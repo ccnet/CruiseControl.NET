@@ -30,7 +30,6 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
 
 			ICruiseManager manager = (ICruiseManager) remotingService.Connect(typeof(ICruiseManager), ServerUri);
 			manager.ForceBuild(Project);
-			remotingService.Disconnect(manager);
 		}
 	}
 }

@@ -38,7 +38,6 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers.Test
 			mockCruiseManager.Expect("ForceBuild", "project");
 			IMock mockRemotingService = new DynamicMock(typeof(IRemotingService));
 			mockRemotingService.ExpectAndReturn("Connect", mockCruiseManager.MockInstance, typeof(ICruiseManager), "tcp://localhost:21234/CruiseManager.rem");
-			mockRemotingService.ExpectAndReturn("Disconnect", true, mockCruiseManager.MockInstance);
 
 			ForceBuildPublisher publisher = new ForceBuildPublisher((IRemotingService)mockRemotingService.MockInstance);
 			publisher.Project = "project";
@@ -54,7 +53,6 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers.Test
 		{
 			IMock mockRemotingService = new DynamicMock(typeof(IRemotingService));
 			mockRemotingService.ExpectNoCall("Connect", typeof(Type), typeof(string));
-			mockRemotingService.ExpectNoCall("Disconnect", typeof(object));
 			
 			ForceBuildPublisher publisher = new ForceBuildPublisher((IRemotingService)mockRemotingService.MockInstance);
 			publisher.IntegrationStatus = IntegrationStatus.Exception;

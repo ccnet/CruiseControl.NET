@@ -9,10 +9,5 @@ namespace ThoughtWorks.CruiseControl.Remote
 		{
 			return RemotingServices.Connect(proxyType, uri);
 		}
-
-		public bool Disconnect(object remoteObj)
-		{
-			return RemotingServices.Disconnect((MarshalByRefObject) remoteObj);
-		}
 	}
 }
