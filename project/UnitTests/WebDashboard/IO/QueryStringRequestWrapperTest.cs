@@ -22,15 +22,15 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.IO
 		[Test]
 		public void ReturnsNoLogSpecifiedIfNoLogParameterSpecified()
 		{
-			Assert(wrapper.GetBuildSpecifier() is NoLogSpecified);
+			Assert(wrapper.GetBuildSpecifier() is NoBuildSpecified);
 		}
 
 		[Test]
 		public void ReturnsLogSpecifierWithNameOfFileIfLogParameterSpecified()
 		{
 			queryString.Add("log", "mylog.xml");
-			FileNameLogSpecifier logSpecifier = (FileNameLogSpecifier) wrapper.GetBuildSpecifier();
-			AssertEquals("mylog.xml", logSpecifier.Filename);
+			NamedBuildSpecifier Specifier = (NamedBuildSpecifier) wrapper.GetBuildSpecifier();
+			AssertEquals("mylog.xml", Specifier.Filename);
 		}
 
 		[Test]

@@ -1,6 +1,6 @@
 namespace ThoughtWorks.CruiseControl.WebDashboard.ServerConnection
 {
-	public interface ILogSpecifier
+	public interface IBuildSpecifier
 	{
 	}
 }

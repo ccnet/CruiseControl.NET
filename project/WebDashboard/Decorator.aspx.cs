@@ -35,14 +35,18 @@ namespace ThoughtWorks.CruiseControl.WebDashboard
 			ConfigurationSettingsConfigGetter configurationGetter = new ConfigurationSettingsConfigGetter();
 			QueryStringRequestWrapper requestWrapper = new QueryStringRequestWrapper(Request.QueryString);
 			ServerAggregatingCruiseManagerWrapper cruiseManagerWrapper = new ServerAggregatingCruiseManagerWrapper(configurationGetter, new RemoteCruiseManagerFactory());
+			CruiseManagerBuildNameRetriever buildNameRetriever = new CruiseManagerBuildNameRetriever(cruiseManagerWrapper);
+
 			SiteTemplateResults results = new SiteTemplate(
 				requestWrapper, 
 				configurationGetter,
 				new DefaultBuildLister(cruiseManagerWrapper),
-				new CachingBuildRetriever(
-					cruiseManagerWrapper , 
-					new LocalFileCacheManager(new HttpPathMapper(Context, this), configurationGetter),
-					requestWrapper)
+				new DefaultBuildRetrieverForRequest(
+					new CachingBuildRetriever(
+						new LocalFileCacheManager(new HttpPathMapper(Context, this), configurationGetter),
+						new CruiseManagerBuildRetriever(cruiseManagerWrapper)),
+					buildNameRetriever),
+				buildNameRetriever
 				).Do();
 
 			if (results.ProjectMode)

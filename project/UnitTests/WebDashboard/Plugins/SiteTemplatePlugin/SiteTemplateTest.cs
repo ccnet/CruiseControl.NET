@@ -15,8 +15,10 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Plugins.SiteTemplate
 		private DynamicMock buildListerMock;
 		private DynamicMock buildRetrieverMock;
 		private DynamicMock configurationGetterMock;
+		private DynamicMock buildNameRetrieverMock;
 		private SiteTemplate siteTemplate;
 		private Build build;
+		private IRequestWrapper requestWrapper;
 
 		[SetUp]
 		public void Setup()
@@ -24,15 +26,20 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Plugins.SiteTemplate
 			requestWrapperMock = new DynamicMock(typeof(IRequestWrapper));
 			configurationGetterMock = new DynamicMock(typeof(IConfigurationGetter));
 			buildListerMock = new DynamicMock(typeof(IBuildLister));
-			buildRetrieverMock = new DynamicMock(typeof(IBuildRetriever));
+			buildRetrieverMock = new DynamicMock(typeof(IBuildRetrieverForRequest));
+			buildNameRetrieverMock = new DynamicMock(typeof(IBuildNameRetriever));
 
+			requestWrapper = (IRequestWrapper) requestWrapperMock.MockInstance;
 			siteTemplate = new SiteTemplate(
-				(IRequestWrapper) requestWrapperMock.MockInstance,
+				requestWrapper,
 				(IConfigurationGetter) configurationGetterMock.MockInstance,
 				(IBuildLister) buildListerMock.MockInstance,
-				(IBuildRetriever) buildRetrieverMock.MockInstance);
+				(IBuildRetrieverForRequest) buildRetrieverMock.MockInstance,
+				(IBuildNameRetriever) buildNameRetrieverMock.MockInstance);
 
-			build = new Build("log20040721095851Lbuild.1.xml", "", "");
+			string server = "myserver";
+			string project = "myproject";
+			build = new Build("log20040721095851Lbuild.1.xml", "my content", server, project);
 		}
 
 		private void VerifyMocks()
@@ -41,12 +48,14 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Plugins.SiteTemplate
 			configurationGetterMock.Verify();
 			buildListerMock.Verify();
 			buildRetrieverMock.Verify();
+			buildNameRetrieverMock.Verify();
 		}
 
 		[Test]
 		public void IfNoProjectSpecifiedThenNotProjectMode()
 		{
 			requestWrapperMock.ExpectAndReturn("GetProjectName", "");
+			requestWrapperMock.ExpectAndReturn("GetServerName", "server");
 			SiteTemplateResults results = siteTemplate.Do();
 			AssertEquals(false, results.ProjectMode);
 
@@ -56,6 +65,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Plugins.SiteTemplate
 		[Test]
 		public void IfNoServerSpecifiedThenNotProjectMode()
 		{
+			requestWrapperMock.ExpectAndReturn("GetProjectName", "project");
 			requestWrapperMock.ExpectAndReturn("GetServerName", "");
 			SiteTemplateResults results = siteTemplate.Do();
 			AssertEquals(false, results.ProjectMode);
@@ -66,10 +76,11 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Plugins.SiteTemplate
 		[Test]
 		public void IfProjectSpecifiedThenProjectMode()
 		{
-			requestWrapperMock.SetupResult("GetProjectName", "myProject");
-			buildRetrieverMock.ExpectAndReturn("GetBuild", build);
-			buildRetrieverMock.ExpectAndReturn("GetPreviousBuild", build, build);
-			buildRetrieverMock.ExpectAndReturn("GetNextBuild", build, build);
+			requestWrapperMock.ExpectAndReturn("GetProjectName", "myProject");
+			requestWrapperMock.ExpectAndReturn("GetServerName", "myProject");
+			buildRetrieverMock.ExpectAndReturn("GetBuild", build, requestWrapper);
+			buildNameRetrieverMock.ExpectAndReturn("GetPreviousBuildName", "previousBuild", build);
+			buildNameRetrieverMock.ExpectAndReturn("GetNextBuildName", "nextBuild", build);
 
 			SiteTemplateResults results = siteTemplate.Do();
 			AssertEquals(true, results.ProjectMode);
@@ -80,7 +91,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Plugins.SiteTemplate
 		[Test]
 		public void DoesntGetBuildListFromListerIfNoProjectSpecified()
 		{
-			requestWrapperMock.SetupResult("GetProjectName", "");
+			requestWrapperMock.ExpectAndReturn("GetProjectName", "");
+			requestWrapperMock.ExpectAndReturn("GetServerName", "server");
 			buildListerMock.ExpectNoCall("GetBuildLinks", typeof(string), typeof(string));
 
 			siteTemplate.Do();
@@ -91,12 +103,12 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Plugins.SiteTemplate
 		public void GetsBuildListFromListerIfProjectSpecified()
 		{
 			HtmlAnchor anchor = new HtmlAnchor();
-			requestWrapperMock.SetupResult("GetProjectName", "myProject");
-			requestWrapperMock.SetupResult("GetServerName", "myServer");
+			requestWrapperMock.ExpectAndReturn("GetProjectName", "myProject");
+			requestWrapperMock.ExpectAndReturn("GetServerName", "myServer");
 			buildListerMock.ExpectAndReturn("GetBuildLinks", new HtmlAnchor[] { anchor } , "myServer", "myProject");
-			buildRetrieverMock.ExpectAndReturn("GetBuild", build);
-			buildRetrieverMock.ExpectAndReturn("GetPreviousBuild", build, build);
-			buildRetrieverMock.ExpectAndReturn("GetNextBuild", build, build);
+			buildRetrieverMock.ExpectAndReturn("GetBuild", build, requestWrapper);
+			buildNameRetrieverMock.ExpectAndReturn("GetPreviousBuildName", "previousBuild", build);
+			buildNameRetrieverMock.ExpectAndReturn("GetNextBuildName", "nextBuild", build);
 
 			SiteTemplateResults results = siteTemplate.Do();
 			AssertEquals(anchor, results.BuildLinkList[0]);

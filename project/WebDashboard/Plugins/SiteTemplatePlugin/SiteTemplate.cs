@@ -10,17 +10,20 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.SiteTemplatePlugin
 {
 	public class SiteTemplate
 	{
-		private readonly IBuildRetriever buildRetriever;
+		private readonly IBuildNameRetriever buildNameRetriever;
+		private readonly IBuildRetrieverForRequest buildRetrieverForRequest;
 		private readonly IConfigurationGetter configurationGetter;
 		private readonly IBuildLister buildLister;
 		private readonly IRequestWrapper requestWrapper;
 
-		public SiteTemplate(IRequestWrapper requestWrapper, IConfigurationGetter configurationGetter, IBuildLister buildLister, IBuildRetriever buildRetriever)
+		public SiteTemplate(IRequestWrapper requestWrapper, IConfigurationGetter configurationGetter, IBuildLister buildLister, 
+			IBuildRetrieverForRequest buildRetrieverForRequest, IBuildNameRetriever buildNameRetriever)
 		{
 			this.requestWrapper = requestWrapper;
 			this.buildLister = buildLister;
 			this.configurationGetter = configurationGetter;
-			this.buildRetriever = buildRetriever;
+			this.buildRetrieverForRequest = buildRetrieverForRequest;
+			this.buildNameRetriever = buildNameRetriever;
 		}
 
 		public SiteTemplateResults Do()
@@ -32,11 +35,11 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.SiteTemplatePlugin
 				return new SiteTemplateResults(false, null, "", "", "", "", "", "");
 			}
 
-			Build build = buildRetriever.GetBuild();
+			Build build = buildRetrieverForRequest.GetBuild(requestWrapper);
 			BuildStats stats = GenerateBuildStats(build);
 			LatestNextPreviousLinks latestNextPreviousLinks = GenerateLatestNextPreviousLinks(build);
 
-			return new SiteTemplateResults(true, buildLister.GetBuildLinks(serverName, projectName), stats.Html, stats.Htmlclass, GeneratePluginLinks(), 
+			return new SiteTemplateResults(true, buildLister.GetBuildLinks(serverName, projectName), stats.Html, stats.Htmlclass, GeneratePluginLinks(build), 
 				latestNextPreviousLinks.latestLink, latestNextPreviousLinks.nextLink, latestNextPreviousLinks.previousLink);	
 		}
 
@@ -73,7 +76,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.SiteTemplatePlugin
 
 
 		// ToDo - untested (but are we going to change how we do plugins? )
-		private string GeneratePluginLinks()
+		private string GeneratePluginLinks(Build build)
 		{
 			string pluginLinksHtml = "";
 			object pluginSpecs = configurationGetter.GetConfigFromSection("CCNet/projectPlugins");
@@ -83,7 +86,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.SiteTemplatePlugin
 				foreach (PluginSpecification spec in (IEnumerable) pluginSpecs)
 				{
 					pluginLinksHtml += String.Format(@"|&nbsp; <a class=""link"" href=""{0}?{1}={2}"">{3}</a> ", 
-						spec.LinkUrl, LogFileUtil.ProjectQueryString, requestWrapper.GetProjectName(), spec.LinkText);
+						spec.LinkUrl, LogFileUtil.ProjectQueryString, build.ProjectName, spec.LinkText);
 				}
 			}
 			return pluginLinksHtml;
@@ -101,29 +104,29 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.SiteTemplatePlugin
 		{
 			LatestNextPreviousLinks links = new LatestNextPreviousLinks();
 
-			links.latestLink = ProjectReportPageWithNoBuild();
-			links.previousLink = ProjectReportPageWithBuild(buildRetriever.GetPreviousBuild(build));
-			links.nextLink = ProjectReportPageWithBuild(buildRetriever.GetNextBuild(build));
+			links.latestLink = ProjectReportPageWithNoBuild(build);
+			links.previousLink = ProjectReportPageWithBuild(buildNameRetriever.GetPreviousBuildName(build), build);
+			links.nextLink = ProjectReportPageWithBuild(buildNameRetriever.GetNextBuildName(build), build);
 
 			return links;
 		}
 
 		// ToDo - we need a URL generator
-		private string ProjectReportPageWithNoBuild()
+		private string ProjectReportPageWithNoBuild(Build currentlyViewedBuild)
 		{
 			return "projectreport.aspx" + string.Format("?{0}={1}&{2}={3}", 
 				QueryStringRequestWrapper.ServerQueryStringParameter, 
-				requestWrapper.GetServerName(),
+				currentlyViewedBuild.ServerName,
 				QueryStringRequestWrapper.ProjectQueryStringParameter,
-				requestWrapper.GetProjectName());
+				currentlyViewedBuild.ProjectName);
 		}
 
-		private string ProjectReportPageWithBuild(Build build)
+		private string ProjectReportPageWithBuild(string buildName, Build currentlyViewedBuild)
 		{
 			return string.Format("{0}&{1}={2}", 
-				ProjectReportPageWithNoBuild(), 
+				ProjectReportPageWithNoBuild(currentlyViewedBuild), 
 				QueryStringRequestWrapper.LogQueryStringParameter,
-				build.Name);
+				buildName);
 		}
 	}
 }

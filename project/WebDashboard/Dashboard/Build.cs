@@ -4,15 +4,17 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 {
 	public class Build
 	{
-		private readonly string url;
+		private readonly string projectName;
+		private readonly string serverName;
 		private readonly string name;
 		private readonly string log;
 
-		public Build(string name, string log, string Url)
+		public Build(string name, string log, string serverName, string projectName)
 		{
 			this.log = log;
 			this.name = name;
-			this.url = Url;
+			this.serverName = serverName;
+			this.projectName = projectName;
 		}
 
 		public string Name
@@ -25,9 +27,14 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 			get { return log; }
 		}
 
-		public string Url
+		public string ProjectName
 		{
-			get { return url; }
+			get { return projectName; }
+		}
+
+		public string ServerName
+		{
+			get { return serverName; }
 		}
 
 		public bool IsSuccessful

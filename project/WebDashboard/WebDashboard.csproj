@@ -398,7 +398,32 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Dashboard\CruiseManagerBuildNameRetriever.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Dashboard\CruiseManagerBuildRetriever.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Dashboard\DefaultBuildRetrieverForRequest.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Dashboard\IBuildNameRetriever.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Dashboard\IBuildRetriever.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Dashboard\IBuildRetrieverForRequest.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -409,6 +434,11 @@
                 />
                 <File
                     RelPath = "Dashboard\ProjectDetailsListGenerator.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Dashboard\UnknownBuildException.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -601,7 +631,7 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "ServerConnection\FileNameLogSpecifier.cs"
+                    RelPath = "ServerConnection\IBuildSpecifier.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -616,12 +646,12 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "ServerConnection\ILogSpecifier.cs"
+                    RelPath = "ServerConnection\NamedBuildSpecifier.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "ServerConnection\NoLogSpecified.cs"
+                    RelPath = "ServerConnection\NoBuildSpecified.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

@@ -17,12 +17,17 @@ namespace ThoughtWorks.CruiseControl.WebDashboard
 		{
 			ConfigurationSettingsConfigGetter configurationGetter = new ConfigurationSettingsConfigGetter();
 			QueryStringRequestWrapper requestWrapper = new QueryStringRequestWrapper(Request.QueryString);
+			ServerAggregatingCruiseManagerWrapper cruiseManagerWrapper = new ServerAggregatingCruiseManagerWrapper(configurationGetter, new RemoteCruiseManagerFactory());
+
+			LocalFileCacheManager cacheManager = new LocalFileCacheManager(new HttpPathMapper(Context, this), configurationGetter);
 			LogViewer logViewer = new LogViewer(
-				new CachingBuildRetriever(
-					new ServerAggregatingCruiseManagerWrapper(configurationGetter, new RemoteCruiseManagerFactory()) , 
-					new LocalFileCacheManager(new HttpPathMapper(Context, this), configurationGetter),
-					requestWrapper)
-				);
+				requestWrapper,
+				new DefaultBuildRetrieverForRequest(
+					new CachingBuildRetriever(
+						cacheManager,
+						new CruiseManagerBuildRetriever(cruiseManagerWrapper)),
+					new CruiseManagerBuildNameRetriever(cruiseManagerWrapper)),
+				cacheManager);
 
 			LogViewerResults results = logViewer.Do();
 			LogLink.HRef = results.RedirectURL;

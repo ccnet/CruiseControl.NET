@@ -16,16 +16,16 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.IO
 			this.queryString = queryString;
 		}
 
-		public ILogSpecifier GetBuildSpecifier()
+		public IBuildSpecifier GetBuildSpecifier()
 		{
 			string logfile = queryString[LogQueryStringParameter];
 			if (logfile == null)
 			{
-				return new NoLogSpecified();
+				return new NoBuildSpecified();
 			}
 			else
 			{
-				return new FileNameLogSpecifier(logfile);
+				return new NamedBuildSpecifier(logfile);
 			}
 		}
 

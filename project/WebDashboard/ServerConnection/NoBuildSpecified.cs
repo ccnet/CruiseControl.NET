@@ -1,7 +1,7 @@
 
 namespace ThoughtWorks.CruiseControl.WebDashboard.ServerConnection
 {
-	public class NoLogSpecified : ILogSpecifier
+	public class NoBuildSpecified : IBuildSpecifier
 	{
 	}
 }

@@ -1,10 +1,10 @@
 namespace ThoughtWorks.CruiseControl.WebDashboard.ServerConnection
 {
-	public class FileNameLogSpecifier : ILogSpecifier
+	public class NamedBuildSpecifier : IBuildSpecifier
 	{
 		private readonly string filename;
 
-		public FileNameLogSpecifier(string filename)
+		public NamedBuildSpecifier(string filename)
 		{
 			this.filename = filename;
 		}

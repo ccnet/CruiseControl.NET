@@ -1,6 +1,8 @@
 using NMock;
 using NUnit.Framework;
+using ThoughtWorks.CruiseControl.WebDashboard.Cache;
 using ThoughtWorks.CruiseControl.WebDashboard.Dashboard;
+using ThoughtWorks.CruiseControl.WebDashboard.IO;
 using ThoughtWorks.CruiseControl.WebDashboard.Plugins.LogViewerPlugin;
 
 namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Plugins.LogViewerPlugin
@@ -8,38 +10,48 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Plugins.LogViewerPlu
 	[TestFixture]
 	public class LogViewerTest : Assertion
 	{
-		private DynamicMock buildRetrieverMock;
-
 		private LogViewer logViewer;
 
 		private string url;
 		private Build build;
+		private DynamicMock buildRetrieverforRequestMock;
+		private DynamicMock requestWrapperMock;
+		private DynamicMock cacheManagerMock;
+		private string serverName;
+		private string projectName;
 
 		[SetUp]
 		public void Setup()
 		{
-			buildRetrieverMock = new DynamicMock(typeof(IBuildRetriever));
+			buildRetrieverforRequestMock = new DynamicMock(typeof(IBuildRetrieverForRequest));
+			requestWrapperMock = new DynamicMock(typeof(IRequestWrapper));
+			cacheManagerMock = new DynamicMock(typeof(ICacheManager));
 
-			logViewer = new LogViewer((IBuildRetriever) buildRetrieverMock.MockInstance);
+			logViewer = new LogViewer((IRequestWrapper) requestWrapperMock.MockInstance, (IBuildRetrieverForRequest) buildRetrieverforRequestMock.MockInstance,
+				(ICacheManager) cacheManagerMock.MockInstance);
 
 			url = "http://foo.bar";
-			build  = new Build("mybuild", "", url);
+			serverName = "myserver";
+			projectName = "myproject";
+			build  = new Build("mybuild", "", serverName, projectName);
 		}
 
 		private void VerifyAll()
 		{
-			buildRetrieverMock.Verify();
+			buildRetrieverforRequestMock.Verify();
+			requestWrapperMock.Verify();
+			cacheManagerMock.Verify();
 		}
 
 		[Test]
-		public void ReturnsURLOfLatestBuild()
+		public void ReturnsURLOfRelevantBuild()
 		{
-			buildRetrieverMock.ExpectAndReturn("GetBuild", build);
+			IRequestWrapper requestWrapper = (IRequestWrapper) requestWrapperMock.MockInstance;
 
-			LogViewerResults results = logViewer.Do();
-			AssertEquals(url, results.RedirectURL);
+			buildRetrieverforRequestMock.ExpectAndReturn("GetBuild", build, requestWrapper);
+			cacheManagerMock.ExpectAndReturn("GetURLForFile", url, serverName, projectName, CachingBuildRetriever.CacheDirectory, "mybuild");
 
-			VerifyAll();
+			AssertEquals(url, logViewer.Do().RedirectURL);
 		}
 	}
 }

@@ -1,69 +1,33 @@
-using System;
 using ThoughtWorks.CruiseControl.WebDashboard.Cache;
-using ThoughtWorks.CruiseControl.WebDashboard.IO;
-using ThoughtWorks.CruiseControl.WebDashboard.ServerConnection;
 
 namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 {
 	public class CachingBuildRetriever : IBuildRetriever
 	{
-		private readonly IRequestWrapper requestWrapper;
+		private readonly IBuildRetriever buildRetriever;
 		public static readonly string CacheDirectory = "originalBuilds";
 
-		private readonly ICruiseManagerWrapper cruiseManagerWrapper;
 		private readonly ICacheManager cacheManager;
 
-		public CachingBuildRetriever(ICruiseManagerWrapper cruiseManagerWrapper, ICacheManager cacheManager, IRequestWrapper requestWrapper)
+		public CachingBuildRetriever(ICacheManager cacheManager, IBuildRetriever buildRetriever)
 		{
 			this.cacheManager = cacheManager;
-			this.cruiseManagerWrapper = cruiseManagerWrapper;
-			this.requestWrapper = requestWrapper;
+			this.buildRetriever = buildRetriever;
 		}
 
-		public Build GetBuild()
-		{
-			string serverName = requestWrapper.GetServerName();
-			string projectName = requestWrapper.GetProjectName();
-
-			ILogSpecifier buildSpecifier = requestWrapper.GetBuildSpecifier();
-
-			if (buildSpecifier is NoLogSpecified)
-			{
-				return GetBuild(serverName, projectName, cruiseManagerWrapper.GetLatestBuildName(serverName, projectName));
-			}
-			else
-			{
-				return GetBuild(serverName, projectName, ((FileNameLogSpecifier) buildSpecifier).Filename);
-			}
-		}
-
-		public Build GetPreviousBuild(Build build)
-		{
-			// ToDo - implement properly
-			return build;
-		}
-
-		public Build GetNextBuild(Build build)
-		{
-			// ToDo - implement properly
-			return build;
-		}
-
-		private Build GetBuild(string serverName, string projectName, string buildName)
+		public Build GetBuild(string serverName, string projectName, string buildName)
 		{
 			PutLogInCacheIfNecessary(serverName, projectName, buildName);
 
-			return new Build(buildName, 
-				cacheManager.GetContent(serverName, projectName, CacheDirectory, buildName), 
-				cacheManager.GetURLForFile(serverName, projectName, CacheDirectory, buildName));
+			return new Build(buildName, cacheManager.GetContent(serverName, projectName, CacheDirectory, buildName), serverName, projectName);
 		}
 
-		private void PutLogInCacheIfNecessary(string serverName, string projectName, string logName)
+		private void PutLogInCacheIfNecessary(string serverName, string projectName, string buildName)
 		{
-			if (cacheManager.GetContent(serverName, projectName, CacheDirectory, logName) == null)
+			if (cacheManager.GetContent(serverName, projectName, CacheDirectory, buildName) == null)
 			{
-				string log = cruiseManagerWrapper.GetLog(serverName, projectName, logName);
-				cacheManager.AddContent(serverName, projectName, CacheDirectory, logName, log);
+				string log = buildRetriever.GetBuild(serverName, projectName, buildName).Log;
+				cacheManager.AddContent(serverName, projectName, CacheDirectory, buildName, log);
 			}
 		}
 	}
