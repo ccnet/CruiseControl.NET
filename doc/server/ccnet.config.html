@@ -54,6 +54,10 @@
 								<a href="#pvcs">PVCS</a></li>
 							<li>
 								<a href="#subversion">Subversion</a></li>
+							<li>
+								<a href="#file">File</a></li>
+							<li>
+								<a href="#multi">Multi</a></li>
 						</ul>
 					<li>
 						<a href="#build">build</a>
@@ -155,9 +159,7 @@
 		</h3>
 		The source control element tells Cruise Control.NET what source control system
 		to use, and how to query the repository, when checking for any new changes.
-		Currently Cruise Control.NET supports <a href="#CVS">CVS</a>, <a href="#p4">Perforce</a>,
-		<a href="#pvcs">PVCS</a>,<a href="#starteam">StarTeam</a>, and <a href="#vss">Visual
-			Source Safe</a>. You tell Cruise Control.NET which source code control
+		You tell Cruise Control.NET which source code control
 		provider to use by setting the mandatory type attribute of the source control
 		element.<br>
 		<br>
@@ -219,7 +221,7 @@
 		<p>
 		</p>
 		<pre>&lt;sourcecontrol type="vss"&gt;<br>   &lt;!-- you have to put quotes around this because of the spaces in the path --&gt;<br>   &lt;executable&gt;"C:\Program Files\Microsoft Visual Studio\VSS\win32\SS.EXE"&lt;/executable&gt;<br>   &lt;project&gt;$/CCNET&lt;/project&gt;<br>   &lt;username&gt;buildguy&lt;/username&gt;<br>   &lt;password&gt;buildguypw&lt;/password&gt;<br>   &lt;ssdir&gt;c:\repos\&lt;/ssdir&gt;<br>&lt;/sourcecontrol&gt;<br>    </pre>
-		<a href="#top">back to top</a><br>
+		<a href="#top">back to top</a>
 		<br>
 		<h4><a name="subversion">Subversion</a></h4>
 		<p>
@@ -233,7 +235,44 @@
 	&lt;trunkUrl&gt;svn://svn.mycompany.com/myfirstproject/trunk&lt;/trunkUrl&gt;
 &lt;/sourcecontrol>
 		</pre>
-		<a href="#top">back to top</a>
+		<p>
+			<a href="#top">back to top</a>
+		</p>
+		<h4><a name="file">'File' Source Control</a></h4>
+		<p>
+			You can use the 'File' Source Control plugin to check for modifications on a directory accessable by the build server.
+			You can use either directories on 'mapped' drives (local or remote), or UNC paths (remote).
+		</p>
+		<pre>
+&lt;sourcecontrol type="filesystem"&gt;
+	&lt;repositoryRoot&gt;c:\mycode&lt;/repositoryRoot&gt;
+&lt;/sourcecontrol>
+		</pre>
+		<p>
+			<a href="#top">back to top</a>
+		</p>
+		<h4><a name="multi">'Multi' Source Control</a></h4>
+		<p>
+			You can use the 'Multi' Source Control plugin to check for modifications from any number of source control repositories. You
+			may want to do this if (for example) you want to build if the source for your project changes, or if the binaries your
+			project depends on change (which may be stored on a file server). Here's an example:
+		</p>
+		<pre>
+&lt;sourcecontrol type="multi"&gt;
+  &lt;sourceControls&gt;
+	&lt;filesystem&gt;
+	  &lt;!-- Check for changes in the latest 1.2 version of the server... --&gt;
+	  &lt;repositoryRoot&gt;\\DistributionFileServer\Server\1.2.latest&lt;/repositoryRoot&gt;
+	&lt;/filesystem&gt;
+	&lt;cvs&gt;
+	  &lt;!-- ...or in the source of the client project --&gt;
+	  &lt;executable&gt;c:\tools\cvs-exe\cvswithplinkrsh.bat&lt;/executable&gt;
+	  &lt;workingDirectory&gt;c:\localcvs\myproject\client&lt;/workingDirectory&gt;
+	&lt;/cvs&gt;
+  &lt;/sourceControls&gt;
+&lt;/sourcecontrol&gt;
+		</pre>
+		<a href="#top">back to top</a><br>
 		<br/>
 		<h3><a name="build">build
 				<span style="FONT-STYLE: italic">(mandatory)</span><br>
