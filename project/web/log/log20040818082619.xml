@@ -1,0 +1,1340 @@
+<cruisecontrol project="CCNetLive - CCNet">
+	<modifications>
+		<modification type="modified">
+			<filename>DefaultUserRequestSpecificSideBarViewBuilderTest.cs</filename>
+			<project>project/UnitTests/WebDashboard/Dashboard</project>
+			<date>18 Aug 2004 08:17</date>
+			<user>mikeroberts</user>
+			<comment>Making webapp work when no build logs exist for a project (this situation would arise when initial check out fails, for example)</comment>
+			<changeNumber>0</changeNumber>
+			<url>http://cvs.sourceforge.net/viewcvs.py/ccnet/ccnet/project/UnitTests/WebDashboard/Dashboard/DefaultUserRequestSpecificSideBarViewBuilderTest.cs</url>
+		</modification>
+		<modification type="modified">
+			<filename>TopControlsViewBuilderTest.cs</filename>
+			<project>project/UnitTests/WebDashboard/Dashboard</project>
+			<date>18 Aug 2004 08:17</date>
+			<user>mikeroberts</user>
+			<comment>Making webapp work when no build logs exist for a project (this situation would arise when initial check out fails, for example)</comment>
+			<changeNumber>0</changeNumber>
+			<url>http://cvs.sourceforge.net/viewcvs.py/ccnet/ccnet/project/UnitTests/WebDashboard/Dashboard/TopControlsViewBuilderTest.cs</url>
+		</modification>
+		<modification type="modified">
+			<filename>WebDashboard.csproj</filename>
+			<project>project/WebDashboard</project>
+			<date>18 Aug 2004 08:17</date>
+			<user>mikeroberts</user>
+			<comment>Making webapp work when no build logs exist for a project (this situation would arise when initial check out fails, for example)</comment>
+			<changeNumber>0</changeNumber>
+			<url>http://cvs.sourceforge.net/viewcvs.py/ccnet/ccnet/project/WebDashboard/WebDashboard.csproj</url>
+		</modification>
+		<modification type="modified">
+			<filename>CruiseManagerBuildNameRetriever.cs</filename>
+			<project>project/WebDashboard/Dashboard</project>
+			<date>18 Aug 2004 08:17</date>
+			<user>mikeroberts</user>
+			<comment>Making webapp work when no build logs exist for a project (this situation would arise when initial check out fails, for example)</comment>
+			<changeNumber>0</changeNumber>
+			<url>http://cvs.sourceforge.net/viewcvs.py/ccnet/ccnet/project/WebDashboard/Dashboard/CruiseManagerBuildNameRetriever.cs</url>
+		</modification>
+		<modification type="modified">
+			<filename>DefaultUserRequestSpecificSideBarViewBuilder.cs</filename>
+			<project>project/WebDashboard/Dashboard</project>
+			<date>18 Aug 2004 08:17</date>
+			<user>mikeroberts</user>
+			<comment>Making webapp work when no build logs exist for a project (this situation would arise when initial check out fails, for example)</comment>
+			<changeNumber>0</changeNumber>
+			<url>http://cvs.sourceforge.net/viewcvs.py/ccnet/ccnet/project/WebDashboard/Dashboard/DefaultUserRequestSpecificSideBarViewBuilder.cs</url>
+		</modification>
+		<modification type="modified">
+			<filename>TopControlsViewBuilder.cs</filename>
+			<project>project/WebDashboard/Dashboard</project>
+			<date>18 Aug 2004 08:17</date>
+			<user>mikeroberts</user>
+			<comment>Making webapp work when no build logs exist for a project (this situation would arise when initial check out fails, for example)</comment>
+			<changeNumber>0</changeNumber>
+			<url>http://cvs.sourceforge.net/viewcvs.py/ccnet/ccnet/project/WebDashboard/Dashboard/TopControlsViewBuilder.cs</url>
+		</modification>
+		<modification type="modified">
+			<filename>AddProjectViewBuilder.cs</filename>
+			<project>project/WebDashboard/MVC/Cruise</project>
+			<date>18 Aug 2004 08:17</date>
+			<user>mikeroberts</user>
+			<comment>Making webapp work when no build logs exist for a project (this situation would arise when initial check out fails, for example)</comment>
+			<changeNumber>0</changeNumber>
+			<url>http://cvs.sourceforge.net/viewcvs.py/ccnet/ccnet/project/WebDashboard/MVC/Cruise/AddProjectViewBuilder.cs</url>
+		</modification>
+		<modification type="modified">
+			<filename>CruiseActionFactory.cs</filename>
+			<project>project/WebDashboard/MVC/Cruise</project>
+			<date>18 Aug 2004 08:17</date>
+			<user>mikeroberts</user>
+			<comment>Making webapp work when no build logs exist for a project (this situation would arise when initial check out fails, for example)</comment>
+			<changeNumber>0</changeNumber>
+			<url>http://cvs.sourceforge.net/viewcvs.py/ccnet/ccnet/project/WebDashboard/MVC/Cruise/CruiseActionFactory.cs</url>
+		</modification>
+		<modification type="added">
+			<filename>ViewProjectReportAction.cs</filename>
+			<project>project/WebDashboard/MVC/Cruise</project>
+			<date>18 Aug 2004 08:17</date>
+			<user>mikeroberts</user>
+			<comment>Making webapp work when no build logs exist for a project (this situation would arise when initial check out fails, for example)</comment>
+			<changeNumber>0</changeNumber>
+			<url>http://cvs.sourceforge.net/viewcvs.py/ccnet/ccnet/project/WebDashboard/MVC/Cruise/ViewProjectReportAction.cs</url>
+		</modification>
+		<modification type="modified">
+			<filename>DeleteProjectHtmlViewBuilder.cs</filename>
+			<project>project/WebDashboard/Plugins/DeleteProject</project>
+			<date>18 Aug 2004 08:17</date>
+			<user>mikeroberts</user>
+			<comment>Making webapp work when no build logs exist for a project (this situation would arise when initial check out fails, for example)</comment>
+			<changeNumber>0</changeNumber>
+			<url>http://cvs.sourceforge.net/viewcvs.py/ccnet/ccnet/project/WebDashboard/Plugins/DeleteProject/DeleteProjectHtmlViewBuilder.cs</url>
+		</modification>
+		<modification type="modified">
+			<filename>ccnet.config</filename>
+			<project>project/console</project>
+			<date>18 Aug 2004 08:17</date>
+			<user>mikeroberts</user>
+			<comment>Making webapp work when no build logs exist for a project (this situation would arise when initial check out fails, for example)</comment>
+			<changeNumber>0</changeNumber>
+			<url>http://cvs.sourceforge.net/viewcvs.py/ccnet/ccnet/project/console/ccnet.config</url>
+		</modification>
+		<modification type="modified">
+			<filename>CruiseServer.cs</filename>
+			<project>project/core</project>
+			<date>18 Aug 2004 08:17</date>
+			<user>mikeroberts</user>
+			<comment>Making webapp work when no build logs exist for a project (this situation would arise when initial check out fails, for example)</comment>
+			<changeNumber>0</changeNumber>
+			<url>http://cvs.sourceforge.net/viewcvs.py/ccnet/ccnet/project/core/CruiseServer.cs</url>
+		</modification>
+	</modifications>
+	<build date="8/18/2004 8:26:19 AM" buildtime="00:03:23" error="true">NAnt 0.85 (Build 0.85.1591.0; net-1.1.win32; nightly; 5/10/2004)
+Copyright (C) 2001-2004 Gerry Shaw
+NAnt Team
+
+<buildresults project="ccnetlaunch">
+			<message level="Info"><![CDATA[Buildfile: file:///d:/sourceforge/ccnet/continuousintegration.build]]></message>
+			<message level="Info"><![CDATA[Target(s) specified: go]]></message>
+			<target name="update">
+				<message level="Warning"><![CDATA[d:\sourceforge\ccnet\continuousintegration.build(5,3): Attribute 'propertyexists' for <ifnot ... /> is deprecated.  Use <if test="${property::exists('propertyname')}"> instead.]]></message>
+				<task name="ifnot"/>
+				<task name="echo">
+					<message level="Info"><![CDATA[CVS Executable at [D:\tools\cvsexe\cvswithplinkrsh.bat]]]></message>
+				</task>
+				<task name="exec">
+					<message level="Info"><![CDATA[D:\tools\cvsexe\cvswithplinkrsh.bat -q update -P -d]]></message>
+					<message level="Info"><![CDATA[? tools/fxcop/Repository]]></message>
+					<message level="Info"><![CDATA[U project/UnitTests/WebDashboard/Dashboard/DefaultUserRequestSpecificSideBarViewBuilderTest.cs]]></message>
+					<message level="Info"><![CDATA[U project/UnitTests/WebDashboard/Dashboard/TopControlsViewBuilderTest.cs]]></message>
+					<message level="Info"><![CDATA[P project/WebDashboard/WebDashboard.csproj]]></message>
+					<message level="Info"><![CDATA[U project/WebDashboard/Dashboard/CruiseManagerBuildNameRetriever.cs]]></message>
+					<message level="Info"><![CDATA[U project/WebDashboard/Dashboard/DefaultUserRequestSpecificSideBarViewBuilder.cs]]></message>
+					<message level="Info"><![CDATA[U project/WebDashboard/Dashboard/TopControlsViewBuilder.cs]]></message>
+					<message level="Info"><![CDATA[U project/WebDashboard/MVC/Cruise/AddProjectViewBuilder.cs]]></message>
+					<message level="Info"><![CDATA[U project/WebDashboard/MVC/Cruise/CruiseActionFactory.cs]]></message>
+					<message level="Info"><![CDATA[U project/WebDashboard/MVC/Cruise/ViewProjectReportAction.cs]]></message>
+					<message level="Info"><![CDATA[U project/WebDashboard/Plugins/DeleteProject/DeleteProjectHtmlViewBuilder.cs]]></message>
+					<message level="Info"><![CDATA[U project/console/ccnet.config]]></message>
+					<message level="Info"><![CDATA[P project/core/CruiseServer.cs]]></message>
+					<message level="Warning"><![CDATA[cvs update: nothing known about tools/nant/NAnt.exe]]></message>
+					<message level="Warning"><![CDATA[cvs update: nothing known about tools/nant/NAnt.exe.config]]></message>
+				</task>
+			</target>
+			<target name="build">
+				<task name="nant">
+					<message level="Info"><![CDATA[d:\sourceforge\ccnet\ccnet.build ContinuousIntegration]]></message>
+					<buildresults project="ccnet">
+						<message level="Info"><![CDATA[Buildfile: file:///d:/sourceforge/ccnet/ccnet.build]]></message>
+						<message level="Info"><![CDATA[Target(s) specified: ContinuousIntegration]]></message>
+						<task name="property"/>
+						<task name="property"/>
+						<task name="property"/>
+						<task name="property"/>
+						<task name="property"/>
+						<task name="property"/>
+						<task name="property"/>
+						<task name="property"/>
+						<task name="property"/>
+						<task name="property"/>
+						<task name="property"/>
+						<task name="property"/>
+						<task name="property"/>
+						<task name="property"/>
+						<task name="property"/>
+						<task name="property"/>
+						<task name="property"/>
+						<task name="property"/>
+						<task name="property"/>
+						<target name="clean">
+							<task name="delete">
+								<message level="Info"><![CDATA[Deleting directory 'd:\sourceforge\ccnet\build'.]]></message>
+							</task>
+							<task name="delete">
+								<message level="Info"><![CDATA[Deleting directory 'd:\sourceforge\ccnet\deployed'.]]></message>
+							</task>
+							<task name="delete">
+								<message level="Info"><![CDATA[Deleting directory 'd:\sourceforge\ccnet\dist'.]]></message>
+							</task>
+						</target>
+						<target name="init">
+							<task name="mkdir">
+								<message level="Info"><![CDATA[Creating directory 'd:\sourceforge\ccnet\build'.]]></message>
+							</task>
+						</target>
+						<target name="compile">
+							<task name="solution">
+								<message level="Info"><![CDATA[Starting solution build.]]></message>
+								<message level="Info"><![CDATA[Building 'Shared' [build]...]]></message>
+								<message level="Info"><![CDATA[Building 'Remote' [build]...]]></message>
+								<message level="Info"><![CDATA[Building 'WebService' [build]...]]></message>
+								<task name="copy">
+									<message level="Info"><![CDATA[Copying 2 files to 'd:\sourceforge\ccnet\project\WebService\..\..\build\webservice\'.]]></message>
+								</task>
+								<task name="resgen"/>
+								<task name="resgen"/>
+								<message level="Info"><![CDATA[Building 'XMLRPCWebService' [build]...]]></message>
+								<task name="copy">
+									<message level="Info"><![CDATA[Copying 2 files to 'd:\sourceforge\ccnet\project\XMLRPCWebService\..\..\build\XMLRPCWebService\'.]]></message>
+								</task>
+								<task name="copy">
+									<message level="Info"><![CDATA[Copying 1 file to 'd:\sourceforge\ccnet\project\XMLRPCWebService\..\..\build\XMLRPCWebService\'.]]></message>
+								</task>
+								<task name="resgen"/>
+								<task name="resgen"/>
+								<message level="Info"><![CDATA[Building 'WebServiceProxy' [build]...]]></message>
+								<task name="copy">
+									<message level="Info"><![CDATA[Copying 2 files to 'd:\sourceforge\ccnet\project\WebServiceProxy\..\..\build\webserviceproxy\'.]]></message>
+								</task>
+								<message level="Info"><![CDATA[Building 'CCTray' [build]...]]></message>
+								<task name="copy">
+									<message level="Info"><![CDATA[Copying 2 files to 'd:\sourceforge\ccnet\project\CCTray\..\..\build\cctray\'.]]></message>
+								</task>
+								<task name="copy">
+									<message level="Info"><![CDATA[Copying 1 file to 'd:\sourceforge\ccnet\project\CCTray\..\..\build\cctray\'.]]></message>
+								</task>
+								<task name="copy">
+									<message level="Info"><![CDATA[Copying 2 files to 'd:\sourceforge\ccnet\project\CCTray\..\..\build\cctray\'.]]></message>
+								</task>
+								<task name="copy">
+									<message level="Info"><![CDATA[Copying 3 files to 'd:\sourceforge\ccnet\project\CCTray\..\..\build\cctray\'.]]></message>
+								</task>
+								<task name="copy">
+									<message level="Info"><![CDATA[Copying 1 file to 'd:\sourceforge\ccnet\project\CCTray\..\..\build\cctray\'.]]></message>
+								</task>
+								<task name="copy">
+									<message level="Info"><![CDATA[Copying 1 file to 'd:\sourceforge\ccnet\project\CCTray\..\..\build\cctray\'.]]></message>
+								</task>
+								<task name="resgen"/>
+								<task name="resgen"/>
+								<task name="resgen"/>
+								<task name="resgen"/>
+								<message level="Info"><![CDATA[Building 'core' [build]...]]></message>
+								<task name="copy">
+									<message level="Info"><![CDATA[Copying 2 files to 'd:\sourceforge\ccnet\project\core\..\..\build\core\'.]]></message>
+								</task>
+								<task name="copy">
+									<message level="Info"><![CDATA[Copying 1 file to 'd:\sourceforge\ccnet\project\core\..\..\build\core\'.]]></message>
+								</task>
+								<task name="copy">
+									<message level="Info"><![CDATA[Copying 1 file to 'd:\sourceforge\ccnet\project\core\..\..\build\core\'.]]></message>
+								</task>
+								<task name="copy">
+									<message level="Info"><![CDATA[Copying 1 file to 'd:\sourceforge\ccnet\project\core\..\..\build\core\'.]]></message>
+								</task>
+								<task name="copy">
+									<message level="Info"><![CDATA[Copying 1 file to 'd:\sourceforge\ccnet\project\core\..\..\build\core\'.]]></message>
+								</task>
+								<message level="Info"><![CDATA[d:\sourceforge\ccnet\project\core\publishers\BuildLogTransformer.cs(57,5): warning CS0618: 'System.Xml.Xsl.XslTransform.Transform(System.Xml.XPath.IXPathNavigable, System.Xml.Xsl.XsltArgumentList, System.Xml.XmlWriter)' is obsolete: 'You should pass XmlResolver to Transform() method']]></message>
+								<message level="Info"><![CDATA[Building 'WebDashboard' [build]...]]></message>
+								<task name="copy">
+									<message level="Info"><![CDATA[Copying 2 files to 'd:\sourceforge\ccnet\project\WebDashboard\..\..\build\webdashboard\'.]]></message>
+								</task>
+								<task name="copy">
+									<message level="Info"><![CDATA[Copying 1 file to 'd:\sourceforge\ccnet\project\WebDashboard\..\..\build\webdashboard\'.]]></message>
+								</task>
+								<task name="copy">
+									<message level="Info"><![CDATA[Copying 5 files to 'd:\sourceforge\ccnet\project\WebDashboard\..\..\build\webdashboard\'.]]></message>
+								</task>
+								<task name="resgen"/>
+								<task name="resgen"/>
+								<task name="resgen"/>
+								<task name="resgen"/>
+								<task name="resgen"/>
+								<message level="Info"><![CDATA[Building 'web' [build]...]]></message>
+								<task name="copy">
+									<message level="Info"><![CDATA[Copying 2 files to 'd:\sourceforge\ccnet\project\web\..\..\build\web\'.]]></message>
+								</task>
+								<task name="copy">
+									<message level="Info"><![CDATA[Copying 1 file to 'd:\sourceforge\ccnet\project\web\..\..\build\web\'.]]></message>
+								</task>
+								<task name="copy">
+									<message level="Info"><![CDATA[Copying 4 files to 'd:\sourceforge\ccnet\project\web\..\..\build\web\'.]]></message>
+								</task>
+								<task name="copy">
+									<message level="Info"><![CDATA[Copying 1 file to 'd:\sourceforge\ccnet\project\web\..\..\build\web\'.]]></message>
+								</task>
+								<task name="copy"/>
+								<task name="copy">
+									<message level="Info"><![CDATA[Copying 1 file to 'd:\sourceforge\ccnet\project\web\..\..\build\web\'.]]></message>
+								</task>
+								<task name="resgen"/>
+								<task name="resgen"/>
+								<task name="resgen"/>
+								<task name="resgen"/>
+								<task name="resgen"/>
+								<task name="resgen"/>
+								<task name="resgen"/>
+								<task name="resgen"/>
+								<task name="resgen"/>
+								<message level="Info"><![CDATA[d:\sourceforge\ccnet\project\web\LogTransformer.cs(33,24): warning CS0618: 'System.Xml.Xsl.XslTransform.Transform(System.Xml.XPath.IXPathNavigable, System.Xml.Xsl.XsltArgumentList)' is obsolete: 'You should pass XmlResolver to Transform() method']]></message>
+								<message level="Info"><![CDATA[Building 'service' [build]...]]></message>
+								<task name="copy">
+									<message level="Info"><![CDATA[Copying 2 files to 'd:\sourceforge\ccnet\project\service\..\..\build\service\'.]]></message>
+								</task>
+								<task name="copy">
+									<message level="Info"><![CDATA[Copying 1 file to 'd:\sourceforge\ccnet\project\service\..\..\build\service\'.]]></message>
+								</task>
+								<task name="copy">
+									<message level="Info"><![CDATA[Copying 1 file to 'd:\sourceforge\ccnet\project\service\..\..\build\service\'.]]></message>
+								</task>
+								<task name="copy">
+									<message level="Info"><![CDATA[Copying 3 files to 'd:\sourceforge\ccnet\project\service\..\..\build\service\'.]]></message>
+								</task>
+								<task name="copy">
+									<message level="Info"><![CDATA[Copying 1 file to 'd:\sourceforge\ccnet\project\service\..\..\build\service\'.]]></message>
+								</task>
+								<task name="resgen"/>
+								<task name="resgen"/>
+								<message level="Info"><![CDATA[Building 'console' [build]...]]></message>
+								<task name="copy">
+									<message level="Info"><![CDATA[Copying 2 files to 'd:\sourceforge\ccnet\project\console\..\..\build\server\'.]]></message>
+								</task>
+								<task name="copy">
+									<message level="Info"><![CDATA[Copying 1 file to 'd:\sourceforge\ccnet\project\console\..\..\build\server\'.]]></message>
+								</task>
+								<task name="copy">
+									<message level="Info"><![CDATA[Copying 1 file to 'd:\sourceforge\ccnet\project\console\..\..\build\server\'.]]></message>
+								</task>
+								<task name="copy">
+									<message level="Info"><![CDATA[Copying 3 files to 'd:\sourceforge\ccnet\project\console\..\..\build\server\'.]]></message>
+								</task>
+								<task name="copy">
+									<message level="Info"><![CDATA[Copying 1 file to 'd:\sourceforge\ccnet\project\console\..\..\build\server\'.]]></message>
+								</task>
+								<message level="Info"><![CDATA[Building 'UnitTests' [build]...]]></message>
+								<task name="copy">
+									<message level="Info"><![CDATA[Copying 2 files to 'd:\sourceforge\ccnet\project\UnitTests\..\..\build\unittests\'.]]></message>
+								</task>
+								<task name="copy">
+									<message level="Info"><![CDATA[Copying 1 file to 'd:\sourceforge\ccnet\project\UnitTests\..\..\build\unittests\'.]]></message>
+								</task>
+								<task name="copy">
+									<message level="Info"><![CDATA[Copying 1 file to 'd:\sourceforge\ccnet\project\UnitTests\..\..\build\unittests\'.]]></message>
+								</task>
+								<task name="copy">
+									<message level="Info"><![CDATA[Copying 5 files to 'd:\sourceforge\ccnet\project\UnitTests\..\..\build\unittests\'.]]></message>
+								</task>
+								<task name="copy"/>
+								<task name="copy"/>
+								<task name="copy">
+									<message level="Info"><![CDATA[Copying 1 file to 'd:\sourceforge\ccnet\project\UnitTests\..\..\build\unittests\'.]]></message>
+								</task>
+								<message level="Info"><![CDATA[Building 'ControlPanel' [build]...]]></message>
+								<task name="copy">
+									<message level="Info"><![CDATA[Copying 3 files to 'd:\sourceforge\ccnet\project\ControlPanel\..\..\build\controlpanel\'.]]></message>
+								</task>
+								<task name="copy">
+									<message level="Info"><![CDATA[Copying 2 files to 'd:\sourceforge\ccnet\project\ControlPanel\..\..\build\controlpanel\'.]]></message>
+								</task>
+								<task name="copy">
+									<message level="Info"><![CDATA[Copying 1 file to 'd:\sourceforge\ccnet\project\ControlPanel\..\..\build\controlpanel\'.]]></message>
+								</task>
+								<task name="copy"/>
+								<task name="copy">
+									<message level="Info"><![CDATA[Copying 3 files to 'd:\sourceforge\ccnet\project\ControlPanel\..\..\build\controlpanel\'.]]></message>
+								</task>
+								<task name="copy">
+									<message level="Info"><![CDATA[Copying 1 file to 'd:\sourceforge\ccnet\project\ControlPanel\..\..\build\controlpanel\'.]]></message>
+								</task>
+								<task name="resgen"/>
+								<task name="resgen"/>
+								<task name="resgen"/>
+								<task name="resgen"/>
+								<task name="resgen"/>
+								<task name="resgen"/>
+								<task name="resgen"/>
+							</task>
+							<task name="copy">
+								<message level="Info"><![CDATA[Copying 1 file to 'd:\sourceforge\ccnet\build\server\ccnet.exe.config'.]]></message>
+								<message level="Info"><![CDATA[Copying 'd:\sourceforge\ccnet\project\console\app.config' to 'd:\sourceforge\ccnet\build\server\ccnet.exe.config'.]]></message>
+							</task>
+							<task name="copy">
+								<message level="Info"><![CDATA[Copying 1 file to 'd:\sourceforge\ccnet\build\service\ccservice.exe.config'.]]></message>
+								<message level="Info"><![CDATA[Copying 'd:\sourceforge\ccnet\project\service\app.config' to 'd:\sourceforge\ccnet\build\service\ccservice.exe.config'.]]></message>
+							</task>
+						</target>
+						<target name="test.unit">
+							<task name="exec">
+								<message level="Info"><![CDATA[d:\sourceforge\ccnet\tools\nunit\nunit-console.exe ThoughtWorks.CruiseControl.Core.dll /xml:../ThoughtWorks.CruiseControl.Core.dll-results.xml /nologo]]></message>
+								<message level="Info"><![CDATA[...........................N...............................................................................................................................................F...................................N................................N................N.......................................................................................................................................]]></message>
+								<message level="Info"><![CDATA[##### Unhandled Exception while running ThoughtWorks.CruiseControl.Core.Test.ProjectIntegratorTest.TerminateCalledTwice]]></message>
+								<message level="Info"><![CDATA[System.Threading.ThreadAbortException: Thread was being aborted.]]></message>
+								<message level="Info"><![CDATA[...........................................................................<instrument>c:\ncover\bin\ncover-console.exe /report-name:MyReport /recurse:src\*.cs</instrument>]]></message>
+								<message level="Info">
+									<report>c:\ncover\bin\ncoverreport.exe /actual:"c:\temp\actual.xml" /report-name:"MyReport"</report>
+								</message>
+								<message level="Info">
+									<removeInstrumentation> /report-name:"MyReport"</removeInstrumentation>
+								</message>
+								<message level="Info">
+									<report>c:\ncover\bin\ncoverreport.exe /actual:"c:\temp\actual.xml" /report-name:"MyReport"</report>
+								</message>
+								<message level="Info">
+									<removeInstrumentation> /report-name:"MyReport"</removeInstrumentation>
+								</message>
+								<message level="Info"><![CDATA[Tests run: 459, Failures: 1, Not run: 4, Time: 106.753504 seconds]]></message>
+								<message level="Info"><![CDATA[Failures:]]></message>
+								<message level="Info"><![CDATA[1) ThoughtWorks.CruiseControl.Core.Publishers.Test.ExecutablePublisherTest.CanHandleTimeout : Expected: CruiseControlException but was Win32Exception]]></message>
+								<message level="Info"><![CDATA[at System.Diagnostics.Process.Kill()]]></message>
+								<message level="Info"><![CDATA[at ThoughtWorks.CruiseControl.Core.Publishers.ExecutablePublisher.KillProcessIfNeeded(Process process) in d:\sourceforge\ccnet\project\core\publishers\ExecutablePublisher.cs:line 134]]></message>
+								<message level="Info"><![CDATA[at ThoughtWorks.CruiseControl.Core.Publishers.ExecutablePublisher.PublishIntegrationResults(IProject project, IntegrationResult result) in d:\sourceforge\ccnet\project\core\publishers\ExecutablePublisher.cs:line 96]]></message>
+								<message level="Info"><![CDATA[at ThoughtWorks.CruiseControl.Core.Publishers.Test.ExecutablePublisherTest.CanHandleTimeout() in d:\sourceforge\ccnet\project\core\publishers\test\ExecutablePublisherTest.cs:line 116]]></message>
+								<message level="Info"><![CDATA[Tests not run:]]></message>
+								<message level="Info"><![CDATA[1) ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test.VaultTest.HistoryDates : user-specific vault test settings here]]></message>
+								<message level="Info"><![CDATA[2) ThoughtWorks.CruiseControl.Core.Publishers.Test.NetSendPublisherTest.Send : move to acceptance tests]]></message>
+								<message level="Info"><![CDATA[3) ThoughtWorks.CruiseControl.Core.Tasks.Test.CoverageTaskIntegrationTest.LoadsNunitTaskAndDevEnvBuilder : Works when in config, but not in test]]></message>
+								<message level="Info"><![CDATA[4) ThoughtWorks.CruiseControl.Core.Tasks.Test.NCoverCoverageTest.ShouldCleanupAfterReporting : Need to fix this, and understand to use mocks]]></message>
+							</task>
+						</target>
+						<failure>
+							<builderror>
+								<type>NAnt.Core.BuildException</type>
+								<message><![CDATA[External Program Failed: d:\sourceforge\ccnet\tools\nunit\nunit-console.exe (return code was 1)]]></message>
+								<location>
+									<filename>d:\sourceforge\ccnet\ccnet.build</filename>
+									<linenumber>54</linenumber>
+									<columnnumber>4</columnnumber>
+								</location>
+								<stacktrace><![CDATA[   at NAnt.Core.Tasks.ExternalProgramBase.ExecuteTask()
+   at NAnt.Core.Tasks.ExecTask.ExecuteTask()
+   at NAnt.Core.Task.Execute()
+   at NAnt.Core.Target.Execute()
+   at NAnt.Core.Project.Execute(String targetName, Boolean forceDependencies)
+   at NAnt.Core.Project.Execute()
+   at NAnt.Core.Project.Run()]]></stacktrace>
+							</builderror>
+						</failure>
+					</buildresults>
+				</task>
+			</target>
+			<failure>
+				<builderror>
+					<type>NAnt.Core.BuildException</type>
+					<message><![CDATA[Nested build failed.  Refer to build log for exact reason.]]></message>
+					<stacktrace><![CDATA[   at NAnt.Core.Tasks.NAntTask.RunBuild(FileInfo buildFile)
+   at NAnt.Core.Tasks.NAntTask.ExecuteTask()
+   at NAnt.Core.Task.Execute()
+   at NAnt.Core.Target.Execute()
+   at NAnt.Core.Project.Execute(String targetName, Boolean forceDependencies)
+   at NAnt.Core.Project.Execute()
+   at NAnt.Core.Project.Run()]]></stacktrace>
+				</builderror>
+			</failure>
+		</buildresults>
+	</build>
+	<test-results name="d:\sourceforge\ccnet\build\core\ThoughtWorks.CruiseControl.Core.dll" total="459" failures="1" not-run="4" date="8/18/2004" time="8:29 AM">
+		<test-suite name="d:\sourceforge\ccnet\build\core\ThoughtWorks.CruiseControl.Core.dll" success="False" time="106.753504" asserts="0">
+			<results>
+				<test-suite name="ThoughtWorks" success="False" time="106.1826832" asserts="0">
+					<results>
+						<test-suite name="CruiseControl" success="False" time="104.65048" asserts="0">
+							<results>
+								<test-suite name="Core" success="False" time="103.799256" asserts="0">
+									<results>
+										<test-suite name="Config" success="True" time="1.602304" asserts="0">
+											<results>
+												<test-suite name="Test" success="True" time="1.5922896" asserts="0">
+													<results>
+														<test-suite name="ConfigurationTest" success="True" time="0.1702448" asserts="0">
+															<results>
+																<test-case name="ThoughtWorks.CruiseControl.Core.Config.Test.ConfigurationTest.CreateIntegrators" executed="True" success="True" time="0.060" asserts="0"/>
+															</results>
+														</test-suite>
+														<test-suite name="CruiseControlConfigSectionHandlerTest" success="True" time="0.5207488" asserts="0">
+															<results>
+																<test-case name="ThoughtWorks.CruiseControl.Core.Config.Test.CruiseControlConfigSectionHandlerTest.LoadConfiguration" executed="True" success="True" time="0.511" asserts="0"/>
+															</results>
+														</test-suite>
+														<test-suite name="XslFilesSectionHandler" success="True" time="0.2804032" asserts="0">
+															<results>
+																<test-case name="ThoughtWorks.CruiseControl.Core.Config.Test.XslFilesSectionHandler.GetConfig" executed="True" success="True" time="0.280" asserts="7"/>
+															</results>
+														</test-suite>
+														<test-suite name="ValidatingLoaderTest" success="True" time="0.6108784" asserts="0">
+															<results>
+																<test-case name="ThoughtWorks.CruiseControl.Core.Config.Test.ValidatingLoaderTest.FailedLoad" executed="True" success="True" time="0.531" asserts="1"/>
+																<test-case name="ThoughtWorks.CruiseControl.Core.Config.Test.ValidatingLoaderTest.SucceededLoad" executed="True" success="True" time="0.050" asserts="1"/>
+															</results>
+														</test-suite>
+													</results>
+												</test-suite>
+											</results>
+										</test-suite>
+										<test-suite name="Sourcecontrol" success="True" time="6.5994896" asserts="0">
+											<results>
+												<test-suite name="Test" success="True" time="6.4693024" asserts="0">
+													<results>
+														<test-suite name="MultiSourceControlTest" success="True" time="0.8211808" asserts="0">
+															<results>
+																<test-case name="ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test.MultiSourceControlTest.ValuePopulation" executed="True" success="True" time="0.361" asserts="2"/>
+																<test-case name="ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test.MultiSourceControlTest.PassesThroughLabelSourceControl" executed="True" success="True" time="0.361" asserts="0"/>
+																<test-case name="ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test.MultiSourceControlTest.PassesThroughGetSourceControlAndCombinesResults" executed="True" success="True" time="0.030" asserts="3"/>
+																<test-case name="ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test.MultiSourceControlTest.ShouldRun" executed="True" success="True" time="0.020" asserts="4"/>
+																<test-case name="ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test.MultiSourceControlTest.TemporaryLabellersHaveMethodsInvoked" executed="True" success="True" time="0.010" asserts="0"/>
+																<test-case name="ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test.MultiSourceControlTest.ShouldInstructAggregatedSourceControlsToGetSource" executed="True" success="True" time="0.010" asserts="0"/>
+															</results>
+														</test-suite>
+														<test-suite name="ModificationTest" success="True" time="0.1902736" asserts="0">
+															<results>
+																<test-case name="ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test.ModificationTest.ModificationsAreComparedByModifiedDatetime" executed="True" success="True" time="0.000" asserts="3"/>
+																<test-case name="ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test.ModificationTest.OutputModificationToXml" executed="True" success="True" time="0.070" asserts="1"/>
+																<test-case name="ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test.ModificationTest.OutputToXmlWithSpecialCharactersInCommentField" executed="True" success="True" time="0.090" asserts="1"/>
+																<test-case name="ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test.ModificationTest.NullEmailAddressOrUrlShouldNotBeIncludedInXml" executed="True" success="True" time="0.010" asserts="2"/>
+															</results>
+														</test-suite>
+														<test-suite name="StarTeamTest" success="True" time="0.4806912" asserts="0">
+															<results>
+																<test-case name="ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test.StarTeamTest.TestCreateHistoryProcess" executed="True" success="True" time="0.160" asserts="3"/>
+																<test-case name="ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test.StarTeamTest.TestValuesSet" executed="True" success="True" time="0.050" asserts="7"/>
+																<test-case name="ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test.StarTeamTest.TestFormatDate" executed="True" success="True" time="0.050" asserts="2"/>
+																<test-case name="ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test.StarTeamTest.TestExecutable_default" executed="True" success="True" time="0.050" asserts="1"/>
+																<test-case name="ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test.StarTeamTest.TestHost_default" executed="True" success="True" time="0.050" asserts="1"/>
+																<test-case name="ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test.StarTeamTest.TestPort_default" executed="True" success="True" time="0.050" asserts="1"/>
+																<test-case name="ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test.StarTeamTest.TestPath_default" executed="True" success="True" time="0.050" asserts="1"/>
+															</results>
+														</test-suite>
+														<test-suite name="CvsHistoryParserTest" success="True" time="0.0300432" asserts="0">
+															<results>
+																<test-case name="ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test.CvsHistoryParserTest.TestParseStream" executed="True" success="True" time="0.030" asserts="6"/>
+															</results>
+														</test-suite>
+														<test-suite name="VaultTest" success="True" time="0.3104464" asserts="0">
+															<results>
+																<test-case name="ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test.VaultTest.CreateHistoryProcess" executed="True" success="True" time="0.100" asserts="3"/>
+																<test-case name="ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test.VaultTest.CreateHistoryProcessSsl" executed="True" success="True" time="0.090" asserts="3"/>
+																<test-case name="ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test.VaultTest.ValuesSet" executed="True" success="True" time="0.090" asserts="6"/>
+																<test-case name="ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test.VaultTest.HistoryDates" executed="False">
+																	<reason>
+																		<message><![CDATA[user-specific vault test settings here]]></message>
+																	</reason>
+																</test-case>
+															</results>
+														</test-suite>
+														<test-suite name="PvcsHistoryParserTest" success="True" time="0.0400576" asserts="0">
+															<results>
+																<test-case name="ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test.PvcsHistoryParserTest.ParseStream" executed="True" success="True" time="0.020" asserts="3"/>
+																<test-case name="ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test.PvcsHistoryParserTest.ExtendedLogFileContent" executed="True" success="True" time="0.020" asserts="8"/>
+															</results>
+														</test-suite>
+														<test-suite name="VssApplyLabelTest" success="True" time="0.1301872" asserts="0">
+															<results>
+																<test-case name="ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test.VssApplyLabelTest.ApplyLabelIsDisabledByDefault" executed="True" success="True" time="0.010" asserts="1"/>
+																<test-case name="ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test.VssApplyLabelTest.GetModificationsWhenApplyLabelIsDisabledDoesNotCreateLabels" executed="True" success="True" time="0.090" asserts="0"/>
+																<test-case name="ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test.VssApplyLabelTest.GetModificationsDoesNotCreateLabelWhenThereAreNoModifications" executed="True" success="True" time="0.000" asserts="0"/>
+															</results>
+														</test-suite>
+														<test-suite name="StarTeamHistoryParserTest" success="True" time="0.150216" asserts="0">
+															<results>
+																<test-case name="ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test.StarTeamHistoryParserTest.TestModificationCount" executed="True" success="True" time="0.130" asserts="1"/>
+																<test-case name="ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test.StarTeamHistoryParserTest.TestModificationContent" executed="True" success="True" time="0.020" asserts="5"/>
+															</results>
+														</test-suite>
+														<test-suite name="WebSVNUrlBuilderTest" success="True" time="0.1101584" asserts="0">
+															<results>
+																<test-case name="ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test.WebSVNUrlBuilderTest.ValuePopulation" executed="True" success="True" time="0.050" asserts="1"/>
+																<test-case name="ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test.WebSVNUrlBuilderTest.CheckSetup" executed="True" success="True" time="0.050" asserts="2"/>
+															</results>
+														</test-suite>
+														<test-suite name="SvnTest" success="True" time="0.1301872" asserts="0">
+															<results>
+																<test-case name="ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test.SvnTest.PropertyPopulationFromXml" executed="True" success="True" time="0.060" asserts="3"/>
+																<test-case name="ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test.SvnTest.CreatingHistoryProcessIncludesCorrectlyFormattedArguments" executed="True" success="True" time="0.060" asserts="1"/>
+																<test-case name="ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test.SvnTest.ApplyLabel" executed="True" success="True" time="0.010" asserts="0"/>
+															</results>
+														</test-suite>
+														<test-suite name="VaultHistoryParserTest" success="True" time="0.050072" asserts="0">
+															<results>
+																<test-case name="ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test.VaultHistoryParserTest.NumberOfModifications" executed="True" success="True" time="0.020" asserts="1"/>
+																<test-case name="ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test.VaultHistoryParserTest.NumberOfModificationsWithInvalidDate" executed="True" success="True" time="0.010" asserts="1"/>
+																<test-case name="ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test.VaultHistoryParserTest.ModificationData" executed="True" success="True" time="0.010" asserts="5"/>
+																<test-case name="ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test.VaultHistoryParserTest.NoComments" executed="True" success="True" time="0.000" asserts="0"/>
+															</results>
+														</test-suite>
+														<test-suite name="ClearCaseHistoryParserTest" success="True" time="0.1702448" asserts="0">
+															<results>
+																<test-case name="ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test.ClearCaseHistoryParserTest.CanTokenizeWithNoComment" executed="True" success="True" time="0.010" asserts="9"/>
+																<test-case name="ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test.ClearCaseHistoryParserTest.CanCreateNewModification" executed="True" success="True" time="0.000" asserts="9"/>
+																<test-case name="ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test.ClearCaseHistoryParserTest.CanAssignFileInfo" executed="True" success="True" time="0.000" asserts="2"/>
+																<test-case name="ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test.ClearCaseHistoryParserTest.CanAssignFileInfoWithNoPath" executed="True" success="True" time="0.010" asserts="2"/>
+																<test-case name="ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test.ClearCaseHistoryParserTest.CanAssignModificationTime" executed="True" success="True" time="0.010" asserts="1"/>
+																<test-case name="ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test.ClearCaseHistoryParserTest.CanAssignModificationTimeWithBadTime" executed="True" success="True" time="0.020" asserts="1"/>
+																<test-case name="ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test.ClearCaseHistoryParserTest.CanIgnoreBranchEvent" executed="True" success="True" time="0.010" asserts="1"/>
+																<test-case name="ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test.ClearCaseHistoryParserTest.CanParseChangeNumber" executed="True" success="True" time="0.010" asserts="1"/>
+																<test-case name="ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test.ClearCaseHistoryParserTest.CanParseBadChangeNumber1" executed="True" success="True" time="0.000" asserts="1"/>
+																<test-case name="ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test.ClearCaseHistoryParserTest.CanParseBadChangeNumber2" executed="True" success="True" time="0.000" asserts="1"/>
+																<test-case name="ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test.ClearCaseHistoryParserTest.CanParseBadChangeNumber3" executed="True" success="True" time="0.010" asserts="1"/>
+																<test-case name="ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test.ClearCaseHistoryParserTest.CanParseChangeNumberWithNoNumber" executed="True" success="True" time="0.010" asserts="1"/>
+																<test-case name="ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test.ClearCaseHistoryParserTest.CanParseBadEntry" executed="True" success="True" time="0.000" asserts="1"/>
+																<test-case name="ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test.ClearCaseHistoryParserTest.CanParse" executed="True" success="True" time="0.010" asserts="2"/>
+																<test-case name="ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test.ClearCaseHistoryParserTest.CanParseEntry" executed="True" success="True" time="0.000" asserts="7"/>
+																<test-case name="ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test.ClearCaseHistoryParserTest.CanParseEntryWithNoComment" executed="True" success="True" time="0.010" asserts="7"/>
+																<test-case name="ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test.ClearCaseHistoryParserTest.CanTokenize" executed="True" success="True" time="0.010" asserts="9"/>
+															</results>
+														</test-suite>
+														<test-suite name="SvnHistoryParserTest" success="True" time="0.150216" asserts="0">
+															<results>
+																<test-case name="ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test.SvnHistoryParserTest.ParsingEmptyLogProducesNoModifications" executed="True" success="True" time="0.020" asserts="1"/>
+																<test-case name="ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test.SvnHistoryParserTest.ParsingSingleLogMessageProducesOneModification" executed="True" success="True" time="0.020" asserts="2"/>
+																<test-case name="ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test.SvnHistoryParserTest.ParsingLotsOfEntries" executed="True" success="True" time="0.010" asserts="3"/>
+																<test-case name="ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test.SvnHistoryParserTest.EntriesOutsideOfRequestedTimeRangeAreIgnored" executed="True" success="True" time="0.010" asserts="1"/>
+																<test-case name="ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test.SvnHistoryParserTest.HandleInvalidXml" executed="True" success="True" time="0.090" asserts="0"/>
+															</results>
+														</test-suite>
+														<test-suite name="CvsTest" success="True" time="0.2703888" asserts="0">
+															<results>
+																<test-case name="ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test.CvsTest.ValuePopulation" executed="True" success="True" time="0.060" asserts="5"/>
+																<test-case name="ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test.CvsTest.CreateProcess" executed="True" success="True" time="0.060" asserts="1"/>
+																<test-case name="ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test.CvsTest.HistoryArgs" executed="True" success="True" time="0.010" asserts="1"/>
+																<test-case name="ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test.CvsTest.CreateProcess_MissingCvsRoot" executed="True" success="True" time="0.050" asserts="1"/>
+																<test-case name="ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test.CvsTest.Executable_default" executed="True" success="True" time="0.000" asserts="1"/>
+																<test-case name="ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test.CvsTest.VerifyDateIsFormatedCorrectly" executed="True" success="True" time="0.050" asserts="1"/>
+																<test-case name="ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test.CvsTest.VerifyProcessInfoForGetSource" executed="True" success="True" time="0.010" asserts="3"/>
+																<test-case name="ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test.CvsTest.ShouldNotGetSourceIfAutoGetSourceIsFalse" executed="True" success="True" time="0.010" asserts="0"/>
+															</results>
+														</test-suite>
+														<test-suite name="ClearCaseTest" success="True" time="0.951368" asserts="0">
+															<results>
+																<test-case name="ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test.ClearCaseTest.CanCreateTemporaryBaselineProcessInfo" executed="True" success="True" time="0.080" asserts="1"/>
+																<test-case name="ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test.ClearCaseTest.CanCreateRemoveBaselineProcessInfo" executed="True" success="True" time="0.050" asserts="1"/>
+																<test-case name="ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test.ClearCaseTest.CanCreateRenameBaselineProcesInfo" executed="True" success="True" time="0.050" asserts="1"/>
+																<test-case name="ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test.ClearCaseTest.CanCatchInvalidBaselineConfiguration" executed="True" success="True" time="0.100" asserts="0"/>
+																<test-case name="ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test.ClearCaseTest.CanValidateBaselineName1" executed="True" success="True" time="0.060" asserts="0"/>
+																<test-case name="ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test.ClearCaseTest.CanValidateBaselineName2" executed="True" success="True" time="0.050" asserts="0"/>
+																<test-case name="ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test.ClearCaseTest.CanValidateBaselineName3" executed="True" success="True" time="0.060" asserts="0"/>
+																<test-case name="ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test.ClearCaseTest.CanCatchInvalidLabelConfiguration" executed="True" success="True" time="0.090" asserts="0"/>
+																<test-case name="ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test.ClearCaseTest.CanEnforceProjectVobSetIfBaselineTrue" executed="True" success="True" time="0.050" asserts="0"/>
+																<test-case name="ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test.ClearCaseTest.CanCreateHistoryProcess" executed="True" success="True" time="0.050" asserts="2"/>
+																<test-case name="ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test.ClearCaseTest.TestConfig" executed="True" success="True" time="0.050" asserts="6"/>
+																<test-case name="ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test.ClearCaseTest.CanCreateLabelType" executed="True" success="True" time="0.050" asserts="2"/>
+																<test-case name="ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test.ClearCaseTest.CanCreateLabelProcess" executed="True" success="True" time="0.050" asserts="2"/>
+																<test-case name="ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test.ClearCaseTest.CanIgnoreVobError" executed="True" success="True" time="0.050" asserts="1"/>
+																<test-case name="ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test.ClearCaseTest.CanDetectError" executed="True" success="True" time="0.050" asserts="1"/>
+															</results>
+														</test-suite>
+														<test-suite name="ViewCVSUrlBuilderTest" success="True" time="0.1101584" asserts="0">
+															<results>
+																<test-case name="ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test.ViewCVSUrlBuilderTest.ValuePopulation" executed="True" success="True" time="0.050" asserts="1"/>
+																<test-case name="ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test.ViewCVSUrlBuilderTest.CheckSetup" executed="True" success="True" time="0.060" asserts="2"/>
+															</results>
+														</test-suite>
+														<test-suite name="VssHistoryParserTest" success="True" time="0.300432" asserts="0">
+															<results>
+																<test-case name="ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test.VssHistoryParserTest.Parse" executed="True" success="True" time="0.050" asserts="2"/>
+																<test-case name="ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test.VssHistoryParserTest.ReadAllEntriesTest" executed="True" success="True" time="0.000" asserts="1"/>
+																<test-case name="ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test.VssHistoryParserTest.IsEntryDelimiter" executed="True" success="True" time="0.010" asserts="4"/>
+																<test-case name="ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test.VssHistoryParserTest.ParseCreatedModification" executed="True" success="True" time="0.010" asserts="2"/>
+																<test-case name="ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test.VssHistoryParserTest.ParseUsernameAndUSDate" executed="True" success="True" time="0.010" asserts="2"/>
+																<test-case name="ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test.VssHistoryParserTest.ParseUsernameAndUKDate" executed="True" success="True" time="0.010" asserts="2"/>
+																<test-case name="ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test.VssHistoryParserTest.ParseUsernameAndFRDate" executed="True" success="True" time="0.010" asserts="2"/>
+																<test-case name="ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test.VssHistoryParserTest.ParseUsernameAndDateWithPeriod" executed="True" success="True" time="0.020" asserts="2"/>
+																<test-case name="ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test.VssHistoryParserTest.ParseMultiWordUsername" executed="True" success="True" time="0.010" asserts="2"/>
+																<test-case name="ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test.VssHistoryParserTest.ParseInvalidUsernameLine" executed="True" success="True" time="0.010" asserts="0"/>
+																<test-case name="ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test.VssHistoryParserTest.ParseFileName" executed="True" success="True" time="0.000" asserts="1"/>
+																<test-case name="ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test.VssHistoryParserTest.ParseFileAndFolder_checkin" executed="True" success="True" time="0.010" asserts="8"/>
+																<test-case name="ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test.VssHistoryParserTest.ParseFileAndFolderFR_checkin" executed="True" success="True" time="0.010" asserts="8"/>
+																<test-case name="ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test.VssHistoryParserTest.ParseFileAndFolderWithNoComment" executed="True" success="True" time="0.000" asserts="6"/>
+																<test-case name="ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test.VssHistoryParserTest.ParseFileAndFolder_addAtRoot" executed="True" success="True" time="0.000" asserts="7"/>
+																<test-case name="ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test.VssHistoryParserTest.ParseFileAndFolderIfFolderIsCalledAdded" executed="True" success="True" time="0.000" asserts="7"/>
+																<test-case name="ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test.VssHistoryParserTest.ParseFileAndFolder_deleteFromSubfolder" executed="True" success="True" time="0.000" asserts="7"/>
+																<test-case name="ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test.VssHistoryParserTest.ParseSingleLineComment" executed="True" success="True" time="0.000" asserts="1"/>
+																<test-case name="ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test.VssHistoryParserTest.ParseMultiLineComment" executed="True" success="True" time="0.000" asserts="1"/>
+																<test-case name="ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test.VssHistoryParserTest.ParseEmptyComment" executed="True" success="True" time="0.010" asserts="1"/>
+																<test-case name="ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test.VssHistoryParserTest.ParseEmptyLineComment" executed="True" success="True" time="0.010" asserts="0"/>
+																<test-case name="ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test.VssHistoryParserTest.ParseNoComment" executed="True" success="True" time="0.010" asserts="0"/>
+																<test-case name="ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test.VssHistoryParserTest.ParseNonCommentAtCommentLine" executed="True" success="True" time="0.000" asserts="0"/>
+															</results>
+														</test-suite>
+														<test-suite name="FileSourceControlTest" success="True" time="0.5207488" asserts="0">
+															<results>
+																<test-case name="ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test.FileSourceControlTest.MissingDirectoryThrowsException" executed="True" success="True" time="0.050" asserts="0"/>
+																<test-case name="ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test.FileSourceControlTest.IgnoreMissingDirectoryReturnsZeroMods" executed="True" success="True" time="0.040" asserts="1"/>
+																<test-case name="ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test.FileSourceControlTest.GetModifications_EmptyLocal" executed="True" success="True" time="0.140" asserts="11"/>
+																<test-case name="ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test.FileSourceControlTest.GetModifications_EmptyRepository" executed="True" success="True" time="0.040" asserts="2"/>
+																<test-case name="ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test.FileSourceControlTest.GetModifications_OneUnmodifiedFile" executed="True" success="True" time="0.190" asserts="2"/>
+																<test-case name="ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test.FileSourceControlTest.ShouldRun" executed="True" success="True" time="0.040" asserts="4"/>
+															</results>
+														</test-suite>
+														<test-suite name="PathFilterTest" success="True" time="0.6208928" asserts="0">
+															<results>
+																<test-case name="ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test.PathFilterTest.TestExactFileNameMatch" executed="True" success="True" time="0.010" asserts="14"/>
+																<test-case name="ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test.PathFilterTest.TestAnyFileNameMatch" executed="True" success="True" time="0.010" asserts="14"/>
+																<test-case name="ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test.PathFilterTest.TestExactFolderAnyNameMatch" executed="True" success="True" time="0.000" asserts="14"/>
+																<test-case name="ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test.PathFilterTest.TestAnyFolderExactNameMatch" executed="True" success="True" time="0.000" asserts="14"/>
+																<test-case name="ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test.PathFilterTest.TestExactSubfolderAnyNameMatch" executed="True" success="True" time="0.000" asserts="14"/>
+																<test-case name="ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test.PathFilterTest.TestAcceptAllMatch" executed="True" success="True" time="0.000" asserts="14"/>
+																<test-case name="ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test.PathFilterTest.TestPartialNameMatch" executed="True" success="True" time="0.010" asserts="14"/>
+																<test-case name="ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test.PathFilterTest.TestAnyFolderExactExtensionMatch" executed="True" success="True" time="0.010" asserts="14"/>
+																<test-case name="ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test.PathFilterTest.TestPartialFolderAnyNameMatch" executed="True" success="True" time="0.000" asserts="14"/>
+																<test-case name="ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test.PathFilterTest.TestAnyFolderPartialExtensionMatch" executed="True" success="True" time="0.000" asserts="14"/>
+																<test-case name="ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test.PathFilterTest.TestPartialPathAnyNameMatch" executed="True" success="True" time="0.010" asserts="14"/>
+															</results>
+														</test-suite>
+														<test-suite name="ProcessSourceControlTest" success="True" time="0.0100144" asserts="0">
+															<results>
+																<test-case name="ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test.ProcessSourceControlTest.ShouldRun" executed="True" success="True" time="0.010" asserts="4"/>
+															</results>
+														</test-suite>
+														<test-suite name="VssTest" success="True" time="0.300432" asserts="0">
+															<results>
+																<test-case name="ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test.VssTest.CreateHistoryProcess" executed="True" success="True" time="0.020" asserts="3"/>
+																<test-case name="ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test.VssTest.ValuesSet" executed="True" success="True" time="0.050" asserts="10"/>
+																<test-case name="ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test.VssTest.FormatDateInCultureInvariantFormat" executed="True" success="True" time="0.000" asserts="2"/>
+																<test-case name="ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test.VssTest.FormatDateInUSFormat" executed="True" success="True" time="0.010" asserts="2"/>
+																<test-case name="ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test.VssTest.CreateLabelProcess" executed="True" success="True" time="0.010" asserts="3"/>
+																<test-case name="ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test.VssTest.CreateLabelProcessForCurrentVersion" executed="True" success="True" time="0.000" asserts="3"/>
+																<test-case name="ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test.VssTest.StripQuotesFromSSDir" executed="True" success="True" time="0.000" asserts="1"/>
+																<test-case name="ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test.VssTest.SSDirEnvironmentVariableValueShouldNotChangeIfSSDirIsNotSpecified" executed="True" success="True" time="0.010" asserts="0"/>
+																<test-case name="ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test.VssTest.ReadDefaultExecutableFromRegistry" executed="True" success="True" time="0.010" asserts="1"/>
+																<test-case name="ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test.VssTest.ShouldWorkWhenStandardErrorIsNull" executed="True" success="True" time="0.000" asserts="0"/>
+																<test-case name="ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test.VssTest.ShouldWorkWhenStandardErrorIsNotNullButExitCodeIsZero" executed="True" success="True" time="0.000" asserts="0"/>
+																<test-case name="ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test.VssTest.ShouldFailIfProcessTimesOut" executed="True" success="True" time="0.010" asserts="0"/>
+																<test-case name="ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test.VssTest.VerifyGetSourceProcessInfo" executed="True" success="True" time="0.020" asserts="4"/>
+																<test-case name="ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test.VssTest.OnlyGetSourceIfAutoGetSourceIsSpecified" executed="True" success="True" time="0.000" asserts="0"/>
+																<test-case name="ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test.VssTest.UseTemporaryDirectoryIfWorkingDirectoryIsNull" executed="True" success="True" time="0.010" asserts="1"/>
+																<test-case name="ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test.VssTest.LabelNotAppliedByDefault" executed="True" success="True" time="0.000" asserts="1"/>
+																<test-case name="ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test.VssTest.LabelAppliedIfApplyLabelTrue" executed="True" success="True" time="0.090" asserts="1"/>
+															</results>
+														</test-suite>
+														<test-suite name="PvcsTest" success="True" time="0.2403456" asserts="0">
+															<results>
+																<test-case name="ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test.PvcsTest.ValuePopulation" executed="True" success="True" time="0.060" asserts="3"/>
+																<test-case name="ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test.PvcsTest.AdjustForDayLightSavingsBugDuringDayLightSavings" executed="True" success="True" time="0.020" asserts="1"/>
+																<test-case name="ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test.PvcsTest.AdjustForDayLightSavingsBugOutsideDayLightSavings" executed="True" success="True" time="0.010" asserts="1"/>
+																<test-case name="ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test.PvcsTest.CreateProcess" executed="True" success="True" time="0.010" asserts="1"/>
+																<test-case name="ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test.PvcsTest.CreatePcliContentsForGeneratingPvcsTemp" executed="True" success="True" time="0.000" asserts="1"/>
+																<test-case name="ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test.PvcsTest.CreatePcliContentsForGettingVLog" executed="True" success="True" time="0.000" asserts="1"/>
+																<test-case name="ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test.PvcsTest.GetModifications" executed="True" success="True" time="0.120" asserts="2"/>
+																<test-case name="ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test.PvcsTest.TransformPvcsTempFile" executed="True" success="True" time="0.000" asserts="1"/>
+															</results>
+														</test-suite>
+														<test-suite name="FilteredSourceControlTest" success="True" time="0.1602304" asserts="0">
+															<results>
+																<test-case name="ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test.FilteredSourceControlTest.ValuePopulation" executed="True" success="True" time="0.060" asserts="6"/>
+																<test-case name="ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test.FilteredSourceControlTest.PassesThroughLabelSourceControl" executed="True" success="True" time="0.000" asserts="0"/>
+																<test-case name="ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test.FilteredSourceControlTest.PassesThroughGetSource" executed="True" success="True" time="0.010" asserts="0"/>
+																<test-case name="ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test.FilteredSourceControlTest.PassesThroughShouldRun" executed="True" success="True" time="0.000" asserts="0"/>
+																<test-case name="ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test.FilteredSourceControlTest.InvokesMethodsOnTemporaryLabeller" executed="True" success="True" time="0.000" asserts="0"/>
+																<test-case name="ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test.FilteredSourceControlTest.InvokesRunOnSCProvider" executed="True" success="True" time="0.010" asserts="0"/>
+																<test-case name="ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test.FilteredSourceControlTest.AppliesFiltersOnModifications" executed="True" success="True" time="0.050" asserts="1"/>
+															</results>
+														</test-suite>
+													</results>
+												</test-suite>
+											</results>
+										</test-suite>
+										<test-suite name="Publishers" success="False" time="20.6597072" asserts="0">
+											<results>
+												<test-suite name="Test" success="False" time="20.5996208" asserts="0">
+													<results>
+														<test-suite name="EmailGroupTest" success="True" time="0.0100144" asserts="0">
+															<results>
+																<test-case name="ThoughtWorks.CruiseControl.Core.Publishers.Test.EmailGroupTest.TestSetNotificationException" executed="True" success="True" time="0.000" asserts="0"/>
+															</results>
+														</test-suite>
+														<test-suite name="BuildLogTransformerTest" success="True" time="0.0200288" asserts="0">
+															<results>
+																<test-case name="ThoughtWorks.CruiseControl.Core.Publishers.Test.BuildLogTransformerTest.TransformingDocumentWithEmptyXSLFilesReturnsEmptyString" executed="True" success="True" time="0.020" asserts="1"/>
+															</results>
+														</test-suite>
+														<test-suite name="ExecutablePublisherTest" success="False" time="2.4334992" asserts="0">
+															<results>
+																<test-case name="ThoughtWorks.CruiseControl.Core.Publishers.Test.ExecutablePublisherTest.CanInitFromXml" executed="True" success="True" time="0.050" asserts="5"/>
+																<test-case name="ThoughtWorks.CruiseControl.Core.Publishers.Test.ExecutablePublisherTest.InvalidFatalExitConfigElementCausesException" executed="True" success="True" time="0.050" asserts="0"/>
+																<test-case name="ThoughtWorks.CruiseControl.Core.Publishers.Test.ExecutablePublisherTest.InvalidTimeoutConfigElementCausesException" executed="True" success="True" time="0.040" asserts="0"/>
+																<test-case name="ThoughtWorks.CruiseControl.Core.Publishers.Test.ExecutablePublisherTest.CanGetLabel" executed="True" success="True" time="0.270" asserts="3"/>
+																<test-case name="ThoughtWorks.CruiseControl.Core.Publishers.Test.ExecutablePublisherTest.CanHandleTimeout" executed="True" success="False" time="0.280" asserts="0">
+																	<failure>
+																		<message><![CDATA[Expected: CruiseControlException but was Win32Exception]]></message>
+																		<stack-trace><![CDATA[   at System.Diagnostics.Process.Kill()
+   at ThoughtWorks.CruiseControl.Core.Publishers.ExecutablePublisher.KillProcessIfNeeded(Process process) in d:\sourceforge\ccnet\project\core\publishers\ExecutablePublisher.cs:line 134
+   at ThoughtWorks.CruiseControl.Core.Publishers.ExecutablePublisher.PublishIntegrationResults(IProject project, IntegrationResult result) in d:\sourceforge\ccnet\project\core\publishers\ExecutablePublisher.cs:line 96
+   at ThoughtWorks.CruiseControl.Core.Publishers.Test.ExecutablePublisherTest.CanHandleTimeout() in d:\sourceforge\ccnet\project\core\publishers\test\ExecutablePublisherTest.cs:line 116
+]]></stack-trace>
+																	</failure>
+																</test-case>
+																<test-case name="ThoughtWorks.CruiseControl.Core.Publishers.Test.ExecutablePublisherTest.NonzeroExitFatal" executed="True" success="True" time="1.021" asserts="0"/>
+																<test-case name="ThoughtWorks.CruiseControl.Core.Publishers.Test.ExecutablePublisherTest.CanExecuteSimpleProcess" executed="True" success="True" time="0.681" asserts="1"/>
+															</results>
+														</test-suite>
+														<test-suite name="HtmlLinkMessageBuilderTest" success="True" time="0.0200288" asserts="0">
+															<results>
+																<test-case name="ThoughtWorks.CruiseControl.Core.Publishers.Test.HtmlLinkMessageBuilderTest.BuildLinkMessageWithoutAnchorTag" executed="True" success="True" time="0.010" asserts="1"/>
+																<test-case name="ThoughtWorks.CruiseControl.Core.Publishers.Test.HtmlLinkMessageBuilderTest.BuildLinkMessageWithAnchorTag" executed="True" success="True" time="0.010" asserts="1"/>
+															</results>
+														</test-suite>
+														<test-suite name="EmailPublisherTest" success="True" time="7.9013616" asserts="0">
+															<results>
+																<test-case name="ThoughtWorks.CruiseControl.Core.Publishers.Test.EmailPublisherTest.SendMessage" executed="True" success="True" time="0.871" asserts="5"/>
+																<test-case name="ThoughtWorks.CruiseControl.Core.Publishers.Test.EmailPublisherTest.ShouldNotSendMessageIfRecipientIsNotSpecifiedAndBuildIsSuccessful" executed="True" success="True" time="1.973" asserts="1"/>
+																<test-case name="ThoughtWorks.CruiseControl.Core.Publishers.Test.EmailPublisherTest.ShouldSendMessageIfRecipientIsNotSpecifiedAndBuildFailed" executed="True" success="True" time="0.320" asserts="1"/>
+																<test-case name="ThoughtWorks.CruiseControl.Core.Publishers.Test.EmailPublisherTest.EmailSubject" executed="True" success="True" time="0.310" asserts="1"/>
+																<test-case name="ThoughtWorks.CruiseControl.Core.Publishers.Test.EmailPublisherTest.EmailSubjectFailedBuild" executed="True" success="True" time="0.070" asserts="1"/>
+																<test-case name="ThoughtWorks.CruiseControl.Core.Publishers.Test.EmailPublisherTest.EmailSubjectFixedBuild" executed="True" success="True" time="0.070" asserts="1"/>
+																<test-case name="ThoughtWorks.CruiseControl.Core.Publishers.Test.EmailPublisherTest.EmailMessageWithDetails" executed="True" success="True" time="2.373" asserts="4"/>
+																<test-case name="ThoughtWorks.CruiseControl.Core.Publishers.Test.EmailPublisherTest.CreateRecipientList_BuildStateChanged" executed="True" success="True" time="0.300" asserts="1"/>
+																<test-case name="ThoughtWorks.CruiseControl.Core.Publishers.Test.EmailPublisherTest.CreateRecipientList_BuildStateNotChanged" executed="True" success="True" time="0.080" asserts="1"/>
+																<test-case name="ThoughtWorks.CruiseControl.Core.Publishers.Test.EmailPublisherTest.CreateRecipientList_NoRecipients" executed="True" success="True" time="0.300" asserts="1"/>
+																<test-case name="ThoughtWorks.CruiseControl.Core.Publishers.Test.EmailPublisherTest.CreateModifiersList" executed="True" success="True" time="0.060" asserts="3"/>
+																<test-case name="ThoughtWorks.CruiseControl.Core.Publishers.Test.EmailPublisherTest.CreateModifiersList_unknownUser" executed="True" success="True" time="0.060" asserts="1"/>
+																<test-case name="ThoughtWorks.CruiseControl.Core.Publishers.Test.EmailPublisherTest.CreateModifiersListWithUnspecifiedUser" executed="True" success="True" time="0.060" asserts="1"/>
+																<test-case name="ThoughtWorks.CruiseControl.Core.Publishers.Test.EmailPublisherTest.CreateNotifyList" executed="True" success="True" time="0.060" asserts="3"/>
+																<test-case name="ThoughtWorks.CruiseControl.Core.Publishers.Test.EmailPublisherTest.Publish" executed="True" success="True" time="0.070" asserts="2"/>
+																<test-case name="ThoughtWorks.CruiseControl.Core.Publishers.Test.EmailPublisherTest.UnitTestResultsShouldBeIncludedInEmailMessageWhenIncludesDetailsIsTrue" executed="True" success="True" time="0.160" asserts="1"/>
+																<test-case name="ThoughtWorks.CruiseControl.Core.Publishers.Test.EmailPublisherTest.Publish_UnknownIntegrationStatus" executed="True" success="True" time="0.060" asserts="1"/>
+																<test-case name="ThoughtWorks.CruiseControl.Core.Publishers.Test.EmailPublisherTest.HandleIntegrationEvent" executed="True" success="True" time="0.060" asserts="1"/>
+																<test-case name="ThoughtWorks.CruiseControl.Core.Publishers.Test.EmailPublisherTest.PopulateFromConfiguration" executed="True" success="True" time="0.130" asserts="11"/>
+																<test-case name="ThoughtWorks.CruiseControl.Core.Publishers.Test.EmailPublisherTest.VerifyEmailSubjectAndMessageForExceptionIntegrationResult" executed="True" success="True" time="0.371" asserts="5"/>
+															</results>
+														</test-suite>
+														<test-suite name="RSSPublisherTest" success="True" time="0.150216" asserts="0">
+															<results>
+																<test-case name="ThoughtWorks.CruiseControl.Core.Publishers.Test.RSSPublisherTest.ChannelContainsCorrectDetails" executed="True" success="True" time="0.010" asserts="3"/>
+																<test-case name="ThoughtWorks.CruiseControl.Core.Publishers.Test.RSSPublisherTest.FirstItemContainsDetailsFromCurrentResult" executed="True" success="True" time="0.140" asserts="1"/>
+															</results>
+														</test-suite>
+														<test-suite name="NetSendPublisherTest" success="True" time="0.4406336" asserts="0">
+															<results>
+																<test-case name="ThoughtWorks.CruiseControl.Core.Publishers.Test.NetSendPublisherTest.LoadMinXmlFromConfig" executed="True" success="True" time="0.080" asserts="3"/>
+																<test-case name="ThoughtWorks.CruiseControl.Core.Publishers.Test.NetSendPublisherTest.LoadMaxXmlFromConfig" executed="True" success="True" time="0.180" asserts="5"/>
+																<test-case name="ThoughtWorks.CruiseControl.Core.Publishers.Test.NetSendPublisherTest.ShouldSendMessage" executed="True" success="True" time="0.000" asserts="3"/>
+																<test-case name="ThoughtWorks.CruiseControl.Core.Publishers.Test.NetSendPublisherTest.BuildFailedMessage" executed="True" success="True" time="0.010" asserts="2"/>
+																<test-case name="ThoughtWorks.CruiseControl.Core.Publishers.Test.NetSendPublisherTest.BuildFailedMessage_NoModifications" executed="True" success="True" time="0.000" asserts="1"/>
+																<test-case name="ThoughtWorks.CruiseControl.Core.Publishers.Test.NetSendPublisherTest.BuildFixedMessage" executed="True" success="True" time="0.000" asserts="2"/>
+																<test-case name="ThoughtWorks.CruiseControl.Core.Publishers.Test.NetSendPublisherTest.Publish" executed="True" success="True" time="0.020" asserts="0"/>
+																<test-case name="ThoughtWorks.CruiseControl.Core.Publishers.Test.NetSendPublisherTest.PublishToMultipleNames" executed="True" success="True" time="0.120" asserts="3"/>
+																<test-case name="ThoughtWorks.CruiseControl.Core.Publishers.Test.NetSendPublisherTest.Send" executed="False">
+																	<reason>
+																		<message><![CDATA[move to acceptance tests]]></message>
+																	</reason>
+																</test-case>
+															</results>
+														</test-suite>
+														<test-suite name="EmailGatewayTest" success="True" time="0.0100144" asserts="0">
+															<results>
+																<test-case name="ThoughtWorks.CruiseControl.Core.Publishers.Test.EmailGatewayTest.TestMockEmailGateway" executed="True" success="True" time="0.000" asserts="5"/>
+															</results>
+														</test-suite>
+														<test-suite name="XmlLogPublisherTest" success="True" time="9.1231184" asserts="0">
+															<results>
+																<test-case name="ThoughtWorks.CruiseControl.Core.Publishers.Test.XmlLogPublisherTest.PopulateFromConfig" executed="True" success="True" time="0.811" asserts="2"/>
+																<test-case name="ThoughtWorks.CruiseControl.Core.Publishers.Test.XmlLogPublisherTest.MergeFilesConfig" executed="True" success="True" time="0.721" asserts="2"/>
+																<test-case name="ThoughtWorks.CruiseControl.Core.Publishers.Test.XmlLogPublisherTest.GetFilenameForFailedBuild" executed="True" success="True" time="1.192" asserts="1"/>
+																<test-case name="ThoughtWorks.CruiseControl.Core.Publishers.Test.XmlLogPublisherTest.GetFilenameForGoodBuild" executed="True" success="True" time="1.142" asserts="1"/>
+																<test-case name="ThoughtWorks.CruiseControl.Core.Publishers.Test.XmlLogPublisherTest.Publish" executed="True" success="True" time="1.532" asserts="1"/>
+																<test-case name="ThoughtWorks.CruiseControl.Core.Publishers.Test.XmlLogPublisherTest.ShouldUseProjectArtifactDirectoryInLogDirectoryIfLogDirNotSetWhenPublishing" executed="True" success="True" time="1.803" asserts="1"/>
+																<test-case name="ThoughtWorks.CruiseControl.Core.Publishers.Test.XmlLogPublisherTest.ShouldGiveLogDirectoryAsConfiguredOneIfOneIsConfigured" executed="True" success="True" time="0.931" asserts="1"/>
+																<test-case name="ThoughtWorks.CruiseControl.Core.Publishers.Test.XmlLogPublisherTest.ShouldUseProjectArtifactDirectoryInLogDirectoryIfLogDirNotSet" executed="True" success="True" time="0.431" asserts="1"/>
+																<test-case name="ThoughtWorks.CruiseControl.Core.Publishers.Test.XmlLogPublisherTest.Publish_UnknownIntegrationStatus" executed="True" success="True" time="0.100" asserts="2"/>
+																<test-case name="ThoughtWorks.CruiseControl.Core.Publishers.Test.XmlLogPublisherTest.MergeFile" executed="True" success="True" time="0.210" asserts="1"/>
+																<test-case name="ThoughtWorks.CruiseControl.Core.Publishers.Test.XmlLogPublisherTest.GetXmlWriter" executed="True" success="True" time="0.100" asserts="2"/>
+																<test-case name="ThoughtWorks.CruiseControl.Core.Publishers.Test.XmlLogPublisherTest.GetXmlWriterTwice" executed="True" success="True" time="0.130" asserts="6"/>
+															</results>
+														</test-suite>
+														<test-suite name="BuildPublisherTest" success="True" time="0.2203168" asserts="0">
+															<results>
+																<test-case name="ThoughtWorks.CruiseControl.Core.Publishers.Test.BuildPublisherTest.TestCopyFiles" executed="True" success="True" time="0.220" asserts="6"/>
+															</results>
+														</test-suite>
+														<test-suite name="XmlIntegrationResultWriterTest" success="True" time="0.1201728" asserts="0">
+															<results>
+																<test-case name="ThoughtWorks.CruiseControl.Core.Publishers.Test.XmlIntegrationResultWriterTest.WriteBuildEvent" executed="True" success="True" time="0.010" asserts="1"/>
+																<test-case name="ThoughtWorks.CruiseControl.Core.Publishers.Test.XmlIntegrationResultWriterTest.WriteModifications" executed="True" success="True" time="0.010" asserts="1"/>
+																<test-case name="ThoughtWorks.CruiseControl.Core.Publishers.Test.XmlIntegrationResultWriterTest.WriteExceptionWithEmbeddedCDATA" executed="True" success="True" time="0.010" asserts="2"/>
+																<test-case name="ThoughtWorks.CruiseControl.Core.Publishers.Test.XmlIntegrationResultWriterTest.WriteException" executed="True" success="True" time="0.010" asserts="2"/>
+																<test-case name="ThoughtWorks.CruiseControl.Core.Publishers.Test.XmlIntegrationResultWriterTest.WriteExceptionWithEmbeddedXml" executed="True" success="True" time="0.010" asserts="2"/>
+																<test-case name="ThoughtWorks.CruiseControl.Core.Publishers.Test.XmlIntegrationResultWriterTest.WriteIntegrationResult" executed="True" success="True" time="0.000" asserts="1"/>
+																<test-case name="ThoughtWorks.CruiseControl.Core.Publishers.Test.XmlIntegrationResultWriterTest.WriteIntegrationResultOutput" executed="True" success="True" time="0.000" asserts="1"/>
+																<test-case name="ThoughtWorks.CruiseControl.Core.Publishers.Test.XmlIntegrationResultWriterTest.WriteIntegrationResultOutputWithEmbeddedCDATA" executed="True" success="True" time="0.000" asserts="1"/>
+																<test-case name="ThoughtWorks.CruiseControl.Core.Publishers.Test.XmlIntegrationResultWriterTest.WriteIntegrationResultOutputWithNullCharacterInCDATA" executed="True" success="True" time="0.010" asserts="1"/>
+																<test-case name="ThoughtWorks.CruiseControl.Core.Publishers.Test.XmlIntegrationResultWriterTest.WriteOutputWithInvalidXml" executed="True" success="True" time="0.000" asserts="1"/>
+																<test-case name="ThoughtWorks.CruiseControl.Core.Publishers.Test.XmlIntegrationResultWriterTest.WriteOutputWithInvalidXmlContainingCDATACloseCommand" executed="True" success="True" time="0.000" asserts="1"/>
+																<test-case name="ThoughtWorks.CruiseControl.Core.Publishers.Test.XmlIntegrationResultWriterTest.ShouldStripXmlDeclaration" executed="True" success="True" time="0.010" asserts="2"/>
+																<test-case name="ThoughtWorks.CruiseControl.Core.Publishers.Test.XmlIntegrationResultWriterTest.WriteFailedIntegrationResult" executed="True" success="True" time="0.010" asserts="1"/>
+															</results>
+														</test-suite>
+														<test-suite name="HtmlDetailsMessageBuilderTest" success="True" time="0.0600864" asserts="0">
+															<results>
+																<test-case name="ThoughtWorks.CruiseControl.Core.Publishers.Test.HtmlDetailsMessageBuilderTest.ShouldCreateStyleElementsInTheMailMessage" executed="True" success="True" time="0.060" asserts="3"/>
+															</results>
+														</test-suite>
+													</results>
+												</test-suite>
+											</results>
+										</test-suite>
+										<test-suite name="Tasks" success="True" time="8.0816208" asserts="0">
+											<results>
+												<test-suite name="Test" success="True" time="8.061592" asserts="0">
+													<results>
+														<test-suite name="NCoverCoverageLoadTest" success="True" time="0.0701008" asserts="0">
+															<results>
+																<test-case name="ThoughtWorks.CruiseControl.Core.Tasks.Test.NCoverCoverageLoadTest.LoadWithAllMandatoryParams" executed="True" success="True" time="0.070" asserts="1"/>
+															</results>
+														</test-suite>
+														<test-suite name="NunitTaskTest" success="True" time="0.3905616" asserts="0">
+															<results>
+																<test-case name="ThoughtWorks.CruiseControl.Core.Tasks.Test.NunitTaskTest.LoadWithSingleAssemblyNunitPath" executed="True" success="True" time="0.320" asserts="3"/>
+																<test-case name="ThoughtWorks.CruiseControl.Core.Tasks.Test.NunitTaskTest.LoadWithMultipleAssemblies" executed="True" success="True" time="0.060" asserts="3"/>
+															</results>
+														</test-suite>
+														<test-suite name="CoverageTaskIntegrationTest" success="True" time="0.0100144" asserts="0">
+															<results>
+																<test-case name="ThoughtWorks.CruiseControl.Core.Tasks.Test.CoverageTaskIntegrationTest.LoadsNunitTaskAndDevEnvBuilder" executed="False">
+																	<reason>
+																		<message><![CDATA[Works when in config, but not in test]]></message>
+																	</reason>
+																</test-case>
+															</results>
+														</test-suite>
+														<test-suite name="NUnitArgumentTest" success="True" time="0.150216" asserts="0">
+															<results>
+																<test-case name="ThoughtWorks.CruiseControl.Core.Tasks.Test.NUnitArgumentTest.IfNoAssembliesAreSpecifiedThenTheArgumentIsInvalid" executed="True" success="True" time="0.010" asserts="1"/>
+																<test-case name="ThoughtWorks.CruiseControl.Core.Tasks.Test.NUnitArgumentTest.NoLogoIsOnAlwaysIfValidAssemblyExists" executed="True" success="True" time="0.000" asserts="1"/>
+																<test-case name="ThoughtWorks.CruiseControl.Core.Tasks.Test.NUnitArgumentTest.XmlConsoleFlagIsAlwaysOnIfAssemblyExists" executed="True" success="True" time="0.000" asserts="1"/>
+																<test-case name="ThoughtWorks.CruiseControl.Core.Tasks.Test.NUnitArgumentTest.IfAssembliesAreSpecifiedAllAssembliesExistInTheResult" executed="True" success="True" time="0.000" asserts="3"/>
+															</results>
+														</test-suite>
+														<test-suite name="MergeFileTaskTest" success="True" time="7.0901952" asserts="0">
+															<results>
+																<test-case name="ThoughtWorks.CruiseControl.Core.Tasks.Test.MergeFileTaskTest.StoreMergeFilesInIntegrationResult" executed="True" success="True" time="0.761" asserts="2"/>
+																<test-case name="ThoughtWorks.CruiseControl.Core.Tasks.Test.MergeFileTaskTest.ResolveWildCards" executed="True" success="True" time="0.371" asserts="2"/>
+																<test-case name="ThoughtWorks.CruiseControl.Core.Tasks.Test.MergeFileTaskTest.ResolveWildCardsForMoreThanOneMergeFiles" executed="True" success="True" time="2.904" asserts="1"/>
+																<test-case name="ThoughtWorks.CruiseControl.Core.Tasks.Test.MergeFileTaskTest.IgnoresFilesNotFound" executed="True" success="True" time="0.761" asserts="1"/>
+																<test-case name="ThoughtWorks.CruiseControl.Core.Tasks.Test.MergeFileTaskTest.LoadFromConfig" executed="True" success="True" time="0.431" asserts="3"/>
+																<test-case name="ThoughtWorks.CruiseControl.Core.Tasks.Test.MergeFileTaskTest.ShouldGiveAPresentationValueThatIsANewLineSeparatedEquivalentOfAllTheFiles" executed="True" success="True" time="0.491" asserts="1"/>
+																<test-case name="ThoughtWorks.CruiseControl.Core.Tasks.Test.MergeFileTaskTest.SettingThroughPresentationValueSplitsAtNewLine" executed="True" success="True" time="0.240" asserts="3"/>
+																<test-case name="ThoughtWorks.CruiseControl.Core.Tasks.Test.MergeFileTaskTest.SettingThroughPresentationValueWorksForEmptyAndNullStrings" executed="True" success="True" time="1.112" asserts="2"/>
+															</results>
+														</test-suite>
+														<test-suite name="NCoverCoverageTest" success="True" time="0.2703888" asserts="0">
+															<results>
+																<test-case name="ThoughtWorks.CruiseControl.Core.Tasks.Test.NCoverCoverageTest.ShouldRunInstrumenterOnAllFiles" executed="True" success="True" time="0.010" asserts="3"/>
+																<test-case name="ThoughtWorks.CruiseControl.Core.Tasks.Test.NCoverCoverageTest.ShouldReportToFile" executed="True" success="True" time="0.010" asserts="2"/>
+																<test-case name="ThoughtWorks.CruiseControl.Core.Tasks.Test.NCoverCoverageTest.ShouldLoadActualFileFromFolderWhereAssemblyLies" executed="True" success="True" time="0.240" asserts="1"/>
+																<test-case name="ThoughtWorks.CruiseControl.Core.Tasks.Test.NCoverCoverageTest.ShouldCleanupAfterReporting" executed="False">
+																	<reason>
+																		<message><![CDATA[Need to fix this, and understand to use mocks]]></message>
+																	</reason>
+																</test-case>
+															</results>
+														</test-suite>
+														<test-suite name="NUnitTaskExecutionTest" success="True" time="0.0200288" asserts="0">
+															<results>
+																<test-case name="ThoughtWorks.CruiseControl.Core.Tasks.Test.NUnitTaskExecutionTest.RunWithNunitPathSetExecutesNunitAndRetrivesStandardOutput" executed="True" success="True" time="0.010" asserts="3"/>
+																<test-case name="ThoughtWorks.CruiseControl.Core.Tasks.Test.NUnitTaskExecutionTest.RunWithNoAssembliesDoesNotCreateTaskResult" executed="True" success="True" time="0.000" asserts="0"/>
+															</results>
+														</test-suite>
+														<test-suite name="DataTaskResultTest" success="True" time="0" asserts="0">
+															<results>
+																<test-case name="ThoughtWorks.CruiseControl.Core.Tasks.Test.DataTaskResultTest.DataSetIsValid" executed="True" success="True" time="0.000" asserts="1"/>
+															</results>
+														</test-suite>
+													</results>
+												</test-suite>
+											</results>
+										</test-suite>
+										<test-suite name="Util" success="True" time="10.4950912" asserts="0">
+											<results>
+												<test-suite name="Test" success="True" time="10.3949472" asserts="0">
+													<results>
+														<test-suite name="ProcessReaderTest" success="True" time="0.3805472" asserts="0">
+															<results>
+																<test-case name="ThoughtWorks.CruiseControl.Core.Util.Test.ProcessReaderTest.EnsureThatStreamIsClosedOnceReadingIsComplete" executed="True" success="True" time="0.250" asserts="0"/>
+															</results>
+														</test-suite>
+														<test-suite name="StringUtilTest" success="True" time="0.050072" asserts="0">
+															<results>
+																<test-case name="ThoughtWorks.CruiseControl.Core.Util.Test.StringUtilTest.TestJoinUnique" executed="True" success="True" time="0.000" asserts="1"/>
+																<test-case name="ThoughtWorks.CruiseControl.Core.Util.Test.StringUtilTest.TestGenerateHashCode" executed="True" success="True" time="0.010" asserts="2"/>
+																<test-case name="ThoughtWorks.CruiseControl.Core.Util.Test.StringUtilTest.TestLastWord" executed="True" success="True" time="0.010" asserts="5"/>
+																<test-case name="ThoughtWorks.CruiseControl.Core.Util.Test.StringUtilTest.TestLastWord_withSeps" executed="True" success="True" time="0.000" asserts="2"/>
+																<test-case name="ThoughtWorks.CruiseControl.Core.Util.Test.StringUtilTest.TestInsert" executed="True" success="True" time="0.000" asserts="5"/>
+																<test-case name="ThoughtWorks.CruiseControl.Core.Util.Test.StringUtilTest.TestStrip" executed="True" success="True" time="0.010" asserts="2"/>
+															</results>
+														</test-suite>
+														<test-suite name="HtmlExceptionFormatterTest" success="True" time="0.0100144" asserts="0">
+															<results>
+																<test-case name="ThoughtWorks.CruiseControl.Core.Util.Test.HtmlExceptionFormatterTest.FormatShouldReplaceNewLinesWithBRTags" executed="True" success="True" time="0.010" asserts="2"/>
+															</results>
+														</test-suite>
+														<test-suite name="RegistryTest" success="True" time="0.1802592" asserts="0">
+															<results>
+																<test-case name="ThoughtWorks.CruiseControl.Core.Util.Test.RegistryTest.GetLocalMachineSubKeyValue" executed="True" success="True" time="0.130" asserts="1"/>
+																<test-case name="ThoughtWorks.CruiseControl.Core.Util.Test.RegistryTest.TryToGetInvalidSubKey" executed="True" success="True" time="0.010" asserts="1"/>
+																<test-case name="ThoughtWorks.CruiseControl.Core.Util.Test.RegistryTest.TryToGetInvalidSubKeyValue" executed="True" success="True" time="0.000" asserts="1"/>
+																<test-case name="ThoughtWorks.CruiseControl.Core.Util.Test.RegistryTest.TryToGetExpectedInvalidSubKey" executed="True" success="True" time="0.000" asserts="0"/>
+																<test-case name="ThoughtWorks.CruiseControl.Core.Util.Test.RegistryTest.TryToGetExpectedInvalidSubKeyValue" executed="True" success="True" time="0.010" asserts="0"/>
+															</results>
+														</test-suite>
+														<test-suite name="TempFileUtilTest" success="True" time="2.1330672" asserts="0">
+															<results>
+																<test-case name="ThoughtWorks.CruiseControl.Core.Util.Test.TempFileUtilTest.TestCreateTempDir" executed="True" success="True" time="0.881" asserts="3"/>
+																<test-case name="ThoughtWorks.CruiseControl.Core.Util.Test.TempFileUtilTest.TestCreateTempDirOverride" executed="True" success="True" time="1.122" asserts="4"/>
+																<test-case name="ThoughtWorks.CruiseControl.Core.Util.Test.TempFileUtilTest.TestCreateTempXmlDoc" executed="True" success="True" time="0.050" asserts="3"/>
+																<test-case name="ThoughtWorks.CruiseControl.Core.Util.Test.TempFileUtilTest.TestCreateTempFile_withContent" executed="True" success="True" time="0.050" asserts="4"/>
+															</results>
+														</test-suite>
+														<test-suite name="ProcessInfoTest" success="True" time="0.0600864" asserts="0">
+															<results>
+																<test-case name="ThoughtWorks.CruiseControl.Core.Util.Test.ProcessInfoTest.IfStandardInputContentIsSetThenStandardInputIsRedirected" executed="True" success="True" time="0.010" asserts="2"/>
+																<test-case name="ThoughtWorks.CruiseControl.Core.Util.Test.ProcessInfoTest.IfStandardInputContentIsNotSetThenStandardInputIsNotRedirected" executed="True" success="True" time="0.000" asserts="1"/>
+																<test-case name="ThoughtWorks.CruiseControl.Core.Util.Test.ProcessInfoTest.IfExecutableIsFoundInWorkingDirectoryThenUseCombinedPathAsExecutablePath" executed="True" success="True" time="0.040" asserts="1"/>
+															</results>
+														</test-suite>
+														<test-suite name="XmlUtilTest" success="True" time="0.0901296" asserts="0">
+															<results>
+																<test-case name="ThoughtWorks.CruiseControl.Core.Util.Test.XmlUtilTest.TestGetFirstElement" executed="True" success="True" time="0.020" asserts="1"/>
+																<test-case name="ThoughtWorks.CruiseControl.Core.Util.Test.XmlUtilTest.TestGetSingleElement" executed="True" success="True" time="0.010" asserts="0"/>
+																<test-case name="ThoughtWorks.CruiseControl.Core.Util.Test.XmlUtilTest.TestSelectValue" executed="True" success="True" time="0.010" asserts="1"/>
+																<test-case name="ThoughtWorks.CruiseControl.Core.Util.Test.XmlUtilTest.TestSelectValue_missingValue" executed="True" success="True" time="0.010" asserts="1"/>
+																<test-case name="ThoughtWorks.CruiseControl.Core.Util.Test.XmlUtilTest.TestSelectValue_missingElement" executed="True" success="True" time="0.000" asserts="1"/>
+																<test-case name="ThoughtWorks.CruiseControl.Core.Util.Test.XmlUtilTest.TestSelectValue_attribute" executed="True" success="True" time="0.000" asserts="1"/>
+																<test-case name="ThoughtWorks.CruiseControl.Core.Util.Test.XmlUtilTest.TestSelectRequiredValue" executed="True" success="True" time="0.000" asserts="1"/>
+																<test-case name="ThoughtWorks.CruiseControl.Core.Util.Test.XmlUtilTest.TestSelectRequiredValue_missingValue" executed="True" success="True" time="0.010" asserts="0"/>
+																<test-case name="ThoughtWorks.CruiseControl.Core.Util.Test.XmlUtilTest.TestSelectRequiredValue_missingElement" executed="True" success="True" time="0.010" asserts="0"/>
+																<test-case name="ThoughtWorks.CruiseControl.Core.Util.Test.XmlUtilTest.VerifyCDATAEncode" executed="True" success="True" time="0.000" asserts="1"/>
+															</results>
+														</test-suite>
+														<test-suite name="ProcessExecutorTest" success="True" time="5.3977616" asserts="0">
+															<results>
+																<test-case name="ThoughtWorks.CruiseControl.Core.Util.Test.ProcessExecutorTest.ExecuteProcessAndEchoResultsBackThroughStandardOut" executed="True" success="True" time="0.951" asserts="3"/>
+																<test-case name="ThoughtWorks.CruiseControl.Core.Util.Test.ProcessExecutorTest.ExecuteProcessAndEchoResultsBackThroughStandardOutWhereALargeAmountOfOutputIsProduced" executed="True" success="True" time="4.236" asserts="3"/>
+																<test-case name="ThoughtWorks.CruiseControl.Core.Util.Test.ProcessExecutorTest.StartProcessRunningCmdExeCallingNonExistentFile" executed="True" success="True" time="0.050" asserts="5"/>
+																<test-case name="ThoughtWorks.CruiseControl.Core.Util.Test.ProcessExecutorTest.SetEnvironmentVariables" executed="True" success="True" time="0.040" asserts="3"/>
+																<test-case name="ThoughtWorks.CruiseControl.Core.Util.Test.ProcessExecutorTest.ForceProcessTimeoutBecauseTargetIsNonTerminating" executed="True" success="True" time="0.090" asserts="4"/>
+																<test-case name="ThoughtWorks.CruiseControl.Core.Util.Test.ProcessExecutorTest.SupplyInvalidFilenameAndVerifyException" executed="True" success="True" time="0.000" asserts="0"/>
+															</results>
+														</test-suite>
+														<test-suite name="ReflectionUtilTest" success="True" time="0.0801152" asserts="0">
+															<results>
+																<test-case name="ThoughtWorks.CruiseControl.Core.Util.Test.ReflectionUtilTest.TestReflectionEquals" executed="True" success="True" time="0.020" asserts="1"/>
+																<test-case name="ThoughtWorks.CruiseControl.Core.Util.Test.ReflectionUtilTest.TestReflectionEquals_BothNull" executed="True" success="True" time="0.010" asserts="1"/>
+																<test-case name="ThoughtWorks.CruiseControl.Core.Util.Test.ReflectionUtilTest.TestReflectionEquals_OneNull" executed="True" success="True" time="0.000" asserts="1"/>
+																<test-case name="ThoughtWorks.CruiseControl.Core.Util.Test.ReflectionUtilTest.TestReflectionEquals_NotEqualFields" executed="True" success="True" time="0.000" asserts="1"/>
+																<test-case name="ThoughtWorks.CruiseControl.Core.Util.Test.ReflectionUtilTest.TestReflectionEquals_NotEqualProperties" executed="True" success="True" time="0.010" asserts="1"/>
+																<test-case name="ThoughtWorks.CruiseControl.Core.Util.Test.ReflectionUtilTest.TestReflectionEquals_DifferentTypes" executed="True" success="True" time="0.010" asserts="1"/>
+																<test-case name="ThoughtWorks.CruiseControl.Core.Util.Test.ReflectionUtilTest.TestReflectionEquals_Arrays" executed="True" success="True" time="0.010" asserts="1"/>
+																<test-case name="ThoughtWorks.CruiseControl.Core.Util.Test.ReflectionUtilTest.TestReflectionToString" executed="True" success="True" time="0.010" asserts="1"/>
+															</results>
+														</test-suite>
+														<test-suite name="WildCardPathTest" success="True" time="0.1301872" asserts="0">
+															<results>
+																<test-case name="ThoughtWorks.CruiseControl.Core.Util.Test.WildCardPathTest.StringWithNoWildCardsReturnsSingleFile" executed="True" success="True" time="0.020" asserts="1"/>
+																<test-case name="ThoughtWorks.CruiseControl.Core.Util.Test.WildCardPathTest.InvalidWildCardPathReturnsNoFiles" executed="True" success="True" time="0.020" asserts="1"/>
+																<test-case name="ThoughtWorks.CruiseControl.Core.Util.Test.WildCardPathTest.HandlesWhiteSpaceInTheFileName" executed="True" success="True" time="0.020" asserts="2"/>
+																<test-case name="ThoughtWorks.CruiseControl.Core.Util.Test.WildCardPathTest.StringWithWildcardsReturnsAllMatchingFiles" executed="True" success="True" time="0.070" asserts="1"/>
+															</results>
+														</test-suite>
+														<test-suite name="LogFileTraceListenerTest" success="True" time="0.0801152" asserts="0">
+															<results>
+																<test-case name="ThoughtWorks.CruiseControl.Core.Util.Test.LogFileTraceListenerTest.LoggingAnEntryShouldFlushLogFileIfAutoFlushIsEnabled" executed="True" success="True" time="0.080" asserts="1"/>
+															</results>
+														</test-suite>
+														<test-suite name="FileChangedWatcherTest" success="True" time="1.7224768" asserts="0">
+															<results>
+																<test-case name="ThoughtWorks.CruiseControl.Core.Util.Test.FileChangedWatcherTest.HandleFileChanged" executed="True" success="True" time="1.722" asserts="2"/>
+															</results>
+														</test-suite>
+													</results>
+												</test-suite>
+											</results>
+										</test-suite>
+										<test-suite name="Test" success="True" time="46.3967152" asserts="0">
+											<results>
+												<test-suite name="CruiseServerTest" success="True" time="1.2417856" asserts="0">
+													<results>
+														<test-case name="ThoughtWorks.CruiseControl.Core.Test.CruiseServerTest.StartAllProjectsInCruiseServer" executed="True" success="True" time="0.040" asserts="0"/>
+														<test-case name="ThoughtWorks.CruiseControl.Core.Test.CruiseServerTest.CallingStopBeforeCallingStartDoesntCauseAnError" executed="True" success="True" time="0.010" asserts="0"/>
+														<test-case name="ThoughtWorks.CruiseControl.Core.Test.CruiseServerTest.CallingStopStopsIntegratorsAndWaitsForThemToFinish" executed="True" success="True" time="0.000" asserts="0"/>
+														<test-case name="ThoughtWorks.CruiseControl.Core.Test.CruiseServerTest.CallingAbortBeforeCallingStartDoesntCauseAnError" executed="True" success="True" time="0.000" asserts="0"/>
+														<test-case name="ThoughtWorks.CruiseControl.Core.Test.CruiseServerTest.CallingAbortStopsIntegratorsAndWaitsForThemToFinish" executed="True" success="True" time="0.010" asserts="0"/>
+														<test-case name="ThoughtWorks.CruiseControl.Core.Test.CruiseServerTest.OnRestartKillAllIntegratorsRefreshConfigAndStartupNewIntegrators" executed="True" success="True" time="0.010" asserts="0"/>
+														<test-case name="ThoughtWorks.CruiseControl.Core.Test.CruiseServerTest.WaitForExitAfterStop" executed="True" success="True" time="0.491" asserts="0"/>
+														<test-case name="ThoughtWorks.CruiseControl.Core.Test.CruiseServerTest.WaitForExitAfterAbort" executed="True" success="True" time="0.371" asserts="0"/>
+														<test-case name="ThoughtWorks.CruiseControl.Core.Test.CruiseServerTest.ForceBuildForProject" executed="True" success="True" time="0.010" asserts="0"/>
+														<test-case name="ThoughtWorks.CruiseControl.Core.Test.CruiseServerTest.AttemptToForceBuildOnProjectThatDoesNotExist" executed="True" success="True" time="0.010" asserts="0"/>
+														<test-case name="ThoughtWorks.CruiseControl.Core.Test.CruiseServerTest.WaitForExitForProject" executed="True" success="True" time="0.010" asserts="0"/>
+														<test-case name="ThoughtWorks.CruiseControl.Core.Test.CruiseServerTest.AttemptToWaitForExitOnProjectThatDoesNotExist" executed="True" success="True" time="0.010" asserts="0"/>
+													</results>
+												</test-suite>
+												<test-suite name="WorkflowTest" success="True" time="0.3705328" asserts="0">
+													<results>
+														<test-case name="ThoughtWorks.CruiseControl.Core.Test.WorkflowTest.LoadConfiguration" executed="True" success="True" time="0.310" asserts="6"/>
+														<test-case name="ThoughtWorks.CruiseControl.Core.Test.WorkflowTest.Run" executed="True" success="True" time="0.020" asserts="5"/>
+														<test-case name="ThoughtWorks.CruiseControl.Core.Test.WorkflowTest.RunForceBuild" executed="True" success="True" time="0.030" asserts="0"/>
+														<test-case name="ThoughtWorks.CruiseControl.Core.Test.WorkflowTest.RunWhereFirstTaskThrowsException" executed="True" success="True" time="0.010" asserts="2"/>
+													</results>
+												</test-suite>
+												<test-suite name="LogFileTest" success="True" time="12.9486192" asserts="0">
+													<results>
+														<test-case name="ThoughtWorks.CruiseControl.Core.Test.LogFileTest.ParseForDate" executed="True" success="True" time="0.130" asserts="1"/>
+														<test-case name="ThoughtWorks.CruiseControl.Core.Test.LogFileTest.GetFormattedDateString" executed="True" success="True" time="0.751" asserts="1"/>
+														<test-case name="ThoughtWorks.CruiseControl.Core.Test.LogFileTest.ParseForDateString" executed="True" success="True" time="0.751" asserts="3"/>
+														<test-case name="ThoughtWorks.CruiseControl.Core.Test.LogFileTest.GetLatestBuildNumber" executed="True" success="True" time="0.381" asserts="1"/>
+														<test-case name="ThoughtWorks.CruiseControl.Core.Test.LogFileTest.GetLatestBuildNumberHandlesString" executed="True" success="True" time="0.631" asserts="1"/>
+														<test-case name="ThoughtWorks.CruiseControl.Core.Test.LogFileTest.ListFiles" executed="True" success="True" time="2.594" asserts="3"/>
+														<test-case name="ThoughtWorks.CruiseControl.Core.Test.LogFileTest.GetLastLogFileName" executed="True" success="True" time="0.210" asserts="1"/>
+														<test-case name="ThoughtWorks.CruiseControl.Core.Test.LogFileTest.GetLastLogFileName_UnknownPath" executed="True" success="True" time="0.010" asserts="1"/>
+														<test-case name="ThoughtWorks.CruiseControl.Core.Test.LogFileTest.GetLastLogFileName_EmptyFolder" executed="True" success="True" time="0.030" asserts="1"/>
+														<test-case name="ThoughtWorks.CruiseControl.Core.Test.LogFileTest.GetLastBuildDate" executed="True" success="True" time="1.362" asserts="1"/>
+														<test-case name="ThoughtWorks.CruiseControl.Core.Test.LogFileTest.GetLastBuildDate_NoDirectory" executed="True" success="True" time="1.021" asserts="1"/>
+														<test-case name="ThoughtWorks.CruiseControl.Core.Test.LogFileTest.GetLastBuildDate_NoFiles" executed="True" success="True" time="1.182" asserts="1"/>
+														<test-case name="ThoughtWorks.CruiseControl.Core.Test.LogFileTest.GetLatestBuildNumberWithMissingPath" executed="True" success="True" time="0.280" asserts="1"/>
+														<test-case name="ThoughtWorks.CruiseControl.Core.Test.LogFileTest.ParseForDateStringWrongPrefix" executed="True" success="True" time="0.250" asserts="0"/>
+														<test-case name="ThoughtWorks.CruiseControl.Core.Test.LogFileTest.ParseForDateStringShortFilename" executed="True" success="True" time="0.631" asserts="0"/>
+														<test-case name="ThoughtWorks.CruiseControl.Core.Test.LogFileTest.BuildSuccessful" executed="True" success="True" time="0.671" asserts="2"/>
+														<test-case name="ThoughtWorks.CruiseControl.Core.Test.LogFileTest.CreateFileNameNoBuildNumber" executed="True" success="True" time="0.200" asserts="1"/>
+														<test-case name="ThoughtWorks.CruiseControl.Core.Test.LogFileTest.CreateFileNameWithBuildNumber" executed="True" success="True" time="0.491" asserts="1"/>
+														<test-case name="ThoughtWorks.CruiseControl.Core.Test.LogFileTest.CreateUrl" executed="True" success="True" time="0.270" asserts="1"/>
+														<test-case name="ThoughtWorks.CruiseControl.Core.Test.LogFileTest.CreateUrl_FailedBuild" executed="True" success="True" time="0.481" asserts="1"/>
+														<test-case name="ThoughtWorks.CruiseControl.Core.Test.LogFileTest.CreateUrl_givenFilename" executed="True" success="True" time="0.451" asserts="1"/>
+														<test-case name="ThoughtWorks.CruiseControl.Core.Test.LogFileTest.CreateUrlWithGivenFilenameAndProjectName" executed="True" success="True" time="0.030" asserts="1"/>
+													</results>
+												</test-suite>
+												<test-suite name="IntegrationResultTest" success="True" time="0.0300432" asserts="0">
+													<results>
+														<test-case name="ThoughtWorks.CruiseControl.Core.Test.IntegrationResultTest.LastModificationDate" executed="True" success="True" time="0.010" asserts="1"/>
+														<test-case name="ThoughtWorks.CruiseControl.Core.Test.IntegrationResultTest.LastModificationDateWhenThereAreNoModifications" executed="True" success="True" time="0.010" asserts="1"/>
+														<test-case name="ThoughtWorks.CruiseControl.Core.Test.IntegrationResultTest.VerifyInitialIntegrationResult" executed="True" success="True" time="0.000" asserts="6"/>
+													</results>
+												</test-suite>
+												<test-suite name="WorkflowResultTest" success="True" time="0.0100144" asserts="0">
+													<results>
+														<test-case name="ThoughtWorks.CruiseControl.Core.Test.WorkflowResultTest.AppendOutput" executed="True" success="True" time="0.000" asserts="1"/>
+														<test-case name="ThoughtWorks.CruiseControl.Core.Test.WorkflowResultTest.AppendModifications" executed="True" success="True" time="0.010" asserts="3"/>
+													</results>
+												</test-suite>
+												<test-suite name="ProjectTest" success="True" time="16.0030112" asserts="0">
+													<results>
+														<test-case name="ThoughtWorks.CruiseControl.Core.Test.ProjectTest.LoadFullySpecifiedProjectFromConfiguration" executed="True" success="True" time="1.743" asserts="12"/>
+														<test-case name="ThoughtWorks.CruiseControl.Core.Test.ProjectTest.LoadMinimalProjectXmlFromConfiguration" executed="True" success="True" time="0.320" asserts="10"/>
+														<test-case name="ThoughtWorks.CruiseControl.Core.Test.ProjectTest.RunningFirstIntegrationShouldForceBuild" executed="True" success="True" time="1.152" asserts="11"/>
+														<test-case name="ThoughtWorks.CruiseControl.Core.Test.ProjectTest.RunningIntegrationWithNoModificationsShouldNotBuildOrPublish" executed="True" success="True" time="0.280" asserts="9"/>
+														<test-case name="ThoughtWorks.CruiseControl.Core.Test.ProjectTest.RunningFirstIntegrationWithModificationsShouldBuildAndPublish" executed="True" success="True" time="2.063" asserts="8"/>
+														<test-case name="ThoughtWorks.CruiseControl.Core.Test.ProjectTest.ShouldNotPublishIntegrationResultsIfPublishExceptionsIsFalseAndSourceControlThrowsAnException" executed="True" success="True" time="0.270" asserts="1"/>
+														<test-case name="ThoughtWorks.CruiseControl.Core.Test.ProjectTest.ShouldPublishIntegrationResultsIfPublishExceptionsIsTrueAndSourceControlThrowsAnException" executed="True" success="True" time="1.302" asserts="1"/>
+														<test-case name="ThoughtWorks.CruiseControl.Core.Test.ProjectTest.ShouldCreateInitialIntegrationResultIfThisIsTheFirstIntegration" executed="True" success="True" time="0.270" asserts="1"/>
+														<test-case name="ThoughtWorks.CruiseControl.Core.Test.ProjectTest.ShouldLoadLastStateIfIntegrationHasBeenRunPreviously" executed="True" success="True" time="0.381" asserts="1"/>
+														<test-case name="ThoughtWorks.CruiseControl.Core.Test.ProjectTest.PostBuild" executed="True" success="True" time="0.270" asserts="3"/>
+														<test-case name="ThoughtWorks.CruiseControl.Core.Test.ProjectTest.ShouldRunBuild" executed="True" success="True" time="0.611" asserts="4"/>
+														<test-case name="ThoughtWorks.CruiseControl.Core.Test.ProjectTest.CreateTemporaryLabelMethodIsInvoked" executed="True" success="True" time="0.671" asserts="0"/>
+														<test-case name="ThoughtWorks.CruiseControl.Core.Test.ProjectTest.CreateTemporaryLabelMethodNotInvokedIfNotTemporaryLabeller" executed="True" success="True" time="0.551" asserts="0"/>
+														<test-case name="ThoughtWorks.CruiseControl.Core.Test.ProjectTest.DeleteTemporaryLabelMethodIsInvokedIfBuildFailed" executed="True" success="True" time="0.330" asserts="0"/>
+														<test-case name="ThoughtWorks.CruiseControl.Core.Test.ProjectTest.DeleteTemporaryLabelMethodNotInvokedIfBuildSuceeded" executed="True" success="True" time="0.260" asserts="0"/>
+														<test-case name="ThoughtWorks.CruiseControl.Core.Test.ProjectTest.DeleteTemporaryLabelMethodNotInvokedIfNotTemporaryLabeller" executed="True" success="True" time="0.811" asserts="0"/>
+														<test-case name="ThoughtWorks.CruiseControl.Core.Test.ProjectTest.InitialActivityState" executed="True" success="True" time="1.052" asserts="1"/>
+														<test-case name="ThoughtWorks.CruiseControl.Core.Test.ProjectTest.RethrowExceptionIfLoadingStateFileThrowsException" executed="True" success="True" time="0.761" asserts="0"/>
+														<test-case name="ThoughtWorks.CruiseControl.Core.Test.ProjectTest.RethrowExceptionIfLabellerThrowsException" executed="True" success="True" time="0.491" asserts="0"/>
+														<test-case name="ThoughtWorks.CruiseControl.Core.Test.ProjectTest.SourceControlLabeled" executed="True" success="True" time="0.160" asserts="4"/>
+														<test-case name="ThoughtWorks.CruiseControl.Core.Test.ProjectTest.HandleBuildResultSaveException" executed="True" success="True" time="0.040" asserts="7"/>
+														<test-case name="ThoughtWorks.CruiseControl.Core.Test.ProjectTest.HandlePublisherException" executed="True" success="True" time="0.250" asserts="7"/>
+														<test-case name="ThoughtWorks.CruiseControl.Core.Test.ProjectTest.ShouldCallSourceControlInitializeOnInitialize" executed="True" success="True" time="0.611" asserts="0"/>
+														<test-case name="ThoughtWorks.CruiseControl.Core.Test.ProjectTest.ShouldCallSourceControlPurgeThenDeleteWorkingDirectoryOnPurge" executed="True" success="True" time="0.771" asserts="2"/>
+														<test-case name="ThoughtWorks.CruiseControl.Core.Test.ProjectTest.ShouldNotDeleteWorkingDirectoryIfSourceControlFailsOnPurge" executed="True" success="True" time="0.391" asserts="2"/>
+														<test-case name="ThoughtWorks.CruiseControl.Core.Test.ProjectTest.ShouldHandleWorkingDirectoryNotExisting" executed="True" success="True" time="0.020" asserts="1"/>
+													</results>
+												</test-suite>
+												<test-suite name="RemoteCruiseServerTest" success="True" time="5.1273728" asserts="0">
+													<results>
+														<test-case name="ThoughtWorks.CruiseControl.Core.Test.RemoteCruiseServerTest.SetupAndTeardownRemotingInfrastructure" executed="True" success="True" time="5.127" asserts="7"/>
+													</results>
+												</test-suite>
+												<test-suite name="ProjectIntegratorTest" success="True" time="10.4450192" asserts="0">
+													<results>
+														<test-case name="ThoughtWorks.CruiseControl.Core.Test.ProjectIntegratorTest.RunProjectOnce" executed="True" success="True" time="0.340" asserts="3"/>
+														<test-case name="ThoughtWorks.CruiseControl.Core.Test.ProjectIntegratorTest.RunProjectTwice" executed="True" success="True" time="2.393" asserts="4"/>
+														<test-case name="ThoughtWorks.CruiseControl.Core.Test.ProjectIntegratorTest.RunProjectUntilStopped" executed="True" success="True" time="0.411" asserts="4"/>
+														<test-case name="ThoughtWorks.CruiseControl.Core.Test.ProjectIntegratorTest.StartMultipleTimes" executed="True" success="True" time="0.951" asserts="2"/>
+														<test-case name="ThoughtWorks.CruiseControl.Core.Test.ProjectIntegratorTest.RestartScheduler" executed="True" success="True" time="1.212" asserts="0"/>
+														<test-case name="ThoughtWorks.CruiseControl.Core.Test.ProjectIntegratorTest.StopUnstartedScheduler" executed="True" success="True" time="0.000" asserts="1"/>
+														<test-case name="ThoughtWorks.CruiseControl.Core.Test.ProjectIntegratorTest.VerifySchedulerStateAfterException" executed="True" success="True" time="2.644" asserts="4"/>
+														<test-case name="ThoughtWorks.CruiseControl.Core.Test.ProjectIntegratorTest.SleepTest" executed="True" success="True" time="1.001" asserts="1"/>
+														<test-case name="ThoughtWorks.CruiseControl.Core.Test.ProjectIntegratorTest.StartTwice" executed="True" success="True" time="0.501" asserts="0"/>
+														<test-case name="ThoughtWorks.CruiseControl.Core.Test.ProjectIntegratorTest.Abort" executed="True" success="True" time="0.351" asserts="2"/>
+														<test-case name="ThoughtWorks.CruiseControl.Core.Test.ProjectIntegratorTest.TerminateWhenProjectIsntStarted" executed="True" success="True" time="0.000" asserts="1"/>
+														<test-case name="ThoughtWorks.CruiseControl.Core.Test.ProjectIntegratorTest.TerminateCalledTwice" executed="True" success="True" time="0.611" asserts="1"/>
+														<test-case name="ThoughtWorks.CruiseControl.Core.Test.ProjectIntegratorTest.ForceBuild" executed="True" success="True" time="0.010" asserts="0"/>
+													</results>
+												</test-suite>
+											</results>
+										</test-suite>
+										<test-suite name="Builder" success="True" time="1.5422176" asserts="0">
+											<results>
+												<test-suite name="Test" success="True" time="1.2718288" asserts="0">
+													<results>
+														<test-suite name="CommandLineBuilderTest" success="True" time="0.2603744" asserts="0">
+															<results>
+																<test-case name="ThoughtWorks.CruiseControl.Core.Builder.Test.CommandLineBuilderTest.PopulateFromReflector" executed="True" success="True" time="0.100" asserts="4"/>
+																<test-case name="ThoughtWorks.CruiseControl.Core.Builder.Test.CommandLineBuilderTest.PopulateFromConfigurationUsingOnlyRequiredElementsAndCheckDefaultValues" executed="True" success="True" time="0.070" asserts="3"/>
+																<test-case name="ThoughtWorks.CruiseControl.Core.Builder.Test.CommandLineBuilderTest.ShouldSetSuccessfulStatusAndBuildOutputAsAResultOfASuccessfulBuild" executed="True" success="True" time="0.010" asserts="3"/>
+																<test-case name="ThoughtWorks.CruiseControl.Core.Builder.Test.CommandLineBuilderTest.ShouldSetFailedStatusAndBuildOutputAsAResultOfFailedBuild" executed="True" success="True" time="0.010" asserts="3"/>
+																<test-case name="ThoughtWorks.CruiseControl.Core.Builder.Test.CommandLineBuilderTest.ShouldThrowBuilderExceptionIfProcessThrowsException" executed="True" success="True" time="0.010" asserts="0"/>
+																<test-case name="ThoughtWorks.CruiseControl.Core.Builder.Test.CommandLineBuilderTest.ShouldPassSpecifiedPropertiesAsProcessInfoArgumentsToProcessExecutor" executed="True" success="True" time="0.010" asserts="3"/>
+																<test-case name="ThoughtWorks.CruiseControl.Core.Builder.Test.CommandLineBuilderTest.ShouldRun" executed="True" success="True" time="0.010" asserts="5"/>
+																<test-case name="ThoughtWorks.CruiseControl.Core.Builder.Test.CommandLineBuilderTest.IfConfiguredBaseDirectoryIsNotSetUseProjectWorkingDirectoryAsBaseDirectory" executed="True" success="True" time="0.010" asserts="1"/>
+																<test-case name="ThoughtWorks.CruiseControl.Core.Builder.Test.CommandLineBuilderTest.IfConfiguredBaseDirectoryIsEmptyUseProjectWorkingDirectoryAsBaseDirectory" executed="True" success="True" time="0.010" asserts="1"/>
+																<test-case name="ThoughtWorks.CruiseControl.Core.Builder.Test.CommandLineBuilderTest.IfConfiguredBaseDirectoryIsNotAbsoluteUseProjectWorkingDirectoryAsFirstPartOfBaseDirectory" executed="True" success="True" time="0.010" asserts="1"/>
+																<test-case name="ThoughtWorks.CruiseControl.Core.Builder.Test.CommandLineBuilderTest.IfConfiguredBaseDirectoryIsAbsoluteUseItAtBaseDirectory" executed="True" success="True" time="0.000" asserts="1"/>
+															</results>
+														</test-suite>
+														<test-suite name="DevenvTaskResultTest" success="True" time="0.0100144" asserts="0">
+															<results>
+																<test-case name="ThoughtWorks.CruiseControl.Core.Builder.Test.DevenvTaskResultTest.CreateFailedXmlFromDevenvOutput" executed="True" success="True" time="0.000" asserts="1"/>
+															</results>
+														</test-suite>
+														<test-suite name="DevenvBuilderTest" success="True" time="0.2103024" asserts="0">
+															<results>
+																<test-case name="ThoughtWorks.CruiseControl.Core.Builder.Test.DevenvBuilderTest.ShouldLoadAllValuesFromConfiguration" executed="True" success="True" time="0.080" asserts="4"/>
+																<test-case name="ThoughtWorks.CruiseControl.Core.Builder.Test.DevenvBuilderTest.ShouldLoadMinimalValuesFromConfiguration" executed="True" success="True" time="0.060" asserts="3"/>
+																<test-case name="ThoughtWorks.CruiseControl.Core.Builder.Test.DevenvBuilderTest.RetrieveExecutableLocationFromRegistryForVS2003" executed="True" success="True" time="0.000" asserts="1"/>
+																<test-case name="ThoughtWorks.CruiseControl.Core.Builder.Test.DevenvBuilderTest.RetrieveExecutableLocationFromRegistryForVS2002" executed="True" success="True" time="0.010" asserts="1"/>
+																<test-case name="ThoughtWorks.CruiseControl.Core.Builder.Test.DevenvBuilderTest.VerifyDevenvProcessInfo" executed="True" success="True" time="0.010" asserts="3"/>
+																<test-case name="ThoughtWorks.CruiseControl.Core.Builder.Test.DevenvBuilderTest.ShouldSetOutputAndIntegrationStatusToSuccessOnSuccessfulBuild" executed="True" success="True" time="0.010" asserts="3"/>
+																<test-case name="ThoughtWorks.CruiseControl.Core.Builder.Test.DevenvBuilderTest.ShouldSetOutputAndIntegrationStatusToFailedOnFailedBuild" executed="True" success="True" time="0.010" asserts="3"/>
+																<test-case name="ThoughtWorks.CruiseControl.Core.Builder.Test.DevenvBuilderTest.ShouldThrowBuilderExceptionIfProcessExecutorThrowsAnException" executed="True" success="True" time="0.010" asserts="0"/>
+																<test-case name="ThoughtWorks.CruiseControl.Core.Builder.Test.DevenvBuilderTest.ShouldThrowBuilderExceptionIfProcessTimesOut" executed="True" success="True" time="0.010" asserts="0"/>
+															</results>
+														</test-suite>
+														<test-suite name="NAntBuilderTest" success="True" time="0.7610944" asserts="0">
+															<results>
+																<test-case name="ThoughtWorks.CruiseControl.Core.Builder.Test.NAntBuilderTest.PopulateFromReflector" executed="True" success="True" time="0.300" asserts="7"/>
+																<test-case name="ThoughtWorks.CruiseControl.Core.Builder.Test.NAntBuilderTest.PopulateFromConfigurationUsingOnlyRequiredElementsAndCheckDefaultValues" executed="True" success="True" time="0.060" asserts="4"/>
+																<test-case name="ThoughtWorks.CruiseControl.Core.Builder.Test.NAntBuilderTest.ShouldSetSuccessfulStatusAndBuildOutputAsAResultOfASuccessfulBuild" executed="True" success="True" time="0.140" asserts="3"/>
+																<test-case name="ThoughtWorks.CruiseControl.Core.Builder.Test.NAntBuilderTest.ShouldSetFailedStatusAndBuildOutputAsAResultOfFailedBuild" executed="True" success="True" time="0.010" asserts="3"/>
+																<test-case name="ThoughtWorks.CruiseControl.Core.Builder.Test.NAntBuilderTest.ShouldThrowBuilderExceptionIfProcessTimesOut" executed="True" success="True" time="0.000" asserts="0"/>
+																<test-case name="ThoughtWorks.CruiseControl.Core.Builder.Test.NAntBuilderTest.ShouldThrowBuilderExceptionIfProcessThrowsException" executed="True" success="True" time="0.000" asserts="0"/>
+																<test-case name="ThoughtWorks.CruiseControl.Core.Builder.Test.NAntBuilderTest.ShouldPassSpecifiedPropertiesAsProcessInfoArgumentsToProcessExecutor" executed="True" success="True" time="0.000" asserts="4"/>
+																<test-case name="ThoughtWorks.CruiseControl.Core.Builder.Test.NAntBuilderTest.ShouldPassAppropriateDefaultPropertiesAsProcessInfoArgumentsToProcessExecutor" executed="True" success="True" time="0.010" asserts="3"/>
+																<test-case name="ThoughtWorks.CruiseControl.Core.Builder.Test.NAntBuilderTest.IfConfiguredBaseDirectoryIsNotSetUseProjectWorkingDirectoryAsBaseDirectory" executed="True" success="True" time="0.010" asserts="1"/>
+																<test-case name="ThoughtWorks.CruiseControl.Core.Builder.Test.NAntBuilderTest.IfConfiguredBaseDirectoryIsEmptyUseProjectWorkingDirectoryAsBaseDirectory" executed="True" success="True" time="0.120" asserts="1"/>
+																<test-case name="ThoughtWorks.CruiseControl.Core.Builder.Test.NAntBuilderTest.IfConfiguredBaseDirectoryIsNotAbsoluteUseProjectWorkingDirectoryAsFirstPartOfBaseDirectory" executed="True" success="True" time="0.000" asserts="1"/>
+																<test-case name="ThoughtWorks.CruiseControl.Core.Builder.Test.NAntBuilderTest.IfConfiguredBaseDirectoryIsAbsoluteUseItAtBaseDirectory" executed="True" success="True" time="0.000" asserts="1"/>
+																<test-case name="ThoughtWorks.CruiseControl.Core.Builder.Test.NAntBuilderTest.ShouldRun" executed="True" success="True" time="0.010" asserts="5"/>
+																<test-case name="ThoughtWorks.CruiseControl.Core.Builder.Test.NAntBuilderTest.ShouldGiveAPresentationValueForTargetsThatIsANewLineSeparatedEquivalentOfAllTargets" executed="True" success="True" time="0.010" asserts="1"/>
+																<test-case name="ThoughtWorks.CruiseControl.Core.Builder.Test.NAntBuilderTest.ShouldWorkForSingleTargetWhenSettingThroughPresentationValue" executed="True" success="True" time="0.010" asserts="2"/>
+																<test-case name="ThoughtWorks.CruiseControl.Core.Builder.Test.NAntBuilderTest.ShouldSplitAtNewLineWhenSettingThroughPresentationValue" executed="True" success="True" time="0.000" asserts="3"/>
+																<test-case name="ThoughtWorks.CruiseControl.Core.Builder.Test.NAntBuilderTest.ShouldWorkForEmptyAndNullStringsWhenSettingThroughPresentationValue" executed="True" success="True" time="0.010" asserts="2"/>
+															</results>
+														</test-suite>
+													</results>
+												</test-suite>
+											</results>
+										</test-suite>
+										<test-suite name="State" success="True" time="7.1502816" asserts="0">
+											<results>
+												<test-suite name="Test" success="True" time="7.1402672" asserts="0">
+													<results>
+														<test-suite name="IntegrationStateManagerTest" success="True" time="7.1302528" asserts="0">
+															<results>
+																<test-case name="ThoughtWorks.CruiseControl.Core.State.Test.IntegrationStateManagerTest.PopulateFromReflector" executed="True" success="True" time="0.330" asserts="2"/>
+																<test-case name="ThoughtWorks.CruiseControl.Core.State.Test.IntegrationStateManagerTest.SaveAndReload" executed="True" success="True" time="6.479" asserts="3"/>
+																<test-case name="ThoughtWorks.CruiseControl.Core.State.Test.IntegrationStateManagerTest.ExistsIsFalseIfFolderIsInvalid" executed="True" success="True" time="0.010" asserts="1"/>
+																<test-case name="ThoughtWorks.CruiseControl.Core.State.Test.IntegrationStateManagerTest.SaveWithNullDirectory" executed="True" success="True" time="0.040" asserts="3"/>
+																<test-case name="ThoughtWorks.CruiseControl.Core.State.Test.IntegrationStateManagerTest.SaveWithInvalidDirectory" executed="True" success="True" time="0.030" asserts="0"/>
+																<test-case name="ThoughtWorks.CruiseControl.Core.State.Test.IntegrationStateManagerTest.LoadWithInvalidDirectory" executed="True" success="True" time="0.020" asserts="0"/>
+																<test-case name="ThoughtWorks.CruiseControl.Core.State.Test.IntegrationStateManagerTest.SaveMultipleTimes" executed="True" success="True" time="0.080" asserts="2"/>
+																<test-case name="ThoughtWorks.CruiseControl.Core.State.Test.IntegrationStateManagerTest.Load_NoPreviousStateFileExist" executed="True" success="True" time="0.020" asserts="1"/>
+																<test-case name="ThoughtWorks.CruiseControl.Core.State.Test.IntegrationStateManagerTest.AttemptToSaveWithInvalidXml" executed="True" success="True" time="0.030" asserts="0"/>
+																<test-case name="ThoughtWorks.CruiseControl.Core.State.Test.IntegrationStateManagerTest.SaveAndReloadWithUnicodeCharacters" executed="True" success="True" time="0.050" asserts="1"/>
+															</results>
+														</test-suite>
+													</results>
+												</test-suite>
+											</results>
+										</test-suite>
+										<test-suite name="state" success="True" time="0.1201728" asserts="0">
+											<results>
+												<test-suite name="test" success="True" time="0.1101584" asserts="0">
+													<results>
+														<test-suite name="ProjectStateManagerTest" success="True" time="0.1101584" asserts="0">
+															<results>
+																<test-case name="ThoughtWorks.CruiseControl.Core.state.test.ProjectStateManagerTest.SetsUpSlaveStateManagerUsingCamelCasedNameOfProjectWheneverStateFileExistsIsCalled" executed="True" success="True" time="0.030" asserts="1"/>
+																<test-case name="ThoughtWorks.CruiseControl.Core.state.test.ProjectStateManagerTest.SetsUpSlaveStateManagerUsingNameOfProjectWheneverLoadStateIsCalled" executed="True" success="True" time="0.010" asserts="0"/>
+																<test-case name="ThoughtWorks.CruiseControl.Core.state.test.ProjectStateManagerTest.SetsUpSlaveStateManagerUsingNameOfProjectWheneverSaveStateIsCalled" executed="True" success="True" time="0.010" asserts="0"/>
+																<test-case name="ThoughtWorks.CruiseControl.Core.state.test.ProjectStateManagerTest.RenamesOldStyleStateFileIfOneExists" executed="True" success="True" time="0.060" asserts="3"/>
+															</results>
+														</test-suite>
+													</results>
+												</test-suite>
+											</results>
+										</test-suite>
+										<test-suite name="Label" success="True" time="0.1101584" asserts="0">
+											<results>
+												<test-suite name="Test" success="True" time="0.100144" asserts="0">
+													<results>
+														<test-suite name="DefaultLabellerTest" success="True" time="0.0901296" asserts="0">
+															<results>
+																<test-case name="ThoughtWorks.CruiseControl.Core.Label.Test.DefaultLabellerTest.Generate" executed="True" success="True" time="0.010" asserts="1"/>
+																<test-case name="ThoughtWorks.CruiseControl.Core.Label.Test.DefaultLabellerTest.Generate_NullLabel" executed="True" success="True" time="0.010" asserts="1"/>
+																<test-case name="ThoughtWorks.CruiseControl.Core.Label.Test.DefaultLabellerTest.Generate_LastBuildFailed" executed="True" success="True" time="0.000" asserts="1"/>
+																<test-case name="ThoughtWorks.CruiseControl.Core.Label.Test.DefaultLabellerTest.Generate_PrefixedLabel_NullResultLabel" executed="True" success="True" time="0.000" asserts="1"/>
+																<test-case name="ThoughtWorks.CruiseControl.Core.Label.Test.DefaultLabellerTest.Generate_PrefixedLabel_SuccessAndPreviousLabel" executed="True" success="True" time="0.010" asserts="1"/>
+																<test-case name="ThoughtWorks.CruiseControl.Core.Label.Test.DefaultLabellerTest.Generate_PrefixedLabel_FailureAndPreviousLabel" executed="True" success="True" time="0.000" asserts="1"/>
+																<test-case name="ThoughtWorks.CruiseControl.Core.Label.Test.DefaultLabellerTest.Generate_PrefixedLabel_SuccessAndPreviousLabelWithPrefix" executed="True" success="True" time="0.000" asserts="1"/>
+																<test-case name="ThoughtWorks.CruiseControl.Core.Label.Test.DefaultLabellerTest.Generate_PrefixedLabel_SuccessAndPreviousLabelWithDifferentPrefix" executed="True" success="True" time="0.000" asserts="1"/>
+																<test-case name="ThoughtWorks.CruiseControl.Core.Label.Test.DefaultLabellerTest.IncrementPrefixedLabel" executed="True" success="True" time="0.010" asserts="1"/>
+																<test-case name="ThoughtWorks.CruiseControl.Core.Label.Test.DefaultLabellerTest.IncrementPrefixedLabelDifferentPrefix" executed="True" success="True" time="0.000" asserts="1"/>
+																<test-case name="ThoughtWorks.CruiseControl.Core.Label.Test.DefaultLabellerTest.IncrementPrefixedLabelNumericPrefix" executed="True" success="True" time="0.000" asserts="1"/>
+																<test-case name="ThoughtWorks.CruiseControl.Core.Label.Test.DefaultLabellerTest.ShouldRun" executed="True" success="True" time="0.010" asserts="4"/>
+															</results>
+														</test-suite>
+													</results>
+												</test-suite>
+											</results>
+										</test-suite>
+										<test-suite name="Schedules" success="True" time="0.5808352" asserts="0">
+											<results>
+												<test-suite name="Test" success="True" time="0.5708208" asserts="0">
+													<results>
+														<test-suite name="DailyScheduleTest" success="True" time="0.1702448" asserts="0">
+															<results>
+																<test-case name="ThoughtWorks.CruiseControl.Core.Schedules.Test.DailyScheduleTest.PopulateFromConfiguration" executed="True" success="True" time="0.070" asserts="2"/>
+																<test-case name="ThoughtWorks.CruiseControl.Core.Schedules.Test.DailyScheduleTest.PopulateFromConfigurationWithInvalidIntegrationTime" executed="True" success="True" time="0.060" asserts="0"/>
+																<test-case name="ThoughtWorks.CruiseControl.Core.Schedules.Test.DailyScheduleTest.ShouldRunIntegrationIfCalendarTimeIsAfterIntegrationTime" executed="True" success="True" time="0.010" asserts="2"/>
+																<test-case name="ThoughtWorks.CruiseControl.Core.Schedules.Test.DailyScheduleTest.ShouldRunIntegrationOnTheNextDay" executed="True" success="True" time="0.000" asserts="1"/>
+																<test-case name="ThoughtWorks.CruiseControl.Core.Schedules.Test.DailyScheduleTest.ShouldIncrementTheIntegrationTimeToTheNextDayAfterIntegrationIsCompleted" executed="True" success="True" time="0.010" asserts="3"/>
+															</results>
+														</test-suite>
+														<test-suite name="ScheduleTest" success="True" time="0.3705328" asserts="0">
+															<results>
+																<test-case name="ThoughtWorks.CruiseControl.Core.Schedules.Test.ScheduleTest.PopulateFromReflector" executed="True" success="True" time="0.090" asserts="3"/>
+																<test-case name="ThoughtWorks.CruiseControl.Core.Schedules.Test.ScheduleTest.VerifyThatShouldRunIntegrationAfterOneSecond" executed="True" success="True" time="0.250" asserts="5"/>
+																<test-case name="ThoughtWorks.CruiseControl.Core.Schedules.Test.ScheduleTest.ShouldRunIntegration_SleepsFromEndOfIntegration" executed="True" success="True" time="0.010" asserts="6"/>
+																<test-case name="ThoughtWorks.CruiseControl.Core.Schedules.Test.ScheduleTest.ShouldStopIntegrationAfterTwoIterations" executed="True" success="True" time="0.000" asserts="4"/>
+																<test-case name="ThoughtWorks.CruiseControl.Core.Schedules.Test.ScheduleTest.ShouldReturnSpecifiedBuildConditionWhenShouldRunIntegration" executed="True" success="True" time="0.010" asserts="1"/>
+															</results>
+														</test-suite>
+													</results>
+												</test-suite>
+											</results>
+										</test-suite>
+									</results>
+								</test-suite>
+							</results>
+						</test-suite>
+					</results>
+				</test-suite>
+			</results>
+		</test-suite>
+	</test-results>
+</cruisecontrol>
