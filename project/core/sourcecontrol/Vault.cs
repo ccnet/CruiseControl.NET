@@ -9,7 +9,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 	{
 		// rowlimit 0 or -1 means unlimited (default is 1000 if not specified)
 		// TODO: might want to make rowlimit configurable?
-		private const string COMMAND_LINE = @"history ""{0}"" -host {1} -user {2} -password {3} -repository {4} -rowlimit 0";
+		private const string COMMAND_LINE = @"history ""{0}"" -host ""{1}"" -user ""{2}"" -password ""{3}"" -repository ""{4}"" -rowlimit 0";
 
 		[ReflectorProperty("username")]
 		public string Username;

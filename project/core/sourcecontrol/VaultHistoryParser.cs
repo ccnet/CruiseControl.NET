@@ -1,32 +1,56 @@
 using System;
 using System.Collections;
 using System.IO;
+using System.Text.RegularExpressions;
 using System.Xml;
 
 namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 {
 	public class VaultHistoryParser : IHistoryParser
 	{
+		private readonly Regex MatchVaultElements = new Regex("<vault>(?:.|\n)*</vault>", RegexOptions.IgnoreCase);
+
 		public Modification[] Parse(TextReader history, DateTime from, DateTime to)
 		{
 			ArrayList mods = new ArrayList();
 			XmlDocument xml = new XmlDocument();
-			xml.Load(history);
+			xml.LoadXml(ExtractXmlFromHistory(history));
 			XmlNode parent = xml.SelectSingleNode("/vault/history");
-			foreach(XmlNode node in parent.ChildNodes)
+			foreach (XmlNode node in parent.ChildNodes)
 			{
 				// the history command in the vault clc does not support a from or
 				// to date, (as of 2.0.0), so we have to filter these ourselves
 				//
 				// as per discussion on vault-list with jeff clausius on 4/20/2004 this should be fixed in the next
 				// release of their clc at which point we can change this
-				if(EntryWithinRange(node, from, to))
+				if (EntryWithinRange(node, from, to))
 				{
 					Modification modification = GetModification(node);
 					mods.Add(modification);
 				}
 			}
-			return (Modification[])mods.ToArray(typeof(Modification));
+			return (Modification[]) mods.ToArray(typeof (Modification));
+		}
+
+		/// <summary
+		/// The Vault command line client (vault.exe), at least for
+		/// version 2.0.4, is not guaranteed to output valid XML in
+		/// that there may be some not XML output surrounding the XML.
+		/// This method strips away any non-XML	output surrounding
+		/// the <vault>...</vault> elements.
+		/// </summary
+		/// <param name="history"Output from Vault client is read from this reader.</param>
+		/// <returns>string containing only the XML output from the Vault client.</returns>
+		/// <exception cref="CruiseControlException">The <vault> start element or </vault> end element cannot be found.</exception>
+		private string ExtractXmlFromHistory(TextReader history)
+		{
+			string output = history.ReadToEnd();
+			string value = MatchVaultElements.Match(output).Value;
+			if (value.Length == 0)
+			{
+				throw new CruiseControlException(string.Format("The output does not contain the expected <vault> element: {0}", output));
+			}
+			return value;
 		}
 
 		private bool EntryWithinRange(XmlNode node, DateTime from, DateTime to)
@@ -41,7 +65,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			string fileName = null;
 			string name = node.Attributes["name"].InnerText;
 			int index = name.LastIndexOf("/");
-			if(index == -1)
+			if (index == -1)
 			{
 				folderName = name;
 			}
@@ -65,7 +89,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 		private string GetComment(XmlNode node)
 		{
 			string comment = null;
-			if(node.Attributes["comment"] != null) 
+			if (node.Attributes["comment"] != null)
 			{
 				comment = node.Attributes["comment"].InnerText;
 			}
@@ -73,10 +97,11 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 		}
 
 		#region GetTypeString
+
 		private string GetTypeString(string type)
 		{
 			// got these from http://support.sourcegear.com/viewtopic.php?t=152
-			switch(type)
+			switch (type)
 			{
 				case "10":
 					return "Added";
@@ -127,6 +152,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			}
 			return type;
 		}
+
 		#endregion
 	}
 }

@@ -1,9 +1,7 @@
 using System;
-using System.IO;
-using System.Xml;
+using Exortech.NetReflector;
 using NUnit.Framework;
 using ThoughtWorks.CruiseControl.Core.Util;
-using Exortech.NetReflector;
 
 namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test
 {
@@ -12,8 +10,8 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test
 	{
 		private Vault _vault;
 		private Vault _sslVault;
-		private const string COMMAND_LINE_NOSSL = @"history ""{0}"" -host {1} -user {2} -password {3} -repository {4} -rowlimit 0";
-		private const string COMMAND_LINE_SSL = @"history ""{0}"" -host {1} -user {2} -password {3} -repository {4} -rowlimit 0 -ssl";
+		private const string COMMAND_LINE_NOSSL = @"history ""{0}"" -host ""{1}"" -user ""{2}"" -password ""{3}"" -repository ""{4}"" -rowlimit 0";
+		private const string COMMAND_LINE_SSL = @"history ""{0}"" -host ""{1}"" -user ""{2}"" -password ""{3}"" -repository ""{4}"" -rowlimit 0 -ssl";
 
 		private const string ST_XML_SSL = @"<sourceControl type=""vault"">
 				<executable>c:\program files\sourcegear\vault client\vault.exe</executable>
