@@ -87,7 +87,7 @@ namespace ThoughtWorks.CruiseControl.Core.Builder
 
 		private string BaseDirectory(IIntegrationResult result)
 		{
-			if (ConfiguredBaseDirectory == null || ConfiguredBaseDirectory == "")
+			if (StringUtil.IsBlank(ConfiguredBaseDirectory))
 			{
 				return result.WorkingDirectory;
 			}
