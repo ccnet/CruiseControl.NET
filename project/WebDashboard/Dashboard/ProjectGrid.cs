@@ -32,7 +32,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 						status.BuildStatus.ToString(), 
 						CalculateHtmlColor(status.BuildStatus), 
 						status.LastBuildDate, 
-						status.LastBuildLabel, 
+						(status.LastBuildLabel != null ? status.LastBuildLabel : "no build available") , 
 						status.Status.ToString(), 
 						status.Activity.ToString(), 
 						urlBuilder.BuildFormName(

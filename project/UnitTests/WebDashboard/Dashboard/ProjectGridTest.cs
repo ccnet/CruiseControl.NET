@@ -81,6 +81,27 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 		}
 
 		[Test]
+		public void ShouldHandleResultsWithNoBuildLabel()
+		{
+			// Setup
+			ProjectStatus projectStatus1 = new ProjectStatus(ProjectIntegratorState.Running, 
+				IntegrationStatus.Success, ProjectActivity.Sleeping, projectSpecifier.ProjectName, "url", DateTime.Today, null, DateTime.Today);
+			ProjectStatusOnServer[] statusses = new ProjectStatusOnServer[]
+				{
+					new ProjectStatusOnServer(projectStatus1, serverSpecifier)
+				};
+
+			// Execute
+			SetupProjectLinkExpectation();
+			ProjectGridRow[] rows = projectGrid.GenerateProjectGridRows(statusses, "myAction", ProjectGridSortColumn.Name, true);
+
+			// Verify
+			Assert.AreEqual(1, rows.Length);
+			Assert.AreEqual("no build available", rows[0].LastBuildLabel);
+			VerifyAll();
+		}
+
+		[Test]
 		public void ShouldCopyBuildStatusToProjectRow()
 		{
 			// Setup
