@@ -20,79 +20,59 @@ namespace ThoughtWorks.CruiseControl.Core.Builder
 		private string _buildfile;
 		private int _buildTimeoutSeconds = DEFAULT_BUILD_TIMEOUT;
 		private string[] _targets = new string[0];
+		private ProcessExecutor executor;
 
-		public NAntBuilder()
+		public NAntBuilder() : this(new ProcessExecutor())
 		{
 			_buildArgs = DEFAULT_BUILDARGS;
 		}
 
-		#region Reflector properties
-
-		[ReflectorProperty("executable")]
-		public string Executable
+		public NAntBuilder(ProcessExecutor executor)
 		{
-			get
-			{
-				return _executable;
-			}
-			set
-			{
-				_executable = value;
-			}
+			this.executor = executor;
 		}
 
-		[ReflectorProperty("baseDirectory")]
+		[ReflectorProperty("executable")] 
+		public string Executable
+		{
+			get { return _executable; }
+			set { _executable = value; }
+		}
+
+		[ReflectorProperty("baseDirectory")] 
 		public string BaseDirectory
 		{
-			get
-			{
-				return _baseDirectory;
-			}
-			set
-			{
-				_baseDirectory = value;
-			}
+			get { return _baseDirectory; }
+			set { _baseDirectory = value; }
 		}
 
 		//TODO: can this be optional?
-
-		[ReflectorProperty("buildFile")]
+		[ReflectorProperty("buildFile")] 
 		public string BuildFile
 		{
-			get
-			{
-				return _buildfile;
-			}
-			set
-			{
-				_buildfile = value;
-			}
+			get { return _buildfile; }
+			set { _buildfile = value; }
 		}
 
-		[ReflectorProperty("buildArgs", Required = false)]
+		[ReflectorProperty("buildArgs", Required = false)] 
 		public string BuildArgs
 		{
-			get
-			{
-				return _buildArgs;
-			}
-			set
-			{
-				_buildArgs = value;
+			get { return _buildArgs; }
+			set 
+			{ 
+				if (value == null || value.IndexOf("-logger:") >=0)
+				{
+					Log.Warning("NAntBuilder buildArgs element does not specify that NAnt should use the XmlLogger.  If this is not specified then CruiseControl.NET may not be able to correctly render the output from NAnt.");
+				}
+				_buildArgs = value; 
 			}
 		}
 
-		[ReflectorArray("targetList", Required = false)]
+		[ReflectorArray("targetList", Required = false)] 
 		public string[] Targets
 		{
-			get
-			{
-				return _targets;
-			}
-			set
-			{
-				_targets = value;
-			}
+			get { return _targets; }
+			set { _targets = value; }
 		}
 
 		/// <summary>
@@ -100,22 +80,12 @@ namespace ThoughtWorks.CruiseControl.Core.Builder
 		/// this period, it will be killed.  Specify this value as zero (or equivalently, omit it from the Xml configuration)
 		/// to disable process timeouts.
 		/// </summary>
-
-
-		[ReflectorProperty("buildTimeoutSeconds", Required = false)]
+		[ReflectorProperty("buildTimeoutSeconds", Required = false)] 
 		public int BuildTimeoutSeconds
 		{
-			get
-			{
-				return _buildTimeoutSeconds;
-			}
-			set
-			{
-				_buildTimeoutSeconds = value;
-			}
+			get { return _buildTimeoutSeconds; }
+			set { _buildTimeoutSeconds = value; }
 		}
-
-		#endregion
 
 		public string LabelToApply = "NO-LABEL";
 
@@ -126,10 +96,7 @@ namespace ThoughtWorks.CruiseControl.Core.Builder
 
 		private string BuildCommand
 		{
-			get
-			{
-				return string.Format("{0} {1}", Executable, BuildArgs);
-			}
+			get { return string.Format("{0} {1}", Executable, BuildArgs); }
 		}
 
 		/// <summary>
@@ -137,8 +104,6 @@ namespace ThoughtWorks.CruiseControl.Core.Builder
 		/// specify the build-file name, the targets to build to, 
 		/// </summary>
 		/// <returns></returns>
-
-
 		internal string CreateArgs()
 		{
 			return string.Format("-buildfile:{0} {1} -D:label-to-apply={2} {3}", BuildFile, BuildArgs, LabelToApply, string.Join(" ", Targets));
@@ -150,8 +115,6 @@ namespace ThoughtWorks.CruiseControl.Core.Builder
 		/// StdOut from nant.exe is redirected and stored.
 		/// </summary>
 		/// <param name="result">For storing build output.</param>
-
-
 		public void Run(IntegrationResult result)
 		{
 			if (result.Label != null && result.Label.Trim().Length > 0)
@@ -173,11 +136,11 @@ namespace ThoughtWorks.CruiseControl.Core.Builder
 					Log.Info("NAnt build failed: " + processResult.StandardError);
 				}
 			}
-			catch(CruiseControlException)
+			catch (CruiseControlException)
 			{
 				throw;
 			}
-			catch(Exception e)
+			catch (Exception e)
 			{
 				throw new BuilderException(this, string.Format("Unable to execute: {0}\n{1}", BuildCommand, e), e);
 			}
@@ -185,7 +148,6 @@ namespace ThoughtWorks.CruiseControl.Core.Builder
 
 		protected virtual ProcessResult AttemptExecute()
 		{
-			ProcessExecutor executor = new ProcessExecutor();
 			executor.Timeout = BuildTimeoutSeconds*1000;
 			ProcessResult processResult = executor.Execute(Executable, CreateArgs(), BaseDirectory);
 			if (processResult.TimedOut)

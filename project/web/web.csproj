@@ -62,6 +62,26 @@
                     TreatWarningsAsErrors = "false"
                     WarningLevel = "4"
                 />
+                <Config
+                    Name = "Build"
+                    AllowUnsafeBlocks = "false"
+                    BaseAddress = "285212672"
+                    CheckForOverflowUnderflow = "false"
+                    ConfigurationOverrideFile = ""
+                    DefineConstants = "DEBUG;TRACE"
+                    DocumentationFile = ""
+                    DebugSymbols = "true"
+                    FileAlignment = "4096"
+                    IncrementalBuild = "true"
+                    NoStdLib = "false"
+                    NoWarn = ""
+                    Optimize = "false"
+                    OutputPath = "bin\"
+                    RegisterForComInterop = "false"
+                    RemoveIntegerChecks = "false"
+                    TreatWarningsAsErrors = "false"
+                    WarningLevel = "4"
+                />
             </Settings>
             <References>
                 <Reference
@@ -108,7 +128,7 @@
                     Name = "Remote"
                     Project = "{E820CF3B-8C5A-4002-BC16-B7818D3D54A8}"
                     Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
-                />                
+                />
                 <Reference
                     Name = "SiteMesh"
                     AssemblyName = "SiteMesh"

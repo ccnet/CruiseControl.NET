@@ -7,9 +7,9 @@
     <xsl:output method="html"/>
 
     <xsl:template match="/">
-        <xsl:variable name="error.messages" select="/cruisecontrol/build/buildresults//message[contains(text(), 'error')]" />
+        <xsl:variable name="error.messages" select="/cruisecontrol/build/buildresults//message[(contains(text(), 'error') and not (contains(text(), '0 error')))]" />
         <xsl:variable name="error.messages.count" select="count($error.messages)" />
-        <xsl:variable name="warning.messages" select="/cruisecontrol/build/buildresults//message[contains(text(), 'warning')]" />
+        <xsl:variable name="warning.messages" select="/cruisecontrol/build/buildresults//message[(contains(text(), 'warning') and not (contains(text(), '0 warning')))]" />
         <xsl:variable name="warning.messages.count" select="count($warning.messages)" />
         <xsl:variable name="total" select="count($error.messages) + count($warning.messages)"/>
 
@@ -28,7 +28,7 @@
         </xsl:if>
     </xsl:template>
 
-    <xsl:template match="message[contains(text(), 'error')]|message[contains(text(), 'warning')]">
+    <xsl:template match="message[(contains(text(), 'error') and not (contains(text(), '0 error')))]|message[(contains(text(), 'warning') and not (contains(text(), '0 warning')))]">
         <pre class="compile-error-data"><xsl:value-of select="text()"/></pre>
     </xsl:template>
 

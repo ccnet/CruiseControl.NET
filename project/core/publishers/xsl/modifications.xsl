@@ -4,7 +4,7 @@
 
     <xsl:output method="html"/>
 
-    <xsl:variable name="modification.list" select="cruisecontrol/modifications/modification"/>
+    <xsl:variable name="modification.list" select="/cruisecontrol/modifications/modification"/>
 
     <xsl:template match="/">
         <table class="section-table" cellpadding="2" cellspacing="0" border="0" width="98%">

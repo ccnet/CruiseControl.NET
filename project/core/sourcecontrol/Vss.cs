@@ -19,7 +19,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 		// ss history [dir] -R -Vd[now]~[lastBuild] -Y[un,pw] -I-Y -O[tempFileName]
 		internal static readonly string HISTORY_COMMAND_FORMAT = @"history {0} -R -Vd{1}~{2} -Y{3},{4} -I-Y";
 
-		internal static readonly string LABEL_COMMAND_FORMAT = @"label {0} -L{1} -Vd{2} -Y{3},{4} -I-Y";
+		internal static readonly string LABEL_COMMAND_FORMAT = @"label {0} -VL{1} -Vd{2} -Y{3},{4} -I-Y";
 		internal static readonly string LABEL_COMMAND_FORMAT_NOTIMESTAMP = @"label {0} -L{1} -Y{2},{3} -I-Y";
 
 		private string _ssDir;
