@@ -1,5 +1,3 @@
-using System;
-
 namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 {
 	public class DefaultLinkFactory : ILinkFactory

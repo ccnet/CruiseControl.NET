@@ -41,7 +41,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.MVC.Cruise
 		[Test]
 		public void ShouldProxyIfServerPresent()
 		{
-			IView view = new DefaultView("foo");
+			IView view = new HtmlView("foo");
 			// Setup
 			cruiseRequestMock.ExpectAndReturn("ServerName", "myServer");
 			errorViewBuilderMock.ExpectNoCall("BuildView", typeof(string));
@@ -58,7 +58,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.MVC.Cruise
 		[Test]
 		public void ShouldNotProxyAndShowErrorMessageIfServerMissing()
 		{
-			IView view = new DefaultView("foo");
+			IView view = new HtmlView("foo");
 			// Setup
 			cruiseRequestMock.ExpectAndReturn("ServerName", "");
 			errorViewBuilderMock.ExpectAndReturn("BuildView", view, new IsTypeOf(typeof(string)));

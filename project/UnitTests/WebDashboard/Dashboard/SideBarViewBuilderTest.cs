@@ -44,7 +44,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 				(IVelocityViewGenerator) velocityViewGeneratorMock.MockInstance,
 				(ILinkFactory) linkFactoryMock.MockInstance);
 
-			velocityView = new DefaultView("velocity view");
+			velocityView = new HtmlView("velocity view");
 			velocityContext = new Hashtable();
 			links = new IAbsoluteLink[] { new GeneralAbsoluteLink("link")};
 		}

@@ -27,7 +27,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.DeleteProject
 
 		private IView NotYetDeletedView(DeleteProjectModel model)
 		{
-			return new DefaultView(
+			return new ControlView(
 				Table(
 				TR(TD(model.Message, 2)),
 				TR(TD("&nbsp;", 2)),
@@ -40,7 +40,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.DeleteProject
 
 		private IView HasBeenDeletedView(DeleteProjectModel model)
 		{
-			return new DefaultView(
+			return new ControlView(
 				Table(
 				TR(TD(model.Message)),
 				TR(TD("&nbsp;")),

@@ -15,7 +15,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.ProjectReport
 
 		public IView Execute(ICruiseRequest cruiseRequest)
 		{
-			return new DefaultView("Project report in development. For now, click one of the builds in the side bar to see a build report");
+			return new HtmlView("Project report in development. For now, click one of the builds in the side bar to see a build report");
 		}
 
 		public string LinkDescription

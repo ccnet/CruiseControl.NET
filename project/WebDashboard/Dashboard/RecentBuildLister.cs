@@ -41,8 +41,9 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 
 				return velocityTransformer.Transform(@"RecentBuilds.vm", primaryContext);
 			}
-			catch (Exception e)
+			catch (Exception)
 			{
+				// Assume exception also caught where we care about (i.e. by action)
 				return "";
 			}
 		}

@@ -43,24 +43,18 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.MVC
 		}
 
 		[Test]
-		public void ShouldExecuteActionFromFactoryPuttingActionArgsOnRequestAndPuttingResultInParentControl()
+		public void ShouldExecuteActionFromFactoryPuttingActionArgsOnRequestAndReturnHtml()
 		{
 			/// Setup
-			HtmlGenericControl control = new HtmlGenericControl("div");
 			mockActionFactory.ExpectAndReturn("Create", action, request);
 			string [] actionArgs = new string[] {"foo"};
 			mockActionFactory.ExpectAndReturn("ActionArguments", actionArgs, request);
 			mockRequest.Expect("ActionArguments", new object[] {actionArgs});
 			mockAction.ExpectAndReturn("Execute", view, request);
-			mockView.ExpectAndReturn("Control", control);
+			mockView.ExpectAndReturn("HtmlFragment", "my html");
 
-			Control topLevelControl = new Control();
-
-			/// Execute
-			controller.Do(topLevelControl);
-
-			/// Verify
-			Assert.IsTrue(topLevelControl.Controls.Contains(control));
+			/// Execute & Verify
+			Assert.AreEqual("my html", controller.Do());
 			VerifyAll();
 		}
 	}

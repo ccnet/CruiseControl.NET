@@ -5,7 +5,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.MVC.Cruise
 	{
 		public IView Execute(IRequest request)
 		{
-			return new DefaultView("To Do - Default Cruise Action");
+			return new HtmlView("To Do - Default Cruise Action");
 		}
 	}
 }

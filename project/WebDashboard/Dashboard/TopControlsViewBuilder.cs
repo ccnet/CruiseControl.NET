@@ -4,8 +4,8 @@ using ThoughtWorks.CruiseControl.WebDashboard.MVC;
 using ThoughtWorks.CruiseControl.WebDashboard.MVC.View;
 using ThoughtWorks.CruiseControl.WebDashboard.Plugins.BuildReport;
 using ThoughtWorks.CruiseControl.WebDashboard.Plugins.FarmReport;
-using ThoughtWorks.CruiseControl.WebDashboard.Plugins.ServerReport;
 using ThoughtWorks.CruiseControl.WebDashboard.Plugins.ProjectReport;
+using ThoughtWorks.CruiseControl.WebDashboard.Plugins.ServerReport;
 
 namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 {

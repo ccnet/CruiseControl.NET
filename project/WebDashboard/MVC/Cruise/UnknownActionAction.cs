@@ -7,12 +7,12 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.MVC.Cruise
 			string actionName = request.FindParameterStartingWith(CruiseActionFactory.ACTION_PARAMETER_PREFIX);
 			if (actionName == "")
 			{
-				return new DefaultView("Internal Error - 'UnknownActionAction' called but there is no action is request!");
+				return new HtmlView("Internal Error - 'UnknownActionAction' called but there is no action is request!");
 			}
 			else
 			{
 				actionName = actionName.Substring(CruiseActionFactory.ACTION_PARAMETER_PREFIX.Length);	
-				return new DefaultView("Unknown action requested - " + actionName);
+				return new HtmlView("Unknown action requested - " + actionName);
 			}
 		}
 	}

@@ -473,7 +473,7 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "WebDashboard\MVC\DefaultViewTest.cs"
+                    RelPath = "WebDashboard\MVC\HtmlViewTest.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

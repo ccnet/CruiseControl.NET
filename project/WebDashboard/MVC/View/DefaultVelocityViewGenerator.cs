@@ -13,7 +13,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.MVC.View
 
 		public IView GenerateView(string templateName, Hashtable velocityContext)
 		{
-			return new DefaultView(velocityTransformer.Transform(templateName, velocityContext));
+			return new HtmlView(velocityTransformer.Transform(templateName, velocityContext));
 		}
 	}
 }

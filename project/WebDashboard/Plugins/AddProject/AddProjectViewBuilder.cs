@@ -36,7 +36,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.AddProject
 			{
 				table.Rows.Add(TR(TD(Button(model.SaveActionName, "Save")), TD()));
 			}
-			return new DefaultView(table);
+			return new ControlView(table);
 		}
 
 		private Control BuildProjectView(Project project, bool isAdd)

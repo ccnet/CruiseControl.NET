@@ -26,8 +26,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.MVC.Cruise
 			actionMock = new DynamicMock(typeof(IAction));
 			velocityViewGeneratorMock = new DynamicMock(typeof(IVelocityViewGenerator)) ;
 			exceptionCatchingAction = new ExceptionCatchingActionProxy((IAction) actionMock.MockInstance, (IVelocityViewGenerator) velocityViewGeneratorMock.MockInstance);
-			view = new DefaultView("my view");
-			errorView = new DefaultView("error view");
+			view = new HtmlView("my view");
+			errorView = new HtmlView("error view");
 			request = new NameValueCollectionRequest(null);
 		}
 

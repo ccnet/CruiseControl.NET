@@ -602,7 +602,12 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "MVC\DefaultView.cs"
+                    RelPath = "MVC\ControlView.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "MVC\HtmlView.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

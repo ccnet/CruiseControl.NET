@@ -41,7 +41,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.MVC.Cruise
 		[Test]
 		public void ShouldGetCruiseRequestForRequestAndProxyAction()
 		{
-			IView view = new DefaultView("foo");
+			IView view = new HtmlView("foo");
 			// Setup
 			cruiseRequestFactoryMock.ExpectAndReturn("CreateCruiseRequest", cruiseRequest, request);
 			proxiedActionMock.ExpectAndReturn("Execute", view, cruiseRequest);

@@ -47,7 +47,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 			projectSpecifier = new DefaultProjectSpecifier(serverSpecifier, "myProject");
 			buildSpecifier = new DefaultBuildSpecifier(projectSpecifier, "myBuild");
 			expectedVelocityContext = new Hashtable();
-			view = new DefaultView("foo");
+			view = new HtmlView("foo");
 			link1 = new GeneralAbsoluteLink("1");
 			link2 = new GeneralAbsoluteLink("2");
 			link3 = new GeneralAbsoluteLink("3");

@@ -36,7 +36,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Plugins.DeleteProjec
 		[Test]
 		public void ShouldPassValidModelToBuilderAndReturnBuildersResult()
 		{
-			IView view = new DefaultView("foo");
+			IView view = new HtmlView("foo");
 			// Setup
 			IProjectSpecifier projectSpecifier = new DefaultProjectSpecifier(new DefaultServerSpecifier("myServer"), "myProject");
 			cruiseRequestMock.ExpectAndReturn("ProjectSpecifier", projectSpecifier);

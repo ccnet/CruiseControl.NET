@@ -40,7 +40,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.MVC.Cruise
 		[Test]
 		public void ShouldProxyIfProjectPresent()
 		{
-			IView view = new DefaultView("foo");
+			IView view = new HtmlView("foo");
 			// Setup
 			cruiseRequestMock.ExpectAndReturn("ProjectName", "myProject");
 			errorViewBuilderMock.ExpectNoCall("BuildView", typeof(string));
@@ -57,7 +57,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.MVC.Cruise
 		[Test]
 		public void ShouldNotProxyAndShowErrorMessageIfProjectMissing()
 		{
-			IView view = new DefaultView("foo");
+			IView view = new HtmlView("foo");
 			// Setup
 			cruiseRequestMock.ExpectAndReturn("ProjectName", "");
 			errorViewBuilderMock.ExpectAndReturn("BuildView", view, new IsTypeOf(typeof(string)));

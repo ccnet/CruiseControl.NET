@@ -16,10 +16,9 @@ namespace ThoughtWorks.CruiseControl.WebDashboard
 		private void Page_Load(object sender, EventArgs e)
 		{
 			ObjectGiver objectGiver = new CruiseObjectGiverInitializer(new ObjectGiverAndRegistrar()).InitializeGiverForRequest(Request, Context, this);
-
-			SideBarLocation.Controls.Add(((SideBarViewBuilder) objectGiver.GiveObjectByType(typeof(SideBarViewBuilder))).Execute().Control);
-			TopControlsLocation.Controls.Add(((TopControlsViewBuilder) objectGiver.GiveObjectByType(typeof(TopControlsViewBuilder))).Execute().Control);
-			((RequestController) objectGiver.GiveObjectByType(typeof(RequestController))).Do(ParentControl);
+			TopControlsLocation.InnerHtml = (((TopControlsViewBuilder) objectGiver.GiveObjectByType(typeof(TopControlsViewBuilder))).Execute()).HtmlFragment;
+			SideBarLocation.InnerHtml = (((SideBarViewBuilder) objectGiver.GiveObjectByType(typeof(SideBarViewBuilder))).Execute()).HtmlFragment;
+			ParentControl.InnerHtml = ((RequestController) objectGiver.GiveObjectByType(typeof(RequestController))).Do();
 		}
 
 		#region Web Form Designer generated code
@@ -32,7 +31,6 @@ namespace ThoughtWorks.CruiseControl.WebDashboard
 		private void InitializeComponent()
 		{    
 			this.Load += new System.EventHandler(this.Page_Load);
-
 		}
 		#endregion
 	}

@@ -1,5 +1,4 @@
 using System.Collections;
-using System.Web.UI.HtmlControls;
 using NMock;
 using NUnit.Framework;
 using ThoughtWorks.CruiseControl.UnitTests.UnitTestUtils;
@@ -24,7 +23,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Plugins.BuildReport
 		private Build build;
 		private string buildLogLocation;
 		private DefaultBuildSpecifier buildSpecifier;
-		private DefaultView view;
+		private IView view;
 
 		[SetUp]
 		public void Setup()
@@ -39,7 +38,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Plugins.BuildReport
 			buildLogLocation = "http://somewhere/mylog";
 			buildSpecifier = new DefaultBuildSpecifier(new DefaultProjectSpecifier(new DefaultServerSpecifier("myserver"), "myproject"), "mybuild");
 			build = new Build(buildSpecifier, buildLog, buildLogLocation);
-			view = new DefaultView("foo");
+			view = new HtmlView("foo");
 		}
 
 		private void VerifyAll()

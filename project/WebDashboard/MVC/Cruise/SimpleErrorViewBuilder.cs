@@ -8,7 +8,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.MVC.Cruise
 
 		public IView BuildView(string errorMessage)
 		{
-			return new DefaultView(errorMessage);
+			return new HtmlView(errorMessage);
 		}
 	}
 }
