@@ -28,7 +28,7 @@ namespace ThoughtWorks.CruiseControl.Web
 				links[j] = new HtmlAnchor();
 				links[j].Attributes["class"] = GetLinkClass(filenames[i]);
 				links[j].HRef = LogFileUtil.CreateUrl(filenames[i]);
-				links[j].InnerText = GetDisplayLabel(filenames[i]);
+				links[j].InnerHtml = GetDisplayLabel(filenames[i]);
 			}
 			return links;
 		}
