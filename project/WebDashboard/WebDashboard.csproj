@@ -521,6 +521,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "MVC\AggregatedRequest.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "MVC\ConfiguredActionFactory.cs"
                     SubType = "Code"
                     BuildAction = "Compile"

@@ -13,7 +13,11 @@ namespace ThoughtWorks.CruiseControl.WebDashboard
 		private void Page_Load(object sender, EventArgs e)
 		{
 			RequestController controller = new RequestController(new CruiseActionFactory(new DashboardComponentFactory(Request, Context, this)));
-			controller.Do(ParentControl, new NameValueCollectionRequest(Request.Params));
+			controller.Do(ParentControl, 
+				new AggregatedRequest(
+					new NameValueCollectionRequest(Request.Form),
+					new NameValueCollectionRequest(Request.QueryString)
+				));
 		}
 
 		#region Web Form Designer generated code
