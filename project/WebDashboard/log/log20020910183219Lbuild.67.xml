@@ -1,0 +1,15 @@
+﻿<cruisecontrol>
+<info />
+<modifications />
+<build>
+<buildresults project="ccnet">
+<target name="nunit.test">
+    [nunit] Running ThoughtWorks.CruiseControl.acceptance.NUnitTest
+<testsuite name="ThoughtWorks.CruiseControl.acceptance.NUnitTest" tests="2" time="0.020" errors="0" failures="0">
+  <testcase name="TestError(ThoughtWorks.CruiseControl.acceptance.NUnitTest)" classname="ThoughtWorks.CruiseControl.acceptance.NUnitTest" time="0.010" />
+  <testcase name="TestPassPlease(ThoughtWorks.CruiseControl.acceptance.NUnitTest)" classname="ThoughtWorks.CruiseControl.acceptance.NUnitTest" time="0.000" />
+</testsuite>    [nunit] 2 tests: ALL SUCCESSFUL
+</target>
+</buildresults>
+</build>
+</cruisecontrol>

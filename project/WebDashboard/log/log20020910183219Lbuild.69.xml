@@ -1,0 +1,44 @@
+﻿<cruisecontrol>
+<info />
+<modifications />
+<build>
+<buildresults project="ccnet">
+  <target name="test">
+    <task name="nunit2">
+      <message level="Info"><!--This file represents the results of running
+a test suite-->
+<test-results name="Elateral.Platform.Dam.Tests.dll" total="1" failures="0"
+not-run="0" date="1/21/2004" time="9:38 AM">
+<test-suite name="Elateral.Platform.Dam.Tests.dll" success="True"
+time="0.1702448">
+<results>
+<test-suite name="Elateral" success="True" time="0.1702448">
+<results>
+<test-suite name="Platform" success="True" time="0.1702448">
+<results>
+<test-suite name="Dam" success="True" time="0.1702448">
+<results>
+<test-suite name="Tests" success="True" time="0.1702448">
+<results>
+<test-suite name="AssetStoreTest" success="True" time="0.1702448">
+<results>
+<test-case name="Elateral.Platform.Dam.Tests.AssetStoreTest.TestName"
+executed="True" success="True" time="0.170" />
+</results>
+</test-suite>
+</results>
+</test-suite>
+</results>
+</test-suite>
+</results>
+</test-suite>
+</results>
+</test-suite>
+</results>
+</test-suite>
+</test-results></message>
+    </task>
+  </target>
+</buildresults>
+</build>
+</cruisecontrol>
