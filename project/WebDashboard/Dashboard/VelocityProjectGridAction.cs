@@ -41,7 +41,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 		{
 			ActionSpecifierWithName actionSpecifier = new ActionSpecifierWithName(actionName);
 			ProjectGridSortColumn sortColumn = GetSortColumn(request);
-			bool sortReverse = GetSortReverse(request);
+			bool sortReverse = SortAscending(request);
 
 			velocityContext["projectNameSortLink"] = GenerateSortLink(serverSpecifier, actionSpecifier, ProjectGridSortColumn.Name, sortColumn, sortReverse);
 			velocityContext["buildStatusSortLink"] = GenerateSortLink(serverSpecifier, actionSpecifier, ProjectGridSortColumn.BuildStatus, sortColumn, sortReverse);
@@ -54,9 +54,9 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 			return viewGenerator.GenerateView(@"ProjectGrid.vm", velocityContext);
 		}
 
-		private bool GetSortReverse(IRequest request)
+		private bool SortAscending(IRequest request)
 		{
-			return request.FindParameterStartingWith("ReverseSort") != string.Empty;
+			return request.FindParameterStartingWith("ReverseSort") == string.Empty;
 		}
 
 		private ProjectGridSortColumn GetSortColumn(IRequest request)
