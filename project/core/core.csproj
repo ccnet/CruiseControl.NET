@@ -689,11 +689,6 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "schedule\NullTrigger.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
                     RelPath = "schedule\PollingIntervalTrigger.cs"
                     SubType = "Code"
                     BuildAction = "Compile"

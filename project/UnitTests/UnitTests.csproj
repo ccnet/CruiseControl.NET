@@ -259,11 +259,6 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "Core\Schedule\NullTriggerTriggerTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
                     RelPath = "Core\Schedule\PollingIntervalTriggerTest.cs"
                     SubType = "Code"
                     BuildAction = "Compile"

@@ -26,7 +26,7 @@ namespace ThoughtWorks.CruiseControl.Core.Test
 		private IMock _mockBuilder;
 		private IMock _mockSourceControl;
 		private IMock _mockStateManager;
-		private IMock _mockIntegrtionTrigger;
+		private IMock _mockIntegrationTrigger;
 		private IMock _mockLabeller;
 		private IMock _mockPublisher;
 		private IMock _mockTask;
@@ -49,8 +49,8 @@ namespace ThoughtWorks.CruiseControl.Core.Test
 			_mockSourceControl.Strict = true;
 			_mockStateManager = new DynamicMock(typeof (IStateManager));
 			_mockStateManager.Strict = true;
-			_mockIntegrtionTrigger = new DynamicMock(typeof (ITrigger));
-			_mockIntegrtionTrigger.Strict = true;
+			_mockIntegrationTrigger = new DynamicMock(typeof (ITrigger));
+			_mockIntegrationTrigger.Strict = true;
 			_mockLabeller = new DynamicMock(typeof (ILabeller));
 			_mockLabeller.Strict = true;
 			_mockPublisher = new DynamicMock((typeof (PublisherBase)));
@@ -63,7 +63,7 @@ namespace ThoughtWorks.CruiseControl.Core.Test
 			_project.Builder = (IBuilder) _mockBuilder.MockInstance;
 			_project.SourceControl = (ISourceControl) _mockSourceControl.MockInstance;
 			_project.StateManager = (IStateManager) _mockStateManager.MockInstance;
-			_project.Trigger = (ITrigger) _mockIntegrtionTrigger.MockInstance;
+			_project.Trigger = (ITrigger) _mockIntegrationTrigger.MockInstance;
 			_project.Labeller = (ILabeller) _mockLabeller.MockInstance;
 			_project.Publishers = new IIntegrationCompletedEventHandler[] {(IIntegrationCompletedEventHandler) _mockPublisher.MockInstance};
 			_project.Tasks = new ITask[] {(ITask) _mockTask.MockInstance};
@@ -79,7 +79,7 @@ namespace ThoughtWorks.CruiseControl.Core.Test
 			_mockBuilder.Verify();
 			_mockSourceControl.Verify();
 			_mockStateManager.Verify();
-			_mockIntegrtionTrigger.Verify();
+			_mockIntegrationTrigger.Verify();
 			_mockLabeller.Verify();
 			_mockPublisher.Verify();
 			_mockTask.Verify();
@@ -147,7 +147,7 @@ namespace ThoughtWorks.CruiseControl.Core.Test
 			Assert.IsTrue(project.Builder is NAntBuilder);
 			Assert.IsTrue(project.SourceControl is MockSourceControl);
 			Assert.IsTrue(project.Labeller is DefaultLabeller);
-			Assert.IsTrue(project.Trigger is NullTrigger);
+			Assert.IsTrue(project.Trigger is MultipleTrigger);
 			Assert.IsNull(project.Publishers);
 			Assert.AreEqual(0, project.Tasks.Length);
 			VerifyAll();

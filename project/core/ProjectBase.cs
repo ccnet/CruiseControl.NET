@@ -11,7 +11,7 @@ namespace ThoughtWorks.CruiseControl.Core
 		public static readonly string DefaultArtifactSubDirectory = "Artifacts";
 
 		private string _name;
-		private ITrigger trigger = new NullTrigger();
+		private ITrigger trigger = new MultipleTrigger();
 		private string _configuredWorkingDirectory;
 		private string _configuredArtifactDirectory;
 
