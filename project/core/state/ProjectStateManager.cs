@@ -1,3 +1,5 @@
+using System;
+using System.IO;
 using System.Text;
 using Exortech.NetReflector;
 
@@ -41,17 +43,40 @@ namespace ThoughtWorks.CruiseControl.Core.State
 
 		private void SetFileName()
 		{
+			string projectFileName = CalculateProjectFileName();
+			RenameOldStyleStateFileIfItExists(projectFileName);
+			slaveStateManager.Filename = projectFileName;
+		}
+
+		private string CalculateProjectFileName()
+		{
 			StringBuilder strBuilder = new StringBuilder();
 			foreach (string token in project.Name.Split(' '))
 			{
-				strBuilder.Append(token.Substring(0,1).ToUpper());
+				strBuilder.Append(token.Substring(0, 1).ToUpper());
 				if (token.Length > 1)
 				{
 					strBuilder.Append(token.Substring(1));
 				}
-
 			}
-			slaveStateManager.Filename = strBuilder.ToString() + ".state";
+			return strBuilder.ToString() + ".state";
+		}
+
+		// ToDo - take this out when we go 1.0...
+		private void RenameOldStyleStateFileIfItExists(string newFileName)
+		{
+			string oldFilePath = GetPathOfFileInCurrentDirectory("ccnet.state");
+			string newFilePath = GetPathOfFileInCurrentDirectory(newFileName);
+			if (File.Exists(oldFilePath))
+			{
+				File.Copy(oldFilePath, newFilePath);
+				File.Delete(oldFilePath);
+			}
+		}
+
+		private string GetPathOfFileInCurrentDirectory(string filename)
+		{
+			return Path.Combine(Directory.GetCurrentDirectory(), filename);
 		}
 	}
 }

@@ -1,3 +1,4 @@
+using System.IO;
 using NMock;
 using NUnit.Framework;
 using ThoughtWorks.CruiseControl.Core.State;
@@ -15,6 +16,31 @@ namespace ThoughtWorks.CruiseControl.Core.state.test
 		{
 			projectMock = new DynamicMock(typeof(IProject));
 			slaveManagerMock = new DynamicMock(typeof(IFileStateManager));
+
+			DeleteTempFiles();
+		}
+
+		[TearDown]
+		public void Teardown()
+		{
+			DeleteTempFiles();
+		}
+
+		private static void DeleteTempFiles()
+		{
+			string oldFilePath = Path.Combine(Directory.GetCurrentDirectory(), "ccnet.state");
+			string newFilePath = Path.Combine(Directory.GetCurrentDirectory(), "MyProject.state");
+	
+			if (File.Exists(oldFilePath)) File.Delete(oldFilePath);
+			if (File.Exists(newFilePath)) File.Delete(newFilePath);
+		}
+
+		string OldStateFilePath
+		{
+			get
+			{
+				return Path.Combine(Directory.GetCurrentDirectory(), "ccnet.state");
+			}
 		}
 
 		private void VerifyAll()
@@ -32,7 +58,7 @@ namespace ThoughtWorks.CruiseControl.Core.state.test
 
 			ProjectStateManager projectStateManager = new ProjectStateManager((IProject) projectMock.MockInstance, 
 				(IFileStateManager) slaveManagerMock.MockInstance);
-			projectStateManager.StateFileExists();
+			AssertEquals(true, projectStateManager.StateFileExists());
 
 			VerifyAll();
 		}
@@ -62,6 +88,24 @@ namespace ThoughtWorks.CruiseControl.Core.state.test
 			ProjectStateManager projectStateManager = new ProjectStateManager((IProject) projectMock.MockInstance, 
 				(IFileStateManager) slaveManagerMock.MockInstance);
 			projectStateManager.SaveState(result);
+
+			VerifyAll();
+		}
+
+		[Test]
+		public void RenamesOldStyleStateFileIfOneExists()
+		{
+			using (StreamWriter sw = File.CreateText(OldStateFilePath)) { }
+			projectMock.ExpectAndReturn("Name","my project");
+			slaveManagerMock.Expect("Filename", "MyProject.state");
+			slaveManagerMock.ExpectAndReturn("StateFileExists", true);
+
+			ProjectStateManager projectStateManager = new ProjectStateManager((IProject) projectMock.MockInstance, 
+				(IFileStateManager) slaveManagerMock.MockInstance);
+			AssertEquals(true, projectStateManager.StateFileExists());
+
+			Assert(! File.Exists(OldStateFilePath));
+			Assert(File.Exists(Path.Combine(Directory.GetCurrentDirectory(), "MyProject.state")));
 
 			VerifyAll();
 		}
