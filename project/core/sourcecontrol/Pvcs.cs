@@ -84,6 +84,11 @@ run -e vlog  ""-xo+e{3}"" ""-d{4}*{5}"" ""@{2}""
 			
 			return ProcessUtil.CreateProcess(Executable, Arguments);
 		}
+
+		public override Process CreateLabelProcess(string label, DateTime timeStamp) 
+		{
+			return null;
+		}
 		
 		public string CreatePcliContents(string beforedate, string afterdate) 
 		{

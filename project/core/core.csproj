@@ -1,8 +1,8 @@
 <VisualStudioProject>
     <CSHARP
         ProjectType = "Local"
-        ProductVersion = "7.0.9466"
-        SchemaVersion = "1.0"
+        ProductVersion = "7.10.3077"
+        SchemaVersion = "2.0"
         ProjectGuid = "{F8113DB9-6C47-4FD1-8A01-655FCF151747}"
     >
         <Build>
@@ -16,7 +16,10 @@
                 DefaultTargetSchema = "IE50"
                 DelaySign = "false"
                 OutputType = "Library"
+                PreBuildEvent = ""
+                PostBuildEvent = "copy $(ProjectDir)test\ccnet.core.dll.config $(TargetDir)&#xd;&#xa;mkdir $(TargetDir)xsl&#xd;&#xa;copy $(ProjectDir)publishers\xsl\*.xsl $(TargetDir)xsl"
                 RootNamespace = "tw.ccnet.core"
+                RunPostBuildEvent = "OnBuildSuccess"
                 StartupObject = ""
             >
                 <Config
@@ -30,6 +33,8 @@
                     DebugSymbols = "true"
                     FileAlignment = "4096"
                     IncrementalBuild = "true"
+                    NoStdLib = "false"
+                    NoWarn = ""
                     Optimize = "false"
                     OutputPath = "..\..\build\"
                     RegisterForComInterop = "false"
@@ -48,6 +53,8 @@
                     DebugSymbols = "false"
                     FileAlignment = "4096"
                     IncrementalBuild = "false"
+                    NoStdLib = "false"
+                    NoWarn = ""
                     Optimize = "true"
                     OutputPath = "bin\Release\"
                     RegisterForComInterop = "false"
@@ -147,6 +154,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "XslFilesSectionHandler.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "builder\BuilderException.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -237,6 +249,11 @@
                 />
                 <File
                     RelPath = "label\test\DefaultLabellerTest.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "publishers\BuildLogTransformer.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -551,6 +568,15 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "test\ccnet.core.dll.config"
+                    BuildAction = "None"
+                />
+                <File
+                    RelPath = "test\ConfigSectionHandler.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "test\CruiseControlTest.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -582,6 +608,11 @@
                 />
                 <File
                     RelPath = "test\MockProject.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "test\MultiThreadedProjectTest.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

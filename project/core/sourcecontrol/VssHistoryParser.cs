@@ -48,6 +48,7 @@ namespace tw.ccnet.core.sourcecontrol
 		{
 			ArrayList entries = new ArrayList();
 			string currentLine = history.ReadLine();
+			//Console.WriteLine(currentLine);
 			while(IsEndOfFile(currentLine) == false) 
 			{
 				if(IsEntryDelimiter(currentLine)) 
@@ -111,7 +112,7 @@ namespace tw.ccnet.core.sourcecontrol
 	{
 		protected string entry;
 		private static readonly Regex REGEX_USER_DATE_LINE = 
-			new Regex(@"User:\s+(\w+)\s+Date:\s+(.+)\s+Time:\s+(.+)$",RegexOptions.Multiline);
+			new Regex(@"User:\s+([\w\.]+)\s+Date:\s+(.+)\s+Time:\s+(.+)$",RegexOptions.Multiline);
 
 		private static readonly Regex REGEX_FILE_NAME = new Regex(@"\*+([\w\s\.]+)", RegexOptions.Multiline);
 
@@ -142,12 +143,17 @@ namespace tw.ccnet.core.sourcecontrol
 
 		internal void ParseUsernameAndDate(Modification mod)
 		{
+			//Console.WriteLine("user name date {0}", entry);
 			Match match = REGEX_USER_DATE_LINE.Match(entry);
 			
 			mod.UserName = match.Groups[1].Value.Trim();
+			//Console.WriteLine("username {0}", mod.UserName);
 			
 			string date = match.Groups[2].Value.Trim();
 			string time = match.Groups[3].Value.Trim();
+			//Console.WriteLine("date {0}", date);
+			//Console.WriteLine("time {0}", time);
+
 			// vss gives am and pm as a and p, so we stuff in an m
 			string dateAndTime = String.Format("{0};{1}m", date, time);
 			mod.ModifiedTime = DateTime.Parse(dateAndTime, DATE_FORMAT_INFO);

@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.IO;
 using System.Xml;
 using Exortech.NetReflector;
@@ -20,6 +21,7 @@ namespace tw.ccnet.core.publishers
 		}
 
 		private string _logDir;
+		private string[] _mergeFiles;
 
 		public XmlLogPublisher() : base()
 		{
@@ -30,6 +32,20 @@ namespace tw.ccnet.core.publishers
 		{
 			get { return _logDir; }
 			set { _logDir = value; }
+		}
+
+		[ReflectorArray("mergeFiles", Required=false)]
+		public string[] MergeFiles 
+		{
+			get 
+			{
+				if (_mergeFiles == null)
+					_mergeFiles = new string[0];
+
+				return _mergeFiles;
+			}
+
+			set { _mergeFiles = value; }
 		}
 
 		public override void Publish(object source, IntegrationResult result)
@@ -77,8 +93,53 @@ namespace tw.ccnet.core.publishers
 			Write(result.Modifications, writer);
 			writer.WriteEndElement();
 			WriteBuildElement(result, writer);
+			WriteMergeFiles(writer);
 			WriteException(result, writer);
 			writer.WriteEndElement();
+		}
+
+		public ArrayList getFileList() 
+		{
+			ArrayList result = new ArrayList();
+			foreach(string file in MergeFiles) 
+			{
+				int index = file.IndexOf("*");
+				if (index != -1) 
+				{
+					string dir = Path.GetDirectoryName(file);
+					string pattern = Path.GetFileName(file);
+					DirectoryInfo info = new DirectoryInfo(dir);
+					foreach (FileInfo fileInfo in info.GetFiles(pattern)) 
+					{
+						result.Add(fileInfo.FullName);
+					}
+				}
+				else 
+				{
+					result.Add(file);
+				}
+
+			}
+
+			return result;
+		}
+
+		private void WriteMergeFiles(XmlWriter writer) 
+		{
+			ArrayList files = getFileList();
+			foreach (string file in files) 
+			{
+				FileInfo info = new FileInfo(file);
+				if (info.Exists) 
+				{
+					XmlDocument doc = new XmlDocument();
+					using (StreamReader reader = new StreamReader(info.FullName)) 
+					{
+						doc.Load(reader);
+					}
+					writer.WriteRaw(doc.DocumentElement.OuterXml);
+				}
+			}
 		}
 		
 		public void WriteBuildElement(IntegrationResult result, XmlWriter writer)

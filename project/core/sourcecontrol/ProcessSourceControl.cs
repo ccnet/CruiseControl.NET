@@ -35,6 +35,20 @@ namespace tw.ccnet.core.sourcecontrol
 			}
 		}
 
+		public void LabelSourceControl(string label, DateTime timeStamp) 
+		{
+//			Process process = CreateLabelProcess(label, timeStamp);
+//			TextReader reader = null;
+//			try
+//			{
+//				reader = Execute(process);
+//			}
+//			finally
+//			{
+//				Close(reader, process);
+//			}
+		}
+
 		protected virtual TextReader Execute(Process process)
 		{
 			TextReader reader = ProcessUtil.ExecuteRedirected(process);
@@ -44,6 +58,7 @@ namespace tw.ccnet.core.sourcecontrol
 		}
 
 		public abstract Process CreateHistoryProcess(DateTime from, DateTime to);
+		public abstract Process CreateLabelProcess(string label, DateTime timeStamp);
 
 		protected Modification[] ParseModifications(TextReader reader)
 		{

@@ -1,26 +1,40 @@
-Microsoft Visual Studio Solution File, Format Version 7.00
+Microsoft Visual Studio Solution File, Format Version 8.00
 Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "install.web", "install.web\install.vdproj", "{06AEAF83-0B4D-4F1E-AA42-EA762F8E2324}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
 EndProject
 Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "install.server", "install.server\install.server.vdproj", "{98BE0ADB-6122-4123-A21B-CE80FDE990A1}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "console", "console\console.csproj", "{E14EE67D-C24E-4088-B01B-35B742E99E85}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "core", "core\core.csproj", "{F8113DB9-6C47-4FD1-8A01-655FCF151747}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "service", "service\service.csproj", "{4DE3AEAD-FAFB-4D15-A0D7-3A9AAECF08E1}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "integration", "integration\integration.csproj", "{BDFCDEE6-98EC-499C-8792-47D2DFC08647}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ccnet.remote", "ccnet.remote\ccnet.remote.csproj", "{E820CF3B-8C5A-4002-BC16-B7818D3D54A8}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "web", "web\web.csproj", "{317E46BA-74DE-411D-A09D-37193EEFD856}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfiguration) = preSolution
-		ConfigName.0 = Debug
-		ConfigName.1 = Release
-	EndGlobalSection
-	GlobalSection(ProjectDependencies) = postSolution
+		Debug = Debug
+		Release = Release
 	EndGlobalSection
 	GlobalSection(ProjectConfiguration) = postSolution
 		{06AEAF83-0B4D-4F1E-AA42-EA762F8E2324}.Debug.ActiveCfg = Debug
@@ -54,7 +68,7 @@ Global
 		{317E46BA-74DE-411D-A09D-37193EEFD856}.Release.Build.0 = Release|.NET
 	EndGlobalSection
 	GlobalSection(SolutionItems) = postSolution
-		Item:1 = ..\ccnet.build
+		..\ccnet.build = ..\ccnet.build
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 	EndGlobalSection

@@ -76,6 +76,21 @@ namespace tw.ccnet.core.sourcecontrol.test
 			Assertion.AssertEquals("foo=bar\r\n", result);
 		}
 
+		[Test]
+		public void CreateLabelProcess() 
+		{
+			string label = "testLabel";
+			DateTime dateTime = new DateTime(2003, 4, 15, 11, 12, 13, 0);
+			Process actual = _vss.CreateLabelProcess(label, dateTime);
+
+			string expectedExecutable = @"..\tools\vss\ss.exe";
+			string expectedArgs = @"label $/fooProject -LtestLabel -Vd04-15-2003;11:12A -YAdmin,admin -I-Y";				
+
+			Assertion.AssertNotNull("process was null", actual);
+			Assertion.AssertEquals(expectedExecutable, actual.StartInfo.FileName);
+			Assertion.AssertEquals(expectedArgs, actual.StartInfo.Arguments);
+		}
+
 		public void TestExecutable_default()
 		{
 			Assertion.AssertEquals("ss.exe", new Vss().Executable);

@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.IO;
 using System.Xml;
 using NUnit.Framework;
@@ -108,6 +109,56 @@ namespace tw.ccnet.core.publishers.test
 			_publisher.Write(result, writer);
 			string expected = "<cruisecontrol><modifications />" + CreateExpectedBuildXml(result) + "</cruisecontrol>";
 			AssertEquals(expected, actual.ToString());
+		}
+
+		[Test]
+		public void MergeFilesConfig() 
+		{
+			string xml = String.Format(
+@"		<xmllogger>
+		    <logDir>{0}</logDir>
+			<mergeFiles>
+				<file>d:\foo.xml</file>
+			</mergeFiles>
+		</xmllogger>", LOGDIR);
+			XmlNode node = XmlUtil.CreateDocumentElement(xml);
+			XmlPopulator populator = new XmlPopulator();
+			XmlLogPublisher pub = (XmlLogPublisher)populator.Populate(node);
+			Assertion.AssertEquals(1, pub.MergeFiles.Length);
+			Assertion.AssertEquals(@"d:\foo.xml", pub.MergeFiles[0]);
+		}
+
+		[Test]
+		public void MergeFile() 
+		{
+			TempFileUtil.CreateTempDir(TEMP_SUBDIR);
+			IntegrationResult result = CreateIntegrationResult(IntegrationStatus.Success, false);
+			_publisher.MergeFiles = new string [] {LOGDIR + "\\foo.xml"};
+			TempFileUtil.CreateTempXmlFile(LOGDIR, "foo.xml", "<?xml version=\"1.0\" encoding=\"utf-16\" standalone=\"no\"?><foo bar=\"4\">bat</foo>");
+			StringWriter actual = new StringWriter();
+			XmlTextWriter writer = new XmlTextWriter(actual);
+			_publisher.Write(result, writer);
+			string expected = "<cruisecontrol><modifications />" + CreateExpectedBuildXml(result) + "<foo bar=\"4\">bat</foo></cruisecontrol>";
+			Assertion.AssertEquals(expected, actual.ToString());
+		}
+
+		[Test]
+		public void ResolveWildCards() 
+		{
+			TempFileUtil.CreateTempDir(TEMP_SUBDIR);
+			TempFileUtil.CreateTempDir(TEMP_SUBDIR + "\\sub");
+			TempFileUtil.CreateTempXmlFile(LOGDIR, "foo.xml", "<foo bar=\"4\">bat</foo>");
+			TempFileUtil.CreateTempFile(LOGDIR, "foo.bat", "blah");
+			TempFileUtil.CreateTempXmlFile(LOGDIR + "\\sub", "foo.xml", "<foo bar=\"9\">bat</foo>");
+
+			_publisher.MergeFiles = new string[] {LOGDIR + "\\*.xml"};
+			ArrayList list = _publisher.getFileList();
+			Assertion.AssertEquals(1, list.Count);
+			Assertion.AssertEquals(LOGDIR + "\\foo.xml", (string)list[0]);
+
+			_publisher.MergeFiles = new string[] {LOGDIR + "\\foo.*"};
+			list = _publisher.getFileList();
+			Assertion.AssertEquals(2, list.Count);
 		}
 		
 		private string CreateExpectedBuildXml(IntegrationResult result)

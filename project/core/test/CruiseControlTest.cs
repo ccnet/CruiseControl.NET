@@ -186,8 +186,10 @@ namespace tw.ccnet.core.test
 			Assertion.AssertEquals(SchedulerState.Running, ((IScheduler)_cc.Schedulers[1]).State);
 
 			_cc.Stop();
+
 			_cc.WaitForExit();
 			Thread.Sleep(1);
+
 			Assertion.AssertEquals(SchedulerState.Stopped, ((IScheduler)_cc.Schedulers[0]).State);
 			Assertion.AssertEquals(SchedulerState.Stopped, ((IScheduler)_cc.Schedulers[1]).State);
 

@@ -24,5 +24,9 @@ namespace tw.ccnet.core.sourcecontrol.test
 			_invoked = true;
 			return _expectedMods;
 		}
+
+		public void LabelSourceControl(string label, DateTime timeStamp) 
+		{
+		}
 	}
 }

@@ -93,6 +93,7 @@
 		<copy file="${lib.dir}\NetReflector.dll" todir="${build.dir}" />
 		<copy file="${lib.dir}\nmock.dll" todir="${build.dir}" />
 		<copy file="${lib.dir}\YpluginDLL.dll" todir="${build.dir}" />
+		<copy file="${src.dir}\core\test\ccnet.core.dll.config" todir="${build.dir}"/>
 		
     <!-- copy xsl files.. -->
     <copy todir="${build.dir}\xsl" verbose="${verbosity}">    
@@ -104,7 +105,7 @@
   </target>
 	
   <target name="compile.web" depends="init" description="compiles the project web client" >
-    <csc target="library" output="${build.dir}\${web.dll}" debug="false" doc="${build.dir}\web.xml">
+    <csc target="library" output="${build.dir}\${web.dll}" debug="true" doc="${build.dir}\web.xml">
       <sources basedir="${src.dir}\web">
         <includes name="**\*.cs"/>
       </sources>
@@ -116,6 +117,7 @@
       <!-- don't warn about uncommented public methods -->
       <arg value="/nowarn:1591"/> 
     </csc>
+    <copy file="${src.dir}\web\test\ccnet.web.dll.config" todir="${build.dir}"/>
   </target>
 
 
@@ -182,13 +184,13 @@
 
   <target name="test.unit" depends="compile" description="runs unit tests">
     <nunit2>
-      <test assemblyname="${build.dir}\${core.dll}" fork="true" type="${nunit.output}"/>
+      <test assemblyname="${build.dir}\${core.dll}" appconfig="${build.dir}\ccnet.core.dll.config" type="${nunit.output}"/>
     </nunit2>
     <nunit2>
-      <test assemblyname="${build.dir}\${web.dll}" fork="true" type="${nunit.output}"/>
+      <test assemblyname="${build.dir}\${web.dll}" appconfig="${build.dir}\ccnet.web.dll.config" type="${nunit.output}"/>
     </nunit2>
     <nunit2>
-      <test assemblyname="${build.dir}\${console.exe}" fork="true" type="${nunit.output}"/>
+      <test assemblyname="${build.dir}\${console.exe}" type="${nunit.output}"/>
     </nunit2>
   </target>
 

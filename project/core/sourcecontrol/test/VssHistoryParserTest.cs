@@ -87,6 +87,21 @@ namespace tw.ccnet.core.sourcecontrol.test
 		}
 
 		[Test]
+		public void TestParseUsernameAndDateWithPeriod() 
+		{
+			//User: Gabriel.gilabert     Date:  5/08/03   Time:  4:06a
+			Modification mod = new Modification();
+			
+			string line = "foo\r\nUser: Gabriel.gilabert     Date:  5/08/03   Time:  4:06a\r\n";
+			CheckInParser parser = new CheckInParser(line);
+			parser.ParseUsernameAndDate(mod);
+			string expectedUsername = "Gabriel.gilabert";
+			DateTime expectedDate = new DateTime(2003, 05, 08, 04, 06, 0);
+			Assertion.AssertEquals(expectedUsername, mod.UserName);
+			Assertion.AssertEquals(expectedDate, mod.ModifiedTime);
+		}
+
+		[Test]
 		public void TestParseFileName() 
 		{
 			string fileName = "**** Im a file name.fi     ********\r\n jakfakjfnb  **** ** lkjnbfgakj ****";

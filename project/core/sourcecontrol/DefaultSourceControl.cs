@@ -13,5 +13,9 @@ namespace tw.ccnet.core.sourcecontrol
 			mods[0].ModifiedTime = DateTime.Now;
 			return mods;
 		}
+
+		public void LabelSourceControl(string label, DateTime timeStamp) 
+		{
+		}
 	}
 }

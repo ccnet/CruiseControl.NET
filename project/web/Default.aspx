@@ -4,8 +4,8 @@
 	<content>
 		<p id="headerXsl" Runat="server" class="stylesection" />
 		<p id="compileXsl" Runat="server" class="stylesection" />
-		<p id="javadocXsl" runat="server" class="stylesection" />
 		<p id="unittestsXsl" runat="server" class="stylesection" />
+		<p id="fittestsXsl" runat="server" class="stylesection" />
 		<p id="modificationsXsl" Runat="server" class="stylesection" />
 		<p id="distributablesXsl" runat="server" class="stylesection" />
 	</content>

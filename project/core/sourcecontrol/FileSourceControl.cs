@@ -62,5 +62,9 @@ namespace tw.ccnet.core.sourcecontrol
 		{
 			return reposFile.LastWriteTime > date;
 		}
+
+		public void LabelSourceControl(string label, DateTime timeStamp) 
+		{
+		}
 	}
 }

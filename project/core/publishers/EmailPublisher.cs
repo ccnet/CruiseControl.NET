@@ -167,44 +167,7 @@ namespace tw.ccnet.core.publishers
 			
 			XmlDocument xml = new XmlDocument();
 			xml.LoadXml(buffer.ToString());
-			message.Append(Transform(xml, @"xsl\header.xsl"));
-			message.Append(Transform(xml, @"xsl\compile.xsl"));
-			message.Append(Transform(xml, @"xsl\javadoc.xsl"));
-			message.Append(Transform(xml, @"xsl\unittests.xsl"));
-			message.Append(Transform(xml, @"xsl\modifications.xsl"));
-		}
-		
-		internal string Transform(XmlDocument document, string xslFile){
-			try 
-			{		
-				XslTransform transform = new XslTransform();
-				LoadStylesheet(transform, xslFile);
-				XmlReader reader = transform.Transform(document.CreateNavigator(), null); 
-				
-				XmlDocument output = new XmlDocument();
-				output.Load(reader);
-				return output.OuterXml;
-			}
-			catch(Exception ex) {
-				Console.WriteLine(ex);
-				throw new CruiseControlException(String.Format("Bad XML in logfile: " + ex.Message));
-			}
-		}
-		
-		private static void LoadStylesheet(XslTransform transform, string xslfile) 
-		{
-			try 
-			{
-				transform.Load(xslfile);
-			}
-			catch(FileNotFoundException) 
-			{
-				throw new CruiseControlException(String.Format("XSL stylesheet file not found: {0}", xslfile));
-			}
-			catch(XmlException ex) 
-			{
-				throw new CruiseControlException(String.Format("Bad XML in stylesheet: " + ex.Message));
-			}
+			message.Append(BuildLogTransformer.Transform(xml));
 		}
 				
 		internal string CreateRecipientList(IntegrationResult result)

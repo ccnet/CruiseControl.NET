@@ -61,7 +61,10 @@ namespace tw.ccnet.core.schedule
 					LogUtil.Log(_project, "Project threw an exception: " + ex);
 				}
 				_schedule.Update();
-				Thread.Sleep(_schedule.CalculateTimeToNextIntegration());
+
+				TimeSpan sleepTime = _schedule.CalculateTimeToNextIntegration();
+				LogUtil.Log(Project, string.Format("Sleeping for {0}", sleepTime));
+				Thread.Sleep(sleepTime);
 			}
 			_state = SchedulerState.Stopped;
 		}
@@ -76,10 +79,10 @@ namespace tw.ccnet.core.schedule
 			if (IsRunning)
 			{
 				_state = SchedulerState.Stopping;
-//				if (_thread != null && _thread.ThreadState == ThreadState.WaitSleepJoin)
-//				{
-//					_thread.Resume();
-//				}
+				//				if (_thread != null && _thread.ThreadState == ThreadState.WaitSleepJoin)
+				//				{
+				//					_thread.Resume();
+				//				}
 			}
 		}
 

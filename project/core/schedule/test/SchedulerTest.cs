@@ -49,7 +49,7 @@ namespace tw.ccnet.core.schedule.test
 		public void RunProjectTwice()
 		{
 			_scheduler = CreateScheduler(2);
-			_schedule.TimeOut = 4;
+			_schedule.TimeOut = 20;
 
 			DateTime start = DateTime.Now;
 			_scheduler.Start();
@@ -65,9 +65,14 @@ namespace tw.ccnet.core.schedule.test
 
 			// verify that project slept twice
 			TimeSpan delta = stop - start;
-			TimeSpan expectedDelta = new TimeSpan(_schedule.TimeOut * 2);
-			// Assert("The project did not sleep",  delta >= expectedDelta);
-			//Console.WriteLine("expected: " + expectedDelta + " actual: " + delta);
+//<<<<<<< SchedulerTest.cs
+			TimeSpan expectedDelta = new TimeSpan(0, 0, 0, 0, (int) _schedule.TimeOut * 2);
+			Assertion.Assert("The project did not sleep",  delta >= expectedDelta);
+//=======
+//			TimeSpan expectedDelta = new TimeSpan(_schedule.TimeOut * 2);
+//			// Assert("The project did not sleep",  delta >= expectedDelta);
+//			//Console.WriteLine("expected: " + expectedDelta + " actual: " + delta);
+//>>>>>>> 1.4
 		}
 
 		[Test]
@@ -143,8 +148,15 @@ namespace tw.ccnet.core.schedule.test
 			_scheduler.Stop();
 			_scheduler.WaitForExit();
 
+//<<<<<<< SchedulerTest.cs
+//			_scheduler.Project = new MockProject("mock");
+//			Schedule newSchedule = new Schedule();
+//			newSchedule.TotalIterations = 1;
+//			newSchedule.TimeOut = 1;
+//=======
 			Schedule newSchedule = new Schedule(1, 1);
 			_scheduler.Project = new MockProject("mock", newSchedule);
+//>>>>>>> 1.4
 			_scheduler.Schedule = newSchedule;
 			
 			_scheduler.Start();

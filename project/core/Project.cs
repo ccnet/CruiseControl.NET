@@ -214,6 +214,7 @@ namespace tw.ccnet.core
 					CurrentIntegration.ExceptionResult = ex;
 				}
 			}
+			LabelProject(CurrentIntegration);
 			RaiseIntegrationEvent(CurrentIntegration);
 			LastIntegration = CurrentIntegration;
 		}
@@ -279,6 +280,14 @@ namespace tw.ccnet.core
 		public string CurrentActivity 
 		{
 			get { return currentActivity; }
+		}
+
+		private void LabelProject(IntegrationResult result) 
+		{
+			if (result.Succeeded) 
+			{
+				SourceControl.LabelSourceControl(result.Label, result.StartTime);
+			}
 		}
 
 		#region Event Handling

@@ -99,6 +99,11 @@ namespace tw.ccnet.core.sourcecontrol
 			return date.ToString(DATE_FORMAT);
 		}
 
+		public override Process CreateLabelProcess(string label, DateTime timeStamp) 
+		{
+			return null;
+		}
+
 		internal string BuildHistoryProcessArgs(DateTime from, DateTime to)
 		{			
 			return String.Format(

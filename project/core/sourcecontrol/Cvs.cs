@@ -54,6 +54,11 @@ namespace tw.ccnet.core.sourcecontrol
 			return ProcessUtil.CreateProcess(Executable, BuildHistoryProcessArgs(from), WorkingDirectory);
 		}
 
+		public override Process CreateLabelProcess(string label, DateTime timeStamp) 
+		{
+			return null;
+		}
+
 		internal string BuildHistoryProcessArgs(DateTime from)
 		{		
 			// in cvs, date 'to' is implicitly now

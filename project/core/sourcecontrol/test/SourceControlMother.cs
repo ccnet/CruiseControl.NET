@@ -16,6 +16,12 @@ namespace tw.ccnet.core.sourcecontrol.test
 	public class MockSourceControl : ISourceControl 
 	{
 		public readonly static DateTime LastModificationTime = DateTime.Now.AddDays(-0.5);
+		private string label;
+
+		public string Label 
+		{
+			get { return label; }
+		}
 
 		public Modification[] GetModifications(DateTime from, DateTime to) 
 		{
@@ -38,6 +44,11 @@ namespace tw.ccnet.core.sourcecontrol.test
 				modifications[i].ModifiedTime = LastModificationTime;
 			}
 			return modifications;
+		}
+
+		public void LabelSourceControl(string label, DateTime timeStamp) 
+		{
+			this.label = label;
 		}
 	}
 

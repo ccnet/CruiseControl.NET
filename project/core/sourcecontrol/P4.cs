@@ -122,6 +122,10 @@ namespace tw.ccnet.core.sourcecontrol
 			}
 		}
 
+		public void LabelSourceControl(string label, DateTime timeStamp) 
+		{
+		}
+
 		protected virtual string execute(Process p)
 		{
 			return ProcessUtil.ExecuteRedirected(p).ReadToEnd();

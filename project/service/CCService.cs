@@ -24,30 +24,7 @@ namespace tw.ccnet.service
 		{
 			// This call is required by the Windows.Forms Component Designer.
 			InitializeComponent();
-			string appDirectory = AppDomain.CurrentDomain.BaseDirectory;
-			string appConfigFile = appDirectory + @"\service.exe.config";
-			string defaultConfigFile = appDirectory + "\\ccnet.confg";
-			string configFile = ConfigurationSettings.AppSettings["ccnet.config"];
-			if (configFile == null || configFile.Length == 0)
-				configFile = defaultConfigFile;
 
-			FileInfo configFileInfo = (new FileInfo(configFile));
-
-			if (! configFileInfo.Exists)
-			{
-				EventLog.WriteEntry("CCService", string.Format("Config file {0} does not exist - exiting application", configFileInfo.FullName), EventLogEntryType.Error);
-				return;
-			}
-
-			// in a service application the work has to be done in a separate thread so we use CruiseManager no matter what
-			// we will register it on a channel if remoting is on
-			manager = new CruiseManager();
-			manager.InitializeCruiseControl(configFile);
-			if (useRemoting()) 
-			{
-				RemotingConfiguration.Configure(appConfigFile);
-				RemotingServices.Marshal(manager, "CruiseManager.rem");
-			}
 		}
 
 		static void Main()
@@ -89,6 +66,30 @@ namespace tw.ccnet.service
 		/// </summary>
 		protected override void OnStart(string[] args)
 		{
+			string appDirectory = AppDomain.CurrentDomain.BaseDirectory;
+			string appConfigFile = appDirectory + @"\service.exe.config";
+			string defaultConfigFile = appDirectory + "\\ccnet.confg";
+			string configFile = ConfigurationSettings.AppSettings["ccnet.config"];
+			if (configFile == null || configFile.Length == 0)
+				configFile = defaultConfigFile;
+
+			FileInfo configFileInfo = (new FileInfo(configFile));
+
+			if (! configFileInfo.Exists)
+			{
+				EventLog.WriteEntry("CCService", string.Format("Config file {0} does not exist - exiting application", configFileInfo.FullName), EventLogEntryType.Error);
+				return;
+			}
+
+			// in a service application the work has to be done in a separate thread so we use CruiseManager no matter what
+			// we will register it on a channel if remoting is on
+			manager = new CruiseManager();
+			manager.InitializeCruiseControl(configFile);
+			if (useRemoting()) 
+			{
+				RemotingConfiguration.Configure(appConfigFile);
+				RemotingServices.Marshal(manager, "CruiseManager.rem");
+			}
 			if (manager != null)
 				manager.StartCruiseControl();
 		}

@@ -23,10 +23,13 @@ namespace tw.ccnet.web
 			{
 				throw new CruiseControlException(String.Format(
 				@"The specified log file folder: {0} does not exist", logFileDir));
-			}
+			}	
 			
 			XmlDocument document = new XmlDocument();
-			document.LoadXml(GetWebConfigXml(logFileDir));
+			document.Load(GetWebConfigFilename());
+			XmlElement logElement = document.GetElementById("logfile");
+			XmlNode logNode = document.SelectSingleNode("//appSettings/add[@key = 'logDir']");
+			logNode.Attributes["value"].Value = logFileDir;
 			document.Save(GetWebConfigFilename());
 		}
 
@@ -43,25 +46,6 @@ namespace tw.ccnet.web
 			{
 				File.Delete(GetWebConfigFilename());
 			}
-		}
-
-		private string GetWebConfigXml(string logFileDir)
-		{
-			return String.Format(@"<?xml version=""1.0"" encoding=""utf-8"" ?>
-<configuration>
-  <system.web>
-    <compilation defaultLanguage=""c#"" debug=""true""/>
-    <customErrors mode=""RemoteOnly"" /> 
-    <authentication mode=""Windows"" /> 
-    <trace enabled=""false"" requestLimit=""10"" pageOutput=""false"" traceMode=""SortByTime"" localOnly=""true""/>
-    <sessionState mode=""InProc"" stateConnectionString=""tcpip=127.0.0.1:42424"" sqlConnectionString=""data source=127.0.0.1;user id=sa;password="" cookieless=""false"" timeout=""20"" />
-    <globalization requestEncoding=""utf-8"" responseEncoding=""utf-8"" />
-  </system.web>
-
-  <appSettings>
-	<add key=""logDir"" value=""{0}"" />
-  </appSettings>
-</configuration>", logFileDir);
 		}
 	}
 }

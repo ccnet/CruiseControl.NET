@@ -271,6 +271,32 @@ namespace tw.ccnet.core.test
 		}
 
 		[Test]
+		public void SourceControlLabeled()
+		{
+//			SetMockSourceControl();
+			_project.SourceControl = new MockSourceControl();
+			_project.Builder = new MockBuilder();
+			MockPublisher publisher = new MockPublisher();
+			IMock mock = new DynamicMock(typeof(ILabeller));
+			mock.ExpectAndReturn("Generate", "1.2.1", new NMock.Constraints.IsAnything());
+			_project.Labeller = (ILabeller)mock.MockInstance;
+			_project.AddIntegrationEventHandler(publisher.IntegrationEventHandler);
+			IMock stateMock = new DynamicMock(typeof(IStateManager));
+			stateMock.ExpectAndReturn("Exists", false);
+			stateMock.Expect("Save", _project.CurrentIntegration);
+			_project.StateManager = (IStateManager)stateMock.MockInstance;
+			
+			_project.Run();
+
+			AssertEquals(_project.CurrentIntegration, _project.LastIntegration);
+			AssertNotNull(_project.CurrentIntegration.EndTime);
+			Assert(publisher.Published);
+			mock.Verify();
+			AssertEquals("1.2.1", ((MockSourceControl)_project.SourceControl).Label);
+			AssertEquals(3, _listener.Traces.Count);
+		}
+
+		[Test]
 		public void HandleBuildResultSaveException()
 		{
 			IMock mock = new DynamicMock(typeof(IStateManager));
@@ -354,5 +380,6 @@ namespace tw.ccnet.core.test
 			if (result != null) mock.ExpectAndReturn("LoadRecent", result, null);
 			return mock;
 		}
+
 	}
 }

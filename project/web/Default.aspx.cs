@@ -20,7 +20,7 @@ namespace tw.ccnet.web
 		protected Template template;
 		protected HtmlGenericControl headerXsl;
 		protected HtmlGenericControl compileXsl;
-		protected HtmlGenericControl javadocXsl;
+		protected HtmlGenericControl fittestsXsl;
 		protected HtmlGenericControl unittestsXsl;
 		protected HtmlGenericControl modificationsXsl;
 		protected HtmlGenericControl distributablesXsl;
@@ -46,10 +46,11 @@ namespace tw.ccnet.web
 				return;
 			}
 
+
 			headerXsl.InnerHtml = LogFileLister.Transform(logfile, WebUtil.GetXslFilename("header.xsl", Request));
 			compileXsl.InnerHtml = LogFileLister.Transform(logfile, WebUtil.GetXslFilename("compile.xsl", Request));
-			javadocXsl.InnerHtml = LogFileLister.Transform(logfile, WebUtil.GetXslFilename("javadoc.xsl", Request));
 			unittestsXsl.InnerHtml = LogFileLister.Transform(logfile, WebUtil.GetXslFilename("unittests.xsl", Request));
+			fittestsXsl.InnerHtml = LogFileLister.Transform(logfile, WebUtil.GetXslFilename("fit.xsl", Request));
 			modificationsXsl.InnerHtml = LogFileLister.Transform(logfile, WebUtil.GetXslFilename("modifications.xsl", Request));
 			distributablesXsl.InnerHtml = LogFileLister.Transform(logfile, WebUtil.GetXslFilename("distributables.xsl", Request));
   		}

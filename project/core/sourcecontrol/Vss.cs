@@ -19,6 +19,8 @@ namespace tw.ccnet.core.sourcecontrol
 		// ss history [dir] -R -Vd[now]~[lastBuild] -Y[un,pw] -I-Y -O[tempFileName]
 		internal static readonly string HISTORY_COMMAND_FORMAT = 
 			@"history {0} -R -Vd{1}~{2} -Y{3},{4} -I-Y";
+
+		internal static readonly string LABEL_COMMAND_FORMAT = @"label {0} -L{1} -Vd{2} -Y{3},{4} -I-Y";
 		
 		// 12-31-2002;8:00P
 		internal static readonly string DATE_FORMAT = "MM-dd-yyyy;h:mmt";
@@ -78,6 +80,14 @@ namespace tw.ccnet.core.sourcecontrol
 			process.StartInfo.EnvironmentVariables[SS_DIR_KEY] = _ssDir;
 			return process;
 			
+		}
+
+		public override Process CreateLabelProcess(string label, DateTime timeStamp) 
+		{ 
+			string args = String.Format(LABEL_COMMAND_FORMAT, Project, label, FormatCommandDate(timeStamp), Username, Password);
+			Process process = ProcessUtil.CreateProcess(Executable, args);
+			process.StartInfo.EnvironmentVariables[SS_DIR_KEY] = _ssDir;
+			return process;
 		}
 
 		internal string FormatCommandDate(DateTime date)
