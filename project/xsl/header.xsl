@@ -37,6 +37,17 @@
                 <td class="header-label"><nobr>Running time:</nobr></td>
                 <td class="header-data"><xsl:value-of select="/cruisecontrol/build/@buildtime"/></td>
             </tr>
+            <tr>
+                <td class="header-label"><nobr>Build condition:</nobr></td>
+                <td class="header-data">
+					<xsl:if test="/cruisecontrol/build/@buildcondition='ForceBuild'">
+						Forced Build
+					</xsl:if>
+					<xsl:if test="/cruisecontrol/build/@buildcondition='IfModificationExists'">
+						Modifications Detected
+					</xsl:if>
+                </td>
+            </tr>
             
             <xsl:apply-templates select="$modification.list">
                 <xsl:sort select="date" order="descending" data-type="text" />

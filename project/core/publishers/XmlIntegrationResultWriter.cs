@@ -46,22 +46,24 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
 			{
 				_writer.WriteAttributeString("error", "true");
 			}
+			_writer.WriteAttributeString("buildcondition", result.BuildCondition.ToString());
 
 			if (result.Output != null)
 			{
 				WriteOutput(result.Output);
 			}
-
+	
 			_writer.WriteEndElement();
 		}
 
 		private void WriteOutput(string output)
 		{
 			string xmlRemovedOutput = StripXmlDeclaration(RemoveNulls(output));
-
 			try
 			{
-				WriteOutput(xmlRemovedOutput, new XmlTextWriter(new StringWriter()));
+				StringWriter buffer = new StringWriter();
+				WriteOutput(xmlRemovedOutput, new XmlTextWriter(buffer));
+//				_writer.WriteRaw(buffer.ToString());
 				WriteOutput(xmlRemovedOutput, _writer);
 			}
 			catch (XmlException)
@@ -131,7 +133,6 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
 			public const string BUILD = "build";
 			public const string CRUISE_ROOT = "cruisecontrol";
 			public const string MODIFICATIONS = "modifications";
-			public const string INFO = "info";
 			public const string EXCEPTION = "exception";
 		}
 	}

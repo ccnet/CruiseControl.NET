@@ -1,23 +1,14 @@
-using System.IO;
-using System.Xml;
-using System.Xml.XPath;
-using System.Xml.Xsl;
 using NUnit.Framework;
 using ThoughtWorks.CruiseControl.Core.Util;
 
 namespace ThoughtWorks.CruiseControl.UnitTests.Xsl
 {
 	[TestFixture]
-	public class CompileStylesheetTest
+	public class CompileStylesheetTest : StylesheetTestFixture
 	{
-		private readonly string stylesheet = @"xsl\compile.xsl";
-		private XslTransform transform;
-
-		[TestFixtureSetUp]
-		public void LoadStyleSheet()
+		protected override string Stylesheet
 		{
-			transform = new XslTransform();
-			transform.Load(stylesheet);
+			get { return @"xsl\compile.xsl"; }
 		}
 
 		[Test]
@@ -65,16 +56,6 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Xsl
 	<message level=""Info"">
 {0}
 </message></buildresults></cruisecontrol>", input);
-		}
-
-		private string LoadStylesheetAndTransformInput(string input)
-		{
-			XPathDocument document = new XPathDocument(new StringReader(input));
-			XmlReader output = transform.Transform(document, null);
-
-			XmlDocument outputDocument = new XmlDocument();
-			outputDocument.Load(output);
-			return outputDocument.OuterXml;
 		}
 	}
 }

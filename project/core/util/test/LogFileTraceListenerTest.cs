@@ -1,8 +1,6 @@
-using NUnit.Framework;
 using System.Diagnostics;
-using System;
 using System.IO;
-using System.Threading;
+using NUnit.Framework;
 
 namespace ThoughtWorks.CruiseControl.Core.Util.Test
 {

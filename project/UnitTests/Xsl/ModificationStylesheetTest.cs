@@ -1,23 +1,14 @@
-using System.IO;
-using System.Xml;
-using System.Xml.XPath;
-using System.Xml.Xsl;
 using NUnit.Framework;
 using ThoughtWorks.CruiseControl.Core.Util;
 
 namespace ThoughtWorks.CruiseControl.UnitTests.Xsl
 {
 	[TestFixture]
-	public class ModificationStylesheetTest
+	public class ModificationStylesheetTest : StylesheetTestFixture
 	{
-		private readonly string stylesheet = @"xsl\modifications.xsl";
-		private XslTransform transform;
-
-		[TestFixtureSetUp]
-		public void LoadStyleSheet()
+		protected override string Stylesheet
 		{
-			transform = new XslTransform();
-			transform.Load(stylesheet);
+			get { return @"xsl\modifications.xsl"; }
 		}
 
 		[Test]
@@ -34,16 +25,6 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Xsl
 
 			string actualXml = LoadStylesheetAndTransformInput(input);
 			CustomAssertion.AssertContains("02 Oct 2002 09:55", actualXml);
-		}
-
-		private string LoadStylesheetAndTransformInput(string input)
-		{
-			XPathDocument document = new XPathDocument(new StringReader(input));
-			XmlReader output = transform.Transform(document, null);
-
-			XmlDocument outputDocument = new XmlDocument();
-			outputDocument.Load(output);
-			return outputDocument.OuterXml;
 		}
 	}
 }

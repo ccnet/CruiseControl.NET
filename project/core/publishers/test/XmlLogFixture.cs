@@ -8,14 +8,19 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers.Test
 	{
 		public string CreateExpectedBuildXml(IntegrationResult result)
 		{
-			string error = (result.Status == IntegrationStatus.Success) ? String.Empty : " error=\"true\"";
-			if (result.Output == null)
+			return CreateExpectedBuildXml(result, result.Output);
+		}
+
+		public static string CreateExpectedBuildXml(IntegrationResult result, string expectedBuildOutput)
+		{
+			string error = (result.Status == IntegrationStatus.Failure) ? " error=\"true\"" : String.Empty;
+			if (expectedBuildOutput == null)
 			{
-				return string.Format(@"<build date=""{0}"" buildtime=""00:00:00""{1} />", result.StartTime, error);
+				return string.Format(@"<build date=""{0}"" buildtime=""00:00:00""{1} buildcondition=""{2}"" />", result.StartTime, error, result.BuildCondition);
 			}
 			else
 			{
-				return string.Format(@"<build date=""{0}"" buildtime=""00:00:00""{1}>{2}</build>", result.StartTime, error, result.Output);
+				return string.Format(@"<build date=""{0}"" buildtime=""00:00:00""{1} buildcondition=""{3}"">{2}</build>", result.StartTime, error, expectedBuildOutput, result.BuildCondition);
 			}
 		}
 	}

@@ -164,5 +164,11 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 				writer.WriteElementString(name, value);
 			}
 		}
+
+		public static void VerifyXmlIsWellFormed(string actual)
+		{
+			XmlDocument document = new XmlDocument();
+			document.LoadXml(actual);
+		}
 	}
 }

@@ -1,13 +1,12 @@
 using System;
-using System.Text;
-using System.Collections.Specialized;
 using System.Collections;
+using System.Text;
 
 namespace ThoughtWorks.CruiseControl.Core.Util
 {
 	public class StringUtil
 	{
-		public static bool StringContains(string text, string fragment)
+		public static bool Contains(string text, string fragment)
 		{
 			return text.IndexOf(fragment) > -1;
 		}

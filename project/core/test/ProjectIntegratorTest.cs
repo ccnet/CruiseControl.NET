@@ -35,7 +35,6 @@ namespace ThoughtWorks.CruiseControl.Core.Test
 			project = (IProject) projectMock.MockInstance;
 
 			_integrator = new ProjectIntegrator(integrationTrigger, StopProjectTrigger, integratable, project);
-			Trace.Listeners.Clear();
 		}
 
 		[TearDown]
@@ -46,7 +45,6 @@ namespace ThoughtWorks.CruiseControl.Core.Test
 				_integrator.Stop();
 				_integrator.WaitForExit();
 			}
-			Trace.Listeners.Add(new DefaultTraceListener());
 		}
 
 		private void VerifyAll()
@@ -226,6 +224,7 @@ namespace ThoughtWorks.CruiseControl.Core.Test
 			Assert.IsTrue(listener.Traces.Count > 0);
 			Assert.IsTrue(listener.Traces[0].ToString().IndexOf(exceptionMessage) > 0);
 			
+			Trace.Listeners.Remove(listener);
 			VerifyAll();
 		}
 
