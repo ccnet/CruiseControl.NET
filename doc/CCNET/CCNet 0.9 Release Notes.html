@@ -1,0 +1,107 @@
+<html>
+    <head>
+        <title>CruiseControl.NET : CCNet 0.9 Release Notes</title>
+	    <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">	    
+    </head>
+
+    <body>
+	    <table class="pagecontent" border="0" cellpadding="0" cellspacing="0" width="100%" bgcolor="#ffffff">
+		    <tr>
+			    <td valign="top" class="pagebody">
+				    <div class="pageheader">
+					    <span class="pagetitle">
+                            CruiseControl.NET : CCNet 0.9 Release Notes
+                                                    </span>
+				    </div>
+				    <div class="pagesubheading">
+					    This page last changed on Apr 04, 2005 by <font color="#0050B2">mroberts</font>.
+				    </div>
+
+				    <p class="paragraph"><h2 style="margin: 4px 0px 4px 0px;" class="heading2"><a name="CCNet0.9ReleaseNotes-Overview"> Overview</a></h2></p><div align='center'><div class='informationMacroPadding'><table cellpadding='5' width='85%' cellspacing='0' class='warningMacro' border='0'><tr><td width='16' valign='top'><img src="/images/icons/emoticons/forbidden.png" width="16" height="16" align="absmiddle" alt="" border="0"></td><td><b class="strong">Breaking Changes</b><br /><br/>
+CruiseControl.NET 0.9 has breaking configuration changes since 0.8. Make sure to read these release notes carefully and then drill down into the documentation as necessary.
+</td></tr></table></div></div><p class="paragraph">We recommend that as part of upgrading that you backup your current CCNet directories, and then read the documentation thoroughly for the plugins you are using.</p>CruiseControl.NET 0.9 has the following major changes since 0.8:<p class="paragraph"><h4 class="heading4"><a name="CCNet0.9ReleaseNotes-Overall"> Overall</a></h4>
+<ul class="star">
+<li> CruiseControl.NET now comes distributed as an installer, which includes operations such as setting up a virtual directory for the <a href="Web Dashboard.html" title="Web Dashboard">Web Dashboard</a> and installing the <a href="The Server Service Application.html" title="The Server Service Application">CruiseControl.NET Service</a>.</li>
+</ul>
+<h4 class="heading4"><a name="CCNet0.9ReleaseNotes-CruiseControl.NETServer"> <a href="CruiseControl.NET Server.html" title="CruiseControl.NET Server">CruiseControl.NET Server</a></a></h4>
+<ul class="star">
+<li> The separation between <em class="emphasis">builders</em> and <em class="emphasis">tasks</em> has now been removed, so you can now have arbitrary task workflow as part of your build (for example allowing you to run multiple NAnt scripts, or run an arbitrary process before your main build.) <a href="Publisher Blocks.html" title="Publisher Blocks">Publishers</a> can also be run as tasks. See the <a href="Project Configuration Block.html" title="Project Configuration Block">Project Configuration Block</a> page for more details.</li>
+<li> <img class="rendericon" src="./icons/emoticons/warning.png" height="16" width="16" align="absmiddle" alt="" border="0"/>&#160;<b class="strong">Breaking Change</b> - &#039;CommandLineBuilder&#039; is now called <a href="Executable Task.html" title="Executable Task">Executable Task</a> and has a new ccnet.config type.</li>
+<li> Initial <a href="MKS Source Integrity Source Control Block.html" title="MKS Source Integrity Source Control Block">MKS</a> support</li>
+<li> VSS Time fixes (this was causing a lot of problems for VSS users in 0.8)</li>
+<li> The <tt class="monospaced">&lt;sourcecontrol&gt;</tt> block is no longer required, enabling CCNet to be used as a scheduled job automation server.</li>
+</ul>
+<h4 class="heading4"><a name="CCNet0.9ReleaseNotes-WebDashboard"> <a href="Web Dashboard.html" title="Web Dashboard">Web Dashboard</a></a></h4></p><ul class="star">
+<li> Completely new, simplified, configuration model, which also allows significantly wider and deeper configuration of the Web Dashboard application. (Since this is completely different to the previous configuration model it is a <b class="strong">breaking change</b>)</li>
+<li> Completely re-implemented presentation logic allowing full customisation of CruiseControl.NET views through templates.</li>
+<li> Arbitrary XSL reporting without code updates through the <a href="Build Report Build Plugin.html" title="Build Report Build Plugin">Build Report Build Plugin</a> and <a href="XSL Report Build Plugin.html" title="XSL Report Build Plugin">XSL Report Build Plugin</a>.</li>
+<li> The <a href="Project Report Web Application.html" title="Project Report Web Application">Project Report Web Application</a> is now deprecated and will be removed from future releases. You are advised to migrate to the <a href="Web Dashboard.html" title="Web Dashboard">Web Dashboard</a> with this release if you haven&#039;t already!</li>
+<li> Project Grid is now sortable (as requested by the community!)</li>
+<li> Dashboard no longer requires per-project configuration</li>
+</ul>
+<h2 class="heading2"><a name="CCNet0.9ReleaseNotes-JiraIssues"> Jira Issues</a></h2><p class="paragraph"><h3 class="heading3"><a name="CCNet0.9ReleaseNotes-Bug"> Bug</a></h3></p>CCNET-148 - ClearCaseHistoryParser does not pick up modifications that span more than one line correctly. <br/>
+CCNET-159 - exception when use url from email publisher<br/>
+CCNET-301 - SourceVault 3.0 Incompability? (Documentation update)<br/>
+CCNET-321 - Email publisher seems incompatible with webdashboard<br/>
+CCNET-327 - Fix time formats for VSS so that it does not require seconds to be specified in the regional time settings<br/>
+CCNET-329 - sourcecontrol type=&quot;vss&quot; fails because of double quotes in executable tag<br/>
+CCNET-333 - Test Details Report Misbehaviour<br/>
+CCNET-345 - ClearCase plugin can&#039;t handle multiline comments<br/>
+CCNET-346 - Invalid VSS history command from ccnet<br/>
+CCNET-347 - Reading history and changes from VSS does not work properly, invalid date time format<br/>
+CCNET-368 - Merge file output is wrapped in CDATA section if it starts with blank line<br/>
+CCNET-372 - Failing unit tests using the NUnitTask should break the build<br/>
+CCNET-373 - Networking problem with ForceBuild Publisher<br/>
+    
+<h3 class="heading3"><a name="CCNet0.9ReleaseNotes-NewFeature"> New Feature</a></h3><p class="paragraph">CCNET-26 - Create CCNet Installer<br/>
+CCNET-33 - Allow service name to be configured (Bill Simser)<br/>
+CCNET-205 - WebDashboard columns should support sorting<br/>
+CCNET-222 - Add integration with MKS Source Integrity<br/>
+CCNET-259 - Dashboard Project Report should show something useful<br/>
+CCNET-262 - Subversion should use IntegrationResult.LastChangeNumber for labelling<br/>
+CCNET-268 - Merge arbitrary files into build log<br/>
+CCNET-273 - Multiple build tags should run multiple build commands<br/>
+CCNET-303 - Dashboard should use its own reporting features if a Project&#039;s Reporting URL has not been set<br/>
+CCNET-315 - Enable &#039;Farm Plugins&#039; on the Dashboard<br/>
+CCNET-323 - Pass working directory and artifact directory values to NAnt script<br/>
+CCNET-326 - Allow arbitrary task list as workflow<br/>
+CCNET-334 - Perforce option to use -f for syncing<br/>
+CCNET-337 - Treat Publishers as Tasks so that they can be included in the tasks section<br/>
+CCNET-338 - Allow External URLs to be viewed on Dashboard<br/>
+CCNET-356 - Configurable XSL Report Plugin for Dashboard (BREAKING CHANGE)<br/>
+CCNET-359 - Add vil Support<br/>
+    
+<h3 class="heading3"><a name="CCNet0.9ReleaseNotes-Task"> Task</a></h3></p>CCNET-309 - Update Dashboard to use NVelocity for views where possible<br/>
+CCNET-310 - Update Dashboard API to not use &#039;Control&#039;<br/>
+CCNET-357 - Move Dashboard&#039;s Server configuration to dashboard.config<br/>
+CCNET-379 - (BREAKING CHANGE) Make naming of builders tasks instead<br/>
+    
+<h3 class="heading3"><a name="CCNet0.9ReleaseNotes-Improvement"> Improvement</a></h3><p class="paragraph">CCNET-38 - In HtmlDetailsMessageBuiler read css settings from file<br/>
+CCNET-76 - CCTray should show time until next build<br/>
+CCNET-161 - WebURL in Project is duplicated with ProjectUrl in EmailPublisher<br/>
+CCNET-284 - CSS needs cleaning up<br/>
+CCNET-294 - Introduce configurable StarTeam RegEx&#039;s to find comments for modifications<br/>
+CCNET-313 - Support for Starteam&#039;s -fp option to redirect the working folder<br/>
+CCNET-316 - Make Dashboard Controller default, remove Sitemesh (BREAKING CHANGE)<br/>
+CCNET-319 - Change VSS time format to use default long time format<br/>
+CCNET-330 - Make &#039;-nologo&#039; argument in NAntBuilder optional<br/>
+CCNET-341 - Let Dashboard handle XML files (Remove projectcache) (Breaking change)<br/>
+CCNET-358 - Add Mike Luke&#039;s alternative NUnit XSL File<br/>
+CCNET-363 - Project SourceControl should not be required<br/>
+CCNET-378 - File source control provider should not fail when files are read only</p>
+
+				    
+                    			    </td>
+		    </tr>
+	    </table>
+	    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+			<tr>
+				<td height="12" background="border/border_bottom.gif"><img src="border/spacer.gif" width="1" height="1" border="0"/></td>
+			</tr>
+		    <tr>
+			    <td align="center"><font color="grey">Document generated by Confluence on Apr 04, 2005 11:56</font></td>
+		    </tr>
+	    </table>
+    </body>
+</html>

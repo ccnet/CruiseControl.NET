@@ -15,15 +15,13 @@
                                                     </span>
 				    </div>
 				    <div class="pagesubheading">
-					    This page last changed on Nov 25, 2004 by <font color="#0050B2">orogers</font>.
+					    This page last changed on Apr 04, 2005 by <font color="#0050B2">mroberts</font>.
 				    </div>
 
-				    <p class="paragraph"><h3 style="margin: 4px 0px 4px 0px;" class="heading3"><a name="TheServerServiceApplication-InstallingCCService"> Installing CCService</a></h3></p>CCService is a Windows Service that can be used to launch the CCNet server.  <br/>
-
-<ol>
+				    <p class="paragraph"><h3 style="margin: 4px 0px 4px 0px;" class="heading3"><a name="TheServerServiceApplication-InstallingCCService"> Installing CCService</a></h3></p>CCService is a Windows Service that can be used to launch the CCNet server.  <p class="paragraph">If you used the CruiseControl.NET Installer to setup CCNet on your machine, the CCNet service should already be configured. Look in the Services section of the Control Panel on your machine. Otherwise, use these instructions to setup the service manually:</p><ol>
 <li> Before starting to use CCService, make sure that everything is set up and configured correctly using the <a href="The Server Console Application.html" title="The Server Console Application">console executable <b class="strong">ccnet.exe</b> </a>.  It is considerably easier to debug configuration issues using the console version of CCNet than it is using CCService.  The console version of CCNet writes its output directly to the console window, so it is much easier to see what the server is doing.  CCService, by default, uses the Event Log and the ccnet.log instead.</li>
 <li> Once you have ascertained that the CCNet server is working, you need to start by configuring CCService.  If you open the <b class="strong">ccnet.service.exe.config</b> file,  you need to change the value of the <b class="strong">ccnet.config</b> setting to point to the location of your ccnet.config file.</li>
-<li> Now you are ready to install the service.  Installing a Windows Service under .NET requires using <b class="strong">installutil</b>. Open up a command prompt, change to the CruiseControl.NET server directory, and run <tt class="monospaced">installutil ccservice.exe</tt>. If installutil is not in your path, you should be able to locate it in something like <tt class="monospaced">C:\WINDOWS\Microsoft.NET\Framework\v1.1.4322</tt>.</li>
+<li> Now you are ready to install the service.  Installing a Windows Service under .NET requires using <b class="strong">installutil</b>. Open up a command prompt, change to the CruiseControl.NET server directory, and run <tt class="monospaced">installutil ccservice.exe</tt>. If installutil is not in your path, you should be able to locate it in something like <tt class="monospaced">&#37;SYSTEMROOT&#37;\Microsoft.NET\Framework\v1.1.4322</tt>.</li>
 <li> At the username/password prompt, login using a valid user account. By default, the dialog tries to login as a local user account.  If you are logging in as a domain user, the domain will have to be specified. (ie: myacct@mycompany.com, pw: mypassword, and confirm)</li>
 <li> Note: Your user account may need to be granted the &quot;Right to Login as a Service&quot;.  This may be accomplished in two ways. The easiest method is to select a service that currently uses &quot;Local System Account&quot;, and using a specific user account instead.  If necessary, the permissions will be granted automatically. Another method is through the Administrative Tools -&gt; Local Security Policy -&gt; Local Policies -&gt; User Rights Assignment -&gt; Log on as a Service.</li>
 <li> Whatever user that you select needs to have the necessary permissions to access all resources required by CCNet (including network shares).  The LocalSystem user may not have sufficient access.</li>
@@ -37,30 +35,20 @@
 <li> Are there any new messages in the <b class="strong">ccnet.log file</b> or in the Event Log?</li>
 <li> Does the CCService user have sufficient priviledges to access all resources required by the CCNet server.  For example, if your source control system is stored on another server, does the user have permissions to access this server? (odds are that the LocalSystem user won&#039;t)</li>
 <li> If you are using <a href="Visual Source Safe Source Control Block.html" title="Visual Source Safe Source Control Block">Visual SourceSafe</a>, does the user account have the SSDIR environment variable defined?  If not, you should explicitly set the SsDir element in your <b class="strong">ccnet.config</b> file.</li>
-<li> Does the user account have registry access?  Can it access the email system (if you are sending the build results by <a href="Email Publisher.html" title="Email Publisher">email</a>?  Can it run Visual Studio.NET if you are using the <a href="Visual Studio Builder.html" title="Visual Studio Builder">Visual Studio Builder</a>?</li>
+<li> Does the user account have registry access?  Can it access the email system (if you are sending the build results by <a href="Email Publisher.html" title="Email Publisher">email</a>?  Can it run Visual Studio.NET if you are using the <a href="Visual Studio Task.html" title="Visual Studio Task">Visual Studio Task</a>?</li>
 <li> Does your build user graphical elements of the .NET Framework? If so, you&#039;ll need to configure your service to have appropriate resources.</li>
 <li> Are any environment variables required by the build process accessible to the CCService user?  If they are user level environment variables then you will need to ensure that they have been set up for the CCService user.</li>
 <li> If CCTray does not connect to the server, it may be that the CCService user does not have sufficient permissions to accept incoming tcp/http connections.</li>
 </ol>
+<h3 class="heading3"><a name="TheServerServiceApplication-RunningmultipleinstancesofCCService"> Running multiple instances of CCService</a></h3><p class="paragraph">You can change the service name so that you can run multiple instances of CCService on the same machine.  
+<ol>
+<li> First, you need to create a copy of the <b class="strong">server</b> folder.  Copy the folder contents to a new location.</li>
+<li> Second, navigate to the new folder and open the <b class="strong">ccservice.exe.config</b> file in a text editor.  Edit the <b class="strong">service.name</b> element in the <b class="strong">appSettings</b> section.  The default name is <b class="strong">CCService</b>, so you should change it to something different.</li>
+<li> You should also change the remoting configuration section for the new service instance.  Specifically you should change the port for the new instance. If you don&#039;t change this then the new service will try and use the same port as the existing service.</li>
+<li> Finally, you need to install a second instance of the ccservice.  When you run <b class="strong">installutil</b> include the option switch &quot;/ServiceName=MyCCService* (replace MyCCService with the name of the service that you specified in the <b class="strong">ccservice.exe.config</b> above).</li>
+</ol></p>
 
 				    
-                                            <div class="tabletitle">
-                            <a name="comments">Comments:</a>
-                        </div>
-
-                        <table border="0" width="100%">
-                                                        <tr>
-                                <td >
-                                    <a name="comment-1177"></a>
-                                    <font class="smallfont"><p class="paragraph"><span class="span">SystemRoot</span>\Microsoft.NET\Framework\v1.1.4322\installutil.exe ccservice.exe<br/>
-You can use this line with both (WinXP and Win2000)</p></font>
-                                    <div align="left" class="smallfont" style="color: #666666; width: 98%; margin-bottom: 10px;">
-                                        <img src="icons/comment_16.gif" height="16" width="16" border="0" align="absmiddle"/>
-                                        Posted by ayurov@mail.ru at Aug 18, 2004 14:22
-                                    </div>
-                                </td>
-                            </tr>
-                                                    </table>
                     			    </td>
 		    </tr>
 	    </table>
@@ -69,7 +57,7 @@ You can use this line with both (WinXP and Win2000)</p></font>
 				<td height="12" background="border/border_bottom.gif"><img src="border/spacer.gif" width="1" height="1" border="0"/></td>
 			</tr>
 		    <tr>
-			    <td align="center"><font color="grey">Copyright(c) 2004 ThoughtWorks, Inc. All Rights Reserved</font></td>
+			    <td align="center"><font color="grey">Document generated by Confluence on Apr 04, 2005 11:56</font></td>
 		    </tr>
 	    </table>
     </body>

@@ -1,0 +1,49 @@
+<html>
+    <head>
+        <title>CruiseControl.NET : Using CruiseControl.NET with Simian</title>
+	    <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">	    
+    </head>
+
+    <body>
+	    <table class="pagecontent" border="0" cellpadding="0" cellspacing="0" width="100%" bgcolor="#ffffff">
+		    <tr>
+			    <td valign="top" class="pagebody">
+				    <div class="pageheader">
+					    <span class="pagetitle">
+                            CruiseControl.NET : Using CruiseControl.NET with Simian
+                                                    </span>
+				    </div>
+				    <div class="pagesubheading">
+					    This page last changed on Mar 31, 2005 by <font color="#0050B2">mbharadwaj@yahoo.com</font>.
+				    </div>
+
+				    <p class="paragraph"><h2 style="margin: 4px 0px 4px 0px;" class="heading2"><a name="UsingCruiseControl.NETwithSimian-RunSimianaspartofyourintegration"> Run Simian as part of your integration</a></h2></p><h4 class="heading4"><a name="UsingCruiseControl.NETwithSimian-RunSimianaspartofyourNAntbuild"> Run Simian as part of your NAnt build</a></h4><p class="paragraph">In order to get the results of Simian included in the CruiseControl.NET build results, you will need to include a call to simian.exe in your NAnt build file.  We recommend you use a target like this:</p><div class="code"><div class="codeContent">
+<pre><span class="xml&#45;tag">&lt;target name=<span class="xml&#45;quote">&quot;simian&quot;</span> depends=<span class="xml&#45;quote">&quot;compile&quot;</span> description=<span class="xml&#45;quote">&quot;finds duplicate code&quot;</span>&gt;</span>&#10;	<span class="xml&#45;tag">&lt;exec program=<span class="xml&#45;quote">&quot;tools&#92;simian&#92;simian.exe&quot;</span>&gt;</span>&#10;		<span class="xml&#45;tag">&lt;arg value=<span class="xml&#45;quote">&quot;&#45;recurse=&#42;.cs&quot;</span>/&gt;</span>&#10;		<span class="xml&#45;tag">&lt;arg value=<span class="xml&#45;quote">&quot;&#45;formatter=xml:build&#92;log&#92;simian.xml&quot;</span>/&gt;</span>&#10;	<span class="xml&#45;tag">&lt;/exec&gt;</span>&#10;<span class="xml&#45;tag">&lt;/target&gt;</span></pre>
+</div></div><p class="paragraph">The above example runs simian on all .cs files from the project home directory. Run &quot;simian&quot; in order to see what command-line options are supported.</p>For a thorough example, look at the CruiseControl.NET source distribution and look at how we use Simian ourselves.<p class="paragraph"><h4 class="heading4"><a name="UsingCruiseControl.NETwithSimian-RunSimianasaCruiseControl.NETTask"> Run Simian as a CruiseControl.NET Task</a></h4></p>We don&#039;t currently support running Simian directly from CruiseControl.NET, but we plan on enabling this in a later release.<p class="paragraph"><h2 class="heading2"><a name="UsingCruiseControl.NETwithSimian-MergeSimianresultsintoyourCruiseControl.NETresults"> Merge Simian results into your CruiseControl.NET results</a></h2></p>The next step is to merge the Simian report file into the integration result using the <a href="File Merge Task.html" title="File Merge Task">File Merge Task</a>. Your <a href="CruiseControl.NET Server.html" title="CruiseControl.NET Server">CruiseControl.NET Server</a> config file will have something in it like :
+<div class="code"><div class="codeContent">
+<pre><span class="xml&#45;tag">&lt;tasks&gt;</span>&#10;    <span class="xml&#45;tag">&lt;merge&gt;</span>&#10;        <span class="xml&#45;tag">&lt;files&gt;</span>&#10;            <span class="xml&#45;tag">&lt;file&gt;</span>d:&#92;sourceforge&#92;ccnet&#92;build&#92;log&#92;unit&#45;test.xml<span class="xml&#45;tag">&lt;/file&gt;</span>&#10;            <span class="xml&#45;tag"><span class="xml&#45;comment">&lt;&#33;&#45;&#45; Add your simian report file as follows &#45;&#45;&gt;</span></span>&#10;            <span class="xml&#45;tag">&lt;file&gt;</span>d:&#92;sourceforge&#92;ccnet&#92;build&#92;log&#92;simian.xml<span class="xml&#45;tag">&lt;/file&gt;</span>&#10;      	<span class="xml&#45;tag">&lt;/files&gt;</span>&#10;    <span class="xml&#45;tag">&lt;/merge&gt;</span>&#10;<span class="xml&#45;tag">&lt;/tasks&gt;</span></pre>
+</div></div><p class="paragraph"><h2 class="heading2"><a name="UsingCruiseControl.NETwithSimian-ConfiguringyourReportingApplicationtodisplaySimianresults"> Configuring your Reporting Application to display Simian results</a></h2></p>For displaying the results, CruiseControl.NET currently supports Simian 2.2.3.<p class="paragraph">If you are using the <a href="Web Dashboard.html" title="Web Dashboard">Web Dashboard</a>, edit your <tt class="monospaced">dashboard.config</tt> file and include the <tt class="monospaced">SimianSummary.xsl</tt> file under the <tt class="monospaced">&lt;dashboard&gt;/&lt;plugins&gt;/&lt;buildPlugins&gt;/&lt;buildReportBuildPlugin&gt;/&lt;xslFileNames&gt;</tt> section like:
+<div class="code"><div class="codeContent">
+<pre><span class="xml&#45;tag">&lt;xslFile&gt;</span>xsl&#92;SimianSummary.xsl<span class="xml&#45;tag">&lt;/xslFile&gt;</span></pre>
+</div></div></p>Also add the following to the <tt class="monospaced">&lt;dashboard&gt;/&lt;plugins&gt;/&lt;buildPlugins&gt;</tt> section as:
+<div class="code"><div class="codeContent">
+<pre><span class="xml&#45;tag">&lt;xslReportBuildPlugin description=<span class="xml&#45;quote">&quot;Simian Report&quot;</span> actionName=<span class="xml&#45;quote">&quot;SimianBuildReport&quot;</span> xslFileName=<span class="xml&#45;quote">&quot;xsl&#92;SimianReport.xsl&quot;</span> /&gt;</span></pre>
+</div></div><br/>
+
+
+
+				    
+                    			    </td>
+		    </tr>
+	    </table>
+	    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+			<tr>
+				<td height="12" background="border/border_bottom.gif"><img src="border/spacer.gif" width="1" height="1" border="0"/></td>
+			</tr>
+		    <tr>
+			    <td align="center"><font color="grey">Document generated by Confluence on Apr 04, 2005 11:57</font></td>
+		    </tr>
+	    </table>
+    </body>
+</html>

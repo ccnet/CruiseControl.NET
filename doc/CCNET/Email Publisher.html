@@ -15,12 +15,13 @@
                                                     </span>
 				    </div>
 				    <div class="pagesubheading">
-					    This page last changed on Oct 13, 2004 by <font color="#0050B2">mroberts</font>.
+					    This page last changed on Mar 11, 2005 by <font color="#0050B2">orogers</font>.
 				    </div>
 
-				    
-The email publisher can be used to send email to any number of users. It is common to include one user who gets an email for every build and then also send email to every developer who checked code in for this build. <p class="paragraph"><img class="rendericon" src="./icons/emoticons/information.png" height="16" width="16" align="absmiddle" alt="" border="0"/> People tend to prefer to use <a href="CCTray.html" title="CCTray">CCTray</a> rather than email for instant notification these days.</p><div class="code"><div class="codeContent">
-<pre><span class="xml&#45;tag">&lt;email from=<span class="xml&#45;quote">&quot;buildmaster&#64;mycompany.com&quot;</span> mailhost=<span class="xml&#45;quote">&quot;smtp.mycompany.com&quot;</span> includeDetails=<span class="xml&#45;quote">&quot;TRUE&quot;</span>&gt;</span>&#10;    <span class="xml&#45;tag">&lt;projectUrl&gt;</span>&#104;ttp://buildserver/myproject<span class="xml&#45;tag">&lt;/projectUrl&gt;</span>&#10;    <span class="xml&#45;tag">&lt;users&gt;</span>&#10;        <span class="xml&#45;tag">&lt;user name=<span class="xml&#45;quote">&quot;BuildGuru&quot;</span> group=<span class="xml&#45;quote">&quot;buildmaster&quot;</span> address=<span class="xml&#45;quote">&quot;buildguru&#64;mycompany.com&quot;</span>/&gt;</span>&#10;        <span class="xml&#45;tag">&lt;user name=<span class="xml&#45;quote">&quot;JoeDeveloper&quot;</span> group=<span class="xml&#45;quote">&quot;developers&quot;</span> address=<span class="xml&#45;quote">&quot;joedeveloper&#64;thoughtworks.com&quot;</span>/&gt;</span>&#10;    <span class="xml&#45;tag">&lt;/users&gt;</span>&#10;    <span class="xml&#45;tag">&lt;groups&gt;</span>&#10;        <span class="xml&#45;tag">&lt;group name=<span class="xml&#45;quote">&quot;developers&quot;</span> notification=<span class="xml&#45;quote">&quot;change&quot;</span>/&gt;</span>&#10;        <span class="xml&#45;tag">&lt;group name=<span class="xml&#45;quote">&quot;buildmaster&quot;</span> notification=<span class="xml&#45;quote">&quot;always&quot;</span>/&gt;</span>&#10;    <span class="xml&#45;tag">&lt;/groups&gt;</span>&#10;<span class="xml&#45;tag">&lt;/email&gt;</span></pre>
+				    <p class="paragraph">The email publisher can be used to send email to any number of users. It is common to include one user who gets an email for every build and then also send email to every developer who checked code in for this build.</p><img class="rendericon" src="./icons/emoticons/information.png" height="16" width="16" align="absmiddle" alt="" border="0"/> People tend to prefer to use <a href="CCTray.html" title="CCTray">CCTray</a> rather than email for instant notification these days.<br/>
+
+<div class="code"><div class="codeContent">
+<pre><span class="xml&#45;tag">&lt;email from=<span class="xml&#45;quote">&quot;buildmaster&#64;mycompany.com&quot;</span> mailhost=<span class="xml&#45;quote">&quot;smtp.mycompany.com&quot;</span> includeDetails=<span class="xml&#45;quote">&quot;TRUE&quot;</span>&gt;</span>&#10;    <span class="xml&#45;tag">&lt;users&gt;</span>&#10;        <span class="xml&#45;tag">&lt;user name=<span class="xml&#45;quote">&quot;BuildGuru&quot;</span> group=<span class="xml&#45;quote">&quot;buildmaster&quot;</span> address=<span class="xml&#45;quote">&quot;buildguru&#64;mycompany.com&quot;</span>/&gt;</span>&#10;        <span class="xml&#45;tag">&lt;user name=<span class="xml&#45;quote">&quot;JoeDeveloper&quot;</span> group=<span class="xml&#45;quote">&quot;developers&quot;</span> address=<span class="xml&#45;quote">&quot;joedeveloper&#64;thoughtworks.com&quot;</span>/&gt;</span>&#10;    <span class="xml&#45;tag">&lt;/users&gt;</span>&#10;    <span class="xml&#45;tag">&lt;groups&gt;</span>&#10;        <span class="xml&#45;tag">&lt;group name=<span class="xml&#45;quote">&quot;developers&quot;</span> notification=<span class="xml&#45;quote">&quot;change&quot;</span>/&gt;</span>&#10;        <span class="xml&#45;tag">&lt;group name=<span class="xml&#45;quote">&quot;buildmaster&quot;</span> notification=<span class="xml&#45;quote">&quot;always&quot;</span>/&gt;</span>&#10;    <span class="xml&#45;tag">&lt;/groups&gt;</span>&#10;<span class="xml&#45;tag">&lt;/email&gt;</span></pre>
 </div></div><p class="paragraph"><h3 class="heading3"><a name="EmailPublisher-ConfigurationElements%3A"> Configuration Elements:</a></h3></p><table class="wikitable">
 <tr>
 <th> Node </th><th> Description </th><th> Type </th><th> Required</th>
@@ -29,7 +30,7 @@ The email publisher can be used to send email to any number of users. It is comm
 </tr><tr>
 <td> from </td><td> The email address that email will be marked as coming from. </td><td> string </td><td> true </td>
 </tr><tr>
-<td> projectURL </td><td> The URL where the CruiseControl.NET web application can be found. </td><td> string </td><td> true </td>
+<td> projectURL </td><td> <b class="strong">Deprecated</b>: this duplicates the webURL element in the Project Configuration Block. </td><td> string </td><td> false</td>
 </tr><tr>
 <td> users </td><td> A set of &lt;user&gt; elements that define who to send emails to. </td><td> complex </td><td> true </td>
 </tr><tr>
@@ -71,96 +72,6 @@ The email publisher can be used to send email to any number of users. It is comm
 This is likely due to not having CDO properly installed on the build server.  To fix this, make sure that you have some sort of email client installed  (Outlook Express is probably there by default).  Outlook Express doesn&#039;t actually initialise CDO until you actually open it, so try and use the client to send an email just to verify that everything works.</p>
 
 				    
-                                            <div class="tabletitle">
-                            <a name="comments">Comments:</a>
-                        </div>
-
-                        <table border="0" width="100%">
-                                                        <tr>
-                                <td >
-                                    <a name="comment-469"></a>
-                                    <font class="smallfont"><p class="paragraph">Are there attributes for specifying login for the SMTP server?</p>chrs,<br/>
-Mads Nissen<br/>
-mads.nissen@objectware.no</font>
-                                    <div align="left" class="smallfont" style="color: #666666; width: 98%; margin-bottom: 10px;">
-                                        <img src="icons/comment_16.gif" height="16" width="16" border="0" align="absmiddle"/>
-                                        Posted by  at Apr 23, 2004 02:44
-                                    </div>
-                                </td>
-                            </tr>
-                                                        <tr>
-                                <td  style="border-top: 1px dashed #666666">
-                                    <a name="comment-470"></a>
-                                    <font class="smallfont"><p class="paragraph">No - we&#039;re using the standard email classes in .NET. In .NET 1.0 there is no way of assigning authenticated SMTP options, but in .NET 1.1 there is. At the moment we&#039;re trying to stay totally compatible between the 2 .NET versions so won&#039;t add this option right now.<br/>
-A work around is to setup the Windows SMTP Server on the same machine as your build server (and use appropriate security options.) It can relay to your actual mail server, and your build server can then use the SMTP server on localhost.</p></font>
-                                    <div align="left" class="smallfont" style="color: #666666; width: 98%; margin-bottom: 10px;">
-                                        <img src="icons/comment_16.gif" height="16" width="16" border="0" align="absmiddle"/>
-                                        Posted by mroberts at Apr 23, 2004 03:40
-                                    </div>
-                                </td>
-                            </tr>
-                                                        <tr>
-                                <td  style="border-top: 1px dashed #666666">
-                                    <a name="comment-621"></a>
-                                    <font class="smallfont"><p class="paragraph">I&#039;m a newbie with cruisecontrol.net. How do I know where the projectURL (cruise control.net web app) is located? I will be using email publisher.</p></font>
-                                    <div align="left" class="smallfont" style="color: #666666; width: 98%; margin-bottom: 10px;">
-                                        <img src="icons/comment_16.gif" height="16" width="16" border="0" align="absmiddle"/>
-                                        Posted by  at May 11, 2004 08:14
-                                    </div>
-                                </td>
-                            </tr>
-                                                        <tr>
-                                <td  style="border-top: 1px dashed #666666">
-                                    <a name="comment-624"></a>
-                                    <font class="smallfont"><p class="paragraph">the projectURL property should point to the url at which you installed the CruiseControl.NET web app.  so if you installed the web app on server: foo using the virtual path: bar, you should set the projectURL property to <a href="http://foo/bar." title="Visit page outside Confluence">&#104;ttp://foo/bar.</a>  am i correctly understanding your question?</p></font>
-                                    <div align="left" class="smallfont" style="color: #666666; width: 98%; margin-bottom: 10px;">
-                                        <img src="icons/comment_16.gif" height="16" width="16" border="0" align="absmiddle"/>
-                                        Posted by orogers at May 12, 2004 03:50
-                                    </div>
-                                </td>
-                            </tr>
-                                                        <tr>
-                                <td  style="border-top: 1px dashed #666666">
-                                    <a name="comment-868"></a>
-                                    <font class="smallfont"><p class="paragraph">It would be nice if you added an attribute to set the Reply-To header. That way email could be marked as being &quot;From&quot; ccnet-builder@company.com without there actually being such an address. Replies would be sent to the project leader, for instance. It would be misleading to have the email actually come &quot;From&quot; his address; he is not sending these mails, he should just get any replies to them.</p>This seems trivial to do with the .Net standard email classes.<p class="paragraph">Makes sense?</p></font>
-                                    <div align="left" class="smallfont" style="color: #666666; width: 98%; margin-bottom: 10px;">
-                                        <img src="icons/comment_16.gif" height="16" width="16" border="0" align="absmiddle"/>
-                                        Posted by gthb at Jun 21, 2004 07:02
-                                    </div>
-                                </td>
-                            </tr>
-                                                        <tr>
-                                <td  style="border-top: 1px dashed #666666">
-                                    <a name="comment-876"></a>
-                                    <font class="smallfont"><p class="paragraph">In the example, the projectUrl is <a href="http://buildserver/myproject" title="Visit page outside Confluence">&#104;ttp://buildserver/myproject</a> which sounds like it points to the build deliverables, rather than the CC.Net webapp displaying information about the build.</p>But clearly the CC.Net webapp is what was intended (since CC.Net tacks ?log=logXXX.xml onto the URL to select the build to display; this parameter has no meaning for the app I&#039;m building).<p class="paragraph">So shouldn&#039;t projectUrl rather be <a href="http://mybuildserver/ccnet" title="Visit page outside Confluence">&#104;ttp://mybuildserver/ccnet</a> in this example? That would be in sync with the webURL used in the ccnet.config page, <a href="http://mybuildserver/ccnet" title="Visit page outside Confluence">&#104;ttp://mybuildserver/ccnet</a></p>Come to think of it, that begs the question: why is the URL to the CC.Net webapp being given again here? The same URL is already specified for each project, in the webUrl property, right?
-</font>
-                                    <div align="left" class="smallfont" style="color: #666666; width: 98%; margin-bottom: 10px;">
-                                        <img src="icons/comment_16.gif" height="16" width="16" border="0" align="absmiddle"/>
-                                        Posted by gthb at Jun 23, 2004 04:11
-                                    </div>
-                                </td>
-                            </tr>
-                                                        <tr>
-                                <td  style="border-top: 1px dashed #666666">
-                                    <a name="comment-1148"></a>
-                                    <font class="smallfont"><p class="paragraph">CruiseControl is running extremely well with the exception of the email publisher; it&#039;s not working.  Thought it could be a problem outside of cc, I am not seeing any output in the console saying that emails are being send when a build breaks.  I have one group for developers set to &quot;always&quot; receive email.   Please let me know if there are some small things I may be overlooking.  Thank you for your time in advance.</p></font>
-                                    <div align="left" class="smallfont" style="color: #666666; width: 98%; margin-bottom: 10px;">
-                                        <img src="icons/comment_16.gif" height="16" width="16" border="0" align="absmiddle"/>
-                                        Posted by bemizerany at Aug 12, 2004 12:25
-                                    </div>
-                                </td>
-                            </tr>
-                                                        <tr>
-                                <td  style="border-top: 1px dashed #666666">
-                                    <a name="comment-1575"></a>
-                                    <font class="smallfont"><p class="paragraph">Blake,</p>I found an email from Matt Steele, he indicated a problem with the .config file.  The xsl links were in the wrong location for him.  This hit me like a brick on the head and I realized that my ccservice.exe.config is located on the C:\ drive and my CC.Net files run from the D:\ drive.  So I went in and added the fully qualified location of the XSL files and it worked like a dream.<p class="paragraph">Good Luck.</p>-Josh</font>
-                                    <div align="left" class="smallfont" style="color: #666666; width: 98%; margin-bottom: 10px;">
-                                        <img src="icons/comment_16.gif" height="16" width="16" border="0" align="absmiddle"/>
-                                        Posted by  at Sep 23, 2004 08:51
-                                    </div>
-                                </td>
-                            </tr>
-                                                    </table>
                     			    </td>
 		    </tr>
 	    </table>
@@ -169,7 +80,7 @@ A work around is to setup the Windows SMTP Server on the same machine as your bu
 				<td height="12" background="border/border_bottom.gif"><img src="border/spacer.gif" width="1" height="1" border="0"/></td>
 			</tr>
 		    <tr>
-			    <td align="center"><font color="grey">Copyright(c) 2004 ThoughtWorks, Inc. All Rights Reserved</font></td>
+			    <td align="center"><font color="grey">Document generated by Confluence on Apr 04, 2005 11:56</font></td>
 		    </tr>
 	    </table>
     </body>

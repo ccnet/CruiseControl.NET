@@ -15,15 +15,42 @@
                                                     </span>
 				    </div>
 				    <div class="pagesubheading">
-					    This page last changed on Jan 16, 2005 by <font color="#0050B2">mroberts</font>.
+					    This page last changed on Apr 04, 2005 by <font color="#0050B2">mroberts</font>.
 				    </div>
 
-				    <p class="paragraph">The CCNet Web Dashboard Application is used for reporting summary details for a set of servers and projects. To install it:</p><ol>
-<li> Unzip the distribution as described in <a href="Basic Installation.html" title="Basic Installation">Basic Installation</a></li>
-<li> In IIS, map a virtual directory to the &#039;webdashboard&#039; subfolder of your CCNet folder</li>
-</ol><br/>
-The Dashboard needs to connect over the network to each of Servers you want to report on. If you have changed any of the <em class="emphasis">remoting</em> configuration for your servers, you&#039;ll need those details now. (See <a href="Server Application Config File.html" title="Server Application Config File">Server Application Config File</a> for more details on configuring remoting.)<p class="paragraph">To configure the dashboard, in the <tt class="monospaced">&lt;CCNET&gt;</tt> \ <tt class="monospaced">&lt;servers&gt;</tt> section of the dashboard&#039;s &#039;<b class="strong">web.config</b>&#039; file, add a <b class="strong">&lt;server&gt;</b> tag for each CruiseControl.NET Server you want to monitor. Set the <tt class="monospaced">url</tt> attribute to the management URL for the Server. Set the <tt class="monospaced">name</tt> attribute to be a unique name for each server you configure in the config file.</p>The web.config file that ships with the dashboard contains an example that works for a default scenario.<p class="paragraph">The Web Dashboard also includes reporting features. Read about these at <a href="Web Dashboard Reporting Features.html" title="Web Dashboard Reporting Features">Web Dashboard Reporting Features</a>.</p>
+				    <table width="100%" cellpadding="5" cellspacing="0" border="0"><tr>
+<td valign="top" ><br/>
+The CCNet Web Dashboard Application is used for reporting a wide range of information. At one end of the scale it reports summary details of all projects in your organisation and at the other it can give specific metric output for any specific build.<p class="paragraph">The Dashboard replaces the previous <a href="Project Report Web Application.html" title="Project Report Web Application">Project Report Web Application</a>, which will be deleted in future versions of CruiseControl.NET.</p>Features of the Web Dashboard include:<br/>
 
+<ul class="star">
+<li> Multi-project, multi-server support - 1 Web Dashboard deployment can report over all the CCNet projects in your organisation so there is no need for multiple instances of a web application.</li>
+<li> A significant set of &#039;plugins&#039; to support various reporting and configuration features</li>
+<li> Plugin API supports custom features at various groupings of build, project, etc.</li>
+<li> Plugin API supports a complete code interface, enabling significantly richer plugins than were available with the old Web Application.</li>
+</ul></td>
+<td valign="top" ><br/>
+<img src="Web Dashboard_attachments/Dashboard.jpg" align="absmiddle" border="0" />
+</td>
+</tr></table><br/>
+
+<ul class="star">
+<li> If you want to start off administering the Web Dashboard, read <a href="Installing the Web Dashboard.html" title="Installing the Web Dashboard">Installing the Web Dashboard</a>.</li>
+<li> Read <a href="Configuring the Web Dashboard.html" title="Configuring the Web Dashboard">Configuring the Web Dashboard</a> to specify Dashboard behaviour, and service locations.</li>
+<li> Read <a href="Using the Web Dashboard.html" title="Using the Web Dashboard">Using the Web Dashboard</a> if you want to actually work with the Dashboard.</li>
+<li> Read <a href="Developing Web Dashboard Plugins.html" title="Developing Web Dashboard Plugins">Developing Web Dashboard Plugins</a> if you&#039;re interested in extending the scope of features of the Dashboard.</li>
+<li> Read the <a href="Web Dashboard FAQ.html" title="Web Dashboard FAQ">Web Dashboard FAQ</a> for some common solutions.</li>
+</ul>
+
+				    					    <br/>
+                        <div class="tabletitle">
+                            <a name="attachments">Attachments:</a>
+                        </div>
+
+                        <div class="greybox" align="left">
+                                                            <img src="icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="Web Dashboard_attachments/Dashboard.JPG">Dashboard.JPG</a> (image/jpeg)
+                                <br/>
+                                                    </div>
 				    
                     			    </td>
 		    </tr>
@@ -33,7 +60,7 @@ The Dashboard needs to connect over the network to each of Servers you want to r
 				<td height="12" background="border/border_bottom.gif"><img src="border/spacer.gif" width="1" height="1" border="0"/></td>
 			</tr>
 		    <tr>
-			    <td align="center"><font color="grey">Copyright(c) 2004 ThoughtWorks, Inc. All Rights Reserved</font></td>
+			    <td align="center"><font color="grey">Document generated by Confluence on Apr 04, 2005 11:57</font></td>
 		    </tr>
 	    </table>
     </body>
