@@ -199,6 +199,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test
 			vss.Username = "orogers";
 			vss.Password = "";
 			vss.WorkingDirectory = @"c:\source\";
+			vss.SsDir = @"..\tools\vss";
 			vss.GetSource(IntegrationResultMother.CreateSuccessful(DateTime.Now));
 
 #if USE_MOCK
@@ -206,6 +207,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test
 			AssertMatches(@"get \$/Refactoring -R -Vd.* -Yorogers, -I-N", info.Arguments);
 			AssertEquals(DEFAULT_SS_EXE_PATH, info.FileName);
 			AssertEquals(@"c:\source\", info.WorkingDirectory);
+			AssertEquals(@"..\tools\vss", info.EnvironmentVariables[Vss.SS_DIR_KEY]);
 #endif
 		}
 
