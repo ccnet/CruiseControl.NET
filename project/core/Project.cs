@@ -3,6 +3,7 @@ using System.ComponentModel;
 using System.IO;
 using Exortech.NetReflector;
 using ThoughtWorks.CruiseControl.Core.Label;
+using ThoughtWorks.CruiseControl.Core.Sourcecontrol;
 using ThoughtWorks.CruiseControl.Core.State;
 using ThoughtWorks.CruiseControl.Core.Util;
 using ThoughtWorks.CruiseControl.Remote;
@@ -39,7 +40,7 @@ namespace ThoughtWorks.CruiseControl.Core
 		public const string DEFAULT_WEB_URL = "http://localhost/CruiseControl.NET/";
 
 		private string _webURL = DEFAULT_WEB_URL;
-		private ISourceControl _sourceControl;
+		private ISourceControl _sourceControl = new NullSourceControl();
 		private IBuilder _builder;
 		private ILabeller _labeller = new DefaultLabeller();
 		private IIntegrationCompletedEventHandler[] _publishers = new IIntegrationCompletedEventHandler[0];
@@ -76,7 +77,7 @@ namespace ThoughtWorks.CruiseControl.Core
 			set { _builder = value; }
 		}
 
-		[ReflectorProperty("sourcecontrol", InstanceTypeKey="type")]
+		[ReflectorProperty("sourcecontrol", InstanceTypeKey="type", Required=false)]
 		public ISourceControl SourceControl
 		{
 			get { return _sourceControl; }

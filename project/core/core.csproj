@@ -609,11 +609,6 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "sourcecontrol\DefaultSourceControl.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
                     RelPath = "sourcecontrol\FileSourceControl.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -675,6 +670,11 @@
                 />
                 <File
                     RelPath = "sourcecontrol\MultiSourceControl.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "sourcecontrol\NullSourceControl.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

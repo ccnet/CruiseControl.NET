@@ -93,7 +93,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Config
 			Project project = configuration.Projects[projectName] as Project;
 			Assert.AreEqual(projectName, project.Name);
 			Assert.IsTrue(project.Builder is MockBuilder);
-			Assert.IsTrue(project.SourceControl is DefaultSourceControl);
+			Assert.IsTrue(project.SourceControl is NullSourceControl);
 			Assert.AreEqual(1, project.Publishers.Length);
 			Assert.IsTrue(project.Publishers[0] is MockPublisher);
 

@@ -3,15 +3,12 @@ using Exortech.NetReflector;
 
 namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 {
-	[ReflectorType("defaultsourcecontrol")]
-	public class DefaultSourceControl : ISourceControl
+	[ReflectorType("nullSourceControl")]
+	public class NullSourceControl : ISourceControl
 	{
 		public Modification[] GetModifications(DateTime from, DateTime to)
 		{
-			Modification[] mods = new Modification[1];
-			mods[0] = new Modification();
-			mods[0].ModifiedTime = DateTime.Now;
-			return mods;
+			return new Modification[0];
 		}
 
 		public void LabelSourceControl( string label, IIntegrationResult result ) 
@@ -33,7 +30,6 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 
 		public void Run(IIntegrationResult result)
 		{
-			result.Modifications = GetModifications(result.LastModificationDate, DateTime.Now);
 		}
 	}
 }

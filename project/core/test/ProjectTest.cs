@@ -9,6 +9,7 @@ using ThoughtWorks.CruiseControl.Core.Builder.Test;
 using ThoughtWorks.CruiseControl.Core.Label;
 using ThoughtWorks.CruiseControl.Core.Publishers;
 using ThoughtWorks.CruiseControl.Core.Publishers.Test;
+using ThoughtWorks.CruiseControl.Core.Sourcecontrol;
 using ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test;
 using ThoughtWorks.CruiseControl.Core.State;
 using ThoughtWorks.CruiseControl.Core.Tasks;
@@ -142,7 +143,6 @@ namespace ThoughtWorks.CruiseControl.Core.Test
 			string xml = @"
 <project name=""foo"">
 	<build type=""nant"" />
-	<sourcecontrol type=""mock"" />
 </project>";
 
 			Project project = (Project) NetReflector.Read(xml);
@@ -151,7 +151,7 @@ namespace ThoughtWorks.CruiseControl.Core.Test
 			Assert.AreEqual(0, project.ModificationDelaySeconds); //TODO: is this the correct default?  should quiet period be turned off by default?  is this sourcecontrol specific?
 			Assert.AreEqual(true, project.PublishExceptions);
 			Assert.IsTrue(project.Builder is NAntBuilder);
-			Assert.IsTrue(project.SourceControl is MockSourceControl);
+			Assert.IsTrue(project.SourceControl is NullSourceControl);
 			Assert.IsTrue(project.Labeller is DefaultLabeller);
 			Assert.AreEqual(1, project.Triggers.Length);
 			Assert.AreEqual(0, project.Publishers.Length);

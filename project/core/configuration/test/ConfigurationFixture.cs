@@ -32,7 +32,7 @@ namespace ThoughtWorks.CruiseControl.Core.Config.Test
 
 		public static string GenerateProjectXml(string name)
 		{
-			return GenerateProjectXml(name, GenerateMockBuildXml(), GenerateDefaultSourceControlXml(), GenerateMockPublisherXml(), GenerateScheduleXml(), GenerateStateManagerXml());
+			return GenerateProjectXml(name, GenerateMockBuildXml(), GenerateNullSourceControlXml(), GenerateMockPublisherXml(), GenerateScheduleXml(), GenerateStateManagerXml());
 		}
 
 		public static string GenerateMockBuildXml()
@@ -40,9 +40,9 @@ namespace ThoughtWorks.CruiseControl.Core.Config.Test
 			return @"<build type=""mockbuildrunner""></build>";
 		}
 
-		public static string GenerateDefaultSourceControlXml()
+		public static string GenerateNullSourceControlXml()
 		{
-			return @"<sourcecontrol type=""defaultsourcecontrol""></sourcecontrol>";
+			return @"<sourcecontrol type=""nullSourceControl""></sourcecontrol>";
 		}
 
 		public static string GenerateMockPublisherXml()
