@@ -159,34 +159,8 @@
                     BuildAction = "Content"
                 />
                 <File
-                    RelPath = "Default.aspx"
+                    RelPath = "default.aspx"
                     BuildAction = "Content"
-                />
-                <File
-                    RelPath = "Default.aspx.cs"
-                    DependentUpon = "Default.aspx"
-                    SubType = "ASPXCodeBehind"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Default.aspx.resx"
-                    DependentUpon = "Default.aspx.cs"
-                    BuildAction = "EmbeddedResource"
-                />
-                <File
-                    RelPath = "Global.asax"
-                    BuildAction = "Content"
-                />
-                <File
-                    RelPath = "Global.asax.cs"
-                    DependentUpon = "Global.asax"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Global.asax.resx"
-                    DependentUpon = "Global.asax.cs"
-                    BuildAction = "EmbeddedResource"
                 />
                 <File
                     RelPath = "Web.config"
@@ -254,6 +228,11 @@
                 />
                 <File
                     RelPath = "Dashboard\BuildLink.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Dashboard\BuildLinkWithFileName.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -528,11 +507,6 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "Dashboard\XmlDownloader\XmlDownloader.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
                     RelPath = "images\arrow_minus_small.gif"
                     BuildAction = "Content"
                 />
@@ -632,16 +606,6 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "MVC\ControlView.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "MVC\HtmlView.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
                     RelPath = "MVC\IAction.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -668,6 +632,16 @@
                 />
                 <File
                     RelPath = "MVC\RequestController.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "MVC\StringView.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "MVC\ASPNET\HttpHandler.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -723,21 +697,6 @@
                 />
                 <File
                     RelPath = "MVC\Cruise\UnknownActionAction.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "MVC\View\DefaultHtmlBuilder.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "MVC\View\HtmlBuilderViewBuilder.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "MVC\View\IHtmlBuilder.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -807,7 +766,17 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Plugins\BuildReport\HtmlBuildLogAction.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Plugins\BuildReport\ViewBuildReportAction.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Plugins\BuildReport\XmlBuildLogAction.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -898,11 +867,6 @@
                 />
                 <File
                     RelPath = "Plugins\ServerReport\ServerReportServerPlugin.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Plugins\ViewAllBuilds\IViewAllBuildsViewBuilder.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

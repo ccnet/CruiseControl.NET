@@ -114,6 +114,20 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 		}
 
 		[Test]
+		public void ShouldBuildBuildUrlAddingCorrectlyFormattedActionWithSpecifiedFileName()
+		{
+			// Setup
+			pathMapperMock.ExpectAndReturn("GetAbsoluteURLForRelativePath", "http://local/another.html", "another.html");
+
+			// Execute
+			string url = urlBuilder.BuildBuildUrl(new ActionSpecifierWithName("myAction"), buildSpecifier, "another.html");
+
+			// Verify
+			Assert.AreEqual("http://local/another.html?_action_myAction=true&server=myserver&project=myproject&build=mybuild", url);
+			VerifyAll();
+		}
+
+		[Test]
 		public void ShouldBuildFormNameBasedOnActionNameWithNoArgs()
 		{
 			// Execute

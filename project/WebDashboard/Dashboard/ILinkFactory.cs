@@ -4,6 +4,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 	{
 		IAbsoluteLink CreateBuildLink(IBuildSpecifier buildSpecifier, string text, IActionSpecifier actionSpecifier);
 		IAbsoluteLink CreateBuildLink(IBuildSpecifier buildSpecifier, IActionSpecifier actionSpecifier);
+		IAbsoluteLink CreateBuildLinkWithFileName(IBuildSpecifier buildSpecifier, IActionSpecifier actionSpecifier, string fileName);
 		IAbsoluteLink CreateStyledBuildLink(IBuildSpecifier buildSpecifier, IActionSpecifier actionSpecifier);
 		IAbsoluteLink CreateProjectLink(IProjectSpecifier projectSpecifier, string text, IActionSpecifier actionSpecifier);
 		IAbsoluteLink CreateProjectLink(IProjectSpecifier projectSpecifier, IActionSpecifier actionSpecifier);

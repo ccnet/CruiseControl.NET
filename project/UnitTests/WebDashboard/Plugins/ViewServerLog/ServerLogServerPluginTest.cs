@@ -46,7 +46,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Plugins.ViewServerLo
 			Hashtable expectedHashtable = new Hashtable();
 			expectedHashtable["log"] = serverLog;
 
-			IView view = new HtmlView("foo");
+			IView view = new StringView("foo");
 
 			requestMock.ExpectAndReturn("ServerSpecifier", serverSpecifier);
 			farmServiceMock.ExpectAndReturn("GetServerLog", serverLog, serverSpecifier);

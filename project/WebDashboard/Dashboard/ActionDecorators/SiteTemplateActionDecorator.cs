@@ -23,9 +23,9 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard.ActionDecorators
 		public IView Execute(ICruiseRequest cruiseRequest)
 		{
 			Hashtable velocityContext = new Hashtable();
-			velocityContext["breadcrumbs"] = (((TopControlsViewBuilder) objectGiver.GiveObjectByType(typeof(TopControlsViewBuilder))).Execute()).HtmlFragment;
-			velocityContext["sidebar"] = (((SideBarViewBuilder) objectGiver.GiveObjectByType(typeof(SideBarViewBuilder))).Execute()).HtmlFragment;
-			velocityContext["mainContent"] = decoratedAction.Execute(cruiseRequest).HtmlFragment;
+			velocityContext["breadcrumbs"] = (((TopControlsViewBuilder) objectGiver.GiveObjectByType(typeof(TopControlsViewBuilder))).Execute()).ResponseFragment;
+			velocityContext["sidebar"] = (((SideBarViewBuilder) objectGiver.GiveObjectByType(typeof(SideBarViewBuilder))).Execute()).ResponseFragment;
+			velocityContext["mainContent"] = decoratedAction.Execute(cruiseRequest).ResponseFragment;
 
 			return velocityViewGenerator.GenerateView("SiteTemplate.vm", velocityContext);
 		}

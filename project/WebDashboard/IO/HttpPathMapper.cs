@@ -1,5 +1,4 @@
 using System.Web;
-using System.Web.UI;
 
 namespace ThoughtWorks.CruiseControl.WebDashboard.IO
 {
@@ -8,13 +7,11 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.IO
 	/// </summary>
 	public class HttpPathMapper : IPathMapper
 	{
-		private readonly Control webControl;
 		private readonly HttpContext context;
 
-		public HttpPathMapper(HttpContext context, Control webControl)
+		public HttpPathMapper(HttpContext context)
 		{
 			this.context = context;
-			this.webControl = webControl;
 		}
 
 		public string GetLocalPathFromURLPath(string originalPath)
@@ -29,7 +26,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.IO
 
 		public string GetAbsoluteURLForRelativePath(string relativePath)
 		{
-			return string.Format("{0}://{1}:{2}{3}", context.Request.Url.Scheme, context.Request.Url.Host, context.Request.Url.Port, webControl.ResolveUrl(relativePath));
+			return string.Format("{0}://{1}:{2}{3}/{4}", context.Request.Url.Scheme, context.Request.Url.Host, context.Request.Url.Port, context.Request.ApplicationPath, relativePath);
 		}
 	}
 }

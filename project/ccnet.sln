@@ -1,20 +1,4 @@
 Microsoft Visual Studio Solution File, Format Version 8.00
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "console", "console\console.csproj", "{E14EE67D-C24E-4088-B01B-35B742E99E85}"
-	ProjectSection(ProjectDependencies) = postProject
-	EndProjectSection
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "core", "core\core.csproj", "{F8113DB9-6C47-4FD1-8A01-655FCF151747}"
-	ProjectSection(ProjectDependencies) = postProject
-	EndProjectSection
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "service", "service\service.csproj", "{4DE3AEAD-FAFB-4D15-A0D7-3A9AAECF08E1}"
-	ProjectSection(ProjectDependencies) = postProject
-	EndProjectSection
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "web", "web\web.csproj", "{317E46BA-74DE-411D-A09D-37193EEFD856}"
-	ProjectSection(ProjectDependencies) = postProject
-	EndProjectSection
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebDashboard", "WebDashboard\WebDashboard.csproj", "{482EF049-EC0C-4819-B568-75B5F74BDD5B}"
 	ProjectSection(ProjectDependencies) = postProject
 	EndProjectSection
@@ -47,6 +31,22 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CCTrayLib", "CCTrayLib\CCTr
 	ProjectSection(ProjectDependencies) = postProject
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "console", "console\console.csproj", "{E14EE67D-C24E-4088-B01B-35B742E99E85}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "core", "core\core.csproj", "{F8113DB9-6C47-4FD1-8A01-655FCF151747}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "service", "service\service.csproj", "{4DE3AEAD-FAFB-4D15-A0D7-3A9AAECF08E1}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "web", "web\web.csproj", "{317E46BA-74DE-411D-A09D-37193EEFD856}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfiguration) = preSolution
 		Build = Build
@@ -54,30 +54,6 @@ Global
 		Release = Release
 	EndGlobalSection
 	GlobalSection(ProjectConfiguration) = postSolution
-		{E14EE67D-C24E-4088-B01B-35B742E99E85}.Build.ActiveCfg = Build|.NET
-		{E14EE67D-C24E-4088-B01B-35B742E99E85}.Build.Build.0 = Build|.NET
-		{E14EE67D-C24E-4088-B01B-35B742E99E85}.Debug.ActiveCfg = Debug|.NET
-		{E14EE67D-C24E-4088-B01B-35B742E99E85}.Debug.Build.0 = Debug|.NET
-		{E14EE67D-C24E-4088-B01B-35B742E99E85}.Release.ActiveCfg = Release|.NET
-		{E14EE67D-C24E-4088-B01B-35B742E99E85}.Release.Build.0 = Release|.NET
-		{F8113DB9-6C47-4FD1-8A01-655FCF151747}.Build.ActiveCfg = Build|.NET
-		{F8113DB9-6C47-4FD1-8A01-655FCF151747}.Build.Build.0 = Build|.NET
-		{F8113DB9-6C47-4FD1-8A01-655FCF151747}.Debug.ActiveCfg = Debug|.NET
-		{F8113DB9-6C47-4FD1-8A01-655FCF151747}.Debug.Build.0 = Debug|.NET
-		{F8113DB9-6C47-4FD1-8A01-655FCF151747}.Release.ActiveCfg = Release|.NET
-		{F8113DB9-6C47-4FD1-8A01-655FCF151747}.Release.Build.0 = Release|.NET
-		{4DE3AEAD-FAFB-4D15-A0D7-3A9AAECF08E1}.Build.ActiveCfg = Build|.NET
-		{4DE3AEAD-FAFB-4D15-A0D7-3A9AAECF08E1}.Build.Build.0 = Build|.NET
-		{4DE3AEAD-FAFB-4D15-A0D7-3A9AAECF08E1}.Debug.ActiveCfg = Debug|.NET
-		{4DE3AEAD-FAFB-4D15-A0D7-3A9AAECF08E1}.Debug.Build.0 = Debug|.NET
-		{4DE3AEAD-FAFB-4D15-A0D7-3A9AAECF08E1}.Release.ActiveCfg = Release|.NET
-		{4DE3AEAD-FAFB-4D15-A0D7-3A9AAECF08E1}.Release.Build.0 = Release|.NET
-		{317E46BA-74DE-411D-A09D-37193EEFD856}.Build.ActiveCfg = Build|.NET
-		{317E46BA-74DE-411D-A09D-37193EEFD856}.Build.Build.0 = Build|.NET
-		{317E46BA-74DE-411D-A09D-37193EEFD856}.Debug.ActiveCfg = Debug|.NET
-		{317E46BA-74DE-411D-A09D-37193EEFD856}.Debug.Build.0 = Debug|.NET
-		{317E46BA-74DE-411D-A09D-37193EEFD856}.Release.ActiveCfg = Release|.NET
-		{317E46BA-74DE-411D-A09D-37193EEFD856}.Release.Build.0 = Release|.NET
 		{482EF049-EC0C-4819-B568-75B5F74BDD5B}.Build.ActiveCfg = Build|.NET
 		{482EF049-EC0C-4819-B568-75B5F74BDD5B}.Build.Build.0 = Build|.NET
 		{482EF049-EC0C-4819-B568-75B5F74BDD5B}.Debug.ActiveCfg = Debug|.NET
@@ -126,6 +102,30 @@ Global
 		{C8043AD9-0F30-4366-A263-E2FC0D6A57A9}.Debug.Build.0 = Debug|.NET
 		{C8043AD9-0F30-4366-A263-E2FC0D6A57A9}.Release.ActiveCfg = Release|.NET
 		{C8043AD9-0F30-4366-A263-E2FC0D6A57A9}.Release.Build.0 = Release|.NET
+		{E14EE67D-C24E-4088-B01B-35B742E99E85}.Build.ActiveCfg = Build|.NET
+		{E14EE67D-C24E-4088-B01B-35B742E99E85}.Build.Build.0 = Build|.NET
+		{E14EE67D-C24E-4088-B01B-35B742E99E85}.Debug.ActiveCfg = Debug|.NET
+		{E14EE67D-C24E-4088-B01B-35B742E99E85}.Debug.Build.0 = Debug|.NET
+		{E14EE67D-C24E-4088-B01B-35B742E99E85}.Release.ActiveCfg = Release|.NET
+		{E14EE67D-C24E-4088-B01B-35B742E99E85}.Release.Build.0 = Release|.NET
+		{F8113DB9-6C47-4FD1-8A01-655FCF151747}.Build.ActiveCfg = Build|.NET
+		{F8113DB9-6C47-4FD1-8A01-655FCF151747}.Build.Build.0 = Build|.NET
+		{F8113DB9-6C47-4FD1-8A01-655FCF151747}.Debug.ActiveCfg = Debug|.NET
+		{F8113DB9-6C47-4FD1-8A01-655FCF151747}.Debug.Build.0 = Debug|.NET
+		{F8113DB9-6C47-4FD1-8A01-655FCF151747}.Release.ActiveCfg = Release|.NET
+		{F8113DB9-6C47-4FD1-8A01-655FCF151747}.Release.Build.0 = Release|.NET
+		{4DE3AEAD-FAFB-4D15-A0D7-3A9AAECF08E1}.Build.ActiveCfg = Build|.NET
+		{4DE3AEAD-FAFB-4D15-A0D7-3A9AAECF08E1}.Build.Build.0 = Build|.NET
+		{4DE3AEAD-FAFB-4D15-A0D7-3A9AAECF08E1}.Debug.ActiveCfg = Debug|.NET
+		{4DE3AEAD-FAFB-4D15-A0D7-3A9AAECF08E1}.Debug.Build.0 = Debug|.NET
+		{4DE3AEAD-FAFB-4D15-A0D7-3A9AAECF08E1}.Release.ActiveCfg = Release|.NET
+		{4DE3AEAD-FAFB-4D15-A0D7-3A9AAECF08E1}.Release.Build.0 = Release|.NET
+		{317E46BA-74DE-411D-A09D-37193EEFD856}.Build.ActiveCfg = Build|.NET
+		{317E46BA-74DE-411D-A09D-37193EEFD856}.Build.Build.0 = Build|.NET
+		{317E46BA-74DE-411D-A09D-37193EEFD856}.Debug.ActiveCfg = Debug|.NET
+		{317E46BA-74DE-411D-A09D-37193EEFD856}.Debug.Build.0 = Debug|.NET
+		{317E46BA-74DE-411D-A09D-37193EEFD856}.Release.ActiveCfg = Release|.NET
+		{317E46BA-74DE-411D-A09D-37193EEFD856}.Release.Build.0 = Release|.NET
 	EndGlobalSection
 	GlobalSection(SolutionItems) = postSolution
 		..\ccnet.build = ..\ccnet.build

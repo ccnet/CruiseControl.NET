@@ -1,15 +1,15 @@
 namespace ThoughtWorks.CruiseControl.WebDashboard.MVC
 {
-	public class HtmlView : IView
+	public class StringView : IView
 	{
 		private readonly string htmlFragment;
 
-		public HtmlView(string htmlFragment)
+		public StringView(string htmlFragment)
 		{
 			this.htmlFragment = htmlFragment;
 		}
 
-		public string HtmlFragment
+		public string ResponseFragment
 		{
 			get { return htmlFragment; }
 		}

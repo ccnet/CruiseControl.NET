@@ -762,6 +762,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "WebDashboard\Dashboard\BuildLinkWithFileNameTest.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "WebDashboard\Dashboard\BuildRequestTransformerTest.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -857,11 +862,6 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "WebDashboard\MVC\DefaultHtmlBuilderTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
                     RelPath = "WebDashboard\MVC\HtmlViewTest.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -912,7 +912,7 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "WebDashboard\Plugins\BuildReport\BuildLogBuildPluginTest.cs"
+                    RelPath = "WebDashboard\Plugins\BuildReport\HtmlBuildLogActionTest.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

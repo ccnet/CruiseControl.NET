@@ -51,7 +51,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.MVC
 			mockActionFactory.ExpectAndReturn("ActionArguments", actionArgs, request);
 			mockRequest.Expect("ActionArguments", new object[] {actionArgs});
 			mockAction.ExpectAndReturn("Execute", view, request);
-			mockView.ExpectAndReturn("HtmlFragment", "my html");
+			mockView.ExpectAndReturn("ResponseFragment", "my html");
 
 			/// Execute & Verify
 			Assert.AreEqual("my html", controller.Do());

@@ -37,7 +37,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.MVC.View
 			IView view = viewGenerator.GenerateView("myTemplate", context);
 
 			// Verify
-			Assert.AreEqual("transformed", view.HtmlFragment);
+			Assert.AreEqual("transformed", view.ResponseFragment);
 			VerifyAll();
 		}
 	}

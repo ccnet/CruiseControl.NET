@@ -21,7 +21,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.BuildReport
 		// ToDo - this shouldn't access Configuration Settings directly ... but maybe we want a new plugin impl anyway using configurable plugins
 		public IView Execute (ICruiseRequest cruiseRequest)
 		{
-			return new HtmlView(buildLogTransformer.Transform(cruiseRequest.BuildSpecifier, (string[]) ((ArrayList) ConfigurationSettings.GetConfig("CCNet/xslFiles")).ToArray(typeof (string))));
+			return new StringView(buildLogTransformer.Transform(cruiseRequest.BuildSpecifier, (string[]) ((ArrayList) ConfigurationSettings.GetConfig("CCNet/xslFiles")).ToArray(typeof (string))));
 		}
 
 		public string LinkDescription

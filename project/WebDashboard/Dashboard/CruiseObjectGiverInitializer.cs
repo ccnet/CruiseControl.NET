@@ -1,5 +1,4 @@
 using System.Web;
-using System.Web.UI;
 using ThoughtWorks.CruiseControl.Core;
 using ThoughtWorks.CruiseControl.Core.Util;
 using ThoughtWorks.CruiseControl.WebDashboard.Config;
@@ -7,6 +6,7 @@ using ThoughtWorks.CruiseControl.WebDashboard.Dashboard.ActionDecorators;
 using ThoughtWorks.CruiseControl.WebDashboard.IO;
 using ThoughtWorks.CruiseControl.WebDashboard.MVC;
 using ThoughtWorks.CruiseControl.WebDashboard.MVC.Cruise;
+using ThoughtWorks.CruiseControl.WebDashboard.Plugins.BuildReport;
 
 namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 {
@@ -19,12 +19,12 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 			this.giverAndRegistrar = giverAndRegistrar;
 		}
 
-		public ObjectGiver InitializeGiverForRequest(HttpRequest request, HttpContext context, Control control)
+		public ObjectGiver InitializeGiverForRequest(HttpContext context)
 		{
-			giverAndRegistrar.AddTypedObject(typeof(HttpRequest), request);
-			giverAndRegistrar.AddTypedObject(typeof(HttpContext), context);
-			giverAndRegistrar.AddTypedObject(typeof(Control), control);
 			giverAndRegistrar.AddTypedObject(typeof(ObjectGiver), giverAndRegistrar);
+			giverAndRegistrar.AddTypedObject(typeof(HttpContext), context);
+			HttpRequest request = context.Request;
+			giverAndRegistrar.AddTypedObject(typeof(HttpRequest), request);
 
 			// Add functionality to object giver to handle this?
 			giverAndRegistrar.AddTypedObject(typeof(IRequest), new AggregatedRequest(new NameValueCollectionRequest(request.Form), new NameValueCollectionRequest(request.QueryString)));
@@ -102,6 +102,11 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 						.Decorate(typeof(ServerCheckingProxyAction)).Decorate(typeof(BuildCheckingProxyAction)).Decorate(typeof(ProjectCheckingProxyAction)).Decorate(typeof(SiteTemplateActionDecorator)).Decorate(typeof(CruiseActionProxyAction)).Decorate(typeof(ExceptionCatchingActionProxy));
 				}
 			}
+
+			// ToDo - make this kind of thing specifiable by Plugins (note that this action is not wrapped with a SiteTemplateActionDecorator
+			// See BuildLogBuildPlugin for linked todo
+			giverAndRegistrar.CreateImplementationMapping(XmlBuildLogAction.ACTION_NAME, typeof(XmlBuildLogAction))
+				.Decorate(typeof(ServerCheckingProxyAction)).Decorate(typeof(BuildCheckingProxyAction)).Decorate(typeof(ProjectCheckingProxyAction)).Decorate(typeof(CruiseActionProxyAction));
 
 			return giverAndRegistrar;
 		}

@@ -11,13 +11,13 @@ using ThoughtWorks.CruiseControl.WebDashboard.Plugins.BuildReport;
 namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Plugins.BuildReport
 {
 	[TestFixture]
-	public class BuildLogBuildPluginTest
+	public class HtmlBuildLogActionTest
 	{
-		private BuildLogBuildPlugin buildPlugin;
+		private HtmlBuildLogAction buildLogAction;
 
 		private DynamicMock requestMock;
 		private DynamicMock buildRetrieverMock;
-		private DynamicMock urlBuilderMock;
+		private DynamicMock linkFactoryMock;
 		private DynamicMock velocityViewGeneratorMock;
 
 		private string buildLog;
@@ -30,17 +30,17 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Plugins.BuildReport
 		{
 			buildRetrieverMock = new DynamicMock(typeof(IBuildRetriever));
 			velocityViewGeneratorMock = new DynamicMock(typeof(IVelocityViewGenerator));
-			urlBuilderMock = new DynamicMock(typeof(IUrlBuilder));
+			linkFactoryMock = new DynamicMock(typeof(ILinkFactory));
 			requestMock = new DynamicMock(typeof(ICruiseRequest));
 
-			buildPlugin = new BuildLogBuildPlugin((IBuildRetriever) buildRetrieverMock.MockInstance, 
+			buildLogAction = new HtmlBuildLogAction((IBuildRetriever) buildRetrieverMock.MockInstance, 
 				(IVelocityViewGenerator) velocityViewGeneratorMock.MockInstance,
-				(IUrlBuilder) urlBuilderMock.MockInstance);
+				(ILinkFactory) linkFactoryMock.MockInstance);
 
 			buildLog = "some stuff in a log with a < and >";
 			buildSpecifier = new DefaultBuildSpecifier(new DefaultProjectSpecifier(new DefaultServerSpecifier("myserver"), "myproject"), "mybuild");
 			build = new Build(buildSpecifier, buildLog);
-			view = new HtmlView("foo");
+			view = new StringView("foo");
 		}
 
 		private void VerifyAll()
@@ -48,7 +48,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Plugins.BuildReport
 			requestMock.Verify();
 			buildRetrieverMock.Verify();
 			velocityViewGeneratorMock.Verify();
-			urlBuilderMock.Verify();
+			linkFactoryMock.Verify();
 		}
 
 		[Test]
@@ -57,7 +57,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Plugins.BuildReport
 			// Setup
 			requestMock.ExpectAndReturn("BuildSpecifier", buildSpecifier);
 			buildRetrieverMock.ExpectAndReturn("GetBuild", build, buildSpecifier);
-			urlBuilderMock.ExpectAndReturn("BuildUrl", "myUrl", "mybuild?server=myserver&project=myproject&build=mybuild");
+			GeneralAbsoluteLink link = new GeneralAbsoluteLink("some text", "myUrl");
+			linkFactoryMock.ExpectAndReturn("CreateBuildLinkWithFileName", link, buildSpecifier, new ActionSpecifierWithName(XmlBuildLogAction.ACTION_NAME), buildSpecifier.BuildName);
 
 			Hashtable expectedContext = new Hashtable();
 			expectedContext["log"] = "some stuff in a log with a &lt; and &gt;";
@@ -66,7 +67,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Plugins.BuildReport
 			velocityViewGeneratorMock.ExpectAndReturn("GenerateView", view, "BuildLog.vm", new HashtableConstraint(expectedContext));
 
 			// Execute & Verify
-			Assert.AreEqual(view, buildPlugin.Execute((ICruiseRequest) requestMock.MockInstance));
+			Assert.AreEqual(view, buildLogAction.Execute((ICruiseRequest) requestMock.MockInstance));
 
 			VerifyAll();
 		}

@@ -21,7 +21,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 
 		public IView Execute (ICruiseRequest cruiseRequest)
 		{
-			return new HtmlView(buildLogTransformer.Transform(cruiseRequest.BuildSpecifier, xslFileName));
+			return new StringView(buildLogTransformer.Transform(cruiseRequest.BuildSpecifier, xslFileName));
 		}
 
 		public string LinkDescription

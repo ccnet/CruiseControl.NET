@@ -14,8 +14,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 			this.pathMapper = pathMapper;
 		}
 
-		// ToDo - make this private again once Actions implemented for file transfer
-		public string BuildUrl(string relativeUrl)
+		private string BuildUrl(string relativeUrl)
 		{
 			return pathMapper.GetAbsoluteURLForRelativePath(relativeUrl);
 		}
@@ -68,6 +67,11 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 		public string BuildBuildUrl(IActionSpecifier action, IBuildSpecifier buildSpecifier)
 		{
 			return BuildUrl(action, BuildBuildQueryString(buildSpecifier));
+		}
+
+		public string BuildBuildUrl(IActionSpecifier action, IBuildSpecifier buildSpecifier, string fileName)
+		{
+			return BuildUrl(fileName, action, BuildBuildQueryString(buildSpecifier));
 		}
 
 		public string BuildFormName(IActionSpecifier action, params string[] args)

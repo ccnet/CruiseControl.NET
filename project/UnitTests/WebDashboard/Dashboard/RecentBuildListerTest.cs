@@ -87,7 +87,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 			IBuildSpecifier[] buildSpecifiers = new IBuildSpecifier [] {build2Specifier, build1Specifier };
 			IAbsoluteLink[] buildLinks = new IAbsoluteLink[] { new GeneralAbsoluteLink("link1"), new GeneralAbsoluteLink("link2") };
 			string buildRows = "renderred Links";
-			IView allBuildsView = new HtmlView("foo");
+			IView allBuildsView = new StringView("foo");
 			Hashtable context1 = new Hashtable();
 			Hashtable context2 = new Hashtable();
 

@@ -1,3 +1,5 @@
+using System;
+
 namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 {
 	public class DefaultLinkFactory : ILinkFactory
@@ -19,6 +21,11 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 		public IAbsoluteLink CreateBuildLink(IBuildSpecifier buildSpecifier, IActionSpecifier actionSpecifier)
 		{
 			return new BuildLink(urlBuilder, buildSpecifier, buildNameFormatter.GetPrettyBuildName(buildSpecifier), actionSpecifier);
+		}
+
+		public IAbsoluteLink CreateBuildLinkWithFileName(IBuildSpecifier buildSpecifier, IActionSpecifier actionSpecifier, string fileName)
+		{
+			return new BuildLinkWithFileName(urlBuilder, buildSpecifier, buildNameFormatter.GetPrettyBuildName(buildSpecifier), actionSpecifier, fileName);
 		}
 
 		public IAbsoluteLink CreateProjectLink(IProjectSpecifier projectSpecifier, string text, IActionSpecifier actionSpecifier)
