@@ -10,7 +10,8 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test
 	[TestFixture]
 	public class ModificationTest : CustomAssertion
 	{
-		public void TestCompareTo()
+		[Test]
+		public void ModificationsAreComparedByModifiedDatetime()
 		{
 			Modification alpha = new Modification();
 			alpha.ModifiedTime = new DateTime(1975, 3, 3);
@@ -26,17 +27,10 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test
 				alpha.CompareTo(beta)), beta.CompareTo(alpha) < 0);
 		}
 
-		public void TestToXml() 
+		[Test]
+		public void OutputModificationToXml() 
 		{
-			DateTime modifiedTime = new DateTime();
-			Modification mod = new Modification();
-			mod.FileName = "File\"Name&";
-			mod.FolderName = "Folder'Name";
-			mod.ModifiedTime = modifiedTime;
-			mod.UserName = "User<>Name";
-			mod.Comment = "Comment";
-			mod.EmailAddress = "foo.bar@quuuux.quuux.quux.qux";
-			mod.Url = "http://localhost/viewcvs/";
+			Modification mod = CreateModification();
 
 			string expected = string.Format(
 @"<modification type=""unknown"">
@@ -45,28 +39,50 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test
 	<date>{0}</date>
 	<user>User&lt;&gt;Name</user>
 	<comment>Comment</comment>
+	<changeNumber>16</changeNumber>
 	<url>http://localhost/viewcvs/</url>
 	<email>foo.bar@quuuux.quuux.quux.qux</email>
-</modification>", DateUtil.FormatDate(modifiedTime));
+</modification>", DateUtil.FormatDate(mod.ModifiedTime));
 
-			AssertEquals(XmlUtil.GenerateOuterXml(expected), mod.ToXml());
+			string actual = mod.ToXml();
+			Console.Out.WriteLine("actual = " + actual);
+			
+			AssertEquals(XmlUtil.GenerateOuterXml(expected), actual);
 		}
 
-		public void TestToXml_CommentContainsXmlSymbols()
+		[Test]
+		public void OutputToXmlWithSpecialCharactersInCommentField()
 		{
-			DateTime modifiedTime = new DateTime();
+			Modification mod = CreateModification();
+			mod.Comment = "math says 2 < 4 & XML CDATA ends with ]]>; don't nest <![CDATA in <![CDATA]]> ]]>";
+
+			string actual = XmlUtil.SelectRequiredValue(mod.ToXml(), "/modification/comment");
+			AssertEquals(mod.Comment, actual);
+		}
+
+		[Test]
+		public void NullEmailAddressOrUrlShouldNotBeIncludedInXml()
+		{
+			Modification mod = CreateModification();
+			mod.EmailAddress = null;
+			mod.Url = null;
+
+			AssertNull(XmlUtil.SelectNode(mod.ToXml(), "/modification/email"));
+			AssertNull(XmlUtil.SelectNode(mod.ToXml(), "/modification/url"));
+		}
+
+		private Modification CreateModification()
+		{
 			Modification mod = new Modification();
 			mod.FileName = "File\"Name&";
 			mod.FolderName = "Folder'Name";
-			mod.ModifiedTime = modifiedTime;
+			mod.ModifiedTime = DateTime.Now;
 			mod.UserName = "User<>Name";
-			mod.Comment = "math says 2 < 4 & XML CDATA ends with ]]>; don't nest <![CDATA in <![CDATA]]> ]]>";
-
-			XmlDocument document = XmlUtil.CreateDocument(mod.ToXml());
-			
-			string xpath = "/modification/comment";
-			string actual = XmlUtil.SelectRequiredValue(document, xpath);
-			AssertEquals(mod.Comment, actual);
+			mod.Comment = "Comment";
+			mod.ChangeNumber = 16;
+			mod.EmailAddress = "foo.bar@quuuux.quuux.quux.qux";
+			mod.Url = "http://localhost/viewcvs/";
+			return mod;
 		}
 	}
 }

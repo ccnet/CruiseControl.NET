@@ -4,126 +4,56 @@ using System.Collections;
 using System.Xml;
 using System.IO;
 using ThoughtWorks.CruiseControl.Core.Util;
+using System.Xml.Serialization;
 
 namespace ThoughtWorks.CruiseControl.Core
 {
+	/// <summary>
+	/// Value object representing the data associated with a source control modification.
+	/// </summary>
+	[XmlRoot("modification")]
 	public class Modification : IComparable 
 	{
-		/** enable logging for this class */
-		private string type = "unknown";
-		private string fileName;
-		private string folderName;
-		private DateTime modifiedTime;
-		private int changeNumber;
-		private string userName;
-		private string emailAddress;
-		private string comment;
-		private string url;
-
-		#region properties
-		public string Type
-		{
-			get { return type; }
-			set { type = value; }
-		}
-
-		public string FileName
-		{
-			get { return fileName; }
-			set { fileName = value; }
-		}
-
-		public string FolderName
-		{
-			get { return folderName; }
-			set { folderName = value; }
-		}
-
-		public DateTime ModifiedTime
-		{
-			get { return modifiedTime; }
-			set { modifiedTime = value; }
-		}
-
-		public int ChangeNumber {
-			get { return changeNumber; }
-			set { changeNumber = value; }
-		}
-
-		public string UserName
-		{
-			get { return userName; }
-			set { userName = value; }
-		}
-
-		public string EmailAddress
-		{
-			get { return emailAddress; }
-			set { emailAddress = value; }
-		}
-
-		public string Comment
-		{
-			get { return comment; }
-			set { comment = value; }
-		}
-
-		public string Url
-		{
-			get { return url; }
-			set { url = value; }
-		}
-		#endregion
-
-		public XmlDocument ToDocument() 
-		{
-			XmlDocument doc = new XmlDocument();
-			XmlElement modificationElement = doc.CreateElement("modification");
-			doc.AppendChild(modificationElement);
-			modificationElement.SetAttribute("type", type);
-			XmlElement filenameElement = doc.CreateElement("filename");
-			filenameElement.InnerText = fileName;
-			XmlElement projectElement = doc.CreateElement("project");
-			projectElement.InnerText = folderName;
-			XmlElement dateElement = doc.CreateElement("date");
-			dateElement.InnerText = DateUtil.FormatDate(modifiedTime);
-			XmlElement userElement = doc.CreateElement("user");
-			userElement.InnerText = userName;
-			XmlElement commentElement = doc.CreateElement("comment");
-			commentElement.InnerText = comment;
-			XmlElement urlElement = doc.CreateElement("url");
-			urlElement.InnerText = url;
-			
-			modificationElement.AppendChild(filenameElement);
-			modificationElement.AppendChild(projectElement);
-			modificationElement.AppendChild(dateElement);
-			modificationElement.AppendChild(userElement);
-			modificationElement.AppendChild(commentElement);
-			modificationElement.AppendChild(urlElement);
-
-			// not all sourcecontrols guarantee a non-null email address
-			if ( emailAddress != null ) 
-			{
-				XmlElement emailAddressElement = doc.CreateElement("email");
-				emailAddressElement.InnerText = emailAddress;
-				modificationElement.AppendChild(emailAddressElement);
-			}
-			return doc;
-		}
+		public string Type = "unknown";
+		public string FileName;
+		public string FolderName;
+		public DateTime ModifiedTime;
+		public string UserName;
+		public int ChangeNumber;
+		public string Comment;
+		public string Url;
+		public string EmailAddress;
 
 		public string ToXml()
 		{
-			return ToDocument().OuterXml;
+			StringWriter writer = new StringWriter();
+			ToXml(new XmlTextWriter(writer));
+			return writer.ToString();
+		}
+
+		public void ToXml(XmlWriter writer)
+		{
+			writer.WriteStartElement("modification");
+			writer.WriteAttributeString("type", Type);
+			writer.WriteElementString("filename", FileName);
+			writer.WriteElementString("project", FolderName);
+			writer.WriteElementString("date", DateUtil.FormatDate(ModifiedTime));
+			writer.WriteElementString("user", UserName);
+			writer.WriteElementString("comment", Comment);
+			writer.WriteElementString("changeNumber", ChangeNumber.ToString());
+			XmlUtil.WriteNonNullElementString(writer, "url", Url);
+			XmlUtil.WriteNonNullElementString(writer, "email", EmailAddress);
+			writer.WriteEndElement();
 		}
 
 		public int CompareTo(Object o) {
 			Modification modification = (Modification) o;
-			return modifiedTime.CompareTo(modification.modifiedTime);
+			return ModifiedTime.CompareTo(modification.ModifiedTime);
 		}
 
 		public override int GetHashCode()
 		{
-			return base.GetHashCode();			
+			return ToString().GetHashCode();			
 		}
 
 		public override bool Equals(object obj)
