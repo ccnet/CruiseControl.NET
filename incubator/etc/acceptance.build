@@ -1,0 +1,15 @@
+<project name="ccnetlaunch" default="all">
+  <target name="all">
+  	<echo message="Build Succeeded"/>
+  </target>
+
+  <target name="success">
+    <echo message="I am success itself"/>
+  </target>
+
+  <target name="fail">
+    <echo message="I am failure itself"/>
+    <fail message="Intentional failure for test purposes, that is to say, purposes of testing, if you will"/>
+  </target>
+
+</project>

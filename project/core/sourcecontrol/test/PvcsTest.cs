@@ -51,6 +51,7 @@ namespace tw.ccnet.core.sourcecontrol.test
 		}
 		
 		// TODO: stop cmd window from popping up with this test!!!
+		[Ignore("Sort out mockpcli stuff")]
 		public void TestGetModifications() 
 		{
 			Pvcs pvcs = CreatePvcs();

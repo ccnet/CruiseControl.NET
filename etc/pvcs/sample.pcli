@@ -1,8 +1,0 @@
-Echo files.tmp is a temp file, pvcslog.txt is the output
-Echo remember to set you PCLI_ID variable from outside
-set -vProject "-prd:\root\PVCS\vm\common\SampleDB"
-set -vSubProject "/chess"
-Echo Getting list of files
-run ->files.tmp listversionedfiles -z -aw $Project $SubProject
-Echo Getting History
-run -e vlog  "-xo+epvcslog.txt" "-d10/10/2001/10:49*10/12/2002" "@files.tmp"
