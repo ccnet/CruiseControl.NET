@@ -269,11 +269,6 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "Core\RemoteCruiseServerTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
                     RelPath = "Core\WorkflowResultTest.cs"
                     SubType = "Code"
                     BuildAction = "Compile"

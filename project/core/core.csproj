@@ -968,6 +968,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "test\RemoteCruiseServerTest.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "test\SimpleBuildFile.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
