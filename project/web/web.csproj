@@ -245,6 +245,21 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "NAnt.aspx"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "NAnt.aspx.cs"
+                    DependentUpon = "NAnt.aspx"
+                    SubType = "ASPXCodeBehind"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "NAnt.aspx.resx"
+                    DependentUpon = "NAnt.aspx.cs"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
                     RelPath = "PageTransformer.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -510,6 +525,11 @@
                 <File
                     RelPath = "xsl\modifications.xsl"
                     Link = "..\xsl\modifications.xsl"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "xsl\NAnt.xsl"
+                    Link = "..\xsl\NAnt.xsl"
                     BuildAction = "Content"
                 />
                 <File
