@@ -94,7 +94,6 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers.Test
 		{
 			_publisher.IncludeDetails = true;
 			string message = _publisher.CreateMessage(CreateIntegrationResult(IntegrationStatus.Success, IntegrationStatus.Success));
-			Console.Out.WriteLine("message = {0}", message);
 			Assert.IsTrue(message.StartsWith("<html>"));
 			Assert.IsTrue(message.IndexOf("CruiseControl.NET Build Results for project Project#9") > 0);
 			Assert.IsTrue(message.IndexOf("Modifications since last build") > 0);
