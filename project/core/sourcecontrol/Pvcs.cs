@@ -81,9 +81,10 @@ run -e vlog  ""-xo+e{3}"" ""-d{4}*{5}"" ""@{2}""
 				to.ToString(TO_PVCS_DATE_FORMAT)
 			);
 
-			StreamWriter stream = File.CreateText(PVCS_INSTRUCTIONS_FILE);
-			stream.Write(content);
-			stream.Close();
+			using (StreamWriter stream = File.CreateText(PVCS_INSTRUCTIONS_FILE))
+			{
+				stream.Write(content);
+			}
 
 			Log.Debug(string.Format("Pvcs: {0} {1}", Executable, Arguments));
 			return new ProcessInfo(Executable, Arguments);
@@ -100,7 +101,10 @@ run -e vlog  ""-xo+e{3}"" ""-d{4}*{5}"" ""@{2}""
 		public override Modification[] GetModifications(DateTime from, DateTime to)
 		{
 			Execute(CreateHistoryProcessInfo(from, to));
-			return ParseModifications(GetTextReader(PVCS_LOGOUTPUT_FILE), from, to);
+			using (TextReader reader = GetTextReader(PVCS_LOGOUTPUT_FILE))
+			{
+				return ParseModifications(reader, from, to);
+			}
 		}
 
 		public override void LabelSourceControl(string label, DateTime timeStamp)
