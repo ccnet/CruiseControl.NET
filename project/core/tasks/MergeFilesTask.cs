@@ -1,8 +1,6 @@
-using System;
-using System.Collections;
-using ThoughtWorks.CruiseControl.Core.Publishers;
 using System.IO;
 using Exortech.NetReflector;
+using ThoughtWorks.CruiseControl.Core.Publishers;
 using ThoughtWorks.CruiseControl.Core.Util;
 
 namespace ThoughtWorks.CruiseControl.Core.Tasks
@@ -10,6 +8,9 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
     [ReflectorType("merge")]
     public class MergeFilesTask : ITask
     {
+		[ReflectorArray("files")] 
+		public string[] MergeFiles = new string[0];
+
         public void Run(IntegrationResult result)
         {
             foreach (string mergeFile in MergeFiles)
@@ -35,8 +36,5 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         {
             return true;
         }
-
-        [ReflectorArray("files")] 
-		public string[] MergeFiles = new string[0];
     }
 }
