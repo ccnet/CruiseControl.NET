@@ -916,6 +916,10 @@
                     BuildAction = "None"
                 />
                 <File
+                    RelPath = "templates\BuildLog.vm"
+                    BuildAction = "None"
+                />
+                <File
                     RelPath = "templates\BuildRows.vm"
                     BuildAction = "None"
                 />

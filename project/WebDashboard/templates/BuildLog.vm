@@ -1,0 +1,2 @@
+<p>Click <a href="$logUrl">here</a> to open log in its own page</p>
+<pre class="log">$log</pre>
