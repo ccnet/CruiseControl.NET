@@ -678,6 +678,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "sourcecontrol\test\SvnTest.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "sourcecontrol\test\VssHistoryParserTest.cs"
                     SubType = "Code"
                     BuildAction = "Compile"

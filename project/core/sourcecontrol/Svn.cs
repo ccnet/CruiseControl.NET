@@ -12,7 +12,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 		internal readonly static string HISTORY_COMMAND_FORMAT = "log -v -r \"{{{0}}}:{{{1}}}\" --xml {2}";
 		internal readonly static string TAG_COMMAND_FORMAT = "copy {0} {1}";
 
-		internal readonly static string COMMAND_DATE_FORMAT = "yyyy-MM-dd HH:mm:ss 'GMT'";
+		internal readonly static string COMMAND_DATE_FORMAT = "yyyy-MM-ddTHH:mm:ss";
 
 		private IHistoryParser _parser = new SvnHistoryParser();
 
@@ -67,7 +67,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 
 		public override Process CreateHistoryProcess(DateTime from, DateTime to)
 		{
-			return ProcessUtil.CreateProcess(Executable, BuildHistoryProcessArgs(from), WorkingDirectory);
+			return ProcessUtil.CreateProcess(Executable, BuildHistoryProcessArgs(from, to), WorkingDirectory);
 		}
 
 		public override Process CreateLabelProcess(string label, DateTime timeStamp) 
@@ -75,9 +75,9 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			return ProcessUtil.CreateProcess(Executable, BuildTagProcessArgs(label));
 		}
 
-		internal string BuildHistoryProcessArgs(DateTime from)
+		internal string BuildHistoryProcessArgs(DateTime from, DateTime to)
 		{		
-			return string.Format(HISTORY_COMMAND_FORMAT, FormatCommandDate(from), FormatCommandDate(DateTime.Now), _trunkUrl);
+			return string.Format(HISTORY_COMMAND_FORMAT, FormatCommandDate(from), FormatCommandDate(to), _trunkUrl);
 		}		
 
 		internal string BuildTagProcessArgs(string label) {
