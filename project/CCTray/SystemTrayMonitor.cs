@@ -39,7 +39,10 @@ namespace ThoughtWorks.CruiseControl.CCTray
 
 		Exception _agentException = null;
 		private System.Windows.Forms.MenuItem mnuForceBuild;
+		private System.Windows.Forms.MenuItem mnuProjects;
+		private System.Windows.Forms.MenuItem mnuProject1PlaceHolder;
 		Exception _audioException = null;
+		private string _lastUrl = "";
 
 		#endregion
 
@@ -51,6 +54,7 @@ namespace ThoughtWorks.CruiseControl.CCTray
 			InitialiseTrayIcon();
 			InitialiseSettings();
 			InitialiseMonitor();
+			InitialiseProjectMenu();
 			InitialiseSettingsForm();
 
 			DisplayStartupBalloon();
@@ -69,6 +73,20 @@ namespace ThoughtWorks.CruiseControl.CCTray
 		{
 			statusMonitor.Settings = settings;
 			statusMonitor.StartPolling();
+		}
+
+		void InitialiseProjectMenu()
+		{
+			this.mnuProjects.MenuItems.Clear();
+			foreach(ProjectStatus project in statusMonitor.GetRemoteProjects())
+			{
+				MenuItem menuItem = new MenuItem(project.Name);
+				menuItem.Click += new System.EventHandler(this.mnuProjectSelected_Click);
+				menuItem.Checked = (project.Name.Equals(settings.ProjectName));
+				this.mnuProjects.MenuItems.Add(menuItem);
+			}
+
+			_lastUrl = statusMonitor.Settings.RemoteServerUrl;
 		}
 
 		void InitialiseTrayIcon()
@@ -122,6 +140,8 @@ namespace ThoughtWorks.CruiseControl.CCTray
 			this.trayIcon = new ThoughtWorks.CruiseControl.CCTray.NotifyIconEx();
 			this.contextMenu = new System.Windows.Forms.ContextMenu();
 			this.mnuLaunchWebPage = new System.Windows.Forms.MenuItem();
+			this.mnuProjects = new System.Windows.Forms.MenuItem();
+			this.mnuProject1PlaceHolder = new System.Windows.Forms.MenuItem();
 			this.mnuSettings = new System.Windows.Forms.MenuItem();
 			this.mnuForceBuild = new System.Windows.Forms.MenuItem();
 			this.mnuExit = new System.Windows.Forms.MenuItem();
@@ -139,6 +159,7 @@ namespace ThoughtWorks.CruiseControl.CCTray
 			// 
 			this.contextMenu.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
 																						this.mnuLaunchWebPage,
+																						this.mnuProjects,
 																						this.mnuSettings,
 																						this.mnuForceBuild,
 																						this.mnuExit});
@@ -150,21 +171,33 @@ namespace ThoughtWorks.CruiseControl.CCTray
 			this.mnuLaunchWebPage.Text = "&Launch web page";
 			this.mnuLaunchWebPage.Click += new System.EventHandler(this.mnuLaunchWebPage_Click);
 			// 
+			// mnuProjects
+			// 
+			this.mnuProjects.Index = 1;
+			this.mnuProjects.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
+																						this.mnuProject1PlaceHolder});
+			this.mnuProjects.Text = "&Project";
+			// 
+			// mnuProject1PlaceHolder
+			// 
+			this.mnuProject1PlaceHolder.Index = 0;
+			this.mnuProject1PlaceHolder.Text = "Project1";
+			// 
 			// mnuSettings
 			// 
-			this.mnuSettings.Index = 1;
+			this.mnuSettings.Index = 2;	//1;
 			this.mnuSettings.Text = "&Settings...";
 			this.mnuSettings.Click += new System.EventHandler(this.mnuSettings_Click);
 			// 
 			// mnuForceBuild
 			// 
-			this.mnuForceBuild.Index = 2;
+			this.mnuForceBuild.Index = 3;	//2;
 			this.mnuForceBuild.Text = "&Force build";
 			this.mnuForceBuild.Click += new System.EventHandler(this.mnuForceBuild_Click);
 			// 
 			// mnuExit
 			// 
-			this.mnuExit.Index = 3;
+			this.mnuExit.Index = 4;	//3;
 			this.mnuExit.Text = "E&xit";
 			this.mnuExit.Click += new System.EventHandler(this.mnuExit_Click);
 			// 
@@ -178,7 +211,7 @@ namespace ThoughtWorks.CruiseControl.CCTray
 			// SystemTrayMonitor
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5, 13);
-			this.ClientSize = new System.Drawing.Size(104, 19);
+			this.ClientSize = new System.Drawing.Size(115, 6);	//(104, 19);
 			this.ControlBox = false;
 			this.Enabled = false;
 			this.MaximizeBox = false;
@@ -239,6 +272,8 @@ namespace ThoughtWorks.CruiseControl.CCTray
 			// update tray icon and tooltip
 			trayIcon.Text = CalculateTrayText(e.ProjectStatus);
 			trayIcon.Icon = GetStatusIcon(e.ProjectStatus);
+			if(statusMonitor.Settings.RemoteServerUrl != _lastUrl)
+				InitialiseProjectMenu();
 		}
 
 		private void statusMonitor_BuildOccurred(object sauce, BuildOccurredEventArgs e)
@@ -266,7 +301,7 @@ namespace ThoughtWorks.CruiseControl.CCTray
 				// polls would otherwise cause multiple dialogs to be displayed
 				_exception = e.Exception;
 
-				MessageBox.Show(e.Exception.ToString(), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+				//MessageBox.Show(e.Exception.ToString(), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
 			}
 
 			_exception = e.Exception;
@@ -275,6 +310,19 @@ namespace ThoughtWorks.CruiseControl.CCTray
 			trayIcon.Icon = GetStatusIcon(IntegrationStatus.Exception);
 		}
 
+		private void mnuProjectSelected_Click(object sender, System.EventArgs e)
+		{
+			MenuItem menuItem = (MenuItem) sender;
+			settings.ProjectName = menuItem.Text;
+			foreach(MenuItem item in menuItem.Parent.MenuItems)
+			{
+				item.Checked = false;
+			}
+			menuItem.Checked = true;
+			SettingsManager.WriteSettings(settings);
+			statusMonitor.Poll();
+		}
+		
 		#endregion
 
 		#region Agent notification
@@ -496,7 +544,7 @@ namespace ThoughtWorks.CruiseControl.CCTray
 
 		void contextMenu_Popup(object sender, System.EventArgs e)
 		{
-			mnuForceBuild.Enabled = statusMonitor.ProjectStatus != null && statusMonitor.ProjectStatus.Activity==ProjectActivity.Sleeping;
+			mnuForceBuild.Enabled = (statusMonitor.ProjectStatus != null && statusMonitor.ProjectStatus.Activity==ProjectActivity.Sleeping);
 		}
 
 		#endregion

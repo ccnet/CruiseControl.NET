@@ -2,6 +2,8 @@ using System;
 using System.IO;
 using System.Windows.Forms;
 
+using ThoughtWorks.CruiseControl.Remote;
+
 namespace ThoughtWorks.CruiseControl.CCTray
 {
 	/// <summary>
@@ -50,7 +52,9 @@ namespace ThoughtWorks.CruiseControl.CCTray
 		#endregion
 
 		Settings _settings;
+		private System.Windows.Forms.ComboBox cboProjectName;
 		StatusMonitor _statusMonitor;
+		bool _remoteServerUrlChanged = false;
 
 		#region Constructors
 
@@ -75,6 +79,12 @@ namespace ThoughtWorks.CruiseControl.CCTray
 		void ExtraInitialisation()
 		{
 			dlgOpenFile.InitialDirectory = AppDomain.CurrentDomain.BaseDirectory;
+			ProjectStatus[] projects = _statusMonitor.GetRemoteProjects();
+			this.cboProjectName.Items.Clear();
+			foreach(ProjectStatus project in projects)
+			{
+				this.cboProjectName.Items.Add(project.Name);
+			}
 		}
 
 		#endregion
@@ -139,6 +149,7 @@ namespace ThoughtWorks.CruiseControl.CCTray
 			this.txtProjectName = new System.Windows.Forms.TextBox();
 			this.lblProjectName = new System.Windows.Forms.Label();
 			this.chkShowExceptions = new System.Windows.Forms.CheckBox();
+			this.cboProjectName = new System.Windows.Forms.ComboBox();
 			((System.ComponentModel.ISupportInitialize)(this.numPollInterval)).BeginInit();
 			this.grpAudio.SuspendLayout();
 			this.grpAgents.SuspendLayout();
@@ -391,6 +402,7 @@ namespace ThoughtWorks.CruiseControl.CCTray
 			this.txtServerUrl.Size = new System.Drawing.Size(280, 21);
 			this.txtServerUrl.TabIndex = 5;
 			this.txtServerUrl.Text = "";
+			this.txtServerUrl.TextChanged += new System.EventHandler(this.txtServerUrl_TextChanged);
 			// 
 			// lblServerUrl
 			// 
@@ -518,6 +530,16 @@ namespace ThoughtWorks.CruiseControl.CCTray
 			this.chkShowExceptions.TabIndex = 6;
 			this.chkShowExceptions.Text = "Show exceptions";
 			// 
+			// cboProjectName
+			// 
+			this.cboProjectName.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+			this.cboProjectName.Location = new System.Drawing.Point(96, 64);
+			this.cboProjectName.MaxDropDownItems = 10;
+			this.cboProjectName.Name = "cboProjectName";
+			this.cboProjectName.Size = new System.Drawing.Size(280, 21);
+			this.cboProjectName.TabIndex = 6;
+			this.cboProjectName.Enter += new System.EventHandler(this.cboProjectName_Enter);
+			// 
 			// SettingsForm
 			// 
 			this.AcceptButton = this.btnOkay;
@@ -526,6 +548,7 @@ namespace ThoughtWorks.CruiseControl.CCTray
 			this.CancelButton = this.btnCancel;
 			this.ClientSize = new System.Drawing.Size(386, 426);
 			this.ControlBox = false;
+			this.Controls.Add(this.cboProjectName);
 			this.Controls.Add(this.lblProjectName);
 			this.Controls.Add(this.txtProjectName);
 			this.Controls.Add(this.txtServerUrl);
@@ -572,7 +595,7 @@ namespace ThoughtWorks.CruiseControl.CCTray
 		{
 			numPollInterval.Value = _settings.PollingIntervalSeconds;
 			txtServerUrl.Text = _settings.RemoteServerUrl;
-			txtProjectName.Text = _settings.ProjectName;
+			cboProjectName.Text = _settings.ProjectName;	//txtProjectName.Text = _settings.ProjectName;
 
 			chkShowBalloons.Checked = _settings.NotificationBalloon.ShowBalloon;
 			chkShowExceptions.Checked = _settings.ShowExceptions;
@@ -604,7 +627,7 @@ namespace ThoughtWorks.CruiseControl.CCTray
 		{
 			_settings.PollingIntervalSeconds = (int)numPollInterval.Value;
 			_settings.RemoteServerUrl = txtServerUrl.Text;
-			_settings.ProjectName = txtProjectName.Text;
+			_settings.ProjectName = cboProjectName.Text;	//_settings.ProjectName = txtProjectName.Text;
 
 			_settings.ShowExceptions = chkShowExceptions.Checked;
 
@@ -730,5 +753,29 @@ namespace ThoughtWorks.CruiseControl.CCTray
 		}
 
 		#endregion
+		
+		private void cboProjectName_Enter(object sender, System.EventArgs e)
+		{
+			if(_statusMonitor.Settings.RemoteServerUrl != txtServerUrl.Text && _remoteServerUrlChanged)
+			{
+				string saveUrl = _statusMonitor.Settings.RemoteServerUrl;
+				_statusMonitor.Settings.RemoteServerUrl = txtServerUrl.Text;
+				ProjectStatus[] projects = _statusMonitor.GetRemoteProjects();
+				this.cboProjectName.Items.Clear();
+				foreach(ProjectStatus project in projects)
+				{
+					this.cboProjectName.Items.Add(project.Name);
+				}
+				if(this.cboProjectName.Items.Count > 0)
+					this.cboProjectName.SelectedIndex = 0;
+				_statusMonitor.Settings.RemoteServerUrl = saveUrl;
+				_remoteServerUrlChanged = false;
+			}
+		}
+
+		private void txtServerUrl_TextChanged(object sender, System.EventArgs e)
+		{
+			_remoteServerUrlChanged = true;
+		}
 	}
 }

@@ -155,7 +155,7 @@ namespace ThoughtWorks.CruiseControl.CCTray
 			{
 				// todo: fix me - we need to have the name of the project we're looking at here, so we can
 				// report on the right one - jeremy
-				ProjectStatus latestProjectStatus = GetRemoteProjectStatus()[0];
+				ProjectStatus latestProjectStatus = GetSingleRemoteProjectStatus();	//GetRemoteProjectStatus()[0];
 
 				OnPolled(new PolledEventArgs(latestProjectStatus));
 
@@ -216,6 +216,34 @@ namespace ThoughtWorks.CruiseControl.CCTray
 			return remoteCC.GetProjectStatus();
 		}
 
+		ProjectStatus GetSingleRemoteProjectStatus()
+		{
+			ProjectStatus[] projectStatusses = GetRemoteCruiseControlProxy().GetProjectStatus();
+			foreach (ProjectStatus status in projectStatusses)
+			{
+				if (status.Name == this.Settings.ProjectName)
+				{
+				  return status;
+				}
+			}
+			// TODO - we need a better way of getting the 'default' project if one hasn't been defined
+			return projectStatusses[0];
+		}
+
+		public ProjectStatus[] GetRemoteProjects()
+		{
+			try
+			{
+				ICruiseManager remoteCC = GetRemoteCruiseControlProxy();
+				return remoteCC.GetProjectStatus();	//.GetProjects();
+			}
+			catch
+			{
+				// Ignore the error
+				return new ProjectStatus[0];
+			}
+		}
+
 		ICruiseManager GetRemoteCruiseControlProxy()
 		{
 			if (Settings.ConnectionMethod==ConnectionMethod.Remoting)
@@ -225,7 +253,7 @@ namespace ThoughtWorks.CruiseControl.CCTray
 
 			if (Settings.ConnectionMethod==ConnectionMethod.WebService)
 			{
-				return new ThoughtWorks.CruiseControl.WebServiceProxy.CCNetManagementProxy(Settings.RemoteServerUrl);
+				return (ICruiseManager)new ThoughtWorks.CruiseControl.WebServiceProxy.CCNetManagementProxy(Settings.RemoteServerUrl);
 			}
 
 			throw new NotImplementedException("Connection method " + Settings.ConnectionMethod + " is not implemented.");
