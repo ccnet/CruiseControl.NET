@@ -1,90 +1,92 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
 <head>
   <title>CruiseControl.NET Installation</title>
-  <link type="text/css" rel="stylesheet" href="cruisecontrol.css"/>
+  <link type="text/css" rel="stylesheet" href="cruisecontrol.css">
 </head>
 <body>
-	<div style="float:right"><img src="images/ccnet_logo_onwhite.gif"/></div>
-	<h2 style="color:#33F">CruiseControl.NET Installation</h2>
-	<p/>
-<p>This document is currently a 'work in progress' - please bare with us until we get the documentation up to
-a release 1.0 standard</p>
+	
+<div style="float: right;"><img src="images/ccnet_logo_onwhite.gif"></div>
+	
+<h2 style="color: rgb(51, 51, 255);">CruiseControl.NET Installation</h2>
+	
+<p> </p>
+<p>This document is currently a 'work in progress' - please bare with
+us until we get the documentation up to a release 1.0 standard</p>
 <h3>Preconditions</h3>
 These instructions assume that you have already:
 <ul>
   <li>Installed Microsoft IIS</li>
-  <li>Installed the Microsoft .NET SDK (IIS must be installed before .NET)</li>
+  <li>Installed the Microsoft .NET SDK (IIS must be installed before
+.NET)</li>
   <li>Set up a NAnt build file to build and test your application</li>
-  <li>Placed your project under version control using CVS or VSS</li>
+  <li>Placed your project under version control</li>
 </ul>
+<h3>Create a bootstrap build file<br>
+</h3>
+First you need to create a 'bootstrap' build file that is used to get
+the latest changes to your source tree whenever an update is comitted. A
+good place to put this build file is in the same directory as your
+project's normal buildfile. This bootstrap file should do 2 things:<br>
+<ol>
+  <li>Get the latest code from source control</li>
+  <li>Call the appropriate target in the actual project build file<br>
+  </li>
+</ol>
+The following is an example for a project under CVS control (it assumes
+that a propery called 'cvs.executable' is passed in from
+CruiseControl.NET - you can do this in the build/buildArgs section of
+the ccnet.config file):<br>
+<br>
+<pre>&lt;project name="ccnetlaunch" default="go"&gt;</pre>
+<pre>&nbsp; &lt;target name="go" depends="update,build"/&gt;</pre>
+<pre>&nbsp; &lt;target name="update"&gt;</pre>
+<pre>&nbsp;&nbsp;&nbsp; &lt;ifnot propertyexists="cvs.executable"&gt;</pre>
+<pre>&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &lt;fail message="cvs.executable property not set, so can't update" /&gt;</pre>
+<pre>&nbsp;&nbsp;&nbsp; &lt;/ifnot&gt;</pre>
+<pre>&nbsp;&nbsp;&nbsp; &lt;echo message="CVS Executable at [${cvs.executable}]" /&gt;</pre>
+<pre>&nbsp;&nbsp;&nbsp; &lt;exec </pre>
+<pre>&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; basedir="." </pre>
+<pre>&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; program="${cvs.executable}" </pre>
+<pre>&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; commandline="-q update -P -d" </pre>
+<pre>&nbsp;&nbsp;&nbsp; /&gt;</pre>
+<pre>&nbsp; &lt;/target&gt;</pre>
+<pre>&nbsp; &lt;target name="build"&gt;</pre>
+<pre>&nbsp;&nbsp;&nbsp; &lt;nant </pre>
+<pre>&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; buildfile="myproject.build" </pre>
+<pre>&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; target="ContinuousIntegration" </pre>
+<pre>&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; inheritall="true"</pre>
+<pre>&nbsp;&nbsp;&nbsp; /&gt;</pre>
+<pre>&nbsp; &lt;/target&gt;</pre>
+<pre>&lt;/project&gt;<br><br></pre>
+<h3>Perform Initial Checkout</h3>
+The bootstrap buildfile above only <span style="font-style: italic;">updates</span>
+the buildserver's local copy of your project's source. Before you even
+run CruiseControl.NET for the first time you need to checkout your
+project to the location on your machine where CruiseControl.NET will
+build it.<br>
+<br>
 <h3>Installing And Running the Server</h3>
+Now to actually setup CruiseControl.NET itself. <br>
 <ol>
-  <li>
-	Start the installation by running the CruiseControl.NET Server Installer: <code>ccnet.server.msi</code>
+  <li>Assuming you are using the binary release version, download the
+CruiseControl.NET release zip file, and then extract it to the directory
+where you want it to run (note this is the directory where
+CruiseControl.NET is going to run, not where your project is going to be
+built.)</li>
+  <li>In the 'builder' sub-folder, create a ccnet.config file as
+	described <a
+ href="file:///C:/tools/eclipse/workspace/ccnet/deployed/doc/ccnet.config.html">here</a>.
+(There is an example in the 'builder' folder to help you out.) Make
+sure you leave the 'xmllogger' 'logDir' variable as '..\website\log'.<br>
   </li>
-  <li>
-	Select into which folder to install the CruiseControl.NET server.  This folder will be referred
-	to as the <code><i>installation-folder</i></code>.
-  </li>
-  <li>
-	Select whether you would like to install CVS and NAnt.  The NAnt install is strongly recommended
-	because CruiseControl.NET needs to use enhancements only available in recent versions of NAnt.
-	Installing CruiseControl.NET will not affect your existing installations of CVS or NAnt.
-  </li>
-  <li>
-	Once the installation is complete, you must manually edit certain files to customize CruiseControl.NET to
-	build your project.
-	Edit the <code><i>installation-folder</i>\ccnet.config</code> file.
-	(eg. <a href="file://C:\Program Files\CruiseControl.Net\bin">C:\Program Files\CruiseControl.Net\bin</a>), as
-	described <a href="ccnet.config.html">here</a>.
-  </li>
-  <li>
-	Edit the <code>cruise.build</code> file.
-	  <ol type="a">
-		  <li>If you are using CVS, modify the <code>program</code> attribute
-			in the <code>exec</code> task to perform an update on your source tree.
-			By default, this is set to the path where CVS is installed by CruiseControl.NET.
-			Modify the <code>basedir</code> attribute to point to the root folder where the
-			source will be checked out to.
-		  </li>
-		  <li>
-			  If using VSS, then delete the CVS exec task and remove the HTML comments around
-			  the VSS exec task.  Change the <code>program</code> attribute to
-			  the location of the <code>ss.exe</code> file.  Set the <code>basedir</code>
-			  attribute to point to the root folder where the source will be checked out to.
-			  Also, modify the <code>commandline</code> attribute to the include the name your
-			  VSS project.
-		  </li>
-		  <li>Modify the <code>buildfile</code> attribute in the <code>nant</code>
-				task to point to the NAnt buildfile for your project.
-		  </li>
-	  </ol>
-  </li>
-  <li>
-	Assuming that everything is configured correctly, you should now be able to run CruiseControl.NET.
-	Click the <b>Run CruiseControl.NET</b> icon in the under the Start menu->Programs->CruiseControl.NET.
+  <li>Try running the server by running the 'StartCCNet.bat' file from
+a command line. If you have setup your config file correctly your build
+should run.</li>
+  <li>Now setup the webapp - just add the 'web' folder as a Virtual
+Directory in IIS. Try pointing to the Virtual Directory to see if your
+webapp works.<br>
   </li>
 </ol>
-<hr/>
-<h3>Installing the Web Application</h3>
-<ol>
-  <li>
-	Start the installation by running the CruiseControl.NET Web Installer: <code>ccnet.web.msi</code>
-  </li>
-  <li>
-	Specify the virtual directory into which to install the CruiseControl.NET Web Application.
-	This virtual directory must match the <a href="#projectUrl">project URL</a> specified in the Server installation above.
-  </li>
-  <li>
-	Specify the folder where CruiseControl.NET will generate its log files.  Typically this should be set to
-	<code><i>installation-folder</i>\log</code>.  The specified folder must exist, otherwise the installation
-	will not complete.
-  </li>
-  <li>
-	Verify that the installation succeeded by browsing to the installed web application. For example
-	<a href="http://localhost/ccnet">http://localhost/ccnet</a>.
-  </li>
-</ol>
-
 </body>
 </html>
