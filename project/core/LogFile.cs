@@ -174,9 +174,9 @@ namespace ThoughtWorks.CruiseControl.Core
 		public static string CreateUrl(IntegrationResult result)
 		{
 			if (result.Status == IntegrationStatus.Success)
-				return CreateUrl(CreateSuccessfulBuildLogFileName(result.LastModificationDate, result.Label));
+				return CreateUrl(CreateSuccessfulBuildLogFileName(result.StartTime, result.Label));
 			else
-				return CreateUrl(CreateFailedBuildLogFileName(result.LastModificationDate));
+				return CreateUrl(CreateFailedBuildLogFileName(result.StartTime));
 		}
 
 		public static string CreateUrl(string urlRoot, IntegrationResult result)
