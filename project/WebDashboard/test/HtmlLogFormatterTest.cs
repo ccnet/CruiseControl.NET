@@ -2,7 +2,7 @@ using NUnit.Framework;
 using System;
 using ThoughtWorks.CruiseControl.Core.Util;
 
-namespace ThoughtWorks.CruiseControl.Web.Test
+namespace ThoughtWorks.CruiseControl.WebDashboard.Test
 {
 	[TestFixture]
 	public class HtmlLogFormatterTest : CustomAssertion

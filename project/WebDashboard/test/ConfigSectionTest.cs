@@ -3,7 +3,7 @@ using System.Configuration;
 using System.Collections.Specialized;
 using NUnit.Framework;
 
-namespace ThoughtWorks.CruiseControl.Web.Test
+namespace ThoughtWorks.CruiseControl.WebDashboard.Test
 {
 	[TestFixture]
 	public class ConfigSectionTest

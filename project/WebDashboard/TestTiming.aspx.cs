@@ -2,7 +2,7 @@ using System;
 using System.Web.UI;
 using System.Web.UI.HtmlControls;
 
-namespace ThoughtWorks.CruiseControl.Web
+namespace ThoughtWorks.CruiseControl.WebDashboard
 {
 	public class TestTiming : Page
 	{
@@ -10,8 +10,9 @@ namespace ThoughtWorks.CruiseControl.Web
 
 		private void Page_Load(object sender, EventArgs e)
 		{
-			string xslFilename = WebUtil.GetXslFilename("timing.xsl", Request);
-			BodyArea.InnerHtml = new PageTransformer(WebUtil.ResolveLogFile(Context), xslFilename).LoadPageContent();
+			WebUtil webUtil = WebUtil.Create(Request, Context);
+			string xslFilename = webUtil.GetXslFilename("timing.xsl");
+			BodyArea.InnerHtml = new PageTransformer(webUtil.GetLogFileAndCheckItExists(), xslFilename).LoadPageContent();
 		}
 
 		#region Web Form Designer generated code

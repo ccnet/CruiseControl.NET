@@ -4,7 +4,7 @@ using System.Xml.XPath;
 using System.Xml.Xsl;
 using ThoughtWorks.CruiseControl.Core;
 
-namespace ThoughtWorks.CruiseControl.Web
+namespace ThoughtWorks.CruiseControl.WebDashboard
 {
 	public class LogTransformer : ITransformer
 	{

@@ -5,7 +5,7 @@ using System.IO;
 using System.Xml;
 using ThoughtWorks.CruiseControl.Core;
 
-namespace ThoughtWorks.CruiseControl.Web
+namespace ThoughtWorks.CruiseControl.WebDashboard
 {
 	[RunInstaller(true)]
 	public class InstallWebConfig : Installer

@@ -1,4 +1,4 @@
-<%@ Page language="c#" Codebehind="FxCop.aspx.cs" Inherits="ThoughtWorks.CruiseControl.Web.FxCop" AutoEventWireup="false" %>
+<%@ Page language="c#" Codebehind="FxCop.aspx.cs" Inherits="ThoughtWorks.CruiseControl.WebDashboard.FxCop" AutoEventWireup="false" %>
 <HTML>
 	<HEAD>
 		<TITLE>FxCop Results</TITLE>

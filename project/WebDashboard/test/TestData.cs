@@ -1,6 +1,6 @@
 using System;
 
-namespace ThoughtWorks.CruiseControl.Web.Test
+namespace ThoughtWorks.CruiseControl.WebDashboard.Test
 {
 	public class TestData
 	{

@@ -1,4 +1,4 @@
-<%@ Page language="c#" Codebehind="Tests.aspx.cs" Inherits="ThoughtWorks.CruiseControl.Web.Tests" AutoEventWireup="false" %>
+<%@ Page language="c#" Codebehind="Tests.aspx.cs" Inherits="ThoughtWorks.CruiseControl.WebDashboard.Tests" AutoEventWireup="false" %>
 <HTML>
 	<HEAD>
 		<TITLE>CruiseControl .NET Test Results</TITLE>

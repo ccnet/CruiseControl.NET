@@ -5,7 +5,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using ThoughtWorks.CruiseControl.Core.Util;
 
-namespace ThoughtWorks.CruiseControl.Web.Test
+namespace ThoughtWorks.CruiseControl.WebDashboard.Test
 {
 	[TestFixture]
 	public class ServerLogFileReaderTest : Assertion

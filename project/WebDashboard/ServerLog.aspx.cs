@@ -3,7 +3,7 @@ using System.Configuration;
 using System.Web.UI;
 using System.Web.UI.HtmlControls;
 
-namespace ThoughtWorks.CruiseControl.Web
+namespace ThoughtWorks.CruiseControl.WebDashboard
 {
 	public class ServerLog : Page
 	{

@@ -12,9 +12,9 @@ using ThoughtWorks.CruiseControl.Core;
 using ThoughtWorks.CruiseControl.Core.Publishers;
 using ThoughtWorks.CruiseControl.Util;
 
-namespace ThoughtWorks.CruiseControl.Web
+namespace ThoughtWorks.CruiseControl.WebDashboard
 {
-	public class Default : Page
+	public class ProjectReport : Page
 	{
 		protected HtmlTableCell HeaderCell;
 		protected HtmlTableCell DetailsCell;
@@ -29,7 +29,7 @@ namespace ThoughtWorks.CruiseControl.Web
 		{
 			try
 			{
-				logfile = WebUtil.ResolveLogFile(Context);
+				logfile = WebUtil.Create(Request, Context).GetLogFileAndCheckItExists();
 				GeneratePluginLinks();
 				InitDisplayLogFile();
 			}

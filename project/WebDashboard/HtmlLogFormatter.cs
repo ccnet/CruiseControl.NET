@@ -2,7 +2,7 @@ using System;
 using System.IO;
 using System.Text;
 
-namespace ThoughtWorks.CruiseControl.Web
+namespace ThoughtWorks.CruiseControl.WebDashboard
 {
 	public class HtmlLogFormatter
 	{

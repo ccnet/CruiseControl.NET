@@ -233,8 +233,13 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "InstallWebConfig.cs"
+                    RelPath = "HttpContextPathMapper.cs"
                     SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "InstallWebConfig.cs"
+                    SubType = "Component"
                     BuildAction = "Compile"
                 />
                 <File
@@ -244,6 +249,11 @@
                 />
                 <File
                     RelPath = "IPageLoader.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "IPathMapper.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -301,6 +311,16 @@
                     RelPath = "ProjectReport.aspx.resx"
                     DependentUpon = "ProjectReport.aspx.cs"
                     BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "ProjectSpecification.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "ProjectsSectionHandler.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
                 />
                 <File
                     RelPath = "ProjectURLsSectionHandler.cs"
@@ -378,6 +398,16 @@
                 />
                 <File
                     RelPath = "WebUtil.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "config\ConfigurationSettingsConfigGetter.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "config\IConfigurationGetter.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

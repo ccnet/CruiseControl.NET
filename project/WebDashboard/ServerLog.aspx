@@ -1,4 +1,4 @@
-<%@ Page language="c#" Codebehind="ServerLog.aspx.cs" Inherits="ThoughtWorks.CruiseControl.Web.ServerLog" AutoEventWireup="false" %>
+<%@ Page language="c#" Codebehind="ServerLog.aspx.cs" Inherits="ThoughtWorks.CruiseControl.WebDashboard.ServerLog" AutoEventWireup="false" %>
 <HTML>
 	<HEAD>
 		<TITLE>CruiseControl .NET Server Log</TITLE>

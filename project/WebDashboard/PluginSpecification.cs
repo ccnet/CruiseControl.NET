@@ -1,6 +1,6 @@
 using System;
 
-namespace ThoughtWorks.CruiseControl.Web
+namespace ThoughtWorks.CruiseControl.WebDashboard
 {
 	public class PluginSpecification
 	{

@@ -3,7 +3,7 @@ using NUnit.Framework;
 using ThoughtWorks.CruiseControl.Core;
 using ThoughtWorks.CruiseControl.Core.Util;
 
-namespace ThoughtWorks.CruiseControl.Web.Test
+namespace ThoughtWorks.CruiseControl.WebDashboard.Test
 {
 	[TestFixture]
 	public class LogStatisticsTest : CustomAssertion

@@ -4,7 +4,7 @@ using System.Web.UI.HtmlControls;
 using ThoughtWorks.CruiseControl.Core;
 using ThoughtWorks.CruiseControl.Core.Util;
 
-namespace ThoughtWorks.CruiseControl.Web.Test
+namespace ThoughtWorks.CruiseControl.WebDashboard.Test
 {
 	[NUnit.Framework.TestFixture]
 	public class LogFileListTest : CustomAssertion

@@ -8,7 +8,7 @@ using System.Web.UI.WebControls;
 using SiteMesh.DecoratorControls;
 using ThoughtWorks.CruiseControl.Core;
 
-namespace ThoughtWorks.CruiseControl.Web
+namespace ThoughtWorks.CruiseControl.WebDashboard
 {
 	public class Decorator : Page
 	{
@@ -26,7 +26,7 @@ namespace ThoughtWorks.CruiseControl.Web
 
 		private void Page_Load(object sender, EventArgs e)
 		{
-			string path = WebUtil.GetLogDirectory(Context).FullName;
+			string path = WebUtil.Create(Request, Context).GetLogDirectory().FullName;
 			InitBuildStats(path);
 			InitLogFileList(path);
 			InitAdjacentAnchors(path);

@@ -1,7 +1,7 @@
 using ThoughtWorks.CruiseControl.Core;
 using ThoughtWorks.CruiseControl.Util;
 
-namespace ThoughtWorks.CruiseControl.Web
+namespace ThoughtWorks.CruiseControl.WebDashboard
 {
 	public class PageTransformer : IPageLoader
 	{

@@ -3,7 +3,7 @@ using System.IO;
 using System.Text;
 using System.Diagnostics;
 
-namespace ThoughtWorks.CruiseControl.Web
+namespace ThoughtWorks.CruiseControl.WebDashboard
 {
 	public class ServerLogFileReader
 	{

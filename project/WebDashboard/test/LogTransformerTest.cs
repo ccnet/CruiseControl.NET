@@ -2,9 +2,9 @@ using System;
 using NUnit.Framework;
 using ThoughtWorks.CruiseControl.Core;
 using ThoughtWorks.CruiseControl.Core.Util;
-using ThoughtWorks.CruiseControl.Web.Test;
+using ThoughtWorks.CruiseControl.WebDashboard.Test;
 
-namespace ThoughtWorks.CruiseControl.Web.Test
+namespace ThoughtWorks.CruiseControl.WebDashboard.Test
 {
 	[TestFixture]
 	public class LogTransformerTest : CustomAssertion

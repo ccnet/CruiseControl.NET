@@ -3,7 +3,7 @@ using System.Collections;
 using System.Text;
 using ThoughtWorks.CruiseControl.Core;
 
-namespace ThoughtWorks.CruiseControl.Web
+namespace ThoughtWorks.CruiseControl.WebDashboard
 {
 	public class LogStatistics
 	{

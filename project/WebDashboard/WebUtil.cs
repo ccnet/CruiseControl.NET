@@ -1,16 +1,37 @@
 using System;
-using System.Configuration;
+using System.Collections;
+using System.Collections.Specialized;
 using System.IO;
 using System.Web;
 using ThoughtWorks.CruiseControl.Core;
+using ThoughtWorks.CruiseControl.WebDashboard.Config;
 
-namespace ThoughtWorks.CruiseControl.Web
+namespace ThoughtWorks.CruiseControl.WebDashboard
 {
 	public class WebUtil
 	{
-		public static string ResolveLogFile(HttpContext context)
+		public static readonly string ProjectNameQueryString = "project";
+
+		private readonly IConfigurationGetter configurationGetter;
+		private readonly NameValueCollection queryString;
+		private readonly IPathMapper pathMapper;
+
+		// ToDo - get rid of this when we have enough CDI happening
+		public static WebUtil Create(HttpRequest request, HttpContext context)
 		{
-			string logfile = WebUtil.GetLogFilename(context, context.Request);
+			return new WebUtil(new ConfigurationSettingsConfigGetter(), request.QueryString, new HttpContextPathMapper(context));
+		}
+
+		public WebUtil(IConfigurationGetter configurationGetter, NameValueCollection queryString, IPathMapper pathMapper)
+		{
+			this.configurationGetter = configurationGetter;
+			this.queryString = queryString;
+			this.pathMapper = pathMapper;
+		}
+
+		public string GetLogFileAndCheckItExists()
+		{
+			string logfile = GetLogFilename();
 			if (logfile == null)
 			{
 				throw new CruiseControlException("Internal Error - couldn't resolve logfile to use");
@@ -22,32 +43,9 @@ namespace ThoughtWorks.CruiseControl.Web
 			return logfile;
 		}
 
-		public static string GetLogFilename(HttpContext context, HttpRequest request)
+		public DirectoryInfo GetLogDirectory()
 		{
-			DirectoryInfo logDirectory = GetLogDirectory(context);
-			string logfile = request.QueryString[LogFileUtil.LogQueryString];
-			if (logfile == null)
-			{
-				logfile = LogFileLister.GetCurrentFilename(logDirectory);
-			}
-			return (logfile == null) ? null : Path.Combine(logDirectory.FullName, logfile);
-		}
-
-		public static string GetXslFilename(string xslfile, HttpRequest request)
-		{
-			return Path.Combine(request.MapPath("xsl"), xslfile);
-		}
-
-		public static string FormatMultiline(string multilineString)
-		{
-			return multilineString.Replace(Environment.NewLine, @"<br>");
-		}
-
-		private static string LogDir { get { return ConfigurationSettings.AppSettings["logDir"]; } }
-
-		public static DirectoryInfo GetLogDirectory(HttpContext context)
-		{
-			string dirName = LogDir;
+			string dirName = GetLogDirName();
 			DirectoryInfo logDirectory = new DirectoryInfo(dirName);
 			if (!logDirectory.Exists)
 			{
@@ -55,7 +53,7 @@ namespace ThoughtWorks.CruiseControl.Web
 				if (dirName.IndexOf(':') < 0)
 				{
 					// If so try and treat as relative to the webapp
-					logDirectory = new DirectoryInfo(context.Server.MapPath(dirName));
+					logDirectory = new DirectoryInfo(pathMapper.MapPath(dirName));
 					if (!logDirectory.Exists)
 					{
 						throw new Exception(string.Format("Can't find log directory [{0}] (Full path : [{1}]", 
@@ -69,6 +67,47 @@ namespace ThoughtWorks.CruiseControl.Web
 				}
 			}
 			return logDirectory;
+		}
+
+		public string GetXslFilename(string xslfile)
+		{
+			return Path.Combine(pathMapper.MapPath("xsl"), xslfile);
+		}
+
+		private string GetLogFilename()
+		{
+			DirectoryInfo logDirectory = GetLogDirectory();
+			string logfile = queryString[LogFileUtil.LogQueryString];
+			if (logfile == null)
+			{
+				logfile = LogFileLister.GetCurrentFilename(logDirectory);
+			}
+			return (logfile == null) ? null : Path.Combine(logDirectory.FullName, logfile);
+		}
+
+		private string GetLogDirName()
+		{
+			object projects = configurationGetter.GetConfig("CCNet/projects");
+			if (projects == null)
+			{
+				throw new ApplicationException("<projects> section not configured correctly in web.config");
+			}
+
+			string requestedProject = queryString[ProjectNameQueryString];
+			if (requestedProject == null || requestedProject == string.Empty)
+			{
+				throw new ApplicationException("[project] parameter not specified on query string");
+			}
+
+			foreach (ProjectSpecification spec in (IEnumerable) projects)
+			{
+				if (spec.name == requestedProject)
+				{
+					return spec.logDirectory;
+				}
+			}
+
+			throw new ApplicationException("Unable to find log configuration for project [ "+ requestedProject + " ]");
 		}
 	}
 }

@@ -3,7 +3,7 @@ using System.Web.UI;
 using System.Web.UI.WebControls;
 using ThoughtWorks.CruiseControl.Core;
 
-namespace ThoughtWorks.CruiseControl.Web
+namespace ThoughtWorks.CruiseControl.WebDashboard
 {
 	public class Statistics : Page
 	{
@@ -13,7 +13,7 @@ namespace ThoughtWorks.CruiseControl.Web
 		{
 			try
 			{
-				InitStatistics(WebUtil.GetLogDirectory(Context).FullName);
+				InitStatistics(WebUtil.Create(Request, Context).GetLogDirectory().FullName);
 			}
 			catch(CruiseControlException ex)
 			{
