@@ -30,6 +30,7 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers.Test
 		private IntegrationResult CreateIntegrationResult(IntegrationStatus current, IntegrationStatus last)
 		{
 			IntegrationResult result = new IntegrationResult();
+			result.StartTime = new DateTime(1980, 1, 1);
 			result.ProjectName = "Project#9";
 			result.Status = current;
 			result.LastIntegrationStatus = last;

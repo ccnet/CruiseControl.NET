@@ -133,11 +133,8 @@ namespace ThoughtWorks.CruiseControl.Core
 
 		public IntegrationResult RunIntegration(BuildCondition buildCondition)
 		{
-			if (buildCondition == BuildCondition.ForceBuild)
-				Log.Info("Build forced");
-
 			IntegrationResult result = CreateNewIntegrationResult(buildCondition);
-			AttemptToRunIntegration(buildCondition, result);
+			AttemptToRunIntegration(result);
 			PostBuild(result);
 			return result;
 		}
@@ -145,19 +142,26 @@ namespace ThoughtWorks.CruiseControl.Core
 		private IntegrationResult CreateNewIntegrationResult(BuildCondition buildCondition)
 		{
 			IntegrationResult result = new IntegrationResult(Name);
-			result.BuildCondition = buildCondition;
-			result.LastIntegrationStatus = LastIntegrationResult.Status;
+			if (LastIntegrationResult.IsInitial())
+			{
+				result.BuildCondition = BuildCondition.ForceBuild;
+			}
+			else
+			{
+				result.BuildCondition = buildCondition;
+				result.LastIntegrationStatus = LastIntegrationResult.Status;				
+			}
 			result.Label = Labeller.Generate(LastIntegrationResult);
 			return result;
 		}
 
-		private void AttemptToRunIntegration(BuildCondition buildCondition, IntegrationResult result)
+		private void AttemptToRunIntegration(IntegrationResult result)
 		{
 			result.MarkStartTime();
 			try
 			{
 				result.Modifications = GetSourceModifications(result);
-				if (ShouldRunBuild(result, buildCondition))
+				if (ShouldRunBuild(result))
 				{
 					CreateTemporaryLabelIfNeeded();
 					_sourceControl.GetSource(result);
@@ -177,7 +181,7 @@ namespace ThoughtWorks.CruiseControl.Core
 		private Modification[] GetSourceModifications(IntegrationResult results)
 		{
 			_currentActivity = ProjectActivity.CheckingModifications;
-			Modification[] modifications = SourceControl.GetModifications(LastIntegrationResult.StartTime, results.StartTime);
+			Modification[] modifications = SourceControl.GetModifications(results.StartTime, results.StartTime);
 			Log.Info(GetModificationsDetectedMessage(modifications));
 			return modifications;
 		}
@@ -198,6 +202,9 @@ namespace ThoughtWorks.CruiseControl.Core
 		private void RunBuild(IntegrationResult result)
 		{
 			_currentActivity = ProjectActivity.Building;
+
+			if (result.BuildCondition == BuildCondition.ForceBuild)
+				Log.Info("Build forced");
 
 			Log.Info("Building");
 
@@ -269,8 +276,7 @@ namespace ThoughtWorks.CruiseControl.Core
 			else
 			{
 				// no integration result is on record
-				// TODO consider something such as IntegrationResult.Empty, to indicate 'unknown state'
-				return new IntegrationResult(Name);
+				return IntegrationResult.Initial;
 			}
 		}
 
@@ -279,9 +285,9 @@ namespace ThoughtWorks.CruiseControl.Core
 		/// are modifications, and none have occurred within the modification
 		/// delay.
 		/// </summary>
-		internal bool ShouldRunBuild(IntegrationResult results, BuildCondition buildCondition)
+		internal bool ShouldRunBuild(IntegrationResult results)
 		{
-			if (buildCondition == BuildCondition.ForceBuild)
+			if (results.BuildCondition == BuildCondition.ForceBuild)
 				return true;
 
 			if (results.HasModifications())

@@ -1,10 +1,8 @@
 using System;
-using System.Runtime.Serialization;
-using System.Xml;
+using System.Collections;
 using System.Xml.Serialization;
 using ThoughtWorks.CruiseControl.Core.Util;
 using ThoughtWorks.CruiseControl.Remote;
-using System.Collections;
 
 namespace ThoughtWorks.CruiseControl.Core
 {
@@ -38,12 +36,12 @@ namespace ThoughtWorks.CruiseControl.Core
         /// <summary>
         /// Gets and sets the date and time at which the integration commenced.
         /// </summary>
-        public DateTime StartTime = new DateTime(1980, 1, 1);
+        public DateTime StartTime;
 
         /// <summary>
         /// Gets and sets the date and time at which the integration was completed.
         /// </summary>
-        public DateTime EndTime = new DateTime(1980, 1, 1);
+        public DateTime EndTime;
 
 		[XmlIgnore]
         public virtual Modification[] Modifications
@@ -169,12 +167,23 @@ namespace ThoughtWorks.CruiseControl.Core
 
         public override int GetHashCode()
         {
-            return base.GetHashCode();
+            return (ProjectName + Label + StartTime.Ticks).GetHashCode();
         }
 
-        public override string ToString()
-        {
-            return ReflectionUtil.ReflectionToString(this);
-        }
+    	public static IntegrationResult Initial
+    	{
+			get
+			{
+				IntegrationResult result = new IntegrationResult();
+				result.StartTime = DateTime.Now.AddDays(-1);
+				result.EndTime = DateTime.Now;
+				return result;
+			}
+    	}
+
+    	public bool IsInitial()
+    	{
+    		return ProjectName == null;
+    	}
     }
 }

@@ -428,6 +428,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "publishers\DefaultTaskResult.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "publishers\EmailGateway.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -990,6 +995,11 @@
                 />
                 <File
                     RelPath = "tasks\test\NUnitTaskExecutionTest.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "tasks\test\NunitTaskTest.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

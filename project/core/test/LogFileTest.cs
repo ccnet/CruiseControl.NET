@@ -25,13 +25,15 @@ namespace ThoughtWorks.CruiseControl.Core.Test
 			TempFileUtil.DeleteTempDir(TestFolder);
 		}
 
-		public void TestParseForDate()
+		[Test]
+		public void ParseForDate()
 		{
 			DateTime date = new DateTime(2002, 3, 28, 13, 0, 0);
 			AssertEquals(date,LogFileUtil.ParseForDate("20020328130000"));
 		}
 		
-		public void TestGetFormattedDateString()
+		[Test]
+		public void GetFormattedDateString()
 		{
 			DateTime date = new DateTime(1971, 5, 14, 15, 0, 0);
 			string actual = LogFileUtil.GetFormattedDateString("log19710514150000.xml");
@@ -39,14 +41,16 @@ namespace ThoughtWorks.CruiseControl.Core.Test
 			AssertEquals(expected, actual);
 		}
 		
-		public void TestParseForDateString()
+		[Test]
+		public void ParseForDateString()
 		{
 			CheckDateString("19741224120000", "log19741224120000.xml");
 			CheckDateString("19750101120000","log19750101120000.xml");
 			CheckDateString("20020830164057","log20020830164057Lbuild.6.xml");
 		}
 		
-		public void TestGetLatestBuildNumber()
+		[Test]
+		public void GetLatestBuildNumber()
 		{
 			string[] filenames = new string[]{
 												 "log19710514150000.xml",
@@ -63,13 +67,15 @@ namespace ThoughtWorks.CruiseControl.Core.Test
 			AssertEquals(9, actual);
 		}
 
-		public void TestGetLatestBuildNumberHandlesString()
+		[Test]
+		public void GetLatestBuildNumberHandlesString()
 		{
 			int actual = LogFileUtil.GetLatestBuildNumber(new string[] {"log20020830164057Lbuild.v1.1.8.xml"});
 			AssertEquals(118, actual);
 		}
 
-		public void TestListFiles() 
+		[Test]
+		public void ListFiles() 
 		{
 			// testFilenames array must be in sorted order -- otherwise links iteration will fail
 			string[] testFilenames = {"log123.xml", "log200.xml", "logfile.txt", 
@@ -82,7 +88,8 @@ namespace ThoughtWorks.CruiseControl.Core.Test
 			AssertEquals(testFilenames[1],fileNames[1]);
 		}
 		
-		public void TestGetLastLogFileName()
+		[Test]
+		public void GetLastLogFileName()
 		{
 			string[] testFilenames = {"log123.xml", "log200.xml", "logfile.txt", 
 										 "log20010830164057Lbuild.6.xml", 
@@ -96,19 +103,22 @@ namespace ThoughtWorks.CruiseControl.Core.Test
 			AssertEquals("log20011230164057Lbuild.8.xml", logfile);
 		}
 
-		public void TestGetLastLogFileName_UnknownPath()
+		[Test]
+		public void GetLastLogFileName_UnknownPath()
 		{
 			string logfile = LogFileUtil.GetLatestLogFileName(@"c:\non\exi\stent");
 			AssertNull(logfile);
 		}
 		
-		public void TestGetLastLogFileName_EmptyFolder()
+		[Test]
+		public void GetLastLogFileName_EmptyFolder()
 		{
 			string folder = TempFileUtil.CreateTempDir(TestFolder);
 			AssertNull(LogFileUtil.GetLatestLogFileName(folder));
 		}
 
-		public void TestGetLastBuildDate()
+		[Test]
+		public void GetLastBuildDate()
 		{
 			string[] testFilenames = {"log123.xml", "log200.xml", "logfile.txt", 
 										 "log20010830164057Lbuild.6.xml", 
@@ -122,18 +132,21 @@ namespace ThoughtWorks.CruiseControl.Core.Test
 			AssertEquals("path: "+path,expected, actual);
 		}
 		
-		public void TestGetLastBuildDate_NoDirectory()
+		[Test]
+		public void GetLastBuildDate_NoDirectory()
 		{
 			AssertEquals(new DateTime(), LogFileUtil.GetLastBuildDate(@"c:\non\exi\stent", new DateTime()));
 		}
 
-		public void TestGetLastBuildDate_NoFiles()
+		[Test]
+		public void GetLastBuildDate_NoFiles()
 		{
 			string path = TempFileUtil.CreateTempDir("lastbuilddate_nofiles");
 			AssertEquals(new DateTime(), LogFileUtil.GetLastBuildDate(path, new DateTime()));
 		}
 
-		public void TestGetLatestBuildNumberWithMissingPath()
+		[Test]
+		public void GetLatestBuildNumberWithMissingPath()
 		{
 			AssertEquals(0, LogFileUtil.GetLatestBuildNumber(@"c:\non\exi\stent"));
 		}
@@ -144,41 +157,45 @@ namespace ThoughtWorks.CruiseControl.Core.Test
 			AssertEquals(expected, actual);
 		}
 		
-		[ExpectedException(typeof(ArgumentException))]
-		public void TestParseForDateStringWrongPrefix()
+		[Test, ExpectedException(typeof(ArgumentException))]
+		public void ParseForDateStringWrongPrefix()
 		{
 			LogFileUtil.ParseForDateString("garbage.txt");
 		}
 		
-		[ExpectedException(typeof(ArgumentException))]
-		public void TestParseForDateStringShortFilename()
+		[Test, ExpectedException(typeof(ArgumentException))]
+		public void ParseForDateStringShortFilename()
 		{
 			LogFileUtil.ParseForDateString("log3.xml");
 		}
 		
-		public void TestBuildSuccessful()
+		[Test]
+		public void BuildSuccessful()
 		{
 			Assert("expected false",!LogFileUtil.IsSuccessful("log19750101120000.xml"));
 			Assert("expected true",LogFileUtil.IsSuccessful("log20020830164057Lbuild.6.xml"));
 		}
 		
-		public void TestCreateFileNameNoBuildNumber()
+		[Test]
+		public void CreateFileNameNoBuildNumber()
 		{
 			DateTime date = new DateTime(2002, 3, 28, 13, 0, 0);
 			string expected = "log20020328130000.xml";
 			AssertEquals(expected, LogFileUtil.CreateFailedBuildLogFileName(date));
 		}
 		
-		public void TestCreateFileNameWithBuildNumber()
+		[Test]
+		public void CreateFileNameWithBuildNumber()
 		{
 			DateTime date = new DateTime(2002, 3, 28, 13, 0, 0);
 			string expected = "log20020328130000Lbuild.33.xml";
 			AssertEquals(expected, LogFileUtil.CreateSuccessfulBuildLogFileName(date, "33"));
 		}
 
-		public void TestCreateUrl()
+		[Test]
+		public void CreateUrl()
 		{
-			string expected = "?log=log19800101000000Lbuild.0.xml";
+			string expected = "?log=log20020222120000Lbuild.0.xml";
 			string actual = LogFileUtil.CreateUrl(CreateIntegrationResult(IntegrationStatus.Success, new DateTime(2002, 02, 22, 12, 00, 00)));
 			AssertEquals(expected, actual);
 		}
@@ -186,6 +203,7 @@ namespace ThoughtWorks.CruiseControl.Core.Test
 		private IntegrationResult CreateIntegrationResult(IntegrationStatus status, DateTime lastModifiedDate)
 		{
 			IntegrationResult result = new IntegrationResult();
+			result.StartTime = lastModifiedDate;
 			result.Status = status;
 			result.Label = "0";
 			result.Modifications = new Modification[1];
@@ -194,14 +212,16 @@ namespace ThoughtWorks.CruiseControl.Core.Test
 			return result;
 		}
 
-		public void TestCreateUrl_FailedBuild()
+		[Test]
+		public void CreateUrl_FailedBuild()
 		{
-			string expected = "?log=log19800101000000.xml";
+			string expected = "?log=log20020222120000.xml";
 			string actual = LogFileUtil.CreateUrl(CreateIntegrationResult(IntegrationStatus.Failure, new DateTime(2002, 02, 22, 12, 00, 00)));
 			AssertEquals(expected, actual);
 		}
 
-		public void TestCreateUrl_givenFilename()
+		[Test]
+		public void CreateUrl_givenFilename()
 		{
 			string filename = "log20020222120000Lbuild.0.xml";
 			string expected = "?log=log20020222120000Lbuild.0.xml";
@@ -210,7 +230,7 @@ namespace ThoughtWorks.CruiseControl.Core.Test
 		}
 
 		[Test]
-		public void TestCreateUrlWithGivenFilenameAndProjectName()
+		public void CreateUrlWithGivenFilenameAndProjectName()
 		{
 			string filename = "log20020222120000Lbuild.0.xml";
 			string expected = "?log=log20020222120000Lbuild.0.xml&project=myproject";

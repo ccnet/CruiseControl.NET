@@ -146,6 +146,7 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers.Test
         private IntegrationResult CreateIntegrationResult(IntegrationStatus status, bool addModifications)
         {
             IntegrationResult result = new IntegrationResult("proj");
+			result.StartTime = new DateTime(1980, 1, 1);
             result.Label = "1";
             result.Status = status;
             if (addModifications)

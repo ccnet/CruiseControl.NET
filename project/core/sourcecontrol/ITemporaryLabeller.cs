@@ -8,10 +8,8 @@ namespace ThoughtWorks.CruiseControl.Core
 	/// </summary>
 	public interface ITemporaryLabeller : ISourceControl
 	{
-
 		void CreateTemporaryLabel();
 
 		void DeleteTemporaryLabel();
-
 	}
 }

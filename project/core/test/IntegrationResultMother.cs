@@ -12,7 +12,7 @@ namespace ThoughtWorks.CruiseControl.Core.Test
 
 		public static IntegrationResult Create(bool succeeded, DateTime date)
 		{
-			IntegrationResult result = new IntegrationResult();
+			IntegrationResult result = new IntegrationResult("test");
 			result.Status = (succeeded) ? IntegrationStatus.Success : IntegrationStatus.Failure;
 			result.StartTime = date;
 			result.EndTime = date;
