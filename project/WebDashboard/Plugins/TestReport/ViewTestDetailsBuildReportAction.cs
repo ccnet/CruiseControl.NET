@@ -7,7 +7,7 @@ using ThoughtWorks.CruiseControl.WebDashboard.MVC.Cruise;
 
 namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.ViewBuildReport
 {
-	public class ViewFxCopBuildReportAction : ICruiseAction
+	public class ViewTestDetailsBuildReportAction : ICruiseAction
 	{
 		public static readonly string ACTION_NAME = "ViewFxCopBuildReport";
 
@@ -15,7 +15,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.ViewBuildReport
 
 		private readonly IBuildRetriever buildRetriever;
 
-		public ViewFxCopBuildReportAction(IBuildRetriever buildRetriever, IMultiTransformer transformer)
+		public ViewTestDetailsBuildReportAction(IBuildRetriever buildRetriever, IMultiTransformer transformer)
 		{
 			this.buildRetriever = buildRetriever;
 			this.transformer = transformer;
@@ -25,7 +25,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.ViewBuildReport
 		{
 			string log = buildRetriever.GetBuild(cruiseRequest.ServerName, cruiseRequest.ProjectName, cruiseRequest.BuildName).Log;
 			HtmlGenericControl control = new HtmlGenericControl("div");
-			control.InnerHtml = transformer.Transform(log, new string[] { @"xsl\tests.xsl" });
+			control.InnerHtml = transformer.Transform(log, new string[] { @"xsl\FxCopReport.xsl" });
 			return control;
 		}
 	}
