@@ -1,3 +1,4 @@
+using System.Text;
 using Exortech.NetReflector;
 using System;
 using System.Globalization;
@@ -8,10 +9,6 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 	[ReflectorType("cvs")]
 	public class Cvs : ProcessSourceControl
 	{
-		// cvs [-d :ext:mycvsserver:/cvsroot/myrepo] -q log -N "-d>2004-12-24 12:00:00 'GMT'" -r my_branch (with branch)
-		// cvs [-d :ext:mycvsserver:/cvsroot/myrepo] -q log -Nb "-d>2004-12-24 12:00:00 'GMT'" (without branch)
-		public const string HISTORY_COMMAND_FORMAT = @"{0}-q log -N{3} ""-d>{1}""{2}";		// -N means 'do not show tags'
-
 		// use -C to force get clean copy? should reset tags?
 		public const string GET_SOURCE_COMMAND_FORMAT = @"-q update -d -P -C";	// build directories, prune empty directories, get clean copy
 		public const string COMMAND_DATE_FORMAT = "yyyy-MM-dd HH:mm:ss 'GMT'";
@@ -104,9 +101,10 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 
 		public ProcessInfo CreateLabelProcessInfo(string label, DateTime timeStamp) 
 		{
-			string cvsroot = (CvsRoot == null) ? String.Empty : "-d " + CvsRoot + " ";
-			string args = string.Format("{0} tag {1}", cvsroot, "ver-" + label);
-			return new ProcessInfo(Executable, args, WorkingDirectory);
+			CommandLineBuilder buffer = new CommandLineBuilder();
+			buffer.AppendArgument("-d {0}", CvsRoot);
+			buffer.AppendArgument("tag ver-{0}", label);
+			return new ProcessInfo(Executable, buffer.ToString(), WorkingDirectory);
 		}
 
 		public override void GetSource(IIntegrationResult result)
@@ -119,21 +117,62 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			}
 		}
 
+		// cvs [-d :ext:mycvsserver:/cvsroot/myrepo] -q log -N "-d>2004-12-24 12:00:00 'GMT'" -rmy_branch (with branch)
+		// cvs [-d :ext:mycvsserver:/cvsroot/myrepo] -q log -Nb "-d>2004-12-24 12:00:00 'GMT'" (without branch)
+//		public const string HISTORY_COMMAND_FORMAT = @"{0}-q log -N{3} ""-d>{1}""{2}";		// -N means 'do not show tags'
+
+		// in cvs, date 'to' is implicitly now
+		// todo: if cvs will accept a 'to' date, it would be nicer to 
+		// include that for some harmony with the vss version
 		internal string BuildHistoryProcessInfoArgs(DateTime from)
 		{		
-			// in cvs, date 'to' is implicitly now
-			// todo: if cvs will accept a 'to' date, it would be nicer to 
-			// include that for some harmony with the vss version
-			string cvsroot = (CvsRoot == null || CvsRoot == string.Empty) ? String.Empty : "-d " + CvsRoot + " ";
-			string branch = (Branch == null || Branch == string.Empty) ? String.Empty : " -r" + Branch;
-			string args = string.Format(HISTORY_COMMAND_FORMAT, cvsroot, FormatCommandDate(from), branch, (branch == String.Empty) ? "b" : "");
-            if (RestrictLogins != null && RestrictLogins != string.Empty) 
+			CommandLineBuilder buffer = new CommandLineBuilder();
+			buffer.AppendArgument("-d {0}", CvsRoot);
+			buffer.AppendArgument("-q log -N");
+			if (StringUtil.IsBlank(branch)) buffer.Append("b");
+			buffer.AppendArgument(@"""-d>{0}""", FormatCommandDate(from));
+			buffer.AppendArgument("-r{0}", Branch);
+            if (! StringUtil.IsBlank(RestrictLogins)) 
             {
                 foreach (string login in RestrictLogins.Split(',')) {
-                    args += " -w" + login;
+                    buffer.AppendArgument("-w{0}", login.Trim());
                 }
             }
-			return args;
+			return buffer.ToString();
+		}
+		
+		private class CommandLineBuilder
+		{
+			private StringBuilder builder = new StringBuilder();
+
+			public void AppendArgument(string format, string value)
+			{
+				if (StringUtil.IsBlank(value)) return;
+
+				AppendSpaceIfNotEmpty();
+				builder.AppendFormat(format, value);
+			}
+
+			public void AppendArgument(string value)
+			{
+				AppendSpaceIfNotEmpty();
+				builder.Append(value);
+			}
+
+			public void Append(string value)
+			{
+				builder.Append(value);
+			}
+
+			private void AppendSpaceIfNotEmpty()
+			{
+				if (builder.Length > 0) builder.Append(" ");
+			}
+
+			public override string ToString()
+			{
+				return builder.ToString();
+			}
 		}
 	}
 }
