@@ -112,6 +112,22 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test
 			Assert.AreEqual(new DateTime(2004,6,2,14,4,0), mod.ModifiedTime);
 		}
 
+		/// <summary>
+		/// Regression lock test for CCNET-251 - "VSS Parser Error with french environnment"
+		/// At least in french (not in english), VSS adds an ascii char 160 before the colon, which messes up the parsing.
+		/// </summary>
+		[Test]
+		public void ParseUsernameAndFRDateWithAsciiCode160()
+		{
+			Modification mod = new Modification();
+			string line = "*****  Tools.build  *****\r\nVersion 3\r\nUtilisateur\xA0: Thomas       Date\xA0: 15/11/04   Heure\xA0: 18:24\r\nArchivé dans $/Projets/Tools\r\nCommentaire: \r\n\r\n";
+			CheckInParser parser = new CheckInParser(line, new VssLocale(new CultureInfo("fr-FR")));
+			parser.ParseUsernameAndDate(mod);
+
+			Assert.AreEqual("Thomas", mod.UserName);
+			Assert.AreEqual(new DateTime(2004,11,15,18,24,0), mod.ModifiedTime);
+		}
+
 		[Test]
 		public void ParseUsernameAndDateWithPeriod() 
 		{
