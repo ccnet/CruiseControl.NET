@@ -23,10 +23,16 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.MVC.Cruise
 
 		public Control Execute(ICruiseRequest request)
 		{
-//			AddEditProjectModel model = projectModelGenerator.GenerateModel(request);
-			Project project = serializer.Deserialize(cruiseManagerWrapper.GetProject(request.ServerName, request.ProjectName));
-			AddEditProjectModel model = new AddEditProjectModel(project, request.ServerName, new string[0]);
-
+			AddEditProjectModel model = null;
+			if (request.Request.GetText("Project.SourceControl") == null || request.Request.GetText("Project.SourceControl") == string.Empty)
+			{
+				Project project = serializer.Deserialize(cruiseManagerWrapper.GetProject(request.ServerName, request.ProjectName));
+				model = new AddEditProjectModel(project, request.ServerName, new string[0]);
+			}
+			else
+			{
+				model = projectModelGenerator.GenerateModel(request.Request);
+			}
 			model.SaveActionName = CruiseActionFactory.EDIT_PROJECT_SAVE_ACTION_NAME;
 			model.IsAdd = false;
 			model.Status = "";

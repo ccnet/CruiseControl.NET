@@ -59,5 +59,10 @@ namespace ThoughtWorks.CruiseControl.Remote
 		/// Returns the serialized form of the requested project from the server
 		/// </summary>
 		string GetProject(string projectName);
+
+		/// <summary>
+		/// Updates the selected project on the server
+		/// </summary>
+		void UpdateProject(string projectName, string serializedProject);
 	}
 }

@@ -53,6 +53,10 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.MVC.Cruise
 			{
 				return SecurityCheckingProxyAction(CruiseActionProxyAction(ProjectCheckingProxyAction(ServerCheckingProxyAction(DisplayEditProjectPageAction))));
 			}
+			else if (actionName == EDIT_PROJECT_SAVE_ACTION_NAME)
+			{
+				return SecurityCheckingProxyAction(CruiseActionProxyAction(ProjectCheckingProxyAction(ServerCheckingProxyAction(SaveEditProjectAction))));
+			}
 			else if (actionName == VIEW_PROJECT_REPORT_ACTION_NAME)
 			{
 				return CruiseActionProxyAction(ProjectCheckingProxyAction(ServerCheckingProxyAction(ViewProjectReportAction)));
@@ -143,6 +147,11 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.MVC.Cruise
 		public DisplayEditProjectPageAction DisplayEditProjectPageAction
 		{
 			get { return new DisplayEditProjectPageAction(AddProjectModelGenerator, AddProjectViewBuilder, dcFactory.ServerAggregatingCruiseManagerWrapper, dcFactory.NetReflectorProjectSerializer); }
+		}
+
+		public SaveEditProjectAction SaveEditProjectAction
+		{
+			get { return new SaveEditProjectAction(AddProjectModelGenerator, AddProjectViewBuilder, dcFactory.ServerAggregatingCruiseManagerWrapper, dcFactory.NetReflectorProjectSerializer, dcFactory.DefaultUrlBuilder); }
 		}
 
 		public AddProjectModelGenerator AddProjectModelGenerator

@@ -626,6 +626,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "MVC\Cruise\SaveEditProjectAction.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "MVC\Cruise\SaveNewProjectAction.cs"
                     SubType = "Code"
                     BuildAction = "Compile"

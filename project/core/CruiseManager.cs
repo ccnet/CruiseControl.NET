@@ -80,6 +80,11 @@ namespace ThoughtWorks.CruiseControl.Core
 			return cruiseServer.GetProject(projectName);
 		}
 
+		public void UpdateProject(string projectName, string serializedProject)
+		{
+			cruiseServer.UpdateProject(projectName, serializedProject);
+		}
+
 		public override object InitializeLifetimeService()
 		{
 			return null;

@@ -293,6 +293,27 @@ namespace ThoughtWorks.CruiseControl.Core
 			return new NetReflectorProjectSerializer().Serialize((Project) configurationService.Load().Projects[name]);
 		}
 
+		// ToDo - this done TDD
+		public void UpdateProject(string projectName, string serializedProject)
+		{
+			Log.Info("Updating project - " + projectName);
+			try
+			{
+				IConfiguration configuration = configurationService.Load();
+				configuration.Projects[projectName].Purge();
+				configuration.DeleteProject(projectName);
+				Project project = projectSerializer.Deserialize(serializedProject);
+				configuration.AddProject(project);
+				project.Initialize();
+				configurationService.Save(configuration);
+			}
+			catch (ApplicationException e)
+			{
+				Log.Warning(e);
+				throw new CruiseControlException("Failed to add project. Exception was - " + e.Message);
+			}
+		}
+
 		private IProjectIntegrator GetIntegrator(string projectName)
 		{
 			IProjectIntegrator integrator = projectIntegrators[projectName];
