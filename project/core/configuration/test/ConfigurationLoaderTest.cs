@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.IO;
 using System.Xml;
+using Exortech.NetReflector;
 using NUnit.Framework;
 using tw.ccnet.core.util;
 using tw.ccnet.core.builder.test;
@@ -111,6 +112,22 @@ namespace tw.ccnet.core.configuration.test
 		public void PopulateProjectsFromXml_InvalidRootElement()
 		{
 			loader.PopulateProjectsFromXml(XmlUtil.CreateDocument("<loader/>"));
+		}
+
+		[Test]
+		public void PopulateCustomProjectFromXml()
+		{
+			string xml = @"<customtestproject name=""foo"" />";
+			IDictionary projects = loader.PopulateProjectsFromXml(ConfigurationFixture.GenerateConfig(xml));
+			Assertion.Assert(projects["foo"] is CustomTestProject);
+			Assertion.AssertEquals("foo", ((CustomTestProject) projects["foo"]).Name);
+	}
+
+	[ReflectorType("customtestproject")]
+		class CustomTestProject // properly should implement IProject
+		{
+			[ReflectorProperty("name")]
+			public string Name;
 		}
 
 		[Test]
