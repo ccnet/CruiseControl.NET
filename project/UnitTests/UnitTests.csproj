@@ -184,11 +184,6 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "CCTrayLib\RemoteCruiseProxyLoaderTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
                     RelPath = "CCTrayLib\ResourceIconStoreTest.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
