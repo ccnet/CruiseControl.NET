@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Specialized;
 using System.Diagnostics;
+using System.IO;
 
 namespace ThoughtWorks.CruiseControl.Core.Util
 {
@@ -24,6 +25,19 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 			startInfo.RedirectStandardOutput = true;
 			startInfo.RedirectStandardError = true;
 			startInfo.RedirectStandardInput = false;
+			RepathExecutableIfItIsInWorkingDirectory();
+		}
+
+		private void RepathExecutableIfItIsInWorkingDirectory()
+		{
+			if (WorkingDirectory != null)
+			{
+				string exectubleInWorkingDirectory = Path.Combine(WorkingDirectory, FileName);
+				if (File.Exists(exectubleInWorkingDirectory))
+				{
+					startInfo.FileName = exectubleInWorkingDirectory;
+				}
+			}
 		}
 
 		public StringDictionary EnvironmentVariables
@@ -67,6 +81,7 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 
 		public Process CreateAndStartNewProcess()
 		{
+			Log.Debug(string.Format("Attempting to start process [{0}] in working directory [{1}]", FileName, WorkingDirectory));
 			return Process.Start(startInfo);
 		}
 

@@ -37,7 +37,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.MVC.Cruise
 
 			NAntBuilder nantBuilder = new NAntBuilder();
 			nantBuilder.Executable = request.GetText("Project.Builder.Executable");
-			nantBuilder.BaseDirectory = request.GetText("Project.Builder.BaseDirectory");
+			nantBuilder.ConfiguredBaseDirectory = request.GetText("Project.Builder.BaseDirectory");
 			nantBuilder.BuildFile = request.GetText("Project.Builder.BuildFile");
 			nantBuilder.BuildArgs = request.GetText("Project.Builder.BuildArgs");
 			nantBuilder.TargetsForPresentation = request.GetText("Project.Builder.Targets");

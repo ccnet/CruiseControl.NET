@@ -13,7 +13,6 @@ namespace ThoughtWorks.CruiseControl.Core.Builder
 	{
 		public const int DEFAULT_BUILD_TIMEOUT = 600;
 		public const string DEFAULT_EXECUTABLE = "nant.exe";
-		public const string DEFAULT_BASEDIRECTORY = ".";
 		public const string DEFAULT_LABEL = "NO-LABEL";
 		public const string DEFAULT_LOGGER = "NAnt.Core.XmlLogger";
 
@@ -30,7 +29,7 @@ namespace ThoughtWorks.CruiseControl.Core.Builder
 		public string Executable = DEFAULT_EXECUTABLE;
 
 		[ReflectorProperty("baseDirectory", Required = false)] 
-		public string BaseDirectory = DEFAULT_BASEDIRECTORY;
+		public string ConfiguredBaseDirectory;
 
 		[ReflectorProperty("buildFile", Required = false)] 
 		public string BuildFile;
@@ -59,7 +58,7 @@ namespace ThoughtWorks.CruiseControl.Core.Builder
 		/// <param name="result">For storing build output.</param>
 		public void Run(IntegrationResult result, IProject project)
 		{
-			ProcessResult processResult = AttemptExecute(CreateProcessInfo(result));
+			ProcessResult processResult = AttemptExecute(CreateProcessInfo(result, project));
 			result.Output = processResult.StandardOutput;
 
 			if (processResult.TimedOut)
@@ -78,11 +77,27 @@ namespace ThoughtWorks.CruiseControl.Core.Builder
 			}
 		}
 
-		private ProcessInfo CreateProcessInfo(IntegrationResult result)
+		private ProcessInfo CreateProcessInfo(IntegrationResult result, IProject project)
 		{
-			ProcessInfo info = new ProcessInfo(Executable, CreateArgs(result), BaseDirectory);
+			ProcessInfo info = new ProcessInfo(Executable, CreateArgs(result), BaseDirectory(project));
 			info.TimeOut = BuildTimeoutSeconds*1000;
 			return info;
+		}
+
+		private string BaseDirectory(IProject project)
+		{
+			if (ConfiguredBaseDirectory == null || ConfiguredBaseDirectory == "")
+			{
+				return project.WorkingDirectory;
+			}
+			else if (Path.IsPathRooted(ConfiguredBaseDirectory))
+			{
+				return ConfiguredBaseDirectory;
+			}
+			else
+			{
+				return Path.Combine(project.WorkingDirectory, ConfiguredBaseDirectory);
+			}
 		}
 
 		protected ProcessResult AttemptExecute(ProcessInfo info)
@@ -139,7 +154,8 @@ namespace ThoughtWorks.CruiseControl.Core.Builder
 
 		public override string ToString()
 		{
-			return string.Format(@" BaseDirectory: {0}, Targets: {1}, Executable: {2}, BuildFile: {3}", BaseDirectory, string.Join(", ", Targets), Executable, BuildFile);
+			string baseDirectory = (ConfiguredBaseDirectory != null ? ConfiguredBaseDirectory : "");
+			return string.Format(@" BaseDirectory: {0}, Targets: {1}, Executable: {2}, BuildFile: {3}", baseDirectory, string.Join(", ", Targets), Executable, BuildFile);
 		}
 
 		public string TargetsForPresentation

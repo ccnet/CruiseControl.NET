@@ -53,8 +53,8 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.MVC.Cruise
 		{
 			// ToDo - Target List
 			return Table(
+				TR(TD("Base Directory"), TD(TextBox("Project.Builder.BaseDirectory", nantBuilder.ConfiguredBaseDirectory))),
 				TR(TD("Executable"), TD(TextBox("Project.Builder.Executable", nantBuilder.Executable))),
-				TR(TD("BaseDirectory"), TD(TextBox("Project.Builder.BaseDirectory", nantBuilder.BaseDirectory))),
 				TR(TD("BuildFile"), TD(TextBox("Project.Builder.BuildFile", nantBuilder.BuildFile))),
 				TR(TD("BuildArgs"), TD(TextBox("Project.Builder.BuildArgs", nantBuilder.BuildArgs))),
 				TR(TD("Targets"), TD(MultiLineTextBox("Project.Builder.TargetsForPresentation", nantBuilder.TargetsForPresentation))),

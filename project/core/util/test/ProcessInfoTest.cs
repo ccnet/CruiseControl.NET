@@ -25,5 +25,17 @@ namespace ThoughtWorks.CruiseControl.Core.Util.Test
 
 			Assert(!info.StartInfo.RedirectStandardInput);
 		}
+
+		[Test]
+		public void IfExecutableIsFoundInWorkingDirectoryThenUseCombinedPathAsExecutablePath()
+		{
+			string workingDir = TempFileUtil.CreateTempDir("working");
+			string executablePath = TempFileUtil.CreateTempFile("working", "myExecutable");
+
+			ProcessInfo infoWithoutPathQualifiedExecutable = new ProcessInfo("myExecutable", "", workingDir);
+			ProcessInfo infoWithPreQualifiedExecutable = new ProcessInfo(executablePath, "", workingDir);
+
+			AssertEquals(infoWithPreQualifiedExecutable, infoWithoutPathQualifiedExecutable);
+		}
 	}
 }

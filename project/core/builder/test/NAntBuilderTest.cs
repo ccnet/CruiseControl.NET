@@ -1,3 +1,4 @@
+using System.IO;
 using Exortech.NetReflector;
 using NMock;
 using NMock.Constraints;
@@ -17,6 +18,7 @@ namespace ThoughtWorks.CruiseControl.Core.Builder.Test
 
 		private NAntBuilder _builder;
 		private IMock _mockExecutor;
+		private DynamicMock projectMock;
 		private IProject project;
 
 		[SetUp]
@@ -24,7 +26,14 @@ namespace ThoughtWorks.CruiseControl.Core.Builder.Test
 		{
 			_mockExecutor = new DynamicMock(typeof(ProcessExecutor));
 			_builder = new NAntBuilder((ProcessExecutor) _mockExecutor.MockInstance);
-			project = (IProject) new DynamicMock(typeof(IProject)).MockInstance;
+			projectMock = new DynamicMock(typeof(IProject));
+			project = (IProject) projectMock.MockInstance;
+		}
+
+		private void VerifyAll()
+		{
+			_mockExecutor.Verify();
+			projectMock.Verify();
 		}
 
 		[TearDown]
@@ -49,7 +58,7 @@ namespace ThoughtWorks.CruiseControl.Core.Builder.Test
     </nant>";
 
 			NetReflector.Read(xml, _builder);
-			AssertEquals(@"C:\", _builder.BaseDirectory);
+			AssertEquals(@"C:\", _builder.ConfiguredBaseDirectory);
 			AssertEquals("mybuild.build", _builder.BuildFile);
 			AssertEquals("NAnt.exe", _builder.Executable);
 			AssertEquals(1, _builder.Targets.Length);
@@ -64,7 +73,7 @@ namespace ThoughtWorks.CruiseControl.Core.Builder.Test
 			string xml = @"<nant />";
 
 			NetReflector.Read(xml, _builder);
-			AssertEquals(NAntBuilder.DEFAULT_BASEDIRECTORY, _builder.BaseDirectory);
+			AssertEquals(null, _builder.ConfiguredBaseDirectory);
 			AssertEquals(NAntBuilder.DEFAULT_EXECUTABLE, _builder.Executable);
 			AssertEquals(0, _builder.Targets.Length);
 			AssertEquals(NAntBuilder.DEFAULT_BUILD_TIMEOUT, _builder.BuildTimeoutSeconds);
@@ -128,7 +137,7 @@ namespace ThoughtWorks.CruiseControl.Core.Builder.Test
 			IntegrationResult result = new IntegrationResult();
 			result.Label = "1.0";
 
-			_builder.BaseDirectory = @"c:\";
+			_builder.ConfiguredBaseDirectory = @"c:\";
 			_builder.Executable = "NAnt.exe";
 			_builder.BuildFile = "mybuild.build";
 			_builder.BuildArgs = "myArgs";
@@ -138,7 +147,7 @@ namespace ThoughtWorks.CruiseControl.Core.Builder.Test
 
 			ProcessInfo info = (ProcessInfo) constraint.Parameter;
 			AssertEquals(_builder.Executable, info.FileName);
-			AssertEquals(_builder.BaseDirectory, info.WorkingDirectory);
+			AssertEquals(_builder.ConfiguredBaseDirectory, info.WorkingDirectory);
 			AssertEquals(2000, info.TimeOut);
 			AssertEquals("-buildfile:mybuild.build -logger:" + NAntBuilder.DEFAULT_LOGGER + " myArgs -D:label-to-apply=1.0 target1 target2", info.Arguments);
 		}
@@ -154,9 +163,61 @@ namespace ThoughtWorks.CruiseControl.Core.Builder.Test
 
 			ProcessInfo info = (ProcessInfo) constraint.Parameter;
 			AssertEquals(_builder.Executable, NAntBuilder.DEFAULT_EXECUTABLE);
-			AssertEquals(_builder.BaseDirectory, NAntBuilder.DEFAULT_BASEDIRECTORY);
 			AssertEquals(NAntBuilder.DEFAULT_BUILD_TIMEOUT * 1000, info.TimeOut);
 			AssertEquals("-logger:" + NAntBuilder.DEFAULT_LOGGER + "  -D:label-to-apply=NO-LABEL", info.Arguments);
+		}
+
+		[Test]
+		public void IfConfiguredBaseDirectoryIsNotSetUseProjectWorkingDirectoryAsBaseDirectory()
+		{
+			_builder.ConfiguredBaseDirectory = null;
+			CheckBaseDirectoryIsProjectDirectoryWithGivenRelativePart("");
+		}
+
+		[Test]
+		public void IfConfiguredBaseDirectoryIsEmptyUseProjectWorkingDirectoryAsBaseDirectory()
+		{
+			_builder.ConfiguredBaseDirectory = "";
+			CheckBaseDirectoryIsProjectDirectoryWithGivenRelativePart("");
+		}
+
+		[Test]
+		public void IfConfiguredBaseDirectoryIsNotAbsoluteUseProjectWorkingDirectoryAsFirstPartOfBaseDirectory()
+		{
+			_builder.ConfiguredBaseDirectory = "relativeBaseDirectory";
+			CheckBaseDirectoryIsProjectDirectoryWithGivenRelativePart("relativeBaseDirectory");
+		}
+
+		private void CheckBaseDirectoryIsProjectDirectoryWithGivenRelativePart(string relativeDirectory)
+		{
+			projectMock.ExpectAndReturn("WorkingDirectory", "projectWorkingDirectory");
+			string expectedBaseDirectory = "projectWorkingDirectory";
+			if (relativeDirectory != "")
+			{
+				expectedBaseDirectory = Path.Combine(expectedBaseDirectory, relativeDirectory);
+			}
+			CheckBaseDirectory(expectedBaseDirectory);
+		}
+
+		[Test]
+		public void IfConfiguredBaseDirectoryIsAbsoluteUseItAtBaseDirectory()
+		{
+			projectMock.ExpectNoCall("WorkingDirectory");
+			_builder.ConfiguredBaseDirectory = @"c:\my\base\directory";
+			CheckBaseDirectory(@"c:\my\base\directory");
+		}
+
+		private void CheckBaseDirectory(string expectedBaseDirectory)
+		{
+			ProcessResult returnVal = CreateSuccessfulProcessResult();
+			CollectingConstraint constraint = new CollectingConstraint();
+			_mockExecutor.ExpectAndReturn("Execute", returnVal, constraint);
+
+			_builder.Run(new IntegrationResult(), project);
+
+			ProcessInfo info = (ProcessInfo) constraint.Parameter;
+			AssertEquals(expectedBaseDirectory, info.WorkingDirectory);
+			VerifyAll();
 		}
 
 		[Test]
