@@ -6,10 +6,10 @@ using Exortech.NetReflector;
 using ThoughtWorks.CruiseControl.Core.Util;
 using ThoughtWorks.CruiseControl.Remote;
 
-namespace ThoughtWorks.CruiseControl.Core.Builder
+namespace ThoughtWorks.CruiseControl.Core.Tasks
 {
 	[ReflectorType("nant")]
-	public class NAntBuilder : IBuilder
+	public class NAntTask : ITask
 	{
 		public const int DEFAULT_BUILD_TIMEOUT = 600;
 		public const string DEFAULT_EXECUTABLE = "nant.exe";
@@ -18,11 +18,11 @@ namespace ThoughtWorks.CruiseControl.Core.Builder
 
 		private ProcessExecutor _executor;
 
-		public NAntBuilder() : this(new ProcessExecutor())
+		public NAntTask() : this(new ProcessExecutor())
 		{
 		}
 
-		public NAntBuilder(ProcessExecutor executor)
+		public NAntTask(ProcessExecutor executor)
 		{
 			_executor = executor;
 		}

@@ -4,10 +4,10 @@ using ThoughtWorks.CruiseControl.Core.Util;
 using System.IO;
 using ThoughtWorks.CruiseControl.Remote;
 
-namespace ThoughtWorks.CruiseControl.Core.Builder
+namespace ThoughtWorks.CruiseControl.Core.Tasks
 {
 	[ReflectorType("devenv")]
-	public class DevenvBuilder : IBuilder
+	public class DevenvTask : ITask
 	{
 		public const string VS2003_REGISTRY_PATH = @"Software\Microsoft\VisualStudio\7.1";
 		public const string VS2002_REGISTRY_PATH = @"Software\Microsoft\VisualStudio\7.0";
@@ -19,9 +19,9 @@ namespace ThoughtWorks.CruiseControl.Core.Builder
 		private ProcessExecutor executor;
 		private string executable;
 
-		public DevenvBuilder() : this(new Registry(), new ProcessExecutor()) { }
+		public DevenvTask() : this(new Registry(), new ProcessExecutor()) { }
 
-		public DevenvBuilder(IRegistry registry, ProcessExecutor executor)
+		public DevenvTask(IRegistry registry, ProcessExecutor executor)
 		{
 			this.registry = registry;
 			this.executor = executor;

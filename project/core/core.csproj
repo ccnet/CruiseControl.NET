@@ -315,46 +315,6 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "builder\BuilderException.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "builder\CommandLineBuilder.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "builder\DevenvBuilder.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "builder\DevenvTaskResult.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "builder\IBuilder.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "builder\MultiBuilder.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "builder\NAntBuilder.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "builder\test\MockBuilder.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
                     RelPath = "configuration\CachingConfigurationService.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -913,12 +873,32 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "tasks\BuilderException.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "tasks\CoverageTask.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
                     RelPath = "tasks\DataTaskResult.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "tasks\DevenvTask.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "tasks\DevenvTaskResult.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "tasks\ExecutableTask.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -934,6 +914,11 @@
                 />
                 <File
                     RelPath = "tasks\MergeFilesTask.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "tasks\NAntTask.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -954,6 +939,11 @@
                 />
                 <File
                     RelPath = "tasks\NUnitTask.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "tasks\test\MockBuilder.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

@@ -31,7 +31,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks.Test
 							<reportName>foo.html</reportName> 
 						</build>";
 			_coverageTask= NetReflector.Read(xml) ;
-			((IBuilder)_coverageTask).Run(new IntegrationResult("foo", @"c:\temp"));
+			((ITask)_coverageTask).Run(new IntegrationResult("foo", @"c:\temp"));
 		}
 	}
 }

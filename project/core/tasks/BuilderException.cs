@@ -1,24 +1,24 @@
 using System;
 
-namespace ThoughtWorks.CruiseControl.Core.Builder
+namespace ThoughtWorks.CruiseControl.Core.Tasks
 {
 	public class BuilderException : CruiseControlException
 	{
-		private IBuilder _runner;
+		private ITask _runner;
 
-		public BuilderException(IBuilder runner, string message) 
+		public BuilderException(ITask runner, string message) 
 			: base(message) 
 		{
 			_runner = runner;
 		}
 
-		public BuilderException(IBuilder runner, string message, Exception innerException) 
+		public BuilderException(ITask runner, string message, Exception innerException) 
 			: base(message, innerException)
 		{
 			_runner = runner;
 		}
 
-		public IBuilder Builder
+		public ITask Builder
 		{
 			get { return _runner; }
 		}

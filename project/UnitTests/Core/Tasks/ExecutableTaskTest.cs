@@ -4,25 +4,26 @@ using Exortech.NetReflector;
 using NMock;
 using NMock.Constraints;
 using NUnit.Framework;
+using ThoughtWorks.CruiseControl.Core.Tasks;
 using ThoughtWorks.CruiseControl.Core.Util;
 using ThoughtWorks.CruiseControl.Remote;
 
-namespace ThoughtWorks.CruiseControl.Core.Builder.Test
+namespace ThoughtWorks.CruiseControl.Core.Tasks.Test
 {
 	[TestFixture]
-	public class CommandLineBuilderTest : CustomAssertion
+	public class ExecutableTaskTest : CustomAssertion
 	{
 		public const int SUCCESSFUL_EXIT_CODE = 0;
 		public const int FAILED_EXIT_CODE = -1;
 
-		private CommandLineBuilder _builder;
+		private ExecutableTask _task;
 		private IMock _mockExecutor;
 
 		[SetUp]
 		public void SetUp()
 		{
 			_mockExecutor = new DynamicMock(typeof(ProcessExecutor));
-			_builder = new CommandLineBuilder((ProcessExecutor) _mockExecutor.MockInstance);
+			_task = new ExecutableTask((ProcessExecutor) _mockExecutor.MockInstance);
 		}
 
 		private void VerifyAll()
@@ -41,11 +42,11 @@ namespace ThoughtWorks.CruiseControl.Core.Builder.Test
 		<buildTimeoutSeconds>123</buildTimeoutSeconds>
     </commandLineBuilder>";
 
-			NetReflector.Read(xml, _builder);
-			Assert.AreEqual(@"C:\", _builder.ConfiguredBaseDirectory);
-			Assert.AreEqual("mybatchfile.bat", _builder.Executable);
-			Assert.AreEqual(123, _builder.BuildTimeoutSeconds);
-			Assert.AreEqual("myarg1 myarg2", _builder.BuildArgs);
+			NetReflector.Read(xml, _task);
+			Assert.AreEqual(@"C:\", _task.ConfiguredBaseDirectory);
+			Assert.AreEqual("mybatchfile.bat", _task.Executable);
+			Assert.AreEqual(123, _task.BuildTimeoutSeconds);
+			Assert.AreEqual("myarg1 myarg2", _task.BuildArgs);
 			VerifyAll();
 		}
 
@@ -57,10 +58,10 @@ namespace ThoughtWorks.CruiseControl.Core.Builder.Test
     	<executable>mybatchfile.bat</executable>
     </commandLineBuilder>";
 
-			NetReflector.Read(xml, _builder);
-			Assert.AreEqual("mybatchfile.bat", _builder.Executable);
-			Assert.AreEqual(600, _builder.BuildTimeoutSeconds);
-			Assert.AreEqual("", _builder.BuildArgs);
+			NetReflector.Read(xml, _task);
+			Assert.AreEqual("mybatchfile.bat", _task.Executable);
+			Assert.AreEqual(600, _task.BuildTimeoutSeconds);
+			Assert.AreEqual("", _task.BuildArgs);
 			VerifyAll();
 		}
 
@@ -71,7 +72,7 @@ namespace ThoughtWorks.CruiseControl.Core.Builder.Test
 			_mockExecutor.ExpectAndReturn("Execute", returnVal, new IsAnything());
 
 			IntegrationResult result = new IntegrationResult();
-			_builder.Run(result);
+			_task.Run(result);
 
 			Assert.IsTrue(result.Succeeded);
 			Assert.AreEqual(IntegrationStatus.Success, result.Status);
@@ -86,7 +87,7 @@ namespace ThoughtWorks.CruiseControl.Core.Builder.Test
 			_mockExecutor.ExpectAndReturn("Execute", returnVal, new IsAnything());
 
 			IntegrationResult result = new IntegrationResult();
-			_builder.Run(result);
+			_task.Run(result);
 
 			Assert.IsTrue(result.Failed);
 			Assert.AreEqual(IntegrationStatus.Failure, result.Status);
@@ -101,7 +102,7 @@ namespace ThoughtWorks.CruiseControl.Core.Builder.Test
 			_mockExecutor.ExpectAndThrow("Execute", new Win32Exception(), new IsAnything());
 
 			IntegrationResult result = new IntegrationResult();
-			_builder.Run(result);
+			_task.Run(result);
 			VerifyAll();
 		}
 
@@ -115,10 +116,10 @@ namespace ThoughtWorks.CruiseControl.Core.Builder.Test
 			IntegrationResult result = new IntegrationResult();
 			result.Label = "1.0";
 
-			_builder.Executable = "test-exe";
-			_builder.BuildArgs = "test-args";
-			_builder.BuildTimeoutSeconds = 222;
-			_builder.Run(result);
+			_task.Executable = "test-exe";
+			_task.BuildArgs = "test-args";
+			_task.BuildTimeoutSeconds = 222;
+			_task.Run(result);
 
 			ProcessInfo info = (ProcessInfo) constraint.Parameter;
 			Assert.AreEqual("test-exe", info.FileName);
@@ -130,21 +131,21 @@ namespace ThoughtWorks.CruiseControl.Core.Builder.Test
 		[Test]
 		public void IfConfiguredBaseDirectoryIsNotSetUseProjectWorkingDirectoryAsBaseDirectory()
 		{
-			_builder.ConfiguredBaseDirectory = null;
+			_task.ConfiguredBaseDirectory = null;
 			CheckBaseDirectoryIsProjectDirectoryWithGivenRelativePart("");
 		}
 
 		[Test]
 		public void IfConfiguredBaseDirectoryIsEmptyUseProjectWorkingDirectoryAsBaseDirectory()
 		{
-			_builder.ConfiguredBaseDirectory = "";
+			_task.ConfiguredBaseDirectory = "";
 			CheckBaseDirectoryIsProjectDirectoryWithGivenRelativePart("");
 		}
 
 		[Test]
 		public void IfConfiguredBaseDirectoryIsNotAbsoluteUseProjectWorkingDirectoryAsFirstPartOfBaseDirectory()
 		{
-			_builder.ConfiguredBaseDirectory = "relativeBaseDirectory";
+			_task.ConfiguredBaseDirectory = "relativeBaseDirectory";
 			CheckBaseDirectoryIsProjectDirectoryWithGivenRelativePart("relativeBaseDirectory");
 		}
 
@@ -162,7 +163,7 @@ namespace ThoughtWorks.CruiseControl.Core.Builder.Test
 		[Test]
 		public void IfConfiguredBaseDirectoryIsAbsoluteUseItAtBaseDirectory()
 		{
-			_builder.ConfiguredBaseDirectory = @"c:\my\base\directory";
+			_task.ConfiguredBaseDirectory = @"c:\my\base\directory";
 			CheckBaseDirectory(new IntegrationResult(), @"c:\my\base\directory");
 		}
 
@@ -172,7 +173,7 @@ namespace ThoughtWorks.CruiseControl.Core.Builder.Test
 			CollectingConstraint constraint = new CollectingConstraint();
 			_mockExecutor.ExpectAndReturn("Execute", returnVal, constraint);
 
-			_builder.Run(result);
+			_task.Run(result);
 
 			ProcessInfo info = (ProcessInfo) constraint.Parameter;
 			Assert.AreEqual(expectedBaseDirectory, info.WorkingDirectory);

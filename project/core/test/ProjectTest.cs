@@ -4,8 +4,6 @@ using Exortech.NetReflector;
 using NMock;
 using NMock.Constraints;
 using NUnit.Framework;
-using ThoughtWorks.CruiseControl.Core.Builder;
-using ThoughtWorks.CruiseControl.Core.Builder.Test;
 using ThoughtWorks.CruiseControl.Core.Label;
 using ThoughtWorks.CruiseControl.Core.Publishers;
 using ThoughtWorks.CruiseControl.Core.Publishers.Test;
@@ -13,6 +11,7 @@ using ThoughtWorks.CruiseControl.Core.Sourcecontrol;
 using ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test;
 using ThoughtWorks.CruiseControl.Core.State;
 using ThoughtWorks.CruiseControl.Core.Tasks;
+using ThoughtWorks.CruiseControl.Core.Tasks.Test;
 using ThoughtWorks.CruiseControl.Core.Triggers;
 using ThoughtWorks.CruiseControl.Core.Util;
 using ThoughtWorks.CruiseControl.Remote;
@@ -43,7 +42,7 @@ namespace ThoughtWorks.CruiseControl.Core.Test
 			Assert.IsTrue(Directory.Exists(workingDirPath));
 			Assert.IsTrue(Directory.Exists(artifactDirPath));
 
-			_mockBuilder = new DynamicMock(typeof (IBuilder));
+			_mockBuilder = new DynamicMock(typeof (ITask));
 			_mockBuilder.Strict = true;
 			_mockSourceControl = new DynamicMock(typeof (ISourceControl));
 			_mockSourceControl.Strict = true;
@@ -68,7 +67,7 @@ namespace ThoughtWorks.CruiseControl.Core.Test
 		private void SetupProject()
 		{
 			_project.Name = PROJECT_NAME;
-			_project.Builder = (IBuilder) _mockBuilder.MockInstance;
+			_project.Builder = (ITask) _mockBuilder.MockInstance;
 			_project.SourceControl = (ISourceControl) _mockSourceControl.MockInstance;
 			_project.StateManager = (IStateManager) _mockStateManager.MockInstance;
 			_project.Triggers = new ITrigger[] {(ITrigger) _mockIntegrationTrigger.MockInstance};
@@ -129,7 +128,7 @@ namespace ThoughtWorks.CruiseControl.Core.Test
 			Assert.AreEqual("http://localhost/ccnet", project.WebURL);
 			Assert.AreEqual(60, project.ModificationDelaySeconds);
 			Assert.AreEqual(true, project.PublishExceptions);
-			Assert.IsTrue(project.Builder is NAntBuilder);
+			Assert.IsTrue(project.Builder is NAntTask);
 			Assert.IsTrue(project.SourceControl is MockSourceControl);
 			Assert.IsTrue(project.Labeller is DefaultLabeller);
 			Assert.IsTrue(project.StateManager is IntegrationStateManager);

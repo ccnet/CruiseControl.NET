@@ -288,31 +288,7 @@
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
-                <File
-                    RelPath = "Core\Builders\CommandLineBuilderTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Core\Builders\DevenvBuilderTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Core\Builders\DevenvTaskResultTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Core\Builders\MultiBuilderTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Core\Builders\NAntBuilderTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
+                <Folder RelPath = "Core\Builders\" />
                 <File
                     RelPath = "Core\Config\CachingConfigurationServiceTest.cs"
                     SubType = "Code"
@@ -589,12 +565,32 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Core\Tasks\DevenvTaskResultTest.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Core\Tasks\DevenvTaskTest.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Core\Tasks\ExecutableTaskTest.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Core\Tasks\FileTaskResultTest.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
                     RelPath = "Core\Tasks\MergeFileTaskTest.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Core\Tasks\NAntTaskTest.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

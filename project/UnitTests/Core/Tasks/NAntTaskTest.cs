@@ -5,25 +5,26 @@ using Exortech.NetReflector;
 using NMock;
 using NMock.Constraints;
 using NUnit.Framework;
+using ThoughtWorks.CruiseControl.Core.Tasks;
 using ThoughtWorks.CruiseControl.Core.Util;
 using ThoughtWorks.CruiseControl.Remote;
 
-namespace ThoughtWorks.CruiseControl.Core.Builder.Test
+namespace ThoughtWorks.CruiseControl.Core.Tasks.Test
 {
 	[TestFixture]
-	public class NAntBuilderTest : CustomAssertion
+	public class NAntTaskTest : CustomAssertion
 	{
 		public const int SUCCESSFUL_EXIT_CODE = 0;
 		public const int FAILED_EXIT_CODE = -1;
 
-		private NAntBuilder _builder;
+		private NAntTask _builder;
 		private IMock _mockExecutor;
 
 		[SetUp]
 		public void SetUp()
 		{
 			_mockExecutor = new DynamicMock(typeof (ProcessExecutor));
-			_builder = new NAntBuilder((ProcessExecutor) _mockExecutor.MockInstance);
+			_builder = new NAntTask((ProcessExecutor) _mockExecutor.MockInstance);
 		}
 
 		private void VerifyAll()
@@ -71,11 +72,11 @@ namespace ThoughtWorks.CruiseControl.Core.Builder.Test
 
 			NetReflector.Read(xml, _builder);
 			Assert.AreEqual("", _builder.ConfiguredBaseDirectory);
-			Assert.AreEqual(NAntBuilder.DEFAULT_EXECUTABLE, _builder.Executable);
+			Assert.AreEqual(NAntTask.DEFAULT_EXECUTABLE, _builder.Executable);
 			Assert.AreEqual(0, _builder.Targets.Length);
-			Assert.AreEqual(NAntBuilder.DEFAULT_BUILD_TIMEOUT, _builder.BuildTimeoutSeconds);
-			Assert.AreEqual(NAntBuilder.DEFAULT_LOGGER, _builder.Logger);
-			Assert.AreEqual(NAntBuilder.DEFAULT_NOLOGO, _builder.NoLogo);
+			Assert.AreEqual(NAntTask.DEFAULT_BUILD_TIMEOUT, _builder.BuildTimeoutSeconds);
+			Assert.AreEqual(NAntTask.DEFAULT_LOGGER, _builder.Logger);
+			Assert.AreEqual(NAntTask.DEFAULT_NOLOGO, _builder.NoLogo);
 		}
 
 		[Test]
@@ -162,8 +163,8 @@ namespace ThoughtWorks.CruiseControl.Core.Builder.Test
 			_builder.Run(new IntegrationResult());
 
 			ProcessInfo info = (ProcessInfo) constraint.Parameter;
-			Assert.AreEqual(_builder.Executable, NAntBuilder.DEFAULT_EXECUTABLE);
-			Assert.AreEqual(NAntBuilder.DEFAULT_BUILD_TIMEOUT*1000, info.TimeOut);
+			Assert.AreEqual(_builder.Executable, NAntTask.DEFAULT_EXECUTABLE);
+			Assert.AreEqual(NAntTask.DEFAULT_BUILD_TIMEOUT*1000, info.TimeOut);
 			Assert.AreEqual("-nologo -logger:NAnt.Core.XmlLogger -D:ccnet.buildcondition=NoBuild", info.Arguments);
 		}
 

@@ -7,6 +7,8 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
 	/// <summary>
 	/// Publisher that provides for executing an arbitrary command.
 	/// </summary>
+	/// 
+	// TODO - Remove this since ExecutableTask should be sufficient - merge features as necessary
 	[ReflectorType("executable")]
 	public class ExecutablePublisher : PublisherBase
 	{

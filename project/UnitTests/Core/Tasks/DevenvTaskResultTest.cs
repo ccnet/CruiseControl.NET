@@ -1,6 +1,7 @@
 using NUnit.Framework;
+using ThoughtWorks.CruiseControl.Core.Tasks;
 
-namespace ThoughtWorks.CruiseControl.Core.Builder.Test
+namespace ThoughtWorks.CruiseControl.Core.Tasks.Test
 {
 	[TestFixture]
 	public class DevenvTaskResultTest

@@ -3,7 +3,6 @@ using Exortech.NetReflector;
 using NMock;
 using NMock.Constraints;
 using NUnit.Framework;
-using ThoughtWorks.CruiseControl.Core.Builder;
 
 namespace ThoughtWorks.CruiseControl.Core.Tasks.Test
 {
@@ -34,7 +33,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks.Test
 						</coverageTask>";
 			_ncoverTask = NetReflector.Read(xml) as CoverageTask;
 			Assert.IsNotNull(_ncoverTask);
-			Assert.IsNotNull(_ncoverTask.DevEnvBuilder);
+			Assert.IsNotNull(_ncoverTask.DevEnvTask);
 			Assert.IsNotNull(_ncoverTask.Nunit);
 		}
 
@@ -44,12 +43,12 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks.Test
 			Mock instrumenter = new DynamicMock(typeof (ICoverage));
 			instrumenter.Expect("Instrument");
 			instrumenter.Expect("Report");
-			Mock devEnvBuilder = new DynamicMock(typeof (DevenvBuilder));
+			Mock devEnvBuilder = new DynamicMock(typeof (DevenvTask));
 			devEnvBuilder.Expect("Run", new IsAnything());
 
 			Mock nunit = new DynamicMock(typeof (NUnitTask));
 			nunit.Expect("Run", new IsAnything());
-			CoverageTask task = new CoverageTask((NUnitTask) nunit.MockInstance, (DevenvBuilder) devEnvBuilder.MockInstance, (ICoverage) instrumenter.MockInstance);
+			CoverageTask task = new CoverageTask((NUnitTask) nunit.MockInstance, (DevenvTask) devEnvBuilder.MockInstance, (ICoverage) instrumenter.MockInstance);
 			task.ReportFileName = "foo.txt";
 			task.Run(createIntegrationResult());
 			instrumenter.Verify();
@@ -63,12 +62,12 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks.Test
 			Mock instrumenter = new DynamicMock(typeof (ICoverage));
 			instrumenter.Expect("Instrument");
 			instrumenter.Expect("Report");
-			Mock devEnvBuilder = new DynamicMock(typeof (DevenvBuilder));
+			Mock devEnvBuilder = new DynamicMock(typeof (DevenvTask));
 			devEnvBuilder.Expect("Run", new IsAnything());
 
 			Mock nunit = new DynamicMock(typeof (NUnitTask));
 			nunit.Expect("Run", new IsAnything());
-			CoverageTask task = new CoverageTask((NUnitTask) nunit.MockInstance, (DevenvBuilder) devEnvBuilder.MockInstance, (ICoverage) instrumenter.MockInstance);
+			CoverageTask task = new CoverageTask((NUnitTask) nunit.MockInstance, (DevenvTask) devEnvBuilder.MockInstance, (ICoverage) instrumenter.MockInstance);
 			task.Run(createIntegrationResult());
 			instrumenter.Verify();
 			devEnvBuilder.Verify();

@@ -2,9 +2,9 @@ using System.IO;
 using NMock;
 using NUnit.Framework;
 using ThoughtWorks.CruiseControl.Core;
-using ThoughtWorks.CruiseControl.Core.Builder;
 using ThoughtWorks.CruiseControl.Core.Config;
 using ThoughtWorks.CruiseControl.Core.Sourcecontrol;
+using ThoughtWorks.CruiseControl.Core.Tasks;
 using ThoughtWorks.CruiseControl.Core.Util;
 
 namespace ThoughtWorks.CruiseControl.UnitTests.Core.Config
@@ -21,7 +21,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Config
 		[Test]
 		public void ShouldBeAbleToSaveProjectsThatALoaderCanLoad()
 		{
-			CommandLineBuilder builder = new CommandLineBuilder();
+			ExecutableTask builder = new ExecutableTask();
 			builder.Executable = "foo";
 			FileSourceControl sourceControl = new FileSourceControl();
 			sourceControl.RepositoryRoot = "bar";

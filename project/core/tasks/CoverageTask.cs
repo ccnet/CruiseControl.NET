@@ -1,26 +1,25 @@
 using System;
 using System.IO;
 using Exortech.NetReflector;
-using ThoughtWorks.CruiseControl.Core.Builder;
 
 namespace ThoughtWorks.CruiseControl.Core.Tasks
 {
 	// ToDo - is this used???
 	[ReflectorType("coverage")]
-	public class CoverageTask : IBuilder
+	public class CoverageTask : ITask
 	{
 		private NUnitTask _nunit;
-		private DevenvBuilder _builder;
+		private DevenvTask _builder;
 		private ICoverage _instrument;
 		private string _reportFileName = String.Empty;
 
 		public CoverageTask()
 		{}
 
-		public CoverageTask(NUnitTask nunit, DevenvBuilder builder, ICoverage instrument)
+		public CoverageTask(NUnitTask nunit, DevenvTask task, ICoverage instrument)
 		{
 			_nunit = nunit;
-			_builder = builder;
+			_builder = task;
 			_instrument = instrument;
 		}
 
@@ -39,7 +38,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 		}
 
 		[ReflectorProperty("devenv")]
-		public DevenvBuilder DevEnvBuilder
+		public DevenvTask DevEnvTask
 		{
 			get { return _builder; }
 			set { _builder = value; }

@@ -2,7 +2,7 @@ using System.IO;
 using System.Xml;
 using ThoughtWorks.CruiseControl.Core.Util;
 
-namespace ThoughtWorks.CruiseControl.Core.Builder
+namespace ThoughtWorks.CruiseControl.Core.Tasks
 {
 	public class DevenvTaskResult : ITaskResult
 	{
