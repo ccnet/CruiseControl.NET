@@ -47,15 +47,13 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
 			// only deal with known integration status
 			if (result.Status==IntegrationStatus.Unknown)
 				return;
-
-			XmlWriter writer = GetXmlWriter(LogDir, GetFilename(result)); 
-			try 
+			foreach(string mergeFileName in MergeFiles)
 			{
-				Write(result, writer);
+				result.TaskResults.Add(new DefaultTaskResult(mergeFileName));			    
 			}
-			finally 
+			using (XmlIntegrationResultWriter integrationWriter = new XmlIntegrationResultWriter(GetXmlWriter(LogDir, GetFilename(result))))
 			{
-				writer.Close();
+			    integrationWriter.Write(result);
 			}
 		}
 		
@@ -110,123 +108,5 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
 
 			return result;
 		}
-
-		#region Writing
-		
-		public void Write(IntegrationResult result, XmlWriter writer)
-		{
-			writer.WriteStartElement(Elements.CRUISE_ROOT);
-			writer.WriteStartElement(Elements.MODIFICATIONS);
-			Write(result.Modifications, writer);
-			writer.WriteEndElement();
-			WriteBuildElement(result, writer);
-			WriteMergeFiles(writer);
-			WriteException(result, writer);
-			writer.WriteEndElement();
-		}
-
-		private void WriteMergeFiles(XmlWriter writer) 
-		{
-			ArrayList files = GetMergeFileList();
-			foreach (string file in files) 
-			{
-				FileInfo info = new FileInfo(file);
-				if (info.Exists) 
-				{
-					XmlDocument doc = new XmlDocument();
-					using (StreamReader reader = new StreamReader(info.FullName)) 
-					{
-						doc.Load(reader);
-					}
-					writer.WriteRaw(doc.DocumentElement.OuterXml);
-				}
-			}
-		}
-		
-		public void WriteBuildElement(IntegrationResult result, XmlWriter writer)
-		{
-			writer.WriteStartElement(Elements.BUILD);
-			writer.WriteAttributeString("date", result.StartTime.ToString());
-
-			// hide the milliseconds
-			TimeSpan time = result.TotalIntegrationTime;
-			writer.WriteAttributeString("buildtime", string.Format("{0:d2}:{1:d2}:{2:d2}", time.Hours, time.Minutes, time.Seconds));
-			if (result.Failed)
-			{
-				writer.WriteAttributeString("error", "true"); 
-			}
-			
-			if (result.Output != null)
-			{
-				WriteIntegrationResultOutput(result, writer);
-			}
-			
-			writer.WriteEndElement();
-		}
-
-		private void WriteIntegrationResultOutput(IntegrationResult result, XmlWriter writer)
-		{
-			string nullRemovedOutput = RemoveNulls(result.Output);
-			XmlValidatingReader reader = new XmlValidatingReader(nullRemovedOutput, XmlNodeType.Element, null);
-			try 
-			{ 
-				reader.ReadInnerXml();
-				writer.WriteNode(reader, false);
-			}
-			catch (XmlException) 
-			{
-				// IF we had a problem with the input xml, wrap it in CDATA and put that in instead
-				writer.WriteCData(XmlUtil.EncodeCDATA(nullRemovedOutput));
-			}
-			finally 
-			{ 
-				reader.Close(); 
-			}
-		}
-
-		public string RemoveNulls(string s)
-		{
-			Regex nullStringRegex = new Regex("\0");
-			return nullStringRegex.Replace(s, "");;
-		}
-
-		public void WriteException(IntegrationResult result, XmlWriter writer)
-		{
-			if (result.ExceptionResult == null)
-			{
-				return;
-			}
-
-			writer.WriteStartElement(Elements.EXCEPTION);
-			writer.WriteCData(XmlUtil.EncodeCDATA(result.ExceptionResult.ToString()));
-			writer.WriteEndElement();
-		}
-
-		public void Write(Modification[] mods, XmlWriter writer)
-		{
-			if (mods == null)
-			{
-				return;
-			}
-			foreach (Modification mod in mods)
-			{
-				writer.WriteRaw(mod.ToXml());
-			}
-		}
-
-		#endregion
-		
-		#region Inner type: Elements
-
-		public class Elements 
-		{
-			public const string BUILD = "build";
-			public const string CRUISE_ROOT = "cruisecontrol";
-			public const string MODIFICATIONS = "modifications";
-			public const string INFO = "info";
-			public const string EXCEPTION = "exception";
-		}
-
-		#endregion
 	}
 }

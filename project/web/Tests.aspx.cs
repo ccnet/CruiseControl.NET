@@ -53,7 +53,7 @@ namespace ThoughtWorks.CruiseControl.Web
 				string directory = Path.GetDirectoryName(xslFile);
 				string file = Path.GetFileName(xslFile);
 				string transformFile = Path.Combine(Request.MapPath(directory), file);
-				builder.Append(ThoughtWorks.CruiseControl.Core.Publishers.BuildLogTransformer.Transform(document, transformFile)).Append("<br>");
+				builder.Append(new ThoughtWorks.CruiseControl.Core.Publishers.BuildLogTransformer().Transform(document, transformFile)).Append("<br>");
 			}
 			catch(XmlException ex)
 			{

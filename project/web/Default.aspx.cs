@@ -117,7 +117,7 @@ namespace ThoughtWorks.CruiseControl.Web
 			string directory = Path.GetDirectoryName(xslfile);
 			string file = Path.GetFileName(xslfile);
 			string transformFile = Path.Combine(Request.MapPath(directory), file);
-			return ThoughtWorks.CruiseControl.Core.Publishers.BuildLogTransformer.Transform(logFileDocument, transformFile);
+			return new ThoughtWorks.CruiseControl.Core.Publishers.BuildLogTransformer().Transform(logFileDocument, transformFile);
 		}
 
 		#region Web Form Designer generated code

@@ -12,12 +12,10 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
 	/// Utility class that provides static methods to transform build results using
 	/// Xsl stylesheets.
 	/// </summary>
-	public class BuildLogTransformer
+	public class BuildLogTransformer //: IBuildLogTransformer
 	{
-		/// <summary>
-		/// Utility class; not intended for instantiation.
-		/// </summary>
-		private BuildLogTransformer() {}
+		
+		public BuildLogTransformer() {}
 
 		/// <summary>
 		/// Transforms the specified Xml document using all configured Xsl files,
@@ -25,15 +23,20 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
 		/// </summary>
 		/// <param name="document"></param>
 		/// <returns></returns>
-		public static string TransformResultsWithAllStyleSheets(XmlDocument document) 
+		public string TransformResultsWithAllStyleSheets(XmlDocument document) 
+		{
+			IList list = (IList)ConfigurationSettings.GetConfig("xslFiles");
+			return TransformResults(list,document);
+		}
+		
+		public string TransformResults(IList xslFiles,XmlDocument document)
 		{
 			StringBuilder builder = new StringBuilder();
-			IList list = (IList)ConfigurationSettings.GetConfig("xslFiles");
-			foreach (string xslFile in list) 
+			if(xslFiles == null) return builder.ToString();
+			foreach (string xslFile in xslFiles) 
 			{
 				builder.Append(Transform(document, xslFile));
 			}
-
 			return builder.ToString();
 		}
 
@@ -43,7 +46,7 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
 		/// <param name="document"></param>
 		/// <param name="xslFile"></param>
 		/// <returns></returns>
-		public static string Transform(XmlDocument document, string xslFile)
+		public string Transform(XmlDocument document, string xslFile)
 		{
 			try 
 			{		
@@ -68,7 +71,7 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
 		/// </summary>
 		/// <param name="transform"></param>
 		/// <param name="xslfile"></param>
-		private static void LoadStylesheet(XslTransform transform, string xslFileName) 
+		private void LoadStylesheet(XslTransform transform, string xslFileName) 
 		{
 			try 
 			{

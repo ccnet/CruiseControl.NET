@@ -36,9 +36,11 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 				}
 				else
 				{
+					
 					standardOutput.Abort();
 					standardError.Abort();
 					process.Kill();
+					Console.WriteLine("Killed the process status:{0}", process.HasExited);
 					return new ProcessResult(standardOutput.Output, standardError.Output, KILLED_PROCESS_EXIT_CODE, ! process.HasExited);
 				}
 			}				

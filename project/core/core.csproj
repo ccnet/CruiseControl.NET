@@ -184,6 +184,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "ITaskResult.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "LogFile.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -368,7 +373,17 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "publishers\BuildLogTransformerTest.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "publishers\BuildPublisher.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "publishers\DefaultTaskResult.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -393,6 +408,31 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "publishers\HtmlDetailsMessageBuilder.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "publishers\HtmlLinkMessageBuilder.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "publishers\HtmlLinkMessageBuilderTest.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "publishers\IBuildLogTransformer.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "publishers\IMessageBuilder.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "publishers\NetSendPublisher.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -404,6 +444,11 @@
                 />
                 <File
                     RelPath = "publishers\RssPublisher.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "publishers\XmlIntegrationResultWriter.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -454,6 +499,16 @@
                 />
                 <File
                     RelPath = "publishers\test\RSSPublisherTest.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "publishers\test\XmlIntegrationResultWriterTest.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "publishers\test\XmlLogFixture.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

@@ -13,17 +13,11 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
 	{
 		private IntegrationCompletedEventHandler _publish;
 
-		#region Constructor
-
 		public PublisherBase()
 		{
 			_publish = new IntegrationCompletedEventHandler(Project_IntegrationCompleted);
 		}
 
-		#endregion
-
-		#region Event registration
-		
 		public IntegrationCompletedEventHandler IntegrationCompletedEventHandler 
 		{
 			get 
@@ -50,17 +44,11 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
 			}
 		}
 
-		#endregion
-
-		#region Abstract methods
-		
 		/// <summary>
 		/// Performs all actions for this publisher implementation.
 		/// </summary>
 		/// <param name="project">The project from which results originated.</param>
 		/// <param name="result">The result of this integration.</param>
 		public abstract void PublishIntegrationResults(IProject project, IntegrationResult result);
-
-		#endregion
 	}
 }

@@ -8,6 +8,7 @@ using ThoughtWorks.CruiseControl.Core.Util;
 using Exortech.NetReflector;
 using ThoughtWorks.CruiseControl.Remote;
 using ThoughtWorks.CruiseControl.Core.Publishers;
+using NMock;
 
 namespace ThoughtWorks.CruiseControl.Core.Publishers.Test
 {
@@ -94,14 +95,6 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers.Test
 				CreateIntegrationResult(IntegrationStatus.Success, IntegrationStatus.Failure));
 			AssertEquals("Project#9 Build Fixed: Build 0", subject);
 		}
-
-		[Test]
-		public void EmailMessageWithoutDetails()
-		{
-			_publisher.IncludeDetails = false;
-			string message = _publisher.CreateMessage(CreateIntegrationResult(IntegrationStatus.Success, IntegrationStatus.Success));
-			AssertEquals(@"CruiseControl.NET Build Results for project Project#9 (http://localhost/ccnet?log=log19800101000000Lbuild.0.xml)", message);
-		}
 		
 		[Test]
 		public void EmailMessageWithDetails() 
@@ -180,6 +173,19 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers.Test
 			_publisher.PublishIntegrationResults(null, result);
 			AssertEquals("mock.gateway.org", _gateway.MailHost);
 			AssertEquals(1, _gateway.SentMessages.Count);
+		}
+
+		[Test]
+		public void UnitTestResultsShouldBeIncludedInEmailMessageWhenIncludesDetailsIsTrue()
+		{
+			IntegrationResult result = CreateIntegrationResult(IntegrationStatus.Success, IntegrationStatus.Success);
+		    IMock mockTaskResult = new DynamicMock(typeof(ITaskResult));
+		    mockTaskResult.SetupResult("Data", "<test-results name=\"foo\" total=\"10\" failures=\"0\" not-run=\"0\"><test-suite></test-suite></test-results>");
+		    result.TaskResults.Add((ITaskResult) mockTaskResult.MockInstance);
+			_publisher.IncludeDetails=true;
+			string message = _publisher.CreateMessage(result);
+			Assert(message.IndexOf("Unit Tests") >= 0);
+		    mockTaskResult.Verify();
 		}
 
 		[Test]
