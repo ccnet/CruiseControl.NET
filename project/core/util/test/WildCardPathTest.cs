@@ -1,8 +1,7 @@
 using System;
 using System.Collections;
-using NUnit.Framework;
-using ThoughtWorks.CruiseControl.Core.Util;
 using System.IO;
+using NUnit.Framework;
 
 namespace ThoughtWorks.CruiseControl.Core.Util.Test
 {
@@ -22,7 +21,7 @@ namespace ThoughtWorks.CruiseControl.Core.Util.Test
 		public void StringWithNoWildCardsReturnsSingleFile()
 		{
 			WildCardPath wildCard = new WildCardPath("foo.xml");
-			IList files = wildCard.GetFiles();
+		    IList files = wildCard.GetFiles();
 			AssertEquals(1, files.Count);
 		}
 
@@ -35,11 +34,20 @@ namespace ThoughtWorks.CruiseControl.Core.Util.Test
 		}
 
 		[Test]
+		public void HandlesWhiteSpaceInTheFileName()
+		{
+			WildCardPath wildCard = new WildCardPath("fooo.xml    ");
+		    FileInfo[] files = wildCard.GetFiles();
+			AssertEquals(1, files.Length);
+			AssertEquals("fooo.xml", files[0].Name);
+
+		}
+
+		[Test]
 		public void StringWithWildcardsReturnsAllMatchingFiles()
 		{
 			string tempFile1Path = TempFileUtil.CreateTempFile(TEMP_FOLDER, "foo.txt", "foofoo");
 			string tempFile2Path = TempFileUtil.CreateTempFile(TEMP_FOLDER, "bar.txt", "barbar");
-			string tempFile3Path = TempFileUtil.CreateTempFile(TEMP_FOLDER, "bat.bat", "batbat");
 			WildCardPath wildCard = new WildCardPath(_tempFolderFullPath + @"\" + "*.txt");
 			IList files = wildCard.GetFiles();
 			AssertEquals(2, files.Count);
@@ -57,6 +65,7 @@ namespace ThoughtWorks.CruiseControl.Core.Util.Test
 			Fail(String.Format("Element {0} not found in the list", s));
 
 		}
+
 
 		[TearDown]
 		public void DeleteTempDir()

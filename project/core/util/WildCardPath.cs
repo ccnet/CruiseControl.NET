@@ -1,5 +1,3 @@
-using System;
-using System.Collections;
 using System.IO;
 
 namespace ThoughtWorks.CruiseControl.Core.Util
@@ -25,7 +23,7 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 			}
 			else
 			{
-				files = new FileInfo[] { new FileInfo(_pathPattern) };
+				files = new FileInfo[] { new FileInfo(_pathPattern.Trim()) };
 			}
 			return files;
 		}
