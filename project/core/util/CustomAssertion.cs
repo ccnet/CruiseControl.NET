@@ -12,6 +12,12 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 			Assert.IsTrue(target.IndexOf(search) >= 0, message);
 		}
 
+		public static void AssertNotContains(string search, string target)
+		{
+			string message = string.Format("Search substring: {0} should not be contained in target: {1}", search, target);
+			Assert.IsFalse(target.IndexOf(search) >= 0, message);
+		}
+
 		public static void AssertContainsInArray(object search, object[] target)
 		{
 			foreach(object a in target)

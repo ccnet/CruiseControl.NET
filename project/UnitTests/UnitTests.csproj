@@ -16,7 +16,7 @@
                 DefaultTargetSchema = "IE50"
                 DelaySign = "false"
                 OutputType = "Library"
-                PreBuildEvent = ""
+                PreBuildEvent = 'mkdir "$(TargetDir)xsl"&#xd;&#xa;copy "$(SolutionDir)\xsl\*.*" "$(TargetDir)xsl"'
                 PostBuildEvent = ""
                 RootNamespace = "ThoughtWorks.CruiseControl.UnitTests"
                 RunPostBuildEvent = "OnBuildSuccess"
@@ -395,6 +395,11 @@
                 />
                 <File
                     RelPath = "WebDashboard\ServerConnection\ServerAggregatingCruiseManagerWrapperTest.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Xsl\CompileStylesheetTest.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
