@@ -1,4 +1,3 @@
-using System;
 using System.IO;
 using NMock;
 using NUnit.Framework;
@@ -26,13 +25,14 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Cache
 		{
 			pathMapperMock = new DynamicMock(typeof(IPathMapper));
 			configurationGetterMock = new DynamicMock(typeof(IConfigurationGetter));
-			cacheRootDirectory = "cache";
+			cacheRootDirectory = TempFileUtil.GetTempPath("cache");
 			configurationGetterMock.SetupResult("GetSimpleConfigSetting", cacheRootDirectory, typeof(string));
 			servername = "myserver";
 			projectname = "myproject";
 			subdirectory = "subdir";
 			filename = "myfile.xml";
 			content = "some\r\ncontent";
+			TempFileUtil.DeleteTempDir("cache");
 		}
 
 		[TearDown]

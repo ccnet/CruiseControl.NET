@@ -309,16 +309,6 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "BuildLog\DefaultLogInspector.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "BuildLog\ILogInspector.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
                     RelPath = "configuration\ccnet.xsd"
                     BuildAction = "EmbeddedResource"
                 />

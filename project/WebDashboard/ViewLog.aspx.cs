@@ -1,6 +1,5 @@
 using System;
 using System.Web.UI.HtmlControls;
-using ThoughtWorks.CruiseControl.Core.BuildLog;
 using ThoughtWorks.CruiseControl.WebDashboard.Cache;
 using ThoughtWorks.CruiseControl.WebDashboard.Config;
 using ThoughtWorks.CruiseControl.WebDashboard.IO;
@@ -17,7 +16,6 @@ namespace ThoughtWorks.CruiseControl.WebDashboard
 		{
 			LogViewer logViewer = new LogViewer(new QueryStringRequestWrapper(Request.QueryString), 
 				new ServerAggregatingCruiseManagerWrapper() , 
-				new DefaultLogInspector(), 
 				new LocalFileCacheManager(new HttpPathMapper(Context, this), new ConfigurationSettingsConfigGetter()));
 
 			LogViewerResults results = logViewer.Do();

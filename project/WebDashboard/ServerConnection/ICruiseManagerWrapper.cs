@@ -2,6 +2,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.ServerConnection
 {
 	public interface ICruiseManagerWrapper
 	{
-		string GetLog(string serverName, string projectName, ILogSpecifier logSpecifier);
+		string GetLatestLogName (string serverName, string projectName);
+		string GetLog(string serverName, string projectName, string logName);
 	}
 }

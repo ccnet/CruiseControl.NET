@@ -11,7 +11,12 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.ServerConnection
 			//
 		}
 
-		public string GetLog(string serverName, string projectName, ILogSpecifier logSpecifier)
+		public string GetLatestLogName(string serverName, string projectName)
+		{
+			throw new NotImplementedException();
+		}
+
+		public string GetLog(string serverName, string projectName, string logName)
 		{
 			throw new NotImplementedException();
 		}

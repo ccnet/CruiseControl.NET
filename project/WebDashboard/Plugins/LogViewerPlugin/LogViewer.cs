@@ -1,4 +1,4 @@
-using ThoughtWorks.CruiseControl.Core.BuildLog;
+using System;
 using ThoughtWorks.CruiseControl.WebDashboard.Cache;
 using ThoughtWorks.CruiseControl.WebDashboard.IO;
 using ThoughtWorks.CruiseControl.WebDashboard.ServerConnection;
@@ -10,15 +10,13 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.LogViewerPlugin
 		public static readonly string CacheDirectory = "originalLogs";
 
 		private readonly ICacheManager cacheManager;
-		private readonly ILogInspector logInspector;
 		private readonly ICruiseManagerWrapper manager;
 		private readonly IRequestWrapper requestWrapper;
 
-		public LogViewer(IRequestWrapper requestWrapper, ICruiseManagerWrapper manager, ILogInspector logInspector, ICacheManager cacheManager)
+		public LogViewer(IRequestWrapper requestWrapper, ICruiseManagerWrapper manager, ICacheManager cacheManager)
 		{
 			this.requestWrapper = requestWrapper;
 			this.manager = manager;
-			this.logInspector = logInspector;
 			this.cacheManager = cacheManager;
 		}
 
@@ -26,11 +24,34 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.LogViewerPlugin
 		{
 			string serverName = requestWrapper.GetServerName();
 			string projectName = requestWrapper.GetProjectName();
-			string log = manager.GetLog(serverName, projectName, requestWrapper.GetLogSpecifier());
-			string logFilename = logInspector.GetLogFileName(log);
-			cacheManager.AddContent(serverName, projectName, CacheDirectory, logFilename, log);
+			string logName = GetLogName(serverName, projectName);
 
-			return new LogViewerResults(cacheManager.GetURLForFile(serverName, projectName, CacheDirectory, logFilename));
+			PutLogInCacheIfNecessary(serverName, projectName, logName);
+
+			return new LogViewerResults(cacheManager.GetURLForFile(serverName, projectName, CacheDirectory, logName));
+		}
+
+		private string GetLogName(string serverName, string projectName)
+		{
+			ILogSpecifier logSpecifier = requestWrapper.GetLogSpecifier();
+
+			if (logSpecifier is NoLogSpecified)
+			{
+				return manager.GetLatestLogName(serverName, projectName);
+			}
+			else
+			{
+				return ((FileNameLogSpecifier) logSpecifier).Filename;
+			}
+		}
+
+		private void PutLogInCacheIfNecessary(string serverName, string projectName, string logName)
+		{
+			if (cacheManager.GetContent(serverName, projectName, CacheDirectory, logName) == null)
+			{
+				string log = manager.GetLog(serverName, projectName, logName);
+				cacheManager.AddContent(serverName, projectName, CacheDirectory, logName, log);
+			}
 		}
 	}
 }

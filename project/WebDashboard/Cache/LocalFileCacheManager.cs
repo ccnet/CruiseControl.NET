@@ -26,6 +26,11 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Cache
 			}
 		}
 
+		public string GetContent(string serverName, string projectName, string directory, string fileName)
+		{
+			throw new NotImplementedException();
+		}
+
 		public string GetURLForFile(string serverName, string projectName, string directory, string fileName)
 		{
 			return pathMapper.GetAbsoluteURLForRelativePath(GetPathforFile(serverName, projectName, directory, fileName));
