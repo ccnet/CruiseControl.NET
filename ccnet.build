@@ -145,6 +145,7 @@
 				<include name="**\*.ascx"/>
 				<include name="**\*.asax"/>
 				<include name="**\*.html"/>
+				<include name="**\*.jpg"/>
 				<include name="**\*.gif"/>
 				<include name="**\*.wav"/>
 				<include name="**\*.css"/>

@@ -344,6 +344,14 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "images\arrow_minus_small.gif"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "images\arrow_plus_small.gif"
+                    BuildAction = "Content"
+                />
+                <File
                     RelPath = "images\bg_blue_stripe.gif"
                     BuildAction = "Content"
                 />
@@ -353,6 +361,10 @@
                 />
                 <File
                     RelPath = "images\ccnet_logo_onwhite.gif"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "images\check.jpg"
                     BuildAction = "Content"
                 />
                 <File
@@ -377,6 +389,10 @@
                 />
                 <File
                     RelPath = "images\fxcop-critical-error.gif"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "images\fxcop-critical-warning.gif"
                     BuildAction = "Content"
                 />
                 <File
