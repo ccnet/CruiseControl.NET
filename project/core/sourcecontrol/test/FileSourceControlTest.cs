@@ -2,7 +2,6 @@ using System;
 using System.IO;
 using System.Threading;
 using NUnit.Framework;
-using ThoughtWorks.CruiseControl.Core.Test;
 using ThoughtWorks.CruiseControl.Core.Util;
 
 namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test
@@ -94,23 +93,14 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test
 		[Test]
 		public void GetModifications_OneUnmodifiedFile()
 		{
-			string file1 = TempFileUtil.CreateTempFile("repo", "file1.txt", "foo");
+			TempFileUtil.CreateTempFile("repo", "file1.txt", "foo");
 			DateTime from = DateTime.Now;
 			Thread.Sleep(100);
-			string file2 = TempFileUtil.CreateTempFile("repo", "file2.txt", "bar");
+			TempFileUtil.CreateTempFile("repo", "file2.txt", "bar");
 
 			Modification[] mods = _sc.GetModifications(from, DateTime.MaxValue);
 			Assert.AreEqual(1, mods.Length);
 			Assert.AreEqual("file2.txt", mods[0].FileName);
-		}
-
-		[Test]
-		public void ShouldRun()
-		{
-			Assert.IsTrue(_sc.ShouldRun(new IntegrationResult()));
-			Assert.IsTrue(_sc.ShouldRun(IntegrationResultMother.CreateSuccessful()));
-			AssertFalse(_sc.ShouldRun(IntegrationResultMother.CreateFailed()));
-			AssertFalse(_sc.ShouldRun(IntegrationResultMother.CreateExceptioned()));
 		}
 	}
 }

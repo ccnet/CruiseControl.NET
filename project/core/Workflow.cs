@@ -57,10 +57,7 @@ namespace ThoughtWorks.CruiseControl.Core
 
 		private void RunTask(BuildCondition buildCondition, ITask task)
 		{
-			if (buildCondition == BuildCondition.ForceBuild || task.ShouldRun(_currentIntegrationResult))
-			{
-				task.Run(_currentIntegrationResult);
-			}
+			task.Run(_currentIntegrationResult);
 		}
 		
 		public IntegrationStatus LatestBuildStatus

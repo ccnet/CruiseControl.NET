@@ -121,15 +121,5 @@ namespace ThoughtWorks.CruiseControl.Core.Label.Test
 
 			Assert.AreEqual(prefix + "24", _labeller.Generate(result));
 		}
-
-		[Test]
-		public void ShouldRun()
-		{
-			IProject project = (IProject) new DynamicMock(typeof(IProject)).MockInstance;
-			Assert.IsTrue(_labeller.ShouldRun(new IntegrationResult()));
-			Assert.IsTrue(_labeller.ShouldRun(IntegrationResultMother.CreateSuccessful()));
-			AssertFalse(_labeller.ShouldRun(IntegrationResultMother.CreateFailed()));
-			AssertFalse(_labeller.ShouldRun(IntegrationResultMother.CreateExceptioned()));
-		}
 	}
 }

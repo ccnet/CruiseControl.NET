@@ -90,17 +90,6 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test
 		}
 
 		[Test]
-		public void PassesThroughShouldRun()
-		{
-			//// SETUP
-			IntegrationResult result = new IntegrationResult();
-			_mockSC.ExpectAndReturn("ShouldRun", true, result);
-
-			//// EXECUTE
-			_filteredSourceControl.ShouldRun(result);
-		}
-
-		[Test]
 		public void InvokesMethodsOnTemporaryLabeller() 
 		{
 			//// SETUP

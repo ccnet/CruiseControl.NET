@@ -178,11 +178,6 @@ namespace ThoughtWorks.CruiseControl.Core.Builder
 			return value;
 		}
 
-		public bool ShouldRun(IIntegrationResult result)
-		{
-			return result.Working && result.HasModifications();
-		}
-
 		public override string ToString()
 		{
 			string baseDirectory = (ConfiguredBaseDirectory != null ? ConfiguredBaseDirectory : "");

@@ -104,5 +104,17 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 			list.Insert(index, insert);
 			return (string[])list.ToArray(typeof(string));
 		}
+
+		public static string Join(string separator, object[] objects)
+		{
+			StringBuilder builder = new StringBuilder();
+			foreach (object obj in objects)
+			{
+				if (obj == null) continue;
+				if (builder.Length > 0) builder.Append(separator);
+				builder.Append(obj.ToString());
+			}
+			return builder.ToString();
+		}
 	}
 }

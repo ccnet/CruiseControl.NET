@@ -24,11 +24,6 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 		[ReflectorProperty("timeout", Required=false)]
 		public int Timeout = DEFAULT_TIMEOUT;
 
-		public bool ShouldRun(IIntegrationResult result)
-		{
-			return result.Working;
-		}
-
 		public void Run(IIntegrationResult result)
 		{
 			result.Modifications = GetModifications(result.LastModificationDate, DateTime.Now);

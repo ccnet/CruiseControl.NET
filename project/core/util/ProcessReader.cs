@@ -37,6 +37,11 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 			get { return output.ToString(); }
 		}
 
+		/// <summary>
+		/// StreamReader.Peek() does not detect if there are no more characters in the buffer and the stream is blocked.
+		/// It will return -1 if the buffer has been read, without checking if the stream is blocked.
+		/// Hence, you can't rely on Peek() to determine if the end of the stream has been reached.
+		/// </summary>
 		private void ReadToEnd()
 		{
 			int nextChar;

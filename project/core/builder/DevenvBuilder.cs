@@ -95,10 +95,5 @@ namespace ThoughtWorks.CruiseControl.Core.Builder
 		{
 			get { return string.Format("{0} /rebuild {1}", SolutionFile, Configuration); }
 		}
-
-		public bool ShouldRun(IIntegrationResult result)
-		{
-			return result.Working && result.HasModifications();
-		}
 	}
 }

@@ -37,15 +37,12 @@ namespace ThoughtWorks.CruiseControl.Core.Test
 		{
 			Workflow project = new Workflow();
 			IMock taskMock1 = new DynamicMock(typeof (ITask));
-			taskMock1.ExpectAndReturn("ShouldRun", true, new NotNull());
 			taskMock1.Expect("Run", new NotNull());
 
 			IMock taskMock2 = new DynamicMock(typeof (ITask));
-			taskMock2.ExpectAndReturn("ShouldRun", true, new NotNull());
 			taskMock2.Expect("Run", new NotNull());
 
 			IMock taskMock3 = new DynamicMock(typeof (ITask));
-			taskMock3.ExpectAndReturn("ShouldRun", false, new NotNull());
 			taskMock3.Expect("Run", new NotNull());
 
 			project.Tasks.Add(taskMock1.MockInstance);
@@ -86,11 +83,9 @@ namespace ThoughtWorks.CruiseControl.Core.Test
 			Workflow project = new Workflow();
 			Exception ex = new CruiseControlException("foo");
 			IMock taskMock1 = new DynamicMock(typeof (ITask));
-			taskMock1.ExpectAndReturn("ShouldRun", true, new NotNull());
 			taskMock1.ExpectAndThrow("Run", ex, new NotNull());
 
 			IMock taskMock2 = new DynamicMock(typeof (ITask));
-			taskMock2.ExpectAndReturn("ShouldRun", true, new NotNull());
 			taskMock2.Expect("Run", new NotNull());
 
 			project.Tasks.Add(taskMock1.MockInstance);

@@ -40,11 +40,6 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
             }
         }
 
-        public bool ShouldRun(IIntegrationResult result)
-        {
-            return true;
-        }
-
 		public string MergeFilesForPresentation
 		{
 			get

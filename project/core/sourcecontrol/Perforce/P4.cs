@@ -152,11 +152,6 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Perforce
 			}
 		}
 
-		public bool ShouldRun(IIntegrationResult result)
-		{
-			return true;
-		}
-
 		public void Run(IIntegrationResult result)
 		{
 			result.Modifications = GetModifications(result.LastModificationDate, DateTime.Now);

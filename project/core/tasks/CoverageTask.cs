@@ -67,11 +67,5 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 			_instrument.Report();
 			result.TaskResults.Add(new FileTaskResult(new FileInfo(_reportFileName)));
 		}
-
-		public bool ShouldRun(IIntegrationResult result)
-		{
-			return true;
-		}
-
 	}
 }

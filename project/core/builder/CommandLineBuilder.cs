@@ -105,11 +105,6 @@ namespace ThoughtWorks.CruiseControl.Core.Builder
 			get { return string.Format("{0} {1}", Executable, BuildArgs); }
 		}
 
-		public bool ShouldRun(IIntegrationResult result)
-		{
-			return result.Working && result.HasModifications();
-		}
-
 		public override string ToString()
 		{
 			return string.Format(@" BaseDirectory: {0}, Executable: {1}", ConfiguredBaseDirectory, Executable);

@@ -46,11 +46,6 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			}
 		}
 
-		public bool ShouldRun(IIntegrationResult result)
-		{
-			return true;
-		}
-
 		public void Run(IIntegrationResult result)
 		{
 			result.Modifications = GetModifications(result.LastModificationDate, DateTime.Now);

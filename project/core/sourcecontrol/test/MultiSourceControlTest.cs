@@ -1,9 +1,8 @@
+using System;
+using System.Collections;
 using Exortech.NetReflector;
 using NMock;
 using NUnit.Framework;
-using System;
-using System.Collections;
-using ThoughtWorks.CruiseControl.Core.Test;
 using ThoughtWorks.CruiseControl.Core.Util;
 
 namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test
@@ -113,17 +112,6 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test
 			Assert.IsTrue(returnedMods.Contains(mod1));
 			Assert.IsTrue(returnedMods.Contains(mod2));
 			Assert.IsTrue(returnedMods.Contains(mod3));
-		}
-
-		[Test]
-		public void ShouldRun()
-		{
-			FileSourceControl sc = new FileSourceControl();
-			IProject project = (IProject) new DynamicMock(typeof(IProject)).MockInstance;
-			Assert.IsTrue(sc.ShouldRun(new IntegrationResult()));
-			Assert.IsTrue(sc.ShouldRun(IntegrationResultMother.CreateSuccessful()));
-			AssertFalse(sc.ShouldRun(IntegrationResultMother.CreateFailed()));
-			AssertFalse(sc.ShouldRun(IntegrationResultMother.CreateExceptioned()));
 		}
 
 		[Test]

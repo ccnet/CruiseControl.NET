@@ -35,11 +35,6 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 			set { _nunitPath = value; }
 		}
 
-		public bool ShouldRun(IIntegrationResult result)
-		{
-			return true;
-		}
-
 		public virtual void Run(IIntegrationResult result)
 		{
 			string args = new NUnitArgument(Assembly).ToString();

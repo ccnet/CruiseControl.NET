@@ -129,16 +129,6 @@ namespace ThoughtWorks.CruiseControl.Core.Builder.Test
 		}
 
 		[Test]
-		public void ShouldRun()
-		{
-			AssertFalse(_builder.ShouldRun(new IntegrationResult()));
-			Assert.IsTrue(_builder.ShouldRun(CreateIntegrationResultWithModifications(IntegrationStatus.Unknown)));
-			Assert.IsTrue(_builder.ShouldRun(CreateIntegrationResultWithModifications(IntegrationStatus.Success)));
-			AssertFalse(_builder.ShouldRun(CreateIntegrationResultWithModifications(IntegrationStatus.Failure)));
-			AssertFalse(_builder.ShouldRun(CreateIntegrationResultWithModifications(IntegrationStatus.Exception)));
-		}
-
-		[Test]
 		public void IfConfiguredBaseDirectoryIsNotSetUseProjectWorkingDirectoryAsBaseDirectory()
 		{
 			_builder.ConfiguredBaseDirectory = null;
@@ -194,14 +184,6 @@ namespace ThoughtWorks.CruiseControl.Core.Builder.Test
 		private ProcessResult CreateSuccessfulProcessResult()
 		{
 			return new ProcessResult("output", null, SUCCESSFUL_EXIT_CODE, false);
-		}
-
-		private IntegrationResult CreateIntegrationResultWithModifications (IntegrationStatus status)
-		{
-			IntegrationResult result = new IntegrationResult ();
-			result.Status = status;
-			result.Modifications = new Modification[] { new Modification () };
-			return result;
 		}
 	}
 }

@@ -64,11 +64,6 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			_realScProvider.LabelSourceControl(label, timeStamp);
 		}
 
-		public bool ShouldRun(IIntegrationResult result)
-		{
-			return _realScProvider.ShouldRun(result);
-		}
-
 		public void Run(IIntegrationResult result)
 		{
 			result.Modifications = GetModifications(result.LastModificationDate, DateTime.Now);

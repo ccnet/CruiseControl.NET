@@ -11,11 +11,6 @@ namespace ThoughtWorks.CruiseControl.Core
 			//No op
 		}
 
-		public bool ShouldRun(IIntegrationResult result)
-		{
-			return true;
-		}
-
 		public Modification[] GetModifications(DateTime from, DateTime to)
 		{
 			Modification m = new Modification();
