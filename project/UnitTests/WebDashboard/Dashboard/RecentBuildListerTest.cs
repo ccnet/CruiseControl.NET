@@ -1,8 +1,10 @@
 using System.Web.UI;
 using System.Web.UI.HtmlControls;
 using NMock;
+using NMock.Constraints;
 using NUnit.Framework;
 using ThoughtWorks.CruiseControl.WebDashboard.Dashboard;
+using ThoughtWorks.CruiseControl.WebDashboard.MVC.Cruise;
 using ThoughtWorks.CruiseControl.WebDashboard.MVC.View;
 using ThoughtWorks.CruiseControl.WebDashboard.ServerConnection;
 
@@ -55,8 +57,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 
 		private void SetupBuildExpectations()
 		{
-			urlBuilderMock.ExpectAndReturn("BuildBuildUrl", "url1", "BuildReport.aspx", "myServer", "myProject", "build2");
-			urlBuilderMock.ExpectAndReturn("BuildBuildUrl", "url2", "BuildReport.aspx", "myServer", "myProject", "build1");
+			urlBuilderMock.ExpectAndReturn("BuildBuildUrl", "url1", new PropertyIs("ActionName", CruiseActionFactory.VIEW_BUILD_REPORT_ACTION_NAME), "myServer", "myProject", "build2");
+			urlBuilderMock.ExpectAndReturn("BuildBuildUrl", "url2", new PropertyIs("ActionName", CruiseActionFactory.VIEW_BUILD_REPORT_ACTION_NAME), "myServer", "myProject", "build1");
 			nameFormatterMock.ExpectAndReturn("GetPrettyBuildName", "prettyName2", "build2");
 			nameFormatterMock.ExpectAndReturn("GetPrettyBuildName", "prettyName1", "build1");
 			nameFormatterMock.ExpectAndReturn("GetCssClassForBuildLink", "css2", "build2");

@@ -99,7 +99,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 			urlBuilderMock.ExpectAndReturn("BuildUrl", "returnedurl1", "default.aspx");
 			urlBuilderMock.ExpectAndReturn("BuildServerUrl", "returnedurl2", "default.aspx", "myServer");
 			urlBuilderMock.ExpectAndReturn("BuildProjectUrl", "returnedurl3", new PropertyIs("ActionName", CruiseActionFactory.VIEW_PROJECT_REPORT_ACTION_NAME), "myServer", "myProject");
-			urlBuilderMock.ExpectAndReturn("BuildBuildUrl", "returnedurl4", "BuildReport.aspx", "myServer", "myProject", "myBuild");
+			urlBuilderMock.ExpectAndReturn("BuildBuildUrl", "returnedurl4", new PropertyIs("ActionName", CruiseActionFactory.VIEW_BUILD_REPORT_ACTION_NAME), "myServer", "myProject", "myBuild");
 
 			// Execute
 			HtmlTable table = (HtmlTable) viewBuilder.Execute(cruiseRequest);

@@ -111,9 +111,9 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 			buildNameRetrieverMock.ExpectAndReturn("GetLatestBuildName", "returnedLatestBuildName", "myServer", "myProject");
 			buildNameRetrieverMock.ExpectAndReturn("GetNextBuildName", "returnedNextBuildName", "myServer", "myProject", "myCurrentBuild");
 			buildNameRetrieverMock.ExpectAndReturn("GetPreviousBuildName", "returnedPreviousBuildName", "myServer", "myProject", "myCurrentBuild");
-			urlBuilderMock.ExpectAndReturn("BuildBuildUrl", "latestUrl", "BuildReport.aspx", "myServer", "myProject", "returnedLatestBuildName");
-			urlBuilderMock.ExpectAndReturn("BuildBuildUrl", "nextUrl", "BuildReport.aspx", "myServer", "myProject", "returnedNextBuildName");
-			urlBuilderMock.ExpectAndReturn("BuildBuildUrl", "previousUrl", "BuildReport.aspx", "myServer", "myProject", "returnedPreviousBuildName");
+			urlBuilderMock.ExpectAndReturn("BuildBuildUrl", "latestUrl", new PropertyIs("ActionName", CruiseActionFactory.VIEW_BUILD_REPORT_ACTION_NAME), "myServer", "myProject", "returnedLatestBuildName");
+			urlBuilderMock.ExpectAndReturn("BuildBuildUrl", "nextUrl", new PropertyIs("ActionName", CruiseActionFactory.VIEW_BUILD_REPORT_ACTION_NAME), "myServer", "myProject", "returnedNextBuildName");
+			urlBuilderMock.ExpectAndReturn("BuildBuildUrl", "previousUrl", new PropertyIs("ActionName", CruiseActionFactory.VIEW_BUILD_REPORT_ACTION_NAME), "myServer", "myProject", "returnedPreviousBuildName");
 			urlBuilderMock.ExpectAndReturn("BuildBuildUrl", "viewLogUrl", new PropertyIs("ActionName", CruiseActionFactory.VIEW_BUILD_LOG_ACTION_NAME), "myServer", "myProject", "myCurrentBuild");
 			HtmlTable buildsPanel = new HtmlTable();
 			recentBuildsViewBuilderMock.ExpectAndReturn("BuildRecentBuildsTable", buildsPanel, "myServer", "myProject");

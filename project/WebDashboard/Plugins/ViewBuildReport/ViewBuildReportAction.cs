@@ -3,31 +3,33 @@ using System.Collections;
 using System.Configuration;
 using System.IO;
 using System.Text;
+using System.Web.UI;
+using System.Web.UI.HtmlControls;
 using System.Xml;
 using System.Xml.XPath;
 using ThoughtWorks.CruiseControl.Core;
 using ThoughtWorks.CruiseControl.Core.Publishers;
 using ThoughtWorks.CruiseControl.WebDashboard.Dashboard;
 using ThoughtWorks.CruiseControl.WebDashboard.IO;
+using ThoughtWorks.CruiseControl.WebDashboard.MVC.Cruise;
 
-namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.BuildReporterPlugin
+namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.ViewBuildReport
 {
-	public class BuildReporterPageRenderer
+	// ToDo - this is pretty much copied staright from the old web app, and is untested.
+	public class ViewBuildReportAction : ICruiseAction
 	{
 		private readonly IPathMapper pathMapper;
-		private readonly ICruiseRequest request;
 		private readonly IBuildRetriever buildRetriever;
 
-		public BuildReporterPageRenderer(ICruiseRequest request, IBuildRetriever buildRetriever, IPathMapper pathMapper)
+		public ViewBuildReportAction(IBuildRetriever buildRetriever, IPathMapper pathMapper)
 		{
 			this.buildRetriever = buildRetriever;
-			this.request = request;
 			this.pathMapper = pathMapper;
 		}
 
-		public BuildReportResults Do()
+		public Control Execute (ICruiseRequest cruiseRequest)
 		{
-			Build build = buildRetriever.GetBuild(request.ServerName, request.ProjectName, request.BuildName);
+			Build build = buildRetriever.GetBuild(cruiseRequest.ServerName, cruiseRequest.ProjectName, cruiseRequest.BuildName);
 			StringBuilder builder = new StringBuilder();
 			try
 			{
@@ -47,7 +49,9 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.BuildReporterPlugin
 				throw new CruiseControlException(String.Format("Bad XML in logfile: " + ex.Message));
 			}
 
-			return new BuildReportResults(builder.ToString());
+			HtmlGenericControl control = new HtmlGenericControl("div");
+			control.InnerHtml = builder.ToString();
+			return control;
 		}
 
 		private string Transform(string xslfile, XPathDocument logFileDocument)

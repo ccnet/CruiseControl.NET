@@ -44,9 +44,9 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 		public HtmlTable GetBuildSideBar(string serverName, string projectName, string buildName)
 		{
 			return Table(
-				TR( TD( A("Latest", urlBuilder.BuildBuildUrl("BuildReport.aspx", serverName, projectName, buildNameRetriever.GetLatestBuildName(serverName, projectName))))),
-				TR( TD( A("Next", urlBuilder.BuildBuildUrl("BuildReport.aspx", serverName, projectName, buildNameRetriever.GetNextBuildName(serverName, projectName, buildName))))),
-				TR( TD( A("Previous", urlBuilder.BuildBuildUrl("BuildReport.aspx", serverName, projectName, buildNameRetriever.GetPreviousBuildName(serverName, projectName, buildName))))),
+				TR( TD( A("Latest", urlBuilder.BuildBuildUrl(new ActionSpecifierWithName(CruiseActionFactory.VIEW_BUILD_REPORT_ACTION_NAME), serverName, projectName, buildNameRetriever.GetLatestBuildName(serverName, projectName))))),
+				TR( TD( A("Next", urlBuilder.BuildBuildUrl(new ActionSpecifierWithName(CruiseActionFactory.VIEW_BUILD_REPORT_ACTION_NAME), serverName, projectName, buildNameRetriever.GetNextBuildName(serverName, projectName, buildName))))),
+				TR( TD( A("Previous", urlBuilder.BuildBuildUrl(new ActionSpecifierWithName(CruiseActionFactory.VIEW_BUILD_REPORT_ACTION_NAME), serverName, projectName, buildNameRetriever.GetPreviousBuildName(serverName, projectName, buildName))))),
 				TR( TD( A("View Build Log", urlBuilder.BuildBuildUrl(new ActionSpecifierWithName(CruiseActionFactory.VIEW_BUILD_LOG_ACTION_NAME), serverName, projectName, buildName)))),
 				TR( TD( "&nbsp;")),
 				TR( TD( recentBuildsViewBuilder.BuildRecentBuildsTable(serverName, projectName)))

@@ -139,21 +139,6 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "BuildReport.aspx"
-                    BuildAction = "Content"
-                />
-                <File
-                    RelPath = "BuildReport.aspx.cs"
-                    DependentUpon = "BuildReport.aspx"
-                    SubType = "ASPXCodeBehind"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "BuildReport.aspx.resx"
-                    DependentUpon = "BuildReport.aspx.cs"
-                    BuildAction = "EmbeddedResource"
-                />
-                <File
                     RelPath = "Controller.aspx"
                     BuildAction = "Content"
                 />
@@ -654,21 +639,7 @@
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
-                <File
-                    RelPath = "Plugins\PluginPageRendererFactory.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Plugins\BuildReporterPlugin\BuildReporterPageRenderer.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Plugins\BuildReporterPlugin\BuildReportResults.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
+                <Folder RelPath = "Plugins\BuildReporterPlugin\" />
                 <File
                     RelPath = "Plugins\DeleteProject\DeleteProjectHtmlViewBuilder.cs"
                     SubType = "Code"
@@ -700,6 +671,11 @@
                 <Folder RelPath = "Plugins\SiteTemplatePlugin\" />
                 <File
                     RelPath = "Plugins\ViewBuildLog\ViewBuildLogAction.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Plugins\ViewBuildReport\ViewBuildReportAction.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
