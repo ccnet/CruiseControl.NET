@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Specialized;
 using System.Diagnostics;
 using System.IO;
@@ -22,9 +23,9 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 
 		public ProcessInfo(string filename, string arguments, string workingDirectory)
 		{
-			startInfo.FileName = filename;
+			startInfo.FileName = StripQuotes(filename);
 			startInfo.Arguments = arguments;
-			startInfo.WorkingDirectory = workingDirectory;
+			startInfo.WorkingDirectory = StripQuotes(workingDirectory);
 			startInfo.UseShellExecute = false;
 			startInfo.CreateNoWindow = true;
 			startInfo.RedirectStandardOutput = true;
@@ -37,10 +38,10 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 		{
 			if (WorkingDirectory != null)
 			{
-				string exectubleInWorkingDirectory = Path.Combine(WorkingDirectory, FileName);
-				if (File.Exists(exectubleInWorkingDirectory))
+				string executableInWorkingDirectory = Path.Combine(WorkingDirectory, FileName);
+				if (File.Exists(executableInWorkingDirectory))
 				{
-					startInfo.FileName = exectubleInWorkingDirectory;
+					startInfo.FileName = executableInWorkingDirectory;
 				}
 			}
 		}
@@ -112,6 +113,11 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 		{
 			return string.Format("FileName: [{0}] -- Arguments: [{1}] -- WorkingDirectory: [{2}] -- StandardInputContent: [{3}] ",
 			                     FileName, Arguments, WorkingDirectory, StandardInputContent);
+		}
+
+		private string StripQuotes(string filename)
+		{
+			return filename == null ? null : filename.Trim('"');
 		}
 	}
 }

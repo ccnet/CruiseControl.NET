@@ -38,5 +38,12 @@ namespace ThoughtWorks.CruiseControl.Core.Util.Test
 
 			Assert.AreEqual(infoWithPreQualifiedExecutable, infoWithoutPathQualifiedExecutable);
 		}
+		
+		[Test]
+		public void StripQuotesFromQuotedExecutablePath()
+		{
+			ProcessInfo info = new ProcessInfo(@"""c:\nant\nant.exe""", null, @"""c:\working""");
+			Assert.AreEqual(@"c:\nant\nant.exe", info.FileName);
+		}
 	}
 }
