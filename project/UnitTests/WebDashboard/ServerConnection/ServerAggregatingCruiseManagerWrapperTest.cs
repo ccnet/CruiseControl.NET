@@ -1,5 +1,6 @@
 using NMock;
 using NUnit.Framework;
+using ThoughtWorks.CruiseControl.Core;
 using ThoughtWorks.CruiseControl.Remote;
 using ThoughtWorks.CruiseControl.WebDashboard.Config;
 using ThoughtWorks.CruiseControl.WebDashboard.Dashboard;
@@ -280,6 +281,21 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.ServerConnection
 			cruiseManagerMock.Expect("ForceBuild", "myproject");
 
 			managerWrapper.ForceBuild(projectSpecifier);
+			
+			VerifyAll();
+		}
+
+		[Test]
+		public void GetsExternalLinks()
+		{
+			ServerLocation[] servers = new ServerLocation[] { new ServerLocation("myserver", "http://myurl"), new ServerLocation("myotherserver", "http://myotherurl")};
+
+			configurationGetterMock.ExpectAndReturn("GetConfigFromSection", servers, ServersSectionHandler.SectionName);
+			cruiseManagerFactoryMock.ExpectAndReturn("GetCruiseManager", (ICruiseManager) cruiseManagerMock.MockInstance, "http://myurl");
+			ExternalLink[] links = new ExternalLink[] { new ExternalLink("1", "2"), new ExternalLink("3", "4") };
+			cruiseManagerMock.ExpectAndReturn("GetExternalLinks", links, "myproject");
+
+			Assert.AreEqual(links, managerWrapper.GetExternalLinks(projectSpecifier));
 			
 			VerifyAll();
 		}

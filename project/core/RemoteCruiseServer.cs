@@ -110,6 +110,11 @@ namespace ThoughtWorks.CruiseControl.Core
 			_server.UpdateProject(projectName, serializedProject);
 		}
 
+		public ExternalLink[] GetExternalLinks(string projectName)
+		{
+			return _server.GetExternalLinks(projectName);
+		}
+
 		private void RegisterForRemoting()
 		{
 			MarshalByRefObject marshalByRef = (MarshalByRefObject)_server.CruiseManager;

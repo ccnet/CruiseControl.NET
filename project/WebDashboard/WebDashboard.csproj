@@ -994,6 +994,10 @@
                     BuildAction = "None"
                 />
                 <File
+                    RelPath = "templates\ProjectReport.vm"
+                    BuildAction = "None"
+                />
+                <File
                     RelPath = "templates\ProjectSideBar.vm"
                     BuildAction = "None"
                 />

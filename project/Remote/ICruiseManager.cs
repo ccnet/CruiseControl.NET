@@ -64,5 +64,7 @@ namespace ThoughtWorks.CruiseControl.Remote
 		/// Updates the selected project on the server
 		/// </summary>
 		void UpdateProject(string projectName, string serializedProject);
+
+		ExternalLink[] GetExternalLinks(string projectName);
 	}
 }

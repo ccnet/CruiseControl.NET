@@ -112,6 +112,10 @@ namespace ThoughtWorks.CruiseControl.Core.Test
 	<tasks>
 		<merge files="""" />
 	</tasks>
+	<externalLinks>
+		<externalLink name=""My Report"" url=""url1"" />
+		<externalLink name=""My Other Report"" url=""url2"" />
+	</externalLinks>
 </project>";
 
 			Project project = (Project) NetReflector.Read(xml);
@@ -126,6 +130,7 @@ namespace ThoughtWorks.CruiseControl.Core.Test
 			Assert.IsTrue(project.Triggers[0] is ScheduleTrigger);
 			Assert.IsTrue(project.Publishers[0] is XmlLogPublisher);
 			Assert.IsTrue(project.Tasks[0] is MergeFilesTask);
+			Assert.AreEqual("My Other Report", project.ExternalLinks[1].Name );
 			Assert.AreEqual(@"c:\my\working\directory", project.ConfiguredWorkingDirectory);
 
 			VerifyAll();
@@ -151,6 +156,7 @@ namespace ThoughtWorks.CruiseControl.Core.Test
 			Assert.AreEqual(1, project.Triggers.Length);
 			Assert.AreEqual(0, project.Publishers.Length);
 			Assert.AreEqual(0, project.Tasks.Length);
+			Assert.AreEqual(0, project.ExternalLinks.Length);
 			VerifyAll();
 		}
 

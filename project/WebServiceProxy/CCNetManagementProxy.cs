@@ -102,6 +102,11 @@ namespace ThoughtWorks.CruiseControl.WebServiceProxy
 			throw new NotImplementedException();
 		}
 
+		public ExternalLink[] GetExternalLinks(string projectName)
+		{
+			throw new NotImplementedException();
+		}
+
 		public void StartCruiseControl()
 		{
 			Service.StartCruiseControl();

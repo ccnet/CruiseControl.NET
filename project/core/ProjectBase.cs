@@ -14,6 +14,7 @@ namespace ThoughtWorks.CruiseControl.Core
 		private string _configuredWorkingDirectory = "";
 		private string _configuredArtifactDirectory = "";
 		private ITrigger[] triggers = new ITrigger[] { new IntervalTrigger() };
+		private ExternalLink[] externalLinks = new ExternalLink[0];
 
 		[ReflectorProperty("name")]
 		public virtual string Name
@@ -41,6 +42,13 @@ namespace ThoughtWorks.CruiseControl.Core
 		{
 			get { return _configuredArtifactDirectory; }
 			set { _configuredArtifactDirectory = value; }
+		}
+
+		[ReflectorArray("externalLinks", Required=false)]
+		public ExternalLink[] ExternalLinks
+		{
+			get { return externalLinks; }
+			set { externalLinks = value; }
 		}
 
 		public string WorkingDirectory

@@ -1,0 +1,16 @@
+<h2>Project Report for $projectName</h2>
+
+#if ($externalLinks.Length > 0)
+<table class="ExternalLinks">
+	<tr>
+		<th>External Links</th>
+	</tr>
+	#foreach ($externalLink in $externalLinks)
+	<tr bgcolor="Ivory">
+		<td align="Left">
+			<a href="$externalLink.Url">$externalLink.Name</a>
+		</td>
+	</tr>
+	#end
+</table>
+#end

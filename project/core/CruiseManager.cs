@@ -85,6 +85,11 @@ namespace ThoughtWorks.CruiseControl.Core
 			cruiseServer.UpdateProject(projectName, serializedProject);
 		}
 
+		public ExternalLink[] GetExternalLinks(string projectName)
+		{
+			return cruiseServer.GetExternalLinks(projectName);
+		}
+
 		public override object InitializeLifetimeService()
 		{
 			return null;

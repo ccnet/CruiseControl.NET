@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using ThoughtWorks.CruiseControl.Core;
 using ThoughtWorks.CruiseControl.Remote;
 using ThoughtWorks.CruiseControl.WebDashboard.Config;
 using ThoughtWorks.CruiseControl.WebDashboard.Dashboard;
@@ -78,6 +79,11 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.ServerConnection
 		public ProjectStatusListAndExceptions GetProjectStatusListAndCaptureExceptions(IServerSpecifier serverSpecifier)
 		{
 			return GetProjectStatusListAndCaptureExceptions(new IServerSpecifier[] { serverSpecifier });
+		}
+
+		public ExternalLink[] GetExternalLinks(IProjectSpecifier projectSpecifier)
+		{
+			return GetCruiseManager(projectSpecifier).GetExternalLinks(projectSpecifier.ProjectName);
 		}
 
 		private ProjectStatusListAndExceptions GetProjectStatusListAndCaptureExceptions(IServerSpecifier[] serverSpecifiers)

@@ -319,6 +319,11 @@ namespace ThoughtWorks.CruiseControl.Core
 			}
 		}
 
+		public ExternalLink[] GetExternalLinks(string projectName)
+		{
+			return GetIntegrator(projectName).Project.ExternalLinks;
+		}
+
 		private IProjectIntegrator GetIntegrator(string projectName)
 		{
 			IProjectIntegrator integrator = projectIntegrators[projectName];

@@ -99,6 +99,11 @@
                     AssemblyName = "System.Data"
                     HintPath = "..\..\..\..\..\..\WINDOWS\Microsoft.NET\Framework\v1.1.4322\System.Data.dll"
                 />
+                <Reference
+                    Name = "NetReflector"
+                    AssemblyName = "NetReflector"
+                    HintPath = "..\..\lib\NetReflector.dll"
+                />
             </References>
         </Build>
         <Files>
@@ -126,6 +131,11 @@
                 />
                 <File
                     RelPath = "CruiseControlStatus.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "ExternalLink.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

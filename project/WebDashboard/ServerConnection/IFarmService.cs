@@ -1,3 +1,5 @@
+using ThoughtWorks.CruiseControl.Core;
+using ThoughtWorks.CruiseControl.Remote;
 using ThoughtWorks.CruiseControl.WebDashboard.Dashboard;
 
 namespace ThoughtWorks.CruiseControl.WebDashboard.ServerConnection
@@ -11,5 +13,6 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.ServerConnection
 		void ForceBuild(IProjectSpecifier projectSpecifier);
 		ProjectStatusListAndExceptions GetProjectStatusListAndCaptureExceptions();
 		ProjectStatusListAndExceptions GetProjectStatusListAndCaptureExceptions(IServerSpecifier serverSpecifier);
+		ExternalLink[] GetExternalLinks(IProjectSpecifier projectSpecifier);
 	}
 }
