@@ -182,7 +182,7 @@ namespace ThoughtWorks.CruiseControl.Core
 					{
 						if (publisher is XmlLogPublisher)
 						{
-							string[] logFileNames = LogFileUtil.GetLogFileNames(((XmlLogPublisher) publisher).LogDir);
+							string[] logFileNames = LogFileUtil.GetLogFileNames(((XmlLogPublisher) publisher).LogDirectory(projectIntegrator.Project));
 							Array.Reverse(logFileNames);
 							return logFileNames;
 						}
@@ -217,7 +217,7 @@ namespace ThoughtWorks.CruiseControl.Core
 					{
 						if (publisher is XmlLogPublisher)
 						{
-							using (StreamReader sr = new StreamReader(Path.Combine(((XmlLogPublisher) publisher).LogDir, buildName)))
+							using (StreamReader sr = new StreamReader(Path.Combine(((XmlLogPublisher) publisher).LogDirectory(projectIntegrator.Project), buildName)))
 							{
 								return sr.ReadToEnd();
 							}

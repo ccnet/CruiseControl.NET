@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.IO;
 using System.Xml;
+using NMock;
 using NUnit.Framework;
 using Exortech.NetReflector;
 using ThoughtWorks.CruiseControl.Core.Util;
@@ -13,23 +14,26 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers.Test
     [TestFixture]
     public class XmlLogPublisherTest : XmlLogFixture
     {
-        public const string TEMP_SUBDIR = "XmlLogPublisherTest";
+        public static readonly string TEMP_SUBDIR = "XmlLogPublisherTest";
         public static readonly string LOGDIR = TempFileUtil.GetTempPath(TEMP_SUBDIR);
 
         private XmlLogPublisher _publisher;
+    	private string artifactsDirPath;
 
-        [SetUp]
+    	[SetUp]
         public void SetUp()
         {
             TempFileUtil.DeleteTempDir(TEMP_SUBDIR);
             _publisher = CreatePublisher();
+			artifactsDirPath = TempFileUtil.CreateTempDir("artifacts");
         }
 
         [TearDown]
         public void TearDown()
         {
             TempFileUtil.DeleteTempDir(TEMP_SUBDIR);
-        }
+			TempFileUtil.DeleteTempDir("artifacts");
+		}
 
         private XmlLogPublisher CreatePublisher()
         {
@@ -43,7 +47,7 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers.Test
         public void PopulateFromConfig()
         {
             Assert.IsNotNull(_publisher);
-            Assert.AreEqual(LOGDIR, _publisher.LogDir);
+            Assert.AreEqual(LOGDIR, _publisher.ConfiguredLogDirectory);
         }
 
         [Test]
@@ -84,13 +88,48 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers.Test
             _publisher.PublishIntegrationResults(null, result);
 
             string filename = _publisher.GetFilename(result);
-            string outputPath = Path.Combine(_publisher.LogDir, filename);
+            string outputPath = Path.Combine(_publisher.ConfiguredLogDirectory, filename);
             Assert.IsTrue(File.Exists(outputPath), outputPath + " should exist ");
 
             CheckForXml(outputPath);
         }
 
-        [Test]
+		[Test]
+		public void ShouldUseProjectArtifactDirectoryInLogDirectoryIfLogDirNotSetWhenPublishing()
+		{
+			IntegrationResult result = CreateIntegrationResult(IntegrationStatus.Success, true);
+
+			DynamicMock projectMock = new DynamicMock(typeof(IProject));
+			projectMock.ExpectAndReturn("ArtifactDirectory", artifactsDirPath);
+
+			_publisher = new XmlLogPublisher();
+			_publisher.PublishIntegrationResults((IProject) projectMock.MockInstance, result);
+
+			string filename = _publisher.GetFilename(result);
+			string outputPath = Path.Combine(Path.Combine(artifactsDirPath, "buildlogs"), filename);
+			Assert.IsTrue(File.Exists(outputPath), outputPath + " should exist ");
+
+			CheckForXml(outputPath);
+			projectMock.Verify();
+		}
+
+		[Test]
+		public void ShouldGiveLogDirectoryAsConfiguredOneIfOneIsConfigured()
+		{
+			Assert.AreEqual(LOGDIR, _publisher.LogDirectory(new Project()));
+		}
+
+		[Test]
+		public void ShouldUseProjectArtifactDirectoryInLogDirectoryIfLogDirNotSet()
+		{
+			DynamicMock projectMock = new DynamicMock(typeof(IProject));
+			projectMock.ExpectAndReturn("ArtifactDirectory", artifactsDirPath);
+			_publisher = new XmlLogPublisher();
+			Assert.AreEqual(Path.Combine(artifactsDirPath, "buildlogs"), _publisher.LogDirectory((IProject) projectMock.MockInstance));
+			projectMock.Verify();
+		}
+
+		[Test]
         public void Publish_UnknownIntegrationStatus()
         {
             AssertFalse(LOGDIR + " should be not exist at start of test.", Directory.Exists(LOGDIR));
@@ -107,7 +146,7 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers.Test
 			string logFile = TempFileUtil.CreateTempXmlFile(logDir, "foo.xml", "<?xml version=\"1.0\" encoding=\"utf-16\" standalone=\"no\"?><foo bar=\"4\">bat</foo>");
 			TempFileUtil.CreateTempXmlFile(logDir, "zip.xml", "<zip/>");
 
-            _publisher.LogDir = logDir;
+            _publisher.ConfiguredLogDirectory = logDir;
             _publisher.MergeFiles = new string [] {logFile, Path.Combine(logDir, "zi*.xml")};		// include wildcard filename
             _publisher.PublishIntegrationResults(null, result);
 

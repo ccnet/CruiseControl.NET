@@ -5,7 +5,6 @@ using System.Web.UI.HtmlControls;
 using System.Web.UI.WebControls;
 using ThoughtWorks.CruiseControl.Core;
 using ThoughtWorks.CruiseControl.Core.Builder;
-using ThoughtWorks.CruiseControl.Core.Publishers;
 using ThoughtWorks.CruiseControl.Core.Sourcecontrol;
 using ThoughtWorks.CruiseControl.Core.Sourcecontrol.Perforce;
 using ThoughtWorks.CruiseControl.Core.Tasks;
@@ -43,7 +42,6 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.MVC.Cruise
 			rows.AddRange(BuildSourceControlSelectionAndView(project.SourceControl));
 			rows.AddRange(BuildBuilderSelectionAndView(project.Builder));
 			rows.Add(TR(TD("Files To Merge"), TD(MultiLineTextBox("Project.Tasks.0.MergeFilesForPresentation", ((MergeFilesTask) project.Tasks[0]).MergeFilesForPresentation))));
-			rows.Add(TR(TD("Output Log Directory *"), TD(TextBox("Project.Publishers.0.LogDir", ((XmlLogPublisher) project.Publishers[0]).LogDir))));
 			rows.Add(TR(TD("Working Directory"), TD(TextBox("Project.ConfiguredWorkingDirectory", project.ConfiguredWorkingDirectory))));
 			rows.Add(TR(TD("Reporting URL *"), TD(TextBox("Project.WebURL", project.WebURL))));
 

@@ -1,11 +1,8 @@
 using System;
-using System.Collections;
 using System.IO;
 using System.Xml;
-using System.Text.RegularExpressions;
 using Exortech.NetReflector;
 using ThoughtWorks.CruiseControl.Core.Tasks;
-using ThoughtWorks.CruiseControl.Core.Util;
 using ThoughtWorks.CruiseControl.Remote;
 
 namespace ThoughtWorks.CruiseControl.Core.Publishers
@@ -13,21 +10,36 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
     [ReflectorType("xmllogger")]
     public class XmlLogPublisher : PublisherBase
     {
+		private string DEFAULT_LOG_SUBDIRECTORY = "buildlogs";
+
         private string _logDir;
         private MergeFilesTask _mergeTask = new MergeFilesTask();
-        //        private string[] _mergeFiles;
 
         public XmlLogPublisher() : base()
         {
         }
 
-        [ReflectorProperty("logDir")] public string LogDir
+        [ReflectorProperty("logDir", Required = false)] 
+		public string ConfiguredLogDirectory
         {
             get { return _logDir; }
             set { _logDir = value; }
         }
 
-        [ReflectorArray("mergeFiles", Required = false)] public string[] MergeFiles
+		public string LogDirectory(IProject project)
+		{
+			if (ConfiguredLogDirectory == null || ConfiguredLogDirectory == string.Empty)
+			{
+				return Path.Combine(project.ArtifactDirectory, DEFAULT_LOG_SUBDIRECTORY);
+			}
+			else
+			{
+				return ConfiguredLogDirectory;
+			}
+		}
+
+    	[ReflectorArray("mergeFiles", Required = false)] 
+		public string[] MergeFiles
         {
             get { return _mergeTask.MergeFiles; }
 
@@ -41,7 +53,7 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
                 return;
 
 			_mergeTask.Run(result, project);
-            using (XmlIntegrationResultWriter integrationWriter = new XmlIntegrationResultWriter(GetXmlWriter(LogDir, GetFilename(result))))
+            using (XmlIntegrationResultWriter integrationWriter = new XmlIntegrationResultWriter(GetXmlWriter(LogDirectory(project), GetFilename(result))))
             {
                 integrationWriter.Write(result);
             }

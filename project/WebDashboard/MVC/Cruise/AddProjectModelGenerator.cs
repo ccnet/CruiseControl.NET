@@ -33,10 +33,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.MVC.Cruise
 			MergeFilesTask mergeFilesTask = new MergeFilesTask();
 			mergeFilesTask.MergeFilesForPresentation = request.GetText("Project.Tasks.0.MergeFilesForPresentation");
 			project.Tasks = new ITask[] {mergeFilesTask};
-
-			XmlLogPublisher logPublisher = new XmlLogPublisher();
-			logPublisher.LogDir = request.GetText("Project.Publishers.0.LogDir");
-			project.Publishers = new IIntegrationCompletedEventHandler[] { logPublisher };
+			project.Publishers = new IIntegrationCompletedEventHandler[] { new XmlLogPublisher() };
 
 			return new AddProjectModel(project, selectedServerName, serverNames);
 		}
