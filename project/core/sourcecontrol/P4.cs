@@ -19,6 +19,14 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 		private string _client;
 		private string _user;
 		private string _port;
+		private ProcessExecutor processExecutor;
+
+		public P4() : this (new ProcessExecutor()) { }
+
+		public P4(ProcessExecutor processExecutor)
+		{
+			this.processExecutor = processExecutor;
+		}
 
 		[ReflectorProperty("executable", Required=false)]
 		public string Executable
@@ -54,6 +62,9 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			get{ return _port;}
 			set{ _port = value;}
 		}
+
+		[ReflectorProperty("applyLabel", Required = false)]
+		public bool ApplyLabel = false;
 
 		public string BuildCommandArguments(DateTime from, DateTime to)
 		{
@@ -120,6 +131,37 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 
 		public void LabelSourceControl(string label, DateTime timeStamp) 
 		{
+			// TODO - failure handling
+			if (ApplyLabel)
+			{
+				Execute(CreateLabelSpecificationProcess(label));
+				Execute(CreateLabelSyncProcess(label));
+			}
+		}
+
+		private ProcessInfo CreateLabelSpecificationProcess(string label)
+		{
+			ProcessInfo processInfo = new ProcessInfo(Executable, BuildCommonArguments() + "label -i");
+			processInfo.StandardInputContent = string.Format(@"Label:	{0}
+
+Description:
+	Created by CCNet
+
+Options:	unlocked
+
+View:
+	{1}
+", label, View);
+			return processInfo;
+		}
+
+		private ProcessInfo CreateLabelSyncProcess(string label)
+		{
+			if (label == null || label.Length == 0)
+				throw new ApplicationException("Internal Exception - Invalid (null or empty) label passed");
+
+			string args = BuildCommonArguments() + "labelsync -l " + label;
+			return new ProcessInfo(Executable, args);
 		}
 
 		public void GetSource(IntegrationResult result)
@@ -129,7 +171,8 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 
 		protected virtual string Execute(ProcessInfo p)
 		{
-			return new ProcessExecutor().Execute(p).StandardOutput;
+			ProcessResult result = processExecutor.Execute(p);
+			return result.StandardOutput;
 		}
 
 		private string FormatDate(DateTime date)

@@ -8,6 +8,7 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 	{
 		private const int DEFAULT_TIMEOUT = 120000;
 		private ProcessStartInfo startInfo = new ProcessStartInfo();
+		private string standardInputContent = null;
 
 		public ProcessInfo(string filename) : this(filename, null) { }
 
@@ -22,6 +23,7 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 			startInfo.CreateNoWindow = true;
 			startInfo.RedirectStandardOutput = true;
 			startInfo.RedirectStandardError = true;
+			startInfo.RedirectStandardInput = false;
 		}
 
 		public StringDictionary EnvironmentVariables
@@ -44,11 +46,49 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 			get { return startInfo.WorkingDirectory; }
 		}
 
+		public string StandardInputContent
+		{
+			get { return standardInputContent; }
+			set
+			{
+				startInfo.RedirectStandardInput = true;
+				startInfo.UseShellExecute = false;
+				standardInputContent = value;
+			}
+		}
+
+		// Mostly for testing, otherwise its tricky due to the static call to 'Process.Start'
+		public ProcessStartInfo StartInfo
+		{
+			get { return startInfo; }
+		}
+
 		public int TimeOut = DEFAULT_TIMEOUT;
 
 		public Process CreateAndStartNewProcess()
 		{
 			return Process.Start(startInfo);
 		}
+
+		public override bool Equals(object obj)
+		{
+			ProcessInfo otherProcessInfo = obj as ProcessInfo;
+			if (otherProcessInfo == null)
+			{
+				return false;
+			}
+
+			return (FileName == otherProcessInfo.FileName
+				&& Arguments == otherProcessInfo.Arguments
+				&& WorkingDirectory == otherProcessInfo.WorkingDirectory
+				&& StandardInputContent == otherProcessInfo.StandardInputContent);
+		}
+
+		public override string ToString()
+		{
+			return string.Format("FileName: [{0}] -- Arguments: [{1}] -- WorkingDirectory: [{2}] -- StandardInputContent: [{3}] ",
+				FileName, Arguments, WorkingDirectory, StandardInputContent);
+		}
+
 	}
 }

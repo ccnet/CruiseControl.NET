@@ -2,3 +2,4 @@
 resharper.caches
 *.resharperoptions
 ccnet.resharper
+.ReSharper.ccnet

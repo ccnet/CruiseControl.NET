@@ -1,5 +1,6 @@
 using System;
 using System.Diagnostics;
+using System.IO;
 
 namespace ThoughtWorks.CruiseControl.Core.Util
 {
@@ -18,6 +19,17 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 			{
 				ProcessReader standardOutput = new ProcessReader(process.StandardOutput);
 				ProcessReader standardError = new ProcessReader(process.StandardError);
+
+				// TODO - not tested yet - any ideas? -- Mike R
+				// TODO - maybe we actually need to do this line-by-line. In that case we should probably extract this 
+				//   to a 'ProcessWriter' and do the thread stuff like the Readers do. -- Mike R
+				if (process.StartInfo.RedirectStandardInput)
+				{
+					process.StandardInput.Write(processInfo.StandardInputContent);
+					process.StandardInput.Flush();
+					process.StandardInput.Close();
+				}
+
 				standardOutput.Start();
 				standardError.Start();
 

@@ -1,4 +1,5 @@
 using System;
+using System.IO;
 using NUnit.Framework;
 using NMock;
 using ThoughtWorks.CruiseControl.Core.Test;
@@ -10,6 +11,21 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test
 	[TestFixture]
 	public class P4Test : CustomAssertion
 	{
+		DynamicMock mockProcessExecutor;
+
+		[SetUp]
+		public void Setup()
+		{
+			mockProcessExecutor = new DynamicMock(typeof(ProcessExecutor)); 
+			mockProcessExecutor.Strict = true;
+		}
+
+		[TearDown]
+		public void TearDown()
+		{
+			TempFileUtil.DeleteTempDir("ccnet");
+		}
+
 		[Test]
 		public void ReadConfig()
 		{
@@ -33,6 +49,13 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test
 		private P4 CreateP4(string p4root)
 		{
 			P4 perforce = new P4();
+			NetReflector.Read(p4root, perforce);
+			return perforce;
+		}
+		
+		private P4 CreateP4(ProcessExecutor processExecutor, string p4root)
+		{
+			P4 perforce = new P4(processExecutor);
 			NetReflector.Read(p4root, perforce);
 			return perforce;
 		}
@@ -61,7 +84,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test
 <sourceControl name=""p4"">
 </sourceControl>
 ";
-			P4 p4 = CreateP4(xml);
+			CreateP4(xml);
 		}
 
 		[Test]
@@ -185,5 +208,82 @@ exit: 0
 			AssertEquals(7, result.Length);
 		}
 
+		[Test]
+		public void LabelSourceControlIfApplyLabelTrue()
+		{
+				string configXml = @"
+<sourceControl name=""p4"">
+  <executable>c:\bin\p4.exe</executable>
+  <view>//depot/myproject/...</view>
+  <client>myclient</client>
+  <user>me</user>
+  <port>anotherserver:2666</port>
+  <applyLabel>true</applyLabel>
+</sourceControl>
+";
+			string expectedLabelView = @"Label:	123
+
+Description:
+	Created by CCNet
+
+Options:	unlocked
+
+View:
+	//depot/myproject/...
+";
+			string label = "123";
+
+			ProcessInfo expectedLabelSpecProcess = new ProcessInfo("c:\\bin\\p4.exe", "-s -c myclient -p anotherserver:2666 -u me label -i");
+			expectedLabelSpecProcess.StandardInputContent = expectedLabelView;
+
+			ProcessInfo expectedLabelSyncProcess = new ProcessInfo("c:\\bin\\p4.exe", "-s -c myclient -p anotherserver:2666 -u me labelsync -l 123");
+
+			mockProcessExecutor.ExpectAndReturn("Execute", "", expectedLabelSpecProcess);
+			mockProcessExecutor.ExpectAndReturn("Execute", "", expectedLabelSyncProcess);
+			CreateP4((ProcessExecutor) mockProcessExecutor.MockInstance, configXml).LabelSourceControl(label,DateTime.Now);
+
+			mockProcessExecutor.Verify();
+		}
+
+		[Test]
+		public void DontLabelSourceControlIfApplyLabelFalse()
+		{
+			string configXml = @"
+<sourceControl name=""p4"">
+  <executable>c:\bin\p4.exe</executable>
+  <view>//depot/myproject/...</view>
+  <client>myclient</client>
+  <user>me</user>
+  <port>anotherserver:2666</port>
+  <applyLabel>false</applyLabel>
+</sourceControl>
+";
+			string label = "123";
+
+			mockProcessExecutor.ExpectNoCall("Execute", typeof(ProcessInfo));
+			CreateP4((ProcessExecutor) mockProcessExecutor.MockInstance, configXml).LabelSourceControl(label,DateTime.Now);
+
+			mockProcessExecutor.Verify();
+		}
+
+		[Test]
+		public void DontLabelSourceControlIfApplyLabelNotSet()
+		{
+			string configXml = @"
+<sourceControl name=""p4"">
+  <executable>c:\bin\p4.exe</executable>
+  <view>//depot/myproject/...</view>
+  <client>myclient</client>
+  <user>me</user>
+  <port>anotherserver:2666</port>
+</sourceControl>
+";
+			string label = "123";
+
+			mockProcessExecutor.ExpectNoCall("Execute", typeof(ProcessInfo));
+			CreateP4((ProcessExecutor) mockProcessExecutor.MockInstance, configXml).LabelSourceControl(label,DateTime.Now);
+
+			mockProcessExecutor.Verify();
+		}
 	}
 }
