@@ -9,7 +9,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test
 		{
 			get
 			{
-				return new StringReader(ClearCase_LOGFILE_CONTENT);
+				return new StringReader(OUTPUT);
 			}
 		}
 		 
@@ -32,7 +32,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test
 		
 		#region test cleartool output
 
-		public static string ClearCase_LOGFILE_CONTENT 
+		public static string OUTPUT 
 		{
 			get 
 			{
