@@ -1,3 +1,4 @@
+using System;
 using System.Net;
 using System.Web;
 using System.Web.UI;
@@ -23,6 +24,11 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.IO
 		public string GetAbsoluteURLForRelativePath(string relativePath)
 		{
 			return string.Format("{0}://{1}:{2}{3}", context.Request.Url.Scheme, Dns.GetHostName(), context.Request.Url.Port, webControl.ResolveUrl(relativePath));
+		}
+
+		public string PhysicalApplicationPath
+		{
+			get { return context.Request.PhysicalApplicationPath; }
 		}
 	}
 }

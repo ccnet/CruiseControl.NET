@@ -324,6 +324,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "UnitTestUtils\HashtableConstraint.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Web\ConfigSectionTest.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -518,7 +523,7 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "WebDashboard\Plugins\ViewServerLog\ViewServerLogActionTest.cs"
+                    RelPath = "WebDashboard\Plugins\ViewServerLog\ServerLogServerPluginTest.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

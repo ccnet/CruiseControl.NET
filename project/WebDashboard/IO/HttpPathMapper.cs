@@ -1,3 +1,4 @@
+using System;
 using System.Web;
 using System.Web.UI;
 
@@ -20,6 +21,11 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.IO
 		public string GetLocalPathFromURLPath(string originalPath)
 		{
 			return context.Server.MapPath(originalPath);
+		}
+
+		public string PhysicalApplicationPath
+		{
+			get { return context.Request.PhysicalApplicationPath; }
 		}
 
 		public string GetAbsoluteURLForRelativePath(string relativePath)

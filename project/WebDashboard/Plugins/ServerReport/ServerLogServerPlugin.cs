@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Web.UI;
 using System.Web.UI.HtmlControls;
 using ThoughtWorks.CruiseControl.WebDashboard.Dashboard;
@@ -10,16 +11,20 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.ServerReport
 	public class ServerLogServerPlugin : ICruiseAction, IPluginLinkRenderer, IPlugin
 	{
 		private readonly IFarmService farmService;
+		private readonly IHashtableTransformer velocityTransformer;
 
-		public ServerLogServerPlugin(IFarmService farmService)
+		public ServerLogServerPlugin(IFarmService farmService, IHashtableTransformer velocityTransformer)
 		{
 			this.farmService = farmService;
+			this.velocityTransformer = velocityTransformer;
 		}
 
 		public Control Execute(ICruiseRequest request)
 		{
 			HtmlGenericControl control = new HtmlGenericControl("p");
-			control.InnerHtml = string.Format(@"<pre class=""log"">{0}</pre>", farmService.GetServerLog(request.ServerSpecifier));
+			Hashtable viewObjects = new Hashtable();
+			viewObjects["log"] = farmService.GetServerLog(request.ServerSpecifier);
+			control.InnerHtml = velocityTransformer.Transform(viewObjects, @"templates\ServerLog.vm");    //string.Format(@"<pre class=""log"">{0}</pre>", );
 			return control;
 		}
 

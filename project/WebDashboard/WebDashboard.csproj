@@ -129,6 +129,21 @@
                     AssemblyName = "System.Configuration.Install"
                     HintPath = "..\..\..\..\..\..\WINDOWS\Microsoft.NET\Framework\v1.1.4322\System.Configuration.Install.dll"
                 />
+                <Reference
+                    Name = "NVelocity"
+                    AssemblyName = "NVelocity"
+                    HintPath = "..\..\lib\NVelocity.dll"
+                />
+                <Reference
+                    Name = "Commons"
+                    AssemblyName = "Commons"
+                    HintPath = "..\..\lib\Commons.dll"
+                />
+                <Reference
+                    Name = "log4net"
+                    AssemblyName = "log4net"
+                    HintPath = "..\..\lib\log4net.dll"
+                />
             </References>
         </Build>
         <Files>
@@ -383,6 +398,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Dashboard\IHashtableTransformer.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Dashboard\ILinkFactory.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -484,6 +504,11 @@
                 />
                 <File
                     RelPath = "Dashboard\SideBarViewBuilder.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Dashboard\StaticInitialisedVelocityTransformer.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -865,6 +890,10 @@
                     RelPath = "ServerConnection\UnknownServerException.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "templates\ServerLog.vm"
+                    BuildAction = "None"
                 />
                 <Folder RelPath = "test\" />
                 <File

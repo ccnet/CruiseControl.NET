@@ -182,6 +182,7 @@
 				<include name="**\*.css"/>
 				<include name="**\*.xsl"/>
 				<include name="**\*.config"/>
+				<include name="**\*.vm" />
 
 				<exclude name="bin\**\*" />
 				<exclude name="obj\**\*" />

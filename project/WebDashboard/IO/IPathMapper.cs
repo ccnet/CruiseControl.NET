@@ -7,5 +7,6 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.IO
 	{
 		string GetLocalPathFromURLPath(string originalPath);
 		string GetAbsoluteURLForRelativePath(string relativePath);
+		string PhysicalApplicationPath { get; }
 	}
 }
