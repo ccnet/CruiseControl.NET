@@ -117,7 +117,6 @@
 	
 	<target name="deploy.server" depends="compile">
 		<mkdir dir="deployed\server"/>
-		
 		<copy todir="deployed\server" verbose="${verbosity}">
 			<fileset basedir="${src.dir}\console\bin\Debug">
 				<includes name="*.exe" />
@@ -128,7 +127,14 @@
 				<excludes name="SiteMesh.dll" />
 			</fileset>
 		</copy>
-
+		<copy todir="deployed\server" verbose="${verbosity}">
+			<fileset basedir="${src.dir}\service\bin\debug">
+				<includes name="*.exe" />
+				<includes name="*.dll" />
+				<includes name="*.pdb" />
+				<excludes name="SiteMesh.dll" />
+			</fileset>
+		</copy> 
 		<copy todir="deployed\server\xsl" verbose="${verbosity}">
 			<fileset basedir="${src.dir}\core\publishers\xsl">
 				<includes name="**\*.xsl"/>
