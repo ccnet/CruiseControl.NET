@@ -211,17 +211,17 @@ namespace ThoughtWorks.CruiseControl.Core.Test
 			Assert(_project.ShouldRunBuild(results, BuildCondition.ForceBuild));
 
 			Modification mod = new Modification();
-			mod.ModifiedTime = DateTime.Now;
+			mod.ModifiedTime = DateTime.Now.AddSeconds(-2);
 			results.Modifications = new Modification[] { mod };
 
 			Assert("There are modifications, project should run", _project.ShouldRunBuild(results, BuildCondition.IfModificationExists));
 			Assert(_project.ShouldRunBuild(results, BuildCondition.ForceBuild));
 
-			_project.ModificationDelaySeconds = 1000;
+			_project.ModificationDelaySeconds = 100;
 			Assert("There are modifications within ModificationDelay, project should not run", !_project.ShouldRunBuild(results, BuildCondition.IfModificationExists));
 			Assert(_project.ShouldRunBuild(results, BuildCondition.ForceBuild));
 			
-			mod.ModifiedTime = DateTime.Now.AddMinutes(-1);
+			mod.ModifiedTime = DateTime.Now.AddMinutes(-2);
 			Assert("There are no modifications within ModificationDelay, project should run", _project.ShouldRunBuild(results, BuildCondition.IfModificationExists));
 			Assert(_project.ShouldRunBuild(results, BuildCondition.ForceBuild));
 		}
