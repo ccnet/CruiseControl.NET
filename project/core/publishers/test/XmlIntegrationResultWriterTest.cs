@@ -148,7 +148,7 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers.Test
             IntegrationResult result = new IntegrationResult();
             result.Output = "<tag><c></tag>";
             string output = GenerateBuildOutput(result);
-			Assert.AreEqual(@"<build date=""01/01/0001 00:00:00"" buildtime=""00:00:00""><![CDATA[<tag><c></tag>]]></build>", output);
+        	Assert.AreEqual(string.Format(@"<build date=""{0}"" buildtime=""00:00:00""><![CDATA[<tag><c></tag>]]></build>", result.StartTime), output);
 			VerifyXmlIsWellFormed(output);
         }
 
@@ -158,7 +158,7 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers.Test
             IntegrationResult result = new IntegrationResult();
             result.Output = "<tag><c>]]></tag>";
             string output = GenerateBuildOutput(result);
-			Assert.AreEqual(@"<build date=""01/01/0001 00:00:00"" buildtime=""00:00:00""><![CDATA[<tag><c>] ]></tag>]]></build>", output);
+			Assert.AreEqual(string.Format(@"<build date=""{0}"" buildtime=""00:00:00""><![CDATA[<tag><c>] ]></tag>]]></build>", result.StartTime), output);
 			VerifyXmlIsWellFormed(output);
         }
 
