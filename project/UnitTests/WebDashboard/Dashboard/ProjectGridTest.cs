@@ -4,6 +4,7 @@ using NMock;
 using NUnit.Framework;
 using ThoughtWorks.CruiseControl.Remote;
 using ThoughtWorks.CruiseControl.WebDashboard.Dashboard;
+using ThoughtWorks.CruiseControl.WebDashboard.Plugins.ProjectReport;
 using ThoughtWorks.CruiseControl.WebDashboard.ServerConnection;
 
 namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
@@ -13,17 +14,39 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 	{
 		private ProjectGrid projectGrid;
 		private DynamicMock urlBuilderMock;
+		private DynamicMock linkFactoryMock;
+		private IAbsoluteLink projectLink;
+		private IServerSpecifier serverSpecifier;
+		private IProjectSpecifier projectSpecifier;
 
 		[SetUp]
 		public void Setup()
 		{
 			urlBuilderMock = new DynamicMock(typeof(IUrlBuilder));
-			projectGrid = new ProjectGrid((IUrlBuilder) urlBuilderMock.MockInstance);
+			linkFactoryMock = new DynamicMock(typeof(ILinkFactory));
+			projectGrid = new ProjectGrid((IUrlBuilder) urlBuilderMock.MockInstance,
+				(ILinkFactory) linkFactoryMock.MockInstance);
+
+			serverSpecifier = new DefaultServerSpecifier("server");
+			projectSpecifier = new DefaultProjectSpecifier(serverSpecifier, "my project");
+
+			projectLink = new GeneralAbsoluteLink("myLinkText", "myLinkUrl");
 		}
 
 		private void VerifyAll()
 		{
 			urlBuilderMock.Verify();
+			linkFactoryMock.Verify();
+		}
+
+		private void SetupProjectLinkExpectation()
+		{
+			SetupProjectLinkExpectation(projectSpecifier);
+		}
+
+		private void SetupProjectLinkExpectation(IProjectSpecifier projectSpecifierForLink)
+		{
+			linkFactoryMock.ExpectAndReturn("CreateProjectLink", projectLink, projectSpecifierForLink, new ActionSpecifierWithName(ProjectReportProjectPlugin.ACTION_NAME));
 		}
 
 		[Test]
@@ -41,18 +64,19 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 		{
 			// Setup
 			ProjectStatus projectStatus1 = new ProjectStatus(ProjectIntegratorState.Running, 
-				IntegrationStatus.Success, ProjectActivity.Sleeping, "my project", "url", DateTime.Today, "1", DateTime.Today);
+				IntegrationStatus.Success, ProjectActivity.Sleeping, projectSpecifier.ProjectName, "url", DateTime.Today, "1", DateTime.Today);
 			ProjectStatusOnServer[] statusses = new ProjectStatusOnServer[]
 				{
-					new ProjectStatusOnServer(projectStatus1, new DefaultServerSpecifier("server"))
+					new ProjectStatusOnServer(projectStatus1, serverSpecifier)
 				};
 
 			// Execute
+			SetupProjectLinkExpectation();
 			ProjectGridRow[] rows = projectGrid.GenerateProjectGridRows(statusses, "myAction", ProjectGridSortColumn.Name, true);
 
 			// Verify
 			Assert.AreEqual(1, rows.Length);
-			Assert.AreEqual("my project", rows[0].Name);
+			Assert.AreEqual(projectSpecifier.ProjectName, rows[0].Name);
 			VerifyAll();
 		}
 
@@ -61,12 +85,13 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 		{
 			// Setup
 			ProjectStatus projectStatus1 = new ProjectStatus(ProjectIntegratorState.Running, 
-				IntegrationStatus.Success, ProjectActivity.Sleeping, "my project", "url", DateTime.Today, "1", DateTime.Today);
+				IntegrationStatus.Success, ProjectActivity.Sleeping, projectSpecifier.ProjectName, "url", DateTime.Today, "1", DateTime.Today);
 			ProjectStatusOnServer[] statusses = new ProjectStatusOnServer[]
 				{
-					new ProjectStatusOnServer(projectStatus1, new DefaultServerSpecifier("server"))
+					new ProjectStatusOnServer(projectStatus1, serverSpecifier)
 				};
 
+			SetupProjectLinkExpectation();
 			// Execute
 			ProjectGridRow[] rows = projectGrid.GenerateProjectGridRows(statusses, "myAction", ProjectGridSortColumn.Name, true);
 
@@ -76,11 +101,12 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 
 			// Setup
 			projectStatus1 = new ProjectStatus(ProjectIntegratorState.Running, 
-				IntegrationStatus.Failure, ProjectActivity.Sleeping, "my project", "url", DateTime.Today, "1", DateTime.Today);
+				IntegrationStatus.Failure, ProjectActivity.Sleeping, projectSpecifier.ProjectName, "url", DateTime.Today, "1", DateTime.Today);
 			statusses = new ProjectStatusOnServer[]
 				{
-					new ProjectStatusOnServer(projectStatus1, new DefaultServerSpecifier("server"))
+					new ProjectStatusOnServer(projectStatus1, serverSpecifier)
 				};
+			SetupProjectLinkExpectation();
 
 			// Execute
 			rows = projectGrid.GenerateProjectGridRows(statusses, "myAction", ProjectGridSortColumn.Name, true);
@@ -91,11 +117,12 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 
 			// Setup
 			projectStatus1 = new ProjectStatus(ProjectIntegratorState.Running, 
-				IntegrationStatus.Unknown, ProjectActivity.Sleeping, "my project", "url", DateTime.Today, "1", DateTime.Today);
+				IntegrationStatus.Unknown, ProjectActivity.Sleeping, projectSpecifier.ProjectName, "url", DateTime.Today, "1", DateTime.Today);
 			statusses = new ProjectStatusOnServer[]
 				{
-					new ProjectStatusOnServer(projectStatus1, new DefaultServerSpecifier("server"))
+					new ProjectStatusOnServer(projectStatus1, serverSpecifier)
 				};
+			SetupProjectLinkExpectation();
 
 			// Execute
 			rows = projectGrid.GenerateProjectGridRows(statusses, "myAction", ProjectGridSortColumn.Name, true);
@@ -106,11 +133,12 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 
 			// Setup
 			projectStatus1 = new ProjectStatus(ProjectIntegratorState.Running, 
-				IntegrationStatus.Exception, ProjectActivity.Sleeping, "my project", "url", DateTime.Today, "1", DateTime.Today);
+				IntegrationStatus.Exception, ProjectActivity.Sleeping, projectSpecifier.ProjectName, "url", DateTime.Today, "1", DateTime.Today);
 			statusses = new ProjectStatusOnServer[]
 				{
-					new ProjectStatusOnServer(projectStatus1, new DefaultServerSpecifier("server"))
+					new ProjectStatusOnServer(projectStatus1, serverSpecifier)
 				};
+			SetupProjectLinkExpectation();
 
 			// Execute
 			rows = projectGrid.GenerateProjectGridRows(statusses, "myAction", ProjectGridSortColumn.Name, true);
@@ -128,11 +156,12 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 			// Setup
 			DateTime date = DateTime.Today;
 			ProjectStatus projectStatus1 = new ProjectStatus(ProjectIntegratorState.Running, 
-				IntegrationStatus.Success, ProjectActivity.Sleeping, "my project", "url", date, "1", DateTime.Today);
+				IntegrationStatus.Success, ProjectActivity.Sleeping, projectSpecifier.ProjectName, "url", date, "1", DateTime.Today);
 			ProjectStatusOnServer[] statusses = new ProjectStatusOnServer[]
 				{
-					new ProjectStatusOnServer(projectStatus1, new DefaultServerSpecifier("server"))
+					new ProjectStatusOnServer(projectStatus1, serverSpecifier)
 				};
+			SetupProjectLinkExpectation();
 
 			// Execute
 			ProjectGridRow[] rows = projectGrid.GenerateProjectGridRows(statusses, "myAction", ProjectGridSortColumn.Name, true);
@@ -147,11 +176,12 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 		{
 			// Setup
 			ProjectStatus projectStatus1 = new ProjectStatus(ProjectIntegratorState.Running, 
-				IntegrationStatus.Success, ProjectActivity.Sleeping, "my project", "url", DateTime.Today, "my label", DateTime.Today);
+				IntegrationStatus.Success, ProjectActivity.Sleeping, projectSpecifier.ProjectName, "url", DateTime.Today, "my label", DateTime.Today);
 			ProjectStatusOnServer[] statusses = new ProjectStatusOnServer[]
 				{
-					new ProjectStatusOnServer(projectStatus1, new DefaultServerSpecifier("server"))
+					new ProjectStatusOnServer(projectStatus1, serverSpecifier)
 				};
+			SetupProjectLinkExpectation();
 
 			// Execute
 			ProjectGridRow[] rows = projectGrid.GenerateProjectGridRows(statusses, "myAction", ProjectGridSortColumn.Name, true);
@@ -162,11 +192,12 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 
 			// Setup
 			projectStatus1 = new ProjectStatus(ProjectIntegratorState.Stopped, 
-				IntegrationStatus.Success, ProjectActivity.Sleeping, "my project", "url", DateTime.Today, "my label", DateTime.Today);
+				IntegrationStatus.Success, ProjectActivity.Sleeping, projectSpecifier.ProjectName, "url", DateTime.Today, "my label", DateTime.Today);
 			statusses = new ProjectStatusOnServer[]
 				{
-					new ProjectStatusOnServer(projectStatus1, new DefaultServerSpecifier("server"))
+					new ProjectStatusOnServer(projectStatus1, serverSpecifier)
 				};
+			SetupProjectLinkExpectation();
 
 			// Execute
 			rows = projectGrid.GenerateProjectGridRows(statusses, "myAction", ProjectGridSortColumn.Name, true);
@@ -181,11 +212,12 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 		{
 			// Setup
 			ProjectStatus projectStatus1 = new ProjectStatus(ProjectIntegratorState.Running, 
-				IntegrationStatus.Success, ProjectActivity.Sleeping, "my project", "url", DateTime.Today, "my label", DateTime.Today);
+				IntegrationStatus.Success, ProjectActivity.Sleeping, projectSpecifier.ProjectName, "url", DateTime.Today, "my label", DateTime.Today);
 			ProjectStatusOnServer[] statusses = new ProjectStatusOnServer[]
 				{
-					new ProjectStatusOnServer(projectStatus1, new DefaultServerSpecifier("server"))
+					new ProjectStatusOnServer(projectStatus1, serverSpecifier)
 				};
+			SetupProjectLinkExpectation();
 
 			// Execute
 			ProjectGridRow[] rows = projectGrid.GenerateProjectGridRows(statusses, "myAction", ProjectGridSortColumn.Name, true);
@@ -196,11 +228,12 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 
 			// Setup
 			projectStatus1 = new ProjectStatus(ProjectIntegratorState.Stopped, 
-				IntegrationStatus.Success, ProjectActivity.CheckingModifications, "my project", "url", DateTime.Today, "my label", DateTime.Today);
+				IntegrationStatus.Success, ProjectActivity.CheckingModifications, projectSpecifier.ProjectName, "url", DateTime.Today, "my label", DateTime.Today);
 			statusses = new ProjectStatusOnServer[]
 				{
 					new ProjectStatusOnServer(projectStatus1, new DefaultServerSpecifier("server"))
 				};
+			SetupProjectLinkExpectation();
 
 			// Execute
 			rows = projectGrid.GenerateProjectGridRows(statusses, "myAction", ProjectGridSortColumn.Name, true);
@@ -216,11 +249,12 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 			// Setup
 			DateTime date = DateTime.Today;
 			ProjectStatus projectStatus1 = new ProjectStatus(ProjectIntegratorState.Running, 
-				IntegrationStatus.Success, ProjectActivity.Sleeping, "my project", "url", date, "my label", DateTime.Today);
+				IntegrationStatus.Success, ProjectActivity.Sleeping, projectSpecifier.ProjectName, "url", date, "my label", DateTime.Today);
 			ProjectStatusOnServer[] statusses = new ProjectStatusOnServer[]
 				{
-					new ProjectStatusOnServer(projectStatus1, new DefaultServerSpecifier("server"))
+					new ProjectStatusOnServer(projectStatus1, serverSpecifier)
 				};
+			SetupProjectLinkExpectation();
 
 			// Execute
 			ProjectGridRow[] rows = projectGrid.GenerateProjectGridRows(statusses, "myAction", ProjectGridSortColumn.Name, true);
@@ -231,21 +265,23 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 		}
 
 		[Test]
-		public void ShouldCopyUrlFromProjectStatusToProjectRow()
+		public void ShouldCreateLinkToProjectReport()
 		{
 			// Setup
 			ProjectStatus projectStatus1 = new ProjectStatus(ProjectIntegratorState.Running, 
-				IntegrationStatus.Success, ProjectActivity.Sleeping, "my project", "url", DateTime.Today, "1", DateTime.Today);
+				IntegrationStatus.Success, ProjectActivity.Sleeping, projectSpecifier.ProjectName, "url", DateTime.Today, "1", DateTime.Today);
+			
 			ProjectStatusOnServer[] statusses = new ProjectStatusOnServer[]
 				{
-					new ProjectStatusOnServer(projectStatus1, new DefaultServerSpecifier("server"))
+					new ProjectStatusOnServer(projectStatus1, serverSpecifier)
 				};
+			SetupProjectLinkExpectation();
 
 			// Execute
 			ProjectGridRow[] rows = projectGrid.GenerateProjectGridRows(statusses, "myAction", ProjectGridSortColumn.Name, true);
 
 			// Verify
-			Assert.AreEqual("url", rows[0].Url);
+			Assert.AreEqual("myLinkUrl", rows[0].Url);
 			VerifyAll();
 		}
 
@@ -254,14 +290,15 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 		{
 			// Setup
 			ProjectStatus projectStatus1 = new ProjectStatus(ProjectIntegratorState.Running, 
-				IntegrationStatus.Success, ProjectActivity.Sleeping, "myproject", "url", DateTime.Today, "1", DateTime.Today);
+				IntegrationStatus.Success, ProjectActivity.Sleeping, projectSpecifier.ProjectName, "url", DateTime.Today, "1", DateTime.Today);
 			ProjectStatusOnServer[] statusses = new ProjectStatusOnServer[]
 				{
-					new ProjectStatusOnServer(projectStatus1, new DefaultServerSpecifier("myServer"))
+					new ProjectStatusOnServer(projectStatus1, serverSpecifier)
 				};
+			SetupProjectLinkExpectation();
 
 			IActionSpecifier expectedActionSpecifier = new ActionSpecifierWithName("myAction");
-			urlBuilderMock.ExpectAndReturn("BuildFormName", "myForceButton", expectedActionSpecifier, new string[] { "myServer", "myproject" });
+			urlBuilderMock.ExpectAndReturn("BuildFormName", "myForceButton", expectedActionSpecifier, new string[] { serverSpecifier.ServerName, projectSpecifier.ProjectName });
 
 			// Execute
 			ProjectGridRow[] rows = projectGrid.GenerateProjectGridRows(statusses, "myAction", ProjectGridSortColumn.Name, true);
@@ -275,15 +312,20 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 		public void ShouldReturnProjectsSortedByNameIfNameColumnSpecifiedAsSortSeed()
 		{
 			// Setup
+			IProjectSpecifier projectA = new DefaultProjectSpecifier(serverSpecifier, "a");
+			IProjectSpecifier projectB = new DefaultProjectSpecifier(serverSpecifier, "b");
+
 			ProjectStatus projectStatus1 = new ProjectStatus(ProjectIntegratorState.Running, 
 				IntegrationStatus.Success, ProjectActivity.Sleeping, "a", "url", DateTime.Today, "1", DateTime.Today);
 			ProjectStatus projectStatus2 = new ProjectStatus(ProjectIntegratorState.Running, 
 				IntegrationStatus.Success, ProjectActivity.Sleeping, "b", "url", DateTime.Today, "1", DateTime.Today);
 			ProjectStatusOnServer[] statusses = new ProjectStatusOnServer[]
 				{
-					new ProjectStatusOnServer(projectStatus1, new DefaultServerSpecifier("server")),
-					new ProjectStatusOnServer(projectStatus2, new DefaultServerSpecifier("server"))
+					new ProjectStatusOnServer(projectStatus1, serverSpecifier),
+					new ProjectStatusOnServer(projectStatus2, serverSpecifier)
 				};
+			SetupProjectLinkExpectation(projectA);
+			SetupProjectLinkExpectation(projectB);
 
 			// Execute
 			ProjectGridRow[] rows = projectGrid.GenerateProjectGridRows(statusses, "myAction", ProjectGridSortColumn.Name, true);
@@ -292,6 +334,10 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 			Assert.AreEqual(2, rows.Length);
 			Assert.AreEqual("a", rows[0].Name);
 			Assert.AreEqual("b", rows[1].Name);
+
+			// Setup
+			SetupProjectLinkExpectation(projectA);
+			SetupProjectLinkExpectation(projectB);
 
 			// Execute
 			rows = projectGrid.GenerateProjectGridRows(statusses, "myAction", ProjectGridSortColumn.Name, false);
@@ -308,15 +354,20 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 		public void ShouldReturnProjectsSortedByLastBuildDateIfLastBuildDateColumnSpecifiedAsSortSeed()
 		{
 			// Setup
+			IProjectSpecifier projectA = new DefaultProjectSpecifier(serverSpecifier, "a");
+			IProjectSpecifier projectB = new DefaultProjectSpecifier(serverSpecifier, "b");
+
 			ProjectStatus projectStatus1 = new ProjectStatus(ProjectIntegratorState.Running, 
 				IntegrationStatus.Success, ProjectActivity.Sleeping, "b", "url", DateTime.Today, "1", DateTime.Today);
 			ProjectStatus projectStatus2 = new ProjectStatus(ProjectIntegratorState.Running, 
 				IntegrationStatus.Success, ProjectActivity.Sleeping, "a", "url", DateTime.Today.AddHours(1), "1", DateTime.Today);
 			ProjectStatusOnServer[] statusses = new ProjectStatusOnServer[]
 				{
-					new ProjectStatusOnServer(projectStatus1, new DefaultServerSpecifier("server")),
-					new ProjectStatusOnServer(projectStatus2, new DefaultServerSpecifier("server"))
+					new ProjectStatusOnServer(projectStatus1, serverSpecifier),
+					new ProjectStatusOnServer(projectStatus2, serverSpecifier)
 				};
+			SetupProjectLinkExpectation(projectB);
+			SetupProjectLinkExpectation(projectA);
 
 			// Execute
 			ProjectGridRow[] rows = projectGrid.GenerateProjectGridRows(statusses, "myAction", ProjectGridSortColumn.LastBuildDate, true);
@@ -325,6 +376,10 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 			Assert.AreEqual(2, rows.Length);
 			Assert.AreEqual("b", rows[0].Name);
 			Assert.AreEqual("a", rows[1].Name);
+
+			// Setup
+			SetupProjectLinkExpectation(projectB);
+			SetupProjectLinkExpectation(projectA);
 
 			// Execute
 			rows = projectGrid.GenerateProjectGridRows(statusses, "myAction", ProjectGridSortColumn.LastBuildDate, false);
@@ -341,15 +396,19 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 		public void ShouldReturnProjectsSortedByBuildStatusIfBuildStatusColumnSpecifiedAsSortSeed()
 		{
 			// Setup
+			IProjectSpecifier projectA = new DefaultProjectSpecifier(serverSpecifier, "a");
+			IProjectSpecifier projectB = new DefaultProjectSpecifier(serverSpecifier, "b");
 			ProjectStatus projectStatus1 = new ProjectStatus(ProjectIntegratorState.Running, 
 				IntegrationStatus.Success, ProjectActivity.Sleeping, "a", "url", DateTime.Today, "1", DateTime.Today);
 			ProjectStatus projectStatus2 = new ProjectStatus(ProjectIntegratorState.Running, 
 				IntegrationStatus.Failure, ProjectActivity.Sleeping, "b", "url", DateTime.Today.AddHours(1), "1", DateTime.Today);
 			ProjectStatusOnServer[] statusses = new ProjectStatusOnServer[]
 				{
-					new ProjectStatusOnServer(projectStatus1, new DefaultServerSpecifier("server")),
-					new ProjectStatusOnServer(projectStatus2, new DefaultServerSpecifier("server"))
+					new ProjectStatusOnServer(projectStatus1, serverSpecifier),
+					new ProjectStatusOnServer(projectStatus2, serverSpecifier)
 				};
+			SetupProjectLinkExpectation(projectA);
+			SetupProjectLinkExpectation(projectB);
 
 			// Execute
 			ProjectGridRow[] rows = projectGrid.GenerateProjectGridRows(statusses, "myAction", ProjectGridSortColumn.BuildStatus, true);
@@ -358,6 +417,10 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 			Assert.AreEqual(2, rows.Length);
 			Assert.AreEqual("b", rows[0].Name);
 			Assert.AreEqual("a", rows[1].Name);
+
+			// Setup
+			SetupProjectLinkExpectation(projectA);
+			SetupProjectLinkExpectation(projectB);
 
 			// Execute
 			rows = projectGrid.GenerateProjectGridRows(statusses, "myAction", ProjectGridSortColumn.BuildStatus, false);

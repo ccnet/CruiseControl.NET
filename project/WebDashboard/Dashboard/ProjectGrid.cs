@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Drawing;
 using ThoughtWorks.CruiseControl.Remote;
+using ThoughtWorks.CruiseControl.WebDashboard.Plugins.ProjectReport;
 using ThoughtWorks.CruiseControl.WebDashboard.ServerConnection;
 
 namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
@@ -8,10 +9,12 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 	public class ProjectGrid : IProjectGrid
 	{
 		private readonly IUrlBuilder urlBuilder;
+		private readonly ILinkFactory linkFactory;
 
-		public ProjectGrid(IUrlBuilder urlBuilder)
+		public ProjectGrid(IUrlBuilder urlBuilder, ILinkFactory linkFactory)
 		{
 			this.urlBuilder = urlBuilder;
+			this.linkFactory = linkFactory;
 		}
 
 		public ProjectGridRow[] GenerateProjectGridRows(ProjectStatusOnServer[] statusList, string forceBuildActionName,
@@ -21,9 +24,11 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 			foreach (ProjectStatusOnServer statusOnServer in statusList)
 			{
 				ProjectStatus status = statusOnServer.ProjectStatus;
+				IServerSpecifier serverSpecifier = statusOnServer.ServerSpecifier;
+				string projectName = status.Name;
 				rows.Add(
 					new ProjectGridRow(
-						status.Name, 
+						projectName, 
 						status.BuildStatus.ToString(), 
 						CalculateHtmlColor(status.BuildStatus), 
 						status.LastBuildDate, 
@@ -32,9 +37,12 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 						status.Activity.ToString(), 
 						urlBuilder.BuildFormName(
 							new ActionSpecifierWithName(forceBuildActionName), 
-							statusOnServer.ServerSpecifier.ServerName, 
-							status.Name),
-						status.WebURL));
+							serverSpecifier.ServerName, 
+							projectName),
+						linkFactory.CreateProjectLink(
+							new DefaultProjectSpecifier(serverSpecifier, projectName), new ActionSpecifierWithName(ProjectReportProjectPlugin.ACTION_NAME)
+						).Url
+					));
 			}
 
 			rows.Sort(GetComparer(sortColumn, sortIsAscending));
