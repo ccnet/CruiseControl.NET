@@ -49,7 +49,7 @@ namespace tw.ccnet.core.configuration.test
 		[Test, ExpectedException(typeof(ConfigurationException))]
 		public void LoadConfigurationFile_FileOnlyNoPath()
 		{
-			loader.ConfigFile = @"ccnet.config";
+			loader.ConfigFile = @"ccnet_unknown.config";
 			loader.LoadConfiguration();
 		}
 
