@@ -22,16 +22,20 @@ namespace ThoughtWorks.CruiseControl.Web
 
 		private void Page_Load(object sender, System.EventArgs e)
 		{
-//				BodyLabel.InnerText += WebUtil.FormatException(ex);
-
 			string serverLogFilename = GetServerLogFilenameFromConfig();
-			string logData = ReadLinesFromLog(serverLogFilename, 20);
-			LogData.InnerText += logData;
+			string logData = ReadLinesFromLog(serverLogFilename, GetServerLogLinesFromConfig());
+			LogData.InnerHtml += WebUtil.FormatMultiline(logData);
 		}
 
 		private string GetServerLogFilenameFromConfig()
 		{
 			return ConfigurationSettings.AppSettings["ServerLogFilePath"];
+		}
+
+		private int GetServerLogLinesFromConfig()
+		{
+			string configValue = ConfigurationSettings.AppSettings["ServerLogFileLines"];
+			return (configValue != null) ? int.Parse(ConfigurationSettings.AppSettings["ServerLogFileLines"]) : 80;
 		}
 
 		private string ReadLinesFromLog(string filename, int lines)

@@ -46,6 +46,11 @@ namespace ThoughtWorks.CruiseControl.Web
 			return "<br/>ERROR: " + message;
 		}
 
+		public static string FormatMultiline(string multilineString)
+		{
+			return multilineString.Replace(Environment.NewLine, @"<br>");
+		}
+
 		public static DirectoryInfo GetLogDirectory(HttpContext context)
 		{
 			string dirName = Configuration.LogDir;
