@@ -1,29 +1,21 @@
 using System.Web.UI;
-using ThoughtWorks.CruiseControl.WebDashboard.Dashboard;
 using ThoughtWorks.CruiseControl.WebDashboard.IO;
-using ThoughtWorks.CruiseControl.WebDashboard.MVC;
+using ThoughtWorks.CruiseControl.WebDashboard.MVC.Cruise;
 
 namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.DeleteProject
 {
-	public class ShowDeleteProjectAction : IAction
+	public class ShowDeleteProjectAction : ICruiseAction
 	{
 		private readonly IDeleteProjectViewBuilder viewBuilder;
-		private readonly ICruiseRequestFactory cruiseRequestFactory;
 
-		public ShowDeleteProjectAction(ICruiseRequestFactory cruiseRequestFactory, IDeleteProjectViewBuilder viewBuilder)
+		public ShowDeleteProjectAction(IDeleteProjectViewBuilder viewBuilder)
 		{
-			this.cruiseRequestFactory = cruiseRequestFactory;
 			this.viewBuilder = viewBuilder;
 		}
 
-		public Control Execute(IRequest request)
+		public Control Execute(ICruiseRequest request)
 		{
-			return viewBuilder.BuildView(BuildModel(cruiseRequestFactory.CreateCruiseRequest(request)));
-		}
-
-		private DeleteProjectModel BuildModel(ICruiseRequest cruiseRequest)
-		{
-			return BuildModel(cruiseRequest.ServerName, cruiseRequest.ProjectName);
+			return viewBuilder.BuildView(BuildModel(request.ServerName, request.ProjectName));
 		}
 
 		private DeleteProjectModel BuildModel(string serverName, string projectName)

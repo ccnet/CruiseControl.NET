@@ -1,12 +1,8 @@
-using System;
-using System.Collections.Specialized;
 using System.Web.UI;
 using NMock;
 using NMock.Constraints;
 using NUnit.Framework;
-using ThoughtWorks.CruiseControl.WebDashboard.Dashboard;
 using ThoughtWorks.CruiseControl.WebDashboard.IO;
-using ThoughtWorks.CruiseControl.WebDashboard.MVC;
 using ThoughtWorks.CruiseControl.WebDashboard.MVC.Cruise;
 
 namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.MVC.Cruise
@@ -14,34 +10,28 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.MVC.Cruise
 	[TestFixture]
 	public class ServerAndProjectCheckingProxyActionTest : Assertion
 	{
-		private DynamicMock cruiseRequestFactoryMock;
 		private DynamicMock errorViewBuilderMock;
 		private DynamicMock proxiedActionMock;
 		private ServerAndProjectCheckingProxyAction checkingAction;
 
 		private DynamicMock cruiseRequestMock;
 		private ICruiseRequest cruiseRequest;
-		private IRequest request;
 
 		[SetUp]
 		public void Setup()
 		{
-			cruiseRequestFactoryMock = new DynamicMock(typeof(ICruiseRequestFactory));
 			errorViewBuilderMock = new DynamicMock(typeof(IErrorViewBuilder));
-			proxiedActionMock = new DynamicMock(typeof(IAction));
+			proxiedActionMock = new DynamicMock(typeof(ICruiseAction));
 			checkingAction = new ServerAndProjectCheckingProxyAction(
-				(IAction) proxiedActionMock.MockInstance,
-				(IErrorViewBuilder) errorViewBuilderMock.MockInstance,
-				(ICruiseRequestFactory) cruiseRequestFactoryMock.MockInstance);
+				(ICruiseAction) proxiedActionMock.MockInstance,
+				(IErrorViewBuilder) errorViewBuilderMock.MockInstance);
 
 			cruiseRequestMock = new DynamicMock(typeof(ICruiseRequest));
 			cruiseRequest = (ICruiseRequest) cruiseRequestMock.MockInstance;
-			request = new NameValueCollectionRequest(new NameValueCollection());
 		}
 
 		private void VerifyAll()
 		{
-			cruiseRequestFactoryMock.Verify();
 			errorViewBuilderMock.Verify();
 			cruiseRequestMock.Verify();
 			proxiedActionMock.Verify();
@@ -52,14 +42,13 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.MVC.Cruise
 		{
 			Control view = new Control();
 			// Setup
-			cruiseRequestFactoryMock.ExpectAndReturn("CreateCruiseRequest", cruiseRequest, request);
 			cruiseRequestMock.ExpectAndReturn("ServerName", "myServer");
 			cruiseRequestMock.ExpectAndReturn("ProjectName", "myProject");
 			errorViewBuilderMock.ExpectNoCall("BuildView", typeof(string));
-			proxiedActionMock.ExpectAndReturn("Execute", view, request);
+			proxiedActionMock.ExpectAndReturn("Execute", view, cruiseRequest);
 
 			// Execute
-			Control returnedView = checkingAction.Execute(request);
+			Control returnedView = checkingAction.Execute(cruiseRequest);
 
 			// Verify
 			AssertEquals(view, returnedView);
@@ -71,13 +60,12 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.MVC.Cruise
 		{
 			Control view = new Control();
 			// Setup
-			cruiseRequestFactoryMock.ExpectAndReturn("CreateCruiseRequest", cruiseRequest, request);
 			cruiseRequestMock.ExpectAndReturn("ServerName", "");
 			errorViewBuilderMock.ExpectAndReturn("BuildView", view, new IsTypeOf(typeof(string)));
-			proxiedActionMock.ExpectNoCall("Execute", typeof(IRequest));
+			proxiedActionMock.ExpectNoCall("Execute", typeof(ICruiseRequest));
 
 			// Execute
-			Control returnedView = checkingAction.Execute(request);
+			Control returnedView = checkingAction.Execute(cruiseRequest);
 
 			// Verify
 			AssertEquals(view, returnedView);
@@ -89,14 +77,13 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.MVC.Cruise
 		{
 			Control view = new Control();
 			// Setup
-			cruiseRequestFactoryMock.ExpectAndReturn("CreateCruiseRequest", cruiseRequest, request);
 			cruiseRequestMock.ExpectAndReturn("ServerName", "myServer");
 			cruiseRequestMock.ExpectAndReturn("ProjectName", "");
 			errorViewBuilderMock.ExpectAndReturn("BuildView", view, new IsTypeOf(typeof(string)));
-			proxiedActionMock.ExpectNoCall("Execute", typeof(IRequest));
+			proxiedActionMock.ExpectNoCall("Execute", typeof(ICruiseRequest));
 
 			// Execute
-			Control returnedView = checkingAction.Execute(request);
+			Control returnedView = checkingAction.Execute(cruiseRequest);
 
 			// Verify
 			AssertEquals(view, returnedView);

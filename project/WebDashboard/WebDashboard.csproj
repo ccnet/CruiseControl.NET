@@ -601,12 +601,22 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "MVC\Cruise\CruiseActionProxyAction.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "MVC\Cruise\DefaultCruiseAction.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
                     RelPath = "MVC\Cruise\DisplayAddProjectPageAction.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "MVC\Cruise\ICruiseAction.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

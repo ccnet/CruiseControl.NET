@@ -50,16 +50,14 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.MVC.Cruise
 			}
 			else if (actionName == SHOW_DELETE_PROJECT_ACTION_NAME)
 			{
-				return new ServerAndProjectCheckingProxyAction(
-					new ShowDeleteProjectAction(
-						dcFactory.NameValueCruiseRequestFactory, 
-						new DeleteProjectHtmlViewBuilder(
-							dcFactory.DefaultHtmlBuilder,
-							dcFactory.DefaultUrlBuilder
-						)),
-					new SimpleErrorViewBuilder(dcFactory.DefaultHtmlBuilder),
-					dcFactory.NameValueCruiseRequestFactory
-					);
+				return new CruiseActionProxyAction(
+					new ServerAndProjectCheckingProxyAction(
+						new ShowDeleteProjectAction(
+							new DeleteProjectHtmlViewBuilder(
+								dcFactory.DefaultHtmlBuilder,
+								dcFactory.DefaultUrlBuilder)),
+						new SimpleErrorViewBuilder(dcFactory.DefaultHtmlBuilder)),
+					dcFactory.NameValueCruiseRequestFactory);
 			}
 			else
 			{
