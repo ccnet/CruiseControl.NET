@@ -27,6 +27,14 @@ namespace ThoughtWorks.CruiseControl.Core.Util.Test
 		}
 
 		[Test]
+		public void InvalidWildCardPathReturnsNoFiles()
+		{
+			WildCardPath wildCard = new WildCardPath(@"\nonexistantfolder\*");
+			IList files = wildCard.GetFiles();
+			AssertEquals(0, files.Count);
+		}
+
+		[Test]
 		public void StringWithWildcardsReturnsAllMatchingFiles()
 		{
 			string tempFile1Path = TempFileUtil.CreateTempFile(TEMP_FOLDER, "foo.txt", "foofoo");

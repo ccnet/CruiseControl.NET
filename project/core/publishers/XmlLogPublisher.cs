@@ -4,6 +4,7 @@ using System.IO;
 using System.Xml;
 using System.Text.RegularExpressions;
 using Exortech.NetReflector;
+using ThoughtWorks.CruiseControl.Core.Tasks;
 using ThoughtWorks.CruiseControl.Core.Util;
 using ThoughtWorks.CruiseControl.Remote;
 
@@ -13,7 +14,8 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
     public class XmlLogPublisher : PublisherBase
     {
         private string _logDir;
-        private string[] _mergeFiles;
+        private MergeFilesTask _mergeTask = new MergeFilesTask();
+        //        private string[] _mergeFiles;
 
         public XmlLogPublisher() : base()
         {
@@ -27,15 +29,9 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
 
         [ReflectorArray("mergeFiles", Required = false)] public string[] MergeFiles
         {
-            get
-            {
-                if (_mergeFiles == null)
-                    _mergeFiles = new string[0];
+            get { return _mergeTask.MergeFiles; }
 
-                return _mergeFiles;
-            }
-
-            set { _mergeFiles = value; }
+            set { _mergeTask.MergeFiles = value; }
         }
 
         public override void PublishIntegrationResults(IProject project, IntegrationResult result)
@@ -44,11 +40,7 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
             if (result.Status == IntegrationStatus.Unknown)
                 return;
 
-            foreach (FileInfo mergeFile in GetMergeFileList())
-            {
-                result.TaskResults.Add(new DefaultTaskResult(mergeFile));
-            }
-
+			_mergeTask.Run(result);
             using (XmlIntegrationResultWriter integrationWriter = new XmlIntegrationResultWriter(GetXmlWriter(LogDir, GetFilename(result))))
             {
                 integrationWriter.Write(result);
@@ -73,45 +65,6 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
                 return LogFileUtil.CreateSuccessfulBuildLogFileName(startTime, result.Label);
             else
                 return LogFileUtil.CreateFailedBuildLogFileName(startTime);
-        }
-
-        /// <summary>
-        /// Gets the list of file names, as specified in the MergeFiles property.  Any wildcards
-        /// are expanded to include such files.
-        /// </summary>
-
-		// TODO Sreekanth Get Rid of this code duplication in here and MergeFileTask
-        public ArrayList GetMergeFileList()
-        {
-            ArrayList result = new ArrayList();
-
-            foreach (string file in MergeFiles)
-            {
-                if (hasWildCards(file))
-                {
-                    // filename has a wildcard
-                    string dir = Path.GetDirectoryName(file);
-                    string pattern = Path.GetFileName(file);
-                    DirectoryInfo info = new DirectoryInfo(dir);
-                    // add all files that match wildcard
-                    foreach (FileInfo fileInfo in info.GetFiles(pattern))
-                    {
-                        result.Add(fileInfo);
-                    }
-                }
-                else
-                {
-                    // no wildcard, so just add
-                    result.Add(new FileInfo(file));
-                }
-            }
-
-            return result;
-        }
-
-        private bool hasWildCards(string file)
-        {
-            return file.IndexOf("*") > -1;
         }
     }
 }

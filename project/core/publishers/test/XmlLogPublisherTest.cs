@@ -61,25 +61,6 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers.Test
         }
 
         [Test]
-        public void ResolveWildCards()
-        {
-            TempFileUtil.CreateTempDir(TEMP_SUBDIR);
-            TempFileUtil.CreateTempDir(TEMP_SUBDIR + "\\sub");
-            TempFileUtil.CreateTempXmlFile(LOGDIR, "foo.xml", "<foo bar=\"4\">bat</foo>");
-            TempFileUtil.CreateTempFile(LOGDIR, "foo.bat", "blah");
-            TempFileUtil.CreateTempXmlFile(LOGDIR + "\\sub", "foo.xml", "<foo bar=\"9\">bat</foo>");
-
-            _publisher.MergeFiles = new string[] {LOGDIR + "\\*.xml"};
-            ArrayList list = _publisher.GetMergeFileList();
-            AssertEquals(1, list.Count);
-            AssertEquals(LOGDIR + "\\foo.xml", ((FileInfo) list[0]).FullName);
-
-            _publisher.MergeFiles = new string[] {LOGDIR + "\\foo.*"};
-            list = _publisher.GetMergeFileList();
-            AssertEquals(2, list.Count);
-        }
-
-        [Test]
         public void GetFilenameForFailedBuild()
         {
             IntegrationResult result = CreateIntegrationResult(IntegrationStatus.Failure, true);

@@ -14,17 +14,20 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 
 		public FileInfo[] GetFiles()
 		{
+			FileInfo[] files= new FileInfo[0];
 			if(HasWildCards(_pathPattern))
 			{
 				string dir = Path.GetDirectoryName(_pathPattern);
 				DirectoryInfo info = new DirectoryInfo(dir);
 				string pattern = Path.GetFileName(_pathPattern);
-				return info.GetFiles(pattern);
+				if(info.Exists)
+					files =info.GetFiles(pattern);
 			}
 			else
 			{
-				return new FileInfo[] { new FileInfo(_pathPattern) };
+				files = new FileInfo[] { new FileInfo(_pathPattern) };
 			}
+			return files;
 		}
 
 		private bool HasWildCards(string file)
