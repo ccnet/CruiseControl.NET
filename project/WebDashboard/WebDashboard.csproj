@@ -626,6 +626,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "MVC\Cruise\SecurityCheckingProxyAction.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "MVC\Cruise\ServerCheckingProxyAction.cs"
                     SubType = "Code"
                     BuildAction = "Compile"

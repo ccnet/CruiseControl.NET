@@ -41,19 +41,19 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.MVC.Cruise
 			}
 			else if (actionName == ADD_PROJECT_DISPLAY_ACTION_NAME)
 			{
-				return DisplayAddProjectPageAction;
+				return SecurityCheckingProxyAction(DisplayAddProjectPageAction);
 			}
 			else if (actionName == ADD_PROJECT_SAVE_ACTION_NAME)
 			{
-				return SaveNewProjectAction;
+				return SecurityCheckingProxyAction(SaveNewProjectAction);
 			}
 			else if (actionName == SHOW_DELETE_PROJECT_ACTION_NAME)
 			{
-				return CruiseActionProxyAction(ProjectCheckingProxyAction(ServerCheckingProxyAction(ShowDeleteProjectAction)));
+				return SecurityCheckingProxyAction(CruiseActionProxyAction(ProjectCheckingProxyAction(ServerCheckingProxyAction(ShowDeleteProjectAction))));
 			}
 			else if (actionName == DO_DELETE_PROJECT_ACTION_NAME)
 			{
-				return CruiseActionProxyAction(ProjectCheckingProxyAction(ServerCheckingProxyAction(DoDeleteProjectAction)));
+				return SecurityCheckingProxyAction(CruiseActionProxyAction(ProjectCheckingProxyAction(ServerCheckingProxyAction(DoDeleteProjectAction))));
 			}
 			else if (actionName == VIEW_SERVER_LOG_ACTION_NAME)
 			{
@@ -68,6 +68,11 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.MVC.Cruise
 		public ExceptionCatchingActionProxy ExceptionCatchingActionProxy(IAction proxied)
 		{
 			return new ExceptionCatchingActionProxy(proxied)	;
+		}
+
+		public SecurityCheckingProxyAction SecurityCheckingProxyAction(IAction proxied)
+		{
+			return new SecurityCheckingProxyAction(proxied, dcFactory.ConfigurationSettingsConfigGetter);
 		}
 
 		public CruiseActionProxyAction CruiseActionProxyAction(ICruiseAction proxied)
