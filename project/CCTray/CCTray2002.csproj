@@ -167,11 +167,6 @@
                     BuildAction = "Content"
                 />
                 <File
-                    RelPath = "ResourceUtil.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
                     RelPath = "Settings.cs"
                     SubType = "Code"
                     BuildAction = "Compile"

@@ -2,6 +2,7 @@ using System;
 using System.Diagnostics;
 using System.Globalization;
 using System.IO;
+using NMock;
 using NUnit.Framework;
 using Exortech.NetReflector;
 using ThoughtWorks.CruiseControl.Core.Util;
@@ -125,12 +126,6 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test
 		}
 
 		[Test]
-		public void ExecutableDefault()
-		{
-			AssertEquals("ss.exe", new Vss().Executable);
-		}
-
-		[Test]
 		public void StripQuotesFromSSDir()
 		{
 			Vss vss = new Vss();
@@ -146,6 +141,17 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test
 			Vss vss = new Vss();
 			Process actual = vss.CreateHistoryProcess(DateTime.Now, DateTime.Now);
 			AssertEquals(orginal.StartInfo.EnvironmentVariables[Vss.SS_DIR_KEY], actual.StartInfo.EnvironmentVariables[Vss.SS_DIR_KEY]);
+		}
+
+		[Test]
+		public void ReadDefaultExecutableFromRegistry()
+		{
+			IMock mockRegistry = new DynamicMock(typeof(IRegistry));
+			mockRegistry.ExpectAndReturn("GetLocalMachineSubKeyValue", @"C:\Program Files\Microsoft Visual Studio\VSS\win32\SSSCC.DLL", Vss.SS_REGISTRY_PATH, Vss.SS_REGISTRY_KEY);
+
+			Vss vss = new Vss();
+			AssertEquals(@"C:\Program Files\Microsoft Visual Studio\VSS\win32\ss.exe", vss.GetExecutable((IRegistry)mockRegistry.MockInstance));
+			mockRegistry.Verify();
 		}
 
 		private Vss CreateVss()

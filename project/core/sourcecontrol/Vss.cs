@@ -13,6 +13,9 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 	{
 		// required environment variable name
 		internal const string SS_DIR_KEY = "SSDIR";
+		internal const string SS_REGISTRY_PATH = @"Software\\Microsoft\\SourceSafe";
+		internal const string SS_REGISTRY_KEY = "SCCServerPath";
+		internal const string SS_EXE = "ss.exe";
 		
 		// ss history [dir] -R -Vd[now]~[lastBuild] -Y[un,pw] -I-Y -O[tempFileName]
 		internal static readonly string HISTORY_COMMAND_FORMAT = 
@@ -23,11 +26,20 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 		
 		private IHistoryParser _parser = new VssHistoryParser();
 		private string _ssDir;
+		private string _executable;
 		
 		public CultureInfo CultureInfo = CultureInfo.CurrentCulture;
 
-		[ReflectorProperty("executable")]
-		public string Executable = "ss.exe";
+		[ReflectorProperty("executable", Required=false)]
+		public string Executable
+		{
+			get
+			{
+				if (_executable == null) _executable = GetExecutable(new Registry());
+				return _executable;
+			}
+			set { _executable = value; }
+		}
 
 		[ReflectorProperty("project")]
 		public string Project;
@@ -108,6 +120,12 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 				FormatCommandDate(from),
 				Username, 
 				Password);
+		}
+
+		internal string GetExecutable(IRegistry registry)
+		{
+			string comServerPath = registry.GetLocalMachineSubKeyValue(SS_REGISTRY_PATH, SS_REGISTRY_KEY);
+			return Path.Combine(Path.GetDirectoryName(comServerPath), SS_EXE);
 		}
 	}
 }

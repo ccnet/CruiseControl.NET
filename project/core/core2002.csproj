@@ -784,6 +784,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "util\IRegistry.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "util\LogFileTraceListener.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -805,6 +810,11 @@
                 />
                 <File
                     RelPath = "util\ReflectionUtil.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "util\Registry.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -840,6 +850,11 @@
                 />
                 <File
                     RelPath = "util\test\ReflectionUtilTest.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "util\test\RegistryTest.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
