@@ -51,7 +51,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			ProcessResult result = _executor.Execute(processInfo);
 
 			if (result.HasError)
-				throw new CruiseControlException(string.Format("Source control operation caused an error: {0}", result.StandardError));
+				throw new CruiseControlException(string.Format("Source control operation caused an error: {0}\nOutput: {1}", result.StandardError, result.StandardOutput));
 			else if (result.TimedOut)
 				throw new CruiseControlException("Source control operation has timed out.");
 

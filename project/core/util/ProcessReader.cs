@@ -7,10 +7,10 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 	public class ProcessReader
 	{
 		private Thread thread;
-		private StreamReader stream;
+		private TextReader stream;
 		private string output;
 
-		public ProcessReader(StreamReader stream)
+		public ProcessReader(TextReader stream)
 		{
 			this.thread = new Thread(new ThreadStart(ReadToEnd));
 			this.stream = stream;
@@ -24,11 +24,13 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 		public void WaitForExit()
 		{
 			thread.Join();
+			stream.Close();
 		}
 
 		public void Abort()
 		{
 			thread.Abort();
+			stream.Close();
 		}
 
 		public string Output

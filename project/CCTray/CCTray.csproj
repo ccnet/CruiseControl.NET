@@ -100,11 +100,6 @@
                     HintPath = "..\..\..\..\..\..\WINDOWS\Microsoft.NET\Framework\v1.1.4322\System.Windows.Forms.dll"
                 />
                 <Reference
-                    Name = "ccnet.remote"
-                    Project = "{E820CF3B-8C5A-4002-BC16-B7818D3D54A8}"
-                    Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
-                />
-                <Reference
                     Name = "System.Data"
                     AssemblyName = "System.Data"
                     HintPath = "..\..\..\..\..\WINNT\Microsoft.NET\Framework\v1.1.4322\System.Data.dll"
@@ -123,6 +118,11 @@
                     Name = "Drew.Agents"
                     AssemblyName = "Drew.Agents"
                     HintPath = "..\..\lib\CCTray\Drew.Agents.dll"
+                />
+                <Reference
+                    Name = "Remote"
+                    Project = "{E820CF3B-8C5A-4002-BC16-B7818D3D54A8}"
+                    Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
                 />
             </References>
         </Build>

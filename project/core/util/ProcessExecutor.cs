@@ -1,5 +1,6 @@
 using System;
 using System.Diagnostics;
+using System.ComponentModel;
 
 namespace ThoughtWorks.CruiseControl.Core.Util
 {
@@ -21,28 +22,29 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 
 		public virtual ProcessResult Execute(ProcessInfo processInfo)
 		{
-			using(Process process = System.Diagnostics.Process.Start(processInfo.startInfo))
+			using(Process process = Process.Start(processInfo.startInfo))
 			{
 				ProcessReader standardOutput = new ProcessReader(process.StandardOutput);
 				ProcessReader standardError = new ProcessReader(process.StandardError);
 				standardOutput.Start();
 				standardError.Start();
 
-				if (process.WaitForExit(Timeout))
+				bool hasExited = process.WaitForExit(Timeout);
+				if (hasExited)
 				{
 					standardOutput.WaitForExit();
 					standardError.WaitForExit();
-					return new ProcessResult(standardOutput.Output, standardError.Output, process.ExitCode, ! process.HasExited);
 				}
 				else
 				{
-					
-					standardOutput.Abort();
-					standardError.Abort();
+					Log.Warning(string.Format("Process timed out: {0} {1}.  Process id: {2}", processInfo.FileName, processInfo.Arguments, process.Id));
 					process.Kill();
-					Console.WriteLine("Killed the process status:{0}", process.HasExited);
-					return new ProcessResult(standardOutput.Output, standardError.Output, KILLED_PROCESS_EXIT_CODE, ! process.HasExited);
+					standardOutput.Abort();		// streams must be aborted after the process is killed -- otherwise there is a risk that the process will
+					standardError.Abort();		// already be dead when process.Kill is invoked
+					process.WaitForExit();
+					Log.Warning(string.Format("The timed out process has been killed: {0}", process.Id));
 				}
+				return new ProcessResult(standardOutput.Output, standardError.Output, process.ExitCode, ! hasExited);
 			}				
 		}
 	}

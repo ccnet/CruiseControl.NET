@@ -100,11 +100,6 @@
                     HintPath = "C:\WINNT\Microsoft.NET\Framework\v1.1.4322\System.XML.dll"
                 />
                 <Reference
-                    Name = "System.Runtime.Remoting"
-                    AssemblyName = "System.Runtime.Remoting"
-                    HintPath = "C:\WINNT\Microsoft.NET\Framework\v1.1.4322\System.Runtime.Remoting.dll"
-                />
-                <Reference
                     Name = "core"
                     Project = "{F8113DB9-6C47-4FD1-8A01-655FCF151747}"
                     Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"

@@ -23,7 +23,7 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers.Test
 	<url>tcp://localhost:2334/MockCruise.rem</url>
 </startproject>";
 
-			object result = new XmlPopulator().Populate(XmlUtil.CreateDocumentElement(xml));
+			object result = NetReflector.Read(XmlUtil.CreateDocumentElement(xml));
 			AssertNotNull(result);
 			AssertEquals(typeof(ProjectStartPublisher), result.GetType());
 
@@ -36,7 +36,7 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers.Test
 		public void StartProject()
 		{
 			RemotingMock mock = new RemotingMock(typeof(ICruiseManager));
-			mock.Expect("Run", "myproject", new IsAnything());
+			mock.Expect("ForceBuild", "myproject");
 
 			using (MockServer server = new MockServer(mock.MarshalByRefInstance, new TcpChannel(4444), "Cruise2.rem"))
 			{
@@ -64,7 +64,7 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers.Test
 			ExecutePublisher("myproject", "tcp://localhost:4445/Cruise2.rem");
 		}
 
-		[Test, ExpectedException(typeof(CruiseControlException)), Ignore("in progress")]
+		[Test, ExpectedException(typeof(CruiseControlException))]
 		public void RemoteProjectThrowsException()
 		{
 			RemotingMock mock = new RemotingMock(typeof(ICruiseManager));
@@ -89,7 +89,7 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers.Test
 		private void ExecutePublisherThrowsException(string project, string url, Exception ex)
 		{
 			Mock managerMock = new DynamicMock(typeof(ICruiseManager));
-//			managerMock.ExpectAndThrow("Run", 
+			managerMock.ExpectAndThrow("ForceBuild", new CruiseControlException("expected exception"));
 			ProjectStartPublisherExtension publisher = new ProjectStartPublisherExtension((ICruiseManager) managerMock.MockInstance);
 			ExecutePublisher(project, url, publisher);
 		}

@@ -7,6 +7,7 @@ using System.Threading;
 using Exortech.NetReflector;
 using ThoughtWorks.CruiseControl.Remote;
 using ThoughtWorks.CruiseControl.Core.Schedules;
+using ThoughtWorks.CruiseControl.Core.Util;
 
 namespace ThoughtWorks.CruiseControl.Core.Publishers
 {
@@ -36,12 +37,11 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
 			try
 			{
 				ICruiseManager manager = GetRemoteCruiseManager();
-//				manager.Run(Project, new Schedule(0, 1));
+				manager.ForceBuild(Project);
 			}
 			catch (Exception ex)
 			{
-				// log exception
-				Console.WriteLine(ex.ToString());
+				Log.Error(ex);
 				_ex = ex;
 			}
 		}
@@ -53,7 +53,6 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
 
 		private void FinishedCallback(IAsyncResult ar)
 		{
-			Console.WriteLine("3" + _result.IsCompleted);			
 		}
 
 		public void WaitForCompletion()

@@ -6,7 +6,7 @@ using System.IO;
 namespace ThoughtWorks.CruiseControl.Core.Util.Test
 {
 	[TestFixture]
-	public class ProcessExecutorTest : Assertion
+	public class ProcessExecutorTest : CustomAssertion
 	{
 		[Test]
 		public void ExecuteProcessAndEchoResultsBackThroughStandardOut()
@@ -50,8 +50,8 @@ operable program or batch file.", result.StandardError.Trim());
 			AssertEquals("foo=bar\r\n", result.StandardOutput);
 		}
 
-		[Test, Ignore("This fails as the file cannot be deleted. Igrnored till i figure this out.")]
-		public void ForceProcessTimeoutBecauseOfBlockingInput()
+		[Test]
+		public void ForceProcessTimeoutBecauseTargetIsNonTerminating()
 		{
 			string filename = TempFileUtil.CreateTempFile("ProcessTest", "run.bat", "@:foo\r\ngoto foo");
 			try
@@ -62,11 +62,11 @@ operable program or batch file.", result.StandardError.Trim());
 
 				Assert("process should have timed out", result.TimedOut);
 				AssertNull(result.StandardOutput);
-				AssertNull(result.StandardError);
+				AssertFalse(result.HasError);
 			}
 			finally
 			{
-				TempFileUtil.DeleteTempFile(filename);
+				TempFileUtil.DeleteTempDir("ProcessTest");
 			}
 		}
 

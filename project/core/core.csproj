@@ -119,6 +119,16 @@
                     AssemblyName = "System.Web"
                     HintPath = "C:\WINNT\Microsoft.NET\Framework\v1.1.4322\System.Web.dll"
                 />
+                <Reference
+                    Name = "System.Data"
+                    AssemblyName = "System.Data"
+                    HintPath = "C:\WINNT\Microsoft.NET\Framework\v1.1.4322\System.Data.dll"
+                />
+                <Reference
+                    Name = "System.Runtime.Remoting"
+                    AssemblyName = "System.Runtime.Remoting"
+                    HintPath = "C:\WINNT\Microsoft.NET\Framework\v1.1.4322\System.Runtime.Remoting.dll"
+                />
             </References>
         </Build>
         <Files>
@@ -963,6 +973,11 @@
                 />
                 <File
                     RelPath = "util\test\ProcessExecutorTest.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "util\test\ProcessReaderTest.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

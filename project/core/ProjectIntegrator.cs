@@ -75,6 +75,16 @@ namespace ThoughtWorks.CruiseControl.Core
 		}
 
 		/// <summary>
+		/// TODO: move force build functionality into project integrator
+		/// </summary>
+		public void ForceBuild()
+		{
+			Log.Info("Force Build for project: " + _project.Name);
+			Start();
+			((Schedules.Schedule)_schedule).ForceBuild();
+		}
+
+		/// <summary>
 		/// Main integration loop, intended to be run in its own thread.
 		/// </summary>
 		private void Run()
@@ -154,10 +164,6 @@ namespace ThoughtWorks.CruiseControl.Core
 			if (IsRunning)
 			{
 				_state = ProjectIntegratorState.Stopping;
-//				if (_thread != null && _thread.ThreadState == ThreadState.WaitSleepJoin)
-//				{
-//					_thread.Resume();
-//				}
 			}
 		}
 
@@ -182,19 +188,9 @@ namespace ThoughtWorks.CruiseControl.Core
 		/// Ensure that the scheduler's thread is terminated when this object is
 		/// garbage collected.
 		/// </summary>
-		public void Dispose()
+		void IDisposable.Dispose()
 		{
 			Abort();
-		}
-
-		/// <summary>
-		/// TODO: move force build functionality into project integrator
-		/// </summary>
-		public void ForceBuild()
-		{
-			Log.Info("Force Build for project: " + _project.Name);
-			Start();
-			((Schedules.Schedule)_schedule).ForceBuild();
 		}
 	}
 }
