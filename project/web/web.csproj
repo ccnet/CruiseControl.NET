@@ -300,6 +300,21 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Simian.aspx"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "Simian.aspx.cs"
+                    DependentUpon = "Simian.aspx"
+                    SubType = "ASPXCodeBehind"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Simian.aspx.resx"
+                    DependentUpon = "Simian.aspx.cs"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
                     RelPath = "Statistics.aspx"
                     BuildAction = "Content"
                 />
@@ -498,6 +513,11 @@
                     BuildAction = "Content"
                 />
                 <File
+                    RelPath = "xsl\AlternativeNUnitDetails.xsl"
+                    Link = "..\xsl\AlternativeNUnitDetails.xsl"
+                    BuildAction = "Content"
+                />
+                <File
                     RelPath = "xsl\compile.xsl"
                     Link = "..\xsl\compile.xsl"
                     BuildAction = "Content"
@@ -550,11 +570,6 @@
                 <File
                     RelPath = "xsl\unittests.xsl"
                     Link = "..\xsl\unittests.xsl"
-                    BuildAction = "Content"
-                />
-                <File
-                    RelPath = "xsl\AlternativeNUnitDetails.xsl"
-                    Link = "..\xsl\AlternativeNUnitDetails.xsl"
                     BuildAction = "Content"
                 />
                 <File

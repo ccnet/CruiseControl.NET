@@ -1014,6 +1014,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Xsl\SimianSummaryStyleSheetTest.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Xsl\StylesheetTestFixture.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
