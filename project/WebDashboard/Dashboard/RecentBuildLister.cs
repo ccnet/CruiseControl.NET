@@ -24,7 +24,10 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 
 		public HtmlTable BuildAllBuildsTable(string serverName, string projectName)
 		{
-			return BuildBuildsTable(serverName, projectName, farmService.GetBuildNames(serverName, projectName));
+			HtmlTable table = BuildBuildsTable(serverName, projectName, farmService.GetBuildNames(serverName, projectName));
+			table.Rows.Insert(0, TR(TD("&nbsp;")));
+			table.Rows.Insert(0, TR(TD(string.Format("<b>All builds for {0}</b>", projectName))));
+			return table;
 		}
 
 		private HtmlTable BuildBuildsTable(string serverName, string projectName, string[] buildNames)

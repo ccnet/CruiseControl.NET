@@ -9,8 +9,6 @@ a:hover { color:#FC0; }
 .main-panel { color:#FC0; }
 
 .link { color:#00F;  }
-.build-passed-link { color:Green; text-decoration:none; }
-.build-failed-link { color:Red; text-decoration:none; }
 .buildresults-header { color: #000; font-weight: bold; }
 .buildresults-data { color: #000; }
 .buildresults-data-failed { color: #F30; }
@@ -95,4 +93,27 @@ a:hover { color:#FC0; }
 .breadcrumbs a:hover 
 { 
         color:#FC0; 
+}
+
+.SideBar a
+{
+        text-decoration: none;
+        color: #333399;
+}
+
+.SideBar .build-passed-link { color:Green; text-decoration:none; }
+.SideBar .build-failed-link { color:Red; text-decoration:none; }
+
+.build-passed-link { color:Green; text-decoration:none; }
+.build-failed-link { color:Red; text-decoration:none; }
+
+
+.wholepage
+{
+        background-color: #000066;
+}
+
+.TopControls
+{
+        background-color: #333399;
 }

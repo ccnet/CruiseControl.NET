@@ -8,7 +8,7 @@
 		<meta name="vs_showGrid" content="True">
 		<link type="text/css" rel="stylesheet" href="cruisecontrol.css">
 	</HEAD>
-	<body topmargin="0" leftmargin="0" marginheight="0" marginwidth="0" bgcolor="#000066">
+	<body class="wholepage" topmargin="0" leftmargin="0" marginheight="0" marginwidth="0">
 		<!-- head: logo, controls -->
 			<table class="main-panel" border="0" align="center" cellpadding="0" cellspacing="0" width="100%">
 				<tr>
@@ -19,7 +19,7 @@
 				</tr>
 			</table>
 			<!-- body: main content panels -->
-			<table class="TopControls" border="0" width="100%" bgcolor="#333399" cellpadding="3" cellspacing="0"
+			<table class="TopControls" border="0" width="100%" cellpadding="3" cellspacing="0"
 				height="25">
 				<tr>
 					<td valign="middle" align="left">
@@ -36,7 +36,7 @@
 							</tr>
 							<tr>
 								<td>
-									<div runat="server" id="SideBarLocation" />
+									<div runat="server" class="SideBar" id="SideBarLocation" />
 								</td>
 							</tr>
 						</table>

@@ -67,8 +67,6 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 		{
 
 			// Verify
-			Assert.AreEqual(2, builtTable.Rows.Count);
-
 			HtmlAnchor expectedAnchor1 = new HtmlAnchor();
 			expectedAnchor1.HRef = "url1";
 			expectedAnchor1.InnerHtml = "prettyName2";
@@ -111,7 +109,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 			HtmlTable builtTable = Builder.BuildAllBuildsTable("myServer", "myProject");
 
 			// Verify
-			Assert.AreEqual(0, builtTable.Rows.Count);
+			// Just comment rows
+			Assert.AreEqual(2, builtTable.Rows.Count);
 
 			VerifyAll();
 		}

@@ -119,9 +119,9 @@ namespace ThoughtWorks.CruiseControl.WebDashboard
 		
 		private void InitializeComponent()
 		{    
+			this.RefreshButton.Click += new System.EventHandler(this.RefreshButton_Click);
 			this.StatusGrid.ItemCommand += new System.Web.UI.WebControls.DataGridCommandEventHandler(this.StatusGrid_ItemCommand);
 			this.StatusGrid.ItemDataBound += new System.Web.UI.WebControls.DataGridItemEventHandler(this.StatusGrid_ItemDataBound);
-			this.RefreshButton.Click += new System.EventHandler(this.RefreshButton_Click);
 			this.Load += new System.EventHandler(this.Page_Load);
 
 		}
