@@ -122,12 +122,7 @@
                 <Reference
                     Name = "System.Data"
                     AssemblyName = "System.Data"
-                    HintPath = "C:\WINNT\Microsoft.NET\Framework\v1.1.4322\System.Data.dll"
-                />
-                <Reference
-                    Name = "System.Runtime.Remoting"
-                    AssemblyName = "System.Runtime.Remoting"
-                    HintPath = "C:\WINNT\Microsoft.NET\Framework\v1.1.4322\System.Runtime.Remoting.dll"
+                    HintPath = "..\..\..\..\..\..\WINDOWS\Microsoft.NET\Framework\v1.1.4322\System.Data.dll"
                 />
             </References>
         </Build>
@@ -793,6 +788,16 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "tasks\MergeFilesTask.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "tasks\test\MergeFileTaskTest.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "test\ConfigurationStub.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -957,6 +962,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "util\WildCardPath.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "util\XmlUtil.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -977,11 +987,6 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "util\test\ProcessReaderTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
                     RelPath = "util\test\ReflectionUtilTest.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -998,6 +1003,11 @@
                 />
                 <File
                     RelPath = "util\test\TempFileUtilTest.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "util\test\WildCardPathTest.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

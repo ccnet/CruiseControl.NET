@@ -198,7 +198,6 @@ namespace ThoughtWorks.CruiseControl.Core
                 return false;
             }
             return this.ProjectName == other.ProjectName && this.Status == other.Status && this.Label == other.Label && this.StartTime == other.StartTime && this.EndTime == other.EndTime;
-            // && this.ExceptionResult == other.ExceptionResult;
         }
 
         public override int GetHashCode()

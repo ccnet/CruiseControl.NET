@@ -54,5 +54,6 @@ namespace ThoughtWorks.CruiseControl.Core.Test
 			result.LastIntegrationStatus = IntegrationStatus.Success;
 			return result;
 		}
+
 	}
 }

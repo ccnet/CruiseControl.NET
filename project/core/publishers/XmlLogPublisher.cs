@@ -9,104 +9,109 @@ using ThoughtWorks.CruiseControl.Remote;
 
 namespace ThoughtWorks.CruiseControl.Core.Publishers
 {
-	[ReflectorType("xmllogger")]
-	public class XmlLogPublisher : PublisherBase
-	{
-		private string _logDir;
-		private string[] _mergeFiles;
+    [ReflectorType("xmllogger")]
+    public class XmlLogPublisher : PublisherBase
+    {
+        private string _logDir;
+        private string[] _mergeFiles;
 
-		public XmlLogPublisher() : base()
-		{
-		}
+        public XmlLogPublisher() : base()
+        {
+        }
 
-		[ReflectorProperty("logDir")] 
-		public string LogDir
-		{
-			get { return _logDir; }
-			set { _logDir = value; }
-		}
+        [ReflectorProperty("logDir")] public string LogDir
+        {
+            get { return _logDir; }
+            set { _logDir = value; }
+        }
 
-		[ReflectorArray("mergeFiles", Required = false)] 
-		public string[] MergeFiles
-		{
-			get
-			{
-				if (_mergeFiles == null)
-					_mergeFiles = new string[0];
+        [ReflectorArray("mergeFiles", Required = false)] public string[] MergeFiles
+        {
+            get
+            {
+                if (_mergeFiles == null)
+                    _mergeFiles = new string[0];
 
-				return _mergeFiles;
-			}
+                return _mergeFiles;
+            }
 
-			set { _mergeFiles = value; }
-		}
+            set { _mergeFiles = value; }
+        }
 
-		public override void PublishIntegrationResults(IProject project, IntegrationResult result)
-		{
-			// only deal with known integration status
-			if (result.Status == IntegrationStatus.Unknown)
-				return;
+        public override void PublishIntegrationResults(IProject project, IntegrationResult result)
+        {
+            // only deal with known integration status
+            if (result.Status == IntegrationStatus.Unknown)
+                return;
 
-			foreach (FileInfo mergeFile in GetMergeFileList())
-			{
-				result.TaskResults.Add(new DefaultTaskResult(mergeFile));
-			}
+            foreach (FileInfo mergeFile in GetMergeFileList())
+            {
+                result.TaskResults.Add(new DefaultTaskResult(mergeFile));
+            }
 
-			using (XmlIntegrationResultWriter integrationWriter = new XmlIntegrationResultWriter(GetXmlWriter(LogDir, GetFilename(result))))
-			{
-				integrationWriter.Write(result);
-			}
-		}
+            using (XmlIntegrationResultWriter integrationWriter = new XmlIntegrationResultWriter(GetXmlWriter(LogDir, GetFilename(result))))
+            {
+                integrationWriter.Write(result);
+            }
+        }
 
-		public XmlWriter GetXmlWriter(string dirname, string filename)
-		{
-			// create directory if necessary
-			if (!Directory.Exists(dirname))
-				Directory.CreateDirectory(dirname);
+        public XmlWriter GetXmlWriter(string dirname, string filename)
+        {
+            // create directory if necessary
+            if (!Directory.Exists(dirname))
+                Directory.CreateDirectory(dirname);
 
-			// create Xml writer using UTF8 encoding
-			string path = Path.Combine(dirname, filename);
-			return new XmlTextWriter(path, System.Text.Encoding.UTF8);
-		}
+            // create Xml writer using UTF8 encoding
+            string path = Path.Combine(dirname, filename);
+            return new XmlTextWriter(path, System.Text.Encoding.UTF8);
+        }
 
-		public string GetFilename(IntegrationResult result)
-		{
-			DateTime startTime = result.StartTime;
-			if (result.Succeeded)
-				return LogFileUtil.CreateSuccessfulBuildLogFileName(startTime, result.Label);
-			else
-				return LogFileUtil.CreateFailedBuildLogFileName(startTime);
-		}
+        public string GetFilename(IntegrationResult result)
+        {
+            DateTime startTime = result.StartTime;
+            if (result.Succeeded)
+                return LogFileUtil.CreateSuccessfulBuildLogFileName(startTime, result.Label);
+            else
+                return LogFileUtil.CreateFailedBuildLogFileName(startTime);
+        }
 
-		/// <summary>
-		/// Gets the list of file names, as specified in the MergeFiles property.  Any wildcards
-		/// are expanded to include such files.
-		/// </summary>
-		public ArrayList GetMergeFileList()
-		{
-			ArrayList result = new ArrayList();
+        /// <summary>
+        /// Gets the list of file names, as specified in the MergeFiles property.  Any wildcards
+        /// are expanded to include such files.
+        /// </summary>
 
-			foreach (string file in MergeFiles)
-			{
-				if (file.IndexOf("*") > -1)
-				{
-					// filename has a wildcard
-					string dir = Path.GetDirectoryName(file);
-					string pattern = Path.GetFileName(file);
-					DirectoryInfo info = new DirectoryInfo(dir);
-					// add all files that match wildcard
-					foreach (FileInfo fileInfo in info.GetFiles(pattern))
-					{
-						result.Add(fileInfo);
-					}
-				}
-				else
-				{
-					// no wildcard, so just add
-					result.Add(new FileInfo(file));
-				}
-			}
+		// TODO Sreekanth Get Rid of this code duplication in here and MergeFileTask
+        public ArrayList GetMergeFileList()
+        {
+            ArrayList result = new ArrayList();
 
-			return result;
-		}
-	}
+            foreach (string file in MergeFiles)
+            {
+                if (hasWildCards(file))
+                {
+                    // filename has a wildcard
+                    string dir = Path.GetDirectoryName(file);
+                    string pattern = Path.GetFileName(file);
+                    DirectoryInfo info = new DirectoryInfo(dir);
+                    // add all files that match wildcard
+                    foreach (FileInfo fileInfo in info.GetFiles(pattern))
+                    {
+                        result.Add(fileInfo);
+                    }
+                }
+                else
+                {
+                    // no wildcard, so just add
+                    result.Add(new FileInfo(file));
+                }
+            }
+
+            return result;
+        }
+
+        private bool hasWildCards(string file)
+        {
+            return file.IndexOf("*") > -1;
+        }
+    }
 }
