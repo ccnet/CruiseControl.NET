@@ -11,6 +11,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 	{
 		internal static readonly string HISTORY_COMMAND_FORMAT = "log -v -r \"{{{0}}}:{{{1}}}\" --xml --non-interactive {2}";
 		internal static readonly string TAG_COMMAND_FORMAT = "copy -m \"CCNET build {0}\" {1} {2}/{0} --non-interactive";
+		internal static readonly string GET_SOURCE_COMMAND_FORMAT = "update --non-interactive";
 
 		internal static readonly string COMMAND_DATE_FORMAT = "yyyy-MM-ddTHH:mm:ssZ";
 
@@ -77,6 +78,9 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 		[ReflectorProperty("password", Required = false)]
 		public string Password;
 
+		[ReflectorProperty("autoGetSource", Required = false)]
+		public bool AutoGetSource = false;
+
 		public string FormatCommandDate(DateTime date)
 		{
 			return date.ToUniversalTime().ToString(COMMAND_DATE_FORMAT, CultureInfo.InvariantCulture);
@@ -129,6 +133,29 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 		{
 			StringBuilder buffer = new StringBuilder();
 			buffer.AppendFormat(TAG_COMMAND_FORMAT, label, _trunkUrl, _tagBaseUrl);
+			AppendUsernameAndPassword(buffer);
+			return buffer.ToString();
+		}
+
+		public override void GetSource(IIntegrationResult result)
+		{
+			if (AutoGetSource)
+			{
+				ProcessInfo info = new ProcessInfo(Executable, BuildGetSourceArguments(result.LastChangeNumber), WorkingDirectory);
+				Log.Info(string.Format("Getting source from Subversion: {0} {1}", info.FileName, info.Arguments));
+				Execute(info);
+			}
+		}
+
+		private string BuildGetSourceArguments(int revision)
+		{
+			StringBuilder buffer = new StringBuilder();
+			buffer.Append(GET_SOURCE_COMMAND_FORMAT);
+			if (revision > 0)
+			{
+				buffer.Append(" -r");
+				buffer.Append(revision);
+			}
 			AppendUsernameAndPassword(buffer);
 			return buffer.ToString();
 		}

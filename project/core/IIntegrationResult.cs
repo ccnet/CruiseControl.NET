@@ -18,6 +18,7 @@ namespace ThoughtWorks.CruiseControl.Core
 		IList TaskResults { get; }
 		string Output { get; set; }
 		DateTime LastModificationDate { get; }
+		int LastChangeNumber { get; }
 		Modification[] Modifications { get; set; }
 		Exception ExceptionResult { get; set; }
 		bool IsInitial();

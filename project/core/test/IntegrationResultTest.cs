@@ -45,5 +45,29 @@ namespace ThoughtWorks.CruiseControl.Core.Test
 
 			Assert.IsTrue(initial.IsInitial());
 		}
+
+		[Test]
+		public void ShouldReturnZeroAsLastChangeNumberIfNoModifications()
+		{
+			Assert.AreEqual(0, new IntegrationResult().LastChangeNumber);
+		}
+
+		[Test]
+		public void ShouldReturnTheMaximumChangeNumberFromAllModificationsForLastChangeNumber()
+		{
+			Modification mod1 = new Modification();
+			mod1.ChangeNumber = 10;
+
+			Modification mod2 = new Modification();
+			mod2.ChangeNumber = 20;
+
+			IntegrationResult result = new IntegrationResult();
+			result.Modifications = new Modification[] { mod1 };
+			Assert.AreEqual(10, result.LastChangeNumber);
+			result.Modifications = new Modification[] { mod1, mod2 };
+			Assert.AreEqual(20, result.LastChangeNumber);
+			result.Modifications = new Modification[] { mod2, mod1 };
+			Assert.AreEqual(20, result.LastChangeNumber);
+		}
 	}
 }

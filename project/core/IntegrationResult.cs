@@ -62,6 +62,20 @@ namespace ThoughtWorks.CruiseControl.Core
             }
         }
 
+		public int LastChangeNumber
+		{
+			get
+			{
+				int lastChangeNumber = 0;
+				foreach (Modification _modification in _modifications)
+				{
+					if (_modification.ChangeNumber > lastChangeNumber)
+						lastChangeNumber = _modification.ChangeNumber;
+				}
+				return lastChangeNumber;
+			}
+		}
+
         /// <summary>
         /// Gets a value indicating the success of this integration.
         /// </summary>
