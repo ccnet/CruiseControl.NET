@@ -1,12 +1,4 @@
 Microsoft Visual Studio Solution File, Format Version 8.00
-Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "install.web", "install.web\install.vdproj", "{06AEAF83-0B4D-4F1E-AA42-EA762F8E2324}"
-	ProjectSection(ProjectDependencies) = postProject
-	EndProjectSection
-EndProject
-Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "install.server", "install.server\install.server.vdproj", "{98BE0ADB-6122-4123-A21B-CE80FDE990A1}"
-	ProjectSection(ProjectDependencies) = postProject
-	EndProjectSection
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "console", "console\console.csproj", "{E14EE67D-C24E-4088-B01B-35B742E99E85}"
 	ProjectSection(ProjectDependencies) = postProject
 	EndProjectSection
@@ -41,11 +33,6 @@ Global
 		Release = Release
 	EndGlobalSection
 	GlobalSection(ProjectConfiguration) = postSolution
-		{06AEAF83-0B4D-4F1E-AA42-EA762F8E2324}.Debug.ActiveCfg = Debug
-		{06AEAF83-0B4D-4F1E-AA42-EA762F8E2324}.Release.ActiveCfg = Release
-		{06AEAF83-0B4D-4F1E-AA42-EA762F8E2324}.Release.Build.0 = Release
-		{98BE0ADB-6122-4123-A21B-CE80FDE990A1}.Debug.ActiveCfg = Debug
-		{98BE0ADB-6122-4123-A21B-CE80FDE990A1}.Release.ActiveCfg = Release
 		{E14EE67D-C24E-4088-B01B-35B742E99E85}.Debug.ActiveCfg = Debug|.NET
 		{E14EE67D-C24E-4088-B01B-35B742E99E85}.Debug.Build.0 = Debug|.NET
 		{E14EE67D-C24E-4088-B01B-35B742E99E85}.Release.ActiveCfg = Release|.NET
