@@ -82,7 +82,7 @@ namespace ThoughtWorks.CruiseControl.ControlPanel
 																						 this.openConfigurationMenuItem});
 			this.fileMenuItem.Text = "&File";
 			// 
-			// openMenuItem
+			// openConfigurationMenuItem
 			// 
 			this.openConfigurationMenuItem.Index = 0;
 			this.openConfigurationMenuItem.Text = "&Open";
@@ -95,7 +95,7 @@ namespace ThoughtWorks.CruiseControl.ControlPanel
 			this.treeView.Location = new System.Drawing.Point(0, 0);
 			this.treeView.Name = "treeView";
 			this.treeView.SelectedImageIndex = -1;
-			this.treeView.Size = new System.Drawing.Size(232, 649);
+			this.treeView.Size = new System.Drawing.Size(232, 449);
 			this.treeView.TabIndex = 0;
 			// 
 			// bodyPanel
@@ -104,21 +104,21 @@ namespace ThoughtWorks.CruiseControl.ControlPanel
 			this.bodyPanel.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.bodyPanel.Location = new System.Drawing.Point(232, 0);
 			this.bodyPanel.Name = "bodyPanel";
-			this.bodyPanel.Size = new System.Drawing.Size(760, 649);
+			this.bodyPanel.Size = new System.Drawing.Size(600, 449);
 			this.bodyPanel.TabIndex = 2;
 			// 
 			// splitter1
 			// 
 			this.splitter1.Location = new System.Drawing.Point(232, 0);
 			this.splitter1.Name = "splitter1";
-			this.splitter1.Size = new System.Drawing.Size(3, 649);
+			this.splitter1.Size = new System.Drawing.Size(3, 449);
 			this.splitter1.TabIndex = 3;
 			this.splitter1.TabStop = false;
 			// 
 			// MainPanel
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5, 13);
-			this.ClientSize = new System.Drawing.Size(992, 649);
+			this.ClientSize = new System.Drawing.Size(832, 449);
 			this.Controls.Add(this.splitter1);
 			this.Controls.Add(this.bodyPanel);
 			this.Controls.Add(this.treeView);
@@ -134,6 +134,7 @@ namespace ThoughtWorks.CruiseControl.ControlPanel
 		{
 			MainPanel panel = new MainPanel();
 			panel.Open(@"c:\tmp\ccnet.config");
+//			new Prototype().Show();
 			Application.Run(panel);
 		}
 
@@ -156,17 +157,9 @@ namespace ThoughtWorks.CruiseControl.ControlPanel
 				return;
 			}
 
-			FileTreeNode fileNode = new FileTreeNode(filename, model);
-			baseNode.Nodes.Add(fileNode);
-
-			foreach (ProjectModel project in model.Projects)
-			{
-				ProjectTreeNode projectNode = new ProjectTreeNode(project);
-				fileNode.Nodes.Add(projectNode);
-			}
-
-			fileNode.Expand();
-			fileNode.ExpandAll();
+			ConfigurationTreeNode configurationNode = model.GetNavigationTreeNodes();
+			configurationNode.Expand();
+			baseNode.Nodes.Add(configurationNode);
 		}
 
 		protected virtual string ChooseFileToOpen() 
@@ -179,11 +172,11 @@ namespace ThoughtWorks.CruiseControl.ControlPanel
 		{
 			if (e.Node == lastSelectedNode) return;
 
-			if (lastSelectedNode is ProjectTreeNode)
+			if (lastSelectedNode is ConfigurationItemTreeNode)
 			{
 				try 
 				{
-					((ProjectTreeNode) lastSelectedNode).Project.Save();
+					((ConfigurationItemTreeNode) lastSelectedNode).Project.Save();
 				}
 				catch (Exception ex) 
 				{
@@ -195,35 +188,15 @@ namespace ThoughtWorks.CruiseControl.ControlPanel
 
 			bodyPanel.Controls.Clear();
 
-			if (e.Node is ProjectTreeNode) 
+			if (e.Node is ConfigurationItemTreeNode) 
 			{
 				BunchOfConfigurationItemControls controls = new BunchOfConfigurationItemControls();
-				controls.Bind(((ProjectTreeNode) e.Node).Project.Items);
+				controls.Bind(((ConfigurationItemTreeNode) e.Node).Items);
 				
 				bodyPanel.Controls.Add(controls);
 			}
 
 			lastSelectedNode = e.Node;
-		}
-
-		private class ProjectTreeNode : TreeNode
-		{
-			public ProjectModel Project;
-
-			public ProjectTreeNode(ProjectModel project) : base(project.Name) 
-			{
-				this.Project = project;
-			}
-		}
-
-		private class FileTreeNode : TreeNode
-		{
-			public ConfigurationModel Model;
-
-			public FileTreeNode(string filename, ConfigurationModel model) : base(filename) 
-			{
-				this.Model = model;
-			}
 		}
 
 		private void ContextMenu_Popup(object sender, EventArgs e)
@@ -238,12 +211,13 @@ namespace ThoughtWorks.CruiseControl.ControlPanel
 			{
 				menu.MenuItems.Add(openConfigurationMenuItem);
 			}
-			else if (treeView.SelectedNode is FileTreeNode)
+			else if (treeView.SelectedNode is ConfigurationTreeNode)
 			{
 				menu.MenuItems.Add(closeConfigurationMenuItem);
 				menu.MenuItems.Add(addProjectMenuItem);
 			}
-			else if (treeView.SelectedNode is ProjectTreeNode)
+			else if (treeView.SelectedNode is ConfigurationItemTreeNode && 
+				((ConfigurationItemTreeNode) treeView.SelectedNode).IsProject)
 			{
 				menu.MenuItems.Add(removeProjectMenuItem);
 			}
@@ -256,9 +230,9 @@ namespace ThoughtWorks.CruiseControl.ControlPanel
 
 		private void CloseConfiguration(object sender, EventArgs e) 
 		{
-			if (treeView.SelectedNode is FileTreeNode)
+			if (treeView.SelectedNode is ConfigurationTreeNode)
 			{
-				FileTreeNode fileNode = (FileTreeNode) treeView.SelectedNode;
+				ConfigurationTreeNode fileNode = (ConfigurationTreeNode) treeView.SelectedNode;
 				treeView.SelectedNode = baseNode;
 				baseNode.Nodes.Remove(fileNode);
 			}

@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.IO;
 using System.Reflection;
+using System.Windows.Forms;
 
 using NUnit.Framework;
 using Exortech.NetReflector;
@@ -57,6 +58,7 @@ namespace ThoughtWorks.CruiseControl.ControlPanel.Test
 			ConfigurationItem item = model.Projects[0].Items["name"];
 			AssertEquals("marathon.net", item.ValueAsString);
 			AssertEquals(null, item.AvailableValues);
+			AssertEquals(false, item.CanHaveChildren);
 
 			item.ValueAsString = "nfit";
 
@@ -85,6 +87,7 @@ namespace ThoughtWorks.CruiseControl.ControlPanel.Test
 
 			AssertEquals("c:/bin/cvs.exe", item.Items["executable"].ValueAsString);
 			AssertEquals("/cvsroot/marathonnet", item.Items["cvsroot"].ValueAsString);
+			AssertEquals(true, item.CanHaveChildren);
 
 			// assign something
 
@@ -126,6 +129,37 @@ namespace ThoughtWorks.CruiseControl.ControlPanel.Test
 		[Test, Ignore("nyi")]
 		public void TestCollections() 
 		{
+		}
+
+		[Test]
+		public void BuildTree()
+		{
+			model.Load(configuration);
+
+			// setup the project model to have the things in it that it should
+			ProjectModel projectModel = model.Projects[0];
+			projectModel.Items.Clear();
+
+			MockItem build = new MockItem("build", "nant", true);
+			build.Items.Add(new MockItem("exec", "nant.exe"));
+			projectModel.Items.Add(build);
+			projectModel.Items.Add(new MockItem("weburl", "http://localhost/marathon"));
+			projectModel.Items.Add(new MockItem("name", "marathon.net"));
+			projectModel.Items.Add(new MockItem("labeller", null, true));
+			
+			ConfigurationTreeNode configurationNode = model.GetNavigationTreeNodes();
+			ConfigurationItemTreeNode projectNode = (ConfigurationItemTreeNode) configurationNode.Nodes[0];
+
+			AssertEquals(2, projectNode.Nodes.Count);
+
+			// check 
+			AssertEquals("marathon.net", projectNode.Text);
+			AssertEquals("build", projectNode.Nodes[0].Text);
+			AssertEquals("labeller", projectNode.Nodes[1].Text);
+
+			// subitems
+			AssertEquals("weburl", projectNode.Items[0].Name);
+			AssertEquals("name", projectNode.Items[1].Name);
 		}
 
 		[Test]
@@ -202,18 +236,6 @@ namespace ThoughtWorks.CruiseControl.ControlPanel.Test
 
 				AssertEquals("old contents", files.ContentsOf("ccnet.out.config"));
 			}
-		}
-
-		[Test, Ignore("nyi")]
-		public void AddProject()
-		{
-			ConfigurationModel model = new ConfigurationModel();
-			model.Load(configuration);
-		}
-
-		[Test, Ignore("nyi")]
-		public void RemoveProject()
-		{
 		}
 
 		private void Print(ConfigurationItemCollection items, string indent) 

@@ -144,19 +144,39 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "ConfigurationItemControl.cs"
-                    SubType = "UserControl"
+                    RelPath = "ConfigurationItemTreeNode.cs"
+                    SubType = "Code"
                     BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "ConfigurationItemControl.resx"
-                    DependentUpon = "ConfigurationItemControl.cs"
-                    BuildAction = "EmbeddedResource"
                 />
                 <File
                     RelPath = "ConfigurationModel.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "ConfigurationTreeNode.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "FertileConfigurationItemControl.cs"
+                    SubType = "UserControl"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "FertileConfigurationItemControl.resx"
+                    DependentUpon = "FertileConfigurationItemControl.cs"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "GroupByCombo.cs"
+                    SubType = "UserControl"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "GroupByCombo.resx"
+                    DependentUpon = "GroupByCombo.cs"
+                    BuildAction = "EmbeddedResource"
                 />
                 <File
                     RelPath = "MainPanel.cs"
@@ -174,12 +194,37 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Prototype.cs"
+                    SubType = "Form"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Prototype.resx"
+                    DependentUpon = "Prototype.cs"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "SterileConfigurationItemControl.cs"
+                    SubType = "UserControl"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "SterileConfigurationItemControl.resx"
+                    DependentUpon = "SterileConfigurationItemControl.cs"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
                     RelPath = "Test\ConfigurationModelTest.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
                     RelPath = "Test\MainPanelTest.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Test\MockItem.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

@@ -44,7 +44,7 @@ namespace ThoughtWorks.CruiseControl.ControlPanel
 		}
 		#endregion
 
-		public void Bind(ConfigurationItemCollection items) 
+		public void Bind(ConfigurationItem [] items) 
 		{
 			foreach (Control control in Controls)
 			{
@@ -54,12 +54,27 @@ namespace ThoughtWorks.CruiseControl.ControlPanel
 
 			foreach (ConfigurationItem childItem in items)
 			{
-				ConfigurationItemControl childControl = new ConfigurationItemControl();
-				childControl.Bind(childItem);
+				Control childControl = NewChildControl(childItem);
 				Controls.Add(childControl);
 				childControl.Resize += new EventHandler(ChildControlResized);
 			}
 			ChildControlResized(null, EventArgs.Empty);
+		}
+
+		private Control NewChildControl(ConfigurationItem item) 
+		{
+			if (item.CanHaveChildren) 
+			{
+				FertileConfigurationItemControl childControl = new FertileConfigurationItemControl();
+				childControl.Bind(item);
+				return childControl;
+			}
+			else 
+			{
+				SterileConfigurationItemControl childControl = new SterileConfigurationItemControl();
+				childControl.Bind(item);
+				return childControl;
+			}
 		}
 
 		private void ChildControlResized(object sender, EventArgs e)

@@ -13,7 +13,15 @@ using ThoughtWorks.CruiseControl.Core.Sourcecontrol;
 
 namespace ThoughtWorks.CruiseControl.ControlPanel
 {
-	public abstract class ConfigurationItem
+	public interface IConfigurationItem
+	{
+		string Name { get; }
+		string ValueAsString { get; set; }
+		ConfigurationItemCollection Items { get; }
+		bool CanHaveChildren { get; }
+	}
+
+	public abstract class ConfigurationItem : IConfigurationItem
 	{
 		private string _name;
 		private object _parent;
@@ -48,6 +56,11 @@ namespace ThoughtWorks.CruiseControl.ControlPanel
 		public ConfigurationItemCollection Items
 		{
 			get { return _items; }
+		}
+
+		public virtual bool CanHaveChildren
+		{
+			get { return false; }
 		}
 
 		public override string ToString()
@@ -172,5 +185,11 @@ namespace ThoughtWorks.CruiseControl.ControlPanel
 			else
 				throw new ArgumentException(provider + "doesn't have a reflector attribute");
 		}
+
+		public override bool CanHaveChildren
+		{
+			get { return true; }
+		}
+
 	}
 }

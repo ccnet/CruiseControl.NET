@@ -13,7 +13,7 @@ using ThoughtWorks.CruiseControl.Core.Sourcecontrol;
 
 namespace ThoughtWorks.CruiseControl.ControlPanel
 {
-	public class ProjectModel 
+	public class ProjectModel : IConfigurationItem
 	{
 		private ConfigurationModel _configuration;
 		private string _name;
@@ -39,6 +39,17 @@ namespace ThoughtWorks.CruiseControl.ControlPanel
 		public void Save()
 		{
 			_configuration.Save();
+		}
+
+		public string ValueAsString
+		{
+			get { throw new NotSupportedException(); }
+			set { throw new NotSupportedException(); }
+		}
+
+		public bool CanHaveChildren
+		{
+			get { return true; }
 		}
 	}
 }

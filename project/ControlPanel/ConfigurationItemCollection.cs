@@ -76,9 +76,35 @@ namespace ThoughtWorks.CruiseControl.ControlPanel
 			InnerHashtable[item.Name] = item;
 		}
 
+		public ConfigurationItem [] ThatCanHaveChildren()
+		{
+			return FilterItems(true);
+		}
+
+		public ConfigurationItem [] ThatCanNotHaveChildren()
+		{
+			return FilterItems(false);
+		}
+
+		private ConfigurationItem [] FilterItems(bool canHaveChildren) 
+		{
+			ArrayList items = new ArrayList();
+			foreach (ConfigurationItem item in InnerHashtable.Values)
+			{
+				if (item.CanHaveChildren == canHaveChildren)
+					items.Add(item);
+			}
+			return (ConfigurationItem[]) items.ToArray(typeof(ConfigurationItem));
+		}
+
 		public ConfigurationItem this[string name]
 		{
 			get { return (ConfigurationItem) InnerHashtable[name]; }
+		}
+
+		public ConfigurationItem [] ToArray() 
+		{
+			return (ConfigurationItem[]) new ArrayList(InnerHashtable.Values).ToArray(typeof(ConfigurationItem));
 		}
 	}
 }

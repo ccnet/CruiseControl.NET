@@ -3,6 +3,7 @@ using System.Collections;
 using System.IO;
 using System.Reflection;
 using System.Text;
+using System.Windows.Forms;
 using System.Xml;
 
 using NUnit.Framework;
@@ -86,6 +87,25 @@ namespace ThoughtWorks.CruiseControl.ControlPanel
 				projects.Add(new ProjectModel(this, project));
 			}
 			_projects = (ProjectModel []) projects.ToArray(typeof(ProjectModel));
+		}
+
+		public ConfigurationTreeNode GetNavigationTreeNodes()
+		{
+			ConfigurationTreeNode baseNode = new ConfigurationTreeNode(_filename, this);
+
+			foreach (ProjectModel project in Projects) 
+			{
+				ConfigurationItemTreeNode projectNode = new ConfigurationItemTreeNode(project, project, project.Items.ThatCanNotHaveChildren());
+				baseNode.Nodes.Add(projectNode);
+
+				foreach (ConfigurationItem item in project.Items.ThatCanHaveChildren())
+				{
+					ConfigurationItemTreeNode itemNode = new ConfigurationItemTreeNode(project, item, new ConfigurationItem [] {item});
+					projectNode.Nodes.Add(itemNode);
+				}
+			}
+
+			return baseNode;
 		}
 
 		public ProjectModel [] Projects
