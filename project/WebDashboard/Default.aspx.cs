@@ -69,7 +69,8 @@ namespace tw.ccnet.webdashboard
 
 		private void StatusGrid_ItemDataBound(object sender, DataGridItemEventArgs e)
 		{
-			if ((ListItemType)e.Item.ItemType == ListItemType.Item)
+			if((e.Item.ItemType == ListItemType.Item) ||
+				(e.Item.ItemType == ListItemType.AlternatingItem))
 			{
 				ProjectStatus thisProjectsStatus = (ProjectStatus) e.Item.DataItem;
 				TableCell buildStatusCell = (TableCell)e.Item.Controls[1];
@@ -87,7 +88,6 @@ namespace tw.ccnet.webdashboard
 					buildStatusCell.ForeColor = Color.Red;
 				}
 			}
-
 		}
 
 		#region Web Form Designer generated code
@@ -101,6 +101,7 @@ namespace tw.ccnet.webdashboard
 		{    
 			this.StatusGrid.ItemDataBound += new System.Web.UI.WebControls.DataGridItemEventHandler(this.StatusGrid_ItemDataBound);
 			this.Load += new System.EventHandler(this.Page_Load);
+
 		}
 		#endregion
 	}
