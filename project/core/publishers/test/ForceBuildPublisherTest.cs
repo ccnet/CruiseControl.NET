@@ -24,10 +24,10 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers.Test
 		[Test]
 		public void PopulateFromMinimalXml()
 		{
-			string xml = @"<forcebuild project=""proj"" serverUri=""http://localhost"" />";
+			string xml = @"<forcebuild project=""proj"" />";
 			ForceBuildPublisher publisher = NetReflector.Read(xml) as ForceBuildPublisher;
 			Assert.AreEqual("proj", publisher.Project);
-			Assert.AreEqual("http://localhost", publisher.ServerUri);
+			Assert.AreEqual("tcp://localhost:21234/CruiseManager.rem", publisher.ServerUri);
 			Assert.AreEqual(IntegrationStatus.Success, publisher.IntegrationStatus);
 		}
 

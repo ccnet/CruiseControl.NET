@@ -18,8 +18,8 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
 		[ReflectorProperty("project")]
 		public string Project;
 
-		[ReflectorProperty("serverUri")]
-		public string ServerUri;
+		[ReflectorProperty("serverUri", Required=false)]
+		public string ServerUri = string.Format("tcp://localhost:21234/{0}", RemoteCruiseServer.URI);
 
 		[ReflectorProperty("integrationStatus", Required=false)]
 		public IntegrationStatus IntegrationStatus = IntegrationStatus.Success;
