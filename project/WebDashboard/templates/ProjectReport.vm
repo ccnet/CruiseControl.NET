@@ -1,5 +1,13 @@
 <h2>Project Report for $projectName</h2>
 
+<p>
+#if ($noLogsAvailable)
+There are currently no build logs available for this project - make sure your Build Server configuration is correct and that this Project's build is not throwing any exceptions
+#else
+Click <a href="$mostRecentBuildUrl">here</a> for the most recent build report.
+#end
+</p>
+
 #if ($externalLinks.Length > 0)
 <table class="ExternalLinks">
 	<tr>

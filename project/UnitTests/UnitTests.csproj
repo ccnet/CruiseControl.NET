@@ -912,6 +912,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "WebDashboard\Plugins\ProjectReport\ProjectReportProjectPluginTest.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "WebDashboard\Plugins\ViewServerLog\ServerLogServerPluginTest.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
