@@ -1,7 +1,7 @@
-using System;
 using System.IO;
 using System.Text;
 using System.Xml;
+using System.Xml.XPath;
 
 namespace ThoughtWorks.CruiseControl.Core.Publishers
 {
@@ -38,14 +38,12 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
 		private void AppendHtmlMessageDetails(StringBuilder message, IntegrationResult result)
 		{
 			StringWriter buffer = new StringWriter();
-
 			using (XmlIntegrationResultWriter integrationWriter = new XmlIntegrationResultWriter(new XmlTextWriter(buffer)))
 			{
 				integrationWriter.Write(result);
 			}
 
-			XmlDocument xml = new XmlDocument();
-			xml.LoadXml(buffer.ToString());			
+			XPathDocument xml = new XPathDocument(new StringReader(buffer.ToString()));
 			message.Append(new BuildLogTransformer().TransformResultsWithAllStyleSheets(xml));
 		}
 

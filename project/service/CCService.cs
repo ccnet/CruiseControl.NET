@@ -1,12 +1,9 @@
 using System;
-using System.ComponentModel;
 using System.Configuration;
 using System.Diagnostics;
 using System.IO;
 using System.ServiceProcess;
-
 using ThoughtWorks.CruiseControl.Core;
-using ThoughtWorks.CruiseControl.Core.Util;
 using ThoughtWorks.CruiseControl.Remote;
 
 namespace ThoughtWorks.CruiseControl.Service
@@ -18,42 +15,15 @@ namespace ThoughtWorks.CruiseControl.Service
 			ServiceBase.Run(new ServiceBase[] { new CCService() } );
 		}
 
-		private Container components = null;
 		private ICruiseServer server;
 
 		public CCService()
 		{
-			// This call is required by the Windows.Forms Component Designer.
-			InitializeComponent();
-		}
-
-		/// <summary> 
-		/// Required method for Designer support - do not modify 
-		/// the contents of this method with the code editor.
-		/// </summary>
-		private void InitializeComponent()
-		{
-			components = new Container();
 			this.ServiceName = "CCService";
 		}
 
 		/// <summary>
-		/// Clean up any resources being used.
-		/// </summary>
-		protected override void Dispose(bool disposing)
-		{
-			if (disposing)
-			{
-				if (components != null) 
-				{
-					components.Dispose();
-				}
-			}
-			base.Dispose(disposing);
-		}
-
-		/// <summary>
-		/// Set things in motion so your service can do its work.
+		/// Start the service
 		/// </summary>
 		protected override void OnStart(string[] args)
 		{

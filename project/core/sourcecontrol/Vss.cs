@@ -28,7 +28,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 
 		public CultureInfo CultureInfo = CultureInfo.CurrentCulture;
 
-		public Vss(): this(new VssHistoryParser(), new ProcessExecutor(), new Registry())
+		public Vss(): this(new VssHistoryParser(VssLocaleFactory.Create()), new ProcessExecutor(), new Registry())
 		{
 		}
 
@@ -75,7 +75,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 		public bool AutoGetSource = false;
 
 		[ReflectorProperty("workingDirectory", Required = false)]
-		public string WorkingDirectory;
+		public string WorkingDirectory = Directory.GetCurrentDirectory();
 
 		public override Modification[] GetModifications(DateTime from, DateTime to)
 		{

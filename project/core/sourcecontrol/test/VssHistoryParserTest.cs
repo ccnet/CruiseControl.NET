@@ -14,8 +14,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test
 		[SetUp]
 		public void SetUp()
 		{
-			_parser = new VssHistoryParser();
-			_parser.CultureInfo = new CultureInfo("en-US");
+			_parser = new VssHistoryParser(new EnglishVssLocale());
 		}
 
 		public void AssertEquals(Modification expected, Modification actual)
@@ -85,7 +84,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test
 			Modification mod = new Modification();
 			
 			string line = "foo\r\nUser: Admin        Date:  9/16/02   Time:  2:40p\r\n";
-			CheckInParser parser = new CheckInParser(line, new CultureInfo("en-US"));
+			CheckInParser parser = new CheckInParser(line, new EnglishVssLocale(new CultureInfo("en-US")));
 			parser.ParseUsernameAndDate(mod);
 			string expectedUsername = "Admin";
 			DateTime expectedDate = new DateTime(2002, 09, 16, 14, 40, 0);
@@ -98,11 +97,23 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test
 		{
 			Modification mod = new Modification();
 			string line = "foo\r\nUser: Admin        Date:  16/9/02   Time:  22:40\r\n";
-			CheckInParser parser = new CheckInParser(line, new CultureInfo("en-GB"));
+			CheckInParser parser = new CheckInParser(line, new EnglishVssLocale(new CultureInfo("en-GB")));
 			parser.ParseUsernameAndDate(mod);
 
 			AssertEquals("Admin", mod.UserName);
 			AssertEquals(new DateTime(2002, 9, 16, 22, 40, 0), mod.ModifiedTime);
+		}
+
+		[Test]
+		public void ParseUsernameAndFRDate()
+		{
+			Modification mod = new Modification();
+			string line = "foo\r\nUtilisateur: Admin        Date:  2/06/04   Heure: 14:04\r\n";
+			CheckInParser parser = new CheckInParser(line, new FrenchVssLocale());
+			parser.ParseUsernameAndDate(mod);
+
+			AssertEquals("Admin", mod.UserName);
+			AssertEquals(new DateTime(2004,6,2,14,4,0), mod.ModifiedTime);
 		}
 
 		[Test]
@@ -112,7 +123,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test
 			Modification mod = new Modification();
 			
 			string line = "foo\r\nUser: Gabriel.gilabert     Date:  5/08/03   Time:  4:06a\r\n";
-			CheckInParser parser = new CheckInParser(line, new CultureInfo("en-US"));
+			CheckInParser parser = new CheckInParser(line, new EnglishVssLocale(new CultureInfo("en-US")));
 			parser.ParseUsernameAndDate(mod);
 			string expectedUsername = "Gabriel.gilabert";
 			DateTime expectedDate = new DateTime(2003, 05, 08, 04, 06, 0);
@@ -126,7 +137,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test
 			Modification mod = new Modification();
 			
 			string line = "foo\r\nUser: Gabriel Gilabert     Date:  5/08/03   Time:  4:06a\r\n";
-			CheckInParser parser = new CheckInParser(line, new CultureInfo("en-US"));
+			CheckInParser parser = new CheckInParser(line, new EnglishVssLocale(new CultureInfo("en-US")));
 			parser.ParseUsernameAndDate(mod);
 			string expectedUsername = "Gabriel Gilabert";
 			DateTime expectedDate = new DateTime(2003, 05, 08, 04, 06, 0);
@@ -138,14 +149,14 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test
 		public void ParseInvalidUsernameLine()
 		{
 			string line = "foo\r\nbar\r\n";
-			new CheckInParser(line, new CultureInfo("en-US")).ParseUsernameAndDate(new Modification());
+			new CheckInParser(line, new EnglishVssLocale(new CultureInfo("en-US"))).ParseUsernameAndDate(new Modification());
 		}
 
 		[Test]
 		public void ParseFileName() 
 		{
 			string fileName = "**** Im a file name.fi     ********\r\n jakfakjfnb  **** ** lkjnbfgakj ****";
-			CheckInParser parser = new CheckInParser(fileName, new CultureInfo("en-US"));
+			CheckInParser parser = new CheckInParser(fileName, new EnglishVssLocale(new CultureInfo("en-US")));
 			string actual = parser.ParseFileName();
 			AssertEquals("Im a file name.fi", actual);
 		}
@@ -165,9 +176,32 @@ Comment: added fir to tree file, checked in recursively from project root";
 			Modification mod = ParseAndAssertFilenameAndFolder(entry, expectedFile, expectedFolder);
 			AssertEquals("Admin", mod.UserName);
 			AssertEquals(new DateTime(2002, 9, 16, 17, 01, 0), mod.ModifiedTime);
-			AssertEquals("checkin", mod.Type);
+			AssertEquals("Checked in", mod.Type);
 			AssertEquals("added fir to tree file, checked in recursively from project root",mod.Comment);
 		}
+
+		[Test]
+		public void ParseFileAndFolderFR_checkin()
+		{
+			// change the parser culture for this test only
+			_parser = new VssHistoryParser(new FrenchVssLocale());
+
+			string entry = @"*****  happyTheFile.txt  *****
+Version 16
+Utilisateur: Admin        Date:  25/11/02   Heure: 17:32
+Archivé dans $/you/want/folders/i/got/em
+Commentaire: adding this file makes me so happy";
+
+			string expectedFile = "happyTheFile.txt";
+			string expectedFolder = "$/you/want/folders/i/got/em";
+
+			Modification mod = ParseAndAssertFilenameAndFolder(entry, expectedFile, expectedFolder);
+			AssertEquals("Admin", mod.UserName);
+			AssertEquals(new DateTime(2002, 11, 25, 17, 32, 0), mod.ModifiedTime);
+			AssertEquals("Archivé dans", mod.Type);
+			AssertEquals("adding this file makes me so happy",mod.Comment);
+		}
+
 
 		[Test]
 		public void ParseFileAndFolderWithNoComment()
@@ -179,7 +213,7 @@ Checked in $/you/want/folders/i/got/em
 ";
 
 			Modification mod = ParseAndAssertFilenameAndFolder(entry, "happyTheFile.txt", "$/you/want/folders/i/got/em");
-			AssertEquals("checkin", mod.Type);
+			AssertEquals("Checked in", mod.Type);
 			AssertNull(mod.Comment);
 		}
 
@@ -244,7 +278,7 @@ happyTheFile.txt deleted";
 		[Test]
 		public void ParseSingleLineComment()
 		{
-			CheckInParser parser = new CheckInParser(EntryWithSingleLineComment(), new CultureInfo("en-US"));
+			CheckInParser parser = new CheckInParser(EntryWithSingleLineComment(), new EnglishVssLocale());
 			Modification mod = new Modification();
 			parser.ParseComment(mod);
 			AssertEquals("a", "added subfolder", mod.Comment);
@@ -253,7 +287,7 @@ happyTheFile.txt deleted";
 		[Test]
 		public void ParseMultiLineComment()
 		{
-			CheckInParser parser = new CheckInParser(EntryWithMultiLineComment(), new CultureInfo("en-US"));
+			CheckInParser parser = new CheckInParser(EntryWithMultiLineComment(), new EnglishVssLocale());
 			Modification mod = new Modification();
 			parser.ParseComment(mod);
 			AssertEquals("b", @"added subfolder
@@ -263,7 +297,7 @@ and then added a new line", mod.Comment);
 		[Test]
 		public void ParseEmptyComment()
 		{
-			CheckInParser parser = new CheckInParser(EntryWithEmptyComment(), new CultureInfo("en-US"));
+			CheckInParser parser = new CheckInParser(EntryWithEmptyComment(), new EnglishVssLocale());
 			Modification mod = new Modification();
 			parser.ParseComment(mod);
 			AssertEquals(String.Empty, mod.Comment);
@@ -272,7 +306,7 @@ and then added a new line", mod.Comment);
 		[Test]
 		public void ParseEmptyLineComment()
 		{
-			CheckInParser parser = new CheckInParser(EntryWithEmptyCommentLine(), new CultureInfo("en-US"));
+			CheckInParser parser = new CheckInParser(EntryWithEmptyCommentLine(), new EnglishVssLocale());
 			Modification mod = new Modification();
 			parser.ParseComment(mod);
 			AssertEquals(null, mod.Comment);
@@ -281,7 +315,7 @@ and then added a new line", mod.Comment);
 		[Test]
 		public void ParseNoComment()
 		{
-			CheckInParser parser = new CheckInParser(EntryWithNoCommentLine(), new CultureInfo("en-US"));
+			CheckInParser parser = new CheckInParser(EntryWithNoCommentLine(), new EnglishVssLocale());
 			Modification mod = new Modification();
 			parser.ParseComment(mod);
 			AssertEquals(null, mod.Comment);
@@ -290,7 +324,7 @@ and then added a new line", mod.Comment);
 		[Test]
 		public void ParseNonCommentAtCommentLine()
 		{
-			CheckInParser parser = new CheckInParser(EntryWithNonCommentAtCommentLine(), new CultureInfo("en-US"));
+			CheckInParser parser = new CheckInParser(EntryWithNonCommentAtCommentLine(), new EnglishVssLocale());
 			Modification mod = new Modification();
 			parser.ParseComment(mod);
 			AssertEquals(null, mod.Comment);

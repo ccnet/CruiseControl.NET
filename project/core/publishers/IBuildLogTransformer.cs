@@ -1,11 +1,10 @@
-using System;
-using System.Xml;
+using System.Xml.XPath;
 
 namespace ThoughtWorks.CruiseControl.Core.Publishers
 {
 	public interface IBuildLogTransformer
 	{
-		string Transform(XmlDocument document, string xslFile);
-		string TransformResultsWithAllStyleSheets(XmlDocument document); 
+		string Transform(XPathDocument document, string xslFile);
+		string TransformResultsWithAllStyleSheets(XPathDocument document); 
 	}
 }

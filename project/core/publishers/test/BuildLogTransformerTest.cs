@@ -1,6 +1,6 @@
-using System;
+using System.IO;
+using System.Xml.XPath;
 using NUnit.Framework;
-using System.Xml;
 
 namespace ThoughtWorks.CruiseControl.Core.Publishers.Test
 {
@@ -11,7 +11,7 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers.Test
 		public void TransformingDocumentWithEmptyXSLFilesReturnsEmptyString()
 		{
 			BuildLogTransformer xformer = new BuildLogTransformer();
-			string result = xformer.TransformResults(null, new XmlDocument());
+			string result = xformer.TransformResults(null, new XPathDocument(new StringReader("<foo />")));
 			AssertEquals("",result);
 		}
 	}

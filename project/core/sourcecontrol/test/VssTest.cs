@@ -37,7 +37,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test
 			mockProcessExecutor = new DynamicMock(typeof(ProcessExecutor)); mockProcessExecutor.Strict = true;
 			mockRegistry = new DynamicMock(typeof(IRegistry)); mockProcessExecutor.Strict = true;
 			mockRegistry.SetupResult("GetExpectedLocalMachineSubKeyValue", DEFAULT_SS_EXE_PATH, typeof(string), typeof(string));
-			vss = new Vss(new VssHistoryParser(), (ProcessExecutor) mockProcessExecutor.MockInstance, (IRegistry) mockRegistry.MockInstance);
+			vss = new Vss(new VssHistoryParser(new EnglishVssLocale()), (ProcessExecutor) mockProcessExecutor.MockInstance, (IRegistry) mockRegistry.MockInstance);
 			vss.CultureInfo = CultureInfo.InvariantCulture;
 			vss.Project = "$/fooProject";
 			vss.Username = "Admin";

@@ -17,7 +17,6 @@ namespace ThoughtWorks.CruiseControl.Core.Config
 		public ConfigurationContainer(IConfigurationLoader loader, IFileWatcher watcher)
 		{
 			_loader = loader;
-
 			_watcher = watcher;
 			_watcher.OnFileChanged += new FileSystemEventHandler(HandleConfigurationFileChanged);
 		}
@@ -27,7 +26,7 @@ namespace ThoughtWorks.CruiseControl.Core.Config
 			_handler += handler;
 		}
 
-		private void InstanciateConfig()
+		private void InstantiateConfig()
 		{
 			if (_config == null)
 			{
@@ -52,7 +51,7 @@ namespace ThoughtWorks.CruiseControl.Core.Config
 			{
 				lock(this)
 				{
-					InstanciateConfig();
+					InstantiateConfig();
 					if (_config != null)
 					{
 						return _config.Projects; 
@@ -71,7 +70,7 @@ namespace ThoughtWorks.CruiseControl.Core.Config
 			{ 
 				lock(this)
 				{
-					InstanciateConfig();
+					InstantiateConfig();
 					if (_config != null)
 					{
 						return _config.Integrators;

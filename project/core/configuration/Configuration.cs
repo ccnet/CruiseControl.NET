@@ -1,6 +1,3 @@
-using System;
-using System.Collections;
-
 namespace ThoughtWorks.CruiseControl.Core.Config
 {
 	public class Configuration : IConfiguration
