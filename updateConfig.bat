@@ -1,0 +1,1 @@
+tools\nant\NAnt.exe -D:in=%1 -D:out=%2 updateConfig
