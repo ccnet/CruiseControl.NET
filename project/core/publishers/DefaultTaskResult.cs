@@ -8,9 +8,9 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
 	{
 		private FileInfo _file;
 
-		public DefaultTaskResult(string mergeFile)
+		public DefaultTaskResult(FileInfo file)
 		{
-			_file = new FileInfo(mergeFile) ;
+			_file = file;
 		}
 
 		public string Data 

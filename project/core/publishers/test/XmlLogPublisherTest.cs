@@ -61,12 +61,6 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers.Test
         }
 
         [Test]
-        public void PublishIntegrationResultsTransformsMergeFilesToTasks()
-        {
-
-        }
-
-        [Test]
         public void ResolveWildCards()
         {
             TempFileUtil.CreateTempDir(TEMP_SUBDIR);
@@ -78,7 +72,7 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers.Test
             _publisher.MergeFiles = new string[] {LOGDIR + "\\*.xml"};
             ArrayList list = _publisher.GetMergeFileList();
             AssertEquals(1, list.Count);
-            AssertEquals(LOGDIR + "\\foo.xml", (string) list[0]);
+            AssertEquals(LOGDIR + "\\foo.xml", ((FileInfo) list[0]).FullName);
 
             _publisher.MergeFiles = new string[] {LOGDIR + "\\foo.*"};
             list = _publisher.GetMergeFileList();
@@ -126,17 +120,17 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers.Test
         [Test]
         public void MergeFile()
         {
-			
             TempFileUtil.CreateTempDir(TEMP_SUBDIR);
             IntegrationResult result = CreateIntegrationResult(IntegrationStatus.Success, false);
             string logDir = TempFileUtil.GetTempPath(TEMP_SUBDIR);
-            string logFile = TempFileUtil.CreateTempXmlFile(logDir, "foo.xml", "<?xml version=\"1.0\" encoding=\"utf-16\" standalone=\"no\"?><foo bar=\"4\">bat</foo>");
+			string logFile = TempFileUtil.CreateTempXmlFile(logDir, "foo.xml", "<?xml version=\"1.0\" encoding=\"utf-16\" standalone=\"no\"?><foo bar=\"4\">bat</foo>");
+			TempFileUtil.CreateTempXmlFile(logDir, "zip.xml", "<zip/>");
 
             _publisher.LogDir = logDir;
-            _publisher.MergeFiles = new string [] {logFile};
+            _publisher.MergeFiles = new string [] {logFile, Path.Combine(logDir, "zi*.xml")};		// include wildcard filename
             _publisher.PublishIntegrationResults(null, result);
 
-            string expected = "<cruisecontrol><modifications />" + CreateExpectedBuildXml(result) + "<foo bar=\"4\">bat</foo></cruisecontrol>";
+            string expected = "<cruisecontrol><modifications />" + CreateExpectedBuildXml(result) + "<foo bar=\"4\">bat</foo><zip /></cruisecontrol>";
             string actualFilename = Path.Combine(logDir, _publisher.GetFilename(result));
             using (StreamReader textReader = File.OpenText(actualFilename))
             {

@@ -192,7 +192,7 @@ namespace ThoughtWorks.CruiseControl.Core
 		/// </summary>
 		public void ForceBuild()
 		{
-			Log.Info("Force Build for project: " + _project);
+			Log.Info("Force Build for project: " + _project.Name);
 			Start();
 			((Schedules.Schedule)_schedule).ForceBuild();
 		}
