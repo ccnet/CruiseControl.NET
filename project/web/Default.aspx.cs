@@ -27,11 +27,10 @@ namespace ThoughtWorks.CruiseControl.Web
 
 		private void Page_Load(object sender, EventArgs e)
 		{
-			logfile = WebUtil.ResolveLogFile(Context);
-			GeneratePluginLinks();
-
 			try
 			{
+				logfile = WebUtil.ResolveLogFile(Context);
+				GeneratePluginLinks();
 				InitDisplayLogFile();
 			}
 			catch (CruiseControlException ex)

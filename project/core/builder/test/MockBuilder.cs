@@ -9,6 +9,7 @@ namespace ThoughtWorks.CruiseControl.Core.Builder.Test
 	[ReflectorType("mockbuildrunner")]
 	public class MockBuilder : IBuilder
 	{
+		public const string BUILDER_OUTPUT = "success";
 		public bool HasRun = false;
 
 		public bool ShouldRun(IntegrationResult result)
@@ -19,7 +20,7 @@ namespace ThoughtWorks.CruiseControl.Core.Builder.Test
 		public void Run(IntegrationResult result)
 		{
 			result.Status = IntegrationStatus.Success;
-			result.Output = "success";
+			result.Output = BUILDER_OUTPUT;
 			HasRun = true;
 		}
 	}

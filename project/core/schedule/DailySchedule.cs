@@ -40,6 +40,9 @@ namespace ThoughtWorks.CruiseControl.Core.Schedules
 			}
 		}
 
+		[ReflectorProperty("buildCondition", Required=false)]
+		public BuildCondition BuildCondition = BuildCondition.IfModificationExists;
+
 		private void SetNextIntegrationDateTime()
 		{
 			DateTime now = _dtProvider.Now;

@@ -29,10 +29,11 @@ namespace ThoughtWorks.CruiseControl.Core.Schedules.Test
 		[Test]
 		public void PopulateFromReflector()
 		{
-			string xml = string.Format(@"<schedule sleepSeconds=""1"" iterations=""1""/>");
+			string xml = string.Format(@"<schedule sleepSeconds=""1"" iterations=""1"" buildCondition=""ForceBuild"" />");
 			Schedule schedule = (Schedule)NetReflector.Read(xml);
 			AssertEquals(1, schedule.SleepSeconds);
 			AssertEquals(1, schedule.TotalIterations);
+			AssertEquals(BuildCondition.ForceBuild, schedule.BuildCondition);
 		}
 
 		[Test]
@@ -86,7 +87,7 @@ namespace ThoughtWorks.CruiseControl.Core.Schedules.Test
 		}
 
 		[Test]
-		public void ShouldStopIntegration()
+		public void ShouldStopIntegrationAfterTwoIterations()
 		{
 			Schedule schedule = new Schedule();
 			schedule.TotalIterations = 2;
@@ -97,6 +98,15 @@ namespace ThoughtWorks.CruiseControl.Core.Schedules.Test
 			schedule.IntegrationCompleted();
 			Assert(schedule.ShouldStopIntegration());
 			AssertEquals(BuildCondition.NoBuild, schedule.ShouldRunIntegration());
+		}
+
+		[Test]
+		public void ShouldReturnSpecifiedBuildConditionWhenShouldRunIntegration()
+		{
+			_mockDateTime.SetupResult("Now", new DateTime(2004, 1, 1, 1, 0, 0, 0));
+
+			_schedule.BuildCondition = BuildCondition.ForceBuild;
+			AssertEquals(BuildCondition.ForceBuild, _schedule.ShouldRunIntegration());
 		}
 	}
 }

@@ -40,6 +40,9 @@ namespace ThoughtWorks.CruiseControl.Core.Schedules
 		[ReflectorProperty("iterations", Required=false)]
 		public int TotalIterations = Infinite;
 
+		[ReflectorProperty("buildCondition", Required=false)]
+		public BuildCondition BuildCondition = BuildCondition.IfModificationExists;
+
 		public void IntegrationCompleted()
 		{
 			_iterationsSoFar++;
@@ -55,7 +58,7 @@ namespace ThoughtWorks.CruiseControl.Core.Schedules
 			if (timeSinceLastBuild.TotalSeconds < SleepSeconds)
 				return BuildCondition.NoBuild;
 
-			return BuildCondition.IfModificationExists;
+			return BuildCondition;
 		}
 
 		public bool ShouldStopIntegration()

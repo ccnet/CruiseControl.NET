@@ -30,8 +30,9 @@ namespace ThoughtWorks.CruiseControl.Core.Schedules.Test
 		[Test]
 		public void PopulateFromConfiguration()
 		{
-			DailySchedule schedule = (DailySchedule)NetReflector.Read(@"<daily integrationTime=""23:59""/>");
+			DailySchedule schedule = (DailySchedule)NetReflector.Read(@"<daily integrationTime=""23:59"" buildCondition=""ForceBuild"" />");
 			AssertEquals(new TimeSpan(23, 59, 0).ToString(), schedule.IntegrationTime);
+			AssertEquals(BuildCondition.ForceBuild, schedule.BuildCondition);
 		}
 
 		[Test, ExpectedException(typeof(ConfigurationException))]
