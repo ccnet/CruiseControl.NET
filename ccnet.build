@@ -25,7 +25,7 @@
     <property name="service.exe" value="ccservice.exe"/>
     <property name="cctray.exe" value="cctray.exe"/>
     <property name="nunit-console.exe" value="tools\nunit\nunit-console.exe" />
-    <property name="ncover-console.exe" value="tools\ncover\ncover.exe" />
+    <property name="ncover-console.exe" value="tools\ncover\NCover.Console.exe" />
 
     <target name="all" depends="clean, compile, test, deploy, dist"/>
 
@@ -66,7 +66,7 @@
 		<exec program="${nunit-console.exe}" workingdir="${build.dir}\core" commandline="${core.dll} /xml:../${core.dll}-results.xml /nologo"/>
 		<exec program="${nunit-console.exe}" workingdir="${build.dir}\server" commandline="${console.exe} /xml:../${console.exe}-results.xml /nologo"/>
 		<exec program="regsvr32" workingdir="tools\ncover" commandline="/s CoverLib.dll" />
-		<exec program="${ncover-console.exe}" workingdir="${build.dir}\unittests" commandline="/c &quot;..\..\${nunit-console.exe} ${unittests.dll} /xml:../${unittests.dll}-results.xml /nologo&quot;"/>
+		<exec program="${ncover-console.exe}" workingdir="${build.dir}\unittests" commandline="/w . /c &quot;..\..\${nunit-console.exe}&quot; &quot;${unittests.dll} /xml:../${unittests.dll}-results.xml /nologo&quot;"/>
 	</target>
 
 	<!-- Used for manually testing the webapp. Don't include this in an automated build
