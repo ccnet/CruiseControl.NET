@@ -11,7 +11,8 @@ namespace ThoughtWorks.CruiseControl.Core
 		public static readonly string DefaultArtifactSubDirectory = "Artifacts";
 
 		private string _name;
-		private ISchedule _schedule = new Schedule();
+		private IIntegrationTrigger integrationTrigger = new NeverTriggerIntegrationTrigger();
+		private IStopProjectTrigger stopProjectTrigger = new NeverStopProjectTrigger();
 		private string _configuredWorkingDirectory;
 		private string _configuredArtifactDirectory;
 
@@ -22,11 +23,18 @@ namespace ThoughtWorks.CruiseControl.Core
 			set { _name = value; }
 		}
 
-		[ReflectorProperty("schedule", InstanceTypeKey="type", Required=false)]
-		public virtual ISchedule Schedule
+		[ReflectorProperty("integrationTrigger", InstanceTypeKey="type", Required=false)]
+		public virtual IIntegrationTrigger IntegrationTrigger
 		{
-			get { return _schedule; }
-			set { _schedule = value; }
+			get { return integrationTrigger; }
+			set { integrationTrigger = value; }
+		}
+
+		[ReflectorProperty("stopProjectTrigger", InstanceTypeKey="type", Required=false)]
+		public virtual IStopProjectTrigger StopProjectTrigger
+		{
+			get { return stopProjectTrigger; }
+			set { stopProjectTrigger = value; }
 		}
 
 		[ReflectorProperty("workingDirectory", Required=false)]

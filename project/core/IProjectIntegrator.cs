@@ -1,12 +1,9 @@
-using System;
 using ThoughtWorks.CruiseControl.Remote;
 
 namespace ThoughtWorks.CruiseControl.Core
 {
 	public interface IProjectIntegrator
 	{
-		// TODO look into whether the setters are required for these properties
-		ISchedule Schedule { get; } 
 		IProject Project { get; }
 
 		string Name { get; }

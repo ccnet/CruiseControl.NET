@@ -6,7 +6,7 @@ namespace ThoughtWorks.CruiseControl.Core
 	/// Interface to which all projects must adhere, and via which all application
 	/// code should interact with projects.
 	/// </summary>
-	public interface IProject
+	public interface IProject : IIntegratable
 	{
 		/// <summary>
 		/// The name of this project.
@@ -17,9 +17,17 @@ namespace ThoughtWorks.CruiseControl.Core
 		}
 
 		/// <summary>
-		/// Schedule information for this project's build.
+		/// A component to trigger integrations for this project.
 		/// </summary>
-		ISchedule Schedule 
+		IIntegrationTrigger IntegrationTrigger 
+		{
+			get;
+		}
+
+		/// <summary>
+		/// A component to trigger when to stop this project.
+		/// </summary>
+		IStopProjectTrigger StopProjectTrigger 
 		{
 			get;
 		}
@@ -55,13 +63,6 @@ namespace ThoughtWorks.CruiseControl.Core
 		{
 			get;
 		}
-
-		/// <summary>
-		/// Runs an integration of this project.
-		/// </summary>
-		/// <param name="buildCondition"></param>
-		/// <returns>The result of the integration, or null if no integration took place.</returns>
-		IIntegrationResult RunIntegration(BuildCondition buildCondition);
 
 		/// <summary>
 		/// Returns the most recent build status.

@@ -24,7 +24,6 @@ namespace ThoughtWorks.CruiseControl.Core
 	///		<build type="nant"></build>
 	///		<state type="state"></state>
 	///		<publishers></publishers>
-	///		<schedule type="schedule" sleepSeconds="300" />
 	/// </project>
 	/// ]]>
 	/// </code>

@@ -10,25 +10,29 @@ namespace ThoughtWorks.CruiseControl.Core
 	/// This integrator, when running, coordinates the top-level life cycle of
 	/// a project's integration.
 	/// <list type="1">
-	///		<item>The <see cref="ISchedule"/> instance is asked whether to build or not.</item>
+	///		<item>The <see cref="IIntegrationTrigger"/> instance is asked whether to build or not.</item>
 	///		<item>If a build is required, the <see cref="IProject.RunIntegration(BuildCondition buildCondition)"/>
 	///		is called.</item>
 	/// </list>
 	/// </summary>
 	public class ProjectIntegrator : IProjectIntegrator, IDisposable
 	{
-		private ISchedule _schedule;
+		private readonly IIntegratable integratable;
+		private readonly IStopProjectTrigger stopProjectTrigger;
+		private IIntegrationTrigger integrationTrigger;
 		private IProject _project;
 		private bool _forceBuild;
 		private Thread _thread;
 		private ProjectIntegratorState _state = ProjectIntegratorState.Stopped;
 
-		public ProjectIntegrator(IProject project) : this(project.Schedule, project) { }
+		public ProjectIntegrator(IProject project) : this(project.IntegrationTrigger, project.StopProjectTrigger, project, project) { }
 
-		public ProjectIntegrator(ISchedule schedule, IProject project)
+		public ProjectIntegrator(IIntegrationTrigger integrationTrigger, IStopProjectTrigger stopProjectTrigger, IIntegratable integratable, IProject project)
 		{
-			_schedule = schedule;
+			this.integrationTrigger = integrationTrigger;
+			this.stopProjectTrigger = stopProjectTrigger;
 			_project = project;
+			this.integratable = integratable;
 		}
 
 		public string Name
@@ -39,11 +43,6 @@ namespace ThoughtWorks.CruiseControl.Core
 		public IProject Project 
 		{ 
 			get { return _project; }
-		}
-
-		public ISchedule Schedule
-		{
-			get { return _schedule; }
 		}
 
 		public ProjectIntegratorState State
@@ -98,7 +97,7 @@ namespace ThoughtWorks.CruiseControl.Core
 				{
 					try
 					{
-						_project.RunIntegration(buildCondition);
+						integratable.RunIntegration(buildCondition);
 					}
 					catch (Exception ex) 
 					{ 
@@ -106,11 +105,12 @@ namespace ThoughtWorks.CruiseControl.Core
 					}
 
 					// notify the schedule whether the build was successful or not
-					_schedule.IntegrationCompleted();
+					integrationTrigger.IntegrationCompleted();
+					stopProjectTrigger.IntegrationCompleted();
 				}
 
 				// should we stop the entire continuous integration process for this project?
-				if (_schedule.ShouldStopIntegration())
+				if (stopProjectTrigger.ShouldStopProject())
 					_state = ProjectIntegratorState.Stopping;
 
 				// sleep for a short while, to avoid hammering CPU
@@ -128,7 +128,7 @@ namespace ThoughtWorks.CruiseControl.Core
 				_forceBuild = false;
 				return BuildCondition.ForceBuild;
 			}
-			return _schedule.ShouldRunIntegration();
+			return integrationTrigger.ShouldRunIntegration();
 		}
 
 		/// <summary>

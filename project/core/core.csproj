@@ -170,6 +170,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "IIntegratable.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "IIntegrationResult.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -664,17 +669,32 @@
                     BuildAction = "Content"
                 />
                 <File
-                    RelPath = "schedule\DailySchedule.cs"
+                    RelPath = "schedule\IntervalIntegrationTrigger.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "schedule\Schedule.cs"
+                    RelPath = "schedule\NeverStopProjectTrigger.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "schedule\test\DailyScheduleTest.cs"
+                    RelPath = "schedule\NeverTriggerIntegrationTrigger.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "schedule\ScheduleIntegrationTrigger.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "schedule\StopProjectAfterNumberOfIntegrationsTrigger.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "schedule\test\IntervalIntegrationTriggerTest.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -684,7 +704,7 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "schedule\test\ScheduleTest.cs"
+                    RelPath = "schedule\test\ScheduleIntegrationTriggerTest.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

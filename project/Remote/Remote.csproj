@@ -140,12 +140,17 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "IIntegrationTrigger.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "IntegrationStatus.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "ISchedule.cs"
+                    RelPath = "IStopTrigger.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
