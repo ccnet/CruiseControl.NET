@@ -104,6 +104,11 @@
                     AssemblyName = "Drew.Agents"
                     HintPath = "..\..\lib\CCTray\Drew.Agents.dll"
                 />
+                <Reference
+                    Name = "WebServiceProxy"
+                    Project = "{19C24DF5-7EE8-4325-AFD6-C18D6C85DD9B}"
+                    Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
+                />
             </References>
         </Build>
         <Files>
@@ -124,6 +129,11 @@
                 />
                 <File
                     RelPath = "BuildTransition.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "ConnectionMethod.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -195,19 +205,19 @@
                 />
                 <File
                     RelPath = "Audio\broken.wav"
-                    BuildAction = "EmbeddedResource"
+                    BuildAction = "Content"
                 />
                 <File
                     RelPath = "Audio\fixed.wav"
-                    BuildAction = "EmbeddedResource"
+                    BuildAction = "Content"
                 />
                 <File
                     RelPath = "Audio\still-failing.wav"
-                    BuildAction = "EmbeddedResource"
+                    BuildAction = "Content"
                 />
                 <File
                     RelPath = "Audio\still-successful.wav"
-                    BuildAction = "EmbeddedResource"
+                    BuildAction = "Content"
                 />
             </Include>
         </Files>

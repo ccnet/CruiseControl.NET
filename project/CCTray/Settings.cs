@@ -25,6 +25,8 @@ namespace ThoughtWorks.CruiseControl.Remote.monitor
 
 		public Agents Agents = new Agents();
 
+		public ConnectionMethod ConnectionMethod;
+
 		public Settings()
 		{
 		}
@@ -34,6 +36,8 @@ namespace ThoughtWorks.CruiseControl.Remote.monitor
 			Settings defaults = new Settings();
 
 			defaults.ProjectName = "ProjectName";
+
+			defaults.ConnectionMethod = ConnectionMethod.Remoting;
 
 			defaults.Sounds = Sounds.CreateDefaultSettings();
 			defaults.NotificationBalloon = NotificationBalloon.CreateDefaultSettings();

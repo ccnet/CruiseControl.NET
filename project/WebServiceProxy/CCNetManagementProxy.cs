@@ -8,6 +8,13 @@ namespace ThoughtWorks.CruiseControl.WebServiceProxy
 	/// </summary>
 	public class CCNetManagementProxy : ICruiseManager
 	{
+		private string _serverUrl;
+
+		public CCNetManagementProxy(string serverUrl)
+		{
+			_serverUrl = serverUrl;
+		}
+
 		#region ICruiseManager Members
 
 		public void StopCruiseControl()
@@ -65,7 +72,9 @@ namespace ThoughtWorks.CruiseControl.WebServiceProxy
 		{
 			get
 			{
-				return new Generated.CCNetManagementService();
+				Generated.CCNetManagementService service = new Generated.CCNetManagementService();
+				service.Url = _serverUrl;
+				return service;
 			}
 		}
 	}

@@ -221,9 +221,17 @@ namespace ThoughtWorks.CruiseControl.Remote.monitor
 
 		ICruiseManager GetRemoteCruiseControlProxy()
 		{
-			ICruiseManager remoteCC
-				= (ICruiseManager)RemotingServices.Connect(typeof(ICruiseManager), Settings.RemoteServerUrl);
-			return remoteCC;
+			if (Settings.ConnectionMethod==ConnectionMethod.Remoting)
+			{
+				return (ICruiseManager)RemotingServices.Connect(typeof(ICruiseManager), Settings.RemoteServerUrl);
+			}
+
+			if (Settings.ConnectionMethod==ConnectionMethod.WebService)
+			{
+				return (ICruiseManager)new ThoughtWorks.CruiseControl.WebServiceProxy.CCNetManagementProxy(Settings.RemoteServerUrl);
+			}
+
+			throw new NotImplementedException("Connection method " + Settings.ConnectionMethod + " is not implemented.");
 		}
 
 
