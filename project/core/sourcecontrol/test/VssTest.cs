@@ -108,6 +108,20 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test
 			AssertEquals(expectedArgs, actual.StartInfo.Arguments);
 		}
 
+		[Test]
+		public void CreateLabelProcessForCurrentVersion()
+		{
+			string label = "testLabel";
+			Process actual = _vss.CreateLabelProcess(label);
+
+			string expectedExecutable = @"..\tools\vss\ss.exe";
+			string expectedArgs = @"label $/fooProject -LtestLabel -YAdmin,admin -I-Y";				
+
+			Assertion.AssertNotNull("process was null", actual);
+			Assertion.AssertEquals(expectedExecutable, actual.StartInfo.FileName);
+			Assertion.AssertEquals(expectedArgs, actual.StartInfo.Arguments);
+		}
+
 		public void TestExecutable_default()
 		{
 			AssertEquals("ss.exe", new Vss().Executable);

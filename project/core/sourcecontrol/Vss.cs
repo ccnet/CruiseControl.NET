@@ -19,6 +19,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			@"history {0} -R -Vd{1}~{2} -Y{3},{4} -I-Y";
 
 		internal static readonly string LABEL_COMMAND_FORMAT = @"label {0} -L{1} -Vd{2} -Y{3},{4} -I-Y";
+		internal static readonly string LABEL_COMMAND_FORMAT_NOTIMESTAMP = @"label {0} -L{1} -Y{2},{3} -I-Y";
 		
 		private IHistoryParser _parser = new VssHistoryParser();
 		
@@ -43,6 +44,17 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 		{
 			get { return _parser; }
 		}
+		public override Modification[] GetModifications(DateTime from, DateTime to)
+		{
+			Modification[] result = base.GetModifications (from, to);
+			if (result.Length > 0)
+			{
+				Process p = CreateLabelProcess("CCNETUNVERIFIED" + to.ToString("MMddyyyyHHmmss"));
+				Execute(p);
+			}
+
+			return result;
+		}
 		
 		public override Process CreateHistoryProcess(DateTime from, DateTime until)
 		{		
@@ -52,6 +64,14 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			process.StartInfo.EnvironmentVariables[SS_DIR_KEY] = SsDir;
 			return process;
 			
+		}
+
+		public Process CreateLabelProcess(string label) 
+		{
+			string args = String.Format(LABEL_COMMAND_FORMAT_NOTIMESTAMP, Project, label, Username, Password);
+			Process process = ProcessUtil.CreateProcess(Executable, args);
+			process.StartInfo.EnvironmentVariables[SS_DIR_KEY] = SsDir;
+			return process;
 		}
 
 		public override Process CreateLabelProcess(string label, DateTime timeStamp) 

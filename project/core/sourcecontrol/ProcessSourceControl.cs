@@ -36,7 +36,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			result.Modifications = GetModifications(result.LastModificationDate, DateTime.Now);
 		}
 
-		public Modification[] GetModifications(DateTime from, DateTime to)
+		public virtual Modification[] GetModifications(DateTime from, DateTime to)
 		{
 			Process process = CreateHistoryProcess(from, to);
 			TextReader reader = null;
