@@ -1,6 +1,10 @@
 using System;
+using System.IO;
+using System.Runtime.Remoting;
 using System.Xml.Serialization;
 using Drew.Agents;
+using ThoughtWorks.CruiseControl.Remote;
+using ThoughtWorks.CruiseControl.WebServiceProxy;
 
 namespace ThoughtWorks.CruiseControl.CCTrayLib
 {
@@ -8,7 +12,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib
 	/// Encapsulates all user-settings for the CruiseControl.NET Monitor.  This class
 	/// is designed to work with Xml serialisation, for persisting user settings.
 	/// </summary>
-	[XmlRoot ("CruiseControlMonitor", Namespace="http://www.sf.net/projects/ccnet", IsNullable=false)]
+	[XmlRoot("CruiseControlMonitor", Namespace="http://www.sf.net/projects/ccnet", IsNullable=false)]
 	public class Settings
 	{
 		public int PollingIntervalSeconds;
@@ -18,39 +22,56 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib
 
 		public NotificationBalloon NotificationBalloon;
 
-		public Sounds Sounds = new Sounds ();
+		public Sounds Sounds = new Sounds();
 
-		public Messages Messages = new Messages ();
+		public Messages Messages = new Messages();
 
-		public Agents Agents = new Agents ();
-		public StatusIcons Icons = new StatusIcons ();
+		public Agents Agents = new Agents();
+		public StatusIcons Icons = new StatusIcons();
 
 		public ConnectionMethod ConnectionMethod;
 
 		public bool ShowExceptions = true;
 
-		public Settings ()
+		public Settings()
 		{
 		}
 
-		public static Settings CreateDefaultSettings ()
+		public static Settings CreateDefaultSettings()
 		{
-			Settings defaults = new Settings ();
+			Settings defaults = new Settings();
 
 			defaults.ProjectName = "ProjectName";
 
 			defaults.ConnectionMethod = ConnectionMethod.Remoting;
 			defaults.ShowExceptions = true;
 
-			defaults.Sounds = Sounds.CreateDefaultSettings ();
-			defaults.NotificationBalloon = NotificationBalloon.CreateDefaultSettings ();
-			defaults.Messages = Messages.CreateDefaultSettings ();
-			defaults.Agents = Agents.CreateDefaultSettings ();
-			defaults.Icons = StatusIcons.CreateDefaultSettings ();
+			defaults.Sounds = Sounds.CreateDefaultSettings();
+			defaults.NotificationBalloon = NotificationBalloon.CreateDefaultSettings();
+			defaults.Messages = Messages.CreateDefaultSettings();
+			defaults.Agents = Agents.CreateDefaultSettings();
+			defaults.Icons = StatusIcons.CreateDefaultSettings();
 			defaults.PollingIntervalSeconds = 15;
 			defaults.RemoteServerUrl = "tcp://localhost:21234/CruiseManager.rem";
 
 			return defaults;
+		}
+
+		public virtual ICruiseManager CruiseManager
+		{
+			get
+			{
+				if (ConnectionMethod == ConnectionMethod.WebService)
+				{
+					return new CCNetManagementProxy(RemoteServerUrl);
+				}
+				if (ConnectionMethod == ConnectionMethod.Remoting)
+				{
+					return (ICruiseManager) RemotingServices.Connect(typeof (ICruiseManager), RemoteServerUrl);
+				}
+				throw new NotImplementedException("Connection method " + ConnectionMethod + " is not implemented.");
+
+			}
 		}
 	}
 
@@ -60,9 +81,9 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib
 	{
 		[XmlAttribute] public bool ShowBalloon;
 
-		public static NotificationBalloon CreateDefaultSettings ()
+		public static NotificationBalloon CreateDefaultSettings()
 		{
-			NotificationBalloon defaults = new NotificationBalloon ();
+			NotificationBalloon defaults = new NotificationBalloon();
 			defaults.ShowBalloon = true;
 			return defaults;
 		}
@@ -74,17 +95,17 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib
 
 	public class Messages
 	{
-		[XmlArrayItem ("Message", typeof (string))] public string[] AnotherSuccess = new string[0];
+		[XmlArrayItem("Message", typeof (string))] public string[] AnotherSuccess = new string[0];
 
-		[XmlArrayItem ("Message", typeof (string))] public string[] AnotherFailure = new string[0];
+		[XmlArrayItem("Message", typeof (string))] public string[] AnotherFailure = new string[0];
 
-		[XmlArrayItem ("Message", typeof (string))] public string[] Fixed = new string[0];
+		[XmlArrayItem("Message", typeof (string))] public string[] Fixed = new string[0];
 
-		[XmlArrayItem ("Message", typeof (string))] public string[] Broken = new string[0];
+		[XmlArrayItem("Message", typeof (string))] public string[] Broken = new string[0];
 
-		public static Messages CreateDefaultSettings ()
+		public static Messages CreateDefaultSettings()
 		{
-			Messages defaults = new Messages ();
+			Messages defaults = new Messages();
 			defaults.AnotherSuccess = new string[] {"Yet another successful build!"};
 			defaults.AnotherFailure = new string[] {"The build is still broken..."};
 			defaults.Fixed = new string[] {"Recent checkins have fixed the build."};
@@ -92,29 +113,26 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib
 			return defaults;
 		}
 
-		public string GetMessageForTransition (BuildTransition buildTransition)
+		// TODO Sreekanth Need to move it into the Build transition class
+		public string GetMessageForTransition(BuildTransition buildTransition)
 		{
-			switch (buildTransition)
-			{
-				case BuildTransition.StillSuccessful:
-					return SelectRandomString (AnotherSuccess);
-				case BuildTransition.StillFailing:
-					return SelectRandomString (AnotherFailure);
-				case BuildTransition.Broken:
-					return SelectRandomString (Broken);
-				case BuildTransition.Fixed:
-					return SelectRandomString (Fixed);
-			}
-
-			throw new Exception ("Unsupported build transition.");
+			if (buildTransition == BuildTransition.StillSuccessful)
+				return SelectRandomString(AnotherSuccess);
+			if (buildTransition == BuildTransition.StillFailing)
+				return SelectRandomString(AnotherFailure);
+			if (buildTransition == BuildTransition.Broken)
+				return SelectRandomString(Broken);
+			if (buildTransition == BuildTransition.Fixed)
+				return SelectRandomString(Fixed);
+			throw new Exception("Unsupported build transition.");
 		}
 
-		private string SelectRandomString (string[] messages)
+		private string SelectRandomString(string[] messages)
 		{
 			if (messages.Length == 0)
 				return "No message available.";
 
-			int index = new Random ().Next (messages.Length);
+			int index = new Random().Next(messages.Length);
 			return messages[index];
 		}
 	}
@@ -130,9 +148,9 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib
 		public string Error;
 		[XmlAttribute] public bool UseDefaultIcons = true;
 
-		public static StatusIcons CreateDefaultSettings ()
+		public static StatusIcons CreateDefaultSettings()
 		{
-			StatusIcons defaults = new StatusIcons ();
+			StatusIcons defaults = new StatusIcons();
 			defaults.UseDefaultIcons = true;
 			return defaults;
 		}
@@ -148,21 +166,21 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib
 
 		[XmlAttribute] public bool HideAfterMessage = true;
 
-		[XmlArray ("AvailableAgents")]
-		[XmlArrayItem ("Agent", typeof (AgentDetails))] public AgentDetails[] AvailableAgents = new AgentDetails[0];
+		[XmlArray("AvailableAgents")]
+		[XmlArrayItem("Agent", typeof (AgentDetails))] public AgentDetails[] AvailableAgents = new AgentDetails[0];
 
-		public static Agents CreateDefaultSettings ()
+		public static Agents CreateDefaultSettings()
 		{
-			Agents defaults = new Agents ();
+			Agents defaults = new Agents();
 			defaults.CurrentAgentName = "Peedy";
 			defaults.ShowAgent = false;
-			defaults.AvailableAgents = new AgentDetails[] {CreatePeedyAgent ()};
+			defaults.AvailableAgents = new AgentDetails[] {CreatePeedyAgent()};
 			return defaults;
 		}
 
-		static AgentDetails CreatePeedyAgent ()
+		private static AgentDetails CreatePeedyAgent()
 		{
-			AgentDetails peedy = new AgentDetails ();
+			AgentDetails peedy = new AgentDetails();
 			peedy.AcsFileName = "Peedy.acs";
 			peedy.Name = "Peedy";
 			peedy.SpeakOutLoud = false;
@@ -173,23 +191,23 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib
 			return peedy;
 		}
 
-		public Agent CreateAgent ()
+		public Agent CreateAgent()
 		{
 			if (!ShowAgent)
 				return null;
 
-			if (CurrentAgentName == null || CurrentAgentName.Trim ().Length == 0)
-				throw new Exception ("No CurrentAgentName has been set in configuration data.");
+			if (CurrentAgentName == null || CurrentAgentName.Trim().Length == 0)
+				throw new Exception("No CurrentAgentName has been set in configuration data.");
 
-			AgentDetails currentAgentDetails = GetCurrentAgentDetails ();
+			AgentDetails currentAgentDetails = GetCurrentAgentDetails();
 
 			if (currentAgentDetails == null)
-				throw new Exception ("Error in configuration of agents.  CurrentAgentName does not correspond to an available agents.");
+				throw new Exception("Error in configuration of agents.  CurrentAgentName does not correspond to an available agents.");
 
-			return new Agent (currentAgentDetails.AcsFileName);
+			return new Agent(currentAgentDetails.AcsFileName);
 		}
 
-		AgentDetails GetCurrentAgentDetails ()
+		private AgentDetails GetCurrentAgentDetails()
 		{
 			foreach (AgentDetails details in AvailableAgents)
 			{
@@ -210,72 +228,6 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib
 		public string AnotherFailureAction = string.Empty;
 		public string FixedAction = string.Empty;
 		public string BrokenAction = string.Empty;
-	}
-
-	#endregion
-
-	#region Sounds
-
-	public class Sounds
-	{
-		public Sound AnotherSuccessfulBuildSound;
-		public Sound AnotherFailedBuildSound;
-		public Sound BrokenBuildSound;
-		public Sound FixedBuildSound;
-
-		public static Sounds CreateDefaultSettings ()
-		{
-			Sounds defaults = new Sounds ();
-			defaults.AnotherSuccessfulBuildSound = new Sound ("still-successful.wav");
-			defaults.AnotherFailedBuildSound = new Sound ("still-failing.wav");
-			defaults.BrokenBuildSound = new Sound ("broken.wav");
-			defaults.FixedBuildSound = new Sound ("fixed.wav");
-			return defaults;
-		}
-
-		#region Helper methods
-
-		public bool ShouldPlaySoundForTransition (BuildTransition transition)
-		{
-			switch (transition)
-			{
-				case BuildTransition.Broken:
-					return BrokenBuildSound.Play;
-
-				case BuildTransition.Fixed:
-					return FixedBuildSound.Play;
-
-				case BuildTransition.StillFailing:
-					return AnotherFailedBuildSound.Play;
-
-				case BuildTransition.StillSuccessful:
-					return AnotherSuccessfulBuildSound.Play;
-			}
-
-			throw new Exception ("Unsupported build transition.");
-		}
-
-		public string GetAudioFileLocation (BuildTransition transition)
-		{
-			switch (transition)
-			{
-				case BuildTransition.Broken:
-					return BrokenBuildSound.FileName;
-
-				case BuildTransition.Fixed:
-					return FixedBuildSound.FileName;
-
-				case BuildTransition.StillFailing:
-					return AnotherFailedBuildSound.FileName;
-
-				case BuildTransition.StillSuccessful:
-					return AnotherSuccessfulBuildSound.FileName;
-			}
-
-			throw new Exception ("Unsupported build transition.");
-		}
-
-		#endregion
 	}
 
 	#endregion

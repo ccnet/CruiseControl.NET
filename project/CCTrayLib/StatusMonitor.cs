@@ -26,13 +26,12 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib
 		public event ErrorEventHandler Error;
 
 		private Timer _pollTimer;
-		private IRemoteCruiseProxyLoader _remoteProxyLoader;
 		private ProjectStatus _currentProjectStatus = new ProjectStatus (ProjectIntegratorState.Stopped, IntegrationStatus.Unknown, ProjectActivity.Unknown, "unknown", "http://ccnet.thoughtworks.com", DateTime.MinValue, "unknown");
 		private Settings _settings;
 
-		public StatusMonitor (IRemoteCruiseProxyLoader remoteProxyLoader)
+		public StatusMonitor (Settings settings)
 		{
-			_remoteProxyLoader = remoteProxyLoader;
+			_settings = settings;
 			_pollTimer = new Timer ();
 			_pollTimer.Interval = 15000;
 			_pollTimer.Tick += new EventHandler (this.pollTimer_Tick);
@@ -63,7 +62,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib
 
 		public void Dispose ()
 		{
-			_pollTimer.Dispose ();
+			StopPolling();
 		}
 
 		public void StartPolling ()
@@ -148,11 +147,6 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib
 				Error (this, e);
 		}
 
-		ProjectStatus[] GetRemoteProjectStatus ()
-		{
-			return GetRemoteCruiseControlProxy ().GetProjectStatus ();
-		}
-
 		ProjectStatus GetSingleRemoteProjectStatus ()
 		{
 			ProjectStatus[] projectStatusses = GetRemoteCruiseControlProxy ().GetProjectStatus ();
@@ -182,7 +176,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib
 
 		private ICruiseManager GetRemoteCruiseControlProxy ()
 		{
-			return _remoteProxyLoader.LoadProxy (_settings);
+			return _settings.CruiseManager;
 		}
 
 		public void ForceBuild (string projectName)
@@ -233,11 +227,6 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib
 		public BuildTransition BuildTransition
 		{
 			get { return _transition; }
-		}
-
-		public BuildTransitionAttribute BuildTransitionInfo
-		{
-			get { return BuildTransitionUtil.GetBuildTransitionAttribute (_transition); }
 		}
 	}
 

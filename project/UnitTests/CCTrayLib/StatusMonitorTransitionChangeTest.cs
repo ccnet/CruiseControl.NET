@@ -10,7 +10,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib
     [NUnit.Framework.TestFixture]
 	public class StatusMonitorTransitionChangeTest
 	{
-		private Mock _remoteProxyMock;
+		private Mock _settingsMock;
 		private StatusMonitor _monitor;
 		private bool _isError;
 		private bool _isPolled;
@@ -19,14 +19,14 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib
 		{
 			_isError = false;
 			_isPolled = false;
-			_remoteProxyMock = new DynamicMock(typeof(IRemoteCruiseProxyLoader));
-		    _monitor = new StatusMonitor((IRemoteCruiseProxyLoader) _remoteProxyMock.MockInstance);
+			_settingsMock = new DynamicMock(typeof(Settings));
+		    _monitor = new StatusMonitor((Settings) _settingsMock.MockInstance);
 		}
 		[Test]
 		public void ShouldNotifyErrorListenersIfExceptionIsThrown()
 		{
 			_monitor.Error +=new ErrorEventHandler(OnError);
-			_remoteProxyMock.ExpectAndThrow("LoadProxy",new Exception("Test"),new IsAnything());
+			_settingsMock.ExpectAndThrow("CruiseManager",new Exception("Test"),new IsAnything());
 			_monitor.Poll();
 			Assert.IsTrue(_isError);
 		}
@@ -40,12 +40,10 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib
 			ProjectStatus[] statuses = new ProjectStatus[1];
 			statuses [0]= status;
 			cruiseManagerMock.SetupResult("GetProjectStatus",statuses);
-			_monitor.Settings = new Settings();
-			_monitor.Settings.ProjectName = "foo";
-			_remoteProxyMock.SetupResult("LoadProxy", (ICruiseManager)cruiseManagerMock.MockInstance, typeof(Settings));
+			_settingsMock.SetupResult("CruiseManager", (ICruiseManager)cruiseManagerMock.MockInstance);
 			_monitor.Poll();
 			Assert.IsTrue(_isPolled);
-			Assert.IsTrue(!_isError);
+			Assert.IsFalse(_isError);
 		}
 
 		private void OnError(object sauce, ErrorEventArgs e)

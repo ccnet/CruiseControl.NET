@@ -3,16 +3,10 @@ using System.Drawing;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
+using ThoughtWorks.CruiseControl.CCTrayLib;
 
 namespace ThoughtWorks.CruiseControl.CCTray
 {
-	public enum NotifyInfoFlags
-	{
-		Error = 0x03,
-		Info = 0x01,
-		None = 0x00,
-		Warning = 0x02
-	}
 
 	/// <summary>
 	/// Class originally by Joel Matthias, and published into the public domain on

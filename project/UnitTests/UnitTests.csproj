@@ -194,6 +194,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "CCTrayLib\SettingsTest.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "CCTrayLib\StatusIconTest.cs"
                     SubType = "Code"
                     BuildAction = "Compile"

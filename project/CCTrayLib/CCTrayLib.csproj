@@ -160,6 +160,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "ErrorLevel.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "FileIconStore.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -203,6 +208,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "NotifyInfoFlags.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Red.ico"
                     BuildAction = "EmbeddedResource"
                 />
@@ -228,6 +238,11 @@
                 />
                 <File
                     RelPath = "Sound.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Sounds.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
