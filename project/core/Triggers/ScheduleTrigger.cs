@@ -44,6 +44,8 @@ namespace ThoughtWorks.CruiseControl.Core.Triggers
 			set { buildCondition = value; }
 		}
 
+		public DayOfWeek[] WeekDays = (DayOfWeek[]) DayOfWeek.GetValues(typeof(DayOfWeek));
+
 		private void SetNextIntegrationDateTime()
 		{
 			DateTime now = _dtProvider.Now;
@@ -61,7 +63,8 @@ namespace ThoughtWorks.CruiseControl.Core.Triggers
 
 		public virtual BuildCondition ShouldRunIntegration()
 		{
-			if (_dtProvider.Now > _nextIntegration)
+			DateTime now = _dtProvider.Now;
+			if (now > _nextIntegration && Array.IndexOf(WeekDays, now.DayOfWeek) >= 0)
 			{
 				return BuildCondition;
 			}

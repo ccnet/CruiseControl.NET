@@ -90,7 +90,7 @@ namespace ThoughtWorks.CruiseControl.Core
 		{
 			Log.Info("Starting integration for project: " + _project.Name);
 			try
-			{				
+			{
 				// loop, until the integrator is stopped
 				while (IsRunning)
 				{
@@ -100,9 +100,13 @@ namespace ThoughtWorks.CruiseControl.Core
 					Thread.Sleep(100);
 				}
 			}
+			catch (ThreadAbortException ex)
+			{
+				Thread.ResetAbort();
+			}
 			finally
 			{
-				Stopped();				
+				Stopped();
 			}
 		}
 

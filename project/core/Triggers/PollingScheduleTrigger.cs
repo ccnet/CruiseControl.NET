@@ -25,6 +25,13 @@ namespace ThoughtWorks.CruiseControl.Core.Triggers
 			set { scheduleTrigger.Time = value; }
 		}
 
+		[ReflectorArray("weekDays")]
+		public DayOfWeek[] WeekDays
+		{
+			get { return scheduleTrigger.WeekDays; }
+			set { scheduleTrigger.WeekDays = value; }
+		}
+
 		public void IntegrationCompleted()
 		{
 			scheduleTrigger.IntegrationCompleted();

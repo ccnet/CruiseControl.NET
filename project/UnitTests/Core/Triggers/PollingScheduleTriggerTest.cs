@@ -1,3 +1,4 @@
+using System;
 using Exortech.NetReflector;
 using NMock;
 using NUnit.Framework;
@@ -27,9 +28,16 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Triggers
 		[Test]
 		public void ShouldFullyPopulateFromReflector()
 		{
-			string xml = string.Format(@"<pollingSchedule time=""12:00:00"" />");
+			string xml = string.Format(@"<pollingSchedule time=""12:00:00"">
+<weekDays>
+	<weekDay>Monday</weekDay>
+	<weekDay>Tuesday</weekDay>
+</weekDays>
+</pollingSchedule>");
 			trigger = (PollingScheduleTrigger)NetReflector.Read(xml);
 			Assert.AreEqual("12:00:00", trigger.Time);
+			Assert.AreEqual(DayOfWeek.Monday, trigger.WeekDays[0]);
+			Assert.AreEqual(DayOfWeek.Tuesday, trigger.WeekDays[1]);
 		}
 
 		[Test]

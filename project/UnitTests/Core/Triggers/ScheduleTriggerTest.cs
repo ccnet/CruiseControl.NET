@@ -80,5 +80,18 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Triggers
 				Assert.AreEqual(expectedCondition, trigger.ShouldRunIntegration());
 			}
 		}
+
+		[Test]
+		public void ShouldOnlyRunOnSpecifiedDays()
+		{
+			trigger.WeekDays = new DayOfWeek[] { DayOfWeek.Monday, DayOfWeek.Wednesday };
+			trigger.BuildCondition = BuildCondition.ForceBuild;
+
+			_mockDateTime.SetupResult("Now", new DateTime(2004, 12, 1));
+			Assert.AreEqual(BuildCondition.ForceBuild, trigger.ShouldRunIntegration());
+
+			_mockDateTime.SetupResult("Now", new DateTime(2004, 12, 2));
+			Assert.AreEqual(BuildCondition.NoBuild, trigger.ShouldRunIntegration());
+		}
 	}
 }
