@@ -51,6 +51,9 @@ namespace ThoughtWorks.CruiseControl.Remote.monitor
 
 		#region Properties
 
+		/// <summary>
+		/// Gets the Url of the build results web page for the current project.
+		/// </summary>
 		public string WebUrl
 		{
 			get
