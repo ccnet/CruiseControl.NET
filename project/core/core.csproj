@@ -1132,6 +1132,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "util\test\LogFileTraceListenerTest.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "util\test\MockFileWatcher.cs"
                     SubType = "Code"
                     BuildAction = "Compile"

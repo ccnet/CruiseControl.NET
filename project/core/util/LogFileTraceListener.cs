@@ -61,5 +61,23 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 		{
 			_listener.WriteLine(obj, CreateMessage(category));
 		}
+
+		public override void Flush()
+		{
+			base.Flush();
+			_listener.Flush();
+		}
+
+		public override void Close()
+		{
+			base.Close();
+			_listener.Close();
+		}
+
+		protected override void Dispose(bool disposing)
+		{
+			base.Dispose(disposing);
+			if (disposing) _listener.Dispose();
+		}
 	}
 }
