@@ -1,10 +1,8 @@
 using System;
-using System.Threading;
-using System.Collections;
-using System.Xml;
 using System.IO;
-using ThoughtWorks.CruiseControl.Core.Util;
+using System.Xml;
 using System.Xml.Serialization;
+using ThoughtWorks.CruiseControl.Core.Util;
 
 namespace ThoughtWorks.CruiseControl.Core
 {

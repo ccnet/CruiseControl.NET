@@ -5,7 +5,7 @@ using Exortech.NetReflector;
 namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 {
 	[ReflectorType("filtered")]
-	public class FilteredSourceControl: ISourceControl, ITemporaryLabeller
+	public class FilteredSourceControl : ISourceControl, ITemporaryLabeller
 	{
 		private ISourceControl _realScProvider;
 		private IList _inclusionFilters;
@@ -18,25 +18,25 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			set { _realScProvider = value; }
 		}
 
-		[ReflectorCollection("exclusionFilters", InstanceType=typeof(ArrayList), Required=false)]
-		public IList ExclusionFilters 
+		[ReflectorCollection("exclusionFilters", InstanceType=typeof (ArrayList), Required=false)]
+		public IList ExclusionFilters
 		{
-			get 
+			get
 			{
-				if ( _exclusionFilters == null )
+				if (_exclusionFilters == null)
 					_exclusionFilters = new ArrayList();
 
-				return _exclusionFilters; 
+				return _exclusionFilters;
 			}
 			set { _exclusionFilters = value; }
 		}
 
-		[ReflectorCollection("inclusionFilters", InstanceType=typeof(ArrayList), Required=false)]
-		public IList InclusionFilters 
+		[ReflectorCollection("inclusionFilters", InstanceType=typeof (ArrayList), Required=false)]
+		public IList InclusionFilters
 		{
-			get 
+			get
 			{
-				if ( _inclusionFilters == null )
+				if (_inclusionFilters == null)
 					_inclusionFilters = new ArrayList();
 
 				return _inclusionFilters;
@@ -49,14 +49,14 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			Modification[] allModifications = _realScProvider.GetModifications(from, to);
 			ArrayList acceptedModifications = new ArrayList();
 
-			foreach (Modification modification in allModifications) 
+			foreach (Modification modification in allModifications)
 			{
-				if ( IsAcceptedByInclusionFilters(modification) && 
-					(! IsAcceptedByExclusionFilters(modification)) )
+				if (IsAcceptedByInclusionFilters(modification) &&
+					(! IsAcceptedByExclusionFilters(modification)))
 					acceptedModifications.Add(modification);
 			}
 
-			return (Modification[])acceptedModifications.ToArray(typeof(Modification));
+			return (Modification[]) acceptedModifications.ToArray(typeof (Modification));
 		}
 
 		public void LabelSourceControl(string label, DateTime timeStamp)
@@ -76,21 +76,21 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 
 		public void CreateTemporaryLabel()
 		{
-			if ( _realScProvider is ITemporaryLabeller )
+			if (_realScProvider is ITemporaryLabeller)
 			{
-				( (ITemporaryLabeller) _realScProvider ).CreateTemporaryLabel();
+				((ITemporaryLabeller) _realScProvider).CreateTemporaryLabel();
 			}
 		}
 
 		public void DeleteTemporaryLabel()
 		{
-			if ( _realScProvider is ITemporaryLabeller )
+			if (_realScProvider is ITemporaryLabeller)
 			{
-				( (ITemporaryLabeller) _realScProvider ).DeleteTemporaryLabel();
+				((ITemporaryLabeller) _realScProvider).DeleteTemporaryLabel();
 			}
 		}
 
-		public void GetSource(IIntegrationResult result) 
+		public void GetSource(IIntegrationResult result)
 		{
 			_realScProvider.GetSource(result);
 		}
@@ -108,14 +108,14 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 		/// inclusion filter or if the modification is accepted by
 		/// at least one of the defined filters.
 		/// </remarks>
-		private bool IsAcceptedByInclusionFilters(Modification m) 
+		private bool IsAcceptedByInclusionFilters(Modification m)
 		{
-			if ( _inclusionFilters == null || _inclusionFilters.Count == 0 )
+			if (_inclusionFilters == null || _inclusionFilters.Count == 0)
 				return true;
 
-			foreach (IModificationFilter mf in _inclusionFilters) 
+			foreach (IModificationFilter mf in _inclusionFilters)
 			{
-				if ( mf.Accept(m) )
+				if (mf.Accept(m))
 					return true;
 			}
 
@@ -127,14 +127,14 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 		/// filter. Modification is accepted if it is accepted by at 
 		/// least one of the defined exclusion filters.
 		/// </remarks>
-		private bool IsAcceptedByExclusionFilters(Modification m) 
+		private bool IsAcceptedByExclusionFilters(Modification m)
 		{
-			if ( _exclusionFilters == null || _exclusionFilters.Count == 0 )
+			if (_exclusionFilters == null || _exclusionFilters.Count == 0)
 				return false;
 
-			foreach (IModificationFilter mf in _exclusionFilters) 
+			foreach (IModificationFilter mf in _exclusionFilters)
 			{
-				if ( mf.Accept(m) )
+				if (mf.Accept(m))
 					return true;
 			}
 

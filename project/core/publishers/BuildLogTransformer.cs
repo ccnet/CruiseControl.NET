@@ -68,7 +68,7 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
 		/// if an error occurs.
 		/// </summary>
 		/// <param name="transform"></param>
-		/// <param name="xslfile"></param>
+		/// <param name="xslFileName"></param>
 		private void LoadStylesheet(XslTransform transform, string xslFileName)
 		{
 			try

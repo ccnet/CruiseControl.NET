@@ -1,4 +1,3 @@
-using System;
 using System.Diagnostics;
 
 namespace ThoughtWorks.CruiseControl.Core.Util
@@ -14,8 +13,11 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 	{
 		public virtual ProcessResult Execute(ProcessInfo processInfo)
 		{
-			using(Process process = processInfo.CreateAndStartNewProcess())
+			using (Process process = processInfo.CreateProcess())
 			{
+				Log.Debug(string.Format("Attempting to start process [{0}] in working directory [{1}]", process.StartInfo.FileName, process.StartInfo.WorkingDirectory));
+				process.Start();
+
 				ProcessReader standardOutput = new ProcessReader(process.StandardOutput);
 				ProcessReader standardError = new ProcessReader(process.StandardError);
 
@@ -43,7 +45,7 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 				standardError.WaitForExit();
 
 				return new ProcessResult(standardOutput.Output, standardError.Output, process.ExitCode, ! hasExited);
-			}				
+			}
 		}
 
 		private bool WaitForExit(ProcessInfo processInfo, Process process)

@@ -119,7 +119,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 	internal abstract class VSSParser
 	{
 		private Regex REGEX_USER_DATE_LINE;
-		private static readonly Regex REGEX_FILE_NAME = new Regex(@"\*+([\w\s\.]+)", RegexOptions.Multiline);
+		private static readonly Regex REGEX_FILE_NAME = new Regex(@"\*+([\w\s\.-]+)", RegexOptions.Multiline);
 
 		protected string entry;
 		protected IVssLocale locale;
@@ -130,7 +130,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 		{
 			this.entry = entry;
 			this.locale = locale;
-			string regex = String.Format(@"{0}:(.+){1}:(.+){2}:(.+)$", locale.UserKeyword, locale.DateKeyword, locale.TimeKeyword);
+			string regex = string.Format(@"{0}:(.+){1}:(.+){2}:(.+)$", locale.UserKeyword, locale.DateKeyword, locale.TimeKeyword);
 			REGEX_USER_DATE_LINE = new Regex(regex, RegexOptions.Multiline);
 			this.locale = locale;
 		}
@@ -141,8 +141,8 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			mod.Type = Keyword;
 			ParseUsernameAndDate(mod);
 			ParseComment(mod);
-			mod.FileName = this.ParseFileName();
-			mod.FolderName = this.ParseFolderName();
+			mod.FileName = ParseFileName();
+			mod.FolderName = ParseFolderName();
 			return mod;
 		}
 

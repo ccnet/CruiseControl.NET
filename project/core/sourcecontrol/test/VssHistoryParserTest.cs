@@ -17,20 +17,6 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test
 			_parser = new VssHistoryParser(new EnglishVssLocale());
 		}
 
-		/*
-		public void AssertEquals(Modification expected, Modification actual)
-		{
-			Assert.AreEqual(expected.Comment, actual.Comment);
-			Assert.AreEqual(expected.EmailAddress, actual.EmailAddress);
-			Assert.AreEqual(expected.FileName, actual.FileName);
-			Assert.AreEqual(expected.FolderName, actual.FolderName);
-			Assert.AreEqual(expected.ModifiedTime, actual.ModifiedTime);
-			Assert.AreEqual(expected.Type, actual.Type);
-			Assert.AreEqual(expected.UserName, actual.UserName);
-			Assert.AreEqual(expected, actual);
-		}
-		*/
-
 		[Test]
 		public void Parse()
 		{
@@ -164,7 +150,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test
 		}
 
 		[Test]
-		public void ParseFileAndFolder_checkin()
+		public void ParseCheckedInFileAndFolder()
 		{
 			string entry = @"*****  happyTheFile.txt  *****
 Version 3
@@ -183,7 +169,7 @@ Comment: added fir to tree file, checked in recursively from project root";
 		}
 
 		[Test]
-		public void ParseFileAndFolderFR_checkin()
+		public void ParseCheckedInFileAndFolderInFrench()
 		{
 			// change the parser culture for this test only
 			_parser = new VssHistoryParser(new FrenchVssLocale());
@@ -202,6 +188,25 @@ Commentaire: adding this file makes me so happy";
 			Assert.AreEqual(new DateTime(2002, 11, 25, 17, 32, 0), mod.ModifiedTime);
 			Assert.AreEqual("Archivé dans", mod.Type);
 			Assert.AreEqual("adding this file makes me so happy",mod.Comment);
+		}
+
+		[Test]
+		public void ParseCheckedInFileAndFolderWithHypenInFilename()
+		{
+			string entry = @"*****  happy-The-File.txt  *****
+Version 3
+User: Admin        Date:  9/16/02   Time:  5:01p
+Checked in $/you/want/folders/i/got/em
+Comment: added fir to tree file, checked in recursively from project root";
+
+			string expectedFile = "happy-The-File.txt";
+			string expectedFolder = "$/you/want/folders/i/got/em";
+
+			Modification mod = ParseAndAssertFilenameAndFolder(entry, expectedFile, expectedFolder);
+			Assert.AreEqual("Admin", mod.UserName);
+			Assert.AreEqual(new DateTime(2002, 9, 16, 17, 01, 0), mod.ModifiedTime);
+			Assert.AreEqual("Checked in", mod.Type);
+			Assert.AreEqual("added fir to tree file, checked in recursively from project root",mod.Comment);
 		}
 
 		[Test]

@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Specialized;
 using System.Diagnostics;
 using System.IO;
@@ -71,18 +70,13 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 			}
 		}
 
-		// Mostly for testing, otherwise its tricky due to the static call to 'Process.Start'
-		public ProcessStartInfo StartInfo
-		{
-			get { return startInfo; }
-		}
-
 		public int TimeOut = DEFAULT_TIMEOUT;
 
-		public Process CreateAndStartNewProcess()
+		public Process CreateProcess()
 		{
-			Log.Debug(string.Format("Attempting to start process [{0}] in working directory [{1}]", FileName, WorkingDirectory));
-			return Process.Start(startInfo);
+			Process process = new Process();
+			process.StartInfo = startInfo;
+			return process;
 		}
 
 		public override bool Equals(object obj)

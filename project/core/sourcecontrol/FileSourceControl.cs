@@ -97,7 +97,6 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 
 		public void GetSource(IIntegrationResult result)
 		{
-			
 		}
 
 		public void Initialize(IProject project)

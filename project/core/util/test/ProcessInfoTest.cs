@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using NUnit.Framework;
 
 using ThoughtWorks.CruiseControl.Core.Util;
@@ -13,16 +14,17 @@ namespace ThoughtWorks.CruiseControl.Core.Util.Test
 			ProcessInfo info = new ProcessInfo("temp");
 			info.StandardInputContent = "Some content";
 
-			Assert.IsTrue(info.StartInfo.RedirectStandardInput);
-			Assert.IsTrue(!info.StartInfo.UseShellExecute);
+			Process process = info.CreateProcess();
+			Assert.IsTrue(process.StartInfo.RedirectStandardInput);
+			Assert.IsTrue(!process.StartInfo.UseShellExecute);
 		}
 
 		[Test]
 		public void IfStandardInputContentIsNotSetThenStandardInputIsNotRedirected()
 		{
 			ProcessInfo info = new ProcessInfo("temp");
-
-			Assert.IsTrue(!info.StartInfo.RedirectStandardInput);
+			Process process = info.CreateProcess();
+			Assert.IsTrue(!process.StartInfo.RedirectStandardInput);
 		}
 
 		[Test]

@@ -1,6 +1,6 @@
 using System;
 using System.IO;
-using NMock;
+using System.Threading;
 using NUnit.Framework;
 using ThoughtWorks.CruiseControl.Core.Test;
 using ThoughtWorks.CruiseControl.Core.Util;
@@ -96,7 +96,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test
 		{
 			string file1 = TempFileUtil.CreateTempFile("repo", "file1.txt", "foo");
 			DateTime from = DateTime.Now;
-			System.Threading.Thread.Sleep(100);
+			Thread.Sleep(100);
 			string file2 = TempFileUtil.CreateTempFile("repo", "file2.txt", "bar");
 
 			Modification[] mods = _sc.GetModifications(from, DateTime.MaxValue);
@@ -107,7 +107,6 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test
 		[Test]
 		public void ShouldRun()
 		{
-			IProject project = (IProject) new DynamicMock(typeof(IProject)).MockInstance;
 			Assert.IsTrue(_sc.ShouldRun(new IntegrationResult()));
 			Assert.IsTrue(_sc.ShouldRun(IntegrationResultMother.CreateSuccessful()));
 			AssertFalse(_sc.ShouldRun(IntegrationResultMother.CreateFailed()));
