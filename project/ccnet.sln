@@ -50,6 +50,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CCTray", "CCTray\CCTray.csp
 	ProjectSection(ProjectDependencies) = postProject
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XMLRPCWebService", "XMLRPCWebService\XMLRPCWebService.csproj", "{4A0F1D7B-93E6-4E25-A48C-2FB0B7B1E17F}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfiguration) = preSolution
 		Build = Build
@@ -122,6 +126,12 @@ Global
 		{D9040862-D7E0-4232-BBD0-CF088706E009}.Debug.Build.0 = Debug|.NET
 		{D9040862-D7E0-4232-BBD0-CF088706E009}.Release.ActiveCfg = Release|.NET
 		{D9040862-D7E0-4232-BBD0-CF088706E009}.Release.Build.0 = Release|.NET
+		{4A0F1D7B-93E6-4E25-A48C-2FB0B7B1E17F}.Build.ActiveCfg = Build|.NET
+		{4A0F1D7B-93E6-4E25-A48C-2FB0B7B1E17F}.Build.Build.0 = Build|.NET
+		{4A0F1D7B-93E6-4E25-A48C-2FB0B7B1E17F}.Debug.ActiveCfg = Debug|.NET
+		{4A0F1D7B-93E6-4E25-A48C-2FB0B7B1E17F}.Debug.Build.0 = Debug|.NET
+		{4A0F1D7B-93E6-4E25-A48C-2FB0B7B1E17F}.Release.ActiveCfg = Release|.NET
+		{4A0F1D7B-93E6-4E25-A48C-2FB0B7B1E17F}.Release.Build.0 = Release|.NET
 	EndGlobalSection
 	GlobalSection(SolutionItems) = postSolution
 		..\ccnet.build = ..\ccnet.build
