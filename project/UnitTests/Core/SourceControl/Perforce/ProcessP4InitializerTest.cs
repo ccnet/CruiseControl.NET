@@ -104,6 +104,8 @@ View:
 			{
 				Assert.IsTrue(e.Message.ToLower().IndexOf("absolute path") > -1, "Should mention something about an absolute directory");
 			}
+
+			VerifyAll();
 		}
 
 		[Test]
@@ -120,6 +122,20 @@ View:
 			{
 				Assert.IsTrue(e.Message.ToLower().IndexOf("valid view") > -1, "Should mention something about a valid view");
 			}
+			VerifyAll();
+		}
+
+		// CCNET-174
+		[Test]
+		public void ShouldAllowViewsWithSpaces()
+		{
+			P4 p4 = new P4();
+			p4.View = @"""//blah/my path with spaces/...""";
+			processInfoCreatorMock.SetupResult("CreateProcessInfo", new ProcessInfo(""), typeof(P4), typeof(string));
+			processExecutorMock.SetupResult("Execute", new ProcessResult("", "", 0, false), typeof(ProcessInfo));
+
+			p4Initializer.Initialize(p4, "myProject", @"c:\my\working\dir");
+			VerifyAll();
 		}
 
 		[Test]

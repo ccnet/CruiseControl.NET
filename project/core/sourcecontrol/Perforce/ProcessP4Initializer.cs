@@ -55,7 +55,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Perforce
 
 		private void CheckViewIsValid(string view)
 		{
-			if (!view.StartsWith("//") || !view.EndsWith("/..."))
+			if (!  ( (view.StartsWith("//") || view.StartsWith(@"""//")) && (view.EndsWith("/...") || view.EndsWith(@"/...""")) ) )
 			{
 				throw new CruiseControlException(string.Format(@"[{0}] is not a valid view - it should start with '//' and end with '/...'", view));
 			}
