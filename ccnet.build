@@ -81,7 +81,8 @@
 			</fileset>
 		</copy>
 
-		<copy todir="deployed\service" verbose="${verbosity}">
+		<!-- deliberately copied into same folder as server -->
+		<copy todir="deployed\server" verbose="${verbosity}">
 			<fileset basedir="${build.dir}\service">
 				<includes name="*" />
 				<excludes name="*.incr" />				
