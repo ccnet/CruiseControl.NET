@@ -1,6 +1,7 @@
 using System.Diagnostics;
 using System.IO;
 using NUnit.Framework;
+using ThoughtWorks.CruiseControl.Core.Test;
 
 namespace ThoughtWorks.CruiseControl.Core.Util.Test
 {
@@ -9,18 +10,20 @@ namespace ThoughtWorks.CruiseControl.Core.Util.Test
 	{
 		private const string TEMP_DIR = "LogFileTraceListenerTest";
 		private LogFileTraceListener listener;
+		private TraceListenerBackup backup;
 
 		[SetUp]
 		protected void AddTraceListener()
 		{			
 			listener = new LogFileTraceListener(TempFileUtil.CreateTempFile(TEMP_DIR, "ccnet.log"));
-			Trace.Listeners.Add(listener);
+			backup = new TraceListenerBackup();
+			backup.AddTraceListener(listener);
 		}
 
 		[TearDown]
 		protected void RemoveTraceListenerAndCleanUp()
 		{
-			Trace.Listeners.Remove(listener);
+			backup.Reset();
 			listener.Close();
 			TempFileUtil.DeleteTempDir(TEMP_DIR);
 		}

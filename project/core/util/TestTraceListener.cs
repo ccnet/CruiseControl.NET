@@ -1,6 +1,5 @@
-using System;
-using System.Diagnostics;
 using System.Collections;
+using System.Diagnostics;
 
 namespace ThoughtWorks.CruiseControl.Core.Util
 {

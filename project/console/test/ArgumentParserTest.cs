@@ -1,7 +1,5 @@
-using System.Diagnostics;
-
 using NUnit.Framework;
-
+using ThoughtWorks.CruiseControl.Core.Test;
 using ThoughtWorks.CruiseControl.Core.Util;
 
 namespace ThoughtWorks.CruiseControl.Console.Test
@@ -9,20 +7,20 @@ namespace ThoughtWorks.CruiseControl.Console.Test
 	[TestFixture]
 	public class ArgumentParserTest : CustomAssertion
 	{
+		private TraceListenerBackup backup;
 		private TestTraceListener listener;
 
 		[SetUp]
 		protected void AddListener()
 		{
-			Trace.Listeners.Clear();
-			listener = new TestTraceListener();
-			Trace.Listeners.Add(listener);
+			backup = new TraceListenerBackup();
+			listener = backup.AddTestTraceListener();
 		}
 
 		[TearDown]
 		protected void RemoveListener()
 		{
-			Trace.Listeners.Remove(listener);
+			backup.Reset();
 		}
 
 		[Test]

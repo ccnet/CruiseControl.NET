@@ -1,7 +1,7 @@
-using System.Diagnostics;
 using NMock;
 using NUnit.Framework;
 using ThoughtWorks.CruiseControl.Core;
+using ThoughtWorks.CruiseControl.Core.Test;
 using ThoughtWorks.CruiseControl.Core.Util;
 using ThoughtWorks.CruiseControl.Remote;
 
@@ -11,20 +11,20 @@ namespace ThoughtWorks.CruiseControl.Console.Test
 	public class ConsoleRunnerTest : CustomAssertion
 	{
 		private TestTraceListener listener;
+		private TraceListenerBackup backup;
 
 		[SetUp]
 		public void SetUp()
 		{
-			Trace.Listeners.Clear();
-			listener = new TestTraceListener();
-			Trace.Listeners.Add(listener);
+			backup = new TraceListenerBackup();
+			listener = backup.AddTestTraceListener();
 			TempFileUtil.CreateTempDir("ConsoleRunnerTest");
 		}
 
 		[TearDown]
 		public void TearDown()
 		{
-			Trace.Listeners.Remove(listener);
+			backup.Reset();
 			TempFileUtil.DeleteTempDir("ConsoleRunnerTest");
 		}
 

@@ -1,5 +1,4 @@
 using System;
-using System.Diagnostics;
 using System.IO;
 using Exortech.NetReflector;
 using NMock;
@@ -10,10 +9,10 @@ using ThoughtWorks.CruiseControl.Core.Builder.Test;
 using ThoughtWorks.CruiseControl.Core.Label;
 using ThoughtWorks.CruiseControl.Core.Publishers;
 using ThoughtWorks.CruiseControl.Core.Publishers.Test;
-using ThoughtWorks.CruiseControl.Core.Triggers;
 using ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test;
 using ThoughtWorks.CruiseControl.Core.State;
 using ThoughtWorks.CruiseControl.Core.Tasks;
+using ThoughtWorks.CruiseControl.Core.Triggers;
 using ThoughtWorks.CruiseControl.Core.Util;
 using ThoughtWorks.CruiseControl.Remote;
 
@@ -30,9 +29,9 @@ namespace ThoughtWorks.CruiseControl.Core.Test
 		private IMock _mockLabeller;
 		private IMock _mockPublisher;
 		private IMock _mockTask;
-		private TestTraceListener _listener;
 		private string workingDirPath;
 		private string artifactDirPath;
+		private TraceListenerBackup backup;
 		private const string PROJECT_NAME = "test";
 
 		[SetUp]
@@ -70,8 +69,8 @@ namespace ThoughtWorks.CruiseControl.Core.Test
 			_project.ConfiguredWorkingDirectory = workingDirPath;
 			_project.ConfiguredArtifactDirectory = artifactDirPath;
 
-			_listener = new TestTraceListener();
-			Trace.Listeners.Add(_listener);
+			backup = new TraceListenerBackup();
+			backup.AddTestTraceListener();
 		}
 
 		private void VerifyAll()
@@ -88,7 +87,7 @@ namespace ThoughtWorks.CruiseControl.Core.Test
 		[TearDown]
 		public void TearDown()
 		{
-			Trace.Listeners.Remove(_listener);
+			backup.Reset();
 
 			TempFileUtil.DeleteTempDir("workingDir");
 			TempFileUtil.DeleteTempDir("artifactDir");

@@ -1,8 +1,6 @@
+using System.Threading;
 using NMock;
 using NUnit.Framework;
-using System;
-using System.Diagnostics;
-using System.Threading;
 using ThoughtWorks.CruiseControl.Core.Util;
 using ThoughtWorks.CruiseControl.Remote;
 
@@ -18,10 +16,12 @@ namespace ThoughtWorks.CruiseControl.Core.Test
 		private IIntegratable integratable;
 		private IProject project;
 		private ProjectIntegrator _integrator;
+		private TraceListenerBackup backup;
 
 		[SetUp]
 		public void SetUp()
 		{
+			backup = new TraceListenerBackup();
 			integrationTriggerMock = new DynamicMock(typeof(ITrigger));
 			integratableMock = new DynamicMock(typeof(IIntegratable));
 			projectMock = new DynamicMock(typeof(IProject));
@@ -36,6 +36,8 @@ namespace ThoughtWorks.CruiseControl.Core.Test
 		[TearDown]
 		public void TearDown()
 		{
+			backup.Reset();
+
 			if (_integrator != null)
 			{
 				_integrator.Stop();
@@ -129,8 +131,7 @@ namespace ThoughtWorks.CruiseControl.Core.Test
 		[Test]
 		public void VerifySchedulerStateAfterException()
 		{
-			TestTraceListener listener = new TestTraceListener();
-			Trace.Listeners.Add(listener);
+			TestTraceListener listener = backup.AddTestTraceListener();
 			string exceptionMessage = "Intentional exception";
 
 			integrationTriggerMock.ExpectAndReturn("ShouldRunIntegration", BuildCondition.ForceBuild);
@@ -146,8 +147,7 @@ namespace ThoughtWorks.CruiseControl.Core.Test
 
 			Assert.IsTrue(listener.Traces.Count > 0);
 			Assert.IsTrue(listener.Traces[0].ToString().IndexOf(exceptionMessage) > 0);
-			
-			Trace.Listeners.Remove(listener);
+
 			VerifyAll();
 		}
 
