@@ -1,9 +1,9 @@
-using NUnit.Framework;
 using System;
 using System.IO;
-using System.Text;
 using System.Text.RegularExpressions;
+using NUnit.Framework;
 using ThoughtWorks.CruiseControl.Core.Util;
+using ThoughtWorks.CruiseControl.WebDashboard.IO;
 
 namespace ThoughtWorks.CruiseControl.WebDashboard.Test
 {

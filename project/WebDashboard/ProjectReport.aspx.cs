@@ -11,6 +11,8 @@ using System.Xml.XPath;
 using ThoughtWorks.CruiseControl.Core;
 using ThoughtWorks.CruiseControl.Core.Publishers;
 using ThoughtWorks.CruiseControl.Util;
+using ThoughtWorks.CruiseControl.WebDashboard.Config;
+using ThoughtWorks.CruiseControl.WebDashboard.IO;
 
 namespace ThoughtWorks.CruiseControl.WebDashboard
 {

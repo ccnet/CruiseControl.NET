@@ -1,4 +1,4 @@
-using System;
+using System.Collections;
 using System.ComponentModel;
 using System.Configuration.Install;
 using System.IO;
@@ -14,7 +14,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard
 		{
 		}
 
-		public override void Install(System.Collections.IDictionary stateSaver)
+		public override void Install(IDictionary stateSaver)
 		{
 			base.Install(stateSaver);
 
@@ -38,7 +38,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard
 			return Path.Combine(Context.Parameters["WebFolder"], "Web.config");
 		}
 
-		public override void Uninstall(System.Collections.IDictionary savedState)
+		public override void Uninstall(IDictionary savedState)
 		{
 			base.Uninstall(savedState);
 

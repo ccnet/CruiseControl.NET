@@ -1,15 +1,17 @@
 using System;
+using System.Web.UI;
 using System.Web.UI.HtmlControls;
+using SiteMesh.DecoratorControls;
 
 namespace ThoughtWorks.CruiseControl.WebDashboard
 {
-	public class DashboardDecorator : System.Web.UI.Page
+	public class DashboardDecorator : Page
 	{
 		protected HtmlTableCell contentCell;
-		protected SiteMesh.DecoratorControls.Title Title1;
-		protected SiteMesh.DecoratorControls.Body Body1;
-		protected SiteMesh.DecoratorControls.GetProperty prop1;
-		protected SiteMesh.DecoratorControls.Title Title3;
+		protected Title Title1;
+		protected Body Body1;
+		protected GetProperty prop1;
+		protected Title Title3;
 
 		#region Web Form Designer generated code
 		override protected void OnInit(EventArgs e)

@@ -1,5 +1,3 @@
-using System;
-
 namespace ThoughtWorks.CruiseControl.WebDashboard.Test
 {
 	public class TestData

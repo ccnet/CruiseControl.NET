@@ -7,6 +7,8 @@ using System.Web.UI.HtmlControls;
 using System.Web.UI.WebControls;
 using SiteMesh.DecoratorControls;
 using ThoughtWorks.CruiseControl.Core;
+using ThoughtWorks.CruiseControl.WebDashboard.Config;
+using ThoughtWorks.CruiseControl.WebDashboard.IO;
 
 namespace ThoughtWorks.CruiseControl.WebDashboard
 {

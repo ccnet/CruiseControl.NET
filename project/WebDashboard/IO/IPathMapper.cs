@@ -1,6 +1,4 @@
-using System;
-
-namespace ThoughtWorks.CruiseControl.WebDashboard
+namespace ThoughtWorks.CruiseControl.WebDashboard.IO
 {
 	/// <summary>
 	/// Used to (at least) wrap HttpContext.Server.MapPath

@@ -1,11 +1,6 @@
 using System;
-using System.Globalization;
 using System.IO;
-using System.Web;
 using System.Web.UI.HtmlControls;
-using System.Xml;
-using System.Xml.XPath;
-using System.Xml.Xsl;
 using ThoughtWorks.CruiseControl.Core;
 
 namespace ThoughtWorks.CruiseControl.WebDashboard

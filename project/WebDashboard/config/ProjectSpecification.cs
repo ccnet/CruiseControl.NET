@@ -1,6 +1,4 @@
-using System;
-
-namespace ThoughtWorks.CruiseControl.WebDashboard
+namespace ThoughtWorks.CruiseControl.WebDashboard.Config
 {
 	public class ProjectSpecification
 	{

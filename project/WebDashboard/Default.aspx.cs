@@ -2,21 +2,22 @@ using System;
 using System.Collections;
 using System.Configuration;
 using System.Drawing;
-using System.Web.UI.WebControls;
 using System.Web.UI;
+using System.Web.UI.WebControls;
 using ThoughtWorks.CruiseControl.Remote;
+using ThoughtWorks.CruiseControl.WebDashboard.Dashboard;
 
 namespace ThoughtWorks.CruiseControl.WebDashboard
 {
-	public class Default : System.Web.UI.Page
+	public class Default : Page
 	{
 		public static readonly string FORCE_BUILD_COMMAND = "forcebuild";
 
-		protected System.Web.UI.WebControls.Label ExceptionTitleLabel;
-		protected System.Web.UI.WebControls.DataGrid ExceptionGrid;
-		protected System.Web.UI.WebControls.Label StatusLabel;
-		protected System.Web.UI.WebControls.DataGrid StatusGrid;
-		protected System.Web.UI.WebControls.Button RefreshButton;
+		protected Label ExceptionTitleLabel;
+		protected DataGrid ExceptionGrid;
+		protected Label StatusLabel;
+		protected DataGrid StatusGrid;
+		protected Button RefreshButton;
 		private LocalCruiseManagerAggregator cruiseManager = new LocalCruiseManagerAggregator((IList)ConfigurationSettings.GetConfig("projectURLs"));
 	
 		private void RefreshDetails()
@@ -83,7 +84,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard
 			}
 		}
 
-		private void Page_Load(object sender, System.EventArgs e)
+		private void Page_Load(object sender, EventArgs e)
 		{
 			// We have to check for postback otherwise the 'force build' button gets swallowed (http://weblogs.asp.net/benmiller/archive/2003/04/04/4844.aspx)
 			if (!IsPostBack)
@@ -92,7 +93,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard
 			}
 		}
 
-		private void StatusGrid_ItemCommand(object source, System.Web.UI.WebControls.DataGridCommandEventArgs e)
+		private void StatusGrid_ItemCommand(object source, DataGridCommandEventArgs e)
 		{
 			if (e.CommandName == FORCE_BUILD_COMMAND)
 			{
@@ -102,7 +103,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard
 			}
 		}
 
-		private void RefreshButton_Click(object sender, System.EventArgs e)
+		private void RefreshButton_Click(object sender, EventArgs e)
 		{
 			RefreshDetails();
 			StatusLabel.Visible = false;
@@ -117,10 +118,10 @@ namespace ThoughtWorks.CruiseControl.WebDashboard
 		
 		private void InitializeComponent()
 		{    
-			this.StatusGrid.ItemCommand += new System.Web.UI.WebControls.DataGridCommandEventHandler(this.StatusGrid_ItemCommand);
-			this.StatusGrid.ItemDataBound += new System.Web.UI.WebControls.DataGridItemEventHandler(this.StatusGrid_ItemDataBound);
-			this.RefreshButton.Click += new System.EventHandler(this.RefreshButton_Click);
-			this.Load += new System.EventHandler(this.Page_Load);
+			this.StatusGrid.ItemCommand += new DataGridCommandEventHandler(this.StatusGrid_ItemCommand);
+			this.StatusGrid.ItemDataBound += new DataGridItemEventHandler(this.StatusGrid_ItemDataBound);
+			this.RefreshButton.Click += new EventHandler(this.RefreshButton_Click);
+			this.Load += new EventHandler(this.Page_Load);
 
 		}
 		#endregion

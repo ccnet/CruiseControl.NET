@@ -1,9 +1,8 @@
 using System;
 using System.IO;
 using System.Text;
-using System.Diagnostics;
 
-namespace ThoughtWorks.CruiseControl.WebDashboard
+namespace ThoughtWorks.CruiseControl.WebDashboard.IO
 {
 	public class ServerLogFileReader
 	{

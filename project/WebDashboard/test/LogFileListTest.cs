@@ -1,30 +1,31 @@
 using System;
 using System.IO;
 using System.Web.UI.HtmlControls;
+using NUnit.Framework;
 using ThoughtWorks.CruiseControl.Core;
 using ThoughtWorks.CruiseControl.Core.Util;
 
 namespace ThoughtWorks.CruiseControl.WebDashboard.Test
 {
-	[NUnit.Framework.TestFixture]
+	[TestFixture]
 	public class LogFileListTest : CustomAssertion
 	{
 		private static readonly string TestFolder = "logfilelist";
 		private string _tempFolder;
 
-		[NUnit.Framework.SetUp]
+		[SetUp]
 		public void Setup()
 		{
 			_tempFolder = TempFileUtil.CreateTempDir(TestFolder);
 		}
 
-		[NUnit.Framework.TearDown]
+		[TearDown]
 		public void Teardown()
 		{
 			TempFileUtil.DeleteTempDir(TestFolder);
 		}
 
-		[NUnit.Framework.Test]
+		[Test]
 		public void GetLinks()
 		{
 			// testFilenames array must be in sorted order -- otherwise links iteration will fail
@@ -40,7 +41,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Test
 			};
 			TempFileUtil.CreateTempFiles(TestFolder, testFilenames);
 
-		    HtmlAnchor[] actualLinks = LogFileLister.GetLinks(_tempFolder);
+			HtmlAnchor[] actualLinks = LogFileLister.GetLinks(_tempFolder);
 			AssertEquals(6, actualLinks.Length);
 
 			// expected Date format: dd MMM yyyy HH:mm
@@ -59,7 +60,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Test
 			AssertEquals("<nobr>24 Dec 1974 12:00 (Failed)</nobr>", actualLinks[5].InnerHtml);
 		}
 
-		[NUnit.Framework.Test]
+		[Test]
 		public void GetBuildStatus()
 		{
 			CheckBuildStatus("(Failed)", "log19750101120000.xml");
@@ -71,14 +72,14 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Test
 			AssertEquals(expected, LogFileLister.GetBuildStatus(input));
 		}
 
-		[NUnit.Framework.Test]
+		[Test]
 		public void ParseDate()
 		{
-		    DateTime date = new DateTime(2002, 3, 28, 13, 0, 0);
+			DateTime date = new DateTime(2002, 3, 28, 13, 0, 0);
 			AssertEquals(date, LogFileUtil.ParseForDate("20020328130000"));
 		}
 
-		[NUnit.Framework.Test]
+		[Test]
 		public void GetCurrentFilename()
 		{
 			// testFilenames array must be in sorted order -- otherwise links iteration will fail
@@ -96,7 +97,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Test
 			AssertEquals("log20030507042535.xml", LogFileLister.GetCurrentFilename(new DirectoryInfo(_tempFolder)));
 		}
 
-		[NUnit.Framework.Test]
+		[Test]
 		public void InitAdjacentAnchors_NoLogFiles()
 		{
 			HtmlAnchor previous = new HtmlAnchor();
@@ -106,7 +107,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Test
 			AssertEquals("Next link set", String.Empty, next.HRef);
 		}
 
-		[NUnit.Framework.Test]
+		[Test]
 		public void InitAdjacentAnchors_OneLogFile()
 		{
 			HtmlAnchor previous = new HtmlAnchor();

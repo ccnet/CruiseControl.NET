@@ -1,6 +1,6 @@
 using System.Web;
 
-namespace ThoughtWorks.CruiseControl.WebDashboard
+namespace ThoughtWorks.CruiseControl.WebDashboard.IO
 {
 	/// <summary>
 	/// Maps paths by using an Http Context

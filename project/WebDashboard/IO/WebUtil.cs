@@ -6,7 +6,7 @@ using System.Web;
 using ThoughtWorks.CruiseControl.Core;
 using ThoughtWorks.CruiseControl.WebDashboard.Config;
 
-namespace ThoughtWorks.CruiseControl.WebDashboard
+namespace ThoughtWorks.CruiseControl.WebDashboard.IO
 {
 	public class WebUtil
 	{

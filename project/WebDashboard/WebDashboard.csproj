@@ -233,11 +233,6 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "HttpContextPathMapper.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
                     RelPath = "InstallWebConfig.cs"
                     SubType = "Component"
                     BuildAction = "Compile"
@@ -253,17 +248,7 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "IPathMapper.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
                     RelPath = "ITransformer.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "LocalCruiseManagerAggregator.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -288,16 +273,6 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "PluginSpecification.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "PluginsSectionHandler.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
                     RelPath = "ProjectReport.aspx"
                     BuildAction = "Content"
                 />
@@ -313,21 +288,6 @@
                     BuildAction = "EmbeddedResource"
                 />
                 <File
-                    RelPath = "ProjectSpecification.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "ProjectsSectionHandler.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "ProjectURLsSectionHandler.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
                     RelPath = "ServerLog.aspx"
                     BuildAction = "Content"
                 />
@@ -341,11 +301,6 @@
                     RelPath = "ServerLog.aspx.resx"
                     DependentUpon = "ServerLog.aspx.cs"
                     BuildAction = "EmbeddedResource"
-                />
-                <File
-                    RelPath = "ServerLogFileReader.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
                 />
                 <File
                     RelPath = "Statistics.aspx"
@@ -397,17 +352,42 @@
                     BuildAction = "None"
                 />
                 <File
-                    RelPath = "WebUtil.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
                     RelPath = "config\ConfigurationSettingsConfigGetter.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
                     RelPath = "config\IConfigurationGetter.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "config\PluginSpecification.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "config\PluginsSectionHandler.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "config\ProjectSpecification.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "config\ProjectsSectionHandler.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "config\ProjectURLsSectionHandler.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Dashboard\LocalCruiseManagerAggregator.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -462,6 +442,26 @@
                 <File
                     RelPath = "images\tw_dev_logo.gif"
                     BuildAction = "Content"
+                />
+                <File
+                    RelPath = "IO\HttpContextPathMapper.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "IO\IPathMapper.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "IO\ServerLogFileReader.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "IO\WebUtil.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
                 />
                 <File
                     RelPath = "log\log20020910183219Lbuild.67.xml"

@@ -1,6 +1,5 @@
-using System;
-using System.Configuration;
 using System.Collections.Specialized;
+using System.Configuration;
 using NUnit.Framework;
 
 namespace ThoughtWorks.CruiseControl.WebDashboard.Test
