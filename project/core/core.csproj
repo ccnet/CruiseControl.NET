@@ -714,6 +714,16 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "sourcecontrol\Vault.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "sourcecontrol\VaultHistoryParser.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "sourcecontrol\ViewCVSUrlBuilder.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -840,6 +850,16 @@
                 />
                 <File
                     RelPath = "sourcecontrol\test\SvnTest.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "sourcecontrol\test\VaultHistoryParserTest.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "sourcecontrol\test\VaultTest.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
