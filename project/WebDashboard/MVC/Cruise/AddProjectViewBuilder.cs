@@ -1,5 +1,8 @@
+using System;
+using System.Collections;
 using System.Web.UI;
 using System.Web.UI.HtmlControls;
+using System.Web.UI.WebControls;
 using ThoughtWorks.CruiseControl.Core;
 using ThoughtWorks.CruiseControl.Core.Builder;
 using ThoughtWorks.CruiseControl.Core.Publishers;
@@ -34,16 +37,16 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.MVC.Cruise
 
 		private Control BuildProjectView(Project project)
 		{
-			return Table(
-				TR(TD("Project Name *"), TD(TextBox("Project.Name", project.Name))),
-				TR(TD("Source Control"), TD("Perforce")),
-				TR(TD(), TD(BuildPerforceView((P4) project.SourceControl))),
-				TR(TD("Builder"), TD("NAnt")),
-				TR(TD(), TD(BuildNAntBuilderView((NAntBuilder) project.Builder))),
-				TR(TD("Files To Merge"), TD(MultiLineTextBox("Project.Tasks.0.MergeFilesForPresentation", ((MergeFilesTask) project.Tasks[0]).MergeFilesForPresentation))),
-				TR(TD("Output Log Directory *"), TD(TextBox("Project.Publishers.0.LogDir", ((XmlLogPublisher) project.Publishers[0]).LogDir))),
-				TR(TD("Reporting URL *"), TD(TextBox("Project.WebURL", project.WebURL)))
-				);
+			ArrayList rows = new ArrayList();
+			rows.Add(TR(TD("Project Name *"), TD(TextBox("Project.Name", project.Name))));
+			rows.Add(TR(TD("Source Control"), TD("Perforce")));
+			rows.Add(TR(TD(), TD(BuildPerforceView((P4) project.SourceControl))));
+			rows.AddRange(BuildBuilderSelectionAndView(project.Builder));
+			rows.Add(TR(TD("Files To Merge"), TD(MultiLineTextBox("Project.Tasks.0.MergeFilesForPresentation", ((MergeFilesTask) project.Tasks[0]).MergeFilesForPresentation))));
+			rows.Add(TR(TD("Output Log Directory *"), TD(TextBox("Project.Publishers.0.LogDir", ((XmlLogPublisher) project.Publishers[0]).LogDir))));
+			rows.Add(TR(TD("Reporting URL *"), TD(TextBox("Project.WebURL", project.WebURL))));
+
+			return Table((HtmlTableRow[]) rows.ToArray(typeof (HtmlTableRow)));
 		}
 
 		private Control BuildPerforceView(P4 p4)
@@ -59,9 +62,47 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.MVC.Cruise
 				);
 		}
 
+		private HtmlTableRow[] BuildBuilderSelectionAndView(IBuilder builder)
+		{
+			if (builder == null)
+			{
+				throw new CruiseControlException("Internal Error - Builder object not set on model so cannot create view");
+			}
+
+			DropDownList dropDownList = new DropDownList();
+			Control builderControl = Table(TR(TD("Unsupported Builder type - " + builder.GetType().FullName)));
+
+			foreach(Type type in new Type[] { typeof(NAntBuilder), typeof(CommandLineBuilder)})
+			{
+				ListItem item = new ListItem(type.Name);
+				if (builder.GetType() == type)
+				{
+					builderControl = BuildBuilderView(builder, type);
+					item.Selected = true;
+				}
+				dropDownList.Items.Add(item);
+			}
+
+			dropDownList.ID = "Project.Builder";
+			dropDownList.AutoPostBack = true;
+
+			return new HtmlTableRow[] { TR(TD("Builder"), TD(dropDownList)), TR(TD(),TD(builderControl))};
+		}
+
+		private Control BuildBuilderView(IBuilder builder, Type type)
+		{
+			if (type == typeof(NAntBuilder))
+			{
+				return BuildNAntBuilderView((NAntBuilder) builder);
+			}
+			else
+			{
+				return BuildCommandLineBuilderView((CommandLineBuilder) builder);
+			}
+		}
+
 		private Control BuildNAntBuilderView(NAntBuilder nantBuilder)
 		{
-			// ToDo - Target List
 			return Table(
 				TR(TD("Base Directory *"), TD(TextBox("Project.Builder.BaseDirectory", nantBuilder.ConfiguredBaseDirectory))),
 				TR(TD("Executable *"), TD(TextBox("Project.Builder.Executable", nantBuilder.Executable))),
@@ -71,6 +112,17 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.MVC.Cruise
 				TR(TD("BuildTimeoutSeconds *"), TD(TextBox("Project.Builder.BuildTimeoutSeconds", nantBuilder.BuildTimeoutSeconds.ToString())))
 				);
 		}
+
+		private Control BuildCommandLineBuilderView(CommandLineBuilder builder)
+		{
+			return Table(
+				TR(TD("Base Directory *"), TD(TextBox("Project.Builder.BaseDirectory", builder.ConfiguredBaseDirectory))),
+				TR(TD("Executable *"), TD(TextBox("Project.Builder.Executable", builder.Executable))),
+				TR(TD("BuildArgs"), TD(TextBox("Project.Builder.BuildArgs", builder.BuildArgs))),
+				TR(TD("BuildTimeoutSeconds *"), TD(TextBox("Project.Builder.BuildTimeoutSeconds", builder.BuildTimeoutSeconds.ToString())))
+				);
+		}
+
 		/*
 		private Control CreateSourceControlDropDown(Project project)
 		{
@@ -84,16 +136,6 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.MVC.Cruise
 			return dropDownList;
 		}
 
-						htmlBuilder.CreateRow(htmlBuilder.CreateCell(SaveButton()))
-		private Button SaveButton()
-		{
-			Button button = new Button();
-			button.Text = "Save";
-			button.ID = "SaveButtonId";
-			button.CommandName = "SaveButtonCommand";
-			button.CommandArgument = "SaveButtonArgument";
-			return button;
-		}
 		*/
 	}
 }

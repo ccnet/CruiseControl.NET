@@ -1,3 +1,4 @@
+using System;
 using ThoughtWorks.CruiseControl.Core;
 using ThoughtWorks.CruiseControl.Core.Builder;
 using ThoughtWorks.CruiseControl.Core.Publishers;
@@ -35,14 +36,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.MVC.Cruise
 			p4.AutoGetSource = request.GetChecked("Project.SourceControl.AutoGetSource");
 			project.SourceControl = p4;
 
-			NAntBuilder nantBuilder = new NAntBuilder();
-			nantBuilder.Executable = request.GetText("Project.Builder.Executable");
-			nantBuilder.ConfiguredBaseDirectory = request.GetText("Project.Builder.BaseDirectory");
-			nantBuilder.BuildFile = request.GetText("Project.Builder.BuildFile");
-			nantBuilder.BuildArgs = request.GetText("Project.Builder.BuildArgs");
-			nantBuilder.TargetsForPresentation = request.GetText("Project.Builder.TargetsForPresentation");
-			nantBuilder.BuildTimeoutSeconds = request.GetInt("Project.Builder.BuildTimeoutSeconds", 0); // Todo - defaults from config?
-			project.Builder = nantBuilder;
+			project.Builder = GenerateBuilder(request);
 
 			MergeFilesTask mergeFilesTask = new MergeFilesTask();
 			mergeFilesTask.MergeFilesForPresentation = request.GetText("Project.Tasks.0.MergeFilesForPresentation");
@@ -53,6 +47,41 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.MVC.Cruise
 			project.Publishers = new IIntegrationCompletedEventHandler[] { logPublisher };
 
 			return new AddProjectModel(project, selectedServerName, serverNames);
+		}
+
+		private IBuilder GenerateBuilder(IRequest request)
+		{
+			string builderType = request.GetText("Project.Builder");
+			if (builderType == null || builderType == "NAntBuilder")
+			{
+				return GenerateNAntBuilder(request);
+			}
+			else
+			{
+				return GenerateCommandLineBuilder(request);
+			}
+		}
+
+		private NAntBuilder GenerateNAntBuilder(IRequest request)
+		{
+			NAntBuilder builder = new NAntBuilder();
+			builder.Executable = request.GetText("Project.Builder.Executable");
+			builder.ConfiguredBaseDirectory = request.GetText("Project.Builder.BaseDirectory");
+			builder.BuildFile = request.GetText("Project.Builder.BuildFile");
+			builder.BuildArgs = request.GetText("Project.Builder.BuildArgs");
+			builder.TargetsForPresentation = request.GetText("Project.Builder.TargetsForPresentation");
+			builder.BuildTimeoutSeconds = request.GetInt("Project.Builder.BuildTimeoutSeconds", builder.BuildTimeoutSeconds);
+			return builder;
+		}
+
+		private CommandLineBuilder GenerateCommandLineBuilder(IRequest request)
+		{
+			CommandLineBuilder builder = new CommandLineBuilder();
+			builder.Executable = request.GetText("Project.Builder.Executable");
+			builder.ConfiguredBaseDirectory = request.GetText("Project.Builder.BaseDirectory");
+			builder.BuildArgs = request.GetText("Project.Builder.BuildArgs");
+			builder.BuildTimeoutSeconds = request.GetInt("Project.Builder.BuildTimeoutSeconds", builder.BuildTimeoutSeconds);
+			return builder;
 		}
 	}
 }

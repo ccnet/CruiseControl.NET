@@ -1,4 +1,5 @@
 using System;
+using System.IO;
 using ThoughtWorks.CruiseControl.Core.Util;
 using Exortech.NetReflector;
 using ThoughtWorks.CruiseControl.Remote;
@@ -15,7 +16,6 @@ namespace ThoughtWorks.CruiseControl.Core.Builder
 	public class CommandLineBuilder : IBuilder
 	{
 		public const int DEFAULT_BUILD_TIMEOUT = 600;
-		public const string DEFAULT_BASEDIRECTORY = ".";
 		public const string DEFAULT_BUILDARGS = "";
 
 		private ProcessExecutor _executor;
@@ -31,7 +31,7 @@ namespace ThoughtWorks.CruiseControl.Core.Builder
 		public string Executable;
 
 		[ReflectorProperty("baseDirectory", Required = false)] 
-		public string BaseDirectory = DEFAULT_BASEDIRECTORY;
+		public string ConfiguredBaseDirectory;
 
 		[ReflectorProperty("buildArgs", Required = false)] 
 		public string BuildArgs = DEFAULT_BUILDARGS;
@@ -45,7 +45,7 @@ namespace ThoughtWorks.CruiseControl.Core.Builder
 
 		public void Run(IntegrationResult result, IProject project)
 		{
-			ProcessResult processResult = AttemptExecute(CreateProcessInfo(result));
+			ProcessResult processResult = AttemptExecute(CreateProcessInfo(result, project));
 			result.Output = processResult.StandardOutput + "\n" + processResult.StandardError;
 
 			if (processResult.TimedOut)
@@ -64,12 +64,29 @@ namespace ThoughtWorks.CruiseControl.Core.Builder
 			}
 		}
 
-		private ProcessInfo CreateProcessInfo(IntegrationResult result)
+		private ProcessInfo CreateProcessInfo(IntegrationResult result, IProject project)
 		{
-			ProcessInfo info = new ProcessInfo(Executable, BuildArgs, BaseDirectory);
+			ProcessInfo info = new ProcessInfo(Executable, BuildArgs, BaseDirectory(project));
 			info.TimeOut = BuildTimeoutSeconds*1000;
 			return info;
 		}
+
+		private string BaseDirectory(IProject project)
+		{
+			if (ConfiguredBaseDirectory == null || ConfiguredBaseDirectory == "")
+			{
+				return project.WorkingDirectory;
+			}
+			else if (Path.IsPathRooted(ConfiguredBaseDirectory))
+			{
+				return ConfiguredBaseDirectory;
+			}
+			else
+			{
+				return Path.Combine(project.WorkingDirectory, ConfiguredBaseDirectory);
+			}
+		}
+
 
 		protected ProcessResult AttemptExecute(ProcessInfo info)
 		{
@@ -95,7 +112,7 @@ namespace ThoughtWorks.CruiseControl.Core.Builder
 
 		public override string ToString()
 		{
-			return string.Format(@" BaseDirectory: {0}, Executable: {1}", BaseDirectory, Executable);
+			return string.Format(@" BaseDirectory: {0}, Executable: {1}", ConfiguredBaseDirectory, Executable);
 		}
 	}
 }
