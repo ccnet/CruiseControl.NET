@@ -158,8 +158,6 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test
 		public void ReadDefaultExecutableFromRegistry()
 		{
 			mockRegistry.ExpectAndReturn("GetExpectedLocalMachineSubKeyValue", @"C:\Program Files\Microsoft Visual Studio\VSS\win32\SSSCC.DLL", Vss.SS_REGISTRY_PATH, Vss.SS_REGISTRY_KEY);
-
-			Vss vss = new Vss();
 			AssertEquals(@"C:\Program Files\Microsoft Visual Studio\VSS\win32\ss.exe", vss.Executable);
 		}
 
