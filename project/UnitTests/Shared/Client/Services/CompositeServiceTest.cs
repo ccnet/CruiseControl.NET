@@ -25,24 +25,41 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Shared.Client.Services
 		}
 
 		[Test]
-		public void ReturnsResultFromFirstSpecializedServiceThatSupportsCommand()
+		public void ReturnsResultFromFirstServiceIfItSupportsCommand()
 		{
-			DynamicMock service1Mock = new DynamicMock(typeof(ISpecializedCruiseService));
-			DynamicMock service2Mock = new DynamicMock(typeof(ISpecializedCruiseService));
-			ISpecializedCruiseService service1 = (ISpecializedCruiseService) service1Mock.MockInstance;
-			ISpecializedCruiseService service2 = (ISpecializedCruiseService) service2Mock.MockInstance;
+			DynamicMock service1Mock = new DynamicMock(typeof(ICruiseService));
+			DynamicMock service2Mock = new DynamicMock(typeof(ICruiseService));
+			ICruiseService service1 = (ICruiseService) service1Mock.MockInstance;
+			ICruiseService service2 = (ICruiseService) service2Mock.MockInstance;
 
-			service1Mock.SetupResult("SupportedCommandTypes", new Type[] { _command.GetType() });
 			service1Mock.ExpectAndReturn("Run", _result, _command);
 			service2Mock.ExpectNoCall("Run");
 
 			CompositeService service = new CompositeService(new ICruiseService[] {service1, service2} );
 			AssertEquals(_result, service.Run(_command));
 
-			// Bug in our old version of NMock? this fails on setup result
-			//service1Mock.Verify();
+			service1Mock.Verify();
 			service2Mock.Verify();
 		}
+
+		[Test]
+		public void ReturnsResultFromSecondServiceIfFirstDoesntSupportCommand()
+		{
+			DynamicMock service1Mock = new DynamicMock(typeof(ICruiseService));
+			DynamicMock service2Mock = new DynamicMock(typeof(ICruiseService));
+			ICruiseService service1 = (ICruiseService) service1Mock.MockInstance;
+			ICruiseService service2 = (ICruiseService) service2Mock.MockInstance;
+
+			service1Mock.ExpectAndReturn("Run", new NoValidServiceFoundResult(), _command);
+			service2Mock.ExpectAndReturn("Run", _result, _command);
+
+			CompositeService service = new CompositeService(new ICruiseService[] {service1, service2} );
+			AssertEquals(_result, service.Run(_command));
+
+			service1Mock.Verify();
+			service2Mock.Verify();
+		}
+
 
 		[Test]
 		public void ReturnsNoValidServiceFoundResultIfNoServicesAvailable()
@@ -52,57 +69,16 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Shared.Client.Services
 		}
 
 		[Test]
-		public void ReturnsNoValidServiceFoundResultIfNoValidSpecializedServiceAvailable()
+		public void ReturnsNoValidServiceFoundResultIfNoValidServiceAvailable()
 		{
-			DynamicMock service1Mock = new DynamicMock(typeof(ISpecializedCruiseService));
-			ISpecializedCruiseService service1 = (ISpecializedCruiseService) service1Mock.MockInstance;
-			service1Mock.SetupResult("SupportedCommandTypes", new Type[0]);
-			service1Mock.ExpectNoCall("Run");
+			DynamicMock service1Mock = new DynamicMock(typeof(ICruiseService));
+			ICruiseService service1 = (ICruiseService) service1Mock.MockInstance;
+			service1Mock.ExpectAndReturn("Run", new NoValidServiceFoundResult(), _command);
 
 			CompositeService service = new CompositeService(new ICruiseService[] {service1} );
 			AssertEquals(typeof(NoValidServiceFoundResult), service.Run(_command).GetType());
 
-			// Bug in our old version of NMock? this fails on setup result
-			//service1Mock.Verify();
-		}
-
-		[Test]
-		public void DelegatesThroughToNonSpecializedServicesAndReturnsResultIfProcessed()
-		{
-			DynamicMock service1Mock = new DynamicMock(typeof(ICruiseService));
-			DynamicMock service2Mock = new DynamicMock(typeof(ISpecializedCruiseService));
-			ICruiseService service1 = (ICruiseService) service1Mock.MockInstance;
-			ISpecializedCruiseService service2 = (ISpecializedCruiseService) service2Mock.MockInstance;
-
-			service1Mock.ExpectAndReturn("Run", _result, _command);
-			service2Mock.ExpectNoCall("Run");
-
-			CompositeService service = new CompositeService(new ICruiseService[] {service1, service2} );
-			AssertEquals(_result, service.Run(_command));
-
-			// Bug in our old version of NMock? this fails on setup result
-			//service1Mock.Verify();
-			service2Mock.Verify();
-		}
-
-		[Test]
-		public void DelegatesThroughToNonSpecializedServicesAndTriesAnotherIfNoServiceFound()
-		{
-			DynamicMock service1Mock = new DynamicMock(typeof(ICruiseService));
-			DynamicMock service2Mock = new DynamicMock(typeof(ISpecializedCruiseService));
-			ICruiseService service1 = (ICruiseService) service1Mock.MockInstance;
-			ISpecializedCruiseService service2 = (ISpecializedCruiseService) service2Mock.MockInstance;
-
-			service2Mock.SetupResult("SupportedCommandTypes", new Type[] { _command.GetType() });
-			service1Mock.ExpectAndReturn("Run", new NoValidServiceFoundResult(), _command);
-			service2Mock.ExpectAndReturn("Run", _result, _command);
-
-			CompositeService service = new CompositeService(new ICruiseService[] {service1, service2} );
-			AssertEquals(_result, service.Run(_command));
-
-			// Bug in our old version of NMock? this fails on setup result
-			//service1Mock.Verify();
-			//service2Mock.Verify();
+			service1Mock.Verify();
 		}
 	}
 }

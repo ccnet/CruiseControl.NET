@@ -7,10 +7,8 @@ using ThoughtWorks.CruiseControl.Shared.Entities.Logging;
 
 namespace ThoughtWorks.CruiseControl.Shared.Client.Services
 {
-	public class LocalLogFileService : ISpecializedCruiseService
+	public class LocalLogFileService : ICruiseService
 	{
-		protected static readonly Type[] SUPPORTED_TYPES = new Type[] { typeof(GetProjectLogCommand) };
-
 		private LocalLogFileServiceConfig _config;
 
 		public LocalLogFileService(LocalLogFileServiceConfig config)
@@ -22,8 +20,9 @@ namespace ThoughtWorks.CruiseControl.Shared.Client.Services
 		{
 			if (!(command is GetProjectLogCommand))
 			{
-				throw new InvalidCommandException(command);
+				return new NoValidServiceFoundResult();
 			}
+
 			GetProjectLogCommand cmd = command as GetProjectLogCommand;
 
 			string logfilename = LogFileUtil.GetLatestLogFileName(_config.GetDefaultProjectLogDirectory());
@@ -35,14 +34,6 @@ namespace ThoughtWorks.CruiseControl.Shared.Client.Services
 			}
 
 			return new GetProjectLogResult(log);
-		}
-
-		public Type[] SupportedCommandTypes
-		{
-			get
-			{
-				return SUPPORTED_TYPES;
-			}
 		}
 	}
 }

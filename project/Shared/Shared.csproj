@@ -139,16 +139,6 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "Services\InvalidCommandException.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Services\ISpecializedCruiseService.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
                     RelPath = "Services\NoValidServiceFoundResult.cs"
                     SubType = "Code"
                     BuildAction = "Compile"

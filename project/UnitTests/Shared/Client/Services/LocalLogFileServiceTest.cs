@@ -41,35 +41,12 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Shared.Client.Services
 		}
 
 		[Test]
-		public void SupportsCorrectCommands()
+		public void ReturnsNoValidServiceFoudnResultIfInvalidCommandRequested()
 		{
 			LocalLogFileService service = new LocalLogFileService(_config);
+			ICruiseCommand command = (ICruiseCommand) new DynamicMock(typeof(ICruiseCommand)).MockInstance;
 
-			ArrayList expectedTypes = new ArrayList( new Type[] { typeof(GetProjectLogCommand) } );
-			ArrayList supportedTypes = new ArrayList (service.SupportedCommandTypes);
-
-			AssertEquals(expectedTypes.Count, supportedTypes.Count);
-			foreach (Type expectedType in expectedTypes)
-			{
-				Assert(supportedTypes.Contains(expectedType));
-			}
-
-			_configMock.Verify();
-		}
-
-		[Test]
-		public void ThrowsCorrectExceptionIfInvalidCommandRequested()
-		{
-			DynamicMock commandMock = new DynamicMock(typeof(ICruiseCommand));
-			try
-			{
-				new LocalLogFileService(_config).Run( (ICruiseCommand) commandMock.MockInstance);
-				Fail();
-			}
-			catch (InvalidCommandException)
-			{
-				// Expected
-			}
+			AssertEquals(typeof(NoValidServiceFoundResult), service.Run(command).GetType());
 		}
 
 		[Test]

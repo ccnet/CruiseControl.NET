@@ -17,36 +17,14 @@ namespace ThoughtWorks.CruiseControl.Shared.Client.Services
 		{
 			foreach (ICruiseService service in _services)
 			{
-				if (service is ISpecializedCruiseService)
+				ICruiseResult result = service.Run(command);
+				if ( !(result is NoValidServiceFoundResult))
 				{
-					if (ServiceSupportsCommand((ISpecializedCruiseService) service, command))
-					{
-						return service.Run(command);
-					}
-				}
-				else
-				{
-					ICruiseResult result = service.Run(command);
-					if (result != null && !(result is NoValidServiceFoundResult))
-					{
-						return result;
-					}
+					return result;
 				}
 			}
 
 			return new NoValidServiceFoundResult();
-		}
-
-		private bool ServiceSupportsCommand(ISpecializedCruiseService service, ICruiseCommand command)
-		{
-			foreach (Type type in service.SupportedCommandTypes)
-			{
-				if (type.Equals(command.GetType()))
-				{
-					return true;
-				}
-			}
-			return false;
 		}
 	}
 }
