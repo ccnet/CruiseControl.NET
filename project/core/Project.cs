@@ -163,6 +163,7 @@ namespace ThoughtWorks.CruiseControl.Core
 				result.Modifications = GetSourceModifications(result);
 				if (ShouldRunBuild(result, buildCondition))
 				{
+					CreateTemporaryLabelIfNeeded();
 					RunBuild(result);
 					RunTasks(result);
 				}
@@ -325,10 +326,29 @@ namespace ThoughtWorks.CruiseControl.Core
 		/// <summary>
 		/// Labels the project, if the build was successful.
 		/// </summary>
-		private void HandleProjectLabelling(IntegrationResult result)
+		internal void HandleProjectLabelling(IntegrationResult result)
 		{
 			if (result.Succeeded)
 				SourceControl.LabelSourceControl(result.Label, result.StartTime);
+			else
+				DeleteTemporaryLabelIfNeeded();
 		}
+			
+		internal void CreateTemporaryLabelIfNeeded()
+		{
+			if ( typeof( ITemporaryLabeller ).IsInstanceOfType( SourceControl ) )
+			{
+				( (ITemporaryLabeller) SourceControl).CreateTemporaryLabel();
+			}
+		}
+
+		internal void DeleteTemporaryLabelIfNeeded()
+		{
+			if ( typeof( ITemporaryLabeller ).IsInstanceOfType( SourceControl ) )
+			{
+				( (ITemporaryLabeller) SourceControl).DeleteTemporaryLabel();
+			}
+		}
+
 	}
 }

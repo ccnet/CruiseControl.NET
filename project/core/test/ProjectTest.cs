@@ -275,6 +275,58 @@ namespace ThoughtWorks.CruiseControl.Core.Test
 			Assert("There are no modifications within ModificationDelay, project should run", _project.ShouldRunBuild(results, BuildCondition.IfModificationExists));
 			Assert(_project.ShouldRunBuild(results, BuildCondition.ForceBuild));
 		}
+		
+		[Test]
+		public void CreateTemporaryLabelMethodIsInvoked()
+		{
+			_mockSourceControl = new DynamicMock( typeof( ITemporaryLabeller ) );
+			_project.SourceControl = ( ISourceControl ) _mockSourceControl.MockInstance;
+			_mockSourceControl.Expect( "CreateTemporaryLabel" );
+
+			_project.CreateTemporaryLabelIfNeeded();
+		}
+
+		[Test]
+		public void CreateTemporaryLabelMethodNotInvokedIfNotTemporaryLabeller()
+		{
+			// the mock has strict test to true, so an exception will be thrown in CreateTemporaryLabel is invoked
+			_project.CreateTemporaryLabelIfNeeded();
+		}
+
+
+		[Test]
+		public void DeleteTemporaryLabelMethodIsInvokedIfBuildFailed()
+		{
+			IntegrationResult result = new IntegrationResult();
+			result.LastIntegrationStatus = IntegrationStatus.Failure;
+			_mockSourceControl = new DynamicMock( typeof( ITemporaryLabeller ) );
+			_project.SourceControl = (ISourceControl) _mockSourceControl.MockInstance;
+			_mockSourceControl.Expect( "DeleteTemporaryLabel" );
+
+			_project.HandleProjectLabelling( result );
+		}
+
+		[Test]
+		public void DeleteTemporaryLabelMethodNotInvokedIfBuildSuceeded()
+		{
+			IntegrationResult result = new IntegrationResult();
+			result.Status = IntegrationStatus.Success;
+			_mockSourceControl = new DynamicMock( typeof( ITemporaryLabeller ) );
+			_project.SourceControl = (ISourceControl) _mockSourceControl.MockInstance;
+			_mockSourceControl.ExpectNoCall( "DeleteTemporaryLabel" );
+
+			_project.HandleProjectLabelling( result );
+		}
+
+
+		[Test]
+		public void DeleteTemporaryLabelMethodNotInvokedIfNotTemporaryLabeller()
+		{
+			IntegrationResult result = new IntegrationResult();
+			result.Status = IntegrationStatus.Success;
+
+			_project.DeleteTemporaryLabelIfNeeded();
+		}
 
 		[Test]
 		public void InitialActivityState()

@@ -96,7 +96,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test
 			ProcessInfo actual = _vss.CreateLabelProcessInfo(label, dateTime);
 
 			string expectedExecutable = @"..\tools\vss\ss.exe";
-			string expectedArgs = @"label $/fooProject -VLtestLabel -Vd04/15/2003;11:12 -YAdmin,admin -I-Y";				
+			string expectedArgs = @"label $/fooProject -LtestLabel -Vd04/15/2003;11:12 -YAdmin,admin -I-Y";				
 
 			AssertNotNull("process was null", actual);
 			AssertEquals(expectedExecutable, actual.FileName);

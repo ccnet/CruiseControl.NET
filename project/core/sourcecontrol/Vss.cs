@@ -8,7 +8,7 @@ using ThoughtWorks.CruiseControl.Core.Util;
 namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 {
 	[ReflectorType("vss")]
-	public class Vss : ProcessSourceControl
+	public class Vss : ProcessSourceControl, ITemporaryLabeller
 	{
 		// required environment variable name
 		internal const string SS_DIR_KEY = "SSDIR";
@@ -19,11 +19,12 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 		// ss history [dir] -R -Vd[now]~[lastBuild] -Y[un,pw] -I-Y -O[tempFileName]
 		internal static readonly string HISTORY_COMMAND_FORMAT = @"history {0} -R -Vd{1}~{2} -Y{3},{4} -I-Y";
 
-		internal static readonly string LABEL_COMMAND_FORMAT = @"label {0} -VL{1} -Vd{2} -Y{3},{4} -I-Y";
+		internal static readonly string LABEL_COMMAND_FORMAT = @"label {0} -L{1} -Vd{2} -Y{3},{4} -I-Y";
 		internal static readonly string LABEL_COMMAND_FORMAT_NOTIMESTAMP = @"label {0} -L{1} -Y{2},{3} -I-Y";
 
 		private string _ssDir;
 		private string _executable;
+		private string _lastTempLabel;
 
 		public CultureInfo CultureInfo = CultureInfo.CurrentCulture;
 
@@ -63,26 +64,41 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			set { _ssDir = value.Trim('"'); }
 		}
 
+		/// <summary>
+		/// Gets or sets whether this repository should be labeled.  Currently IGNORED.
+		/// </summary>
+		/// <remarks>
+		/// This was originally added to allow the user to avoid CCNETUNVERIFIEDxxx labels that resulted
+		/// from using VSS.  The CCNETUNVERIFIED problem has been solved on 20 April 2004, and this propery should
+		/// eventually be removed.  It is kept here for API downward compatability.
+		/// </remarks>
 		[ReflectorProperty("applyLabel", Required = false)]
 		public bool ApplyLabel = false;
 
 		public override Modification[] GetModifications(DateTime from, DateTime to)
 		{
-			Modification[] modifications = GetModifications(CreateHistoryProcessInfo(from, to), from, to);
-			if (modifications.Length > 0 && ApplyLabel)
-			{
-				string label = "CCNETUNVERIFIED" + to.ToString("MMddyyyyHHmmss");
-				LabelSourceControl(label, to);
-			}
-			return modifications;
+			return GetModifications(CreateHistoryProcessInfo(from, to), from, to);
 		}
 
 		public override void LabelSourceControl(string label, DateTime timeStamp)
 		{
-			if (ApplyLabel)
+			Execute(CreateLabelProcessInfo(label, timeStamp));
+			_lastTempLabel = null;
+		}
+
+		public void CreateTemporaryLabel()
+		{
+			_lastTempLabel = CreateTemporaryLabelName( DateTime.Now );
+			LabelSourceControl( _lastTempLabel );
+		}
+
+		public void DeleteTemporaryLabel()
+		{
+			if ( WasTempLabelApplied() )
 			{
-				Execute(CreateLabelProcessInfo(label, timeStamp));
+				DeleteLatestLabel();
 			}
+			_lastTempLabel = null;
 		}
 
 		public ProcessInfo CreateHistoryProcessInfo(DateTime from, DateTime until)
@@ -111,6 +127,11 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			return ProcessInfo;
 		}
 
+		internal string CreateTemporaryLabelName( DateTime time )
+		{
+			return "CCNETUNVERIFIED" + time.ToString("MMddyyyyHHmmss");
+		}
+
 		/// <summary>
 		/// Format the date in a format appropriate for the VSS command-line.  The date should not contain any spaces as VSS would treat it as a separate argument.
 		/// The trailing 'M' in 'AM' or 'PM' is also removed.
@@ -120,6 +141,11 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 		internal string FormatCommandDate(DateTime date)
 		{
 			return string.Concat(date.ToString("d", CultureInfo), ";", date.ToString("t", CultureInfo)).Replace(" ", string.Empty).TrimEnd('M', 'm');
+		}
+
+		internal void LabelSourceControl( string label )
+		{
+			Execute(CreateLabelProcessInfo(label));
 		}
 
 		internal string BuildHistoryProcessInfoArgs(DateTime from, DateTime to)
@@ -132,5 +158,22 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			string comServerPath = registry.GetLocalMachineSubKeyValue(SS_REGISTRY_PATH, SS_REGISTRY_KEY);
 			return Path.Combine(Path.GetDirectoryName(comServerPath), SS_EXE);
 		}
+
+		internal string LastTempLabel
+		{
+			get { return _lastTempLabel; }
+			set { _lastTempLabel = value; }
+		}
+
+		private void DeleteLatestLabel()
+		{
+			LabelSourceControl( "", DateTime.Now );
+		}
+
+		private bool WasTempLabelApplied()
+		{
+			return ( _lastTempLabel != null );
+		}
+
 	}
 }

@@ -7,7 +7,7 @@ using ThoughtWorks.CruiseControl.Core;
 namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 {
 	[ReflectorType("multi")]
-	public class MultiSourceControl : ISourceControl
+	public class MultiSourceControl : ITemporaryLabeller, ISourceControl
 	{
 		private IList _sourceControls;
 
@@ -56,6 +56,28 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 		public void Run(IntegrationResult result)
 		{
 			result.Modifications = GetModifications(result.LastModificationDate, DateTime.Now);
+		}
+
+		public void CreateTemporaryLabel()
+		{
+			foreach (ISourceControl sourceControl in SourceControls)
+			{
+				if ( typeof(ITemporaryLabeller).IsInstanceOfType(sourceControl) )
+				{
+					( (ITemporaryLabeller) sourceControl ).CreateTemporaryLabel();
+				}
+			}
+		}
+
+		public void DeleteTemporaryLabel()
+		{
+			foreach (ISourceControl sourceControl in SourceControls)
+			{
+				if ( typeof(ITemporaryLabeller).IsInstanceOfType(sourceControl) )
+				{
+					( (ITemporaryLabeller) sourceControl ).DeleteTemporaryLabel();
+				}
+			}
 		}
 	}
 }
