@@ -97,12 +97,12 @@
                 <Reference
                     Name = "Drew.Controls"
                     AssemblyName = "Drew.Controls"
-                    HintPath = "..\..\lib\Drew.Controls.dll"
+                    HintPath = "..\..\lib\CCTray\Drew.Controls.dll"
                 />
                 <Reference
                     Name = "Drew.Agents"
                     AssemblyName = "Drew.Agents"
-                    HintPath = "..\..\lib\Drew.Agents.dll"
+                    HintPath = "..\..\lib\CCTray\Drew.Agents.dll"
                 />
             </References>
         </Build>
