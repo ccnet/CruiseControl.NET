@@ -174,8 +174,9 @@ namespace ThoughtWorks.CruiseControl.Core
 					{
 						if (publisher is XmlLogPublisher)
 						{
-							// ToDo - check these are sorted?
-							return LogFileUtil.GetLogFileNames(((XmlLogPublisher) publisher).LogDir);
+							string[] logFileNames = LogFileUtil.GetLogFileNames(((XmlLogPublisher) publisher).LogDir);
+							Array.Reverse(logFileNames);
+							return logFileNames;
 						}
 					}
 					throw new CruiseControlException("Unable to find Log Publisher for project so can't find log file");
@@ -188,29 +189,13 @@ namespace ThoughtWorks.CruiseControl.Core
 		public string[] GetMostRecentBuildNames(string projectName, int buildCount)
 		{
 			// TODO - this is a hack - I'll tidy it up later - promise! :) MR
-			foreach (IProjectIntegrator projectIntegrator in projectIntegrators) 
+			string[] buildNames = GetBuildNames(projectName);
+			ArrayList buildNamesToReturn = new ArrayList();
+			for (int i = 0; i < ((buildCount < buildNames.Length) ? buildCount : buildNames.Length); i++)
 			{
-				if (projectIntegrator.Name == projectName)
-				{
-					foreach (IIntegrationCompletedEventHandler publisher in ((Project) projectIntegrator.Project).Publishers)
-					{
-						if (publisher is XmlLogPublisher)
-						{
-							// ToDo - check these are sorted?
-							string[] buildNames = LogFileUtil.GetLogFileNames(((XmlLogPublisher) publisher).LogDir);
-							ArrayList buildNamesToReturn = new ArrayList();
-							for (int i = 0; i < ((buildCount < buildNames.Length) ? buildCount : buildNames.Length); i++)
-							{
-								buildNamesToReturn.Add(buildNames[i]);
-							}
-							return (string[]) buildNamesToReturn.ToArray(typeof (string));
-						}
-					}
-					throw new CruiseControlException("Unable to find Log Publisher for project so can't find log file");
-				}
+				buildNamesToReturn.Add(buildNames[i]);
 			}
-
-			throw new NoSuchProjectException(projectName);
+			return (string[]) buildNamesToReturn.ToArray(typeof (string));
 		}
 
 		public string GetLog(string projectName, string buildName)
