@@ -9,13 +9,14 @@
 
     <property name="webapp.dir" value="deployed\web"/>
     <property name="webdashboard.dir" value="deployed\webdashboard"/>
-		<property name="webservice.dir" value="deployed\webservice" />
+    <property name="webservice.dir" value="deployed\webservice" />
 
     <property name="build.dir" value="build"/>
     <property name="src.dir" value="project"/>
     <property name="lib.dir" value="lib"/>
     <property name="package.dir" value="package"/>
 
+    <property name="interfaces.dll" value="ccnet.remote.dll" />
     <property name="core.dll" value="ccnet.core.dll"/>
     <property name="console.exe" value="ccnet.exe"/>
     <property name="service.exe" value="ccnet.service.exe"/>
@@ -49,6 +50,7 @@
 		<foreach item="Folder" property="foldername">
 			<in>
 				<items basedir="project">
+					<includes name="*\bin" />
 					<includes name="*\bin\Debug" />
 				</items>
 			</in>
@@ -78,24 +80,35 @@
 	<!-- TEST -->
 	<target name="test" depends="test.unit" />
 
-    <target name="test.unit" depends="compile" description="runs unit tests">
-    	
-		<exec basedir="${build.dir}" 
-			  workingdir="${build.dir}" 
-			  program="..\tools\nunit\nunit-console.exe" 
-			  commandline="${core.dll} /xml:ccnet-core-results.xml"/>
+	<target name="test.unit" depends="compile" description="runs unit tests">    	
+	    	<call target="test.core" />
+	    	<call target="test.console" />
+	    	<call target="test.web" />
+	</target>
+    
+	<target name="test.core">
+		<nunit2>
+			<formatter type="Plain" />
+			<formatter type="Xml" usefile="true" extension=".xml" outputdir="${build.dir}" />
+			<test assemblyname="${build.dir}\${core.dll}" appconfig="${build.dir}\${core.dll}.config" />
+		</nunit2>
+	</target>
 
-		<exec basedir="${build.dir}" 
-			  workingdir="${build.dir}" 
-			  program="..\tools\nunit\nunit-console.exe" 
-			  commandline="${console.exe} /xml:ccnet-console-results.xml"/>
+	<target name="test.console">
+		<nunit2>
+			<formatter type="Plain" />
+			<formatter type="Xml" usefile="true" extension=".xml" outputdir="${build.dir}" />
+			<test assemblyname="${build.dir}\${console.exe}" appconfig="${build.dir}\${console.exe}.config" />
+		</nunit2>
+	</target>
 
-		<exec basedir="${build.dir}" 
-			  workingdir="${build.dir}" 
-			  program="..\tools\nunit\nunit-console.exe" 
-			  commandline="${web.dll} /xml:ccnet-web-results.xml"/>
-
-    </target>
+	<target name="test.web">
+		<nunit2>
+			<formatter type="Plain" />
+			<formatter type="Xml" usefile="true" extension=".xml" outputdir="${build.dir}" />
+			<test assemblyname="${build.dir}\${web.dll}" appconfig="${build.dir}\${web.dll}.config" />
+		</nunit2>
+	</target>
 
 	<!-- Used for manually testing the webapp. Don't include this in an automated build
 		unless we copy files to distribute to a different location -->
@@ -114,25 +127,13 @@
 	
 	<target name="deploy.server" depends="compile">
 		<mkdir dir="deployed\server"/>
-		<foreach item="Folder" property="foldername">
-			<in>
-				<items basedir="project">
-					<includes name="core" />
-					<includes name="ccnet.remote" />
-					<includes name="console" />
-					<includes name="service" />
-				</items>
-			</in>
-			<do>
-				<copy todir="deployed\server">
-					<fileset basedir="${foldername}\bin\Debug">
-						<includes name="*.dll" />
-						<includes name="*.pdb" />
-						<includes name="*.exe" />
-					</fileset>
-				</copy>
-			</do>
-		</foreach>
+		<copy file="${src.dir}\ccnet.remote\bin\Debug\${interfaces.dll}" todir="deployed\server" />
+		<copy file="${src.dir}\core\bin\Debug\${core.dll}" todir="deployed\server" />
+		<copy file="${src.dir}\console\bin\Debug\${console.exe}" todir="deployed\server" />
+		<copy file="${src.dir}\service\bin\Debug\${service.exe}" todir="deployed\server" />
+		<copy file="lib\nunit.framework.dll" todir="deployed\server" />
+		<copy file="lib\nmock.dll" todir="deployed\server" />
+		<copy file="lib\NetReflector.dll" todir="deployed\server" />
 
 		<copy todir="deployed\server\xsl" verbose="${verbosity}">
 			<fileset basedir="${src.dir}\core\publishers\xsl">
@@ -160,11 +161,12 @@
     
 	<target name="deploy.webapp" depends="compile" description="deploys the web application">
 		<mkdir dir="${webapp.dir}" verbose="${verbosity}"/>
-		<copy todir="${webapp.dir}\bin">
-			<fileset basedir="project\web\bin\Debug">
-				<includes name="*.dll" />
-			</fileset>
-		</copy>
+		<copy file="${src.dir}\ccnet.remote\bin\Debug\${interfaces.dll}" todir="deployed\server" />
+		<copy file="${src.dir}\core\bin\Debug\${core.dll}" todir="deployed\server" />
+		<copy file="${src.dir}\web\bin\${web.dll}" todir="deployed\web" />
+		<copy file="lib\nunit.framework.dll" todir="deployed\server" />
+		<copy file="lib\nmock.dll" todir="deployed\server" />
+		<copy file="lib\SiteMesh.dll" todir="deployed\server" />
 
 		<copy todir="${webapp.dir}">
 			<fileset basedir="project\web">

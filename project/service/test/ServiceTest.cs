@@ -9,21 +9,17 @@ namespace ThoughtWorks.CruiseControl.Service.Test
 	public class ServiceTest 
 	{	
 		[Test]
-		public void TestInstallService() 
+		public void ServiceStart()
 		{
-			DynamicMock mockSPI = new DynamicMock(typeof(ServiceProcessInstaller));
-			DynamicMock mockSI = new DynamicMock(typeof(ServiceInstaller));
-			
-			mockSPI.Expect("Account", ServiceAccount.LocalSystem);
-			mockSI.Expect("StartType", ServiceStartMode.Manual);
+			new CCServiceExtension().Start();
+		}
 
-			//execute
-
-			ProjectInstaller i = new ProjectInstaller();			            
-
-			//verify
-			mockSPI.Verify();
-			mockSI.Verify();		
+		private class CCServiceExtension : CCService
+		{
+			public void Start()
+			{
+				OnStart(new string[] { });
+			}
 		}
 	}
 }

@@ -20,7 +20,6 @@ namespace ThoughtWorks.CruiseControl.Service
 		}
 
 		private Container components = null;
-//		private CruiseManager manager;
 		private ICruiseServer server;
 
 		public CCService()
@@ -59,6 +58,9 @@ namespace ThoughtWorks.CruiseControl.Service
 		/// </summary>
 		protected override void OnStart(string[] args)
 		{
+			// Set working directory to service executable's home directory.
+			Directory.SetCurrentDirectory(AppDomain.CurrentDomain.BaseDirectory);
+
 			string configFile = GetConfigFilename();
 			FileInfo configFileInfo = (new FileInfo(configFile));
 
@@ -68,15 +70,6 @@ namespace ThoughtWorks.CruiseControl.Service
 				return;
 			}
 
-			// in a service application the work has to be done in a separate thread so we use CruiseManager no matter what
-			// we will register it on a channel if remoting is on
-			// TODO: switch to use factory once cruisecontrol operates as a separate thread
-//			manager = new CruiseManager(new CruiseServer(new ConfigurationLoader(configFile)));
-//			
-//			if (UseRemoting()) 
-//				manager.RegisterForRemoting();
-//
-//			manager.StartCruiseControl();
 			server = CruiseServerFactory.Create(UseRemoting(), configFile);
 			server.Start();
 		}

@@ -109,6 +109,16 @@
                     AssemblyName = "System.Runtime.Remoting"
                     HintPath = "..\..\..\..\WINDOWS\Microsoft.NET\Framework\v1.1.4322\System.Runtime.Remoting.dll"
                 />
+		<Reference
+		    Name = "nunit.framework"
+		    AssemblyName = "nunit.framework"
+		    HintPath = "..\..\lib\nunit.framework.dll"
+                />
+                <Reference
+                    Name = "nmock"
+                    AssemblyName = "nmock"
+                    HintPath = "..\..\lib\nmock.dll"
+                />                
             </References>
         </Build>
         <Files>
@@ -142,6 +152,11 @@
                     DependentUpon = "ProjectInstaller.cs"
                     BuildAction = "EmbeddedResource"
                 />
+                <File
+                    RelPath = "test\ServiceTest.cs"
+                    SubType = "Component"
+                    BuildAction = "Compile"
+                />                
             </Include>
         </Files>
     </CSHARP>
