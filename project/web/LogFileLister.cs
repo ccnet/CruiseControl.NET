@@ -102,7 +102,8 @@ namespace tw.ccnet.web
 
 				XslTransform transform = new XslTransform();
 				LoadStylesheet(transform, xslfile);
-				XmlReader reader = transform.Transform(document.CreateNavigator(), null); // , (XmlResolver)null); 
+				XmlReader reader = transform.Transform(document.CreateNavigator(), null); 
+
 
 				XmlDocument output = new XmlDocument();
 				output.Load(reader);

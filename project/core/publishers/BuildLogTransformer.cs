@@ -31,7 +31,8 @@ namespace tw.ccnet.core.publishers
 			{		
 				XslTransform transform = new XslTransform();
 				LoadStylesheet(transform, xslFile);
-				XmlReader reader = transform.Transform(document.CreateNavigator(), null); // , (XmlResolver)null); 
+
+				XmlReader reader = transform.Transform(document.CreateNavigator(), null); 
 				
 				XmlDocument output = new XmlDocument();
 				output.Load(reader);

@@ -147,14 +147,14 @@ namespace tw.ccnet.core
 			return IntegrationStatus.Unknown;
 		}
 
-		public string CurrentProjectActivity() 
+		public ProjectActivity CurrentProjectActivity() 
 		{
 			foreach (IProject p in Projects) 
 			{
 				return ((Project)p).CurrentActivity;
 			}
 
-			return "unknown";
+			return ProjectActivity.Unknown;
 		}
 
 		internal void AddProject(IProject project) 

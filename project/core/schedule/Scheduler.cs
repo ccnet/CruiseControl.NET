@@ -63,6 +63,8 @@ namespace tw.ccnet.core.schedule
 				_schedule.Update();
 
 				TimeSpan sleepTime = _schedule.CalculateTimeToNextIntegration();
+				if (_project.MinimumSleepTime > 0 && _project.MinimumSleepTime < sleepTime.TotalMilliseconds)
+					sleepTime = new TimeSpan(0, 0, 0, 0, _project.MinimumSleepTime);
 				LogUtil.Log(Project, string.Format("Sleeping for {0}", sleepTime));
 				Thread.Sleep(sleepTime);
 			}

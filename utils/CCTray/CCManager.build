@@ -35,7 +35,7 @@
 			</sources>
 			<references>
 				<includes name="build\CCTrayManager.exe"/>
-				<includes name="D:\program files\nunit v2.0\bin\nunit.framework.dll"/>
+				<includes name="..\..\lib\nunit.framework.dll"/>
 			</references>
 		</csc>
 		

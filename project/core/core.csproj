@@ -228,22 +228,12 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "label\AssemblyVersionLabeller.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
                     RelPath = "label\DefaultLabeller.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
                     RelPath = "label\ILabeller.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "label\test\AssemblyLabellerTest.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

@@ -24,7 +24,6 @@ namespace tw.ccnet.core.test
 		{
 			_project = new Project();
 			_project.Name = "test";
-			_project.IntegrationTimeout = 10;
 			_listener = new TestTraceListener();
 			Trace.Listeners.Add(_listener);
 		}
@@ -114,6 +113,8 @@ namespace tw.ccnet.core.test
 
 			_project.Run();
 
+			AssertEquals(ProjectActivity.Sleeping, _project.CurrentActivity);
+
 			AssertEquals(3, _project.CurrentIntegration.Modifications.Length);
 			// verify that build was invoked
 			builderMock.Verify();
@@ -139,7 +140,6 @@ namespace tw.ccnet.core.test
 			_project.SourceControl = new MockSourceControl();
 			_project.Builder = (IBuilder)builderMock.MockInstance;
 			_project.StateManager = (IStateManager)stateMock.MockInstance;
-			_project.IntegrationTimeout = buildTimeout;
 			_project.Name = "Test";
 			_project.Schedule = new Schedule(buildTimeout, 1);
 

@@ -99,7 +99,6 @@ namespace tw.ccnet.core.configuration.test
 			Assertion.AssertEquals("missing publisher", 1, project.Publishers.Count);
 			Assertion.AssertEquals(typeof(MockPublisher), project.Publishers[0].GetType());
 
-			Assertion.AssertEquals(ConfigurationFixture.SleepTime, project.IntegrationTimeout);
 		}
 
 		[Test, ExpectedException(typeof(ConfigurationException))]

@@ -46,15 +46,23 @@ namespace tw.ccnet.remote
 		Unknown
 	}
 
+	public enum ProjectActivity 
+	{
+		CheckingModifications,
+		Building,
+		Sleeping,
+		Unknown
+	}
+
 	[Serializable]
 	public struct ProjectStatus
 	{
 		private CruiseControlStatus status;
 		private IntegrationStatus buildStatus;
-		private string activity;
+		private ProjectActivity activity;
 		private string name;
 
-		public ProjectStatus(CruiseControlStatus status, IntegrationStatus buildStatus, string activity, string name) 
+		public ProjectStatus(CruiseControlStatus status, IntegrationStatus buildStatus, ProjectActivity activity, string name) 
 		{
 			this.status = status;
 			this.buildStatus = buildStatus;
@@ -72,7 +80,7 @@ namespace tw.ccnet.remote
 			get { return buildStatus; }
 		}
 
-		public string Activity 
+		public ProjectActivity Activity 
 		{
 			get { return activity; }
 		}

@@ -36,12 +36,11 @@ namespace tw.ccnet.core
 		private ILabeller _labeller = new DefaultLabeller();
 		private IList _publishers = new ArrayList();
 		private IStateManager _state = new IntegrationStateManager();
-		private int _timeout = 60000;
 		private bool _stopped = false;
 		private IntegrationResult _lastIntegration;
 		private IntegrationResult _currentIntegration;
 		private event IntegrationEventHandler _integrationEventHandler;
-		private string currentActivity;
+		private ProjectActivity currentActivity;
 		private int modificationDelay = 0;
 		private int sleepTime = 0;
 
@@ -92,17 +91,15 @@ namespace tw.ccnet.core
 			}
 		}
 
-		[ReflectorProperty("sleepTime", Required=false)]
-		public int IntegrationTimeout
-		{
-			get { return _timeout; }
-			set { _timeout = value; }
-		}
-
 		public bool Stopped 
 		{
 			get { return _stopped; }
 			set { _stopped = value; }
+		}
+
+		public int MinimumSleepTime 
+		{
+			get { return sleepTime; }
 		}
 
 		[ReflectorProperty("state", InstanceTypeKey="type", Required=false)]
@@ -156,6 +153,7 @@ namespace tw.ccnet.core
 			if (Stopped) return;
 
 			// lock
+			sleepTime = 0;
 			try
 			{
 				PreBuild();
@@ -173,13 +171,12 @@ namespace tw.ccnet.core
 				CurrentIntegration.ExceptionResult = ex;
 				PostBuild();
 			}
+			currentActivity = ProjectActivity.Sleeping;
 		}
 
 		internal void PreBuild()
 		{
 			Log("Starting new integration...");
-			currentActivity = "building";
-			sleepTime = IntegrationTimeout;
 			CurrentIntegration = new IntegrationResult();
 			CurrentIntegration.ProjectName = Name;
 			CurrentIntegration.LastIntegrationStatus = LastIntegration.Status;		// test
@@ -189,12 +186,14 @@ namespace tw.ccnet.core
 
 		internal void GetSourceModifications()
 		{
+			currentActivity = ProjectActivity.CheckingModifications;
 			CurrentIntegration.Modifications = SourceControl.GetModifications(LastIntegration.LastModificationDate,  CurrentIntegration.StartTime);
 			Log(String.Format("{0} Modifications detected...", CurrentIntegration.Modifications.Length));
 		}
 
 		internal void RunBuild()
 		{
+			currentActivity = ProjectActivity.Building;
 			Builder.Build(CurrentIntegration);
 			Log(String.Format("Build Complete: {0}", CurrentIntegration.Status.ToString())); 
 		}
@@ -277,7 +276,7 @@ namespace tw.ccnet.core
 			return IntegrationStatus.Unknown;
 		}
 
-		public string CurrentActivity 
+		public ProjectActivity CurrentActivity 
 		{
 			get { return currentActivity; }
 		}

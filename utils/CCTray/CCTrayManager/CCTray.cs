@@ -215,9 +215,9 @@ namespace CCManager
 				ProjectStatus status = getProjectStatus();
 
 				ccStatus = status.Status;
-				string activity = status.Activity;
+				ProjectActivity activity = status.Activity;
 				if (ccStatus == CruiseControlStatus.Stopped)
-					activity = "none";
+					activity = ProjectActivity.Unknown;
 				IntegrationStatus buildStatus = status.BuildStatus;
 				
 				trayIcon.Text = string.Format("Status: {0}\nActivity: {1}\nLast Build: {2}", ccStatus, activity, buildStatus.ToString());

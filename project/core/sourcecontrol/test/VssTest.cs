@@ -72,7 +72,7 @@ namespace tw.ccnet.core.sourcecontrol.test
 		TextReader reader = ProcessUtil.ExecuteRedirected(p);
 			string result = reader.ReadToEnd();
 			p.WaitForExit();
-			Console.WriteLine(result);
+
 			Assertion.AssertEquals("foo=bar\r\n", result);
 		}
 

@@ -11,5 +11,6 @@ namespace tw.ccnet.core
 
 		void AddIntegrationEventHandler(IntegrationEventHandler handler);
 		IntegrationStatus GetLastBuildStatus();
+		int MinimumSleepTime { get; }
 	}
 }

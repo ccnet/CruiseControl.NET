@@ -50,8 +50,7 @@ namespace tw.ccnet.core.configuration.test
 
 		private void handler(object sender, ValidationEventArgs args) 
 		{
-			//Console.WriteLine("handler called from {0}", sender.GetType().Name);
-			Console.WriteLine(args.Message);
+
 		}
 	}
 

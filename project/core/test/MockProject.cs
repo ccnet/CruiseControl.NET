@@ -23,6 +23,11 @@ namespace tw.ccnet.core.test
 			get { return name; } 
 		}
 
+		public int MinimumSleepTime 
+		{
+			get { return 0; }
+		}
+
 		public ISchedule Schedule 
 		{ 
 			get { return schedule; } 
