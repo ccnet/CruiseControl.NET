@@ -24,12 +24,12 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 		[ReflectorProperty("timeout", Required=false)]
 		public int Timeout = DEFAULT_TIMEOUT;
 
-		public bool ShouldRun(IntegrationResult result)
+		public bool ShouldRun(IntegrationResult result, IProject project)
 		{
 			return result.Working;
 		}
 
-		public void Run(IntegrationResult result)
+		public void Run(IntegrationResult result, IProject project)
 		{
 			result.Modifications = GetModifications(result.LastModificationDate, DateTime.Now);
 		}
@@ -79,7 +79,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 		{
 		}
 
-		public virtual void Initialize(string projectName, string workingDirectory)
+		public virtual void Initialize(IProject project)
 		{
 		}
 	}

@@ -57,7 +57,7 @@ namespace ThoughtWorks.CruiseControl.Core.Builder
 		/// StdOut from nant.exe is redirected and stored.
 		/// </summary>
 		/// <param name="result">For storing build output.</param>
-		public void Run(IntegrationResult result)
+		public void Run(IntegrationResult result, IProject project)
 		{
 			ProcessResult processResult = AttemptExecute(CreateProcessInfo(result));
 			result.Output = processResult.StandardOutput;
@@ -132,7 +132,7 @@ namespace ThoughtWorks.CruiseControl.Core.Builder
 			return "-D:label-to-apply=" + label;
 		}
 
-		public bool ShouldRun(IntegrationResult result)
+		public bool ShouldRun(IntegrationResult result, IProject project)
 		{
 			return result.Working && result.HasModifications();
 		}

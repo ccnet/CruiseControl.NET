@@ -34,19 +34,19 @@ namespace ThoughtWorks.CruiseControl.Core.Test
 		[Test]
 		public void Run()
 		{
+			Workflow project = new Workflow();
 			IMock taskMock1 = new DynamicMock(typeof(ITask));
-			taskMock1.ExpectAndReturn("ShouldRun", true, new NMock.Constraints.NotNull());
-			taskMock1.Expect("Run", new NMock.Constraints.NotNull());
+			taskMock1.ExpectAndReturn("ShouldRun", true, new NMock.Constraints.NotNull(), project);
+			taskMock1.Expect("Run", new NMock.Constraints.NotNull(), project);
 
 			IMock taskMock2 = new DynamicMock(typeof(ITask));
-			taskMock2.ExpectAndReturn("ShouldRun", true, new NMock.Constraints.NotNull());
-			taskMock2.Expect("Run", new NMock.Constraints.NotNull());
+			taskMock2.ExpectAndReturn("ShouldRun", true, new NMock.Constraints.NotNull(), project);
+			taskMock2.Expect("Run", new NMock.Constraints.NotNull(), project);
 
 			IMock taskMock3 = new DynamicMock(typeof(ITask));
-			taskMock3.ExpectAndReturn("ShouldRun", false, new NMock.Constraints.NotNull());
-			taskMock3.Expect("Run", new NMock.Constraints.NotNull());
+			taskMock3.ExpectAndReturn("ShouldRun", false, new NMock.Constraints.NotNull(), project);
+			taskMock3.Expect("Run", new NMock.Constraints.NotNull(), project);
 
-			Workflow project = new Workflow();
 			project.Tasks.Add(taskMock1.MockInstance);
 			project.Tasks.Add(taskMock2.MockInstance);
 			project.RunIntegration(BuildCondition.IfModificationExists);
@@ -63,13 +63,13 @@ namespace ThoughtWorks.CruiseControl.Core.Test
 		[Test]
 		public void RunForceBuild()
 		{
+			Workflow project = new Workflow();
 			IMock taskMock1 = new DynamicMock(typeof(ITask));
-			taskMock1.Expect("Run", new NMock.Constraints.NotNull());
+			taskMock1.Expect("Run", new NMock.Constraints.NotNull(), project);
 
 			IMock taskMock2 = new DynamicMock(typeof(ITask));
-			taskMock2.Expect("Run", new NMock.Constraints.NotNull());
+			taskMock2.Expect("Run", new NMock.Constraints.NotNull(), project);
 
-			Workflow project = new Workflow();
 			project.Tasks.Add(taskMock1.MockInstance);
 			project.Tasks.Add(taskMock2.MockInstance);
 
@@ -82,16 +82,16 @@ namespace ThoughtWorks.CruiseControl.Core.Test
 		[Test]
 		public void RunWhereFirstTaskThrowsException()
 		{
+			Workflow project = new Workflow();
 			Exception ex = new CruiseControlException("foo");
 			IMock taskMock1 = new DynamicMock(typeof(ITask));
-			taskMock1.ExpectAndReturn("ShouldRun", true, new NMock.Constraints.NotNull());
-			taskMock1.ExpectAndThrow("Run", ex, new NMock.Constraints.NotNull());
+			taskMock1.ExpectAndReturn("ShouldRun", true, new NMock.Constraints.NotNull(), project);
+			taskMock1.ExpectAndThrow("Run", ex, new NMock.Constraints.NotNull(), project);
 
 			IMock taskMock2 = new DynamicMock(typeof(ITask));
-			taskMock2.ExpectAndReturn("ShouldRun", true, new NMock.Constraints.NotNull());
-			taskMock2.Expect("Run", new NMock.Constraints.NotNull());
+			taskMock2.ExpectAndReturn("ShouldRun", true, new NMock.Constraints.NotNull(), project);
+			taskMock2.Expect("Run", new NMock.Constraints.NotNull(), project);
 
-			Workflow project = new Workflow();
 			project.Tasks.Add(taskMock1.MockInstance);
 			project.Tasks.Add(taskMock2.MockInstance);
 

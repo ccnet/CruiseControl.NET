@@ -12,12 +12,12 @@ namespace ThoughtWorks.CruiseControl.Core.Builder.Test
 		public const string BUILDER_OUTPUT = "success";
 		public bool HasRun = false;
 
-		public bool ShouldRun(IntegrationResult result)
+		public bool ShouldRun(IntegrationResult result, IProject project)
 		{
 			return true;
 		}
 
-		public void Run(IntegrationResult result)
+		public void Run(IntegrationResult result, IProject project)
 		{
 			result.Status = IntegrationStatus.Success;
 			result.Output = BUILDER_OUTPUT;

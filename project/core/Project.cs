@@ -38,10 +38,8 @@ namespace ThoughtWorks.CruiseControl.Core
 		public event IntegrationCompletedEventHandler IntegrationCompleted;
 
 		public const string DEFAULT_WEB_URL = "http://localhost/CruiseControl.NET/";
-		public static readonly string DefaultWorkingDirectory = "WorkingDirectory";
 
 		private string _webURL = DEFAULT_WEB_URL;
-		private string _workingDirectory;
 		private ISourceControl _sourceControl;
 		private IBuilder _builder;
 		private ILabeller _labeller = new DefaultLabeller();
@@ -69,13 +67,6 @@ namespace ThoughtWorks.CruiseControl.Core
 		{
 			get { return _webURL; }
 			set { _webURL = value; }
-		}
-
-		[ReflectorProperty("workingDirectory", Required=false)]
-		public string WorkingDirectory
-		{
-			get { return _workingDirectory; }
-			set { _workingDirectory = value; }
 		}
 
 		[ReflectorProperty("build", InstanceTypeKey="type")]
@@ -234,7 +225,7 @@ namespace ThoughtWorks.CruiseControl.Core
 
 			Log.Info("Building");
 
-			Builder.Run(result);
+			Builder.Run(result, this);
 
 			Log.Info("Build complete: " + result.Status);
 		}
@@ -243,7 +234,7 @@ namespace ThoughtWorks.CruiseControl.Core
 		{
 			foreach (ITask task in Tasks)
 			{
-				task.Run(result);
+				task.Run(result, this);
 			}
 		}
 
@@ -383,19 +374,7 @@ namespace ThoughtWorks.CruiseControl.Core
 		public void Initialize()
 		{
 			Log.Info(string.Format("Initiatizing Project [{0}]", Name));
-			SourceControl.Initialize(Name, WorkingDirectoryToUse());
-		}
-
-		private string WorkingDirectoryToUse()
-		{
-			if (_workingDirectory == null || _workingDirectory == string.Empty)
-			{
-				return new DirectoryInfo(Path.Combine(Name, DefaultWorkingDirectory)).FullName;
-			}
-			else
-			{
-				return _workingDirectory;
-			}
+			SourceControl.Initialize(this);
 		}
 	}
 }

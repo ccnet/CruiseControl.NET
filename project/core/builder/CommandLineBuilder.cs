@@ -43,7 +43,7 @@ namespace ThoughtWorks.CruiseControl.Core.Builder
 		[ReflectorProperty("buildTimeoutSeconds", Required = false)] 
 		public int BuildTimeoutSeconds = DEFAULT_BUILD_TIMEOUT;
 
-		public void Run(IntegrationResult result)
+		public void Run(IntegrationResult result, IProject project)
 		{
 			ProcessResult processResult = AttemptExecute(CreateProcessInfo(result));
 			result.Output = processResult.StandardOutput + "\n" + processResult.StandardError;
@@ -88,7 +88,7 @@ namespace ThoughtWorks.CruiseControl.Core.Builder
 			get { return string.Format("{0} {1}", Executable, BuildArgs); }
 		}
 
-		public bool ShouldRun(IntegrationResult result)
+		public bool ShouldRun(IntegrationResult result, IProject project)
 		{
 			return result.Working && result.HasModifications();
 		}

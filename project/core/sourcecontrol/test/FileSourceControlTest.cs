@@ -1,5 +1,6 @@
 using System;
 using System.IO;
+using NMock;
 using NUnit.Framework;
 using ThoughtWorks.CruiseControl.Core.Test;
 using ThoughtWorks.CruiseControl.Core.Util;
@@ -106,10 +107,11 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test
 		[Test]
 		public void ShouldRun()
 		{
-			Assert(_sc.ShouldRun(new IntegrationResult()));
-			Assert(_sc.ShouldRun(IntegrationResultMother.CreateSuccessful()));
-			AssertFalse(_sc.ShouldRun(IntegrationResultMother.CreateFailed()));
-			AssertFalse(_sc.ShouldRun(IntegrationResultMother.CreateExceptioned()));
+			IProject project = (IProject) new DynamicMock(typeof(IProject)).MockInstance;
+			Assert(_sc.ShouldRun(new IntegrationResult(), project));
+			Assert(_sc.ShouldRun(IntegrationResultMother.CreateSuccessful(), project));
+			AssertFalse(_sc.ShouldRun(IntegrationResultMother.CreateFailed(), project));
+			AssertFalse(_sc.ShouldRun(IntegrationResultMother.CreateExceptioned(), project));
 		}
 	}
 }

@@ -144,6 +144,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Core\ProjectBaseTest.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Core\ProjectIntegratorListFactoryTest.cs"
                     SubType = "Code"
                     BuildAction = "Compile"

@@ -40,7 +40,7 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
             if (result.Status == IntegrationStatus.Unknown)
                 return;
 
-			_mergeTask.Run(result);
+			_mergeTask.Run(result, project);
             using (XmlIntegrationResultWriter integrationWriter = new XmlIntegrationResultWriter(GetXmlWriter(LogDir, GetFilename(result))))
             {
                 integrationWriter.Write(result);

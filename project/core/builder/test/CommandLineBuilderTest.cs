@@ -18,12 +18,14 @@ namespace ThoughtWorks.CruiseControl.Core.Builder.Test
 
 		private CommandLineBuilder _builder;
 		private IMock _mockExecutor;
+		private IProject project;
 
 		[SetUp]
 		public void SetUp()
 		{
 			_mockExecutor = new DynamicMock(typeof(ProcessExecutor));
 			_builder = new CommandLineBuilder((ProcessExecutor) _mockExecutor.MockInstance);
+			project = (IProject) new DynamicMock(typeof(IProject)).MockInstance;
 		}
 
 		[TearDown]
@@ -72,7 +74,7 @@ namespace ThoughtWorks.CruiseControl.Core.Builder.Test
 			_mockExecutor.ExpectAndReturn("Execute", returnVal, new IsAnything());
 
 			IntegrationResult result = new IntegrationResult();
-			_builder.Run(result);
+			_builder.Run(result, project);
 
 			Assert("build should have succeeded", result.Succeeded);
 			AssertEquals(IntegrationStatus.Success, result.Status);
@@ -87,7 +89,7 @@ namespace ThoughtWorks.CruiseControl.Core.Builder.Test
 			_mockExecutor.ExpectAndReturn("Execute", returnVal, new IsAnything());
 
 			IntegrationResult result = new IntegrationResult();
-			_builder.Run(result);
+			_builder.Run(result, project);
 
 			Assert("build should have failed", result.Failed);
 			AssertEquals(IntegrationStatus.Failure, result.Status);
@@ -103,7 +105,7 @@ namespace ThoughtWorks.CruiseControl.Core.Builder.Test
 			_mockExecutor.ExpectAndThrow("Execute", new Win32Exception(), new IsAnything());
 
 			IntegrationResult result = new IntegrationResult();
-			_builder.Run(result);
+			_builder.Run(result, project);
 			_mockExecutor.Verify();
 		}
 
@@ -121,7 +123,7 @@ namespace ThoughtWorks.CruiseControl.Core.Builder.Test
 			_builder.Executable = "test-exe";
 			_builder.BuildArgs = "test-args";
 			_builder.BuildTimeoutSeconds = 222;
-			_builder.Run(result);
+			_builder.Run(result, project);
 
 			ProcessInfo info = (ProcessInfo) constraint.Parameter;
 			AssertEquals("test-exe", info.FileName);
@@ -134,11 +136,11 @@ namespace ThoughtWorks.CruiseControl.Core.Builder.Test
 		[Test]
 		public void ShouldRun()
 		{
-			AssertFalse(_builder.ShouldRun(new IntegrationResult()));
-			Assert(_builder.ShouldRun(CreateIntegrationResultWithModifications(IntegrationStatus.Unknown)));
-			Assert(_builder.ShouldRun(CreateIntegrationResultWithModifications(IntegrationStatus.Success)));
-			AssertFalse(_builder.ShouldRun(CreateIntegrationResultWithModifications(IntegrationStatus.Failure)));
-			AssertFalse(_builder.ShouldRun(CreateIntegrationResultWithModifications(IntegrationStatus.Exception)));
+			AssertFalse(_builder.ShouldRun(new IntegrationResult(), new Project()));
+			Assert(_builder.ShouldRun(CreateIntegrationResultWithModifications(IntegrationStatus.Unknown), project));
+			Assert(_builder.ShouldRun(CreateIntegrationResultWithModifications(IntegrationStatus.Success), project));
+			AssertFalse(_builder.ShouldRun(CreateIntegrationResultWithModifications(IntegrationStatus.Failure), project));
+			AssertFalse(_builder.ShouldRun(CreateIntegrationResultWithModifications(IntegrationStatus.Exception), project));
 		}
 
 		private ProcessResult CreateSuccessfulProcessResult()

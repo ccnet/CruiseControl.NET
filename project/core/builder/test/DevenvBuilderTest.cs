@@ -19,6 +19,7 @@ namespace ThoughtWorks.CruiseControl.Core.Builder.Test
 		private DevenvBuilder builder;
 		private IMock mockRegistry;
 		private IMock mockProcessExecutor;
+		private IProject project;
 
 		[SetUp]
 		protected void CreateBuilder()
@@ -26,6 +27,7 @@ namespace ThoughtWorks.CruiseControl.Core.Builder.Test
 			mockRegistry = new DynamicMock(typeof(IRegistry)); 
 			mockProcessExecutor = new DynamicMock(typeof(ProcessExecutor)); 
 			builder = new DevenvBuilder((IRegistry) mockRegistry.MockInstance, (ProcessExecutor) mockProcessExecutor.MockInstance);
+			project = (IProject) new DynamicMock(typeof(IProject)).MockInstance;
 		}
 
 		[TearDown]
@@ -90,7 +92,7 @@ namespace ThoughtWorks.CruiseControl.Core.Builder.Test
 			builder.SolutionFile = "mySolution.sln";
 			builder.Configuration = "Debug";
 
-			builder.Run(new IntegrationResult());
+			builder.Run(new IntegrationResult(), project);
 
 			ProcessInfo info = (ProcessInfo) constraint.Parameter;
 			AssertEquals(DEVENV_PATH, info.FileName);
@@ -112,7 +114,7 @@ namespace ThoughtWorks.CruiseControl.Core.Builder.Test
 			builder.Configuration = CONFIGURATION;
 
 			IntegrationResult result = new IntegrationResult();
-			builder.Run(result);
+			builder.Run(result, project);
 
 			AssertEquals(IntegrationStatus.Success, result.Status);
 			AssertMatches(@"Rebuild All: \d+ succeeded, \d+ failed, \d+ skipped", result.Output);
@@ -133,7 +135,7 @@ namespace ThoughtWorks.CruiseControl.Core.Builder.Test
 			builder.Configuration = CONFIGURATION;
 
 			IntegrationResult result = new IntegrationResult();
-			builder.Run(result);
+			builder.Run(result, project);
 
 			AssertEquals(IntegrationStatus.Failure, result.Status);
 			AssertMatches(@"(\.|\n)*could not be found and will not be loaded", result.Output);
@@ -152,7 +154,7 @@ namespace ThoughtWorks.CruiseControl.Core.Builder.Test
 			builder.SolutionFile = @"D:\dev\ccnet\ccnet\project\nosolution.sln";
 			builder.Configuration = "Debug";
 
-			builder.Run(new IntegrationResult());
+			builder.Run(new IntegrationResult(), project);
 		}
 
 		[Test, ExpectedException(typeof(BuilderException))]
@@ -169,7 +171,7 @@ namespace ThoughtWorks.CruiseControl.Core.Builder.Test
 			builder.SolutionFile = SOLUTION_FILE;
 			builder.Configuration = CONFIGURATION;
 
-			builder.Run(new IntegrationResult());
+			builder.Run(new IntegrationResult(), project);
 		}
 	}
 }

@@ -17,6 +17,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks.Test
 		
 private NUnitTask _task;
 		private IntegrationResult _result;
+		private IProject project;
 
 		[SetUp]
 		public void Init()
@@ -26,6 +27,7 @@ private NUnitTask _task;
 			_task=new NUnitTask(_processExecutor.MockInstance as ProcessExecutor);
 			_task.NUnitPath=NUNIT_DUMMY_PATH;
 			_result=new IntegrationResult("testProject");
+			project = (IProject) new DynamicMock(typeof(IProject)).MockInstance;
 		}
 		
 		[Test]
@@ -36,7 +38,7 @@ private NUnitTask _task;
 			string setupData="foo";
 			_processArguments.Expect("Assemblies",TEST_ASSEMBLIES);
 			_processExecutor.ExpectAndReturn("Execute",new ProcessResult(setupData,String.Empty,0,false), new IsTypeOf(typeof(ProcessInfo)));
-			_task.Run(_result);
+			_task.Run(_result, project);
 
 			AssertEquals(1, _result.TaskResults.Count);
 			ITaskResult taskResult = (ITaskResult) _result.TaskResults[0];
@@ -48,7 +50,7 @@ private NUnitTask _task;
 		[Test]
 		public void RunWithNoAssembliesDoesNotCreateTaskResult()
 		{	_processExecutor.ExpectNoCall("Execute",typeof(ProcessInfo));
-			_task.Run(_result);
+			_task.Run(_result, project);
 			_processExecutor.Verify();
 		}
 

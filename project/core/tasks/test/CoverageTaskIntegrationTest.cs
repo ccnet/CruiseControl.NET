@@ -1,4 +1,5 @@
 using Exortech.NetReflector;
+using NMock;
 using NUnit.Framework;
 
 namespace ThoughtWorks.CruiseControl.Core.Tasks.Test
@@ -6,10 +7,20 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks.Test
 	[TestFixture]
 	public class CoverageTaskIntegrationTest : Assertion
 	{
+		[SetUp]
+		public void Setup()
+		{
+			project = (IProject) new DynamicMock(typeof(IProject)).MockInstance;
+		}
+
 		private object _coverageTask;
+		private IProject project;
+
 		public CoverageTaskIntegrationTest()
 		{
+		
 		}
+
 		[Test, Ignore("Works when in config, but not in test")]
 		public void LoadsNunitTaskAndDevEnvBuilder() 
 		{
@@ -33,7 +44,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks.Test
 							<reportName>foo.html</reportName> 
 						</build>";
 			_coverageTask= NetReflector.Read(xml) ;
-			((IBuilder)_coverageTask).Run(new IntegrationResult("foo"));
+			((IBuilder)_coverageTask).Run(new IntegrationResult("foo"), project);
 		}
 
 	}

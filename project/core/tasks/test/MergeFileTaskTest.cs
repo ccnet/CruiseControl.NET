@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using Exortech.NetReflector;
+using NMock;
 using NUnit.Framework;
 using ThoughtWorks.CruiseControl.Core.Util;
 
@@ -13,13 +14,15 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks.Test
         private IntegrationResult _result;
         private MergeFilesTask _task;
         private string _fullPathToTempDir;
+    	private IProject project;
 
-        [SetUp]
+    	[SetUp]
         public void CreateTempDir ()
         {
             _fullPathToTempDir = TempFileUtil.CreateTempDir (TEMP_DIR);
             _task = new MergeFilesTask ();
             _result = new IntegrationResult ();
+			project = (IProject) new DynamicMock(typeof(IProject)).MockInstance;
         }
 
         [Test]
@@ -29,7 +32,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks.Test
             string tempFile = TempFileUtil.CreateTempFile (TEMP_DIR, "MergeFileTask", fileData);
 
             _task.MergeFiles = new string[] {tempFile};
-            _task.Run (_result);
+            _task.Run (_result, project);
 
             AssertEquals (1, _result.TaskResults.Count);
             ITaskResult taskResult = (ITaskResult) _result.TaskResults[0];
@@ -47,7 +50,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks.Test
             TempFileUtil.CreateTempXmlFile (TEMP_DIR + "\\sub", "foo.xml", "<foo bar=\"9\">bat</foo>");
 
             _task.MergeFiles = new string[] {_fullPathToTempDir + @"\*.xml"};
-            _task.Run (_result);
+            _task.Run (_result, project);
             IList list = _result.TaskResults;
             AssertEquals (1, list.Count);
             AssertEquals (fileData, ((ITaskResult) list[0]).Data);
@@ -71,7 +74,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks.Test
                     _fullPathToTempDir + @"\foo.*"
                 };
 
-            _task.Run (_result);
+            _task.Run (_result, project);
             IList list = _result.TaskResults;
             AssertEquals (3, list.Count);
             AssertDataContainedInList (list, fooXmlFileData);
@@ -83,7 +86,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks.Test
         public void IgnoresFilesNotFound ()
         {
 			_task.MergeFiles = new string[] {"nonExistantFile.txt"};
-			_task.Run (_result);
+			_task.Run (_result, project);
 			AssertEquals (0, _result.TaskResults.Count);
         }
 

@@ -6,12 +6,12 @@ namespace ThoughtWorks.CruiseControl.Core
 	[ReflectorType("test")]
 	public class TestSourceControl : ISourceControl
 	{
-		public void Run(IntegrationResult result)
+		public void Run(IntegrationResult result, IProject project)
 		{
 			//No op
 		}
 
-		public bool ShouldRun(IntegrationResult result)
+		public bool ShouldRun(IntegrationResult result, IProject project)
 		{
 			return true;
 		}
@@ -34,7 +34,7 @@ namespace ThoughtWorks.CruiseControl.Core
 			// no op
 		}
 
-		public void Initialize(string projectName, string workingDirectory)
+		public void Initialize(IProject project)
 		{
 		}
 	}

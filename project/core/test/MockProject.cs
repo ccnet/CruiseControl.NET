@@ -65,6 +65,17 @@ namespace ThoughtWorks.CruiseControl.Core.Test
 			get { return _projectActivity; }
 			set { _projectActivity = value; }
 		}
+
+		public string WorkingDirectory
+		{
+			get { throw new NotImplementedException(); }
+		}
+
+		public string ArtifactDirectory
+		{
+			get { throw new NotImplementedException(); }
+		}
+
 	}
 
 	public class ExceptionMockProject : MockProject

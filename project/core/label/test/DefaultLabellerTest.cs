@@ -1,4 +1,5 @@
 using System;
+using NMock;
 using NUnit.Framework;
 using ThoughtWorks.CruiseControl.Core.Test;
 using ThoughtWorks.CruiseControl.Remote;
@@ -125,10 +126,11 @@ namespace ThoughtWorks.CruiseControl.Core.Label.Test
 		[Test]
 		public void ShouldRun()
 		{
-			Assert(_labeller.ShouldRun(new IntegrationResult()));
-			Assert(_labeller.ShouldRun(IntegrationResultMother.CreateSuccessful()));
-			AssertFalse(_labeller.ShouldRun(IntegrationResultMother.CreateFailed()));
-			AssertFalse(_labeller.ShouldRun(IntegrationResultMother.CreateExceptioned()));
+			IProject project = (IProject) new DynamicMock(typeof(IProject)).MockInstance;
+			Assert(_labeller.ShouldRun(new IntegrationResult(), project));
+			Assert(_labeller.ShouldRun(IntegrationResultMother.CreateSuccessful(), project));
+			AssertFalse(_labeller.ShouldRun(IntegrationResultMother.CreateFailed(), project));
+			AssertFalse(_labeller.ShouldRun(IntegrationResultMother.CreateExceptioned(), project));
 		}
 	}
 }

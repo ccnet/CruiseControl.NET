@@ -60,7 +60,7 @@ namespace ThoughtWorks.CruiseControl.Core.Builder
 		[ReflectorProperty("buildTimeoutSeconds", Required = false)] 
 		public int BuildTimeoutSeconds = DEFAULT_BUILD_TIMEOUT;
 
-		public virtual void Run(IntegrationResult result)
+		public virtual void Run(IntegrationResult result, IProject project)
 		{
 			ProcessResult processResult = AttemptToExecute();
 			result.Status = (processResult.Failed) ? IntegrationStatus.Failure : IntegrationStatus.Success;
@@ -96,7 +96,7 @@ namespace ThoughtWorks.CruiseControl.Core.Builder
 			get { return string.Format("{0} /rebuild {1}", SolutionFile, Configuration); }
 		}
 
-		public bool ShouldRun(IntegrationResult result)
+		public bool ShouldRun(IntegrationResult result, IProject project)
 		{
 			return result.Working && result.HasModifications();
 		}

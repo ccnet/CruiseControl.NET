@@ -41,6 +41,22 @@ namespace ThoughtWorks.CruiseControl.Core
 		}
 
 		/// <summary>
+		/// Gets the project's working directory, where the primary build and checkout happens
+		/// </summary>
+		string WorkingDirectory
+		{
+			get;
+		}
+
+		/// <summary>
+		/// Gets the project's artifact directory, where build logs and distributables can be placed
+		/// </summary>
+		string ArtifactDirectory
+		{
+			get;
+		}
+
+		/// <summary>
 		/// Runs an integration of this project.
 		/// </summary>
 		/// <param name="buildCondition"></param>

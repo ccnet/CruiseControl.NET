@@ -110,7 +110,7 @@ namespace ThoughtWorks.CruiseControl.Core.Test
 			AssertEquals(typeof (Schedule), project.Schedule);
 			AssertEquals(typeof (XmlLogPublisher), project.Publishers[0]);
 			AssertEquals(typeof (MergeFilesTask), project.Tasks[0]);
-			AssertEquals(@"c:\my\working\directory", project.WorkingDirectory);
+			AssertEquals(@"c:\my\working\directory", project.ConfiguredWorkingDirectory);
 		}
 
 		[Test]
@@ -146,7 +146,7 @@ namespace ThoughtWorks.CruiseControl.Core.Test
 			_mockSourceControl.Expect("GetSource", new IsAnything());
 			_mockSourceControl.Expect("LabelSourceControl", "label", new IsAnything());
 			_mockPublisher.Expect("PublishIntegrationResults", new IsAnything(), new IsAnything());
-			_mockTask.Expect("Run", new IsAnything());
+			_mockTask.Expect("Run", new IsAnything(), _project);
 			_project.Builder = new MockBuilder(); // need to use mock builder in order to set properties on IntegrationResult
 
 			IntegrationResult result = _project.RunIntegration(BuildCondition.IfModificationExists);
@@ -172,7 +172,7 @@ namespace ThoughtWorks.CruiseControl.Core.Test
 			_mockStateManager.ExpectAndReturn("LoadState", IntegrationResultMother.CreateSuccessful());
 			_mockLabeller.ExpectAndReturn("Generate", "label", new IsAnything()); // generate new label
 			_mockSourceControl.ExpectAndReturn("GetModifications", new Modification[0], new IsAnything(), new IsAnything()); // return no modifications found
-			_mockBuilder.ExpectNoCall("Run", typeof (IntegrationResult));
+			_mockBuilder.ExpectNoCall("Run", typeof (IntegrationResult), typeof(IProject));
 			_mockPublisher.ExpectNoCall("PublishIntegrationResults", typeof (IProject), typeof (IntegrationResult));
 
 			IntegrationResult result = _project.RunIntegration(BuildCondition.IfModificationExists);
@@ -201,7 +201,7 @@ namespace ThoughtWorks.CruiseControl.Core.Test
 			_mockSourceControl.Expect("LabelSourceControl", "label", new IsAnything());
 			_mockSourceControl.Expect("GetSource", new IsAnything());
 			_mockPublisher.Expect("PublishIntegrationResults", new IsAnything(), new IsAnything());
-			_mockTask.Expect("Run", new IsAnything());
+			_mockTask.Expect("Run", new IsAnything(), _project);
 
 			_project.Builder = new MockBuilder(); // need to use mock builder in order to set properties on IntegrationResult
 			IntegrationResult result = _project.RunIntegration(BuildCondition.IfModificationExists);
@@ -391,7 +391,7 @@ namespace ThoughtWorks.CruiseControl.Core.Test
 			_project.Builder = new MockBuilder();
 			MockPublisher publisher = new MockPublisher();
 			_mockLabeller.ExpectAndReturn("Generate", "1.2.1", new IsAnything());
-			_mockTask.Expect("Run", new IsAnything());
+			_mockTask.Expect("Run", new IsAnything(), _project);
 			_project.IntegrationCompleted += publisher.IntegrationCompletedEventHandler;
 			IMock stateMock = new DynamicMock(typeof (IStateManager));
 			stateMock.ExpectAndReturn("StateFileExists", false);
@@ -414,7 +414,7 @@ namespace ThoughtWorks.CruiseControl.Core.Test
 			_mockStateManager.ExpectAndReturn("StateFileExists", false);
 			Exception expectedException = new CruiseControlException("expected exception");
 			_mockStateManager.ExpectAndThrow("SaveState", expectedException, new IsAnything());
-			_mockTask.Expect("Run", new IsAnything());
+			_mockTask.Expect("Run", new IsAnything(), _project);
 			MockPublisher publisher = new MockPublisher();
 			_project.IntegrationCompleted += publisher.IntegrationCompletedEventHandler;
 			_project.SourceControl = new MockSourceControl();
@@ -439,7 +439,7 @@ namespace ThoughtWorks.CruiseControl.Core.Test
 			_mockStateManager.ExpectAndReturn("StateFileExists", false);
 			Exception expectedException = new CruiseControlException("expected exception");
 			_mockStateManager.ExpectAndThrow("SaveState", expectedException, new IsAnything());
-			_mockTask.Expect("Run", new IsAnything());
+			_mockTask.Expect("Run", new IsAnything(), _project);
 			MockPublisher publisher = new MockPublisher();
 			_project.IntegrationCompleted += publisher.IntegrationCompletedEventHandler;
 			_project.SourceControl = new MockSourceControl();
@@ -458,34 +458,13 @@ namespace ThoughtWorks.CruiseControl.Core.Test
 		}
 
 		[Test]
-		public void ShouldCallSourceControlInitializeWithCalculatedWorkingDirectoryIfOneIsNotSet()
+		public void ShouldCallSourceControlInitializeOnInitialize()
 		{
 			// Setup
 			Project project = new Project();
-			project.Name = "myProject";
-			string workingDirectory = new DirectoryInfo(@"myProject\WorkingDirectory").FullName;
 
 			DynamicMock sourceControlMock = new DynamicMock(typeof(ISourceControl));
-			sourceControlMock.Expect("Initialize", "myProject", workingDirectory);
-			project.SourceControl = (ISourceControl) sourceControlMock.MockInstance;
-
-			// Execute
-			project.Initialize();
-			
-			// Verify
-			sourceControlMock.Verify();
-		}
-
-		[Test]
-		public void ShouldCallSourceControlInitializeWithSpecifiedWorkingDirectoryIfOneIsNotSet()
-		{
-			// Setup
-			Project project = new Project();
-			project.Name = "myProject";
-			project.WorkingDirectory = @"C:\my\working\directory";
-
-			DynamicMock sourceControlMock = new DynamicMock(typeof(ISourceControl));
-			sourceControlMock.Expect("Initialize", "myProject",  @"C:\my\working\directory");
+			sourceControlMock.Expect("Initialize", project);
 			project.SourceControl = (ISourceControl) sourceControlMock.MockInstance;
 
 			// Execute

@@ -28,6 +28,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test
               </sourcecontrol>";
 		private FilteredSourceControl _filteredSourceControl;
 		private DynamicMock _mockSC;
+		private IProject project;
 
 		[SetUp]
 		public void SetUp()
@@ -35,6 +36,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test
 			_filteredSourceControl = new FilteredSourceControl();
 			_mockSC = new DynamicMock(typeof(ISourceControl));
 			_filteredSourceControl.SourceControlProvider = (ISourceControl)_mockSC.MockInstance;
+			project = (IProject) new DynamicMock(typeof(IProject)).MockInstance;
 		}
 
 		[TearDown]
@@ -94,10 +96,10 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test
 		{
 			//// SETUP
 			IntegrationResult result = new IntegrationResult();
-			_mockSC.ExpectAndReturn("ShouldRun", true, result);
+			_mockSC.ExpectAndReturn("ShouldRun", true, result, project);
 
 			//// EXECUTE
-			_filteredSourceControl.ShouldRun(result);
+			_filteredSourceControl.ShouldRun(result, project);
 		}
 
 		[Test]
@@ -121,7 +123,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test
 			_mockSC.ExpectAndReturn("GetModifications", Modifications, new IsTypeOf(typeof(DateTime)), new IsTypeOf(typeof(DateTime)));
 
 			//// EXECUTE
-			_filteredSourceControl.Run(result);
+			_filteredSourceControl.Run(result, project);
 		}
 
 		[Test]

@@ -16,6 +16,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol.Perforce
 		private DynamicMock processExecutorMock;
 		private DynamicMock p4InitializerMock;
 		private DynamicMock processInfoCreatorMock;
+		private DynamicMock projectMock;
+		private IProject project;
 
 		[SetUp]
 		public void Setup()
@@ -24,6 +26,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol.Perforce
 			processExecutorMock.Strict = true;
 			p4InitializerMock = new DynamicMock(typeof(IP4Initializer));
 			processInfoCreatorMock = new DynamicMock(typeof(IP4ProcessInfoCreator));
+			projectMock = new DynamicMock(typeof(IProject));
+			project = (IProject) projectMock.MockInstance;
 		}
 
 		private void VerifyAll()
@@ -31,6 +35,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol.Perforce
 			processExecutorMock.Verify();
 			p4InitializerMock.Verify();
 			processInfoCreatorMock.Verify();
+			projectMock.Verify();
 		}
 
 		[TearDown]
@@ -343,9 +348,11 @@ View:
 			P4 p4 = CreateP4();
 			p4.View = "//depot/myproject/...";
 			p4InitializerMock.Expect("Initialize",  p4, "myProject", "workingDirFromProject");
+			projectMock.ExpectAndReturn("Name", "myProject");
+			projectMock.ExpectAndReturn("WorkingDirectory", "workingDirFromProject");
 
 			// Execute
-			p4.Initialize("myProject", "workingDirFromProject");
+			p4.Initialize(project);
 
 			// Verify
 			VerifyAll();
@@ -359,9 +366,11 @@ View:
 			p4.View = "//depot/myproject/...";
 			p4.WorkingDirectory = "";
 			p4InitializerMock.Expect("Initialize",  p4, "myProject", "workingDirFromProject");
+			projectMock.ExpectAndReturn("Name", "myProject");
+			projectMock.ExpectAndReturn("WorkingDirectory", "workingDirFromProject");
 
 			// Execute
-			p4.Initialize("myProject", "workingDirFromProject");
+			p4.Initialize(project);
 
 			// Verify
 			VerifyAll();
@@ -375,9 +384,11 @@ View:
 			p4.View = "//depot/myproject/...";
 			p4.WorkingDirectory = "p4sOwnWorkingDirectory";
 			p4InitializerMock.Expect("Initialize",  p4, "myProject", "p4sOwnWorkingDirectory");
+			projectMock.ExpectAndReturn("Name", "myProject");
+			projectMock.ExpectNoCall("WorkingDirectory");
 
 			// Execute
-			p4.Initialize("myProject", "workingDirFromProject");
+			p4.Initialize(project);
 
 			// Verify
 			VerifyAll();

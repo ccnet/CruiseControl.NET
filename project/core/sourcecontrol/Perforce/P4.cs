@@ -141,12 +141,12 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Perforce
 			}
 		}
 
-		public bool ShouldRun(IntegrationResult result)
+		public bool ShouldRun(IntegrationResult result, IProject project)
 		{
 			return true;
 		}
 
-		public void Run(IntegrationResult result)
+		public void Run(IntegrationResult result, IProject project)
 		{
 			result.Modifications = GetModifications(result.LastModificationDate, DateTime.Now);
 		}
@@ -233,15 +233,15 @@ View:
 			return result.StandardOutput.Trim() + Environment.NewLine + result.StandardError.Trim();
 		}
 
-		public void Initialize(string projectName, string workingDirectory)
+		public void Initialize(IProject project)
 		{
 			if (_workingDirectory == null || _workingDirectory == string.Empty)
 			{
-				p4Initializer.Initialize(this, projectName, workingDirectory);	
+				p4Initializer.Initialize(this, project.Name, project.WorkingDirectory);	
 			}
 			else
 			{
-				p4Initializer.Initialize(this, projectName, _workingDirectory);
+				p4Initializer.Initialize(this, project.Name, _workingDirectory);
 			}
 		}
 	}

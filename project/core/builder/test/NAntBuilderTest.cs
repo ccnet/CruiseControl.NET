@@ -17,12 +17,14 @@ namespace ThoughtWorks.CruiseControl.Core.Builder.Test
 
 		private NAntBuilder _builder;
 		private IMock _mockExecutor;
+		private IProject project;
 
 		[SetUp]
 		public void SetUp()
 		{
 			_mockExecutor = new DynamicMock(typeof(ProcessExecutor));
 			_builder = new NAntBuilder((ProcessExecutor) _mockExecutor.MockInstance);
+			project = (IProject) new DynamicMock(typeof(IProject)).MockInstance;
 		}
 
 		[TearDown]
@@ -76,7 +78,7 @@ namespace ThoughtWorks.CruiseControl.Core.Builder.Test
 			_mockExecutor.ExpectAndReturn("Execute", returnVal, new IsAnything());
 
 			IntegrationResult result = new IntegrationResult();
-			_builder.Run(result);
+			_builder.Run(result, project);
 
 			Assert("build should have succeeded", result.Succeeded);
 			AssertEquals(IntegrationStatus.Success, result.Status);
@@ -90,7 +92,7 @@ namespace ThoughtWorks.CruiseControl.Core.Builder.Test
 			_mockExecutor.ExpectAndReturn("Execute", returnVal, new IsAnything());
 
 			IntegrationResult result = new IntegrationResult();
-			_builder.Run(result);
+			_builder.Run(result, project);
 
 			Assert("build should have failed", result.Failed);
 			AssertEquals(IntegrationStatus.Failure, result.Status);
@@ -104,7 +106,7 @@ namespace ThoughtWorks.CruiseControl.Core.Builder.Test
 			_mockExecutor.ExpectAndReturn("Execute", returnVal, new IsAnything());
 
 			IntegrationResult result = new IntegrationResult();
-			_builder.Run(result);
+			_builder.Run(result, project);
 		}
 
 		[Test, ExpectedException(typeof(BuilderException))]
@@ -113,7 +115,7 @@ namespace ThoughtWorks.CruiseControl.Core.Builder.Test
 			_mockExecutor.ExpectAndThrow("Execute", new Win32Exception(), new IsAnything());
 
 			IntegrationResult result = new IntegrationResult();
-			_builder.Run(result);
+			_builder.Run(result, project);
 		}
 
 		[Test]
@@ -132,7 +134,7 @@ namespace ThoughtWorks.CruiseControl.Core.Builder.Test
 			_builder.BuildArgs = "myArgs";
 			_builder.Targets = new string[] { "target1", "target2"};
 			_builder.BuildTimeoutSeconds = 2;
-			_builder.Run(result);
+			_builder.Run(result, project);
 
 			ProcessInfo info = (ProcessInfo) constraint.Parameter;
 			AssertEquals(_builder.Executable, info.FileName);
@@ -148,7 +150,7 @@ namespace ThoughtWorks.CruiseControl.Core.Builder.Test
 			CollectingConstraint constraint = new CollectingConstraint();
 			_mockExecutor.ExpectAndReturn("Execute", returnVal, constraint);
 			
-			_builder.Run(new IntegrationResult());
+			_builder.Run(new IntegrationResult(), project);
 
 			ProcessInfo info = (ProcessInfo) constraint.Parameter;
 			AssertEquals(_builder.Executable, NAntBuilder.DEFAULT_EXECUTABLE);
@@ -160,11 +162,11 @@ namespace ThoughtWorks.CruiseControl.Core.Builder.Test
 		[Test]
 		public void ShouldRun()
 		{
-			AssertFalse(_builder.ShouldRun(new IntegrationResult()));
-			Assert(_builder.ShouldRun(CreateIntegrationResultWithModifications(IntegrationStatus.Unknown)));
-			Assert(_builder.ShouldRun(CreateIntegrationResultWithModifications(IntegrationStatus.Success)));
-			AssertFalse(_builder.ShouldRun(CreateIntegrationResultWithModifications(IntegrationStatus.Failure)));
-			AssertFalse(_builder.ShouldRun(CreateIntegrationResultWithModifications(IntegrationStatus.Exception)));
+			AssertFalse(_builder.ShouldRun(new IntegrationResult(), project));
+			Assert(_builder.ShouldRun(CreateIntegrationResultWithModifications(IntegrationStatus.Unknown), project));
+			Assert(_builder.ShouldRun(CreateIntegrationResultWithModifications(IntegrationStatus.Success), project));
+			AssertFalse(_builder.ShouldRun(CreateIntegrationResultWithModifications(IntegrationStatus.Failure), project));
+			AssertFalse(_builder.ShouldRun(CreateIntegrationResultWithModifications(IntegrationStatus.Exception), project));
 		}
 
 		[Test]

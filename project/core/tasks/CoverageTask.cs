@@ -55,20 +55,20 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 	        set { _reportFileName = value; }
 	    }
 
-	    public void Run(IntegrationResult result)
+	    public void Run(IntegrationResult result, IProject project)
 		{
 			if(_reportFileName.Equals(String.Empty) )
 				_reportFileName = result.ProjectName;
 			_instrument.NUnitTask = _nunit;
 			_instrument.ReportName = _reportFileName;	
 			_instrument.Instrument();
-			_builder.Run(result);
-			_nunit.Run(result);
+			_builder.Run(result, project);
+			_nunit.Run(result, project);
 			_instrument.Report();
 			result.TaskResults.Add(new FileTaskResult(new FileInfo(_reportFileName)));
 		}
 
-		public bool ShouldRun(IntegrationResult result)
+		public bool ShouldRun(IntegrationResult result, IProject project)
 		{
 			return true;
 		}

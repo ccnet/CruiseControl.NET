@@ -14,7 +14,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 		[ReflectorArray("files")] 
 		public string[] MergeFiles = new string[0];
 
-        public void Run(IntegrationResult result)
+        public void Run(IntegrationResult result, IProject project)
         {
             foreach (string mergeFile in MergeFiles)
             {
@@ -35,7 +35,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
             }
         }
 
-        public bool ShouldRun(IntegrationResult result)
+        public bool ShouldRun(IntegrationResult result, IProject project)
         {
             return true;
         }

@@ -36,12 +36,12 @@ namespace ThoughtWorks.CruiseControl.Core.Label
 			}
 		}
 
-		public bool ShouldRun(IntegrationResult result)
+		public bool ShouldRun(IntegrationResult result, IProject project)
 		{
 			return result.Working;
 		}
 
-		public void Run(IntegrationResult result)
+		public void Run(IntegrationResult result, IProject project)
 		{
 			result.Label = Generate(result);
 		}

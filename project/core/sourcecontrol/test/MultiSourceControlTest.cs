@@ -120,10 +120,11 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test
 		public void ShouldRun()
 		{
 			FileSourceControl sc = new FileSourceControl();
-			Assert(sc.ShouldRun(new IntegrationResult()));
-			Assert(sc.ShouldRun(IntegrationResultMother.CreateSuccessful()));
-			AssertFalse(sc.ShouldRun(IntegrationResultMother.CreateFailed()));
-			AssertFalse(sc.ShouldRun(IntegrationResultMother.CreateExceptioned()));
+			IProject project = (IProject) new DynamicMock(typeof(IProject)).MockInstance;
+			Assert(sc.ShouldRun(new IntegrationResult(), project));
+			Assert(sc.ShouldRun(IntegrationResultMother.CreateSuccessful(), project));
+			AssertFalse(sc.ShouldRun(IntegrationResultMother.CreateFailed(), project));
+			AssertFalse(sc.ShouldRun(IntegrationResultMother.CreateExceptioned(), project));
 		}
 
 		[Test]
