@@ -16,7 +16,19 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib
 	public class Settings
 	{
 		public int PollingIntervalSeconds;
-		public string RemoteServerUrl;
+
+		private string remoteServerUrl = "";
+		public string RemoteServerUrl
+		{
+			get
+			{
+				return remoteServerUrl;
+			}
+			set
+			{
+				remoteServerUrl = value.Trim();
+			}
+		}
 
 		public string ProjectName;
 

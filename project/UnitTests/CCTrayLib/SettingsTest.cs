@@ -30,5 +30,11 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib
 			Assert.IsNotNull(_settings.CruiseManager);
 		}
 
+		[Test]
+		public void ShouldTrimURL()
+		{
+			_settings.RemoteServerUrl = "tcp://localhost:1234/foo.rem ";
+			Assert.AreEqual("tcp://localhost:1234/foo.rem", _settings.RemoteServerUrl);
+		}
 	}
 }
