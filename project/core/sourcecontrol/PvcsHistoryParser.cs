@@ -65,7 +65,7 @@ namespace tw.ccnet.core.sourcecontrol
 			else if (line.StartsWith("Workfile:")){ 
 				modification.FileName = line.Substring(18);
 			}           
-			else if (line.StartsWith("Last modified:")){
+			else if (line.StartsWith("Checked in:")){
 				// if this is the newest revision...
 				if (firstModifiedTime) {
 					firstModifiedTime = false;

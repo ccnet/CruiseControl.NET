@@ -925,7 +925,7 @@ Initial revision.
 			mod1.Type = PvcsHistoryParser.UNKNOWN;
 			mod1.FileName = "foo.txt";
 			mod1.FolderName = "piddy dee";
-			mod1.ModifiedTime = CreateDate("2001/09/13 13:34:52");
+			mod1.ModifiedTime = CreateDate("0001/01/01 00:00:00");
 			mod1.UserName = "dante";
 			mod1.Comment = "made a first hello world comment";
 
@@ -933,7 +933,7 @@ Initial revision.
 			mod2.Type = PvcsHistoryParser.UNKNOWN;
 			mod2.FileName = "bar.txt";
 			mod2.FolderName = "raise the";
-			mod2.ModifiedTime = CreateDate("2001/10/31 18:52:13");
+			mod1.ModifiedTime = CreateDate("0001/01/01 00:00:00");
 			mod2.UserName = "virgil";
 			mod2.Comment = "made a second hello world comment";
 
@@ -952,7 +952,8 @@ Initial revision.
 			Assertion.AssertEquals("ChessRules.java", second.FileName);
 			Assertion.AssertEquals("kerstinb", second.UserName);
 			Assertion.AssertEquals("Enabled system printouts.", second.Comment);
-			Assertion.AssertEquals(CreateDate("1998/05/18 04:53:12"), second.ModifiedTime);
+			Assertion.AssertEquals(CreateDate("2000/02/01 16:26:14"), second.ModifiedTime);
+
 			Assertion.AssertEquals(
 				@"D:\root\PVCS\vm\common\SampleDB\archives\chess\client\ChessRules.java-arc",
 				second.FolderName);
