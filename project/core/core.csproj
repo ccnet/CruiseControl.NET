@@ -433,11 +433,6 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "publishers\HtmlLinkMessageBuilderTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
                     RelPath = "publishers\IBuildLogTransformer.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -499,6 +494,11 @@
                 />
                 <File
                     RelPath = "publishers\test\EmailPublisherTest.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "publishers\test\HtmlLinkMessageBuilderTest.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

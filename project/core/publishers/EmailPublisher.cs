@@ -23,7 +23,7 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
         private string _fromAddress;
         private Hashtable _users = new Hashtable();
         private Hashtable _groups = new Hashtable();
-        private IMessageBuilder _messageBuilder = new HtmlLinkMessageBuilder();
+        private IMessageBuilder _messageBuilder = new HtmlLinkMessageBuilder(false);
 
         public EmailGateway EmailGateway
         {
@@ -60,10 +60,11 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
 
         /// <summary>
         /// Set this property (in configuration) to enable HTML emails containing build details.
+        /// This property is deprecated and should be removed.  It should be replaced by the MessageBuilder property.
         /// </summary>
         [ReflectorProperty("includeDetails", Required = false)] 
 		public bool IncludeDetails
-        { ///TODO: eliminate this property
+        { 
             get 
 			{
 				return _messageBuilder is HtmlDetailsMessageBuilder; 
@@ -76,7 +77,7 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
                 }
                 else
                 {
-                    _messageBuilder = new HtmlLinkMessageBuilder();
+                    _messageBuilder = new HtmlLinkMessageBuilder(false);
                 }
             }
         }

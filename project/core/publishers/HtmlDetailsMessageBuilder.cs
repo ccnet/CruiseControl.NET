@@ -27,7 +27,7 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
 
 		private void AppendLinkToWebPage(StringBuilder message, IntegrationResult result, string projectURL)
 		{
-			message.Append(new HtmlLinkMessageBuilder().BuildMessage(result, projectURL));
+			message.Append(new HtmlLinkMessageBuilder(true).BuildMessage(result, projectURL));
 		}
 
 		private void AppendHorizontalRule(StringBuilder message)
