@@ -4,9 +4,7 @@ using System.Text.RegularExpressions;
 using System.IO;
 using System.Collections;
 
-using ThoughtWorks.CruiseControl.Core.Util;
-
-namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
+namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Perforce
 {
 	public class P4HistoryParser : IHistoryParser
 	{

@@ -1,12 +1,12 @@
 using System;
-using System.IO;
 using NUnit.Framework;
 using NMock;
-using ThoughtWorks.CruiseControl.Core.Test;
+using ThoughtWorks.CruiseControl.Core;
+using ThoughtWorks.CruiseControl.Core.Sourcecontrol.Perforce;
 using ThoughtWorks.CruiseControl.Core.Util;
 using Exortech.NetReflector;
 
-namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test
+namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol.Perforce
 {
 	[TestFixture]
 	public class P4Test : CustomAssertion
@@ -55,7 +55,12 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test
 		
 		private P4 CreateP4(ProcessExecutor processExecutor, string p4root)
 		{
-			P4 perforce = new P4(processExecutor);
+			return CreateP4(processExecutor, new ProcessP4Initializer(processExecutor), p4root);
+		}
+
+		private P4 CreateP4(ProcessExecutor processExecutor, IP4Initializer p4Initializer, string p4root)
+		{
+			P4 perforce = new P4(processExecutor, p4Initializer, null);
 			NetReflector.Read(p4root, perforce);
 			return perforce;
 		}
@@ -363,6 +368,33 @@ View:
 ";
 
 			CreateP4((ProcessExecutor) mockProcessExecutor.MockInstance, configXml).GetSource(new IntegrationResult());
+		}
+
+		[Test]
+		public void ShouldCallInitializerWithAppropriateArgumentsWhenInitializeDirectoryCalled()
+		{
+			// Setup
+			string configXml = @"
+<sourceControl name=""p4"">
+  <executable>c:\bin\p4.exe</executable>
+  <view>//depot/myproject/...</view>
+  <client>myclient</client>
+  <user>me</user>
+  <port>anotherserver:2666</port>
+</sourceControl>
+";
+			DynamicMock p4InitializerMock = new DynamicMock(typeof(IP4Initializer));
+			P4 p4 = CreateP4((ProcessExecutor) mockProcessExecutor.MockInstance, (IP4Initializer) p4InitializerMock.MockInstance, configXml);
+			p4InitializerMock.Expect("Initialize",  @"c:\bin\p4.exe", "//depot/myproject/...", "myclient", "me", "anotherserver:2666");
+
+			// Execute
+			p4.InitializeDirectory();
+
+			// Verify
+			mockProcessExecutor.Verify();
+			p4InitializerMock.Verify();
+
+
 		}
 	}
 }

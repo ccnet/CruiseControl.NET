@@ -1,13 +1,15 @@
 using System;
 using System.IO;
 using NUnit.Framework;
+using ThoughtWorks.CruiseControl.Core;
+using ThoughtWorks.CruiseControl.Core.Sourcecontrol.Perforce;
 
-namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test
+namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol.Perforce
 {
 	[TestFixture]
 	public class P4HistoryParserTest : Assertion
 	{
-		private IHistoryParser _parser = new P4HistoryParser();
+		private P4HistoryParser _parser = new P4HistoryParser();
 
 		[Test]
 		public void Parse_MultipleModifications() 

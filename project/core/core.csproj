@@ -728,16 +728,6 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "sourcecontrol\P4.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "sourcecontrol\P4HistoryParser.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
                     RelPath = "sourcecontrol\PathFilter.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -813,6 +803,36 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "sourcecontrol\Perforce\IP4Initializer.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "sourcecontrol\Perforce\IP4ProcessInfoCreator.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "sourcecontrol\Perforce\P4.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "sourcecontrol\Perforce\P4ConfigProcessInfoCreator.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "sourcecontrol\Perforce\P4HistoryParser.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "sourcecontrol\Perforce\ProcessP4Initializer.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "sourcecontrol\test\ClearCaseHistoryParserTest.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -869,21 +889,6 @@
                 />
                 <File
                     RelPath = "sourcecontrol\test\MultiSourceControlTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "sourcecontrol\test\P4HistoryParserTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "sourcecontrol\test\P4Mother.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "sourcecontrol\test\P4Test.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

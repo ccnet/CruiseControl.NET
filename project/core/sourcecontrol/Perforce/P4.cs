@@ -1,13 +1,11 @@
 using Exortech.NetReflector;
 using System;
 using System.IO;
-using System.Collections;
 using System.Globalization;
 using System.Text;
-using System.Text.RegularExpressions;
 using ThoughtWorks.CruiseControl.Core.Util;
 
-namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
+namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Perforce
 {
 	[ReflectorType("p4")]
 	public class P4 : ISourceControl
@@ -19,13 +17,17 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 		private string _client;
 		private string _user;
 		private string _port;
-		private ProcessExecutor processExecutor;
+		private readonly ProcessExecutor processExecutor;
+		private readonly IP4Initializer p4Initializer;
+		private readonly IP4ProcessInfoCreator processInfoCreator;
 
-		public P4() : this (new ProcessExecutor()) { }
+		public P4() : this (new ProcessExecutor(), new ProcessP4Initializer(new ProcessExecutor()), new P4ConfigProcessInfoCreator()) { }
 
-		public P4(ProcessExecutor processExecutor)
+		public P4(ProcessExecutor processExecutor, IP4Initializer initializer, IP4ProcessInfoCreator processInfoCreator)
 		{
 			this.processExecutor = processExecutor;
+			this.p4Initializer = initializer;
+			this.processInfoCreator = processInfoCreator;
 		}
 
 		[ReflectorProperty("executable", Required=false)]
@@ -237,6 +239,11 @@ View:
 				args.Append("-u " + User + " ");
 			}
 			return args.ToString();
+		}
+
+		public void InitializeDirectory()
+		{
+			p4Initializer.Initialize(Executable, View, Client, User, Port);
 		}
 	}
 }
