@@ -428,11 +428,6 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "publishers\DefaultTaskResult.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
                     RelPath = "publishers\EmailGateway.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -449,6 +444,11 @@
                 />
                 <File
                     RelPath = "publishers\EmailUser.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "publishers\FileTaskResult.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -924,12 +924,27 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "tasks\CoverageTask.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "tasks\DataTaskResult.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "tasks\ICoverage.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "tasks\MergeFilesTask.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "tasks\NCoverCoverage.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -944,6 +959,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "tasks\test\CoverageTaskTest.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "tasks\test\DataTaskResultTest.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -954,17 +974,22 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "tasks\test\NCoverCoverageLoadTest.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "tasks\test\NCoverCoverageTest.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "tasks\test\NUnitArgumentTest.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
                     RelPath = "tasks\test\NUnitTaskExecutionTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "tasks\test\NunitTaskTest.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

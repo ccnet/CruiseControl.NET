@@ -1,16 +1,9 @@
 using System;
-using System.Collections;
 using System.IO;
-using System.Reflection;
-using System.Windows.Forms;
-
 using NUnit.Framework;
-using Exortech.NetReflector;
-
 using ThoughtWorks.CruiseControl.Core;
 using ThoughtWorks.CruiseControl.Core.Config;
 using ThoughtWorks.CruiseControl.Core.Label;
-using ThoughtWorks.CruiseControl.Core.Publishers;
 using ThoughtWorks.CruiseControl.Core.Sourcecontrol;
 
 namespace ThoughtWorks.CruiseControl.ControlPanel.Test
@@ -69,7 +62,7 @@ namespace ThoughtWorks.CruiseControl.ControlPanel.Test
 		public void LoadSourceControl()
 		{
 			// setup
-			Cvs cvs = new Cvs();
+		    Cvs cvs = new Cvs();
 			cvs.Executable = "c:/bin/cvs.exe";
 			cvs.CvsRoot = "/cvsroot/marathonnet";
 
@@ -105,7 +98,7 @@ namespace ThoughtWorks.CruiseControl.ControlPanel.Test
 		[Test]
 		public void LoadNullAsAnAvailableValueForLabellers()
 		{
-			DefaultLabeller labeller = new DefaultLabeller();
+		    DefaultLabeller labeller = new DefaultLabeller();
 			labeller.LabelPrefix = "foo";
 
 			project.Labeller = labeller;
@@ -242,7 +235,7 @@ namespace ThoughtWorks.CruiseControl.ControlPanel.Test
 		{
 			foreach (ConfigurationItem item in items)
 			{
-				Console.WriteLine(indent + item.Name + "=" + item.ValueAsString);
+			    Console.WriteLine(indent + item.Name + "=" + item.ValueAsString);
 				Print(item.Items, indent + "    ");
 			}
 		}

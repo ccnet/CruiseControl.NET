@@ -60,7 +60,7 @@ namespace ThoughtWorks.CruiseControl.Core.Builder
 		[ReflectorProperty("buildTimeoutSeconds", Required = false)] 
 		public int BuildTimeoutSeconds = DEFAULT_BUILD_TIMEOUT;
 
-		public void Run(IntegrationResult result)
+		public virtual void Run(IntegrationResult result)
 		{
 			ProcessResult processResult = AttemptToExecute();
 			result.Status = (processResult.Failed) ? IntegrationStatus.Failure : IntegrationStatus.Success;

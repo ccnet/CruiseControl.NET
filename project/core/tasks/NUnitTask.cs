@@ -1,8 +1,6 @@
 using System;
 using Exortech.NetReflector;
 using ThoughtWorks.CruiseControl.Core.Util;
-using ThoughtWorks.CruiseControl.Core.Publishers;
-using System.IO;
 
 namespace ThoughtWorks.CruiseControl.Core.Tasks
 {
@@ -42,7 +40,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 			return true;
 		}
 
-		public void Run(IntegrationResult result)
+		public virtual void Run(IntegrationResult result)
 		{
 			string args = new NUnitArgument(Assembly).ToString();
 			if (args != String.Empty)

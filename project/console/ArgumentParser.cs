@@ -1,4 +1,3 @@
-using System;
 using System.Collections;
 using System.Text.RegularExpressions;
 using ThoughtWorks.CruiseControl.Core.Util;
@@ -45,7 +44,7 @@ Options:
 				}
 				else
 				{
-					Log.Warning(string.Format("Invalid argument: {0}", arg));
+				    Log.Warning(string.Format("Invalid argument: {0}", arg));
 					options["help"] = true;
 				}
 			}

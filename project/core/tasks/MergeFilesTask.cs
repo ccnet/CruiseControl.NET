@@ -22,7 +22,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
                     Log.Info("Merging file: " + fileInfo);
                     if (fileInfo.Exists)
                     {
-                        result.TaskResults.Add((new DefaultTaskResult(fileInfo)));
+                        result.TaskResults.Add((new FileTaskResult(fileInfo)));
                     }
                     else
                     {
