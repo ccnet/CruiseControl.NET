@@ -204,11 +204,6 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "XslFilesSectionHandler.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
                     RelPath = "builder\BuilderException.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -243,6 +238,11 @@
                     BuildAction = "None"
                 />
                 <File
+                    RelPath = "configuration\Configuration.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "configuration\ConfigurationException.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -252,6 +252,11 @@
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
+                <File
+                    RelPath = "configuration\CruiseControlConfigSectionHandler.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />                
                 <File
                     RelPath = "configuration\IConfiguration.cs"
                     SubType = "Code"
@@ -268,6 +273,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "configuration\XslFilesSectionHandler.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "configuration\test\ConfigurationFixture.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -278,10 +288,20 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "configuration\test\CruiseControlConfigSectionHandlerTest.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "configuration\test\ValidatingLoaderTest.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
+                <File
+                    RelPath = "configuration\test\XslFilesSectionHandlerTest.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />                
                 <File
                     RelPath = "label\DefaultLabeller.cs"
                     SubType = "Code"
@@ -620,11 +640,6 @@
                 <File
                     RelPath = "test\ccnet.core.dll.config"
                     BuildAction = "None"
-                />
-                <File
-                    RelPath = "test\ConfigSectionHandler.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
                 />
                 <File
                     RelPath = "test\CruiseServerTest.cs"

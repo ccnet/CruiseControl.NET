@@ -101,9 +101,8 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test
 		
 		private StarTeam CreateStarTeam()
 		{
-			XmlPopulator populator = new XmlPopulator();
 			StarTeam starTeam = new StarTeam();
-			populator.Populate(XmlUtil.CreateDocumentElement(ST_XML), starTeam);
+			NetReflector.Read(ST_XML, starTeam);
 			return starTeam;
 		}
 	} 	

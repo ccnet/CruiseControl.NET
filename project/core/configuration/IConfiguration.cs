@@ -1,11 +1,11 @@
 using System;
+using System.Collections;
 
 namespace ThoughtWorks.CruiseControl.Core
 {
-	public interface IConfiguration
+	public interface IConfiguration : IEnumerable
 	{
-//		IProject GetProject(string name);
-		string ReadXml();
-		void WriteXml(string xml);
+		void AddProject(IProject project);
+		IProject GetProject(string name);
 	}
 }

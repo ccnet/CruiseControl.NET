@@ -1,12 +1,12 @@
+using NMock;
+using NUnit.Framework;
 using System;
 using System.Collections;
 using System.Threading;
 using System.Xml;
-using NUnit.Framework;
-using NMock;
-using ThoughtWorks.CruiseControl.Core.Util;
-using ThoughtWorks.CruiseControl.Core.Schedules;
 using ThoughtWorks.CruiseControl.Core.Configuration;
+using ThoughtWorks.CruiseControl.Core.Schedules;
+using ThoughtWorks.CruiseControl.Core.Util;
 
 namespace ThoughtWorks.CruiseControl.Core.Test
 {
@@ -16,7 +16,7 @@ namespace ThoughtWorks.CruiseControl.Core.Test
 		DynamicMock _mockConfig;
 		MockProject _project1;
 		MockProject _project2;
-		IDictionary _projects;
+		IConfiguration _configuration;
 		CruiseServer _cc;
 
 		[SetUp]
@@ -25,9 +25,9 @@ namespace ThoughtWorks.CruiseControl.Core.Test
 			_project1 = new MockProject("project1", new Schedule(1, Schedule.Infinite));
 			_project2 = new MockProject("project2", new Schedule(1, Schedule.Infinite));
 
-			_projects = new Hashtable();
-			_projects.Add("project1", _project1);
-			_projects.Add("project2", _project2);
+			_configuration = new Configuration.Configuration();
+			_configuration.AddProject(_project1);
+			_configuration.AddProject(_project2);
 
 			_mockConfig = new DynamicMock(typeof(IConfigurationLoader));
 		}
@@ -43,8 +43,8 @@ namespace ThoughtWorks.CruiseControl.Core.Test
 		public void LoadConfigurationAtConstruction()
 		{
 			MockProject projectWithoutSchedule = new MockProject("project3", null);
-			_projects.Add(projectWithoutSchedule.Name, projectWithoutSchedule);
-			_mockConfig.ExpectAndReturn("LoadProjects", _projects);
+			_configuration.AddProject(projectWithoutSchedule);
+			_mockConfig.ExpectAndReturn("Load", _configuration);
 
 			_cc = new CruiseServer((IConfigurationLoader)_mockConfig.MockInstance);
 
@@ -62,7 +62,7 @@ namespace ThoughtWorks.CruiseControl.Core.Test
 		[Test]
 		public void RunIntegration()
 		{
-			_mockConfig.ExpectAndReturn("LoadProjects", _projects);
+			_mockConfig.ExpectAndReturn("Load", _configuration);
 			((Schedule)_project1.Schedule).TotalIterations = 1;
 			((Schedule)_project2.Schedule).TotalIterations = 1;
 
@@ -78,11 +78,11 @@ namespace ThoughtWorks.CruiseControl.Core.Test
 		[Test]
 		public void HandleChangedConfiguration()
 		{
-			MockConfigurationLoader config = new MockConfigurationLoader();
-			config.Projects = _projects;
+			MockConfigurationLoader config = new MockConfigurationLoader(_configuration);
 
 			_cc = new CruiseServer(config);
 			_cc.Start();
+
 			// verify configuration projects and schedulers have been loaded
 			AssertEquals(2, _cc.ProjectIntegrators.Count);
 			AssertEquals(_project1, ((IProjectIntegrator)_cc.ProjectIntegrators[1]).Project);
@@ -93,10 +93,10 @@ namespace ThoughtWorks.CruiseControl.Core.Test
 			_project1.Schedule = newSchedule;
 			MockProject project3 = new MockProject("project3", new Schedule(1, 1));
 
-			Hashtable projects = new Hashtable();
-			projects.Add(_project1.Name, _project1);
-			projects.Add(project3.Name, project3);
-			config.Projects = projects;
+			IConfiguration newConfig = new Configuration.Configuration();
+			newConfig.AddProject(_project1);
+			newConfig.AddProject(project3);
+			config.Configuration = newConfig;
 			config.RaiseConfigurationChangedEvent();
 
 			// verify configuration projects have been updated
@@ -124,7 +124,7 @@ namespace ThoughtWorks.CruiseControl.Core.Test
 		[Test]
 		public void StartStopAndWaitForExit()
 		{
-			_mockConfig.ExpectAndReturn("LoadProjects", _projects);
+			_mockConfig.ExpectAndReturn("Load", _configuration);
 
 			_cc = new CruiseServer((IConfigurationLoader)_mockConfig.MockInstance);
 			_cc.Start();
@@ -143,17 +143,22 @@ namespace ThoughtWorks.CruiseControl.Core.Test
 
 		private class MockConfigurationLoader : IConfigurationLoader
 		{
-			private IDictionary _projects;
+			private IConfiguration _configuration;
 			private ConfigurationChangedHandler _handler;
 
-			public IDictionary Projects
+			public MockConfigurationLoader(IConfiguration configuration)
 			{
-				set { _projects = value; }
+				_configuration = configuration;
 			}
 
-			public IDictionary LoadProjects()
+			public IConfiguration Configuration
 			{
-				return _projects;
+				set { _configuration = value; }
+			}
+
+			public IConfiguration Load()
+			{
+				return _configuration;
 			}
 
 			public void AddConfigurationChangedHandler(ConfigurationChangedHandler handler)
@@ -165,15 +170,12 @@ namespace ThoughtWorks.CruiseControl.Core.Test
 			{
 				_handler();
 			}
-
-			public string ReadXml() { return null;	}
-			public void WriteXml(string xml) { }
 		}
 
 		[Test]
 		public void StartAndStopTwice()
 		{
-			_mockConfig.ExpectAndReturn("LoadProjects", _projects);
+			_mockConfig.ExpectAndReturn("Load", _configuration);
 			_cc = new CruiseServer((IConfigurationLoader)_mockConfig.MockInstance);
 
 			_cc.Start();
@@ -207,7 +209,7 @@ namespace ThoughtWorks.CruiseControl.Core.Test
 		[Test]
 		public void IntegrateProjectSpecifiedByName()
 		{
-			_mockConfig.ExpectAndReturn("LoadProjects", _projects);
+			_mockConfig.ExpectAndReturn("Load", _configuration);
 			_cc = new CruiseServer((IConfigurationLoader)_mockConfig.MockInstance);
 
 			IntegrationResult result = _cc.RunIntegration(_project1.Name);
@@ -217,7 +219,7 @@ namespace ThoughtWorks.CruiseControl.Core.Test
 		[Test, ExpectedException(typeof(CruiseControlException))]
 		public void TryIntegratingUnknownProject()
 		{
-			_mockConfig.ExpectAndReturn("LoadProjects", _projects);
+			_mockConfig.ExpectAndReturn("Load", _configuration);
 			_cc = new CruiseServer((IConfigurationLoader)_mockConfig.MockInstance);
 
 			IntegrationResult result = _cc.RunIntegration("does not exist");
@@ -233,9 +235,9 @@ namespace ThoughtWorks.CruiseControl.Core.Test
 			mockProject.CurrentActivity = ThoughtWorks.CruiseControl.Remote.ProjectActivity.Building; // already building
 			AssertEquals(0, schedule.ForceBuild_CallCount);
 
-			_projects.Clear();
-			_projects.Add(testProjectName, mockProject);
-			_mockConfig.ExpectAndReturn("LoadProjects", _projects);
+			_configuration = new Configuration.Configuration();
+			_configuration.AddProject(mockProject);
+			_mockConfig.ExpectAndReturn("Load", _configuration);
 
 			// we're testing this method
 			_cc = new CruiseServer((IConfigurationLoader)_mockConfig.MockInstance);
@@ -247,7 +249,7 @@ namespace ThoughtWorks.CruiseControl.Core.Test
 		[Test]
 		public void Abort()
 		{
-			_mockConfig.ExpectAndReturn("LoadProjects", _projects);
+			_mockConfig.ExpectAndReturn("Load", _configuration);
 			_cc = new CruiseServer((IConfigurationLoader)_mockConfig.MockInstance);
 			_cc.Start();
 			Thread.Sleep(0);

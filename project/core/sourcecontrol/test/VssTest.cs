@@ -99,9 +99,8 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test
 
 		private Vss CreateVss()
 		{
-			XmlPopulator populator = new XmlPopulator();
 			Vss vss = new Vss();
-			populator.Populate(XmlUtil.CreateDocumentElement(VSS_XML), vss);
+			NetReflector.Read(VSS_XML, vss);
 			vss.CultureInfo = CultureInfo.InvariantCulture;
 			return vss;
 		}

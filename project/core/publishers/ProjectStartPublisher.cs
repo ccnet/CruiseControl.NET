@@ -5,10 +5,10 @@ using System.Runtime.Remoting;
 using System.Runtime.Remoting.Messaging;
 using System.Threading;
 using Exortech.NetReflector;
-using tw.ccnet.remote;
-using tw.ccnet.core.schedule;
+using ThoughtWorks.CruiseControl.Remote;
+using ThoughtWorks.CruiseControl.Core.Schedules;
 
-namespace tw.ccnet.core.publishers
+namespace ThoughtWorks.CruiseControl.Core.Publishers
 {
 	[ReflectorType("startproject")]
 	public class ProjectStartPublisher : PublisherBase

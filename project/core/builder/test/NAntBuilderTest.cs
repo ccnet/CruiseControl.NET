@@ -47,11 +47,8 @@ namespace ThoughtWorks.CruiseControl.Core.Builder.test
     	</targetList>
     </build>", NANT_TEST_EXECUTABLE, NANT_TEST_BASEDIR, NANT_TEST_BUILDFILE, NANT_TEST_TARGET);
 
-			XmlNode node = XmlUtil.CreateDocumentElement(xml);
-			AssertNotNull("Node is null", node);
-			XmlPopulator populator = new XmlPopulator();
-			populator.Reflector.AddReflectorTypes(Assembly.GetExecutingAssembly());
-			populator.Populate(node, _builder);
+			_builder = new NAntBuilder();
+			NetReflector.Read(xml, _builder);
 			AssertEquals(NANT_TEST_BASEDIR, _builder.BaseDirectory);
 			AssertEquals(NANT_TEST_BUILDFILE, _builder.BuildFile);
 			AssertEquals(NANT_TEST_EXECUTABLE, _builder.Executable);

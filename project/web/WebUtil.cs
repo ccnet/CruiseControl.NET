@@ -9,9 +9,23 @@ namespace ThoughtWorks.CruiseControl.Web
 {
 	public class WebUtil
 	{
-		public static string GetLogFilename(HttpContext Context, HttpRequest request)
+		public static string ResolveLogFile(HttpContext context)
 		{
-			DirectoryInfo logDirectory = GetLogDirectory(Context);
+			string logfile = WebUtil.GetLogFilename(context, context.Request);
+			if (logfile == null)
+			{
+				throw new CruiseControlException("Internal Error - couldn't resolve logfile to use");
+			}
+			if (!File.Exists(logfile))
+			{
+				throw new CruiseControlException(String.Format("Logfile not found: {0}", logfile));
+			}
+			return logfile;
+		}
+
+		public static string GetLogFilename(HttpContext context, HttpRequest request)
+		{
+			DirectoryInfo logDirectory = GetLogDirectory(context);
 			string logfile = request.QueryString[LogFileUtil.LogQueryString];
 			if (logfile == null)
 			{
@@ -31,7 +45,7 @@ namespace ThoughtWorks.CruiseControl.Web
 			return "<br/>ERROR: " + message;
 		}
 
-		public static DirectoryInfo GetLogDirectory(HttpContext Context)
+		public static DirectoryInfo GetLogDirectory(HttpContext context)
 		{
 			string dirName = ConfigurationSettings.AppSettings["logDir"];
 			DirectoryInfo logDirectory = new DirectoryInfo(dirName);
@@ -41,7 +55,7 @@ namespace ThoughtWorks.CruiseControl.Web
 				if (dirName.IndexOf(':') < 0)
 				{
 					// If so try and treat as relative to the webapp
-					logDirectory = new DirectoryInfo(Context.Server.MapPath(dirName));
+					logDirectory = new DirectoryInfo(context.Server.MapPath(dirName));
 					if (!logDirectory.Exists)
 					{
 						throw new Exception(string.Format("Can't find log directory [{0}] (Full path : [{1}]", 

@@ -5,11 +5,11 @@ using NUnit.Framework;
 using NMock;
 using NMock.Constraints;
 using NMock.Remoting;
-using tw.ccnet.remote;
-using tw.ccnet.core.test;
-using tw.ccnet.core.util;
+using ThoughtWorks.CruiseControl.Remote;
+using ThoughtWorks.CruiseControl.Core.Test;
+using ThoughtWorks.CruiseControl.Core.Util;
 
-namespace tw.ccnet.core.publishers.test
+namespace ThoughtWorks.CruiseControl.Core.Publishers.Test
 {
 	[TestFixture]
 	public class ProjectStartPublisherTest : CustomAssertion

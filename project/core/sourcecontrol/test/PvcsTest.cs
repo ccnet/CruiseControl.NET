@@ -63,9 +63,8 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test
 
 		private Pvcs CreatePvcs()
 		{
-			XmlPopulator populator = new XmlPopulator();
 			Pvcs pvcs = new Pvcs();
-			populator.Populate(XmlUtil.CreateDocumentElement(CreateSourceControlXml()), pvcs);
+			NetReflector.Read(CreateSourceControlXml(), pvcs);
 			return pvcs;
 		}
 		

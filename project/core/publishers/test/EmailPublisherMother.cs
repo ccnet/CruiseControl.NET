@@ -36,8 +36,7 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers.Test
 
 		public static EmailPublisher Create(XmlNode node)
 		{
-			XmlPopulator populator = new XmlPopulator();
-			return (EmailPublisher)populator.Populate(node);
+			return NetReflector.Read(node) as EmailPublisher;
 		}
 	}
 }

@@ -31,7 +31,7 @@
                     FileAlignment = "4096"
                     IncrementalBuild = "true"
                     Optimize = "false"
-                    OutputPath = "..\..\build\"
+                    OutputPath = "bin\Debug2\"
                     RegisterForComInterop = "false"
                     RemoveIntegerChecks = "false"
                     TreatWarningsAsErrors = "false"
@@ -96,11 +96,6 @@
                     Name = "System.Web"
                     AssemblyName = "System.Web"
                     HintPath = "C:\WINNT\Microsoft.NET\Framework\v1.0.3705\System.Web.dll"
-                />
-                <Reference
-                    Name = "System.Data"
-                    AssemblyName = "System.Data"
-                    HintPath = "C:\WINNT\Microsoft.NET\Framework\v1.0.3705\System.Data.dll"
                 />
             </References>
         </Build>
@@ -207,11 +202,6 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "XslFilesSectionHandler.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
                     RelPath = "builder\BuilderException.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -246,6 +236,11 @@
                     BuildAction = "None"
                 />
                 <File
+                    RelPath = "configuration\Configuration.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "configuration\ConfigurationException.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -276,6 +271,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "configuration\XslFilesSectionHandler.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "configuration\test\ConfigurationFixture.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -292,6 +292,11 @@
                 />
                 <File
                     RelPath = "configuration\test\ValidatingLoaderTest.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "configuration\test\XslFilesSectionHandlerTest.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -342,6 +347,11 @@
                 />
                 <File
                     RelPath = "publishers\NetSendPublisher.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "publishers\ProjectStartPublisher.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -639,11 +649,6 @@
                     BuildAction = "None"
                 />
                 <File
-                    RelPath = "test\ConfigSectionHandler.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
                     RelPath = "test\CruiseManagerTest.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -695,11 +700,6 @@
                 />
                 <File
                     RelPath = "test\TestLogs.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "test\ThreadPoolTest.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

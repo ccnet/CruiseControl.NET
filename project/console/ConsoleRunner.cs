@@ -62,7 +62,7 @@ namespace ThoughtWorks.CruiseControl.Console
 			}
 			finally
 			{
-				server.Stop();
+				server.Abort();
 			}
 		}
 	}

@@ -20,8 +20,7 @@ namespace ThoughtWorks.CruiseControl.Core.Test
 		<mock/>
 	</tasks>
 </workflow>";
-			XmlPopulator populator = new XmlPopulator();
-			object obj = populator.Populate(XmlUtil.CreateDocumentElement(xml));
+			object obj = NetReflector.Read(xml);
 			AssertNotNull(obj);
 			AssertEquals(typeof(Workflow), obj.GetType());
 			Workflow project = (Workflow)obj;

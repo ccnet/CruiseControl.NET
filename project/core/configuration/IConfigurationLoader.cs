@@ -5,9 +5,9 @@ namespace ThoughtWorks.CruiseControl.Core.Configuration
 {
 	public delegate void ConfigurationChangedHandler();
 
-	public interface IConfigurationLoader : IConfiguration
+	public interface IConfigurationLoader
 	{
-		IDictionary LoadProjects();
+		IConfiguration Load();
 		void AddConfigurationChangedHandler(ConfigurationChangedHandler handler);
 	}
 }

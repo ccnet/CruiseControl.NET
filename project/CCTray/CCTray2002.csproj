@@ -31,7 +31,7 @@
                     FileAlignment = "4096"
                     IncrementalBuild = "true"
                     Optimize = "false"
-                    OutputPath = "bin\Debug\"
+                    OutputPath = "bin\Debug2\"
                     RegisterForComInterop = "false"
                     RemoveIntegerChecks = "false"
                     TreatWarningsAsErrors = "false"
@@ -73,11 +73,6 @@
                     HintPath = "C:\WINNT\Microsoft.NET\Framework\v1.0.3705\System.XML.dll"
                 />
                 <Reference
-                    Name = "ccnet2002.remote"
-                    Project = "{E820CF3B-8C5A-4002-BC16-B7818D3D54A8}"
-                    Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
-                />
-                <Reference
                     Name = "AgentObjects"
                     AssemblyName = "AgentObjects"
                     HintPath = "..\..\lib\CCTray\AgentObjects.dll"
@@ -107,6 +102,16 @@
                     AssemblyName = "System.Drawing"
                     HintPath = "C:\WINNT\Microsoft.NET\Framework\v1.0.3705\System.Drawing.dll"
                 />
+                <Reference
+                    Name = "ThoughtWorks.CruiseControl.WebServiceProxy"
+                    AssemblyName = "ThoughtWorks.CruiseControl.WebServiceProxy"
+                    HintPath = "..\..\lib\ThoughtWorks.CruiseControl.WebServiceProxy.dll"
+                />
+                <Reference
+                    Name = "ccnet2002.remote"
+                    Project = "{E820CF3B-8C5A-4002-BC16-B7818D3D54A8}"
+                    Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
+                />
             </References>
         </Build>
         <Files>
@@ -127,6 +132,11 @@
                 />
                 <File
                     RelPath = "BuildTransition.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "ConnectionMethod.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

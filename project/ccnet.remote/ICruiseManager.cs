@@ -41,10 +41,10 @@ namespace ThoughtWorks.CruiseControl.Remote
 		/// <summary>
 		/// Gets and sets the configuration string for this CruiseControl.NET instance.
 		/// </summary>
-        string Configuration
-		{
-			get;
-			set;
-		}
+//        string Configuration
+//		{
+//			get;
+//			set;
+//		}
 	}
 }

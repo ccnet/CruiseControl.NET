@@ -8,7 +8,7 @@ using System.Runtime.InteropServices;
 
 
 
-namespace tw.ccnet.core.publishers
+namespace ThoughtWorks.CruiseControl.Core.Publishers
 {
 	/// <summary>
 	/// Summary description for YahooPublisher.

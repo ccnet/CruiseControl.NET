@@ -7,19 +7,8 @@ using System.Text;
 
 namespace ThoughtWorks.CruiseControl.Core
 {
-	/// <summary>
-	/// Summary description for XslFilesSectionHandler.
-	/// </summary>
 	public class XslFilesSectionHandler : IConfigurationSectionHandler
 	{
-		public XslFilesSectionHandler()
-		{
-			//
-			// TODO: Add constructor logic here
-			//
-		}
-		#region IConfigurationSectionHandler Members
-
 		public object Create(object parent, object configContext, System.Xml.XmlNode section)
 		{
 			ArrayList files = new ArrayList();
@@ -34,7 +23,5 @@ namespace ThoughtWorks.CruiseControl.Core
 			}
 			return files;
 		}
-
-		#endregion
 	}
 }

@@ -34,9 +34,8 @@ namespace ThoughtWorks.CruiseControl.Core.State.Test
 		[Test]
 		public void PopulateFromReflector()
 		{
-			XmlNode node = XmlUtil.CreateDocumentElement(@"<state><directory>c:\temp</directory><filename>project.state</filename></state>");
-
-			_state = (IntegrationStateManager)new XmlPopulator().Populate(node);
+			string xml = @"<state><directory>c:\temp</directory><filename>project.state</filename></state>";
+			_state = (IntegrationStateManager)NetReflector.Read(xml);
 			AssertEquals(@"c:\temp", _state.Directory);
 			AssertEquals("project.state", _state.Filename);
 		}

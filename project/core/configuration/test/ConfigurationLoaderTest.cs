@@ -8,6 +8,7 @@ using ThoughtWorks.CruiseControl.Core.Util;
 using ThoughtWorks.CruiseControl.Core.Builder.test;
 using ThoughtWorks.CruiseControl.Core.Sourcecontrol;
 using ThoughtWorks.CruiseControl.Core.Publishers.Test;
+using ThoughtWorks.CruiseControl.Remote;
 
 namespace ThoughtWorks.CruiseControl.Core.Configuration.test
 {
@@ -66,8 +67,8 @@ namespace ThoughtWorks.CruiseControl.Core.Configuration.test
 		public void PopulateProjectsFromXml()
 		{
 			string projectXml = ConfigurationFixture.GenerateProjectXml("test");
-			IDictionary projects = loader.PopulateProjectsFromXml(ConfigurationFixture.GenerateConfig(projectXml));
-			ValidateProject(projects, "test");
+			IConfiguration configuration = loader.PopulateProjectsFromXml(ConfigurationFixture.GenerateConfig(projectXml));
+			ValidateProject(configuration, "test");
 		}
 
 		[Test]
@@ -75,9 +76,10 @@ namespace ThoughtWorks.CruiseControl.Core.Configuration.test
 		{
 			string projectXml = ConfigurationFixture.GenerateProjectXml("test");
 			string project2Xml = ConfigurationFixture.GenerateProjectXml("test2");
-			IDictionary projects = loader.PopulateProjectsFromXml(ConfigurationFixture.GenerateConfig(projectXml + project2Xml));
-			ValidateProject(projects, "test");
-			ValidateProject(projects, "test2");
+			Console.WriteLine(ConfigurationFixture.GenerateConfig(projectXml + project2Xml).OuterXml);
+			IConfiguration configuration = loader.PopulateProjectsFromXml(ConfigurationFixture.GenerateConfig(projectXml + project2Xml));
+			ValidateProject(configuration, "test");
+			ValidateProject(configuration, "test2");
 		}
 
 		[Test, ExpectedException(typeof(ConfigurationException))]
@@ -87,9 +89,9 @@ namespace ThoughtWorks.CruiseControl.Core.Configuration.test
 			loader.PopulateProjectsFromXml(ConfigurationFixture.GenerateConfig(projectXml));
 		}
 
-		private void ValidateProject(IDictionary projects, string projectName)
+		private void ValidateProject(IConfiguration configuration, string projectName)
 		{
-			Project project = (Project)projects[projectName];
+			Project project = configuration.GetProject(projectName) as Project;
 			AssertEquals(projectName, project.Name);
 			AssertNotNull("missing builder", project.Builder);
 			AssertEquals(typeof(MockBuilder), project.Builder.GetType());
@@ -118,16 +120,18 @@ namespace ThoughtWorks.CruiseControl.Core.Configuration.test
 		public void PopulateCustomProjectFromXml()
 		{
 			string xml = @"<customtestproject name=""foo"" />";
-			IDictionary projects = loader.PopulateProjectsFromXml(ConfigurationFixture.GenerateConfig(xml));
-			Assert(projects["foo"] is CustomTestProject);
-			AssertEquals("foo", ((CustomTestProject) projects["foo"]).Name);
+			IConfiguration configuration = loader.PopulateProjectsFromXml(ConfigurationFixture.GenerateConfig(xml));
+			AssertNotNull(configuration.GetProject("foo"));
+			AssertEquals(typeof(CustomTestProject), configuration.GetProject("foo").GetType());
+			AssertEquals("foo", ((CustomTestProject) configuration.GetProject("foo")).Name);
 		}
 
 		[ReflectorType("customtestproject")]
-		class CustomTestProject // properly should implement IProject
+		class CustomTestProject : ProjectBase, IProject
 		{
-			[ReflectorProperty("name")]
-			public string Name;
+			public ProjectActivity CurrentActivity { get { return ProjectActivity.Building; } }
+			public IntegrationResult RunIntegration(BuildCondition buildCondition) { return null; }
+			public IntegrationStatus GetLatestBuildStatus() { return IntegrationStatus.Success; }
 		}
 
 		[Test]
@@ -150,19 +154,6 @@ namespace ThoughtWorks.CruiseControl.Core.Configuration.test
 		private void OnConfigurationChanged()
 		{
 			changed++;
-		}
-
-		[Test]
-		public void ReadAndWriteConfigurationXml()
-		{
-			string xml = "<cruisecontrol></cruisecontrol>";
-			loader.ConfigFile = TempFileUtil.CreateTempXmlFile(TempFileUtil.CreateTempDir(this), "loadernet.config", xml);
-
-			AssertEquals(xml, loader.ReadXml());
-
-			string newXml = @"<cruisecontrol foo=""bar""></cruisecontrol>";
-			loader.WriteXml(newXml);
-			AssertEquals(newXml, loader.ReadXml());
 		}
 	}
 }

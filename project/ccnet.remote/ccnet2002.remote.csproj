@@ -31,7 +31,7 @@
                     FileAlignment = "4096"
                     IncrementalBuild = "true"
                     Optimize = "false"
-                    OutputPath = "..\..\build\"
+                    OutputPath = "bin\Debug2\"
                     RegisterForComInterop = "false"
                     RemoveIntegerChecks = "false"
                     TreatWarningsAsErrors = "false"
@@ -61,11 +61,6 @@
                     Name = "System"
                     AssemblyName = "System"
                     HintPath = "C:\WINNT\Microsoft.NET\Framework\v1.0.3705\System.dll"
-                />
-                <Reference
-                    Name = "System.Data"
-                    AssemblyName = "System.Data"
-                    HintPath = "C:\WINNT\Microsoft.NET\Framework\v1.0.3705\System.Data.dll"
                 />
                 <Reference
                     Name = "System.XML"

@@ -181,9 +181,7 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers.Test
 
 		public void TestPopulateFromConfiguration()
 		{
-			XmlPopulator populator = new XmlPopulator();
-			populator.Reflector.AddReflectorTypes(System.Reflection.Assembly.GetExecutingAssembly());
-			populator.Populate(EmailPublisherMother.ConfigurationXml.DocumentElement, _publisher);
+			_publisher = EmailPublisherMother.Create();
 
 			AssertEquals("smtp.telus.net", _publisher.MailHost);
 			AssertEquals("ccnet@thoughtworks.com", _publisher.FromAddress);

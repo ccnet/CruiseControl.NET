@@ -23,7 +23,7 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers.Test
 	<names>orogers</names>
 </netsend>";
 
-			object result = new XmlPopulator().Populate(XmlUtil.CreateDocumentElement(xml));
+			object result = NetReflector.Read(xml);
 			AssertNotNull(result);
 			AssertEquals(typeof(NetSendPublisher), result.GetType());
 
@@ -41,7 +41,7 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers.Test
 	<fixedMessage>YAHOO!</fixedMessage>
 </netsend>";
 
-			object result = new XmlPopulator().Populate(XmlUtil.CreateDocumentElement(xml));
+			object result = NetReflector.Read(xml);
 			AssertNotNull(result);
 			AssertEquals(typeof(NetSendPublisher), result.GetType());
 

@@ -16,7 +16,7 @@ namespace ThoughtWorks.CruiseControl.Core
 	public class CruiseServer : ICruiseControl, ICruiseServer, IDisposable
 	{
 		private IConfigurationLoader _loader;
-		private IDictionary _projects;
+		private IConfiguration _configuration;
 		private IList _projectIntegrators = new ArrayList();
 		private bool _stopped = false;
 
@@ -24,9 +24,9 @@ namespace ThoughtWorks.CruiseControl.Core
 		{
 			_loader = loader;
 			_loader.AddConfigurationChangedHandler(new ConfigurationChangedHandler(OnConfigurationChanged));
-			_projects = _loader.LoadProjects();
+			_configuration = _loader.Load();
 
-			foreach (IProject project in _projects.Values)
+			foreach (IProject project in _configuration)
 			{
 				AddProjectIntegrator(project);
 			}
@@ -34,12 +34,12 @@ namespace ThoughtWorks.CruiseControl.Core
 
 		public IProject GetProject(string projectName)
 		{
-			return (IProject)_projects[projectName];
+			return _configuration.GetProject(projectName);
 		}
 
 		public IConfiguration Configuration
 		{
-			get { return _loader; }
+			get { return _configuration; }
 		}
 
 		public IntegrationResult RunIntegration(string projectName)
@@ -64,11 +64,6 @@ namespace ThoughtWorks.CruiseControl.Core
 		{
 			if (project.Schedule!=null)
 				_projectIntegrators.Add(new ProjectIntegrator(project.Schedule, project));
-		}
-
-		public ICollection Projects
-		{
-			get { return _projects.Values; }
 		}
 
 		public IList ProjectIntegrators
@@ -122,12 +117,12 @@ namespace ThoughtWorks.CruiseControl.Core
 
 		private void ReloadConfiguration()
 		{
-			_projects = _loader.LoadProjects();
+			_configuration = _loader.Load();
 
 			IDictionary schedulerMap = CreateSchedulerMap();
 			foreach (IProjectIntegrator scheduler in schedulerMap.Values)
 			{
-				IProject project = (IProject)_projects[scheduler.Project.Name];
+				IProject project = _configuration.GetProject(scheduler.Project.Name);
 				if (project == null)
 				{
 					// project has been removed, so stop scheduler and remove
@@ -141,7 +136,7 @@ namespace ThoughtWorks.CruiseControl.Core
 				}
 			}
 
-			foreach (IProject project in _projects.Values)
+			foreach (IProject project in _configuration)
 			{
 				IProjectIntegrator scheduler = (IProjectIntegrator)schedulerMap[project.Name];
 				if (scheduler == null)
@@ -169,7 +164,7 @@ namespace ThoughtWorks.CruiseControl.Core
 		/// </summary>
 		public void Dispose()
 		{
-			Stop();
+			Abort();
 		}
 
 		public void WaitForExit()
@@ -188,7 +183,7 @@ namespace ThoughtWorks.CruiseControl.Core
 		public IntegrationStatus GetLatestBuildStatus()
 		{
 			// TODO determine the most recent where multiple projects exist, rather than simply returning the first
-			foreach (IProject project in Projects) 
+			foreach (IProject project in _configuration) 
 			{
 				return project.GetLatestBuildStatus();
 			}
@@ -198,7 +193,7 @@ namespace ThoughtWorks.CruiseControl.Core
 
 		public ProjectActivity CurrentProjectActivity()
 		{
-			foreach (IProject project in Projects) 
+			foreach (IProject project in _configuration) 
 			{
 				return project.CurrentActivity;
 			}

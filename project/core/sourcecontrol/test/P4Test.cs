@@ -33,9 +33,8 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test
 
 		private P4 CreateP4(string p4root)
 		{
-			XmlPopulator populator = new XmlPopulator();
 			P4 perforce = new P4();
-			populator.Populate(XmlUtil.CreateDocumentElement(p4root), perforce);
+			NetReflector.Read(p4root, perforce);
 			return perforce;
 		}
 		
@@ -56,7 +55,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test
 		}
 
 		[Test]
-		[ExpectedException(typeof(ReflectorException))]
+		[ExpectedException(typeof(NetReflectorException))]
 		public void ReadConfigBarfsWhenViewIsExcluded()
 		{
 			string xml = @"

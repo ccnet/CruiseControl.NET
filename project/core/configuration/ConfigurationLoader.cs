@@ -1,10 +1,10 @@
+using Exortech.NetReflector;
 using System;
 using System.Collections;
 using System.IO;
 using System.Xml;
 using System.Xml.Schema;
 using System.Reflection;
-using Exortech.NetReflector;
 
 namespace ThoughtWorks.CruiseControl.Core.Configuration
 {
@@ -17,7 +17,6 @@ namespace ThoughtWorks.CruiseControl.Core.Configuration
 		private string _configFile;
 		private FileSystemWatcher _watcher = new FileSystemWatcher();
 		private ConfigurationChangedHandler _configurationChangedHandler;
-		private XmlPopulator _populator = new XmlPopulator();
 		private System.Timers.Timer timer;
 		private ValidationEventHandler _handler;
 		private XmlSchema _schema;
@@ -25,7 +24,6 @@ namespace ThoughtWorks.CruiseControl.Core.Configuration
 		public ConfigurationLoader(string configFile) : this()
 		{
 			ConfigFile = configFile;
-			_populator.Reflector.AddReflectorTypes(Directory.GetCurrentDirectory(), CONFIG_ASSEMBLY_PATTERN);
 		}
 
 		internal ConfigurationLoader() 
@@ -54,7 +52,7 @@ namespace ThoughtWorks.CruiseControl.Core.Configuration
 			}
 		}
 
-		public IDictionary LoadProjects()
+		public IConfiguration Load()
 		{
 			XmlDocument config = LoadConfiguration();
 			return PopulateProjectsFromXml(config);
@@ -108,15 +106,23 @@ namespace ThoughtWorks.CruiseControl.Core.Configuration
 			}
 		}
 
-		internal IDictionary PopulateProjectsFromXml(XmlDocument configXml)
+		internal IConfiguration PopulateProjectsFromXml(XmlDocument configXml)
 		{
 			VerifyConfigRoot(configXml);
 			try
 			{
-				PROJECTS_ATTRIBUTE.InstanceTypeKey = "type";
-				return (IDictionary)_populator.PopulateHash(configXml.DocumentElement, typeof(Hashtable), PROJECTS_ATTRIBUTE);
+				NetReflectorTypeTable typeTable = new NetReflectorTypeTable();
+				typeTable.Add(Assembly.GetExecutingAssembly());
+				typeTable.Add(Directory.GetCurrentDirectory(), CONFIG_ASSEMBLY_PATTERN);
+				IConfiguration configuration = new Configuration();
+				foreach (XmlNode node in configXml.DocumentElement)
+				{
+					IProject project = NetReflector.Read(node, typeTable) as IProject;
+					configuration.AddProject(project);
+				}
+				return configuration;
 			}
-			catch (ReflectorException ex)
+			catch (NetReflectorException ex)
 			{
 				throw new ConfigurationException("Unable to instantiate CruiseControl projects from configuration document. " +  
 					"Configuration document is likely missing Xml nodes required for properly populating CruiseControl configuration." + ex.Message, ex);
@@ -171,18 +177,6 @@ namespace ThoughtWorks.CruiseControl.Core.Configuration
 		private void handleSchemaEvent(object sender, ValidationEventArgs args) 
 		{
 			System.Diagnostics.Trace.WriteLine(args.Message);
-		}
-
-		public string ReadXml()
-		{ 
-			return LoadConfiguration().OuterXml; 
-		}
-
-		public void WriteXml(string xml)
-		{ 
-			 XmlDocument document = new XmlDocument();
-			document.LoadXml(xml);
-			document.Save(ConfigFile);
 		}
 	}
 }

@@ -154,14 +154,13 @@ namespace ThoughtWorks.CruiseControl.Core.Test
 
 			IntegrationResult originalLastResult = _project.LastIntegrationResult;
 
-			Hashtable projects = new Hashtable();
-			projects.Add(_project.Name, _project);
+			Configuration.Configuration configuration = new Configuration.Configuration();
+			configuration.AddProject(_project);
 
 			IMock mockConfig = new DynamicMock(typeof(IConfigurationLoader));
-			mockConfig.ExpectAndReturn("LoadProjects", projects);
+			mockConfig.ExpectAndReturn("Load", configuration);
 
 			CruiseServer control = new CruiseServer((IConfigurationLoader)mockConfig.MockInstance);
-//			control.AddProject(_project);
 
 			DateTime start = DateTime.Now;
 			control.Start(); // RunIntegration();

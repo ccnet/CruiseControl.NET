@@ -18,10 +18,7 @@ namespace ThoughtWorks.CruiseControl.Core.Schedules.Test
 		public void PopulateFromReflector()
 		{
 			string xml = string.Format(@"<schedule sleepSeconds=""1"" iterations=""1""/>");
-			XmlPopulator populator = new XmlPopulator();
-			populator.Reflector.AddReflectorTypes(Assembly.GetExecutingAssembly());
-
-			Schedule schedule = (Schedule)populator.Populate(XmlUtil.CreateDocumentElement(xml));
+			Schedule schedule = (Schedule)NetReflector.Read(xml);
 			AssertEquals(1, schedule.SleepSeconds);
 			AssertEquals(1, schedule.TotalIterations);
 		}

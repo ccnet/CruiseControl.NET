@@ -30,7 +30,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test
 			MultiSourceControl multiSourceControl = new MultiSourceControl();
 
 			//// EXECUTE
-			new XmlPopulator().Populate(XmlUtil.CreateDocumentElement(SourceControlXml), multiSourceControl);
+			NetReflector.Read(SourceControlXml, multiSourceControl);
 
 			//// VERIFY
 			Assert(multiSourceControl.SourceControls.Count == 2);

@@ -24,7 +24,8 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 		public static TextReader ExecuteRedirected(Process process)
 		{
 			process.StartInfo.RedirectStandardOutput = true;
-			process.StartInfo.UseShellExecute = false;			
+			process.StartInfo.UseShellExecute = false;		
+			process.StartInfo.CreateNoWindow = true;
 			process.Start();
 			return process.StandardOutput;			
 		}

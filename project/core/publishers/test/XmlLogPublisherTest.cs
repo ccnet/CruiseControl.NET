@@ -37,9 +37,7 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers.Test
 				@"		<xmllogger>
 		    <logDir>{0}</logDir>
 		</xmllogger>", LOGDIR);
-			XmlNode node = XmlUtil.CreateDocumentElement(xml);
-			XmlPopulator populator = new XmlPopulator();
-			return (XmlLogPublisher)populator.Populate(node);
+			return NetReflector.Read(xml) as XmlLogPublisher;
 		}
 
 		public void TestPopulateFromConfig()
@@ -121,9 +119,7 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers.Test
 				<file>d:\foo.xml</file>
 			</mergeFiles>
 		</xmllogger>", LOGDIR);
-			XmlNode node = XmlUtil.CreateDocumentElement(xml);
-			XmlPopulator populator = new XmlPopulator();
-			XmlLogPublisher pub = (XmlLogPublisher)populator.Populate(node);
+			XmlLogPublisher pub = NetReflector.Read(xml) as XmlLogPublisher;
 			AssertEquals(1, pub.MergeFiles.Length);
 			AssertEquals(@"d:\foo.xml", pub.MergeFiles[0]);
 		}

@@ -1,7 +1,7 @@
 using System;
 using Exortech.NetReflector;
 
-namespace tw.ccnet.core.publishers
+namespace ThoughtWorks.CruiseControl.Core.Publishers
 {
 	[ReflectorType("yahoouser")]
 	public class YahooUser

@@ -63,8 +63,6 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
 			}
 		}
 
-		#region Helper method
-		
 		/// <summary>
 		/// Attempts to load the specified stylesheet.  Throws a <see cref="CruiseControlException"/>
 		/// if an error occurs.
@@ -86,7 +84,5 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
 				throw new CruiseControlException("Bad XML in stylesheet: " + ex.Message);
 			}
 		}
-
-		#endregion
 	}
 }

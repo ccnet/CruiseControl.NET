@@ -29,8 +29,8 @@ namespace ThoughtWorks.CruiseControl.Web
 
 		private void Page_Load(object sender, System.EventArgs e)
 		{
-			resolveLogFile();
-			generatePluginLinks();
+			logfile = WebUtil.ResolveLogFile(Context);
+			GeneratePluginLinks();
 
 			try
 			{
@@ -52,20 +52,7 @@ namespace ThoughtWorks.CruiseControl.Web
 			}
 		}
 
-		private void resolveLogFile()
-		{
-			logfile = WebUtil.GetLogFilename(Context, Request);
-			if (logfile == null)
-			{
-				throw new CruiseControlException("Internal Error - couldn't resolve logfile to use");
-			}
-			if (!File.Exists(logfile))
-			{
-				throw new CruiseControlException(String.Format("Logfile not found: {0}", logfile));
-			}
-		}
-
-		private void generatePluginLinks()
+		private void GeneratePluginLinks()
 		{
 			if (ConfigurationSettings.GetConfig("CCNet/buildPlugins") == null)
 			{
@@ -80,13 +67,13 @@ namespace ThoughtWorks.CruiseControl.Web
 				{
 					pluginLinksHtml += String.Format("|&nbsp; ");
 				}
-				pluginLinksHtml += String.Format(@"<a class=""link"" href=""{0}"">{1}</a> ", genLogUrl(spec.LinkUrl), spec.LinkText);
+				pluginLinksHtml += String.Format(@"<a class=""link"" href=""{0}"">{1}</a> ", GenerateLogUrl(spec.LinkUrl), spec.LinkText);
 				firstLink = false;
 			}
 			PluginLinks.InnerHtml = pluginLinksHtml;
 		}
 
-		private string genLogUrl(string urlPrefix)
+		private string GenerateLogUrl(string urlPrefix)
 		{
 			return ResolveUrl(String.Format("{0}{1}", urlPrefix, new FileInfo(logfile).Name));
 		}
@@ -104,11 +91,11 @@ namespace ThoughtWorks.CruiseControl.Web
 				{
 					if (xslFile.ToLower().IndexOf("header") > -1)
 					{
-						generateHeader(xslFile, document);
+						GenerateHeader(xslFile, document);
 					}
 					else
 					{
-						builder.Append(transform(xslFile, document)).Append("<br>");
+						builder.Append(Transform(xslFile, document)).Append("<br>");
 					}
 				}
 			}
@@ -120,12 +107,12 @@ namespace ThoughtWorks.CruiseControl.Web
 			DetailsCell.InnerHtml = builder.ToString();
 		}
 
-		private void generateHeader(string headerXslfile, XmlDocument logFileDocument)
+		private void GenerateHeader(string headerXslfile, XmlDocument logFileDocument)
 		{
-			HeaderCell.InnerHtml = "<br/>" + transform(headerXslfile, logFileDocument);
+			HeaderCell.InnerHtml = "<br/>" + Transform(headerXslfile, logFileDocument);
 		}
 
-		private string transform(string xslfile, XmlDocument logFileDocument)
+		private string Transform(string xslfile, XmlDocument logFileDocument)
 		{
 			string directory = Path.GetDirectoryName(xslfile);
 			string file = Path.GetFileName(xslfile);

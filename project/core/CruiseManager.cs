@@ -29,8 +29,6 @@ namespace ThoughtWorks.CruiseControl.Core
 			_cruiseControl = cruiseControl;
 		}
 
-		#region Starting and stopping CruiseControl.NET
-
 		public void StartCruiseControl()
 		{
 			_cruiseControl.Start();
@@ -65,10 +63,6 @@ namespace ThoughtWorks.CruiseControl.Core
 			StopCruiseControl();
 		}
 
-		#endregion
-
-		#region Getting status of server and projects
-
 		public CruiseControlStatus GetStatus()
 		{
 			return _cruiseControl.Status;
@@ -76,27 +70,16 @@ namespace ThoughtWorks.CruiseControl.Core
 
 		public ProjectStatus GetProjectStatus()
 		{
-			IEnumerator e =_cruiseControl.Projects.GetEnumerator();
+			IEnumerator e =_cruiseControl.Configuration.GetEnumerator();
 			e.MoveNext();
 			Project p = (Project)e.Current;
 			return new ProjectStatus(GetStatus(), p.GetLatestBuildStatus(), p.CurrentActivity, p.Name, p.WebURL, p.LastIntegrationResult.StartTime, p.LastIntegrationResult.Label); 
 		}
-		#endregion
 
 		public void ForceBuild(string projectName)
 		{
 			((ICruiseServer)_cruiseControl).ForceBuild(projectName);
 		}
-
-		#region Properties
-
-		public string Configuration
-		{
-			get { return _cruiseControl.Configuration.ReadXml(); }
-			set { _cruiseControl.Configuration.WriteXml(value); }
-		}
-
-		#endregion
 
 		public override object InitializeLifetimeService()
 		{

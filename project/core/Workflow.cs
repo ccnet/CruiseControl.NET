@@ -10,10 +10,11 @@ namespace ThoughtWorks.CruiseControl.Core
 	/// <code>
 	/// <![CDATA[
 	/// <workflow name="foo">
-	///		<sourcecontrol type="cvs"></sourcecontrol>
-	///		<build type="nant"></build>
+	///		<tasks>
+	///			<sourcecontrol type="cvs"></sourcecontrol>
+	///			<build type="nant"></build>
+	///		</tasks>
 	///		<state type="state"></state>
-	///		<publishers></publishers>
 	/// </workflow>
 	/// ]]>
 	/// </code>

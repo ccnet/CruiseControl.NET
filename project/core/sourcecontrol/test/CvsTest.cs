@@ -100,9 +100,8 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test
 
 		private Cvs CreateCvs(string xml)
 		{
-			XmlPopulator populator = new XmlPopulator();
 			Cvs cvs = new Cvs();
-			populator.Populate(XmlUtil.CreateDocumentElement(xml), cvs);
+			NetReflector.Read(xml, cvs);
 			return cvs;
 		}
 	} 

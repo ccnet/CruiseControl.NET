@@ -7,7 +7,7 @@ using ThoughtWorks.CruiseControl.Core.Util;
 namespace ThoughtWorks.CruiseControl.Core.Test
 {
 	[TestFixture]
-	public class ConfigSectionHandlerTest : CustomAssertion
+	public class XslFilesSectionHandler : CustomAssertion
 	{
 		[Test]
 		public void GetConfig() 
