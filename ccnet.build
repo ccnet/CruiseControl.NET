@@ -17,6 +17,7 @@
     <property name="lib.dir" value="lib"/>
     <property name="package.dir" value="package"/>
 
+    <property name="remote.dll" value="ThoughtWorks.CruiseControl.Remote.dll"/>
     <property name="core.dll" value="ThoughtWorks.CruiseControl.Core.dll"/>
     <property name="web.dll" value="ThoughtWorks.CruiseControl.Web.dll"/>
     <property name="webdashboard.dll" value="ThoughtWorks.CruiseControl.WebDashboard.dll"/>
@@ -26,8 +27,10 @@
     <property name="cctray.exe" value="cctray.exe"/>
     <property name="nunit-console.exe" value="tools\nunit\nunit-console.exe" />
     <property name="ncover-console.exe" value="tools\ncover\NCover.Console.exe" />
-
-    <target name="all" depends="clean, compile, test, deploy, dist"/>
+    <property name="vil.executable" value="tools\vil\vil.exe" />
+    <property name="vil.assemblies" value="comma,separated,list,of,assemblies,to,analyze (full path)" />
+    
+	<target name="all" depends="clean, compile, test, deploy, dist"/>
 
 	<target name="clean" description="cleans up everything">
 		<!-- These mkdirs here to stop warnings -->
@@ -291,7 +294,7 @@
 		<mkdir dir="build\fxcop" />
 		<exec program="tools\fxcop\fxcopcmd.exe" 
 			  commandline="/p:tools\fxcop\ccnet.fxcop /o:build\fxcop\ccnet-fxcop.xml" failonerror="false"/>
-	
+		<call target="vil" />
 	</target>
 	
 	<!-- FOR RUNNING CCNET AGAINST ITSELF -->
@@ -346,4 +349,11 @@
 		<loadtasks assembly="lib\NetReflectorDocumenterTask.dll"/>
 		<netreflector assembly="${build.dir}\core\${core.dll}" />
 	</target>
+	
+	<target name="vil">
+		<exec program="${vil.executable}" 
+			workingdir="${build.dir}\webdashboard"
+			commandline='/a="${remote.dll},${core.dll},${webdashboard.dll}" /outxml="../ccnet.results-vil.xml"  /m classes,enumerations,structs,types,LOC,events,impInterfaces,WMC,DIT,CBO,RFC,NOC,constructors,methods,imps,fields,properties /sc=type' 
+			failonerror="false"/>
+    	</target>
 </project>
