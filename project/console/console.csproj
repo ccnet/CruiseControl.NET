@@ -185,10 +185,6 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "StartCCNet.bat"
-                    BuildAction = "None"
-                />
-                <File
                     RelPath = "test\ArgumentParserTest.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
