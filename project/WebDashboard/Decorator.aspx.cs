@@ -12,30 +12,9 @@ namespace ThoughtWorks.CruiseControl.WebDashboard
 
 		private void Page_Load(object sender, EventArgs e)
 		{
-			DashboardComponentFactory dcFactory = new DashboardComponentFactory(Request, Context, this);
-
-			SideBarViewBuilder sideBarViewBuilder = new SideBarViewBuilder(
-				new DefaultUserRequestSpecificSideBarViewBuilder(
-					dcFactory.DefaultHtmlBuilder, 
-					dcFactory.DefaultUrlBuilderWithHttpPathMapper, 
-					dcFactory.CruiseManagerBuildNameRetriever,
-				new DecoratingRecentBuildsPanelBuilder(
-					dcFactory.DefaultHtmlBuilder,
-					dcFactory.DefaultUrlBuilderWithHttpPathMapper, 
-					new RecentBuildLister(
-						dcFactory.DefaultHtmlBuilder, 
-						dcFactory.DefaultUrlBuilderWithHttpPathMapper, 
-						dcFactory.ServerAggregatingCruiseManagerWrapper,
-						dcFactory.DefaultBuildNameFormatter))));
-
-			TopControlsViewBuilder topControlsViewBuilder = 
-				new TopControlsViewBuilder(
-					dcFactory.DefaultHtmlBuilder, 
-					dcFactory.DefaultUrlBuilderWithHttpPathMapper,
-					dcFactory.DefaultBuildNameFormatter);
-
-			SideBarLocation.Controls.Add(sideBarViewBuilder.Execute(dcFactory.RequestWrappingCruiseRequest));
-			TopControlsLocation.Controls.Add(topControlsViewBuilder.Execute(dcFactory.RequestWrappingCruiseRequest));
+			ObjectGiver objectGiver = CruiseObjectGiverFactory.CreateGiverForRequest(Request, Context, this);
+			SideBarLocation.Controls.Add(((SideBarViewBuilder) objectGiver.GiveObjectByType(typeof(SideBarViewBuilder))).Execute());
+			TopControlsLocation.Controls.Add(((TopControlsViewBuilder) objectGiver.GiveObjectByType(typeof(TopControlsViewBuilder))).Execute());
 		}
 
 		#region Web Form Designer generated code

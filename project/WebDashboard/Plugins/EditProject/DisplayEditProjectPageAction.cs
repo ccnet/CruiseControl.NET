@@ -9,6 +9,8 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.EditProject
 {
 	public class DisplayEditProjectPageAction : ICruiseAction
 	{
+		public static readonly string ACTION_NAME = "EditProjectDisplay";
+
 		private readonly ICruiseManagerWrapper cruiseManagerWrapper;
 		private readonly IProjectSerializer serializer;
 		private readonly AddProjectViewBuilder viewBuilder;
@@ -35,7 +37,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.EditProject
 			{
 				model = projectModelGenerator.GenerateModel(request.Request);
 			}
-			model.SaveActionName = CruiseActionFactory.EDIT_PROJECT_SAVE_ACTION_NAME;
+			model.SaveActionName = SaveEditProjectAction.ACTION_NAME;
 			model.IsAdd = false;
 			model.Status = "";
 			return viewBuilder.BuildView(model);

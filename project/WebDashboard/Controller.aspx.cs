@@ -2,6 +2,7 @@ using System;
 using System.Web.UI;
 using System.Web.UI.HtmlControls;
 using ThoughtWorks.CruiseControl.WebDashboard.Dashboard;
+using ThoughtWorks.CruiseControl.WebDashboard.MVC;
 
 namespace ThoughtWorks.CruiseControl.WebDashboard
 {
@@ -11,8 +12,8 @@ namespace ThoughtWorks.CruiseControl.WebDashboard
 
 		private void Page_Load(object sender, EventArgs e)
 		{
-			DashboardComponentFactory dcFactory = new DashboardComponentFactory(Request, Context, this);
-			dcFactory.RequestController.Do(ParentControl,dcFactory.AggregatedRequest);
+			ObjectGiver objectGiver = CruiseObjectGiverFactory.CreateGiverForRequest(Request, Context, this);
+			((RequestController) objectGiver.GiveObjectByType(typeof(RequestController))).Do(ParentControl);
 		}
 
 		#region Web Form Designer generated code

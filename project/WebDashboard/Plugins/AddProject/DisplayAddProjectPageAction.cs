@@ -6,6 +6,8 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.AddProject
 {
 	public class DisplayAddProjectPageAction : IAction
 	{
+		public static readonly string ACTION_NAME = "AddProjectDisplay";
+
 		private readonly AddProjectViewBuilder viewBuilder;
 		private readonly AddProjectModelGenerator projectModelGenerator;
 
@@ -18,7 +20,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.AddProject
 		public Control Execute(IRequest request)
 		{
 			AddEditProjectModel model = projectModelGenerator.GenerateModel(request);
-			model.SaveActionName = CruiseActionFactory.ADD_PROJECT_SAVE_ACTION_NAME;
+			model.SaveActionName = SaveNewProjectAction.ACTION_NAME;
 			model.IsAdd = true;
 			model.Status = "";
 			return viewBuilder.BuildView(model);

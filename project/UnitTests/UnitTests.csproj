@@ -383,6 +383,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "WebDashboard\Dashboard\CruiseObjectGiverFactoryTest.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "WebDashboard\Dashboard\DecoratingRecentBuildsPanelBuilderTest.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -399,6 +404,11 @@
                 />
                 <File
                     RelPath = "WebDashboard\Dashboard\DefaultUserRequestSpecificSideBarViewBuilderTest.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "WebDashboard\Dashboard\ObjectGiverAndRegistrarTest.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

@@ -4,21 +4,24 @@ using System.Web.UI.HtmlControls;
 using ThoughtWorks.CruiseControl.WebDashboard.IO;
 using ThoughtWorks.CruiseControl.WebDashboard.MVC.Cruise;
 using ThoughtWorks.CruiseControl.WebDashboard.MVC.View;
+using ThoughtWorks.CruiseControl.WebDashboard.Plugins.ViewBuildReport;
 
 namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 {
 	public class TopControlsViewBuilder : HtmlBuilderViewBuilder
 	{
+		private readonly ICruiseRequest request;
 		private readonly IBuildNameFormatter buildNameFormatter;
 		private readonly IUrlBuilder urlBuilder;
 
-		public TopControlsViewBuilder(IHtmlBuilder htmlBuilder, IUrlBuilder urlBuilder, IBuildNameFormatter buildNameFormatter) : base (htmlBuilder)
+		public TopControlsViewBuilder(IHtmlBuilder htmlBuilder, IUrlBuilder urlBuilder, IBuildNameFormatter buildNameFormatter, ICruiseRequest request) : base (htmlBuilder)
 		{
 			this.urlBuilder = urlBuilder;
 			this.buildNameFormatter = buildNameFormatter;
+			this.request = request;
 		}
 
-		public Control Execute(ICruiseRequest request)
+		public Control Execute()
 		{
 			StringWriter writer = new StringWriter();
 			HtmlTextWriter htmlWriter = new HtmlTextWriter(writer);
@@ -45,7 +48,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 			{
 				htmlWriter.Write(" &gt; ");
 				A(buildNameFormatter.GetPrettyBuildName(buildName),
-					urlBuilder.BuildBuildUrl(new ActionSpecifierWithName(CruiseActionFactory.VIEW_BUILD_REPORT_ACTION_NAME), serverName, projectName, buildName)).RenderControl(htmlWriter);
+					urlBuilder.BuildBuildUrl(new ActionSpecifierWithName(ViewBuildReportAction.ACTION_NAME), serverName, projectName, buildName)).RenderControl(htmlWriter);
 			}
 
 			HtmlGenericControl locationMenu = new HtmlGenericControl("div");

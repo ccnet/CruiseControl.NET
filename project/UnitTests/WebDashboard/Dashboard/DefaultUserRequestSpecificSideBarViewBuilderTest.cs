@@ -6,6 +6,12 @@ using NUnit.Framework;
 using ThoughtWorks.CruiseControl.WebDashboard.Dashboard;
 using ThoughtWorks.CruiseControl.WebDashboard.MVC.Cruise;
 using ThoughtWorks.CruiseControl.WebDashboard.MVC.View;
+using ThoughtWorks.CruiseControl.WebDashboard.Plugins.AddProject;
+using ThoughtWorks.CruiseControl.WebDashboard.Plugins.DeleteProject;
+using ThoughtWorks.CruiseControl.WebDashboard.Plugins.EditProject;
+using ThoughtWorks.CruiseControl.WebDashboard.Plugins.ViewBuildLog;
+using ThoughtWorks.CruiseControl.WebDashboard.Plugins.ViewBuildReport;
+using ThoughtWorks.CruiseControl.WebDashboard.Plugins.ViewServerLog;
 
 namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 {
@@ -40,7 +46,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 		public void ShouldReturnLinkToAddProjectForFarmView()
 		{
 			// Setup
-			urlBuilderMock.ExpectAndReturn("BuildUrl", "returnedurl", new PropertyIs("ActionName", CruiseActionFactory.ADD_PROJECT_DISPLAY_ACTION_NAME));
+			urlBuilderMock.ExpectAndReturn("BuildUrl", "returnedurl", new PropertyIs("ActionName", DisplayAddProjectPageAction.ACTION_NAME));
 
 			// Execute
 			HtmlTable table = viewBuilder.GetFarmSideBar();
@@ -58,8 +64,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 		public void ShouldReturnLinkToAddProjectAndServerLogForServerView()
 		{
 			// Setup
-			urlBuilderMock.ExpectAndReturn("BuildServerUrl", "returnedurl1", new PropertyIs("ActionName", CruiseActionFactory.VIEW_SERVER_LOG_ACTION_NAME), "myServer");
-			urlBuilderMock.ExpectAndReturn("BuildServerUrl", "returnedurl2", new PropertyIs("ActionName", CruiseActionFactory.ADD_PROJECT_DISPLAY_ACTION_NAME), "myServer");
+			urlBuilderMock.ExpectAndReturn("BuildServerUrl", "returnedurl1", new PropertyIs("ActionName", ViewServerLogAction.ACTION_NAME), "myServer");
+			urlBuilderMock.ExpectAndReturn("BuildServerUrl", "returnedurl2", new PropertyIs("ActionName", DisplayAddProjectPageAction.ACTION_NAME), "myServer");
 			HtmlAnchor expectedAnchor1 = new HtmlAnchor();
 			expectedAnchor1.HRef = "returnedurl1";
 			expectedAnchor1.InnerHtml = "View Server Log";
@@ -81,8 +87,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 		public void ShouldReturnLinkToProjectReportForProjectView()
 		{
 			// Setup
-			urlBuilderMock.ExpectAndReturn("BuildProjectUrl", "editUrl", new PropertyIs("ActionName", CruiseActionFactory.EDIT_PROJECT_DISPLAY_ACTION_NAME), "myServer", "myProject");
-			urlBuilderMock.ExpectAndReturn("BuildProjectUrl", "deleteUrl", new PropertyIs("ActionName", CruiseActionFactory.SHOW_DELETE_PROJECT_ACTION_NAME), "myServer", "myProject");
+			urlBuilderMock.ExpectAndReturn("BuildProjectUrl", "editUrl", new PropertyIs("ActionName", DisplayEditProjectPageAction.ACTION_NAME), "myServer", "myProject");
+			urlBuilderMock.ExpectAndReturn("BuildProjectUrl", "deleteUrl", new PropertyIs("ActionName", ShowDeleteProjectAction.ACTION_NAME), "myServer", "myProject");
 			HtmlTable buildsPanel = new HtmlTable();
 			recentBuildsViewBuilderMock.ExpectAndReturn("BuildRecentBuildsTable", buildsPanel, "myServer", "myProject");
 
@@ -111,10 +117,10 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 			buildNameRetrieverMock.ExpectAndReturn("GetLatestBuildName", "returnedLatestBuildName", "myServer", "myProject");
 			buildNameRetrieverMock.ExpectAndReturn("GetNextBuildName", "returnedNextBuildName", "myServer", "myProject", "myCurrentBuild");
 			buildNameRetrieverMock.ExpectAndReturn("GetPreviousBuildName", "returnedPreviousBuildName", "myServer", "myProject", "myCurrentBuild");
-			urlBuilderMock.ExpectAndReturn("BuildBuildUrl", "latestUrl", new PropertyIs("ActionName", CruiseActionFactory.VIEW_BUILD_REPORT_ACTION_NAME), "myServer", "myProject", "returnedLatestBuildName");
-			urlBuilderMock.ExpectAndReturn("BuildBuildUrl", "nextUrl", new PropertyIs("ActionName", CruiseActionFactory.VIEW_BUILD_REPORT_ACTION_NAME), "myServer", "myProject", "returnedNextBuildName");
-			urlBuilderMock.ExpectAndReturn("BuildBuildUrl", "previousUrl", new PropertyIs("ActionName", CruiseActionFactory.VIEW_BUILD_REPORT_ACTION_NAME), "myServer", "myProject", "returnedPreviousBuildName");
-			urlBuilderMock.ExpectAndReturn("BuildBuildUrl", "viewLogUrl", new PropertyIs("ActionName", CruiseActionFactory.VIEW_BUILD_LOG_ACTION_NAME), "myServer", "myProject", "myCurrentBuild");
+			urlBuilderMock.ExpectAndReturn("BuildBuildUrl", "latestUrl", new PropertyIs("ActionName", ViewBuildReportAction.ACTION_NAME), "myServer", "myProject", "returnedLatestBuildName");
+			urlBuilderMock.ExpectAndReturn("BuildBuildUrl", "nextUrl", new PropertyIs("ActionName", ViewBuildReportAction.ACTION_NAME), "myServer", "myProject", "returnedNextBuildName");
+			urlBuilderMock.ExpectAndReturn("BuildBuildUrl", "previousUrl", new PropertyIs("ActionName", ViewBuildReportAction.ACTION_NAME), "myServer", "myProject", "returnedPreviousBuildName");
+			urlBuilderMock.ExpectAndReturn("BuildBuildUrl", "viewLogUrl", new PropertyIs("ActionName", ViewBuildLogAction.ACTION_NAME), "myServer", "myProject", "myCurrentBuild");
 			HtmlTable buildsPanel = new HtmlTable();
 			recentBuildsViewBuilderMock.ExpectAndReturn("BuildRecentBuildsTable", buildsPanel, "myServer", "myProject");
 

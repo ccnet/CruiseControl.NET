@@ -6,6 +6,8 @@ using ThoughtWorks.CruiseControl.WebDashboard.Dashboard;
 using ThoughtWorks.CruiseControl.WebDashboard.IO;
 using ThoughtWorks.CruiseControl.WebDashboard.MVC.Cruise;
 using ThoughtWorks.CruiseControl.WebDashboard.MVC.View;
+using ThoughtWorks.CruiseControl.WebDashboard.Plugins.ViewBuildReport;
+using ThoughtWorks.CruiseControl.WebDashboard.Plugins.ViewProjectReport;
 
 namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 {
@@ -16,19 +18,17 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 		private TopControlsViewBuilder viewBuilder;
 		private DynamicMock urlBuilderMock;
 		private DynamicMock buildNameFormatterMock;
-
 		private DynamicMock cruiseRequestMock;
-		private ICruiseRequest cruiseRequest;
 
 		[SetUp]
 		public void Setup()
 		{
 			urlBuilderMock = new DynamicMock(typeof(IUrlBuilder));
 			buildNameFormatterMock = new DynamicMock(typeof(IBuildNameFormatter));
-			viewBuilder = new TopControlsViewBuilder(new DefaultHtmlBuilder(), (IUrlBuilder) urlBuilderMock.MockInstance, (IBuildNameFormatter) buildNameFormatterMock.MockInstance);
-
 			cruiseRequestMock = new DynamicMock(typeof(ICruiseRequest));
-			cruiseRequest = (ICruiseRequest) cruiseRequestMock.MockInstance;
+			viewBuilder = new TopControlsViewBuilder(new DefaultHtmlBuilder(), (IUrlBuilder) urlBuilderMock.MockInstance, 
+				(IBuildNameFormatter) buildNameFormatterMock.MockInstance, (ICruiseRequest) cruiseRequestMock.MockInstance);
+
 		}
 
 		private void VerifyAll()
@@ -47,7 +47,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 			urlBuilderMock.ExpectAndReturn("BuildUrl", "returnedurl", "default.aspx");
 
 			// Execute
-			HtmlTable table = (HtmlTable) viewBuilder.Execute(cruiseRequest);
+			HtmlTable table = (HtmlTable) viewBuilder.Execute();
 			
 			// Verify
 			VerifyAll();
@@ -64,7 +64,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 			urlBuilderMock.ExpectAndReturn("BuildServerUrl", "returnedurl2", "default.aspx", "myServer");
 
 			// Execute
-			HtmlTable table = (HtmlTable) viewBuilder.Execute(cruiseRequest);
+			HtmlTable table = (HtmlTable) viewBuilder.Execute();
 			
 			// Verify
 			VerifyAll();
@@ -79,10 +79,10 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 			cruiseRequestMock.ExpectAndReturn("BuildName", "");
 			urlBuilderMock.ExpectAndReturn("BuildUrl", "returnedurl1", "default.aspx");
 			urlBuilderMock.ExpectAndReturn("BuildServerUrl", "returnedurl2", "default.aspx", "myServer");
-			urlBuilderMock.ExpectAndReturn("BuildProjectUrl", "returnedurl3", new PropertyIs("ActionName", CruiseActionFactory.VIEW_PROJECT_REPORT_ACTION_NAME), "myServer", "myProject");
+			urlBuilderMock.ExpectAndReturn("BuildProjectUrl", "returnedurl3", new PropertyIs("ActionName", ViewProjectReportAction.ACTION_NAME), "myServer", "myProject");
 
 			// Execute
-			HtmlTable table = (HtmlTable) viewBuilder.Execute(cruiseRequest);
+			HtmlTable table = (HtmlTable) viewBuilder.Execute();
 
 			// Verify
 			VerifyAll();
@@ -98,11 +98,11 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 			buildNameFormatterMock.ExpectAndReturn("GetPrettyBuildName", "pretty name", "myBuild");
 			urlBuilderMock.ExpectAndReturn("BuildUrl", "returnedurl1", "default.aspx");
 			urlBuilderMock.ExpectAndReturn("BuildServerUrl", "returnedurl2", "default.aspx", "myServer");
-			urlBuilderMock.ExpectAndReturn("BuildProjectUrl", "returnedurl3", new PropertyIs("ActionName", CruiseActionFactory.VIEW_PROJECT_REPORT_ACTION_NAME), "myServer", "myProject");
-			urlBuilderMock.ExpectAndReturn("BuildBuildUrl", "returnedurl4", new PropertyIs("ActionName", CruiseActionFactory.VIEW_BUILD_REPORT_ACTION_NAME), "myServer", "myProject", "myBuild");
+			urlBuilderMock.ExpectAndReturn("BuildProjectUrl", "returnedurl3", new PropertyIs("ActionName", ViewProjectReportAction.ACTION_NAME), "myServer", "myProject");
+			urlBuilderMock.ExpectAndReturn("BuildBuildUrl", "returnedurl4", new PropertyIs("ActionName", ViewBuildReportAction.ACTION_NAME), "myServer", "myProject", "myBuild");
 
 			// Execute
-			HtmlTable table = (HtmlTable) viewBuilder.Execute(cruiseRequest);
+			HtmlTable table = (HtmlTable) viewBuilder.Execute();
 
 			// Verify
 			VerifyAll();

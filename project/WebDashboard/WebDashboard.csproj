@@ -278,7 +278,12 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "Dashboard\DashboardComponentFactory.cs"
+                    RelPath = "Dashboard\CruiseObjectGiverFactory.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Dashboard\DecoratedType.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -363,6 +368,16 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Dashboard\ObjectGiver.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Dashboard\ObjectGiverAndRegistrar.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Dashboard\ProjectDetailsListGenerator.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -379,6 +394,11 @@
                 />
                 <File
                     RelPath = "Dashboard\TopControlsViewBuilder.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Dashboard\TypeDecoratorable.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

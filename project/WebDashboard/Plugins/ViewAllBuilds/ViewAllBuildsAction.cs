@@ -7,6 +7,8 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.ViewAllBuilds
 {
 	public class ViewAllBuildsAction : ICruiseAction
 	{
+		public static readonly string ACTION_NAME = "ViewAllBuilds";
+
 		private readonly IAllBuildsViewBuilder viewBuilder;
 
 		public ViewAllBuildsAction (IAllBuildsViewBuilder viewBuilder)

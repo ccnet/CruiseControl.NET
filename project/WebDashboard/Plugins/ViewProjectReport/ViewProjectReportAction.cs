@@ -7,6 +7,8 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.ViewProjectReport
 {
 	public class ViewProjectReportAction : ICruiseAction
 	{
+		public static readonly string ACTION_NAME = "ViewProjectReport";
+
 		public ViewProjectReportAction()
 		{
 		}

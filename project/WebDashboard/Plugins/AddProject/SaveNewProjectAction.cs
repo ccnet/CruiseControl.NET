@@ -3,12 +3,15 @@ using ThoughtWorks.CruiseControl.Core;
 using ThoughtWorks.CruiseControl.WebDashboard.Dashboard;
 using ThoughtWorks.CruiseControl.WebDashboard.MVC;
 using ThoughtWorks.CruiseControl.WebDashboard.MVC.Cruise;
+using ThoughtWorks.CruiseControl.WebDashboard.Plugins.ViewProjectReport;
 using ThoughtWorks.CruiseControl.WebDashboard.ServerConnection;
 
 namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.AddProject
 {
 	public class SaveNewProjectAction : IAction
 	{
+		public static readonly string ACTION_NAME = "AddProjectSave";
+
 		private readonly IUrlBuilder urlBuilder;
 		private readonly IProjectSerializer serializer;
 		private readonly ICruiseManagerWrapper cruiseManagerWrapper;
@@ -39,7 +42,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.AddProject
 			catch (CruiseControlException e)
 			{
 				model.Status = "Failed to create project. Reason given was: " + e.Message;
-				model.SaveActionName = CruiseActionFactory.ADD_PROJECT_SAVE_ACTION_NAME;
+				model.SaveActionName = SaveNewProjectAction.ACTION_NAME;
 				model.IsAdd = true;
 			}
 			
@@ -50,7 +53,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.AddProject
 		{
 			if (model.Project.WebURL == null || model.Project.WebURL == string.Empty)
 			{
-				model.Project.WebURL = urlBuilder.BuildProjectUrl(new ActionSpecifierWithName(CruiseActionFactory.VIEW_PROJECT_REPORT_ACTION_NAME), model.SelectedServerName, model.Project.Name);
+				model.Project.WebURL = urlBuilder.BuildProjectUrl(new ActionSpecifierWithName(ViewProjectReportAction.ACTION_NAME), model.SelectedServerName, model.Project.Name);
 			}
 		}
 	}

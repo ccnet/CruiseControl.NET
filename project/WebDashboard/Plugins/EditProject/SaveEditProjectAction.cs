@@ -1,15 +1,19 @@
+using System;
 using System.Web.UI;
 using ThoughtWorks.CruiseControl.Core;
 using ThoughtWorks.CruiseControl.WebDashboard.Dashboard;
 using ThoughtWorks.CruiseControl.WebDashboard.IO;
 using ThoughtWorks.CruiseControl.WebDashboard.MVC.Cruise;
 using ThoughtWorks.CruiseControl.WebDashboard.Plugins.AddProject;
+using ThoughtWorks.CruiseControl.WebDashboard.Plugins.ViewProjectReport;
 using ThoughtWorks.CruiseControl.WebDashboard.ServerConnection;
 
 namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.EditProject
 {
 	public class SaveEditProjectAction : ICruiseAction
 	{
+		public static readonly string ACTION_NAME = "EditProjectSave";
+
 		private readonly IUrlBuilder urlBuilder;
 		private readonly IProjectSerializer serializer;
 		private readonly ICruiseManagerWrapper cruiseManagerWrapper;
@@ -43,7 +47,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.EditProject
 			catch (CruiseControlException e)
 			{
 				model.Status = "Failed to update project. Reason given was: " + e.Message;
-				model.SaveActionName = CruiseActionFactory.EDIT_PROJECT_SAVE_ACTION_NAME;
+				model.SaveActionName = ACTION_NAME;
 				model.IsAdd = false;
 			}
 			
@@ -54,7 +58,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.EditProject
 		{
 			if (model.Project.WebURL == null || model.Project.WebURL == string.Empty)
 			{
-				model.Project.WebURL = urlBuilder.BuildProjectUrl(new ActionSpecifierWithName(CruiseActionFactory.VIEW_PROJECT_REPORT_ACTION_NAME), model.SelectedServerName, model.Project.Name);
+				model.Project.WebURL = urlBuilder.BuildProjectUrl(new ActionSpecifierWithName(ViewProjectReportAction.ACTION_NAME), model.SelectedServerName, model.Project.Name);
 			}
 		}
 	}

@@ -34,7 +34,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.DeleteProject
 				TR(TD("Purge Working Directory?"), TD(BooleanCheckBox("PurgeWorkingDirectory", model.PurgeWorkingDirectory))),
 				TR(TD("Purge Artifact Directory?"), TD(BooleanCheckBox("PurgeArtifactDirectory", model.PurgeArtifactDirectory))),
 				TR(TD("Purge Source Control Environment?"), TD(BooleanCheckBox("PurgeSourceControlEnvironment", model.PurgeSourceControlEnvironment))),
-				TR(TD(Button(CruiseActionFactory.DO_DELETE_PROJECT_ACTION_NAME, "Yes - Really Delete"), 2))
+				TR(TD(Button(DoDeleteProjectAction.ACTION_NAME, "Yes - Really Delete"), 2))
 				);
 		}
 

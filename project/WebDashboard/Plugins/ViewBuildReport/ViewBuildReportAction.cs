@@ -18,6 +18,8 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.ViewBuildReport
 	// ToDo - this is pretty much copied staright from the old web app, and is untested.
 	public class ViewBuildReportAction : ICruiseAction
 	{
+		public static readonly string ACTION_NAME = "ViewBuildReport";
+
 		private readonly IPathMapper pathMapper;
 		private readonly IBuildRetriever buildRetriever;
 

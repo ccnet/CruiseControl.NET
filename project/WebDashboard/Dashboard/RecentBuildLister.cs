@@ -1,6 +1,6 @@
 using System.Web.UI.HtmlControls;
-using ThoughtWorks.CruiseControl.WebDashboard.MVC.Cruise;
 using ThoughtWorks.CruiseControl.WebDashboard.MVC.View;
+using ThoughtWorks.CruiseControl.WebDashboard.Plugins.ViewBuildReport;
 using ThoughtWorks.CruiseControl.WebDashboard.ServerConnection;
 
 namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
@@ -38,7 +38,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 			{
 				table.Rows.Add(TR(TD(A(
 					buildNameFormatter.GetPrettyBuildName(name), 
-					urlBuilder.BuildBuildUrl(new ActionSpecifierWithName(CruiseActionFactory.VIEW_BUILD_REPORT_ACTION_NAME),serverName, projectName, name),
+					urlBuilder.BuildBuildUrl(new ActionSpecifierWithName(ViewBuildReportAction.ACTION_NAME),serverName, projectName, name),
 					buildNameFormatter.GetCssClassForBuildLink(name)
 					))));	
 			}

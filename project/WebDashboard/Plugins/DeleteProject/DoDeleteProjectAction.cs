@@ -7,6 +7,8 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.DeleteProject
 {
 	public class DoDeleteProjectAction : ICruiseAction
 	{
+		public static readonly string ACTION_NAME = "DoDeleteProject";
+
 		private readonly IFarmService farmService;
 		private readonly IDeleteProjectViewBuilder viewBuilder;
 

@@ -8,6 +8,8 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.ViewServerLog
 {
 	public class ViewServerLogAction : ICruiseAction
 	{
+		public static readonly string ACTION_NAME = "ViewServerLog";
+
 		private readonly IFarmService farmService;
 
 		public ViewServerLogAction(IFarmService farmService)

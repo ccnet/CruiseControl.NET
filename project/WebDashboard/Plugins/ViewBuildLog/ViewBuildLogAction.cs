@@ -8,6 +8,8 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.ViewBuildLog
 {
 	public class ViewBuildLogAction : ICruiseAction
 	{
+		public static readonly string ACTION_NAME = "ViewBuildLog";
+
 		private readonly IBuildRetriever buildRetriever;
 
 		public ViewBuildLogAction(IBuildRetriever buildRetriever)

@@ -11,9 +11,9 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.MVC
 		private DynamicMock mockActionFactory;
 		private DynamicMock mockRequest;
 		private DynamicMock mockAction;
-		private IRequest request;
 		private RequestController controller;
 		private IAction action;
+		IRequest request;
 
 		[SetUp]
 		public void Setup()
@@ -22,10 +22,10 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.MVC
 			mockRequest = new DynamicMock(typeof(IRequest));
 			mockAction = new DynamicMock(typeof(IAction));
 
-			request = (IRequest) mockRequest.MockInstance;
 			action = (IAction) mockAction.MockInstance;
 
-			controller = new RequestController((IActionFactory) mockActionFactory.MockInstance);
+			request = (IRequest) mockRequest.MockInstance;
+			controller = new RequestController((IActionFactory) mockActionFactory.MockInstance, request);
 		}
 
 		private void VerifyAll()
@@ -45,7 +45,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.MVC
 			Control topLevelControl = new Control();
 
 			/// Execute
-			controller.Do(topLevelControl, request);
+			controller.Do(topLevelControl);
 
 			/// Verify
 			Assert.IsTrue(topLevelControl.Controls.Contains(actionResult));

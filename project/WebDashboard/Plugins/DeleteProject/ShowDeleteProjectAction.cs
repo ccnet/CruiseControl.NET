@@ -6,6 +6,8 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.DeleteProject
 {
 	public class ShowDeleteProjectAction : ICruiseAction
 	{
+		public static readonly string ACTION_NAME = "ShowDeleteProject";
+
 		private readonly IDeleteProjectViewBuilder viewBuilder;
 
 		public ShowDeleteProjectAction(IDeleteProjectViewBuilder viewBuilder)

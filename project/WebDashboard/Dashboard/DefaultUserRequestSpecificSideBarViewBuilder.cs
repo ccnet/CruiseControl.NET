@@ -1,6 +1,12 @@
 using System.Web.UI.HtmlControls;
 using ThoughtWorks.CruiseControl.WebDashboard.MVC.Cruise;
 using ThoughtWorks.CruiseControl.WebDashboard.MVC.View;
+using ThoughtWorks.CruiseControl.WebDashboard.Plugins.AddProject;
+using ThoughtWorks.CruiseControl.WebDashboard.Plugins.DeleteProject;
+using ThoughtWorks.CruiseControl.WebDashboard.Plugins.EditProject;
+using ThoughtWorks.CruiseControl.WebDashboard.Plugins.ViewBuildLog;
+using ThoughtWorks.CruiseControl.WebDashboard.Plugins.ViewBuildReport;
+using ThoughtWorks.CruiseControl.WebDashboard.Plugins.ViewServerLog;
 
 namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 {
@@ -21,21 +27,21 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 		public HtmlTable GetFarmSideBar()
 		{
 			return Table(
-				TR( TD( A("Add Project", urlBuilder.BuildUrl(new ActionSpecifierWithName(CruiseActionFactory.ADD_PROJECT_DISPLAY_ACTION_NAME))))));
+				TR( TD( A("Add Project", urlBuilder.BuildUrl(new ActionSpecifierWithName(DisplayAddProjectPageAction.ACTION_NAME))))));
 		}
 
 		public HtmlTable GetServerSideBar(string serverName)
 		{
 			return Table(
-				TR( TD( A("View Server Log", urlBuilder.BuildServerUrl(new ActionSpecifierWithName(CruiseActionFactory.VIEW_SERVER_LOG_ACTION_NAME), serverName)))),
-				TR( TD( A("Add Project", urlBuilder.BuildServerUrl(new ActionSpecifierWithName(CruiseActionFactory.ADD_PROJECT_DISPLAY_ACTION_NAME), serverName)))));
+				TR( TD( A("View Server Log", urlBuilder.BuildServerUrl(new ActionSpecifierWithName(ViewServerLogAction.ACTION_NAME), serverName)))),
+				TR( TD( A("Add Project", urlBuilder.BuildServerUrl(new ActionSpecifierWithName(DisplayAddProjectPageAction.ACTION_NAME), serverName)))));
 		}
 
 		public HtmlTable GetProjectSideBar(string serverName, string projectName)
 		{
 			return Table(
-				TR( TD( A("Edit Project", urlBuilder.BuildProjectUrl(new ActionSpecifierWithName(CruiseActionFactory.EDIT_PROJECT_DISPLAY_ACTION_NAME), serverName, projectName)))),
-				TR( TD( A("Delete Project", urlBuilder.BuildProjectUrl(new ActionSpecifierWithName(CruiseActionFactory.SHOW_DELETE_PROJECT_ACTION_NAME), serverName, projectName)))),
+				TR( TD( A("Edit Project", urlBuilder.BuildProjectUrl(new ActionSpecifierWithName(DisplayEditProjectPageAction.ACTION_NAME), serverName, projectName)))),
+				TR( TD( A("Delete Project", urlBuilder.BuildProjectUrl(new ActionSpecifierWithName(ShowDeleteProjectAction.ACTION_NAME), serverName, projectName)))),
 				TR( TD( "&nbsp;")),
 				TR( TD( recentBuildsViewBuilder.BuildRecentBuildsTable(serverName, projectName)))
 				);
@@ -44,10 +50,10 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 		public HtmlTable GetBuildSideBar(string serverName, string projectName, string buildName)
 		{
 			return Table(
-				TR( TD( A("Latest", urlBuilder.BuildBuildUrl(new ActionSpecifierWithName(CruiseActionFactory.VIEW_BUILD_REPORT_ACTION_NAME), serverName, projectName, buildNameRetriever.GetLatestBuildName(serverName, projectName))))),
-				TR( TD( A("Next", urlBuilder.BuildBuildUrl(new ActionSpecifierWithName(CruiseActionFactory.VIEW_BUILD_REPORT_ACTION_NAME), serverName, projectName, buildNameRetriever.GetNextBuildName(serverName, projectName, buildName))))),
-				TR( TD( A("Previous", urlBuilder.BuildBuildUrl(new ActionSpecifierWithName(CruiseActionFactory.VIEW_BUILD_REPORT_ACTION_NAME), serverName, projectName, buildNameRetriever.GetPreviousBuildName(serverName, projectName, buildName))))),
-				TR( TD( A("View Build Log", urlBuilder.BuildBuildUrl(new ActionSpecifierWithName(CruiseActionFactory.VIEW_BUILD_LOG_ACTION_NAME), serverName, projectName, buildName)))),
+				TR( TD( A("Latest", urlBuilder.BuildBuildUrl(new ActionSpecifierWithName(ViewBuildReportAction.ACTION_NAME), serverName, projectName, buildNameRetriever.GetLatestBuildName(serverName, projectName))))),
+				TR( TD( A("Next", urlBuilder.BuildBuildUrl(new ActionSpecifierWithName(ViewBuildReportAction.ACTION_NAME), serverName, projectName, buildNameRetriever.GetNextBuildName(serverName, projectName, buildName))))),
+				TR( TD( A("Previous", urlBuilder.BuildBuildUrl(new ActionSpecifierWithName(ViewBuildReportAction.ACTION_NAME), serverName, projectName, buildNameRetriever.GetPreviousBuildName(serverName, projectName, buildName))))),
+				TR( TD( A("View Build Log", urlBuilder.BuildBuildUrl(new ActionSpecifierWithName(ViewBuildLogAction.ACTION_NAME), serverName, projectName, buildName)))),
 				TR( TD( "&nbsp;")),
 				TR( TD( recentBuildsViewBuilder.BuildRecentBuildsTable(serverName, projectName)))
 					);
