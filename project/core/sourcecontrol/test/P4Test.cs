@@ -310,5 +310,59 @@ View:
 
 			mockProcessExecutor.Verify();
 		}
+
+		[Test]
+		public void GetSourceIfGetSourceTrue()
+		{
+			string configXml = @"
+<sourceControl name=""p4"">
+  <executable>c:\bin\p4.exe</executable>
+  <view>//depot/myproject/...</view>
+  <client>myclient</client>
+  <user>me</user>
+  <port>anotherserver:2666</port>
+  <autoGetSource>true</autoGetSource>
+</sourceControl>
+";
+
+			ProcessInfo expectedSyncProcess = new ProcessInfo("c:\\bin\\p4.exe", "-s -c myclient -p anotherserver:2666 -u me sync");
+
+			mockProcessExecutor.ExpectAndReturn("Execute", new ProcessResult("", "", 0, false), expectedSyncProcess);
+			CreateP4((ProcessExecutor) mockProcessExecutor.MockInstance, configXml).GetSource(new IntegrationResult());
+
+			mockProcessExecutor.Verify();
+		}
+
+		[Test]
+		public void DontGetSourceIfGetSourceFalseOrNotSet()
+		{
+			string configXml = @"
+<sourceControl name=""p4"">
+  <executable>c:\bin\p4.exe</executable>
+  <view>//depot/myproject/...</view>
+  <client>myclient</client>
+  <user>me</user>
+  <port>anotherserver:2666</port>
+</sourceControl>
+";
+
+			mockProcessExecutor.ExpectNoCall("Execute", typeof(ProcessInfo));
+			CreateP4((ProcessExecutor) mockProcessExecutor.MockInstance, configXml).GetSource(new IntegrationResult());
+
+			mockProcessExecutor.Verify();
+
+			configXml = @"
+<sourceControl name=""p4"">
+  <executable>c:\bin\p4.exe</executable>
+  <view>//depot/myproject/...</view>
+  <client>myclient</client>
+  <user>me</user>
+  <port>anotherserver:2666</port>
+  <autoGetSource>false</autoGetSource>
+</sourceControl>
+";
+
+			CreateP4((ProcessExecutor) mockProcessExecutor.MockInstance, configXml).GetSource(new IntegrationResult());
+		}
 	}
 }

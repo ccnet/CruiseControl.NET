@@ -66,6 +66,9 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 		[ReflectorProperty("applyLabel", Required = false)]
 		public bool ApplyLabel = false;
 
+		[ReflectorProperty("autoGetSource", Required = false)]
+		public bool AutoGetSource = false;
+
 		public string BuildCommandArguments(DateTime from, DateTime to)
 		{
 			StringBuilder args = new StringBuilder(BuildCommonArguments());
@@ -197,7 +200,12 @@ View:
 
 		public void GetSource(IntegrationResult result)
 		{
-			
+			if (AutoGetSource)
+			{
+				ProcessInfo info = new ProcessInfo(Executable, BuildCommonArguments() + "sync");
+				Log.Info(string.Format("Getting source from Perforce: {0} {1}", info.FileName, info.Arguments));
+				Execute(info);
+			}
 		}
 
 		protected virtual string Execute(ProcessInfo p)
