@@ -41,6 +41,13 @@ namespace ThoughtWorks.CruiseControl.Core.Test
 			return Create(true, startDate);
 		}
 
+		public static IntegrationResult CreateSuccessful(Modification[] modifications)
+		{
+			IntegrationResult result = Create(true, DateTime.Now);
+			result.Modifications = modifications;
+			return result;
+		}
+
 		public static IntegrationResult CreateFailed()
 		{
 			return Create(false, DateTime.Now);

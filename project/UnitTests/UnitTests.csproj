@@ -349,6 +349,21 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Core\Publishers\EmailGatewayTest.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Core\Publishers\EmailGroupTest.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Core\Publishers\EmailMessageTest.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Core\Publishers\FileTaskResultTest.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -510,6 +525,16 @@
                 />
                 <File
                     RelPath = "Core\SourceControl\Vss\VssLocaleTest.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Core\State\IntegrationStateManagerTest.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Core\State\ProjectStateManagerTest.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

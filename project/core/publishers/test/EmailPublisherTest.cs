@@ -57,13 +57,6 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers.Test
 			Assert.AreEqual(1, _gateway.SentMessages.Count);
 		}
 
-		[Test]
-		public void EmailSubject()
-		{
-			string subject = _publisher.CreateSubject(CreateIntegrationResult(IntegrationStatus.Success, IntegrationStatus.Success));
-			Assert.AreEqual("Project#9 Build Successful: Build 0", subject);
-		}
-
 		private IntegrationResult CreateIntegrationResult(IntegrationStatus current, IntegrationStatus last)
 		{
 			IntegrationResult result = new IntegrationResult();
@@ -73,20 +66,6 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers.Test
 			result.LastIntegrationStatus = last;
 			result.Label = "0";
 			return result;
-		}
-
-		[Test]
-		public void EmailSubjectFailedBuild()
-		{
-			string subject = _publisher.CreateSubject(CreateIntegrationResult(IntegrationStatus.Failure, IntegrationStatus.Success));
-			Assert.AreEqual("Project#9 Build Failed", subject);
-		}
-
-		[Test]
-		public void EmailSubjectFixedBuild()
-		{
-			string subject = _publisher.CreateSubject(CreateIntegrationResult(IntegrationStatus.Success, IntegrationStatus.Failure));
-			Assert.AreEqual("Project#9 Build Fixed: Build 0", subject);
 		}
 
 		[Test]
@@ -101,79 +80,9 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers.Test
 		}
 
 		[Test]
-		public void CreateRecipientList_BuildStateChanged()
-		{
-			string expected = "dmercier@thoughtworks.com, mandersen@thoughtworks.com, orogers@thoughtworks.com, rwan@thoughtworks.com, servid@telus.net";
-			string actual = _publisher.CreateRecipientList(CreateIntegrationResult(IntegrationStatus.Failure, IntegrationStatus.Success));
-			Assert.AreEqual(expected, actual);
-		}
-
-		[Test]
-		public void CreateRecipientList_BuildStateNotChanged()
-		{
-			string expected = "orogers@thoughtworks.com, servid@telus.net";
-			string actual = _publisher.CreateRecipientList(CreateIntegrationResult(IntegrationStatus.Success, IntegrationStatus.Success));
-			Assert.AreEqual(expected, actual);
-		}
-
-		[Test]
-		public void CreateRecipientList_NoRecipients()
-		{
-			_publisher.EmailUsers.Clear();
-			IntegrationResult IntegrationResult = CreateIntegrationResult(IntegrationStatus.Success, IntegrationStatus.Failure);
-
-			string expected = String.Empty;
-			string actual = _publisher.CreateRecipientList(IntegrationResult);
-			Assert.AreEqual(expected, actual);
-		}
-
-		[Test]
-		public void CreateModifiersList()
-		{
-			Modification[] modifications = CreateModifications();
-			string[] modifiers = _publisher.CreateModifiersList(modifications);
-			Assert.AreEqual(2, modifications.Length);
-			Assert.AreEqual("servid@telus.net", modifiers[0]);
-			Assert.AreEqual("orogers@thoughtworks.com", modifiers[1]);
-		}
-
-		[Test]
-		public void CreateModifiersList_unknownUser()
-		{
-			Modification[] modifications = new Modification[1];
-			modifications[0] = new Modification();
-			modifications[0].UserName = "nosuchuser";
-
-			string[] modifiers = _publisher.CreateModifiersList(modifications);
-			Assert.AreEqual(0, modifiers.Length);
-		}
-
-		[Test]
-		public void CreateModifiersListWithUnspecifiedUser()
-		{
-			Modification[] modifications = new Modification[1];
-			modifications[0] = new Modification();
-			modifications[0].UserName = null;
-
-			string[] modifiers = _publisher.CreateModifiersList(modifications);
-			Assert.AreEqual(0, modifiers.Length);
-		}
-
-		[Test]
-		public void CreateNotifyList()
-		{
-			string[] always = _publisher.CreateNotifyList(EmailGroup.NotificationType.Always);
-			Assert.AreEqual(1, always.Length);
-			Assert.AreEqual("servid@telus.net", always[0]);
-
-			string[] change = _publisher.CreateNotifyList(EmailGroup.NotificationType.Change);
-			Assert.AreEqual(4, change.Length);
-		}
-
-		[Test]
 		public void Publish()
 		{
-			IntegrationResult result = CreateIntegrationResult(IntegrationStatus.Success, IntegrationStatus.Success);
+			IntegrationResult result = IntegrationResultMother.CreateStillSuccessful();
 			_publisher.PublishIntegrationResults(null, result);
 			Assert.AreEqual("mock.gateway.org", _gateway.MailHost);
 			Assert.AreEqual(1, _gateway.SentMessages.Count);
@@ -182,8 +91,8 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers.Test
 		[Test]
 		public void UnitTestResultsShouldBeIncludedInEmailMessageWhenIncludesDetailsIsTrue()
 		{
-			IntegrationResult result = CreateIntegrationResult(IntegrationStatus.Success, IntegrationStatus.Success);
-			IMock mockTaskResult = new DynamicMock(typeof(ITaskResult));
+			IntegrationResult result = IntegrationResultMother.CreateStillSuccessful();
+			IMock mockTaskResult = new DynamicMock(typeof (ITaskResult));
 			mockTaskResult.SetupResult("Data", "<test-results name=\"foo\" total=\"10\" failures=\"0\" not-run=\"0\"><test-suite></test-suite></test-results>");
 			result.TaskResults.Add((ITaskResult) mockTaskResult.MockInstance);
 			_publisher.IncludeDetails = true;
@@ -204,7 +113,7 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers.Test
 		public void HandleIntegrationEvent()
 		{
 			IntegrationCompletedEventHandler handler = _publisher.IntegrationCompletedEventHandler;
-			IntegrationResult result = CreateIntegrationResult(IntegrationStatus.Success, IntegrationStatus.Success);
+			IntegrationResult result = IntegrationResultMother.CreateStillSuccessful();
 			handler(null, new IntegrationCompletedEventArgs(result));
 			Assert.IsTrue(_gateway.SentMessages.Count > 0, "Mail message was not sent!");
 		}
@@ -259,7 +168,6 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers.Test
 			IntegrationResult result = CreateIntegrationResult(IntegrationStatus.Exception, IntegrationStatus.Unknown);
 			result.ExceptionResult = new CruiseControlException("test exception");
 
-			Assert.AreEqual("Project#9 Build Failed", _publisher.CreateSubject(result));
 			Assert.IsTrue(_publisher.CreateMessage(result).StartsWith("CruiseControl.NET Build Results for project Project#9"));
 
 			_publisher.IncludeDetails = true;

@@ -1,7 +1,6 @@
 using System;
 using System.Collections;
 using Exortech.NetReflector;
-using ThoughtWorks.CruiseControl.Core.Util;
 using ThoughtWorks.CruiseControl.Remote;
 
 namespace ThoughtWorks.CruiseControl.Core.Publishers
@@ -99,25 +98,15 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
             set { _groups = value; }
         }
 
-        public EmailUser GetEmailUser(string username)
-        {
-			if (username == null) return null;
-            return (EmailUser) _users[username];
-        }
-
-        public EmailGroup GetEmailGroup(string groupname)
-        {
-            return (EmailGroup) _groups[groupname];
-        }
-
         public override void PublishIntegrationResults(IProject project, IIntegrationResult result)
         {
             if (result.Status == IntegrationStatus.Unknown)
                 return;
 
-            string to = CreateRecipientList(result);
-            string subject = CreateSubject(result);
-            string message = _messageBuilder.BuildMessage(result, ProjectUrl);
+        	EmailMessage  emailMessage = new EmailMessage(result, this); 
+            string to = emailMessage.Recipients;
+            string subject = emailMessage.Subject;
+            string message = CreateMessage(result);
             if (IsRecipientSpecified(to))
             {
                 SendMessage(_fromAddress, to, subject, message);
@@ -129,7 +118,7 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
             return to != null && to.Trim() != string.Empty;
         }
 
-        internal virtual void SendMessage(string from, string to, string subject, string message)
+        public virtual void SendMessage(string from, string to, string subject, string message)
         {
             try
             {
@@ -141,78 +130,11 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
             }
         }
 
-        internal string CreateSubject(IIntegrationResult result)
-        {
-            if (result.Status == IntegrationStatus.Success)
-            {
-                if (BuildStateChanged(result))
-                {
-                    return string.Format("{0} {1} {2}", result.ProjectName, "Build Fixed: Build", result.Label);
-                }
-                else
-                {
-                    return string.Format("{0} {1} {2}", result.ProjectName, "Build Successful: Build", result.Label);
-                }
-            }
-            else
-            {
-                return string.Format("{0} {1}", result.ProjectName, "Build Failed");
-            }
-        }
-
-        internal string CreateMessage(IntegrationResult result)
+        internal string CreateMessage(IIntegrationResult result)
         {
             // TODO Add culprit to message text -- especially if modifier is not an email user
             //      This information is included, when using Html email (all mods are shown)
             return _messageBuilder.BuildMessage(result, ProjectUrl);
-        } 
-
-        internal string CreateRecipientList(IIntegrationResult result)
-        {
-            string[] always = CreateNotifyList(EmailGroup.NotificationType.Always);
-            if (BuildStateChanged(result))
-            {
-                string[] change = CreateNotifyList(EmailGroup.NotificationType.Change);
-                return StringUtil.JoinUnique(", ", always, change);
-            }
-            else
-            {
-                string[] modifiers = CreateModifiersList(result.Modifications);
-                return StringUtil.JoinUnique(", ", always, modifiers);
-            }
-        }
-
-        internal string[] CreateModifiersList(Modification[] modifications)
-        {
-            ArrayList modifiers = new ArrayList(modifications.Length);
-            foreach (Modification modification in modifications)
-            {
-                EmailUser user = GetEmailUser(modification.UserName);
-                if (user != null)
-                {
-                    modifiers.Add(user.Address);
-                }
-            }
-            return (string[]) modifiers.ToArray(typeof(string));
-        }
-
-        internal string[] CreateNotifyList(EmailGroup.NotificationType notification)
-        {
-            ArrayList userList = new ArrayList();
-            foreach (EmailUser user in EmailUsers.Values)
-            {
-                EmailGroup group = GetEmailGroup(user.Group);
-                if (group != null && group.Notification.Equals(notification))
-                {
-                    userList.Add(user.Address);
-                }
-            }
-            return (string[]) userList.ToArray(typeof(string));
-        }
-
-        private bool BuildStateChanged(IIntegrationResult result)
-        {
-            return result.LastIntegrationStatus != result.Status;
         }
     }
 }

@@ -464,6 +464,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "publishers\EmailMessage.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "publishers\EmailPublisher.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -530,16 +535,6 @@
                 />
                 <File
                     RelPath = "publishers\XmlLogPublisher.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "publishers\test\EmailGatewayTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "publishers\test\EmailGroupTest.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -894,16 +889,6 @@
                 />
                 <File
                     RelPath = "state\ProjectStateManager.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "state\test\IntegrationStateManagerTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "state\test\ProjectStateManagerTest.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

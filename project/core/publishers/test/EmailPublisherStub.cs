@@ -1,7 +1,6 @@
-using System;
+using System.IO;
 using Exortech.NetReflector;
 using ThoughtWorks.CruiseControl.Core.Util;
-using System.IO;
 
 namespace ThoughtWorks.CruiseControl.Core.Publishers.Test
 {
@@ -11,7 +10,7 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers.Test
 		[ReflectorProperty("save", Required=false)]
 		public bool SaveToFile = false;
 
-		internal override void SendMessage(string from, string to, string subject, string message)
+		public override void SendMessage(string from, string to, string subject, string message)
 		{
 			Log.Debug("email message = " + message);
 			if (SaveToFile)
