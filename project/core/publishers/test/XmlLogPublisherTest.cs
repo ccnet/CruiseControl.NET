@@ -68,9 +68,31 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers.Test
 		{
 			IntegrationResult result = new IntegrationResult();
 			result.Status = IntegrationStatus.Success;
-			result.Output ="<tag><![CDATA[a b <c>]]></tag>";
-			string output = GenerateBuildOutput(result);
-			AssertEquals(CreateExpectedBuildXml(result), output);
+			result.Output = "<tag><![CDATA[a b <c>]]></tag>";
+			AssertEquals(CreateExpectedBuildXml(result), GenerateBuildOutput(result));
+		}
+
+		[Test]
+		public void WriteIntegrationResultOutputWithNullCharacterInCDATA()
+		{
+			IntegrationResult result = new IntegrationResult();
+			result.Status = IntegrationStatus.Success;
+
+			StringWriter swWithoutNull = new StringWriter();
+			swWithoutNull.WriteLine("<tag><![CDATA["); 
+			swWithoutNull.WriteLine("This is a line with a null in it");
+			swWithoutNull.WriteLine("]]></tag>");
+			result.Output = swWithoutNull.ToString();
+
+			string expectedResult = CreateExpectedBuildXml(result);
+
+			StringWriter swWithNull = new StringWriter();
+			swWithNull.WriteLine("<tag><![CDATA["); 
+			swWithNull.WriteLine("This is a line with a null in it\0");
+			swWithNull.WriteLine("]]></tag>");
+			result.Output = swWithNull.ToString();
+
+			AssertEquals(expectedResult, GenerateBuildOutput(result));
 		}
 		
 		[Test]

@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.IO;
 using System.Xml;
+using System.Text.RegularExpressions;
 
 using Exortech.NetReflector;
 
@@ -165,20 +166,28 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
 
 		private void WriteIntegrationResultOutput(IntegrationResult result, XmlWriter writer)
 		{
-			XmlValidatingReader reader = new XmlValidatingReader(result.Output, XmlNodeType.Element, null);
+			string nullRemovedOutput = RemoveNulls(result.Output);
+			XmlValidatingReader reader = new XmlValidatingReader(nullRemovedOutput, XmlNodeType.Element, null);
 			try 
 			{ 
 				reader.ReadInnerXml();
 				writer.WriteNode(reader, false);
 			}
-			catch (XmlException) 
+			catch (XmlException e) 
 			{
-				writer.WriteCData(XmlUtil.EncodeCDATA(result.Output));
+				// IF we had a problem with the input xml, wrap it in CDATA and put that in instead
+				writer.WriteCData(XmlUtil.EncodeCDATA(nullRemovedOutput));
 			}
 			finally 
 			{ 
 				reader.Close(); 
 			}
+		}
+
+		public string RemoveNulls(string s)
+		{
+			Regex nullStringRegex = new Regex("\0");
+			return nullStringRegex.Replace(s, "");;
 		}
 
 		public void WriteException(IntegrationResult result, XmlWriter writer)
