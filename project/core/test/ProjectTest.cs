@@ -144,14 +144,28 @@ namespace ThoughtWorks.CruiseControl.Core.Test
 			Assert.AreEqual("foo", project.Name);
 			Assert.AreEqual(Project.DEFAULT_WEB_URL, project.WebURL);
 			Assert.AreEqual(0, project.ModificationDelaySeconds); //TODO: is this the correct default?  should quiet period be turned off by default?  is this sourcecontrol specific?
-			Assert.AreEqual(false, project.PublishExceptions);
+			Assert.AreEqual(true, project.PublishExceptions);
 			Assert.IsTrue(project.Builder is NAntBuilder);
 			Assert.IsTrue(project.SourceControl is MockSourceControl);
 			Assert.IsTrue(project.Labeller is DefaultLabeller);
-			Assert.AreEqual(0, project.Triggers.Length);
+			Assert.AreEqual(1, project.Triggers.Length);
 			Assert.AreEqual(0, project.Publishers.Length);
 			Assert.AreEqual(0, project.Tasks.Length);
 			VerifyAll();
+		}
+
+		[Test]
+		public void asf()
+		{
+			string xml = @"
+<project name=""foo"">
+	<build type=""nant"" />
+	<sourcecontrol type=""mock"" />
+	<triggers/>
+</project>";
+			
+			Project project = (Project) NetReflector.Read(xml);
+			Assert.AreEqual(0, project.Triggers.Length);
 		}
 
 		[Test]

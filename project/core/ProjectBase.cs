@@ -1,4 +1,3 @@
-using System;
 using System.IO;
 using Exortech.NetReflector;
 using ThoughtWorks.CruiseControl.Core.Triggers;
@@ -14,7 +13,7 @@ namespace ThoughtWorks.CruiseControl.Core
 		private string _name;
 		private string _configuredWorkingDirectory;
 		private string _configuredArtifactDirectory;
-		private ITrigger[] triggers = new ITrigger[0];
+		private ITrigger[] triggers = new ITrigger[] { new PollingIntervalTrigger() };
 
 		[ReflectorProperty("name")]
 		public virtual string Name

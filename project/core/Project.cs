@@ -125,7 +125,7 @@ namespace ThoughtWorks.CruiseControl.Core
 		public ITask[] Tasks = new ITask[0];
 
 		[ReflectorProperty("publishExceptions", Required=false)]
-		public bool PublishExceptions = false;
+		public bool PublishExceptions = true;
 
 		public ProjectActivity CurrentActivity
 		{

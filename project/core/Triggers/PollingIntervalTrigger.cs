@@ -1,10 +1,8 @@
-using System;
 using Exortech.NetReflector;
 using ThoughtWorks.CruiseControl.Remote;
 
 namespace ThoughtWorks.CruiseControl.Core.Triggers
 {
-	[Serializable]
 	[ReflectorType("pollingInterval")]
 	public class PollingIntervalTrigger : ITrigger
 	{
