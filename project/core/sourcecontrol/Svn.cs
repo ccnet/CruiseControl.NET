@@ -19,39 +19,45 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 		private bool _tagOnSuccess;
 		private string _tagBaseUrl;
 
-		public Svn(): base (new SvnHistoryParser())	{}
+		public Svn(ProcessExecutor executor) : base(new SvnHistoryParser(), executor) { }
 
-		[ReflectorProperty("executable")]
+		public Svn(): base (new SvnHistoryParser())
+		{
+		}
+
+		[ReflectorProperty("executable")] 
 		public string Executable
 		{
-			get { return _executable;}
-			set { _executable = value;}
-		}
-		
-		[ReflectorProperty("trunkUrl")]
-		public string TrunkUrl {
-			get { return _trunkUrl;}
-			set { _trunkUrl = value;}
+			get { return _executable; }
+			set { _executable = value; }
 		}
 
-		[ReflectorProperty("workingDirectory", Required=false)]
+		[ReflectorProperty("trunkUrl")] 
+		public string TrunkUrl
+		{
+			get { return _trunkUrl; }
+			set { _trunkUrl = value; }
+		}
+
+		[ReflectorProperty("workingDirectory", Required = false)] 
 		public string WorkingDirectory
 		{
-			get { return _workingDirectory;}
-			set { _workingDirectory = value;}
-		}		
-
-		[ReflectorProperty("tagOnSuccess", Required=false)]
-		public bool TagOnSuccess
-		{
-			get { return _tagOnSuccess;}
-			set { _tagOnSuccess = value;}
+			get { return _workingDirectory; }
+			set { _workingDirectory = value; }
 		}
 
-		[ReflectorProperty("tagBaseUrl", Required=false)]
-		public string TagBaseUrl {
-			get { return _tagBaseUrl;}
-			set { _tagBaseUrl = value;}
+		[ReflectorProperty("tagOnSuccess", Required = false)] 
+		public bool TagOnSuccess
+		{
+			get { return _tagOnSuccess; }
+			set { _tagOnSuccess = value; }
+		}
+
+		[ReflectorProperty("tagBaseUrl", Required = false)] 
+		public string TagBaseUrl
+		{
+			get { return _tagBaseUrl; }
+			set { _tagBaseUrl = value; }
 		}
 
 		public string FormatCommandDate(DateTime date)
@@ -59,29 +65,37 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			return date.ToUniversalTime().ToString(COMMAND_DATE_FORMAT);
 		}
 
-		public override ProcessInfo CreateHistoryProcessInfo(DateTime from, DateTime to)
+		public ProcessInfo CreateHistoryProcessInfo(DateTime from, DateTime to)
 		{
 			return new ProcessInfo(Executable, BuildHistoryProcessArgs(from, to), WorkingDirectory);
 		}
 
-		public override ProcessInfo CreateLabelProcessInfo(string label, DateTime timeStamp) 
+		public ProcessInfo CreateLabelProcessInfo(string label, DateTime timeStamp)
 		{
-			if(TagOnSuccess) 
+			return new ProcessInfo(Executable, BuildTagProcessArgs(label));
+		}
+
+		public override Modification[] GetModifications(DateTime from, DateTime to)
+		{
+			ProcessResult result = Execute(CreateHistoryProcessInfo(from, to));
+			return ParseModifications(result, from, to);
+		}
+
+		public override void LabelSourceControl(string label, DateTime timeStamp)
+		{
+			if (TagOnSuccess)
 			{
-				return new ProcessInfo(Executable, BuildTagProcessArgs(label));
-			} 
-			else 
-			{
-				return null;
+				Execute(CreateLabelProcessInfo(label, timeStamp));
 			}
 		}
 
 		internal string BuildHistoryProcessArgs(DateTime from, DateTime to)
-		{		
+		{
 			return string.Format(HISTORY_COMMAND_FORMAT, FormatCommandDate(from), FormatCommandDate(to), _trunkUrl);
-		}		
+		}
 
-		internal string BuildTagProcessArgs(string label) {
+		internal string BuildTagProcessArgs(string label)
+		{
 			string tagUrl = _tagBaseUrl + "/" + label;
 			return string.Format(TAG_COMMAND_FORMAT, label, _trunkUrl, tagUrl);
 		}

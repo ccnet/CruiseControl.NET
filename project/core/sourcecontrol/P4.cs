@@ -57,7 +57,6 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 
 		public string BuildCommandArguments(DateTime from, DateTime to)
 		{
-			
 			StringBuilder args = new StringBuilder(BuildCommonArguments());
 			args.Append("changes -s submitted ");
 			args.Append(View);

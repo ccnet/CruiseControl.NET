@@ -2,11 +2,13 @@ using System;
 using System.Collections;
 using System.IO;
 using ThoughtWorks.CruiseControl.Core.Util;
+using Exortech.NetReflector;
 
 namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 {
 	public abstract class ProcessSourceControl : ISourceControl
 	{
+		private const int DEFAULT_TIMEOUT = 600000;
 		private ProcessExecutor _executor;
 		private IHistoryParser _historyParser;
 
@@ -14,21 +16,14 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 		{
 		}
 
-		public ProcessSourceControl(IHistoryParser histParser, ProcessExecutor executor)
+		public ProcessSourceControl(IHistoryParser historyParser, ProcessExecutor executor)
 		{
 			_executor = executor;
-			_historyParser = histParser;
+			_historyParser = historyParser;
 		}
 
-		// todo: make configurable
-		public int Timeout
-		{
-			get { return 600000; }
-		}
-
-		public abstract ProcessInfo CreateHistoryProcessInfo(DateTime from, DateTime to);
-
-		public abstract ProcessInfo CreateLabelProcessInfo(string label, DateTime timeStamp);
+		[ReflectorProperty("timeout", Required=false)]
+		public int Timeout = DEFAULT_TIMEOUT;
 
 		public bool ShouldRun(IntegrationResult result)
 		{
@@ -40,34 +35,33 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			result.Modifications = GetModifications(result.LastModificationDate, DateTime.Now);
 		}
 
-		public virtual Modification[] GetModifications(DateTime from, DateTime to)
+		public abstract Modification[] GetModifications(DateTime from, DateTime to);
+
+		public abstract void LabelSourceControl(string label, DateTime timeStamp);
+
+		protected Modification[] GetModifications(ProcessInfo info, DateTime from, DateTime to)
 		{
-			ProcessInfo processInfo = CreateHistoryProcessInfo(from, to);
-			ProcessResult result = Execute(processInfo);
-			return ParseModifications(new StringReader(result.StandardOutput), from, to);
+			ProcessResult result = Execute(info);
+			return ParseModifications(result, from, to);
 		}
 
-		public void LabelSourceControl(string label, DateTime timeStamp)
-		{
-			ProcessInfo processInfo = CreateLabelProcessInfo(label, timeStamp);
-			_executor.Timeout = Timeout;
-			Execute(processInfo);
-		}
-
-		protected virtual ProcessResult Execute(ProcessInfo processInfo)
+		protected ProcessResult Execute(ProcessInfo processInfo)
 		{
 			_executor.Timeout = Timeout;
 			ProcessResult result = _executor.Execute(processInfo);
 
-			// check for stderr
 			if (result.HasError)
-				throw new CruiseControlException(string.Format("Error: {0}", result.StandardError));
+				throw new CruiseControlException(string.Format("Source control operation caused an error: {0}", result.StandardError));
 			else if (result.TimedOut)
 				throw new CruiseControlException("Source control operation has timed out.");
-			else if (result.StandardOutput == null)
-				throw new CruiseControlException("Standard output is null, but no error was produced");
 
+			Console.Out.WriteLine("result.result = " + result.StandardOutput);
 			return result;
+		}
+
+		protected Modification[] ParseModifications(ProcessResult result, DateTime from, DateTime to)
+		{
+			return ParseModifications(new StringReader(result.StandardOutput), from, to);
 		}
 
 		protected Modification[] ParseModifications(TextReader reader, DateTime from, DateTime to)

@@ -27,26 +27,24 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 
 		public CultureInfo CultureInfo = CultureInfo.CurrentCulture;
 
-		public Vss (): base(new VssHistoryParser())
-		{
-		}
-		public Vss (IHistoryParser historyParser, ProcessExecutor executor): base(historyParser, executor)
+		public Vss(): base(new VssHistoryParser())
 		{
 		}
 
-		[ReflectorProperty("executable", Required = false)]
+		public Vss(IHistoryParser historyParser, ProcessExecutor executor): base(historyParser, executor)
+		{
+		}
+
+		[ReflectorProperty("executable", Required = false)] 
 		public string Executable
 		{
 			get
 			{
-				if(_executable == null)
+				if (_executable == null)
 					_executable = GetExecutable(new Registry());
 				return _executable;
 			}
-			set
-			{
-				_executable = value;
-			}
+			set { _executable = value; }
 		}
 
 		[ReflectorProperty("project")]
@@ -58,7 +56,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 		[ReflectorProperty("password")]
 		public string Password;
 
-		[ReflectorProperty("ssdir", Required = false)]
+		[ReflectorProperty("ssdir", Required = false)] 
 		public string SsDir
 		{
 			get { return _ssDir; }
@@ -70,16 +68,24 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 
 		public override Modification[] GetModifications(DateTime from, DateTime to)
 		{
-			Modification[] result = base.GetModifications(from, to);
-			if(result.Length > 0 && ApplyLabel)
+			Modification[] modifications = GetModifications(CreateHistoryProcessInfo(from, to), from, to);
+			if (modifications.Length > 0 && ApplyLabel)
 			{
 				string label = "CCNETUNVERIFIED" + to.ToString("MMddyyyyHHmmss");
-				base.LabelSourceControl(label,to);
+				LabelSourceControl(label, to);
 			}
-			return result;
+			return modifications;
 		}
 
-		public override ProcessInfo CreateHistoryProcessInfo(DateTime from, DateTime until)
+		public override void LabelSourceControl(string label, DateTime timeStamp)
+		{
+			if (ApplyLabel)
+			{
+				Execute(CreateLabelProcessInfo(label, timeStamp));
+			}
+		}
+
+		public ProcessInfo CreateHistoryProcessInfo(DateTime from, DateTime until)
 		{
 			return CreateProcessInfo(BuildHistoryProcessInfoArgs(from, until));
 		}
@@ -89,7 +95,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			return CreateProcessInfo(string.Format(LABEL_COMMAND_FORMAT_NOTIMESTAMP, Project, label, Username, Password));
 		}
 
-		public override ProcessInfo CreateLabelProcessInfo(string label, DateTime timeStamp)
+		public ProcessInfo CreateLabelProcessInfo(string label, DateTime timeStamp)
 		{
 			return CreateProcessInfo(string.Format(LABEL_COMMAND_FORMAT, Project, label, FormatCommandDate(timeStamp), Username, Password));
 		}
@@ -98,7 +104,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 		{
 			Log.Debug(string.Format("VSS: {0} {1}", Executable, args));
 			ProcessInfo ProcessInfo = new ProcessInfo(Executable, args);
-			if(SsDir != null)
+			if (SsDir != null)
 			{
 				ProcessInfo.EnvironmentVariables[SS_DIR_KEY] = SsDir;
 			}

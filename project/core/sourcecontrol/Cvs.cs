@@ -66,23 +66,29 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			return date.ToUniversalTime().ToString(COMMAND_DATE_FORMAT, CultureInfo.InvariantCulture);
 		}
 
-		public override ProcessInfo CreateHistoryProcessInfo(DateTime from, DateTime to)
+		public override Modification[] GetModifications(DateTime from, DateTime to)
+		{
+			return GetModifications(CreateHistoryProcessInfo(from, to), from, to);
+		}
+
+		public override void LabelSourceControl(string label, DateTime timeStamp)
+		{
+			if (LabelOnSuccess)
+			{
+				Execute(CreateLabelProcessInfo(label, timeStamp));
+			}
+		}
+
+		public ProcessInfo CreateHistoryProcessInfo(DateTime from, DateTime to)
 		{
 			return new ProcessInfo(Executable, BuildHistoryProcessInfoArgs(from), WorkingDirectory);
 		}
 
-		public override ProcessInfo CreateLabelProcessInfo(string label, DateTime timeStamp) 
+		public ProcessInfo CreateLabelProcessInfo(string label, DateTime timeStamp) 
 		{
-			if (LabelOnSuccess)
-			{
-				string cvsroot = (CvsRoot == null) ? String.Empty : "-d " + CvsRoot + " ";
-				string args = string.Format("{0} tag {1}", cvsroot, "ver-" + label);
-				return new ProcessInfo(Executable, args, WorkingDirectory);
-			}
-			else
-			{
-				return null;
-			}
+			string cvsroot = (CvsRoot == null) ? String.Empty : "-d " + CvsRoot + " ";
+			string args = string.Format("{0} tag {1}", cvsroot, "ver-" + label);
+			return new ProcessInfo(Executable, args, WorkingDirectory);
 		}
 
 		internal string BuildHistoryProcessInfoArgs(DateTime from)

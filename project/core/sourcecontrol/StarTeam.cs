@@ -33,12 +33,6 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			_path = String.Empty;
 		}
 
-		public override ProcessInfo CreateHistoryProcessInfo(DateTime from, DateTime to)
-		{
-			string args = BuildHistoryProcessArgs(from, to);
-			return new ProcessInfo(Executable, args);
-		}
-
 		[ReflectorProperty("executable")]
 		public string Executable
 		{
@@ -88,15 +82,25 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			set { _path = value; }
 		}
 
+		public ProcessInfo CreateHistoryProcessInfo(DateTime from, DateTime to)
+		{
+			string args = BuildHistoryProcessArgs(from, to);
+			return new ProcessInfo(Executable, args);
+		}
+
+		public override Modification[] GetModifications(DateTime from, DateTime to)
+		{
+			return GetModifications(CreateHistoryProcessInfo(from, to), from, to);
+		}
+
+		public override void LabelSourceControl(string label, DateTime timeStamp)
+		{
+		}
+
 		internal string FormatCommandDate(DateTime date)
 		{
 			return date.ToString(Culture.DateTimeFormat);
 //			return date.ToString(DATE_FORMAT);
-		}
-
-		public override ProcessInfo CreateLabelProcessInfo(string label, DateTime timeStamp) 
-		{
-			return null;
 		}
 
 		internal string BuildHistoryProcessArgs(DateTime from, DateTime to)

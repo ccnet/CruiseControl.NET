@@ -7,6 +7,7 @@ using NUnit.Framework;
 using ThoughtWorks.CruiseControl.Core.Util;
 using ThoughtWorks.CruiseControl.Core.Test;
 using Exortech.NetReflector;
+using NMock;
 
 namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test
 {
@@ -19,6 +20,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test
 				@"    <sourceControl type=""svn"">
 					      <executable>..\tools\subversion-0.37.0\svn.exe</executable>
 						  <trunkUrl>{0}</trunkUrl>
+						  <timeout>5</timeout>
 					  </sourceControl>"
 				, trunkUrl);	
 		}
@@ -29,6 +31,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test
 			Svn svn = CreateSvn(CreateSourceControlXml("svn://myserver/mypath"));
 			AssertEquals("..\\tools\\subversion-0.37.0\\svn.exe", svn.Executable);
 			AssertEquals("svn://myserver/mypath", svn.TrunkUrl);
+			AssertEquals(5, svn.Timeout);
 		}
 
 		[Test]
@@ -40,6 +43,23 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test
 			ProcessInfo actualProcess = svn.CreateHistoryProcessInfo(from, to);
 
 			AssertEquals("log -v -r \"{2001-01-21T20:00:00Z}:{2001-01-21T20:30:50Z}\" --xml svn://someserver/", actualProcess.Arguments);
+		}
+
+		[Test]
+		public void ApplyLabel()
+		{
+			DynamicMock executor = new DynamicMock(typeof(ProcessExecutor));
+			Svn svn = new Svn((ProcessExecutor) executor.MockInstance);
+
+			svn.TagOnSuccess = true;
+			executor.ExpectAndReturn("Execute", new ProcessResult("foo", null, 0, false), new NMock.Constraints.IsAnything());
+			svn.LabelSourceControl("foo", DateTime.Now);
+			executor.Verify();
+
+			svn.TagOnSuccess = false;
+			executor.ExpectNoCall("Execute", typeof(ProcessInfo));
+			svn.LabelSourceControl("foo", DateTime.Now);
+			executor.Verify();
 		}
 
 		private Svn CreateSvn(string xml)

@@ -76,17 +76,6 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test
 		}
 
 		[Test]
-		public void LabelOnSuccessProcess()
-		{
-			Cvs cvs = CreateCvs();
-
-			AssertNull(cvs.CreateLabelProcessInfo("", new DateTime()));
-
-			cvs.LabelOnSuccess = true;
-			AssertNotNull(cvs.CreateLabelProcessInfo("", new DateTime()));
-		}
-	
-		[Test]
 		public void Executable_default()
 		{
 			AssertEquals("cvs.exe", new Cvs().Executable);

@@ -19,6 +19,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test
     <username>Admin</username>
     <password>admin</password>
 	<applyLabel>true</applyLabel>
+	<timeout>5</timeout>
 </sourceControl>";	
 
 		private Vss _vss;
@@ -54,6 +55,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test
 			AssertEquals(@"..\tools\vss", _vss.SsDir);
 			AssertEquals(@"Admin", _vss.Username);
 			AssertEquals("incorrect applyLabel value", true, _vss.ApplyLabel);
+			AssertEquals(5, _vss.Timeout);
 		}
 
 		[Test]
@@ -149,17 +151,6 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test
 		{
 			Mock mockProcessExecutor = new DynamicMock(typeof(ProcessExecutor));
 			mockProcessExecutor.ExpectAndReturn("Execute", new ProcessResult("foo", null, 1, false), new NMock.Constraints.IsAnything());
-			
-			Vss vss = new Vss(new VssHistoryParser(), (ProcessExecutor)mockProcessExecutor.MockInstance);
-			vss.Executable = "foo";
-			vss.GetModifications(DateTime.Now, DateTime.Now);
-		}
-
-		[Test, ExpectedException(typeof(CruiseControlException))]
-		public void ShouldFailWhenStandardOutputIsNull()
-		{
-			Mock mockProcessExecutor = new DynamicMock(typeof(ProcessExecutor));
-			mockProcessExecutor.ExpectAndReturn("Execute", new ProcessResult(null, null, 1, false), new NMock.Constraints.IsAnything());
 			
 			Vss vss = new Vss(new VssHistoryParser(), (ProcessExecutor)mockProcessExecutor.MockInstance);
 			vss.Executable = "foo";

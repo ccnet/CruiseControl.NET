@@ -70,7 +70,7 @@ run -e vlog  ""-xo+e{3}"" ""-d{4}*{5}"" ""@{2}""
 			set{ _currentTimeZone = value;}
 		}
 
-		public override ProcessInfo CreateHistoryProcessInfo(DateTime from, DateTime to)
+		public ProcessInfo CreateHistoryProcessInfo(DateTime from, DateTime to)
 		{
 			// required due to DayLightSavings bug in PVCS 7.5.1
 			from = AdjustForDayLightSavingsBug(from);
@@ -89,11 +89,6 @@ run -e vlog  ""-xo+e{3}"" ""-d{4}*{5}"" ""@{2}""
 			return new ProcessInfo(Executable, Arguments);
 		}
 
-		public override ProcessInfo CreateLabelProcessInfo(string label, DateTime timeStamp) 
-		{
-			return null;
-		}
-		
 		public string CreatePcliContents(string beforedate, string afterdate) 
 		{
 			return string.Format(
@@ -102,12 +97,14 @@ run -e vlog  ""-xo+e{3}"" ""-d{4}*{5}"" ""@{2}""
 			);
 		}
 		
-		protected override ProcessResult Execute(ProcessInfo processInfo)
+		public override Modification[] GetModifications(DateTime from, DateTime to)
 		{
-			ProcessExecutor executor = new ProcessExecutor();
-			executor.Timeout = Timeout;
-			ProcessResult result = executor.Execute(processInfo);
-			return new ProcessResult(GetTextReader(PVCS_LOGOUTPUT_FILE).ReadToEnd(), result.StandardError, result.ExitCode, result.TimedOut);
+			Execute(CreateHistoryProcessInfo(from, to));
+			return ParseModifications(GetTextReader(PVCS_LOGOUTPUT_FILE), from, to);
+		}
+
+		public override void LabelSourceControl(string label, DateTime timeStamp)
+		{
 		}
 
 		public static TextReader GetTextReader(string path)
