@@ -107,6 +107,7 @@ namespace ThoughtWorks.CruiseControl.Core
 			set { _modificationDelaySeconds = value; }
 		}
 
+		[ReflectorProperty("labeller", InstanceTypeKey="type", Required=false)]
 		public ILabeller Labeller
 		{
 			get { return _labeller; }
