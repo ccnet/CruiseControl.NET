@@ -258,7 +258,7 @@
 	<!-- FOR RUNNING CCNET AGAINST ITSELF -->
 	<target name="dist.publish" depends="dist">
 			
-			<property name="publish.dir" value="D:\download-area\CCNet-Builds\${label-to-apply}" />
+			<property name="publish.dir" value="D:\download-area\CCNet-Builds\${ccnet.label}" />
 
 			<mkdir dir="${publish.dir}" />
 			<copy todir="${publish.dir}">
@@ -284,20 +284,20 @@
 	</target>
 
 	<target name="ContinuousIntegration">
-		<ifnot test="${property::exists('label-to-apply')}">
-			<fail message="label-to-apply property not set, so can't create labelled distribution files" />
+		<ifnot test="${property::exists('ccnet.label')}">
+			<fail message="ccnet.label property not set, so can't create labelled distribution files" />
 		</ifnot>
 	
 		<call target="transform.build.number" />
 		<call target="createAssemblyInfo" />
 		<call target="all" />
 		<call target="dist.publish" />
-		<echo message="CI Run for build number ${label-to-apply} successfully completed" />
+		<echo message="CI Run for build number ${ccnet.label} successfully completed" />
 		<call target="reporting" />
 	</target>
 	
 	<target name="transform.build.number" >
-		<regex pattern="(?'major'\d+)_(?'minor'\d+)_(?'revision'\d+)_(?'build'\d+)" input="${label-to-apply}" />
+		<regex pattern="(?'major'\d+)_(?'minor'\d+)_(?'revision'\d+)_(?'build'\d+)" input="${ccnet.label}" />
 		<property name="build.number" value="${major}.${minor}.${revision}.${build}" />
 		<echo message="Build number: ${build.number}"/>
 	</target>
