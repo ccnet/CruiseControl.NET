@@ -15,9 +15,11 @@ namespace ThoughtWorks.CruiseControl.ControlPanel
 		private System.Windows.Forms.MainMenu mainMenu1;
 		private System.Windows.Forms.MenuItem fileMenuItem;
 		private System.Windows.Forms.MenuItem openConfigurationMenuItem;
-		private System.Windows.Forms.MenuItem closeConfigurationMenuItem;
-		private System.Windows.Forms.MenuItem addProjectMenuItem;
-		private System.Windows.Forms.MenuItem removeProjectMenuItem;
+
+// THESE ITEMS ARE NOT REFERENCED AND CAUSING A COMPILER WARNING
+//		private System.Windows.Forms.MenuItem closeConfigurationMenuItem;
+//		private System.Windows.Forms.MenuItem addProjectMenuItem;
+//		private System.Windows.Forms.MenuItem removeProjectMenuItem;
 		private System.ComponentModel.Container components = null;
 		private System.Windows.Forms.TreeView treeView;
 		private System.Windows.Forms.Panel bodyPanel;

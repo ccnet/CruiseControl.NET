@@ -24,7 +24,8 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers.Test
 			_publisher.EmailGateway = _gateway;
 		}
 
-		public void TestSendMessage()
+		[Test]
+		public void SendMessage()
 		{
 			_publisher.SendMessage("from@foo.com", "to@bar.com", "test subject", "test message");
 			AssertEquals(1, _gateway.SentMessages.Count);
@@ -36,7 +37,16 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers.Test
 			AssertEquals("test message", message.Body);
 		}
 
-		public void TestEmailSubject()
+		[Test]
+		public void ShouldNotSendMessageIfRecipientIsNotSpecifiedAndBuildIsSuccessful()
+		{
+			_publisher = new EmailPublisher();
+			_publisher.PublishIntegrationResults(null, IntegrationResultMother.CreateSuccessful());
+			AssertEquals(0, _gateway.SentMessages.Count);
+		}
+
+		[Test]
+		public void EmailSubject()
 		{
 			string subject = _publisher.CreateSubject(
 				CreateIntegrationResult(IntegrationStatus.Success, IntegrationStatus.Success));
@@ -54,28 +64,32 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers.Test
 			return result;
 		}
 
-		public void TestEmailSubjectFailedBuild()
+		[Test]
+		public void EmailSubjectFailedBuild()
 		{
 			string subject = _publisher.CreateSubject(
 				CreateIntegrationResult(IntegrationStatus.Failure, IntegrationStatus.Success));
 			AssertEquals("Project#9 Build Failed", subject);
 		}
 
-		public void TestEmailSubjectFixedBuild()
+		[Test]
+		public void EmailSubjectFixedBuild()
 		{
 			string subject = _publisher.CreateSubject(
 				CreateIntegrationResult(IntegrationStatus.Success, IntegrationStatus.Failure));
 			AssertEquals("Project#9 Build Fixed: Build 0", subject);
 		}
 
-		public void TestEmailMessageWithoutDetails()
+		[Test]
+		public void EmailMessageWithoutDetails()
 		{
 			_publisher.IncludeDetails = false;
 			string message = _publisher.CreateMessage(CreateIntegrationResult(IntegrationStatus.Success, IntegrationStatus.Success));
 			AssertEquals(@"CruiseControl.NET Build Results for project Project#9 (http://localhost/ccnet?log=log19800101000000Lbuild.0.xml)", message);
 		}
 		
-		public void TestEmailMessageWithDetails() 
+		[Test]
+		public void EmailMessageWithDetails() 
 		{
 			_publisher.IncludeDetails = true;
 			string message = _publisher.CreateMessage(CreateIntegrationResult(IntegrationStatus.Success, IntegrationStatus.Success));
@@ -85,21 +99,24 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers.Test
 			Assert(message.EndsWith("</html>"));
 		}		
 
-		public void TestCreateRecipientList_BuildStateChanged()
+		[Test]
+		public void CreateRecipientList_BuildStateChanged()
 		{
 			string expected = "dmercier@thoughtworks.com, mandersen@thoughtworks.com, orogers@thoughtworks.com, rwan@thoughtworks.com, servid@telus.net";
 			string actual = _publisher.CreateRecipientList(CreateIntegrationResult(IntegrationStatus.Failure, IntegrationStatus.Success));
 			AssertEquals(expected, actual);
 		}
 
-		public void TestCreateRecipientList_BuildStateNotChanged()
+		[Test]
+		public void CreateRecipientList_BuildStateNotChanged()
 		{
 			string expected = "orogers@thoughtworks.com, servid@telus.net";
 			string actual = _publisher.CreateRecipientList(CreateIntegrationResult(IntegrationStatus.Success, IntegrationStatus.Success));
 			AssertEquals(expected, actual);
 		}
 
-		public void TestCreateRecipientList_NoRecipients()
+		[Test]
+		public void CreateRecipientList_NoRecipients()
 		{
 			_publisher.EmailUsers.Clear();
 			IntegrationResult IntegrationResult = CreateIntegrationResult(IntegrationStatus.Success, IntegrationStatus.Failure);
@@ -109,7 +126,8 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers.Test
 			AssertEquals(expected, actual);
 		}
 
-		public void TestCreateModifiersList()
+		[Test]
+		public void CreateModifiersList()
 		{			
 			Modification[] modifications = CreateModifications();
 			string[] modifiers = _publisher.CreateModifiersList(modifications);
@@ -118,7 +136,8 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers.Test
 			AssertEquals("orogers@thoughtworks.com", modifiers[1]);
 		}
 
-		public void TestCreateModifiersList_unknownUser()
+		[Test]
+		public void CreateModifiersList_unknownUser()
 		{
 			Modification[] modifications = new Modification[1];
 			modifications[0] = new Modification();
@@ -128,7 +147,8 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers.Test
 			AssertEquals("expected 0 modifier", 0, modifiers.Length);
 		}
 
-		public void TestCreateNotifyList()
+		[Test]
+		public void CreateNotifyList()
 		{			
 			string[] always = _publisher.CreateNotifyList(EmailGroup.NotificationType.Always);
 			AssertEquals(1, always.Length);
@@ -138,7 +158,8 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers.Test
 			AssertEquals(4, change.Length);
 		}
 
-		public void TestPublish()
+		[Test]
+		public void Publish()
 		{
 			IntegrationResult result = CreateIntegrationResult(IntegrationStatus.Success, IntegrationStatus.Success);
 			_publisher.PublishIntegrationResults(null, result);
@@ -146,7 +167,8 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers.Test
 			AssertEquals(1, _gateway.SentMessages.Count);
 		}
 
-		public void TestPublish_UnknownIntegrationStatus()
+		[Test]
+		public void Publish_UnknownIntegrationStatus()
 		{
 			_publisher.PublishIntegrationResults(null, new IntegrationResult());
 			AssertEquals(0, _gateway.SentMessages.Count);
@@ -154,7 +176,7 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers.Test
 		}
 
 		[Test]
-		public void TestHandleIntegrationEvent()
+		public void HandleIntegrationEvent()
 		{
 			IntegrationCompletedEventHandler handler = _publisher.IntegrationCompletedEventHandler;
 			IntegrationResult result = CreateIntegrationResult(IntegrationStatus.Success, IntegrationStatus.Success);
@@ -179,7 +201,8 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers.Test
 			return modifications;
 		}
 
-		public void TestPopulateFromConfiguration()
+		[Test]
+		public void PopulateFromConfiguration()
 		{
 			_publisher = EmailPublisherMother.Create();
 
