@@ -62,7 +62,7 @@ namespace ThoughtWorks.CruiseControl.Core.Builder
 
 		public virtual void Run(IIntegrationResult result)
 		{
-			ProcessResult processResult = AttemptToExecute();
+			ProcessResult processResult = AttemptToExecute(result.WorkingDirectory);
 			result.Status = (processResult.Failed) ? IntegrationStatus.Failure : IntegrationStatus.Success;
 			result.Output = processResult.StandardOutput;
 			result.TaskResults.Add(new DevenvTaskResult(result.Output));
@@ -74,9 +74,9 @@ namespace ThoughtWorks.CruiseControl.Core.Builder
 			}
 		}
 
-		private ProcessResult AttemptToExecute()
+		private ProcessResult AttemptToExecute(string workingDirectory)
 		{
-			ProcessInfo processInfo = new ProcessInfo(Executable, Arguments);
+			ProcessInfo processInfo = new ProcessInfo(Executable, Arguments, workingDirectory);
 			processInfo.TimeOut = BuildTimeoutSeconds * 1000;
 
 			Log.Info(string.Format("Starting build: {0} {1}", processInfo.FileName, processInfo.Arguments));

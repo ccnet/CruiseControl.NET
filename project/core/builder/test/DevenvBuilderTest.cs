@@ -9,7 +9,7 @@ using ThoughtWorks.CruiseControl.Remote;
 namespace ThoughtWorks.CruiseControl.Core.Builder.Test
 {
 	[TestFixture]
-	public class DevenvBuilderTest : CustomAssertion
+	public class DevenvBuilderTest
 	{
 		private const string DEVENV_PATH = @"C:\Program Files\Microsoft Visual Studio .NET 2003\Common7\IDE\devenv.com";
 		private const string SOLUTION_FILE = @"D:\dev\ccnet\ccnet\project\ccnet.sln";
@@ -21,7 +21,7 @@ namespace ThoughtWorks.CruiseControl.Core.Builder.Test
 		private IProject project;
 
 		[SetUp]
-		protected void CreateBuilder()
+		public void Setup()
 		{
 			mockRegistry = new DynamicMock(typeof(IRegistry)); 
 			mockProcessExecutor = new DynamicMock(typeof(ProcessExecutor)); 
@@ -30,7 +30,7 @@ namespace ThoughtWorks.CruiseControl.Core.Builder.Test
 		}
 
 		[TearDown]
-			protected void VerifyMocks()
+		public void VerifyMocks()
 		{
 			mockRegistry.Verify();
 			mockProcessExecutor.Verify();
@@ -96,7 +96,7 @@ namespace ThoughtWorks.CruiseControl.Core.Builder.Test
 			ProcessInfo info = (ProcessInfo) constraint.Parameter;
 			Assert.AreEqual(DEVENV_PATH, info.FileName);
 			Assert.AreEqual(DevenvBuilder.DEFAULT_BUILD_TIMEOUT * 1000, info.TimeOut);
-			AssertStartsWith("mySolution.sln /rebuild Debug", info.Arguments);
+			CustomAssertion.AssertStartsWith("mySolution.sln /rebuild Debug", info.Arguments);
 		}
 
 		[Test]
@@ -112,7 +112,7 @@ namespace ThoughtWorks.CruiseControl.Core.Builder.Test
 			builder.Run(result);
 
 			Assert.AreEqual(IntegrationStatus.Success, result.Status);
-			AssertMatches(@"Rebuild All: \d+ succeeded, \d+ failed, \d+ skipped", result.Output);
+			CustomAssertion.AssertMatches(@"Rebuild All: \d+ succeeded, \d+ failed, \d+ skipped", result.Output);
 			Assert.IsTrue(result.TaskResults[0] is DevenvTaskResult);
 		}
 
@@ -120,16 +120,21 @@ namespace ThoughtWorks.CruiseControl.Core.Builder.Test
 		public void ShouldSetOutputAndIntegrationStatusToFailedOnFailedBuild()
 		{
 			ProcessResult processResult = new ProcessResult(@"D:\dev\ccnet\ccnet\project\nosolution.sln could not be found and will not be loaded", string.Empty, 1, false);
-			mockProcessExecutor.ExpectAndReturn("Execute", processResult, new IsAnything());
+			CollectingConstraint constraint = new CollectingConstraint();
+			mockProcessExecutor.ExpectAndReturn("Execute", processResult, constraint);
+
 			builder.Executable = DEVENV_PATH;
 			builder.SolutionFile = @"D:\dev\ccnet\ccnet\project\nosolution.sln";
 			builder.Configuration = CONFIGURATION;
 
-			IntegrationResult result = new IntegrationResult();
+			IntegrationResult result = new IntegrationResult("myProject", "myWorkingDirectory");
 			builder.Run(result);
 
+			ProcessInfo info = (ProcessInfo) constraint.Parameter;
+			Assert.AreEqual("myWorkingDirectory", info.WorkingDirectory);
+
 			Assert.AreEqual(IntegrationStatus.Failure, result.Status);
-			AssertMatches(@"(\.|\n)*could not be found and will not be loaded", result.Output);
+			CustomAssertion.AssertMatches(@"(\.|\n)*could not be found and will not be loaded", result.Output);
 			Assert.IsTrue(result.TaskResults[0] is DevenvTaskResult);
 		}
 

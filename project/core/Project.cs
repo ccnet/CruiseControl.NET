@@ -163,6 +163,7 @@ namespace ThoughtWorks.CruiseControl.Core
 				result.Modifications = GetSourceModifications(result);
 				if (ShouldRunBuild(result))
 				{
+					CreateWorkingDirectoryIfItDoesntExist();
 					CreateTemporaryLabelIfNeeded();
 					_sourceControl.GetSource(result);
 					RunBuild(result);
@@ -305,6 +306,13 @@ namespace ThoughtWorks.CruiseControl.Core
 				SourceControl.LabelSourceControl(result.Label, result.StartTime);
 			else
 				DeleteTemporaryLabelIfNeeded();
+		}
+
+		// ToDo - MR - this is temporary until we know for certain that 'Initialize' will have been called at some point
+		private void CreateWorkingDirectoryIfItDoesntExist()
+		{
+			if (! Directory.Exists(WorkingDirectory))
+				Directory.CreateDirectory(WorkingDirectory);
 		}
 
 		internal void CreateTemporaryLabelIfNeeded()
