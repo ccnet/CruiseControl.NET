@@ -15,5 +15,6 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.MVC.View
 		TextBox CreateTextBox(string id, string text);
 		CheckBox CreateBooleanCheckBox(string id, bool isChecked);
 		Button CreateButton(string id, string text);
+		TextBox CreateMultiLineTextBox(string id, string text);
 	}
 }

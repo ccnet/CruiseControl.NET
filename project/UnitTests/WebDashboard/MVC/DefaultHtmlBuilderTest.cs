@@ -81,7 +81,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.MVC
 		}
 
 		[Test]
-		public void ShouldCreateTextBoxWithGivenIdAndContent()
+		public void ShouldCreateSimpleTextBoxWithGivenIdAndContent()
 		{
 			// Execute
 			TextBox textBox = new DefaultHtmlBuilder().CreateTextBox("myTextBox", "Hello World");
@@ -89,6 +89,19 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.MVC
 			// Verify
 			AssertEquals("myTextBox", textBox.ID);
 			AssertEquals("Hello World", textBox.Text);
+			AssertEquals(TextBoxMode.SingleLine , textBox.TextMode);
+		}
+
+		[Test]
+		public void ShouldCreateMultiLineTextBoxWithGivenIdAndContent()
+		{
+			// Execute
+			TextBox textBox = new DefaultHtmlBuilder().CreateMultiLineTextBox("myTextBox", "Hello World");
+
+			// Verify
+			AssertEquals("myTextBox", textBox.ID);
+			AssertEquals("Hello World", textBox.Text);
+			AssertEquals(TextBoxMode.MultiLine , textBox.TextMode);
 		}
 
 		[Test]

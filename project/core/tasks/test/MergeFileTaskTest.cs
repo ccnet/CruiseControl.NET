@@ -97,6 +97,30 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks.Test
             AssertEquals ("bar.xml", task.MergeFiles[1]);
         }
 
+		[Test]
+		public void ShouldGiveAPresentationValueThatIsANewLineSeparatedEquivalentOfAllTheFiles()
+		{
+			_task.MergeFiles = new string[] {"file1", "file2"};
+			AssertEquals ("file1" + Environment.NewLine + "file2", _task.MergeFilesForPresentation);
+		}
+
+		[Test]
+		public void SettingThroughPresentationValueSplitsAtNewLine()
+		{
+			_task.MergeFilesForPresentation = "file1" + Environment.NewLine + "file2";
+			AssertEquals("file1", _task.MergeFiles[0]);
+			AssertEquals("file2", _task.MergeFiles[1]);
+			AssertEquals(2, _task.MergeFiles.Length);
+		}
+
+		[Test]
+		public void SettingThroughPresentationValueWorksForEmptyAndNullStrings()
+		{
+			_task.MergeFilesForPresentation = "";
+			AssertEquals(0, _task.MergeFiles.Length);
+			_task.MergeFilesForPresentation = null;
+			AssertEquals(0, _task.MergeFiles.Length);
+		}
 
         private void AssertDataContainedInList (IList list, string data)
         {

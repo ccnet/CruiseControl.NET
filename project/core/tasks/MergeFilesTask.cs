@@ -1,4 +1,7 @@
+using System;
+using System.Collections;
 using System.IO;
+using System.Text;
 using Exortech.NetReflector;
 using ThoughtWorks.CruiseControl.Core.Publishers;
 using ThoughtWorks.CruiseControl.Core.Util;
@@ -36,5 +39,49 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         {
             return true;
         }
+
+    	public string MergeFilesForPresentation
+    	{
+    		get
+    		{
+    			StringBuilder combined = new StringBuilder();
+				bool isFirst = true;
+    			foreach (string file in MergeFiles)
+    			{
+    				if (! isFirst)
+    				{
+    					combined.Append(Environment.NewLine);
+    				}
+					combined.Append(file);
+					isFirst = false;
+    			}
+				return combined.ToString();
+    		}
+			set
+			{
+				if (value == null || value == string.Empty)
+				{
+					MergeFiles = new string[0];
+					return;
+				}
+				ArrayList files = new ArrayList();
+				using (StringReader reader = new StringReader(value))
+				{
+					while(true)
+					{
+						string line = reader.ReadLine();
+						if(line != null)
+						{
+							files.Add(line);
+						}
+						else
+						{
+							break;
+						}
+					}
+				}
+				MergeFiles = (string[]) files.ToArray(typeof (string));
+			}
+    	}
     }
 }

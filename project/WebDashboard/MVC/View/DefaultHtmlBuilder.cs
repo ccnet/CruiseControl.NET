@@ -48,9 +48,20 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.MVC.View
 
 		public TextBox CreateTextBox(string id, string text)
 		{
+			return CreateTextBox(id, text, TextBoxMode.SingleLine);
+		}
+
+		public TextBox CreateMultiLineTextBox(string id, string text)
+		{
+			return CreateTextBox(id, text, TextBoxMode.MultiLine);
+		}
+
+		private TextBox CreateTextBox(string id, string text, TextBoxMode mode)
+		{
 			TextBox textBox = new TextBox();
 			textBox.ID = id;
 			textBox.Text = text;
+			textBox.TextMode = mode;
 			return textBox;
 		}
 

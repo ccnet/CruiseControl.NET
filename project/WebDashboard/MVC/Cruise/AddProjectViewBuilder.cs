@@ -2,6 +2,7 @@ using System.Web.UI;
 using ThoughtWorks.CruiseControl.Core;
 using ThoughtWorks.CruiseControl.Core.Builder;
 using ThoughtWorks.CruiseControl.Core.Sourcecontrol;
+using ThoughtWorks.CruiseControl.Core.Tasks;
 using ThoughtWorks.CruiseControl.WebDashboard.MVC.View;
 
 namespace ThoughtWorks.CruiseControl.WebDashboard.MVC.Cruise
@@ -27,7 +28,8 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.MVC.Cruise
 				TR(TD("Source Control"), TD("Perforce")),
 				TR(TD(), TD(BuildPerforceView((P4) project.SourceControl))),
 				TR(TD("Builder"), TD("NAnt")),
-				TR(TD(), TD(BuildNAntBuilderView((NAntBuilder) project.Builder)))
+				TR(TD(), TD(BuildNAntBuilderView((NAntBuilder) project.Builder))),
+				TR(TD("Files To Merge"), TD(MultiLineTextBox("Project.Tasks.0.MergeFiles", ((MergeFilesTask) project.Tasks[0]).MergeFilesForPresentation)))
 				);
 		}
 

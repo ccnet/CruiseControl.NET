@@ -1,6 +1,7 @@
 using ThoughtWorks.CruiseControl.Core;
 using ThoughtWorks.CruiseControl.Core.Builder;
 using ThoughtWorks.CruiseControl.Core.Sourcecontrol;
+using ThoughtWorks.CruiseControl.Core.Tasks;
 using ThoughtWorks.CruiseControl.WebDashboard.ServerConnection;
 
 namespace ThoughtWorks.CruiseControl.WebDashboard.MVC.Cruise
@@ -39,6 +40,10 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.MVC.Cruise
 			nantBuilder.BuildArgs = request.GetText("Project.Builder.BuildArgs");
 			nantBuilder.BuildTimeoutSeconds = request.GetInt("Project.Builder.BuildTimeoutSeconds", 0); // Todo - defaults from config?
 			project.Builder = nantBuilder;
+
+			MergeFilesTask mergeFilesTask = new MergeFilesTask();
+			mergeFilesTask.MergeFilesForPresentation = request.GetText("Project.Tasks.0.MergeFiles");
+			project.Tasks = new ITask[] {mergeFilesTask};
 
 			return new AddProjectModel(project, selectedServerName, serverNames);
 		}
