@@ -51,12 +51,6 @@
 						<asp:button id="RefreshButton" runat="server" Text="Refresh status"></asp:button>
 					</td>
 				</tr>
-				<tr>
-					<td>
-						<hr noshade>
-						<p align="right"><a href="AddProject.aspx">Add Project</a></p>
-					</td>
-				</tr>
 			</table>
 		</form>
 	</body>
