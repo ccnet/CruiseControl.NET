@@ -23,15 +23,17 @@ namespace ThoughtWorks.CruiseControl.Core.Test
 			get { return _name; } 
 		}
 
+		public ITrigger[] Triggers
+		{
+			get
+			{
+				throw new NotImplementedException();
+			}
+		}
+
 		public int MinimumSleepTimeMillis 
 		{
 			get { return 0; }
-		}
-
-		public ITrigger Trigger 
-		{ 
-			get { return _schedule; } 
-			set { _schedule = value; } 
 		}
 
 		public ArrayList Publishers
@@ -89,7 +91,10 @@ namespace ThoughtWorks.CruiseControl.Core.Test
 
 		public override IIntegrationResult RunIntegration(BuildCondition buildCondition)
 		{
-			Trigger.IntegrationCompleted();
+			foreach (ITrigger trigger in Triggers)
+			{
+				trigger.IntegrationCompleted();	
+			}
 			throw new Exception(EXCEPTION_MESSAGE);
 		}
 	}

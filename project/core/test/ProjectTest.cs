@@ -63,7 +63,7 @@ namespace ThoughtWorks.CruiseControl.Core.Test
 			_project.Builder = (IBuilder) _mockBuilder.MockInstance;
 			_project.SourceControl = (ISourceControl) _mockSourceControl.MockInstance;
 			_project.StateManager = (IStateManager) _mockStateManager.MockInstance;
-			_project.Trigger = (ITrigger) _mockIntegrationTrigger.MockInstance;
+			_project.Triggers = new ITrigger[] { (ITrigger) _mockIntegrationTrigger.MockInstance } ;
 			_project.Labeller = (ILabeller) _mockLabeller.MockInstance;
 			_project.Publishers = new IIntegrationCompletedEventHandler[] {(IIntegrationCompletedEventHandler) _mockPublisher.MockInstance};
 			_project.Tasks = new ITask[] {(ITask) _mockTask.MockInstance};
@@ -104,7 +104,9 @@ namespace ThoughtWorks.CruiseControl.Core.Test
 	<sourcecontrol type=""mock"" />
 	<labeller type=""defaultlabeller"" />
 	<state type=""state"" />
-	<trigger type=""pollingInterval"" seconds=""30"" />
+	<triggers>
+		<pollingInterval seconds=""30"" />
+	</triggers>
 	<publishers>
 		<xmllogger logDir=""C:\temp"" />
 	</publishers>
@@ -122,7 +124,7 @@ namespace ThoughtWorks.CruiseControl.Core.Test
 			Assert.IsTrue(project.SourceControl is MockSourceControl);
 			Assert.IsTrue(project.Labeller is DefaultLabeller);
 			Assert.IsTrue(project.StateManager is IntegrationStateManager);
-			Assert.IsTrue(project.Trigger is PollingIntervalTrigger);
+			Assert.IsTrue(project.Triggers[0] is PollingIntervalTrigger);
 			Assert.IsTrue(project.Publishers[0] is XmlLogPublisher);
 			Assert.IsTrue(project.Tasks[0] is MergeFilesTask);
 			Assert.AreEqual(@"c:\my\working\directory", project.ConfiguredWorkingDirectory);
@@ -147,8 +149,8 @@ namespace ThoughtWorks.CruiseControl.Core.Test
 			Assert.IsTrue(project.Builder is NAntBuilder);
 			Assert.IsTrue(project.SourceControl is MockSourceControl);
 			Assert.IsTrue(project.Labeller is DefaultLabeller);
-			Assert.IsTrue(project.Trigger is MultipleTrigger);
-			Assert.IsNull(project.Publishers);
+			Assert.AreEqual(0, project.Triggers.Length);
+			Assert.AreEqual(0, project.Publishers.Length);
 			Assert.AreEqual(0, project.Tasks.Length);
 			VerifyAll();
 		}

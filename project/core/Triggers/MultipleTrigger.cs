@@ -4,16 +4,16 @@ using ThoughtWorks.CruiseControl.Remote;
 
 namespace ThoughtWorks.CruiseControl.Core.Triggers
 {
-	[Serializable]
-	[ReflectorType("multipleTriggers")]
 	public class MultipleTrigger : ITrigger
 	{
 		private ITrigger[] triggers;
 
-		public MultipleTrigger()
+		public MultipleTrigger(ITrigger[] triggers)
 		{
-			this.triggers = new ITrigger[0];
+			this.triggers = triggers;
 		}
+
+		public MultipleTrigger() : this (new ITrigger[0]) { }
 
 		[ReflectorArray("triggers", Required=false)]
 		public ITrigger[] Triggers

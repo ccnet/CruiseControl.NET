@@ -42,7 +42,7 @@ namespace ThoughtWorks.CruiseControl.Core
 		private ISourceControl _sourceControl;
 		private IBuilder _builder;
 		private ILabeller _labeller = new DefaultLabeller();
-		private IIntegrationCompletedEventHandler[] _publishers;
+		private IIntegrationCompletedEventHandler[] _publishers = new IIntegrationCompletedEventHandler[0];
 		private ProjectActivity _currentActivity = ProjectActivity.Unknown;
 		private int _modificationDelaySeconds = 0;
 		private IStateManager _state;

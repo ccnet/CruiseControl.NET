@@ -1,3 +1,4 @@
+using System;
 using System.IO;
 using Exortech.NetReflector;
 using ThoughtWorks.CruiseControl.Core.Triggers;
@@ -11,9 +12,9 @@ namespace ThoughtWorks.CruiseControl.Core
 		public static readonly string DefaultArtifactSubDirectory = "Artifacts";
 
 		private string _name;
-		private ITrigger trigger = new MultipleTrigger();
 		private string _configuredWorkingDirectory;
 		private string _configuredArtifactDirectory;
+		private ITrigger[] triggers = new ITrigger[0];
 
 		[ReflectorProperty("name")]
 		public virtual string Name
@@ -22,11 +23,11 @@ namespace ThoughtWorks.CruiseControl.Core
 			set { _name = value; }
 		}
 
-		[ReflectorProperty("trigger", InstanceTypeKey="type", Required=false)]
-		public virtual ITrigger Trigger
+		[ReflectorArray("triggers", Required=false)]
+		public ITrigger[] Triggers
 		{
-			get { return trigger; }
-			set { trigger = value; }
+			get { return triggers; }
+			set { triggers = value; }
 		}
 
 		[ReflectorProperty("workingDirectory", Required=false)]

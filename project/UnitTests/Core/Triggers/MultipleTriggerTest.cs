@@ -33,19 +33,6 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Triggers
 		}
 
 		[Test]
-		public void PopulateFromReflector()
-		{
-			string xml = string.Format(@"<multipleTriggers>
-	<triggers>
-		<pollingInterval seconds=""60"" />
-		<pollingSchedule time=""08:00"" buildCondition=""ForceBuild"" />
-	</triggers>
-</multipleTriggers>");
-			trigger = (MultipleTrigger)NetReflector.Read(xml);
-			Assert.AreEqual(2, trigger.Triggers.Length);
-		}
-
-		[Test]
 		public void ShouldReturnNoBuildWhenNoTriggers()
 		{
 			trigger = new MultipleTrigger();
