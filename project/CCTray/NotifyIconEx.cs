@@ -286,7 +286,13 @@ namespace tw.ccnet.remote.monitor
 			data.hWnd = m_messageSink.Handle;
 			data.uID = m_id;
 
-			data.hIcon = m_icon.Handle; // this should always be valid
+			// this null check has been introduced by Drew... I don't know why it's needed
+			// but the app was crashing sometimes -- especially when ccnet is calling through
+			// to a nant task that's crashed, for example.
+			// this can cause the icon to disappear until the remoting starts to work again,
+			// but this is preferable to having the app crash
+			if (m_icon!=null)
+				data.hIcon = m_icon.Handle; // this should always be valid
 			data.uFlags |= NotifyFlags.Icon;
 
 			data.szTip = m_text;

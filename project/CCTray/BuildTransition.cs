@@ -5,16 +5,16 @@ namespace tw.ccnet.remote.monitor
 {
 	public enum BuildTransition
 	{
-		[BuildTransition("Broken build", "The most recent checkins have broken the build.", ErrorLevel.Error)]
+		[BuildTransition("Broken build", ErrorLevel.Error)]
 		Broken,
 
-		[BuildTransition("Fixed build", "The most recent checkins have fixed the build.", ErrorLevel.Info)]
+		[BuildTransition("Fixed build", ErrorLevel.Info)]
 		Fixed,
 
-		[BuildTransition("Build successful", "Yet another successful build!", ErrorLevel.Info)]
+		[BuildTransition("Build successful", ErrorLevel.Info)]
 		StillSuccessful,
 
-		[BuildTransition("Build still failing", "The build is still broken...", ErrorLevel.Warning)]
+		[BuildTransition("Build still failing", ErrorLevel.Warning)]
 		StillFailing
 	}
 
@@ -28,13 +28,11 @@ namespace tw.ccnet.remote.monitor
 	public class BuildTransitionAttribute : Attribute
 	{
 		public string Caption;
-		public string Description;
 		public ErrorLevel ErrorLevel;
 
-		public BuildTransitionAttribute(string caption, string description, ErrorLevel messageType)
+		public BuildTransitionAttribute(string caption, ErrorLevel messageType)
 		{
 			Caption = caption;
-			Description = description;
 			ErrorLevel = messageType;
 		}
 	}

@@ -91,22 +91,23 @@
                 />
                 <Reference
                     Name = "System.XML"
-                    AssemblyName = "System.XML"
+                    AssemblyName = "System.Xml"
                     HintPath = "..\..\..\..\..\WINNT\Microsoft.NET\Framework\v1.1.4322\System.XML.dll"
                 />
                 <Reference
                     Name = "Drew.Controls"
                     AssemblyName = "Drew.Controls"
-                    HintPath = "Drew.Controls.dll"
+                    HintPath = "..\..\lib\Drew.Controls.dll"
+                />
+                <Reference
+                    Name = "Drew.Agents"
+                    AssemblyName = "Drew.Agents"
+                    HintPath = "..\..\lib\Drew.Agents.dll"
                 />
             </References>
         </Build>
         <Files>
             <Include>
-                <File
-                    RelPath = "App.config"
-                    BuildAction = "None"
-                />
                 <File
                     RelPath = "App.ico"
                     BuildAction = "Content"
@@ -135,9 +136,8 @@
                     BuildAction = "EmbeddedResource"
                 />
                 <File
-                    RelPath = "MonitorSettings.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
+                    RelPath = "Notes.txt"
+                    BuildAction = "Content"
                 />
                 <File
                     RelPath = "NotifyIconEx.cs"
@@ -154,7 +154,7 @@
                     BuildAction = "EmbeddedResource"
                 />
                 <File
-                    RelPath = "ResourceUtil.cs"
+                    RelPath = "Settings.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -167,6 +167,11 @@
                     RelPath = "SettingsForm.resx"
                     DependentUpon = "SettingsForm.cs"
                     BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "SettingsManager.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
                 />
                 <File
                     RelPath = "StatusMonitor.cs"

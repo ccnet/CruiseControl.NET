@@ -1,15 +1,17 @@
 using System;
 using System.ComponentModel;
-using System.Collections;
-using System.Diagnostics;
 using System.Runtime.Remoting;
 using System.Windows.Forms;
 
 namespace tw.ccnet.remote.monitor
 {
+	#region Public delegates
+
 	public delegate void BuildOccurredEventHandler(object sauce, BuildOccurredEventArgs e);
 	public delegate void PolledEventHandler(object sauce, PolledEventArgs e);
 	public delegate void ErrorEventHandler(object sauce, ErrorEventArgs e);
+
+	#endregion
 
 	/// <summary>
 	/// Monitors a remote CruiseControl.NET instance, and raises events in
@@ -17,6 +19,8 @@ namespace tw.ccnet.remote.monitor
 	/// </summary>
 	public class StatusMonitor : Component
 	{
+		#region Field declarations
+
 		public event BuildOccurredEventHandler BuildOccurred;
 		public event PolledEventHandler Polled;
 		public event ErrorEventHandler Error;
@@ -25,7 +29,9 @@ namespace tw.ccnet.remote.monitor
 		IContainer components;
 
 		ProjectStatus _currentProjectStatus;
-		MonitorSettings _settings;
+		Settings _settings;
+
+		#endregion
 
 		#region Constructors
 
@@ -53,7 +59,7 @@ namespace tw.ccnet.remote.monitor
 			}
 		}
 
-		public MonitorSettings Settings
+		public Settings Settings
 		{
 			get
 			{
@@ -62,6 +68,14 @@ namespace tw.ccnet.remote.monitor
 			set
 			{
 				_settings = value;
+			}
+		}
+
+		public ProjectStatus ProjectStatus
+		{
+			get
+			{
+				return _currentProjectStatus;
 			}
 		}
 
@@ -198,9 +212,26 @@ namespace tw.ccnet.remote.monitor
 
 		ProjectStatus GetRemoteProjectStatus()
 		{
+			ICruiseManager remoteCC = GetRemoteCruiseControlProxy();
+			return remoteCC.GetProjectStatus();
+		}
+
+		ICruiseManager GetRemoteCruiseControlProxy()
+		{
 			ICruiseManager remoteCC
 				= (ICruiseManager)RemotingServices.Connect(typeof(ICruiseManager), Settings.RemoteServerUrl);
-			return remoteCC.GetProjectStatus();
+			return remoteCC;
+		}
+
+
+		#endregion
+
+		#region Forcing a build
+
+		public void ForceBuild(string projectName)
+		{
+			ICruiseManager remoteCC = GetRemoteCruiseControlProxy();
+			remoteCC.ForceBuild(projectName);
 		}
 
 

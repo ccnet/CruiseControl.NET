@@ -1,53 +1,66 @@
 using System;
-using System.Drawing;
-using System.Diagnostics;
 using System.Collections;
 using System.ComponentModel;
+using System.Diagnostics;
+using System.Drawing;
 using System.IO;
-using System.Windows.Forms;
-using System.Configuration;
 using System.Reflection;
 using System.Runtime.Remoting;
+using System.Windows.Forms;
+
+using Drew.Agents;
 
 namespace tw.ccnet.remote.monitor
 {
-	public class CCTray : Form
+	/// <summary>
+	/// Monitors CruiseControl.NET build activity from a remote machine (normally a development PC)
+	/// and reports on the state of the build.  A variety of notification mechanisms are supported,
+	/// including system tray icons (the default, and most basic), popup balloon messages, and
+	/// Microsoft Agent characters with text-to-speech support.
+	/// </summary>
+	public class SystemTrayMonitor : Form
 	{
+		#region Field declarations
+
 		IContainer components;
 		ContextMenu contextMenu;
 		NotifyIconEx trayIcon;
 		Hashtable _icons = null;
+		Agent _agent = null;
 
 		MenuItem mnuExit;
 		MenuItem mnuLaunchWebPage;
 		MenuItem mnuSettings;
 		StatusMonitor statusMonitor;
 		SettingsForm settingsForm;
-		MonitorSettings settings;
-		
-		public CCTray()
+		Settings settings;
+
+		Exception _agentException = null;
+		private System.Windows.Forms.MenuItem mnuForceBuild;
+		Exception _audioException = null;
+
+		#endregion
+
+		#region Constructor
+
+		public SystemTrayMonitor()
 		{
 			InitializeComponent();
 			InitialiseTrayIcon();
-			DisplayStartupBalloon();
-
-			this.Visible = false;
-
 			InitialiseSettings();
 			InitialiseMonitor();
 			InitialiseSettingsForm();
 
-			PlayBuildAudio(BuildTransition.Fixed);
+			DisplayStartupBalloon();
 		}
 
+		#endregion
 
 		#region Initialisation
 
 		void InitialiseSettings()
 		{
-			settings = new MonitorSettings();
-			settings.PollingIntervalSeconds = GetPollingIntervalFromConfiguration();
-			settings.RemoteServerUrl = GetRemoteServerUrlFromConfiguration();
+			settings = SettingsManager.LoadSettings();
 		}
 
 		void InitialiseMonitor()
@@ -63,44 +76,8 @@ namespace tw.ccnet.remote.monitor
 
 		void DisplayStartupBalloon()
 		{
-			trayIcon.ShowBalloon("CruiseControl.NET Monitor", "Monitor started.", NotifyInfoFlags.Info, 1500);
-		}
-
-
-		string GetRemoteServerUrlFromConfiguration()
-		{
-			string remoteServerUrl = ConfigurationSettings.AppSettings["cc.net.url"];
-
-			if (remoteServerUrl == null || remoteServerUrl.Length == 0)
-			{
-				DisplayConfigurationProblemAndExit("No server Url is specified");
-			}
-
-			return remoteServerUrl;
-		}
-
-		int GetPollingIntervalFromConfiguration()
-		{
-			int pollingInterval;
-
-			string pollingIntervalString = ConfigurationSettings.AppSettings["poll.interval.seconds"];
-			if (pollingIntervalString == null || pollingIntervalString.Length == 0 || Convert.ToInt32(pollingIntervalString) == 0)
-			{
-				pollingInterval = MonitorSettings.DefaultPollingIntervalSeconds;
-			}
-			else
-			{
-				pollingInterval = Convert.ToInt32(pollingIntervalString);
-			}
-
-			return pollingInterval;
-		}
-
-		void DisplayConfigurationProblemAndExit(string message)
-		{
-			trayIcon.ShowBalloon("Configuration Error", message, NotifyInfoFlags.Error, 3000);
-			System.Threading.Thread.Sleep(2500);
-			Exit();
+			if (settings.NotificationBalloon.ShowBalloon)
+				trayIcon.ShowBalloon("CruiseControl.NET Monitor", "Monitor started.", NotifyInfoFlags.Info, 1500);
 		}
 
 		private void CCTray_Load(object sender, System.EventArgs e)
@@ -143,9 +120,10 @@ namespace tw.ccnet.remote.monitor
 			this.trayIcon = new tw.ccnet.remote.monitor.NotifyIconEx();
 			this.contextMenu = new System.Windows.Forms.ContextMenu();
 			this.mnuLaunchWebPage = new System.Windows.Forms.MenuItem();
+			this.mnuSettings = new System.Windows.Forms.MenuItem();
+			this.mnuForceBuild = new System.Windows.Forms.MenuItem();
 			this.mnuExit = new System.Windows.Forms.MenuItem();
 			this.statusMonitor = new tw.ccnet.remote.monitor.StatusMonitor(this.components);
-			this.mnuSettings = new System.Windows.Forms.MenuItem();
 			// 
 			// trayIcon
 			// 
@@ -160,7 +138,9 @@ namespace tw.ccnet.remote.monitor
 			this.contextMenu.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
 																						this.mnuLaunchWebPage,
 																						this.mnuSettings,
+																						this.mnuForceBuild,
 																						this.mnuExit});
+			this.contextMenu.Popup += new System.EventHandler(this.contextMenu_Popup);
 			// 
 			// mnuLaunchWebPage
 			// 
@@ -168,33 +148,40 @@ namespace tw.ccnet.remote.monitor
 			this.mnuLaunchWebPage.Text = "&Launch web page";
 			this.mnuLaunchWebPage.Click += new System.EventHandler(this.mnuLaunchWebPage_Click);
 			// 
-			// mnuExit
-			// 
-			this.mnuExit.Index = 2;
-			this.mnuExit.Text = "E&xit";
-			this.mnuExit.Click += new System.EventHandler(this.mnuExit_Click);
-			// 
-			// statusMonitor
-			// 
-			this.statusMonitor.Error += new tw.ccnet.remote.monitor.ErrorEventHandler(this.statusMonitor_Error);
-			this.statusMonitor.BuildOccurred += new tw.ccnet.remote.monitor.BuildOccurredEventHandler(this.statusMonitor_BuildOccurred);
-			this.statusMonitor.Polled += new tw.ccnet.remote.monitor.PolledEventHandler(this.statusMonitor_Polled);
-			// 
 			// mnuSettings
 			// 
 			this.mnuSettings.Index = 1;
 			this.mnuSettings.Text = "&Settings...";
 			this.mnuSettings.Click += new System.EventHandler(this.mnuSettings_Click);
 			// 
-			// CCTray
+			// mnuForceBuild
+			// 
+			this.mnuForceBuild.Index = 2;
+			this.mnuForceBuild.Text = "&Force build";
+			this.mnuForceBuild.Click += new System.EventHandler(this.mnuForceBuild_Click);
+			// 
+			// mnuExit
+			// 
+			this.mnuExit.Index = 3;
+			this.mnuExit.Text = "E&xit";
+			this.mnuExit.Click += new System.EventHandler(this.mnuExit_Click);
+			// 
+			// statusMonitor
+			// 
+			this.statusMonitor.Settings = null;
+			this.statusMonitor.Error += new tw.ccnet.remote.monitor.ErrorEventHandler(this.statusMonitor_Error);
+			this.statusMonitor.BuildOccurred += new tw.ccnet.remote.monitor.BuildOccurredEventHandler(this.statusMonitor_BuildOccurred);
+			this.statusMonitor.Polled += new tw.ccnet.remote.monitor.PolledEventHandler(this.statusMonitor_Polled);
+			// 
+			// SystemTrayMonitor
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5, 13);
-			this.ClientSize = new System.Drawing.Size(104, 23);
+			this.ClientSize = new System.Drawing.Size(104, 19);
 			this.ControlBox = false;
 			this.Enabled = false;
 			this.MaximizeBox = false;
 			this.MinimizeBox = false;
-			this.Name = "CCTray";
+			this.Name = "SystemTrayMonitor";
 			this.ShowInTaskbar = false;
 			this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
 			this.Text = "CCTray";
@@ -213,7 +200,7 @@ namespace tw.ccnet.remote.monitor
 		[STAThread]
 		static void Main()
 		{
-			Application.Run(new CCTray());
+			Application.Run(new SystemTrayMonitor());
 		}
 
 
@@ -248,19 +235,70 @@ namespace tw.ccnet.remote.monitor
 		private void statusMonitor_BuildOccurred(object sauce, BuildOccurredEventArgs e)
 		{
 			string caption = e.BuildTransitionInfo.Caption;
-			string description = e.BuildTransitionInfo.Description;
+			string description = settings.Messages.GetMessageForTransition(e.BuildTransition);
 			NotifyInfoFlags icon = GetNotifyInfoFlag(e.BuildTransitionInfo.ErrorLevel);
 
-			// show a balloon
-			trayIcon.ShowBalloon(caption, description, icon, 5000);
+			HandleBalloonNotification(caption, description, icon);
+			HandleAgentNotification(description, caption);
 
+			// play audio, in accordance to settings
 			PlayBuildAudio(e.BuildTransition);
 		}
 
 		private void statusMonitor_Error(object sender, ErrorEventArgs e)
 		{
 			trayIcon.Text = GetErrorMessage(e.Exception);
-			trayIcon.Icon = GetStatusIcon(IntegrationStatus.Unknown);
+			trayIcon.Icon = GetStatusIcon(IntegrationStatus.Exception);
+		}
+
+		#endregion
+
+		#region Agent notification
+
+		void HandleAgentNotification(string description, string caption)
+		{
+			if (settings.Agents.ShowAgent)
+			{
+				try 
+				{
+					EnsureAgentLoaded();
+				
+					_agent.Speak(description);
+
+					// Hide agent
+					if (settings.Agents.HideAfterMessage)
+					{
+						_agent.Hide();
+					}
+				}
+				catch (Exception ex)
+				{
+					// only display the first exception with agents
+					if (_agentException==null)
+					{
+						MessageBox.Show(ex.Message, "Unable to initialise agent", MessageBoxButtons.OK, MessageBoxIcon.Error);
+						_agentException = ex;
+					}
+				}
+			}
+		}
+
+		void EnsureAgentLoaded()
+		{
+			if (_agent==null)
+				_agent = settings.Agents.CreateAgent();
+		}
+
+
+		#endregion
+
+		#region Balloon notification
+
+		void HandleBalloonNotification(string caption, string description, NotifyInfoFlags icon)
+		{
+			// show a balloon
+			if (settings.NotificationBalloon.ShowBalloon)
+				trayIcon.ShowBalloon(caption, description, icon, 5000);
 		}
 
 
@@ -270,14 +308,30 @@ namespace tw.ccnet.remote.monitor
 
 		void PlayBuildAudio(BuildTransition transition)
 		{
-			if (settings.ShouldPlaySoundForTransition(transition))
+			if (settings.Sounds.ShouldPlaySoundForTransition(transition))
 			{
-				string resourceName = settings.GetAudioFileLocation(transition);
-				Stream stream = (Stream)ResourceUtil.GetEmbeddedResource(resourceName);
-				byte[] bytes = new byte[stream.Length];
-				stream.Read(bytes, 0, bytes.Length);
-				Audio.PlaySound(bytes, true, true);
+				try
+				{
+					PlayAudioFile(settings.Sounds.GetAudioFileLocation(transition));
+				}
+				catch (Exception ex)
+				{
+					// only display the first exception with audio
+					if (_audioException==null)
+					{
+						MessageBox.Show(ex.Message, "Unable to initialise audio", MessageBoxButtons.OK, MessageBoxIcon.Error);
+						_audioException = ex;
+					}
+				}
 			}
+		}
+
+		void PlayAudioFile(string fileName)
+		{
+			Stream stream = new FileStream(fileName, FileMode.Open, FileAccess.Read, FileShare.Read);
+			byte[] bytes = new byte[stream.Length];
+			stream.Read(bytes, 0, bytes.Length);
+			Audio.PlaySound(bytes, true, true);
 		}
 
 		#endregion
@@ -294,6 +348,9 @@ namespace tw.ccnet.remote.monitor
 			if (_icons==null)
 				LoadIcons();
 
+			if (!_icons.ContainsKey(status))
+				throw new Exception("Unsupported IntegrationStatus: " + status);
+
 			return (Icon)_icons[status];
 		}
 
@@ -303,6 +360,7 @@ namespace tw.ccnet.remote.monitor
 			_icons[IntegrationStatus.Failure] = LoadIcon("tw.ccnet.remote.monitor.Red.ico");
 			_icons[IntegrationStatus.Success] = LoadIcon("tw.ccnet.remote.monitor.Green.ico");
 			_icons[IntegrationStatus.Unknown] = LoadIcon("tw.ccnet.remote.monitor.Gray.ico");
+			_icons[IntegrationStatus.Exception] = LoadIcon("tw.ccnet.remote.monitor.Gray.ico");
 		}
 
 		Icon LoadIcon(string name) 
@@ -324,7 +382,7 @@ namespace tw.ccnet.remote.monitor
 		{
 			object activity = (projectStatus.Status==CruiseControlStatus.Stopped) ? ProjectActivity.Unknown : projectStatus.Activity;
 
-			return String.Format("Server: {0}\nProject: {1}\nLast Build: {2} ({3})", 
+			return string.Format("Server: {0}\nProject: {1}\nLast Build: {2} ({3})", 
 				activity,
 				projectStatus.Name,
 				projectStatus.BuildStatus,
@@ -385,9 +443,31 @@ namespace tw.ccnet.remote.monitor
 
 		#endregion
 
+		#region Settings
+
 		private void mnuSettings_Click(object sender, System.EventArgs e)
 		{
-			settingsForm.Launch();			
+			settingsForm.Launch();
 		}
+
+		#endregion
+
+		#region Forcing a build
+
+		private void mnuForceBuild_Click(object sender, System.EventArgs e)
+		{
+			statusMonitor.ForceBuild(settings.ProjectName);
+		}
+
+		#endregion
+
+		#region Context menu management
+
+		void contextMenu_Popup(object sender, System.EventArgs e)
+		{
+			mnuForceBuild.Enabled (statusMonitor.ProjectStatus.Activity==ProjectActivity.Sleeping);
+		}
+
+		#endregion
 	}
 }
