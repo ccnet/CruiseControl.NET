@@ -247,18 +247,18 @@
 			<li>
 				type
 				<span style="FONT-STYLE: italic">(mandatory) </span>- For now we just support
-			Nant, so you must set this as "nant"
+			NAnt, so you must set this as "nant"
 			<li>
 				executable
 				<span style="FONT-STYLE: italic">(mandatory)</span>
 				- The location of the nant.exe you want to use (it can be absolute, or relative
-				to folder ccnet.exe is in.) Often this is set to a version of Nant that is
+				to folder ccnet.exe is in.) Often this is set to a version of NAnt that is
 				checked into Source Control with your project.<br>
 			<li>
 				baseDirectory
 				<span style="FONT-STYLE: italic">(mandatory)</span>
-			- The directory you want Nant to be started in (normally the root directory of
-			your project if that's where you store your Nant build files)
+			- The directory you want NAnt to be started in (normally the root directory of
+			your project if that's where you store your NAnt build files)
 			<li>
 				buildFile
 				<span style="FONT-STYLE: italic">(mandatory)</span>
@@ -267,24 +267,27 @@
 			<li>
 				buildArgs
 				<span style="FONT-STYLE: italic">(optional)</span>
-			- You can use the 'buildArgs' tag to pass through any parameters to Nant. This
-			is useful if you want to define some Nant properties, e.g. in the example we
-			pass through the location of a CVS executable as a Nant property called
-			'cvs.executable'
+			- You can use the 'buildArgs' tag to pass through any parameters to NAnt. This
+			is useful if you want to define some NAnt properties, e.g. in the example we
+			pass through the location of a CVS executable as a NAnt property called
+			'cvs.executable'.  If you do specify this element, you should ensure that you
+			include the following argument: <code>-logger:NAnt.Core.XmlLogger</code>.
+			This argument is supplied to NAnt by default to instruct it to use the Xml logger.
+			By specifying buildArgs elements, you are overriding the default argument.
 			<li>
 				targetList
 				<span style="FONT-STYLE: italic">(optional) - </span>A set of targets to be
-			called. If you don't specifiy at least one, Nant will use the project's default
-			target. CruiseControl.NET does not call Nant once for each target, it just
-			specifies all the targets when it calls Nant the one time for the build, so
+			called. If you don't specifiy at least one, NAnt will use the project's default
+			target. CruiseControl.NET does not call NAnt once for each target, it just
+			specifies all the targets when it calls NAnt the one time for the build, so
 			semantically specifying more than one target is the same as manually running
-			Nant yourself with more than one target.
+			NAnt yourself with more than one target.
 			<li>
 				buildTimeout
 				<span style="FONT-STYLE: italic">(optional) </span>- This element may be set to
 				indicate the maximum amount of time in milliseconds CruiseControl.NET should
 				wait for the build to finish. If you leave this element out, or set it to 0,
-				then CruiseControl.NET will wait indefinitely for Nant to finish (so if Nant
+				then CruiseControl.NET will wait indefinitely for NAnt to finish (so if NAnt
 				'hangs', so will CruiseControl.NET)<br>
 			</li>
 		</ul>
