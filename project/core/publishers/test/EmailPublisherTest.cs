@@ -72,7 +72,7 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers.Test
 		{
 			_publisher.IncludeDetails = false;
 			string message = _publisher.CreateMessage(CreateIntegrationResult(IntegrationStatus.Success, IntegrationStatus.Success));
-			AssertEquals(@"CruiseControl.NET Build Results for project Project#9: http://localhost/ccnet?log=log19741224023000Lbuild.0.xml", message);
+			AssertEquals(@"CruiseControl.NET Build Results for project Project#9 (http://localhost/ccnet?log=log19741224023000Lbuild.0.xml)", message);
 		}
 		
 		public void TestEmailMessageWithDetails() 
@@ -81,7 +81,7 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers.Test
 			string message = _publisher.CreateMessage(CreateIntegrationResult(IntegrationStatus.Success, IntegrationStatus.Success));
 			Assert(message.StartsWith("<html>"));
 			Assert(message.IndexOf("CruiseControl.NET Build Results for project Project#9") > 0);
-			Assert(message.IndexOf("Modifications since last build:") > 0);
+			Assert(message.IndexOf("Modifications since last build") > 0);
 			Assert(message.EndsWith("</html>"));
 		}		
 

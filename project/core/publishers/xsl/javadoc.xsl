@@ -16,32 +16,20 @@
         <xsl:variable name="total.errorMessage.count" select="count($javadoc.warn.messages)  + count($javadoc.error.messages)"/>
 
         <xsl:if test="$total.errorMessage.count > 0">
-            <table align="center" cellpadding="2" cellspacing="0" border="0" width="98%">
+            <table class="section-table" align="center" cellpadding="2" cellspacing="0" border="0" width="98%">
                 <tr>
                     <!-- NOTE: total.errorMessage.count is actually the number of lines of error
                      messages. This accurately represents the number of errors ONLY if the Ant property
                      build.compiler.emacs is set to "true" -->
-                    <td style="background-color:#000066; color:#FFFFFF;">
-                        &#160;Javadoc Errors/Warnings: (<xsl:value-of select="$total.errorMessage.count"/>)
+                    <td class="javadoc-sectionheader">
+                        &#160;Javadoc Errors/Warnings (<xsl:value-of select="$total.errorMessage.count"/>)
                     </td>
                 </tr>
                 <xsl:if test="count($javadoc.error.messages) > 0">
-                    <tr>
-                        <td>
-                           <pre style="font-size:9px; color:#FF3300;">
-                            <xsl:apply-templates select="$javadoc.error.messages"/>
-                           </pre>
-                        </td>
-                    </tr>
+                    <tr><td class="javadoc-error"><xsl:apply-templates select="$javadoc.error.messages"/></td></tr>
                 </xsl:if>
                 <xsl:if test="count($javadoc.warn.messages) > 0">
-                    <tr>
-                        <td>
-                           <pre style="font-size:9px; color:#000000;">
-                            <xsl:apply-templates select="$javadoc.warn.messages"/>
-                           </pre>
-                        </td>
-                    </tr>
+                    <tr><td class="javadoc-warning"><xsl:apply-templates select="$javadoc.warn.messages"/></td></tr>
                 </xsl:if>
             </table>
         </xsl:if>
