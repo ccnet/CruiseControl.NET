@@ -6,6 +6,8 @@
     <property name="debug" value="true"/>
     <property name="verbosity" value="true"/>
     <property name="nunit.output" value="Plain"/>
+    <property name="build.number" value="0" />
+    
 
     <property name="webapp.dir" value="deployed\web"/>
     <property name="webdashboard.dir" value="deployed\webdashboard"/>
@@ -254,9 +256,6 @@
 	
 	<!-- FOR RUNNING CCNET AGAINST ITSELF -->
 	<target name="dist.publish" depends="dist">
-			<ifnot propertyexists="label-to-apply">
-				<fail message="label-to-apply property not set, so can't create labelled distribution files" />
-			</ifnot>
 			
 			<property name="publish.dir" value="D:\download-area\CCNet-Builds\${label-to-apply}" />
 
@@ -268,7 +267,30 @@
 			</copy>			
 	</target>
 	
-	<target name="ContinuousIntegration" depends="all, dist.publish">
+	<target name="createAssemblyInfo" description="Create an assembly info file with the current build number" >
+
+	   <asminfo output="project/CommonAssemblyInfo.cs" language="CSharp">
+		<imports>
+		    <import name="System.Reflection" />
+		</imports>
+		<attributes>
+		    <attribute type="AssemblyVersionAttribute" value="${build.number}" />
+		    <attribute type="AssemblyCopyrightAttribute" value="Copyright © 2004 ThoughtWorks Inc." />
+		    <attribute type="AssemblyCompanyAttribute" value="ThoughtWorks" />
+		    <attribute type="AssemblyProductAttribute" value="CruiseControl.NET" />
+		</attributes>
+	    </asminfo>
+	</target>
+
+	<target name="ContinuousIntegration">
+		<ifnot propertyexists="label-to-apply">
+			<fail message="label-to-apply property not set, so can't create labelled distribution files" />
+		</ifnot>
+		<property name="build.number" value="$label-to-apply" />
+	
+		<call target="createAssemblyInfo" />
+		<call target="all" />
+		<call target="dist.publish" />
 		<echo message="CI Run for build number ${label-to-apply} successfully completed" />
 		<call target="reporting" />
 	</target>

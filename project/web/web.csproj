@@ -150,6 +150,11 @@
         <Files>
             <Include>
                 <File
+                    RelPath = "CommonAssemblyInfo.cs"
+                    Link = "..\CommonAssemblyInfo.cs"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Coverage.aspx"
                     BuildAction = "Content"
                 />

@@ -156,6 +156,11 @@
                     BuildAction = "None"
                 />
                 <File
+                    RelPath = "CommonAssemblyInfo.cs"
+                    Link = "..\CommonAssemblyInfo.cs"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "ConsoleEventHandler.cs"
                     SubType = "Code"
                     BuildAction = "Compile"

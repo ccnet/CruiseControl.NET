@@ -140,6 +140,11 @@
                     BuildAction = "EmbeddedResource"
                 />
                 <File
+                    RelPath = "CommonAssemblyInfo.cs"
+                    Link = "..\CommonAssemblyInfo.cs"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Global.asax"
                     SubType = "Component"
                     BuildAction = "Content"
