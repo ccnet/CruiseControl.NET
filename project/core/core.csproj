@@ -330,27 +330,7 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "builder\test\CommandLineBuilderTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "builder\test\DevenvBuilderTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "builder\test\DevenvTaskResultTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
                     RelPath = "builder\test\MockBuilder.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "builder\test\NAntBuilderTest.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

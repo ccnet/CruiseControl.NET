@@ -239,6 +239,26 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Core\Builders\CommandLineBuilderTest.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Core\Builders\DevenvBuilderTest.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Core\Builders\DevenvTaskResultTest.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Core\Builders\NAntBuilderTest.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Core\Config\CachingConfigurationServiceTest.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -265,6 +285,11 @@
                 />
                 <File
                     RelPath = "Core\Log\ServerLogFileReaderTest.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Core\Publishers\FileTaskResultTest.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
