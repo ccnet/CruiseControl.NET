@@ -559,6 +559,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "publishers\test\ExecutablePublisherTest.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "publishers\test\HtmlDetailsMessageBuilderTest.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -610,6 +615,11 @@
                 />
                 <File
                     RelPath = "sourcecontrol\ClearCaseHistoryParser.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "sourcecontrol\ClearCaseHistoryParserTest.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -809,11 +819,6 @@
                 />
                 <File
                     RelPath = "sourcecontrol\Perforce\ProcessP4Purger.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "sourcecontrol\test\ClearCaseHistoryParserTest.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
