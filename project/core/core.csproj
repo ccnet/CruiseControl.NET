@@ -149,11 +149,6 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "ICruiseControl.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
                     RelPath = "IntegrationEvents.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -174,7 +169,17 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "IProjectList.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "IProjectIntegrator.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "IProjectIntegratorList.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -194,12 +199,22 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "ProjectList.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "ProjectBase.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
                     RelPath = "ProjectIntegrator.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "ProjectIntegratorList.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -679,6 +694,11 @@
                 />
                 <File
                     RelPath = "state\test\IntegrationStateManagerTest.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "test\ConfigurationStub.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

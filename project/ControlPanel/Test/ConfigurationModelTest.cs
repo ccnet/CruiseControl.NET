@@ -67,7 +67,6 @@ namespace ThoughtWorks.CruiseControl.ControlPanel.Test
 		public void LoadSourceControl()
 		{
 			// setup
-
 			Cvs cvs = new Cvs();
 			cvs.Executable = "c:/bin/cvs.exe";
 			cvs.CvsRoot = "/cvsroot/marathonnet";

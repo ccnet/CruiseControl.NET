@@ -50,7 +50,7 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
 				XslTransform transform = new XslTransform();
 				LoadStylesheet(transform, xslFile);
 
-				XmlReader reader = transform.Transform(document.DocumentElement, null, new XmlUrlResolver()); 
+				XmlReader reader = transform.Transform(document.DocumentElement, null); 
 				
 				XmlDocument output = new XmlDocument();
 				output.Load(reader);

@@ -23,8 +23,6 @@ namespace ThoughtWorks.CruiseControl.Core
 		DateTime _endTime;
 		Exception _exception;
 
-		#region Constructors
-
 		// Default constructor required for serialization
 		public IntegrationResult() { }
 
@@ -32,10 +30,6 @@ namespace ThoughtWorks.CruiseControl.Core
 		{
 			_projectName = projectName;
 		}
-
-		#endregion
-
-		#region Read/Write Properties
 
 		public string ProjectName
 		{
@@ -87,10 +81,6 @@ namespace ThoughtWorks.CruiseControl.Core
 			get { return _lastIntegrationStatus; }
 			set { _lastIntegrationStatus = value; }
 		}
-
-		#endregion
-
-		#region Readonly properties
 
 		public DateTime LastModificationDate
 		{
@@ -151,10 +141,6 @@ namespace ThoughtWorks.CruiseControl.Core
 			get { return EndTime - StartTime; }
 		}
 
-		#endregion
-
-		#region Properties not serialised into Xml
-
 		/// <summary>
 		/// Contains the output from the build process.  In the case of NAntBuilder, this is the 
 		/// redirected StdOut of the nant.exe process.
@@ -180,8 +166,6 @@ namespace ThoughtWorks.CruiseControl.Core
 			}
 		}
 
-		#endregion
-
 		public void MarkStartTime()
 		{
 			_startTime = DateTime.Now;
@@ -196,8 +180,6 @@ namespace ThoughtWorks.CruiseControl.Core
 		{
 			return Modifications.Length > 0;
 		}
-
-		#region Overridden methods
 
 		public override bool Equals(object obj)
 		{
@@ -223,7 +205,5 @@ namespace ThoughtWorks.CruiseControl.Core
 		{
 			return ReflectionUtil.ReflectionToString(this);
 		}
-
-		#endregion
 	}
 }

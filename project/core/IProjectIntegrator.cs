@@ -6,8 +6,10 @@ namespace ThoughtWorks.CruiseControl.Core
 	public interface IProjectIntegrator : IDisposable
 	{
 		// TODO look into whether the setters are required for these properties
-		ISchedule Schedule { get; set; }
-		IProject Project { get; set; }
+		ISchedule Schedule { get; } 
+		IProject Project { get; }
+
+		string Name { get; }
 
 		/// <summary>
 		/// Starts the integration of this project on a separate thread.  If
@@ -46,5 +48,7 @@ namespace ThoughtWorks.CruiseControl.Core
 		{
 			get;
 		}
+
+		void ForceBuild();
 	}
 }

@@ -23,29 +23,37 @@ namespace ThoughtWorks.CruiseControl.Core
 			_server.Start();
 		}
 
+		// unregister remoted object?
 		public void Stop()
 		{
 			_server.Stop();
 		}
 
+		// unregister remoted object?
 		public void Abort()
 		{
 			_server.Abort();
 		}
 
-		public void ForceBuild(string projectName)
+		// unregister remoted object?
+		public void WaitForExit()
 		{
-			_server.ForceBuild(projectName);
+			_server.WaitForExit();
 		}
 
-		public void RegisterForRemoting()
+		public ICruiseManager CruiseManager
 		{
-			CruiseManager manager = new CruiseManager((ICruiseControl)_server);
+			get { return _server.CruiseManager; }
+		}
+
+		private void RegisterForRemoting()
+		{
+			MarshalByRefObject marshalByRef = (MarshalByRefObject)_server.CruiseManager;
 
 			string configFile = AppDomain.CurrentDomain.SetupInformation.ConfigurationFile;
 
 			RemotingConfiguration.Configure(configFile);
-			RemotingServices.Marshal(manager, URI);
+			RemotingServices.Marshal(marshalByRef, URI);
  
 			VerifyCruiseManagerIsRemoted();
 		}
@@ -55,7 +63,7 @@ namespace ThoughtWorks.CruiseControl.Core
 			IChannelReceiver channel = (IChannelReceiver)ChannelServices.RegisteredChannels[0];
 			string url = channel.GetUrlsForUri(URI)[0];
 			ICruiseManager marshalledObject = (ICruiseManager) RemotingServices.Connect(typeof(ICruiseManager), url);
-			marshalledObject.GetStatus(); // this will throw an exception if it didn't connect
+//			marshalledObject.GetStatus(); // this will throw an exception if it didn't connect
 
 			Log.Info("CruiseManager: Listening on " + url);
 		}

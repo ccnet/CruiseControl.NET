@@ -34,7 +34,7 @@ namespace integration
 		public static IntegrationEventCounter AddIntegrationEventHandler(CruiseServer cc, string projectName)
 		{
 			IntegrationEventCounter counter = new IntegrationEventCounter();
-			((Project)cc.GetProject(projectName)).IntegrationCompleted += counter.IntegrationCompletedEventHandler;
+			((Project)cc.Configuration.Projects[projectName]).IntegrationCompleted += counter.IntegrationCompletedEventHandler;
 			return counter;
 		}
 

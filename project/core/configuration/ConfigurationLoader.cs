@@ -1,10 +1,10 @@
+using Exortech.NetReflector;
 using System;
 using System.IO;
 using System.Reflection;
 using System.Xml;
 using System.Xml.Schema;
-
-using Exortech.NetReflector;
+using ThoughtWorks.CruiseControl.Core.Util;
 
 namespace ThoughtWorks.CruiseControl.Core.Config
 {
@@ -121,7 +121,7 @@ namespace ThoughtWorks.CruiseControl.Core.Config
 				typeTable.Add(AppDomain.CurrentDomain);
 //				typeTable.Add(Assembly.GetExecutingAssembly());
 				typeTable.Add(Directory.GetCurrentDirectory(), CONFIG_ASSEMBLY_PATTERN);
-				IConfiguration configuration = new Configuration();
+				Configuration configuration = new Configuration();
 				foreach (XmlNode node in configXml.DocumentElement)
 				{
 					IProject project = NetReflector.Read(node, typeTable) as IProject;
@@ -152,7 +152,14 @@ namespace ThoughtWorks.CruiseControl.Core.Config
 
 		private void ConfigChanged() 
 		{
-			_configurationChangedHandler();
+			try
+			{
+				_configurationChangedHandler(Load());
+			}
+			catch (Exception ex)
+			{
+				Log.Error(ex);
+			}
 		}
 
 		protected void OnTimer(Object source, System.Timers.ElapsedEventArgs e)

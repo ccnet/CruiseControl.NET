@@ -33,11 +33,5 @@ namespace ThoughtWorks.CruiseControl.WebService
 		{
 			BackingCruiseManager.ForceBuild(projectName);
 		}
-
-		[WebMethod]
-		public ThoughtWorks.CruiseControl.Remote.CruiseControlStatus GetStatus()
-		{
-			return BackingCruiseManager.GetStatus();
-		}
 	}
 }

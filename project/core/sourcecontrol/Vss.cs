@@ -49,6 +49,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 		{
 			get { return _parser; }
 		}
+
 		public override Modification[] GetModifications(DateTime from, DateTime to)
 		{
 			Modification[] result = base.GetModifications (from, to);

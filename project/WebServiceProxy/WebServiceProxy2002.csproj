@@ -3,20 +3,20 @@
         ProjectType = "Local"
         ProductVersion = "7.0.9466"
         SchemaVersion = "1.0"
-        ProjectGuid = "{E820CF3B-8C5A-4002-BC16-B7818D3D54A8}"
+        ProjectGuid = "{19C24DF5-7EE8-4325-AFD6-C18D6C85DD9B}"
     >
         <Build>
             <Settings
                 ApplicationIcon = ""
                 AssemblyKeyContainerName = ""
-                AssemblyName = "ccnet.remote"
+                AssemblyName = "ThoughtWorks.CruiseControl.WebServiceProxy"
                 AssemblyOriginatorKeyFile = ""
                 DefaultClientScript = "JScript"
                 DefaultHTMLPageLayout = "Grid"
                 DefaultTargetSchema = "IE50"
                 DelaySign = "false"
                 OutputType = "Library"
-                RootNamespace = "ThoughtWorks.CruiseControl.Remote"
+                RootNamespace = "ThoughtWorks.CruiseControl.WebServiceProxy"
                 StartupObject = ""
             >
                 <Config
@@ -29,7 +29,7 @@
                     DocumentationFile = ""
                     DebugSymbols = "true"
                     FileAlignment = "4096"
-                    IncrementalBuild = "true"
+                    IncrementalBuild = "false"
                     Optimize = "false"
                     OutputPath = "bin\Debug\"
                     RegisterForComInterop = "false"
@@ -60,12 +60,27 @@
                 <Reference
                     Name = "System"
                     AssemblyName = "System"
-                    HintPath = "C:\WINNT\Microsoft.NET\Framework\v1.0.3705\System.dll"
+                    HintPath = "..\..\..\..\..\..\WINDOWS\Microsoft.NET\Framework\v1.1.4322\System.dll"
+                />
+                <Reference
+                    Name = "System.Data"
+                    AssemblyName = "System.Data"
+                    HintPath = "..\..\..\..\..\..\WINDOWS\Microsoft.NET\Framework\v1.1.4322\System.Data.dll"
                 />
                 <Reference
                     Name = "System.XML"
                     AssemblyName = "System.Xml"
-                    HintPath = "C:\WINNT\Microsoft.NET\Framework\v1.0.3705\System.XML.dll"
+                    HintPath = "..\..\..\..\..\..\WINDOWS\Microsoft.NET\Framework\v1.1.4322\System.XML.dll"
+                />
+                <Reference
+                    Name = "System.Web.Services"
+                    AssemblyName = "System.Web.Services"
+                    HintPath = "..\..\..\..\..\..\WINDOWS\Microsoft.NET\Framework\v1.1.4322\System.Web.Services.dll"
+                />
+                <Reference
+                    Name = "Remote2002"
+                    Project = "{E820CF3B-8C5A-4002-BC16-B7818D3D54A8}"
+                    Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
                 />
             </References>
         </Build>
@@ -77,43 +92,17 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "BuildCondition.cs"
+                    RelPath = "CCNetManagementProxy.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "CruiseControlStatus.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
+                    RelPath = "GenerateWsdl.bat"
+                    BuildAction = "None"
                 />
                 <File
-                    RelPath = "ICruiseManager.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "ICruiseServer.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "IntegrationStatus.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "ISchedule.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "ProjectActivity.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "ProjectStatus.cs"
-                    SubType = "Code"
+                    RelPath = "Generated\CCNetManagementService.cs"
+                    SubType = "code"
                     BuildAction = "Compile"
                 />
             </Include>

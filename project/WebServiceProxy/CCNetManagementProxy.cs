@@ -51,6 +51,11 @@ namespace ThoughtWorks.CruiseControl.WebServiceProxy
 			Service.ForceBuild(projectName);
 		}
 
+		public void WaitForExit(string projectName)
+		{
+			
+		}
+
 		public void StartCruiseControl()
 		{
 			Service.StartCruiseControl();

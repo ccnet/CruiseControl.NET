@@ -8,11 +8,6 @@ namespace ThoughtWorks.CruiseControl.Remote
 	public interface ICruiseManager
 	{
 		/// <summary>
-		/// Gets the current status of the CruiseControl.NET server.
-		/// </summary>
-		CruiseControlStatus GetStatus();
-
-		/// <summary>
 		/// Gets information about the last build status, current activity and project name.
 		/// for all projects on a cruise server
 		/// </summary>
@@ -23,5 +18,7 @@ namespace ThoughtWorks.CruiseControl.Remote
 		/// </summary>
 		/// <param name="projectName"></param>
 		void ForceBuild(string projectName);
+
+		void WaitForExit(string projectName);
 	}
 }

@@ -103,13 +103,13 @@
                     HintPath = "C:\WINNT\Microsoft.NET\Framework\v1.0.3705\System.Drawing.dll"
                 />
                 <Reference
-                    Name = "ThoughtWorks.CruiseControl.WebServiceProxy"
-                    AssemblyName = "ThoughtWorks.CruiseControl.WebServiceProxy"
-                    HintPath = "..\..\lib\ThoughtWorks.CruiseControl.WebServiceProxy.dll"
+                    Name = "Remote2002"
+                    Project = "{E820CF3B-8C5A-4002-BC16-B7818D3D54A8}"
+                    Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
                 />
                 <Reference
-                    Name = "ccnet2002.remote"
-                    Project = "{E820CF3B-8C5A-4002-BC16-B7818D3D54A8}"
+                    Name = "WebServiceProxy2002"
+                    Project = "{19C24DF5-7EE8-4325-AFD6-C18D6C85DD9B}"
                     Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
                 />
             </References>

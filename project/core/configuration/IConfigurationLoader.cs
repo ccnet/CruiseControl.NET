@@ -2,7 +2,7 @@ using System;
 
 namespace ThoughtWorks.CruiseControl.Core.Config
 {
-	public delegate void ConfigurationChangedHandler();
+	public delegate void ConfigurationChangedHandler(IConfiguration configuration);
 
 	public interface IConfigurationLoader
 	{

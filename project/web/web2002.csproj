@@ -98,11 +98,6 @@
                     HintPath = "C:\WINNT\Microsoft.NET\Framework\v1.0.3705\System.Runtime.Remoting.dll"
                 />
                 <Reference
-                    Name = "ccnet.remote"
-                    Project = "{E820CF3B-8C5A-4002-BC16-B7818D3D54A8}"
-                    Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
-                />
-                <Reference
                     Name = "core"
                     Project = "{F8113DB9-6C47-4FD1-8A01-655FCF151747}"
                     Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
@@ -111,6 +106,11 @@
                     Name = "SiteMesh"
                     AssemblyName = "SiteMesh"
                     HintPath = "..\..\lib\SiteMesh.dll"
+                />
+                <Reference
+                    Name = "ccnet2002.remote"
+                    Project = "{E820CF3B-8C5A-4002-BC16-B7818D3D54A8}"
+                    Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
                 />
             </References>
         </Build>
@@ -192,6 +192,26 @@
                 />
                 <File
                     RelPath = "PluginsSectionHandler.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "ServerLog.aspx"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "ServerLog.aspx.cs"
+                    DependentUpon = "ServerLog.aspx"
+                    SubType = "ASPXCodeBehind"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "ServerLog.aspx.resx"
+                    DependentUpon = "ServerLog.aspx.cs"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "ServerLogFileReader.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

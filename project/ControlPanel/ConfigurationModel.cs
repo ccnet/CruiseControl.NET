@@ -40,7 +40,7 @@ namespace ThoughtWorks.CruiseControl.ControlPanel
 				writer.QuoteChar = '\'';
 				
 				writer.WriteStartElement("cruisecontrol");
-				foreach (IProject project in _configuration)
+				foreach (IProject project in _configuration.Projects)
 				{
 					NetReflector.Write(writer, project);
 				}
@@ -52,7 +52,7 @@ namespace ThoughtWorks.CruiseControl.ControlPanel
 		{
 			_configuration = configuration;
 			ArrayList projects = new ArrayList();
-			foreach (IProject project in configuration) 
+			foreach (IProject project in configuration.Projects) 
 			{
 				projects.Add(new ProjectItem(project));
 			}

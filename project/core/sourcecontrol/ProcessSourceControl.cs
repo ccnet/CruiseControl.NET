@@ -76,6 +76,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			// to do this pattern properly, the output must be read in another thread
 			// see the class NAntBuilder.StdOutReader (which could be made a public utility class)
 			string result = reader.ReadToEnd();
+			if (result == string.Empty) throw new CruiseControlException("No data returned from process.  Check stderr.");
 			
 			process.WaitForExit(120000);
 			return new StringReader(result);

@@ -15,7 +15,7 @@ namespace ThoughtWorks.CruiseControl.Console
 		{
 			try
 			{
-				new ConsoleRunner(new ArgumentParser(args), new Timeout()).Run();
+				new ConsoleRunner(new ArgumentParser(args)).Run();
 			}
 			catch (Exception ex)
 			{
@@ -24,16 +24,14 @@ namespace ThoughtWorks.CruiseControl.Console
 		}	
 
 		private ArgumentParser _parser;
-		private ITimeout _timeout;
 		private ICruiseServer _server;
 
-		public ConsoleRunner(ArgumentParser parser, ITimeout timeout) : 
-			this(parser, CruiseServerFactory.Create(parser.IsRemote, parser.ConfigFile), timeout) { }
+		public ConsoleRunner(ArgumentParser parser) : 
+			this(parser, CruiseServerFactory.Create(parser.IsRemote, parser.ConfigFile)) { }
 
-		public ConsoleRunner(ArgumentParser parser, ICruiseServer server, ITimeout timeout)
+		public ConsoleRunner(ArgumentParser parser, ICruiseServer server)
 		{
 			_parser = parser;
-			_timeout = timeout;
 			_server = server;
 		}
 
@@ -44,33 +42,20 @@ namespace ThoughtWorks.CruiseControl.Console
 				Log.Warning(ArgumentParser.Usage);
 				return;
 			}
-
 			LaunchServer();
 		}
 
 		private void LaunchServer()
 		{
-			try
+			if (_parser.Project == null)
 			{
-				if (_parser.Project == null)
-				{
-					Log.Info("Starting CruiseControl.NET Server");
-					_server.Start();
-					// server.WaitForExit();
-				}
-				else
-				{
-					Log.Info("Starting CruiseControl.NET Project: " + _parser.Project);
-					_server.ForceBuild(_parser.Project);
-					// server.CruiseManager.ForceBuild(_parser.Project);
-					// server.CruiseManager.WaitForExit(_parser.Project);
-				}
-				Log.Info("Hit Ctrl-C when integration is complete."); // HACK: better to join thread.
-				_timeout.Wait();
+				_server.Start();
+				_server.WaitForExit();
 			}
-			finally
+			else
 			{
-				_server.Abort();
+				_server.CruiseManager.ForceBuild(_parser.Project);
+				_server.CruiseManager.WaitForExit(_parser.Project);
 			}
 		}
 	}

@@ -3,6 +3,7 @@ using NUnit.Framework;
 using System;
 using System.Threading;
 using ThoughtWorks.CruiseControl.Core;
+using ThoughtWorks.CruiseControl.Core.Config;
 using ThoughtWorks.CruiseControl.Core.Schedules;
 using ThoughtWorks.CruiseControl.Core.Util;
 using ThoughtWorks.CruiseControl.Remote;
@@ -34,11 +35,11 @@ namespace integration
 		{
 			string xml = CreateBasicProjectXml();
 			string configFile = TempFileUtil.CreateTempXmlFile("StartLocalServer", "ccnet.config", xml);
-			ICruiseServer server = CruiseServerFactory.Create(false, configFile);
+			IConfiguration config = new ConfigurationLoader(configFile).Load();
+			ICruiseServer server = new CruiseServer(config);
 			server.Start();
 
-			ICruiseControl cc = server as ICruiseControl;
-			Project project = (Project)cc.Configuration.GetProject("foo");
+			Project project = (Project)config.Projects["foo"];
 			project.IntegrationCompleted += new IntegrationCompletedEventHandler(this.WaitForBuildToComplete);
 			wait.WaitOne();
 			server.Stop();

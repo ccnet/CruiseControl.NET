@@ -20,8 +20,13 @@ namespace ThoughtWorks.CruiseControl.Remote
 		void Abort();
 
 		/// <summary>
-		/// Force the specified project to run a single integration immediately
+		/// Wait for CruiseControl server to finish executing
 		/// </summary>
-		void ForceBuild(string project);
+		void WaitForExit();
+
+		/// <summary>
+		/// Retrieve CruiseManager interface for the server
+		/// </summary>
+		ICruiseManager CruiseManager { get; }
 	}
 }

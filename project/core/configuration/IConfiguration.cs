@@ -7,9 +7,9 @@ namespace ThoughtWorks.CruiseControl.Core
 	/// The configuration interface for CruiseControl.NET.  Extends <see cref="IEnumerable"/>
 	/// and implementations should provide enumeration over projects.
 	/// </summary>
-	public interface IConfiguration : IEnumerable
+	public interface IConfiguration
 	{
-		void AddProject(IProject project);
-		IProject GetProject(string name);
+		IProjectList Projects { get; }
+		IProjectIntegratorList Integrators { get; }
 	}
 }

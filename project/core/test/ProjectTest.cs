@@ -169,7 +169,7 @@ namespace ThoughtWorks.CruiseControl.Core.Test
 
 			DateTime start = DateTime.Now;
 			control.Start(); // RunIntegration();
-			control.WaitForExit();
+			// control.WaitForExit();
 			DateTime stop = DateTime.Now;
 
 			// verify that build was NOT invoked and postbuild was NOT invoked

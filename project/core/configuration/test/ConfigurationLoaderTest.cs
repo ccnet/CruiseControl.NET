@@ -91,7 +91,7 @@ namespace ThoughtWorks.CruiseControl.Core.Config.Test
 
 		private void ValidateProject(IConfiguration configuration, string projectName)
 		{
-			Project project = configuration.GetProject(projectName) as Project;
+			Project project = configuration.Projects[projectName] as Project;
 			AssertEquals(projectName, project.Name);
 			AssertNotNull("missing builder", project.Builder);
 			AssertEquals(typeof(MockBuilder), project.Builder.GetType());
@@ -121,9 +121,9 @@ namespace ThoughtWorks.CruiseControl.Core.Config.Test
 		{
 			string xml = @"<customtestproject name=""foo"" />";
 			IConfiguration configuration = loader.PopulateProjectsFromXml(ConfigurationFixture.GenerateConfig(xml));
-			AssertNotNull(configuration.GetProject("foo"));
-			AssertEquals(typeof(CustomTestProject), configuration.GetProject("foo").GetType());
-			AssertEquals("foo", ((CustomTestProject) configuration.GetProject("foo")).Name);
+			AssertNotNull(configuration.Projects["foo"]);
+			AssertEquals(typeof(CustomTestProject), configuration.Projects["foo"].GetType());
+			AssertEquals("foo", ((CustomTestProject) configuration.Projects["foo"]).Name);
 		}
 
 		[ReflectorType("customtestproject")]
@@ -142,7 +142,7 @@ namespace ThoughtWorks.CruiseControl.Core.Config.Test
 			ConfigurationChangedHandler handler = new ConfigurationChangedHandler(OnConfigurationChanged);
 			loader.AddConfigurationChangedHandler(handler);
 			AssertEquals("configuration should not have changed yet!", 0, changed);
-			TempFileUtil.UpdateTempFile(configFile, "<hello/>");
+			TempFileUtil.UpdateTempFile(configFile, " ");		// must be valid xml
 			// filesystemwatcher runs in separate thread so must wait for wake up
 			System.Threading.Thread.Sleep(1000);
 			lock(loader) 
@@ -151,7 +151,7 @@ namespace ThoughtWorks.CruiseControl.Core.Config.Test
 			}
 		}
 
-		private void OnConfigurationChanged()
+		private void OnConfigurationChanged(IConfiguration config)
 		{
 			changed++;
 		}

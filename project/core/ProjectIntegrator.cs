@@ -22,22 +22,27 @@ namespace ThoughtWorks.CruiseControl.Core
 		private Thread _thread;
 		private ProjectIntegratorState _state = ProjectIntegratorState.Stopped;
 
+		public ProjectIntegrator(IProject project) : this(project.Schedule, project) { }
+
 		public ProjectIntegrator(ISchedule schedule, IProject project)
 		{
 			_schedule = schedule;
 			_project = project;
 		}
 
+		public string Name
+		{
+			get { return _project.Name; }
+		}
+
 		public IProject Project 
 		{ 
 			get { return _project; }
-			set { _project = value; } 
 		}
 
 		public ISchedule Schedule
 		{
 			get { return _schedule; }
-			set { _schedule = value; }
 		}
 
 		public ProjectIntegratorState State
@@ -180,6 +185,16 @@ namespace ThoughtWorks.CruiseControl.Core
 		public void Dispose()
 		{
 			Abort();
+		}
+
+		/// <summary>
+		/// TODO: move force build functionality into project integrator
+		/// </summary>
+		public void ForceBuild()
+		{
+			Log.Info("Force Build for project: " + _project);
+			Start();
+			((Schedules.Schedule)_schedule).ForceBuild();
 		}
 	}
 }

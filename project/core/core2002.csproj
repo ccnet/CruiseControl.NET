@@ -9,7 +9,7 @@
             <Settings
                 ApplicationIcon = ""
                 AssemblyKeyContainerName = ""
-                AssemblyName = "ccnet.core"
+                AssemblyName = "ThoughtWorks.CruiseControl.Core"
                 AssemblyOriginatorKeyFile = ""
                 DefaultClientScript = "JScript"
                 DefaultHTMLPageLayout = "Grid"
@@ -83,11 +83,6 @@
                     HintPath = "..\..\lib\NetReflector.dll"
                 />
                 <Reference
-                    Name = "ccnet.remote"
-                    Project = "{E820CF3B-8C5A-4002-BC16-B7818D3D54A8}"
-                    Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
-                />
-                <Reference
                     Name = "System.Runtime.Remoting"
                     AssemblyName = "System.Runtime.Remoting"
                     HintPath = "C:\WINNT\Microsoft.NET\Framework\v1.0.3705\System.Runtime.Remoting.dll"
@@ -101,6 +96,11 @@
                     Name = "System.Data"
                     AssemblyName = "System.Data"
                     HintPath = "C:\WINNT\Microsoft.NET\Framework\v1.0.3705\System.Data.dll"
+                />
+                <Reference
+                    Name = "ccnet2002.remote"
+                    Project = "{E820CF3B-8C5A-4002-BC16-B7818D3D54A8}"
+                    Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
                 />
             </References>
         </Build>
@@ -132,11 +132,6 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "ICruiseControl.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
                     RelPath = "IntegrationEvents.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -158,6 +153,16 @@
                 />
                 <File
                     RelPath = "IProjectIntegrator.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "IProjectIntegratorList.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "IProjectList.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -187,7 +192,17 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "ProjectIntegratorList.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "ProjectIntegratorState.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "ProjectList.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -287,6 +302,11 @@
                 />
                 <File
                     RelPath = "configuration\test\ConfigurationLoaderTest.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "configuration\test\ConfigurationTest.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -675,8 +695,9 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "test\ccnet.core.dll.config"
-                    BuildAction = "None"
+                    RelPath = "test\ConfigurationStub.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
                 />
                 <File
                     RelPath = "test\CruiseManagerTest.cs"
@@ -727,6 +748,10 @@
                     RelPath = "test\SimpleBuildFile.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "test\test.config"
+                    BuildAction = "None"
                 />
                 <File
                     RelPath = "test\TestLogs.cs"

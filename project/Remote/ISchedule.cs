@@ -37,6 +37,6 @@ namespace ThoughtWorks.CruiseControl.Remote
 		/// Tells the scheduler that an integration should occur the next
 		/// time <see cref="ShouldRunIntegration"/> is called.
 		/// </summary>
-		void ForceBuild();
+//		void ForceBuild();
 	}
 }

@@ -119,12 +119,19 @@ namespace ThoughtWorks.CruiseControl.Core.Builder
 			try
 			{			
 				int exitCode = AttemptExecute(result);
-				result.Status = (exitCode == 0) ? IntegrationStatus.Success : IntegrationStatus.Failure;
+				if (exitCode == 0)
+				{
+					result.Status = IntegrationStatus.Success;
+				}
+				else
+				{
+					result.Status = IntegrationStatus.Failure;
+					Log.Info("NAnt build failed - exit code: " + exitCode);
+				}
 			}
-			catch (CruiseControlException cce)
+			catch (CruiseControlException)
 			{
-				// this type of exception is allowed to pass
-				throw cce;
+				throw;
 			}
 			catch (Exception e) 
 			{
@@ -140,13 +147,10 @@ namespace ThoughtWorks.CruiseControl.Core.Builder
 		/// <exception cref="CruiseControlException">If a BuildTimeout is specified, and the process exceeds it.</exception>
 		protected virtual int AttemptExecute(IntegrationResult result)
 		{
-			Process process = ProcessUtil.CreateProcess(Executable, CreateArgs(), BaseDirectory);
-			TextReader stdOut = null;
-
-			try
+			using (Process process = ProcessUtil.CreateProcess(Executable, CreateArgs(), BaseDirectory))
 			{
 				// start the process, and redirect output
-				stdOut = ProcessUtil.ExecuteRedirected(process);
+				TextReader stdOut = ProcessUtil.ExecuteRedirected(process);
 
 				// read the std output in another thread (otherwise it'll block and we won't be able to do timeout)
 				StdOutReader stdOutReader = new StdOutReader(result, stdOut);
@@ -157,14 +161,14 @@ namespace ThoughtWorks.CruiseControl.Core.Builder
 					// wait prescribed number of milliseconds
 					process.WaitForExit(BuildTimeoutSeconds * 1000);
 					
-					if (!process.HasExited)
+					if (! process.HasExited)
 					{
 						// the process timed out
 						process.Kill();
 
 						// this causes the build to end up in 'exception' state.  the exception message is logged,
 						// though currently doesn't appear on the build web page
-						throw new CruiseControlException("NAnt process timed out (after " + BuildTimeoutSeconds + " seconds)");
+						throw new BuilderException(this, "NAnt process timed out (after " + BuildTimeoutSeconds + " seconds)");
 					}
 				}
 				else
@@ -179,10 +183,6 @@ namespace ThoughtWorks.CruiseControl.Core.Builder
 
 				// if the process timed out, we'll be unable to read this value -- InvalidOperationException
 				return process.ExitCode;
-			}
-			finally
-			{
-				process.Close();
 			}
 		}
 

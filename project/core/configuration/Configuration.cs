@@ -6,7 +6,8 @@ namespace ThoughtWorks.CruiseControl.Core.Config
 {
 	public class Configuration : IConfiguration
 	{
-		private IDictionary _projects = new Hashtable();
+		private ProjectList _projects = new ProjectList();
+		private ProjectIntegratorList _integrators = new ProjectIntegratorList();
 
 		// these values have been moved to this class to co-locate all app settings string keys...
 		// implemented as property getters, rather than static-readonly, so that they're retrieved for each call
@@ -19,17 +20,18 @@ namespace ThoughtWorks.CruiseControl.Core.Config
 
 		public void AddProject(IProject project)
 		{
-			_projects[project.Name] = project;
+			_projects.Add(project);
+			_integrators.Add(new ProjectIntegrator(project));
 		}
 
-		public IProject GetProject(string name)
+		public IProjectList Projects
 		{
-			return _projects[name] as IProject;
+			get { return _projects; }
 		}
 
-		IEnumerator IEnumerable.GetEnumerator()
+		public IProjectIntegratorList Integrators
 		{
-			return _projects.Values.GetEnumerator();
+			get { return _integrators; }
 		}
 	}
 }

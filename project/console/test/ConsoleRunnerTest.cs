@@ -2,6 +2,7 @@ using System;
 using System.Diagnostics;
 using NMock;
 using NUnit.Framework;
+using ThoughtWorks.CruiseControl.Core;
 using ThoughtWorks.CruiseControl.Remote;
 using ThoughtWorks.CruiseControl.Core.Util;
 
@@ -33,7 +34,7 @@ namespace ThoughtWorks.CruiseControl.Console.Test
 		{
 			Mock mockCruiseServer = new DynamicMock(typeof(ICruiseServer));
 			ArgumentParser parser = new ArgumentParser(new string[] { "-remoting:on", "-help" });
-			ConsoleRunner runner = new ConsoleRunner(parser, (ICruiseServer)mockCruiseServer.MockInstance, null);
+			ConsoleRunner runner = new ConsoleRunner(parser, (ICruiseServer)mockCruiseServer.MockInstance);
 			runner.Run();
 
 			AssertEquals(1, listener.Traces.Count);
@@ -43,17 +44,19 @@ namespace ThoughtWorks.CruiseControl.Console.Test
 		[Test]
 		public void ForceBuildCruiseServerProject()
 		{
-			Mock mockTimeout = new DynamicMock(typeof(ITimeout));
-			mockTimeout.Expect("Wait");
+			Mock mockCruiseManager = new DynamicMock(typeof(ICruiseManager));
+			mockCruiseManager.Expect("ForceBuild", "test");
+			mockCruiseManager.Expect("WaitForExit");
 
 			Mock mockCruiseServer = new DynamicMock(typeof(ICruiseServer));
-			mockCruiseServer.Expect("ForceBuild", "test");
+			mockCruiseServer.ExpectAndReturn("CruiseManager", mockCruiseManager.MockInstance);
+			mockCruiseServer.ExpectAndReturn("CruiseManager", mockCruiseManager.MockInstance);
 
 			ArgumentParser parser = new ArgumentParser(new string[] { "-project:test" });
-			new ConsoleRunner(parser, (ICruiseServer)mockCruiseServer.MockInstance, (ITimeout)mockTimeout.MockInstance).Run();
+			new ConsoleRunner(parser, (ICruiseServer)mockCruiseServer.MockInstance).Run();
 
-			mockTimeout.Verify();
 			mockCruiseServer.Verify();
+			mockCruiseManager.Verify();
 		}	
 
 		[Test]
@@ -62,16 +65,13 @@ namespace ThoughtWorks.CruiseControl.Console.Test
 			string xml = @"<cruisecontrol><workflow name=""test""><tasks /></workflow></cruisecontrol>";
 			string configFile = TempFileUtil.CreateTempXmlFile("ConsoleRunnerTest", "myconfig.config", xml);
 
-			Mock mockTimeout = new DynamicMock(typeof(ITimeout));
-			mockTimeout.Expect("Wait");
-
 			Mock mockCruiseServer = new DynamicMock(typeof(ICruiseServer));
 			mockCruiseServer.Expect("Start");
+			mockCruiseServer.Expect("WaitForExit");
 
 			ArgumentParser parser = new ArgumentParser(new string[0]);
-			new ConsoleRunner(parser, (ICruiseServer)mockCruiseServer.MockInstance, (ITimeout)mockTimeout.MockInstance).Run();
+			new ConsoleRunner(parser, (ICruiseServer)mockCruiseServer.MockInstance).Run();
 
-			mockTimeout.Verify();
 			mockCruiseServer.Verify();
 		}	
 	}
