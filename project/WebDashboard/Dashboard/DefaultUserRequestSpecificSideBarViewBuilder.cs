@@ -4,6 +4,7 @@ using ThoughtWorks.CruiseControl.WebDashboard.MVC.View;
 using ThoughtWorks.CruiseControl.WebDashboard.Plugins.AddProject;
 using ThoughtWorks.CruiseControl.WebDashboard.Plugins.DeleteProject;
 using ThoughtWorks.CruiseControl.WebDashboard.Plugins.EditProject;
+using ThoughtWorks.CruiseControl.WebDashboard.Plugins.NCover;
 using ThoughtWorks.CruiseControl.WebDashboard.Plugins.ViewBuildLog;
 using ThoughtWorks.CruiseControl.WebDashboard.Plugins.ViewBuildReport;
 using ThoughtWorks.CruiseControl.WebDashboard.Plugins.ViewServerLog;
@@ -58,6 +59,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 				TR( TD( A("View Test Details", urlBuilder.BuildBuildUrl(new ActionSpecifierWithName(ViewTestDetailsBuildReportAction.ACTION_NAME), serverName, projectName, buildName)))),
 				TR( TD( A("View Test Timings", urlBuilder.BuildBuildUrl(new ActionSpecifierWithName(ViewTestTimingsBuildReportAction.ACTION_NAME), serverName, projectName, buildName)))),
 				TR( TD( A("View FxCop Report", urlBuilder.BuildBuildUrl(new ActionSpecifierWithName(ViewFxCopBuildReportAction.ACTION_NAME), serverName, projectName, buildName)))),
+				TR( TD( A("View NCover Report", urlBuilder.BuildBuildUrl(new ActionSpecifierWithName(ViewNCoverBuildReportAction.ACTION_NAME), serverName, projectName, buildName)))),
 				TR( TD( "&nbsp;")),
 				TR( TD( recentBuildsViewBuilder.BuildRecentBuildsTable(serverName, projectName)))
 					);

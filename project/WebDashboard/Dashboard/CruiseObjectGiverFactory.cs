@@ -7,6 +7,7 @@ using ThoughtWorks.CruiseControl.WebDashboard.MVC.Cruise;
 using ThoughtWorks.CruiseControl.WebDashboard.Plugins.AddProject;
 using ThoughtWorks.CruiseControl.WebDashboard.Plugins.DeleteProject;
 using ThoughtWorks.CruiseControl.WebDashboard.Plugins.EditProject;
+using ThoughtWorks.CruiseControl.WebDashboard.Plugins.NCover;
 using ThoughtWorks.CruiseControl.WebDashboard.Plugins.ViewAllBuilds;
 using ThoughtWorks.CruiseControl.WebDashboard.Plugins.ViewBuildLog;
 using ThoughtWorks.CruiseControl.WebDashboard.Plugins.ViewBuildReport;
@@ -80,6 +81,9 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 
 			giverAndRegistrar.CreateImplementationMapping(ViewFxCopBuildReportAction.ACTION_NAME, 
 				typeof(ViewFxCopBuildReportAction)).Decorate(typeof(ServerCheckingProxyAction)).Decorate(typeof(BuildCheckingProxyAction)).Decorate(typeof(ProjectCheckingProxyAction)).Decorate(typeof(CruiseActionProxyAction));
+
+			giverAndRegistrar.CreateImplementationMapping(ViewNCoverBuildReportAction.ACTION_NAME, 
+				typeof(ViewNCoverBuildReportAction)).Decorate(typeof(ServerCheckingProxyAction)).Decorate(typeof(BuildCheckingProxyAction)).Decorate(typeof(ProjectCheckingProxyAction)).Decorate(typeof(CruiseActionProxyAction));
 
 			return giverAndRegistrar;
 		}
