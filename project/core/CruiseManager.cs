@@ -1,5 +1,7 @@
 using System;
 using System.Collections;
+using System.IO;
+using ThoughtWorks.CruiseControl.Core.Publishers;
 using ThoughtWorks.CruiseControl.Remote;
 
 namespace ThoughtWorks.CruiseControl.Core 
@@ -77,7 +79,26 @@ namespace ThoughtWorks.CruiseControl.Core
 
 		public string GetLog(string projectName, string buildName)
 		{
-			return  "Some log contents";
+			// TODO - this is a hack - I'll tidy it up later - promise! :) MR
+			foreach (Project project in _config.Projects) 
+			{
+				if (project.Name == projectName)
+				{
+					foreach (IIntegrationCompletedEventHandler publisher in project.Publishers)
+					{
+						if (publisher is XmlLogPublisher)
+						{
+							using (StreamReader sr = new StreamReader(Path.Combine(((XmlLogPublisher) publisher).LogDir, buildName)))
+							{
+								return sr.ReadToEnd();
+							}
+						}
+					}
+					throw new CruiseControlException("Unable to find Log Publisher for project so can't find log file");
+				}
+			}
+
+			throw new NoSuchProjectException(projectName);
 		}
 
 		/// <summary>
