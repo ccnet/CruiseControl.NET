@@ -39,9 +39,10 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 
 		private void ReadToEnd()
 		{
-			while (stream.Peek() >= 0)
+			int nextChar;
+			while ((nextChar = stream.Read()) >= 0)
 			{
-				output.Write((char)stream.Read());
+				output.Write((char)nextChar);
 			}
 		}
 
