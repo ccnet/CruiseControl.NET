@@ -12,8 +12,8 @@ namespace ThoughtWorks.CruiseControl.Core.Util.Test
 		{
 			HtmlExceptionFormatter formatter  = new HtmlExceptionFormatter(new Exception("foo"+Environment.NewLine+"Bar"));
 		    string formattedString = formatter.ToString();
-			Assert(formattedString.IndexOf(Environment.NewLine) == -1);
-			AssertEquals(1+1, CountOfStrings(formattedString, "<br/>"));
+			Assert.IsTrue(formattedString.IndexOf(Environment.NewLine) == -1);
+			Assert.AreEqual(1+1, CountOfStrings(formattedString, "<br/>"));
 		}
 
 	    private int CountOfStrings (string baseString, string stringToSearch)

@@ -5,7 +5,6 @@ using System;
 using System.Collections;
 using ThoughtWorks.CruiseControl.Core.Test;
 using ThoughtWorks.CruiseControl.Core.Util;
-using NMock.Constraints;
 
 namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test
 {
@@ -34,7 +33,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test
 			NetReflector.Read(SourceControlXml, multiSourceControl);
 
 			//// VERIFY
-			Assert(multiSourceControl.SourceControls.Count == 2);
+			Assert.IsTrue(multiSourceControl.SourceControls.Count == 2);
 
 			string optionalProp0 = ((SourceControlMock)multiSourceControl.SourceControls[0]).AnOptionalProperty;
 			string optionalProp1 = ((SourceControlMock)multiSourceControl.SourceControls[1]).AnOptionalProperty;
@@ -42,7 +41,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test
 			bool fooFound = optionalProp0 == "foo" || optionalProp1 == "foo";
 			bool barFound = optionalProp0 == "bar" || optionalProp1 == "bar";
 
-			Assert("Didn't find both foo and bar Source Controls", fooFound && barFound);
+			Assert.IsTrue(fooFound && barFound);
 		}
 
 		[Test]
@@ -111,9 +110,9 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test
 				mock.Verify();
 			}
 
-			Assert(returnedMods.Contains(mod1));
-			Assert(returnedMods.Contains(mod2));
-			Assert(returnedMods.Contains(mod3));
+			Assert.IsTrue(returnedMods.Contains(mod1));
+			Assert.IsTrue(returnedMods.Contains(mod2));
+			Assert.IsTrue(returnedMods.Contains(mod3));
 		}
 
 		[Test]
@@ -121,8 +120,8 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test
 		{
 			FileSourceControl sc = new FileSourceControl();
 			IProject project = (IProject) new DynamicMock(typeof(IProject)).MockInstance;
-			Assert(sc.ShouldRun(new IntegrationResult(), project));
-			Assert(sc.ShouldRun(IntegrationResultMother.CreateSuccessful(), project));
+			Assert.IsTrue(sc.ShouldRun(new IntegrationResult(), project));
+			Assert.IsTrue(sc.ShouldRun(IntegrationResultMother.CreateSuccessful(), project));
 			AssertFalse(sc.ShouldRun(IntegrationResultMother.CreateFailed(), project));
 			AssertFalse(sc.ShouldRun(IntegrationResultMother.CreateExceptioned(), project));
 		}

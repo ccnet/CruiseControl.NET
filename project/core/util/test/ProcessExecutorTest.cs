@@ -1,7 +1,5 @@
 using NUnit.Framework;
 using System;
-using System.Diagnostics;
-using System.IO;
 
 namespace ThoughtWorks.CruiseControl.Core.Util.Test
 {
@@ -20,7 +18,7 @@ namespace ThoughtWorks.CruiseControl.Core.Util.Test
 		public void ExecuteProcessAndEchoResultsBackThroughStandardOut()
 		{
 			ProcessResult result = executor.Execute(new ProcessInfo("cmd.exe", "/C @echo Hello World"));
-			AssertEquals("Hello World", result.StandardOutput.Trim());
+			Assert.AreEqual("Hello World", result.StandardOutput.Trim());
 			AssertProcessExitsSuccessfully(result);
 		}
 
@@ -28,7 +26,7 @@ namespace ThoughtWorks.CruiseControl.Core.Util.Test
 		public void ExecuteProcessAndEchoResultsBackThroughStandardOutWhereALargeAmountOfOutputIsProduced()
 		{
 			ProcessResult result = executor.Execute(new ProcessInfo("cmd.exe", "/C @dir " + Environment.SystemDirectory));
-			Assert("process should not have timed out", ! result.TimedOut);
+			Assert.IsTrue(! result.TimedOut);
 			AssertProcessExitsSuccessfully(result);
 		}
 
@@ -38,10 +36,10 @@ namespace ThoughtWorks.CruiseControl.Core.Util.Test
 			ProcessResult result = executor.Execute(new ProcessInfo("cmd.exe", "/C @zerk.exe foo"));
 
 			AssertProcessExitsWithFailure(result, 1);
-			AssertEquals(@"'zerk.exe' is not recognized as an internal or external command,
+			Assert.AreEqual(@"'zerk.exe' is not recognized as an internal or external command,
 operable program or batch file.", result.StandardError.Trim());
-			AssertEquals(string.Empty, result.StandardOutput);
-			Assert("process should not have timed out", ! result.TimedOut);
+			Assert.AreEqual(string.Empty, result.StandardOutput);
+			Assert.IsTrue(! result.TimedOut);
 		}
 
 		[Test]
@@ -51,7 +49,7 @@ operable program or batch file.", result.StandardError.Trim());
 			processInfo.EnvironmentVariables["foo"] = "bar";
 			ProcessResult result = executor.Execute(processInfo);
 
-			AssertEquals("foo=bar\r\n", result.StandardOutput);
+			Assert.AreEqual("foo=bar\r\n", result.StandardOutput);
 			AssertProcessExitsSuccessfully(result);
 		}
 
@@ -65,8 +63,8 @@ operable program or batch file.", result.StandardError.Trim());
 				processInfo.TimeOut = 10;
 				ProcessResult result = executor.Execute(processInfo);
 
-				Assert("process should have timed out", result.TimedOut);
-				AssertNotNull("some output should have been produced", result.StandardOutput);
+				Assert.IsTrue(result.TimedOut);
+				Assert.IsNotNull(result.StandardOutput, "some output should have been produced");
 				AssertProcessExitsWithFailure(result, ProcessResult.TIMED_OUT_EXIT_CODE);
 			}
 			finally
@@ -84,14 +82,14 @@ operable program or batch file.", result.StandardError.Trim());
 
 		private void AssertProcessExitsSuccessfully(ProcessResult result)
 		{
-			AssertEquals(ProcessResult.SUCCESSFUL_EXIT_CODE, result.ExitCode);
+			Assert.AreEqual(ProcessResult.SUCCESSFUL_EXIT_CODE, result.ExitCode);
 			AssertFalse("process should not return an error", result.Failed);
 		}
 
 		private void AssertProcessExitsWithFailure(ProcessResult result, int expectedExitCode)
 		{
-			AssertEquals(expectedExitCode, result.ExitCode);
-			Assert("process should return an error", result.Failed);
+			Assert.AreEqual(expectedExitCode, result.ExitCode);
+			Assert.IsTrue(result.Failed, "process should return an error");
 		}
 	}
 }

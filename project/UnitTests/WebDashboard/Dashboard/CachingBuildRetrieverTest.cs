@@ -6,7 +6,7 @@ using ThoughtWorks.CruiseControl.WebDashboard.Dashboard;
 namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 {
 	[TestFixture]
-	public class CachingBuildRetrieverTest : Assertion
+	public class CachingBuildRetrieverTest
 	{
 		private DynamicMock cacheManagerMock;
 		private DynamicMock slaveBuildRetrieverMock;
@@ -43,10 +43,10 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 			cacheManagerMock.ExpectAndReturn("GetContent", logContent, serverName, projectName, CachingBuildRetriever.CacheDirectory, buildName);
 
 			Build returnedBuild = cachingBuildRetriever.GetBuild(serverName, projectName, buildName);
-			AssertEquals(buildName, returnedBuild.Name);
-			AssertEquals(logContent, returnedBuild.Log);
-			AssertEquals(serverName, returnedBuild.ServerName);
-			AssertEquals(projectName, returnedBuild.ProjectName);
+			Assert.AreEqual(buildName, returnedBuild.Name);
+			Assert.AreEqual(logContent, returnedBuild.Log);
+			Assert.AreEqual(serverName, returnedBuild.ServerName);
+			Assert.AreEqual(projectName, returnedBuild.ProjectName);
 
 			VerifyAll();
 		}
@@ -61,10 +61,10 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 			cacheManagerMock.ExpectNoCall("AddContent",typeof(string), typeof(string), typeof(string), typeof(string), typeof(string));
 
 			Build returnedBuild = cachingBuildRetriever.GetBuild(serverName, projectName, buildName);
-			AssertEquals(buildName, returnedBuild.Name);
-			AssertEquals(logContent, returnedBuild.Log);
-			AssertEquals(serverName, returnedBuild.ServerName);
-			AssertEquals(projectName, returnedBuild.ProjectName);
+			Assert.AreEqual(buildName, returnedBuild.Name);
+			Assert.AreEqual(logContent, returnedBuild.Log);
+			Assert.AreEqual(serverName, returnedBuild.ServerName);
+			Assert.AreEqual(projectName, returnedBuild.ProjectName);
 
 			VerifyAll();
 		}

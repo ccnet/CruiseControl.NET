@@ -42,8 +42,8 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers.Test
         [Test]
         public void PopulateFromConfig()
         {
-            AssertNotNull("Populated publisher is null", _publisher);
-            AssertEquals(LOGDIR, _publisher.LogDir);
+            Assert.IsNotNull(_publisher);
+            Assert.AreEqual(LOGDIR, _publisher.LogDir);
         }
 
         [Test]
@@ -56,8 +56,8 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers.Test
 			</mergeFiles>
 		</xmllogger>", LOGDIR);
             XmlLogPublisher pub = NetReflector.Read(xml) as XmlLogPublisher;
-            AssertEquals(1, pub.MergeFiles.Length);
-            AssertEquals(@"d:\foo.xml", pub.MergeFiles[0]);
+            Assert.AreEqual(1, pub.MergeFiles.Length);
+            Assert.AreEqual(@"d:\foo.xml", pub.MergeFiles[0]);
         }
 
         [Test]
@@ -65,7 +65,7 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers.Test
         {
             IntegrationResult result = CreateIntegrationResult(IntegrationStatus.Failure, true);
             string expected = "log19800101000000.xml";
-            AssertEquals(expected, _publisher.GetFilename(result));
+            Assert.AreEqual(expected, _publisher.GetFilename(result));
         }
 
         [Test]
@@ -73,7 +73,7 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers.Test
         {
             IntegrationResult result = CreateIntegrationResult(IntegrationStatus.Success, true);
             string expected = "log19800101000000Lbuild.1.xml";
-            AssertEquals(expected, _publisher.GetFilename(result));
+            Assert.AreEqual(expected, _publisher.GetFilename(result));
         }
 
         [Test]
@@ -85,7 +85,7 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers.Test
 
             string filename = _publisher.GetFilename(result);
             string outputPath = Path.Combine(_publisher.LogDir, filename);
-            Assert(outputPath + " should exist ", File.Exists(outputPath));
+            Assert.IsTrue(File.Exists(outputPath), outputPath + " should exist ");
 
             CheckForXml(outputPath);
         }
@@ -115,7 +115,7 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers.Test
             string actualFilename = Path.Combine(logDir, _publisher.GetFilename(result));
             using (StreamReader textReader = File.OpenText(actualFilename))
             {
-				AssertEquals(expected, textReader.ReadToEnd());    
+				Assert.AreEqual(expected, textReader.ReadToEnd());    
             }
         }
 
@@ -134,13 +134,13 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers.Test
         private void AssertGetXmlWriter(string filename)
         {
             XmlWriter writer = _publisher.GetXmlWriter(TempFileUtil.GetTempPath(TEMP_SUBDIR), filename);
-            AssertNotNull(writer);
+            Assert.IsNotNull(writer);
 
             writer.WriteStartElement("bar");
             writer.WriteEndElement();
             writer.Close();
 
-            Assert(filename + " should exist ", TempFileUtil.TempFileExists(TEMP_SUBDIR, filename));
+            Assert.IsTrue(TempFileUtil.TempFileExists(TEMP_SUBDIR, filename));
         }
 
         private IntegrationResult CreateIntegrationResult(IntegrationStatus status, bool addModifications)
@@ -163,8 +163,8 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers.Test
         {
             AssertGetXmlWriter("TestGetXmlWriter1.xml");
             AssertGetXmlWriter("TestGetXmlWriter2.xml");
-            Assert("there should be two log files", TempFileUtil.TempFileExists(TEMP_SUBDIR, "TestGetXmlWriter1.xml"));
-            AssertEquals(2, Directory.GetFiles(TempFileUtil.GetTempPath(TEMP_SUBDIR)).Length);
+            Assert.IsTrue(TempFileUtil.TempFileExists(TEMP_SUBDIR, "TestGetXmlWriter1.xml"), "there should be two log files");
+            Assert.AreEqual(2, Directory.GetFiles(TempFileUtil.GetTempPath(TEMP_SUBDIR)).Length);
         }
 
 

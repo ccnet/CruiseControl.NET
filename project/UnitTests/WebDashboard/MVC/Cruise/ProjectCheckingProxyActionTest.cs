@@ -8,7 +8,7 @@ using ThoughtWorks.CruiseControl.WebDashboard.MVC.Cruise;
 namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.MVC.Cruise
 {
 	[TestFixture]
-	public class ProjectCheckingProxyActionTest : Assertion
+	public class ProjectCheckingProxyActionTest
 	{
 		private DynamicMock errorViewBuilderMock;
 		private DynamicMock proxiedActionMock;
@@ -50,7 +50,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.MVC.Cruise
 			Control returnedView = checkingAction.Execute(cruiseRequest);
 
 			// Verify
-			AssertEquals(view, returnedView);
+			Assert.AreEqual(view, returnedView);
 			VerifyAll();
 		}
 
@@ -67,7 +67,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.MVC.Cruise
 			Control returnedView = checkingAction.Execute(cruiseRequest);
 
 			// Verify
-			AssertEquals(view, returnedView);
+			Assert.AreEqual(view, returnedView);
 			VerifyAll();
 		}
 	}

@@ -4,7 +4,7 @@ using System;
 namespace ThoughtWorks.CruiseControl.Core.Test
 {
 	[TestFixture]
-	public class WorkflowResultTest : Assertion
+	public class WorkflowResultTest 
 	{
 		[Test]
 		public void AppendOutput()
@@ -12,7 +12,7 @@ namespace ThoughtWorks.CruiseControl.Core.Test
 			WorkflowResult result = new WorkflowResult();
 			result.Output = "foo";
 			result.Output = "bar";
-			AssertEquals("foobar", result.Output);
+			Assert.AreEqual("foobar", result.Output);
 		}
 
 		[Test]
@@ -24,9 +24,9 @@ namespace ThoughtWorks.CruiseControl.Core.Test
 			result.Modifications = new Modification[] { mod1 };
 			result.Modifications = new Modification[] { mod2 };
 
-			AssertEquals(2, result.Modifications.Length);
-			AssertEquals(mod1, result.Modifications[0]);
-			AssertEquals(mod2, result.Modifications[1]);
+			Assert.AreEqual(2, result.Modifications.Length);
+			Assert.AreEqual(mod1, result.Modifications[0]);
+			Assert.AreEqual(mod2, result.Modifications[1]);
 		}
 	}
 }

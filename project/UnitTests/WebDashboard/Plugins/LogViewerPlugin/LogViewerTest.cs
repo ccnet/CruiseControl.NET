@@ -8,7 +8,7 @@ using ThoughtWorks.CruiseControl.WebDashboard.Plugins.LogViewerPlugin;
 namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Plugins.LogViewerPlugin
 {
 	[TestFixture]
-	public class LogViewerTest : Assertion
+	public class LogViewerTest
 	{
 		private LogViewerPageRenderer logViewerPageRenderer;
 
@@ -51,7 +51,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Plugins.LogViewerPlu
 			buildRetrieverforRequestMock.ExpectAndReturn("GetBuild", build, request);
 			cacheManagerMock.ExpectAndReturn("GetURLForFile", url, serverName, projectName, CachingBuildRetriever.CacheDirectory, "mybuild");
 
-			AssertEquals(url, logViewerPageRenderer.Do().RedirectURL);
+			Assert.AreEqual(url, logViewerPageRenderer.Do().RedirectURL);
 		}
 	}
 }

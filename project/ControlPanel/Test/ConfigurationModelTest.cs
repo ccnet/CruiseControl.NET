@@ -51,13 +51,13 @@ namespace ThoughtWorks.CruiseControl.ControlPanel.Test
 			model.Load(configuration);
 
 			ConfigurationItem item = model.Projects[0].Items["name"];
-			AssertEquals("marathon.net", item.ValueAsString);
-			AssertEquals(null, item.AvailableValues);
-			AssertEquals(false, item.CanHaveChildren);
+			Assert.AreEqual("marathon.net", item.ValueAsString);
+			Assert.AreEqual(null, item.AvailableValues);
+			Assert.AreEqual(false, item.CanHaveChildren);
 
 			item.ValueAsString = "nfit";
 
-			AssertEquals("nfit", project.Name);
+			Assert.AreEqual("nfit", project.Name);
 		}
 
 		[Test]
@@ -76,28 +76,28 @@ namespace ThoughtWorks.CruiseControl.ControlPanel.Test
 
 			ConfigurationItem item = model.Projects[0].Items["sourcecontrol"];
 
-			AssertEquals("cvs", item.ValueAsString);
+			Assert.AreEqual("cvs", item.ValueAsString);
 			AssertContainsInArray("clearCase",item.AvailableValues);
 			AssertContainsInArray("cvs",item.AvailableValues);
 			AssertContainsInArray("defaultsourcecontrol",item.AvailableValues);
 			AssertContainsInArray("clearCase",item.AvailableValues);
 			AssertContainsInArray("clearCase",item.AvailableValues);
 			AssertContainsInArray("clearCase",item.AvailableValues);
-			AssertEquals("c:/bin/cvs.exe", item.Items["executable"].ValueAsString);
-			AssertEquals("/cvsroot/marathonnet", item.Items["cvsroot"].ValueAsString);
-			AssertEquals(true, item.CanHaveChildren);
+			Assert.AreEqual("c:/bin/cvs.exe", item.Items["executable"].ValueAsString);
+			Assert.AreEqual("/cvsroot/marathonnet", item.Items["cvsroot"].ValueAsString);
+			Assert.AreEqual(true, item.CanHaveChildren);
 
 			// assign something
 
 			item.Items["executable"].ValueAsString = "foobar";
 
-			AssertEquals("foobar", cvs.Executable);
+			Assert.AreEqual("foobar", cvs.Executable);
 
 			item.ValueAsString = "p4";
 			item.Items["view"].ValueAsString = "crap";
 
-			AssertEquals(typeof(P4), project.SourceControl.GetType());
-			AssertEquals("crap", ((P4) project.SourceControl).View);
+			Assert.AreEqual(typeof(P4), project.SourceControl.GetType());
+			Assert.AreEqual("crap", ((P4) project.SourceControl).View);
 		}
 
 		[Test]
@@ -112,16 +112,16 @@ namespace ThoughtWorks.CruiseControl.ControlPanel.Test
 
 			ConfigurationItem item = model.Projects[0].Items["labeller"];
 
-			AssertEquals("defaultlabeller", item.ValueAsString);
-			AssertEquals(",defaultlabeller", string.Join(",", item.AvailableValues));
+			Assert.AreEqual("defaultlabeller", item.ValueAsString);
+			Assert.AreEqual(",defaultlabeller", string.Join(",", item.AvailableValues));
 
-			AssertEquals("", model.Projects[0].Items["sourcecontrol"].ValueAsString);
+			Assert.AreEqual("", model.Projects[0].Items["sourcecontrol"].ValueAsString);
 
 			item.ValueAsString = "";
-			AssertEquals(null, project.Labeller);
+			Assert.AreEqual(null, project.Labeller);
 
 			item.ValueAsString = "defaultlabeller";
-			AssertEquals(typeof(DefaultLabeller), project.Labeller.GetType());
+			Assert.AreEqual(typeof(DefaultLabeller), project.Labeller.GetType());
 		}
 
 		[Test, Ignore("nyi")]
@@ -148,16 +148,16 @@ namespace ThoughtWorks.CruiseControl.ControlPanel.Test
 			ConfigurationTreeNode configurationNode = model.GetNavigationTreeNodes();
 			ConfigurationItemTreeNode projectNode = (ConfigurationItemTreeNode) configurationNode.Nodes[0];
 
-			AssertEquals(2, projectNode.Nodes.Count);
+			Assert.AreEqual(2, projectNode.Nodes.Count);
 
 			// check 
-			AssertEquals("marathon.net", projectNode.Text);
-			AssertEquals("build", projectNode.Nodes[0].Text);
-			AssertEquals("labeller", projectNode.Nodes[1].Text);
+			Assert.AreEqual("marathon.net", projectNode.Text);
+			Assert.AreEqual("build", projectNode.Nodes[0].Text);
+			Assert.AreEqual("labeller", projectNode.Nodes[1].Text);
 
 			// subitems
-			AssertEquals("weburl", projectNode.Items[0].Name);
-			AssertEquals("name", projectNode.Items[1].Name);
+			Assert.AreEqual("weburl", projectNode.Items[0].Name);
+			Assert.AreEqual("name", projectNode.Items[1].Name);
 		}
 
 		[Test]
@@ -169,7 +169,7 @@ namespace ThoughtWorks.CruiseControl.ControlPanel.Test
 
 				model.Load(files.MapPath("ccnet.config"));
 
-				AssertEquals("MyProject", model.Projects[0].Name);
+				Assert.AreEqual("MyProject", model.Projects[0].Name);
 			}
 		}
 
@@ -183,12 +183,12 @@ namespace ThoughtWorks.CruiseControl.ControlPanel.Test
 				model.Load(files.MapPath("ccnet.config"));
 				model.Save(files.MapPath("ccnet.out.config"));
 
-				Assert(files.ContentsOf("ccnet.out.config").IndexOf("<webURL>http://localhost/CruiseControl.NET/</webURL>") != -1);
+				Assert.IsTrue(files.ContentsOf("ccnet.out.config").IndexOf("<webURL>http://localhost/CruiseControl.NET/</webURL>") != -1);
 
 				model = new ConfigurationModel();
 				model.Load(files.MapPath("ccnet.out.config"));
 				
-				AssertEquals("cvs", model.Projects[0].Items["sourcecontrol"].ValueAsString);
+				Assert.AreEqual("cvs", model.Projects[0].Items["sourcecontrol"].ValueAsString);
 			}
 		}
 
@@ -203,12 +203,12 @@ namespace ThoughtWorks.CruiseControl.ControlPanel.Test
 				files.Delete("ccnet.config");
 				model.Save();
 
-				Assert(files.ContentsOf("ccnet.config").IndexOf("<webURL>http://localhost/CruiseControl.NET/</webURL>") != -1);
+				Assert.IsTrue(files.ContentsOf("ccnet.config").IndexOf("<webURL>http://localhost/CruiseControl.NET/</webURL>") != -1);
 
 				files.Delete("ccnet.config");
 				model.Projects[0].Save();
 
-				Assert(files.ContentsOf("ccnet.config").IndexOf("<webURL>http://localhost/CruiseControl.NET/</webURL>") != -1);
+				Assert.IsTrue(files.ContentsOf("ccnet.config").IndexOf("<webURL>http://localhost/CruiseControl.NET/</webURL>") != -1);
 			}
 		}
 
@@ -225,23 +225,14 @@ namespace ThoughtWorks.CruiseControl.ControlPanel.Test
 				try 
 				{
 					model.Save(files.MapPath("ccnet.out.config"));
-					Fail("should have failed");
+					Assert.Fail("should have failed");
 				} 
 				catch (ConfigurationException e) 
 				{
-					AssertEquals("couldn't save because state is invalid :", e.Message);
+					Assert.AreEqual("couldn't save because state is invalid :", e.Message);
 				}
 
-				AssertEquals("old contents", files.ContentsOf("ccnet.out.config"));
-			}
-		}
-
-		private void Print(ConfigurationItemCollection items, string indent) 
-		{
-			foreach (ConfigurationItem item in items)
-			{
-			    Console.WriteLine(indent + item.Name + "=" + item.ValueAsString);
-				Print(item.Items, indent + "    ");
+				Assert.AreEqual("old contents", files.ContentsOf("ccnet.out.config"));
 			}
 		}
 	}

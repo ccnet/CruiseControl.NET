@@ -18,7 +18,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test
 			
 			input.Close();
 
-			AssertEquals("Should have returned 5 modifications.", 5, modifications.Length);
+			Assert.AreEqual(5, modifications.Length);
 
 			Modification mod1 = new Modification();
 			mod1.Type = "modified";
@@ -61,12 +61,12 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test
 			mod5.Comment = "Hey, look, another deleted file.";
 		
 			ArrayList.Adapter(modifications).Sort();
-			AssertEquals("1", mod1, modifications[2]);
-			AssertEquals("2", mod2, modifications[3]);
-			AssertEquals("3", mod3, modifications[4]);
-			AssertEquals("4", mod4, modifications[1]);
+			Assert.AreEqual(mod1, modifications[2]);
+			Assert.AreEqual(mod2, modifications[3]);
+			Assert.AreEqual(mod3, modifications[4]);
+			Assert.AreEqual(mod4, modifications[1]);
 
-			AssertEquals("5", mod5, modifications[0]);
+			Assert.AreEqual(mod5, modifications[0]);
 		}
 		private DateTime CreateDate(string dateString) 
 		{

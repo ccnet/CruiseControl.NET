@@ -9,7 +9,7 @@ using ThoughtWorks.CruiseControl.Remote;
 namespace ThoughtWorks.CruiseControl.Core.Test
 {
 	[TestFixture]
-	public class RemoteCruiseServerTest : Assertion
+	public class RemoteCruiseServerTest
 	{
 		[SetUp]
 		public void SetUp()
@@ -48,7 +48,7 @@ namespace ThoughtWorks.CruiseControl.Core.Test
 	</system.runtime.remoting>
 </configuration>";
 
-			AssertEquals("no registered channels should be open.", 0, ChannelServices.RegisteredChannels.Length);
+			Assert.AreEqual(0, ChannelServices.RegisteredChannels.Length);
 
 			TempFileUtil.CreateTempDir("RemoteCruiseServerTest");
 			string configFile = TempFileUtil.CreateTempXmlFile("RemoteCruiseServerTest", "remote.config", configXml);
@@ -61,17 +61,17 @@ namespace ThoughtWorks.CruiseControl.Core.Test
 
 			using(RemoteCruiseServer server = new RemoteCruiseServer((ICruiseServer) mockCruiseServer.MockInstance, configFile))
 			{
-				AssertEquals(2, ChannelServices.RegisteredChannels.Length);
-				AssertNotNull("ccnet channel is missing", ChannelServices.GetChannel("ccnet"));
-				AssertNotNull("ccnet2 channel is missing", ChannelServices.GetChannel("ccnet2"));
+				Assert.AreEqual(2, ChannelServices.RegisteredChannels.Length);
+				Assert.IsNotNull(ChannelServices.GetChannel("ccnet"), "ccnet channel is missing");
+				Assert.IsNotNull(ChannelServices.GetChannel("ccnet2"), "ccnet2 channel is missing");
 
 				ICruiseManager remoteManager = (ICruiseManager) RemotingServices.Connect(typeof(ICruiseManager), "tcp://localhost:35354/" + RemoteCruiseServer.URI);
-				AssertNotNull("cruiseserver should be registered on tcp channel", remoteManager);
+				Assert.IsNotNull(remoteManager, "cruiseserver should be registered on tcp channel");
 
 				remoteManager = (ICruiseManager) RemotingServices.Connect(typeof(ICruiseManager), "http://localhost:35355/" + RemoteCruiseServer.URI);
-				AssertNotNull("cruiseserver should be registered on http channel", remoteManager);
+				Assert.IsNotNull(remoteManager, "cruiseserver should be registered on http channel");
 			}
-			AssertEquals("all registered channels should be closed.", 0, ChannelServices.RegisteredChannels.Length);
+			Assert.AreEqual(0, ChannelServices.RegisteredChannels.Length, "all registered channels should be closed.");
 			mockCruiseServer.Verify();
 			mockCruiseManager.Verify();
 		}

@@ -37,7 +37,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test
 			StringReader reader = GetReader(XML);
 			Modification[] modifications = parser.Parse(reader, new DateTime(2003, 5, 12), DateTime.Now);
 			reader.Close();
-			AssertEquals(1, modifications.Length);
+			Assert.AreEqual(1, modifications.Length);
 		}
 
 		[Test]
@@ -47,7 +47,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test
 			StringReader reader = GetReader(XML);
 			Modification[] modifications = parser.Parse(reader, DateTime.Now.AddMinutes(-1), DateTime.Now);
 			reader.Close();
-			AssertEquals(0, modifications.Length);
+			Assert.AreEqual(0, modifications.Length);
 		}
 
 		[Test]
@@ -58,12 +58,12 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test
 			Modification[] modifications = parser.Parse(reader, new DateTime(2003, 5, 12), DateTime.Now);
 			reader.Close();
 			Modification mod = modifications[0];
-			AssertEquals("$", mod.FolderName);
-			AssertEquals(null, mod.FileName);
-			AssertEquals(new DateTime(2003, 5, 13, 22, 41, 30), mod.ModifiedTime);
-			AssertEquals("Created", mod.Type);
-			AssertEquals("admin", mod.UserName);
-			AssertEquals(2, mod.ChangeNumber);
+			Assert.AreEqual("$", mod.FolderName);
+			Assert.AreEqual(null, mod.FileName);
+			Assert.AreEqual(new DateTime(2003, 5, 13, 22, 41, 30), mod.ModifiedTime);
+			Assert.AreEqual("Created", mod.Type);
+			Assert.AreEqual("admin", mod.UserName);
+			Assert.AreEqual(2, mod.ChangeNumber);
 		}
 
 		/// <summary>

@@ -9,7 +9,7 @@ using ThoughtWorks.CruiseControl.Core.Util;
 namespace ThoughtWorks.CruiseControl.UnitTests.Core.SourceControl.Perforce
 {
 	[TestFixture]
-	public class ProcessP4InitializerTest : Assertion
+	public class ProcessP4InitializerTest
 	{
 		private DynamicMock processExecutorMock;
 		private DynamicMock processInfoCreatorMock;
@@ -84,7 +84,7 @@ View:
 			p4Initializer.Initialize(p4, projectName, @"c:\my\working\dir");
 
 			// Verify
-			AssertEquals(expectedClientName, p4.Client);
+			Assert.AreEqual(expectedClientName, p4.Client);
 			VerifyAll();
 		}
 
@@ -95,11 +95,11 @@ View:
 			try
 			{
 				p4Initializer.Initialize(p4, "myProject", "thisIsNotAnAbsoluteDirectory");
-				Fail("Should check for non absolute working directory");
+				Assert.Fail("Should check for non absolute working directory");
 			}
 			catch (CruiseControlException e)
 			{
-				Assert("Should mention something about an absolute directory", e.Message.ToLower().IndexOf("absolute path") > -1);
+				Assert.IsTrue(e.Message.ToLower().IndexOf("absolute path") > -1, "Should mention something about an absolute directory");
 			}
 		}
 
@@ -111,11 +111,11 @@ View:
 			try
 			{
 				p4Initializer.Initialize(p4, "myProject", @"c:\my\working\dir");
-				Fail("Should check for a valid view");
+				Assert.Fail("Should check for a valid view");
 			}
 			catch (CruiseControlException e)
 			{
-				Assert("Should mention something about a valid view", e.Message.ToLower().IndexOf("valid view") > -1);
+				Assert.IsTrue(e.Message.ToLower().IndexOf("valid view") > -1, "Should mention something about a valid view");
 			}
 			
 		}

@@ -7,7 +7,7 @@ using ThoughtWorks.CruiseControl.Core.Config;
 namespace ThoughtWorks.CruiseControl.UnitTests.Core.Config
 {
 	[TestFixture]
-	public class CachingConfigurationServiceTest : Assertion
+	public class CachingConfigurationServiceTest
 	{
 		private DynamicMock slaveServiceMock;
 		private CachingConfigurationService cachingConfigurationService;
@@ -37,7 +37,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Config
 			slaveServiceMock.ExpectAndReturn("Load", configuration);
 
 			// Execute & Verify
-			AssertEquals(configuration, cachingConfigurationService.Load());
+			Assert.AreEqual(configuration, cachingConfigurationService.Load());
 
 			VerifyAll();
 		}
@@ -92,11 +92,11 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Config
 
 			// Execute & Verify
 			slaveService.configuration = configuration;
-			AssertEquals(configuration, cachingConfigurationService.Load());
+			Assert.AreEqual(configuration, cachingConfigurationService.Load());
 
 			slaveService.handler();
 			slaveService.configuration = configuration2;
-			AssertEquals(configuration2, cachingConfigurationService.Load());
+			Assert.AreEqual(configuration2, cachingConfigurationService.Load());
 
 			VerifyAll();
 		}

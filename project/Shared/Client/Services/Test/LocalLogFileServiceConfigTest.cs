@@ -10,13 +10,13 @@ using ThoughtWorks.CruiseControl.Shared.Services.Commands.Reporting;
 namespace ThoughtWorks.CruiseControl.Shared.Client.Services.Test
 {
 	[TestFixture]
-	public class LocalLogFileServiceConfigTest : Assertion
+	public class LocalLogFileServiceConfigTest
 	{
 		[Test]
 		public void ReturnsCorrectServiceType()
 		{
 			LocalLogFileServiceConfig config = new LocalLogFileServiceConfig();
-			AssertEquals(typeof(LocalLogFileService), config.ServiceType);
+			Assert.AreEqual(typeof(LocalLogFileService), config.ServiceType);
 		}
 
 		// This test will be invalid when we support multi-project instances
@@ -25,7 +25,7 @@ namespace ThoughtWorks.CruiseControl.Shared.Client.Services.Test
 		{
 			LocalLogFileServiceConfig config = new LocalLogFileServiceConfig();
 			config.LogDirectoryName = "testdir";
-			AssertEquals("testdir", config.GetDefaultProjectLogDirectory());
+			Assert.AreEqual("testdir", config.GetDefaultProjectLogDirectory());
 		}
 	}
 }

@@ -1,16 +1,13 @@
-using System;
 using System.Drawing;
 using System.IO;
-using NUnit.Framework;
 
 namespace ThoughtWorks.CruiseControl.CCTray.Test
 {
 	/// <summary>
 	/// Summary description for IconFileFixture.
 	/// </summary>
-	public class IconFileFixture : Assertion
+	public class IconFileFixture
 	{
-
 		protected Icon _originalIcon; 
 		protected string _file;
 

@@ -52,9 +52,9 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test
 			string expectedExecutable = @"c:\program files\sourcegear\vault client\vault.exe";
 			string expectedArgs = string.Format(COMMAND_LINE_NOSSL, "$", "host", "username", "password", "repository");
 
-			AssertNotNull("process was null", actual);
-			AssertEquals(expectedExecutable, actual.FileName);
-			AssertEquals(expectedArgs, actual.Arguments);
+			Assert.IsNotNull(actual);
+			Assert.AreEqual(expectedExecutable, actual.FileName);
+			Assert.AreEqual(expectedArgs, actual.Arguments);
 		}
 
 		[Test]
@@ -68,20 +68,20 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test
 			string expectedExecutable = @"c:\program files\sourcegear\vault client\vault.exe";
 			string expectedArgs = string.Format(COMMAND_LINE_SSL, "$", "host", "username", "password", "repository");
 
-			AssertNotNull("process was null", actual);
-			AssertEquals(expectedExecutable, actual.FileName);
-			AssertEquals(expectedArgs, actual.Arguments);
+			Assert.IsNotNull(actual);
+			Assert.AreEqual(expectedExecutable, actual.FileName);
+			Assert.AreEqual(expectedArgs, actual.Arguments);
 		}
 
 		[Test]
 		public void ValuesSet()
 		{
-			AssertEquals(@"c:\program files\sourcegear\vault client\vault.exe", _vault.Executable);
-			AssertEquals("username", _vault.Username);
-			AssertEquals("password", _vault.Password);
-			AssertEquals("host", _vault.Host);
-			AssertEquals("repository", _vault.Repository);
-			AssertEquals("$", _vault.Folder);
+			Assert.AreEqual(@"c:\program files\sourcegear\vault client\vault.exe", _vault.Executable);
+			Assert.AreEqual("username", _vault.Username);
+			Assert.AreEqual("password", _vault.Password);
+			Assert.AreEqual("host", _vault.Host);
+			Assert.AreEqual("repository", _vault.Repository);
+			Assert.AreEqual("$", _vault.Folder);
 		}
 
 		[Test]
@@ -95,10 +95,10 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test
 			DateTime to = new DateTime(2004, 4, 20, 11, 0, 0);
 
 			Modification[] mods = _vault.GetModifications(from, to);
-			AssertNotNull(mods);
+			Assert.IsNotNull(mods);
 
 			// change this value to reflect your live vault repository
-			AssertEquals(1, mods.Length);
+			Assert.AreEqual(1, mods.Length);
 		}
 
 		private Vault CreateNoSslVault()

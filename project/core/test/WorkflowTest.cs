@@ -21,13 +21,13 @@ namespace ThoughtWorks.CruiseControl.Core.Test
 	</tasks>
 </workflow>";
 			object obj = NetReflector.Read(xml);
-			AssertNotNull(obj);
-			AssertEquals(typeof(Workflow), obj);
+			Assert.IsNotNull(obj);
+			Assert.IsTrue(obj is Workflow);
 			Workflow project = (Workflow)obj;
-			AssertEquals("foo", project.Name);
-			AssertEquals(2, project.Tasks.Count);
-			Assert(project.Tasks[0] is ITask);
-			Assert(project.Tasks[1] is ITask);
+			Assert.AreEqual("foo", project.Name);
+			Assert.AreEqual(2, project.Tasks.Count);
+			Assert.IsTrue(project.Tasks[0] is ITask);
+			Assert.IsTrue(project.Tasks[1] is ITask);
 			//TODO: need NetReflector to enforce type of collection elements
 		}
 
@@ -51,11 +51,11 @@ namespace ThoughtWorks.CruiseControl.Core.Test
 			project.Tasks.Add(taskMock2.MockInstance);
 			project.RunIntegration(BuildCondition.IfModificationExists);
 
-			AssertNotNull(project.CurrentIntegration);
-			AssertNotNull(project.CurrentIntegration.StartTime);
-			AssertNotNull(project.CurrentIntegration.EndTime);
-			AssertNotNull(project.CurrentIntegration.EndTime > project.CurrentIntegration.StartTime);
-			AssertEquals(project.CurrentIntegration.Status, project.LatestBuildStatus);
+			Assert.IsNotNull(project.CurrentIntegration);
+			Assert.IsNotNull(project.CurrentIntegration.StartTime);
+			Assert.IsNotNull(project.CurrentIntegration.EndTime);
+			Assert.IsNotNull(project.CurrentIntegration.EndTime > project.CurrentIntegration.StartTime);
+			Assert.AreEqual(project.CurrentIntegration.Status, project.LatestBuildStatus);
 			taskMock1.Verify();
 			taskMock2.Verify();
 		}
@@ -99,8 +99,8 @@ namespace ThoughtWorks.CruiseControl.Core.Test
 
 			taskMock1.Verify();
 			taskMock2.Verify();
-			AssertEquals(IntegrationStatus.Exception, result.Status);
-			AssertEquals(ex, result.ExceptionResult);
+			Assert.AreEqual(IntegrationStatus.Exception, result.Status);
+			Assert.AreEqual(ex, result.ExceptionResult);
 		}
 
 		// need some way to determine if task should run

@@ -7,7 +7,7 @@ using ThoughtWorks.CruiseControl.WebDashboard.ServerConnection;
 namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 {
 	[TestFixture]
-	public class DefaultBuildRetrieverForRequestTest : Assertion
+	public class DefaultBuildRetrieverForRequestTest
 	{
 		private DynamicMock buildRetrieverMock;
 		private DynamicMock buildNameRetrieverMock;
@@ -48,8 +48,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 
 			Build returnedBuild = buildRetrieverForRequest.GetBuild((ICruiseRequest) requestWrapperMock.MockInstance);
 
-			AssertEquals(buildName, returnedBuild.Name);
-			AssertEquals(logContent, returnedBuild.Log);
+			Assert.AreEqual(buildName, returnedBuild.Name);
+			Assert.AreEqual(logContent, returnedBuild.Log);
 
 			VerifyAll();
 		}
@@ -66,8 +66,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 
 			Build returnedBuild = buildRetrieverForRequest.GetBuild((ICruiseRequest) requestWrapperMock.MockInstance);
 
-			AssertEquals(buildName, returnedBuild.Name);
-			AssertEquals(logContent, returnedBuild.Log);
+			Assert.AreEqual(buildName, returnedBuild.Name);
+			Assert.AreEqual(logContent, returnedBuild.Log);
 
 			VerifyAll();
 		}

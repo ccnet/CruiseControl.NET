@@ -5,7 +5,7 @@ using NUnit.Framework;
 namespace ThoughtWorks.CruiseControl.Core.Tasks.Test
 {
 	[TestFixture]
-	public class CoverageTaskIntegrationTest : Assertion
+	public class CoverageTaskIntegrationTest
 	{
 		[SetUp]
 		public void Setup()

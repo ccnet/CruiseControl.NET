@@ -10,7 +10,7 @@ using ThoughtWorks.CruiseControl.WebDashboard.MVC.View;
 namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 {
 	[TestFixture]
-	public class DefaultUserRequestSpecificSideBarViewBuilderTest : Assertion
+	public class DefaultUserRequestSpecificSideBarViewBuilderTest
 	{
 		private DynamicMock urlBuilderMock;
 		private DynamicMock buildNameRetrieverMock;
@@ -48,7 +48,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 			anchor.HRef = "returnedurl";
 			anchor.InnerHtml = "Add Project";
 
-			Assert(TableContains(table, anchor));
+			Assert.IsTrue(TableContains(table, anchor));
 			
 			// Verify
 			VerifyAll();
@@ -70,8 +70,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 			// Execute
 			HtmlTable table = viewBuilder.GetServerSideBar("myServer");
 
-			Assert(TableContains(table, expectedAnchor1));
-			Assert(TableContains(table, expectedAnchor2));
+			Assert.IsTrue(TableContains(table, expectedAnchor1));
+			Assert.IsTrue(TableContains(table, expectedAnchor2));
 			
 			// Verify
 			VerifyAll();
@@ -91,7 +91,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 			// Execute
 			HtmlTable table = viewBuilder.GetProjectSideBar("myServer", "myProject");
 
-			Assert(TableContains(table, expectedAnchor1));
+			Assert.IsTrue(TableContains(table, expectedAnchor1));
 			
 			// Verify
 			VerifyAll();
@@ -127,11 +127,11 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 			// Execute
 			HtmlTable table = viewBuilder.GetBuildSideBar("myServer", "myProject", "myCurrentBuild");
 
-			Assert(TableContains(table, expectedAnchor1));
-			Assert(TableContains(table, expectedAnchor2));
-			Assert(TableContains(table, expectedAnchor3));
-			Assert(TableContains(table, expectedAnchor4));
-			Assert(TableContains(table, buildsPanel));
+			Assert.IsTrue(TableContains(table, expectedAnchor1));
+			Assert.IsTrue(TableContains(table, expectedAnchor2));
+			Assert.IsTrue(TableContains(table, expectedAnchor3));
+			Assert.IsTrue(TableContains(table, expectedAnchor4));
+			Assert.IsTrue(TableContains(table, buildsPanel));
 			
 			// Verify
 			VerifyAll();

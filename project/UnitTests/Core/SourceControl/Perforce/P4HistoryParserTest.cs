@@ -7,7 +7,7 @@ using ThoughtWorks.CruiseControl.Core.Sourcecontrol.Perforce;
 namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol.Perforce
 {
 	[TestFixture]
-	public class P4HistoryParserTest : Assertion
+	public class P4HistoryParserTest
 	{
 		private P4HistoryParser _parser = new P4HistoryParser();
 
@@ -15,7 +15,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol.Perforce
 		public void Parse_MultipleModifications() 
 		{
 			Modification[] mods = _parser.Parse(P4Mother.ContentReader, P4Mother.OLDEST_ENTRY, P4Mother.NEWEST_ENTRY);
-			AssertEquals("number of modifications", 7, mods.Length);
+			Assert.AreEqual(7, mods.Length);
 			assertModification(mods[0], "SpoonCrusher.cs", "//depot/myproject/something", new DateTime(2002, 10, 31, 18, 20, 59), "edit", "someone@somewhere", "someone", "Something important\r\nso there!");
 			assertModification(mods[1], "AppleEater.cs", "//depot/myproject/something", new DateTime(2002, 10, 31, 18, 20, 59), "add", "someone@somewhere", "someone", "Something important\r\nso there!");
 			assertModification(mods[2], "MonkeyToucher.cs", "//depot/myproject/something", new DateTime(2002, 10, 31, 18, 20, 59), "edit", "someone@somewhere", "someone", "Something important\r\nso there!");
@@ -23,7 +23,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol.Perforce
 			assertModification(mods[4], "MiniMike.cs", "//depot/myproject/foo", new DateTime(2002, 10, 31, 14, 20, 59), "add", "someone@somewhere", "someone", "One line\r\n\r\nAnother line");
 			assertModification(mods[5], "JoeJoeJoe.cs", "//depot/myproject/foo", new DateTime(2002, 10, 31, 14, 20, 59), "add", "someone@somewhere", "someone", "One line\r\n\r\nAnother line");
 			assertModification(mods[6], "Fish.cs", "//depot/myproject/tank", new DateTime(2002, 10, 31, 11, 20, 59), "add", "bob@nowhere", "bob", "thingy\r\n(evil below)\r\nAffected files ...\r\nChange 123 by someone@somewhere on 2002/10/31 11:20:59\r\n(end of evil)");
-			AssertEquals(7, mods.Length);
+			Assert.AreEqual(7, mods.Length);
 		}
 
 		[Test]
@@ -42,25 +42,25 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol.Perforce
 				"exit: 0\r\n");
 			DateTime entryDate = DateTime.Parse("2003/09/01 16:30:53");
 			Modification[] mods = _parser.Parse(input, entryDate, entryDate);
-			AssertEquals("number of mods", 1, mods.Length);
-			AssertEquals("user", "guox01", mods[0].UserName);
-			AssertEquals("email address", "guox01@BP1HEMAP048", mods[0].EmailAddress);
-			AssertEquals("filename", "readme", mods[0].FileName);
-			AssertEquals("folder name", "//shipping", mods[0].FolderName);
-			AssertEquals("mod type", "edit", mods[0].Type);
-			AssertEquals("comment", "a test comment", mods[0].Comment);
+			Assert.AreEqual(1, mods.Length);
+			Assert.AreEqual("guox01", mods[0].UserName);
+			Assert.AreEqual("guox01@BP1HEMAP048", mods[0].EmailAddress);
+			Assert.AreEqual("readme", mods[0].FileName);
+			Assert.AreEqual("//shipping", mods[0].FolderName);
+			Assert.AreEqual("edit", mods[0].Type);
+			Assert.AreEqual("a test comment", mods[0].Comment);
 		}
 
 		private void assertModification(Modification mod, string file, string folder, 
 			DateTime modifiedTime, string type, string email, string username, string comment)
 		{
-			AssertEquals(file, mod.FileName);
-			AssertEquals(folder, mod.FolderName);
-			AssertEquals(modifiedTime, mod.ModifiedTime);
-			AssertEquals(type, mod.Type);
-			AssertEquals(email, mod.EmailAddress);
-			AssertEquals(username, mod.UserName);
-			AssertEquals(comment, mod.Comment);
+			Assert.AreEqual(file, mod.FileName);
+			Assert.AreEqual(folder, mod.FolderName);
+			Assert.AreEqual(modifiedTime, mod.ModifiedTime);
+			Assert.AreEqual(type, mod.Type);
+			Assert.AreEqual(email, mod.EmailAddress);
+			Assert.AreEqual(username, mod.UserName);
+			Assert.AreEqual(comment, mod.Comment);
 		}
 
 		[Test]
@@ -75,7 +75,7 @@ exit: 0
 ";
 			string expected = "3328 3327 332";
 
-			AssertEquals(expected,new P4HistoryParser().ParseChanges(changes));
+			Assert.AreEqual(expected,new P4HistoryParser().ParseChanges(changes));
 		}
 
 		[Test]
@@ -84,7 +84,7 @@ exit: 0
 			string changes = "exit: 0";
 			string expected = "";
 
-			AssertEquals(expected,new P4HistoryParser().ParseChanges(changes));
+			Assert.AreEqual(expected,new P4HistoryParser().ParseChanges(changes));
 		}
 
 		[Test]

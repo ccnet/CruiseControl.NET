@@ -36,8 +36,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Config
 			string xml = "<cruisecontrol></cruisecontrol>";
 			FileInfo configFile = new FileInfo(TempFileUtil.CreateTempXmlFile(TempFileUtil.CreateTempDir(this), "loadernet.config", xml));
 			XmlDocument config = fileLoader.LoadConfiguration(configFile);
-			AssertNotNull("config file should not be null", config);
-			AssertEquals(xml, config.OuterXml);
+			Assert.IsNotNull(config);
+			Assert.AreEqual(xml, config.OuterXml);
 		}
 
 		[Test, ExpectedException(typeof(ConfigurationFileMissingException))]
@@ -90,11 +90,11 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Config
 		private void ValidateProject(IConfiguration configuration, string projectName)
 		{
 			Project project = configuration.Projects[projectName] as Project;
-			AssertEquals(projectName, project.Name);
-			AssertEquals(typeof(MockBuilder), project.Builder);
-			AssertEquals(typeof(DefaultSourceControl), project.SourceControl);
-			AssertEquals("missing publisher", 1, project.Publishers.Length);
-			AssertEquals(typeof(MockPublisher), project.Publishers[0]);
+			Assert.AreEqual(projectName, project.Name);
+			Assert.IsTrue(project.Builder is MockBuilder);
+			Assert.IsTrue(project.SourceControl is DefaultSourceControl);
+			Assert.AreEqual(1, project.Publishers.Length);
+			Assert.IsTrue(project.Publishers[0] is MockPublisher);
 
 		}
 
@@ -124,9 +124,9 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Config
 		{
 			string xml = @"<customtestproject name=""foo"" />";
 			IConfiguration configuration = fileLoader.PopulateProjectsFromXml(ConfigurationFixture.GenerateConfig(xml));
-			AssertNotNull(configuration.Projects["foo"]);
-			AssertEquals(typeof(CustomTestProject), configuration.Projects["foo"]);
-			AssertEquals("foo", ((CustomTestProject) configuration.Projects["foo"]).Name);
+			Assert.IsNotNull(configuration.Projects["foo"]);
+			Assert.IsTrue(configuration.Projects["foo"] is CustomTestProject);
+			Assert.AreEqual("foo", ((CustomTestProject) configuration.Projects["foo"]).Name);
 		}
 
 		[ReflectorType("customtestproject")]

@@ -7,7 +7,7 @@ using ThoughtWorks.CruiseControl.Remote;
 namespace ThoughtWorks.CruiseControl.Core.Publishers.Test
 {
 	[TestFixture]
-	public class RSSPublisherTest : Assertion
+	public class RSSPublisherTest
 	{
 		Project project;
 		IntegrationResult result;
@@ -30,9 +30,9 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers.Test
 			Document document = publisher.GenarateDocument(project, result);
 
 			/// Verify
-			AssertEquals("CruiseControl.NET - myProject", document.Channel.Title);
-			AssertEquals("http://somewhere/someplace.html", document.Channel.Link);
-			AssertEquals("The latest build results for myProject", document.Channel.Description);
+			Assert.AreEqual("CruiseControl.NET - myProject", document.Channel.Title);
+			Assert.AreEqual("http://somewhere/someplace.html", document.Channel.Link);
+			Assert.AreEqual("The latest build results for myProject", document.Channel.Description);
 		}
 
 		[Test]
@@ -43,7 +43,7 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers.Test
 			Document document = publisher.GenarateDocument(project, result);
 
 			Item firstItem = (Item) document.Channel.Items[0];
-			AssertEquals("Successful Build", firstItem.Title);
+			Assert.AreEqual("Successful Build", firstItem.Title);
 		}
 	}
 }

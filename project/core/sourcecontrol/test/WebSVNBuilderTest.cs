@@ -28,7 +28,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test
 		{
 			WebSVNUrlBuilder svnurl = CreateBuilder();
 			
-			AssertEquals( URL, svnurl.Url );
+			Assert.AreEqual( URL, svnurl.Url );
 		}
 
 		[Test]
@@ -49,8 +49,8 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test
 			string url0 = String.Format( URL, "/trunk/nant.bat", 3 );
 			string url1 = String.Format( URL, "/trunk/MiniACE.Test/AssemblyInfo.cs", 2 );
 
-			AssertEquals( url0, mods[0].Url );
-			AssertEquals( url1, mods[1].Url );
+			Assert.AreEqual( url0, mods[0].Url );
+			Assert.AreEqual( url1, mods[1].Url );
 		}
 	}
 }

@@ -1,10 +1,9 @@
 using System;
 using System.Collections;
 
-using NUnit.Framework;
 using NMock;
 using NMock.Constraints;
-
+using NUnit.Framework;
 using ThoughtWorks.CruiseControl.Shared.Client.Services;
 using ThoughtWorks.CruiseControl.Shared.Services.Commands.Reporting;
 using ThoughtWorks.CruiseControl.Shared.Services;
@@ -12,7 +11,7 @@ using ThoughtWorks.CruiseControl.Shared.Services;
 namespace ThoughtWorks.CruiseControl.Shared.Client.Services.Test
 {
 	[TestFixture]
-	public class CompositeServiceTest : Assertion
+	public class CompositeServiceTest
 	{
 		ICruiseCommand _command;
 		ICruiseResult _result;
@@ -36,7 +35,7 @@ namespace ThoughtWorks.CruiseControl.Shared.Client.Services.Test
 			service2Mock.ExpectNoCall("Run",typeof(ICruiseCommand));
 
 			CompositeService service = new CompositeService(new ICruiseService[] {service1, service2} );
-			AssertEquals(_result, service.Run(_command));
+			Assert.AreEqual(_result, service.Run(_command));
 
 			service1Mock.Verify();
 			service2Mock.Verify();
@@ -54,7 +53,7 @@ namespace ThoughtWorks.CruiseControl.Shared.Client.Services.Test
 			service2Mock.ExpectAndReturn("Run", _result, _command);
 
 			CompositeService service = new CompositeService(new ICruiseService[] {service1, service2} );
-			AssertEquals(_result, service.Run(_command));
+			Assert.AreEqual(_result, service.Run(_command));
 
 			service1Mock.Verify();
 			service2Mock.Verify();
@@ -65,7 +64,7 @@ namespace ThoughtWorks.CruiseControl.Shared.Client.Services.Test
 		public void ReturnsNoValidServiceFoundResultIfNoServicesAvailable()
 		{
 			CompositeService service = new CompositeService(new ICruiseService[0] );
-			AssertEquals(typeof(NoValidServiceFoundResult), service.Run(_command).GetType());
+			Assert.AreEqual(typeof(NoValidServiceFoundResult), service.Run(_command).GetType());
 		}
 
 		[Test]
@@ -76,7 +75,7 @@ namespace ThoughtWorks.CruiseControl.Shared.Client.Services.Test
 			service1Mock.ExpectAndReturn("Run", new NoValidServiceFoundResult(), _command);
 
 			CompositeService service = new CompositeService(new ICruiseService[] {service1} );
-			AssertEquals(typeof(NoValidServiceFoundResult), service.Run(_command).GetType());
+			Assert.AreEqual(typeof(NoValidServiceFoundResult), service.Run(_command).GetType());
 
 			service1Mock.Verify();
 		}

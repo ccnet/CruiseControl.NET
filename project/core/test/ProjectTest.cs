@@ -1,6 +1,5 @@
 using System;
 using System.Diagnostics;
-using System.IO;
 using Exortech.NetReflector;
 using NMock;
 using NMock.Constraints;
@@ -99,18 +98,18 @@ namespace ThoughtWorks.CruiseControl.Core.Test
 </project>";
 
 			Project project = (Project) NetReflector.Read(xml);
-			AssertEquals("foo", project.Name);
-			AssertEquals("http://localhost/ccnet", project.WebURL);
-			AssertEquals(60, project.ModificationDelaySeconds);
-			AssertEquals(true, project.PublishExceptions);
-			AssertEquals(typeof (NAntBuilder), project.Builder);
-			AssertEquals(typeof (MockSourceControl), project.SourceControl);
-			AssertEquals(typeof (DefaultLabeller), project.Labeller);
-			AssertEquals(typeof (IntegrationStateManager), project.StateManager);
-			AssertEquals(typeof (Schedule), project.Schedule);
-			AssertEquals(typeof (XmlLogPublisher), project.Publishers[0]);
-			AssertEquals(typeof (MergeFilesTask), project.Tasks[0]);
-			AssertEquals(@"c:\my\working\directory", project.ConfiguredWorkingDirectory);
+			Assert.AreEqual("foo", project.Name);
+			Assert.AreEqual("http://localhost/ccnet", project.WebURL);
+			Assert.AreEqual(60, project.ModificationDelaySeconds);
+			Assert.AreEqual(true, project.PublishExceptions);
+			Assert.IsTrue(project.Builder is NAntBuilder);
+			Assert.IsTrue(project.SourceControl is MockSourceControl);
+			Assert.IsTrue(project.Labeller is DefaultLabeller);
+			Assert.IsTrue(project.StateManager is IntegrationStateManager);
+			Assert.IsTrue(project.Schedule is Schedule);
+			Assert.IsTrue(project.Publishers[0] is XmlLogPublisher);
+			Assert.IsTrue(project.Tasks[0] is MergeFilesTask);
+			Assert.AreEqual(@"c:\my\working\directory", project.ConfiguredWorkingDirectory);
 		}
 
 		[Test]
@@ -123,17 +122,16 @@ namespace ThoughtWorks.CruiseControl.Core.Test
 </project>";
 
 			Project project = (Project) NetReflector.Read(xml);
-			AssertEquals("foo", project.Name);
-			AssertEquals(Project.DEFAULT_WEB_URL, project.WebURL);
-			AssertEquals(0, project.ModificationDelaySeconds); //TODO: is this the correct default?  should quiet period be turned off by default?  is this sourcecontrol specific?
-			AssertEquals(false, project.PublishExceptions);
-			AssertEquals(typeof (NAntBuilder), project.Builder);
-			AssertEquals(typeof (MockSourceControl), project.SourceControl);
-			AssertEquals(typeof (DefaultLabeller), project.Labeller);
-			AssertEquals(typeof (ProjectStateManager), project.StateManager);
-			AssertEquals(typeof (Schedule), project.Schedule);
-			AssertNull("project should contain no publishers", project.Publishers);
-			AssertEquals(0, project.Tasks.Length);
+			Assert.AreEqual("foo", project.Name);
+			Assert.AreEqual(Project.DEFAULT_WEB_URL, project.WebURL);
+			Assert.AreEqual(0, project.ModificationDelaySeconds); //TODO: is this the correct default?  should quiet period be turned off by default?  is this sourcecontrol specific?
+			Assert.AreEqual(false, project.PublishExceptions);
+			Assert.IsTrue(project.Builder is NAntBuilder);
+			Assert.IsTrue(project.SourceControl is MockSourceControl);
+			Assert.IsTrue(project.Labeller is DefaultLabeller);
+			Assert.IsTrue(project.Schedule is Schedule);
+			Assert.IsNull(project.Publishers);
+			Assert.AreEqual(0, project.Tasks.Length);
 		}
 
 		[Test]
@@ -151,18 +149,18 @@ namespace ThoughtWorks.CruiseControl.Core.Test
 
 			IntegrationResult result = _project.RunIntegration(BuildCondition.IfModificationExists);
 
-			AssertEquals(PROJECT_NAME, result.ProjectName);
-			AssertEquals("No exception should be thrown", null, result.ExceptionResult);
-			AssertEquals(ProjectActivity.Sleeping, _project.CurrentActivity);
-			AssertEquals(IntegrationStatus.Success, result.Status);
-			AssertEquals(IntegrationStatus.Unknown, result.LastIntegrationStatus);
-			AssertEquals(BuildCondition.ForceBuild, result.BuildCondition);
-			AssertEquals(result, _project.LastIntegrationResult);
-			AssertEquals("label", result.Label);
+			Assert.AreEqual(PROJECT_NAME, result.ProjectName);
+			Assert.AreEqual(null, result.ExceptionResult);
+			Assert.AreEqual(ProjectActivity.Sleeping, _project.CurrentActivity);
+			Assert.AreEqual(IntegrationStatus.Success, result.Status);
+			Assert.AreEqual(IntegrationStatus.Unknown, result.LastIntegrationStatus);
+			Assert.AreEqual(BuildCondition.ForceBuild, result.BuildCondition);
+			Assert.AreEqual(result, _project.LastIntegrationResult);
+			Assert.AreEqual("label", result.Label);
 			AssertFalse("unexpected modifications were returned", result.HasModifications());
 			AssertEqualArrays(new Modification[0], result.Modifications);
-			AssertEquals("no output is expected as builder is not called", MockBuilder.BUILDER_OUTPUT, result.Output);
-			Assert("end time should come after start time", result.EndTime >= result.StartTime);
+			Assert.AreEqual(MockBuilder.BUILDER_OUTPUT, result.Output, "no output is expected as builder is not called");
+			Assert.IsTrue(result.EndTime >= result.StartTime);
 		}
 
 		[Test] //TODO: question: should state be saved after a poll with no modifications and no build?? -- i think it should: implication for last build though
@@ -177,16 +175,16 @@ namespace ThoughtWorks.CruiseControl.Core.Test
 
 			IntegrationResult result = _project.RunIntegration(BuildCondition.IfModificationExists);
 
-			AssertEquals(PROJECT_NAME, result.ProjectName);
-			AssertEquals("No exception should be thrown", null, result.ExceptionResult);
-			AssertEquals(ProjectActivity.Sleeping, _project.CurrentActivity);
-			AssertEquals(IntegrationStatus.Unknown, result.Status);
-			AssertNotNull(_project.LastIntegrationResult);
-			AssertEquals("label", result.Label);
+			Assert.AreEqual(PROJECT_NAME, result.ProjectName);
+			Assert.AreEqual(null, result.ExceptionResult);
+			Assert.AreEqual(ProjectActivity.Sleeping, _project.CurrentActivity);
+			Assert.AreEqual(IntegrationStatus.Unknown, result.Status);
+			Assert.IsNotNull(_project.LastIntegrationResult);
+			Assert.AreEqual("label", result.Label);
 			AssertFalse("unexpected modifications were returned", result.HasModifications());
 			AssertEqualArrays(new Modification[0], result.Modifications);
-			AssertNull("no output is expected as builder is not called", result.Output);
-			Assert("end time should come after start time", result.EndTime >= result.StartTime);
+			Assert.IsNull(result.Output, "no output is expected as builder is not called");
+			Assert.IsTrue(result.EndTime >= result.StartTime);
 		}
 
 		[Test]
@@ -206,14 +204,14 @@ namespace ThoughtWorks.CruiseControl.Core.Test
 			_project.Builder = new MockBuilder(); // need to use mock builder in order to set properties on IntegrationResult
 			IntegrationResult result = _project.RunIntegration(BuildCondition.IfModificationExists);
 
-			AssertEquals(PROJECT_NAME, result.ProjectName);
-			AssertEquals(ProjectActivity.Sleeping, _project.CurrentActivity);
-			AssertEquals(IntegrationStatus.Success, result.Status);
-			AssertEquals(IntegrationStatus.Unknown, result.LastIntegrationStatus);
-			AssertEquals("label", result.Label);
-			Assert("no modifications were returned", result.HasModifications());
-			AssertEquals(modifications, result.Modifications);
-			Assert("end time should come after start time", result.EndTime >= result.StartTime);
+			Assert.AreEqual(PROJECT_NAME, result.ProjectName);
+			Assert.AreEqual(ProjectActivity.Sleeping, _project.CurrentActivity);
+			Assert.AreEqual(IntegrationStatus.Success, result.Status);
+			Assert.AreEqual(IntegrationStatus.Unknown, result.LastIntegrationStatus);
+			Assert.AreEqual("label", result.Label);
+			Assert.IsTrue(result.HasModifications());
+			Assert.AreEqual(modifications, result.Modifications);
+			Assert.IsTrue(result.EndTime >= result.StartTime);
 		}
 
 		[Test]
@@ -228,7 +226,7 @@ namespace ThoughtWorks.CruiseControl.Core.Test
 
 			_project.PublishExceptions = false;
 			IntegrationResult result = _project.RunIntegration(BuildCondition.IfModificationExists);
-			AssertEquals(expectedException, result.ExceptionResult);
+			Assert.AreEqual(expectedException, result.ExceptionResult);
 		}
 
 		[Test]
@@ -243,7 +241,7 @@ namespace ThoughtWorks.CruiseControl.Core.Test
 
 			_project.PublishExceptions = true;
 			IntegrationResult result = _project.RunIntegration(BuildCondition.IfModificationExists);
-			AssertEquals(expectedException, result.ExceptionResult);
+			Assert.AreEqual(expectedException, result.ExceptionResult);
 		}
 
 		// test: verify correct args are passed to sourcecontrol?  should use date of last modification from last successful build IMO
@@ -252,7 +250,7 @@ namespace ThoughtWorks.CruiseControl.Core.Test
 		public void ShouldCreateInitialIntegrationResultIfThisIsTheFirstIntegration()
 		{
 			_mockStateManager.ExpectAndReturn("StateFileExists", false, null);
-			Assert(_project.LastIntegrationResult.IsInitial());
+			Assert.IsTrue(_project.LastIntegrationResult.IsInitial());
 		}
 
 		[Test]
@@ -266,7 +264,7 @@ namespace ThoughtWorks.CruiseControl.Core.Test
 			_mockStateManager.ExpectAndReturn("StateFileExists", true);
 			_mockStateManager.ExpectAndReturn("LoadState", expected);
 
-			AssertEquals(expected, _project.LastIntegrationResult);
+			Assert.AreEqual(expected, _project.LastIntegrationResult);
 		}
 
 		[Test]
@@ -283,9 +281,9 @@ namespace ThoughtWorks.CruiseControl.Core.Test
 			_project.PostBuild(results);
 
 			// verify event was sent
-			AssertNotNull(constraint.Parameter);
-			AssertEquals(results, (IntegrationResult) constraint.Parameter);
-			AssertEquals("verify that current build has become last build", results, _project.LastIntegrationResult);
+			Assert.IsNotNull(constraint.Parameter);
+			Assert.AreEqual(results, (IntegrationResult) constraint.Parameter);
+			Assert.AreEqual(results, _project.LastIntegrationResult, "verify that current build has become last build");
 		}
 
 		[Test]
@@ -293,19 +291,19 @@ namespace ThoughtWorks.CruiseControl.Core.Test
 		{
 			IntegrationResult results = new IntegrationResult();
 			results.Modifications = new Modification[0];
-			Assert("There are no modifications, project should not run", !_project.ShouldRunBuild(results));
+			Assert.IsTrue(!_project.ShouldRunBuild(results), "There are no modifications, project should not run");
 
 			Modification mod = new Modification();
 			mod.ModifiedTime = DateTime.Now.AddSeconds(-2);
 			results.Modifications = new Modification[] {mod};
 
-			Assert("There are modifications, project should run", _project.ShouldRunBuild(results));
+			Assert.IsTrue(_project.ShouldRunBuild(results), "There are modifications, project should run");
 
 			_project.ModificationDelaySeconds = 100;
-			Assert("There are modifications within ModificationDelay, project should not run", !_project.ShouldRunBuild(results));
+			Assert.IsTrue(!_project.ShouldRunBuild(results), "There are modifications within ModificationDelay, project should not run");
 
 			mod.ModifiedTime = DateTime.Now.AddMinutes(-2);
-			Assert("There are no modifications within ModificationDelay, project should run", _project.ShouldRunBuild(results));
+			Assert.IsTrue(_project.ShouldRunBuild(results), "There are no modifications within ModificationDelay, project should run");
 		}
 
 		[Test]
@@ -363,7 +361,7 @@ namespace ThoughtWorks.CruiseControl.Core.Test
 		[Test]
 		public void InitialActivityState()
 		{
-			AssertEquals(ProjectActivity.Unknown, _project.CurrentActivity);
+			Assert.AreEqual(ProjectActivity.Unknown, _project.CurrentActivity);
 		}
 
 		[Test, ExpectedException(typeof (CruiseControlException))]
@@ -401,10 +399,10 @@ namespace ThoughtWorks.CruiseControl.Core.Test
 
 			stateMock.Expect("SaveState", results);
 
-			AssertEquals("new integration result has not been set to the last integration result", results, _project.LastIntegrationResult);
-			AssertNotNull(results.EndTime);
-			Assert(publisher.Published);
-			AssertEquals("1.2.1", ((MockSourceControl) _project.SourceControl).Label);
+			Assert.AreEqual(results, _project.LastIntegrationResult, "new integration result has not been set to the last integration result");
+			Assert.IsNotNull(results.EndTime);
+			Assert.IsTrue(publisher.Published);
+			Assert.AreEqual("1.2.1", ((MockSourceControl) _project.SourceControl).Label);
 		}
 
 		[Test]
@@ -423,13 +421,13 @@ namespace ThoughtWorks.CruiseControl.Core.Test
 			IntegrationResult results = _project.RunIntegration(BuildCondition.IfModificationExists);
 
 			// failure to save the integration result will register as a failed project
-			AssertEquals("new integration result has not been set to the last integration result", results, _project.LastIntegrationResult);
-			AssertEquals(IntegrationStatus.Exception, _project.LastIntegrationResult.Status);
-			AssertEquals(expectedException, _project.LastIntegrationResult.ExceptionResult);
-			AssertNotNull(results.EndTime);
-			Assert(publisher.Published);
-			AssertEquals("No messages logged.", 1, _listener.Traces.Count);
-			Assert("Wrong message logged.", _listener.Traces[0].ToString().IndexOf(expectedException.ToString()) > 0);
+			Assert.AreEqual(results, _project.LastIntegrationResult, "new integration result has not been set to the last integration result");
+			Assert.AreEqual(IntegrationStatus.Exception, _project.LastIntegrationResult.Status);
+			Assert.AreEqual(expectedException, _project.LastIntegrationResult.ExceptionResult);
+			Assert.IsNotNull(results.EndTime);
+			Assert.IsTrue(publisher.Published);
+			Assert.AreEqual(1, _listener.Traces.Count, "No messages logged.");
+			Assert.IsTrue(_listener.Traces[0].ToString().IndexOf(expectedException.ToString()) > 0, "Wrong message logged.");
 		}
 
 		[Test]
@@ -448,13 +446,13 @@ namespace ThoughtWorks.CruiseControl.Core.Test
 			IntegrationResult results = _project.RunIntegration(BuildCondition.IfModificationExists);
 
 			// failure to save the integration result will register as a failed project
-			AssertEquals("new integration result has not been set to the last integration result", results, _project.LastIntegrationResult);
-			AssertEquals(IntegrationStatus.Exception, _project.LastIntegrationResult.Status);
-			AssertEquals(expectedException, _project.LastIntegrationResult.ExceptionResult);
-			AssertNotNull(results.EndTime);
-			Assert(publisher.Published);
-			AssertEquals("No messages logged.", 1, _listener.Traces.Count);
-			Assert("Wrong message logged.", _listener.Traces[0].ToString().IndexOf(expectedException.ToString()) > 0);
+			Assert.AreEqual(results, _project.LastIntegrationResult, "new integration result has not been set to the last integration result");
+			Assert.AreEqual(IntegrationStatus.Exception, _project.LastIntegrationResult.Status);
+			Assert.AreEqual(expectedException, _project.LastIntegrationResult.ExceptionResult);
+			Assert.IsNotNull(results.EndTime);
+			Assert.IsTrue(publisher.Published);
+			Assert.AreEqual(1, _listener.Traces.Count);
+			Assert.IsTrue(_listener.Traces[0].ToString().IndexOf(expectedException.ToString()) > 0, "Wrong message logged.");
 		}
 
 		[Test]

@@ -35,14 +35,14 @@ namespace ThoughtWorks.CruiseControl.Core.Test
 		public void RunProjectOnce()
 		{
 			_integrator = CreateProjectIntegrator(1);
-			AssertEquals(0, _schedule.IterationsSoFar);
+			Assert.AreEqual(0, _schedule.IterationsSoFar);
 			_integrator.Start();
 			// verify that the project has not run yet
 			_integrator.WaitForExit();
 
 			// verify that the project has run once after sleeping
-			AssertEquals(1, _schedule.IterationsSoFar);
-			AssertEquals(ProjectIntegratorState.Stopped, _integrator.State);
+			Assert.AreEqual(1, _schedule.IterationsSoFar);
+			Assert.AreEqual(ProjectIntegratorState.Stopped, _integrator.State);
 		}
 
 		[Test]
@@ -55,7 +55,7 @@ namespace ThoughtWorks.CruiseControl.Core.Test
 			DateTime startTime = DateTime.Now;
 
 			// verfiy that the project has not run yet
-			AssertEquals(0, _schedule.IterationsSoFar);
+			Assert.AreEqual(0, _schedule.IterationsSoFar);
 
 			// start integration
 			_integrator.Start();
@@ -69,13 +69,13 @@ namespace ThoughtWorks.CruiseControl.Core.Test
 			DateTime stopTime = DateTime.Now;
 
 			// verify that the project has run three times after sleeping
-			AssertEquals(3, _schedule.IterationsSoFar);
-			AssertEquals(ProjectIntegratorState.Stopped, _integrator.State);
+			Assert.AreEqual(3, _schedule.IterationsSoFar);
+			Assert.AreEqual(ProjectIntegratorState.Stopped, _integrator.State);
 
 			// verify that project slept twice over 3 integrations
 			TimeSpan delta = stopTime - startTime;
 			TimeSpan expectedDelta = TimeSpan.FromSeconds(_schedule.SleepSeconds * 2);
-			Assert("The project did not sleep: " + delta, delta >= expectedDelta);
+			Assert.IsTrue(delta >= expectedDelta, "The project did not sleep: " + delta);
 
 			//			TimeSpan expectedDelta = new TimeSpan(_schedule.TimeOut * 2);
 			//			// Assert("The project did not sleep",  delta >= expectedDelta);
@@ -88,14 +88,14 @@ namespace ThoughtWorks.CruiseControl.Core.Test
 			_integrator = CreateProjectIntegrator(Schedule.Infinite);
 			_integrator.Start();
 			Thread.Sleep(200);
-			Assert("scheduler is not still running?!", _integrator.IsRunning);
+			Assert.IsTrue(_integrator.IsRunning);
 			_integrator.Stop();
 			_integrator.WaitForExit();
-			Assert("schedule should be stopped", ! _integrator.IsRunning);
+			Assert.IsTrue(! _integrator.IsRunning);
 
 			// verify that the project has run multiple times
-			Assert(_project.RunIntegration_CallCount > 0);
-			AssertEquals(ProjectIntegratorState.Stopped, _integrator.State);
+			Assert.IsTrue(_project.RunIntegration_CallCount > 0);
+			Assert.AreEqual(ProjectIntegratorState.Stopped, _integrator.State);
 		}
 
 		[Test]
@@ -106,10 +106,10 @@ namespace ThoughtWorks.CruiseControl.Core.Test
 			_integrator.Start();
 			Thread.Sleep(0);
 			_integrator.Start();
-			AssertEquals(ProjectIntegratorState.Running, _integrator.State);
+			Assert.AreEqual(ProjectIntegratorState.Running, _integrator.State);
 			_integrator.Stop();
 			_integrator.WaitForExit();
-			AssertEquals(ProjectIntegratorState.Stopped, _integrator.State);
+			Assert.AreEqual(ProjectIntegratorState.Stopped, _integrator.State);
 		}
 
 		[Test]
@@ -132,7 +132,7 @@ namespace ThoughtWorks.CruiseControl.Core.Test
 		{
 			IProjectIntegrator _scheduler = CreateProjectIntegrator(Schedule.Infinite);
 			_scheduler.Stop();
-			AssertEquals(ProjectIntegratorState.Stopped, _scheduler.State);
+			Assert.AreEqual(ProjectIntegratorState.Stopped, _scheduler.State);
 		}
 
 		[Test]
@@ -149,11 +149,10 @@ namespace ThoughtWorks.CruiseControl.Core.Test
 			Thread.Sleep(2500);
 
 			// verify scheduler is still running - but is logging exceptions
-			AssertEquals(ProjectIntegratorState.Running, _integrator.State);
-			Assert("should have >1 iterations, but have " + _schedule.IterationsSoFar,
-				_schedule.IterationsSoFar > 1);
-			Assert(listener.Traces.Count > 0);
-			Assert(listener.Traces[0].ToString().IndexOf(ExceptionMockProject.EXCEPTION_MESSAGE) > 0);
+			Assert.AreEqual(ProjectIntegratorState.Running, _integrator.State);
+			Assert.IsTrue(_schedule.IterationsSoFar > 1);
+			Assert.IsTrue(listener.Traces.Count > 0);
+			Assert.IsTrue(listener.Traces[0].ToString().IndexOf(ExceptionMockProject.EXCEPTION_MESSAGE) > 0);
 			
 			// verify scheduler is restartable
 			_integrator.Stop();
@@ -173,7 +172,7 @@ namespace ThoughtWorks.CruiseControl.Core.Test
 //			_integrator.Start();
 //			Thread.Sleep(1);
 //			_integrator.WaitForExit();
-//			AssertEquals(1, newSchedule.IterationsSoFar);
+//			Assert.AreEqual(1, newSchedule.IterationsSoFar);
 		}
 
 		[Test]
@@ -201,9 +200,9 @@ namespace ThoughtWorks.CruiseControl.Core.Test
 			_integrator = new ProjectIntegrator(_schedule, _project);
 			_integrator.Start();
 			Thread.Sleep(0);
-			AssertEquals(ProjectIntegratorState.Running, _integrator.State);
+			Assert.AreEqual(ProjectIntegratorState.Running, _integrator.State);
 			_integrator.Abort();
-			AssertEquals(ProjectIntegratorState.Stopped, _integrator.State);
+			Assert.AreEqual(ProjectIntegratorState.Stopped, _integrator.State);
 		}
 
 		[Test]
@@ -212,7 +211,7 @@ namespace ThoughtWorks.CruiseControl.Core.Test
 			_schedule = new Schedule(new DateTimeProvider(),1, Schedule.Infinite);
 			_integrator = new ProjectIntegrator(_schedule, _project);
 			_integrator.Abort();
-			AssertEquals(ProjectIntegratorState.Stopped, _integrator.State);
+			Assert.AreEqual(ProjectIntegratorState.Stopped, _integrator.State);
 		}
 
 		[Test]
@@ -222,7 +221,7 @@ namespace ThoughtWorks.CruiseControl.Core.Test
 			_integrator = new ProjectIntegrator(_schedule, _project);
 			_integrator.Start();
 			Thread.Sleep(0);
-			AssertEquals(ProjectIntegratorState.Running, _integrator.State);
+			Assert.AreEqual(ProjectIntegratorState.Running, _integrator.State);
 			_integrator.Abort();
 			_integrator.Abort();
 		}

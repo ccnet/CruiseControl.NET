@@ -15,13 +15,13 @@ namespace ThoughtWorks.CruiseControl.Core.Config.Test
 		public void GetConfig() 
 		{
 			IList list = (IList)ConfigurationSettings.GetConfig("xslFiles");
-			AssertNotNull(list);
-			AssertEquals(5, list.Count);
-			AssertEquals(@"xsl\header.xsl", (string)list[0]);
-			AssertEquals(@"xsl\compile.xsl", (string)list[1]);
-			AssertEquals(@"xsl\unittests.xsl", (string)list[2]);
-			AssertEquals(@"xsl\fit.xsl", (string)list[3]);
-			AssertEquals(@"xsl\modifications.xsl", (string)list[4]);
+			Assert.IsNotNull(list);
+			Assert.AreEqual(5, list.Count);
+			Assert.AreEqual(@"xsl\header.xsl", (string)list[0]);
+			Assert.AreEqual(@"xsl\compile.xsl", (string)list[1]);
+			Assert.AreEqual(@"xsl\unittests.xsl", (string)list[2]);
+			Assert.AreEqual(@"xsl\fit.xsl", (string)list[3]);
+			Assert.AreEqual(@"xsl\modifications.xsl", (string)list[4]);
 		}
 	}
 }

@@ -49,10 +49,10 @@ namespace ThoughtWorks.CruiseControl.Core.Builder.Test
 </devenv>";
 
 			DevenvBuilder builder = (DevenvBuilder) NetReflector.Read(xml);
-			AssertEquals(@"c:\vs.net\devenv.com", builder.Executable);
-			AssertEquals(@"mySolution.sln", builder.SolutionFile);
-			AssertEquals(@"Debug", builder.Configuration);
-			AssertEquals(4, builder.BuildTimeoutSeconds);
+			Assert.AreEqual(@"c:\vs.net\devenv.com", builder.Executable);
+			Assert.AreEqual(@"mySolution.sln", builder.SolutionFile);
+			Assert.AreEqual(@"Debug", builder.Configuration);
+			Assert.AreEqual(4, builder.BuildTimeoutSeconds);
 		}
 
 		[Test]
@@ -60,9 +60,9 @@ namespace ThoughtWorks.CruiseControl.Core.Builder.Test
 		{
 			string xml = @"<devenv solutionfile=""mySolution.sln"" configuration=""Release"" />";
 			DevenvBuilder builder = (DevenvBuilder) NetReflector.Read(xml);
-			AssertEquals(@"mySolution.sln", builder.SolutionFile);
-			AssertEquals(@"Release", builder.Configuration);
-			AssertEquals(DevenvBuilder.DEFAULT_BUILD_TIMEOUT, builder.BuildTimeoutSeconds);
+			Assert.AreEqual(@"mySolution.sln", builder.SolutionFile);
+			Assert.AreEqual(@"Release", builder.Configuration);
+			Assert.AreEqual(DevenvBuilder.DEFAULT_BUILD_TIMEOUT, builder.BuildTimeoutSeconds);
 		}
 
 		[Test]
@@ -70,7 +70,7 @@ namespace ThoughtWorks.CruiseControl.Core.Builder.Test
 		{
 			mockRegistry.ExpectAndReturn("GetLocalMachineSubKeyValue", @"C:\Program Files\Microsoft Visual Studio .NET 2003\Common7\IDE\", 
 				DevenvBuilder.VS2003_REGISTRY_PATH, DevenvBuilder.VS_REGISTRY_KEY);
-			AssertEquals(@"C:\Program Files\Microsoft Visual Studio .NET 2003\Common7\IDE\devenv.com", builder.Executable);
+			Assert.AreEqual(@"C:\Program Files\Microsoft Visual Studio .NET 2003\Common7\IDE\devenv.com", builder.Executable);
 		}
 
 		[Test]
@@ -79,7 +79,7 @@ namespace ThoughtWorks.CruiseControl.Core.Builder.Test
 			mockRegistry.ExpectAndReturn("GetLocalMachineSubKeyValue", null, DevenvBuilder.VS2003_REGISTRY_PATH, DevenvBuilder.VS_REGISTRY_KEY);
 			mockRegistry.ExpectAndReturn("GetExpectedLocalMachineSubKeyValue", @"C:\Program Files\Microsoft Visual Studio .NET\Common7\IDE\", 
 				DevenvBuilder.VS2002_REGISTRY_PATH, DevenvBuilder.VS_REGISTRY_KEY);
-			AssertEquals(@"C:\Program Files\Microsoft Visual Studio .NET\Common7\IDE\devenv.com", builder.Executable);
+			Assert.AreEqual(@"C:\Program Files\Microsoft Visual Studio .NET\Common7\IDE\devenv.com", builder.Executable);
 		}
 
 		[Test]
@@ -95,8 +95,8 @@ namespace ThoughtWorks.CruiseControl.Core.Builder.Test
 			builder.Run(new IntegrationResult(), project);
 
 			ProcessInfo info = (ProcessInfo) constraint.Parameter;
-			AssertEquals(DEVENV_PATH, info.FileName);
-			AssertEquals(DevenvBuilder.DEFAULT_BUILD_TIMEOUT * 1000, info.TimeOut);
+			Assert.AreEqual(DEVENV_PATH, info.FileName);
+			Assert.AreEqual(DevenvBuilder.DEFAULT_BUILD_TIMEOUT * 1000, info.TimeOut);
 			AssertStartsWith("mySolution.sln /rebuild Debug", info.Arguments);
 		}
 
@@ -116,9 +116,9 @@ namespace ThoughtWorks.CruiseControl.Core.Builder.Test
 			IntegrationResult result = new IntegrationResult();
 			builder.Run(result, project);
 
-			AssertEquals(IntegrationStatus.Success, result.Status);
+			Assert.AreEqual(IntegrationStatus.Success, result.Status);
 			AssertMatches(@"Rebuild All: \d+ succeeded, \d+ failed, \d+ skipped", result.Output);
-			AssertEquals(typeof(DevenvTaskResult), result.TaskResults[0]);
+			Assert.IsTrue(result.TaskResults[0] is DevenvTaskResult);
 		}
 
 		[Test]
@@ -137,9 +137,9 @@ namespace ThoughtWorks.CruiseControl.Core.Builder.Test
 			IntegrationResult result = new IntegrationResult();
 			builder.Run(result, project);
 
-			AssertEquals(IntegrationStatus.Failure, result.Status);
+			Assert.AreEqual(IntegrationStatus.Failure, result.Status);
 			AssertMatches(@"(\.|\n)*could not be found and will not be loaded", result.Output);
-			AssertEquals(typeof(DevenvTaskResult), result.TaskResults[0]);
+			Assert.IsTrue(result.TaskResults[0] is DevenvTaskResult);
 		}
 
 		[Test, ExpectedException(typeof(BuilderException))]

@@ -1,7 +1,5 @@
-using System;
 using NUnit.Framework;
 using ThoughtWorks.CruiseControl.CCTray.Test;
-using ThoughtWorks.CruiseControl.Remote;
 
 namespace ThoughtWorks.CruiseControl.CCTray.Test
 {
@@ -21,7 +19,7 @@ namespace ThoughtWorks.CruiseControl.CCTray.Test
 
 	    protected override void Validate(StatusIcon expectedIcon, StatusIcon actualIcon)
 	    {
-			AssertSame(expectedIcon, actualIcon);
+			Assert.AreSame(expectedIcon, actualIcon);
 	    }
 	}
 }

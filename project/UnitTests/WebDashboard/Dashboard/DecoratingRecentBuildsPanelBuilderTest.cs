@@ -10,7 +10,7 @@ using ThoughtWorks.CruiseControl.WebDashboard.MVC.View;
 namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 {
 	[TestFixture]
-	public class DecoratingRecentBuildsPanelBuilderTest : Assertion
+	public class DecoratingRecentBuildsPanelBuilderTest
 	{
 		private DynamicMock urlBuilderMock;
 		private DynamicMock decoratedBuilderMock;
@@ -46,8 +46,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 			HtmlTable returnedTable = builder.BuildRecentBuildsTable("myServer", "myProject");
 
 			// Verify
-			AssertEquals("Recent Builds", returnedTable.Rows[0].Cells[0].InnerHtml);
-			AssertEquals("hello decorator", returnedTable.Rows[1].Cells[0].InnerHtml);
+			Assert.AreEqual("Recent Builds", returnedTable.Rows[0].Cells[0].InnerHtml);
+			Assert.AreEqual("hello decorator", returnedTable.Rows[1].Cells[0].InnerHtml);
 			VerifyAll();
 		}
 
@@ -65,12 +65,12 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 			// Verify
 			// Row 0 is header
 			// Row 1 is row returned from decoratedBuilder
-			AssertEquals("hello decorator", returnedTable.Rows[1].Cells[0].InnerHtml);
+			Assert.AreEqual("hello decorator", returnedTable.Rows[1].Cells[0].InnerHtml);
 			// Row 2 is a blank row
 			// Row 3 is footer
 			HtmlAnchor showAllLink = (HtmlAnchor) returnedTable.Rows[3].Cells[0].Controls[0];
-			AssertEquals("Show All", showAllLink.InnerHtml);
-			AssertEquals("returnedurl1", showAllLink.HRef);
+			Assert.AreEqual("Show All", showAllLink.InnerHtml);
+			Assert.AreEqual("returnedurl1", showAllLink.HRef);
 			VerifyAll();
 		}
 	}

@@ -6,7 +6,7 @@ using ThoughtWorks.CruiseControl.WebDashboard.MVC;
 namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.MVC
 {
 	[TestFixture]
-	public class AggregatedRequestTest : Assertion
+	public class AggregatedRequestTest
 	{
 		private DynamicMock request1Mock;
 		private DynamicMock request2Mock;
@@ -37,7 +37,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.MVC
 			string value = aggregatedRequest.FindParameterStartingWith("prefix");
 
 			// Verify
-			AssertEquals("value", value);
+			Assert.AreEqual("value", value);
 			VerifyAll();
 		}
 
@@ -52,7 +52,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.MVC
 			string value = aggregatedRequest.FindParameterStartingWith("prefix");
 
 			// Verify
-			AssertEquals("value", value);
+			Assert.AreEqual("value", value);
 			VerifyAll();
 		}
 
@@ -67,7 +67,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.MVC
 			string value = aggregatedRequest.GetText("id");
 
 			// Verify
-			AssertEquals("value", value);
+			Assert.AreEqual("value", value);
 			VerifyAll();
 		}
 
@@ -82,7 +82,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.MVC
 			string value = aggregatedRequest.GetText("id");
 
 			// Verify
-			AssertEquals("value", value);
+			Assert.AreEqual("value", value);
 			VerifyAll();
 		}
 
@@ -98,7 +98,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.MVC
 			bool value = aggregatedRequest.GetChecked("id");
 
 			// Verify
-			AssertEquals(true, value);
+			Assert.AreEqual(true, value);
 			VerifyAll();
 		}
 
@@ -113,7 +113,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.MVC
 			bool value = aggregatedRequest.GetChecked("id");
 
 			// Verify
-			AssertEquals(true, value);
+			Assert.AreEqual(true, value);
 			VerifyAll();
 		}
 
@@ -128,7 +128,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.MVC
 			bool value = aggregatedRequest.GetChecked("id");
 
 			// Verify
-			AssertEquals(false, value);
+			Assert.AreEqual(false, value);
 			VerifyAll();
 		}
 
@@ -143,7 +143,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.MVC
 			int value = aggregatedRequest.GetInt("id", -100);
 
 			// Verify
-			AssertEquals(77, value);
+			Assert.AreEqual(77, value);
 			VerifyAll();
 		}
 
@@ -158,7 +158,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.MVC
 			int value = aggregatedRequest.GetInt("id", -100);
 
 			// Verify
-			AssertEquals(88, value);
+			Assert.AreEqual(88, value);
 			VerifyAll();
 		}
 
@@ -173,7 +173,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.MVC
 			int value = aggregatedRequest.GetInt("id", -100);
 
 			// Verify
-			AssertEquals(-100, value);
+			Assert.AreEqual(-100, value);
 			VerifyAll();
 		}
 
@@ -194,11 +194,11 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.MVC
 			// Execute
 			NameValueCollection returnedParams = aggregatedRequest.Params;
 
-			AssertEquals(3, returnedParams.Keys.Count);
-			AssertEquals("value1", returnedParams["only1"]);
-			AssertEquals("value2", returnedParams["only2"]);
-			AssertEquals("value01", returnedParams["both"]);
-			AssertEquals(1, returnedParams.GetValues("both").Length);
+			Assert.AreEqual(3, returnedParams.Keys.Count);
+			Assert.AreEqual("value1", returnedParams["only1"]);
+			Assert.AreEqual("value2", returnedParams["only2"]);
+			Assert.AreEqual("value01", returnedParams["both"]);
+			Assert.AreEqual(1, returnedParams.GetValues("both").Length);
 			VerifyAll();
 		}
 	}

@@ -15,9 +15,9 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks.Test
 		{
 			string xml="<nunit><path>d:\temp\nunit-console.exe</path><assemblies><assembly>foo.dll</assembly></assemblies></nunit>";
 			_nunitTask= NetReflector.Read(xml) as NUnitTask;
-			AssertEquals("d:\temp\nunit-console.exe",_nunitTask.NUnitPath);
-			AssertEquals(1,_nunitTask.Assembly.Length);
-			AssertEquals("foo.dll",_nunitTask.Assembly[0]);
+			Assert.AreEqual("d:\temp\nunit-console.exe",_nunitTask.NUnitPath);
+			Assert.AreEqual(1,_nunitTask.Assembly.Length);
+			Assert.AreEqual("foo.dll",_nunitTask.Assembly[0]);
 
 		}
 		[Test]

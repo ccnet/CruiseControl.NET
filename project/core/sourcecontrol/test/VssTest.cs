@@ -61,25 +61,25 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test
 
 			string expectedArgs = @"history $/fooProject -R -Vd02/22/2002;20:00~01/21/2001;20:00 -YAdmin,admin -I-Y";				
 
-			AssertNotNull("process was null", actual);
-			AssertEquals(DEFAULT_SS_EXE_PATH, actual.FileName);
-			AssertEquals(expectedArgs, actual.Arguments);
+			Assert.IsNotNull(actual);
+			Assert.AreEqual(DEFAULT_SS_EXE_PATH, actual.FileName);
+			Assert.AreEqual(expectedArgs, actual.Arguments);
 		}
 		
 		[Test]
 		public void ValuesSet()
 		{
 			NetReflector.Read(VSS_XML, vss);
-			AssertEquals(@"..\tools\vss\ss.exe", vss.Executable);
-			AssertEquals(@"admin", vss.Password);
-			AssertEquals(@"$/root", vss.Project);
-			AssertEquals(@"..\tools\vss", vss.SsDir);
-			AssertEquals(@"Admin", vss.Username);
-			AssertEquals("incorrect applyLabel value", true, vss.ApplyLabel);
-			AssertEquals(5, vss.Timeout);
-			AssertEquals(true, vss.AutoGetSource);
-			AssertEquals(@"C:\temp", vss.WorkingDirectory);
-			AssertEquals("fr-FR", vss.Culture);
+			Assert.AreEqual(@"..\tools\vss\ss.exe", vss.Executable);
+			Assert.AreEqual(@"admin", vss.Password);
+			Assert.AreEqual(@"$/root", vss.Project);
+			Assert.AreEqual(@"..\tools\vss", vss.SsDir);
+			Assert.AreEqual(@"Admin", vss.Username);
+			Assert.AreEqual(true, vss.ApplyLabel);
+			Assert.AreEqual(5, vss.Timeout);
+			Assert.AreEqual(true, vss.AutoGetSource);
+			Assert.AreEqual(@"C:\temp", vss.WorkingDirectory);
+			Assert.AreEqual("fr-FR", vss.Culture);
 		}
 
 		[Test]
@@ -88,12 +88,12 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test
 			DateTime date = new DateTime(2002, 2, 22, 20, 0, 0);
 			string expected = "02/22/2002;20:00";
 			string actual = vss.FormatCommandDate(date);
-			AssertEquals(expected, actual);
+			Assert.AreEqual(expected, actual);
 
 			date = new DateTime(2002, 2, 22, 12, 0, 0);
 			expected = "02/22/2002;12:00";
 			actual = vss.FormatCommandDate(date);
-			AssertEquals(expected, actual);
+			Assert.AreEqual(expected, actual);
 		}
 
 		[Test]
@@ -103,12 +103,12 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test
 			DateTime date = new DateTime(2002, 2, 22, 20, 0, 0);
 			string expected = "2/22/2002;8:00P";
 			string actual = vss.FormatCommandDate(date);
-			AssertEquals(expected, actual);
+			Assert.AreEqual(expected, actual);
 
 			date = new DateTime(2002, 2, 22, 12, 0, 0);
 			expected = "2/22/2002;12:00P";
 			actual = vss.FormatCommandDate(date);
-			AssertEquals(expected, actual);
+			Assert.AreEqual(expected, actual);
 		}
 
 		[Test]
@@ -121,9 +121,9 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test
 
 			string expectedArgs = @"label $/fooProject -LnewLabel -VLoldLabel -YAdmin,admin -I-Y";				
 
-			AssertNotNull("process was null", actual);
-			AssertEquals(DEFAULT_SS_EXE_PATH, actual.FileName);
-			AssertEquals(expectedArgs, actual.Arguments);
+			Assert.IsNotNull(actual);
+			Assert.AreEqual(DEFAULT_SS_EXE_PATH, actual.FileName);
+			Assert.AreEqual(expectedArgs, actual.Arguments);
 		}
 
 		[Test]
@@ -134,16 +134,16 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test
 			ProcessInfo actual = vss.CreateLabelProcessInfo(label);
 
 			string expectedArgs = @"label $/fooProject -LtestLabel -YAdmin,admin -I-Y";				
-			AssertNotNull("process was null", actual);
-			AssertEquals(DEFAULT_SS_EXE_PATH, actual.FileName);
-			AssertEquals(expectedArgs, actual.Arguments);
+			Assert.IsNotNull(actual);
+			Assert.AreEqual(DEFAULT_SS_EXE_PATH, actual.FileName);
+			Assert.AreEqual(expectedArgs, actual.Arguments);
 		}
 
 		[Test]
 		public void StripQuotesFromSSDir()
 		{
 			vss.SsDir = @"""C:\Program Files\Microsoft Visual Studio\VSS""";
-			AssertEquals(@"C:\Program Files\Microsoft Visual Studio\VSS", vss.SsDir);
+			Assert.AreEqual(@"C:\Program Files\Microsoft Visual Studio\VSS", vss.SsDir);
 		}
 
 		[Test]
@@ -152,14 +152,14 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test
 			ProcessInfo orginal = new ProcessInfo("foo", "bar");
 
 			ProcessInfo actual = vss.CreateHistoryProcessInfo(DateTime.Now, DateTime.Now);
-			AssertEquals(orginal.EnvironmentVariables[Vss.SS_DIR_KEY], actual.EnvironmentVariables[Vss.SS_DIR_KEY]);
+			Assert.AreEqual(orginal.EnvironmentVariables[Vss.SS_DIR_KEY], actual.EnvironmentVariables[Vss.SS_DIR_KEY]);
 		}
 
 		[Test]
 		public void ReadDefaultExecutableFromRegistry()
 		{
 			mockRegistry.ExpectAndReturn("GetExpectedLocalMachineSubKeyValue", @"C:\Program Files\Microsoft Visual Studio\VSS\win32\SSSCC.DLL", Vss.SS_REGISTRY_PATH, Vss.SS_REGISTRY_KEY);
-			AssertEquals(@"C:\Program Files\Microsoft Visual Studio\VSS\win32\ss.exe", vss.Executable);
+			Assert.AreEqual(@"C:\Program Files\Microsoft Visual Studio\VSS\win32\ss.exe", vss.Executable);
 		}
 
 		[Test]
@@ -206,9 +206,9 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test
 #if USE_MOCK
 			ProcessInfo info = (ProcessInfo) constraint.Parameter;
 			AssertMatches(@"get \$/Refactoring -R -Vd.* -Yorogers, -I-N", info.Arguments);
-			AssertEquals(DEFAULT_SS_EXE_PATH, info.FileName);
-			AssertEquals(@"c:\source\", info.WorkingDirectory);
-			AssertEquals(@"..\tools\vss", info.EnvironmentVariables[Vss.SS_DIR_KEY]);
+			Assert.AreEqual(DEFAULT_SS_EXE_PATH, info.FileName);
+			Assert.AreEqual(@"c:\source\", info.WorkingDirectory);
+			Assert.AreEqual(@"..\tools\vss", info.EnvironmentVariables[Vss.SS_DIR_KEY]);
 #endif
 		}
 
@@ -240,7 +240,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test
 
 			vss.CreateTemporaryLabel();
 
-			AssertEquals( "CreateLabelProcessInfo should not have been invoked", 0, vss.methodInvoked );
+			Assert.AreEqual(0, vss.methodInvoked );
 		}
 
 		[Test]
@@ -251,7 +251,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test
 
 			vss.CreateTemporaryLabel();
 
-			AssertEquals( "CreateLabelProcessInfo should have been invoked once", 1, vss.methodInvoked );
+			Assert.AreEqual(1, vss.methodInvoked );
 		}
 
 		private class PseudoMockVss : Vss

@@ -1,6 +1,7 @@
 using System;
 using System.IO;
 using System.Web.UI.HtmlControls;
+using NUnit.Framework;
 using ThoughtWorks.CruiseControl.Core;
 using ThoughtWorks.CruiseControl.Core.Util;
 
@@ -41,22 +42,22 @@ namespace ThoughtWorks.CruiseControl.Web.Test
 			TempFileUtil.CreateTempFiles(TestFolder, testFilenames);
 
 		    HtmlAnchor[] actualLinks = LogFileLister.GetLinks(_tempFolder);
-			AssertEquals(6, actualLinks.Length);
+			Assert.AreEqual(6, actualLinks.Length);
 
 			// expected Date format: dd MMM yyyy HH:mm
-			AssertEquals("?log=log20020830164057Lbuild.6.xml", actualLinks[0].HRef);
-			AssertEquals("?log=log20020507042535.xml", actualLinks[1].HRef);
-			AssertEquals("?log=log20020507023858.xml", actualLinks[2].HRef);
-			AssertEquals("?log=log20020507010355.xml", actualLinks[3].HRef);
-			AssertEquals("?log=log19750101120000.xml", actualLinks[4].HRef);
-			AssertEquals("?log=log19741224120000.xml", actualLinks[5].HRef);
+			Assert.AreEqual("?log=log20020830164057Lbuild.6.xml", actualLinks[0].HRef);
+			Assert.AreEqual("?log=log20020507042535.xml", actualLinks[1].HRef);
+			Assert.AreEqual("?log=log20020507023858.xml", actualLinks[2].HRef);
+			Assert.AreEqual("?log=log20020507010355.xml", actualLinks[3].HRef);
+			Assert.AreEqual("?log=log19750101120000.xml", actualLinks[4].HRef);
+			Assert.AreEqual("?log=log19741224120000.xml", actualLinks[5].HRef);
 
-			AssertEquals("<nobr>30 Aug 2002 16:40 (6)</nobr>", actualLinks[0].InnerText);
-			AssertEquals("<nobr>07 May 2002 04:25 (Failed)</nobr>", actualLinks[1].InnerHtml);
-			AssertEquals("<nobr>07 May 2002 02:38 (Failed)</nobr>", actualLinks[2].InnerHtml);
-			AssertEquals("<nobr>07 May 2002 01:03 (Failed)</nobr>", actualLinks[3].InnerHtml);
-			AssertEquals("<nobr>01 Jan 1975 12:00 (Failed)</nobr>", actualLinks[4].InnerHtml);
-			AssertEquals("<nobr>24 Dec 1974 12:00 (Failed)</nobr>", actualLinks[5].InnerHtml);
+			Assert.AreEqual("<nobr>30 Aug 2002 16:40 (6)</nobr>", actualLinks[0].InnerText);
+			Assert.AreEqual("<nobr>07 May 2002 04:25 (Failed)</nobr>", actualLinks[1].InnerHtml);
+			Assert.AreEqual("<nobr>07 May 2002 02:38 (Failed)</nobr>", actualLinks[2].InnerHtml);
+			Assert.AreEqual("<nobr>07 May 2002 01:03 (Failed)</nobr>", actualLinks[3].InnerHtml);
+			Assert.AreEqual("<nobr>01 Jan 1975 12:00 (Failed)</nobr>", actualLinks[4].InnerHtml);
+			Assert.AreEqual("<nobr>24 Dec 1974 12:00 (Failed)</nobr>", actualLinks[5].InnerHtml);
 		}
 
 		[NUnit.Framework.Test]
@@ -68,14 +69,14 @@ namespace ThoughtWorks.CruiseControl.Web.Test
 
 		private void CheckBuildStatus(string expected, string input)
 		{
-			AssertEquals(expected, LogFileLister.GetBuildStatus(input));
+			Assert.AreEqual(expected, LogFileLister.GetBuildStatus(input));
 		}
 
 		[NUnit.Framework.Test]
 		public void ParseDate()
 		{
 		    DateTime date = new DateTime(2002, 3, 28, 13, 0, 0);
-			AssertEquals(date, LogFileUtil.ParseForDate("20020328130000"));
+			Assert.AreEqual(date, LogFileUtil.ParseForDate("20020328130000"));
 		}
 
 		[NUnit.Framework.Test]
@@ -93,7 +94,7 @@ namespace ThoughtWorks.CruiseControl.Web.Test
 			};
 			TempFileUtil.CreateTempFiles(TestFolder, testFilenames);
 
-			AssertEquals("log20030507042535.xml", LogFileLister.GetCurrentFilename(new DirectoryInfo(_tempFolder)));
+			Assert.AreEqual("log20030507042535.xml", LogFileLister.GetCurrentFilename(new DirectoryInfo(_tempFolder)));
 		}
 
 		[NUnit.Framework.Test]
@@ -102,8 +103,8 @@ namespace ThoughtWorks.CruiseControl.Web.Test
 			HtmlAnchor previous = new HtmlAnchor();
 			HtmlAnchor next = new HtmlAnchor();
 			LogFileLister.InitAdjacentAnchors(previous, next, _tempFolder, null);
-			AssertEquals("Previous link set", String.Empty, previous.HRef);
-			AssertEquals("Next link set", String.Empty, next.HRef);
+			Assert.AreEqual(String.Empty, previous.HRef);
+			Assert.AreEqual(String.Empty, next.HRef);
 		}
 
 		[NUnit.Framework.Test]
@@ -113,8 +114,8 @@ namespace ThoughtWorks.CruiseControl.Web.Test
 			HtmlAnchor next = new HtmlAnchor();
 			TempFileUtil.CreateTempFile(_tempFolder, LogFileUtil.CreateSuccessfulBuildLogFileName(new DateTime(), "2"));
 			LogFileLister.InitAdjacentAnchors(new HtmlAnchor(), new HtmlAnchor(), _tempFolder, null);
-			AssertEquals("Previous link set", String.Empty, previous.HRef);
-			AssertEquals("Next link set", String.Empty, next.HRef);
+			Assert.AreEqual(String.Empty, previous.HRef);
+			Assert.AreEqual(String.Empty, next.HRef);
 		}
 
 	}

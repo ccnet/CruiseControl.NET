@@ -9,7 +9,7 @@ using ThoughtWorks.CruiseControl.WebDashboard.MVC.Cruise;
 namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.MVC.Cruise
 {
 	[TestFixture]
-	public class ExceptionCatchingActionProxyTest : Assertion
+	public class ExceptionCatchingActionProxyTest
 	{
 		private DynamicMock actionMock;
 		private ExceptionCatchingActionProxy exceptionCatchingAction;
@@ -40,7 +40,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.MVC.Cruise
 			Control returnedControl = exceptionCatchingAction.Execute(request);
 
 			// Verify
-			AssertEquals(view, returnedControl);
+			Assert.AreEqual(view, returnedControl);
 			VerifyAll();
 		}
 
@@ -55,7 +55,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.MVC.Cruise
 			Control returnedControl = exceptionCatchingAction.Execute(request);
 
 			// Verify
-			Assert(((HtmlGenericControl) returnedControl).InnerHtml.IndexOf("A nasty exception") > -1);
+			Assert.IsTrue(((HtmlGenericControl) returnedControl).InnerHtml.IndexOf("A nasty exception") > -1);
 			VerifyAll();
 		}
 	}

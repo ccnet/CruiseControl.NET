@@ -21,7 +21,7 @@ namespace ThoughtWorks.CruiseControl.CCTray.Test
 	    {
 	      StatusIcon iconFile = StatusIcon.LoadFromFile(_file);
 	        Size size = iconFile.Icon.Size;
-			AssertEquals(_originalIcon.Size,size);
+			Assert.AreEqual(_originalIcon.Size,size);
 	    }
 
 		[Test]

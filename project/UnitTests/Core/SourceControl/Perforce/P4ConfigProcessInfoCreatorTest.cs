@@ -5,7 +5,7 @@ using ThoughtWorks.CruiseControl.Core.Util;
 namespace ThoughtWorks.CruiseControl.UnitTests.Core.SourceControl.Perforce
 {
 	[TestFixture]
-	public class P4ConfigProcessInfoCreatorTest : Assertion
+	public class P4ConfigProcessInfoCreatorTest 
 	{
 		[Test]
 		public void ShouldCreateProcessUsingAllConfigurationVariablesIfTheyAreSet()
@@ -19,8 +19,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.SourceControl.Perforce
 
 			ProcessInfo info = new P4ConfigProcessInfoCreator().CreateProcessInfo(p4, "my arguments");
 
-			AssertEquals("myExecutable", info.FileName);
-			AssertEquals("-s -c myClient -p anotherserver:2666 -u myUser my arguments", info.Arguments);
+			Assert.AreEqual("myExecutable", info.FileName);
+			Assert.AreEqual("-s -c myClient -p anotherserver:2666 -u myUser my arguments", info.Arguments);
 		}
 
 		[Test]
@@ -31,8 +31,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.SourceControl.Perforce
 
 			ProcessInfo info = new P4ConfigProcessInfoCreator().CreateProcessInfo(p4, "my arguments");
 
-			AssertEquals("p4", info.FileName);
-			AssertEquals("-s my arguments", info.Arguments);
+			Assert.AreEqual("p4", info.FileName);
+			Assert.AreEqual("-s my arguments", info.Arguments);
 		}
 	}
 }

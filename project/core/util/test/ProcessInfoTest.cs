@@ -1,4 +1,3 @@
-using System;
 using NUnit.Framework;
 
 using ThoughtWorks.CruiseControl.Core.Util;
@@ -14,8 +13,8 @@ namespace ThoughtWorks.CruiseControl.Core.Util.Test
 			ProcessInfo info = new ProcessInfo("temp");
 			info.StandardInputContent = "Some content";
 
-			Assert(info.StartInfo.RedirectStandardInput);
-			Assert(!info.StartInfo.UseShellExecute);
+			Assert.IsTrue(info.StartInfo.RedirectStandardInput);
+			Assert.IsTrue(!info.StartInfo.UseShellExecute);
 		}
 
 		[Test]
@@ -23,7 +22,7 @@ namespace ThoughtWorks.CruiseControl.Core.Util.Test
 		{
 			ProcessInfo info = new ProcessInfo("temp");
 
-			Assert(!info.StartInfo.RedirectStandardInput);
+			Assert.IsTrue(!info.StartInfo.RedirectStandardInput);
 		}
 
 		[Test]
@@ -35,7 +34,7 @@ namespace ThoughtWorks.CruiseControl.Core.Util.Test
 			ProcessInfo infoWithoutPathQualifiedExecutable = new ProcessInfo("myExecutable", "", workingDir);
 			ProcessInfo infoWithPreQualifiedExecutable = new ProcessInfo(executablePath, "", workingDir);
 
-			AssertEquals(infoWithPreQualifiedExecutable, infoWithoutPathQualifiedExecutable);
+			Assert.AreEqual(infoWithPreQualifiedExecutable, infoWithoutPathQualifiedExecutable);
 		}
 	}
 }

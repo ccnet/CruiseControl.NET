@@ -4,7 +4,7 @@ using System;
 namespace ThoughtWorks.CruiseControl.Core.Builder.Test
 {
 	[TestFixture]
-	public class DevenvTaskResultTest : Assertion
+	public class DevenvTaskResultTest
 	{
 		[Test]
 		public void CreateFailedXmlFromDevenvOutput()
@@ -24,7 +24,7 @@ Build complete -- 1 errors, 0 warnings";
 "</buildresults>";
 
 			DevenvTaskResult result = new DevenvTaskResult(output);
-			AssertEquals(expected, result.Data);
+			Assert.AreEqual(expected, result.Data);
 		}
 	}
 }

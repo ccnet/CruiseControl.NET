@@ -6,7 +6,7 @@ using ThoughtWorks.CruiseControl.WebDashboard.ServerConnection;
 namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 {
 	[TestFixture]
-	public class CruiseManagerBuildNameRetrieverTest : Assertion
+	public class CruiseManagerBuildNameRetrieverTest
 	{
 		private DynamicMock cruiseManagerMock;
 		private CruiseManagerBuildNameRetriever nameBuildRetriever;
@@ -39,7 +39,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 		{
 			cruiseManagerMock.ExpectAndReturn("GetLatestBuildName", buildName, serverName, projectName);
 
-			AssertEquals(buildName, nameBuildRetriever.GetLatestBuildName(serverName, projectName));
+			Assert.AreEqual(buildName, nameBuildRetriever.GetLatestBuildName(serverName, projectName));
 
 			VerifyAll();
 		}
@@ -49,7 +49,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 		{
 			cruiseManagerMock.ExpectAndReturn("GetBuildNames", buildNames, serverName, projectName);
 
-			AssertEquals("log3", nameBuildRetriever.GetNextBuildName(serverName, projectName, "log3"));
+			Assert.AreEqual("log3", nameBuildRetriever.GetNextBuildName(serverName, projectName, "log3"));
 
 			VerifyAll();
 		}
@@ -59,7 +59,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 		{
 			cruiseManagerMock.ExpectAndReturn("GetBuildNames", buildNames, serverName, projectName);
 
-			AssertEquals("log2", nameBuildRetriever.GetNextBuildName(serverName, projectName, "log1"));
+			Assert.AreEqual("log2", nameBuildRetriever.GetNextBuildName(serverName, projectName, "log1"));
 			VerifyAll();
 		}
 
@@ -70,7 +70,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 			try
 			{
 				nameBuildRetriever.GetNextBuildName(serverName, projectName, "not a real build");
-				Fail("Should throw the right exception");
+				Assert.Fail("Should throw the right exception");
 			}
 			catch (UnknownBuildException) { }
 			VerifyAll();
@@ -81,7 +81,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 		{
 			cruiseManagerMock.ExpectAndReturn("GetBuildNames", buildNames, serverName, projectName);
 
-			AssertEquals("log1", nameBuildRetriever.GetPreviousBuildName(serverName, projectName, "log1"));
+			Assert.AreEqual("log1", nameBuildRetriever.GetPreviousBuildName(serverName, projectName, "log1"));
 
 			VerifyAll();
 		}
@@ -91,7 +91,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 		{
 			cruiseManagerMock.ExpectAndReturn("GetBuildNames", buildNames, serverName, projectName);
 
-			AssertEquals("log2", nameBuildRetriever.GetPreviousBuildName(serverName, projectName, "log3"));
+			Assert.AreEqual("log2", nameBuildRetriever.GetPreviousBuildName(serverName, projectName, "log3"));
 
 			VerifyAll();
 		}
@@ -103,7 +103,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 			try
 			{
 				nameBuildRetriever.GetPreviousBuildName(serverName, projectName, "not a real build");
-				Fail("Should throw the right exception");
+				Assert.Fail("Should throw the right exception");
 			}
 			catch (UnknownBuildException) { }
 			VerifyAll();

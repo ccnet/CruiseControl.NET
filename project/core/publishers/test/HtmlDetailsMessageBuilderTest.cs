@@ -21,9 +21,9 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers.Test
 	        int styleBegin = message.IndexOf("<style>");
 	        int styleEnd = message.IndexOf("</style>");
 
-	        Assert(styleBegin != -1);
-			Assert(styleEnd != -1);
-			Assert("There must be some styles from the loaded file",styleEnd - styleBegin > 8);
+	        Assert.IsTrue(styleBegin != -1);
+			Assert.IsTrue(styleEnd != -1);
+			Assert.IsTrue(styleEnd - styleBegin > 8, "There must be some styles from the loaded file");
 	    }
 	}
 }

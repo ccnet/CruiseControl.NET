@@ -4,7 +4,7 @@ using System;
 namespace ThoughtWorks.CruiseControl.Core.Config.Test
 {
 	[TestFixture]
-	public class ConfigurationTest : Assertion
+	public class ConfigurationTest
 	{
 		[Test]
 		public void CreateIntegrators()

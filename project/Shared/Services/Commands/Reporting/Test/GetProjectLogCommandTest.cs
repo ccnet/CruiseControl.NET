@@ -1,19 +1,18 @@
 using System;
 
 using NUnit.Framework;
-using NMock;
 
 namespace ThoughtWorks.CruiseControl.Shared.Services.Commands.Reporting.Test
 {
 	[TestFixture]
-	public class GetProjectLogCommandTest : Assertion
+	public class GetProjectLogCommandTest
 	{
 		[Test]
 		public void CanRequestLatestLogForDefaultProject()
 		{
 			GetProjectLogCommand command = new GetProjectLogCommand();
 
-			AssertEquals(GetProjectLogCommandLogType.Latest, command.LogType);
+			Assert.AreEqual(GetProjectLogCommandLogType.Latest, command.LogType);
 		}
 
 		[Test]
@@ -22,8 +21,8 @@ namespace ThoughtWorks.CruiseControl.Shared.Services.Commands.Reporting.Test
 			DateTime dateRequested = DateTime.Now;
 			GetProjectLogCommand command = new GetProjectLogCommand(dateRequested);
 
-			AssertEquals(GetProjectLogCommandLogType.Dated, command.LogType);
-			AssertEquals(dateRequested, command.LogDate);
+			Assert.AreEqual(GetProjectLogCommandLogType.Dated, command.LogType);
+			Assert.AreEqual(dateRequested, command.LogDate);
 		}
 
 		[Test]
@@ -31,8 +30,8 @@ namespace ThoughtWorks.CruiseControl.Shared.Services.Commands.Reporting.Test
 		{
 			GetProjectLogCommand command = new GetProjectLogCommand("myProject");
 
-			AssertEquals(GetProjectLogCommandLogType.Latest, command.LogType);
-			AssertEquals("myProject", command.ProjectName);
+			Assert.AreEqual(GetProjectLogCommandLogType.Latest, command.LogType);
+			Assert.AreEqual("myProject", command.ProjectName);
 		}
 
 		[Test]
@@ -41,9 +40,9 @@ namespace ThoughtWorks.CruiseControl.Shared.Services.Commands.Reporting.Test
 			DateTime dateRequested = DateTime.Now;
 			GetProjectLogCommand command = new GetProjectLogCommand("myProject", dateRequested);
 
-			AssertEquals(GetProjectLogCommandLogType.Dated, command.LogType);
-			AssertEquals(dateRequested, command.LogDate);
-			AssertEquals("myProject", command.ProjectName);
+			Assert.AreEqual(GetProjectLogCommandLogType.Dated, command.LogType);
+			Assert.AreEqual(dateRequested, command.LogDate);
+			Assert.AreEqual("myProject", command.ProjectName);
 		}
 
 		[Test]
@@ -53,7 +52,7 @@ namespace ThoughtWorks.CruiseControl.Shared.Services.Commands.Reporting.Test
 			GetProjectLogResult result = new GetProjectLogResult("");
 			command.Result = result;
 
-			AssertEquals(result, command.Result);
+			Assert.AreEqual(result, command.Result);
 		}
 	}
 }

@@ -1,4 +1,3 @@
-using System;
 using System.Configuration;
 using System.Collections.Specialized;
 using NUnit.Framework;
@@ -12,11 +11,11 @@ namespace ThoughtWorks.CruiseControl.Web.Test
 		public void LoadSection() 
 		{
 			NameValueCollection col = (NameValueCollection)ConfigurationSettings.GetConfig("xslFiles");
-			Assertion.AssertEquals(2, col.Count);
-			Assertion.AssertNotNull("one should not be null", col["one"]);
-			Assertion.AssertEquals("foo.xsl", col["one"]);
-			Assertion.AssertNotNull("two should not be null", col["two"]);
-			Assertion.AssertEquals("bar.xsl", col["two"]);
+			Assert.AreEqual(2, col.Count);
+			Assert.IsNotNull(col["one"]);
+			Assert.AreEqual("foo.xsl", col["one"]);
+			Assert.IsNotNull(col["two"]);
+			Assert.AreEqual("bar.xsl", col["two"]);
 		}
 	}
 }

@@ -213,11 +213,7 @@
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
-                <File
-                    RelPath = "Test\CustomAssertion.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
+                <Folder RelPath = "Test\" />
                 <File
                     RelPath = "Util\DateUtil.cs"
                     SubType = "Code"
@@ -228,11 +224,7 @@
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
-                <File
-                    RelPath = "Util\Test\TempFileUtilTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
+                <Folder RelPath = "Util\Test\" />
             </Include>
         </Files>
     </CSHARP>

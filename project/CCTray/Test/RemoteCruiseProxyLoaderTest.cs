@@ -5,10 +5,9 @@ using ThoughtWorks.CruiseControl.WebServiceProxy;
 
 namespace ThoughtWorks.CruiseControl.CCTray.Test
 {
-	[NUnit.Framework.TestFixture]
-	public class RemoteCruiseProxyLoaderTest : Assertion
+	[TestFixture]
+	public class RemoteCruiseProxyLoaderTest
 	{
-
 		private RemoteCruiseProxyLoader _loader;
 		private Settings _settings;
 
@@ -23,7 +22,7 @@ namespace ThoughtWorks.CruiseControl.CCTray.Test
 		public void ShouldUseCCNetManagementProxyWhenUsingWebServicesInSettings()
 		{
 			_settings.ConnectionMethod = ConnectionMethod.WebService;
-			AssertNotNull((CCNetManagementProxy) _loader.LoadProxy(_settings));		    
+			Assert.IsNotNull((CCNetManagementProxy) _loader.LoadProxy(_settings));		    
 		}
 		
 		[Test]
@@ -31,7 +30,7 @@ namespace ThoughtWorks.CruiseControl.CCTray.Test
 		{
 			_settings.ConnectionMethod = ConnectionMethod.Remoting;
 			_settings.RemoteServerUrl = "tcp://localhost:1234/foo.rem";
-			AssertNotNull( _loader.LoadProxy(_settings));		    
+			Assert.IsNotNull( _loader.LoadProxy(_settings));		    
 		}
 	}
 

@@ -1,5 +1,4 @@
 using System;
-using System.Text;
 using System.Runtime.InteropServices;
 using NUnit.Framework;
 using NMock;
@@ -22,11 +21,11 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers.Test
 </netsend>";
 
 			object result = NetReflector.Read(xml);
-			AssertNotNull(result);
-			AssertEquals(typeof(NetSendPublisher), result);
+			Assert.IsNotNull(result);
+			Assert.IsTrue(result is NetSendPublisher);
 
 			NetSendPublisher netsend = result as NetSendPublisher;
-			AssertEquals("orogers", netsend.Names);
+			Assert.AreEqual("orogers", netsend.Names);
 		}
 
 		[Test]
@@ -40,13 +39,13 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers.Test
 </netsend>";
 
 			object result = NetReflector.Read(xml);
-			AssertNotNull(result);
-			AssertEquals(typeof(NetSendPublisher), result.GetType());
+			Assert.IsNotNull(result);
+			Assert.AreEqual(typeof(NetSendPublisher), result.GetType());
 
 			NetSendPublisher netsend = result as NetSendPublisher;
-			AssertEquals("orogers", netsend.Names);
-			AssertEquals("DOH!", netsend.FailedMessage);
-			AssertEquals("YAHOO!", netsend.FixedMessage);
+			Assert.AreEqual("orogers", netsend.Names);
+			Assert.AreEqual("DOH!", netsend.FailedMessage);
+			Assert.AreEqual("YAHOO!", netsend.FixedMessage);
 		}
 
 		[Test]
@@ -54,8 +53,8 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers.Test
 		{
 			NetSendPublisher publisher = new NetSendPublisher();
 			AssertFalse("message should not be sent", publisher.ShouldSendMessage(IntegrationResultMother.CreateSuccessful()));
-			Assert("message should be sent", publisher.ShouldSendMessage(IntegrationResultMother.CreateFailed()));
-			Assert("message should be sent", publisher.ShouldSendMessage(IntegrationResultMother.CreateFixed()));
+			Assert.IsTrue(publisher.ShouldSendMessage(IntegrationResultMother.CreateFailed()));
+			Assert.IsTrue(publisher.ShouldSendMessage(IntegrationResultMother.CreateFixed()));
 		}
 
 		[Test]
@@ -64,10 +63,10 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers.Test
 			IntegrationResult result = CreateFailedIntegrationResult();
 			NetSendPublisher publisher = new NetSendPublisher();
 			string expected = "BUILD FAILED!\nLast comment: mod\nLast committer: owen";
-			AssertEquals(expected, publisher.GetMessage(result));
+			Assert.AreEqual(expected, publisher.GetMessage(result));
 
 			publisher.FailedMessage = "foo";
-			AssertEquals("foo\nLast comment: mod\nLast committer: owen", publisher.GetMessage(result));
+			Assert.AreEqual("foo\nLast comment: mod\nLast committer: owen", publisher.GetMessage(result));
 		}
 
 		private IntegrationResult CreateFailedIntegrationResult()
@@ -85,7 +84,7 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers.Test
 		{
 			NetSendPublisher publisher = new NetSendPublisher();
 			string expected = "BUILD FAILED!\nLast comment: Unknown\nLast committer: Unknown";
-			AssertEquals(expected, publisher.GetMessage(IntegrationResultMother.CreateFailed()));
+			Assert.AreEqual(expected, publisher.GetMessage(IntegrationResultMother.CreateFailed()));
 		}
 
 		[Test]
@@ -93,10 +92,10 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers.Test
 		{
 			IntegrationResult result = IntegrationResultMother.CreateFixed();
 			NetSendPublisher publisher = new NetSendPublisher();
-			AssertEquals("BUILD FIXED!", publisher.GetMessage(result));
+			Assert.AreEqual("BUILD FIXED!", publisher.GetMessage(result));
 
 			publisher.FixedMessage = "fixerama";
-			AssertEquals("fixerama", publisher.GetMessage(result));
+			Assert.AreEqual("fixerama", publisher.GetMessage(result));
 		}
 
 		[Test]
@@ -132,9 +131,9 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers.Test
 			publisher.PublishIntegrationResults(null, IntegrationResultMother.CreateFailed());
 
 			mockPublisher.Verify();
-			AssertEquals(@"send ""machine1""", ((ProcessInfo)process1.Parameter).Arguments.Substring(0, 15));
-			AssertEquals(@"send ""machine2""", ((ProcessInfo)process2.Parameter).Arguments.Substring(0, 15));
-			AssertEquals(@"send ""machine3""", ((ProcessInfo)process3.Parameter).Arguments.Substring(0, 15));
+			Assert.AreEqual(@"send ""machine1""", ((ProcessInfo)process1.Parameter).Arguments.Substring(0, 15));
+			Assert.AreEqual(@"send ""machine2""", ((ProcessInfo)process2.Parameter).Arguments.Substring(0, 15));
+			Assert.AreEqual(@"send ""machine3""", ((ProcessInfo)process3.Parameter).Arguments.Substring(0, 15));
 		}
 
 		[Test, Ignore("move to acceptance tests")]
@@ -145,7 +144,7 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers.Test
 			publisher.PublishIntegrationResults(null, CreateFailedIntegrationResult());
 
 			Win32Window window = Win32Window.Find("Messenger Service ");
-			AssertNotNull(window);
+			Assert.IsNotNull(window);
 			window.Close();
 		}
 

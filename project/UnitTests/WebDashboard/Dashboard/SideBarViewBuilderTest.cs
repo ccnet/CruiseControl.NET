@@ -1,16 +1,13 @@
-using System;
-using System.Web.UI;
 using System.Web.UI.HtmlControls;
 using NMock;
 using NUnit.Framework;
 using ThoughtWorks.CruiseControl.WebDashboard.Dashboard;
 using ThoughtWorks.CruiseControl.WebDashboard.IO;
-using ThoughtWorks.CruiseControl.WebDashboard.MVC.View;
 
 namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 {
 	[TestFixture]
-	public class SideBarViewBuilderTest : Assertion
+	public class SideBarViewBuilderTest
 	{
 		private DynamicMock userRequestSpecificSideBarViewBuilderMock;
 		private SideBarViewBuilder sideBarViewBuilder;
@@ -46,7 +43,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 			HtmlTable sidebarControl = sideBarViewBuilder.Execute(cruiseRequest);
 
 			// Verify
-			AssertEquals(actionsControl, sidebarControl);
+			Assert.AreEqual(actionsControl, sidebarControl);
 			VerifyAll();
 		}
 
@@ -63,7 +60,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 			HtmlTable sidebarControl = sideBarViewBuilder.Execute(cruiseRequest);
 
 			// Verify
-			AssertEquals(actionsControl, sidebarControl);
+			Assert.AreEqual(actionsControl, sidebarControl);
 			VerifyAll();
 		}
 
@@ -81,7 +78,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 			HtmlTable sidebarControl = sideBarViewBuilder.Execute(cruiseRequest);
 
 			// Verify
-			AssertEquals(actionsControl, sidebarControl);
+			Assert.AreEqual(actionsControl, sidebarControl);
 			VerifyAll();
 		}
 
@@ -99,7 +96,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 			HtmlTable sidebarControl = sideBarViewBuilder.Execute(cruiseRequest);
 
 			// Verify
-			AssertEquals(actionsControl, sidebarControl);
+			Assert.AreEqual(actionsControl, sidebarControl);
 			VerifyAll();
 		}
 	}

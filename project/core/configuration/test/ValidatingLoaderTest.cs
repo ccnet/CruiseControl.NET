@@ -1,4 +1,3 @@
-using System;
 using System.IO;
 using System.Reflection;
 using System.Xml;
@@ -23,7 +22,7 @@ namespace ThoughtWorks.CruiseControl.Core.Config.Test
 			loader.ValidationEventHandler += hd;
 			loader.Schemas.Add(schema);
 			XmlDocument doc = loader.Load();
-			AssertNull(doc);
+			Assert.IsNull(doc);
 		}
 
 		[Test]
@@ -36,7 +35,7 @@ namespace ThoughtWorks.CruiseControl.Core.Config.Test
 			loader.ValidationEventHandler += hd;
 			loader.Schemas.Add(schema);
 			XmlDocument doc = loader.Load();
-			AssertNotNull(doc);
+			Assert.IsNotNull(doc);
 		}
 
 		private XmlSchema LoadSchema() 

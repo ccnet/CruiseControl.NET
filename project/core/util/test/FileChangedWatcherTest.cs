@@ -6,7 +6,7 @@ using System.Threading;
 namespace ThoughtWorks.CruiseControl.Core.Util.Test
 {
 	[TestFixture]
-	public class FileChangedWatcherTest : Assertion
+	public class FileChangedWatcherTest
 	{
 		private string tempFile;
 		private int filechangedCount;
@@ -34,10 +34,10 @@ namespace ThoughtWorks.CruiseControl.Core.Util.Test
 				watcher.OnFileChanged += new FileSystemEventHandler(FileChanged);
 
 				UpdateFile("<rob><schneider/></rob>");
-				AssertEquals(1, filechangedCount);
+				Assert.AreEqual(1, filechangedCount);
 
 				UpdateFile("<joseph><conrad/></joseph");
-				AssertEquals(2, filechangedCount);
+				Assert.AreEqual(2, filechangedCount);
 			}
 		}
 

@@ -21,7 +21,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks.Test
 							<source>src\*.cs</source>
 						</ncover>";
 			_ncoverTask= NetReflector.Read(xml) as NCoverCoverage;
-			AssertNotNull(_ncoverTask);
+			Assert.IsNotNull(_ncoverTask);
 
 		}
 	}

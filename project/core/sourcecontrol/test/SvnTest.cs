@@ -29,9 +29,9 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test
 		public void PropertyPopulationFromXml()
 		{
 			Svn svn = CreateSvn(CreateSourceControlXml("svn://myserver/mypath"));
-			AssertEquals("..\\tools\\subversion-0.37.0\\svn.exe", svn.Executable);
-			AssertEquals("svn://myserver/mypath", svn.TrunkUrl);
-			AssertEquals(5, svn.Timeout);
+			Assert.AreEqual("..\\tools\\subversion-0.37.0\\svn.exe", svn.Executable);
+			Assert.AreEqual("svn://myserver/mypath", svn.TrunkUrl);
+			Assert.AreEqual(5, svn.Timeout);
 		}
 
 		[Test]
@@ -42,7 +42,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test
 			DateTime to = DateTime.Parse("2001-01-21  20:30:50 'GMT'");
 			ProcessInfo actualProcess = svn.CreateHistoryProcessInfo(from, to);
 
-			AssertEquals("log -v -r \"{2001-01-21T20:00:00Z}:{2001-01-21T20:30:50Z}\" --xml svn://someserver/", actualProcess.Arguments);
+			Assert.AreEqual("log -v -r \"{2001-01-21T20:00:00Z}:{2001-01-21T20:30:50Z}\" --xml svn://someserver/", actualProcess.Arguments);
 		}
 
 		[Test]

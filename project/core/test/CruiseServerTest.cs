@@ -7,7 +7,7 @@ using ThoughtWorks.CruiseControl.Remote;
 namespace ThoughtWorks.CruiseControl.Core.Test
 {
 	[TestFixture]
-	public class CruiseServerTest : Assertion
+	public class CruiseServerTest
 	{
 		private DynamicMock configServiceMock;
 		private DynamicMock projectIntegratorListFactoryMock;

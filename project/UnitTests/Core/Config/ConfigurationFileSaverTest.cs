@@ -10,7 +10,7 @@ using ThoughtWorks.CruiseControl.Core.Util;
 namespace ThoughtWorks.CruiseControl.UnitTests.Core.Config
 {
 	[TestFixture]
-	public class ConfigurationFileSaverTest : Assertion
+	public class ConfigurationFileSaverTest
 	{
 		[TearDown]
 		protected void TearDown() 
@@ -51,8 +51,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Config
 			IConfiguration configuration2 = loader.Load(configFile);
 
 			// Verify
-			AssertNotNull (configuration2.Projects["Project One"]);
-			AssertNotNull (configuration2.Projects["Project Two"]);
+			Assert.IsNotNull (configuration2.Projects["Project One"]);
+			Assert.IsNotNull (configuration2.Projects["Project Two"]);
 			mockConfiguration.Verify();
 		}
 

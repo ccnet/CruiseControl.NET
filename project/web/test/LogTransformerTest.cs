@@ -29,8 +29,8 @@ namespace ThoughtWorks.CruiseControl.Web.Test
 			string xslfile = TempFileUtil.CreateTempXmlFile(TestFolder, "samplestylesheet.xsl", TestData.StyleSheetContents);
 
 			string output = new LogTransformer(logfile, xslfile).Transform();
-			AssertNotNull(output);
-			Assert("Transform returned no data", ! String.Empty.Equals(output));
+			Assert.IsNotNull(output);
+			Assert.IsTrue(! String.Empty.Equals(output), "Transform returned no data");
 		}
 
 		[ExpectedException(typeof(CruiseControlException))]

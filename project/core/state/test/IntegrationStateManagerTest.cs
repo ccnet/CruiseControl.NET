@@ -33,8 +33,8 @@ namespace ThoughtWorks.CruiseControl.Core.State.Test
 		{
 			string xml = @"<state><directory>c:\temp</directory><filename>project.state</filename></state>";
 			_state = (IntegrationStateManager)NetReflector.Read(xml);
-			AssertEquals(@"c:\temp", _state.Directory);
-			AssertEquals("project.state", _state.Filename);
+			Assert.AreEqual(@"c:\temp", _state.Directory);
+			Assert.AreEqual("project.state", _state.Filename);
 		}
 
 		[Test]
@@ -44,9 +44,9 @@ namespace ThoughtWorks.CruiseControl.Core.State.Test
 			_state.Filename = "ccnet.state";
 			AssertFalse(_state.StateFileExists());
 			_state.SaveState(_result);
-			Assert(_state.StateFileExists());
+			Assert.IsTrue(_state.StateFileExists());
 			IntegrationResult actual = _state.LoadState();
-			AssertEquals(_result, actual);
+			Assert.AreEqual(_result, actual);
 		}
 
 		[Test]
@@ -68,8 +68,8 @@ namespace ThoughtWorks.CruiseControl.Core.State.Test
 			{
 				AssertFalse(File.Exists(_state.GetFilePath()));
 				_state.SaveState(_result);
-				AssertEquals(1, Directory.GetFiles(_tempDir).Length);
-				Assert(File.Exists(_state.GetFilePath()));
+				Assert.AreEqual(1, Directory.GetFiles(_tempDir).Length);
+				Assert.IsTrue(File.Exists(_state.GetFilePath()));
 			}
 			finally
 			{
@@ -104,9 +104,9 @@ namespace ThoughtWorks.CruiseControl.Core.State.Test
 			result.Label = "10";
 			_state.SaveState(result);
 
-			AssertEquals(1, Directory.GetFiles(_tempDir).Length);
+			Assert.AreEqual(1, Directory.GetFiles(_tempDir).Length);
 			IntegrationResult actual = _state.LoadState();
-			AssertEquals("10", actual.Label);
+			Assert.AreEqual("10", actual.Label);
 		}
 
 		[Test, ExpectedException(typeof(CruiseControlException))]
@@ -114,7 +114,7 @@ namespace ThoughtWorks.CruiseControl.Core.State.Test
 		{
 			_state.Directory = _tempDir;
 			AssertFalse(_state.StateFileExists());
-			AssertNull(_state.LoadState());
+			Assert.IsNotNull(_state.LoadState());
 		}
 
 		[Test]
@@ -138,7 +138,7 @@ namespace ThoughtWorks.CruiseControl.Core.State.Test
 			_state.SaveState(result);
 
 			IntegrationResult actual = _state.LoadState();
-			AssertEquals(result.ProjectName, actual.ProjectName);
+			Assert.AreEqual(result.ProjectName, actual.ProjectName);
 		}
 	}
 }

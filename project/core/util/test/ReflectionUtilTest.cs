@@ -10,39 +10,39 @@ namespace ThoughtWorks.CruiseControl.Core.Util.Test
 		{
 			ReflectTest o1 = new ReflectTest(1, "hello", new ReflectTest(2, "sub", null));
 			ReflectTest o2 = new ReflectTest(1, "hello", new ReflectTest(2, "sub", null));
-			AssertEquals(o1, o2);
+			Assert.AreEqual(o1, o2);
 		}
 
 		public void TestReflectionEquals_BothNull()
 		{
-			AssertEquals(null, null);
+			Assert.AreEqual(null, null);
 		}
 
 		public void TestReflectionEquals_OneNull()
 		{
 			ReflectTest o1 = new ReflectTest(1, "hello", new ReflectTest(2, "sub", null));
-			Assert(! o1.Equals(null));
+			Assert.IsTrue(! o1.Equals(null));
 		}
 
 		public void TestReflectionEquals_NotEqualFields()
 		{
 			ReflectTest o1 = new ReflectTest(1, "hello", new ReflectTest(2, "sub", null));
 			ReflectTest o2 = new ReflectTest(2, "hello", new ReflectTest(2, "sub", null));
-			Assert(! o1.Equals(o2));
+			Assert.IsTrue(! o1.Equals(o2));
 		}
 
 		public void TestReflectionEquals_NotEqualProperties()
 		{
 			ReflectTest o1 = new ReflectTest(1, "hello", new ReflectTest(2, "sub", null));
 			ReflectTest o2 = new ReflectTest(1, "hello", null);
-			Assert(! o1.Equals(o2));
+			Assert.IsTrue(! o1.Equals(o2));
 		}
 
 		public void TestReflectionEquals_DifferentTypes()
 		{
 			ReflectTest o1 = new ReflectTest(1, "hello", new ReflectTest(2, "sub", null));
 			string o2 = "testing";
-			Assert(! o1.Equals(o2));
+			Assert.IsTrue(! o1.Equals(o2));
 		}
 
 		public void TestReflectionEquals_Arrays()
@@ -51,13 +51,13 @@ namespace ThoughtWorks.CruiseControl.Core.Util.Test
 			o1.Values = new String[] { "a", "b" };
 			ReflectTest o2 = new ReflectTest(1, "hello", new ReflectTest(2, "sub", null));
 			o2.Values = new String[] { "a", "b" };
-			AssertEquals(o1, o2);
+			Assert.AreEqual(o1, o2);
 		}
 
 		public void TestReflectionToString()
 		{
 			ReflectTest o1 = new ReflectTest(1, "hello", new ReflectTest(2, "sub", null));
-			AssertEquals("ReflectTest: (id=1,name=hello,Child=ReflectTest: (id=2,name=sub,Child=,Values=),Values=)", ReflectionUtil.ReflectionToString(o1));
+			Assert.AreEqual("ReflectTest: (id=1,name=hello,Child=ReflectTest: (id=2,name=sub,Child=,Values=),Values=)", ReflectionUtil.ReflectionToString(o1));
 		}
 
 		private class ReflectTest
@@ -102,10 +102,6 @@ namespace ThoughtWorks.CruiseControl.Core.Util.Test
 			{
 				return ToString().GetHashCode();
 			}
-		}
-
-		private class ReflectTestSub : ReflectTest
-		{
 		}
 	}
 }

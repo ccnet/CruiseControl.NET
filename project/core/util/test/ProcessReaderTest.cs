@@ -7,7 +7,7 @@ using System.Threading;
 namespace ThoughtWorks.CruiseControl.Core.Util.Test
 {
 	[TestFixture]
-	public class ProcessReaderTest : Assertion
+	public class ProcessReaderTest
 	{
 		[Test]
 		public void EnsureThatStreamIsClosedOnceReadingIsComplete()

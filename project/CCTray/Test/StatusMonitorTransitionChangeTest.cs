@@ -7,9 +7,8 @@ using ThoughtWorks.CruiseControl.Remote;
 namespace ThoughtWorks.CruiseControl.CCTray.Test
 {
     [NUnit.Framework.TestFixture]
-	public class StatusMonitorTransitionChangeTest : Assertion
+	public class StatusMonitorTransitionChangeTest
 	{
-
 		private Mock _remoteProxyMock;
 		private StatusMonitor _monitor;
 		private bool _isError;
@@ -28,7 +27,7 @@ namespace ThoughtWorks.CruiseControl.CCTray.Test
 			_monitor.Error +=new ErrorEventHandler(OnError);
 			_remoteProxyMock.ExpectAndThrow("LoadProxy",new Exception("Test"),new IsAnything());
 			_monitor.Poll();
-			Assert(_isError);
+			Assert.IsTrue(_isError);
 		}
 
 		[Test]
@@ -44,8 +43,8 @@ namespace ThoughtWorks.CruiseControl.CCTray.Test
 			_monitor.Settings.ProjectName = "foo";
 			_remoteProxyMock.SetupResult("LoadProxy", (ICruiseManager)cruiseManagerMock.MockInstance, typeof(Settings));
 			_monitor.Poll();
-			Assert(_isPolled);
-			Assert(!_isError);
+			Assert.IsTrue(_isPolled);
+			Assert.IsTrue(!_isError);
 		}
 
 		private void OnError(object sauce, ErrorEventArgs e)
@@ -57,8 +56,6 @@ namespace ThoughtWorks.CruiseControl.CCTray.Test
 		{
 			_isPolled = true;
 		}
-
-	    
 	}
 }
 																				 

@@ -58,13 +58,13 @@ namespace ThoughtWorks.CruiseControl.Core.Builder.Test
     </nant>";
 
 			NetReflector.Read(xml, _builder);
-			AssertEquals(@"C:\", _builder.ConfiguredBaseDirectory);
-			AssertEquals("mybuild.build", _builder.BuildFile);
-			AssertEquals("NAnt.exe", _builder.Executable);
-			AssertEquals(1, _builder.Targets.Length);
-			AssertEquals(123, _builder.BuildTimeoutSeconds);
-			AssertEquals("SourceForge.NAnt.XmlLogger", _builder.Logger);
-			AssertEquals("foo", _builder.Targets[0]);
+			Assert.AreEqual(@"C:\", _builder.ConfiguredBaseDirectory);
+			Assert.AreEqual("mybuild.build", _builder.BuildFile);
+			Assert.AreEqual("NAnt.exe", _builder.Executable);
+			Assert.AreEqual(1, _builder.Targets.Length);
+			Assert.AreEqual(123, _builder.BuildTimeoutSeconds);
+			Assert.AreEqual("SourceForge.NAnt.XmlLogger", _builder.Logger);
+			Assert.AreEqual("foo", _builder.Targets[0]);
 		}
 
 		[Test]
@@ -73,11 +73,11 @@ namespace ThoughtWorks.CruiseControl.Core.Builder.Test
 			string xml = @"<nant />";
 
 			NetReflector.Read(xml, _builder);
-			AssertEquals(null, _builder.ConfiguredBaseDirectory);
-			AssertEquals(NAntBuilder.DEFAULT_EXECUTABLE, _builder.Executable);
-			AssertEquals(0, _builder.Targets.Length);
-			AssertEquals(NAntBuilder.DEFAULT_BUILD_TIMEOUT, _builder.BuildTimeoutSeconds);
-			AssertEquals(NAntBuilder.DEFAULT_LOGGER, _builder.Logger);
+			Assert.AreEqual(null, _builder.ConfiguredBaseDirectory);
+			Assert.AreEqual(NAntBuilder.DEFAULT_EXECUTABLE, _builder.Executable);
+			Assert.AreEqual(0, _builder.Targets.Length);
+			Assert.AreEqual(NAntBuilder.DEFAULT_BUILD_TIMEOUT, _builder.BuildTimeoutSeconds);
+			Assert.AreEqual(NAntBuilder.DEFAULT_LOGGER, _builder.Logger);
 		}
 
 		[Test]
@@ -89,9 +89,9 @@ namespace ThoughtWorks.CruiseControl.Core.Builder.Test
 			IntegrationResult result = new IntegrationResult();
 			_builder.Run(result, project);
 
-			Assert("build should have succeeded", result.Succeeded);
-			AssertEquals(IntegrationStatus.Success, result.Status);
-			AssertEquals(returnVal.StandardOutput, result.Output);
+			Assert.IsTrue(result.Succeeded);
+			Assert.AreEqual(IntegrationStatus.Success, result.Status);
+			Assert.AreEqual(returnVal.StandardOutput, result.Output);
 		}
 
 		[Test]
@@ -103,9 +103,9 @@ namespace ThoughtWorks.CruiseControl.Core.Builder.Test
 			IntegrationResult result = new IntegrationResult();
 			_builder.Run(result, project);
 
-			Assert("build should have failed", result.Failed);
-			AssertEquals(IntegrationStatus.Failure, result.Status);
-			AssertEquals(returnVal.StandardOutput, result.Output);
+			Assert.IsTrue(result.Failed);
+			Assert.AreEqual(IntegrationStatus.Failure, result.Status);
+			Assert.AreEqual(returnVal.StandardOutput, result.Output);
 		}
 
 		[Test, ExpectedException(typeof(BuilderException))]
@@ -146,10 +146,10 @@ namespace ThoughtWorks.CruiseControl.Core.Builder.Test
 			_builder.Run(result, project);
 
 			ProcessInfo info = (ProcessInfo) constraint.Parameter;
-			AssertEquals(_builder.Executable, info.FileName);
-			AssertEquals(_builder.ConfiguredBaseDirectory, info.WorkingDirectory);
-			AssertEquals(2000, info.TimeOut);
-			AssertEquals("-buildfile:mybuild.build -logger:" + NAntBuilder.DEFAULT_LOGGER + " myArgs -D:label-to-apply=1.0 target1 target2", info.Arguments);
+			Assert.AreEqual(_builder.Executable, info.FileName);
+			Assert.AreEqual(_builder.ConfiguredBaseDirectory, info.WorkingDirectory);
+			Assert.AreEqual(2000, info.TimeOut);
+			Assert.AreEqual("-buildfile:mybuild.build -logger:" + NAntBuilder.DEFAULT_LOGGER + " myArgs -D:label-to-apply=1.0 target1 target2", info.Arguments);
 		}
 
 		[Test]
@@ -162,9 +162,9 @@ namespace ThoughtWorks.CruiseControl.Core.Builder.Test
 			_builder.Run(new IntegrationResult(), project);
 
 			ProcessInfo info = (ProcessInfo) constraint.Parameter;
-			AssertEquals(_builder.Executable, NAntBuilder.DEFAULT_EXECUTABLE);
-			AssertEquals(NAntBuilder.DEFAULT_BUILD_TIMEOUT * 1000, info.TimeOut);
-			AssertEquals("-logger:" + NAntBuilder.DEFAULT_LOGGER + "  -D:label-to-apply=NO-LABEL", info.Arguments);
+			Assert.AreEqual(_builder.Executable, NAntBuilder.DEFAULT_EXECUTABLE);
+			Assert.AreEqual(NAntBuilder.DEFAULT_BUILD_TIMEOUT * 1000, info.TimeOut);
+			Assert.AreEqual("-logger:" + NAntBuilder.DEFAULT_LOGGER + "  -D:label-to-apply=NO-LABEL", info.Arguments);
 		}
 
 		[Test]
@@ -216,7 +216,7 @@ namespace ThoughtWorks.CruiseControl.Core.Builder.Test
 			_builder.Run(new IntegrationResult(), project);
 
 			ProcessInfo info = (ProcessInfo) constraint.Parameter;
-			AssertEquals(expectedBaseDirectory, info.WorkingDirectory);
+			Assert.AreEqual(expectedBaseDirectory, info.WorkingDirectory);
 			VerifyAll();
 		}
 
@@ -224,8 +224,8 @@ namespace ThoughtWorks.CruiseControl.Core.Builder.Test
 		public void ShouldRun()
 		{
 			AssertFalse(_builder.ShouldRun(new IntegrationResult(), project));
-			Assert(_builder.ShouldRun(CreateIntegrationResultWithModifications(IntegrationStatus.Unknown), project));
-			Assert(_builder.ShouldRun(CreateIntegrationResultWithModifications(IntegrationStatus.Success), project));
+			Assert.IsTrue(_builder.ShouldRun(CreateIntegrationResultWithModifications(IntegrationStatus.Unknown), project));
+			Assert.IsTrue(_builder.ShouldRun(CreateIntegrationResultWithModifications(IntegrationStatus.Success), project));
 			AssertFalse(_builder.ShouldRun(CreateIntegrationResultWithModifications(IntegrationStatus.Failure), project));
 			AssertFalse(_builder.ShouldRun(CreateIntegrationResultWithModifications(IntegrationStatus.Exception), project));
 		}
@@ -234,33 +234,33 @@ namespace ThoughtWorks.CruiseControl.Core.Builder.Test
 		public void ShouldGiveAPresentationValueForTargetsThatIsANewLineSeparatedEquivalentOfAllTargets()
 		{
 			_builder.Targets = new string[] {"target1", "target2"};
-			AssertEquals ("target1" + Environment.NewLine + "target2", _builder.TargetsForPresentation);
+			Assert.AreEqual ("target1" + Environment.NewLine + "target2", _builder.TargetsForPresentation);
 		}
 
 		[Test]
 		public void ShouldWorkForSingleTargetWhenSettingThroughPresentationValue()
 		{
 			_builder.TargetsForPresentation = "target1";
-			AssertEquals("target1", _builder.Targets[0]);
-			AssertEquals(1, _builder.Targets.Length);
+			Assert.AreEqual("target1", _builder.Targets[0]);
+			Assert.AreEqual(1, _builder.Targets.Length);
 		}
 
 		[Test]
 		public void ShouldSplitAtNewLineWhenSettingThroughPresentationValue()
 		{
 			_builder.TargetsForPresentation = "target1" + Environment.NewLine + "target2";
-			AssertEquals("target1", _builder.Targets[0]);
-			AssertEquals("target2", _builder.Targets[1]);
-			AssertEquals(2, _builder.Targets.Length);
+			Assert.AreEqual("target1", _builder.Targets[0]);
+			Assert.AreEqual("target2", _builder.Targets[1]);
+			Assert.AreEqual(2, _builder.Targets.Length);
 		}
 
 		[Test]
 		public void ShouldWorkForEmptyAndNullStringsWhenSettingThroughPresentationValue()
 		{
 			_builder.TargetsForPresentation = "";
-			AssertEquals(0, _builder.Targets.Length);
+			Assert.AreEqual(0, _builder.Targets.Length);
 			_builder.TargetsForPresentation = null;
-			AssertEquals(0, _builder.Targets.Length);
+			Assert.AreEqual(0, _builder.Targets.Length);
 		}
 
 

@@ -6,7 +6,7 @@ using ThoughtWorks.CruiseControl.WebDashboard.MVC;
 namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.MVC
 {
 	[TestFixture]
-	public class RequestControllerTest : Assertion
+	public class RequestControllerTest
 	{
 		private DynamicMock mockActionFactory;
 		private DynamicMock mockRequest;
@@ -48,7 +48,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.MVC
 			controller.Do(topLevelControl, request);
 
 			/// Verify
-			Assert(topLevelControl.Controls.Contains(actionResult));
+			Assert.IsTrue(topLevelControl.Controls.Contains(actionResult));
 			VerifyAll();
 		}
 	}

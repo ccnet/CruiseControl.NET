@@ -24,7 +24,7 @@ C:\dev\ccnet\etc\nant.compile.test.cs(9,27): error CS0246: The type or namespace
 C:\dev\ccnet\project\acceptance\NUnitTest.cs(17): We want to test failures
 <testsuite name="ThoughtWorks.CruiseControl.acceptance.NUnitTest" tests="3" time="0.070" errors="0" failures="1">
   <testcase name="TestFail(ThoughtWorks.CruiseControl.acceptance.NUnitTest)" classname="ThoughtWorks.CruiseControl.acceptance.NUnitTest" time="0.060">
-    <failure message="We want to test failures" type="NUnit.Framework.AssertionFailedError">   at NUnit.Framework.Assertion.Fail(String message)
+    <failure message="We want to test failures" type="NUnit.Framework.AssertionFailedError">   at NUnit.Framework..Fail(String message)
    at ThoughtWorks.CruiseControl.acceptance.NUnitTest.TestFail() in C:\dev\ccnet\project\acceptance\NUnitTest.cs:line 17</failure>
   </testcase>
   <testcase name="TestError(ThoughtWorks.CruiseControl.acceptance.NUnitTest)" classname="ThoughtWorks.CruiseControl.acceptance.NUnitTest" time="0.000" />

@@ -31,9 +31,9 @@ namespace ThoughtWorks.CruiseControl.Core.Schedules.Test
 		{
 			string xml = string.Format(@"<schedule sleepSeconds=""1"" iterations=""1"" buildCondition=""ForceBuild"" />");
 			Schedule schedule = (Schedule)NetReflector.Read(xml);
-			AssertEquals(1, schedule.SleepSeconds);
-			AssertEquals(1, schedule.TotalIterations);
-			AssertEquals(BuildCondition.ForceBuild, schedule.BuildCondition);
+			Assert.AreEqual(1, schedule.SleepSeconds);
+			Assert.AreEqual(1, schedule.TotalIterations);
+			Assert.AreEqual(BuildCondition.ForceBuild, schedule.BuildCondition);
 		}
 
 		[Test]
@@ -42,23 +42,23 @@ namespace ThoughtWorks.CruiseControl.Core.Schedules.Test
 			_schedule.SleepSeconds = 10;
 
 			_mockDateTime.SetupResult("Now", new DateTime(2004, 1, 1, 1, 0, 0, 0));
-			AssertEquals(BuildCondition.IfModificationExists, _schedule.ShouldRunIntegration());
+			Assert.AreEqual(BuildCondition.IfModificationExists, _schedule.ShouldRunIntegration());
 			_schedule.IntegrationCompleted();
 
 			_mockDateTime.SetupResult("Now", new DateTime(2004, 1, 1, 1, 0, 5, 0)); // 5 seconds later
-			AssertEquals(BuildCondition.NoBuild, _schedule.ShouldRunIntegration());
+			Assert.AreEqual(BuildCondition.NoBuild, _schedule.ShouldRunIntegration());
 
 			_mockDateTime.SetupResult("Now", new DateTime(2004, 1, 1, 1, 0, 9, 0)); // 4 seconds later
 
 			// still before 1sec
-			AssertEquals(BuildCondition.NoBuild, _schedule.ShouldRunIntegration());
+			Assert.AreEqual(BuildCondition.NoBuild, _schedule.ShouldRunIntegration());
 			
 			// sleep beyond the 1sec mark
 			_mockDateTime.SetupResult("Now", new DateTime(2004, 1, 1, 1, 0, 14, 0)); // 5 seconds later
 			
-			AssertEquals(BuildCondition.IfModificationExists, _schedule.ShouldRunIntegration());
+			Assert.AreEqual(BuildCondition.IfModificationExists, _schedule.ShouldRunIntegration());
 			_schedule.IntegrationCompleted();
-			AssertEquals(BuildCondition.NoBuild, _schedule.ShouldRunIntegration());
+			Assert.AreEqual(BuildCondition.NoBuild, _schedule.ShouldRunIntegration());
 		}
 
 		[Test]
@@ -67,23 +67,23 @@ namespace ThoughtWorks.CruiseControl.Core.Schedules.Test
 			_schedule.SleepSeconds = 0.5;
 
 			_mockDateTime.SetupResult("Now", new DateTime(2004, 1, 1, 1, 0, 0, 0));
-			AssertEquals(BuildCondition.IfModificationExists, _schedule.ShouldRunIntegration());
+			Assert.AreEqual(BuildCondition.IfModificationExists, _schedule.ShouldRunIntegration());
 
 			_mockDateTime.SetupResult("Now", new DateTime(2004, 1, 1, 1, 0, 0, 550));
 
-			AssertEquals(BuildCondition.IfModificationExists, _schedule.ShouldRunIntegration());
+			Assert.AreEqual(BuildCondition.IfModificationExists, _schedule.ShouldRunIntegration());
 			_schedule.IntegrationCompleted();
-			AssertEquals(BuildCondition.NoBuild, _schedule.ShouldRunIntegration());
+			Assert.AreEqual(BuildCondition.NoBuild, _schedule.ShouldRunIntegration());
 
 			_mockDateTime.SetupResult("Now", new DateTime(2004, 1, 1, 1, 0, 1, 50));
 
-			AssertEquals(BuildCondition.IfModificationExists, _schedule.ShouldRunIntegration());
+			Assert.AreEqual(BuildCondition.IfModificationExists, _schedule.ShouldRunIntegration());
 			_schedule.IntegrationCompleted();
-			AssertEquals(BuildCondition.NoBuild, _schedule.ShouldRunIntegration());
+			Assert.AreEqual(BuildCondition.NoBuild, _schedule.ShouldRunIntegration());
 
 			_mockDateTime.SetupResult("Now", new DateTime(2004, 1, 1, 1, 0, 1, 550));
 
-			AssertEquals(BuildCondition.IfModificationExists, _schedule.ShouldRunIntegration());
+			Assert.AreEqual(BuildCondition.IfModificationExists, _schedule.ShouldRunIntegration());
 		}
 
 		[Test]
@@ -92,12 +92,12 @@ namespace ThoughtWorks.CruiseControl.Core.Schedules.Test
 			Schedule schedule = new Schedule();
 			schedule.TotalIterations = 2;
 
-			Assert(!schedule.ShouldStopIntegration());
+			Assert.IsTrue(!schedule.ShouldStopIntegration());
 			schedule.IntegrationCompleted();
-			Assert(!schedule.ShouldStopIntegration());
+			Assert.IsTrue(!schedule.ShouldStopIntegration());
 			schedule.IntegrationCompleted();
-			Assert(schedule.ShouldStopIntegration());
-			AssertEquals(BuildCondition.NoBuild, schedule.ShouldRunIntegration());
+			Assert.IsTrue(schedule.ShouldStopIntegration());
+			Assert.AreEqual(BuildCondition.NoBuild, schedule.ShouldRunIntegration());
 		}
 
 		[Test]
@@ -106,7 +106,7 @@ namespace ThoughtWorks.CruiseControl.Core.Schedules.Test
 			_mockDateTime.SetupResult("Now", new DateTime(2004, 1, 1, 1, 0, 0, 0));
 
 			_schedule.BuildCondition = BuildCondition.ForceBuild;
-			AssertEquals(BuildCondition.ForceBuild, _schedule.ShouldRunIntegration());
+			Assert.AreEqual(BuildCondition.ForceBuild, _schedule.ShouldRunIntegration());
 		}
 	}
 }

@@ -4,7 +4,7 @@ using ThoughtWorks.CruiseControl.Core;
 namespace ThoughtWorks.CruiseControl.UnitTests.Core
 {
 	[TestFixture]
-	public class ProjectIntegratorListFactoryTest : Assertion
+	public class ProjectIntegratorListFactoryTest
 	{
 		[Test]
 		public void CreatesProjectIntegrators()
@@ -22,9 +22,9 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 			IProjectIntegratorList integrators = new ProjectIntegratorListFactory().CreateProjectIntegrators(projectList);
 
 			// Verify
-			AssertEquals(2, integrators.Count);
-			AssertEquals(project1, integrators["Project 1"].Project );
-			AssertEquals(project2, integrators["Project 2"].Project );
+			Assert.AreEqual(2, integrators.Count);
+			Assert.AreEqual(project1, integrators["Project 1"].Project );
+			Assert.AreEqual(project2, integrators["Project 2"].Project );
 		}
 	}
 }

@@ -23,7 +23,7 @@ namespace ThoughtWorks.CruiseControl.Core.Util.Test
 		public void TestGetFirstElement()
 		{			
 			XmlElement actual = XmlUtil.GetFirstElement(_doc, TWO_SUCH_ELEMENTS);
-			AssertEquals(_elementTwo, actual);
+			Assert.AreEqual(_elementTwo, actual);
 		}
 
 		public void TestGetSingleElement()
@@ -33,7 +33,7 @@ namespace ThoughtWorks.CruiseControl.Core.Util.Test
 			try
 			{
 				XmlUtil.GetSingleElement(_doc, TWO_SUCH_ELEMENTS);
-				Fail("expected death at get single on multiple");
+				Assert.Fail("expected death at get single on multiple");
 			}
 			catch(CruiseControlException){}
 		}
@@ -56,35 +56,35 @@ namespace ThoughtWorks.CruiseControl.Core.Util.Test
 		{
 			XmlDocument document = XmlUtil.CreateDocument("<configuration><monkeys>bananas</monkeys></configuration>");
 			string value = XmlUtil.SelectValue(document, "/configuration/monkeys", "orangutan");
-			AssertEquals("bananas", value);			
+			Assert.AreEqual("bananas", value);			
 		}
 
 		public void TestSelectValue_missingValue()
 		{
 			XmlDocument document = XmlUtil.CreateDocument("<configuration><monkeys></monkeys></configuration>");
 			string value = XmlUtil.SelectValue(document, "/configuration/monkeys", "orangutan");
-			AssertEquals("orangutan", value);			
+			Assert.AreEqual("orangutan", value);			
 		}
 
 		public void TestSelectValue_missingElement()
 		{
 			XmlDocument document = XmlUtil.CreateDocument("<configuration><monkeys></monkeys></configuration>");
 			string value = XmlUtil.SelectValue(document, "/configuration/apes", "orangutan");
-			AssertEquals("orangutan", value);			
+			Assert.AreEqual("orangutan", value);			
 		}
 
 		public void TestSelectValue_attribute()
 		{
 			XmlDocument document = XmlUtil.CreateDocument("<configuration><monkeys part=\"brains\">booyah</monkeys></configuration>");
 			string value = XmlUtil.SelectValue(document, "/configuration/monkeys/@part", "orangutan");
-			AssertEquals("brains", value);			
+			Assert.AreEqual("brains", value);			
 		}
 
 		public void TestSelectRequiredValue()
 		{
 			XmlDocument document = XmlUtil.CreateDocument("<configuration><martin>andersen</martin></configuration>");
 			string value = XmlUtil.SelectRequiredValue(document, "/configuration/martin");
-			AssertEquals("andersen", value);			
+			Assert.AreEqual("andersen", value);			
 		}
 
 		[ExpectedException(typeof(CruiseControlException))]
@@ -105,7 +105,7 @@ namespace ThoughtWorks.CruiseControl.Core.Util.Test
 		public void VerifyCDATAEncode()
 		{
 			string test = "a b <f>]]></a>";
-			AssertEquals("a b <f>] ]></a>", XmlUtil.EncodeCDATA(test));
+			Assert.AreEqual("a b <f>] ]></a>", XmlUtil.EncodeCDATA(test));
 		}
 	}
 }

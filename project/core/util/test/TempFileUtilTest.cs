@@ -14,20 +14,20 @@ namespace ThoughtWorks.CruiseControl.Core.Util.Test
 		public void SetUp()
 		{
 			TempFileUtil.DeleteTempDir(TempDir);
-			Assert("Temp folder exists before test!", ! Directory.Exists(TempFileUtil.GetTempPath(TempDir)));
+			Assert.IsTrue(! Directory.Exists(TempFileUtil.GetTempPath(TempDir)), "Temp folder exists before test!");
 		}
 
 		[TearDown]
 		public void TearDown()
 		{
 			TempFileUtil.DeleteTempDir(TempDir);
-			Assert("Temp folder exists after test!", ! Directory.Exists(TempFileUtil.GetTempPath(TempDir)));
+			Assert.IsTrue(! Directory.Exists(TempFileUtil.GetTempPath(TempDir)));
 		}
 
 		public void TestCreateTempDir()
 		{
 			TempFileUtil.CreateTempDir(TempDir);
-			Assert("Temp folder does not exist after test!", Directory.Exists(TempFileUtil.GetTempPath(TempDir)));
+			Assert.IsTrue(Directory.Exists(TempFileUtil.GetTempPath(TempDir)));
 			TempFileUtil.DeleteTempDir(TempDir);
 		}
 
@@ -35,16 +35,16 @@ namespace ThoughtWorks.CruiseControl.Core.Util.Test
 		{
 			TempFileUtil.CreateTempDir(TempDir);
 			TempFileUtil.CreateTempFiles(TempDir, new String[]{"test.tmp"});
-			AssertEquals(1, Directory.GetFiles(TempFileUtil.GetTempPath(TempDir)).Length);
+			Assert.AreEqual(1, Directory.GetFiles(TempFileUtil.GetTempPath(TempDir)).Length);
 			TempFileUtil.CreateTempDir(TempDir);
-			AssertEquals(0, Directory.GetFiles(TempFileUtil.GetTempPath(TempDir)).Length);
+			Assert.AreEqual(0, Directory.GetFiles(TempFileUtil.GetTempPath(TempDir)).Length);
 		}
 
 		public void TestCreateTempXmlDoc()
 		{
 			TempFileUtil.CreateTempDir(TempDir);
 			string path = TempFileUtil.CreateTempXmlFile(TempDir, "foobar.xml", "<test />");
-			Assert("Xml file does not exist", File.Exists(path));
+			Assert.IsTrue(File.Exists(path));
 			XmlDocument doc = new XmlDocument();
 			doc.Load(path);
 		}
@@ -53,12 +53,12 @@ namespace ThoughtWorks.CruiseControl.Core.Util.Test
 		{
 			string expected = "hello my name is rosebud";
 			string path = TempFileUtil.CreateTempFile(TempDir, "TestCreateTempFile_withContent.txt", expected);
-			Assert("expected file to exist: " + path, File.Exists(path));
+			Assert.IsTrue(File.Exists(path));
 			StreamReader stream = null;
 			try
 			{
 				stream = File.OpenText(path);
-				AssertEquals(expected, stream.ReadToEnd());				
+				Assert.AreEqual(expected, stream.ReadToEnd());				
 			}
 			finally
 			{

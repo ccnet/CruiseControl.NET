@@ -50,7 +50,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test
 			try 
 			{
 				Modification[] mods = _sc.GetModifications(DateTime.MinValue, DateTime.MaxValue);
-				AssertEquals("Modifications found in a missing directory", 0, mods.Length);
+				Assert.AreEqual(0, mods.Length, "Modifications found in a missing directory");
 			} 
 			finally 
 			{
@@ -67,28 +67,28 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test
 
 			Modification[] mods = _sc.GetModifications(DateTime.MinValue, DateTime.MaxValue);
 
-			AssertEquals(3, mods.Length);
-			AssertEquals("file1.txt", mods[0].FileName);
-			AssertEquals("file2.txt", mods[1].FileName);
-			AssertEquals("file3.txt", mods[2].FileName);
-			AssertEquals(Path.GetDirectoryName(file1), mods[0].FolderName);
-			AssertEquals(Path.GetDirectoryName(file2), mods[1].FolderName);
-			AssertEquals(Path.GetDirectoryName(file3), mods[2].FolderName);
+			Assert.AreEqual(3, mods.Length);
+			Assert.AreEqual("file1.txt", mods[0].FileName);
+			Assert.AreEqual("file2.txt", mods[1].FileName);
+			Assert.AreEqual("file3.txt", mods[2].FileName);
+			Assert.AreEqual(Path.GetDirectoryName(file1), mods[0].FolderName);
+			Assert.AreEqual(Path.GetDirectoryName(file2), mods[1].FolderName);
+			Assert.AreEqual(Path.GetDirectoryName(file3), mods[2].FolderName);
 			
-			AssertEquals(new FileInfo(file1).LastWriteTime, mods[0].ModifiedTime);
-			AssertEquals(new FileInfo(file2).LastWriteTime, mods[1].ModifiedTime);
-			AssertEquals(new FileInfo(file3).LastWriteTime, mods[2].ModifiedTime);
+			Assert.AreEqual(new FileInfo(file1).LastWriteTime, mods[0].ModifiedTime);
+			Assert.AreEqual(new FileInfo(file2).LastWriteTime, mods[1].ModifiedTime);
+			Assert.AreEqual(new FileInfo(file3).LastWriteTime, mods[2].ModifiedTime);
 
 			mods = _sc.GetModifications(DateTime.Now, DateTime.MaxValue);
-			AssertEquals(0, mods.Length);
+			Assert.AreEqual(0, mods.Length);
 		}
 
 		[Test]
 		public void GetModifications_EmptyRepository()
 		{
 			Modification[] mods = _sc.GetModifications(DateTime.MinValue, DateTime.MaxValue);
-			AssertNotNull(mods);
-			AssertEquals(0, mods.Length);
+			Assert.IsNotNull(mods);
+			Assert.AreEqual(0, mods.Length);
 		}
 
 		[Test]
@@ -100,16 +100,16 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test
 			string file2 = TempFileUtil.CreateTempFile("repo", "file2.txt", "bar");
 
 			Modification[] mods = _sc.GetModifications(from, DateTime.MaxValue);
-			AssertEquals(1, mods.Length);
-			AssertEquals("file2.txt", mods[0].FileName);
+			Assert.AreEqual(1, mods.Length);
+			Assert.AreEqual("file2.txt", mods[0].FileName);
 		}
 
 		[Test]
 		public void ShouldRun()
 		{
 			IProject project = (IProject) new DynamicMock(typeof(IProject)).MockInstance;
-			Assert(_sc.ShouldRun(new IntegrationResult(), project));
-			Assert(_sc.ShouldRun(IntegrationResultMother.CreateSuccessful(), project));
+			Assert.IsTrue(_sc.ShouldRun(new IntegrationResult(), project));
+			Assert.IsTrue(_sc.ShouldRun(IntegrationResultMother.CreateSuccessful(), project));
 			AssertFalse(_sc.ShouldRun(IntegrationResultMother.CreateFailed(), project));
 			AssertFalse(_sc.ShouldRun(IntegrationResultMother.CreateExceptioned(), project));
 		}

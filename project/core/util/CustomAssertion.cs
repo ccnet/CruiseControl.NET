@@ -4,12 +4,12 @@ using System.Text.RegularExpressions;
 
 namespace ThoughtWorks.CruiseControl.Core.Util
 {
-	public class CustomAssertion : Assertion
+	public class CustomAssertion
 	{
 		public static void AssertContains(string search, string target)
 		{
 			string message = string.Format("Search substring: {0} is not contained in target: {1}", search, target);
-			Assert(message, target.IndexOf(search) >= 0);
+			Assert.IsTrue(target.IndexOf(search) >= 0, message);
 		}
 
 		public static void AssertContainsInArray(object search, object[] target)
@@ -19,48 +19,48 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 				if(a.Equals(search)) return;
 			}
 			string message = string.Format("Did not find {0} in the array", search);
-			Fail(message);
+			Assert.Fail(message);
 		}
 
 		public static void AssertStartsWith(string expected, string actual)
 		{
 			string message = string.Format("<{0}> does not start wth \n<{1}>", actual, expected);
-			Assert(message, actual != null && actual.StartsWith(expected));
+			Assert.IsTrue(actual != null && actual.StartsWith(expected), message);
 		}
 
 		public static void AssertMatches(string pattern, string actual)
 		{
 			string message = string.Format("Pattern string <{0}> does not match \nactual string <{1}>", pattern, actual);
-			Assert(message, Regex.IsMatch(actual, pattern));
+			Assert.IsTrue(Regex.IsMatch(actual, pattern), message);
 		}
 
 		public static void AssertFalse(bool assert)
 		{
-			Assert(!assert);
+			Assert.IsTrue(!assert);
 		}
 
 		public static void AssertFalse(string message, bool assert)
 		{
-			Assert(message, !assert);
+			Assert.IsTrue(!assert, message);
 		}
 
 		public static void AssertEquals(Type type, object obj)
 		{
 			if (type == null)
 			{
-				Assertion.AssertEquals(type, obj);
+				Assert.AreEqual(type, obj);
 				return;
 			}
-			AssertNotNull(string.Format("object of expected type {0} is null", type.FullName), obj);
+			Assert.IsNotNull(obj, string.Format("object of expected type {0} is null", type.FullName));
 			Type actualType = (obj is Type) ? (Type)obj : obj.GetType();
-			AssertEquals("object of the wrong type", type, actualType);
+			Assert.AreEqual(type, actualType, "object of the wrong type");
 		}
 
 		public static void AssertNotEquals(object expected, object actual)
 		{
 			string message = string.Format("Values ({0}) and ({1}) should not be equal", expected, actual);
-			Assert(message, !expected.Equals(actual));
-			Assert(message, !actual.Equals(expected));
+			Assert.IsTrue(!expected.Equals(actual), message);
+			Assert.IsTrue(!actual.Equals(expected), message);
 		}
 
 		public static void AssertApproximatelyEqual(double expected, double actual, double tolerance)
@@ -71,16 +71,16 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 		public static void AssertApproximatelyEqual(string message, double expected, double actual, double tolerance)
 		{
 			string expectation = string.Format("Expected {0}, but was {1}", expected, actual);
-			Assert(message + expectation, Math.Abs(expected - actual) < tolerance);
+			Assert.IsTrue(Math.Abs(expected - actual) < tolerance, message + expectation);
 		}
 
 		public static void AssertEqualArrays(Array expected, Array actual)
 		{
-			AssertEquals("Arrays should have same length", actual.Length, expected.Length);
+			Assert.AreEqual(actual.Length, expected.Length, "Arrays should have same length");
 			
 			for (int i=0; i<expected.Length; i++)
 			{
-				AssertEquals("Comparing array index " + i, expected.GetValue(i), actual.GetValue(i));
+				Assert.AreEqual(expected.GetValue(i), actual.GetValue(i), "Comparing array index " + i);
 			}
 		}
 	}

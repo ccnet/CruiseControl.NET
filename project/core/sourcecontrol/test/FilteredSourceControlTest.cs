@@ -52,20 +52,20 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test
 			NetReflector.Read(SourceControlXml, _filteredSourceControl);
 
 			//// VERIFY
-			Assert(_filteredSourceControl.SourceControlProvider != null);
+			Assert.IsTrue(_filteredSourceControl.SourceControlProvider != null);
 
 			string optionalProp = ((SourceControlMock)_filteredSourceControl.SourceControlProvider).AnOptionalProperty;
-			AssertEquals("Didn't find expected source control provider", optionalProp, "foo");
+			Assert.AreEqual(optionalProp, "foo", "Didn't find expected source control provider");
 
-			AssertEquals("Didn't find expected inclusion filter", _filteredSourceControl.InclusionFilters.Count, 1);
+			Assert.AreEqual(_filteredSourceControl.InclusionFilters.Count, 1);
 
 			string inclusionPattern = ((PathFilter)_filteredSourceControl.InclusionFilters[0]).Pattern;
-			AssertEquals("Didn't find expected inclusion path pattern", inclusionPattern, "/sources/**/*.*");
+			Assert.AreEqual(inclusionPattern, "/sources/**/*.*", "Didn't find expected inclusion path pattern");
 
-			AssertEquals("Didn't find expected exclusion filter", _filteredSourceControl.ExclusionFilters.Count, 1);
+			Assert.AreEqual(_filteredSourceControl.ExclusionFilters.Count, 1);
 
 			string exclusionPattern = ((PathFilter)_filteredSourceControl.ExclusionFilters[0]).Pattern;
-			AssertEquals("Didn't find expected exclusion path pattern", exclusionPattern, "/sources/info/version.cs");
+			Assert.AreEqual(exclusionPattern, "/sources/info/version.cs", "Didn't find expected exclusion path pattern");
 		}
 
 		[Test]
@@ -141,7 +141,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test
 			Modification[] filteredResult = _filteredSourceControl.GetModifications(dateTime1, dateTime2);
 
 			//// VERIFY
-			AssertEquals(1, filteredResult.Length);
+			Assert.AreEqual(1, filteredResult.Length);
 		}
 		
 		public static readonly Modification[] Modifications = new Modification[]

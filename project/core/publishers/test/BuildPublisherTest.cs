@@ -1,4 +1,3 @@
-using System;
 using System.IO;
 using NUnit.Framework;
 using ThoughtWorks.CruiseControl.Core;
@@ -64,26 +63,23 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers.Test
 			publisher.PublishIntegrationResults(null, result);
 
 			FileInfo resultFile = new FileInfo(pubDir + @"\99\" + fileName);
-			Assert("File not found in build number directory", resultFile.Exists);
-
-			
+			Assert.IsTrue(resultFile.Exists, "File not found in build number directory");
 
 			resultFile = new FileInfo(pubDir + @"\99\" + subDir + "\\" + fileName);
-			Assert("File not found in sub directory", resultFile.Exists);
+			Assert.IsTrue(resultFile.Exists, "File not found in sub directory");
 
 			resultFile = new FileInfo(pubDir + @"\99\" + subDir + "\\" + subSubDir + "\\" + fileName);
-			Assert("File not found in sub sub directory", resultFile.Exists);
+			Assert.IsTrue(resultFile.Exists, "File not found in sub sub directory");
 
 
 			resultFile = new FileInfo(pubDir + @"\" + additionalDir + @"\" + fileName);
-			Assert("File not found in additional directory", resultFile.Exists);
+			Assert.IsTrue(resultFile.Exists, "File not found in additional directory");
 
 			resultFile = new FileInfo(pubDir + @"\" + additionalDir + @"\" + subDir + "\\" + fileName);
-			Assert("File not found in additional sub directory", resultFile.Exists);
+			Assert.IsTrue(resultFile.Exists, "File not found in additional sub directory");
 
 			resultFile = new FileInfo(pubDir + @"\" + additionalDir + @"\" + subDir + "\\" + subSubDir + "\\" + fileName);
-			Assert("File not found in additional sub sub directory", resultFile.Exists);
-
+			Assert.IsTrue(resultFile.Exists, "File not found in additional sub sub directory");
 		}
 
 		[TearDown]

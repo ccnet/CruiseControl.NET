@@ -8,7 +8,7 @@ using ThoughtWorks.CruiseControl.WebDashboard.ServerConnection;
 namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Plugins.ViewServerLog
 {
 	[TestFixture]
-	public class ViewServerLogActionTest : Assertion
+	public class ViewServerLogActionTest
 	{
 		private ViewServerLogAction action;
 
@@ -44,7 +44,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Plugins.ViewServerLo
 
 			// Execute
 			HtmlGenericControl control = (HtmlGenericControl) action.Execute((ICruiseRequest) requestMock.MockInstance);
-			AssertEquals("<pre>" + serverLog + "</pre>", control.InnerHtml);
+			Assert.AreEqual("<pre>" + serverLog + "</pre>", control.InnerHtml);
 
 			VerifyAll();
 		}

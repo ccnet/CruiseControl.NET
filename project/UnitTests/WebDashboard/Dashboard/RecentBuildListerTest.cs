@@ -9,7 +9,7 @@ using ThoughtWorks.CruiseControl.WebDashboard.ServerConnection;
 namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 {
 	[TestFixture]
-	public class RecentBuildListerTest : Assertion
+	public class RecentBuildListerTest
 	{
 		private DynamicMock urlBuilderMock;
 		private DynamicMock farmMock;
@@ -65,7 +65,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 		{
 
 			// Verify
-			AssertEquals(2, builtTable.Rows.Count);
+			Assert.AreEqual(2, builtTable.Rows.Count);
 
 			HtmlAnchor expectedAnchor1 = new HtmlAnchor();
 			expectedAnchor1.HRef = "url1";
@@ -74,8 +74,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 			expectedAnchor2.HRef = "url2";
 			expectedAnchor2.InnerHtml = "prettyName1";
 
-			Assert(expectedAnchor1.HRef, TableContains(builtTable, expectedAnchor1));
-			Assert(expectedAnchor2.HRef, TableContains(builtTable, expectedAnchor2));
+			Assert.IsTrue(TableContains(builtTable, expectedAnchor1));
+			Assert.IsTrue(TableContains(builtTable, expectedAnchor2));
 
 			VerifyAll();
 		}
@@ -91,7 +91,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 			HtmlTable builtTable = Builder.BuildRecentBuildsTable("myServer", "myProject");
 
 			// Verify
-			AssertEquals(0, builtTable.Rows.Count);
+			Assert.AreEqual(0, builtTable.Rows.Count);
 
 			VerifyAll();
 		}
@@ -107,7 +107,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 			HtmlTable builtTable = Builder.BuildAllBuildsTable("myServer", "myProject");
 
 			// Verify
-			AssertEquals(0, builtTable.Rows.Count);
+			Assert.AreEqual(0, builtTable.Rows.Count);
 
 			VerifyAll();
 		}

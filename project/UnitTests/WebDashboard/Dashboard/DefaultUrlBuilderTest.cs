@@ -6,7 +6,7 @@ using ThoughtWorks.CruiseControl.WebDashboard.IO;
 namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 {
 	[TestFixture]
-	public class DefaultUrlBuilderTest : Assertion
+	public class DefaultUrlBuilderTest
 	{
 		private DynamicMock pathMapperMock;
 		private DefaultUrlBuilder urlBuilder;
@@ -33,7 +33,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 			string url = urlBuilder.BuildUrl("foo.htm");
 
 			// Verify
-			AssertEquals("http://local/foo.htm", url);
+			Assert.AreEqual("http://local/foo.htm", url);
 			VerifyAll();
 		}
 
@@ -47,7 +47,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 			string url = urlBuilder.BuildUrl(new ActionSpecifierWithName("myAction"));
 
 			// Verify
-			AssertEquals("http://local/foo.htm?_action_myAction=true", url);
+			Assert.AreEqual("http://local/foo.htm?_action_myAction=true", url);
 			VerifyAll();
 		}
 
@@ -61,7 +61,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 			string url = urlBuilder.BuildUrl("foo.htm", "myparam=myvalue");
 
 			// Verify
-			AssertEquals("http://local/foo.htm?myparam=myvalue", url);
+			Assert.AreEqual("http://local/foo.htm?myparam=myvalue", url);
 			VerifyAll();
 		}
 
@@ -75,7 +75,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 			string url = urlBuilder.BuildUrl(new ActionSpecifierWithName("myAction"), "myparam=myvalue");
 
 			// Verify
-			AssertEquals("http://local/foo.htm?_action_myAction=true&amp;myparam=myvalue", url);
+			Assert.AreEqual("http://local/foo.htm?_action_myAction=true&amp;myparam=myvalue", url);
 			VerifyAll();
 		}
 
@@ -89,7 +89,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 			string url = urlBuilder.BuildServerUrl("foo.htm", "myserver");
 
 			// Verify
-			AssertEquals("http://local/foo.htm?server=myserver", url);
+			Assert.AreEqual("http://local/foo.htm?server=myserver", url);
 			VerifyAll();
 		}
 		
@@ -103,7 +103,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 			string url = urlBuilder.BuildServerUrl(new ActionSpecifierWithName("myAction"), "myserver");
 
 			// Verify
-			AssertEquals("http://local/foo.htm?_action_myAction=true&amp;server=myserver", url);
+			Assert.AreEqual("http://local/foo.htm?_action_myAction=true&amp;server=myserver", url);
 			VerifyAll();
 		}
 
@@ -117,7 +117,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 			string url = urlBuilder.BuildProjectUrl("foo.htm", "myserver", "myproject");
 
 			// Verify
-			AssertEquals("http://local/foo.htm?server=myserver&amp;project=myproject", url);
+			Assert.AreEqual("http://local/foo.htm?server=myserver&amp;project=myproject", url);
 			VerifyAll();
 		}
 
@@ -131,7 +131,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 			string url = urlBuilder.BuildProjectUrl(new ActionSpecifierWithName("myAction"),"myserver", "myproject");
 
 			// Verify
-			AssertEquals("http://local/foo.htm?_action_myAction=true&amp;server=myserver&amp;project=myproject", url);
+			Assert.AreEqual("http://local/foo.htm?_action_myAction=true&amp;server=myserver&amp;project=myproject", url);
 			VerifyAll();
 		}
 
@@ -145,7 +145,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 			string url = urlBuilder.BuildBuildUrl("foo.htm", "myserver", "myproject", "mybuild");
 
 			// Verify
-			AssertEquals("http://local/foo.htm?server=myserver&amp;project=myproject&amp;build=mybuild", url);
+			Assert.AreEqual("http://local/foo.htm?server=myserver&amp;project=myproject&amp;build=mybuild", url);
 			VerifyAll();
 		}
 
@@ -159,7 +159,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 			string url = urlBuilder.BuildBuildUrl(new ActionSpecifierWithName("myAction"),"myserver", "myproject", "mybuild");
 
 			// Verify
-			AssertEquals("http://local/foo.htm?_action_myAction=true&amp;server=myserver&amp;project=myproject&amp;build=mybuild", url);
+			Assert.AreEqual("http://local/foo.htm?_action_myAction=true&amp;server=myserver&amp;project=myproject&amp;build=mybuild", url);
 			VerifyAll();
 		}
 	}

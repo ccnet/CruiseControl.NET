@@ -1,6 +1,5 @@
 using System;
 using System.IO;
-using System.Collections;
 using System.Globalization;
 using NUnit.Framework;
 using ThoughtWorks.CruiseControl.Core.Util;
@@ -27,20 +26,10 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test
 		}
 
 		[Test]
-		[Ignore("This is an incomplete test")]
-		public void TestNothing() 
-		{
-			// why is this test in here?
-			IHistoryParser parser = new StarTeamHistoryParser();
-			int nModification = 0;
-			AssertEquals("Should have returned 0 modifications.", 0, nModification);
-		}
-
-		[Test]
 		public void TestModificationCount()
 		{
 			Modification [] mod = _parser.Parse(StarTeamHistoryParserTest.ContentReader, OLDEST_ENTRY, NEWEST_ENTRY);
-			AssertEquals("Should have returned 4 modifications.", 4, mod.Length);
+			Assert.AreEqual(4, mod.Length);
 		}
 
 		[Test]

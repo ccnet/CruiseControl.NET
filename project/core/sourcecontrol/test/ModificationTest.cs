@@ -1,9 +1,6 @@
 using System;
-using System.IO;
-using System.Xml;
 using NUnit.Framework;
 using ThoughtWorks.CruiseControl.Core.Util;
-using System.Collections;
 
 namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test
 {
@@ -19,12 +16,9 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test
 			Modification beta = new Modification();
 			alpha.ModifiedTime = new DateTime(1961, 3, 3);
 
-			Assert(string.Format("expected alpha greater than beta {0}", 
-				alpha.CompareTo(beta)), alpha.CompareTo(beta) > 0);
-			Assert(string.Format("expected alpha-beta equality {0}", 
-				alpha.CompareTo(beta)), alpha.CompareTo(alpha) == 0);
-			Assert(string.Format("expected alpha less than beta {0}", 
-				alpha.CompareTo(beta)), beta.CompareTo(alpha) < 0);
+			Assert.IsTrue(alpha.CompareTo(beta) > 0, string.Format("expected alpha greater than beta {0}", alpha.CompareTo(beta)));
+			Assert.IsTrue(alpha.CompareTo(alpha) == 0, string.Format("expected alpha-beta equality {0}", alpha.CompareTo(beta)));
+			Assert.IsTrue(beta.CompareTo(alpha) < 0, string.Format("expected alpha less than beta {0}", alpha.CompareTo(beta)));
 		}
 
 		[Test]
@@ -44,7 +38,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test
 	<email>foo.bar@quuuux.quuux.quux.qux</email>
 </modification>", DateUtil.FormatDate(mod.ModifiedTime));
 
-			AssertEquals(XmlUtil.GenerateOuterXml(expected), mod.ToXml());
+			Assert.AreEqual(XmlUtil.GenerateOuterXml(expected), mod.ToXml());
 		}
 
 		[Test]
@@ -54,7 +48,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test
 			mod.Comment = "math says 2 < 4 & XML CDATA ends with ]]>; don't nest <![CDATA in <![CDATA]]> ]]>";
 
 			string actual = XmlUtil.SelectRequiredValue(mod.ToXml(), "/modification/comment");
-			AssertEquals(mod.Comment, actual);
+			Assert.AreEqual(mod.Comment, actual);
 		}
 
 		[Test]
@@ -64,8 +58,8 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test
 			mod.EmailAddress = null;
 			mod.Url = null;
 
-			AssertNull(XmlUtil.SelectNode(mod.ToXml(), "/modification/email"));
-			AssertNull(XmlUtil.SelectNode(mod.ToXml(), "/modification/url"));
+			Assert.IsNull(XmlUtil.SelectNode(mod.ToXml(), "/modification/email"));
+			Assert.IsNull(XmlUtil.SelectNode(mod.ToXml(), "/modification/url"));
 		}
 
 		private Modification CreateModification()

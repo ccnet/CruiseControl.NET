@@ -28,7 +28,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test
 			ViewCVSUrlBuilder cvsurl = new ViewCVSUrlBuilder();
 			NetReflector.Read( CreateSourceControlXml(), cvsurl );
 			
-			AssertEquals( URL + @"/{0}", cvsurl.Url );
+			Assert.AreEqual( URL + @"/{0}", cvsurl.Url );
 		}
 
 		[Test]
@@ -47,8 +47,8 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test
 			string url0 = URL + "/NUnitDemo.build";
 			string url1 = URL + "/NUnitDemo/TestClass.cs";
 
-			AssertEquals( url0, mods[0].Url );
-			AssertEquals( url1, mods[1].Url );
+			Assert.AreEqual( url0, mods[0].Url );
+			Assert.AreEqual( url1, mods[1].Url );
 		}
 		
 	}

@@ -9,7 +9,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 {
 	// ToDo - actually look at html
 	[TestFixture]
-	public class TopControlsViewBuilderTest : Assertion
+	public class TopControlsViewBuilderTest
 	{
 		private TopControlsViewBuilder viewBuilder;
 		private DynamicMock urlBuilderMock;

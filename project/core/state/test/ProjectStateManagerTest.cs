@@ -6,7 +6,7 @@ using ThoughtWorks.CruiseControl.Core.State;
 namespace ThoughtWorks.CruiseControl.Core.state.test
 {
 	[TestFixture]
-	public class ProjectStateManagerTest : Assertion
+	public class ProjectStateManagerTest
 	{
 		private DynamicMock projectMock;
 		private DynamicMock slaveManagerMock;
@@ -58,7 +58,7 @@ namespace ThoughtWorks.CruiseControl.Core.state.test
 
 			ProjectStateManager projectStateManager = new ProjectStateManager((IProject) projectMock.MockInstance, 
 				(IFileStateManager) slaveManagerMock.MockInstance);
-			AssertEquals(true, projectStateManager.StateFileExists());
+			Assert.AreEqual(true, projectStateManager.StateFileExists());
 
 			VerifyAll();
 		}
@@ -102,10 +102,10 @@ namespace ThoughtWorks.CruiseControl.Core.state.test
 
 			ProjectStateManager projectStateManager = new ProjectStateManager((IProject) projectMock.MockInstance, 
 				(IFileStateManager) slaveManagerMock.MockInstance);
-			AssertEquals(true, projectStateManager.StateFileExists());
+			Assert.AreEqual(true, projectStateManager.StateFileExists());
 
-			Assert(! File.Exists(OldStateFilePath));
-			Assert(File.Exists(Path.Combine(Directory.GetCurrentDirectory(), "MyProject.state")));
+			Assert.IsTrue(! File.Exists(OldStateFilePath));
+			Assert.IsTrue(File.Exists(Path.Combine(Directory.GetCurrentDirectory(), "MyProject.state")));
 
 			VerifyAll();
 		}

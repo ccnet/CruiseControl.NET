@@ -6,7 +6,7 @@ using ThoughtWorks.CruiseControl.WebDashboard.ServerConnection;
 namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 {
 	[TestFixture]
-	public class CruiseManagerBuildRetrieverTest : Assertion
+	public class CruiseManagerBuildRetrieverTest
 	{
 		private DynamicMock cruiseManagerMock;
 		private CruiseManagerBuildRetriever cruiseManagerBuildRetriever;
@@ -34,10 +34,10 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 			cruiseManagerMock.ExpectAndReturn("GetLog", logContent, serverName, projectName, buildName);
 
 			Build returnedBuild = cruiseManagerBuildRetriever.GetBuild(serverName, projectName, buildName);
-			AssertEquals(buildName, returnedBuild.Name);
-			AssertEquals(logContent, returnedBuild.Log);
-			AssertEquals(serverName, returnedBuild.ServerName);
-			AssertEquals(projectName, returnedBuild.ProjectName);
+			Assert.AreEqual(buildName, returnedBuild.Name);
+			Assert.AreEqual(logContent, returnedBuild.Log);
+			Assert.AreEqual(serverName, returnedBuild.ServerName);
+			Assert.AreEqual(projectName, returnedBuild.ProjectName);
 
 			VerifyAll();
 		}

@@ -23,27 +23,27 @@ namespace ThoughtWorks.CruiseControl.Web.Test
 		[Test]
 		public void ShouldReturnSameStringForDebugLogMessage()
 		{
-			AssertEquals(DEBUG + HtmlLogFormatter.HTML_NEWLINE, formatter.Format(DEBUG));
+			Assert.AreEqual(DEBUG + HtmlLogFormatter.HTML_NEWLINE, formatter.Format(DEBUG));
 		}
 
 		[Test]
 		public void ShouldReturnSameStringForInfoLogMessage()
 		{
-			AssertEquals(INFO + HtmlLogFormatter.HTML_NEWLINE, formatter.Format(INFO));
+			Assert.AreEqual(INFO + HtmlLogFormatter.HTML_NEWLINE, formatter.Format(INFO));
 		}
 
 		[Test]
 		public void ShouldEncloseWarningInSpan()
 		{
 			string actual = formatter.Format(WARNING);
-			AssertEquals(string.Format(@"<span class=""warning"">{0}</span>{1}", WARNING, HtmlLogFormatter.HTML_NEWLINE), actual);
+			Assert.AreEqual(string.Format(@"<span class=""warning"">{0}</span>{1}", WARNING, HtmlLogFormatter.HTML_NEWLINE), actual);
 		}
 
 		[Test]
 		public void ShouldEncloseErrorInSpan()
 		{
 			string actual = formatter.Format(ERROR);
-			AssertEquals(string.Format(@"<span class=""error"">{0}</span>{1}", ERROR, HtmlLogFormatter.HTML_NEWLINE), actual);
+			Assert.AreEqual(string.Format(@"<span class=""error"">{0}</span>{1}", ERROR, HtmlLogFormatter.HTML_NEWLINE), actual);
 		}
 
 		[Test]
@@ -52,7 +52,7 @@ namespace ThoughtWorks.CruiseControl.Web.Test
 			string input = string.Format("{0}{1}{2}{1}{3}{1}{4}{1}{2}", DEBUG, Environment.NewLine, WARNING, INFO, ERROR);
 			string expected = string.Format(@"{0}{4}<span class=""warning"">{1}</span>{4}{2}<br /><span class=""error"">{3}</span>{4}<span class=""warning"">{1}</span>{4}", 
 				DEBUG, WARNING, INFO, ERROR, HtmlLogFormatter.HTML_NEWLINE);
-			AssertEquals(expected, formatter.Format(input));
+			Assert.AreEqual(expected, formatter.Format(input));
 		}
 
 	}

@@ -13,7 +13,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks.Test
 		{
 			string data = "foo";
 			DataTaskResult result=new DataTaskResult(data);
-			AssertEquals(data,result.Data);
+			Assert.AreEqual(data,result.Data);
 		}
 	}
 }

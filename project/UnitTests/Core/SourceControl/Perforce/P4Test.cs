@@ -58,12 +58,12 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol.Perforce
 </sourceControl>
 ";
 			P4 p4 = CreateP4WithNoArgContructor(xml);
-			AssertEquals(@"c:\bin\p4.exe", p4.Executable);
-			AssertEquals("//depot/myproject/...", p4.View);
-			AssertEquals("myclient", p4.Client);
-			AssertEquals("me", p4.User);
-			AssertEquals("anotherserver:2666", p4.Port);
-			AssertEquals("myWorkingDirectory", p4.WorkingDirectory);
+			Assert.AreEqual(@"c:\bin\p4.exe", p4.Executable);
+			Assert.AreEqual("//depot/myproject/...", p4.View);
+			Assert.AreEqual("myclient", p4.Client);
+			Assert.AreEqual("me", p4.User);
+			Assert.AreEqual("anotherserver:2666", p4.Port);
+			Assert.AreEqual("myWorkingDirectory", p4.WorkingDirectory);
 		}
 
 		private P4 CreateP4WithNoArgContructor(string p4root)
@@ -89,11 +89,11 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol.Perforce
 </sourceControl>
 ";
 			P4 p4 = CreateP4WithNoArgContructor(xml);
-			AssertEquals("p4", p4.Executable);
-			AssertEquals("//depot/anotherproject/...", p4.View);
-			AssertNull(p4.Client);
-			AssertNull(p4.User);
-			AssertNull(p4.Port);
+			Assert.AreEqual("p4", p4.Executable);
+			Assert.AreEqual("//depot/anotherproject/...", p4.View);
+			Assert.IsNull(p4.Client);
+			Assert.IsNull(p4.User);
+			Assert.IsNull(p4.Port);
 		}
 
 		[Test]
@@ -119,8 +119,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol.Perforce
 
 			string expectedArgs = "-s changes -s submitted //depot/myproj/...@2002/10/20:02:00:00,@2002/10/31:05:05:00";
 
-			AssertEquals("p4", process.FileName);
-			AssertEquals(expectedArgs, process.Arguments);
+			Assert.AreEqual("p4", process.FileName);
+			Assert.AreEqual(expectedArgs, process.Arguments);
 		}
 
 		[Test]
@@ -146,8 +146,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol.Perforce
 			P4 p4 = CreateP4WithNoArgContructor(xml);
 			ProcessInfo process = p4.CreateChangeListProcess(from, to);
 
-			AssertEquals("c:\\bin\\p4.exe", process.FileName);
-			AssertEquals(expectedArgs, process.Arguments);
+			Assert.AreEqual("c:\\bin\\p4.exe", process.FileName);
+			Assert.AreEqual(expectedArgs, process.Arguments);
 		}
 
 		[Test]
@@ -157,8 +157,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol.Perforce
 			ProcessInfo process = new P4().CreateDescribeProcess(changes);
 
 			string expectedArgs = "-s describe -s " + changes;
-			AssertEquals("p4", process.FileName);
-			AssertEquals(expectedArgs, process.Arguments);
+			Assert.AreEqual("p4", process.FileName);
+			Assert.AreEqual(expectedArgs, process.Arguments);
 		}
 
 		[Test]
@@ -180,8 +180,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol.Perforce
 			P4 p4 = CreateP4WithNoArgContructor(xml);
 			ProcessInfo process = p4.CreateDescribeProcess(changes);
 
-			AssertEquals("c:\\bin\\p4.exe", process.FileName);
-			AssertEquals(expectedArgs, process.Arguments);
+			Assert.AreEqual("c:\\bin\\p4.exe", process.FileName);
+			Assert.AreEqual(expectedArgs, process.Arguments);
 		}
 
 		[Test]
@@ -225,7 +225,7 @@ exit: 0
 			Modification[] result = p4.GetModifications(from, to);
 
 			mock.Verify();
-			AssertEquals(7, result.Length);
+			Assert.AreEqual(7, result.Length);
 		}
 
 		[Test]
@@ -275,7 +275,7 @@ View:
 			try
 			{
 				p4.LabelSourceControl(label,DateTime.Now);
-				Fail("Perforce labelling should fail if a purely numeric label is attempted to be applied");
+				Assert.Fail("Perforce labelling should fail if a purely numeric label is attempted to be applied");
 			}
 			catch (CruiseControlException) { }
 

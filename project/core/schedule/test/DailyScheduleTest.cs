@@ -9,7 +9,7 @@ using ThoughtWorks.CruiseControl.Core.Config;
 namespace ThoughtWorks.CruiseControl.Core.Schedules.Test
 {
 	[TestFixture]
-	public class DailyScheduleTest : Assertion
+	public class DailyScheduleTest
 	{
 		private IMock _mockDateTime;
 		private DailySchedule _schedule;
@@ -31,8 +31,8 @@ namespace ThoughtWorks.CruiseControl.Core.Schedules.Test
 		public void PopulateFromConfiguration()
 		{
 			DailySchedule schedule = (DailySchedule)NetReflector.Read(@"<daily integrationTime=""23:59"" buildCondition=""ForceBuild"" />");
-			AssertEquals(new TimeSpan(23, 59, 0).ToString(), schedule.IntegrationTime);
-			AssertEquals(BuildCondition.ForceBuild, schedule.BuildCondition);
+			Assert.AreEqual(new TimeSpan(23, 59, 0).ToString(), schedule.IntegrationTime);
+			Assert.AreEqual(BuildCondition.ForceBuild, schedule.BuildCondition);
 		}
 
 		[Test, ExpectedException(typeof(ConfigurationException))]
@@ -46,10 +46,10 @@ namespace ThoughtWorks.CruiseControl.Core.Schedules.Test
 		{
 			_mockDateTime.SetupResult("Now", new DateTime(2004, 1, 1, 23, 25, 0, 0));
 			_schedule.IntegrationTime = "23:30";
-			AssertEquals(BuildCondition.NoBuild, _schedule.ShouldRunIntegration());
+			Assert.AreEqual(BuildCondition.NoBuild, _schedule.ShouldRunIntegration());
 			
 			_mockDateTime.SetupResult("Now", new DateTime(2004, 1, 1, 23, 31, 0, 0));
-			AssertEquals(BuildCondition.IfModificationExists, _schedule.ShouldRunIntegration());
+			Assert.AreEqual(BuildCondition.IfModificationExists, _schedule.ShouldRunIntegration());
 		}
 
 		[Test]
@@ -59,7 +59,7 @@ namespace ThoughtWorks.CruiseControl.Core.Schedules.Test
 			_schedule.IntegrationTime = "23:30";
 
 			_mockDateTime.SetupResult("Now", new DateTime(2004, 1, 2, 1, 1, 0, 0));
-			AssertEquals(BuildCondition.IfModificationExists, _schedule.ShouldRunIntegration());
+			Assert.AreEqual(BuildCondition.IfModificationExists, _schedule.ShouldRunIntegration());
 		}
 
 		[Test]
@@ -69,12 +69,12 @@ namespace ThoughtWorks.CruiseControl.Core.Schedules.Test
 			_schedule.IntegrationTime = "14:30";
 			_mockDateTime.SetupResult("Now", new DateTime(2004, 6, 27, 15, 00, 0, 0));
 
-			AssertEquals(BuildCondition.IfModificationExists, _schedule.ShouldRunIntegration());			
+			Assert.AreEqual(BuildCondition.IfModificationExists, _schedule.ShouldRunIntegration());			
 			_schedule.IntegrationCompleted();
-			AssertEquals(BuildCondition.NoBuild, _schedule.ShouldRunIntegration());			
+			Assert.AreEqual(BuildCondition.NoBuild, _schedule.ShouldRunIntegration());			
 
 			_mockDateTime.SetupResult("Now", new DateTime(2004, 6, 28, 15, 00, 0, 0));
-			AssertEquals(BuildCondition.IfModificationExists, _schedule.ShouldRunIntegration());			
+			Assert.AreEqual(BuildCondition.IfModificationExists, _schedule.ShouldRunIntegration());			
 		}
 	}
 }

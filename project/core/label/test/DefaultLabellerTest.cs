@@ -1,4 +1,3 @@
-using System;
 using NMock;
 using NUnit.Framework;
 using ThoughtWorks.CruiseControl.Core.Test;
@@ -25,7 +24,7 @@ namespace ThoughtWorks.CruiseControl.Core.Label.Test
 			result.Label = "35";
 			result.Status = IntegrationStatus.Success;
 
-			AssertEquals("36", _labeller.Generate(result));
+			Assert.AreEqual("36", _labeller.Generate(result));
 		}
 
 		[Test]
@@ -34,7 +33,7 @@ namespace ThoughtWorks.CruiseControl.Core.Label.Test
 			IntegrationResult result = IntegrationResultFixture.CreateIntegrationResult();
 			result.Label = null;
 
-			AssertEquals(DefaultLabeller.INITIAL_LABEL, _labeller.Generate(result));
+			Assert.AreEqual(DefaultLabeller.INITIAL_LABEL, _labeller.Generate(result));
 		}
 
 		[Test]
@@ -46,7 +45,7 @@ namespace ThoughtWorks.CruiseControl.Core.Label.Test
 
 			DefaultLabeller _labeller = new DefaultLabeller();
 			string label = _labeller.Generate(result);
-			AssertEquals("23", label);
+			Assert.AreEqual("23", label);
 		}
 
 		[Test]
@@ -55,7 +54,7 @@ namespace ThoughtWorks.CruiseControl.Core.Label.Test
 			IntegrationResult result = IntegrationResultFixture.CreateIntegrationResult();
 			_labeller.LabelPrefix = "Sample";
 			result.Label = null;
-			Assertion.AssertEquals("Sample" + DefaultLabeller.INITIAL_LABEL, _labeller.Generate(result));
+			Assert.AreEqual("Sample" + DefaultLabeller.INITIAL_LABEL, _labeller.Generate(result));
 		}
 
 		[Test]
@@ -64,7 +63,7 @@ namespace ThoughtWorks.CruiseControl.Core.Label.Test
 			IntegrationResult result = IntegrationResultFixture.CreateIntegrationResult();
 			_labeller.LabelPrefix = "Sample";
 			result.Label = "23";
-			Assertion.AssertEquals("Sample24", _labeller.Generate(result));
+			Assert.AreEqual("Sample24", _labeller.Generate(result));
 		}
 
 		[Test]
@@ -74,7 +73,7 @@ namespace ThoughtWorks.CruiseControl.Core.Label.Test
 			_labeller.LabelPrefix = "Sample";
 			result.Label = "23";
 			result.Status = IntegrationStatus.Failure;
-			Assertion.AssertEquals("23", _labeller.Generate(result));
+			Assert.AreEqual("23", _labeller.Generate(result));
 		}
 
 		[Test]
@@ -84,7 +83,7 @@ namespace ThoughtWorks.CruiseControl.Core.Label.Test
 			_labeller.LabelPrefix = "Sample";
 			result.Label = "Sample23";
 			result.Status = IntegrationStatus.Success;
-			Assertion.AssertEquals("Sample24", _labeller.Generate(result));
+			Assert.AreEqual("Sample24", _labeller.Generate(result));
 		}
 
 		[Test]
@@ -94,21 +93,21 @@ namespace ThoughtWorks.CruiseControl.Core.Label.Test
 			_labeller.LabelPrefix = "Sample";
 			result.Label = "SomethingElse23";
 			result.Status = IntegrationStatus.Success;
-			Assertion.AssertEquals("Sample24", _labeller.Generate(result));
+			Assert.AreEqual("Sample24", _labeller.Generate(result));
 		}
 
 		[Test]
 		public void IncrementPrefixedLabel()
 		{
 			_labeller.LabelPrefix = "Sample";
-			AssertEquals("24", _labeller.IncrementLabel("Sample23"));
+			Assert.AreEqual("24", _labeller.IncrementLabel("Sample23"));
 		}
 
 		[Test]
 		public void IncrementPrefixedLabelDifferentPrefix()
 		{
 			_labeller.LabelPrefix = "Sample";
-			AssertEquals("24", _labeller.IncrementLabel("SomethingElse23"));
+			Assert.AreEqual("24", _labeller.IncrementLabel("SomethingElse23"));
 		}
 
 		[Test]
@@ -120,15 +119,15 @@ namespace ThoughtWorks.CruiseControl.Core.Label.Test
 			result.Label = prefix + "23";
 			result.Status = IntegrationStatus.Success;
 
-			AssertEquals(prefix + "24", _labeller.Generate(result));
+			Assert.AreEqual(prefix + "24", _labeller.Generate(result));
 		}
 
 		[Test]
 		public void ShouldRun()
 		{
 			IProject project = (IProject) new DynamicMock(typeof(IProject)).MockInstance;
-			Assert(_labeller.ShouldRun(new IntegrationResult(), project));
-			Assert(_labeller.ShouldRun(IntegrationResultMother.CreateSuccessful(), project));
+			Assert.IsTrue(_labeller.ShouldRun(new IntegrationResult(), project));
+			Assert.IsTrue(_labeller.ShouldRun(IntegrationResultMother.CreateSuccessful(), project));
 			AssertFalse(_labeller.ShouldRun(IntegrationResultMother.CreateFailed(), project));
 			AssertFalse(_labeller.ShouldRun(IntegrationResultMother.CreateExceptioned(), project));
 		}

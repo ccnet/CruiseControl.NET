@@ -24,7 +24,7 @@ namespace ThoughtWorks.CruiseControl.Web.Test
 		    _transformer.ExpectAndReturn("Transform",val, null);
 		    PageTransformer pageTransformer = new PageTransformer((ITransformer) _transformer.MockInstance);
 			string data = pageTransformer.LoadPageContent();
-			AssertEquals(val,data);
+			Assert.AreEqual(val,data);
 			_transformer.Verify();
 		}
 

@@ -8,7 +8,7 @@ using ThoughtWorks.CruiseControl.Core.Util;
 namespace ThoughtWorks.CruiseControl.UnitTest.Core.Log
 {
 	[TestFixture]
-	public class ServerLogFileReaderTest : Assertion
+	public class ServerLogFileReaderTest
 	{
 		private const string TEMP_DIR = "ServerLogFileReaderTest";
 
@@ -30,7 +30,7 @@ namespace ThoughtWorks.CruiseControl.UnitTest.Core.Log
 			string content = @"SampleLine";
 			string filename = TempFileUtil.CreateTempFile(TEMP_DIR, "ReadSingleLineFromLogFile.log", content);
 			ServerLogFileReader reader = new ServerLogFileReader(filename, 10);
-			AssertEquals(content, reader.Read());
+			Assert.AreEqual(content, reader.Read());
 		}
 
 		[Test]
@@ -44,10 +44,10 @@ namespace ThoughtWorks.CruiseControl.UnitTest.Core.Log
 			ServerLogFileReader reader = new ServerLogFileReader(filename, numReadLines);
 			String[] readLines = StringToLines(reader.Read());
 
-			AssertEquals("Wrong number of lines read from file", numReadLines, readLines.Length);
+			Assert.AreEqual(numReadLines, readLines.Length);
 			for (int i = 0; i < readLines.Length; i++)
 			{
-				AssertEquals(contentLines[numFileLines - numReadLines + i], readLines[i]);
+				Assert.AreEqual(contentLines[numFileLines - numReadLines + i], readLines[i]);
 			}
 		}
 
@@ -63,10 +63,10 @@ namespace ThoughtWorks.CruiseControl.UnitTest.Core.Log
 			String[] readLines = StringToLines(reader.Read());
 			
 			// All of file should be read
-			AssertEquals("Wrong number of lines read from file", numFileLines, readLines.Length);
+			Assert.AreEqual(numFileLines, readLines.Length);
 			for (int i = 0; i < readLines.Length; i++)
 			{
-				AssertEquals(contentLines[i], readLines[i]);
+				Assert.AreEqual(contentLines[i], readLines[i]);
 			}
 		}
 
@@ -81,10 +81,10 @@ namespace ThoughtWorks.CruiseControl.UnitTest.Core.Log
 			String[] readLines = StringToLines(reader.Read());
 			
 			// All of file should be read
-			AssertEquals("Wrong number of lines read from file", numLines, readLines.Length);
+			Assert.AreEqual(numLines, readLines.Length);
 			for (int i = 0; i < readLines.Length; i++)
 			{
-				AssertEquals(contentLines[i], readLines[i]);
+				Assert.AreEqual(contentLines[i], readLines[i]);
 			}
 		}
 
@@ -93,14 +93,14 @@ namespace ThoughtWorks.CruiseControl.UnitTest.Core.Log
 		{
 			string filename = TempFileUtil.CreateTempFile(TEMP_DIR, "ReadEmptyFile.log");
 			ServerLogFileReader reader = new ServerLogFileReader(filename, 10);
-			AssertEquals("Error reading empty log file", "", reader.Read());
+			Assert.AreEqual("", reader.Read(), "Error reading empty log file");
 		}
 
 //		[Test]
 //		public void ReadNullFile()
 //		{
 //			ServerLogFileReader reader = new ServerLogFileReader(null, 10);
-//			AssertEquals("Error reading file with null name", "", reader.Read());
+//			Assert.AreEqual("Error reading file with null name", "", reader.Read());
 //		}
 //
 		[Test]
@@ -110,14 +110,14 @@ namespace ThoughtWorks.CruiseControl.UnitTest.Core.Log
 			ServerLogFileReader reader = new ServerLogFileReader(filename, 10);
 			String first = reader.Read();
 			String second = reader.Read();
-			AssertEquals("Error reading file twice with same reader", first, second);
+			Assert.AreEqual(first, second, "Error reading file twice with same reader");
 		}
 
 		[Test, ExpectedException(typeof(FileNotFoundException))]
 		public void ReadUnknownFile()
 		{
 			ServerLogFileReader reader = new ServerLogFileReader("BogusFileName", 10);
-			AssertEquals("Error reading unknown file", "", reader.Read());
+			Assert.AreEqual("Error reading unknown file", "", reader.Read());
 		}
 
 		[Test]
@@ -131,7 +131,7 @@ namespace ThoughtWorks.CruiseControl.UnitTest.Core.Log
 				stream.Flush();
 
 				ServerLogFileReader reader = new ServerLogFileReader(tempFile, 10);
-				AssertEquals("foobar", reader.Read());
+				Assert.AreEqual("foobar", reader.Read());
 			}
 		}
 

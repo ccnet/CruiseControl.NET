@@ -5,7 +5,7 @@ using ThoughtWorks.CruiseControl.WebDashboard.MVC;
 namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.MVC
 {
 	[TestFixture]
-	public class ConfiguredActionFactoryTest : Assertion
+	public class ConfiguredActionFactoryTest
 	{
 		private DynamicMock mockRequest;
 		private DynamicMock mockConfiguration;
@@ -52,7 +52,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.MVC
 			mockTypeInstantiator.ExpectAndReturn("GetInstance", action, typeSpecification);
 
 			/// Execute & Verify
-			AssertEquals(action, actionFactory.Create(request));
+			Assert.AreEqual(action, actionFactory.Create(request));
 			VerifyAll();
 		}
 
@@ -66,7 +66,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.MVC
 			mockTypeInstantiator.ExpectAndReturn("GetInstance", action, typeSpecification);
 			
 			/// Execute & Verify
-			AssertEquals(action, actionFactory.Create(request));
+			Assert.AreEqual(action, actionFactory.Create(request));
 			VerifyAll();
 		}
 
@@ -83,7 +83,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.MVC
 			try
 			{
 				actionFactory.Create(request);
-				Fail("Should throw an exception");
+				Assert.Fail("Should throw an exception");
 			}
 			catch (ActionFactoryConfigurationException)
 			{
@@ -104,7 +104,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.MVC
 			try
 			{
 				actionFactory.Create(request);
-				Fail("Should throw an exception");
+				Assert.Fail("Should throw an exception");
 			}
 			catch (ActionFactoryConfigurationException)
 			{

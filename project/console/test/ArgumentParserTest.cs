@@ -1,4 +1,3 @@
-using System;
 using System.Diagnostics;
 
 using NUnit.Framework;
@@ -31,36 +30,36 @@ namespace ThoughtWorks.CruiseControl.Console.Test
 		{
 			string[] args = new string[] { "-remoting:off", "-project:foo", @"-config:C:\test dir\cruise.config", "-help" };
 			ArgumentParser parser = new ArgumentParser(args);
-			AssertEquals(false, parser.IsRemote);
-			AssertEquals("foo", parser.Project);
-			AssertEquals(@"C:\test dir\cruise.config", parser.ConfigFile);
-			AssertEquals(true, parser.ShowHelp);
+			Assert.AreEqual(false, parser.IsRemote);
+			Assert.AreEqual("foo", parser.Project);
+			Assert.AreEqual(@"C:\test dir\cruise.config", parser.ConfigFile);
+			Assert.AreEqual(true, parser.ShowHelp);
 		}
 
 		[Test]
 		public void InstantiateWithDefaultArguments()
 		{
 			ArgumentParser parser = new ArgumentParser(new string[0]);
-			AssertEquals(true, parser.IsRemote);
-			AssertNull(parser.Project);
-			AssertEquals(ArgumentParser.DEFAULT_CONFIG_PATH, parser.ConfigFile);	
-			AssertEquals(false, parser.ShowHelp);
+			Assert.AreEqual(true, parser.IsRemote);
+			Assert.IsNull(parser.Project);
+			Assert.AreEqual(ArgumentParser.DEFAULT_CONFIG_PATH, parser.ConfigFile);	
+			Assert.AreEqual(false, parser.ShowHelp);
 		}
 
 		[Test]
 		public void InstantiateWithInvalidArguments()
 		{
 			ArgumentParser parser = new ArgumentParser(new string[] { "foo" });
-			AssertEquals(true, parser.ShowHelp);
+			Assert.AreEqual(true, parser.ShowHelp);
 		}
 
 		[Test]
 		public void InstantiateWithMoreInvalidArguments()
 		{
 			ArgumentParser parser = new ArgumentParser(new string[] { "-foo:bar" });
-			AssertEquals(true, parser.ShowHelp);
-			AssertEquals(1, listener.Traces.Count);
-			Assert(listener.Traces[0].ToString().IndexOf("-foo:bar") >= 0);
+			Assert.AreEqual(true, parser.ShowHelp);
+			Assert.AreEqual(1, listener.Traces.Count);
+			Assert.IsTrue(listener.Traces[0].ToString().IndexOf("-foo:bar") >= 0);
 		}
 	}
 }

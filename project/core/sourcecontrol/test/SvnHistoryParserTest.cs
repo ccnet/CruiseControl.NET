@@ -23,7 +23,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test
 		public void ParsingEmptyLogProducesNoModifications()
 		{
 			Modification[] modifications = svn.Parse(new StringReader(emptyLogXml), oldestEntry, newestEntry);
-			AssertEquals(0, modifications.Length);
+			Assert.AreEqual(0, modifications.Length);
 		}
 
 		[Test]
@@ -31,7 +31,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test
 		{
 			Modification[] modifications = svn.Parse(new StringReader(oneEntryLogXml), oldestEntry, newestEntry);
 
-			AssertEquals(1, modifications.Length);
+			Assert.AreEqual(1, modifications.Length);
 
 			Modification expected = new Modification();
 			expected.Type = "Added";
@@ -42,7 +42,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test
 			expected.UserName = "";
 			expected.Comment = "i added a file";
 
-			AssertEquals(expected, modifications[0]);
+			Assert.AreEqual(expected, modifications[0]);
 		}
 
 		[Test]
@@ -50,7 +50,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test
 		{
 			Modification[] modifications = svn.Parse(new StringReader(fullLogXml), oldestEntry, newestEntry);
 
-			AssertEquals(9, modifications.Length);
+			Assert.AreEqual(9, modifications.Length);
 
 			Modification mbrMod1 = new Modification();
 			mbrMod1.Type = "Modified";
@@ -61,13 +61,13 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test
 			mbrMod1.UserName = "mbr";
 			mbrMod1.Comment = "Other Mike made some changes";
 
-			AssertEquals(mbrMod1, modifications[0]);
+			Assert.AreEqual(mbrMod1, modifications[0]);
 
 			mbrMod1.Type = "Deleted";
 			mbrMod1.FolderName = "/foo";
 			mbrMod1.FileName = "foofile.txt";
 
-			AssertEquals(mbrMod1, modifications[1]);
+			Assert.AreEqual(mbrMod1, modifications[1]);
 		}
 
 		[Test]
@@ -77,7 +77,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test
 			DateTime oldest = DateTime.Parse("2003-12-12T16:48:52Z");
 
 			Modification[] modifications = svn.Parse(new StringReader(fullLogXml), oldest, newest);
-			AssertEquals(3, modifications.Length);
+			Assert.AreEqual(3, modifications.Length);
 		}
 
 		[Test, ExpectedException(typeof(CruiseControlException))]

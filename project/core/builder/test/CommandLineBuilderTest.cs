@@ -48,10 +48,10 @@ namespace ThoughtWorks.CruiseControl.Core.Builder.Test
     </commandLineBuilder>";
 
 			NetReflector.Read(xml, _builder);
-			AssertEquals(@"C:\", _builder.ConfiguredBaseDirectory);
-			AssertEquals("mybatchfile.bat", _builder.Executable);
-			AssertEquals(123, _builder.BuildTimeoutSeconds);
-			AssertEquals("myarg1 myarg2", _builder.BuildArgs);
+			Assert.AreEqual(@"C:\", _builder.ConfiguredBaseDirectory);
+			Assert.AreEqual("mybatchfile.bat", _builder.Executable);
+			Assert.AreEqual(123, _builder.BuildTimeoutSeconds);
+			Assert.AreEqual("myarg1 myarg2", _builder.BuildArgs);
 			VerifyAll();
 		}
 
@@ -64,9 +64,9 @@ namespace ThoughtWorks.CruiseControl.Core.Builder.Test
     </commandLineBuilder>";
 
 			NetReflector.Read(xml, _builder);
-			AssertEquals("mybatchfile.bat", _builder.Executable);
-			AssertEquals(600, _builder.BuildTimeoutSeconds);
-			AssertEquals("", _builder.BuildArgs);
+			Assert.AreEqual("mybatchfile.bat", _builder.Executable);
+			Assert.AreEqual(600, _builder.BuildTimeoutSeconds);
+			Assert.AreEqual("", _builder.BuildArgs);
 			VerifyAll();
 		}
 
@@ -79,9 +79,9 @@ namespace ThoughtWorks.CruiseControl.Core.Builder.Test
 			IntegrationResult result = new IntegrationResult();
 			_builder.Run(result, project);
 
-			Assert("build should have succeeded", result.Succeeded);
-			AssertEquals(IntegrationStatus.Success, result.Status);
-			AssertEquals(returnVal.StandardOutput + "\n" + returnVal.StandardError, result.Output);
+			Assert.IsTrue(result.Succeeded);
+			Assert.AreEqual(IntegrationStatus.Success, result.Status);
+			Assert.AreEqual(returnVal.StandardOutput + "\n" + returnVal.StandardError, result.Output);
 			VerifyAll();
 		}
 
@@ -94,9 +94,9 @@ namespace ThoughtWorks.CruiseControl.Core.Builder.Test
 			IntegrationResult result = new IntegrationResult();
 			_builder.Run(result, project);
 
-			Assert("build should have failed", result.Failed);
-			AssertEquals(IntegrationStatus.Failure, result.Status);
-			AssertEquals(returnVal.StandardOutput + "\n" + returnVal.StandardError, result.Output);
+			Assert.IsTrue(result.Failed);
+			Assert.AreEqual(IntegrationStatus.Failure, result.Status);
+			Assert.AreEqual(returnVal.StandardOutput + "\n" + returnVal.StandardError, result.Output);
 			VerifyAll();
 		}
 
@@ -127,9 +127,9 @@ namespace ThoughtWorks.CruiseControl.Core.Builder.Test
 			_builder.Run(result, project);
 
 			ProcessInfo info = (ProcessInfo) constraint.Parameter;
-			AssertEquals("test-exe", info.FileName);
-			AssertEquals(222000, info.TimeOut);
-			AssertEquals("test-args", info.Arguments);
+			Assert.AreEqual("test-exe", info.FileName);
+			Assert.AreEqual(222000, info.TimeOut);
+			Assert.AreEqual("test-args", info.Arguments);
 			VerifyAll();
 		}
 
@@ -137,8 +137,8 @@ namespace ThoughtWorks.CruiseControl.Core.Builder.Test
 		public void ShouldRun()
 		{
 			AssertFalse(_builder.ShouldRun(new IntegrationResult(), new Project()));
-			Assert(_builder.ShouldRun(CreateIntegrationResultWithModifications(IntegrationStatus.Unknown), project));
-			Assert(_builder.ShouldRun(CreateIntegrationResultWithModifications(IntegrationStatus.Success), project));
+			Assert.IsTrue(_builder.ShouldRun(CreateIntegrationResultWithModifications(IntegrationStatus.Unknown), project));
+			Assert.IsTrue(_builder.ShouldRun(CreateIntegrationResultWithModifications(IntegrationStatus.Success), project));
 			AssertFalse(_builder.ShouldRun(CreateIntegrationResultWithModifications(IntegrationStatus.Failure), project));
 			AssertFalse(_builder.ShouldRun(CreateIntegrationResultWithModifications(IntegrationStatus.Exception), project));
 		}
@@ -193,7 +193,7 @@ namespace ThoughtWorks.CruiseControl.Core.Builder.Test
 			_builder.Run(new IntegrationResult(), project);
 
 			ProcessInfo info = (ProcessInfo) constraint.Parameter;
-			AssertEquals(expectedBaseDirectory, info.WorkingDirectory);
+			Assert.AreEqual(expectedBaseDirectory, info.WorkingDirectory);
 			VerifyAll();
 		}
 

@@ -5,7 +5,7 @@ using ThoughtWorks.CruiseControl.Remote;
 namespace ThoughtWorks.CruiseControl.Core.Publishers.Test
 {
 	[TestFixture]
-	public class HtmlLinkMessageBuilderTest : Assertion
+	public class HtmlLinkMessageBuilderTest
 	{
 		[Test]
 		public void BuildLinkMessageWithoutAnchorTag()
@@ -14,7 +14,7 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers.Test
 
 			HtmlLinkMessageBuilder linkMessageBuilder = new HtmlLinkMessageBuilder(false);
 			string message = linkMessageBuilder.BuildMessage(result, "http://localhost/ccnet");
-			AssertEquals(@"CruiseControl.NET Build Results for project Project#9 (http://localhost/ccnet?log=log19800101000000Lbuild.0.xml)", message);
+			Assert.AreEqual(@"CruiseControl.NET Build Results for project Project#9 (http://localhost/ccnet?log=log19800101000000Lbuild.0.xml)", message);
 		}
 
 		[Test]
@@ -24,7 +24,7 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers.Test
 
 			HtmlLinkMessageBuilder linkMessageBuilder = new HtmlLinkMessageBuilder(true);
 			string message = linkMessageBuilder.BuildMessage(result, "http://localhost/ccnet");
-			AssertEquals(@"CruiseControl.NET Build Results for project Project#9 (<a href=""http://localhost/ccnet?log=log19800101000000Lbuild.0.xml"">web page</a>)", message);
+			Assert.AreEqual(@"CruiseControl.NET Build Results for project Project#9 (<a href=""http://localhost/ccnet?log=log19800101000000Lbuild.0.xml"">web page</a>)", message);
 		}
 
 		private IntegrationResult CreateIntegrationResult(IntegrationStatus current, IntegrationStatus last)

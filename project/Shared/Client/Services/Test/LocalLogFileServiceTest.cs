@@ -1,6 +1,4 @@
 using System;
-using System.Collections;
-using System.IO;
 
 using NUnit.Framework;
 using NMock;
@@ -14,7 +12,7 @@ using ThoughtWorks.CruiseControl.Shared.Services;
 namespace ThoughtWorks.CruiseControl.Shared.Client.Services.Test
 {
 	[TestFixture]
-	public class LocalLogFileServiceTest : Assertion
+	public class LocalLogFileServiceTest
 	{
 		DynamicMock _configMock;
 		LocalLogFileServiceConfig _config;
@@ -46,7 +44,7 @@ namespace ThoughtWorks.CruiseControl.Shared.Client.Services.Test
 			LocalLogFileService service = new LocalLogFileService(_config);
 			ICruiseCommand command = (ICruiseCommand) new DynamicMock(typeof(ICruiseCommand)).MockInstance;
 
-			AssertEquals(typeof(NoValidServiceFoundResult), service.Run(command).GetType());
+			Assert.AreEqual(typeof(NoValidServiceFoundResult), service.Run(command).GetType());
 		}
 
 		[Test]
@@ -57,7 +55,7 @@ namespace ThoughtWorks.CruiseControl.Shared.Client.Services.Test
 			LocalLogFileService service = new LocalLogFileService(_config);
 			GetProjectLogResult result = (GetProjectLogResult) service.Run(new GetProjectLogCommand());
 
-			AssertEquals("test log data", result.Log);
+			Assert.AreEqual("test log data", result.Log);
 
 			_configMock.Verify();
 		}

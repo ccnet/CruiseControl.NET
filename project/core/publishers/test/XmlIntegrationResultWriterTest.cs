@@ -31,7 +31,7 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers.Test
 			_writer.Write(result);
 
 			string expected = @"<cruisecontrol project=""proj""><modifications />" + CreateExpectedBuildXml(result) + "</cruisecontrol>";
-			AssertEquals(expected, buffer.ToString());
+			Assert.AreEqual(expected, buffer.ToString());
 		}
 
         [Test]
@@ -41,7 +41,7 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers.Test
             string expected = string.Format("<modifications>{0}</modifications>", mods[0].ToXml());
 
             _writer.WriteModifications(mods);
-            AssertEquals(expected, buffer.ToString());
+            Assert.AreEqual(expected, buffer.ToString());
         }
 
         [Test]
@@ -70,8 +70,8 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers.Test
             _writer.Write(result);
             string actual = buffer.ToString();
 
-            Assert(actual.IndexOf(exceptionMessage) > 0);
-            Assert(actual.IndexOf(exception.GetType().Name) > 0);
+            Assert.IsTrue(actual.IndexOf(exceptionMessage) > 0);
+            Assert.IsTrue(actual.IndexOf(exception.GetType().Name) > 0);
 
             //verify xml is well-formed
             XmlDocument document = new XmlDocument();
@@ -90,7 +90,7 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers.Test
             IntegrationResult result = new IntegrationResult();
             result.Status = IntegrationStatus.Success;
             string output = GenerateBuildOutput(result);
-            AssertEquals(CreateExpectedBuildXml(result), output);
+            Assert.AreEqual(CreateExpectedBuildXml(result), output);
         }
 
         [Test]
@@ -100,7 +100,7 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers.Test
             result.Status = IntegrationStatus.Success;
             result.Output = "<tag></tag>";
             string output = GenerateBuildOutput(result);
-            AssertEquals(CreateExpectedBuildXml(result), output);
+            Assert.AreEqual(CreateExpectedBuildXml(result), output);
         }
 
         [Test]
@@ -109,7 +109,7 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers.Test
             IntegrationResult result = new IntegrationResult();
             result.Status = IntegrationStatus.Success;
             result.Output = "<tag><![CDATA[a b <c>]]></tag>";
-            AssertEquals(CreateExpectedBuildXml(result), GenerateBuildOutput(result));
+            Assert.AreEqual(CreateExpectedBuildXml(result), GenerateBuildOutput(result));
         }
 
         [Test]
@@ -132,7 +132,7 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers.Test
             swWithNull.WriteLine("]]></tag>");
             result.Output = swWithNull.ToString();
 
-            AssertEquals(expectedResult, GenerateBuildOutput(result));
+            Assert.AreEqual(expectedResult, GenerateBuildOutput(result));
         }
 
         [Test]
@@ -159,8 +159,8 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers.Test
 			IntegrationResult result = new IntegrationResult();
 			result.Output = @"<?xml version=""1.0""?> <foo>Data</foo>" ;
 			string output = GenerateBuildOutput(result);
-			AssertEquals(-1, output.IndexOf("<![CDATA>"));
-			AssertEquals(-1, output.IndexOf("<?xml"));
+			Assert.AreEqual(-1, output.IndexOf("<![CDATA>"));
+			Assert.AreEqual(-1, output.IndexOf("<?xml"));
 		}
 
         [Test]
@@ -169,7 +169,7 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers.Test
             IntegrationResult result = new IntegrationResult();
             result.Status = IntegrationStatus.Failure;
             string output = GenerateBuildOutput(result);
-            AssertEquals(CreateExpectedBuildXml(result), output);
+            Assert.AreEqual(CreateExpectedBuildXml(result), output);
         }
 
         private IntegrationResult CreateIntegrationResult(IntegrationStatus status, bool addModifications)

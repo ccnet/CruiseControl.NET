@@ -6,7 +6,7 @@ using ThoughtWorks.CruiseControl.WebDashboard.MVC.View;
 namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.MVC
 {
 	[TestFixture]
-	public class DefaultHtmlBuilderTest : Assertion
+	public class DefaultHtmlBuilderTest
 	{
 		[Test]
 		public void ShoudCreateTablesWithAllRequestedRows()
@@ -21,9 +21,9 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.MVC
 			HtmlTable table = new DefaultHtmlBuilder().CreateTable(row1, row2);
 
 			// Verify
-			AssertEquals(2, table.Rows.Count);
-			AssertEquals(row1, table.Rows[0]);
-			AssertEquals(row2, table.Rows[1]);
+			Assert.AreEqual(2, table.Rows.Count);
+			Assert.AreEqual(row1, table.Rows[0]);
+			Assert.AreEqual(row2, table.Rows[1]);
 		}
 
 		[Test]
@@ -38,9 +38,9 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.MVC
 			HtmlTableRow row = new DefaultHtmlBuilder().CreateRow(cell1, cell2);
 
 			// Verify
-			AssertEquals(2, row.Cells.Count);
-			AssertEquals(cell1, row.Cells[0]);
-			AssertEquals(cell2, row.Cells[1]);
+			Assert.AreEqual(2, row.Cells.Count);
+			Assert.AreEqual(cell1, row.Cells[0]);
+			Assert.AreEqual(cell2, row.Cells[1]);
 		}
 
 		[Test]
@@ -53,7 +53,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.MVC
 			HtmlTableCell cell = new DefaultHtmlBuilder().CreateCell(content);
 			
 			// Verify
-			AssertEquals(content, cell.InnerHtml);
+			Assert.AreEqual(content, cell.InnerHtml);
 		}
 
 		[Test]
@@ -66,7 +66,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.MVC
 			HtmlTableCell cell = new DefaultHtmlBuilder().CreateCell(subControl);
 
 			// Verify
-			AssertEquals(subControl, cell.Controls[0]);
+			Assert.AreEqual(subControl, cell.Controls[0]);
 		}
 
 		[Test]
@@ -76,8 +76,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.MVC
 			HtmlTableCell cell = new DefaultHtmlBuilder().CreateCell();
 
 			// Verify
-			AssertEquals(0, cell.Controls.Count);
-			AssertEquals("", cell.InnerHtml);
+			Assert.AreEqual(0, cell.Controls.Count);
+			Assert.AreEqual("", cell.InnerHtml);
 		}
 
 		[Test]
@@ -87,9 +87,9 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.MVC
 			TextBox textBox = new DefaultHtmlBuilder().CreateTextBox("myTextBox", "Hello World");
 
 			// Verify
-			AssertEquals("myTextBox", textBox.ID);
-			AssertEquals("Hello World", textBox.Text);
-			AssertEquals(TextBoxMode.SingleLine , textBox.TextMode);
+			Assert.AreEqual("myTextBox", textBox.ID);
+			Assert.AreEqual("Hello World", textBox.Text);
+			Assert.AreEqual(TextBoxMode.SingleLine , textBox.TextMode);
 		}
 
 		[Test]
@@ -99,9 +99,9 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.MVC
 			TextBox textBox = new DefaultHtmlBuilder().CreateMultiLineTextBox("myTextBox", "Hello World");
 
 			// Verify
-			AssertEquals("myTextBox", textBox.ID);
-			AssertEquals("Hello World", textBox.Text);
-			AssertEquals(TextBoxMode.MultiLine , textBox.TextMode);
+			Assert.AreEqual("myTextBox", textBox.ID);
+			Assert.AreEqual("Hello World", textBox.Text);
+			Assert.AreEqual(TextBoxMode.MultiLine , textBox.TextMode);
 		}
 
 		[Test]
@@ -111,15 +111,15 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.MVC
 			CheckBox checkBox = new DefaultHtmlBuilder().CreateBooleanCheckBox("myCheckBox", true);
 
 			// Verify
-			AssertEquals("myCheckBox", checkBox.ID);
-			AssertEquals(true, checkBox.Checked);
+			Assert.AreEqual("myCheckBox", checkBox.ID);
+			Assert.AreEqual(true, checkBox.Checked);
 
 			// Execute
 			checkBox = new DefaultHtmlBuilder().CreateBooleanCheckBox("myOtherCheckBox", false);
 
 			// Verify
-			AssertEquals("myOtherCheckBox", checkBox.ID);
-			AssertEquals(false, checkBox.Checked);
+			Assert.AreEqual("myOtherCheckBox", checkBox.ID);
+			Assert.AreEqual(false, checkBox.Checked);
 		}
 
 		[Test]
@@ -129,8 +129,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.MVC
 			Button button = new DefaultHtmlBuilder().CreateButton("myButton", "Hello");
 
 			// Verify
-			AssertEquals("_action_myButton", button.ID);
-			AssertEquals("Hello", button.Text);
+			Assert.AreEqual("_action_myButton", button.ID);
+			Assert.AreEqual("Hello", button.Text);
 		}
 
 		[Test]
@@ -143,12 +143,12 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.MVC
 			DropDownList dropDownList = new DefaultHtmlBuilder().CreateDropDownList("myDropDown", entries, "entry2");
 
 			// Verify
-			AssertEquals("myDropDown", dropDownList.ID);
-			AssertEquals(3, dropDownList.Items.Count);
-			AssertEquals("entry1", dropDownList.Items[0].Text);
-			AssertEquals(false, dropDownList.Items[0].Selected);
-			AssertEquals("entry2", dropDownList.Items[1].Text);
-			AssertEquals(true, dropDownList.Items[1].Selected);
+			Assert.AreEqual("myDropDown", dropDownList.ID);
+			Assert.AreEqual(3, dropDownList.Items.Count);
+			Assert.AreEqual("entry1", dropDownList.Items[0].Text);
+			Assert.AreEqual(false, dropDownList.Items[0].Selected);
+			Assert.AreEqual("entry2", dropDownList.Items[1].Text);
+			Assert.AreEqual(true, dropDownList.Items[1].Selected);
 		}
 
 		[Test]
@@ -158,8 +158,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.MVC
 			HtmlAnchor anchor = new DefaultHtmlBuilder().CreateAnchor("hello world", "helloworld.htm;");
 
 			// Verify
-			AssertEquals("hello world", anchor.InnerHtml);
-			AssertEquals("helloworld.htm;", anchor.HRef);
+			Assert.AreEqual("hello world", anchor.InnerHtml);
+			Assert.AreEqual("helloworld.htm;", anchor.HRef);
 		}
 	}
 }

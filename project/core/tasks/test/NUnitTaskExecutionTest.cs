@@ -40,10 +40,10 @@ private NUnitTask _task;
 			_processExecutor.ExpectAndReturn("Execute",new ProcessResult(setupData,String.Empty,0,false), new IsTypeOf(typeof(ProcessInfo)));
 			_task.Run(_result, project);
 
-			AssertEquals(1, _result.TaskResults.Count);
+			Assert.AreEqual(1, _result.TaskResults.Count);
 			ITaskResult taskResult = (ITaskResult) _result.TaskResults[0];
-			AssertNotNull(taskResult);
-			AssertEquals(setupData, taskResult.Data);
+			Assert.IsNotNull(taskResult);
+			Assert.AreEqual(setupData, taskResult.Data);
 			_processExecutor.Verify();
 		}
 

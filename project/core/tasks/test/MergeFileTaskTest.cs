@@ -34,9 +34,9 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks.Test
             _task.MergeFiles = new string[] {tempFile};
             _task.Run (_result, project);
 
-            AssertEquals (1, _result.TaskResults.Count);
+            Assert.AreEqual (1, _result.TaskResults.Count);
             ITaskResult taskResult = (ITaskResult) _result.TaskResults[0];
-            AssertEquals (fileData, taskResult.Data);
+            Assert.AreEqual (fileData, taskResult.Data);
 
         }
 
@@ -52,8 +52,8 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks.Test
             _task.MergeFiles = new string[] {_fullPathToTempDir + @"\*.xml"};
             _task.Run (_result, project);
             IList list = _result.TaskResults;
-            AssertEquals (1, list.Count);
-            AssertEquals (fileData, ((ITaskResult) list[0]).Data);
+            Assert.AreEqual (1, list.Count);
+            Assert.AreEqual (fileData, ((ITaskResult) list[0]).Data);
         }
 
         [Test]
@@ -76,7 +76,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks.Test
 
             _task.Run (_result, project);
             IList list = _result.TaskResults;
-            AssertEquals (3, list.Count);
+            Assert.AreEqual (3, list.Count);
             AssertDataContainedInList (list, fooXmlFileData);
             AssertDataContainedInList (list, fooBatFileData);
             AssertDataContainedInList (list, subFooXmlFileData);
@@ -87,7 +87,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks.Test
         {
 			_task.MergeFiles = new string[] {"nonExistantFile.txt"};
 			_task.Run (_result, project);
-			AssertEquals (0, _result.TaskResults.Count);
+			Assert.AreEqual (0, _result.TaskResults.Count);
         }
 
         [Test]
@@ -95,34 +95,34 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks.Test
         {
             string xml = @"<merge><files><file>foo.xml</file><file>bar.xml</file></files></merge>";
             MergeFilesTask task = NetReflector.Read (xml) as MergeFilesTask;
-            AssertEquals (2, task.MergeFiles.Length);
-            AssertEquals ("foo.xml", task.MergeFiles[0]);
-            AssertEquals ("bar.xml", task.MergeFiles[1]);
+            Assert.AreEqual (2, task.MergeFiles.Length);
+            Assert.AreEqual ("foo.xml", task.MergeFiles[0]);
+            Assert.AreEqual ("bar.xml", task.MergeFiles[1]);
         }
 
 		[Test]
 		public void ShouldGiveAPresentationValueThatIsANewLineSeparatedEquivalentOfAllTheFiles()
 		{
 			_task.MergeFiles = new string[] {"file1", "file2"};
-			AssertEquals ("file1" + Environment.NewLine + "file2", _task.MergeFilesForPresentation);
+			Assert.AreEqual ("file1" + Environment.NewLine + "file2", _task.MergeFilesForPresentation);
 		}
 
 		[Test]
 		public void SettingThroughPresentationValueSplitsAtNewLine()
 		{
 			_task.MergeFilesForPresentation = "file1" + Environment.NewLine + "file2";
-			AssertEquals("file1", _task.MergeFiles[0]);
-			AssertEquals("file2", _task.MergeFiles[1]);
-			AssertEquals(2, _task.MergeFiles.Length);
+			Assert.AreEqual("file1", _task.MergeFiles[0]);
+			Assert.AreEqual("file2", _task.MergeFiles[1]);
+			Assert.AreEqual(2, _task.MergeFiles.Length);
 		}
 
 		[Test]
 		public void SettingThroughPresentationValueWorksForEmptyAndNullStrings()
 		{
 			_task.MergeFilesForPresentation = "";
-			AssertEquals(0, _task.MergeFiles.Length);
+			Assert.AreEqual(0, _task.MergeFiles.Length);
 			_task.MergeFilesForPresentation = null;
-			AssertEquals(0, _task.MergeFiles.Length);
+			Assert.AreEqual(0, _task.MergeFiles.Length);
 		}
 
         private void AssertDataContainedInList (IList list, string data)
@@ -132,7 +132,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks.Test
                 if (result.Data == data)
                     return;
             }
-            Fail (data + " not found in the list");
+            Assert.Fail(data + " not found in the list");
         }
 
         [TearDown]

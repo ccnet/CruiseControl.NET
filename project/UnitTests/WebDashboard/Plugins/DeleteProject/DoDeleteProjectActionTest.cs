@@ -8,7 +8,7 @@ using ThoughtWorks.CruiseControl.WebDashboard.ServerConnection;
 namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Plugins.DeleteProject
 {
 	[TestFixture]
-	public class DoDeleteProjectActionTest : Assertion
+	public class DoDeleteProjectActionTest
 	{
 		private DynamicMock viewBuilderMock;
 		private DynamicMock farmServiceMock;
@@ -49,7 +49,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Plugins.DeleteProjec
 			Control returnedView = doDeleteProjectAction.Execute(cruiseRequest);
 
 			// Verify
-			AssertEquals(view, returnedView);
+			Assert.AreEqual(view, returnedView);
 			VerifyAll();
 		}
 	}

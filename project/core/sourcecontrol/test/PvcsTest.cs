@@ -44,9 +44,9 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test
 
 			NetReflector.Read(xml, pvcs);
 
-			AssertEquals(@"..\etc\pvcs\mockpcli.bat", pvcs.Executable);
-			AssertEquals("fooproject",pvcs.Project);
-			AssertEquals("barsub", pvcs.Subproject);
+			Assert.AreEqual(@"..\etc\pvcs\mockpcli.bat", pvcs.Executable);
+			Assert.AreEqual("fooproject",pvcs.Project);
+			Assert.AreEqual("barsub", pvcs.Subproject);
 		}
 
 		// Daylight savings time bug
@@ -60,7 +60,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test
 			
 			DateTime date = new DateTime(2000, 1, 1, 1, 0, 0);
 			DateTime anHourBefore = new DateTime(2000, 1, 1, 0, 0, 0);
-			AssertEquals(anHourBefore, pvcs.AdjustForDayLightSavingsBug(date));
+			Assert.AreEqual(anHourBefore, pvcs.AdjustForDayLightSavingsBug(date));
 		}
 		[Test]
 		public void AdjustForDayLightSavingsBugOutsideDayLightSavings()
@@ -69,7 +69,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test
 			pvcs.CurrentTimeZone = timeZoneWhereItIsNeverDayLightSavings;
 			
 			DateTime date = new DateTime(2000, 1, 1, 1, 0, 0);
-			AssertEquals(date, pvcs.AdjustForDayLightSavingsBug(date));
+			Assert.AreEqual(date, pvcs.AdjustForDayLightSavingsBug(date));
 		}
 
 		[Test]
@@ -78,7 +78,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test
 			ProcessInfo actualProcess = pvcs.CreatePVCSProcessInfo();
 			string expected = Pvcs.COMMAND;
 			string actual = actualProcess.Arguments;
-			AssertEquals(expected, actual);
+			Assert.AreEqual(expected, actual);
 		}
 		
 		[Test]
@@ -93,7 +93,7 @@ run ->pvcspretemp.txt listversionedfiles -z -aw $Project $SubProject
 ";
 
 			string actual = pvcs.CreatePcliContentsForGeneratingPvcsTemp();
-			AssertEquals(expected, actual);
+			Assert.AreEqual(expected, actual);
 		}
 
 		[Test]
@@ -101,7 +101,7 @@ run ->pvcspretemp.txt listversionedfiles -z -aw $Project $SubProject
 		{
 			string expected = @"run -e vlog  ""-xo+epvcsout.txt"" ""-dbeforedate*afterdate"" ""@pvcstemp.txt"" ";
 			string actual = pvcs.CreatePcliContentsForCreatingVLog("beforedate", "afterdate");
-			AssertEquals(expected, actual);
+			Assert.AreEqual(expected, actual);
 		}
 
 		[Test]
@@ -114,9 +114,9 @@ run ->pvcspretemp.txt listversionedfiles -z -aw $Project $SubProject
 			File.CreateText(Pvcs.PVCS_LOGOUTPUT_FILE).Close();
 
 			Modification[] mods = pvcs.GetModifications(new DateTime(2004, 6, 1, 1, 1, 1), new DateTime(2004, 6, 1, 2, 2, 2));
-			AssertEquals(2, mods.Length);
+			Assert.AreEqual(2, mods.Length);
 			File.Delete(Pvcs.PVCS_LOGOUTPUT_FILE);
-			Assert("input file missing", File.Exists(Pvcs.PVCS_INSTRUCTIONS_FILE));
+			Assert.IsTrue(File.Exists(Pvcs.PVCS_INSTRUCTIONS_FILE));
 			File.Delete(Pvcs.PVCS_INSTRUCTIONS_FILE);
 			File.Delete(Pvcs.PVCS_PRETEMPFILE);
 			File.Delete(Pvcs.PVCS_TEMPFILE);
@@ -136,7 +136,7 @@ run ->pvcspretemp.txt listversionedfiles -z -aw $Project $SubProject
 ""\\\FSHOME\Data\projects\prototype\AbstractModule.cs-arc(D:\Projects\prototype\AbstractModule.cs)""
 ""\\\FSHOME\Data\projects\prototype\AbstractService.cs-arc(D:\Projects\prototype\AbstractService.cs)""
 ";
-			AssertEquals(expected, output.ToString());
+			Assert.AreEqual(expected, output.ToString());
 		}
 
 		private TimeZone CreateMockTimeZone(bool inDayLightSavings)

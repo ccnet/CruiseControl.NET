@@ -13,7 +13,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks.Test
 		{
 			NUnitArgument arg=new NUnitArgument(null);
 		    string argString = arg.ToString();
-			AssertEquals(String.Empty,argString);
+			Assert.AreEqual(String.Empty,argString);
 		}
 		[Test]
 		public void	NoLogoIsOnAlwaysIfValidAssemblyExists()

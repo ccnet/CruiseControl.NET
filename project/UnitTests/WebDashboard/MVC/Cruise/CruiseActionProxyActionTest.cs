@@ -11,7 +11,7 @@ using ThoughtWorks.CruiseControl.WebDashboard.MVC.Cruise;
 namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.MVC.Cruise
 {
 	[TestFixture]
-	public class CruiseActionProxyActionTest : Assertion
+	public class CruiseActionProxyActionTest
 	{
 		private DynamicMock cruiseRequestFactoryMock;
 		private DynamicMock proxiedActionMock;
@@ -51,7 +51,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.MVC.Cruise
 			Control returnedView = proxy.Execute(request);
 
 			// Verify
-			AssertEquals(view, returnedView);
+			Assert.AreEqual(view, returnedView);
 			VerifyAll();
 		}
 	}

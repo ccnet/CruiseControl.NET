@@ -4,9 +4,8 @@ using ThoughtWorks.CruiseControl.Remote;
 
 namespace ThoughtWorks.CruiseControl.CCTray.Test
 {
-	public abstract class AbstractIconStoreTestCase : Assertion
+	public abstract class AbstractIconStoreTestCase
 	{
-
 		private ProjectStatus _status;
 		private IIconStore _iconStore;
 

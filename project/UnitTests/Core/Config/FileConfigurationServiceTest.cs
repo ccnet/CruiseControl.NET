@@ -8,7 +8,7 @@ using ThoughtWorks.CruiseControl.Core.Util.Test;
 namespace ThoughtWorks.CruiseControl.UnitTests.Core.Config
 {
 	[TestFixture]
-	public class FileConfigurationServiceTest : Assertion
+	public class FileConfigurationServiceTest
 	{
 		private DynamicMock configurationFileLoaderMock;
 		private DynamicMock configurationFileSaverMock;
@@ -48,7 +48,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Config
 			configurationFileLoaderMock.ExpectAndReturn("Load", configuration, configFile);
 
 			// Execute & Verify
-			AssertEquals(configuration, fileService.Load());
+			Assert.AreEqual(configuration, fileService.Load());
 
 			VerifyAll();
 		}
@@ -76,7 +76,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Config
 			fileWatcher.RaiseEvent();
 
 			// Verify
-			Assert(updateCalled);
+			Assert.IsTrue(updateCalled);
 		}
 
 		bool updateCalled = false;

@@ -19,7 +19,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test
 			
 			input.Close();
 
-			AssertEquals("Should have returned 2 modifications.", 2, modifications.Length);
+			Assert.AreEqual(2, modifications.Length);
 
 			Modification mod1 = new Modification();
 			mod1.Type = PvcsHistoryParser.UNKNOWN;
@@ -37,8 +37,8 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test
 			mod2.UserName = "virgil";
 			mod2.Comment = "made a second hello world comment";
 		
-			AssertEquals("1", mod1, modifications[0]);
-			AssertEquals("2", mod2, modifications[1]);
+			Assert.AreEqual(mod1, modifications[0]);
+			Assert.AreEqual(mod2, modifications[1]);
 		}
 		
 		[Test]
@@ -46,20 +46,20 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test
 		{
 			TextReader input = new StringReader(PvcsMother.EXTENDED_LOGFILE_CONTENT);
 			Modification[] modifications = _pvcs.Parse(input, PvcsMother.OLDEST_ENTRY, PvcsMother.NEWEST_ENTRY);
-			AssertEquals(21, modifications.Length);
+			Assert.AreEqual(21, modifications.Length);
 			
 			Modification second = modifications[1];
-			AssertEquals("ChessRules.java", second.FileName);
-			AssertEquals("kerstinb", second.UserName);
-			AssertEquals("Enabled system printouts.", second.Comment);
-			AssertEquals(CreateDate("2000/02/01 16:26:14"), second.ModifiedTime);
-			AssertEquals(
+			Assert.AreEqual("ChessRules.java", second.FileName);
+			Assert.AreEqual("kerstinb", second.UserName);
+			Assert.AreEqual("Enabled system printouts.", second.Comment);
+			Assert.AreEqual(CreateDate("2000/02/01 16:26:14"), second.ModifiedTime);
+			Assert.AreEqual(
 				@"D:\root\PVCS\vm\common\SampleDB\archives\chess\client\ChessRules.java-arc",
 				second.FolderName);
 
 			Modification third = modifications[2];
-			AssertEquals("chessviewer.html", third.FileName);
-			AssertEquals(CreateDate("1998/05/18 04:46:38"), third.ModifiedTime);
+			Assert.AreEqual("chessviewer.html", third.FileName);
+			Assert.AreEqual(CreateDate("1998/05/18 04:46:38"), third.ModifiedTime);
 
 		}
 

@@ -2,7 +2,6 @@ using System;
 using System.Globalization;
 using NUnit.Framework;
 using ThoughtWorks.CruiseControl.Core.Util;
-using ThoughtWorks.CruiseControl.Core.Test;
 using Exortech.NetReflector;
 
 namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test
@@ -40,21 +39,21 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test
 			string expectedExecutable = @"..\tools\starteam\stcmd.exe";
 			string expectedArgs = "hist -nologo -x -is -filter IO -p \"Admin:admin@10.1.1.64:49201/.NET LAB/CC.NET/starteam-ccnet\" \"*\"";
 
-			AssertNotNull("process was null", actual);
-			AssertEquals(expectedExecutable, actual.FileName);
-			AssertEquals(expectedArgs, actual.Arguments);
+			Assert.IsNotNull(actual);
+			Assert.AreEqual(expectedExecutable, actual.FileName);
+			Assert.AreEqual(expectedArgs, actual.Arguments);
 		}
 		
 		[Test]
 		public void TestValuesSet()
 		{			
-			AssertEquals(@"..\tools\starteam\stcmd.exe", _starteam.Executable);
-			AssertEquals("Admin", _starteam.Username);
-			AssertEquals("admin", _starteam.Password);
-			AssertEquals("10.1.1.64", _starteam.Host);
-			AssertEquals(49201, _starteam.Port);
-			AssertEquals(".NET LAB", _starteam.Project);
-			AssertEquals("CC.NET/starteam-ccnet", _starteam.Path);
+			Assert.AreEqual(@"..\tools\starteam\stcmd.exe", _starteam.Executable);
+			Assert.AreEqual("Admin", _starteam.Username);
+			Assert.AreEqual("admin", _starteam.Password);
+			Assert.AreEqual("10.1.1.64", _starteam.Host);
+			Assert.AreEqual(49201, _starteam.Port);
+			Assert.AreEqual(".NET LAB", _starteam.Project);
+			Assert.AreEqual("CC.NET/starteam-ccnet", _starteam.Path);
 			
 		}
 
@@ -66,37 +65,37 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test
 //			string expected = "02/22/2002 08:00:00 PM";
 			string expected = "2/22/2002 8:00:00 PM";
 			string actual = _starteam.FormatCommandDate(date);
-			AssertEquals(expected, actual);
+			Assert.AreEqual(expected, actual);
 
 			date = new DateTime(2002, 2, 22, 12, 0, 0);
 //			expected = "02/22/2002 12:00:00 PM";
 			expected = "2/22/2002 12:00:00 PM";
 			actual = _starteam.FormatCommandDate(date);
-			AssertEquals(expected, actual);
+			Assert.AreEqual(expected, actual);
 		}
 
 		[Test]
 		public void TestExecutable_default()
 		{
-			AssertEquals("stcmd.exe", new StarTeam().Executable);
+			Assert.AreEqual("stcmd.exe", new StarTeam().Executable);
 		}
 
 		[Test]
 		public void TestHost_default()
 		{
-			AssertEquals("127.0.0.1", new StarTeam().Host);
+			Assert.AreEqual("127.0.0.1", new StarTeam().Host);
 		}
 
 		[Test]
 		public void TestPort_default()
 		{
-			AssertEquals(49201, new StarTeam().Port);
+			Assert.AreEqual(49201, new StarTeam().Port);
 		}
 
 		[Test]
 		public void TestPath_default()
 		{
-			AssertEquals(String.Empty, new StarTeam().Path);
+			Assert.AreEqual(String.Empty, new StarTeam().Path);
 		}
 		
 		private StarTeam CreateStarTeam()

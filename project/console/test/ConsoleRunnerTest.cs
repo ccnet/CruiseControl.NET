@@ -35,8 +35,8 @@ namespace ThoughtWorks.CruiseControl.Console.Test
 			ConsoleRunner runner = new ConsoleRunner(parser, (ICruiseServer)mockCruiseServer.MockInstance);
 			runner.Run();
 
-			AssertEquals(1, listener.Traces.Count);
-			Assert("Wrong message was logged.", listener.Traces[0].ToString().IndexOf(ArgumentParser.Usage) > 0);
+			Assert.AreEqual(1, listener.Traces.Count);
+			Assert.IsTrue(listener.Traces[0].ToString().IndexOf(ArgumentParser.Usage) > 0, "Wrong message was logged.");
 		}
 
 		[Test]

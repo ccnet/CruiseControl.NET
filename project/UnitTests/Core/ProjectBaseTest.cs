@@ -5,7 +5,7 @@ using ThoughtWorks.CruiseControl.Core;
 namespace ThoughtWorks.CruiseControl.UnitTests.Core
 {
 	[TestFixture]
-	public class ProjectBaseTest : Assertion
+	public class ProjectBaseTest
 	{
 		private ProjectBase project;
 		private class ConcreteProject : ProjectBase { }
@@ -23,7 +23,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 			project.ConfiguredWorkingDirectory = @"C:\my\working\directory";
 
 			// Execute & Verify
-			AssertEquals(@"C:\my\working\directory", project.WorkingDirectory);
+			Assert.AreEqual(@"C:\my\working\directory", project.WorkingDirectory);
 		}
 
 		[Test]
@@ -33,7 +33,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 			project.Name = "myProject";
 
 			// Execute & Verify
-			AssertEquals(new DirectoryInfo(@"myProject\WorkingDirectory").FullName, project.WorkingDirectory);
+			Assert.AreEqual(new DirectoryInfo(@"myProject\WorkingDirectory").FullName, project.WorkingDirectory);
 		}
 
 		[Test]
@@ -43,7 +43,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 			project.ConfiguredArtifactDirectory = @"C:\my\artifacts";
 
 			// Execute & Verify
-			AssertEquals(@"C:\my\artifacts", project.ArtifactDirectory);
+			Assert.AreEqual(@"C:\my\artifacts", project.ArtifactDirectory);
 		}
 
 		[Test]
@@ -53,7 +53,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 			project.Name = "myProject";
 
 			// Execute & Verify
-			AssertEquals(new DirectoryInfo(@"myProject\Artifacts").FullName, project.ArtifactDirectory);
+			Assert.AreEqual(new DirectoryInfo(@"myProject\Artifacts").FullName, project.ArtifactDirectory);
 		}
 	}
 }

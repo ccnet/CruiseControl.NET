@@ -31,11 +31,11 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test
 		public void ValuePopulation()
 		{
 			Cvs cvs = CreateCvs(CreateSourceControlXml("myCvsRoot", "branch"));
-			AssertEquals(@"..\tools\cvs.exe", cvs.Executable);
-			AssertEquals("..",cvs.WorkingDirectory);
-			AssertEquals("myCvsRoot", cvs.CvsRoot);
-			AssertEquals("branch", cvs.Branch);
-			AssertEquals(true, cvs.AutoGetSource);
+			Assert.AreEqual(@"..\tools\cvs.exe", cvs.Executable);
+			Assert.AreEqual("..",cvs.WorkingDirectory);
+			Assert.AreEqual("myCvsRoot", cvs.CvsRoot);
+			Assert.AreEqual("branch", cvs.Branch);
+			Assert.AreEqual(true, cvs.AutoGetSource);
 		}
 
 		[Test]
@@ -47,7 +47,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test
 
 			string expected = string.Format(@"-q log -N ""-d>{0}""", cvs.FormatCommandDate(from));
 			string actual = actualProcess.Arguments;
-			AssertEquals(expected, actual);
+			Assert.AreEqual(expected, actual);
 		}
 
 		[Test]
@@ -60,7 +60,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test
 			cvs.Branch = "branch"; 
 			string args = cvs.BuildHistoryProcessInfoArgs(from);
 			string expected = string.Format(@"-d myCvsRoot -q log -N ""-d>{0}"" -rbranch", cvs.FormatCommandDate(from));
-			AssertEquals(expected, args);
+			Assert.AreEqual(expected, args);
 		}
 
 		[Test]
@@ -72,20 +72,20 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test
 
 			string expected = string.Format(@"-q log -N ""-d>{0}""", cvs.FormatCommandDate(from));
 			string actual = actualProcess.Arguments;
-			AssertEquals(expected, actual);
+			Assert.AreEqual(expected, actual);
 		}
 
 		[Test]
 		public void Executable_default()
 		{
-			AssertEquals("cvs.exe", new Cvs().Executable);
+			Assert.AreEqual("cvs.exe", new Cvs().Executable);
 		}
 
 		[Test]
 		public void VerifyDateIsFormatedCorrectly()
 		{
 			DateTime dt = DateTime.Parse("2003-01-01 01:01:01 GMT", CultureInfo.InvariantCulture);
-			AssertEquals("2003-01-01 01:01:01 GMT", CreateCvs().FormatCommandDate(dt));
+			Assert.AreEqual("2003-01-01 01:01:01 GMT", CreateCvs().FormatCommandDate(dt));
 		}
 
 		[Test]
@@ -104,9 +104,9 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test
 			cvs.GetSource(result);
 
 			ProcessInfo info = (ProcessInfo) args.Parameter;
-			AssertEquals(@"C:\temp", info.WorkingDirectory);
-			AssertEquals(@"C:\Program Files\TortoiseCVS", info.FileName);
-			AssertEquals(@"-q update -d -P", info.Arguments);
+			Assert.AreEqual(@"C:\temp", info.WorkingDirectory);
+			Assert.AreEqual(@"C:\Program Files\TortoiseCVS", info.FileName);
+			Assert.AreEqual(@"-q update -d -P", info.Arguments);
 
 			mockHistoryParser.Verify();
 			mockProcessExecutor.Verify();

@@ -22,7 +22,7 @@ namespace ThoughtWorks.CruiseControl.Core.Util.Test
 		{
 			WildCardPath wildCard = new WildCardPath("foo.xml");
 		    IList files = wildCard.GetFiles();
-			AssertEquals(1, files.Count);
+			Assert.AreEqual(1, files.Count);
 		}
 
 		[Test]
@@ -30,7 +30,7 @@ namespace ThoughtWorks.CruiseControl.Core.Util.Test
 		{
 			WildCardPath wildCard = new WildCardPath(@"\nonexistantfolder\*");
 			IList files = wildCard.GetFiles();
-			AssertEquals(0, files.Count);
+			Assert.AreEqual(0, files.Count);
 		}
 
 		[Test]
@@ -38,8 +38,8 @@ namespace ThoughtWorks.CruiseControl.Core.Util.Test
 		{
 			WildCardPath wildCard = new WildCardPath("fooo.xml    ");
 		    FileInfo[] files = wildCard.GetFiles();
-			AssertEquals(1, files.Length);
-			AssertEquals("fooo.xml", files[0].Name);
+			Assert.AreEqual(1, files.Length);
+			Assert.AreEqual("fooo.xml", files[0].Name);
 
 		}
 
@@ -50,7 +50,7 @@ namespace ThoughtWorks.CruiseControl.Core.Util.Test
 			string tempFile2Path = TempFileUtil.CreateTempFile(TEMP_FOLDER, "bar.txt", "barbar");
 			WildCardPath wildCard = new WildCardPath(_tempFolderFullPath + @"\" + "*.txt");
 			IList files = wildCard.GetFiles();
-			AssertEquals(2, files.Count);
+			Assert.AreEqual(2, files.Count);
 			AssertListContainsPath(files, tempFile2Path);
 			AssertListContainsPath(files, tempFile1Path);
 		}
@@ -62,7 +62,7 @@ namespace ThoughtWorks.CruiseControl.Core.Util.Test
 				if (info.FullName == s)
 					return;
 			}
-			Fail(String.Format("Element {0} not found in the list", s));
+			Assert.Fail(String.Format("Element {0} not found in the list", s));
 
 		}
 

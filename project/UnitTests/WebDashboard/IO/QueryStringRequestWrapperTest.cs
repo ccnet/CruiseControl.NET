@@ -7,7 +7,7 @@ using ThoughtWorks.CruiseControl.WebDashboard.ServerConnection;
 namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.IO
 {
 	[TestFixture]
-	public class QueryStringRequestWrapperTest : Assertion
+	public class QueryStringRequestWrapperTest
 	{
 		private NameValueCollection queryString;
 		private QueryStringRequestWrapper wrapper;
@@ -22,7 +22,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.IO
 		[Test]
 		public void ReturnsNoLogSpecifiedIfNoLogParameterSpecified()
 		{
-			Assert(wrapper.GetBuildSpecifier() is NoBuildSpecified);
+			Assert.IsTrue(wrapper.GetBuildSpecifier() is NoBuildSpecified);
 		}
 
 		[Test]
@@ -30,46 +30,46 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.IO
 		{
 			queryString.Add("build", "mylog.xml");
 			NamedBuildSpecifier Specifier = (NamedBuildSpecifier) wrapper.GetBuildSpecifier();
-			AssertEquals("mylog.xml", Specifier.Filename);
+			Assert.AreEqual("mylog.xml", Specifier.Filename);
 		}
 
 		[Test]
 		public void ReturnsEmptyStringIfNoProjectSpecified()
 		{
-			AssertEquals(string.Empty, wrapper.ProjectName);
+			Assert.AreEqual(string.Empty, wrapper.ProjectName);
 		}
 
 		[Test]
 		public void ReturnsProjectNameIfProjectSpecified()
 		{
 			queryString.Add("project", "myproject");
-			AssertEquals("myproject", wrapper.ProjectName);
+			Assert.AreEqual("myproject", wrapper.ProjectName);
 		}
 
 		[Test]
 		public void ReturnsEmptyStringIfNoServerSpecified()
 		{
-			AssertEquals(string.Empty, wrapper.ServerName);
+			Assert.AreEqual(string.Empty, wrapper.ServerName);
 		}
 
 		[Test]
 		public void ReturnsServerNameIfServerSpecified()
 		{
 			queryString.Add("server", "myserver");
-			AssertEquals("myserver", wrapper.ServerName);
+			Assert.AreEqual("myserver", wrapper.ServerName);
 		}
 
 		[Test]
 		public void ReturnsEmptyStringIfNoBuildSpecified()
 		{
-			AssertEquals(string.Empty, wrapper.BuildName);
+			Assert.AreEqual(string.Empty, wrapper.BuildName);
 		}
 
 		[Test]
 		public void ReturnsBuildNameIfBuildSpecified()
 		{
 			queryString.Add("build", "mybuild");
-			AssertEquals("mybuild", wrapper.BuildName);
+			Assert.AreEqual("mybuild", wrapper.BuildName);
 		}
 	}
 }

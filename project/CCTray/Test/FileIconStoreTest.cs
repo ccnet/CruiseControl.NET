@@ -16,7 +16,7 @@ namespace ThoughtWorks.CruiseControl.CCTray.Test
 
 	    protected override void Validate(StatusIcon expectedIcon, StatusIcon actualIcon)
 	    {
-			AssertEquals(expectedIcon.Icon.Size, actualIcon.Icon.Size);
+			Assert.AreEqual(expectedIcon.Icon.Size, actualIcon.Icon.Size);
 	    }
 
 	    [SetUp]
