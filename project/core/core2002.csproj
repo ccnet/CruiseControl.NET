@@ -132,16 +132,6 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "GenericIntegrationResult.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "GenericProject.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
                     RelPath = "ICruiseControl.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -203,6 +193,16 @@
                 />
                 <File
                     RelPath = "RemoteCruiseServer.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Workflow.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "WorkflowResult.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -659,16 +659,6 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "test\GenericIntegrationResultTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "test\GenericProjectTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
                     RelPath = "test\IntegrationResultFixture.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -705,6 +695,21 @@
                 />
                 <File
                     RelPath = "test\TestLogs.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "test\ThreadPoolTest.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "test\WorkflowResultTest.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "test\WorkflowTest.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

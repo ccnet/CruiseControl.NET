@@ -4,12 +4,12 @@ using System;
 namespace tw.ccnet.core.test
 {
 	[TestFixture]
-	public class GenericIntegrationResultTest : Assertion
+	public class WorkflowResultTest : Assertion
 	{
 		[Test]
 		public void AppendOutput()
 		{
-			GenericIntegrationResult result = new GenericIntegrationResult();
+			WorkflowResult result = new WorkflowResult();
 			result.Output = "foo";
 			result.Output = "bar";
 			AssertEquals("foobar", result.Output);
@@ -18,7 +18,7 @@ namespace tw.ccnet.core.test
 		[Test]
 		public void AppendModifications()
 		{
-			GenericIntegrationResult result = new GenericIntegrationResult();
+			WorkflowResult result = new WorkflowResult();
 			Modification mod1 = new Modification();
 			Modification mod2 = new Modification();
 			result.Modifications = new Modification[] { mod1 };

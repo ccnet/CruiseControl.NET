@@ -129,7 +129,7 @@
                     BuildAction = "Compile"
                 />                   
                 <File
-                    RelPath = "GenericProject.cs"
+                    RelPath = "Workflow.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -149,7 +149,7 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "GenericIntegrationResult.cs"
+                    RelPath = "WorkflowResult.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />                
@@ -642,12 +642,12 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "test\GenericProjectTest.cs"
+                    RelPath = "test\WorkflowTest.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "test\GenericIntegrationResultTest.cs"
+                    RelPath = "test\WorkflowResultTest.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />                

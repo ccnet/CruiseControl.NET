@@ -8,23 +8,23 @@ using tw.ccnet.core.util;
 namespace tw.ccnet.core.test
 {
 	[TestFixture]
-	public class GenericProjectTest : CustomAssertion
+	public class WorkflowTest : CustomAssertion
 	{
 		[Test]
 		public void LoadConfiguration()
 		{
 			string xml = @"
-<generic name=""foo"">
+<workflow name=""foo"">
 	<tasks>
 		<mock/>
 		<mock/>
 	</tasks>
-</generic>";
+</workflow>";
 			XmlPopulator populator = new XmlPopulator();
 			object obj = populator.Populate(XmlUtil.CreateDocumentElement(xml));
 			AssertNotNull(obj);
-			AssertEquals(typeof(GenericProject), obj.GetType());
-			GenericProject project = (GenericProject)obj;
+			AssertEquals(typeof(Workflow), obj.GetType());
+			Workflow project = (Workflow)obj;
 			AssertEquals("foo", project.Name);
 			AssertEquals(2, project.Tasks.Count);
 			Assert(project.Tasks[0] is ITask);
@@ -47,7 +47,7 @@ namespace tw.ccnet.core.test
 			taskMock3.ExpectAndReturn("ShouldRun", false, new NMock.Constraints.NotNull());
 			taskMock3.Expect("Run", new NMock.Constraints.NotNull());
 
-			GenericProject project = new GenericProject();
+			Workflow project = new Workflow();
 			project.Tasks.Add(taskMock1.MockInstance);
 			project.Tasks.Add(taskMock2.MockInstance);
 			project.RunIntegration(BuildCondition.IfModificationExists);
@@ -70,7 +70,7 @@ namespace tw.ccnet.core.test
 			IMock taskMock2 = new DynamicMock(typeof(ITask));
 			taskMock2.Expect("Run", new NMock.Constraints.NotNull());
 
-			GenericProject project = new GenericProject();
+			Workflow project = new Workflow();
 			project.Tasks.Add(taskMock1.MockInstance);
 			project.Tasks.Add(taskMock2.MockInstance);
 
@@ -92,7 +92,7 @@ namespace tw.ccnet.core.test
 			taskMock2.ExpectAndReturn("ShouldRun", true, new NMock.Constraints.NotNull());
 			taskMock2.Expect("Run", new NMock.Constraints.NotNull());
 
-			GenericProject project = new GenericProject();
+			Workflow project = new Workflow();
 			project.Tasks.Add(taskMock1.MockInstance);
 			project.Tasks.Add(taskMock2.MockInstance);
 

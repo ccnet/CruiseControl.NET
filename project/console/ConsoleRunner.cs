@@ -20,14 +20,16 @@ namespace tw.ccnet.console
 			ArgumentParser parser = new ArgumentParser(args);
 			Trace.Listeners.Add(new TextWriterTraceListener(Console.Out));
 
-			new ConsoleRunner(parser).Run();				
+			new ConsoleRunner(parser, new Timeout()).Run();
 		}	
 
 		private ArgumentParser _parser;
+		private ITimeout _timeout;
 
-		public ConsoleRunner(ArgumentParser parser)
+		public ConsoleRunner(ArgumentParser parser, ITimeout timeout)
 		{
 			_parser = parser;
+			_timeout = timeout;
 		}
 
 		public void Run()
@@ -50,6 +52,7 @@ namespace tw.ccnet.console
 				{
 					LogUtil.Log("Starting CruiseControl.NET Server");
 					server.Start();
+					_timeout.Wait();
 				}
 				else
 				{

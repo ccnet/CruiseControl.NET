@@ -95,6 +95,11 @@
                     Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
                 />
                 <Reference
+                    Name = "nmock"
+                    AssemblyName = "nmock"
+                    HintPath = "..\..\lib\nmock.dll"
+                />
+                <Reference
                     Name = "nunit.framework"
                     AssemblyName = "nunit.framework"
                     HintPath = "..\..\lib\nunit.framework.dll"
@@ -123,6 +128,16 @@
                 />
                 <File
                     RelPath = "ConsoleRunner.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />             
+                <File
+                    RelPath = "ITimeout.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />             
+                <File
+                    RelPath = "Timeout.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />             

@@ -5,7 +5,7 @@ using tw.ccnet.remote;
 
 namespace tw.ccnet.core
 {
-	public class GenericIntegrationResult : IntegrationResult
+	public class WorkflowResult : IntegrationResult
 	{
 		private StringBuilder buffer = new StringBuilder();
 		private ArrayList modifications = new ArrayList();

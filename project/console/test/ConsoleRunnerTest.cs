@@ -1,8 +1,9 @@
+using NMock;
 using NUnit.Framework;
-using tw.ccnet.core;
-using tw.ccnet.core.util;
 using System;
 using System.Diagnostics;
+using tw.ccnet.core;
+using tw.ccnet.core.util;
 
 namespace tw.ccnet.console.test
 {
@@ -15,7 +16,9 @@ namespace tw.ccnet.console.test
 			TestTraceListener listener = new TestTraceListener();
 			Trace.Listeners.Add(listener);
 
-			new ConsoleRunner(new ArgumentParser(new string[] { "-remoting:on", "-help" })).Run();
+			ArgumentParser parser = new ArgumentParser(new string[] { "-remoting:on", "-help" });
+			ConsoleRunner runner = new ConsoleRunner(parser, null);
+			runner.Run();
 			AssertEquals(1, listener.Traces.Count);
 			AssertEquals(ArgumentParser.Usage, listener.Traces[0].ToString());
 
@@ -25,12 +28,30 @@ namespace tw.ccnet.console.test
 		[Test] // integration test
 		public void ForceBuildCruiseServerProject()
 		{
-			string xml = @"<cruisecontrol><generic name=""test""><tasks /></generic></cruisecontrol>";
+			string xml = @"<cruisecontrol><workflow name=""test""><tasks /></workflow></cruisecontrol>";
 			TempFileUtil.CreateTempDir("ConsoleRunnerTest");
 			string configFile = TempFileUtil.CreateTempXmlFile("ConsoleRunnerTest", "myconfig.config", xml);
 
-			new ConsoleRunner(new ArgumentParser(new string[] { "-project:test", "-config:" + configFile })).Run();
+			ArgumentParser parser = new ArgumentParser(new string[] { "-project:test", "-config:" + configFile });
+			new ConsoleRunner(parser, null).Run();
 
+			TempFileUtil.DeleteTempDir("ConsoleRunnerTest");
+		}	
+
+		[Test] // integration test
+		public void StartCruiseServerProject()
+		{
+			string xml = @"<cruisecontrol><workflow name=""test""><tasks /></workflow></cruisecontrol>";
+			TempFileUtil.CreateTempDir("ConsoleRunnerTest");
+			string configFile = TempFileUtil.CreateTempXmlFile("ConsoleRunnerTest", "myconfig.config", xml);
+
+			Mock mockTimeout = new DynamicMock(typeof(ITimeout));
+			mockTimeout.Expect("Wait");
+
+			ArgumentParser parser = new ArgumentParser(new string[] { "-config:" + configFile });
+			new ConsoleRunner(parser, (ITimeout)mockTimeout.MockInstance).Run();
+
+			mockTimeout.Verify();
 			TempFileUtil.DeleteTempDir("ConsoleRunnerTest");
 		}	
 	}

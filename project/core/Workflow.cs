@@ -9,20 +9,20 @@ namespace tw.ccnet.core
 	/// A generic project contains a collection of tasks.  It will execute them in the specified order.  It is possible to have multiple tasks of the same type.
 	/// <code>
 	/// <![CDATA[
-	/// <generic name="foo">
+	/// <workflow name="foo">
 	///		<sourcecontrol type="cvs"></sourcecontrol>
 	///		<build type="nant"></build>
 	///		<state type="state"></state>
 	///		<publishers></publishers>
-	/// </generic>
+	/// </workflow>
 	/// ]]>
 	/// </code>
 	/// </summary>
-	[ReflectorType("generic")]
-	public class GenericProject : ProjectBase, IProject
+	[ReflectorType("workflow")]
+	public class Workflow : ProjectBase, IProject
 	{
 		private IList _tasks = new ArrayList();
-		private GenericIntegrationResult _currentIntegrationResult;
+		private WorkflowResult _currentIntegrationResult;
 
 		[ReflectorCollection("tasks", InstanceType = typeof(ArrayList))]
 		public IList Tasks
@@ -38,7 +38,7 @@ namespace tw.ccnet.core
 
 		public IntegrationResult RunIntegration(BuildCondition buildCondition)
 		{
-			_currentIntegrationResult = new GenericIntegrationResult();
+			_currentIntegrationResult = new WorkflowResult();
 
 			foreach (ITask task in Tasks)
 			{

@@ -168,7 +168,7 @@
                 />
                 <File
                     RelPath = "SettingsForm.cs"
-                    SubType = "Code"
+                    SubType = "Form"
                     BuildAction = "Compile"
                 />
                 <File
@@ -193,7 +193,7 @@
                 />
                 <File
                     RelPath = "SystemTrayMonitor.cs"
-                    SubType = "Code"
+                    SubType = "Form"
                     BuildAction = "Compile"
                 />
                 <File

@@ -92,6 +92,11 @@
                     Project = "{F8113DB9-6C47-4FD1-8A01-655FCF151747}"
                     Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
                 />
+                <Reference
+                    Name = "nmock"
+                    AssemblyName = "nmock"
+                    HintPath = "..\..\lib\nmock.dll"
+                />
             </References>
         </Build>
         <Files>
@@ -116,6 +121,16 @@
                 />
                 <File
                     RelPath = "ConsoleRunner.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "ITimeout.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Timeout.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
