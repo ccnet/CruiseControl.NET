@@ -4,6 +4,7 @@ using System.IO;
 using System.Web;
 using System.Web.UI.HtmlControls;
 using System.Xml;
+using System.Xml.XPath;
 using System.Xml.Xsl;
 using ThoughtWorks.CruiseControl.Core;
 
@@ -97,13 +98,9 @@ namespace ThoughtWorks.CruiseControl.Web
 			}
 			try
 			{		
-				XmlDocument document = new XmlDocument();
-				document.Load(logfile);
-
 				XslTransform transform = new XslTransform();
 				LoadStylesheet(transform, xslfile);
-				XmlReader reader = transform.Transform(document.CreateNavigator(), null); 
-
+				XmlReader reader = transform.Transform(new XPathDocument(logfile), null); 
 
 				XmlDocument output = new XmlDocument();
 				output.Load(reader);

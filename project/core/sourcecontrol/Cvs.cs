@@ -1,7 +1,8 @@
+using Exortech.NetReflector;
 using System;
 using System.Diagnostics;
+using System.Globalization;
 using System.IO;
-using Exortech.NetReflector;
 using ThoughtWorks.CruiseControl.Core.Util;
 
 namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
@@ -64,7 +65,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 		
 		public string FormatCommandDate(DateTime date)
 		{
-			return date.ToUniversalTime().ToString(COMMAND_DATE_FORMAT);
+			return date.ToUniversalTime().ToString(COMMAND_DATE_FORMAT, CultureInfo.InvariantCulture);
 		}
 
 		public override Process CreateHistoryProcess(DateTime from, DateTime to)

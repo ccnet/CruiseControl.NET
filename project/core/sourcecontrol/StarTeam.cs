@@ -1,5 +1,6 @@
 using System;
 using System.Diagnostics;
+using System.Globalization;
 using ThoughtWorks.CruiseControl.Core.Util;
 using Exortech.NetReflector;
 
@@ -13,8 +14,8 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 	{
 		//stcmd hist -nologo -x -is -filter IO -p "userid:password@host:port/project/path" "files"		
 		internal readonly static string HISTORY_COMMAND_FORMAT = "hist -nologo -x -is -filter IO -p \"{0}:{1}@{2}:{3}/{4}/{5}\" \"*\"";
-		internal readonly static string DATE_FORMAT = "MM/dd/yyyy hh:mm:ss tt";
-
+//		internal readonly static string DATE_FORMAT = "MM/dd/yyyy hh:mm:ss tt";
+		internal CultureInfo Culture = CultureInfo.CurrentCulture;
 
 		private string _executable;		
 		private string _username;
@@ -96,7 +97,8 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 
 		internal string FormatCommandDate(DateTime date)
 		{
-			return date.ToString(DATE_FORMAT);
+			return date.ToString(Culture.DateTimeFormat);
+//			return date.ToString(DATE_FORMAT);
 		}
 
 		public override Process CreateLabelProcess(string label, DateTime timeStamp) 

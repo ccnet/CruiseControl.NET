@@ -93,6 +93,13 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test
 			AssertEquals("cvs.exe", new Cvs().Executable);
 		}
 
+		[Test]
+		public void VerifyDateIsFormatedCorrectly()
+		{
+			DateTime dt = DateTime.Parse("2003-01-01 01:01:01 GMT", CultureInfo.InvariantCulture);
+			AssertEquals("2003-01-01 01:01:01 GMT", CreateCvs().FormatCommandDate(dt));
+		}
+
 		private Cvs CreateCvs()
 		{
 			return CreateCvs(CreateSourceControlXml(null, null));

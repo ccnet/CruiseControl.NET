@@ -46,6 +46,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test
 		[Test]
 		public void TestModificationContent()
 		{
+			_parser.Culture = new CultureInfo("en-US");
 			Modification[] actual = _parser.Parse(StarTeamHistoryParserTest.ContentReader, OLDEST_ENTRY, NEWEST_ENTRY);
 			Modification[] expected = getExpectedModifications();
 

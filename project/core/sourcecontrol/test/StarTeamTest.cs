@@ -1,5 +1,6 @@
 using System;
 using System.Diagnostics;
+using System.Globalization;
 using NUnit.Framework;
 using ThoughtWorks.CruiseControl.Core.Util;
 using ThoughtWorks.CruiseControl.Core.Test;
@@ -32,7 +33,6 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test
 		[Test]
 		public void TestCreateHistoryProcess()
 		{				
-			//AssertNotNull("StarTeam was null", _starteam);
 			DateTime from = new DateTime(2001, 1, 21, 20, 0, 0);
 			DateTime to = new DateTime(2002, 2, 22, 20, 0, 0);
 
@@ -49,7 +49,6 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test
 		[Test]
 		public void TestValuesSet()
 		{			
-			//AssertNotNull("StarTeam was null", _starteam);
 			AssertEquals(@"..\tools\starteam\stcmd.exe", _starteam.Executable);
 			AssertEquals("Admin", _starteam.Username);
 			AssertEquals("admin", _starteam.Password);
@@ -63,14 +62,16 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test
 		[Test]
 		public void TestFormatDate()
 		{
-			//AssertNotNull("StarTeam was null", _starteam);
+			_starteam.Culture = new CultureInfo("en-US");
 			DateTime date = new DateTime(2002, 2, 22, 20, 0, 0);
-			string expected = "02/22/2002 08:00:00 PM";
+//			string expected = "02/22/2002 08:00:00 PM";
+			string expected = "2/22/2002 8:00:00 PM";
 			string actual = _starteam.FormatCommandDate(date);
 			AssertEquals(expected, actual);
 
 			date = new DateTime(2002, 2, 22, 12, 0, 0);
-			expected = "02/22/2002 12:00:00 PM";
+//			expected = "02/22/2002 12:00:00 PM";
+			expected = "2/22/2002 12:00:00 PM";
 			actual = _starteam.FormatCommandDate(date);
 			AssertEquals(expected, actual);
 		}

@@ -14,8 +14,6 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 	/// </summary>
 	public class StarTeamHistoryParser : IHistoryParser
 	{
-		#region Constants
-
 		internal readonly static string FolderInfoSeparator  = "Folder: ";
 		internal readonly static string FileHistorySeparator = "----------------------------";
 
@@ -39,14 +37,11 @@ Status:(?<file_status>.+)
 		internal readonly static string FileHistoryRegEx = @"(?m:Revision: (?<file_revision>\S+) View: (?<view_name>.+) Branch Revision: (?<branch_revision>\S+)
 Author: (?<author_name>.*?) Date: (?<date_string>\d{01,2}/\d{1,2}/\d\d \d{1,2}:\d\d:\d\d (A|P)M).*\n(?s:(?<change_comment>.*?))-{28})";
 
-		#endregion
-
 		readonly Regex folderRegex;
 		readonly Regex fileRegex;
 		readonly Regex historyRegex;
-		DateTimeFormatInfo dfi;
-
-		#region Constructor
+//		DateTimeFormatInfo dfi;
+		internal CultureInfo Culture = CultureInfo.CurrentCulture;
 
 		public StarTeamHistoryParser()
 		{
@@ -57,16 +52,11 @@ Author: (?<author_name>.*?) Date: (?<date_string>\d{01,2}/\d{1,2}/\d\d \d{1,2}:\
 			historyRegex = new Regex(StarTeamHistoryParser.FileHistoryRegEx);
         
 			// Create DateTimeFormatInfo
-			dfi = new DateTimeFormatInfo();
-			dfi.AMDesignator = "AM";
-			dfi.PMDesignator = "PM";
-			dfi.MonthDayPattern = @"M/d/yy h:mm:ss tt";
+//			dfi = new DateTimeFormatInfo();
+//			dfi.AMDesignator = "AM";
+//			dfi.PMDesignator = "PM";
+//			dfi.MonthDayPattern = @"M/d/yy h:mm:ss tt";
 		}
-
-
-		#endregion
-
-		#region Parsing modifications from StarTeam output
 
 		/// <summary>
 		/// Method implementaion for IHistoryParser
@@ -123,7 +113,7 @@ Author: (?<author_name>.*?) Date: (?<date_string>\d{01,2}/\d{1,2}/\d\d \d{1,2}:\
 						// date_string looks like "12/9/02 10:33:36 AM"
 						// ASSUMPTION: StarTeam server and this application
 						// runs in the same TIMEZONE
-						mod.ModifiedTime = DateTime.Parse(mHistory.Result("${date_string}"), dfi);
+						mod.ModifiedTime = DateTime.Parse(mHistory.Result("${date_string}"), Culture.DateTimeFormat);
 						mod.Comment = mHistory.Result("${change_comment}");
 					}
 					modList.Add(mod);
@@ -131,7 +121,5 @@ Author: (?<author_name>.*?) Date: (?<date_string>\d{01,2}/\d{1,2}/\d\d \d{1,2}:\
 			}
 			return (Modification[])modList.ToArray(typeof(Modification));
 		}
-
-		#endregion
 	}
 }
