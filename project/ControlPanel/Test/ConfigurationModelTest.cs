@@ -123,7 +123,10 @@ namespace ThoughtWorks.CruiseControl.ControlPanel.Test
 			AssertEquals(typeof(DefaultLabeller), project.Labeller.GetType());
 		}
 
-		// test collections
+		[Test, Ignore("nyi")]
+		public void TestCollections() 
+		{
+		}
 
 		[Test]
 		public void LoadFromFile()
@@ -157,6 +160,62 @@ namespace ThoughtWorks.CruiseControl.ControlPanel.Test
 			}
 		}
 
+		[Test]
+		public void SaveOnProjectSavesAsWell()
+		{
+			using (TempFiles files = new TempFiles()) 
+			{
+				files.Add("ccnet.config", _configFileContents);
+				model.Load(files.MapPath("ccnet.config"));
+
+				files.Delete("ccnet.config");
+				model.Save();
+
+				Assert(files.ContentsOf("ccnet.config").IndexOf("<webURL>http://localhost/CruiseControl.NET/</webURL>") != -1);
+
+				files.Delete("ccnet.config");
+				model.Projects[0].Save();
+
+				Assert(files.ContentsOf("ccnet.config").IndexOf("<webURL>http://localhost/CruiseControl.NET/</webURL>") != -1);
+			}
+		}
+
+		[Test]
+		public void SaveBackToFileThrowsExceptionAndDoesntSaveIfCantReload()
+		{
+			using (TempFiles files = new TempFiles()) 
+			{
+				files.Add("ccnet.config", _configFileContents);
+				files.Add("ccnet.out.config", "old contents");
+
+				model.Load(files.MapPath("ccnet.config"));
+				model.Projects[0].Items["build"].Value = null;
+				try 
+				{
+					model.Save(files.MapPath("ccnet.out.config"));
+					Fail("should have failed");
+				} 
+				catch (ConfigurationException e) 
+				{
+					AssertEquals("couldn't save because state is invalid :", e.Message);
+				}
+
+				AssertEquals("old contents", files.ContentsOf("ccnet.out.config"));
+			}
+		}
+
+		[Test, Ignore("nyi")]
+		public void AddProject()
+		{
+			ConfigurationModel model = new ConfigurationModel();
+			model.Load(configuration);
+		}
+
+		[Test, Ignore("nyi")]
+		public void RemoveProject()
+		{
+		}
+
 		private void Print(ConfigurationItemCollection items, string indent) 
 		{
 			foreach (ConfigurationItem item in items)
@@ -188,6 +247,11 @@ namespace ThoughtWorks.CruiseControl.ControlPanel.Test
 			{
 				writer.Write(contents);
 			}
+		}
+
+		public void Delete(string filename) 
+		{
+			File.Delete(MapPath(filename));
 		}
 
 		public string ContentsOf(string filename)

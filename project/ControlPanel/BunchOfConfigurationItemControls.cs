@@ -7,28 +7,15 @@ using System.Windows.Forms;
 
 namespace ThoughtWorks.CruiseControl.ControlPanel
 {
-	/// <summary>
-	/// Summary description for BunchOfConfigurationItemControls.
-	/// </summary>
 	public class BunchOfConfigurationItemControls : System.Windows.Forms.UserControl
 	{
-		/// <summary> 
-		/// Required designer variable.
-		/// </summary>
 		private System.ComponentModel.Container components = null;
 
 		public BunchOfConfigurationItemControls()
 		{
-			// This call is required by the Windows.Forms Form Designer.
 			InitializeComponent();
-
-			// TODO: Add any initialization after the InitializeComponent call
-
 		}
 
-		/// <summary> 
-		/// Clean up any resources being used.
-		/// </summary>
 		protected override void Dispose( bool disposing )
 		{
 			if( disposing )

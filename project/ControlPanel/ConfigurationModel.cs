@@ -18,7 +18,8 @@ namespace ThoughtWorks.CruiseControl.ControlPanel
 {
 	public class ConfigurationModel
 	{
-		private ProjectItem [] _projects;
+		private string _filename;
+		private ProjectModel [] _projects;
 		private IConfiguration _configuration;
 
 		public void Load(string filename) 
@@ -26,12 +27,42 @@ namespace ThoughtWorks.CruiseControl.ControlPanel
 			using (ConfigurationLoader loader = new ConfigurationLoader(filename)) 
 			{
 				Load(loader.Load());
+				_filename = filename;
 			}
+		}
+
+		public void Save() 
+		{
+			Save(_filename);
 		}
 
 		public void Save(string filename) 
 		{
-			using (StreamWriter streamWriter = new StreamWriter(filename)) {
+			string tmpFilename = filename + ".tmp";
+
+			DoSave(tmpFilename);
+			CheckIfFileIsLoadable(tmpFilename);
+			
+			if (File.Exists(filename)) File.Delete(filename);
+			File.Move(tmpFilename, filename);			
+		}
+
+		private void CheckIfFileIsLoadable(string filename)
+		{
+			try 
+			{
+				new ConfigurationLoader(filename).Load();
+			} 
+			catch (ConfigurationException e) 
+			{
+				throw new ConfigurationException("couldn't save because state is invalid :", e);
+			}
+		}
+
+		private void DoSave(string filename)
+		{
+			using (StreamWriter streamWriter = new StreamWriter(filename)) 
+			{
 				XmlTextWriter writer = new XmlTextWriter(streamWriter);
 			
 				writer.Formatting = Formatting.Indented;
@@ -54,36 +85,14 @@ namespace ThoughtWorks.CruiseControl.ControlPanel
 			ArrayList projects = new ArrayList();
 			foreach (IProject project in configuration.Projects) 
 			{
-				projects.Add(new ProjectItem(project));
+				projects.Add(new ProjectModel(this, project));
 			}
-			_projects = (ProjectItem []) projects.ToArray(typeof(ProjectItem));
+			_projects = (ProjectModel []) projects.ToArray(typeof(ProjectModel));
 		}
 
-		public ProjectItem [] Projects
+		public ProjectModel [] Projects
 		{
 			get { return _projects; }
-		}
-	}
-
-	public class ProjectItem 
-	{
-		private string _name;
-		private ConfigurationItemCollection _items = new ConfigurationItemCollection();
-
-		public ProjectItem(IProject project) 
-		{
-			_name = project.Name;
-			_items.LoadPropertiesOf(project);
-		}
-
-		public string Name 
-		{
-			get { return _name; }
-		}
-
-		public ConfigurationItemCollection Items
-		{
-			get { return _items; }
 		}
 	}
 }

@@ -14,16 +14,33 @@ namespace ThoughtWorks.CruiseControl.ControlPanel
 	{
 		private System.Windows.Forms.MainMenu mainMenu1;
 		private System.Windows.Forms.MenuItem fileMenuItem;
-		private System.Windows.Forms.MenuItem openMenuItem;
-		private System.Windows.Forms.TabControl tabControl;
-		private System.Windows.Forms.MenuItem saveMenuItem;
+		private System.Windows.Forms.MenuItem openConfigurationMenuItem;
+		private System.Windows.Forms.MenuItem closeConfigurationMenuItem;
+		private System.Windows.Forms.MenuItem addProjectMenuItem;
+		private System.Windows.Forms.MenuItem removeProjectMenuItem;
 		private System.ComponentModel.Container components = null;
-		private ConfigurationModel _model;
-		private string _filename;
+		private System.Windows.Forms.TreeView treeView;
+		private System.Windows.Forms.Panel bodyPanel;
+		private System.Windows.Forms.Splitter splitter1;
+		private TreeNode baseNode;
+		private TreeNode lastSelectedNode;
+		private TreeNode lastClickedControl;
 
 		public MainPanel()
 		{
 			InitializeComponent();
+
+			baseNode = new	TreeNode("Cruise Control Installations");
+			baseNode.Expand();
+			treeView.Nodes.Add(baseNode);
+			treeView.AfterSelect += new TreeViewEventHandler(treeView_AfterSelect);
+			treeView.ContextMenu = new ContextMenu();
+			treeView.ContextMenu.Popup += new EventHandler(ContextMenu_Popup);
+			treeView.MouseDown += new MouseEventHandler(treeView_MouseDown);
+
+			closeConfigurationMenuItem = new MenuItem("close configuration", new EventHandler(CloseConfiguration));
+			addProjectMenuItem = new MenuItem("add project", new EventHandler(AddProject));
+			removeProjectMenuItem = new MenuItem("remove project", new EventHandler(RemoveProject));
 		}
 
 		protected override void Dispose( bool disposing )
@@ -47,9 +64,10 @@ namespace ThoughtWorks.CruiseControl.ControlPanel
 		{
 			this.mainMenu1 = new System.Windows.Forms.MainMenu();
 			this.fileMenuItem = new System.Windows.Forms.MenuItem();
-			this.openMenuItem = new System.Windows.Forms.MenuItem();
-			this.tabControl = new System.Windows.Forms.TabControl();
-			this.saveMenuItem = new System.Windows.Forms.MenuItem();
+			this.openConfigurationMenuItem = new System.Windows.Forms.MenuItem();
+			this.treeView = new System.Windows.Forms.TreeView();
+			this.bodyPanel = new System.Windows.Forms.Panel();
+			this.splitter1 = new System.Windows.Forms.Splitter();
 			this.SuspendLayout();
 			// 
 			// mainMenu1
@@ -61,36 +79,49 @@ namespace ThoughtWorks.CruiseControl.ControlPanel
 			// 
 			this.fileMenuItem.Index = 0;
 			this.fileMenuItem.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
-																						 this.openMenuItem,
-																						 this.saveMenuItem});
+																						 this.openConfigurationMenuItem});
 			this.fileMenuItem.Text = "&File";
 			// 
 			// openMenuItem
 			// 
-			this.openMenuItem.Index = 0;
-			this.openMenuItem.Text = "&Open";
-			this.openMenuItem.Click += new System.EventHandler(this.openMenuItem_Click);
+			this.openConfigurationMenuItem.Index = 0;
+			this.openConfigurationMenuItem.Text = "&Open";
+			this.openConfigurationMenuItem.Click += new System.EventHandler(this.openMenuItem_Click);
 			// 
-			// tabControl
+			// treeView
 			// 
-			this.tabControl.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.tabControl.Location = new System.Drawing.Point(0, 0);
-			this.tabControl.Name = "tabControl";
-			this.tabControl.SelectedIndex = 0;
-			this.tabControl.Size = new System.Drawing.Size(992, 649);
-			this.tabControl.TabIndex = 0;
+			this.treeView.Dock = System.Windows.Forms.DockStyle.Left;
+			this.treeView.ImageIndex = -1;
+			this.treeView.Location = new System.Drawing.Point(0, 0);
+			this.treeView.Name = "treeView";
+			this.treeView.SelectedImageIndex = -1;
+			this.treeView.Size = new System.Drawing.Size(232, 649);
+			this.treeView.TabIndex = 0;
 			// 
-			// saveMenuItem
+			// bodyPanel
 			// 
-			this.saveMenuItem.Index = 1;
-			this.saveMenuItem.Text = "&Save";
-			this.saveMenuItem.Click += new System.EventHandler(this.saveMenuItem_Click);
+			this.bodyPanel.AutoScroll = true;
+			this.bodyPanel.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.bodyPanel.Location = new System.Drawing.Point(232, 0);
+			this.bodyPanel.Name = "bodyPanel";
+			this.bodyPanel.Size = new System.Drawing.Size(760, 649);
+			this.bodyPanel.TabIndex = 2;
+			// 
+			// splitter1
+			// 
+			this.splitter1.Location = new System.Drawing.Point(232, 0);
+			this.splitter1.Name = "splitter1";
+			this.splitter1.Size = new System.Drawing.Size(3, 649);
+			this.splitter1.TabIndex = 3;
+			this.splitter1.TabStop = false;
 			// 
 			// MainPanel
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5, 13);
 			this.ClientSize = new System.Drawing.Size(992, 649);
-			this.Controls.Add(this.tabControl);
+			this.Controls.Add(this.splitter1);
+			this.Controls.Add(this.bodyPanel);
+			this.Controls.Add(this.treeView);
 			this.Menu = this.mainMenu1;
 			this.Name = "MainPanel";
 			this.Text = "Cruise Control - Control Panel";
@@ -114,11 +145,10 @@ namespace ThoughtWorks.CruiseControl.ControlPanel
 
 		private void Open(string filename) 
 		{
-			_filename = filename;
-			_model = new ConfigurationModel();
+			ConfigurationModel model = new ConfigurationModel();
 			try 
 			{
-				_model.Load(filename);
+				model.Load(filename);
 			}
 			catch (ConfigurationException ex) 
 			{
@@ -126,17 +156,17 @@ namespace ThoughtWorks.CruiseControl.ControlPanel
 				return;
 			}
 
-			foreach (ProjectItem project in _model.Projects)
+			FileTreeNode fileNode = new FileTreeNode(filename, model);
+			baseNode.Nodes.Add(fileNode);
+
+			foreach (ProjectModel project in model.Projects)
 			{
-				BunchOfConfigurationItemControls controls = new BunchOfConfigurationItemControls();
-				controls.Bind(project.Items);
-				
-				TabPage page = new TabPage(project.Name);
-				page.Controls.Add(controls);
-				
-				tabControl.TabPages.Add(page);
+				ProjectTreeNode projectNode = new ProjectTreeNode(project);
+				fileNode.Nodes.Add(projectNode);
 			}
 
+			fileNode.Expand();
+			fileNode.ExpandAll();
 		}
 
 		protected virtual string ChooseFileToOpen() 
@@ -145,9 +175,101 @@ namespace ThoughtWorks.CruiseControl.ControlPanel
 			return DialogResult.OK == dialog.ShowDialog(this) ? dialog.FileName : null;
 		}
 
-		private void saveMenuItem_Click(object sender, System.EventArgs e)
+		private void treeView_AfterSelect(object sender, TreeViewEventArgs e)
 		{
-			_model.Save(_filename);
+			if (e.Node == lastSelectedNode) return;
+
+			if (lastSelectedNode is ProjectTreeNode)
+			{
+				try 
+				{
+					((ProjectTreeNode) lastSelectedNode).Project.Save();
+				}
+				catch (Exception ex) 
+				{
+					MessageBox.Show(ex.ToString());
+					treeView.SelectedNode = lastSelectedNode;
+					return;
+				}
+			}
+
+			bodyPanel.Controls.Clear();
+
+			if (e.Node is ProjectTreeNode) 
+			{
+				BunchOfConfigurationItemControls controls = new BunchOfConfigurationItemControls();
+				controls.Bind(((ProjectTreeNode) e.Node).Project.Items);
+				
+				bodyPanel.Controls.Add(controls);
+			}
+
+			lastSelectedNode = e.Node;
+		}
+
+		private class ProjectTreeNode : TreeNode
+		{
+			public ProjectModel Project;
+
+			public ProjectTreeNode(ProjectModel project) : base(project.Name) 
+			{
+				this.Project = project;
+			}
+		}
+
+		private class FileTreeNode : TreeNode
+		{
+			public ConfigurationModel Model;
+
+			public FileTreeNode(string filename, ConfigurationModel model) : base(filename) 
+			{
+				this.Model = model;
+			}
+		}
+
+		private void ContextMenu_Popup(object sender, EventArgs e)
+		{
+			ContextMenu menu = (ContextMenu) sender;
+			menu.MenuItems.Clear();
+
+			treeView.SelectedNode = lastClickedControl;
+			if (treeView.SelectedNode != lastClickedControl) return;
+
+			if (treeView.SelectedNode == baseNode)
+			{
+				menu.MenuItems.Add(openConfigurationMenuItem);
+			}
+			else if (treeView.SelectedNode is FileTreeNode)
+			{
+				menu.MenuItems.Add(closeConfigurationMenuItem);
+				menu.MenuItems.Add(addProjectMenuItem);
+			}
+			else if (treeView.SelectedNode is ProjectTreeNode)
+			{
+				menu.MenuItems.Add(removeProjectMenuItem);
+			}
+		}
+
+		private void treeView_MouseDown(object sender, MouseEventArgs e)
+		{
+			lastClickedControl = treeView.GetNodeAt(e.X, e.Y);
+		}
+
+		private void CloseConfiguration(object sender, EventArgs e) 
+		{
+			if (treeView.SelectedNode is FileTreeNode)
+			{
+				FileTreeNode fileNode = (FileTreeNode) treeView.SelectedNode;
+				treeView.SelectedNode = baseNode;
+				baseNode.Nodes.Remove(fileNode);
+			}
+		}
+
+		private void AddProject(object sender, EventArgs e)
+		{
+		}
+		
+		private void RemoveProject(object sender, EventArgs e)
+		{
 		}
 	}
 }
