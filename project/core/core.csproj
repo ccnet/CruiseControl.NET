@@ -449,11 +449,6 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "publishers\DefaultTaskResult.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
                     RelPath = "publishers\EmailGateway.cs"
                     SubType = "Code"
                     BuildAction = "Compile"

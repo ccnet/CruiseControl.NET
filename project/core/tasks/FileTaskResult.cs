@@ -1,18 +1,18 @@
 using System;
 using System.IO;
-using System.Xml;
 
 namespace ThoughtWorks.CruiseControl.Core.Tasks
 {
 	public class FileTaskResult : ITaskResult
 	{
-		private FileInfo _file;
 		private string _data;
+
+		public FileTaskResult(string filename) : this(new FileInfo(filename))
+		{}
 
 		public FileTaskResult(FileInfo file)
 		{
-			_file = file;
-			_data = ReadXmlFile();
+			ReadFileContents(file);
 		}
 
 		public string Data
@@ -20,20 +20,18 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 			get { return _data; }
 		}
 
-		private string ReadXmlFile()
+		private void ReadFileContents(FileInfo file)
 		{
-			if (! _file.Exists)
-				return string.Empty;
-
 			try
 			{
-				XmlDocument doc = new XmlDocument();
-				doc.Load(_file.FullName);
-				return doc.DocumentElement.OuterXml;
+				using (StreamReader reader = file.OpenText())
+				{
+					_data = reader.ReadToEnd();
+				}
 			}
 			catch (Exception ex)
 			{
-				throw new CruiseControlException("Unable to read the contents of the merge file: " + _file.Name, ex);
+				throw new CruiseControlException("Unable to read the contents of the file: " + file.FullName, ex);
 			}
 		}
 	}

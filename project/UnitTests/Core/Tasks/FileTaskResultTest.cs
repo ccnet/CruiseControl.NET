@@ -1,4 +1,3 @@
-using System.IO;
 using NUnit.Framework;
 using ThoughtWorks.CruiseControl.Core;
 using ThoughtWorks.CruiseControl.Core.Tasks;
@@ -23,12 +22,17 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 			TempFileUtil.DeleteTempDir("FileTaskResult");
 		}
 
-		[Test, ExpectedException(typeof (CruiseControlException), "Unable to read the contents of the merge file: test.xml")]
-		public void ShouldThrowReadableExceptionIfFileContainsInvalidXml()
+		[Test]
+		public void ShouldReadContentsOfTempFile()
 		{
-			FileInfo info = new FileInfo(filename);
-			FileTaskResult result = new FileTaskResult(info);
-			string data = result.Data;
+			FileTaskResult result = new FileTaskResult(filename);
+			Assert.AreEqual("<invalid xml>", result.Data);
+		}
+
+		[Test, ExpectedException(typeof (CruiseControlException))]
+		public void ShouldThrowReadableExceptionIfFileDoesNotExist()
+		{
+			new FileTaskResult("unknown.file");
 		}
 	}
 }

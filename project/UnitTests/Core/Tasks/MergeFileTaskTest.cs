@@ -34,7 +34,6 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks.Test
 			Assert.AreEqual(1, _result.TaskResults.Count);
 			ITaskResult taskResult = (ITaskResult) _result.TaskResults[0];
 			Assert.AreEqual(fileData, taskResult.Data);
-
 		}
 
 		[Test]

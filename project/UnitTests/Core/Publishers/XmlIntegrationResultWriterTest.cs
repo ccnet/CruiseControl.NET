@@ -1,6 +1,7 @@
 using System;
 using System.IO;
 using NUnit.Framework;
+using ThoughtWorks.CruiseControl.Core.Tasks;
 using ThoughtWorks.CruiseControl.Core.Test;
 using ThoughtWorks.CruiseControl.Core.Util;
 using ThoughtWorks.CruiseControl.Remote;
@@ -88,6 +89,15 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers.Test
             Assert.AreEqual(CreateExpectedBuildXml(result), output);
 			XmlUtil.VerifyXmlIsWellFormed(output);
         }
+
+		[Test]
+		public void WriteTaskResultsWithInvalidXmlShouldBeWrappedInCDATA()
+		{
+			IntegrationResult result = IntegrationResultMother.CreateSuccessful();
+			result.TaskResults.Add(new DataTaskResult("<foo>"));
+			_writer.Write(result);			
+			AssertContains("<![CDATA[<foo>]]>", buffer.ToString());
+		}
 
         [Test]
         public void WriteIntegrationResultOutput()
