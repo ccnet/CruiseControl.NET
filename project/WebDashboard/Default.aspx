@@ -6,18 +6,19 @@
 	<h1>Project Dashboard</h1>
 	<P>&nbsp;</P>
 	<asp:datagrid id="StatusGrid" runat="server" BorderColor="White" BorderStyle="Ridge" CellSpacing="1"
-		BorderWidth="2px" BackColor="White" CellPadding="3" GridLines="None" AutoGenerateColumns="False">
+		BorderWidth="2px" BackColor="White" CellPadding="3" GridLines="None" AutoGenerateColumns="False"
+		Width="784px">
 		<SelectedItemStyle Font-Bold="True" ForeColor="White" BackColor="#9471DE"></SelectedItemStyle>
 		<ItemStyle ForeColor="Black" BackColor="#DEDFDE"></ItemStyle>
 		<HeaderStyle Font-Size="Larger" Font-Bold="True" ForeColor="#E7E7FF" BackColor="#4A3C8C"></HeaderStyle>
 		<FooterStyle ForeColor="Black" BackColor="#C6C3C6"></FooterStyle>
 		<Columns>
-			<asp:BoundColumn DataField="Name" HeaderText="Project Name">
+			<asp:HyperLinkColumn DataNavigateUrlField="webURL" DataTextField="Name" HeaderText="Project Name"></asp:HyperLinkColumn>
+			<asp:BoundColumn DataField="BuildStatus" HeaderText="Last Build Status">
 				<ItemStyle Font-Bold="True"></ItemStyle>
 			</asp:BoundColumn>
-			<asp:BoundColumn DataField="BuildStatus" HeaderText="Build Status">
-				<ItemStyle Font-Bold="True"></ItemStyle>
-			</asp:BoundColumn>
+			<asp:BoundColumn DataField="LastBuildDate" HeaderText="Last Build Time"></asp:BoundColumn>
+			<asp:BoundColumn DataField="LastBuildLabel" HeaderText="Last Build Label"></asp:BoundColumn>
 			<asp:BoundColumn DataField="Status" HeaderText="CCNet Status"></asp:BoundColumn>
 			<asp:BoundColumn DataField="Activity" HeaderText="Activity"></asp:BoundColumn>
 		</Columns>

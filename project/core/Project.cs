@@ -31,6 +31,7 @@ namespace tw.ccnet.core
 	{
 		public static readonly string END_OF_INTEGRATION_LOG_OUTPUT = Environment.NewLine;
 		private string _name;
+		private string _webURL = "http://localhost/CruiseControl.NET/";
 		private ISchedule _schedule;
 		private ISourceControl _sourceControl;
 		private IBuilder _builder;
@@ -51,6 +52,13 @@ namespace tw.ccnet.core
 		{
 			get { return _name; }
 			set { _name = value; }
+		}
+
+		[ReflectorProperty("webURL", Required=false)]
+		public string WebURL
+		{
+			get { return _webURL; }
+			set { _webURL = value; }
 		}
 
 		[ReflectorProperty("schedule", InstanceTypeKey="type", Required=false)]

@@ -83,7 +83,7 @@ namespace tw.ccnet.core
 			IEnumerator e =_cruiseControl.Projects.GetEnumerator();
 			e.MoveNext();
 			Project p = (Project)e.Current;
-			return new ProjectStatus(GetStatus(), p.GetLastBuildStatus(), p.CurrentActivity, p.Name); 
+			return new ProjectStatus(GetStatus(), p.GetLastBuildStatus(), p.CurrentActivity, p.Name, p.WebURL, p.LastIntegration.StartTime, p.LastIntegration.Label); 
 		}
 
 		public override object InitializeLifetimeService() 

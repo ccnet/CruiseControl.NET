@@ -63,13 +63,27 @@ namespace tw.ccnet.remote
 		private IntegrationStatus buildStatus;
 		private ProjectActivity activity;
 		private string name;
+		private string webURL;
+		private DateTime lastBuildDate;
+		private string lastBuildLabel;
 
-		public ProjectStatus(CruiseControlStatus status, IntegrationStatus buildStatus, ProjectActivity activity, string name) 
+		public ProjectStatus(
+			CruiseControlStatus status, 
+			IntegrationStatus buildStatus, 
+			ProjectActivity activity, 
+			string name, 
+			string webURL,
+			DateTime lastBuildDate,
+			string lastBuildLabel
+		) 
 		{
 			this.status = status;
 			this.buildStatus = buildStatus;
 			this.activity = activity;
 			this.name = name;
+			this.webURL = webURL;
+			this.lastBuildDate = lastBuildDate;
+			this.lastBuildLabel = lastBuildLabel;
 		}
 
 		public CruiseControlStatus Status 
@@ -90,6 +104,21 @@ namespace tw.ccnet.remote
 		public string Name 
 		{
 			get { return name; }
+		}
+
+		public string WebURL
+		{
+			get { return webURL; }
+		}
+
+		public DateTime LastBuildDate
+		{
+			get { return lastBuildDate; }
+		}
+
+		public string LastBuildLabel
+		{
+			get { return lastBuildLabel; }
 		}
 	}
 
