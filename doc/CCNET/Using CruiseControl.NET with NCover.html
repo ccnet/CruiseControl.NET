@@ -15,41 +15,18 @@
                                                     </span>
 				    </div>
 				    <div class="pagesubheading">
-					    This page last changed on Nov 07, 2004 by <font color="#0050B2">mroberts</font>.
+					    This page last changed on Jan 16, 2005 by <font color="#0050B2">mroberts</font>.
 				    </div>
 
-				    <p class="paragraph">This page shows an example of how you can integrate NCover, code coverage tool with NUnit into your CruiseControl .NET build for test coverage purpose. NCover is a code coverage analysis tool and it is designed to work with compiled shipping code.<br/>
-(Note that there are two different versions of NCover available and the one being explained here is based on the gotdotnet version : <a href="http://www.gotdotnet.com/Community/Workspaces/Workspace.aspx?id=3122ee1a-46e7-48a5-857e-aad6739ef6b9" title="Visit page outside Confluence">NCover</a></p><h3 class="heading3"><a name="UsingCruiseControl.NETwithNCover-IntegrateNCoverwithNUnitintoyourproject%26%23039%3BsNAntbuild"> Integrate NCover with NUnit into your project&#039;s NAnt build</a></h3>
-
-<ol>
-<li> Download and install NCover from <a href="http://www.gotdotnet.com/Community/Workspaces/Workspace.aspx?id=3122ee1a-46e7-48a5-857e-aad6739ef6b9" title="Visit page outside Confluence">GotDotNET</a></li>
-<li> Next, in order to allow NAnt build script to call NCover, you can choose to add NCover path to your Path system environment variable or refer to it in your NAnt script instead.</li>
-<li> There&#039;s no custom task in NAnt for NCover, hence the easiest way to call NCover in this case, will be using the exec task. We will run NUnit unit tests within NCover to analyse the test coverage for the project, and determine which part of the code was not tested by the test suite. Add the following target to your NAnt build:
-<div class="code"><div class="codeContent">
-<pre><span class="xml&#45;tag">&lt;target name=<span class="xml&#45;quote">&quot;code&#45;coverage&#95;report&quot;</span>&gt;</span>&#10;        <span class="xml&#45;tag">&lt;exec program=<span class="xml&#45;quote">&quot;$&#123;NCOVER&#95;DIR&#125;&#92;ncover.console&quot;</span> commandline=&#039;/q /o $&#123;TEST&#95;RESULTS&#95;DIR&#125;&#92;coverage.xml &#10;           /c <span class="xml&#45;quote">&quot;C:&#92;Program Files&#92;NUnit V2.1&#92;bin&#92;nunit&#45;console&quot;</span>&#160;<span class="xml&#45;quote">&quot;$&#123;nant.project.basedir&#125;&#92;$&#123;ASSEMBLY&#125;&quot;</span>&#039; /&gt;</span>&#10;<span class="xml&#45;tag">&lt;/target&gt;</span></pre>
+				    <p class="paragraph">This page shows how you can integrate NCover, a code coverage tool, with NUnit into your CruiseControl .NET build for test coverage purpose. NCover is a code coverage analysis tool and it is designed to work with compiled shipping code.</p><div align='center'><div class='informationMacroPadding'><table cellpadding='5' width='85%' cellspacing='0' class='noteMacro' border='0'><tr><td width='16' valign='top'><img src="/images/icons/emoticons/warning.png" width="16" height="16" align="absmiddle" alt="" border="0"></td><td>
+There are several different NCover projects available. We assume that you are using <a href="http://ncover.org" title="Visit page outside Confluence">NCover.org</a> version.
+</td></tr></table></div></div><p class="paragraph"><h2 class="heading2"><a name="UsingCruiseControl.NETwithNCover-RunNCoveraspartofyourintegration"> Run NCover as part of your integration</a></h2></p><h4 class="heading4"><a name="UsingCruiseControl.NETwithNCover-RunNCoveraspartofyourNAntbuild"> Run NCover as part of your NAnt build</a></h4><p class="paragraph">In order to get the results of NCover included in the CruiseControl.NET build results, you will need to include a call to NCover in your NAnt build file.  We recommend you use a NAnt frgament like this:</p><div class="code"><div class="codeContent">
+<pre><span class="xml&#45;tag">&lt;exec &#10;    program=<span class="xml&#45;quote">&quot;tools&#92;ncover&#92;ncover.exe&quot;</span> &#10;    workingdir=<span class="xml&#45;quote">&quot;build&#92;unittests&quot;</span> &#10;    commandline=<span class="xml&#45;quote">&quot;/c &quot;</span>..&#92;..&#92;tools&#92;nunit&#92;nunit&#45;console.exe MyUnitTests.dll /xml:../MyUnitTests.dll&#45;results.xml /nologo&quot;&quot;/&gt;</span></pre>
 </div></div><br/>
-Note that
+For a thorough example, look at the CruiseControl.NET source distribution and look at how we use NCover ourselves.<p class="paragraph"><h4 class="heading4"><a name="UsingCruiseControl.NETwithNCover-RunNCoverasaCruiseControl.NETTask"> Run NCover as a CruiseControl.NET Task</a></h4></p>We don&#039;t currently support running NCover directly from CruiseControl.NET, but we plan on enabling this in a later release.<p class="paragraph"><h2 class="heading2"><a name="UsingCruiseControl.NETwithNCover-MergeNCoverresultsintoyourCruiseControl.NETresults"> Merge NCover results into your CruiseControl.NET results</a></h2></p>The next step is to merge the NCover report file into the integration result using the <a href="File Merge Task.html" title="File Merge Task">File Merge Task</a>. Your <a href="CruiseControl.NET Server.html" title="CruiseControl.NET Server">CruiseControl.NET Server</a> config file will have something in it like :
 <div class="code"><div class="codeContent">
-<pre>&#45; $&#123;NCOVER&#95;DIR&#125; is the property representing the path to your NCover installation.&#10;&#45; $&#123;TEST&#95;RESULTS&#95;DIR&#125; is the property representing the output path <span class="java&#45;keyword">for</span> the output coverage results XML file.&#10;&#45; $&#123;ASSEMBLY&#125; is the target compiled assembly with unit tests <span class="java&#45;keyword">for</span> instrumentation analysis.</pre>
-</div></div><br/>
-Finally what we really interested in is the result XML file, as we need to merge the XML result file with the build log for CC.NET
-</li>
-</ol>
-<h3 class="heading3"><a name="UsingCruiseControl.NETwithNCover-ConfigureCC.NETtomergethebuildlogwiththeNCovercoverageresult"> Configure CC.NET to merge the build log with the NCover coverage result</a></h3>
-<ol>
-<li> Next, use the <a href="File Merge Task.html" title="File Merge Task">File Merge Task</a> to merge the NCover result files. (See the <a href="File Merge Task.html" title="File Merge Task">File Merge Task</a> documentation for examples)</li>
-</ol>
-<h3 class="heading3"><a name="UsingCruiseControl.NETwithNCover-ModifyWeb.configfileforCC.NETwebapplication"> Modify Web.config file for CC.NET web application</a></h3>
-<ol>
-<li> Once we have the coverage results merged together with the build log file, now it&#039;s just a matter of parsing the build log and run an xsl file over it to pull the data out and display it on the web page. In Web.config, add a link to Coverage.aspx page
-<div class="code"><div class="codeContent">
-<pre>&lt;buildPlugins&gt;&#10;    &lt;plugin linkText=<span class="java&#45;quote">&quot;test details&quot;</span> linkUrl=<span class="java&#45;quote">&quot;Tests.aspx&#63;log=&quot;</span> /&gt;&#10;    &lt;plugin linkText=<span class="java&#45;quote">&quot;test timing&quot;</span> linkUrl=<span class="java&#45;quote">&quot;TestTiming.aspx&#63;log=&quot;</span> /&gt;&#10;    . . . &#10;    &lt;plugin linkText=<span class="java&#45;quote">&quot;NCover&quot;</span> linkUrl=<span class="java&#45;quote">&quot;Coverage.aspx&#63;log=&quot;</span> /&gt;&#10;    . . . &#10;&lt;/buildPlugins&gt;</pre>
-</div></div>
-</li>
-<li> Go to your build page and you should be able to see a link to NCover results now.</li>
-</ol><br/>
-For more information on CCNET Web Plugins, refer to: <a href="Project Report Web Application Plugins.html" title="Project Report Web Application Plugins">Project Report Web Application Plugins</a> 
-
+<pre><span class="xml&#45;tag">&lt;tasks&gt;</span>&#10;    <span class="xml&#45;tag">&lt;merge&gt;</span>&#10;        <span class="xml&#45;tag">&lt;files&gt;</span>&#10;            <span class="xml&#45;tag">&lt;file&gt;</span>d:&#92;sourceforge&#92;ccnet&#92;build&#92;unittests&#92;Coverage.xml<span class="xml&#45;tag">&lt;/file&gt;</span>&#10;            <span class="xml&#45;tag"><span class="xml&#45;comment">&lt;&#33;&#45;&#45; Other files to merge for your build would also be included here &#45;&#45;&gt;</span></span>&#10;      	<span class="xml&#45;tag">&lt;/files&gt;</span>&#10;    <span class="xml&#45;tag">&lt;/merge&gt;</span>&#10;<span class="xml&#45;tag">&lt;/tasks&gt;</span></pre>
+</div></div><p class="paragraph"><h2 class="heading2"><a name="UsingCruiseControl.NETwithNCover-ConfiguringyourReportingApplicationtodisplayNCoverresults"> Configuring your Reporting Application to display NCover results</a></h2></p>For displaying the results, CruiseControl.NET <b class="strong">currently supports NCover 1.3.3</b>.<p class="paragraph">If you are using the <a href="Web Dashboard.html" title="Web Dashboard">Web Dashboard</a>, edit your <tt class="monospaced">web.config</tt> file and include the <tt class="monospaced">ThoughtWorks.CruiseControl.WebDashboard.Plugins.NCover.NCoverReportBuildPlugin</tt> Build Plugin.</p>If you are using <a href="Project Report Web Application.html" title="Project Report Web Application">Project Report Web Application</a>, edit your <tt class="monospaced">web.config</tt> file and include the <tt class="monospaced">Coverage.aspx</tt> Build Plugin.
 
 				    
                     			    </td>
@@ -60,7 +37,7 @@ For more information on CCNET Web Plugins, refer to: <a href="Project Report Web
 				<td height="12" background="border/border_bottom.gif"><img src="border/spacer.gif" width="1" height="1" border="0"/></td>
 			</tr>
 		    <tr>
-			    <td align="center"><font color="grey">Document generated by Confluence on Nov 07, 2004 16:10</font></td>
+			    <td align="center"><font color="grey">Copyright(c) 2004 ThoughtWorks, Inc. All Rights Reserved</font></td>
 		    </tr>
 	    </table>
     </body>

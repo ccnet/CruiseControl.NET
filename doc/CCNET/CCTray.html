@@ -25,20 +25,20 @@
 <li> Force a build from any PC (when the CruiseControl.NET server is sleeping)</li>
 </ul>
 <hr class="line"/></p><h4 class="heading4"><a name="CCTray-TrayIcons"> Tray Icons</a></h4>
-Once started, CCTray is normally only visible as an icon in the windows system tray.<p class="paragraph"><img src="CCTray_attachments/cctray-full-green.png" align="absmiddle" border="0"  /></p>The colour of the CCTray icon conveys information about the CruiseControl.NET server&#039;s state: <br/>
+Once started, CCTray is normally only visible as an icon in the windows system tray.<p class="paragraph"><img src="CCTray_attachments/cctray-full-green.png" align="absmiddle" border="0" /></p>The colour of the CCTray icon conveys information about the CruiseControl.NET server&#039;s state: <br/>
 
 <ul class="star">
-<li> <img src="CCTray_attachments/cctray-icon-small-green.png" align="absmiddle" border="0"  /> The most recent build was successful</li>
-<li> <img src="CCTray_attachments/cctray-icon-small-red.png" align="absmiddle" border="0"  /> The most recent build failed</li>
-<li> <img src="CCTray_attachments/cctray-icon-small-grey.png" align="absmiddle" border="0"  /> The server is unavailable, or returned an error status</li>
-<li> <img src="CCTray_attachments/cctray-icon-small-yellow.png" align="absmiddle" border="0"  /> The server is currently building the code.
+<li> <img src="CCTray_attachments/cctray-icon-small-green.png" align="absmiddle" border="0" /> The most recent build was successful</li>
+<li> <img src="CCTray_attachments/cctray-icon-small-red.png" align="absmiddle" border="0" /> The most recent build failed</li>
+<li> <img src="CCTray_attachments/cctray-icon-small-grey.png" align="absmiddle" border="0" /> The server is unavailable, or returned an error status</li>
+<li> <img src="CCTray_attachments/cctray-icon-small-yellow.png" align="absmiddle" border="0" /> The server is currently building the code.
 <hr class="line"/>
 </li>
 </ul>
 <h4 class="heading4"><a name="CCTray-Balloonnotifications"> Balloon notifications</a></h4><p class="paragraph">Ballon notifications use the standard Windows tray icon popup balloon whenever a build completes. The text within the balloon is configurable. Balloon notifications may be enabled/disabled.<br/>
-<img src="CCTray_attachments/balloon-fixed.png" align="absmiddle" border="0"  />&#160;<img src="CCTray_attachments/balloon-broken.png" align="absmiddle" border="0"  />
+<img src="CCTray_attachments/balloon-fixed.png" align="absmiddle" border="0" />&#160;<img src="CCTray_attachments/balloon-broken.png" align="absmiddle" border="0" />
 <hr class="line"/></p><h4 class="heading4"><a name="CCTray-Menuoptions"> Menu options</a></h4>
-<img src="CCTray_attachments/context-menu-building.png" align="right" border="0"  /><br/>
+<img src="CCTray_attachments/context-menu-building.png" align="right" border="0" /><br/>
 Right-clicking the CCTray system tray icon displays a menu with several options: <br/>
 
 <ul class="star">
@@ -61,7 +61,7 @@ Right-clicking the CCTray system tray icon displays a menu with several options:
 <li> Closes the CCTray application.</li>
 </ul></li>
 </ul>
-<hr class="line"/><p class="paragraph"><h4 class="heading4"><a name="CCTray-Configuration"> Configuration</a></h4></p>CCTray&#039;s configuration settings is stored in the file &quot;<b class="strong">cctray-settings.xml</b>&quot; (see a <a href="cctray-settings.xml.html" title="cctray-settings.xml">sample</a>), which is located in the same folder as the executable. The file may be hand edited, though it&#039;s simpler to use the settings form. To launch the settings form, right-click the tray icon and select &#039;Settings...&#039;.<p class="paragraph"><img src="CCTray_attachments/form-settings.png" align="left" border="0"  /></p><b class="strong">Poll every n seconds</b><br/>
+<hr class="line"/><p class="paragraph"><h4 class="heading4"><a name="CCTray-Configuration"> Configuration</a></h4></p>CCTray&#039;s configuration settings is stored in the file &quot;<b class="strong">cctray-settings.xml</b>&quot; (see a <a href="cctray-settings.xml.html" title="cctray-settings.xml">sample</a>), which is located in the same folder as the executable. The file may be hand edited, though it&#039;s simpler to use the settings form. To launch the settings form, right-click the tray icon and select &#039;Settings...&#039;.<p class="paragraph"><img src="CCTray_attachments/form-settings.png" align="left" border="0" /></p><b class="strong">Poll every n seconds</b><br/>
 CCTray detects changes in the CCNet server state by polling at regular intervals. This value sets the period between polls.<p class="paragraph"><b class="strong">Server</b><br/>
 A Uri to the remoting interface of the CruiseControl.NET server.</p><b class="strong">Project name</b><br/>
 The name of the project to be monitored, as described within the server&#039;s configuration file.<p class="paragraph"><b class="strong">Show balloon notifications</b><br/>
@@ -70,7 +70,7 @@ Enables or disables notification of completed builds via agents.<p class="paragr
 Turns the agent off after they deliver the completed build message.</p><b class="strong">Agent</b><br/>
 The agent to use. This agent must be installed.<p class="paragraph"><b class="strong">Audio</b><br/>
 The location of audio files to play upon completed builds. The checkbox enables individual sounds. Use the folder icon to browse for the wav file, and the play icon to preview the sound.</p><br clear="all" />
-<hr class="line"/><p class="paragraph"><h4 class="heading4"><a name="CCTray-Agents"> Agents</a></h4></p><img src="CCTray_attachments/agent-peedy-speak.png" align="right" border="0"  /><br/>
+<hr class="line"/><p class="paragraph"><h4 class="heading4"><a name="CCTray-Agents"> Agents</a></h4></p><img src="CCTray_attachments/agent-peedy-speak.png" align="right" border="0" /><br/>
 MS agents may be used to notify you of completed builds. Agents must be installed on your PC before you can use them (they&#039;re not part of a default Windows install). The MS Agent homepage is <a href="http://www.microsoft.com/msagent," title="Visit page outside Confluence">&#104;ttp://www.microsoft.com/msagent,</a> and the download page is <a href="http://www.microsoft.com/msagent/downloads/user.asp" title="Visit page outside Confluence">here </a> (you can download the software that enables speech here too). An agent WebRing exists here <a href="http://www.msagentring.org." title="Visit page outside Confluence">&#104;ttp://www.msagentring.org.</a><p class="paragraph">The agent shown above is Peedy. Peedy&#039;s installer should give CCTray access to the relevant ACS (Agent Character Script) file. Other agents (such as those used by Microsoft office) must be referenced by absolute paths, and the cctray-settings.xml file must currently be edited by hand. The agents that ship with MS Office 2000 are kept in the folder C:\Program Files\Microsoft Office\Office\.</p><hr class="line"/><p class="paragraph"><h4 class="heading4"><a name="CCTray-FAQ"> FAQ</a></h4></p><b class="strong">My CCTray icon is constantly greyed out. How can I tell why this is happening?</b><br/>
 A grey icon indicates some sort of connection or server error. In such cases, the tray icon&#039;s tooltip is the exception message. Set your mouse motionless above the CCTray icon for a second to see this message.<p class="paragraph"><b class="strong">&quot;Launch web page&quot; doesn&#039;t display the right URL&#8230; help!</b><br/>
 The URL at which your CruiseControl.NET build results are available is in the server configuration. Ensure that your server&#039;s configuration has a fully qualified host name (not just localhost).</p><b class="strong">I&#039;ve selected &quot;Notification Balloon&quot;, but it only flickers onto the screen momentarily.</b><br/>
@@ -129,7 +129,7 @@ Please send help requests to the CCNet user mailing list: <a href="mailto:ccnet-
 				<td height="12" background="border/border_bottom.gif"><img src="border/spacer.gif" width="1" height="1" border="0"/></td>
 			</tr>
 		    <tr>
-			    <td align="center"><font color="grey">Document generated by Confluence on Nov 07, 2004 16:10</font></td>
+			    <td align="center"><font color="grey">Copyright(c) 2004 ThoughtWorks, Inc. All Rights Reserved</font></td>
 		    </tr>
 	    </table>
     </body>

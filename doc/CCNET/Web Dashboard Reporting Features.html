@@ -15,37 +15,48 @@
                                                     </span>
 				    </div>
 				    <div class="pagesubheading">
-					    This page last changed on Nov 01, 2004 by <font color="#0050B2">mroberts</font>.
+					    This page last changed on Jan 16, 2005 by <font color="#0050B2">mroberts</font>.
 				    </div>
 
-				    <p class="paragraph">This is preliminary documentation for new features in the Web Dashboard to provide reporting and configuration features.</p><img src="./icons/emoticons/warning.png" height="16" width="16" align="absmiddle" alt="" border="0"/> These new features are still <b class="strong">in development</b> and should <b class="strong">not</b> be considered to be &#039;production ready&#039;. Some reporting features (e.g. FxCop reporting) have not yet been included in the new reporting pages, but these will be added soon. Use these new features at your own risk! <img src="./icons/emoticons/smile.gif" height="20" width="20" align="absmiddle" alt="" border="0"/>&#160;<p class="paragraph">The new features in the Web Dashboard consolidate the previous, separate, Web and Web Dashboard applications, plus also will provide the following new features:</p><ul type="square" class="minus">
-<li> Multi-project, multi-server support. Now you just need 1 deployment of the web application to report over all your CCNet projects. (<em class="emphasis">This code is complete, but some reporting features have not yet been migrated</em>)</li>
-<li> Project Configuration. Add, edit and delete projects through the web application on any CCNet build server (remote or local to the web application) (<em class="emphasis">This code is still in early days. Only some scenarios using Perforce, File Source Control, Command Line Builder and NAnt Builder have been implemented</em>)</li>
+				    <p class="paragraph">The Web Dashboard provides reporting features to replace those in the <a href="Project Report Web Application.html" title="Project Report Web Application">Project Report Web Application</a>. In later versions of CruiseControl.NET the old <a href="Project Report Web Application.html" title="Project Report Web Application">Project Report Web Application</a> will be deprecated and then deleted in favour of the improved <a href="Web Dashboard.html" title="Web Dashboard">Web Dashboard</a>.</p>Benefits of the Web Dashboard over the old <a href="Project Report Web Application.html" title="Project Report Web Application">Project Report Web Application</a> are:<br/>
+
+<ul class="star">
+<li> Multi-project, multi-server support - 1 Web Dashboard deployment can report over all the CCNet projects in your organisation so there is no longer a need for multiple instances of a web application.</li>
+<li> New plugin API supports custom features at various groupings of report, project, etc.</li>
+<li> New plugin API supports a complete code interface, enabling significantly richer plugins</li>
+<li> (To come) Configuration Plugins to support remote, GUI based, server configuration</li>
+</ul>
+<div align='center'><div class='informationMacroPadding'><table cellpadding='5' width='85%' cellspacing='0' class='noteMacro' border='0'><tr><td width='16' valign='top'><img src="/images/icons/emoticons/warning.png" width="16" height="16" align="absmiddle" alt="" border="0"></td><td>
+Dashboard reporting features are still <b class="strong">in development</b>. The UI is not completely polished and the API for developing custom plugins is not stabilised.
+</td></tr></table></div></div><p class="paragraph">These new reporting features are being used on CCNetLive at <a href="http://ccnetlive.thoughtworks.com/ccnet/" title="Visit page outside Confluence">&#104;ttp://ccnetlive.thoughtworks.com/ccnet/</a></p><h3 class="heading3"><a name="WebDashboardReportingFeatures-Setupguide"> Setup guide</a></h3><p class="paragraph">To install the new Web Dashboard features, do the following:
+<ul class="star">
+<li> Run through the instructions on the <a href="Web Dashboard.html" title="Web Dashboard">Web Dashboard</a> page.</li>
+<li> Create a folder under the WebDashboard folder called <tt class="monospaced">projectcache</tt></li>
+<li> Give all rights, apart from &#039;Full Control&#039;, to the ASP.NET Machine Account to the <tt class="monospaced">projectcache</tt> folder (Normally this account is called ASPNET).  (We plan on improving the security of the design of this solution at a later date)</li>
 </ul><br/>
-The features are being used on CCNetLive at <a href="http://ccnetlive.thoughtworks.com/ccnet/" title="Visit page outside Confluence">&#104;ttp://ccnetlive.thoughtworks.com/ccnet/</a><p class="paragraph"><img src="./icons/emoticons/warning.png" height="16" width="16" align="absmiddle" alt="" border="0"/> If you do want to use the new web application, please note the <b class="strong">SECURITY</b> section below.</p><img src="./icons/emoticons/information.png" height="16" width="16" align="absmiddle" alt="" border="0"/> The &#039;plugins&#039; API for the new web application is completely different to that for the old web application. Documentation on writing your own plugins will come later.<p class="paragraph"><h3 class="heading3"><a name="WebDashboardReportingFeatures-60secondsetupguide"> 60 second setup guide</a></h3></p>To setup the new Web Dashboard features, just run through the instructions on the <a href="Web Dashboard.html" title="Web Dashboard">Web Dashboard</a> page.<p class="paragraph"><h3 class="heading3"><a name="WebDashboardReportingFeatures-SecurityandtheCCNetwebapplication"> Security and the CCNet web application</a></h3></p>Certain features within the CCNet web application could allow a user to seriously damage the setup of the machine that a build server is hosted on. Unless you trust everyone with access to your deployed web application, do the following:
-<ol>
-<li> Open up the <em class="emphasis">web.config</em> file in the root directory of your deployed web application</li>
-<li> Look for a line that says <tt class="monospaced">&lt;add key=&quot;AllowSecureActions&quot; value=&quot;true&quot; /&gt;</tt></li>
-<li> Delete this line, comment it, or change the <tt class="monospaced">value</tt> setting to false</li>
-<li> Save the file</li>
-</ol><br/>
-This process will disable all actions that could compromise your build servers, including all configuration features.<p class="paragraph"><h3 class="heading3"><a name="WebDashboardReportingFeatures-Usageguide"> Usage guide</a></h3></p>This part of the documentation is very sparse at the moment, and some of the instructions here <b class="strong">will</b> change once more features are added (and bugs are fixed!)<p class="paragraph">At the moment, you need to update the <tt class="monospaced">&lt;webURL&gt;</tt> tag for each project in your build server (this will be updated soon). The format of the URL should be the following:
-<ul class="star">
+The Web Dashboard comes pre-configured to use a default set of plugins. To change what plugins you want to use for your CruiseControl.NET deployment, edit the <tt class="monospaced">web.config</tt> file in the Dashboard&#039;s root directory and update the relevant sub-sections of the <tt class="monospaced">CCNet</tt> section.</p>If you are interested in writing your own Dashboard plugins, read <a href="Developing Web Dashboard Plugins.html" title="Developing Web Dashboard Plugins">Developing Web Dashboard Plugins</a>.<p class="paragraph">If you want to include a plugin that is not located in the Dashboard&#039;s own assembly, add an attribute called <tt class="monospaced">assemblyFileName</tt> and set the value to be the file name of the DLL that contains the plugin. This DLL must be located in the <tt class="monospaced">bin</tt> folder of the Dashboard application.</p><div align='center'><div class='informationMacroPadding'><table cellpadding='5' width='85%' cellspacing='0' class='warningMacro' border='0'><tr><td width='16' valign='top'><img src="/images/icons/emoticons/forbidden.png" width="16" height="16" align="absmiddle" alt="" border="0"></td><td>
+Be <b class="strong">very</b> careful if enabling any Configuration Plugins - these can able any user of the web application to change project configuration in a way that could damage the machine that the build server is installed on.
+</td></tr></table></div></div><p class="paragraph"><h3 class="heading3"><a name="WebDashboardReportingFeatures-ProjectSetupguide"> Project Setup guide</a></h3></p>At the moment you need to update the configuration for the Servers want to report on to point to an appropriate URL in the Web Dashboard. This will simplified in a later release.<p class="paragraph">For each project, on each server, update the <tt class="monospaced">&lt;webURL&gt;</tt> tag. The format of the URL should be the following:</p><ul class="star">
 <li> <tt class="monospaced">&lt;webURL&gt;http://<em class="emphasis">hostname</em>/<em class="emphasis">VirtualDirectory</em>/Controller.aspx?&#95;action&#95;ViewProjectReport=true&amp;server=<em class="emphasis">Server Name</em>&amp;project=<em class="emphasis">Project Name</em>&lt;/webURL&gt;</tt></li>
-</ul>
+</ul><br/>
+where:<br/>
+
 <ul class="star">
-<li> <em class="emphasis">Server Name</em> is the name of the server that you set in the &#039;web.config&#039; file for the web application. If you didn&#039;t set anything, it will just be <em class="emphasis">local</em></li>
-<li> <em class="emphasis">Project Name</em> is the same as the name that you set for the project in the config file.</li>
-<li> In both of the above, make sure to replace any spaces in server and project names with <b class="strong"><tt class="monospaced">%20</tt></b>.</li>
+<li> <em class="emphasis">Server Name</em> is the name of the server that you set in the &lt;servers&gt; section of the &#039;web.config&#039; file for the dashboard application. If you didn&#039;t set update this file, it will just be <em class="emphasis">local</em></li>
+<li> <em class="emphasis">Project Name</em> is the same as the name that you set for the project in the config file</li>
+<li> In both of the above, make sure to set CAPITALS correctly, and replace any spaces in server and project names with <b class="strong"><tt class="monospaced">%20</tt></b>.</li>
+<li> The ampersands should be XML escaped, ie &amp; a m p ;</li>
 </ul>
-<h4 class="heading4"><a name="WebDashboardReportingFeatures-Viewingprojects"> Viewing projects</a></h4></p>Assuming you&#039;ve set everything up OK, you should be able to view the default page in the Virtual Directory you setup for your web application. The default page on CCNetLive is at <a href="http://ccnetlive.thoughtworks.com/ccnet/" title="Visit page outside Confluence">&#104;ttp://ccnetlive.thoughtworks.com/ccnet/</a>, and you should see something similar.<p class="paragraph">What you are seeing here is the <em class="emphasis">farm view</em>. There are 4 different views in the CCNet Web Application, with increasingly narrower scope. Here&#039;s a brief description:
+<h3 class="heading3"><a name="WebDashboardReportingFeatures-UsageGuide"> Usage Guide</a></h3><p class="paragraph">Assuming you&#039;ve set everything up OK, you should be able to view the default page in the Virtual Directory you setup for your web application. The default page on CCNetLive is at <a href="http://ccnetlive.thoughtworks.com/ccnet/" title="Visit page outside Confluence">&#104;ttp://ccnetlive.thoughtworks.com/ccnet/</a>, and you should see something similar.</p>What you are seeing here is the <em class="emphasis">Farm View</em>. There are 4 different views in the CCNet Web Application, with increasingly narrower scope. Here&#039;s a brief description:
 <ul class="star">
 <li> <b class="strong">Farm</b> - shows all projects running on all servers. Drill down into a project by clicking on its name</li>
-<li> <b class="strong">Server</b> - shows all projects running on a server. From here you can also view the &#039;server log&#039;, and add projects to a server</li>
-<li> <b class="strong">Project</b> - Shows a summary of the current state of a summary, shows the recent builds, and allows project configuration. Drill down into a specific build by clicking on its name</li>
-<li> <b class="strong">Build</b> - This is the equivalent of the old CCNet web application. Here you can view the results of a build in various ways (summary report, full log, FxCop results, etc.)</li>
-</ul><br/>
-Note the <b class="strong">location bar</b> near the top of the page - this allows you to back-track up through the views.</p><h4 class="heading4"><a name="WebDashboardReportingFeatures-Projectconfiguration"> Project configuration</a></h4><p class="paragraph"><img src="./icons/emoticons/warning.png" height="16" width="16" align="absmiddle" alt="" border="0"/> Project configuration support is in very early days - we recommend you don&#039;t use it now and come back to it later. If you do have any questions about the project configuration features, please mail the ccnet-devel list.</p>
+<li> <b class="strong">Server</b> - shows all projects running on a server. From here you can also view the &#039;server log&#039; (and later on add projects to a server)</li>
+<li> <b class="strong">Project</b> - Shows a summary of the current state of a project, shows the recent builds, and allows project configuration (to come later.) Drill down into a specific build by clicking on its name</li>
+<li> <b class="strong">Build</b> - This is the equivalent of the old CCNet <a href="Project Report Web Application.html" title="Project Report Web Application">Project Report Web Application</a>. Here you can view the results of a build in various ways (summary report, full log, FxCop results, etc.)</li>
+</ul>
+<div align='center'><div class='informationMacroPadding'><table cellpadding='5' width='85%' cellspacing='0' class='tipMacro' border='0'><tr><td width='16' valign='top'><img src="/images/icons/emoticons/check.png" width="16" height="16" align="absmiddle" alt="" border="0"></td><td>
+Note the <b class="strong">location bar</b> near the top of the page - this allows you to back-track up through the views.
+</td></tr></table></div></div>
 
 				    
                     			    </td>
@@ -56,7 +67,7 @@ Note the <b class="strong">location bar</b> near the top of the page - this allo
 				<td height="12" background="border/border_bottom.gif"><img src="border/spacer.gif" width="1" height="1" border="0"/></td>
 			</tr>
 		    <tr>
-			    <td align="center"><font color="grey">Document generated by Confluence on Nov 07, 2004 16:10</font></td>
+			    <td align="center"><font color="grey">Copyright(c) 2004 ThoughtWorks, Inc. All Rights Reserved</font></td>
 		    </tr>
 	    </table>
     </body>

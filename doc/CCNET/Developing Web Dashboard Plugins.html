@@ -1,0 +1,58 @@
+<html>
+    <head>
+        <title>CruiseControl.NET : Developing Web Dashboard Plugins</title>
+	    <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">	    
+    </head>
+
+    <body>
+	    <table class="pagecontent" border="0" cellpadding="0" cellspacing="0" width="100%" bgcolor="#ffffff">
+		    <tr>
+			    <td valign="top" class="pagebody">
+				    <div class="pageheader">
+					    <span class="pagetitle">
+                            CruiseControl.NET : Developing Web Dashboard Plugins
+                                                    </span>
+				    </div>
+				    <div class="pagesubheading">
+					    This page last changed on Jan 16, 2005 by <font color="#0050B2">mroberts</font>.
+				    </div>
+
+				    <div align='center'><div class='informationMacroPadding'><table cellpadding='5' width='85%' cellspacing='0' class='warningMacro' border='0'><tr><td width='16' valign='top'><img src="/images/icons/emoticons/forbidden.png" width="16" height="16" align="absmiddle" alt="" border="0"></td><td>
+The Web Dashboard Plugin API is not yet stabilised. If you do write your own plugins it is recommended that you subscribe to the <a href="http://lists.sourceforge.net/mailman/listinfo/ccnet-checkins" title="Visit page outside Confluence">CCNet Checkins Mailing list</a> and watch for changes to the Dashboard project]
+</td></tr></table></div></div><p class="paragraph">The <a href="Web Dashboard.html" title="Web Dashboard">Web Dashboard</a> supports, and includes, custom plugins. This page is preliminary documentation for developing your own Dashboard plugins.</p>First of all, you need to decide what type of plugin you are developing:<br/>
+
+<ul class="star">
+<li> A <b class="strong">Server Plugin</b> is used when you are looking at a specific server, but not any particular project</li>
+<li> A <b class="strong">Project Plugin</b> is used when you are looking at a specific project, but not a particular build</li>
+<li> A <b class="strong">Build Plugin</b> is used when you are viewing a specific build for a specific project.</li>
+</ul>
+<h2 class="heading2"><a name="DevelopingWebDashboardPlugins-Actions"> Actions</a></h2><p class="paragraph"><h3 class="heading3"><a name="DevelopingWebDashboardPlugins-AboutActions"> About Actions</a></h3></p>The CruiseControl.NET Web Dashboard includes its own Web Framework implementation. The fundamental &#039;component&#039; in this framework is an <b class="strong">Action</b>. An Action represents a specific interraction between the application and a user. Some features require multiple actions, e.g. one Action to allow a user to edit some fields, and then another to show the results of this.<p class="paragraph">Your Dashboard Plugin must include at least 1 Action. It can include more than 1, but only 1 will ever be linked directly from the Dashboard menus (the others must be linked by your other actions.)</p><h3 class="heading3"><a name="DevelopingWebDashboardPlugins-ImplementingActions"> Implementing Actions</a></h3><p class="paragraph">The Actions you write should implement <tt class="monospaced">ICruiseAction</tt>. This has one method on it:
+<ul class="star">
+<li> <tt class="monospaced">System.Web.UIControl Execute(ICruiseRequest cruiseRequest)</tt></li>
+</ul><br/>
+<img class="rendericon" src="./icons/emoticons/warning.png" height="16" width="16" align="absmiddle" alt="" border="0"/> We are probably going to change the return type before we consider the Dashboard API final.</p>The responsibilty of an Action&#039;s Execute method is &#039;Given a request, generate a response&#039;. The response is the &#039;main panel&#039; part of the Dashboard&#039;s UI.<p class="paragraph"><h3 class="heading3"><a name="DevelopingWebDashboardPlugins-Definingdependencies"> Defining dependencies</a></h3></p>The CruiseControl.NET Web Dashboard uses a <a href="http://www.martinfowler.com/articles/injection.html" title="Visit page outside Confluence">Constructor Dependency Injection</a> (<b class="strong">CDI</b>) pattern to enable classes to define what types they are dependent on. The Dashboard API has a number of types you can depend upon which can do things like return you the currently viewed build log. You can also specify dependencies to your own types. It is recommended that you use interfaces to define responsibilities.<p class="paragraph">The Dashboard&#039;s CDI implementation does not currently allow for runtime configuration. It will use sensible defaults where available. We plan on adding more configuration later.</p><h3 class="heading3"><a name="DevelopingWebDashboardPlugins-Howtostart"> How to start</a></h3><p class="paragraph">To implement your own actions, its probably best to first look at the source code for the Dashboard&#039;s own plugins. These are available in the <tt class="monospaced">ThoughtWorks.CruiseControl.WebDashboard.Plugins</tt> Namespace.</p><h2 class="heading2"><a name="DevelopingWebDashboardPlugins-SupportClass"> Support Class</a></h2><p class="paragraph">Once you&#039;ve written your action(s), your Plugin is almost complete, but you have 2 more interfaces to implement. For simple , single-action, plugins you can just implement these interface on the same class as your action if you want, otherwise they must be implemented on another (single) class.</p>The first interface is <tt class="monospaced">IPlugin</tt>. This contains the following property:<br/>
+
+<ul class="star">
+<li> <tt class="monospaced">TypedAction[] Actions &#123; get; &#125;</tt></li>
+</ul><br/>
+This method specifies all the Actions in your plugin. An Action is specified (in a <tt class="monospaced">TypedAction</tt>) by giving the Type of the Action, and also a (unique) Action Name that will be used by the Web Framework&#039;s controller to route user requests. Action Names should just include alpha-numberic characters (i.e. only a-z, A-Z, and 0-9).<p class="paragraph">The second interface is <tt class="monospaced">IPluginLinkRenderer</tt>. This has 2 properties:</p><ul class="star">
+<li> <tt class="monospaced">LinkDescription &#123; get; &#125;</tt> &#8211; Specifies the text that appears in the Dashboard UI to link to this plugin</li>
+<li> <tt class="monospaced">LinkActionName &#123; get; &#125;</tt> &#8211; The intial Action to link to from the Dashboard (as specified in the IPlugin implementation)</li>
+</ul><br/>
+Again, for both of these look at existing implementations to see how CruiseControl.NET defines its own plugins.<p class="paragraph"><h2 class="heading2"><a name="DevelopingWebDashboardPlugins-DeployingyourPlugin"> Deploying your Plugin</a></h2></p>To deploy your plugin, just copy its assembly to the <tt class="monospaced">bin</tt> folder of the Dashboard, and then follow the plugin configuration instructions on the <a href="Web Dashboard Reporting Features.html" title="Web Dashboard Reporting Features">Web Dashboard Reporting Features</a> page. Make sure you set the <tt class="monospaced">assemblyFileName</tt> correctly.
+
+				    
+                    			    </td>
+		    </tr>
+	    </table>
+	    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+			<tr>
+				<td height="12" background="border/border_bottom.gif"><img src="border/spacer.gif" width="1" height="1" border="0"/></td>
+			</tr>
+		    <tr>
+			    <td align="center"><font color="grey">Copyright(c) 2004 ThoughtWorks, Inc. All Rights Reserved</font></td>
+		    </tr>
+	    </table>
+    </body>
+</html>

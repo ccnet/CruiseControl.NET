@@ -1,0 +1,51 @@
+<html>
+    <head>
+        <title>CruiseControl.NET : ForceBuildPublisher</title>
+	    <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">	    
+    </head>
+
+    <body>
+	    <table class="pagecontent" border="0" cellpadding="0" cellspacing="0" width="100%" bgcolor="#ffffff">
+		    <tr>
+			    <td valign="top" class="pagebody">
+				    <div class="pageheader">
+					    <span class="pagetitle">
+                            CruiseControl.NET : ForceBuildPublisher
+                                                    </span>
+				    </div>
+				    <div class="pagesubheading">
+					    This page last changed on Nov 25, 2004 by <font color="#0050B2">orogers</font>.
+				    </div>
+
+				    <p class="paragraph">The ForceBuildPublisher is used to force a build on a local or remote build server.  It uses .NET Remoting to invoke a forced build on the CruiseControl.NET server at the specified URI.  The ForceBuildPublisher is a great way to help <a href="Splitting the build.html" title="Splitting the build">split the build</a>.</p><h4 class="heading4"><a name="ForceBuildPublisher-ConfigurationExample"> Configuration Example</a></h4>
+
+<div class="code"><div class="codeContent">
+<pre><span class="xml&#45;tag">&lt;publishers&gt;</span>&#10;    <span class="xml&#45;tag">&lt;forcebuild&gt;</span>&#10;        <span class="xml&#45;tag">&lt;project&gt;</span>AcceptanceTestProject<span class="xml&#45;tag">&lt;/project&gt;</span>&#10;        <span class="xml&#45;tag">&lt;serverUri&gt;</span>tcp://buildserver2:21234/CruiseManager.rem<span class="xml&#45;tag">&lt;/serverUri&gt;</span>&#10;    <span class="xml&#45;tag">&lt;/forcebuild&gt;</span>&#10;<span class="xml&#45;tag">&lt;/publishers&gt;</span></pre>
+</div></div>
+<p class="paragraph"><h4 class="heading4"><a name="ForceBuildPublisher-ConfigurationElements%3A"> Configuration Elements:</a></h4></p><table class="wikitable">
+<tr>
+<th> Node </th><th> Description </th><th> Type </th><th> Required </th><th> Default </th>
+</tr><tr>
+<td> project </td><td> The CCNet project to force to build </td><td> string </td><td> true </td><td> n/a </td>
+</tr><tr>
+<td> serverUri </td><td> The URI for the local or remote server managing the project to build.  The default value is the default URI for the local build server. </td><td> string </td><td> false </td><td> tcp://localhost:21234/CruiseManager.rem </td>
+</tr><tr>
+<td> integrationStatus </td><td> The condition determining whether or not the remoting call should be made. The default value is &quot;Success&quot; indicating that the specified build will be forced if the current build was successful.  Other legal values are &quot;Exception&quot; or &quot;Failure&quot;. </td><td> string </td><td> false </td><td> Success </td>
+</tr>
+</table>
+
+				    
+                    			    </td>
+		    </tr>
+	    </table>
+	    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+			<tr>
+				<td height="12" background="border/border_bottom.gif"><img src="border/spacer.gif" width="1" height="1" border="0"/></td>
+			</tr>
+		    <tr>
+			    <td align="center"><font color="grey">Copyright(c) 2004 ThoughtWorks, Inc. All Rights Reserved</font></td>
+		    </tr>
+	    </table>
+    </body>
+</html>

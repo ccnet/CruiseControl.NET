@@ -386,6 +386,9 @@ textarea, textarea.editor {
     color: #999999;
 	margin: 0px;
 }
+.spacenametitle img {
+  margin: 0 0 -4px 0;
+}
 .spacenametitle a {
     text-decoration: none;
     color: #999999;
@@ -677,27 +680,27 @@ a.createlink {
 }
 
 .previewBoxTop {
-	background-color: #fcc;
+	background-color: #f0f0f0;
     border-width: 1px 1px 0px 1px;
     border-style: solid;
-    border-color: #c00;
+    border-color: #3c78b5;
     padding: 5px;
     margin: 5px 0px 0px 0px;
     text-align: center;
 }
 .previewContent {
     background-color: #fff;
- 	border-color: #c00;
+ 	border-color: #3c78b5;
 	border-width: 0px 1px 0px 1px;
 	border-style: solid;
 	padding: 10px;
 	margin: 0px;
 }
 .previewBoxBottom {
-	background-color: #fcc;
+	background-color: #f0f0f0;
     border-width: 0px 1px 1px 1px;
     border-style: solid;
-    border-color: #c00;
+    border-color: #3c78b5;
     padding: 5px;
     margin: 0px 0px 5px 0px;
     text-align: center;
@@ -918,13 +921,32 @@ color: black;
     padding:2px;
 }
 
-.blogcalendar caption {
-    font-family:palatino, georgia, times new roman, serif;
-    font-size:small;
+
+table.blogcalendar {
+    border: 1px solid #3c78b5;
+}
+
+.blogcalendar th.calendarhead {
+    font-size:x-small;
     font-weight:bold;
     padding:2px;
-    letter-spacing: .3em;
     text-transform:uppercase;
+    background-color: #3c78b5;
+    color: #ffffff;
+    letter-spacing: .3em;
+    text-transform: uppercase;
+}
+
+.blogcalendar th {
+    font-size:x-small;
+    font-weight:bold;
+    padding:2px;
+    background-color:#f0f0f0;
+}
+
+.blogcalendar td {
+    font-size:x-small;
+    font-weight:normal;
 }
 
 .searchGroup { padding: 0 0 10px 0; background: #f0f0f0; }
@@ -937,8 +959,26 @@ color: black;
     border-bottom: #bbb; border-width: 0 0 1px 0; border-style: solid; font-size: 16px; text-align: left;
 }
 .permissionTab {
-    border-width: 0 0 0 1px; border-style: solid; background: #3c78b5; color: white;
+    border-width: 0 0 0 1px; border-style: solid; background: #3c78b5; color: #ffffff; font-size: 10px;
+}
+.permissionSuperTab {
+    border-width: 0 0 0 1px; border-style: solid; background: #003366; color: #ffffff;
 }
 .permissionCell {
     border-left: #bbb; border-width: 0 0 0 1px; border-style: solid;
 }
+
+/* warning panel */
+.warningPanel { background: #FFFFCE; border:#F0C000 1px solid; padding: 8px; margin: 10px; }
+
+/* side menu highlighting (e.g. space content screen) */
+.optionPadded { padding: 2px; }
+.optionSelected { background-color: #ffffcc; padding: 2px; border: 1px solid #ddd; margin: -1px; }
+.optionSelected a { font-weight: bold; text-decoration: none; color: black; }
+
+/* information macros */
+.noteMacro { border-style: solid; border-width: 1px; border-color: #F0C000; background-color: #FFFFCE; }
+.warningMacro { border-style: solid; border-width: 1px; border-color: #c00; background-color: #fcc; }
+.infoMacro { border-style: solid; border-width: 1px; border-color: #3c78b5; background-color: #D8E4F1; }
+.tipMacro { border-style: solid; border-width: 1px; border-color: #090; background-color: #dfd; }
+.informationMacroPadding { padding: 5px 0 0 5px; }

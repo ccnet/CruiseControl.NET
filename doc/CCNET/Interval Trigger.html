@@ -1,0 +1,51 @@
+<html>
+    <head>
+        <title>CruiseControl.NET : Interval Trigger</title>
+	    <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">	    
+    </head>
+
+    <body>
+	    <table class="pagecontent" border="0" cellpadding="0" cellspacing="0" width="100%" bgcolor="#ffffff">
+		    <tr>
+			    <td valign="top" class="pagebody">
+				    <div class="pageheader">
+					    <span class="pagetitle">
+                            CruiseControl.NET : Interval Trigger
+                                                    </span>
+				    </div>
+				    <div class="pagesubheading">
+					    This page last changed on Jan 13, 2005 by <font color="#0050B2">mroberts</font>.
+				    </div>
+
+				    <p class="paragraph">The Interval Trigger is used to specify that an integration should be run periodically, after a certain amount of time. By default, an integration will only be triggered if modifications have been detected since the last integration.  The trigger can also be configured to force a build even if no changes have occurred to source control.</p><h4 class="heading4"><a name="IntervalTrigger-Examples"> Examples</a></h4><p class="paragraph">Minimalist example:
+<div class="code"><div class="codeContent">
+<pre><span class="xml&#45;tag">&lt;intervalTrigger /&gt;</span></pre>
+</div></div></p>Full example:
+<div class="code"><div class="codeContent">
+<pre><span class="xml&#45;tag">&lt;intervalTrigger seconds=<span class="xml&#45;quote">&quot;30&quot;</span> buildCondition=<span class="xml&#45;quote">&quot;ForceBuild&quot;</span>/&gt;</span></pre>
+</div></div><p class="paragraph"><h4 class="heading4"><a name="IntervalTrigger-ConfigurationElements%3A"> Configuration Elements:</a></h4></p><table class="wikitable">
+<tr>
+<th> Node </th><th> Description </th><th> Type </th><th> Required</th><th> Default </th>
+</tr><tr>
+<td> seconds </td><td> The number of seconds after an integration cycle completes before triggering the next integration cycle. </td><td> int </td><td> false </td><td> 60 </td>
+</tr><tr>
+<td> buildCondition </td><td> The condition that should be used to launch the integration.  By default, this value is <b class="strong">IfModificationsExist</b>, meaning that an integration will only be triggered if modifications have been detected. Set this attribute to <b class="strong">ForceBuild</b> in order to ensure that a build should be launched regardless of whether new modifications are detected. </td><td> string </td><td> false </td><td> IfModificationsExist </td>
+</tr>
+</table><br/>
+<img class="rendericon" src="./icons/emoticons/warning.png" height="16" width="16" align="absmiddle" alt="" border="0"/> NOTE: this class replaces the <b class="strong">PollingIntervalTrigger</b> and the <b class="strong">ForceBuildIntervalTrigger</b>.
+
+				    
+                    			    </td>
+		    </tr>
+	    </table>
+	    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+			<tr>
+				<td height="12" background="border/border_bottom.gif"><img src="border/spacer.gif" width="1" height="1" border="0"/></td>
+			</tr>
+		    <tr>
+			    <td align="center"><font color="grey">Copyright(c) 2004 ThoughtWorks, Inc. All Rights Reserved</font></td>
+		    </tr>
+	    </table>
+    </body>
+</html>

@@ -1,0 +1,51 @@
+<html>
+    <head>
+        <title>CruiseControl.NET : Schedule Trigger</title>
+	    <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">	    
+    </head>
+
+    <body>
+	    <table class="pagecontent" border="0" cellpadding="0" cellspacing="0" width="100%" bgcolor="#ffffff">
+		    <tr>
+			    <td valign="top" class="pagebody">
+				    <div class="pageheader">
+					    <span class="pagetitle">
+                            CruiseControl.NET : Schedule Trigger
+                                                    </span>
+				    </div>
+				    <div class="pagesubheading">
+					    This page last changed on Dec 12, 2004 by <font color="#0050B2">orogers</font>.
+				    </div>
+
+				    <p class="paragraph">The Schedule Trigger is used to specify that an integration should be run at a certain time on certain days. By default, an integration will only be triggered if modifications have been detected since the last integration.  The trigger can be configured to force a build even if have occurred to source control.</p><h4 class="heading4"><a name="ScheduleTrigger-Example"> Example</a></h4>
+
+<div class="code"><div class="codeContent">
+<pre><span class="xml&#45;tag">&lt;scheduleTrigger time=<span class="xml&#45;quote">&quot;23:30&quot;</span> buildCondition=<span class="xml&#45;quote">&quot;ForceBuild&quot;</span>&gt;</span>&#10;        <span class="xml&#45;tag">&lt;weekDays&gt;</span>&#10;            <span class="xml&#45;tag">&lt;weekDay&gt;</span>Monday<span class="xml&#45;tag">&lt;/weekDay&gt;</span>&#10;        <span class="xml&#45;tag">&lt;/weekDays&gt;</span>&#10;    <span class="xml&#45;tag">&lt;/scheduleTrigger&gt;</span></pre>
+</div></div><p class="paragraph"><h4 class="heading4"><a name="ScheduleTrigger-ConfigurationElements%3A"> Configuration Elements:</a></h4></p><table class="wikitable">
+<tr>
+<th> Node </th><th> Description </th><th> Type </th><th> Required</th><th> Default </th>
+</tr><tr>
+<td> time </td><td> The time of day that the build should run at.  The time should be specified in a locale-specific format (ie. H:mm am/pm is acceptable for US locales.) </td><td> string </td><td> true </td><td> n/a </td>
+</tr><tr>
+<td> weekDays </td><td> The week days on which the build should be run (eg. Monday, Tuesday).  By default, all days of the week are set. </td><td> elements </td><td> false </td><td> Monday-Sunday </td>
+</tr><tr>
+<td> buildCondition </td><td> The condition that should be used to launch the integration.  By default, this value is <b class="strong">IfModificationsExist</b>, meaning that an integration will only be triggered if modifications have been detected. Set this attribute to <b class="strong">ForceBuild</b> in order to ensure that a build should be launched regardless of whether new modifications are detected. </td><td> string </td><td> false </td><td> IfModificationsExist </td>
+</tr>
+</table><br/>
+<img class="rendericon" src="./icons/emoticons/warning.png" height="16" width="16" align="absmiddle" alt="" border="0"/> NOTE: this class replaces the <b class="strong">PollingScheduleTrigger</b> and the <b class="strong">ForceBuildScheduleTrigger</b>.  Use the <b class="strong">buildCondition</b> property if you want to run a scheduled forced build.
+
+				    
+                    			    </td>
+		    </tr>
+	    </table>
+	    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+			<tr>
+				<td height="12" background="border/border_bottom.gif"><img src="border/spacer.gif" width="1" height="1" border="0"/></td>
+			</tr>
+		    <tr>
+			    <td align="center"><font color="grey">Copyright(c) 2004 ThoughtWorks, Inc. All Rights Reserved</font></td>
+		    </tr>
+	    </table>
+    </body>
+</html>
