@@ -46,17 +46,12 @@ a:hover { color:#FC0; }
 .unittests-data { font-size:9px; color:#000; }
 .unittests-error { font-size:9px; color:#F30; white-space:pre; }
 
-.javadoc-sectionheader { background-color:#006; color:#FFF; }
-.javadoc-oddrow { background-color:#CCC; }
-.javadoc-data { font-size:9px; color:#000; }
-.javadoc-error { font-size:9px; color:#F30; white-space:pre; }
-.javadoc-warning { font-size:9px; color:#000; white-space:pre; }
-
 .section-table { margin-top:10px; }
 
 .fxcop-summary-sectionheader { background-color:#006; color:#FFF; }
 .fxcop-summary-oddrow { background-color:#F0F7FF; }
 .fxcop-summary-data { font-size:9px; color:#000; }
 
-.warning { color:orange }
+.warning { color: darkorange; }
 .error { color:red }
+.pluginLinks { float:right; margin-top:10px; padding:10px; background-color:#000066; color:White }

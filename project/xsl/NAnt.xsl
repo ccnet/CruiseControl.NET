@@ -3,35 +3,50 @@
     <xsl:output method="html"/>
 
     <xsl:template match="/">
-		<xsl:apply-templates select="//buildresults" />
+		<xsl:variable name="buildresults" select="//buildresults" />
+		<xsl:choose>
+			<xsl:when test="count($buildresults) > 0">
+				<xsl:choose>
+					<xsl:when test="$buildresults/failure">
+						<h2>Build Failed (<a href="#failure">click to see error</a>)</h2>
+					</xsl:when>
+					<xsl:otherwise>
+						<h2>Build Succeeded</h2>
+					</xsl:otherwise>
+				</xsl:choose>
+				<xsl:apply-templates select="$buildresults" />
+			</xsl:when>
+			<xsl:otherwise>
+				<h2>Log does not contain any Xml output from NAnt.</h2>
+				<p>Please make sure that NAnt is executed using the XmlLogger (use the argument: <b>-logger:NAnt.Core.XmlLogger</b>).  </p>
+			</xsl:otherwise>
+		</xsl:choose>
 	</xsl:template>
 	
 	<xsl:template match="buildresults">
-		<xsl:apply-templates select="message"/>
-		<xsl:apply-templates select="task"/>
-		<xsl:apply-templates select="target"/>
+		<hr/>
+		<xsl:apply-templates />
 	</xsl:template>
 	
 	<xsl:template match="target">
 		<p>
 		<xsl:value-of select="@name"/>:
 		</p>
-		<xsl:apply-templates select="message"/>
-		<xsl:apply-templates select="task"/>
+		<xsl:apply-templates />
 	</xsl:template>
 	
 	<xsl:template match="task">
-		<xsl:if test="count(message) > 0">
-			<xsl:apply-templates select="message"/>
-		</xsl:if>
-		<xsl:apply-templates select="target"/>	
+		<xsl:apply-templates />	
 	</xsl:template>
 	
 	<xsl:template match="message">
 		<span>
-			<xsl:if test="@level='Error' or @level='Warning'">
-				<xsl:attribute name="style">color:#F30</xsl:attribute>
+			<xsl:if test="@level='Error'">
+				<xsl:attribute name="class">error</xsl:attribute>
 			</xsl:if>
+			<xsl:if test="@level='Warning'">
+				<xsl:attribute name="class">warning</xsl:attribute>
+			</xsl:if>			
 			<xsl:if test="../@name != ''">
 				[<xsl:value-of select="../@name"/>] 
 			</xsl:if>
@@ -39,4 +54,38 @@
 		</span>
 		<br/>
 	</xsl:template>
+	
+	<xsl:template match="failure">
+		<a name="failure">
+			<xsl:apply-templates />
+		</a>
+	</xsl:template>
+	
+	<xsl:template match="builderror">
+		<br/>
+		<span class="error">Build Error: <xsl:value-of select="type"/><br/>
+		<xsl:value-of select="message"/><br/>		
+		<xsl:apply-templates select="location" />
+		<pre>
+			<xsl:value-of select="stacktrace" />
+		</pre>
+		</span>		
+	</xsl:template>
+	
+	<xsl:template match="internalerror">
+		<br/>
+		<span class="error">Internal Error: <xsl:value-of select="type"/><br/>
+		<xsl:value-of select="message"/><br/>		
+		<xsl:apply-templates select="location" />
+		<pre>
+			<xsl:value-of select="stacktrace" />
+		</pre>
+		</span>		
+	</xsl:template>
+	
+	<xsl:template match="location">
+		in <xsl:value-of select="filename"/>
+		line: <xsl:value-of select="linenumber"/>
+		col: <xsl:value-of select="columnnumber"/><br/>
+	</xsl:template>	
 </xsl:stylesheet>
