@@ -17,7 +17,7 @@
                 DelaySign = "false"
                 OutputType = "Library"
                 PreBuildEvent = ""
-                PostBuildEvent = 'copy "$(ProjectDir)test\test.config" "$(TargetPath).config"&#xd;&#xa;mkdir "$(TargetDir)xsl"&#xd;&#xa;copy "$(SolutionDir)\xsl\*.*" "$(TargetDir)xsl"'
+                PostBuildEvent = 'mkdir "$(TargetDir)xsl"&#xd;&#xa;copy "$(SolutionDir)\xsl\*.*" "$(TargetDir)xsl"'
                 RootNamespace = "ThoughtWorks.CruiseControl.Core"
                 RunPostBuildEvent = "OnBuildSuccess"
                 StartupObject = ""
@@ -866,10 +866,6 @@
                     RelPath = "test\SimpleBuildFile.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "test\test.config"
-                    BuildAction = "None"
                 />
                 <File
                     RelPath = "test\TestLogs.cs"
