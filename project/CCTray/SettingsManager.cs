@@ -21,17 +21,30 @@ namespace ThoughtWorks.CruiseControl.Remote.Monitor
 
 		#region Settings file name location
 
-		const string SettingsFileName = "cctray-settings.xml";
+		private const string DEFAULT_SETTINGS_FILE = "cctray-settings.xml";
+
+		static private string _settingsFileName = DEFAULT_SETTINGS_FILE;
+
+		/// <summary>
+		/// The filename of the settings file to be used by the executing application.
+		/// </summary>
+		static public string SettingsFileName
+		{
+			set
+			{
+				_settingsFileName = value;
+			}
+		}
 
 		/// <summary>
 		/// Gets the absolute path and filename to the settings file to be used
 		/// by the executing application.
 		/// </summary>
-		static public string SettingsPathAndFileName
+		static private string SettingsPathAndFileName
 		{
 			get
 			{
-				return Path.Combine(AppDomain.CurrentDomain.BaseDirectory, SettingsFileName);
+				return Path.Combine(AppDomain.CurrentDomain.BaseDirectory, _settingsFileName);
 			}
 		}
 

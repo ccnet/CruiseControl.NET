@@ -198,8 +198,13 @@ namespace ThoughtWorks.CruiseControl.Remote.Monitor
 		/// The main entry point for the application.
 		/// </summary>
 		[STAThread]
-		static void Main()
+		static void Main(String[] args)
 		{
+			if (args.Length > 0)
+			{
+				SettingsManager.SettingsFileName = args[0];
+			}
+			
 			Application.Run(new SystemTrayMonitor());
 		}
 
