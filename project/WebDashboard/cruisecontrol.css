@@ -107,6 +107,10 @@ a:hover { color:#FC0; }
 .build-passed-link { color:Green; text-decoration:none; }
 .build-failed-link { color:Red; text-decoration:none; }
 
+.log
+{
+	overflow: auto;
+}
 
 .wholepage
 {

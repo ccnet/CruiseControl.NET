@@ -18,7 +18,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.ViewServerLog
 		public Control Execute(ICruiseRequest request)
 		{
 			HtmlGenericControl control = new HtmlGenericControl("p");
-			control.InnerHtml = string.Format("<pre>{0}</pre>", farmService.GetServerLog(request.ServerName));
+			control.InnerHtml = string.Format(@"<pre class=""log"">{0}</pre>", farmService.GetServerLog(request.ServerName));
 			return control;
 		}
 	}
