@@ -1,0 +1,162 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>NAnt.VSNetTasks</name>
+    </assembly>
+    <members>
+        <member name="T:NAnt.VSNet.Tasks.SolutionTask">
+            <summary>
+            Compiles VS.NET solutions (or sets of projects), automatically determining project dependencies from inter-project references.
+            </summary>
+            <remarks>
+            <para>
+            This task will analyze each of the given .csproj or .vbproj files and
+            build them in the proper order.  It supports reading solution files, as well
+            as enterprise template projects.
+            </para>
+            <para>
+            This task also supports the model of referencing projects by their
+            output filenames, rather than referencing them inside the solution.  It will
+            automatically detect the existance of a file reference and convert it to a 
+            project reference.  For example, if project A references the file in the
+            release output directory of project B, the solution task will automatically convert
+            this to a project dependency on project B and will reference the appropriate configuration output
+            directory at the final build time (ie: reference the debug version of B if the solution is built as debug).
+            </para>
+            </remarks>
+            <example>
+              <para>Compiles all of the projects in <c>test.sln</c>, in relase mode, in the proper order.</para>
+              <code>
+                <![CDATA[
+               <solution configuration="release" solutionfile="test.sln">        
+               </solution>
+                ]]>
+              </code>
+              <para>Compiles all of the projects in <c>projects.txt</c>, in the proper order.</para>
+              <code>
+                <![CDATA[
+               <solution configuration="release">        
+                   <projects>
+                       <includesList name="projects.txt" />
+                   </projects>
+               </solution>
+                ]]>
+              </code>
+              <para>Compiles projects A, B and C, using the output of project X as a reference.</para>
+              <code>
+                <![CDATA[
+               <solution configuration="release">        
+                   <projects>
+                       <includes name="A\A.csproj" />
+                       <includes name="B\b.vbproj" />
+                       <includes name="C\c.csproj" />
+                   </projects>
+                <referenceprojects>
+                    <includes name="X\x.csproj" />
+                </referenceprojects>
+               </solution>
+                ]]>
+              </code>
+            </example>
+        </member>
+        <member name="P:NAnt.VSNet.Tasks.SolutionTask.Projects">
+            <summary>
+            The names of the projects to build.
+            </summary>
+            <remarks>
+            <para>
+            Optional.
+            </para>
+            </remarks>
+        </member>
+        <member name="P:NAnt.VSNet.Tasks.SolutionTask.ReferenceProjects">
+            <summary>
+            The names of the projects to scan, but not build.
+            </summary>
+            <remarks>
+            <para>
+            Optional.  These projects are used to resolve project references.  These projects are
+            generally external to the solution being built.  References to these project's output files
+            are converted to use the appropriate solution configuration at build time.
+            
+            </para>
+            </remarks>
+        </member>
+        <member name="P:NAnt.VSNet.Tasks.SolutionTask.SolutionFile">
+            <summary>
+            The name of the VS.NET solution file to build.
+            </summary>
+            <remarks>
+            <para>
+            Optional, can use <![CDATA[<projects>]]> list instead.
+            </para>
+            </remarks>
+        </member>
+        <member name="P:NAnt.VSNet.Tasks.SolutionTask.Configuration">
+            <summary>
+            The name of the solution configuration to build.
+            </summary>
+            <remarks>
+            <para>
+            Generally <c>release</c> or <c>debug</c>.  Not case-sensitive.
+            </para>
+            </remarks>
+        </member>
+        <member name="T:NAnt.VSNet.Tasks.ConfigurationSettings">
+            <summary>
+            Summary description for ConfigurationSettings.
+            </summary>
+        </member>
+        <member name="T:NAnt.VSNet.Tasks.Project">
+            <summary>
+            Summary description for Project.
+            </summary>
+        </member>
+        <member name="M:NAnt.VSNet.Tasks.Project.Log(NAnt.Core.Level,System.String)">
+            <summary>
+            Logs a message with the given priority.
+            </summary>
+            <param name="messageLevel">The message priority at which the specified message is to be logged.</param>
+            <param name="message">The message to be logged.</param>
+            <remarks>
+            The actual logging is delegated to the task.
+            </remarks>
+        </member>
+        <member name="M:NAnt.VSNet.Tasks.Project.Log(NAnt.Core.Level,System.String,System.Object[])">
+            <summary>
+            Logs a message with the given priority.
+            </summary>
+            <param name="messageLevel">The message priority at which the specified message is to be logged.</param>
+            <param name="message">The message to log, containing zero or more format items.</param>
+            <param name="args">An <see cref="T:System.Object"/> array containing zero or more objects to format.</param>
+            <remarks>
+            The actual logging is delegated to the task.
+            </remarks>
+        </member>
+        <member name="T:NAnt.VSNet.Tasks.ProjectSettings">
+            <summary>
+            Summary description for ProjectSettings.
+            </summary>
+        </member>
+        <member name="T:NAnt.VSNet.Tasks.Reference">
+            <summary>
+            Summary description for Reference.
+            </summary>
+        </member>
+        <member name="T:NAnt.VSNet.Tasks.Resource">
+            <summary>
+            Summary description for Resouce.
+            </summary>
+        </member>
+        <member name="T:NAnt.VSNet.Tasks.Solution">
+            <summary>
+            Summary description for Solution.
+            </summary>
+        </member>
+        <member name="T:NAnt.VSNet.Tasks.WebDavClient">
+            <summary>
+            Summary description for WebDavClient.
+            </summary>
+        </member>
+    </members>
+</doc>

@@ -1,0 +1,160 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>NAnt.SourceControlTasks</name>
+    </assembly>
+    <members>
+        <member name="T:NAnt.SourceControl.Tasks.AbstractCvsTask">
+            <summary>Performs cvs client commands on a cvs repository.</summary>
+            <remarks>
+              <para>Checks out the specified module to the required directory.</para>
+              <para>Takes a password parameter as an attribute.</para>
+            </remarks>
+                    
+            <example>
+              <para>Checkout nant.</para>
+              <code>&lt;cvs destination="c:\src\nant\" cvsroot=":pserver:anonymous@cvs.sourceforge.net:/cvsroot/nant" password="" module="nant" /&gt;</code>
+              <para>Checkout your favorite build tool to the specified directory.</para>
+              <code>
+            <![CDATA[
+            <cvs destination="c:\src\nant\" cvsroot=":pserver:anonymous@cvs.sourceforge.net:/cvsroot/nant" password="" module="nant"/>
+            ]]>
+              </code>
+            </example>
+        </member>
+        <member name="M:NAnt.SourceControl.Tasks.AbstractCvsTask.#ctor">
+            <summary>
+            Create a new abstract cvs task.
+            </summary>
+        </member>
+        <member name="M:NAnt.SourceControl.Tasks.AbstractCvsTask.ExecuteTask">
+            <summary>
+            Exectute the cvs command specified.
+            </summary>
+        </member>
+        <member name="M:NAnt.SourceControl.Tasks.AbstractCvsTask.validate">
+            <summary>
+            Validates that the required object are not null.
+            
+            <throws>NullReferenceException if any of the required
+                fields is null.</throws>
+            </summary>
+        </member>
+        <member name="M:NAnt.SourceControl.Tasks.AbstractCvsTask.CreateCommand">
+            <summary>
+            Creates the cvs command object to execute against the 
+                specified repository.
+            </summary>
+            <returns>Command to execute against the repository.</returns>
+        </member>
+        <member name="P:NAnt.SourceControl.Tasks.AbstractCvsTask.Cvsroot">
+            <summary>
+            Cvsroot Variable.
+            </summary>
+        </member>
+        <member name="P:NAnt.SourceControl.Tasks.AbstractCvsTask.Module">
+            <summary>
+            The module to check out.
+            </summary>
+        </member>
+        <member name="P:NAnt.SourceControl.Tasks.AbstractCvsTask.Destination">
+            <summary>
+            Destination directory for the checked out/ updated files.
+            </summary>
+        </member>
+        <member name="P:NAnt.SourceControl.Tasks.AbstractCvsTask.Password">
+            <summary>
+            Set the password for logging in.  
+            </summary>
+        </member>
+        <member name="P:NAnt.SourceControl.Tasks.AbstractCvsTask.Root">
+            <summary>
+            The Cvsroot of the repository.
+            </summary>
+        </member>
+        <member name="P:NAnt.SourceControl.Tasks.AbstractCvsTask.Working">
+            <summary>
+            Working Directory to place checked out source in.
+            </summary>
+        </member>
+        <member name="P:NAnt.SourceControl.Tasks.AbstractCvsTask.Connection">
+            <summary>
+            Connection object that is used to connect to the repository.
+            </summary>
+        </member>
+        <member name="P:NAnt.SourceControl.Tasks.AbstractCvsTask.Command">
+            <summary>
+            Command to execute, command must implement
+                <see cref="T:ICSharpCode.SharpCvsLib.Commands.ICommand"/>
+            </summary>
+        </member>
+        <member name="T:NAnt.SourceControl.Tasks.CheckoutTask">
+            <summary>
+                <remarks>
+                    <para>Checks out the specified module to the required directory.</para>
+                    <para>Takes a password parameter as an attribute.</para>
+                </remarks>
+                    
+                <example>
+                    <para>Checkout nant.</para>
+                        <code>&lt;cvs-checkout destination="c:\src\nant\" cvsroot=":pserver:anonymous@cvs.sourceforge.net:/cvsroot/nant" password="" module="nant" /&gt;</code>
+                    <para>Checkout your favorite build tool to the specified directory.</para>
+                        <code>
+                            <![CDATA[
+                            <cvs-checkout destination="c:\src\nant\" cvsroot=":pserver:anonymous@cvs.sourceforge.net:/cvsroot/nant" password="" module="nant"/>
+                            ]]>
+                        </code>
+                </example>
+            </summary>
+        </member>
+        <member name="M:NAnt.SourceControl.Tasks.CheckoutTask.#ctor">
+            <summary>
+            Public constructor.
+            </summary>
+        </member>
+        <member name="M:NAnt.SourceControl.Tasks.CheckoutTask.CreateCommand">
+            <summary>
+            Creates the checkout command.
+            </summary>
+            <returns>An instance of the checkout command.</returns>
+        </member>
+        <member name="T:NAnt.SourceControl.Tasks.UpdateTask">
+            <summary>
+                <remarks>
+                    <para>Updates the module in the specified working directory.</para>
+                </remarks>
+                    
+                <example>
+                    <para>Update nant.</para>
+                        <code>&lt;cvs-update destination="c:\src\nant\" cvsroot=":pserver:anonymous@cvs.sourceforge.net:/cvsroot/nant" password="" module="nant" /&gt;</code>
+                    <para>Checkout your favorite build tool to the specified directory.</para>
+                        <code>
+                            <![CDATA[
+                            <cvs-update destination="c:\src\nant\" cvsroot=":pserver:anonymous@cvs.sourceforge.net:/cvsroot/nant" password="" module="nant"/>
+                            ]]>
+                        </code>
+                </example>
+            </summary>
+        </member>
+        <member name="M:NAnt.SourceControl.Tasks.UpdateTask.#ctor">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:NAnt.SourceControl.Tasks.UpdateTask.CreateCommand">
+            <summary>
+            Creates an instance of the update command.
+            </summary>
+            <returns>An instance of the update command.</returns>
+        </member>
+        <member name="M:NAnt.SourceControl.Tasks.UpdateTask.PopulateFolders(ICSharpCode.SharpCvsLib.Misc.WorkingDirectory)">
+            <summary>
+            Create a list of files that need to be compared
+                against the server and then updated.
+            </summary>
+            <param name="workingDirectory">The directory to
+                use in the comparison.
+            </param>
+        </member>
+    </members>
+</doc>

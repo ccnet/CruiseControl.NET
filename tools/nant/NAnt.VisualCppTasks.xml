@@ -1,0 +1,193 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>NAnt.VisualCppTasks</name>
+    </assembly>
+    <members>
+        <member name="T:NAnt.VisualCpp.Tasks.ClTask">
+            <summary>
+            Compiles C/C++ programs using cl, Microsoft's C/C++ compiler.
+            </summary>
+            <remarks>
+              <para>This task is intended for version 13.00.9466 of cl.exe.</para>
+            </remarks>
+            <example>
+              <para>Compiles <c>helloworld.cpp</c> for the Common Language Runtime.</para>
+              <code>
+                <![CDATA[
+            <cl outputdir="build" options="/clr">
+                <sources>
+                    <includes name="helloworld.cpp"/>
+                </sources>
+            </cl>
+                ]]>
+              </code>
+            </example>
+        </member>
+        <member name="M:NAnt.VisualCpp.Tasks.ClTask.NeedsCompiling">
+            <summary>
+            Determines if the sources need compiling.
+            </summary>
+        </member>
+        <member name="M:NAnt.VisualCpp.Tasks.ClTask.ExecuteTask">
+            <summary>
+            Compiles the sources.
+            </summary>
+        </member>
+        <member name="P:NAnt.VisualCpp.Tasks.ClTask.Options">
+            <summary>
+            Options to pass to the compiler.
+            </summary>
+        </member>
+        <member name="P:NAnt.VisualCpp.Tasks.ClTask.OutputDir">
+            <summary>
+            Directory where all output files are placed.
+            </summary>
+        </member>
+        <member name="P:NAnt.VisualCpp.Tasks.ClTask.PchFile">
+            <summary>
+            The name of the precompiled header file.
+            </summary>
+        </member>
+        <member name="P:NAnt.VisualCpp.Tasks.ClTask.Sources">
+            <summary>
+            The list of files to compile.
+            </summary>
+        </member>
+        <member name="P:NAnt.VisualCpp.Tasks.ClTask.Includes">
+            <summary>
+            The list of directories in which to search for include files.
+            </summary>
+        </member>
+        <member name="P:NAnt.VisualCpp.Tasks.ClTask.ProgramFileName">
+            <summary>
+            Gets the filename of the external program to start.
+            </summary>
+            <value>The filename of the external program.</value>
+        </member>
+        <member name="P:NAnt.VisualCpp.Tasks.ClTask.ProgramArguments">
+            <summary>
+            Gets the command-line arguments for the external program.
+            </summary>
+            <value>
+            The command-line arguments for the external program.
+            </value>
+        </member>
+        <member name="T:NAnt.VisualCpp.Tasks.LibTask">
+            <summary>Run lib.exe, Microsoft's Library Manager.</summary>
+            <example>
+              <para>Create a library.</para>
+              <code>
+            <![CDATA[
+            <lib output="library.lib">
+                <sources>
+                    <includes name="library.obj"/>
+                </sources>
+            </lib>
+            ]]>
+              </code>
+            </example>
+        </member>
+        <member name="M:NAnt.VisualCpp.Tasks.LibTask.ExecuteTask">
+            <summary>
+            Creates the library.
+            </summary>
+        </member>
+        <member name="P:NAnt.VisualCpp.Tasks.LibTask.Options">
+            <summary>
+            Options to pass to the compiler.
+            </summary>
+        </member>
+        <member name="P:NAnt.VisualCpp.Tasks.LibTask.Output">
+            <summary>
+            The output file name.
+            </summary>
+        </member>
+        <member name="P:NAnt.VisualCpp.Tasks.LibTask.Sources">
+            <summary>
+            The list of files to combine into the output file.
+            </summary>
+        </member>
+        <member name="P:NAnt.VisualCpp.Tasks.LibTask.LibDirs">
+            <summary>
+            The list of additional library directories to search.
+            </summary>
+        </member>
+        <member name="P:NAnt.VisualCpp.Tasks.LibTask.ProgramFileName">
+            <summary>
+            Gets the filename of the external program to start.
+            </summary>
+            <value>The filename of the external program.</value>
+        </member>
+        <member name="P:NAnt.VisualCpp.Tasks.LibTask.ProgramArguments">
+            <summary>
+            Gets the command-line arguments for the external program.
+            </summary>
+            <value>
+            The command-line arguments for the external program.
+            </value>
+        </member>
+        <member name="T:NAnt.VisualCpp.Tasks.LinkTask">
+            <summary>Links files using link, Microsoft's Incremental Linker.</summary>
+            <remarks>
+              <para>This task is intended for version 7.00.9466 of link.exe.</para>
+            </remarks>
+            <example>
+              <para>Combine all object files in the current directory into <c>helloworld.exe</c>.</para>
+              <code>
+            <![CDATA[
+            <link output="helloworld.exe">
+                <sources>
+                    <includes name="*.obj"/>
+                </sources>
+            </link>
+            ]]>
+              </code>
+            </example>
+        </member>
+        <member name="M:NAnt.VisualCpp.Tasks.LinkTask.NeedsLinking">
+            <summary>
+            Determines if the output needs linking.
+            </summary>
+        </member>
+        <member name="M:NAnt.VisualCpp.Tasks.LinkTask.ExecuteTask">
+            <summary>
+            Links the sources.
+            </summary>
+        </member>
+        <member name="P:NAnt.VisualCpp.Tasks.LinkTask.Options">
+            <summary>
+            Options to pass to the compiler.
+            </summary>
+        </member>
+        <member name="P:NAnt.VisualCpp.Tasks.LinkTask.Output">
+            <summary>
+            The output file name.
+            </summary>
+        </member>
+        <member name="P:NAnt.VisualCpp.Tasks.LinkTask.Sources">
+            <summary>
+            The list of files to combine into the output file.
+            </summary>
+        </member>
+        <member name="P:NAnt.VisualCpp.Tasks.LinkTask.LibDirs">
+            <summary>
+            The list of additional library directories to search.
+            </summary>
+        </member>
+        <member name="P:NAnt.VisualCpp.Tasks.LinkTask.ProgramFileName">
+            <summary>
+            Gets the filename of the external program to start.
+            </summary>
+            <value>The filename of the external program.</value>
+        </member>
+        <member name="P:NAnt.VisualCpp.Tasks.LinkTask.ProgramArguments">
+            <summary>
+            Gets the command-line arguments for the external program.
+            </summary>
+            <value>
+            The command-line arguments for the external program.
+            </value>
+        </member>
+    </members>
+</doc>

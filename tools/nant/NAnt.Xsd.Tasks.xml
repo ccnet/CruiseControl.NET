@@ -1,0 +1,77 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>NAnt.Xsd.Tasks</name>
+    </assembly>
+    <members>
+        <member name="T:NAnt.Contrib.Tasks.XsdTask">
+            <summary>Compiles an XML Schema into a Microsoft.NET Assembly 
+            containing types that can marshal back and forth from XML elements 
+            and the objects that represent them. Also can create a W3C XML 
+            schema from an existing Microsoft.NET Assembly, XML document, 
+            or an old XDR format schema.</summary>
+            <example>
+              <para>Compile a schema.</para>
+              <code><![CDATA[<xsd schema="MySchema.xsd" element="MyRootElement" 
+                language="CS" namespace="MyCompany.MySchema" outputdir="build\bin" 
+                uri="http://MySchema'sTargetNamespace" />]]></code>
+              <para>Generate a schema from an Assembly.</para>
+              <code><![CDATA[<xsd assembly="MyAssembly.dll" outputdir="build\Schemas" />]]></code>
+              <para>Generate a schema from an XML doc.</para>
+              <code><![CDATA[<xsd xmldoc="MyDoc.xml" outputdir="build\Schemas" />]]></code>
+              <para>Generate a schema from an XDR schema.</para>
+              <code><![CDATA[<xsd xdr="MyOldSchema.xdr" outputdir="build\Schemas" />]]></code>
+            </example>
+        </member>
+        <member name="M:NAnt.Contrib.Tasks.XsdTask.InitializeTask(System.Xml.XmlNode)">
+            <summary>
+            Initializes task and ensures the supplied attributes are valid.
+            </summary>
+            <param name="taskNode">Xml node used to define this task instance.</param>
+        </member>
+        <member name="P:NAnt.Contrib.Tasks.XsdTask.Schema">
+            <summary>XML Schema (.xsd) filename.</summary>
+        </member>
+        <member name="P:NAnt.Contrib.Tasks.XsdTask.Target">
+            <summary>Target of XML Schema compilation. Can be "classes" or "dataset".</summary>
+        </member>
+        <member name="P:NAnt.Contrib.Tasks.XsdTask.Element">
+            <summary>XML element in the Schema to process.</summary>
+        </member>
+        <member name="P:NAnt.Contrib.Tasks.XsdTask.Language">
+            <summary>Language of generated code. 'CS', 'VB', 'JS', 
+            or the fully-qualified name of a class implementing 
+            System.CodeDom.Compiler.CodeDomCompiler. </summary>
+        </member>
+        <member name="P:NAnt.Contrib.Tasks.XsdTask.Namespace">
+            <summary>Microsoft.NET namespace of generated classes.</summary>
+        </member>
+        <member name="P:NAnt.Contrib.Tasks.XsdTask.NoLogo">
+            <summary>Suppresses the banner.</summary>
+        </member>
+        <member name="P:NAnt.Contrib.Tasks.XsdTask.OutputDir">
+            <summary>Output directory in which to place generated files.</summary>
+        </member>
+        <member name="P:NAnt.Contrib.Tasks.XsdTask.Assembly">
+            <summary>Assembly (.dll or .exe) to generate a W3C XML Schema for.</summary>
+        </member>
+        <member name="P:NAnt.Contrib.Tasks.XsdTask.Types">
+            <summary>Types in the assembly for which an XML schema is being created. 
+            If you don't specify this, all types in the assembly will be included.</summary>
+        </member>
+        <member name="P:NAnt.Contrib.Tasks.XsdTask.Uri">
+            <summary>Uri of elements from the Schema to process.</summary>
+        </member>
+        <member name="P:NAnt.Contrib.Tasks.XsdTask.XmlDoc">
+            <summary>XML document to generate a W3C XML Schema for.</summary>
+        </member>
+        <member name="P:NAnt.Contrib.Tasks.XsdTask.Xdr">
+            <summary>XDR schema to generate a W3C XML Schema for.</summary>
+        </member>
+        <member name="P:NAnt.Contrib.Tasks.XsdTask.ProgramArguments">
+            <summary>
+            Arguments of program to execute
+            </summary>
+        </member>
+    </members>
+</doc>
