@@ -1,1 +1,1 @@
-ccnet -remoting:on
+ccnet -remoting:on %*
