@@ -2,6 +2,7 @@
 <P><span id="StatusLabel"><b><font color="#4A3C8C">$forceBuildMessage</font></b></span></P>
 #end
 
+#if ($projectGrid.Count > 0)
 <table cellspacing="0" cellpadding="3" rules="rows" bordercolor="#333399" border="1" id="StatusGrid" bgcolor="White" width="100%">
 	<tr bgcolor="#333399">
 		<td>
@@ -30,7 +31,7 @@
 	<tr bgcolor="Ivory">
 		<td align="Left">
 			<font color="Black">
-				<a href="$projectGridRow.WebURL">$projectGridRow.Name</a>
+				<a href="$projectGridRow.Url">$projectGridRow.Name</a>
 			</font>
 		</td>
 		<td align="Center">
@@ -58,6 +59,27 @@
 	</tr>
 	#end
 </table>
+#end
+
+#if ($exceptions.Length > 0)
+<P>
+<span id="ExceptionTitleLabel">There were exceptions connecting to the following servers:</span>
+</P>
+<table cellspacing="0" cellpadding="4" rules="all" bordercolor="#CC9966" border="1" id="ExceptionGrid" bgcolor="White">
+	<tr bgcolor="#990000">
+		<th><font color="#FFFFCC"><b>Server Name</b></font></th>
+		<th><font color="#FFFFCC"><b>Url</b></font></th>
+		<th><font color="#FFFFCC"><b>Message</b></font></th>
+	</tr>
+	#foreach ($exception in $exceptions)
+	<tr bgcolor="White">
+		<td><font color="#330099">$exception.ServerName</font></td>
+		<td><font color="#330099">$exception.Url</font></td>
+		<td><font color="#330099">$exception.Message</font></td>
+	</tr>
+	#end
+</table>
+#end
 
 <P/>
 <br/>

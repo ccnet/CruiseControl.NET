@@ -33,6 +33,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 			string serverName = request.ServerName;
 			if (serverName == "")
 			{
+				velocityContext["links"] = pluginLinkCalculator.GetFarmPluginLinks();
 				velocityTemplateName = @"FarmSideBar.vm";
 			}
 			else

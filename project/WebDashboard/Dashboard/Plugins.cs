@@ -69,5 +69,22 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 
 			return (IAbsoluteLink[]) links.ToArray(typeof (IAbsoluteLink));
 		}
+
+		public IAbsoluteLink[] GetFarmPluginLinks()
+		{
+			ArrayList links = new ArrayList();
+
+			foreach (IPluginSpecification pluginSpecification in (IPluginSpecification[]) configurationGetter.GetConfigFromSection("CCNet/farmPlugins"))
+			{
+				IPluginLinkRenderer linkRenderer = objectGiver.GiveObjectByType(pluginSpecification.Type) as IPluginLinkRenderer;
+				if (linkRenderer == null)
+				{
+					throw new CruiseControlException(pluginSpecification.TypeName + " is not a IPluginLinkRenderer");
+				}
+				links.Add(LinkFactory.CreateFarmLink(linkRenderer.LinkDescription, new ActionSpecifierWithName(linkRenderer.LinkActionName)));
+			}
+
+			return (IAbsoluteLink[]) links.ToArray(typeof (IAbsoluteLink));
+		}
 	}
 }

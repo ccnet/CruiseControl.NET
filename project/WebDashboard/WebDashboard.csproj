@@ -348,6 +348,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Dashboard\FarmLink.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Dashboard\GeneralAbsoluteLink.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -423,6 +428,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Dashboard\IProjectGridAction.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Dashboard\IProjectSpecifier.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -483,6 +493,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Dashboard\ProjectGridRow.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Dashboard\ProjectLink.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -519,6 +534,11 @@
                 />
                 <File
                     RelPath = "Dashboard\UnknownBuildException.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Dashboard\VelocityProjectGridAction.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -837,6 +857,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Plugins\FarmReport\FarmReportFarmPlugin.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Plugins\FxCop\FxCopReportBuildPlugin.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -858,11 +883,6 @@
                 />
                 <File
                     RelPath = "Plugins\NUnit\NUnitTestTimingsBuildPlugin.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Plugins\ServerReport\ProjectGridRow.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -892,6 +912,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "ServerConnection\CruiseServerException.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "ServerConnection\ICruiseManagerFactory.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -903,6 +928,16 @@
                 />
                 <File
                     RelPath = "ServerConnection\IFarmService.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "ServerConnection\ProjectStatusListAndExceptions.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "ServerConnection\ProjectStatusOnServer.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

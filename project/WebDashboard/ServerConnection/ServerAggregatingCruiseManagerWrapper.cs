@@ -52,14 +52,56 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.ServerConnection
 			GetCruiseManager(projectSpecifier).DeleteProject(projectSpecifier.ProjectName, purgeWorkingDirectory, purgeArtifactDirectory, purgeSourceControlEnvironment);
 		}
 
-		public ProjectStatus[] GetProjectStatusList(IServerSpecifier serverSpecifier)
-		{
-			return GetCruiseManager(serverSpecifier).GetProjectStatus();
-		}
-
 		public void ForceBuild(IProjectSpecifier projectSpecifier)
 		{
 			GetCruiseManager(projectSpecifier.ServerSpecifier).ForceBuild(projectSpecifier.ProjectName);
+		}
+
+		private string GetServerUrl(IServerSpecifier serverSpecifier)
+		{
+			foreach (ServerLocation serverLocation in ServerLocations)
+			{
+				if (serverLocation.Name == serverSpecifier.ServerName)
+				{
+					return serverLocation.Url;
+				}
+			}
+
+			throw new UnknownServerException(serverSpecifier.ServerName);
+		}
+
+		public ProjectStatusListAndExceptions GetProjectStatusListAndCaptureExceptions()
+		{
+			return GetProjectStatusListAndCaptureExceptions(GetServerSpecifiers());
+		}
+
+		public ProjectStatusListAndExceptions GetProjectStatusListAndCaptureExceptions(IServerSpecifier serverSpecifier)
+		{
+			return GetProjectStatusListAndCaptureExceptions(new IServerSpecifier[] { serverSpecifier });
+		}
+
+		private ProjectStatusListAndExceptions GetProjectStatusListAndCaptureExceptions(IServerSpecifier[] serverSpecifiers)
+		{
+			ArrayList projectStatusOnServers = new ArrayList();
+			ArrayList exceptions = new ArrayList();
+
+			foreach (IServerSpecifier serverSpecifier in serverSpecifiers)
+			{
+				try
+				{
+					foreach (ProjectStatus projectStatus in GetCruiseManager(serverSpecifier).GetProjectStatus())
+					{
+						projectStatusOnServers.Add(new ProjectStatusOnServer(projectStatus, serverSpecifier));
+					}
+				}
+				catch (Exception e)
+				{
+					exceptions.Add(new CruiseServerException(serverSpecifier.ServerName, GetServerUrl(serverSpecifier), e));
+				}
+			}
+
+			return new ProjectStatusListAndExceptions((ProjectStatusOnServer[]) projectStatusOnServers.ToArray(typeof (ProjectStatusOnServer)),
+			                                          (CruiseServerException[]) exceptions.ToArray(typeof (CruiseServerException)));
 		}
 
 		public string GetServerLog(IServerSpecifier serverSpecifier)
@@ -104,15 +146,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.ServerConnection
 
 		private ICruiseManager GetCruiseManager(IServerSpecifier serverSpecifier)
 		{
-			foreach (ServerLocation serverLocation in ServerLocations)
-			{
-				if (serverLocation.Name == serverSpecifier.ServerName)
-				{
-					return managerFactory.GetCruiseManager(serverLocation.Url);
-				}
-			}
-
-			throw new UnknownServerException(serverSpecifier.ServerName);
+			return managerFactory.GetCruiseManager(GetServerUrl(serverSpecifier));
 		}
 
 		private IEnumerable ServerLocations

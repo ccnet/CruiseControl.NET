@@ -26,6 +26,11 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 			return new ServerLink(urlBuilder, serverSpecifier, text, actionSpecifier);
 		}
 
+		public IAbsoluteLink CreateFarmLink(string text, ActionSpecifierWithName actionSpecifier)
+		{
+			return new FarmLink(urlBuilder, text, actionSpecifier);
+		}
+
 		public IAbsoluteLink CreateStyledBuildLink(IBuildSpecifier specifier, IActionSpecifier actionSpecifier)
 		{
 			IAbsoluteLink link = CreateBuildLink(specifier, buildNameFormatter.GetPrettyBuildName(specifier), actionSpecifier);

@@ -1,3 +1,5 @@
 <table width="100%">
-	<tr><td>&nbsp;</td></tr>
+	#foreach ($link in $links)
+	<tr><td><a href="$link.Url" class="$link.LinkClass">$link.Text</a></td></tr>
+	#end
 </table>

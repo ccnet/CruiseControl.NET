@@ -1,6 +1,6 @@
 using System;
 
-namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.ServerReport
+namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 {
 	public class ProjectGridRow
 	{
@@ -12,9 +12,10 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.ServerReport
 		private readonly string status;
 		private readonly string activity;
 		private readonly string forceBuildButtonName;
+		private readonly string url;
 
 		public ProjectGridRow(string name, string buildStatus, string buildStatusHtmlColor, DateTime lastBuildDate, 
-			string lastBuildLabel, string status, string activity, string forceBuildButtonName)
+			string lastBuildLabel, string status, string activity, string forceBuildButtonName, string url)
 		{
 			this.name = name;
 			this.buildStatus = buildStatus;
@@ -24,6 +25,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.ServerReport
 			this.status = status;
 			this.activity = activity;
 			this.forceBuildButtonName = forceBuildButtonName;
+			this.url = url;
 		}
 
 		public string Name
@@ -64,6 +66,11 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.ServerReport
 		public string ForceBuildButtonName
 		{
 			get { return forceBuildButtonName; }
+		}
+
+		public string Url
+		{
+			get { return url; }
 		}
 	}
 }

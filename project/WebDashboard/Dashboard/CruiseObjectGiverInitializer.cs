@@ -60,6 +60,20 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 
 			// ToDo - Refactor these plugin sections
 
+			foreach (IPluginSpecification pluginSpecification in (IPluginSpecification[]) configurationGetter.GetConfigFromSection("CCNet/farmPlugins"))
+			{
+				IPlugin plugin = giverAndRegistrar.GiveObjectByType(pluginSpecification.Type) as IPlugin;
+				if (plugin == null)
+				{
+					throw new CruiseControlException(pluginSpecification.TypeName + " is not a IPlugin");
+				}
+				foreach (TypedAction action in plugin.Actions)
+				{
+					giverAndRegistrar.CreateImplementationMapping(action.ActionName, action.ActionType)
+						.Decorate(typeof(CruiseActionProxyAction));
+				}
+			}
+
 			foreach (IPluginSpecification pluginSpecification in (IPluginSpecification[]) configurationGetter.GetConfigFromSection("CCNet/serverPlugins"))
 			{
 				IPlugin plugin = giverAndRegistrar.GiveObjectByType(pluginSpecification.Type) as IPlugin;

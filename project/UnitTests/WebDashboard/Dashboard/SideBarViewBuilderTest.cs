@@ -64,6 +64,10 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 		{
 			// Setup
 			cruiseRequestWrapperMock.ExpectAndReturn("ServerName", "");
+			pluginLinkCalculatorMock.ExpectAndReturn("GetFarmPluginLinks", links);
+
+			velocityContext["links"] = links;
+
 			velocityViewGeneratorMock.ExpectAndReturn("GenerateView", velocityView, @"FarmSideBar.vm", new HashtableConstraint(velocityContext));
 
 			// Execute
