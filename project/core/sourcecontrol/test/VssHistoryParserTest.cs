@@ -1,6 +1,7 @@
 using System;
 using System.Globalization;
 using NUnit.Framework;
+using ThoughtWorks.CruiseControl.Core.sourcecontrol;
 using ThoughtWorks.CruiseControl.Core.Util;
 
 namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test
@@ -8,7 +9,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test
 	[TestFixture]
 	public class VssHistoryParserTest : CustomAssertion
 	{
-		VssHistoryParser _parser;
+		private VssHistoryParser _parser;
 
 		[SetUp]
 		public void SetUp()
