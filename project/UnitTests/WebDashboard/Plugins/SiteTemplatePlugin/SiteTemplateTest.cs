@@ -131,8 +131,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Plugins.SiteTemplate
 		public void CreatesCorrectListOfBuildPluginLinks()
 		{
 			IPluginSpecification buildPlugin = new AssemblyLoadingPluginSpecification(typeof(TestBuildPlugin).FullName, typeof(TestBuildPlugin).Assembly.CodeBase);
-			IPluginSpecification serverPlugin = new AssemblyLoadingPluginSpecification(typeof(TestServerPlugin).FullName, typeof(TestServerPlugin).Assembly.CodeBase);
-			IPluginSpecification[] assemblyLoadingPlugins = new IPluginSpecification[] { buildPlugin, serverPlugin };
+			IPluginSpecification[] assemblyLoadingPlugins = new IPluginSpecification[] { buildPlugin };
 			configurationGetterMock.ExpectAndReturn("GetConfigFromSection", assemblyLoadingPlugins, PluginsSectionHandler.SectionName);
 			configurationGetterMock.ExpectAndReturn("GetConfigFromSection", assemblyLoadingPlugins, PluginsSectionHandler.SectionName);
 			configurationGetterMock.ExpectAndReturn("GetConfigFromSection", assemblyLoadingPlugins, PluginsSectionHandler.SectionName);
@@ -145,37 +144,6 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Plugins.SiteTemplate
 			AssertEquals(1, results.BuildPluginsList.Length);
 			AssertEquals("Test Build Plugin", results.BuildPluginsList[0].InnerHtml);
 			AssertEquals("testbuild.aspx", results.BuildPluginsList[0].HRef);
-		}
-
-		[Test]
-		public void DoesntCreateListOfServerPluginsIfNoProjectSpecified()
-		{
-			requestWrapperMock.ExpectAndReturn("GetProjectName", "");
-			requestWrapperMock.ExpectAndReturn("GetServerName", "server");
-			SiteTemplateResults results = siteTemplate.Do();
-			AssertEquals(0, results.ServerPluginsList.Length);
-
-			VerifyMocks();
-		}
-
-		[Test]
-		public void CreatesCorrectListOfServerPluginLinks()
-		{
-			IPluginSpecification buildPlugin = new AssemblyLoadingPluginSpecification(typeof(TestBuildPlugin).FullName, typeof(TestBuildPlugin).Assembly.CodeBase);
-			IPluginSpecification serverPlugin = new AssemblyLoadingPluginSpecification(typeof(TestServerPlugin).FullName, typeof(TestServerPlugin).Assembly.CodeBase);
-			IPluginSpecification[] assemblyLoadingPlugins = new IPluginSpecification[] { buildPlugin, serverPlugin };
-			configurationGetterMock.ExpectAndReturn("GetConfigFromSection", assemblyLoadingPlugins, PluginsSectionHandler.SectionName);
-			configurationGetterMock.ExpectAndReturn("GetConfigFromSection", assemblyLoadingPlugins, PluginsSectionHandler.SectionName);
-			configurationGetterMock.ExpectAndReturn("GetConfigFromSection", assemblyLoadingPlugins, PluginsSectionHandler.SectionName);
-			requestWrapperMock.ExpectAndReturn("GetProjectName", project);
-			requestWrapperMock.ExpectAndReturn("GetServerName", server);
-			buildRetrieverMock.ExpectAndReturn("GetBuild", build, requestWrapper);
-
-			SiteTemplateResults results = siteTemplate.Do();
-
-			AssertEquals(1, results.ServerPluginsList.Length);
-			AssertEquals("Test Server Plugin", results.ServerPluginsList[0].InnerHtml);
-			AssertEquals("testserver.aspx",results.ServerPluginsList[0].HRef);
 		}
 	}
 
@@ -190,22 +158,6 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Plugins.SiteTemplate
 		}
 
 		public string CreateURL (string serverName, string projectName, string buildName, IBuildUrlGenerator urlGenerator)
-		{
-			return url;
-		}
-	}
-
-	public class TestServerPlugin : IServerPlugin
-	{
-		string description = "Test Server Plugin";
-		string url = "testserver.aspx";
-
-		public string Description
-		{
-			get { return description; }
-		}
-
-		public string CreateURL (string serverName, IServerUrlGenerator urlGenerator)
 		{
 			return url;
 		}

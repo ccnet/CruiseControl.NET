@@ -22,5 +22,16 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 			return string.Format("{0}?{1}", BuildUrl(relativeUrl), partialQueryString);
 		}
 
+		public string BuildServerUrl(string relativeUrl, string serverName)
+		{
+			return BuildUrl(relativeUrl, string.Format("{0}={1}", QueryStringRequestWrapper.ServerQueryStringParameter, serverName));
+		}
+
+		public string BuildProjectrUrl(string relativeUrl, string serverName, string projectName)
+		{
+			return BuildUrl(relativeUrl, string.Format("{0}={1}&amp;{2}={3}", 
+				QueryStringRequestWrapper.ServerQueryStringParameter, serverName,
+				QueryStringRequestWrapper.ProjectQueryStringParameter, projectName));
+		}
 	}
 }

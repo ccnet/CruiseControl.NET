@@ -50,5 +50,33 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 			AssertEquals("http://local/foo.htm?myparam=myvalue", url);
 			VerifyAll();
 		}
+
+		[Test]
+		public void ShouldBuildServerUrl()
+		{
+			// Setup
+			pathMapperMock.ExpectAndReturn("GetAbsoluteURLForRelativePath", "http://local/foo.htm", "foo.htm");
+
+			// Execute
+			string url = urlBuilder.BuildServerUrl("foo.htm", "myserver");
+
+			// Verify
+			AssertEquals("http://local/foo.htm?server=myserver", url);
+			VerifyAll();
+		}
+		
+		[Test]
+		public void ShouldBuildProjectrUrl()
+		{
+			// Setup
+			pathMapperMock.ExpectAndReturn("GetAbsoluteURLForRelativePath", "http://local/foo.htm", "foo.htm");
+
+			// Execute
+			string url = urlBuilder.BuildProjectrUrl("foo.htm", "myserver", "myproject");
+
+			// Verify
+			AssertEquals("http://local/foo.htm?server=myserver&amp;project=myproject", url);
+			VerifyAll();
+		}
 	}
 }

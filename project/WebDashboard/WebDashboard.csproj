@@ -333,16 +333,6 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "Dashboard\DefaultProjectUrlGenerator.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Dashboard\DefaultServerUrlGenerator.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
                     RelPath = "Dashboard\DefaultUrlBuilder.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -384,26 +374,6 @@
                 />
                 <File
                     RelPath = "Dashboard\IPlugin.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Dashboard\IProjectPlugin.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Dashboard\IProjectUrlGenerator.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Dashboard\IServerPlugin.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Dashboard\IServerUrlGenerator.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -656,11 +626,6 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "Plugins\ProjectReporterPlugin\LatestProjectReporter.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
                     RelPath = "Plugins\ProjectReporterPlugin\NextProjectReporter.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -682,11 +647,6 @@
                 />
                 <File
                     RelPath = "Plugins\ProjectReporterPlugin\ProjectReportResults.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Plugins\ServerLogViewerPlugin\ServerLogViewer.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

@@ -48,8 +48,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 		public void ShouldReturnLinkToAddProjectAndServerLogForServerView()
 		{
 			// Setup
-			urlBuilderMock.ExpectAndReturn("BuildUrl", "returnedurl1", "ViewServerLog.aspx", "server=myServer");
-			urlBuilderMock.ExpectAndReturn("BuildUrl", "returnedurl2", "controller.aspx", "server=myServer");
+			urlBuilderMock.ExpectAndReturn("BuildServerUrl", "returnedurl1", "ViewServerLog.aspx", "myServer");
+			urlBuilderMock.ExpectAndReturn("BuildServerUrl", "returnedurl2", "controller.aspx", "myServer");
 			HtmlAnchor expectedAnchor1 = new HtmlAnchor();
 			expectedAnchor1.HRef = "returnedurl1";
 			expectedAnchor1.InnerHtml = "View Server Log";
@@ -62,6 +62,25 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 
 			Assert(TableContains(table, expectedAnchor1));
 			Assert(TableContains(table, expectedAnchor2));
+			
+			// Verify
+			VerifyAll();
+		}
+
+		[Test]
+		public void ShouldReturnLinkToLatestProjectReportForProjectView()
+		{
+			// Setup
+			urlBuilderMock.ExpectAndReturn("BuildProjectrUrl", "returnedurl1", "ProjectReport.aspx", "myServer", "myProject");
+
+			HtmlAnchor expectedAnchor1 = new HtmlAnchor();
+			expectedAnchor1.HRef = "returnedurl1";
+			expectedAnchor1.InnerHtml = "Latest";
+
+			// Execute
+			HtmlTable table = (HtmlTable) viewBuilder.GetProjectSideBar("myServer", "myProject");
+
+			Assert(TableContains(table, expectedAnchor1));
 			
 			// Verify
 			VerifyAll();

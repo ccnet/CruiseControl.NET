@@ -34,26 +34,20 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.SiteTemplatePlugin
 			string projectName = requestWrapper.GetProjectName();
 			if (serverName == string.Empty || projectName == string.Empty)
 			{
-				return new SiteTemplateResults(false, new HtmlAnchor[0], "", "", "", new HtmlAnchor[0], new HtmlAnchor[0]);
+				return new SiteTemplateResults(false, new HtmlAnchor[0], "", "", "", new HtmlAnchor[0]);
 			}
 
 			build = buildRetrieverForRequest.GetBuild(requestWrapper);
 			BuildStats stats = GenerateBuildStats(build);
 
 			return new SiteTemplateResults(true, buildLister.GetBuildLinks(serverName, projectName), stats.Html, stats.Htmlclass, "", 
-				BuildPluginLinks(), ServerPluginLinks());	
-		}
-
-		private HtmlAnchor[] ServerPluginLinks()
-		{
-			return PluginLinks(typeof(IServerPlugin));
+				BuildPluginLinks());	
 		}
 
 		private HtmlAnchor[] BuildPluginLinks()
 		{
 			// ToDo - this better!
 			ArrayList list = new ArrayList();
-			list.AddRange(PluginLinks(typeof(IProjectPlugin)));
 			list.AddRange(PluginLinks(typeof(IBuildPlugin)));
 			return (HtmlAnchor[]) list.ToArray (typeof (HtmlAnchor));
 		}
@@ -90,16 +84,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.SiteTemplatePlugin
 							((IBuildNameRetrieverSettable) plugin).BuildNameRetriever = buildNameRetriever;
 						}
 
-						// ToDo - clean this up
-						if (pluginClassification == typeof(IServerPlugin))
-						{
-							anchor.HRef = ((IServerPlugin) plugin).CreateURL(build.ServerName, new DefaultServerUrlGenerator());
-						}
-						else if (pluginClassification == typeof(IProjectPlugin))
-						{
-							anchor.HRef = ((IProjectPlugin) plugin).CreateURL(build.ServerName, build.ProjectName, new DefaultProjectUrlGenerator());
-						}
-						else if (pluginClassification == typeof(IBuildPlugin))
+						if (pluginClassification == typeof(IBuildPlugin))
 						{
 							anchor.HRef = ((IBuildPlugin) plugin).CreateURL(build.ServerName, build.ProjectName, build.Name, new DefaultBuildUrlGenerator());
 						}

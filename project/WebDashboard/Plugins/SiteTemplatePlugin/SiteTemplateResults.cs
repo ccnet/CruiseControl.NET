@@ -14,8 +14,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.SiteTemplatePlugin
 		private readonly string pluginLinksHtml;
 
 		public SiteTemplateResults(bool projectMode, HtmlAnchor[] buildLinkList, string buildStatsHtml, string buildStatsClass, 
-			string pluginLinksHtml, HtmlAnchor[] buildPluginList,
-			HtmlAnchor[] serverPluginsList)
+			string pluginLinksHtml, HtmlAnchor[] buildPluginList)
 		{
 			this.buildLinkList = buildLinkList;
 			this.projectMode = projectMode;
