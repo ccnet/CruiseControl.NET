@@ -6,6 +6,7 @@ using System.Web.UI.WebControls;
 using ThoughtWorks.CruiseControl.Core;
 using ThoughtWorks.CruiseControl.Core.Builder;
 using ThoughtWorks.CruiseControl.Core.Publishers;
+using ThoughtWorks.CruiseControl.Core.Sourcecontrol;
 using ThoughtWorks.CruiseControl.Core.Sourcecontrol.Perforce;
 using ThoughtWorks.CruiseControl.Core.Tasks;
 using ThoughtWorks.CruiseControl.WebDashboard.MVC.View;
@@ -39,17 +40,60 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.MVC.Cruise
 		{
 			ArrayList rows = new ArrayList();
 			rows.Add(TR(TD("Project Name *"), TD(TextBox("Project.Name", project.Name))));
-			rows.Add(TR(TD("Source Control"), TD("Perforce")));
-			rows.Add(TR(TD(), TD(BuildPerforceView((P4) project.SourceControl))));
+			rows.AddRange(BuildSourceControlSelectionAndView(project.SourceControl));
 			rows.AddRange(BuildBuilderSelectionAndView(project.Builder));
 			rows.Add(TR(TD("Files To Merge"), TD(MultiLineTextBox("Project.Tasks.0.MergeFilesForPresentation", ((MergeFilesTask) project.Tasks[0]).MergeFilesForPresentation))));
 			rows.Add(TR(TD("Output Log Directory *"), TD(TextBox("Project.Publishers.0.LogDir", ((XmlLogPublisher) project.Publishers[0]).LogDir))));
+			rows.Add(TR(TD("Working Directory"), TD(TextBox("Project.ConfiguredWorkingDirectory", project.ConfiguredWorkingDirectory))));
 			rows.Add(TR(TD("Reporting URL *"), TD(TextBox("Project.WebURL", project.WebURL))));
 
 			return Table((HtmlTableRow[]) rows.ToArray(typeof (HtmlTableRow)));
 		}
 
-		private Control BuildPerforceView(P4 p4)
+		private HtmlTableRow[] BuildSourceControlSelectionAndView(ISourceControl sourceControl)
+		{
+			if (sourceControl == null)
+			{
+				throw new CruiseControlException("Internal Error - SourceControl object not set on model so cannot create view");
+			}
+
+			DropDownList dropDownList = new DropDownList();
+			Control sourceControlView = Table(TR(TD("Unsupported Source Control type - " + sourceControl.GetType().FullName)));
+
+			foreach(Type type in new Type[] { typeof(P4), typeof(Cvs), typeof(FileSourceControl)})
+			{
+				ListItem item = new ListItem(type.Name);
+				if (sourceControl.GetType() == type)
+				{
+					sourceControlView = BuildSourceControlView(sourceControl, type);
+					item.Selected = true;
+				}
+				dropDownList.Items.Add(item);
+			}
+
+			dropDownList.ID = "Project.SourceControl";
+			dropDownList.AutoPostBack = true;
+
+			return new HtmlTableRow[] { TR(TD("Source Control"), TD(dropDownList)), TR(TD(),TD(sourceControlView))};
+		}
+
+		private Control BuildSourceControlView(ISourceControl sourceControl, Type type)
+		{
+			if (type == typeof(P4))
+			{
+				return BuildP4View((P4) sourceControl);
+			}
+			else if (type == typeof(Cvs))
+			{
+				return BuildCvsView((Cvs) sourceControl);
+			}
+			else
+			{
+				return BuildFileSourceControlView((FileSourceControl) sourceControl);
+			}
+		}
+
+		private Control BuildP4View(P4 p4)
 		{
 			return Table(
 				TR(TD("View *"), TD(TextBox("Project.SourceControl.View", p4.View))),
@@ -59,6 +103,27 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.MVC.Cruise
 				TR(TD("Port"), TD(TextBox("Project.SourceControl.Port", p4.Port))),
 				TR(TD("ApplyLabel"), TD(BooleanCheckBox("Project.SourceControl.ApplyLabel", p4.ApplyLabel))),
 				TR(TD("AutoGetSource *"), TD(BooleanCheckBox("Project.SourceControl.AutoGetSource", p4.AutoGetSource)))
+				);
+		}
+
+		private Control BuildCvsView(Cvs cvs)
+		{
+			return Table(
+				TR(TD("Executable"), TD(TextBox("Project.SourceControl.Executable", cvs.Executable))),
+				TR(TD("Timeout"), TD(TextBox("Project.SourceControl.Client", cvs.Timeout.ToString()))),
+				TR(TD("CvsRoot"), TD(TextBox("Project.SourceControl.CvsRoot", cvs.CvsRoot))),
+				TR(TD("WorkingDirectory"), TD(TextBox("Project.SourceControl.Port", cvs.WorkingDirectory))),
+				TR(TD("LabelOnSuccess"), TD(BooleanCheckBox("Project.SourceControl.LabelOnSuccess", cvs.LabelOnSuccess))),
+				TR(TD("AutoGetSource"), TD(BooleanCheckBox("Project.SourceControl.AutoGetSource", cvs.AutoGetSource))),
+				TR(TD("RestrictLogins"), TD(TextBox("Project.SourceControl.RestrictLogins", cvs.RestrictLogins))),
+				TR(TD("Branch"), TD(TextBox("Project.SourceControl.Branch", cvs.Branch))));
+		}
+
+		private Control BuildFileSourceControlView(FileSourceControl fileSourceControl)
+		{
+			return Table(
+				TR(TD("RepositoryRoot"), TD(TextBox("Project.SourceControl.RepositoryRoot", fileSourceControl.RepositoryRoot))),
+				TR(TD("IgnoreMissingRoot"), TD(BooleanCheckBox("Project.SourceControl.IgnoreMissingRoot", fileSourceControl.IgnoreMissingRoot)))
 				);
 		}
 
@@ -122,20 +187,5 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.MVC.Cruise
 				TR(TD("BuildTimeoutSeconds *"), TD(TextBox("Project.Builder.BuildTimeoutSeconds", builder.BuildTimeoutSeconds.ToString())))
 				);
 		}
-
-		/*
-		private Control CreateSourceControlDropDown(Project project)
-		{
-			DropDownList dropDownList = new DropDownList();
-			dropDownList.ID = "SourceControlDropDown";
-			dropDownList.AutoPostBack = true;
-			ListItem item = new ListItem("File Source Control");
-			dropDownList.Items.Add(item);
-			item = new ListItem("Perforce");
-			dropDownList.Items.Add(item);
-			return dropDownList;
-		}
-
-		*/
 	}
 }
