@@ -11,13 +11,14 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 
 		//MKS arguments
 		//configurable from ccnet.config
-		private string executable = "";
-		private string hostname = "";
-		private string port = "";
-		private string user = "";
-		private string password = "";
-		private string sandboxRoot = "";
-		private string sandboxFile = "";
+		private string executable;
+		private string hostname;
+		private int port;
+		private string user;
+		private string password;
+		private string sandboxRoot;
+		private string sandboxFile;
+		private bool autoGetSource;
 
 		//command templates
 		private readonly string RESYNCH_COMMAND_TEMPLATE =
@@ -33,25 +34,22 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 				+ " {{revisioncount}}" + DELIMITER + " {{date}}" + DELIMITER + " {{author}}" + DELIMITER
 				+ " {{description}}\" --recurse --sandbox={0} --user={1} --password={2}";
 
+		public Mks() : this(new MksHistoryParser(), new ProcessExecutor())
+		{
+		}
+
+		public Mks(IHistoryParser parser, ProcessExecutor executor) : base(parser, executor)
+		{
+			executable = "si.exe";
+			port = 8722;
+			autoGetSource = false;
+		}
+
 		[ReflectorProperty("executable")]
 		public string Executable
 		{
 			get { return executable; }
 			set { executable = value; }
-		}
-
-		[ReflectorProperty("hostname")]
-		public string Hostname
-		{
-			get { return hostname; }
-			set { hostname = value; }
-		}
-
-		[ReflectorProperty("port")]
-		public string Port
-		{
-			get { return port; }
-			set { port = value; }
 		}
 
 		[ReflectorProperty("user")]
@@ -68,6 +66,20 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			set { password = value; }
 		}
 
+		[ReflectorProperty("hostname")]
+		public string Hostname
+		{
+			get { return hostname; }
+			set { hostname = value; }
+		}
+
+		[ReflectorProperty("port", Required=false)]
+		public int Port
+		{
+			get { return port; }
+			set { port = value; }
+		}
+
 		[ReflectorProperty("sandboxroot")]
 		public string SandboxRoot
 		{
@@ -82,14 +94,12 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			set { sandboxFile = value; }
 		}
 
-		public Mks() : this(new MksHistoryParser(), new ProcessExecutor())
+		[ReflectorProperty("autoGetSource", Required=false)]
+		public bool AutoGetSource
 		{
+			get { return autoGetSource; }
+			set { autoGetSource = value; }
 		}
-
-		public Mks(IHistoryParser parser, ProcessExecutor executor) : base(parser, executor)
-		{
-		}
-
 
 		public override void Initialize(IProject project)
 		{
@@ -117,10 +127,13 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 
 		public override void GetSource(IIntegrationResult result)
 		{
-			ProcessInfo resynchProcess = createProcess(RESYNCH_COMMAND_TEMPLATE);
-			Log.Info(string.Format("Getting source from MKS: {0} {1}", resynchProcess.FileName, resynchProcess.Arguments));
-			Execute(resynchProcess);
-			RemoveReadOnlyAttribute();
+			if (AutoGetSource)
+			{
+				ProcessInfo resynchProcess = createProcess(RESYNCH_COMMAND_TEMPLATE);
+				Log.Info(string.Format("Getting source from MKS: {0} {1}", resynchProcess.FileName, resynchProcess.Arguments));
+				Execute(resynchProcess);
+				RemoveReadOnlyAttribute();
+			}
 		}
 
 		private void RemoveReadOnlyAttribute()

@@ -37,8 +37,18 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test
 						  <password>CCNetPassword</password>
 						  <sandboxroot>{0}</sandboxroot>
 						  <sandboxfile>myproject.pj</sandboxfile>
+						  <autoGetSource>true</autoGetSource>
 					  </sourceControl>
 				 ", sandboxRoot);
+		}
+
+		[Test]
+		public void CheckDefaults()
+		{
+			Mks mks = new Mks();
+			Assert.AreEqual(@"si.exe", mks.Executable);
+			Assert.AreEqual(8722, mks.Port);
+			Assert.AreEqual(false, mks.AutoGetSource);
 		}
 
 		[Test]
@@ -47,11 +57,12 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test
 			Mks mks = CreateMks(CreateSourceControlXml(), null, null);
 			Assert.AreEqual(@"..\bin\si.exe", mks.Executable);
 			Assert.AreEqual(@"hostname", mks.Hostname);
-			Assert.AreEqual(@"8722", mks.Port);
+			Assert.AreEqual(8722, mks.Port);
 			Assert.AreEqual(@"CCNetUser", mks.User);
 			Assert.AreEqual(@"CCNetPassword", mks.Password);
 			Assert.AreEqual(sandboxRoot, mks.SandboxRoot);
 			Assert.AreEqual(@"myproject.pj", mks.SandboxFile);
+			Assert.AreEqual(true, mks.AutoGetSource);
 		}
 
 		[Test, Ignore("The Add label command needs to be replaced by check pointing")]
