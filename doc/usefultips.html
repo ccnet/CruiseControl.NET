@@ -1,0 +1,118 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+  <title>CruiseControl.NET Useful tips</title>
+  <link type="text/css" rel="stylesheet" href="cruisecontrol.css">
+</head>
+<body>
+	<a name="top"> 	</a>
+<div style="float: right;"><a name="top"><img
+ src="images/ccnet_logo_onwhite.gif"></a></div>
+<a name="top">	</a>
+<h2 style="color: rgb(51, 51, 255);"><a name="top">CruiseControl.NET
+Tips<br>
+</a></h2>
+<h3><a name="top">Using CruiseControl.NET with CVS over SSH<br>
+</a></h3>
+<p>Very often when using CVS it is best to use SSH as the
+authentication/transport protocol. This occurs (for example) if you are
+using a 'SourceForge' or 'GForge' instance for your source control. If
+you are setting up such a scenario, you may want to follow the steps
+below to help get you going:</p>
+<ol>
+  <li>First you need to decide whether you are going to use password or
+key based authentication. Using keys is more secure, but using
+passwords is easier to setup initially. If you are going to use keys,
+you'll need to upload your public key to the server - we don't discuss
+that here but if you are using SourceForge, see <a
+ href="http://sourceforge.net/docman/display_doc.php?docid=766&amp;group_id=1">here</a>
+for some help.<br>
+    <br>
+  </li>
+  <li>We are going to use 'putty' and 'plink' as our SSH client -
+download them <a
+ href="http://www.chiark.greenend.org.uk/%7Esgtatham/putty/download.html">here</a>.
+In what follows, we're going to assume that putty and plink are both
+available in c:\putty.<br>
+    <br>
+  </li>
+  <li>Start-up putty and create a session with the following details<br>
+- a name that we will use later (e.g. 'mysourcecontrol')<br>
+- SSH protocol<br>
+- hostname set to the host of your source control server<br>
+- Set your username in the 'auto-login username' box of the
+'connection' tab<br>
+- If you are using key-based authentication, setup your key details<br>
+Once you've set all these up, save the seesion, then make sure you can
+connect (<span style="font-weight: bold;">this is important since we
+need to allow the remote server's SSH key</span>) <br>
+    <br>
+  </li>
+  <li>We're going to assume in these steps that you are using the CVS
+command-line client in the 'tools' sub-directory of the CruiseControl
+home directory, but feel free to use another one of your choice<br>
+    <br>
+  </li>
+  <li>CVS uses SSH as its transport when the 'ext' authentication type
+is specified in the CVSROOT (we'll see that later) and the CVS_RSH
+environment variable points to a SSH cilent. To set the environment
+variable, you can:<br>
+- Set it as a system environment variable in Windows<br>
+- Wrap the cvs.exe file with a batch script, e.g. use the
+'cvswithplinkrsh.bat' batch file in the tools sub-directory.<br>
+If you are using key-based authentication, set the CVS_RSH variable to
+be the full path of the 'plink.exe' executable. If you are using
+password-based authentication you'll need to use another batch file to
+wrap plink so that you can set the password. An example file is
+'plinkwithpw.bat' in the tools sub-directory. <span
+ style="font-weight: bold;">Note that you'll be setting your CVS
+password in plain-text so you'll want to keep this file secure.</span><br>
+    <br>
+  </li>
+  <li>Decide where you want your working copy of your source-control
+project to be located, e.g. 'c:\fromcvs\myproject'<br>
+    <br>
+  </li>
+  <li>Check the project out from source control using the cvs client
+you are going to use with Cruise Control, e.g. as follows:<br>
+- cd \fromcvs\myproject<br>
+- c:\Program Files\CruiseControl.NET\tools\cvswithplinkrsh -d:ext:<span
+ style="font-weight: bold;">mysourcecontrol</span>:<span
+ style="font-weight: bold;">/cvsroot/myproject</span> co <span
+ style="font-weight: bold;">mymodule </span>(here 'mysourcecontrol'
+corresponds to the putty session you setup in step 3, and the other
+items in bold are the CVS details for your project.<br>
+    <br>
+  </li>
+  <li>Now we can setup the CruiseControl.NET config file itself by
+completing the &lt;sourcecontrol&gt; tag. Here's an example:<br>
+    <pre>&nbsp;&nbsp;&nbsp; &lt;sourcecontrol type="cvs"&gt;</pre>
+    <pre>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;executable&gt;<span
+ style="font-weight: bold;">c:\Program Files\CruiseControl.NET\tools\cvswithplinkrsh.bat</span>&lt;/executable&gt;</pre>
+    <pre>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;workingDirectory&gt;<span
+ style="font-weight: bold;">C:\fromcvs\myproject\mymodule</span>&lt;/workingDirectory&gt;</pre>
+    <pre>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;cvsroot&gt;:ext:<span
+ style="font-weight: bold;">mysourcecontrol</span>:<span
+ style="font-weight: bold;">/cvsroot/myproject</span>&lt;/cvsroot&gt;</pre>
+    <pre>&nbsp;&nbsp;&nbsp; &lt;/sourcecontrol&gt;</pre>
+  </li>
+  <li>The final point to mention is that you will need to use the same
+kind of setup to checkout the latest code in your actual build file. If
+you are using a 'bootstrap' build file for CruiseControl.NET in your
+project's home directory, something like the following might be
+appropriate:<br>
+    <pre>&lt;project name="myproject-ccnet" default="run"&gt;</pre>
+    <pre>&nbsp; &lt;target name="run"&gt;</pre>
+    <pre>&nbsp;&nbsp;&nbsp; &lt;exec </pre>
+    <pre>&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; basedir="." </pre>
+    <pre>&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; program="<span
+ style="font-weight: bold;">c:\Program Files\CruiseControl.NET\tools\cvswithplinkrsh.bat</span>" </pre>
+    <pre>&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; commandline="-q update -P -d" </pre>
+    <pre>&nbsp;&nbsp;&nbsp; /&gt;</pre>
+    <pre>&nbsp;&nbsp;&nbsp; &lt;nant buildfile="myproject.build" /&gt;</pre>
+    <pre>&nbsp; &lt;/target&gt;</pre>
+    <pre>&lt;/project&gt;</pre>
+  </li>
+</ol>
+</body>
+</html>
