@@ -124,7 +124,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 		// in cvs, date 'to' is implicitly now
 		// todo: if cvs will accept a 'to' date, it would be nicer to 
 		// include that for some harmony with the vss version
-		internal string BuildHistoryProcessInfoArgs(DateTime from)
+		public string BuildHistoryProcessInfoArgs(DateTime from)
 		{		
 			CommandLineBuilder buffer = new CommandLineBuilder();
 			buffer.AppendArgument("-d {0}", CvsRoot);

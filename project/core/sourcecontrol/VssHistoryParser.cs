@@ -27,7 +27,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			return ParseModifications(entries);
 		}
 
-		internal Modification[] ParseModifications(string[] entries)
+		public Modification[] ParseModifications(string[] entries)
 		{
 			// not every entry will yield a valid modification so we can't use
 			// an array, but we can assume that most will so starting our 
@@ -46,7 +46,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			return (Modification[]) modifications.ToArray(typeof (Modification));
 		}
 
-		internal string[] ReadAllEntries(TextReader history)
+		public string[] ReadAllEntries(TextReader history)
 		{
 			ArrayList entries = new ArrayList();
 			string currentLine = history.ReadLine();
@@ -72,7 +72,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			return (string[]) entries.ToArray(typeof (string));
 		}
 
-		internal bool IsEntryDelimiter(string line)
+		public bool IsEntryDelimiter(string line)
 		{
 			return IsEndOfFile(line) || 
 				(line.StartsWith(DELIMITER_UNVERSIONED_START) && line.EndsWith(DELIMITER_UNVERSIONED_END)) || 
@@ -122,7 +122,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 		}
 	}
 
-	internal abstract class VSSParser
+	public abstract class VSSParser
 	{
 		private Regex REGEX_USER_DATE_LINE;
 		private static readonly Regex REGEX_FILE_NAME = new Regex(@"\*+([\w\s\.-]+)", RegexOptions.Multiline);
@@ -154,9 +154,9 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 
 		public abstract string Keyword { get; }
 
-		internal abstract string ParseFileName();
+		public abstract string ParseFileName();
 
-		internal void ParseUsernameAndDate(Modification mod)
+		public void ParseUsernameAndDate(Modification mod)
 		{
 			Match match = REGEX_USER_DATE_LINE.Match(entry);
 			if (! match.Success)
@@ -171,7 +171,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			mod.ModifiedTime = locale.ParseDateTime(date, time);
 		}
 
-		internal void ParseComment(Modification mod)
+		public void ParseComment(Modification mod)
 		{
 			string comment = locale.CommentKeyword + ":";
 			int index = entry.IndexOf(comment);
@@ -181,7 +181,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			}
 		}
 
-		internal virtual string ParseFolderName()
+		public virtual string ParseFolderName()
 		{
 			string checkedin = locale.CheckedInKeyword;
 			string comment = locale.CommentKeyword + ":";
@@ -219,14 +219,14 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			}
 		}
 
-		internal string ParseFirstLineName()
+		public string ParseFirstLineName()
 		{
 			Match match = REGEX_FILE_NAME.Match(entry);
 			return match.Groups[1].Value.Trim();
 		}
 	}
 
-	internal class CheckInParser : VSSParser
+	public class CheckInParser : VSSParser
 	{
 		public CheckInParser(string entry, IVssLocale locale) : base(entry, locale)
 		{
@@ -237,13 +237,13 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			get { return locale.CheckedInKeyword; }
 		}
 
-		internal override string ParseFileName()
+		public override string ParseFileName()
 		{
 			return ParseFirstLineName();
 		}
 	}
 
-	internal class AddedParser : VSSParser
+	public class AddedParser : VSSParser
 	{
 		public AddedParser(string entry, IVssLocale locale) : base(entry, locale)
 		{
@@ -263,12 +263,12 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			get { return locale.AddedKeyword; }
 		}
 
-		internal override string ParseFileName()
+		public override string ParseFileName()
 		{
 			return ParseFileNameOther();
 		}
 
-		internal override string ParseFolderName()
+		public override string ParseFolderName()
 		{
 			if (entry.StartsWith(DELIMITER_VERSIONED_START))
 				return  "[projectRoot]";
@@ -277,7 +277,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 		}
 	}
 
-	internal class DeletedParser : VSSParser
+	public class DeletedParser : VSSParser
 	{
 		public DeletedParser(string entry, IVssLocale locale) : base(entry, locale)
 		{
@@ -288,12 +288,12 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			get { return locale.DeletedKeyword; }
 		}
 
-		internal override string ParseFileName()
+		public override string ParseFileName()
 		{
 			return ParseFileNameOther();
 		}
 
-		internal override string ParseFolderName()
+		public override string ParseFolderName()
 		{
 			if (entry.StartsWith(DELIMITER_VERSIONED_START))
 				return  "[projectRoot]";
@@ -302,7 +302,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 		}
 	}
 
-	internal class DestroyedParser : VSSParser
+	public class DestroyedParser : VSSParser
 	{
 		public DestroyedParser(string entry, IVssLocale locale) : base(entry, locale)
 		{
@@ -313,12 +313,12 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			get { return locale.DestroyedKeyword; }
 		}
 
-		internal override string ParseFileName()
+		public override string ParseFileName()
 		{
 			return ParseFileNameOther();
 		}
 
-		internal override string ParseFolderName()
+		public override string ParseFolderName()
 		{
 			if (entry.StartsWith(DELIMITER_VERSIONED_START))
 				return "[projectRoot]";
@@ -327,7 +327,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 		}
 	}
 
-	internal class NullParser : VSSParser
+	public class NullParser : VSSParser
 	{
 		public NullParser(string entry, IVssLocale locale) : base(entry, locale)
 		{
@@ -343,7 +343,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			return null;
 		}
 
-		internal override string ParseFileName()
+		public override string ParseFileName()
 		{
 			return null;
 		}

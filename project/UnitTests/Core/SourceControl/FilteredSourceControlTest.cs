@@ -4,6 +4,7 @@ using NMock;
 using NMock.Constraints;
 using Exortech.NetReflector;
 using ThoughtWorks.CruiseControl.Core.Util;
+using ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol;
 
 namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test
 {

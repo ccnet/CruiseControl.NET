@@ -30,7 +30,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			return ParseStream( history );
 		}
 
-		internal void AssignFileInfo( Modification modification, string file )
+		public void AssignFileInfo( Modification modification, string file )
 		{
 			int separatorLocation = file.LastIndexOf( Path.DirectorySeparatorChar.ToString() );
 			if ( separatorLocation > - 1 )
@@ -45,7 +45,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			}
 		}
 
-		internal void AssignModificationTime( Modification modification, string time )
+		public void AssignModificationTime( Modification modification, string time )
 		{
 			try
 			{
@@ -57,7 +57,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			}
 		}
 
-		internal Modification CreateNewModification(
+		public Modification CreateNewModification(
 			string userName,
 			string time,
 			string elementName,
@@ -76,7 +76,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			return modification;
 		}
 
-		internal int ParseChangeNumber( string item )
+		public int ParseChangeNumber( string item )
 		{
 			if ( item == null )
 			{
@@ -97,7 +97,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			}
 		}
 
-		internal Modification ParseEntry( string line )
+		public Modification ParseEntry( string line )
 		{
 			string[] tokens = TokenizeEntry( line );
 			if ( tokens == null
@@ -158,7 +158,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 		}
 
 
-		internal string[] TokenizeEntry( string line )
+		public string[] TokenizeEntry( string line )
 		{
 			ArrayList items = new ArrayList();
 			int firstDelimiter = -1;

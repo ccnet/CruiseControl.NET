@@ -1,10 +1,11 @@
 using System;
 using System.Globalization;
 using NUnit.Framework;
+using ThoughtWorks.CruiseControl.Core.Sourcecontrol;
 using ThoughtWorks.CruiseControl.Core.Util;
 using Exortech.NetReflector;
 
-namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test
+namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 {
 	[TestFixture]
 	public class StarTeamTest : CustomAssertion

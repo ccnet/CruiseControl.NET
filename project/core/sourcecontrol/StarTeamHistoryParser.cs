@@ -19,7 +19,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 		internal readonly static string FileHistorySeparator = "----------------------------";
 
 //		DateTimeFormatInfo dfi;
-		internal CultureInfo Culture = CultureInfo.CurrentCulture;
+		public CultureInfo Culture = CultureInfo.CurrentCulture;
 
 		public StarTeamHistoryParser(IStarTeamRegExProvider starTeamRegExProvider)
 		{

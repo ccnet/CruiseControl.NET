@@ -82,13 +82,13 @@ run ->{2} listversionedfiles -z -aw $Project $SubProject
 			}			
 		}
 
-		internal ProcessInfo CreatePVCSProcessInfo()
+		public ProcessInfo CreatePVCSProcessInfo()
 		{
 			Log.Debug(string.Format("Pvcs: {0} {1}", Executable, Arguments));
 			return new ProcessInfo(Executable, Arguments);
 		}
 
-		internal string CreatePcliContentsForGeneratingPvcsTemp()
+		public string CreatePcliContentsForGeneratingPvcsTemp()
 		{
 			return string.Format(PRE_INSTRUCTIONS_TEMPLATE, Project, Subproject, PVCS_PRETEMPFILE);
 		}
@@ -104,7 +104,7 @@ run ->{2} listversionedfiles -z -aw $Project $SubProject
 			return new StreamReader(stream);
 		}
 
-		internal DateTime AdjustForDayLightSavingsBug(DateTime date)
+		public DateTime AdjustForDayLightSavingsBug(DateTime date)
 		{
 			if (_currentTimeZone.IsDaylightSavingTime(DateTime.Now))
 			{
@@ -133,7 +133,7 @@ run ->{2} listversionedfiles -z -aw $Project $SubProject
 			}
 		}
 
-		internal void TransformVersionedFileList(TextReader reader, TextWriter writer)
+		public void TransformVersionedFileList(TextReader reader, TextWriter writer)
 		{
 			while (reader.Peek() != -1)
 			{

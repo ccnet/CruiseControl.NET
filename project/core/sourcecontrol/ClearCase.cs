@@ -71,7 +71,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			set { _viewPath = value; }
 		}
 
-		internal string TempBaseline
+		public string TempBaseline
 		{
 			get { return _tempBaseline; }
 			set { _tempBaseline = value; }
@@ -124,7 +124,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			}
 		}
 
-		internal ProcessInfo CreateTempBaselineProcessInfo( string name )
+		public ProcessInfo CreateTempBaselineProcessInfo( string name )
 		{
 			string args = string.Format( "mkbl -view {0} -identical {1}", ViewName, name );
 			Log.Debug( string.Format( "command line is: {0} {1}", Executable, args) );
@@ -168,7 +168,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 		/// </remarks>
 		/// <param name="standardError">the standard error from the process</param>
 		/// <returns><c>true</c> if there is a fatal error</returns>
-		internal bool HasFatalError( string standardError )
+		public bool HasFatalError( string standardError )
 		{
 			if ( standardError == null )
 			{
@@ -193,7 +193,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			}
 		}
 
-		internal ProcessInfo CreateHistoryProcessInfo( DateTime from, DateTime to )
+		public ProcessInfo CreateHistoryProcessInfo( DateTime from, DateTime to )
 		{
 			string fromDate = from.ToString( DATETIME_FORMAT );
 			string args = CreateHistoryArguments( fromDate );
@@ -207,7 +207,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 		/// </summary>
 		/// <param name="label">the label to apply</param>
 		/// <returns>the process execution info</returns>
-		internal ProcessInfo CreateLabelTypeProcessInfo( string label )
+		public ProcessInfo CreateLabelTypeProcessInfo( string label )
 		{
 			string args = " mklbtype -c \"CRUISECONTROL Comment\" " + label;
 			Log.Debug( string.Format( "mklbtype: {0} {1}; [working dir: {2}]", Executable, args, ViewPath ) );
@@ -219,28 +219,28 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 		/// </summary>
 		/// <param name="label">the label to apply</param>
 		/// <returns>the process execution info</returns>
-		internal ProcessInfo CreateMakeLabelProcessInfo( string label )
+		public ProcessInfo CreateMakeLabelProcessInfo( string label )
 		{
 			string args = String.Format( @" mklabel -recurse {0} {1}", label, ViewPath );
 			Log.Debug( string.Format( "mklabel: {0} {1}", Executable, args ) );
 			return new ProcessInfo( Executable, args );
 		}
 
-		internal ProcessInfo CreateRemoveBaselineProcessInfo()
+		public ProcessInfo CreateRemoveBaselineProcessInfo()
 		{
 			string args = string.Format( "rmbl -force {0}@\\{1}", TempBaseline, ProjectVobName );
 			Log.Debug( string.Format( "remove baseline: {0} {1}", Executable, args ) );
 			return new ProcessInfo( Executable, args );
 		}
 
-		internal ProcessInfo CreateRenameBaselineProcessInfo( string name )
+		public ProcessInfo CreateRenameBaselineProcessInfo( string name )
 		{
 			string args = string.Format( "rename baseline:{0}@\\{1} {2}", TempBaseline, ProjectVobName, name  );
 			Log.Debug( string.Format( "rename baseline: {0} {1}", Executable, args ) );
 			return new ProcessInfo( Executable, args );
 		}
 
-		internal void ValidateBaselineName( string name )
+		public void ValidateBaselineName( string name )
 		{
 			if ( name == null
 				|| name.Length == 0

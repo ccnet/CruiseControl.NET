@@ -1,8 +1,7 @@
 using System;
 using System.IO;
-using ThoughtWorks.CruiseControl.Core.Util;
 
-namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test
+namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 {
 	public class VssMother
 	{

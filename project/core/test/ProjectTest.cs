@@ -7,7 +7,6 @@ using NUnit.Framework;
 using ThoughtWorks.CruiseControl.Core.Label;
 using ThoughtWorks.CruiseControl.Core.Publishers;
 using ThoughtWorks.CruiseControl.Core.Sourcecontrol;
-using ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test;
 using ThoughtWorks.CruiseControl.Core.State;
 using ThoughtWorks.CruiseControl.Core.Tasks;
 using ThoughtWorks.CruiseControl.Core.Tasks.Test;
@@ -104,7 +103,9 @@ namespace ThoughtWorks.CruiseControl.Core.Test
 <project name=""foo"" webURL=""http://localhost/ccnet"" modificationDelaySeconds=""60"" publishExceptions=""true"">
 	<workingDirectory>c:\my\working\directory</workingDirectory>
 	<build type=""nant"" />
-	<sourcecontrol type=""mock"" />
+	<sourcecontrol type=""filesystem"">
+		<repositoryRoot>C:\</repositoryRoot>
+	</sourcecontrol>
 	<labeller type=""defaultlabeller"" />
 	<state type=""state"" />
 	<triggers>
@@ -128,7 +129,7 @@ namespace ThoughtWorks.CruiseControl.Core.Test
 			Assert.AreEqual(60, project.ModificationDelaySeconds);
 			Assert.AreEqual(true, project.PublishExceptions);
 			Assert.IsTrue(project.Builder is NAntTask);
-			Assert.IsTrue(project.SourceControl is MockSourceControl);
+			Assert.IsTrue(project.SourceControl is FileSourceControl);
 			Assert.IsTrue(project.Labeller is DefaultLabeller);
 			Assert.IsTrue(project.StateManager is IntegrationStateManager);
 			Assert.IsTrue(project.Triggers[0] is ScheduleTrigger);
@@ -166,8 +167,6 @@ namespace ThoughtWorks.CruiseControl.Core.Test
 		{
 			string xml = @"
 <project name=""foo"">
-	<build type=""nant"" />
-	<sourcecontrol type=""mock"" />
 	<triggers/>
 </project>";
 
@@ -506,10 +505,12 @@ namespace ThoughtWorks.CruiseControl.Core.Test
 		[Test]
 		public void SourceControlLabeled()
 		{
-			_project.SourceControl = new MockSourceControl();
 			_project.Builder = new MockBuilder();
 			_mockLabeller.ExpectAndReturn("Generate", "1.2.1", new IsAnything());
 			_mockTask.Expect("Run", new IsAnything());
+			_mockSourceControl.ExpectAndReturn("GetModifications", CreateModifications(), new IsAnything(), new IsAnything());
+			_mockSourceControl.Expect("GetSource", new IsAnything());
+			_mockSourceControl.Expect("LabelSourceControl", "1.2.1", new IsAnything());
 			integrationCompletedCalled = false;
 			_project.IntegrationCompleted += new IntegrationCompletedEventHandler(Project_IntegrationCompleted);
 			IMock stateMock = new DynamicMock(typeof (IStateManager));
@@ -523,8 +524,18 @@ namespace ThoughtWorks.CruiseControl.Core.Test
 			Assert.AreEqual(results, _project.LastIntegrationResult, "new integration result has not been set to the last integration result");
 			Assert.IsNotNull(results.EndTime);
 			Assert.IsTrue(integrationCompletedCalled);
-			Assert.AreEqual("1.2.1", ((MockSourceControl) _project.SourceControl).Label);
 			VerifyAll();
+		}
+
+		private Modification[] CreateModifications()
+		{
+			Modification[] modifications = new Modification[3];
+			for (int i = 0; i < modifications.Length; i++)
+			{
+				modifications[i] = new Modification();
+				modifications[i].ModifiedTime = DateTime.Today.AddDays(-1);
+			}
+			return modifications;
 		}
 
 		private bool integrationCompletedCalled;
@@ -539,10 +550,12 @@ namespace ThoughtWorks.CruiseControl.Core.Test
 			_mockLabeller.ExpectAndReturn("Generate", "1.0", new IsAnything());
 			_mockStateManager.ExpectAndReturn("StateFileExists", false);
 			_mockStateManager.Expect("SaveState", new IsAnything());
+			_mockSourceControl.ExpectAndReturn("GetModifications", CreateModifications(), new IsAnything(), new IsAnything());
+			_mockSourceControl.Expect("GetSource", new IsAnything());
+			_mockSourceControl.Expect("LabelSourceControl", "1.0", new IsAnything());
 			_mockTask.Expect("Run", new IsAnything());
 			Exception expectedException = new CruiseControlException("expected exception");
 			_mockPublisher.ExpectAndThrow("PublishIntegrationResults", expectedException, new IsAnything());
-			_project.SourceControl = new MockSourceControl();
 			_project.Builder = new MockBuilder();
 
 			IIntegrationResult results = _project.RunIntegration(BuildCondition.IfModificationExists);

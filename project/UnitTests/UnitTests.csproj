@@ -440,12 +440,32 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Core\SourceControl\ClearCaseHistoryParserTest.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Core\SourceControl\ClearCaseMother.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Core\SourceControl\ClearCaseTest.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Core\SourceControl\CvsHistoryParserTest.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
                     RelPath = "Core\SourceControl\CvsMother.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Core\SourceControl\CvsTest.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -466,6 +486,11 @@
                 />
                 <File
                     RelPath = "Core\SourceControl\MksTest.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Core\SourceControl\MockSourceControl.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -510,7 +535,27 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Core\SourceControl\PvcsTest.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Core\SourceControl\QuietPeriodTest.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Core\SourceControl\SourceControlMother.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Core\SourceControl\StarTeamHistoryParserTest.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Core\SourceControl\StarTeamTest.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -541,6 +586,21 @@
                 />
                 <File
                     RelPath = "Core\SourceControl\VssApplyLabelTest.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Core\SourceControl\VssHistoryParserTest.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Core\SourceControl\VssMother.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Core\SourceControl\VssTest.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

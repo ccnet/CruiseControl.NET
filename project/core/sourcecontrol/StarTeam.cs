@@ -14,7 +14,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 		//stcmd hist -nologo -x -is -filter IO -p "userid:password@host:port/project/path" "files"		
 		internal readonly static string HISTORY_COMMAND_FORMAT = "hist -nologo -x -is -filter IO -p \"{0}:{1}@{2}:{3}/{4}/{5}\" ";
 		internal readonly static string GET_SOURCE_COMMAND_FORMAT = "co -nologo -x -is -q -f NCO -p \"{0}:{1}@{2}:{3}/{4}/{5}\" ";
-		internal CultureInfo Culture = CultureInfo.CurrentCulture;
+		public CultureInfo Culture = CultureInfo.CurrentCulture;
 
 		private string _executable;		
 		private string _username;
@@ -175,7 +175,7 @@ Author: (?<author_name>.*?) Date: (?<date_string>\d{01,2}/\d{1,2}/\d\d \d{1,2}:\
 			}
 		}
 
-		internal string FormatCommandDate(DateTime date)
+		public string FormatCommandDate(DateTime date)
 		{
 			return date.ToString(Culture.DateTimeFormat);
 		}
@@ -209,7 +209,7 @@ Author: (?<author_name>.*?) Date: (?<date_string>\d{01,2}/\d{1,2}/\d\d \d{1,2}:\
 			return formatted;
 		}
 
-		internal string GetSourceProcessArgs()
+		public string GetSourceProcessArgs()
 		{			
 			string formatted = string.Format(
 				GET_SOURCE_COMMAND_FORMAT,

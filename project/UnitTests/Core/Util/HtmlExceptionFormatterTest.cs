@@ -1,8 +1,9 @@
 using System;
 using NUnit.Framework;
+using ThoughtWorks.CruiseControl.Core.Util;
 using ThoughtWorks.CruiseControl.Util;
 
-namespace ThoughtWorks.CruiseControl.Core.Util.Test
+namespace ThoughtWorks.CruiseControl.UnitTests.Core.Util
 {
 	[TestFixture]
 	public class HtmlExceptionFormatterTest : CustomAssertion

@@ -1,7 +1,7 @@
 using System;
 using System.IO;
 
-namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test
+namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 {
 	public class ClearCaseMother
 	{

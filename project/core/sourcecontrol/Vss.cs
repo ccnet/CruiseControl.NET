@@ -9,10 +9,10 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 	[ReflectorType("vss")]
 	public class Vss : ProcessSourceControl, ITemporaryLabeller
 	{
-		internal const string SS_DIR_KEY = "SSDIR";
-		internal const string SS_REGISTRY_PATH = @"Software\\Microsoft\\SourceSafe";
-		internal const string SS_REGISTRY_KEY = "SCCServerPath";
-		internal const string SS_EXE = "ss.exe";
+		public const string SS_DIR_KEY = "SSDIR";
+		public const string SS_REGISTRY_PATH = @"Software\\Microsoft\\SourceSafe";
+		public const string SS_REGISTRY_KEY = "SCCServerPath";
+		public const string SS_EXE = "ss.exe";
 		public const string TEMP_SOURCE_DIRECTORY = "VssSource";
 
 		internal static readonly string HISTORY_COMMAND_FORMAT = @"history {0} -R -Vd{1}~{2} -Y{3},{4} -I-Y";

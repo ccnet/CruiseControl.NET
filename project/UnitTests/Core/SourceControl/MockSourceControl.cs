@@ -1,7 +1,8 @@
 using System;
 using Exortech.NetReflector;
+using ThoughtWorks.CruiseControl.Core;
 
-namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test
+namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 {
 	[ReflectorType("mocksourcecontrol")]
 	public class SourceControlMock : ISourceControl

@@ -3,7 +3,7 @@ using NMock;
 using NUnit.Framework;
 using ThoughtWorks.CruiseControl.Core;
 using ThoughtWorks.CruiseControl.Core.Config;
-using ThoughtWorks.CruiseControl.Core.Util.Test;
+using ThoughtWorks.CruiseControl.UnitTests.Core.Util;
 
 namespace ThoughtWorks.CruiseControl.UnitTests.Core.Config
 {

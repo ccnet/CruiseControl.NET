@@ -1,7 +1,8 @@
 using NUnit.Framework;
 using System;
+using ThoughtWorks.CruiseControl.Core.Util;
 
-namespace ThoughtWorks.CruiseControl.Core.Util.Test
+namespace ThoughtWorks.CruiseControl.UnitTests.Core.Util
 {
 	[TestFixture]
 	public class ProcessExecutorTest : CustomAssertion

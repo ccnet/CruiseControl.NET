@@ -1,9 +1,9 @@
 using NUnit.Framework;
-using System;
 using System.IO;
 using System.Threading;
+using ThoughtWorks.CruiseControl.Core.Util;
 
-namespace ThoughtWorks.CruiseControl.Core.Util.Test
+namespace ThoughtWorks.CruiseControl.UnitTests.Core.Util
 {
 	[TestFixture]
 	public class FileChangedWatcherTest
