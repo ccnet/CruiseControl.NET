@@ -23,12 +23,10 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 		private string		_tempBaseline;
 		private string		_projectVobName;
 
-		private const string _TEMPORARY_BASELINE_PREFIX = "CruiseControlTemporaryBaseline_";
-		private const int    _DEFAULT_TIMEOUT = 1000 * 45; // 45 seconds -- ClearCase is a slow mofo
+		private const string _TEMPORARY_BASELINE_PREFIX = "CruiseControl.NETTemporaryBaseline_";
 
 		public ClearCase() : base(new ClearCaseHistoryParser())
 		{
-			this.Timeout = _DEFAULT_TIMEOUT;
 		}
 
 		[ReflectorProperty("executable", Required=false)]
@@ -138,6 +136,8 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			return _TEMPORARY_BASELINE_PREFIX + DateTime.Now.ToString( "MM-dd-yyyy-HH-mm-ss" );
 		}
 
+		// This is a HACK.  ProcessSourceControl.Execute doesn't allow the flexibility ClearCase needs
+		// to allow nonzero exit codes and to selectively ignore certian error messages.
 		internal void ExecuteIgnoreNonVobObjects( ProcessInfo info )
 		{
 			info.TimeOut = Timeout;
@@ -243,7 +243,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 		internal void ValidateBaselineName( string name )
 		{
 			if ( name == null
-				|| name == string.Empty
+				|| name.Length == 0
 				|| name.IndexOf( " " ) > -1 )
 			{
 				throw new CruiseControlException( string.Format( "invalid baseline name: \"{0}\" (Does your prefix have a space in it?)", name ) );
