@@ -2,16 +2,10 @@ using System;
 
 namespace tw.ccnet.core
 {
-	public delegate void IntegrationCompletedEventHandler(object sender, IntegrationResult result);
-	public delegate void IntegrationExceptionEventHandler(object sender, CruiseControlException ex);
+	public delegate void IntegrationEventHandler(object sender, IntegrationResult result);
 
-	public interface IIntegrationCompletedEventHandler
+	public interface IIntegrationEventHandler
 	{
-		IntegrationCompletedEventHandler IntegrationCompletedEventHandler { get ; }
-	}
-
-	public interface IIntegrationExceptionEventHandler
-	{
-		IntegrationExceptionEventHandler IntegrationExceptionEventHandler { get ; }
+		IntegrationEventHandler IntegrationEventHandler { get ; }
 	}
 }

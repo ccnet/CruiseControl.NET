@@ -1,11 +1,13 @@
 using System;
 using System.Collections;
+using System.IO;
+using System.Text;
+using System.Xml;
+using System.Xml.Xsl;
+
+using Exortech.NetReflector;
 using tw.ccnet.core.util;
 using tw.ccnet.remote;
-using Exortech.NetReflector;
-using System.Xml.Xsl;
-using System.Xml;
-using System.IO;
 
 
 namespace tw.ccnet.core.publishers
@@ -18,7 +20,7 @@ namespace tw.ccnet.core.publishers
 		private string _fromAddress;
 		private Hashtable _users = new Hashtable();
 		private Hashtable _groups = new Hashtable();
-		private bool _includeDetails;		
+		private bool _includeDetails = false;		
 
 		public EmailGateway EmailGateway
 		{
@@ -41,12 +43,12 @@ namespace tw.ccnet.core.publishers
 			set { _fromAddress = value; }
 		}
 		
-		[ReflectorProperty("includeDetails")]
-		public bool IncludeDetails {
+		[ReflectorProperty("includeDetails", Required=false)]
+		public bool IncludeDetails 
+		{
 			get { return _includeDetails; }
 			set { _includeDetails = value; }
 		}		
-		
 
 		[ReflectorProperty("projectUrl")]
 		public string ProjectUrl
@@ -82,6 +84,11 @@ namespace tw.ccnet.core.publishers
 
 		public override void Publish(object source, IntegrationResult result)
 		{
+			if (result.Status == IntegrationStatus.Unknown)
+			{
+				return;
+			}
+
 			string to = CreateRecipientList(result);
 			string subject = CreateSubject(result);
 			string message = CreateMessage(result);
@@ -122,52 +129,54 @@ namespace tw.ccnet.core.publishers
 			}
 		}
 
-		internal string CreateMessage(IntegrationResult result) {
+		internal string CreateMessage(IntegrationResult result) 
+		{
 			// TODO Add culprit to message text -- especially if modifier is not an email user
-			String message = "";
-			if(_includeDetails) {
-				message += "<html><head></head><body>";
-				message += String.Format(@"CC.NET Build Results for {0}: {1}", 
-					result.ProjectName, LogFile.CreateUrl(ProjectUrl, result)) +"\n";
-				message += GetDetailedHTMLMessage(result);
-				message += "</body></html>";
-			}else{
-				message += String.Format(@"CC.NET Build Results for {0}: {1}", 
-					result.ProjectName, LogFile.CreateUrl(ProjectUrl, result)) ;
+			if(_includeDetails) 
+			{
+				return CreateHtmlMessage(result);
 			}
-			return message;
+			else
+			{
+				return CreateLinkMessage(result);
+			}
 		}
 		
-		private string GetDetailedHTMLMessage(IntegrationResult result){
-			string htmlMessage = "";
-			string logFilename;
-			try{
-				string tempDir = TempFileUtil.CreateTempDir(this);
-				logFilename = TempFileUtil.CreateTempFile(tempDir,"logfile");
-				XmlTextWriter writer = new XmlTextWriter(logFilename, System.Text.Encoding.UTF8);
-				new XmlLogPublisher().Write(result,writer);
-				writer.Close();
-				
-				htmlMessage += Transform(logFilename, @"xsl\header.xsl");
-				htmlMessage += Transform(logFilename, @"xsl\compile.xsl");
-				htmlMessage += Transform(logFilename, @"xsl\javadoc.xsl");
-				htmlMessage += Transform(logFilename, @"xsl\unittests.xsl");
-				htmlMessage += Transform(logFilename, @"xsl\modifications.xsl");		
-			}
-			finally{
-				TempFileUtil.DeleteTempDir(this);
-			}			
-			return htmlMessage;
+		private string CreateLinkMessage(IntegrationResult result)
+		{
+			return String.Format(@"CC.NET Build Results for {0}: {1}", 
+				result.ProjectName, LogFile.CreateUrl(ProjectUrl, result)) ;
+		}
+
+		private string CreateHtmlMessage(IntegrationResult result)
+		{
+			StringBuilder message = new StringBuilder(10000);
+			message.Append("<html><head></head><body>");
+			message.Append(CreateLinkMessage(result));
+			AppendHtmlMessageDetails(result, message);
+			message.Append("</body></html>");
+			return message.ToString();
+		}
+
+		private void AppendHtmlMessageDetails(IntegrationResult result, StringBuilder message)
+		{
+			StringWriter buffer = new StringWriter();
+			XmlTextWriter writer = new XmlTextWriter(buffer);
+			new XmlLogPublisher().Write(result, writer);
+			writer.Close();
+			
+			XmlDocument xml = new XmlDocument();
+			xml.LoadXml(buffer.ToString());
+			message.Append(Transform(xml, @"xsl\header.xsl"));
+			message.Append(Transform(xml, @"xsl\compile.xsl"));
+			message.Append(Transform(xml, @"xsl\javadoc.xsl"));
+			message.Append(Transform(xml, @"xsl\unittests.xsl"));
+			message.Append(Transform(xml, @"xsl\modifications.xsl"));
 		}
 		
-		internal string Transform(string logFileName, string xslFile){
-			if (! File.Exists(logFileName)) {
-				throw new CruiseControlException(String.Format("Logfile not found: {0}", logFileName));
-			}
-			try {		
-				XmlDocument document = new XmlDocument();
-				document.Load(logFileName);
-				
+		internal string Transform(XmlDocument document, string xslFile){
+			try 
+			{		
 				XslTransform transform = new XslTransform();
 				LoadStylesheet(transform, xslFile);
 				XmlReader reader = transform.Transform(document.CreateNavigator(), null); 
@@ -180,19 +189,20 @@ namespace tw.ccnet.core.publishers
 				Console.WriteLine(ex);
 				throw new CruiseControlException(String.Format("Bad XML in logfile: " + ex.Message));
 			}
-		
-		
 		}
 		
-		
-		private static void LoadStylesheet(XslTransform transform, string xslfile) {
-			try {
+		private static void LoadStylesheet(XslTransform transform, string xslfile) 
+		{
+			try 
+			{
 				transform.Load(xslfile);
 			}
-			catch(FileNotFoundException) {
+			catch(FileNotFoundException) 
+			{
 				throw new CruiseControlException(String.Format("XSL stylesheet file not found: {0}", xslfile));
 			}
-			catch(XmlException ex) {
+			catch(XmlException ex) 
+			{
 				throw new CruiseControlException(String.Format("Bad XML in stylesheet: " + ex.Message));
 			}
 		}

@@ -1,4 +1,5 @@
 using System;
+using System.Runtime.Serialization;
 using System.Xml;
 using System.Xml.Serialization;
 using tw.ccnet.core.util;
@@ -6,6 +7,7 @@ using tw.ccnet.remote;
 
 namespace tw.ccnet.core
 {
+	[Serializable]
 	public class IntegrationResult
 	{
 		private string _projectName;
@@ -16,6 +18,7 @@ namespace tw.ccnet.core
 		private string _output;
 		private Modification[] _modifications;
 		private IntegrationStatus _lastIntegrationStatus = IntegrationStatus.Unknown;
+		private Exception _exception;
 
 		// Default constructor required for serialization
 		public IntegrationResult() { }
@@ -80,6 +83,20 @@ namespace tw.ccnet.core
 			set { _lastIntegrationStatus = value; }
 		}
 
+		[XmlIgnore] // Exceptions cannot be serialised because of permission attributes
+		public Exception ExceptionResult
+		{
+			get { return _exception; }
+			set 
+			{ 
+				_exception = value; 
+				if (_exception != null)
+				{
+					Status = IntegrationStatus.Exception;
+				}
+			}
+		}
+
 		public void Start()
 		{
 			_startTime = DateTime.Now;
@@ -132,17 +149,17 @@ namespace tw.ccnet.core
 		public override bool Equals(object obj)
 		{
 			IntegrationResult other = obj as IntegrationResult;
-			bool result = false;
-			if (other != null)
+			if (other == null)
 			{
-				result = this.ProjectName == other.ProjectName
-					&& this.Status == other.Status
-					&& this.Label == other.Label
-					&& this.StartTime == other.StartTime
-					&& this.EndTime == other.EndTime
-					&& this.Output == other.Output;
+				return false;
 			}
-			return result;
+			return this.ProjectName == other.ProjectName
+				&& this.Status == other.Status
+				&& this.Label == other.Label
+				&& this.StartTime == other.StartTime
+				&& this.EndTime == other.EndTime
+				&& this.Output == other.Output;
+				// && this.ExceptionResult == other.ExceptionResult;
 		}
 
 		public override int GetHashCode()

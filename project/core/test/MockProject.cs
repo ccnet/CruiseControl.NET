@@ -49,8 +49,7 @@ namespace tw.ccnet.core.test
 			set { sleep = value; }
 		}
 
-		public void AddIntegrationCompletedEventHandler(IntegrationCompletedEventHandler handler) {}
-		public void AddIntegrationExceptionEventHandler(IntegrationExceptionEventHandler handler) {}
+		public void AddIntegrationEventHandler(IntegrationEventHandler handler) {}
 
 		public IntegrationStatus GetLastBuildStatus() 
 		{
@@ -64,11 +63,12 @@ namespace tw.ccnet.core.test
 
 	public class ExceptionMockProject : MockProject
 	{
+		public const string EXCEPTION_MESSAGE = "Intentional exception";
 		public ExceptionMockProject(string name) : base(name) {}
 
 		public override void RunIntegration()
 		{
-			throw new Exception("Intentional exception");
+			throw new Exception(EXCEPTION_MESSAGE);
 		}
 	}
 }

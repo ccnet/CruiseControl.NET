@@ -19,5 +19,11 @@ namespace tw.ccnet.core.util
 		{
 			AssertEquals(message, false, assert);
 		}
+
+		public static void AssertNotEquals(object expected, object actual)
+		{
+			Assert(String.Format("Expected value ({0}) equals actual value ({1}) but they should not be equal", expected, actual),
+				expected != actual);
+		}
 	}
 }

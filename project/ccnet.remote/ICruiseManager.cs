@@ -85,6 +85,7 @@ namespace tw.ccnet.remote
 	{
 		Success,
 		Failure,
+		Exception,
 		Unknown
 	}
 }

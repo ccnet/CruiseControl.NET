@@ -26,12 +26,13 @@ namespace tw.ccnet.core
 		{
 			_loader = loader;
 			_loader.AddConfigurationChangedHandler(new ConfigurationChangedHandler(OnConfigurationChanged));
-			LoadConfiguration();
+			_projects = _loader.LoadProjects();
+
+			CreateSchedulers();
 		}
 
-		internal void LoadConfiguration()
+		internal void CreateSchedulers()
 		{
-			_projects = _loader.LoadProjects();
 			foreach (IProject project in Projects)
 			{
 				if (project.Schedule != null)
@@ -64,11 +65,6 @@ namespace tw.ccnet.core
 
 		public void Run()
 		{
-			IntegrationExceptionEventHandler handler = new IntegrationExceptionEventHandler(HandleException);
-			foreach (IProject project in Projects) 
-			{
-				project.AddIntegrationExceptionEventHandler(handler);
-			}
 			while (! Stopped)
 			{
 				RunIntegration();
@@ -76,18 +72,12 @@ namespace tw.ccnet.core
 			Trace.WriteLine("CruiseControl stopped");
 		}
 		
-		public void HandleException(object sender, CruiseControlException ex) 
-		{
-			// TODO: this method should be tested!
-			LogUtil.Log((IProject)sender, String.Format("exception: {0}\n{1}", ex.Message, ex.InnerException));
-		}
-
 		internal void RunIntegration()
 		{
 			foreach (IProject project in Projects)
 			{
 				project.Run();
-				if (!Stopped)
+				if (! Stopped)
 					project.Sleep();
 			}
 		}
@@ -118,27 +108,47 @@ namespace tw.ccnet.core
 
 		protected void OnConfigurationChanged()
 		{
-			// stop existing schedulers and remove them
-			Stop();
-			_schedulers = new ArrayList();
+			// reload configuration
+			_projects = _loader.LoadProjects();
 
-			// load new projects
-			LoadConfiguration();
-
-			// Start();
-		}
-
-		private void RemoveSchedule(IProject project)
-		{
-			Scheduler[] schedulers = new Scheduler[_schedulers.Count];
-			_schedulers.CopyTo(schedulers, 0);
-			foreach (IScheduler scheduler in schedulers)
+			IDictionary schedulerMap = CreateSchedulerMap();
+			foreach (IScheduler scheduler in schedulerMap.Values)
 			{
-				if (scheduler.Project == project)
+				IProject project = (IProject)_projects[scheduler.Project.Name];
+				if (project == null)
 				{
+					// project has been removed, so stop scheduler and remove
+					scheduler.Stop();
 					_schedulers.Remove(scheduler);
 				}
+				else
+				{
+					scheduler.Project = project;
+					scheduler.Schedule = project.Schedule;
+				}
 			}
+
+			foreach (IProject project in _projects.Values)
+			{
+				IScheduler scheduler = (IScheduler)schedulerMap[project.Name];
+				if (scheduler == null)
+				{
+					// create new scheduler
+					IScheduler newScheduler = new Scheduler(project.Schedule, project);
+					_schedulers.Add(newScheduler);
+					newScheduler.Start();
+				}
+			}
+		}
+
+		private IDictionary CreateSchedulerMap()
+		{
+			Hashtable schedulerList = new Hashtable();
+			foreach (Scheduler scheduler in _schedulers)
+			{
+				schedulerList.Add(scheduler.Project.Name, scheduler);
+			}
+			return schedulerList;
 		}
 
 		public void Dispose()

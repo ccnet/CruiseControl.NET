@@ -11,7 +11,7 @@ using tw.ccnet.remote;
 namespace tw.ccnet.core.publishers.test
 {
 	[TestFixture]
-	public class EmailPublisherTest
+	public class EmailPublisherTest : Assertion
 	{
 		private EmailPublisher _publisher;
 		private MockEmailGateway _gateway;
@@ -27,20 +27,20 @@ namespace tw.ccnet.core.publishers.test
 		public void TestSendMessage()
 		{
 			_publisher.SendMessage("from@foo.com", "to@bar.com", "test subject", "test message");
-			Assertion.AssertEquals(1, _gateway.SentMessages.Count);
+			AssertEquals(1, _gateway.SentMessages.Count);
 
 			MailMessage message = (MailMessage)_gateway.SentMessages[0];
-			Assertion.AssertEquals("from@foo.com", message.From);
-			Assertion.AssertEquals("to@bar.com", message.To);
-			Assertion.AssertEquals("test subject", message.Subject);
-			Assertion.AssertEquals("test message", message.Body);
+			AssertEquals("from@foo.com", message.From);
+			AssertEquals("to@bar.com", message.To);
+			AssertEquals("test subject", message.Subject);
+			AssertEquals("test message", message.Body);
 		}
 
 		public void TestEmailSubject()
 		{
 			string subject = _publisher.CreateSubject(
 				CreateIntegrationResult(IntegrationStatus.Success, IntegrationStatus.Success));
-			Assertion.AssertEquals("Project#9 Build Successful: Build 0", subject);
+			AssertEquals("Project#9 Build Successful: Build 0", subject);
 		}
 
 		private IntegrationResult CreateIntegrationResult(IntegrationStatus current, IntegrationStatus last)
@@ -58,62 +58,63 @@ namespace tw.ccnet.core.publishers.test
 		{
 			string subject = _publisher.CreateSubject(
 				CreateIntegrationResult(IntegrationStatus.Failure, IntegrationStatus.Success));
-			Assertion.AssertEquals("Project#9 Build Failed", subject);
+			AssertEquals("Project#9 Build Failed", subject);
 		}
 
 		public void TestEmailSubjectFixedBuild()
 		{
 			string subject = _publisher.CreateSubject(
 				CreateIntegrationResult(IntegrationStatus.Success, IntegrationStatus.Failure));
-			Assertion.AssertEquals("Project#9 Build Fixed: Build 0", subject);
+			AssertEquals("Project#9 Build Fixed: Build 0", subject);
 		}
 
 		public void TestEmailMessageWithoutDetails()
 		{
 			_publisher.IncludeDetails = false;
 			string message = _publisher.CreateMessage(CreateIntegrationResult(IntegrationStatus.Success, IntegrationStatus.Success));
-			Assertion.AssertEquals(@"CC.NET Build Results for Project#9: http://localhost/ccnet?log=log19741224023000Lbuild.0.xml", message);
+			AssertEquals(@"CC.NET Build Results for Project#9: http://localhost/ccnet?log=log19741224023000Lbuild.0.xml", message);
 		}
 		
 		public void TestEmailMessageWithDetails() {
 			_publisher.IncludeDetails = true;
 			string message = _publisher.CreateMessage(CreateIntegrationResult(IntegrationStatus.Success, IntegrationStatus.Success));
-			Assertion.Assert(message.StartsWith("<html>"));
-			Assertion.Assert(message.EndsWith("</html>"));
+			Assert(message.StartsWith("<html>"));
+			Assert(message.IndexOf("CC.NET Build Results for Project#9") > 0);
+			Assert(message.IndexOf("Modifications since last build:") > 0);
+			Assert(message.EndsWith("</html>"));
 		}		
 
 		public void TestCreateRecipientList_BuildStateChanged()
 		{
 			string expected = "dmercier@thoughtworks.com, mandersen@thoughtworks.com, orogers@thoughtworks.com, rwan@thoughtworks.com, servid@telus.net";
 			string actual = _publisher.CreateRecipientList(CreateIntegrationResult(IntegrationStatus.Failure, IntegrationStatus.Success));
-			Assertion.AssertEquals(expected, actual);
+			AssertEquals(expected, actual);
 		}
 
 		public void TestCreateRecipientList_BuildStateNotChanged()
 		{
 			string expected = "orogers@thoughtworks.com, servid@telus.net";
 			string actual = _publisher.CreateRecipientList(CreateIntegrationResult(IntegrationStatus.Success, IntegrationStatus.Success));
-			Assertion.AssertEquals(expected, actual);
+			AssertEquals(expected, actual);
 		}
 
 		public void TestCreateRecipientList_NoRecipients()
 		{
 			_publisher.EmailUsers.Clear();
-//			Modification[] modifications = new Modification[] {};
 			IntegrationResult IntegrationResult = CreateIntegrationResult(IntegrationStatus.Success, IntegrationStatus.Failure);
 
 			string expected = String.Empty;
 			string actual = _publisher.CreateRecipientList(IntegrationResult);
-			Assertion.AssertEquals(expected, actual);
+			AssertEquals(expected, actual);
 		}
 
 		public void TestCreateModifiersList()
 		{			
 			Modification[] modifications = CreateModifications();
 			string[] modifiers = _publisher.CreateModifiersList(modifications);
-			Assertion.AssertEquals("expected 2 modifiers", 2, modifications.Length);
-			Assertion.AssertEquals("servid@telus.net", modifiers[0]);
-			Assertion.AssertEquals("orogers@thoughtworks.com", modifiers[1]);
+			AssertEquals("expected 2 modifiers", 2, modifications.Length);
+			AssertEquals("servid@telus.net", modifiers[0]);
+			AssertEquals("orogers@thoughtworks.com", modifiers[1]);
 		}
 
 		public void TestCreateModifiersList_unknownUser()
@@ -123,38 +124,40 @@ namespace tw.ccnet.core.publishers.test
 			modifications[0].UserName = "nosuchuser";
 
 			string[] modifiers = _publisher.CreateModifiersList(modifications);
-			Assertion.AssertEquals("expected 0 modifier", 0, modifiers.Length);
+			AssertEquals("expected 0 modifier", 0, modifiers.Length);
 		}
 
 		public void TestCreateNotifyList()
 		{			
 			string[] always = _publisher.CreateNotifyList(EmailGroup.NotificationType.Always);
-			Assertion.AssertEquals(1, always.Length);
-			Assertion.AssertEquals("servid@telus.net", always[0]);
+			AssertEquals(1, always.Length);
+			AssertEquals("servid@telus.net", always[0]);
 
 			string[] change = _publisher.CreateNotifyList(EmailGroup.NotificationType.Change);
-			Assertion.AssertEquals(4, change.Length);
+			AssertEquals(4, change.Length);
 		}
 
 		public void TestPublish()
 		{
 			IntegrationResult result = CreateIntegrationResult(IntegrationStatus.Success, IntegrationStatus.Success);
 			_publisher.Publish(null, result);
-			Assertion.AssertEquals("mock.gateway.org", _gateway.MailHost);
-			Assertion.AssertEquals(1, _gateway.SentMessages.Count);
+			AssertEquals("mock.gateway.org", _gateway.MailHost);
+			AssertEquals(1, _gateway.SentMessages.Count);
 		}
 
-		public void TestPublish_noModifications()
+		public void TestPublish_UnknownIntegrationStatus()
 		{
 			_publisher.Publish(null, new IntegrationResult());
-			Assertion.AssertEquals(1, _gateway.SentMessages.Count);
+			AssertEquals(0, _gateway.SentMessages.Count);
+			// verify that no messages are sent if there were no modifications
 		}
 
-		public void TestHandleIntegrationCompletedEvent()
+		[Test]
+		public void TestHandleIntegrationEvent()
 		{
-			IntegrationCompletedEventHandler handler = _publisher.IntegrationCompletedEventHandler;
+			IntegrationEventHandler handler = _publisher.IntegrationEventHandler;
 			handler(this, CreateIntegrationResult(IntegrationStatus.Success, IntegrationStatus.Success));
-			Assertion.Assert("Mail message was not sent!", _gateway.SentMessages.Count > 0);
+			Assert("Mail message was not sent!", _gateway.SentMessages.Count > 0);
 		}
 
 		private Modification[] CreateModifications()
@@ -180,10 +183,10 @@ namespace tw.ccnet.core.publishers.test
 			populator.Reflector.AddReflectorTypes(System.Reflection.Assembly.GetExecutingAssembly());
 			populator.Populate(EmailPublisherMother.ConfigurationXml.DocumentElement, _publisher);
 
-			Assertion.AssertEquals("smtp.telus.net", _publisher.MailHost);
-			Assertion.AssertEquals("ccnet@thoughtworks.com", _publisher.FromAddress);
+			AssertEquals("smtp.telus.net", _publisher.MailHost);
+			AssertEquals("ccnet@thoughtworks.com", _publisher.FromAddress);
 
-			Assertion.AssertEquals(5, _publisher.EmailUsers.Count);
+			AssertEquals(5, _publisher.EmailUsers.Count);
 			ArrayList expected = new ArrayList();
 			expected.Add(new EmailUser("buildmaster", "buildmaster", "servid@telus.net"));
 			expected.Add(new EmailUser("orogers", "developers", "orogers@thoughtworks.com"));
@@ -192,15 +195,31 @@ namespace tw.ccnet.core.publishers.test
 			expected.Add(new EmailUser("rwan", "developers", "rwan@thoughtworks.com"));
 			for (int i = 0; i < expected.Count; i++)
 			{
-				Assertion.Assert("EmailUser was not loaded from config: " + expected[i], 
+				Assert("EmailUser was not loaded from config: " + expected[i], 
 					_publisher.EmailUsers.ContainsValue(expected[i]));
 			}
 
-			Assertion.AssertEquals(2, _publisher.EmailGroups.Count);
+			AssertEquals(2, _publisher.EmailGroups.Count);
 			EmailGroup developers = new EmailGroup("developers", EmailGroup.NotificationType.Change);
 			EmailGroup buildmaster = new EmailGroup("buildmaster", EmailGroup.NotificationType.Always);
-			Assertion.AssertEquals(developers, _publisher.EmailGroups["developers"]);
-			Assertion.AssertEquals(buildmaster, _publisher.EmailGroups["buildmaster"]);
+			AssertEquals(developers, _publisher.EmailGroups["developers"]);
+			AssertEquals(buildmaster, _publisher.EmailGroups["buildmaster"]);
+		}
+
+		[Test]
+		public void VerifyEmailSubjectAndMessageForExceptionIntegrationResult()
+		{
+			IntegrationResult result = CreateIntegrationResult(IntegrationStatus.Exception, IntegrationStatus.Unknown);
+			result.ExceptionResult = new CruiseControlException("test exception");
+
+			AssertEquals("Project#9 Build Failed", _publisher.CreateSubject(result));
+			Assert(_publisher.CreateMessage(result).StartsWith("CC.NET Build Results for Project#9"));
+
+			_publisher.IncludeDetails = true;
+			string actual = _publisher.CreateMessage(result);
+			Assert(actual.IndexOf(result.ExceptionResult.Message) > 0);
+			Assert(actual.IndexOf(result.ExceptionResult.GetType().Name) > 0);
+			Assert(actual.IndexOf("BUILD COMPLETE") == -1);			// verify build complete message is not output
 		}
 	}
 }

@@ -33,7 +33,7 @@ namespace integration
 		public static IntegrationEventCounter AddIntegrationEventHandler(CruiseControl cc, string projectName)
 		{
 			IntegrationEventCounter counter = new IntegrationEventCounter();
-			((Project)cc.GetProject(projectName)).AddIntegrationCompletedEventHandler(counter.Handler);
+			((Project)cc.GetProject(projectName)).AddIntegrationEventHandler(counter.IntegrationEventHandler);
 			return counter;
 		}
 
@@ -45,13 +45,13 @@ namespace integration
 		}
 	}
 
-	public class IntegrationEventCounter
+	public class IntegrationEventCounter : IIntegrationEventHandler
 	{
 		private int count = 0;
 
-		public IntegrationCompletedEventHandler Handler
+		public IntegrationEventHandler IntegrationEventHandler
 		{
-			get { return new IntegrationCompletedEventHandler(HandleEvent); }
+			get { return new IntegrationEventHandler(HandleEvent); }
 		}
 
 		private void HandleEvent(object sender, IntegrationResult result)

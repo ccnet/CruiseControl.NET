@@ -10,7 +10,7 @@ using tw.ccnet.remote;
 namespace tw.ccnet.core.publishers.test 
 {
 	[TestFixture]
-	public class XmlLogPublisherTest 
+	public class XmlLogPublisherTest : CustomAssertion
 	{
 		public const string TEMP_SUBDIR="XmlLogPublisherTest";
 		public static readonly string LOGDIR = TempFileUtil.GetTempPath(TEMP_SUBDIR);
@@ -43,15 +43,16 @@ namespace tw.ccnet.core.publishers.test
 
 		public void TestPopulateFromConfig()
 		{
-			Assertion.AssertNotNull("Populated publisher is null", _publisher);
-			Assertion.AssertEquals(LOGDIR, _publisher.LogDir);
+			AssertNotNull("Populated publisher is null", _publisher);
+			AssertEquals(LOGDIR, _publisher.LogDir);
 		}
 
 		public void TestWriteIntegrationResult()
 		{
 			IntegrationResult result = new IntegrationResult();
 			result.Status = IntegrationStatus.Success;
-			CheckXml(CreateExpectedBuildXml(result), result);
+			string output = GenerateBuildOutput(result);
+			AssertEquals(CreateExpectedBuildXml(result), output);
 		}
 		
 		public void TestWriteIntegrationResultOutput()
@@ -59,14 +60,44 @@ namespace tw.ccnet.core.publishers.test
 			IntegrationResult result = new IntegrationResult();
 			result.Status = IntegrationStatus.Success;
 			result.Output ="<tag></tag>";
-			CheckXml(CreateExpectedBuildXml(result), result);
+			string output = GenerateBuildOutput(result);
+			AssertEquals(CreateExpectedBuildXml(result), output);
+		}
+
+		[Test]
+		public void WriteIntegrationResultOutputWithEmbeddedCDATA()
+		{
+			IntegrationResult result = new IntegrationResult();
+			result.Status = IntegrationStatus.Success;
+			result.Output ="<tag><![CDATA[a b <c>]]></tag>";
+			string output = GenerateBuildOutput(result);
+			AssertEquals(CreateExpectedBuildXml(result), output);
 		}
 		
+		[Test]
+		public void WriteOutputWithInvalidXml()
+		{
+			IntegrationResult result = new IntegrationResult();
+			result.Output ="<tag><c></tag>";
+			string output = GenerateBuildOutput(result);
+			AssertContains("<![CDATA[<tag><c></tag>]]>", output);
+		}
+
+		[Test]
+		public void WriteOutputWithInvalidXmlContainingCDATACloseCommand()
+		{
+			IntegrationResult result = new IntegrationResult();
+			result.Output ="<tag><c>]]></tag>";
+			string output = GenerateBuildOutput(result);
+			AssertContains("<![CDATA[<tag><c>] ]></tag>]]>", output);
+		}		
+
 		public void TestWriteFailedIntegrationResult()
 		{
 			IntegrationResult result = new IntegrationResult();
 			result.Status = IntegrationStatus.Failure;
-			CheckXml(CreateExpectedBuildXml(result), result);
+			string output = GenerateBuildOutput(result);
+			AssertEquals(CreateExpectedBuildXml(result), output);
 		}
 		
 		public void TestWriteBuildEvent()
@@ -76,7 +107,7 @@ namespace tw.ccnet.core.publishers.test
 			XmlTextWriter writer = new XmlTextWriter(actual);
 			_publisher.Write(result, writer);
 			string expected = "<cruisecontrol><modifications />" + CreateExpectedBuildXml(result) + "</cruisecontrol>";
-			Assertion.AssertEquals(expected, actual.ToString());
+			AssertEquals(expected, actual.ToString());
 		}
 		
 		private string CreateExpectedBuildXml(IntegrationResult result)
@@ -98,14 +129,14 @@ namespace tw.ccnet.core.publishers.test
 		{
 			IntegrationResult result = CreateIntegrationResult(IntegrationStatus.Failure, true);
 			string expected = "log20020203000000.xml";
-			Assertion.AssertEquals(expected, _publisher.GetFilename(result));
+			AssertEquals(expected, _publisher.GetFilename(result));
 		}
 		
 		public void TestGetFilenameForGoodBuild()
 		{
 			IntegrationResult result = CreateIntegrationResult(IntegrationStatus.Success, true);
 			string expected = "log20020203000000Lbuild.1.xml";
-			Assertion.AssertEquals(expected, _publisher.GetFilename(result));
+			AssertEquals(expected, _publisher.GetFilename(result));
 		}
 		
 		public void TestPublish()
@@ -116,9 +147,16 @@ namespace tw.ccnet.core.publishers.test
 
 			string filename = _publisher.GetFilename(result);
 			string outputPath = Path.Combine(_publisher.LogDir, filename);
-			Assertion.Assert(outputPath + " should exist ", File.Exists(outputPath));
+			Assert(outputPath + " should exist ", File.Exists(outputPath));
 			
 			CheckForXml(outputPath);
+		}
+
+		public void TestPublish_UnknownIntegrationStatus()
+		{
+			AssertFalse(LOGDIR + " should be not exist at start of test.", Directory.Exists(LOGDIR));
+			_publisher.Publish(null, new IntegrationResult());
+			AssertFalse(LOGDIR + " should still not exist at end of this test.", Directory.Exists(LOGDIR));
 		}
 
 		public void TestWriteModifications() 
@@ -128,9 +166,48 @@ namespace tw.ccnet.core.publishers.test
 			StringWriter actual = new StringWriter();
 			XmlTextWriter writer = new XmlTextWriter(actual);
 			_publisher.Write(mods, writer);
-			Assertion.AssertEquals(expected, actual.ToString());
+			AssertEquals(expected, actual.ToString());
 		}
 		
+		[Test]
+		public void WriteException()
+		{
+			ExceptionTest(new CruiseControlException("test exception"));
+		}
+
+		[Test]
+		public void WriteExceptionWithEmbeddedXml()
+		{
+			ExceptionTest(new CruiseControlException("message with <xml><foo/></xml>"));
+		}
+
+		[Test]
+		public void WriteExceptionWithEmbeddedCDATA()
+		{
+			ExceptionTest(new CruiseControlException("message with <xml><![CDATA[<foo/>]]></xml>"), "message with <xml><![CDATA[<foo/>] ]></xml>");
+		}
+
+		private void ExceptionTest(Exception exception)
+		{
+			ExceptionTest(exception, exception.Message);
+		}
+
+		private void ExceptionTest(Exception exception, string exceptionMessage)
+		{
+			IntegrationResult result = IntegrationResultMother.Create(false);
+			result.ExceptionResult = exception;
+			StringWriter buffer = new StringWriter();
+			_publisher.Write(result, new XmlTextWriter(buffer));
+			string actual = buffer.ToString();
+
+			Assert(actual.IndexOf(exceptionMessage) > 0);
+			Assert(actual.IndexOf(exception.GetType().Name) > 0);
+
+			//verify xml is well-formed
+			XmlDocument document = new XmlDocument();
+			document.LoadXml(actual);
+		}
+
 		private Modification[] CreateModifications()
 		{
 			Modification result = new Modification();
@@ -162,13 +239,13 @@ namespace tw.ccnet.core.publishers.test
 		{
 			XmlWriter writer = _publisher.GetXmlWriter(
 				TempFileUtil.GetTempPath(TEMP_SUBDIR), filename);
-			Assertion.AssertNotNull(writer);
+			AssertNotNull(writer);
 			
 			writer.WriteStartElement("bar");
 			writer.WriteEndElement();
 			writer.Close();
 			
-			Assertion.Assert(filename + " should exist ",
+			Assert(filename + " should exist ",
 				TempFileUtil.TempFileExists(TEMP_SUBDIR, filename));
 		}
 
@@ -176,17 +253,17 @@ namespace tw.ccnet.core.publishers.test
 		{
 			AssertGetXmlWriter("TestGetXmlWriter1.xml");
 			AssertGetXmlWriter("TestGetXmlWriter2.xml");
-			Assertion.Assert("there should be two log files", 
+			Assert("there should be two log files", 
 				TempFileUtil.TempFileExists(TEMP_SUBDIR, "TestGetXmlWriter1.xml"));
-			Assertion.AssertEquals(2, Directory.GetFiles(TempFileUtil.GetTempPath(TEMP_SUBDIR)).Length);
+			AssertEquals(2, Directory.GetFiles(TempFileUtil.GetTempPath(TEMP_SUBDIR)).Length);
 		}
 
-		private void CheckXml(string expected, IntegrationResult input)
+		private string GenerateBuildOutput(IntegrationResult input)
 		{
 			StringWriter actual = new StringWriter();
 			XmlTextWriter writer = new XmlTextWriter(actual);
-			_publisher.WriteInfo(input, writer);
-			Assertion.AssertEquals(expected, actual.ToString());
+			_publisher.WriteBuildElement(input, writer);
+			return actual.ToString();
 		}
 
 		private IntegrationResult CreateIntegrationResult(IntegrationStatus status, bool addModifications)

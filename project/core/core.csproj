@@ -616,6 +616,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "util\CustomAssertion.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "util\DateUtil.cs"
                     SubType = "Code"
                     BuildAction = "Compile"

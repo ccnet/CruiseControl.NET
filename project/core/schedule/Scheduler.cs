@@ -1,5 +1,6 @@
 using System;
 using System.Threading;
+using tw.ccnet.core.util;
 
 namespace tw.ccnet.core.schedule
 {
@@ -37,34 +38,31 @@ namespace tw.ccnet.core.schedule
 		{
 			if (IsRunning)
 			{
-				throw new CruiseControlException("Schedule is already started.  Stop before starting again.");
+				LogUtil.Log("scheduler", "Thread cannot be started.  It is already running.");
+				return;
 			}
+			// TODO: need verification that multiple thread instances cannot be created.
+			_thread =  new Thread(new ThreadStart(Run));
 			_state = SchedulerState.Running;
-			_thread = new Thread(new ThreadStart(Run));
 			_thread.Start();
 		}
 
 		private void Run()
 		{
-			try
+			while (IsRunning && _schedule.ShouldRun())
 			{
-				while (IsRunning && _schedule.ShouldRun())
+				try
 				{
-					_project.RunIntegration();
-					_schedule.Update();
-					Thread.Sleep(_schedule.CalculateTimeToNextIntegration());
-					// Console.WriteLine("sleep " + _schedule.CalculateTimeToNextIntegration().Ticks);
+					_project.Run();
 				}
+				catch (Exception ex) 
+				{ 
+					LogUtil.Log(_project, "Project threw an exception: " + ex);
+				}
+				_schedule.Update();
+				Thread.Sleep(_schedule.CalculateTimeToNextIntegration());
 			}
-			catch (Exception ex) 
-			{ 
-				_thread.Abort();
-				Console.WriteLine("Exception: " + ex);
-			}
-			finally
-			{
-				_state = SchedulerState.Stopped;
-			}
+			_state = SchedulerState.Stopped;
 		}
 
 		public bool IsRunning

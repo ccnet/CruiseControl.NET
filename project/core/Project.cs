@@ -9,6 +9,7 @@ using tw.ccnet.core.publishers;
 using tw.ccnet.core;
 using tw.ccnet.remote;
 using tw.ccnet.core.schedule;
+using tw.ccnet.core.util;
 
 namespace tw.ccnet.core
 {
@@ -39,8 +40,7 @@ namespace tw.ccnet.core
 		private bool _stopped = false;
 		private IntegrationResult _lastIntegration;
 		private IntegrationResult _currentIntegration;
-		private event IntegrationCompletedEventHandler _integrationCompletedEventHandler;
-		private event IntegrationExceptionEventHandler _integrationExceptionEventHandler;
+		private event IntegrationEventHandler _integrationEventHandler;
 		private string currentActivity;
 		private int modificationDelay = 0;
 		private int sleepTime = 0;
@@ -148,28 +148,24 @@ namespace tw.ccnet.core
 
 		public void Run()
 		{
+			if (Stopped) return;
+
 			// lock
-			if (NotStopped)
+			try
 			{
-				try
+				PreBuild();
+				DateTime modStart = DateTime.Now;
+				GetSourceModifications();
+				if (ShouldRunBuild())
 				{
-					RunIntegration();
-				}
-				catch (CruiseControlException ex)
-				{
-					RaiseIntegrationExceptionEvent(ex); 
+					RunBuild();
+					PostBuild();
 				}
 			}
-		}
-
-		public void RunIntegration()
-		{
-			PreBuild();
-			DateTime modStart = DateTime.Now;
-			GetSourceModifications();
-			if (ShouldRunIntegration())
+			catch (CruiseControlException ex)
 			{
-				RunBuild();
+				Log("Exception occurred while running integration", ex);
+				CurrentIntegration.ExceptionResult = ex;
 				PostBuild();
 			}
 		}
@@ -201,8 +197,19 @@ namespace tw.ccnet.core
 		internal void PostBuild()
 		{
 			CurrentIntegration.End();
-			RaiseIntegrationCompeletedEvent(CurrentIntegration);
-			BuildHistory.Save(CurrentIntegration);
+			try
+			{
+				BuildHistory.Save(CurrentIntegration);
+			}
+			catch (CruiseControlException ex)
+			{
+				Log("Exception when saving build history", ex);
+				if (CurrentIntegration.ExceptionResult == null)
+				{
+					CurrentIntegration.ExceptionResult = ex;
+				}
+			}
+			RaiseIntegrationEvent(CurrentIntegration);
 			LastIntegration = CurrentIntegration;
 		}
 
@@ -224,23 +231,23 @@ namespace tw.ccnet.core
 			return (BuildHistory.Exists()) ? BuildHistory.Load() : new IntegrationResult();
 		}
 
-		private bool NotStopped
-		{
-			get { return ! _stopped; }
-		}
-
 		private void Log(string message)
 		{
-			Trace.WriteLine(String.Format("[project: {0}] {1}", Name, message)); 
+			LogUtil.Log(this, message);
 		}
 
-		public void AddPublisher(object publisher)
+		private void Log(string message, CruiseControlException ex)
+		{
+			LogUtil.Log(this, message, ex);
+		}
+
+		public void AddPublisher(IIntegrationEventHandler publisher)
 		{
 			_publishers.Add(publisher);
-			AddEventHandler(publisher);
+			AddIntegrationEventHandler(publisher.IntegrationEventHandler);
 		}
 
-		internal bool ShouldRunIntegration() 
+		internal bool ShouldRunBuild() 
 		{
 			if (CurrentIntegration.ShouldRunIntegration()) 
 			{
@@ -251,7 +258,7 @@ namespace tw.ccnet.core
 					if (diff.TotalMilliseconds < ModificationDelay) 
 					{
 						sleepTime = ModificationDelay - (int)diff.TotalMilliseconds;
-						Log(string.Format("Changes found within the modification delay"));
+						Log("Changes found within the modification delay");
 						return false;
 					}
 
@@ -282,45 +289,20 @@ namespace tw.ccnet.core
 		{
 			for (int i = 0; i < list.Count; i++)
 			{
-				AddEventHandler(list[i]);
+				AddIntegrationEventHandler(((IIntegrationEventHandler)list[i]).IntegrationEventHandler);
 			}
 		}
 
-		private void AddEventHandler(object handler)
+		public void AddIntegrationEventHandler(IntegrationEventHandler handler)
 		{
-			if (handler is IIntegrationCompletedEventHandler)
-			{
-				AddIntegrationCompletedEventHandler(((IIntegrationCompletedEventHandler)handler).IntegrationCompletedEventHandler);
-			}
-			else if (handler is IIntegrationExceptionEventHandler)
-			{
-				AddIntegrationExceptionEventHandler(((IIntegrationExceptionEventHandler)handler).IntegrationExceptionEventHandler);
-			}
+			_integrationEventHandler += handler;
 		}
 
-		public void AddIntegrationCompletedEventHandler(IntegrationCompletedEventHandler handler)
+		private void RaiseIntegrationEvent(IntegrationResult result)
 		{
-			_integrationCompletedEventHandler += handler;
-		}
-
-		private void RaiseIntegrationCompeletedEvent(IntegrationResult result)
-		{
-			if (_integrationCompletedEventHandler != null)
+			if (_integrationEventHandler != null)
 			{
-				_integrationCompletedEventHandler(this, result);
-			}
-		}
-
-		public void AddIntegrationExceptionEventHandler(IntegrationExceptionEventHandler handler)
-		{
-			_integrationExceptionEventHandler += handler;
-		}
-
-		private void RaiseIntegrationExceptionEvent(CruiseControlException ex)
-		{
-			if (_integrationExceptionEventHandler != null)
-			{
-				_integrationExceptionEventHandler(this, ex);
+				_integrationEventHandler(this, result);
 			}
 		}
 		#endregion Event Handling

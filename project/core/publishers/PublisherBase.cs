@@ -4,16 +4,16 @@ using System.Xml;
 
 namespace tw.ccnet.core.publishers 
 {
-	public abstract class PublisherBase : IIntegrationCompletedEventHandler
+	public abstract class PublisherBase : IIntegrationEventHandler
 	{
-		private IntegrationCompletedEventHandler _publish; 
+		private IntegrationEventHandler _publish; 
 
 		public PublisherBase()
 		{
-			_publish = new IntegrationCompletedEventHandler(Publish);
+			_publish = new IntegrationEventHandler(Publish);
 		}
 		
-		public IntegrationCompletedEventHandler IntegrationCompletedEventHandler 
+		public IntegrationEventHandler IntegrationEventHandler 
 		{
 			get { return _publish;}
 		}

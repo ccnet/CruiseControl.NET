@@ -6,30 +6,33 @@
     <xsl:output method="html"/>
 
     <xsl:template match="/">
-        <xsl:variable name="modification.list" select="cruisecontrol/modifications/modification"/>
+        <xsl:variable name="modification.list" select="/cruisecontrol/modifications/modification"/>
 
         <table cellpadding="2" cellspacing="0" border="0" width="98%">
 
-            <xsl:if test="cruisecontrol/build/@error">
-                <tr><td style="font-size:12px; color:#000000; font-weight:bold;">BUILD FAILED</td></tr>
+            <xsl:if test="/cruisecontrol/exception">
+                <tr><td style="font-size:12px; color:#000000; font-weight:bold;">BUILD EXCEPTION</td></tr>
                 <tr><td style="color:#000000;">
                     <span style="font-weight:bold;">Error Message:</span>
-                    <xsl:value-of select="cruisecontrol/build/@error"/>
+                    <xsl:value-of select="/cruisecontrol/exception"/>
                 </td></tr>
             </xsl:if>
-
-            <xsl:if test="not (cruisecontrol/build/@error)">
+            <xsl:if test="/cruisecontrol/build/@error">
+                <tr><td style="font-size:12px; color:#000000; font-weight:bold;">BUILD FAILED
+                </td></tr>
+            </xsl:if>
+            <xsl:if test="not (/cruisecontrol/build/@error) and not (/cruisecontrol/exception)">
                 <tr><td style="font-size:12px; color:#000000; font-weight:bold;">BUILD COMPLETE
                 </td></tr>
             </xsl:if>
 
             <tr><td style="color:#000000;">
                 <span style="font-weight:bold;">Date of build:&#160;</span>
-                <xsl:value-of select="cruisecontrol/build/@date"/>
+                <xsl:value-of select="/cruisecontrol/build/@date"/>
             </td></tr>
             <tr><td style="color:#000000;">
                 <span style="font-weight:bold;">Time to build:&#160;</span>
-                <xsl:value-of select="cruisecontrol/build/@buildtime"/>
+                <xsl:value-of select="/cruisecontrol/build/@buildtime"/>
             </td></tr>
             <xsl:apply-templates select="$modification.list">
                 <xsl:sort select="date" order="descending" data-type="text" />
@@ -38,7 +41,7 @@
     </xsl:template>
 
     <!-- Last Modification template -->
-    <xsl:template match="modification">
+    <xsl:template match="/cruisecontrol/modifications/modification">
         <xsl:if test="position() = 1">
             <tr><td style="color:#000000;">
                 <span style="font-weight:bold;">Last changed:&#160;</span>

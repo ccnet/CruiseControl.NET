@@ -8,9 +8,8 @@ namespace tw.ccnet.core
 		string Name { get; }
 		ISchedule Schedule { get; }
 		void Run();
-		void RunIntegration();  // temporary until scheduling is fully integrated
-		void AddIntegrationCompletedEventHandler(IntegrationCompletedEventHandler handler);
-		void AddIntegrationExceptionEventHandler(IntegrationExceptionEventHandler handler);
+
+		void AddIntegrationEventHandler(IntegrationEventHandler handler);
 		IntegrationStatus GetLastBuildStatus();
 		void Sleep();
 	}

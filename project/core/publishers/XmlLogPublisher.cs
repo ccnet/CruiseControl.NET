@@ -2,6 +2,8 @@ using System;
 using System.IO;
 using System.Xml;
 using Exortech.NetReflector;
+using tw.ccnet.core.util;
+using tw.ccnet.remote;
 
 namespace tw.ccnet.core.publishers 
 {
@@ -14,6 +16,7 @@ namespace tw.ccnet.core.publishers
 			public const string CRUISE_ROOT="cruisecontrol";
 			public const string MODIFICATIONS="modifications";
 			public const string INFO="info";
+			public const string EXCEPTION="exception";
 		}
 
 		private string _logDir;
@@ -31,8 +34,9 @@ namespace tw.ccnet.core.publishers
 
 		public override void Publish(object source, IntegrationResult result)
 		{
-			string filename = GetFilename(result);
-			XmlWriter writer = GetXmlWriter(LogDir, filename); 
+			if (result.Status == IntegrationStatus.Unknown) return;
+
+			XmlWriter writer = GetXmlWriter(LogDir, GetFilename(result)); 
 			try 
 			{
 				Write(result, writer);
@@ -72,28 +76,59 @@ namespace tw.ccnet.core.publishers
 			writer.WriteStartElement(Elements.MODIFICATIONS);
 			Write(result.Modifications, writer);
 			writer.WriteEndElement();
-			WriteInfo(result, writer);
+			WriteBuildElement(result, writer);
+			WriteException(result, writer);
 			writer.WriteEndElement();
 		}
 		
-		public void WriteInfo(IntegrationResult IntegrationResult, XmlWriter writer)
+		public void WriteBuildElement(IntegrationResult result, XmlWriter writer)
 		{
 			writer.WriteStartElement(Elements.BUILD);
-			writer.WriteAttributeString("date", IntegrationResult.StartTime.ToString());
+			writer.WriteAttributeString("date", result.StartTime.ToString());
 
 			// hide the milliseconds
-			TimeSpan time = IntegrationResult.TotalIntegrationTime;
+			TimeSpan time = result.TotalIntegrationTime;
 			writer.WriteAttributeString("buildtime", string.Format("{0:d2}:{1:d2}:{2:d2}", time.Hours, time.Minutes, time.Seconds));
-			if (IntegrationResult.Failed)
+			if (result.Failed)
 			{
 				writer.WriteAttributeString("error", "true"); 
 			}
 			
-			if (IntegrationResult.Output != null)
+			if (result.Output != null)
 			{
-				writer.WriteRaw(IntegrationResult.Output.ToString());
+				WriteIntegrationResultOutput(result, writer);
 			}
 			
+			writer.WriteEndElement();
+		}
+
+		private void WriteIntegrationResultOutput(IntegrationResult result, XmlWriter writer)
+		{
+			XmlValidatingReader reader = new XmlValidatingReader(result.Output, XmlNodeType.Element, null);
+			try 
+			{ 
+				reader.ReadInnerXml();
+				writer.WriteNode(reader, false);
+			}
+			catch (XmlException) 
+			{
+				writer.WriteCData(XmlUtil.EncodeCDATA(result.Output));
+			}
+			finally 
+			{ 
+				reader.Close(); 
+			}
+		}
+
+		public void WriteException(IntegrationResult result, XmlWriter writer)
+		{
+			if (result.ExceptionResult == null)
+			{
+				return;
+			}
+
+			writer.WriteStartElement(Elements.EXCEPTION);
+			writer.WriteCData(XmlUtil.EncodeCDATA(result.ExceptionResult.ToString()));
 			writer.WriteEndElement();
 		}
 
