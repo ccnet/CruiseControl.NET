@@ -42,9 +42,13 @@ namespace ThoughtWorks.CruiseControl.Core
 		public event IntegrationCompletedEventHandler IntegrationCompleted;
 
 		private string _webURL = "http://localhost/CruiseControl.NET/"; // default value
+		private ISourceControl _sourceControl;
+		private IBuilder _builder;
+		private ILabeller _labeller = new DefaultLabeller();
 		private ArrayList _publishers = new ArrayList();
 		private IntegrationResult _lastIntegrationResult = null;
 		private ProjectActivity _currentActivity = ProjectActivity.Unknown;
+		private int _modificationDelaySeconds = 0;
 
 		[ReflectorProperty("webURL", Required=false)]
 		public string WebURL
@@ -54,10 +58,18 @@ namespace ThoughtWorks.CruiseControl.Core
 		}
 
 		[ReflectorProperty("build", InstanceTypeKey="type")]
-		public IBuilder Builder;
+		public IBuilder Builder
+		{
+			get { return _builder; }
+			set { _builder = value; }
+		}
 
 		[ReflectorProperty("sourcecontrol", InstanceTypeKey="type")]
-		public ISourceControl SourceControl;
+		public ISourceControl SourceControl
+		{
+			get { return _sourceControl; }
+			set { _sourceControl = value; }
+		}		
 
 		/// <summary>
 		/// The list of build-completed publishers used by this project.  This property is
@@ -90,10 +102,18 @@ namespace ThoughtWorks.CruiseControl.Core
 		/// checkin.
 		/// </summary>
 		[ReflectorProperty("modificationDelaySeconds", Required=false)]
-		public int ModificationDelaySeconds;
+		public int ModificationDelaySeconds
+		{
+			get { return _modificationDelaySeconds; }
+			set { _modificationDelaySeconds = value; }
+		}
 
 		[ReflectorProperty("labeller", InstanceTypeKey="type", Required=false)]
-		public ILabeller Labeller = new DefaultLabeller();
+		public ILabeller Labeller
+		{
+			get { return _labeller; }
+			set { _labeller = value; }
+		}
 
 		public ProjectActivity CurrentActivity 
 		{

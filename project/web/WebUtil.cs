@@ -2,9 +2,7 @@ using System;
 using System.Configuration;
 using System.IO;
 using System.Web;
-
 using ThoughtWorks.CruiseControl.Core;
-using ThoughtWorks.CruiseControl.Core.Config;
 
 namespace ThoughtWorks.CruiseControl.Web
 {
