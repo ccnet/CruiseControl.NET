@@ -161,10 +161,6 @@
                     BuildAction = "EmbeddedResource"
                 />
                 <File
-                    RelPath = "Notes.txt"
-                    BuildAction = "Content"
-                />
-                <File
                     RelPath = "NotifyIconEx.cs"
                     SubType = "Component"
                     BuildAction = "Compile"
