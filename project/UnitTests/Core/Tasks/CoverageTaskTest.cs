@@ -4,7 +4,6 @@ using NMock;
 using NMock.Constraints;
 using NUnit.Framework;
 using ThoughtWorks.CruiseControl.Core.Builder;
-using ThoughtWorks.CruiseControl.Core.tasks;
 
 namespace ThoughtWorks.CruiseControl.Core.Tasks.Test
 {
@@ -14,8 +13,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks.Test
 		private CoverageTask _ncoverTask;
 
 		public CoverageTaskTest()
-		{
-		}
+		{}
 
 		[Test]
 		public void LoadsNunitTaskAndDevEnvBuilder()
@@ -107,7 +105,6 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks.Test
 			get { throw new NotImplementedException(); }
 			set { throw new NotImplementedException(); }
 		}
-
 
 	}
 

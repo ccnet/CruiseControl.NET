@@ -2,7 +2,7 @@ using System;
 using System.IO;
 using System.Xml;
 
-namespace ThoughtWorks.CruiseControl.Core.Publishers
+namespace ThoughtWorks.CruiseControl.Core.Tasks
 {
 	public class FileTaskResult : ITaskResult
 	{

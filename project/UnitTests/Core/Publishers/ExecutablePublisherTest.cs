@@ -1,21 +1,19 @@
 using Exortech.NetReflector;
-
+using NMock;
+using NMock.Constraints;
 using NUnit.Framework;
 
 using ThoughtWorks.CruiseControl.Core.Test;
+using ThoughtWorks.CruiseControl.Core.Util;
 
 namespace ThoughtWorks.CruiseControl.Core.Publishers.Test
 {
-    /// <summary>
-    /// Tests the ExecutablePublisher.
-    /// Written by Garrett Smith, gsmith@northwestern.edu.
-    /// </summary>
     [TestFixture]
     public class ExecutablePublisherTest
     {
-
         private ExecutablePublisher _publisher;
         private IntegrationResult _result;
+		private IMock _mockExecutor;
 
         private static readonly string _EXECUTABLE = "someexe.exe";
         private static readonly string _ARGUMENTS = "arg1 arg2";
@@ -34,10 +32,11 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers.Test
              workingDirectory=""{3}""
              nonzeroExitFatal=""{4}"" />";
 
-        [SetUp]
+    	[SetUp]
         public void SetUp()
         {
-            _publisher = new ExecutablePublisher();
+			_mockExecutor = new DynamicMock(typeof(ProcessExecutor));
+            _publisher = new ExecutablePublisher((ProcessExecutor) _mockExecutor.MockInstance);
             _publisher.Executable = "cmd.exe";
             _publisher.NonzeroExitFatal = true;
             _result = IntegrationResultMother.CreateSuccessful();
@@ -47,8 +46,7 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers.Test
         [TearDown]
         public void TearDown()
         {
-            _publisher = null;
-            _result = null;
+			_mockExecutor.Verify();
         }
 
         [Test]
@@ -95,44 +93,47 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers.Test
         [Test]
 		public void CanGetLabel()
         {
-            _publisher.Arguments = "/C \"set\"";
-
-            _publisher.PublishIntegrationResults( null, _result );
+        	CollectingConstraint args = new CollectingConstraint();
+        	_mockExecutor.ExpectAndReturn("Execute", ProcessResultFixture.CreateSuccessfulResult(), args);
+			
+			_publisher.Arguments = "/C \"set\"";
+            _publisher.PublishIntegrationResults(_result );
 
             Assert.IsNotNull( _publisher.StandardOutput, "StandardOutput was null" );
-            Assert.IsTrue( _publisher.StandardOutput.IndexOf( _LABEL_ENVIRONMENT_KEY ) != -1,
+
+			ProcessInfo actualInfo = (ProcessInfo) args.Parameter;
+            Assert.IsTrue( actualInfo.EnvironmentVariables.ContainsKey(_LABEL_ENVIRONMENT_KEY),
                 "the label key wasn't in the environment" );
-            Assert.IsTrue( _publisher.StandardOutput.IndexOf( _LABEL ) != -1,
+            Assert.AreEqual( _LABEL, actualInfo.EnvironmentVariables[_LABEL_ENVIRONMENT_KEY],
                 "the label wasn't in the environment" );
         }
 
-        [Test]
-        [ExpectedException(typeof( CruiseControlException ) )]
+        [Test, ExpectedException(typeof( CruiseControlException ) )]
         public void CanHandleTimeout()
         {
-            _publisher.Arguments = "/C \"sleep 200\"";
+			_mockExecutor.ExpectAndReturn("Execute", ProcessResultFixture.CreateTimedOutResult(), new IsAnything());
+			
+			_publisher.Arguments = "/C \"sleep 200\"";
             _publisher.Timeout = 1;
-
-            _publisher.PublishIntegrationResults( null, _result );
+            _publisher.PublishIntegrationResults(_result );
         }
 
-        [Test]
-        [ExpectedException( typeof( CruiseControlException ) )]
+        [Test, ExpectedException( typeof( CruiseControlException ) )]
         public void NonzeroExitFatal()
         {
-            _publisher.Arguments = "/C \"exit 1\"";
+			_mockExecutor.ExpectAndReturn("Execute", ProcessResultFixture.CreateNonZeroExitCodeResult(), new IsAnything());
 
-            _publisher.PublishIntegrationResults( null, _result );
+            _publisher.Arguments = "/C \"exit 1\"";
+            _publisher.PublishIntegrationResults(_result );
         }
 
         [Test]
         public void CanExecuteSimpleProcess()
         {
-            _publisher.Arguments = "/C \"echo foo\"";
-
-            _publisher.PublishIntegrationResults( null, _result );
-
-            Assert.IsNotNull( _publisher.StandardOutput, "StandardOutput was null" );
+			_mockExecutor.ExpectAndReturn("Execute", ProcessResultFixture.CreateSuccessfulResult(), new IsAnything());
+			
+			_publisher.Arguments = "/C \"echo foo\"";
+            _publisher.PublishIntegrationResults(_result );
         }
 
         private string CreateConfigurationXml( string executable, string arguments, string timeout, string workingDirectory, string nonzeroExitFatal )

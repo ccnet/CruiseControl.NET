@@ -1,7 +1,6 @@
 using System;
 using System.IO;
 using Exortech.NetReflector;
-using ThoughtWorks.CruiseControl.Core.tasks;
 using ThoughtWorks.CruiseControl.Core.Util;
 
 namespace ThoughtWorks.CruiseControl.Core.Tasks
@@ -12,12 +11,13 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 		private ProcessExecutor _exec;
 		private string _srcFilePath;
 		private string _ncoverBinPath;
-		private string _reportName= String.Empty;
+		private string _reportName = String.Empty;
 		private string _ncoverReportBinPath;
 		private string _nrecoverBinPath;
 		private NUnitTask _nunitTask;
 
-		public NCoverCoverage() :this(new ProcessExecutor()){}
+		public NCoverCoverage() : this(new ProcessExecutor())
+		{}
 
 		public NCoverCoverage(ProcessExecutor executor)
 		{
@@ -39,7 +39,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 			}
 			finally
 			{
-				RemoveInstumentation();	
+				RemoveInstumentation();
 			}
 		}
 
@@ -56,53 +56,52 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 			RunProcess(_nrecoverBinPath, args);
 		}
 
-		private void RunProcess( string binaryPath, string args)
+		private void RunProcess(string binaryPath, string args)
 		{
 			_exec.Execute(new ProcessInfo(binaryPath, args));
 		}
 
 		private void GenerateReport()
 		{
-			string actualPath = new FileInfo(_nunitTask.Assembly[0]).DirectoryName+@"\"+ "actual.xml";
-			string args = "/actual:" +"\""+ actualPath+"\"" + " /report-name:" + "\"" + _reportName + "\"";
+			string actualPath = new FileInfo(_nunitTask.Assembly[0]).DirectoryName + @"\" + "actual.xml";
+			string args = "/actual:" + "\"" + actualPath + "\"" + " /report-name:" + "\"" + _reportName + "\"";
 			Log.Debug(string.Format("<report>{0} {1}</report>", _ncoverReportBinPath, args));
 			RunProcess(_ncoverReportBinPath, args);
 		}
 
-
-		[ReflectorProperty("source")] 
+		[ReflectorProperty("source")]
 		public string SrcFilePath
 		{
 			set { _srcFilePath = value; }
 			get { return _srcFilePath; }
 		}
 
-		[ReflectorProperty("report", Required = false)] 
+		[ReflectorProperty("report", Required = false)]
 		public string ReportName
 		{
 			get { return _reportName; }
 			set
 			{
-				if(value != String.Empty) 
+				if (value != String.Empty)
 					_reportName = value;
 			}
 		}
 
-		[ReflectorProperty("ncoverBin")] 
+		[ReflectorProperty("ncoverBin")]
 		public string NCoverInstrumentBinPath
 		{
 			set { _ncoverBinPath = value; }
 			get { return _ncoverBinPath; }
 		}
-		
-		[ReflectorProperty("ncoverReportBin")] 
+
+		[ReflectorProperty("ncoverReportBin")]
 		public string NCoverReportBinPath
 		{
 			get { return _ncoverReportBinPath; }
 			set { _ncoverReportBinPath = value; }
 		}
-		
-		[ReflectorProperty("nrecoverBin")] 
+
+		[ReflectorProperty("nrecoverBin")]
 		public string NRecoverPath
 		{
 			get { return _nrecoverBinPath; }

@@ -1,22 +1,12 @@
-using ThoughtWorks.CruiseControl.Core.Tasks;
-
-namespace ThoughtWorks.CruiseControl.Core.tasks
+namespace ThoughtWorks.CruiseControl.Core.Tasks
 {
 	public interface ICoverage
 	{
 		void Instrument();
 		void Report();
-		
-		NUnitTask NUnitTask
-		{
-			get;
-			set;
-		}
 
-		string ReportName
-		{
-			get ;
-			set	;
-		}
+		NUnitTask NUnitTask { get; set; }
+
+		string ReportName { get; set; }
 	}
 }
