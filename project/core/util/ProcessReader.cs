@@ -48,7 +48,7 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 			while ((nextLine = stream.ReadLine()) != null)
 			{
 				output.WriteLine(nextLine);
-//				Log.Debug(nextLine);
+				Log.Debug(nextLine);
 			}
 		}
 
