@@ -18,8 +18,7 @@ namespace tw.ccnet.web
 {
 	public class Default : System.Web.UI.Page
 	{
-		protected Template template;
-		protected HtmlGenericControl contentXsl;
+		protected System.Web.UI.WebControls.Label BodyLabel;
 
 		private void Page_Load(object sender, System.EventArgs e)
 		{
@@ -29,7 +28,7 @@ namespace tw.ccnet.web
 			}
 			catch(CruiseControlException ex)
 			{
-				contentXsl.InnerHtml += WebUtil.FormatException(ex);
+				BodyLabel.Text += WebUtil.FormatException(ex);
 			}
 		}
 
@@ -64,7 +63,7 @@ namespace tw.ccnet.web
 				throw new CruiseControlException(String.Format("Bad XML in logfile: " + ex.Message));
 			}
 
-			contentXsl.InnerHtml = builder.ToString();
+			BodyLabel.Text = builder.ToString();
 		}
 
 		#region Web Form Designer generated code

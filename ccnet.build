@@ -136,6 +136,8 @@
                 <includes name="${build.dir}\${core.dll}"/>
                 <includes name="${build.dir}\ccnet.remote.dll"/>
                 <includes name="${lib.dir}\nunit.framework.dll"/>
+                <includes name="${lib.dir}\SiteMesh.dll"/>
+                <includes name="${lib.dir}\DecoratorControls.dll"/>
             </references>
             <!-- don't warn about uncommented public methods -->
             <arg value="/nowarn:1591"/>
@@ -252,6 +254,13 @@
                 <includes name="ccnet.remote.dll"/>
                 <includes name="${core.dll}"/>
                 <includes name="${web.dll}"/>
+            </fileset>
+        </copy>
+
+        <copy todir="${webapp.dir}\bin" overwrite="true">
+            <fileset basedir="lib">
+                <includes name="SiteMesh.dll"/>
+                <includes name="DecoratorControls.dll"/>
             </fileset>
         </copy>
 

@@ -1,7 +1,7 @@
 <%@ Page language="c#" Codebehind="Statistics.aspx.cs" AutoEventWireup="false" Inherits="tw.ccnet.web.Statistics" %>
-<%@ Register TagPrefix="CCNet" TagName="Template" Src="Template.ascx" %>
-<CCNet:Template runAt="server">
-	<content>
-		<p id="statistics" Runat="server" class="stylesection" />
-	</content>
-</CCNet:Template>
+<HTML>
+	<HEAD>
+		<TITLE>CruiseControl .NET Statistics</TITLE>
+	</HEAD>
+	<asp:Label id="BodyLabel" runat="server" Width="432px" Height="400px" />
+</HTML>

@@ -16,8 +16,8 @@ namespace tw.ccnet.web
 {
 	public class Statistics : System.Web.UI.Page
 	{
-		protected HtmlGenericControl statistics;
-
+		protected System.Web.UI.WebControls.Label BodyLabel;
+	
 		private void Page_Load(object sender, System.EventArgs e)
 		{
 			try
@@ -26,19 +26,19 @@ namespace tw.ccnet.web
 			}
 			catch(CruiseControlException ex)
 			{
-				statistics.InnerHtml += ex.Message;
+				Response.Write(ex.Message);
 			}
 		}
 
 		private void InitStatistics(string path)
 		{
 			LogStatistics logStats = LogStatistics.Create(path);
-			statistics.InnerHtml += String.Format("<p>Total Successful Builds: {0}</p>", logStats.GetTotalSuccessfulBuilds());
-			statistics.InnerHtml += String.Format("<p>Total Failed Builds: {0}</p>", logStats.GetTotalFailedBuilds());
-			statistics.InnerHtml += String.Format("<p>Success Ratio: {0}</p>", logStats.GetSuccessRatio());
-			statistics.InnerHtml += String.Format("<p>Latest Build Status: {0}</p>", 
-				(logStats.IsLatestBuildSuccessful() ? "Successful" : "Failed") );
-			statistics.InnerHtml += String.Format("<p>Time Since Latest Build: {0}</p>", logStats.GetTimeSinceLatestBuildString());
+			BodyLabel.Text += (String.Format("<p>Total Successful Builds: {0}</p>", logStats.GetTotalSuccessfulBuilds()));
+			BodyLabel.Text += (String.Format("<p>Total Failed Builds: {0}</p>", logStats.GetTotalFailedBuilds()));
+			BodyLabel.Text += (String.Format("<p>Success Ratio: {0}</p>", logStats.GetSuccessRatio()));
+			BodyLabel.Text += (String.Format("<p>Latest Build Status: {0}</p>", 
+				(logStats.IsLatestBuildSuccessful() ? "Successful" : "Failed") ));
+			BodyLabel.Text += (String.Format("<p>Time Since Latest Build: {0}</p>", logStats.GetTimeSinceLatestBuildString()));
 		}
 
 		#region Web Form Designer generated code
@@ -51,6 +51,7 @@ namespace tw.ccnet.web
 		private void InitializeComponent()
 		{    
 			this.Load += new System.EventHandler(this.Page_Load);
+
 		}
 		#endregion
 	}

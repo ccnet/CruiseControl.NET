@@ -110,9 +110,20 @@
                     Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
                 />
                 <Reference
+                    Name = "SiteMesh"
+                    AssemblyName = "SiteMesh"
+                    HintPath = "..\..\lib\SiteMesh.dll"
+                />
+                <Reference
+                    Name = "DecoratorControls"
+                    AssemblyName = "DecoratorControls"
+                    HintPath = "..\..\lib\DecoratorControls.dll"
+                />
+                <Reference
                     Name = "nunit.framework"
                     AssemblyName = "nunit.framework"
                     HintPath = "..\..\lib\nunit.framework.dll"
+                    Private = "True"
                 />
             </References>
         </Build>
@@ -136,6 +147,21 @@
                 <File
                     RelPath = "cruisecontrol.css"
                     BuildAction = "Content"
+                />
+                <File
+                    RelPath = "Decorator.aspx"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "Decorator.aspx.cs"
+                    DependentUpon = "Decorator.aspx"
+                    SubType = "ASPXCodeBehind"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Decorator.aspx.resx"
+                    DependentUpon = "Decorator.aspx.cs"
+                    BuildAction = "EmbeddedResource"
                 />
                 <File
                     RelPath = "Default.aspx"
@@ -188,21 +214,6 @@
                     BuildAction = "EmbeddedResource"
                 />
                 <File
-                    RelPath = "Template.ascx"
-                    BuildAction = "Content"
-                />
-                <File
-                    RelPath = "Template.ascx.cs"
-                    DependentUpon = "Template.ascx"
-                    SubType = "ASPXCodeBehind"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Template.ascx.resx"
-                    DependentUpon = "Template.ascx.cs"
-                    BuildAction = "EmbeddedResource"
-                />
-                <File
                     RelPath = "TestTiming.aspx"
                     BuildAction = "Content"
                 />
@@ -211,6 +222,11 @@
                     DependentUpon = "TestTiming.aspx"
                     SubType = "ASPXCodeBehind"
                     BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "TestTiming.aspx.resx"
+                    DependentUpon = "TestTiming.aspx.cs"
+                    BuildAction = "EmbeddedResource"
                 />
                 <File
                     RelPath = "Web.config"

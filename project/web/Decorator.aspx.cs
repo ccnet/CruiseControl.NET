@@ -1,22 +1,33 @@
+using System;
+using System.Collections;
+using System.Configuration;
+using System.ComponentModel;
+using System.Data;
+using System.Drawing;
+using System.Text;
+using System.Web;
+using System.Web.SessionState;
+using System.Web.UI;
+using System.Web.UI.WebControls;
+using System.Web.UI.HtmlControls;
+using tw.ccnet.core;
+
 namespace tw.ccnet.web
 {
-	using System;
-	using System.Web.UI;
-	using System.Web.UI.HtmlControls;
-	using System.Web.UI.WebControls;
-	using System.Configuration;
-	using System.Text;
-	using tw.ccnet.core;
-
-	public abstract class Template : UserControl
+	public class Decorator : System.Web.UI.Page
 	{
 		protected HtmlTableCell contentCell;
 		protected DataList menu;
 		protected HtmlGenericControl buildStats;
 		protected HtmlAnchor nextLog;
 		protected HtmlAnchor previousLog;
+		protected SiteMesh.DecoratorControls.Title Title1;
+		protected SiteMesh.DecoratorControls.Body Body1;
+		protected SiteMesh.DecoratorControls.GetProperty prop1;
+		protected SiteMesh.DecoratorControls.Title Title3;
 		protected HtmlAnchor testTiming;
 
+		/*
 		public Control Content
 		{
 			set 
@@ -25,6 +36,7 @@ namespace tw.ccnet.web
 				contentCell.Controls.Add(value); 
 			}
 		}
+		*/
 
 		private void Page_Load(object sender, System.EventArgs e)
 		{
@@ -91,7 +103,7 @@ namespace tw.ccnet.web
 		}
 		
 		private void InitializeComponent()
-		{
+		{    
 			this.Load += new System.EventHandler(this.Page_Load);
 			menu.ItemDataBound += new DataListItemEventHandler(this.DataList_BindItem);
 		}
