@@ -688,7 +688,10 @@
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
-                <Folder RelPath = "resources\templates\" />
+                <File
+                    RelPath = "resources\templates\TestTransform.vm"
+                    BuildAction = "None"
+                />
                 <File
                     RelPath = "UnitTestUtils\HashtableConstraint.cs"
                     SubType = "Code"
