@@ -11,9 +11,10 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers.Test
 		public void BuildLinkMessageWithoutAnchorTag()
 		{
 			IntegrationResult result = CreateIntegrationResult(IntegrationStatus.Success, IntegrationStatus.Success);
+			result.ProjectUrl = "http://localhost/ccnet";
 
 			HtmlLinkMessageBuilder linkMessageBuilder = new HtmlLinkMessageBuilder(false);
-			string message = linkMessageBuilder.BuildMessage(result, "http://localhost/ccnet");
+			string message = linkMessageBuilder.BuildMessage(result);
 			Assert.AreEqual(@"CruiseControl.NET Build Results for project Project#9 (http://localhost/ccnet)", message);
 		}
 
@@ -21,9 +22,10 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers.Test
 		public void BuildLinkMessageWithAnchorTag()
 		{
 			IntegrationResult result = CreateIntegrationResult(IntegrationStatus.Success, IntegrationStatus.Success);
+			result.ProjectUrl = "http://localhost/ccnet";
 
 			HtmlLinkMessageBuilder linkMessageBuilder = new HtmlLinkMessageBuilder(true);
-			string message = linkMessageBuilder.BuildMessage(result, "http://localhost/ccnet");
+			string message = linkMessageBuilder.BuildMessage(result);
 			Assert.AreEqual(@"CruiseControl.NET Build Results for project Project#9 (<a href=""http://localhost/ccnet"">web page</a>)", message);
 		}
 

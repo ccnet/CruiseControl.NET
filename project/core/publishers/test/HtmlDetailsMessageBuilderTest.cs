@@ -11,7 +11,7 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers.Test
 		public void ShouldCreateStyleElementsInTheMailMessage()
 	    {
 	        HtmlDetailsMessageBuilder builder = new HtmlDetailsMessageBuilder();
-	        string message = builder.BuildMessage(IntegrationResultMother.CreateSuccessful(),"http://foo.bar/ccnet");
+	        string message = builder.BuildMessage(IntegrationResultMother.CreateSuccessful());
 	        int styleBegin = message.IndexOf("<style>");
 	        int styleEnd = message.IndexOf("</style>");
 

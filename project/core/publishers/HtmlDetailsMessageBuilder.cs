@@ -6,14 +6,14 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
 {
 	public class HtmlDetailsMessageBuilder : IMessageBuilder
 	{
-		private const string HtmlCSSFile =@"xsl\cruisecontrol.css";
+		private const string HtmlCSSFile = @"xsl\cruisecontrol.css";
 		private string _htmlCss;
 
-		public string BuildMessage(IIntegrationResult result, string projectURL)
+		public string BuildMessage(IIntegrationResult result)
 		{
 			StringBuilder message = new StringBuilder(10000);
 			AppendHtmlHeader(message);
-			AppendLinkToWebPage(message, result, projectURL);
+			AppendLinkToWebPage(message, result);
 			AppendHorizontalRule(message);
 			AppendHtmlMessageDetails(message, result);
 			AppendHtmlFooter(message);
@@ -29,9 +29,9 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
 			message.Append("</head><body>");
 		}
 
-		private void AppendLinkToWebPage(StringBuilder message, IIntegrationResult result, string projectURL)
+		private void AppendLinkToWebPage(StringBuilder message, IIntegrationResult result)
 		{
-			message.Append(new HtmlLinkMessageBuilder(true).BuildMessage(result, projectURL));
+			message.Append(new HtmlLinkMessageBuilder(true).BuildMessage(result));
 		}
 
 		private void AppendHorizontalRule(StringBuilder message)
@@ -60,12 +60,12 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
 		{
 			get
 			{
-				if(_htmlCss == null)
+				if (_htmlCss == null)
 				{
-				    using (StreamReader textReader = File.OpenText(HtmlCSSFile))
-				    {
-				        _htmlCss = textReader.ReadToEnd();
-				    }
+					using (StreamReader textReader = File.OpenText(HtmlCSSFile))
+					{
+						_htmlCss = textReader.ReadToEnd();
+					}
 				}
 				return _htmlCss;
 			}

@@ -10,9 +10,9 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
 			this.includeAnchorTag = includeAnchorTag;
 		}
 
-		public string BuildMessage(IIntegrationResult result, string projectUrl)
+		public string BuildMessage(IIntegrationResult result)
 		{
-			string link = projectUrl;
+			string link = result.ProjectUrl;
 			if (includeAnchorTag) link = string.Format(@"<a href=""{0}"">web page</a>", link);
 			return string.Format("CruiseControl.NET Build Results for project {0} ({1})", result.ProjectName, link);
 		}

@@ -14,7 +14,6 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
     public class EmailPublisher : PublisherBase
     {
         private EmailGateway _emailGateway = new EmailGateway();
-        private string _projectUrl;
         private string _fromAddress;
         private Hashtable _users = new Hashtable();
         private Hashtable _groups = new Hashtable();
@@ -77,13 +76,6 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
             }
         }
 
-        [ReflectorProperty("projectUrl")] 
-		public string ProjectUrl
-        {
-            get { return _projectUrl; }
-            set { _projectUrl = value; }
-        }
-
         [ReflectorHash("users", "name")] 
 		public Hashtable EmailUsers
         {
@@ -134,7 +126,7 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
         {
             // TODO Add culprit to message text -- especially if modifier is not an email user
             //      This information is included, when using Html email (all mods are shown)
-            return _messageBuilder.BuildMessage(result, ProjectUrl);
+            return _messageBuilder.BuildMessage(result);
         }
     }
 }
