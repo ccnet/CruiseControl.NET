@@ -25,7 +25,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.ViewBuildReport
 		{
 			string log = buildRetriever.GetBuild(cruiseRequest.ServerName, cruiseRequest.ProjectName, cruiseRequest.BuildName).Log;
 			HtmlGenericControl control = new HtmlGenericControl("div");
-			control.InnerHtml = transformer.Transform(log, new string[] { @"xsl\FxCopReport.xsl" });
+			control.InnerHtml = transformer.Transform(log, new string[] { @"xsl\tests.xsl" });
 			return control;
 		}
 	}
