@@ -12,7 +12,7 @@ namespace ThoughtWorks.CruiseControl.Console
 			@"ccnet [options]
 Options:
   -config:[ccnet.config]
-  -remoting:[on/off] default:off
+  -remoting:[on/off] default:on
   -project:[projectName]
   -help";
 
@@ -53,7 +53,7 @@ Options:
 
 		public bool IsRemote
 		{
-			get { return GetOption("remoting") == "on"; }
+			get { return GetOption("remoting") != "off"; }
 		}
 
 		public string Project

@@ -48,7 +48,7 @@ namespace ThoughtWorks.CruiseControl.CCTray
 			defaults.Agents = Agents.CreateDefaultSettings();
 
 			defaults.PollingIntervalSeconds = 15;
-			defaults.RemoteServerUrl = "tcp://localhost:1234/CruiseManager.rem";
+			defaults.RemoteServerUrl = "tcp://localhost:21234/CruiseManager.rem";
 
 			return defaults;
 		}

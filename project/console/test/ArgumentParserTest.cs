@@ -29,9 +29,9 @@ namespace ThoughtWorks.CruiseControl.Console.Test
 		[Test]
 		public void InstantiateWithSpecifiedArguments()
 		{
-			string[] args = new string[] { "-remoting:on", "-project:foo", @"-config:C:\test dir\cruise.config", "-help" };
+			string[] args = new string[] { "-remoting:off", "-project:foo", @"-config:C:\test dir\cruise.config", "-help" };
 			ArgumentParser parser = new ArgumentParser(args);
-			AssertEquals(true, parser.IsRemote);
+			AssertEquals(false, parser.IsRemote);
 			AssertEquals("foo", parser.Project);
 			AssertEquals(@"C:\test dir\cruise.config", parser.ConfigFile);
 			AssertEquals(true, parser.ShowHelp);
@@ -41,7 +41,7 @@ namespace ThoughtWorks.CruiseControl.Console.Test
 		public void InstantiateWithDefaultArguments()
 		{
 			ArgumentParser parser = new ArgumentParser(new string[0]);
-			AssertEquals(false, parser.IsRemote);
+			AssertEquals(true, parser.IsRemote);
 			AssertNull(parser.Project);
 			AssertEquals(ArgumentParser.DEFAULT_CONFIG_PATH, parser.ConfigFile);	
 			AssertEquals(false, parser.ShowHelp);
