@@ -23,6 +23,8 @@
 !define MUI_HEADERIMAGE
 !define MUI_HEADERIMAGE_BITMAP "install\install_logo.bmp"
 !define MUI_HEADERIMAGE_RIGHT
+!define MUI_COMPONENTSPAGE_SMALLDESC
+
 
 ; Welcome page
 !insertmacro MUI_PAGE_WELCOME
@@ -83,7 +85,6 @@ Section "CruiseControl.NET Server" SEC01
   !insertmacro MUI_STARTMENU_WRITE_END
   
   Call InstallService
-  
 SectionEnd
 
 Section "Web Dashboard" SEC02
@@ -168,6 +169,14 @@ Function BackupAndExtractConfigFiles
   extractCCServiceExeConfig:
     File "deployed\server\ccservice.exe.config"
 
+  IfFileExists $INSTDIR\server\ccnet.config 0 extractCCNetConfig
+    DetailPrint "Backing up ccnet.config to ccnet.config.old..."
+    Delete $INSTDIR\server\ccnet.config.old
+    Rename $INSTDIR\server\ccnet.config $INSTDIR\server\ccnet.config.old
+    StrCpy $ConfigBackedUp "yes"
+  extractCCNetConfig:
+    File "deployed\server\ccnet.config"
+
 FunctionEnd
 
 Var InstallService
@@ -189,7 +198,16 @@ Function InstallService
   exit:
 FunctionEnd
 
+; Messages for virtual directory creation error messages
+LangString ERROR_VDIR_CREATION_UNCONFIRMED ${LANG_ENGLISH} "The installer attempted to create the virtual directory for the CruiseControl.NET Web Dashboard but could not confirm its creation. Please check IIS after the installer has completed and manually create the virtual directory ."
+LangString ERROR_VDIR_ALREADY_EXISTS ${LANG_ENGLISH} "A virtual directory called 'ccnet' already exists in the local IIS server's default web site. Please manually create a virtual directory for the CruiseControl.NET Web Dashboard after installation has completed."
+LangString ERROR_VDIR_PATH_UNDEFINED ${LANG_ENGLISH} "The installation directory for the CruiseControl.NET Web Dashboard was not specified. Please manually create a virtual directory after installation has completed."
+LangString ERROR_VDIR_TIMEOUT ${LANG_ENGLISH} "A timeout occurred during the creation of the virtual directory for the CruiseControl.NET Web Dashboard. Please manually create a virtual directory after installation has completed."
+LangString ERROR_GENERAL ${LANG_ENGLISH} "An unspecified error occurred during the creation of the virtual directory for the CruiseControl.NET Web Dashboard. Please manually create a virtual directory after installation has completed."
+LangString ERROR_EXEC ${LANG_ENGLISH} "Could not start the createCCNetVDir.vbs script. Please manually create a virtual directory for the CruiseControl.NET Web dashboard after installation has completed."
+
 Var CreateVirtualDirectory
+Var ErrorMessage
 Function CreateVirtualDirectory
   !insertmacro MUI_INSTALLOPTIONS_READ $CreateVirtualDirectory "AdditionalConfiguration.ini" "Field 2" "State"
   StrCmp $CreateVirtualDirectory "0" exit
@@ -197,18 +215,45 @@ Function CreateVirtualDirectory
     SetOverwrite on
     File "install\createCCNetVDir.vbs"
     DetailPrint "Creating IIS virtual directory..."
-    nsExec::ExecToLog /TIMEOUT=20000 '"$SYSDIR\cscript.exe" "$TEMP\createCCNetVDir.vbs" "$INSTDIR\webdashboard"'
+    nsExec::ExecToLog /TIMEOUT=60000 '"$SYSDIR\cscript.exe" "$TEMP\createCCNetVDir.vbs" "$INSTDIR\webdashboard"'
     Pop $0
-    StrCmp $0 "0" exit
-      MessageBox MB_ICONINFORMATION|MB_OK "Could not create the virtual directory due to $0."
+    StrCmp $0 "4" errorcode4
+    StrCmp $0 "3" errorcode3
+    StrCmp $0 "2" errorcode2
+    StrCmp $0 "1" errorcode1
+    StrCmp $0 "timeout" errorTimeout
+    StrCmp $0 "error" errorExec
+    Goto writeRegistryString
+    errorcode4:
+      StrCpy $ErrorMessage $(ERROR_VDIR_CREATION_UNCONFIRMED)
+      Goto showError
+    errorcode3:
+      StrCpy $ErrorMessage $(ERROR_VDIR_ALREADY_EXISTS)
+      Goto showError
+    errorcode2:
+      StrCpy $ErrorMessage $(ERROR_VDIR_PATH_UNDEFINED)
+      Goto showError
+    errorcode1:
+      StrCpy $ErrorMessage $(ERROR_GENERAL)
+      Goto showError
+    errorTimeout:
+      StrCpy $ErrorMessage $(ERROR_VDIR_TIMEOUT)
+      Goto showError
+    errorExec:
+      StrCpy $ErrorMessage $(ERROR_EXEC)
+    showError:
+      MessageBox MB_ICONEXCLAMATION|MB_OK $ErrorMessage
+      WriteRegStr ${PRODUCT_UNINST_ROOT_KEY} "${PRODUCT_UNINST_KEY}" "CCNetVDir" 0
+      Goto exit
+    writeRegistryString:
+      WriteRegStr ${PRODUCT_UNINST_ROOT_KEY} "${PRODUCT_UNINST_KEY}" "CCNetVDir" $CreateVirtualDirectory
   exit:
-    WriteRegStr ${PRODUCT_UNINST_ROOT_KEY} "${PRODUCT_UNINST_KEY}" "CCNetVDir" $CreateVirtualDirectory
 FunctionEnd
 
 Var MessageDetail
 Function PrepareFinishPageMessage
   StrCmp $ConfigBackedUp "yes" 0 prepMessage
-    StrCpy $MessageDetail "Your existing configuration files have been backed up to ccnet.exe.config.old and ccservice.exe.config.old.\r\n"
+    StrCpy $MessageDetail "Your existing configuration files have been backed up to ccnet.config.old, ccnet.exe.config.old, ccservice.exe.config.old.\r\n"
 prepMessage:
   StrCpy $FinishMessage "$(^Name) has been installed on your computer.\r\n\r\n$MessageDetail\r\nClick Finish to close this wizard."
 FunctionEnd
@@ -265,10 +310,10 @@ Function un.RemoveVirtualDirectory
     SetOverwrite on
     File "install\removeCCNetVDir.vbs"
     DetailPrint "Removing IIS virtual directory..."
-    nsExec::ExecToLog /TIMEOUT=20000 '"$SYSDIR\cscript.exe" "$TEMP\removeCCNetVDir.vbs" "$INSTDIR\webdashboard"'
+    nsExec::ExecToLog /TIMEOUT=60000 '"$SYSDIR\cscript.exe" "$TEMP\removeCCNetVDir.vbs" "$INSTDIR\webdashboard"'
     Pop $0
     StrCmp $0 "0" exit
-      MessageBox MB_ICONINFORMATION|MB_OK "Could not remove the virtual directory due to $0."
+      MessageBox MB_ICONINFORMATION|MB_OK "Could not remove the virtual directory due to a general error. Please remove the virtual directory manually."
     Goto exit
   skipRemoveVDir:
     DetailPrint "The CruiseControl.NET virtual directory has not been installed."

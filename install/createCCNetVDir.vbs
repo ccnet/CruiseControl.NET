@@ -1,5 +1,10 @@
 Option Explicit
 
+' Error codes:
+' 1: no installation directory provided
+' 2: ccnet virtual directory already exists
+' 3: created, but not confirmed
+
 createVDir()
 
 Function CreateVDir()
@@ -7,7 +12,7 @@ Function CreateVDir()
         
 	If WScript.Arguments.Count < 1 Then
 		WScript.Echo "Installation directory for the CruiseControl.NET Web Dashboard not provided; cannot continue."
-		WScript.Quit 1
+		WScript.Quit 2
 	End If
 
 	Dim webdashboardInstallDir: webdashboardInstallDir = WScript.Arguments(0)
@@ -15,7 +20,7 @@ Function CreateVDir()
         WScript.Echo "Checking whether there is an existing virtual directory with the name " & vdirName
 	If DoesCCNetVDirExist(vdirName) Then
 		WScript.Echo vdirName & " virtual directory already exists; cannot continue."
-		WScript.Quit 1
+		WScript.Quit 3
 	End If
 
 	Dim ccnetVDir: 	Set ccnetVDir = CreateCCNetVDir(webdashboardInstallDir)
@@ -25,7 +30,7 @@ Function CreateVDir()
         WScript.Echo "Confirming that the virtual directory " & vdirName & " was created..."
         If DoesCCNetVDirExist(vdirName) = False Then
                 WScript.Echo vdirName  & " virtual directory creation failed."
-                WScript.Quit 1
+                WScript.Quit 4
         End If
         
         WScript.Echo "Virtual directory for CruiseControl.NET Web Dashboard created successfully."
@@ -38,6 +43,7 @@ Function DoesCCNetVDirExist(vdirName)
 	Set iisRoot = GetObject("IIS://localhost/W3SVC/1/ROOT")
 	Dim vdir
 	For Each vdir in iisRoot
+                WScript.Echo vdir.Name
 		If vdir.Name = vdirName Then
 			DoesCCNetVDirExist = True
 			Exit Function
@@ -59,6 +65,8 @@ Function CreateCCNetVDir(webdashboardInstallDir)
 	ccnetVDir.AccessExecute = True
 	ccnetVDir.AppFriendlyName = "ccnet"
 	ccnetVDir.KeyType = "IisWebVirtualDir"
+        ccnetVDir.DefaultDoc = "default.aspx"
+        ccnetVDir.DirBrowseFlags = &H40000000
 	ccnetVDir.Path = webdashboardInstallDir
 
 	ccnetVDir.SetInfo()

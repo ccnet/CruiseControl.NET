@@ -1,4 +1,4 @@
-<?xml version="1.0"?>
+﻿<?xml version="1.0"?>
 
 <project name="ccnet" default="test">
 
@@ -89,6 +89,7 @@
 		
 		<copy file="${src.dir}\console\app.config" tofile="${build.dir}\server\${console.exe}.config" verbose="${verbosity}"/>
 		<copy file="${src.dir}\service\app.config" tofile="${build.dir}\service\${service.exe}.config" verbose="${verbosity}"/>		
+		<copy file="${src.dir}\service\ccnet.config" tofile="${build.dir}\service\ccnet.config" verbose="${verbosity}"/>
 	</target>
 
 	<!-- TEST -->
