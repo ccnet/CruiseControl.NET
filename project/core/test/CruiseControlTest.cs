@@ -245,7 +245,7 @@ namespace tw.ccnet.core.test
 		}
 
 		[Test]
-		public void Terminate()
+		public void Abort()
 		{
 			_mockConfig.ExpectAndReturn("LoadProjects", _projects);
 			_cc = new CruiseControl((IConfigurationLoader)_mockConfig.MockInstance);
@@ -254,7 +254,7 @@ namespace tw.ccnet.core.test
 			AssertEquals(ProjectIntegratorState.Running, ((IProjectIntegrator)_cc.ProjectIntegrators[0]).State);
 			AssertEquals(ProjectIntegratorState.Running, ((IProjectIntegrator)_cc.ProjectIntegrators[1]).State);
 
-			_cc.Terminate();
+			_cc.Abort();
 			AssertEquals(ProjectIntegratorState.Stopped, ((IProjectIntegrator)_cc.ProjectIntegrators[0]).State);
 			AssertEquals(ProjectIntegratorState.Stopped, ((IProjectIntegrator)_cc.ProjectIntegrators[1]).State);
 		}

@@ -136,7 +136,7 @@ namespace tw.ccnet.core
 			}
 		}
 
-		public void Terminate()
+		public void Abort()
 		{
 			if (_thread != null)
 			{
@@ -159,7 +159,7 @@ namespace tw.ccnet.core
 		/// </summary>
 		public void Dispose()
 		{
-			Terminate();
+			Abort();
 		}
 	}
 }

@@ -9,7 +9,6 @@ namespace tw.ccnet.core
 	/// </summary>
 	public interface ICruiseControl : ICruiseServer
 	{
-		void Terminate();
 		void WaitForExit();
 
 		ICollection Projects { get;	}

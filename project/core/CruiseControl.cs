@@ -107,11 +107,11 @@ namespace tw.ccnet.core
 			}
 		}
 
-		public void Terminate()
+		public void Abort()
 		{
 			foreach (IProjectIntegrator projectIntegrator in _projectIntegrators)
 			{
-				projectIntegrator.Terminate();
+				projectIntegrator.Abort();
 			}		
 		}
 

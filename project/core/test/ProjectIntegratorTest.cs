@@ -195,14 +195,14 @@ namespace tw.ccnet.core.test
 		}
 
 		[Test]
-		public void Terminate()
+		public void Abort()
 		{
 			_schedule = new Schedule(1, Schedule.Infinite);
 			_integrator = new ProjectIntegrator(_schedule, _project);
 			_integrator.Start();
 			Thread.Sleep(0);
 			AssertEquals(ProjectIntegratorState.Running, _integrator.State);
-			_integrator.Terminate();
+			_integrator.Abort();
 			AssertEquals(ProjectIntegratorState.Stopped, _integrator.State);
 		}
 
@@ -211,7 +211,7 @@ namespace tw.ccnet.core.test
 		{
 			_schedule = new Schedule(1, Schedule.Infinite);
 			_integrator = new ProjectIntegrator(_schedule, _project);
-			_integrator.Terminate();
+			_integrator.Abort();
 			AssertEquals(ProjectIntegratorState.Stopped, _integrator.State);
 		}
 
@@ -223,8 +223,8 @@ namespace tw.ccnet.core.test
 			_integrator.Start();
 			Thread.Sleep(0);
 			AssertEquals(ProjectIntegratorState.Running, _integrator.State);
-			_integrator.Terminate();
-			_integrator.Terminate();
+			_integrator.Abort();
+			_integrator.Abort();
 		}
 
 		#region Testing helper methods

@@ -10,9 +10,14 @@ namespace tw.ccnet.remote
 		void Start();
 
 		/// <summary>
-		/// Terminates the CruiseControl.NET server, stopping all started projects
+		/// Requests all started projects within the CruiseControl.NET server to stop
 		/// </summary>
 		void Stop();
+
+		/// <summary>
+		/// Terminates the CruiseControl.NET server immediately, stopping all started projects
+		/// </summary>
+		void Abort();
 
 		/// <summary>
 		/// Force the specified project to run a single integration immediately

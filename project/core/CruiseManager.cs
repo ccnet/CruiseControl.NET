@@ -45,7 +45,12 @@ namespace tw.ccnet.core
 		
 		public void StopCruiseControlNow()
 		{
-			_cruiseControl.Terminate();
+			Abort();
+		}
+
+		public void Abort()
+		{
+			_cruiseControl.Abort();
 			LogUtil.Log("CruiseManager", "CruiseControl stopped");
 		}
 		

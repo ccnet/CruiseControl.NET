@@ -26,9 +26,9 @@ namespace tw.ccnet.core
 		void WaitForExit();
 
 		/// <summary>
-		/// Terminates the integrator thread immediately.
+		/// Aborts the integrator thread immediately.
 		/// </summary>
-		void Terminate();
+		void Abort();
 
 		/// <summary>
 		/// Gets a value indicating whether this project integrator is currently

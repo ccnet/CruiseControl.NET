@@ -24,6 +24,11 @@ namespace tw.ccnet.core
 			_server.Stop();
 		}
 
+		public void Abort()
+		{
+			_server.Abort();
+		}
+
 		public void ForceBuild(string projectName)
 		{
 			_server.ForceBuild(projectName);
