@@ -7,12 +7,6 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 {
 	public class VaultHistoryParser : IHistoryParser
 	{
-		public VaultHistoryParser()
-		{
-		}
-
-		#region IHistoryParser Members
-
 		public Modification[] Parse(TextReader history, DateTime from, DateTime to)
 		{
 			ArrayList mods = new ArrayList();
@@ -133,8 +127,6 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			}
 			return type;
 		}
-		#endregion
-
 		#endregion
 	}
 }

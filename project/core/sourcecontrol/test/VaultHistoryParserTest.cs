@@ -24,18 +24,6 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test
 					<item txid=""2"" date=""" + XML_COMMENT_DATE + @""" name=""$"" type=""70"" version=""1"" user=""admin"" />
 				</history>
 			  </vault>";
-//		private const string XML = 
-//			@"<vault>
-//				<history>
-//					<item txid=""2"" date=""5/13/2003 10:41:30 PM"" name=""$"" type=""70"" version=""1"" user=""admin"" comment=""creating repository"" />
-//				</history>
-//			  </vault>";
-//		private const string NO_COMMENT_XML =
-//			@"<vault>
-//				<history>
-//					<item txid=""2"" date=""5/13/2003 10:41:30 PM"" name=""$"" type=""70"" version=""1"" user=""admin"" />
-//				</history>
-//			  </vault>";
 
 		private StringReader GetReader(string xml)
 		{
@@ -43,7 +31,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test
 		}
 
 		[Test]
-		public void TestNumberOfModifications()
+		public void NumberOfModifications()
 		{
 			VaultHistoryParser parser = new VaultHistoryParser();
 			StringReader reader = GetReader(XML);
@@ -53,7 +41,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test
 		}
 
 		[Test]
-		public void TestNumberOfModificationsWithInvalidDate()
+		public void NumberOfModificationsWithInvalidDate()
 		{
 			VaultHistoryParser parser = new VaultHistoryParser();
 			StringReader reader = GetReader(XML);
@@ -63,7 +51,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test
 		}
 
 		[Test]
-		public void TestModificationData()
+		public void ModificationData()
 		{
 			VaultHistoryParser parser = new VaultHistoryParser();
 			StringReader reader = GetReader(XML);
@@ -85,7 +73,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test
 		/// Apparently the "comments" attribute is not always in the XML.
 		/// </remarks>
 		[Test]
-		public void NoCommentsTest()
+		public void NoComments()
 		{
 			VaultHistoryParser parser = new VaultHistoryParser();
 			StringReader reader = GetReader(NO_COMMENT_XML);

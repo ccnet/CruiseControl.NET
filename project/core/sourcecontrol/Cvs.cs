@@ -14,14 +14,10 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 		// use -C to force get clean copy? should reset tags?
 		public const string GET_SOURCE_COMMAND_FORMAT = @"-q update -d -P";	// build directories, prune empty directories, (get clean copy - use -C)
 		public const string COMMAND_DATE_FORMAT = "yyyy-MM-dd HH:mm:ss 'GMT'";
-
 		private string _executable = "cvs.exe";
-		private string _cvsRoot;
 		private string _workingDirectory;
-		private bool _labelOnSuccess;
-        private string _restrictLogins;
-		private IUrlBuilder _urlBuilder;
- 
+		private string _cvsRoot;
+
 		public Cvs() : this(new CvsHistoryParser(), new ProcessExecutor()) { }
 
 		public Cvs(IHistoryParser parser, ProcessExecutor executor) : base(parser, executor) { }
@@ -29,44 +25,32 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 		[ReflectorProperty("executable")]
 		public string Executable
 		{
-			get { return _executable;}
-			set { _executable = value;}
+			get { return _executable; }
+			set { _executable = value; }
 		}
 		
 		[ReflectorProperty("cvsroot", Required=false)]
 		public string CvsRoot
 		{
-			get { return _cvsRoot;}
-			set { _cvsRoot = value;}
+			get { return _cvsRoot; }
+			set { _cvsRoot = value; }
 		}
-		
+
 		[ReflectorProperty("workingDirectory")]
 		public string WorkingDirectory
 		{
-			get { return _workingDirectory;}
-			set { _workingDirectory = value;}
-		}		
+			get { return _workingDirectory; }
+			set { _workingDirectory = value; }
+		}
 
 		[ReflectorProperty("labelOnSuccess", Required=false)]
-		public bool LabelOnSuccess
-		{
-			get { return _labelOnSuccess;}
-			set { _labelOnSuccess = value;}
-		}
+		public bool LabelOnSuccess;
 
         [ReflectorProperty("restrictLogins", Required=false)]
-        public string RestrictLogins 
-		{
-            get{ return _restrictLogins; }
-            set{ _restrictLogins = value; }
-        }
+        public string RestrictLogins; 
 
 		[ReflectorProperty("webUrlBuilder", InstanceTypeKey="type", Required=false)]
-		public IUrlBuilder UrlBuilder
-		{
-			get { return _urlBuilder; }
-			set { _urlBuilder = value; }
-		}
+		public IUrlBuilder UrlBuilder;
 
 		[ReflectorProperty("branch", Required=false)]
 		public string Branch;
@@ -82,9 +66,9 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 		public override Modification[] GetModifications(DateTime from, DateTime to)
 		{
 			Modification[] modifications = GetModifications(CreateHistoryProcessInfo(from, to), from, to);
-			if ( _urlBuilder != null ) 
+			if (UrlBuilder != null ) 
 			{
-				_urlBuilder.SetupModification(modifications);
+				UrlBuilder.SetupModification(modifications);
 			}
 			return modifications;
 		}

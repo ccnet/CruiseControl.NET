@@ -15,8 +15,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test
 		private const string COMMAND_LINE_NOSSL = @"history ""{0}"" -host {1} -user {2} -password {3} -repository {4} -rowlimit 0";
 		private const string COMMAND_LINE_SSL = @"history ""{0}"" -host {1} -user {2} -password {3} -repository {4} -rowlimit 0 -ssl";
 
-		private const string ST_XML_SSL =
-			@"<sourceControl type=""vault"">
+		private const string ST_XML_SSL = @"<sourceControl type=""vault"">
 				<executable>c:\program files\sourcegear\vault client\vault.exe</executable>
 				<username>username</username>
 				<password>password</password>
@@ -26,8 +25,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test
 				<ssl>True</ssl>
 			</sourceControl>";
 
-		private const string ST_XML_NOSSL =
-			@"<sourceControl type=""vault"">
+		private const string ST_XML_NOSSL = @"<sourceControl type=""vault"">
 				<executable>c:\program files\sourcegear\vault client\vault.exe</executable>
 				<username>username</username>
 				<password>password</password>
@@ -44,21 +42,15 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test
 		}
 
 		[Test]
-		public void TestCreateHistoryProcess()
-		{				
+		public void CreateHistoryProcess()
+		{
 			DateTime from = new DateTime(2001, 1, 21, 20, 0, 0);
 			DateTime to = new DateTime(2002, 2, 22, 20, 0, 0);
 
 			ProcessInfo actual = _vault.CreateHistoryProcessInfo(from, to);
 
 			string expectedExecutable = @"c:\program files\sourcegear\vault client\vault.exe";
-			string expectedArgs = string.Format(
-				COMMAND_LINE_NOSSL,
-				"$",
-				"host",
-				"username",
-				"password",
-				"repository");
+			string expectedArgs = string.Format(COMMAND_LINE_NOSSL, "$", "host", "username", "password", "repository");
 
 			AssertNotNull("process was null", actual);
 			AssertEquals(expectedExecutable, actual.FileName);
@@ -66,21 +58,15 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test
 		}
 
 		[Test]
-		public void TestCreateHistoryProcessSsl()
-		{				
+		public void CreateHistoryProcessSsl()
+		{
 			DateTime from = new DateTime(2001, 1, 21, 20, 0, 0);
 			DateTime to = new DateTime(2002, 2, 22, 20, 0, 0);
 
 			ProcessInfo actual = _sslVault.CreateHistoryProcessInfo(from, to);
 
 			string expectedExecutable = @"c:\program files\sourcegear\vault client\vault.exe";
-			string expectedArgs = string.Format(
-				COMMAND_LINE_SSL,
-				"$",
-				"host",
-				"username",
-				"password",
-				"repository");
+			string expectedArgs = string.Format(COMMAND_LINE_SSL, "$", "host", "username", "password", "repository");
 
 			AssertNotNull("process was null", actual);
 			AssertEquals(expectedExecutable, actual.FileName);
@@ -88,8 +74,8 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test
 		}
 
 		[Test]
-		public void TestValuesSet()
-		{			
+		public void ValuesSet()
+		{
 			AssertEquals(@"c:\program files\sourcegear\vault client\vault.exe", _vault.Executable);
 			AssertEquals("username", _vault.Username);
 			AssertEquals("password", _vault.Password);
@@ -100,14 +86,14 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test
 
 		[Test]
 		[Ignore("user-specific vault test settings here")]
-		public void HistoryDatesTest()
+		public void HistoryDates()
 		{
 			// change these values to reflect your live vault repository
 			// checked in IPopup.cs on 4/20/2004 10:56:46 AM
 			// so check for changes between 10 and 11
 			DateTime from = new DateTime(2004, 4, 20, 10, 0, 0);
 			DateTime to = new DateTime(2004, 4, 20, 11, 0, 0);
-			
+
 			Modification[] mods = _vault.GetModifications(from, to);
 			AssertNotNull(mods);
 
