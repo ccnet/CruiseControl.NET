@@ -17,7 +17,7 @@
                 DelaySign = "false"
                 OutputType = "Library"
                 PreBuildEvent = ""
-                PostBuildEvent = "copy $(ProjectDir)test\ccnet.web.dll.config $(TargetDir)"
+                PostBuildEvent = 'copy "$(ProjectDir)test\ccnet.web.dll.config" "$(TargetDir)"'
                 RootNamespace = "tw.ccnet.web"
                 RunPostBuildEvent = "OnBuildSuccess"
                 StartupObject = ""
