@@ -3,7 +3,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//Dtd XHTML 1.0 Transitional//EN" "http://localhost/NUnitAsp/dtd/xhtml1-transitional.dtd">
 <HTML>
 	<HEAD>
-		<decorator:title runat="server" defaulttitle="CruiseControl.Net Build Results" ID="Title1" /></title>
+		<title><decorator:title runat="server" defaulttitle="CruiseControl.Net Build Results" ID="Title1" /></title>
 		<link type="text/css" rel="stylesheet" href="cruisecontrol.css">
 	</HEAD>
 	<body background="images/bg_blue_stripe.gif" topmargin="0" leftmargin="0" marginheight="0"
