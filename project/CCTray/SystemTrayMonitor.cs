@@ -19,13 +19,6 @@ namespace ThoughtWorks.CruiseControl.CCTray
 	/// </summary>
 	public class SystemTrayMonitor : Form
 	{
-		/// <summary>
-		/// This denotes how long the application will wait for the Status Monitor's thread to join, before forcefully Aborting.
-		/// </summary>
-		private const int STATUSMONITOR_JOIN_WAIT = 3000;
-		private const string DIAGNOSTICS_CATEGORY = "SystemTrayMonitor";
-		private const string FORMAT_TRAY_TOOLTIP = "Server: {0}\nProject: {1}\nLast Build: {2} ({3})";
-
 		private IContainer components;
 		private ContextMenu contextMenu;
 		private NotifyIconEx trayIcon;
@@ -287,7 +280,7 @@ namespace ThoughtWorks.CruiseControl.CCTray
 			_exception = null;
 
 			// update tray icon and tooltip
-			trayIcon.Text = CalculateTrayText(e.ProjectStatus);
+			trayIcon.Text = new TrayTooltip(e.ProjectStatus).Text;
 			trayIcon.Icon = _iconLoader.LoadIcon(e.ProjectStatus).Icon;
 			if (_statusMonitor.Settings.RemoteServerUrl != _lastUrl)
 				InitialiseProjectMenu();
@@ -427,16 +420,6 @@ namespace ThoughtWorks.CruiseControl.CCTray
 
 		#region Presentation calculations
 
-		private string CalculateTrayText(ProjectStatus projectStatus)
-		{
-			object activity = (projectStatus.Status == ProjectIntegratorState.Stopped) ? ProjectActivity.Sleeping : projectStatus.Activity;
-
-			return string.Format(FORMAT_TRAY_TOOLTIP,
-			                     activity,
-			                     projectStatus.Name,
-			                     projectStatus.BuildStatus,
-			                     projectStatus.LastBuildLabel);
-		}
 
 		private string GetErrorMessage(Exception ex)
 		{

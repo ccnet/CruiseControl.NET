@@ -119,6 +119,11 @@
                     Project = "{E820CF3B-8C5A-4002-BC16-B7818D3D54A8}"
                     Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
                 />
+                <Reference
+                    Name = "System.XML"
+                    AssemblyName = "System.XML"
+                    HintPath = "C:\Windows\Microsoft.NET\Framework\v1.1.4322\System.XML.dll"
+                />
             </References>
         </Build>
         <Files>

@@ -252,6 +252,11 @@
                     BuildAction = "EmbeddedResource"
                 />
                 <File
+                    RelPath = "TrayTooltip.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Yellow.ico"
                     BuildAction = "EmbeddedResource"
                 />
