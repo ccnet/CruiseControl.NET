@@ -199,6 +199,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "WebDashboard\Plugins\LogViewerPlugin\LogViewerTest.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "WebDashboard\Plugins\ProjectReporter\LatestProjectReporterTest.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -218,11 +223,7 @@
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
-                <File
-                    RelPath = "WebDashboard\Plugins\SiteTemplatePlugin\LogViewerPlugin\LogViewerTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
+                <Folder RelPath = "WebDashboard\Plugins\SiteTemplatePlugin\LogViewerPlugin\" />
                 <File
                     RelPath = "WebDashboard\ServerConnection\ServerAggregatingCruiseManagerWrapperTest.cs"
                     SubType = "Code"
