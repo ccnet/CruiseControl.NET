@@ -181,17 +181,6 @@
                     BuildAction = "None"
                 />
                 <File
-                    RelPath = "Cache\ICacheManager.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Cache\LocalFileCacheManager.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <Folder RelPath = "config\" />
-                <File
                     RelPath = "Configuration\DashboardConfigurationLoader.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -624,7 +613,6 @@
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
-                <Folder RelPath = "log\" />
                 <File
                     RelPath = "MVC\AggregatedRequest.cs"
                     SubType = "Code"
