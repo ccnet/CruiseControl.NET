@@ -17,7 +17,6 @@ namespace ThoughtWorks.CruiseControl.Core
 		{
 			_config = config;
 			_config.AddConfigurationChangedHandler(new ConfigurationChangedHandler(ResetConfiguration));
-
 			_manager = new CruiseManager(config);
 		}
 
@@ -25,14 +24,29 @@ namespace ThoughtWorks.CruiseControl.Core
 		{
 			Log.Info("Starting CruiseControl.NET Server");
 			_monitor.Reset();
-			StartIntegrators(_config);
+
+			try
+			{
+				StartIntegrators(_config);
+			}
+			catch (ConfigurationException ce)
+			{
+				Log.Error(ce);
+			}
 		}
 
 		private void StartIntegrators(IConfiguration configuration)
 		{
+			bool startedAtLeastOneIntegrator = false;
 			foreach (IProjectIntegrator integrator in configuration.Integrators)
 			{
 				integrator.Start();
+				startedAtLeastOneIntegrator = true;
+			}
+
+			if (! startedAtLeastOneIntegrator)
+			{
+				Log.Info("No projects found");
 			}
 		}
 
@@ -95,4 +109,7 @@ namespace ThoughtWorks.CruiseControl.Core
 			get { return _config; }
 		}
 	}
+
+
+
 }

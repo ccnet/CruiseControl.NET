@@ -17,7 +17,6 @@ namespace ThoughtWorks.CruiseControl.Core.Config
 		public ConfigurationContainer(IConfigurationLoader loader, IFileWatcher watcher)
 		{
 			_loader = loader;
-			_config = _loader.Load();
 
 			_watcher = watcher;
 			_watcher.OnFileChanged += new FileSystemEventHandler(HandleConfigurationFileChanged);
@@ -28,18 +27,73 @@ namespace ThoughtWorks.CruiseControl.Core.Config
 			_handler += handler;
 		}
 
-		public IProjectList Projects { get { return _config.Projects; } }
+		private void InstanciateConfig()
+		{
+			if (_config == null)
+			{
+				try
+				{
+					_config = _loader.Load();
+				}
+				catch (ConfigurationFileMissingException)
+				{
+					throw;
+				}
+				catch (ConfigurationException ce)
+				{
+					Log.Error(ce);
+				}
+			}
+		}
 
-		public IProjectIntegratorList Integrators { get { return _config.Integrators; } }
+		public IProjectList Projects 
+		{ 
+			get 
+			{
+				lock(this)
+				{
+					InstanciateConfig();
+					if (_config != null)
+					{
+						return _config.Projects; 
+					}
+					else
+					{
+						return new ProjectList();
+					}
+				}
+			} 
+		}
 
-		// lock?
+		public IProjectIntegratorList Integrators 
+		{ 
+			get 
+			{ 
+				lock(this)
+				{
+					InstanciateConfig();
+					if (_config != null)
+					{
+						return _config.Integrators;
+					}
+					else
+					{
+						return new ProjectIntegratorList();
+					}
+				}
+			} 
+		}
+
 		private void HandleConfigurationFileChanged(object source, FileSystemEventArgs args)
 		{
 			try
 			{
-				IConfiguration newConfig = _loader.Load();
-				_handler(newConfig);
-				_config = newConfig;
+				lock(this)
+				{
+					IConfiguration newConfig = _loader.Load();
+					_handler(newConfig);
+					_config = newConfig;
+				}
 			}
 			catch (Exception ex) 
 			{

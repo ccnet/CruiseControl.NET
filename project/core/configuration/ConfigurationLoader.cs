@@ -54,8 +54,18 @@ namespace ThoughtWorks.CruiseControl.Core.Config
 			}
 		}
 
+		internal string ConfigFileFullPath
+		{
+			get
+			{
+				return Path.GetFullPath(ConfigFile);
+			}
+		}
+
 		public IConfiguration Load()
 		{
+			Log.Info(String.Format("Reading configuration file \"{0}\"", ConfigFileFullPath));
+
 			XmlDocument config = LoadConfiguration();
 			return PopulateProjectsFromXml(config);
 		}
@@ -91,7 +101,7 @@ namespace ThoughtWorks.CruiseControl.Core.Config
 		{
 			if (! File.Exists(ConfigFile))
 			{
-				throw new ConfigurationException("Specified configuration file does not exist: " + Path.GetFullPath(ConfigFile));
+				throw new ConfigurationFileMissingException("Specified configuration file does not exist: " + ConfigFileFullPath);
 			}
 		}
 
