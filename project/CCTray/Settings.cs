@@ -91,7 +91,7 @@ namespace ThoughtWorks.CruiseControl.CCTray
 		public static Messages CreateDefaultSettings()
 		{
 			Messages defaults = new Messages();
-			defaults.AnotherSuccess = new string[] { "Yet another succesful build!" };
+			defaults.AnotherSuccess = new string[] { "Yet another successful build!" };
 			defaults.AnotherFailure = new string[] { "The build is still broken..." };
 			defaults.Fixed = new string[] { "Recent checkins have fixed the build." };
 			defaults.Broken = new string[] { "Recent checkins have broken the build." };
