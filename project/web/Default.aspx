@@ -1,4 +1,5 @@
 <%@ Page language="c#" Codebehind="Default.aspx.cs" Inherits="ThoughtWorks.CruiseControl.Web.Default" AutoEventWireup="false" %>
+<%@ OutputCache Duration="6000" VaryByParam="log" %>
 <HTML>
 	<HEAD>
 		<TITLE>CruiseControl .NET Build Results</TITLE>
