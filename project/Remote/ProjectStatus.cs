@@ -22,6 +22,8 @@ namespace ThoughtWorks.CruiseControl.Remote
 		private DateTime lastBuildDate;
 		private string lastBuildLabel;
 
+		public ProjectStatus() { }
+
 		public ProjectStatus(
 			CruiseControlStatus status, 
 			IntegrationStatus buildStatus, 

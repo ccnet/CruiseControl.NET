@@ -3,8 +3,7 @@ using System.IO;
 
 using NUnit.Framework;
 using marathon.framework;
-
-using ThoughtWorks.CruiseControl.Shared.Util;
+using ThoughtWorks.CruiseControl.Core.Util;
 
 namespace ThoughtWorks.CruiseControl.ControlPanel.Test
 {

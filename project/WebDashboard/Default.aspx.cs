@@ -101,15 +101,6 @@ namespace ThoughtWorks.CruiseControl.WebDashboard
 			}
 		}
 
-//		private void StatusGrid_ItemCommand(object source, DataGridCommandEventArgs e)
-//		{
-//			if (e.CommandName == "Force")
-//			{
-//				HyperLink link = (HyperLink)e.Item.Cells[0].Controls[0];
-//				ForceBuild(link.Text);
-//			}
-//		}
-
 		#region Web Form Designer generated code
 		override protected void OnInit(EventArgs e)
 		{
@@ -121,7 +112,6 @@ namespace ThoughtWorks.CruiseControl.WebDashboard
 		{    
 			this.StatusGrid.ItemDataBound += new System.Web.UI.WebControls.DataGridItemEventHandler(this.StatusGrid_ItemDataBound);
 			this.Load += new System.EventHandler(this.Page_Load);
-
 		}
 		#endregion
 	}

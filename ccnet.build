@@ -20,6 +20,8 @@
     <property name="web.dll" value="ThoughtWorks.CruiseControl.Web.dll"/>
     <property name="console.exe" value="ccnet.exe"/>
     <property name="service.exe" value="ccservice.exe"/>
+    <property name="controlpanel.exe" value="controlpanel.exe"/>
+    <property name="nunit-console.exe" value="tools\nunit\nunit-console.exe" />
 
     <target name="all" depends="clean, compile, test, deploy, dist"/>
 
@@ -27,73 +29,31 @@
 		<delete dir="${build.dir}" failonerror="false"/>
 		<delete dir="deployed" failonerror="false"/>
 		<delete dir="dist" failonerror="false"/>
-		<delete>
-			<fileset>
-				<includes name="**/bin"/>
-				<includes name="**/obj"/>
-			</fileset>
-		</delete>
 	</target>
 
-    <target name="init" description="initial compilation setup">
-        <mkdir dir="${build.dir}" verbose="${verbosity}"/>
-    </target>
+	<target name="init" description="initial compilation setup">
+		<mkdir dir="${build.dir}" verbose="${verbosity}"/>
+	</target>
 
 
 	<!-- COMPILE -->
 	<target name="compile" depends="init" description="compiles everything to be released">
-		<solution configuration="debug" solutionfile="project\ccnet.sln" />
+		<solution configuration="build" solutionfile="project\ccnet.sln" />
 		
-		<foreach item="Folder" property="foldername">
-			<in>
-				<items basedir="project">
-					<includes name="*\bin" />
-					<includes name="*\bin\Debug" />
-				</items>
-			</in>
-			<do>
-				<copy todir="${build.dir}">
-					<fileset basedir="${foldername}">
-						<includes name="*.config" />
-						<includes name="*.dll" />
-						<includes name="*.pdb" />
-						<includes name="*.exe" />
-					</fileset>
-				</copy>
-			</do>
-		</foreach>
-
-		<copy file="${src.dir}\core\test\test.config" tofile="${build.dir}\${core.dll}.config"/>
-		<copy file="${src.dir}\web\test\test.config" tofile="${build.dir}\${web.dll}.config"/>
-		<copy file="${src.dir}\console\app.config" tofile="${build.dir}\${console.exe}.config" verbose="${verbosity}"/>
-		<copy file="${src.dir}\service\app.config" tofile="${build.dir}\${service.exe}.config" verbose="${verbosity}"/>
-
-		<copy todir="${build.dir}\xsl" verbose="${verbosity}">
-			<fileset basedir="${src.dir}\core\publishers\xsl">
-					<includes name="**\*.xsl"/>
-			</fileset>
-		</copy>
+		<copy file="${src.dir}\console\app.config" tofile="${build.dir}\server\${console.exe}.config" verbose="${verbosity}"/>
+		<copy file="${src.dir}\service\app.config" tofile="${build.dir}\service\${service.exe}.config" verbose="${verbosity}"/>		
 	</target>
 
 	<!-- TEST -->
-	<target name="test" depends="test.unit" />
+	<target name="test" depends="compile, test.unit" />
 
-    <target name="test.unit" depends="compile" description="runs unit tests">
-    	
-		<foreach item="File" property="filename">
-			<in>
-				<items>
-					<includes name="build/*.exe" />
-					<includes name="build/ThoughtWorks.CruiseControl.*.dll" />
-				</items>
-			</in>
-			<do>
-				<exec program="tools\nunit\nunit-console.exe" 
-					commandline="${filename} /xml:${filename}-results.xml"/>
-			</do>
-		</foreach>
-
-    </target>
+	<target name="test.unit" description="runs unit tests">
+		<exec program="${nunit-console.exe}" workingdir="${build.dir}\core" commandline="${core.dll} /xml:${core.dll}-results.xml"/>
+		<exec program="${nunit-console.exe}" workingdir="${build.dir}\web" commandline="${web.dll} /xml:${web.dll}-results.xml"/>
+		<exec program="${nunit-console.exe}" workingdir="${build.dir}\server" commandline="${console.exe} /xml:${console.exe}-results.xml"/>
+		<exec program="${nunit-console.exe}" workingdir="${build.dir}\service" commandline="${service.exe} /xml:${service.exe}-results.xml"/>
+		<exec program="${nunit-console.exe}" workingdir="${build.dir}\controlpanel" commandline="${controlpanel.exe} /xml:${controlpanel.exe}-results.xml"/>
+	</target>
 
 	<!-- Used for manually testing the webapp. Don't include this in an automated build
 		unless we copy files to distribute to a different location -->
@@ -109,52 +69,43 @@
 
 	<!-- DEPLOY -->
 
-	<target name="deploy" depends="deploy.server, deploy.cctray, deploy.webapp, deploy.webdashboard, deploy.webservice" />
+	<target name="deploy" depends="compile, deploy.server, deploy.cctray, deploy.webapp, deploy.webdashboard, deploy.webservice" />
 	
 	<target name="deploy.server" depends="compile">
 		<mkdir dir="deployed\server"/>
 		<copy todir="deployed\server" verbose="${verbosity}">
-			<fileset basedir="${src.dir}\console\bin\Debug">
-				<includes name="*.exe" />
-				<includes name="*.dll" />
-				<includes name="*.pdb" />
-
-				<!-- workaround for <Solution> including too much -->
-				<excludes name="SiteMesh.dll" />
+			<fileset basedir="${build.dir}\server">
+				<includes name="*" />
+				<excludes name="*.incr" />
+				<excludes name="**/PostBuildEvent.bat" />
 			</fileset>
 		</copy>
-		<copy todir="deployed\server" verbose="${verbosity}">
-			<fileset basedir="${src.dir}\service\bin\debug">
-				<includes name="*.exe" />
-				<includes name="*.dll" />
-				<includes name="*.pdb" />
-				<excludes name="SiteMesh.dll" />
+
+		<copy todir="deployed\service" verbose="${verbosity}">
+			<fileset basedir="${build.dir}\service">
+				<includes name="*" />
+				<excludes name="*.incr" />				
+				<excludes name="**/PostBuildEvent.bat" />
 			</fileset>
-		</copy> 
+		</copy>
+
 		<copy todir="deployed\server\xsl" verbose="${verbosity}">
 			<fileset basedir="${src.dir}\core\publishers\xsl">
 				<includes name="**\*.xsl"/>
 			</fileset>
 		</copy>
 
-		<copy file="${src.dir}\console\app.config" tofile="deployed\server\${console.exe}.config" verbose="${verbosity}"/>
-		<copy file="${src.dir}\service\app.config" tofile="deployed\server\${service.exe}.config" verbose="${verbosity}"/>
-
 		<copy file="${src.dir}\console\ccnet.example.config" todir="deployed\server"  verbose="${verbosity}"/>
 		<copy file="${src.dir}\console\StartCCNet.bat" todir="deployed\server" verbose="${verbosity}"/>
 	</target>
 	
-	<target name="deploy.cctray" depends="compile">
+	<target name="deploy.cctray">
 		<mkdir dir="deployed\cctray" />
 
 		<copy todir="deployed\cctray">
-			<fileset basedir="project\cctray\bin\Debug">
-				<includes name="*.dll" />
-				<includes name="*.pdb" />
-				<includes name="*.exe" />
-
-				<!-- workaround for <Solution> including too much -->
-				<excludes name="SiteMesh.dll" />
+			<fileset basedir="${build.dir}\cctray">
+				<includes name="*" />
+				<excludes name="*.incr" />
 			</fileset>
 		</copy>
 
@@ -165,14 +116,14 @@
 		</copy>
 	</target>
     
-	<target name="deploy.webapp" depends="compile" description="deploys the web application">
+	<target name="deploy.webapp" description="deploys the web application">
 		<mkdir dir="${webapp.dir}" verbose="${verbosity}"/>
 		<copy todir="${webapp.dir}\bin">
-			<fileset basedir="project\web\bin">
-				<includes name="*.dll" />
-
-				<!-- workaround for <Solution> including too much -->
-				<excludes name="NetReflector.dll" />
+			<fileset basedir="${build.dir}\web">
+				<includes name="*" />
+				<excludes name="PostBuildEvent.bat" />
+				<excludes name="*.xml" />
+				<excludes name="*.incr" />
 			</fileset>
 		</copy>
 
@@ -204,14 +155,12 @@
 
 	</target>
 	
-	<target name="deploy.webdashboard" depends="compile" description="deploys the web dashboard application">
+	<target name="deploy.webdashboard" description="deploys the web dashboard application">
 		<mkdir dir="${webdashboard.dir}" verbose="${verbosity}"/>
 		<copy todir="${webdashboard.dir}\bin">
-			<fileset basedir="project\webdashboard\bin\Debug">
+			<fileset basedir="${build.dir}\webdashboard">
 				<includes name="*.dll" />
-
-				<!-- workaround for <Solution> including too much -->
-				<excludes name="NetReflector.dll" />
+				<excludes name="*.incr" />
 			</fileset>
 		</copy>
 
@@ -234,14 +183,12 @@
 		</copy>
 	</target>
 
-	<target name="deploy.webservice" depends="compile" description="deploys the web service">
+	<target name="deploy.webservice" description="deploys the web service">
 		<mkdir dir="${webservice.dir}" verbose="${verbosity}"/>
 		<copy todir="${webservice.dir}\bin">
-			<fileset basedir="project\WebService\bin\Debug">
+			<fileset basedir="${build.dir}\webservice">
 				<includes name="*.dll" />
-
-				<!-- workaround for <Solution> including too much -->
-				<excludes name="NetReflector.dll" />
+				<excludes name="*.incr" />
 			</fileset>
 		</copy>
 

@@ -13,7 +13,7 @@ namespace ThoughtWorks.CruiseControl.Core.Builder.Test
 		public const string TEMP_DIR = "NAntBuilderTest";
 		public static readonly string NANT_TEST_BASEDIR = ".";
 
-		public static readonly string NANT_TEST_EXECUTABLE = @"..\tools\nant\nant.exe";
+		public static readonly string NANT_TEST_EXECUTABLE = GetNAntLocation();
 
 		public static readonly string TEST_BUILD_FILENAME = "test.build";
 		public static readonly string NANT_TEST_BUILDFILE = TempFileUtil.GetTempFilePath("nant-build-temp", TEST_BUILD_FILENAME);
@@ -247,5 +247,11 @@ namespace ThoughtWorks.CruiseControl.Core.Builder.Test
 
 		#endregion
 
+		private static string GetNAntLocation()
+		{
+			string currentDir = Directory.GetCurrentDirectory();
+			string baseDir = currentDir.Substring(0, currentDir.LastIndexOf("ccnet") + "ccnet".Length);
+			return baseDir + @"\tools\nant\nant.exe";
+		}
 	}
 }
