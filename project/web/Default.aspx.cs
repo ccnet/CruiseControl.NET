@@ -36,8 +36,18 @@ namespace tw.ccnet.web
 			{
 				InitDisplayLogFile();
 			}
-			catch(CruiseControlException ex)
+			catch (CruiseControlException ex)
 			{
+				// This fixes a problem where the BodyLabel control isn't initialised, causing
+				// a NullReferenceException.  The original exception (ex) was being lost.
+				// Why is BodyLabel null?  (drewnoakes: I saw this problem while working with
+				// invalid Xsl in file modifications.xsl)
+				if (BodyLabel==null)
+					throw ex;
+
+				if (BodyLabel.Text==null)
+					BodyLabel.Text = string.Empty;
+
 				BodyLabel.Text += WebUtil.FormatException(ex);
 			}
 		}
