@@ -14,24 +14,37 @@
                                                     </span>
 				    </div>
 				    <div class="pagesubheading">
-					    This page last changed on Apr 22, 2004 by <font color="#0050B2">orogers</font>.
+					    This page last changed on May 31, 2004 by <font color="#0050B2">orogers</font>.
 				    </div>
 
-				    <p class="paragraph"><h3 class="heading3"> VSS Configuration Examples</h3>
-For Visual Source Safe you must specify the executable, project, username and password. You may also specify the SSDIR. If SSDIR is not set the default or the SSDIR environment variable will be used.</p><div class="code"><pre>&lt;sourcecontrol type=&quot;vss&quot;&gt;&#10;   &lt;executable&gt;C&#58;&#92;Program Files&#92;Microsoft Visual Studio&#92;VSS&#92;win32&#92;SS.EXE&lt;/executable&gt;&#10;   &lt;project&gt;$/CCNET&lt;/project&gt;&#10;   &lt;username&gt;buildguy&lt;/username&gt;&#10;   &lt;password&gt;buildguypw&lt;/password&gt;&#10;   &lt;ssdir&gt;c&#58;&#92;repos&#92;&lt;/ssdir&gt;&#10;&lt;/sourcecontrol&gt;</pre></div>
-<ul class="star">
-<li> project: the root project that CCNet should monitor</li>
-<li> username: the VSS userid that be used to log into VSS</li>
-<li> password: the password of the above user</li>
-<li> ssdir (<em class="emphasis">optional</em>): this value sets the SSDIR environment variable which is used to specify the location of the SRCSAFE.INI file.  If this environment variable is already set on the integration server then this property can be omitted.</li>
-<li> executable (<em class="emphasis">optional</em>): this property points to the location of the SS.EXE executable.  If VSS is installed on the integration server, the location of VSS will be read from the registry and this element can be omitted.</li>
-<li> timeout (<em class="emphasis">optional</em>): this is how long (in milliseconds) the VSS operation will be permitted to run before timing out.  The default value is 10 minutes.</li>
-</ul>
-<h3 class="heading3"> VSS Issues</h3><p class="paragraph"><b class="strong">CCNet periodically reports the following error when connecting to VSS: &quot;Unable to open user login file \SourceSafe\Vss60\data\loggedin\&lt;userid&gt;.log.&quot;  What gives?</b></p>If you have set CCNet up to manage multiple projects that all connect to the VSS repository using the same user id then you may sporadically receive this failure.  Our analysis suggests that the root of the problem is caused by the fact that VSS will create the <b class="strong">&lt;userid&gt;.log</b> file when a user logs into VSS and delete it when the user logs out again.  If a second build is using the repository concurrently with the same user, when that second build logs out it looks for <b class="strong">&lt;userid&gt;.log</b>, but it&#039;s gone.  Hence the error.<p class="paragraph">There are three approaches that you can take to deal with this:<ul class="star">
+				    <p class="paragraph"><h3 class="heading3"> VSS Configuration Example</h3>
+For Visual Source Safe you must specify the executable, project, username and password. You may also specify the SSDIR. If SSDIR is not set the default or the SSDIR environment variable will be used.</p><div class="code"><pre>&lt;sourcecontrol type=&quot;vss&quot; autoGetSource=&quot;true&quot;&gt;&#10;   &lt;executable&gt;C&#58;&#92;Program Files&#92;Microsoft Visual Studio&#92;VSS&#92;win32&#92;SS.EXE&lt;/executable&gt;&#10;   &lt;project&gt;$/CCNET&lt;/project&gt;&#10;   &lt;username&gt;buildguy&lt;/username&gt;&#10;   &lt;password&gt;buildguypw&lt;/password&gt;&#10;   &lt;ssdir&gt;c&#58;&#92;repos&#92;&lt;/ssdir&gt;&#10;&lt;/sourcecontrol&gt;</pre></div><p class="paragraph"><h3 class="heading3"> Configuration Elements:</h3></p><table class="wikitable">
+<tr>
+<th> Node </th><th> Description </th><th> Type </th><th> Required</th>
+</tr><tr>
+<td> project </td><td> Root project in the repository to be monitored by CCNet </td><td> string </td><td> true </td>
+</tr><tr>
+<td> username</td><td> VSS user id that CCNet should use to authenticate </td><td> string </td><td> true </td>
+</tr><tr>
+<td> password </td><td> Password for the VSS user id </td><td> string </td><td> true</td>
+</tr><tr>
+<td> ssdir </td><td> Sets the SSDIR environment variable which is used to specify the location of the SRCSAFE.INI file.  If this environment variable is already set on the integration server then this property can be omitted. </td><td> string </td><td> false </td>
+</tr><tr>
+<td> executable </td><td> The location of the SS.EXE executable.  If VSS is installed on the integration server, the location of VSS will be read from the registry and this element can be omitted. </td><td> string </td><td> false </td>
+</tr><tr>
+<td> autoGetSource </td><td> Specifies whether the current version of the source should be retrieved from VSS.  The default value for this setting is false. </td><td> bool </td><td> false </td>
+</tr><tr>
+<td> workingDirectory </td><td> The folder into which the source should be retrived from VSS.  If this folder does not exist, it will be automatically created. </td><td> string </td><td> false </td>
+</tr><tr>
+<td> timeout </td><td> How long (in milliseconds) the VSS operation will be permitted to run before timing out.  The default value is 10 minutes. </td><td> int </td><td> false </td>
+</tr>
+</table>
+<h3 class="heading3"> Getting the latest source with VSS</h3><p class="paragraph">VSS does not automatically remove files from the local workspace that have been deleted from the VSS database.  This does not cause a problem if you are using the <b class="strong">&lt;solution&gt;</b> task or the <a href="DevenvBuilder.html">DevenvBuilder</a> to compile your project.  However, if you are packaging the source for deployment or if you are using the <b class="strong">&lt;csc&gt;</b> task to produce a custom build, you may end up compiling these deleted files in your assembly.  To be on the safe side, it might be a good idea to clear the contents of the local workspace after each build.</p><h3 class="heading3"> VSS Issues</h3><p class="paragraph"><b class="strong">CCNet periodically reports the following error when connecting to VSS: &quot;Unable to open user login file \SourceSafe\Vss60\data\loggedin\&lt;userid&gt;.log.&quot;  What gives?</b></p>If you have set CCNet up to manage multiple projects that all connect to the VSS repository using the same user id then you may sporadically receive this failure.  Our analysis suggests that the root of the problem is caused by the fact that VSS will create the <b class="strong">&lt;userid&gt;.log</b> file when a user logs into VSS and delete it when the user logs out again.  If a second build is using the repository concurrently with the same user, when that second build logs out it looks for <b class="strong">&lt;userid&gt;.log</b>, but it&#039;s gone.  Hence the error.<p class="paragraph">There are three approaches that you can take to deal with this:<ul class="star">
 <li> You can <a href="ProjectExceptions.html">keep CCNet from publishing exceptions</a>, so this exception will just get logged into the <b class="strong">ccnet.log</b> file.</li>
 <li> Leave the VSS GUI open on the integration server.  This will mean the <b class="strong">userid.log</b> file never gets deleted.</li>
 <li> Log into VSS using different users for each CCNet project</li>
-</ul></p>
+</ul><br/>
+<b class="strong">If you&#039;re using a labeller that returns a label equal to one already applied in the repository, the old label will be <ins class="inserted">deleted</ins> when the new one is added.</b></p>This is because of a quirk in how VSS deals with labels of the same name; it should not be a problem with the default labeller.<p class="paragraph">This problem usually occurs when someone is using a custom labeller (a class that implements ILabeller) and that custom labeller returns a constant value.</p><b class="strong">Workaround:</b> If you use a custom labeller, make sure each label is unique.
 
 				    
                     			    </td>
@@ -42,7 +55,7 @@ For Visual Source Safe you must specify the executable, project, username and pa
 				<td height="12" background="border/border_bottom.gif"><img src="border/spacer.gif" width="1" height="1" border="0"/></td>
 			</tr>
 		    <tr>
-			    <td align="center"><font color="grey">Document generated by Confluence on Apr 23, 2004 00:07</font></td>
+			    <td align="center"><font color="grey">Document generated by Confluence on May 31, 2004 05:05</font></td>
 		    </tr>
 	    </table>
     </body>

@@ -1,0 +1,55 @@
+<html>
+    <head>
+        <title>CruiseControl.NET : Rational ClearCase</title>
+	    <link rel="stylesheet" href="styles/site.css" type="text/css" />
+    </head>
+
+    <body>
+	    <table class="pagecontent" border="0" cellpadding="0" cellspacing="0" width="100%" bgcolor="#ffffff">
+		    <tr>
+			    <td valign="top" class="pagebody">
+				    <div class="pageheader">
+					    <span class="pagetitle">
+                            CruiseControl.NET : Rational ClearCase
+                                                    </span>
+				    </div>
+				    <div class="pagesubheading">
+					    This page last changed on May 17, 2004 by <font color="#0050B2">gsmith</font>.
+				    </div>
+
+				    <p class="paragraph"><h3 class="heading3"> Rational ClearCase Configuration</h3></p>CCNet supports monitoring a ClearCase repository for modifications and labelling on a successful build.<p class="paragraph"><h4 class="heading4"> Typical / Minimal Configuration</h4></p>For most uses the following is all you&#039;ll need in your <tt class="monospaced">ccnet.config</tt>:
+
+<div class="code"><pre>&lt;sourcecontrol type=&quot;clearCase&quot;&gt;&#10;    &lt;viewPath&gt;C&#58;&#92;PATH&#92;TO&#92;SOURCE&lt;/viewPath&gt;&#10;&lt;/sourcecontrol&gt;</pre></div><p class="paragraph">This will label the source but not apply baselines.</p><a name="Rational+ClearCase-viewPath" ></a><p class="paragraph">The <tt class="monospaced">&lt;viewPath&gt;</tt> specifies a directory on your filesystem that CCNet monitors for changes.  The path must be a versioned object.  CCNet checks the actual VOB for changes, not the local filesystem.</p><tt class="monospaced">&lt;viewPath&gt;</tt> doesn&#039;t have to be the root of the local ClearCase view.  It may be any of the root&#039;s children or even a single object.
+<p class="paragraph"><h4 class="heading4"> Full Configuration</h4></p><div class="code"><pre>&lt;sourcecontrol type=&quot;clearCase&quot;&gt;&#10;    &lt;viewPath&gt;C&#58;&#92;PATH&#92;TO&#92;SOURCE&lt;/viewPath&gt;&#10;    &lt;useLabel&gt;true&lt;/useLabel&gt;&#10;    &lt;useBaseline&gt;false&lt;/useBaseline&gt;&#10;    &lt;projectVobName&gt;PROJECT&#95;VOB&#95;NAME&lt;/projectVobName&gt;&#10;    &lt;viewName&gt;PROJECT&#95;VIEW&#95;NAME&lt;/viewName&gt;&#10;    &lt;executable&gt;cleartool.exe&lt;/executable&gt;&#10;    &lt;timeout&gt;50000&lt;/timeout&gt;&#10;&lt;/sourcecontrol&gt;</pre></div>
+
+<ul class="star">
+<li> <ins class="inserted">viewPath</ins>: Required.  The path that CCNet will check for modifications and to apply the label. See <a href="#Rational+ClearCase-viewPath">above</a> for full details.</li>
+<li> <ins class="inserted">useLabel</ins>: <tt class="monospaced">true</tt> or <tt class="monospaced">false</tt>. Optional; default is <tt class="monospaced">true</tt>.  Specifies whether a label should be applied when the build is successful.</li>
+<li> <ins class="inserted">useBaseline</ins>: <tt class="monospaced">true</tt> or <tt class="monospaced">false</tt>. Optional; default is <tt class="monospaced">false</tt>.  Specifies whether a baseline should be applied when the build is successful.  Requires the VOB your view references to be a UCM VOB.  Requires that you specify <tt class="monospaced">&lt;viewName&gt;</tt> and <tt class="monospaced">&lt;projectVobName&gt;</tt>.</li>
+<li> <ins class="inserted">executable</ins>: Optional; default is <tt class="monospaced">cleartool.exe</tt>.  Specifies the path to the ClearCase command line tool.  You should only have to include this element if the tool isn&#039;t in your path.  By default, the ClearCase client installation puts cleartool in your path.</li>
+<li> <ins class="inserted">projectVobName</ins>: Required if <tt class="monospaced">&lt;useBaseline&gt;</tt> is <tt class="monospaced">true</tt>.  The name of the project VOB that the view path uses.</li>
+<li> <ins class="inserted">viewName</ins>: Required if <tt class="monospaced">&lt;useBaseline&gt;</tt> is <tt class="monospaced">true</tt>.  The name of the view that you&#039;re using.</li>
+<li> <ins class="inserted">timeout</ins>: Optional; default is 10 minutes.  The time, in milliseconds, that CCNet waits for all ClearCase operations to complete.</li>
+</ul><p class="paragraph"><h4 class="heading4"> Common Problems</h4></p><h5 class="heading5"> After the build is successful I get a &quot;Baseline not found&quot; error message.</h5><p class="paragraph">An example of this message is:
+<div class="preformatted"><div class="preformattedContent">
+<pre>ThoughtWorks.CruiseControl.Core.CruiseControlException: Source control operation failed:&#10;cleartool: Error: Baseline not found: &quot;CruiseControl.NETTemporaryBaseline&#95;05&#45;06&#45;2004&#45;16&#45;34&#45;15&quot;.</pre>
+</div></div></p>This happens when <tt class="monospaced">&lt;projectVobName&gt;</tt> is not set to the project VOB.  Typically this happens when the user specifies the UCM VOB instead of the project VOB.<p class="paragraph">To correct the problem, change the value in that element to the name of the project VOB.</p><h4 class="heading4"> Known Bugs</h4><p class="paragraph"><h5 class="heading5">  When I view my baselines, I see that they&#039;re called <tt class="monospaced">CruiseControl.NET&#91;something&#93;</tt> instead of <tt class="monospaced">v1.0.0.4</tt>.</h5></p>This is a bug in ClearCase; Rational is aware of it.  It only occurs if you&#039;re using baselines.<p class="paragraph">CCNet creates a temporary baseline with the prefix <tt class="monospaced">CruiseControl.NET</tt> before renaming it to the final value, such as <tt class="monospaced">v1.5.2.3</tt>.  Depending on how you view baselines in ClearCase, you may see the temporary or real name.</p>For example, if you use the admin console, you&#039;ll see the old, temporary value.  If use use <tt class="monospaced">cleartool lsbl</tt>, you&#039;ll see the correct one:
+
+<div class="preformatted"><div class="preformattedContent">
+<pre>M:&#92;gsmith&#95;GS&#95;Project&#95;int&#92;GS&#95;UCM&#95;VOB&gt;cleartool lsbl&#10;06&#45;May&#45;04.16:28:27  v1.0.0.1  gsmith   &quot;CruiseControlTemporaryBaseline&#95;05&#45;06&#45;200&#10;4&#45;16&#45;28&#45;26&quot;&#10;  stream: GS&#95;Project&#95;Integration&#64;&#92;GS&#95;PVOB&#10;  component: GS&#95;UCM&#95;VOB&#64;&#92;GS&#95;PVOB&#10;06&#45;May&#45;04.16:34:16  v1.0.0.2  gsmith   &quot;CruiseControl.NETTemporaryBaseline&#95;05&#45;06&#10;&#45;2004&#45;16&#45;34&#45;15&quot;&#10;  stream: GS&#95;Project&#95;Integration&#64;&#92;GS&#95;PVOB&#10;  component: GS&#95;UCM&#95;VOB&#64;&#92;GS&#95;PVOB</pre>
+</div></div>
+
+				    
+                    			    </td>
+		    </tr>
+	    </table>
+	    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+			<tr>
+				<td height="12" background="border/border_bottom.gif"><img src="border/spacer.gif" width="1" height="1" border="0"/></td>
+			</tr>
+		    <tr>
+			    <td align="center"><font color="grey">Document generated by Confluence on May 31, 2004 05:05</font></td>
+		    </tr>
+	    </table>
+    </body>
+</html>
