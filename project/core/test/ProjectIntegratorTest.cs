@@ -89,7 +89,7 @@ namespace ThoughtWorks.CruiseControl.Core.Test
 
 			_integrator.Start();
 			_integrator.Start();
-			Thread.Sleep(0);
+			Thread.Sleep(110);
 			_integrator.Start();
 			Assert.AreEqual(ProjectIntegratorState.Running, _integrator.State);
 			_integrator.Stop();
@@ -106,12 +106,12 @@ namespace ThoughtWorks.CruiseControl.Core.Test
 			integrationTriggerMock.ExpectNoCall("IntegrationCompleted");
 
 			_integrator.Start();
-			Thread.Sleep(0);
+			Thread.Sleep(110);
 			_integrator.Stop();
 			_integrator.WaitForExit();
 
 			_integrator.Start();
-			Thread.Sleep(0);
+			Thread.Sleep(110);
 			_integrator.Stop();
 			_integrator.WaitForExit();		
 			VerifyAll();
@@ -140,7 +140,7 @@ namespace ThoughtWorks.CruiseControl.Core.Test
 
 			_integrator.Start();
 			Assert.AreEqual(ProjectIntegratorState.Running, _integrator.State);
-			Thread.Sleep(0);
+			Thread.Sleep(110);
 			_integrator.Stop();
 			_integrator.WaitForExit();
 			Assert.AreEqual(ProjectIntegratorState.Stopped, _integrator.State);
@@ -159,7 +159,7 @@ namespace ThoughtWorks.CruiseControl.Core.Test
 			integrationTriggerMock.ExpectNoCall("IntegrationCompleted");
 
 			_integrator.Start();
-			Thread.Sleep(0);
+			Thread.Sleep(110);
 			Assert.AreEqual(ProjectIntegratorState.Running, _integrator.State);
 			_integrator.Abort();
 			_integrator.WaitForExit();
@@ -185,7 +185,7 @@ namespace ThoughtWorks.CruiseControl.Core.Test
 			integrationTriggerMock.ExpectNoCall("IntegrationCompleted");
 
 			_integrator.Start();
-			Thread.Sleep(0);
+			Thread.Sleep(110);
 			Assert.AreEqual(ProjectIntegratorState.Running, _integrator.State);
 			_integrator.Abort();
 			_integrator.Abort();

@@ -174,7 +174,7 @@ namespace ThoughtWorks.CruiseControl.Core.Test
 		private void Stop()
 		{
 			monitor.WaitOne();
-			Thread.Sleep(0);
+			Thread.Sleep(110);
 			server.Stop();
 		}
 
@@ -194,7 +194,7 @@ namespace ThoughtWorks.CruiseControl.Core.Test
 		private void Abort()
 		{
 			monitor.WaitOne();
-			Thread.Sleep(0);
+			Thread.Sleep(110);
 			server.Abort();
 		}
 
