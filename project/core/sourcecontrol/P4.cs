@@ -129,14 +129,45 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			result.Modifications = GetModifications(result.LastModificationDate, DateTime.Now);
 		}
 
+		/// <summary>
+		/// Labelling in Perforce requires 2 activities. First you create a 'label specification' which is the name of the label, and what
+		/// part of the source repository it is associated with. Secondly you actually populate the label with files and associated
+		/// revisions by performing a 'label sync'. We take the versioned file set as being the versions that are currently 
+		/// checked out on the client (In theory this could be refined by using the timeStamp, but it would be better
+		/// to wait until CCNet has proper support for atomic-commit change groups, and use that instead)
+		/// </summary>
 		public void LabelSourceControl(string label, DateTime timeStamp) 
 		{
-			// TODO - failure handling
 			if (ApplyLabel)
 			{
-				Execute(CreateLabelSpecificationProcess(label));
-				Execute(CreateLabelSyncProcess(label));
+				ProcessInfo process = CreateLabelSpecificationProcess(label);
+				try
+				{
+					int.Parse(label);
+					throw new CruiseControlException("Perforce cannot handle purely numeric labels - you must use a label prefix for your project");
+				}
+				catch (FormatException) { }
+
+				string processOutput = Execute(process);
+				if (containsErrors(processOutput))
+				{
+					Log.Error(string.Format("Perforce labelling failed:\r\n\t process was : {0} \r\n\t output from process was: {1}", process.ToString(),  processOutput));
+					return;
+				}
+
+				process = CreateLabelSyncProcess(label);
+				processOutput = Execute(process);
+				if (containsErrors(processOutput))
+				{
+					Log.Error(string.Format("Perforce labelling failed:\r\n\t process was : {0} \r\n\t output from process was: {1}", process.ToString(),  processOutput));
+					return;
+				}
 			}
+		}
+
+		private bool containsErrors(string processOutput)
+		{
+			return processOutput.IndexOf("error:") > -1;
 		}
 
 		private ProcessInfo CreateLabelSpecificationProcess(string label)
@@ -171,8 +202,9 @@ View:
 
 		protected virtual string Execute(ProcessInfo p)
 		{
+			Log.Debug("Perforce integration - running:" + p.ToString());
 			ProcessResult result = processExecutor.Execute(p);
-			return result.StandardOutput;
+			return result.StandardOutput.Trim() + "\r\n" + result.StandardError.Trim();
 		}
 
 		private string FormatDate(DateTime date)

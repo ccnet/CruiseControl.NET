@@ -13,15 +13,15 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 		public const int SUCCESSFUL_EXIT_CODE = 0;
 		public const int TIMED_OUT_EXIT_CODE = -1;
 
-		private string standardOutput;
-		private string standardError;
-		private int exitCode;
-		private bool timedOut;
+		private readonly string standardOutput;
+		private readonly string standardError;
+		private readonly int exitCode;
+		private readonly bool timedOut;
 
 		public ProcessResult(string standardOutput, string standardError, int errorCode, bool timedOut)
 		{
-			this.standardOutput = standardOutput;
-			this.standardError = standardError;
+			this.standardOutput = (standardOutput == null ? "" : standardOutput);
+			this.standardError = (standardError == null ? "" : standardError);
 			this.exitCode = errorCode;
 			this.timedOut = timedOut;
 		}
@@ -57,7 +57,7 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 
 		public bool HasErrorOutput
 		{
-			get { return standardError != null && standardError.Trim() != string.Empty; }
+			get { return standardError.Trim() != string.Empty; }
 		}
 	}
 }

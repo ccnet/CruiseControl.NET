@@ -15,42 +15,32 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 
 		public static void Info(string message)
 		{
-			if (CruiseControlSwitch.TraceInfo)
-			{
-				WriteLine("Info", message);
-			}
+			WriteLine("Info", message, CruiseControlSwitch.TraceInfo);
 		}
 
 		public static void Debug(string message)
 		{
-			if (CruiseControlSwitch.TraceVerbose)
-			{
-				WriteLine("Debug", message);
-			}
+			WriteLine("Debug", message, CruiseControlSwitch.TraceVerbose);
 		}
 
 		public static void Warning(string message)
 		{
-			if (CruiseControlSwitch.TraceWarning)
-			{
-				WriteLine("Warning", message);
-			}
+			WriteLine("Warning", message, CruiseControlSwitch.TraceWarning);
 		}
 
 		public static void Warning(Exception ex)
 		{
-			if (CruiseControlSwitch.TraceWarning)
-			{
-				WriteLine("Warning", CreateExceptionMessage(ex));
-			}
+			WriteLine("Warning", ex, CruiseControlSwitch.TraceWarning);
+		}
+
+		public static void Error(string message)
+		{
+			WriteLine("Error", message, CruiseControlSwitch.TraceError);
 		}
 
 		public static void Error(Exception ex)
 		{
-			if (CruiseControlSwitch.TraceError)
-			{
-				WriteLine("Error", CreateExceptionMessage(ex));
-			}
+			WriteLine("Error", ex, CruiseControlSwitch.TraceError);
 		}
 
 		private static string CreateExceptionMessage(Exception ex)
@@ -72,6 +62,19 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 		private static string GetContextName()
 		{
 			return (Thread.CurrentThread.Name == null) ? "CruiseControl Server" : Thread.CurrentThread.Name;
+		}
+
+		private static void WriteLine(string level, Exception ex, bool traceSwitch)
+		{
+			WriteLine(level, CreateExceptionMessage(ex), traceSwitch);
+		}
+
+		private static void WriteLine(string level, string message, bool traceSwitch)
+		{
+			if (traceSwitch)
+			{
+				WriteLine(level, message);
+			}
 		}
 
 		private static void WriteLine(string level, string message)

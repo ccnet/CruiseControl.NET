@@ -221,7 +221,7 @@ exit: 0
   <applyLabel>true</applyLabel>
 </sourceControl>
 ";
-			string expectedLabelView = @"Label:	123
+			string expectedLabelView = @"Label:	foo-123
 
 Description:
 	Created by CCNet
@@ -231,16 +231,41 @@ Options:	unlocked
 View:
 	//depot/myproject/...
 ";
-			string label = "123";
+			string label = "foo-123";
 
 			ProcessInfo expectedLabelSpecProcess = new ProcessInfo("c:\\bin\\p4.exe", "-s -c myclient -p anotherserver:2666 -u me label -i");
 			expectedLabelSpecProcess.StandardInputContent = expectedLabelView;
 
-			ProcessInfo expectedLabelSyncProcess = new ProcessInfo("c:\\bin\\p4.exe", "-s -c myclient -p anotherserver:2666 -u me labelsync -l 123");
+			ProcessInfo expectedLabelSyncProcess = new ProcessInfo("c:\\bin\\p4.exe", "-s -c myclient -p anotherserver:2666 -u me labelsync -l foo-123");
 
-			mockProcessExecutor.ExpectAndReturn("Execute", "", expectedLabelSpecProcess);
-			mockProcessExecutor.ExpectAndReturn("Execute", "", expectedLabelSyncProcess);
+			mockProcessExecutor.ExpectAndReturn("Execute", new ProcessResult("", "", 0, false), expectedLabelSpecProcess);
+			mockProcessExecutor.ExpectAndReturn("Execute", new ProcessResult("", "", 0, false), expectedLabelSyncProcess);
 			CreateP4((ProcessExecutor) mockProcessExecutor.MockInstance, configXml).LabelSourceControl(label,DateTime.Now);
+
+			mockProcessExecutor.Verify();
+		}
+
+		[Test]
+		public void LabelSourceControlFailsIfLabelIsOnlyNumeric()
+		{
+			string configXml = @"
+<sourceControl name=""p4"">
+  <executable>c:\bin\p4.exe</executable>
+  <view>//depot/myproject/...</view>
+  <client>myclient</client>
+  <user>me</user>
+  <port>anotherserver:2666</port>
+  <applyLabel>true</applyLabel>
+</sourceControl>
+";
+			string label = "123";
+
+			try
+			{
+				CreateP4((ProcessExecutor) mockProcessExecutor.MockInstance, configXml).LabelSourceControl(label,DateTime.Now);
+				Fail("Perforce labelling should fail if a purely numeric label is attempted to be applied");
+			}
+			catch (CruiseControlException) { }
 
 			mockProcessExecutor.Verify();
 		}
@@ -258,7 +283,7 @@ View:
   <applyLabel>false</applyLabel>
 </sourceControl>
 ";
-			string label = "123";
+			string label = "foo-123";
 
 			mockProcessExecutor.ExpectNoCall("Execute", typeof(ProcessInfo));
 			CreateP4((ProcessExecutor) mockProcessExecutor.MockInstance, configXml).LabelSourceControl(label,DateTime.Now);
@@ -267,7 +292,7 @@ View:
 		}
 
 		[Test]
-		public void DontLabelSourceControlIfApplyLabelNotSet()
+		public void DontLabelSourceControlIfApplyLabelNotSetEvenIfInvalidLabel()
 		{
 			string configXml = @"
 <sourceControl name=""p4"">
