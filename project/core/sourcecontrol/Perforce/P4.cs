@@ -11,6 +11,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Perforce
 	[ReflectorType("p4")]
 	public class P4 : ISourceControl
 	{
+		private readonly IP4Purger p4Purger;
 		internal readonly static string COMMAND_DATE_FORMAT = "yyyy/MM/dd:HH:mm:ss";
 
 		private string _executable = "p4";
@@ -28,13 +29,15 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Perforce
 			processExecutor = new ProcessExecutor();
 			processInfoCreator = new P4ConfigProcessInfoCreator();
 			p4Initializer = new ProcessP4Initializer(processExecutor, processInfoCreator);
+			p4Purger = new ProcessP4Purger(processExecutor, processInfoCreator);
 		}
 
-		public P4(ProcessExecutor processExecutor, IP4Initializer initializer, IP4ProcessInfoCreator processInfoCreator)
+		public P4(ProcessExecutor processExecutor, IP4Initializer initializer, IP4Purger p4Purger, IP4ProcessInfoCreator processInfoCreator)
 		{
 			this.processExecutor = processExecutor;
 			this.p4Initializer = initializer;
 			this.processInfoCreator = processInfoCreator;
+			this.p4Purger = p4Purger;
 		}
 
 		[ReflectorProperty("executable", Required=false)]
@@ -277,6 +280,18 @@ View:
 			else
 			{
 				p4Initializer.Initialize(this, project.Name, _workingDirectory);
+			}
+		}
+
+		public void Purge(IProject project)
+		{
+			if (_workingDirectory == null || _workingDirectory == string.Empty)
+			{
+				p4Purger.Purge(this, project.WorkingDirectory);	
+			}
+			else
+			{
+				p4Purger.Purge(this, _workingDirectory);
 			}
 		}
 	}

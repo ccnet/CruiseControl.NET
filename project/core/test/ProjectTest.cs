@@ -1,5 +1,6 @@
 using System;
 using System.Diagnostics;
+using System.IO;
 using Exortech.NetReflector;
 using NMock;
 using NMock.Constraints;
@@ -30,6 +31,7 @@ namespace ThoughtWorks.CruiseControl.Core.Test
 		private IMock _mockPublisher;
 		private IMock _mockTask;
 		private TestTraceListener _listener;
+		private string tempDirPath;
 		private const string PROJECT_NAME = "test";
 
 		[SetUp]
@@ -60,6 +62,8 @@ namespace ThoughtWorks.CruiseControl.Core.Test
 			_project.Publishers = new IIntegrationCompletedEventHandler[] {(IIntegrationCompletedEventHandler) _mockPublisher.MockInstance};
 			_project.Tasks = new ITask[] {(ITask) _mockTask.MockInstance};
 
+			tempDirPath = TempFileUtil.CreateTempDir("tempDir");
+
 			_listener = new TestTraceListener();
 			Trace.Listeners.Add(_listener);
 		}
@@ -69,6 +73,9 @@ namespace ThoughtWorks.CruiseControl.Core.Test
 		{
 			Trace.Listeners.Remove(_listener);
 
+			TempFileUtil.DeleteTempDir("tempDir");
+
+			// NONONO - Verify's in teardown are NOT good enough - move these out to a 'VerifyAll' method and call it from every test.
 			_mockBuilder.Verify();
 			_mockSourceControl.Verify();
 			_mockStateManager.Verify();
@@ -470,6 +477,50 @@ namespace ThoughtWorks.CruiseControl.Core.Test
 			
 			// Verify
 			sourceControlMock.Verify();
+		}
+
+		[Test]
+		public void ShouldCallSourceControlPurgeThenDeleteWorkingDirectoryOnPurge()
+		{
+			// Setup
+			Project project = new Project();
+
+			DynamicMock sourceControlMock = new DynamicMock(typeof(ISourceControl));
+			sourceControlMock.Expect("Purge", project);
+			project.SourceControl = (ISourceControl) sourceControlMock.MockInstance;
+			project.ConfiguredWorkingDirectory = tempDirPath;
+			Assert.IsTrue(Directory.Exists(tempDirPath));
+
+			// Execute
+			project.Purge();
+			
+			// Verify
+			sourceControlMock.Verify();
+			Assert.IsFalse(Directory.Exists(tempDirPath));
+		}
+
+		[Test]
+		public void ShouldNotDeleteWorkingDirectoryIfSourceControlFailsOnPurge()
+		{
+			// Setup
+			Project project = new Project();
+
+			DynamicMock sourceControlMock = new DynamicMock(typeof(ISourceControl));
+			sourceControlMock.ExpectAndThrow("Purge", new CruiseControlException(), project);
+			project.SourceControl = (ISourceControl) sourceControlMock.MockInstance;
+			project.ConfiguredWorkingDirectory = tempDirPath;
+			Assert.IsTrue(Directory.Exists(tempDirPath));
+
+			// Execute
+			try
+			{
+				project.Purge();
+			}
+			catch (CruiseControlException) { }
+			
+			// Verify
+			sourceControlMock.Verify();
+			Assert.IsTrue(Directory.Exists(tempDirPath));
 		}
 	}
 }

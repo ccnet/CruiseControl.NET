@@ -37,5 +37,9 @@ namespace ThoughtWorks.CruiseControl.Core
 		public void Initialize(IProject project)
 		{
 		}
+
+		public void Purge(IProject project)
+		{
+		}
 	}
 }

@@ -69,6 +69,11 @@ namespace ThoughtWorks.CruiseControl.Core
 			get { return _currentIntegrationResult.Status; }
 		}
 
+		public void Purge()
+		{
+			return;
+		}
+
 		public int MinimumSleepTimeMillis 
 		{ 
 			get { return 0; }

@@ -68,5 +68,10 @@ namespace ThoughtWorks.CruiseControl.Core
 		/// </summary>
 		/// <returns>The most recent build status</returns>
 		IntegrationStatus LatestBuildStatus { get; }
+
+		/// <summary>
+		/// This method is called when the project is being deleted from the server. It allows resources to be cleaned up, SCM clients to be unregistered, etc.
+		/// </summary>
+		void Purge();
 	}
 }

@@ -160,7 +160,15 @@ namespace ThoughtWorks.CruiseControl.Core
 
 		public string GetLatestBuildName(string projectName)
 		{
-			return GetBuildNames(projectName)[0];
+			string[] buildNames = GetBuildNames(projectName);
+			if (buildNames.Length > 0)
+			{
+				return buildNames[0];
+			}
+			else
+			{
+				return "";
+			}
 		}
 
 		public string[] GetBuildNames(string projectName)
@@ -248,17 +256,18 @@ namespace ThoughtWorks.CruiseControl.Core
 		}
 
 		// ToDo - test
-		// ToDo - when we decide how to handle configuration changes, do more here (like stopping project, deleting working dir, etc.)
+		// ToDo - when we decide how to handle configuration changes, do more here (like stopping/waiting for project, returning asynchronously, etc.)
 		public void DeleteProject(string projectName)
 		{
 			Log.Info("Deleting project - " + projectName);
 			try
 			{
 				IConfiguration configuration = configurationService.Load();
+				configuration.Projects[projectName].Purge();
 				configuration.DeleteProject(projectName);
 				configurationService.Save(configuration);
 			}
-			catch (ApplicationException e)
+			catch (Exception e)
 			{
 				Log.Warning(e);
 				throw new CruiseControlException("Failed to add project. Exception was - " + e.Message);

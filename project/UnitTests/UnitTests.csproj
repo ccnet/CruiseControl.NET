@@ -209,6 +209,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Core\SourceControl\Perforce\ProessP4PurgerTest.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "WebDashboard\Cache\LocalFileCacheManagerTest.cs"
                     SubType = "Code"
                     BuildAction = "Compile"

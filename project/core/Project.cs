@@ -376,5 +376,12 @@ namespace ThoughtWorks.CruiseControl.Core
 			Log.Info(string.Format("Initiatizing Project [{0}]", Name));
 			SourceControl.Initialize(this);
 		}
+
+		public void Purge()
+		{
+			Log.Info(string.Format("Purging Project [{0}]", Name));
+			SourceControl.Purge(this);
+			Directory.Delete(WorkingDirectory, true);
+		}
 	}
 }

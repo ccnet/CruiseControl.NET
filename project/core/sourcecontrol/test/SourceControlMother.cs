@@ -13,7 +13,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test
 	}
 
 	[ReflectorType("mock")]
-	public class MockSourceControl : ISourceControl 
+	public class MockSourceControl : ISourceControl
 	{
 		public readonly static DateTime LastModificationTime = DateTime.Now.AddDays(-0.5);
 		private string label;
@@ -69,6 +69,8 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test
 		{
 		}
 
+		public void Purge(IProject project)
+		{
+		}
 	}
-
 }

@@ -828,6 +828,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "sourcecontrol\Perforce\IP4Purger.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "sourcecontrol\Perforce\P4.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -844,6 +849,11 @@
                 />
                 <File
                     RelPath = "sourcecontrol\Perforce\ProcessP4Initializer.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "sourcecontrol\Perforce\ProcessP4Purger.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -1212,7 +1222,17 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "util\IFileDirectoryDeleter.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "util\IFileWatcher.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "util\IoService.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

@@ -99,6 +99,10 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 		{
 		}
 
+		public void Purge(IProject project)
+		{
+		}
+
 		/// <remarks>
 		/// Modification is accepted by default if there isn't any
 		/// inclusion filter or if the modification is accepted by

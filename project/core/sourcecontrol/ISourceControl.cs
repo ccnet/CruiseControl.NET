@@ -13,5 +13,6 @@ namespace ThoughtWorks.CruiseControl.Core
 		void GetSource(IntegrationResult result);
 
 		void Initialize(IProject project);
+		void Purge(IProject project);
 	}
 }

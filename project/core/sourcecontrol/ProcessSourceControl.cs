@@ -82,5 +82,9 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 		public virtual void Initialize(IProject project)
 		{
 		}
+
+		public void Purge(IProject project)
+		{
+		}
 	}
 }

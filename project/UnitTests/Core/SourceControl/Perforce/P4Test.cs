@@ -18,6 +18,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol.Perforce
 		private DynamicMock processInfoCreatorMock;
 		private DynamicMock projectMock;
 		private IProject project;
+		private DynamicMock p4PurgerMock;
 
 		[SetUp]
 		public void Setup()
@@ -25,6 +26,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol.Perforce
 			processExecutorMock = new DynamicMock(typeof(ProcessExecutor)); 
 			processExecutorMock.Strict = true;
 			p4InitializerMock = new DynamicMock(typeof(IP4Initializer));
+			p4PurgerMock = new DynamicMock(typeof(IP4Purger));
 			processInfoCreatorMock = new DynamicMock(typeof(IP4ProcessInfoCreator));
 			projectMock = new DynamicMock(typeof(IProject));
 			project = (IProject) projectMock.MockInstance;
@@ -34,6 +36,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol.Perforce
 		{
 			processExecutorMock.Verify();
 			p4InitializerMock.Verify();
+			p4PurgerMock.Verify();
 			processInfoCreatorMock.Verify();
 			projectMock.Verify();
 		}
@@ -77,6 +80,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol.Perforce
 		{
 			return new P4((ProcessExecutor) processExecutorMock.MockInstance, 
 				(IP4Initializer) p4InitializerMock.MockInstance,
+				(IP4Purger) p4PurgerMock.MockInstance,
 				(IP4ProcessInfoCreator) processInfoCreatorMock.MockInstance);
 		}
 
@@ -463,6 +467,56 @@ View:
 
 			// Execute
 			p4.Initialize(project);
+
+			// Verify
+			VerifyAll();
+		}
+
+		[Test]
+		public void ShouldCallPurgerWithGivenWorkingDirectoryIfAlternativeNotSet()
+		{
+			// Setup
+			P4 p4 = CreateP4();
+			p4.View = "//depot/myproject/...";
+			p4PurgerMock.Expect("Purge",  p4, "workingDirFromProject");
+			projectMock.ExpectAndReturn("WorkingDirectory", "workingDirFromProject");
+
+			// Execute
+			p4.Purge(project);
+
+			// Verify
+			VerifyAll();
+		}
+
+		[Test]
+		public void ShouldCallPurgerWithGivenWorkingDirectoryIfAlternativeSetToEmpty()
+		{
+			// Setup
+			P4 p4 = CreateP4();
+			p4.View = "//depot/myproject/...";
+			p4.WorkingDirectory = "";
+			p4PurgerMock.Expect("Purge",  p4, "workingDirFromProject");
+			projectMock.ExpectAndReturn("WorkingDirectory", "workingDirFromProject");
+
+			// Execute
+			p4.Purge(project);
+
+			// Verify
+			VerifyAll();
+		}
+
+		[Test]
+		public void ShouldCallPurgerWithConfiguredWorkingDirectoryIfAlternativeIsConfigured()
+		{
+			// Setup
+			P4 p4 = CreateP4();
+			p4.View = "//depot/myproject/...";
+			p4.WorkingDirectory = "p4sOwnWorkingDirectory";
+			p4PurgerMock.Expect("Purge",  p4, "p4sOwnWorkingDirectory");
+			projectMock.ExpectNoCall("WorkingDirectory");
+
+			// Execute
+			p4.Purge(project);
 
 			// Verify
 			VerifyAll();

@@ -1,6 +1,5 @@
 using System;
 using System.Collections;
-using System.Threading;
 
 using ThoughtWorks.CruiseControl.Core.Schedules;
 using ThoughtWorks.CruiseControl.Remote;
@@ -58,6 +57,11 @@ namespace ThoughtWorks.CruiseControl.Core.Test
 		public IntegrationStatus LatestBuildStatus
 		{
 			get { return IntegrationStatus.Unknown; }
+		}
+
+		public void Purge()
+		{
+			return;
 		}
 
 		public ProjectActivity CurrentActivity 

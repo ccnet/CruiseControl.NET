@@ -55,5 +55,8 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test
 		{
 		}
 
+		public void Purge(IProject project)
+		{
+		}
 	}
 }
