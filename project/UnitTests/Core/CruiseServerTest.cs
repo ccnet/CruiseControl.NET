@@ -2,9 +2,10 @@ using System;
 using System.Threading;
 using NMock;
 using NUnit.Framework;
+using ThoughtWorks.CruiseControl.Core;
 using ThoughtWorks.CruiseControl.Core.Config;
 
-namespace ThoughtWorks.CruiseControl.Core.Test
+namespace ThoughtWorks.CruiseControl.UnitTests.Core
 {
 	[TestFixture]
 	public class CruiseServerTest

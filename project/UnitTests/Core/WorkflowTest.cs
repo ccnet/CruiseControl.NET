@@ -3,10 +3,11 @@ using Exortech.NetReflector;
 using NMock;
 using NMock.Constraints;
 using NUnit.Framework;
+using ThoughtWorks.CruiseControl.Core;
 using ThoughtWorks.CruiseControl.Core.Util;
 using ThoughtWorks.CruiseControl.Remote;
 
-namespace ThoughtWorks.CruiseControl.Core.Test
+namespace ThoughtWorks.CruiseControl.UnitTests.Core
 {
 	[TestFixture]
 	public class WorkflowTest : CustomAssertion

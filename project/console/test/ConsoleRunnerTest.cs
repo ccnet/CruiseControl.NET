@@ -1,12 +1,11 @@
-using NMock;
-using NUnit.Framework;
 using ThoughtWorks.CruiseControl.Core;
-using ThoughtWorks.CruiseControl.Core.Test;
 using ThoughtWorks.CruiseControl.Core.Util;
 using ThoughtWorks.CruiseControl.Remote;
 
 namespace ThoughtWorks.CruiseControl.Console.Test
 {
+	/* These aren't run anyway since NUnit can't run against a .exe !
+
 	[TestFixture]
 	public class ConsoleRunnerTest : CustomAssertion
 	{
@@ -74,4 +73,5 @@ namespace ThoughtWorks.CruiseControl.Console.Test
 			mockCruiseServer.Verify();
 		}	
 	}
+	*/
 }

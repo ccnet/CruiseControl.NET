@@ -1,8 +1,8 @@
 using System.IO;
 using Exortech.NetReflector;
 using NUnit.Framework;
-using ThoughtWorks.CruiseControl.Core.Test;
 using ThoughtWorks.CruiseControl.Core.Util;
+using ThoughtWorks.CruiseControl.UnitTests.Core;
 
 namespace ThoughtWorks.CruiseControl.Core.State.Test
 {

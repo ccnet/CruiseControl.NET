@@ -1,6 +1,7 @@
 using NUnit.Framework;
+using ThoughtWorks.CruiseControl.Core;
 
-namespace ThoughtWorks.CruiseControl.Core.Test
+namespace ThoughtWorks.CruiseControl.UnitTests.Core
 {
 	[TestFixture]
 	public class WorkflowResultTest 

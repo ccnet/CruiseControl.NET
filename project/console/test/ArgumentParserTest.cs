@@ -1,9 +1,9 @@
-using NUnit.Framework;
-using ThoughtWorks.CruiseControl.Core.Test;
 using ThoughtWorks.CruiseControl.Core.Util;
 
 namespace ThoughtWorks.CruiseControl.Console.Test
 {
+	/* These aren't run anyway since NUnit can't run against a .exe !
+
 	[TestFixture]
 	public class ArgumentParserTest : CustomAssertion
 	{
@@ -60,4 +60,5 @@ namespace ThoughtWorks.CruiseControl.Console.Test
 			Assert.IsTrue(listener.Traces[0].ToString().IndexOf("-foo:bar") >= 0);
 		}
 	}
+	*/
 }

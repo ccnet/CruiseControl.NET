@@ -4,7 +4,7 @@ using System.Threading;
 using NUnit.Framework;
 using ThoughtWorks.CruiseControl.Remote;
 
-namespace ThoughtWorks.CruiseControl.Core.Test
+namespace ThoughtWorks.CruiseControl.UnitTests.Core
 {
 	[TestFixture]
 	public class IntegrationRequestQueueTest

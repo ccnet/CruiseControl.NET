@@ -95,11 +95,6 @@
                     HintPath = "C:\WINNT\Microsoft.NET\Framework\v1.1.4322\System.dll"
                 />
                 <Reference
-                    Name = "nmock"
-                    AssemblyName = "nmock"
-                    HintPath = "..\..\lib\nmock.dll"
-                />
-                <Reference
                     Name = "NetReflector"
                     AssemblyName = "NetReflector"
                     HintPath = "..\..\lib\NetReflector.dll"
@@ -108,11 +103,6 @@
                     Name = "Remote"
                     Project = "{E820CF3B-8C5A-4002-BC16-B7818D3D54A8}"
                     Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
-                />
-                <Reference
-                    Name = "nunit.framework"
-                    AssemblyName = "nunit.framework"
-                    HintPath = "..\..\lib\nunit.framework.dll"
                 />
                 <Reference
                     Name = "System.Web"
@@ -128,11 +118,6 @@
                     Name = "System.Runtime.Remoting"
                     AssemblyName = "System.Runtime.Remoting"
                     HintPath = "..\..\..\..\..\WINDOWS\Microsoft.NET\Framework\v1.1.4322\System.Runtime.Remoting.dll"
-                />
-                <Reference
-                    Name = "nunit.core"
-                    AssemblyName = "nunit.core"
-                    HintPath = "..\..\lib\nunit.core.dll"
                 />
             </References>
         </Build>
@@ -832,51 +817,7 @@
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
-                <File
-                    RelPath = "test\FileMother.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "test\IntegrationResultFixture.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "test\IntegrationResultMother.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "test\ProcessResultFixture.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "test\ProjectTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "test\RemoteCruiseServerTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "test\SimpleBuildFile.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "test\TestLogs.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "test\TraceListenerBackup.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
+                <Folder RelPath = "test\" />
                 <File
                     RelPath = "Triggers\FilterTrigger.cs"
                     SubType = "Code"
@@ -899,11 +840,6 @@
                 />
                 <File
                     RelPath = "util\ConsoleTraceListener.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "util\CustomAssertion.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -979,11 +915,6 @@
                 />
                 <File
                     RelPath = "util\LogFileTraceListener.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "util\LogFileTraceListenerTest.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

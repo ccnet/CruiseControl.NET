@@ -189,6 +189,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "CustomAssertion.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "CCTrayLib\AbstractIconStoreTestCase.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -239,12 +244,27 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Core\FileMother.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Core\IntegrationRequestQueueTest.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Core\IntegrationResultFixture.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Core\IntegrationResultManagerTest.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Core\IntegrationResultMother.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -264,6 +284,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Core\ProcessResultFixture.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Core\ProjectBaseTest.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -275,6 +300,31 @@
                 />
                 <File
                     RelPath = "Core\ProjectIntegratorTest.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Core\ProjectTest.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Core\RemoteCruiseServerTest.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Core\SimpleBuildFile.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Core\TestLogs.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Core\TraceListenerBackup.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -761,6 +811,11 @@
                 />
                 <File
                     RelPath = "Core\Util\HtmlExceptionFormatterTest.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Core\Util\LogFileTraceListenerTest.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

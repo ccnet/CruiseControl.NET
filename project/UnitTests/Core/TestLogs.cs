@@ -1,6 +1,5 @@
-using System;
 
-namespace ThoughtWorks.CruiseControl.Core.Test
+namespace ThoughtWorks.CruiseControl.UnitTests.Core
 {
 	public class TestLogs
 	{

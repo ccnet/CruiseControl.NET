@@ -4,7 +4,6 @@ using NMock;
 using NMock.Remoting;
 using NUnit.Framework;
 using ThoughtWorks.CruiseControl.Core.Publishers;
-using ThoughtWorks.CruiseControl.Core.Test;
 using ThoughtWorks.CruiseControl.Remote;
 
 namespace ThoughtWorks.CruiseControl.UnitTests.Core.Publishers
