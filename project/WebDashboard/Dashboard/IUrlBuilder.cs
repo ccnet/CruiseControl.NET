@@ -2,6 +2,9 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 {
 	public interface IUrlBuilder
 	{
+		// ToDo - remove this again once Actions implemented for file transfer
+		string BuildUrl(string relativeUrl);
+
 		string BuildUrl(IActionSpecifier action);
 		string BuildUrl(IActionSpecifier action, string partialQueryString);
 		string BuildServerUrl(IActionSpecifier action, IServerSpecifier serverSpecifier);

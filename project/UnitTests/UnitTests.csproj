@@ -762,11 +762,6 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "WebDashboard\Dashboard\CachingBuildRetrieverTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
                     RelPath = "WebDashboard\Dashboard\CruiseManagerBuildNameRetrieverTest.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -823,6 +818,11 @@
                 />
                 <File
                     RelPath = "WebDashboard\Dashboard\ServerLinkTest.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "WebDashboard\Dashboard\ServerQueryingBuildRetrieverTest.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

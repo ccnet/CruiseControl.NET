@@ -11,19 +11,27 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.BuildReport
 	{
 		private readonly IBuildRetriever buildRetriever;
 		private readonly IVelocityViewGenerator viewGenerator;
+		private readonly IUrlBuilder urlBuilder;
 
-		public BuildLogBuildPlugin(IBuildRetriever buildRetriever, IVelocityViewGenerator viewGenerator)
+		public BuildLogBuildPlugin(IBuildRetriever buildRetriever, IVelocityViewGenerator viewGenerator, IUrlBuilder urlBuilder)
 		{
 			this.buildRetriever = buildRetriever;
 			this.viewGenerator = viewGenerator;
+			this.urlBuilder = urlBuilder;
 		}
 
 		public IView Execute(ICruiseRequest cruiseRequest)
 		{
 			Hashtable velocityContext = new Hashtable();
-			Build build = buildRetriever.GetBuild(cruiseRequest.BuildSpecifier);
+			IBuildSpecifier buildSpecifier = cruiseRequest.BuildSpecifier;
+			Build build = buildRetriever.GetBuild(buildSpecifier);
 			velocityContext["log"] = build.Log.Replace("<", "&lt;").Replace(">", "&gt;");
-			velocityContext["logUrl"] = build.BuildLogLocation;
+
+			// This hack is only here until we can have actions that can do File Responses
+			velocityContext["logUrl"] = urlBuilder.BuildUrl(string.Format("{5}?{0}={1}&{2}={3}&{4}={5}",
+				RequestWrappingCruiseRequest.ServerQueryStringParameter, buildSpecifier.ProjectSpecifier.ServerSpecifier.ServerName,
+				RequestWrappingCruiseRequest.ProjectQueryStringParameter, buildSpecifier.ProjectSpecifier.ProjectName,
+				RequestWrappingCruiseRequest.BuildQueryStringParameter, buildSpecifier.BuildName));
 
 			return viewGenerator.GenerateView(@"BuildLog.vm", velocityContext);
 		}

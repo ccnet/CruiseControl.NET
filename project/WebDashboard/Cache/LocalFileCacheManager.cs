@@ -6,6 +6,7 @@ using ThoughtWorks.CruiseControl.WebDashboard.IO;
 
 namespace ThoughtWorks.CruiseControl.WebDashboard.Cache
 {
+	// This is currently not used and only here as a basis to develop a new caching strategy
 	public class LocalFileCacheManager : ICacheManager
 	{
 		public static readonly string LocalCacheRootDirectoryConfigParameter = "cachedirectory";

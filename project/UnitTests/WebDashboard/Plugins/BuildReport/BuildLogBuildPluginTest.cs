@@ -17,11 +17,11 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Plugins.BuildReport
 
 		private DynamicMock requestMock;
 		private DynamicMock buildRetrieverMock;
+		private DynamicMock urlBuilderMock;
 		private DynamicMock velocityViewGeneratorMock;
 
 		private string buildLog;
 		private Build build;
-		private string buildLogLocation;
 		private DefaultBuildSpecifier buildSpecifier;
 		private IView view;
 
@@ -30,14 +30,16 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Plugins.BuildReport
 		{
 			buildRetrieverMock = new DynamicMock(typeof(IBuildRetriever));
 			velocityViewGeneratorMock = new DynamicMock(typeof(IVelocityViewGenerator));
+			urlBuilderMock = new DynamicMock(typeof(IUrlBuilder));
 			requestMock = new DynamicMock(typeof(ICruiseRequest));
 
-			buildPlugin = new BuildLogBuildPlugin((IBuildRetriever) buildRetrieverMock.MockInstance, (IVelocityViewGenerator) velocityViewGeneratorMock.MockInstance);
+			buildPlugin = new BuildLogBuildPlugin((IBuildRetriever) buildRetrieverMock.MockInstance, 
+				(IVelocityViewGenerator) velocityViewGeneratorMock.MockInstance,
+				(IUrlBuilder) urlBuilderMock.MockInstance);
 
 			buildLog = "some stuff in a log with a < and >";
-			buildLogLocation = "http://somewhere/mylog";
 			buildSpecifier = new DefaultBuildSpecifier(new DefaultProjectSpecifier(new DefaultServerSpecifier("myserver"), "myproject"), "mybuild");
-			build = new Build(buildSpecifier, buildLog, buildLogLocation);
+			build = new Build(buildSpecifier, buildLog);
 			view = new HtmlView("foo");
 		}
 
@@ -46,6 +48,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Plugins.BuildReport
 			requestMock.Verify();
 			buildRetrieverMock.Verify();
 			velocityViewGeneratorMock.Verify();
+			urlBuilderMock.Verify();
 		}
 
 		[Test]
@@ -54,10 +57,11 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Plugins.BuildReport
 			// Setup
 			requestMock.ExpectAndReturn("BuildSpecifier", buildSpecifier);
 			buildRetrieverMock.ExpectAndReturn("GetBuild", build, buildSpecifier);
+			urlBuilderMock.ExpectAndReturn("BuildUrl", "myUrl", "mybuild?server=myserver&project=myproject&build=mybuild");
 
 			Hashtable expectedContext = new Hashtable();
 			expectedContext["log"] = "some stuff in a log with a &lt; and &gt;";
-			expectedContext["logUrl"] = buildLogLocation;
+			expectedContext["logUrl"] = "myUrl";
 
 			velocityViewGeneratorMock.ExpectAndReturn("GenerateView", view, "BuildLog.vm", new HashtableConstraint(expectedContext));
 

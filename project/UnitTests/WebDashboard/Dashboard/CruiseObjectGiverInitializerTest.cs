@@ -1,7 +1,6 @@
 using System.Web;
 using System.Web.UI.HtmlControls;
 using NUnit.Framework;
-using ThoughtWorks.CruiseControl.WebDashboard.Cache;
 using ThoughtWorks.CruiseControl.WebDashboard.Config;
 using ThoughtWorks.CruiseControl.WebDashboard.Dashboard;
 using ThoughtWorks.CruiseControl.WebDashboard.IO;
@@ -25,9 +24,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 
 			new CruiseObjectGiverInitializer(objectGiver).InitializeGiverForRequest(request, context, control);
 
-			Assert.IsNotNull(objectGiver.GiveObjectByType(typeof(LocalFileCacheManager)));
 			Assert.IsNotNull(objectGiver.GiveObjectByType(typeof(HttpPathMapper)));
-			Assert.IsNotNull(objectGiver.GiveObjectByType(typeof(CachingBuildRetriever)));
+			Assert.IsNotNull(objectGiver.GiveObjectByType(typeof(ServerQueryingBuildRetriever)));
 			Assert.IsNotNull(objectGiver.GiveObjectByType(typeof(CruiseManagerBuildNameRetriever)));
 			Assert.IsNotNull(objectGiver.GiveObjectByType(typeof(ConfigurationSettingsConfigGetter)));
 			Assert.IsNotNull(objectGiver.GiveObjectByType(typeof(PathMapperUsingHostName)));

@@ -18,7 +18,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 
 			DefaultBuildSpecifier buildSpecifier = new DefaultBuildSpecifier(new DefaultProjectSpecifier(new DefaultServerSpecifier("myServer"), "myProject"), "myBuild");
 
-			Build build = new Build(buildSpecifier, "logContents", null);
+			Build build = new Build(buildSpecifier, "logContents");
 
 			buildRetrieverMock.ExpectAndReturn("GetBuild", build, buildSpecifier);
 

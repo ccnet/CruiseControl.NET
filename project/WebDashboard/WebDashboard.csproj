@@ -258,11 +258,6 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "Dashboard\CachingBuildRetriever.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
                     RelPath = "Dashboard\CruiseManagerBuildNameRetriever.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -483,6 +478,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Dashboard\ServerQueryingBuildRetriever.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Dashboard\SideBarViewBuilder.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -514,6 +514,11 @@
                 />
                 <File
                     RelPath = "Dashboard\XslReportBuildPlugin.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Dashboard\XmlDownloader\XmlDownloader.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
