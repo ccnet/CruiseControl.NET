@@ -56,7 +56,9 @@ namespace tw.ccnet.core.sourcecontrol
 
 		public override Process CreateLabelProcess(string label, DateTime timeStamp) 
 		{
-			return null;
+			string cvsroot = (CvsRoot == null) ? String.Empty : "-d " + CvsRoot + " ";
+			string args = String.Format("{0} tag {1}", cvsroot, "ver-" + label);
+			return ProcessUtil.CreateProcess(Executable, args, WorkingDirectory);
 		}
 
 		internal string BuildHistoryProcessArgs(DateTime from)
@@ -65,9 +67,10 @@ namespace tw.ccnet.core.sourcecontrol
 			// todo: if cvs will accept a 'to' date, it would be nicer to 
 			// include that for some harmony with the vss version
 			string cvsroot = (CvsRoot == null) ? String.Empty : "-d " + CvsRoot + " ";
-			return String.Format(HISTORY_COMMAND_FORMAT, 
+			string args = String.Format(HISTORY_COMMAND_FORMAT, 
 				cvsroot,
 				FormatCommandDate(from));
+			return args;
 		}
 		
 	}

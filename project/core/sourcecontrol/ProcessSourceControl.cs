@@ -37,16 +37,19 @@ namespace tw.ccnet.core.sourcecontrol
 
 		public void LabelSourceControl(string label, DateTime timeStamp) 
 		{
-//			Process process = CreateLabelProcess(label, timeStamp);
-//			TextReader reader = null;
-//			try
-//			{
-//				reader = Execute(process);
-//			}
-//			finally
-//			{
-//				Close(reader, process);
-//			}
+			Process process = CreateLabelProcess(label, timeStamp);
+			if (process != null) 
+			{
+				TextReader reader = null;
+				try
+				{
+					reader = Execute(process);
+				}
+				finally
+				{
+					Close(reader, process);
+				}
+			}
 		}
 
 		protected virtual TextReader Execute(Process process)
