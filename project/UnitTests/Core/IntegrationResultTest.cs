@@ -1,5 +1,6 @@
 using System;
 using NUnit.Framework;
+using ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test;
 using ThoughtWorks.CruiseControl.Remote;
 
 namespace ThoughtWorks.CruiseControl.Core.Test
@@ -68,6 +69,49 @@ namespace ThoughtWorks.CruiseControl.Core.Test
 			Assert.AreEqual(20, result.LastChangeNumber);
 			result.Modifications = new Modification[] { mod2, mod1 };
 			Assert.AreEqual(20, result.LastChangeNumber);
+		}
+
+		[Test] 
+		public void ShouldNotRunBuildIfThereAreNoModifications()
+		{
+			IntegrationResult result = new IntegrationResult();
+			result.Modifications = new Modification[0];
+			Assert.IsFalse(result.ShouldRunBuild(0));
+		}
+
+		[Test] 
+		public void ShouldRunBuildIfThereAreModifications()
+		{
+			IntegrationResult result = new IntegrationResult();
+			Modification modification = ModificationMother.CreateModification("foo", DateTime.Now.AddSeconds(-2));
+			result.Modifications = new Modification[] {modification};
+			Assert.IsTrue(result.ShouldRunBuild(0));
+		}
+		
+		[Test] 
+		public void ShouldNotRunBuildIfThereAreModificationsWithinModificationDelay()
+		{
+			IntegrationResult result = new IntegrationResult();
+			Modification modification = ModificationMother.CreateModification("foo", DateTime.Now.AddSeconds(-2));
+			result.Modifications = new Modification[] {modification};
+			Assert.IsFalse(result.ShouldRunBuild(100));
+		}
+		
+		[Test] 
+		public void ShouldRunBuildIfLastModificationOutsideModificationDelay()
+		{
+			IntegrationResult result = new IntegrationResult();
+			Modification modification = ModificationMother.CreateModification("foo", DateTime.Now.AddMinutes(-2));
+			result.Modifications = new Modification[] {modification};
+			Assert.IsTrue(result.ShouldRunBuild(100));
+		}
+
+		[Test] 
+		public void ShouldRunBuildIfInForcedCondition()
+		{
+			IntegrationResult result = new IntegrationResult();
+			result.BuildCondition = BuildCondition.ForceBuild;
+			Assert.IsTrue(result.ShouldRunBuild(0));
 		}
 	}
 }

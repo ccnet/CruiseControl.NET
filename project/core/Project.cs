@@ -161,7 +161,7 @@ namespace ThoughtWorks.CruiseControl.Core
 			try
 			{
 				result.Modifications = GetSourceModifications(result);
-				if (ShouldRunBuild(result))
+				if (result.ShouldRunBuild(ModificationDelaySeconds))
 				{
 					CreateWorkingDirectoryIfItDoesntExist();
 					CreateTemporaryLabelIfNeeded();
@@ -250,42 +250,6 @@ namespace ThoughtWorks.CruiseControl.Core
 			}
 		}
 
-		/// <summary>
-		/// Determines whether a build should run.  A build should run if there
-		/// are modifications, and none have occurred within the modification
-		/// delay.
-		/// </summary>
-		internal bool ShouldRunBuild(IIntegrationResult results)
-		{
-			if (results.BuildCondition == BuildCondition.ForceBuild)
-				return true;
-
-			if (results.HasModifications())
-				return ! DoModificationsExistWithinModificationDelay(results);
-
-			return false;
-		}
-
-		/// <summary>
-		/// Checks whether modifications occurred within the modification delay.  If the
-		/// modification delay is not set (has a value of zero or less), this method
-		/// will always return false.
-		/// </summary>
-		private bool DoModificationsExistWithinModificationDelay(IIntegrationResult results)
-		{
-			if (ModificationDelaySeconds <= 0)
-				return false;
-
-			//TODO: can the last mod date (which is the time on the SCM) be compared with now (which is the time on the build machine)?
-			TimeSpan diff = DateTime.Now - results.LastModificationDate;
-			if (diff.TotalSeconds < ModificationDelaySeconds)
-			{
-				Log.Info("Changes found within the modification delay");
-				return true;
-			}
-
-			return false;
-		}
 
 		/// <summary>
 		/// Raises the IntegrationCompleted event.

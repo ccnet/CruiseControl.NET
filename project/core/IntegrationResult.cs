@@ -257,5 +257,39 @@ namespace ThoughtWorks.CruiseControl.Core
     		get { return _workingDirectory; }
 			set { _workingDirectory = value; }
 		}
+
+		/// <summary>
+		/// Determines whether a build should run.  A build should run if there
+		/// are modifications, and none have occurred within the modification
+		/// delay.
+		/// </summary>
+		public bool ShouldRunBuild(int modificationDelaySeconds)
+		{
+			if (Remote.BuildCondition.ForceBuild == BuildCondition) 
+				return true;
+			else return (HasModifications() &&
+					 ! DoModificationsExistWithinModificationDelay(modificationDelaySeconds));
+		}
+
+		/// <summary>
+		/// Checks whether modifications occurred within the modification delay.  If the
+		/// modification delay is not set (has a value of zero or less), this method
+		/// will always return false.
+		/// </summary>
+		private bool DoModificationsExistWithinModificationDelay(int modificationDelaySeconds)
+		{
+			if (modificationDelaySeconds <= 0)
+				return false;
+
+			//TODO: can the last mod date (which is the time on the SCM) be compared with now (which is the time on the build machine)?
+			TimeSpan diff = DateTime.Now - LastModificationDate;
+			if (diff.TotalSeconds < modificationDelaySeconds)
+			{
+				Log.Info("Changes found within the modification delay");
+				return true;
+			}
+
+			return false;
+		}
     }
 }

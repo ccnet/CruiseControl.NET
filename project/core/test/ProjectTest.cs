@@ -318,27 +318,6 @@ namespace ThoughtWorks.CruiseControl.Core.Test
 		}
 
 		[Test]
-		public void ShouldRunBuild()
-		{
-			IntegrationResult results = new IntegrationResult();
-			results.Modifications = new Modification[0];
-			Assert.IsTrue(!_project.ShouldRunBuild(results), "There are no modifications, project should not run");
-
-			Modification mod = new Modification();
-			mod.ModifiedTime = DateTime.Now.AddSeconds(-2);
-			results.Modifications = new Modification[] {mod};
-
-			Assert.IsTrue(_project.ShouldRunBuild(results), "There are modifications, project should run");
-
-			_project.ModificationDelaySeconds = 100;
-			Assert.IsTrue(!_project.ShouldRunBuild(results), "There are modifications within ModificationDelay, project should not run");
-
-			mod.ModifiedTime = DateTime.Now.AddMinutes(-2);
-			Assert.IsTrue(_project.ShouldRunBuild(results), "There are no modifications within ModificationDelay, project should run");
-			VerifyAll();
-		}
-
-		[Test]
 		public void CreateTemporaryLabelMethodIsInvoked()
 		{
 			_mockSourceControl = new DynamicMock(typeof (ITemporaryLabeller));

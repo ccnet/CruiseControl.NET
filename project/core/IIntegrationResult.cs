@@ -32,5 +32,6 @@ namespace ThoughtWorks.CruiseControl.Core
 		bool Succeeded { get; }
 		void MarkStartTime();
 		void MarkEndTime();
+		bool ShouldRunBuild(int modificationDelaySeconds);
 	}
 }
