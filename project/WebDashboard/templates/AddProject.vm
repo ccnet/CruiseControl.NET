@@ -11,6 +11,7 @@
 // -->
 </script>
 
+<form ID="Form1">
 <table>
 	<tr>
 		<td></td>
@@ -99,5 +100,6 @@
 	</tr>
 	#end
 </table>
+</form>
 
 <!-- End of AddProject.vm -->

@@ -1,14 +1,17 @@
+<form ID="RefreshForm">
 <table width="100%">
 <tr>
 	<td align="right"><input type="submit" align="right" name="$refreshButtonName" value="Refresh status" /></td>
 </tr>
 </table>
+</form>
 
 #if ($forceBuildMessage.Length > 0)
 <P><span id="StatusLabel"><b><font color="#4A3C8C">$forceBuildMessage</font></b></span></P>
 #end
 
 #if ($projectGrid.Length > 0)
+<form ID="GridForm">
 <table cellspacing="0" cellpadding="3" rules="rows" bordercolor="#333399" border="1" id="StatusGrid" bgcolor="White" width="100%">
 	<tr bgcolor="#333399" class="ProjectGridHeader">
 		<td>
@@ -66,6 +69,7 @@
 	</tr>
 	#end
 </table>
+</form>
 #end
 
 #if ($exceptions.Length > 0)

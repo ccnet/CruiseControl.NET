@@ -26,8 +26,7 @@
 				<td width="2">
 				<td valign="top" bgcolor="#ffffff">
 					<table border="0" align="center" cellpadding="3" cellspacing="0" width="100%">
-						<!-- ToDo - take out this form and leave it to individual templates? -->
-						<tr><td><form ID="Form1">$mainContent	</form></td></tr>
+						<tr><td>$mainContent</td></tr>
 					</table>
 				</td>
 			</tr>
