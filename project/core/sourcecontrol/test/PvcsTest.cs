@@ -29,13 +29,13 @@ namespace tw.ccnet.core.sourcecontrol.test
 		// This was necessary to resolve a bug with PVCS 7.5.1 (would not properly
 		// detected modifications during periods where daylight savings was active)
 		[Ignore("Date dependent test due to day light savings time bug in PVCS v7.5.1")]
-		public void TestDetectedDayLightSavingsTime_PVCSDayLighSavingsBug() 
+		public void TestDetectedDayLightSavingsTime_PVCSDayLightSavingsBug() 
 		{
 			Pvcs pvcs = new Pvcs();
 			Assertion.Assert(pvcs.IsDayLightSavings());
 		}
 
-		public void TestSubtractAnHour_PVCSDayLighSavingsBug() 
+		public void TestSubtractAnHour_PVCSDayLightSavingsBug() 
 		{
 			Pvcs pvcs = new Pvcs();
 			DateTime date1 = new DateTime(2000, 1, 1, 1, 0, 0);
