@@ -14,6 +14,7 @@ namespace tw.ccnet.core.sourcecontrol.test
 		public void SetUp()
 		{
 			_parser = new VssHistoryParser();
+			_parser.CultureInfo = new CultureInfo("en-US");
 		}
 
 		public void AssertEquals(Modification expected, Modification actual)
@@ -28,7 +29,8 @@ namespace tw.ccnet.core.sourcecontrol.test
 			Assertion.AssertEquals(expected, actual);
 		}
 
-		public void TestParse()
+		[Test]
+		public void Parse()
 		{
 			Modification[] mods = _parser.Parse(VssMother.ContentReader);
 			Assertion.AssertNotNull("mods should not be null", mods);
@@ -42,7 +44,8 @@ namespace tw.ccnet.core.sourcecontrol.test
 			Assertion.AssertEquals(24, entries.Length);
 		}
 
-		public void TestIsEntryDelimiter()
+		[Test]
+		public void IsEntryDelimiter()
 		{
 			string line = "*****  cereal.txt  *****";
 			Assertion.Assert("should recognize as delim", _parser.IsEntryDelimiter(line));
@@ -57,7 +60,8 @@ namespace tw.ccnet.core.sourcecontrol.test
 			Assertion.Assert("should recognize as delim", _parser.IsEntryDelimiter(line));
 		}
 
-		public void TestParseCreatedModification()
+		[Test]
+		public void ParseCreatedModification()
 		{
 			string entry = EntryWithSingleLineComment();
 			
@@ -74,12 +78,13 @@ namespace tw.ccnet.core.sourcecontrol.test
 			Assertion.AssertEquals("created should not have produced a modification", 0, actual.Length);
 		}
 
-		public void TestParseUsernameAndDate()
+		[Test]
+		public void ParseUsernameAndUSDate()
 		{
 			Modification mod = new Modification();
 			
 			string line = "foo\r\nUser: Admin        Date:  9/16/02   Time:  2:40p\r\n";
-			CheckInParser parser = new CheckInParser(line);
+			CheckInParser parser = new CheckInParser(line, new CultureInfo("en-US"));
 			parser.ParseUsernameAndDate(mod);
 			string expectedUsername = "Admin";
 			DateTime expectedDate = new DateTime(2002, 09, 16, 14, 40, 0);
@@ -99,36 +104,14 @@ namespace tw.ccnet.core.sourcecontrol.test
 			Assertion.AssertEquals(new DateTime(2002, 9, 16, 22, 40, 0), mod.ModifiedTime);
 		}
 
-//		[Test]
-//		public void ParseUKDate()
-//		{
-//			CultureInfo culture = ;
-//			DateTimeFormatInfo info = culture.DateTimeFormat;
-//			info.AMDesignator = "a";
-//			info.PMDesignator = "p";
-//			Assertion.AssertEquals(new DateTime(2002, 9, 16, 22, 40, 0), DateTime.Parse("16/9/02;22:40", info));
-//			Assertion.AssertEquals(new DateTime(2002, 9, 16, 2, 40, 0), DateTime.Parse("16/9/02;2:40", info));
-//		}
-//
-//		[Test]
-//		public void ParseUSDate()
-//		{
-//			CultureInfo culture = new CultureInfo("en-US");
-//			DateTimeFormatInfo info = culture.DateTimeFormat;
-//			info.AMDesignator = "a";
-//			info.PMDesignator = "p";
-//			Assertion.AssertEquals(new DateTime(2002, 9, 16, 22, 40, 0), DateTime.Parse("9/16/02;10:40p", info));
-//			Assertion.AssertEquals(new DateTime(2002, 9, 16, 2, 40, 0), DateTime.Parse("9/16/02;2:40a", info));
-//		}
-
 		[Test]
-		public void TestParseUsernameAndDateWithPeriod() 
+		public void ParseUsernameAndDateWithPeriod() 
 		{
 			//User: Gabriel.gilabert     Date:  5/08/03   Time:  4:06a
 			Modification mod = new Modification();
 			
 			string line = "foo\r\nUser: Gabriel.gilabert     Date:  5/08/03   Time:  4:06a\r\n";
-			CheckInParser parser = new CheckInParser(line);
+			CheckInParser parser = new CheckInParser(line, new CultureInfo("en-US"));
 			parser.ParseUsernameAndDate(mod);
 			string expectedUsername = "Gabriel.gilabert";
 			DateTime expectedDate = new DateTime(2003, 05, 08, 04, 06, 0);
@@ -137,15 +120,16 @@ namespace tw.ccnet.core.sourcecontrol.test
 		}
 
 		[Test]
-		public void TestParseFileName() 
+		public void ParseFileName() 
 		{
 			string fileName = "**** Im a file name.fi     ********\r\n jakfakjfnb  **** ** lkjnbfgakj ****";
-			CheckInParser parser = new CheckInParser(fileName);
+			CheckInParser parser = new CheckInParser(fileName, new CultureInfo("en-US"));
 			string actual = parser.parseFileName();
 			Assertion.AssertEquals("Im a file name.fi", actual);
 		}
 
-		public void TestParseFileAndFolder_checkin()
+		[Test]
+		public void ParseFileAndFolder_checkin()
 		{
 			string entry = @"*****  happyTheFile.txt  *****
 Version 3
@@ -163,7 +147,8 @@ Comment: added fir to tree file, checked in recursively from project root";
 			Assertion.AssertEquals("added fir to tree file, checked in recursively from project root",mod.Comment);
 		}
 
-		public void TestParseFileAndFolder_addAtRoot()
+		[Test]
+		public void ParseFileAndFolder_addAtRoot()
 		{
 			// note: this represents the entry after version line insertion 
 			// (see _parser.InsertVersionLine)
@@ -182,7 +167,8 @@ happyTheFile.txt added
 			Assertion.AssertEquals(null, mod.Comment);
 		}
 		
-		public void TestParseFileAndFolder_deleteFromSubfolder()
+		[Test]
+		public void ParseFileAndFolder_deleteFromSubfolder()
 		{
 string entry = @"*****  iAmAFolder  *****
 Version 8
@@ -219,50 +205,56 @@ happyTheFile.txt deleted";
 			return mod[0];
 		}
 
-		public void TestParseSingleLineComment()
+		[Test]
+		public void ParseSingleLineComment()
 		{
-			CheckInParser parser = new CheckInParser(EntryWithSingleLineComment());
+			CheckInParser parser = new CheckInParser(EntryWithSingleLineComment(), new CultureInfo("en-US"));
 			Modification mod = new Modification();
 			parser.ParseComment(mod);
 			Assertion.AssertEquals("a", "added subfolder", mod.Comment);
 		}
 
-		public void TestParseMultiLineComment()
+		[Test]
+		public void ParseMultiLineComment()
 		{
-			CheckInParser parser = new CheckInParser(EntryWithMultiLineComment());
+			CheckInParser parser = new CheckInParser(EntryWithMultiLineComment(), new CultureInfo("en-US"));
 			Modification mod = new Modification();
 			parser.ParseComment(mod);
 			Assertion.AssertEquals("b", @"added subfolder
 and then added a new line", mod.Comment);
 		}
 
-		public void TestParseEmptyComment()
+		[Test]
+		public void ParseEmptyComment()
 		{
-			CheckInParser parser = new CheckInParser(EntryWithEmptyComment());
+			CheckInParser parser = new CheckInParser(EntryWithEmptyComment(), new CultureInfo("en-US"));
 			Modification mod = new Modification();
 			parser.ParseComment(mod);
 			Assertion.AssertEquals(String.Empty, mod.Comment);
 		}
 
-		public void TestParseEmptyLineComment()
+		[Test]
+		public void ParseEmptyLineComment()
 		{
-			CheckInParser parser = new CheckInParser(EntryWithEmptyCommentLine());
+			CheckInParser parser = new CheckInParser(EntryWithEmptyCommentLine(), new CultureInfo("en-US"));
 			Modification mod = new Modification();
 			parser.ParseComment(mod);
 			Assertion.AssertEquals(null, mod.Comment);
 		}
 
-		public void TestParseNoComment()
+		[Test]
+		public void ParseNoComment()
 		{
-			CheckInParser parser = new CheckInParser(EntryWithNoCommentLine());
+			CheckInParser parser = new CheckInParser(EntryWithNoCommentLine(), new CultureInfo("en-US"));
 			Modification mod = new Modification();
 			parser.ParseComment(mod);
 			Assertion.AssertEquals(null, mod.Comment);
 		}
 
-		public void TestParseNonCommentAtCommentLine()
+		[Test]
+		public void ParseNonCommentAtCommentLine()
 		{
-			CheckInParser parser = new CheckInParser(EntryWithNonCommentAtCommentLine());
+			CheckInParser parser = new CheckInParser(EntryWithNonCommentAtCommentLine(), new CultureInfo("en-US"));
 			Modification mod = new Modification();
 			parser.ParseComment(mod);
 			Assertion.AssertEquals(null, mod.Comment);

@@ -16,6 +16,8 @@ namespace tw.ccnet.core.sourcecontrol
 		internal const string DELIMITER_UNVERSIONED_START = "*****  ";
 		internal const string DELIMITER_UNVERSIONED_END = "  *****";
 
+		public CultureInfo CultureInfo = CultureInfo.CurrentCulture;
+
 		public Modification[] Parse(TextReader history)
 		{
 			string[] entries = this.ReadAllEntries(history);
@@ -34,7 +36,7 @@ namespace tw.ccnet.core.sourcecontrol
 
 			foreach (string entry in entries) 
 			{
-				VSSParser parser = VSSParserFactory.CreateParser(entry);
+				VSSParser parser = VSSParserFactory.CreateParser(entry, CultureInfo);
 				Modification mod = parser.parse();
 				if (mod != null)
 					modifications.Add(mod);
@@ -85,25 +87,25 @@ namespace tw.ccnet.core.sourcecontrol
 
 	internal class VSSParserFactory 
 	{
-		public static VSSParser CreateParser(string entry) 
+		public static VSSParser CreateParser(string entry, CultureInfo cultureInfo) 
 		{
 			int commentIndex = entry.IndexOf("Comment");
 			commentIndex = commentIndex > -1 ? commentIndex : entry.Length;
 			string nonCommentEntry = entry.Substring(0, commentIndex);
 			if (nonCommentEntry.IndexOf("Checked in") > -1) 
 			{
-				return new CheckInParser(entry);
+				return new CheckInParser(entry, cultureInfo);
 			}
 			else if (nonCommentEntry.IndexOf("added") > -1) 
 			{
-				return new AddedParser(entry);
+				return new AddedParser(entry, cultureInfo);
 			}
 			else if (nonCommentEntry.IndexOf("deleted") > -1)
-				return new DeletedParser(entry);
+				return new DeletedParser(entry, cultureInfo);
 			else if (nonCommentEntry.IndexOf("destroyed") > -1)
-				return new DestroyedParser(entry);
+				return new DestroyedParser(entry, cultureInfo);
 
-			return new NullParser(entry);
+			return new NullParser(entry, cultureInfo);
 		}
 	}
 
@@ -117,8 +119,6 @@ namespace tw.ccnet.core.sourcecontrol
 		protected string entry;
 
 		internal const string DELIMITER_VERSIONED_START = "*****************  ";
-
-		public VSSParser(string entry) : this(entry, CultureInfo.CurrentCulture) { }
 
 		public VSSParser(string entry, CultureInfo culture)
 		{
@@ -206,7 +206,6 @@ namespace tw.ccnet.core.sourcecontrol
 
 	internal class CheckInParser : VSSParser 
 	{
-		public CheckInParser(string entry) : base(entry) {}
 		public CheckInParser(string entry, CultureInfo culture) : base(entry, culture) {}
 
 		internal override void setType(Modification mod) 
@@ -224,7 +223,7 @@ namespace tw.ccnet.core.sourcecontrol
 	{
 		private readonly static string type = "added";
 
-		public AddedParser(string entry) : base(entry){}
+		public AddedParser(string entry, CultureInfo cultureInfo) : base(entry, cultureInfo) {}
 
 		public override Modification parse() 
 		{
@@ -258,7 +257,7 @@ namespace tw.ccnet.core.sourcecontrol
 	{
 		private readonly static string type = "deleted";
 
-		public DeletedParser(string entry) : base(entry){}
+		public DeletedParser(string entry, CultureInfo culture) : base(entry, culture) {}
 
 		internal override void setType(Modification mod) 
 		{
@@ -283,7 +282,7 @@ namespace tw.ccnet.core.sourcecontrol
 	{
 		private readonly static string type = "destroyed";
 
-		public DestroyedParser(string entry) : base(entry){}
+		public DestroyedParser(string entry, CultureInfo culture) : base(entry, culture) {}
 
 		internal override void setType(Modification mod) 
 		{
@@ -306,7 +305,8 @@ namespace tw.ccnet.core.sourcecontrol
 
 	internal class NullParser : VSSParser 
 	{
-		public NullParser(string entry) : base(entry) {}
+		public NullParser(string entry, CultureInfo culture) : base(entry, culture) {}
+
 		public override Modification parse() 
 		{
 			return null;
