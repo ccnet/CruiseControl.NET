@@ -1,0 +1,324 @@
+<VisualStudioProject>
+    <CSHARP
+        ProjectType = "Local"
+        ProductVersion = "7.0.9466"
+        SchemaVersion = "1.0"
+        ProjectGuid = "{317E46BA-74DE-411D-A09D-37193EEFD856}"
+    >
+        <Build>
+            <Settings
+                ApplicationIcon = ""
+                AssemblyKeyContainerName = ""
+                AssemblyName = "ccnet.web"
+                AssemblyOriginatorKeyFile = ""
+                DefaultClientScript = "JScript"
+                DefaultHTMLPageLayout = "Grid"
+                DefaultTargetSchema = "IE50"
+                DelaySign = "false"
+                OutputType = "Library"
+                RootNamespace = "tw.ccnet.web"
+                StartupObject = ""
+            >
+                <Config
+                    Name = "Debug"
+                    AllowUnsafeBlocks = "false"
+                    BaseAddress = "285212672"
+                    CheckForOverflowUnderflow = "false"
+                    ConfigurationOverrideFile = ""
+                    DefineConstants = "DEBUG;TRACE"
+                    DocumentationFile = ""
+                    DebugSymbols = "true"
+                    FileAlignment = "4096"
+                    IncrementalBuild = "true"
+                    Optimize = "false"
+                    OutputPath = "bin\Debug\"
+                    RegisterForComInterop = "false"
+                    RemoveIntegerChecks = "false"
+                    TreatWarningsAsErrors = "false"
+                    WarningLevel = "4"
+                />
+                <Config
+                    Name = "Release"
+                    AllowUnsafeBlocks = "false"
+                    BaseAddress = "285212672"
+                    CheckForOverflowUnderflow = "false"
+                    ConfigurationOverrideFile = ""
+                    DefineConstants = "TRACE"
+                    DocumentationFile = ""
+                    DebugSymbols = "false"
+                    FileAlignment = "4096"
+                    IncrementalBuild = "false"
+                    Optimize = "true"
+                    OutputPath = "bin\Release\"
+                    RegisterForComInterop = "false"
+                    RemoveIntegerChecks = "false"
+                    TreatWarningsAsErrors = "false"
+                    WarningLevel = "4"
+                />
+            </Settings>
+            <References>
+                <Reference
+                    Name = "System"
+                    AssemblyName = "System"
+                    HintPath = "C:\WINNT\Microsoft.NET\Framework\v1.0.3705\System.dll"
+                />
+                <Reference
+                    Name = "System.Data"
+                    AssemblyName = "System.Data"
+                    HintPath = "C:\WINNT\Microsoft.NET\Framework\v1.0.3705\System.Data.dll"
+                />
+                <Reference
+                    Name = "System.XML"
+                    AssemblyName = "System.Xml"
+                    HintPath = "C:\WINNT\Microsoft.NET\Framework\v1.0.3705\System.XML.dll"
+                />
+                <Reference
+                    Name = "System.Web"
+                    AssemblyName = "System.Web"
+                    HintPath = "C:\WINNT\Microsoft.NET\Framework\v1.0.3705\System.Web.dll"
+                />
+                <Reference
+                    Name = "System.Drawing"
+                    AssemblyName = "System.Drawing"
+                    HintPath = "C:\WINNT\Microsoft.NET\Framework\v1.0.3705\System.Drawing.dll"
+                />
+                <Reference
+                    Name = "nunit.framework"
+                    AssemblyName = "nunit.framework"
+                    HintPath = "..\..\lib\nunit.framework.dll"
+                />
+                <Reference
+                    Name = "System.Configuration.Install"
+                    AssemblyName = "System.Configuration.Install"
+                    HintPath = "C:\WINNT\Microsoft.NET\Framework\v1.0.3705\System.Configuration.Install.dll"
+                />
+                <Reference
+                    Name = "System.Runtime.Remoting"
+                    AssemblyName = "System.Runtime.Remoting"
+                    HintPath = "C:\WINNT\Microsoft.NET\Framework\v1.0.3705\System.Runtime.Remoting.dll"
+                />
+                <Reference
+                    Name = "ccnet.remote"
+                    Project = "{E820CF3B-8C5A-4002-BC16-B7818D3D54A8}"
+                    Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
+                />
+                <Reference
+                    Name = "core"
+                    Project = "{F8113DB9-6C47-4FD1-8A01-655FCF151747}"
+                    Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
+                />
+            </References>
+        </Build>
+        <Files>
+            <Include>
+                <File
+                    RelPath = "Admin.aspx"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "Admin.aspx.cs"
+                    DependentUpon = "Admin.aspx"
+                    SubType = "ASPXCodeBehind"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Admin.aspx.resx"
+                    DependentUpon = "Admin.aspx.cs"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "cruisecontrol.css"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "Default.aspx"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "Default.aspx.cs"
+                    DependentUpon = "Default.aspx"
+                    SubType = "ASPXCodeBehind"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Default.aspx.resx"
+                    DependentUpon = "Default.aspx.cs"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "InstallWebConfig.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "InstallWebConfig.resx"
+                    DependentUpon = "InstallWebConfig.cs"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "LogFileLister.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "LogStatistics.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Statistics.aspx"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "Statistics.aspx.cs"
+                    DependentUpon = "Statistics.aspx"
+                    SubType = "ASPXCodeBehind"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Statistics.aspx.resx"
+                    DependentUpon = "Statistics.aspx.cs"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "Template.ascx"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "Template.ascx.cs"
+                    DependentUpon = "Template.ascx"
+                    SubType = "ASPXCodeBehind"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Template.ascx.resx"
+                    DependentUpon = "Template.ascx.cs"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "TestTiming.aspx"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "TestTiming.aspx.cs"
+                    DependentUpon = "TestTiming.aspx"
+                    SubType = "ASPXCodeBehind"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Web.config"
+                    BuildAction = "None"
+                />
+                <File
+                    RelPath = "WebUtil.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "images\bg_blue_stripe.gif"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "images\ccnet_logo.gif"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "images\ccnet_logo_onwhite.gif"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "images\corner_blue_lr.gif"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "images\corner_blue_ur.gif"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "images\corner_white_ll.gif"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "images\corner_white_ul.gif"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "images\shim.gif"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "images\tw_dev_logo.gif"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "log\log20020910183219Lbuild.67.xml"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "log\log20020916143555.xml"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "log\log20020924144031.xml"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "log\log20021002095508.xml"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "log\log20021009102803Lbuild.68.xml"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "log\log20021009102803Lbuild.69.xml"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "test\LogFileListTest.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "test\LogStatisticsTest.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "test\TestData.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "xsl\compile.xsl"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "xsl\distributables.xsl"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "xsl\header.xsl"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "xsl\javadoc.xsl"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "xsl\modifications.xsl"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "xsl\timing.xsl"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "xsl\unittests.xsl"
+                    BuildAction = "Content"
+                />
+            </Include>
+        </Files>
+    </CSHARP>
+</VisualStudioProject>
+

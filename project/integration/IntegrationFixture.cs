@@ -1,0 +1,67 @@
+using System;
+using tw.ccnet.core;
+using tw.ccnet.core.configuration;
+using tw.ccnet.core.schedule;
+using tw.ccnet.core.history;
+using tw.ccnet.core.util;
+
+namespace integration
+{
+	public class IntegrationFixture
+	{
+		public static CruiseControl CreateCruiseControl(string configDirName, params string[] projects)
+		{
+			// create config
+			string configFile = ConfigurationFileFixture.CreateConfigurationFile(configDirName, projects);
+			ConfigurationLoader loader = new ConfigurationLoader(configFile);
+
+			return new CruiseControl(loader);
+		}
+
+		public static Schedule CreateSchedule(int iterations)
+		{
+			Schedule schedule = new Schedule();
+			schedule.TotalIterations = iterations;
+			return schedule;
+		}
+
+		public static Schedule CreateSchedule()
+		{
+			return CreateSchedule(Schedule.Infinite);
+		}
+
+		public static IntegrationEventCounter AddIntegrationEventHandler(CruiseControl cc, string projectName)
+		{
+			IntegrationEventCounter counter = new IntegrationEventCounter();
+			((Project)cc.GetProject(projectName)).AddIntegrationCompletedEventHandler(counter.Handler);
+			return counter;
+		}
+
+		public static IntegrationResult LoadIntegrationResult(string dirName)
+		{
+			XmlBuildHistory history = new XmlBuildHistory();
+			history.LogDir = TempFileUtil.GetTempPath(dirName);
+			return history.Load();
+		}
+	}
+
+	public class IntegrationEventCounter
+	{
+		private int count = 0;
+
+		public IntegrationCompletedEventHandler Handler
+		{
+			get { return new IntegrationCompletedEventHandler(HandleEvent); }
+		}
+
+		private void HandleEvent(object sender, IntegrationResult result)
+		{
+			count++;
+		}
+
+		public int EventCount
+		{
+			get { return count; }
+		}
+	}
+}
