@@ -17,7 +17,7 @@
                 DelaySign = "false"
                 OutputType = "Library"
                 PreBuildEvent = ""
-                PostBuildEvent = 'copy "$(ProjectDir)test\test.config" "$(TargetPath).config"'
+                PostBuildEvent = 'copy "$(ProjectDir)test\test.config" "$(TargetPath).config"&#xd;&#xa;copy "$(SolutionDir)\xsl\*.xsl" "$(ProjectDir)\xsl"&#xd;&#xa;'
                 RootNamespace = "ThoughtWorks.CruiseControl.Web"
                 RunPostBuildEvent = "OnBuildSuccess"
                 StartupObject = ""
@@ -516,42 +516,57 @@
                 />
                 <File
                     RelPath = "xsl\compile.xsl"
+                    Link = "..\xsl\compile.xsl"
                     BuildAction = "Content"
                 />
                 <File
                     RelPath = "xsl\distributables.xsl"
+                    Link = "..\xsl\distributables.xsl"
                     BuildAction = "Content"
                 />
                 <File
                     RelPath = "xsl\fit.xsl"
+                    Link = "..\xsl\fit.xsl"
                     BuildAction = "Content"
                 />
                 <File
                     RelPath = "xsl\FxCopReport.xsl"
+                    Link = "..\xsl\FxCopReport.xsl"
                     BuildAction = "Content"
                 />
                 <File
                     RelPath = "xsl\fxcop-summary.xsl"
+                    Link = "..\xsl\fxcop-summary.xsl"
                     BuildAction = "Content"
                 />
                 <File
                     RelPath = "xsl\header.xsl"
+                    Link = "..\xsl\header.xsl"
                     BuildAction = "Content"
                 />
                 <File
                     RelPath = "xsl\modifications.xsl"
+                    Link = "..\xsl\modifications.xsl"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "xsl\NCover.xsl"
+                    Link = "..\xsl\NCover.xsl"
                     BuildAction = "Content"
                 />
                 <File
                     RelPath = "xsl\tests.xsl"
+                    Link = "..\xsl\tests.xsl"
                     BuildAction = "Content"
                 />
                 <File
                     RelPath = "xsl\timing.xsl"
+                    Link = "..\xsl\timing.xsl"
                     BuildAction = "Content"
                 />
                 <File
                     RelPath = "xsl\unittests.xsl"
+                    Link = "..\xsl\unittests.xsl"
                     BuildAction = "Content"
                 />
             </Include>
