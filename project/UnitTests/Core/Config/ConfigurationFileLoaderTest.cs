@@ -4,11 +4,11 @@ using Exortech.NetReflector;
 using NUnit.Framework;
 using ThoughtWorks.CruiseControl.Core;
 using ThoughtWorks.CruiseControl.Core.Config;
-using ThoughtWorks.CruiseControl.Core.Publishers.Test;
 using ThoughtWorks.CruiseControl.Core.Sourcecontrol;
 using ThoughtWorks.CruiseControl.Core.Tasks.Test;
 using ThoughtWorks.CruiseControl.Core.Util;
 using ThoughtWorks.CruiseControl.Remote;
+using ThoughtWorks.CruiseControl.UnitTests.Core.Publishers;
 
 namespace ThoughtWorks.CruiseControl.UnitTests.Core.Config
 {

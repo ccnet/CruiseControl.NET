@@ -1,6 +1,8 @@
 using Exortech.NetReflector;
+using ThoughtWorks.CruiseControl.Core;
+using ThoughtWorks.CruiseControl.Core.Publishers;
 
-namespace ThoughtWorks.CruiseControl.Core.Publishers.Test
+namespace ThoughtWorks.CruiseControl.UnitTests.Core.Publishers
 {
 	[ReflectorType("mockpublisher")]
 	public class MockPublisher : PublisherBase

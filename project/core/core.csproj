@@ -469,11 +469,6 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "publishers\NetSendPublisher.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
                     RelPath = "publishers\PublisherBase.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -490,41 +485,6 @@
                 />
                 <File
                     RelPath = "publishers\XmlLogPublisher.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "publishers\test\EmailPublisherMother.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "publishers\test\EmailPublisherStub.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "publishers\test\EmailPublisherTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "publishers\test\HtmlDetailsMessageBuilderTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "publishers\test\MockEmailGateway.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "publishers\test\MockPublisher.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "publishers\test\NetSendPublisherTest.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

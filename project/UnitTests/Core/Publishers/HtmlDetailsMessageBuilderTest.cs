@@ -1,8 +1,9 @@
 using NUnit.Framework;
+using ThoughtWorks.CruiseControl.Core.Publishers;
 using ThoughtWorks.CruiseControl.Core.Test;
 using ThoughtWorks.CruiseControl.Core.Util;
 
-namespace ThoughtWorks.CruiseControl.Core.Publishers.Test
+namespace ThoughtWorks.CruiseControl.UnitTests.Core.Publishers
 {
 	[TestFixture]
 	public class HtmlDetailsMessageBuilderTest : CustomAssertion
@@ -10,7 +11,7 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers.Test
 	    [Test]
 		public void ShouldCreateStyleElementsInTheMailMessage()
 	    {
-	        HtmlDetailsMessageBuilder builder = new HtmlDetailsMessageBuilder();
+	    	HtmlDetailsMessageBuilder builder = new HtmlDetailsMessageBuilder();
 	        string message = builder.BuildMessage(IntegrationResultMother.CreateSuccessful());
 	        int styleBegin = message.IndexOf("<style>");
 	        int styleEnd = message.IndexOf("</style>");

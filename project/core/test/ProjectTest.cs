@@ -6,7 +6,6 @@ using NMock.Constraints;
 using NUnit.Framework;
 using ThoughtWorks.CruiseControl.Core.Label;
 using ThoughtWorks.CruiseControl.Core.Publishers;
-using ThoughtWorks.CruiseControl.Core.Publishers.Test;
 using ThoughtWorks.CruiseControl.Core.Sourcecontrol;
 using ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test;
 using ThoughtWorks.CruiseControl.Core.State;
@@ -509,10 +508,10 @@ namespace ThoughtWorks.CruiseControl.Core.Test
 		{
 			_project.SourceControl = new MockSourceControl();
 			_project.Builder = new MockBuilder();
-			MockPublisher publisher = new MockPublisher();
 			_mockLabeller.ExpectAndReturn("Generate", "1.2.1", new IsAnything());
 			_mockTask.Expect("Run", new IsAnything());
-			_project.IntegrationCompleted += publisher.IntegrationCompletedEventHandler;
+			integrationCompletedCalled = false;
+			_project.IntegrationCompleted += new IntegrationCompletedEventHandler(Project_IntegrationCompleted);
 			IMock stateMock = new DynamicMock(typeof (IStateManager));
 			stateMock.ExpectAndReturn("StateFileExists", false);
 			_project.StateManager = (IStateManager) stateMock.MockInstance;
@@ -523,9 +522,15 @@ namespace ThoughtWorks.CruiseControl.Core.Test
 
 			Assert.AreEqual(results, _project.LastIntegrationResult, "new integration result has not been set to the last integration result");
 			Assert.IsNotNull(results.EndTime);
-			Assert.IsTrue(publisher.Published);
+			Assert.IsTrue(integrationCompletedCalled);
 			Assert.AreEqual("1.2.1", ((MockSourceControl) _project.SourceControl).Label);
 			VerifyAll();
+		}
+
+		private bool integrationCompletedCalled;
+		private void Project_IntegrationCompleted(object source, IntegrationCompletedEventArgs e)
+		{
+			integrationCompletedCalled = true;
 		}
 
 		[Test] // publishers will need to log their own exceptions

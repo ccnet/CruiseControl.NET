@@ -1,8 +1,9 @@
 using System;
+using ThoughtWorks.CruiseControl.Core;
 using ThoughtWorks.CruiseControl.Remote;
 using ThoughtWorks.CruiseControl.Core.Util;
 
-namespace ThoughtWorks.CruiseControl.Core.Publishers.Test
+namespace ThoughtWorks.CruiseControl.UnitTests.Core.Publishers
 {
 	public class XmlLogFixture : CustomAssertion
 	{

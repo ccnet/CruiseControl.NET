@@ -122,7 +122,7 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
             }
         }
 
-        internal string CreateMessage(IIntegrationResult result)
+        public string CreateMessage(IIntegrationResult result)
         {
             // TODO Add culprit to message text -- especially if modifier is not an email user
             //      This information is included, when using Html email (all mods are shown)

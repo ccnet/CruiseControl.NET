@@ -1,8 +1,8 @@
 using System.IO;
 using Exortech.NetReflector;
-using ThoughtWorks.CruiseControl.Core.Util;
+using ThoughtWorks.CruiseControl.Core.Publishers;
 
-namespace ThoughtWorks.CruiseControl.Core.Publishers.Test
+namespace ThoughtWorks.CruiseControl.UnitTests.Core.Publishers
 {
 	[ReflectorType("emailstub")]
 	public class EmailPublisherStub : EmailPublisher
@@ -12,7 +12,7 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers.Test
 
 		public override void SendMessage(string from, string to, string subject, string message)
 		{
-			Log.Debug("email message = " + message);
+			ThoughtWorks.CruiseControl.Core.Util.Log.Debug("email message = " + message);
 			if (SaveToFile)
 			{
 				using (StreamWriter writer = File.CreateText("emailstub.html"))

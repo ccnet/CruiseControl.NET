@@ -1,7 +1,8 @@
 using System.Collections;
 using System.Web.Mail;
+using ThoughtWorks.CruiseControl.Core.Publishers;
 
-namespace ThoughtWorks.CruiseControl.Core.Publishers.Test
+namespace ThoughtWorks.CruiseControl.UnitTests.Core.Publishers
 {
 	public class MockEmailGateway : EmailGateway
 	{

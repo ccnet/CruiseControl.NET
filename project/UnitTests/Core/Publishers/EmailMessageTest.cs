@@ -1,12 +1,12 @@
 using System;
 using NUnit.Framework;
+using ThoughtWorks.CruiseControl.Core;
 using ThoughtWorks.CruiseControl.Core.Publishers;
-using ThoughtWorks.CruiseControl.Core.Publishers.Test;
 using ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test;
 using ThoughtWorks.CruiseControl.Core.Test;
 using ThoughtWorks.CruiseControl.Core.Util;
 
-namespace ThoughtWorks.CruiseControl.Core.Publishers.test
+namespace ThoughtWorks.CruiseControl.UnitTests.Core.Publishers
 {
 	/// <summary>
 	/// Tests the messages required by email publisher

@@ -370,6 +370,21 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Core\Publishers\EmailPublisherMother.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Core\Publishers\EmailPublisherStub.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Core\Publishers\EmailPublisherTest.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Core\Publishers\ExecutablePublisherTest.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -380,7 +395,22 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Core\Publishers\HtmlDetailsMessageBuilderTest.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Core\Publishers\HtmlLinkMessageBuilderTest.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Core\Publishers\MockEmailGateway.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Core\Publishers\MockPublisher.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

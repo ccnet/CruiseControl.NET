@@ -1,8 +1,9 @@
 using System.IO;
 using System.Xml.XPath;
 using NUnit.Framework;
+using ThoughtWorks.CruiseControl.Core.Publishers;
 
-namespace ThoughtWorks.CruiseControl.Core.Publishers.Test
+namespace ThoughtWorks.CruiseControl.UnitTests.Core.Publishers
 {
 	[TestFixture]
 	public class BuildLogTransformerTest

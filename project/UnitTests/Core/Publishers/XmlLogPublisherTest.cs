@@ -3,11 +3,13 @@ using System.IO;
 using System.Xml;
 using Exortech.NetReflector;
 using NUnit.Framework;
+using ThoughtWorks.CruiseControl.Core;
+using ThoughtWorks.CruiseControl.Core.Publishers;
 using ThoughtWorks.CruiseControl.Core.Test;
 using ThoughtWorks.CruiseControl.Core.Util;
 using ThoughtWorks.CruiseControl.Remote;
 
-namespace ThoughtWorks.CruiseControl.Core.Publishers.Test
+namespace ThoughtWorks.CruiseControl.UnitTests.Core.Publishers
 {
     [TestFixture]
     public class XmlLogPublisherTest : XmlLogFixture
