@@ -1,4 +1,4 @@
-﻿<?xml version="1.0"?>
+<?xml version="1.0"?>
 
 <project name="ccnet" default="test">
 
@@ -279,12 +279,14 @@
 			<fileset>
 				<include name="**\*" />
 
-				<exclude name="build\**\*" />
-				<exclude name="deployed\**\*" />
-				<exclude name="dist\**\*" />
-				<exclude name="**\bin\**\*" />
-				<exclude name="**\obj\**\*" />
-				<exclude name="**\CVS\**\*" />
+				<exclude name="build\**" />
+				<exclude name="deployed\**" />
+				<exclude name="dist\**" />
+				<exclude name="**\bin\**" />
+				<exclude name="**\obj\**" />
+				<exclude name="**\CVS\**" />
+				<exclude name="tools\**" />
+				<exclude name="**\_Resharper*\**" />
 			</fileset>
 		</zip>
 		
