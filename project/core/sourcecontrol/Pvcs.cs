@@ -73,6 +73,13 @@ run -e vlog  ""-xo+e{3}"" ""-d{4}*{5}"" ""@{2}""
 		
 		public override Process CreateHistoryProcess(DateTime from, DateTime to)
 		{
+			// required due to DayLightSavings bug in PVCS 7.5.1
+			if (IsDayLightSavings()) 
+			{
+				from = SubtractAnHour(from);
+				to = SubtractAnHour(to);
+			}
+
 			string content = CreatePcliContents(
 				from.ToString(TO_PVCS_DATE_FORMAT),
 				to.ToString(TO_PVCS_DATE_FORMAT)
@@ -103,6 +110,19 @@ run -e vlog  ""-xo+e{3}"" ""-d{4}*{5}"" ""@{2}""
 			process.Start();	
 			process.WaitForExit(Timeout);
 			return ProcessUtil.GetTextReader(PVCS_LOGOUTPUT_FILE);
+		}
+
+		public Boolean IsDayLightSavings() 
+		{
+			TimeZone tz = TimeZone.CurrentTimeZone;
+			return tz.IsDaylightSavingTime(DateTime.Now);
+		}
+
+		public DateTime SubtractAnHour(DateTime date) 
+		{
+			TimeSpan anHour = new TimeSpan(1, 0, 0);
+			Console.WriteLine(date);
+			return date.Subtract(anHour);
 		}
 		
 	}

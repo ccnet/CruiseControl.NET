@@ -23,6 +23,26 @@ namespace tw.ccnet.core.sourcecontrol.test
 ";
 		}
 
+		// Daylight savings time bug
+		// Comment this test in and forward system time to appropriate date
+		// to veryify daylight saving time detected.
+		// This was necessary to resolve a bug with PVCS 7.5.1 (would not properly
+		// detected modifications during periods where daylight savings was active)
+		[Ignore("Date dependent test due to day light savings time bug in PVCS v7.5.1")]
+		public void TestDetectedDayLightSavingsTime_PVCSDayLighSavingsBug() 
+		{
+			Pvcs pvcs = new Pvcs();
+			Assertion.Assert(pvcs.IsDayLightSavings());
+		}
+
+		public void TestSubtractAnHour_PVCSDayLighSavingsBug() 
+		{
+			Pvcs pvcs = new Pvcs();
+			DateTime date1 = new DateTime(2000, 1, 1, 1, 0, 0);
+			DateTime anHourAgo = new DateTime(2000, 1, 1, 0, 0, 0);
+			Assertion.AssertEquals(anHourAgo, pvcs.SubtractAnHour(date1));
+		}
+
 		public void TestValuePopulation()
 		{
 			Pvcs pvcs = CreatePvcs();
@@ -35,7 +55,7 @@ namespace tw.ccnet.core.sourcecontrol.test
 		{
 			Pvcs pvcs = CreatePvcs();
 			DateTime from = new DateTime(2001, 1, 21, 20, 0, 0);
-			Process actualProcess = pvcs.CreateHistoryProcess(from, new DateTime());
+			Process actualProcess = pvcs.CreateHistoryProcess(from, DateTime.Now);
 
 			string expected = Pvcs.COMMAND;
 			string actual = actualProcess.StartInfo.Arguments;
