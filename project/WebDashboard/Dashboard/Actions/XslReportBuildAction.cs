@@ -6,36 +6,36 @@ using ThoughtWorks.CruiseControl.WebDashboard.MVC.Cruise;
 
 namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard.Actions
 {
-	[ReflectorType("multipleXslReportAction")]
-	public class MultipleXslReportAction : ICruiseAction
+	[ReflectorType("xslReportBuildAction")]
+	public class XslReportBuildAction : ICruiseAction
 	{
 		private readonly IBuildLogTransformer buildLogTransformer;
-		private string[] xslFileNames;
+		private string xslFileName;
 
-		public MultipleXslReportAction(IBuildLogTransformer buildLogTransformer)
+		public XslReportBuildAction(IBuildLogTransformer buildLogTransformer)
 		{
 			this.buildLogTransformer = buildLogTransformer;
 		}
 
 		public IView Execute(ICruiseRequest cruiseRequest)
 		{
-			if (xslFileNames == null)
+			if (xslFileName == null)
 			{
 				throw new ApplicationException("XSL File Name has not been set for XSL Report Action");
 			}
-			return new StringView(buildLogTransformer.Transform(cruiseRequest.BuildSpecifier, xslFileNames));
+			return new StringView(buildLogTransformer.Transform(cruiseRequest.BuildSpecifier, xslFileName));
 		}
 
-		[ReflectorArrayAttribute("xslFileNames")]
-		public string[] XslFileNames
+		[ReflectorProperty("xslFileName")]
+		public string XslFileName
 		{
 			get
 			{
-				return xslFileNames;
+				return xslFileName;
 			}
 			set
 			{
-				xslFileNames = value;
+				xslFileName = value;
 			}
 		}
 	}

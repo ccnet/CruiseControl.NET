@@ -22,10 +22,10 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard.Actions
 			cruiseRequestMock.ExpectAndReturn("BuildSpecifier", buildSpecifier);
 			buildLogTransformerMock.ExpectAndReturn("Transform", "transformed", buildSpecifier, new string[] { @"xsl\myxsl.xsl", @"xsl\myotherxsl.xsl" });
 
-			MultipleXslReportAction action = new MultipleXslReportAction((IBuildLogTransformer) buildLogTransformerMock.MockInstance);
-			action.XslFileNames = new string[] { @"xsl\myxsl.xsl", @"xsl\myotherxsl.xsl" };
+			MultipleXslReportBuildAction buildAction = new MultipleXslReportBuildAction((IBuildLogTransformer) buildLogTransformerMock.MockInstance);
+			buildAction.XslFileNames = new string[] { @"xsl\myxsl.xsl", @"xsl\myotherxsl.xsl" };
 
-			Assert.AreEqual("transformed", action.Execute(cruiseRequest).ResponseFragment);
+			Assert.AreEqual("transformed", buildAction.Execute(cruiseRequest).ResponseFragment);
 
 			buildLogTransformerMock.Verify();
 			cruiseRequestMock.Verify();

@@ -15,8 +15,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 		public void ShouldUseObjectGiverToInstantiateActions()
 		{
 			DynamicMock objectGiverMock = new DynamicMock(typeof(ObjectGiver));
-			Type typeToInstantiate = typeof(XslReportAction);
-			ICruiseAction instantiated = new XslReportAction(null);
+			Type typeToInstantiate = typeof(XslReportBuildAction);
+			ICruiseAction instantiated = new XslReportBuildAction(null);
 			objectGiverMock.ExpectAndReturn("GiveObjectByType", instantiated, typeToInstantiate);
 
 			ActionInstantiatorWithObjectGiver instantiator = new ActionInstantiatorWithObjectGiver((ObjectGiver) objectGiverMock.MockInstance);

@@ -507,12 +507,12 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "Dashboard\Actions\MultipleXslReportAction.cs"
+                    RelPath = "Dashboard\Actions\MultipleXslReportBuildAction.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "Dashboard\Actions\XslReportAction.cs"
+                    RelPath = "Dashboard\Actions\XslReportBuildAction.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -522,7 +522,7 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "Dashboard\GenericPlugins\XslReportPlugin.cs"
+                    RelPath = "Dashboard\GenericPlugins\XslReportBuildPlugin.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

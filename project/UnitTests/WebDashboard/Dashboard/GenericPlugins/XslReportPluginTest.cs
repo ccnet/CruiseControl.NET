@@ -10,13 +10,13 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard.GenericPlu
 	public class XslReportPluginTest
 	{
 		private DynamicMock actionInstantiatorMock;
-		private XslReportPlugin plugin;
+		private XslReportBuildPlugin buildPlugin;
 
 		[SetUp]
 		public void Setup()
 		{
 			actionInstantiatorMock = new DynamicMock(typeof(IActionInstantiator));
-			plugin = new XslReportPlugin((IActionInstantiator) actionInstantiatorMock.MockInstance);
+			buildPlugin = new XslReportBuildPlugin((IActionInstantiator) actionInstantiatorMock.MockInstance);
 		}
 
 		private void VerifyAll()
@@ -27,13 +27,13 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard.GenericPlu
 		[Test]
 		public void ShouldUseConfigurableProperties()
 		{
-			plugin.ActionName = "MyAction";
-			plugin.LinkDescription = "My Plugin";
-			plugin.XslFileName = @"xsl\myxsl.xsl";
+			buildPlugin.ActionName = "MyAction";
+			buildPlugin.LinkDescription = "My Plugin";
+			buildPlugin.XslFileName = @"xsl\myxsl.xsl";
 
-			Assert.AreEqual("MyAction", plugin.ActionName);
-			Assert.AreEqual("My Plugin", plugin.LinkDescription);
-			Assert.AreEqual(@"xsl\myxsl.xsl", plugin.XslFileName);
+			Assert.AreEqual("MyAction", buildPlugin.ActionName);
+			Assert.AreEqual("My Plugin", buildPlugin.LinkDescription);
+			Assert.AreEqual(@"xsl\myxsl.xsl", buildPlugin.XslFileName);
 
 			VerifyAll();
 		}
@@ -41,19 +41,19 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard.GenericPlu
 		[Test]
 		public void ShouldCreateAnXslReportActionWithCorrectNameXslFileName()
 		{
-			plugin.ActionName = "MyAction";
-			plugin.LinkDescription = "My Plugin";
-			plugin.XslFileName = @"xsl\myxsl.xsl";
+			buildPlugin.ActionName = "MyAction";
+			buildPlugin.LinkDescription = "My Plugin";
+			buildPlugin.XslFileName = @"xsl\myxsl.xsl";
 
-			XslReportAction xslReportAction = new XslReportAction(null);
-			actionInstantiatorMock.ExpectAndReturn("InstantiateAction", xslReportAction, typeof(XslReportAction));
+			XslReportBuildAction xslReportAction = new XslReportBuildAction(null);
+			actionInstantiatorMock.ExpectAndReturn("InstantiateAction", xslReportAction, typeof(XslReportBuildAction));
 
-			INamedAction[] namedActions = plugin.NamedActions;
+			INamedAction[] namedActions = buildPlugin.NamedActions;
 
 			Assert.AreEqual(1, namedActions.Length);
 			Assert.AreEqual("MyAction", namedActions[0].ActionName);
 			Assert.AreEqual(xslReportAction, namedActions[0].Action);
-			Assert.AreEqual(@"xsl\myxsl.xsl", ((XslReportAction) namedActions[0].Action).XslFileName);
+			Assert.AreEqual(@"xsl\myxsl.xsl", ((XslReportBuildAction) namedActions[0].Action).XslFileName);
 
 			VerifyAll();
 		}

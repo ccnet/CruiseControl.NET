@@ -40,9 +40,9 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.BuildReport
 		{
 			get
 			{
-				MultipleXslReportAction action = (MultipleXslReportAction) actionInstantiator.InstantiateAction(typeof(MultipleXslReportAction));
-				action.XslFileNames = XslFileNames;
-				return new INamedAction[] { new ImmutableNamedAction(ACTION_NAME, action) } ;
+				MultipleXslReportBuildAction buildAction = (MultipleXslReportBuildAction) actionInstantiator.InstantiateAction(typeof(MultipleXslReportBuildAction));
+				buildAction.XslFileNames = XslFileNames;
+				return new INamedAction[] { new ImmutableNamedAction(ACTION_NAME, buildAction) } ;
 			}
 		}
 	}

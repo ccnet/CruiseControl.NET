@@ -4,15 +4,15 @@ using ThoughtWorks.CruiseControl.WebDashboard.Dashboard.Actions;
 
 namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard.GenericPlugins
 {
-	[ReflectorType("xslReportPlugin")]
-	public class XslReportPlugin : IPlugin
+	[ReflectorType("xslReportBuildPlugin")]
+	public class XslReportBuildPlugin : IPlugin
 	{
 		private readonly IActionInstantiator actionInstantiator;
 		private string xslFileName = "";
 		private string description = "no description set";
 		private string actionName = "NoActionSet";
 
-		public XslReportPlugin(IActionInstantiator actionInstantiator)
+		public XslReportBuildPlugin(IActionInstantiator actionInstantiator)
 		{
 			this.actionInstantiator = actionInstantiator;
 		}
@@ -60,7 +60,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard.GenericPlugins
 		{
 			get
 			{
-				XslReportAction action = (XslReportAction) actionInstantiator.InstantiateAction(typeof(XslReportAction));
+				XslReportBuildAction action = (XslReportBuildAction) actionInstantiator.InstantiateAction(typeof(XslReportBuildAction));
 				action.XslFileName = XslFileName;
 				return new INamedAction[] { new ImmutableNamedAction(actionName, action) } ;
 			}
