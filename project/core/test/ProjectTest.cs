@@ -64,6 +64,7 @@ namespace tw.ccnet.core.test
 		[Test]
 		public void PreBuild_InitialBuild()
 		{
+			SetMockStateManager(false, null);
 			_project.PreBuild();
 			AssertNotNull(_project.LastIntegration);
 			AssertNotNull(_project.CurrentIntegration);
