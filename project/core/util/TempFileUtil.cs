@@ -1,5 +1,5 @@
-using System;
 using System.IO;
+using System.Text;
 using System.Xml;
 
 namespace ThoughtWorks.CruiseControl.Core.Util
@@ -69,7 +69,7 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 		public static string CreateTempXmlFile(string dirname, string filename, string contents)
 		{
 			string path = Path.Combine(GetTempPath(dirname),filename);
-			XmlTextWriter writer = new XmlTextWriter(path, System.Text.Encoding.UTF8);
+		    XmlTextWriter writer = new XmlTextWriter(path, Encoding.UTF8);
 			writer.WriteRaw(contents);
 			writer.Close();
 
