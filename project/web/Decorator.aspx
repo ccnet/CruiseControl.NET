@@ -41,10 +41,9 @@
 										<td><img src="images/shim.gif" width="20"></td>
 										<td nowrap>
 											<span class="buildresults-header">BUILD RESULTS</span><br>
-											<span id="buildStats" runat="server" class="buildresults-data" runAt="server">
-												<p>
-													<asp:DataList ID="menu" Runat="server" /></p>
-											</span>
+											<span id="buildStats" runat="server" class="buildresults-data" runAt="server" />
+											<p>
+												<asp:DataList ID="menu" Runat="server" /></p>
 										</td>
 									</tr>
 								</table>
