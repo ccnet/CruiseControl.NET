@@ -1,7 +1,7 @@
 <%@ Page language="c#" Codebehind="Controller.aspx.cs" Inherits="ThoughtWorks.CruiseControl.WebDashboard.Controller" AutoEventWireup="false" %>
 <HTML>
 	<HEAD>
-		<TITLE>Add Project</TITLE>
+		<TITLE>CruiseControl.NET</TITLE>
 	</HEAD>
 	<body>
 		<form runat="server">
