@@ -30,7 +30,6 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
 				DirectoryInfo pubDir = new DirectoryInfo(PublishDir);
 				DirectoryInfo srcDir = new DirectoryInfo(SourceDir);
 				DirectoryInfo destination = pubDir.CreateSubdirectory(result.Label);
-				DirectoryInfo additionalDestination = null;
 
 				recurseSubDirectories(srcDir, destination);
 			}
