@@ -4,35 +4,37 @@ using System.Reflection;
 
 namespace ObjectWizard
 {
-	public class ObjectGiverAndRegistrar : ObjectGiver, ObjectGiverManager
+	public class ManagableObjectGiver : ObjectGiver, ObjectGiverManager
 	{
-		private Hashtable typedObjects;
+		private Hashtable typedInstances;
 		private Hashtable implementationTypes;
 		private Hashtable dependencyImplementationTypes;
 		private Hashtable implementationMappings;
 		private bool ignoreNMockImplementations;
 		private Hashtable dependencyImplementationTypesForIdentifers;
+		private Hashtable instanceMappings;
 
-		public ObjectGiverAndRegistrar()
+		public ManagableObjectGiver()
 		{
-			typedObjects = new Hashtable();
+			typedInstances = new Hashtable();
 			implementationTypes = new Hashtable();
 			dependencyImplementationTypes = new Hashtable();
 			implementationMappings = new Hashtable();
 			ignoreNMockImplementations = false;
 			dependencyImplementationTypesForIdentifers = new Hashtable();
+			instanceMappings = new Hashtable();
 		}
 
-		public void AddTypedObject(Type type, object instance)
+		public void AddTypedInstance(Type type, object instance)
 		{
-			typedObjects[type] = instance;
+			typedInstances[type] = instance;
 		}
 
-		public void AddTypedObjects(params object[] objects)
+		public void AddInstances(params object[] objects)
 		{
 			foreach (object o in objects)
 			{
-				AddTypedObject(o.GetType(), o);
+				AddTypedInstance(o.GetType(), o);
 			}
 		}
 
@@ -45,6 +47,12 @@ namespace ObjectWizard
 		{
 			implementationMappings[identifier] = new DecoratedType(type);
 			return (TypeDecoratorable) implementationMappings[identifier];
+		}
+
+		public TypeDecoratorable CreateInstanceMapping(string identifier, object instance)
+		{
+			instanceMappings[identifier] = new DecoratedInstance(instance);
+			return (TypeDecoratorable) instanceMappings[identifier];
 		}
 
 		public void SetDependencyImplementationForIdentifer(string identifier, Type dependencyType, Type implementationType)
@@ -70,17 +78,33 @@ namespace ObjectWizard
 
 		public object GiveObjectById(string id)
 		{
-			DecoratedType decoratedType = (DecoratedType) implementationMappings[id];
+			object instance = instanceMappings[id];
+			if (instance == null)
+			{
+				DecoratedType decoratedType = (DecoratedType) implementationMappings[id];
 			
-			if (decoratedType == null)
-				throw new ApplicationException("Unknown object key : " + id);
+				if (decoratedType == null)
+					throw new ApplicationException("Unknown object key : " + id);
+				else
+					return Instantiate(decoratedType, id);
+			}
 			else
-				return Instantiate(decoratedType, id);
+			{
+				DecoratedInstance decoratedInstance = (DecoratedInstance) instance;
+				if (decoratedInstance.Decorator != null)
+				{
+					return Instantiate(decoratedInstance.Decorator, id, decoratedInstance.Instance);
+				}
+				else
+				{
+					return decoratedInstance.Instance;
+				}
+			}
 		}
 
 		private object GiveObjectByType(Type type, string id)
 		{
-			object result = typedObjects[type];
+			object result = typedInstances[type];
 			if (result == null)
 			{
 				result = Instantiate(type, id);

@@ -2,14 +2,14 @@ using System;
 
 namespace ObjectWizard
 {
-	public class DecoratedType : TypeDecoratorable
+	public class DecoratedInstance : TypeDecoratorable
 	{
-		private readonly Type type;
+		private readonly object instance;
 		private DecoratedType decorator;
 
-		public DecoratedType(Type type)
+		public DecoratedInstance(object instance)
 		{
-			this.type = type;
+			this.instance = instance;
 		}
 
 		public TypeDecoratorable Decorate(Type type)
@@ -18,9 +18,9 @@ namespace ObjectWizard
 			return decorator;
 		}
 
-		public Type Type
+		public object Instance
 		{
-			get { return type; }
+			get { return instance; }
 		}
 
 		public DecoratedType Decorator

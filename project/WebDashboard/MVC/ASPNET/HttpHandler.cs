@@ -18,7 +18,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.MVC.ASPNET
 				context.Response.ContentType = "Text/XML";
 			}
 
-			ObjectGiver objectGiver = new CruiseObjectGiverInitializer(new ObjectGiverAndRegistrar()).SetupObjectGiverForRequest(context);
+			ObjectGiver objectGiver = new CruiseObjectGiverInitializer(new ManagableObjectGiver()).SetupObjectGiverForRequest(context);
 			context.Response.Write(((RequestController) objectGiver.GiveObjectByType(typeof(RequestController))).Do());
 			context.Response.Flush();
 		}

@@ -714,7 +714,12 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "ObjectWizard\ObjectGiverAndRegistrarTest.cs"
+                    RelPath = "ObjectWizard\ManagableObjectGiverTest.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "ObjectWizard\NetReflector\ObjectGiverNetReflectorInstantiatorTest.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -772,6 +777,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "WebDashboard\Dashboard\ActionInstantiatorWithObjectGiverTest.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "WebDashboard\Dashboard\BuildLinkTest.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -812,17 +822,17 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "WebDashboard\Dashboard\DefaultPluginLinkCalculatorTest.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "WebDashboard\Dashboard\DefaultUrlBuilderTest.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
                     RelPath = "WebDashboard\Dashboard\PathMappingMultiTransformerTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "WebDashboard\Dashboard\PluginsTest.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -858,6 +868,26 @@
                 />
                 <File
                     RelPath = "WebDashboard\Dashboard\TopControlsViewBuilderTest.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "WebDashboard\Dashboard\Actions\MultipleXslReportActionTest.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "WebDashboard\Dashboard\Actions\XslReportActionTest.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "WebDashboard\Dashboard\GenericPlugins\ConfigurablePluginTest.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "WebDashboard\Dashboard\GenericPlugins\XslReportPluginTest.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

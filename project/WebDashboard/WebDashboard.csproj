@@ -144,6 +144,11 @@
                     Project = "{A81B8A36-19CC-49FA-93A4-E7E607F48567}"
                     Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
                 />
+                <Reference
+                    Name = "NetReflector"
+                    AssemblyName = "NetReflector"
+                    HintPath = "..\..\lib\NetReflector.dll"
+                />
             </References>
         </Build>
         <Files>
@@ -164,6 +169,10 @@
                     BuildAction = "Content"
                 />
                 <File
+                    RelPath = "dashboard.config"
+                    BuildAction = "None"
+                />
+                <File
                     RelPath = "default.aspx"
                     BuildAction = "Content"
                 />
@@ -182,27 +191,12 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "config\AssemblyLoadingPluginSpecification.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
                     RelPath = "config\ConfigurationSettingsConfigGetter.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
                     RelPath = "config\IConfigurationGetter.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "config\IPluginSpecification.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "config\PluginsSectionHandler.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -217,7 +211,22 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "config\SimplePluginSpecification.cs"
+                    RelPath = "Configuration\IPluginConfiguration.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Configuration\NetReflectorPluginConfiguration.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Configuration\PluginConfigurationLoader.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Dashboard\ActionInstantiatorWithObjectGiver.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -243,6 +252,11 @@
                 />
                 <File
                     RelPath = "Dashboard\BuildRequestTransformer.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Dashboard\ConfigurableNamedAction.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -277,6 +291,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Dashboard\DefaultPluginLinkCalculator.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Dashboard\DefaultProjectSpecifier.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -303,6 +322,11 @@
                 />
                 <File
                     RelPath = "Dashboard\IAbsoluteLink.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Dashboard\IActionInstantiator.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -357,17 +381,22 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Dashboard\ImmutableNamedAction.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Dashboard\INamedAction.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Dashboard\IPlugin.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
                     RelPath = "Dashboard\IPluginLinkCalculator.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Dashboard\IPluginLinkRenderer.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -417,11 +446,6 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "Dashboard\Plugins.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
                     RelPath = "Dashboard\ProjectGrid.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -467,11 +491,6 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "Dashboard\TypedAction.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
                     RelPath = "Dashboard\UnknownBuildException.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -482,12 +501,27 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "Dashboard\XslReportBuildPlugin.cs"
+                    RelPath = "Dashboard\ActionDecorators\SiteTemplateActionDecorator.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "Dashboard\ActionDecorators\SiteTemplateActionDecorator.cs"
+                    RelPath = "Dashboard\Actions\MultipleXslReportAction.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Dashboard\Actions\XslReportAction.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Dashboard\GenericPlugins\ConfigurablePlugin.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Dashboard\GenericPlugins\XslReportPlugin.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -815,31 +849,10 @@
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
-                <File
-                    RelPath = "Plugins\FxCop\FxCopReportBuildPlugin.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Plugins\NAnt\NAntReportBuildPlugin.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Plugins\NCover\NCoverReportBuildPlugin.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Plugins\NUnit\NUnitTestDetailsBuildPlugin.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Plugins\NUnit\NUnitTestTimingsBuildPlugin.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
+                <Folder RelPath = "Plugins\FxCop\" />
+                <Folder RelPath = "Plugins\NAnt\" />
+                <Folder RelPath = "Plugins\NCover\" />
+                <Folder RelPath = "Plugins\NUnit\" />
                 <File
                     RelPath = "Plugins\ProjectReport\ProjectReportProjectPlugin.cs"
                     SubType = "Code"

@@ -2,8 +2,16 @@ using ThoughtWorks.CruiseControl.WebDashboard.Dashboard;
 
 namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.DeleteProject
 {
-	public class DeleteProjectPlugin : IPluginLinkRenderer, IPlugin
+	// ToDo - Test!
+	public class DeleteProjectPlugin : IPlugin
 	{
+		private readonly IActionInstantiator actionInstantiator;
+
+		public DeleteProjectPlugin(IActionInstantiator actionInstantiator)
+		{
+			this.actionInstantiator = actionInstantiator;
+		}
+
 		public string LinkDescription
 		{
 			get { return "Delete Project"; }
@@ -11,17 +19,17 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.DeleteProject
 
 		public string LinkActionName
 		{
-			get { return Actions[0].ActionName; }
+			get { return NamedActions[0].ActionName; }
 		}
 
-		public TypedAction[] Actions
+		public INamedAction[] NamedActions
 		{
 			get
 			{
-				return new TypedAction[]
+				return new INamedAction[]
 				{
-					new TypedAction("ShowDeleteProject", typeof(ShowDeleteProjectAction)),
-					new TypedAction(DoDeleteProjectAction.ACTION_NAME, typeof(DoDeleteProjectAction))
+					new ImmutableNamedAction("ShowDeleteProject", actionInstantiator.InstantiateAction(typeof(ShowDeleteProjectAction))),
+					new ImmutableNamedAction(DoDeleteProjectAction.ACTION_NAME, actionInstantiator.InstantiateAction(typeof(ShowDeleteProjectAction)))
 				};
 			}
 		}

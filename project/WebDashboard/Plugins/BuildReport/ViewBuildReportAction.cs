@@ -1,27 +1,21 @@
-using System.Collections;
-using System.Configuration;
+using Exortech.NetReflector;
 using ThoughtWorks.CruiseControl.WebDashboard.Dashboard;
-using ThoughtWorks.CruiseControl.WebDashboard.IO;
-using ThoughtWorks.CruiseControl.WebDashboard.MVC;
-using ThoughtWorks.CruiseControl.WebDashboard.MVC.Cruise;
+using ThoughtWorks.CruiseControl.WebDashboard.Dashboard.Actions;
 
 namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.BuildReport
 {
-	public class BuildReportBuildPlugin : ICruiseAction, IPluginLinkRenderer, IPlugin
+	// ToDo - Test!
+	[ReflectorType("buildReportBuildPlugin")]
+	public class BuildReportBuildPlugin : IPlugin
 	{
 		public static readonly string ACTION_NAME = "ViewBuildReport";
 
-		private readonly IBuildLogTransformer buildLogTransformer;
+		private readonly IActionInstantiator actionInstantiator;
+		private string[] xslFileNames = new string[0];
 
-		public BuildReportBuildPlugin(IBuildLogTransformer buildLogTransformer)
+		public BuildReportBuildPlugin(IActionInstantiator actionInstantiator)
 		{
-			this.buildLogTransformer = buildLogTransformer;
-		}
-
-		// ToDo - this shouldn't access Configuration Settings directly ... but maybe we want a new plugin impl anyway using configurable plugins
-		public IView Execute (ICruiseRequest cruiseRequest)
-		{
-			return new StringView(buildLogTransformer.Transform(cruiseRequest.BuildSpecifier, (string[]) ((ArrayList) ConfigurationSettings.GetConfig("CCNet/xslFiles")).ToArray(typeof (string))));
+			this.actionInstantiator = actionInstantiator;
 		}
 
 		public string LinkDescription
@@ -34,9 +28,27 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.BuildReport
 			get { return ACTION_NAME; }
 		}
 
-		public TypedAction[] Actions
+		[ReflectorArray("xslFileNames")]
+		public string[] XslFileNames
 		{
-			get {  return new TypedAction[] { new TypedAction(LinkActionName, this.GetType()) }; }
+			get
+			{
+				return xslFileNames;
+			}
+			set
+			{
+				xslFileNames = value;
+			}
+		}
+
+		public INamedAction[] NamedActions
+		{
+			get
+			{
+				MultipleXslReportAction action = (MultipleXslReportAction) actionInstantiator.InstantiateAction(typeof(MultipleXslReportAction));
+				action.XslFileNames = XslFileNames;
+				return new INamedAction[] { new ImmutableNamedAction(ACTION_NAME, action) } ;
+			}
 		}
 	}
 }

@@ -96,8 +96,13 @@
                 />
                 <Reference
                     Name = "System.XML"
-                    AssemblyName = "System.XML"
+                    AssemblyName = "System.Xml"
                     HintPath = "..\..\..\..\..\WINDOWS\Microsoft.NET\Framework\v1.1.4322\System.XML.dll"
+                />
+                <Reference
+                    Name = "NetReflector"
+                    AssemblyName = "NetReflector"
+                    HintPath = "..\..\lib\NetReflector.dll"
                 />
             </References>
         </Build>
@@ -109,17 +114,22 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "DecoratedInstance.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "DecoratedType.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "ObjectGiver.cs"
+                    RelPath = "ManagableObjectGiver.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "ObjectGiverAndRegistrar.cs"
+                    RelPath = "ObjectGiver.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -130,6 +140,11 @@
                 />
                 <File
                     RelPath = "TypeDecoratorable.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "NetReflector\ObjectGiverNetReflectorInstantiator.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

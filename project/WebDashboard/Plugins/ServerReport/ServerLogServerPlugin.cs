@@ -1,4 +1,5 @@
 using System.Collections;
+using Exortech.NetReflector;
 using ThoughtWorks.CruiseControl.WebDashboard.Dashboard;
 using ThoughtWorks.CruiseControl.WebDashboard.IO;
 using ThoughtWorks.CruiseControl.WebDashboard.MVC;
@@ -8,7 +9,8 @@ using ThoughtWorks.CruiseControl.WebDashboard.ServerConnection;
 
 namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.ServerReport
 {
-	public class ServerLogServerPlugin : ICruiseAction, IPluginLinkRenderer, IPlugin
+	[ReflectorType("serverLogServerPlugin")]
+	public class ServerLogServerPlugin : ICruiseAction, IPlugin
 	{
 		private readonly IFarmService farmService;
 		private readonly IVelocityViewGenerator viewGenerator;
@@ -37,9 +39,9 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.ServerReport
 			get { return "ViewServerLog"; }
 		}
 
-		public TypedAction[] Actions
+		public INamedAction[] NamedActions
 		{
-			get {  return new TypedAction[] { new TypedAction(LinkActionName, this.GetType()) }; }
+			get {  return new INamedAction[] { new ImmutableNamedAction(LinkActionName, this) }; }
 		}
 	}
 }

@@ -1,3 +1,4 @@
+using Exortech.NetReflector;
 using ThoughtWorks.CruiseControl.WebDashboard.Dashboard;
 using ThoughtWorks.CruiseControl.WebDashboard.IO;
 using ThoughtWorks.CruiseControl.WebDashboard.MVC;
@@ -5,7 +6,9 @@ using ThoughtWorks.CruiseControl.WebDashboard.MVC.Cruise;
 
 namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.ServerReport
 {
-	public class ServerReportServerPlugin : ICruiseAction, IPluginLinkRenderer, IPlugin
+	// ToDo - Test!
+	[ReflectorType("serverReportServerPlugin")]
+	public class ServerReportServerPlugin : ICruiseAction, IPlugin
 	{
 		public static readonly string ACTION_NAME = "ViewServerReport";
 
@@ -31,9 +34,9 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.ServerReport
 			get { return ACTION_NAME; }
 		}
 
-		public TypedAction[] Actions
+		public INamedAction[] NamedActions
 		{
-			get {  return new TypedAction[] { new TypedAction(LinkActionName, this.GetType()) }; }
+			get {  return new INamedAction[] { new ImmutableNamedAction(LinkActionName, this) }; }
 		}
 	}
 }

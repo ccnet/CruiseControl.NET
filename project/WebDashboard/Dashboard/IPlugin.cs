@@ -2,6 +2,8 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 {
 	public interface IPlugin
 	{
-		TypedAction[] Actions { get; }
+		INamedAction[] NamedActions { get; }
+		string LinkDescription { get; }
+		string LinkActionName { get; }
 	}
 }

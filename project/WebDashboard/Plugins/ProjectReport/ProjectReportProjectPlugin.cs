@@ -1,4 +1,5 @@
 using System.Collections;
+using Exortech.NetReflector;
 using ThoughtWorks.CruiseControl.WebDashboard.Dashboard;
 using ThoughtWorks.CruiseControl.WebDashboard.IO;
 using ThoughtWorks.CruiseControl.WebDashboard.MVC;
@@ -9,7 +10,8 @@ using ThoughtWorks.CruiseControl.WebDashboard.ServerConnection;
 
 namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.ProjectReport
 {
-	public class ProjectReportProjectPlugin : ICruiseAction, IPluginLinkRenderer, IPlugin
+	[ReflectorType("projectReportProjectPlugin")]
+	public class ProjectReportProjectPlugin : ICruiseAction, IPlugin
 	{
 		private readonly IFarmService farmService;
 		private readonly IVelocityViewGenerator viewGenerator;
@@ -51,9 +53,9 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.ProjectReport
 			get { return ACTION_NAME; }
 		}
 
-		public TypedAction[] Actions
+		public INamedAction[] NamedActions
 		{
-			get {  return new TypedAction[] { new TypedAction(LinkActionName, this.GetType()) }; }
+			get {  return new INamedAction[] { new ImmutableNamedAction(LinkActionName, this) }; }
 		}
 	}
 }

@@ -1,8 +1,7 @@
 using System.Web;
 using ObjectWizard;
-using ThoughtWorks.CruiseControl.Core;
 using ThoughtWorks.CruiseControl.Core.Util;
-using ThoughtWorks.CruiseControl.WebDashboard.Config;
+using ThoughtWorks.CruiseControl.WebDashboard.Configuration;
 using ThoughtWorks.CruiseControl.WebDashboard.Dashboard.ActionDecorators;
 using ThoughtWorks.CruiseControl.WebDashboard.IO;
 using ThoughtWorks.CruiseControl.WebDashboard.MVC;
@@ -20,16 +19,17 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 			this.giverManager = giverAndRegistrar;
 		}
 
+		// This all needs breaking up a bit (to make it testable, apart from anything else)
 		public ObjectGiver SetupObjectGiverForRequest(HttpContext context)
 		{
 			ObjectGiver giver = (ObjectGiver) giverManager; // Yuch - put this in Object Wizard somewhere
-			giverManager.AddTypedObject(typeof(ObjectGiver), giverManager);
-			giverManager.AddTypedObject(typeof(HttpContext), context);
+			giverManager.AddTypedInstance(typeof(ObjectGiver), giverManager);
+			giverManager.AddTypedInstance(typeof(HttpContext), context);
 			HttpRequest request = context.Request;
-			giverManager.AddTypedObject(typeof(HttpRequest), request);
+			giverManager.AddTypedInstance(typeof(HttpRequest), request);
 
 			// Add functionality to object giver to handle this?
-			giverManager.AddTypedObject(typeof(IRequest), new AggregatedRequest(new NameValueCollectionRequest(request.Form), new NameValueCollectionRequest(request.QueryString)));
+			giverManager.AddTypedInstance(typeof(IRequest), new AggregatedRequest(new NameValueCollectionRequest(request.Form), new NameValueCollectionRequest(request.QueryString)));
 			
 			giverManager.SetImplementationType(typeof(IPathMapper), typeof(HttpPathMapper));
 			giverManager.SetImplementationType(typeof(IMultiTransformer), typeof(PathMappingMultiTransformer));
@@ -41,66 +41,49 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 //			giverAndRegistrar.SetDependencyImplementationForIdentifer(SaveNewProjectAction.ACTION_NAME, typeof(IPathMapper), typeof(PathMapperUsingHostName));
 //			giverAndRegistrar.SetDependencyImplementationForIdentifer(SaveEditProjectAction.ACTION_NAME, typeof(IPathMapper), typeof(PathMapperUsingHostName));
 
-			IConfigurationGetter configurationGetter = (IConfigurationGetter) giver.GiveObjectByType(typeof(IConfigurationGetter));
-			if (configurationGetter == null)
-			{
-				throw new CruiseControlException("Unable to instantiate configuration getter");
-			}
+//			IConfigurationGetter configurationGetter = (IConfigurationGetter) giver.GiveObjectByType(typeof(IConfigurationGetter));
+//			if (configurationGetter == null)
+//			{
+//				throw new CruiseControlException("Unable to instantiate configuration getter");
+//			}
+
+			giverManager.SetImplementationType(typeof(IPluginConfiguration), typeof(PluginConfigurationLoader));
+			IPluginConfiguration config = (IPluginConfiguration) giver.GiveObjectByType(typeof(IPluginConfiguration));
 
 			// ToDo - Refactor these plugin sections
 
-			foreach (IPluginSpecification pluginSpecification in (IPluginSpecification[]) configurationGetter.GetConfigFromSection("CCNet/farmPlugins"))
+			foreach (IPlugin plugin in config.FarmPlugins)
 			{
-				IPlugin plugin = giver.GiveObjectByType(pluginSpecification.Type) as IPlugin;
-				if (plugin == null)
+				foreach (INamedAction action in plugin.NamedActions)
 				{
-					throw new CruiseControlException(pluginSpecification.TypeName + " is not a IPlugin");
-				}
-				foreach (TypedAction action in plugin.Actions)
-				{
-					giverManager.CreateImplementationMapping(action.ActionName, action.ActionType)
+					giverManager.CreateInstanceMapping(action.ActionName, action.Action)
 						.Decorate(typeof(SiteTemplateActionDecorator)).Decorate(typeof(CruiseActionProxyAction)).Decorate(typeof(ExceptionCatchingActionProxy));
 				}
 			}
 
-			foreach (IPluginSpecification pluginSpecification in (IPluginSpecification[]) configurationGetter.GetConfigFromSection("CCNet/serverPlugins"))
+			foreach (IPlugin plugin in config.ServerPlugins)
 			{
-				IPlugin plugin = giver.GiveObjectByType(pluginSpecification.Type) as IPlugin;
-				if (plugin == null)
+				foreach (INamedAction action in plugin.NamedActions)
 				{
-					throw new CruiseControlException(pluginSpecification.TypeName + " is not a IPlugin");
-				}
-				foreach (TypedAction action in plugin.Actions)
-				{
-					giverManager.CreateImplementationMapping(action.ActionName, action.ActionType)
+					giverManager.CreateInstanceMapping(action.ActionName, action.Action)
 						.Decorate(typeof(ServerCheckingProxyAction)).Decorate(typeof(SiteTemplateActionDecorator)).Decorate(typeof(CruiseActionProxyAction)).Decorate(typeof(ExceptionCatchingActionProxy));
 				}
 			}
 
-			foreach (IPluginSpecification pluginSpecification in (IPluginSpecification[]) configurationGetter.GetConfigFromSection("CCNet/projectPlugins"))
+			foreach (IPlugin plugin in config.ProjectPlugins)
 			{
-				IPlugin plugin = giver.GiveObjectByType(pluginSpecification.Type) as IPlugin;
-				if (plugin == null)
+				foreach (INamedAction action in plugin.NamedActions)
 				{
-					throw new CruiseControlException(pluginSpecification.TypeName + " is not a IPlugin");
-				}
-				foreach (TypedAction action in plugin.Actions)
-				{
-					giverManager.CreateImplementationMapping(action.ActionName, action.ActionType)
+					giverManager.CreateInstanceMapping(action.ActionName, action.Action)
 						.Decorate(typeof(ServerCheckingProxyAction)).Decorate(typeof(ProjectCheckingProxyAction)).Decorate(typeof(SiteTemplateActionDecorator)).Decorate(typeof(CruiseActionProxyAction)).Decorate(typeof(ExceptionCatchingActionProxy));
 				}
 			}
 
-			foreach (IPluginSpecification pluginSpecification in (IPluginSpecification[]) configurationGetter.GetConfigFromSection("CCNet/buildPlugins"))
+			foreach (IPlugin plugin in config.BuildPlugins)
 			{
-				IPlugin plugin = giver.GiveObjectByType(pluginSpecification.Type) as IPlugin;
-				if (plugin == null)
+				foreach (INamedAction action in plugin.NamedActions)
 				{
-					throw new CruiseControlException(pluginSpecification.TypeName + " is not a IPlugin");
-				}
-				foreach (TypedAction action in plugin.Actions)
-				{
-					giverManager.CreateImplementationMapping(action.ActionName,action.ActionType)
+					giverManager.CreateInstanceMapping(action.ActionName,action.Action)
 						.Decorate(typeof(ServerCheckingProxyAction)).Decorate(typeof(BuildCheckingProxyAction)).Decorate(typeof(ProjectCheckingProxyAction)).Decorate(typeof(SiteTemplateActionDecorator)).Decorate(typeof(CruiseActionProxyAction)).Decorate(typeof(ExceptionCatchingActionProxy));
 				}
 			}
