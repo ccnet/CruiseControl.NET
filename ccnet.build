@@ -286,7 +286,7 @@
 		<ifnot propertyexists="label-to-apply">
 			<fail message="label-to-apply property not set, so can't create labelled distribution files" />
 		</ifnot>
-		<property name="build.number" value="$label-to-apply" />
+		<property name="build.number" value="${label-to-apply}" />
 	
 		<call target="createAssemblyInfo" />
 		<call target="all" />
