@@ -62,6 +62,21 @@
 			<li><b>linkText</b> is the text that will appear in the toolbar as a link to your plugin.</li>
 			<li><b>linkUrl</b> is the location of your plugin, relative to the CCNet Web App location.</li>
 		</ul>
-
+		<h2>Server Log Settings</h2>
+		<p>The configuration of the server log settings is also done in the webapp.config file as shown below:</p>
+		<pre>
+	&lt;appSettings>
+		&lt;add key="ServerLogFilePath" value="ccnet.log" />
+		&lt;add key="ServerLogFileLines" value="40" />
+		.
+		.
+		.
+	&lt;/appSettings>
+		</pre>
+		<p>where:</p>
+		<ul>
+			<li><b>ServerLogFilePath</b> is the path to the CCNet server log, (alternativly this setting could be used to display any text file).</li>
+			<li><b>ServerLogFileLines</b> is the number of lines of the log file to to display on the web page, if this value is omitted the default is 80.</li>
+		</ul>
 	</body>
 </html>
