@@ -464,11 +464,6 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "label\test\DefaultLabellerTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
                     RelPath = "Log\ServerLogFileReader.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
