@@ -45,13 +45,13 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test
 			DateTime from = new DateTime(2001, 1, 21, 20, 0, 0);
 			ProcessInfo actualProcess = cvs.CreateHistoryProcessInfo(from, new DateTime());
 
-			string expected = string.Format(@"-q log -N ""-d>{0}""", cvs.FormatCommandDate(from));
+			string expected = string.Format(@"-q log -Nb ""-d>{0}""", cvs.FormatCommandDate(from));
 			string actual = actualProcess.Arguments;
 			Assert.AreEqual(expected, actual);
 		}
 
 		[Test]
-		public void HistoryArgs()
+		public void HistoryArgsWithBranch()
 		{
 			DateTime from = new DateTime(2001, 1, 21, 20, 0, 0);
 
@@ -70,7 +70,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test
 			DateTime from = new DateTime(2001, 1, 21, 20, 0, 0);
 			ProcessInfo actualProcess = cvs.CreateHistoryProcessInfo(from, new DateTime());
 
-			string expected = string.Format(@"-q log -N ""-d>{0}""", cvs.FormatCommandDate(from));
+			string expected = string.Format(@"-q log -Nb ""-d>{0}""", cvs.FormatCommandDate(from));
 			string actual = actualProcess.Arguments;
 			Assert.AreEqual(expected, actual);
 		}

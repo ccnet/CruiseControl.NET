@@ -8,8 +8,9 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 	[ReflectorType("cvs")]
 	public class Cvs : ProcessSourceControl
 	{
-		// cvs [-d :ext:mycvsserver:/cvsroot/myrepo] -q log -N "-d>2004-12-24 12:00:00 'GMT'" -r my_branch
-		public const string HISTORY_COMMAND_FORMAT = @"{0}-q log -N ""-d>{1}""{2}";		// do not show tags
+		// cvs [-d :ext:mycvsserver:/cvsroot/myrepo] -q log -N "-d>2004-12-24 12:00:00 'GMT'" -r my_branch (with branch)
+		// cvs [-d :ext:mycvsserver:/cvsroot/myrepo] -q log -Nb "-d>2004-12-24 12:00:00 'GMT'" (without branch)
+		public const string HISTORY_COMMAND_FORMAT = @"{0}-q log -N{3} ""-d>{1}""{2}";		// -N means 'do not show tags'
 
 		// use -C to force get clean copy? should reset tags?
 		public const string GET_SOURCE_COMMAND_FORMAT = @"-q update -d -P -C";	// build directories, prune empty directories, get clean copy
@@ -110,7 +111,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			// include that for some harmony with the vss version
 			string cvsroot = (CvsRoot == null) ? String.Empty : "-d " + CvsRoot + " ";
 			string branch = (Branch == null) ? String.Empty : " -r" + Branch;
-			string args = string.Format(HISTORY_COMMAND_FORMAT, cvsroot, FormatCommandDate(from), branch);
+			string args = string.Format(HISTORY_COMMAND_FORMAT, cvsroot, FormatCommandDate(from), branch, (branch == String.Empty) ? "b" : "");
             if (RestrictLogins != null) 
             {
                 foreach (string login in RestrictLogins.Split(',')) {
