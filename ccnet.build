@@ -66,7 +66,6 @@
 		<copy file="${src.dir}\web\test\ccnet.web.dll.config" todir="${build.dir}"/>
 		<copy file="${src.dir}\console\app.config" tofile="${build.dir}\${console.exe}.config" verbose="${verbosity}"/>
 		<copy file="${src.dir}\service\app.config" tofile="${build.dir}\${service.exe}.config" verbose="${verbosity}"/>
-		<copy file="${src.dir}\CCTray\app.config" tofile="${build.dir}\${cctray.exe}.config" verbose="${verbosity}"/>
 
 		<copy todir="${build.dir}\xsl" verbose="${verbosity}">
 			<fileset basedir="${src.dir}\core\publishers\xsl">
