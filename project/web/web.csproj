@@ -140,10 +140,30 @@
                     HintPath = "..\..\lib\nunit.framework.dll"
                     Private = "True"
                 />
+                <Reference
+                    Name = "nmock"
+                    AssemblyName = "nmock"
+                    HintPath = "..\..\lib\nmock.dll"
+                />
             </References>
         </Build>
         <Files>
             <Include>
+                <File
+                    RelPath = "Coverage.aspx"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "Coverage.aspx.cs"
+                    DependentUpon = "Coverage.aspx"
+                    SubType = "ASPXCodeBehind"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Coverage.aspx.resx"
+                    DependentUpon = "Coverage.aspx.cs"
+                    BuildAction = "EmbeddedResource"
+                />
                 <File
                     RelPath = "cruisecontrol.css"
                     BuildAction = "Content"
@@ -209,12 +229,32 @@
                     BuildAction = "EmbeddedResource"
                 />
                 <File
+                    RelPath = "IPageLoader.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "ITransformer.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "LogFileLister.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
                     RelPath = "LogStatistics.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "LogTransformer.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "PageTransformer.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -399,6 +439,16 @@
                 />
                 <File
                     RelPath = "test\LogStatisticsTest.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "test\LogTransformerTest.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "test\PageTransformerTest.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

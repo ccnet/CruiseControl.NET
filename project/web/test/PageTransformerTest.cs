@@ -8,7 +8,7 @@ using ThoughtWorks.CruiseControl.Core.Util;
 namespace ThoughtWorks.CruiseControl.Web.Test
 {
 	[TestFixture]
-	public class DefaultTransformedPageTest : CustomAssertion
+	public class PageTransformerTest : CustomAssertion
 	{
 		private IMock _transformer;
 		[SetUp]
