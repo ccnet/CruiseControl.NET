@@ -13,7 +13,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 	{
 		//stcmd hist -nologo -x -is -filter IO -p "userid:password@host:port/project/path" "files"		
 		internal readonly static string HISTORY_COMMAND_FORMAT = "hist -nologo -x -is -filter IO -p \"{0}:{1}@{2}:{3}/{4}/{5}\" \"*\"";
-//		internal readonly static string DATE_FORMAT = "MM/dd/yyyy hh:mm:ss tt";
+		internal readonly static string GET_SOURCE_COMMAND_FORMAT = "co -nologo -x -is -q -f NCO -p \"{0}:{1}@{2}:{3}/{4}/{5}\" \"*\"";
 		internal CultureInfo Culture = CultureInfo.CurrentCulture;
 
 		private string _executable;		
@@ -23,7 +23,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 		private int    _port;
 		private string _project;
 		private string _path;
-
+		private bool _autoGetSource;
 
 		public StarTeam(): base(new StarTeamHistoryParser())
 		{
@@ -31,6 +31,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			_host = "127.0.0.1";
 			_port = 49201;
 			_path = String.Empty;
+			_autoGetSource = false;
 		}
 
 		[ReflectorProperty("executable")]
@@ -82,6 +83,13 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			set { _path = value; }
 		}
 
+		[ReflectorProperty("autoGetSource", Required=false)]
+		public bool AutoGetSource
+		{
+			get { return _autoGetSource; }
+			set { _autoGetSource = value; }
+		}
+
 		public ProcessInfo CreateHistoryProcessInfo(DateTime from, DateTime to)
 		{
 			string args = BuildHistoryProcessArgs(from, to);
@@ -97,22 +105,43 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 		{
 		}
 
+		public override void GetSource(IIntegrationResult result)
+		{
+			if (AutoGetSource)
+			{
+				string args = GetSourceProcessArgs();
+				ProcessInfo info = new ProcessInfo(Executable, args);
+				Execute(info);
+			}
+		}
+
 		internal string FormatCommandDate(DateTime date)
 		{
 			return date.ToString(Culture.DateTimeFormat);
-//			return date.ToString(DATE_FORMAT);
 		}
 
 		internal string BuildHistoryProcessArgs(DateTime from, DateTime to)
 		{			
 			return string.Format(
-			HISTORY_COMMAND_FORMAT,
-			Username,
-			Password,
-			Host,
-			Port,
-			Project,
-			Path);
+				HISTORY_COMMAND_FORMAT,
+				Username,
+				Password,
+				Host,
+				Port,
+				Project,
+				Path);
+		}
+
+		internal string GetSourceProcessArgs()
+		{			
+			return string.Format(
+				GET_SOURCE_COMMAND_FORMAT,
+				Username,
+				Password,
+				Host,
+				Port,
+				Project,
+				Path);
 		}
 	}
 }
