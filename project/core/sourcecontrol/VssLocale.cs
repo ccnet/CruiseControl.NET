@@ -2,7 +2,6 @@ using System;
 using System.Globalization;
 using System.Resources;
 using ThoughtWorks.CruiseControl.Core.Sourcecontrol;
-using ThoughtWorks.CruiseControl.Core.Util;
 
 namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 {
@@ -102,20 +101,15 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 		public string FormatCommandDate(DateTime date)
 		{
 			DateTimeFormatInfo info = CreateDateTimeInfo();
-			string timePattern = info.LongTimePattern;
-			bool containsAMPM = StringUtil.Contains(timePattern, "t");
-			if (StringUtil.Contains(timePattern, "h") || containsAMPM)
+			if (info.LongTimePattern.IndexOf('h') >= 0 || info.LongTimePattern.IndexOf('t') >= 0)
 			{
-				timePattern = timePattern.Replace("H", "h");
-				timePattern = timePattern.Replace("hh", "h");
-				if (! containsAMPM) 
-					timePattern += 't';
+				info.LongTimePattern = string.Format("h{0}mmt", info.TimeSeparator);
 			}
 			else
 			{
-				timePattern = timePattern.Replace("HH", "H");				
+				info.LongTimePattern = string.Format("H{0}mm", info.TimeSeparator);				
 			}
-			return string.Concat(date.ToString("d", info), ";", date.ToString(timePattern, info));
+			return string.Concat(date.ToString("d", info), ";", date.ToString(info.LongTimePattern, info));
 		}
 
 		public override string ToString()

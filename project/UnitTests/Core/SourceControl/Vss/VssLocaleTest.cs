@@ -13,12 +13,12 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.SourceControl.Vss
 		{
 			IVssLocale vssLocale = new VssLocale(CultureInfo.InvariantCulture);
 			DateTime date = new DateTime(2002, 2, 22, 20, 0, 0);
-			string expected = "02/22/2002;20:00:00";
+			string expected = "02/22/2002;20:00";
 			string actual = vssLocale.FormatCommandDate(date);
 			Assert.AreEqual(expected, actual);
 
 			date = new DateTime(2002, 2, 22, 12, 0, 0);
-			expected = "02/22/2002;12:00:00";
+			expected = "02/22/2002;12:00";
 			actual = vssLocale.FormatCommandDate(date);
 			Assert.AreEqual(expected, actual);
 		}
@@ -28,12 +28,12 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.SourceControl.Vss
 		{
 			IVssLocale vssLocale = new VssLocale(new CultureInfo("en-US", false));
 			DateTime date = new DateTime(2002, 2, 22, 20, 0, 0);
-			string expected = "2/22/2002;8:00:00 p";
+			string expected = "2/22/2002;8:00p";
 			string actual = vssLocale.FormatCommandDate(date);
 			Assert.AreEqual(expected, actual);
 
 			date = new DateTime(2002, 2, 22, 12, 0, 0);
-			expected = "2/22/2002;12:00:00 p";
+			expected = "2/22/2002;12:00p";
 			actual = vssLocale.FormatCommandDate(date);
 			Assert.AreEqual(expected, actual);
 		}
@@ -43,12 +43,12 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.SourceControl.Vss
 		{
 			IVssLocale vssLocale = new VssLocale(new CultureInfo("en-GB", false));
 			DateTime date = new DateTime(2002, 2, 22, 20, 0, 0, 34);
-			string expected = "22/02/2002;20:00:00";
+			string expected = "22/02/2002;20:00";
 			string actual = vssLocale.FormatCommandDate(date);
 			Assert.AreEqual(expected, actual);
 
 			date = new DateTime(2002, 2, 22, 12, 0, 0);
-			expected = "22/02/2002;12:00:00";
+			expected = "22/02/2002;12:00";
 			actual = vssLocale.FormatCommandDate(date);
 			Assert.AreEqual(expected, actual);
 		}
@@ -64,12 +64,12 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.SourceControl.Vss
 			IVssLocale vssLocale = new VssLocale(cultureInfo);
 			DateTime date = new DateTime(2002, 2, 22, 20, 0, 0, 34);
 
-			string expected = "22/02/2002;8:00:00 p";
+			string expected = "22/02/2002;8:00p";
 			string actual = vssLocale.FormatCommandDate(date);
 			Assert.AreEqual(expected, actual);
 
 			date = new DateTime(2002, 2, 22, 12, 0, 0);
-			expected = "22/02/2002;12:00:00 p";
+			expected = "22/02/2002;12:00p";
 			actual = vssLocale.FormatCommandDate(date);
 			Assert.AreEqual(expected, actual);
 		}
