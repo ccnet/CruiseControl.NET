@@ -15,6 +15,7 @@ namespace ThoughtWorks.CruiseControl.Core.Util.Test
 		[SetUp]
 		protected void SetUp()
 		{
+			TempFileUtil.CreateTempDir("FileChangedWatcherTest");
 			tempFile = TempFileUtil.CreateTempXmlFile("FileChangedWatcherTest", "foo.xml", "<derek><zoolander/></derek>");
 			monitor = new ManualResetEvent(false);
 		}
@@ -22,7 +23,7 @@ namespace ThoughtWorks.CruiseControl.Core.Util.Test
 		[TearDown]
 		protected void TearDown()
 		{
-			File.Delete(tempFile);
+			TempFileUtil.DeleteTempDir("FileChangedWatcherTest");
 		}
 
 		[Test]

@@ -112,5 +112,13 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 				writer.Write(text);
 			}
 		}
+
+		public static void DeleteTempFile(string path)
+		{
+			if (path != null && File.Exists(path))
+			{
+				File.Delete(path);
+			}
+		}
 	}
 }
