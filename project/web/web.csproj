@@ -340,6 +340,16 @@
                     BuildAction = "EmbeddedResource"
                 />
                 <File
+                    RelPath = "Global.asax"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "Global.asax.cs"
+                    DependentUpon = "Global.asax"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Web.config"
                     BuildAction = "Content"
                 />
