@@ -1,10 +1,12 @@
 using System;
-using System.Configuration;
 using System.Collections;
+using System.Configuration;
+
 using NUnit.Framework;
+
 using ThoughtWorks.CruiseControl.Core.Util;
 
-namespace ThoughtWorks.CruiseControl.Core.Test
+namespace ThoughtWorks.CruiseControl.Core.Config.Test
 {
 	[TestFixture]
 	public class XslFilesSectionHandler : CustomAssertion

@@ -4,10 +4,10 @@ using System.ComponentModel;
 using System.Web;
 using System.Web.SessionState;
 
-namespace WebService2 
+namespace ThoughtWorks.CruiseControl.WebService
 {
 	/// <summary>
-	/// Summary description for Global.
+	/// Global event handlers for the CruiseControl.NET web service application.
 	/// </summary>
 	public class Global : System.Web.HttpApplication
 	{

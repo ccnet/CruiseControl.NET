@@ -1,16 +1,17 @@
 using System;
-using System.Collections;
-using System.IO;
 using System.Xml;
+
 using Exortech.NetReflector;
+
 using NUnit.Framework;
-using ThoughtWorks.CruiseControl.Core.Util;
-using ThoughtWorks.CruiseControl.Core.Builder.test;
-using ThoughtWorks.CruiseControl.Core.Sourcecontrol;
+
+using ThoughtWorks.CruiseControl.Core.Builder.Test;
 using ThoughtWorks.CruiseControl.Core.Publishers.Test;
+using ThoughtWorks.CruiseControl.Core.Sourcecontrol;
+using ThoughtWorks.CruiseControl.Core.Util;
 using ThoughtWorks.CruiseControl.Remote;
 
-namespace ThoughtWorks.CruiseControl.Core.Configuration.test
+namespace ThoughtWorks.CruiseControl.Core.Config.Test
 {
 	[TestFixture]
 	public class ConfigurationLoaderTest : CustomAssertion
@@ -126,7 +127,7 @@ namespace ThoughtWorks.CruiseControl.Core.Configuration.test
 		}
 
 		[ReflectorType("customtestproject")]
-		class CustomTestProject : ProjectBase, IProject
+			class CustomTestProject : ProjectBase, IProject
 		{
 			public ProjectActivity CurrentActivity { get { return ProjectActivity.Building; } }
 			public IntegrationResult RunIntegration(BuildCondition buildCondition) { return null; }

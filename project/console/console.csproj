@@ -18,7 +18,7 @@
                 OutputType = "Exe"
                 PreBuildEvent = ""
                 PostBuildEvent = ""
-                RootNamespace = "tw.ccnet.console"
+                RootNamespace = "ThoughtWorks.CruiseControl.Console"
                 RunPostBuildEvent = "OnBuildSuccess"
                 StartupObject = ""
             >
@@ -130,17 +130,17 @@
                     RelPath = "ConsoleRunner.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
-                />             
+                />
                 <File
                     RelPath = "ITimeout.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
-                />             
+                />
                 <File
                     RelPath = "Timeout.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
-                />             
+                />
                 <File
                     RelPath = "test\ArgumentParserTest.cs"
                     SubType = "Code"

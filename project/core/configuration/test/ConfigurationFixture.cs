@@ -1,8 +1,9 @@
 using System;
 using System.Xml;
+
 using ThoughtWorks.CruiseControl.Core.Util;
 
-namespace ThoughtWorks.CruiseControl.Core.Configuration.test
+namespace ThoughtWorks.CruiseControl.Core.Config.Test
 {
 	public class ConfigurationFixture
 	{

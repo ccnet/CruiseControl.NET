@@ -3,7 +3,7 @@ using System.Xml.Serialization;
 
 using Drew.Agents;
 
-namespace ThoughtWorks.CruiseControl.Remote.monitor
+namespace ThoughtWorks.CruiseControl.Remote.Monitor
 {
 	/// <summary>
 	/// Encapsulates all user-settings for the CruiseControl.NET Monitor.  This class
@@ -27,6 +27,8 @@ namespace ThoughtWorks.CruiseControl.Remote.monitor
 
 		public ConnectionMethod ConnectionMethod;
 
+		public bool ShowExceptions = true;
+
 		public Settings()
 		{
 		}
@@ -38,6 +40,7 @@ namespace ThoughtWorks.CruiseControl.Remote.monitor
 			defaults.ProjectName = "ProjectName";
 
 			defaults.ConnectionMethod = ConnectionMethod.Remoting;
+			defaults.ShowExceptions = true;
 
 			defaults.Sounds = Sounds.CreateDefaultSettings();
 			defaults.NotificationBalloon = NotificationBalloon.CreateDefaultSettings();

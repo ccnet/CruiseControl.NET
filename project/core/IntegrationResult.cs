@@ -14,7 +14,7 @@ namespace ThoughtWorks.CruiseControl.Core
 	public class IntegrationResult
 	{
 		IntegrationStatus _status = IntegrationStatus.Unknown;
-		Modification[] _modifications;
+		Modification[] _modifications = new Modification[0];
 		IntegrationStatus _lastIntegrationStatus = IntegrationStatus.Unknown;
 		string _projectName;
 		string _label;
@@ -43,6 +43,9 @@ namespace ThoughtWorks.CruiseControl.Core
 			set { _projectName = value; }
 		}
 
+		/// <summary>
+		/// Gets and sets the status for this integration (e.g. Success, Failed, Exception, etc...)
+		/// </summary>
 		public IntegrationStatus Status
 		{
 			get { return _status; }
@@ -56,7 +59,7 @@ namespace ThoughtWorks.CruiseControl.Core
 		}
 
 		/// <summary>
-		/// The date and time at which the integration commenced.
+		/// Gets and sets the date and time at which the integration commenced.
 		/// </summary>
 		public DateTime StartTime
 		{
@@ -65,7 +68,7 @@ namespace ThoughtWorks.CruiseControl.Core
 		}
 
 		/// <summary>
-		/// The date and time at which the integration was completed.
+		/// Gets and sets the date and time at which the integration was completed.
 		/// </summary>
 		public DateTime EndTime
 		{
@@ -75,14 +78,7 @@ namespace ThoughtWorks.CruiseControl.Core
 
 		public virtual Modification[] Modifications
 		{
-			get
-			{
-				if (_modifications == null)
-				{
-					_modifications = new Modification[0];
-				}
-				return _modifications;
-			}
+			get { return _modifications; }
 			set { _modifications = value; }
 		}
 
@@ -115,21 +111,33 @@ namespace ThoughtWorks.CruiseControl.Core
 			}
 		}
 
+		/// <summary>
+		/// Gets a value indicating the success of this integration.
+		/// </summary>
 		public bool Succeeded
 		{
 			get { return Status == IntegrationStatus.Success; }
 		}
 
+		/// <summary>
+		/// Gets a value indicating whether this integration failed.
+		/// </summary>
 		public bool Failed
 		{
 			get { return Status == IntegrationStatus.Failure; }
 		}
 
+		/// <summary>
+		/// Gets a value indicating whether this integration fixed a previously broken build.
+		/// </summary>
 		public bool Fixed
 		{
 			get { return Succeeded && LastIntegrationStatus == IntegrationStatus.Failure; }
 		}
 
+		/// <summary>
+		/// Gets a value indicating whether this integration is either successful or in an unknown state.
+		/// </summary>
 		public bool Working
 		{
 			get { return Status == IntegrationStatus.Unknown || Succeeded; }
@@ -147,6 +155,10 @@ namespace ThoughtWorks.CruiseControl.Core
 
 		#region Properties not serialised into Xml
 
+		/// <summary>
+		/// Contains the output from the build process.  In the case of NAntBuilder, this is the 
+		/// redirected StdOut of the nant.exe process.
+		/// </summary>
 		[XmlIgnore]
 		public virtual string Output
 		{

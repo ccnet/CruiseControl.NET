@@ -1,5 +1,6 @@
 using System;
-using ThoughtWorks.CruiseControl.Core.Configuration;
+
+using ThoughtWorks.CruiseControl.Core.Config;
 using ThoughtWorks.CruiseControl.Remote;
 
 namespace ThoughtWorks.CruiseControl.Core

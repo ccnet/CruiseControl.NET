@@ -10,7 +10,7 @@ using System.Web.Services;
 
 using ThoughtWorks.CruiseControl.Remote;
 
-namespace CCNet.WebService
+namespace ThoughtWorks.CruiseControl.WebService
 {
 	public class CCNetManagementService : System.Web.Services.WebService
 	{

@@ -1,9 +1,8 @@
 using System;
-using System.IO;
 using System.Xml;
 using System.Xml.Schema;
 
-namespace ThoughtWorks.CruiseControl.Core.Configuration
+namespace ThoughtWorks.CruiseControl.Core.Config
 {
 	/// <summary>
 	/// Summary description for XmlValidatingLoader.

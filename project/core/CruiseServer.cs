@@ -1,11 +1,7 @@
 using System;
 using System.Collections;
-using System.Threading;
-using System.Runtime.Remoting;
-using System.Diagnostics;
-using ThoughtWorks.CruiseControl.Core.Configuration;
-using ThoughtWorks.CruiseControl.Core.Schedules;
-using ThoughtWorks.CruiseControl.Core.Util;
+
+using ThoughtWorks.CruiseControl.Core.Config;
 using ThoughtWorks.CruiseControl.Remote;
 
 namespace ThoughtWorks.CruiseControl.Core
@@ -17,7 +13,8 @@ namespace ThoughtWorks.CruiseControl.Core
 	{
 		private IConfigurationLoader _loader;
 		private IConfiguration _configuration;
-		private IList _projectIntegrators = new ArrayList();
+		// define as ArrayList, not IList, so we have .ToArray(...)
+		private ArrayList _projectIntegrators = new ArrayList();
 		private bool _stopped = false;
 
 		public CruiseServer(IConfigurationLoader loader)
@@ -45,10 +42,10 @@ namespace ThoughtWorks.CruiseControl.Core
 		public IntegrationResult RunIntegration(string projectName)
 		{
 			IProject project = GetProject(projectName);
+			
 			if (project == null) 
-			{
 				throw new CruiseControlException(String.Format("Cannot execute the specified project: {0}.  Project does not exist.", projectName));
-			}
+			
 			return project.RunIntegration(BuildCondition.ForceBuild);
 		}
 
@@ -66,9 +63,9 @@ namespace ThoughtWorks.CruiseControl.Core
 				_projectIntegrators.Add(new ProjectIntegrator(project.Schedule, project));
 		}
 
-		public IList ProjectIntegrators
+		public IProjectIntegrator[] ProjectIntegrators
 		{
-			get { return _projectIntegrators; }
+			get { return (IProjectIntegrator[])_projectIntegrators.ToArray(typeof(IProjectIntegrator)); }
 		}
 
 		public CruiseControlStatus Status
@@ -193,6 +190,7 @@ namespace ThoughtWorks.CruiseControl.Core
 
 		public ProjectActivity CurrentProjectActivity()
 		{
+			// TODO determine the appropriate project where multiples exist, rather than simply returning the first
 			foreach (IProject project in _configuration) 
 			{
 				return project.CurrentActivity;
@@ -200,6 +198,5 @@ namespace ThoughtWorks.CruiseControl.Core
 
 			return ProjectActivity.Unknown;
 		}
-
 	}
 }

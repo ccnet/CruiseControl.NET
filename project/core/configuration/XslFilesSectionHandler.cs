@@ -1,18 +1,15 @@
 using System;
-using System.Configuration;
 using System.Collections;
+using System.Configuration;
 using System.Xml;
-using System.IO;
-using System.Text;
 
-namespace ThoughtWorks.CruiseControl.Core
+namespace ThoughtWorks.CruiseControl.Core.Config
 {
 	public class XslFilesSectionHandler : IConfigurationSectionHandler
 	{
-		public object Create(object parent, object configContext, System.Xml.XmlNode section)
+		public object Create(object parent, object configContext, XmlNode section)
 		{
 			ArrayList files = new ArrayList();
-			
 
 			foreach (XmlNode node in section.ChildNodes) 
 			{
@@ -21,6 +18,7 @@ namespace ThoughtWorks.CruiseControl.Core
 					files.Add(node.Attributes["name"].Value);
 				}
 			}
+
 			return files;
 		}
 	}

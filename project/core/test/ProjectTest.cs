@@ -1,19 +1,21 @@
 using System;
 using System.Collections;
 using System.Diagnostics;
-using System.IO;
-using NUnit.Framework;
+
 using NMock;
 using NMock.Constraints;
-using ThoughtWorks.CruiseControl.Remote;
-using ThoughtWorks.CruiseControl.Core.Configuration;
-using ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test;
-using ThoughtWorks.CruiseControl.Core.Builder.test;
+
+using NUnit.Framework;
+
+using ThoughtWorks.CruiseControl.Core.Builder.Test;
+using ThoughtWorks.CruiseControl.Core.Config;
 using ThoughtWorks.CruiseControl.Core.Publishers;
 using ThoughtWorks.CruiseControl.Core.Publishers.Test;
 using ThoughtWorks.CruiseControl.Core.Schedules;
-using ThoughtWorks.CruiseControl.Core.Util;
+using ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test;
 using ThoughtWorks.CruiseControl.Core.State;
+using ThoughtWorks.CruiseControl.Core.Util;
+using ThoughtWorks.CruiseControl.Remote;
 
 namespace ThoughtWorks.CruiseControl.Core.Test
 {
@@ -156,7 +158,7 @@ namespace ThoughtWorks.CruiseControl.Core.Test
 
 			IntegrationResult originalLastResult = _project.LastIntegrationResult;
 
-			Configuration.Configuration configuration = new Configuration.Configuration();
+			Configuration configuration = new Configuration();
 			configuration.AddProject(_project);
 
 			IMock mockConfig = new DynamicMock(typeof(IConfigurationLoader));

@@ -58,20 +58,8 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 
 		public string BuildCommandArguments(DateTime from, DateTime to)
 		{
-			StringBuilder args = new StringBuilder();
-			args.Append("-s ");
-			if (Client!=null) 
-			{
-				args.Append("-c " + Client + " ");
-			}
-			if (Port!=null) 
-			{
-				args.Append("-p " + Port + " ");
-			}
-			if (User!=null)
-			{
-				args.Append("-u " + User + " ");
-			}
+			
+			StringBuilder args = new StringBuilder(buildCommonArguments());
 			args.Append("changes -s submitted ");
 			args.Append(View);
 			if (from==DateTime.MinValue) 
@@ -101,7 +89,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 					throw new CruiseControlException("Invalid changes list encountered");
 			}
 
-			string args = "-s describe -s " + changes;
+			string args = buildCommonArguments() + "describe -s " + changes;
 			return ProcessUtil.CreateProcess(Executable, args);
 		}
 
@@ -144,6 +132,25 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 		private string formatDate(DateTime date)
 		{
 			return date.ToString(COMMAND_DATE_FORMAT);
+		}
+		
+		private string buildCommonArguments() 
+		{
+			StringBuilder args = new StringBuilder();
+			args.Append("-s "); // for "scripting" mode
+			if (Client!=null) 
+			{
+				args.Append("-c " + Client + " ");
+			}
+			if (Port!=null) 
+			{
+				args.Append("-p " + Port + " ");
+			}
+			if (User!=null)
+			{
+				args.Append("-u " + User + " ");
+			}
+			return args.ToString();
 		}
 	}
 }

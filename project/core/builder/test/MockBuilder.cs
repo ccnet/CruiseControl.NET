@@ -1,8 +1,10 @@
 using System;
+
 using Exortech.NetReflector;
+
 using ThoughtWorks.CruiseControl.Remote;
 
-namespace ThoughtWorks.CruiseControl.Core.Builder.test
+namespace ThoughtWorks.CruiseControl.Core.Builder.Test
 {
 	[ReflectorType("mockbuildrunner")]
 	public class MockBuilder : IBuilder

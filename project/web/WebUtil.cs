@@ -4,6 +4,7 @@ using System.IO;
 using System.Web;
 
 using ThoughtWorks.CruiseControl.Core;
+using ThoughtWorks.CruiseControl.Core.Config;
 
 namespace ThoughtWorks.CruiseControl.Web
 {
@@ -47,7 +48,7 @@ namespace ThoughtWorks.CruiseControl.Web
 
 		public static DirectoryInfo GetLogDirectory(HttpContext context)
 		{
-			string dirName = ConfigurationSettings.AppSettings["logDir"];
+			string dirName = Configuration.LogDir;
 			DirectoryInfo logDirectory = new DirectoryInfo(dirName);
 			if (!logDirectory.Exists)
 			{

@@ -1,7 +1,6 @@
 using System;
-using System.Collections;
 
-namespace ThoughtWorks.CruiseControl.Core.Configuration
+namespace ThoughtWorks.CruiseControl.Core.Config
 {
 	public delegate void ConfigurationChangedHandler();
 

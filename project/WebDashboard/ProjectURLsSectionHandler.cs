@@ -1,11 +1,9 @@
 using System;
-using System.Configuration;
 using System.Collections;
+using System.Configuration;
 using System.Xml;
-using System.IO;
-using System.Text;
 
-namespace ThoughtWorks.CruiseControl.webdashboard
+namespace ThoughtWorks.CruiseControl.WebDashboard
 {
 	public class ProjectURLsSectionHandler : IConfigurationSectionHandler
 	{

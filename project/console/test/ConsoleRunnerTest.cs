@@ -1,11 +1,13 @@
-using NMock;
-using NUnit.Framework;
 using System;
 using System.Diagnostics;
-using ThoughtWorks.CruiseControl.Core;
+
+using NMock;
+
+using NUnit.Framework;
+
 using ThoughtWorks.CruiseControl.Core.Util;
 
-namespace ThoughtWorks.CruiseControl.Console.test
+namespace ThoughtWorks.CruiseControl.Console.Test
 {
 	[TestFixture]
 	public class ConsoleRunnerTest : CustomAssertion
@@ -44,8 +46,12 @@ namespace ThoughtWorks.CruiseControl.Console.test
 		[Test] // integration test
 		public void StartCruiseServerProject()
 		{
-			string xml = @"<cruisecontrol><workflow name=""test""><tasks /></workflow></cruisecontrol>";
+			// this sleep gives a previous test chance to delete the dir (if it's still around)
+			System.Threading.Thread.Sleep(500);
+
 			TempFileUtil.CreateTempDir("ConsoleRunnerTest");
+
+			string xml = @"<cruisecontrol><workflow name=""test""><tasks /></workflow></cruisecontrol>";
 			string configFile = TempFileUtil.CreateTempXmlFile("ConsoleRunnerTest", "myconfig.config", xml);
 
 			Mock mockTimeout = new DynamicMock(typeof(ITimeout));

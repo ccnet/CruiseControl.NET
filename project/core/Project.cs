@@ -164,6 +164,8 @@ namespace ThoughtWorks.CruiseControl.Core
 					PostBuild(results);
 			}
 
+			// TODO what happens when build causes other types of exceptions?  (i.e. not just CruiseControlException, but perhaps BuilderException)
+
 			// go to sleep
 			_currentActivity = ProjectActivity.Sleeping;
 

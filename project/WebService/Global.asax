@@ -1,1 +1,1 @@
-<%@ Application Codebehind="Global.asax.cs" Inherits="WebService2.Global" %>
+<%@ Application Codebehind="Global.asax.cs" Inherits="ThoughtWorks.CruiseControl.WebService.Global" %>

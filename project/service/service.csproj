@@ -18,7 +18,7 @@
                 OutputType = "WinExe"
                 PreBuildEvent = ""
                 PostBuildEvent = ""
-                RootNamespace = "tw.ccnet.service"
+                RootNamespace = "ThoughtWorks.CruiseControl.Service"
                 RunPostBuildEvent = "OnBuildSuccess"
                 StartupObject = ""
             >

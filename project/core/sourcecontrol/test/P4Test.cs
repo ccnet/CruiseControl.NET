@@ -120,6 +120,29 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test
 		}
 
 		[Test]
+		public void CreateGetDescribeProcessWithSpecifiedArgs() {
+			string xml = @"
+<sourceControl name=""p4"">
+  <executable>c:\bin\p4.exe</executable>
+  <view>//depot/myproject/...</view>
+  <client>myclient</client>
+  <user>me</user>
+  <port>anotherserver:2666</port>
+</sourceControl>
+";
+			string changes = "3327 3328 332";
+			
+			string expectedArgs = "-s -c myclient -p anotherserver:2666 -u me"
+				+ " describe -s " + changes;
+			
+			P4 p4 = CreateP4(xml);
+			Process process = p4.CreateDescribeProcess(changes);
+
+			AssertEquals("c:\\bin\\p4.exe", process.StartInfo.FileName);
+			AssertEquals(expectedArgs, process.StartInfo.Arguments);
+		}
+
+		[Test]
 		[ExpectedException(typeof(CruiseControlException))]
 		public void CreateGetDescribeProcessWithEvilCode()
 		{

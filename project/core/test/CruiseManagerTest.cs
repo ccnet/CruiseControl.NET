@@ -1,17 +1,13 @@
 using System;
 using System.Diagnostics;
-using System.IO;
-using System.Runtime.Remoting;
 using System.Threading;
 
-using NUnit.Framework;
 using NMock;
 
-using ThoughtWorks.CruiseControl.Core.Configuration;
+using NUnit.Framework;
+
 using ThoughtWorks.CruiseControl.Core.Util;
 using ThoughtWorks.CruiseControl.Remote;
-using ThoughtWorks.CruiseControl.Core.Schedules;
-using ThoughtWorks.CruiseControl.Core.Schedules.Test;
 
 namespace ThoughtWorks.CruiseControl.Core.Test
 {
@@ -60,13 +56,13 @@ namespace ThoughtWorks.CruiseControl.Core.Test
 		[Test]
 		public void GetSetConfiguration() 
 		{
-//			string fileName = CreateTestingCruiseControlConfigurationFile();
-//			CruiseManager manager = new CruiseManager(new CruiseServer(new ConfigurationLoader(fileName)));
-//            
-//			AssertEquals("<cruisecontrol></cruisecontrol>", manager.Configuration);
-//			string xml = SimpleBuildFile.Document.OuterXml;
-//			manager.Configuration = xml;
-//			AssertEquals(xml, manager.Configuration);
+			//			string fileName = CreateTestingCruiseControlConfigurationFile();
+			//			CruiseManager manager = new CruiseManager(new CruiseServer(new ConfigurationLoader(fileName)));
+			//            
+			//			AssertEquals("<cruisecontrol></cruisecontrol>", manager.Configuration);
+			//			string xml = SimpleBuildFile.Document.OuterXml;
+			//			manager.Configuration = xml;
+			//			AssertEquals(xml, manager.Configuration);
 		}
 
 		[Test]

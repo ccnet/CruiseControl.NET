@@ -18,7 +18,10 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 
 		public static void Log(IProject project, string message, CruiseControlException ex) 
 		{
-			LogUtil.Log(project, string.Format("{0}: {1}\n{2}", message, ex.Message, ex.InnerException));
+			if (ex.InnerException!=null)
+				LogUtil.Log(project, string.Format("{0}: {1}\n\tInner exception: {2}", message, ex.Message, ex.InnerException));
+			else
+				LogUtil.Log(project, string.Format("{0}: {1}", message, ex.Message));
 		}
 
 		public static void Log(string topic, string message)

@@ -21,13 +21,19 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 			return process;
 		}
 	
+		/// <summary>
+		/// Starts a process, and redirects its output.  The process runs asynchronously.
+		/// </summary>
+		/// <param name="process"></param>
+		/// <returns></returns>
 		public static TextReader ExecuteRedirected(Process process)
 		{
 			process.StartInfo.RedirectStandardOutput = true;
 			process.StartInfo.UseShellExecute = false;		
 			process.StartInfo.CreateNoWindow = true;
+			process.StartInfo.ErrorDialog = false;
 			process.Start();
-			return process.StandardOutput;			
+			return process.StandardOutput;
 		}
 		
 		public static TextReader GetTextReader(string path)

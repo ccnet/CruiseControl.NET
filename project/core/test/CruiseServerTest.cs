@@ -1,10 +1,11 @@
-using NMock;
-using NUnit.Framework;
 using System;
-using System.Collections;
 using System.Threading;
-using System.Xml;
-using ThoughtWorks.CruiseControl.Core.Configuration;
+
+using NMock;
+
+using NUnit.Framework;
+
+using ThoughtWorks.CruiseControl.Core.Config;
 using ThoughtWorks.CruiseControl.Core.Schedules;
 using ThoughtWorks.CruiseControl.Core.Util;
 
@@ -25,7 +26,7 @@ namespace ThoughtWorks.CruiseControl.Core.Test
 			_project1 = new MockProject("project1", new Schedule(1, Schedule.Infinite));
 			_project2 = new MockProject("project2", new Schedule(1, Schedule.Infinite));
 
-			_configuration = new Configuration.Configuration();
+			_configuration = new Configuration();
 			_configuration.AddProject(_project1);
 			_configuration.AddProject(_project2);
 
@@ -54,9 +55,9 @@ namespace ThoughtWorks.CruiseControl.Core.Test
 			AssertEquals(_project2, _cc.GetProject("project2"));
 
 			// verify that schedulers have been created
-			AssertEquals(2, _cc.ProjectIntegrators.Count);
-			AssertEquals(_project1, ((IProjectIntegrator)_cc.ProjectIntegrators[1]).Project);
-			AssertEquals(_project2, ((IProjectIntegrator)_cc.ProjectIntegrators[0]).Project);
+			AssertEquals(2, _cc.ProjectIntegrators.Length);
+			AssertEquals(_project1, _cc.ProjectIntegrators[1].Project);
+			AssertEquals(_project2, _cc.ProjectIntegrators[0].Project);
 		}
 
 		[Test]
@@ -84,16 +85,16 @@ namespace ThoughtWorks.CruiseControl.Core.Test
 			_cc.Start();
 
 			// verify configuration projects and schedulers have been loaded
-			AssertEquals(2, _cc.ProjectIntegrators.Count);
-			AssertEquals(_project1, ((IProjectIntegrator)_cc.ProjectIntegrators[1]).Project);
-			AssertEquals(_project2, ((IProjectIntegrator)_cc.ProjectIntegrators[0]).Project);
+			AssertEquals(2, _cc.ProjectIntegrators.Length);
+			AssertEquals(_project1, _cc.ProjectIntegrators[1].Project);
+			AssertEquals(_project2, _cc.ProjectIntegrators[0].Project);
 
 			// create new configuration - change schedule for project1, remove project2 and add project3
 			Schedule newSchedule = new Schedule();
 			_project1.Schedule = newSchedule;
 			MockProject project3 = new MockProject("project3", new Schedule(1, 1));
 
-			IConfiguration newConfig = new Configuration.Configuration();
+			IConfiguration newConfig = new Configuration();
 			newConfig.AddProject(_project1);
 			newConfig.AddProject(project3);
 			config.Configuration = newConfig;
@@ -105,13 +106,14 @@ namespace ThoughtWorks.CruiseControl.Core.Test
 			AssertEquals(project3, _cc.GetProject(project3.Name));
 
 			// verify configuration schedulers have been updated
-			AssertEquals(2, _cc.ProjectIntegrators.Count);
-			AssertEquals(_project1, ((ProjectIntegrator)_cc.ProjectIntegrators[0]).Project);
-			AssertEquals(newSchedule, ((ProjectIntegrator)_cc.ProjectIntegrators[0]).Schedule);
-			AssertEquals(ProjectIntegratorState.Running, ((ProjectIntegrator)_cc.ProjectIntegrators[0]).State);
-			AssertEquals(project3, ((ProjectIntegrator)_cc.ProjectIntegrators[1]).Project);
-			// project3 is automatically started
-			AssertEquals(ProjectIntegratorState.Running, ((ProjectIntegrator)_cc.ProjectIntegrators[1]).State);
+			AssertEquals(2, _cc.ProjectIntegrators.Length);
+			
+			AssertEquals(_project1, _cc.ProjectIntegrators[0].Project);
+			AssertEquals(newSchedule, _cc.ProjectIntegrators[0].Schedule);
+			AssertEquals(ProjectIntegratorState.Running, _cc.ProjectIntegrators[0].State);
+			
+			AssertEquals(project3, _cc.ProjectIntegrators[1].Project);
+			AssertEquals("project3 should be automatically started", ProjectIntegratorState.Running, _cc.ProjectIntegrators[1].State);
 
 			_cc.Stop();
 		}
@@ -180,30 +182,30 @@ namespace ThoughtWorks.CruiseControl.Core.Test
 
 			_cc.Start();
 			Thread.Sleep(50);
-			AssertEquals(2, _cc.ProjectIntegrators.Count);
-			AssertEquals(ProjectIntegratorState.Running, ((IProjectIntegrator)_cc.ProjectIntegrators[0]).State);
-			AssertEquals(ProjectIntegratorState.Running, ((IProjectIntegrator)_cc.ProjectIntegrators[1]).State);
+			AssertEquals(2, _cc.ProjectIntegrators.Length);
+			AssertEquals(ProjectIntegratorState.Running, _cc.ProjectIntegrators[0].State);
+			AssertEquals(ProjectIntegratorState.Running, _cc.ProjectIntegrators[1].State);
 
 			// try invoking start again
 			_cc.Start();
 			Thread.Sleep(1);
-			AssertEquals(2, _cc.ProjectIntegrators.Count);
-			AssertEquals(ProjectIntegratorState.Running, ((IProjectIntegrator)_cc.ProjectIntegrators[0]).State);
-			AssertEquals(ProjectIntegratorState.Running, ((IProjectIntegrator)_cc.ProjectIntegrators[1]).State);
+			AssertEquals(2, _cc.ProjectIntegrators.Length);
+			AssertEquals(ProjectIntegratorState.Running, _cc.ProjectIntegrators[0].State);
+			AssertEquals(ProjectIntegratorState.Running, _cc.ProjectIntegrators[1].State);
 
 			_cc.Stop();
 
 			_cc.WaitForExit();
 			Thread.Sleep(1);
 
-			AssertEquals(ProjectIntegratorState.Stopped, ((IProjectIntegrator)_cc.ProjectIntegrators[0]).State);
-			AssertEquals(ProjectIntegratorState.Stopped, ((IProjectIntegrator)_cc.ProjectIntegrators[1]).State);
+			AssertEquals(ProjectIntegratorState.Stopped, _cc.ProjectIntegrators[0].State);
+			AssertEquals(ProjectIntegratorState.Stopped, _cc.ProjectIntegrators[1].State);
 
 			// try invoking stop again
 			_cc.Stop();
 			Thread.Sleep(1);
-			AssertEquals(ProjectIntegratorState.Stopped, ((IProjectIntegrator)_cc.ProjectIntegrators[0]).State);
-			AssertEquals(ProjectIntegratorState.Stopped, ((IProjectIntegrator)_cc.ProjectIntegrators[1]).State);
+			AssertEquals(ProjectIntegratorState.Stopped, _cc.ProjectIntegrators[0].State);
+			AssertEquals(ProjectIntegratorState.Stopped, _cc.ProjectIntegrators[1].State);
 		}
 
 		[Test]
@@ -235,7 +237,7 @@ namespace ThoughtWorks.CruiseControl.Core.Test
 			mockProject.CurrentActivity = ThoughtWorks.CruiseControl.Remote.ProjectActivity.Building; // already building
 			AssertEquals(0, schedule.ForceBuild_CallCount);
 
-			_configuration = new Configuration.Configuration();
+			_configuration = new Configuration();
 			_configuration.AddProject(mockProject);
 			_mockConfig.ExpectAndReturn("Load", _configuration);
 
@@ -253,12 +255,12 @@ namespace ThoughtWorks.CruiseControl.Core.Test
 			_cc = new CruiseServer((IConfigurationLoader)_mockConfig.MockInstance);
 			_cc.Start();
 			Thread.Sleep(0);
-			AssertEquals(ProjectIntegratorState.Running, ((IProjectIntegrator)_cc.ProjectIntegrators[0]).State);
-			AssertEquals(ProjectIntegratorState.Running, ((IProjectIntegrator)_cc.ProjectIntegrators[1]).State);
+			AssertEquals(ProjectIntegratorState.Running, _cc.ProjectIntegrators[0].State);
+			AssertEquals(ProjectIntegratorState.Running, _cc.ProjectIntegrators[1].State);
 
 			_cc.Abort();
-			AssertEquals(ProjectIntegratorState.Stopped, ((IProjectIntegrator)_cc.ProjectIntegrators[0]).State);
-			AssertEquals(ProjectIntegratorState.Stopped, ((IProjectIntegrator)_cc.ProjectIntegrators[1]).State);
+			AssertEquals(ProjectIntegratorState.Stopped, _cc.ProjectIntegrators[0].State);
+			AssertEquals(ProjectIntegratorState.Stopped, _cc.ProjectIntegrators[1].State);
 		}
 
 		//		public void TestStopSleepingProject()

@@ -11,5 +11,7 @@ Animate icon to display server activity
 - building
 - sleeping
 Modify StatusMonitor to raise events when server activity changes
+Poll after ForceBuild to update to new state
+Estimate completion percentage of build based upon previous builds
 
 put link http://www.microsoft.com/msagent/downloads/user.asp in docs somewhere

@@ -2,21 +2,23 @@ using System;
 using System.IO;
 using System.Windows.Forms;
 
-namespace ThoughtWorks.CruiseControl.Remote.monitor
+namespace ThoughtWorks.CruiseControl.Remote.Monitor
 {
 	/// <summary>
 	/// Displays user settings for the CruiseControl.NET monitor, allowing
 	/// changes to be made.
 	/// </summary>
-	public class SettingsForm : Drew.Controls.WobblyForm
+	public class SettingsForm : Form
 	{
 		#region Gui control declarations
 
-		Button btnOkay;
-		Label lblHeading;
 		Label lblSeconds;
 		Label lblPollInterval;
+		Label lblServerUrl;
+		Label lblProjectName;
+		Label lblAgent;
 		GroupBox grpAudio;
+		GroupBox grpAgents;
 		CheckBox chkAudioSuccessful;
 		CheckBox chkAudioBroken;
 		CheckBox chkAudioFixed;
@@ -25,39 +27,38 @@ namespace ThoughtWorks.CruiseControl.Remote.monitor
 		TextBox txtAudioFileFixed;
 		TextBox txtAudioFileBroken;
 		TextBox txtAudioFileFailing;
+		TextBox txtProjectName;
+		TextBox txtServerUrl;
 		Button btnFindAudioSuccess;
 		Button btnFindAudioFixed;
 		Button btnFindAudioBroken;
 		Button btnFindAudioFailing;
-		
-		NumericUpDown numPollInterval;
-		TextBox txtServerUrl;
-		Label lblServerUrl;
-		GroupBox grpAgents;
-		OpenFileDialog dlgOpenFile;
-		ComboBox ddlAgent;
-		Label lblAgent;
+		Button btnPlayBroken;
+		Button btnPlayFailing;
+		Button btnPlayFixed;
+		Button btnPlaySuccess;
+		Button btnOkay;
+		Button btnCancel;
 		CheckBox chkShowBalloons;
 		CheckBox chkShowAgent;
+		CheckBox chkShowExceptions;
 		CheckBox chkHideAgent;
-		Button btnCancel;
-
-		private System.Windows.Forms.Button btnPlayBroken;
-		private System.Windows.Forms.Button btnPlayFailing;
-		private System.Windows.Forms.Button btnPlayFixed;
-		private System.Windows.Forms.Button btnPlaySuccess;
+		ComboBox ddlAgent;
+		NumericUpDown numPollInterval;
+		OpenFileDialog dlgOpenFile;
 
 		#endregion
-		private System.Windows.Forms.TextBox txtProjectName;
-		private System.Windows.Forms.Label lblProjectName;
 
 		Settings _settings;
+		StatusMonitor _statusMonitor;
 
 		#region Constructors
 
-		public SettingsForm(Settings settings)
+		public SettingsForm(Settings settings, StatusMonitor statusMonitor)
 		{
 			_settings = settings;
+			_statusMonitor = statusMonitor;
+
 			InitializeComponent();
 			ExtraInitialisation();
 		}
@@ -85,16 +86,16 @@ namespace ThoughtWorks.CruiseControl.Remote.monitor
 		/// <summary>
 		/// Clean up any resources being used.
 		/// </summary>
-		protected override void Dispose( bool disposing )
+		protected override void Dispose(bool disposing)
 		{
-			if( disposing )
+			if (disposing)
 			{
-				if(components != null)
+				if (components != null)
 				{
 					components.Dispose();
 				}
 			}
-			base.Dispose( disposing );
+			base.Dispose(disposing);
 		}
 
 		/// <summary>
@@ -105,7 +106,6 @@ namespace ThoughtWorks.CruiseControl.Remote.monitor
 		{
 			System.Resources.ResourceManager resources = new System.Resources.ResourceManager(typeof(SettingsForm));
 			this.btnOkay = new System.Windows.Forms.Button();
-			this.lblHeading = new System.Windows.Forms.Label();
 			this.numPollInterval = new System.Windows.Forms.NumericUpDown();
 			this.lblSeconds = new System.Windows.Forms.Label();
 			this.lblPollInterval = new System.Windows.Forms.Label();
@@ -138,6 +138,7 @@ namespace ThoughtWorks.CruiseControl.Remote.monitor
 			this.btnCancel = new System.Windows.Forms.Button();
 			this.txtProjectName = new System.Windows.Forms.TextBox();
 			this.lblProjectName = new System.Windows.Forms.Label();
+			this.chkShowExceptions = new System.Windows.Forms.CheckBox();
 			((System.ComponentModel.ISupportInitialize)(this.numPollInterval)).BeginInit();
 			this.grpAudio.SuspendLayout();
 			this.grpAgents.SuspendLayout();
@@ -145,29 +146,22 @@ namespace ThoughtWorks.CruiseControl.Remote.monitor
 			// 
 			// btnOkay
 			// 
-			this.btnOkay.BackColor = System.Drawing.Color.LightSteelBlue;
-			this.btnOkay.Location = new System.Drawing.Point(103, 416);
+			this.btnOkay.BackColor = System.Drawing.SystemColors.Control;
+			this.btnOkay.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+			this.btnOkay.Font = new System.Drawing.Font("Verdana", 8.25F);
+			this.btnOkay.Location = new System.Drawing.Point(116, 392);
 			this.btnOkay.Name = "btnOkay";
 			this.btnOkay.TabIndex = 0;
 			this.btnOkay.Text = "&OK";
 			this.btnOkay.Click += new System.EventHandler(this.btnOkay_Click);
 			// 
-			// lblHeading
-			// 
-			this.lblHeading.BackColor = System.Drawing.Color.Transparent;
-			this.lblHeading.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((System.Byte)(0)));
-			this.lblHeading.Location = new System.Drawing.Point(51, 24);
-			this.lblHeading.Name = "lblHeading";
-			this.lblHeading.Size = new System.Drawing.Size(258, 24);
-			this.lblHeading.TabIndex = 1;
-			this.lblHeading.Text = "CruiseControl.NET Monitor Settings";
-			this.lblHeading.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-			// 
 			// numPollInterval
 			// 
-			this.numPollInterval.Location = new System.Drawing.Point(88, 64);
+			this.numPollInterval.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+			this.numPollInterval.Font = new System.Drawing.Font("Verdana", 8.25F);
+			this.numPollInterval.Location = new System.Drawing.Point(96, 16);
 			this.numPollInterval.Name = "numPollInterval";
-			this.numPollInterval.Size = new System.Drawing.Size(56, 20);
+			this.numPollInterval.Size = new System.Drawing.Size(56, 21);
 			this.numPollInterval.TabIndex = 2;
 			this.numPollInterval.Value = new System.Decimal(new int[] {
 																		  10,
@@ -178,9 +172,10 @@ namespace ThoughtWorks.CruiseControl.Remote.monitor
 			// lblSeconds
 			// 
 			this.lblSeconds.BackColor = System.Drawing.Color.Transparent;
-			this.lblSeconds.Location = new System.Drawing.Point(152, 64);
+			this.lblSeconds.Font = new System.Drawing.Font("Verdana", 8.25F);
+			this.lblSeconds.Location = new System.Drawing.Point(160, 16);
 			this.lblSeconds.Name = "lblSeconds";
-			this.lblSeconds.Size = new System.Drawing.Size(48, 20);
+			this.lblSeconds.Size = new System.Drawing.Size(64, 20);
 			this.lblSeconds.TabIndex = 3;
 			this.lblSeconds.Text = "seconds";
 			this.lblSeconds.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -188,9 +183,10 @@ namespace ThoughtWorks.CruiseControl.Remote.monitor
 			// lblPollInterval
 			// 
 			this.lblPollInterval.BackColor = System.Drawing.Color.Transparent;
-			this.lblPollInterval.Location = new System.Drawing.Point(16, 64);
+			this.lblPollInterval.Font = new System.Drawing.Font("Verdana", 8.25F);
+			this.lblPollInterval.Location = new System.Drawing.Point(8, 16);
 			this.lblPollInterval.Name = "lblPollInterval";
-			this.lblPollInterval.Size = new System.Drawing.Size(56, 20);
+			this.lblPollInterval.Size = new System.Drawing.Size(64, 20);
 			this.lblPollInterval.TabIndex = 3;
 			this.lblPollInterval.Text = "Poll every";
 			this.lblPollInterval.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -214,18 +210,20 @@ namespace ThoughtWorks.CruiseControl.Remote.monitor
 			this.grpAudio.Controls.Add(this.btnPlayFailing);
 			this.grpAudio.Controls.Add(this.btnPlayFixed);
 			this.grpAudio.Controls.Add(this.btnPlaySuccess);
-			this.grpAudio.Location = new System.Drawing.Point(16, 280);
+			this.grpAudio.Font = new System.Drawing.Font("Verdana", 8.25F);
+			this.grpAudio.Location = new System.Drawing.Point(8, 256);
 			this.grpAudio.Name = "grpAudio";
-			this.grpAudio.Size = new System.Drawing.Size(328, 128);
+			this.grpAudio.Size = new System.Drawing.Size(368, 128);
 			this.grpAudio.TabIndex = 4;
 			this.grpAudio.TabStop = false;
 			this.grpAudio.Text = "Audio";
 			// 
 			// btnFindAudioSuccess
 			// 
+			this.btnFindAudioSuccess.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
 			this.btnFindAudioSuccess.Image = ((System.Drawing.Image)(resources.GetObject("btnFindAudioSuccess.Image")));
 			this.btnFindAudioSuccess.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
-			this.btnFindAudioSuccess.Location = new System.Drawing.Point(272, 24);
+			this.btnFindAudioSuccess.Location = new System.Drawing.Point(304, 24);
 			this.btnFindAudioSuccess.Name = "btnFindAudioSuccess";
 			this.btnFindAudioSuccess.Size = new System.Drawing.Size(22, 20);
 			this.btnFindAudioSuccess.TabIndex = 2;
@@ -233,73 +231,90 @@ namespace ThoughtWorks.CruiseControl.Remote.monitor
 			// 
 			// txtAudioFileSuccess
 			// 
-			this.txtAudioFileSuccess.Location = new System.Drawing.Point(104, 24);
+			this.txtAudioFileSuccess.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+			this.txtAudioFileSuccess.Font = new System.Drawing.Font("Verdana", 8.25F);
+			this.txtAudioFileSuccess.Location = new System.Drawing.Point(112, 24);
 			this.txtAudioFileSuccess.Name = "txtAudioFileSuccess";
-			this.txtAudioFileSuccess.Size = new System.Drawing.Size(160, 20);
+			this.txtAudioFileSuccess.Size = new System.Drawing.Size(184, 21);
 			this.txtAudioFileSuccess.TabIndex = 1;
 			this.txtAudioFileSuccess.Text = "";
 			// 
 			// chkAudioSuccessful
 			// 
+			this.chkAudioSuccessful.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+			this.chkAudioSuccessful.Font = new System.Drawing.Font("Verdana", 8.25F);
 			this.chkAudioSuccessful.Location = new System.Drawing.Point(16, 24);
 			this.chkAudioSuccessful.Name = "chkAudioSuccessful";
-			this.chkAudioSuccessful.Size = new System.Drawing.Size(88, 16);
+			this.chkAudioSuccessful.Size = new System.Drawing.Size(96, 16);
 			this.chkAudioSuccessful.TabIndex = 0;
 			this.chkAudioSuccessful.Text = "Successful";
 			// 
 			// chkAudioBroken
 			// 
+			this.chkAudioBroken.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+			this.chkAudioBroken.Font = new System.Drawing.Font("Verdana", 8.25F);
 			this.chkAudioBroken.Location = new System.Drawing.Point(16, 72);
 			this.chkAudioBroken.Name = "chkAudioBroken";
-			this.chkAudioBroken.Size = new System.Drawing.Size(88, 16);
+			this.chkAudioBroken.Size = new System.Drawing.Size(96, 16);
 			this.chkAudioBroken.TabIndex = 0;
 			this.chkAudioBroken.Text = "Broken";
 			// 
 			// chkAudioFixed
 			// 
+			this.chkAudioFixed.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+			this.chkAudioFixed.Font = new System.Drawing.Font("Verdana", 8.25F);
 			this.chkAudioFixed.Location = new System.Drawing.Point(16, 48);
 			this.chkAudioFixed.Name = "chkAudioFixed";
-			this.chkAudioFixed.Size = new System.Drawing.Size(88, 16);
+			this.chkAudioFixed.Size = new System.Drawing.Size(96, 16);
 			this.chkAudioFixed.TabIndex = 0;
 			this.chkAudioFixed.Text = "Fixed";
 			// 
 			// chkAudioStillFailing
 			// 
+			this.chkAudioStillFailing.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+			this.chkAudioStillFailing.Font = new System.Drawing.Font("Verdana", 8.25F);
 			this.chkAudioStillFailing.Location = new System.Drawing.Point(16, 96);
 			this.chkAudioStillFailing.Name = "chkAudioStillFailing";
-			this.chkAudioStillFailing.Size = new System.Drawing.Size(88, 16);
+			this.chkAudioStillFailing.Size = new System.Drawing.Size(96, 16);
 			this.chkAudioStillFailing.TabIndex = 0;
 			this.chkAudioStillFailing.Text = "Still failing";
 			// 
 			// txtAudioFileFixed
 			// 
-			this.txtAudioFileFixed.Location = new System.Drawing.Point(104, 48);
+			this.txtAudioFileFixed.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+			this.txtAudioFileFixed.Font = new System.Drawing.Font("Verdana", 8.25F);
+			this.txtAudioFileFixed.Location = new System.Drawing.Point(112, 48);
 			this.txtAudioFileFixed.Name = "txtAudioFileFixed";
-			this.txtAudioFileFixed.Size = new System.Drawing.Size(160, 20);
+			this.txtAudioFileFixed.Size = new System.Drawing.Size(184, 21);
 			this.txtAudioFileFixed.TabIndex = 1;
 			this.txtAudioFileFixed.Text = "";
 			// 
 			// txtAudioFileBroken
 			// 
-			this.txtAudioFileBroken.Location = new System.Drawing.Point(104, 72);
+			this.txtAudioFileBroken.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+			this.txtAudioFileBroken.Font = new System.Drawing.Font("Verdana", 8.25F);
+			this.txtAudioFileBroken.Location = new System.Drawing.Point(112, 72);
 			this.txtAudioFileBroken.Name = "txtAudioFileBroken";
-			this.txtAudioFileBroken.Size = new System.Drawing.Size(160, 20);
+			this.txtAudioFileBroken.Size = new System.Drawing.Size(184, 21);
 			this.txtAudioFileBroken.TabIndex = 1;
 			this.txtAudioFileBroken.Text = "";
 			// 
 			// txtAudioFileFailing
 			// 
-			this.txtAudioFileFailing.Location = new System.Drawing.Point(104, 96);
+			this.txtAudioFileFailing.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+			this.txtAudioFileFailing.Font = new System.Drawing.Font("Verdana", 8.25F);
+			this.txtAudioFileFailing.Location = new System.Drawing.Point(112, 96);
 			this.txtAudioFileFailing.Name = "txtAudioFileFailing";
-			this.txtAudioFileFailing.Size = new System.Drawing.Size(160, 20);
+			this.txtAudioFileFailing.Size = new System.Drawing.Size(184, 21);
 			this.txtAudioFileFailing.TabIndex = 1;
 			this.txtAudioFileFailing.Text = "";
 			// 
 			// btnFindAudioFixed
 			// 
+			this.btnFindAudioFixed.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
 			this.btnFindAudioFixed.Image = ((System.Drawing.Image)(resources.GetObject("btnFindAudioFixed.Image")));
 			this.btnFindAudioFixed.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
-			this.btnFindAudioFixed.Location = new System.Drawing.Point(272, 48);
+			this.btnFindAudioFixed.Location = new System.Drawing.Point(304, 48);
 			this.btnFindAudioFixed.Name = "btnFindAudioFixed";
 			this.btnFindAudioFixed.Size = new System.Drawing.Size(22, 20);
 			this.btnFindAudioFixed.TabIndex = 2;
@@ -307,9 +322,10 @@ namespace ThoughtWorks.CruiseControl.Remote.monitor
 			// 
 			// btnFindAudioBroken
 			// 
+			this.btnFindAudioBroken.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
 			this.btnFindAudioBroken.Image = ((System.Drawing.Image)(resources.GetObject("btnFindAudioBroken.Image")));
 			this.btnFindAudioBroken.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
-			this.btnFindAudioBroken.Location = new System.Drawing.Point(272, 72);
+			this.btnFindAudioBroken.Location = new System.Drawing.Point(304, 72);
 			this.btnFindAudioBroken.Name = "btnFindAudioBroken";
 			this.btnFindAudioBroken.Size = new System.Drawing.Size(22, 20);
 			this.btnFindAudioBroken.TabIndex = 2;
@@ -317,9 +333,10 @@ namespace ThoughtWorks.CruiseControl.Remote.monitor
 			// 
 			// btnFindAudioFailing
 			// 
+			this.btnFindAudioFailing.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
 			this.btnFindAudioFailing.Image = ((System.Drawing.Image)(resources.GetObject("btnFindAudioFailing.Image")));
 			this.btnFindAudioFailing.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
-			this.btnFindAudioFailing.Location = new System.Drawing.Point(272, 96);
+			this.btnFindAudioFailing.Location = new System.Drawing.Point(304, 96);
 			this.btnFindAudioFailing.Name = "btnFindAudioFailing";
 			this.btnFindAudioFailing.Size = new System.Drawing.Size(22, 20);
 			this.btnFindAudioFailing.TabIndex = 2;
@@ -327,8 +344,9 @@ namespace ThoughtWorks.CruiseControl.Remote.monitor
 			// 
 			// btnPlayBroken
 			// 
+			this.btnPlayBroken.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
 			this.btnPlayBroken.Image = ((System.Drawing.Image)(resources.GetObject("btnPlayBroken.Image")));
-			this.btnPlayBroken.Location = new System.Drawing.Point(296, 72);
+			this.btnPlayBroken.Location = new System.Drawing.Point(328, 72);
 			this.btnPlayBroken.Name = "btnPlayBroken";
 			this.btnPlayBroken.Size = new System.Drawing.Size(22, 20);
 			this.btnPlayBroken.TabIndex = 2;
@@ -336,8 +354,9 @@ namespace ThoughtWorks.CruiseControl.Remote.monitor
 			// 
 			// btnPlayFailing
 			// 
+			this.btnPlayFailing.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
 			this.btnPlayFailing.Image = ((System.Drawing.Image)(resources.GetObject("btnPlayFailing.Image")));
-			this.btnPlayFailing.Location = new System.Drawing.Point(296, 96);
+			this.btnPlayFailing.Location = new System.Drawing.Point(328, 96);
 			this.btnPlayFailing.Name = "btnPlayFailing";
 			this.btnPlayFailing.Size = new System.Drawing.Size(22, 20);
 			this.btnPlayFailing.TabIndex = 2;
@@ -345,8 +364,9 @@ namespace ThoughtWorks.CruiseControl.Remote.monitor
 			// 
 			// btnPlayFixed
 			// 
+			this.btnPlayFixed.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
 			this.btnPlayFixed.Image = ((System.Drawing.Image)(resources.GetObject("btnPlayFixed.Image")));
-			this.btnPlayFixed.Location = new System.Drawing.Point(296, 48);
+			this.btnPlayFixed.Location = new System.Drawing.Point(328, 48);
 			this.btnPlayFixed.Name = "btnPlayFixed";
 			this.btnPlayFixed.Size = new System.Drawing.Size(22, 20);
 			this.btnPlayFixed.TabIndex = 2;
@@ -354,8 +374,9 @@ namespace ThoughtWorks.CruiseControl.Remote.monitor
 			// 
 			// btnPlaySuccess
 			// 
+			this.btnPlaySuccess.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
 			this.btnPlaySuccess.Image = ((System.Drawing.Image)(resources.GetObject("btnPlaySuccess.Image")));
-			this.btnPlaySuccess.Location = new System.Drawing.Point(296, 24);
+			this.btnPlaySuccess.Location = new System.Drawing.Point(328, 24);
 			this.btnPlaySuccess.Name = "btnPlaySuccess";
 			this.btnPlaySuccess.Size = new System.Drawing.Size(22, 20);
 			this.btnPlaySuccess.TabIndex = 2;
@@ -363,18 +384,21 @@ namespace ThoughtWorks.CruiseControl.Remote.monitor
 			// 
 			// txtServerUrl
 			// 
-			this.txtServerUrl.Location = new System.Drawing.Point(88, 88);
+			this.txtServerUrl.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+			this.txtServerUrl.Font = new System.Drawing.Font("Verdana", 8.25F);
+			this.txtServerUrl.Location = new System.Drawing.Point(96, 40);
 			this.txtServerUrl.Name = "txtServerUrl";
-			this.txtServerUrl.Size = new System.Drawing.Size(256, 20);
+			this.txtServerUrl.Size = new System.Drawing.Size(280, 21);
 			this.txtServerUrl.TabIndex = 5;
 			this.txtServerUrl.Text = "";
 			// 
 			// lblServerUrl
 			// 
 			this.lblServerUrl.BackColor = System.Drawing.Color.Transparent;
-			this.lblServerUrl.Location = new System.Drawing.Point(16, 88);
+			this.lblServerUrl.Font = new System.Drawing.Font("Verdana", 8.25F);
+			this.lblServerUrl.Location = new System.Drawing.Point(8, 40);
 			this.lblServerUrl.Name = "lblServerUrl";
-			this.lblServerUrl.Size = new System.Drawing.Size(48, 20);
+			this.lblServerUrl.Size = new System.Drawing.Size(56, 20);
 			this.lblServerUrl.TabIndex = 3;
 			this.lblServerUrl.Text = "Server";
 			this.lblServerUrl.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -382,18 +406,22 @@ namespace ThoughtWorks.CruiseControl.Remote.monitor
 			// chkShowBalloons
 			// 
 			this.chkShowBalloons.BackColor = System.Drawing.Color.Transparent;
-			this.chkShowBalloons.Location = new System.Drawing.Point(88, 136);
+			this.chkShowBalloons.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+			this.chkShowBalloons.Font = new System.Drawing.Font("Verdana", 8.25F);
+			this.chkShowBalloons.Location = new System.Drawing.Point(96, 88);
 			this.chkShowBalloons.Name = "chkShowBalloons";
-			this.chkShowBalloons.Size = new System.Drawing.Size(160, 24);
+			this.chkShowBalloons.Size = new System.Drawing.Size(248, 24);
 			this.chkShowBalloons.TabIndex = 6;
 			this.chkShowBalloons.Text = "Show balloon notifications";
 			// 
 			// chkShowAgent
 			// 
 			this.chkShowAgent.BackColor = System.Drawing.Color.Transparent;
+			this.chkShowAgent.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+			this.chkShowAgent.Font = new System.Drawing.Font("Verdana", 8.25F);
 			this.chkShowAgent.Location = new System.Drawing.Point(16, 16);
 			this.chkShowAgent.Name = "chkShowAgent";
-			this.chkShowAgent.Size = new System.Drawing.Size(160, 24);
+			this.chkShowAgent.Size = new System.Drawing.Size(248, 24);
 			this.chkShowAgent.TabIndex = 7;
 			this.chkShowAgent.Text = "Show agent";
 			// 
@@ -404,16 +432,18 @@ namespace ThoughtWorks.CruiseControl.Remote.monitor
 			this.grpAgents.Controls.Add(this.ddlAgent);
 			this.grpAgents.Controls.Add(this.chkHideAgent);
 			this.grpAgents.Controls.Add(this.chkShowAgent);
-			this.grpAgents.Location = new System.Drawing.Point(16, 168);
+			this.grpAgents.Font = new System.Drawing.Font("Verdana", 8.25F);
+			this.grpAgents.Location = new System.Drawing.Point(8, 144);
 			this.grpAgents.Name = "grpAgents";
-			this.grpAgents.Size = new System.Drawing.Size(328, 104);
+			this.grpAgents.Size = new System.Drawing.Size(368, 104);
 			this.grpAgents.TabIndex = 8;
 			this.grpAgents.TabStop = false;
 			this.grpAgents.Text = "Agents";
 			// 
 			// lblAgent
 			// 
-			this.lblAgent.Location = new System.Drawing.Point(16, 72);
+			this.lblAgent.Font = new System.Drawing.Font("Verdana", 8.25F);
+			this.lblAgent.Location = new System.Drawing.Point(32, 72);
 			this.lblAgent.Name = "lblAgent";
 			this.lblAgent.Size = new System.Drawing.Size(48, 23);
 			this.lblAgent.TabIndex = 10;
@@ -423,16 +453,19 @@ namespace ThoughtWorks.CruiseControl.Remote.monitor
 			// ddlAgent
 			// 
 			this.ddlAgent.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			this.ddlAgent.Location = new System.Drawing.Point(64, 72);
+			this.ddlAgent.Font = new System.Drawing.Font("Verdana", 8.25F);
+			this.ddlAgent.Location = new System.Drawing.Point(112, 72);
 			this.ddlAgent.Name = "ddlAgent";
-			this.ddlAgent.Size = new System.Drawing.Size(192, 21);
+			this.ddlAgent.Size = new System.Drawing.Size(184, 21);
 			this.ddlAgent.TabIndex = 9;
 			// 
 			// chkHideAgent
 			// 
+			this.chkHideAgent.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+			this.chkHideAgent.Font = new System.Drawing.Font("Verdana", 8.25F);
 			this.chkHideAgent.Location = new System.Drawing.Point(16, 40);
 			this.chkHideAgent.Name = "chkHideAgent";
-			this.chkHideAgent.Size = new System.Drawing.Size(160, 24);
+			this.chkHideAgent.Size = new System.Drawing.Size(248, 24);
 			this.chkHideAgent.TabIndex = 8;
 			this.chkHideAgent.Text = "Hide after announcement";
 			// 
@@ -443,8 +476,11 @@ namespace ThoughtWorks.CruiseControl.Remote.monitor
 			// 
 			// btnCancel
 			// 
-			this.btnCancel.BackColor = System.Drawing.Color.LightSteelBlue;
-			this.btnCancel.Location = new System.Drawing.Point(183, 416);
+			this.btnCancel.BackColor = System.Drawing.SystemColors.Control;
+			this.btnCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+			this.btnCancel.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+			this.btnCancel.Font = new System.Drawing.Font("Verdana", 8.25F);
+			this.btnCancel.Location = new System.Drawing.Point(196, 392);
 			this.btnCancel.Name = "btnCancel";
 			this.btnCancel.TabIndex = 0;
 			this.btnCancel.Text = "&Cancel";
@@ -452,53 +488,72 @@ namespace ThoughtWorks.CruiseControl.Remote.monitor
 			// 
 			// txtProjectName
 			// 
-			this.txtProjectName.Location = new System.Drawing.Point(88, 112);
+			this.txtProjectName.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+			this.txtProjectName.Font = new System.Drawing.Font("Verdana", 8.25F);
+			this.txtProjectName.Location = new System.Drawing.Point(96, 64);
 			this.txtProjectName.Name = "txtProjectName";
-			this.txtProjectName.Size = new System.Drawing.Size(256, 20);
+			this.txtProjectName.Size = new System.Drawing.Size(280, 21);
 			this.txtProjectName.TabIndex = 9;
 			this.txtProjectName.Text = "";
 			// 
 			// lblProjectName
 			// 
 			this.lblProjectName.BackColor = System.Drawing.Color.Transparent;
-			this.lblProjectName.Location = new System.Drawing.Point(16, 112);
+			this.lblProjectName.Font = new System.Drawing.Font("Verdana", 8.25F);
+			this.lblProjectName.Location = new System.Drawing.Point(8, 64);
 			this.lblProjectName.Name = "lblProjectName";
-			this.lblProjectName.Size = new System.Drawing.Size(72, 20);
+			this.lblProjectName.Size = new System.Drawing.Size(80, 20);
 			this.lblProjectName.TabIndex = 10;
 			this.lblProjectName.Text = "Project name";
 			this.lblProjectName.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			// 
+			// chkShowExceptions
+			// 
+			this.chkShowExceptions.BackColor = System.Drawing.Color.Transparent;
+			this.chkShowExceptions.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+			this.chkShowExceptions.Font = new System.Drawing.Font("Verdana", 8.25F);
+			this.chkShowExceptions.Location = new System.Drawing.Point(96, 112);
+			this.chkShowExceptions.Name = "chkShowExceptions";
+			this.chkShowExceptions.Size = new System.Drawing.Size(248, 24);
+			this.chkShowExceptions.TabIndex = 6;
+			this.chkShowExceptions.Text = "Show exceptions";
 			// 
 			// SettingsForm
 			// 
 			this.AcceptButton = this.btnOkay;
 			this.AutoScaleBaseSize = new System.Drawing.Size(5, 13);
-			this.BackColor = System.Drawing.Color.FromArgb(((System.Byte)(100)), ((System.Byte)(149)), ((System.Byte)(238)));
-			this.ClientSize = new System.Drawing.Size(360, 456);
+			this.BackColor = System.Drawing.Color.FromArgb(((System.Byte)(212)), ((System.Byte)(208)), ((System.Byte)(201)));
+			this.CancelButton = this.btnCancel;
+			this.ClientSize = new System.Drawing.Size(386, 426);
+			this.ControlBox = false;
 			this.Controls.Add(this.lblProjectName);
 			this.Controls.Add(this.txtProjectName);
+			this.Controls.Add(this.txtServerUrl);
 			this.Controls.Add(this.grpAgents);
 			this.Controls.Add(this.chkShowBalloons);
-			this.Controls.Add(this.txtServerUrl);
 			this.Controls.Add(this.grpAudio);
 			this.Controls.Add(this.lblSeconds);
 			this.Controls.Add(this.numPollInterval);
-			this.Controls.Add(this.lblHeading);
 			this.Controls.Add(this.btnOkay);
 			this.Controls.Add(this.lblPollInterval);
 			this.Controls.Add(this.lblServerUrl);
 			this.Controls.Add(this.btnCancel);
+			this.Controls.Add(this.chkShowExceptions);
+			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
+			this.MaximizeBox = false;
+			this.MinimizeBox = false;
 			this.Name = "SettingsForm";
 			this.ShowInTaskbar = false;
-			this.Text = "SettingsForm";
-			this.TransparencyKey = System.Drawing.Color.FromArgb(((System.Byte)(100)), ((System.Byte)(149)), ((System.Byte)(238)));
-			this.TweenSteps = 100;
-			this.WobbleFactor = 10;
+			this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
+			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
+			this.Text = "CruiseControl.NET Monitor Settings";
 			((System.ComponentModel.ISupportInitialize)(this.numPollInterval)).EndInit();
 			this.grpAudio.ResumeLayout(false);
 			this.grpAgents.ResumeLayout(false);
 			this.ResumeLayout(false);
 
 		}
+
 		#endregion
 
 		public void Launch()
@@ -520,6 +575,7 @@ namespace ThoughtWorks.CruiseControl.Remote.monitor
 			txtProjectName.Text = _settings.ProjectName;
 
 			chkShowBalloons.Checked = _settings.NotificationBalloon.ShowBalloon;
+			chkShowExceptions.Checked = _settings.ShowExceptions;
 			chkShowAgent.Checked = _settings.Agents.ShowAgent;
 			chkHideAgent.Checked = _settings.Agents.HideAfterMessage;
 
@@ -549,6 +605,8 @@ namespace ThoughtWorks.CruiseControl.Remote.monitor
 			_settings.PollingIntervalSeconds = (int)numPollInterval.Value;
 			_settings.RemoteServerUrl = txtServerUrl.Text;
 			_settings.ProjectName = txtProjectName.Text;
+
+			_settings.ShowExceptions = chkShowExceptions.Checked;
 
 			_settings.NotificationBalloon.ShowBalloon = chkShowBalloons.Checked;
 			_settings.Agents.ShowAgent = chkShowAgent.Checked;
@@ -582,6 +640,9 @@ namespace ThoughtWorks.CruiseControl.Remote.monitor
 			SettingsManager.WriteSettings(_settings);
 
 			this.Hide();
+
+			// force a poll once the form is hidden
+			_statusMonitor.Poll();
 		}
 
 		private void btnCancel_Click(object sender, System.EventArgs e)

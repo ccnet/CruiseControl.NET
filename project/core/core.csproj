@@ -109,11 +109,6 @@
         <Files>
             <Include>
                 <File
-                    RelPath = "CruiseServer.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
                     RelPath = "CruiseControlException.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -124,12 +119,12 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "CruiseServerFactory.cs"
+                    RelPath = "CruiseServer.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
-                />                   
+                />
                 <File
-                    RelPath = "Workflow.cs"
+                    RelPath = "CruiseServerFactory.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -148,11 +143,6 @@
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
-                <File
-                    RelPath = "WorkflowResult.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />                
                 <File
                     RelPath = "IntegrationStatus.cs"
                     SubType = "Code"
@@ -187,7 +177,7 @@
                     RelPath = "ProjectBase.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
-                />                
+                />
                 <File
                     RelPath = "ProjectIntegrator.cs"
                     SubType = "Code"
@@ -197,9 +187,19 @@
                     RelPath = "ProjectIntegratorState.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
-                />                
+                />
                 <File
                     RelPath = "RemoteCruiseServer.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Workflow.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "WorkflowResult.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -256,7 +256,7 @@
                     RelPath = "configuration\CruiseControlConfigSectionHandler.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
-                />                
+                />
                 <File
                     RelPath = "configuration\IConfiguration.cs"
                     SubType = "Code"
@@ -301,7 +301,7 @@
                     RelPath = "configuration\test\XslFilesSectionHandlerTest.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
-                />                
+                />
                 <File
                     RelPath = "label\DefaultLabeller.cs"
                     SubType = "Code"
@@ -581,7 +581,7 @@
                     RelPath = "sourcecontrol\test\ProcessSourceControlTest.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
-                />                
+                />
                 <File
                     RelPath = "sourcecontrol\test\PvcsHistoryParserTest.cs"
                     SubType = "Code"
@@ -642,12 +642,12 @@
                     BuildAction = "None"
                 />
                 <File
-                    RelPath = "test\CruiseServerTest.cs"
+                    RelPath = "test\CruiseManagerTest.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "test\CruiseManagerTest.cs"
+                    RelPath = "test\CruiseServerTest.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -656,16 +656,6 @@
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
-                <File
-                    RelPath = "test\WorkflowTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "test\WorkflowResultTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />                
                 <File
                     RelPath = "test\IntegrationResultFixture.cs"
                     SubType = "Code"
@@ -703,6 +693,16 @@
                 />
                 <File
                     RelPath = "test\TestLogs.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "test\WorkflowResultTest.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "test\WorkflowTest.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

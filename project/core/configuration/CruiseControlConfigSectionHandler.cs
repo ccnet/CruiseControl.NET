@@ -1,7 +1,7 @@
 using System;
 using System.Configuration;
 
-namespace ThoughtWorks.CruiseControl.Core.Configuration
+namespace ThoughtWorks.CruiseControl.Core.Config
 {
 	public class CruiseControlConfigSectionHandler : IConfigurationSectionHandler
 	{

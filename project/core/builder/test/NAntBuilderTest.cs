@@ -1,13 +1,14 @@
-using Exortech.NetReflector;
-using NUnit.Framework;
 using System;
 using System.IO;
-using System.Reflection;
-using System.Xml;
+
+using Exortech.NetReflector;
+
+using NUnit.Framework;
+
 using ThoughtWorks.CruiseControl.Core.Util;
 using ThoughtWorks.CruiseControl.Remote;
 
-namespace ThoughtWorks.CruiseControl.Core.Builder.test
+namespace ThoughtWorks.CruiseControl.Core.Builder.Test
 {
 	[TestFixture]
 	public class NAntBuilderTest : CustomAssertion
@@ -17,7 +18,8 @@ namespace ThoughtWorks.CruiseControl.Core.Builder.test
 
 		public static readonly string NANT_TEST_EXECUTABLE = @"..\tools\nant\nant.exe";
 
-		public static readonly string NANT_TEST_BUILDFILE = TempFileUtil.GetTempFilePath("nant-build-temp", "test.build");
+		public static readonly string TEST_BUILD_FILENAME = "test.build";
+		public static readonly string NANT_TEST_BUILDFILE = TempFileUtil.GetTempFilePath("nant-build-temp", TEST_BUILD_FILENAME);
 		public static readonly string NANT_TEST_TARGET = "success";
 
 		private NAntBuilder _builder;
@@ -45,6 +47,7 @@ namespace ThoughtWorks.CruiseControl.Core.Builder.test
 		<targetList>
       		<target>{3}</target>
     	</targetList>
+		<buildTimeoutSeconds>123</buildTimeoutSeconds>
     </build>", NANT_TEST_EXECUTABLE, NANT_TEST_BASEDIR, NANT_TEST_BUILDFILE, NANT_TEST_TARGET);
 
 			_builder = new NAntBuilder();
@@ -53,6 +56,7 @@ namespace ThoughtWorks.CruiseControl.Core.Builder.test
 			AssertEquals(NANT_TEST_BUILDFILE, _builder.BuildFile);
 			AssertEquals(NANT_TEST_EXECUTABLE, _builder.Executable);
 			AssertEquals(1, _builder.Targets.Length);
+			AssertEquals(123, _builder.BuildTimeoutSeconds);
 			AssertEquals(NANT_TEST_TARGET, _builder.Targets[0]);
 		}
 
@@ -86,11 +90,14 @@ namespace ThoughtWorks.CruiseControl.Core.Builder.test
 		public void BuildSucceed()
 		{
 			CreateTestBuildFile();
+
 			_builder.Executable = NANT_TEST_EXECUTABLE;
-			_builder.BuildFile = "test.build";
+			_builder.BuildFile = TEST_BUILD_FILENAME;
 			_builder.BaseDirectory = TempFileUtil.GetTempPath(TEMP_DIR);
-			_builder.Targets = new string[] {"success" };
+			_builder.Targets = new string[] { "success" };
+
 			IntegrationResult result = new IntegrationResult();
+
 			_builder.Run(result);
 			
 			Assert("test build should succeed", result.Succeeded);
@@ -101,11 +108,14 @@ namespace ThoughtWorks.CruiseControl.Core.Builder.test
 		public void BuildFailed()
 		{
 			CreateTestBuildFile();
+
 			_builder.Executable = NANT_TEST_EXECUTABLE;
-			_builder.BuildFile = "test.build";
+			_builder.BuildFile = TEST_BUILD_FILENAME;
 			_builder.BaseDirectory = TempFileUtil.GetTempPath(TEMP_DIR);
-			_builder.Targets = new string[] {"fail" };
+			_builder.Targets = new string[] { "fail" };
+
 			IntegrationResult result = new IntegrationResult();
+
 			_builder.Run(result);
 
 			Assert("test build should fail", result.Failed);
@@ -146,9 +156,9 @@ namespace ThoughtWorks.CruiseControl.Core.Builder.test
 		{
 			CreateTestBuildFile();
 			_builder.Executable = NANT_TEST_EXECUTABLE;
-			_builder.BuildFile = "test.build";
+			_builder.BuildFile = TEST_BUILD_FILENAME;
 			_builder.BaseDirectory = TempFileUtil.GetTempPath(TEMP_DIR);
-			_builder.Targets = new string[] {"checkLabel" };
+			_builder.Targets = new string[] { "checkLabel" };
 			IntegrationResult result = new IntegrationResult();
 			result.Label = "ATestLabel";
 			_builder.Run(result);
@@ -167,6 +177,40 @@ namespace ThoughtWorks.CruiseControl.Core.Builder.test
 			AssertFalse(_builder.ShouldRun(CreateIntegrationResultWithModifications(IntegrationStatus.Exception)));
 		}
 
+		[Test]
+		public void Run_TimesOut()
+		{
+			CreateTestBuildFile();
+
+			_builder.Executable = NANT_TEST_EXECUTABLE;
+			_builder.BuildFile = TEST_BUILD_FILENAME;
+			_builder.BaseDirectory = TempFileUtil.GetTempPath(TEMP_DIR);
+
+			// this target takes 10 sec to complete
+			_builder.Targets = new string[] { "sleepy" };
+
+			// only give 1 sec before kill process
+			_builder.BuildTimeoutSeconds = 1;
+
+			IntegrationResult result = new IntegrationResult();
+
+			try 
+			{
+				_builder.Run(result);
+				Fail("Should have timed out and thrown CruiseControlException.");
+			}
+			catch (CruiseControlException cce)
+			{
+				AssertEquals("NAnt process timed out (after 1 seconds)", cce.Message);
+			}
+
+			// for teardown (when directory deleted), this sleep gives
+			// the chance for spawned process to release file lock
+			System.Threading.Thread.Sleep(500);
+		}
+
+		#region Test support
+
 		private IntegrationResult CreateIntegrationResultWithModifications(IntegrationStatus status)
 		{
 			IntegrationResult result = new IntegrationResult();
@@ -178,7 +222,7 @@ namespace ThoughtWorks.CruiseControl.Core.Builder.test
 		private string CreateTestBuildFile()
 		{
 			string contents =  
-@"<project name=""ccnetlaunch"" default=""all"">
+				@"<project name=""ccnetlaunch"" default=""all"">
 
   <target name=""all"">
   	<echo message=""Build Succeeded""/>
@@ -197,8 +241,14 @@ namespace ThoughtWorks.CruiseControl.Core.Builder.test
     <echo message=""${label-to-apply}"" />
   </target>
 
+  <target name=""sleepy"">
+    <sleep seconds=""10"" />
+  </target>
+
 </project>";
-			return TempFileUtil.CreateTempFile(TEMP_DIR, "test.build", contents);
+			return TempFileUtil.CreateTempFile(TEMP_DIR, TEST_BUILD_FILENAME, contents);
 		}
+
+		#endregion
 	}
 }

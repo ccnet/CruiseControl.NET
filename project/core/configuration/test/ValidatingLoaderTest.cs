@@ -1,13 +1,14 @@
 using System;
 using System.IO;
+using System.Reflection;
 using System.Xml;
 using System.Xml.Schema;
+
 using NUnit.Framework;
 
 using ThoughtWorks.CruiseControl.Core.Util;
-using ThoughtWorks.CruiseControl.Core.Configuration;
 
-namespace ThoughtWorks.CruiseControl.Core.Configuration.test
+namespace ThoughtWorks.CruiseControl.Core.Config.Test
 {
 	[TestFixture]
 	public class ValidatingLoaderTest : CustomAssertion
@@ -15,8 +16,8 @@ namespace ThoughtWorks.CruiseControl.Core.Configuration.test
 		[Test]
 		public void FailedLoad() 
 		{
-			ValidationEventHandler hd = new ValidationEventHandler(handler);
-			XmlSchema schema = loadSchema();
+			ValidationEventHandler hd = new ValidationEventHandler(Handler);
+			XmlSchema schema = LoadSchema();
 			XmlTextReader xr = new XmlTextReader(new StringReader(@"<cruisecontrol><projectx></projectx></cruisecontrol>"));
 			XmlValidatingLoader loader = new XmlValidatingLoader(xr);
 			loader.ValidationEventHandler += hd;
@@ -28,8 +29,8 @@ namespace ThoughtWorks.CruiseControl.Core.Configuration.test
 		[Test]
 		public void SucceededLoad() 
 		{
-			ValidationEventHandler hd = new ValidationEventHandler(handler);
-			XmlSchema schema = loadSchema();
+			ValidationEventHandler hd = new ValidationEventHandler(Handler);
+			XmlSchema schema = LoadSchema();
 			XmlTextReader xr = new XmlTextReader(new StringReader(ConfigurationFixture.GenerateConfigXml()));
 			XmlValidatingLoader loader = new XmlValidatingLoader(xr);
 			loader.ValidationEventHandler += hd;
@@ -38,18 +39,16 @@ namespace ThoughtWorks.CruiseControl.Core.Configuration.test
 			AssertNotNull(doc);
 		}
 
-		private XmlSchema loadSchema() 
+		private XmlSchema LoadSchema() 
 		{
-			System.Reflection.Assembly ass = System.Reflection.Assembly.GetExecutingAssembly();
-			Stream s = ass.GetManifestResourceStream("ThoughtWorks.CruiseControl.Core.configuration.ccnet.xsd");
-			return XmlSchema.Read(s, new ValidationEventHandler(handler));
+			Assembly ass = Assembly.GetExecutingAssembly();
+			Stream s = ass.GetManifestResourceStream(ConfigurationLoader.XsdSchemaResourceName);
+			return XmlSchema.Read(s, new ValidationEventHandler(Handler));
 		}
 
-		private void handler(object sender, ValidationEventArgs args) 
+		private void Handler(object sender, ValidationEventArgs args) 
 		{
-
+			// this handler is required, and not used
 		}
 	}
-
-
 }

@@ -1,18 +1,20 @@
-using Exortech.NetReflector;
 using System;
-using System.Collections;
 using System.IO;
+using System.Reflection;
 using System.Xml;
 using System.Xml.Schema;
-using System.Reflection;
 
-namespace ThoughtWorks.CruiseControl.Core.Configuration
+using Exortech.NetReflector;
+
+namespace ThoughtWorks.CruiseControl.Core.Config
 {
 	public class ConfigurationLoader : IConfigurationLoader, IDisposable
 	{
 		private const string ROOT_ELEMENT = "cruisecontrol";
 		private const string CONFIG_ASSEMBLY_PATTERN = "ccnet.*.plugin.dll";
 		private static readonly ReflectorHashAttribute PROJECTS_ATTRIBUTE = new ReflectorHashAttribute("cruisecontrol", "name");
+
+		internal const string XsdSchemaResourceName = "ThoughtWorks.CruiseControl.Core.configuration.ccnet.xsd";
 
 		private string _configFile;
 		private FileSystemWatcher _watcher = new FileSystemWatcher();
@@ -29,7 +31,11 @@ namespace ThoughtWorks.CruiseControl.Core.Configuration
 		internal ConfigurationLoader() 
 		{
 			_handler = new ValidationEventHandler(handleSchemaEvent);
-			Stream s = Assembly.GetExecutingAssembly().GetManifestResourceStream("ThoughtWorks.CruiseControl.Core.configuration.ccnet.xsd");
+			Stream s = Assembly.GetExecutingAssembly().GetManifestResourceStream(XsdSchemaResourceName);
+			
+			if (s==null)
+				throw new CruiseControlException("Unable to load ccnet.xsd resource from assembly.");
+
 			_schema = XmlSchema.Read(s, _handler);
 			_schema.Compile(_handler);
 		}

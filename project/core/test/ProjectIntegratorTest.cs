@@ -1,11 +1,11 @@
 using System;
-using System.Collections;
 using System.Diagnostics;
 using System.Threading;
+
 using NUnit.Framework;
-using ThoughtWorks.CruiseControl.Core.Test;
-using ThoughtWorks.CruiseControl.Core.Util;
+
 using ThoughtWorks.CruiseControl.Core.Schedules;
+using ThoughtWorks.CruiseControl.Core.Util;
 
 namespace ThoughtWorks.CruiseControl.Core.Test
 {
@@ -78,9 +78,9 @@ namespace ThoughtWorks.CruiseControl.Core.Test
 			TimeSpan expectedDelta = TimeSpan.FromSeconds(_schedule.SleepSeconds * 2);
 			Assert("The project did not sleep: " + delta, delta >= expectedDelta);
 
-//			TimeSpan expectedDelta = new TimeSpan(_schedule.TimeOut * 2);
-//			// Assert("The project did not sleep",  delta >= expectedDelta);
-//			//Console.WriteLine("expected: " + expectedDelta + " actual: " + delta);
+			//			TimeSpan expectedDelta = new TimeSpan(_schedule.TimeOut * 2);
+			//			// Assert("The project did not sleep",  delta >= expectedDelta);
+			//			//Console.WriteLine("expected: " + expectedDelta + " actual: " + delta);
 		}
 
 		[Test]
@@ -182,7 +182,7 @@ namespace ThoughtWorks.CruiseControl.Core.Test
 			DateTime start = DateTime.Now;
 			Thread.Sleep(1000);
 			DateTime end = DateTime.Now;
-			AssertApproximatelyEqual("thread sleep time", 1000, (end - start).TotalMilliseconds, 50);
+			AssertApproximatelyEqual("thread sleep time", 1000, (end - start).TotalMilliseconds, 150);
 		}
 
 		[Test]

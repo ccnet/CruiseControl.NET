@@ -1,9 +1,11 @@
-using NUnit.Framework;
 using System;
 using System.Xml;
+
+using NUnit.Framework;
+
 using ThoughtWorks.CruiseControl.Core.Util;
 
-namespace ThoughtWorks.CruiseControl.Core.Configuration.test
+namespace ThoughtWorks.CruiseControl.Core.Config.Test
 {
 	[TestFixture]
 	public class CruiseControlConfigSectionHandlerTest

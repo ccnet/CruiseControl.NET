@@ -9,7 +9,7 @@
             <Settings
                 ApplicationIcon = "App.ico"
                 AssemblyKeyContainerName = ""
-                AssemblyName = "ThoughtWorks.CruiseControl.Remote.monitor"
+                AssemblyName = "ThoughtWorks.CruiseControl.Remote.Monitor"
                 AssemblyOriginatorKeyFile = ""
                 DefaultClientScript = "JScript"
                 DefaultHTMLPageLayout = "Grid"
@@ -18,7 +18,7 @@
                 OutputType = "WinExe"
                 PreBuildEvent = ""
                 PostBuildEvent = ""
-                RootNamespace = "ThoughtWorks.CruiseControl.Remote.monitor"
+                RootNamespace = "ThoughtWorks.CruiseControl.Remote.Monitor"
                 RunPostBuildEvent = "OnBuildSuccess"
                 StartupObject = ""
             >
@@ -93,11 +93,6 @@
                     Name = "System.XML"
                     AssemblyName = "System.Xml"
                     HintPath = "..\..\..\..\..\WINNT\Microsoft.NET\Framework\v1.1.4322\System.XML.dll"
-                />
-                <Reference
-                    Name = "Drew.Controls"
-                    AssemblyName = "Drew.Controls"
-                    HintPath = "..\..\lib\CCTray\Drew.Controls.dll"
                 />
                 <Reference
                     Name = "Drew.Agents"

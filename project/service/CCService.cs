@@ -1,20 +1,18 @@
 using System;
-using System.Collections;
 using System.ComponentModel;
 using System.Configuration;
 using System.Diagnostics;
 using System.IO;
-using System.Runtime.Remoting;
 using System.ServiceProcess;
 
 using ThoughtWorks.CruiseControl.Core;
-using ThoughtWorks.CruiseControl.Core.Configuration;
+using ThoughtWorks.CruiseControl.Core.Config;
 
 namespace ThoughtWorks.CruiseControl.Service
 {
 	public class CCService : ServiceBase
 	{
-		private System.ComponentModel.Container components = null;
+		private Container components = null;
 		private CruiseManager manager;
 
 		public CCService()
@@ -34,23 +32,23 @@ namespace ThoughtWorks.CruiseControl.Service
 		/// </summary>
 		private void InitializeComponent()
 		{
-			components = new System.ComponentModel.Container();
+			components = new Container();
 			this.ServiceName = "CCService";
 		}
 
 		/// <summary>
 		/// Clean up any resources being used.
 		/// </summary>
-		protected override void Dispose( bool disposing )
+		protected override void Dispose(bool disposing)
 		{
-			if( disposing )
+			if (disposing)
 			{
 				if (components != null) 
 				{
 					components.Dispose();
 				}
 			}
-			base.Dispose( disposing );
+			base.Dispose(disposing);
 		}
 
 		/// <summary>
@@ -72,26 +70,26 @@ namespace ThoughtWorks.CruiseControl.Service
 			// TODO: switch to use factory once cruisecontrol operates as a separate thread
 			manager = new CruiseManager(new CruiseServer(new ConfigurationLoader(configFile)));
 			
-            if (useRemoting()) 
-                manager.RegisterForRemoting();
+			if (UseRemoting()) 
+				manager.RegisterForRemoting();
 
-            manager.StartCruiseControl();
+			manager.StartCruiseControl();
 		}
 
 		private string GetConfigFilename()
 		{
 			string appDirectory = AppDomain.CurrentDomain.BaseDirectory;
-			string defaultConfigFile = appDirectory + "\\ccnet.confg";
-			string configFile = ConfigurationSettings.AppSettings["ccnet.config"];
-			if (configFile == null || configFile.Length == 0)
+			string defaultConfigFile = appDirectory + @"\ccnet.config";
+			string configFile = Configuration.ConfigFileName;
+			if (configFile == null || configFile.Trim().Length == 0)
 				configFile = defaultConfigFile;
 			return configFile;
 		}
 
-		private bool useRemoting() 
+		private bool UseRemoting()
 		{
-			string remote = ConfigurationSettings.AppSettings["remoting"];
-			return (remote != null && remote == "on");
+			string remote = Configuration.Remoting;
+			return (remote != null && remote.Trim().ToLower() == "on");
 		}
  
 		/// <summary>

@@ -30,7 +30,7 @@
 													</xs:sequence>
 												</xs:complexType>
 											</xs:element>
-											<xs:element name="buildTimeout" type="xs:unsignedShort" />
+											<xs:element name="buildTimeoutSeconds" type="xs:unsignedShort" />
 										</xs:sequence>
 										<xs:attribute name="type" type="xs:string" use="required" />
 									</xs:complexType>

@@ -3,7 +3,7 @@ using System.ComponentModel;
 using System.Runtime.Remoting;
 using System.Windows.Forms;
 
-namespace ThoughtWorks.CruiseControl.Remote.monitor
+namespace ThoughtWorks.CruiseControl.Remote.Monitor
 {
 	#region Public delegates
 
@@ -146,7 +146,7 @@ namespace ThoughtWorks.CruiseControl.Remote.monitor
 			pollTimer.Interval = Settings.PollingIntervalSeconds * 1000;
 		}
 
-		void Poll()
+		public void Poll()
 		{
 			// check for any change in status, and raise events accordingly
 			try

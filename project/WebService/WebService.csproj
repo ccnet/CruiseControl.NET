@@ -18,7 +18,7 @@
                 OutputType = "Library"
                 PreBuildEvent = ""
                 PostBuildEvent = ""
-                RootNamespace = "CCNet.WebService"
+                RootNamespace = "ThoughtWorks.CruiseControl.WebService"
                 RunPostBuildEvent = "OnBuildSuccess"
                 StartupObject = ""
             >

@@ -18,7 +18,7 @@
                 OutputType = "Library"
                 PreBuildEvent = ""
                 PostBuildEvent = 'copy "$(ProjectDir)test\ccnet.web.dll.config" "$(TargetDir)"'
-                RootNamespace = "tw.ccnet.web"
+                RootNamespace = "ThoughtWorks.CruiseControl.Web"
                 RunPostBuildEvent = "OnBuildSuccess"
                 StartupObject = ""
             >
