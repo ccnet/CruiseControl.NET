@@ -60,6 +60,10 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test
 		{
 			this.label = label;
 		}
+
+		public void GetSource(IntegrationResult result)
+		{
+		}
 	}
 
 }

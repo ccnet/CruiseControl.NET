@@ -30,7 +30,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			ArrayList modifications;
 			DirectoryInfo root = new DirectoryInfo(RepositoryRoot);
 
-			modifications = getMods(root, from , to);
+			modifications = GetMods(root, from , to);
 
 			return (Modification[])modifications.ToArray(typeof(Modification));
 		}
@@ -45,7 +45,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			result.Modifications = GetModifications(result.LastModificationDate, DateTime.Now);
 		}
 
-		private ArrayList getMods(DirectoryInfo dir, DateTime from, DateTime to) 
+		private ArrayList GetMods(DirectoryInfo dir, DateTime from, DateTime to) 
 		{
 			ArrayList mods = new ArrayList();
 
@@ -63,7 +63,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 				DirectoryInfo[] subs = dir.GetDirectories();
 				foreach (DirectoryInfo sub in subs) 
 				{
-					mods.AddRange(getMods(sub, from, to));
+					mods.AddRange(GetMods(sub, from, to));
 				}
 			} 
 			catch (DirectoryNotFoundException exc) 
@@ -93,6 +93,11 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 
 		public void LabelSourceControl(string label, DateTime timeStamp) 
 		{
+		}
+
+		public void GetSource(IntegrationResult result)
+		{
+			
 		}
 	}
 }

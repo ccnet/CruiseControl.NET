@@ -122,6 +122,11 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 		{
 		}
 
+		public void GetSource(IntegrationResult result)
+		{
+			
+		}
+
 		protected virtual string Execute(ProcessInfo p)
 		{
 			return new ProcessExecutor().Execute(p).StandardOutput;

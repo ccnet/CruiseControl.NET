@@ -46,5 +46,9 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test
 		public void LabelSourceControl(string label, DateTime timeStamp) 
 		{
 		}
+
+		public void GetSource(IntegrationResult result)
+		{
+		}
 	}
 }

@@ -159,6 +159,7 @@ namespace ThoughtWorks.CruiseControl.Core
 				if (ShouldRunBuild(result, buildCondition))
 				{
 					CreateTemporaryLabelIfNeeded();
+					_sourceControl.GetSource(result);
 					RunBuild(result);
 					RunTasks(result);
 				}

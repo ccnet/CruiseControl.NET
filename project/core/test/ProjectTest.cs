@@ -159,6 +159,7 @@ namespace ThoughtWorks.CruiseControl.Core.Test
 			_mockLabeller.ExpectAndReturn("Generate", "label", new IsAnything());		// generate new label
 			_mockSourceControl.ExpectAndReturn("GetModifications", modifications, new IsAnything(), new IsAnything());
 			_mockSourceControl.Expect("LabelSourceControl", "label", new IsAnything());
+			_mockSourceControl.Expect("GetSource", new IsAnything());
 			_mockPublisher.Expect("PublishIntegrationResults", new IsAnything(), new IsAnything());
 			_mockTask.Expect("Run", new IsAnything());
 

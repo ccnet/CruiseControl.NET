@@ -77,5 +77,13 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 				}
 			}
 		}
+
+		public void GetSource(IntegrationResult result) 
+		{
+			foreach (ISourceControl sourceControl in SourceControls)
+			{
+				sourceControl.GetSource(result);
+			}
+		}
 	}
 }

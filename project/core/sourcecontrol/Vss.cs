@@ -17,22 +17,24 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 
 		// ss history [dir] -R -Vd[now]~[lastBuild] -Y[un,pw] -I-Y -O[tempFileName]
 		internal static readonly string HISTORY_COMMAND_FORMAT = @"history {0} -R -Vd{1}~{2} -Y{3},{4} -I-Y";
-
+		internal static readonly string GET_COMMAND_FORMAT = @"get {0} -R -Vd{1} -Y{2},{3} -I-N";
 		internal static readonly string LABEL_COMMAND_FORMAT = @"label {0} -L{1} -Vd{2} -Y{3},{4} -I-Y";
 		internal static readonly string LABEL_COMMAND_FORMAT_NOTIMESTAMP = @"label {0} -L{1} -Y{2},{3} -I-Y";
 
+		private IRegistry _registry;
 		private string _ssDir;
 		private string _executable;
 		private string _lastTempLabel;
 
 		public CultureInfo CultureInfo = CultureInfo.CurrentCulture;
 
-		public Vss(): base(new VssHistoryParser())
+		public Vss(): this(new VssHistoryParser(), new ProcessExecutor(), new Registry())
 		{
 		}
 
-		public Vss(IHistoryParser historyParser, ProcessExecutor executor): base(historyParser, executor)
+		public Vss(IHistoryParser historyParser, ProcessExecutor executor, IRegistry registry) : base(historyParser, executor)
 		{
+			_registry = registry;
 		}
 
 		[ReflectorProperty("executable", Required = false)] 
@@ -41,7 +43,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			get
 			{
 				if (_executable == null)
-					_executable = GetExecutable(new Registry());
+					_executable = GetExecutable();
 				return _executable;
 			}
 			set { _executable = value; }
@@ -68,6 +70,12 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 		/// </summary>
 		[ReflectorProperty("applyLabel", Required = false)]
 		public bool ApplyLabel = false;
+
+		[ReflectorProperty("autoGetSource", Required = false)]
+		public bool AutoGetSource = false;
+
+		[ReflectorProperty("workingDirectory", Required = false)]
+		public string WorkingDirectory;
 
 		public override Modification[] GetModifications(DateTime from, DateTime to)
 		{
@@ -153,10 +161,26 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			return string.Format(HISTORY_COMMAND_FORMAT, Project, FormatCommandDate(to), FormatCommandDate(from), Username, Password);
 		}
 
-		internal string GetExecutable(IRegistry registry)
+		private string GetExecutable()
 		{
-			string comServerPath = registry.GetLocalMachineSubKeyValue(SS_REGISTRY_PATH, SS_REGISTRY_KEY);
+			string comServerPath = _registry.GetExpectedLocalMachineSubKeyValue(SS_REGISTRY_PATH, SS_REGISTRY_KEY);
 			return Path.Combine(Path.GetDirectoryName(comServerPath), SS_EXE);
+		}
+
+		public override void GetSource(IntegrationResult result)
+		{
+			if (! AutoGetSource) return;
+
+			if (! Directory.Exists(WorkingDirectory))
+			{
+				Directory.CreateDirectory(WorkingDirectory);
+			}
+
+			Log.Info("Getting source from VSS");
+			string arguments = string.Format(GET_COMMAND_FORMAT, Project, FormatCommandDate(result.StartTime), Username, Password);		
+			ProcessInfo processInfo = new ProcessInfo(Executable, arguments, WorkingDirectory);
+			Log.Debug(string.Format("VSS Command: {0} {1}", Executable, arguments));
+			Execute(processInfo);
 		}
 
 		internal string LastTempLabel
@@ -174,6 +198,5 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 		{
 			return ( _lastTempLabel != null );
 		}
-
 	}
 }

@@ -5,6 +5,7 @@ using System;
 using System.Collections;
 using ThoughtWorks.CruiseControl.Core.Test;
 using ThoughtWorks.CruiseControl.Core.Util;
+using NMock.Constraints;
 
 namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test
 {
@@ -45,7 +46,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test
 		}
 
 		[Test]
-		public void TestPassesThroughLabelSourceControl()
+		public void PassesThroughLabelSourceControl()
 		{
 			//// SETUP
 			string label = "testLabel";
@@ -73,7 +74,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test
 		}
 
 		[Test]
-		public void TestPassesThroughGetSourceControlAndCombinesResults()
+		public void PassesThroughGetSourceControlAndCombinesResults()
 		{
 			//// SETUP
 			DateTime dateTime1 = DateTime.Now;
@@ -87,10 +88,10 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test
 			mod3.Comment = "Yet More Multi";
 
 			ArrayList mocks = new ArrayList();
-			mocks.Add( createModificationsSourceControlMock( new Modification[] { mod1, mod2 }, dateTime1, dateTime2 ) );
-			mocks.Add( createModificationsSourceControlMock( new Modification[] { mod3 }, dateTime1, dateTime2 ) );
-			mocks.Add( createModificationsSourceControlMock( new Modification[0], dateTime1, dateTime2 ) );
-			mocks.Add( createModificationsSourceControlMock( null, dateTime1, dateTime2 ) );
+			mocks.Add( CreateModificationsSourceControlMock( new Modification[] { mod1, mod2 }, dateTime1, dateTime2 ) );
+			mocks.Add( CreateModificationsSourceControlMock( new Modification[] { mod3 }, dateTime1, dateTime2 ) );
+			mocks.Add( CreateModificationsSourceControlMock( new Modification[0], dateTime1, dateTime2 ) );
+			mocks.Add( CreateModificationsSourceControlMock( null, dateTime1, dateTime2 ) );
 
 			ArrayList scList = new ArrayList();
 			foreach (DynamicMock mock in mocks)
@@ -154,7 +155,25 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test
 			}
 		}
 
-		private DynamicMock createModificationsSourceControlMock(Modification[] mods, DateTime dt1, DateTime dt2)
+		[Test]
+		public void ShouldInstructAggregatedSourceControlsToGetSource()
+		{
+			IntegrationResult result = new IntegrationResult();
+			IMock mockSC1 = new DynamicMock(typeof(ISourceControl));
+			IMock mockSC2 = new DynamicMock(typeof(ISourceControl));
+			mockSC1.Expect("GetSource", result);
+			mockSC2.Expect("GetSource", result);
+
+			MultiSourceControl multiSourceControl = new MultiSourceControl();
+			multiSourceControl.SourceControls.Add((ISourceControl) mockSC1.MockInstance);
+			multiSourceControl.SourceControls.Add((ISourceControl) mockSC2.MockInstance);
+			multiSourceControl.GetSource(result);
+
+			mockSC1.Verify();
+			mockSC2.Verify();
+		}
+
+		private DynamicMock CreateModificationsSourceControlMock(Modification[] mods, DateTime dt1, DateTime dt2)
 		{
 			DynamicMock mock = new DynamicMock(typeof(ISourceControl));
 			mock.ExpectAndReturn("GetModifications", mods, dt1, dt2);

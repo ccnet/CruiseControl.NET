@@ -75,5 +75,9 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 		{
 			return _historyParser.Parse(reader, from, to);
 		}
+
+		public virtual void GetSource(IntegrationResult result)
+		{
+		}
 	}
 }

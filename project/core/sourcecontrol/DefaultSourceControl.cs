@@ -18,6 +18,11 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 		{
 		}
 
+		public void GetSource(IntegrationResult result)
+		{
+			
+		}
+
 		public bool ShouldRun(IntegrationResult result)
 		{
 			return result.Working;
