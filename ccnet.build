@@ -48,11 +48,11 @@
 	<target name="test" depends="compile, test.unit" />
 
 	<target name="test.unit" description="runs unit tests">
-		<exec program="${nunit-console.exe}" workingdir="${build.dir}\core" commandline="${core.dll} /xml:${core.dll}-results.xml"/>
-		<exec program="${nunit-console.exe}" workingdir="${build.dir}\web" commandline="${web.dll} /xml:${web.dll}-results.xml"/>
-		<exec program="${nunit-console.exe}" workingdir="${build.dir}\server" commandline="${console.exe} /xml:${console.exe}-results.xml"/>
-		<exec program="${nunit-console.exe}" workingdir="${build.dir}\service" commandline="${service.exe} /xml:${service.exe}-results.xml"/>
-		<exec program="${nunit-console.exe}" workingdir="${build.dir}\controlpanel" commandline="${controlpanel.exe} /xml:${controlpanel.exe}-results.xml"/>
+		<exec program="${nunit-console.exe}" workingdir="${build.dir}\core" commandline="${core.dll} /xml:../${core.dll}-results.xml"/>
+		<exec program="${nunit-console.exe}" workingdir="${build.dir}\web" commandline="${web.dll} /xml:../${web.dll}-results.xml"/>
+		<exec program="${nunit-console.exe}" workingdir="${build.dir}\server" commandline="${console.exe} /xml:../${console.exe}-results.xml"/>
+		<exec program="${nunit-console.exe}" workingdir="${build.dir}\service" commandline="${service.exe} /xml:../${service.exe}-results.xml"/>
+		<exec program="${nunit-console.exe}" workingdir="${build.dir}\controlpanel" commandline="${controlpanel.exe} /xml:../${controlpanel.exe}-results.xml"/>
 	</target>
 
 	<!-- Used for manually testing the webapp. Don't include this in an automated build
