@@ -381,7 +381,10 @@ namespace ThoughtWorks.CruiseControl.Core
 		{
 			Log.Info(string.Format("Purging Project [{0}]", Name));
 			SourceControl.Purge(this);
-			Directory.Delete(WorkingDirectory, true);
+			if (Directory.Exists(WorkingDirectory))
+			{
+				new IoService().DeleteIncludingReadOnlyObjects(WorkingDirectory);	
+			}
 		}
 	}
 }

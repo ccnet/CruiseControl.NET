@@ -522,5 +522,25 @@ namespace ThoughtWorks.CruiseControl.Core.Test
 			sourceControlMock.Verify();
 			Assert.IsTrue(Directory.Exists(tempDirPath));
 		}
+
+		[Test]
+		public void ShouldHandleWorkingDirectoryNotExisting()
+		{
+			// Setup
+			Project project = new Project();
+
+			DynamicMock sourceControlMock = new DynamicMock(typeof(ISourceControl));
+			sourceControlMock.Expect("Purge", project);
+			project.SourceControl = (ISourceControl) sourceControlMock.MockInstance;
+			project.ConfiguredWorkingDirectory = tempDirPath;
+			TempFileUtil.DeleteTempDir("tempDir");
+			Assert.IsFalse(Directory.Exists(tempDirPath));
+
+			// Execute
+			project.Purge();
+			
+			// Verify
+			sourceControlMock.Verify();
+		}
 	}
 }
