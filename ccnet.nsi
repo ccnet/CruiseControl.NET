@@ -107,12 +107,22 @@ Section "CCTray" SEC03
   !insertmacro MUI_STARTMENU_WRITE_END
 SectionEnd
 
+Section "Documentation" SEC04
+  SetOutPath "$INSTDIR\Doc"
+  SetOverwrite on
+  File /r "deployed\doc\*"
+
+  !insertmacro MUI_STARTMENU_WRITE_BEGIN Application
+  !insertmacro MUI_STARTMENU_WRITE_END
+SectionEnd
+
 Section -AdditionalIcons
   SetOutPath $INSTDIR
   !insertmacro MUI_STARTMENU_WRITE_BEGIN Application
   WriteIniStr "$INSTDIR\${PRODUCT_NAME}.url" "InternetShortcut" "URL" "${PRODUCT_WEB_SITE}"
   CreateShortCut "$SMPROGRAMS\$ICONS_GROUP\Website.lnk" "$INSTDIR\${PRODUCT_NAME}.url"
   CreateShortCut "$SMPROGRAMS\$ICONS_GROUP\Uninstall.lnk" "$INSTDIR\uninst.exe"
+  CreateShortCut "$SMPROGRAMS\$ICONS_GROUP\Documentation.lnk" "$INSTDIR\doc\index.html"
   !insertmacro MUI_STARTMENU_WRITE_END
 SectionEnd
 
@@ -132,6 +142,7 @@ SectionEnd
   !insertmacro MUI_DESCRIPTION_TEXT ${SEC01} "The core CruiseControl.NET server."
   !insertmacro MUI_DESCRIPTION_TEXT ${SEC02} "The ASP.NET Web Dashboard for configuring and monitoring builds managed by CruiseControl.NET."
   !insertmacro MUI_DESCRIPTION_TEXT ${SEC03} "The system tray applet for remotely monitoring and triggering builds managed by CruiseControl.NET."
+  !insertmacro MUI_DESCRIPTION_TEXT ${SEC04} "Documetation for the CruiseControl.NET Product Suite"
 !insertmacro MUI_FUNCTION_DESCRIPTION_END
 
 ; Installer functions
@@ -273,6 +284,7 @@ Section Uninstall
   Call un.RemoveVirtualDirectory
   !insertmacro MUI_STARTMENU_GETFOLDER "Application" $ICONS_GROUP
 
+  Delete "$SMPROGRAMS\$ICONS_GROUP\Documentation.lnk"
   Delete "$SMPROGRAMS\$ICONS_GROUP\Uninstall.lnk"
   Delete "$SMPROGRAMS\$ICONS_GROUP\Website.lnk"
   Delete "$DESKTOP\CruiseControl.NET.lnk"
