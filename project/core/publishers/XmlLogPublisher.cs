@@ -173,7 +173,7 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
 				reader.ReadInnerXml();
 				writer.WriteNode(reader, false);
 			}
-			catch (XmlException e) 
+			catch (XmlException) 
 			{
 				// IF we had a problem with the input xml, wrap it in CDATA and put that in instead
 				writer.WriteCData(XmlUtil.EncodeCDATA(nullRemovedOutput));

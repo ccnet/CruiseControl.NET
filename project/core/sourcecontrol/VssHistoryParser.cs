@@ -112,7 +112,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 	internal abstract class VSSParser 
 	{
 		private static readonly Regex REGEX_USER_DATE_LINE = 
-			new Regex(@"User:\s+([\w\.]+)\s+Date:\s+(.+)\s+Time:\s+(.+)$",RegexOptions.Multiline);
+			new Regex(@"User:(.+)Date:(.+)Time:(.+)$",RegexOptions.Multiline);
 		private static readonly Regex REGEX_FILE_NAME = new Regex(@"\*+([\w\s\.]+)", RegexOptions.Multiline);
 
 		private DateTimeFormatInfo dateTimeFormatInfo;
@@ -152,6 +152,10 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 		internal void ParseUsernameAndDate(Modification mod)
 		{
 			Match match = REGEX_USER_DATE_LINE.Match(entry);
+			if (! match.Success)
+			{
+				throw new CruiseControlException("Invalid data retrieved from VSS.  Unable to parse username and date from text. " + entry);
+			}
 			
 			mod.UserName = match.Groups[1].Value.Trim();
 			string date = match.Groups[2].Value.Trim();

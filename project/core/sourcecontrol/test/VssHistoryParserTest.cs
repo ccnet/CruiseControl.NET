@@ -119,6 +119,27 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test
 			AssertEquals(expectedUsername, mod.UserName);
 			AssertEquals(expectedDate, mod.ModifiedTime);
 		}
+		
+		[Test]
+		public void ParseMultiWordUsername()
+		{
+			Modification mod = new Modification();
+			
+			string line = "foo\r\nUser: Gabriel Gilabert     Date:  5/08/03   Time:  4:06a\r\n";
+			CheckInParser parser = new CheckInParser(line, new CultureInfo("en-US"));
+			parser.ParseUsernameAndDate(mod);
+			string expectedUsername = "Gabriel Gilabert";
+			DateTime expectedDate = new DateTime(2003, 05, 08, 04, 06, 0);
+			AssertEquals(expectedUsername, mod.UserName);
+			AssertEquals(expectedDate, mod.ModifiedTime);
+		}
+
+		[Test, ExpectedException(typeof(CruiseControlException))]
+		public void ParseInvalidUsernameLine()
+		{
+			string line = "foo\r\nbar\r\n";
+			new CheckInParser(line, new CultureInfo("en-US")).ParseUsernameAndDate(new Modification());
+		}
 
 		[Test]
 		public void ParseFileName() 
