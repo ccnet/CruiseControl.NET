@@ -1,5 +1,4 @@
 using System.IO;
-using System.Text;
 using System.Xml;
 using Exortech.NetReflector;
 using ThoughtWorks.CruiseControl.Remote;
@@ -48,13 +47,14 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
             if (result.Status == IntegrationStatus.Unknown)
                 return;
 
-            using (XmlIntegrationResultWriter integrationWriter = new XmlIntegrationResultWriter(GetXmlWriter(LogDirectory(project), GetFilename(result))))
+            using (XmlIntegrationResultWriter integrationWriter = new XmlIntegrationResultWriter(CreateWriter(LogDirectory(project), GetFilename(result))))
             {
-                integrationWriter.Write(result);
+				integrationWriter.Formatting = Formatting.Indented;
+				integrationWriter.Write(result);
             }
         }
 
-        private XmlWriter GetXmlWriter(string dirname, string filename)
+        private TextWriter CreateWriter(string dirname, string filename)
         {
             // create directory if necessary
             if (!Directory.Exists(dirname))
@@ -63,9 +63,7 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
             string path = Path.Combine(dirname, filename);
 
 			// create XmlWriter using UTF8 encoding
-        	XmlTextWriter writer = new XmlTextWriter(path, Encoding.UTF8);
-			writer.Formatting = Formatting.Indented;
-        	return writer;
+			return new StreamWriter(path);
         }
 
         private string GetFilename(IIntegrationResult result)

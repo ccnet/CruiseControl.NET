@@ -8,11 +8,11 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
 {
 	public class XmlIntegrationResultWriter : IDisposable
 	{
-		private XmlWriter _writer;
+		private XmlFragmentWriter _writer;
 
-		public XmlIntegrationResultWriter(XmlWriter writer)
+		public XmlIntegrationResultWriter(TextWriter textWriter)
 		{
-			_writer = writer;
+			_writer = new XmlFragmentWriter(textWriter);
 		}
 
 		public void Write(IIntegrationResult result)
@@ -58,46 +58,17 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
 
 		private void WriteOutput(string output)
 		{
-			string xmlRemovedOutput = StripXmlDeclaration(RemoveNulls(output));
-			try
-			{
-				StringWriter buffer = new StringWriter();
-				WriteOutput(xmlRemovedOutput, new XmlTextWriter(buffer));
-//				_writer.WriteRaw(buffer.ToString());
-				WriteOutput(xmlRemovedOutput, _writer);
-			}
-			catch (XmlException)
-			{
-				// IF we had a problem with the input xml, wrap it in CDATA and put that in instead
-				_writer.WriteCData(XmlUtil.EncodeCDATA(xmlRemovedOutput));
-			}
+			string xmlRemovedOutput = RemoveNulls(output);
+			_writer.WriteNode(xmlRemovedOutput);
 		}
 
-		private void WriteOutput(string output, XmlWriter writer)
-		{
-			XmlTextReader reader = new XmlTextReader(new StringReader(output));
-			try
-			{
-				writer.WriteNode(reader, false);
-			}
-			finally
-			{
-				reader.Close();
-			}
-		}
-
-		private string StripXmlDeclaration(string xmlString)
-		{
-			return Regex.Replace(xmlString, @"<\?xml.*\?>", "");
-		}
-
-		public string RemoveNulls(string s)
+		private string RemoveNulls(string s)
 		{
 			Regex nullStringRegex = new Regex("\0");
-			return nullStringRegex.Replace(s, "");
+			return nullStringRegex.Replace(s, string.Empty);
 		}
 
-		public void WriteException(IIntegrationResult result)
+		private void WriteException(IIntegrationResult result)
 		{
 			if (result.ExceptionResult == null)
 			{
@@ -128,12 +99,17 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
 			_writer.WriteEndElement();
 		}
 
-		public class Elements
+		private class Elements
 		{
 			public const string BUILD = "build";
 			public const string CRUISE_ROOT = "cruisecontrol";
 			public const string MODIFICATIONS = "modifications";
 			public const string EXCEPTION = "exception";
+		}
+
+		public Formatting Formatting
+		{
+			set { _writer.Formatting = value; }
 		}
 	}
 }

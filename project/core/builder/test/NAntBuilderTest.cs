@@ -144,7 +144,7 @@ namespace ThoughtWorks.CruiseControl.Core.Builder.Test
 			Assert.AreEqual(_builder.Executable, info.FileName);
 			Assert.AreEqual(_builder.ConfiguredBaseDirectory, info.WorkingDirectory);
 			Assert.AreEqual(2000, info.TimeOut);
-			Assert.AreEqual(@"-buildfile:mybuild.build -logger:NAnt.Core.XmlLogger myArgs -D:label-to-apply=1.0 -D:ccnet.label=1.0 -D:ccnet.buildcondition=NoBuild target1 target2", info.Arguments);
+			Assert.AreEqual(@"-nologo -buildfile:mybuild.build -logger:NAnt.Core.XmlLogger myArgs -D:label-to-apply=1.0 -D:ccnet.label=1.0 -D:ccnet.buildcondition=NoBuild target1 target2", info.Arguments);
 		}
 
 		[Test]
@@ -159,7 +159,7 @@ namespace ThoughtWorks.CruiseControl.Core.Builder.Test
 			ProcessInfo info = (ProcessInfo) constraint.Parameter;
 			Assert.AreEqual(_builder.Executable, NAntBuilder.DEFAULT_EXECUTABLE);
 			Assert.AreEqual(NAntBuilder.DEFAULT_BUILD_TIMEOUT*1000, info.TimeOut);
-			Assert.AreEqual("-logger:NAnt.Core.XmlLogger -D:ccnet.buildcondition=NoBuild", info.Arguments);
+			Assert.AreEqual("-nologo -logger:NAnt.Core.XmlLogger -D:ccnet.buildcondition=NoBuild", info.Arguments);
 		}
 
 		[Test]
@@ -173,7 +173,7 @@ namespace ThoughtWorks.CruiseControl.Core.Builder.Test
 			_builder.Run(new IntegrationResult());
 
 			ProcessInfo info = (ProcessInfo) constraint.Parameter;
-			Assert.AreEqual(@"-buildfile:""my project.build"" -logger:NAnt.Core.XmlLogger -D:ccnet.buildcondition=NoBuild", info.Arguments);
+			Assert.AreEqual(@"-nologo -buildfile:""my project.build"" -logger:NAnt.Core.XmlLogger -D:ccnet.buildcondition=NoBuild", info.Arguments);
 		}
 
 		[Test]
@@ -258,46 +258,6 @@ namespace ThoughtWorks.CruiseControl.Core.Builder.Test
 			Assert.AreEqual(0, _builder.Targets.Length);
 			_builder.TargetsForPresentation = null;
 			Assert.AreEqual(0, _builder.Targets.Length);
-		}
-
-		[Test]
-		public void ShouldStripNonXmlHeaderFromResultsIfOutputFromNantIsXml()
-		{
-			string standardOut = @"NAnt 0.85 (Build 0.85.1714.0; net-1.0.win32; nightly; 10/09/2004)
-Copyright (C) 2001-2004 Gerry Shaw
-http://nant.sourceforge.net
-
-<buildresults project=""test"" />";
-			ProcessResult returnVal = new ProcessResult(standardOut, null, SUCCESSFUL_EXIT_CODE, false);
-
-			_mockExecutor.ExpectAndReturn("Execute", returnVal, new IsAnything());
-
-			IntegrationResult result = new IntegrationResult();
-			_builder.Run(result);
-
-			Assert.IsTrue(result.Succeeded);
-			Assert.AreEqual(IntegrationStatus.Success, result.Status);
-			Assert.AreEqual(@"<buildresults project=""test"" />", result.Output);
-		}
-
-		[Test]
-		public void ShouldLeaveResultsAsIsIfOutputFromNantIsNotXml()
-		{
-			string standardOut = @"NAnt 0.85 (Build 0.85.1714.0; net-1.0.win32; nightly; 10/09/2004)
-Copyright (C) 2001-2004 Gerry Shaw
-http://nant.sourceforge.net
-
-Some stuff that isn't XML";
-			ProcessResult returnVal = new ProcessResult(standardOut, null, SUCCESSFUL_EXIT_CODE, false);
-
-			_mockExecutor.ExpectAndReturn("Execute", returnVal, new IsAnything());
-
-			IntegrationResult result = new IntegrationResult();
-			_builder.Run(result);
-
-			Assert.IsTrue(result.Succeeded);
-			Assert.AreEqual(IntegrationStatus.Success, result.Status);
-			Assert.AreEqual(standardOut, result.Output);
 		}
 
 		private ProcessResult CreateSuccessfulProcessResult()

@@ -60,7 +60,7 @@ namespace ThoughtWorks.CruiseControl.Core.Builder
 		public void Run(IIntegrationResult result)
 		{
 			ProcessResult processResult = AttemptExecute(CreateProcessInfo(result));
-			result.Output = StripNonXmlHeaderIfXmlOutput(processResult.StandardOutput);
+			result.Output = processResult.StandardOutput;
 
 			if (processResult.TimedOut)
 			{
@@ -75,20 +75,6 @@ namespace ThoughtWorks.CruiseControl.Core.Builder
 			{
 				result.Status = IntegrationStatus.Failure;
 				Log.Info("NAnt build failed: " + processResult.StandardError);
-			}
-		}
-
-		// http://jira.public.thoughtworks.org/browse/CCNET-214
-		private string StripNonXmlHeaderIfXmlOutput(string output)
-		{
-			int buildResultTagPosition = output.IndexOf("<buildresults");
-			if ( buildResultTagPosition > -1)
-			{
-				return output.Substring(buildResultTagPosition);
-			}
-			else
-			{
-				return output;
 			}
 		}
 
@@ -140,12 +126,18 @@ namespace ThoughtWorks.CruiseControl.Core.Builder
 		private string CreateArgs(IIntegrationResult result)
 		{
 			StringBuilder buffer = new StringBuilder();
+			AppendNoLogoArg(buffer);
 			AppendBuildFileArg(buffer);
 			AppendLoggerArg(buffer);
 			AppendIfNotBlank(buffer, BuildArgs);
 			AppendIntegrationResultProperties(buffer, result);
 			AppendTargets(buffer);
 			return buffer.ToString();
+		}
+
+		private void AppendNoLogoArg(StringBuilder buffer)
+		{
+			buffer.Append("-nologo");
 		}
 
 		private void AppendBuildFileArg(StringBuilder buffer)

@@ -43,7 +43,7 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
 		private void AppendHtmlMessageDetails(StringBuilder message, IIntegrationResult result)
 		{
 			StringWriter buffer = new StringWriter();
-			using (XmlIntegrationResultWriter integrationWriter = new XmlIntegrationResultWriter(new XmlTextWriter(buffer)))
+			using (XmlIntegrationResultWriter integrationWriter = new XmlIntegrationResultWriter(buffer))
 			{
 				integrationWriter.Write(result);
 			}

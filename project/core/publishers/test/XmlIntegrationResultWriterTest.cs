@@ -1,6 +1,5 @@
 using System;
 using System.IO;
-using System.Xml;
 using NUnit.Framework;
 using ThoughtWorks.CruiseControl.Core.Test;
 using ThoughtWorks.CruiseControl.Core.Util;
@@ -19,7 +18,7 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers.Test
         protected void SetUp()
         {
             buffer = new StringWriter();
-            _writer = new XmlIntegrationResultWriter(new XmlTextWriter(buffer));
+            _writer = new XmlIntegrationResultWriter(buffer);
         }
 
 		[Test]
@@ -146,16 +145,6 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers.Test
 			XmlUtil.VerifyXmlIsWellFormed(output);
         }
 
-        [Test]
-        public void WriteOutputWithInvalidXmlContainingCDATACloseCommand()
-        {
-            IntegrationResult result = new IntegrationResult();
-            result.Output = "<tag><c>]]></tag>";
-            string output = GenerateBuildOutput(result);
-			Assert.AreEqual(CreateExpectedBuildXml(result, @"<![CDATA[<tag><c>] ]></tag>]]>"), output);
-			XmlUtil.VerifyXmlIsWellFormed(output);
-        }
-
 		[Test]
 		public void ShouldStripXmlDeclaration()
 		{
@@ -176,6 +165,21 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers.Test
             Assert.AreEqual(CreateExpectedBuildXml(result), output);
 			XmlUtil.VerifyXmlIsWellFormed(output);
         }
+
+		[Test]
+		public void ShouldNotEncloseBuilderOutputInCDATAIfNotSingleRootedXml()
+		{
+			string nantOut = @"NAnt 0.85 (Build 0.85.1714.0; net-1.0.win32; nightly; 10/09/2004)
+Copyright (C) 2001-2004 Gerry Shaw
+http://nant.sourceforge.net
+
+<buildresults project=""test"" />";
+
+			IntegrationResult result = CreateIntegrationResult(IntegrationStatus.Success, false);
+			result.Output = nantOut;
+
+			Assert.AreEqual(CreateExpectedBuildXml(result), GenerateBuildOutput(result));
+		}
 
         private IntegrationResult CreateIntegrationResult(IntegrationStatus status, bool addModifications)
         {
