@@ -41,6 +41,15 @@
 									<TABLE cellSpacing="0" cellPadding="0" width="100%" align="center" border="0">
 										<TR>
 											<TD><IMG src="images/shim.gif" width="20"></TD>
+											<TD noWrap><BR>
+											</TD>
+										<TR>
+											<TD><IMG src="images/shim.gif" width="20"></TD>
+											<TD noWrap>
+												<asp:DataList id="ServerPluginsList" Runat="server"></asp:DataList></TD>
+										</TR>
+										<TR>
+											<TD><IMG src="images/shim.gif" width="20"></TD>
 											<TD noWrap><SPAN class="buildresults-header">BUILD 
                   RESULTS</SPAN>
 												<BR>
@@ -49,14 +58,12 @@
 										<TR>
 											<TD><IMG src="images/shim.gif" width="20"></TD>
 											<TD noWrap>
-												<asp:DataList id="menu" Runat="server"></asp:DataList>
-											</TD>
+												<asp:DataList id="menu" Runat="server"></asp:DataList></TD>
 										</TR>
 										<TR>
 											<TD><IMG src="images/shim.gif" width="20"></TD>
 											<TD noWrap>
-												<asp:DataList id="BuildPluginsList" Runat="server"></asp:DataList>
-											</TD>
+												<asp:DataList id="BuildPluginsList" Runat="server"></asp:DataList></TD>
 										</TR>
 									</TABLE>
 								</TD>

@@ -32,6 +32,11 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.ServerConnection
 			return GetCruiseManager(serverName).GetBuildNames(projectName);
 		}
 
+		public string GetServerLog (string serverName)
+		{
+			return GetCruiseManager(serverName).GetServerLog();
+		}
+
 		private ICruiseManager GetCruiseManager(string serverName)
 		{
 			foreach (ServerSpecification server in (IEnumerable) configurationGetter.GetConfigFromSection(ServersSectionHandler.SectionName))

@@ -6,5 +6,11 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 	{
 		string Description { get; }
 		string Url { get; }
+		PluginBehavior Behavior { get; }
+	}
+
+	public enum PluginBehavior
+	{
+		Server, Project, Build
 	}
 }

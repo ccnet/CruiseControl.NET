@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.IO;
+using ThoughtWorks.Core.Log;
 using ThoughtWorks.CruiseControl.Core.Publishers;
 using ThoughtWorks.CruiseControl.Remote;
 
@@ -105,6 +106,12 @@ namespace ThoughtWorks.CruiseControl.Core
 			}
 
 			throw new NoSuchProjectException(projectName);
+		}
+
+		// ToDo - test
+		public string GetServerLog ()
+		{
+			return new ServerLogFileReader().Read();
 		}
 
 		/// <summary>

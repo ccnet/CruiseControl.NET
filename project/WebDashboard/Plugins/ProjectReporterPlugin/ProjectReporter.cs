@@ -13,5 +13,9 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.ProjectReporterPlugin
 		{
 			get { return "ProjectReport.aspx"; }
 		}
+		public PluginBehavior Behavior
+		{
+			get { return PluginBehavior.Build; }
+		}
 	}
 }

@@ -5,6 +5,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.SiteTemplatePlugin
 {
 	public class SiteTemplateResults
 	{
+		private readonly HtmlAnchor[] serverPluginsList;
 		private readonly HtmlAnchor[] buildPluginList;
 		private readonly string latestLogLink;
 		private readonly string previousLogLink;
@@ -16,7 +17,8 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.SiteTemplatePlugin
 		private readonly string pluginLinksHtml;
 
 		public SiteTemplateResults(bool projectMode, HtmlAnchor[] buildLinkList, string buildStatsHtml, string buildStatsClass, 
-			string pluginLinksHtml, string latestLogLink, string nextLogLink, string previousLogLink, HtmlAnchor[] buildPluginList)
+			string pluginLinksHtml, string latestLogLink, string nextLogLink, string previousLogLink, HtmlAnchor[] buildPluginList,
+			HtmlAnchor[] serverPluginsList)
 		{
 			this.buildLinkList = buildLinkList;
 			this.projectMode = projectMode;
@@ -27,6 +29,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.SiteTemplatePlugin
 			this.nextLogLink = nextLogLink;
 			this.previousLogLink = previousLogLink;
 			this.buildPluginList = buildPluginList;
+			this.serverPluginsList = serverPluginsList;
 		}
 
 		public bool ProjectMode
@@ -72,6 +75,11 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.SiteTemplatePlugin
 		public HtmlAnchor[] BuildPluginsList
 		{
 			get { return buildPluginList; }
+		}
+
+		public HtmlAnchor[] ServerPluginsList
+		{
+			get { return serverPluginsList; }
 		}
 	}
 }

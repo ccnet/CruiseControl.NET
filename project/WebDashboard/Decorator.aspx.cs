@@ -26,6 +26,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard
 		protected HtmlTableCell contentCell;
 		protected System.Web.UI.WebControls.Panel ProjectPanel1;
 		protected System.Web.UI.WebControls.DataList BuildPluginsList;
+		protected System.Web.UI.WebControls.DataList ServerPluginsList;
 		protected System.Web.UI.WebControls.Panel ProjectPanel2;
 
 		private void Page_Load(object sender, EventArgs e)
@@ -36,6 +37,9 @@ namespace ThoughtWorks.CruiseControl.WebDashboard
 			{
 				buildStats.InnerHtml = results.BuildStatsHtml;
 				buildStats.Attributes["class"] = results.BuildStatsClass;
+
+				ServerPluginsList.DataSource = results.ServerPluginsList;
+				ServerPluginsList.DataBind();
 
 				menu.DataSource = results.BuildLinkList;
 				menu.DataBind();
@@ -70,6 +74,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard
 		{    
 			this.menu.ItemDataBound += new System.Web.UI.WebControls.DataListItemEventHandler(this.DataList_BindItem);
 			this.BuildPluginsList.ItemDataBound += new System.Web.UI.WebControls.DataListItemEventHandler(this.DataList_BindItem);
+			this.ServerPluginsList.ItemDataBound += new System.Web.UI.WebControls.DataListItemEventHandler(this.DataList_BindItem);
 			this.Load += new System.EventHandler(this.Page_Load);
 
 		}

@@ -1,6 +1,8 @@
+using System;
 using System.Web.UI.HtmlControls;
 using NMock;
 using NUnit.Framework;
+using ThoughtWorks.CruiseControl.WebDashboard.config;
 using ThoughtWorks.CruiseControl.WebDashboard.Config;
 using ThoughtWorks.CruiseControl.WebDashboard.Dashboard;
 using ThoughtWorks.CruiseControl.WebDashboard.IO;
@@ -133,8 +135,10 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Plugins.SiteTemplate
 		[Test]
 		public void CreatesCorrectListOfBuildPluginLinks()
 		{
-			AssemblyLoadingPluginSpecification assemblyLoadingPlugin = new AssemblyLoadingPluginSpecification(typeof(TestPlugin).FullName, typeof(TestPlugin).Assembly.CodeBase);
-			AssemblyLoadingPluginSpecification[] assemblyLoadingPlugins = new AssemblyLoadingPluginSpecification[] { assemblyLoadingPlugin };
+			IPluginSpecification buildPlugin = new AssemblyLoadingPluginSpecification(typeof(TestBuildPlugin).FullName, typeof(TestBuildPlugin).Assembly.CodeBase);
+			IPluginSpecification serverPlugin = new AssemblyLoadingPluginSpecification(typeof(TestServerPlugin).FullName, typeof(TestServerPlugin).Assembly.CodeBase);
+			IPluginSpecification[] assemblyLoadingPlugins = new IPluginSpecification[] { buildPlugin, serverPlugin };
+			configurationGetterMock.ExpectAndReturn("GetConfigFromSection", assemblyLoadingPlugins, PluginsSectionHandler.SectionName);
 			configurationGetterMock.ExpectAndReturn("GetConfigFromSection", assemblyLoadingPlugins, PluginsSectionHandler.SectionName);
 			requestWrapperMock.ExpectAndReturn("GetProjectName", project);
 			requestWrapperMock.ExpectAndReturn("GetServerName", server);
@@ -143,16 +147,47 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Plugins.SiteTemplate
 			SiteTemplateResults results = siteTemplate.Do();
 
 			AssertEquals(1, results.BuildPluginsList.Length);
-			AssertEquals("Test Plugin", results.BuildPluginsList[0].InnerHtml);
-			AssertEquals(string.Format("test.aspx?server={0}&amp;project={1}&amp;build={2}", server, project,  buildName), 
+			AssertEquals("Test Build Plugin", results.BuildPluginsList[0].InnerHtml);
+			AssertEquals(string.Format("testbuild.aspx?server={0}&amp;project={1}&amp;build={2}", server, project,  buildName), 
 				results.BuildPluginsList[0].HRef);
+		}
+
+		[Test]
+		public void DoesntCreateListOfServerPluginsIfNoProjectSpecified()
+		{
+			requestWrapperMock.ExpectAndReturn("GetProjectName", "");
+			requestWrapperMock.ExpectAndReturn("GetServerName", "server");
+			SiteTemplateResults results = siteTemplate.Do();
+			AssertEquals(0, results.ServerPluginsList.Length);
+
+			VerifyMocks();
+		}
+
+		[Test]
+		public void CreatesCorrectListOfServerPluginLinks()
+		{
+			IPluginSpecification buildPlugin = new AssemblyLoadingPluginSpecification(typeof(TestBuildPlugin).FullName, typeof(TestBuildPlugin).Assembly.CodeBase);
+			IPluginSpecification serverPlugin = new AssemblyLoadingPluginSpecification(typeof(TestServerPlugin).FullName, typeof(TestServerPlugin).Assembly.CodeBase);
+			IPluginSpecification[] assemblyLoadingPlugins = new IPluginSpecification[] { buildPlugin, serverPlugin };
+			configurationGetterMock.ExpectAndReturn("GetConfigFromSection", assemblyLoadingPlugins, PluginsSectionHandler.SectionName);
+			configurationGetterMock.ExpectAndReturn("GetConfigFromSection", assemblyLoadingPlugins, PluginsSectionHandler.SectionName);
+			requestWrapperMock.ExpectAndReturn("GetProjectName", project);
+			requestWrapperMock.ExpectAndReturn("GetServerName", server);
+			buildRetrieverMock.ExpectAndReturn("GetBuild", build, requestWrapper);
+
+			SiteTemplateResults results = siteTemplate.Do();
+
+			AssertEquals(1, results.ServerPluginsList.Length);
+			AssertEquals("Test Server Plugin", results.ServerPluginsList[0].InnerHtml);
+			AssertEquals(string.Format("testserver.aspx?server={0}&amp;project={1}&amp;build={2}", server, project,  buildName), 
+				results.ServerPluginsList[0].HRef);
 		}
 	}
 
-	public class TestPlugin : IPlugin
+	public class TestBuildPlugin : IPlugin
 	{
-		string description = "Test Plugin";
-		string url = "test.aspx";
+		string description = "Test Build Plugin";
+		string url = "testbuild.aspx";
 
 		public string Description
 		{
@@ -161,6 +196,29 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Plugins.SiteTemplate
 		public string Url
 		{
 			get { return url; }
+		}
+		public PluginBehavior Behavior
+		{
+			get { return PluginBehavior.Build; }
+		}
+	}
+
+	public class TestServerPlugin : IPlugin
+	{
+		string description = "Test Server Plugin";
+		string url = "testserver.aspx";
+
+		public string Description
+		{
+			get { return description; }
+		}
+		public string Url
+		{
+			get { return url; }
+		}
+		public PluginBehavior Behavior
+		{
+			get { return PluginBehavior.Server; }
 		}
 	}
 }

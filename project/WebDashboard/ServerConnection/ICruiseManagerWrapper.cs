@@ -5,5 +5,6 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.ServerConnection
 		string GetLatestBuildName(string serverName, string projectName);
 		string GetLog(string serverName, string projectName, string buildName);
 		string[] GetBuildNames(string serverName, string projectName);
+		string GetServerLog(string serverName);
 	}
 }

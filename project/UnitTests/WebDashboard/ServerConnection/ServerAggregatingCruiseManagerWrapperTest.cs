@@ -136,5 +136,19 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.ServerConnection
 			
 			VerifyAll();
 		}
+
+		[Test]
+		public void ReturnsServerLogFromCorrectServer()
+		{
+			ServerSpecification[] servers = new ServerSpecification[] { new ServerSpecification("myserver", "http://myurl"), new ServerSpecification("myotherserver", "http://myotherurl")};
+
+			configurationGetterMock.ExpectAndReturn("GetConfigFromSection", servers, ServersSectionHandler.SectionName);
+			cruiseManagerFactoryMock.ExpectAndReturn("GetCruiseManager", (ICruiseManager) cruiseManagerMock.MockInstance, "http://myurl");
+			cruiseManagerMock.ExpectAndReturn("GetServerLog", "a server log");
+			AssertEquals("a server log", managerWrapper.GetServerLog("myserver"));
+			
+			VerifyAll();
+		}
+
 	}
 }

@@ -34,7 +34,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.SiteTemplatePlugin
 			string projectName = requestWrapper.GetProjectName();
 			if (serverName == string.Empty || projectName == string.Empty)
 			{
-				return new SiteTemplateResults(false, new HtmlAnchor[0], "", "", "", "", "", "", new HtmlAnchor[0]);
+				return new SiteTemplateResults(false, new HtmlAnchor[0], "", "", "", "", "", "", new HtmlAnchor[0], new HtmlAnchor[0]);
 			}
 
 			build = buildRetrieverForRequest.GetBuild(requestWrapper);
@@ -42,10 +42,20 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.SiteTemplatePlugin
 			LatestNextPreviousLinks latestNextPreviousLinks = GenerateLatestNextPreviousLinks(build);
 
 			return new SiteTemplateResults(true, buildLister.GetBuildLinks(serverName, projectName), stats.Html, stats.Htmlclass, "", 
-				latestNextPreviousLinks.latestLink, latestNextPreviousLinks.nextLink, latestNextPreviousLinks.previousLink, BuildPluginLinks());	
+				latestNextPreviousLinks.latestLink, latestNextPreviousLinks.nextLink, latestNextPreviousLinks.previousLink, BuildPluginLinks(), ServerPluginLinks());	
+		}
+
+		private HtmlAnchor[] ServerPluginLinks()
+		{
+			return PluginLinks(PluginBehavior.Server);
 		}
 
 		private HtmlAnchor[] BuildPluginLinks ()
+		{
+			return PluginLinks(PluginBehavior.Build);
+		}
+
+		private HtmlAnchor[] PluginLinks(PluginBehavior behavior)
 		{
 			IPluginSpecification[] pluginSpecifications = configurationGetter.GetConfigFromSection(PluginsSectionHandler.SectionName) as IPluginSpecification[];
 			if (pluginSpecifications == null)
@@ -66,12 +76,15 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.SiteTemplatePlugin
 				if (tempPlugin is IPlugin)
 				{
 					IPlugin plugin = (IPlugin) tempPlugin;
-					HtmlAnchor anchor = new HtmlAnchor();
-					// ToDo - make a URL generator
-					anchor.HRef = string.Format("{0}?server={1}&amp;project={2}&amp;build={3}", plugin.Url, build.ServerName, build.ProjectName, build.Name);
-					anchor.InnerHtml = plugin.Description;
-					anchor.Attributes["class"] = "link";
-					pluginAnchors.Add(anchor);
+					if (plugin.Behavior == behavior)
+					{
+						HtmlAnchor anchor = new HtmlAnchor();
+						// ToDo - make a URL generator
+						anchor.HRef = string.Format("{0}?server={1}&amp;project={2}&amp;build={3}", plugin.Url, build.ServerName, build.ProjectName, build.Name);
+						anchor.InnerHtml = plugin.Description;
+						anchor.Attributes["class"] = "link";
+						pluginAnchors.Add(anchor);
+					}
 				}
 				else
 				{
@@ -80,7 +93,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.SiteTemplatePlugin
 				}
 			}
 
-			return (HtmlAnchor[]) pluginAnchors.ToArray (typeof (HtmlAnchor));
+			return (HtmlAnchor[]) pluginAnchors.ToArray(typeof (HtmlAnchor));
 		}
 
 		private struct BuildStats

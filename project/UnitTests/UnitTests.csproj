@@ -139,6 +139,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Core\Log\ServerLogFileReaderTest.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "WebDashboard\Cache\LocalFileCacheManagerTest.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -175,6 +180,11 @@
                 />
                 <File
                     RelPath = "WebDashboard\Plugins\LogViewerPlugin\LogViewerTest.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "WebDashboard\Plugins\ServerLogViewerPlugin\ServerLogViewerPageRendererTest.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

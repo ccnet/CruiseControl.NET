@@ -35,5 +35,10 @@ namespace ThoughtWorks.CruiseControl.Remote
 		/// Returns the build log contents for requested project and build name
 		/// </summary>
 		string GetLog(string projectName, string buildName);
+
+		/// <summary>
+		/// Returns a log of recent build server activity. How much information that is returned is configured on the build server.
+		/// </summary>
+		string GetServerLog();
 	}
 }

@@ -214,6 +214,21 @@
                     BuildAction = "EmbeddedResource"
                 />
                 <File
+                    RelPath = "ViewServerLog.aspx"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "ViewServerLog.aspx.cs"
+                    DependentUpon = "ViewServerLog.aspx"
+                    SubType = "ASPXCodeBehind"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "ViewServerLog.aspx.resx"
+                    DependentUpon = "ViewServerLog.aspx.cs"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
                     RelPath = "Web.config"
                     BuildAction = "None"
                 />
@@ -437,6 +452,21 @@
                 />
                 <File
                     RelPath = "Plugins\ProjectReporterPlugin\ProjectReportResults.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Plugins\ServerLogViewerPlugin\ServerLogViewer.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Plugins\ServerLogViewerPlugin\ServerLogViewerPageRenderer.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Plugins\ServerLogViewerPlugin\ServerLogViewerResults.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

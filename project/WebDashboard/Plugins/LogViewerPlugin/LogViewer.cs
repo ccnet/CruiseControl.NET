@@ -13,5 +13,9 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.LogViewerPlugin
 		{
 			get { return "ViewLog.aspx"; }
 		}
+		public PluginBehavior Behavior
+		{
+			get { return PluginBehavior.Build; }
+		}
 	}
 }
