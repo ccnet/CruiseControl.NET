@@ -185,6 +185,16 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "IIntegrationResultManager.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "IIntegrationRunnerTarget.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "IntegrationEvents.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -196,6 +206,11 @@
                 />
                 <File
                     RelPath = "IntegrationResultManager.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "IntegrationRunner.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

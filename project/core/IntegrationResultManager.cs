@@ -4,7 +4,7 @@ using ThoughtWorks.CruiseControl.Remote;
 
 namespace ThoughtWorks.CruiseControl.Core
 {
-	public class IntegrationResultManager
+	public class IntegrationResultManager : IIntegrationResultManager
 	{
 		private readonly Project _project;
 		private IIntegrationResult _lastResult;

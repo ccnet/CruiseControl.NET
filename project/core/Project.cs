@@ -1,4 +1,3 @@
-using System;
 using System.ComponentModel;
 using System.IO;
 using Exortech.NetReflector;
@@ -30,7 +29,7 @@ namespace ThoughtWorks.CruiseControl.Core
 	/// </code>
 	/// </remarks>
 	[ReflectorType("project")]
-	public class Project : ProjectBase, IProject
+	public class Project : ProjectBase, IProject, IIntegrationRunnerTarget
 	{
 		/// <summary>
 		/// Raised whenever an integration is completed.
@@ -43,16 +42,27 @@ namespace ThoughtWorks.CruiseControl.Core
 		private ISourceControl _sourceControl = new NullSourceControl();
 		private IBuilder _builder;
 		private ILabeller _labeller = new DefaultLabeller();
+		private ITask[] _tasks = new ITask[0];		
 		private IIntegrationCompletedEventHandler[] _publishers = new IIntegrationCompletedEventHandler[0];
 		private ProjectActivity _currentActivity = ProjectActivity.Sleeping;
 		private int _modificationDelaySeconds = 0;
 		private IStateManager _state;
-		private IntegrationResultManager _integrationResultManager;
+		private IIntegrationResultManager _integrationResultManager;
+		private bool _publishExceptions = true;
+		private IIntegratable integratable;
 
 		public Project()
 		{
 			_state = new ProjectStateManager(this, new IntegrationStateManager());
 			_integrationResultManager = new IntegrationResultManager(this);
+			this.integratable = new IntegrationRunner(_integrationResultManager, this);
+		}
+
+		// This is nasty - test constructors and real constructors should be linked, but we have circular references here that need
+		// to be sorted out
+		public Project(IIntegratable integratable) : this ()
+		{ 
+			this.integratable = integratable;
 		}
 
 		[ReflectorProperty("state", InstanceTypeKey="type", Required=false)]
@@ -123,10 +133,24 @@ namespace ThoughtWorks.CruiseControl.Core
 		}
 
 		[ReflectorArray("tasks", Required=false)]
-		public ITask[] Tasks = new ITask[0];
+		public ITask[] Tasks
+		{
+			get { return _tasks; }
+			set { _tasks = value; }
+		}
 
 		[ReflectorProperty("publishExceptions", Required=false)]
-		public bool PublishExceptions = true;
+		public bool PublishExceptions
+		{
+			get { return _publishExceptions; }
+			set { _publishExceptions = value; }
+		}
+
+		// Move this ideally
+		public ProjectActivity Activity
+		{
+			set { _currentActivity = value; }
+		}
 
 		public ProjectActivity CurrentActivity
 		{
@@ -145,154 +169,24 @@ namespace ThoughtWorks.CruiseControl.Core
 
 		public IIntegrationResult RunIntegration(BuildCondition buildCondition)
 		{
-			IIntegrationResult result = CreateNewIntegrationResult(buildCondition);
-			AttemptToRunIntegration(result);
-			PostBuild(result);
-			return result;
+			return integratable.RunIntegration(buildCondition);
 		}
 
-		private IIntegrationResult CreateNewIntegrationResult(BuildCondition buildCondition)
+		public void Run(IIntegrationResult result)
 		{
-			return _integrationResultManager.StartNewIntegration(buildCondition);
-		}
-
-		private void AttemptToRunIntegration(IIntegrationResult result)
-		{
-			result.MarkStartTime();
-			try
-			{
-				result.Modifications = GetSourceModifications(result);
-				if (result.ShouldRunBuild(ModificationDelaySeconds))
-				{
-					CreateWorkingDirectoryIfItDoesntExist();
-					CreateTemporaryLabelIfNeeded();
-					_sourceControl.GetSource(result);
-					RunBuild(result);
-					RunTasks(result);
-				}
-			}
-			catch (Exception ex)
-			{
-				Log.Error(ex);
-				result.ExceptionResult = ex;
-				result.Status = IntegrationStatus.Exception;
-			}
-			result.MarkEndTime();
-		}
-
-		private Modification[] GetSourceModifications(IIntegrationResult result)
-		{
-			_currentActivity = ProjectActivity.CheckingModifications;
-			Modification[] modifications = SourceControl.GetModifications(LastIntegrationResult.StartTime, result.StartTime);
-			Log.Info(GetModificationsDetectedMessage(modifications));
-			return modifications;
-		}
-
-		private string GetModificationsDetectedMessage(Modification[] modifications)
-		{
-			switch (modifications.Length)
-			{
-				case 0:
-					return "No modifications detected.";
-				case 1:
-					return "1 modification detected.";
-				default:
-					return string.Format("{0} modifications detected.", modifications.Length);
-			}
-		}
-
-		private void RunBuild(IIntegrationResult result)
-		{
-			_currentActivity = ProjectActivity.Building;
-
-			if (result.BuildCondition == BuildCondition.ForceBuild)
-				Log.Info("Build forced");
-
-			Log.Info("Building");
-
 			Builder.Run(result);
-
-			Log.Info("Build complete: " + result.Status);
-		}
-
-		private void RunTasks(IIntegrationResult result)
-		{
-			foreach (ITask task in Tasks)
+			foreach (ITask task in _tasks)
 			{
 				task.Run(result);
 			}
 		}
 
-		private void PostBuild(IIntegrationResult result)
-		{
-			if (ShouldPublishException(result))
-			{
-				HandleProjectLabelling(result);
-
-				// raise event (publishers do their thing in response)
-				OnIntegrationCompleted(new IntegrationCompletedEventArgs(result));
-
-				_integrationResultManager.FinishIntegration();
-			}
-			Log.Info("Integration complete: " + result.EndTime);
-
-			_currentActivity = ProjectActivity.Sleeping;
-		}
-
-		private bool ShouldPublishException(IIntegrationResult result)
-		{
-			if (result.Status == IntegrationStatus.Exception)
-			{
-				return PublishExceptions;
-			}
-			else
-			{
-				return result.Status != IntegrationStatus.Unknown;
-			}
-		}
-
-
-		/// <summary>
-		/// Raises the IntegrationCompleted event.
-		/// </summary>
-		/// <param name="e">Arguments to pass with the raised event.</param>
-		private void OnIntegrationCompleted(IntegrationCompletedEventArgs e)
+		public void OnIntegrationCompleted(IIntegrationResult result)
 		{
 			if (IntegrationCompleted != null)
+			{
+				IntegrationCompletedEventArgs e = new IntegrationCompletedEventArgs(result);
 				IntegrationCompleted(this, e);
-		}
-
-		/// <summary>
-		/// Labels the project, if the build was successful.
-		/// </summary>
-		internal void HandleProjectLabelling(IIntegrationResult result)
-		{
-			if (result.Succeeded)
-				SourceControl.LabelSourceControl(result.Label, result);
-			else
-				DeleteTemporaryLabelIfNeeded();
-		}
-
-		// ToDo - MR - this is temporary until we know for certain that 'Initialize' will have been called at some point
-		private void CreateWorkingDirectoryIfItDoesntExist()
-		{
-			if (! Directory.Exists(WorkingDirectory))
-				Directory.CreateDirectory(WorkingDirectory);
-		}
-
-		internal void CreateTemporaryLabelIfNeeded()
-		{
-			if (SourceControl is ITemporaryLabeller)
-			{
-				((ITemporaryLabeller) SourceControl).CreateTemporaryLabel();
-			}
-		}
-
-		internal void DeleteTemporaryLabelIfNeeded()
-		{
-			if (SourceControl is ITemporaryLabeller)
-			{
-				((ITemporaryLabeller) SourceControl).DeleteTemporaryLabel();
 			}
 		}
 
