@@ -17,7 +17,7 @@
                 DelaySign = "false"
                 OutputType = "Library"
                 PreBuildEvent = ""
-                PostBuildEvent = ""
+                PostBuildEvent = 'mkdir "$(ProjectDir)\xsl"&#xd;&#xa;copy "$(SolutionDir)\xsl\*.xsl" "$(ProjectDir)\xsl"'
                 RootNamespace = "ThoughtWorks.CruiseControl.WebDashboard"
                 RunPostBuildEvent = "OnBuildSuccess"
                 StartupObject = ""
