@@ -77,8 +77,6 @@ namespace ThoughtWorks.CruiseControl.CCTray
 			_pollTimer.Dispose();
 		}
 
-		#region Polling
-
 		public void StartPolling()
 		{
 			// poll immediately
@@ -128,8 +126,6 @@ namespace ThoughtWorks.CruiseControl.CCTray
 			}
 		}
 
-
-		#endregion
 
 		#region Build transition detection
 
@@ -209,10 +205,10 @@ namespace ThoughtWorks.CruiseControl.CCTray
 
 		#region Build transitions
 
-		BuildTransition GetBuildTransition(ProjectStatus projectStatus)
+		private BuildTransition GetBuildTransition(ProjectStatus projectStatus)
 		{
-			bool wasOk = _currentProjectStatus.BuildStatus==IntegrationStatus.Success;
-			bool isOk = projectStatus.BuildStatus==IntegrationStatus.Success;
+			bool wasOk = _currentProjectStatus.BuildStatus == IntegrationStatus.Success;
+			bool isOk = projectStatus.BuildStatus == IntegrationStatus.Success;
 
 			if (wasOk && isOk)
 				return BuildTransition.StillSuccessful;

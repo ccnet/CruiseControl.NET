@@ -1,10 +1,8 @@
 using System;
-using System.Collections;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
 using System.IO;
-using System.Reflection;
 using System.Runtime.Remoting;
 using System.Windows.Forms;
 
@@ -24,27 +22,28 @@ namespace ThoughtWorks.CruiseControl.CCTray
 	{
 		#region Field declarations
 
-		IContainer components;
-		ContextMenu contextMenu;
-		NotifyIconEx trayIcon;
-		Hashtable _icons = null;
-		Agent _agent = null;
+		private IContainer components;
+		private ContextMenu contextMenu;
+		private NotifyIconEx trayIcon;
+		private Agent _agent = null;
 
-		MenuItem mnuExit;
-		MenuItem mnuLaunchWebPage;
-		MenuItem mnuSettings;
-		StatusMonitor statusMonitor;
-		SettingsForm settingsForm;
-		Settings settings;
+		private MenuItem mnuExit;
+		private MenuItem mnuLaunchWebPage;
+		private MenuItem mnuSettings;
+		private StatusMonitor statusMonitor;
+		private SettingsForm settingsForm;
+		private Settings settings;
 
-		Exception _agentException = null;
+		private Exception _agentException = null;
+
 		private System.Windows.Forms.MenuItem mnuForceBuild;
 		private System.Windows.Forms.MenuItem mnuProjects;
 		private System.Windows.Forms.MenuItem mnuProject1PlaceHolder;
 		Exception _audioException = null;
 		private string _lastUrl = "";
+		private IStatusIconLoader _iconLoader = new DefaultStatusIconLoader();
 
-		#endregion
+	    #endregion
 
 		#region Constructor
 
@@ -56,7 +55,7 @@ namespace ThoughtWorks.CruiseControl.CCTray
 			InitialiseMonitor();
 			InitialiseProjectMenu();
 			InitialiseSettingsForm();
-
+			
 			DisplayStartupBalloon();
 		}
 
@@ -91,7 +90,10 @@ namespace ThoughtWorks.CruiseControl.CCTray
 
 		void InitialiseTrayIcon()
 		{
-			trayIcon.Icon = GetStatusIcon(IntegrationStatus.Unknown);
+			ProjectStatus status = new ProjectStatus();
+			status.BuildStatus = IntegrationStatus.Unknown;
+			status.Activity = ProjectActivity.Unknown;
+			trayIcon.Icon = GetStatusIcon(status);
 		}
 
 		void DisplayStartupBalloon()
@@ -285,7 +287,7 @@ namespace ThoughtWorks.CruiseControl.CCTray
 			NotifyInfoFlags icon = GetNotifyInfoFlag(e.BuildTransitionInfo.ErrorLevel);
 
 			HandleBalloonNotification(caption, description, icon);
-			HandleAgentNotification(description, caption);
+			HandleAgentNotification(description);
 
 			// play audio, in accordance to settings
 			PlayBuildAudio(e.BuildTransition);
@@ -307,7 +309,9 @@ namespace ThoughtWorks.CruiseControl.CCTray
 			_exception = e.Exception;
 
 			trayIcon.Text = GetErrorMessage(e.Exception);
-			trayIcon.Icon = GetStatusIcon(IntegrationStatus.Exception);
+			ProjectStatus status = new ProjectStatus();
+			status.BuildStatus = IntegrationStatus.Exception;
+			trayIcon.Icon = GetStatusIcon(status);
 		}
 
 		private void mnuProjectSelected_Click(object sender, System.EventArgs e)
@@ -327,7 +331,7 @@ namespace ThoughtWorks.CruiseControl.CCTray
 
 		#region Agent notification
 
-		void HandleAgentNotification(string description, string caption)
+	    void HandleAgentNotification(string description)
 		{
 			if (settings.Agents.ShowAgent)
 			{
@@ -408,45 +412,13 @@ namespace ThoughtWorks.CruiseControl.CCTray
 
 		#endregion
 
-		#region Icons
 
-		Icon GetStatusIcon(ProjectStatus status)
+		internal Icon GetStatusIcon(ProjectStatus status)
 		{
-			return GetStatusIcon(status.BuildStatus);
-		}
-
-		Icon GetStatusIcon(IntegrationStatus status)
-		{
-			if (_icons==null)
-				LoadIcons();
-
-			if (!_icons.ContainsKey(status))
-				throw new Exception("Unsupported IntegrationStatus: " + status);
-
-			return (Icon)_icons[status];
-		}
-
-		void LoadIcons()
-		{
-			_icons = new Hashtable(3);
-			_icons[IntegrationStatus.Failure] = LoadIcon("ThoughtWorks.CruiseControl.CCTray.Red.ico");
-			_icons[IntegrationStatus.Success] = LoadIcon("ThoughtWorks.CruiseControl.CCTray.Green.ico");
-			_icons[IntegrationStatus.Unknown] = LoadIcon("ThoughtWorks.CruiseControl.CCTray.Gray.ico");
-			_icons[IntegrationStatus.Exception] = LoadIcon("ThoughtWorks.CruiseControl.CCTray.Gray.ico");
-		}
-
-		Icon LoadIcon(string name) 
-		{
-			return Icon.FromHandle(((Bitmap)Image.FromStream(GetIconStream(name))).GetHicon());
-		}
-
-		Stream GetIconStream(string name)
-		{
-			return Assembly.GetCallingAssembly().GetManifestResourceStream(name);
+			return _iconLoader.LoadIcon(status).Icon;
 		}
 
 
-		#endregion
 
 		#region Presentation calculations
 

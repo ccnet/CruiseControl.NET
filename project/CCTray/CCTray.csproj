@@ -163,6 +163,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "DefaultStatusIconLoader.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Gray.ico"
                     BuildAction = "EmbeddedResource"
                 />
@@ -172,6 +177,11 @@
                 />
                 <File
                     RelPath = "IRemoteCruiseProxyLoader.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "IStatusIconLoader.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -215,6 +225,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "StatusIcon.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "StatusMonitor.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -232,6 +247,10 @@
                 <File
                     RelPath = "SystemTrayMonitor.resx"
                     DependentUpon = "SystemTrayMonitor.cs"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "Yellow.ico"
                     BuildAction = "EmbeddedResource"
                 />
                 <File
@@ -265,6 +284,11 @@
                 <File
                     RelPath = "Images\icon-play.gif"
                     BuildAction = "Content"
+                />
+                <File
+                    RelPath = "Test\DefaultStatusIconLoaderTest.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
                 />
                 <File
                     RelPath = "Test\RemoteCruiseProxyLoaderTest.cs"
