@@ -988,12 +988,22 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "util\HtmlExceptionFormatter.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "util\IFileWatcher.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
                     RelPath = "util\IRegistry.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "util\IStringFormatter.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -1069,6 +1079,11 @@
                 />
                 <File
                     RelPath = "util\test\FileChangedWatcherTest.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "util\test\HtmlExceptionFormatterTest.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

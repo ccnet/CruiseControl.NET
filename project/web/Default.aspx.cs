@@ -13,6 +13,7 @@ using System.Web.UI.WebControls;
 using System.Web.UI.HtmlControls;
 using System.Xml;
 using ThoughtWorks.CruiseControl.Core;
+using ThoughtWorks.CruiseControl.Util;
 
 namespace ThoughtWorks.CruiseControl.Web
 {
@@ -48,7 +49,7 @@ namespace ThoughtWorks.CruiseControl.Web
 				if (BodyLabel.InnerText==null)
 					BodyLabel.InnerText = string.Empty;
 
-				BodyLabel.InnerText += WebUtil.FormatException(ex);
+				BodyLabel.InnerText += new HtmlExceptionFormatter(ex).ToString();
 			}
 		}
 

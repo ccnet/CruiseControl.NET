@@ -12,6 +12,7 @@ using System.Web.UI.WebControls;
 using System.Web.UI.HtmlControls;
 using System.IO;
 using ThoughtWorks.CruiseControl.Core;
+using ThoughtWorks.CruiseControl.Util;
 
 namespace ThoughtWorks.CruiseControl.Web
 {
@@ -28,7 +29,7 @@ namespace ThoughtWorks.CruiseControl.Web
 			}
 			catch(CruiseControlException ex)
 			{
-				BodyArea.InnerHtml += WebUtil.FormatException(ex);
+				BodyArea.InnerHtml += new HtmlExceptionFormatter(ex).ToString();
 			}
 		}
 		

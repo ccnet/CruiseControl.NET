@@ -38,12 +38,6 @@ namespace ThoughtWorks.CruiseControl.Web
 			return Path.Combine(request.MapPath("xsl"), xslfile);
 		}
 
-		public static string FormatException(Exception ex)
-		{
-			string message = ex.Message.Replace(Environment.NewLine, "<br>");
-			return "<br/>ERROR: " + message;
-		}
-
 		public static string FormatMultiline(string multilineString)
 		{
 			return multilineString.Replace(Environment.NewLine, @"<br>");
