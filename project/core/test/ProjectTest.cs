@@ -43,7 +43,7 @@ namespace ThoughtWorks.CruiseControl.Core.Test
 		{
 			Mock mock = SetMockStateManager(false, null);
 			IntegrationResult last = _project.LastIntegrationResult;
-			AssertNotNull(last);
+			AssertEquals(new IntegrationResult(), last);
 
 			AssertEquals(DateTime.Now.AddDays(-1).Date, last.LastModificationDate.Date);		// will load all modifications
 			mock.Verify();
@@ -55,6 +55,7 @@ namespace ThoughtWorks.CruiseControl.Core.Test
 			IntegrationResult expected = new IntegrationResult();
 			expected.Label = "previous";
 			expected.Output = "<foo>blah</foo>";
+			expected.Status = IntegrationStatus.Success;
 
 			DynamicMock mock = new DynamicMock(typeof(IStateManager));
 			mock.ExpectAndReturn("StateFileExists", true, null);
@@ -236,7 +237,7 @@ namespace ThoughtWorks.CruiseControl.Core.Test
 
 		[Test]
 		[Ignore("Todo")]
-		public void TestStateChange()
+		public void ActivityStateChange()
 		{
 			// TODO test valid state transitions
 			// TODO test stopping at any point
@@ -246,6 +247,12 @@ namespace ThoughtWorks.CruiseControl.Core.Test
 			// TODO should tests be multithreaded?
 			// TODO should delegate to schedule to determine when to run and how often
 		}
+
+		[Test]
+		public void InitialActivityState()
+		{
+			AssertEquals(ProjectActivity.Unknown, _project.CurrentActivity);
+		}		
 
 		[Test]
 		public void HandleStateManagerException()

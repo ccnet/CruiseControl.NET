@@ -115,6 +115,11 @@ namespace ThoughtWorks.CruiseControl.Core
 			set { _labeller = value; }
 		}
 
+		public ProjectActivity CurrentActivity 
+		{
+			get { return _currentActivity; }
+		}
+
 		public IntegrationResult LastIntegrationResult
 		{
 			get 
@@ -128,9 +133,9 @@ namespace ThoughtWorks.CruiseControl.Core
 			set { _lastIntegrationResult = value; }
 		}
 
-		public ProjectActivity CurrentActivity 
+		public IntegrationStatus GetLatestBuildStatus()
 		{
-			get { return _currentActivity; }
+			return LastIntegrationResult.Status;
 		}
 
 		public IntegrationResult RunIntegration(BuildCondition buildCondition)
@@ -307,14 +312,6 @@ namespace ThoughtWorks.CruiseControl.Core
 		{
 			if (IntegrationCompleted!=null)
 				IntegrationCompleted(this, e);
-		}
-
-		public IntegrationStatus GetLatestBuildStatus()
-		{
-			if (LastIntegrationResult != null)
-				return LastIntegrationResult.Status;
-
-			return IntegrationStatus.Unknown;
 		}
 
 		/// <summary>
