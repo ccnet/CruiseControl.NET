@@ -1,3 +1,9 @@
+<table width="100%">
+<tr>
+	<td align="right"><input type="submit" align="right" name="$refreshButtonName" value="Refresh status" /></td>
+</tr>
+</table>
+
 #if ($forceBuildMessage.Length > 0)
 <P><span id="StatusLabel"><b><font color="#4A3C8C">$forceBuildMessage</font></b></span></P>
 #end
@@ -66,7 +72,7 @@
 <P>
 <span id="ExceptionTitleLabel">There were exceptions connecting to the following servers:</span>
 </P>
-<table cellspacing="0" cellpadding="4" rules="all" bordercolor="#CC9966" border="1" id="ExceptionGrid" bgcolor="White">
+<table cellspacing="0" cellpadding="4" rules="all" bordercolor="#CC9966" border="1" id="ExceptionGrid" bgcolor="White" width="100%">
 	<tr bgcolor="#990000">
 		<th><font color="#FFFFCC"><b>Server Name</b></font></th>
 		<th><font color="#FFFFCC"><b>Url</b></font></th>
@@ -81,7 +87,3 @@
 	#end
 </table>
 #end
-
-<P/>
-<br/>
-<input type="submit" name="$refreshButtonName" value="Refresh status" />
