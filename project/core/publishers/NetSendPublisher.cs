@@ -1,5 +1,4 @@
 using System;
-using System.Diagnostics;
 using Exortech.NetReflector;
 using ThoughtWorks.CruiseControl.Remote;
 using ThoughtWorks.CruiseControl.Core.Util;
@@ -51,23 +50,13 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
 
 		internal int Send(string name, string message)
 		{
-			Process process = ProcessUtil.CreateProcess("net", string.Format("send \"{0}\" \"{1}\"", name, message));
-			process.StartInfo.UseShellExecute = false;	
-			return ExecuteProcess(process);
+			ProcessInfo processInfo = new ProcessInfo("net", string.Format("send \"{0}\" \"{1}\"", name, message));
+			return ExecuteProcess(processInfo);
 		}
 
-		protected virtual int ExecuteProcess(Process process)
+		protected virtual int ExecuteProcess(ProcessInfo processInfo)
 		{
-			try
-			{
-				process.Start();
-				process.WaitForExit();
-				return process.ExitCode;
-			}
-			finally
-			{
-				process.Close();
-			}
+			return new ProcessExecutor().Execute(processInfo).ExitCode;
 		}
 	}
 }

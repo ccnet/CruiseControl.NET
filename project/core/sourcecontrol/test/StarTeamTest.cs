@@ -1,5 +1,4 @@
 using System;
-using System.Diagnostics;
 using System.Globalization;
 using NUnit.Framework;
 using ThoughtWorks.CruiseControl.Core.Util;
@@ -36,14 +35,14 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test
 			DateTime from = new DateTime(2001, 1, 21, 20, 0, 0);
 			DateTime to = new DateTime(2002, 2, 22, 20, 0, 0);
 
-			Process actual = _starteam.CreateHistoryProcess(from, to);			
+			ProcessInfo actual = _starteam.CreateHistoryProcessInfo(from, to);			
 
 			string expectedExecutable = @"..\tools\starteam\stcmd.exe";
 			string expectedArgs = "hist -nologo -x -is -filter IO -p \"Admin:admin@10.1.1.64:49201/.NET LAB/CC.NET/starteam-ccnet\" \"*\"";
 
 			AssertNotNull("process was null", actual);
-			AssertEquals(expectedExecutable, actual.StartInfo.FileName);
-			AssertEquals(expectedArgs, actual.StartInfo.Arguments);
+			AssertEquals(expectedExecutable, actual.FileName);
+			AssertEquals(expectedArgs, actual.Arguments);
 		}
 		
 		[Test]

@@ -1,12 +1,11 @@
+using Exortech.NetReflector;
+using NUnit.Framework;
 using System;
+using System.Collections;
 using System.Globalization;
 using System.IO;
-using System.Collections;
-using System.Diagnostics;
-using NUnit.Framework;
 using ThoughtWorks.CruiseControl.Core.Util;
 using ThoughtWorks.CruiseControl.Core.Test;
-using Exortech.NetReflector;
 
 namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test
 {
@@ -44,10 +43,10 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test
 		{
 			Cvs cvs = CreateCvs();
 			DateTime from = new DateTime(2001, 1, 21, 20, 0, 0);
-			Process actualProcess = cvs.CreateHistoryProcess(from, new DateTime());
+			ProcessInfo actualProcess = cvs.CreateHistoryProcessInfo(from, new DateTime());
 
 			string expected = string.Format(@"-q log -N ""-d>{0}""", cvs.FormatCommandDate(from));
-			string actual = actualProcess.StartInfo.Arguments;
+			string actual = actualProcess.Arguments;
 			AssertEquals(expected, actual);
 		}
 
@@ -59,7 +58,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test
 			Cvs cvs = new Cvs();
 			cvs.CvsRoot = "myCvsRoot";
 			cvs.Branch = "branch"; 
-			string args = cvs.BuildHistoryProcessArgs(from);
+			string args = cvs.BuildHistoryProcessInfoArgs(from);
 			string expected = string.Format(@"-d myCvsRoot -q log -N ""-d>{0}"" -rbranch", cvs.FormatCommandDate(from));
 			AssertEquals(expected, args);
 		}
@@ -69,10 +68,10 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test
 		{
 			Cvs cvs = CreateCvs();
 			DateTime from = new DateTime(2001, 1, 21, 20, 0, 0);
-			Process actualProcess = cvs.CreateHistoryProcess(from, new DateTime());
+			ProcessInfo actualProcess = cvs.CreateHistoryProcessInfo(from, new DateTime());
 
 			string expected = string.Format(@"-q log -N ""-d>{0}""", cvs.FormatCommandDate(from));
-			string actual = actualProcess.StartInfo.Arguments;
+			string actual = actualProcess.Arguments;
 			AssertEquals(expected, actual);
 		}
 
@@ -81,10 +80,10 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test
 		{
 			Cvs cvs = CreateCvs();
 
-			AssertNull(cvs.CreateLabelProcess("", new DateTime()));
+			AssertNull(cvs.CreateLabelProcessInfo("", new DateTime()));
 
 			cvs.LabelOnSuccess = true;
-			AssertNotNull(cvs.CreateLabelProcess("", new DateTime()));
+			AssertNotNull(cvs.CreateLabelProcessInfo("", new DateTime()));
 		}
 	
 		[Test]

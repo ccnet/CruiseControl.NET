@@ -1,7 +1,6 @@
-using System;
-using System.Diagnostics;
-using System.IO;
 using Exortech.NetReflector;
+using System;
+using System.IO;
 using ThoughtWorks.CruiseControl.Core.Util;
 
 namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
@@ -71,7 +70,7 @@ run -e vlog  ""-xo+e{3}"" ""-d{4}*{5}"" ""@{2}""
 			get { return _parser; }
 		}
 		
-		public override Process CreateHistoryProcess(DateTime from, DateTime to)
+		public override ProcessInfo CreateHistoryProcessInfo(DateTime from, DateTime to)
 		{
 			// required due to DayLightSavings bug in PVCS 7.5.1
 			if (IsDayLightSavings()) 
@@ -90,10 +89,10 @@ run -e vlog  ""-xo+e{3}"" ""-d{4}*{5}"" ""@{2}""
 			stream.Close();
 
 			Log.Debug(string.Format("Pvcs: {0} {1}", Executable, Arguments));
-			return ProcessUtil.CreateProcess(Executable, Arguments);
+			return new ProcessInfo(Executable, Arguments);
 		}
 
-		public override Process CreateLabelProcess(string label, DateTime timeStamp) 
+		public override ProcessInfo CreateLabelProcessInfo(string label, DateTime timeStamp) 
 		{
 			return null;
 		}
@@ -106,11 +105,18 @@ run -e vlog  ""-xo+e{3}"" ""-d{4}*{5}"" ""@{2}""
 			);
 		}
 		
-		protected override TextReader Execute(Process process)
+		protected override ProcessResult Execute(ProcessInfo processInfo)
 		{
-			process.Start();	
-			process.WaitForExit(Timeout);
-			return ProcessUtil.GetTextReader(PVCS_LOGOUTPUT_FILE);
+			ProcessExecutor executor = new ProcessExecutor();
+			executor.Timeout = Timeout;
+			ProcessResult result = executor.Execute(processInfo);
+			return new ProcessResult(GetTextReader(PVCS_LOGOUTPUT_FILE).ReadToEnd(), result.StandardError, result.ExitCode, result.TimedOut);
+		}
+
+		public static TextReader GetTextReader(string path)
+		{
+			FileStream stream = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.Read);
+			return new StreamReader(stream);
 		}
 
 		public Boolean IsDayLightSavings() 

@@ -1,6 +1,5 @@
 using System;
 using System.Collections;
-using System.Diagnostics;
 using System.IO;
 using ThoughtWorks.CruiseControl.Core.Util;
 
@@ -8,23 +7,21 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 {
 	public abstract class ProcessSourceControl : ISourceControl
 	{
+		private ProcessExecutor executor = new ProcessExecutor();
+
 		// todo: make configurable
 		public int Timeout
 		{
 			get { return 30000; }
 		}
 
-		#region Abstract property and methods
-
 		protected abstract IHistoryParser HistoryParser
 		{
 			get;
 		}
 
-		public abstract Process CreateHistoryProcess(DateTime from, DateTime to);
-		public abstract Process CreateLabelProcess(string label, DateTime timeStamp);
-
-		#endregion
+		public abstract ProcessInfo CreateHistoryProcessInfo(DateTime from, DateTime to);
+		public abstract ProcessInfo CreateLabelProcessInfo(string label, DateTime timeStamp);
 
 		public bool ShouldRun(IntegrationResult result)
 		{
@@ -38,65 +35,31 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 
 		public virtual Modification[] GetModifications(DateTime from, DateTime to)
 		{
-			Process process = CreateHistoryProcess(from, to);
-			TextReader reader = null;
-			try
-			{
-				reader = Execute(process);
-				return ParseModifications(reader, from, to);
-			}
-			finally
-			{
-				Close(reader, process);
-			}
+			ProcessInfo processInfo = CreateHistoryProcessInfo(from, to);
+			ProcessResult result = Execute(processInfo);
+			return ParseModifications(new StringReader(result.StandardOutput), from, to);
 		}
 
 		public void LabelSourceControl(string label, DateTime timeStamp) 
 		{
-			Process process = CreateLabelProcess(label, timeStamp);
-			if (process != null) 
-			{
-				TextReader reader = null;
-				try
-				{
-					reader = Execute(process);
-				}
-				finally
-				{
-					Close(reader, process);
-				}
-			}
+			ProcessInfo processInfo = CreateLabelProcessInfo(label, timeStamp);
+			executor.Timeout = Timeout;
+			Execute(processInfo);
 		}
 
-		protected virtual TextReader Execute(Process process)
+		protected virtual ProcessResult Execute(ProcessInfo processInfo)
 		{
-			TextReader reader = ProcessUtil.ExecuteRedirected(process);
+			executor.Timeout = Timeout;
+			ProcessResult result = executor.Execute(processInfo);
 
-			// TODO: this call will block until the process ends (so there's no point calling WaitForExit below)
-			// to do this pattern properly, the output must be read in another thread
-			// see the class NAntBuilder.StdOutReader (which could be made a public utility class)
-			// MR - I'm not sure this is true - I've deleted the 'if result empty throw exception' since this is failing when really being used
-			string result = reader.ReadToEnd();
-			
-			process.WaitForExit(120000);
-			return new StringReader(result);
+			// check for stderr
+			if (result.StandardError != string.Empty) throw new CruiseControlException("Error: " + result.StandardError);
+			return result;
 		}
 
 		protected Modification[] ParseModifications(TextReader reader, DateTime from, DateTime to)
 		{
 			return HistoryParser.Parse(reader, from, to);
-		}
-
-		private void Close(TextReader reader, Process process)
-		{
-			if (reader != null)
-				reader.Close();
-
-			if (process != null)
-			{
-				process.WaitForExit(Timeout);
-				process.Close();
-			}
 		}
 	}
 }

@@ -164,17 +164,17 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "IProjectList.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
                     RelPath = "IProjectIntegrator.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
                     RelPath = "IProjectIntegratorList.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "IProjectList.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -190,11 +190,6 @@
                 />
                 <File
                     RelPath = "Project.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "ProjectList.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -215,6 +210,11 @@
                 />
                 <File
                     RelPath = "ProjectIntegratorState.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "ProjectList.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -318,12 +318,12 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "configuration\test\ConfigurationFixture.cs"
+                    RelPath = "configuration\test\ConfigurationContainerTest.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "configuration\test\ConfigurationContainerTest.cs"
+                    RelPath = "configuration\test\ConfigurationFixture.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -832,7 +832,22 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "util\ProcessUtil.cs"
+                    RelPath = "util\ProcessExecutor.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "util\ProcessInfo.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "util\ProcessReader.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "util\ProcessResult.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -877,7 +892,7 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "util\test\ProcessUtilTest.cs"
+                    RelPath = "util\test\ProcessExecutorTest.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

@@ -1,11 +1,10 @@
+using Exortech.NetReflector;
+using NUnit.Framework;
 using System;
+using System.Collections;
 using System.Globalization;
 using System.IO;
-using System.Collections;
-using System.Diagnostics;
-using NUnit.Framework;
 using ThoughtWorks.CruiseControl.Core.Util;
-using Exortech.NetReflector;
 
 namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test
 {
@@ -54,10 +53,10 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test
 		{
 			Pvcs pvcs = CreatePvcs();
 			DateTime from = new DateTime(2001, 1, 21, 20, 0, 0);
-			Process actualProcess = pvcs.CreateHistoryProcess(from, DateTime.Now);
+			ProcessInfo actualProcess = pvcs.CreateHistoryProcessInfo(from, DateTime.Now);
 
 			string expected = Pvcs.COMMAND;
-			string actual = actualProcess.StartInfo.Arguments;
+			string actual = actualProcess.Arguments;
 			AssertEquals(expected, actual);
 		}
 

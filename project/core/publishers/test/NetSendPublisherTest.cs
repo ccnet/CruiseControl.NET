@@ -1,7 +1,5 @@
 using System;
-using System.Diagnostics;
 using System.Text;
-//using System.Windows.Forms;
 using System.Runtime.InteropServices;
 using NUnit.Framework;
 using NMock;
@@ -106,7 +104,7 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers.Test
 		{
 			DynamicMock mockPublisher = new DynamicMock(typeof(NetSendPublisher));
 			mockPublisher.Ignore("PublishIntegrationResults");
-			mockPublisher.ExpectAndReturn("ExecuteProcess", 0, new NMock.Constraints.IsTypeOf(typeof(Process)));
+			mockPublisher.ExpectAndReturn("ExecuteProcess", 0, new NMock.Constraints.IsTypeOf(typeof(ProcessInfo)));
 
 			NetSendPublisher publisher = (NetSendPublisher)mockPublisher.MockInstance;
 			publisher.Names = "localhost";
@@ -134,9 +132,9 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers.Test
 			publisher.PublishIntegrationResults(null, IntegrationResultMother.CreateFailed());
 
 			mockPublisher.Verify();
-			AssertEquals(@"send ""machine1""", ((Process)process1.Parameter).StartInfo.Arguments.Substring(0, 15));
-			AssertEquals(@"send ""machine2""", ((Process)process2.Parameter).StartInfo.Arguments.Substring(0, 15));
-			AssertEquals(@"send ""machine3""", ((Process)process3.Parameter).StartInfo.Arguments.Substring(0, 15));
+			AssertEquals(@"send ""machine1""", ((ProcessInfo)process1.Parameter).Arguments.Substring(0, 15));
+			AssertEquals(@"send ""machine2""", ((ProcessInfo)process2.Parameter).Arguments.Substring(0, 15));
+			AssertEquals(@"send ""machine3""", ((ProcessInfo)process3.Parameter).Arguments.Substring(0, 15));
 		}
 
 		[Test, Ignore("move to acceptance tests")]

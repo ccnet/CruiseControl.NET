@@ -1,7 +1,6 @@
-using System;
-using System.Diagnostics;
-using System.IO;
 using Exortech.NetReflector;
+using System;
+using System.IO;
 using ThoughtWorks.CruiseControl.Core.Util;
 
 namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
@@ -65,14 +64,14 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			return date.ToUniversalTime().ToString(COMMAND_DATE_FORMAT);
 		}
 
-		public override Process CreateHistoryProcess(DateTime from, DateTime to)
+		public override ProcessInfo CreateHistoryProcessInfo(DateTime from, DateTime to)
 		{
-			return ProcessUtil.CreateProcess(Executable, BuildHistoryProcessArgs(from, to), WorkingDirectory);
+			return new ProcessInfo(Executable, BuildHistoryProcessArgs(from, to), WorkingDirectory);
 		}
 
-		public override Process CreateLabelProcess(string label, DateTime timeStamp) 
+		public override ProcessInfo CreateLabelProcessInfo(string label, DateTime timeStamp) 
 		{
-			return ProcessUtil.CreateProcess(Executable, BuildTagProcessArgs(label));
+			return new ProcessInfo(Executable, BuildTagProcessArgs(label));
 		}
 
 		internal string BuildHistoryProcessArgs(DateTime from, DateTime to)

@@ -1,5 +1,4 @@
 using System;
-using System.Diagnostics;
 using System.Globalization;
 using ThoughtWorks.CruiseControl.Core.Util;
 using Exortech.NetReflector;
@@ -40,10 +39,10 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			get { return _parser; }
 		}
 
-		public override Process CreateHistoryProcess(DateTime from, DateTime to)
+		public override ProcessInfo CreateHistoryProcessInfo(DateTime from, DateTime to)
 		{
 			string args = BuildHistoryProcessArgs(from, to);
-			return ProcessUtil.CreateProcess(Executable, args);
+			return new ProcessInfo(Executable, args);
 		}
 
 		[ReflectorProperty("executable")]
@@ -101,7 +100,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 //			return date.ToString(DATE_FORMAT);
 		}
 
-		public override Process CreateLabelProcess(string label, DateTime timeStamp) 
+		public override ProcessInfo CreateLabelProcessInfo(string label, DateTime timeStamp) 
 		{
 			return null;
 		}

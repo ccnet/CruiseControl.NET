@@ -1,10 +1,7 @@
 using System;
 using System.IO;
-
 using Exortech.NetReflector;
-
 using NUnit.Framework;
-
 using ThoughtWorks.CruiseControl.Core.Util;
 using ThoughtWorks.CruiseControl.Remote;
 
@@ -61,7 +58,7 @@ namespace ThoughtWorks.CruiseControl.Core.Builder.Test
 		}
 
 		[Test]
-		public void ExecuteCommand() 
+		public void ExecuteCommand()
 		{
 			string tempFile = TempFileUtil.CreateTempFile(TEMP_DIR, "testexecute.bat", "echo hello martin");
 			_builder.Executable = tempFile;
@@ -71,10 +68,10 @@ namespace ThoughtWorks.CruiseControl.Core.Builder.Test
 
 			IntegrationResult result = new IntegrationResult();
 			_builder.Run(result);
-			string errorMessage = string.Format("{0} not contained in {1}",expected, result.Output);
+			string errorMessage = string.Format("{0} not contained in {1}", expected, result.Output);
 			Assert(errorMessage, StringUtil.StringContains(result.Output.ToString(), expected));
 		}
-		
+
 		[Test, ExpectedException(typeof(BuilderException))]
 		public void ExecuteCommandWithInvalidFile()
 		{
@@ -82,10 +79,10 @@ namespace ThoughtWorks.CruiseControl.Core.Builder.Test
 			_builder.Executable = @"\nodir\invalidfile.bat";
 			_builder.BuildArgs = "";
 			_builder.BaseDirectory = TempFileUtil.GetTempPath(TEMP_DIR);
-			Assert("invalidfile.bat should not exist!",! File.Exists(_builder.Executable));
+			Assert("invalidfile.bat should not exist!", ! File.Exists(_builder.Executable));
 			_builder.Run(new IntegrationResult());
 		}
-		
+
 		[Test]
 		public void BuildSucceed()
 		{
@@ -99,11 +96,11 @@ namespace ThoughtWorks.CruiseControl.Core.Builder.Test
 			IntegrationResult result = new IntegrationResult();
 
 			_builder.Run(result);
-			
+
 			Assert("test build should succeed", result.Succeeded);
 			Assert(StringUtil.StringContains(result.Output.ToString(), "I am success itself"));
 		}
-		
+
 		[Test]
 		public void BuildFailed()
 		{
@@ -152,7 +149,7 @@ namespace ThoughtWorks.CruiseControl.Core.Builder.Test
 		}
 
 		[Test]
-		public void LabelGetsPassedThrough() 
+		public void LabelGetsPassedThrough()
 		{
 			CreateTestBuildFile();
 			_builder.Executable = NANT_TEST_EXECUTABLE;
@@ -162,7 +159,7 @@ namespace ThoughtWorks.CruiseControl.Core.Builder.Test
 			IntegrationResult result = new IntegrationResult();
 			result.Label = "ATestLabel";
 			_builder.Run(result);
-			
+
 			Assert("test build should succeed", result.Succeeded);
 			Assert(StringUtil.StringContains(result.Output.ToString(), "ATestLabel"));
 		}
@@ -194,35 +191,34 @@ namespace ThoughtWorks.CruiseControl.Core.Builder.Test
 
 			IntegrationResult result = new IntegrationResult();
 
-			try 
+			try
 			{
 				_builder.Run(result);
 				Fail("Should have timed out and thrown CruiseControlException.");
 			}
-			catch (CruiseControlException cce)
+			catch(CruiseControlException cce)
 			{
-				AssertEquals("NAnt process timed out (after 1 seconds)", cce.Message);
+				AssertEquals("NAnt process timed out(after 1 seconds)", cce.Message);
 			}
 
-			// for teardown (when directory deleted), this sleep gives
+			// for teardown(when directory deleted), this sleep gives
 			// the chance for spawned process to release file lock
 			System.Threading.Thread.Sleep(500);
 		}
 
 		#region Test support
 
-		private IntegrationResult CreateIntegrationResultWithModifications(IntegrationStatus status)
+		private IntegrationResult CreateIntegrationResultWithModifications (IntegrationStatus status)
 		{
-			IntegrationResult result = new IntegrationResult();
+			IntegrationResult result = new IntegrationResult ();
 			result.Status = status;
-			result.Modifications = new Modification[] { new Modification() };
+			result.Modifications = new Modification[] { new Modification () };
 			return result;
 		}
-		
-		private string CreateTestBuildFile()
+
+		private string CreateTestBuildFile ()
 		{
-			string contents =  
-				@"<project name=""ccnetlaunch"" default=""all"">
+			string contents = @"<project name=""ccnetlaunch"" default=""all"">
 
   <target name=""all"">
   	<echo message=""Build Succeeded""/>
@@ -246,9 +242,10 @@ namespace ThoughtWorks.CruiseControl.Core.Builder.Test
   </target>
 
 </project>";
-			return TempFileUtil.CreateTempFile(TEMP_DIR, TEST_BUILD_FILENAME, contents);
+			return TempFileUtil.CreateTempFile (TEMP_DIR, TEST_BUILD_FILENAME, contents);
 		}
 
 		#endregion
+
 	}
 }

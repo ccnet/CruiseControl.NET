@@ -1,6 +1,5 @@
 using System;
 using System.ComponentModel;
-using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 
@@ -71,18 +70,18 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			return date.ToUniversalTime().ToString(COMMAND_DATE_FORMAT, CultureInfo.InvariantCulture);
 		}
 
-		public override Process CreateHistoryProcess(DateTime from, DateTime to)
+		public override ProcessInfo CreateHistoryProcessInfo(DateTime from, DateTime to)
 		{
-			return ProcessUtil.CreateProcess(Executable, BuildHistoryProcessArgs(from), WorkingDirectory);
+			return new ProcessInfo(Executable, BuildHistoryProcessInfoArgs(from), WorkingDirectory);
 		}
 
-		public override Process CreateLabelProcess(string label, DateTime timeStamp) 
+		public override ProcessInfo CreateLabelProcessInfo(string label, DateTime timeStamp) 
 		{
 			if (LabelOnSuccess)
 			{
 				string cvsroot = (CvsRoot == null) ? String.Empty : "-d " + CvsRoot + " ";
 				string args = string.Format("{0} tag {1}", cvsroot, "ver-" + label);
-				return ProcessUtil.CreateProcess(Executable, args, WorkingDirectory);
+				return new ProcessInfo(Executable, args, WorkingDirectory);
 			}
 			else
 			{
@@ -90,7 +89,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			}
 		}
 
-		internal string BuildHistoryProcessArgs(DateTime from)
+		internal string BuildHistoryProcessInfoArgs(DateTime from)
 		{		
 			// in cvs, date 'to' is implicitly now
 			// todo: if cvs will accept a 'to' date, it would be nicer to 

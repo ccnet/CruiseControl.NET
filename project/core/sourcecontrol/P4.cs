@@ -1,11 +1,10 @@
 using Exortech.NetReflector;
 using System;
-using System.Text;
-using System.Text.RegularExpressions;
 using System.IO;
-using System.Diagnostics;
 using System.Collections;
 using System.Globalization;
+using System.Text;
+using System.Text.RegularExpressions;
 using ThoughtWorks.CruiseControl.Core.Util;
 
 namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
@@ -59,26 +58,26 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 		public string BuildCommandArguments(DateTime from, DateTime to)
 		{
 			
-			StringBuilder args = new StringBuilder(buildCommonArguments());
+			StringBuilder args = new StringBuilder(BuildCommonArguments());
 			args.Append("changes -s submitted ");
 			args.Append(View);
 			if (from==DateTime.MinValue) 
 			{
-				args.Append("@" + formatDate(to));
+				args.Append("@" + FormatDate(to));
 			} 
 			else 
 			{
-				args.Append(string.Format("@{0},@{1}", formatDate(from), formatDate(to)));
+				args.Append(string.Format("@{0},@{1}", FormatDate(from), FormatDate(to)));
 			}
 			return args.ToString();
 		}
 
-		public virtual Process CreateChangeListProcess(DateTime from, DateTime to) 
+		public virtual ProcessInfo CreateChangeListProcess(DateTime from, DateTime to) 
 		{
-			return ProcessUtil.CreateProcess(Executable, BuildCommandArguments(from, to));
+			return new ProcessInfo(Executable, BuildCommandArguments(from, to));
 		}
 
-		public virtual Process CreateDescribeProcess(string changes)
+		public virtual ProcessInfo CreateDescribeProcess(string changes)
 		{
 			if (changes.Length == 0)
 				throw new Exception("Empty changes list found - this should not happen");
@@ -89,15 +88,15 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 					throw new CruiseControlException("Invalid changes list encountered");
 			}
 
-			string args = buildCommonArguments() + "describe -s " + changes;
-			return ProcessUtil.CreateProcess(Executable, args);
+			string args = BuildCommonArguments() + "describe -s " + changes;
+			return new ProcessInfo(Executable, args);
 		}
 
 		public Modification[] GetModifications(DateTime from, DateTime to) 
 		{
 			P4HistoryParser parser = new P4HistoryParser();
-			Process process = CreateChangeListProcess(from, to);
-			string processResult = execute(process);
+			ProcessInfo process = CreateChangeListProcess(from, to);
+			string processResult = Execute(process);
 			String changes = parser.ParseChanges(processResult);
 			if (changes.Length == 0)
 			{
@@ -106,7 +105,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			else
 			{
 				process = CreateDescribeProcess(changes);
-				return parser.Parse(new StringReader(execute(process)), from, to);
+				return parser.Parse(new StringReader(Execute(process)), from, to);
 			}
 		}
 
@@ -124,17 +123,17 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 		{
 		}
 
-		protected virtual string execute(Process p)
+		protected virtual string Execute(ProcessInfo p)
 		{
-			return ProcessUtil.ExecuteRedirected(p).ReadToEnd();
+			return new ProcessExecutor().Execute(p).StandardOutput;
 		}
 
-		private string formatDate(DateTime date)
+		private string FormatDate(DateTime date)
 		{
 			return date.ToString(COMMAND_DATE_FORMAT, CultureInfo.InvariantCulture);
 		}
 		
-		private string buildCommonArguments() 
+		private string BuildCommonArguments() 
 		{
 			StringBuilder args = new StringBuilder();
 			args.Append("-s "); // for "scripting" mode
