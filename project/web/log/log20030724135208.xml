@@ -1,0 +1,60 @@
+﻿<cruisecontrol><modifications><modification type="modified"><filename>HelloWorld.cs</filename><project>src/HelloWorld</project><date>24 Jul 2003 13:52</date><user>mroberts</user><comment>This shouldn't compile</comment></modification><modification type="modified"><filename>HelloWorldTest.cs</filename><project>src/HelloWorld-Test</project><date>24 Jul 2003 13:52</date><user>mroberts</user><comment>This shouldn't compile</comment></modification></modifications><build date="7/24/2003 1:54:03 PM" buildtime="00:00:01" error="true">NAnt version 0.8.3 Copyright (C) 2001-2003 Gerry Shaw
+http://nant.sourceforge.net
+
+<buildresults project="ccnetlaunch">
+  <message><![CDATA[Buildfile: file:///c:/fromcvs/HelloWorld/cruise.build]]></message>
+  <target name="update">
+    <task name="ifnot" />
+    <task name="echo">
+      <message><![CDATA[CVS Executable at [C:\devel\HelloWorldCCNet\tools\cvsexe\cvs.exe]]]></message>
+    </task>
+    <task name="exec">
+      <message><![CDATA[C:\devel\HelloWorldCCNet\tools\cvsexe\cvs.exe -q update -P -d]]></message>
+    </task>
+  </target>
+  <target name="build">
+    <task name="nant">
+      <message><![CDATA[HelloWorld.build ContinuousIntegration]]></message>
+      <buildresults project="HelloWorld">
+        <message><![CDATA[Buildfile: file:///c:/fromcvs/HelloWorld/HelloWorld.build]]></message>
+        <target name="clean">
+          <task name="delete">
+            <message><![CDATA[c:\fromcvs\HelloWorld\HelloWorld.build(4,4):
+ Cannot delete directory c:\fromcvs\HelloWorld\build. The directory does not exist.]]></message>
+          </task>
+          <task name="foreach">
+            <task name="">
+              <task name="delete">
+                <message><![CDATA[Deleting directory c:\fromcvs\HelloWorld\src\HelloWorld\bin.]]></message>
+              </task>
+            </task>
+            <task name="">
+              <task name="delete">
+                <message><![CDATA[Deleting directory c:\fromcvs\HelloWorld\src\HelloWorld-Test\bin.]]></message>
+              </task>
+            </task>
+          </task>
+        </target>
+        <target name="build">
+          <task name="solution">
+            <message><![CDATA[Starting solution build.]]></message>
+            <message><![CDATA[Building HelloWorld [debug]...]]></message>
+            <message><![CDATA[Building HelloWorld-Test [debug]...]]></message>
+            <task name="copy">
+              <message><![CDATA[Copying 2 files to c:\fromcvs\HelloWorld\src\HelloWorld-Test\bin\Debug\.]]></message>
+            </task>
+            <task name="copy">
+              <message><![CDATA[Copying 1 file to c:\fromcvs\HelloWorld\src\HelloWorld-Test\bin\Debug\.]]></message>
+            </task>
+            <message><![CDATA[HelloWorldTest.cs(13,43): error CS0117: 'HelloWorld.HelloWorld' does not contain a definition for 'Message']]></message>Build failed.
+*** Project HelloWorld-Test failed!
+*** Continuing build with non-dependent projects:
+
+          </task>
+        </target>
+        <message><![CDATA[Total time: 0 seconds.]]></message>
+      </buildresults>
+    </task>
+  </target>
+  <message><![CDATA[Total time: 0 seconds.]]></message>
+</buildresults></build></cruisecontrol>
