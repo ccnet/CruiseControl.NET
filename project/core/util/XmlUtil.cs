@@ -1,6 +1,8 @@
 using System;
 using System.Text.RegularExpressions;
 using System.Xml;
+using System.IO;
+using System.Xml.Serialization;
 
 namespace ThoughtWorks.CruiseControl.Core.Util
 {
@@ -101,6 +103,23 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 		{
 			Regex CDATACloseTag = new Regex(@"\]\]>");
 			return CDATACloseTag.Replace(text, @"] ]>");
+		}
+
+		public static string StringSerialize(object o)
+		{
+			XmlSerializer serializer = new XmlSerializer(o.GetType());
+			StringWriter writer1 = new StringWriter();
+			serializer.Serialize(writer1, o);
+
+			StringReader reader = new StringReader(writer1.ToString());
+			StringWriter writer2 = new StringWriter();
+
+			// This is because .NET's XML Serialization is a but bunk and puts a dodgy first line in the xml
+			reader.ReadLine();
+			writer2.WriteLine(@"<?xml version=""1.0""?>");
+			writer2.Write(reader.ReadToEnd());
+
+			return writer2.ToString();
 		}
 	}
 }

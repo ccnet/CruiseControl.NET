@@ -130,6 +130,8 @@ namespace ThoughtWorks.CruiseControl.Core.Config.Test
 			public ProjectActivity CurrentActivity { get { return ProjectActivity.Building; } }
 			public IntegrationResult RunIntegration(BuildCondition buildCondition) { return null; }
 			public IntegrationStatus GetLatestBuildStatus() { return IntegrationStatus.Success; }
+			public string WebURL { get {return ""; }	}
+
 		}
 	}
 }

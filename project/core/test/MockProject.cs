@@ -40,6 +40,11 @@ namespace ThoughtWorks.CruiseControl.Core.Test
 			get { return new ArrayList(); }
 		}
 
+		public string WebURL 
+		{ 
+			get { return ""; }
+		}
+
 		public int RunIntegration_CallCount = 0;
 		public IntegrationResult RunIntegration_ReturnValue = null;
 		public BuildCondition RunIntegration_buildCondition = (BuildCondition)(-1); // default

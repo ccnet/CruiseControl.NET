@@ -78,5 +78,10 @@ namespace ThoughtWorks.CruiseControl.Core
 		{
 			get { return ProjectActivity.Unknown; }
 		}
+
+		public string WebURL 
+		{ 
+			get { return ""; }
+		}
 	}
 }

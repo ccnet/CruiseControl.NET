@@ -403,6 +403,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "publishers\RssPublisher.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "publishers\XmlLogPublisher.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -444,6 +449,11 @@
                 />
                 <File
                     RelPath = "publishers\test\NetSendPublisherTest.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "publishers\test\RSSPublisherTest.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

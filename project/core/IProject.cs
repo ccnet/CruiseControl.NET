@@ -27,6 +27,14 @@ namespace ThoughtWorks.CruiseControl.Core
 		}
 
 		/// <summary>
+		/// Where the results web page for this project can be found
+		/// </summary>
+		string WebURL 
+		{ 
+			get;
+		}
+
+		/// <summary>
 		/// Gets this project's current activity, such as Building, Sleeping, etc...
 		/// </summary>
 		ProjectActivity CurrentActivity 
