@@ -149,14 +149,15 @@ namespace ThoughtWorks.CruiseControl.Core
         /// Contains the output from the build process.  In the case of NAntBuilder, this is the 
         /// redirected StdOut of the nant.exe process.
         /// </summary>
-        [XmlIgnore] public virtual string Output
+        [XmlIgnore] 
+		public virtual string Output
         {
             get { return _output; }
             set { _output = value; }
         }
 
         [XmlIgnore] // Exceptions cannot be serialised because of permission attributes
-            public Exception ExceptionResult
+        public Exception ExceptionResult
         {
             get { return _exception; }
             set

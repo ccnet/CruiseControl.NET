@@ -1,7 +1,9 @@
-using System;
-using System.IO;
 using Exortech.NetReflector;
+using NMock;
+using NMock.Constraints;
 using NUnit.Framework;
+using System;
+using System.ComponentModel;
 using ThoughtWorks.CruiseControl.Core.Util;
 using ThoughtWorks.CruiseControl.Remote;
 
@@ -10,158 +12,149 @@ namespace ThoughtWorks.CruiseControl.Core.Builder.Test
 	[TestFixture]
 	public class NAntBuilderTest : CustomAssertion
 	{
-		public const string TEMP_DIR = "NAntBuilderTest";
-		public static readonly string NANT_TEST_BASEDIR = ".";
-
-		public static readonly string NANT_TEST_EXECUTABLE = GetNAntLocation();
-
-		public static readonly string TEST_BUILD_FILENAME = "test.build";
-		public static readonly string NANT_TEST_BUILDFILE = TempFileUtil.GetTempFilePath("nant-build-temp", TEST_BUILD_FILENAME);
-		public static readonly string NANT_TEST_TARGET = "success";
+		public const int SUCCESSFUL_EXIT_CODE = 0;
+		public const int FAILED_EXIT_CODE = -1;
 
 		private NAntBuilder _builder;
+		private IMock _mockExecutor;
 
 		[SetUp]
 		public void SetUp()
 		{
-			_builder = new NAntBuilder();
+			_mockExecutor = new DynamicMock(typeof(ProcessExecutor));
+			_builder = new NAntBuilder((ProcessExecutor) _mockExecutor.MockInstance);
 		}
 
 		[TearDown]
 		public void TearDown()
 		{
-			TempFileUtil.DeleteTempDir(TEMP_DIR);
+			_mockExecutor.Verify();
 		}
 
 		[Test]
 		public void PopulateFromReflector()
 		{
-			string xml = string.Format(@"
-    <build>
-    	<executable>{0}</executable>
-    	<baseDirectory>{1}</baseDirectory>
-    	<buildFile>{2}</buildFile>
+			string xml = @"
+    <nant>
+    	<executable>NAnt.exe</executable>
+    	<baseDirectory>C:\</baseDirectory>
+    	<buildFile>mybuild.build</buildFile>
 		<targetList>
-      		<target>{3}</target>
+      		<target>foo</target>
     	</targetList>
+		<logger>SourceForge.NAnt.XmlLogger</logger>
 		<buildTimeoutSeconds>123</buildTimeoutSeconds>
-    </build>", NANT_TEST_EXECUTABLE, NANT_TEST_BASEDIR, NANT_TEST_BUILDFILE, NANT_TEST_TARGET);
+    </nant>";
 
-			_builder = new NAntBuilder();
 			NetReflector.Read(xml, _builder);
-			AssertEquals(NANT_TEST_BASEDIR, _builder.BaseDirectory);
-			AssertEquals(NANT_TEST_BUILDFILE, _builder.BuildFile);
-			AssertEquals(NANT_TEST_EXECUTABLE, _builder.Executable);
+			AssertEquals(@"C:\", _builder.BaseDirectory);
+			AssertEquals("mybuild.build", _builder.BuildFile);
+			AssertEquals("NAnt.exe", _builder.Executable);
 			AssertEquals(1, _builder.Targets.Length);
 			AssertEquals(123, _builder.BuildTimeoutSeconds);
-			AssertEquals(NANT_TEST_TARGET, _builder.Targets[0]);
+			AssertEquals("SourceForge.NAnt.XmlLogger", _builder.Logger);
+			AssertEquals("foo", _builder.Targets[0]);
 		}
 
 		[Test]
-		public void ExecuteCommand()
+		public void PopulateFromConfigurationUsingOnlyRequiredElementsAndCheckDefaultValues()
 		{
-			string tempFile = TempFileUtil.CreateTempFile(TEMP_DIR, "testexecute.bat", "echo hello martin");
-			_builder.Executable = tempFile;
-			_builder.BaseDirectory = TempFileUtil.GetTempPath(TEMP_DIR);
-			Assert(tempFile + " does not exist!", File.Exists(tempFile));
-			string expected = "hello martin";
+			string xml = @"<nant />";
+
+			NetReflector.Read(xml, _builder);
+			AssertEquals(NAntBuilder.DEFAULT_BASEDIRECTORY, _builder.BaseDirectory);
+			AssertEquals(NAntBuilder.DEFAULT_EXECUTABLE, _builder.Executable);
+			AssertEquals(0, _builder.Targets.Length);
+			AssertEquals(NAntBuilder.DEFAULT_BUILD_TIMEOUT, _builder.BuildTimeoutSeconds);
+			AssertEquals(NAntBuilder.DEFAULT_LOGGER, _builder.Logger);
+		}
+
+		[Test]
+		public void ShouldSetSuccessfulStatusAndBuildOutputAsAResultOfASuccessfulBuild()
+		{
+			ProcessResult returnVal = CreateSuccessfulProcessResult();
+			_mockExecutor.ExpectAndReturn("Execute", returnVal, new IsAnything());
 
 			IntegrationResult result = new IntegrationResult();
 			_builder.Run(result);
-			string errorMessage = string.Format("{0} not contained in {1}", expected, result.Output);
-			Assert(errorMessage, StringUtil.StringContains(result.Output.ToString(), expected));
+
+			Assert("build should have succeeded", result.Succeeded);
+			AssertEquals(IntegrationStatus.Success, result.Status);
+			AssertEquals(returnVal.StandardOutput, result.Output);
+		}
+
+		[Test]
+		public void ShouldSetFailedStatusAndBuildOutputAsAResultOfFailedBuild()
+		{
+			ProcessResult returnVal = new ProcessResult("output", null, FAILED_EXIT_CODE, false);
+			_mockExecutor.ExpectAndReturn("Execute", returnVal, new IsAnything());
+
+			IntegrationResult result = new IntegrationResult();
+			_builder.Run(result);
+
+			Assert("build should have failed", result.Failed);
+			AssertEquals(IntegrationStatus.Failure, result.Status);
+			AssertEquals(returnVal.StandardOutput, result.Output);
 		}
 
 		[Test, ExpectedException(typeof(BuilderException))]
-		public void ExecuteCommandWithInvalidFile()
+		public void ShouldThrowBuilderExceptionIfProcessTimesOut()
 		{
-			// simulate nant missing
-			_builder.Executable = @"\nodir\invalidfile.bat";
-			_builder.BuildArgs = "";
-			_builder.BaseDirectory = TempFileUtil.GetTempPath(TEMP_DIR);
-			Assert("invalidfile.bat should not exist!", ! File.Exists(_builder.Executable));
+			ProcessResult returnVal = new ProcessResult("output", null, SUCCESSFUL_EXIT_CODE, true);
+			_mockExecutor.ExpectAndReturn("Execute", returnVal, new IsAnything());
+
+			IntegrationResult result = new IntegrationResult();
+			_builder.Run(result);
+		}
+
+		[Test, ExpectedException(typeof(BuilderException))]
+		public void ShouldThrowBuilderExceptionIfProcessThrowsException()
+		{
+			_mockExecutor.ExpectAndThrow("Execute", new Win32Exception(), new IsAnything());
+
+			IntegrationResult result = new IntegrationResult();
+			_builder.Run(result);
+		}
+
+		[Test]
+		public void ShouldPassSpecifiedPropertiesAsProcessInfoArgumentsToProcessExecutor()
+		{
+			ProcessResult returnVal = CreateSuccessfulProcessResult();
+			CollectingConstraint constraint = new CollectingConstraint();
+			_mockExecutor.ExpectAndReturn("Execute", returnVal, constraint);
+			
+			IntegrationResult result = new IntegrationResult();
+			result.Label = "1.0";
+
+			_builder.BaseDirectory = @"c:\";
+			_builder.Executable = "NAnt.exe";
+			_builder.BuildFile = "mybuild.build";
+			_builder.BuildArgs = "myArgs";
+			_builder.Targets = new string[] { "target1", "target2"};
+			_builder.BuildTimeoutSeconds = 2;
+			_builder.Run(result);
+
+			ProcessInfo info = (ProcessInfo) constraint.Parameter;
+			AssertEquals(_builder.Executable, info.FileName);
+			AssertEquals(_builder.BaseDirectory, info.WorkingDirectory);
+			AssertEquals(2000, info.TimeOut);
+			AssertEquals("-buildfile:mybuild.build -logger:" + NAntBuilder.DEFAULT_LOGGER + " myArgs -D:label-to-apply=1.0 target1 target2", info.Arguments);
+		}
+
+		[Test]
+		public void ShouldPassAppropriateDefaultPropertiesAsProcessInfoArgumentsToProcessExecutor()
+		{
+			ProcessResult returnVal = CreateSuccessfulProcessResult();
+			CollectingConstraint constraint = new CollectingConstraint();
+			_mockExecutor.ExpectAndReturn("Execute", returnVal, constraint);
+			
 			_builder.Run(new IntegrationResult());
-		}
 
-		[Test]
-		public void BuildSucceed()
-		{
-			CreateTestBuildFile();
-
-			_builder.Executable = NANT_TEST_EXECUTABLE;
-			_builder.BuildFile = TEST_BUILD_FILENAME;
-			_builder.BaseDirectory = TempFileUtil.GetTempPath(TEMP_DIR);
-			_builder.Targets = new string[] { "success" };
-
-			IntegrationResult result = new IntegrationResult();
-
-			_builder.Run(result);
-
-			Assert("test build should succeed", result.Succeeded);
-			Assert(StringUtil.StringContains(result.Output.ToString(), "I am success itself"));
-		}
-
-		[Test]
-		public void BuildFailed()
-		{
-			CreateTestBuildFile();
-
-			_builder.Executable = NANT_TEST_EXECUTABLE;
-			_builder.BuildFile = TEST_BUILD_FILENAME;
-			_builder.BaseDirectory = TempFileUtil.GetTempPath(TEMP_DIR);
-			_builder.Targets = new string[] { "fail" };
-
-			IntegrationResult result = new IntegrationResult();
-
-			_builder.Run(result);
-
-			Assert("test build should fail", result.Failed);
-			Assert(StringUtil.StringContains(result.Output.ToString(), "I am failure itself"));
-		}
-
-		[Test, ExpectedException(typeof(BuilderException))]
-		public void BuildWithInvalidBuildFile()
-		{
-			// simulate missing build file
-			_builder.Executable = NANT_TEST_EXECUTABLE;
-			_builder.BaseDirectory = TempFileUtil.GetTempPath(TEMP_DIR);
-			_builder.BuildArgs = "";
-			_builder.BuildFile = "invalidbuildfile";
-			IntegrationResult result = new IntegrationResult();
-			_builder.Run(result);
-			Fail("Build should fail when invoked with missing buildfile, but didn't!");
-		}
-
-		[Test]
-		public void CreateBuildArgs()
-		{
-			_builder.BuildFile = "foo.xml";
-			_builder.BuildArgs = "-bar";
-			_builder.LabelToApply = "1234";
-			_builder.Targets = new string[] {"a", "b"};
-			AssertEquals("-buildfile:foo.xml -bar -D:label-to-apply=1234 a b", _builder.CreateArgs());
-		}
-
-		[Test]
-		public void CreateBuildArgs_MissingArguments()
-		{
-			AssertEquals("-buildfile: -logger:NAnt.Core.XmlLogger -D:label-to-apply=NO-LABEL ", _builder.CreateArgs());
-		}
-
-		[Test]
-		public void LabelGetsPassedThrough()
-		{
-			CreateTestBuildFile();
-			_builder.Executable = NANT_TEST_EXECUTABLE;
-			_builder.BuildFile = TEST_BUILD_FILENAME;
-			_builder.BaseDirectory = TempFileUtil.GetTempPath(TEMP_DIR);
-			_builder.Targets = new string[] { "checkLabel" };
-			IntegrationResult result = new IntegrationResult();
-			result.Label = "ATestLabel";
-			_builder.Run(result);
-
-			Assert("test build should succeed", result.Succeeded);
-			Assert(StringUtil.StringContains(result.Output.ToString(), "ATestLabel"));
+			ProcessInfo info = (ProcessInfo) constraint.Parameter;
+			AssertEquals(_builder.Executable, NAntBuilder.DEFAULT_EXECUTABLE);
+			AssertEquals(_builder.BaseDirectory, NAntBuilder.DEFAULT_BASEDIRECTORY);
+			AssertEquals(NAntBuilder.DEFAULT_BUILD_TIMEOUT * 1000, info.TimeOut);
+			AssertEquals("-logger:" + NAntBuilder.DEFAULT_LOGGER + "  -D:label-to-apply=NO-LABEL", info.Arguments);
 		}
 
 		[Test]
@@ -174,39 +167,10 @@ namespace ThoughtWorks.CruiseControl.Core.Builder.Test
 			AssertFalse(_builder.ShouldRun(CreateIntegrationResultWithModifications(IntegrationStatus.Exception)));
 		}
 
-		[Test]
-		public void Run_TimesOut()
+		private ProcessResult CreateSuccessfulProcessResult()
 		{
-			CreateTestBuildFile();
-
-			_builder.Executable = NANT_TEST_EXECUTABLE;
-			_builder.BuildFile = TEST_BUILD_FILENAME;
-			_builder.BaseDirectory = TempFileUtil.GetTempPath(TEMP_DIR);
-
-			// this target takes 10 sec to complete
-			_builder.Targets = new string[] { "sleepy" };
-
-			// only give 1 sec before kill process
-			_builder.BuildTimeoutSeconds = 1;
-
-			IntegrationResult result = new IntegrationResult();
-
-			try
-			{
-				_builder.Run(result);
-				Fail("Should have timed out and thrown CruiseControlException.");
-			}
-			catch(CruiseControlException cce)
-			{
-				AssertEquals("NAnt process timed out(after 1 seconds)", cce.Message);
-			}
-
-			// for teardown(when directory deleted), this sleep gives
-			// the chance for spawned process to release file lock
-			System.Threading.Thread.Sleep(500);
+			return new ProcessResult("output", null, SUCCESSFUL_EXIT_CODE, false);
 		}
-
-		#region Test support
 
 		private IntegrationResult CreateIntegrationResultWithModifications (IntegrationStatus status)
 		{
@@ -214,44 +178,6 @@ namespace ThoughtWorks.CruiseControl.Core.Builder.Test
 			result.Status = status;
 			result.Modifications = new Modification[] { new Modification () };
 			return result;
-		}
-
-		private string CreateTestBuildFile ()
-		{
-			string contents = @"<project name=""ccnetlaunch"" default=""all"">
-
-  <target name=""all"">
-  	<echo message=""Build Succeeded""/>
-  </target>
-
-  <target name=""success"">
-    <echo message=""I am success itself""/>
-  </target>
-
-  <target name=""fail"">
-    <echo message=""I am failure itself""/>
-    <fail message=""Intentional failure for test purposes, that is to say, purposes of testing, if you will""/>
-  </target>
-
-  <target name=""checkLabel"">
-    <echo message=""${label-to-apply}"" />
-  </target>
-
-  <target name=""sleepy"">
-    <sleep seconds=""10"" />
-  </target>
-
-</project>";
-			return TempFileUtil.CreateTempFile (TEMP_DIR, TEST_BUILD_FILENAME, contents);
-		}
-
-		#endregion
-
-		private static string GetNAntLocation()
-		{
-			string currentDir = Directory.GetCurrentDirectory();
-			string baseDir = currentDir.Substring(0, currentDir.LastIndexOf("ccnet") + "ccnet".Length);
-			return baseDir + @"\tools\nant\nant.exe";
 		}
 	}
 }

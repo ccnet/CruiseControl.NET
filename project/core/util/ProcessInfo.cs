@@ -6,7 +6,8 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 {
 	public class ProcessInfo
 	{
-		internal ProcessStartInfo startInfo = new ProcessStartInfo();
+		private const int DEFAULT_TIMEOUT = 120000;
+		private ProcessStartInfo startInfo = new ProcessStartInfo();
 
 		public ProcessInfo(string filename, string arguments) : this(filename, arguments, null) { }
 
@@ -34,6 +35,18 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 		public string Arguments 
 		{
 			get { return startInfo.Arguments; }
+		}
+
+		public string WorkingDirectory
+		{
+			get { return startInfo.WorkingDirectory; }
+		}
+
+		public int TimeOut = DEFAULT_TIMEOUT;
+
+		public Process CreateAndStartNewProcess()
+		{
+			return Process.Start(startInfo);
 		}
 	}
 }

@@ -8,7 +8,7 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 		public static void AssertContains(string search, string target)
 		{
 			string message = string.Format("Search substring: {0} is not contained in target: {1}", search, target);
-			Assert(message, target.IndexOf(search) > 0);
+			Assert(message, target.IndexOf(search) >= 0);
 		}
 
 		public static void AssertFalse(bool assert)
@@ -48,17 +48,5 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 				AssertEquals("Comparing array index " + i, expected.GetValue(i), actual.GetValue(i));
 			}
 		}
-
-//		public static void AssertModificationsEquals(Modification expected, Modification actual)
-//		{
-//			AssertEquals(expected.Comment, actual.Comment);
-//			AssertEquals(expected.EmailAddress, actual.EmailAddress);
-//			AssertEquals(expected.FileName, actual.FileName);
-//			AssertEquals(expected.FolderName, actual.FolderName);
-//			AssertEquals(expected.ModifiedTime, actual.ModifiedTime);
-//			AssertEquals(expected.Type, actual.Type);
-//			AssertEquals(expected.UserName, actual.UserName);
-//			AssertEquals(expected, actual);
-//		}
 	}
 }

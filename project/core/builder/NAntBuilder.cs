@@ -5,75 +5,46 @@ using System.IO;
 using ThoughtWorks.CruiseControl.Core.Config;
 using ThoughtWorks.CruiseControl.Core.Util;
 using ThoughtWorks.CruiseControl.Remote;
+using System.Text;
 
 namespace ThoughtWorks.CruiseControl.Core.Builder
 {
 	[ReflectorType("nant")]
 	public class NAntBuilder : IBuilder
 	{
-		private const int DEFAULT_BUILD_TIMEOUT = 600;
-		private readonly string DEFAULT_BUILDARGS = "-logger:" + Configuration.NAntLogger;
+		public const int DEFAULT_BUILD_TIMEOUT = 600;
+		public const string DEFAULT_EXECUTABLE = "nant.exe";
+		public const string DEFAULT_BASEDIRECTORY = ".";
+		public const string DEFAULT_LABEL = "NO-LABEL";
+		public const string DEFAULT_LOGGER = "NAnt.Core.XmlLogger";
 
-		private string _executable;
-		private string _baseDirectory;
 		private string _buildArgs;
-		private string _buildfile;
-		private int _buildTimeoutSeconds = DEFAULT_BUILD_TIMEOUT;
-		private string[] _targets = new string[0];
-		private ProcessExecutor executor;
+		private ProcessExecutor _executor;
 
-		public NAntBuilder() : this(new ProcessExecutor())
-		{
-			_buildArgs = DEFAULT_BUILDARGS;
-		}
+		public NAntBuilder() : this(new ProcessExecutor()) { }
 
 		public NAntBuilder(ProcessExecutor executor)
 		{
-			this.executor = executor;
+			_executor = executor;
 		}
 
-		[ReflectorProperty("executable")] 
-		public string Executable
-		{
-			get { return _executable; }
-			set { _executable = value; }
-		}
+		[ReflectorProperty("executable", Required = false)] 
+		public string Executable = DEFAULT_EXECUTABLE;
 
-		[ReflectorProperty("baseDirectory")] 
-		public string BaseDirectory
-		{
-			get { return _baseDirectory; }
-			set { _baseDirectory = value; }
-		}
+		[ReflectorProperty("baseDirectory", Required = false)] 
+		public string BaseDirectory = DEFAULT_BASEDIRECTORY;
 
-		//TODO: can this be optional?
-		[ReflectorProperty("buildFile")] 
-		public string BuildFile
-		{
-			get { return _buildfile; }
-			set { _buildfile = value; }
-		}
+		[ReflectorProperty("buildFile", Required = false)] 
+		public string BuildFile;
 
 		[ReflectorProperty("buildArgs", Required = false)] 
-		public string BuildArgs
-		{
-			get { return _buildArgs; }
-			set 
-			{ 
-				if (value == null || value.IndexOf("-logger:") < 0)
-				{
-					Log.Warning("NAntBuilder buildArgs element does not specify that NAnt should use the XmlLogger.  If this is not specified then CruiseControl.NET may not be able to correctly render the output from NAnt.");
-				}
-				_buildArgs = value; 
-			}
-		}
+		public string BuildArgs;
+
+		[ReflectorProperty("logger", Required = false)]
+		public string Logger = DEFAULT_LOGGER;
 
 		[ReflectorArray("targetList", Required = false)] 
-		public string[] Targets
-		{
-			get { return _targets; }
-			set { _targets = value; }
-		}
+		public string[] Targets = new string[0];
 
 		/// <summary>
 		/// Gets and sets the maximum number of seconds that the build may take.  If the build process takes longer than
@@ -81,17 +52,52 @@ namespace ThoughtWorks.CruiseControl.Core.Builder
 		/// to disable process timeouts.
 		/// </summary>
 		[ReflectorProperty("buildTimeoutSeconds", Required = false)] 
-		public int BuildTimeoutSeconds
+		public int BuildTimeoutSeconds = DEFAULT_BUILD_TIMEOUT;
+
+		/// <summary>
+		/// Runs the integration using NAnt.  The build number is provided for labelling, build
+		/// timeouts are enforced.  The specified targets are used for the specified NAnt build file.
+		/// StdOut from nant.exe is redirected and stored.
+		/// </summary>
+		/// <param name="result">For storing build output.</param>
+		public void Run(IntegrationResult result)
 		{
-			get { return _buildTimeoutSeconds; }
-			set { _buildTimeoutSeconds = value; }
+			ProcessResult processResult = AttemptExecute(CreateProcessInfo(result));
+			result.Output = processResult.StandardOutput;
+
+			if (processResult.TimedOut)
+			{
+				throw new BuilderException(this, "NAnt process timed out(after " + BuildTimeoutSeconds + " seconds)");
+			}
+
+			if (processResult.ExitCode == 0)
+			{
+				result.Status = IntegrationStatus.Success;
+			}
+			else
+			{
+				result.Status = IntegrationStatus.Failure;
+				Log.Info("NAnt build failed: " + processResult.StandardError);
+			}
 		}
 
-		public string LabelToApply = "NO-LABEL";
-
-		public bool ShouldRun(IntegrationResult result)
+		private ProcessInfo CreateProcessInfo(IntegrationResult result)
 		{
-			return result.Working && result.Modifications.Length > 0;
+			ProcessInfo info = new ProcessInfo(Executable, CreateArgs(result), BaseDirectory);
+			info.TimeOut = BuildTimeoutSeconds*1000;
+			return info;
+		}
+
+		protected ProcessResult AttemptExecute(ProcessInfo info)
+		{
+			try
+			{
+				return _executor.Execute(info);
+			}			
+			catch (Exception e)
+			{
+				throw new BuilderException(this, string.Format("Unable to execute: {0}\n{1}", BuildCommand, e), e);
+			}
 		}
 
 		private string BuildCommand
@@ -104,64 +110,34 @@ namespace ThoughtWorks.CruiseControl.Core.Builder
 		/// specify the build-file name, the targets to build to, 
 		/// </summary>
 		/// <returns></returns>
-		internal string CreateArgs()
+		internal string CreateArgs(IntegrationResult result)
 		{
-			return string.Format("-buildfile:{0} {1} -D:label-to-apply={2} {3}", BuildFile, BuildArgs, LabelToApply, string.Join(" ", Targets));
+			return string.Format("{0} {1} {2} {3} {4}", CreateBuildFileArg(), CreateLoggerArg(), BuildArgs, CreateLabelToApplyArg(result), string.Join(" ", Targets)).Trim();
 		}
 
-		/// <summary>
-		/// Runs the integration, using NAnt.  The build number is provided for labelling, build
-		/// timeouts are enforced.  The specified targets are used for the specified NAnt build file.
-		/// StdOut from nant.exe is redirected and stored.
-		/// </summary>
-		/// <param name="result">For storing build output.</param>
-		public void Run(IntegrationResult result)
+		private string CreateBuildFileArg()
 		{
-			if (result.Label != null && result.Label.Trim().Length > 0)
-			{
-				LabelToApply = result.Label;
-			}
+			if (StringUtil.IsBlank(BuildFile)) return string.Empty;
 
-			try
-			{
-				ProcessResult processResult = AttemptExecute();
-				result.Output = processResult.StandardOutput;
-				if (processResult.ExitCode == 0)
-				{
-					result.Status = IntegrationStatus.Success;
-				}
-				else
-				{
-					result.Status = IntegrationStatus.Failure;
-					Log.Info("NAnt build failed: " + processResult.StandardError);
-				}
-			}
-			catch (CruiseControlException)
-			{
-				throw;
-			}
-			catch (Exception e)
-			{
-				throw new BuilderException(this, string.Format("Unable to execute: {0}\n{1}", BuildCommand, e), e);
-			}
+			return "-buildfile:" + BuildFile;
 		}
 
-		protected virtual ProcessResult AttemptExecute()
+		private string CreateLoggerArg()
 		{
-			executor.Timeout = BuildTimeoutSeconds*1000;
-			ProcessResult processResult = executor.Execute(Executable, CreateArgs(), BaseDirectory);
-			if (processResult.TimedOut)
-			{
-				// this causes the build to end up in 'exception' state.  the exception message is logged,
-				// though currently doesn't appear on the build web page
-				throw new BuilderException(this, "NAnt process timed out(after " + BuildTimeoutSeconds + " seconds)");
-			}
-			return processResult;
+			if (StringUtil.IsBlank(Logger)) return string.Empty;
+
+			return "-logger:" + Logger;
 		}
 
-		protected virtual ProcessInfo CreateProcess(string filename, string arguments, string workingDirectory)
+		private string CreateLabelToApplyArg(IntegrationResult result)
 		{
-			return new ProcessInfo(filename, arguments, workingDirectory);
+			string label = StringUtil.IsBlank(result.Label) ? DEFAULT_LABEL : result.Label;
+			return "-D:label-to-apply=" + label;
+		}
+
+		public bool ShouldRun(IntegrationResult result)
+		{
+			return result.Working && result.Modifications.Length > 0;
 		}
 
 		public override string ToString()

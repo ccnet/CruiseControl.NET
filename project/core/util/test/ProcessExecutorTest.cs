@@ -8,10 +8,17 @@ namespace ThoughtWorks.CruiseControl.Core.Util.Test
 	[TestFixture]
 	public class ProcessExecutorTest : CustomAssertion
 	{
+		private ProcessExecutor executor;
+
+		[SetUp]
+		protected void CreateExecutor()
+		{
+			executor = new ProcessExecutor();
+		}
+
 		[Test]
 		public void ExecuteProcessAndEchoResultsBackThroughStandardOut()
 		{
-			ProcessExecutor executor = new ProcessExecutor();
 			ProcessResult result = executor.Execute("cmd.exe", "/C @echo Hello World");
 			AssertEquals("Hello World", result.StandardOutput.Trim());
 			AssertEquals(false, result.HasError);
@@ -20,7 +27,6 @@ namespace ThoughtWorks.CruiseControl.Core.Util.Test
 		[Test]
 		public void ExecuteProcessAndEchoResultsBackThroughStandardOutWhereALargeAmountOfOutputIsProduced()
 		{
-			ProcessExecutor executor = new ProcessExecutor();
 			ProcessResult result = executor.Execute("cmd.exe", "/C @dir " + Environment.SystemDirectory);
 			Assert("process should not have timed out", ! result.TimedOut);
 			AssertEquals(false, result.HasError);
@@ -29,7 +35,6 @@ namespace ThoughtWorks.CruiseControl.Core.Util.Test
 		[Test]
 		public void StartProcessRunningBatchFileCallingNonExistentFile()
 		{
-			ProcessExecutor executor = new ProcessExecutor();
 			ProcessResult result = executor.Execute("cmd.exe", "/C @zerk.exe foo");
 
 			AssertEquals(true, result.HasError);
@@ -42,7 +47,6 @@ operable program or batch file.", result.StandardError.Trim());
 		[Test]
 		public void SetEnvironmentVariables()
 		{
-			ProcessExecutor executor = new ProcessExecutor();
 			ProcessInfo processInfo = new ProcessInfo("cmd.exe", "/C set foo", null);
 			processInfo.EnvironmentVariables["foo"] = "bar";
 			ProcessResult result = executor.Execute(processInfo);
@@ -56,13 +60,14 @@ operable program or batch file.", result.StandardError.Trim());
 			string filename = TempFileUtil.CreateTempFile("ProcessTest", "run.bat", "@:foo\r\ngoto foo");
 			try
 			{
-				ProcessExecutor executor = new ProcessExecutor();
-				executor.Timeout = 10;
-				ProcessResult result = executor.Execute(filename, null);
+				ProcessInfo processInfo = new ProcessInfo(filename, null);
+				processInfo.TimeOut = 10;
+				ProcessResult result = executor.Execute(processInfo);
 
 				Assert("process should have timed out", result.TimedOut);
-				AssertNull(result.StandardOutput);
+				AssertNotNull("some output should have been produced", result.StandardOutput);
 				AssertFalse(result.HasError);
+				AssertEquals(-1, result.ExitCode);
 			}
 			finally
 			{

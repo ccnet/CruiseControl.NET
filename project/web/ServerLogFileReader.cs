@@ -44,7 +44,7 @@ namespace ThoughtWorks.CruiseControl.Web
 				CloseFile();
 			}
 
-			return builder.ToString().TrimStart(null);
+			return builder.ToString().TrimStart();
 		}
 
 		private bool OpenFile()

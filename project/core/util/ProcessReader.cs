@@ -27,12 +27,6 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 			stream.Close();
 		}
 
-		public void Abort()
-		{
-			thread.Abort();
-			stream.Close();
-		}
-
 		public string Output
 		{
 			get { return output; }

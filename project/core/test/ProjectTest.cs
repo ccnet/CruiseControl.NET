@@ -39,6 +39,13 @@ namespace ThoughtWorks.CruiseControl.Core.Test
 		}
 
 		[Test]
+		public void RunningASuccessfulIntegrationShouldCheckForModificationsExecuteBuildAndPublishResults()
+		{
+			IntegrationResult result = _project.RunIntegration(BuildCondition.IfModificationExists);
+
+		}
+
+		[Test]
 		public void GetLastIntegration_NoPreviousBuild()
 		{
 			Mock mock = SetMockStateManager(false, null);

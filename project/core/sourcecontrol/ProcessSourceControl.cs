@@ -47,7 +47,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 
 		protected ProcessResult Execute(ProcessInfo processInfo)
 		{
-			_executor.Timeout = Timeout;
+			processInfo.TimeOut = Timeout;
 			ProcessResult result = _executor.Execute(processInfo);
 
 			if (result.HasError)
