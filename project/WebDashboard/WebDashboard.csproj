@@ -702,11 +702,6 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "MVC\View\DefaultVelocityViewGenerator.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
                     RelPath = "MVC\View\HtmlBuilderViewBuilder.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -727,7 +722,12 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "MVC\View\StaticInitialisedVelocityTransformer.cs"
+                    RelPath = "MVC\View\LazilyInitialisingVelocityTransformer.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "MVC\View\VelocityViewGeneratorWithTransformer.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

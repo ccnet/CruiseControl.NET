@@ -16,7 +16,7 @@
                 DefaultTargetSchema = "IE50"
                 DelaySign = "false"
                 OutputType = "Library"
-                PreBuildEvent = 'copy "$(ProjectDir)Web\test.config" "$(TargetPath).config"&#xd;&#xa;mkdir "$(TargetDir)xsl"&#xd;&#xa;copy "$(SolutionDir)\xsl\*.*" "$(TargetDir)xsl"'
+                PreBuildEvent = 'copy "$(ProjectDir)Web\test.config" "$(TargetPath).config"&#xd;&#xa;mkdir "$(TargetDir)xsl"&#xd;&#xa;copy "$(SolutionDir)\xsl\*.*" "$(TargetDir)xsl"&#xd;&#xa;xcopy "$(ProjectDir)\resources\*.*" "$(TargetDir)" /S /Y'
                 PostBuildEvent = ""
                 RootNamespace = "ThoughtWorks.CruiseControl.UnitTests"
                 RunPostBuildEvent = "OnBuildSuccess"
@@ -158,6 +158,21 @@
                     Name = "web"
                     Project = "{317E46BA-74DE-411D-A09D-37193EEFD856}"
                     Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
+                />
+                <Reference
+                    Name = "NVelocity"
+                    AssemblyName = "NVelocity"
+                    HintPath = "..\..\lib\NVelocity.dll"
+                />
+                <Reference
+                    Name = "Commons"
+                    AssemblyName = "Commons"
+                    HintPath = "..\..\lib\Commons.dll"
+                />
+                <Reference
+                    Name = "log4net"
+                    AssemblyName = "log4net"
+                    HintPath = "..\..\lib\log4net.dll"
                 />
             </References>
         </Build>
@@ -328,6 +343,7 @@
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
+                <Folder RelPath = "resources\templates\" />
                 <File
                     RelPath = "UnitTestUtils\HashtableConstraint.cs"
                     SubType = "Code"
@@ -514,6 +530,16 @@
                 />
                 <File
                     RelPath = "WebDashboard\MVC\Cruise\ServerCheckingProxyActionTest.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "WebDashboard\MVC\View\LazilyInitialisingVelocityTransformerTest.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "WebDashboard\MVC\View\VelocityViewGeneratorWithTransformerTest.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
