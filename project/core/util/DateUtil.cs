@@ -4,7 +4,7 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 {
 	public class DateUtil
 	{
-		public const string DateOutputFormat = "dd MMM yyyy HH:mm";
+		public const string DateOutputFormat = "dd MMM yyyy HH:mm:ss";
 
 		public static string FormatDate(DateTime date)
 		{

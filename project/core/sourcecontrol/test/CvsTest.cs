@@ -106,7 +106,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test
 			ProcessInfo info = (ProcessInfo) args.Parameter;
 			Assert.AreEqual(@"C:\temp", info.WorkingDirectory);
 			Assert.AreEqual(@"C:\Program Files\TortoiseCVS", info.FileName);
-			Assert.AreEqual(@"-q update -d -P", info.Arguments);
+			Assert.AreEqual(@"-q update -d -P -C", info.Arguments);
 
 			mockHistoryParser.Verify();
 			mockProcessExecutor.Verify();

@@ -52,12 +52,12 @@ namespace ThoughtWorks.CruiseControl.Web.Test
 			Assert.AreEqual("?log=log19750101120000.xml", actualLinks[4].HRef);
 			Assert.AreEqual("?log=log19741224120000.xml", actualLinks[5].HRef);
 
-			Assert.AreEqual("<nobr>30 Aug 2002 16:40 (6)</nobr>", actualLinks[0].InnerText);
-			Assert.AreEqual("<nobr>07 May 2002 04:25 (Failed)</nobr>", actualLinks[1].InnerHtml);
-			Assert.AreEqual("<nobr>07 May 2002 02:38 (Failed)</nobr>", actualLinks[2].InnerHtml);
-			Assert.AreEqual("<nobr>07 May 2002 01:03 (Failed)</nobr>", actualLinks[3].InnerHtml);
-			Assert.AreEqual("<nobr>01 Jan 1975 12:00 (Failed)</nobr>", actualLinks[4].InnerHtml);
-			Assert.AreEqual("<nobr>24 Dec 1974 12:00 (Failed)</nobr>", actualLinks[5].InnerHtml);
+			Assert.AreEqual("<nobr>30 Aug 2002 16:40:57 (6)</nobr>", actualLinks[0].InnerText);
+			Assert.AreEqual("<nobr>07 May 2002 04:25:35 (Failed)</nobr>", actualLinks[1].InnerHtml);
+			Assert.AreEqual("<nobr>07 May 2002 02:38:58 (Failed)</nobr>", actualLinks[2].InnerHtml);
+			Assert.AreEqual("<nobr>07 May 2002 01:03:55 (Failed)</nobr>", actualLinks[3].InnerHtml);
+			Assert.AreEqual("<nobr>01 Jan 1975 12:00:00 (Failed)</nobr>", actualLinks[4].InnerHtml);
+			Assert.AreEqual("<nobr>24 Dec 1974 12:00:00 (Failed)</nobr>", actualLinks[5].InnerHtml);
 		}
 
 		[Test]

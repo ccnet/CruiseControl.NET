@@ -48,6 +48,17 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Xsl
 			CustomAssertion.AssertNotContains("Rules", actualXml);
 		}
 
+		[Test]
+		public void ShouldRenderNAntBuildErrorElement()
+		{
+			string xml = string.Format(@"<cruisecontrol><build><buildresults><failure><builderror>
+	<message>External Program Failed: D:\tools\cvsexe\cvswithplinkrsh.bat (return code was 1)</message>
+</builderror></failure></buildresults></build></cruisecontrol>");
+
+			string actualXml = LoadStylesheetAndTransformInput(CreateInfoMessage(xml));
+			CustomAssertion.AssertContains("External Program Failed:", actualXml);
+		}
+
 		private string CreateInfoMessage(string input)
 		{
 			return string.Format(@"<cruisecontrol><buildresults>

@@ -12,7 +12,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 		public const string HISTORY_COMMAND_FORMAT = @"{0}-q log -N ""-d>{1}""{2}";		// do not show tags
 
 		// use -C to force get clean copy? should reset tags?
-		public const string GET_SOURCE_COMMAND_FORMAT = @"-q update -d -P";	// build directories, prune empty directories, (get clean copy - use -C)
+		public const string GET_SOURCE_COMMAND_FORMAT = @"-q update -d -P -C";	// build directories, prune empty directories, get clean copy
 		public const string COMMAND_DATE_FORMAT = "yyyy-MM-dd HH:mm:ss 'GMT'";
 		private string _executable = "cvs.exe";
 		private string _workingDirectory;
