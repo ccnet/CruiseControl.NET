@@ -80,31 +80,24 @@
 	<!-- TEST -->
 	<target name="test" depends="test.unit" />
 
-	<target name="test.unit" depends="compile, test.core, test.console, test.web" description="runs unit tests" />    	
-    
-	<target name="test.core">
-		<nunit2>
-			<formatter type="Plain" />
-			<formatter type="Xml" usefile="true" extension=".xml" outputdir="${build.dir}" />
-			<test assemblyname="${build.dir}\${core.dll}" appconfig="${build.dir}\${core.dll}.config" />
-		</nunit2>
-	</target>
+    <target name="test.unit" depends="compile" description="runs unit tests">
+    	
+		<exec basedir="${build.dir}" 
+			  workingdir="${build.dir}" 
+			  program="..\tools\nunit\nunit-console.exe" 
+			  commandline="${core.dll} /xml:ccnet-core-results.xml"/>
 
-	<target name="test.console">
-		<nunit2>
-			<formatter type="Plain" />
-			<formatter type="Xml" usefile="true" extension=".xml" outputdir="${build.dir}" />
-			<test assemblyname="${build.dir}\${console.exe}" appconfig="${build.dir}\${console.exe}.config" />
-		</nunit2>
-	</target>
+		<exec basedir="${build.dir}" 
+			  workingdir="${build.dir}" 
+			  program="..\tools\nunit\nunit-console.exe" 
+			  commandline="${console.exe} /xml:ccnet-console-results.xml"/>
 
-	<target name="test.web">
-		<nunit2>
-			<formatter type="Plain" />
-			<formatter type="Xml" usefile="true" extension=".xml" outputdir="${build.dir}" />
-			<test assemblyname="${build.dir}\${web.dll}" appconfig="${build.dir}\${web.dll}.config" />
-		</nunit2>
-	</target>
+		<exec basedir="${build.dir}" 
+			  workingdir="${build.dir}" 
+			  program="..\tools\nunit\nunit-console.exe" 
+			  commandline="${web.dll} /xml:ccnet-web-results.xml"/>
+
+    </target>
 
 	<!-- Used for manually testing the webapp. Don't include this in an automated build
 		unless we copy files to distribute to a different location -->
