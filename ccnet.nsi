@@ -44,10 +44,11 @@ var ICONS_GROUP
 !insertmacro MUI_PAGE_STARTMENU Application $ICONS_GROUP
 ; Instfiles page
 !insertmacro MUI_PAGE_INSTFILES
-Page custom InstallService InstallService
-Page custom CreateVirtualDirectory CreateVirtualDirectory
+;Page custom InstallService InstallService
+;Page custom CreateVirtualDirectory CreateVirtualDirectory
 ; Finish page
 Var FinishMessage
+!define MUI_FINISHPAGE_NOAUTOCLOSE
 !define MUI_WELCOMEFINISHPAGE_CUSTOMFUNCTION_INIT PrepareFinishPageMessage
 !define MUI_FINISHPAGE_TEXT $FinishMessage
 !insertmacro MUI_PAGE_FINISH
@@ -72,7 +73,6 @@ Section "CruiseControl.NET Server" SEC01
   SetOutPath "$INSTDIR\server"
   SetOverwrite ifnewer
   File /r /x *.config "deployed\server\*"
-  ;File /r "deployed\server\*"
 
   Call BackupAndExtractConfigFiles
 
@@ -81,28 +81,10 @@ Section "CruiseControl.NET Server" SEC01
   CreateShortCut "$SMPROGRAMS\$ICONS_GROUP\CruiseControl.NET.lnk" "$INSTDIR\server\ccnet.exe"
   CreateShortCut "$DESKTOP\CruiseControl.NET.lnk" "$INSTDIR\server\ccnet.exe"
   !insertmacro MUI_STARTMENU_WRITE_END
+  
+  Call InstallService
+  
 SectionEnd
-
-Var ConfigBackedUp
-Function BackupAndExtractConfigFiles
-  SetOutPath "$INSTDIR\server"
-  StrCpy $ConfigBackedUp "no"
-
-  IfFileExists $INSTDIR\server\ccnet.exe.config 0 extractCCNetExeConfig
-    Delete $INSTDIR\server\ccnet.exe.config.old
-    Rename $INSTDIR\server\ccnet.exe.config $INSTDIR\server\ccnet.exe.config.old
-    StrCpy $ConfigBackedUp "yes"
-  extractCCNetExeConfig:
-    File "deployed\server\ccnet.exe.config"
-
-  IfFileExists $INSTDIR\server\ccservice.exe.config 0 extractCCServiceExeConfig
-    Delete $INSTDIR\server\ccservice.exe.config.old
-    Rename $INSTDIR\server\ccservice.exe.config $INSTDIR\server\ccservice.exe.config.old
-    StrCpy $ConfigBackedUp "yes"
-  extractCCServiceExeConfig:
-    File "deployed\server\ccservice.exe.config"
-
-FunctionEnd
 
 Section "Web Dashboard" SEC02
   SetOutPath "$INSTDIR\webdashboard"
@@ -111,6 +93,8 @@ Section "Web Dashboard" SEC02
 
   !insertmacro MUI_STARTMENU_WRITE_BEGIN Application
   !insertmacro MUI_STARTMENU_WRITE_END
+  
+  Call CreateVirtualDirectory
 SectionEnd
 
 Section "CCTray" SEC03
@@ -163,27 +147,62 @@ Function AdditionalConfiguration
   !insertmacro MUI_INSTALLOPTIONS_DISPLAY "AdditionalConfiguration.ini"
 FunctionEnd
 
+Var ConfigBackedUp
+Function BackupAndExtractConfigFiles
+  SetOutPath "$INSTDIR\server"
+  StrCpy $ConfigBackedUp "no"
+
+  IfFileExists $INSTDIR\server\ccnet.exe.config 0 extractCCNetExeConfig
+    DetailPrint "Backing up ccnet.exe.config to ccnet.exe.config.old..."
+    Delete $INSTDIR\server\ccnet.exe.config.old
+    Rename $INSTDIR\server\ccnet.exe.config $INSTDIR\server\ccnet.exe.config.old
+    StrCpy $ConfigBackedUp "yes"
+  extractCCNetExeConfig:
+    File "deployed\server\ccnet.exe.config"
+
+  IfFileExists $INSTDIR\server\ccservice.exe.config 0 extractCCServiceExeConfig
+    DetailPrint "Backing up ccservice.exe.config to ccservice.exe.config.old..."
+    Delete $INSTDIR\server\ccservice.exe.config.old
+    Rename $INSTDIR\server\ccservice.exe.config $INSTDIR\server\ccservice.exe.config.old
+    StrCpy $ConfigBackedUp "yes"
+  extractCCServiceExeConfig:
+    File "deployed\server\ccservice.exe.config"
+
+FunctionEnd
+
 Var InstallService
 Function InstallService
   !insertmacro MUI_INSTALLOPTIONS_READ $InstallService "AdditionalConfiguration.ini" "Field 1" "State"
-  Strcmp $InstallService "0" exit
+  StrCmp $InstallService "0" exit
+    DetailPrint "Checking if ccservice is already installed..."
     nsSCM::QueryStatus /NOUNLOAD "CCService"
     Pop $0
     Pop $1
-    Strcmp $0 "error" installService
+    StrCmp $0 "error" installService
       MessageBox MB_ICONINFORMATION|MB_OK \
       "There is already a service with the name 'CCService' installed. The CruiseControl.NET service will need to be installed manually."
       Return
     installService:
+      DetailPrint "Installing ccservice..."
       nsSCM::Install /NOUNLOAD "CCService" "CruiseControl.NET Server" 16 3 "$INSTDIR\server\ccservice.exe" "" ""
       Return
   exit:
 FunctionEnd
 
-;Var CreateVirtualDirectory
+Var CreateVirtualDirectory
 Function CreateVirtualDirectory
-  ;TODO: Actually create the virtual directory.
-  ;!insertmacro MUI_INSTALLOPTIONS_READ $CreateVirtualDirectory "AdditionalConfiguration.ini" "Field 2" "State"
+  !insertmacro MUI_INSTALLOPTIONS_READ $CreateVirtualDirectory "AdditionalConfiguration.ini" "Field 2" "State"
+  StrCmp $CreateVirtualDirectory "0" exit
+    SetOutPath $TEMP
+    SetOverwrite on
+    File "install\createCCNetVDir.vbs"
+    DetailPrint "Creating IIS virtual directory..."
+    nsExec::ExecToLog /TIMEOUT=20000 '"$SYSDIR\cscript.exe" "$TEMP\createCCNetVDir.vbs" "$INSTDIR\webdashboard"'
+    Pop $0
+    StrCmp $0 "0" exit
+      MessageBox MB_ICONINFORMATION|MB_OK "Could not create the virtual directory due to $0."
+  exit:
+    WriteRegStr ${PRODUCT_UNINST_ROOT_KEY} "${PRODUCT_UNINST_KEY}" "CCNetVDir" $CreateVirtualDirectory
 FunctionEnd
 
 Var MessageDetail
@@ -226,16 +245,32 @@ Function un.InstallService
   nsSCM::QueryStatus /NOUNLOAD "CCService"
   Pop $0
   Pop $1
-  Strcmp $0 "error" exit
+  StrCmp $0 "error" exit
+    DetailPrint "Stopping the CruiseControl.NET service..."
     nsSCM::Stop /NOUNLOAD "CCService"
+    DetailPrint "Removing the CruiseControl.NET service..."
     nsSCM::Remove /NOUNLOAD "CCService"
     Pop $0
     Strcmp $0 "success" exit
       MessageBox MB_ICONEXCLAMATION|MB_OK "The CruiseControl.NET service could not be removed."
   exit:
+    DetailPrint "CruiseControl.NET service successfully removed."
 FunctionEnd
 
+Var RemoveVDir
 Function un.RemoveVirtualDirectory
-  ;TODO: Remove the 'ccnet' virtual directory. But what if the virt dir has been renamed since installation and another app
-  ; creates a 'ccnet'? Can a unique object id or handle for the virtual directory we create be stored in the registry?
+  ReadRegStr $RemoveVDir ${PRODUCT_UNINST_ROOT_KEY} "${PRODUCT_UNINST_KEY}" "CCNetVDir"
+  StrCmp $RemoveVDir "0" skipRemoveVDir
+    SetOutPath $TEMP
+    SetOverwrite on
+    File "install\removeCCNetVDir.vbs"
+    DetailPrint "Removing IIS virtual directory..."
+    nsExec::ExecToLog /TIMEOUT=20000 '"$SYSDIR\cscript.exe" "$TEMP\removeCCNetVDir.vbs" "$INSTDIR\webdashboard"'
+    Pop $0
+    StrCmp $0 "0" exit
+      MessageBox MB_ICONINFORMATION|MB_OK "Could not remove the virtual directory due to $0."
+    Goto exit
+  skipRemoveVDir:
+    DetailPrint "The CruiseControl.NET virtual directory has not been installed."
+  exit:
 FunctionEnd
