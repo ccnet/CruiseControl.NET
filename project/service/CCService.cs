@@ -86,8 +86,7 @@ namespace tw.ccnet.service
 
 			// in a service application the work has to be done in a separate thread so we use CruiseManager no matter what
 			// we will register it on a channel if remoting is on
-			manager = new CruiseManager();
-			manager.InitializeCruiseControl(configFile);
+			manager = new CruiseManager(configFile);
 			
             if (useRemoting()) 
                 manager.RegisterForRemoting();

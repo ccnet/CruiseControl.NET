@@ -1,6 +1,7 @@
 using System;
 using System.Diagnostics;
 using System.IO;
+using System.Runtime.Remoting;
 using System.Threading;
 
 using NUnit.Framework;
@@ -51,13 +52,11 @@ namespace tw.ccnet.core.test
 			}
 		}
 
-        public class MyConsoleOutputSink : IConsoleOutputSink 
+        [Test]
+        public void TestStartStopCruise() 
         {
-            public string Text = "";
-            public void Write(string line) 
-            {
-                Text += line;
-            }
+            CruiseControl cc = new CruiseControl();
+            CruiseManager manager = new CruiseManager(cc);
         }
 	}
 }

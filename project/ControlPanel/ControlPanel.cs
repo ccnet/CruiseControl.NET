@@ -360,18 +360,4 @@ namespace tw.ccnet.controlpanel
             manager.Configuration = configurationTextBox.Text;        
         }
     }
-
-    public class ConsoleOutputSink : MarshalByRefObject, IConsoleOutputSink 
-    {
-        private ControlPanel panel;
-        public ConsoleOutputSink(ControlPanel panel) 
-        {
-            this.panel = panel;
-        }
-
-        public void Write(string line) 
-        {
-            panel.consoleOutputTextBox.Text += line;
-        }
-    }
 }

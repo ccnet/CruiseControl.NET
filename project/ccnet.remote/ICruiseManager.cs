@@ -100,9 +100,4 @@ namespace tw.ccnet.remote
 		Exception,
 		Unknown
 	}
-
-    public interface IConsoleOutputSink 
-    {
-        void Write(string text);
-    }
 }

@@ -19,13 +19,15 @@ namespace tw.ccnet.core
 		private Thread _cruiseControlThread;
 		public const int TCP_PORT = 1234;
 
-		public void InitializeCruiseControl(String configFileName)
-		{
-			ConfigurationLoader configLoader = new ConfigurationLoader(configFileName);
-			_cruiseControl = new CruiseControl(configLoader);
-		}
-		
-		public void InitializeThread()
+        public CruiseManager(string configFileName) 
+            : this(new CruiseControl(new ConfigurationLoader(configFileName))) {}
+
+        public CruiseManager(CruiseControl cruiseControl) 
+        {
+            _cruiseControl = cruiseControl;
+        }
+
+        private void InitializeThread()
 		{
 			_cruiseControlThread = new Thread(new ThreadStart(_cruiseControl.Start));
 			_cruiseControlThread.Start();

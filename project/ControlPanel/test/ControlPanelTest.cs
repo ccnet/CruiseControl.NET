@@ -80,8 +80,8 @@ namespace tw.ccnet.controlpanel.test
         [Test, Ignore("can't get this to work with remoting")]
         public void TestConsoleOutputSink() 
         {
-            manager.Sink.Write("foo");
-            manager.Sink.Write("bar");
+//            manager.Sink.Write("foo");
+//            manager.Sink.Write("bar");
 
             AssertEquals("foobar", panel.consoleOutputTextBox.Text);
         }
@@ -104,7 +104,6 @@ namespace tw.ccnet.controlpanel.test
         public class MockCruiseManager : ICruiseManager
         {
             public CruiseControlStatus Status = CruiseControlStatus.Running;
-            public IConsoleOutputSink Sink;
             private string configuration;
 
             public string Configuration 
@@ -140,11 +139,6 @@ namespace tw.ccnet.controlpanel.test
             public void StopCruiseControlNow()
             {
                 Status = CruiseControlStatus.Stopped;
-            }
-
-            public void AttachConsoleOutputSink(IConsoleOutputSink sink) 
-            {
-                this.Sink = sink;
             }
         }
 	}

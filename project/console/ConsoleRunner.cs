@@ -63,8 +63,7 @@ namespace tw.ccnet.console
 
 		private static void StartRemoteCC(String configFile)
 		{
-            manager = new CruiseManager();
-            manager.InitializeCruiseControl(configFile);
+            manager = new CruiseManager(configFile);
             manager.RegisterForRemoting();
             manager.StartCruiseControl();
 		}
