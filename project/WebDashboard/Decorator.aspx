@@ -29,10 +29,10 @@
 			</table>
 			<table border="0" align="center" cellpadding="0" cellspacing="0" width="100%" bgcolor="#333399">
 				<tr>
-					<td valign="top" id="LeftHandSide" width="196" bgcolor="#eeeedd">
-						<table id="Plugins" width="100%" cellpadding="3" cellspacing="0" border="0">
+					<td valign="top" id="LeftHandSide" bgcolor="#eeeedd" width="180px">
+						<table id="Plugins" cellpadding="3" cellspacing="0" border="0">
 							<tr>
-								<td>&nbsp;</td>
+								<td><img src="images/shim.gif" width="180px" height="1"></td>
 							</tr>
 							<tr>
 								<td>

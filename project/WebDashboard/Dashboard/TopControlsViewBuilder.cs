@@ -40,8 +40,10 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 			HtmlGenericControl locationMenu = new HtmlGenericControl("div");
 			locationMenu.InnerHtml = writer.ToString();
 
-			return Table(
-				TR( TD( locationMenu )));
+			HtmlTable table = Table();
+			table.Attributes.Add("class", "breadcrumbs");
+			table.Rows.Add(TR( TD( locationMenu )));
+			return table;
 		}
 	}
 }

@@ -46,6 +46,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 				TR( TD( A("Next", urlBuilder.BuildBuildUrl("BuildReport.aspx", serverName, projectName, buildNameRetriever.GetNextBuildName(serverName, projectName, buildName))))),
 				TR( TD( A("Previous", urlBuilder.BuildBuildUrl("BuildReport.aspx", serverName, projectName, buildNameRetriever.GetPreviousBuildName(serverName, projectName, buildName))))),
 				TR( TD( A("View Build Log", urlBuilder.BuildBuildUrl("ViewLog.aspx", serverName, projectName, buildName)))),
+				TR( TD( "&nbsp;")),
 				TR( TD( recentBuildsViewBuilder.BuildRecentBuildsTable(serverName, projectName)))
 					);
 		}

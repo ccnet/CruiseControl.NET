@@ -15,31 +15,34 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 
 		public HtmlTable Execute(ICruiseRequest request)
 		{
+			HtmlTable table = null;
 			string serverName = request.GetServerName();
 			if (serverName == "")
 			{
-				return slaveBuilder.GetFarmSideBar();
+				table = slaveBuilder.GetFarmSideBar();
 			}
 			else
 			{
 				string projectName = request.GetProjectName();
 				if (projectName == "")
 				{
-					return slaveBuilder.GetServerSideBar(serverName);
+					table = slaveBuilder.GetServerSideBar(serverName);
 				}
 				else
 				{
 					string buildName = request.GetBuildName();
 					if (buildName == "")
 					{
-						return slaveBuilder.GetProjectSideBar(serverName, projectName);	
+						table = slaveBuilder.GetProjectSideBar(serverName, projectName);	
 					}
 					else
 					{
-						return slaveBuilder.GetBuildSideBar(serverName, projectName, buildName);
+						table =  slaveBuilder.GetBuildSideBar(serverName, projectName, buildName);
 					}
 				}
 			}
+			table.Width = "100%";
+			return table;
 		}
 	}
 }

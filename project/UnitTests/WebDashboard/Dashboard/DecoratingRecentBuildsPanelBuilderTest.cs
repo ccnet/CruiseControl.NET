@@ -63,8 +63,12 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 			HtmlTable returnedTable = builder.BuildRecentBuildsTable("myServer", "myProject");
 
 			// Verify
+			// Row 0 is header
+			// Row 1 is row returned from decoratedBuilder
 			AssertEquals("hello decorator", returnedTable.Rows[1].Cells[0].InnerHtml);
-			HtmlAnchor showAllLink = (HtmlAnchor) returnedTable.Rows[2].Cells[0].Controls[0];
+			// Row 2 is a blank row
+			// Row 3 is footer
+			HtmlAnchor showAllLink = (HtmlAnchor) returnedTable.Rows[3].Cells[0].Controls[0];
 			AssertEquals("Show All", showAllLink.InnerHtml);
 			AssertEquals("returnedurl1", showAllLink.HRef);
 			VerifyAll();
