@@ -1377,11 +1377,6 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "util\XmlFragmentWriter.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
                     RelPath = "util\XmlUtil.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
