@@ -28,6 +28,13 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.ServerConnection
 				);
 		}
 
+		private void VerifyAll()
+		{
+			configurationGetterMock.Verify();
+			cruiseManagerFactoryMock.Verify();
+			cruiseManagerMock.Verify();
+		}
+
 		[Test]
 		public void ThrowsCorrectExceptionIfServerNotKnown()
 		{
@@ -53,9 +60,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.ServerConnection
 				AssertEquals("unknownServer", e.RequestedServer);
 			}
 
-			configurationGetterMock.Verify();
-			cruiseManagerFactoryMock.Verify();
-			cruiseManagerMock.Verify();
+			VerifyAll();
 		}
 
 		[Test]
@@ -75,9 +80,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.ServerConnection
 				AssertEquals("myproject", e.RequestedProject);
 			}
 
-			configurationGetterMock.Verify();
-			cruiseManagerFactoryMock.Verify();
-			cruiseManagerMock.Verify();
+			VerifyAll();
 		}
 
 		[Test]
@@ -105,9 +108,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.ServerConnection
 			cruiseManagerMock.ExpectAndReturn("GetLatestBuildName", "mylogformyotherserverformyotherproject", "myotherproject");
 			AssertEquals("mylogformyotherserverformyotherproject", managerWrapper.GetLatestBuildName("myotherserver", "myotherproject"));
 			
-			configurationGetterMock.Verify();
-			cruiseManagerFactoryMock.Verify();
-			cruiseManagerMock.Verify();
+			VerifyAll();
 		}
 
 		[Test]
@@ -120,9 +121,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.ServerConnection
 			cruiseManagerMock.ExpectAndReturn("GetLog", "log\r\ncontents", "myproject", "mybuild");
 			AssertEquals("log\r\ncontents", managerWrapper.GetLog("myserver", "myproject", "mybuild"));
 			
-			configurationGetterMock.Verify();
-			cruiseManagerFactoryMock.Verify();
-			cruiseManagerMock.Verify();
+			VerifyAll();
 		}
 
 		[Test]
@@ -135,9 +134,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.ServerConnection
 			cruiseManagerMock.ExpectAndReturn("GetBuildNames", new string[] {"log1", "log2"}, "myproject");
 			AssertEquals("log1", managerWrapper.GetBuildNames("myserver", "myproject")[0]);
 			
-			configurationGetterMock.Verify();
-			cruiseManagerFactoryMock.Verify();
-			cruiseManagerMock.Verify();
+			VerifyAll();
 		}
 	}
 }

@@ -37,6 +37,12 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Cache
 			TempFileUtil.DeleteTempDir("cache");
 		}
 
+		private void VerifyAll()
+		{
+			pathMapperMock.Verify();
+			configurationGetterMock.Verify();
+		}
+
 		[TearDown]
 		public void Teardown()
 		{
@@ -52,8 +58,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Cache
 			manager.AddContent(servername, projectname, subdirectory, filename, content);
 			Assert(Directory.Exists(cacheRootDirectory));
 
-			pathMapperMock.Verify();
-			configurationGetterMock.Verify();
+			VerifyAll();
 		}
 
 		[Test]
@@ -71,8 +76,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Cache
 			}
 
 			AssertEquals(content, readContent);
-			pathMapperMock.Verify();
-			configurationGetterMock.Verify();
+			VerifyAll();
 		}
 
 		[Test]
@@ -81,8 +85,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Cache
 			LocalFileCacheManager manager = new LocalFileCacheManager((IPathMapper) pathMapperMock.MockInstance, (IConfigurationGetter) configurationGetterMock.MockInstance);
 			pathMapperMock.ExpectAndReturn("GetLocalPathFromURLPath", fullfilename, fullfilename);
 			AssertNull(manager.GetContent(servername, projectname, subdirectory, filename));
-			pathMapperMock.Verify();
-			configurationGetterMock.Verify();
+			VerifyAll();
 		}
 
 		[Test]
@@ -96,8 +99,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Cache
 			manager = new LocalFileCacheManager((IPathMapper) pathMapperMock.MockInstance, (IConfigurationGetter) configurationGetterMock.MockInstance);
 			AssertEquals(content, manager.GetContent(servername, projectname, subdirectory, filename));
 
-			pathMapperMock.Verify();
-			configurationGetterMock.Verify();
+			VerifyAll();
 		}
 
 		[Test]
@@ -107,8 +109,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Cache
 
 			LocalFileCacheManager manager = new LocalFileCacheManager((IPathMapper) pathMapperMock.MockInstance, (IConfigurationGetter) configurationGetterMock.MockInstance);
 			AssertEquals("http://foo.bar/baz", manager.GetURLForFile(servername, projectname, subdirectory, filename));
-			pathMapperMock.Verify();
-			configurationGetterMock.Verify();
+			VerifyAll();
 		}
 	}
 }

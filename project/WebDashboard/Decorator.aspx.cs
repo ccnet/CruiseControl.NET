@@ -3,12 +3,10 @@ using System.Web.UI;
 using System.Web.UI.HtmlControls;
 using System.Web.UI.WebControls;
 using SiteMesh.DecoratorControls;
-using ThoughtWorks.CruiseControl.WebDashboard.Cache;
-using ThoughtWorks.CruiseControl.WebDashboard.Config;
 using ThoughtWorks.CruiseControl.WebDashboard.Dashboard;
 using ThoughtWorks.CruiseControl.WebDashboard.IO;
+using ThoughtWorks.CruiseControl.WebDashboard.Plugins;
 using ThoughtWorks.CruiseControl.WebDashboard.Plugins.SiteTemplatePlugin;
-using ThoughtWorks.CruiseControl.WebDashboard.ServerConnection;
 
 namespace ThoughtWorks.CruiseControl.WebDashboard
 {
@@ -32,22 +30,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard
 
 		private void Page_Load(object sender, EventArgs e)
 		{
-			ConfigurationSettingsConfigGetter configurationGetter = new ConfigurationSettingsConfigGetter();
-			QueryStringRequestWrapper requestWrapper = new QueryStringRequestWrapper(Request.QueryString);
-			ServerAggregatingCruiseManagerWrapper cruiseManagerWrapper = new ServerAggregatingCruiseManagerWrapper(configurationGetter, new RemoteCruiseManagerFactory());
-			CruiseManagerBuildNameRetriever buildNameRetriever = new CruiseManagerBuildNameRetriever(cruiseManagerWrapper);
-
-			SiteTemplateResults results = new SiteTemplate(
-				requestWrapper, 
-				configurationGetter,
-				new DefaultBuildLister(cruiseManagerWrapper),
-				new DefaultBuildRetrieverForRequest(
-					new CachingBuildRetriever(
-						new LocalFileCacheManager(new HttpPathMapper(Context, this), configurationGetter),
-						new CruiseManagerBuildRetriever(cruiseManagerWrapper)),
-					buildNameRetriever),
-				buildNameRetriever
-				).Do();
+			SiteTemplateResults results = new PluginFactory(new DashboardComponentFactory(Request, Context, this)).SiteTemplate.Do();
 
 			if (results.ProjectMode)
 			{

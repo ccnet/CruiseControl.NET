@@ -408,6 +408,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Dashboard\DashboardComponentFactory.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Dashboard\DefaultBuildRetrieverForRequest.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -601,12 +606,27 @@
                     BuildAction = "Content"
                 />
                 <File
+                    RelPath = "Plugins\PluginFactory.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Plugins\LogViewerPlugin\LogViewer.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
                     RelPath = "Plugins\LogViewerPlugin\LogViewerResults.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Plugins\ProjectReporterPlugin\ProjectReporter.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Plugins\ProjectReporterPlugin\ProjectReportResults.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

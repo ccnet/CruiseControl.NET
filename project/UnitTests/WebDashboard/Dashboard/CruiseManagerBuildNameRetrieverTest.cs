@@ -76,6 +76,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 				Fail("Should throw the right exception");
 			}
 			catch (UnknownBuildException) { }
+			VerifyAll();
 		}
 
 		[Test]
@@ -108,6 +109,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 				Fail("Should throw the right exception");
 			}
 			catch (UnknownBuildException) { }
+			VerifyAll();
 		}
 	}
 }

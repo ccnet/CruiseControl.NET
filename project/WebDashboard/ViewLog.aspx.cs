@@ -1,11 +1,8 @@
 using System;
 using System.Web.UI.HtmlControls;
-using ThoughtWorks.CruiseControl.WebDashboard.Cache;
-using ThoughtWorks.CruiseControl.WebDashboard.Config;
 using ThoughtWorks.CruiseControl.WebDashboard.Dashboard;
-using ThoughtWorks.CruiseControl.WebDashboard.IO;
+using ThoughtWorks.CruiseControl.WebDashboard.Plugins;
 using ThoughtWorks.CruiseControl.WebDashboard.Plugins.LogViewerPlugin;
-using ThoughtWorks.CruiseControl.WebDashboard.ServerConnection;
 
 namespace ThoughtWorks.CruiseControl.WebDashboard
 {
@@ -15,19 +12,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard
 
 		private void Page_Load(object sender, System.EventArgs e)
 		{
-			ConfigurationSettingsConfigGetter configurationGetter = new ConfigurationSettingsConfigGetter();
-			QueryStringRequestWrapper requestWrapper = new QueryStringRequestWrapper(Request.QueryString);
-			ServerAggregatingCruiseManagerWrapper cruiseManagerWrapper = new ServerAggregatingCruiseManagerWrapper(configurationGetter, new RemoteCruiseManagerFactory());
-
-			LocalFileCacheManager cacheManager = new LocalFileCacheManager(new HttpPathMapper(Context, this), configurationGetter);
-			LogViewer logViewer = new LogViewer(
-				requestWrapper,
-				new DefaultBuildRetrieverForRequest(
-					new CachingBuildRetriever(
-						cacheManager,
-						new CruiseManagerBuildRetriever(cruiseManagerWrapper)),
-					new CruiseManagerBuildNameRetriever(cruiseManagerWrapper)),
-				cacheManager);
+			LogViewer logViewer = new PluginFactory(new DashboardComponentFactory(Request, Context, this)).LogViewer;
 
 			LogViewerResults results = logViewer.Do();
 			LogLink.HRef = results.RedirectURL;

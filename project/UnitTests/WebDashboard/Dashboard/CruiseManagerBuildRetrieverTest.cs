@@ -36,6 +36,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 			Build returnedBuild = cruiseManagerBuildRetriever.GetBuild(serverName, projectName, buildName);
 			AssertEquals(buildName, returnedBuild.Name);
 			AssertEquals(logContent, returnedBuild.Log);
+			AssertEquals(serverName, returnedBuild.ServerName);
+			AssertEquals(projectName, returnedBuild.ProjectName);
 
 			VerifyAll();
 		}

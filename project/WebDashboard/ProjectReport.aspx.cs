@@ -1,18 +1,12 @@
 using System;
-using System.Collections;
-using System.Configuration;
-using System.IO;
-using System.Text;
 using System.Web.UI;
 using System.Web.UI.HtmlControls;
 using System.Web.UI.WebControls;
-using System.Xml;
-using System.Xml.XPath;
 using ThoughtWorks.CruiseControl.Core;
-using ThoughtWorks.CruiseControl.Core.Publishers;
 using ThoughtWorks.CruiseControl.Util;
-using ThoughtWorks.CruiseControl.WebDashboard.Config;
-using ThoughtWorks.CruiseControl.WebDashboard.IO;
+using ThoughtWorks.CruiseControl.WebDashboard.Dashboard;
+using ThoughtWorks.CruiseControl.WebDashboard.Plugins;
+using ThoughtWorks.CruiseControl.WebDashboard.Plugins.ProjectReporterPlugin;
 
 namespace ThoughtWorks.CruiseControl.WebDashboard
 {
@@ -25,18 +19,16 @@ namespace ThoughtWorks.CruiseControl.WebDashboard
 		protected HyperLink LogLink;
 		protected HtmlGenericControl BodyLabel;
 
-		private string logfile;
-		private WebUtil webUtil;
-
 		private void Page_Load(object sender, EventArgs e)
 		{
 			try
 			{
-				webUtil = WebUtil.Create(Request, Context, this);
-				logfile = webUtil.GetLogFileAndCheckItExists();
-				GeneratePluginLinks();
-				InitDisplayLogFile();
+				ProjectReportResults results = new PluginFactory(new DashboardComponentFactory(Request, Context, this)).ProjectReporter.Do();
+				HeaderCell.InnerHtml = results.HeaderCellHtml;
+				DetailsCell.InnerHtml = results.DetailsCellHtml;
+				PluginLinks.InnerHtml = results.PluginLinksHtml;
 			}
+			// ToDo - Generic Error page?
 			catch (CruiseControlException ex)
 			{
 				// This fixes a problem where the BodyLabel control isn't initialised, causing
@@ -52,75 +44,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard
 				BodyLabel.InnerText += new HtmlExceptionFormatter(ex).ToString();
 			}
 		}
-
-		private void GeneratePluginLinks()
-		{
-			if (ConfigurationSettings.GetConfig("CCNet/buildPlugins") == null)
-			{
-				return;
-			}
-
-			string pluginLinksHtml = "";
-			bool firstLink = true;
-			foreach (PluginSpecification spec in (IEnumerable) ConfigurationSettings.GetConfig("CCNet/buildPlugins"))
-			{
-				if (!firstLink)
-				{
-					pluginLinksHtml += String.Format("|&nbsp; ");
-				}
-				pluginLinksHtml += String.Format(@"<a class=""link"" href=""{0}"">{1}</a> ", GenerateLogUrl(spec.LinkUrl), spec.LinkText);
-				firstLink = false;
-			}
-			PluginLinks.InnerHtml = pluginLinksHtml;
-		}
-
-		private string GenerateLogUrl(string urlPrefix)
-		{
-			// OK, this is icky, I know... (MR)
-			return ResolveUrl(String.Format("{0}{1}", urlPrefix, LogFileUtil.CreateUrl(new FileInfo(logfile).Name, webUtil.GetCurrentlyViewedProjectName())));
-		}
 		
-		private void InitDisplayLogFile()
-		{
-			StringBuilder builder = new StringBuilder();
-			try
-			{		
-				XPathDocument document = new XPathDocument(logfile);
-				
-				IList list = (IList) ConfigurationSettings.GetConfig("CCNet/xslFiles");
-				foreach (string xslFile in list) 
-				{
-					if (xslFile.ToLower().IndexOf("header") > -1)
-					{
-						GenerateHeader(xslFile, document);
-					}
-					else
-					{
-						builder.Append(Transform(xslFile, document)).Append("<br>");
-					}
-				}
-			}
-			catch(XmlException ex)
-			{
-				throw new CruiseControlException(String.Format("Bad XML in logfile: " + ex.Message));
-			}
-
-			DetailsCell.InnerHtml = builder.ToString();
-		}
-
-		private void GenerateHeader(string headerXslfile, XPathDocument logFileDocument)
-		{
-			HeaderCell.InnerHtml = "<br/>" + Transform(headerXslfile, logFileDocument);
-		}
-
-		private string Transform(string xslfile, XPathDocument logFileDocument)
-		{
-			string directory = Path.GetDirectoryName(xslfile);
-			string file = Path.GetFileName(xslfile);
-			string transformFile = Path.Combine(Request.MapPath(directory), file);
-			return new BuildLogTransformer().Transform(logFileDocument, transformFile);
-		}
-
 		#region Web Form Designer generated code
 		override protected void OnInit(EventArgs e)
 		{
