@@ -5,35 +5,33 @@
 	
 	<xsl:template match="/">
 		<div id="master">
-			<xsl:apply-templates select="cruisecontrol/test-results[.//test-suite]">
-				<xsl:with-param name="test.suite.id">Unit</xsl:with-param>
-				<xsl:with-param name="test.suite.name">Unit Tests</xsl:with-param>
-			</xsl:apply-templates>
+			<xsl:apply-templates select="cruisecontrol/test-results[.//test-suite]" />
 		</div>
 	</xsl:template>
 	
 	<xsl:template match="test-results">
-		<xsl:param name="test.suite.id"/>
-		<xsl:param name="test.suite.name"/>
+
+		<xsl:variable name="test.suite.id" select="generate-id()" />
+		<xsl:variable name="test.suite.name" select="./@name"/>
 		<xsl:variable name="failure.count" select="count(.//results/test-case[@success='False'])" />
 		<xsl:variable name="ignored.count" select="count(.//results/test-case[@executed='False'])" />
 				
 		<div>
 			<script>
-				function toggleDiv(imgId, divId)
+				function toggleDiv( imgId, divId )
 				{
-					eDiv = document.getElementById(divId);
-					eImg = document.getElementById(imgId);
+					eDiv = document.getElementById( divId );
+					eImg = document.getElementById( imgId );
 					
 					if ( eDiv.style.display == "none" )
 					{
-						eDiv.style.display="block";
-						eImg.src="images/arrow_minus_small.gif";
+						eDiv.style.display = "block";
+						eImg.src = "images/arrow_minus_small.gif";
 					}
 					else
 					{
 						eDiv.style.display = "none";
-						eImg.src="images/arrow_plus_small.gif";
+						eImg.src = "images/arrow_plus_small.gif";
 					}
 				}
 			</script>
@@ -100,17 +98,17 @@
 
 		<xsl:variable name="testName" select="@name"/>
 		<tr>
-			<td valign="top">
+			<td valign="top" width="30%">
 				<input type="image" src="images/arrow_plus_small.gif">
 					<xsl:attribute name="id">imgTestCase_<xsl:value-of select="@name"/></xsl:attribute>
-					<xsl:attribute name="onClick">javascript:toggleDiv('imgTestCase_<xsl:value-of select="$testName"/>', 'divStory_<xsl:value-of select="$testName"/>');</xsl:attribute>
+					<xsl:attribute name="onClick">javascript:toggleDiv('imgTestCase_<xsl:value-of select="$testName"/>', 'divTest_<xsl:value-of select="$testName"/>');</xsl:attribute>
 				</input>
 				<a>
 					<xsl:attribute name="name"><xsl:value-of select="@name"/></xsl:attribute>
 					<xsl:value-of select="@name"/>
 				</a>
 			</td>
-			<td width="100%">
+			<td width="70%">
 				<table border="0" cellspacing="1" width="100%">
 					<tr>
 						<xsl:if test="$passedtests.count > 0">
@@ -138,7 +136,7 @@
 				</table>
 				<!--xsl:if test="$failedtests.count > 0 or $ignoredtests.count > 0"-->
 				<div style="display:none">
-					<xsl:attribute name="id">divStory_<xsl:value-of select="$testName"/></xsl:attribute>
+					<xsl:attribute name="id">divTest_<xsl:value-of select="$testName"/></xsl:attribute>
 					<table border="0" cell-padding="6" cell-spacing="0" width="100%">
 						<xsl:apply-templates select="$failedtests.list"/>
 						<xsl:apply-templates select="$ignoredtests.list"/>
