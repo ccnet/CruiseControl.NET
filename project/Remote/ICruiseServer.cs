@@ -72,5 +72,10 @@ namespace ThoughtWorks.CruiseControl.Remote
 		/// Adds a project to the server
 		/// </summary>
 		void AddProject(string serializedProject);
+
+		/// <summary>
+		/// Deletes the specified project from the server
+		/// </summary>
+		void DeleteProject(string projectName);
 	}
 }

@@ -262,6 +262,12 @@ namespace ThoughtWorks.CruiseControl.Core
 			}
 		}
 
+		// ToDo - implement
+		public void DeleteProject(string projectName)
+		{
+			return;
+		}
+
 		private IProjectIntegrator GetIntegrator(string projectName)
 		{
 			IProjectIntegrator integrator = projectIntegrators[projectName];

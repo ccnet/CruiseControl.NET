@@ -305,6 +305,11 @@
                 />
                 <Folder RelPath = "WebDashboard\Plugins\AddProjectPlugin\" />
                 <File
+                    RelPath = "WebDashboard\Plugins\DeleteProject\DoDeleteProjectActionTest.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "WebDashboard\Plugins\DeleteProject\ShowDeleteProjectActionTest.cs"
                     SubType = "Code"
                     BuildAction = "Compile"

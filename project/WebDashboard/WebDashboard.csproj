@@ -696,6 +696,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Plugins\DeleteProject\DoDeleteProjectAction.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Plugins\DeleteProject\IDeleteProjectViewBuilder.cs"
                     SubType = "Code"
                     BuildAction = "Compile"

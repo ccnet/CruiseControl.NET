@@ -94,6 +94,11 @@ namespace ThoughtWorks.CruiseControl.Core
 			_server.AddProject(serializedProject);
 		}
 
+		public void DeleteProject(string projectName)
+		{
+			_server.DeleteProject(projectName);
+		}
+
 		private void RegisterForRemoting()
 		{
 			MarshalByRefObject marshalByRef = (MarshalByRefObject)_server.CruiseManager;

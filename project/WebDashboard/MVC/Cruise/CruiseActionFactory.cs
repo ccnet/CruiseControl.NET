@@ -44,6 +44,10 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.MVC.Cruise
 			{
 				return CruiseActionProxyAction(ServerAndProjectCheckingProxyAction(ShowDeleteProjectAction));
 			}
+			else if (actionName == DO_DELETE_PROJECT_ACTION_NAME)
+			{
+				return CruiseActionProxyAction(ServerAndProjectCheckingProxyAction(DoDeleteProjectAction));
+			}
 			else
 			{
 				return new UnknownActionAction();
@@ -68,6 +72,11 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.MVC.Cruise
 		public ShowDeleteProjectAction ShowDeleteProjectAction
 		{
 			get { return new ShowDeleteProjectAction( DeleteProjectHtmlViewBuilder );}
+		}
+
+		public DoDeleteProjectAction DoDeleteProjectAction
+		{
+			get { return new DoDeleteProjectAction( DeleteProjectHtmlViewBuilder, dcFactory.ServerAggregatingCruiseManagerWrapper );}
 		}
 
 		public DeleteProjectHtmlViewBuilder DeleteProjectHtmlViewBuilder

@@ -158,6 +158,23 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.ServerConnection
 		}
 
 		[Test]
+		public void DeletesProjectOnCorrectServer()
+		{
+			// Setup
+			ServerSpecification[] servers = new ServerSpecification[] { new ServerSpecification("myserver", "http://myurl"), new ServerSpecification("myotherserver", "http://myotherurl")};
+
+			configurationGetterMock.ExpectAndReturn("GetConfigFromSection", servers, ServersSectionHandler.SectionName);
+			cruiseManagerFactoryMock.ExpectAndReturn("GetCruiseManager", (ICruiseManager) cruiseManagerMock.MockInstance, "http://myurl");
+			cruiseManagerMock.Expect("DeleteProject", "myproject");
+
+			// Execute
+			managerWrapper.DeleteProject("myserver", "myproject");
+
+			// Verify
+			VerifyAll();
+		}
+
+		[Test]
 		public void ReturnsServerLogFromCorrectServer()
 		{
 			ServerSpecification[] servers = new ServerSpecification[] { new ServerSpecification("myserver", "http://myurl"), new ServerSpecification("myotherserver", "http://myotherurl")};

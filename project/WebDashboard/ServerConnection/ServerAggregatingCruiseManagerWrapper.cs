@@ -37,6 +37,11 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.ServerConnection
 			return GetCruiseManager(serverName).GetMostRecentBuildNames(projectName,buildCount);
 		}
 
+		public void DeleteProject(string serverName, string projectName)
+		{
+			GetCruiseManager(serverName).DeleteProject(projectName);
+		}
+
 		public string GetServerLog (string serverName)
 		{
 			return GetCruiseManager(serverName).GetServerLog();
@@ -75,6 +80,6 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.ServerConnection
 			get { return (IEnumerable) configurationGetter.GetConfigFromSection(ServersSectionHandler.SectionName); }
 		}
 
-	
+
 	}
 }
