@@ -325,6 +325,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "builder\MultiBuilder.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "builder\NAntBuilder.cs"
                     SubType = "Code"
                     BuildAction = "Compile"

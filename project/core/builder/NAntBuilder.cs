@@ -103,6 +103,7 @@ namespace ThoughtWorks.CruiseControl.Core.Builder
 			ProcessResult processResult = AttemptExecute(CreateProcessInfo(result));
 			result.AddTaskResult(processResult.StandardOutput);
 
+			// is this right?? or should this break the build
 			if (processResult.TimedOut)
 			{
 				throw new BuilderException(this, "NAnt process timed out (after " + buildTimeoutSeconds + " seconds)");

@@ -11,12 +11,7 @@ namespace ThoughtWorks.CruiseControl.Core
 		public const string URI = "CruiseManager.rem";
 
 		private ICruiseServer _server;
-		private static readonly string ConfigurationFile = AppDomain.CurrentDomain.SetupInformation.ConfigurationFile;
 		private bool _disposed;
-
-		public RemoteCruiseServer(ICruiseServer server) : this(server, ConfigurationFile)
-		{
-		}
 
 		public RemoteCruiseServer(ICruiseServer server, string remotingConfigurationFile)
 		{

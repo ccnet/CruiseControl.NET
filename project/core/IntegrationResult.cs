@@ -23,7 +23,6 @@ namespace ThoughtWorks.CruiseControl.Core
 		private DateTime _startTime;
 		private DateTime _endTime;
 		private Modification[] _modifications = new Modification[0];
-        private string _output;
 		private string _artifactDirectory;
 		private string _projectUrl;
         private Exception _exception;
