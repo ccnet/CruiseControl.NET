@@ -1,7 +1,6 @@
 using System;
 using System.Globalization;
 using NUnit.Framework;
-using ThoughtWorks.CruiseControl.Core.sourcecontrol;
 using ThoughtWorks.CruiseControl.Core.Util;
 
 namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test
@@ -14,7 +13,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test
 		[SetUp]
 		public void SetUp()
 		{
-			_parser = new VssHistoryParser(new EnglishVssLocale());
+			_parser = new VssHistoryParser(new VssLocale(CultureInfo.InvariantCulture));
 		}
 
 		[Test]
@@ -61,7 +60,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test
 			expected.FileName = "[none]";
 			expected.FolderName = "plant";
 
-			Modification[] actual = _parser.parseModifications(makeArray(entry));
+			Modification[] actual = _parser.ParseModifications(makeArray(entry));
 			Assert.IsNotNull(actual, "expected a mod");
 			Assert.AreEqual(0, actual.Length, "created should not have produced a modification");
 		}
@@ -72,7 +71,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test
 			Modification mod = new Modification();
 			
 			string line = "foo\r\nUser: Admin        Date:  9/16/02   Time:  2:40p\r\n";
-			CheckInParser parser = new CheckInParser(line, new EnglishVssLocale(new CultureInfo("en-US")));
+			CheckInParser parser = new CheckInParser(line, new VssLocale(new CultureInfo("en-US")));
 			parser.ParseUsernameAndDate(mod);
 			string expectedUsername = "Admin";
 			DateTime expectedDate = new DateTime(2002, 09, 16, 14, 40, 0);
@@ -85,11 +84,20 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test
 		{
 			Modification mod = new Modification();
 			string line = "foo\r\nUser: Admin        Date:  16/9/02   Time:  22:40\r\n";
-			CheckInParser parser = new CheckInParser(line, new EnglishVssLocale(new CultureInfo("en-GB")));
+			CheckInParser parser = new CheckInParser(line, new VssLocale(new CultureInfo("en-GB")));
 			parser.ParseUsernameAndDate(mod);
 
 			Assert.AreEqual("Admin", mod.UserName);
 			Assert.AreEqual(new DateTime(2002, 9, 16, 22, 40, 0), mod.ModifiedTime);
+		}
+
+		[Test, ExpectedException(typeof(CruiseControlException))]
+		public void ShouldThrowCruiseControlExceptionShowingDateStringIfCannotParseDate()
+		{
+			Modification mod = new Modification();
+			string line = "foo\r\nUser: Admin        Date:  16/24/02   Time:  22:40\r\n";
+			CheckInParser parser = new CheckInParser(line, new VssLocale(CultureInfo.InvariantCulture));
+			parser.ParseUsernameAndDate(mod);
 		}
 
 		[Test]
@@ -97,7 +105,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test
 		{
 			Modification mod = new Modification();
 			string line = "foo\r\nUtilisateur: Admin        Date:  2/06/04   Heure: 14:04\r\n";
-			CheckInParser parser = new CheckInParser(line, new FrenchVssLocale());
+			CheckInParser parser = new CheckInParser(line, new VssLocale(new CultureInfo("fr-FR")));
 			parser.ParseUsernameAndDate(mod);
 
 			Assert.AreEqual("Admin", mod.UserName);
@@ -111,7 +119,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test
 			Modification mod = new Modification();
 			
 			string line = "foo\r\nUser: Gabriel.gilabert     Date:  5/08/03   Time:  4:06a\r\n";
-			CheckInParser parser = new CheckInParser(line, new EnglishVssLocale(new CultureInfo("en-US")));
+			CheckInParser parser = new CheckInParser(line, new VssLocale(new CultureInfo("en-US")));
 			parser.ParseUsernameAndDate(mod);
 			string expectedUsername = "Gabriel.gilabert";
 			DateTime expectedDate = new DateTime(2003, 05, 08, 04, 06, 0);
@@ -125,7 +133,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test
 			Modification mod = new Modification();
 			
 			string line = "foo\r\nUser: Gabriel Gilabert     Date:  5/08/03   Time:  4:06a\r\n";
-			CheckInParser parser = new CheckInParser(line, new EnglishVssLocale(new CultureInfo("en-US")));
+			CheckInParser parser = new CheckInParser(line, new VssLocale(new CultureInfo("en-US")));
 			parser.ParseUsernameAndDate(mod);
 			string expectedUsername = "Gabriel Gilabert";
 			DateTime expectedDate = new DateTime(2003, 05, 08, 04, 06, 0);
@@ -137,14 +145,14 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test
 		public void ParseInvalidUsernameLine()
 		{
 			string line = "foo\r\nbar\r\n";
-			new CheckInParser(line, new EnglishVssLocale(new CultureInfo("en-US"))).ParseUsernameAndDate(new Modification());
+			new CheckInParser(line, new VssLocale(new CultureInfo("en-US"))).ParseUsernameAndDate(new Modification());
 		}
 
 		[Test]
 		public void ParseFileName() 
 		{
 			string fileName = "**** Im a file name.fi     ********\r\n jakfakjfnb  **** ** lkjnbfgakj ****";
-			CheckInParser parser = new CheckInParser(fileName, new EnglishVssLocale(new CultureInfo("en-US")));
+			CheckInParser parser = new CheckInParser(fileName, new VssLocale(new CultureInfo("en-US")));
 			string actual = parser.ParseFileName();
 			Assert.AreEqual("Im a file name.fi", actual);
 		}
@@ -172,7 +180,7 @@ Comment: added fir to tree file, checked in recursively from project root";
 		public void ParseCheckedInFileAndFolderInFrench()
 		{
 			// change the parser culture for this test only
-			_parser = new VssHistoryParser(new FrenchVssLocale());
+			_parser = new VssHistoryParser(new VssLocale(new CultureInfo("fr-FR")));
 
 			string entry = @"*****  happyTheFile.txt  *****
 Version 16
@@ -289,7 +297,7 @@ happyTheFile.txt deleted";
 		{
 			string[] entries = makeArray(entry);
 
-			Modification[] mod = _parser.parseModifications(entries);
+			Modification[] mod = _parser.ParseModifications(entries);
 			
 			Assert.IsNotNull(mod);
 			Assert.AreEqual(1, mod.Length);
@@ -302,7 +310,7 @@ happyTheFile.txt deleted";
 		[Test]
 		public void ParseSingleLineComment()
 		{
-			CheckInParser parser = new CheckInParser(EntryWithSingleLineComment(), new EnglishVssLocale());
+			CheckInParser parser = new CheckInParser(EntryWithSingleLineComment(), new VssLocale(CultureInfo.InvariantCulture));
 			Modification mod = new Modification();
 			parser.ParseComment(mod);
 			Assert.AreEqual("added subfolder", mod.Comment);
@@ -311,7 +319,7 @@ happyTheFile.txt deleted";
 		[Test]
 		public void ParseMultiLineComment()
 		{
-			CheckInParser parser = new CheckInParser(EntryWithMultiLineComment(), new EnglishVssLocale());
+			CheckInParser parser = new CheckInParser(EntryWithMultiLineComment(), new VssLocale(CultureInfo.InvariantCulture));
 			Modification mod = new Modification();
 			parser.ParseComment(mod);
 			Assert.AreEqual(@"added subfolder
@@ -321,7 +329,7 @@ and then added a new line", mod.Comment);
 		[Test]
 		public void ParseEmptyComment()
 		{
-			CheckInParser parser = new CheckInParser(EntryWithEmptyComment(), new EnglishVssLocale());
+			CheckInParser parser = new CheckInParser(EntryWithEmptyComment(), new VssLocale(CultureInfo.InvariantCulture));
 			Modification mod = new Modification();
 			parser.ParseComment(mod);
 			Assert.AreEqual(String.Empty, mod.Comment);
@@ -330,7 +338,7 @@ and then added a new line", mod.Comment);
 		[Test]
 		public void ParseEmptyLineComment()
 		{
-			CheckInParser parser = new CheckInParser(EntryWithEmptyCommentLine(), new EnglishVssLocale());
+			CheckInParser parser = new CheckInParser(EntryWithEmptyCommentLine(), new VssLocale(CultureInfo.InvariantCulture));
 			Modification mod = new Modification();
 			parser.ParseComment(mod);
 			Assert.AreEqual(null, mod.Comment);
@@ -339,7 +347,7 @@ and then added a new line", mod.Comment);
 		[Test]
 		public void ParseNoComment()
 		{
-			CheckInParser parser = new CheckInParser(EntryWithNoCommentLine(), new EnglishVssLocale());
+			CheckInParser parser = new CheckInParser(EntryWithNoCommentLine(), new VssLocale(CultureInfo.InvariantCulture));
 			Modification mod = new Modification();
 			parser.ParseComment(mod);
 			Assert.AreEqual(null, mod.Comment);
@@ -348,7 +356,7 @@ and then added a new line", mod.Comment);
 		[Test]
 		public void ParseNonCommentAtCommentLine()
 		{
-			CheckInParser parser = new CheckInParser(EntryWithNonCommentAtCommentLine(), new EnglishVssLocale());
+			CheckInParser parser = new CheckInParser(EntryWithNonCommentAtCommentLine(), new VssLocale(CultureInfo.InvariantCulture));
 			Modification mod = new Modification();
 			parser.ParseComment(mod);
 			Assert.AreEqual(null, mod.Comment);

@@ -1,9 +1,8 @@
 using System;
-using System.Globalization;
 using System.IO;
 using NMock;
+using NMock.Constraints;
 using NUnit.Framework;
-using Exortech.NetReflector;
 using ThoughtWorks.CruiseControl.Core.Util;
 
 namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test
@@ -20,7 +19,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test
 		{
 			_executor = new DynamicMock(typeof(ProcessExecutor));
 			_historyParser = new DynamicMock(typeof(IHistoryParser));
-			_vss = new Vss((IHistoryParser) _historyParser.MockInstance, (ProcessExecutor) _executor.MockInstance, null);
+			_vss = new Vss(new VssLocale(), (IHistoryParser) _historyParser.MockInstance, (ProcessExecutor) _executor.MockInstance, null);
 			_vss.Executable = "ss.exe";
 		}
 
@@ -42,7 +41,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test
 			ProcessResult result = new ProcessResult("", "", 0, false);
 			Modification[] dummyArray = new Modification[1] { new Modification() };
 			_historyParser.SetupResult("Parse", dummyArray, typeof(TextReader), typeof(DateTime), typeof(DateTime));
-			_executor.ExpectAndReturn("Execute", result, new NMock.Constraints.IsTypeOf(typeof(ProcessInfo)));
+			_executor.ExpectAndReturn("Execute", result, new IsTypeOf(typeof(ProcessInfo)));
 			_executor.ExpectNoCall("Execute", typeof(ProcessInfo));
 
 			_vss.GetModifications(DateTime.Now, DateTime.Now);
@@ -54,7 +53,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test
 			ProcessResult result = new ProcessResult("", "", 0, false);
 			Modification[] emptyArray = new Modification[0];
 			_historyParser.SetupResult("Parse", emptyArray, typeof(TextReader), typeof(DateTime), typeof(DateTime));
-			_executor.ExpectAndReturn("Execute", result, new NMock.Constraints.IsTypeOf(typeof(ProcessInfo)));
+			_executor.ExpectAndReturn("Execute", result, new IsTypeOf(typeof(ProcessInfo)));
 			_executor.ExpectNoCall("Execute", typeof(ProcessInfo));
 
 			_vss.GetModifications(DateTime.Now, DateTime.Now);

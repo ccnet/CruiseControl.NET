@@ -1,10 +1,10 @@
 using System;
+using System.Globalization;
 using System.IO;
 using Exortech.NetReflector;
 using NMock;
 using NMock.Constraints;
 using NUnit.Framework;
-using ThoughtWorks.CruiseControl.Core.sourcecontrol;
 using ThoughtWorks.CruiseControl.Core.Test;
 using ThoughtWorks.CruiseControl.Core.Util;
 
@@ -29,15 +29,19 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test
 
 		private IMock mockProcessExecutor;
 		private IMock mockRegistry;
+		private VssHistoryParser _historyParser;
 		private Vss vss;
-		
+
 		[SetUp]
 		public void SetUp()
 		{
 			mockProcessExecutor = new DynamicMock(typeof(ProcessExecutor)); mockProcessExecutor.Strict = true;
 			mockRegistry = new DynamicMock(typeof(IRegistry)); mockProcessExecutor.Strict = true;
 			mockRegistry.SetupResult("GetExpectedLocalMachineSubKeyValue", DEFAULT_SS_EXE_PATH, typeof(string), typeof(string));
-			vss = new Vss(new VssHistoryParser(new EnglishVssLocale()), (ProcessExecutor) mockProcessExecutor.MockInstance, (IRegistry) mockRegistry.MockInstance);
+			VssLocale locale = new VssLocale(CultureInfo.InvariantCulture);
+			_historyParser = new VssHistoryParser(locale);
+
+			vss = new Vss(locale, _historyParser, (ProcessExecutor) mockProcessExecutor.MockInstance, (IRegistry) mockRegistry.MockInstance);
 			vss.Project = "$/fooProject";
 			vss.Culture = string.Empty; // invariant culture
 			vss.Username = "Admin";
@@ -80,35 +84,6 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test
 			Assert.AreEqual(true, vss.AutoGetSource);
 			Assert.AreEqual(@"C:\temp", vss.WorkingDirectory);
 			Assert.AreEqual("fr-FR", vss.Culture);
-		}
-
-		[Test]
-		public void FormatDateInCultureInvariantFormat()
-		{
-			DateTime date = new DateTime(2002, 2, 22, 20, 0, 0);
-			string expected = "02/22/2002;20:00";
-			string actual = vss.FormatCommandDate(date);
-			Assert.AreEqual(expected, actual);
-
-			date = new DateTime(2002, 2, 22, 12, 0, 0);
-			expected = "02/22/2002;12:00";
-			actual = vss.FormatCommandDate(date);
-			Assert.AreEqual(expected, actual);
-		}
-
-		[Test]
-		public void FormatDateInUSFormat()
-		{
-			vss.Culture = "en-US";
-			DateTime date = new DateTime(2002, 2, 22, 20, 0, 0);
-			string expected = "2/22/2002;8:00P";
-			string actual = vss.FormatCommandDate(date);
-			Assert.AreEqual(expected, actual);
-
-			date = new DateTime(2002, 2, 22, 12, 0, 0);
-			expected = "2/22/2002;12:00P";
-			actual = vss.FormatCommandDate(date);
-			Assert.AreEqual(expected, actual);
 		}
 
 		[Test]
@@ -246,6 +221,13 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test
 			vss.CreateTemporaryLabel();
 
 			Assert.AreEqual(1, vss.methodInvoked );
+		}
+
+		[Test]
+		public void ShouldSetLocaleOnVssHistoryParserIfCultureChanges()
+		{
+			vss.Culture = "en-GB";
+			Assert.AreEqual(new VssLocale(new CultureInfo("en-GB")), _historyParser.Locale);
 		}
 
 		private class PseudoMockVss : Vss

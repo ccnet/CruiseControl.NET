@@ -3,12 +3,14 @@ using System.Globalization;
 using System.Resources;
 using ThoughtWorks.CruiseControl.Core.Sourcecontrol;
 
-namespace ThoughtWorks.CruiseControl.Core.sourcecontrol
+namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 {
-	public abstract class VssLocale : IVssLocale
+	public class VssLocale : IVssLocale
 	{
-		protected CultureInfo cultureInfo;
+		private CultureInfo cultureInfo;
 		private ResourceManager manager;
+
+		public VssLocale() : this(CultureInfo.InvariantCulture) { }
 
 		public VssLocale(CultureInfo cultureInfo)
 		{
@@ -61,18 +63,13 @@ namespace ThoughtWorks.CruiseControl.Core.sourcecontrol
 			get { return GetKeyword("Time"); }
 		}
 
-		public abstract DateTimeFormatInfo CreateDateTimeInfo();
+		public string CultureName
+		{
+			get { return cultureInfo.Name; }
+			set { cultureInfo = new CultureInfo(value); }
+		}
 
-		public abstract DateTime ParseDateTime(string date, string time);
-	}
-
-	public class EnglishVssLocale : VssLocale
-	{
-		public EnglishVssLocale() : base(CultureInfo.InvariantCulture) {}
-
-		public EnglishVssLocale(CultureInfo cultureInfo) : base(cultureInfo) {}
-
-		public override DateTimeFormatInfo CreateDateTimeInfo()
+		public virtual DateTimeFormatInfo CreateDateTimeInfo()
 		{
 			DateTimeFormatInfo dateTimeFormatInfo = cultureInfo.DateTimeFormat.Clone() as DateTimeFormatInfo;
 			dateTimeFormatInfo.AMDesignator = "a";
@@ -80,46 +77,47 @@ namespace ThoughtWorks.CruiseControl.Core.sourcecontrol
 			return dateTimeFormatInfo;
 		}
 
-		public override DateTime ParseDateTime(string date, string time)
+		public virtual DateTime ParseDateTime(string date, string time)
 		{
 			// vss gives am and pm as a and p, so we append an m
 			string suffix = (time.EndsWith("a") || time.EndsWith("p")) ? "m" : String.Empty;
 			string dateAndTime = string.Format("{0};{1}{2}", date, time, suffix);
-			return DateTime.Parse(dateAndTime, CreateDateTimeInfo());
-		}
-	}
-
-	public class FrenchVssLocale : VssLocale
-	{
-		public FrenchVssLocale() : base(new CultureInfo("fr-FR")) {}
-		
-		public FrenchVssLocale(CultureInfo cultureInfo) : base(cultureInfo) {}
-
-		public override DateTimeFormatInfo CreateDateTimeInfo()
-		{
-			return cultureInfo.DateTimeFormat.Clone() as DateTimeFormatInfo;
-		}
-
-		public override DateTime ParseDateTime(string date, string time)
-		{
-			string dateAndTime = string.Format("{0};{1}", date, time);
-			return DateTime.Parse(dateAndTime, CreateDateTimeInfo());
-		}
-	}
-
-	public class VssLocaleFactory
-	{
-		public static IVssLocale Create()
-		{
-			CultureInfo culture = CultureInfo.CurrentCulture;
-			if (culture.TwoLetterISOLanguageName == "fr")
+			try
 			{
-				return new FrenchVssLocale(culture);
+				return DateTime.Parse(dateAndTime, CreateDateTimeInfo());				
 			}
-			else
+			catch (FormatException ex)
 			{
-				return new EnglishVssLocale(culture);
+				throw new CruiseControlException(string.Format("Unable to parse vss date: {0}", dateAndTime), ex);
 			}
+		}
+
+		/// <summary>
+		/// Format the date in a format appropriate for the VSS command-line.  The date should not contain any spaces as VSS would treat it as a separate argument.
+		/// The trailing 'M' in 'AM' or 'PM' is also removed.
+		/// </summary>
+		/// <param name="date"></param>
+		/// <returns>Date string formatted for the specified locale as expected by the VSS command-line.</returns>
+		public string FormatCommandDate(DateTime date)
+		{
+			return string.Concat(date.ToString("d", cultureInfo), ";", date.ToString("t", cultureInfo)).Replace(" ", string.Empty).TrimEnd('M', 'm');
+		}
+
+		public override string ToString()
+		{
+			return string.Format("VssLocale culture: {0}", cultureInfo.Name);
+		}
+
+		public override bool Equals(object obj)
+		{
+			if (obj is VssLocale) 
+				return ((VssLocale)obj).cultureInfo.Name == cultureInfo.Name;
+			return false;
+		}
+
+		public override int GetHashCode()
+		{
+			return cultureInfo.GetHashCode();
 		}
 	}
 }

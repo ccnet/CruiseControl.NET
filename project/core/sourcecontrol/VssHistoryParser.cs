@@ -24,10 +24,10 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 		public Modification[] Parse(TextReader history, DateTime from, DateTime to)
 		{
 			string[] entries = this.ReadAllEntries(history);
-			return parseModifications(entries);
+			return ParseModifications(entries);
 		}
 
-		internal Modification[] parseModifications(string[] entries)
+		internal Modification[] ParseModifications(string[] entries)
 		{
 			// not every entry will yield a valid modification so we can't use
 			// an array, but we can assume that most will so starting our 
@@ -79,9 +79,15 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 				line.StartsWith(DELIMITER_VERSIONED_START) && line.EndsWith(DELIMITER_VERSIONED_END);
 		}
 
-		internal bool IsEndOfFile(string line)
+		private bool IsEndOfFile(string line)
 		{
 			return line == null;
+		}
+
+		public IVssLocale Locale
+		{
+			get { return locale; }
+			set { locale = value; }
 		}
 	}
 

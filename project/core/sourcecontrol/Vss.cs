@@ -2,7 +2,6 @@ using System;
 using System.Globalization;
 using System.IO;
 using Exortech.NetReflector;
-using ThoughtWorks.CruiseControl.Core.sourcecontrol;
 using ThoughtWorks.CruiseControl.Core.Util;
 
 namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
@@ -10,13 +9,12 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 	[ReflectorType("vss")]
 	public class Vss : ProcessSourceControl, ITemporaryLabeller
 	{
-		public const string TEMP_SOURCE_DIRECTORY = "VssSource";
-
 		// required environment variable name
 		internal const string SS_DIR_KEY = "SSDIR";
 		internal const string SS_REGISTRY_PATH = @"Software\\Microsoft\\SourceSafe";
 		internal const string SS_REGISTRY_KEY = "SCCServerPath";
 		internal const string SS_EXE = "ss.exe";
+		public const string TEMP_SOURCE_DIRECTORY = "VssSource";
 
 		internal static readonly string HISTORY_COMMAND_FORMAT = @"history {0} -R -Vd{1}~{2} -Y{3},{4} -I-Y";
 		internal static readonly string GET_BY_DATE_COMMAND_FORMAT = @"get {0} -R -Vd{1} -Y{2},{3} -I-N -GWR";
@@ -28,15 +26,20 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 		private string _ssDir;
 		private string _executable;
 		private string _lastTempLabel;
-		private CultureInfo _cultureInfo = CultureInfo.CurrentCulture;
+		private IVssLocale _locale;
 
-		public Vss() : this(new VssHistoryParser(VssLocaleFactory.Create()), new ProcessExecutor(), new Registry())
+		public Vss() : this(new VssLocale(CultureInfo.CurrentCulture))
 		{
 		}
 
-		public Vss(IHistoryParser historyParser, ProcessExecutor executor, IRegistry registry) : base(historyParser, executor)
+		private Vss(IVssLocale locale) : this(locale, new VssHistoryParser(locale), new ProcessExecutor(), new Registry())
+		{
+		}
+
+		public Vss(IVssLocale locale, IHistoryParser historyParser, ProcessExecutor executor, IRegistry registry) : base(historyParser, executor)
 		{
 			_registry = registry;
+			_locale = locale;
 		}
 
 		[ReflectorProperty("executable", Required = false)]
@@ -51,11 +54,14 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			set { _executable = value; }
 		}
 
-		[ReflectorProperty("project")] public string Project;
+		[ReflectorProperty("project")]
+		public string Project;
 
-		[ReflectorProperty("username")] public string Username;
+		[ReflectorProperty("username")]
+		public string Username;
 
-		[ReflectorProperty("password")] public string Password;
+		[ReflectorProperty("password")]
+		public string Password;
 
 		[ReflectorProperty("ssdir", Required = false)]
 		public string SsDir
@@ -67,17 +73,20 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 		/// <summary>
 		/// Gets or sets whether this repository should be labeled.
 		/// </summary>
-		[ReflectorProperty("applyLabel", Required = false)] public bool ApplyLabel = false;
+		[ReflectorProperty("applyLabel", Required = false)]
+		public bool ApplyLabel = false;
 
-		[ReflectorProperty("autoGetSource", Required = false)] public bool AutoGetSource = false;
+		[ReflectorProperty("autoGetSource", Required = false)]
+		public bool AutoGetSource = false;
 
-		[ReflectorProperty("workingDirectory", Required = false)] public string WorkingDirectory;
+		[ReflectorProperty("workingDirectory", Required = false)]
+		public string WorkingDirectory;
 
 		[ReflectorProperty("culture", Required = false)]
 		public string Culture
 		{
-			get { return _cultureInfo.Name; }
-			set { _cultureInfo = new CultureInfo(value); }
+			get { return _locale.CultureName; }
+			set { _locale.CultureName = value; }
 		}
 
 		public override Modification[] GetModifications(DateTime from, DateTime to)
@@ -148,17 +157,6 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			return "CCNETUNVERIFIED" + time.ToString("MMddyyyyHHmmss");
 		}
 
-		/// <summary>
-		/// Format the date in a format appropriate for the VSS command-line.  The date should not contain any spaces as VSS would treat it as a separate argument.
-		/// The trailing 'M' in 'AM' or 'PM' is also removed.
-		/// </summary>
-		/// <param name="date"></param>
-		/// <returns>Date string formatted for the specified locale as expected by the VSS command-line.</returns>
-		internal string FormatCommandDate(DateTime date)
-		{
-			return string.Concat(date.ToString("d", _cultureInfo), ";", date.ToString("t", _cultureInfo)).Replace(" ", string.Empty).TrimEnd('M', 'm');
-		}
-
 		internal void LabelSourceControl(string label)
 		{
 			Execute(CreateLabelProcessInfo(label));
@@ -166,7 +164,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 
 		internal string BuildHistoryProcessInfoArgs(DateTime from, DateTime to)
 		{
-			return string.Format(HISTORY_COMMAND_FORMAT, Project, FormatCommandDate(to), FormatCommandDate(from), Username, Password);
+			return string.Format(HISTORY_COMMAND_FORMAT, Project, _locale.FormatCommandDate(to), _locale.FormatCommandDate(from), Username, Password);
 		}
 
 		private string GetExecutable()
@@ -202,7 +200,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			}
 			else if (!ApplyLabel)
 			{
-				return string.Format(GET_BY_DATE_COMMAND_FORMAT, Project, FormatCommandDate(result.StartTime), Username, Password);
+				return string.Format(GET_BY_DATE_COMMAND_FORMAT, Project, _locale.FormatCommandDate(result.StartTime), Username, Password);
 			}
 			else
 			{

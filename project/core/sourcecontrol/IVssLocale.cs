@@ -16,5 +16,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 
 		DateTimeFormatInfo CreateDateTimeInfo();
 		DateTime ParseDateTime(string date, string time);
+		string FormatCommandDate(DateTime date);
+		string CultureName { get; set; }
 	}
 }
