@@ -52,7 +52,7 @@ namespace tw.ccnet.console
 			catch (ConfigurationException ex)
 			{
 				Console.WriteLine("There was an error loading the configuration file: ");
-				Console.WriteLine("  " + ex.InnerException.Message);
+				Console.WriteLine("  " + ex.Message);
 			}
 			catch (CruiseControlException ex)
 			{
