@@ -1,7 +1,5 @@
-using System;
 using System.Collections.Specialized;
 using ThoughtWorks.CruiseControl.WebDashboard.MVC;
-using ThoughtWorks.CruiseControl.WebDashboard.ServerConnection;
 
 namespace ThoughtWorks.CruiseControl.WebDashboard.IO
 {
@@ -21,19 +19,6 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.IO
 		public RequestWrappingCruiseRequest(IRequest request)
 		{
 			this.request = request;
-		}
-
-		public IBuildSpecifier GetBuildSpecifier()
-		{
-			string logfile = QueryString[BuildQueryStringParameter];
-			if (logfile == null)
-			{
-				return new NoBuildSpecified();
-			}
-			else
-			{
-				return new NamedBuildSpecifier(logfile);
-			}
 		}
 
 		public string ServerName

@@ -22,20 +22,6 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.IO
 		}
 
 		[Test]
-		public void ReturnsNoLogSpecifiedIfNoLogParameterSpecified()
-		{
-			Assert.IsTrue(cruiseRequest.GetBuildSpecifier() is NoBuildSpecified);
-		}
-
-		[Test]
-		public void ReturnsLogSpecifierWithNameOfFileIfLogParameterSpecified()
-		{
-			queryString.Add("build", "mylog.xml");
-			NamedBuildSpecifier Specifier = (NamedBuildSpecifier) cruiseRequest.GetBuildSpecifier();
-			Assert.AreEqual("mylog.xml", Specifier.Filename);
-		}
-
-		[Test]
 		public void ReturnsEmptyStringIfNoProjectSpecified()
 		{
 			Assert.AreEqual(string.Empty, cruiseRequest.ProjectName);

@@ -639,7 +639,6 @@
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
-                <Folder RelPath = "Plugins\BuildReporterPlugin\" />
                 <File
                     RelPath = "Plugins\DeleteProject\DeleteProjectHtmlViewBuilder.cs"
                     SubType = "Code"
@@ -665,10 +664,6 @@
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
-                <Folder RelPath = "Plugins\LogViewerPlugin\" />
-                <Folder RelPath = "Plugins\ProjectReporterPlugin\" />
-                <Folder RelPath = "Plugins\ServerLogViewerPlugin\" />
-                <Folder RelPath = "Plugins\SiteTemplatePlugin\" />
                 <File
                     RelPath = "Plugins\ViewBuildLog\ViewBuildLogAction.cs"
                     SubType = "Code"
@@ -685,11 +680,6 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "ServerConnection\IBuildSpecifier.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
                     RelPath = "ServerConnection\ICruiseManagerFactory.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -701,16 +691,6 @@
                 />
                 <File
                     RelPath = "ServerConnection\IFarmService.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "ServerConnection\NamedBuildSpecifier.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "ServerConnection\NoBuildSpecified.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
