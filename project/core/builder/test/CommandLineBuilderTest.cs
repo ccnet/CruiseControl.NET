@@ -11,7 +11,7 @@ using ThoughtWorks.CruiseControl.Core.Builder;
 namespace ThoughtWorks.CruiseControl.Core.Builder.Test
 {
 	[TestFixture]
-	public class CommandLineBuilderBuilderTest : CustomAssertion
+	public class CommandLineBuilderTest : CustomAssertion
 	{
 		public const int SUCCESSFUL_EXIT_CODE = 0;
 		public const int FAILED_EXIT_CODE = -1;
