@@ -112,17 +112,22 @@
 	</target>
 
 	<!-- DEPLOY -->
+
 	<target name="deploy" depends="deploy.server, deploy.cctray, deploy.webapp, deploy.webdashboard, deploy.webservice" />
 	
 	<target name="deploy.server" depends="compile">
 		<mkdir dir="deployed\server"/>
-		<copy file="${src.dir}\ccnet.remote\bin\Debug\${interfaces.dll}" todir="deployed\server" />
-		<copy file="${src.dir}\core\bin\Debug\${core.dll}" todir="deployed\server" />
-		<copy file="${src.dir}\console\bin\Debug\${console.exe}" todir="deployed\server" />
-		<copy file="${src.dir}\service\bin\Debug\${service.exe}" todir="deployed\server" />
-		<copy file="lib\nunit.framework.dll" todir="deployed\server" />
-		<copy file="lib\nmock.dll" todir="deployed\server" />
-		<copy file="lib\NetReflector.dll" todir="deployed\server" />
+		
+		<copy todir="deployed\server" verbose="${verbosity}">
+			<fileset basedir="${src.dir}\console\bin\Debug">
+				<includes name="*.exe" />
+				<includes name="*.dll" />
+				<includes name="*.pdb" />
+
+				<!-- workaround for <Solution> including too much -->
+				<excludes name="SiteMesh.dll" />
+			</fileset>
+		</copy>
 
 		<copy todir="deployed\server\xsl" verbose="${verbosity}">
 			<fileset basedir="${src.dir}\core\publishers\xsl">
@@ -139,23 +144,35 @@
 	
 	<target name="deploy.cctray" depends="compile">
 		<mkdir dir="deployed\cctray" />
+
 		<copy todir="deployed\cctray">
 			<fileset basedir="project\cctray\bin\Debug">
 				<includes name="*.dll" />
 				<includes name="*.pdb" />
 				<includes name="*.exe" />
+
+				<!-- workaround for <Solution> including too much -->
+				<excludes name="SiteMesh.dll" />
+			</fileset>
+		</copy>
+
+		<copy todir="deployed\cctray">
+			<fileset basedir="project\cctray\Audio">
+				<includes name="*" />
 			</fileset>
 		</copy>
 	</target>
     
 	<target name="deploy.webapp" depends="compile" description="deploys the web application">
 		<mkdir dir="${webapp.dir}" verbose="${verbosity}"/>
-		<copy file="${src.dir}\ccnet.remote\bin\Debug\${interfaces.dll}" todir="deployed\server" />
-		<copy file="${src.dir}\core\bin\Debug\${core.dll}" todir="deployed\server" />
-		<copy file="${src.dir}\web\bin\${web.dll}" todir="deployed\web" />
-		<copy file="lib\nunit.framework.dll" todir="deployed\server" />
-		<copy file="lib\nmock.dll" todir="deployed\server" />
-		<copy file="lib\SiteMesh.dll" todir="deployed\server" />
+		<copy todir="${webapp.dir}\bin">
+			<fileset basedir="project\web\bin">
+				<includes name="*.dll" />
+
+				<!-- workaround for <Solution> including too much -->
+				<excludes name="NetReflector.dll" />
+			</fileset>
+		</copy>
 
 		<copy todir="${webapp.dir}">
 			<fileset basedir="project\web">
@@ -184,12 +201,15 @@
 		-->
 
 	</target>
-
+	
 	<target name="deploy.webdashboard" depends="compile" description="deploys the web dashboard application">
 		<mkdir dir="${webdashboard.dir}" verbose="${verbosity}"/>
 		<copy todir="${webdashboard.dir}\bin">
 			<fileset basedir="project\webdashboard\bin\Debug">
 				<includes name="*.dll" />
+
+				<!-- workaround for <Solution> including too much -->
+				<excludes name="NetReflector.dll" />
 			</fileset>
 		</copy>
 
@@ -217,6 +237,9 @@
 		<copy todir="${webservice.dir}\bin">
 			<fileset basedir="project\WebService\bin\Debug">
 				<includes name="*.dll" />
+
+				<!-- workaround for <Solution> including too much -->
+				<excludes name="NetReflector.dll" />
 			</fileset>
 		</copy>
 
