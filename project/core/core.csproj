@@ -241,59 +241,6 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "Incrementers\AssemblyVersionIncrementer.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Incrementers\ILabelIncrementer.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Incrementers\LogFileIncrementer.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Incrementers\CVS\Entries"
-                    BuildAction = "None"
-                />
-                <File
-                    RelPath = "Incrementers\CVS\Entries.Log"
-                    BuildAction = "None"
-                />
-                <File
-                    RelPath = "Incrementers\CVS\Repository"
-                    BuildAction = "None"
-                />
-                <File
-                    RelPath = "Incrementers\CVS\Root"
-                    BuildAction = "None"
-                />
-                <File
-                    RelPath = "Incrementers\test\AssemblyIncrementerTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Incrementers\test\LogFileIncrementerTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Incrementers\test\CVS\Entries"
-                    BuildAction = "None"
-                />
-                <File
-                    RelPath = "Incrementers\test\CVS\Repository"
-                    BuildAction = "None"
-                />
-                <File
-                    RelPath = "Incrementers\test\CVS\Root"
-                    BuildAction = "None"
-                />
-                <File
                     RelPath = "label\AssemblyVersionLabeller.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -645,11 +592,6 @@
                 />
                 <File
                     RelPath = "test\LogFileTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "test\MockLabelIncrementer.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
