@@ -12,8 +12,8 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 	public class StarTeam : ProcessSourceControl
 	{
 		//stcmd hist -nologo -x -is -filter IO -p "userid:password@host:port/project/path" "files"		
-		internal readonly static string HISTORY_COMMAND_FORMAT = "hist -nologo -x -is -filter IO -p \"{0}:{1}@{2}:{3}/{4}/{5}\" \"*\"";
-		internal readonly static string GET_SOURCE_COMMAND_FORMAT = "co -nologo -x -is -q -f NCO -p \"{0}:{1}@{2}:{3}/{4}/{5}\" \"*\"";
+		internal readonly static string HISTORY_COMMAND_FORMAT = "hist -nologo -x -is -filter IO -p \"{0}:{1}@{2}:{3}/{4}/{5}\" ";
+		internal readonly static string GET_SOURCE_COMMAND_FORMAT = "co -nologo -x -is -q -f NCO -p \"{0}:{1}@{2}:{3}/{4}/{5}\" ";
 		internal CultureInfo Culture = CultureInfo.CurrentCulture;
 
 		private string _executable;		
@@ -24,6 +24,8 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 		private string _project;
 		private string _path;
 		private bool _autoGetSource;
+		private string _pathOverrideViewWorkingDir;
+		private string _pathOverrideFolderWorkingDir;
 
 		public StarTeam(): base(new StarTeamHistoryParser())
 		{
@@ -32,6 +34,8 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			_port = 49201;
 			_path = String.Empty;
 			_autoGetSource = false;
+			_pathOverrideViewWorkingDir = String.Empty;
+			_pathOverrideFolderWorkingDir = String.Empty;
 		}
 
 		[ReflectorProperty("executable")]
@@ -90,6 +94,20 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			set { _autoGetSource = value; }
 		}
 
+		[ReflectorProperty("overrideViewWorkingDir", Required=false)]
+		public string OverrideViewWorkingDir
+		{
+			get { return _pathOverrideViewWorkingDir; }
+			set { _pathOverrideViewWorkingDir = value; }
+		}
+		
+		[ReflectorProperty("overrideFolderWorkingDir", Required=false)]
+		public string OverrideFolderWorkingDir
+		{
+			get { return _pathOverrideFolderWorkingDir; }
+			set { _pathOverrideFolderWorkingDir = value; }
+		}
+
 		public ProcessInfo CreateHistoryProcessInfo(DateTime from, DateTime to)
 		{
 			string args = BuildHistoryProcessArgs(from, to);
@@ -101,7 +119,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			return GetModifications(CreateHistoryProcessInfo(from, to), from, to);
 		}
 
-		public override void LabelSourceControl( string label, IIntegrationResult result )
+		public override void LabelSourceControl(string label, IIntegrationResult result)
 		{
 		}
 
@@ -120,9 +138,21 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			return date.ToString(Culture.DateTimeFormat);
 		}
 
+		internal void AddOptionalArgs(ref string formatted)
+		{
+			if( 0 != _pathOverrideViewWorkingDir.Length )
+			{
+				formatted = String.Concat(formatted," -rp ",String.Format("\"{0}\" ",_pathOverrideViewWorkingDir));
+			}
+			else if( 0 != _pathOverrideFolderWorkingDir.Length )
+			{
+				formatted = String.Concat(formatted," -fp ",String.Format("\"{0}\" ",_pathOverrideFolderWorkingDir));
+			}
+		}
+
 		internal string BuildHistoryProcessArgs(DateTime from, DateTime to)
 		{			
-			return string.Format(
+			string formatted =  string.Format(
 				HISTORY_COMMAND_FORMAT,
 				Username,
 				Password,
@@ -130,11 +160,16 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 				Port,
 				Project,
 				Path);
+
+			AddOptionalArgs(ref formatted);
+			formatted = String.Concat(formatted,"\"*\"");
+	
+			return formatted;
 		}
 
 		internal string GetSourceProcessArgs()
 		{			
-			return string.Format(
+			string formatted = string.Format(
 				GET_SOURCE_COMMAND_FORMAT,
 				Username,
 				Password,
@@ -142,6 +177,12 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 				Port,
 				Project,
 				Path);
+
+			AddOptionalArgs(ref formatted);
+			formatted = String.Concat(formatted,"\"*\"");
+
+			return formatted;
 		}
 	}
 }
+
