@@ -4,20 +4,17 @@ using ThoughtWorks.CruiseControl.WebDashboard.IO;
 
 namespace ThoughtWorks.CruiseControl.WebDashboard.MVC.Cruise
 {
-	public class ViewAllBuildsAction : IAction
+	public class ViewAllBuildsAction : ICruiseAction
 	{
-		private readonly ICruiseRequestFactory cruiseRequestFactory;
 		private readonly IAllBuildsViewBuilder viewBuilder;
 
-		public ViewAllBuildsAction (IAllBuildsViewBuilder viewBuilder, ICruiseRequestFactory cruiseRequestFactory)
+		public ViewAllBuildsAction (IAllBuildsViewBuilder viewBuilder)
 		{
 			this.viewBuilder = viewBuilder;
-			this.cruiseRequestFactory = cruiseRequestFactory;
 		}
 
-		public Control Execute(IRequest request)
+		public Control Execute(ICruiseRequest cruiseRequest)
 		{
-			ICruiseRequest cruiseRequest = cruiseRequestFactory.CreateCruiseRequest(request);
 			return viewBuilder.BuildAllBuildsTable(cruiseRequest.ServerName, cruiseRequest.ProjectName);
 		}
 	}

@@ -30,39 +30,74 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.MVC.Cruise
 			actionName = actionName.Substring(ACTION_PARAMETER_PREFIX.Length);
 			if (actionName == VIEW_ALL_BUILDS_ACTION_NAME)
 			{
-				return new ViewAllBuildsAction(
-					new RecentBuildLister(dcFactory.DefaultHtmlBuilder, dcFactory.DefaultUrlBuilder, dcFactory.ServerAggregatingCruiseManagerWrapper, dcFactory.DefaultBuildNameFormatter),
-					dcFactory.NameValueCruiseRequestFactory);
+				return CruiseActionProxyAction(ServerAndProjectCheckingProxyAction(ViewAllBuildsAction));
 			}
 			else if (actionName == ADD_PROJECT_DISPLAY_ACTION_NAME)
 			{
-				return new DisplayAddProjectPageAction(
-					new AddProjectModelGenerator(dcFactory.ServerAggregatingCruiseManagerWrapper),
-					new AddProjectViewBuilder(dcFactory.DefaultHtmlBuilder));
+				return DisplayAddProjectPageAction;
 			}
 			else if (actionName == ADD_PROJECT_SAVE_ACTION_NAME)
 			{
-				return new SaveNewProjectAction(
-					new AddProjectModelGenerator(dcFactory.ServerAggregatingCruiseManagerWrapper),
-					new AddProjectViewBuilder(dcFactory.DefaultHtmlBuilder),
-					dcFactory.ServerAggregatingCruiseManagerWrapper, 
-					dcFactory.NetReflectorProjectSerializer);
+				return SaveNewProjectAction;
 			}
 			else if (actionName == SHOW_DELETE_PROJECT_ACTION_NAME)
 			{
-				return new CruiseActionProxyAction(
-					new ServerAndProjectCheckingProxyAction(
-						new ShowDeleteProjectAction(
-							new DeleteProjectHtmlViewBuilder(
-								dcFactory.DefaultHtmlBuilder,
-								dcFactory.DefaultUrlBuilder)),
-						new SimpleErrorViewBuilder(dcFactory.DefaultHtmlBuilder)),
-					dcFactory.NameValueCruiseRequestFactory);
+				return CruiseActionProxyAction(ServerAndProjectCheckingProxyAction(ShowDeleteProjectAction));
 			}
 			else
 			{
 				return new UnknownActionAction();
 			}
+		}
+
+		public CruiseActionProxyAction CruiseActionProxyAction(ICruiseAction proxied)
+		{
+			return new CruiseActionProxyAction(proxied, dcFactory.NameValueCruiseRequestFactory);
+		}
+
+		public ServerAndProjectCheckingProxyAction ServerAndProjectCheckingProxyAction(ICruiseAction proxied)
+		{
+			return new ServerAndProjectCheckingProxyAction(proxied, SimpleErrorViewBuilder);
+		}
+
+		public SimpleErrorViewBuilder SimpleErrorViewBuilder
+		{
+			get { return new SimpleErrorViewBuilder(dcFactory.DefaultHtmlBuilder);}
+		}
+
+		public ShowDeleteProjectAction ShowDeleteProjectAction
+		{
+			get { return new ShowDeleteProjectAction( DeleteProjectHtmlViewBuilder );}
+		}
+
+		public DeleteProjectHtmlViewBuilder DeleteProjectHtmlViewBuilder
+		{
+			get { return new DeleteProjectHtmlViewBuilder(dcFactory.DefaultHtmlBuilder, dcFactory.DefaultUrlBuilder);}
+		}
+
+		public SaveNewProjectAction SaveNewProjectAction
+		{
+			get { return new SaveNewProjectAction( AddProjectModelGenerator, AddProjectViewBuilder, dcFactory.ServerAggregatingCruiseManagerWrapper, dcFactory.NetReflectorProjectSerializer); }
+		}
+
+		public DisplayAddProjectPageAction DisplayAddProjectPageAction
+		{
+			get { return new DisplayAddProjectPageAction(AddProjectModelGenerator, AddProjectViewBuilder); }
+		}
+
+		public AddProjectModelGenerator AddProjectModelGenerator
+		{
+			get { return new AddProjectModelGenerator(dcFactory.ServerAggregatingCruiseManagerWrapper); }
+		}
+
+		public AddProjectViewBuilder AddProjectViewBuilder
+		{
+			get { return new AddProjectViewBuilder(dcFactory.DefaultHtmlBuilder); }
+		}
+
+		public ViewAllBuildsAction ViewAllBuildsAction
+		{
+			get { return new ViewAllBuildsAction(new RecentBuildLister( dcFactory.DefaultHtmlBuilder, dcFactory.DefaultUrlBuilder, dcFactory.ServerAggregatingCruiseManagerWrapper, dcFactory.DefaultBuildNameFormatter)); } 
 		}
 	}
 }
