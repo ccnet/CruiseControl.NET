@@ -134,6 +134,11 @@
                     AssemblyName = "nunit.framework"
                     HintPath = "..\..\lib\nunit.framework.dll"
                 />
+                <Reference
+                    Name = "nunit.core"
+                    AssemblyName = "nunit.core"
+                    HintPath = "..\..\lib\nunit.core.dll"
+                />
             </References>
         </Build>
         <Files>

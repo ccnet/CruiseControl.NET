@@ -129,6 +129,11 @@
                     AssemblyName = "System.Runtime.Remoting"
                     HintPath = "..\..\..\..\..\WINDOWS\Microsoft.NET\Framework\v1.1.4322\System.Runtime.Remoting.dll"
                 />
+                <Reference
+                    Name = "nunit.core"
+                    AssemblyName = "nunit.core"
+                    HintPath = "..\..\lib\nunit.core.dll"
+                />
             </References>
         </Build>
         <Files>

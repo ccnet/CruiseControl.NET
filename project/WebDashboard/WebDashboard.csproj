@@ -125,16 +125,6 @@
                     Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
                 />
                 <Reference
-                    Name = "nunit.framework"
-                    AssemblyName = "nunit.framework"
-                    HintPath = "..\..\lib\nunit.framework.dll"
-                />
-                <Reference
-                    Name = "nmock"
-                    AssemblyName = "nmock"
-                    HintPath = "..\..\lib\nmock.dll"
-                />
-                <Reference
                     Name = "System.Configuration.Install"
                     AssemblyName = "System.Configuration.Install"
                     HintPath = "..\..\..\..\..\..\WINDOWS\Microsoft.NET\Framework\v1.1.4322\System.Configuration.Install.dll"

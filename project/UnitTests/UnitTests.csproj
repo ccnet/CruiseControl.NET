@@ -134,6 +134,11 @@
                     AssemblyName = "NetReflector"
                     HintPath = "..\..\lib\NetReflector.dll"
                 />
+                <Reference
+                    Name = "nunit.core"
+                    AssemblyName = "nunit.core"
+                    HintPath = "..\..\lib\nunit.core.dll"
+                />
             </References>
         </Build>
         <Files>
