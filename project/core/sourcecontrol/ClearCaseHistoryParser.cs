@@ -51,7 +51,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			{
 				modification.ModifiedTime = DateTime.Parse( time );
 			}
-			catch 
+			catch ( FormatException )
 			{
 				modification.ModifiedTime = DateTime.MinValue;
 			}
