@@ -80,11 +80,7 @@
 	<!-- TEST -->
 	<target name="test" depends="test.unit" />
 
-	<target name="test.unit" depends="compile" description="runs unit tests">    	
-	    	<call target="test.core" />
-	    	<call target="test.console" />
-	    	<call target="test.web" />
-	</target>
+	<target name="test.unit" depends="compile, test.core, test.console, test.web" description="runs unit tests" />    	
     
 	<target name="test.core">
 		<nunit2>
@@ -112,7 +108,7 @@
 
 	<!-- Used for manually testing the webapp. Don't include this in an automated build
 		unless we copy files to distribute to a different location -->
-	<target name="test-web" depends="deploy.webapp">
+	<target name="copy-test-web-files" depends="deploy.webapp">
 		<copy todir="${webapp.dir}">
 			<fileset basedir="project\WebTest">
 				<includes name="**\*" />
