@@ -14,6 +14,7 @@ namespace ThoughtWorks.CruiseControl.Core.Util.Test
 			ProcessExecutor executor = new ProcessExecutor();
 			ProcessResult result = executor.Execute("cmd.exe", "/C @echo Hello World");
 			AssertEquals("Hello World", result.StandardOutput.Trim());
+			AssertEquals(false, result.HasError);
 		}
 
 		[Test]
@@ -22,6 +23,7 @@ namespace ThoughtWorks.CruiseControl.Core.Util.Test
 			ProcessExecutor executor = new ProcessExecutor();
 			ProcessResult result = executor.Execute("cmd.exe", "/C @dir " + Environment.SystemDirectory);
 			Assert("process should not have timed out", ! result.TimedOut);
+			AssertEquals(false, result.HasError);
 		}
 
 		[Test]
@@ -30,6 +32,7 @@ namespace ThoughtWorks.CruiseControl.Core.Util.Test
 			ProcessExecutor executor = new ProcessExecutor();
 			ProcessResult result = executor.Execute("cmd.exe", "/C @zerk.exe foo");
 
+			AssertEquals(true, result.HasError);
 			AssertEquals(@"'zerk.exe' is not recognized as an internal or external command,
 operable program or batch file.", result.StandardError.Trim());
 			AssertEquals(string.Empty, result.StandardOutput);

@@ -57,7 +57,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			ProcessResult result = _executor.Execute(processInfo);
 
 			// check for stderr
-			if (result.StandardError != string.Empty) throw new CruiseControlException("Error: " + result.StandardError);
+			if (result.HasError) throw new CruiseControlException(string.Format("Error: {0}", result.StandardError));
 			return result;
 		}
 

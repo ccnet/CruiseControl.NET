@@ -144,6 +144,16 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test
 			mockRegistry.Verify();
 		}
 
+		[Test]
+		public void ShouldWorkWhenStandardErrorIsNull()
+		{
+			Mock mockProcessExecutor = new DynamicMock(typeof(ProcessExecutor));
+			mockProcessExecutor.ExpectAndReturn("Execute", new ProcessResult("foo", null, 1, false), new NMock.Constraints.IsAnything());
+			
+			Vss vss = new Vss(new VssHistoryParser(), (ProcessExecutor)mockProcessExecutor.MockInstance);
+			vss.GetModifications(DateTime.Now, DateTime.Now);
+		}
+
 		private Vss CreateVss()
 		{
 			Vss vss = new Vss();
