@@ -17,18 +17,16 @@ namespace ThoughtWorks.CruiseControl.Core
 	/// </summary>
 	public class ProjectIntegrator : IProjectIntegrator
 	{
-		ISchedule _schedule;
-		IProject _project;
-		Thread _thread;
-		ProjectIntegratorState _state = ProjectIntegratorState.Stopped;
+		private ISchedule _schedule;
+		private IProject _project;
+		private Thread _thread;
+		private ProjectIntegratorState _state = ProjectIntegratorState.Stopped;
 
 		public ProjectIntegrator(ISchedule schedule, IProject project)
 		{
 			_schedule = schedule;
 			_project = project;
 		}
-
-		#region Properties
 
 		public IProject Project 
 		{ 
@@ -47,8 +45,6 @@ namespace ThoughtWorks.CruiseControl.Core
 			get { return _state; }
 		}
 
-		#endregion
-
 		public void Start()
 		{
 			lock (this)
@@ -60,21 +56,23 @@ namespace ThoughtWorks.CruiseControl.Core
 			}
 
 			// multiple thread instances cannot be created
-			if (_thread==null || _thread.ThreadState==ThreadState.Stopped)
+			if (_thread == null || _thread.ThreadState == ThreadState.Stopped)
 			{
 				_thread = new Thread(new ThreadStart(Run));
 				_thread.Name = "ProjectIntegrator for project " + _project.Name;
 			}
 
 			// start thread if it's not running yet
-			if (_thread.ThreadState!=ThreadState.Running)
+			if (_thread.ThreadState != ThreadState.Running)
+			{
 				_thread.Start();
+			}
 		}
 
 		/// <summary>
 		/// Main integration loop, intended to be run in its own thread.
 		/// </summary>
-		void Run()
+		private void Run()
 		{
 			// loop, until the integrator is stopped
 			while (IsRunning)
@@ -111,13 +109,37 @@ namespace ThoughtWorks.CruiseControl.Core
 			_state = ProjectIntegratorState.Stopped;
 		}
 
+//		private void Run()
+//		{
+//			while (IsRunning && _schedule.ShouldRun())
+//			{
+//				try
+//				{
+//					_project.Run(_schedule.ForceBuild);
+//				}
+//				catch (Exception ex) 
+//				{ 
+//					LogUtil.Log(_project, "Project threw an exception: " + ex);
+//				}
+//				_schedule.Update();
+//
+//				TimeSpan sleepTime = _schedule.CalculateTimeToNextIntegration();
+//				if (_project.MinimumSleepTime > 0 && _project.MinimumSleepTime < sleepTime.TotalMilliseconds)
+//					sleepTime = new TimeSpan(0, 0, 0, 0, _project.MinimumSleepTime);
+//				LogUtil.Log(Project, string.Format("Sleeping for {0}", sleepTime));
+//				Thread.Sleep(sleepTime);
+//			}
+//			_state = SchedulerState.Stopped;
+//		}
+
+
 		/// <summary>
 		/// Gets a value indicating whether this project integrator is running
 		/// and will continue to run.  If the state is Stopping, this returns false.
 		/// </summary>
 		public bool IsRunning
 		{
-			get { return _state==ProjectIntegratorState.Running; }
+			get { return _state == ProjectIntegratorState.Running; }
 		}
 
 		/// <summary>

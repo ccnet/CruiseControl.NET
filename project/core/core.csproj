@@ -18,7 +18,7 @@
                 OutputType = "Library"
                 PreBuildEvent = ""
                 PostBuildEvent = 'copy "$(ProjectDir)test\ccnet.core.dll.config" "$(TargetDir)"&#xd;&#xa;mkdir "$(TargetDir)xsl"&#xd;&#xa;copy "$(ProjectDir)publishers\xsl\*.xsl" "$(TargetDir)xsl"'
-                RootNamespace = "tw.ccnet.core"
+                RootNamespace = "ThoughtWorks.CruiseControl.Core"
                 RunPostBuildEvent = "OnBuildSuccess"
                 StartupObject = ""
             >

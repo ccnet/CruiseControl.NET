@@ -58,7 +58,6 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
 			}
 			catch(Exception ex) 
 			{
-				Console.WriteLine(ex);
 				throw new CruiseControlException(string.Format("Bad XML in logfile: " + ex.Message));
 			}
 		}

@@ -29,7 +29,7 @@ namespace ThoughtWorks.CruiseControl.Core.Configuration
 		internal ConfigurationLoader() 
 		{
 			_handler = new ValidationEventHandler(handleSchemaEvent);
-			Stream s = Assembly.GetExecutingAssembly().GetManifestResourceStream("tw.ccnet.core.configuration.ccnet.xsd");
+			Stream s = Assembly.GetExecutingAssembly().GetManifestResourceStream("ThoughtWorks.CruiseControl.Core.configuration.ccnet.xsd");
 			_schema = XmlSchema.Read(s, _handler);
 			_schema.Compile(_handler);
 		}
@@ -112,7 +112,8 @@ namespace ThoughtWorks.CruiseControl.Core.Configuration
 			try
 			{
 				NetReflectorTypeTable typeTable = new NetReflectorTypeTable();
-				typeTable.Add(Assembly.GetExecutingAssembly());
+				typeTable.Add(AppDomain.CurrentDomain);
+//				typeTable.Add(Assembly.GetExecutingAssembly());
 				typeTable.Add(Directory.GetCurrentDirectory(), CONFIG_ASSEMBLY_PATTERN);
 				IConfiguration configuration = new Configuration();
 				foreach (XmlNode node in configXml.DocumentElement)

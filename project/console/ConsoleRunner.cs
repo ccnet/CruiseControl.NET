@@ -52,13 +52,17 @@ namespace ThoughtWorks.CruiseControl.Console
 				{
 					LogUtil.Log("Starting CruiseControl.NET Server");
 					server.Start();
-					_timeout.Wait();
+					// server.WaitForExit();
 				}
 				else
 				{
 					LogUtil.Log("Starting CruiseControl.NET Project: " + _parser.Project);
 					server.ForceBuild(_parser.Project);
+					// server.CruiseManager.ForceBuild(_parser.Project);
+					// server.CruiseManager.WaitForExit(_parser.Project);
+					LogUtil.Log("Hit Ctrl-C when integration is complete."); // HACK: better to join thread.
 				}
+				_timeout.Wait();
 			}
 			finally
 			{

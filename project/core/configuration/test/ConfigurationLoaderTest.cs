@@ -76,7 +76,6 @@ namespace ThoughtWorks.CruiseControl.Core.Configuration.test
 		{
 			string projectXml = ConfigurationFixture.GenerateProjectXml("test");
 			string project2Xml = ConfigurationFixture.GenerateProjectXml("test2");
-			Console.WriteLine(ConfigurationFixture.GenerateConfig(projectXml + project2Xml).OuterXml);
 			IConfiguration configuration = loader.PopulateProjectsFromXml(ConfigurationFixture.GenerateConfig(projectXml + project2Xml));
 			ValidateProject(configuration, "test");
 			ValidateProject(configuration, "test2");

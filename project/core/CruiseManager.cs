@@ -88,7 +88,8 @@ namespace ThoughtWorks.CruiseControl.Core
 
 		public void RegisterForRemoting()
 		{
-			string configFile = System.Reflection.Assembly.GetEntryAssembly().Location + ".config";
+			string configFile = AppDomain.CurrentDomain.SetupInformation.ConfigurationFile;
+//			string configFile = System.Reflection.Assembly.GetEntryAssembly().Location + ".config";
 			string uri = "CruiseManager.rem";
 
 			RemotingConfiguration.Configure(configFile);
@@ -106,6 +107,7 @@ namespace ThoughtWorks.CruiseControl.Core
 			} 
 			catch 
 			{
+				// todo: improve exception
 				throw new Exception("Couldn't listen on " + url);
 			}
 		}

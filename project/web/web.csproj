@@ -174,6 +174,21 @@
                     BuildAction = "EmbeddedResource"
                 />
                 <File
+                    RelPath = "FxCop.aspx"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "FxCop.aspx.cs"
+                    DependentUpon = "FxCop.aspx"
+                    SubType = "ASPXCodeBehind"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "FxCop.aspx.resx"
+                    DependentUpon = "FxCop.aspx.cs"
+                    BuildAction = "EmbeddedResource"
+                />                
+                <File
                     RelPath = "InstallWebConfig.cs"
                     SubType = "Component"
                     BuildAction = "Compile"

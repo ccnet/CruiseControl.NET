@@ -40,21 +40,15 @@ namespace ThoughtWorks.CruiseControl.Core
 		/// </summary>
 		public event IntegrationCompletedEventHandler IntegrationCompleted;
 
-		#region Field declarations
+		private string _webURL = "http://localhost/CruiseControl.NET/"; // default value
+		private ISourceControl _sourceControl;
+		private IBuilder _builder;
+		private ILabeller _labeller = new DefaultLabeller();
+		private ArrayList _publishers = new ArrayList();
+		private IntegrationResult _lastIntegrationResult = null;
+		private ProjectActivity _currentActivity = ProjectActivity.Unknown;
+		private int _modificationDelaySeconds = 0;
 
-		string _webURL = "http://localhost/CruiseControl.NET/"; // default value
-		ISourceControl _sourceControl;
-		IBuilder _builder;
-		ILabeller _labeller = new DefaultLabeller();
-		ArrayList _publishers = new ArrayList();
-		IntegrationResult _lastIntegrationResult = null;
-		ProjectActivity _currentActivity = ProjectActivity.Unknown;
-		int _modificationDelaySeconds = 0;
-		bool _stopped = false;
-
-		#endregion
-
-		#region Properties set via Xml configuration
 		[ReflectorProperty("webURL", Required=false)]
 		public string WebURL
 		{
@@ -113,16 +107,6 @@ namespace ThoughtWorks.CruiseControl.Core
 			set { _modificationDelaySeconds = value; }
 		}
 
-		#endregion
-
-		#region Other properties
-
-		public bool Stopped 
-		{
-			get { return _stopped; }
-			set { _stopped = value; }
-		}
-
 		public ILabeller Labeller
 		{
 			get { return _labeller; }
@@ -147,16 +131,8 @@ namespace ThoughtWorks.CruiseControl.Core
 			get { return _currentActivity; }
 		}
 
-		
-		#endregion
-		
-		#region RunIntegration top-level workflow
-
 		public IntegrationResult RunIntegration(BuildCondition buildCondition)
 		{
-			if (Stopped)
-				return null;
-			
 			if (buildCondition==BuildCondition.ForceBuild)
 				Log("Build forced");
 
@@ -176,7 +152,7 @@ namespace ThoughtWorks.CruiseControl.Core
 				Log("Exception occurred while running integration", ex);
 
 				// store exception
-				if (results!=null)
+				if (results != null)
 					results.ExceptionResult = ex;
 
 				// if an exception occurred, we're going to log it, so flag postbuild to occur
@@ -194,11 +170,6 @@ namespace ThoughtWorks.CruiseControl.Core
 			return results;
 		}
 
-
-		#endregion
-
-		#region Build helper methods
-
 		internal void CreateNewIntegrationResult(out IntegrationResult results)
 		{
 			results = new IntegrationResult();
@@ -214,13 +185,20 @@ namespace ThoughtWorks.CruiseControl.Core
 
 			results.Modifications = SourceControl.GetModifications(LastIntegrationResult.StartTime,  results.StartTime);
 
-			// log a message showing how many modifications were detected
-			string message = results.Modifications.Length + " modifications";
-			if (results.Modifications.Length==0)
-				message = "No modifications";
-			else if (results.Modifications.Length==1)
-				message = "1 modification";
-			Log(message);
+			Log(GetModificationsDetectedMessage(results));
+		}
+
+		private string GetModificationsDetectedMessage(IntegrationResult result)
+		{
+			switch (result.Modifications.Length)
+			{
+				case 0: 
+					return "No modifications detected.";
+				case 1:
+					return "1 modification detected.";
+				default:
+					return string.Format("{0} modifications detected.", result.Modifications.Length);
+			}
 		}
 
 		internal void RunBuild(IntegrationResult results)
@@ -251,11 +229,7 @@ namespace ThoughtWorks.CruiseControl.Core
 			Log("Integration complete: " + results.EndTime);
 		}
 
-		#endregion
-
-		#region State persistence
-
-		void AttemptToSaveState(IntegrationResult results)
+		private void AttemptToSaveState(IntegrationResult results)
 		{
 			try
 			{
@@ -265,12 +239,12 @@ namespace ThoughtWorks.CruiseControl.Core
 			{
 				Log("Exception when saving integration state", ex);
 
-				if (results.ExceptionResult==null)
+				if (results.ExceptionResult == null)
 					results.ExceptionResult = ex;
 			}
 		}
 
-		IntegrationResult LoadLastIntegration()
+		private IntegrationResult LoadLastIntegration()
 		{
 			if (StateManager.StateFileExists())
 			{
@@ -284,10 +258,6 @@ namespace ThoughtWorks.CruiseControl.Core
 			}
 		}
 
-		#endregion
-
-		#region Logging helper methods
-
 		private void Log(string message)
 		{
 			LogUtil.Log(this, message);
@@ -298,10 +268,6 @@ namespace ThoughtWorks.CruiseControl.Core
 			LogUtil.Log(this, message, ex);
 		}
 
-		#endregion
-
-		#region Deciding whether a build should run
-
 		/// <summary>
 		/// Determines whether a build should run.  A build should run if there
 		/// are modifications, and none have occurred within the modification
@@ -309,7 +275,7 @@ namespace ThoughtWorks.CruiseControl.Core
 		/// </summary>
 		internal bool ShouldRunBuild(IntegrationResult results, BuildCondition buildCondition)
 		{
-			if (buildCondition==BuildCondition.ForceBuild)
+			if (buildCondition == BuildCondition.ForceBuild)
 				return true;
 
 			if (results.HasModifications()) 
@@ -323,7 +289,7 @@ namespace ThoughtWorks.CruiseControl.Core
 		/// modification delay is not set (has a value of zero or less), this method
 		/// will always return false.
 		/// </summary>
-		bool DoModificationsExistWithinModificationDelay(IntegrationResult results)
+		private bool DoModificationsExistWithinModificationDelay(IntegrationResult results)
 		{
 			if (ModificationDelaySeconds <= 0) 
 				return false;
@@ -340,16 +306,6 @@ namespace ThoughtWorks.CruiseControl.Core
 			return false;
 		}
 
-		#endregion
-
-		#region IntegrationCompleted event management
-
-		public void AddPublisher(PublisherBase publisher)
-		{
-			_publishers.Add(publisher);
-			IntegrationCompleted += publisher.IntegrationCompletedEventHandler;
-		}
-
 		/// <summary>
 		/// Raises the IntegrationCompleted event.
 		/// </summary>
@@ -360,11 +316,9 @@ namespace ThoughtWorks.CruiseControl.Core
 				IntegrationCompleted(this, e);
 		}
 
-		#endregion
-
 		public IntegrationStatus GetLatestBuildStatus()
 		{
-			if (LastIntegrationResult!=null)
+			if (LastIntegrationResult != null)
 				return LastIntegrationResult.Status;
 
 			return IntegrationStatus.Unknown;
@@ -373,7 +327,7 @@ namespace ThoughtWorks.CruiseControl.Core
 		/// <summary>
 		/// Labels the project, if the build was successful.
 		/// </summary>
-		void HandleProjectLabelling(IntegrationResult result)
+		private void HandleProjectLabelling(IntegrationResult result)
 		{
 			if (result.Succeeded) 
 				SourceControl.LabelSourceControl(result.Label, result.StartTime);

@@ -12,9 +12,9 @@ namespace ThoughtWorks.CruiseControl.Core.Test
 	[TestFixture]
 	public class ProjectIntegratorTest : CustomAssertion
 	{
-		MockProject _project;
-		Schedule _schedule;
-		ProjectIntegrator _integrator;
+		private MockProject _project;
+		private Schedule _schedule;
+		private ProjectIntegrator _integrator;
 
 		[SetUp]
 		protected void SetUp()
@@ -227,24 +227,20 @@ namespace ThoughtWorks.CruiseControl.Core.Test
 			_integrator.Abort();
 		}
 
-		#region Testing helper methods
-
-		ProjectIntegrator CreateProjectIntegrator()
+		private ProjectIntegrator CreateProjectIntegrator()
 		{
 			return CreateProjectIntegrator(Schedule.Infinite, 1);
 		}
 
-		ProjectIntegrator CreateProjectIntegrator(int iterations)
+		private ProjectIntegrator CreateProjectIntegrator(int iterations)
 		{
 			return CreateProjectIntegrator(iterations, 1);
 		}
 	
-		ProjectIntegrator CreateProjectIntegrator(int iterations, int timeout)
+		private ProjectIntegrator CreateProjectIntegrator(int iterations, int timeout)
 		{
 			_schedule = new Schedule(timeout, iterations);
 			return new ProjectIntegrator(_schedule, _project);
 		}
-
-		#endregion
 	}
 }

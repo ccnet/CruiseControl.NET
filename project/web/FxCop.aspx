@@ -3,5 +3,5 @@
 	<HEAD>
 		<TITLE>FxCop Results</TITLE>
 	</HEAD>
-	<asp:Label id="results" runat="server">Label</asp:Label>
+	<div id="BodyArea" runat="server" />
 </HTML>

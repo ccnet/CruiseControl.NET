@@ -121,7 +121,6 @@ run -e vlog  ""-xo+e{3}"" ""-d{4}*{5}"" ""@{2}""
 		public DateTime SubtractAnHour(DateTime date) 
 		{
 			TimeSpan anHour = new TimeSpan(1, 0, 0);
-			Console.WriteLine(date);
 			return date.Subtract(anHour);
 		}
 		

@@ -41,7 +41,7 @@ namespace ThoughtWorks.CruiseControl.Core.Configuration.test
 		private XmlSchema loadSchema() 
 		{
 			System.Reflection.Assembly ass = System.Reflection.Assembly.GetExecutingAssembly();
-			Stream s = ass.GetManifestResourceStream("tw.ccnet.core.configuration.ccnet.xsd");
+			Stream s = ass.GetManifestResourceStream("ThoughtWorks.CruiseControl.Core.configuration.ccnet.xsd");
 			return XmlSchema.Read(s, new ValidationEventHandler(handler));
 		}
 

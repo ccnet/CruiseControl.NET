@@ -23,13 +23,8 @@ namespace ThoughtWorks.CruiseControl.Web
 		{
 			try
 			{
-				string logfile = WebUtil.GetLogFilename(Context, Request);
-				if (logfile == null)
-				{
-					return;
-				}
+				string logfile = WebUtil.ResolveLogFile(Context);
 				BodyArea.InnerHtml = LogFileLister.Transform(logfile, WebUtil.GetXslFilename("timing.xsl", Request));
-
 			}
 			catch(CruiseControlException ex)
 			{

@@ -110,10 +110,10 @@
 	</target>
 
 	<!-- DEPLOY -->
-	<target name="deploy" depends="deploy.builder, deploy.cctray, deploy.webapp, deploy.webdashboard, deploy.webservice" />
+	<target name="deploy" depends="deploy.server, deploy.cctray, deploy.webapp, deploy.webdashboard, deploy.webservice" />
 	
-	<target name="deploy.builder" depends="compile">
-		<mkdir dir="deployed\builder"/>
+	<target name="deploy.server" depends="compile">
+		<mkdir dir="deployed\server"/>
 		<foreach item="Folder" property="foldername">
 			<in>
 				<items basedir="project">
@@ -124,7 +124,7 @@
 				</items>
 			</in>
 			<do>
-				<copy todir="deployed\builder">
+				<copy todir="deployed\server">
 					<fileset basedir="${foldername}\bin\Debug">
 						<includes name="*.dll" />
 						<includes name="*.pdb" />
@@ -134,17 +134,17 @@
 			</do>
 		</foreach>
 
-		<copy todir="deployed\builder\xsl" verbose="${verbosity}">
+		<copy todir="deployed\server\xsl" verbose="${verbosity}">
 			<fileset basedir="${src.dir}\core\publishers\xsl">
 				<includes name="**\*.xsl"/>
 			</fileset>
 		</copy>
 
-		<copy file="${src.dir}\console\app.config" tofile="deployed\builder\${console.exe}.config" verbose="${verbosity}"/>
-		<copy file="${src.dir}\service\app.config" tofile="deployed\builder\${service.exe}.config" verbose="${verbosity}"/>
+		<copy file="${src.dir}\console\app.config" tofile="deployed\server\${console.exe}.config" verbose="${verbosity}"/>
+		<copy file="${src.dir}\service\app.config" tofile="deployed\server\${service.exe}.config" verbose="${verbosity}"/>
 
-		<copy file="${src.dir}\console\ccnet.example.config" todir="deployed\builder"  verbose="${verbosity}"/>
-		<copy file="${src.dir}\console\StartCCNet.bat" todir="deployed\builder" verbose="${verbosity}"/>
+		<copy file="${src.dir}\console\ccnet.example.config" todir="deployed\server"  verbose="${verbosity}"/>
+		<copy file="${src.dir}\console\StartCCNet.bat" todir="deployed\server" verbose="${verbosity}"/>
 	</target>
 	
 	<target name="deploy.cctray" depends="compile">

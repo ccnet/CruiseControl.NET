@@ -19,24 +19,19 @@ namespace ThoughtWorks.CruiseControl.Web
 	public class FxCop : System.Web.UI.Page
 	{
 		protected System.Web.UI.WebControls.Label results;
+		protected HtmlGenericControl BodyArea;
 
 		private void Page_Load(object sender, System.EventArgs e)
 		{
-			string logFile = WebUtil.ResolveLogFile(Context);
-
-			string xml = Transform(@"xsl\FxCopReport.xsl", logFile);
-			results.Text = xml;
-		}
-
-		private string Transform(string xslfile, string logFile)
-		{
-			XmlDocument document = new XmlDocument();
-			document.Load(logFile);
-
-			string directory = Path.GetDirectoryName(xslfile);
-			string file = Path.GetFileName(xslfile);
-			string transformFile = Path.Combine(Request.MapPath(directory), file);
-			return ThoughtWorks.CruiseControl.Core.Publishers.BuildLogTransformer.Transform(document, transformFile);
+			try
+			{
+				string logfile = WebUtil.ResolveLogFile(Context);
+				BodyArea.InnerHtml = LogFileLister.Transform(logfile, WebUtil.GetXslFilename("FxCopReport.xsl", Request));
+			}
+			catch(CruiseControlException ex)
+			{
+				BodyArea.InnerHtml += WebUtil.FormatException(ex);
+			}
 		}
 
 		#region Web Form Designer generated code

@@ -32,8 +32,11 @@ namespace ThoughtWorks.CruiseControl.Console.test
 			TempFileUtil.CreateTempDir("ConsoleRunnerTest");
 			string configFile = TempFileUtil.CreateTempXmlFile("ConsoleRunnerTest", "myconfig.config", xml);
 
+			Mock mockTimeout = new DynamicMock(typeof(ITimeout));
+			mockTimeout.Expect("Wait");
+
 			ArgumentParser parser = new ArgumentParser(new string[] { "-project:test", "-config:" + configFile });
-			new ConsoleRunner(parser, null).Run();
+			new ConsoleRunner(parser, (ITimeout)mockTimeout.MockInstance).Run();
 
 			TempFileUtil.DeleteTempDir("ConsoleRunnerTest");
 		}	

@@ -11,6 +11,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "console2002", "console\cons
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CCTray2002", "CCTray\CCTray2002.csproj", "{B57FC66E-2352-448B-89A8-E531F3E2683B}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "integration2002", "integration\integration2002.csproj", "{BDFCDEE6-98EC-499C-8792-47D2DFC08647}"
+EndProject
 Global
 	GlobalSection(SolutionConfiguration) = preSolution
 		ConfigName.0 = Debug
@@ -43,6 +45,10 @@ Global
 		{B57FC66E-2352-448B-89A8-E531F3E2683B}.Debug.Build.0 = Debug|.NET
 		{B57FC66E-2352-448B-89A8-E531F3E2683B}.Release.ActiveCfg = Release|.NET
 		{B57FC66E-2352-448B-89A8-E531F3E2683B}.Release.Build.0 = Release|.NET
+		{BDFCDEE6-98EC-499C-8792-47D2DFC08647}.Debug.ActiveCfg = Debug|.NET
+		{BDFCDEE6-98EC-499C-8792-47D2DFC08647}.Debug.Build.0 = Debug|.NET
+		{BDFCDEE6-98EC-499C-8792-47D2DFC08647}.Release.ActiveCfg = Release|.NET
+		{BDFCDEE6-98EC-499C-8792-47D2DFC08647}.Release.Build.0 = Release|.NET
 	EndGlobalSection
 	GlobalSection(SolutionItems) = postSolution
 		Item:1 = ..\ccnet.build

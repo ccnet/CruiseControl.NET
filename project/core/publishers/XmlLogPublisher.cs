@@ -20,8 +20,6 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
 		{
 		}
 
-		#region Xml configuration bound properties
-
 		[ReflectorProperty("logDir")]
 		public string LogDir
 		{
@@ -42,8 +40,6 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
 
 			set { _mergeFiles = value; }
 		}
-
-		#endregion
 
 		public override void PublishIntegrationResults(IProject project, IntegrationResult result)
 		{

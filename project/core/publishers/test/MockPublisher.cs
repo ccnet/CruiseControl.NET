@@ -25,7 +25,5 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers.Test
 			_published = true;
 			_result = result;
 		}
-
-
 	}
 }

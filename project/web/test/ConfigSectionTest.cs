@@ -17,10 +17,6 @@ namespace ThoughtWorks.CruiseControl.Web.Test
 			Assertion.AssertEquals("foo.xsl", col["one"]);
 			Assertion.AssertNotNull("two should not be null", col["two"]);
 			Assertion.AssertEquals("bar.xsl", col["two"]);
-			foreach (string key in col) 
-			{
-				Console.WriteLine(col[key]);
-			}
 		}
 	}
 }

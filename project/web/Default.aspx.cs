@@ -23,7 +23,7 @@ namespace ThoughtWorks.CruiseControl.Web
 		protected HtmlGenericControl PluginLinks;
 		protected System.Web.UI.WebControls.HyperLink TestDetailsLink;
 		protected System.Web.UI.WebControls.HyperLink LogLink;
-		protected System.Web.UI.WebControls.Label BodyLabel;
+		protected HtmlGenericControl BodyLabel;
 
 		private string logfile;
 
@@ -45,10 +45,10 @@ namespace ThoughtWorks.CruiseControl.Web
 				if (BodyLabel==null)
 					throw ex;
 
-				if (BodyLabel.Text==null)
-					BodyLabel.Text = string.Empty;
+				if (BodyLabel.InnerText==null)
+					BodyLabel.InnerText = string.Empty;
 
-				BodyLabel.Text += WebUtil.FormatException(ex);
+				BodyLabel.InnerText += WebUtil.FormatException(ex);
 			}
 		}
 

@@ -9,15 +9,13 @@ namespace ThoughtWorks.CruiseControl.Core.Schedules
 	public class Schedule : ISchedule
 	{
 		public const int Infinite = -1;
-		public const int DefaultTimeOut = 60000;
+		public const int DefaultTimeOut = 60;
 
-		double _timeOut = DefaultTimeOut;
-		int _totalIterations = Infinite;
-		int _iterationsSoFar = 0;
-		bool _forceNextBuild = false;
-		DateTime _lastIntegrationCompleteTime = DateTime.MinValue;
-
-		#region Constructors
+		private double _timeOut = DefaultTimeOut;
+		private int _totalIterations = Infinite;
+		private int _iterationsSoFar = 0;
+		private bool _forceNextBuild = false;
+		private DateTime _lastIntegrationCompleteTime = DateTime.MinValue;
 
 		public Schedule() { }
 
@@ -26,10 +24,6 @@ namespace ThoughtWorks.CruiseControl.Core.Schedules
 			_timeOut = timeout;
 			_totalIterations = totalIterations;
 		}
-
-		#endregion
-
-		#region Xml configuration file properties
 
 		/// <summary>
 		/// Gets and sets the number of seconds between builds for which
@@ -54,10 +48,6 @@ namespace ThoughtWorks.CruiseControl.Core.Schedules
 			set { _totalIterations = value; }
 		}
 
-		#endregion
-
-		#region Interface implementation
-
 		public void IntegrationCompleted()
 		{
 			_iterationsSoFar++;
@@ -76,7 +66,7 @@ namespace ThoughtWorks.CruiseControl.Core.Schedules
 			}
 
 			TimeSpan timeSinceLastBuild = DateTime.Now - _lastIntegrationCompleteTime;
-			if (timeSinceLastBuild.TotalSeconds<SleepSeconds)
+			if (timeSinceLastBuild.TotalSeconds < SleepSeconds)
 				return BuildCondition.NoBuild;
 
 			return BuildCondition.IfModificationExists;
@@ -84,11 +74,8 @@ namespace ThoughtWorks.CruiseControl.Core.Schedules
 
 		public bool ShouldStopIntegration()
 		{
-			return (_totalIterations!=Infinite && _iterationsSoFar>=_totalIterations);
+			return (_totalIterations != Infinite && _iterationsSoFar >= _totalIterations);
 		}
-
-
-		#endregion
 
 		/// <summary>
 		/// Forces <see cref="ShouldRunIntegration"/> to return true on its next

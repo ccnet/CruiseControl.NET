@@ -90,7 +90,9 @@ namespace ThoughtWorks.CruiseControl.Core.Test
 			DynamicMock stateMock = new DynamicMock(typeof(IStateManager));
 			stateMock.Expect("SaveState", results);
 
-			_project.AddPublisher((PublisherBase)publisherMock.MockInstance);
+			ArrayList publishers = new ArrayList();
+			publishers.Add((PublisherBase)publisherMock.MockInstance);
+			_project.Publishers = publishers;
 			_project.StateManager = (IStateManager)stateMock.MockInstance;
 
 			_project.PostBuild(results);
@@ -240,14 +242,6 @@ namespace ThoughtWorks.CruiseControl.Core.Test
 			// TODO state set to sleeping
 			// TODO should tests be multithreaded?
 			// TODO should delegate to schedule to determine when to run and how often
-		}
-
-		[Test]
-		public void NotRunWhenStopped()
-		{
-			_project.Stopped = true;
-			IntegrationResult results = _project.RunIntegration(BuildCondition.IfModificationExists);
-			AssertNull(results);
 		}
 
 		[Test]
