@@ -17,7 +17,7 @@
                 DelaySign = "false"
                 OutputType = "Library"
                 PreBuildEvent = ""
-                PostBuildEvent = 'copy "$(ProjectDir)test\test.config" "$(TargetPath).config"&#xd;&#xa;mkdir "$(ProjectDir)\xsl"&#xd;&#xa;copy "$(SolutionDir)\xsl\*.xsl" "$(ProjectDir)\xsl"&#xd;&#xa;'
+                PostBuildEvent = '@echo off&#xd;&#xa;copy "$(ProjectDir)test\test.config" "$(TargetPath).config"&#xd;&#xa;mkdir "$(ProjectDir)\xsl"&#xd;&#xa;copy "$(SolutionDir)\xsl\*.xsl" "$(ProjectDir)\xsl"&#xd;&#xa;copy "$(SolutionDir)\xsl\*.css" "$(ProjectDir)"&#xd;&#xa;'
                 RootNamespace = "ThoughtWorks.CruiseControl.Web"
                 RunPostBuildEvent = "OnBuildSuccess"
                 StartupObject = ""
@@ -166,6 +166,7 @@
                 />
                 <File
                     RelPath = "cruisecontrol.css"
+                    Link = "..\xsl\cruisecontrol.css"
                     BuildAction = "Content"
                 />
                 <File
