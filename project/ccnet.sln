@@ -27,6 +27,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebDashboard", "WebDashboar
 	ProjectSection(ProjectDependencies) = postProject
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebTest", "WebTest\WebTest.csproj", "{4387C25F-D884-4836-9B90-2662D7F62534}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfiguration) = preSolution
 		Debug = Debug
@@ -61,6 +65,10 @@ Global
 		{482EF049-EC0C-4819-B568-75B5F74BDD5B}.Debug.Build.0 = Debug|.NET
 		{482EF049-EC0C-4819-B568-75B5F74BDD5B}.Release.ActiveCfg = Release|.NET
 		{482EF049-EC0C-4819-B568-75B5F74BDD5B}.Release.Build.0 = Release|.NET
+		{4387C25F-D884-4836-9B90-2662D7F62534}.Debug.ActiveCfg = Debug|.NET
+		{4387C25F-D884-4836-9B90-2662D7F62534}.Debug.Build.0 = Debug|.NET
+		{4387C25F-D884-4836-9B90-2662D7F62534}.Release.ActiveCfg = Release|.NET
+		{4387C25F-D884-4836-9B90-2662D7F62534}.Release.Build.0 = Release|.NET
 	EndGlobalSection
 	GlobalSection(SolutionItems) = postSolution
 		..\ccnet.build = ..\ccnet.build
