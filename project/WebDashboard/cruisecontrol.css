@@ -8,10 +8,10 @@ a:hover { color:#FC0; }
 
 .main-panel { color:#FC0; }
 
-.link { color:#FFF; text-decoration:none; }
+.link { color:#00F;  }
 .link-failed { color:#F30; text-decoration:none; }
-.buildresults-header { color: #FFF; font-weight: bold; }
-.buildresults-data { color: #9F3; }
+.buildresults-header { color: #000; font-weight: bold; }
+.buildresults-data { color: #000; }
 .buildresults-data-failed { color: #F30; }
 
 .stylesection { margin-left: 4px; }

@@ -5,7 +5,6 @@
 	</HEAD>
 	<body>
 		<form id="Form1" method="post" runat="server">
-			<h1>Project Dashboard</h1>
 			<table>
 				<tr>
 					<td>
