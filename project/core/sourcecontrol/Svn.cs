@@ -1,18 +1,18 @@
-using Exortech.NetReflector;
 using System;
-using System.IO;
-using ThoughtWorks.CruiseControl.Core.Util;
 using System.Globalization;
+using System.Text;
+using Exortech.NetReflector;
+using ThoughtWorks.CruiseControl.Core.Util;
 
 namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 {
 	[ReflectorType("svn")]
 	public class Svn : ProcessSourceControl
 	{
-		internal readonly static string HISTORY_COMMAND_FORMAT = "log -v -r \"{{{0}}}:{{{1}}}\" --xml {2}";
-		internal readonly static string TAG_COMMAND_FORMAT = "copy -m \"CCNET build {0}\" {1} {2}";
+		internal static readonly string HISTORY_COMMAND_FORMAT = "log -v -r \"{{{0}}}:{{{1}}}\" --xml {2}";
+		internal static readonly string TAG_COMMAND_FORMAT = "copy -m \"CCNET build {0}\" {1} {2}/{0}";
 
-		internal readonly static string COMMAND_DATE_FORMAT = "yyyy-MM-ddTHH:mm:ssZ";
+		internal static readonly string COMMAND_DATE_FORMAT = "yyyy-MM-ddTHH:mm:ssZ";
 
 		private string _executable = "svn.exe";
 		private string _trunkUrl;
@@ -21,9 +21,11 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 		private string _tagBaseUrl;
 		private IModificationUrlBuilder _urlBuilder;
 
-		public Svn(ProcessExecutor executor) : base(new SvnHistoryParser(), executor) { }
+		public Svn(ProcessExecutor executor) : base(new SvnHistoryParser(), executor)
+		{
+		}
 
-		public Svn(): base (new SvnHistoryParser())
+		public Svn() : base(new SvnHistoryParser())
 		{
 		}
 
@@ -34,47 +36,46 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			set { _urlBuilder = value; }
 		}
 
-		[ReflectorProperty("executable")] 
+		[ReflectorProperty("executable")]
 		public string Executable
 		{
 			get { return _executable; }
 			set { _executable = value; }
 		}
 
-		[ReflectorProperty("trunkUrl")] 
+		[ReflectorProperty("trunkUrl")]
 		public string TrunkUrl
 		{
 			get { return _trunkUrl; }
 			set { _trunkUrl = value; }
 		}
 
-		[ReflectorProperty("workingDirectory", Required = false)] 
+		[ReflectorProperty("workingDirectory")]
 		public string WorkingDirectory
 		{
 			get { return _workingDirectory; }
 			set { _workingDirectory = value; }
 		}
 
-		[ReflectorProperty("tagOnSuccess", Required = false)] 
+		[ReflectorProperty("tagOnSuccess", Required = false)]
 		public bool TagOnSuccess
 		{
 			get { return _tagOnSuccess; }
 			set { _tagOnSuccess = value; }
 		}
 
-		[ReflectorProperty("tagBaseUrl", Required = false)] 
+		[ReflectorProperty("tagBaseUrl", Required = false)]
 		public string TagBaseUrl
 		{
 			get { return _tagBaseUrl; }
 			set { _tagBaseUrl = value; }
 		}
 
- 		[ReflectorProperty("username", Required = false)]
+		[ReflectorProperty("username", Required = false)]
 		public string Username;
-		 
+
 		[ReflectorProperty("password", Required = false)]
 		public string Password;
-
 
 		public string FormatCommandDate(DateTime date)
 		{
@@ -95,11 +96,11 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 		{
 			ProcessResult result = Execute(CreateHistoryProcessInfo(from, to));
 			Modification[] modifications = ParseModifications(result, from, to);
-			if ( _urlBuilder != null )
+			if (_urlBuilder != null)
 			{
 				_urlBuilder.SetupModification(modifications);
 			}
-			return modifications;		
+			return modifications;
 		}
 
 		public override void LabelSourceControl(string label, DateTime timeStamp)
@@ -110,15 +111,26 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			}
 		}
 
-		internal string BuildHistoryProcessArgs(DateTime from, DateTime to)
+		private string BuildHistoryProcessArgs(DateTime from, DateTime to)
 		{
-			return string.Format(HISTORY_COMMAND_FORMAT, FormatCommandDate(from), FormatCommandDate(to), _trunkUrl);
+			StringBuilder buffer = new StringBuilder();
+			buffer.AppendFormat(HISTORY_COMMAND_FORMAT, FormatCommandDate(from), FormatCommandDate(to), _trunkUrl);
+			AppendUsernameAndPassword(buffer);
+			return buffer.ToString();
 		}
 
-		internal string BuildTagProcessArgs(string label)
+		private void AppendUsernameAndPassword(StringBuilder buffer)
 		{
-			string tagUrl = _tagBaseUrl + "/" + label;
-			return string.Format(TAG_COMMAND_FORMAT, label, _trunkUrl, tagUrl);
+			if (! StringUtil.IsWhitespace(Username)) buffer.AppendFormat(@" --username ""{0}""", Username);
+			if (! StringUtil.IsWhitespace(Password)) buffer.AppendFormat(@" --password ""{0}""", Password);
+		}
+
+		private string BuildTagProcessArgs(string label)
+		{
+			StringBuilder buffer = new StringBuilder();
+			buffer.AppendFormat(TAG_COMMAND_FORMAT, label, _trunkUrl, _tagBaseUrl);
+			AppendUsernameAndPassword(buffer);
+			return buffer.ToString();
 		}
 	}
 }
