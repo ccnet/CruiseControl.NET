@@ -1,18 +1,32 @@
 using System;
 using System.IO;
-using System.Xml;
 using System.Xml.Serialization;
 
 namespace tw.ccnet.remote.monitor
 {
+	/// <summary>
+	/// Utility class for managing CruiseControl.NET Monitor settings.
+	/// </summary>
 	public class SettingsManager
 	{
+		#region Private constructor
+
+		/// <summary>
+		/// Utility class, not intended for instantiation.
+		/// </summary>
+		private SettingsManager()
+		{ }
+
+		#endregion
+
+		#region Settings file name location
+
 		const string SettingsFileName = "cctray-settings.xml";
 
-		private SettingsManager()
-		{
-		}
-
+		/// <summary>
+		/// Gets the absolute path and filename to the settings file to be used
+		/// by the executing application.
+		/// </summary>
 		static public string SettingsPathAndFileName
 		{
 			get
@@ -21,6 +35,14 @@ namespace tw.ccnet.remote.monitor
 			}
 		}
 
+		#endregion
+
+		#region Read and write settings
+
+		/// <summary>
+		/// Writes the specified settings using Xml serialisation.
+		/// </summary>
+		/// <param name="settings">The settings to write.</param>
 		public static void WriteSettings(Settings settings)
 		{
 			TextWriter writer = null;
@@ -37,6 +59,10 @@ namespace tw.ccnet.remote.monitor
 			}
 		}
 
+		/// <summary>
+		/// Loads and returns the settings to be used, via Xml deserialisation.
+		/// </summary>
+		/// <returns>The deserialised settings.</returns>
 		public static Settings LoadSettings()
 		{
 			if (!File.Exists(SettingsPathAndFileName))
@@ -60,5 +86,7 @@ namespace tw.ccnet.remote.monitor
 					reader.Close();
 			}
 		}
+
+		#endregion
 	}
 }
