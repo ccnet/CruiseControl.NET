@@ -134,6 +134,8 @@ namespace ThoughtWorks.CruiseControl.Core.Builder.Test
 
 			IntegrationResult result = new IntegrationResult();
 			result.Label = "1.0";
+			result.WorkingDirectory = @"C:\temp";
+			result.ArtifactDirectory = @"C:\temp";
 
 			_builder.ConfiguredBaseDirectory = @"c:\";
 			_builder.Executable = "NAnt.exe";
@@ -147,7 +149,7 @@ namespace ThoughtWorks.CruiseControl.Core.Builder.Test
 			Assert.AreEqual(_builder.Executable, info.FileName);
 			Assert.AreEqual(_builder.ConfiguredBaseDirectory, info.WorkingDirectory);
 			Assert.AreEqual(2000, info.TimeOut);
-			Assert.AreEqual(@"-nologo -buildfile:mybuild.build -logger:NAnt.Core.XmlLogger myArgs -D:label-to-apply=1.0 -D:ccnet.label=1.0 -D:ccnet.buildcondition=NoBuild target1 target2", info.Arguments);
+			Assert.AreEqual(@"-nologo -buildfile:mybuild.build -logger:NAnt.Core.XmlLogger myArgs -D:label-to-apply=1.0 -D:ccnet.label=1.0 -D:ccnet.buildcondition=NoBuild -D:ccnet.working.directory=C:\temp -D:ccnet.artifact.directory=C:\temp target1 target2", info.Arguments);
 		}
 
 		[Test]

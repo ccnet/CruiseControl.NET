@@ -197,6 +197,8 @@ namespace ThoughtWorks.CruiseControl.Core.Builder
 			AppendIfNotBlank(buffer, @"-D:label-to-apply={0}", label);
 			AppendIfNotBlank(buffer, @"-D:ccnet.label={0}", label);
 			AppendIfNotBlank(buffer, @"-D:ccnet.buildcondition={0}", result.BuildCondition.ToString());
+			AppendIfNotBlank(buffer, @"-D:ccnet.working.directory={0}", result.WorkingDirectory);
+			AppendIfNotBlank(buffer, @"-D:ccnet.artifact.directory={0}", result.ArtifactDirectory);
 		}
 
 		private void AppendTargets(StringBuilder buffer)
