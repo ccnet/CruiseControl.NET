@@ -1,0 +1,11 @@
+﻿<cruisecontrol><info /><modifications><modification type="modified"><filename>compile.xsl</filename><project>project/web/xsl</project><date>02 Oct 2002 09:55</date><user>exortech</user><comment>modified stylesheet to view error messages</comment></modification></modifications><build error="true"><buildresults project="ccnetlaunch"><message><![CDATA[Buildfile: file:///C:/wazodev/ccnet/ccnet-config/cruise.build]]></message><target name="update"><message><![CDATA[update:]]></message><task name="exec"><message><![CDATA[C:\wazodev\ccnet\tools\cvs.exe -q update -P -d]]></message><message type="error"><![CDATA[External program returned errors, see build log for details. C:\wazodev\ccnet\ccnet-config\cruise.build(5,6):
+? cvs.test.bat
+? tools/nant/.new.NAnt.Core.dll
+P project/web/xsl/compile.xsl
+U tools/nant/NAnt.Core.dll]]></message></task></target><message type="error"><![CDATA[BUILD FAILED
+External program returned errors, see build log for details. C:\wazodev\ccnet\ccnet-config\cruise.build(5,6):
+? cvs.test.bat
+? tools/nant/.new.NAnt.Core.dll
+P project/web/xsl/compile.xsl
+U tools/nant/NAnt.Core.dll]]></message></buildresults>Try 'nant -help' for more information
+</build></cruisecontrol>

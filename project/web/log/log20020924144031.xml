@@ -1,0 +1,206 @@
+<cruisecontrol>
+<info />
+<modifications><modification type="modified"><filename>ccnet.build</filename><project></project><date>9/24/2002</date><user>owen</user><comment>updated build file to produce xml output for acceptance tests</comment></modification></modifications>
+<build error="true">
+		<buildresults project="ccnetlaunch">
+			<message><![CDATA[Buildfile: file:///C:/dev/ccnet/ccnet-config/cruise.build]]></message>
+			<target name="update">
+				<message><![CDATA[update:]]></message>
+				<task name="exec">
+					<message><![CDATA[C:\dev\ccnet\tools\cvs.exe -q update -P -d]]></message>
+					<message><![CDATA[U ccnet.build
+					? ccnet
+					? currentbuild.txt
+					? log.xml
+					? logs
+					? tools/nant/NAnt.Contrib.Tasks.dll
+					? tools/nant/taskdef.Tasks.dll
+					]]></message>
+				</task>
+			</target>
+			<target name="build">
+				<message><![CDATA[build:]]></message>
+				<task name="nant">
+					<message><![CDATA[..\ccnet.build all acceptancetest]]></message>
+					<buildresults project="ccnet">
+						<message><![CDATA[            Buildfile: file:///C:/dev/ccnet/ccnet.build]]></message>
+						<task name="property" />
+						<task name="property" />
+						<task name="property" />
+						<task name="property" />
+						<task name="property" />
+						<task name="property" />
+						<task name="property" />
+						<task name="property" />
+						<task name="property" />
+						<task name="property" />
+						<task name="property" />
+						<task name="property" />
+						<task name="property" />
+						<task name="property" />
+						<target name="all">
+							<message><![CDATA[            all:]]></message>
+							<task name="call">
+								<target name="clean">
+									<message><![CDATA[            clean:]]></message>
+									<task name="delete">
+										<message><![CDATA[Deleting directory C:\dev\ccnet\build]]></message>
+									</task>
+								</target>
+							</task>
+							<task name="call">
+								<target name="init">
+									<message><![CDATA[            init:]]></message>
+									<task name="mkdir">
+										<message><![CDATA[Creating directory C:\dev\ccnet\build]]></message>
+									</task>
+								</target>
+								<target name="compile">
+									<message><![CDATA[            compile:]]></message>
+									<task name="call">
+										<target name="compile_core">
+											<message><![CDATA[            compile_core:]]></message>
+											<task name="csc">
+												<message><![CDATA[Compiling 72 files to C:\dev\ccnet\build\CCNetCore.dll]]></message>
+											</task>
+										</target>
+									</task>
+									<task name="call">
+										<target name="compile_web">
+											<message><![CDATA[            compile_web:]]></message>
+											<task name="csc">
+												<message><![CDATA[Compiling 4 files to C:\dev\ccnet\build\ccnet.dll]]></message>
+											</task>
+										</target>
+									</task>
+									<task name="call">
+										<target name="compile_console">
+											<message><![CDATA[            compile_console:]]></message>
+											<task name="csc">
+												<message><![CDATA[Compiling 3 files to C:\dev\ccnet\build\CruiseControl.exe]]></message>
+											</task>
+										</target>
+									</task>
+									<task name="call">
+										<target name="compile_acceptancetest">
+											<message><![CDATA[            compile_acceptancetest:]]></message>
+											<task name="csc">
+												<message><![CDATA[Compiling 8 files to C:\dev\ccnet\build\CCNetAcceptance.dll]]></message>
+											</task>
+										</target>
+									</task>
+								</target>
+								<target name="unittest">
+									<message><![CDATA[            unittest:]]></message>
+									<task name="copy">
+										<message><![CDATA[Copying 1 files to C:\dev\ccnet\build]]></message>
+									</task>
+									<task name="exec">
+										<message><![CDATA[tools/nunit-console\nunit-console.exe /assembly:build\CCNetCore.dll /xml:core.test.xml]]></message>
+										<message><![CDATA[C:\dev\ccnet>tools/nunit-console\nunit-console.exe /assembly:build\CCNetCore.dll /xml:core.test.xml]]></message>
+										<message><![CDATA[NUnit version 2.0.5
+                        Copyright (C) 2002 James W. Newkirk, Michael C. Two, Alexei A. Vorontsov.
+                        Copyright (C) 2000-2002 Philip Craig.
+                        All Rights Reserved.
+                        .........................................................Build event not triggered: going back to sleep
+                        0 modifications found since 1/1/0001 12:00:00 AM
+                        .............................................
+                        Tests run: 102, Failures: 0, Not run: 0, Time: 2.103024 seconds
+                        ]]></message>
+									</task>
+									<task name="exec">
+										<message><![CDATA[tools/nunit-console\nunit-console.exe /assembly:build\ccnet.dll /xml:web.test.xml]]></message>
+										<message><![CDATA[C:\dev\ccnet>tools/nunit-console\nunit-console.exe /assembly:build\ccnet.dll /xml:web.test.xml]]></message>
+										<message><![CDATA[NUnit version 2.0.5
+                        Copyright (C) 2002 James W. Newkirk, Michael C. Two, Alexei A. Vorontsov.
+                        Copyright (C) 2000-2002 Philip Craig.
+                        All Rights Reserved.
+                        .....
+                        Tests run: 5, Failures: 0, Not run: 0, Time: 1.1816992 seconds
+                        ]]></message>
+									</task>
+									<task name="exec">
+										<message><![CDATA[tools/nunit-console\nunit-console.exe /assembly:build\CruiseControl.exe /xml:console.test.xml]]></message><message><![CDATA[C:\dev\ccnet>tools/nunit-console\nunit-console.exe /assembly:build\CruiseControl.exe /xml:console.test.xml]]></message>
+										<message><![CDATA[NUnit version 2.0.5
+                        Copyright (C) 2002 James W. Newkirk, Michael C. Two, Alexei A. Vorontsov.
+                        Copyright (C) 2000-2002 Philip Craig.
+                        All Rights Reserved.
+                        ....CruiseControl [options]
+                        Options:
+                        -help            print this message
+                        -config:<file>   set the configuration file
+                          .
+                          Tests run: 5, Failures: 0, Not run: 0, Time: 0.701008 seconds
+                        ]]></message>
+									</task>
+								</target>
+							</task>
+							<task name="call">
+								<target name="deploy"><message><![CDATA[            deploy:]]></message>
+									<task name="call">
+										<target name="deploy_content">
+											<message><![CDATA[            deploy_content:]]></message>
+											<task name="copy" />
+											<task name="copy" />
+										</target>
+									</task>
+									<task name="copy">
+										<message><![CDATA[Copying 2 files to c:\inetpub\wwwroot\ccnet\bin]]></message>
+										<message><![CDATA[Copying C:\dev\ccnet\build\CCNetCore.dll to c:\inetpub\wwwroot\ccnet\bin\CCNetCore.dll]]></message>
+										<message><![CDATA[Copying C:\dev\ccnet\build\ccnet.dll to c:\inetpub\wwwroot\ccnet\bin\ccnet.dll]]></message>
+									</task>
+								</target>
+							</task>
+						</target>
+						<target name="acceptancetest">
+							<message><![CDATA[            acceptancetest:]]></message>
+							<task name="copy">
+								<message><![CDATA[Copying 1 files]]></message>
+							</task>
+							<task name="copy">
+								<message><![CDATA[Copying 1 files]]></message>
+							</task>
+							<task name="copy">
+								<message><![CDATA[Copying 1 files]]></message>
+							</task>
+							<task name="nunit">
+								<message><![CDATA[Running tw.ccnet.acceptance.AllTests]]></message>
+								<message><![CDATA[ERROR: VssTest.TestExecute]]></message>
+								<message><![CDATA[            C:\dev\ccnet\project\acceptance\core\VssTest.cs(32): The system cannot find the path specified]]></message>
+								<message><![CDATA[ERROR: VssTest.TestGetModifications]]></message>
+								<message><![CDATA[            C:\dev\ccnet\project\acceptance\core\VssTest.cs(44): No process is associated with this object.]]></message>
+								<message>
+                      <testsuite name="tw.ccnet.acceptance Tests" tests="14" time="72.474" errors="2" failures="0">
+                        <testcase name="TestExecuteCommand(tw.ccnet.acceptance.BuildRunnerTest)" classname="tw.ccnet.acceptance.BuildRunnerTest" time="0.110" />
+                        <testcase name="TestExecuteCommandWithInvalidFile(tw.ccnet.acceptance.BuildRunnerTest)" classname="tw.ccnet.acceptance.BuildRunnerTest" time="0.000" />
+                        <testcase name="TestBuildSucceed(tw.ccnet.acceptance.BuildRunnerTest)" classname="tw.ccnet.acceptance.BuildRunnerTest" time="0.013" />
+                        <testcase name="TestBuildFailed(tw.ccnet.acceptance.BuildRunnerTest)" classname="tw.ccnet.acceptance.BuildRunnerTest" time="0.073" />
+                        <testcase name="TestBuildWithInvalidBuildFile(tw.ccnet.acceptance.BuildRunnerTest)" classname="tw.ccnet.acceptance.BuildRunnerTest" time="0.140" />
+                        <testcase name="TestExecute(tw.ccnet.acceptance.CvsTest)" classname="tw.ccnet.acceptance.CvsTest" time="0.482" />
+                        <testcase name="TestGetModifications(tw.ccnet.acceptance.CvsTest)" classname="tw.ccnet.acceptance.CvsTest" time="0.113" />
+                        <testcase name="TestEmailGateway(tw.ccnet.acceptance.EmailTest)" classname="tw.ccnet.acceptance.EmailTest" time="0.590" />
+                        <testcase name="TestEmailPublisher(tw.ccnet.acceptance.EmailTest)" classname="tw.ccnet.acceptance.EmailTest" time="0.350" />
+                        <testcase name="TestExecute(tw.ccnet.acceptance.VssTest)" classname="tw.ccnet.acceptance.VssTest" time="0.040">
+                          <error message="The system cannot find the path specified" type="System.ComponentModel.Win32Exception">   at System.Diagnostics.Process.StartWithCreateProcess(ProcessStartInfo startInfo)
+                            at System.Diagnostics.Process.Start()
+                          at tw.ccnet.acceptance.VssTest.TestExecute() in C:\dev\ccnet\project\acceptance\core\VssTest.cs:line 32</error>
+                        </testcase>
+                        <testcase name="TestGetModifications(tw.ccnet.acceptance.VssTest)" classname="tw.ccnet.acceptance.VssTest" time="0.010">
+                          <error message="No process is associated with this object." type="System.InvalidOperationException">   at System.Diagnostics.Process.EnsureState(State state)
+                            at System.Diagnostics.Process.EnsureState(State state)
+                            at System.Diagnostics.Process.GetProcessHandle(Int32 access, Boolean throwIfExited)
+                            at System.Diagnostics.Process.WaitForExit(Int32 milliseconds)
+                            at tw.ccnet.core.sourcecontrol.ProcessSourceControl.GetModifications(DateTime from, DateTime to)
+                          at tw.ccnet.acceptance.VssTest.TestGetModifications() in C:\dev\ccnet\project\acceptance\core\VssTest.cs:line 44</error>
+                        </testcase>
+                        <testcase name="TestPage(tw.ccnet.acceptance.DefaultTest)" classname="tw.ccnet.acceptance.DefaultTest" time="0.540" />
+                        <testcase name="TestError(tw.ccnet.acceptance.NUnitTest)" classname="tw.ccnet.acceptance.NUnitTest" time="0.000" />
+                        <testcase name="TestPassPlease(tw.ccnet.acceptance.NUnitTest)" classname="tw.ccnet.acceptance.NUnitTest" time="0.000" />
+                  </testsuite>
+								</message>
+								<message><![CDATA[14 tests: FAILURES: 0 ERRORS: 2]]></message></task></target><message><![CDATA[            BUILD FAILED
+                  ]]></message><message><![CDATA[            C:\dev\ccnet\ccnet.build(138,6): Unit test failed, see build log.
+            ]]></message></buildresults></task></target><message><![CDATA[BUILD FAILED
+            ]]></message><message><![CDATA[Nested build failed.  Refer to build log for exact reason.
+      ]]></message></buildresults>Try 'nant -help' for more information
+  </build></cruisecontrol>

@@ -1,0 +1,42 @@
+<html>
+<head>
+  <title>CruiseControl.NET build process</title>
+  <link type="text/css" rel="stylesheet" href="cruisecontrol.css"/>
+</head>
+<body>
+	<div style="float:right"><img src="images/ccnet_logo_onwhite.gif"/></div>
+	<h2 style="color:#33F">CruiseControl.NET build process</h2>
+	<p/>
+	<h3>Steps:</h3>
+	<ol>
+		<li>Initiate/Init/Setup/Start/PreBuild</li>
+		<li>RunBuild/Build</li>
+		<li>Finish/TearDown/PostBuild</li>
+	</ol>
+
+	<h3>PreBuild</h3>
+	<ol>
+		<li>Load previous BuildResult from BuildHistory, if not previously loaded.
+		a) if no previous build -> set to empty build result
+		b) if last build is null -> load recent build
+		c) if current build is not null -> last build = current build
+		</li>
+		<li>Create Build Result</li>
+		<li>Label Build - generate new label from previous BuildResult</li>
+	</ol>
+
+	<h3>Build</h3>
+	<ol>
+		<li>BuildResult.Start()</li>
+		<li>Get Modifications from Source Control - from last modification date from previous BuildResult</li>
+		<li>Execute Builder</li>
+		<li>BuildResult.End()</li>
+	</ol>
+
+	<h3>PostBuild</h3>
+	<ol>
+		<li>Send BuildEvent notification</li>
+		<li>Save BuildResult to BuildHistory</li>
+	</ol>
+</body>
+</html>

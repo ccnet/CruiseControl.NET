@@ -1,0 +1,156 @@
+<html>
+<head>
+  <title>Configuring CruiseControl.NET</title>
+  <link type="text/css" rel="stylesheet" href="cruisecontrol.css"/>
+</head>
+<body>
+	<a name="top"/>
+	<div style="float:right"><img src="images/ccnet_logo_onwhite.gif"/></div>
+	<h2 style="color:#33F">The ccnet.config file</h2>
+	<p/>
+	<h3>Major sections of the ccnet.config file</h3>
+	<ul>
+	  <li><a href="#project">project</a></li>
+	  <li><a href="#sourcecontrol">sourcecontrol</a></li>
+  	  <li><a href="#build">build</a></li>
+	  <li><a href="#publishers">publishers</a></li>
+	  <li><a href="#modificationdelay">modificationDelay</a></li>
+	  <li><a href="#sleeptime">sleepTime</a></li>
+	  <li><a href="#history">history</a></li>
+	</ul>
+
+	<h3><a name="project">project</a></h3>
+	The project tag contains all of the information about a certain project. It is a wrapper for every other element defined in this document. Project has one attribute. A name.
+	<p/>
+	<a href="#top">back to top</a>
+	<h3><a name="sourcecontrol">sourcecontrol</a></h3>
+	The source control element tells Cruise Control.NET what source control system to use and where to look for the repository. Currently Cruise Control.NET supports <a href="#CVS">CVS</a>, <a href="#p4">Perforce</a>, <a href="#pvcs">PVCS</a>, <a href="#starteam">StarTeam</a>, and <a href="#vss">Visual Source Safe</a>. You tell Cruise Control.NET which source code control provider to use by setting the mandatory type attribute of the source control element.
+	<h4><a name="CVS">CVS</a></h4>
+	For cvs you must define where the cvs executable is and the working directory for checked out code. You may optionally specify the cvsroot.<p/>
+	<pre>
+&lt;sourcecontrol type="cvs"&gt;
+   &lt;executable&gt;..\tools\cvs.exe&lt;/executable&gt;
+   &lt;workingDirectory&gt;c:\projects\ccnet&lt;/workingDirectory&gt;
+   &lt;cvsroot&gt;ccnet&lt;/cvsroot&gt;
+&lt;/sourcecontrol&gt;
+    </pre>
+    <p/>
+    <a href="#top">back to top</a>
+	<h4><a name="p4">Perforce</a></h4>
+    <p>For Perforce you must specify at least the <i>view</i> of the region of your repository
+    you want to check for changes. E.g., if your project is located at
+    '//projects/MyProject', you would specify '//projects/MyProject/...' as the view to
+    check for activity. </p>
+    <p>You may optionally specify the location of the p4.exe <i>executable</i>. If you do not specify it then the default p4.exe will be used and it must be on your path.</p>
+    <p>You may also specify any of the Perforce <i>client</i>, <i>user</i> and <i>port</i> (ie 'host:port' in Perforce standards) settings to use to use. If you don't specify them,
+    then Cruise Control .NET will use the defaults in your registry (use 'p4 set' to view
+    and edit these.) NB: If you use a user with a <b>non-empty</b> password, you must use the user
+    specified in the registry, and its password must be set in the registry too. This is done
+    whenever you use 'P4Win' and tell it to remember your password.</p>
+	<pre>
+&lt;sourcecontrol type="p4"&gt;
+   &lt;executable&gt;c:\perforce\p4.exe&lt;/executable&gt;
+   &lt;view&gt;//projects/ccnet/...&lt;/view&gt;
+   &lt;client&gt;ccnet-buildhost&lt;/client&gt;
+   &lt;user&gt;public&lt;/user&gt;
+   &lt;port&gt;perforce01.thoughtworks.net:1666&lt;/port&gt;
+&lt;/sourcecontrol&gt;
+	</pre>
+    <a href="#top">back to top</a>
+	<h4><a name="pvcs">PVCS</a></h4>
+	For pvcs you must specify the executable, project and subproject. You may also specify arguments and instructions.<p/>
+	<pre>
+&lt;sourcecontrol type="p4"&gt;
+   &lt;executable&gt;c:\pvcs\pvcs.exe&lt;/executable&gt;
+   &lt;project&gt;ccnet&lt;/project&gt;
+   &lt;subproject&gt;ccnet1.0&lt;/subproject&gt;
+   &lt;arguments&gt;buildguy&lt;/arguments&gt;
+   &lt;instructions&gt;42&lt;/instructions&gt;
+&lt;/sourcecontrol&gt;
+	</pre
+    <p/>
+    <a href="#top">back to top</a>
+	<h4><a name="starteam">StarTeam</a></h4>
+	For StarTeam you must specify the executable, project, username and password. You may also specify the host, port and path. The host defaults to 127.0.0.1. The port to 49201. The path to the empty string.<p/>
+	<pre>
+&lt;sourcecontrol type="starteam"&gt;
+   &lt;executable&gt;c:\starteam\stcmd.exe&lt;/executable&gt;
+   &lt;project&gt;ccnet&lt;/project&gt;
+   &lt;username&gt;buildguy&lt;/username&gt;
+   &lt;password&gt;buildguyrocks&lt;/password&gt;
+   &lt;host&gt;thebuildmachine&lt;/host&gt;
+   &lt;port&gt;49201&lt;/portt&gt;
+   &lt;path&gt;release2.0&lt;/path&gt;
+&lt;/sourcecontrol&gt;
+    </pre>
+    <a href="#top">back to top</a>
+	<h4><a name="vss">Visual Source Safe</a></h4>
+	For Visual Source Safe you must specify the executable, project, username and password. You may also specify the SSDIR. If SSDIR is not set the default or the SSDIR environment variable will be used.<p/>
+	<pre>
+&lt;sourcecontrol type="vss"&gt;
+   &lt;!-- you have to put quotes around this because of the spaces in the path --&gt;
+   &lt;executable&gt;"C:\Program Files\Microsoft Visual Studio\VSS\win32\SS.EXE"&lt;/executable&gt;
+   &lt;project&gt;$/CCNET&lt;/project&gt;
+   &lt;username&gt;buildguy&lt;/username&gt;
+   &lt;password&gt;buildguyrocks&lt;/password&gt;
+   &lt;ssdir&gt;c:\repos\&lt;/ssdir&gt;
+&lt;/sourcecontrol&gt;
+    </pre>
+	<a href="#top">back to top</a>
+	<h3><a name="build">build</a></h3>
+	The build element tells CruiseControl.NET how to actually do a build when changes are detected. The type attribute of the build element is required. Right now only NAnt is supported. You must set the executable, baseDirectory, and buildFile. The executable tells CruiseControl.NET how to find nant.exe. The baseDirectory element contains the directory from which nant is executed. Typically this is the directory containing the build file. The buildFile element contains the name of the nant file to run. You may also specify a targetList. If ommitted the default target in you nant file is used. You can specify arguments to pass to the nant.exe by including a buildArgs element. The buildTimeout element may be set to indicate the maximum amount of time in milliseconds CruiseControl.NET should wait for the build to finish. The default is 60000 or 1 minute. For most builds that isn't very long.<p/>
+	<pre>
+&lt;build type="nant"&gt;
+   &lt;executable&gt;..\tools\nant\NAnt.exe&lt;/executable&gt;
+   &lt;baseDirectory&gt;..&lt;/baseDirectory&gt;
+   &lt;buildFile&gt;cruise.build&lt;/buildFile&gt;
+   &lt;targetList&gt;
+      &lt;target&gt;run&lt;/target&gt;
+   &lt;/targetList&gt;
+   &lt;buildTimeout&gt;300000&lt;/buildTimeout&gt;
+   &lt;buildArgs&gt;"-Dfoo=bar"&lt;/buildArgs&gt;
+&lt;/build&gt;
+	</pre>
+	<a href="#top">back to top</a>
+	<h3><a name="publishers">publishers</a></h3>
+	A publisher is anything that runs after the build has been run. CruiseControl.NET defines two publishers <a href="#email">email</a> and <a href="#xmllogger">xmllogger</a>.
+	<p/>
+	<a href="#top">back to top</a>
+	<h4><a name="email">email</a></h4>
+	The email publisher can be used to send email to any number of users. It is common to include one user who gets an email for every build and then also send email to every developer who checked code in for this build. The email element has an attribute for the from address for all email that is sent out. An attribute for the mail server. And an attribute to indicate if the details of the build result should be included in the email. Inside the email element you must include an element for the project url. A list of individual users must be placed inside the users element. Each user has to have a name attribute that corresponds to their user name in the source control repository. Users also must belong to a group and have their email address specified. Group definitions are contained in the groups element. Each group definition has a name and a notification type. There are two notification types. Setting the notification to always means that anyone in that group will get notified of every build whether they checked in or not. A notification type of change means that anyone in that group will only get notified if they checked in code that is in this build.<p/>
+	<pre>
+&lt;email from="buildmaster@somecompany.com" mailhost="yourmailhost.com" includeDetails="true"&gt;
+   &lt;projectUrl&gt;http://buildmachine/myproject&lt;/projectUrl&gt;
+   &lt;users&gt;
+      &lt;user name="buildmaster" group="buildmaster" address="buildmaster@yourcompany.com"/&gt;
+      &lt;user name="Frank" group="developers" address="[DEVELOPER@YOURCOMPANY.COM]"/&gt;
+   &lt;/users&gt;
+   &lt;groups&gt;
+      &lt;group name="developers" notification="change"/&gt;
+      &lt;group name="buildmaster" notification="always"/&gt;
+   &lt;/groups&gt;
+&lt;/email&gt;
+	</pre>
+	<p/>
+	<a href="#top">back to top</a>
+	<h4><a name="xmllogger">xmllogger</a></h4>
+	The xmllogger publisher is used to create the log files read by the CruiseControl.NET web page. So without the xmllogger the web page will not function. All that is needed is a directory to store log files in. This directory must exist before Cruise Control.NET is run.<p/>
+	&lt;xmllogger&gt;<br/>
+	&lt;logDir&gt;C:\myproject\cclogs&lt;/logDir&gt;<br/>
+    &lt;/xmllogger&gt;<br/>
+	<p/>
+	<h3><a name="modificationdelay">modificationDelay</a></h3>
+	The minimum number of milliseconds between the last check in and the start of the build. If any modifications are found within this interval the system will sleep long enough so the last checkin is just outside this interval. For example if the modification delay is set to 10000 (10 seconds) and the last checkin was 7 seconds ago the system will sleep for 3 seconds and check again. This process will repeat until no modifications have been found within the modification delay window.<p/>
+	&lt;modificationDelay&gt;20000&lt;/modificationDelay&gt;<br/>
+	<p/>
+	<a href="#top">back to top</a>
+	<h3><a name="sleeptime">sleepTime</a></h3>
+	The number of milliseconds between the end of the last build and the start of the next build.</p>
+	&lt;sleepTime&gt;20000&lt;/sleepTime&gt;<br/>
+	<p/>
+	<h3><a name="history">history</a></h3>
+	Cruise Control.NET keeps a build history that is independent from the build logs saved by the xmllogger. It is important to store the history files in a different directory than the build logs. Currently only storage of history using xml is supported. The type of the history element must be set to "xmlhistory". The "historyDir" attribute is also required.</p>
+	&lt;history type="xmlhistory" historyDir="c:\myproject\cchistory"/&gt;<br/>
+	<a href="#top">back to top</a>
+</body>
+</html>

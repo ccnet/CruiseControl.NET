@@ -1,0 +1,45 @@
+<html>
+<head>
+  <title>NAnt and CruiseControl.NET</title>
+  <link type="text/css" rel="stylesheet" href="cruisecontrol.css"/>
+</head>
+<body>
+	<a name="top"/>
+	<div style="float:right"><img src="images/ccnet_logo_onwhite.gif"/></div>
+	<h2 style="color:#33F">Setting up a NAnt build file for use with CruiseControl.NET</h2>
+	<p/>
+	<h3>Source Control and NAnt</h3>
+	While CruiseControl.NET will detect modifications for you it will not check out changes. It is up to you to add targets to your nant script to do that for you.
+	<h3>NUnit and NAnt</h3>
+	CruiseControl.NET uses xsl to process the build log and produce html for display on the web page. Since xml is so easy to parse the nunit2 task in NAnt can produce xml output. The tasks must be configured to do that in order for test results to show up on the web page. Typically this is done by adding a formatter element to the nunit2 task and setting the type to be "Xml". Additionally the usefile flag of the formatter element must be set to "false". If it isn't the nunit2 task will try and save the output to a file and not write it out to the build log.<br/>
+	<p/>
+	<pre>
+&lt;target name="test.unit" depends="compile" description="runs unit tests"&gt;
+	&lt;nunit2&gt;
+		&lt;formatter type="Xml" usefile="false"/&gt;
+		&lt;test assemblyname="${build.dir}\${core.dll}" fork="true"/&gt;
+		&lt;test assemblyname="${build.dir}\${console.exe}" fork="true"/&gt;
+	&lt;/nunit2&gt;
+&lt;/target&gt;
+  </pre>
+  <p/>
+  It would be pretty tedious for developers to read the xml output when they run the build locally. Define a property for the build output type and set it to "Plain" and use the property in the formatter element..<br/>
+  <p/>
+  <pre>
+&lt;property name="outputType" value="Plain"/&gt;
+	...
+	&lt;formatter type="${outputType}" usefile="false"/&gt;
+	...
+	</pre>
+  <p/>
+  Then in the build section of the ccnet.config file pass in a different value for outputType.<br/>
+  <p/>
+  <pre>
+&lt;build type="nant"&gt;
+	...
+	&lt;buildArgs&gt;"-DoutputType=Xml"&lt;/buildArgs&gt;
+	...
+&lt;/build&gt;
+    </pre>
+</body>
+</html>

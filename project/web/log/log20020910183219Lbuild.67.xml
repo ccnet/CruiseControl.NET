@@ -1,0 +1,15 @@
+﻿<cruisecontrol>
+<info />
+<modifications />
+<build>
+<buildresults project="ccnet">
+<target name="nunit.test">
+    [nunit] Running tw.ccnet.acceptance.NUnitTest
+<testsuite name="tw.ccnet.acceptance.NUnitTest" tests="2" time="0.020" errors="0" failures="0">
+  <testcase name="TestError(tw.ccnet.acceptance.NUnitTest)" classname="tw.ccnet.acceptance.NUnitTest" time="0.010" />
+  <testcase name="TestPassPlease(tw.ccnet.acceptance.NUnitTest)" classname="tw.ccnet.acceptance.NUnitTest" time="0.000" />
+</testsuite>    [nunit] 2 tests: ALL SUCCESSFUL
+</target>
+</buildresults>
+</build>
+</cruisecontrol>
