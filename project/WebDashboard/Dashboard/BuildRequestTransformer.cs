@@ -5,7 +5,7 @@ using ThoughtWorks.CruiseControl.WebDashboard.IO;
 
 namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 {
-	public class BuildRequestTransformer : IRequestTransformer
+	public class BuildRequestTransformer : IBuildLogTransformer
 	{
 		private readonly IMultiTransformer transformer;
 		private readonly IBuildRetriever buildRetriever;
@@ -16,9 +16,9 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 			this.transformer = transformer;
 		}
 
-		public Control Transform(ICruiseRequest cruiseRequest, params string[] transformerFileNames)
+		public Control Transform(IBuildSpecifier buildSpecifier, params string[] transformerFileNames)
 		{
-			string log = buildRetriever.GetBuild(cruiseRequest.ServerName, cruiseRequest.ProjectName, cruiseRequest.BuildName).Log;
+			string log = buildRetriever.GetBuild(buildSpecifier).Log;
 			HtmlGenericControl control = new HtmlGenericControl("div");
 			control.InnerHtml = transformer.Transform(log, transformerFileNames);
 			return control;

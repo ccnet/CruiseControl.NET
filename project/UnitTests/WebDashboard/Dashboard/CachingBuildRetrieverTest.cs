@@ -17,6 +17,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 		private string logContent;
 		private string buildName;
 		private string logLocation;
+		private DefaultBuildSpecifier buildSpecifier;
+		private IProjectSpecifier projectSpecifier;
 
 		[SetUp]
 		public void Setup()
@@ -30,6 +32,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 			serverName = "my Server";
 			projectName = "my Project";
 			buildName = "myBuild";
+			projectSpecifier = new DefaultProjectSpecifier(new DefaultServerSpecifier(serverName), projectName);
+			buildSpecifier = new DefaultBuildSpecifier(projectSpecifier, buildName);
 			logContent = "log Content";
 			logLocation = "http://somewhere/mylog";
 		}
@@ -37,18 +41,16 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 		[Test]
 		public void ReturnsBuildAndPutsItInCacheIfNotAlreadyThere()
 		{
-			cruiseManagerWrapperMock.ExpectAndReturn("GetLog", logContent, serverName, projectName, buildName);
+			cruiseManagerWrapperMock.ExpectAndReturn("GetLog", logContent, buildSpecifier);
 
-			cacheManagerMock.ExpectAndReturn("GetContent", null, serverName, projectName, CachingBuildRetriever.CacheDirectory, buildName);
-			cacheManagerMock.Expect("AddContent", serverName, projectName, CachingBuildRetriever.CacheDirectory, buildName, logContent);
-			cacheManagerMock.ExpectAndReturn("GetContent", logContent, serverName, projectName, CachingBuildRetriever.CacheDirectory, buildName);
-			cacheManagerMock.ExpectAndReturn("GetURLForFile", logLocation, serverName, projectName, CachingBuildRetriever.CacheDirectory, buildName);
+			cacheManagerMock.ExpectAndReturn("GetContent", null, projectSpecifier, CachingBuildRetriever.CacheDirectory, buildName);
+			cacheManagerMock.Expect("AddContent", projectSpecifier, CachingBuildRetriever.CacheDirectory, buildName, logContent);
+			cacheManagerMock.ExpectAndReturn("GetContent", logContent, projectSpecifier, CachingBuildRetriever.CacheDirectory, buildName);
+			cacheManagerMock.ExpectAndReturn("GetURLForFile", logLocation, projectSpecifier, CachingBuildRetriever.CacheDirectory, buildName);
 
-			Build returnedBuild = cachingBuildRetriever.GetBuild(serverName, projectName, buildName);
-			Assert.AreEqual(buildName, returnedBuild.Name);
+			Build returnedBuild = cachingBuildRetriever.GetBuild(buildSpecifier);
+			Assert.AreEqual(buildSpecifier, returnedBuild.BuildSpecifier);
 			Assert.AreEqual(logContent, returnedBuild.Log);
-			Assert.AreEqual(serverName, returnedBuild.ServerName);
-			Assert.AreEqual(projectName, returnedBuild.ProjectName);
 			Assert.AreEqual(logLocation, returnedBuild.BuildLogLocation);
 
 			VerifyAll();
@@ -57,18 +59,16 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 		[Test]
 		public void IfBuildInCacheThenDoesntGetLogContentFromCruiseServer()
 		{
-			cruiseManagerWrapperMock.ExpectNoCall("GetLog", typeof(string), typeof(string), typeof(string));
+			cruiseManagerWrapperMock.ExpectNoCall("GetLog", typeof(IBuildSpecifier));
 
-			cacheManagerMock.ExpectAndReturn("GetContent", logContent, serverName, projectName, CachingBuildRetriever.CacheDirectory, buildName);
-			cacheManagerMock.ExpectAndReturn("GetContent", logContent, serverName, projectName, CachingBuildRetriever.CacheDirectory, buildName);
-			cacheManagerMock.ExpectNoCall("AddContent",typeof(string), typeof(string), typeof(string), typeof(string), typeof(string));
-			cacheManagerMock.ExpectAndReturn("GetURLForFile", logLocation, serverName, projectName, CachingBuildRetriever.CacheDirectory, buildName);
+			cacheManagerMock.ExpectAndReturn("GetContent", logContent, projectSpecifier, CachingBuildRetriever.CacheDirectory, buildName);
+			cacheManagerMock.ExpectAndReturn("GetContent", logContent, projectSpecifier, CachingBuildRetriever.CacheDirectory, buildName);
+			cacheManagerMock.ExpectNoCall("AddContent", typeof(IProjectSpecifier), typeof(string), typeof(string), typeof(string));
+			cacheManagerMock.ExpectAndReturn("GetURLForFile", logLocation, projectSpecifier, CachingBuildRetriever.CacheDirectory, buildName);
 
-			Build returnedBuild = cachingBuildRetriever.GetBuild(serverName, projectName, buildName);
-			Assert.AreEqual(buildName, returnedBuild.Name);
+			Build returnedBuild = cachingBuildRetriever.GetBuild(buildSpecifier);
+			Assert.AreEqual(buildSpecifier, returnedBuild.BuildSpecifier);
 			Assert.AreEqual(logContent, returnedBuild.Log);
-			Assert.AreEqual(serverName, returnedBuild.ServerName);
-			Assert.AreEqual(projectName, returnedBuild.ProjectName);
 			Assert.AreEqual(logLocation, returnedBuild.BuildLogLocation);
 
 			VerifyAll();

@@ -4,16 +4,16 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 {
 	public class UnknownBuildException : CruiseControlException
 	{
-		private readonly Build build;
+		private readonly IBuildSpecifier buildSpecifier;
 
-		public UnknownBuildException(Build build) : base()
+		public UnknownBuildException(IBuildSpecifier buildSpecifier) : base()
 		{
-			this.build = build;
+			this.buildSpecifier = buildSpecifier;
 		}
 
-		public Build Build
+		public IBuildSpecifier BuildSpecifier
 		{
-			get { return build; }
+			get { return buildSpecifier; }
 		}
 	}
 }

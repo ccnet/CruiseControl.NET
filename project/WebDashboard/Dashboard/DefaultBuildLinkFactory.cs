@@ -9,9 +9,9 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 			this.urlBuilder = urlBuilder;
 		}
 
-		public IAbsoluteLink CreateBuildLink(string serverName, string projectName, string buildName, string description, IActionSpecifier actionSpecifier)
+		public IAbsoluteLink CreateBuildLink(IBuildSpecifier buildSpecifier, string description, IActionSpecifier actionSpecifier)
 		{
-			return new BuildLink(urlBuilder, serverName, projectName, buildName, description, actionSpecifier);
+			return new BuildLink(urlBuilder, buildSpecifier, description, actionSpecifier);
 		}
 	}
 }

@@ -16,22 +16,22 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 			this.cruiseManagerWrapper = cruiseManagerWrapper;
 		}
 
-		public Build GetBuild(string serverName, string projectName, string buildName)
+		public Build GetBuild(IBuildSpecifier buildSpecifier)
 		{
-			PutLogInCacheIfNecessary(serverName, projectName, buildName);
+			PutLogInCacheIfNecessary(buildSpecifier);
 
-			string buildLog = cacheManager.GetContent(serverName, projectName, CacheDirectory, buildName);
-			string buildLogLocation = cacheManager.GetURLForFile(serverName, projectName, CacheDirectory, buildName);
+			string buildLog = cacheManager.GetContent(buildSpecifier.ProjectSpecifier, CacheDirectory, buildSpecifier.BuildName);
+			string buildLogLocation = cacheManager.GetURLForFile(buildSpecifier.ProjectSpecifier, CacheDirectory, buildSpecifier.BuildName);
 
-			return new Build(buildName, buildLog, serverName, projectName, buildLogLocation);
+			return new Build(buildSpecifier, buildLog, buildLogLocation);
 		}
 
-		private void PutLogInCacheIfNecessary(string serverName, string projectName, string buildName)
+		private void PutLogInCacheIfNecessary(IBuildSpecifier buildSpecifier)
 		{
-			if (cacheManager.GetContent(serverName, projectName, CacheDirectory, buildName) == null)
+			if (cacheManager.GetContent(buildSpecifier.ProjectSpecifier, CacheDirectory, buildSpecifier.BuildName) == null)
 			{
-				string log = cruiseManagerWrapper.GetLog(serverName, projectName, buildName);
-				cacheManager.AddContent(serverName, projectName, CacheDirectory, buildName, log);
+				string log = cruiseManagerWrapper.GetLog(buildSpecifier);
+				cacheManager.AddContent(buildSpecifier.ProjectSpecifier, CacheDirectory, buildSpecifier.BuildName, log);
 			}
 		}
 	}

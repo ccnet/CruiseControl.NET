@@ -1,4 +1,5 @@
 using System.Web.UI;
+using ThoughtWorks.CruiseControl.WebDashboard.Dashboard;
 using ThoughtWorks.CruiseControl.WebDashboard.IO;
 using ThoughtWorks.CruiseControl.WebDashboard.MVC.Cruise;
 
@@ -17,12 +18,12 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.DeleteProject
 
 		public Control Execute(ICruiseRequest request)
 		{
-			return viewBuilder.BuildView(BuildModel(request.ServerName, request.ProjectName));
+			return viewBuilder.BuildView(BuildModel(request.ProjectSpecifier));
 		}
 
-		private DeleteProjectModel BuildModel(string serverName, string projectName)
+		private DeleteProjectModel BuildModel(IProjectSpecifier projectSpecifier)
 		{
-			return new DeleteProjectModel(serverName, projectName, string.Format("Please confirm you want to delete {0}, and choose which extra delete actions you want to perform", projectName), true, true, true, true);
+			return new DeleteProjectModel(projectSpecifier, string.Format("Please confirm you want to delete {0}, and choose which extra delete actions you want to perform", projectSpecifier.ProjectName), true, true, true, true);
 		}
 	}
 }

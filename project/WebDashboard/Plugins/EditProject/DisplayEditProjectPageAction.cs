@@ -1,5 +1,6 @@
 using System.Web.UI;
 using ThoughtWorks.CruiseControl.Core;
+using ThoughtWorks.CruiseControl.WebDashboard.Dashboard;
 using ThoughtWorks.CruiseControl.WebDashboard.IO;
 using ThoughtWorks.CruiseControl.WebDashboard.MVC.Cruise;
 using ThoughtWorks.CruiseControl.WebDashboard.Plugins.AddProject;
@@ -30,8 +31,8 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.EditProject
 			AddEditProjectModel model = null;
 			if (request.Request.GetText("Project.SourceControl") == null || request.Request.GetText("Project.SourceControl") == string.Empty)
 			{
-				Project project = serializer.Deserialize(cruiseManagerWrapper.GetProject(request.ServerName, request.ProjectName));
-				model = new AddEditProjectModel(project, request.ServerName, new string[0]);
+				Project project = serializer.Deserialize(cruiseManagerWrapper.GetProject(request.ProjectSpecifier));
+				model = new AddEditProjectModel(project, request.ServerName, new IServerSpecifier[0]);
 			}
 			else
 			{

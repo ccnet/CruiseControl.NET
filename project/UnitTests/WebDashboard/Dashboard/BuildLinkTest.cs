@@ -11,6 +11,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 		private string serverName = "my server";
 		private string projectName = "my project";
 		private string buildName = "my build";
+		private IBuildSpecifier buildSpecifier;
 		private string description = "my description";
 		private BuildLink buildLink;
 		private ActionSpecifierWithName actionSpecifier = new ActionSpecifierWithName("my action");
@@ -18,8 +19,9 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 		[SetUp]
 		public void Setup()
 		{
+			buildSpecifier = new DefaultBuildSpecifier(new DefaultProjectSpecifier(new DefaultServerSpecifier(serverName), projectName), buildName);
 			urlBuilderMock = new DynamicMock(typeof(IUrlBuilder));
-			buildLink = new BuildLink((IUrlBuilder) urlBuilderMock.MockInstance, serverName, projectName, buildName, description, this.actionSpecifier);
+			buildLink = new BuildLink((IUrlBuilder) urlBuilderMock.MockInstance, buildSpecifier, description, this.actionSpecifier);
 		}
 
 		private void VerifyAll()
@@ -37,7 +39,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 		[Test]
 		public void ShouldReturnCalculatedAbsoluteUrl()
 		{
-			urlBuilderMock.ExpectAndReturn("BuildBuildUrl", "my absolute url", actionSpecifier, serverName, projectName, buildName);
+			urlBuilderMock.ExpectAndReturn("BuildBuildUrl", "my absolute url", actionSpecifier, buildSpecifier);
 			Assert.AreEqual("my absolute url", buildLink.AbsoluteURL);
 			VerifyAll();
 		}

@@ -47,49 +47,49 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 			return BuildUrl(relativeUrl) + queryString;
 		}
 
-		public string BuildServerUrl(string relativeUrl, string serverName)
+		public string BuildServerUrl(string relativeUrl, IServerSpecifier serverSpecifier)
 		{
-			return BuildUrl(relativeUrl, BuildServerQueryString(serverName));
+			return BuildUrl(relativeUrl, BuildServerQueryString(serverSpecifier));
 		}
 
-		public string BuildServerUrl(IActionSpecifier action, string serverName)
+		public string BuildServerUrl(IActionSpecifier action, IServerSpecifier serverSpecifier)
 		{
-			return BuildUrl(action, BuildServerQueryString(serverName));
+			return BuildUrl(action, BuildServerQueryString(serverSpecifier));
 		}
 
-		public string BuildProjectUrl(string relativeUrl, string serverName, string projectName)
+		public string BuildProjectUrl(string relativeUrl, IProjectSpecifier projectSpecifier)
 		{
-			return BuildUrl(relativeUrl, BuildProjectQueryString(serverName, projectName));
+			return BuildUrl(relativeUrl, BuildProjectQueryString(projectSpecifier));
 		}
 
-		public string BuildProjectUrl (IActionSpecifier action, string serverName, string projectName)
+		public string BuildProjectUrl(IActionSpecifier action, IProjectSpecifier projectSpecifier)
 		{
-			return BuildUrl(action, BuildProjectQueryString(serverName, projectName));
+			return BuildUrl(action, BuildProjectQueryString(projectSpecifier));
 		}
 
-		public string BuildBuildUrl(string relativeUrl, string serverName, string projectName, string buildName)
+		public string BuildBuildUrl(string relativeUrl, IBuildSpecifier buildSpecifier)
 		{
-			return BuildUrl(relativeUrl, BuildBuildQueryString(serverName, projectName, buildName));
+			return BuildUrl(relativeUrl, BuildBuildQueryString(buildSpecifier));
 		}
 
-		public string BuildBuildUrl(IActionSpecifier action, string serverName, string projectName, string buildName)
+		public string BuildBuildUrl(IActionSpecifier action, IBuildSpecifier buildSpecifier)
 		{
-			return BuildUrl(action, BuildBuildQueryString(serverName, projectName, buildName));
+			return BuildUrl(action, BuildBuildQueryString(buildSpecifier));
 		}
 
-		private string BuildServerQueryString(string serverName)
+		private string BuildServerQueryString(IServerSpecifier serverSpecifier)
 		{
-			return string.Format("{0}={1}", RequestWrappingCruiseRequest.ServerQueryStringParameter, serverName);
+			return string.Format("{0}={1}", RequestWrappingCruiseRequest.ServerQueryStringParameter, serverSpecifier.ServerName);
 		}
 
-		private string BuildProjectQueryString(string serverName, string projectName)
+		private string BuildProjectQueryString(IProjectSpecifier projectSpecifier)
 		{
-			return string.Format("{0}&{1}={2}",BuildServerQueryString(serverName), RequestWrappingCruiseRequest.ProjectQueryStringParameter, projectName);
+			return string.Format("{0}&{1}={2}",BuildServerQueryString(projectSpecifier.ServerSpecifier), RequestWrappingCruiseRequest.ProjectQueryStringParameter, projectSpecifier.ProjectName);
 		}
 
-		private string BuildBuildQueryString(string serverName, string projectName, string buildName)
+		private string BuildBuildQueryString(IBuildSpecifier buildSpecifier)
 		{
-			return string.Format("{0}&{1}={2}",BuildProjectQueryString(serverName, projectName), RequestWrappingCruiseRequest.BuildQueryStringParameter, buildName);
+			return string.Format("{0}&{1}={2}",BuildProjectQueryString(buildSpecifier.ProjectSpecifier), RequestWrappingCruiseRequest.BuildQueryStringParameter, buildSpecifier.BuildName);
 		}
 	}
 }

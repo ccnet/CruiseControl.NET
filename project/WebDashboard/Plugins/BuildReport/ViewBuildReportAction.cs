@@ -11,16 +11,16 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.BuildReport
 	{
 		public static readonly string ACTION_NAME = "ViewBuildReport";
 
-		private readonly IRequestTransformer requestTransformer;
+		private readonly IBuildLogTransformer buildLogTransformer;
 
-		public ViewBuildReportAction(IRequestTransformer requestTransformer)
+		public ViewBuildReportAction(IBuildLogTransformer buildLogTransformer)
 		{
-			this.requestTransformer = requestTransformer;
+			this.buildLogTransformer = buildLogTransformer;
 		}
 
 		public Control Execute (ICruiseRequest cruiseRequest)
 		{
-			return requestTransformer.Transform(cruiseRequest, (string[]) ((ArrayList) ConfigurationSettings.GetConfig("CCNet/xslFiles")).ToArray(typeof (string)));
+			return buildLogTransformer.Transform(cruiseRequest.BuildSpecifier, (string[]) ((ArrayList) ConfigurationSettings.GetConfig("CCNet/xslFiles")).ToArray(typeof (string)));
 		}
 	}
 }

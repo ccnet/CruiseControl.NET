@@ -5,6 +5,7 @@ using ThoughtWorks.CruiseControl.Core.Publishers;
 using ThoughtWorks.CruiseControl.Core.Sourcecontrol;
 using ThoughtWorks.CruiseControl.Core.Sourcecontrol.Perforce;
 using ThoughtWorks.CruiseControl.Core.Tasks;
+using ThoughtWorks.CruiseControl.WebDashboard.Dashboard;
 using ThoughtWorks.CruiseControl.WebDashboard.MVC;
 using ThoughtWorks.CruiseControl.WebDashboard.ServerConnection;
 
@@ -22,7 +23,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.AddProject
 		public AddEditProjectModel GenerateModel(IRequest request)
 		{
 			string selectedServerName = request.GetText("ServersDropDown");
-			string[] serverNames = cruiseManagerWrapper.GetServerNames();
+			IServerSpecifier[] serverSpecifiers = cruiseManagerWrapper.GetServerSpecifiers();
 
 			Project project = new Project();
 			project.Name = request.GetText("Project.Name");
@@ -36,7 +37,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.AddProject
 			project.Tasks = new ITask[] {mergeFilesTask};
 			project.Publishers = new IIntegrationCompletedEventHandler[] { new XmlLogPublisher() };
 
-			return new AddEditProjectModel(project, selectedServerName, serverNames);
+			return new AddEditProjectModel(project, selectedServerName, serverSpecifiers);
 		}
 
 		private IBuilder GenerateBuilder(IRequest request)

@@ -10,11 +10,11 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 		private readonly string actionName;
 		private readonly string description;
 		private readonly string xslFileName;
-		private readonly IRequestTransformer requestTransformer;
+		private readonly IBuildLogTransformer buildLogTransformer;
 
-		public XslReportBuildPlugin(IRequestTransformer requestTransformer, string xslFileName, string description, string actionName)
+		public XslReportBuildPlugin(IBuildLogTransformer buildLogTransformer, string xslFileName, string description, string actionName)
 		{
-			this.requestTransformer = requestTransformer;
+			this.buildLogTransformer = buildLogTransformer;
 			this.xslFileName = xslFileName;
 			this.description = description;
 			this.actionName = actionName;
@@ -22,7 +22,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 
 		public Control Execute (ICruiseRequest cruiseRequest)
 		{
-			return requestTransformer.Transform(cruiseRequest, xslFileName);
+			return buildLogTransformer.Transform(cruiseRequest.BuildSpecifier, xslFileName);
 		}
 
 		public string Description

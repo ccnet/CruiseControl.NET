@@ -1,4 +1,5 @@
 using System.Web.UI;
+using ThoughtWorks.CruiseControl.WebDashboard.Dashboard;
 using ThoughtWorks.CruiseControl.WebDashboard.IO;
 using ThoughtWorks.CruiseControl.WebDashboard.MVC.Cruise;
 using ThoughtWorks.CruiseControl.WebDashboard.ServerConnection;
@@ -20,18 +21,17 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.DeleteProject
 
 		public Control Execute(ICruiseRequest request)
 		{
-			string serverName = request.ServerName;
-			string projectName = request.ProjectName;
+			IProjectSpecifier projectSpecifier = request.ProjectSpecifier;
 			bool purgeWorkingDirectory = request.Request.GetChecked("PurgeWorkingDirectory");
 			bool purgeArtifactDirectory = request.Request.GetChecked("PurgeArtifactDirectory");
 			bool purgeSourceControlEnvironment = request.Request.GetChecked("PurgeSourceControlEnvironment");
-			farmService.DeleteProject(serverName, projectName, purgeWorkingDirectory, purgeArtifactDirectory, purgeSourceControlEnvironment);
-			return viewBuilder.BuildView(BuildModel(serverName, projectName, purgeWorkingDirectory, purgeArtifactDirectory, purgeSourceControlEnvironment));
+			farmService.DeleteProject(projectSpecifier, purgeWorkingDirectory, purgeArtifactDirectory, purgeSourceControlEnvironment);
+			return viewBuilder.BuildView(BuildModel(projectSpecifier, purgeWorkingDirectory, purgeArtifactDirectory, purgeSourceControlEnvironment));
 		}
 
-		private DeleteProjectModel BuildModel(string serverName, string projectName, bool purgeWorkingDirectory, bool purgeArtifactDirectory, bool purgeSourceControlEnvironment)
+		private DeleteProjectModel BuildModel(IProjectSpecifier projectSpecifier, bool purgeWorkingDirectory, bool purgeArtifactDirectory, bool purgeSourceControlEnvironment)
 		{
-			return new DeleteProjectModel(serverName, projectName, string.Format("Project Deleted"), false, 
+			return new DeleteProjectModel(projectSpecifier, string.Format("Project Deleted"), false, 
 				purgeWorkingDirectory, purgeArtifactDirectory, purgeSourceControlEnvironment);
 		}
 	}

@@ -52,9 +52,11 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 		{
 			// Setup
 			HtmlTable actionsControl = new HtmlTable();
+			IServerSpecifier serverSpecifier = new DefaultServerSpecifier("myServer");
 			cruiseRequestWrapperMock.ExpectAndReturn("ServerName", "myServer");
 			cruiseRequestWrapperMock.ExpectAndReturn("ProjectName", "");
-			userRequestSpecificSideBarViewBuilderMock.ExpectAndReturn("GetServerSideBar", actionsControl, "myServer");
+			cruiseRequestWrapperMock.ExpectAndReturn("ServerSpecifier", serverSpecifier);
+			userRequestSpecificSideBarViewBuilderMock.ExpectAndReturn("GetServerSideBar", actionsControl, serverSpecifier);
 
 			// Execute
 			HtmlTable sidebarControl = sideBarViewBuilder.Execute();
@@ -69,10 +71,12 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 		{
 			// Setup
 			HtmlTable actionsControl = new HtmlTable();
+			IProjectSpecifier projectSpecifier = new DefaultProjectSpecifier(new DefaultServerSpecifier("myServer"), "myProject");
 			cruiseRequestWrapperMock.ExpectAndReturn("ServerName", "myServer");
 			cruiseRequestWrapperMock.ExpectAndReturn("ProjectName", "myProject");
 			cruiseRequestWrapperMock.ExpectAndReturn("BuildName", "");
-			userRequestSpecificSideBarViewBuilderMock.ExpectAndReturn("GetProjectSideBar", actionsControl, "myServer", "myProject");
+			cruiseRequestWrapperMock.ExpectAndReturn("ProjectSpecifier", projectSpecifier);
+			userRequestSpecificSideBarViewBuilderMock.ExpectAndReturn("GetProjectSideBar", actionsControl, projectSpecifier);
 
 			// Execute
 			HtmlTable sidebarControl = sideBarViewBuilder.Execute();
@@ -87,10 +91,12 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 		{
 			// Setup
 			HtmlTable actionsControl = new HtmlTable();
+			IBuildSpecifier buildSpecifier = new DefaultBuildSpecifier(new DefaultProjectSpecifier(new DefaultServerSpecifier("myServer"), "myProject"), "myBuild");
 			cruiseRequestWrapperMock.ExpectAndReturn("ServerName", "myServer");
 			cruiseRequestWrapperMock.ExpectAndReturn("ProjectName", "myProject");
 			cruiseRequestWrapperMock.ExpectAndReturn("BuildName", "myBuild");
-			userRequestSpecificSideBarViewBuilderMock.ExpectAndReturn("GetBuildSideBar", actionsControl, "myServer", "myProject", "myBuild");
+			cruiseRequestWrapperMock.ExpectAndReturn("BuildSpecifier", buildSpecifier);
+			userRequestSpecificSideBarViewBuilderMock.ExpectAndReturn("GetBuildSideBar", actionsControl, buildSpecifier);
 
 			// Execute
 			HtmlTable sidebarControl = sideBarViewBuilder.Execute();

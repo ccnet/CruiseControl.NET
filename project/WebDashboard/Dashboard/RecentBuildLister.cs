@@ -18,28 +18,28 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 			this.buildNameFormatter = buildNameFormatter;
 		}
 
-		public HtmlTable BuildRecentBuildsTable(string serverName, string projectName)
+		public HtmlTable BuildRecentBuildsTable(IProjectSpecifier projectSpecifier)
 		{
-			return BuildBuildsTable(serverName, projectName, farmService.GetMostRecentBuildNames(serverName, projectName, 10));
+			return BuildBuildsTable(farmService.GetMostRecentBuildSpecifiers(projectSpecifier, 10));
 		}
 
-		public HtmlTable BuildAllBuildsTable(string serverName, string projectName)
+		public HtmlTable BuildAllBuildsTable(IProjectSpecifier projectSpecifier)
 		{
-			HtmlTable table = BuildBuildsTable(serverName, projectName, farmService.GetBuildNames(serverName, projectName));
+			HtmlTable table = BuildBuildsTable(farmService.GetBuildSpecifiers(projectSpecifier));
 			table.Rows.Insert(0, TR(TD("&nbsp;")));
-			table.Rows.Insert(0, TR(TD(string.Format("<b>All builds for {0}</b>", projectName))));
+			table.Rows.Insert(0, TR(TD(string.Format("<b>All builds for {0}</b>", projectSpecifier.ProjectName))));
 			return table;
 		}
 
-		private HtmlTable BuildBuildsTable(string serverName, string projectName, string[] buildNames)
+		private HtmlTable BuildBuildsTable(IBuildSpecifier[] buildSpecifiers)
 		{
 			HtmlTable table = Table();
-			foreach (string name in buildNames)
+			foreach (IBuildSpecifier buildSpecifier in buildSpecifiers)
 			{
 				table.Rows.Add(TR(TD(A(
-					buildNameFormatter.GetPrettyBuildName(name), 
-					urlBuilder.BuildBuildUrl(new ActionSpecifierWithName(ViewBuildReportAction.ACTION_NAME),serverName, projectName, name),
-					buildNameFormatter.GetCssClassForBuildLink(name)
+					buildNameFormatter.GetPrettyBuildName(buildSpecifier), 
+					urlBuilder.BuildBuildUrl(new ActionSpecifierWithName(ViewBuildReportAction.ACTION_NAME), buildSpecifier),
+					buildNameFormatter.GetCssClassForBuildLink(buildSpecifier)
 					))));	
 			}
 			return table;

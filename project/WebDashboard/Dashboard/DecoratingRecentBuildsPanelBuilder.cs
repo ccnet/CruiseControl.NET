@@ -1,5 +1,4 @@
 using System.Web.UI.HtmlControls;
-using ThoughtWorks.CruiseControl.WebDashboard.MVC.Cruise;
 using ThoughtWorks.CruiseControl.WebDashboard.MVC.View;
 using ThoughtWorks.CruiseControl.WebDashboard.Plugins.ViewAllBuilds;
 
@@ -16,9 +15,9 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 			this.urlBuilder = urlBuilder;
 		}
 
-		public HtmlTable BuildRecentBuildsTable(string serverName, string projectName)
+		public HtmlTable BuildRecentBuildsTable(IProjectSpecifier projectSpecifier)
 		{
-			HtmlTable subTable = builderToDecorate.BuildRecentBuildsTable(serverName, projectName);
+			HtmlTable subTable = builderToDecorate.BuildRecentBuildsTable(projectSpecifier);
 			subTable.Attributes.Add("class", "RecentBuildsPanel");
 			subTable.Align = "center";
 			subTable.Width = "100%";
@@ -30,7 +29,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 			subTable.Rows.Add(TR(TD()));
 			subTable.Rows.Add(TR(
 				TD(A("Show All", 
-				     urlBuilder.BuildProjectUrl(new ActionSpecifierWithName(ViewAllBuildsAction.ACTION_NAME), serverName, projectName)))));
+				     urlBuilder.BuildProjectUrl(new ActionSpecifierWithName(ViewAllBuildsAction.ACTION_NAME), projectSpecifier)))));
 			return subTable;
 		}
 	}

@@ -1,3 +1,4 @@
+using System;
 using NMock;
 using NUnit.Framework;
 using ThoughtWorks.CruiseControl.WebDashboard.Dashboard;
@@ -8,38 +9,46 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 	[TestFixture]
 	public class CruiseManagerBuildNameRetrieverTest
 	{
-		private DynamicMock cruiseManagerMock;
+		private DynamicMock cruiseManagerWrapperMock;
 		private CruiseManagerBuildNameRetriever nameBuildRetriever;
 		private string serverName;
 		private string projectName;
 		private string buildName;
-		private string[] buildNames;
+		private IBuildSpecifier[] buildSpecifiers;
+		private DefaultBuildSpecifier buildSpecifier;
+		private DefaultProjectSpecifier projectSpecifier;
 
 		[SetUp]
 		public void Setup()
 		{
-			cruiseManagerMock = new DynamicMock(typeof(ICruiseManagerWrapper));
+			cruiseManagerWrapperMock = new DynamicMock(typeof(ICruiseManagerWrapper));
 
-			nameBuildRetriever = new CruiseManagerBuildNameRetriever((ICruiseManagerWrapper) cruiseManagerMock.MockInstance);
+			nameBuildRetriever = new CruiseManagerBuildNameRetriever((ICruiseManagerWrapper) cruiseManagerWrapperMock.MockInstance);
 
 			serverName = "my Server";
 			projectName = "my Project";
 			buildName = "myLogfile.xml";
-			buildNames = new string[] {"log3", "log2", "log1"};
+			projectSpecifier = new DefaultProjectSpecifier(new DefaultServerSpecifier(serverName), projectName);
+			buildSpecifier = new DefaultBuildSpecifier(this.projectSpecifier, buildName);
+			buildSpecifiers = new IBuildSpecifier[] {CreateBuildSpecifier("log3"), CreateBuildSpecifier("log2"), CreateBuildSpecifier("log1")};
+		}
 
+		private IBuildSpecifier CreateBuildSpecifier(string buildName)
+		{
+			return new DefaultBuildSpecifier(projectSpecifier, buildName);
 		}
 
 		private void VerifyAll()
 		{
-			cruiseManagerMock.Verify();
+			cruiseManagerWrapperMock.Verify();
 		}
 
 		[Test]
 		public void ReturnsNameOfLatestLog()
 		{
-			cruiseManagerMock.ExpectAndReturn("GetLatestBuildName", buildName, serverName, projectName);
+			cruiseManagerWrapperMock.ExpectAndReturn("GetLatestBuildSpecifier", buildSpecifier, projectSpecifier);
 
-			Assert.AreEqual(buildName, nameBuildRetriever.GetLatestBuildName(serverName, projectName));
+			Assert.AreEqual(buildSpecifier, nameBuildRetriever.GetLatestBuildSpecifier(projectSpecifier));
 
 			VerifyAll();
 		}
@@ -47,9 +56,9 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 		[Test]
 		public void NextBuildIsRequestedBuildIfNoneNewer()
 		{
-			cruiseManagerMock.ExpectAndReturn("GetBuildNames", buildNames, serverName, projectName);
+			cruiseManagerWrapperMock.ExpectAndReturn("GetBuildSpecifiers", buildSpecifiers, projectSpecifier);
 
-			Assert.AreEqual("log3", nameBuildRetriever.GetNextBuildName(serverName, projectName, "log3"));
+			Assert.AreEqual("log3", nameBuildRetriever.GetNextBuildSpecifier(new DefaultBuildSpecifier(projectSpecifier, "log3")).BuildName);
 
 			VerifyAll();
 		}
@@ -57,19 +66,19 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 		[Test]
 		public void NextBuildIsNextMostRecentBuildIfOneExists()
 		{
-			cruiseManagerMock.ExpectAndReturn("GetBuildNames", buildNames, serverName, projectName);
+			cruiseManagerWrapperMock.ExpectAndReturn("GetBuildSpecifiers", buildSpecifiers, projectSpecifier);
 
-			Assert.AreEqual("log2", nameBuildRetriever.GetNextBuildName(serverName, projectName, "log1"));
+			Assert.AreEqual("log2", nameBuildRetriever.GetNextBuildSpecifier(new DefaultBuildSpecifier(projectSpecifier, "log1")).BuildName);
 			VerifyAll();
 		}
 
 		[Test]
 		public void ThrowsAnExceptionForNextBuildIfBuildIsUnknown()
 		{
-			cruiseManagerMock.ExpectAndReturn("GetBuildNames", buildNames, serverName, projectName);
+			cruiseManagerWrapperMock.ExpectAndReturn("GetBuildSpecifiers", buildSpecifiers, projectSpecifier);
 			try
 			{
-				nameBuildRetriever.GetNextBuildName(serverName, projectName, "not a real build");
+				nameBuildRetriever.GetNextBuildSpecifier(new DefaultBuildSpecifier(projectSpecifier, "not a real build"));
 				Assert.Fail("Should throw the right exception");
 			}
 			catch (UnknownBuildException) { }
@@ -79,9 +88,9 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 		[Test]
 		public void PreviousBuildIsRequestedBuildIfNoneOlder()
 		{
-			cruiseManagerMock.ExpectAndReturn("GetBuildNames", buildNames, serverName, projectName);
+			cruiseManagerWrapperMock.ExpectAndReturn("GetBuildSpecifiers", buildSpecifiers, projectSpecifier);
 
-			Assert.AreEqual("log1", nameBuildRetriever.GetPreviousBuildName(serverName, projectName, "log1"));
+			Assert.AreEqual("log1", nameBuildRetriever.GetPreviousBuildSpecifier(new DefaultBuildSpecifier(projectSpecifier, "log1")).BuildName);
 
 			VerifyAll();
 		}
@@ -89,9 +98,9 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 		[Test]
 		public void PreviousBuildIsNextOldestIfOneExists()
 		{
-			cruiseManagerMock.ExpectAndReturn("GetBuildNames", buildNames, serverName, projectName);
+			cruiseManagerWrapperMock.ExpectAndReturn("GetBuildSpecifiers", buildSpecifiers, projectSpecifier);
 
-			Assert.AreEqual("log2", nameBuildRetriever.GetPreviousBuildName(serverName, projectName, "log3"));
+			Assert.AreEqual("log2", nameBuildRetriever.GetPreviousBuildSpecifier(new DefaultBuildSpecifier(projectSpecifier, "log3")).BuildName);
 
 			VerifyAll();
 		}
@@ -99,10 +108,10 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 		[Test]
 		public void ThrowsAnExceptionForPreviousBuildIfBuildIsUnknown()
 		{
-			cruiseManagerMock.ExpectAndReturn("GetBuildNames", buildNames, serverName, projectName);
+			cruiseManagerWrapperMock.ExpectAndReturn("GetBuildSpecifiers", buildSpecifiers, projectSpecifier);
 			try
 			{
-				nameBuildRetriever.GetPreviousBuildName(serverName, projectName, "not a real build");
+				nameBuildRetriever.GetPreviousBuildSpecifier(new DefaultBuildSpecifier(projectSpecifier, "not a real build"));
 				Assert.Fail("Should throw the right exception");
 			}
 			catch (UnknownBuildException) { }

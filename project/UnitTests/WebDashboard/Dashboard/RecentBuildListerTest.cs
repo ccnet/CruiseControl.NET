@@ -14,55 +14,62 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 	public class RecentBuildListerTest
 	{
 		private DynamicMock urlBuilderMock;
-		private DynamicMock farmMock;
+		private DynamicMock farmServiceMock;
 		private DynamicMock nameFormatterMock;
 		private RecentBuildLister Builder;
+		private IProjectSpecifier projectSpecifier;
+		private DefaultBuildSpecifier build2Specifier;
+		private DefaultBuildSpecifier build1Specifier;
 
 		[SetUp]
 		public void Setup()
 		{
 			urlBuilderMock = new DynamicMock(typeof(IUrlBuilder));
-			farmMock = new DynamicMock(typeof(IFarmService));
+			farmServiceMock = new DynamicMock(typeof(IFarmService));
 			nameFormatterMock = new DynamicMock(typeof(IBuildNameFormatter));
+			projectSpecifier = new DefaultProjectSpecifier(new DefaultServerSpecifier("myServer"), "myProject");
+			build2Specifier = new DefaultBuildSpecifier(projectSpecifier, "build2");
+			build1Specifier = new DefaultBuildSpecifier(projectSpecifier, "build1");
+
 			Builder = new RecentBuildLister(new DefaultHtmlBuilder(), 
 				(IUrlBuilder) urlBuilderMock.MockInstance,
-				(IFarmService) farmMock.MockInstance,
+				(IFarmService) farmServiceMock.MockInstance,
 				(IBuildNameFormatter) nameFormatterMock.MockInstance);
 		}
 
 		private void VerifyAll()
 		{
 			urlBuilderMock.Verify();
-			farmMock.Verify();
+			farmServiceMock.Verify();
 			nameFormatterMock.Verify();
 		}
 
 		[Test]
 		public void ShouldRequestRecentBuildsFromServerAndDisplayARowForEachOne()
 		{
-			farmMock.ExpectAndReturn("GetMostRecentBuildNames", new string [] {"build2", "build1"}, "myServer", "myProject", 10);
+			farmServiceMock.ExpectAndReturn("GetMostRecentBuildSpecifiers", new IBuildSpecifier [] {build2Specifier, build1Specifier }, projectSpecifier, 10);
 			SetupBuildExpectations();
-			HtmlTable builtTable = Builder.BuildRecentBuildsTable("myServer", "myProject");
+			HtmlTable builtTable = Builder.BuildRecentBuildsTable(projectSpecifier);
 			CheckReturnedTableForCorrectBuilds(builtTable);
 		}
 
 		[Test]
 		public void ShouldRequestAllBuildsFromServerAndDisplayARowForEachOne()
 		{
-			farmMock.ExpectAndReturn("GetBuildNames", new string [] {"build2", "build1"}, "myServer", "myProject");
+			farmServiceMock.ExpectAndReturn("GetBuildSpecifiers", new IBuildSpecifier [] { build2Specifier, build1Specifier }, projectSpecifier);
 			SetupBuildExpectations();
-			HtmlTable builtTable = Builder.BuildAllBuildsTable("myServer", "myProject");
+			HtmlTable builtTable = Builder.BuildAllBuildsTable(projectSpecifier);
 			CheckReturnedTableForCorrectBuilds(builtTable);
 		}
 
 		private void SetupBuildExpectations()
 		{
-			urlBuilderMock.ExpectAndReturn("BuildBuildUrl", "url1", new PropertyIs("ActionName", ViewBuildReportAction.ACTION_NAME), "myServer", "myProject", "build2");
-			urlBuilderMock.ExpectAndReturn("BuildBuildUrl", "url2", new PropertyIs("ActionName", ViewBuildReportAction.ACTION_NAME), "myServer", "myProject", "build1");
-			nameFormatterMock.ExpectAndReturn("GetPrettyBuildName", "prettyName2", "build2");
-			nameFormatterMock.ExpectAndReturn("GetPrettyBuildName", "prettyName1", "build1");
-			nameFormatterMock.ExpectAndReturn("GetCssClassForBuildLink", "css2", "build2");
-			nameFormatterMock.ExpectAndReturn("GetCssClassForBuildLink", "css1", "build1");
+			urlBuilderMock.ExpectAndReturn("BuildBuildUrl", "url1", new PropertyIs("ActionName", ViewBuildReportAction.ACTION_NAME), build2Specifier);
+			urlBuilderMock.ExpectAndReturn("BuildBuildUrl", "url2", new PropertyIs("ActionName", ViewBuildReportAction.ACTION_NAME), build1Specifier);
+			nameFormatterMock.ExpectAndReturn("GetPrettyBuildName", "prettyName2", build2Specifier);
+			nameFormatterMock.ExpectAndReturn("GetPrettyBuildName", "prettyName1", build1Specifier);
+			nameFormatterMock.ExpectAndReturn("GetCssClassForBuildLink", "css2", build2Specifier);
+			nameFormatterMock.ExpectAndReturn("GetCssClassForBuildLink", "css1", build1Specifier);
 		}
 
 		private void CheckReturnedTableForCorrectBuilds(HtmlTable builtTable)
@@ -88,11 +95,11 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 		public void ShouldRequestRecentBuildsFromServerAndShowNothingIfNoBuilds()
 		{
 			// Setup
-			farmMock.ExpectAndReturn("GetMostRecentBuildNames", new string [0], "myServer", "myProject", 10);
-			urlBuilderMock.ExpectNoCall("BuildBuildUrl",typeof(string),typeof(string),typeof(string),typeof(string));
+			farmServiceMock.ExpectAndReturn("GetMostRecentBuildSpecifiers", new IBuildSpecifier [0], projectSpecifier, 10);
+			urlBuilderMock.ExpectNoCall("BuildBuildUrl",typeof(IActionSpecifier), typeof(IBuildSpecifier));
 
 			// Execute
-			HtmlTable builtTable = Builder.BuildRecentBuildsTable("myServer", "myProject");
+			HtmlTable builtTable = Builder.BuildRecentBuildsTable(projectSpecifier);
 
 			// Verify
 			Assert.AreEqual(0, builtTable.Rows.Count);
@@ -104,11 +111,11 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 		public void ShouldRequestAllBuildsFromServerAndShowNothingIfNoBuilds()
 		{
 			// Setup
-			farmMock.ExpectAndReturn("GetBuildNames", new string [0], "myServer", "myProject");
-			urlBuilderMock.ExpectNoCall("BuildBuildUrl",typeof(string),typeof(string),typeof(string),typeof(string));
+			farmServiceMock.ExpectAndReturn("GetBuildSpecifiers", new IBuildSpecifier [0], projectSpecifier);
+			urlBuilderMock.ExpectNoCall("BuildBuildUrl", typeof(IActionSpecifier), typeof(IBuildSpecifier));
 
 			// Execute
-			HtmlTable builtTable = Builder.BuildAllBuildsTable("myServer", "myProject");
+			HtmlTable builtTable = Builder.BuildAllBuildsTable(projectSpecifier);
 
 			// Verify
 			// Just comment rows

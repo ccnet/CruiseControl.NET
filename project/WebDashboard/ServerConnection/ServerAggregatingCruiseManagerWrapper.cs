@@ -1,6 +1,7 @@
 using System.Collections;
 using ThoughtWorks.CruiseControl.Remote;
 using ThoughtWorks.CruiseControl.WebDashboard.Config;
+using ThoughtWorks.CruiseControl.WebDashboard.Dashboard;
 
 namespace ThoughtWorks.CruiseControl.WebDashboard.ServerConnection
 {
@@ -15,75 +16,95 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.ServerConnection
 			this.managerFactory = managerFactory;
 		}
 
-		public string GetLatestBuildName(string serverName, string projectName)
+		public IBuildSpecifier GetLatestBuildSpecifier(IProjectSpecifier projectSpecifier)
 		{
-			return GetCruiseManager(serverName).GetLatestBuildName(projectName);
+			return new DefaultBuildSpecifier(projectSpecifier, GetCruiseManager(projectSpecifier.ServerSpecifier).GetLatestBuildName(projectSpecifier.ProjectName));
 		}
 
-		public string GetLog(string serverName, string projectName, string buildName)
+		public string GetLog(IBuildSpecifier buildSpecifier)
 		{
-			return GetCruiseManager(serverName).GetLog(projectName, buildName);
+			return GetCruiseManager(buildSpecifier).GetLog(buildSpecifier.ProjectSpecifier.ProjectName, buildSpecifier.BuildName);
 		}
 
-		public string[] GetBuildNames(string serverName, string projectName)
+		public IBuildSpecifier[] GetBuildSpecifiers(IProjectSpecifier projectSpecifier)
 		{
-			return GetCruiseManager(serverName).GetBuildNames(projectName);
+			return CreateBuildSpecifiers(projectSpecifier, GetCruiseManager(projectSpecifier).GetBuildNames(projectSpecifier.ProjectName));
 		}
 
-		public string[] GetMostRecentBuildNames(string serverName, string projectName, int buildCount)
+		public IBuildSpecifier[] GetMostRecentBuildSpecifiers(IProjectSpecifier projectSpecifier, int buildCount)
 		{
-			return GetCruiseManager(serverName).GetMostRecentBuildNames(projectName,buildCount);
+			return CreateBuildSpecifiers(projectSpecifier, GetCruiseManager(projectSpecifier).GetMostRecentBuildNames(projectSpecifier.ProjectName, buildCount));
 		}
 
-		public void DeleteProject(string serverName, string projectName, bool purgeWorkingDirectory, bool purgeArtifactDirectory, bool purgeSourceControlEnvironment)
+		private IBuildSpecifier[] CreateBuildSpecifiers(IProjectSpecifier projectSpecifier, string[] buildNames)
 		{
-			GetCruiseManager(serverName).DeleteProject(projectName, purgeWorkingDirectory, purgeArtifactDirectory, purgeSourceControlEnvironment);
-		}
-
-		public string GetServerLog (string serverName)
-		{
-			return GetCruiseManager(serverName).GetServerLog();
-		}
-
-		public string[] GetServerNames()
-		{
-			ArrayList names = new ArrayList();
-			foreach (ServerSpecification server in ServerSpecifcations)
+			ArrayList buildSpecifiers = new ArrayList();
+			foreach (string buildName in buildNames)
 			{
-				names.Add(server.Name);
+				buildSpecifiers.Add(new DefaultBuildSpecifier(projectSpecifier, buildName));
 			}
-			return (string[]) names.ToArray(typeof (string));
+			return (IBuildSpecifier[]) buildSpecifiers.ToArray(typeof (IBuildSpecifier));
 		}
 
-		public void AddProject(string serverName, string serializedProject)
+		public void DeleteProject(IProjectSpecifier projectSpecifier, bool purgeWorkingDirectory, bool purgeArtifactDirectory, bool purgeSourceControlEnvironment)
 		{
-			GetCruiseManager(serverName).AddProject(serializedProject);
+			GetCruiseManager(projectSpecifier).DeleteProject(projectSpecifier.ProjectName, purgeWorkingDirectory, purgeArtifactDirectory, purgeSourceControlEnvironment);
 		}
 
-		public string GetProject(string serverName, string projectName)
+		public string GetServerLog(IServerSpecifier serverSpecifier)
 		{
-			return GetCruiseManager(serverName).GetProject(projectName);
+			return GetCruiseManager(serverSpecifier).GetServerLog();
 		}
 
-		public void UpdateProject(string serverName, string projectName, string serializedProject)
+		public IServerSpecifier[] GetServerSpecifiers()
 		{
-			GetCruiseManager(serverName).UpdateProject(projectName, serializedProject);
-		}
-
-		private ICruiseManager GetCruiseManager(string serverName)
-		{
-			foreach (ServerSpecification server in ServerSpecifcations)
+			ArrayList serverSpecifiers = new ArrayList();
+			foreach (ServerLocation serverLocation in ServerLocations)
 			{
-				if (server.Name == serverName)
+				serverSpecifiers.Add(new DefaultServerSpecifier(serverLocation.Name));
+			}
+			return (IServerSpecifier[]) serverSpecifiers.ToArray(typeof (IServerSpecifier));
+		}
+
+		public void AddProject(IServerSpecifier serverSpecifier, string serializedProject)
+		{
+			GetCruiseManager(serverSpecifier).AddProject(serializedProject);
+		}
+
+		public string GetProject(IProjectSpecifier projectSpecifier)
+		{
+			return GetCruiseManager(projectSpecifier.ServerSpecifier).GetProject(projectSpecifier.ProjectName);
+		}
+
+		public void UpdateProject(IProjectSpecifier projectSpecifier, string serializedProject)
+		{
+			GetCruiseManager(projectSpecifier.ServerSpecifier).UpdateProject(projectSpecifier.ProjectName, serializedProject);
+		}
+
+		private ICruiseManager GetCruiseManager(IBuildSpecifier buildSpecifier)
+		{
+			return GetCruiseManager(buildSpecifier.ProjectSpecifier);
+		}
+
+		private ICruiseManager GetCruiseManager(IProjectSpecifier projectSpecifier)
+		{
+			return GetCruiseManager(projectSpecifier.ServerSpecifier);
+		}
+
+		private ICruiseManager GetCruiseManager(IServerSpecifier serverSpecifier)
+		{
+			foreach (ServerLocation serverLocation in ServerLocations)
+			{
+				if (serverLocation.Name == serverSpecifier.ServerName)
 				{
-					return managerFactory.GetCruiseManager(server.Url);
+					return managerFactory.GetCruiseManager(serverLocation.Url);
 				}
 			}
 
-			throw new UnknownServerException(serverName);
+			throw new UnknownServerException(serverSpecifier.ServerName);
 		}
 
-		private IEnumerable ServerSpecifcations
+		private IEnumerable ServerLocations
 		{
 			get { return (IEnumerable) configurationGetter.GetConfigFromSection(ServersSectionHandler.SectionName); }
 		}

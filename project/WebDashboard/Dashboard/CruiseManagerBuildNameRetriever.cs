@@ -11,48 +11,48 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 			this.cruiseManagerWrapper = cruiseManagerWrapper;
 		}
 
-		public string GetLatestBuildName(string serverName, string projectName)
+		public IBuildSpecifier GetLatestBuildSpecifier(IProjectSpecifier projectSpecifier)
 		{
-			return cruiseManagerWrapper.GetLatestBuildName(serverName, projectName);	
+			return cruiseManagerWrapper.GetLatestBuildSpecifier(projectSpecifier);	
 		}
 
-		public string GetNextBuildName(string serverName, string projectName, string buildName)
+		public IBuildSpecifier GetNextBuildSpecifier(IBuildSpecifier buildSpecifier)
 		{
-			string[] buildNames = cruiseManagerWrapper.GetBuildNames(serverName, projectName);
+			IBuildSpecifier[] buildSpecifiers = cruiseManagerWrapper.GetBuildSpecifiers(buildSpecifier.ProjectSpecifier);
 
-			if (buildNames.Length == 0 || buildName == buildNames[0])
+			if (buildSpecifiers.Length == 0 || buildSpecifier.Equals(buildSpecifiers[0]))
 			{
-				return buildName;
+				return buildSpecifier;
 			}
 
-			for (int i = 1; i < buildNames.Length; i++)
+			for (int i = 1; i < buildSpecifiers.Length; i++)
 			{
-				if (buildName == buildNames[i])
+				if (buildSpecifier.Equals(buildSpecifiers[i]))
 				{
-					return buildNames[i-1];
+					return buildSpecifiers[i-1];
 				}
 			}
-			throw new UnknownBuildException(new Build(buildName, "", serverName, projectName, ""));
+			throw new UnknownBuildException(buildSpecifier);
 		}
 
-		public string GetPreviousBuildName(string serverName, string projectName, string buildName)
+		public IBuildSpecifier GetPreviousBuildSpecifier(IBuildSpecifier buildSpecifier)
 		{
-			string[] buildNames = cruiseManagerWrapper.GetBuildNames(serverName, projectName);
+			IBuildSpecifier[] buildSpecifiers = cruiseManagerWrapper.GetBuildSpecifiers(buildSpecifier.ProjectSpecifier);
 
-			if (buildName == buildNames[buildNames.Length - 1])
+			if (buildSpecifier.Equals(buildSpecifiers[buildSpecifiers.Length - 1]))
 			{
-				return buildName;
+				return buildSpecifier;
 			}
 
-			for (int i = 0; i < buildNames.Length - 1; i++)
+			for (int i = 0; i < buildSpecifiers.Length - 1; i++)
 			{
-				if (buildName == buildNames[i])
+				if (buildSpecifier.Equals(buildSpecifiers[i]))
 				{
-					return buildNames[i+1];
+					return buildSpecifiers[i+1];
 				}
 			}
 
-			throw new UnknownBuildException(new Build(buildName, "", serverName, projectName, ""));
+			throw new UnknownBuildException(buildSpecifier);
 		}
 	}
 }

@@ -4,7 +4,6 @@ using NMock;
 using NUnit.Framework;
 using ThoughtWorks.CruiseControl.Core.Util;
 using ThoughtWorks.CruiseControl.WebDashboard.Dashboard;
-using ThoughtWorks.CruiseControl.WebDashboard.IO;
 
 namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 {
@@ -16,28 +15,24 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 		{
 			DynamicMock buildRetrieverMock = new DynamicMock(typeof(IBuildRetriever));
 			DynamicMock delegateTransformerMock = new DynamicMock(typeof(IMultiTransformer));
-			DynamicMock cruiseRequestMock = new DynamicMock(typeof(ICruiseRequest));
 
 			BuildRequestTransformer requestTransformer = new BuildRequestTransformer((IBuildRetriever) buildRetrieverMock.MockInstance, (IMultiTransformer) delegateTransformerMock.MockInstance);
 
-			cruiseRequestMock.ExpectAndReturn("ServerName", "myServer");
-			cruiseRequestMock.ExpectAndReturn("ProjectName", "myProject");
-			cruiseRequestMock.ExpectAndReturn("BuildName", "myBuild");
+			DefaultBuildSpecifier buildSpecifier = new DefaultBuildSpecifier(new DefaultProjectSpecifier(new DefaultServerSpecifier("myServer"), "myProject"), "myBuild");
 
-			Build build = new Build(null, "logContents", null, null, null);
+			Build build = new Build(buildSpecifier, "logContents", null);
 
-			buildRetrieverMock.ExpectAndReturn("GetBuild", build, "myServer", "myProject", "myBuild");
+			buildRetrieverMock.ExpectAndReturn("GetBuild", build, buildSpecifier);
 
 			string[] fileNames = new string[] { "file1", "file2" };
 
 			delegateTransformerMock.ExpectAndReturn("Transform", "transformed", "logContents", fileNames);
 
-			Control control = requestTransformer.Transform((ICruiseRequest) cruiseRequestMock.MockInstance, fileNames);
+			Control control = requestTransformer.Transform(buildSpecifier, fileNames);
 			Assert.AreEqual("transformed", ((HtmlGenericControl) control).InnerHtml);
 
 			buildRetrieverMock.Verify();
 			delegateTransformerMock.Verify();
-			cruiseRequestMock.Verify();
 		}
 	}
 }

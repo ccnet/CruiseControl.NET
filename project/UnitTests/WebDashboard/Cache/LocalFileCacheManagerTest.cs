@@ -4,6 +4,7 @@ using NUnit.Framework;
 using ThoughtWorks.CruiseControl.Core.Util;
 using ThoughtWorks.CruiseControl.WebDashboard.Cache;
 using ThoughtWorks.CruiseControl.WebDashboard.Config;
+using ThoughtWorks.CruiseControl.WebDashboard.Dashboard;
 using ThoughtWorks.CruiseControl.WebDashboard.IO;
 
 namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Cache
@@ -20,6 +21,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Cache
 		private string filename;
 		private string content;
 		private string fullfilename;
+		private IProjectSpecifier projectSpecifier;
 
 		[SetUp]
 		public void Setup()
@@ -30,6 +32,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Cache
 			configurationGetterMock.SetupResult("GetSimpleConfigSetting", cacheRootDirectory, typeof(string));
 			servername = "myserver";
 			projectname = "myproject";
+			projectSpecifier = new DefaultProjectSpecifier(new DefaultServerSpecifier(servername), projectname);
 			subdirectory = "subdir";
 			filename = "myfile.xml";
 			fullfilename = Path.Combine(cacheRootDirectory, @"myserver\myproject\subdir\myfile.xml");
@@ -55,7 +58,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Cache
 			Assert.IsTrue(! Directory.Exists(cacheRootDirectory));
 			LocalFileCacheManager manager = new LocalFileCacheManager((IPathMapper) pathMapperMock.MockInstance, (IConfigurationGetter) configurationGetterMock.MockInstance);
 			pathMapperMock.ExpectAndReturn("GetLocalPathFromURLPath", fullfilename, fullfilename);
-			manager.AddContent(servername, projectname, subdirectory, filename, content);
+			manager.AddContent(projectSpecifier, subdirectory, filename, content);
 			Assert.IsTrue(Directory.Exists(cacheRootDirectory));
 
 			VerifyAll();
@@ -66,7 +69,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Cache
 		{
 			LocalFileCacheManager manager = new LocalFileCacheManager((IPathMapper) pathMapperMock.MockInstance, (IConfigurationGetter) configurationGetterMock.MockInstance);
 			pathMapperMock.ExpectAndReturn("GetLocalPathFromURLPath", fullfilename, fullfilename);
-			manager.AddContent(servername, projectname, subdirectory, filename, content);
+			manager.AddContent(projectSpecifier, subdirectory, filename, content);
 			string expectedFile = Path.Combine(cacheRootDirectory, @"myserver\myproject\subdir\myfile.xml");
 
 			string readContent = null;
@@ -84,7 +87,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Cache
 		{
 			LocalFileCacheManager manager = new LocalFileCacheManager((IPathMapper) pathMapperMock.MockInstance, (IConfigurationGetter) configurationGetterMock.MockInstance);
 			pathMapperMock.ExpectAndReturn("GetLocalPathFromURLPath", fullfilename, fullfilename);
-			Assert.IsNull(manager.GetContent(servername, projectname, subdirectory, filename));
+			Assert.IsNull(manager.GetContent(projectSpecifier, subdirectory, filename));
 			VerifyAll();
 		}
 
@@ -93,11 +96,11 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Cache
 		{
 			LocalFileCacheManager manager = new LocalFileCacheManager((IPathMapper) pathMapperMock.MockInstance, (IConfigurationGetter) configurationGetterMock.MockInstance);
 			pathMapperMock.ExpectAndReturn("GetLocalPathFromURLPath", fullfilename, fullfilename);
-			manager.AddContent(servername, projectname, subdirectory, filename, content);
+			manager.AddContent(projectSpecifier, subdirectory, filename, content);
 
 			pathMapperMock.ExpectAndReturn("GetLocalPathFromURLPath", fullfilename, fullfilename);
 			manager = new LocalFileCacheManager((IPathMapper) pathMapperMock.MockInstance, (IConfigurationGetter) configurationGetterMock.MockInstance);
-			Assert.AreEqual(content, manager.GetContent(servername, projectname, subdirectory, filename));
+			Assert.AreEqual(content, manager.GetContent(projectSpecifier, subdirectory, filename));
 
 			VerifyAll();
 		}
@@ -108,7 +111,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Cache
 			pathMapperMock.ExpectAndReturn("GetAbsoluteURLForRelativePath", "http://foo.bar/baz", Path.Combine(cacheRootDirectory, @"myserver\myproject\subdir\myfile.xml"));
 
 			LocalFileCacheManager manager = new LocalFileCacheManager((IPathMapper) pathMapperMock.MockInstance, (IConfigurationGetter) configurationGetterMock.MockInstance);
-			Assert.AreEqual("http://foo.bar/baz", manager.GetURLForFile(servername, projectname, subdirectory, filename));
+			Assert.AreEqual("http://foo.bar/baz", manager.GetURLForFile(projectSpecifier, subdirectory, filename));
 			VerifyAll();
 		}
 	}

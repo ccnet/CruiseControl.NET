@@ -32,22 +32,24 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 			if (serverName != "")
 			{
 				htmlWriter.Write(" &gt; ");
-				A(serverName, urlBuilder.BuildServerUrl("default.aspx", serverName)).RenderControl(htmlWriter);
+				A(serverName, urlBuilder.BuildServerUrl("default.aspx", request.ServerSpecifier)).RenderControl(htmlWriter);
 			}
 
 			string projectName = request.ProjectName;
 			if (projectName != "")
 			{
 				htmlWriter.Write(" &gt; ");
-				A(projectName, urlBuilder.BuildProjectUrl(new ActionSpecifierWithName("ViewProjectReport"), serverName, projectName)).RenderControl(htmlWriter);
+				A(projectName, urlBuilder.BuildProjectUrl(new ActionSpecifierWithName("ViewProjectReport"), request.ProjectSpecifier)).RenderControl(htmlWriter);
 			}
 
 			string buildName = request.BuildName;
 			if (buildName != "")
 			{
 				htmlWriter.Write(" &gt; ");
-				A(buildNameFormatter.GetPrettyBuildName(buildName),
-					urlBuilder.BuildBuildUrl(new ActionSpecifierWithName(ViewBuildReportAction.ACTION_NAME), serverName, projectName, buildName)).RenderControl(htmlWriter);
+
+				IBuildSpecifier buildSpecifier = request.BuildSpecifier;
+				A(buildNameFormatter.GetPrettyBuildName(buildSpecifier),
+					urlBuilder.BuildBuildUrl(new ActionSpecifierWithName(ViewBuildReportAction.ACTION_NAME), buildSpecifier)).RenderControl(htmlWriter);
 			}
 
 			HtmlGenericControl locationMenu = new HtmlGenericControl("div");

@@ -6,11 +6,11 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 		string BuildUrl(string relativeUrl, string partialQueryString);
 		string BuildUrl(IActionSpecifier action);
 		string BuildUrl(IActionSpecifier action, string partialQueryString);
-		string BuildServerUrl(string relativeUrl, string serverName);
-		string BuildServerUrl(IActionSpecifier action, string serverName);
-		string BuildProjectUrl(string relativeUrl, string serverName, string projectName);
-		string BuildProjectUrl(IActionSpecifier action, string serverName, string projectName);
-		string BuildBuildUrl(string relativeUrl, string serverName, string projectName, string buildName);
-		string BuildBuildUrl(IActionSpecifier action, string serverName, string projectName, string buildName);
+		string BuildServerUrl(string relativeUrl, IServerSpecifier serverSpecifier);
+		string BuildServerUrl(IActionSpecifier action, IServerSpecifier serverSpecifier);
+		string BuildProjectUrl(string relativeUrl, IProjectSpecifier projectSpecifier);
+		string BuildProjectUrl(IActionSpecifier action, IProjectSpecifier projectSpecifier);
+		string BuildBuildUrl(string relativeUrl, IBuildSpecifier buildSpecifier);
+		string BuildBuildUrl(IActionSpecifier action, IBuildSpecifier buildSpecifier);
 	}
 }

@@ -1,14 +1,16 @@
+using ThoughtWorks.CruiseControl.WebDashboard.Dashboard;
+
 namespace ThoughtWorks.CruiseControl.WebDashboard.ServerConnection
 {
 	public interface ICruiseManagerWrapper
 	{
-		string GetLatestBuildName(string serverName, string projectName);
-		string GetLog(string serverName, string projectName, string buildName);
-		string[] GetBuildNames(string serverName, string projectName);
-		string GetServerLog(string serverName);
-		string[] GetServerNames();
-		void AddProject(string serverName, string serializedProject);
-		string GetProject(string serverName, string projectName);
-		void UpdateProject(string serverName, string projectName, string serializedProject);
+		IBuildSpecifier GetLatestBuildSpecifier(IProjectSpecifier projectSpecifier);
+		string GetLog(IBuildSpecifier buildSpecifier);
+		IBuildSpecifier[] GetBuildSpecifiers(IProjectSpecifier projectSpecifier);
+		string GetServerLog(IServerSpecifier serverSpecifier);
+		IServerSpecifier[] GetServerSpecifiers();
+		void AddProject(IServerSpecifier serverSpecifier, string serializedProject);
+		string GetProject(IProjectSpecifier projectSpecifier);
+		void UpdateProject(IProjectSpecifier projectSpecifier, string serializedProject);
 	}
 }

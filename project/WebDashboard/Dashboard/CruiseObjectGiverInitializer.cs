@@ -53,7 +53,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 				typeof(DisplayAddProjectPageAction)).Decorate(typeof(SecurityCheckingProxyAction));
 
 			giverAndRegistrar.CreateImplementationMapping(SaveNewProjectAction.ACTION_NAME, 
-				typeof(SaveNewProjectAction)).Decorate(typeof(SecurityCheckingProxyAction));
+				typeof(SaveNewProjectAction)).Decorate(typeof(ServerCheckingProxyAction)).Decorate(typeof(ProjectCheckingProxyAction)).Decorate(typeof(CruiseActionProxyAction)).Decorate(typeof(SecurityCheckingProxyAction));
 
 			giverAndRegistrar.CreateImplementationMapping(DisplayEditProjectPageAction.ACTION_NAME, 
 				typeof(DisplayEditProjectPageAction)).Decorate(typeof(ServerCheckingProxyAction)).Decorate(typeof(ProjectCheckingProxyAction)).Decorate(typeof(CruiseActionProxyAction)).Decorate(typeof(SecurityCheckingProxyAction));

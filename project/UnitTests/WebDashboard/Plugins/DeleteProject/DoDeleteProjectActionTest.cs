@@ -1,6 +1,7 @@
 using System.Web.UI;
 using NMock;
 using NUnit.Framework;
+using ThoughtWorks.CruiseControl.WebDashboard.Dashboard;
 using ThoughtWorks.CruiseControl.WebDashboard.IO;
 using ThoughtWorks.CruiseControl.WebDashboard.MVC;
 using ThoughtWorks.CruiseControl.WebDashboard.Plugins.DeleteProject;
@@ -44,14 +45,14 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Plugins.DeleteProjec
 		{
 			Control view = new Control();
 			// Setup
-			cruiseRequestMock.ExpectAndReturn("ServerName", "myServer");
-			cruiseRequestMock.ExpectAndReturn("ProjectName", "myProject");
+			IProjectSpecifier projectSpecifier = new DefaultProjectSpecifier(new DefaultServerSpecifier("myServer"), "myProject");
+			cruiseRequestMock.ExpectAndReturn("ProjectSpecifier", projectSpecifier);
 			requestMock.ExpectAndReturn("GetChecked", true, "PurgeWorkingDirectory");
 			requestMock.ExpectAndReturn("GetChecked", false, "PurgeArtifactDirectory");
 			requestMock.ExpectAndReturn("GetChecked", true, "PurgeSourceControlEnvironment");
-			farmServiceMock.Expect("DeleteProject", "myServer", "myProject", true, false, true);
+			farmServiceMock.Expect("DeleteProject", projectSpecifier, true, false, true);
 			string expectedMessage = "Project Deleted";
-			viewBuilderMock.ExpectAndReturn("BuildView", view, new DeleteProjectModel("myServer", "myProject", expectedMessage, false, true, false, true));
+			viewBuilderMock.ExpectAndReturn("BuildView", view, new DeleteProjectModel(projectSpecifier, expectedMessage, false, true, false, true));
 
 			// Execute
 			Control returnedView = doDeleteProjectAction.Execute(cruiseRequest);

@@ -18,7 +18,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.ViewAllBuilds
 
 		public Control Execute(ICruiseRequest cruiseRequest)
 		{
-			return viewBuilder.BuildAllBuildsTable(cruiseRequest.ServerName, cruiseRequest.ProjectName);
+			return viewBuilder.BuildAllBuildsTable(cruiseRequest.ProjectSpecifier);
 		}
 	}
 }

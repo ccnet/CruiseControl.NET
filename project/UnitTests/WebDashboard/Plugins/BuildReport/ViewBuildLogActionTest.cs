@@ -20,6 +20,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Plugins.BuildReport
 		private string buildLog;
 		private Build build;
 		private string buildLogLocation;
+		private DefaultBuildSpecifier buildSpecifier;
 
 		[SetUp]
 		public void Setup()
@@ -34,7 +35,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Plugins.BuildReport
 			buildName = "mybuild";
 			buildLog = "some stuff in a log";
 			buildLogLocation = "http://somewhere/mylog";
-			build = new Build(buildName, buildLog, serverName, projectName, buildLogLocation);
+			buildSpecifier = new DefaultBuildSpecifier(new DefaultProjectSpecifier(new DefaultServerSpecifier(serverName), projectName), buildName);
+			build = new Build(buildSpecifier, buildLog, buildLogLocation);
 		}
 
 		private void VerifyAll()
@@ -47,10 +49,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Plugins.BuildReport
 		public void ReturnsServerLogFromRequestedServer()
 		{
 			// Setup
-			requestMock.ExpectAndReturn("ServerName", serverName);
-			requestMock.ExpectAndReturn("ProjectName", projectName);
-			requestMock.ExpectAndReturn("BuildName", buildName);
-			buildRetrieverMock.ExpectAndReturn("GetBuild", build, serverName, projectName, buildName);
+			requestMock.ExpectAndReturn("BuildSpecifier", buildSpecifier);
+			buildRetrieverMock.ExpectAndReturn("GetBuild", build, buildSpecifier);
 
 			// Execute
 			HtmlGenericControl control = (HtmlGenericControl) buildPlugin.Execute((ICruiseRequest) requestMock.MockInstance);

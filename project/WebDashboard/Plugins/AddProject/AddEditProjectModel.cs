@@ -1,4 +1,6 @@
+using System.Collections;
 using ThoughtWorks.CruiseControl.Core;
+using ThoughtWorks.CruiseControl.WebDashboard.Dashboard;
 
 namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.AddProject
 {
@@ -7,15 +9,15 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.AddProject
 		private string saveActionName;
 		private readonly Project project;
 		private string selectedServer;
-		private readonly string[] servers;
+		private readonly IServerSpecifier[] serverSpecifiers;
 		private string status;
 		private bool isAdd;
 
-		public AddEditProjectModel(Project project, string selectedServer, string[] servers) 
+		public AddEditProjectModel(Project project, string selectedServer, IServerSpecifier[] serverSpecifiers) 
 		{
 			this.project = project;
 			this.selectedServer = selectedServer;
-			this.servers = servers;
+			this.serverSpecifiers = serverSpecifiers;
 			this.status = "";
 			this.isAdd = true;
 			this.saveActionName = "";
@@ -52,7 +54,15 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.AddProject
 
 		public string[] ServerNames
 		{
-			get { return servers; }
+			get 
+			{
+				ArrayList serverNames = new ArrayList() ;
+				foreach (IServerSpecifier specifier in serverSpecifiers)
+				{
+					serverNames.Add(specifier.ServerName);
+				}
+				return (string[]) serverNames.ToArray(typeof (string));
+			}
 		}
 	}
 }

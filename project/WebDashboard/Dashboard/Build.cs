@@ -4,24 +4,15 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 {
 	public class Build
 	{
+		private readonly IBuildSpecifier buildSpecifier;
 		private readonly string buildLogLocation;
-		private readonly string projectName;
-		private readonly string serverName;
-		private readonly string name;
 		private readonly string log;
 
-		public Build(string name, string log, string serverName, string projectName, string buildLogLocation)
+		public Build(IBuildSpecifier buildSpecifier, string log, string buildLogLocation)
 		{
 			this.log = log;
-			this.name = name;
-			this.serverName = serverName;
-			this.projectName = projectName;
 			this.buildLogLocation = buildLogLocation;
-		}
-
-		public string Name
-		{
-			get { return name; }
+			this.buildSpecifier = buildSpecifier;
 		}
 
 		public string Log
@@ -29,24 +20,19 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 			get { return log; }
 		}
 
-		public string ProjectName
-		{
-			get { return projectName; }
-		}
-
-		public string ServerName
-		{
-			get { return serverName; }
-		}
-
 		public string BuildLogLocation
 		{
 			get { return buildLogLocation; }
 		}
 
+		public IBuildSpecifier BuildSpecifier
+		{
+			get { return buildSpecifier; }
+		}
+
 		public bool IsSuccessful
 		{
-			get { return new LogFile(Name).Succeeded; }
+			get { return new LogFile(buildSpecifier.BuildName).Succeeded; }
 		}
 	}
 }

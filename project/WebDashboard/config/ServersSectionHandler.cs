@@ -14,11 +14,11 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Config
 			{
 				if (node.NodeType == XmlNodeType.Element) 
 				{
-					servers.Add(new ServerSpecification(node.Attributes["name"].Value, node.Attributes["url"].Value));
+					servers.Add(new ServerLocation(node.Attributes["name"].Value, node.Attributes["url"].Value));
 				}
 			}
 
-			return (ServerSpecification[]) servers.ToArray(typeof (ServerSpecification));
+			return (ServerLocation[]) servers.ToArray(typeof (ServerLocation));
 		}
 
 		public static readonly string SectionName = "CCNet/servers";

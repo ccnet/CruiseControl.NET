@@ -1,14 +1,14 @@
 using System.Web.UI;
 using ThoughtWorks.CruiseControl.Core;
 using ThoughtWorks.CruiseControl.WebDashboard.Dashboard;
-using ThoughtWorks.CruiseControl.WebDashboard.MVC;
+using ThoughtWorks.CruiseControl.WebDashboard.IO;
 using ThoughtWorks.CruiseControl.WebDashboard.MVC.Cruise;
 using ThoughtWorks.CruiseControl.WebDashboard.Plugins.ViewProjectReport;
 using ThoughtWorks.CruiseControl.WebDashboard.ServerConnection;
 
 namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.AddProject
 {
-	public class SaveNewProjectAction : IAction
+	public class SaveNewProjectAction : ICruiseAction
 	{
 		public static readonly string ACTION_NAME = "AddProjectSave";
 
@@ -28,13 +28,13 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.AddProject
 			this.urlBuilder = urlBuilder;
 		}
 
-		public Control Execute(IRequest request)
+		public Control Execute(ICruiseRequest request)
 		{
-			AddEditProjectModel model = projectModelGenerator.GenerateModel(request);
-			SetProjectUrlIfOneNotSet(model);
+			AddEditProjectModel model = projectModelGenerator.GenerateModel(request.Request);
+			SetProjectUrlIfOneNotSet(model, request.ProjectSpecifier);
 			try
 			{
-				cruiseManagerWrapper.AddProject(model.SelectedServerName, serializer.Serialize(model.Project));
+				cruiseManagerWrapper.AddProject(request.ServerSpecifier, serializer.Serialize(model.Project));
 				model.Status = "Project saved successfully";
 				model.IsAdd = true;
 				model.SaveActionName = "";
@@ -49,11 +49,11 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.AddProject
 			return viewBuilder.BuildView(model);
 		}
 
-		private void SetProjectUrlIfOneNotSet(AddEditProjectModel model)
+		private void SetProjectUrlIfOneNotSet(AddEditProjectModel model, IProjectSpecifier projectSpecifier)
 		{
 			if (model.Project.WebURL == null || model.Project.WebURL == string.Empty)
 			{
-				model.Project.WebURL = urlBuilder.BuildProjectUrl(new ActionSpecifierWithName(ViewProjectReportAction.ACTION_NAME), model.SelectedServerName, model.Project.Name);
+				model.Project.WebURL = urlBuilder.BuildProjectUrl(new ActionSpecifierWithName(ViewProjectReportAction.ACTION_NAME), projectSpecifier);
 			}
 		}
 	}

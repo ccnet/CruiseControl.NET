@@ -36,10 +36,10 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.EditProject
 			AddEditProjectModel model = projectModelGenerator.GenerateModel(request.Request);
 			model.Project.Name = request.ProjectName;
 			model.SelectedServerName = request.ServerName;
-			SetProjectUrlIfOneNotSet(model);
+			SetProjectUrlIfOneNotSet(model, request.ProjectSpecifier);
 			try
 			{
-				cruiseManagerWrapper.UpdateProject(request.ServerName, request.ProjectName, serializer.Serialize(model.Project));
+				cruiseManagerWrapper.UpdateProject(request.ProjectSpecifier, serializer.Serialize(model.Project));
 				model.Status = "Project saved successfully";
 				model.IsAdd = false;
 				model.SaveActionName = "";
@@ -54,11 +54,11 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.EditProject
 			return viewBuilder.BuildView(model);
 		}
 
-		private void SetProjectUrlIfOneNotSet(AddEditProjectModel model)
+		private void SetProjectUrlIfOneNotSet(AddEditProjectModel model, IProjectSpecifier projectSpecifier)
 		{
 			if (model.Project.WebURL == null || model.Project.WebURL == string.Empty)
 			{
-				model.Project.WebURL = urlBuilder.BuildProjectUrl(new ActionSpecifierWithName(ViewProjectReportAction.ACTION_NAME), model.SelectedServerName, model.Project.Name);
+				model.Project.WebURL = urlBuilder.BuildProjectUrl(new ActionSpecifierWithName(ViewProjectReportAction.ACTION_NAME), projectSpecifier);
 			}
 		}
 	}

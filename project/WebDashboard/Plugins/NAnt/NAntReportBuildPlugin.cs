@@ -4,8 +4,8 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.NAnt
 {
 	public class NAntReportBuildPlugin : XslReportBuildPlugin
 	{
-		public NAntReportBuildPlugin(IRequestTransformer requestTransformer)
-			: base (requestTransformer, @"xsl\NAnt.xsl", "View NAnt Report", "ViewNAntBuildReport")
+		public NAntReportBuildPlugin(IBuildLogTransformer buildLogTransformer)
+			: base (buildLogTransformer, @"xsl\NAnt.xsl", "View NAnt Report", "ViewNAntBuildReport")
 		{ }
 	}
 }

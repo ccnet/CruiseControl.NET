@@ -17,7 +17,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 			this.objectGiver = objectGiver;
 		}
 
-		public IAbsoluteLink[] GetBuildPluginLinks(string serverName, string projectName, string buildName)
+		public IAbsoluteLink[] GetBuildPluginLinks(IBuildSpecifier buildSpecifier)
 		{
 			ArrayList links = new ArrayList();
 
@@ -28,7 +28,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 				{
 					throw new CruiseControlException(pluginSpecification.TypeName + " is not a IPluginLinkRenderer");
 				}
-				links.Add(buildLinkFactory.CreateBuildLink(serverName, projectName, buildName, linkRenderer.Description, new ActionSpecifierWithName(linkRenderer.ActionName)));
+				links.Add(buildLinkFactory.CreateBuildLink(buildSpecifier, linkRenderer.Description, new ActionSpecifierWithName(linkRenderer.ActionName)));
 			}
 
 			return (IAbsoluteLink[]) links.ToArray(typeof (IAbsoluteLink));

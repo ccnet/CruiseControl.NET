@@ -1,6 +1,7 @@
 using System.Web.UI.HtmlControls;
 using NMock;
 using NUnit.Framework;
+using ThoughtWorks.CruiseControl.WebDashboard.Dashboard;
 using ThoughtWorks.CruiseControl.WebDashboard.IO;
 using ThoughtWorks.CruiseControl.WebDashboard.Plugins.ViewServerLog;
 using ThoughtWorks.CruiseControl.WebDashboard.ServerConnection;
@@ -39,8 +40,9 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Plugins.ViewServerLo
 		public void ReturnsServerLogFromRequestedServer()
 		{
 			// Setup
-			requestMock.ExpectAndReturn("ServerName", serverName);
-			farmServiceMock.ExpectAndReturn("GetServerLog", serverLog, serverName);
+			IServerSpecifier serverSpecifier = new DefaultServerSpecifier(serverName);
+			requestMock.ExpectAndReturn("ServerSpecifier", serverSpecifier);
+			farmServiceMock.ExpectAndReturn("GetServerLog", serverLog, serverSpecifier);
 
 			// Execute
 			HtmlGenericControl control = (HtmlGenericControl) action.Execute((ICruiseRequest) requestMock.MockInstance);

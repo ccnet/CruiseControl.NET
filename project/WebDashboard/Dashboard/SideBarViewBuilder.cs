@@ -27,18 +27,18 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 				string projectName = request.ProjectName;
 				if (projectName == "")
 				{
-					table = slaveBuilder.GetServerSideBar(serverName);
+					table = slaveBuilder.GetServerSideBar(request.ServerSpecifier);
 				}
 				else
 				{
 					string buildName = request.BuildName;
 					if (buildName == "")
 					{
-						table = slaveBuilder.GetProjectSideBar(serverName, projectName);	
+						table = slaveBuilder.GetProjectSideBar(request.ProjectSpecifier);	
 					}
 					else
 					{
-						table =  slaveBuilder.GetBuildSideBar(serverName, projectName, buildName);
+						table =  slaveBuilder.GetBuildSideBar(request.BuildSpecifier);
 					}
 				}
 			}

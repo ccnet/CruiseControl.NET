@@ -1,4 +1,5 @@
 using System.Collections.Specialized;
+using ThoughtWorks.CruiseControl.WebDashboard.Dashboard;
 using ThoughtWorks.CruiseControl.WebDashboard.MVC;
 
 namespace ThoughtWorks.CruiseControl.WebDashboard.IO
@@ -45,6 +46,30 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.IO
 			{
 				string build = QueryString[BuildQueryStringParameter];
 				return (build == null) ? "" : build;
+			}
+		}
+
+		public IServerSpecifier ServerSpecifier
+		{
+			get
+			{
+				return new DefaultServerSpecifier(ServerName);
+			}
+		}
+
+		public IProjectSpecifier ProjectSpecifier
+		{
+			get
+			{
+				return new DefaultProjectSpecifier(ServerSpecifier, ProjectName);
+			}
+		}
+
+		public IBuildSpecifier BuildSpecifier
+		{
+			get
+			{
+				return new DefaultBuildSpecifier(ProjectSpecifier, BuildName);
 			}
 		}
 

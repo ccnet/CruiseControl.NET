@@ -16,10 +16,12 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 		private DynamicMock buildLinkFactoryMock;
 		private DynamicMock configurationGetterMock;
 		private DynamicMock objectGiverMock;
+		private DefaultBuildSpecifier buildSpecifier;
 
 		[SetUp]
 		public void Setup()
 		{
+			buildSpecifier = new DefaultBuildSpecifier(new DefaultProjectSpecifier(new DefaultServerSpecifier(serverName), projectName), buildName);
 			buildLinkFactoryMock = new DynamicMock(typeof(IBuildLinkFactory));
 			configurationGetterMock = new DynamicMock(typeof(IConfigurationGetter));
 			objectGiverMock = new DynamicMock(typeof(ObjectGiver));
@@ -59,10 +61,10 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 			IAbsoluteLink link1 = (IAbsoluteLink) new DynamicMock(typeof(IAbsoluteLink)).MockInstance;
 			IAbsoluteLink link2 = (IAbsoluteLink) new DynamicMock(typeof(IAbsoluteLink)).MockInstance;
 
-			buildLinkFactoryMock.ExpectAndReturn("CreateBuildLink", link1, serverName, projectName, buildName, "Description 1", new PropertyIs("ActionName", "Action Name 1"));
-			buildLinkFactoryMock.ExpectAndReturn("CreateBuildLink", link2, serverName, projectName, buildName, "Description 2", new PropertyIs("ActionName", "Action Name 2"));
+			buildLinkFactoryMock.ExpectAndReturn("CreateBuildLink", link1, buildSpecifier, "Description 1", new PropertyIs("ActionName", "Action Name 1"));
+			buildLinkFactoryMock.ExpectAndReturn("CreateBuildLink", link2, buildSpecifier, "Description 2", new PropertyIs("ActionName", "Action Name 2"));
 
-			IAbsoluteLink[] buildLinks = buildPlugins.GetBuildPluginLinks(serverName, projectName, buildName);
+			IAbsoluteLink[] buildLinks = buildPlugins.GetBuildPluginLinks(buildSpecifier);
 
 			Assert.AreSame(link1, buildLinks[0]);
 			Assert.AreSame(link2, buildLinks[1]);

@@ -1,10 +1,8 @@
-using System;
 using System.Web.UI.HtmlControls;
 using NMock;
 using NMock.Constraints;
 using NUnit.Framework;
 using ThoughtWorks.CruiseControl.WebDashboard.Dashboard;
-using ThoughtWorks.CruiseControl.WebDashboard.MVC.Cruise;
 using ThoughtWorks.CruiseControl.WebDashboard.MVC.View;
 using ThoughtWorks.CruiseControl.WebDashboard.Plugins.ViewAllBuilds;
 
@@ -17,12 +15,14 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 		private DynamicMock decoratedBuilderMock;
 		private DecoratingRecentBuildsPanelBuilder builder;
 		private IHtmlBuilder htmlBuilder;
+		private IProjectSpecifier projectSpecifier;
 
 		[SetUp]
 		public void Setup()
 		{
 			urlBuilderMock = new DynamicMock(typeof(IUrlBuilder));
 			decoratedBuilderMock = new DynamicMock(typeof(IRecentBuildsViewBuilder));
+			projectSpecifier = new DefaultProjectSpecifier(new DefaultServerSpecifier("myServer"), "myProject");
 
 			htmlBuilder = new DefaultHtmlBuilder();
 			builder = new DecoratingRecentBuildsPanelBuilder(htmlBuilder, 
@@ -41,10 +41,10 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 		{
 			// Setup
 			HtmlTable table = htmlBuilder.CreateTable(htmlBuilder.CreateRow(htmlBuilder.CreateCell("hello decorator")));
-			decoratedBuilderMock.ExpectAndReturn("BuildRecentBuildsTable", table, "myServer", "myProject");
+			decoratedBuilderMock.ExpectAndReturn("BuildRecentBuildsTable", table, projectSpecifier);
 
 			// Execute
-			HtmlTable returnedTable = builder.BuildRecentBuildsTable("myServer", "myProject");
+			HtmlTable returnedTable = builder.BuildRecentBuildsTable(projectSpecifier);
 
 			// Verify
 			Assert.AreEqual("Recent Builds", returnedTable.Rows[0].Cells[0].InnerHtml);
@@ -57,11 +57,11 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 		{
 			// Setup
 			HtmlTable table = htmlBuilder.CreateTable(htmlBuilder.CreateRow(htmlBuilder.CreateCell("hello decorator")));
-			decoratedBuilderMock.ExpectAndReturn("BuildRecentBuildsTable", table, "myServer", "myProject");
-			urlBuilderMock.ExpectAndReturn("BuildProjectUrl", "returnedurl1", new PropertyIs("ActionName", ViewAllBuildsAction.ACTION_NAME), "myServer", "myProject");
+			decoratedBuilderMock.ExpectAndReturn("BuildRecentBuildsTable", table, projectSpecifier);
+			urlBuilderMock.ExpectAndReturn("BuildProjectUrl", "returnedurl1", new PropertyIs("ActionName", ViewAllBuildsAction.ACTION_NAME), projectSpecifier);
 
 			// Execute
-			HtmlTable returnedTable = builder.BuildRecentBuildsTable("myServer", "myProject");
+			HtmlTable returnedTable = builder.BuildRecentBuildsTable(projectSpecifier);
 
 			// Verify
 			// Row 0 is header

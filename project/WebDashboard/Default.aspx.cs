@@ -18,7 +18,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard
 		protected Label StatusLabel;
 		protected DataGrid StatusGrid;
 		protected Button RefreshButton;
-		private LocalCruiseManagerAggregator cruiseManager = new LocalCruiseManagerAggregator((ServerSpecification[])ConfigurationSettings.GetConfig(ServersSectionHandler.SectionName));
+		private LocalCruiseManagerAggregator cruiseManager = new LocalCruiseManagerAggregator((ServerLocation[])ConfigurationSettings.GetConfig(ServersSectionHandler.SectionName));
 	
 		private void RefreshDetails()
 		{

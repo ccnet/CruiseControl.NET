@@ -1,6 +1,7 @@
 using System;
 using System.IO;
 using ThoughtWorks.CruiseControl.WebDashboard.Config;
+using ThoughtWorks.CruiseControl.WebDashboard.Dashboard;
 using ThoughtWorks.CruiseControl.WebDashboard.IO;
 
 namespace ThoughtWorks.CruiseControl.WebDashboard.Cache
@@ -17,9 +18,9 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Cache
 			this.configurationGetter = configurationGetter;
 		}
 
-		public void AddContent(string serverName, string projectName, string directory, string fileName, string content)
+		public void AddContent(IProjectSpecifier projectSpecifier, string directory, string fileName, string content)
 		{
-			string localFilePath = GetLocalPathForFile(serverName, projectName, directory, fileName);
+			string localFilePath = GetLocalPathForFile(projectSpecifier, directory, fileName);
 			CreateDirectoryForFileIfNecessary(localFilePath);
 			using (StreamWriter sw = new StreamWriter(localFilePath)) 
 			{
@@ -27,9 +28,9 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Cache
 			}
 		}
 
-		public string GetContent(string serverName, string projectName, string directory, string fileName)
+		public string GetContent(IProjectSpecifier projectSpecifier, string directory, string fileName)
 		{
-			string filepath = GetLocalPathForFile(serverName, projectName, directory, fileName);
+			string filepath = GetLocalPathForFile(projectSpecifier, directory, fileName);
 
 			if (File.Exists(filepath))
 			{
@@ -41,24 +42,24 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Cache
 			}
 		}
 
-		public string GetURLForFile(string serverName, string projectName, string directory, string fileName)
+		public string GetURLForFile(IProjectSpecifier projectSpecifier, string directory, string fileName)
 		{
-			return pathMapper.GetAbsoluteURLForRelativePath(GetRelativePathForFile(serverName, projectName, directory, fileName));
+			return pathMapper.GetAbsoluteURLForRelativePath(GetRelativePathForFile(projectSpecifier, directory, fileName));
 		}
 
-		private string GetLocalPathForFile(string serverName, string projectName, string directory, string fileName)
+		private string GetLocalPathForFile(IProjectSpecifier projectSpecifier, string directory, string fileName)
 		{
-			return pathMapper.GetLocalPathFromURLPath(GetRelativePathForFile(serverName, projectName, directory, fileName));
+			return pathMapper.GetLocalPathFromURLPath(GetRelativePathForFile(projectSpecifier, directory, fileName));
 		}
 
-		private string GetRelativePathForFile(string serverName, string projectName, string directory, string fileName)
+		private string GetRelativePathForFile(IProjectSpecifier projectSpecifier, string directory, string fileName)
 		{
 			string cacheRootDirectory = configurationGetter.GetSimpleConfigSetting(LocalCacheRootDirectoryConfigParameter);
 			if (cacheRootDirectory == null || cacheRootDirectory == string.Empty)
 			{
 				throw new ApplicationException("Cache Root directory not set in config - make sure you have specified parameter [ " + LocalCacheRootDirectoryConfigParameter + " ]");
 			}
-			return Path.Combine(Path.Combine(Path.Combine(Path.Combine(cacheRootDirectory, serverName), projectName), directory), fileName);
+			return Path.Combine(Path.Combine(Path.Combine(Path.Combine(cacheRootDirectory, projectSpecifier.ServerSpecifier.ServerName), projectSpecifier.ProjectName), directory), fileName);
 		}
 
 		private void CreateDirectoryForFileIfNecessary(string fullLocalPathOfFile)

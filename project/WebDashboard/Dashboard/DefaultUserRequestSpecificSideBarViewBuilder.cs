@@ -31,31 +31,31 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 				TR( TD( A("Add Project", urlBuilder.BuildUrl(new ActionSpecifierWithName(DisplayAddProjectPageAction.ACTION_NAME))))));
 		}
 
-		public HtmlTable GetServerSideBar(string serverName)
+		public HtmlTable GetServerSideBar(IServerSpecifier serverSpecifier)
 		{
 			return Table(
-				TR( TD( A("View Server Log", urlBuilder.BuildServerUrl(new ActionSpecifierWithName(ViewServerLogAction.ACTION_NAME), serverName)))),
-				TR( TD( A("Add Project", urlBuilder.BuildServerUrl(new ActionSpecifierWithName(DisplayAddProjectPageAction.ACTION_NAME), serverName)))));
+				TR( TD( A("View Server Log", urlBuilder.BuildServerUrl(new ActionSpecifierWithName(ViewServerLogAction.ACTION_NAME), serverSpecifier)))),
+				TR( TD( A("Add Project", urlBuilder.BuildServerUrl(new ActionSpecifierWithName(DisplayAddProjectPageAction.ACTION_NAME), serverSpecifier)))));
 		}
 
-		public HtmlTable GetProjectSideBar(string serverName, string projectName)
+		public HtmlTable GetProjectSideBar(IProjectSpecifier projectSpecifier)
 		{
 			return Table(
-				TR( TD( A("Edit Project", urlBuilder.BuildProjectUrl(new ActionSpecifierWithName(DisplayEditProjectPageAction.ACTION_NAME), serverName, projectName)))),
-				TR( TD( A("Delete Project", urlBuilder.BuildProjectUrl(new ActionSpecifierWithName(ShowDeleteProjectAction.ACTION_NAME), serverName, projectName)))),
+				TR( TD( A("Edit Project", urlBuilder.BuildProjectUrl(new ActionSpecifierWithName(DisplayEditProjectPageAction.ACTION_NAME), projectSpecifier)))),
+				TR( TD( A("Delete Project", urlBuilder.BuildProjectUrl(new ActionSpecifierWithName(ShowDeleteProjectAction.ACTION_NAME), projectSpecifier)))),
 				TR( TD( "&nbsp;")),
-				TR( TD( recentBuildsViewBuilder.BuildRecentBuildsTable(serverName, projectName)))
+				TR( TD( recentBuildsViewBuilder.BuildRecentBuildsTable(projectSpecifier)))
 				);
 		}
 
-		public HtmlTable GetBuildSideBar(string serverName, string projectName, string buildName)
+		public HtmlTable GetBuildSideBar(IBuildSpecifier buildSpecifier)
 		{
-			IAbsoluteLink[] pluginLinks = buildPluginLinkCalculator.GetBuildPluginLinks(serverName, projectName, buildName);
+			IAbsoluteLink[] pluginLinks = buildPluginLinkCalculator.GetBuildPluginLinks(buildSpecifier);
 
 			HtmlTable table = Table(
-				TR( TD( A("Latest", urlBuilder.BuildBuildUrl(new ActionSpecifierWithName(ViewBuildReportAction.ACTION_NAME), serverName, projectName, buildNameRetriever.GetLatestBuildName(serverName, projectName))))),
-				TR( TD( A("Next", urlBuilder.BuildBuildUrl(new ActionSpecifierWithName(ViewBuildReportAction.ACTION_NAME), serverName, projectName, buildNameRetriever.GetNextBuildName(serverName, projectName, buildName))))),
-				TR( TD( A("Previous", urlBuilder.BuildBuildUrl(new ActionSpecifierWithName(ViewBuildReportAction.ACTION_NAME), serverName, projectName, buildNameRetriever.GetPreviousBuildName(serverName, projectName, buildName))))),
+				TR( TD( A("Latest", urlBuilder.BuildBuildUrl(new ActionSpecifierWithName(ViewBuildReportAction.ACTION_NAME), buildNameRetriever.GetLatestBuildSpecifier(buildSpecifier.ProjectSpecifier))))),
+				TR( TD( A("Next", urlBuilder.BuildBuildUrl(new ActionSpecifierWithName(ViewBuildReportAction.ACTION_NAME), buildNameRetriever.GetNextBuildSpecifier(buildSpecifier))))),
+				TR( TD( A("Previous", urlBuilder.BuildBuildUrl(new ActionSpecifierWithName(ViewBuildReportAction.ACTION_NAME), buildNameRetriever.GetPreviousBuildSpecifier(buildSpecifier))))),
 				TR( TD( "&nbsp;")));
 
 			foreach (IAbsoluteLink link in pluginLinks)
@@ -64,7 +64,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 			}
 
 			table.Rows.Add(TR( TD( "&nbsp;")));
-			table.Rows.Add(TR( TD( recentBuildsViewBuilder.BuildRecentBuildsTable(serverName, projectName))));
+			table.Rows.Add(TR( TD( recentBuildsViewBuilder.BuildRecentBuildsTable(buildSpecifier.ProjectSpecifier))));
 
 			return table;
 		}

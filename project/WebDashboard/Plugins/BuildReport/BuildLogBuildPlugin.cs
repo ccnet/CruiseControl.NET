@@ -18,7 +18,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.BuildReport
 
 		public Control Execute (ICruiseRequest cruiseRequest)
 		{
-			Build build = buildRetriever.GetBuild(cruiseRequest.ServerName, cruiseRequest.ProjectName, cruiseRequest.BuildName);
+			Build build = buildRetriever.GetBuild(cruiseRequest.BuildSpecifier);
 			HtmlGenericControl control = new HtmlGenericControl("div");
 			string buildLogForDisplay = build.Log.Replace("<", "&lt;");
 			buildLogForDisplay = buildLogForDisplay.Replace(">", "&gt;");

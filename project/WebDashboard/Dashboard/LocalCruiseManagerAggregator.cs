@@ -12,14 +12,14 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 		private ArrayList projectDetails = new ArrayList();
 		private IDictionary urlsForProjects = new Hashtable();
 
-		public LocalCruiseManagerAggregator(ServerSpecification[] servers) 
+		public LocalCruiseManagerAggregator(ServerLocation[] servers) 
 		{
 			ConnectToRemoteServers(servers);
 		}
 
-		private void ConnectToRemoteServers(ServerSpecification[] servers)
+		private void ConnectToRemoteServers(ServerLocation[] servers)
 		{
-			foreach (ServerSpecification server in servers)
+			foreach (ServerLocation server in servers)
 			{
 				try
 				{
