@@ -21,7 +21,8 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 		public Control GetServerSideBar(string serverName)
 		{
 			return Table(
-				TR( TD( "Server Side Bar Not Implemented" )));
+				TR( TD( A("View Server Log", urlBuilder.BuildUrl("ViewServerLog.aspx", "server=" + serverName)))),
+				TR( TD( A("Add Project", urlBuilder.BuildUrl("controller.aspx", "server=" + serverName)))));
 		}
 
 		public Control GetProjectSideBar(string serverName, string projectName)

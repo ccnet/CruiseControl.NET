@@ -44,6 +44,29 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 			VerifyAll();
 		}
 
+		[Test]
+		public void ShouldReturnLinkToAddProjectAndServerLogForServerView()
+		{
+			// Setup
+			urlBuilderMock.ExpectAndReturn("BuildUrl", "returnedurl1", "ViewServerLog.aspx", "server=myServer");
+			urlBuilderMock.ExpectAndReturn("BuildUrl", "returnedurl2", "controller.aspx", "server=myServer");
+			HtmlAnchor expectedAnchor1 = new HtmlAnchor();
+			expectedAnchor1.HRef = "returnedurl1";
+			expectedAnchor1.InnerHtml = "View Server Log";
+			HtmlAnchor expectedAnchor2 = new HtmlAnchor();
+			expectedAnchor2.HRef = "returnedurl2";
+			expectedAnchor2.InnerHtml = "Add Project";
+
+			// Execute
+			HtmlTable table = (HtmlTable) viewBuilder.GetServerSideBar("myServer");
+
+			Assert(TableContains(table, expectedAnchor1));
+			Assert(TableContains(table, expectedAnchor2));
+			
+			// Verify
+			VerifyAll();
+		}
+
 		private bool TableContains(HtmlTable table, HtmlAnchor anchor)
 		{
 			foreach (HtmlTableRow row in table.Rows)
