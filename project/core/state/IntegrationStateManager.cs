@@ -15,7 +15,6 @@ namespace ThoughtWorks.CruiseControl.Core.State
 
 		public IntegrationStateManager()
 		{
-			_serializer = new XmlSerializer(typeof(IntegrationResult));
 		}
 
 		[ReflectorProperty("directory", Required=false)]
@@ -44,6 +43,7 @@ namespace ThoughtWorks.CruiseControl.Core.State
 
 		public IntegrationResult LoadState()
 		{
+			_serializer = new XmlSerializer(typeof(IntegrationResult));
 			using (TextReader reader = CreateTextReader(GetFilePath()))
 			{
 				return (IntegrationResult)_serializer.Deserialize(reader);
@@ -52,6 +52,7 @@ namespace ThoughtWorks.CruiseControl.Core.State
 		
 		public void SaveState(IntegrationResult result)
 		{
+			_serializer = new XmlSerializer(typeof(IntegrationResult));
 			StringWriter buffer = new StringWriter();
 			_serializer.Serialize(buffer, result);
 
