@@ -27,7 +27,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 		public HtmlTable GetServerSideBar(string serverName)
 		{
 			return Table(
-				TR( TD( A("View Server Log", urlBuilder.BuildServerUrl("ViewServerLog.aspx", serverName)))),
+				TR( TD( A("View Server Log", urlBuilder.BuildServerUrl(new ActionSpecifierWithName(CruiseActionFactory.VIEW_SERVER_LOG_ACTION_NAME), serverName)))),
 				TR( TD( A("Add Project", urlBuilder.BuildServerUrl(new ActionSpecifierWithName(CruiseActionFactory.ADD_PROJECT_DISPLAY_ACTION_NAME), serverName)))));
 		}
 

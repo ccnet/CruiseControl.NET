@@ -229,21 +229,6 @@
                     BuildAction = "EmbeddedResource"
                 />
                 <File
-                    RelPath = "ViewServerLog.aspx"
-                    BuildAction = "Content"
-                />
-                <File
-                    RelPath = "ViewServerLog.aspx.cs"
-                    DependentUpon = "ViewServerLog.aspx"
-                    SubType = "ASPXCodeBehind"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "ViewServerLog.aspx.resx"
-                    DependentUpon = "ViewServerLog.aspx.cs"
-                    BuildAction = "EmbeddedResource"
-                />
-                <File
                     RelPath = "Web.config"
                     BuildAction = "None"
                 />
@@ -646,6 +631,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "MVC\Cruise\ServerCheckingProxyAction.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "MVC\Cruise\SimpleErrorViewBuilder.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -726,17 +716,13 @@
                     BuildAction = "Compile"
                 />
                 <Folder RelPath = "Plugins\ProjectReporterPlugin\" />
-                <File
-                    RelPath = "Plugins\ServerLogViewerPlugin\ServerLogViewerPageRenderer.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Plugins\ServerLogViewerPlugin\ServerLogViewerResults.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
+                <Folder RelPath = "Plugins\ServerLogViewerPlugin\" />
                 <Folder RelPath = "Plugins\SiteTemplatePlugin\" />
+                <File
+                    RelPath = "Plugins\ViewServerLog\ViewServerLogAction.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
                 <File
                     RelPath = "ServerConnection\IBuildSpecifier.cs"
                     SubType = "Code"

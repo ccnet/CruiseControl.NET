@@ -1,7 +1,6 @@
 using ThoughtWorks.CruiseControl.WebDashboard.Dashboard;
 using ThoughtWorks.CruiseControl.WebDashboard.Plugins.LogViewerPlugin;
 using ThoughtWorks.CruiseControl.WebDashboard.Plugins.BuildReporterPlugin;
-using ThoughtWorks.CruiseControl.WebDashboard.Plugins.ServerLogViewerPlugin;
 
 namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins
 {
@@ -24,11 +23,6 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins
 		public LogViewerPageRenderer LogViewerPageRenderer
 		{
 			get { return new LogViewerPageRenderer(dcFactory.QueryStringRequestWrapper, dcFactory.DefaultBuildRetrieverForRequest, dcFactory.LocalFileCacheManager);}
-		}
-
-		public ServerLogViewerPageRenderer ServerLogViewerPageRenderer
-		{
-			get { return new ServerLogViewerPageRenderer(dcFactory.QueryStringRequestWrapper, dcFactory.ServerAggregatingCruiseManagerWrapper); }
 		}
 	}
 }

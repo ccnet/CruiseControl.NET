@@ -58,7 +58,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 		public void ShouldReturnLinkToAddProjectAndServerLogForServerView()
 		{
 			// Setup
-			urlBuilderMock.ExpectAndReturn("BuildServerUrl", "returnedurl1", "ViewServerLog.aspx", "myServer");
+			urlBuilderMock.ExpectAndReturn("BuildServerUrl", "returnedurl1", new PropertyIs("ActionName", CruiseActionFactory.VIEW_SERVER_LOG_ACTION_NAME), "myServer");
 			urlBuilderMock.ExpectAndReturn("BuildServerUrl", "returnedurl2", new PropertyIs("ActionName", CruiseActionFactory.ADD_PROJECT_DISPLAY_ACTION_NAME), "myServer");
 			HtmlAnchor expectedAnchor1 = new HtmlAnchor();
 			expectedAnchor1.HRef = "returnedurl1";

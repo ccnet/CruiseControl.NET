@@ -308,6 +308,11 @@
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
+                <File
+                    RelPath = "WebDashboard\MVC\Cruise\ServerCheckingProxyActionTest.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
                 <Folder RelPath = "WebDashboard\Plugins\AddProjectPlugin\" />
                 <File
                     RelPath = "WebDashboard\Plugins\DeleteProject\DoDeleteProjectActionTest.cs"
@@ -325,12 +330,13 @@
                     BuildAction = "Compile"
                 />
                 <Folder RelPath = "WebDashboard\Plugins\ProjectReporter\" />
+                <Folder RelPath = "WebDashboard\Plugins\ServerLogViewerPlugin\" />
+                <Folder RelPath = "WebDashboard\Plugins\SiteTemplatePlugin\LogViewerPlugin\" />
                 <File
-                    RelPath = "WebDashboard\Plugins\ServerLogViewerPlugin\ServerLogViewerPageRendererTest.cs"
+                    RelPath = "WebDashboard\Plugins\ViewServerLog\ViewServerLogActionTest.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
-                <Folder RelPath = "WebDashboard\Plugins\SiteTemplatePlugin\LogViewerPlugin\" />
                 <File
                     RelPath = "WebDashboard\ServerConnection\ServerAggregatingCruiseManagerWrapperTest.cs"
                     SubType = "Code"

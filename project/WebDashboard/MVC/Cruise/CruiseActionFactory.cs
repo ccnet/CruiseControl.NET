@@ -1,5 +1,7 @@
+using System;
 using ThoughtWorks.CruiseControl.WebDashboard.Dashboard;
 using ThoughtWorks.CruiseControl.WebDashboard.Plugins.DeleteProject;
+using ThoughtWorks.CruiseControl.WebDashboard.Plugins.ViewServerLog;
 
 namespace ThoughtWorks.CruiseControl.WebDashboard.MVC.Cruise
 {
@@ -18,6 +20,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.MVC.Cruise
 		public static readonly string VIEW_ALL_BUILDS_ACTION_NAME = "ViewAllBuilds";
 		public static readonly string SHOW_DELETE_PROJECT_ACTION_NAME = "ShowDeleteProject";
 		public static readonly string DO_DELETE_PROJECT_ACTION_NAME = "DoDeleteProject";
+		public static readonly string VIEW_SERVER_LOG_ACTION_NAME = "ViewServerLog";
 
 		public IAction Create(IRequest request)
 		{
@@ -52,6 +55,10 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.MVC.Cruise
 			{
 				return CruiseActionProxyAction(ServerAndProjectCheckingProxyAction(DoDeleteProjectAction));
 			}
+			else if (actionName == VIEW_SERVER_LOG_ACTION_NAME)
+			{
+				return CruiseActionProxyAction(ServerCheckingProxyAction(ViewServerLogAction));
+			}
 			else
 			{
 				return new UnknownActionAction();
@@ -71,6 +78,11 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.MVC.Cruise
 		public ServerAndProjectCheckingProxyAction ServerAndProjectCheckingProxyAction(ICruiseAction proxied)
 		{
 			return new ServerAndProjectCheckingProxyAction(proxied, SimpleErrorViewBuilder);
+		}
+
+		public ServerCheckingProxyAction ServerCheckingProxyAction(ICruiseAction proxied)
+		{
+			return new ServerCheckingProxyAction(proxied, SimpleErrorViewBuilder);
 		}
 
 		public SimpleErrorViewBuilder SimpleErrorViewBuilder
@@ -116,6 +128,11 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.MVC.Cruise
 		public ViewAllBuildsAction ViewAllBuildsAction
 		{
 			get { return new ViewAllBuildsAction(new RecentBuildLister( dcFactory.DefaultHtmlBuilder, dcFactory.DefaultUrlBuilder, dcFactory.ServerAggregatingCruiseManagerWrapper, dcFactory.DefaultBuildNameFormatter)); } 
+		}
+
+		private ViewServerLogAction ViewServerLogAction
+		{
+			get { return new ViewServerLogAction(dcFactory.ServerAggregatingCruiseManagerWrapper); }
 		}
 	}
 }
