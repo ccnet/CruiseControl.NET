@@ -6,7 +6,7 @@
 	<body>
 		<table cellpadding="0" cellspacing="0" width="100%">
 			<tr>
-				<td id="HeaderCell" rowspan="2" bgcolor="#ffffff" runat="server">
+				<td id="HeaderCell" rowspan="2" bgcolor="#ffffff" runat="server" />
 				<!-- Context Menu top right -->
 				<td align="right" valign="top">
 					<table class="main-panel" bgcolor="#000066" cellpadding="0" cellspacing="0">

@@ -18,8 +18,6 @@ namespace ThoughtWorks.CruiseControl.Core.State
 			_serializer = new XmlSerializer(typeof(IntegrationResult));
 		}
 
-		#region NetReflector managed properties
-
 		[ReflectorProperty("directory", Required=false)]
 		public string Directory
 		{
@@ -33,8 +31,6 @@ namespace ThoughtWorks.CruiseControl.Core.State
 			get { return _filename; }
 			set { _filename = value; }
 		}
-
-		#endregion
 
 		public string GetFilePath()
 		{
