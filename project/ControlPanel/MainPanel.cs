@@ -18,7 +18,8 @@ namespace ThoughtWorks.CruiseControl.ControlPanel
 		private System.Windows.Forms.TabControl tabControl;
 		private System.Windows.Forms.MenuItem saveMenuItem;
 		private System.ComponentModel.Container components = null;
-		private IConfiguration configuration;
+		private ConfigurationModel _model;
+		private string _filename;
 
 		public MainPanel()
 		{
@@ -113,35 +114,29 @@ namespace ThoughtWorks.CruiseControl.ControlPanel
 
 		private void Open(string filename) 
 		{
-			configuration = LoadConfiguration(filename);
-			if (configuration == null) return;
-
-			foreach (IProject project in configuration) 
+			_filename = filename;
+			_model = new ConfigurationModel();
+			try 
 			{
-				ConfigurationModel model = new ConfigurationModel();
-				model.Load(project);
-				
+				_model.Load(filename);
+			}
+			catch (ConfigurationException ex) 
+			{
+				MessageBox.Show("there was an error loading (" + filename + ") : \n" + ex.ToString(), "Error");
+				return;
+			}
+
+			foreach (ProjectItem project in _model.Projects)
+			{
 				BunchOfConfigurationItemControls controls = new BunchOfConfigurationItemControls();
-				controls.Bind(model.Items);
+				controls.Bind(project.Items);
 				
 				TabPage page = new TabPage(project.Name);
 				page.Controls.Add(controls);
 				
 				tabControl.TabPages.Add(page);
 			}
-		}
 
-		private IConfiguration LoadConfiguration(string filename)
-		{
-			try 
-			{
-				return new CruiseServer(new ConfigurationLoader(filename)).Configuration;
-			}
-			catch (ConfigurationException ex) 
-			{
-				MessageBox.Show("there was an error loading (" + filename + ") : \n" + ex.ToString(), "Error");
-				return null;
-			}
 		}
 
 		protected virtual string ChooseFileToOpen() 
@@ -152,8 +147,7 @@ namespace ThoughtWorks.CruiseControl.ControlPanel
 
 		private void saveMenuItem_Click(object sender, System.EventArgs e)
 		{
-
-		
+			_model.Save(_filename);
 		}
 	}
 }

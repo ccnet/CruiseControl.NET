@@ -127,7 +127,7 @@ namespace ThoughtWorks.CruiseControl.Core.Config.Test
 		}
 
 		[ReflectorType("customtestproject")]
-			class CustomTestProject : ProjectBase, IProject
+		class CustomTestProject : ProjectBase, IProject
 		{
 			public ProjectActivity CurrentActivity { get { return ProjectActivity.Building; } }
 			public IntegrationResult RunIntegration(BuildCondition buildCondition) { return null; }

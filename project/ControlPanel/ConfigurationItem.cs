@@ -144,6 +144,7 @@ namespace ThoughtWorks.CruiseControl.ControlPanel
 				{
 					values.Add(GetReflectorName(type));
 				}
+				values.Sort();
 
 				return (string []) values.ToArray(typeof(string));
 			}
