@@ -463,6 +463,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Dashboard\XslReportBuildPlugin.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "images\arrow_minus_small.gif"
                     BuildAction = "Content"
                 />
