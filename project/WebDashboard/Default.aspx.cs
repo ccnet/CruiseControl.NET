@@ -13,9 +13,6 @@ namespace ThoughtWorks.CruiseControl.WebDashboard
 	{
 		protected System.Web.UI.WebControls.Label ExceptionTitleLabel;
 		protected System.Web.UI.WebControls.DataGrid ExceptionGrid;
-		protected System.Web.UI.WebControls.DropDownList lstProject;
-		protected System.Web.UI.WebControls.Button cmdBuild;
-		protected System.Web.UI.WebControls.Label lblBuilding;
 		protected System.Web.UI.WebControls.DataGrid StatusGrid;
 	
 		private void Page_Load(object sender, System.EventArgs e)
@@ -23,13 +20,6 @@ namespace ThoughtWorks.CruiseControl.WebDashboard
 			IList urls = (IList) ConfigurationSettings.GetConfig("projectURLs");
 			ArrayList statusses = new ArrayList();
 			ArrayList connectionExceptions = new ArrayList();
-			ArrayList projectNames = new ArrayList();
-			String buildProjectName = "";
-
-			if (Page.IsPostBack.Equals(true))
-			   {
-					buildProjectName = Page.Request.Form.Get("lstProject");
-			   }
 
 			foreach (string url in urls)
 			{
@@ -38,17 +28,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard
 					ICruiseManager remoteCC = (ICruiseManager) RemotingServices.Connect(typeof(ICruiseManager), url);
 					foreach (ProjectStatus status in remoteCC.GetProjectStatus())
 					{
-						if (buildProjectName.Length > 0)
-							if (status.Name.Equals(buildProjectName))
-								{
-									remoteCC.ForceBuild (buildProjectName);
-									lblBuilding.Text = "Starting build for " + buildProjectName + "...";
-									lblBuilding.Visible = true;
-								    Response.Redirect ("Default.aspx", true);
-							}
-
 						statusses.Add(status);
-						projectNames.Add(status.Name);
 					}
 				}
 				catch (Exception f)
@@ -62,14 +42,10 @@ namespace ThoughtWorks.CruiseControl.WebDashboard
 				StatusGrid.DataSource = statusses;
 				StatusGrid.DataBind();
 				StatusGrid.Visible = true;
-				lstProject.DataSource = projectNames;
-				lstProject.DataBind();
-				cmdBuild.Enabled = true;
 			}
 			else
 			{
 				StatusGrid.Visible = false;
-				cmdBuild.Enabled = false;
 			}
 
 			if (connectionExceptions.Count > 0)
@@ -119,16 +95,10 @@ namespace ThoughtWorks.CruiseControl.WebDashboard
 		private void InitializeComponent()
 		{    
 			this.StatusGrid.ItemDataBound += new System.Web.UI.WebControls.DataGridItemEventHandler(this.StatusGrid_ItemDataBound);
-			this.StatusGrid.SelectedIndexChanged += new System.EventHandler(this.StatusGrid_SelectedIndexChanged);
 			this.Load += new System.EventHandler(this.Page_Load);
 
 		}
 		#endregion
-
-		private void StatusGrid_SelectedIndexChanged(object sender, System.EventArgs e)
-		{
-		
-		}
 	}
 
 	public struct ConnectionException
