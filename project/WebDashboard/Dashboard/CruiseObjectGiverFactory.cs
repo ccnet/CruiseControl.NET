@@ -75,6 +75,9 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 			giverAndRegistrar.CreateImplementationMapping(ViewTestDetailsBuildReportAction.ACTION_NAME, 
 				typeof(ViewTestDetailsBuildReportAction)).Decorate(typeof(ServerCheckingProxyAction)).Decorate(typeof(BuildCheckingProxyAction)).Decorate(typeof(ProjectCheckingProxyAction)).Decorate(typeof(CruiseActionProxyAction));
 
+			giverAndRegistrar.CreateImplementationMapping(ViewTestDetailsBuildReportAction.ACTION_NAME, 
+				typeof(ViewTestTimingsBuildReportAction)).Decorate(typeof(ServerCheckingProxyAction)).Decorate(typeof(BuildCheckingProxyAction)).Decorate(typeof(ProjectCheckingProxyAction)).Decorate(typeof(CruiseActionProxyAction));
+
 			giverAndRegistrar.CreateImplementationMapping(ViewFxCopBuildReportAction.ACTION_NAME, 
 				typeof(ViewFxCopBuildReportAction)).Decorate(typeof(ServerCheckingProxyAction)).Decorate(typeof(BuildCheckingProxyAction)).Decorate(typeof(ProjectCheckingProxyAction)).Decorate(typeof(CruiseActionProxyAction));
 

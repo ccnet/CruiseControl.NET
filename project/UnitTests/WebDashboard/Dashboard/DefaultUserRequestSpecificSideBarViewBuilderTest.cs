@@ -121,6 +121,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 			urlBuilderMock.ExpectAndReturn("BuildBuildUrl", "previousUrl", new PropertyIs("ActionName", ViewBuildReportAction.ACTION_NAME), "myServer", "myProject", "returnedPreviousBuildName");
 			urlBuilderMock.ExpectAndReturn("BuildBuildUrl", "viewLogUrl", new PropertyIs("ActionName", ViewBuildLogAction.ACTION_NAME), "myServer", "myProject", "myCurrentBuild");
 			urlBuilderMock.ExpectAndReturn("BuildBuildUrl", "viewTestDetailsUrl", new PropertyIs("ActionName", ViewTestDetailsBuildReportAction.ACTION_NAME), "myServer", "myProject", "myCurrentBuild");
+			urlBuilderMock.ExpectAndReturn("BuildBuildUrl", "viewTestTimingsUrl", new PropertyIs("ActionName", ViewTestTimingsBuildReportAction.ACTION_NAME), "myServer", "myProject", "myCurrentBuild");
 			urlBuilderMock.ExpectAndReturn("BuildBuildUrl", "viewFxCopUrl", new PropertyIs("ActionName", ViewFxCopBuildReportAction.ACTION_NAME), "myServer", "myProject", "myCurrentBuild");
 			HtmlTable buildsPanel = new HtmlTable();
 			recentBuildsViewBuilderMock.ExpectAndReturn("BuildRecentBuildsTable", buildsPanel, "myServer", "myProject");
@@ -140,6 +141,9 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 			HtmlAnchor expectedAnchor5 = new HtmlAnchor();
 			expectedAnchor5.HRef = "viewTestDetailsUrl";
 			expectedAnchor5.InnerHtml = "View Test Details";
+			HtmlAnchor expectedAnchor6 = new HtmlAnchor();
+			expectedAnchor6.HRef = "viewTestTimingsUrl";
+			expectedAnchor6.InnerHtml = "View Test Timings";
 			HtmlAnchor expectedAnchor7 = new HtmlAnchor();
 			expectedAnchor7.HRef = "viewFxCopUrl";
 			expectedAnchor7.InnerHtml = "View FxCop Report";
@@ -152,6 +156,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 			Assert.IsTrue(TableContains(table, expectedAnchor3));
 			Assert.IsTrue(TableContains(table, expectedAnchor4));
 			Assert.IsTrue(TableContains(table, expectedAnchor5));
+			Assert.IsTrue(TableContains(table, expectedAnchor6));
 			Assert.IsTrue(TableContains(table, expectedAnchor7));
 			Assert.IsTrue(TableContains(table, buildsPanel));
 			

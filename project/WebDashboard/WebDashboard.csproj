@@ -666,6 +666,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Plugins\TestReport\ViewTestTimingsBuildReportAction.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Plugins\ViewAllBuilds\IViewAllBuildsViewBuilder.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
