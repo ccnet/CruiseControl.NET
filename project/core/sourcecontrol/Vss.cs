@@ -9,6 +9,8 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 	[ReflectorType("vss")]
 	public class Vss : ProcessSourceControl, ITemporaryLabeller
 	{
+		public const string TEMP_SOURCE_DIRECTORY = "VssSource";
+
 		// required environment variable name
 		internal const string SS_DIR_KEY = "SSDIR";
 		internal const string SS_REGISTRY_PATH = @"Software\\Microsoft\\SourceSafe";
@@ -75,7 +77,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 		public bool AutoGetSource = false;
 
 		[ReflectorProperty("workingDirectory", Required = false)]
-		public string WorkingDirectory = Directory.GetCurrentDirectory();
+		public string WorkingDirectory;
 
 		public override Modification[] GetModifications(DateTime from, DateTime to)
 		{
@@ -171,7 +173,11 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 		{
 			if (! AutoGetSource) return;
 
-			if (! Directory.Exists(WorkingDirectory))
+			if (WorkingDirectory == null)
+			{
+				WorkingDirectory = TempFileUtil.CreateTempDir(TEMP_SOURCE_DIRECTORY);
+			}
+			else if (! Directory.Exists(WorkingDirectory))
 			{
 				Directory.CreateDirectory(WorkingDirectory);
 			}

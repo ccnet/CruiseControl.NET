@@ -2,6 +2,7 @@
 
 using System;
 using System.Globalization;
+using System.IO;
 using Exortech.NetReflector;
 using NMock;
 using NMock.Constraints;
@@ -217,6 +218,19 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test
 			mockProcessExecutor.ExpectNoCall("Execute", typeof(ProcessInfo));
 
 			vss.GetSource(IntegrationResultMother.CreateSuccessful(DateTime.Now));
+		}
+
+		[Test]
+		public void UseTemporaryDirectoryIfWorkingDirectoryIsNull()
+		{
+			CollectingConstraint constraint = new CollectingConstraint();
+			mockProcessExecutor.ExpectAndReturn("Execute", new ProcessResult("Getting App.ico", null, ProcessResult.SUCCESSFUL_EXIT_CODE, false), constraint);
+
+			vss.AutoGetSource = true;
+			vss.GetSource(IntegrationResultMother.CreateSuccessful(DateTime.Now));
+
+			ProcessInfo info = (ProcessInfo) constraint.Parameter;
+			AssertStartsWith(Path.GetTempPath(), info.WorkingDirectory);
 		}
 
 		[Test]
