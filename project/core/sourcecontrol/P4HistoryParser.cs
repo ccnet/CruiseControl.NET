@@ -4,59 +4,26 @@ using System.Text.RegularExpressions;
 using System.IO;
 using System.Collections;
 
+using tw.ccnet.core.util;
+
 namespace tw.ccnet.core.sourcecontrol
 {
 	public class P4HistoryParser : IHistoryParser
 	{
-
 		private static Regex modRegex = new Regex(@"info1: (?<folder>//.*)/(?<file>.*)#\d+ (?<type>\w+)");
 		private static Regex changeRegex = new Regex(@"text: Change \w+ by (?<email>(?<user>.*)@.*) on (?<date>\d{4}/\d{2}/\d{2} \d{2}:\d{2}:\d{2})");
 
-		public Modification[] Parse(TextReader reader)
-		{
-			ArrayList mods = new ArrayList();
-			string line;
-			string email = null, user = null, comment = null;
-			DateTime date = DateTime.Now;
-			while((line = reader.ReadLine()) != null)
-			{
-				Match match = modRegex.Match(line);
-				if (match.Success)
-				{
-					Modification mod = new Modification();
-					mod.FolderName = match.Groups["folder"].Value;
-					mod.FileName = match.Groups["file"].Value;
-					mod.Type = match.Groups["type"].Value;
-					mod.EmailAddress = email;
-					mod.UserName = user;
-					mod.ModifiedTime = date;
-					mod.Comment = comment.Trim();
-					mods.Add(mod);
-				}
-				else 
-				{
-					match = changeRegex.Match(line);
-					if (match.Success)
-					{
-						email = match.Groups["email"].Value;
-						user = match.Groups["user"].Value;
-						date = DateTime.Parse(match.Groups["date"].Value);
-						comment = "";
-					}
-					else if (line.StartsWith("text:   "))
-					{
-						comment += line.Substring(8) + "\r\n";
-					}
-				}
-			}
-			
-			return (Modification[]) mods.ToArray(typeof(Modification));
-		}
-
+		/// <summary>
+		/// Used to extract changelist numbers from p4.exe output of format
+		/// <code>info: Change 123 456 789</code>
+		/// </summary>
+		/// <param name="changes"></param>
+		/// <returns></returns>
 		public string ParseChanges(String changes)
 		{
 			if (!changes.TrimEnd().EndsWith("exit: 0"))
 			{
+				// TODO think about adding remainder of 'changes' text to this exception
 				throw new CruiseControlException("Perforce exit status 1");
 			}
 			StringBuilder result = new StringBuilder();
@@ -69,5 +36,74 @@ namespace tw.ccnet.core.sourcecontrol
 			return result.ToString().Trim();
 		}
 
+		/// <summary>
+		/// Parses output from p4.exe obtained using arguments <code>p4 -s describe -s 123</code>
+		/// where 123 (etc...) are changelist numbers.  This output looks like this:
+		/// <p>
+		/// <code>
+		/// text: Change 123 by user@hostname on 2002/08/21 14:39:52
+		/// text:
+		/// text:   The checkin comment
+		/// text:
+		/// text: Affected files ...
+		/// text:
+		/// info1: //view/path/filename.java#1 add
+		/// text:
+		/// exit: 0
+		/// </code>
+		/// </p>
+		/// the type appears at the end of the info1 line, and may be add, edit, delete etc...
+		/// Two regex strings are used to match the first line, and the 'info1:' line.
+		/// NOTE there's a tab character before comment text.
+		/// </summary>
+		/// <param name="reader"></param>
+		/// <returns></returns>
+		public Modification[] Parse(TextReader reader)
+		{
+			ArrayList mods = new ArrayList();
+			string line;
+			string email = null, user = null, comment = string.Empty;
+			DateTime date = DateTime.Now;
+			while((line = reader.ReadLine()) != null)
+			{
+				Match modificationMatch = modRegex.Match(line);
+				if (modificationMatch.Success)
+				{
+					// when this line is matched, we're finished with this mod, so add it
+					Modification mod = new Modification();
+					mod.FolderName = modificationMatch.Groups["folder"].Value;
+					mod.FileName = modificationMatch.Groups["file"].Value;
+					mod.Type = modificationMatch.Groups["type"].Value;
+					mod.EmailAddress = email;
+					mod.UserName = user;
+					mod.ModifiedTime = date;
+					mod.Comment = comment.Trim();
+					mods.Add(mod);
+				}
+				else 
+				{
+					Match changeMatch = changeRegex.Match(line);
+					if (changeMatch.Success)
+					{
+						// set these values while they're available
+						email = changeMatch.Groups["email"].Value;
+						user = changeMatch.Groups["user"].Value;
+						date = DateTime.Parse(changeMatch.Groups["date"].Value);
+						// TODO this is necessary, could someone explain why?
+						comment = "";
+					}
+					else 
+					{
+						string checkinCommentPrefix = "text: \t";
+						if (line.StartsWith(checkinCommentPrefix))
+						{
+							comment += line.Substring(checkinCommentPrefix.Length) + "\r\n";
+						}
+					}
+				}
+			}
+			
+			return (Modification[]) mods.ToArray(typeof(Modification));
+		}
 	}
 }
