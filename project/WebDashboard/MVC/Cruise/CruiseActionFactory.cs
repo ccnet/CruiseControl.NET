@@ -1,5 +1,6 @@
 using ThoughtWorks.CruiseControl.WebDashboard.Dashboard;
 using ThoughtWorks.CruiseControl.WebDashboard.Plugins.DeleteProject;
+using ThoughtWorks.CruiseControl.WebDashboard.Plugins.ViewBuildLog;
 using ThoughtWorks.CruiseControl.WebDashboard.Plugins.ViewServerLog;
 
 namespace ThoughtWorks.CruiseControl.WebDashboard.MVC.Cruise
@@ -22,6 +23,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.MVC.Cruise
 		public static readonly string SHOW_DELETE_PROJECT_ACTION_NAME = "ShowDeleteProject";
 		public static readonly string DO_DELETE_PROJECT_ACTION_NAME = "DoDeleteProject";
 		public static readonly string VIEW_SERVER_LOG_ACTION_NAME = "ViewServerLog";
+		public static readonly string VIEW_BUILD_LOG_ACTION_NAME = "ViewBuildLog";
 		public static readonly string VIEW_PROJECT_REPORT_ACTION_NAME = "ViewProjectReport";
 
 		public IAction Create(IRequest request)
@@ -72,6 +74,10 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.MVC.Cruise
 			else if (actionName == VIEW_SERVER_LOG_ACTION_NAME)
 			{
 				return CruiseActionProxyAction(ServerCheckingProxyAction(ViewServerLogAction));
+			}
+			else if (actionName == VIEW_BUILD_LOG_ACTION_NAME)
+			{
+				return CruiseActionProxyAction(BuildCheckingProxyAction(ProjectCheckingProxyAction(ServerCheckingProxyAction(ViewBuildLogAction))));
 			}
 			else
 			{
@@ -172,6 +178,11 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.MVC.Cruise
 		private ViewServerLogAction ViewServerLogAction
 		{
 			get { return new ViewServerLogAction(dcFactory.ServerAggregatingCruiseManagerWrapper); }
+		}
+
+		private ViewBuildLogAction ViewBuildLogAction
+		{
+			get { return new ViewBuildLogAction(dcFactory.CachingBuildRetriever); }
 		}
 	}
 }

@@ -32,7 +32,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 					return buildNames[i-1];
 				}
 			}
-			throw new UnknownBuildException(new Build(buildName, "", serverName, projectName));
+			throw new UnknownBuildException(new Build(buildName, "", serverName, projectName, ""));
 		}
 
 		public string GetPreviousBuildName(string serverName, string projectName, string buildName)
@@ -52,7 +52,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 				}
 			}
 
-			throw new UnknownBuildException(new Build(buildName, "", serverName, projectName));
+			throw new UnknownBuildException(new Build(buildName, "", serverName, projectName, ""));
 		}
 	}
 }

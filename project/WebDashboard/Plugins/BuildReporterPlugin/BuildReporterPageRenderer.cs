@@ -16,21 +16,22 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.BuildReporterPlugin
 	{
 		private readonly IPathMapper pathMapper;
 		private readonly ICruiseRequest request;
-		private readonly IBuildRetrieverForRequest buildRetrieverForRequest;
+		private readonly IBuildRetriever buildRetriever;
 
-		public BuildReporterPageRenderer(ICruiseRequest request, IBuildRetrieverForRequest buildRetrieverForRequest, IPathMapper pathMapper)
+		public BuildReporterPageRenderer(ICruiseRequest request, IBuildRetriever buildRetriever, IPathMapper pathMapper)
 		{
-			this.buildRetrieverForRequest = buildRetrieverForRequest;
+			this.buildRetriever = buildRetriever;
 			this.request = request;
 			this.pathMapper = pathMapper;
 		}
 
 		public BuildReportResults Do()
 		{
+			Build build = buildRetriever.GetBuild(request.ServerName, request.ProjectName, request.BuildName);
 			StringBuilder builder = new StringBuilder();
 			try
 			{
-				using(StringReader logReader = new StringReader(buildRetrieverForRequest.GetBuild(request).Log))
+				using(StringReader logReader = new StringReader(build.Log))
 				{
 					XPathDocument document = new XPathDocument(logReader);
 					IList list = (IList) ConfigurationSettings.GetConfig("CCNet/xslFiles");

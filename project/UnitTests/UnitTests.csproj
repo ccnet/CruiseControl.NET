@@ -234,22 +234,12 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "WebDashboard\Dashboard\CruiseManagerBuildRetrieverTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
                     RelPath = "WebDashboard\Dashboard\DecoratingRecentBuildsPanelBuilderTest.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
                     RelPath = "WebDashboard\Dashboard\DefaultBuildNameFormatterTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "WebDashboard\Dashboard\DefaultBuildRetrieverForRequestTest.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -344,14 +334,15 @@
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
-                <File
-                    RelPath = "WebDashboard\Plugins\LogViewerPlugin\LogViewerTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
+                <Folder RelPath = "WebDashboard\Plugins\LogViewerPlugin\" />
                 <Folder RelPath = "WebDashboard\Plugins\ProjectReporter\" />
                 <Folder RelPath = "WebDashboard\Plugins\ServerLogViewerPlugin\" />
                 <Folder RelPath = "WebDashboard\Plugins\SiteTemplatePlugin\LogViewerPlugin\" />
+                <File
+                    RelPath = "WebDashboard\Plugins\ViewBuildLog\ViewBuildLogActionTest.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
                 <File
                     RelPath = "WebDashboard\Plugins\ViewServerLog\ViewServerLogActionTest.cs"
                     SubType = "Code"

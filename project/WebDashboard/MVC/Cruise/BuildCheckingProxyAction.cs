@@ -3,7 +3,7 @@ using ThoughtWorks.CruiseControl.WebDashboard.IO;
 
 namespace ThoughtWorks.CruiseControl.WebDashboard.MVC.Cruise
 {
-	public class BuildCheckingProxyAction
+	public class BuildCheckingProxyAction : ICruiseAction
 	{
 		private readonly IErrorViewBuilder errorViewBuilder;
 		private readonly ICruiseAction proxiedAction;

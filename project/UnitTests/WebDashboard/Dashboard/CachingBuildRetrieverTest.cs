@@ -2,6 +2,7 @@ using NMock;
 using NUnit.Framework;
 using ThoughtWorks.CruiseControl.WebDashboard.Cache;
 using ThoughtWorks.CruiseControl.WebDashboard.Dashboard;
+using ThoughtWorks.CruiseControl.WebDashboard.ServerConnection;
 
 namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 {
@@ -9,44 +10,46 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 	public class CachingBuildRetrieverTest
 	{
 		private DynamicMock cacheManagerMock;
-		private DynamicMock slaveBuildRetrieverMock;
+		private DynamicMock cruiseManagerWrapperMock;
 		private CachingBuildRetriever cachingBuildRetriever;
 		private string serverName;
 		private string projectName;
 		private string logContent;
 		private string buildName;
-		private Build build;
+		private string logLocation;
 
 		[SetUp]
 		public void Setup()
 		{
 			cacheManagerMock = new DynamicMock(typeof(ICacheManager));
-			slaveBuildRetrieverMock = new DynamicMock(typeof(IBuildRetriever));
+			cruiseManagerWrapperMock = new DynamicMock(typeof(ICruiseManagerWrapper));
 
 			cachingBuildRetriever = new CachingBuildRetriever((ICacheManager) cacheManagerMock.MockInstance,
-				(IBuildRetriever) slaveBuildRetrieverMock.MockInstance);
+				(ICruiseManagerWrapper) cruiseManagerWrapperMock.MockInstance);
 
 			serverName = "my Server";
 			projectName = "my Project";
+			buildName = "myBuild";
 			logContent = "log Content";
-			buildName = "myLogfile.xml";
-			build = new Build(buildName, logContent, serverName, projectName);
+			logLocation = "http://somewhere/mylog";
 		}
 
 		[Test]
 		public void ReturnsBuildAndPutsItInCacheIfNotAlreadyThere()
 		{
-			slaveBuildRetrieverMock.ExpectAndReturn("GetBuild", build, serverName, projectName, buildName);
+			cruiseManagerWrapperMock.ExpectAndReturn("GetLog", logContent, serverName, projectName, buildName);
 
 			cacheManagerMock.ExpectAndReturn("GetContent", null, serverName, projectName, CachingBuildRetriever.CacheDirectory, buildName);
 			cacheManagerMock.Expect("AddContent", serverName, projectName, CachingBuildRetriever.CacheDirectory, buildName, logContent);
 			cacheManagerMock.ExpectAndReturn("GetContent", logContent, serverName, projectName, CachingBuildRetriever.CacheDirectory, buildName);
+			cacheManagerMock.ExpectAndReturn("GetURLForFile", logLocation, serverName, projectName, CachingBuildRetriever.CacheDirectory, buildName);
 
 			Build returnedBuild = cachingBuildRetriever.GetBuild(serverName, projectName, buildName);
 			Assert.AreEqual(buildName, returnedBuild.Name);
 			Assert.AreEqual(logContent, returnedBuild.Log);
 			Assert.AreEqual(serverName, returnedBuild.ServerName);
 			Assert.AreEqual(projectName, returnedBuild.ProjectName);
+			Assert.AreEqual(logLocation, returnedBuild.BuildLogLocation);
 
 			VerifyAll();
 		}
@@ -54,17 +57,19 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 		[Test]
 		public void IfBuildInCacheThenDoesntGetLogContentFromCruiseServer()
 		{
-			slaveBuildRetrieverMock.ExpectNoCall("GetBuild", typeof(string), typeof(string), typeof(string));
+			cruiseManagerWrapperMock.ExpectNoCall("GetLog", typeof(string), typeof(string), typeof(string));
 
 			cacheManagerMock.ExpectAndReturn("GetContent", logContent, serverName, projectName, CachingBuildRetriever.CacheDirectory, buildName);
 			cacheManagerMock.ExpectAndReturn("GetContent", logContent, serverName, projectName, CachingBuildRetriever.CacheDirectory, buildName);
 			cacheManagerMock.ExpectNoCall("AddContent",typeof(string), typeof(string), typeof(string), typeof(string), typeof(string));
+			cacheManagerMock.ExpectAndReturn("GetURLForFile", logLocation, serverName, projectName, CachingBuildRetriever.CacheDirectory, buildName);
 
 			Build returnedBuild = cachingBuildRetriever.GetBuild(serverName, projectName, buildName);
 			Assert.AreEqual(buildName, returnedBuild.Name);
 			Assert.AreEqual(logContent, returnedBuild.Log);
 			Assert.AreEqual(serverName, returnedBuild.ServerName);
 			Assert.AreEqual(projectName, returnedBuild.ProjectName);
+			Assert.AreEqual(logLocation, returnedBuild.BuildLogLocation);
 
 			VerifyAll();
 		}
@@ -72,7 +77,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 		private void VerifyAll()
 		{
 			cacheManagerMock.Verify();
-			slaveBuildRetrieverMock.Verify();
+			cruiseManagerWrapperMock.Verify();
 		}
 	}
 }

@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Specialized;
 using System.Web;
 using System.Web.UI;
@@ -26,19 +25,9 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 			this.control = control;
 		}
 
-		public DefaultBuildRetrieverForRequest DefaultBuildRetrieverForRequest
-		{
-			get { return new DefaultBuildRetrieverForRequest(CachingBuildRetriever, CruiseManagerBuildNameRetriever); }
-		}
-
-		public CruiseManagerBuildRetriever CruiseManagerBuildRetriever
-		{
-			get { return new CruiseManagerBuildRetriever(ServerAggregatingCruiseManagerWrapper); }
-		}
-
 		public CachingBuildRetriever CachingBuildRetriever
 		{
-			get { return new CachingBuildRetriever(LocalFileCacheManager, CruiseManagerBuildRetriever); }
+			get { return new CachingBuildRetriever(LocalFileCacheManager, ServerAggregatingCruiseManagerWrapper); }
 		}
 
 		public CruiseManagerBuildNameRetriever CruiseManagerBuildNameRetriever

@@ -44,7 +44,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Plugins.ViewServerLo
 
 			// Execute
 			HtmlGenericControl control = (HtmlGenericControl) action.Execute((ICruiseRequest) requestMock.MockInstance);
-			Assert.AreEqual("<pre>" + serverLog + "</pre>", control.InnerHtml);
+			Assert.AreEqual(@"<pre class=""log"">" + serverLog + "</pre>", control.InnerHtml);
 
 			VerifyAll();
 		}
