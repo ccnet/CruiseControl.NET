@@ -12,7 +12,8 @@ namespace ThoughtWorks.CruiseControl.Web
 
 		private void Page_Load(object sender, EventArgs e)
 		{
-			BodyArea.InnerHtml = new PageTransformer(WebUtil.ResolveLogFile(Context),"Ncover.xsl").LoadPageContent();
+			string xslFilename = WebUtil.GetXslFilename("Ncover.xsl", Request);
+			BodyArea.InnerHtml = new PageTransformer(WebUtil.ResolveLogFile(Context), xslFilename).LoadPageContent();
 		}
 
 		#region Web Form Designer generated code
