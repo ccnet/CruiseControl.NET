@@ -235,22 +235,12 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "ITransformer.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
                     RelPath = "LogFileLister.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
                     RelPath = "LogStatistics.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "LogTransformer.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

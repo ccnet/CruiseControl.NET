@@ -309,6 +309,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Core\Util\LogTransformerTest.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Core\Util\SystemIoFileSystemTest.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -335,11 +340,6 @@
                 />
                 <File
                     RelPath = "Web\LogStatisticsTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Web\LogTransformerTest.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

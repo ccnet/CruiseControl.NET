@@ -1,8 +1,5 @@
-using System;
-
-namespace ThoughtWorks.CruiseControl.Web
+namespace ThoughtWorks.CruiseControl.Core.Util
 {
-	
 	public interface ITransformer
 	{
 		string Transform();
