@@ -1,4 +1,5 @@
 using Exortech.NetReflector;
+using NMock;
 using NUnit.Framework;
 using System;
 using System.Collections;
@@ -22,26 +23,32 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test
 		}
 
 		// Daylight savings time bug
-		// Comment this test in and forward system time to appropriate date
-		// to veryify daylight saving time detected.
 		// This was necessary to resolve a bug with PVCS 7.5.1 (would not properly
-		// detected modifications during periods where daylight savings was active)
-		[Ignore("Date dependent test due to day light savings time bug in PVCS v7.5.1")]
-		public void TestDetectedDayLightSavingsTime_PVCSDayLightSavingsBug() 
+		// detect modifications during periods where daylight savings was active)
+		[Test]
+		public void AdjustForDayLightSavingsBugDuringDayLightSavings()
 		{
 			Pvcs pvcs = new Pvcs();
-			Assert(pvcs.IsDayLightSavings());
+			TimeZone timeZoneWhereItIsAlwaysDayLightSavings = CreateMockTimeZone(true);
+			pvcs.CurrentTimeZone = timeZoneWhereItIsAlwaysDayLightSavings;
+			
+			DateTime date = new DateTime(2000, 1, 1, 1, 0, 0);
+			DateTime anHourBefore = new DateTime(2000, 1, 1, 0, 0, 0);
+			AssertEquals(anHourBefore, pvcs.AdjustForDayLightSavingsBug(date));
 		}
-
-		public void TestSubtractAnHour_PVCSDayLightSavingsBug() 
-		{
+		[Test]
+		public void AdjustForDayLightSavingsBugOutsideDayLightSavings()
+		{			
 			Pvcs pvcs = new Pvcs();
-			DateTime date1 = new DateTime(2000, 1, 1, 1, 0, 0);
-			DateTime anHourAgo = new DateTime(2000, 1, 1, 0, 0, 0);
-			AssertEquals(anHourAgo, pvcs.SubtractAnHour(date1));
+			TimeZone timeZoneWhereItIsNeverDayLightSavings = CreateMockTimeZone(false);
+			pvcs.CurrentTimeZone = (TimeZone) timeZoneWhereItIsNeverDayLightSavings;
+			
+			DateTime date = new DateTime(2000, 1, 1, 1, 0, 0);
+			AssertEquals(date, pvcs.AdjustForDayLightSavingsBug(date));
 		}
 
-		public void TestValuePopulation()
+		[Test]
+		public void ValuePopulation()
 		{
 			Pvcs pvcs = CreatePvcs();
 			AssertEquals(@"..\etc\pvcs\mockpcli.bat", pvcs.Executable);
@@ -49,7 +56,8 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test
 			AssertEquals("barsub", pvcs.Subproject);
 		}
 
-		public void TestCreateProcess()
+		[Test]
+		public void CreateProcess()
 		{
 			Pvcs pvcs = CreatePvcs();
 			DateTime from = new DateTime(2001, 1, 21, 20, 0, 0);
@@ -68,8 +76,9 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test
 		}
 		
 		// TODO: stop cmd window from popping up with this test!!!
+		[Test]
 		[Ignore("Sort out mockpcli stuff")]
-		public void TestGetModifications() 
+		public void GetModifications() 
 		{
 			Pvcs pvcs = CreatePvcs();
 			Modification[] mods = pvcs.GetModifications(new DateTime(), new DateTime());
@@ -79,7 +88,8 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test
 			File.Delete(Pvcs.PVCS_INSTRUCTIONS_FILE);
 		}
 		
-		public void TestCreatePcliContents() 
+		[Test]
+		public void CreatePcliContents() 
 		{
 			Pvcs pvcs = CreatePvcs();
 			string actual = pvcs.CreatePcliContents("beforedate", "afterdate");
@@ -90,12 +100,18 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test
 		private string CreateExpectedContents() 
 		{
 			return 
-@"set -vProject ""fooproject""
+				@"set -vProject ""fooproject""
 set -vSubProject ""barsub""
 run ->pvcstemp.txt listversionedfiles -z -aw $Project $SubProject
 run -e vlog  ""-xo+epvcsout.txt"" ""-dbeforedate*afterdate"" ""@pvcstemp.txt""
 ";
 		}
-	} 
-	
+
+		private TimeZone CreateMockTimeZone(Boolean inDayLightSavings)
+		{			
+			Mock mock = new DynamicMock(typeof(TimeZone));
+			mock.ExpectAndReturn("IsDaylightSavingTime", inDayLightSavings);
+			return (TimeZone) mock.MockInstance;
+		}
+	}	
 }
