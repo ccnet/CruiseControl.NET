@@ -1,4 +1,4 @@
-using ThoughtWorks.CruiseControl.WebDashboard.Dashboard;
+using ObjectWizard;
 using ThoughtWorks.CruiseControl.WebDashboard.Plugins.FarmReport;
 
 namespace ThoughtWorks.CruiseControl.WebDashboard.MVC.Cruise

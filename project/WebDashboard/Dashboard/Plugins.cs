@@ -1,4 +1,5 @@
 using System.Collections;
+using ObjectWizard;
 using ThoughtWorks.CruiseControl.Core;
 using ThoughtWorks.CruiseControl.WebDashboard.Config;
 

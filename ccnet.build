@@ -39,6 +39,35 @@
 		<delete dir="dist" failonerror="false"/>
 	</target>
 
+	<target name="clean-vs" description="Delete Visual Studio artifacts">
+		<!-- NB - this target will likely fail if you have the solution open in Visual Studio -->
+		<foreach item="File" property="filename">
+			<in>
+				<items basedir="project">
+					<include name="*.suo" />
+					<include name="*.resharperoptions" />
+					<include name="*\*.user" />
+				</items>
+			</in>
+			<do>
+				<delete file="${filename}" />
+			</do>
+		</foreach>
+		<foreach item="Folder" property="foldername">
+			<in>
+				<items basedir="project">
+					<include name="*\bin" />
+					<include name="*\obj" />
+					<!-- can't seem to pick this up using a wild card -->
+					<include name="_ReSharper.ccnet" />
+				</items>
+			</in>
+			<do>
+				<delete dir="${foldername}" />
+			</do>
+		</foreach>
+	</target>
+
 	<target name="init" description="initial compilation setup">
 		<mkdir dir="${build.dir}" verbose="${verbosity}"/>
 	</target>

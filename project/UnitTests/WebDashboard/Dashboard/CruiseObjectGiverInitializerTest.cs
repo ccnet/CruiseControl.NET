@@ -1,5 +1,6 @@
 using System.Web;
 using NUnit.Framework;
+using ObjectWizard;
 using ThoughtWorks.CruiseControl.WebDashboard.Config;
 using ThoughtWorks.CruiseControl.WebDashboard.Dashboard;
 using ThoughtWorks.CruiseControl.WebDashboard.IO;
@@ -19,7 +20,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 			ObjectGiverAndRegistrar objectGiver = new ObjectGiverAndRegistrar();
 			objectGiver.IgnoreNMockImplementations = true;
 
-			new CruiseObjectGiverInitializer(objectGiver).InitializeGiverForRequest(context);
+			new CruiseObjectGiverInitializer(objectGiver).SetupObjectGiverForRequest(context);
 
 			Assert.IsNotNull(objectGiver.GiveObjectByType(typeof(HttpPathMapper)));
 			Assert.IsNotNull(objectGiver.GiveObjectByType(typeof(ServerQueryingBuildRetriever)));

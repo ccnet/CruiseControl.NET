@@ -1,6 +1,7 @@
 using NMock;
 using NMock.Constraints;
 using NUnit.Framework;
+using ObjectWizard;
 using ThoughtWorks.CruiseControl.WebDashboard.Config;
 using ThoughtWorks.CruiseControl.WebDashboard.Dashboard;
 

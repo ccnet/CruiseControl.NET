@@ -1,4 +1,5 @@
 using System.Web;
+using ObjectWizard;
 using ThoughtWorks.CruiseControl.WebDashboard.Dashboard;
 
 namespace ThoughtWorks.CruiseControl.WebDashboard.MVC.ASPNET
@@ -17,7 +18,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.MVC.ASPNET
 				context.Response.ContentType = "Text/XML";
 			}
 
-			ObjectGiver objectGiver = new CruiseObjectGiverInitializer(new ObjectGiverAndRegistrar()).InitializeGiverForRequest(context);
+			ObjectGiver objectGiver = new CruiseObjectGiverInitializer(new ObjectGiverAndRegistrar()).SetupObjectGiverForRequest(context);
 			context.Response.Write(((RequestController) objectGiver.GiveObjectByType(typeof(RequestController))).Do());
 			context.Response.Flush();
 		}

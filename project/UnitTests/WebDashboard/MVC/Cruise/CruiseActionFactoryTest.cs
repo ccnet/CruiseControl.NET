@@ -1,6 +1,6 @@
 using NMock;
 using NUnit.Framework;
-using ThoughtWorks.CruiseControl.WebDashboard.Dashboard;
+using ObjectWizard;
 using ThoughtWorks.CruiseControl.WebDashboard.MVC;
 using ThoughtWorks.CruiseControl.WebDashboard.MVC.Cruise;
 
