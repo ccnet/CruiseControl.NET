@@ -21,7 +21,13 @@
     <xsl:variable name="testcase.failure.list" select="$testcase.list/failure"/>
     <xsl:variable name="totalErrorsAndFailures" select="count($testcase.error.list) + count($testcase.failure.list) + count($nunit2.failure.list)"/>
 
+    <xsl:variable name="nunit.tests.present" select="count(//test-results) > 0 or count(/cruisecontrol/build/buildresults//testsuite) > 0" />
+    <xsl:variable name="junit.tests.present" select="count(//cruisecontrol//testsuite) > 0" />
+
     <xsl:template match="/">
+
+    <xsl:choose>
+      <xsl:when test="$nunit.tests.present">  
         <table class="section-table" cellpadding="2" cellspacing="0" border="0" width="98%">
 
             <!-- Unit Tests -->
@@ -84,6 +90,81 @@
                 <tr><td colspan="2"> </td></tr>
             </xsl:if>
         </table>
+      </xsl:when>
+    
+      <xsl:when test="$junit.tests.present">  
+          <xsl:variable name="testsuite.list" select="cruisecontrol//testsuite"/>
+          <xsl:variable name="testsuite.error.count" select="count($testsuite.list/error)"/>
+          <xsl:variable name="testcase.list" select="$testsuite.list/testcase"/>
+          <xsl:variable name="testcase.error.list" select="$testcase.list/error"/>
+          <xsl:variable name="testcase.failure.list" select="$testcase.list/failure"/>
+          <xsl:variable name="totalErrorsAndFailures" select="count($testcase.error.list) + count($testcase.failure.list)"/>
+
+      
+      	<table align="center" cellpadding="2" cellspacing="0" border="0" width="100%">
+      
+      	    <!-- Unit Tests -->
+      	    <tr>
+      		<td class="unittests-sectionheader" colspan="2">
+      		   Tests run: <xsl:value-of select="count($testcase.list)"/>,
+      		   &#160;Failures: <xsl:value-of select="$totalErrorsAndFailures"/>,
+      		   &#160;Time: <xsl:value-of select="sum($testcase.list/@time)"/> seconds
+      		</td>
+      	    </tr>
+            
+            <xsl:choose>
+		<xsl:when test="count($testsuite.list) = 0">
+		    <tr>
+			<td colspan="2" class="unittests-data">
+			    No Tests Run
+			</td>
+		    </tr>
+		    <tr>
+			<td colspan="2" class="unittests-error">
+			    This project doesn't have any tests
+			</td>
+		    </tr>
+		</xsl:when>
+
+		<xsl:when test="$totalErrorsAndFailures = 0">
+		    <tr>
+			<td colspan="2" class="unittests-data">
+			    All Tests Passed
+			</td>
+		    </tr>
+		</xsl:when>
+	    </xsl:choose>
+      
+      	    <xsl:apply-templates select="$testcase.error.list"/>
+      	    <xsl:apply-templates select="$testcase.failure.list"/>
+      	    <tr/>
+      	    <tr><td colspan="2">&#160;</td></tr>
+      
+      	    <xsl:if test="$totalErrorsAndFailures > 0">
+      
+      	      <tr>
+      		<td class="unittests-sectionheader" colspan="2">
+      		    &#160;Unit Test Failure and Error Details:&#160;(<xsl:value-of select="$totalErrorsAndFailures"/>)
+      		</td>
+      	      </tr>
+      
+      	      <!-- (PENDING) Why doesn't this work if set up as variables up top? -->
+      	      <xsl:call-template name="testdetail">
+      		<xsl:with-param name="detailnodes" select="//testsuite/testcase[.//error]"/>
+      	      </xsl:call-template>
+      
+      	      <xsl:call-template name="testdetail">
+      		<xsl:with-param name="detailnodes" select="//testsuite/testcase[.//failure]"/>
+      	      </xsl:call-template>
+      
+      
+      	      <tr><td colspan="2">&#160;</td></tr>
+      	    </xsl:if>
+      	</table>
+
+      </xsl:when>
+      
+    </xsl:choose>    
     </xsl:template>
 
     <!-- UnitTest Errors -->
