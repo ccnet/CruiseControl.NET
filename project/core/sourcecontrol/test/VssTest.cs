@@ -151,6 +151,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test
 			mockProcessExecutor.ExpectAndReturn("Execute", new ProcessResult("foo", null, 1, false), new NMock.Constraints.IsAnything());
 			
 			Vss vss = new Vss(new VssHistoryParser(), (ProcessExecutor)mockProcessExecutor.MockInstance);
+			vss.Executable = "foo";
 			vss.GetModifications(DateTime.Now, DateTime.Now);
 		}
 
