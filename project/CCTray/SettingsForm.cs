@@ -48,6 +48,8 @@ namespace ThoughtWorks.CruiseControl.Remote.monitor
 		private System.Windows.Forms.Button btnPlaySuccess;
 
 		#endregion
+		private System.Windows.Forms.TextBox txtProjectName;
+		private System.Windows.Forms.Label lblProjectName;
 
 		Settings _settings;
 
@@ -120,6 +122,10 @@ namespace ThoughtWorks.CruiseControl.Remote.monitor
 			this.btnFindAudioFixed = new System.Windows.Forms.Button();
 			this.btnFindAudioBroken = new System.Windows.Forms.Button();
 			this.btnFindAudioFailing = new System.Windows.Forms.Button();
+			this.btnPlayBroken = new System.Windows.Forms.Button();
+			this.btnPlayFailing = new System.Windows.Forms.Button();
+			this.btnPlayFixed = new System.Windows.Forms.Button();
+			this.btnPlaySuccess = new System.Windows.Forms.Button();
 			this.txtServerUrl = new System.Windows.Forms.TextBox();
 			this.lblServerUrl = new System.Windows.Forms.Label();
 			this.chkShowBalloons = new System.Windows.Forms.CheckBox();
@@ -130,10 +136,8 @@ namespace ThoughtWorks.CruiseControl.Remote.monitor
 			this.chkHideAgent = new System.Windows.Forms.CheckBox();
 			this.dlgOpenFile = new System.Windows.Forms.OpenFileDialog();
 			this.btnCancel = new System.Windows.Forms.Button();
-			this.btnPlayBroken = new System.Windows.Forms.Button();
-			this.btnPlayFailing = new System.Windows.Forms.Button();
-			this.btnPlayFixed = new System.Windows.Forms.Button();
-			this.btnPlaySuccess = new System.Windows.Forms.Button();
+			this.txtProjectName = new System.Windows.Forms.TextBox();
+			this.lblProjectName = new System.Windows.Forms.Label();
 			((System.ComponentModel.ISupportInitialize)(this.numPollInterval)).BeginInit();
 			this.grpAudio.SuspendLayout();
 			this.grpAgents.SuspendLayout();
@@ -142,7 +146,7 @@ namespace ThoughtWorks.CruiseControl.Remote.monitor
 			// btnOkay
 			// 
 			this.btnOkay.BackColor = System.Drawing.Color.LightSteelBlue;
-			this.btnOkay.Location = new System.Drawing.Point(103, 392);
+			this.btnOkay.Location = new System.Drawing.Point(103, 416);
 			this.btnOkay.Name = "btnOkay";
 			this.btnOkay.TabIndex = 0;
 			this.btnOkay.Text = "&OK";
@@ -161,7 +165,7 @@ namespace ThoughtWorks.CruiseControl.Remote.monitor
 			// 
 			// numPollInterval
 			// 
-			this.numPollInterval.Location = new System.Drawing.Point(80, 64);
+			this.numPollInterval.Location = new System.Drawing.Point(88, 64);
 			this.numPollInterval.Name = "numPollInterval";
 			this.numPollInterval.Size = new System.Drawing.Size(56, 20);
 			this.numPollInterval.TabIndex = 2;
@@ -174,7 +178,7 @@ namespace ThoughtWorks.CruiseControl.Remote.monitor
 			// lblSeconds
 			// 
 			this.lblSeconds.BackColor = System.Drawing.Color.Transparent;
-			this.lblSeconds.Location = new System.Drawing.Point(144, 64);
+			this.lblSeconds.Location = new System.Drawing.Point(152, 64);
 			this.lblSeconds.Name = "lblSeconds";
 			this.lblSeconds.Size = new System.Drawing.Size(48, 20);
 			this.lblSeconds.TabIndex = 3;
@@ -210,7 +214,7 @@ namespace ThoughtWorks.CruiseControl.Remote.monitor
 			this.grpAudio.Controls.Add(this.btnPlayFailing);
 			this.grpAudio.Controls.Add(this.btnPlayFixed);
 			this.grpAudio.Controls.Add(this.btnPlaySuccess);
-			this.grpAudio.Location = new System.Drawing.Point(16, 256);
+			this.grpAudio.Location = new System.Drawing.Point(16, 280);
 			this.grpAudio.Name = "grpAudio";
 			this.grpAudio.Size = new System.Drawing.Size(328, 128);
 			this.grpAudio.TabIndex = 4;
@@ -321,11 +325,47 @@ namespace ThoughtWorks.CruiseControl.Remote.monitor
 			this.btnFindAudioFailing.TabIndex = 2;
 			this.btnFindAudioFailing.Click += new System.EventHandler(this.btnFindAudioFailing_Click);
 			// 
+			// btnPlayBroken
+			// 
+			this.btnPlayBroken.Image = ((System.Drawing.Image)(resources.GetObject("btnPlayBroken.Image")));
+			this.btnPlayBroken.Location = new System.Drawing.Point(296, 72);
+			this.btnPlayBroken.Name = "btnPlayBroken";
+			this.btnPlayBroken.Size = new System.Drawing.Size(22, 20);
+			this.btnPlayBroken.TabIndex = 2;
+			this.btnPlayBroken.Click += new System.EventHandler(this.btnPlayBroken_Click);
+			// 
+			// btnPlayFailing
+			// 
+			this.btnPlayFailing.Image = ((System.Drawing.Image)(resources.GetObject("btnPlayFailing.Image")));
+			this.btnPlayFailing.Location = new System.Drawing.Point(296, 96);
+			this.btnPlayFailing.Name = "btnPlayFailing";
+			this.btnPlayFailing.Size = new System.Drawing.Size(22, 20);
+			this.btnPlayFailing.TabIndex = 2;
+			this.btnPlayFailing.Click += new System.EventHandler(this.btnPlayFailing_Click);
+			// 
+			// btnPlayFixed
+			// 
+			this.btnPlayFixed.Image = ((System.Drawing.Image)(resources.GetObject("btnPlayFixed.Image")));
+			this.btnPlayFixed.Location = new System.Drawing.Point(296, 48);
+			this.btnPlayFixed.Name = "btnPlayFixed";
+			this.btnPlayFixed.Size = new System.Drawing.Size(22, 20);
+			this.btnPlayFixed.TabIndex = 2;
+			this.btnPlayFixed.Click += new System.EventHandler(this.btnPlayFixed_Click);
+			// 
+			// btnPlaySuccess
+			// 
+			this.btnPlaySuccess.Image = ((System.Drawing.Image)(resources.GetObject("btnPlaySuccess.Image")));
+			this.btnPlaySuccess.Location = new System.Drawing.Point(296, 24);
+			this.btnPlaySuccess.Name = "btnPlaySuccess";
+			this.btnPlaySuccess.Size = new System.Drawing.Size(22, 20);
+			this.btnPlaySuccess.TabIndex = 2;
+			this.btnPlaySuccess.Click += new System.EventHandler(this.btnPlaySuccess_Click);
+			// 
 			// txtServerUrl
 			// 
-			this.txtServerUrl.Location = new System.Drawing.Point(80, 88);
+			this.txtServerUrl.Location = new System.Drawing.Point(88, 88);
 			this.txtServerUrl.Name = "txtServerUrl";
-			this.txtServerUrl.Size = new System.Drawing.Size(264, 20);
+			this.txtServerUrl.Size = new System.Drawing.Size(256, 20);
 			this.txtServerUrl.TabIndex = 5;
 			this.txtServerUrl.Text = "";
 			// 
@@ -342,7 +382,7 @@ namespace ThoughtWorks.CruiseControl.Remote.monitor
 			// chkShowBalloons
 			// 
 			this.chkShowBalloons.BackColor = System.Drawing.Color.Transparent;
-			this.chkShowBalloons.Location = new System.Drawing.Point(80, 112);
+			this.chkShowBalloons.Location = new System.Drawing.Point(88, 136);
 			this.chkShowBalloons.Name = "chkShowBalloons";
 			this.chkShowBalloons.Size = new System.Drawing.Size(160, 24);
 			this.chkShowBalloons.TabIndex = 6;
@@ -364,7 +404,7 @@ namespace ThoughtWorks.CruiseControl.Remote.monitor
 			this.grpAgents.Controls.Add(this.ddlAgent);
 			this.grpAgents.Controls.Add(this.chkHideAgent);
 			this.grpAgents.Controls.Add(this.chkShowAgent);
-			this.grpAgents.Location = new System.Drawing.Point(16, 144);
+			this.grpAgents.Location = new System.Drawing.Point(16, 168);
 			this.grpAgents.Name = "grpAgents";
 			this.grpAgents.Size = new System.Drawing.Size(328, 104);
 			this.grpAgents.TabIndex = 8;
@@ -404,54 +444,38 @@ namespace ThoughtWorks.CruiseControl.Remote.monitor
 			// btnCancel
 			// 
 			this.btnCancel.BackColor = System.Drawing.Color.LightSteelBlue;
-			this.btnCancel.Location = new System.Drawing.Point(183, 392);
+			this.btnCancel.Location = new System.Drawing.Point(183, 416);
 			this.btnCancel.Name = "btnCancel";
 			this.btnCancel.TabIndex = 0;
 			this.btnCancel.Text = "&Cancel";
 			this.btnCancel.Click += new System.EventHandler(this.btnCancel_Click);
 			// 
-			// btnPlayBroken
+			// txtProjectName
 			// 
-			this.btnPlayBroken.Image = ((System.Drawing.Image)(resources.GetObject("btnPlayBroken.Image")));
-			this.btnPlayBroken.Location = new System.Drawing.Point(296, 72);
-			this.btnPlayBroken.Name = "btnPlayBroken";
-			this.btnPlayBroken.Size = new System.Drawing.Size(22, 20);
-			this.btnPlayBroken.TabIndex = 2;
-			this.btnPlayBroken.Click += new System.EventHandler(this.btnPlayBroken_Click);
+			this.txtProjectName.Location = new System.Drawing.Point(88, 112);
+			this.txtProjectName.Name = "txtProjectName";
+			this.txtProjectName.Size = new System.Drawing.Size(256, 20);
+			this.txtProjectName.TabIndex = 9;
+			this.txtProjectName.Text = "";
 			// 
-			// btnPlayFailing
+			// lblProjectName
 			// 
-			this.btnPlayFailing.Image = ((System.Drawing.Image)(resources.GetObject("btnPlayFailing.Image")));
-			this.btnPlayFailing.Location = new System.Drawing.Point(296, 96);
-			this.btnPlayFailing.Name = "btnPlayFailing";
-			this.btnPlayFailing.Size = new System.Drawing.Size(22, 20);
-			this.btnPlayFailing.TabIndex = 2;
-			this.btnPlayFailing.Click += new System.EventHandler(this.btnPlayFailing_Click);
-			// 
-			// btnPlayFixed
-			// 
-			this.btnPlayFixed.Image = ((System.Drawing.Image)(resources.GetObject("btnPlayFixed.Image")));
-			this.btnPlayFixed.Location = new System.Drawing.Point(296, 48);
-			this.btnPlayFixed.Name = "btnPlayFixed";
-			this.btnPlayFixed.Size = new System.Drawing.Size(22, 20);
-			this.btnPlayFixed.TabIndex = 2;
-			this.btnPlayFixed.Click += new System.EventHandler(this.btnPlayFixed_Click);
-			// 
-			// btnPlaySuccess
-			// 
-			this.btnPlaySuccess.Image = ((System.Drawing.Image)(resources.GetObject("btnPlaySuccess.Image")));
-			this.btnPlaySuccess.Location = new System.Drawing.Point(296, 24);
-			this.btnPlaySuccess.Name = "btnPlaySuccess";
-			this.btnPlaySuccess.Size = new System.Drawing.Size(22, 20);
-			this.btnPlaySuccess.TabIndex = 2;
-			this.btnPlaySuccess.Click += new System.EventHandler(this.btnPlaySuccess_Click);
+			this.lblProjectName.BackColor = System.Drawing.Color.Transparent;
+			this.lblProjectName.Location = new System.Drawing.Point(16, 112);
+			this.lblProjectName.Name = "lblProjectName";
+			this.lblProjectName.Size = new System.Drawing.Size(72, 20);
+			this.lblProjectName.TabIndex = 10;
+			this.lblProjectName.Text = "Project name";
+			this.lblProjectName.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
 			// SettingsForm
 			// 
 			this.AcceptButton = this.btnOkay;
 			this.AutoScaleBaseSize = new System.Drawing.Size(5, 13);
 			this.BackColor = System.Drawing.Color.FromArgb(((System.Byte)(100)), ((System.Byte)(149)), ((System.Byte)(238)));
-			this.ClientSize = new System.Drawing.Size(360, 432);
+			this.ClientSize = new System.Drawing.Size(360, 456);
+			this.Controls.Add(this.lblProjectName);
+			this.Controls.Add(this.txtProjectName);
 			this.Controls.Add(this.grpAgents);
 			this.Controls.Add(this.chkShowBalloons);
 			this.Controls.Add(this.txtServerUrl);
@@ -486,10 +510,14 @@ namespace ThoughtWorks.CruiseControl.Remote.monitor
 
 		#region Moving settings between Settings object and Gui controls
 
-		private void PopulateControlsFromSettings()
+		/// <summary>
+		/// Copies values from the 
+		/// </summary>
+		void PopulateControlsFromSettings()
 		{
 			numPollInterval.Value = _settings.PollingIntervalSeconds;
 			txtServerUrl.Text = _settings.RemoteServerUrl;
+			txtProjectName.Text = _settings.ProjectName;
 
 			chkShowBalloons.Checked = _settings.NotificationBalloon.ShowBalloon;
 			chkShowAgent.Checked = _settings.Agents.ShowAgent;
@@ -520,6 +548,7 @@ namespace ThoughtWorks.CruiseControl.Remote.monitor
 		{
 			_settings.PollingIntervalSeconds = (int)numPollInterval.Value;
 			_settings.RemoteServerUrl = txtServerUrl.Text;
+			_settings.ProjectName = txtProjectName.Text;
 
 			_settings.NotificationBalloon.ShowBalloon = chkShowBalloons.Checked;
 			_settings.Agents.ShowAgent = chkShowAgent.Checked;
