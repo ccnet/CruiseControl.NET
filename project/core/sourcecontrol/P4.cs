@@ -131,7 +131,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 
 		private string formatDate(DateTime date)
 		{
-			return date.ToString(COMMAND_DATE_FORMAT);
+			return date.ToString(COMMAND_DATE_FORMAT, CultureInfo.InvariantCulture);
 		}
 		
 		private string buildCommonArguments() 
