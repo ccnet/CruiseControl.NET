@@ -14,10 +14,17 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			get { return 30000; }
 		}
 
+		#region Abstract property and methods
+
 		protected abstract IHistoryParser HistoryParser
 		{
 			get;
 		}
+
+		public abstract Process CreateHistoryProcess(DateTime from, DateTime to);
+		public abstract Process CreateLabelProcess(string label, DateTime timeStamp);
+
+		#endregion
 
 		public bool ShouldRun(IntegrationResult result)
 		{
@@ -29,7 +36,6 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			result.Modifications = GetModifications(result.LastModificationDate, DateTime.Now);
 		}
 
-		// TODO: is it necessary to specify to date -- just want changes after from date
 		public Modification[] GetModifications(DateTime from, DateTime to)
 		{
 			Process process = CreateHistoryProcess(from, to);
@@ -65,13 +71,15 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 		protected virtual TextReader Execute(Process process)
 		{
 			TextReader reader = ProcessUtil.ExecuteRedirected(process);
+
+			// TODO: this call will block until the process ends (so there's no point calling WaitForExit below)
+			// to do this pattern properly, the output must be read in another thread
+			// see the class NAntBuilder.StdOutReader (which could be made a public utility class)
 			string result = reader.ReadToEnd();
+			
 			process.WaitForExit(120000);
 			return new StringReader(result);
 		}
-
-		public abstract Process CreateHistoryProcess(DateTime from, DateTime to);
-		public abstract Process CreateLabelProcess(string label, DateTime timeStamp);
 
 		protected Modification[] ParseModifications(TextReader reader)
 		{
@@ -81,9 +89,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 		private void Close(TextReader reader, Process process)
 		{
 			if (reader != null)
-			{
 				reader.Close();
-			}
 
 			if (process != null)
 			{
