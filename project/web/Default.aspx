@@ -3,6 +3,7 @@
 	<HEAD>
 		<TITLE>CruiseControl .NET Build Results</TITLE>
 	</HEAD>
+	<body>
 	<table cellpadding="0" cellspacing="0" width="100%">
 		<tr>
 			<td id="HeaderCell" rowspan="2" bgcolor="#ffffff" runat="server" />
@@ -45,4 +46,5 @@
 			<td id="DetailsCell" runat="server" colspan="2" />
 		</tr>
 	</table>
+	</body>
 </HTML>
