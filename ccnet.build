@@ -122,6 +122,7 @@
 		<copy file="${src.dir}\console\app.config" tofile="deployed\builder\${console.exe}.config" verbose="${verbosity}"/>
 		<copy file="${src.dir}\service\app.config" tofile="deployed\builder\${service.exe}.config" verbose="${verbosity}"/>
 
+		<copy file="${src.dir}\console\ccnet.example.config" todir="deployed\builder"  verbose="${verbosity}"/>
 		<copy file="${src.dir}\console\StartCCNet.bat" todir="deployed\builder" verbose="${verbosity}"/>
 	</target>
 	
