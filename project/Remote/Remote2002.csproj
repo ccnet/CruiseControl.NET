@@ -82,6 +82,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "CruiseControlException.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "CruiseControlStatus.cs"
                     SubType = "Code"
                     BuildAction = "Compile"

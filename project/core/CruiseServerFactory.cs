@@ -9,7 +9,7 @@ namespace ThoughtWorks.CruiseControl.Core
 	{
 		public static ICruiseServer CreateLocal(string configFile)
 		{
-			return new CruiseServer(new ConfigurationLoader(configFile));
+			return new CruiseServer(new ConfigurationContainer(configFile));
 		}
 
 		public static ICruiseServer CreateRemote(string configFile)

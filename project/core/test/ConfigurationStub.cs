@@ -1,10 +1,11 @@
 using NMock;
 using System;
 using System.Collections;
+using ThoughtWorks.CruiseControl.Core.Config;
 
 namespace ThoughtWorks.CruiseControl.Core.Test
 {
-	public class ConfigurationStub : IConfiguration
+	public class ConfigurationStub : IConfigurationContainer
 	{
 		private ProjectIntegratorList _integrators = new ProjectIntegratorList();
 		private ArrayList _mockIntegrators = new ArrayList();
@@ -37,6 +38,11 @@ namespace ThoughtWorks.CruiseControl.Core.Test
 			{
 				mock.Verify();
 			}
+		}
+
+		public void AddConfigurationChangedHandler(ThoughtWorks.CruiseControl.Core.Config.ConfigurationChangedHandler handler)
+		{
+		
 		}
 	}
 }

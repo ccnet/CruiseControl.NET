@@ -35,7 +35,7 @@ namespace integration
 		{
 			string xml = CreateBasicProjectXml();
 			string configFile = TempFileUtil.CreateTempXmlFile("StartLocalServer", "ccnet.config", xml);
-			IConfiguration config = new ConfigurationLoader(configFile).Load();
+			IConfigurationContainer config = new ConfigurationContainer(configFile);
 			ICruiseServer server = new CruiseServer(config);
 			server.Start();
 

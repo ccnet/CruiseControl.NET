@@ -13,9 +13,9 @@ namespace integration
 		{
 			// create config
 			string configFile = ConfigurationFileFixture.CreateConfigurationFile(configDirName, projects);
-			ConfigurationLoader loader = new ConfigurationLoader(configFile);
+			ConfigurationContainer config = new ConfigurationContainer(configFile);
 
-			return new CruiseServer(loader);
+			return new CruiseServer(config);
 		}
 
 		public static Schedule CreateSchedule(int iterations)

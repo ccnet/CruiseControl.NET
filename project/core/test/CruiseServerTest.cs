@@ -63,15 +63,12 @@ namespace ThoughtWorks.CruiseControl.Core.Test
 			configStub.GetIntegratorMock(1).Expect("Stop");
 			configStub.GetIntegratorMock(0).Expect("WaitForExit");
 			configStub.GetIntegratorMock(1).Expect("WaitForExit");
+			configStub.GetIntegratorMock(0).Expect("Start");
+			configStub.GetIntegratorMock(1).Expect("Start");
 
-			ConfigurationStub newConfigurationStub = new ConfigurationStub(2);
-			newConfigurationStub.GetIntegratorMock(0).Expect("Start");
-			newConfigurationStub.GetIntegratorMock(1).Expect("Start");
-
-			server.ResetConfiguration(newConfigurationStub);
+			server.ResetConfiguration(configStub);
 
 			configStub.Verify();
-			newConfigurationStub.Verify();
 		}
 
 		[Test]

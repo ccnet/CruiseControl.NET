@@ -24,11 +24,9 @@ namespace ThoughtWorks.CruiseControl.ControlPanel
 
 		public void Load(string filename) 
 		{
-			using (ConfigurationLoader loader = new ConfigurationLoader(filename)) 
-			{
-				Load(loader.Load());
-				_filename = filename;
-			}
+			ConfigurationLoader loader = new ConfigurationLoader(filename); 
+			Load(loader.Load());
+			_filename = filename;
 		}
 
 		public void Save() 

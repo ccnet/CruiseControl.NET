@@ -19,6 +19,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test
     <project>$/fooProject</project>
     <username>Admin</username>
     <password>admin</password>
+	<applyLabel>true</applyLabel>
 </sourceControl>";	
 
 		private Vss _vss;
@@ -53,6 +54,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test
 			AssertEquals(@"$/fooProject", _vss.Project);
 			AssertEquals(@"..\tools\vss", _vss.SsDir);
 			AssertEquals(@"Admin", _vss.Username);
+			AssertEquals("incorrect applyLabel value", true, _vss.ApplyLabel);
 		}
 
 		[Test]

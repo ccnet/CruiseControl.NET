@@ -80,17 +80,20 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 		{		
 			string path = CreateTempDir(tempDir, false);				
 			path = Path.Combine(path, filename);			
-			File.CreateText(path).Close();
-			return path;
+			using (File.CreateText(path))
+			{
+				return path;
+			}
 		}
 
 		public static string CreateTempFile(string tempDir, string filename, string content)
 		{		
 			string path = CreateTempDir(tempDir, false);				
 			path = Path.Combine(path, filename);			
-			StreamWriter stream = File.CreateText(path);
-			stream.Write(content);
-			stream.Close();
+			using (StreamWriter stream = File.CreateText(path))
+			{
+				stream.Write(content);
+			}
 			return path;
 		}
 
@@ -106,9 +109,7 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 		{
 			using (StreamWriter writer = File.AppendText(filename)) 
 			{
-				//System.Threading.Thread.Sleep(1000);
 				writer.Write(text);
-				//System.Threading.Thread.Sleep(1000);
 			}
 		}
 	}

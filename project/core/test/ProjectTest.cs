@@ -1,12 +1,9 @@
+using NMock;
+using NMock.Constraints;
+using NUnit.Framework;
 using System;
 using System.Collections;
 using System.Diagnostics;
-
-using NMock;
-using NMock.Constraints;
-
-using NUnit.Framework;
-
 using ThoughtWorks.CruiseControl.Core.Builder.Test;
 using ThoughtWorks.CruiseControl.Core.Config;
 using ThoughtWorks.CruiseControl.Core.Publishers;
@@ -15,6 +12,7 @@ using ThoughtWorks.CruiseControl.Core.Schedules;
 using ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test;
 using ThoughtWorks.CruiseControl.Core.State;
 using ThoughtWorks.CruiseControl.Core.Util;
+using ThoughtWorks.CruiseControl.Core.Util.Test;
 using ThoughtWorks.CruiseControl.Remote;
 
 namespace ThoughtWorks.CruiseControl.Core.Test
@@ -162,10 +160,10 @@ namespace ThoughtWorks.CruiseControl.Core.Test
 			Configuration configuration = new Configuration();
 			configuration.AddProject(_project);
 
-			IMock mockConfig = new DynamicMock(typeof(IConfigurationLoader));
-			mockConfig.ExpectAndReturn("Load", configuration);
+			IMock mockConfigLoader = new DynamicMock(typeof(IConfigurationLoader));
+			mockConfigLoader.ExpectAndReturn("Load", configuration);
 
-			CruiseServer control = new CruiseServer((IConfigurationLoader)mockConfig.MockInstance);
+			CruiseServer control = new CruiseServer(new ConfigurationContainer((IConfigurationLoader)mockConfigLoader.MockInstance, new MockFileWatcher()));
 
 			DateTime start = DateTime.Now;
 			control.Start(); // RunIntegration();
@@ -175,6 +173,8 @@ namespace ThoughtWorks.CruiseControl.Core.Test
 			// verify that build was NOT invoked and postbuild was NOT invoked
 			builderMock.Verify();
 			AssertSame(originalLastResult, _project.LastIntegrationResult);
+
+			mockConfigLoader.Verify();
 
 			// verify that project slept
 			Assert("The project should have slept", stop >= start);

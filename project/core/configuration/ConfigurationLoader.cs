@@ -8,7 +8,7 @@ using ThoughtWorks.CruiseControl.Core.Util;
 
 namespace ThoughtWorks.CruiseControl.Core.Config
 {
-	public class ConfigurationLoader : IConfigurationLoader, IDisposable
+	public class ConfigurationLoader : IConfigurationLoader
 	{
 		private const string ROOT_ELEMENT = "cruisecontrol";
 		private const string CONFIG_ASSEMBLY_PATTERN = "ccnet.*.plugin.dll";
@@ -17,9 +17,6 @@ namespace ThoughtWorks.CruiseControl.Core.Config
 		internal const string XsdSchemaResourceName = "ThoughtWorks.CruiseControl.Core.configuration.ccnet.xsd";
 
 		private string _configFile;
-		private FileSystemWatcher _watcher = new FileSystemWatcher();
-		private ConfigurationChangedHandler _configurationChangedHandler;
-		private System.Timers.Timer timer;
 		private ValidationEventHandler _handler;
 		private XmlSchema _schema;
 
@@ -54,7 +51,6 @@ namespace ThoughtWorks.CruiseControl.Core.Config
 			set 
 			{ 
 				_configFile = value; 
-				InitialiseFileWatcher();
 			}
 		}
 
@@ -62,19 +58,6 @@ namespace ThoughtWorks.CruiseControl.Core.Config
 		{
 			XmlDocument config = LoadConfiguration();
 			return PopulateProjectsFromXml(config);
-		}
-
-		private void InitialiseFileWatcher()
-		{
-			VerifyConfigFileExists();
-			_watcher.Path = (new FileInfo(ConfigFile)).DirectoryName;
-			_watcher.Filter = Path.GetFileName(ConfigFile);
-			_watcher.NotifyFilter = NotifyFilters.LastWrite;
-			_watcher.Changed += new FileSystemEventHandler(OnConfigurationChanged);
-			timer = new System.Timers.Timer( 500 );
-			timer.AutoReset=false;
-			timer.Enabled=false;
-			timer.Elapsed+=new System.Timers.ElapsedEventHandler(OnTimer);
 		}
 
 		internal XmlDocument LoadConfiguration()
@@ -119,7 +102,6 @@ namespace ThoughtWorks.CruiseControl.Core.Config
 			{
 				NetReflectorTypeTable typeTable = new NetReflectorTypeTable();
 				typeTable.Add(AppDomain.CurrentDomain);
-//				typeTable.Add(Assembly.GetExecutingAssembly());
 				typeTable.Add(Directory.GetCurrentDirectory(), CONFIG_ASSEMBLY_PATTERN);
 				Configuration configuration = new Configuration();
 				foreach (XmlNode node in configXml.DocumentElement)
@@ -144,53 +126,9 @@ namespace ThoughtWorks.CruiseControl.Core.Config
 			}
 		}
 
-		public void AddConfigurationChangedHandler(ConfigurationChangedHandler handler)
-		{
-			_configurationChangedHandler += handler;
-			_watcher.EnableRaisingEvents = true;
-		}
-
-		private void ConfigChanged() 
-		{
-			try
-			{
-				_configurationChangedHandler(Load());
-			}
-			catch (Exception ex)
-			{
-				Log.Error(ex);
-			}
-		}
-
-		protected void OnTimer(Object source, System.Timers.ElapsedEventArgs e)
-		{
-			lock(this)
-			{
-				ConfigChanged();
-				timer.Enabled=false;
-			}
-		}
-
-		private void OnConfigurationChanged(object sender, FileSystemEventArgs e)
-		{
-			// don't need null check because should be guaranteed of handlers
-			lock(this)
-			{
-				if(!timer.Enabled)
-					timer.Enabled=true;
-				timer.Start();
-			}
-		}
-
-		public void Dispose()
-		{
-			_watcher.EnableRaisingEvents = false;
-			_watcher.Dispose();
-		}
-
 		private void handleSchemaEvent(object sender, ValidationEventArgs args) 
 		{
-			System.Diagnostics.Trace.WriteLine(args.Message);
+			Log.Info("Loading config schema: " + args.Message);
 		}
 	}
 }

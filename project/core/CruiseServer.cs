@@ -9,31 +9,28 @@ namespace ThoughtWorks.CruiseControl.Core
 {
 	public class CruiseServer : ICruiseServer
 	{
-		private IConfiguration _config;
+		private IConfigurationContainer _config;
 		private ICruiseManager _manager;
 		private ManualResetEvent _monitor = new ManualResetEvent(true);
 
-		public CruiseServer(IConfiguration config)
+		public CruiseServer(IConfigurationContainer config)
 		{
 			_config = config;
-			_manager = new CruiseManager(config);
-		}
+			_config.AddConfigurationChangedHandler(new ConfigurationChangedHandler(ResetConfiguration));
 
-		public CruiseServer(IConfigurationLoader configLoader) : this(configLoader.Load())
-		{
-			configLoader.AddConfigurationChangedHandler(new ConfigurationChangedHandler(ResetConfiguration));
+			_manager = new CruiseManager(config);
 		}
 
 		public void Start()
 		{
 			Log.Info("Starting CruiseControl.NET Server");
 			_monitor.Reset();
-			StartIntegrators();
+			StartIntegrators(_config);
 		}
 
-		private void StartIntegrators()
+		private void StartIntegrators(IConfiguration configuration)
 		{
-			foreach (IProjectIntegrator integrator in _config.Integrators)
+			foreach (IProjectIntegrator integrator in configuration.Integrators)
 			{
 				integrator.Start();
 			}
@@ -71,14 +68,13 @@ namespace ThoughtWorks.CruiseControl.Core
 			_monitor.WaitOne();
 		}
 
-		public void ResetConfiguration(IConfiguration configuration)
+		public void ResetConfiguration(IConfiguration newConfig)
 		{
 			Log.Info("Configuration changed: Restarting CruiseControl.NET Server ");
 
 			// lock
 			StopIntegrators();
-			_config = configuration;
-			StartIntegrators();
+			StartIntegrators(newConfig);
 		}
 
 		private void WaitForIntegratorsToExit()

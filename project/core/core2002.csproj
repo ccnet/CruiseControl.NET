@@ -107,11 +107,6 @@
         <Files>
             <Include>
                 <File
-                    RelPath = "CruiseControlException.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
                     RelPath = "CruiseControlRemotingException.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -261,6 +256,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "configuration\ConfigurationContainer.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "configuration\ConfigurationException.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -281,6 +281,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "configuration\IConfigurationContainer.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "configuration\IConfigurationLoader.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -292,6 +297,11 @@
                 />
                 <File
                     RelPath = "configuration\XslFilesSectionHandler.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "configuration\test\ConfigurationContainerTest.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -784,6 +794,16 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "util\FileChangedWatcher.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "util\IFileWatcher.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "util\IRegistry.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -839,7 +859,17 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "util\test\FileChangedWatcherTest.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "util\test\LogFileTraceListenerTest.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "util\test\MockFileWatcher.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

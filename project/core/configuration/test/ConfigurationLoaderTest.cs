@@ -17,13 +17,11 @@ namespace ThoughtWorks.CruiseControl.Core.Config.Test
 	public class ConfigurationLoaderTest : CustomAssertion
 	{
 		private ConfigurationLoader loader;
-		private int changed;
 		
 		[SetUp]
 		protected void SetUp()
 		{
 			loader = new ConfigurationLoader();
-			changed = 0;
 		}
 
 		[TearDown]
@@ -132,28 +130,6 @@ namespace ThoughtWorks.CruiseControl.Core.Config.Test
 			public ProjectActivity CurrentActivity { get { return ProjectActivity.Building; } }
 			public IntegrationResult RunIntegration(BuildCondition buildCondition) { return null; }
 			public IntegrationStatus GetLatestBuildStatus() { return IntegrationStatus.Success; }
-		}
-
-		[Test]
-		public void ConfigurationChanged()
-		{
-			string configFile = TempFileUtil.CreateTempXmlFile(TempFileUtil.CreateTempDir(this), "loadernet.config", ConfigurationFixture.GenerateConfigXml());
-			loader.ConfigFile = configFile;
-			ConfigurationChangedHandler handler = new ConfigurationChangedHandler(OnConfigurationChanged);
-			loader.AddConfigurationChangedHandler(handler);
-			AssertEquals("configuration should not have changed yet!", 0, changed);
-			TempFileUtil.UpdateTempFile(configFile, " ");		// must be valid xml
-			// filesystemwatcher runs in separate thread so must wait for wake up
-			System.Threading.Thread.Sleep(1000);
-			lock(loader) 
-			{
-				AssertEquals("configuration event should only be called once!", 1, changed);
-			}
-		}
-
-		private void OnConfigurationChanged(IConfiguration config)
-		{
-			changed++;
 		}
 	}
 }

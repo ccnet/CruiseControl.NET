@@ -57,6 +57,9 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			set { _ssDir = value.Trim('"'); }
 		}
 
+		[ReflectorProperty("applyLabel", Required=false)]
+		public bool ApplyLabel = false;
+
 		protected override IHistoryParser HistoryParser
 		{
 			get { return _parser; }
