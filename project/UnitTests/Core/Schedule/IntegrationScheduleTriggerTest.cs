@@ -3,10 +3,11 @@ using Exortech.NetReflector;
 using NMock;
 using NUnit.Framework;
 using ThoughtWorks.CruiseControl.Core.Config;
+using ThoughtWorks.CruiseControl.Core.Schedules;
 using ThoughtWorks.CruiseControl.Core.Util;
 using ThoughtWorks.CruiseControl.Remote;
 
-namespace ThoughtWorks.CruiseControl.Core.Schedules.Test
+namespace ThoughtWorks.CruiseControl.UnitTests.Core.Schedule
 {
 	[TestFixture]
 	public class IntegrationScheduleTriggerTest

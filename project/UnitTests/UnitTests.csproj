@@ -239,6 +239,21 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Core\Schedule\IntegrationIntervalTriggerTest.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Core\Schedule\IntegrationScheduleTriggerTest.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Core\Schedule\MockSchedule.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Core\Schedule\MultipleTriggerTest.cs"
                     SubType = "Code"
                     BuildAction = "Compile"

@@ -689,21 +689,6 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "schedule\test\IntegrationIntervalTriggerTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "schedule\test\IntegrationScheduleTriggerTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "schedule\test\MockSchedule.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
                     RelPath = "sourcecontrol\ClearCase.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
