@@ -20,6 +20,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Perforce
 		private string _user = "";
 		private string _port = "";
 		private string _workingDirectory = "";
+		private bool forceSync = false;
 		private readonly ProcessExecutor processExecutor;
 		private readonly IP4Initializer p4Initializer;
 		private readonly IP4ProcessInfoCreator processInfoCreator;
@@ -87,6 +88,13 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Perforce
 
 		[ReflectorProperty("autoGetSource", Required = false)]
 		public bool AutoGetSource = false;
+
+		[ReflectorProperty("forceSync", Required = false)]
+		public bool ForceSync
+		{
+			get { return forceSync; }
+			set { forceSync = value; }
+		}
 
 		public string BuildModificationsCommandArguments(DateTime from, DateTime to)
 		{
@@ -261,10 +269,20 @@ View:
 		{
 			if (AutoGetSource)
 			{
-				ProcessInfo info = processInfoCreator.CreateProcessInfo(this, "sync");
+				ProcessInfo info = processInfoCreator.CreateProcessInfo(this, CreateSyncCommandLine());
 				Log.Info(string.Format("Getting source from Perforce: {0} {1}", info.FileName, info.Arguments));
 				Execute(info);
 			}
+		}
+
+		private string CreateSyncCommandLine()
+		{
+			string commandline = "sync";
+			if (ForceSync)
+			{
+				commandline += " -f";
+			}
+			return commandline;
 		}
 
 		protected virtual string Execute(ProcessInfo p)

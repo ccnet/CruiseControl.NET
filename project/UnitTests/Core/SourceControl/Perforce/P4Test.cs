@@ -408,6 +408,22 @@ View:
 		}
 
 		[Test]
+		public void GetForceSourceIfGetSourceTrue()
+		{
+			P4 p4 = CreateP4();
+			p4.View = "//depot/myproject/...";
+			p4.AutoGetSource = true;
+			p4.ForceSync = true;
+
+			ProcessInfo processInfo = new ProcessInfo("getSource");
+			processInfoCreatorMock.ExpectAndReturn("CreateProcessInfo", processInfo, p4, "sync -f");
+			processExecutorMock.ExpectAndReturn("Execute", new ProcessResult("", "", 0, false), processInfo);
+			p4.GetSource(new IntegrationResult());
+
+			VerifyAll();
+		}
+
+		[Test]
 		public void DontGetSourceIfGetSourceFalse()
 		{
 			P4 p4 = CreateP4();
