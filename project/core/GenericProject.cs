@@ -5,9 +5,14 @@ using tw.ccnet.remote;
 
 namespace tw.ccnet.core
 {
+	/// <summary>
+	/// TODO explain why this class is here...
+	/// </summary>
 	[ReflectorType("generic")]
 	public class GenericProject : IProject
 	{
+		public event IntegrationCompletedEventHandler IntegrationCompleted;
+
 		private IList _tasks = new ArrayList();
 		public string Name 
 		{ 
@@ -26,15 +31,11 @@ namespace tw.ccnet.core
 			set { _tasks = value; }
 		}
 
-		public void Run(bool forceBuild)
-		{
-		}
-
-		public void AddIntegrationEventHandler(IntegrationEventHandler handler)
+		public void RunIntegration(bool forceBuild)
 		{
 		}
 		
-		public IntegrationStatus GetLastBuildStatus()
+		public IntegrationStatus GetLatestBuildStatus()
 		{
 			return IntegrationStatus.Unknown;
 		}
@@ -42,6 +43,16 @@ namespace tw.ccnet.core
 		public int MinimumSleepTime 
 		{ 
 			get { return 0; }
+		}
+
+		public ArrayList Publishers
+		{
+			get { return new ArrayList(); }
+		}
+
+		public ProjectActivity CurrentActivity 
+		{
+			get { return ProjectActivity.Unknown; }
 		}
 	}
 }

@@ -70,8 +70,8 @@ namespace tw.ccnet.core.test
 			_cc.WaitForExit();
 
 			_mockConfig.Verify();
-			Assertion.AssertEquals(1, _project1.Runs);
-			Assertion.AssertEquals(1, _project2.Runs);
+			Assertion.AssertEquals(1, _project1.RunIntegration_CallCount);
+			Assertion.AssertEquals(1, _project2.RunIntegration_CallCount);
 		}
 
 		[Test]
@@ -200,38 +200,38 @@ namespace tw.ccnet.core.test
 			Assertion.AssertEquals(SchedulerState.Stopped, ((IScheduler)_cc.Schedulers[1]).State);
 		}
 
-//		public void TestStopSleepingProject()
-//		{
-//			_project1.Sleep = 100000;
-//			_cc.Start(_project1);
-//			Assertion.AssertEquals(1, _cc.Threads.Count);
-//			Thread.Sleep(1000);
-//
-//			_cc.Stop(_project1);
-//			Assertion.AssertEquals(0, _cc.Threads.Count);
-//		}
-//
-//		// test stop if thread has already stopped
-//		public void TestStopAlreadyStoppedProject()
-//		{
-//			_cc.Start(_project1);
-//			Thread.Sleep(1000);
-//			_project1.Stop();
-//			Thread.Sleep(1000);
-//			_cc.Stop(_project1);
-//			Assertion.AssertEquals(0, _cc.Threads.Count);
-//		}
-//
-//		public void TestDisposeIfThreadsAreNotStopped()
-//		{
-//			_mockConfig.ExpectAndReturn("HasConfigurationChanged", true);
-//			_mockConfig.ExpectAndReturn("LoadProjects", _projects);
-//
-//			
-//			_cc.Start();
-//			Thread.Sleep(2);
-//			// do not shut down threads -- need to verify dispose called
-//			_cc.Dispose();
-//		}
+		//		public void TestStopSleepingProject()
+		//		{
+		//			_project1.Sleep = 100000;
+		//			_cc.Start(_project1);
+		//			Assertion.AssertEquals(1, _cc.Threads.Count);
+		//			Thread.Sleep(1000);
+		//
+		//			_cc.Stop(_project1);
+		//			Assertion.AssertEquals(0, _cc.Threads.Count);
+		//		}
+		//
+		//		// test stop if thread has already stopped
+		//		public void TestStopAlreadyStoppedProject()
+		//		{
+		//			_cc.Start(_project1);
+		//			Thread.Sleep(1000);
+		//			_project1.Stop();
+		//			Thread.Sleep(1000);
+		//			_cc.Stop(_project1);
+		//			Assertion.AssertEquals(0, _cc.Threads.Count);
+		//		}
+		//
+		//		public void TestDisposeIfThreadsAreNotStopped()
+		//		{
+		//			_mockConfig.ExpectAndReturn("HasConfigurationChanged", true);
+		//			_mockConfig.ExpectAndReturn("LoadProjects", _projects);
+		//
+		//			
+		//			_cc.Start();
+		//			Thread.Sleep(2);
+		//			// do not shut down threads -- need to verify dispose called
+		//			_cc.Dispose();
+		//		}
 	}
 }

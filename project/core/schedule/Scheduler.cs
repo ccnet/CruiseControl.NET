@@ -54,7 +54,7 @@ namespace tw.ccnet.core.schedule
 			{
 				try
 				{
-					_project.Run(_schedule.ForceBuild);
+					_project.RunIntegration(_schedule.ForceBuild);
 				}
 				catch (Exception ex) 
 				{ 

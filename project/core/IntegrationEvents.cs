@@ -2,10 +2,33 @@ using System;
 
 namespace tw.ccnet.core
 {
-	public delegate void IntegrationEventHandler(object sender, IntegrationResult result);
+	public delegate void IntegrationCompletedEventHandler(object sender, IntegrationCompletedEventArgs e);
 
-	public interface IIntegrationEventHandler
+	public interface IIntegrationCompletedEventHandler
 	{
-		IntegrationEventHandler IntegrationEventHandler { get ; }
+		/// <summary>
+		/// Gets a delegate for the IntegrationCompleted event.
+		/// </summary>
+		IntegrationCompletedEventHandler IntegrationCompletedEventHandler
+		{
+			get;
+		}
 	}
+
+	/// <summary>
+	/// Event arguments for completed integrations.
+	/// </summary>
+	public class IntegrationCompletedEventArgs : EventArgs
+	{
+		/// <summary>
+		/// The result of the completed integration.
+		/// </summary>
+		public IntegrationResult IntegrationResult;
+
+		public IntegrationCompletedEventArgs(IntegrationResult result)
+		{
+			IntegrationResult = result;
+		}
+	}
+
 }

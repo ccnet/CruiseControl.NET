@@ -9,14 +9,26 @@ using System.Xml.Xsl;
 namespace tw.ccnet.core.publishers
 {
 	/// <summary>
-	/// Summary description for BuildLogTransformer.
+	/// Utility class that provides static methods to transform build results using
+	/// Xsl stylesheets.
 	/// </summary>
 	public class BuildLogTransformer
 	{
-		public static string Transform(XmlDocument document) 
+		/// <summary>
+		/// Utility class; not intended for instantiation.
+		/// </summary>
+		private BuildLogTransformer() {}
+
+		/// <summary>
+		/// Transforms the specified Xml document using all configured Xsl files,
+		/// and returns the concatenated resulting Xml.
+		/// </summary>
+		/// <param name="document"></param>
+		/// <returns></returns>
+		public static string TransformResultsWithAllStyleSheets(XmlDocument document) 
 		{
 			StringBuilder builder = new StringBuilder();
-			IList list = (IList) ConfigurationSettings.GetConfig("xslFiles");
+			IList list = (IList)ConfigurationSettings.GetConfig("xslFiles");
 			foreach (string xslFile in list) 
 			{
 				builder.Append(Transform(document, xslFile));
@@ -25,6 +37,12 @@ namespace tw.ccnet.core.publishers
 			return builder.ToString();
 		}
 
+		/// <summary>
+		/// Transforms an Xml document using a specific Xsl file.
+		/// </summary>
+		/// <param name="document"></param>
+		/// <param name="xslFile"></param>
+		/// <returns></returns>
 		public static string Transform(XmlDocument document, string xslFile)
 		{
 			try 
@@ -44,21 +62,31 @@ namespace tw.ccnet.core.publishers
 				throw new CruiseControlException(String.Format("Bad XML in logfile: " + ex.Message));
 			}
 		}
+
+		#region Helper method
 		
-		private static void LoadStylesheet(XslTransform transform, string xslfile) 
+		/// <summary>
+		/// Attempts to load the specified stylesheet.  Throws a <see cref="CruiseControlException"/>
+		/// if an error occurs.
+		/// </summary>
+		/// <param name="transform"></param>
+		/// <param name="xslfile"></param>
+		private static void LoadStylesheet(XslTransform transform, string xslFileName) 
 		{
 			try 
 			{
-				transform.Load(xslfile);
+				transform.Load(xslFileName);
 			}
-			catch(FileNotFoundException) 
+			catch (FileNotFoundException) 
 			{
-				throw new CruiseControlException(String.Format("XSL stylesheet file not found: {0}", xslfile));
+				throw new CruiseControlException("XSL stylesheet file not found: " + xslFileName);
 			}
-			catch(XmlException ex) 
+			catch (XmlException ex) 
 			{
-				throw new CruiseControlException(String.Format("Bad XML in stylesheet: " + ex.Message));
+				throw new CruiseControlException("Bad XML in stylesheet: " + ex.Message);
 			}
 		}
+
+		#endregion
 	}
 }

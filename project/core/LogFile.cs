@@ -33,26 +33,22 @@ namespace tw.ccnet.core
 		
 		public static bool IsSuccessful(string filename)
 		{
-			return filename[FilenamePrefix.Length+DateFormat.Length] == 'L';
+			int characterIndex = FilenamePrefix.Length + DateFormat.Length;
+			return filename[characterIndex] == 'L';
 		}
 		
-//		public static string ParseForBuildLabel(string filename)
-//		{
-//			return null;
-//		}
-		
-		public static string CreateFileName(DateTime date)
+		public static string CreateFailedBuildLogFileName(DateTime date)
 		{
-			return String.Format("{0}{1}.xml",FilenamePrefix,date.ToString(DateFormat));
+			return String.Format("{0}{1}.xml", FilenamePrefix,date.ToString(DateFormat));
 		}
 		
-		public static string CreateFileName(DateTime date, string label)
+		public static string CreateSuccessfulBuildLogFileName(DateTime date, string label)
 		{
 			return String.Format("{0}{1}Lbuild.{2}.xml",
 				FilenamePrefix,
 				date.ToString(DateFormat),
 				label
-			);
+				);
 		}
 
 		public static string[] GetLogFileNames(string path)
@@ -150,13 +146,13 @@ namespace tw.ccnet.core
 			if (filename.StartsWith(FilenamePrefix) == false)
 			{
 				throw new ArgumentException(String.Format(
-				"{0} does not start with {1}.", filename, FilenamePrefix));
+					"{0} does not start with {1}.", filename, FilenamePrefix));
 			}
 			if (filename.Length < FilenamePrefix.Length + DateFormat.Length) 
 			{
 				throw new ArgumentException(String.Format(
-				"{0} does not start with {1} followed by a date in {2} format",
-				filename, FilenamePrefix, DateFormat));
+					"{0} does not start with {1} followed by a date in {2} format",
+					filename, FilenamePrefix, DateFormat));
 			}
 		}
 
@@ -168,9 +164,9 @@ namespace tw.ccnet.core
 		public static string CreateUrl(IntegrationResult result)
 		{
 			if (result.Status == IntegrationStatus.Success)
-				return CreateUrl(CreateFileName(result.LastModificationDate, result.Label));
+				return CreateUrl(CreateSuccessfulBuildLogFileName(result.LastModificationDate, result.Label));
 			else
-				return CreateUrl(CreateFileName(result.LastModificationDate));
+				return CreateUrl(CreateFailedBuildLogFileName(result.LastModificationDate));
 		}
 
 		public static string CreateUrl(string urlRoot, IntegrationResult result)

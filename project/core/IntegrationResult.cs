@@ -46,12 +46,18 @@ namespace tw.ccnet.core
 			set { _label = value; }
 		}
 
+		/// <summary>
+		/// The date and time at which the integration commenced.
+		/// </summary>
 		public DateTime StartTime
 		{
 			get { return _startTime; }
 			set { _startTime = value; }
 		}
 
+		/// <summary>
+		/// The date and time at which the integration was completed.
+		/// </summary>
 		public DateTime EndTime
 		{
 			get { return _endTime; }
@@ -98,17 +104,17 @@ namespace tw.ccnet.core
 			}
 		}
 
-		public void Start()
+		public void MarkStartTime()
 		{
 			_startTime = DateTime.Now;
 		}
 
-		public void End()
+		public void MarkEndTime()
 		{
 			_endTime = DateTime.Now;
 		}
 
-		public bool ShouldRunIntegration()
+		public bool HasModifications()
 		{
 			return Modifications.Length > 0;
 		}
@@ -164,7 +170,7 @@ namespace tw.ccnet.core
 				&& this.Label == other.Label
 				&& this.StartTime == other.StartTime
 				&& this.EndTime == other.EndTime;
-				// && this.ExceptionResult == other.ExceptionResult;
+			// && this.ExceptionResult == other.ExceptionResult;
 		}
 
 		public override int GetHashCode()

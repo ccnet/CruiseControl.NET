@@ -9,7 +9,6 @@ using Exortech.NetReflector;
 using tw.ccnet.core.util;
 using tw.ccnet.remote;
 
-
 namespace tw.ccnet.core.publishers
 {
 	[ReflectorType("email")]
@@ -31,6 +30,10 @@ namespace tw.ccnet.core.publishers
 		}
 
 		#region Configuration Properties
+
+		/// <summary>
+		/// The host name of the mail server.  This field is required to send email notifications.
+		/// </summary>
 		[ReflectorProperty("mailhost")]
 		public string MailHost
 		{
@@ -38,6 +41,10 @@ namespace tw.ccnet.core.publishers
 			set { EmailGateway.MailHost = value; }
 		}
 
+		/// <summary>
+		/// The email address from which build results appear to have originated from.  This
+		/// value seems to be required for most mail servers.
+		/// </summary>
 		[ReflectorProperty("from")]
 		public string FromAddress
 		{
@@ -45,6 +52,9 @@ namespace tw.ccnet.core.publishers
 			set { _fromAddress = value; }
 		}
 		
+		/// <summary>
+		/// Set this property (in configuration) to enable HTML emails containing build details.
+		/// </summary>
 		[ReflectorProperty("includeDetails", Required=false)]
 		public bool IncludeDetails 
 		{
@@ -72,6 +82,7 @@ namespace tw.ccnet.core.publishers
 			get { return _groups; }
 			set { _groups = value; }
 		}
+
 		#endregion
 
 		public EmailUser GetEmailUser(string username)
@@ -84,21 +95,20 @@ namespace tw.ccnet.core.publishers
 			return (EmailGroup)_groups[groupname];
 		}
 
-		public override void Publish(object source, IntegrationResult result)
+		public override void PublishIntegrationResults(IProject project, IntegrationResult result)
 		{
-			if (result.Status == IntegrationStatus.Unknown)
+			if (result.Status==IntegrationStatus.Unknown)
 			{
 				return;
 			}
 
-			Project p = (Project) source;
-			if (p != null) 
+			if (project!=null) 
 			{
-				foreach (PublisherBase publisher in p.Publishers) 
+				foreach (PublisherBase publisher in project.Publishers) 
 				{
 					if (publisher is XmlLogPublisher) 
 					{
-						logPublisher = (XmlLogPublisher) publisher;
+						logPublisher = (XmlLogPublisher)publisher;
 						break;
 					}
 				}
@@ -147,46 +157,80 @@ namespace tw.ccnet.core.publishers
 		internal string CreateMessage(IntegrationResult result) 
 		{
 			// TODO Add culprit to message text -- especially if modifier is not an email user
-			if(_includeDetails) 
+			if (_includeDetails) 
 			{
 				return CreateHtmlMessage(result);
 			}
 			else
 			{
-				return CreateLinkMessage(result);
+				return CreateLinkMessage(result, false);
 			}
 		}
 		
-		private string CreateLinkMessage(IntegrationResult result)
+		string CreateLinkMessage(IntegrationResult result, bool makeHyperlink)
 		{
-			return String.Format(@"CC.NET Build Results for {0}: {1}", 
-				result.ProjectName, LogFile.CreateUrl(ProjectUrl, result)) ;
+			string link = LogFile.CreateUrl(ProjectUrl, result);
+			
+			if (makeHyperlink)
+				link = string.Format("<a href='{0}'>view results</a>", link);
+
+			return string.Format("CruiseControl.NET Build Results for project {0}: {1}", 
+				result.ProjectName, link);
 		}
 
-		private string CreateHtmlMessage(IntegrationResult result)
+		#region HTML email stuff
+
+		/// <summary>
+		/// Creates an HTML representation of the build result as a string, intended
+		/// to be included in the email message whenever 'IncludeDetails' is set to
+		/// true.
+		/// </summary>
+		/// <param name="result"></param>
+		/// <returns></returns>
+		string CreateHtmlMessage(IntegrationResult result)
 		{
 			StringBuilder message = new StringBuilder(10000);
-			message.Append("<html><head></head><body>");
-			message.Append(CreateLinkMessage(result));
+			
+			// open HTML tags
+			message.Append(string.Format("<html><head>{0}</head><body bgcolor='#DEDEF7'>", HtmlEmailCss));
+
+			// include a link to the build results page
+			message.Append(CreateLinkMessage(result, true));
+			
+			// append html details of the build
 			AppendHtmlMessageDetails(result, message);
+			
+			// close HTML tags
 			message.Append("</body></html>");
+
 			return message.ToString();
 		}
 
-		private void AppendHtmlMessageDetails(IntegrationResult result, StringBuilder message)
+		void AppendHtmlMessageDetails(IntegrationResult result, StringBuilder message)
 		{
 			StringWriter buffer = new StringWriter();
 			XmlTextWriter writer = new XmlTextWriter(buffer);
 			if (logPublisher != null)
+			{
 				logPublisher.Write(result, writer);
+			}
 			else
+			{
+				// no log publisher has been set -- create a new one
 				new XmlLogPublisher().Write(result, writer);
+			}
 			writer.Close();
 			
 			XmlDocument xml = new XmlDocument();
 			xml.LoadXml(buffer.ToString());
-			message.Append(BuildLogTransformer.Transform(xml));
+			message.Append(BuildLogTransformer.TransformResultsWithAllStyleSheets(xml));
 		}
+
+		const string HtmlEmailCss = @"<style>
+BODY { font-family: verdana, arial, helvetica, sans-serif; font-size:9pt; }
+</style>";
+
+		#endregion
 				
 		internal string CreateRecipientList(IntegrationResult result)
 		{
@@ -236,6 +280,5 @@ namespace tw.ccnet.core.publishers
 		{
 			return result.LastIntegrationStatus != result.Status;
 		}
-
 	}
 }

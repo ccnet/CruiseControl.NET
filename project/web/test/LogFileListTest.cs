@@ -129,7 +129,7 @@ namespace tw.ccnet.web.test
 		{
 			HtmlAnchor previous = new HtmlAnchor();
 			HtmlAnchor next = new HtmlAnchor();
-			TempFileUtil.CreateTempFile(_tempFolder, LogFile.CreateFileName(new DateTime(), "2"));
+			TempFileUtil.CreateTempFile(_tempFolder, LogFile.CreateSuccessfulBuildLogFileName(new DateTime(), "2"));
 			LogFileLister.InitAdjacentAnchors(new HtmlAnchor(), new HtmlAnchor(), 
 				_tempFolder, null);
 			Assertion.AssertEquals("Previous link set", String.Empty, previous.HRef);

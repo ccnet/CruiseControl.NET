@@ -34,7 +34,7 @@ namespace tw.ccnet.core.publishers.test
 		private XmlLogPublisher CreatePublisher()
 		{
 			string xml = String.Format(
-@"		<xmllogger>
+				@"		<xmllogger>
 		    <logDir>{0}</logDir>
 		</xmllogger>", LOGDIR);
 			XmlNode node = XmlUtil.CreateDocumentElement(xml);
@@ -115,7 +115,7 @@ namespace tw.ccnet.core.publishers.test
 		public void MergeFilesConfig() 
 		{
 			string xml = String.Format(
-@"		<xmllogger>
+				@"		<xmllogger>
 		    <logDir>{0}</logDir>
 			<mergeFiles>
 				<file>d:\foo.xml</file>
@@ -152,12 +152,12 @@ namespace tw.ccnet.core.publishers.test
 			TempFileUtil.CreateTempXmlFile(LOGDIR + "\\sub", "foo.xml", "<foo bar=\"9\">bat</foo>");
 
 			_publisher.MergeFiles = new string[] {LOGDIR + "\\*.xml"};
-			ArrayList list = _publisher.getFileList();
+			ArrayList list = _publisher.GetMergeFileList();
 			Assertion.AssertEquals(1, list.Count);
 			Assertion.AssertEquals(LOGDIR + "\\foo.xml", (string)list[0]);
 
 			_publisher.MergeFiles = new string[] {LOGDIR + "\\foo.*"};
-			list = _publisher.getFileList();
+			list = _publisher.GetMergeFileList();
 			Assertion.AssertEquals(2, list.Count);
 		}
 		
@@ -194,7 +194,7 @@ namespace tw.ccnet.core.publishers.test
 		{
 			IntegrationResult result = CreateIntegrationResult(IntegrationStatus.Success, true);
 
-			_publisher.Publish(null, result);
+			_publisher.PublishIntegrationResults(null, result);
 
 			string filename = _publisher.GetFilename(result);
 			string outputPath = Path.Combine(_publisher.LogDir, filename);
@@ -206,7 +206,7 @@ namespace tw.ccnet.core.publishers.test
 		public void TestPublish_UnknownIntegrationStatus()
 		{
 			AssertFalse(LOGDIR + " should be not exist at start of test.", Directory.Exists(LOGDIR));
-			_publisher.Publish(null, new IntegrationResult());
+			_publisher.PublishIntegrationResults(null, new IntegrationResult());
 			AssertFalse(LOGDIR + " should still not exist at end of this test.", Directory.Exists(LOGDIR));
 		}
 

@@ -47,16 +47,16 @@ namespace tw.ccnet.core.test
 		public void TestGetLatestBuildNumber()
 		{
 			string[] filenames = new string[]{
-				"log19710514150000.xml",
-				"log19710514150001.xml",
-				"log20020830164057Lbuild.9.xml",
-				"log19710514150002.xml",
-				"log20020830164057Lbuild.7.xml",
-				"log19710514150003.xml",
-				"log20020830164057Lbuild.6.xml",
-				"log20020830164057Lbuild.8.xml",
-				"log19710514150004.xml"
-			};
+												 "log19710514150000.xml",
+												 "log19710514150001.xml",
+												 "log20020830164057Lbuild.9.xml",
+												 "log19710514150002.xml",
+												 "log20020830164057Lbuild.7.xml",
+												 "log19710514150003.xml",
+												 "log20020830164057Lbuild.6.xml",
+												 "log20020830164057Lbuild.8.xml",
+												 "log19710514150004.xml"
+											 };
 			int actual = LogFile.GetLatestBuildNumber(filenames);
 			Assertion.AssertEquals(9, actual);
 		}
@@ -65,7 +65,7 @@ namespace tw.ccnet.core.test
 		{
 			// testFilenames array must be in sorted order -- otherwise links iteration will fail
 			string[] testFilenames = {"log123.xml", "log200.xml", "logfile.txt", 
-				"log20020830164057Lbuild.6.xml", "badfile.xml" };
+										 "log20020830164057Lbuild.6.xml", "badfile.xml" };
 			TempFileUtil.CreateTempFiles(TestFolder, testFilenames);
 
 			string[] fileNames = LogFile.GetLogFileNames(_tempFolder);
@@ -77,10 +77,10 @@ namespace tw.ccnet.core.test
 		public void TestGetLastLogFileName()
 		{
 			string[] testFilenames = {"log123.xml", "log200.xml", "logfile.txt", 
-				"log20010830164057Lbuild.6.xml", 
-				"log20011230164057Lbuild.8.xml", 
-				"log20010430164057Lbuild.7.xml", 
-			"badfile.xml" };
+										 "log20010830164057Lbuild.6.xml", 
+										 "log20011230164057Lbuild.8.xml", 
+										 "log20010430164057Lbuild.7.xml", 
+										 "badfile.xml" };
 			TempFileUtil.CreateTempFiles(TestFolder, testFilenames);
 			string path = TempFileUtil.GetTempPath(TestFolder);
 
@@ -103,10 +103,10 @@ namespace tw.ccnet.core.test
 		public void TestGetLastBuildDate()
 		{
 			string[] testFilenames = {"log123.xml", "log200.xml", "logfile.txt", 
-				"log20010830164057Lbuild.6.xml", 
-				"log20011230164057Lbuild.6.xml", 
-				"log20010430164057Lbuild.6.xml", 
-			"badfile.xml" };
+										 "log20010830164057Lbuild.6.xml", 
+										 "log20011230164057Lbuild.6.xml", 
+										 "log20010430164057Lbuild.6.xml", 
+										 "badfile.xml" };
 			TempFileUtil.CreateTempFiles(TestFolder, testFilenames);
 			DateTime expected = new DateTime(2001,12,30,16,40,57);
 			string path = TempFileUtil.GetTempPath(TestFolder);
@@ -158,14 +158,14 @@ namespace tw.ccnet.core.test
 		{
 			DateTime date = new DateTime(2002, 3, 28, 13, 0, 0);
 			string expected = "log20020328130000.xml";
-			Assertion.AssertEquals(expected, LogFile.CreateFileName(date));
+			Assertion.AssertEquals(expected, LogFile.CreateFailedBuildLogFileName(date));
 		}
 		
 		public void TestCreateFileNameWithBuildNumber()
 		{
 			DateTime date = new DateTime(2002, 3, 28, 13, 0, 0);
 			string expected = "log20020328130000Lbuild.33.xml";
-			Assertion.AssertEquals(expected, LogFile.CreateFileName(date, "33"));
+			Assertion.AssertEquals(expected, LogFile.CreateSuccessfulBuildLogFileName(date, "33"));
 		}
 
 		public void TestCreateUrl()

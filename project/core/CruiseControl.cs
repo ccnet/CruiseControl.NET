@@ -137,11 +137,17 @@ namespace tw.ccnet.core
 			Stop();
 		}
 
-		public IntegrationStatus GetLastBuildStatus() 
+		/// <summary>
+		/// Gets the most recent build status across all projects for this CruiseControl.NET
+		/// instance.
+		/// </summary>
+		/// <returns></returns>
+		public IntegrationStatus GetLatestBuildStatus() 
 		{
-			foreach (IProject p in Projects) 
+			// TODO determine the most recent where multiple projects exist, rather than simply returning the first
+			foreach (IProject project in Projects) 
 			{
-				return p.GetLastBuildStatus();
+				return project.GetLatestBuildStatus();
 			}
 
 			return IntegrationStatus.Unknown;
@@ -149,9 +155,9 @@ namespace tw.ccnet.core
 
 		public ProjectActivity CurrentProjectActivity() 
 		{
-			foreach (IProject p in Projects) 
+			foreach (IProject project in Projects) 
 			{
-				return ((Project)p).CurrentActivity;
+				return project.CurrentActivity;
 			}
 
 			return ProjectActivity.Unknown;

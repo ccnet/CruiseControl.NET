@@ -15,18 +15,18 @@ namespace tw.ccnet.core
 	
 	public class CruiseManager : MarshalByRefObject, ICruiseManager 
 	{
-        private CruiseControl _cruiseControl; 
-        private ConfigurationLoader _loader; 
-        private Thread _cruiseControlThread;
+		private CruiseControl _cruiseControl; 
+		private ConfigurationLoader _loader; 
+		private Thread _cruiseControlThread;
 		public const int TCP_PORT = 1234;
 
-        public CruiseManager(string configFileName) 
-        {
-            _loader = new ConfigurationLoader(configFileName);
-            _cruiseControl = new CruiseControl(_loader);
-        }
+		public CruiseManager(string configFileName) 
+		{
+			_loader = new ConfigurationLoader(configFileName);
+			_cruiseControl = new CruiseControl(_loader);
+		}
 
-        private void InitializeThread()
+		private void InitializeThread()
 		{
 			_cruiseControlThread = new Thread(new ThreadStart(_cruiseControl.Start));
 			_cruiseControlThread.Start();
@@ -83,7 +83,7 @@ namespace tw.ccnet.core
 			IEnumerator e =_cruiseControl.Projects.GetEnumerator();
 			e.MoveNext();
 			Project p = (Project)e.Current;
-			return new ProjectStatus(GetStatus(), p.GetLastBuildStatus(), p.CurrentActivity, p.Name, p.WebURL, p.LastIntegration.StartTime, p.LastIntegration.Label); 
+			return new ProjectStatus(GetStatus(), p.GetLatestBuildStatus(), p.CurrentActivity, p.Name, p.WebURL, p.LastIntegrationResult.StartTime, p.LastIntegrationResult.Label); 
 		}
 
 		public override object InitializeLifetimeService() 
@@ -95,57 +95,57 @@ namespace tw.ccnet.core
 		{
 		}
 
-        public string Configuration 
-        {
-            get 
-            { 
-                StreamReader stream = new StreamReader(_loader.ConfigFile);
-                try 
-                {
-                    return stream.ReadToEnd();
-                } 
-                finally 
-                {
-                    stream.Close();
-                }            
-            }
-            set
-            { 
-                StreamWriter stream = new StreamWriter(_loader.ConfigFile);
-                try 
-                {
-                    stream.Write(value);
-                } 
-                finally 
-                {
-                    stream.Close();
-                }            
-            }
-        }
+		public string Configuration 
+		{
+			get 
+			{ 
+				StreamReader stream = new StreamReader(_loader.ConfigFile);
+				try 
+				{
+					return stream.ReadToEnd();
+				} 
+				finally 
+				{
+					stream.Close();
+				}            
+			}
+			set
+			{ 
+				StreamWriter stream = new StreamWriter(_loader.ConfigFile);
+				try 
+				{
+					stream.Write(value);
+				} 
+				finally 
+				{
+					stream.Close();
+				}            
+			}
+		}
 
-        public void RegisterForRemoting() 
-        {
-            string configFile = System.Reflection.Assembly.GetEntryAssembly().Location + ".config";
-            string uri = "CruiseManager.rem";
+		public void RegisterForRemoting() 
+		{
+			string configFile = System.Reflection.Assembly.GetEntryAssembly().Location + ".config";
+			string uri = "CruiseManager.rem";
 
-            RemotingConfiguration.Configure(configFile);
-            RemotingServices.Marshal(this, uri);
+			RemotingConfiguration.Configure(configFile);
+			RemotingServices.Marshal(this, uri);
  
 
-            string url = uri;
-            try 
-            {
-                IChannelReceiver channel = (IChannelReceiver)ChannelServices.RegisteredChannels[0];
-                url = channel.GetUrlsForUri(uri)[0];
+			string url = uri;
+			try 
+			{
+				IChannelReceiver channel = (IChannelReceiver)ChannelServices.RegisteredChannels[0];
+				url = channel.GetUrlsForUri(uri)[0];
 
-                ICruiseManager marshalledObject = (ICruiseManager) RemotingServices.Connect(typeof(ICruiseManager), url);
-                marshalledObject.GetStatus(); // this will throw an exception if it didn't connect
-                Console.WriteLine("listening on " + url);
-            } 
-            catch 
-            {
-                throw new Exception("couldn't listen on " + url);
-            }
-        }
-    }
+				ICruiseManager marshalledObject = (ICruiseManager) RemotingServices.Connect(typeof(ICruiseManager), url);
+				marshalledObject.GetStatus(); // this will throw an exception if it didn't connect
+				Console.WriteLine("listening on " + url);
+			} 
+			catch 
+			{
+				throw new Exception("couldn't listen on " + url);
+			}
+		}
+	}
 }

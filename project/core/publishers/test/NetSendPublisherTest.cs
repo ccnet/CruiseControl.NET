@@ -105,12 +105,12 @@ namespace tw.ccnet.core.publishers.test
 		public void Publish()
 		{
 			DynamicMock mockPublisher = new DynamicMock(typeof(NetSendPublisher));
-			mockPublisher.Ignore("Publish");
+			mockPublisher.Ignore("PublishIntegrationResults");
 			mockPublisher.ExpectAndReturn("ExecuteProcess", 0, new NMock.Constraints.IsTypeOf(typeof(Process)));
 
 			NetSendPublisher publisher = (NetSendPublisher)mockPublisher.MockInstance;
 			publisher.Names = "localhost";
-			publisher.Publish(null, IntegrationResultMother.CreateFailed());
+			publisher.PublishIntegrationResults(null, IntegrationResultMother.CreateFailed());
 
 			mockPublisher.Verify();
 		}
@@ -123,7 +123,7 @@ namespace tw.ccnet.core.publishers.test
 			CollectingConstraint process3 = new CollectingConstraint();
 
 			DynamicMock mockPublisher = new DynamicMock(typeof(NetSendPublisher));
-			mockPublisher.Ignore("Publish");
+			mockPublisher.Ignore("PublishIntegrationResults");
 			mockPublisher.ExpectAndReturn("ExecuteProcess", 0, process1);
 			mockPublisher.ExpectAndReturn("ExecuteProcess", 0, process2);
 			mockPublisher.ExpectAndReturn("ExecuteProcess", 0, process3);
@@ -131,7 +131,7 @@ namespace tw.ccnet.core.publishers.test
 			NetSendPublisher publisher = (NetSendPublisher)mockPublisher.MockInstance;
 			publisher.Names = "machine1,machine2,machine3";
 
-			publisher.Publish(null, IntegrationResultMother.CreateFailed());
+			publisher.PublishIntegrationResults(null, IntegrationResultMother.CreateFailed());
 
 			mockPublisher.Verify();
 			AssertEquals(@"send ""machine1""", ((Process)process1.Parameter).StartInfo.Arguments.Substring(0, 15));
@@ -144,7 +144,7 @@ namespace tw.ccnet.core.publishers.test
 		{
 			NetSendPublisher publisher = new NetSendPublisher();
 			publisher.Names = "localhost";
-			publisher.Publish(null, CreateFailedIntegrationResult());
+			publisher.PublishIntegrationResults(null, CreateFailedIntegrationResult());
 
 			Win32Window window = Win32Window.Find("Messenger Service ");
 			AssertNotNull(window);

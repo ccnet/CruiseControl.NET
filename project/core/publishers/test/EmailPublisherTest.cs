@@ -75,7 +75,8 @@ namespace tw.ccnet.core.publishers.test
 			AssertEquals(@"CC.NET Build Results for Project#9: http://localhost/ccnet?log=log19741224023000Lbuild.0.xml", message);
 		}
 		
-		public void TestEmailMessageWithDetails() {
+		public void TestEmailMessageWithDetails() 
+		{
 			_publisher.IncludeDetails = true;
 			string message = _publisher.CreateMessage(CreateIntegrationResult(IntegrationStatus.Success, IntegrationStatus.Success));
 			Assert(message.StartsWith("<html>"));
@@ -140,14 +141,14 @@ namespace tw.ccnet.core.publishers.test
 		public void TestPublish()
 		{
 			IntegrationResult result = CreateIntegrationResult(IntegrationStatus.Success, IntegrationStatus.Success);
-			_publisher.Publish(null, result);
+			_publisher.PublishIntegrationResults(null, result);
 			AssertEquals("mock.gateway.org", _gateway.MailHost);
 			AssertEquals(1, _gateway.SentMessages.Count);
 		}
 
 		public void TestPublish_UnknownIntegrationStatus()
 		{
-			_publisher.Publish(null, new IntegrationResult());
+			_publisher.PublishIntegrationResults(null, new IntegrationResult());
 			AssertEquals(0, _gateway.SentMessages.Count);
 			// verify that no messages are sent if there were no modifications
 		}
@@ -155,8 +156,9 @@ namespace tw.ccnet.core.publishers.test
 		[Test]
 		public void TestHandleIntegrationEvent()
 		{
-			IntegrationEventHandler handler = _publisher.IntegrationEventHandler;
-			handler(null, CreateIntegrationResult(IntegrationStatus.Success, IntegrationStatus.Success));
+			IntegrationCompletedEventHandler handler = _publisher.IntegrationCompletedEventHandler;
+			IntegrationResult result = CreateIntegrationResult(IntegrationStatus.Success, IntegrationStatus.Success);
+			handler(null, new IntegrationCompletedEventArgs(result));
 			Assert("Mail message was not sent!", _gateway.SentMessages.Count > 0);
 		}
 

@@ -37,7 +37,7 @@ namespace tw.ccnet.core.publishers
 			set { additionalDir = value; }
 		}
 
-		public override void Publish(object source, IntegrationResult result)
+		public override void PublishIntegrationResults(IProject project, IntegrationResult result)
 		{
 			if (result.Succeeded) 
 			{

@@ -9,12 +9,12 @@ namespace tw.ccnet.core.test
 		public static IntegrationResult CreateIntegrationResult()
 		{
 			IntegrationResult result = new IntegrationResult("testProject");
-			result.Start();
+			result.MarkStartTime();
 			result.Status = IntegrationStatus.Success;
 			result.Label = "hello";
 			result.Modifications = new Modification[] { new Modification() };
 			result.Output = "<somexml>output</somexml>";
-			result.End();
+			result.MarkEndTime();
 			return result;
 		}
 

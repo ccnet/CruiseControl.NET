@@ -1,5 +1,7 @@
 using System;
+using System.Collections;
 using System.Threading;
+
 using tw.ccnet.core.schedule;
 using tw.ccnet.remote;
 
@@ -7,10 +9,10 @@ namespace tw.ccnet.core.test
 {
 	public class MockProject : IProject
 	{
+		public event IntegrationCompletedEventHandler IntegrationCompleted;
+
 		private string name;
-		private int runs = 0;
 		private ISchedule schedule;
-		public bool ForceBuild;
 
 		public MockProject(string name, ISchedule schedule)
 		{
@@ -34,27 +36,32 @@ namespace tw.ccnet.core.test
 			set { schedule = value; } 
 		}
 
-		public virtual void Run(bool forceBuild)
+		public ArrayList Publishers
 		{
-			ForceBuild = forceBuild;
+			get { return new ArrayList(); }
+		}
+
+		public bool RunIntegration_forceBuild;
+		public virtual void RunIntegration(bool forceBuild)
+		{
+			RunIntegration_forceBuild = forceBuild;
 			RunIntegration();
 		}
 
+		public int RunIntegration_CallCount = 0;
 		public virtual void RunIntegration()
 		{
-			runs++;
+			RunIntegration_CallCount++;
 		}
 
-		public int Runs
-		{
-			get { return runs; }
-		}
-
-		public void AddIntegrationEventHandler(IntegrationEventHandler handler) {}
-
-		public IntegrationStatus GetLastBuildStatus() 
+		public IntegrationStatus GetLatestBuildStatus() 
 		{
 			return IntegrationStatus.Unknown;
+		}
+
+		public ProjectActivity CurrentActivity 
+		{
+			get { return ProjectActivity.Unknown; }
 		}
 	}
 

@@ -11,21 +11,14 @@ namespace tw.ccnet.core.publishers
 	[ReflectorType("xmllogger")]
 	public class XmlLogPublisher : PublisherBase
 	{
-		public class Elements 
-		{
-			public const string BUILD="build";
-			public const string CRUISE_ROOT="cruisecontrol";
-			public const string MODIFICATIONS="modifications";
-			public const string INFO="info";
-			public const string EXCEPTION="exception";
-		}
-
 		private string _logDir;
 		private string[] _mergeFiles;
 
 		public XmlLogPublisher() : base()
 		{
 		}
+
+		#region Xml configuration bound properties
 
 		[ReflectorProperty("logDir")]
 		public string LogDir
@@ -48,9 +41,13 @@ namespace tw.ccnet.core.publishers
 			set { _mergeFiles = value; }
 		}
 
-		public override void Publish(object source, IntegrationResult result)
+		#endregion
+
+		public override void PublishIntegrationResults(IProject project, IntegrationResult result)
 		{
-			if (result.Status == IntegrationStatus.Unknown) return;
+			// only deal with known integration status
+			if (result.Status==IntegrationStatus.Unknown)
+				return;
 
 			XmlWriter writer = GetXmlWriter(LogDir, GetFilename(result)); 
 			try 
@@ -65,26 +62,61 @@ namespace tw.ccnet.core.publishers
 		
 		public XmlWriter GetXmlWriter(string dirname, string filename)
 		{
-			if (! Directory.Exists(dirname))
-			{
+			// create directory if necessary
+			if (!Directory.Exists(dirname))
 				Directory.CreateDirectory(dirname);
-			}
+
+			// create Xml writer using UTF8 encoding
 			string path = Path.Combine(dirname, filename);
 			return new XmlTextWriter(path, System.Text.Encoding.UTF8);
 		}
 		
 		public string GetFilename(IntegrationResult result)
 		{
-			DateTime date = result.LastModificationDate;
+			DateTime lastModDate = result.LastModificationDate;
 			if (result.Succeeded)
 			{
-				return LogFile.CreateFileName(date, result.Label);
+				return LogFile.CreateSuccessfulBuildLogFileName(lastModDate, result.Label);
 			} 
 			else 
 			{
-				return LogFile.CreateFileName(date);
+				return LogFile.CreateFailedBuildLogFileName(lastModDate);
 			}
 		}
+
+		/// <summary>
+		/// Gets the list of file names, as specified in the MergeFiles property.  Any wildcards
+		/// are expanded to include such files.
+		/// </summary>
+		public ArrayList GetMergeFileList() 
+		{
+			ArrayList result = new ArrayList();
+
+			foreach (string file in MergeFiles) 
+			{
+				if (file.IndexOf("*")>-1) 
+				{
+					// filename has a wildcard
+					string dir = Path.GetDirectoryName(file);
+					string pattern = Path.GetFileName(file);
+					DirectoryInfo info = new DirectoryInfo(dir);
+					// add all files that match wildcard
+					foreach (FileInfo fileInfo in info.GetFiles(pattern)) 
+					{
+						result.Add(fileInfo.FullName);
+					}
+				}
+				else 
+				{
+					// no wildcard, so just add
+					result.Add(file);
+				}
+			}
+
+			return result;
+		}
+
+		#region Writing
 		
 		public void Write(IntegrationResult result, XmlWriter writer)
 		{
@@ -98,35 +130,9 @@ namespace tw.ccnet.core.publishers
 			writer.WriteEndElement();
 		}
 
-		public ArrayList getFileList() 
-		{
-			ArrayList result = new ArrayList();
-			foreach(string file in MergeFiles) 
-			{
-				int index = file.IndexOf("*");
-				if (index != -1) 
-				{
-					string dir = Path.GetDirectoryName(file);
-					string pattern = Path.GetFileName(file);
-					DirectoryInfo info = new DirectoryInfo(dir);
-					foreach (FileInfo fileInfo in info.GetFiles(pattern)) 
-					{
-						result.Add(fileInfo.FullName);
-					}
-				}
-				else 
-				{
-					result.Add(file);
-				}
-
-			}
-
-			return result;
-		}
-
 		private void WriteMergeFiles(XmlWriter writer) 
 		{
-			ArrayList files = getFileList();
+			ArrayList files = GetMergeFileList();
 			foreach (string file in files) 
 			{
 				FileInfo info = new FileInfo(file);
@@ -204,7 +210,20 @@ namespace tw.ccnet.core.publishers
 				writer.WriteRaw(mod.ToXml());
 			}
 		}
+
+		#endregion
+		
+		#region Inner type: Elements
+
+		public class Elements 
+		{
+			public const string BUILD = "build";
+			public const string CRUISE_ROOT = "cruisecontrol";
+			public const string MODIFICATIONS = "modifications";
+			public const string INFO = "info";
+			public const string EXCEPTION = "exception";
+		}
+
+		#endregion
 	}
 }
-
-

@@ -60,7 +60,7 @@ namespace tw.ccnet.core.publishers.test
 			result.Status = IntegrationStatus.Success;
 			result.Label = "99";
 
-			publisher.Publish(null, result);
+			publisher.PublishIntegrationResults(null, result);
 
 			FileInfo resultFile = new FileInfo(pubDir + @"\99\" + fileName);
 			Assertion.Assert("File not found in build number directory", resultFile.Exists);

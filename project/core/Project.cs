@@ -1,15 +1,14 @@
 using System;
 using System.Collections;
-using System.Diagnostics;
-using System.Threading;
+
 using Exortech.NetReflector;
-using tw.ccnet.core.state;
+
 using tw.ccnet.core.label;
 using tw.ccnet.core.publishers;
-using tw.ccnet.core;
-using tw.ccnet.remote;
 using tw.ccnet.core.schedule;
+using tw.ccnet.core.state;
 using tw.ccnet.core.util;
+using tw.ccnet.remote;
 
 namespace tw.ccnet.core
 {
@@ -29,24 +28,28 @@ namespace tw.ccnet.core
 	[ReflectorType("project")]
 	public class Project : IProject
 	{
-		public static readonly string END_OF_INTEGRATION_LOG_OUTPUT = Environment.NewLine;
-		private string _name;
-		private string _webURL = "http://localhost/CruiseControl.NET/";
-		private ISchedule _schedule;
-		private ISourceControl _sourceControl;
-		private IBuilder _builder;
-		private ILabeller _labeller = new DefaultLabeller();
-		private IList _publishers = new ArrayList();
-		private IStateManager _state = new IntegrationStateManager();
-		private bool _stopped = false;
-		private IntegrationResult _lastIntegration;
-		private IntegrationResult _currentIntegration;
-		private event IntegrationEventHandler _integrationEventHandler;
-		private ProjectActivity currentActivity;
-		private int modificationDelay = 0;
-		private int sleepTime = 0;
+		/// <summary>
+		/// Raised whenever an integration is completed.
+		/// </summary>
+		public event IntegrationCompletedEventHandler IntegrationCompleted;
 
-		#region Project Properties
+		string _name;
+		string _webURL = "http://localhost/CruiseControl.NET/"; // default value
+		ISchedule _schedule;
+		ISourceControl _sourceControl;
+		IBuilder _builder;
+		ILabeller _labeller = new DefaultLabeller();
+		ArrayList _publishers = new ArrayList();
+		IStateManager _state = new IntegrationStateManager();
+		IntegrationResult _lastIntegrationResult = null;
+		IntegrationResult _currentIntegrationResult = null;
+		ProjectActivity _currentActivity = ProjectActivity.Unknown;
+		int _modificationDelay = 0;
+		int _sleepTime = 0;
+		bool _stopped = false;
+
+		#region Properties set via Xml configuration
+
 		[ReflectorProperty("name")]
 		public string Name
 		{
@@ -65,11 +68,11 @@ namespace tw.ccnet.core
 		public ISchedule Schedule
 		{
 			get 
-			{ 
-				if (_schedule == null) 
-				{
+			{
+				// construct a new schedule if none exists
+				if (_schedule==null) 
 					_schedule = new Schedule();
-				}
+
 				return _schedule; 
 			}
 			set { _schedule = value; }
@@ -89,26 +92,28 @@ namespace tw.ccnet.core
 			set { _sourceControl = value; }
 		}		
 
+		/// <summary>
+		/// The list of build-completed publishers used by this project.  This property is
+		/// intended to be set via Xml configuration.  Additional publishers should be
+		/// added via the <see cref="AddPublisher"/> method.
+		/// </summary>
 		[ReflectorCollection("publishers", InstanceType=typeof(ArrayList), Required=false)]
-		public IList Publishers
+		public ArrayList Publishers
 		{
 			get { return _publishers; }
 			set 
 			{ 
 				_publishers = value; 
-				AddEventHandlers(_publishers);
+
+				// an arraylist is used for netreflector, and this array cast ensures
+				// strong typing at runtime
+				IIntegrationCompletedEventHandler[] handlers
+					= (IIntegrationCompletedEventHandler[])_publishers.ToArray(typeof(IIntegrationCompletedEventHandler));
+
+				// register each of these event handlers
+				foreach (IIntegrationCompletedEventHandler handler in handlers)
+					IntegrationCompleted += handler.IntegrationCompletedEventHandler;
 			}
-		}
-
-		public bool Stopped 
-		{
-			get { return _stopped; }
-			set { _stopped = value; }
-		}
-
-		public int MinimumSleepTime 
-		{
-			get { return sleepTime; }
 		}
 
 		[ReflectorProperty("state", InstanceTypeKey="type", Required=false)]
@@ -118,55 +123,76 @@ namespace tw.ccnet.core
 			set { _state = value; }
 		}
 
+		[ReflectorProperty("modificationDelay", Required=false)]
+		public int ModificationDelay 
+		{
+			get { return _modificationDelay; }
+			set { _modificationDelay = value; }
+		}
+
+		#endregion
+
+		#region Other properties
+
+		public bool Stopped 
+		{
+			get { return _stopped; }
+			set { _stopped = value; }
+		}
+
+		public int MinimumSleepTime 
+		{
+			get { return _sleepTime; }
+		}
+
 		public ILabeller Labeller
 		{
 			get { return _labeller; }
 			set { _labeller = value; }
 		}
 
-		public IntegrationResult LastIntegration
+		public IntegrationResult LastIntegrationResult
 		{
 			get 
 			{ 
-				if (_lastIntegration == null)
+				if (_lastIntegrationResult == null)
 				{
-					_lastIntegration = LoadLastIntegration();
+					_lastIntegrationResult = LoadLastIntegration();
 				}
-				return _lastIntegration; 
+				return _lastIntegrationResult; 
 			}
 
-			set { _lastIntegration = value; }
+			set { _lastIntegrationResult = value; }
 		}
 
-		public IntegrationResult CurrentIntegration
+		public IntegrationResult CurrentIntegrationResult
 		{
-			get { return _currentIntegration; }
-			set { _currentIntegration = value; }
+			get { return _currentIntegrationResult; }
+			set { _currentIntegrationResult = value; }
 		}
 
-		[ReflectorProperty("modificationDelay", Required=false)]
-		public int ModificationDelay 
+		public ProjectActivity CurrentActivity 
 		{
-			get { return modificationDelay; }
-			set { modificationDelay = value; }
+			get { return _currentActivity; }
 		}
+
 		#endregion
 
-		public void Run() 
+		public void RunIntegrationAndForceBuild() 
 		{ 
-			Run(true); 
+			RunIntegration(true); 
 		}
 
-		public void Run(bool forceBuild)
+		public void RunIntegration(bool forceBuild)
 		{
-			if (Stopped) return;
+			if (Stopped)
+				return;
 
 			// lock
-			sleepTime = 0;
+			_sleepTime = 0;
 			try
 			{
-				PreBuild();
-				DateTime modStart = DateTime.Now;
+				InitialiseCurrentIntegrationResult();
 				GetSourceModifications();
 				if (forceBuild || ShouldRunBuild())
 				{
@@ -177,61 +203,80 @@ namespace tw.ccnet.core
 			catch (CruiseControlException ex)
 			{
 				Log("Exception occurred while running integration", ex);
-				CurrentIntegration.ExceptionResult = ex;
+				CurrentIntegrationResult.ExceptionResult = ex;
 				PostBuild();
 			}
-			currentActivity = ProjectActivity.Sleeping;
+
+			// go to sleep
+			_currentActivity = ProjectActivity.Sleeping;
 		}
 
-		internal void PreBuild()
+		internal void InitialiseCurrentIntegrationResult()
 		{
-			CurrentIntegration = new IntegrationResult();
-			CurrentIntegration.ProjectName = Name;
-			CurrentIntegration.LastIntegrationStatus = LastIntegration.Status;		// test
-			CurrentIntegration.Label = Labeller.Generate(LastIntegration);
-			CurrentIntegration.Start();
-			Log(String.Format("Starting new integration...{0}", CurrentIntegration.StartTime));
+			CurrentIntegrationResult = new IntegrationResult();
+			CurrentIntegrationResult.ProjectName = Name;
+			CurrentIntegrationResult.LastIntegrationStatus = LastIntegrationResult.Status;		// test
+			CurrentIntegrationResult.Label = Labeller.Generate(LastIntegrationResult);
+			CurrentIntegrationResult.MarkStartTime();
 		}
 
 		internal void GetSourceModifications()
 		{
-			currentActivity = ProjectActivity.CheckingModifications;
-			CurrentIntegration.Modifications = SourceControl.GetModifications(LastIntegration.StartTime,  CurrentIntegration.StartTime);
-			Log(String.Format("{0} Modifications detected...", CurrentIntegration.Modifications.Length));
+			_currentActivity = ProjectActivity.CheckingModifications;
+			CurrentIntegrationResult.Modifications = SourceControl.GetModifications(LastIntegrationResult.StartTime,  CurrentIntegrationResult.StartTime);
+			Log(String.Format("{0} Modifications detected...", CurrentIntegrationResult.Modifications.Length));
 		}
 
 		internal void RunBuild()
 		{
-			currentActivity = ProjectActivity.Building;
-			Builder.Run(CurrentIntegration);
-			Log(String.Format("Build Complete: {0}", CurrentIntegration.Status.ToString())); 
+			_currentActivity = ProjectActivity.Building;
+			Builder.Run(CurrentIntegrationResult);
+			Log(String.Format("Build Complete: {0}", CurrentIntegrationResult.Status.ToString())); 
 		}
 
 		internal void PostBuild()
 		{
-			CurrentIntegration.End();
+			CurrentIntegrationResult.MarkEndTime();
+			AttemptToSaveState();
+			HandleProjectLabelling(CurrentIntegrationResult);
+			// raise event (publishers do their thing in response)
+			OnIntegrationCompleted(new IntegrationCompletedEventArgs(CurrentIntegrationResult));
+			// update reference to the most recent result
+			LastIntegrationResult = CurrentIntegrationResult;
+			Log(String.Format("Integration Complete... {0}", CurrentIntegrationResult.EndTime));
+		}
+
+		void AttemptToSaveState()
+		{
 			try
 			{
-				StateManager.Save(CurrentIntegration);
+				StateManager.Save(CurrentIntegrationResult);
 			}
 			catch (CruiseControlException ex)
 			{
 				Log("Exception when saving integration state", ex);
-				if (CurrentIntegration.ExceptionResult == null)
+				if (CurrentIntegrationResult.ExceptionResult == null)
 				{
-					CurrentIntegration.ExceptionResult = ex;
+					CurrentIntegrationResult.ExceptionResult = ex;
 				}
 			}
-			LabelProject(CurrentIntegration);
-			RaiseIntegrationEvent(CurrentIntegration);
-			LastIntegration = CurrentIntegration;
-			Log(String.Format("Integration Complete... {0}", CurrentIntegration.EndTime));
 		}
 
-		private IntegrationResult LoadLastIntegration()
+		IntegrationResult LoadLastIntegration()
 		{
-			return (StateManager.Exists()) ? StateManager.Load() : new IntegrationResult();
+			if (StateManager.Exists())
+			{
+				return StateManager.Load();
+			}
+			else
+			{
+				// no integration result is on record
+				// TODO consider something such as IntegrationResult.Empty, to indicate 'unknown state'
+				return new IntegrationResult();
+			}
 		}
+
+		#region Logging helper methods
 
 		private void Log(string message)
 		{
@@ -243,83 +288,77 @@ namespace tw.ccnet.core
 			LogUtil.Log(this, message, ex);
 		}
 
-		public void AddPublisher(IIntegrationEventHandler publisher)
-		{
-			_publishers.Add(publisher);
-			AddIntegrationEventHandler(publisher.IntegrationEventHandler);
-		}
+		#endregion
 
+		/// <summary>
+		/// Determines whether a build should run.  A build should run if there
+		/// are modifications, and none have occurred within the modification
+		/// delay.
+		/// </summary>
 		internal bool ShouldRunBuild() 
 		{
-			if (CurrentIntegration.ShouldRunIntegration()) 
-			{
-				if (ModificationDelay > 0) 
-				{
-					return CheckModificationDelay();
-				} 
-				else 
-				{
-					return true;
-				}
-			}
+			if (CurrentIntegrationResult.HasModifications()) 
+				return !DoModificationsExistWithinModificationDelay();
+
 			return false;
 		}
 
-		private bool CheckModificationDelay()
+		/// <summary>
+		/// Checks whether modifications occurred within the modification delay.  If the
+		/// modification delay is not set (has a value of zero or less), this method
+		/// will always return false.
+		/// </summary>
+		bool DoModificationsExistWithinModificationDelay()
 		{
-			TimeSpan diff = DateTime.Now - CurrentIntegration.LastModificationDate;
+			if (ModificationDelay <= 0) 
+				return false;
+
+			TimeSpan diff = DateTime.Now - CurrentIntegrationResult.LastModificationDate;
 			if (diff.TotalMilliseconds < ModificationDelay) 
 			{
-				sleepTime = ModificationDelay - (int)diff.TotalMilliseconds;
+				_sleepTime = ModificationDelay - (int)diff.TotalMilliseconds;
 				Log("Changes found within the modification delay");
-				return false;
+				return true;
 			}
-			return true;
+
+			return false;
 		}
 
-		public IntegrationStatus GetLastBuildStatus() 
+		public IntegrationStatus GetLatestBuildStatus() 
 		{
-			if (LastIntegration != null)
-			{
-				return LastIntegration.Status;
-			}
+			if (LastIntegrationResult!=null)
+				return LastIntegrationResult.Status;
+
 			return IntegrationStatus.Unknown;
 		}
 
-		public ProjectActivity CurrentActivity 
-		{
-			get { return currentActivity; }
-		}
-
-		private void LabelProject(IntegrationResult result) 
+		/// <summary>
+		/// Labels the project, if the build was successful.
+		/// </summary>
+		void HandleProjectLabelling(IntegrationResult result) 
 		{
 			if (result.Succeeded) 
-			{
 				SourceControl.LabelSourceControl(result.Label, result.StartTime);
-			}
 		}
 
 		#region Event Handling
-		private void AddEventHandlers(IList list)
+
+		public void AddPublisher(PublisherBase publisher)
 		{
-			for (int i = 0; i < list.Count; i++)
-			{
-				AddIntegrationEventHandler(((IIntegrationEventHandler)list[i]).IntegrationEventHandler);
-			}
+			_publishers.Add(publisher);
+			IntegrationCompleted += publisher.IntegrationCompletedEventHandler;
 		}
 
-		public void AddIntegrationEventHandler(IntegrationEventHandler handler)
+		/// <summary>
+		/// Raises the IntegrationCompleted event.
+		/// </summary>
+		/// <param name="e">Arguments to pass with the raised event.</param>
+		protected virtual void OnIntegrationCompleted(IntegrationCompletedEventArgs e)
 		{
-			_integrationEventHandler += handler;
+			if (IntegrationCompleted!=null)
+				IntegrationCompleted(this, e);
 		}
 
-		private void RaiseIntegrationEvent(IntegrationResult result)
-		{
-			if (_integrationEventHandler != null)
-			{
-				_integrationEventHandler(this, result);
-			}
-		}
-		#endregion Event Handling
+		#endregion
 	}
 }

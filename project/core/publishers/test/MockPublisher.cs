@@ -20,7 +20,7 @@ namespace tw.ccnet.core.publishers.test
 			get { return _result; }
 		}
 
-		public override void Publish(object source, IntegrationResult result)
+		public override void PublishIntegrationResults(IProject project, IntegrationResult result)
 		{
 			_published = true;
 			_result = result;

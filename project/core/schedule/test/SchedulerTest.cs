@@ -68,9 +68,9 @@ namespace tw.ccnet.core.schedule.test
 			TimeSpan expectedDelta = new TimeSpan(0, 0, 0, 0, (int) _schedule.TimeOut * 2);
 			Assertion.Assert("The project did not sleep",  delta >= expectedDelta);
 
-//			TimeSpan expectedDelta = new TimeSpan(_schedule.TimeOut * 2);
-//			// Assert("The project did not sleep",  delta >= expectedDelta);
-//			//Console.WriteLine("expected: " + expectedDelta + " actual: " + delta);
+			//			TimeSpan expectedDelta = new TimeSpan(_schedule.TimeOut * 2);
+			//			// Assert("The project did not sleep",  delta >= expectedDelta);
+			//			//Console.WriteLine("expected: " + expectedDelta + " actual: " + delta);
 		}
 
 		[Test]
@@ -85,7 +85,7 @@ namespace tw.ccnet.core.schedule.test
 			Assert("schedule should be stopped", ! _scheduler.IsRunning);
 
 			// verify that the project has run multiple times
-			Assert(_project.Runs > 0);
+			Assert(_project.RunIntegration_CallCount > 0);
 			AssertEquals(SchedulerState.Stopped, _scheduler.State);
 		}
 
@@ -146,15 +146,15 @@ namespace tw.ccnet.core.schedule.test
 			_scheduler.Stop();
 			_scheduler.WaitForExit();
 
-//<<<<<<< SchedulerTest.cs
-//			_scheduler.Project = new MockProject("mock");
-//			Schedule newSchedule = new Schedule();
-//			newSchedule.TotalIterations = 1;
-//			newSchedule.TimeOut = 1;
-//=======
+			//<<<<<<< SchedulerTest.cs
+			//			_scheduler.Project = new MockProject("mock");
+			//			Schedule newSchedule = new Schedule();
+			//			newSchedule.TotalIterations = 1;
+			//			newSchedule.TimeOut = 1;
+			//=======
 			Schedule newSchedule = new Schedule(1, 1);
 			_scheduler.Project = new MockProject("mock", newSchedule);
-//>>>>>>> 1.4
+			//>>>>>>> 1.4
 			_scheduler.Schedule = newSchedule;
 			
 			_scheduler.Start();
@@ -185,7 +185,7 @@ namespace tw.ccnet.core.schedule.test
 			_scheduler.Start();
 			_scheduler.WaitForExit();
 
-			Assert(_project.ForceBuild);
+			Assert(_project.RunIntegration_forceBuild);
 		}
 
 		private Scheduler CreateScheduler(int iterations)

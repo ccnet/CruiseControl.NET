@@ -39,7 +39,7 @@ namespace tw.ccnet.core.test
 		public void GetLastIntegration_NoPreviousBuild()
 		{
 			Mock mock = SetMockStateManager(false, null);
-			IntegrationResult last = _project.LastIntegration;
+			IntegrationResult last = _project.LastIntegrationResult;
 			AssertNotNull(last);
 			AssertEquals(DateTime.Now.AddDays(-1), last.LastModificationDate);		// will load all modifications
 			mock.Verify();
@@ -57,7 +57,7 @@ namespace tw.ccnet.core.test
 			mock.ExpectAndReturn("Load", expected, null);
 			_project.StateManager = (IStateManager)mock.MockInstance;
 
-			AssertEquals(expected, _project.LastIntegration);
+			AssertEquals(expected, _project.LastIntegrationResult);
 			mock.Verify();
 		}
 
@@ -65,24 +65,24 @@ namespace tw.ccnet.core.test
 		public void PreBuild_InitialBuild()
 		{
 			SetMockStateManager(false, null);
-			_project.PreBuild();
-			AssertNotNull(_project.LastIntegration);
-			AssertNotNull(_project.CurrentIntegration);
-			AssertEquals("1", _project.CurrentIntegration.Label);
-			AssertEquals(_project.Name, _project.CurrentIntegration.ProjectName);
+			_project.InitialiseCurrentIntegrationResult();
+			AssertNotNull(_project.LastIntegrationResult);
+			AssertNotNull(_project.CurrentIntegrationResult);
+			AssertEquals("1", _project.CurrentIntegrationResult.Label);
+			AssertEquals(_project.Name, _project.CurrentIntegrationResult.ProjectName);
 		}
 
 		[Test]
 		public void PostBuild()
 		{
-			_project.CurrentIntegration = new IntegrationResult();
+			_project.CurrentIntegrationResult = new IntegrationResult();
 
 			DynamicMock publisherMock = new DynamicMock(typeof(PublisherBase));
 			CollectingConstraint constraint = new CollectingConstraint();
-			publisherMock.Expect("Publish", new IsAnything(), constraint);
+			publisherMock.Expect("PublishIntegrationResults", new IsAnything(), constraint);
 
 			DynamicMock stateMock = new DynamicMock(typeof(IStateManager));
-			stateMock.Expect("Save", _project.CurrentIntegration);
+			stateMock.Expect("Save", _project.CurrentIntegrationResult);
 
 			_project.AddPublisher((PublisherBase)publisherMock.MockInstance);
 			_project.StateManager = (IStateManager)stateMock.MockInstance;
@@ -92,12 +92,12 @@ namespace tw.ccnet.core.test
 			// verify event was sent
 			publisherMock.Verify();
 			AssertNotNull(constraint.Parameter);
-			AssertEquals(_project.CurrentIntegration, (IntegrationResult)constraint.Parameter);
+			AssertEquals(_project.CurrentIntegrationResult, (IntegrationResult)constraint.Parameter);
 
 			// verify build was written to state manager
 			stateMock.Verify();
 
-			AssertEquals("verify that current build has become last build", _project.CurrentIntegration, _project.LastIntegration);
+			AssertEquals("verify that current build has become last build", _project.CurrentIntegrationResult, _project.LastIntegrationResult);
 		}
  
 		[Test]
@@ -113,18 +113,18 @@ namespace tw.ccnet.core.test
 			_project.Builder = (IBuilder)builderMock.MockInstance;
 			_project.StateManager = (IStateManager)stateMock.MockInstance;
 
-			_project.Run();
+			_project.RunIntegrationAndForceBuild();
 
 			AssertEquals(ProjectActivity.Sleeping, _project.CurrentActivity);
 
-			AssertEquals(3, _project.CurrentIntegration.Modifications.Length);
+			AssertEquals(3, _project.CurrentIntegrationResult.Modifications.Length);
 			// verify that build was invoked
 			builderMock.Verify();
 			// verify postbuild invoked
-			AssertEquals(_project.CurrentIntegration, _project.LastIntegration);
-			TimeSpan span = DateTime.Now - _project.CurrentIntegration.StartTime;
-			Assert("start time is not set", _project.CurrentIntegration.StartTime != DateTime.MinValue);
-			Assert("end time is not set", _project.CurrentIntegration.EndTime != DateTime.MinValue);
+			AssertEquals(_project.CurrentIntegrationResult, _project.LastIntegrationResult);
+			TimeSpan span = DateTime.Now - _project.CurrentIntegrationResult.StartTime;
+			Assert("start time is not set", _project.CurrentIntegrationResult.StartTime != DateTime.MinValue);
+			Assert("end time is not set", _project.CurrentIntegrationResult.EndTime != DateTime.MinValue);
 		}
 
 		[Test]
@@ -137,9 +137,9 @@ namespace tw.ccnet.core.test
 			stateMock.ExpectAndReturn("Exists", false);
 			int buildTimeout = 1000;
 
-			_project.LastIntegration = new IntegrationResult();
-			_project.LastIntegration.Modifications = CreateModifications();
-			_project.LastIntegration.StartTime = MockSourceControl.LastModificationTime;
+			_project.LastIntegrationResult = new IntegrationResult();
+			_project.LastIntegrationResult.Modifications = CreateModifications();
+			_project.LastIntegrationResult.StartTime = MockSourceControl.LastModificationTime;
 			_project.SourceControl = new MockSourceControl();
 			_project.Builder = (IBuilder)builderMock.MockInstance;
 			_project.StateManager = (IStateManager)stateMock.MockInstance;
@@ -153,11 +153,11 @@ namespace tw.ccnet.core.test
 			control.WaitForExit();
 			DateTime stop = DateTime.Now;
 
-			AssertEquals(0, _project.CurrentIntegration.Modifications.Length);
+			AssertEquals(0, _project.CurrentIntegrationResult.Modifications.Length);
 
 			// verify that build was NOT invoked and postbuild was NOT invoked
 			builderMock.Verify();
-			AssertNotEquals(_project.CurrentIntegration, _project.LastIntegration);
+			AssertNotEquals(_project.CurrentIntegrationResult, _project.LastIntegrationResult);
 
 			// verify that project slept
 			Assert("The project did not sleep", stop >= start);
@@ -167,12 +167,12 @@ namespace tw.ccnet.core.test
 		[Test]
 		public void ShouldRunIntegration() 
 		{
-			_project.CurrentIntegration = _project.LastIntegration;
+			_project.CurrentIntegrationResult = _project.LastIntegrationResult;
 			Assert("There are no modifications, project should not run", !_project.ShouldRunBuild());
 			Modification mod = new Modification();
 			mod.ModifiedTime = DateTime.Now;
-			_project.CurrentIntegration.Modifications = new Modification[1];
-			_project.CurrentIntegration.Modifications[0] = mod;
+			_project.CurrentIntegrationResult.Modifications = new Modification[1];
+			_project.CurrentIntegrationResult.Modifications[0] = mod;
 			Assert("There are modifications, project should run", _project.ShouldRunBuild());
 			_project.ModificationDelay = 1000;
 			Assert("There are modifications within ModificationDelay, project should not run", !_project.ShouldRunBuild());
@@ -180,34 +180,34 @@ namespace tw.ccnet.core.test
 			Assert("There are no modifications within ModificationDelay, project should run", _project.ShouldRunBuild());
 		}
 
-/*		[Test]
-		[Ignore("too fragile")]
-		public void SleepTime() 
-		{
-			_project.CurrentIntegration = _project.LastIntegration;
-			Modification mod = new Modification();
-			mod.ModifiedTime = DateTime.Now;
-			_project.IntegrationTimeout = 100;
-			_project.PreBuild();
-			_project.CurrentIntegration.Modifications = new Modification[1];
-			_project.CurrentIntegration.Modifications[0] = mod;
+		/*		[Test]
+				[Ignore("too fragile")]
+				public void SleepTime() 
+				{
+					_project.CurrentIntegration = _project.LastIntegration;
+					Modification mod = new Modification();
+					mod.ModifiedTime = DateTime.Now;
+					_project.IntegrationTimeout = 100;
+					_project.PreBuild();
+					_project.CurrentIntegration.Modifications = new Modification[1];
+					_project.CurrentIntegration.Modifications[0] = mod;
 			
 			
-			DateTime start = DateTime.Now;
-			_project.Sleep();
-			TimeSpan diff = DateTime.Now - start;
-			Assert("Didn't sleep long enough", !(diff.TotalMilliseconds < 100));
-			_project.ModificationDelay = 50;
-			mod.ModifiedTime = DateTime.Now.AddMilliseconds(-5);
-			Assert("There are modifications within ModificationDelay, project should not run", !_project.ShouldRunBuild());
-			mod.ModifiedTime = DateTime.Now.AddMilliseconds(-5);
-			start = DateTime.Now;
-			_project.Sleep();
-			diff = DateTime.Now - start;
-			Assert("Didn't sleep long enough", !(diff.TotalMilliseconds < 45));
-			Assert("Slept too long", !(diff.TotalMilliseconds > 100));
-		}
-*/
+					DateTime start = DateTime.Now;
+					_project.Sleep();
+					TimeSpan diff = DateTime.Now - start;
+					Assert("Didn't sleep long enough", !(diff.TotalMilliseconds < 100));
+					_project.ModificationDelay = 50;
+					mod.ModifiedTime = DateTime.Now.AddMilliseconds(-5);
+					Assert("There are modifications within ModificationDelay, project should not run", !_project.ShouldRunBuild());
+					mod.ModifiedTime = DateTime.Now.AddMilliseconds(-5);
+					start = DateTime.Now;
+					_project.Sleep();
+					diff = DateTime.Now - start;
+					Assert("Didn't sleep long enough", !(diff.TotalMilliseconds < 45));
+					Assert("Slept too long", !(diff.TotalMilliseconds > 100));
+				}
+		*/
 		public void TestStateChange()
 		{
 			// test valid state transitions
@@ -223,8 +223,8 @@ namespace tw.ccnet.core.test
 		public void NotRunWhenStopped()
 		{
 			_project.Stopped = true;
-			_project.Run();
-			AssertNull(_project.CurrentIntegration);
+			_project.RunIntegrationAndForceBuild();
+			AssertNull(_project.CurrentIntegrationResult);
 		}
 
 		[Test]
@@ -235,14 +235,14 @@ namespace tw.ccnet.core.test
 			Exception expectedException = new CruiseControlException("expected exception");
 			stateMock.ExpectAndThrow("Exists", expectedException);
 			_project.StateManager = (IStateManager)stateMock.MockInstance;
-			_project.AddIntegrationEventHandler(publisher.IntegrationEventHandler);
+			_project.IntegrationCompleted += publisher.IntegrationCompletedEventHandler;
 
-			_project.Run();
+			_project.RunIntegrationAndForceBuild();
 
-			AssertEquals(_project.CurrentIntegration, _project.LastIntegration);
-			AssertEquals(expectedException, _project.LastIntegration.ExceptionResult);
-			AssertEquals(IntegrationStatus.Exception, _project.LastIntegration.Status);
-			AssertNotNull(_project.CurrentIntegration.EndTime);
+			AssertEquals(_project.CurrentIntegrationResult, _project.LastIntegrationResult);
+			AssertEquals(expectedException, _project.LastIntegrationResult.ExceptionResult);
+			AssertEquals(IntegrationStatus.Exception, _project.LastIntegrationResult.Status);
+			AssertNotNull(_project.CurrentIntegrationResult.EndTime);
 			Assert(publisher.Published);
 			stateMock.Verify();
 			AssertEquals(2, _listener.Traces.Count);
@@ -256,18 +256,18 @@ namespace tw.ccnet.core.test
 			Exception expectedException = new CruiseControlException("expected exception");
 			mock.ExpectAndThrow("Generate", expectedException, new NMock.Constraints.IsAnything());
 			_project.Labeller = (ILabeller)mock.MockInstance;
-			_project.AddIntegrationEventHandler(publisher.IntegrationEventHandler);
+			_project.IntegrationCompleted += publisher.IntegrationCompletedEventHandler;
 			IMock stateMock = new DynamicMock(typeof(IStateManager));
 			stateMock.ExpectAndReturn("Exists", false);
-			stateMock.Expect("Save", _project.CurrentIntegration);
+			stateMock.Expect("Save", _project.CurrentIntegrationResult);
 			_project.StateManager = (IStateManager)stateMock.MockInstance;
 			
-			_project.Run();
+			_project.RunIntegrationAndForceBuild();
 
-			AssertEquals(_project.CurrentIntegration, _project.LastIntegration);
-			AssertEquals(IntegrationStatus.Exception, _project.LastIntegration.Status);
-			AssertEquals(expectedException, _project.LastIntegration.ExceptionResult);
-			AssertNotNull(_project.CurrentIntegration.EndTime);
+			AssertEquals(_project.CurrentIntegrationResult, _project.LastIntegrationResult);
+			AssertEquals(IntegrationStatus.Exception, _project.LastIntegrationResult.Status);
+			AssertEquals(expectedException, _project.LastIntegrationResult.ExceptionResult);
+			AssertNotNull(_project.CurrentIntegrationResult.EndTime);
 			Assert(publisher.Published);
 			mock.Verify();
 			AssertEquals(2, _listener.Traces.Count);
@@ -276,23 +276,23 @@ namespace tw.ccnet.core.test
 		[Test]
 		public void SourceControlLabeled()
 		{
-//			SetMockSourceControl();
+			//			SetMockSourceControl();
 			_project.SourceControl = new MockSourceControl();
 			_project.Builder = new MockBuilder();
 			MockPublisher publisher = new MockPublisher();
 			IMock mock = new DynamicMock(typeof(ILabeller));
 			mock.ExpectAndReturn("Generate", "1.2.1", new NMock.Constraints.IsAnything());
 			_project.Labeller = (ILabeller)mock.MockInstance;
-			_project.AddIntegrationEventHandler(publisher.IntegrationEventHandler);
+			_project.IntegrationCompleted += publisher.IntegrationCompletedEventHandler;
 			IMock stateMock = new DynamicMock(typeof(IStateManager));
 			stateMock.ExpectAndReturn("Exists", false);
-			stateMock.Expect("Save", _project.CurrentIntegration);
+			stateMock.Expect("Save", _project.CurrentIntegrationResult);
 			_project.StateManager = (IStateManager)stateMock.MockInstance;
 			
-			_project.Run();
+			_project.RunIntegrationAndForceBuild();
 
-			AssertEquals(_project.CurrentIntegration, _project.LastIntegration);
-			AssertNotNull(_project.CurrentIntegration.EndTime);
+			AssertEquals(_project.CurrentIntegrationResult, _project.LastIntegrationResult);
+			AssertNotNull(_project.CurrentIntegrationResult.EndTime);
 			Assert(publisher.Published);
 			mock.Verify();
 			AssertEquals("1.2.1", ((MockSourceControl)_project.SourceControl).Label);
@@ -308,17 +308,17 @@ namespace tw.ccnet.core.test
 			mock.ExpectAndThrow("Save", expectedException, new NMock.Constraints.IsAnything());
 			_project.StateManager = (IStateManager)mock.MockInstance;
 			MockPublisher publisher = new MockPublisher();
-			_project.AddIntegrationEventHandler(publisher.IntegrationEventHandler);
+			_project.IntegrationCompleted += publisher.IntegrationCompletedEventHandler;
 			_project.SourceControl = new MockSourceControl();
 			_project.Builder = new MockBuilder();
 			
-			_project.Run();
+			_project.RunIntegrationAndForceBuild();
 
 			// failure to save the integration result will register as a failed project
-			AssertEquals(_project.CurrentIntegration, _project.LastIntegration);
-			AssertEquals(IntegrationStatus.Exception, _project.LastIntegration.Status);
-			AssertEquals(expectedException, _project.LastIntegration.ExceptionResult);
-			AssertNotNull(_project.CurrentIntegration.EndTime);
+			AssertEquals(_project.CurrentIntegrationResult, _project.LastIntegrationResult);
+			AssertEquals(IntegrationStatus.Exception, _project.LastIntegrationResult.Status);
+			AssertEquals(expectedException, _project.LastIntegrationResult.ExceptionResult);
+			AssertNotNull(_project.CurrentIntegrationResult.EndTime);
 			Assert(publisher.Published);
 			mock.Verify();
 			AssertEquals(5, _listener.Traces.Count);
@@ -333,17 +333,17 @@ namespace tw.ccnet.core.test
 			mock.ExpectAndThrow("Save", expectedException, new NMock.Constraints.IsAnything());
 			_project.StateManager = (IStateManager)mock.MockInstance;
 			MockPublisher publisher = new MockPublisher();
-			_project.AddIntegrationEventHandler(publisher.IntegrationEventHandler);
+			_project.IntegrationCompleted += publisher.IntegrationCompletedEventHandler;
 			_project.SourceControl = new MockSourceControl();
 			_project.Builder = new MockBuilder();
 			
-			_project.Run();
+			_project.RunIntegrationAndForceBuild();
 
 			// failure to save the integration result will register as a failed project
-			AssertEquals(_project.CurrentIntegration, _project.LastIntegration);
-			AssertEquals(IntegrationStatus.Exception, _project.LastIntegration.Status);
-			AssertEquals(expectedException, _project.LastIntegration.ExceptionResult);
-			AssertNotNull(_project.CurrentIntegration.EndTime);
+			AssertEquals(_project.CurrentIntegrationResult, _project.LastIntegrationResult);
+			AssertEquals(IntegrationStatus.Exception, _project.LastIntegrationResult.Status);
+			AssertEquals(expectedException, _project.LastIntegrationResult.ExceptionResult);
+			AssertNotNull(_project.CurrentIntegrationResult.EndTime);
 			Assert(publisher.Published);
 			mock.Verify();
 			AssertEquals(5, _listener.Traces.Count);
@@ -358,7 +358,7 @@ namespace tw.ccnet.core.test
 			_project.Builder = new MockBuilder();
 			AssertFalse(((MockBuilder)_project.Builder).HasRun);
 
-			_project.Run(true);
+			_project.RunIntegration(true);
 
 			Assert(((MockBuilder)_project.Builder).HasRun);
 		}

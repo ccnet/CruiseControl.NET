@@ -18,7 +18,7 @@ namespace tw.ccnet.core.publishers
 		[ReflectorProperty("fixedMessage", Required=false)]
 		public string FixedMessage = "BUILD FIXED!";
 
-		public override void Publish(object source, IntegrationResult result)
+		public override void PublishIntegrationResults(IProject project, IntegrationResult result)
 		{
 			if (ShouldSendMessage(result))
 			{

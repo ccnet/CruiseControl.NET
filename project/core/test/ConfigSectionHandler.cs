@@ -11,7 +11,7 @@ namespace tw.ccnet.core.test
 		[Test]
 		public void GetConfig() 
 		{
-			IList list = (IList) ConfigurationSettings.GetConfig("xslFiles");
+			IList list = (IList)ConfigurationSettings.GetConfig("xslFiles");
 			Assertion.AssertNotNull(list);
 			Assertion.AssertEquals(5, list.Count);
 			Assertion.AssertEquals(@"xsl\header.xsl", (string)list[0]);
