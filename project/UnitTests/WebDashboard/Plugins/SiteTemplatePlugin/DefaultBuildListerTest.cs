@@ -58,12 +58,12 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Plugins.SiteTemplate
 			AssertEquals(6, actualLinks.Length);
 
 			// expected Date format: dd MMM yyyy HH:mm
-			AssertEquals("?log=log20020830164057Lbuild.6.xml&project=myproject", actualLinks[0].HRef);
-			AssertEquals("?log=log20020507042535.xml&project=myproject", actualLinks[1].HRef);
-			AssertEquals("?log=log20020507023858.xml&project=myproject", actualLinks[2].HRef);
-			AssertEquals("?log=log20020507010355.xml&project=myproject", actualLinks[3].HRef);
-			AssertEquals("?log=log19750101120000.xml&project=myproject", actualLinks[4].HRef);
-			AssertEquals("?log=log19741224120000.xml&project=myproject", actualLinks[5].HRef);
+			AssertEquals("ProjectReport.aspx?server=myserver&amp;project=myproject&amp;build=log20020830164057Lbuild.6.xml", actualLinks[0].HRef);
+			AssertEquals("ProjectReport.aspx?server=myserver&amp;project=myproject&amp;build=log20020507042535.xml", actualLinks[1].HRef);
+			AssertEquals("ProjectReport.aspx?server=myserver&amp;project=myproject&amp;build=log20020507023858.xml", actualLinks[2].HRef);
+			AssertEquals("ProjectReport.aspx?server=myserver&amp;project=myproject&amp;build=log20020507010355.xml", actualLinks[3].HRef);
+			AssertEquals("ProjectReport.aspx?server=myserver&amp;project=myproject&amp;build=log19750101120000.xml", actualLinks[4].HRef);
+			AssertEquals("ProjectReport.aspx?server=myserver&amp;project=myproject&amp;build=log19741224120000.xml", actualLinks[5].HRef);
 
 			AssertEquals("<nobr>30 Aug 2002 16:40 (6)</nobr>", actualLinks[0].InnerText);
 			AssertEquals("<nobr>07 May 2002 04:25 (Failed)</nobr>", actualLinks[1].InnerHtml);

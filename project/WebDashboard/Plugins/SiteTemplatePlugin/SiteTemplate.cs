@@ -107,7 +107,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.SiteTemplatePlugin
 		{
 			BuildStats buildStats = new BuildStats();
 			
-			buildStats.Html = string.Format(@"Latest Build Status: {0}<br/>\nTime Since Latest Build: {1}", build.IsSuccessful ? "Successful" : "Failed", TimeSinceLastBuild(build));
+			buildStats.Html = string.Format(@"Latest Build Status: {0}<br/>Time Since Latest Build: {1}", build.IsSuccessful ? "Successful" : "Failed", TimeSinceLastBuild(build));
 			buildStats.Htmlclass = build.IsSuccessful ? "buildresults-data" : "buildresults-data-failed";
 
 			return buildStats;
@@ -161,7 +161,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.SiteTemplatePlugin
 		{
 			return string.Format("{0}&{1}={2}", 
 				ProjectReportPageWithNoBuild(currentlyViewedBuild), 
-				QueryStringRequestWrapper.LogQueryStringParameter,
+				QueryStringRequestWrapper.BuildQueryStringParameter,
 				buildName);
 		}
 	}

@@ -5,7 +5,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.IO
 {
 	public class QueryStringRequestWrapper : IRequestWrapper
 	{
-		public static readonly string LogQueryStringParameter = "log";
+		public static readonly string BuildQueryStringParameter = "build";
 		public static readonly string ProjectQueryStringParameter = "project";
 		public static readonly string ServerQueryStringParameter = "server";
 
@@ -18,7 +18,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.IO
 
 		public IBuildSpecifier GetBuildSpecifier()
 		{
-			string logfile = queryString[LogQueryStringParameter];
+			string logfile = queryString[BuildQueryStringParameter];
 			if (logfile == null)
 			{
 				return new NoBuildSpecified();

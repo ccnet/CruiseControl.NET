@@ -23,11 +23,11 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.SiteTemplatePlugin
 			}
 			else
 			{
-				return GenerateBuildLinks(manager.GetBuildNames(serverName, projectName), projectName);
+				return GenerateBuildLinks(manager.GetBuildNames(serverName, projectName), projectName, serverName);
 			}
 		}
 
-		private HtmlAnchor[] GenerateBuildLinks(string[] buildNames, string projectName)
+		private HtmlAnchor[] GenerateBuildLinks(string[] buildNames, string projectName, string serverName)
 		{
 			ArrayList anchorList = new ArrayList();
 			foreach (string buildName in buildNames)
@@ -36,7 +36,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.SiteTemplatePlugin
 				// To Do - get rid of these static methods - maybe use the Log Specifier class?
 				HtmlAnchor anchor = new HtmlAnchor();
 				anchor.Attributes["class"] =  isSuccessful ? "link" : "link-failed";
-				anchor.HRef = LogFileUtil.CreateUrl(buildName, projectName);
+				anchor.HRef = string.Format("{0}?server={1}&amp;project={2}&amp;build={3}", "ProjectReport.aspx", serverName, projectName, buildName);
 				anchor.InnerHtml = string.Format("<nobr>{0} ({1})</nobr>", 
 					LogFileUtil.GetFormattedDateString(buildName), 
 					isSuccessful ?  LogFileUtil.ParseBuildNumber(buildName) : "Failed");	

@@ -28,7 +28,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.IO
 		[Test]
 		public void ReturnsLogSpecifierWithNameOfFileIfLogParameterSpecified()
 		{
-			queryString.Add("log", "mylog.xml");
+			queryString.Add("build", "mylog.xml");
 			NamedBuildSpecifier Specifier = (NamedBuildSpecifier) wrapper.GetBuildSpecifier();
 			AssertEquals("mylog.xml", Specifier.Filename);
 		}
