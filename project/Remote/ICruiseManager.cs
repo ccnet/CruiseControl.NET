@@ -22,9 +22,14 @@ namespace ThoughtWorks.CruiseControl.Remote
 		void WaitForExit(string projectName);
 
 		/// <summary>
-		/// Returns the name of the most recent build log for the specified project
+		/// Returns the name of the most recent build for the specified project
 		/// </summary>
 		string GetLatestBuildName(string projectName);
+
+		/// <summary>
+		/// Returns the names of all builds for the specified project, sorted s.t. the newest build is first in the array
+		/// </summary>
+		string[] GetBuildNames(string projectName);
 
 		/// <summary>
 		/// Returns the build log contents for requested project and build name

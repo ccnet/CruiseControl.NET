@@ -7,19 +7,21 @@
 			<decorator:title runat="server" defaulttitle="CruiseControl.Net Build Results" ID="Title1" /></title>
 		<link type="text/css" rel="stylesheet" href="cruisecontrol.css">
 	</HEAD>
-	<body background="images/bg_blue_stripe.gif" topmargin="0" leftmargin="0" marginheight="0" marginwidth="0">
-		<div><img src="images/shim.gif" height="6" border="0"></div>
+	<body background="images/bg_blue_stripe.gif" topmargin="0" leftmargin="0" marginheight="0"
+		marginwidth="0">
 		<!-- head: logo, controls -->
 		<table class="main-panel" border="0" align="center" cellpadding="0" cellspacing="0" width="100%">
 			<tr>
-				<td valign="center" align="left">
+				<td valign="middle" align="left">
 					<img src="images/shim.gif" width="6" border="0"> <a href="http://ccnet.thoughtworks.com">
 						<img src="images/ccnet_logo.gif" border="0"></a>
 				</td>
-				<td valign="center" align="right">
+				<td valign="middle" align="right">
+					<asp:Panel id="ProjectPanel1" runat="server">
 					<a class="link" id="latestLog" href="." runat="server">latest</a> |&nbsp; <a class="link" id="nextLog" runat="server">
 						next</a> |&nbsp; <a class="link" id="previousLog" runat="server">previous</a>
 					<span id="ProjectPluginLinks" runat="server" runAt="server">&nbsp;</span>
+					</asp:Panel>
 				</td>
 				<td><img src="images/shim.gif" width="6" border="0"></td>
 			</tr>
@@ -29,14 +31,15 @@
 			<tr>
 				<td width="196" valign="top">
 					<!-- build results -->
-					<table border="0" align="center" cellpadding="0" cellspacing="0" width="196">
-						<tr>
-							<td bgcolor="#333366" width="100%"><img src="images/shim.gif" border="0"></td>
-							<td><img src="images/corner_blue_ur.gif" border="0"></td>
-						</tr>
-						<tr>
-							<td bgcolor="#333366">
-								<table border="0" align="center" cellpadding="0" cellspacing="0" width="100%">
+					<asp:Panel id="ProjectPanel2" runat="server">
+						<TABLE cellSpacing="0" cellPadding="0" width="196" align="center" border="0">
+							<TR>
+								<TD width="100%" bgColor="#333366"><IMG src="images/shim.gif" border="0"></TD>
+								<TD><IMG src="images/corner_blue_ur.gif" border="0"></TD>
+							</TR>
+							<TR>
+								<TD bgColor="#333366">
+									<TABLE cellSpacing="0" cellPadding="0" width="100%" align="center" border="0">
 									<tr>
 										<td><img src="images/shim.gif" width="20"></td>
 										<td nowrap>
@@ -46,15 +49,16 @@
 												<asp:DataList ID="menu" Runat="server" /></p>
 										</td>
 									</tr>
-								</table>
-							</td>
-							<td bgcolor="#333366"><img src="images/shim.gif" border="0"></td>
-						</tr>
-						<tr>
-							<td bgcolor="#333366" width="100%"><img src="images/shim.gif" border="0"></td>
-							<td><img src="images/corner_blue_lr.gif" border="0"></td>
-						</tr>
-					</table>
+									</TABLE>
+								</TD>
+								<TD bgColor="#333366"><IMG src="images/shim.gif" border="0"></TD>
+							</TR>
+							<TR>
+								<TD width="100%" bgColor="#333366"><IMG src="images/shim.gif" border="0"></TD>
+								<TD><IMG src="images/corner_blue_lr.gif" border="0"></TD>
+							</TR>
+						</TABLE>
+					</asp:Panel>
 				</td>
 				<td>
 					<img src="images/shim.gif" width="12" border="0">

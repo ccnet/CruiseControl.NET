@@ -45,7 +45,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.ServerConnection
 			configurationGetterMock.ExpectAndReturn("GetConfigFromSection", new ServerSpecification[] { new ServerSpecification("myserver", "url")}, ServersSectionHandler.SectionName);
 			try
 			{
-				managerWrapper.GetLatestLogName("unknownServer", "");
+				managerWrapper.GetLatestBuildName("unknownServer", "");
 				Fail("Should throw exception");
 			}
 			catch (UnknownServerException e)
@@ -67,7 +67,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.ServerConnection
 
 			try
 			{
-				managerWrapper.GetLatestLogName("myserver", "myproject");
+				managerWrapper.GetLatestBuildName("myserver", "myproject");
 				Fail("Should throw exception");
 			}
 			catch (NoSuchProjectException e)
@@ -88,22 +88,22 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.ServerConnection
 			configurationGetterMock.ExpectAndReturn("GetConfigFromSection", servers, ServersSectionHandler.SectionName);
 			cruiseManagerFactoryMock.ExpectAndReturn("GetCruiseManager", (ICruiseManager) cruiseManagerMock.MockInstance, "http://myurl");
 			cruiseManagerMock.ExpectAndReturn("GetLatestBuildName", "mylogformyserverformyproject", "myproject");
-			AssertEquals("mylogformyserverformyproject", managerWrapper.GetLatestLogName("myserver", "myproject"));
+			AssertEquals("mylogformyserverformyproject", managerWrapper.GetLatestBuildName("myserver", "myproject"));
 
 			configurationGetterMock.ExpectAndReturn("GetConfigFromSection", servers, ServersSectionHandler.SectionName);
 			cruiseManagerFactoryMock.ExpectAndReturn("GetCruiseManager", (ICruiseManager) cruiseManagerMock.MockInstance, "http://myurl");
 			cruiseManagerMock.ExpectAndReturn("GetLatestBuildName", "mylogformyserverformyotherproject", "myotherproject");
-			AssertEquals("mylogformyserverformyotherproject", managerWrapper.GetLatestLogName("myserver", "myotherproject"));
+			AssertEquals("mylogformyserverformyotherproject", managerWrapper.GetLatestBuildName("myserver", "myotherproject"));
 			
 			configurationGetterMock.ExpectAndReturn("GetConfigFromSection", servers, ServersSectionHandler.SectionName);
 			cruiseManagerFactoryMock.ExpectAndReturn("GetCruiseManager", (ICruiseManager) cruiseManagerMock.MockInstance, "http://myotherurl");
 			cruiseManagerMock.ExpectAndReturn("GetLatestBuildName", "mylogformyotherserverformyproject", "myproject");
-			AssertEquals("mylogformyotherserverformyproject", managerWrapper.GetLatestLogName("myotherserver", "myproject"));
+			AssertEquals("mylogformyotherserverformyproject", managerWrapper.GetLatestBuildName("myotherserver", "myproject"));
 
 			configurationGetterMock.ExpectAndReturn("GetConfigFromSection", servers, ServersSectionHandler.SectionName);
 			cruiseManagerFactoryMock.ExpectAndReturn("GetCruiseManager", (ICruiseManager) cruiseManagerMock.MockInstance, "http://myotherurl");
 			cruiseManagerMock.ExpectAndReturn("GetLatestBuildName", "mylogformyotherserverformyotherproject", "myotherproject");
-			AssertEquals("mylogformyotherserverformyotherproject", managerWrapper.GetLatestLogName("myotherserver", "myotherproject"));
+			AssertEquals("mylogformyotherserverformyotherproject", managerWrapper.GetLatestBuildName("myotherserver", "myotherproject"));
 			
 			configurationGetterMock.Verify();
 			cruiseManagerFactoryMock.Verify();
@@ -119,6 +119,21 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.ServerConnection
 			cruiseManagerFactoryMock.ExpectAndReturn("GetCruiseManager", (ICruiseManager) cruiseManagerMock.MockInstance, "http://myurl");
 			cruiseManagerMock.ExpectAndReturn("GetLog", "log\r\ncontents", "myproject", "mybuild");
 			AssertEquals("log\r\ncontents", managerWrapper.GetLog("myserver", "myproject", "mybuild"));
+			
+			configurationGetterMock.Verify();
+			cruiseManagerFactoryMock.Verify();
+			cruiseManagerMock.Verify();
+		}
+
+		[Test]
+		public void ReturnsCorrectLogNamesFromCorrectProjectOnCorrectServer()
+		{
+			ServerSpecification[] servers = new ServerSpecification[] { new ServerSpecification("myserver", "http://myurl"), new ServerSpecification("myotherserver", "http://myotherurl")};
+
+			configurationGetterMock.ExpectAndReturn("GetConfigFromSection", servers, ServersSectionHandler.SectionName);
+			cruiseManagerFactoryMock.ExpectAndReturn("GetCruiseManager", (ICruiseManager) cruiseManagerMock.MockInstance, "http://myurl");
+			cruiseManagerMock.ExpectAndReturn("GetBuildNames", new string[] {"log1", "log2"}, "myproject");
+			AssertEquals("log1", managerWrapper.GetBuildNames("myserver", "myproject")[0]);
 			
 			configurationGetterMock.Verify();
 			cruiseManagerFactoryMock.Verify();

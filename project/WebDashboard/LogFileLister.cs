@@ -28,34 +28,6 @@ namespace ThoughtWorks.CruiseControl.WebDashboard
 			return links;
 		}
 
-		public static void InitAdjacentAnchors(HtmlAnchor latest, HtmlAnchor previous, HtmlAnchor next, string path, string currentFile, string projectName)
-		{			
-			string[] filenames = LogFileUtil.GetLogFileNames(path);
-			if (filenames.Length <= 1)
-			{
-				return;
-			}
-
-			// Yuck - repeated code (and its wrong - can't we get the current URL?)
-			latest.HRef = "projectreport.aspx" + string.Format("?{0}={1}", LogFileUtil.ProjectQueryString, projectName);
-
-			for (int i=0; i < filenames.Length; i++)
-			{
-				if (filenames[i] == currentFile)
-				{					
-					int previousIndex = Math.Max(0, i - 1);
-					int nextIndex = Math.Min(filenames.Length - 1, i + 1);
-					previous.HRef = LogFileUtil.CreateUrl(filenames[previousIndex],projectName);					
-					next.HRef = LogFileUtil.CreateUrl(filenames[nextIndex],projectName);					
-					return;
-				}
-			}
-			// Yuck - repeated code
-			next.HRef = "." + string.Format("?{0}={1}", LogFileUtil.ProjectQueryString, projectName);
-			previous.HRef = (currentFile == null) ? 
-				LogFileUtil.CreateUrl(filenames[filenames.Length-2],projectName) : ".";
-		}
-
 		public static string GetDisplayLabel(string logFilename)
 		{
 			return string.Format("<nobr>{0} {1}</nobr>",

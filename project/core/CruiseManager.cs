@@ -58,19 +58,25 @@ namespace ThoughtWorks.CruiseControl.Core
 
 		public string GetLatestBuildName(string projectName)
 		{
+			return GetBuildNames(projectName)[0];
+		}
+
+		public string[] GetBuildNames(string projectName)
+		{
 			// TODO - this is a hack - I'll tidy it up later - promise! :) MR
 			foreach (Project project in _config.Projects) 
 			{
 				if (project.Name == projectName)
 				{
-					if (project.LastIntegrationResult.Status == IntegrationStatus.Success)
+					foreach (IIntegrationCompletedEventHandler publisher in project.Publishers)
 					{
-						return LogFileUtil.CreateSuccessfulBuildLogFileName(project.LastIntegrationResult.StartTime, project.LastIntegrationResult.Label);
+						if (publisher is XmlLogPublisher)
+						{
+							// ToDo - check these are sorted?
+							return LogFileUtil.GetLogFileNames(((XmlLogPublisher) publisher).LogDir);
+						}
 					}
-					else
-					{
-						return LogFileUtil.CreateFailedBuildLogFileName(project.LastIntegrationResult.StartTime);
-					}
+					throw new CruiseControlException("Unable to find Log Publisher for project so can't find log file");
 				}
 			}
 

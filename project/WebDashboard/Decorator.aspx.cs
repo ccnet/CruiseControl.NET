@@ -1,14 +1,14 @@
 using System;
-using System.Collections;
-using System.Configuration;
-using System.Text;
 using System.Web.UI;
 using System.Web.UI.HtmlControls;
 using System.Web.UI.WebControls;
 using SiteMesh.DecoratorControls;
-using ThoughtWorks.CruiseControl.Core;
+using ThoughtWorks.CruiseControl.WebDashboard.Cache;
 using ThoughtWorks.CruiseControl.WebDashboard.Config;
+using ThoughtWorks.CruiseControl.WebDashboard.Dashboard;
 using ThoughtWorks.CruiseControl.WebDashboard.IO;
+using ThoughtWorks.CruiseControl.WebDashboard.Plugins.SiteTemplatePlugin;
+using ThoughtWorks.CruiseControl.WebDashboard.ServerConnection;
 
 namespace ThoughtWorks.CruiseControl.WebDashboard
 {
@@ -26,77 +26,45 @@ namespace ThoughtWorks.CruiseControl.WebDashboard
 		protected HtmlTableCell Td2;
 		protected Title Title3;
 		protected HtmlTableCell contentCell;
+		protected System.Web.UI.WebControls.Panel ProjectPanel1;
+		protected System.Web.UI.WebControls.Panel ProjectPanel2;
 		protected WebUtil webUtil;
 
 		private void Page_Load(object sender, EventArgs e)
 		{
-			webUtil = WebUtil.Create(Request, Context, this);
-			string path = webUtil.GetLogDirectory().FullName;
-			InitBuildStats(path);
-			InitLogFileList(path);
-			InitAdjacentAnchors(path);
-			InitProjectPluginLinks();
-		}
+			ConfigurationSettingsConfigGetter configurationGetter = new ConfigurationSettingsConfigGetter();
+			QueryStringRequestWrapper requestWrapper = new QueryStringRequestWrapper(Request.QueryString);
+			ServerAggregatingCruiseManagerWrapper cruiseManagerWrapper = new ServerAggregatingCruiseManagerWrapper(configurationGetter, new RemoteCruiseManagerFactory());
+			SiteTemplateResults results = new SiteTemplate(
+				requestWrapper, 
+				configurationGetter,
+				new DefaultBuildLister(cruiseManagerWrapper),
+				new CachingBuildRetriever(
+					cruiseManagerWrapper , 
+					new LocalFileCacheManager(new HttpPathMapper(Context, this), configurationGetter),
+					requestWrapper)
+				).Do();
 
-		private void InitProjectPluginLinks()
-		{
-			if (ConfigurationSettings.GetConfig("CCNet/projectPlugins") == null)
+			if (results.ProjectMode)
 			{
-				return;
+				buildStats.InnerHtml = results.BuildStatsHtml;
+				buildStats.Attributes["class"] = results.BuildStatsClass;
+
+				menu.DataSource = results.BuildLinkList;
+				menu.DataBind();
+
+				ProjectPluginLinks.InnerHtml = results.PluginLinksHtml;
+
+				latestLog.HRef = results.LatestLogLink;
+				previousLog.HRef = results.PreviousLogLink;
+				nextLog.HRef = results.NextLogLink;
 			}
 
-			string pluginLinksHtml = "";
-			foreach (PluginSpecification spec in (IEnumerable) ConfigurationSettings.GetConfig("CCNet/projectPlugins"))
-			{
-				pluginLinksHtml += String.Format(@"|&nbsp; <a class=""link"" href=""{0}"">{1}</a> ", DecoratePluginLinkWithProjectName(spec.LinkUrl), spec.LinkText);
-			}
-			ProjectPluginLinks.InnerHtml = pluginLinksHtml;
+			ProjectPanel1.Visible = results.ProjectMode;
+			ProjectPanel2.Visible = results.ProjectMode;
 		}
 
-		private string DecoratePluginLinkWithProjectName(string url)
-		{
-			return string.Format("{0}?{1}={2}", url, LogFileUtil.ProjectQueryString, webUtil.GetCurrentlyViewedProjectName());
-		}
-
-		private void InitBuildStats(string path)
-		{
-			LogStatistics stats = LogStatistics.Create(path);
-
-			StringBuilder buffer = new StringBuilder();
-			buffer.Append("Latest Build Status: ");
-			buffer.Append(stats.IsLatestBuildSuccessful() ? "Successful" : "Failed");
-			buffer.Append("<br/>\n");
-
-			buffer.Append("Time Since Latest Build: ");
-			TimeSpan interval = stats.GetTimeSinceLatestBuild();
-			if (interval.TotalHours >= 1)
-			{
-				buffer.Append((int)interval.TotalHours).Append(" hours");
-			}
-			else
-			{
-				buffer.Append((int)interval.TotalMinutes).Append(" min");
-			}
-			buildStats.InnerHtml = buffer.ToString();
-
-			if (! stats.IsLatestBuildSuccessful())
-			{
-				buildStats.Attributes["class"] = "buildresults-data-failed";
-			}
-		}
-
-		private void InitAdjacentAnchors(string path)
-		{			
-			string currentFile = Request.QueryString[LogFileUtil.LogQueryString];
-			LogFileLister.InitAdjacentAnchors(latestLog, previousLog, nextLog, path, currentFile, webUtil.GetCurrentlyViewedProjectName());			
-		}
-
-		private void InitLogFileList(string path)
-		{
-			menu.DataSource = LogFileLister.GetLinks(path, webUtil.GetCurrentlyViewedProjectName());
-			menu.DataBind();
-		}
-
+		// This binds the HRef control that is each data item into the Controls container of the list
 		private void DataList_BindItem(object sender, DataListItemEventArgs e)
 		{
 			if (e.Item.DataItem != null)
@@ -112,8 +80,8 @@ namespace ThoughtWorks.CruiseControl.WebDashboard
 		
 		private void InitializeComponent()
 		{    
-			this.menu.ItemDataBound += new DataListItemEventHandler(this.DataList_BindItem);
-			this.Load += new EventHandler(this.Page_Load);
+			this.menu.ItemDataBound += new System.Web.UI.WebControls.DataListItemEventHandler(this.DataList_BindItem);
+			this.Load += new System.EventHandler(this.Page_Load);
 
 		}
 		#endregion

@@ -4,6 +4,7 @@ using ThoughtWorks.CruiseControl.Core.Util;
 
 namespace ThoughtWorks.CruiseControl.WebDashboard.Test
 {
+	/* This is to die, but we may want to copy some tests first
 	[TestFixture]
 	public class LogStatisticsTest : CustomAssertion
 	{
@@ -84,4 +85,5 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Test
 			AssertEquals("0 minutes", stats.GetTimeSinceLatestBuildString());
 		}
 	}
+	*/
 }

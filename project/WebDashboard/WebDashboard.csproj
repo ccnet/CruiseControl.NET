@@ -168,21 +168,6 @@
                     BuildAction = "Content"
                 />
                 <File
-                    RelPath = "DashboardDecorator.aspx"
-                    BuildAction = "Content"
-                />
-                <File
-                    RelPath = "DashboardDecorator.aspx.cs"
-                    DependentUpon = "DashboardDecorator.aspx"
-                    SubType = "ASPXCodeBehind"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "DashboardDecorator.aspx.resx"
-                    DependentUpon = "DashboardDecorator.aspx.cs"
-                    BuildAction = "EmbeddedResource"
-                />
-                <File
                     RelPath = "Decorator.aspx"
                     BuildAction = "Content"
                 />
@@ -258,11 +243,6 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "LogStatistics.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
                     RelPath = "LogTransformer.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -300,21 +280,6 @@
                 <File
                     RelPath = "ServerLog.aspx.resx"
                     DependentUpon = "ServerLog.aspx.cs"
-                    BuildAction = "EmbeddedResource"
-                />
-                <File
-                    RelPath = "Statistics.aspx"
-                    BuildAction = "Content"
-                />
-                <File
-                    RelPath = "Statistics.aspx.cs"
-                    DependentUpon = "Statistics.aspx"
-                    SubType = "ASPXCodeBehind"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Statistics.aspx.resx"
-                    DependentUpon = "Statistics.aspx.cs"
                     BuildAction = "EmbeddedResource"
                 />
                 <File
@@ -419,6 +384,21 @@
                 />
                 <File
                     RelPath = "config\ServersSectionHandler.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Dashboard\Build.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Dashboard\CachingBuildRetriever.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Dashboard\IBuildRetriever.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -597,6 +577,26 @@
                 />
                 <File
                     RelPath = "Plugins\LogViewerPlugin\LogViewerResults.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Plugins\SiteTemplatePlugin\DefaultBuildLister.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Plugins\SiteTemplatePlugin\IBuildLister.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Plugins\SiteTemplatePlugin\SiteTemplate.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Plugins\SiteTemplatePlugin\SiteTemplateResults.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

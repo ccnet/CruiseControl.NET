@@ -17,7 +17,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.ServerConnection
 			this.managerFactory = managerFactory;
 		}
 
-		public string GetLatestLogName(string serverName, string projectName)
+		public string GetLatestBuildName(string serverName, string projectName)
 		{
 			return GetCruiseManager(serverName).GetLatestBuildName(projectName);
 		}
@@ -25,6 +25,11 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.ServerConnection
 		public string GetLog(string serverName, string projectName, string buildName)
 		{
 			return GetCruiseManager(serverName).GetLog(projectName, buildName);
+		}
+
+		public string[] GetBuildNames(string serverName, string projectName)
+		{
+			return GetCruiseManager(serverName).GetBuildNames(projectName);
 		}
 
 		private ICruiseManager GetCruiseManager(string serverName)

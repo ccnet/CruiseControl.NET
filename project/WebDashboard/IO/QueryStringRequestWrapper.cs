@@ -40,6 +40,5 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.IO
 			string project = queryString[ProjectQueryStringParameter];
 			return (project == null) ? "" : project;
 		}
-
 	}
 }
