@@ -5,74 +5,30 @@ using System.Globalization;
 using NUnit.Framework;
 using ThoughtWorks.CruiseControl.Core.Util;
 
-namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test 
+namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test
 {
 	[TestFixture]
 	public class SvnHistoryParserTest : CustomAssertion
 	{
-		String emptyLogXml = "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n<log>\n</log>";
-		
-		String oneEntryLogXml = "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n" +
-			"<log>\n<logentry revision=\"4\"><date>2003-12-12T16:48:51Z</date>\n" +
-			"<paths><path action=\"A\">/foo/addedfile.txt</path></paths><msg>i added a file</msg></logentry></log>";
+		string emptyLogXml = "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n<log>\n</log>";
+		string fullLogXml = "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n" + "<log>\n" + "<logentry\n" + "   revision=\"3\">\n" + "<author>mbr</author>\n" + "<date>2003-12-12T17:09:44.559203Z</date>\n" + "<paths>\n" + "<path\n" + "   action=\"M\">/myfile.txt</path>\n" + "<path\n" + "   action=\"D\">/foo/foofile.txt</path>\n" + "<path\n" + "   action=\"A\">/foo/barfile.txt</path>\n" + "</paths>\n" + "<msg>Other Mike made some changes</msg>\n" + "</logentry>\n" + "<logentry\n" + "   revision=\"2\">\n" + "<author>mgm</author>\n" + "<date>2003-12-12T16:50:44.000000Z</date>\n" + "<paths>\n" + "<path\n" + "   action=\"A\">/bar/mgmfile.txt</path>\n" + "<path\n" + "   action=\"M\">/myfile.txt</path>\n" + "<path\n" + "   action=\"A\">/bar</path>\n" + "</paths>\n" + "<msg>mgm made some changes</msg>\n" + "</logentry>\n" + "<logentry\n" + "   revision=\"1\">\n" + "<date>2003-12-12T16:48:51.000000Z</date>\n" + "<paths>\n" + "<path\n" + "   action=\"A\">/foo</path>\n" + "<path\n" + "   action=\"A\">/myfile.txt</path>\n" + "<path\n" + "   action=\"A\">/foo/foofile.txt</path>\n" + "</paths>\n" + "<msg>added some stuff with anon user</msg>\n" + "</logentry>\n" + "</log>	\n";
+		string oneEntryLogXml = "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n" + "<log>\n<logentry revision=\"4\"><date>2003-12-12T16:48:51Z</date>\n" + "<paths><path action=\"A\">/foo/addedfile.txt</path></paths><msg>i added a file</msg></logentry></log>";
 
 		DateTime oldestEntry = DateTime.Parse("2003-12-12T16:48:50Z");
 		DateTime newestEntry = DateTime.Parse("2003-12-12T17:09:45Z");
 
-		String fullLogXml =
-		"<?xml version=\"1.0\" encoding=\"utf-8\"?>\n" +
-		"<log>\n" +
-		"<logentry\n" +
-		"   revision=\"3\">\n" +
-		"<author>mbr</author>\n" +
-		"<date>2003-12-12T17:09:44.559203Z</date>\n" +
-		"<paths>\n" +
-		"<path\n" +
-		"   action=\"M\">/myfile.txt</path>\n" +
-		"<path\n" +
-		"   action=\"D\">/foo/foofile.txt</path>\n" +
-		"<path\n" +
-		"   action=\"A\">/foo/barfile.txt</path>\n" +
-		"</paths>\n" +
-		"<msg>Other Mike made some changes</msg>\n" +
-		"</logentry>\n" +
-		"<logentry\n" +
-		"   revision=\"2\">\n" +
-		"<author>mgm</author>\n" +
-		"<date>2003-12-12T16:50:44.000000Z</date>\n" +
-		"<paths>\n" +
-		"<path\n" +
-		"   action=\"A\">/bar/mgmfile.txt</path>\n" +
-		"<path\n" +
-		"   action=\"M\">/myfile.txt</path>\n" +
-		"<path\n" +
-		"   action=\"A\">/bar</path>\n" +
-		"</paths>\n" +
-		"<msg>mgm made some changes</msg>\n" +
-		"</logentry>\n" +
-		"<logentry\n" +
-		"   revision=\"1\">\n" +
-		"<date>2003-12-12T16:48:51.000000Z</date>\n" +
-		"<paths>\n" +
-		"<path\n" +
-		"   action=\"A\">/foo</path>\n" +
-		"<path\n" +
-		"   action=\"A\">/myfile.txt</path>\n" +
-		"<path\n" +
-		"   action=\"A\">/foo/foofile.txt</path>\n" +
-		"</paths>\n" +
-		"<msg>added some stuff with anon user</msg>\n" +
-		"</logentry>\n" +
-		"</log>	\n";
-
 		private SvnHistoryParser svn = new SvnHistoryParser();
 
-		public void TestParsingEmptyLogProducesNoModifications() {
+		[Test]
+		public void ParsingEmptyLogProducesNoModifications()
+		{
 			Modification[] modifications = svn.Parse(new StringReader(emptyLogXml), oldestEntry, newestEntry);
 			AssertEquals(0, modifications.Length);
 		}
 
-		public void TestParsingSingleLogMessageProducesOneModification() {
+		[Test]
+		public void ParsingSingleLogMessageProducesOneModification()
+		{
 			Modification[] modifications = svn.Parse(new StringReader(oneEntryLogXml), oldestEntry, newestEntry);
 
 			AssertEquals(1, modifications.Length);
@@ -89,7 +45,9 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test
 			AssertEquals(expected, modifications[0]);
 		}
 
-		public void TestParsingLotsOfEntries() {
+		[Test]
+		public void ParsingLotsOfEntries()
+		{
 			Modification[] modifications = svn.Parse(new StringReader(fullLogXml), oldestEntry, newestEntry);
 
 			AssertEquals(9, modifications.Length);
@@ -112,7 +70,9 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test
 			AssertEquals(mbrMod1, modifications[1]);
 		}
 
-		public void TestEntriesOutsideOfRequestedTimeRangeAreIgnored() {
+		[Test]
+		public void EntriesOutsideOfRequestedTimeRangeAreIgnored()
+		{
 			DateTime newest = DateTime.Parse("2003-12-12T17:09:40Z");
 			DateTime oldest = DateTime.Parse("2003-12-12T16:48:52Z");
 
@@ -120,10 +80,15 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test
 			AssertEquals(3, modifications.Length);
 		}
 
-		private DateTime CreateDate(string dateString) 
+		[Test, ExpectedException(typeof(CruiseControlException))]
+		public void HandleInvalidXml()
+		{
+			svn.Parse(new StringReader("<foo/><bar/>"), DateTime.Now, DateTime.Now);
+		}
+
+		private DateTime CreateDate(string dateString)
 		{
 			return DateTime.Parse(dateString);
 		}
 	}
 }
-
