@@ -96,7 +96,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.MVC.Cruise
 		private Control BuildP4View(P4 p4)
 		{
 			return Table(
-				TR(TD("View *"), TD(TextBox("Project.SourceControl.View", p4.View))),
+				TR(TD("View *"), TD(MultiLineTextBox("Project.SourceControl.View", p4.View.Replace(",", Environment.NewLine)))),
 				TR(TD("Executable"), TD(TextBox("Project.SourceControl.Executable", p4.Executable))),
 				TR(TD("Client"), TD(TextBox("Project.SourceControl.Client", p4.Client))),
 				TR(TD("User"), TD(TextBox("Project.SourceControl.User", p4.User))),

@@ -96,7 +96,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.MVC.Cruise
 		private P4 GenerateP4(IRequest request)
 		{
 			P4 p4 = new P4();
-			p4.View = request.GetText("Project.SourceControl.View");
+			p4.View = request.GetText("Project.SourceControl.View") == null ? "" : request.GetText("Project.SourceControl.View").Replace(Environment.NewLine, ",");
 			p4.Executable = request.GetText("Project.SourceControl.Executable");
 			p4.Client = request.GetText("Project.SourceControl.Client");
 			p4.User = request.GetText("Project.SourceControl.User");

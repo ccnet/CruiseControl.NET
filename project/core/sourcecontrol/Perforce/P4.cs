@@ -1,3 +1,4 @@
+using System.Collections;
 using Exortech.NetReflector;
 using System;
 using System.IO;
@@ -51,7 +52,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Perforce
 		}
 
 		[ReflectorProperty("client", Required=false)]
-		public string Client
+		public virtual string Client
 		{
 			get{ return _client;}
 			set{ _client = value;}
@@ -84,18 +85,25 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Perforce
 		[ReflectorProperty("autoGetSource", Required = false)]
 		public bool AutoGetSource = false;
 
-		public string BuildCommandArguments(DateTime from, DateTime to)
+		public string BuildModificationsCommandArguments(DateTime from, DateTime to)
+		{
+			return string.Format("changes -s submitted {0}", GenerateRevisionsForView(from, to));
+		}
+
+		private string GenerateRevisionsForView(DateTime from, DateTime to)
 		{
 			StringBuilder args = new StringBuilder();
-			args.Append("changes -s submitted ");
-			args.Append(View);
-			if (from==DateTime.MinValue) 
+			foreach (string viewline in View.Split(','))
 			{
-				args.Append("@" + FormatDate(to));
-			} 
-			else 
-			{
-				args.Append(string.Format("@{0},@{1}", FormatDate(from), FormatDate(to)));
+				args.Append(viewline);
+				if (from==DateTime.MinValue) 
+				{
+					args.Append("@" + FormatDate(to));
+				} 
+				else 
+				{
+					args.Append(string.Format("@{0},@{1} ", FormatDate(from), FormatDate(to)));
+				}
 			}
 			return args.ToString();
 		}
@@ -107,7 +115,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Perforce
 		
 		public virtual ProcessInfo CreateChangeListProcess(DateTime from, DateTime to) 
 		{
-			return processInfoCreator.CreateProcessInfo(this, BuildCommandArguments(from, to));
+			return processInfoCreator.CreateProcessInfo(this, BuildModificationsCommandArguments(from, to));
 		}
 
 		public virtual ProcessInfo CreateDescribeProcess(string changes)
@@ -206,9 +214,36 @@ Description:
 Options:	unlocked
 
 View:
-	{1}
-", label, View);
+{1}", label, ViewForSpecificationsAsNewlineSeparatedString);
 			return processInfo;
+		}
+
+		public virtual string[] ViewForSpecifications
+		{
+			get
+			{
+				ArrayList viewLineList = new ArrayList();
+				foreach (string viewLine in View.Split(','))
+				{
+					viewLineList.Add(viewLine);
+				}
+				return (string[]) viewLineList.ToArray(typeof (string));
+			}
+		}
+
+		private string ViewForSpecificationsAsNewlineSeparatedString
+		{
+			get
+			{
+				StringBuilder builder = new StringBuilder();
+				foreach (string viewLine in ViewForSpecifications)
+				{
+					builder.Append(" ");
+					builder.Append(viewLine);
+					builder.Append(Environment.NewLine);
+				}
+				return builder.ToString();
+			}
 		}
 
 		private ProcessInfo CreateLabelSyncProcess(string label)

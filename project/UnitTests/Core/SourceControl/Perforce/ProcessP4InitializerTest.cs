@@ -1,4 +1,3 @@
-using System;
 using System.Net;
 using NMock;
 using NUnit.Framework;
@@ -33,9 +32,11 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.SourceControl.Perforce
 		public void CreatesAClientWithGivenClientNameIfSpecified()
 		{
 			// Setup
-			P4 p4 = new P4();
-			p4.Client = "myClient";
-			p4.View = "//mydepot/...";
+			DynamicMock p4Mock = new DynamicMock(typeof(P4));
+			P4 p4 = (P4) p4Mock.MockInstance;
+
+			p4Mock.SetupResult("Client", "myClient");
+			p4Mock.SetupResult("ViewForSpecifications", new string[] { "//mydepot/...", "//myotherdepot/..." });
 
 			ProcessInfo processInfo = new ProcessInfo("createclient");
 			ProcessInfo processInfoWithStdInContent = new ProcessInfo("createclient");
@@ -44,7 +45,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.SourceControl.Perforce
 Root:   c:\my\working\dir
 
 View:
-        //mydepot/... //myClient/mydepot/...
+ //mydepot/... //myClient/mydepot/...
+ //myotherdepot/... //myClient/myotherdepot/...
 ";
 
 			processInfoCreatorMock.ExpectAndReturn("CreateProcessInfo", processInfo, p4, "client -i");
@@ -54,6 +56,7 @@ View:
 			p4Initializer.Initialize(p4, "myProject", @"c:\my\working\dir");
 
 			// Verify
+			p4Mock.Verify();
 			VerifyAll();
 		}
 
@@ -74,7 +77,7 @@ View:
 Root:   c:\my\working\dir
 
 View:
-        //mydepot/... //{0}/mydepot/...
+ //mydepot/... //{0}/mydepot/...
 ", expectedClientName);
 
 			processInfoCreatorMock.ExpectAndReturn("CreateProcessInfo", processInfo, p4, "client -i");
@@ -117,7 +120,46 @@ View:
 			{
 				Assert.IsTrue(e.Message.ToLower().IndexOf("valid view") > -1, "Should mention something about a valid view");
 			}
-			
+		}
+
+		[Test]
+		public void ShouldThrowExceptionIfProcessFails()
+		{
+			// Setup
+			P4 p4 = new P4();
+			p4.View = "//mydepot/...";
+			string projectName = "myProject";
+
+			string expectedClientName = string.Format("CCNet-{0}-{1}", Dns.GetHostName(), projectName);
+
+			ProcessInfo processInfo = new ProcessInfo("createclient");
+			ProcessInfo processInfoWithStdInContent = new ProcessInfo("createclient");
+			processInfoWithStdInContent.StandardInputContent = string.Format(@"Client: {0}
+
+Root:   c:\my\working\dir
+
+View:
+ //mydepot/... //{0}/mydepot/...
+", expectedClientName);
+
+			processInfoCreatorMock.ExpectAndReturn("CreateProcessInfo", processInfo, p4, "client -i");
+			processExecutorMock.ExpectAndReturn("Execute", new ProcessResult("This is standard out", "This is standard error", 1, false), processInfoWithStdInContent);
+
+			// Execute
+			try
+			{
+				p4Initializer.Initialize(p4, projectName, @"c:\my\working\dir");
+				Assert.Fail("Should throw an exception since process result has a non zero exit code");
+			}
+			catch (CruiseControlException e)
+			{
+				Assert.IsTrue(e.Message.IndexOf("This is standard out") > -1);
+				Assert.IsTrue(e.Message.IndexOf("This is standard error") > -1);
+			}
+
+			// Verify
+			Assert.AreEqual(expectedClientName, p4.Client);
+			VerifyAll();
 		}
 	}
 }

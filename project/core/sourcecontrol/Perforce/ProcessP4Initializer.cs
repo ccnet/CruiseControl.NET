@@ -1,6 +1,7 @@
 using System;
 using System.IO;
 using System.Net;
+using System.Text;
 using ThoughtWorks.CruiseControl.Core.Util;
 
 namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Perforce
@@ -25,11 +26,15 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Perforce
 		public void Initialize(P4 p4, string project, string workingDirectory)
 		{
 			CheckWorkingDirectoryIsValid(workingDirectory);
-			CheckViewIsValid(p4.View);
+			CheckViewIsValid(p4.ViewForSpecifications);
 			CreateClientNameIfOneNotSet(p4, project);
 			ProcessInfo processInfo = processInfoCreator.CreateProcessInfo(p4, "client -i");
 			processInfo.StandardInputContent = CreateClientSpecification(p4, workingDirectory);
-			executor.Execute(processInfo);
+			ProcessResult result = executor.Execute(processInfo);
+			if (result.ExitCode != ProcessResult.SUCCESSFUL_EXIT_CODE)
+			{
+				throw new CruiseControlException(string.Format("Failed to Initialize client (exit code was {0}).\r\nStandard output was: {1}\r\nStandard error was {2}", result.ExitCode, result.StandardOutput, result.StandardError));
+			}
 		}
 
 		private void CreateClientNameIfOneNotSet(P4 p4, string projectName)
@@ -37,6 +42,14 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Perforce
 			if (p4.Client == null || p4.Client == string.Empty)
 			{
 				p4.Client = string.Format("{0}-{1}-{2}", ClientPrefix, Dns.GetHostName(), projectName);
+			}
+		}
+
+		private void CheckViewIsValid(string[] viewLines)
+		{
+			foreach (string viewLine in viewLines)
+			{
+				CheckViewIsValid(viewLine);
 			}
 		}
 
@@ -63,13 +76,18 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Perforce
 Root:   {1}
 
 View:
-        {2}
-", p4.Client, workingDirectory, GenerateClientView(p4.View, p4.Client));
+{2}", p4.Client, workingDirectory, GenerateClientView(p4.ViewForSpecifications, p4.Client));
 		}
 
-		private string GenerateClientView(string view, string client)
+		private string GenerateClientView(string[] view, string client)
 		{
-			return view + " " + view.Insert(2, client + "/");
+			StringBuilder builder = new StringBuilder();
+			foreach (string viewLine in view)
+			{
+				builder.Append(string.Format(" {0} {1}", viewLine, viewLine.Insert(2, client + "/")));
+				builder.Append(Environment.NewLine);
+			}
+			return builder.ToString();
 		}
 	}
 }
