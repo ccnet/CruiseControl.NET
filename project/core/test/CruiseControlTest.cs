@@ -17,7 +17,7 @@ namespace tw.ccnet.core.test
 		MockProject _project1;
 		MockProject _project2;
 		IDictionary _projects;
-		ICruiseControl _cc;
+		CruiseControl _cc;
 
 		[SetUp]
 		protected void SetUp()
@@ -165,6 +165,9 @@ namespace tw.ccnet.core.test
 			{
 				_handler();
 			}
+
+			public string ReadXml() { return null;	}
+			public void WriteXml(string xml) { }
 		}
 
 		[Test]
@@ -197,6 +200,61 @@ namespace tw.ccnet.core.test
 			// try invoking stop again
 			_cc.Stop();
 			Thread.Sleep(1);
+			AssertEquals(ProjectIntegratorState.Stopped, ((IProjectIntegrator)_cc.ProjectIntegrators[0]).State);
+			AssertEquals(ProjectIntegratorState.Stopped, ((IProjectIntegrator)_cc.ProjectIntegrators[1]).State);
+		}
+
+		[Test]
+		public void IntegrateProjectSpecifiedByName()
+		{
+			_mockConfig.ExpectAndReturn("LoadProjects", _projects);
+			_cc = new CruiseControl((IConfigurationLoader)_mockConfig.MockInstance);
+
+			IntegrationResult result = _cc.RunIntegration(_project1.Name);
+			AssertEquals(1, _project1.RunIntegration_CallCount);
+		}
+
+		[Test, ExpectedException(typeof(CruiseControlException))]
+		public void TryIntegratingUnknownProject()
+		{
+			_mockConfig.ExpectAndReturn("LoadProjects", _projects);
+			_cc = new CruiseControl((IConfigurationLoader)_mockConfig.MockInstance);
+
+			IntegrationResult result = _cc.RunIntegration("does not exist");
+		}
+
+		[Test]
+		public void ForceBuild_AlreadyBuilding()
+		{
+			string testProjectName = "TestProjectName";
+
+			tw.ccnet.core.schedule.test.MockSchedule schedule = new tw.ccnet.core.schedule.test.MockSchedule();
+			MockProject mockProject = new MockProject(testProjectName, schedule);
+			mockProject.CurrentActivity = tw.ccnet.remote.ProjectActivity.Building; // already building
+			AssertEquals(0, schedule.ForceBuild_CallCount);
+
+			_projects.Clear();
+			_projects.Add(testProjectName, mockProject);
+			_mockConfig.ExpectAndReturn("LoadProjects", _projects);
+
+			// we're testing this method
+			_cc = new CruiseControl((IConfigurationLoader)_mockConfig.MockInstance);
+			_cc.ForceBuild(testProjectName);
+
+			AssertEquals(1, schedule.ForceBuild_CallCount);
+		}
+
+		[Test]
+		public void Terminate()
+		{
+			_mockConfig.ExpectAndReturn("LoadProjects", _projects);
+			_cc = new CruiseControl((IConfigurationLoader)_mockConfig.MockInstance);
+			_cc.Start();
+			Thread.Sleep(0);
+			AssertEquals(ProjectIntegratorState.Running, ((IProjectIntegrator)_cc.ProjectIntegrators[0]).State);
+			AssertEquals(ProjectIntegratorState.Running, ((IProjectIntegrator)_cc.ProjectIntegrators[1]).State);
+
+			_cc.Terminate();
 			AssertEquals(ProjectIntegratorState.Stopped, ((IProjectIntegrator)_cc.ProjectIntegrators[0]).State);
 			AssertEquals(ProjectIntegratorState.Stopped, ((IProjectIntegrator)_cc.ProjectIntegrators[1]).State);
 		}

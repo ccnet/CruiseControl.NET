@@ -113,6 +113,7 @@ namespace tw.ccnet.core.configuration
 			VerifyConfigRoot(configXml);
 			try
 			{
+				PROJECTS_ATTRIBUTE.InstanceTypeKey = "type";
 				return (IDictionary)_populator.PopulateHash(configXml.DocumentElement, typeof(Hashtable), PROJECTS_ATTRIBUTE);
 			}
 			catch (ReflectorException ex)
@@ -170,6 +171,18 @@ namespace tw.ccnet.core.configuration
 		private void handleSchemaEvent(object sender, ValidationEventArgs args) 
 		{
 			System.Diagnostics.Trace.WriteLine(args.Message);
+		}
+
+		public string ReadXml()
+		{ 
+			return LoadConfiguration().OuterXml; 
+		}
+
+		public void WriteXml(string xml)
+		{ 
+			 XmlDocument document = new XmlDocument();
+			document.LoadXml(xml);
+			document.Save(ConfigFile);
 		}
 	}
 }

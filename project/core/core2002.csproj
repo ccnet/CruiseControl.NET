@@ -127,6 +127,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "CruiseServerFactory.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "GenericIntegrationResult.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -197,6 +202,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "RemoteCruiseServer.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "XslFilesSectionHandler.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -246,6 +256,16 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "configuration\CruiseControlConfigSectionHandler.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "configuration\IConfiguration.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "configuration\IConfigurationLoader.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -262,6 +282,11 @@
                 />
                 <File
                     RelPath = "configuration\test\ConfigurationLoaderTest.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "configuration\test\CruiseControlConfigSectionHandlerTest.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -655,11 +680,6 @@
                 />
                 <File
                     RelPath = "test\LogFileTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "test\MockCruiseControl.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

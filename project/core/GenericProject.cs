@@ -9,32 +9,20 @@ namespace tw.ccnet.core
 	/// A generic project contains a collection of tasks.  It will execute them in the specified order.  It is possible to have multiple tasks of the same type.
 	/// <code>
 	/// <![CDATA[
-	/// <project name="foo">
+	/// <generic name="foo">
 	///		<sourcecontrol type="cvs"></sourcecontrol>
 	///		<build type="nant"></build>
 	///		<state type="state"></state>
 	///		<publishers></publishers>
-	/// </project>
+	/// </generic>
 	/// ]]>
 	/// </code>
 	/// </summary>
 	[ReflectorType("generic")]
-	public class GenericProject : IProject
+	public class GenericProject : ProjectBase, IProject
 	{
-		public event IntegrationCompletedEventHandler IntegrationCompleted;
-
 		private IList _tasks = new ArrayList();
 		private GenericIntegrationResult _currentIntegrationResult;
-
-		public string Name 
-		{ 
-			get { return null; }
-		}
-
-		public ISchedule Schedule 
-		{
-			get { return null; }
-		}
 
 		[ReflectorCollection("tasks", InstanceType = typeof(ArrayList))]
 		public IList Tasks

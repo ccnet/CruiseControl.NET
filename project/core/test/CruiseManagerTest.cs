@@ -5,7 +5,9 @@ using System.Runtime.Remoting;
 using System.Threading;
 
 using NUnit.Framework;
+using NMock;
 
+using tw.ccnet.core.configuration;
 using tw.ccnet.core.util;
 using tw.ccnet.remote;
 using tw.ccnet.core.schedule;
@@ -56,71 +58,37 @@ namespace tw.ccnet.core.test
 		}
 
 		[Test]
-		public void TestStartStopCruise() 
+		public void StartStopCruise() 
 		{
 			// stellsmi - in progress
 		}
 
 		[Test]
-		public void TestGetSetConfiguration() 
+		public void GetSetConfiguration() 
 		{
 			string fileName = CreateTestingCruiseControlConfigurationFile();
-			CruiseManager manager = new CruiseManager(fileName);
+			CruiseManager manager = new CruiseManager(new CruiseControl(new ConfigurationLoader(fileName)));
             
 			AssertEquals("<cruisecontrol></cruisecontrol>", manager.Configuration);
-			manager.Configuration = SimpleBuildFile.Content;
-			AssertEquals(SimpleBuildFile.Content, manager.Configuration);
+			string xml = SimpleBuildFile.Document.OuterXml;
+			manager.Configuration = xml;
+			AssertEquals(xml, manager.Configuration);
 		}
-		/*
-				[Test]
-				public void ForceBuild()
-				{
-					string testProjectName = "TestProjectName";
-
-					MockCruiseControl mockCC = new MockCruiseControl();
-					CruiseManager manager = new CruiseManager(mockCC);
-					MockProject mockProject = new MockProject(testProjectName, null);
-					mockCC.GetProject_ReturnValue = mockProject;
-
-					AssertEquals(0, mockCC.GetProject_CallCount);
-					AssertEquals(0, mockProject.RunIntegration_CallCount);
-
-					// server is sleeping, so build can occur
-					mockProject.CurrentActivity = ProjectActivity.Sleeping;
-			
-					// we're testing this method
-					manager.ForceBuild(testProjectName);
-
-					AssertEquals(1, mockCC.GetProject_CallCount);
-					AssertEquals(testProjectName, mockCC.GetProject_projectName);
-					AssertEquals(1, mockProject.RunIntegration_CallCount);
-					Assert(mockProject.RunIntegration_forceBuild);
-				}
-		*/
 
 		[Test]
-		public void ForceBuild_AlreadyBuilding()
+		public void ForceBuild()
 		{
 			string testProjectName = "TestProjectName";
+			MockProject mockProject = new MockProject(testProjectName, null);
 
-			MockCruiseControl mockCC = new MockCruiseControl();
-			CruiseManager manager = new CruiseManager(mockCC);
-			MockSchedule schedule = new MockSchedule();
-			MockProject mockProject = new MockProject(testProjectName, schedule);
-			mockCC.GetProject_ReturnValue = mockProject;
-			
-			// already building
-			mockProject.CurrentActivity = ProjectActivity.Building;
+			Mock mockCC = new DynamicMock(typeof(ICruiseControl));
+			mockCC.Expect("ForceBuild", testProjectName);
 
-			AssertEquals(0, schedule.ForceBuild_CallCount);
-
-			// we're testing this method
+			CruiseManager manager = new CruiseManager((ICruiseControl)mockCC.MockInstance);
 			manager.ForceBuild(testProjectName);
 
-			AssertEquals(1, schedule.ForceBuild_CallCount);
+			mockCC.Verify();
 		}
-
-		// TODO what happens when someone forces a build, while a build is already running?  this situation would suck...
 
 		#region Helper methods
 

@@ -112,12 +112,22 @@
                     BuildAction = "Content"
                 />
                 <File
+                    RelPath = "ArgumentParser.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "AssemblyInfo.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
                     RelPath = "ConsoleRunner.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />             
+                <File
+                    RelPath = "test\ArgumentParserTest.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

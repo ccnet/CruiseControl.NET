@@ -63,15 +63,13 @@ namespace tw.ccnet.core.state
 		
 		public void SaveState(IntegrationResult result)
 		{
-			TextWriter writer = CreateTextWriter(GetFilePath());
-			try
+			StringWriter buffer = new StringWriter();
+			_serializer.Serialize(buffer, result);
+
+			using (TextWriter writer = CreateTextWriter(GetFilePath()))
 			{
-				_serializer.Serialize(writer, result);
+				writer.Write(buffer.ToString());
 				writer.Flush();
-			}
-			finally
-			{
-				writer.Close();
 			}
 		}
 

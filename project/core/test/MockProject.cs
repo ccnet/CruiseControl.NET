@@ -9,8 +9,6 @@ namespace tw.ccnet.core.test
 {
 	public class MockProject : IProject
 	{
-		public event IntegrationCompletedEventHandler IntegrationCompleted;
-
 		string _name;
 		ISchedule _schedule;
 		ProjectActivity _projectActivity = ProjectActivity.Unknown; // default

@@ -6,7 +6,7 @@ namespace tw.ccnet.core.util
 {
 	public class TestTraceListener : TraceListener
 	{
-		private IList _traces = new ArrayList();
+		private ArrayList _traces = new ArrayList();
 
 		public override void Write(string trace)
 		{
@@ -21,6 +21,11 @@ namespace tw.ccnet.core.util
 		public IList Traces
 		{
 			get { return _traces; }
+		}
+
+		public override string ToString()
+		{
+			return string.Join("\n", (string[])_traces.ToArray(typeof(string)));
 		}
 	}
 }

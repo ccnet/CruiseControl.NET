@@ -14,7 +14,7 @@ namespace tw.ccnet.core.test
 		public void LoadConfiguration()
 		{
 			string xml = @"
-<generic>
+<generic name=""foo"">
 	<tasks>
 		<mock/>
 		<mock/>
@@ -25,6 +25,7 @@ namespace tw.ccnet.core.test
 			AssertNotNull(obj);
 			AssertEquals(typeof(GenericProject), obj.GetType());
 			GenericProject project = (GenericProject)obj;
+			AssertEquals("foo", project.Name);
 			AssertEquals(2, project.Tasks.Count);
 			Assert(project.Tasks[0] is ITask);
 			Assert(project.Tasks[1] is ITask);

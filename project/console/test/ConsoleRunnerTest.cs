@@ -1,53 +1,37 @@
-using System;
 using NUnit.Framework;
 using tw.ccnet.core;
 using tw.ccnet.core.util;
+using System;
+using System.Diagnostics;
 
 namespace tw.ccnet.console.test
 {
 	[TestFixture]
 	public class ConsoleRunnerTest : CustomAssertion
 	{
-		public void TestReadArgs_help()
+		[Test]
+		public void ShowHelp()
 		{
-			string[] args = new String[]{"-help"};
-			AssertNull("config should be null", ConsoleRunner.GetConfigFileName(args));
+			TestTraceListener listener = new TestTraceListener();
+			Trace.Listeners.Add(listener);
+
+			new ConsoleRunner(new ArgumentParser(new string[] { "-remoting:on", "-help" })).Run();
+			AssertEquals(1, listener.Traces.Count);
+			AssertEquals(ArgumentParser.Usage, listener.Traces[0].ToString());
+
+			Trace.Listeners.Remove(listener);
 		}
 
-		// TODO: test running cruisecontrol from console
-		public void TestReadArgs_config()
+		[Test] // integration test
+		public void ForceBuildCruiseServerProject()
 		{
-//		string file = FileMother.CreateConfigFile();
-//
-//			string[] args = new String[]{file};
-//			Configuration config = ConsoleRunner.ReadArgs(args);
-//			AssertNotNull("config should not be null", config);
-//			AssertEquals(2, config.Publishers.Count);
-//			AssertEquals(typeof(tw.ccnet.core.publishers.EmailPublisher), config.Publishers[0].GetType());
-//			AssertEquals(typeof(tw.ccnet.core.publishers.XmlLogPublisher), config.Publishers[1].GetType());
-//			AssertEquals(typeof(tw.ccnet.core.sourcecontrol.test.MockSourceControl), config.SourceControl.GetType());
-//			FileMother.CleanUp();
-		}
+			string xml = @"<cruisecontrol><generic name=""test""><tasks /></generic></cruisecontrol>";
+			TempFileUtil.CreateTempDir("ConsoleRunnerTest");
+			string configFile = TempFileUtil.CreateTempXmlFile("ConsoleRunnerTest", "myconfig.config", xml);
 
-		public void TestGetConfigFileName()
-		{
-			string[] args = new String[]{"cruise.config"};
-			AssertEquals("Invalid config file","cruise.config",ConsoleRunner.GetConfigFileName(args));
-			args = new String[]{"-remoting:on","cruise.config"};
-			AssertEquals("Invalid config file", "cruise.config", ConsoleRunner.GetConfigFileName(args));
-			args = new String[]{};
-			AssertEquals("Invalid config file", ".\\ccnet.config", ConsoleRunner.GetConfigFileName(args));
-		}
+			new ConsoleRunner(new ArgumentParser(new string[] { "-project:test", "-config:" + configFile })).Run();
 
-		public void TestGetOption(){
-			string[] args = new String[]{"cruise.config"};
-			AssertNull("Invalid Option", ConsoleRunner.GetOption("remoting",args));
-			args = new String[]{"-remoting:on", "cruise.config"};
-			AssertEquals("Invalid Option", "on", ConsoleRunner.GetOption("remoting",args));
-			args = new String[]{"-remoting:off", "-process:XP", "cruise.config"};;
-			AssertEquals("Invalid Option" ,"off", ConsoleRunner.GetOption("remoting",args));
-			AssertEquals("Invalid Option", "XP", ConsoleRunner.GetOption("process",args));
-		}
-
+			TempFileUtil.DeleteTempDir("ConsoleRunnerTest");
+		}	
 	}
 }

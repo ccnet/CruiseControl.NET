@@ -11,21 +11,14 @@ using tw.ccnet.remote;
 namespace tw.ccnet.core
 {
 	/// <summary>
-	/// 
+	/// Main CruiseControl engine class.  Responsible for loading and launching CruiseControl projects.
 	/// </summary>
-	public class CruiseControl : ICruiseControl, IDisposable
+	public class CruiseControl : ICruiseControl, ICruiseServer, IDisposable
 	{
-		IConfigurationLoader _loader;
-		IDictionary _projects;
-		IList _projectIntegrators = new ArrayList();
-		bool _stopped = false;
-
-		#region Constructors
-
-		internal CruiseControl()
-		{
-			_projects = new Hashtable();
-		}
+		private IConfigurationLoader _loader;
+		private IDictionary _projects;
+		private IList _projectIntegrators = new ArrayList();
+		private bool _stopped = false;
 
 		public CruiseControl(IConfigurationLoader loader)
 		{
@@ -39,32 +32,39 @@ namespace tw.ccnet.core
 			}
 		}
 
-
-		#endregion
-
-		#region Get / Add projects
-
 		public IProject GetProject(string projectName)
 		{
 			return (IProject)_projects[projectName];
 		}
 
-		public void AddProject(IProject project)
+		public IConfiguration Configuration
 		{
-			_projects.Add(project.Name, project);
-			AddProjectIntegrator(project);
+			get { return _loader; }
 		}
 
-		void AddProjectIntegrator(IProject project)
+		public IntegrationResult RunIntegration(string projectName)
+		{
+			IProject project = GetProject(projectName);
+			if (project == null) 
+			{
+				throw new CruiseControlException(String.Format("Cannot execute the specified project: {0}.  Project does not exist.", projectName));
+			}
+			return project.RunIntegration(BuildCondition.ForceBuild);
+		}
+
+		public void ForceBuild(string projectName)
+		{
+			IProject project = GetProject(projectName);
+
+			// tell the project's schedule that we want a build forced
+			project.Schedule.ForceBuild();
+		}
+
+		private void AddProjectIntegrator(IProject project)
 		{
 			if (project.Schedule!=null)
 				_projectIntegrators.Add(new ProjectIntegrator(project.Schedule, project));
 		}
-		
-
-		#endregion
-
-		#region Properties
 
 		public ICollection Projects
 		{
@@ -76,16 +76,10 @@ namespace tw.ccnet.core
 			get { return _projectIntegrators; }
 		}
 
-		public virtual bool Stopped
+		public CruiseControlStatus Status
 		{
-			get { return _stopped; }
-//			set { _stopped = value; }
+			get { return (_stopped) ? CruiseControlStatus.Stopped : CruiseControlStatus.Running; }
 		}
-
-
-		#endregion
-
-		#region Start & Stop
 
 		/// <summary>
 		/// Starts each project's integration cycle.
@@ -113,10 +107,13 @@ namespace tw.ccnet.core
 			}
 		}
 
-
-		#endregion
-
-		#region Configuration loading / reloading
+		public void Terminate()
+		{
+			foreach (IProjectIntegrator projectIntegrator in _projectIntegrators)
+			{
+				projectIntegrator.Terminate();
+			}		
+		}
 
 		protected void OnConfigurationChanged()
 		{
@@ -167,10 +164,6 @@ namespace tw.ccnet.core
 			return schedulerList;
 		}
 
-		#endregion
-
-		#region Disposing
-
 		/// <summary>
 		/// Stops all integration threads when garbage collected.
 		/// </summary>
@@ -178,8 +171,6 @@ namespace tw.ccnet.core
 		{
 			Stop();
 		}
-
-		#endregion
 
 		public void WaitForExit()
 		{

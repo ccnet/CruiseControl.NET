@@ -120,5 +120,16 @@ namespace tw.ccnet.core.state.test
 			AssertFalse(_state.StateFileExists());
 			AssertNull(_state.LoadState());
 		}
+
+		[Test]
+		public void AttemptToSaveWithInvalidXml()
+		{
+			_state.Directory = _tempDir;
+			IntegrationResult result = new IntegrationResult();
+			result.ProjectName = "<<%_&";
+			result.Label = "<&/<>";
+			result.Output = "<badxml>>";
+			_state.SaveState(result);
+		}
 	}
 }

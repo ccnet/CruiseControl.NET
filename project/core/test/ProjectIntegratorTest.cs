@@ -88,8 +88,8 @@ namespace tw.ccnet.core.test
 		{
 			_integrator = CreateProjectIntegrator(Schedule.Infinite);
 			_integrator.Start();
-			Thread.Sleep(20);
-			Assert("_scheduler is not still running?!", _integrator.IsRunning);
+			Thread.Sleep(200);
+			Assert("scheduler is not still running?!", _integrator.IsRunning);
 			_integrator.Stop();
 			_integrator.WaitForExit();
 			Assert("schedule should be stopped", ! _integrator.IsRunning);
@@ -192,6 +192,39 @@ namespace tw.ccnet.core.test
 			_integrator.Start();
 			Thread.Sleep(50);
 			_integrator.Start();
+		}
+
+		[Test]
+		public void Terminate()
+		{
+			_schedule = new Schedule(1, Schedule.Infinite);
+			_integrator = new ProjectIntegrator(_schedule, _project);
+			_integrator.Start();
+			Thread.Sleep(0);
+			AssertEquals(ProjectIntegratorState.Running, _integrator.State);
+			_integrator.Terminate();
+			AssertEquals(ProjectIntegratorState.Stopped, _integrator.State);
+		}
+
+		[Test]
+		public void TerminateWhenProjectIsntStarted()
+		{
+			_schedule = new Schedule(1, Schedule.Infinite);
+			_integrator = new ProjectIntegrator(_schedule, _project);
+			_integrator.Terminate();
+			AssertEquals(ProjectIntegratorState.Stopped, _integrator.State);
+		}
+
+		[Test]
+		public void TerminateCalledTwice()
+		{
+			_schedule = new Schedule(1, Schedule.Infinite);
+			_integrator = new ProjectIntegrator(_schedule, _project);
+			_integrator.Start();
+			Thread.Sleep(0);
+			AssertEquals(ProjectIntegratorState.Running, _integrator.State);
+			_integrator.Terminate();
+			_integrator.Terminate();
 		}
 
 		#region Testing helper methods

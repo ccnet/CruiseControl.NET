@@ -121,9 +121,9 @@ namespace tw.ccnet.core.configuration.test
 			IDictionary projects = loader.PopulateProjectsFromXml(ConfigurationFixture.GenerateConfig(xml));
 			Assert(projects["foo"] is CustomTestProject);
 			AssertEquals("foo", ((CustomTestProject) projects["foo"]).Name);
-	}
+		}
 
-	[ReflectorType("customtestproject")]
+		[ReflectorType("customtestproject")]
 		class CustomTestProject // properly should implement IProject
 		{
 			[ReflectorProperty("name")]
@@ -150,6 +150,19 @@ namespace tw.ccnet.core.configuration.test
 		private void OnConfigurationChanged()
 		{
 			changed++;
+		}
+
+		[Test]
+		public void ReadAndWriteConfigurationXml()
+		{
+			string xml = "<cruisecontrol></cruisecontrol>";
+			loader.ConfigFile = TempFileUtil.CreateTempXmlFile(TempFileUtil.CreateTempDir(this), "loadernet.config", xml);
+
+			AssertEquals(xml, loader.ReadXml());
+
+			string newXml = @"<cruisecontrol foo=""bar""></cruisecontrol>";
+			loader.WriteXml(newXml);
+			AssertEquals(newXml, loader.ReadXml());
 		}
 	}
 }

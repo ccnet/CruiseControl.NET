@@ -7,6 +7,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "web2002", "web\web2002.cspr
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ccnet2002.remote", "ccnet.remote\ccnet2002.remote.csproj", "{E820CF3B-8C5A-4002-BC16-B7818D3D54A8}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "console2002", "console\console2002.csproj", "{E14EE67D-C24E-4088-B01B-35B742E99E85}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CCTray2002", "CCTray\CCTray2002.csproj", "{B57FC66E-2352-448B-89A8-E531F3E2683B}"
+EndProject
 Global
 	GlobalSection(SolutionConfiguration) = preSolution
 		ConfigName.0 = Debug
@@ -31,6 +35,14 @@ Global
 		{E820CF3B-8C5A-4002-BC16-B7818D3D54A8}.Debug.Build.0 = Debug|.NET
 		{E820CF3B-8C5A-4002-BC16-B7818D3D54A8}.Release.ActiveCfg = Release|.NET
 		{E820CF3B-8C5A-4002-BC16-B7818D3D54A8}.Release.Build.0 = Release|.NET
+		{E14EE67D-C24E-4088-B01B-35B742E99E85}.Debug.ActiveCfg = Debug|.NET
+		{E14EE67D-C24E-4088-B01B-35B742E99E85}.Debug.Build.0 = Debug|.NET
+		{E14EE67D-C24E-4088-B01B-35B742E99E85}.Release.ActiveCfg = Release|.NET
+		{E14EE67D-C24E-4088-B01B-35B742E99E85}.Release.Build.0 = Release|.NET
+		{B57FC66E-2352-448B-89A8-E531F3E2683B}.Debug.ActiveCfg = Debug|.NET
+		{B57FC66E-2352-448B-89A8-E531F3E2683B}.Debug.Build.0 = Debug|.NET
+		{B57FC66E-2352-448B-89A8-E531F3E2683B}.Release.ActiveCfg = Release|.NET
+		{B57FC66E-2352-448B-89A8-E531F3E2683B}.Release.Build.0 = Release|.NET
 	EndGlobalSection
 	GlobalSection(SolutionItems) = postSolution
 		Item:1 = ..\ccnet.build

@@ -1,34 +1,21 @@
 using System;
 using System.Collections;
+using tw.ccnet.remote;
 
 namespace tw.ccnet.core
 {
 	/// <summary>
 	/// 
 	/// </summary>
-	public interface ICruiseControl
+	public interface ICruiseControl : ICruiseServer
 	{
-		void AddProject(IProject project);
-		IProject GetProject(string projectName);
-		
-		void Start();
-		void Stop();
+		void Terminate();
 		void WaitForExit();
 
-		ICollection Projects
-		{
-			get;
-		}
+		ICollection Projects { get;	}
 
-		IList ProjectIntegrators
-		{
-			get;
-		}
+		CruiseControlStatus Status { get; }
 
-		bool Stopped
-		{
-			get;
-//			set;
-		}
+		IConfiguration Configuration { get; }
 	}
 }

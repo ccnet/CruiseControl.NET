@@ -40,7 +40,6 @@ namespace tw.ccnet.service
             this.Installers.AddRange(new System.Configuration.Install.Installer[] {
                                                                                       this.serviceProcessInstaller,
                                                                                       this.serviceInstaller});
-
         }
 		#endregion
 	}

@@ -1,10 +1,12 @@
 using System;
+using System.Collections;
 using System.Diagnostics;
 using System.IO;
 using NUnit.Framework;
 using NMock;
 using NMock.Constraints;
 using tw.ccnet.remote;
+using tw.ccnet.core.configuration;
 using tw.ccnet.core.sourcecontrol.test;
 using tw.ccnet.core.builder.test;
 using tw.ccnet.core.publishers;
@@ -152,8 +154,15 @@ namespace tw.ccnet.core.test
 
 			IntegrationResult originalLastResult = _project.LastIntegrationResult;
 
-			ICruiseControl control = new CruiseControl();
-			control.AddProject(_project);
+			Hashtable projects = new Hashtable();
+			projects.Add(_project.Name, _project);
+
+			IMock mockConfig = new DynamicMock(typeof(IConfigurationLoader));
+			mockConfig.ExpectAndReturn("LoadProjects", projects);
+
+			ICruiseControl control = new CruiseControl((IConfigurationLoader)mockConfig.MockInstance);
+//			control.AddProject(_project);
+
 			DateTime start = DateTime.Now;
 			control.Start(); // RunIntegration();
 			control.WaitForExit();

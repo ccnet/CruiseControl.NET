@@ -11,11 +11,6 @@ namespace tw.ccnet.core
 	public interface IProject
 	{
 		/// <summary>
-		/// Raised upon completion of an integration for this project.
-		/// </summary>
-		event IntegrationCompletedEventHandler IntegrationCompleted;
-
-		/// <summary>
 		/// The name of this project.
 		/// </summary>
 		string Name

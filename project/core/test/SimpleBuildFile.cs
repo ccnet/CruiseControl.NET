@@ -7,7 +7,6 @@ namespace tw.ccnet.core.test
 	public class SimpleBuildFile
 	{
 		public const string Content = @"<?xml version=""1.0""?>
-
 <project name=""ccnetTest"" default=""success"">
 
   <target name=""success"">

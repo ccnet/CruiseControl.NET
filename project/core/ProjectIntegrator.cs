@@ -81,7 +81,7 @@ namespace tw.ccnet.core
 			{
 				// should we integrate this pass?
 				BuildCondition buildCondition = _schedule.ShouldRunIntegration();
-				if (buildCondition!=BuildCondition.NoBuild)
+				if (buildCondition != BuildCondition.NoBuild)
 				{
 					try
 					{
@@ -136,9 +136,18 @@ namespace tw.ccnet.core
 			}
 		}
 
+		public void Terminate()
+		{
+			if (_thread != null)
+			{
+				_thread.Abort();
+			}
+			_state = ProjectIntegratorState.Stopped;
+		}
+
 		public void WaitForExit()
 		{
-			if (_thread!=null && _thread.IsAlive)
+			if (_thread != null && _thread.IsAlive)
 			{
 				_thread.Join();
 			}
@@ -150,7 +159,7 @@ namespace tw.ccnet.core
 		/// </summary>
 		public void Dispose()
 		{
-			Stop();
+			Terminate();
 		}
 	}
 }

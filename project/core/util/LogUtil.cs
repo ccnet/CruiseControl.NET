@@ -23,7 +23,12 @@ namespace tw.ccnet.core.util
 
 		public static void Log(string topic, string message)
 		{
-			Trace.WriteLine(string.Format("{0}] {1}", topic, message)); 
+			Trace.WriteLine(string.Format("[{0}] {1}", topic, message)); 
+		}
+
+		public static void Log(string message)
+		{
+			Trace.WriteLine(message); 
 		}
 	}
 }

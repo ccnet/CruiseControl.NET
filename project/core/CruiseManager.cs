@@ -9,6 +9,7 @@ using System.Threading;
 using tw.ccnet.core;
 using tw.ccnet.core.configuration;
 using tw.ccnet.remote;
+using tw.ccnet.core.util;
 
 namespace tw.ccnet.core 
 {
@@ -17,69 +18,47 @@ namespace tw.ccnet.core
 	/// this interface via remoting.  The CCTray is one such example of an
 	/// application that may make use of this remote interface.
 	/// </summary>
-	public class CruiseManager : MarshalByRefObject, ICruiseManager 
+	public class CruiseManager : MarshalByRefObject, ICruiseManager, ICruiseServer
 	{
 		public const int TCP_PORT = 1234;
 
-		ICruiseControl _cruiseControl; 
-		ConfigurationLoader _loader; 
-		Thread _cruiseControlThread;
+		private ICruiseControl _cruiseControl; 
 
-		#region Constructors
-
-		public CruiseManager(string configFileName)
-		{
-			_loader = new ConfigurationLoader(configFileName);
-			_cruiseControl = new CruiseControl(_loader);
-		}
-
-		/// <summary>
-		/// This constructor is intended for testing purposes, and doesn't create
-		/// or set a configuration loader.  Calls to <see cref="Configuration"/>
-		/// properties will fail.
-		/// </summary>
-		/// <param name="cruiseControl"></param>
-		internal CruiseManager(ICruiseControl cruiseControl)
+		public CruiseManager(ICruiseControl cruiseControl)
 		{
 			_cruiseControl = cruiseControl;
-			_loader = null;
 		}
-
-
-		#endregion
-
-		void InitializeThread()
-		{
-			_cruiseControlThread = new Thread(new ThreadStart(_cruiseControl.Start));
-			_cruiseControlThread.Start();
-			_cruiseControlThread.Name = "CruiseControl.NET";
-		}
-		
 
 		#region Starting and stopping CruiseControl.NET
 
 		public void StartCruiseControl()
 		{
-			if (_cruiseControlThread==null || !_cruiseControlThread.IsAlive)
-			{
-				InitializeThread();
-			}
 			_cruiseControl.Start();
+			LogUtil.Log("CruiseManager", "CruiseControl is stopping");
 		}
 		
 		public void StopCruiseControl()
 		{
-			Trace.WriteLine("CruiseControl is stopping");
 			_cruiseControl.Stop();
+			LogUtil.Log("CruiseManager", "CruiseControl is stopping");
 		}
 		
 		public void StopCruiseControlNow()
 		{
-			Trace.WriteLine("CruiseControl stopped");
-			_cruiseControlThread.Abort();
-			_cruiseControlThread = null;
+			_cruiseControl.Terminate();
+			LogUtil.Log("CruiseManager", "CruiseControl stopped");
 		}
 		
+		void ICruiseServer.Start()
+		{
+			RegisterForRemoting();
+			StartCruiseControl();
+		}
+
+		void ICruiseServer.Stop()
+		{
+			StopCruiseControl();
+		}
 
 		#endregion
 
@@ -87,26 +66,7 @@ namespace tw.ccnet.core
 
 		public CruiseControlStatus GetStatus()
 		{
-			if(_cruiseControlThread == null)	
-				return CruiseControlStatus.Stopped;
-			else
-			{
-				if(_cruiseControl.Stopped)
-				{
-					if(_cruiseControlThread.IsAlive)
-					{
-						return CruiseControlStatus.WillBeStopped;
-					}
-					else
-					{
-						return CruiseControlStatus.Stopped;
-					}
-				}
-				else
-				{
-					return CruiseControlStatus.Running;
-				}
-			}
+			return _cruiseControl.Status;
 		}				
 
 		public ProjectStatus GetProjectStatus()
@@ -116,52 +76,20 @@ namespace tw.ccnet.core
 			Project p = (Project)e.Current;
 			return new ProjectStatus(GetStatus(), p.GetLatestBuildStatus(), p.CurrentActivity, p.Name, p.WebURL, p.LastIntegrationResult.StartTime, p.LastIntegrationResult.Label); 
 		}
-
-
 		#endregion
-
-		#region Forcing a build
 
 		public void ForceBuild(string projectName)
 		{
-			IProject project = _cruiseControl.GetProject(projectName);
-
-			// tell the project's schedule that we want a build forced
-			project.Schedule.ForceBuild();
+			((ICruiseServer)_cruiseControl).ForceBuild(projectName);
 		}
-
-		#endregion
 
 		#region Properties
 
 		public string Configuration
 		{
-			get 
-			{ 
-				StreamReader stream = new StreamReader(_loader.ConfigFile);
-				try 
-				{
-					return stream.ReadToEnd();
-				} 
-				finally 
-				{
-					stream.Close();
-				}            
-			}
-			set
-			{ 
-				StreamWriter stream = new StreamWriter(_loader.ConfigFile);
-				try 
-				{
-					stream.Write(value);
-				} 
-				finally 
-				{
-					stream.Close();
-				}            
-			}
+			get { return _cruiseControl.Configuration.ReadXml(); }
+			set { _cruiseControl.Configuration.WriteXml(value); }
 		}
-
 
 		#endregion
 
@@ -186,7 +114,7 @@ namespace tw.ccnet.core
 
 				ICruiseManager marshalledObject = (ICruiseManager) RemotingServices.Connect(typeof(ICruiseManager), url);
 				marshalledObject.GetStatus(); // this will throw an exception if it didn't connect
-				Console.WriteLine("Listening on " + url);
+				LogUtil.Log("CruiseManager", "Listening on " + url);
 			} 
 			catch 
 			{

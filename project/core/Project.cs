@@ -42,7 +42,6 @@ namespace tw.ccnet.core
 
 		#region Field declarations
 
-		string _name;
 		string _webURL = "http://localhost/CruiseControl.NET/"; // default value
 		ISourceControl _sourceControl;
 		IBuilder _builder;
