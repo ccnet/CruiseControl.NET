@@ -12,7 +12,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard
 
 		private void Page_Load(object sender, EventArgs e)
 		{
-			ObjectGiver objectGiver = CruiseObjectGiverFactory.CreateGiverForRequest(Request, Context, this);
+			ObjectGiver objectGiver = new CruiseObjectGiverInitializer(new ObjectGiverAndRegistrar()).InitializeGiverForRequest(Request, Context, this);
 			((RequestController) objectGiver.GiveObjectByType(typeof(RequestController))).Do(ParentControl);
 		}
 

@@ -398,7 +398,7 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "WebDashboard\Dashboard\CruiseObjectGiverFactoryTest.cs"
+                    RelPath = "WebDashboard\Dashboard\CruiseObjectGiverInitializerTest.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -498,17 +498,17 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "WebDashboard\Plugins\BuildReport\ViewBuildLogActionTest.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "WebDashboard\Plugins\DeleteProject\DoDeleteProjectActionTest.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
                     RelPath = "WebDashboard\Plugins\DeleteProject\ShowDeleteProjectActionTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "WebDashboard\Plugins\ViewBuildLog\ViewBuildLogActionTest.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

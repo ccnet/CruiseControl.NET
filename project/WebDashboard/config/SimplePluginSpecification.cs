@@ -1,4 +1,5 @@
 using System;
+using ThoughtWorks.CruiseControl.Core;
 
 namespace ThoughtWorks.CruiseControl.WebDashboard.Config
 {
@@ -9,6 +10,10 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Config
 		public SimplePluginSpecification (string typeName)
 		{
 			this.typeName = typeName;
+			if (Type.GetType(typeName) == null)
+			{
+				throw new CruiseControlException("Unable to get Type for type name [" + typeName + "]");
+			}
 		}
 
 		public string TypeName

@@ -293,7 +293,7 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "Dashboard\CruiseObjectGiverFactory.cs"
+                    RelPath = "Dashboard\CruiseObjectGiverInitializer.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -358,6 +358,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Dashboard\IBuildPlugin.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Dashboard\IBuildPluginLinkCalculator.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -369,6 +374,11 @@
                 />
                 <File
                     RelPath = "Dashboard\ICruiseRequestFactory.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Dashboard\IPluginLinkRenderer.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -677,6 +687,16 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Plugins\BuildReport\BuildLogBuildPlugin.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Plugins\BuildReport\ViewBuildReportAction.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Plugins\DeleteProject\DeleteProjectHtmlViewBuilder.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -712,27 +732,27 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "Plugins\FxCopReport\ViewFxCopBuildReportAction.cs"
+                    RelPath = "Plugins\FxCop\FxCopReportBuildPlugin.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "Plugins\NAnt\ViewNAntBuildReportAction.cs"
+                    RelPath = "Plugins\NAnt\NAntReportBuildPlugin.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "Plugins\NCover\ViewNCoverBuildReportAction.cs"
+                    RelPath = "Plugins\NCover\NCoverReportBuildPlugin.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "Plugins\TestReport\ViewTestDetailsBuildReportAction.cs"
+                    RelPath = "Plugins\NUnit\NUnitTestDetailsBuildPlugin.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "Plugins\TestReport\ViewTestTimingsBuildReportAction.cs"
+                    RelPath = "Plugins\NUnit\NUnitTestTimingsBuildPlugin.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -743,16 +763,6 @@
                 />
                 <File
                     RelPath = "Plugins\ViewAllBuilds\ViewAllBuildsAction.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Plugins\ViewBuildLog\ViewBuildLogAction.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Plugins\ViewBuildReport\ViewBuildReportAction.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

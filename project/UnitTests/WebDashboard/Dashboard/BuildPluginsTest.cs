@@ -1,11 +1,8 @@
 using NMock;
 using NMock.Constraints;
 using NUnit.Framework;
+using ThoughtWorks.CruiseControl.WebDashboard.Config;
 using ThoughtWorks.CruiseControl.WebDashboard.Dashboard;
-using ThoughtWorks.CruiseControl.WebDashboard.Plugins.NAnt;
-using ThoughtWorks.CruiseControl.WebDashboard.Plugins.NCover;
-using ThoughtWorks.CruiseControl.WebDashboard.Plugins.ViewBuildLog;
-using ThoughtWorks.CruiseControl.WebDashboard.Plugins.ViewBuildReport;
 
 namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 {
@@ -17,44 +14,60 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 		private string buildName = "my build";
 		private BuildPlugins buildPlugins;
 		private DynamicMock buildLinkFactoryMock;
+		private DynamicMock configurationGetterMock;
+		private DynamicMock objectGiverMock;
 
 		[SetUp]
 		public void Setup()
 		{
 			buildLinkFactoryMock = new DynamicMock(typeof(IBuildLinkFactory));
-			buildPlugins = new BuildPlugins((IBuildLinkFactory) buildLinkFactoryMock.MockInstance);
+			configurationGetterMock = new DynamicMock(typeof(IConfigurationGetter));
+			objectGiverMock = new DynamicMock(typeof(ObjectGiver));
+			buildPlugins = new BuildPlugins((IBuildLinkFactory) buildLinkFactoryMock.MockInstance, (IConfigurationGetter) configurationGetterMock.MockInstance, (ObjectGiver) objectGiverMock.MockInstance);
 		}
 
 		private void VerifyAll()
 		{
 			buildLinkFactoryMock.Verify();
+			configurationGetterMock.Verify();
+			objectGiverMock.Verify();
 		}
 
 		[Test]
-		public void ShouldReturnBuildLinks()
+		public void ShouldReturnBuildPluginLinksByQueryingConfiguration()
 		{
-			IAbsoluteLink viewBuildLogLink = (IAbsoluteLink) new DynamicMock(typeof(IAbsoluteLink)).MockInstance;
-			IAbsoluteLink viewTestDetailsLink = (IAbsoluteLink) new DynamicMock(typeof(IAbsoluteLink)).MockInstance;
-			IAbsoluteLink viewTestTimingsLink = (IAbsoluteLink) new DynamicMock(typeof(IAbsoluteLink)).MockInstance;
-			IAbsoluteLink viewNAntLink = (IAbsoluteLink) new DynamicMock(typeof(IAbsoluteLink)).MockInstance;
-			IAbsoluteLink viewFxCopLink = (IAbsoluteLink) new DynamicMock(typeof(IAbsoluteLink)).MockInstance;
-			IAbsoluteLink viewNCoverLink = (IAbsoluteLink) new DynamicMock(typeof(IAbsoluteLink)).MockInstance;
+			DynamicMock pluginSpecificationMock1 = new DynamicMock(typeof(IPluginSpecification));
+			DynamicMock pluginSpecificationMock2 = new DynamicMock(typeof(IPluginSpecification));
+			DynamicMock linkRendererMock1 = new DynamicMock(typeof(IPluginLinkRenderer));
+			DynamicMock linkRendererMock2 = new DynamicMock(typeof(IPluginLinkRenderer));
 
-			buildLinkFactoryMock.ExpectAndReturn("CreateBuildLink", viewBuildLogLink, serverName, projectName, buildName, "View Build Log", new PropertyIs("ActionName", ViewBuildLogAction.ACTION_NAME));
-			buildLinkFactoryMock.ExpectAndReturn("CreateBuildLink", viewTestDetailsLink, serverName, projectName, buildName, "View Test Details", new PropertyIs("ActionName", ViewTestDetailsBuildReportAction.ACTION_NAME));
-			buildLinkFactoryMock.ExpectAndReturn("CreateBuildLink", viewTestTimingsLink, serverName, projectName, buildName, "View Test Timings", new PropertyIs("ActionName", ViewTestTimingsBuildReportAction.ACTION_NAME));
-			buildLinkFactoryMock.ExpectAndReturn("CreateBuildLink", viewNAntLink, serverName, projectName, buildName, "View NAnt Report", new PropertyIs("ActionName", ViewNAntBuildReportAction.ACTION_NAME));
-			buildLinkFactoryMock.ExpectAndReturn("CreateBuildLink", viewFxCopLink, serverName, projectName, buildName, "View FxCop Report", new PropertyIs("ActionName", ViewFxCopBuildReportAction.ACTION_NAME));
-			buildLinkFactoryMock.ExpectAndReturn("CreateBuildLink", viewNCoverLink, serverName, projectName, buildName, "View NCover Report", new PropertyIs("ActionName", ViewNCoverBuildReportAction.ACTION_NAME));
+			IPluginSpecification[] pluginSpecs = new IPluginSpecification[] { (IPluginSpecification) pluginSpecificationMock1.MockInstance, (IPluginSpecification) pluginSpecificationMock2.MockInstance };
+
+			configurationGetterMock.ExpectAndReturn("GetConfigFromSection", pluginSpecs, "CCNet/buildPlugins");
+
+			pluginSpecificationMock1.ExpectAndReturn("Type", typeof(string));
+			pluginSpecificationMock2.ExpectAndReturn("Type", typeof(int));
+
+			objectGiverMock.ExpectAndReturn("GiveObjectByType", linkRendererMock1.MockInstance, typeof(string));
+			objectGiverMock.ExpectAndReturn("GiveObjectByType", linkRendererMock2.MockInstance, typeof(int));
+
+			linkRendererMock1.ExpectAndReturn("Description", "Description 1");
+			linkRendererMock1.ExpectAndReturn("ActionName", "Action Name 1");
+			linkRendererMock2.ExpectAndReturn("Description", "Description 2");
+			linkRendererMock2.ExpectAndReturn("ActionName", "Action Name 2");
+
+			IAbsoluteLink link1 = (IAbsoluteLink) new DynamicMock(typeof(IAbsoluteLink)).MockInstance;
+			IAbsoluteLink link2 = (IAbsoluteLink) new DynamicMock(typeof(IAbsoluteLink)).MockInstance;
+
+			buildLinkFactoryMock.ExpectAndReturn("CreateBuildLink", link1, serverName, projectName, buildName, "Description 1", new PropertyIs("ActionName", "Action Name 1"));
+			buildLinkFactoryMock.ExpectAndReturn("CreateBuildLink", link2, serverName, projectName, buildName, "Description 2", new PropertyIs("ActionName", "Action Name 2"));
 
 			IAbsoluteLink[] buildLinks = buildPlugins.GetBuildPluginLinks(serverName, projectName, buildName);
 
-			Assert.AreSame(viewBuildLogLink, buildLinks[0]);
-			Assert.AreSame(viewTestDetailsLink, buildLinks[1]);
-			Assert.AreSame(viewTestTimingsLink, buildLinks[2]);
-			Assert.AreSame(viewNAntLink, buildLinks[3]);
-			Assert.AreSame(viewFxCopLink, buildLinks[4]);
-			Assert.AreSame(viewNCoverLink, buildLinks[5]);
+			Assert.AreSame(link1, buildLinks[0]);
+			Assert.AreSame(link2, buildLinks[1]);
+
+			Assert.AreEqual(2, buildLinks.Length);
 
 			VerifyAll();
 		}

@@ -1,3 +1,4 @@
+using System;
 using System.Web.UI;
 using ThoughtWorks.CruiseControl.WebDashboard.Dashboard;
 using ThoughtWorks.CruiseControl.WebDashboard.IO;
@@ -5,13 +6,11 @@ using ThoughtWorks.CruiseControl.WebDashboard.MVC.Cruise;
 
 namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.NAnt
 {
-	public class ViewNAntBuildReportAction : ICruiseAction
+	public class NAntReportBuildPlugin : ICruiseAction, IPluginLinkRenderer, IBuildPlugin
 	{
-		public static readonly string ACTION_NAME = "ViewNAntBuildReport";
-
 		private readonly IRequestTransformer requestTransformer;
 
-		public ViewNAntBuildReportAction(IRequestTransformer requestTransformer)
+		public NAntReportBuildPlugin(IRequestTransformer requestTransformer)
 		{
 			this.requestTransformer = requestTransformer;
 		}
@@ -19,6 +18,21 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.NAnt
 		public Control Execute (ICruiseRequest cruiseRequest)
 		{
 			return requestTransformer.Transform(cruiseRequest, @"xsl\NAnt.xsl");
+		}
+
+		public string Description
+		{
+			get { return "View NAnt Report"; }
+		}
+
+		public string ActionName
+		{
+			get { return "ViewNAntBuildReport"; }
+		}
+
+		public Type ActionType
+		{
+			get { return this.GetType(); }
 		}
 	}
 }

@@ -1,30 +1,35 @@
 using System.Collections;
-using ThoughtWorks.CruiseControl.WebDashboard.Plugins.NAnt;
-using ThoughtWorks.CruiseControl.WebDashboard.Plugins.NCover;
-using ThoughtWorks.CruiseControl.WebDashboard.Plugins.ViewBuildLog;
-using ThoughtWorks.CruiseControl.WebDashboard.Plugins.ViewBuildReport;
+using ThoughtWorks.CruiseControl.Core;
+using ThoughtWorks.CruiseControl.WebDashboard.Config;
 
 namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 {
 	public class BuildPlugins : IBuildPluginLinkCalculator
 	{
+		private readonly ObjectGiver objectGiver;
+		private readonly IConfigurationGetter configurationGetter;
 		private readonly IBuildLinkFactory buildLinkFactory;
 
-		public BuildPlugins(IBuildLinkFactory buildLinkFactory)
+		public BuildPlugins(IBuildLinkFactory buildLinkFactory, IConfigurationGetter configurationGetter, ObjectGiver objectGiver)
 		{
 			this.buildLinkFactory = buildLinkFactory;
+			this.configurationGetter = configurationGetter;
+			this.objectGiver = objectGiver;
 		}
 
 		public IAbsoluteLink[] GetBuildPluginLinks(string serverName, string projectName, string buildName)
 		{
 			ArrayList links = new ArrayList();
 
-			links.Add(buildLinkFactory.CreateBuildLink(serverName, projectName, buildName, "View Build Log", new ActionSpecifierWithName(ViewBuildLogAction.ACTION_NAME)));
-			links.Add(buildLinkFactory.CreateBuildLink(serverName, projectName, buildName, "View Test Details", new ActionSpecifierWithName(ViewTestDetailsBuildReportAction.ACTION_NAME)));
-			links.Add(buildLinkFactory.CreateBuildLink(serverName, projectName, buildName, "View Test Timings", new ActionSpecifierWithName(ViewTestTimingsBuildReportAction.ACTION_NAME)));
-			links.Add(buildLinkFactory.CreateBuildLink(serverName, projectName, buildName, "View NAnt Report", new ActionSpecifierWithName(ViewNAntBuildReportAction.ACTION_NAME)));
-			links.Add(buildLinkFactory.CreateBuildLink(serverName, projectName, buildName, "View FxCop Report", new ActionSpecifierWithName(ViewFxCopBuildReportAction.ACTION_NAME)));
-			links.Add(buildLinkFactory.CreateBuildLink(serverName, projectName, buildName, "View NCover Report", new ActionSpecifierWithName(ViewNCoverBuildReportAction.ACTION_NAME)));
+			foreach (IPluginSpecification pluginSpecification in (IPluginSpecification[]) configurationGetter.GetConfigFromSection("CCNet/buildPlugins"))
+			{
+				IPluginLinkRenderer linkRenderer = objectGiver.GiveObjectByType(pluginSpecification.Type) as IPluginLinkRenderer;
+				if (linkRenderer == null)
+				{
+					throw new CruiseControlException(pluginSpecification.TypeName + " is not a IPluginLinkRenderer");
+				}
+				links.Add(buildLinkFactory.CreateBuildLink(serverName, projectName, buildName, linkRenderer.Description, new ActionSpecifierWithName(linkRenderer.ActionName)));
+			}
 
 			return (IAbsoluteLink[]) links.ToArray(typeof (IAbsoluteLink));
 		}
