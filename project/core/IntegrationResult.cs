@@ -19,8 +19,8 @@ namespace ThoughtWorks.CruiseControl.Core
 		string _projectName;
 		string _label;
 		string _output;
-		DateTime _startTime;
-		DateTime _endTime;
+		DateTime _startTime = new DateTime(1980, 1, 1); 
+		DateTime _endTime = new DateTime(1980, 1, 1);
 		Exception _exception;
 
 		// Default constructor required for serialization

@@ -72,7 +72,7 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers.Test
 		{
 			_publisher.IncludeDetails = false;
 			string message = _publisher.CreateMessage(CreateIntegrationResult(IntegrationStatus.Success, IntegrationStatus.Success));
-			AssertEquals(@"CruiseControl.NET Build Results for project Project#9 (http://localhost/ccnet?log=log00010101000000Lbuild.0.xml)", message);
+			AssertEquals(@"CruiseControl.NET Build Results for project Project#9 (http://localhost/ccnet?log=log19800101000000Lbuild.0.xml)", message);
 		}
 		
 		public void TestEmailMessageWithDetails() 

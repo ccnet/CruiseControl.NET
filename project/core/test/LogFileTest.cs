@@ -172,7 +172,7 @@ namespace ThoughtWorks.CruiseControl.Core.Test
 
 		public void TestCreateUrl()
 		{
-			string expected = "?log=log00010101000000Lbuild.0.xml";
+			string expected = "?log=log19800101000000Lbuild.0.xml";
 			string actual = LogFileUtil.CreateUrl(CreateIntegrationResult(IntegrationStatus.Success, new DateTime(2002, 02, 22, 12, 00, 00)));
 			AssertEquals(expected, actual);
 		}
@@ -190,7 +190,7 @@ namespace ThoughtWorks.CruiseControl.Core.Test
 
 		public void TestCreateUrl_FailedBuild()
 		{
-			string expected = "?log=log00010101000000.xml";
+			string expected = "?log=log19800101000000.xml";
 			string actual = LogFileUtil.CreateUrl(CreateIntegrationResult(IntegrationStatus.Failure, new DateTime(2002, 02, 22, 12, 00, 00)));
 			AssertEquals(expected, actual);
 		}
