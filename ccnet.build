@@ -95,6 +95,7 @@
 		<copy todir="deployed\server\xsl" verbose="${verbosity}">
 			<fileset basedir="${src.dir}\core\publishers\xsl">
 				<includes name="**\*.xsl"/>
+				<includes name="**\*.css"/>
 			</fileset>
 		</copy>
 
