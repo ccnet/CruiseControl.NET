@@ -41,11 +41,13 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test
 			const string elementName = path + "\\" + file;
 			const string modificationType = "checkin";
 			const string comment = "implemented dwim";
+			const string change = @"\main\17";
 			Modification modification = _parser.CreateNewModification( userName,
 				timeStamp,
 				elementName,
 				modificationType,
-				comment );
+				comment,
+				change );
 
 			Assert.AreEqual( comment, modification.Comment );
 			Assert.IsNull( modification.EmailAddress );
@@ -54,6 +56,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test
 			Assert.AreEqual( expectedTime, modification.ModifiedTime );
 			Assert.AreEqual( modificationType, modification.Type );
 			Assert.IsNull( modification.Url );
+			Assert.AreEqual( 17, modification.ChangeNumber );
 			Assert.AreEqual( userName, modification.UserName );
 		}
 
@@ -114,6 +117,47 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test
 		}
 
 		[Test]
+		public void CanParseChangeNumber()
+		{
+			int changeNumber = _parser.ParseChangeNumber( @"\main\4" );
+
+			Assert.AreEqual( 4, changeNumber );
+		}
+
+		[Test]
+		public void CanParseBadChangeNumber1()
+		{
+			int changeNumber = _parser.ParseChangeNumber( null );
+
+			Assert.AreEqual( -1, changeNumber );
+		}
+
+		[Test]
+		public void CanParseBadChangeNumber2()
+		{
+			int changeNumber = _parser.ParseChangeNumber( string.Empty );
+
+			Assert.AreEqual( -1, changeNumber );
+		}
+
+		
+		[Test]
+		public void CanParseBadChangeNumber3()
+		{
+			int changeNumber = _parser.ParseChangeNumber( "foobar" );
+
+			Assert.AreEqual( -1, changeNumber );
+		}
+
+		[Test]
+		public void CanParseChangeNumberWithNoNumber()
+		{
+			int changeNumber = _parser.ParseChangeNumber( @"\main" );
+
+			Assert.AreEqual( -1, changeNumber );
+		}
+
+		[Test]
 		public void CanParseBadEntry()
 		{
 			Modification modification = _parser.ParseEntry( @"ppunjani#~#Tuesday, February 18, 2003 05:09:14 PM#~#D:\CCase\ppunjani_view\RefArch\tutorial\wwhdata\common\wwhpagef.js#~#\main\0#~#mkbranch#~#!#~#!#~#" );
@@ -137,6 +181,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test
 			Assert.AreEqual( @"D:\CCase\ppunjani_view\RefArch\tutorial\wwhdata\common", modification.FolderName );
 			Assert.AreEqual( "towwhdir.js", modification.FileName );
 			Assert.AreEqual( "mkelem", modification.Type );
+			Assert.AreEqual( -1, modification.ChangeNumber );
 			Assert.IsNull( modification.Comment );
 		}
 		
@@ -149,6 +194,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test
 			Assert.AreEqual( @"D:\CCase\ppunjani_view\RefArch\tutorial\wwhdata\common", modification.FolderName);
 			Assert.AreEqual( "topics.js", modification.FileName);
 			Assert.AreEqual( "**null operation kind**", modification.Type );
+			Assert.AreEqual( -1, modification.ChangeNumber );
 			Assert.IsNull( modification.Comment );
 		}
 		

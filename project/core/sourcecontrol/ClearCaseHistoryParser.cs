@@ -62,17 +62,39 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			string time,
 			string elementName,
 			string modificationType,
-			string comment )
+			string comment,
+			string change )
 		{
 			Modification modification = new Modification();
 			// ClearCase change number is a string, not an int
-			modification.ChangeNumber = -1;
+			modification.ChangeNumber = ParseChangeNumber( change );
 			modification.UserName = userName;
 			modification.Type = modificationType;
 			modification.Comment = ( comment == string.Empty ? null : comment );
 			AssignFileInfo( modification, elementName );
 			AssignModificationTime( modification, time );
 			return modification;
+		}
+
+		internal int ParseChangeNumber( string item )
+		{
+			if ( item == null )
+			{
+				return -1;
+			}
+			int index = item.LastIndexOf( "\\" );
+			if ( index == -1 )
+			{
+				return -1;
+			}
+			try 
+			{
+				return Int32.Parse( item.Substring( index + 1 ) );
+			}
+			catch ( FormatException )
+			{
+				return -1;
+			}
 		}
 
 		internal Modification ParseEntry( string line )
@@ -93,7 +115,8 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 				tokens[1].Trim(),
 				tokens[2].Trim(),
 				tokens[4].Trim(),
-				tokens[7].Trim() );
+				tokens[7].Trim(),
+				tokens[5].Trim() );
 		}
 
 		internal Modification[] ParseStream( TextReader reader )
