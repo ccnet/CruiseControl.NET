@@ -303,5 +303,71 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 
 			VerifyAll();
 		}
+
+		[Test]
+		public void ShouldReturnProjectsSortedByLastBuildDateIfLastBuildDateColumnSpecifiedAsSortSeed()
+		{
+			// Setup
+			ProjectStatus projectStatus1 = new ProjectStatus(ProjectIntegratorState.Running, 
+				IntegrationStatus.Success, ProjectActivity.Sleeping, "b", "url", DateTime.Today, "1", DateTime.Today);
+			ProjectStatus projectStatus2 = new ProjectStatus(ProjectIntegratorState.Running, 
+				IntegrationStatus.Success, ProjectActivity.Sleeping, "a", "url", DateTime.Today.AddHours(1), "1", DateTime.Today);
+			ProjectStatusOnServer[] statusses = new ProjectStatusOnServer[]
+				{
+					new ProjectStatusOnServer(projectStatus1, new DefaultServerSpecifier("server")),
+					new ProjectStatusOnServer(projectStatus2, new DefaultServerSpecifier("server"))
+				};
+
+			// Execute
+			ProjectGridRow[] rows = projectGrid.GenerateProjectGridRows(statusses, "myAction", ProjectGridSortColumn.LastBuildDate, true);
+
+			// Verify
+			Assert.AreEqual(2, rows.Length);
+			Assert.AreEqual("b", rows[0].Name);
+			Assert.AreEqual("a", rows[1].Name);
+
+			// Execute
+			rows = projectGrid.GenerateProjectGridRows(statusses, "myAction", ProjectGridSortColumn.LastBuildDate, false);
+
+			// Verify
+			Assert.AreEqual(2, rows.Length);
+			Assert.AreEqual("a", rows[0].Name);
+			Assert.AreEqual("b", rows[1].Name);
+
+			VerifyAll();
+		}
+
+		[Test]
+		public void ShouldReturnProjectsSortedByBuildStatusIfBuildStatusColumnSpecifiedAsSortSeed()
+		{
+			// Setup
+			ProjectStatus projectStatus1 = new ProjectStatus(ProjectIntegratorState.Running, 
+				IntegrationStatus.Success, ProjectActivity.Sleeping, "b", "url", DateTime.Today, "1", DateTime.Today);
+			ProjectStatus projectStatus2 = new ProjectStatus(ProjectIntegratorState.Running, 
+				IntegrationStatus.Failure, ProjectActivity.Sleeping, "a", "url", DateTime.Today.AddHours(1), "1", DateTime.Today);
+			ProjectStatusOnServer[] statusses = new ProjectStatusOnServer[]
+				{
+					new ProjectStatusOnServer(projectStatus1, new DefaultServerSpecifier("server")),
+					new ProjectStatusOnServer(projectStatus2, new DefaultServerSpecifier("server"))
+				};
+
+			// Execute
+			ProjectGridRow[] rows = projectGrid.GenerateProjectGridRows(statusses, "myAction", ProjectGridSortColumn.BuildStatus, true);
+
+			// Verify
+			Assert.AreEqual(2, rows.Length);
+			Assert.AreEqual("b", rows[0].Name);
+			Assert.AreEqual("a", rows[1].Name);
+
+			// Execute
+			rows = projectGrid.GenerateProjectGridRows(statusses, "myAction", ProjectGridSortColumn.BuildStatus, false);
+
+			// Verify
+			Assert.AreEqual(2, rows.Length);
+			Assert.AreEqual("a", rows[0].Name);
+			Assert.AreEqual("b", rows[1].Name);
+
+			VerifyAll();
+		}
 	}
 }

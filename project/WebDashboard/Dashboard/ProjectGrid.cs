@@ -78,7 +78,22 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 			{
 				ProjectGridRow rowx = x as ProjectGridRow;
 				ProjectGridRow rowy = y as ProjectGridRow;
-				return rowx.Name.CompareTo(rowy.Name) * (ascending ? 1 : -1);
+				if (column == ProjectGridSortColumn.Name)
+				{
+					return rowx.Name.CompareTo(rowy.Name) * (ascending ? 1 : -1);
+				}
+				else if (column == ProjectGridSortColumn.LastBuildDate)
+				{
+					return rowx.LastBuildDate.CompareTo(rowy.LastBuildDate) * (ascending ? 1 : -1);
+				}
+				else if (column == ProjectGridSortColumn.BuildStatus)
+				{
+					return rowx.BuildStatus.CompareTo(rowy.BuildStatus) * (ascending ? 1 : -1);
+				}
+				else
+				{
+					return 0;
+				}
 			}
 		}
 	}

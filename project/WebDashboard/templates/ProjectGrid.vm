@@ -9,10 +9,10 @@
 			<a href="$projectNameSortLink"><b>Project Name</b></a>
 		</td>
 		<td align="Center">
-			<b>Last Build Status</b>
+			<a href="$buildStatusSortLink"><b>Last Build Status</b></a>
 		</td>
 		<td align="Center">
-			<b>Last Build Time</b>
+			<a href="$lastBuildDateSortLink"><b>Last Build Time</b></a>
 		</td>
 		<td align="Center">
 			<b>Last Build Label</b>

@@ -44,6 +44,8 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 			bool sortReverse = GetSortReverse(request);
 
 			velocityContext["projectNameSortLink"] = GenerateSortLink(serverSpecifier, actionSpecifier, ProjectGridSortColumn.Name, sortColumn, sortReverse);
+			velocityContext["buildStatusSortLink"] = GenerateSortLink(serverSpecifier, actionSpecifier, ProjectGridSortColumn.BuildStatus, sortColumn, sortReverse);
+			velocityContext["lastBuildDateSortLink"] = GenerateSortLink(serverSpecifier, actionSpecifier, ProjectGridSortColumn.LastBuildDate, sortColumn, sortReverse);
 			velocityContext["projectGrid"] = projectGrid.GenerateProjectGridRows(
 				projectStatusListAndExceptions.StatusAndServerList, actionName, sortColumn, sortReverse);
 			velocityContext["exceptions"] = projectStatusListAndExceptions.Exceptions;
