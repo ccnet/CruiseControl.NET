@@ -28,7 +28,16 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Cache
 
 		public string GetContent(string serverName, string projectName, string directory, string fileName)
 		{
-			throw new NotImplementedException();
+			string filepath = GetPathforFile(serverName, projectName, directory, fileName);
+
+			if (File.Exists(filepath))
+			{
+				return ReadFile(filepath);
+			}
+			else
+			{
+				return null;	
+			}
 		}
 
 		public string GetURLForFile(string serverName, string projectName, string directory, string fileName)
@@ -54,6 +63,14 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Cache
 		private void CreateDirectoryIfNecessary(string serverName, string projectName, string directory)
 		{
 			Directory.CreateDirectory(GetDirectory(serverName, projectName, directory));
+		}
+
+		private string ReadFile(string path)
+		{
+			using (StreamReader sr = new StreamReader(path)) 
+			{
+				return sr.ReadToEnd();
+			}
 		}
 	}
 }

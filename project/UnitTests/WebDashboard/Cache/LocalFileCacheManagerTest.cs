@@ -67,6 +67,22 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Cache
 		}
 
 		[Test]
+		public void GetContentReturnsNullIfRequestedContentDoesntExist()
+		{
+			LocalFileCacheManager manager = new LocalFileCacheManager((IPathMapper) pathMapperMock.MockInstance, (IConfigurationGetter) configurationGetterMock.MockInstance);
+			AssertNull(manager.GetContent(servername, projectname, subdirectory, filename));
+		}
+
+		[Test]
+		public void GetContentReturnsContentIfItExistsAcrossInstances()
+		{
+			LocalFileCacheManager manager = new LocalFileCacheManager((IPathMapper) pathMapperMock.MockInstance, (IConfigurationGetter) configurationGetterMock.MockInstance);
+			manager.AddContent(servername, projectname, subdirectory, filename, content);
+			manager = new LocalFileCacheManager((IPathMapper) pathMapperMock.MockInstance, (IConfigurationGetter) configurationGetterMock.MockInstance);
+			AssertEquals(content, manager.GetContent(servername, projectname, subdirectory, filename));
+		}
+
+		[Test]
 		public void ReturnsUrlForFile()
 		{
 			pathMapperMock.ExpectAndReturn("GetAbsoluteURLForRelativePath", "http://foo.bar/baz", Path.Combine(cacheRootDirectory, @"myserver\myproject\subdir\myfile.xml"));
