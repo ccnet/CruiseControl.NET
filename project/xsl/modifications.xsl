@@ -10,7 +10,7 @@
         <table class="section-table" cellpadding="2" cellspacing="0" border="0" width="98%">
             <!-- Modifications -->
             <tr>
-                <td class="modifications-sectionheader" colspan="4">
+                <td class="modifications-sectionheader" colspan="5">
                     Modifications since last build (<xsl:value-of select="count($modification.list)"/>)
                 </td>
             </tr>
@@ -52,6 +52,7 @@
             	</xsl:choose>
 			</td>
             <td class="modifications-data" valign="top"><xsl:value-of select="comment"/></td>
+            <td class="modifications-data" valign="top"><xsl:value-of select="date"/></td>
         </tr>
     </xsl:template>
 
