@@ -9,7 +9,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 	public class Svn : ProcessSourceControl
 	{
 		internal readonly static string HISTORY_COMMAND_FORMAT = "log -v -r \"{{{0}}}:{{{1}}}\" --xml {2}";
-		internal readonly static string TAG_COMMAND_FORMAT = "copy {0} {1}";
+		internal readonly static string TAG_COMMAND_FORMAT = "copy -m \"CCNET build {0}\" {1} {2}";
 
 		internal readonly static string COMMAND_DATE_FORMAT = "yyyy-MM-ddTHH:mm:ssZ";
 
@@ -71,7 +71,14 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 
 		public override ProcessInfo CreateLabelProcessInfo(string label, DateTime timeStamp) 
 		{
-			return new ProcessInfo(Executable, BuildTagProcessArgs(label));
+			if(TagOnSuccess) 
+			{
+				return new ProcessInfo(Executable, BuildTagProcessArgs(label));
+			} 
+			else 
+			{
+				return null;
+			}
 		}
 
 		internal string BuildHistoryProcessArgs(DateTime from, DateTime to)
@@ -81,7 +88,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 
 		internal string BuildTagProcessArgs(string label) {
 			string tagUrl = _tagBaseUrl + "/" + label;
-			return string.Format(TAG_COMMAND_FORMAT, _trunkUrl, tagUrl);
+			return string.Format(TAG_COMMAND_FORMAT, label, _trunkUrl, tagUrl);
 		}
 	}
 }
