@@ -7,10 +7,10 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.LogViewerPlugin
 	public class LogViewerPageRenderer
 	{
 		private readonly ICacheManager cacheManager;
-		private readonly IRequestWrapper requestWrapper;
+		private readonly ICruiseRequestWrapper requestWrapper;
 		private readonly IBuildRetrieverForRequest buildRetrieverForRequest;
 
-		public LogViewerPageRenderer(IRequestWrapper requestWrapper, IBuildRetrieverForRequest buildRetrieverForRequest, ICacheManager cacheManager)
+		public LogViewerPageRenderer(ICruiseRequestWrapper requestWrapper, IBuildRetrieverForRequest buildRetrieverForRequest, ICacheManager cacheManager)
 		{
 			this.buildRetrieverForRequest = buildRetrieverForRequest;
 			this.requestWrapper = requestWrapper;

@@ -1,6 +1,4 @@
-using System;
 using ThoughtWorks.CruiseControl.WebDashboard.Dashboard;
-using ThoughtWorks.CruiseControl.WebDashboard.Plugins.AddProjectPlugin;
 using ThoughtWorks.CruiseControl.WebDashboard.Plugins.LogViewerPlugin;
 using ThoughtWorks.CruiseControl.WebDashboard.Plugins.ProjectReporterPlugin;
 using ThoughtWorks.CruiseControl.WebDashboard.Plugins.ServerLogViewerPlugin;
@@ -43,11 +41,6 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins
 		public ServerLogViewerPageRenderer ServerLogViewerPageRenderer
 		{
 			get { return new ServerLogViewerPageRenderer(dcFactory.QueryStringRequestWrapper, dcFactory.ServerAggregatingCruiseManagerWrapper); }
-		}
-
-		public AddProjectPageModel AddProjectPageModel
-		{
-			get { return new AddProjectPageModel(dcFactory.ServerAggregatingCruiseManagerWrapper, dcFactory.NetReflectorProjectSerializer); }
 		}
 	}
 }

@@ -4,6 +4,6 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 {
 	public interface IBuildRetrieverForRequest
 	{
-		Build GetBuild(IRequestWrapper requestWrapper);
+		Build GetBuild(ICruiseRequestWrapper requestWrapper);
 	}
 }

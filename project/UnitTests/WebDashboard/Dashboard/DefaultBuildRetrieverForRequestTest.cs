@@ -25,7 +25,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 		{
 			buildRetrieverMock = new DynamicMock(typeof(IBuildRetriever));
 			buildNameRetrieverMock = new DynamicMock(typeof(IBuildNameRetriever));
-			requestWrapperMock = new DynamicMock(typeof(IRequestWrapper));
+			requestWrapperMock = new DynamicMock(typeof(ICruiseRequestWrapper));
 
 			buildRetrieverForRequest = new DefaultBuildRetrieverForRequest((IBuildRetriever) buildRetrieverMock.MockInstance, (IBuildNameRetriever) buildNameRetrieverMock.MockInstance);
 
@@ -46,7 +46,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 			buildNameRetrieverMock.ExpectAndReturn("GetLatestBuildName", buildName, serverName, projectName);
 			buildRetrieverMock.ExpectAndReturn("GetBuild", build, serverName, projectName, buildName);
 
-			Build returnedBuild = buildRetrieverForRequest.GetBuild((IRequestWrapper) requestWrapperMock.MockInstance);
+			Build returnedBuild = buildRetrieverForRequest.GetBuild((ICruiseRequestWrapper) requestWrapperMock.MockInstance);
 
 			AssertEquals(buildName, returnedBuild.Name);
 			AssertEquals(logContent, returnedBuild.Log);
@@ -64,7 +64,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 			buildNameRetrieverMock.ExpectNoCall("GetLatestBuildName", typeof(string), typeof(string));
 			buildRetrieverMock.ExpectAndReturn("GetBuild", build, serverName, projectName, buildName);
 
-			Build returnedBuild = buildRetrieverForRequest.GetBuild((IRequestWrapper) requestWrapperMock.MockInstance);
+			Build returnedBuild = buildRetrieverForRequest.GetBuild((ICruiseRequestWrapper) requestWrapperMock.MockInstance);
 
 			AssertEquals(buildName, returnedBuild.Name);
 			AssertEquals(logContent, returnedBuild.Log);

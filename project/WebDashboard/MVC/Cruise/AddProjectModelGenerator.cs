@@ -1,0 +1,46 @@
+using ThoughtWorks.CruiseControl.Core;
+using ThoughtWorks.CruiseControl.Core.Builder;
+using ThoughtWorks.CruiseControl.Core.Sourcecontrol;
+using ThoughtWorks.CruiseControl.WebDashboard.ServerConnection;
+
+namespace ThoughtWorks.CruiseControl.WebDashboard.MVC.Cruise
+{
+	public class AddProjectModelGenerator
+	{
+		private readonly ICruiseManagerWrapper cruiseManagerWrapper;
+
+		public AddProjectModelGenerator(ICruiseManagerWrapper cruiseManagerWrapper)
+		{
+			this.cruiseManagerWrapper = cruiseManagerWrapper;
+		}
+
+		public AddProjectModel GenerateModel(IRequest request)
+		{
+			string selectedServerName = request.GetText("ServersDropDown");
+			string[] serverNames = cruiseManagerWrapper.GetServerNames();
+
+			Project project = new Project();
+			project.Name = request.GetText("Project.Name");
+
+			P4 p4 = new P4();
+			p4.View = request.GetText("Project.SourceControl.View");
+			p4.Executable = request.GetText("Project.SourceControl.Executable");
+			p4.Client = request.GetText("Project.SourceControl.Executable");
+			p4.User = request.GetText("Project.SourceControl.Executable");
+			p4.Port = request.GetText("Project.SourceControl.Executable");
+			p4.ApplyLabel = request.GetChecked("Project.SourceControl.ApplyLabel");
+			p4.AutoGetSource = request.GetChecked("Project.SourceControl.AutoGetSource");
+			project.SourceControl = p4;
+
+			NAntBuilder nantBuilder = new NAntBuilder();
+			nantBuilder.Executable = request.GetText("Project.Builder.Executable");
+			nantBuilder.BaseDirectory = request.GetText("Project.Builder.Executable");
+			nantBuilder.BuildFile = request.GetText("Project.Builder.Executable");
+			nantBuilder.BuildArgs = request.GetText("Project.Builder.Executable");
+			nantBuilder.BuildTimeoutSeconds = request.GetInt("Project.Builder.Executable");
+			project.Builder = nantBuilder;
+
+			return new AddProjectModel(project, selectedServerName, serverNames);
+		}
+	}
+}

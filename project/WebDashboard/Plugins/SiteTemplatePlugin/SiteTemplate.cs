@@ -15,10 +15,10 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.SiteTemplatePlugin
 		private readonly IBuildRetrieverForRequest buildRetrieverForRequest;
 		private readonly IConfigurationGetter configurationGetter;
 		private readonly IBuildLister buildLister;
-		private readonly IRequestWrapper requestWrapper;
+		private readonly ICruiseRequestWrapper requestWrapper;
 		private Build build;
 
-		public SiteTemplate(IRequestWrapper requestWrapper, IConfigurationGetter configurationGetter, IBuildLister buildLister, 
+		public SiteTemplate(ICruiseRequestWrapper requestWrapper, IConfigurationGetter configurationGetter, IBuildLister buildLister, 
 			IBuildRetrieverForRequest buildRetrieverForRequest, IBuildNameRetriever buildNameRetriever)
 		{
 			this.requestWrapper = requestWrapper;

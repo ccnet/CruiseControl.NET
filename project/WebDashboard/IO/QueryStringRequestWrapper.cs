@@ -3,7 +3,7 @@ using ThoughtWorks.CruiseControl.WebDashboard.ServerConnection;
 
 namespace ThoughtWorks.CruiseControl.WebDashboard.IO
 {
-	public class QueryStringRequestWrapper : IRequestWrapper
+	public class QueryStringRequestWrapper : ICruiseRequestWrapper
 	{
 		public static readonly string BuildQueryStringParameter = "build";
 		public static readonly string ProjectQueryStringParameter = "project";

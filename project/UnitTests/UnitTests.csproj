@@ -194,10 +194,16 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "WebDashboard\Plugins\AddProjectPlugin\AddProjectPageModelTest.cs"
+                    RelPath = "WebDashboard\MVC\DefaultActionFactoryTest.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
+                <File
+                    RelPath = "WebDashboard\MVC\HttpControllerTest.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <Folder RelPath = "WebDashboard\Plugins\AddProjectPlugin\" />
                 <File
                     RelPath = "WebDashboard\Plugins\LogViewerPlugin\LogViewerTest.cs"
                     SubType = "Code"

@@ -19,7 +19,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Plugins.SiteTemplate
 		private DynamicMock buildNameRetrieverMock;
 		private SiteTemplate siteTemplate;
 		private Build build;
-		private IRequestWrapper requestWrapper;
+		private ICruiseRequestWrapper requestWrapper;
 		private string server;
 		private string project;
 		private string buildName;
@@ -27,13 +27,13 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Plugins.SiteTemplate
 		[SetUp]
 		public void Setup()
 		{
-			requestWrapperMock = new DynamicMock(typeof(IRequestWrapper));
+			requestWrapperMock = new DynamicMock(typeof(ICruiseRequestWrapper));
 			configurationGetterMock = new DynamicMock(typeof(IConfigurationGetter));
 			buildListerMock = new DynamicMock(typeof(IBuildLister));
 			buildRetrieverMock = new DynamicMock(typeof(IBuildRetrieverForRequest));
 			buildNameRetrieverMock = new DynamicMock(typeof(IBuildNameRetriever));
 
-			requestWrapper = (IRequestWrapper) requestWrapperMock.MockInstance;
+			requestWrapper = (ICruiseRequestWrapper) requestWrapperMock.MockInstance;
 			siteTemplate = new SiteTemplate(
 				requestWrapper,
 				(IConfigurationGetter) configurationGetterMock.MockInstance,

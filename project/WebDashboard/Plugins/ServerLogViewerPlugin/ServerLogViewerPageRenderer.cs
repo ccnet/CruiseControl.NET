@@ -5,10 +5,10 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.ServerLogViewerPlugin
 {
 	public class ServerLogViewerPageRenderer
 	{
-		private readonly IRequestWrapper requestWrapper;
+		private readonly ICruiseRequestWrapper requestWrapper;
 		private readonly ICruiseManagerWrapper cruiseManagerWrapper;
 
-		public ServerLogViewerPageRenderer(IRequestWrapper requestWrapper, ICruiseManagerWrapper cruiseManagerWrapper)
+		public ServerLogViewerPageRenderer(ICruiseRequestWrapper requestWrapper, ICruiseManagerWrapper cruiseManagerWrapper)
 		{
 			this.cruiseManagerWrapper = cruiseManagerWrapper;
 			this.requestWrapper = requestWrapper;

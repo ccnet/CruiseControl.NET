@@ -15,10 +15,10 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.ProjectReporterPlugin
 	public class ProjectReporterPageRenderer
 	{
 		private readonly IPathMapper pathMapper;
-		private readonly IRequestWrapper requestWrapper;
+		private readonly ICruiseRequestWrapper requestWrapper;
 		private readonly IBuildRetrieverForRequest buildRetrieverForRequest;
 
-		public ProjectReporterPageRenderer(IRequestWrapper requestWrapper, IBuildRetrieverForRequest buildRetrieverForRequest, IPathMapper pathMapper)
+		public ProjectReporterPageRenderer(ICruiseRequestWrapper requestWrapper, IBuildRetrieverForRequest buildRetrieverForRequest, IPathMapper pathMapper)
 		{
 			this.buildRetrieverForRequest = buildRetrieverForRequest;
 			this.requestWrapper = requestWrapper;
