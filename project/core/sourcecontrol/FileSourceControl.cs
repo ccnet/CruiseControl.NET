@@ -27,6 +27,11 @@ namespace tw.ccnet.core.sourcecontrol
 			return (Modification[])modifications.ToArray(typeof(Modification));
 		}
 
+		public void Run(IntegrationResult result)
+		{
+			result.Modifications = GetModifications(result.LastModificationDate, DateTime.Now);
+		}
+
 		private ArrayList getMods(DirectoryInfo dir, DateTime from, DateTime to) 
 		{
 			ArrayList mods = new ArrayList();

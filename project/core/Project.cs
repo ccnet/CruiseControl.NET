@@ -29,6 +29,7 @@ namespace tw.ccnet.core
 	[ReflectorType("project")]
 	public class Project : IProject
 	{
+		public static readonly string END_OF_INTEGRATION_LOG_OUTPUT = Environment.NewLine;
 		private string _name;
 		private ISchedule _schedule;
 		private ISourceControl _sourceControl;
@@ -172,6 +173,7 @@ namespace tw.ccnet.core
 				PostBuild();
 			}
 			currentActivity = ProjectActivity.Sleeping;
+			Log(END_OF_INTEGRATION_LOG_OUTPUT);
 		}
 
 		internal void PreBuild()
@@ -194,7 +196,7 @@ namespace tw.ccnet.core
 		internal void RunBuild()
 		{
 			currentActivity = ProjectActivity.Building;
-			Builder.Build(CurrentIntegration);
+			Builder.Run(CurrentIntegration);
 			Log(String.Format("Build Complete: {0}", CurrentIntegration.Status.ToString())); 
 		}
 

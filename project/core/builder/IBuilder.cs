@@ -2,8 +2,7 @@ using System;
 
 namespace tw.ccnet.core
 {
-	public interface IBuilder
+	public interface IBuilder : ITask
 	{
-		void Build(IntegrationResult result);
 	}
 }

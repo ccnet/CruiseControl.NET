@@ -17,5 +17,10 @@ namespace tw.ccnet.core.sourcecontrol
 		public void LabelSourceControl(string label, DateTime timeStamp) 
 		{
 		}
+
+		public void Run(IntegrationResult result)
+		{
+			result.Modifications = GetModifications(result.LastModificationDate, DateTime.Now);
+		}
 	}
 }

@@ -16,7 +16,7 @@
                 DefaultTargetSchema = "IE50"
                 DelaySign = "false"
                 OutputType = "Exe"
-                RootNamespace = "CCRunner"
+                RootNamespace = "CCNet.CCRunner"
                 StartupObject = ""
             >
                 <Config
@@ -69,7 +69,7 @@
                 />
                 <Reference
                     Name = "System.XML"
-                    AssemblyName = "System.XML"
+                    AssemblyName = "System.Xml"
                     HintPath = "C:\WINNT\Microsoft.NET\Framework\v1.0.3705\System.XML.dll"
                 />
                 <Reference
@@ -97,10 +97,24 @@
                     AssemblyName = "nmock"
                     HintPath = "..\..\lib\nmock.dll"
                 />
+                <Reference
+                    Name = "System.Runtime.Remoting"
+                    AssemblyName = "System.Runtime.Remoting"
+                    HintPath = "C:\WINNT\Microsoft.NET\Framework\v1.0.3705\System.Runtime.Remoting.dll"
+                />
+                <Reference
+                    Name = "ccnet.core"
+                    AssemblyName = "ccnet.core"
+                    HintPath = "..\..\build\ccnet.core.dll"
+                />
             </References>
         </Build>
         <Files>
             <Include>
+                <File
+                    RelPath = "app.config"
+                    BuildAction = "None"
+                />
                 <File
                     RelPath = "App.ico"
                     BuildAction = "Content"
@@ -117,6 +131,16 @@
                 />
                 <File
                     RelPath = "Schedule.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "ServerConnectionException.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "test\IntegrationTest.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

@@ -1,7 +1,7 @@
 Microsoft Visual Studio Solution File, Format Version 7.00
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CCRunner", "CCRunner.csproj", "{CE195BE3-8516-445F-9A2E-31A53FA79448}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ccnet.remote", "..\..\project\ccnet.remote\ccnet.remote.csproj", "{E820CF3B-8C5A-4002-BC16-B7818D3D54A8}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ccnet2002.remote", "..\..\project\ccnet.remote\ccnet2002.remote.csproj", "{E820CF3B-8C5A-4002-BC16-B7818D3D54A8}"
 EndProject
 Global
 	GlobalSection(SolutionConfiguration) = preSolution

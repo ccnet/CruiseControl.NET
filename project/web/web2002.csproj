@@ -107,6 +107,16 @@
                     Project = "{F8113DB9-6C47-4FD1-8A01-655FCF151747}"
                     Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
                 />
+                <Reference
+                    Name = "SiteMesh"
+                    AssemblyName = "SiteMesh"
+                    HintPath = "..\..\lib\SiteMesh.dll"
+                />
+                <Reference
+                    Name = "DecoratorControls"
+                    AssemblyName = "DecoratorControls"
+                    HintPath = "..\..\lib\DecoratorControls.dll"
+                />
             </References>
         </Build>
         <Files>
@@ -129,6 +139,21 @@
                 <File
                     RelPath = "cruisecontrol.css"
                     BuildAction = "Content"
+                />
+                <File
+                    RelPath = "Decorator.aspx"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "Decorator.aspx.cs"
+                    DependentUpon = "Decorator.aspx"
+                    SubType = "ASPXCodeBehind"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Decorator.aspx.resx"
+                    DependentUpon = "Decorator.aspx.cs"
+                    BuildAction = "EmbeddedResource"
                 />
                 <File
                     RelPath = "Default.aspx"
@@ -178,21 +203,6 @@
                 <File
                     RelPath = "Statistics.aspx.resx"
                     DependentUpon = "Statistics.aspx.cs"
-                    BuildAction = "EmbeddedResource"
-                />
-                <File
-                    RelPath = "Template.ascx"
-                    BuildAction = "Content"
-                />
-                <File
-                    RelPath = "Template.ascx.cs"
-                    DependentUpon = "Template.ascx"
-                    SubType = "ASPXCodeBehind"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Template.ascx.resx"
-                    DependentUpon = "Template.ascx.cs"
                     BuildAction = "EmbeddedResource"
                 />
                 <File
@@ -275,6 +285,15 @@
                     BuildAction = "Content"
                 />
                 <File
+                    RelPath = "test\ccnet.web.dll.config"
+                    BuildAction = "None"
+                />
+                <File
+                    RelPath = "test\ConfigSectionTest.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "test\LogFileListTest.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -295,6 +314,10 @@
                 />
                 <File
                     RelPath = "xsl\distributables.xsl"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "xsl\fit.xsl"
                     BuildAction = "Content"
                 />
                 <File

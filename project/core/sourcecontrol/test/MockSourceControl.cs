@@ -25,6 +25,11 @@ namespace tw.ccnet.core.sourcecontrol.test
 			return _expectedMods;
 		}
 
+		public void Run(IntegrationResult result)
+		{
+			result.Modifications = GetModifications(result.LastModificationDate, DateTime.Now);
+		}
+
 		public void LabelSourceControl(string label, DateTime timeStamp) 
 		{
 		}

@@ -34,6 +34,11 @@ namespace tw.ccnet.core.sourcecontrol.test
 				return new Modification[0];
 			}
 		}
+
+		public void Run(IntegrationResult result)
+		{
+			result.Modifications = GetModifications(result.LastModificationDate, DateTime.Now);
+		}
  
 		private Modification[] CreateModifications()
 		{

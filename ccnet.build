@@ -5,7 +5,7 @@
     <!-- PROPERTIES -->
     <property name="debug" value="true"/>
     <property name="verbosity" value="true"/>
-    <property name="version" value="0.2"/>
+    <property name="version" value="0.3.1"/>
     <property name="nunit.output" value="Plain"/>
 
     <!-- CHANGE this property when you want to deploy the webapp to a different URL -->
@@ -221,10 +221,6 @@
 
     <target name="test.unit" depends="compile" description="runs unit tests">
         <nunit2>
-            <test assemblyname="${build.dir}\ccnet.controlpanel.exe"
-                appconfig="${build.dir}\ccnet.controlpanel.exe.config" type="${nunit.output}"/>
-        </nunit2>
-        <nunit2>
             <test assemblyname="${build.dir}\${core.dll}" appconfig="${build.dir}\ccnet.core.dll.config" type="${nunit.output}"/>
         </nunit2>
         <nunit2>
@@ -232,6 +228,10 @@
         </nunit2>
         <nunit2>
             <test assemblyname="${build.dir}\${console.exe}" type="${nunit.output}"/>
+        </nunit2>
+       	<nunit2>
+            <test assemblyname="${build.dir}\ccnet.controlpanel.exe"
+                appconfig="${build.dir}\ccnet.controlpanel.exe.config" type="${nunit.output}"/>
         </nunit2>
     </target>
 
@@ -425,7 +425,8 @@
         </csc>
     </target>
 
-    <!-- Comment by MR - what's this for? -->
+    <!-- Update CCNET configuration file by using XSL transformation 
+    	 used to upgrade configuration file from one version to another -->
     <target name="updateConfig">
         <property name="in" value="etc/ccnet_update.config"/>
         <property name="out" value="etc/ccnet_new.config"/>

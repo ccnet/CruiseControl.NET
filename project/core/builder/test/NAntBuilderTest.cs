@@ -67,7 +67,7 @@ namespace tw.ccnet.core.builder.test
 			string expected = "hello martin";
 
 			IntegrationResult result = new IntegrationResult();
-			_builder.Build(result);
+			_builder.Run(result);
 			string errorMessage = String.Format("{0} not contained in {1}",expected, result.Output);
 			Assertion.Assert(errorMessage, StringUtil.StringContains(result.Output.ToString(), expected));
 		}
@@ -80,7 +80,7 @@ namespace tw.ccnet.core.builder.test
 			_builder.BuildArgs = "";
 			_builder.BaseDirectory = TempFileUtil.GetTempPath(TEMP_DIR);
 			Assertion.Assert("invalidfile.bat should not exist!",! File.Exists(_builder.Executable));
-			_builder.Build(new IntegrationResult());
+			_builder.Run(new IntegrationResult());
 		}
 		
 		public void TestBuildSucceed()
@@ -91,7 +91,7 @@ namespace tw.ccnet.core.builder.test
 			_builder.BaseDirectory = TempFileUtil.GetTempPath(TEMP_DIR);
 			_builder.Targets = new string[] {"success" };
 			IntegrationResult result = new IntegrationResult();
-			_builder.Build(result);
+			_builder.Run(result);
 			
 			Assertion.Assert("test build should succeed", result.Succeeded);
 			Assertion.Assert(StringUtil.StringContains(result.Output.ToString(), "I am success itself"));
@@ -105,7 +105,7 @@ namespace tw.ccnet.core.builder.test
 			_builder.BaseDirectory = TempFileUtil.GetTempPath(TEMP_DIR);
 			_builder.Targets = new string[] {"fail" };
 			IntegrationResult result = new IntegrationResult();
-			_builder.Build(result);
+			_builder.Run(result);
 
 			Assertion.Assert("test build should fail", result.Failed);
 			Assertion.Assert(StringUtil.StringContains(result.Output.ToString(), "I am failure itself"));
@@ -120,7 +120,7 @@ namespace tw.ccnet.core.builder.test
 			_builder.BuildArgs = "";
 			_builder.BuildFile = "invalidbuildfile";
 			IntegrationResult result = new IntegrationResult();
-			_builder.Build(result);
+			_builder.Run(result);
 			Assertion.Fail("Build should fail when invoked with missing buildfile, but didn't!");
 		}
 
@@ -147,7 +147,7 @@ namespace tw.ccnet.core.builder.test
 			_builder.Targets = new string[] {"checkLabel" };
 			IntegrationResult result = new IntegrationResult();
 			result.Label = "ATestLabel";
-			_builder.Build(result);
+			_builder.Run(result);
 			
 			Assertion.Assert("test build should succeed", result.Succeeded);
 			Assertion.Assert(StringUtil.StringContains(result.Output.ToString(), "ATestLabel"));

@@ -1,5 +1,6 @@
 using System;
 using System.Diagnostics;
+using System.IO;
 using NUnit.Framework;
 using NMock;
 using NMock.Constraints;
@@ -102,7 +103,7 @@ namespace tw.ccnet.core.test
 		public void Build_WithModifications()
 		{
 			DynamicMock builderMock = new DynamicMock(typeof(IBuilder));
-			builderMock.Expect("Build", new IsAnything());
+			builderMock.Expect("Run", new IsAnything());
 
 			DynamicMock stateMock = new DynamicMock(typeof(IStateManager));
 			stateMock.ExpectAndReturn("Exists", false);
@@ -129,7 +130,7 @@ namespace tw.ccnet.core.test
 		public void Build_NoModifications()
 		{
 			DynamicMock builderMock = new DynamicMock(typeof(IBuilder));
-			builderMock.ExpectNoCall("Build");
+			builderMock.ExpectNoCall("Run");
 
 			DynamicMock stateMock = new DynamicMock(typeof(IStateManager));
 			stateMock.ExpectAndReturn("Exists", false);
@@ -243,7 +244,7 @@ namespace tw.ccnet.core.test
 			AssertNotNull(_project.CurrentIntegration.EndTime);
 			Assert(publisher.Published);
 			stateMock.Verify();
-			AssertEquals(2, _listener.Traces.Count);
+			AssertEquals(3, _listener.Traces.Count);
 		}
 
 		[Test]
@@ -268,7 +269,7 @@ namespace tw.ccnet.core.test
 			AssertNotNull(_project.CurrentIntegration.EndTime);
 			Assert(publisher.Published);
 			mock.Verify();
-			AssertEquals(2, _listener.Traces.Count);
+			AssertEquals(3, _listener.Traces.Count);
 		}
 
 		[Test]
@@ -294,7 +295,7 @@ namespace tw.ccnet.core.test
 			Assert(publisher.Published);
 			mock.Verify();
 			AssertEquals("1.2.1", ((MockSourceControl)_project.SourceControl).Label);
-			AssertEquals(3, _listener.Traces.Count);
+			AssertEquals(4, _listener.Traces.Count);
 		}
 
 		[Test]
@@ -319,7 +320,7 @@ namespace tw.ccnet.core.test
 			AssertNotNull(_project.CurrentIntegration.EndTime);
 			Assert(publisher.Published);
 			mock.Verify();
-			AssertEquals(4, _listener.Traces.Count);
+			AssertEquals(5, _listener.Traces.Count);
 		}
 
 		[Test]
@@ -344,7 +345,7 @@ namespace tw.ccnet.core.test
 			AssertNotNull(_project.CurrentIntegration.EndTime);
 			Assert(publisher.Published);
 			mock.Verify();
-			AssertEquals(4, _listener.Traces.Count);
+			AssertEquals(5, _listener.Traces.Count);
 		}
 
 		[Test]
@@ -381,6 +382,5 @@ namespace tw.ccnet.core.test
 			if (result != null) mock.ExpectAndReturn("LoadRecent", result, null);
 			return mock;
 		}
-
 	}
 }

@@ -15,6 +15,11 @@ namespace tw.ccnet.core.label
 				IncrementLabel(previousResult.Label) : previousResult.Label;
 		}
 
+		public void Run(IntegrationResult result)
+		{
+			result.Label = Generate(result);
+		}
+
 		protected string IncrementLabel(string label)
 		{
 			int newLabel = int.Parse(label);

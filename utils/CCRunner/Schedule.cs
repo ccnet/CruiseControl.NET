@@ -1,11 +1,16 @@
 using System;
 using tw.ccnet.remote;
 
-namespace CCRunner
+namespace CCNet.CCRunner
 {
-	public class Schedule : MarshalByRefObject, ISchedule
+	[Serializable]
+	public class Schedule : ISchedule
 	{
 		private int runs = 0; 
+
+		public Schedule()
+		{
+		}
 
 		public bool ForceBuild 
 		{ 
@@ -25,6 +30,16 @@ namespace CCRunner
 		public void Update()
 		{
 			runs++;
+		}
+
+		public override bool Equals(object obj)
+		{
+			return (obj is Schedule) && runs == ((Schedule)obj).runs;
+		}
+
+		public override int GetHashCode()
+		{
+			return runs;
 		}
 	}
 }

@@ -16,7 +16,6 @@ namespace tw.ccnet.core.sourcecontrol
 		internal const string DELIMITER_UNVERSIONED_START = "*****  ";
 		internal const string DELIMITER_UNVERSIONED_END = "  *****";
 
-
 		public Modification[] Parse(TextReader history)
 		{
 			string[] entries = this.ReadAllEntries(history);
@@ -110,19 +109,29 @@ namespace tw.ccnet.core.sourcecontrol
 
 	internal abstract class VSSParser 
 	{
-		protected string entry;
 		private static readonly Regex REGEX_USER_DATE_LINE = 
 			new Regex(@"User:\s+([\w\.]+)\s+Date:\s+(.+)\s+Time:\s+(.+)$",RegexOptions.Multiline);
-
 		private static readonly Regex REGEX_FILE_NAME = new Regex(@"\*+([\w\s\.]+)", RegexOptions.Multiline);
 
-		private static readonly DateTimeFormatInfo DATE_FORMAT_INFO = CreateDateTimeInfo();
+		private DateTimeFormatInfo dateTimeFormatInfo;
+		protected string entry;
 
 		internal const string DELIMITER_VERSIONED_START = "*****************  ";
 
-		public VSSParser(string entry) 
+		public VSSParser(string entry) : this(entry, CultureInfo.CurrentCulture) { }
+
+		public VSSParser(string entry, CultureInfo culture)
 		{
 			this.entry = entry;
+			this.dateTimeFormatInfo = CreateDateTimeInfo(culture);
+		}
+
+		private DateTimeFormatInfo CreateDateTimeInfo(CultureInfo culture) 
+		{
+			DateTimeFormatInfo dateTimeFormatInfo = culture.DateTimeFormat.Clone() as DateTimeFormatInfo;
+			dateTimeFormatInfo.AMDesignator = "a";
+			dateTimeFormatInfo.PMDesignator = "p";
+			return dateTimeFormatInfo;
 		}
 
 		public virtual Modification parse() 
@@ -133,7 +142,6 @@ namespace tw.ccnet.core.sourcecontrol
 			ParseComment(mod);
 			mod.FileName = this.parseFileName();
 			mod.FolderName = this.parseFolderName();
-
 			return mod;
 		}
 
@@ -143,20 +151,16 @@ namespace tw.ccnet.core.sourcecontrol
 
 		internal void ParseUsernameAndDate(Modification mod)
 		{
-			//Console.WriteLine("user name date {0}", entry);
 			Match match = REGEX_USER_DATE_LINE.Match(entry);
 			
 			mod.UserName = match.Groups[1].Value.Trim();
-			//Console.WriteLine("username {0}", mod.UserName);
-			
 			string date = match.Groups[2].Value.Trim();
 			string time = match.Groups[3].Value.Trim();
-			//Console.WriteLine("date {0}", date);
-			//Console.WriteLine("time {0}", time);
 
-			// vss gives am and pm as a and p, so we stuff in an m
-			string dateAndTime = String.Format("{0};{1}m", date, time);
-			mod.ModifiedTime = DateTime.Parse(dateAndTime, DATE_FORMAT_INFO);
+			// vss gives am and pm as a and p, so we append an m
+			string suffix = (time.EndsWith("a") || time.EndsWith("p")) ? "m" : String.Empty;
+			string dateAndTime = String.Format("{0};{1}{2}", date, time, suffix);
+			mod.ModifiedTime = DateTime.Parse(dateAndTime, dateTimeFormatInfo);
 		}
 
 		internal void ParseComment(Modification mod)
@@ -198,20 +202,12 @@ namespace tw.ccnet.core.sourcecontrol
 
 			return match.Groups[1].Value.Trim();
 		}
-
-		private static DateTimeFormatInfo CreateDateTimeInfo() 
-		{
-			DateTimeFormatInfo dfi = new DateTimeFormatInfo();
-			dfi.AMDesignator = "a";
-			dfi.PMDesignator = "p";
-			dfi.MonthDayPattern = @"M-dd-yy;h:mmt";
-			return dfi;
-		}
 	}
 
 	internal class CheckInParser : VSSParser 
 	{
-		public CheckInParser(string entry) : base(entry){}
+		public CheckInParser(string entry) : base(entry) {}
+		public CheckInParser(string entry, CultureInfo culture) : base(entry, culture) {}
 
 		internal override void setType(Modification mod) 
 		{

@@ -1,5 +1,6 @@
 using System;
 using System.IO;
+using System.Globalization;
 using NUnit.Framework;
 
 namespace tw.ccnet.core.sourcecontrol.test
@@ -85,6 +86,40 @@ namespace tw.ccnet.core.sourcecontrol.test
 			Assertion.AssertEquals(expectedUsername, mod.UserName);
 			Assertion.AssertEquals(expectedDate, mod.ModifiedTime);
 		}
+
+		[Test]
+		public void ParseUsernameAndUKDate()
+		{
+			Modification mod = new Modification();
+			string line = "foo\r\nUser: Admin        Date:  16/9/02   Time:  22:40\r\n";
+			CheckInParser parser = new CheckInParser(line, new CultureInfo("en-GB"));
+			parser.ParseUsernameAndDate(mod);
+
+			Assertion.AssertEquals("Admin", mod.UserName);
+			Assertion.AssertEquals(new DateTime(2002, 9, 16, 22, 40, 0), mod.ModifiedTime);
+		}
+
+//		[Test]
+//		public void ParseUKDate()
+//		{
+//			CultureInfo culture = ;
+//			DateTimeFormatInfo info = culture.DateTimeFormat;
+//			info.AMDesignator = "a";
+//			info.PMDesignator = "p";
+//			Assertion.AssertEquals(new DateTime(2002, 9, 16, 22, 40, 0), DateTime.Parse("16/9/02;22:40", info));
+//			Assertion.AssertEquals(new DateTime(2002, 9, 16, 2, 40, 0), DateTime.Parse("16/9/02;2:40", info));
+//		}
+//
+//		[Test]
+//		public void ParseUSDate()
+//		{
+//			CultureInfo culture = new CultureInfo("en-US");
+//			DateTimeFormatInfo info = culture.DateTimeFormat;
+//			info.AMDesignator = "a";
+//			info.PMDesignator = "p";
+//			Assertion.AssertEquals(new DateTime(2002, 9, 16, 22, 40, 0), DateTime.Parse("9/16/02;10:40p", info));
+//			Assertion.AssertEquals(new DateTime(2002, 9, 16, 2, 40, 0), DateTime.Parse("9/16/02;2:40a", info));
+//		}
 
 		[Test]
 		public void TestParseUsernameAndDateWithPeriod() 

@@ -2,7 +2,7 @@ using System;
 
 namespace tw.ccnet.core
 {
-	public interface ILabeller
+	public interface ILabeller : ITask
 	{
 		string Generate(IntegrationResult previousLabel);
 	}

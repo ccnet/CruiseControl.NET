@@ -19,6 +19,11 @@ namespace tw.ccnet.core.sourcecontrol
 			get;
 		}
 
+		public void Run(IntegrationResult result)
+		{
+			result.Modifications = GetModifications(result.LastModificationDate, DateTime.Now);
+		}
+
 		// TODO: is it necessary to specify to date -- just want changes after from date
 		public Modification[] GetModifications(DateTime from, DateTime to)
 		{

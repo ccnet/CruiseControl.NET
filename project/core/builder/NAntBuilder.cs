@@ -79,7 +79,7 @@ namespace tw.ccnet.core.builder
 
 		public string LabelToApply = "NO-LABEL";
 		
-		public void Build(IntegrationResult result)
+		public void Run(IntegrationResult result)
 		{
 			if (result.Label != null && result.Label != "")
 			{
