@@ -238,6 +238,14 @@ namespace ThoughtWorks.CruiseControl.Core.Builder.Test
 		}
 
 		[Test]
+		public void ShouldWorkForSingleTargetWhenSettingThroughPresentationValue()
+		{
+			_builder.TargetsForPresentation = "target1";
+			AssertEquals("target1", _builder.Targets[0]);
+			AssertEquals(1, _builder.Targets.Length);
+		}
+
+		[Test]
 		public void ShouldSplitAtNewLineWhenSettingThroughPresentationValue()
 		{
 			_builder.TargetsForPresentation = "target1" + Environment.NewLine + "target2";

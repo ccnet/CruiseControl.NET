@@ -40,7 +40,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.MVC.Cruise
 			nantBuilder.ConfiguredBaseDirectory = request.GetText("Project.Builder.BaseDirectory");
 			nantBuilder.BuildFile = request.GetText("Project.Builder.BuildFile");
 			nantBuilder.BuildArgs = request.GetText("Project.Builder.BuildArgs");
-			nantBuilder.TargetsForPresentation = request.GetText("Project.Builder.Targets");
+			nantBuilder.TargetsForPresentation = request.GetText("Project.Builder.TargetsForPresentation");
 			nantBuilder.BuildTimeoutSeconds = request.GetInt("Project.Builder.BuildTimeoutSeconds", 0); // Todo - defaults from config?
 			project.Builder = nantBuilder;
 

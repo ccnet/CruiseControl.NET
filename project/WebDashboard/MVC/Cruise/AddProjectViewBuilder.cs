@@ -18,34 +18,35 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.MVC.Cruise
 		{
 			return Table(
 				TR(TD("Servers"), TD(DropDown("ServersDropDown", model.ServerNames, model.SelectedServerName))),
-				TR(TD(), TD(BuildProjectView(model.Project)))
+				TR(TD(), TD(BuildProjectView(model.Project))),
+				TR(TD(), TD("* denotes currently mandatory fields"))
 				);
 		}
 
 		private Control BuildProjectView(Project project)
 		{
 			return Table(
-				TR(TD("Project Name"), TD(TextBox("Project.Name", project.Name))),
+				TR(TD("Project Name *"), TD(TextBox("Project.Name", project.Name))),
 				TR(TD("Source Control"), TD("Perforce")),
 				TR(TD(), TD(BuildPerforceView((P4) project.SourceControl))),
 				TR(TD("Builder"), TD("NAnt")),
 				TR(TD(), TD(BuildNAntBuilderView((NAntBuilder) project.Builder))),
 				TR(TD("Files To Merge"), TD(MultiLineTextBox("Project.Tasks.0.MergeFilesForPresentation", ((MergeFilesTask) project.Tasks[0]).MergeFilesForPresentation))),
-				TR(TD("Output Log Directory"), TD(TextBox("Project.Publishers.0.LogDir", ((XmlLogPublisher) project.Publishers[0]).LogDir))),
-				TR(TD("Reporting URL"), TD(TextBox("Project.WebURL", project.WebURL)))
+				TR(TD("Output Log Directory *"), TD(TextBox("Project.Publishers.0.LogDir", ((XmlLogPublisher) project.Publishers[0]).LogDir))),
+				TR(TD("Reporting URL *"), TD(TextBox("Project.WebURL", project.WebURL)))
 				);
 		}
 
 		private Control BuildPerforceView(P4 p4)
 		{
 			return Table(
-				TR(TD("View"), TD(TextBox("Project.SourceControl.View", p4.View))),
+				TR(TD("View *"), TD(TextBox("Project.SourceControl.View", p4.View))),
 				TR(TD("Executable"), TD(TextBox("Project.SourceControl.Executable", p4.Executable))),
 				TR(TD("Client"), TD(TextBox("Project.SourceControl.Client", p4.Client))),
 				TR(TD("User"), TD(TextBox("Project.SourceControl.User", p4.User))),
 				TR(TD("Port"), TD(TextBox("Project.SourceControl.Port", p4.Port))),
 				TR(TD("ApplyLabel"), TD(BooleanCheckBox("Project.SourceControl.ApplyLabel", p4.ApplyLabel))),
-				TR(TD("AutoGetSource"), TD(BooleanCheckBox("Project.SourceControl.AutoGetSource", p4.AutoGetSource)))
+				TR(TD("AutoGetSource *"), TD(BooleanCheckBox("Project.SourceControl.AutoGetSource", p4.AutoGetSource)))
 				);
 		}
 
@@ -53,12 +54,12 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.MVC.Cruise
 		{
 			// ToDo - Target List
 			return Table(
-				TR(TD("Base Directory"), TD(TextBox("Project.Builder.BaseDirectory", nantBuilder.ConfiguredBaseDirectory))),
-				TR(TD("Executable"), TD(TextBox("Project.Builder.Executable", nantBuilder.Executable))),
-				TR(TD("BuildFile"), TD(TextBox("Project.Builder.BuildFile", nantBuilder.BuildFile))),
+				TR(TD("Base Directory *"), TD(TextBox("Project.Builder.BaseDirectory", nantBuilder.ConfiguredBaseDirectory))),
+				TR(TD("Executable *"), TD(TextBox("Project.Builder.Executable", nantBuilder.Executable))),
+				TR(TD("BuildFile *"), TD(TextBox("Project.Builder.BuildFile", nantBuilder.BuildFile))),
 				TR(TD("BuildArgs"), TD(TextBox("Project.Builder.BuildArgs", nantBuilder.BuildArgs))),
 				TR(TD("Targets"), TD(MultiLineTextBox("Project.Builder.TargetsForPresentation", nantBuilder.TargetsForPresentation))),
-				TR(TD("BuildTimeoutSeconds"), TD(TextBox("Project.Builder.BuildTimeoutSeconds", nantBuilder.BuildTimeoutSeconds.ToString())))
+				TR(TD("BuildTimeoutSeconds *"), TD(TextBox("Project.Builder.BuildTimeoutSeconds", nantBuilder.BuildTimeoutSeconds.ToString())))
 				);
 		}
 		/*
