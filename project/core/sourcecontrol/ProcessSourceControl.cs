@@ -55,7 +55,6 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			else if (result.TimedOut)
 				throw new CruiseControlException("Source control operation has timed out.");
 
-			Console.Out.WriteLine("result.result = " + result.StandardOutput);
 			return result;
 		}
 

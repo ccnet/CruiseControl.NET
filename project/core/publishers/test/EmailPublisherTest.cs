@@ -7,6 +7,7 @@ using ThoughtWorks.CruiseControl.Core.Test;
 using ThoughtWorks.CruiseControl.Core.Util;
 using Exortech.NetReflector;
 using ThoughtWorks.CruiseControl.Remote;
+using ThoughtWorks.CruiseControl.Core.Publishers;
 
 namespace ThoughtWorks.CruiseControl.Core.Publishers.Test
 {
@@ -41,8 +42,22 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers.Test
 		public void ShouldNotSendMessageIfRecipientIsNotSpecifiedAndBuildIsSuccessful()
 		{
 			_publisher = new EmailPublisher();
-			_publisher.PublishIntegrationResults(null, IntegrationResultMother.CreateSuccessful());
+			_publisher.EmailGateway = _gateway;
+			_publisher.EmailUsers.Add("bar", new EmailUser("bar", "foo", "bar@foo.com"));
+			_publisher.EmailGroups.Add("foo", new EmailGroup("foo", EmailGroup.NotificationType.Change));
+			_publisher.PublishIntegrationResults(null, IntegrationResultMother.CreateStillSuccessful());
 			AssertEquals(0, _gateway.SentMessages.Count);
+		}
+
+		[Test]
+		public void ShouldSendMessageIfRecipientIsNotSpecifiedAndBuildFailed()
+		{
+			_publisher = new EmailPublisher();
+			_publisher.EmailGateway = _gateway;
+			_publisher.EmailUsers.Add("bar", new EmailUser("bar", "foo", "bar@foo.com"));
+			_publisher.EmailGroups.Add("foo", new EmailGroup("foo", EmailGroup.NotificationType.Change));
+			_publisher.PublishIntegrationResults(null, IntegrationResultMother.CreateFailed());
+			AssertEquals(1, _gateway.SentMessages.Count);
 		}
 
 		[Test]

@@ -267,15 +267,14 @@ a:hover { color:#FC0; }
 		internal string CreateRecipientList(IntegrationResult result)
 		{
 			string[] always = CreateNotifyList(EmailGroup.NotificationType.Always);
-			string[] modifiers = CreateModifiersList(result.Modifications);
-
 			if (BuildStateChanged(result))
 			{
 				string[] change = CreateNotifyList(EmailGroup.NotificationType.Change);
-				return StringUtil.JoinUnique(", ", always, change, modifiers);
+				return StringUtil.JoinUnique(", ", always, change);
 			}
 			else
 			{
+				string[] modifiers = CreateModifiersList(result.Modifications);
 				return StringUtil.JoinUnique(", ", always, modifiers);
 			}
 		}

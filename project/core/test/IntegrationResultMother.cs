@@ -47,5 +47,12 @@ namespace ThoughtWorks.CruiseControl.Core.Test
 			result.Status = IntegrationStatus.Exception;
 			return result;
 		}
+
+		public static IntegrationResult CreateStillSuccessful()
+		{
+			IntegrationResult result = CreateSuccessful();
+			result.LastIntegrationStatus = IntegrationStatus.Success;
+			return result;
+		}
 	}
 }

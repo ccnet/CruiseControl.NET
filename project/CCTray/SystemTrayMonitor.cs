@@ -496,7 +496,7 @@ namespace ThoughtWorks.CruiseControl.CCTray
 
 		void contextMenu_Popup(object sender, System.EventArgs e)
 		{
-			mnuForceBuild.Enabled = (statusMonitor.ProjectStatus.Activity==ProjectActivity.Sleeping);
+			mnuForceBuild.Enabled = statusMonitor.ProjectStatus != null && statusMonitor.ProjectStatus.Activity==ProjectActivity.Sleeping;
 		}
 
 		#endregion

@@ -30,7 +30,7 @@ namespace ThoughtWorks.CruiseControl.CCTray
 		Timer pollTimer;
 		IContainer components;
 
-		ProjectStatus _currentProjectStatus;
+		ProjectStatus _currentProjectStatus = new ProjectStatus(CruiseControlStatus.Unknown, IntegrationStatus.Unknown, ProjectActivity.Unknown, "unknown", "http://ccnet.thoughtworks.com", DateTime.MinValue, "unknown");
 		Settings _settings;
 
 		#endregion
@@ -192,8 +192,6 @@ namespace ThoughtWorks.CruiseControl.CCTray
 
 		#endregion
 
-		#region Protected virtual event raisers
-
 		protected virtual void OnPolled(PolledEventArgs e)
 		{
 			if (Polled!=null)
@@ -212,11 +210,6 @@ namespace ThoughtWorks.CruiseControl.CCTray
 				Error(this, e);
 		}
 
-
-		#endregion
-
-		#region Remoting communication
-
 		ProjectStatus [] GetRemoteProjectStatus()
 		{
 			ICruiseManager remoteCC = GetRemoteCruiseControlProxy();
@@ -232,25 +225,17 @@ namespace ThoughtWorks.CruiseControl.CCTray
 
 			if (Settings.ConnectionMethod==ConnectionMethod.WebService)
 			{
-				return (ICruiseManager)new ThoughtWorks.CruiseControl.WebServiceProxy.CCNetManagementProxy(Settings.RemoteServerUrl);
+				return new ThoughtWorks.CruiseControl.WebServiceProxy.CCNetManagementProxy(Settings.RemoteServerUrl);
 			}
 
 			throw new NotImplementedException("Connection method " + Settings.ConnectionMethod + " is not implemented.");
 		}
-
-
-		#endregion
-
-		#region Forcing a build
 
 		public void ForceBuild(string projectName)
 		{
 			ICruiseManager remoteCC = GetRemoteCruiseControlProxy();
 			remoteCC.ForceBuild(projectName);
 		}
-
-
-		#endregion
 
 		#region Build transitions
 
