@@ -91,7 +91,7 @@ namespace ThoughtWorks.CruiseControl.Core.Config
 		{
 			if (! File.Exists(ConfigFile))
 			{
-				throw new ConfigurationException("Specified configuration file does not exist: " + ConfigFile);
+				throw new ConfigurationException("Specified configuration file does not exist: " + Path.GetFullPath(ConfigFile));
 			}
 		}
 
@@ -106,8 +106,11 @@ namespace ThoughtWorks.CruiseControl.Core.Config
 				Configuration configuration = new Configuration();
 				foreach (XmlNode node in configXml.DocumentElement)
 				{
-					IProject project = NetReflector.Read(node, typeTable) as IProject;
-					configuration.AddProject(project);
+                    if (!(node is XmlComment))
+                    {
+                        IProject project = NetReflector.Read(node, typeTable) as IProject;
+                        configuration.AddProject(project);
+                    }
 				}
 				return configuration;
 			}

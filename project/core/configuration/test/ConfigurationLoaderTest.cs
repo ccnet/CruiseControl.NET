@@ -109,6 +109,15 @@ namespace ThoughtWorks.CruiseControl.Core.Config.Test
 		{
 			loader.PopulateProjectsFromXml(XmlUtil.CreateDocument("<loader/>"));
 		}
+        
+        [Test]
+        // [CCNET-63] XML comments before project tag was causing NetReflectorException
+        public void PopulateProjectsFromXml_WithComments()
+        {
+            string projectXml = @"<!-- A Comment -->" + ConfigurationFixture.GenerateProjectXml("test");
+            IConfiguration configuration = loader.PopulateProjectsFromXml(ConfigurationFixture.GenerateConfig(projectXml));
+            ValidateProject(configuration, "test");
+        }
 
 		[Test]
 		public void PopulateCustomProjectFromXml()
