@@ -5,9 +5,9 @@
     <xsl:output method="html"/>
 
     <xsl:template match="/">
-		<xsl:variable name="error.messages" select="(/cruisecontrol//buildresults//message[(contains(text(), ' error') and not (contains(text(), '0 error')))]) | (//builderror//message) " />
+		<xsl:variable name="error.messages" select="(/cruisecontrol//buildresults//message[((contains(text(), ' error') and not (contains(text(), '0 error')))) or @level='Error']) | (//builderror//message) " />
         <xsl:variable name="error.messages.count" select="count($error.messages)" />
-        <xsl:variable name="warning.messages" select="/cruisecontrol//buildresults//message[(contains(text(), ' warning') and not (contains(text(), '0 warning')))]" />
+        <xsl:variable name="warning.messages" select="/cruisecontrol//buildresults//message[((contains(text(), ' warning') and not (contains(text(), '0 warning'))) or @level='Warning')]" />
         <xsl:variable name="warning.messages.count" select="count($warning.messages)" />
         <xsl:variable name="total" select="count($error.messages) + count($warning.messages)"/>
 
