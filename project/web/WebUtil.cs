@@ -51,9 +51,11 @@ namespace ThoughtWorks.CruiseControl.Web
 			return multilineString.Replace(Environment.NewLine, @"<br>");
 		}
 
+		private static string LogDir { get { return ConfigurationSettings.AppSettings["logDir"]; } }
+
 		public static DirectoryInfo GetLogDirectory(HttpContext context)
 		{
-			string dirName = Configuration.LogDir;
+			string dirName = LogDir;
 			DirectoryInfo logDirectory = new DirectoryInfo(dirName);
 			if (!logDirectory.Exists)
 			{

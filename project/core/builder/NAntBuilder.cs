@@ -18,7 +18,6 @@ namespace ThoughtWorks.CruiseControl.Core.Builder
 		public const string DEFAULT_LABEL = "NO-LABEL";
 		public const string DEFAULT_LOGGER = "NAnt.Core.XmlLogger";
 
-		private string _buildArgs;
 		private ProcessExecutor _executor;
 
 		public NAntBuilder() : this(new ProcessExecutor()) { }

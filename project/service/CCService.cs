@@ -6,7 +6,6 @@ using System.IO;
 using System.ServiceProcess;
 
 using ThoughtWorks.CruiseControl.Core;
-using ThoughtWorks.CruiseControl.Core.Config;
 using ThoughtWorks.CruiseControl.Core.Util;
 using ThoughtWorks.CruiseControl.Remote;
 
@@ -74,11 +73,14 @@ namespace ThoughtWorks.CruiseControl.Service
 			server.Start();
 		}
 
+		private string ConfigFileName { get { return ConfigurationSettings.AppSettings["ccnet.config"]; } }
+		private string Remoting       { get { return ConfigurationSettings.AppSettings["remoting"]; } }
+
 		private string GetConfigFilename()
 		{
 			string appDirectory = AppDomain.CurrentDomain.BaseDirectory;
 			string defaultConfigFile = appDirectory + @"\ccnet.config";
-			string configFile = Configuration.ConfigFileName;
+			string configFile = ConfigFileName;
 			if (configFile == null || configFile.Trim().Length == 0)
 				configFile = defaultConfigFile;
 			return configFile;
@@ -86,7 +88,7 @@ namespace ThoughtWorks.CruiseControl.Service
 
 		private bool UseRemoting()
 		{
-			return (Configuration.Remoting != null && Configuration.Remoting.Trim().ToLower() == "on");
+			return (Remoting != null && Remoting.Trim().ToLower() == "on");
 		}
  
 		/// <summary>
