@@ -222,8 +222,8 @@ namespace ThoughtWorks.CruiseControl.Remote.Monitor
 		public static Sounds CreateDefaultSettings()
 		{
 			Sounds defaults = new Sounds();
-			defaults.AnotherSuccessfulBuildSound = new Sound("another-success.wav");
-			defaults.AnotherFailedBuildSound = new Sound("another-failure.wav");
+			defaults.AnotherSuccessfulBuildSound = new Sound("still-successful.wav");
+			defaults.AnotherFailedBuildSound = new Sound("still-failing.wav");
 			defaults.BrokenBuildSound = new Sound("broken.wav");
 			defaults.FixedBuildSound = new Sound("fixed.wav");
 			return defaults;

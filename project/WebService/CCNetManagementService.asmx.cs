@@ -23,7 +23,7 @@ namespace ThoughtWorks.CruiseControl.WebService
 		}
 
 		[WebMethod]
-		public ProjectStatus GetProjectStatus()
+		public ProjectStatus [] GetProjectStatus()
 		{
 			return BackingCruiseManager.GetProjectStatus();
 		}

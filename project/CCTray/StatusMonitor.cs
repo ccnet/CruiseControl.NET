@@ -151,7 +151,9 @@ namespace ThoughtWorks.CruiseControl.Remote.Monitor
 			// check for any change in status, and raise events accordingly
 			try
 			{
-				ProjectStatus latestProjectStatus = GetRemoteProjectStatus();
+				// todo: fix me - we need to have the name of the project we're looking at here, so we can
+				// report on the right one - jeremy
+				ProjectStatus latestProjectStatus = GetRemoteProjectStatus()[0];
 
 				OnPolled(new PolledEventArgs(latestProjectStatus));
 
@@ -213,7 +215,7 @@ namespace ThoughtWorks.CruiseControl.Remote.Monitor
 
 		#region Remoting communication
 
-		ProjectStatus GetRemoteProjectStatus()
+		ProjectStatus [] GetRemoteProjectStatus()
 		{
 			ICruiseManager remoteCC = GetRemoteCruiseControlProxy();
 			return remoteCC.GetProjectStatus();

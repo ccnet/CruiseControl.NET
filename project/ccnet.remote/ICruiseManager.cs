@@ -14,8 +14,9 @@ namespace ThoughtWorks.CruiseControl.Remote
 
 		/// <summary>
 		/// Gets information about the last build status, current activity and project name.
+		/// for all projects on a cruise server
 		/// </summary>
-		ProjectStatus GetProjectStatus();
+		ProjectStatus [] GetProjectStatus();
 
 		/// <summary>
 		/// Forces a build for the named project.

@@ -27,12 +27,26 @@ namespace ThoughtWorks.CruiseControl.Core
 			return _cruiseControl.Status;
 		}				
 
-		public ProjectStatus GetProjectStatus()
+		public ProjectStatus [] GetProjectStatus()
 		{
-			IEnumerator e =_cruiseControl.Configuration.GetEnumerator();
-			e.MoveNext();
-			Project p = (Project)e.Current;
-			return new ProjectStatus(GetStatus(), p.GetLatestBuildStatus(), p.CurrentActivity, p.Name, p.WebURL, p.LastIntegrationResult.StartTime, p.LastIntegrationResult.Label); 
+			ArrayList projects = new ArrayList();
+			foreach (Project project in _cruiseControl.Configuration) 
+			{
+				projects.Add(new ProjectStatus(GetStatus(), 
+					project.GetLatestBuildStatus(), 
+					project.CurrentActivity, 
+					project.Name, 
+					project.WebURL, 
+					project.LastIntegrationResult.StartTime, 
+					project.LastIntegrationResult.Label));
+			}
+
+			ProjectStatus [] result = new ProjectStatus[projects.Count];
+			for (int i = 0; i < result.Length; i++)
+			{
+				result[i] = (ProjectStatus) projects[i];
+			}
+			return result;				
 		}
 
 		public void ForceBuild(string projectName)

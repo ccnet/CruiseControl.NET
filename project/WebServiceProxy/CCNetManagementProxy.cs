@@ -34,16 +34,16 @@ namespace ThoughtWorks.CruiseControl.WebServiceProxy
 			}
 		}
 
-		public ProjectStatus GetProjectStatus()
+		public ProjectStatus [] GetProjectStatus()
 		{
 			Generated.ProjectStatus serviceStatus = Service.GetProjectStatus();
-			return new ProjectStatus((CruiseControlStatus) serviceStatus.Status, 
-				(IntegrationStatus) serviceStatus.BuildStatus, 
-				(ProjectActivity) serviceStatus.Activity,
-				serviceStatus.Name,
-				serviceStatus.WebURL,
-				serviceStatus.LastBuildDate,
-				serviceStatus.LastBuildLabel);
+			return new ProjectStatus [] {new ProjectStatus((CruiseControlStatus) serviceStatus.Status, 
+											(IntegrationStatus) serviceStatus.BuildStatus, 
+											(ProjectActivity) serviceStatus.Activity,
+											serviceStatus.Name,
+											serviceStatus.WebURL,
+											serviceStatus.LastBuildDate,
+											serviceStatus.LastBuildLabel)};
 		}
 
 		public void ForceBuild(string projectName)

@@ -26,7 +26,10 @@ namespace ThoughtWorks.CruiseControl.WebDashboard
 				try
 				{
 					ICruiseManager remoteCC = (ICruiseManager) RemotingServices.Connect(typeof(ICruiseManager), url);
-					statusses.Add(remoteCC.GetProjectStatus());
+					foreach (ProjectStatus status in remoteCC.GetProjectStatus())
+					{
+						statusses.Add(status);
+					}
 				}
 				catch (Exception f)
 				{
