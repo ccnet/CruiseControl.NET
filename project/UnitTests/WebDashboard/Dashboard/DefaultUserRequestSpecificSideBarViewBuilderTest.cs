@@ -98,8 +98,10 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 			// Setup
 			buildNameRetrieverMock.ExpectAndReturn("GetLatestBuildName", "returnedLatestBuildName", "myServer", "myProject");
 			buildNameRetrieverMock.ExpectAndReturn("GetNextBuildName", "returnedNextBuildName", "myServer", "myProject", "myCurrentBuild");
+			buildNameRetrieverMock.ExpectAndReturn("GetPreviousBuildName", "returnedPreviousBuildName", "myServer", "myProject", "myCurrentBuild");
 			urlBuilderMock.ExpectAndReturn("BuildBuildUrl", "latestUrl", "BuildReport.aspx", "myServer", "myProject", "returnedLatestBuildName");
 			urlBuilderMock.ExpectAndReturn("BuildBuildUrl", "nextUrl", "BuildReport.aspx", "myServer", "myProject", "returnedNextBuildName");
+			urlBuilderMock.ExpectAndReturn("BuildBuildUrl", "previousUrl", "BuildReport.aspx", "myServer", "myProject", "returnedPreviousBuildName");
 
 			HtmlAnchor expectedAnchor1 = new HtmlAnchor();
 			expectedAnchor1.HRef = "latestUrl";
@@ -107,12 +109,16 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 			HtmlAnchor expectedAnchor2 = new HtmlAnchor();
 			expectedAnchor2.HRef = "nextUrl";
 			expectedAnchor2.InnerHtml = "Next";
+			HtmlAnchor expectedAnchor3 = new HtmlAnchor();
+			expectedAnchor3.HRef = "previousUrl";
+			expectedAnchor3.InnerHtml = "Previous";
 
 			// Execute
 			HtmlTable table = (HtmlTable) viewBuilder.GetBuildSideBar("myServer", "myProject", "myCurrentBuild");
 
 			Assert(TableContains(table, expectedAnchor1));
 			Assert(TableContains(table, expectedAnchor2));
+			Assert(TableContains(table, expectedAnchor3));
 			
 			// Verify
 			VerifyAll();
