@@ -201,4 +201,9 @@
 			</fileset>
 		</zip>
 	</target>
+	
+	<!-- FOR RUNNING CCNET AGAINST ITSELF -->
+	<target name="ContinuousIntegration" depends="all">
+		<echo message="CI Run for build number ${label-to-apply} successfully completed" />
+	</target>
 </project>

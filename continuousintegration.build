@@ -1,0 +1,24 @@
+<project name="ccnetlaunch" default="go">
+  <target name="go" depends="update,build"/>
+
+  <target name="update">
+	<ifnot propertyexists="cvs.executable">
+		<fail message="cvs.executable property not set, so can't update" />
+	</ifnot>
+	<echo message="CVS Executable at [${cvs.executable}]" />
+    <exec 
+    	basedir="." 
+    	program="${cvs.executable}" 
+    	commandline="-q update -P -d" 
+    />
+  </target>
+
+  <target name="build">
+    <nant 
+    	buildfile="ccnet.build" 
+    	target="ContinuousIntegration" 
+    	inheritall="true"
+    />
+  </target>
+
+</project>
