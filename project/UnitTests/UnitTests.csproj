@@ -189,6 +189,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "CCTrayLib\CCTimeFormatterTest.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "CCTrayLib\FileIconStoreTest.cs"
                     SubType = "Code"
                     BuildAction = "Compile"

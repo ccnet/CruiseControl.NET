@@ -14,7 +14,7 @@ namespace ThoughtWorks.CruiseControl.CCTray
 		[SetUp]
 		public void Init()
 		{
-			DateTime now = new DateTime(2005, 1, 1, 10, 00, 00);
+			DateTime now = new DateTime(2005, 1, 1, 10, 0, 0);
 			ProjectStatus projectStatus = new ProjectStatus(ProjectIntegratorState.Running,
 			                                                IntegrationStatus.Success,
 			                                                ProjectActivity.Building,
@@ -31,7 +31,7 @@ namespace ThoughtWorks.CruiseControl.CCTray
 		[Test]
 		public void ShouldShowProjectDetailsOnToolTip()
 		{
-			Assert.AreEqual("Server: Building\nProject: CCNet\nLast Build: Success (1.0.0.123) \nNext Build in 0 Day(s), 0 Hour(s), 6 Minute(s)", _tooltip.Text);
+			Assert.AreEqual("Server: Building\nProject: CCNet\nLast Build: Success (1.0.0.123) \nNext Build in 6 Minute(s)", _tooltip.Text);
 		}
 	}
 }
