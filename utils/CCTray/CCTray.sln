@@ -1,0 +1,24 @@
+Microsoft Visual Studio Solution File, Format Version 7.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CCTrayManager", "CCTrayManager\CCTrayManager.csproj", "{E5462ED8-0375-418A-B3AA-DFEFCB9DE729}"
+EndProject
+Global
+	GlobalSection(SolutionConfiguration) = preSolution
+		ConfigName.0 = Debug
+		ConfigName.1 = Release
+	EndGlobalSection
+	GlobalSection(ProjectDependencies) = postSolution
+	EndGlobalSection
+	GlobalSection(ProjectConfiguration) = postSolution
+		{E5462ED8-0375-418A-B3AA-DFEFCB9DE729}.Debug.ActiveCfg = Debug|.NET
+		{E5462ED8-0375-418A-B3AA-DFEFCB9DE729}.Debug.Build.0 = Debug|.NET
+		{E5462ED8-0375-418A-B3AA-DFEFCB9DE729}.Release.ActiveCfg = Release|.NET
+		{E5462ED8-0375-418A-B3AA-DFEFCB9DE729}.Release.Build.0 = Release|.NET
+	EndGlobalSection
+	GlobalSection(SolutionItems) = postSolution
+		Item:1 = CCManager.build
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+	EndGlobalSection
+	GlobalSection(ExtensibilityAddIns) = postSolution
+	EndGlobalSection
+EndGlobal
