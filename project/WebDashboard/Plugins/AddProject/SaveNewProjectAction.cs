@@ -1,7 +1,7 @@
-using System.Web.UI;
 using ThoughtWorks.CruiseControl.Core;
 using ThoughtWorks.CruiseControl.WebDashboard.Dashboard;
 using ThoughtWorks.CruiseControl.WebDashboard.IO;
+using ThoughtWorks.CruiseControl.WebDashboard.MVC;
 using ThoughtWorks.CruiseControl.WebDashboard.MVC.Cruise;
 using ThoughtWorks.CruiseControl.WebDashboard.Plugins.ViewProjectReport;
 using ThoughtWorks.CruiseControl.WebDashboard.ServerConnection;
@@ -28,7 +28,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.AddProject
 			this.urlBuilder = urlBuilder;
 		}
 
-		public Control Execute(ICruiseRequest request)
+		public IView Execute(ICruiseRequest request)
 		{
 			AddEditProjectModel model = projectModelGenerator.GenerateModel(request.Request);
 			SetProjectUrlIfOneNotSet(model, new DefaultProjectSpecifier(request.ServerSpecifier, model.Project.Name));

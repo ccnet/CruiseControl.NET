@@ -1,5 +1,5 @@
-using System.Web.UI;
 using ThoughtWorks.CruiseControl.WebDashboard.IO;
+using ThoughtWorks.CruiseControl.WebDashboard.MVC;
 using ThoughtWorks.CruiseControl.WebDashboard.MVC.Cruise;
 
 namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
@@ -19,9 +19,9 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 			this.actionName = actionName;
 		}
 
-		public Control Execute (ICruiseRequest cruiseRequest)
+		public IView Execute (ICruiseRequest cruiseRequest)
 		{
-			return buildLogTransformer.Transform(cruiseRequest.BuildSpecifier, xslFileName);
+			return new DefaultView(buildLogTransformer.Transform(cruiseRequest.BuildSpecifier, xslFileName));
 		}
 
 		public string LinkDescription

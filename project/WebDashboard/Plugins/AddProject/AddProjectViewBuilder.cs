@@ -8,6 +8,7 @@ using ThoughtWorks.CruiseControl.Core.Builder;
 using ThoughtWorks.CruiseControl.Core.Sourcecontrol;
 using ThoughtWorks.CruiseControl.Core.Sourcecontrol.Perforce;
 using ThoughtWorks.CruiseControl.Core.Tasks;
+using ThoughtWorks.CruiseControl.WebDashboard.MVC;
 using ThoughtWorks.CruiseControl.WebDashboard.MVC.View;
 
 namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.AddProject
@@ -18,7 +19,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.AddProject
 		{
 		}
 
-		public Control BuildView(AddEditProjectModel model)
+		public IView BuildView(AddEditProjectModel model)
 		{
 			HtmlTable table = Table();
 			if (model.Status != null && model.Status != "")
@@ -35,7 +36,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.AddProject
 			{
 				table.Rows.Add(TR(TD(Button(model.SaveActionName, "Save")), TD()));
 			}
-			return table;
+			return new DefaultView(table);
 		}
 
 		private Control BuildProjectView(Project project, bool isAdd)

@@ -1,6 +1,7 @@
 using System.Web.UI;
 using ThoughtWorks.CruiseControl.WebDashboard.Dashboard;
 using ThoughtWorks.CruiseControl.WebDashboard.IO;
+using ThoughtWorks.CruiseControl.WebDashboard.MVC;
 using ThoughtWorks.CruiseControl.WebDashboard.MVC.Cruise;
 using ThoughtWorks.CruiseControl.WebDashboard.ServerConnection;
 
@@ -19,7 +20,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.DeleteProject
 			this.farmService = farmService;
 		}
 
-		public Control Execute(ICruiseRequest request)
+		public IView Execute(ICruiseRequest request)
 		{
 			IProjectSpecifier projectSpecifier = request.ProjectSpecifier;
 			bool purgeWorkingDirectory = request.Request.GetChecked("PurgeWorkingDirectory");

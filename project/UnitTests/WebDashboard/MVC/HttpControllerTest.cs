@@ -1,4 +1,5 @@
 using System.Web.UI;
+using System.Web.UI.HtmlControls;
 using NMock;
 using NUnit.Framework;
 using ThoughtWorks.CruiseControl.WebDashboard.MVC;
@@ -11,8 +12,11 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.MVC
 		private DynamicMock mockActionFactory;
 		private DynamicMock mockRequest;
 		private DynamicMock mockAction;
+		private DynamicMock mockView;
+
 		private RequestController controller;
 		private IAction action;
+		private IView view;
 		IRequest request;
 
 		[SetUp]
@@ -21,10 +25,12 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.MVC
 			mockActionFactory = new DynamicMock(typeof(IActionFactory));
 			mockRequest = new DynamicMock(typeof(IRequest));
 			mockAction = new DynamicMock(typeof(IAction));
+			mockView = new DynamicMock(typeof(IView));
 
 			action = (IAction) mockAction.MockInstance;
-
 			request = (IRequest) mockRequest.MockInstance;
+			view = (IView) mockView.MockInstance;
+
 			controller = new RequestController((IActionFactory) mockActionFactory.MockInstance, request);
 		}
 
@@ -33,22 +39,25 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.MVC
 			mockActionFactory.Verify();
 			mockAction.Verify();
 			mockRequest.Verify();
+			mockView.Verify();
 		}
 
 		[Test]
 		public void RunsActionFromFactoryAndPutsResultInParentControl()
 		{
 			/// Setup
+			HtmlGenericControl control = new HtmlGenericControl("div");
 			mockActionFactory.ExpectAndReturn("Create", action, request);
-			Control actionResult = new Control();
-			mockAction.ExpectAndReturn("Execute", actionResult, request);
+			mockAction.ExpectAndReturn("Execute", view, request);
+			mockView.ExpectAndReturn("Control", control);
+
 			Control topLevelControl = new Control();
 
 			/// Execute
 			controller.Do(topLevelControl);
 
 			/// Verify
-			Assert.IsTrue(topLevelControl.Controls.Contains(actionResult));
+			Assert.IsTrue(topLevelControl.Controls.Contains(control));
 			VerifyAll();
 		}
 	}

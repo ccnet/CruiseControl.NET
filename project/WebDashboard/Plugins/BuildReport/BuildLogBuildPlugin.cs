@@ -1,8 +1,6 @@
-using System;
-using System.Web.UI;
-using System.Web.UI.HtmlControls;
 using ThoughtWorks.CruiseControl.WebDashboard.Dashboard;
 using ThoughtWorks.CruiseControl.WebDashboard.IO;
+using ThoughtWorks.CruiseControl.WebDashboard.MVC;
 using ThoughtWorks.CruiseControl.WebDashboard.MVC.Cruise;
 
 namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.BuildReport
@@ -16,15 +14,13 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.BuildReport
 			this.buildRetriever = buildRetriever;
 		}
 
-		public Control Execute (ICruiseRequest cruiseRequest)
+		public IView Execute (ICruiseRequest cruiseRequest)
 		{
 			Build build = buildRetriever.GetBuild(cruiseRequest.BuildSpecifier);
-			HtmlGenericControl control = new HtmlGenericControl("div");
 			string buildLogForDisplay = build.Log.Replace("<", "&lt;");
 			buildLogForDisplay = buildLogForDisplay.Replace(">", "&gt;");
-			control.InnerHtml = string.Format(@"<p>Click <a href=""{0}"">here</a> to open log in its own page</p><pre class=""log"">{1}</pre>", 
-				build.BuildLogLocation, buildLogForDisplay);
-			return control;
+			return new DefaultView(string.Format(@"<p>Click <a href=""{0}"">here</a> to open log in its own page</p><pre class=""log"">{1}</pre>", 
+				build.BuildLogLocation, buildLogForDisplay));
 		}
 
 		public string LinkDescription

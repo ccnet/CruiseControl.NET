@@ -1,4 +1,3 @@
-using System.Web.UI;
 using ThoughtWorks.CruiseControl.WebDashboard.IO;
 
 namespace ThoughtWorks.CruiseControl.WebDashboard.MVC.Cruise
@@ -7,6 +6,6 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.MVC.Cruise
 	// See CruiseActionProxyAction
 	public interface ICruiseAction
 	{
-		Control Execute(ICruiseRequest cruiseRequest);
+		IView Execute(ICruiseRequest cruiseRequest);
 	}
 }

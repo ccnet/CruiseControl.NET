@@ -1,4 +1,3 @@
-using System.Web.UI;
 using System.Web.UI.HtmlControls;
 using NMock;
 using NUnit.Framework;
@@ -13,7 +12,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.MVC.Cruise
 	{
 		private DynamicMock actionMock;
 		private ExceptionCatchingActionProxy exceptionCatchingAction;
-		private Control view;
+		private IView view;
 		private IRequest request;
 
 		[SetUp]
@@ -21,7 +20,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.MVC.Cruise
 		{
 			actionMock = new DynamicMock(typeof(IAction));
 			exceptionCatchingAction = new ExceptionCatchingActionProxy((IAction) actionMock.MockInstance);
-			view = new Control();
+			view = new DefaultView("my view");
 			request = new NameValueCollectionRequest(null);
 		}
 
@@ -37,7 +36,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.MVC.Cruise
 			actionMock.ExpectAndReturn("Execute", view, request);
 
 			// Execute
-			Control returnedControl = exceptionCatchingAction.Execute(request);
+			IView returnedControl = exceptionCatchingAction.Execute(request);
 
 			// Verify
 			Assert.AreEqual(view, returnedControl);
@@ -52,10 +51,10 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.MVC.Cruise
 			actionMock.ExpectAndThrow("Execute", e, request);
 
 			// Execute
-			Control returnedControl = exceptionCatchingAction.Execute(request);
+			IView returnedView = exceptionCatchingAction.Execute(request);
 
 			// Verify
-			Assert.IsTrue(((HtmlGenericControl) returnedControl).InnerHtml.IndexOf("A nasty exception") > -1);
+			Assert.IsTrue(((HtmlGenericControl) returnedView.Control).InnerHtml.IndexOf("A nasty exception") > -1);
 			VerifyAll();
 		}
 	}

@@ -1,4 +1,3 @@
-using System.Web.UI;
 using ThoughtWorks.CruiseControl.WebDashboard.IO;
 
 namespace ThoughtWorks.CruiseControl.WebDashboard.MVC.Cruise
@@ -14,7 +13,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.MVC.Cruise
 			this.errorViewBuilder = errorViewBuilder;
 		}
 
-		public Control Execute(ICruiseRequest cruiseRequest)
+		public IView Execute(ICruiseRequest cruiseRequest)
 		{
 			if (cruiseRequest.ServerName == string.Empty)
 			{

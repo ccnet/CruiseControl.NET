@@ -1,4 +1,3 @@
-using System.Web.UI;
 using ThoughtWorks.CruiseControl.WebDashboard.Dashboard;
 
 namespace ThoughtWorks.CruiseControl.WebDashboard.MVC.Cruise
@@ -14,7 +13,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.MVC.Cruise
 			this.cruiseRequestFactory = cruiseRequestFactory;
 		}
 
-		public Control Execute(IRequest request)
+		public IView Execute(IRequest request)
 		{
 			return proxiedAction.Execute(cruiseRequestFactory.CreateCruiseRequest(request));
 		}

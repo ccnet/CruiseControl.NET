@@ -1,6 +1,6 @@
-using System.Web.UI;
 using ThoughtWorks.CruiseControl.WebDashboard.Dashboard;
 using ThoughtWorks.CruiseControl.WebDashboard.IO;
+using ThoughtWorks.CruiseControl.WebDashboard.MVC;
 using ThoughtWorks.CruiseControl.WebDashboard.MVC.Cruise;
 
 namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.ViewAllBuilds
@@ -16,9 +16,9 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.ViewAllBuilds
 			this.viewBuilder = viewBuilder;
 		}
 
-		public Control Execute(ICruiseRequest cruiseRequest)
+		public IView Execute(ICruiseRequest cruiseRequest)
 		{
-			return viewBuilder.BuildAllBuildsTable(cruiseRequest.ProjectSpecifier);
+			return new DefaultView(viewBuilder.BuildAllBuildsTable(cruiseRequest.ProjectSpecifier));
 		}
 	}
 }

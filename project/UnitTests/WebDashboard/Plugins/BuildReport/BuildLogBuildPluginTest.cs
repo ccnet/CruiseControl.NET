@@ -3,12 +3,13 @@ using NMock;
 using NUnit.Framework;
 using ThoughtWorks.CruiseControl.WebDashboard.Dashboard;
 using ThoughtWorks.CruiseControl.WebDashboard.IO;
+using ThoughtWorks.CruiseControl.WebDashboard.MVC;
 using ThoughtWorks.CruiseControl.WebDashboard.Plugins.BuildReport;
 
 namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Plugins.BuildReport
 {
 	[TestFixture]
-	public class ViewBuildLogActionTest
+	public class BuildLogBuildPluginTest
 	{
 		private BuildLogBuildPlugin buildPlugin;
 
@@ -53,9 +54,9 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Plugins.BuildReport
 			buildRetrieverMock.ExpectAndReturn("GetBuild", build, buildSpecifier);
 
 			// Execute
-			HtmlGenericControl control = (HtmlGenericControl) buildPlugin.Execute((ICruiseRequest) requestMock.MockInstance);
-			Assert.IsTrue(control.InnerHtml.IndexOf(buildLog) > 0);
-			Assert.IsTrue(control.InnerHtml.IndexOf(buildLogLocation) > 0);
+			IView view = buildPlugin.Execute((ICruiseRequest) requestMock.MockInstance);
+			Assert.IsTrue(((HtmlGenericControl) view.Control).InnerHtml.IndexOf(buildLog) > 0);
+			Assert.IsTrue(((HtmlGenericControl) view.Control).InnerHtml.IndexOf(buildLogLocation) > 0);
 
 			VerifyAll();
 		}

@@ -1,8 +1,8 @@
-using System.Web.UI;
 using NMock;
 using NMock.Constraints;
 using NUnit.Framework;
 using ThoughtWorks.CruiseControl.WebDashboard.IO;
+using ThoughtWorks.CruiseControl.WebDashboard.MVC;
 using ThoughtWorks.CruiseControl.WebDashboard.MVC.Cruise;
 
 namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.MVC.Cruise
@@ -40,14 +40,14 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.MVC.Cruise
 		[Test]
 		public void ShouldProxyIfProjectPresent()
 		{
-			Control view = new Control();
+			IView view = new DefaultView("foo");
 			// Setup
 			cruiseRequestMock.ExpectAndReturn("ProjectName", "myProject");
 			errorViewBuilderMock.ExpectNoCall("BuildView", typeof(string));
 			proxiedActionMock.ExpectAndReturn("Execute", view, cruiseRequest);
 
 			// Execute
-			Control returnedView = checkingAction.Execute(cruiseRequest);
+			IView returnedView = checkingAction.Execute(cruiseRequest);
 
 			// Verify
 			Assert.AreEqual(view, returnedView);
@@ -57,14 +57,14 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.MVC.Cruise
 		[Test]
 		public void ShouldNotProxyAndShowErrorMessageIfProjectMissing()
 		{
-			Control view = new Control();
+			IView view = new DefaultView("foo");
 			// Setup
 			cruiseRequestMock.ExpectAndReturn("ProjectName", "");
 			errorViewBuilderMock.ExpectAndReturn("BuildView", view, new IsTypeOf(typeof(string)));
 			proxiedActionMock.ExpectNoCall("Execute", typeof(ICruiseRequest));
 
 			// Execute
-			Control returnedView = checkingAction.Execute(cruiseRequest);
+			IView returnedView = checkingAction.Execute(cruiseRequest);
 
 			// Verify
 			Assert.AreEqual(view, returnedView);

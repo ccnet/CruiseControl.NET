@@ -15,7 +15,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.MVC
 
 		public void Do(Control parentControl)
 		{
-			parentControl.Controls.Add(actionFactory.Create(request).Execute(request));
+			parentControl.Controls.Add(actionFactory.Create(request).Execute(request).Control);
 		}
 	}
 }

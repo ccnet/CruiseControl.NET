@@ -1,5 +1,3 @@
-using System.Web.UI;
-using System.Web.UI.HtmlControls;
 using NMock;
 using NUnit.Framework;
 using ThoughtWorks.CruiseControl.Core.Util;
@@ -28,8 +26,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 
 			delegateTransformerMock.ExpectAndReturn("Transform", "transformed", "logContents", fileNames);
 
-			Control control = requestTransformer.Transform(buildSpecifier, fileNames);
-			Assert.AreEqual("transformed", ((HtmlGenericControl) control).InnerHtml);
+			Assert.AreEqual("transformed", requestTransformer.Transform(buildSpecifier, fileNames));
 
 			buildRetrieverMock.Verify();
 			delegateTransformerMock.Verify();

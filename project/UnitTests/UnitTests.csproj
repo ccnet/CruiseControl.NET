@@ -478,6 +478,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "WebDashboard\MVC\DefaultViewTest.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "WebDashboard\MVC\HttpControllerTest.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -508,7 +513,7 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "WebDashboard\Plugins\BuildReport\ViewBuildLogActionTest.cs"
+                    RelPath = "WebDashboard\Plugins\BuildReport\BuildLogBuildPluginTest.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

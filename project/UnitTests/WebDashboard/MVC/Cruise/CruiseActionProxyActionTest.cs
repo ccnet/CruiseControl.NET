@@ -41,13 +41,13 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.MVC.Cruise
 		[Test]
 		public void ShouldGetCruiseRequestForRequestAndProxyAction()
 		{
-			Control view = new Control();
+			IView view = new DefaultView("foo");
 			// Setup
 			cruiseRequestFactoryMock.ExpectAndReturn("CreateCruiseRequest", cruiseRequest, request);
 			proxiedActionMock.ExpectAndReturn("Execute", view, cruiseRequest);
 
 			// Execute
-			Control returnedView = proxy.Execute(request);
+			IView returnedView = proxy.Execute(request);
 
 			// Verify
 			Assert.AreEqual(view, returnedView);

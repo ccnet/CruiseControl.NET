@@ -1,8 +1,7 @@
 using System.Collections;
-using System.Web.UI;
-using System.Web.UI.HtmlControls;
 using ThoughtWorks.CruiseControl.WebDashboard.Dashboard;
 using ThoughtWorks.CruiseControl.WebDashboard.IO;
+using ThoughtWorks.CruiseControl.WebDashboard.MVC;
 using ThoughtWorks.CruiseControl.WebDashboard.MVC.Cruise;
 using ThoughtWorks.CruiseControl.WebDashboard.ServerConnection;
 
@@ -19,13 +18,11 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.ServerReport
 			this.velocityTransformer = velocityTransformer;
 		}
 
-		public Control Execute(ICruiseRequest request)
+		public IView Execute(ICruiseRequest request)
 		{
-			HtmlGenericControl control = new HtmlGenericControl("p");
 			Hashtable viewObjects = new Hashtable();
 			viewObjects["log"] = farmService.GetServerLog(request.ServerSpecifier);
-			control.InnerHtml = velocityTransformer.Transform(viewObjects, @"templates\ServerLog.vm");    //string.Format(@"<pre class=""log"">{0}</pre>", );
-			return control;
+			return new DefaultView(velocityTransformer.Transform(viewObjects, @"templates\ServerLog.vm"));
 		}
 
 		public string LinkDescription

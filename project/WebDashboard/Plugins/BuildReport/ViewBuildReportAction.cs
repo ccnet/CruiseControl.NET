@@ -1,8 +1,8 @@
 using System.Collections;
 using System.Configuration;
-using System.Web.UI;
 using ThoughtWorks.CruiseControl.WebDashboard.Dashboard;
 using ThoughtWorks.CruiseControl.WebDashboard.IO;
+using ThoughtWorks.CruiseControl.WebDashboard.MVC;
 using ThoughtWorks.CruiseControl.WebDashboard.MVC.Cruise;
 
 namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.BuildReport
@@ -18,9 +18,10 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.BuildReport
 			this.buildLogTransformer = buildLogTransformer;
 		}
 
-		public Control Execute (ICruiseRequest cruiseRequest)
+		// ToDo - this shouldn't access Configuration Settings directly ... but maybe we want a new plugin impl anyway using configurable plugins
+		public IView Execute (ICruiseRequest cruiseRequest)
 		{
-			return buildLogTransformer.Transform(cruiseRequest.BuildSpecifier, (string[]) ((ArrayList) ConfigurationSettings.GetConfig("CCNet/xslFiles")).ToArray(typeof (string)));
+			return new DefaultView(buildLogTransformer.Transform(cruiseRequest.BuildSpecifier, (string[]) ((ArrayList) ConfigurationSettings.GetConfig("CCNet/xslFiles")).ToArray(typeof (string))));
 		}
 	}
 }

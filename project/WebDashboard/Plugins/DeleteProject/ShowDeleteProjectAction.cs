@@ -1,6 +1,6 @@
-using System.Web.UI;
 using ThoughtWorks.CruiseControl.WebDashboard.Dashboard;
 using ThoughtWorks.CruiseControl.WebDashboard.IO;
+using ThoughtWorks.CruiseControl.WebDashboard.MVC;
 using ThoughtWorks.CruiseControl.WebDashboard.MVC.Cruise;
 
 namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.DeleteProject
@@ -16,7 +16,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.DeleteProject
 			this.viewBuilder = viewBuilder;
 		}
 
-		public Control Execute(ICruiseRequest request)
+		public IView Execute(ICruiseRequest request)
 		{
 			return viewBuilder.BuildView(BuildModel(request.ProjectSpecifier));
 		}

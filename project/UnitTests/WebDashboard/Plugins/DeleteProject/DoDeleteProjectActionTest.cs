@@ -43,7 +43,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Plugins.DeleteProjec
 		[Test]
 		public void ShouldCallFarmServiceAndIfSuccessfulShowSuccessMessage()
 		{
-			Control view = new Control();
+			IView view = new DefaultView("foo");
 			// Setup
 			IProjectSpecifier projectSpecifier = new DefaultProjectSpecifier(new DefaultServerSpecifier("myServer"), "myProject");
 			cruiseRequestMock.ExpectAndReturn("ProjectSpecifier", projectSpecifier);
@@ -55,7 +55,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Plugins.DeleteProjec
 			viewBuilderMock.ExpectAndReturn("BuildView", view, new DeleteProjectModel(projectSpecifier, expectedMessage, false, true, false, true));
 
 			// Execute
-			Control returnedView = doDeleteProjectAction.Execute(cruiseRequest);
+			IView returnedView = doDeleteProjectAction.Execute(cruiseRequest);
 
 			// Verify
 			Assert.AreEqual(view, returnedView);

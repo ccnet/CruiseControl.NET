@@ -3,6 +3,7 @@ using NMock;
 using NUnit.Framework;
 using ThoughtWorks.CruiseControl.WebDashboard.Dashboard;
 using ThoughtWorks.CruiseControl.WebDashboard.IO;
+using ThoughtWorks.CruiseControl.WebDashboard.MVC;
 using ThoughtWorks.CruiseControl.WebDashboard.Plugins.DeleteProject;
 
 namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Plugins.DeleteProject
@@ -35,7 +36,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Plugins.DeleteProjec
 		[Test]
 		public void ShouldPassValidModelToBuilderAndReturnBuildersResult()
 		{
-			Control view = new Control();
+			IView view = new DefaultView("foo");
 			// Setup
 			IProjectSpecifier projectSpecifier = new DefaultProjectSpecifier(new DefaultServerSpecifier("myServer"), "myProject");
 			cruiseRequestMock.ExpectAndReturn("ProjectSpecifier", projectSpecifier);
@@ -43,7 +44,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Plugins.DeleteProjec
 			viewBuilderMock.ExpectAndReturn("BuildView", view, new DeleteProjectModel(projectSpecifier, expectedMessage, true, true, true, true));
 
 			// Execute
-			Control returnedView = showDeleteProjectAction.Execute(cruiseRequest);
+			IView returnedView = showDeleteProjectAction.Execute(cruiseRequest);
 
 			// Verify
 			Assert.AreEqual(view, returnedView);

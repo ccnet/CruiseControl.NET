@@ -1,8 +1,7 @@
-using System;
-using System.Web.UI;
 using ThoughtWorks.CruiseControl.Core;
 using ThoughtWorks.CruiseControl.WebDashboard.Dashboard;
 using ThoughtWorks.CruiseControl.WebDashboard.IO;
+using ThoughtWorks.CruiseControl.WebDashboard.MVC;
 using ThoughtWorks.CruiseControl.WebDashboard.MVC.Cruise;
 using ThoughtWorks.CruiseControl.WebDashboard.Plugins.AddProject;
 using ThoughtWorks.CruiseControl.WebDashboard.Plugins.ViewProjectReport;
@@ -31,7 +30,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.EditProject
 		}
 
 		// Todo - move both add and edit action to server page and just use server in URL (no dropdown)
-		public Control Execute(ICruiseRequest request)
+		public IView Execute(ICruiseRequest request)
 		{
 			AddEditProjectModel model = projectModelGenerator.GenerateModel(request.Request);
 			model.Project.Name = request.ProjectName;

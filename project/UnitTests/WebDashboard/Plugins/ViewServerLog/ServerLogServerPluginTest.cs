@@ -5,6 +5,7 @@ using NUnit.Framework;
 using ThoughtWorks.CruiseControl.UnitTests.UnitTestUtils;
 using ThoughtWorks.CruiseControl.WebDashboard.Dashboard;
 using ThoughtWorks.CruiseControl.WebDashboard.IO;
+using ThoughtWorks.CruiseControl.WebDashboard.MVC;
 using ThoughtWorks.CruiseControl.WebDashboard.Plugins.ServerReport;
 using ThoughtWorks.CruiseControl.WebDashboard.ServerConnection;
 
@@ -50,8 +51,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Plugins.ViewServerLo
 			hashtableTransformerMock.ExpectAndReturn("Transform", "some html", new HashtableConstraint(expectedHashtable), @"templates\ServerLog.vm");
 
 			// Execute
-			HtmlGenericControl control = (HtmlGenericControl) action.Execute((ICruiseRequest) requestMock.MockInstance);
-			Assert.AreEqual("some html", control.InnerHtml);
+			IView view = action.Execute((ICruiseRequest) requestMock.MockInstance);
+			Assert.AreEqual("some html", ((HtmlGenericControl) view.Control).InnerHtml);
 
 			VerifyAll();
 		}

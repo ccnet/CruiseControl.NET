@@ -1,9 +1,9 @@
-using System.Web.UI;
+using ThoughtWorks.CruiseControl.WebDashboard.MVC;
 
 namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.DeleteProject
 {
 	public interface IDeleteProjectViewBuilder
 	{
-		Control BuildView(DeleteProjectModel model);
+		IView BuildView(DeleteProjectModel model);
 	}
 }

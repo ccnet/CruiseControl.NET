@@ -1,6 +1,5 @@
-using System.Web.UI;
 using ThoughtWorks.CruiseControl.WebDashboard.Dashboard;
-using ThoughtWorks.CruiseControl.WebDashboard.MVC.Cruise;
+using ThoughtWorks.CruiseControl.WebDashboard.MVC;
 using ThoughtWorks.CruiseControl.WebDashboard.MVC.View;
 
 namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.DeleteProject
@@ -14,7 +13,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.DeleteProject
 			this.urlBuilder = urlBuilder;
 		}
 
-		public Control BuildView(DeleteProjectModel model)
+		public IView BuildView(DeleteProjectModel model)
 		{
 			if (model.AllowDelete)
 			{
@@ -26,25 +25,27 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.DeleteProject
 			}
 		}
 
-		private Control NotYetDeletedView(DeleteProjectModel model)
+		private IView NotYetDeletedView(DeleteProjectModel model)
 		{
-			return Table(
+			return new DefaultView(
+				Table(
 				TR(TD(model.Message, 2)),
 				TR(TD("&nbsp;", 2)),
 				TR(TD("Purge Working Directory?"), TD(BooleanCheckBox("PurgeWorkingDirectory", model.PurgeWorkingDirectory))),
 				TR(TD("Purge Artifact Directory?"), TD(BooleanCheckBox("PurgeArtifactDirectory", model.PurgeArtifactDirectory))),
 				TR(TD("Purge Source Control Environment?"), TD(BooleanCheckBox("PurgeSourceControlEnvironment", model.PurgeSourceControlEnvironment))),
 				TR(TD(Button(DoDeleteProjectAction.ACTION_NAME, "Yes - Really Delete"), 2))
-				);
+				));
 		}
 
-		private Control HasBeenDeletedView(DeleteProjectModel model)
+		private IView HasBeenDeletedView(DeleteProjectModel model)
 		{
-			return Table(
+			return new DefaultView(
+				Table(
 				TR(TD(model.Message)),
 				TR(TD("&nbsp;")),
 				TR(TD(A("Return to Dashboard", urlBuilder.BuildUrl("default.aspx"))))
-				);
+				));
 		}
 	}
 }

@@ -4,6 +4,6 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 {
 	public interface IBuildLogTransformer
 	{
-		Control Transform(IBuildSpecifier build, params string[] transformerFileNames);
+		string Transform(IBuildSpecifier build, params string[] transformerFileNames);
 	}
 }

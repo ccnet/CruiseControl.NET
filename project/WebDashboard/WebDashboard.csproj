@@ -637,6 +637,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "MVC\DefaultView.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "MVC\IAction.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -648,6 +653,11 @@
                 />
                 <File
                     RelPath = "MVC\IRequest.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "MVC\IView.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
