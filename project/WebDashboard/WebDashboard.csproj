@@ -268,6 +268,16 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Dashboard\BuildLink.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Dashboard\BuildPlugins.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Dashboard\BuildRequestTransformer.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -298,6 +308,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Dashboard\DefaultBuildLinkFactory.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Dashboard\DefaultBuildNameFormatter.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -313,6 +328,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Dashboard\IAbsoluteLink.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Dashboard\IActionSpecifier.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -323,12 +343,22 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Dashboard\IBuildLinkFactory.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Dashboard\IBuildNameFormatter.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
                     RelPath = "Dashboard\IBuildNameRetriever.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Dashboard\IBuildPluginLinkCalculator.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

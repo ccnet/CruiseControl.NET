@@ -8,9 +8,6 @@ using ThoughtWorks.CruiseControl.WebDashboard.MVC.View;
 using ThoughtWorks.CruiseControl.WebDashboard.Plugins.AddProject;
 using ThoughtWorks.CruiseControl.WebDashboard.Plugins.DeleteProject;
 using ThoughtWorks.CruiseControl.WebDashboard.Plugins.EditProject;
-using ThoughtWorks.CruiseControl.WebDashboard.Plugins.NAnt;
-using ThoughtWorks.CruiseControl.WebDashboard.Plugins.NCover;
-using ThoughtWorks.CruiseControl.WebDashboard.Plugins.ViewBuildLog;
 using ThoughtWorks.CruiseControl.WebDashboard.Plugins.ViewBuildReport;
 using ThoughtWorks.CruiseControl.WebDashboard.Plugins.ViewServerLog;
 
@@ -22,6 +19,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 		private DynamicMock urlBuilderMock;
 		private DynamicMock buildNameRetrieverMock;
 		private DynamicMock recentBuildsViewBuilderMock;
+		private DynamicMock buildPluginLinkCalculatorMock;
 		private DefaultUserRequestSpecificSideBarViewBuilder viewBuilder;
 
 		[SetUp]
@@ -30,10 +28,12 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 			urlBuilderMock = new DynamicMock(typeof(IUrlBuilder));
 			buildNameRetrieverMock = new DynamicMock(typeof(IBuildNameRetriever));
 			recentBuildsViewBuilderMock = new DynamicMock(typeof(IRecentBuildsViewBuilder));
+			buildPluginLinkCalculatorMock = new DynamicMock(typeof(IBuildPluginLinkCalculator));
 			viewBuilder = new DefaultUserRequestSpecificSideBarViewBuilder(new DefaultHtmlBuilder(), 
 				(IUrlBuilder) urlBuilderMock.MockInstance, 
 				(IBuildNameRetriever) buildNameRetrieverMock.MockInstance,
-				(IRecentBuildsViewBuilder) recentBuildsViewBuilderMock.MockInstance);
+				(IRecentBuildsViewBuilder) recentBuildsViewBuilderMock.MockInstance,
+				(IBuildPluginLinkCalculator) buildPluginLinkCalculatorMock.MockInstance);
 		}
 
 		private void VerifyAll()
@@ -41,6 +41,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 			urlBuilderMock.Verify();
 			buildNameRetrieverMock.Verify();
 			recentBuildsViewBuilderMock.Verify();
+			buildPluginLinkCalculatorMock.Verify();
 		}
 
 		[Test]
@@ -118,15 +119,19 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 			buildNameRetrieverMock.ExpectAndReturn("GetLatestBuildName", "returnedLatestBuildName", "myServer", "myProject");
 			buildNameRetrieverMock.ExpectAndReturn("GetNextBuildName", "returnedNextBuildName", "myServer", "myProject", "myCurrentBuild");
 			buildNameRetrieverMock.ExpectAndReturn("GetPreviousBuildName", "returnedPreviousBuildName", "myServer", "myProject", "myCurrentBuild");
+
+			Mock link1Mock = new DynamicMock(typeof(IAbsoluteLink));
+			Mock link2Mock = new DynamicMock(typeof(IAbsoluteLink));
+			link1Mock.SetupResult("Description", "my link 1");
+			link1Mock.SetupResult("AbsoluteURL", "myurl1");
+			link2Mock.SetupResult("Description", "my link 2");
+			link2Mock.SetupResult("AbsoluteURL", "myurl2");
+
+			buildPluginLinkCalculatorMock.ExpectAndReturn("GetBuildPluginLinks", new IAbsoluteLink[] { (IAbsoluteLink) link1Mock.MockInstance, (IAbsoluteLink) link2Mock.MockInstance }, "myServer", "myProject", "myCurrentBuild");
 			urlBuilderMock.ExpectAndReturn("BuildBuildUrl", "latestUrl", new PropertyIs("ActionName", ViewBuildReportAction.ACTION_NAME), "myServer", "myProject", "returnedLatestBuildName");
 			urlBuilderMock.ExpectAndReturn("BuildBuildUrl", "nextUrl", new PropertyIs("ActionName", ViewBuildReportAction.ACTION_NAME), "myServer", "myProject", "returnedNextBuildName");
 			urlBuilderMock.ExpectAndReturn("BuildBuildUrl", "previousUrl", new PropertyIs("ActionName", ViewBuildReportAction.ACTION_NAME), "myServer", "myProject", "returnedPreviousBuildName");
-			urlBuilderMock.ExpectAndReturn("BuildBuildUrl", "viewLogUrl", new PropertyIs("ActionName", ViewBuildLogAction.ACTION_NAME), "myServer", "myProject", "myCurrentBuild");
-			urlBuilderMock.ExpectAndReturn("BuildBuildUrl", "viewTestDetailsUrl", new PropertyIs("ActionName", ViewTestDetailsBuildReportAction.ACTION_NAME), "myServer", "myProject", "myCurrentBuild");
-			urlBuilderMock.ExpectAndReturn("BuildBuildUrl", "viewTestTimingsUrl", new PropertyIs("ActionName", ViewTestTimingsBuildReportAction.ACTION_NAME), "myServer", "myProject", "myCurrentBuild");
-			urlBuilderMock.ExpectAndReturn("BuildBuildUrl", "viewNAntUrl", new PropertyIs("ActionName", ViewNAntBuildReportAction.ACTION_NAME), "myServer", "myProject", "myCurrentBuild");
-			urlBuilderMock.ExpectAndReturn("BuildBuildUrl", "viewFxCopUrl", new PropertyIs("ActionName", ViewFxCopBuildReportAction.ACTION_NAME), "myServer", "myProject", "myCurrentBuild");
-			urlBuilderMock.ExpectAndReturn("BuildBuildUrl", "viewNcoverUrl", new PropertyIs("ActionName", ViewNCoverBuildReportAction.ACTION_NAME), "myServer", "myProject", "myCurrentBuild");
+			
 			HtmlTable buildsPanel = new HtmlTable();
 			recentBuildsViewBuilderMock.ExpectAndReturn("BuildRecentBuildsTable", buildsPanel, "myServer", "myProject");
 
@@ -140,23 +145,11 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 			expectedAnchor3.HRef = "previousUrl";
 			expectedAnchor3.InnerHtml = "Previous";
 			HtmlAnchor expectedAnchor4 = new HtmlAnchor();
-			expectedAnchor4.HRef = "viewLogUrl";
-			expectedAnchor4.InnerHtml = "View Build Log";
+			expectedAnchor4.HRef = "myurl1";
+			expectedAnchor4.InnerHtml = "my link 1";
 			HtmlAnchor expectedAnchor5 = new HtmlAnchor();
-			expectedAnchor5.HRef = "viewTestDetailsUrl";
-			expectedAnchor5.InnerHtml = "View Test Details";
-			HtmlAnchor expectedAnchor6 = new HtmlAnchor();
-			expectedAnchor6.HRef = "viewTestTimingsUrl";
-			expectedAnchor6.InnerHtml = "View Test Timings";
-			HtmlAnchor expectedAnchor7 = new HtmlAnchor();
-			expectedAnchor7.HRef = "viewNAntUrl";
-			expectedAnchor7.InnerHtml = "View NAnt Report";
-			HtmlAnchor expectedAnchor8 = new HtmlAnchor();
-			expectedAnchor8.HRef = "viewFxCopUrl";
-			expectedAnchor8.InnerHtml = "View FxCop Report";
-			HtmlAnchor expectedAnchor9 = new HtmlAnchor();
-			expectedAnchor9.HRef = "viewNcoverUrl";
-			expectedAnchor9.InnerHtml = "View NCover Report";
+			expectedAnchor5.HRef = "myurl2";
+			expectedAnchor5.InnerHtml = "my link 2";
 
 			// Execute
 			HtmlTable table = viewBuilder.GetBuildSideBar("myServer", "myProject", "myCurrentBuild");
@@ -166,10 +159,6 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 			Assert.IsTrue(TableContains(table, expectedAnchor3));
 			Assert.IsTrue(TableContains(table, expectedAnchor4));
 			Assert.IsTrue(TableContains(table, expectedAnchor5));
-			Assert.IsTrue(TableContains(table, expectedAnchor6));
-			Assert.IsTrue(TableContains(table, expectedAnchor7));
-			Assert.IsTrue(TableContains(table, expectedAnchor8));
-			Assert.IsTrue(TableContains(table, expectedAnchor9));
 			Assert.IsTrue(TableContains(table, buildsPanel));
 			
 			// Verify
