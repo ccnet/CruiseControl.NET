@@ -35,6 +35,14 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebServiceProxy", "WebServi
 	ProjectSection(ProjectDependencies) = postProject
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shared", "Shared\Shared.csproj", "{FA6F61A0-6332-4236-B861-FEA43B74A092}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnitTests", "UnitTests\UnitTests.csproj", "{2BE0F646-12F8-4A7C-BB51-31EE6B32B650}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfiguration) = preSolution
 		Debug = Debug
@@ -77,6 +85,14 @@ Global
 		{19C24DF5-7EE8-4325-AFD6-C18D6C85DD9B}.Debug.Build.0 = Debug|.NET
 		{19C24DF5-7EE8-4325-AFD6-C18D6C85DD9B}.Release.ActiveCfg = Release|.NET
 		{19C24DF5-7EE8-4325-AFD6-C18D6C85DD9B}.Release.Build.0 = Release|.NET
+		{FA6F61A0-6332-4236-B861-FEA43B74A092}.Debug.ActiveCfg = Debug|.NET
+		{FA6F61A0-6332-4236-B861-FEA43B74A092}.Debug.Build.0 = Debug|.NET
+		{FA6F61A0-6332-4236-B861-FEA43B74A092}.Release.ActiveCfg = Release|.NET
+		{FA6F61A0-6332-4236-B861-FEA43B74A092}.Release.Build.0 = Release|.NET
+		{2BE0F646-12F8-4A7C-BB51-31EE6B32B650}.Debug.ActiveCfg = Debug|.NET
+		{2BE0F646-12F8-4A7C-BB51-31EE6B32B650}.Debug.Build.0 = Debug|.NET
+		{2BE0F646-12F8-4A7C-BB51-31EE6B32B650}.Release.ActiveCfg = Release|.NET
+		{2BE0F646-12F8-4A7C-BB51-31EE6B32B650}.Release.Build.0 = Release|.NET
 	EndGlobalSection
 	GlobalSection(SolutionItems) = postSolution
 		..\ccnet.build = ..\ccnet.build

@@ -18,6 +18,7 @@
 
     <property name="interfaces.dll" value="ccnet.remote.dll" />
     <property name="core.dll" value="ccnet.core.dll"/>
+    <property name="unittests.dll" value="ThoughtWorks.CruiseControl.UnitTests.dll"/>
     <property name="console.exe" value="ccnet.exe"/>
     <property name="service.exe" value="ccnet.service.exe"/>
     <property name="web.dll" value="ccnet.web.dll"/>
@@ -96,6 +97,11 @@
 			  workingdir="${build.dir}" 
 			  program="..\tools\nunit\nunit-console.exe" 
 			  commandline="${web.dll} /xml:ccnet-web-results.xml"/>
+
+		<exec basedir="${build.dir}" 
+			  workingdir="${build.dir}" 
+			  program="..\tools\nunit\nunit-console.exe" 
+			  commandline="${unittests.dll} /xml:ccnet-unittest-results.xml"/>
 
     </target>
 
