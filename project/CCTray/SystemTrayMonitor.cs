@@ -456,7 +456,7 @@ namespace ThoughtWorks.CruiseControl.CCTray
 			if (statusMonitor.WebUrl==null || statusMonitor.WebUrl.Trim().Length==0)
 				UnableToLaunchWebPage();
 			else
-				Process.Start(settings.Browser, statusMonitor.WebUrl);
+				Process.Start(statusMonitor.WebUrl);
 		}
 
 		void UnableToLaunchWebPage()

@@ -14,7 +14,6 @@ namespace ThoughtWorks.CruiseControl.CCTray
 	{
 		public int PollingIntervalSeconds;
 		public string RemoteServerUrl;
-		public string Browser;
 
 		public string ProjectName;
 
@@ -50,7 +49,6 @@ namespace ThoughtWorks.CruiseControl.CCTray
 
 			defaults.PollingIntervalSeconds = 15;
 			defaults.RemoteServerUrl = "tcp://localhost:1234/CruiseManager.rem";
-			defaults.Browser = "IExplore.exe";
 
 			return defaults;
 		}
