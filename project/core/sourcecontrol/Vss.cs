@@ -179,7 +179,6 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			Log.Info("Getting source from VSS");
 			string arguments = string.Format(GET_COMMAND_FORMAT, Project, FormatCommandDate(result.StartTime), Username, Password);		
 			ProcessInfo processInfo = CreateProcessInfo(arguments);
-			Log.Debug(string.Format("VSS Command: {0} {1}", Executable, arguments));
 			Execute(processInfo);
 		}
 

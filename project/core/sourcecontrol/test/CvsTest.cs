@@ -1,24 +1,23 @@
 using Exortech.NetReflector;
+using NMock;
+using NMock.Constraints;
 using NUnit.Framework;
 using System;
-using System.Collections;
 using System.Globalization;
-using System.IO;
 using ThoughtWorks.CruiseControl.Core.Util;
-using ThoughtWorks.CruiseControl.Core.Test;
 
 namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test
 {
 	[TestFixture]
 	public class CvsTest : CustomAssertion
 	{
-		public static string CreateSourceControlXml(string cvsroot, string branch)
+		private string CreateSourceControlXml(string cvsroot, string branch)
 		{
 			cvsroot = (cvsroot == null) ? String.Empty : "<cvsroot>" + cvsroot + "</cvsroot>";
 			branch = (branch == null) ? String.Empty : "<branch>" + branch + "</branch>";
 
 			return string.Format(
-				@"    <sourceControl type=""cvs"">
+				@"    <sourceControl type=""cvs"" autoGetSource=""true"">
       <executable>..\tools\cvs.exe</executable>
       <workingDirectory>..</workingDirectory>
       {0}
@@ -36,6 +35,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test
 			AssertEquals("..",cvs.WorkingDirectory);
 			AssertEquals("myCvsRoot", cvs.CvsRoot);
 			AssertEquals("branch", cvs.Branch);
+			AssertEquals(true, cvs.AutoGetSource);
 		}
 
 		[Test]
@@ -86,6 +86,44 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test
 		{
 			DateTime dt = DateTime.Parse("2003-01-01 01:01:01 GMT", CultureInfo.InvariantCulture);
 			AssertEquals("2003-01-01 01:01:01 GMT", CreateCvs().FormatCommandDate(dt));
+		}
+
+		[Test]
+		public void VerifyProcessInfoForGetSource()
+		{
+			IMock mockHistoryParser = new DynamicMock(typeof(IHistoryParser));
+			IMock mockProcessExecutor = new DynamicMock(typeof(ProcessExecutor));
+			CollectingConstraint args = new CollectingConstraint();
+			mockProcessExecutor.ExpectAndReturn("Execute", new ProcessResult("output", null, ProcessResult.SUCCESSFUL_EXIT_CODE, false), args); // ProcessResult Execute(ProcessInfo processInfo)
+			IntegrationResult result = new IntegrationResult();
+			
+			Cvs cvs = new Cvs((IHistoryParser) mockHistoryParser.MockInstance, (ProcessExecutor) mockProcessExecutor.MockInstance);
+			cvs.AutoGetSource = true;
+			cvs.WorkingDirectory = @"C:\temp";
+			cvs.Executable = @"C:\Program Files\TortoiseCVS";
+			cvs.GetSource(result);
+
+			ProcessInfo info = (ProcessInfo) args.Parameter;
+			AssertEquals(@"C:\temp", info.WorkingDirectory);
+			AssertEquals(@"C:\Program Files\TortoiseCVS", info.FileName);
+			AssertEquals(@"-q update -d -P", info.Arguments);
+
+			mockHistoryParser.Verify();
+			mockProcessExecutor.Verify();
+		}
+
+		[Test]
+		public void ShouldNotGetSourceIfAutoGetSourceIsFalse()
+		{
+			IMock mockProcessExecutor = new DynamicMock(typeof(ProcessExecutor));
+			mockProcessExecutor.ExpectNoCall("Execute", typeof(ProcessInfo));
+			IntegrationResult result = new IntegrationResult();
+			
+			Cvs cvs = new Cvs(null, (ProcessExecutor) mockProcessExecutor.MockInstance);
+			cvs.AutoGetSource = false;
+			cvs.GetSource(result);
+
+			mockProcessExecutor.Verify();			
 		}
 
 		private Cvs CreateCvs()
