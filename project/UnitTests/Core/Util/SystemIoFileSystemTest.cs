@@ -47,6 +47,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Util
 			Assert.IsTrue(File.Exists(Path.Combine(_tempDir, "File2")));
 		}
 
+
 		[Test]
 		public void ShouldAllowOverwrites()
 		{
@@ -54,6 +55,18 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Util
 			TempFileUtil.CreateTempFile(_tempDir, "File2");
 
 			new SystemIoFileSystem().Copy(Path.Combine(_tempDir, "File1"), Path.Combine(_tempDir, "File2"));
+
+			Assert.IsTrue(File.Exists(Path.Combine(_tempDir, "File2")));
+		}
+
+		[Test]
+		public void ShouldAllowOverwritesEvenWhenDestinationHasReadOnlyAttributeSet()
+		{
+			string file1 = TempFileUtil.CreateTempFile(_tempDir, "File1");
+			string file2 = TempFileUtil.CreateTempFile(_tempDir, "File2");
+			File.SetAttributes(file2, FileAttributes.ReadOnly);
+
+			new SystemIoFileSystem().Copy(file1, file2);
 
 			Assert.IsTrue(File.Exists(Path.Combine(_tempDir, "File2")));
 		}

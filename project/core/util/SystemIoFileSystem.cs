@@ -48,6 +48,9 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 			if (! Directory.Exists(destDir))
 				Directory.CreateDirectory(destDir);
 
+			if (File.Exists(destPath))
+				File.SetAttributes(destPath,FileAttributes.Normal);
+
 			File.Copy(sourcePath, destPath, true);
 		}
 	}
