@@ -7,7 +7,7 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
 {
 	public class HtmlDetailsMessageBuilder : IMessageBuilder
 	{
-		private const string HtmlCSSFile =@"xsl\Mailstyle.css";
+		private const string HtmlCSSFile =@"xsl\cruisecontrol.css";
 		private string _htmlCss;
 
 		public string BuildMessage(IIntegrationResult result, string projectURL)
@@ -68,7 +68,7 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
 				        _htmlCss = textReader.ReadToEnd();
 				    }
 				}
-				return  _htmlCss;
+				return _htmlCss;
 			}
 		}
 	}
