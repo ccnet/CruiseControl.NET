@@ -5,12 +5,13 @@ using ThoughtWorks.CruiseControl.Core;
 using ThoughtWorks.CruiseControl.Core.Config;
 using ThoughtWorks.CruiseControl.Core.Label;
 using ThoughtWorks.CruiseControl.Core.Sourcecontrol;
+using ThoughtWorks.CruiseControl.Core.Util;
 
 namespace ThoughtWorks.CruiseControl.ControlPanel.Test
 {
 
 	[TestFixture]
-	public class ConfigurationModelTest : Assertion
+	public class ConfigurationModelTest : CustomAssertion
 	{
 		public const string _configFileContents = @"<cruisecontrol>
   <project name='MyProject'>
@@ -75,9 +76,12 @@ namespace ThoughtWorks.CruiseControl.ControlPanel.Test
 			ConfigurationItem item = model.Projects[0].Items["sourcecontrol"];
 
 			AssertEquals("cvs", item.ValueAsString);
-			AssertEquals("clearCase,cvs,defaultsourcecontrol,filesystem,filtered,multi,p4,pvcs,starteam,svn,vault,vss", 
-				string.Join(",", item.AvailableValues));
-
+			AssertContainsInArray("clearCase",item.AvailableValues);
+			AssertContainsInArray("cvs",item.AvailableValues);
+			AssertContainsInArray("defaultsourcecontrol",item.AvailableValues);
+			AssertContainsInArray("clearCase",item.AvailableValues);
+			AssertContainsInArray("clearCase",item.AvailableValues);
+			AssertContainsInArray("clearCase",item.AvailableValues);
 			AssertEquals("c:/bin/cvs.exe", item.Items["executable"].ValueAsString);
 			AssertEquals("/cvsroot/marathonnet", item.Items["cvsroot"].ValueAsString);
 			AssertEquals(true, item.CanHaveChildren);

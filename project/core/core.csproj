@@ -768,6 +768,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "sourcecontrol\TestSourceControl.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "sourcecontrol\Vault.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -1028,7 +1033,7 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "tasks\test\CoverageTaskTest.cs"
+                    RelPath = "tasks\test\CoverageTaskIntegrationTest.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

@@ -12,6 +12,16 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 			Assert(message, target.IndexOf(search) >= 0);
 		}
 
+		public static void AssertContainsInArray(object search, object[] target)
+		{
+			foreach(object a in target)
+			{
+				if(a.Equals(search)) return;
+			}
+			string message = string.Format("Did not find {0} in the array", search);
+			Fail(message);
+		}
+
 		public static void AssertStartsWith(string expected, string actual)
 		{
 			string message = string.Format("<{0}> does not start wth \n<{1}>", actual, expected);

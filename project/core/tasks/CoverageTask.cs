@@ -7,14 +7,15 @@ using ThoughtWorks.CruiseControl.Core.tasks;
 
 namespace ThoughtWorks.CruiseControl.Core.Tasks
 {
-	[ReflectorType("coverageTask")]
-	public class CoverageTask : ITask
+	[ReflectorType("coverage")]
+	public class CoverageTask : IBuilder
 	{
 		private NUnitTask _nunit;
 		private DevenvBuilder _builder;
 		private ICoverage _instrument;
-		private string _reportFileName="";
-
+		private string _reportFileName =String.Empty;
+		private string _filePath = String.Empty;
+		
 		public CoverageTask()
 		{
 		}
@@ -58,6 +59,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 		{
 			if(_reportFileName.Equals(String.Empty) )
 				_reportFileName = result.ProjectName;
+			_instrument.NUnitTask = _nunit;
 			_instrument.ReportName = _reportFileName;	
 			_instrument.Instrument();
 			_builder.Run(result);

@@ -17,6 +17,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks.Test
 		private const string NCoverReportPath=@"c:\ncover\bin\ncoverreport.exe";
 		private const string NRecoverPath=@"c:\ncover\bin\nrecover.exe";
 		private const string ReportName="MyReport";
+		private CollectingConstraint _constraint;
 		public NCoverCoverageTest()
 		{
 		}
@@ -28,20 +29,18 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks.Test
 			_coverage = new NCoverCoverage((ProcessExecutor) _processMock.MockInstance);
 			_coverage.NCoverInstrumentBinPath= NCoverInstrumentPath;
 			_coverage.NCoverReportBinPath= NCoverReportPath;
-
+			_constraint= new CollectingConstraint();
 		}
 																				  
 		[Test]
 		public void ShouldRunInstrumenterOnAllFiles()
 		{
 			string src =@"src\*.cs";
-			CollectingConstraint constraint = new CollectingConstraint();
-			
-			_processMock.ExpectAndReturn("Execute", ExpectedProcessResult, constraint);
+			_processMock.ExpectAndReturn("Execute", ExpectedProcessResult, _constraint);
 			_coverage.SrcFilePath = src;
 			_coverage.ReportName = ReportName;
 			_coverage.Instrument();
-			ProcessInfo processInfo = (ProcessInfo) constraint.Parameter;
+			ProcessInfo processInfo = (ProcessInfo) _constraint.Parameter;
 			AssertContains(src, processInfo.Arguments);
 			AssertContains(_coverage.NCoverInstrumentBinPath, processInfo.FileName);
 			AssertContains(ReportName, processInfo.Arguments);
@@ -51,29 +50,44 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks.Test
 		[Test]
 		public void ShouldReportToFile()
 		{
-			CollectingConstraint constraint = new CollectingConstraint();
-			_processMock.ExpectAndReturn("Execute", ExpectedProcessResult, constraint);
+			_coverage.NUnitTask = new NUnitTask();
+			_coverage.NUnitTask.Assembly = new string[1]{@"c:\temp\foo.dll"};
+
+			_processMock.ExpectAndReturn("Execute", ExpectedProcessResult, _constraint);
 			_processMock.SetupResult("Execute", ExpectedProcessResult,typeof(ProcessInfo));
 			_coverage.ReportName = ReportName;
 			_coverage.Report();
-			ProcessInfo processInfo = (ProcessInfo) constraint.Parameter;
+			ProcessInfo processInfo = (ProcessInfo) _constraint.Parameter;
 			AssertContains(ReportName, processInfo.Arguments);
 			AssertContains(NCoverReportPath, processInfo.FileName);
 			_processMock.Verify();
 		}	 
 
+		[Test]
+		public void ShouldLoadActualFileFromFolderWhereAssemblyLies()
+		{
+			_coverage.NUnitTask = new NUnitTask();
+			_coverage.NUnitTask.Assembly = new string[1]{@"c:\temp\foo.dll"};
+			_processMock.ExpectAndReturn("Execute", ExpectedProcessResult, _constraint);
+			_processMock.SetupResult("Execute", ExpectedProcessResult,typeof(ProcessInfo));
+			_coverage.ReportName = ReportName;
+			_coverage.Report();
+			ProcessInfo processInfo = (ProcessInfo) _constraint.Parameter;
+			AssertContains(@"c:\temp\actual.xml", processInfo.Arguments);
+			_processMock.Verify();
+			
+		}
+		
 		[Test, Ignore("Need to fix this, and understand to use mocks")]
 		public void ShouldCleanupAfterReporting()
 		{
 			string reportName ="MyReport";
-			CollectingConstraint constraint = new CollectingConstraint();
-			
 			_processMock.SetupResult("Execute", ExpectedProcessResult,typeof(ProcessInfo));
-			_processMock.ExpectAndReturn("Execute", ExpectedProcessResult, constraint);
+			_processMock.ExpectAndReturn("Execute", ExpectedProcessResult, _constraint);
 
 			_coverage.ReportName = reportName;
 			_coverage.Report();
-			ProcessInfo processInfo = (ProcessInfo) constraint.Parameter;
+			ProcessInfo processInfo = (ProcessInfo) _constraint.Parameter;
 			AssertContains(reportName, processInfo.Arguments);
 			AssertContains(NRecoverPath, processInfo.FileName);
 			_processMock.Verify();

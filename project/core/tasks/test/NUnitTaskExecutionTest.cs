@@ -19,7 +19,7 @@ private NUnitTask _task;
 		private IntegrationResult _result;
 
 		[SetUp]
-		void Init()
+		public void Init()
 		{
 			_processExecutor=new DynamicMock(typeof(ProcessExecutor));
 			_processArguments=new DynamicMock(typeof(NUnitArgument));

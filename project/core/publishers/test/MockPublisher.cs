@@ -1,5 +1,3 @@
-using System;
-using System.Collections;
 using Exortech.NetReflector;
 
 namespace ThoughtWorks.CruiseControl.Core.Publishers.Test
