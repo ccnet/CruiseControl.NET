@@ -15,10 +15,9 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 				{
 					XslTransform transform = new XslTransform();
 					LoadStylesheet(transform, transformerFileName);
-					XmlReader reader = transform.Transform(new XPathDocument(inputReader), null);
-					XmlDocument output = new XmlDocument();
-					output.Load(reader);
-					return output.OuterXml;
+					StringWriter output = new StringWriter();
+					transform.Transform(new XPathDocument(inputReader), null, output);
+					return output.ToString();
 				}
 				catch (XmlException ex)
 				{
