@@ -16,14 +16,10 @@
     <property name="lib.dir" value="lib"/>
     <property name="package.dir" value="package"/>
 
-    <property name="interfaces.dll" value="ccnet.remote.dll" />
-    <property name="core.dll" value="ccnet.core.dll"/>
-    <property name="unittests.dll" value="ThoughtWorks.CruiseControl.UnitTests.dll"/>
+    <property name="core.dll" value="ThoughtWorks.CruiseControl.Core.dll"/>
+    <property name="web.dll" value="ThoughtWorks.CruiseControl.Web.dll"/>
     <property name="console.exe" value="ccnet.exe"/>
-    <property name="service.exe" value="ccnet.service.exe"/>
-    <property name="web.dll" value="ccnet.web.dll"/>
-    <property name="webdashboard.dll" value="ccnet.webdashboard.dll"/>
-    <property name="cctray.exe" value="CCTray.exe"/>
+    <property name="service.exe" value="ccservice.exe"/>
 
     <target name="all" depends="clean, compile, test, deploy, dist"/>
 
@@ -58,6 +54,7 @@
 			<do>
 				<copy todir="${build.dir}">
 					<fileset basedir="${foldername}">
+						<includes name="*.config" />
 						<includes name="*.dll" />
 						<includes name="*.pdb" />
 						<includes name="*.exe" />
@@ -66,8 +63,8 @@
 			</do>
 		</foreach>
 
-		<copy file="${src.dir}\core\test\ccnet.core.dll.config" todir="${build.dir}"/>
-		<copy file="${src.dir}\web\test\ccnet.web.dll.config" todir="${build.dir}"/>
+		<copy file="${src.dir}\core\test\test.config" tofile="${build.dir}\${core.dll}.config"/>
+		<copy file="${src.dir}\web\test\test.config" tofile="${build.dir}\${web.dll}.config"/>
 		<copy file="${src.dir}\console\app.config" tofile="${build.dir}\${console.exe}.config" verbose="${verbosity}"/>
 		<copy file="${src.dir}\service\app.config" tofile="${build.dir}\${service.exe}.config" verbose="${verbosity}"/>
 
@@ -83,25 +80,18 @@
 
     <target name="test.unit" depends="compile" description="runs unit tests">
     	
-		<exec basedir="${build.dir}" 
-			  workingdir="${build.dir}" 
-			  program="..\tools\nunit\nunit-console.exe" 
-			  commandline="${core.dll} /xml:ccnet-core-results.xml"/>
-
-		<exec basedir="${build.dir}" 
-			  workingdir="${build.dir}" 
-			  program="..\tools\nunit\nunit-console.exe" 
-			  commandline="${console.exe} /xml:ccnet-console-results.xml"/>
-
-		<exec basedir="${build.dir}" 
-			  workingdir="${build.dir}" 
-			  program="..\tools\nunit\nunit-console.exe" 
-			  commandline="${web.dll} /xml:ccnet-web-results.xml"/>
-
-		<exec basedir="${build.dir}" 
-			  workingdir="${build.dir}" 
-			  program="..\tools\nunit\nunit-console.exe" 
-			  commandline="${unittests.dll} /xml:ccnet-unittest-results.xml"/>
+		<foreach item="File" property="filename">
+			<in>
+				<items>
+					<includes name="build/*.exe" />
+					<includes name="build/ThoughtWorks.CruiseControl.*.dll" />
+				</items>
+			</in>
+			<do>
+				<exec program="tools\nunit\nunit-console.exe" 
+					commandline="${filename} /xml:${filename}-results.xml"/>
+			</do>
+		</foreach>
 
     </target>
 

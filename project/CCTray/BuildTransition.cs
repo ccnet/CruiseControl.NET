@@ -1,7 +1,7 @@
 using System;
 using System.Reflection;
 
-namespace ThoughtWorks.CruiseControl.Remote.Monitor
+namespace ThoughtWorks.CruiseControl.CCTray
 {
 	public enum BuildTransition
 	{

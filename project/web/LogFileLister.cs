@@ -100,7 +100,7 @@ namespace ThoughtWorks.CruiseControl.Web
 			{		
 				XslTransform transform = new XslTransform();
 				LoadStylesheet(transform, xslfile);
-				XmlReader reader = transform.Transform(new XPathDocument(logfile), null); 
+				XmlReader reader = transform.Transform(new XPathDocument(logfile), null, new XmlUrlResolver()); 
 
 				XmlDocument output = new XmlDocument();
 				output.Load(reader);

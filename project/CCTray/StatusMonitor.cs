@@ -3,7 +3,9 @@ using System.ComponentModel;
 using System.Runtime.Remoting;
 using System.Windows.Forms;
 
-namespace ThoughtWorks.CruiseControl.Remote.Monitor
+using ThoughtWorks.CruiseControl.Remote;
+
+namespace ThoughtWorks.CruiseControl.CCTray
 {
 	#region Public delegates
 

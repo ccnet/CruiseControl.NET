@@ -3,7 +3,7 @@ using System.Xml.Serialization;
 
 using Drew.Agents;
 
-namespace ThoughtWorks.CruiseControl.Remote.Monitor
+namespace ThoughtWorks.CruiseControl.CCTray
 {
 	/// <summary>
 	/// Encapsulates all user-settings for the CruiseControl.NET Monitor.  This class

@@ -1,6 +1,6 @@
 using System;
 
-namespace ThoughtWorks.CruiseControl.Remote.Monitor
+namespace ThoughtWorks.CruiseControl.CCTray
 {
 	/// <summary>
 	/// Enumeration of methods via which CCTray may connect to the CCNet server.

@@ -2,7 +2,7 @@ using System;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
 
-namespace ThoughtWorks.CruiseControl.Remote.Monitor
+namespace ThoughtWorks.CruiseControl.CCTray
 {
 	/// <summary>
 	/// Summary description for Audio.

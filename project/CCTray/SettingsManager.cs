@@ -2,7 +2,7 @@ using System;
 using System.IO;
 using System.Xml.Serialization;
 
-namespace ThoughtWorks.CruiseControl.Remote.Monitor
+namespace ThoughtWorks.CruiseControl.CCTray
 {
 	/// <summary>
 	/// Utility class for managing CruiseControl.NET Monitor settings.

@@ -9,7 +9,7 @@
             <Settings
                 ApplicationIcon = "App.ico"
                 AssemblyKeyContainerName = ""
-                AssemblyName = "ThoughtWorks.CruiseControl.Remote.Monitor"
+                AssemblyName = "cctray"
                 AssemblyOriginatorKeyFile = ""
                 DefaultClientScript = "JScript"
                 DefaultHTMLPageLayout = "Grid"
@@ -18,7 +18,7 @@
                 OutputType = "WinExe"
                 PreBuildEvent = ""
                 PostBuildEvent = ""
-                RootNamespace = "ThoughtWorks.CruiseControl.Remote.Monitor"
+                RootNamespace = "ThoughtWorks.CruiseControl.CCTray"
                 RunPostBuildEvent = "OnBuildSuccess"
                 StartupObject = ""
             >
@@ -212,6 +212,14 @@
                 />
                 <File
                     RelPath = "Audio\still-successful.wav"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "Images\icon-open-file.gif"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "Images\icon-play.gif"
                     BuildAction = "Content"
                 />
             </Include>

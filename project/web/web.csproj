@@ -9,7 +9,7 @@
             <Settings
                 ApplicationIcon = ""
                 AssemblyKeyContainerName = ""
-                AssemblyName = "ccnet.web"
+                AssemblyName = "ThoughtWorks.CruiseControl.Web"
                 AssemblyOriginatorKeyFile = ""
                 DefaultClientScript = "JScript"
                 DefaultHTMLPageLayout = "Grid"
@@ -17,7 +17,7 @@
                 DelaySign = "false"
                 OutputType = "Library"
                 PreBuildEvent = ""
-                PostBuildEvent = 'copy "$(ProjectDir)test\ccnet.web.dll.config" "$(TargetDir)"'
+                PostBuildEvent = 'copy "$(ProjectDir)test\test.config" "$(TargetPath)"'
                 RootNamespace = "ThoughtWorks.CruiseControl.Web"
                 RunPostBuildEvent = "OnBuildSuccess"
                 StartupObject = ""
@@ -98,11 +98,6 @@
                     Name = "System.Runtime.Remoting"
                     AssemblyName = "System.Runtime.Remoting"
                     HintPath = "C:\WINNT\Microsoft.NET\Framework\v1.1.4322\System.Runtime.Remoting.dll"
-                />
-                <Reference
-                    Name = "ccnet.remote"
-                    Project = "{E820CF3B-8C5A-4002-BC16-B7818D3D54A8}"
-                    Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
                 />
                 <Reference
                     Name = "core"
@@ -310,6 +305,18 @@
                     BuildAction = "Content"
                 />
                 <File
+                    RelPath = "images\fxcop-critical-error.gif"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "images\fxcop-error.gif"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "images\fxcop-warning.gif"
+                    BuildAction = "Content"
+                />
+                <File
                     RelPath = "images\shim.gif"
                     BuildAction = "Content"
                 />
@@ -346,8 +353,9 @@
                     BuildAction = "Content"
                 />
                 <File
-                    RelPath = "test\ccnet.web.dll.config"
-                    BuildAction = "None"
+                    RelPath = "test\ConfigSectionTest.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
                 />
                 <File
                     RelPath = "test\LogFileListTest.cs"
@@ -363,6 +371,10 @@
                     RelPath = "test\ServerLogFileReaderTest.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "test\test.config"
+                    BuildAction = "None"
                 />
                 <File
                     RelPath = "test\TestData.cs"

@@ -9,7 +9,7 @@
             <Settings
                 ApplicationIcon = ""
                 AssemblyKeyContainerName = ""
-                AssemblyName = "ccnet.core"
+                AssemblyName = "ThoughtWorks.CruiseControl.Core"
                 AssemblyOriginatorKeyFile = ""
                 DefaultClientScript = "JScript"
                 DefaultHTMLPageLayout = "Grid"
@@ -17,7 +17,7 @@
                 DelaySign = "false"
                 OutputType = "Library"
                 PreBuildEvent = ""
-                PostBuildEvent = 'copy "$(ProjectDir)test\ccnet.core.dll.config" "$(TargetDir)"&#xd;&#xa;mkdir "$(TargetDir)xsl"&#xd;&#xa;copy "$(ProjectDir)publishers\xsl\*.xsl" "$(TargetDir)xsl"'
+                PostBuildEvent = 'copy "$(ProjectDir)test\test.config" "$(TargetPath).config"&#xd;&#xa;mkdir "$(TargetDir)xsl"&#xd;&#xa;copy "$(ProjectDir)publishers\xsl\*.xsl" "$(TargetDir)xsl"'
                 RootNamespace = "ThoughtWorks.CruiseControl.Core"
                 RunPostBuildEvent = "OnBuildSuccess"
                 StartupObject = ""
@@ -100,9 +100,14 @@
                     HintPath = "..\..\lib\NetReflector.dll"
                 />
                 <Reference
-                    Name = "ccnet.remote"
+                    Name = "Remote"
                     Project = "{E820CF3B-8C5A-4002-BC16-B7818D3D54A8}"
                     Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
+                />
+                <Reference
+                    Name = "System.Runtime.Remoting"
+                    AssemblyName = "System.Runtime.Remoting"
+                    HintPath = "..\..\..\..\..\WINDOWS\Microsoft.NET\Framework\v1.1.4322\System.Runtime.Remoting.dll"
                 />
             </References>
         </Build>
@@ -110,6 +115,11 @@
             <Include>
                 <File
                     RelPath = "CruiseControlException.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "CruiseControlRemotingException.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -428,7 +438,17 @@
                     BuildAction = "Content"
                 />
                 <File
+                    RelPath = "schedule\DailySchedule.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "schedule\Schedule.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "schedule\test\DailyScheduleTest.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -653,10 +673,6 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "test\ccnet.core.dll.config"
-                    BuildAction = "None"
-                />
-                <File
                     RelPath = "test\CruiseManagerTest.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -705,6 +721,10 @@
                     RelPath = "test\SimpleBuildFile.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "test\test.config"
+                    BuildAction = "None"
                 />
                 <File
                     RelPath = "test\TestLogs.cs"

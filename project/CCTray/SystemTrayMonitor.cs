@@ -10,7 +10,9 @@ using System.Windows.Forms;
 
 using Drew.Agents;
 
-namespace ThoughtWorks.CruiseControl.Remote.Monitor
+using ThoughtWorks.CruiseControl.Remote;
+
+namespace ThoughtWorks.CruiseControl.CCTray
 {
 	/// <summary>
 	/// Monitors CruiseControl.NET build activity from a remote machine (normally a development PC)
@@ -117,13 +119,13 @@ namespace ThoughtWorks.CruiseControl.Remote.Monitor
 		private void InitializeComponent()
 		{
 			this.components = new System.ComponentModel.Container();
-			this.trayIcon = new ThoughtWorks.CruiseControl.Remote.Monitor.NotifyIconEx();
+			this.trayIcon = new ThoughtWorks.CruiseControl.CCTray.NotifyIconEx();
 			this.contextMenu = new System.Windows.Forms.ContextMenu();
 			this.mnuLaunchWebPage = new System.Windows.Forms.MenuItem();
 			this.mnuSettings = new System.Windows.Forms.MenuItem();
 			this.mnuForceBuild = new System.Windows.Forms.MenuItem();
 			this.mnuExit = new System.Windows.Forms.MenuItem();
-			this.statusMonitor = new ThoughtWorks.CruiseControl.Remote.Monitor.StatusMonitor(this.components);
+			this.statusMonitor = new ThoughtWorks.CruiseControl.CCTray.StatusMonitor(this.components);
 			// 
 			// trayIcon
 			// 
@@ -169,9 +171,9 @@ namespace ThoughtWorks.CruiseControl.Remote.Monitor
 			// statusMonitor
 			// 
 			this.statusMonitor.Settings = null;
-			this.statusMonitor.Error += new ThoughtWorks.CruiseControl.Remote.Monitor.ErrorEventHandler(this.statusMonitor_Error);
-			this.statusMonitor.BuildOccurred += new ThoughtWorks.CruiseControl.Remote.Monitor.BuildOccurredEventHandler(this.statusMonitor_BuildOccurred);
-			this.statusMonitor.Polled += new ThoughtWorks.CruiseControl.Remote.Monitor.PolledEventHandler(this.statusMonitor_Polled);
+			this.statusMonitor.Error += new ThoughtWorks.CruiseControl.CCTray.ErrorEventHandler(this.statusMonitor_Error);
+			this.statusMonitor.BuildOccurred += new ThoughtWorks.CruiseControl.CCTray.BuildOccurredEventHandler(this.statusMonitor_BuildOccurred);
+			this.statusMonitor.Polled += new ThoughtWorks.CruiseControl.CCTray.PolledEventHandler(this.statusMonitor_Polled);
 			// 
 			// SystemTrayMonitor
 			// 
@@ -379,10 +381,10 @@ namespace ThoughtWorks.CruiseControl.Remote.Monitor
 		void LoadIcons()
 		{
 			_icons = new Hashtable(3);
-			_icons[IntegrationStatus.Failure] = LoadIcon("ThoughtWorks.CruiseControl.Remote.Monitor.Red.ico");
-			_icons[IntegrationStatus.Success] = LoadIcon("ThoughtWorks.CruiseControl.Remote.Monitor.Green.ico");
-			_icons[IntegrationStatus.Unknown] = LoadIcon("ThoughtWorks.CruiseControl.Remote.Monitor.Gray.ico");
-			_icons[IntegrationStatus.Exception] = LoadIcon("ThoughtWorks.CruiseControl.Remote.Monitor.Gray.ico");
+			_icons[IntegrationStatus.Failure] = LoadIcon("ThoughtWorks.CruiseControl.CCTray.Red.ico");
+			_icons[IntegrationStatus.Success] = LoadIcon("ThoughtWorks.CruiseControl.CCTray.Green.ico");
+			_icons[IntegrationStatus.Unknown] = LoadIcon("ThoughtWorks.CruiseControl.CCTray.Gray.ico");
+			_icons[IntegrationStatus.Exception] = LoadIcon("ThoughtWorks.CruiseControl.CCTray.Gray.ico");
 		}
 
 		Icon LoadIcon(string name) 

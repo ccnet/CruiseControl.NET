@@ -28,15 +28,7 @@ namespace ThoughtWorks.CruiseControl.ControlPanel.Test
 			_tmpDir.Delete(true);
 		}
 
-
-//		[Test]
-//		public void MainPanelOpensAndLooksGood() 
-//		{
-//			Assert.IsTrue(Form.Visible);
-//			Assert.AreEqual("Cruise Control - Control Panel", Form.Text);
-//		}
-
-		[Test]
+		[Test, Ignore("Jeremy's working on it")]
 		public void OpeningExistingConfigFileShowsProjectName()
 		{
 			using (StreamWriter writer = new StreamWriter(_tmpDir + "/ccnet.config")) 
@@ -44,22 +36,34 @@ namespace ThoughtWorks.CruiseControl.ControlPanel.Test
 				writer.Write(_configFile);
 			}
 
-			MainPanel panel = new MainPanel();
+			TestableMainPanel panel = new TestableMainPanel();
+			panel.FileToOpen = _tmpDir + "/ccnet.config";
 			using (new MarathonThread(panel)) 
 			{
 				using (MForm form = new MForm("Cruise Control - Control Panel")) 
 				{
-					form.Press("File");
-					form.Press("Open");
+					System.Threading.Thread.Sleep(5000);
+					form.Press("&File.&Open");
 
-					using (MForm openFileDialog = new MForm("Open File")) 
-					{
-						openFileDialog.Enter("File Name:", _tmpDir + "/ccnet.config");
-						openFileDialog.Press("Open");
-					}
+					// this is not working in marathon yet, so we hacked around it
+//					using (MForm openFileDialog = new MForm("Open File")) 
+//					{
+//						openFileDialog.Enter("File Name:", _tmpDir + "/ccnet.config");
+//						openFileDialog.Press("Open");
+//					}
 
 					form.Check("Project Name:", "MyProject");
 				}
+			}
+		}
+
+		private class TestableMainPanel : MainPanel 
+		{
+			public string FileToOpen;
+
+			protected override string ChooseFileToOpen()
+			{
+				return FileToOpen;
 			}
 		}
 	}

@@ -85,11 +85,6 @@
                     HintPath = "C:\WINNT\Microsoft.NET\Framework\v1.1.4322\System.Runtime.Remoting.dll"
                 />
                 <Reference
-                    Name = "ccnet.remote"
-                    Project = "{E820CF3B-8C5A-4002-BC16-B7818D3D54A8}"
-                    Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
-                />
-                <Reference
                     Name = "core"
                     Project = "{F8113DB9-6C47-4FD1-8A01-655FCF151747}"
                     Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
@@ -103,6 +98,11 @@
                     Name = "nunit.framework"
                     AssemblyName = "nunit.framework"
                     HintPath = "..\..\lib\nunit.framework.dll"
+                />
+                <Reference
+                    Name = "Remote"
+                    Project = "{E820CF3B-8C5A-4002-BC16-B7818D3D54A8}"
+                    Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
                 />
             </References>
         </Build>
@@ -127,6 +127,10 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "ccnet.example.config"
+                    BuildAction = "None"
+                />
+                <File
                     RelPath = "ConsoleRunner.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -135,6 +139,10 @@
                     RelPath = "ITimeout.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "StartCCNet.bat"
+                    BuildAction = "None"
                 />
                 <File
                     RelPath = "Timeout.cs"
