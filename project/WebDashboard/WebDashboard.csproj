@@ -184,6 +184,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Global.asax.resx"
+                    DependentUpon = "Global.asax.cs"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
                     RelPath = "Web.config"
                     BuildAction = "None"
                 />
@@ -514,6 +519,11 @@
                 />
                 <File
                     RelPath = "Dashboard\XslReportBuildPlugin.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Dashboard\ActionDecorators\SiteTemplateActionDecorator.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -1016,6 +1026,10 @@
                 />
                 <File
                     RelPath = "templates\ServerSideBar.vm"
+                    BuildAction = "None"
+                />
+                <File
+                    RelPath = "templates\SiteTemplate.vm"
                     BuildAction = "None"
                 />
                 <File

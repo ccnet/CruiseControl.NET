@@ -3,11 +3,10 @@ using System.Web.UI;
 using ThoughtWorks.CruiseControl.Core;
 using ThoughtWorks.CruiseControl.Core.Util;
 using ThoughtWorks.CruiseControl.WebDashboard.Config;
+using ThoughtWorks.CruiseControl.WebDashboard.Dashboard.ActionDecorators;
 using ThoughtWorks.CruiseControl.WebDashboard.IO;
 using ThoughtWorks.CruiseControl.WebDashboard.MVC;
 using ThoughtWorks.CruiseControl.WebDashboard.MVC.Cruise;
-using ThoughtWorks.CruiseControl.WebDashboard.Plugins.AddProject;
-using ThoughtWorks.CruiseControl.WebDashboard.Plugins.EditProject;
 
 namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 {
@@ -58,7 +57,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 				foreach (TypedAction action in plugin.Actions)
 				{
 					giverAndRegistrar.CreateImplementationMapping(action.ActionName, action.ActionType)
-						.Decorate(typeof(CruiseActionProxyAction)).Decorate(typeof(ExceptionCatchingActionProxy));
+						.Decorate(typeof(SiteTemplateActionDecorator)).Decorate(typeof(CruiseActionProxyAction)).Decorate(typeof(ExceptionCatchingActionProxy));
 				}
 			}
 
@@ -72,7 +71,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 				foreach (TypedAction action in plugin.Actions)
 				{
 					giverAndRegistrar.CreateImplementationMapping(action.ActionName, action.ActionType)
-						.Decorate(typeof(ServerCheckingProxyAction)).Decorate(typeof(CruiseActionProxyAction)).Decorate(typeof(ExceptionCatchingActionProxy));
+						.Decorate(typeof(ServerCheckingProxyAction)).Decorate(typeof(SiteTemplateActionDecorator)).Decorate(typeof(CruiseActionProxyAction)).Decorate(typeof(ExceptionCatchingActionProxy));
 				}
 			}
 
@@ -86,7 +85,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 				foreach (TypedAction action in plugin.Actions)
 				{
 					giverAndRegistrar.CreateImplementationMapping(action.ActionName, action.ActionType)
-						.Decorate(typeof(ServerCheckingProxyAction)).Decorate(typeof(ProjectCheckingProxyAction)).Decorate(typeof(CruiseActionProxyAction)).Decorate(typeof(ExceptionCatchingActionProxy));
+						.Decorate(typeof(ServerCheckingProxyAction)).Decorate(typeof(ProjectCheckingProxyAction)).Decorate(typeof(SiteTemplateActionDecorator)).Decorate(typeof(CruiseActionProxyAction)).Decorate(typeof(ExceptionCatchingActionProxy));
 				}
 			}
 
@@ -100,7 +99,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 				foreach (TypedAction action in plugin.Actions)
 				{
 					giverAndRegistrar.CreateImplementationMapping(action.ActionName,action.ActionType)
-						.Decorate(typeof(ServerCheckingProxyAction)).Decorate(typeof(BuildCheckingProxyAction)).Decorate(typeof(ProjectCheckingProxyAction)).Decorate(typeof(CruiseActionProxyAction)).Decorate(typeof(ExceptionCatchingActionProxy));
+						.Decorate(typeof(ServerCheckingProxyAction)).Decorate(typeof(BuildCheckingProxyAction)).Decorate(typeof(ProjectCheckingProxyAction)).Decorate(typeof(SiteTemplateActionDecorator)).Decorate(typeof(CruiseActionProxyAction)).Decorate(typeof(ExceptionCatchingActionProxy));
 				}
 			}
 
