@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+
+<project name="test" default="build">
+
+		<target name="build">
+			<echo>Hello World</echo>
+		</target>
+
+</project>

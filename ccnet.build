@@ -47,6 +47,13 @@
 	<target name="compile" depends="init" description="compiles everything to be released">
 		<solution configuration="build" solutionfile="project\ccnet.sln" />
 		
+		<!-- Visual Studio doesn't allow you to turn off build events for specific configurations -->
+		<delete file="${build.dir}\server\echo.bat" />
+		<delete file="${build.dir}\server\fail.bat" />
+		<delete file="${build.dir}\server\ccnet.config" />
+		<delete file="${build.dir}\server\helloworld.build" />
+		<delete file="${build.dir}\server\PostBuildEvent.bat" />
+		
 		<copy file="${src.dir}\console\app.config" tofile="${build.dir}\server\${console.exe}.config" verbose="${verbosity}"/>
 		<copy file="${src.dir}\service\app.config" tofile="${build.dir}\service\${service.exe}.config" verbose="${verbosity}"/>		
 	</target>
@@ -102,8 +109,6 @@
 				<include name="**\*.css"/>
 			</fileset>
 		</copy>
-
-		<copy file="${src.dir}\console\ccnet.example.config" todir="deployed\server"  verbose="${verbosity}"/>
 	</target>
 	
 	<target name="deploy.cctray">
@@ -153,13 +158,6 @@
 		</copy>
 
 		<mkdir dir="${webapp.dir}\log" />
-
-		<!-- Create web application (This may fail on Windows Server 2003 / IIS 6 -->
-		<!-- MR - need to add NantContrib.dll once Nant 0.8.3 actually released
-		<echo message="Setting up IIS V-Dir, physical [${webapp.dir}], virtual [${webapp.name}]" />
-		<mkiisdir dirpath="${webapp.dir}" vdirname="ccnetdev"/>
-		-->
-
 	</target>
 	
 	<target name="deploy.webdashboard" description="deploys the web dashboard application">
