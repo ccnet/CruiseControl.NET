@@ -5,6 +5,8 @@
 	
 	<xsl:template match="/">
 		<div id="master">
+			<xsl:apply-templates select="cruisecontrol/build/test-results[.//test-suite]" />
+			<!-- this here for pre-0.9 build logs -->
 			<xsl:apply-templates select="cruisecontrol/test-results[.//test-suite]" />
 		</div>
 	</xsl:template>
