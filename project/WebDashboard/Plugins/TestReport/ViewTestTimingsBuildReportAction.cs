@@ -9,7 +9,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.ViewBuildReport
 {
 	public class ViewTestTimingsBuildReportAction : ICruiseAction
 	{
-		public static readonly string ACTION_NAME = "ViewFxCopBuildReport";
+		public static readonly string ACTION_NAME = "ViewTestTimingsBuildReport";
 
 		private readonly IMultiTransformer transformer;
 
