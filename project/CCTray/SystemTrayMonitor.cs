@@ -51,9 +51,10 @@ namespace ThoughtWorks.CruiseControl.CCTray
 
 		public SystemTrayMonitor()
 		{
-			InitializeComponent();
 			InitialiseSettings();
 			InitialiseMonitor();
+
+			InitializeComponent();
 			InitialiseTrayIcon();
 			InitialiseProjectMenu();
 
@@ -222,7 +223,6 @@ namespace ThoughtWorks.CruiseControl.CCTray
 			// 
 			// statusMonitor
 			// 
-			this._statusMonitor.Settings = null;
 			this._statusMonitor.Error += new ErrorEventHandler(this.statusMonitor_Error);
 			this._statusMonitor.BuildOccurred += new BuildOccurredEventHandler(this.statusMonitor_BuildOccurred);
 			this._statusMonitor.Polled += new PolledEventHandler(this.statusMonitor_Polled);

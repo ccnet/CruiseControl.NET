@@ -1,7 +1,5 @@
-using NMock;
 using NUnit.Framework;
 using ThoughtWorks.CruiseControl.CCTrayLib;
-using ThoughtWorks.CruiseControl.Remote;
 using ThoughtWorks.CruiseControl.WebServiceProxy;
 
 namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib

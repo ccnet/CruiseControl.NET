@@ -56,7 +56,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib
 
 			return defaults;
 		}
-
+		[XmlIgnore]
 		public virtual ICruiseManager CruiseManager
 		{
 			get
