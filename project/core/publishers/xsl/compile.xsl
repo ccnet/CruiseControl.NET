@@ -21,21 +21,15 @@
                     </td>
                 </tr>
                 <xsl:if test="$total > 0">
-                    <tr>
-                        <td>
-                            <xsl:apply-templates select="$error.messages"/>
-                            <xsl:apply-templates select="$warning.messages"/>
-                        </td>
-                    </tr>
+                <tr><td><xsl:apply-templates select="$error.messages"/></td></tr>
+                <tr><td><xsl:apply-templates select="$warning.messages"/></td></tr>
                 </xsl:if>
             </table>
         </xsl:if>
     </xsl:template>
 
     <xsl:template match="message[contains(text(), 'error')]|message[contains(text(), 'warning')]">
-        <p class="compile-error-data">
-            <xsl:value-of select="text()"/>
-        </p>
+        <pre class="compile-error-data"><xsl:value-of select="text()"/></pre>
     </xsl:template>
 
 </xsl:stylesheet>

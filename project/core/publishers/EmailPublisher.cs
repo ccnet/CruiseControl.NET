@@ -16,7 +16,7 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
 	/// plain-text, and Html email formats.  Rules regarding who receives email
 	/// are configurable.
 	/// </summary>
-	/// TODO document email recipient rules a little here...
+	// TODO document email recipient rules a little here...
 	[ReflectorType("email")]
 	public class EmailPublisher : PublisherBase
 	{
@@ -106,9 +106,7 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
 		public override void PublishIntegrationResults(IProject project, IntegrationResult result)
 		{
 			if (result.Status==IntegrationStatus.Unknown)
-			{
 				return;
-			}
 
 			string to = CreateRecipientList(result);
 			string subject = CreateSubject(result);
@@ -240,6 +238,7 @@ a:hover { color:#FC0; }
 .header-title { font-size:12px; color:#000; font-weight:bold; padding-bottom:10pt; }
 .header-label { font-weight:bold; }
 .header-data { color:#000; }
+.header-data-error { font-family:courier, monospaced; color:#000; white-space:pre; }
 
 .modifications-data { font-size:9px; color:#000; }
 .modifications-sectionheader { background-color:#006; color:#FFF; }
@@ -255,7 +254,7 @@ a:hover { color:#FC0; }
 
 .compile-data { font-size:9px; color:#000; }
 .compile-error-data { font-size:9px; color:#F30; white-space:pre; }
-.compile-warn-data { font-size:9px; color:#C90; }
+.compile-warn-data { font-size:9px; color:#C90; white-space:pre; }
 .compile-sectionheader { background-color:#006; color:#FFF; }
 
 .distributables-data { font-size:9px; color:#000; }

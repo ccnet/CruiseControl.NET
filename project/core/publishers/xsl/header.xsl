@@ -13,8 +13,8 @@
             <xsl:if test="/cruisecontrol/exception">
                 <tr><td class="header-title" colspan="2">BUILD EXCEPTION</td></tr>
                 <tr>
-                    <td class="header-label">Error Message:</td>
-                    <td class="header-data"><xsl:value-of select="/cruisecontrol/exception"/></td>
+                    <td class="header-label"><nobr>Error Message:</nobr></td>
+                    <td class="header-data-error"><xsl:value-of select="/cruisecontrol/exception"/></td>
                 </tr>
             </xsl:if>
             
@@ -27,11 +27,11 @@
             </xsl:if>
 
             <tr>
-                <td class="header-label">Date of build:</td>
+                <td class="header-label"><nobr>Date of build:</nobr></td>
                 <td class="header-data"><xsl:value-of select="/cruisecontrol/build/@date"/></td>
             </tr>
             <tr>
-                <td class="header-label">Time of build:</td>
+                <td class="header-label"><nobr>Running time:</nobr></td>
                 <td class="header-data"><xsl:value-of select="/cruisecontrol/build/@buildtime"/></td>
             </tr>
             
@@ -46,11 +46,11 @@
     <xsl:template match="/cruisecontrol/modifications/modification">
         <xsl:if test="position() = 1">
             <tr>
-                <td class="header-label">Last changed:</td>
+                <td class="header-label"><nobr>Last changed:</nobr></td>
                 <td class="header-data"><xsl:value-of select="date"/></td>
             </tr>
             <tr>
-                <td class="header-label">Last log entry:</td>
+                <td class="header-label"><nobr>Last log entry:</nobr></td>
                 <td class="header-data"><xsl:value-of select="comment"/></td>
             </tr>
         </xsl:if>

@@ -28,7 +28,7 @@
             <!-- Unit Tests -->
             <tr>
                 <td class="unittests-sectionheader" colspan="2">
-                   Unit Tests (<xsl:value-of select="count($testcase.list) + count($nunit2case.list)"/>)
+                   &#160;Unit Tests (<xsl:value-of select="count($testcase.list) + count($nunit2case.list)"/>)
                 </td>
             </tr>
 
@@ -46,30 +46,30 @@
             <xsl:apply-templates select="$testcase.error.list"/>
             <xsl:apply-templates select="$testcase.failure.list | $nunit2.failure.list"/>
             <xsl:apply-templates select="$nunit2.notrun.list"/>
-            <tr/>
+
             <tr><td colspan="2">&#160;</td></tr>
 
             <xsl:if test="$totalErrorsAndFailures > 0">
-              <tr>
-                <td class="unittests-sectionheader" colspan="2">
-                    &#160;Unit Test Failure and Error Details (<xsl:value-of select="$totalErrorsAndFailures"/>)
-                </td>
-              </tr>
+                <tr>
+                    <td class="unittests-sectionheader" colspan="2">
+                        &#160;Unit Test Failure and Error Details (<xsl:value-of select="$totalErrorsAndFailures"/>)
+                    </td>
+                </tr>
 
-              <!-- (PENDING) Why doesn't this work if set up as variables up top? -->
-              <xsl:call-template name="testdetail">
-                  <xsl:with-param name="detailnodes" select="//testsuite/testcase[.//error]"/>
-              </xsl:call-template>
+                <!-- (PENDING) Why doesn't this work if set up as variables up top? -->
+                <xsl:call-template name="testdetail">
+                    <xsl:with-param name="detailnodes" select="//testsuite/testcase[.//error]"/>
+                </xsl:call-template>
 
-              <xsl:call-template name="testdetail">
-                  <xsl:with-param name="detailnodes" select="//testsuite/testcase[.//failure]"/>
-              </xsl:call-template>
-              
-              <xsl:call-template name="nunit2testdetail">
-                  <xsl:with-param name="detailnodes" select="//test-suite//test-case[.//failure]"/>
-              </xsl:call-template>
+                <xsl:call-template name="testdetail">
+                    <xsl:with-param name="detailnodes" select="//testsuite/testcase[.//failure]"/>
+                </xsl:call-template>
+                
+                <xsl:call-template name="nunit2testdetail">
+                    <xsl:with-param name="detailnodes" select="//test-suite//test-case[.//failure]"/>
+                </xsl:call-template>
 
-              <tr><td colspan="2">&#160;</td></tr>
+                <tr><td colspan="2">&#160;</td></tr>
             </xsl:if>
             
             <xsl:if test="$nunit2notrun > 0">
@@ -138,11 +138,9 @@
         <tr>
             <td></td>
             <td class="unittests-error">
-                <pre>
-                    <xsl:call-template name="br-replace">
+                <pre><xsl:call-template name="br-replace">
                         <xsl:with-param name="word" select="error"/>
-                    </xsl:call-template>
-                </pre>
+                    </xsl:call-template></pre>
             </td>
         </tr>
         </xsl:if>
@@ -153,11 +151,9 @@
         <tr>
             <td></td>
             <td class="unittests-error">
-                <pre>
-                    <xsl:call-template name="br-replace">
+                <pre><xsl:call-template name="br-replace">
                         <xsl:with-param name="word" select="failure"/>
-                    </xsl:call-template>
-                </pre>
+                    </xsl:call-template></pre>
             </td>
         </tr>
         </xsl:if>
@@ -182,9 +178,7 @@
             <tr>
                 <td></td>
                 <td class="unittests-error">
-                    <pre>
-                        <xsl:value-of select="failure//stack-trace"/>
-                    </pre>
+                    <pre><xsl:value-of select="failure//stack-trace"/></pre>
                 </td>
             </tr>
             </xsl:if>
@@ -196,11 +190,9 @@
             <tr>
                 <td></td>
                 <td class="unittests-error">
-                    <pre>
-                        <xsl:call-template name="br-replace">
+                    <pre><xsl:call-template name="br-replace">
                             <xsl:with-param name="word" select="/stack-trace"/>
-                        </xsl:call-template>
-                    </pre>
+                        </xsl:call-template></pre>
                 </td>
             </tr>
             </xsl:if>
