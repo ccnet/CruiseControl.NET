@@ -125,6 +125,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "GenericProject.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "IntegrationEvents.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -141,6 +146,11 @@
                 />
                 <File
                     RelPath = "IProject.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "ITask.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -274,6 +284,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "publishers\NetSendPublisher.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "publishers\PublisherBase.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -315,6 +330,11 @@
                 />
                 <File
                     RelPath = "publishers\test\MockPublisher.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "publishers\test\NetSendPublisherTest.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -579,6 +599,11 @@
                 />
                 <File
                     RelPath = "test\FileMother.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "test\GenericProjectTest.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
