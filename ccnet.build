@@ -9,6 +9,7 @@
 
     <property name="webapp.dir" value="deployed\web"/>
     <property name="webdashboard.dir" value="deployed\webdashboard"/>
+		<property name="webservice.dir" value="deployed\webservice" />
 
     <property name="build.dir" value="build"/>
     <property name="src.dir" value="project"/>
@@ -109,7 +110,7 @@
 	</target>
 
 	<!-- DEPLOY -->
-	<target name="deploy" depends="deploy.builder, deploy.cctray, deploy.webapp, deploy.webdashboard" />
+	<target name="deploy" depends="deploy.builder, deploy.cctray, deploy.webapp, deploy.webdashboard, deploy.webservice" />
 	
 	<target name="deploy.builder" depends="compile">
 		<mkdir dir="deployed\builder"/>
@@ -206,6 +207,34 @@
 				<includes name="**\*.aspx"/>
 				<includes name="**\*.ascx"/>
 				<includes name="**\*.asax"/>
+				<includes name="**\*.html"/>
+				<includes name="**\*.gif"/>
+				<includes name="**\*.wav"/>
+				<includes name="**\*.css"/>
+				<includes name="**\*.xsl"/>
+				<includes name="**\*.config"/>
+
+				<excludes name="bin\**\*" />
+				<excludes name="obj\**\*" />
+				<excludes name="test\**\*" />
+			</fileset>
+		</copy>
+	</target>
+
+	<target name="deploy.webservice" depends="compile" description="deploys the web service">
+		<mkdir dir="${webservice.dir}" verbose="${verbosity}"/>
+		<copy todir="${webservice.dir}\bin">
+			<fileset basedir="project\WebService\bin\Debug">
+				<includes name="*.dll" />
+			</fileset>
+		</copy>
+
+		<copy todir="${webservice.dir}">
+			<fileset basedir="project\WebService">
+				<includes name="**\*.aspx"/>
+				<includes name="**\*.ascx"/>
+				<includes name="**\*.asax"/>
+				<includes name="**\*.asmx"/>
 				<includes name="**\*.html"/>
 				<includes name="**\*.gif"/>
 				<includes name="**\*.wav"/>
