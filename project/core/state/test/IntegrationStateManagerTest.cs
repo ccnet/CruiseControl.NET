@@ -1,7 +1,4 @@
-using System;
 using System.IO;
-using System.Xml;
-
 using Exortech.NetReflector;
 using NUnit.Framework;
 using ThoughtWorks.CruiseControl.Core.Test;
@@ -18,7 +15,7 @@ namespace ThoughtWorks.CruiseControl.Core.State.Test
 		IntegrationResult _result;
 
 		[SetUp]
-		protected void SetUp()
+		public void SetUp()
 		{
 			_state = new IntegrationStateManager();
 			_result = IntegrationResultFixture.CreateIntegrationResult();
@@ -26,7 +23,7 @@ namespace ThoughtWorks.CruiseControl.Core.State.Test
 		}
 
 		[TearDown]
-		protected void TearDown()
+		public void TearDown()
 		{
 			TempFileUtil.DeleteTempDir(_tempDir);
 		}
@@ -129,6 +126,19 @@ namespace ThoughtWorks.CruiseControl.Core.State.Test
 			result.Label = "<&/<>";
 			result.Output = "<badxml>>";
 			_state.SaveState(result);
+		}
+
+		[Test]
+		public void SaveAndReloadWithUnicodeCharacters()
+		{
+			_state.Directory = _tempDir;
+
+			IntegrationResult result = IntegrationResultMother.CreateSuccessful();
+			result.ProjectName = "hi there? håkan! \u307b";
+			_state.SaveState(result);
+
+			IntegrationResult actual = _state.LoadState();
+			AssertEquals(result.ProjectName, actual.ProjectName);
 		}
 	}
 }

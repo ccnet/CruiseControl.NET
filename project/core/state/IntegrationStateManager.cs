@@ -1,6 +1,6 @@
 using System;
 using System.IO;
-using System.Xml;
+using System.Text;
 using System.Xml.Serialization;
 using Exortech.NetReflector;
 
@@ -9,9 +9,9 @@ namespace ThoughtWorks.CruiseControl.Core.State
 	[ReflectorType("state")]
 	public class IntegrationStateManager : IStateManager
 	{
-		XmlSerializer _serializer;
-		string _directory = System.IO.Directory.GetCurrentDirectory(); // default
-		string _filename = "ccnet.state"; // default
+		private XmlSerializer _serializer;
+		private string _directory = System.IO.Directory.GetCurrentDirectory(); // default
+		private string _filename = "ccnet.state"; // default
 
 		public IntegrationStateManager()
 		{
@@ -78,7 +78,7 @@ namespace ThoughtWorks.CruiseControl.Core.State
 		{
 			try
 			{
-				return new StreamWriter(path);
+				return new StreamWriter(path, false, Encoding.Unicode);
 			}
 			catch (SystemException ex)
 			{
