@@ -1,0 +1,28 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<FxCopProject Version="1.21" Name="My FxCop Project">
+ <ProjectOptions>
+  <SharedProject>True</SharedProject>
+  <Stylesheet Apply="False">$(FxCopDir)\Xml\FxCopReport.xsl</Stylesheet>
+  <SaveMessages>
+   <Project Status="Active, Excluded" NewOnly="False" />
+   <Report Status="Active" NewOnly="False" />
+  </SaveMessages>
+  <CompressProjectFile DefaultTargetCheck="True" DefaultRuleCheck="True">True</CompressProjectFile>
+  <PermitAnalysis>True</PermitAnalysis>
+ </ProjectOptions>
+ <Targets>
+  <Target Name="$(ProjectDir)/../../project/core/bin/Debug/ccnet.core.dll" Analyze="True" AnalyzeAllChildren="True" />
+ </Targets>
+ <RuleFiles>
+  <RuleFile Name="$(FxCopDir)\Rules\DesignRules.dll" Enabled="True" AllRulesEnabled="True" />
+  <RuleFile Name="$(FxCopDir)\Rules\SecurityRules.dll" Enabled="True" AllRulesEnabled="True" />
+  <RuleFile Name="$(FxCopDir)\Rules\UsageRules.dll" Enabled="True" AllRulesEnabled="True" />
+  <RuleFile Name="$(FxCopDir)\Rules\GlobalizationRules.dll" Enabled="True" AllRulesEnabled="True" />
+  <RuleFile Name="$(FxCopDir)\Rules\ComRules.dll" Enabled="True" AllRulesEnabled="True" />
+  <RuleFile Name="$(FxCopDir)\Rules\NamingRules.dll" Enabled="True" AllRulesEnabled="True" />
+  <RuleFile Name="$(FxCopDir)\Rules\PerformanceRules.dll" Enabled="True" AllRulesEnabled="True" />
+ </RuleFiles>
+ <FxCopReport Version="1.21" LastAnalysis="2003-09-09 15:38:12Z">
+  <Notes />
+ </FxCopReport>
+</FxCopProject>
