@@ -1,9 +1,8 @@
 using System;
 using System.Drawing;
-using System.Windows.Forms;
-using System.Runtime.InteropServices;
-using System.ComponentModel;
 using System.Reflection;
+using System.Runtime.InteropServices;
+using System.Windows.Forms;
 
 namespace tw.ccnet.remote.monitor
 {
@@ -59,13 +58,13 @@ namespace tw.ccnet.remote.monitor
 						case 0x402: // NIN_BALLOONSHOW
 							break;
 
-						// this should happen when the balloon is closed using the x
-						// - we never seem to get this message!
+							// this should happen when the balloon is closed using the x
+							// - we never seem to get this message!
 						case 0x403: // NIN_BALLOONHIDE
 							break;
 
-						// we seem to get this next message whether the balloon times
-						// out or whether it is closed using the x
+							// we seem to get this next message whether the balloon times
+							// out or whether it is closed using the x
 						case 0x404: // NIN_BALLOONTIMEOUT
 							break;
 
