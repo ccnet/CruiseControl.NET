@@ -233,7 +233,22 @@
 	</target>
 	
 	<!-- FOR RUNNING CCNET AGAINST ITSELF -->
-	<target name="ContinuousIntegration" depends="all">
+	<target name="dist.publish" depends="dist">
+			<ifnot propertyexists="label-to-apply">
+				<fail message="label-to-apply property not set, so can't create labelled distribution files" />
+			</ifnot>
+			
+			<property name="publish.dir" value="D:\download-area\CCNet-Builds\${label-to-apply}" />
+
+			<mkdir dir="${publish.dir}" />
+			<copy todir="${publish.dir}">
+					<fileset basedir="dist">
+							<includes name="*"/>
+					</fileset>
+			</copy>			
+	</target>
+	
+	<target name="ContinuousIntegration" depends="all, dist.publish">
 		<echo message="CI Run for build number ${label-to-apply} successfully completed" />
 	</target>
 </project>
