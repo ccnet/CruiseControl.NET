@@ -30,6 +30,10 @@
     <target name="all" depends="clean, compile, test, deploy, dist"/>
 
 	<target name="clean" description="cleans up everything">
+		<!-- These mkdirs here to stop warnings -->
+		<mkdir dir="${build.dir}" />
+		<mkdir dir="deployed" />
+		<mkdir dir="dist" />
 		<delete dir="${build.dir}" failonerror="false"/>
 		<delete dir="deployed" failonerror="false"/>
 		<delete dir="dist" failonerror="false"/>
