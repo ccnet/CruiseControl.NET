@@ -41,7 +41,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 			{
 				if (queryString.Length > 1)
 				{
-					queryString += "&amp;";	
+					queryString += "&";	
 				}
 				queryString += partialQueryString;
 			}
@@ -85,12 +85,12 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 
 		private string BuildProjectQueryString(string serverName, string projectName)
 		{
-			return string.Format("{0}&amp;{1}={2}",BuildServerQueryString(serverName), QueryStringRequestWrapper.ProjectQueryStringParameter, projectName);
+			return string.Format("{0}&{1}={2}",BuildServerQueryString(serverName), QueryStringRequestWrapper.ProjectQueryStringParameter, projectName);
 		}
 
 		private string BuildBuildQueryString(string serverName, string projectName, string buildName)
 		{
-			return string.Format("{0}&amp;{1}={2}",BuildProjectQueryString(serverName, projectName), QueryStringRequestWrapper.BuildQueryStringParameter, buildName);
+			return string.Format("{0}&{1}={2}",BuildProjectQueryString(serverName, projectName), QueryStringRequestWrapper.BuildQueryStringParameter, buildName);
 		}
 	}
 }

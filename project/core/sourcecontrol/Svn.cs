@@ -19,7 +19,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 		private string _workingDirectory;
 		private bool _tagOnSuccess;
 		private string _tagBaseUrl;
-		private IUrlBuilder _urlBuilder;
+		private IModificationUrlBuilder _urlBuilder;
 
 		public Svn(ProcessExecutor executor) : base(new SvnHistoryParser(), executor) { }
 
@@ -28,7 +28,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 		}
 
 		[ReflectorProperty("webUrlBuilder", InstanceTypeKey="type", Required = false)]
-		public IUrlBuilder UrlBuilder
+		public IModificationUrlBuilder UrlBuilder
 		{
 			get { return _urlBuilder; }
 			set { _urlBuilder = value; }

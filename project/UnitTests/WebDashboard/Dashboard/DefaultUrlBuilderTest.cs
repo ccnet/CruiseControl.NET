@@ -75,7 +75,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 			string url = urlBuilder.BuildUrl(new ActionSpecifierWithName("myAction"), "myparam=myvalue");
 
 			// Verify
-			Assert.AreEqual("http://local/foo.htm?_action_myAction=true&amp;myparam=myvalue", url);
+			Assert.AreEqual("http://local/foo.htm?_action_myAction=true&myparam=myvalue", url);
 			VerifyAll();
 		}
 
@@ -103,7 +103,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 			string url = urlBuilder.BuildServerUrl(new ActionSpecifierWithName("myAction"), "myserver");
 
 			// Verify
-			Assert.AreEqual("http://local/foo.htm?_action_myAction=true&amp;server=myserver", url);
+			Assert.AreEqual("http://local/foo.htm?_action_myAction=true&server=myserver", url);
 			VerifyAll();
 		}
 
@@ -117,7 +117,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 			string url = urlBuilder.BuildProjectUrl("foo.htm", "myserver", "myproject");
 
 			// Verify
-			Assert.AreEqual("http://local/foo.htm?server=myserver&amp;project=myproject", url);
+			Assert.AreEqual("http://local/foo.htm?server=myserver&project=myproject", url);
 			VerifyAll();
 		}
 
@@ -131,7 +131,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 			string url = urlBuilder.BuildProjectUrl(new ActionSpecifierWithName("myAction"),"myserver", "myproject");
 
 			// Verify
-			Assert.AreEqual("http://local/foo.htm?_action_myAction=true&amp;server=myserver&amp;project=myproject", url);
+			Assert.AreEqual("http://local/foo.htm?_action_myAction=true&server=myserver&project=myproject", url);
 			VerifyAll();
 		}
 
@@ -145,7 +145,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 			string url = urlBuilder.BuildBuildUrl("foo.htm", "myserver", "myproject", "mybuild");
 
 			// Verify
-			Assert.AreEqual("http://local/foo.htm?server=myserver&amp;project=myproject&amp;build=mybuild", url);
+			Assert.AreEqual("http://local/foo.htm?server=myserver&project=myproject&build=mybuild", url);
 			VerifyAll();
 		}
 
@@ -159,7 +159,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 			string url = urlBuilder.BuildBuildUrl(new ActionSpecifierWithName("myAction"),"myserver", "myproject", "mybuild");
 
 			// Verify
-			Assert.AreEqual("http://local/foo.htm?_action_myAction=true&amp;server=myserver&amp;project=myproject&amp;build=mybuild", url);
+			Assert.AreEqual("http://local/foo.htm?_action_myAction=true&server=myserver&project=myproject&build=mybuild", url);
 			VerifyAll();
 		}
 	}

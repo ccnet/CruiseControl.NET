@@ -713,6 +713,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "sourcecontrol\IModificationUrlBuilder.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "sourcecontrol\ISourceControl.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -724,11 +729,6 @@
                 />
                 <File
                     RelPath = "sourcecontrol\IVssLocale.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "sourcecontrol\IWebUrlBuilder.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

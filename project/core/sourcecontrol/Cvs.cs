@@ -50,7 +50,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
         public string RestrictLogins; 
 
 		[ReflectorProperty("webUrlBuilder", InstanceTypeKey="type", Required=false)]
-		public IUrlBuilder UrlBuilder;
+		public IModificationUrlBuilder UrlBuilder;
 
 		[ReflectorProperty("branch", Required=false)]
 		public string Branch;

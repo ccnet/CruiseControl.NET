@@ -4,7 +4,7 @@ using System;
 namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 {
 	[ReflectorType("websvn")]
-	public class WebSVNUrlBuilder : IUrlBuilder
+	public class WebSVNUrlBuilder : IModificationUrlBuilder
 	{
 		private string _url;
 

@@ -117,7 +117,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.MVC.Cruise
 
 		public SaveNewProjectAction SaveNewProjectAction
 		{
-			get { return new SaveNewProjectAction( AddProjectModelGenerator, AddProjectViewBuilder, dcFactory.ServerAggregatingCruiseManagerWrapper, dcFactory.NetReflectorProjectSerializer); }
+			get { return new SaveNewProjectAction( AddProjectModelGenerator, AddProjectViewBuilder, dcFactory.ServerAggregatingCruiseManagerWrapper, dcFactory.NetReflectorProjectSerializer, dcFactory.DefaultUrlBuilder); }
 		}
 
 		public DisplayAddProjectPageAction DisplayAddProjectPageAction

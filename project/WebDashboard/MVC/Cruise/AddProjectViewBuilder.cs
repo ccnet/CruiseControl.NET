@@ -43,7 +43,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.MVC.Cruise
 			rows.AddRange(BuildBuilderSelectionAndView(project.Builder));
 			rows.Add(TR(TD("Files To Merge"), TD(MultiLineTextBox("Project.Tasks.0.MergeFilesForPresentation", ((MergeFilesTask) project.Tasks[0]).MergeFilesForPresentation))));
 			rows.Add(TR(TD("Working Directory"), TD(TextBox("Project.ConfiguredWorkingDirectory", project.ConfiguredWorkingDirectory))));
-			rows.Add(TR(TD("Reporting URL *"), TD(TextBox("Project.WebURL", project.WebURL))));
+			rows.Add(TR(TD("Reporting URL"), TD(TextBox("Project.WebURL", project.WebURL))));
 
 			return Table((HtmlTableRow[]) rows.ToArray(typeof (HtmlTableRow)));
 		}

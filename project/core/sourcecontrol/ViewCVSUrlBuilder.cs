@@ -4,7 +4,7 @@ using System;
 namespace ThoughtWorks.CruiseControl.Core
 {
 	[ReflectorType("viewcvs")]
-	public class ViewCVSUrlBuilder : IUrlBuilder
+	public class ViewCVSUrlBuilder : IModificationUrlBuilder
 	{
 		private string _url;
 
