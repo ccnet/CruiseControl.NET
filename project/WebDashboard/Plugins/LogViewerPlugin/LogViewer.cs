@@ -24,24 +24,24 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.LogViewerPlugin
 		{
 			string serverName = requestWrapper.GetServerName();
 			string projectName = requestWrapper.GetProjectName();
-			string logName = GetLogName(serverName, projectName);
+			string buildName = GetBuildName(serverName, projectName);
 
-			PutLogInCacheIfNecessary(serverName, projectName, logName);
+			PutLogInCacheIfNecessary(serverName, projectName, buildName);
 
-			return new LogViewerResults(cacheManager.GetURLForFile(serverName, projectName, CacheDirectory, logName));
+			return new LogViewerResults(cacheManager.GetURLForFile(serverName, projectName, CacheDirectory, buildName));
 		}
 
-		private string GetLogName(string serverName, string projectName)
+		private string GetBuildName(string serverName, string projectName)
 		{
-			ILogSpecifier logSpecifier = requestWrapper.GetLogSpecifier();
+			ILogSpecifier buildSpecifier = requestWrapper.GetBuildSpecifier();
 
-			if (logSpecifier is NoLogSpecified)
+			if (buildSpecifier is NoLogSpecified)
 			{
 				return manager.GetLatestLogName(serverName, projectName);
 			}
 			else
 			{
-				return ((FileNameLogSpecifier) logSpecifier).Filename;
+				return ((FileNameLogSpecifier) buildSpecifier).Filename;
 			}
 		}
 

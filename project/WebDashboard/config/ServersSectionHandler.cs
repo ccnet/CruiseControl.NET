@@ -1,24 +1,28 @@
+using System;
 using System.Collections;
 using System.Configuration;
 using System.Xml;
+using ThoughtWorks.CruiseControl.WebDashboard.config;
 
 namespace ThoughtWorks.CruiseControl.WebDashboard.Config
 {
-	public class ProjectURLsSectionHandler : IConfigurationSectionHandler
+	public class ServersSectionHandler : IConfigurationSectionHandler
 	{
 		public object Create(object parent, object configContext, XmlNode section)
 		{
-			ArrayList urls = new ArrayList();
+			ArrayList servers = new ArrayList();
 			
 			foreach (XmlNode node in section.ChildNodes) 
 			{
 				if (node.NodeType == XmlNodeType.Element) 
 				{
-					urls.Add(node.Attributes["url"].Value);
+					servers.Add(new ServerSpecification(node.Attributes["name"].Value, node.Attributes["url"].Value));
 				}
 			}
 
-			return urls;
+			return servers;
 		}
+
+		public static readonly string SectionName = "servers";
 	}
 }

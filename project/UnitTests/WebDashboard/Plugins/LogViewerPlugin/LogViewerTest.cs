@@ -41,7 +41,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Plugins.LogViewerPlu
 		{
 			requestWrapperMock.ExpectAndReturn("GetServerName", serverName);
 			requestWrapperMock.ExpectAndReturn("GetProjectName", projectName);
-			requestWrapperMock.ExpectAndReturn("GetLogSpecifier", new NoLogSpecified());
+			requestWrapperMock.ExpectAndReturn("GetBuildSpecifier", new NoLogSpecified());
 
 			cruiseManagerMock.ExpectAndReturn("GetLatestLogName", logFileName, serverName, projectName);
 			cruiseManagerMock.ExpectAndReturn("GetLog", logContent, serverName, projectName, logFileName);
@@ -63,7 +63,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Plugins.LogViewerPlu
 		{
 			requestWrapperMock.SetupResult("GetServerName", serverName);
 			requestWrapperMock.SetupResult("GetProjectName", projectName);
-			requestWrapperMock.SetupResult("GetLogSpecifier", new FileNameLogSpecifier(logFileName));
+			requestWrapperMock.SetupResult("GetBuildSpecifier", new FileNameLogSpecifier(logFileName));
 
 			cruiseManagerMock.ExpectAndReturn("GetLog", logContent, serverName, projectName, logFileName);
 			cruiseManagerMock.ExpectNoCall("GetLatestLogName", typeof(string), typeof(string));
@@ -85,7 +85,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Plugins.LogViewerPlu
 		{
 			requestWrapperMock.ExpectAndReturn("GetServerName", serverName);
 			requestWrapperMock.ExpectAndReturn("GetProjectName", projectName);
-			requestWrapperMock.ExpectAndReturn("GetLogSpecifier", new NoLogSpecified());
+			requestWrapperMock.ExpectAndReturn("GetBuildSpecifier", new NoLogSpecified());
 			
 			cruiseManagerMock.ExpectAndReturn("GetLatestLogName", logFileName, serverName, projectName);
 			cruiseManagerMock.ExpectNoCall("GetLog", typeof(string), typeof(string), typeof(string));
@@ -107,7 +107,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Plugins.LogViewerPlu
 		{
 			requestWrapperMock.SetupResult("GetServerName", serverName);
 			requestWrapperMock.SetupResult("GetProjectName", projectName);
-			requestWrapperMock.SetupResult("GetLogSpecifier", new FileNameLogSpecifier(logFileName));
+			requestWrapperMock.SetupResult("GetBuildSpecifier", new FileNameLogSpecifier(logFileName));
 
 			cruiseManagerMock.ExpectNoCall("GetLatestLogName", typeof(string), typeof(string));
 			cruiseManagerMock.ExpectNoCall("GetLog", typeof(string), typeof(string), typeof(string));

@@ -148,6 +148,11 @@
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
+                <File
+                    RelPath = "WebDashboard\ServerConnection\ServerAggregatingCruiseManagerWrapperTest.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
             </Include>
         </Files>
     </CSHARP>

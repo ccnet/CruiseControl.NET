@@ -413,7 +413,12 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "config\ProjectURLsSectionHandler.cs"
+                    RelPath = "config\ServerSpecification.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "config\ServersSectionHandler.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -601,6 +606,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "ServerConnection\ICruiseManagerFactory.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "ServerConnection\ICruiseManagerWrapper.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -616,7 +626,17 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "ServerConnection\RemoteCruiseManagerFactory.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "ServerConnection\ServerAggregatingCruiseManagerWrapper.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "ServerConnection\UnknownServerException.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

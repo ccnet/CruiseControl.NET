@@ -14,9 +14,12 @@ namespace ThoughtWorks.CruiseControl.WebDashboard
 
 		private void Page_Load(object sender, System.EventArgs e)
 		{
-			LogViewer logViewer = new LogViewer(new QueryStringRequestWrapper(Request.QueryString), 
-				new ServerAggregatingCruiseManagerWrapper() , 
-				new LocalFileCacheManager(new HttpPathMapper(Context, this), new ConfigurationSettingsConfigGetter()));
+			ConfigurationSettingsConfigGetter configurationGetter = new ConfigurationSettingsConfigGetter();
+			LogViewer logViewer = new LogViewer(
+				new QueryStringRequestWrapper(Request.QueryString), 
+				new ServerAggregatingCruiseManagerWrapper(configurationGetter, new RemoteCruiseManagerFactory()) , 
+				new LocalFileCacheManager(new HttpPathMapper(Context, this), configurationGetter)
+			);
 
 			LogViewerResults results = logViewer.Do();
 

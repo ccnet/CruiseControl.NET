@@ -4,7 +4,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.IO
 {
 	public interface IRequestWrapper
 	{
-		ILogSpecifier GetLogSpecifier();
+		ILogSpecifier GetBuildSpecifier();
 		string GetServerName();
 		string GetProjectName();
 	}

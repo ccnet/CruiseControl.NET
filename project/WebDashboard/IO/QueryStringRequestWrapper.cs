@@ -16,7 +16,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.IO
 			this.queryString = queryString;
 		}
 
-		public ILogSpecifier GetLogSpecifier()
+		public ILogSpecifier GetBuildSpecifier()
 		{
 			string logfile = queryString[LogQueryStringParameter];
 			if (logfile == null)

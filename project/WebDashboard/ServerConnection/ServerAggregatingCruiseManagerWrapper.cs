@@ -1,24 +1,44 @@
 using System;
+using System.Collections;
+using ThoughtWorks.CruiseControl.Remote;
+using ThoughtWorks.CruiseControl.WebDashboard.config;
+using ThoughtWorks.CruiseControl.WebDashboard.Config;
 
 namespace ThoughtWorks.CruiseControl.WebDashboard.ServerConnection
 {
 	public class ServerAggregatingCruiseManagerWrapper : ICruiseManagerWrapper
 	{
-		public ServerAggregatingCruiseManagerWrapper()
+		private readonly ICruiseManagerFactory managerFactory;
+		private readonly IConfigurationGetter configurationGetter;
+
+		public ServerAggregatingCruiseManagerWrapper(IConfigurationGetter configurationGetter, ICruiseManagerFactory managerFactory)
 		{
-			//
-			// TODO: Add constructor logic here
-			//
+			this.configurationGetter = configurationGetter;
+			this.managerFactory = managerFactory;
 		}
 
 		public string GetLatestLogName(string serverName, string projectName)
 		{
-			throw new NotImplementedException();
+			return GetCruiseManager(serverName).GetLatestLogName(projectName);
 		}
 
-		public string GetLog(string serverName, string projectName, string logName)
+		public string GetLog(string serverName, string projectName, string buildName)
 		{
-			throw new NotImplementedException();
+			return GetCruiseManager(serverName).GetLog(projectName, buildName);
+		}
+
+		private ICruiseManager GetCruiseManager(string serverName)
+		{
+			foreach (ServerSpecification server in (IEnumerable) configurationGetter.GetConfigFromSection(ServersSectionHandler.SectionName))
+			{
+				if (server.Name == serverName)
+				{
+					return managerFactory.GetCruiseManager(server.Url);
+				}
+			}
+
+			throw new UnknownServerException(serverName);
+
 		}
 	}
 }

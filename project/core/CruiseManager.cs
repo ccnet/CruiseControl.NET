@@ -54,6 +54,17 @@ namespace ThoughtWorks.CruiseControl.Core
 			GetIntegrator(project).WaitForExit();
 		}
 
+		public string GetLatestLogName(string projectName)
+		{
+			// TODO - throw 'NoSuchProject' exception if project doesn't exist
+			throw new NotImplementedException();
+		}
+
+		public string GetLog(string projectName, string buildName)
+		{
+			throw new NotImplementedException();
+		}
+
 		/// <summary>
 		/// TODO: deprecate this
 		/// </summary>

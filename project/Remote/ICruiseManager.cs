@@ -20,5 +20,15 @@ namespace ThoughtWorks.CruiseControl.Remote
 		void ForceBuild(string projectName);
 
 		void WaitForExit(string projectName);
+
+		/// <summary>
+		/// Returns the name of the most recent build log for the specified project
+		/// </summary>
+		string GetLatestLogName(string projectName);
+
+		/// <summary>
+		/// Returns the build log contents for requested project and build name
+		/// </summary>
+		string GetLog(string projectName, string buildName);
 	}
 }
