@@ -348,8 +348,34 @@
                     BuildAction = "EmbeddedResource"
                 />
                 <File
+                    RelPath = "ViewLog.aspx"
+                    SubType = "Form"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "ViewLog.aspx.cs"
+                    DependentUpon = "ViewLog.aspx"
+                    SubType = "ASPXCodeBehind"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "ViewLog.aspx.resx"
+                    DependentUpon = "ViewLog.aspx.cs"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
                     RelPath = "Web.config"
                     BuildAction = "None"
+                />
+                <File
+                    RelPath = "Cache\ICacheManager.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Cache\LocalFileCacheManager.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
                 />
                 <File
                     RelPath = "config\ConfigurationProjectSpecificationRetriever.cs"
@@ -464,6 +490,16 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "IO\IRequestWrapper.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "IO\QueryStringRequestWrapper.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "IO\ServerLogFileReader.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -548,6 +584,41 @@
                 <File
                     RelPath = "log\log20040412170952.xml"
                     BuildAction = "Content"
+                />
+                <File
+                    RelPath = "Plugins\LogViewerPlugin\LogViewer.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Plugins\LogViewerPlugin\LogViewerResults.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "ServerConnection\FileNameLogSpecifier.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "ServerConnection\ICruiseManagerWrapper.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "ServerConnection\ILogSpecifier.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "ServerConnection\NoLogSpecified.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "ServerConnection\ServerAggregatingCruiseManagerWrapper.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
                 />
                 <File
                     RelPath = "test\ConfigSectionTest.cs"

@@ -54,6 +54,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XMLRPCWebService", "XMLRPCW
 	ProjectSection(ProjectDependencies) = postProject
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnitTests", "UnitTests\UnitTests.csproj", "{3F93AC24-DF56-469E-91C3-43A2A179C7E1}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfiguration) = preSolution
 		Build = Build
@@ -104,6 +108,7 @@ Global
 		{19C24DF5-7EE8-4325-AFD6-C18D6C85DD9B}.Release.ActiveCfg = Release|.NET
 		{19C24DF5-7EE8-4325-AFD6-C18D6C85DD9B}.Release.Build.0 = Release|.NET
 		{FA6F61A0-6332-4236-B861-FEA43B74A092}.Build.ActiveCfg = Build|.NET
+		{FA6F61A0-6332-4236-B861-FEA43B74A092}.Build.Build.0 = Build|.NET
 		{FA6F61A0-6332-4236-B861-FEA43B74A092}.Debug.ActiveCfg = Debug|.NET
 		{FA6F61A0-6332-4236-B861-FEA43B74A092}.Debug.Build.0 = Debug|.NET
 		{FA6F61A0-6332-4236-B861-FEA43B74A092}.Release.ActiveCfg = Release|.NET
@@ -132,6 +137,12 @@ Global
 		{4A0F1D7B-93E6-4E25-A48C-2FB0B7B1E17F}.Debug.Build.0 = Debug|.NET
 		{4A0F1D7B-93E6-4E25-A48C-2FB0B7B1E17F}.Release.ActiveCfg = Release|.NET
 		{4A0F1D7B-93E6-4E25-A48C-2FB0B7B1E17F}.Release.Build.0 = Release|.NET
+		{3F93AC24-DF56-469E-91C3-43A2A179C7E1}.Build.ActiveCfg = Build|.NET
+		{3F93AC24-DF56-469E-91C3-43A2A179C7E1}.Build.Build.0 = Build|.NET
+		{3F93AC24-DF56-469E-91C3-43A2A179C7E1}.Debug.ActiveCfg = Debug|.NET
+		{3F93AC24-DF56-469E-91C3-43A2A179C7E1}.Debug.Build.0 = Debug|.NET
+		{3F93AC24-DF56-469E-91C3-43A2A179C7E1}.Release.ActiveCfg = Release|.NET
+		{3F93AC24-DF56-469E-91C3-43A2A179C7E1}.Release.Build.0 = Release|.NET
 	EndGlobalSection
 	GlobalSection(SolutionItems) = postSolution
 		..\ccnet.build = ..\ccnet.build
