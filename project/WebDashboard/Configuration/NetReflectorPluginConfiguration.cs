@@ -3,7 +3,7 @@ using ThoughtWorks.CruiseControl.WebDashboard.Dashboard;
 
 namespace ThoughtWorks.CruiseControl.WebDashboard.Configuration
 {
-	[ReflectorType("dashboard")]
+	[ReflectorType("plugins")]
 	public class NetReflectorPluginConfiguration : IPluginConfiguration
 	{
 		private IPlugin[] farmPlugins = new IPlugin[0];

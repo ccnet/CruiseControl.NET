@@ -1,8 +1,7 @@
 using System;
 using System.Collections;
-using ThoughtWorks.CruiseControl.Core;
 using ThoughtWorks.CruiseControl.Remote;
-using ThoughtWorks.CruiseControl.WebDashboard.Config;
+using ThoughtWorks.CruiseControl.WebDashboard.Configuration;
 using ThoughtWorks.CruiseControl.WebDashboard.Dashboard;
 
 namespace ThoughtWorks.CruiseControl.WebDashboard.ServerConnection
@@ -10,11 +9,11 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.ServerConnection
 	public class ServerAggregatingCruiseManagerWrapper : ICruiseManagerWrapper, IFarmService
 	{
 		private readonly ICruiseManagerFactory managerFactory;
-		private readonly IConfigurationGetter configurationGetter;
+		private readonly IRemoteServicesConfiguration configuration;
 
-		public ServerAggregatingCruiseManagerWrapper(IConfigurationGetter configurationGetter, ICruiseManagerFactory managerFactory)
+		public ServerAggregatingCruiseManagerWrapper(IRemoteServicesConfiguration configuration, ICruiseManagerFactory managerFactory)
 		{
-			this.configurationGetter = configurationGetter;
+			this.configuration = configuration;
 			this.managerFactory = managerFactory;
 		}
 
@@ -155,9 +154,9 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.ServerConnection
 			return managerFactory.GetCruiseManager(GetServerUrl(serverSpecifier));
 		}
 
-		private IEnumerable ServerLocations
+		private ServerLocation[] ServerLocations
 		{
-			get { return (IEnumerable) configurationGetter.GetConfigFromSection(ServersSectionHandler.SectionName); }
+			get { return configuration.Servers; }
 		}
 	}
 }

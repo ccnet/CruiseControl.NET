@@ -771,11 +771,7 @@
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
-                <File
-                    RelPath = "WebDashboard\Cache\LocalFileCacheManagerTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
+                <Folder RelPath = "WebDashboard\Cache\" />
                 <File
                     RelPath = "WebDashboard\Dashboard\ActionInstantiatorWithObjectGiverTest.cs"
                     SubType = "Code"

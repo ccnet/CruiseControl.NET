@@ -24,6 +24,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 		{
 			ObjectGiver giver = (ObjectGiver) giverManager; // Yuch - put this in Object Wizard somewhere
 			giverManager.AddTypedInstance(typeof(ObjectGiver), giverManager);
+
 			giverManager.AddTypedInstance(typeof(HttpContext), context);
 			HttpRequest request = context.Request;
 			giverManager.AddTypedInstance(typeof(HttpRequest), request);
@@ -36,23 +37,23 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 
 			giverManager.SetDependencyImplementationForType(typeof(PathMappingMultiTransformer), typeof(IMultiTransformer), typeof (HtmlAwareMultiTransformer));
 
+			IDashboardConfiguration config = (IDashboardConfiguration) giver.GiveObjectByType(typeof(IDashboardConfiguration));
+			giverManager.AddTypedInstance(typeof(IDashboardConfiguration), config);
+
+			IRemoteServicesConfiguration remoteServicesConfig = config.RemoteServices;
+			giverManager.AddTypedInstance(typeof(IRemoteServicesConfiguration), remoteServicesConfig);
+
+			IPluginConfiguration pluginConfig = config.PluginConfiguration;
+			giverManager.AddTypedInstance(typeof(IPluginConfiguration), pluginConfig);
+			
 			// Need to get these into plugin setup
 			// These plugins are currently disabled - this code will be required again when they are needed
 //			giverAndRegistrar.SetDependencyImplementationForIdentifer(SaveNewProjectAction.ACTION_NAME, typeof(IPathMapper), typeof(PathMapperUsingHostName));
 //			giverAndRegistrar.SetDependencyImplementationForIdentifer(SaveEditProjectAction.ACTION_NAME, typeof(IPathMapper), typeof(PathMapperUsingHostName));
 
-//			IConfigurationGetter configurationGetter = (IConfigurationGetter) giver.GiveObjectByType(typeof(IConfigurationGetter));
-//			if (configurationGetter == null)
-//			{
-//				throw new CruiseControlException("Unable to instantiate configuration getter");
-//			}
-
-			giverManager.SetImplementationType(typeof(IPluginConfiguration), typeof(PluginConfigurationLoader));
-			IPluginConfiguration config = (IPluginConfiguration) giver.GiveObjectByType(typeof(IPluginConfiguration));
-
 			// ToDo - Refactor these plugin sections
 
-			foreach (IPlugin plugin in config.FarmPlugins)
+			foreach (IPlugin plugin in pluginConfig.FarmPlugins)
 			{
 				foreach (INamedAction action in plugin.NamedActions)
 				{
@@ -61,7 +62,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 				}
 			}
 
-			foreach (IPlugin plugin in config.ServerPlugins)
+			foreach (IPlugin plugin in pluginConfig.ServerPlugins)
 			{
 				foreach (INamedAction action in plugin.NamedActions)
 				{
@@ -70,7 +71,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 				}
 			}
 
-			foreach (IPlugin plugin in config.ProjectPlugins)
+			foreach (IPlugin plugin in pluginConfig.ProjectPlugins)
 			{
 				foreach (INamedAction action in plugin.NamedActions)
 				{
@@ -79,7 +80,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 				}
 			}
 
-			foreach (IPlugin plugin in config.BuildPlugins)
+			foreach (IPlugin plugin in pluginConfig.BuildPlugins)
 			{
 				foreach (INamedAction action in plugin.NamedActions)
 				{

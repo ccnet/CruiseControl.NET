@@ -1,6 +1,4 @@
-using System;
 using System.IO;
-using ThoughtWorks.CruiseControl.WebDashboard.Config;
 using ThoughtWorks.CruiseControl.WebDashboard.Dashboard;
 using ThoughtWorks.CruiseControl.WebDashboard.IO;
 
@@ -9,14 +7,11 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Cache
 	// This is currently not used and only here as a basis to develop a new caching strategy
 	public class LocalFileCacheManager : ICacheManager
 	{
-		public static readonly string LocalCacheRootDirectoryConfigParameter = "cachedirectory";
-		private readonly IConfigurationGetter configurationGetter;
 		private readonly IPathMapper pathMapper;
 
-		public LocalFileCacheManager(IPathMapper pathMapper, IConfigurationGetter configurationGetter)
+		public LocalFileCacheManager(IPathMapper pathMapper)
 		{
 			this.pathMapper = pathMapper;
-			this.configurationGetter = configurationGetter;
 		}
 
 		public void AddContent(IProjectSpecifier projectSpecifier, string directory, string fileName, string content)
@@ -55,11 +50,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Cache
 
 		private string GetRelativePathForFile(IProjectSpecifier projectSpecifier, string directory, string fileName)
 		{
-			string cacheRootDirectory = configurationGetter.GetSimpleConfigSetting(LocalCacheRootDirectoryConfigParameter);
-			if (cacheRootDirectory == null || cacheRootDirectory == string.Empty)
-			{
-				throw new ApplicationException("Cache Root directory not set in config - make sure you have specified parameter [ " + LocalCacheRootDirectoryConfigParameter + " ]");
-			}
+			string cacheRootDirectory = "cache";
 			return Path.Combine(Path.Combine(Path.Combine(Path.Combine(cacheRootDirectory, projectSpecifier.ServerSpecifier.ServerName), projectSpecifier.ProjectName), directory), fileName);
 		}
 

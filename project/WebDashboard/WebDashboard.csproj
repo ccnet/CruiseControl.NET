@@ -190,23 +190,14 @@
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
+                <Folder RelPath = "config\" />
                 <File
-                    RelPath = "config\ConfigurationSettingsConfigGetter.cs"
+                    RelPath = "Configuration\DashboardConfigurationLoader.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "config\IConfigurationGetter.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "config\ServerLocation.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "config\ServersSectionHandler.cs"
+                    RelPath = "Configuration\IDashboardConfiguration.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -216,12 +207,22 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Configuration\IRemoteServicesConfiguration.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Configuration\NetReflectorPluginConfiguration.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "Configuration\PluginConfigurationLoader.cs"
+                    RelPath = "Configuration\NetReflectorRemoteServicesConfiguration.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Configuration\ServerLocation.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
