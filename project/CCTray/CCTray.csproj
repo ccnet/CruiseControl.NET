@@ -124,6 +124,16 @@
                     Project = "{E820CF3B-8C5A-4002-BC16-B7818D3D54A8}"
                     Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
                 />
+                <Reference
+                    Name = "nmock"
+                    AssemblyName = "nmock"
+                    HintPath = "..\..\lib\nmock.dll"
+                />
+                <Reference
+                    Name = "nunit.framework"
+                    AssemblyName = "nunit.framework"
+                    HintPath = "..\..\lib\nunit.framework.dll"
+                />
             </References>
         </Build>
         <Files>
@@ -161,6 +171,11 @@
                     BuildAction = "EmbeddedResource"
                 />
                 <File
+                    RelPath = "IRemoteCruiseProxyLoader.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "NotifyIconEx.cs"
                     SubType = "Component"
                     BuildAction = "Compile"
@@ -173,6 +188,11 @@
                 <File
                     RelPath = "Red.ico"
                     BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "RemoteCruiseProxyLoader.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
                 />
                 <File
                     RelPath = "Settings.cs"
@@ -196,7 +216,7 @@
                 />
                 <File
                     RelPath = "StatusMonitor.cs"
-                    SubType = "Component"
+                    SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
@@ -245,6 +265,16 @@
                 <File
                     RelPath = "Images\icon-play.gif"
                     BuildAction = "Content"
+                />
+                <File
+                    RelPath = "Test\RemoteCruiseProxyLoaderTest.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Test\StatusMonitorTransitionChangeTest.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
                 />
             </Include>
         </Files>

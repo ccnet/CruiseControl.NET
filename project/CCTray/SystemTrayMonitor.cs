@@ -145,7 +145,7 @@ namespace ThoughtWorks.CruiseControl.CCTray
 			this.mnuSettings = new System.Windows.Forms.MenuItem();
 			this.mnuForceBuild = new System.Windows.Forms.MenuItem();
 			this.mnuExit = new System.Windows.Forms.MenuItem();
-			this.statusMonitor = new ThoughtWorks.CruiseControl.CCTray.StatusMonitor(this.components);
+			this.statusMonitor = new ThoughtWorks.CruiseControl.CCTray.StatusMonitor(new RemoteCruiseProxyLoader());
 			// 
 			// trayIcon
 			// 

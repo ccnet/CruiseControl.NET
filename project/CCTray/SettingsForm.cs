@@ -51,10 +51,10 @@ namespace ThoughtWorks.CruiseControl.CCTray
 
 		#endregion
 
-		Settings _settings;
+		private Settings _settings;
 		private System.Windows.Forms.ComboBox cboProjectName;
-		StatusMonitor _statusMonitor;
-		bool _remoteServerUrlChanged = false;
+		private StatusMonitor _statusMonitor;
+		private bool _remoteServerUrlChanged = false;
 
 		#region Constructors
 
@@ -62,7 +62,6 @@ namespace ThoughtWorks.CruiseControl.CCTray
 		{
 			_settings = settings;
 			_statusMonitor = statusMonitor;
-
 			InitializeComponent();
 			ExtraInitialisation();
 		}
@@ -595,7 +594,7 @@ namespace ThoughtWorks.CruiseControl.CCTray
 		{
 			numPollInterval.Value = _settings.PollingIntervalSeconds;
 			txtServerUrl.Text = _settings.RemoteServerUrl;
-			cboProjectName.Text = _settings.ProjectName;	//txtProjectName.Text = _settings.ProjectName;
+			cboProjectName.Text = _settings.ProjectName;
 
 			chkShowBalloons.Checked = _settings.NotificationBalloon.ShowBalloon;
 			chkShowExceptions.Checked = _settings.ShowExceptions;

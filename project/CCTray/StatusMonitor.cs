@@ -1,8 +1,5 @@
 using System;
-using System.ComponentModel;
-using System.Runtime.Remoting;
 using System.Windows.Forms;
-
 using ThoughtWorks.CruiseControl.Remote;
 
 namespace ThoughtWorks.CruiseControl.CCTray
@@ -19,37 +16,25 @@ namespace ThoughtWorks.CruiseControl.CCTray
 	/// Monitors a remote CruiseControl.NET instance, and raises events in
 	/// responses to changes in the server's state.
 	/// </summary>
-	public class StatusMonitor : Component
+	public class StatusMonitor :IDisposable
 	{
-		#region Field declarations
 
 		public event BuildOccurredEventHandler BuildOccurred;
 		public event PolledEventHandler Polled;
 		public event ErrorEventHandler Error;
 
-		Timer pollTimer;
-		IContainer components;
+		private Timer _pollTimer;
+		private IRemoteCruiseProxyLoader _remoteProxyLoader;
+		private ProjectStatus _currentProjectStatus = new ProjectStatus(CruiseControlStatus.Unknown, IntegrationStatus.Unknown, ProjectActivity.Unknown, "unknown", "http://ccnet.thoughtworks.com", DateTime.MinValue, "unknown");
+		private Settings _settings;
 
-		ProjectStatus _currentProjectStatus = new ProjectStatus(CruiseControlStatus.Unknown, IntegrationStatus.Unknown, ProjectActivity.Unknown, "unknown", "http://ccnet.thoughtworks.com", DateTime.MinValue, "unknown");
-		Settings _settings;
-
-		#endregion
-
-		#region Constructors
-
-		public StatusMonitor(System.ComponentModel.IContainer container)
+		public StatusMonitor(IRemoteCruiseProxyLoader remoteProxyLoader)
 		{
-			container.Add(this);
-			InitializeComponent();
+			_remoteProxyLoader = remoteProxyLoader;
+			_pollTimer = new Timer();
+			_pollTimer.Interval = 15000;
+			_pollTimer.Tick += new EventHandler(this.pollTimer_Tick);
 		}
-
-		public StatusMonitor()
-		{
-			InitializeComponent();
-		}
-
-
-		#endregion
 
 		#region Properties
 
@@ -87,40 +72,10 @@ namespace ThoughtWorks.CruiseControl.CCTray
 
 		#endregion
 
-		#region Component Designer generated code
-		
-		/// <summary> 
-		/// Clean up any resources being used.
-		/// </summary>
-		protected override void Dispose(bool disposing)
+		public void Dispose()
 		{
-			if (disposing)
-			{
-				if (components!=null)
-				{
-					components.Dispose();
-				}
-			}
-			base.Dispose(disposing);
+			_pollTimer.Dispose();
 		}
-
-		/// <summary>
-		/// Required method for Designer support - do not modify
-		/// the contents of this method with the code editor.
-		/// </summary>
-		private void InitializeComponent()
-		{
-			this.components = new System.ComponentModel.Container();
-			this.pollTimer = new System.Windows.Forms.Timer(this.components);
-			// 
-			// pollTimer
-			// 
-			this.pollTimer.Interval = 15000;
-			this.pollTimer.Tick += new System.EventHandler(this.pollTimer_Tick);
-
-		}
-
-		#endregion
 
 		#region Polling
 
@@ -130,14 +85,14 @@ namespace ThoughtWorks.CruiseControl.CCTray
 			Poll();
 
 			// use timer to ensure periodic polling
-			pollTimer.Enabled = true;
-			pollTimer.Start();
+		    _pollTimer.Enabled = true;
+		    _pollTimer.Start();
 		}
 
 		public void StopPolling()
 		{
-			pollTimer.Enabled = false;
-			pollTimer.Stop();
+		    _pollTimer.Enabled = false;
+		    _pollTimer.Stop();
 		}
 
 		void pollTimer_Tick(object sender, EventArgs e)
@@ -145,7 +100,7 @@ namespace ThoughtWorks.CruiseControl.CCTray
 			Poll();
 
 			// update interval, in case it has changed
-			pollTimer.Interval = Settings.PollingIntervalSeconds * 1000;
+		    _pollTimer.Interval = Settings.PollingIntervalSeconds * 1000;
 		}
 
 		public void Poll()
@@ -182,11 +137,11 @@ namespace ThoughtWorks.CruiseControl.CCTray
 		{
 			// If last build date is DateTime.MinValue (struct's default value),
 			// then the remote status has not yet been recorded.
-			if (_currentProjectStatus.LastBuildDate==DateTime.MinValue)
+			if (_currentProjectStatus.LastBuildDate == DateTime.MinValue)
 				return false;
 
 			// compare dates
-			return (newProjectStatus.LastBuildDate!=_currentProjectStatus.LastBuildDate);
+			return (newProjectStatus.LastBuildDate != _currentProjectStatus.LastBuildDate);
 		}
 
 
@@ -212,8 +167,7 @@ namespace ThoughtWorks.CruiseControl.CCTray
 
 		ProjectStatus [] GetRemoteProjectStatus()
 		{
-			ICruiseManager remoteCC = GetRemoteCruiseControlProxy();
-			return remoteCC.GetProjectStatus();
+			return GetRemoteCruiseControlProxy().GetProjectStatus();
 		}
 
 		ProjectStatus GetSingleRemoteProjectStatus()
@@ -234,8 +188,7 @@ namespace ThoughtWorks.CruiseControl.CCTray
 		{
 			try
 			{
-				ICruiseManager remoteCC = GetRemoteCruiseControlProxy();
-				return remoteCC.GetProjectStatus();	//.GetProjects();
+				return GetRemoteCruiseControlProxy().GetProjectStatus();	//.GetProjects();
 			}
 			catch
 			{
@@ -244,25 +197,14 @@ namespace ThoughtWorks.CruiseControl.CCTray
 			}
 		}
 
-		ICruiseManager GetRemoteCruiseControlProxy()
+		private ICruiseManager GetRemoteCruiseControlProxy()
 		{
-			if (Settings.ConnectionMethod==ConnectionMethod.Remoting)
-			{
-				return (ICruiseManager)RemotingServices.Connect(typeof(ICruiseManager), Settings.RemoteServerUrl);
-			}
-
-			if (Settings.ConnectionMethod==ConnectionMethod.WebService)
-			{
-				return new ThoughtWorks.CruiseControl.WebServiceProxy.CCNetManagementProxy(Settings.RemoteServerUrl);
-			}
-
-			throw new NotImplementedException("Connection method " + Settings.ConnectionMethod + " is not implemented.");
+			return _remoteProxyLoader.LoadProxy(_settings);
 		}
 
 		public void ForceBuild(string projectName)
 		{
-			ICruiseManager remoteCC = GetRemoteCruiseControlProxy();
-			remoteCC.ForceBuild(projectName);
+			GetRemoteCruiseControlProxy().ForceBuild(projectName);
 		}
 
 		#region Build transitions
