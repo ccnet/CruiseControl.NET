@@ -134,7 +134,7 @@ namespace ThoughtWorks.CruiseControl.Core
 		public IntegrationResult RunIntegration(BuildCondition buildCondition)
 		{
 			if (buildCondition==BuildCondition.ForceBuild)
-				Log("Build forced");
+				Log.Info("Build forced");
 
 			IntegrationResult results = null;
 			bool attemptingBuild = false;
@@ -149,7 +149,8 @@ namespace ThoughtWorks.CruiseControl.Core
 			}
 			catch (CruiseControlException ex)
 			{
-				Log("Exception occurred while running integration", ex);
+				// TODO what happens when build causes other types of exceptions?
+				Log.Error(ex);
 
 				// store exception
 				if (results != null)
@@ -163,8 +164,6 @@ namespace ThoughtWorks.CruiseControl.Core
 				if (attemptingBuild)
 					PostBuild(results);
 			}
-
-			// TODO what happens when build causes other types of exceptions?  (i.e. not just CruiseControlException, but perhaps BuilderException)
 
 			// go to sleep
 			_currentActivity = ProjectActivity.Sleeping;
@@ -187,7 +186,7 @@ namespace ThoughtWorks.CruiseControl.Core
 
 			results.Modifications = SourceControl.GetModifications(LastIntegrationResult.StartTime,  results.StartTime);
 
-			Log(GetModificationsDetectedMessage(results));
+			Log.Info(GetModificationsDetectedMessage(results));
 		}
 
 		private string GetModificationsDetectedMessage(IntegrationResult result)
@@ -207,11 +206,11 @@ namespace ThoughtWorks.CruiseControl.Core
 		{
 			_currentActivity = ProjectActivity.Building;
 
-			Log("Building");
+			Log.Info("Building");
 			
 			Builder.Run(results);
 
-			Log("Build complete: " + results.Status); 
+			Log.Info("Build complete: " + results.Status); 
 		}
 
 		internal void PostBuild(IntegrationResult results)
@@ -228,7 +227,7 @@ namespace ThoughtWorks.CruiseControl.Core
 			// update reference to the most recent result
 			LastIntegrationResult = results;
 			
-			Log("Integration complete: " + results.EndTime);
+			Log.Info("Integration complete: " + results.EndTime);
 		}
 
 		private void AttemptToSaveState(IntegrationResult results)
@@ -239,7 +238,7 @@ namespace ThoughtWorks.CruiseControl.Core
 			}
 			catch (CruiseControlException ex)
 			{
-				Log("Exception when saving integration state", ex);
+				Log.Error(ex);
 
 				if (results.ExceptionResult == null)
 					results.ExceptionResult = ex;
@@ -258,16 +257,6 @@ namespace ThoughtWorks.CruiseControl.Core
 				// TODO consider something such as IntegrationResult.Empty, to indicate 'unknown state'
 				return new IntegrationResult();
 			}
-		}
-
-		private void Log(string message)
-		{
-			LogUtil.Log(this, message);
-		}
-
-		private void Log(string message, CruiseControlException ex)
-		{
-			LogUtil.Log(this, message, ex);
 		}
 
 		/// <summary>

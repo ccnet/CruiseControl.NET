@@ -1,6 +1,6 @@
 using System;
 using System.Xml;
-using ThoughtWorks.CruiseControl.Core.Configuration.test;
+using ThoughtWorks.CruiseControl.Core.Config.Test;
 using ThoughtWorks.CruiseControl.Core;
 using ThoughtWorks.CruiseControl.Core.Util;
 using ThoughtWorks.CruiseControl.Core.Schedules;

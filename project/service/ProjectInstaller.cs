@@ -6,7 +6,7 @@ using System.Configuration.Install;
 namespace ThoughtWorks.CruiseControl.Service
 {
 	/// <summary>
-	/// Summary description for ProjectInstaller.
+	/// Installs CCService as a Windows Service.
 	/// </summary>
 	[RunInstaller(true)]
 	public class ProjectInstaller : System.Configuration.Install.Installer

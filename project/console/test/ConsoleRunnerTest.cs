@@ -12,26 +12,39 @@ namespace ThoughtWorks.CruiseControl.Console.Test
 	[TestFixture]
 	public class ConsoleRunnerTest : CustomAssertion
 	{
+		private TestTraceListener listener;
+
+		[SetUp]
+		protected void SetUp()
+		{
+			Trace.Listeners.Clear();
+			listener = new TestTraceListener();
+			Trace.Listeners.Add(listener);
+			TempFileUtil.CreateTempDir("ConsoleRunnerTest");
+		}
+
+		[TearDown]
+		protected void TearDown()
+		{
+			Trace.Listeners.Remove(listener);
+			TempFileUtil.DeleteTempDir("ConsoleRunnerTest");
+		}
+
 		[Test]
 		public void ShowHelp()
 		{
-			TestTraceListener listener = new TestTraceListener();
-			Trace.Listeners.Add(listener);
-
 			ArgumentParser parser = new ArgumentParser(new string[] { "-remoting:on", "-help" });
 			ConsoleRunner runner = new ConsoleRunner(parser, null);
 			runner.Run();
-			AssertEquals(1, listener.Traces.Count);
-			AssertEquals(ArgumentParser.Usage, listener.Traces[0].ToString());
 
-			Trace.Listeners.Remove(listener);
+			AssertEquals(1, listener.Traces.Count);
+			Assert("Wrong message was logged.", listener.Traces[0].ToString().IndexOf(ArgumentParser.Usage) > 0);
 		}
 
 		[Test] // integration test
 		public void ForceBuildCruiseServerProject()
 		{
 			string xml = @"<cruisecontrol><workflow name=""test""><tasks /></workflow></cruisecontrol>";
-			TempFileUtil.CreateTempDir("ConsoleRunnerTest");
 			string configFile = TempFileUtil.CreateTempXmlFile("ConsoleRunnerTest", "myconfig.config", xml);
 
 			Mock mockTimeout = new DynamicMock(typeof(ITimeout));
@@ -39,18 +52,11 @@ namespace ThoughtWorks.CruiseControl.Console.Test
 
 			ArgumentParser parser = new ArgumentParser(new string[] { "-project:test", "-config:" + configFile });
 			new ConsoleRunner(parser, (ITimeout)mockTimeout.MockInstance).Run();
-
-			TempFileUtil.DeleteTempDir("ConsoleRunnerTest");
 		}	
 
 		[Test] // integration test
 		public void StartCruiseServerProject()
 		{
-			// this sleep gives a previous test chance to delete the dir (if it's still around)
-			System.Threading.Thread.Sleep(500);
-
-			TempFileUtil.CreateTempDir("ConsoleRunnerTest");
-
 			string xml = @"<cruisecontrol><workflow name=""test""><tasks /></workflow></cruisecontrol>";
 			string configFile = TempFileUtil.CreateTempXmlFile("ConsoleRunnerTest", "myconfig.config", xml);
 
@@ -61,7 +67,6 @@ namespace ThoughtWorks.CruiseControl.Console.Test
 			new ConsoleRunner(parser, (ITimeout)mockTimeout.MockInstance).Run();
 
 			mockTimeout.Verify();
-			TempFileUtil.DeleteTempDir("ConsoleRunnerTest");
 		}	
 	}
 }

@@ -1,6 +1,4 @@
 using System;
-using System.Diagnostics;
-
 using ThoughtWorks.CruiseControl.Core;
 using ThoughtWorks.CruiseControl.Core.Util;
 using ThoughtWorks.CruiseControl.Remote;
@@ -15,10 +13,14 @@ namespace ThoughtWorks.CruiseControl.Console
 		[STAThread]
 		internal static void Main(string[] args)
 		{
-			ArgumentParser parser = new ArgumentParser(args);
-			Trace.Listeners.Add(new TextWriterTraceListener(System.Console.Out));
-
-			new ConsoleRunner(parser, new Timeout()).Run();
+			try
+			{
+				new ConsoleRunner(new ArgumentParser(args), new Timeout()).Run();
+			}
+			catch (Exception ex)
+			{
+				Log.Error(ex);
+			}
 		}	
 
 		private ArgumentParser _parser;
@@ -34,7 +36,7 @@ namespace ThoughtWorks.CruiseControl.Console
 		{
 			if (_parser.ShowHelp)
 			{
-				LogUtil.Log(ArgumentParser.Usage);
+				Log.Warning(ArgumentParser.Usage);
 				return;
 			}
 
@@ -48,18 +50,18 @@ namespace ThoughtWorks.CruiseControl.Console
 			{
 				if (_parser.Project == null)
 				{
-					LogUtil.Log("Starting CruiseControl.NET Server");
+					Log.Info("Starting CruiseControl.NET Server");
 					server.Start();
 					// server.WaitForExit();
 				}
 				else
 				{
-					LogUtil.Log("Starting CruiseControl.NET Project: " + _parser.Project);
+					Log.Info("Starting CruiseControl.NET Project: " + _parser.Project);
 					server.ForceBuild(_parser.Project);
 					// server.CruiseManager.ForceBuild(_parser.Project);
 					// server.CruiseManager.WaitForExit(_parser.Project);
-					LogUtil.Log("Hit Ctrl-C when integration is complete."); // HACK: better to join thread.
 				}
+				Log.Info("Hit Ctrl-C when integration is complete."); // HACK: better to join thread.
 				_timeout.Wait();
 			}
 			finally

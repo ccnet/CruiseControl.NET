@@ -4,7 +4,7 @@ using System.IO;
 using System.Threading;
 using NUnit.Framework;
 using ThoughtWorks.CruiseControl.Core;
-using ThoughtWorks.CruiseControl.Core.Configuration;
+using ThoughtWorks.CruiseControl.Core.Config;
 using ThoughtWorks.CruiseControl.Core.Util;
 using ThoughtWorks.CruiseControl.Remote;
 using ThoughtWorks.CruiseControl.Core.Schedules;

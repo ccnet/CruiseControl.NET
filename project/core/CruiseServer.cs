@@ -13,7 +13,6 @@ namespace ThoughtWorks.CruiseControl.Core
 	{
 		private IConfigurationLoader _loader;
 		private IConfiguration _configuration;
-		// define as ArrayList, not IList, so we have .ToArray(...)
 		private ArrayList _projectIntegrators = new ArrayList();
 		private bool _stopped = false;
 

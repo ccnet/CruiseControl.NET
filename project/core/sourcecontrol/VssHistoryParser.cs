@@ -49,7 +49,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 		{
 			ArrayList entries = new ArrayList();
 			string currentLine = history.ReadLine();
-			LogUtil.Log("VSSPublisher", currentLine);
+			Log.Debug("VSSPublisher: " + currentLine);
 			while(IsEndOfFile(currentLine) == false) 
 			{
 				if(IsEntryDelimiter(currentLine)) 

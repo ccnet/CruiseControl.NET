@@ -14,39 +14,12 @@ namespace ThoughtWorks.CruiseControl.WebService
 {
 	public class CCNetManagementService : System.Web.Services.WebService
 	{
-		public CCNetManagementService()
-		{
-			//CODEGEN: This call is required by the ASP.NET Web Services Designer
-			InitializeComponent();
-		}
-
 		public virtual ICruiseManager BackingCruiseManager
 		{
 			get
 			{
 				return (ICruiseManager) RemotingServices.Connect(typeof(ICruiseManager), ConfigurationSettings.AppSettings["BackingURL"]);
 			}
-		}
-
-		[WebMethod]
-		public void StopCruiseControl()
-		{
-//			BackingCruiseManager.StopCruiseControl();
-			throw new NotSupportedException("This Method not yet supported in the Web Service");
-		}
-
-		[WebMethod]
-		public string GetConfiguration()
-		{
-//			return BackingCruiseManager.Configuration;
-			throw new NotSupportedException("This Method not yet supported in the Web Service");
-		}
-
-		[WebMethod]
-		public void SetConfiguration(string configuration)
-		{
-//			BackingCruiseManager.Configuration = configuration;
-			throw new NotSupportedException("This Method not yet supported in the Web Service");
 		}
 
 		[WebMethod]
@@ -62,50 +35,9 @@ namespace ThoughtWorks.CruiseControl.WebService
 		}
 
 		[WebMethod]
-		public void StartCruiseControl()
-		{
-//			BackingCruiseManager.StartCruiseControl();
-			throw new NotSupportedException("This Method not yet supported in the Web Service");
-		}
-
-		[WebMethod]
 		public ThoughtWorks.CruiseControl.Remote.CruiseControlStatus GetStatus()
 		{
 			return BackingCruiseManager.GetStatus();
 		}
-
-		[WebMethod]
-		public void StopCruiseControlNow()
-		{
-//			BackingCruiseManager.StopCruiseControl();
-			throw new NotSupportedException("This Method not yet supported in the Web Service");
-		}
-
-		#region Component Designer generated code
-		
-		//Required by the Web Services Designer 
-		private IContainer components = null;
-				
-		/// <summary>
-		/// Required method for Designer support - do not modify
-		/// the contents of this method with the code editor.
-		/// </summary>
-		private void InitializeComponent()
-		{
-		}
-
-		/// <summary>
-		/// Clean up any resources being used.
-		/// </summary>
-		protected override void Dispose( bool disposing )
-		{
-			if(disposing && components != null)
-			{
-				components.Dispose();
-			}
-			base.Dispose(disposing);		
-		}
-		
-		#endregion
 	}
 }

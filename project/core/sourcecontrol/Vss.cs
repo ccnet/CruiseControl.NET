@@ -47,7 +47,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 		public override Process CreateHistoryProcess(DateTime from, DateTime until)
 		{		
 			string args = BuildHistoryProcessArgs(from, until);
-			LogUtil.Log("VSSPublisher", string.Format("{0} {1}", Executable, args));
+			Log.Debug(string.Format("VSSPublisher: {0} {1}", Executable, args));
 			Process process = ProcessUtil.CreateProcess(Executable, args);
 			process.StartInfo.EnvironmentVariables[SS_DIR_KEY] = SsDir;
 			return process;

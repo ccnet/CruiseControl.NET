@@ -7,23 +7,26 @@ using System.ServiceProcess;
 
 using ThoughtWorks.CruiseControl.Core;
 using ThoughtWorks.CruiseControl.Core.Config;
+using ThoughtWorks.CruiseControl.Core.Util;
+using ThoughtWorks.CruiseControl.Remote;
 
 namespace ThoughtWorks.CruiseControl.Service
 {
 	public class CCService : ServiceBase
 	{
+		static void Main()
+		{
+			ServiceBase.Run(new ServiceBase[] { new CCService() } );
+		}
+
 		private Container components = null;
-		private CruiseManager manager;
+//		private CruiseManager manager;
+		private ICruiseServer server;
 
 		public CCService()
 		{
 			// This call is required by the Windows.Forms Component Designer.
 			InitializeComponent();
-		}
-
-		static void Main()
-		{
-			ServiceBase.Run(new ServiceBase[] { new CCService() } );
 		}
 
 		/// <summary> 
@@ -68,12 +71,14 @@ namespace ThoughtWorks.CruiseControl.Service
 			// in a service application the work has to be done in a separate thread so we use CruiseManager no matter what
 			// we will register it on a channel if remoting is on
 			// TODO: switch to use factory once cruisecontrol operates as a separate thread
-			manager = new CruiseManager(new CruiseServer(new ConfigurationLoader(configFile)));
-			
-			if (UseRemoting()) 
-				manager.RegisterForRemoting();
-
-			manager.StartCruiseControl();
+//			manager = new CruiseManager(new CruiseServer(new ConfigurationLoader(configFile)));
+//			
+//			if (UseRemoting()) 
+//				manager.RegisterForRemoting();
+//
+//			manager.StartCruiseControl();
+			server = CruiseServerFactory.Create(UseRemoting(), configFile);
+			server.Start();
 		}
 
 		private string GetConfigFilename()
@@ -88,8 +93,7 @@ namespace ThoughtWorks.CruiseControl.Service
 
 		private bool UseRemoting()
 		{
-			string remote = Configuration.Remoting;
-			return (remote != null && remote.Trim().ToLower() == "on");
+			return (Configuration.Remoting != null && Configuration.Remoting.Trim().ToLower() == "on");
 		}
  
 		/// <summary>
@@ -97,17 +101,17 @@ namespace ThoughtWorks.CruiseControl.Service
 		/// </summary>
 		protected override void OnStop()
 		{
-			manager.StopCruiseControlNow();
+			server.Abort();
 		}
 
 		protected override void OnPause()
 		{
-			manager.StopCruiseControl();
+			server.Stop();
 		}
 
 		protected override void OnContinue()
 		{
-			manager.StartCruiseControl();
+			server.Start();
 		}
 	}
 }

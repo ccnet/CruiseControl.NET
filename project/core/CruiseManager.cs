@@ -1,7 +1,5 @@
 using System;
 using System.Collections;
-using System.Runtime.Remoting;
-using System.Runtime.Remoting.Channels;
 
 using ThoughtWorks.CruiseControl.Core.Util;
 using ThoughtWorks.CruiseControl.Remote;
@@ -9,11 +7,11 @@ using ThoughtWorks.CruiseControl.Remote;
 namespace ThoughtWorks.CruiseControl.Core 
 {
 	/// <summary>
-	/// Manages an instance of the CruiseControl.NET main process, an exposes
+	/// Manages an instance of the CruiseControl.NET main process, and exposes
 	/// this interface via remoting.  The CCTray is one such example of an
 	/// application that may make use of this remote interface.
 	/// </summary>
-	public class CruiseManager : MarshalByRefObject, ICruiseManager, ICruiseServer
+	public class CruiseManager : MarshalByRefObject, ICruiseManager
 	{
 		public const int TCP_PORT = 1234;
 
@@ -22,40 +20,6 @@ namespace ThoughtWorks.CruiseControl.Core
 		public CruiseManager(ICruiseControl cruiseControl)
 		{
 			_cruiseControl = cruiseControl;
-		}
-
-		public void StartCruiseControl()
-		{
-			_cruiseControl.Start();
-			LogUtil.Log("CruiseManager", "CruiseControl is stopping");
-		}
-		
-		public void StopCruiseControl()
-		{
-			_cruiseControl.Stop();
-			LogUtil.Log("CruiseManager", "CruiseControl is stopping");
-		}
-		
-		public void StopCruiseControlNow()
-		{
-			Abort();
-		}
-
-		public void Abort()
-		{
-			_cruiseControl.Abort();
-			LogUtil.Log("CruiseManager", "CruiseControl stopped");
-		}
-		
-		void ICruiseServer.Start()
-		{
-			RegisterForRemoting();
-			StartCruiseControl();
-		}
-
-		void ICruiseServer.Stop()
-		{
-			StopCruiseControl();
 		}
 
 		public CruiseControlStatus GetStatus()
@@ -79,32 +43,6 @@ namespace ThoughtWorks.CruiseControl.Core
 		public override object InitializeLifetimeService()
 		{
 			return null;
-		}
-
-		public void RegisterForRemoting()
-		{
-			string configFile = AppDomain.CurrentDomain.SetupInformation.ConfigurationFile;
-//			string configFile = System.Reflection.Assembly.GetEntryAssembly().Location + ".config";
-			string uri = "CruiseManager.rem";
-
-			RemotingConfiguration.Configure(configFile);
-			RemotingServices.Marshal(this, uri);
- 
-			string url = uri;
-			try 
-			{
-				IChannelReceiver channel = (IChannelReceiver)ChannelServices.RegisteredChannels[0];
-				url = channel.GetUrlsForUri(uri)[0];
-
-				ICruiseManager marshalledObject = (ICruiseManager) RemotingServices.Connect(typeof(ICruiseManager), url);
-				marshalledObject.GetStatus(); // this will throw an exception if it didn't connect
-				LogUtil.Log("CruiseManager", "Listening on " + url);
-			} 
-			catch 
-			{
-				// todo: improve exception
-				throw new Exception("Couldn't listen on " + url);
-			}
 		}
 	}
 }

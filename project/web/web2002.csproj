@@ -117,21 +117,6 @@
         <Files>
             <Include>
                 <File
-                    RelPath = "Admin.aspx"
-                    BuildAction = "Content"
-                />
-                <File
-                    RelPath = "Admin.aspx.cs"
-                    DependentUpon = "Admin.aspx"
-                    SubType = "ASPXCodeBehind"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Admin.aspx.resx"
-                    DependentUpon = "Admin.aspx.cs"
-                    BuildAction = "EmbeddedResource"
-                />
-                <File
                     RelPath = "cruisecontrol.css"
                     BuildAction = "Content"
                 />

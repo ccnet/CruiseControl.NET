@@ -59,7 +59,7 @@ namespace ThoughtWorks.CruiseControl.Core
 			if (_thread == null || _thread.ThreadState == ThreadState.Stopped)
 			{
 				_thread = new Thread(new ThreadStart(Run));
-				_thread.Name = "ProjectIntegrator for project " + _project.Name;
+				_thread.Name = _project.Name;
 			}
 
 			// start thread if it's not running yet
@@ -87,10 +87,8 @@ namespace ThoughtWorks.CruiseControl.Core
 					}
 					catch (Exception ex) 
 					{ 
-						CruiseControlException cce
-							= new CruiseControlException("Project threw an exception while integrating", ex);
-
-						LogUtil.Log(_project, "Project threw an exception while integrating.", cce);
+						//TODO: what to do with this exception
+						Log.Error(ex);
 					}
 
 					// notify the schedule whether the build was successful or not

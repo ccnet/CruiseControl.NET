@@ -3,20 +3,23 @@
         ProjectType = "Local"
         ProductVersion = "7.0.9466"
         SchemaVersion = "1.0"
-        ProjectGuid = "{4DE3AEAD-FAFB-4D15-A0D7-3A9AAECF08E1}"
+        ProjectGuid = "{8A93E21E-3834-40D4-9FD0-E00958AFA5A8}"
     >
         <Build>
             <Settings
                 ApplicationIcon = ""
                 AssemblyKeyContainerName = ""
-                AssemblyName = "service"
+                AssemblyName = "CCNet.WebService"
                 AssemblyOriginatorKeyFile = ""
                 DefaultClientScript = "JScript"
                 DefaultHTMLPageLayout = "Grid"
                 DefaultTargetSchema = "IE50"
                 DelaySign = "false"
-                OutputType = "WinExe"
-                RootNamespace = "ThoughtWorks.CruiseControl.Service"
+                OutputType = "Library"
+                PreBuildEvent = ""
+                PostBuildEvent = ""
+                RootNamespace = "ThoughtWorks.CruiseControl.WebService"
+                RunPostBuildEvent = "OnBuildSuccess"
                 StartupObject = ""
             >
                 <Config
@@ -29,7 +32,9 @@
                     DocumentationFile = ""
                     DebugSymbols = "true"
                     FileAlignment = "4096"
-                    IncrementalBuild = "true"
+                    IncrementalBuild = "false"
+                    NoStdLib = "false"
+                    NoWarn = ""
                     Optimize = "false"
                     OutputPath = "bin\Debug\"
                     RegisterForComInterop = "false"
@@ -48,6 +53,8 @@
                     DebugSymbols = "false"
                     FileAlignment = "4096"
                     IncrementalBuild = "false"
+                    NoStdLib = "false"
+                    NoWarn = ""
                     Optimize = "true"
                     OutputPath = "bin\Release\"
                     RegisterForComInterop = "false"
@@ -60,85 +67,77 @@
                 <Reference
                     Name = "System"
                     AssemblyName = "System"
-                    HintPath = "C:\WINNT\Microsoft.NET\Framework\v1.0.3705\System.dll"
+                    HintPath = "..\..\..\..\..\..\WINDOWS\Microsoft.NET\Framework\v1.1.4322\System.dll"
                 />
                 <Reference
-                    Name = "System.ServiceProcess"
-                    AssemblyName = "System.ServiceProcess"
-                    HintPath = "C:\WINNT\Microsoft.NET\Framework\v1.0.3705\System.ServiceProcess.dll"
+                    Name = "System.Data"
+                    AssemblyName = "System.Data"
+                    HintPath = "..\..\..\..\..\..\WINDOWS\Microsoft.NET\Framework\v1.1.4322\System.Data.dll"
                 />
                 <Reference
                     Name = "System.XML"
                     AssemblyName = "System.Xml"
-                    HintPath = "C:\WINNT\Microsoft.NET\Framework\v1.0.3705\System.XML.dll"
+                    HintPath = "..\..\..\..\..\..\WINDOWS\Microsoft.NET\Framework\v1.1.4322\System.XML.dll"
                 />
                 <Reference
-                    Name = "System.Management"
-                    AssemblyName = "System.Management"
-                    HintPath = "C:\WINNT\Microsoft.NET\Framework\v1.0.3705\System.Management.dll"
+                    Name = "System.Web"
+                    AssemblyName = "System.Web"
+                    HintPath = "..\..\..\..\..\..\WINDOWS\Microsoft.NET\Framework\v1.1.4322\System.Web.dll"
                 />
                 <Reference
-                    Name = "System.Configuration.Install"
-                    AssemblyName = "System.Configuration.Install"
-                    HintPath = "C:\WINNT\Microsoft.NET\Framework\v1.0.3705\System.Configuration.Install.dll"
+                    Name = "System.Web.Services"
+                    AssemblyName = "System.Web.Services"
+                    HintPath = "..\..\..\..\..\..\WINDOWS\Microsoft.NET\Framework\v1.1.4322\System.Web.Services.dll"
                 />
                 <Reference
                     Name = "ccnet.remote"
                     Project = "{E820CF3B-8C5A-4002-BC16-B7818D3D54A8}"
                     Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
                 />
-                <Reference
-                    Name = "core"
-                    Project = "{F8113DB9-6C47-4FD1-8A01-655FCF151747}"
-                    Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
-                />
-                <Reference
-                    Name = "nunit.framework"
-                    AssemblyName = "nunit.framework"
-                    HintPath = "..\..\lib\nunit.framework.dll"
-                />
-                <Reference
-                    Name = "nmock"
-                    AssemblyName = "nmock"
-                    HintPath = "..\..\lib\nmock.dll"
-                />
             </References>
         </Build>
         <Files>
             <Include>
-                <File
-                    RelPath = "app.config"
-                    BuildAction = "None"
-                />
                 <File
                     RelPath = "AssemblyInfo.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "CCService.cs"
+                    RelPath = "CCNetManagementService.asmx"
+                    SubType = "Form"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "CCNetManagementService.asmx.cs"
+                    DependentUpon = "CCNetManagementService.asmx"
                     SubType = "Component"
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "CCService.resx"
-                    DependentUpon = "CCService.cs"
+                    RelPath = "CCNetManagementService.asmx.resx"
+                    DependentUpon = "CCNetManagementService.asmx.cs"
                     BuildAction = "EmbeddedResource"
                 />
                 <File
-                    RelPath = "ProjectInstaller.cs"
+                    RelPath = "Global.asax"
                     SubType = "Component"
-                    BuildAction = "Compile"
+                    BuildAction = "Content"
                 />
                 <File
-                    RelPath = "ProjectInstaller.resx"
-                    DependentUpon = "ProjectInstaller.cs"
-                    BuildAction = "EmbeddedResource"
-                />
-                <File
-                    RelPath = "test\ServiceTest.cs"
+                    RelPath = "Global.asax.cs"
+                    DependentUpon = "Global.asax"
                     SubType = "Code"
                     BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Global.asax.resx"
+                    DependentUpon = "Global.asax.cs"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "Web.config"
+                    BuildAction = "Content"
                 />
             </Include>
         </Files>

@@ -266,7 +266,8 @@ namespace ThoughtWorks.CruiseControl.Core.Test
 			AssertNotNull(results.EndTime);
 			Assert(publisher.Published);
 			stateMock.Verify();
-			AssertEquals("Number of messages logged.", 2, _listener.Traces.Count);
+			AssertEquals("No messages logged.", 1, _listener.Traces.Count);
+			Assert("Wrong message logged.", _listener.Traces[0].ToString().IndexOf(expectedException.ToString()) > 0);
 		}
 
 		[Test]
@@ -292,7 +293,8 @@ namespace ThoughtWorks.CruiseControl.Core.Test
 			AssertNotNull(results.EndTime);
 			Assert(publisher.Published);
 			mockLabeller.Verify();
-			AssertEquals("Number of messages logged.", 2, _listener.Traces.Count);
+			AssertEquals("No messages logged.", 1, _listener.Traces.Count);
+			Assert("Wrong message logged.", _listener.Traces[0].ToString().IndexOf(expectedException.ToString()) > 0);
 		}
 
 		[Test]
@@ -319,7 +321,6 @@ namespace ThoughtWorks.CruiseControl.Core.Test
 			Assert(publisher.Published);
 			mock.Verify();
 			AssertEquals("1.2.1", ((MockSourceControl)_project.SourceControl).Label);
-			AssertEquals("Number of messages logged.", 4, _listener.Traces.Count);
 		}
 
 		[Test]
@@ -344,7 +345,8 @@ namespace ThoughtWorks.CruiseControl.Core.Test
 			AssertNotNull(results.EndTime);
 			Assert(publisher.Published);
 			mock.Verify();
-			AssertEquals("Number of messages logged.", 5, _listener.Traces.Count);
+			AssertEquals("No messages logged.", 1, _listener.Traces.Count);
+			Assert("Wrong message logged.", _listener.Traces[0].ToString().IndexOf(expectedException.ToString()) > 0);
 		}
 
 		[Test]
@@ -369,7 +371,8 @@ namespace ThoughtWorks.CruiseControl.Core.Test
 			AssertNotNull(results.EndTime);
 			Assert(publisher.Published);
 			mock.Verify();
-			AssertEquals("Number of messages logged.", 5, _listener.Traces.Count);
+			AssertEquals("No messages logged.", 1, _listener.Traces.Count);
+			Assert("Wrong message logged.", _listener.Traces[0].ToString().IndexOf(expectedException.ToString()) > 0);
 		}
 
 		[Test]

@@ -141,6 +141,7 @@ namespace ThoughtWorks.CruiseControl.Core.Test
 		{
 			TestTraceListener listener = new TestTraceListener();
 			Trace.Listeners.Add(listener);
+
 			_project = new ExceptionMockProject("exception", new Schedule());
 			_integrator = CreateProjectIntegrator();
 			_integrator.Start();
@@ -152,7 +153,7 @@ namespace ThoughtWorks.CruiseControl.Core.Test
 			AssertEquals(ProjectIntegratorState.Running, _integrator.State);
 			Assert("should have >1 iterations, but have " + _schedule.IterationsSoFar,
 				_schedule.IterationsSoFar > 1);
-			Assert(listener.Traces.Count > 1);
+			Assert(listener.Traces.Count > 0);
 			Assert(listener.Traces[0].ToString().IndexOf(ExceptionMockProject.EXCEPTION_MESSAGE) > 0);
 			
 			// verify scheduler is restartable

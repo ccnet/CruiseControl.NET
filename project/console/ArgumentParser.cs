@@ -1,4 +1,7 @@
 using System;
+using System.Collections;
+using System.Text.RegularExpressions;
+using ThoughtWorks.CruiseControl.Core.Util;
 
 namespace ThoughtWorks.CruiseControl.Console
 {
@@ -13,11 +16,39 @@ Options:
   -project:[projectName]
   -help";
 
-		private string[] args;
+		private string[] validOptions = new string[] { "config", "remoting", "project", "help" };
+		private Hashtable options = new Hashtable();
+		private Regex regex = new Regex("-(?<option>[^:]*)(:(?<value>.*))?");
 
 		public ArgumentParser(string[] args)
 		{
-			this.args = args;
+			InitialiseOptions();
+			Parse(args);
+		}
+
+		private void InitialiseOptions()
+		{
+			foreach (string option in validOptions)
+			{
+				options.Add(option, null);
+			}
+		}
+
+		private void Parse(string[] args)
+		{
+			foreach (string arg in args)
+			{
+				Match match = regex.Match(arg);
+				if (match.Success && options.ContainsKey(match.Groups["option"].Value))
+				{
+					options[match.Groups["option"].Value] = match.Groups["value"].Value;
+				}
+				else
+				{
+					Log.Warning(string.Format("Invalid argument: {0}", arg));
+					options["help"] = true;
+				}
+			}
 		}
 
 		public bool IsRemote
@@ -46,14 +77,7 @@ Options:
 
 		private string GetOption(string optionRequired)
 		{
-			for (int i = 0; i < args.Length; i++)
-			{
-				if (args[i].StartsWith(string.Format("-{0}", optionRequired)))
-				{
-					return args[i].Remove(0, optionRequired.Length + 1).TrimStart(':');
-				}
-			}
-			return null;
+			return options[optionRequired] == null ? null : options[optionRequired].ToString();
 		}
 	}
 }

@@ -22,7 +22,7 @@
 							<td height="18" width="18" bgcolor="#ffffff"><img src="images/shim.gif" border="0"></td>
 							<td height="18" width="18"><img src="images/shim.gif" border="0"></td>
 							<td valign="center">
-								<span id="PluginLinks" runat="server" runAt="server"></span>
+								<span id="PluginLinks" runat="server"></span>
 							</td>
 							<td><img src="images/shim.gif" width="6" border="0"></td>
 						</tr>

@@ -46,7 +46,7 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
 			catch (Exception ex)
 			{
 				// TODO what do we do with these exceptions (apart from log them)???
-				LogUtil.Log((IProject)source, "Exception thrown by publisher.", new CruiseControlException("Exception thrown by publisher", ex));
+				Log.Warning(new CruiseControlException("Exception thrown by publisher", ex));
 			}
 		}
 
