@@ -23,6 +23,7 @@ namespace ThoughtWorks.CruiseControl.Core.Util.Test
 		}
 
 		[Test]
+		[Ignore("This is failing sporadically - see http://ccnetlive.thoughtworks.com/ccnet/controller.aspx?_action_ViewBuildReport=true&server=CCNetLive%201&project=CCNetLive%20-%20CCNet&build=log20041015043405.xml")]
 		public void ExecuteProcessAndEchoResultsBackThroughStandardOutWhereALargeAmountOfOutputIsProduced()
 		{
 			ProcessResult result = executor.Execute(new ProcessInfo("cmd.exe", "/C @dir " + Environment.SystemDirectory));
