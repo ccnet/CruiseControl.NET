@@ -1,5 +1,6 @@
 using ThoughtWorks.CruiseControl.Core;
 using ThoughtWorks.CruiseControl.Core.Builder;
+using ThoughtWorks.CruiseControl.Core.Publishers;
 using ThoughtWorks.CruiseControl.Core.Sourcecontrol;
 using ThoughtWorks.CruiseControl.Core.Tasks;
 using ThoughtWorks.CruiseControl.WebDashboard.ServerConnection;
@@ -22,6 +23,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.MVC.Cruise
 
 			Project project = new Project();
 			project.Name = request.GetText("Project.Name");
+			project.WebURL = request.GetText("Project.WebURL");
 
 			P4 p4 = new P4();
 			p4.View = request.GetText("Project.SourceControl.View");
@@ -38,12 +40,17 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.MVC.Cruise
 			nantBuilder.BaseDirectory = request.GetText("Project.Builder.BaseDirectory");
 			nantBuilder.BuildFile = request.GetText("Project.Builder.BuildFile");
 			nantBuilder.BuildArgs = request.GetText("Project.Builder.BuildArgs");
+			nantBuilder.TargetsForPresentation = request.GetText("Project.Builder.Targets");
 			nantBuilder.BuildTimeoutSeconds = request.GetInt("Project.Builder.BuildTimeoutSeconds", 0); // Todo - defaults from config?
 			project.Builder = nantBuilder;
 
 			MergeFilesTask mergeFilesTask = new MergeFilesTask();
-			mergeFilesTask.MergeFilesForPresentation = request.GetText("Project.Tasks.0.MergeFiles");
+			mergeFilesTask.MergeFilesForPresentation = request.GetText("Project.Tasks.0.MergeFilesForPresentation");
 			project.Tasks = new ITask[] {mergeFilesTask};
+
+			XmlLogPublisher logPublisher = new XmlLogPublisher();
+			logPublisher.LogDir = request.GetText("Project.Publishers.0.LogDir");
+			project.Publishers = new IIntegrationCompletedEventHandler[] { logPublisher };
 
 			return new AddProjectModel(project, selectedServerName, serverNames);
 		}

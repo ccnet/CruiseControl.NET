@@ -167,6 +167,32 @@ namespace ThoughtWorks.CruiseControl.Core.Builder.Test
 			AssertFalse(_builder.ShouldRun(CreateIntegrationResultWithModifications(IntegrationStatus.Exception)));
 		}
 
+		[Test]
+		public void ShouldGiveAPresentationValueForTargetsThatIsANewLineSeparatedEquivalentOfAllTargets()
+		{
+			_builder.Targets = new string[] {"target1", "target2"};
+			AssertEquals ("target1" + Environment.NewLine + "target2", _builder.TargetsForPresentation);
+		}
+
+		[Test]
+		public void ShouldSplitAtNewLineWhenSettingThroughPresentationValue()
+		{
+			_builder.TargetsForPresentation = "target1" + Environment.NewLine + "target2";
+			AssertEquals("target1", _builder.Targets[0]);
+			AssertEquals("target2", _builder.Targets[1]);
+			AssertEquals(2, _builder.Targets.Length);
+		}
+
+		[Test]
+		public void ShouldWorkForEmptyAndNullStringsWhenSettingThroughPresentationValue()
+		{
+			_builder.TargetsForPresentation = "";
+			AssertEquals(0, _builder.Targets.Length);
+			_builder.TargetsForPresentation = null;
+			AssertEquals(0, _builder.Targets.Length);
+		}
+
+
 		private ProcessResult CreateSuccessfulProcessResult()
 		{
 			return new ProcessResult("output", null, SUCCESSFUL_EXIT_CODE, false);

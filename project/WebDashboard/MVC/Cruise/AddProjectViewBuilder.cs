@@ -1,6 +1,7 @@
 using System.Web.UI;
 using ThoughtWorks.CruiseControl.Core;
 using ThoughtWorks.CruiseControl.Core.Builder;
+using ThoughtWorks.CruiseControl.Core.Publishers;
 using ThoughtWorks.CruiseControl.Core.Sourcecontrol;
 using ThoughtWorks.CruiseControl.Core.Tasks;
 using ThoughtWorks.CruiseControl.WebDashboard.MVC.View;
@@ -29,7 +30,9 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.MVC.Cruise
 				TR(TD(), TD(BuildPerforceView((P4) project.SourceControl))),
 				TR(TD("Builder"), TD("NAnt")),
 				TR(TD(), TD(BuildNAntBuilderView((NAntBuilder) project.Builder))),
-				TR(TD("Files To Merge"), TD(MultiLineTextBox("Project.Tasks.0.MergeFiles", ((MergeFilesTask) project.Tasks[0]).MergeFilesForPresentation)))
+				TR(TD("Files To Merge"), TD(MultiLineTextBox("Project.Tasks.0.MergeFilesForPresentation", ((MergeFilesTask) project.Tasks[0]).MergeFilesForPresentation))),
+				TR(TD("Output Log Directory"), TD(TextBox("Project.Publishers.0.LogDir", ((XmlLogPublisher) project.Publishers[0]).LogDir))),
+				TR(TD("Reporting URL"), TD(TextBox("Project.WebURL", project.WebURL)))
 				);
 		}
 
@@ -54,6 +57,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.MVC.Cruise
 				TR(TD("BaseDirectory"), TD(TextBox("Project.Builder.BaseDirectory", nantBuilder.BaseDirectory))),
 				TR(TD("BuildFile"), TD(TextBox("Project.Builder.BuildFile", nantBuilder.BuildFile))),
 				TR(TD("BuildArgs"), TD(TextBox("Project.Builder.BuildArgs", nantBuilder.BuildArgs))),
+				TR(TD("Targets"), TD(MultiLineTextBox("Project.Builder.TargetsForPresentation", nantBuilder.TargetsForPresentation))),
 				TR(TD("BuildTimeoutSeconds"), TD(TextBox("Project.Builder.BuildTimeoutSeconds", nantBuilder.BuildTimeoutSeconds.ToString())))
 				);
 		}

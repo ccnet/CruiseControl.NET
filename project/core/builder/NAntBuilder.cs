@@ -1,4 +1,7 @@
 using System;
+using System.Collections;
+using System.IO;
+using System.Text;
 using Exortech.NetReflector;
 using ThoughtWorks.CruiseControl.Core.Util;
 using ThoughtWorks.CruiseControl.Remote;
@@ -137,6 +140,50 @@ namespace ThoughtWorks.CruiseControl.Core.Builder
 		public override string ToString()
 		{
 			return string.Format(@" BaseDirectory: {0}, Targets: {1}, Executable: {2}, BuildFile: {3}", BaseDirectory, string.Join(", ", Targets), Executable, BuildFile);
+		}
+
+		public string TargetsForPresentation
+		{
+			get
+			{
+				StringBuilder combined = new StringBuilder();
+				bool isFirst = true;
+				foreach (string file in Targets)
+				{
+					if (! isFirst)
+					{
+						combined.Append(Environment.NewLine);
+					}
+					combined.Append(file);
+					isFirst = false;
+				}
+				return combined.ToString();
+			}
+			set
+			{
+				if (value == null || value == string.Empty)
+				{
+					Targets = new string[0];
+					return;
+				}
+				ArrayList files = new ArrayList();
+				using (StringReader reader = new StringReader(value))
+				{
+					while(true)
+					{
+						string line = reader.ReadLine();
+						if(line != null)
+						{
+							files.Add(line);
+						}
+						else
+						{
+							break;
+						}
+					}
+				}
+				Targets = (string[]) files.ToArray(typeof (string));
+			}
 		}
 	}
 }

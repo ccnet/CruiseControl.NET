@@ -40,23 +40,23 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
             return true;
         }
 
-    	public string MergeFilesForPresentation
-    	{
-    		get
-    		{
-    			StringBuilder combined = new StringBuilder();
+		public string MergeFilesForPresentation
+		{
+			get
+			{
+				StringBuilder combined = new StringBuilder();
 				bool isFirst = true;
-    			foreach (string file in MergeFiles)
-    			{
-    				if (! isFirst)
-    				{
-    					combined.Append(Environment.NewLine);
-    				}
+				foreach (string file in MergeFiles)
+				{
+					if (! isFirst)
+					{
+						combined.Append(Environment.NewLine);
+					}
 					combined.Append(file);
 					isFirst = false;
-    			}
+				}
 				return combined.ToString();
-    		}
+			}
 			set
 			{
 				if (value == null || value == string.Empty)
@@ -82,6 +82,6 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 				}
 				MergeFiles = (string[]) files.ToArray(typeof (string));
 			}
-    	}
-    }
+		}
+	}
 }
