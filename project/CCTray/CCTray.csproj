@@ -9,7 +9,7 @@
             <Settings
                 ApplicationIcon = "App.ico"
                 AssemblyKeyContainerName = ""
-                AssemblyName = "ccnet.remote.monitor"
+                AssemblyName = "ThoughtWorks.CruiseControl.Remote.monitor"
                 AssemblyOriginatorKeyFile = ""
                 DefaultClientScript = "JScript"
                 DefaultHTMLPageLayout = "Grid"
@@ -18,7 +18,7 @@
                 OutputType = "WinExe"
                 PreBuildEvent = ""
                 PostBuildEvent = ""
-                RootNamespace = "tw.ccnet.remote.monitor"
+                RootNamespace = "ThoughtWorks.CruiseControl.Remote.monitor"
                 RunPostBuildEvent = "OnBuildSuccess"
                 StartupObject = ""
             >
