@@ -13,7 +13,7 @@ namespace ThoughtWorks.CruiseControl.Core.Config
 	}
 
 	/// <summary>
-	/// Typed exception for use within CruiseControl configuration.
+	/// Exception thrown if configuration file (ccnet.config) could not be found.
 	/// </summary>
 	[Serializable]
 	public class ConfigurationFileMissingException : ConfigurationException

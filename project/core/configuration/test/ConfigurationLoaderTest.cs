@@ -1,10 +1,6 @@
-using System;
-using System.Xml;
-
 using Exortech.NetReflector;
-
 using NUnit.Framework;
-
+using System.Xml;
 using ThoughtWorks.CruiseControl.Core.Builder.Test;
 using ThoughtWorks.CruiseControl.Core.Publishers.Test;
 using ThoughtWorks.CruiseControl.Core.Sourcecontrol;
@@ -40,14 +36,14 @@ namespace ThoughtWorks.CruiseControl.Core.Config.Test
 			AssertEquals(xml, config.OuterXml);
 		}
 
-		[Test, ExpectedException(typeof(ConfigurationException))]
+		[Test, ExpectedException(typeof(ConfigurationFileMissingException))]
 		public void LoadConfigurationFile_MissingFile()
 		{
 			loader.ConfigFile = @"c:\unknown\config.file.xml";
 			loader.LoadConfiguration();
 		}
 
-		[Test, ExpectedException(typeof(ConfigurationException))]
+		[Test, ExpectedException(typeof(ConfigurationFileMissingException))]
 		public void LoadConfigurationFile_FileOnlyNoPath()
 		{
 			loader.ConfigFile = @"ccnet_unknown.config";
@@ -59,7 +55,7 @@ namespace ThoughtWorks.CruiseControl.Core.Config.Test
 		{
 			loader.ConfigFile = TempFileUtil.CreateTempXmlFile(TempFileUtil.CreateTempDir(this), "loadernet.config"
 				, "<test><a><b/></test>");
-			XmlDocument config = loader.LoadConfiguration();
+			loader.LoadConfiguration();
 		}
 
 		[Test]

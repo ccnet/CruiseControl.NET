@@ -12,7 +12,6 @@ namespace ThoughtWorks.CruiseControl.Core.Config
 	{
 		private const string ROOT_ELEMENT = "cruisecontrol";
 		private const string CONFIG_ASSEMBLY_PATTERN = "ccnet.*.plugin.dll";
-		private static readonly ReflectorHashAttribute PROJECTS_ATTRIBUTE = new ReflectorHashAttribute("cruisecontrol", "name");
 
 		internal const string XsdSchemaResourceName = "ThoughtWorks.CruiseControl.Core.configuration.ccnet.xsd";
 
