@@ -4,9 +4,6 @@ using System.IO;
 using Exortech.NetReflector;
 using ThoughtWorks.CruiseControl.Core.Util;
 
-// TODO remove
-using System.Threading;
-
 namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 {
 	[ReflectorType("vss")]
@@ -20,9 +17,9 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 		internal const string SS_REGISTRY_KEY = "SCCServerPath";
 		internal const string SS_EXE = "ss.exe";
 
-		// ss history [dir] -R -Vd[now]~[lastBuild] -Y[un,pw] -I-Y -O[tempFileName]
 		internal static readonly string HISTORY_COMMAND_FORMAT = @"history {0} -R -Vd{1}~{2} -Y{3},{4} -I-Y";
-		internal static readonly string GET_COMMAND_FORMAT = @"get {0} -R -Vd{1} -Y{2},{3} -I-N";
+		internal static readonly string GET_BY_DATE_COMMAND_FORMAT = @"get {0} -R -Vd{1} -Y{2},{3} -I-N";
+		internal static readonly string GET_BY_LABEL_COMMAND_FORMAT = @"get {0} -R -VL{1} -Y{2},{3} -I-N";
 		internal static readonly string LABEL_COMMAND_FORMAT = @"label {0} -L{1} -VL{2} -Y{3},{4} -I-Y";
 		internal static readonly string LABEL_COMMAND_FORMAT_NOTIMESTAMP = @"label {0} -L{1} -Y{2},{3} -I-Y";
 
@@ -197,15 +194,24 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			}
 
 			Log.Info("Getting source from VSS");
-			string arguments = string.Format(GET_COMMAND_FORMAT, Project, FormatCommandDate(result.StartTime), Username, Password);		
-			ProcessInfo processInfo = CreateProcessInfo(arguments);
+			ProcessInfo processInfo = CreateProcessInfo( DetermineGetSourceCommand( result ) );
 			Execute(processInfo);
 		}
 
-		internal string LastTempLabel
+		internal string DetermineGetSourceCommand(IntegrationResult result) 
 		{
-			get { return _lastTempLabel; }
-			set { _lastTempLabel = value; }
+			if ( ApplyLabel && WasTempLabelApplied() )
+			{
+				return string.Format(GET_BY_LABEL_COMMAND_FORMAT, Project, _lastTempLabel, Username, Password);		
+			}
+			else if ( !ApplyLabel )
+			{
+				return string.Format(GET_BY_DATE_COMMAND_FORMAT, Project, FormatCommandDate(result.StartTime), Username, Password);		
+			}
+			else 
+			{
+				throw new CruiseControlException( "illegal state: applylabel true but no temp label" );
+			}
 		}
 
 		private void DeleteLatestLabel()
