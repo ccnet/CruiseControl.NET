@@ -46,7 +46,8 @@ namespace tw.ccnet.console
 				{
 					StartLocalCC(configFile);
 				}
-				BlockForUserInput();
+                Console.WriteLine("Server Started.........");
+                BlockForUserInput();
 			}
 			catch (ConfigurationException ex)
 			{
@@ -62,13 +63,10 @@ namespace tw.ccnet.console
 
 		private static void StartRemoteCC(String configFile)
 		{
-			RemotingConfiguration.Configure("ccnet.exe.config");
-			manager = new CruiseManager();
-			manager.InitializeCruiseControl(configFile);
-			manager.StartCruiseControl();
-			RemotingServices.Marshal(manager, "CruiseManager.rem");
-			Console.WriteLine("Server Started.........");
-
+            manager = new CruiseManager();
+            manager.InitializeCruiseControl(configFile);
+            manager.RegisterForRemoting();
+            manager.StartCruiseControl();
 		}
 
 		private static void StartLocalCC(String configFile)

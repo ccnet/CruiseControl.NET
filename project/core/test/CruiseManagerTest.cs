@@ -1,13 +1,16 @@
 using System;
 using System.Diagnostics;
+using System.IO;
 using System.Threading;
+
 using NUnit.Framework;
+
 using tw.ccnet.remote;
 
 namespace tw.ccnet.core.test
 {
 	[TestFixture]
-	public class CruiseManagerTest
+	public class CruiseManagerTest : Assertion
 	{
 		[Test]
 		[Ignore("takes too long, will move to acceptanceTests")]
@@ -47,5 +50,14 @@ namespace tw.ccnet.core.test
 				p.WaitForExit();
 			}
 		}
+
+        public class MyConsoleOutputSink : IConsoleOutputSink 
+        {
+            public string Text = "";
+            public void Write(string line) 
+            {
+                Text += line;
+            }
+        }
 	}
 }

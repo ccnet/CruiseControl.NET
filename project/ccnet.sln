@@ -31,6 +31,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "web", "web\web.csproj", "{3
 	ProjectSection(ProjectDependencies) = postProject
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ControlPanel", "ControlPanel\ControlPanel.csproj", "{039090B7-A3B1-4345-83F5-E856333E6D8C}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfiguration) = preSolution
 		Debug = Debug
@@ -66,6 +70,10 @@ Global
 		{317E46BA-74DE-411D-A09D-37193EEFD856}.Debug.Build.0 = Debug|.NET
 		{317E46BA-74DE-411D-A09D-37193EEFD856}.Release.ActiveCfg = Release|.NET
 		{317E46BA-74DE-411D-A09D-37193EEFD856}.Release.Build.0 = Release|.NET
+		{039090B7-A3B1-4345-83F5-E856333E6D8C}.Debug.ActiveCfg = Debug|.NET
+		{039090B7-A3B1-4345-83F5-E856333E6D8C}.Debug.Build.0 = Debug|.NET
+		{039090B7-A3B1-4345-83F5-E856333E6D8C}.Release.ActiveCfg = Release|.NET
+		{039090B7-A3B1-4345-83F5-E856333E6D8C}.Release.Build.0 = Release|.NET
 	EndGlobalSection
 	GlobalSection(SolutionItems) = postSolution
 		..\ccnet.build = ..\ccnet.build

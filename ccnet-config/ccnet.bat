@@ -1,2 +1,2 @@
 title CCNET
-..\dist\ccnet.exe 
+..\dist\ccnet.exe -remoting:on

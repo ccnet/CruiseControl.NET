@@ -1,19 +1,20 @@
 using System;
 using System.Collections;
 using System.Diagnostics;
+using System.IO;
+using System.Runtime.Remoting;
+using System.Runtime.Remoting.Channels;
 using System.Threading;
+
 using tw.ccnet.core;
 using tw.ccnet.core.configuration;
 using tw.ccnet.remote;
-
-using System.Runtime.Remoting;
 
 namespace tw.ccnet.core 
 {
 	
 	public class CruiseManager : MarshalByRefObject, ICruiseManager 
 	{
-
 		private CruiseControl _cruiseControl; 
 		private Thread _cruiseControlThread;
 		public const int TCP_PORT = 1234;
@@ -93,5 +94,35 @@ namespace tw.ccnet.core
 		{
 		}
 
-	}
+        public string Configuration 
+        {
+            get { return "bob's your uncle"; }
+            set { }
+        }
+
+        public void RegisterForRemoting() 
+        {
+            string configFile = System.Reflection.Assembly.GetEntryAssembly().Location + ".config";
+            string uri = "CruiseManager.rem";
+
+            RemotingConfiguration.Configure(configFile);
+            RemotingServices.Marshal(this, uri);
+ 
+
+            string url = uri;
+            try 
+            {
+                IChannelReceiver channel = (IChannelReceiver)ChannelServices.RegisteredChannels[0];
+                url = channel.GetUrlsForUri(uri)[0];
+
+                ICruiseManager marshalledObject = (ICruiseManager) RemotingServices.Connect(typeof(ICruiseManager), url);
+                marshalledObject.GetStatus(); // this will throw an exception if it didn't connect
+                Console.WriteLine("listening on " + url);
+            } 
+            catch 
+            {
+                throw new Exception("couldn't listen on " + url);
+            }
+        }
+    }
 }

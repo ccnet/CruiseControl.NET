@@ -1,14 +1,17 @@
 using System;
 using System.Collections;
 using System.ComponentModel;
+using System.Configuration;
 using System.Data;
 using System.Diagnostics;
 using System.IO;
+using System.Runtime.Remoting;
+using System.Runtime.Remoting.Channels;
+using System.Runtime.Remoting.Channels.Tcp;
 using System.ServiceProcess;
+
 using tw.ccnet.core;
 using tw.ccnet.core.configuration;
-using System.Runtime.Remoting;
-using System.Configuration;
 
 namespace tw.ccnet.service
 {
@@ -85,13 +88,11 @@ namespace tw.ccnet.service
 			// we will register it on a channel if remoting is on
 			manager = new CruiseManager();
 			manager.InitializeCruiseControl(configFile);
-			if (useRemoting()) 
-			{
-				RemotingConfiguration.Configure(appConfigFile);
-				RemotingServices.Marshal(manager, "CruiseManager.rem");
-			}
-			if (manager != null)
-				manager.StartCruiseControl();
+			
+            if (useRemoting()) 
+                manager.RegisterForRemoting();
+
+            manager.StartCruiseControl();
 		}
 
 		private bool useRemoting() 

@@ -33,6 +33,8 @@ namespace tw.ccnet.remote
 		ProjectStatus GetProjectStatus();
 
 		void Run(string project, ISchedule schedule);
+
+        string Configuration { get; set; }
 	}
 
 	/// <remarks>
@@ -98,4 +100,9 @@ namespace tw.ccnet.remote
 		Exception,
 		Unknown
 	}
+
+    public interface IConsoleOutputSink 
+    {
+        void Write(string text);
+    }
 }
