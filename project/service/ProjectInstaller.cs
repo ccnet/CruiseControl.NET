@@ -1,7 +1,6 @@
-using System;
-using System.Collections;
 using System.ComponentModel;
 using System.Configuration.Install;
+using System.ServiceProcess;
 
 namespace ThoughtWorks.CruiseControl.Service
 {
@@ -9,38 +8,38 @@ namespace ThoughtWorks.CruiseControl.Service
 	/// Installs CCService as a Windows Service.
 	/// </summary>
 	[RunInstaller(true)]
-	public class ProjectInstaller : System.Configuration.Install.Installer
+	public class ProjectInstaller : Installer
 	{
-        private System.ServiceProcess.ServiceProcessInstaller serviceProcessInstaller;
-        private System.ServiceProcess.ServiceInstaller serviceInstaller;
+		private ServiceProcessInstaller serviceProcessInstaller;
+		private ServiceInstaller serviceInstaller;
 
 		public ProjectInstaller()
 		{
 			InitializeComponent();
-        }
+		}
 
-		#region Component Designer generated code
 		private void InitializeComponent()
 		{
-            this.serviceProcessInstaller = new System.ServiceProcess.ServiceProcessInstaller();
-            this.serviceInstaller = new System.ServiceProcess.ServiceInstaller();
-            // 
-            // serviceProcessInstaller
-            // 
-            this.serviceProcessInstaller.Password = null;
-            this.serviceProcessInstaller.Username = null;
-            // 
-            // serviceInstaller
-            // 
-            this.serviceInstaller.DisplayName = "CCService";
-            this.serviceInstaller.ServiceName = "CCService";
-            // 
-            // ProjectInstaller
-            // 
-            this.Installers.AddRange(new System.Configuration.Install.Installer[] {
-                                                                                      this.serviceProcessInstaller,
-                                                                                      this.serviceInstaller});
-        }
-		#endregion
+			this.serviceProcessInstaller = new ServiceProcessInstaller();
+			this.serviceInstaller = new ServiceInstaller();
+			// 
+			// serviceProcessInstaller
+			// 
+			this.serviceProcessInstaller.Password = null;
+			this.serviceProcessInstaller.Username = null;
+			// 
+			// serviceInstaller
+			// 
+			this.serviceInstaller.DisplayName = "CCService";
+			this.serviceInstaller.ServiceName = "CCService";
+			// 
+			// ProjectInstaller
+			// 
+			this.Installers.AddRange(new Installer[]
+				{
+					this.serviceProcessInstaller,
+					this.serviceInstaller
+				});
+		}
 	}
 }

@@ -10,9 +10,9 @@ namespace ThoughtWorks.CruiseControl.Service
 {
 	public class CCService : ServiceBase
 	{
-		static void Main()
+		private static void Main()
 		{
-			ServiceBase.Run(new ServiceBase[] { new CCService() } );
+			ServiceBase.Run(new ServiceBase[] {new CCService()});
 		}
 
 		private ICruiseServer server;
@@ -20,6 +20,16 @@ namespace ThoughtWorks.CruiseControl.Service
 		public CCService()
 		{
 			this.ServiceName = "CCService";
+		}
+
+		private string ConfigFileName
+		{
+			get { return ConfigurationSettings.AppSettings["ccnet.config"]; }
+		}
+
+		private string Remoting
+		{
+			get { return ConfigurationSettings.AppSettings["remoting"]; }
 		}
 
 		/// <summary>
@@ -32,7 +42,6 @@ namespace ThoughtWorks.CruiseControl.Service
 
 			string configFile = GetConfigFilename();
 			FileInfo configFileInfo = (new FileInfo(configFile));
-
 			if (! configFileInfo.Exists)
 			{
 				EventLog.WriteEntry("CCService", string.Format("Config file {0} does not exist - exiting application", configFileInfo.FullName), EventLogEntryType.Error);
@@ -42,9 +51,6 @@ namespace ThoughtWorks.CruiseControl.Service
 			server = CruiseServerFactory.Create(UseRemoting(), configFile);
 			server.Start();
 		}
-
-		private string ConfigFileName { get { return ConfigurationSettings.AppSettings["ccnet.config"]; } }
-		private string Remoting       { get { return ConfigurationSettings.AppSettings["remoting"]; } }
 
 		private string GetConfigFilename()
 		{
@@ -60,7 +66,7 @@ namespace ThoughtWorks.CruiseControl.Service
 		{
 			return (Remoting != null && Remoting.Trim().ToLower() == "on");
 		}
- 
+
 		/// <summary>
 		/// Stop this service.
 		/// </summary>
