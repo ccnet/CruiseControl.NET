@@ -1,0 +1,12 @@
+Archive:
+Workfile:01234567 foo.txt
+Last modified:  Sep 13 2001 13:34:52
+Author id: dante 
+made a first hello world comment
+garbage
+more garbage
+Archive:  
+Workfile:01234567 bar.txt
+Last modified:  Oct 31 2001 18:52:13
+Author id: virgil
+made a second hello world comment

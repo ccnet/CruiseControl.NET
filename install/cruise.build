@@ -1,0 +1,18 @@
+<project name="ccnetlaunch" default="run">
+  <target name="run" depends="update,build"/>
+
+  <target name="update">
+    <!-- ENABLE FOR CVS -->
+    <exec basedir="[PROJECT_DIRECTORY]" program="tools/cvs.exe" commandline="-q update -P -d" />
+    
+    <!-- ENABLE FOR VSS (DELETE FILES FIRST TO ENSURE CLEAN LOCAL COPY) -->
+    <!-- <delete dir="[PROJECT_DIRECTORY]"/> -->
+    <!-- <mkdir dir="[PROJECT_DIRECTORY]"/> -->
+    <!-- <exec basedir="[PROJECT_DIRECTORY]" program="C:\Program Files\Microsoft Visual Studio\VSS\win32\SS.EXE" commandline="Get $/[PROJECTNAME] -R" /> -->
+  </target>
+
+  <target name="build">
+    <nant buildfile="[BUILDFILE_LOCATION]" />
+  </target>
+
+</project>

@@ -1,0 +1,110 @@
+<?xml version="1.0" ?>
+<xs:schema attributeFormDefault="unqualified" elementFormDefault="qualified" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="http://www.w3.org/2001/XMLSchema">
+	<xs:element name="cruisecontrol">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="project">
+					<xs:complexType>
+						<xs:sequence>
+							<xs:choice maxOccurs="unbounded">
+								<xs:element name="sourcecontrol">
+									<xs:complexType>
+										<xs:sequence minOccurs="0">
+											<xs:element name="executable" type="xs:string" />
+											<xs:element name="workingDirectory" type="xs:string" />
+										</xs:sequence>
+										<xs:attribute name="type" type="xs:string" use="required" />
+									</xs:complexType>
+								</xs:element>
+								<xs:element name="build">
+									<xs:complexType>
+										<xs:sequence minOccurs="0">
+											<xs:element name="executable" type="xs:string" />
+											<xs:element name="baseDirectory" type="xs:string" />
+											<xs:element name="buildFile" type="xs:string" />
+											<xs:element name="targetList">
+												<xs:complexType>
+													<xs:sequence>
+														<xs:element name="target" type="xs:string" />
+													</xs:sequence>
+												</xs:complexType>
+											</xs:element>
+											<xs:element name="buildTimeout" type="xs:unsignedShort" />
+										</xs:sequence>
+										<xs:attribute name="type" type="xs:string" use="required" />
+									</xs:complexType>
+								</xs:element>
+								<xs:element name="publishers">
+									<xs:complexType>
+										<xs:sequence>
+											<xs:element minOccurs="0" name="mockpublisher" />
+											<xs:element minOccurs="0" name="email">
+												<xs:complexType>
+													<xs:sequence>
+														<xs:element name="projectUrl" type="xs:string" />
+														<xs:element name="users">
+															<xs:complexType>
+																<xs:sequence>
+																	<xs:element maxOccurs="unbounded" name="user">
+																		<xs:complexType>
+																			<xs:attribute name="name" type="xs:string" use="required" />
+																			<xs:attribute name="group" type="xs:string" use="required" />
+																			<xs:attribute name="address" type="xs:string" use="required" />
+																		</xs:complexType>
+																	</xs:element>
+																</xs:sequence>
+															</xs:complexType>
+														</xs:element>
+														<xs:element name="groups">
+															<xs:complexType>
+																<xs:sequence>
+																	<xs:element maxOccurs="unbounded" name="group">
+																		<xs:complexType>
+																			<xs:attribute name="name" type="xs:string" use="required" />
+																			<xs:attribute name="notification" type="xs:string" use="required" />
+																		</xs:complexType>
+																	</xs:element>
+																</xs:sequence>
+															</xs:complexType>
+														</xs:element>
+													</xs:sequence>
+													<xs:attribute name="from" type="xs:string" use="required" />
+													<xs:attribute name="mailhost" type="xs:string" use="required" />
+													<xs:attribute name="includeDetails" type="xs:boolean" use="required" />
+												</xs:complexType>
+											</xs:element>
+											<xs:element minOccurs="0" name="xmllogger">
+												<xs:complexType>
+													<xs:sequence>
+														<xs:element name="logDir" type="xs:string" />
+													</xs:sequence>
+												</xs:complexType>
+											</xs:element>
+										</xs:sequence>
+									</xs:complexType>
+								</xs:element>
+								<xs:element name="history">
+									<xs:complexType>
+										<xs:attribute name="type" type="xs:string" use="required" />
+										<xs:attribute name="historyDir" type="xs:string" use="optional" />
+									</xs:complexType>
+								</xs:element>
+								<xs:element name="modificationDelay" type="xs:unsignedShort" />
+								<xs:element name="schedule">
+									<xs:complexType>
+										<xs:attribute name="type" type="xs:string" use="required" />
+										<xs:attribute name="timeout" type="xs:unsignedByte" use="required" />
+										<xs:attribute name="iterations" type="xs:unsignedByte" use="required" />
+									</xs:complexType>
+								</xs:element>
+							</xs:choice>
+						</xs:sequence>
+						<xs:attribute name="name" type="xs:string" use="required" />
+						<xs:attribute name="logDir" type="xs:string" use="optional" />
+						<xs:attribute name="sleepTime" type="xs:unsignedByte" use="optional" />
+					</xs:complexType>
+				</xs:element>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+</xs:schema>
