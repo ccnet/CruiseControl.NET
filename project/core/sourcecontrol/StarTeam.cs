@@ -9,7 +9,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 	/// Source Controller for StarTeam
 	/// </summary>	
 	[ReflectorType("starteam")]
-	public class StarTeam : ProcessSourceControl
+	public class StarTeam : ProcessSourceControl, IStarTeamRegExProvider
 	{
 		//stcmd hist -nologo -x -is -filter IO -p "userid:password@host:port/project/path" "files"		
 		internal readonly static string HISTORY_COMMAND_FORMAT = "hist -nologo -x -is -filter IO -p \"{0}:{1}@{2}:{3}/{4}/{5}\" ";
@@ -27,7 +27,25 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 		private string _pathOverrideViewWorkingDir;
 		private string _pathOverrideFolderWorkingDir;
 
-		public StarTeam(): base(new StarTeamHistoryParser())
+		// The regular expression to capture info about each folder
+		private string folderRegEx = @"(?m:^Folder: (?<folder_name>.+)  \(working dir: (?<working_directory>.+)\)(?s:.*?)(?=^Folder: ))";
+
+		// The regular expression to capture info about each file in a folder
+		// KEEP IT AS IT IS, DO NOT ALIGN LINES
+		private string fileRegEx = @"(?m:History for: (?<file_name>.+)
+Description:(?<file_description>.*)
+Locked by:(?<locked_by>.*)
+Status:(?<file_status>.+)
+-{28}(?# the file history separator ---...)
+(?s:(?<file_history>.*?))
+={77}(?# the file info separator ====....))";
+
+		// The regular expression to capture the history of a file
+		// KEEP IT AS IT IS, DO NOT ALIGN LINES
+		private string fileHistoryRegEx = @"(?m:Revision: (?<file_revision>\S+) View: (?<view_name>.+) Branch Revision: (?<branch_revision>\S+)
+Author: (?<author_name>.*?) Date: (?<date_string>\d{01,2}/\d{1,2}/\d\d \d{1,2}:\d\d:\d\d (A|P)M).*\n(?s:(?<change_comment>.*?))-{28})";
+
+		public StarTeam(): base(new StarTeamHistoryParser(null))
 		{
 			_executable = "stcmd.exe";
 			_host = "127.0.0.1";
@@ -36,6 +54,9 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			_autoGetSource = false;
 			_pathOverrideViewWorkingDir = String.Empty;
 			_pathOverrideFolderWorkingDir = String.Empty;
+			// We have to do this here since we can't pass a reference to 'this' as part of the call to 'base' above
+			// Its nasty, but I don't like inheritence anyway (Mike R)
+			_historyParser = new StarTeamHistoryParser(this);
 		}
 
 		[ReflectorProperty("executable")]
@@ -106,6 +127,27 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 		{
 			get { return _pathOverrideFolderWorkingDir; }
 			set { _pathOverrideFolderWorkingDir = value; }
+		}
+
+		[ReflectorProperty("folderRegEx", Required=false)]
+		public string FolderRegEx
+		{
+			get { return folderRegEx; }
+			set { folderRegEx = value; }
+		}
+
+		[ReflectorProperty("fileRegEx", Required=false)]
+		public string FileRegEx
+		{
+			get { return fileRegEx; }
+			set { fileRegEx = value; }
+		}
+
+		[ReflectorProperty("fileHistoryRegEx", Required=false)]
+		public string FileHistoryRegEx
+		{
+			get { return fileHistoryRegEx; }
+			set { fileHistoryRegEx = value; }
 		}
 
 		public ProcessInfo CreateHistoryProcessInfo(DateTime from, DateTime to)

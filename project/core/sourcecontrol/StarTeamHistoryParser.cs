@@ -14,43 +14,16 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 	/// </summary>
 	public class StarTeamHistoryParser : IHistoryParser
 	{
+		private readonly IStarTeamRegExProvider starTeamRegExProvider;
 		internal readonly static string FolderInfoSeparator  = "Folder: ";
 		internal readonly static string FileHistorySeparator = "----------------------------";
 
-		// The regular expression to capture info about each folder
-		public const string FolderRegEx = @"(?m:^Folder: (?<folder_name>.+)  \(working dir: (?<working_directory>.+)\)(?s:.*?)(?=^Folder: ))";
-
-
-		// The regular expression to capture info about each file in a folder
-		// KEEP IT AS IT IS, DO NOT ALIGN LINES
-		internal readonly static string FileRegEx = @"(?m:History for: (?<file_name>.+)
-Description:(?<file_description>.*)
-Locked by:(?<locked_by>.*)
-Status:(?<file_status>.+)
--{28}(?# the file history separator ---...)
-(?s:(?<file_history>.*?))
-={77}(?# the file info separator ====....))";
-
-
-		// The regular expression to capture the history of a file
-		// KEEP IT AS IT IS, DO NOT ALIGN LINES
-		internal readonly static string FileHistoryRegEx = @"(?m:Revision: (?<file_revision>\S+) View: (?<view_name>.+) Branch Revision: (?<branch_revision>\S+)
-Author: (?<author_name>.*?) Date: (?<date_string>\d{01,2}/\d{1,2}/\d\d \d{1,2}:\d\d:\d\d (A|P)M).*\n(?s:(?<change_comment>.*?))-{28})";
-
-		readonly Regex folderRegex;
-		readonly Regex fileRegex;
-		readonly Regex historyRegex;
 //		DateTimeFormatInfo dfi;
 		internal CultureInfo Culture = CultureInfo.CurrentCulture;
 
-		public StarTeamHistoryParser()
+		public StarTeamHistoryParser(IStarTeamRegExProvider starTeamRegExProvider)
 		{
-			// Create the regular expression objects needed to parse
-			// the StarTeam history log stream
-			folderRegex = new Regex(StarTeamHistoryParser.FolderRegEx);        
-			fileRegex = new Regex(StarTeamHistoryParser.FileRegEx);
-			historyRegex = new Regex(StarTeamHistoryParser.FileHistoryRegEx);
-        
+			this.starTeamRegExProvider = starTeamRegExProvider;
 			// Create DateTimeFormatInfo
 //			dfi = new DateTimeFormatInfo();
 //			dfi.AMDesignator = "AM";
@@ -65,6 +38,10 @@ Author: (?<author_name>.*?) Date: (?<date_string>\d{01,2}/\d{1,2}/\d\d \d{1,2}:\
 		/// <returns></returns>
 		public Modification[] Parse(TextReader starTeamLog, DateTime from, DateTime to)
 		{
+			Regex folderRegex = new Regex(starTeamRegExProvider.FolderRegEx);        
+			Regex fileRegex = new Regex(starTeamRegExProvider.FileRegEx);
+			Regex historyRegex = new Regex(starTeamRegExProvider.FileHistoryRegEx);
+
 			// Temporary holder of Modification objects
 			ArrayList modList = new ArrayList();
 

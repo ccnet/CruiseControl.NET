@@ -18,7 +18,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test
 		[SetUp]
 		public void SetUp()
 		{
-			_parser = new StarTeamHistoryParser();
+			_parser = new StarTeamHistoryParser(new StarTeam());
 			_dfi = new DateTimeFormatInfo();
 			_dfi.AMDesignator = "AM";
 			_dfi.PMDesignator = "PM";
