@@ -10,7 +10,7 @@ namespace ThoughtWorks.CruiseControl.Service
 {
 	public class CCService : ServiceBase
 	{
-		private const string DefaultServiceName = "CCService";
+		public const string DefaultServiceName = "CCService";
 		private const string DefaultConfigFileName = "ccnet.config";
 		private readonly string DefaultDirectory = AppDomain.CurrentDomain.BaseDirectory;
 

@@ -1,3 +1,4 @@
+using System.Collections;
 using System.ComponentModel;
 using System.Configuration.Install;
 using System.ServiceProcess;
@@ -10,6 +11,7 @@ namespace ThoughtWorks.CruiseControl.Service
 	[RunInstaller(true)]
 	public class ProjectInstaller : Installer
 	{
+		private const string ServiceNameSwitch = "ServiceName";
 		private ServiceProcessInstaller serviceProcessInstaller;
 		private ServiceInstaller serviceInstaller;
 
@@ -20,26 +22,35 @@ namespace ThoughtWorks.CruiseControl.Service
 
 		private void InitializeComponent()
 		{
-			this.serviceProcessInstaller = new ServiceProcessInstaller();
-			this.serviceInstaller = new ServiceInstaller();
-			// 
-			// serviceProcessInstaller
-			// 
-			this.serviceProcessInstaller.Password = null;
-			this.serviceProcessInstaller.Username = null;
-			// 
-			// serviceInstaller
-			// 
-			this.serviceInstaller.DisplayName = "CCService";
-			this.serviceInstaller.ServiceName = "CCService";
-			// 
-			// ProjectInstaller
-			// 
-			this.Installers.AddRange(new Installer[]
+			serviceProcessInstaller = new ServiceProcessInstaller();
+			serviceInstaller = new ServiceInstaller();
+			SetServiceName(CCService.DefaultServiceName);
+
+			Installers.AddRange(new Installer[]
 				{
-					this.serviceProcessInstaller,
-					this.serviceInstaller
+					serviceProcessInstaller,
+					serviceInstaller
 				});
+		}
+
+		private void SetServiceName(string serviceName)
+		{
+			serviceInstaller.DisplayName = serviceName;
+			serviceInstaller.ServiceName = serviceName;
+		}
+
+		public override string HelpText
+		{
+			get { return string.Format("Usage: installutil [/u] [/{0}=MyCCService] ccnet.service.exe", ServiceNameSwitch); }
+		}
+
+		public override void Install(IDictionary stateSaver)
+		{
+			if (stateSaver.Contains(ServiceNameSwitch))
+			{
+				SetServiceName(stateSaver[ServiceNameSwitch].ToString());
+			}
+			base.Install(stateSaver);
 		}
 	}
 }
