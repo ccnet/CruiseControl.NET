@@ -13,11 +13,14 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Triggers
 	{
 		private IMock _mockDateTime;
 		private IntervalTrigger trigger;
+		private DateTime initialDateTimeNow;
 
 		[SetUp]
 		public void Setup()
 		{
 			_mockDateTime = new DynamicMock(typeof(DateTimeProvider));
+			initialDateTimeNow = new DateTime(2002, 1, 2, 3, 0, 0, 0);
+			_mockDateTime.SetupResult("Now", this.initialDateTimeNow);
 			trigger = new IntervalTrigger((DateTimeProvider) _mockDateTime.MockInstance);
 		}
 
@@ -131,7 +134,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Triggers
 		[Test]
 		public void ShouldReturnCurrentTimeForNextBuildOnServerStart()
 		{
-			Assert.AreEqual(DateTime.Now, trigger.NextBuild);			
+			Assert.AreEqual(initialDateTimeNow, trigger.NextBuild);
+			VerifyAll();
 		}
 
 		[Test]

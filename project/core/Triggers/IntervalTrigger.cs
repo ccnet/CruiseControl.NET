@@ -24,8 +24,7 @@ namespace ThoughtWorks.CruiseControl.Core.Triggers
 			this.intervalSeconds = DefaultIntervalSeconds;
 			this.buildCondition = BuildCondition.IfModificationExists;
 			lastIntegrationCompleteTime = DateTime.MinValue;
-			nextBuildTime = DateTime.Now;
-
+			nextBuildTime = dtProvider.Now;
 		}
 
 		[ReflectorProperty("seconds", Required=false)]
