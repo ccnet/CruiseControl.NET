@@ -16,7 +16,7 @@
 	        <xsl:if test="$error.messages.count > 0">
 	            <table class="section-table" cellpadding="2" cellspacing="0" border="0" width="98%">
 	                <tr>
-	                    <td class="compile-sectionheader">
+	                    <td class="sectionheader">
 	                        Errors: (<xsl:value-of select="$error.messages.count"/>)
 	                    </td>
 	                </tr>
@@ -30,7 +30,7 @@
 	        <xsl:if test="$warning.messages.count > 0">
 	            <table class="section-table" cellpadding="2" cellspacing="0" border="0" width="98%">
 	                <tr>
-	                    <td class="compile-sectionheader">
+	                    <td class="sectionheader">
 	                        Warnings: (<xsl:value-of select="$warning.messages.count"/>)
 	                    </td>
 	                </tr>
@@ -41,7 +41,7 @@
     </xsl:template>
 
     <xsl:template match="message">
-        <pre class="compile-error-data"><xsl:value-of select="text()"/></pre>
+        <pre class="section-error"><xsl:value-of select="text()"/></pre>
     </xsl:template>
 
 </xsl:stylesheet>

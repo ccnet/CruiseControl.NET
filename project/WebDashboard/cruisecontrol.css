@@ -19,43 +19,12 @@ a:hover { color:#FC0; }
 .header-data { color:#000; }
 .header-data-error { font-family:courier, monospaced; color:#000; white-space:pre; }
 
-.modifications-data { font-size:9px; color:#000; }
-.modifications-sectionheader { background-color:#006; color:#FFF; }
-.modifications-oddrow { background-color:#F0F7FF; }
-.modifications-evenrow { background-color:#FFF; }
-
-.changelists-oddrow { background-color:#F0F7FF; }
-.changelists-evenrow { background-color:#FFF; }
-.changelists-file-spacer { background-color:#FFF; }
-.changelists-file-evenrow { background-color:#FFF; }
-.changelists-file-oddrow { background-color:#F0F7FF; }
-.changelists-file-header { font-size:9px; background-color:#666; color:#FFF; }
-
-.compile-data { font-size:9px; color:#000; }
-.compile-error-data { font-size:9px; color:#F30; white-space:pre; }
-.compile-warn-data { font-size:9px; color:#C90; white-space:pre; }
-.compile-sectionheader { background-color:#006; color:#FFF; }
-
-.distributables-data { font-size:9px; color:#000; }
-.distributables-sectionheader { background-color:#006; color:#FFF; }
-.distributables-oddrow { background-color:#F0F7FF; }
-
-.unittests-sectionheader { background-color:#006; color:#FFF; }
-.unittests-oddrow { background-color:#F0F7FF; }
-.unittests-data { font-size:9px; color:#000; }
-.unittests-error { font-size:9px; color:#F30; white-space:pre; }
-
-.javadoc-sectionheader { background-color:#006; color:#FFF; }
-.javadoc-oddrow { background-color:#CCC; }
-.javadoc-data { font-size:9px; color:#000; }
-.javadoc-error { font-size:9px; color:#F30; white-space:pre; }
-.javadoc-warning { font-size:9px; color:#000; white-space:pre; }
-
 .section-table { margin-top:10px; }
-
-.fxcop-summary-sectionheader { background-color:#006; color:#FFF; }
-.fxcop-summary-oddrow { background-color:#F0F7FF; }
-.fxcop-summary-data { font-size:9px; color:#000; }
+.sectionheader { background-color:#006; color:#FFF; }
+.section-data { font-size:9px; color:#000; }
+.section-oddrow { background-color:#F0F7FF; }
+.section-evenrow { background-color:#FFF; }
+.section-error { font-size:9px; color:#F30; white-space:pre; }
 
 .warning { color:orange }
 .error { color:red }

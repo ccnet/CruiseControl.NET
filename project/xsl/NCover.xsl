@@ -8,7 +8,7 @@
 	        <table class="section-table" cellpadding="2" cellspacing="0" border="0" width="98%">
 	
 	            <tr>
-	                <td class="unittests-sectionheader" colspan="2">
+	                <td class="sectionheader" colspan="2">
 	           		<!-- Test Coverage Summary -->
 	            	
 				NCover - Test Coverage:

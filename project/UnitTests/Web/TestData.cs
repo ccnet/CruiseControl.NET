@@ -1,5 +1,3 @@
-using System;
-
 namespace ThoughtWorks.CruiseControl.Web.Test
 {
 	public class TestData
@@ -714,7 +712,7 @@ namespace ThoughtWorks.CruiseControl.Web.Test
         <table align=""center"" cellpadding=""2"" cellspacing=""0"" border=""0"" width=""98%"">
             <!-- Modifications -->
             <tr>
-                <td class=""modifications-sectionheader"" colspan=""4"">
+                <td class=""sectionheader"" colspan=""4"">
                     &#160;Modifications since last build:&#160;
                     (<xsl:value-of select=""count($modification.list)""/>)
                 </td>
@@ -731,16 +729,16 @@ namespace ThoughtWorks.CruiseControl.Web.Test
     <xsl:template match=""modification"">
         <tr>
             <xsl:if test=""position() mod 2=0"">
-                <xsl:attribute name=""class"">modifications-oddrow</xsl:attribute>
+                <xsl:attribute name=""class"">section-oddrow</xsl:attribute>
             </xsl:if>
             <xsl:if test=""position() mod 2!=0"">
-                <xsl:attribute name=""class"">modifications-evenrow</xsl:attribute>
+                <xsl:attribute name=""class"">section-evenrow</xsl:attribute>
             </xsl:if>
 
-            <td class=""modifications-data""><xsl:value-of select=""@type""/></td>
-            <td class=""modifications-data""><xsl:value-of select=""user""/></td>
-            <td class=""modifications-data""><xsl:value-of select=""project""/>/<xsl:value-of select=""filename""/></td>
-            <td class=""modifications-data""><xsl:value-of select=""comment""/></td>
+            <td class=""section-data""><xsl:value-of select=""@type""/></td>
+            <td class=""section-data""><xsl:value-of select=""user""/></td>
+            <td class=""section-data""><xsl:value-of select=""project""/>/<xsl:value-of select=""filename""/></td>
+            <td class=""section-data""><xsl:value-of select=""comment""/></td>
         </tr>
     </xsl:template>
 

@@ -34,7 +34,7 @@
 
 				<table class="section-table" cellSpacing="0" cellPadding="2" width="98%" border="0">
 					<tr>
-						<td class="fxcop-summary-sectionheader" colSpan="4">FxCop <xsl:value-of select="$fxcop.version" /> Summary</td>
+						<td class="sectionheader" colSpan="4">FxCop <xsl:value-of select="$fxcop.version" /> Summary</td>
 					</tr>
 					<tr>
 						<td><b>Target rules</b></td>
@@ -54,7 +54,7 @@
 		<xsl:if test="@Name">
 			<tr style="cursor:pointer">
 				<xsl:attribute name="onClick">toggleRuleVisiblity('<xsl:value-of select="@Name"/>');</xsl:attribute>
-				<td colspan="2" class="fxcop-summary-data">
+				<td colspan="2" class="section-data">
 					<span><xsl:attribute name="id"><xsl:value-of select="@Name"/>.plus</xsl:attribute>+ </span>
 					<xsl:value-of select="@Name" />
 					<div style="display: none; border: 1px solid gray">
@@ -73,7 +73,7 @@
 			<xsl:variable name="filename" select="translate(@Name, '\', '/')"/>
 			<tr style="cursor:pointer">
 				<xsl:attribute name="onClick">toggleRuleVisiblity('<xsl:value-of select="$filename"/>');</xsl:attribute>
-				<td colspan="2" class="fxcop-summary-data">
+				<td colspan="2" class="section-data">
 					<span><xsl:attribute name="id"><xsl:value-of select="$filename"/>.plus</xsl:attribute>+ </span>
 					<xsl:value-of select="@Name" />
 					<div style="display: none; border: 1px solid gray">
@@ -197,7 +197,7 @@
 			<xsl:variable name="line" select=".//SourceCode/@Line" />
 			<xsl:variable name="resolution" select=".//Resolution/Text" />
 
-			<div class="fxcop-summary-data" style="margin-left:10px">
+			<div class="section-data" style="margin-left:10px">
 				<img>
 					<xsl:if test="$level='CriticalError'">
 						<xsl:attribute name="src">images/fxcop-critical-error.gif</xsl:attribute>

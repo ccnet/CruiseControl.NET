@@ -153,7 +153,7 @@
 	<xsl:template match="test-case[@success='True']">
 		<tr>
 			<xsl:if test="position() mod 2 = 0">
-				<xsl:attribute name="class">unittests-oddrow</xsl:attribute>
+				<xsl:attribute name="class">section-oddrow</xsl:attribute>
 			</xsl:if>
 			<td>
 				<img src="images\check.jpg" width="16" height="16"/>
@@ -171,7 +171,7 @@
 	<xsl:template match="test-case[@success='False']">
 		<tr>
 			<xsl:if test="position() mod 2 = 0">
-				<xsl:attribute name="class">unittests-oddrow</xsl:attribute>
+				<xsl:attribute name="class">section-oddrow</xsl:attribute>
 			</xsl:if>
 			<td>
 				<img src="images\fxcop-critical-error.gif"/>
@@ -190,7 +190,7 @@
 	<xsl:template match="test-case[@executed='False']">
 		<tr>
 			<xsl:if test="position() mod 2 = 0">
-				<xsl:attribute name="class">unittests-oddrow</xsl:attribute>
+				<xsl:attribute name="class">section-oddrow</xsl:attribute>
 			</xsl:if>
 			<td>
 				<img src="images\fxcop-error.gif"/>

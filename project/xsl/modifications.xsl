@@ -10,7 +10,7 @@
         <table class="section-table" cellpadding="2" cellspacing="0" border="0" width="98%">
             <!-- Modifications -->
             <tr>
-                <td class="modifications-sectionheader" colspan="5">
+                <td class="sectionheader" colspan="5">
                     Modifications since last build (<xsl:value-of select="count($modification.list)"/>)
                 </td>
             </tr>
@@ -26,15 +26,15 @@
     <xsl:template match="modification">
         <tr>
             <xsl:if test="position() mod 2=0">
-                <xsl:attribute name="class">modifications-oddrow</xsl:attribute>
+                <xsl:attribute name="class">section-oddrow</xsl:attribute>
             </xsl:if>
             <xsl:if test="position() mod 2!=0">
-                <xsl:attribute name="class">modifications-evenrow</xsl:attribute>
+                <xsl:attribute name="class">section-evenrow</xsl:attribute>
             </xsl:if>
 
-            <td class="modifications-data" valign="top"><xsl:value-of select="@type"/></td>
-            <td class="modifications-data" valign="top"><xsl:value-of select="user"/></td>
-            <td class="modifications-data" valign="top">
+            <td class="section-data" valign="top"><xsl:value-of select="@type"/></td>
+            <td class="section-data" valign="top"><xsl:value-of select="user"/></td>
+            <td class="section-data" valign="top">
             	<xsl:choose>
             		<xsl:when test="count(url) = 1 ">
 						<a>
@@ -51,8 +51,8 @@
 		      		</xsl:otherwise>
             	</xsl:choose>
 			</td>
-            <td class="modifications-data" valign="top"><xsl:value-of select="comment"/></td>
-            <td class="modifications-data" valign="top"><xsl:value-of select="date"/></td>
+            <td class="section-data" valign="top"><xsl:value-of select="comment"/></td>
+            <td class="section-data" valign="top"><xsl:value-of select="date"/></td>
         </tr>
     </xsl:template>
 

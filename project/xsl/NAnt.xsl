@@ -52,7 +52,7 @@
 			</xsl:if>
 			<xsl:value-of select="text()" />
 		</span>
-		<br/>
+		<br />
 	</xsl:template>
 	
 	<xsl:template match="failure">
@@ -88,4 +88,6 @@
 		line: <xsl:value-of select="linenumber"/>
 		col: <xsl:value-of select="columnnumber"/><br/>
 	</xsl:template>	
+	
+	<xsl:template match="duration" />
 </xsl:stylesheet>

@@ -11,7 +11,7 @@
 
             <!-- Unit Tests -->
             <tr>
-                <td class="unittests-sectionheader" colspan="2">
+                <td class="sectionheader" colspan="2">
                     Test Timing
                 </td>
             </tr>
@@ -29,10 +29,10 @@
             <xsl:if test="position() mod 2 = 0">
                 <xsl:attribute name="class">unittests-oddrow</xsl:attribute>
             </xsl:if>
-            <td class="unittests-data">
+            <td class="section-data">
                 <xsl:value-of select="./@name"/>
             </td>
-            <td class="unittests-data">
+            <td class="section-data">
             	<xsl:choose>
             		<xsl:when test="@executed[.='True']">
             		    <xsl:value-of select="./@time"/>

@@ -12,7 +12,7 @@
     	<xsl:if test="count($hrefnode) > 0">
     		<table cellpadding="2" cellspacing="0" border="0" width="98%">
     		<tr>
-				<td class="unittests-sectionheader" colspan="2">
+				<td class="sectionheader" colspan="2">
 				     Acceptance Tests: <xsl:value-of select="$resultsnode"/>
 			    </td>
 			    
