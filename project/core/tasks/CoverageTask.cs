@@ -7,6 +7,7 @@ using ThoughtWorks.CruiseControl.Core.tasks;
 
 namespace ThoughtWorks.CruiseControl.Core.Tasks
 {
+	// ToDo - is this used???
 	[ReflectorType("coverage")]
 	public class CoverageTask : IBuilder
 	{

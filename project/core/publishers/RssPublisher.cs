@@ -8,24 +8,17 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
 {
 	[ReflectorType("rss")]
 	// This publisher generates a rss file reporting the latest results for a Project.
-	// We use .NET's XMLSerialization to genarate the XML
+	// We use .NET's XMLSerialization to generate the XML
+	// ToDo - more on this, or delete it!
 	public class RssPublisher : PublisherBase
 	{
 		private string filename;
-		private string logDir;
 
 		[ReflectorProperty("filename", Required=true)]
 		public string Filename
 		{
 			get { return filename; }
 			set { filename = value;}
-		}
-
-		[ReflectorProperty("logdir", Required=true)]
-		public string LogDir
-		{
-			get { return logDir; }
-			set { logDir = value;}
 		}
 
 		public override void PublishIntegrationResults(IProject project, IIntegrationResult result)
