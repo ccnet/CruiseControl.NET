@@ -1,0 +1,44 @@
+using System;
+using Exortech.NetReflector;
+
+namespace tw.ccnet.core.sourcecontrol.test
+{	
+	public class SourceControlMother
+	{
+		public static ISourceControl Create()
+		{
+			ISourceControl control = new MockSourceControl();
+			return control;
+		}
+	}
+
+	[ReflectorType("mock")]
+	public class MockSourceControl : ISourceControl 
+	{
+		public readonly static DateTime LastModificationTime = DateTime.Now.AddDays(-0.5);
+
+		public Modification[] GetModifications(DateTime from, DateTime to) 
+		{
+			if (from < LastModificationTime && LastModificationTime < to) 
+			{
+				return CreateModifications();
+			} 
+			else 
+			{
+				return new Modification[0];
+			}
+		}
+ 
+		private Modification[] CreateModifications()
+		{
+			Modification[] modifications = new Modification[3];
+			for (int i = 0; i < modifications.Length; i++)
+			{
+				modifications[i] = new Modification();
+				modifications[i].ModifiedTime = LastModificationTime;
+			}
+			return modifications;
+		}
+	}
+
+}
