@@ -754,6 +754,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "sourcecontrol\test\PvcsMother.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "sourcecontrol\test\PvcsTest.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
