@@ -18,7 +18,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.MVC.Cruise
 						new ServerAggregatingCruiseManagerWrapper(new ConfigurationSettingsConfigGetter(), new RemoteCruiseManagerFactory())), 
 					new AddProjectViewBuilder(new DefaultHtmlBuilder()));
 			}
-			else
+			else if (type == typeof(SaveNewProjectAction))
 			{
 				return new SaveNewProjectAction(
 					new AddProjectModelGenerator(
@@ -27,6 +27,11 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.MVC.Cruise
 					new ServerAggregatingCruiseManagerWrapper(new ConfigurationSettingsConfigGetter(), new RemoteCruiseManagerFactory()),
 					new NetReflectorProjectSerializer());
 			}
+			else if (type == typeof(ViewAllBuildsAction))
+			{
+				return new ViewAllBuildsAction();
+			}
+			return null;
 		}
 	}
 }

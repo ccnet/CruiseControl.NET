@@ -591,6 +591,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "MVC\Cruise\ViewAllBuildsAction.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "MVC\View\DefaultHtmlBuilder.cs"
                     SubType = "Code"
                     BuildAction = "Compile"

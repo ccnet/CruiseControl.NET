@@ -9,7 +9,14 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.MVC.Cruise
 
 		public ITypeSpecification GetTypeSpecification(string actionName)
 		{
-			return new TypeSpecificationWithType(typeof(SaveNewProjectAction));
+			if (actionName == "_action_ViewAllBuilds")
+			{
+				return new TypeSpecificationWithType(typeof(ViewAllBuildsAction));
+			}
+			else
+			{
+				return new TypeSpecificationWithType(typeof(SaveNewProjectAction));	
+			}
 		}
 	}
 }
