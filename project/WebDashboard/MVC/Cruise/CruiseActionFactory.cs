@@ -1,4 +1,6 @@
+using System;
 using ThoughtWorks.CruiseControl.WebDashboard.Dashboard;
+using ThoughtWorks.CruiseControl.WebDashboard.Plugins.DeleteProject;
 
 namespace ThoughtWorks.CruiseControl.WebDashboard.MVC.Cruise
 {
@@ -15,6 +17,8 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.MVC.Cruise
 		public static readonly string ADD_PROJECT_DISPLAY_ACTION_NAME = "AddProjectDisplay";
 		public static readonly string ADD_PROJECT_SAVE_ACTION_NAME = "AddProjectSave";
 		public static readonly string VIEW_ALL_BUILDS_ACTION_NAME = "ViewAllBuilds";
+		public static readonly string SHOW_DELETE_PROJECT_ACTION_NAME = "ShowDeleteProject";
+		public static readonly string DO_DELETE_PROJECT_ACTION_NAME = "DoDeleteProject";
 
 		public IAction Create(IRequest request)
 		{
@@ -43,6 +47,19 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.MVC.Cruise
 					new AddProjectViewBuilder(dcFactory.DefaultHtmlBuilder),
 					dcFactory.ServerAggregatingCruiseManagerWrapper, 
 					dcFactory.NetReflectorProjectSerializer);
+			}
+			else if (actionName == SHOW_DELETE_PROJECT_ACTION_NAME)
+			{
+				return new ServerAndProjectCheckingProxyAction(
+					new ShowDeleteProjectAction(
+						dcFactory.NameValueCruiseRequestFactory, 
+						new DeleteProjectHtmlViewBuilder(
+							dcFactory.DefaultHtmlBuilder,
+							dcFactory.DefaultUrlBuilder
+						)),
+					new SimpleErrorViewBuilder(dcFactory.DefaultHtmlBuilder),
+					dcFactory.NameValueCruiseRequestFactory
+					);
 			}
 			else
 			{

@@ -611,12 +611,27 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "MVC\Cruise\IErrorViewBuilder.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "MVC\Cruise\IViewAllBuildsViewBuilder.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
                     RelPath = "MVC\Cruise\SaveNewProjectAction.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "MVC\Cruise\ServerAndProjectCheckingProxyAction.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "MVC\Cruise\SimpleErrorViewBuilder.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -657,6 +672,26 @@
                 />
                 <File
                     RelPath = "Plugins\BuildReporterPlugin\BuildReportResults.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Plugins\DeleteProject\DeleteProjectHtmlViewBuilder.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Plugins\DeleteProject\DeleteProjectModel.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Plugins\DeleteProject\IDeleteProjectViewBuilder.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Plugins\DeleteProject\ShowDeleteProjectAction.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

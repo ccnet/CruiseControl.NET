@@ -21,7 +21,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.ServerLogViewerPlugin
 
 		private string GenerateLogHtml()
 		{
-			return string.Format("<pre>{0}</pre>", cruiseManagerWrapper.GetServerLog(request.GetServerName()));
+			return string.Format("<pre>{0}</pre>", cruiseManagerWrapper.GetServerLog(request.ServerName));
 		}
 	}
 }

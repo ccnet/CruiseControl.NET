@@ -36,40 +36,40 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.IO
 		[Test]
 		public void ReturnsEmptyStringIfNoProjectSpecified()
 		{
-			AssertEquals(string.Empty, wrapper.GetProjectName());
+			AssertEquals(string.Empty, wrapper.ProjectName);
 		}
 
 		[Test]
 		public void ReturnsProjectNameIfProjectSpecified()
 		{
 			queryString.Add("project", "myproject");
-			AssertEquals("myproject", wrapper.GetProjectName());
+			AssertEquals("myproject", wrapper.ProjectName);
 		}
 
 		[Test]
 		public void ReturnsEmptyStringIfNoServerSpecified()
 		{
-			AssertEquals(string.Empty, wrapper.GetServerName());
+			AssertEquals(string.Empty, wrapper.ServerName);
 		}
 
 		[Test]
 		public void ReturnsServerNameIfServerSpecified()
 		{
 			queryString.Add("server", "myserver");
-			AssertEquals("myserver", wrapper.GetServerName());
+			AssertEquals("myserver", wrapper.ServerName);
 		}
 
 		[Test]
 		public void ReturnsEmptyStringIfNoBuildSpecified()
 		{
-			AssertEquals(string.Empty, wrapper.GetBuildName());
+			AssertEquals(string.Empty, wrapper.BuildName);
 		}
 
 		[Test]
 		public void ReturnsBuildNameIfBuildSpecified()
 		{
 			queryString.Add("build", "mybuild");
-			AssertEquals("mybuild", wrapper.GetBuildName());
+			AssertEquals("mybuild", wrapper.BuildName);
 		}
 	}
 }

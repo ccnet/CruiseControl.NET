@@ -5,8 +5,8 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.IO
 	public interface ICruiseRequest
 	{
 		IBuildSpecifier GetBuildSpecifier();
-		string GetServerName();
-		string GetProjectName();
-		string GetBuildName();
+		string ServerName { get; }
+		string ProjectName { get; }
+		string BuildName { get; }
 	}
 }

@@ -39,9 +39,9 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 		public void ShouldShowJustLinkToDashboardIfNothingSpecified()
 		{
 			// Setup
-			cruiseRequestMock.ExpectAndReturn("GetServerName", "");
-			cruiseRequestMock.ExpectAndReturn("GetProjectName", "");
-			cruiseRequestMock.ExpectAndReturn("GetBuildName", "");
+			cruiseRequestMock.ExpectAndReturn("ServerName", "");
+			cruiseRequestMock.ExpectAndReturn("ProjectName", "");
+			cruiseRequestMock.ExpectAndReturn("BuildName", "");
 			urlBuilderMock.ExpectAndReturn("BuildUrl", "returnedurl", "default.aspx");
 
 			// Execute
@@ -55,9 +55,9 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 		public void ShouldShowLinkToDashboardAndServerIfServerButNoProjectSpecified()
 		{
 			// Setup
-			cruiseRequestMock.ExpectAndReturn("GetServerName", "myServer");
-			cruiseRequestMock.ExpectAndReturn("GetProjectName", "");
-			cruiseRequestMock.ExpectAndReturn("GetBuildName", "");
+			cruiseRequestMock.ExpectAndReturn("ServerName", "myServer");
+			cruiseRequestMock.ExpectAndReturn("ProjectName", "");
+			cruiseRequestMock.ExpectAndReturn("BuildName", "");
 			urlBuilderMock.ExpectAndReturn("BuildUrl", "returnedurl1", "default.aspx");
 			urlBuilderMock.ExpectAndReturn("BuildServerUrl", "returnedurl2", "default.aspx", "myServer");
 
@@ -72,9 +72,9 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 		public void ShouldShowLinkToDashboardServerAndProjectIfServerAndProjectButNoBuildSpecified()
 		{
 			// Setup
-			cruiseRequestMock.ExpectAndReturn("GetServerName", "myServer");
-			cruiseRequestMock.ExpectAndReturn("GetProjectName", "myProject");
-			cruiseRequestMock.ExpectAndReturn("GetBuildName", "");
+			cruiseRequestMock.ExpectAndReturn("ServerName", "myServer");
+			cruiseRequestMock.ExpectAndReturn("ProjectName", "myProject");
+			cruiseRequestMock.ExpectAndReturn("BuildName", "");
 			urlBuilderMock.ExpectAndReturn("BuildUrl", "returnedurl1", "default.aspx");
 			urlBuilderMock.ExpectAndReturn("BuildServerUrl", "returnedurl2", "default.aspx", "myServer");
 			urlBuilderMock.ExpectAndReturn("BuildProjectUrl", "returnedurl3", "BuildReport.aspx", "myServer", "myProject");
@@ -90,9 +90,9 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 		public void ShouldShowLinkToDashboardServerProjectAndBuildIfServerProjectAndBuildSpecified()
 		{
 			// Setup
-			cruiseRequestMock.ExpectAndReturn("GetServerName", "myServer");
-			cruiseRequestMock.ExpectAndReturn("GetProjectName", "myProject");
-			cruiseRequestMock.ExpectAndReturn("GetBuildName", "myBuild");
+			cruiseRequestMock.ExpectAndReturn("ServerName", "myServer");
+			cruiseRequestMock.ExpectAndReturn("ProjectName", "myProject");
+			cruiseRequestMock.ExpectAndReturn("BuildName", "myBuild");
 			buildNameFormatterMock.ExpectAndReturn("GetPrettyBuildName", "pretty name", "myBuild");
 			urlBuilderMock.ExpectAndReturn("BuildUrl", "returnedurl1", "default.aspx");
 			urlBuilderMock.ExpectAndReturn("BuildServerUrl", "returnedurl2", "default.aspx", "myServer");

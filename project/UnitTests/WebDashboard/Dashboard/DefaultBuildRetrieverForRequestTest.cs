@@ -39,8 +39,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 		[Test]
 		public void ReturnsLatestBuildIfNoneSpecified()
 		{
-			requestWrapperMock.ExpectAndReturn("GetServerName", serverName);
-			requestWrapperMock.ExpectAndReturn("GetProjectName", projectName);
+			requestWrapperMock.ExpectAndReturn("ServerName", serverName);
+			requestWrapperMock.ExpectAndReturn("ProjectName", projectName);
 			requestWrapperMock.ExpectAndReturn("GetBuildSpecifier", new NoBuildSpecified());
 
 			buildNameRetrieverMock.ExpectAndReturn("GetLatestBuildName", buildName, serverName, projectName);
@@ -57,8 +57,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 		[Test]
 		public void ReturnsSpecifiedBuildIfOneSpecified()
 		{
-			requestWrapperMock.ExpectAndReturn("GetServerName", serverName);
-			requestWrapperMock.ExpectAndReturn("GetProjectName", projectName);
+			requestWrapperMock.ExpectAndReturn("ServerName", serverName);
+			requestWrapperMock.ExpectAndReturn("ProjectName", projectName);
 			requestWrapperMock.ExpectAndReturn("GetBuildSpecifier", new NamedBuildSpecifier(buildName));
 
 			buildNameRetrieverMock.ExpectNoCall("GetLatestBuildName", typeof(string), typeof(string));

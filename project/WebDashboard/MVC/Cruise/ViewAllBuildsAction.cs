@@ -18,7 +18,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.MVC.Cruise
 		public Control Execute(IRequest request)
 		{
 			ICruiseRequest cruiseRequest = cruiseRequestFactory.CreateCruiseRequest(request);
-			return viewBuilder.BuildAllBuildsTable(cruiseRequest.GetServerName(), cruiseRequest.GetProjectName());
+			return viewBuilder.BuildAllBuildsTable(cruiseRequest.ServerName, cruiseRequest.ProjectName);
 		}
 	}
 }

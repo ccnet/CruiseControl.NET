@@ -293,7 +293,17 @@
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
+                <File
+                    RelPath = "WebDashboard\MVC\Cruise\ServerAndProjectCheckingProxyActionTest.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
                 <Folder RelPath = "WebDashboard\Plugins\AddProjectPlugin\" />
+                <File
+                    RelPath = "WebDashboard\Plugins\DeleteProject\ShowDeleteProjectActionTest.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
                 <File
                     RelPath = "WebDashboard\Plugins\LogViewerPlugin\LogViewerTest.cs"
                     SubType = "Code"

@@ -1,4 +1,3 @@
-using System.Web.UI;
 using System.Web.UI.HtmlControls;
 using ThoughtWorks.CruiseControl.WebDashboard.MVC.Cruise;
 using ThoughtWorks.CruiseControl.WebDashboard.MVC.View;
@@ -35,7 +34,8 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 		public HtmlTable GetProjectSideBar(string serverName, string projectName)
 		{
 			return Table(
-				TR( TD( A("Latest", urlBuilder.BuildBuildUrl("BuildReport.aspx", serverName, projectName, buildNameRetriever.GetLatestBuildName(serverName, projectName)))))
+				TR( TD( A("Latest", urlBuilder.BuildBuildUrl("BuildReport.aspx", serverName, projectName, buildNameRetriever.GetLatestBuildName(serverName, projectName))))),
+				TR( TD( A("Delete Project", urlBuilder.BuildProjectUrl("controller.aspx", new ActionSpecifierWithName(CruiseActionFactory.SHOW_DELETE_PROJECT_ACTION_NAME), serverName, projectName))))
 				);
 		}
 

@@ -38,7 +38,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Plugins.ServerLogVie
 		[Test]
 		public void ReturnsServerLogFromRequestedServer()
 		{
-			requestWrapperMock.ExpectAndReturn("GetServerName", serverName);
+			requestWrapperMock.ExpectAndReturn("ServerName", serverName);
 			cruiseManagerWrapperMock.ExpectAndReturn("GetServerLog", serverLog, serverName);
 
 			AssertEquals("<pre>" + serverLog + "</pre>", serverLogViewerPageRenderer.Do().LogHtml);

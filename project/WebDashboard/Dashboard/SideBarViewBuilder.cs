@@ -16,21 +16,21 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 		public HtmlTable Execute(ICruiseRequest request)
 		{
 			HtmlTable table = null;
-			string serverName = request.GetServerName();
+			string serverName = request.ServerName;
 			if (serverName == "")
 			{
 				table = slaveBuilder.GetFarmSideBar();
 			}
 			else
 			{
-				string projectName = request.GetProjectName();
+				string projectName = request.ProjectName;
 				if (projectName == "")
 				{
 					table = slaveBuilder.GetServerSideBar(serverName);
 				}
 				else
 				{
-					string buildName = request.GetBuildName();
+					string buildName = request.BuildName;
 					if (buildName == "")
 					{
 						table = slaveBuilder.GetProjectSideBar(serverName, projectName);	

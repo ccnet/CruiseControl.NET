@@ -25,21 +25,21 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 			HtmlAnchor dashboard = A("Dashboard", urlBuilder.BuildUrl("default.aspx"));
 			dashboard.RenderControl(htmlWriter);
 
-			string serverName = request.GetServerName();
+			string serverName = request.ServerName;
 			if (serverName != "")
 			{
 				htmlWriter.Write(" &gt; ");
 				A(serverName, urlBuilder.BuildServerUrl("default.aspx", serverName)).RenderControl(htmlWriter);
 			}
 
-			string projectName = request.GetProjectName();
+			string projectName = request.ProjectName;
 			if (projectName != "")
 			{
 				htmlWriter.Write(" &gt; ");
 				A(projectName, urlBuilder.BuildProjectUrl("BuildReport.aspx", serverName, projectName)).RenderControl(htmlWriter);
 			}
 
-			string buildName = request.GetBuildName();
+			string buildName = request.BuildName;
 			if (buildName != "")
 			{
 				htmlWriter.Write(" &gt; ");

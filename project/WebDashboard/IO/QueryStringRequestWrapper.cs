@@ -30,22 +30,31 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.IO
 			}
 		}
 
-		public string GetServerName()
+		public string ServerName
 		{
-			string server = queryString[ServerQueryStringParameter];
-			return (server == null) ? "" : server;
+			get
+			{
+				string server = queryString[ServerQueryStringParameter];
+				return (server == null) ? "" : server;
+			}
 		}
 
-		public string GetProjectName()
+		public string ProjectName
 		{
-			string project = queryString[ProjectQueryStringParameter];
-			return (project == null) ? "" : project;
+			get
+			{
+				string project = queryString[ProjectQueryStringParameter];
+				return (project == null) ? "" : project;
+			}
 		}
 
-		public string GetBuildName()
+		public string BuildName
 		{
-			string build = queryString[BuildQueryStringParameter];
-			return (build == null) ? "" : build;
+			get
+			{
+				string build = queryString[BuildQueryStringParameter];
+				return (build == null) ? "" : build;
+			}
 		}
 	}
 }

@@ -16,8 +16,8 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 
 		public Build GetBuild(ICruiseRequest request)
 		{
-			string serverName = request.GetServerName();
-			string projectName = request.GetProjectName();
+			string serverName = request.ServerName;
+			string projectName = request.ProjectName;
 			IBuildSpecifier buildSpecifier = request.GetBuildSpecifier();
 
 			return buildRetriever.GetBuild(serverName, projectName, GetBuildName(serverName, projectName, buildSpecifier));
