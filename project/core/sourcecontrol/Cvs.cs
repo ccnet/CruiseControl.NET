@@ -18,6 +18,7 @@ namespace tw.ccnet.core.sourcecontrol
 		private string _cvsRoot;
 		private string _workingDirectory;
 		private bool _labelOnSuccess;
+        private string _restrictLogins;
 
 		[ReflectorProperty("executable")]
 		public string Executable
@@ -46,6 +47,12 @@ namespace tw.ccnet.core.sourcecontrol
 			get { return _labelOnSuccess;}
 			set { _labelOnSuccess = value;}
 		}
+
+        [ReflectorProperty("restrictLogins", Required=false)]
+        public string RestrictLogins {
+            get{ return _restrictLogins; }
+            set{ _restrictLogins = value; }
+        }
 
 		[ReflectorProperty("branch", Required=false)]
 		public string Branch;
@@ -86,7 +93,14 @@ namespace tw.ccnet.core.sourcecontrol
 			// include that for some harmony with the vss version
 			string cvsroot = (CvsRoot == null) ? String.Empty : "-d " + CvsRoot + " ";
 			string branch = (Branch == null) ? String.Empty : " -r" + Branch;
-			return String.Format(HISTORY_COMMAND_FORMAT, cvsroot, FormatCommandDate(from), branch);
+			string args = String.Format(HISTORY_COMMAND_FORMAT, cvsroot, FormatCommandDate(from), branch);
+            if (RestrictLogins != null) 
+            {
+                foreach (string login in RestrictLogins.Split(',')) {
+                    args += " -w" + login;
+                }
+            }
+			return args;
 		}		
 	}
 }
