@@ -219,9 +219,17 @@ namespace ThoughtWorks.CruiseControl.Core
 		public void AddProject(string serializedProject)
 		{
 			Log.Info("Adding project - " + serializedProject);
-			IConfiguration configuration = configurationService.Load();
-			configuration.AddProject(projectSerializer.Deserialize(serializedProject));
-			configurationService.Save(configuration);
+			try
+			{
+				IConfiguration configuration = configurationService.Load();
+				configuration.AddProject(projectSerializer.Deserialize(serializedProject));
+				configurationService.Save(configuration);
+			}
+			catch (ApplicationException e)
+			{
+				Log.Warning(e);
+				throw new CruiseControlException("Failed to add project. Exception was - " + e.Message);
+			}
 		}
 
 		private IProjectIntegrator GetIntegrator(string projectName)

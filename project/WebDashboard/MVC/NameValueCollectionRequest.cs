@@ -26,7 +26,16 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.MVC
 
 		public string GetText(string id)
 		{
-			return map[id];
+			string text = map[id];
+			if (text == null || text == string.Empty)
+			{
+				// This is valid becuase of the way our config objects work
+				return null;
+			}
+			else
+			{
+				return text;
+			}
 		}
 
 		public bool GetChecked(string id)
@@ -35,7 +44,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.MVC
 			return (value != null && value =="on");
 		}
 
-		public int GetInt(string id)
+		public int GetInt(string id, int defaultValue)
 		{
 			// To Do - something more sensible
 			string text = GetText(id);
@@ -47,12 +56,13 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.MVC
 				}
 				catch (FormatException)
 				{
-					return 0;
+					// Todo - exception?
+					return defaultValue;
 				}
 			}
 			else
 			{
-				return 0;
+				return defaultValue;
 			}
 		}
 	}
