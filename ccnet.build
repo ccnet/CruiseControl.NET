@@ -25,6 +25,7 @@
     <property name="service.exe" value="ccservice.exe"/>
     <property name="cctray.exe" value="cctray.exe"/>
     <property name="nunit-console.exe" value="tools\nunit\nunit-console.exe" />
+    <property name="ncover-console.exe" value="tools\ncover\ncover.exe" />
 
     <target name="all" depends="clean, compile, test, deploy, dist"/>
 
@@ -64,7 +65,7 @@
 	<target name="test.unit" description="runs unit tests">
 		<exec program="${nunit-console.exe}" workingdir="${build.dir}\core" commandline="${core.dll} /xml:../${core.dll}-results.xml /nologo"/>
 		<exec program="${nunit-console.exe}" workingdir="${build.dir}\server" commandline="${console.exe} /xml:../${console.exe}-results.xml /nologo"/>
-		<exec program="${nunit-console.exe}" workingdir="${build.dir}\unittests" commandline="${unittests.dll} /xml:../${unittests.dll}-results.xml /nologo"/>
+		<exec program="${ncover-console.exe}" workingdir="${build.dir}\unittests" commandline="/c &quot;..\..\${nunit-console.exe} ${unittests.dll} /xml:../${unittests.dll}-results.xml /nologo&quot;"/>
 	</target>
 
 	<!-- Used for manually testing the webapp. Don't include this in an automated build
