@@ -1,4 +1,4 @@
-<form ID="RefreshForm">
+<form ID="RefreshForm" method="post">
 <table width="100%">
 <tr>
 	<td align="right"><input type="submit" align="right" name="$refreshButtonName" value="Refresh status" /></td>
@@ -11,7 +11,7 @@
 #end
 
 #if ($projectGrid.Length > 0)
-<form ID="GridForm">
+<form ID="GridForm" method="post">
 <table cellspacing="0" cellpadding="3" rules="rows" bordercolor="#333399" border="1" id="StatusGrid" bgcolor="White" width="100%">
 	<tr bgcolor="#333399" class="ProjectGridHeader">
 		<td>
