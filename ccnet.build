@@ -285,7 +285,7 @@
 	</target>
 
 	<target name="ContinuousIntegration">
-		<ifnot test="${property::exists('propertyname')}">
+		<ifnot test="${property::exists('label-to-apply')}">
 			<fail message="label-to-apply property not set, so can't create labelled distribution files" />
 		</ifnot>
 	
