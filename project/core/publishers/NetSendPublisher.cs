@@ -3,6 +3,8 @@ using ThoughtWorks.CruiseControl.Core.Util;
 
 namespace ThoughtWorks.CruiseControl.Core.Publishers
 {
+	// THIS IS DEPRECATED
+	// TODO - Delete (see http://www.microsoft.com/technet/prodtechnol/winxppro/maintain/sp2netwk.mspx#EKAA)
 	[ReflectorType("netsend")]
 	public class NetSendPublisher : PublisherBase
 	{
