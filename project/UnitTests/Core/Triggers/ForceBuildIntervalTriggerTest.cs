@@ -1,17 +1,17 @@
 using Exortech.NetReflector;
 using NMock;
 using NUnit.Framework;
-using ThoughtWorks.CruiseControl.Core.Schedules;
+using ThoughtWorks.CruiseControl.Core.Triggers;
 using ThoughtWorks.CruiseControl.Core.Util;
 using ThoughtWorks.CruiseControl.Remote;
 
-namespace ThoughtWorks.CruiseControl.UnitTests.Core.Schedule
+namespace ThoughtWorks.CruiseControl.UnitTests.Core.Triggers
 {
 	[TestFixture]
-	public class PollingIntervalTriggerTest : CustomAssertion
+	public class ForceBuildIntervalTriggerTest : CustomAssertion
 	{
 		private DynamicMock intervalTriggerMock;
-		private PollingIntervalTrigger trigger;
+		private ForceBuildIntervalTrigger trigger;
 
 		[SetUp]
 		public void Setup()
@@ -28,8 +28,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Schedule
 		[Test]
 		public void ShouldFullyPopulateFromReflector()
 		{
-			string xml = string.Format(@"<pollingInterval seconds=""1"" />");
-			trigger = (PollingIntervalTrigger)NetReflector.Read(xml);
+			string xml = string.Format(@"<forceBuildInterval seconds=""1"" />");
+			trigger = (ForceBuildIntervalTrigger)NetReflector.Read(xml);
 			Assert.AreEqual(1, trigger.IntervalSeconds);
 		}
 
@@ -37,16 +37,16 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Schedule
 		[Test]
 		public void ShouldDefaultPopulateFromReflector()
 		{
-			string xml = string.Format(@"<pollingInterval />");
-			trigger = (PollingIntervalTrigger)NetReflector.Read(xml);
-			Assert.AreEqual(PollingIntervalTrigger.DefaultIntervalSeconds, trigger.IntervalSeconds);
+			string xml = string.Format(@"<forceBuildInterval />");
+			trigger = (ForceBuildIntervalTrigger)NetReflector.Read(xml);
+			Assert.AreEqual(ForceBuildIntervalTrigger.DefaultIntervalSeconds, trigger.IntervalSeconds);
 		}
 
 		[Test]
-		public void ShouldSetUpSubTriggerForModificationChecking()
+		public void ShouldSetUpSubTriggerForForceBuild()
 		{
-			intervalTriggerMock.Expect("BuildCondition", BuildCondition.IfModificationExists);
-			trigger = new PollingIntervalTrigger((IntervalTrigger) intervalTriggerMock.MockInstance);
+			intervalTriggerMock.Expect("BuildCondition", BuildCondition.ForceBuild);
+			trigger = new ForceBuildIntervalTrigger((IntervalTrigger) intervalTriggerMock.MockInstance);
 			VerifyAll();
 		}
 
@@ -54,7 +54,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Schedule
 		public void ShouldPassThroughDefaultInterval()
 		{
 			intervalTriggerMock.Expect("IntervalSeconds", ForceBuildIntervalTrigger.DefaultIntervalSeconds);
-			trigger = new PollingIntervalTrigger((IntervalTrigger) intervalTriggerMock.MockInstance);
+			trigger = new ForceBuildIntervalTrigger((IntervalTrigger) intervalTriggerMock.MockInstance);
 			VerifyAll();
 		}
 
@@ -62,7 +62,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Schedule
 		public void ShouldPassThroughIntervalWhenSet()
 		{
 			intervalTriggerMock.Expect("IntervalSeconds", ForceBuildIntervalTrigger.DefaultIntervalSeconds);
-			trigger = new PollingIntervalTrigger((IntervalTrigger) intervalTriggerMock.MockInstance);
+			trigger = new ForceBuildIntervalTrigger((IntervalTrigger) intervalTriggerMock.MockInstance);
 			intervalTriggerMock.Expect("IntervalSeconds", 3d);
 			trigger.IntervalSeconds = 3d;
 			VerifyAll();
@@ -71,7 +71,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Schedule
 		[Test]
 		public void ShouldPassThroughIntegrationCompletedMessage()
 		{
-			trigger = new PollingIntervalTrigger((IntervalTrigger) intervalTriggerMock.MockInstance);
+			trigger = new ForceBuildIntervalTrigger((IntervalTrigger) intervalTriggerMock.MockInstance);
 
 			intervalTriggerMock.Expect("IntegrationCompleted");
 			trigger.IntegrationCompleted();
@@ -82,7 +82,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Schedule
 		[Test]
 		public void ShouldReturnCorrectCondition()
 		{
-			trigger = new PollingIntervalTrigger((IntervalTrigger) intervalTriggerMock.MockInstance);
+			trigger = new ForceBuildIntervalTrigger((IntervalTrigger) intervalTriggerMock.MockInstance);
 
 			intervalTriggerMock.ExpectAndReturn("ShouldRunIntegration", BuildCondition.NoBuild);
 			Assert.AreEqual(BuildCondition.NoBuild, trigger.ShouldRunIntegration());

@@ -239,41 +239,6 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "Core\Schedule\ForceBuildIntervalTriggerTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Core\Schedule\ForceBuildScheduleTriggerTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Core\Schedule\IntervalTriggerTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Core\Schedule\MultipleTriggerTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Core\Schedule\PollingIntervalTriggerTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Core\Schedule\PollingScheduleTriggerTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Core\Schedule\ScheduleTriggerTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
                     RelPath = "Core\SourceControl\Perforce\P4ConfigProcessInfoCreatorTest.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -305,6 +270,41 @@
                 />
                 <File
                     RelPath = "Core\SourceControl\Vss\VssLocaleTest.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Core\Triggers\ForceBuildIntervalTriggerTest.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Core\Triggers\ForceBuildScheduleTriggerTest.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Core\Triggers\IntervalTriggerTest.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Core\Triggers\MultipleTriggerTest.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Core\Triggers\PollingIntervalTriggerTest.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Core\Triggers\PollingScheduleTriggerTest.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Core\Triggers\ScheduleTriggerTest.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

@@ -2,20 +2,20 @@ using Exortech.NetReflector;
 using System;
 using ThoughtWorks.CruiseControl.Remote;
 
-namespace ThoughtWorks.CruiseControl.Core.Schedules
+namespace ThoughtWorks.CruiseControl.Core.Triggers
 {
 	[Serializable]
-	[ReflectorType("forceBuildSchedule")]
-	public class ForceBuildScheduleTrigger : ITrigger
+	[ReflectorType("pollingSchedule")]
+	public class PollingScheduleTrigger : ITrigger
 	{
 		private readonly ScheduleTrigger scheduleTrigger;
 
-		public ForceBuildScheduleTrigger() : this(new ScheduleTrigger()) { }
+		public PollingScheduleTrigger() : this(new ScheduleTrigger()) { }
 
-		public ForceBuildScheduleTrigger(ScheduleTrigger scheduleTrigger)
+		public PollingScheduleTrigger(ScheduleTrigger scheduleTrigger)
 		{
 			this.scheduleTrigger = scheduleTrigger;
-			scheduleTrigger.BuildCondition = BuildCondition.ForceBuild;
+			scheduleTrigger.BuildCondition = BuildCondition.IfModificationExists;
 		}
 
 		[ReflectorProperty("time")]

@@ -1,16 +1,16 @@
 using Exortech.NetReflector;
 using NMock;
 using NUnit.Framework;
-using ThoughtWorks.CruiseControl.Core.Schedules;
+using ThoughtWorks.CruiseControl.Core.Triggers;
 using ThoughtWorks.CruiseControl.Remote;
 
-namespace ThoughtWorks.CruiseControl.UnitTests.Core.Schedule
+namespace ThoughtWorks.CruiseControl.UnitTests.Core.Triggers
 {
 	[TestFixture]
-	public class PollingScheduleTriggerTest
+	public class ForceBuildScheduleTriggerTest
 	{
 		private DynamicMock scheduleTriggerMock;
-		private PollingScheduleTrigger trigger;
+		private ForceBuildScheduleTrigger trigger;
 
 		[SetUp]
 		public void Setup()
@@ -27,23 +27,23 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Schedule
 		[Test]
 		public void ShouldFullyPopulateFromReflector()
 		{
-			string xml = string.Format(@"<pollingSchedule time=""12:00:00"" />");
-			trigger = (PollingScheduleTrigger)NetReflector.Read(xml);
+			string xml = string.Format(@"<forceBuildSchedule time=""12:00:00"" />");
+			trigger = (ForceBuildScheduleTrigger)NetReflector.Read(xml);
 			Assert.AreEqual("12:00:00", trigger.Time);
 		}
 
 		[Test]
 		public void ShouldSetUpSubTriggerForModificationChecking()
 		{
-			scheduleTriggerMock.Expect("BuildCondition", BuildCondition.IfModificationExists);
-			trigger = new PollingScheduleTrigger((ScheduleTrigger) scheduleTriggerMock.MockInstance);
+			scheduleTriggerMock.Expect("BuildCondition", BuildCondition.ForceBuild);
+			trigger = new ForceBuildScheduleTrigger((ScheduleTrigger) scheduleTriggerMock.MockInstance);
 			VerifyAll();
 		}
 
 		[Test]
 		public void ShouldPassTimeWhenSet()
 		{
-			trigger = new PollingScheduleTrigger((ScheduleTrigger) scheduleTriggerMock.MockInstance);
+			trigger = new ForceBuildScheduleTrigger((ScheduleTrigger) scheduleTriggerMock.MockInstance);
 			scheduleTriggerMock.Expect("Time", "11:59");
 			trigger.Time = "11:59";
 			VerifyAll();
@@ -52,7 +52,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Schedule
 		[Test]
 		public void ShouldPassThroughIntegrationCompletedMessage()
 		{
-			trigger = new PollingScheduleTrigger((ScheduleTrigger) scheduleTriggerMock.MockInstance);
+			trigger = new ForceBuildScheduleTrigger((ScheduleTrigger) scheduleTriggerMock.MockInstance);
 
 			scheduleTriggerMock.Expect("IntegrationCompleted");
 			trigger.IntegrationCompleted();
@@ -63,7 +63,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Schedule
 		[Test]
 		public void ShouldReturnCorrectCondition()
 		{
-			trigger = new PollingScheduleTrigger((ScheduleTrigger) scheduleTriggerMock.MockInstance);
+			trigger = new ForceBuildScheduleTrigger((ScheduleTrigger) scheduleTriggerMock.MockInstance);
 
 			scheduleTriggerMock.ExpectAndReturn("ShouldRunIntegration", BuildCondition.NoBuild);
 			Assert.AreEqual(BuildCondition.NoBuild, trigger.ShouldRunIntegration());
