@@ -1,6 +1,5 @@
 using System;
 using System.Runtime.Serialization;
-using System.Xml.Serialization;
 
 namespace ThoughtWorks.CruiseControl.Core
 {

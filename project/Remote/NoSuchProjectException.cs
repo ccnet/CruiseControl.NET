@@ -1,7 +1,9 @@
+using System;
 using ThoughtWorks.CruiseControl.Core;
 
 namespace ThoughtWorks.CruiseControl.Remote
 {
+	[Serializable]
 	public class NoSuchProjectException : CruiseControlException
 	{
 		private readonly string requestedProject;

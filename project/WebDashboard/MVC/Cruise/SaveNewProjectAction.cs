@@ -48,7 +48,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.MVC.Cruise
 		{
 			if (model.Project.WebURL == null || model.Project.WebURL == string.Empty)
 			{
-				model.Project.WebURL = urlBuilder.BuildProjectUrl("BuildReport.aspx", model.SelectedServerName, model.Project.Name);
+				model.Project.WebURL = urlBuilder.BuildProjectUrl(new ActionSpecifierWithName(CruiseActionFactory.VIEW_PROJECT_REPORT_ACTION_NAME), model.SelectedServerName, model.Project.Name);
 			}
 		}
 	}

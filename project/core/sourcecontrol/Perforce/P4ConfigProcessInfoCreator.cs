@@ -7,7 +7,9 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Perforce
 	{
 		public ProcessInfo CreateProcessInfo(P4 p4, string extraArguments)
 		{
-			return new ProcessInfo(p4.Executable, BuildCommonArguments(p4) + extraArguments);
+			ProcessInfo processInfo = new ProcessInfo(p4.Executable, BuildCommonArguments(p4) + extraArguments);
+			processInfo.TimeOut = 10 * 60 * 1000; // 10 minutes
+			return processInfo;
 		}
 
 		private string BuildCommonArguments(P4 p4) 
