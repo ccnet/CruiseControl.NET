@@ -16,7 +16,7 @@
                 DefaultTargetSchema = "IE50"
                 DelaySign = "false"
                 OutputType = "WinExe"
-                RootNamespace = "tw.ccnet.service"
+                RootNamespace = "ThoughtWorks.CruiseControl.Service"
                 StartupObject = ""
             >
                 <Config

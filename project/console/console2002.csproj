@@ -16,7 +16,7 @@
                 DefaultTargetSchema = "IE50"
                 DelaySign = "false"
                 OutputType = "Exe"
-                RootNamespace = "tw.ccnet.console"
+                RootNamespace = "ThoughtWorks.CruiseControl.Console"
                 StartupObject = ""
             >
                 <Config

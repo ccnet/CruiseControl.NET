@@ -16,7 +16,7 @@
                 DefaultTargetSchema = "IE50"
                 DelaySign = "false"
                 OutputType = "Library"
-                RootNamespace = "tw.ccnet.web"
+                RootNamespace = "ThoughtWorks.CruiseControl.Web"
                 StartupObject = ""
             >
                 <Config

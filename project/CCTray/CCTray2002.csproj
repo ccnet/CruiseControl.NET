@@ -16,7 +16,7 @@
                 DefaultTargetSchema = "IE50"
                 DelaySign = "false"
                 OutputType = "Library"
-                RootNamespace = "CCTray2002"
+                RootNamespace = "ThoughtWorks.CruiseControl.CCTray"
                 StartupObject = ""
             >
                 <Config
