@@ -10,20 +10,16 @@ namespace ThoughtWorks.CruiseControl.WebDashboard
 {
 	public class Default : System.Web.UI.Page
 	{
+		public static readonly string FORCE_BUILD_COMMAND = "forcebuild";
+
 		protected System.Web.UI.WebControls.Label ExceptionTitleLabel;
 		protected System.Web.UI.WebControls.DataGrid ExceptionGrid;
 		protected System.Web.UI.WebControls.Label StatusLabel;
 		protected System.Web.UI.WebControls.DataGrid StatusGrid;
+		protected System.Web.UI.WebControls.Button RefreshButton;
 		private LocalCruiseManagerAggregator cruiseManager = new LocalCruiseManagerAggregator((IList)ConfigurationSettings.GetConfig("projectURLs"));
 	
-		private void Page_Load(object sender, System.EventArgs e)
-		{
-			CheckForceBuild();
-			ShowProjectDetails();
-			ShowExceptionDetails();
-		}
-
-		private void ShowProjectDetails()
+		private void RefreshDetails()
 		{
 			if (cruiseManager.ProjectDetails.Count > 0)
 			{
@@ -35,10 +31,6 @@ namespace ThoughtWorks.CruiseControl.WebDashboard
 			{
 				StatusGrid.Visible = false;
 			}			
-		}
-
-		private void ShowExceptionDetails()
-		{
 
 			if (cruiseManager.ConnectionExceptions.Count > 0)
 			{
@@ -54,26 +46,16 @@ namespace ThoughtWorks.CruiseControl.WebDashboard
 			}
 		}
 
-		private void CheckForceBuild()
-		{
-			string forceBuildProject = Request.QueryString["project"];
-			if (forceBuildProject != null)
-			{
-				ForceBuild(forceBuildProject);
-				Response.Redirect(Request.Url.GetLeftPart(UriPartial.Path), true);
-			}
-		}
-
 		private void ForceBuild(string projectName)
 		{
 			try
 			{
 				cruiseManager.ForceBuild(projectName);
-				StatusLabel.Text = "Build Successfully Forced for project [ " + projectName + " ]";
+				StatusLabel.Text = "Build Successfully Forced for  " + projectName;
 			}
 			catch (Exception e)
 			{
-				StatusLabel.Text = "Build could not be forced for project [ " + projectName + " ], exception was: " + e.ToString();
+				StatusLabel.Text = "Build could not be forced for " + projectName + " , exception was: " + e.ToString();
 			}
 			StatusLabel.Visible = true;
 		}
@@ -101,6 +83,31 @@ namespace ThoughtWorks.CruiseControl.WebDashboard
 			}
 		}
 
+		private void Page_Load(object sender, System.EventArgs e)
+		{
+			// We have to check for postback otherwise the 'force build' button gets swallowed (http://weblogs.asp.net/benmiller/archive/2003/04/04/4844.aspx)
+			if (!IsPostBack)
+			{
+				RefreshDetails();
+			}
+		}
+
+		private void StatusGrid_ItemCommand(object source, System.Web.UI.WebControls.DataGridCommandEventArgs e)
+		{
+			if (e.CommandName == FORCE_BUILD_COMMAND)
+			{
+				// The command argument of the embedded button is the nsame of the project to build
+				// See comments in the HTML to see the data binding to make this work
+				ForceBuild(e.CommandArgument.ToString());
+			}
+		}
+
+		private void RefreshButton_Click(object sender, System.EventArgs e)
+		{
+			RefreshDetails();
+			StatusLabel.Visible = false;
+		}
+
 		#region Web Form Designer generated code
 		override protected void OnInit(EventArgs e)
 		{
@@ -110,36 +117,12 @@ namespace ThoughtWorks.CruiseControl.WebDashboard
 		
 		private void InitializeComponent()
 		{    
+			this.StatusGrid.ItemCommand += new System.Web.UI.WebControls.DataGridCommandEventHandler(this.StatusGrid_ItemCommand);
 			this.StatusGrid.ItemDataBound += new System.Web.UI.WebControls.DataGridItemEventHandler(this.StatusGrid_ItemDataBound);
+			this.RefreshButton.Click += new System.EventHandler(this.RefreshButton_Click);
 			this.Load += new System.EventHandler(this.Page_Load);
+
 		}
 		#endregion
-	}
-
-	public struct ConnectionException
-	{
-		private string _url;
-		private Exception _exception;
-
-		public ConnectionException(string URL, Exception exception)
-		{
-			this._url = URL;
-			this._exception = exception;
-		}
-
-		public string URL
-		{
-			get { return _url; }
-		}
-
-		public string Message
-		{
-			get { return _exception.Message; }
-		}
-
-		public Exception Exception
-		{
-			get { return _exception; }
-		}
 	}
 }

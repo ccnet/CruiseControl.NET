@@ -52,4 +52,31 @@ namespace ThoughtWorks.CruiseControl.WebDashboard
 			remoteCC.ForceBuild(projectName);
 		}
 	}
+
+	public struct ConnectionException
+	{
+		private string _url;
+		private Exception _exception;
+
+		public ConnectionException(string URL, Exception exception)
+		{
+			this._url = URL;
+			this._exception = exception;
+		}
+
+		public string URL
+		{
+			get { return _url; }
+		}
+
+		public string Message
+		{
+			get { return _exception.Message; }
+		}
+
+		public Exception Exception
+		{
+			get { return _exception; }
+		}
+	}
 }
