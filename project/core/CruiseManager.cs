@@ -15,16 +15,15 @@ namespace tw.ccnet.core
 	
 	public class CruiseManager : MarshalByRefObject, ICruiseManager 
 	{
-		private CruiseControl _cruiseControl; 
-		private Thread _cruiseControlThread;
+        private CruiseControl _cruiseControl; 
+        private ConfigurationLoader _loader; 
+        private Thread _cruiseControlThread;
 		public const int TCP_PORT = 1234;
 
         public CruiseManager(string configFileName) 
-            : this(new CruiseControl(new ConfigurationLoader(configFileName))) {}
-
-        public CruiseManager(CruiseControl cruiseControl) 
         {
-            _cruiseControl = cruiseControl;
+            _loader = new ConfigurationLoader(configFileName);
+            _cruiseControl = new CruiseControl(_loader);
         }
 
         private void InitializeThread()
@@ -98,8 +97,30 @@ namespace tw.ccnet.core
 
         public string Configuration 
         {
-            get { return "bob's your uncle"; }
-            set { }
+            get 
+            { 
+                StreamReader stream = new StreamReader(_loader.ConfigFile);
+                try 
+                {
+                    return stream.ReadToEnd();
+                } 
+                finally 
+                {
+                    stream.Close();
+                }            
+            }
+            set
+            { 
+                StreamWriter stream = new StreamWriter(_loader.ConfigFile);
+                try 
+                {
+                    stream.Write(value);
+                } 
+                finally 
+                {
+                    stream.Close();
+                }            
+            }
         }
 
         public void RegisterForRemoting() 

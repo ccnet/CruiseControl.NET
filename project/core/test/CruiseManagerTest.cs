@@ -6,6 +6,7 @@ using System.Threading;
 
 using NUnit.Framework;
 
+using tw.ccnet.core.util;
 using tw.ccnet.remote;
 
 namespace tw.ccnet.core.test
@@ -55,8 +56,19 @@ namespace tw.ccnet.core.test
         [Test]
         public void TestStartStopCruise() 
         {
-            CruiseControl cc = new CruiseControl();
-            CruiseManager manager = new CruiseManager(cc);
+            // stellsmi - in progress
+        }
+
+        [Test]
+        public void TestGetSetConfiguration() 
+        {
+            string xml = "<cruisecontrol></cruisecontrol>";
+            string file = TempFileUtil.CreateTempXmlFile(TempFileUtil.CreateTempDir(this), "loadernet.config", xml);
+            CruiseManager manager = new CruiseManager(file);
+            
+            AssertEquals("<cruisecontrol></cruisecontrol>", manager.Configuration);
+            manager.Configuration = SimpleBuildFile.Content;
+            AssertEquals(SimpleBuildFile.Content, manager.Configuration);
         }
 	}
 }

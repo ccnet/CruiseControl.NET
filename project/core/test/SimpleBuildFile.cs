@@ -6,11 +6,7 @@ namespace tw.ccnet.core.test
 {
 	public class SimpleBuildFile
 	{
-		public static string Content
-		{
-			get 
-			{
-				return @"<?xml version=""1.0""?>
+		public const string Content = @"<?xml version=""1.0""?>
 
 <project name=""ccnetTest"" default=""success"">
 
@@ -24,8 +20,6 @@ namespace tw.ccnet.core.test
   </target>
 
 </project>";
-			}
-		}
 
 		public static XmlDocument Document
 		{

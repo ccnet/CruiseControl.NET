@@ -198,12 +198,16 @@ namespace tw.ccnet.controlpanel
             // 
             // configurationTextBox
             // 
+            this.configurationTextBox.AcceptsReturn = true;
+            this.configurationTextBox.AcceptsTab = true;
             this.configurationTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
                 | System.Windows.Forms.AnchorStyles.Left) 
                 | System.Windows.Forms.AnchorStyles.Right)));
+            this.configurationTextBox.Font = new System.Drawing.Font("Courier New", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((System.Byte)(0)));
             this.configurationTextBox.Location = new System.Drawing.Point(0, 0);
             this.configurationTextBox.Multiline = true;
             this.configurationTextBox.Name = "configurationTextBox";
+            this.configurationTextBox.ScrollBars = System.Windows.Forms.ScrollBars.Both;
             this.configurationTextBox.Size = new System.Drawing.Size(544, 368);
             this.configurationTextBox.TabIndex = 0;
             this.configurationTextBox.Text = "";
@@ -340,9 +344,9 @@ namespace tw.ccnet.controlpanel
             {
                 manager.GetStatus();
             } 
-            catch (System.Net.Sockets.SocketException e)
+            catch (System.Net.Sockets.SocketException)
             {
-                MessageBox.Show("Can't connect to cruise control, make sure it's running with remoting turned on\n" + e);
+                MessageBox.Show("Can't connect to cruise control, make sure it's running with remoting turned on");
                 return;
             }
 
