@@ -1,9 +1,8 @@
 using System;
-using NUnit.Framework;
-using ThoughtWorks.CruiseControl.Core.Util;
-using System.IO;
 using System.Collections;
 using Exortech.NetReflector;
+using NUnit.Framework;
+using ThoughtWorks.CruiseControl.Core.Util;
 
 namespace ThoughtWorks.CruiseControl.Core.Tasks.Test
 {
@@ -91,12 +90,13 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks.Test
         [Test]
         public void LoadFromConfig ()
         {
-            string xml = @"<merge><files><file>foo.xml</file> <file>bar.xml</file> </files> </merge>";
+            string xml = @"<merge><files><file>foo.xml</file><file>bar.xml</file></files></merge>";
             MergeFilesTask task = NetReflector.Read (xml) as MergeFilesTask;
             AssertEquals (2, task.MergeFiles.Length);
             AssertEquals ("foo.xml", task.MergeFiles[0]);
             AssertEquals ("bar.xml", task.MergeFiles[1]);
         }
+
 
         private void AssertDataContainedInList (IList list, string data)
         {
