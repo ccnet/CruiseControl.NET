@@ -1,4 +1,3 @@
-using ThoughtWorks.CruiseControl.WebDashboard.Dashboard;
 using ThoughtWorks.CruiseControl.WebDashboard.MVC;
 using ThoughtWorks.CruiseControl.WebDashboard.MVC.View;
 
@@ -6,12 +5,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.DeleteProject
 {
 	public class DeleteProjectHtmlViewBuilder : HtmlBuilderViewBuilder, IDeleteProjectViewBuilder
 	{
-		private readonly IUrlBuilder urlBuilder;
-
-		public DeleteProjectHtmlViewBuilder(IHtmlBuilder htmlBuilder, IUrlBuilder urlBuilder) : base(htmlBuilder)
-		{
-			this.urlBuilder = urlBuilder;
-		}
+		public DeleteProjectHtmlViewBuilder(IHtmlBuilder htmlBuilder) : base(htmlBuilder) { }
 
 		public IView BuildView(DeleteProjectModel model)
 		{
@@ -43,8 +37,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.DeleteProject
 			return new ControlView(
 				Table(
 				TR(TD(model.Message)),
-				TR(TD("&nbsp;")),
-				TR(TD(A("Return to Dashboard", urlBuilder.BuildUrl("default.aspx"))))
+				TR(TD("&nbsp;"))
 				));
 		}
 	}

@@ -802,6 +802,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "WebDashboard\Dashboard\ProjectGridTest.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "WebDashboard\Dashboard\ProjectLinkTest.cs"
                     SubType = "Code"
                     BuildAction = "Compile"

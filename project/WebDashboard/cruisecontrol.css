@@ -64,6 +64,19 @@ a:hover { color:#FC0; }
         color:#FC0; 
 }
 
+.ProjectGridHeader
+{
+        color: ivory;
+}
+.ProjectGridHeader a {
+        color: ivory;
+        text-decoration: none;
+}
+.ProjectGridHeader a:hover 
+{ 
+        color:#FC0; 
+}
+
 .SideBar a
 {
         text-decoration: none;

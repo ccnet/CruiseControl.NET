@@ -393,6 +393,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Dashboard\IProjectGrid.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Dashboard\IProjectGridAction.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -448,7 +453,17 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Dashboard\ProjectGrid.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Dashboard\ProjectGridRow.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Dashboard\ProjectGridSortColumn.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

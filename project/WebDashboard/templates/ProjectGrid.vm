@@ -2,31 +2,32 @@
 <P><span id="StatusLabel"><b><font color="#4A3C8C">$forceBuildMessage</font></b></span></P>
 #end
 
-#if ($projectGrid.Count > 0)
+#if ($projectGrid.Length > 0)
 <table cellspacing="0" cellpadding="3" rules="rows" bordercolor="#333399" border="1" id="StatusGrid" bgcolor="White" width="100%">
-	<tr bgcolor="#333399">
+	<tr bgcolor="#333399" class="ProjectGridHeader">
 		<td>
-			<font color="Ivory"><b>Project Name</b></font>
+			<a href="$projectNameSortLink"><b>Project Name</b></a>
 		</td>
 		<td align="Center">
-			<font color="Ivory"><b>Last Build Status</b></font>
+			<b>Last Build Status</b>
 		</td>
 		<td align="Center">
-			<font color="Ivory"><b>Last Build Time</b></font>
+			<b>Last Build Time</b>
 		</td>
 		<td align="Center">
-			<font color="Ivory"><b>Last Build Label</b></font>
+			<b>Last Build Label</b>
 		</td>
 		<td align="Center">
-			<font color="Ivory"><b>CCNet Status</b></font>
+			<b>CCNet Status</b>
 		</td>
 		<td align="Center">
-			<font color="Ivory"><b>Activity</b></font>
+			<b>Activity</b>
 		</td>
 		<td align="Center">
-			<font color="Ivory"><b>Force Build</b></font>
+			<b>Force Build</b>
 		</td>
 	</tr>
+	
 	#foreach ($projectGridRow in $projectGrid)
 	<tr bgcolor="Ivory">
 		<td align="Left">

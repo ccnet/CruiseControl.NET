@@ -1,6 +1,6 @@
+using System;
 using System.Collections;
-using System.Drawing;
-using ThoughtWorks.CruiseControl.Remote;
+using ThoughtWorks.CruiseControl.Core;
 using ThoughtWorks.CruiseControl.WebDashboard.MVC;
 using ThoughtWorks.CruiseControl.WebDashboard.MVC.View;
 using ThoughtWorks.CruiseControl.WebDashboard.ServerConnection;
@@ -13,50 +13,93 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 		private readonly IFarmService farmService;
 		private readonly IUrlBuilder urlBuilder;
 		private readonly IVelocityViewGenerator viewGenerator;
+		private readonly IProjectGrid projectGrid;
 
-		public VelocityProjectGridAction(IFarmService farmService, IUrlBuilder urlBuilder, IVelocityViewGenerator viewGenerator)
+		public VelocityProjectGridAction(IFarmService farmService, IUrlBuilder urlBuilder, IVelocityViewGenerator viewGenerator, IProjectGrid projectGrid)
 		{
 			this.farmService = farmService;
 			this.urlBuilder = urlBuilder;
 			this.viewGenerator = viewGenerator;
+			this.projectGrid = projectGrid;
 		}
 
-		public IView Execute(string[] actionArguments, string actionName)
+		public IView Execute(string[] actionArguments, string actionName, IRequest request)
 		{
 			Hashtable velocityContext = new Hashtable();
 			velocityContext["forceBuildMessage"] = ForceBuildIfNecessary(actionArguments);
-			return GenerateView(farmService.GetProjectStatusListAndCaptureExceptions(), velocityContext, actionName);
+			return GenerateView(farmService.GetProjectStatusListAndCaptureExceptions(), velocityContext, actionName, request, null);
 		}
 
-		public IView Execute(string[] actionArguments, string actionName, IServerSpecifier serverSpecifer)
+		public IView Execute(string[] actionArguments, string actionName, IServerSpecifier serverSpecifier, IRequest request)
 		{
 			Hashtable velocityContext = new Hashtable();
 			velocityContext["forceBuildMessage"] = ForceBuildIfNecessary(actionArguments);
-			return GenerateView(farmService.GetProjectStatusListAndCaptureExceptions(serverSpecifer), velocityContext, actionName);
+			return GenerateView(farmService.GetProjectStatusListAndCaptureExceptions(serverSpecifier), velocityContext, actionName, request, serverSpecifier);
 		}
 
-		private IView GenerateView(ProjectStatusListAndExceptions projectStatusListAndExceptions, Hashtable velocityContext, string actionName)
+		private IView GenerateView(ProjectStatusListAndExceptions projectStatusListAndExceptions, Hashtable velocityContext, string actionName, IRequest request, IServerSpecifier serverSpecifier)
 		{
-			velocityContext["projectGrid"] = CreateProjectGrid(projectStatusListAndExceptions.StatusAndServerList, actionName);
+			ActionSpecifierWithName actionSpecifier = new ActionSpecifierWithName(actionName);
+			ProjectGridSortColumn sortColumn = GetSortColumn(request);
+			bool sortReverse = GetSortReverse(request);
+
+			velocityContext["projectNameSortLink"] = GenerateSortLink(serverSpecifier, actionSpecifier, ProjectGridSortColumn.Name, sortColumn, sortReverse);
+			velocityContext["projectGrid"] = projectGrid.GenerateProjectGridRows(
+				projectStatusListAndExceptions.StatusAndServerList, actionName, sortColumn, sortReverse);
 			velocityContext["exceptions"] = projectStatusListAndExceptions.Exceptions;
-			velocityContext["refreshButtonName"] = urlBuilder.BuildFormName(new ActionSpecifierWithName(actionName));
+			velocityContext["refreshButtonName"] = urlBuilder.BuildFormName(actionSpecifier);
 
 			return viewGenerator.GenerateView(@"ProjectGrid.vm", velocityContext);
 		}
 
+		private bool GetSortReverse(IRequest request)
+		{
+			return request.FindParameterStartingWith("ReverseSort") != string.Empty;
+		}
+
+		private ProjectGridSortColumn GetSortColumn(IRequest request)
+		{
+			string columnName = request.GetText("SortColumn");
+			if (columnName == string.Empty)
+			{
+				columnName = "Name";
+			}
+			try
+			{
+				return (ProjectGridSortColumn) Enum.Parse(typeof(ProjectGridSortColumn), columnName);	
+			}
+			catch (Exception)
+			{
+				throw new CruiseControlException(string.Format("Error attempting to calculate column to sort. Specified column name was [{0}]", columnName));
+			}
+		}
+
+		private object GenerateSortLink(IServerSpecifier serverSpecifier, IActionSpecifier actionSpecifier, ProjectGridSortColumn column, ProjectGridSortColumn currentColumn, bool currentReverse)
+		{
+			string queryString = "SortColumn=" + column.ToString();
+			if (column == currentColumn && !currentReverse)
+			{
+				queryString += "&ReverseSort=ReverseSort";
+			}
+			if (serverSpecifier == null)
+			{
+				return urlBuilder.BuildUrl(actionSpecifier, queryString);
+			}
+			else
+			{
+				return urlBuilder.BuildServerUrl(actionSpecifier, serverSpecifier, queryString);
+			}
+		}
+
 		private string ForceBuildIfNecessary(string[] actionArguments)
 		{
-			if (actionArguments.Length == 0)
-			{
-				return "";
-			}
-			else if (actionArguments.Length == 2)
+			if (actionArguments.Length == 2)
 			{
 				return ForceBuild(actionArguments[0], actionArguments[1]);
 			}
 			else
 			{
-				return "Unexpected action arguments - not forcing build";
+				return "";
 			}
 		}
 
@@ -64,41 +107,6 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 		{
 			farmService.ForceBuild(new DefaultProjectSpecifier(new DefaultServerSpecifier(serverName), projectName));
 			return string.Format("Build successfully forced for {0}", projectName);
-		}
-
-		private IList CreateProjectGrid(ProjectStatusOnServer[] statuses, string actionName)
-		{
-			ArrayList rows = new ArrayList();
-			foreach (ProjectStatusOnServer statusOnServer in statuses)
-			{
-				ProjectStatus status = statusOnServer.ProjectStatus;
-				rows.Add(new ProjectGridRow(
-					status.Name, status.BuildStatus.ToString(), CalculateHtmlColor(status.BuildStatus), status.LastBuildDate, 
-					status.LastBuildLabel, status.Status.ToString(), status.Activity.ToString(), 
-					CalculateForceBuildButtonName(statusOnServer.ServerSpecifier, status.Name, actionName), status.WebURL));
-			}
-			return rows;
-		}
-
-		private string CalculateForceBuildButtonName(IServerSpecifier specifier, string projectName, string actionName)
-		{
-			return urlBuilder.BuildFormName(new ActionSpecifierWithName(actionName), specifier.ServerName, projectName);
-		}
-
-		private string CalculateHtmlColor(IntegrationStatus status)
-		{
-			if (status == IntegrationStatus.Success)
-			{
-				return Color.Green.Name;
-			}
-			else if (status == IntegrationStatus.Unknown)
-			{
-				return Color.Yellow.Name;
-			}
-			else
-			{
-				return Color.Red.Name;
-			}
 		}
 	}
 }

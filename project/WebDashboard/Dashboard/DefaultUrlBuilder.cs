@@ -1,3 +1,4 @@
+using System;
 using ThoughtWorks.CruiseControl.WebDashboard.IO;
 using ThoughtWorks.CruiseControl.WebDashboard.MVC.Cruise;
 
@@ -13,7 +14,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 			this.pathMapper = pathMapper;
 		}
 
-		public string BuildUrl(string relativeUrl)
+		private string BuildUrl(string relativeUrl)
 		{
 			return pathMapper.GetAbsoluteURLForRelativePath(relativeUrl);
 		}
@@ -21,11 +22,6 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 		public string BuildUrl(IActionSpecifier action)
 		{
 			return BuildUrl(action, "");
-		}
-
-		public string BuildUrl(string relativeUrl, string partialQueryString)
-		{
-			return BuildUrl(relativeUrl, new NullActionSpecifier(), partialQueryString);
 		}
 
 		public string BuildUrl(IActionSpecifier action, string partialQueryString)
@@ -48,29 +44,24 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 			return BuildUrl(relativeUrl) + queryString;
 		}
 
-		public string BuildServerUrl(string relativeUrl, IServerSpecifier serverSpecifier)
-		{
-			return BuildUrl(relativeUrl, BuildServerQueryString(serverSpecifier));
-		}
-
 		public string BuildServerUrl(IActionSpecifier action, IServerSpecifier serverSpecifier)
 		{
-			return BuildUrl(action, BuildServerQueryString(serverSpecifier));
+			return BuildServerUrl(action, serverSpecifier, "");
 		}
 
-		public string BuildProjectUrl(string relativeUrl, IProjectSpecifier projectSpecifier)
+		public string BuildServerUrl(IActionSpecifier action, IServerSpecifier serverSpecifier, string queryString)
 		{
-			return BuildUrl(relativeUrl, BuildProjectQueryString(projectSpecifier));
+			string fullQueryString = BuildServerQueryString(serverSpecifier);
+			if (queryString != null && queryString != string.Empty)
+			{
+				fullQueryString += ("&" + queryString);
+			}
+			return BuildUrl(action, fullQueryString);
 		}
 
 		public string BuildProjectUrl(IActionSpecifier action, IProjectSpecifier projectSpecifier)
 		{
 			return BuildUrl(action, BuildProjectQueryString(projectSpecifier));
-		}
-
-		public string BuildBuildUrl(string relativeUrl, IBuildSpecifier buildSpecifier)
-		{
-			return BuildUrl(relativeUrl, BuildBuildQueryString(buildSpecifier));
 		}
 
 		public string BuildBuildUrl(IActionSpecifier action, IBuildSpecifier buildSpecifier)
