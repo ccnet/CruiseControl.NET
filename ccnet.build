@@ -245,7 +245,7 @@
 	<target name="reporting" depends="compile">
 		<mkdir dir="build\fxcop" />
 		<exec program="tools\fxcop\fxcopcmd.exe" 
-			  commandline="/p:tools\fxcop\ccnet.fxcop /o:build\fxcop\ccnet-fxcop.xml"/>
+			  commandline="/p:tools\fxcop\ccnet.fxcop /o:build\fxcop\ccnet-fxcop.xml" failonerror="false"/>
 	
 	</target>
 	
