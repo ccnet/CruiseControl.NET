@@ -23,6 +23,7 @@ namespace ThoughtWorks.CruiseControl.Web
 		protected HtmlTableCell Td2;
 		protected Title Title3;
 		protected HtmlTableCell contentCell;
+		private LogFileLister logFileLister = new LogFileLister();
 
 		private void Page_Load(object sender, EventArgs e)
 		{
@@ -46,12 +47,6 @@ namespace ThoughtWorks.CruiseControl.Web
 				pluginLinksHtml += String.Format(@"|&nbsp; <a class=""link"" href=""{0}"">{1}</a> ", spec.LinkUrl, spec.LinkText);
 			}
 			ProjectPluginLinks.InnerHtml = pluginLinksHtml;
-		}
-
-		private string BuildLogFileUri(string baseUri)
-		{
-			string logFile = Request.QueryString[LogFileUtil.LogQueryString];
-			return (logFile != null && logFile.Length > 0) ? baseUri + LogFileUtil.CreateUrl(logFile) : baseUri;
 		}
 
 		private void InitBuildStats(string path)
@@ -84,12 +79,12 @@ namespace ThoughtWorks.CruiseControl.Web
 		private void InitAdjacentAnchors(string path)
 		{			
 			string currentFile = Request.QueryString[LogFileUtil.LogQueryString];
-			LogFileLister.InitAdjacentAnchors(previousLog, nextLog, path, currentFile);			
+			logFileLister.InitAdjacentAnchors(previousLog, nextLog, path, currentFile);			
 		}
 
 		private void InitLogFileList(string path)
 		{
-			menu.DataSource = LogFileLister.GetLinks(path);
+			menu.DataSource = logFileLister.GetLinks(path);
 			menu.DataBind();
 		}
 

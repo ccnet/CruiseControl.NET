@@ -11,6 +11,11 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 			return date.ToString(DateOutputFormat);
 		}
 
+		public static string FormatDate(DateTime date, IFormatProvider formatter)
+		{
+			return date.ToString(DateOutputFormat, formatter);
+		}
+
 		public static DateTime MaxDate(DateTime a, DateTime b)
 		{
 			return (a > b) ? a : b;

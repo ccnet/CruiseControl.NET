@@ -82,23 +82,6 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test
 			Assert.AreEqual("$", _vault.Folder);
 		}
 
-		[Test]
-		[Ignore("user-specific vault test settings here")]
-		public void HistoryDates()
-		{
-			// change these values to reflect your live vault repository
-			// checked in IPopup.cs on 4/20/2004 10:56:46 AM
-			// so check for changes between 10 and 11
-			DateTime from = new DateTime(2004, 4, 20, 10, 0, 0);
-			DateTime to = new DateTime(2004, 4, 20, 11, 0, 0);
-
-			Modification[] mods = _vault.GetModifications(from, to);
-			Assert.IsNotNull(mods);
-
-			// change this value to reflect your live vault repository
-			Assert.AreEqual(1, mods.Length);
-		}
-
 		private Vault CreateNoSslVault()
 		{
 			Vault vault = new Vault();

@@ -56,7 +56,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test
 			DateTime to = DateTime.Parse("2001-01-21  20:30:50 'GMT'");
 			ProcessInfo actualProcess = svn.CreateHistoryProcessInfo(from, to);
 
-			Assert.AreEqual("log -v -r \"{2001-01-21T20:00:00Z}:{2001-01-21T20:30:50Z}\" --xml svn://someserver/", actualProcess.Arguments);
+			Assert.AreEqual("log -v -r \"{2001-01-21T20:00:00Z}:{2001-01-21T20:30:50Z}\" --xml --non-interactive svn://someserver/", actualProcess.Arguments);
 		}
 
 		[Test]
@@ -67,7 +67,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test
 			DateTime to = DateTime.Parse("2001-01-21  20:30:50 'GMT'");
 			ProcessInfo actualProcess = svn.CreateHistoryProcessInfo(from, to);
 
-			string expectedOutput = @"log -v -r ""{2001-01-21T20:00:00Z}:{2001-01-21T20:30:50Z}"" --xml svn://someserver/ --username ""user"" --password ""password""";
+			string expectedOutput = @"log -v -r ""{2001-01-21T20:00:00Z}:{2001-01-21T20:30:50Z}"" --xml --non-interactive svn://someserver/ --username ""user"" --password ""password""";
 			Assert.AreEqual(expectedOutput, actualProcess.Arguments);
 		}
 
@@ -96,7 +96,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test
 			DateTime date = DateTime.Parse("2001-01-21  20:00:00 'GMT'");
 			ProcessInfo actualProcess = svn.CreateLabelProcessInfo("foo", date);
 
-			string expectedOutput = @"copy -m ""CCNET build foo"" svn://someserver/ svn://someserver/tags/foo --username ""user"" --password ""password""";
+			string expectedOutput = @"copy -m ""CCNET build foo"" svn://someserver/ svn://someserver/tags/foo --non-interactive --username ""user"" --password ""password""";
 			Assert.AreEqual(expectedOutput, actualProcess.Arguments);
 		}
 

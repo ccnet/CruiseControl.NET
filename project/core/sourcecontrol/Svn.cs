@@ -9,8 +9,8 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 	[ReflectorType("svn")]
 	public class Svn : ProcessSourceControl
 	{
-		internal static readonly string HISTORY_COMMAND_FORMAT = "log -v -r \"{{{0}}}:{{{1}}}\" --xml {2}";
-		internal static readonly string TAG_COMMAND_FORMAT = "copy -m \"CCNET build {0}\" {1} {2}/{0}";
+		internal static readonly string HISTORY_COMMAND_FORMAT = "log -v -r \"{{{0}}}:{{{1}}}\" --xml --non-interactive {2}";
+		internal static readonly string TAG_COMMAND_FORMAT = "copy -m \"CCNET build {0}\" {1} {2}/{0} --non-interactive";
 
 		internal static readonly string COMMAND_DATE_FORMAT = "yyyy-MM-ddTHH:mm:ssZ";
 

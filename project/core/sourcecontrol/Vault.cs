@@ -47,8 +47,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 
 		public ProcessInfo CreateHistoryProcessInfo(DateTime from, DateTime to, string folder)
 		{
-			string args = BuildHistoryProcessArgs(from, to);
-			return new ProcessInfo(Executable, args);
+			return new ProcessInfo(Executable, BuildHistoryProcessArgs());
 		}
 
 		public override Modification[] GetModifications(DateTime from, DateTime to)
@@ -60,7 +59,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 		{
 		}
 
-		private string BuildHistoryProcessArgs(DateTime from, DateTime to)
+		private string BuildHistoryProcessArgs()
 		{
 			string args = string.Format(COMMAND_LINE, Folder, Host, Username, Password, Repository);
 			if (Ssl)

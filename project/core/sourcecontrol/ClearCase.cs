@@ -14,7 +14,6 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 	[ReflectorType("clearCase")]
 	public class ClearCase : ProcessSourceControl, ITemporaryLabeller
 	{
-
 		private string		_executable		= "cleartool.exe";
 		private string		_viewPath;
 		private string		_viewName;
@@ -24,6 +23,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 		private string		_projectVobName;
 
 		private const string _TEMPORARY_BASELINE_PREFIX = "CruiseControl.NETTemporaryBaseline_";
+		public const string DATETIME_FORMAT = "dd-MMM-yyyy.HH:mm:ss";
 
 		public ClearCase() : base(new ClearCaseHistoryParser())
 		{
@@ -195,7 +195,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 
 		internal ProcessInfo CreateHistoryProcessInfo( DateTime from, DateTime to )
 		{
-			string fromDate = from.ToString( "dd-MMM-yyyy.HH:mm:ss" );
+			string fromDate = from.ToString( DATETIME_FORMAT );
 			string args = CreateHistoryArguments( fromDate );
 			Log.Debug( string.Format( "cleartool commandline: {0} {1}", Executable, args ) );
 			ProcessInfo processInfo = new ProcessInfo( Executable, args );

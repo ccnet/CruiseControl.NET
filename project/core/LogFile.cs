@@ -16,6 +16,7 @@ namespace ThoughtWorks.CruiseControl.Core
 		private DateTime _date;
 		private string _label;
 		private bool _succeeded;
+		private IFormatProvider _formatter = CultureInfo.CurrentCulture;
 
 		public LogFile(string filename)
 		{
@@ -23,6 +24,11 @@ namespace ThoughtWorks.CruiseControl.Core
 			_date = ParseDate(filename);
 			_label = ParseLabel(filename);
 			_succeeded = IsSuccessful(filename);
+		}
+
+		public LogFile(string filename, IFormatProvider formatter) : this(filename)
+		{
+			_formatter = formatter;
 		}
 
 		public LogFile(IIntegrationResult result)
@@ -39,7 +45,7 @@ namespace ThoughtWorks.CruiseControl.Core
 
 		public string FormattedDateString
 		{
-			get { return DateUtil.FormatDate(_date); }
+			get { return DateUtil.FormatDate(_date, _formatter); }
 		}
 
 		public string Label
@@ -96,7 +102,7 @@ namespace ThoughtWorks.CruiseControl.Core
 		private DateTime ParseDate(string filename)
 		{
 			string dateString = filename.Substring(FilenamePrefix.Length, FilenameDateFormat.Length);
-			return DateTime.ParseExact(dateString, FilenameDateFormat, DateTimeFormatInfo.GetInstance(CultureInfo.InvariantCulture));
+			return DateTime.ParseExact(dateString, FilenameDateFormat, _formatter);
 		}
 
 		private string ParseLabel(string filename)

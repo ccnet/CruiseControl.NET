@@ -1,4 +1,5 @@
 using System;
+using System.Globalization;
 using System.IO;
 using System.Web.UI.HtmlControls;
 using ThoughtWorks.CruiseControl.Core;
@@ -12,14 +13,25 @@ namespace ThoughtWorks.CruiseControl.Web
 	{
 		public const string FAILED = "(Failed)";
 
-		public static HtmlAnchor[] GetLinks(string path)
+		private readonly IFormatProvider formatter;
+
+		public LogFileLister() : this(CultureInfo.CurrentCulture)
+		{
+		}
+
+		public LogFileLister(IFormatProvider formatter)
+		{
+			this.formatter = formatter;
+		}
+
+		public HtmlAnchor[] GetLinks(string path)
 		{
 			string[] filenames = LogFileUtil.GetLogFileNames(path);
 
 			HtmlAnchor[] links = new HtmlAnchor[filenames.Length];
 			for (int i = 0; i < filenames.Length; i++)
 			{
-				LogFile logFile = new LogFile(filenames[i]);
+				LogFile logFile = new LogFile(filenames[i], formatter);
 				int j = filenames.Length - i - 1;
 				links[j] = new HtmlAnchor();
 				links[j].Attributes["class"] = GetLinkClass(logFile);
@@ -29,7 +41,7 @@ namespace ThoughtWorks.CruiseControl.Web
 			return links;
 		}
 
-		public static void InitAdjacentAnchors(HtmlAnchor previous, HtmlAnchor next, string path, string currentFile)
+		public void InitAdjacentAnchors(HtmlAnchor previous, HtmlAnchor next, string path, string currentFile)
 		{
 			string[] filenames = LogFileUtil.GetLogFileNames(path);
 			if (filenames.Length <= 1)
@@ -53,14 +65,14 @@ namespace ThoughtWorks.CruiseControl.Web
 				LogFileUtil.CreateUrl(filenames[filenames.Length - 2]) : ".";
 		}
 
-		public static string GetDisplayLabel(LogFile logFile)
+		private string GetDisplayLabel(LogFile logFile)
 		{
 			return string.Format("<nobr>{0} {1}</nobr>",
 			                     logFile.FormattedDateString,
 			                     GetBuildStatus(logFile));
 		}
 
-		public static string GetBuildStatus(LogFile logFile)
+		public string GetBuildStatus(LogFile logFile)
 		{
 			if (logFile.Succeeded)
 			{
@@ -72,12 +84,12 @@ namespace ThoughtWorks.CruiseControl.Web
 			}
 		}
 
-		private static string GetLinkClass(LogFile logFile)
+		private string GetLinkClass(LogFile logFile)
 		{
 			return logFile.Succeeded ? "link" : "link-failed";
 		}
 
-		public static string GetCurrentFilename(DirectoryInfo logDirectory)
+		public string GetCurrentFilename(DirectoryInfo logDirectory)
 		{
 			string[] filenames = LogFileUtil.GetLogFileNames(logDirectory.FullName);
 			return (filenames.Length == 0) ? null : filenames[filenames.Length - 1];

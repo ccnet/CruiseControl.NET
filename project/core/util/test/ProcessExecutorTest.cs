@@ -46,8 +46,7 @@ namespace ThoughtWorks.CruiseControl.Core.Util.Test
 			ProcessResult result = executor.Execute(new ProcessInfo("cmd.exe", "/C @zerk.exe foo"));
 
 			AssertProcessExitsWithFailure(result, 1);
-			Assert.AreEqual(@"'zerk.exe' is not recognized as an internal or external command,
-operable program or batch file.", result.StandardError.Trim());
+			AssertContains("zerk.exe", result.StandardError);
 			Assert.AreEqual(string.Empty, result.StandardOutput);
 			Assert.IsTrue(! result.TimedOut);
 		}

@@ -28,7 +28,7 @@ namespace ThoughtWorks.CruiseControl.Web
 			string logfile = request.QueryString[LogFileUtil.LogQueryString];
 			if (logfile == null)
 			{
-				logfile = LogFileLister.GetCurrentFilename(logDirectory);
+				logfile = new LogFileLister().GetCurrentFilename(logDirectory);
 			}
 			return (logfile == null) ? null : Path.Combine(logDirectory.FullName, logfile);
 		}

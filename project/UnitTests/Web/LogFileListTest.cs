@@ -1,4 +1,5 @@
 using System;
+using System.Globalization;
 using System.IO;
 using System.Web.UI.HtmlControls;
 using NUnit.Framework;
@@ -12,11 +13,13 @@ namespace ThoughtWorks.CruiseControl.Web.Test
 	{
 		private static readonly string TestFolder = "logfilelist";
 		private string _tempFolder;
+		private LogFileLister _logFileLister;
 
 		[SetUp]
 		public void Setup()
 		{
 			_tempFolder = TempFileUtil.CreateTempDir(TestFolder);
+			_logFileLister = new LogFileLister(CultureInfo.InvariantCulture);
 		}
 
 		[TearDown]
@@ -41,7 +44,7 @@ namespace ThoughtWorks.CruiseControl.Web.Test
 			};
 			TempFileUtil.CreateTempFiles(TestFolder, testFilenames);
 
-			HtmlAnchor[] actualLinks = LogFileLister.GetLinks(_tempFolder);
+			HtmlAnchor[] actualLinks = _logFileLister.GetLinks(_tempFolder);
 			Assert.AreEqual(6, actualLinks.Length);
 
 			// expected Date format: dd MMM yyyy HH:mm
@@ -69,7 +72,7 @@ namespace ThoughtWorks.CruiseControl.Web.Test
 
 		private void CheckBuildStatus(string expected, string input)
 		{
-			Assert.AreEqual(expected, LogFileLister.GetBuildStatus(new LogFile(input)));
+			Assert.AreEqual(expected, _logFileLister.GetBuildStatus(new LogFile(input)));
 		}
 
 		[Test]
@@ -94,7 +97,7 @@ namespace ThoughtWorks.CruiseControl.Web.Test
 			};
 			TempFileUtil.CreateTempFiles(TestFolder, testFilenames);
 
-			Assert.AreEqual("log20030507042535.xml", LogFileLister.GetCurrentFilename(new DirectoryInfo(_tempFolder)));
+			Assert.AreEqual("log20030507042535.xml", _logFileLister.GetCurrentFilename(new DirectoryInfo(_tempFolder)));
 		}
 
 		[Test]
@@ -102,7 +105,7 @@ namespace ThoughtWorks.CruiseControl.Web.Test
 		{
 			HtmlAnchor previous = new HtmlAnchor();
 			HtmlAnchor next = new HtmlAnchor();
-			LogFileLister.InitAdjacentAnchors(previous, next, _tempFolder, null);
+			_logFileLister.InitAdjacentAnchors(previous, next, _tempFolder, null);
 			Assert.AreEqual(String.Empty, previous.HRef);
 			Assert.AreEqual(String.Empty, next.HRef);
 		}
@@ -113,7 +116,7 @@ namespace ThoughtWorks.CruiseControl.Web.Test
 			HtmlAnchor previous = new HtmlAnchor();
 			HtmlAnchor next = new HtmlAnchor();
 			TempFileUtil.CreateTempFile(_tempFolder, new LogFile(new IntegrationResult()).Filename);
-			LogFileLister.InitAdjacentAnchors(new HtmlAnchor(), new HtmlAnchor(), _tempFolder, null);
+			_logFileLister.InitAdjacentAnchors(new HtmlAnchor(), new HtmlAnchor(), _tempFolder, null);
 			Assert.AreEqual(String.Empty, previous.HRef);
 			Assert.AreEqual(String.Empty, next.HRef);
 		}
