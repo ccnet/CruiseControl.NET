@@ -33,7 +33,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test
 		[Test]
 		public void Parse()
 		{
-			Modification[] mods = _parser.Parse(VssMother.ContentReader);
+			Modification[] mods = _parser.Parse(VssMother.ContentReader, VssMother.OLDEST_ENTRY, VssMother.NEWEST_ENTRY);
 			AssertNotNull("mods should not be null", mods);
 			AssertEquals(19, mods.Length);			
 		}

@@ -14,6 +14,9 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test
 			}
 		}
 		
+		public static DateTime OLDEST_ENTRY = DateTime.Parse("2002/10/31 11:20:59");
+		public static DateTime NEWEST_ENTRY = DateTime.Parse("2002/10/31 18:20:59");
+
 		#region P4_LOGFILE_CONTENT
 
 		public static string P4_LOGFILE_CONTENT 

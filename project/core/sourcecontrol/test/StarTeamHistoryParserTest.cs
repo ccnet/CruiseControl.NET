@@ -13,6 +13,9 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test
 		StarTeamHistoryParser _parser;
 		DateTimeFormatInfo _dfi;
 
+		private readonly DateTime OLDEST_ENTRY = DateTime.Parse("1996-Sep-13 13:34:52");
+		private readonly DateTime NEWEST_ENTRY = DateTime.Parse("2005-Sep-13 13:34:52");
+
 		[SetUp]
 		public void SetUp()
 		{
@@ -36,14 +39,14 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test
 		[Test]
 		public void TestModificationCount()
 		{
-			Modification [] mod = _parser.Parse(StarTeamHistoryParserTest.ContentReader);
+			Modification [] mod = _parser.Parse(StarTeamHistoryParserTest.ContentReader, OLDEST_ENTRY, NEWEST_ENTRY);
 			AssertEquals("Should have returned 4 modifications.", 4, mod.Length);
 		}
 
 		[Test]
 		public void TestModificationContent()
 		{
-			Modification[] actual = _parser.Parse(StarTeamHistoryParserTest.ContentReader);
+			Modification[] actual = _parser.Parse(StarTeamHistoryParserTest.ContentReader, OLDEST_ENTRY, NEWEST_ENTRY);
 			Modification[] expected = getExpectedModifications();
 
 			AssertEqualArrays(actual, expected);

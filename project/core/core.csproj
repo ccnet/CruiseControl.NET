@@ -518,6 +518,16 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "sourcecontrol\Svn.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "sourcecontrol\SvnHistoryParser.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "sourcecontrol\Vss.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -604,6 +614,11 @@
                 />
                 <File
                     RelPath = "sourcecontrol\test\StarTeamTest.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "sourcecontrol\test\SvnHistoryParserTest.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -710,7 +725,7 @@
                     RelPath = "util\ConsoleTraceListener.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
-                />                
+                />
                 <File
                     RelPath = "util\CustomAssertion.cs"
                     SubType = "Code"
@@ -725,7 +740,7 @@
                     RelPath = "util\LogFileTraceListener.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
-                />                
+                />
                 <File
                     RelPath = "util\LogUtil.cs"
                     SubType = "Code"

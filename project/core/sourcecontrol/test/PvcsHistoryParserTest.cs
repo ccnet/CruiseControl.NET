@@ -12,6 +12,9 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test
 	{
 		private PvcsHistoryParser _pvcs = new PvcsHistoryParser();
 		
+		private readonly DateTime OLDEST_ENTRY = DateTime.Parse("1996-Sep-13 13:34:52");
+		private readonly DateTime NEWEST_ENTRY = DateTime.Parse("2005-Sep-13 13:34:52");
+
 		private string LogfileContent 
 		{
 			get 
@@ -917,7 +920,7 @@ Initial revision.
 		{
 			
 			TextReader input = new StringReader(LogfileContent);
-			Modification[] modifications = _pvcs.Parse(input);
+			Modification[] modifications = _pvcs.Parse(input, OLDEST_ENTRY, NEWEST_ENTRY);
 			
 			input.Close();
 
@@ -947,7 +950,7 @@ Initial revision.
 		public void TestExtendedLogFileContent()
 		{
 			TextReader input = new StringReader(ExtendedLogfileContent);
-			Modification[] modifications = _pvcs.Parse(input);
+			Modification[] modifications = _pvcs.Parse(input, OLDEST_ENTRY, NEWEST_ENTRY);
 			AssertEquals(21, modifications.Length);
 			
 			Modification second = modifications[1];

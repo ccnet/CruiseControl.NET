@@ -15,6 +15,9 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test
 			get { return TempFileUtil.CreateTempFile(CVS_TEMP_DIR, "cvslog.txt", CVS_LOGFILE_CONTENT); }
 		}
 		
+		public static DateTime OLDEST_ENTRY = DateTime.Parse("2002/03/13 19:38:42");
+		public static DateTime NEWEST_ENTRY = DateTime.Parse("2002/03/15 19:20:28");
+
 		#region CVS_LOGFILE_CONTENT
 		public static string CVS_LOGFILE_CONTENT 
 		{

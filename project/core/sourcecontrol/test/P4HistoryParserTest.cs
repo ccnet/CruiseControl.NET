@@ -12,7 +12,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test
 		[Test]
 		public void Parse_MultipleModifications() 
 		{
-			Modification[] mods = _parser.Parse(P4Mother.ContentReader);
+			Modification[] mods = _parser.Parse(P4Mother.ContentReader, P4Mother.OLDEST_ENTRY, P4Mother.NEWEST_ENTRY);
 			AssertEquals("number of modifications", 7, mods.Length);
 			assertModification(mods[0], "SpoonCrusher.cs", "//depot/myproject/something", new DateTime(2002, 10, 31, 18, 20, 59), "edit", "someone@somewhere", "someone", "Something important\r\nso there!");
 			assertModification(mods[1], "AppleEater.cs", "//depot/myproject/something", new DateTime(2002, 10, 31, 18, 20, 59), "add", "someone@somewhere", "someone", "Something important\r\nso there!");
@@ -38,7 +38,8 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test
 				"info1: //shipping/readme#10 edit\r\n" +
 				"text: \r\n" +
 				"exit: 0\r\n");
-			Modification[] mods = _parser.Parse(input);
+			DateTime entryDate = DateTime.Parse("2003/09/01 16:30:53");
+			Modification[] mods = _parser.Parse(input, entryDate, entryDate);
 			AssertEquals("number of mods", 1, mods.Length);
 			AssertEquals("user", "guox01", mods[0].UserName);
 			AssertEquals("email address", "guox01@BP1HEMAP048", mods[0].EmailAddress);

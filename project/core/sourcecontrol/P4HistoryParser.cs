@@ -58,7 +58,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 		/// </summary>
 		/// <param name="reader"></param>
 		/// <returns></returns>
-		public Modification[] Parse(TextReader reader)
+		public Modification[] Parse(TextReader reader, DateTime from, DateTime to)
 		{
 			ArrayList mods = new ArrayList();
 			string line;

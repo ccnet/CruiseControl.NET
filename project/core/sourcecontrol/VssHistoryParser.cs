@@ -18,7 +18,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 
 		public CultureInfo CultureInfo = CultureInfo.CurrentCulture;
 
-		public Modification[] Parse(TextReader history)
+		public Modification[] Parse(TextReader history, DateTime from, DateTime to)
 		{
 			string[] entries = this.ReadAllEntries(history);
 			

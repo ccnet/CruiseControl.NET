@@ -8,7 +8,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 	public class PvcsHistoryParser : IHistoryParser 
 	{
 		public const string UNKNOWN = "checked in";
-		public Modification[] Parse(TextReader reader)
+		public Modification[] Parse(TextReader reader, DateTime from, DateTime to)
 		{
 
 			PvcsModificationBuilder builder = new PvcsModificationBuilder();

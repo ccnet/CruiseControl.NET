@@ -43,7 +43,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			try
 			{
 				reader = Execute(process);
-				return ParseModifications(reader);
+				return ParseModifications(reader, from, to);
 			}
 			finally
 			{
@@ -81,9 +81,9 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			return new StringReader(result);
 		}
 
-		protected Modification[] ParseModifications(TextReader reader)
+		protected Modification[] ParseModifications(TextReader reader, DateTime from, DateTime to)
 		{
-			return HistoryParser.Parse(reader);
+			return HistoryParser.Parse(reader, from, to);
 		}
 
 		private void Close(TextReader reader, Process process)

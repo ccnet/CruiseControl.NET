@@ -106,7 +106,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			else
 			{
 				process = CreateDescribeProcess(changes);
-				return parser.Parse(new StringReader(execute(process)));
+				return parser.Parse(new StringReader(execute(process)), from, to);
 			}
 		}
 

@@ -13,9 +13,8 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test
 		private CvsHistoryParser _cvs = new CvsHistoryParser();
 		public void TestParseStream() 
 		{
-			
 			TextReader input = new StringReader(CvsMother.CVS_LOGFILE_CONTENT);
-			Modification[] modifications = _cvs.Parse(input);
+			Modification[] modifications = _cvs.Parse(input, CvsMother.OLDEST_ENTRY, CvsMother.NEWEST_ENTRY);
 			
 			input.Close();
 

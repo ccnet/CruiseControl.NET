@@ -14,6 +14,7 @@ namespace ThoughtWorks.CruiseControl.Core
 		private string fileName;
 		private string folderName;
 		private DateTime modifiedTime;
+		private int changeNumber;
 		private string userName;
 		private string emailAddress;
 		private string comment;
@@ -41,6 +42,11 @@ namespace ThoughtWorks.CruiseControl.Core
 		{
 			get { return modifiedTime; }
 			set { modifiedTime = value; }
+		}
+
+		public int ChangeNumber {
+			get { return changeNumber; }
+			set { changeNumber = value; }
 		}
 
 		public string UserName

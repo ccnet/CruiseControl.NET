@@ -71,7 +71,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			_workingFileName="";
 		}
 		
-		public Modification[] Parse(TextReader cvsLog)
+		public Modification[] Parse(TextReader cvsLog, DateTime from, DateTime to)
 		{
 			// Read to the first RCS file name. The first entry in the log
 			// information will begin with this line. A CVS_FILE_DELIMITER is NOT

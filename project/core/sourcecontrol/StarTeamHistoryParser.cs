@@ -73,7 +73,7 @@ Author: (?<author_name>.*?) Date: (?<date_string>\d{01,2}/\d{1,2}/\d\d \d{1,2}:\
 		/// </summary>
 		/// <param name="starTeamLog"></param>
 		/// <returns></returns>
-		public Modification[] Parse(TextReader starTeamLog)
+		public Modification[] Parse(TextReader starTeamLog, DateTime from, DateTime to)
 		{
 			// Temporary holder of Modification objects
 			ArrayList modList = new ArrayList();

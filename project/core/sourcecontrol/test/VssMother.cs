@@ -14,6 +14,9 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test
 			}
 		}
 
+		public static readonly DateTime OLDEST_ENTRY = DateTime.Parse("2002/09/16 14:29:00");
+		public static readonly DateTime NEWEST_ENTRY = DateTime.Parse("2002/12/26 14:38:00");
+
 		#region VSS_LOGFILE_CONTENT
 		public static string VSS_LOGFILE_CONTENT 
 		{
