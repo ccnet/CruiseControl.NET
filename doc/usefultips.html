@@ -21,10 +21,10 @@ you are setting up such a scenario, you may want to follow the steps
 below to help get you going:</p>
 <ol>
   <li>First you need to decide whether you are going to use password or
-key based authentication. Using keys is more secure, but using
-passwords is easier to setup initially. If you are going to use keys,
-you'll need to upload your public key to the server - we don't discuss
-that here but if you are using SourceForge, see <a
+key based authentication. Using keys is more secure, but using passwords
+is easier to setup initially. If you are going to use keys, you'll need
+to upload your public key to the server - we don't discuss that here
+but if you are using SourceForge, see <a
  href="http://sourceforge.net/docman/display_doc.php?docid=766&amp;group_id=1">here</a>
 for some help.<br>
     <br>
@@ -75,13 +75,16 @@ project to be located, e.g. 'c:\fromcvs\myproject'<br>
   </li>
   <li>Check the project out from source control using the cvs client
 you are going to use with Cruise Control, e.g. as follows:<br>
-- cd \fromcvs\myproject<br>
+    <pre>
+- cd \fromcvs\myproject</pre>
+    <pre>
 - c:\Program Files\CruiseControl.NET\tools\cvswithplinkrsh -d:ext:<span
  style="font-weight: bold;">mysourcecontrol</span>:<span
  style="font-weight: bold;">/cvsroot/myproject</span> co <span
- style="font-weight: bold;">mymodule </span>(here 'mysourcecontrol'
-corresponds to the putty session you setup in step 3, and the other
-items in bold are the CVS details for your project.<br>
+ style="font-weight: bold;">mymodule </span></pre>
+(here 'mysourcecontrol' corresponds to the putty session you setup in
+step 3, and the other items in bold are the CVS details for your
+project.<br>
     <br>
   </li>
   <li>Now we can setup the CruiseControl.NET config file itself by
