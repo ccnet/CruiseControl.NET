@@ -67,32 +67,32 @@
                 <Reference
                     Name = "System"
                     AssemblyName = "System"
-                    HintPath = "C:\WINNT\Microsoft.NET\Framework\v1.0.3705\System.dll"
+                    HintPath = "C:\WINNT\Microsoft.NET\Framework\v1.1.4322\System.dll"
                 />
                 <Reference
                     Name = "System.Data"
                     AssemblyName = "System.Data"
-                    HintPath = "C:\WINNT\Microsoft.NET\Framework\v1.0.3705\System.Data.dll"
+                    HintPath = "C:\WINNT\Microsoft.NET\Framework\v1.1.4322\System.Data.dll"
                 />
                 <Reference
                     Name = "System.ServiceProcess"
                     AssemblyName = "System.ServiceProcess"
-                    HintPath = "C:\WINNT\Microsoft.NET\Framework\v1.0.3705\System.ServiceProcess.dll"
+                    HintPath = "C:\WINNT\Microsoft.NET\Framework\v1.1.4322\System.ServiceProcess.dll"
                 />
                 <Reference
                     Name = "System.XML"
                     AssemblyName = "System.Xml"
-                    HintPath = "C:\WINNT\Microsoft.NET\Framework\v1.0.3705\System.XML.dll"
+                    HintPath = "C:\WINNT\Microsoft.NET\Framework\v1.1.4322\System.XML.dll"
                 />
                 <Reference
                     Name = "System.Management"
                     AssemblyName = "System.Management"
-                    HintPath = "C:\WINNT\Microsoft.NET\Framework\v1.0.3705\System.Management.dll"
+                    HintPath = "C:\WINNT\Microsoft.NET\Framework\v1.1.4322\System.Management.dll"
                 />
                 <Reference
                     Name = "System.Configuration.Install"
                     AssemblyName = "System.Configuration.Install"
-                    HintPath = "C:\WINNT\Microsoft.NET\Framework\v1.0.3705\System.Configuration.Install.dll"
+                    HintPath = "C:\WINNT\Microsoft.NET\Framework\v1.1.4322\System.Configuration.Install.dll"
                 />
                 <Reference
                     Name = "ccnet.remote"
@@ -109,16 +109,16 @@
                     AssemblyName = "System.Runtime.Remoting"
                     HintPath = "..\..\..\..\WINDOWS\Microsoft.NET\Framework\v1.1.4322\System.Runtime.Remoting.dll"
                 />
-		<Reference
-		    Name = "nunit.framework"
-		    AssemblyName = "nunit.framework"
-		    HintPath = "..\..\lib\nunit.framework.dll"
+                <Reference
+                    Name = "nunit.framework"
+                    AssemblyName = "nunit.framework"
+                    HintPath = "..\..\lib\nunit.framework.dll"
                 />
                 <Reference
                     Name = "nmock"
                     AssemblyName = "nmock"
                     HintPath = "..\..\lib\nmock.dll"
-                />                
+                />
             </References>
         </Build>
         <Files>
@@ -154,9 +154,9 @@
                 />
                 <File
                     RelPath = "test\ServiceTest.cs"
-                    SubType = "Component"
+                    SubType = "Code"
                     BuildAction = "Compile"
-                />                
+                />
             </Include>
         </Files>
     </CSHARP>
