@@ -10,6 +10,9 @@
 !define PRODUCT_UNINST_ROOT_KEY "HKLM"
 !define PRODUCT_STARTMENU_REGVAL "NSIS:StartMenuDir"
 
+; Plug-ins
+!addplugindir install
+
 ; MUI 1.67 compatible ------
 !include "MUI.nsh"
 
@@ -24,6 +27,8 @@
 !insertmacro MUI_PAGE_LICENSE "deployed\license.txt"
 ; Components page
 !insertmacro MUI_PAGE_COMPONENTS
+; Add service page
+Page custom AdditionalConfiguration
 ; Directory page
 !insertmacro MUI_PAGE_DIRECTORY
 ; Start menu page
@@ -36,6 +41,8 @@ var ICONS_GROUP
 !insertmacro MUI_PAGE_STARTMENU Application $ICONS_GROUP
 ; Instfiles page
 !insertmacro MUI_PAGE_INSTFILES
+Page custom InstallService InstallService
+Page custom CreateVirtualDirectory CreateVirtualDirectory
 ; Finish page
 ;!define MUI_FINISHPAGE_RUN "$INSTDIR\Server\ccnet.exe"
 !insertmacro MUI_PAGE_FINISH
@@ -58,7 +65,10 @@ ShowUnInstDetails show
 Section "CruiseControl.NET Server" SEC01
   SetOutPath "$INSTDIR\server"
   SetOverwrite ifnewer
+  ;File /r /x *.config "deployed\server\*"
   File /r "deployed\server\*"
+
+  Call ExtractConfigFilesSafely
 
   !insertmacro MUI_STARTMENU_WRITE_BEGIN Application
   CreateDirectory "$SMPROGRAMS\$ICONS_GROUP"
@@ -66,6 +76,10 @@ Section "CruiseControl.NET Server" SEC01
   CreateShortCut "$DESKTOP\CruiseControl.NET.lnk" "$INSTDIR\server\ccnet.exe"
   !insertmacro MUI_STARTMENU_WRITE_END
 SectionEnd
+
+Function ExtractConfigFilesSafely
+  ;TODO: Only extract config files if we aren't going to clobber user-modified versions when upgrading.
+FunctionEnd
 
 Section "Web Dashboard" SEC02
   SetOutPath "$INSTDIR\webdashboard"
@@ -107,11 +121,48 @@ SectionEnd
 
 ; Section descriptions
 !insertmacro MUI_FUNCTION_DESCRIPTION_BEGIN
-  !insertmacro MUI_DESCRIPTION_TEXT ${SEC01} ""
-  !insertmacro MUI_DESCRIPTION_TEXT ${SEC02} ""
-  !insertmacro MUI_DESCRIPTION_TEXT ${SEC03} ""
+  !insertmacro MUI_DESCRIPTION_TEXT ${SEC01} "The core CruiseControl.NET server."
+  !insertmacro MUI_DESCRIPTION_TEXT ${SEC02} "The ASP.NET Web Dashboard for configuring and monitoring builds managed by CruiseControl.NET."
+  !insertmacro MUI_DESCRIPTION_TEXT ${SEC03} "The system tray applet for remotely monitoring and triggering builds managed by CruiseControl.NET."
 !insertmacro MUI_FUNCTION_DESCRIPTION_END
 
+; Installer functions
+Function .onInit
+  ;Extract InstallOptions INI files
+  !insertmacro MUI_INSTALLOPTIONS_EXTRACT_AS "install\AdditionalConfiguration.ini" "AdditionalConfiguration.ini"
+FunctionEnd
+
+LangString TEXT_IO_TITLE ${LANG_ENGLISH} "Additional Configuration"
+LangString TEXT_IO_SUBTITLE ${LANG_ENGLISH} "Configure the Windows Service and IIS virtual directory for CruiseControl.NET."
+
+Function AdditionalConfiguration
+  !insertmacro MUI_HEADER_TEXT "$(TEXT_IO_TITLE)" "$(TEXT_IO_SUBTITLE)"
+;  !insertmacro MUI_INSTALLOPTIONS_DISPLAY ".\install\AdditionalConfiguration.ini"
+  !insertmacro MUI_INSTALLOPTIONS_DISPLAY "AdditionalConfiguration.ini"
+FunctionEnd
+
+Var InstallService
+Function InstallService
+  !insertmacro MUI_INSTALLOPTIONS_READ $InstallService "AdditionalConfiguration.ini" "Field 1" "State"
+  Strcmp $InstallService "0" exit
+    nsSCM::QueryStatus /NOUNLOAD "CCService"
+    Pop $0
+    Pop $1
+    Strcmp $0 "error" installService
+      MessageBox MB_ICONINFORMATION|MB_OK \
+      "There is already a service with the name 'CCService' installed. The CruiseControl.NET service will need to be installed manually."
+      Return
+    installService:
+      nsSCM::Install /NOUNLOAD "CCService" "CruiseControl.NET Server" 16 3 "$INSTDIR\server\ccservice.exe" "" ""
+      Return
+  exit:
+FunctionEnd
+
+;Var CreateVirtualDirectory
+Function CreateVirtualDirectory
+  ;TODO: Actually create the virtual directory.
+  ;!insertmacro MUI_INSTALLOPTIONS_READ $CreateVirtualDirectory "AdditionalConfiguration.ini" "Field 2" "State"
+FunctionEnd
 
 Function un.onUninstSuccess
   HideWindow
@@ -124,6 +175,8 @@ Function un.onInit
 FunctionEnd
 
 Section Uninstall
+  Call un.InstallService
+  Call un.RemoveVirtualDirectory
   !insertmacro MUI_STARTMENU_GETFOLDER "Application" $ICONS_GROUP
 
   Delete "$SMPROGRAMS\$ICONS_GROUP\Uninstall.lnk"
@@ -138,3 +191,21 @@ Section Uninstall
   DeleteRegKey HKLM "${PRODUCT_DIR_REGKEY}"
   SetAutoClose true
 SectionEnd
+
+Function un.InstallService
+  nsSCM::QueryStatus /NOUNLOAD "CCService"
+  Pop $0
+  Pop $1
+  Strcmp $0 "error" exit
+    nsSCM::Stop /NOUNLOAD "CCService"
+    nsSCM::Remove /NOUNLOAD "CCService"
+    Pop $0
+    Strcmp $0 "success" exit
+      MessageBox MB_ICONEXCLAMATION|MB_OK "The CruiseControl.NET service could not be removed."
+  exit:
+FunctionEnd
+
+Function un.RemoveVirtualDirectory
+  ;TODO: Remove the 'ccnet' virtual directory. But what if the virt dir has been renamed since installation and another app
+  ; creates a 'ccnet'? Can a unique object id or handle for the virtual directory we create be stored in the registry?
+FunctionEnd

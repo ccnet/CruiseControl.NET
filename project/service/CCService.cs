@@ -32,24 +32,14 @@ namespace ThoughtWorks.CruiseControl.Service
 			get { return ConfigurationSettings.AppSettings["remoting"]; }
 		}
 
-		/// <summary>
-		/// Start the service
-		/// </summary>
 		protected override void OnStart(string[] args)
 		{
 			// Set working directory to service executable's home directory.
 			Directory.SetCurrentDirectory(AppDomain.CurrentDomain.BaseDirectory);
 
 			string configFile = GetConfigFilename();
-			FileInfo configFileInfo = (new FileInfo(configFile));
-			if (! configFileInfo.Exists)
-			{
-				EventLog.WriteEntry("CCService", string.Format("Config file {0} does not exist - exiting application", configFileInfo.FullName), EventLogEntryType.Error);
-				return;
-			}
-
-			server = new CruiseServerFactory().Create(UseRemoting(), configFile);
-			server.Start();
+			VerifyConfigFileExists(configFile);
+			CreateAndStartCruiseServer(configFile);
 		}
 
 		private string GetConfigFilename()
@@ -57,9 +47,23 @@ namespace ThoughtWorks.CruiseControl.Service
 			string appDirectory = AppDomain.CurrentDomain.BaseDirectory;
 			string defaultConfigFile = appDirectory + @"\ccnet.config";
 			string configFile = ConfigFileName;
-			if (configFile == null || configFile.Trim().Length == 0)
-				configFile = defaultConfigFile;
+			if (configFile == null || configFile.Trim().Length == 0) configFile = defaultConfigFile;
 			return configFile;
+		}
+		
+		private void VerifyConfigFileExists(string configFile)
+		{
+			FileInfo configFileInfo = new FileInfo(configFile);
+			if (!configFileInfo.Exists)
+			{
+				throw new Exception(string.Format("CruiseControl.NET configuration file {0} does not exist.", configFileInfo.FullName));
+			}			
+		}
+		
+		private void CreateAndStartCruiseServer(string configFile)
+		{
+			server = new CruiseServerFactory().Create(UseRemoting(), configFile);
+			server.Start();
 		}
 
 		private bool UseRemoting()
@@ -67,9 +71,6 @@ namespace ThoughtWorks.CruiseControl.Service
 			return (Remoting != null && Remoting.Trim().ToLower() == "on");
 		}
 
-		/// <summary>
-		/// Stop this service.
-		/// </summary>
 		protected override void OnStop()
 		{
 			server.Abort();
