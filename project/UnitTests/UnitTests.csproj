@@ -284,22 +284,12 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "Core\Triggers\ForceBuildIntervalTriggerTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
                     RelPath = "Core\Triggers\IntervalTriggerTest.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
                     RelPath = "Core\Triggers\MultipleTriggerTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Core\Triggers\PollingIntervalTriggerTest.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

@@ -1193,11 +1193,6 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "test\MockProject.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
                     RelPath = "test\ProcessResultFixture.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -1252,22 +1247,12 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "Triggers\ForceBuildIntervalTrigger.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
                     RelPath = "Triggers\IntervalTrigger.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
                     RelPath = "Triggers\MultipleTrigger.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Triggers\PollingIntervalTrigger.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

@@ -1,4 +1,5 @@
 using System;
+using Exortech.NetReflector;
 using NMock;
 using NUnit.Framework;
 using ThoughtWorks.CruiseControl.Core.Triggers;
@@ -23,6 +24,24 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Triggers
 		public void VerifyAll()
 		{
 			_mockDateTime.Verify();
+		}
+
+		[Test]
+		public void ShouldFullyPopulateFromReflector()
+		{
+			string xml = string.Format(@"<intervalTrigger seconds=""1"" buildCondition=""ForceBuild"" />");
+			trigger = (IntervalTrigger)NetReflector.Read(xml);
+			Assert.AreEqual(1, trigger.IntervalSeconds);
+			Assert.AreEqual(BuildCondition.ForceBuild, trigger.BuildCondition);
+		}
+
+		[Test]
+		public void ShouldDefaultPopulateFromReflector()
+		{
+			string xml = string.Format(@"<intervalTrigger />");
+			trigger = (IntervalTrigger)NetReflector.Read(xml);
+			Assert.AreEqual(IntervalTrigger.DefaultIntervalSeconds, trigger.IntervalSeconds);
+			Assert.AreEqual(BuildCondition.IfModificationExists, trigger.BuildCondition);
 		}
 
 		[Test]

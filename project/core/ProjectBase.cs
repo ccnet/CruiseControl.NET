@@ -13,7 +13,7 @@ namespace ThoughtWorks.CruiseControl.Core
 		private string _name;
 		private string _configuredWorkingDirectory;
 		private string _configuredArtifactDirectory;
-		private ITrigger[] triggers = new ITrigger[] { new PollingIntervalTrigger() };
+		private ITrigger[] triggers = new ITrigger[] { new IntervalTrigger() };
 
 		[ReflectorProperty("name")]
 		public virtual string Name
