@@ -1,7 +1,6 @@
 using System;
-using System.IO;
-using System.Collections;
 using System.Globalization;
+using System.IO;
 using Exortech.NetReflector;
 using ThoughtWorks.CruiseControl.Core.Util;
 
@@ -65,13 +64,8 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 		}
 
 		/// <summary>
-		/// Gets or sets whether this repository should be labeled.  Currently IGNORED.
+		/// Gets or sets whether this repository should be labeled.
 		/// </summary>
-		/// <remarks>
-		/// This was originally added to allow the user to avoid CCNETUNVERIFIEDxxx labels that resulted
-		/// from using VSS.  The CCNETUNVERIFIED problem has been solved on 20 April 2004, and this propery should
-		/// eventually be removed.  It is kept here for API downward compatability.
-		/// </remarks>
 		[ReflectorProperty("applyLabel", Required = false)]
 		public bool ApplyLabel = false;
 
@@ -82,19 +76,25 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 
 		public override void LabelSourceControl(string label, DateTime timeStamp)
 		{
-			Execute(CreateLabelProcessInfo(label, timeStamp));
-			_lastTempLabel = null;
+			if ( ApplyLabel )
+			{
+				Execute(CreateLabelProcessInfo(label, timeStamp));
+				_lastTempLabel = null;
+			}
 		}
 
 		public void CreateTemporaryLabel()
 		{
-			_lastTempLabel = CreateTemporaryLabelName( DateTime.Now );
-			LabelSourceControl( _lastTempLabel );
+			if ( ApplyLabel )
+			{
+				_lastTempLabel = CreateTemporaryLabelName( DateTime.Now );
+				LabelSourceControl( _lastTempLabel );
+			}
 		}
 
 		public void DeleteTemporaryLabel()
 		{
-			if ( WasTempLabelApplied() )
+			if ( ApplyLabel && WasTempLabelApplied() )
 			{
 				DeleteLatestLabel();
 			}
@@ -106,7 +106,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			return CreateProcessInfo(BuildHistoryProcessInfoArgs(from, until));
 		}
 
-		public ProcessInfo CreateLabelProcessInfo(string label)
+		public virtual ProcessInfo CreateLabelProcessInfo(string label)
 		{
 			return CreateProcessInfo(string.Format(LABEL_COMMAND_FORMAT_NOTIMESTAMP, Project, label, Username, Password));
 		}

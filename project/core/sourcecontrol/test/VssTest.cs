@@ -1,10 +1,9 @@
+using System;
+using System.Globalization;
 using Exortech.NetReflector;
 using NMock;
 using NMock.Constraints;
 using NUnit.Framework;
-using System;
-using System.Globalization;
-using System.IO;
 using ThoughtWorks.CruiseControl.Core.Util;
 
 namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test
@@ -180,12 +179,46 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test
 			vss.GetModifications(DateTime.Now, DateTime.Now);
 		}
 
+		[Test]
+		public void LabelNotAppliedByDefault()
+		{
+			PseudoMockVss vss = new PseudoMockVss();
+
+			vss.CreateTemporaryLabel();
+
+			AssertEquals( "CreateLabelProcessInfo should not have been invoked", 0, vss.methodInvoked );
+		}
+
+		[Test]
+		public void LabelAppliedIfApplyLabelTrue()
+		{
+			PseudoMockVss vss = new PseudoMockVss();
+			vss.ApplyLabel = true;
+
+			vss.CreateTemporaryLabel();
+
+			AssertEquals( "CreateLabelProcessInfo should have been invoked once", 1, vss.methodInvoked );
+		}
+
 		private Vss CreateVss()
 		{
 			Vss vss = new Vss();
 			NetReflector.Read(VSS_XML, vss);
 			vss.CultureInfo = CultureInfo.InvariantCulture;
 			return vss;
+		}
+
+		private class PseudoMockVss : Vss
+		{
+			public override ProcessInfo CreateLabelProcessInfo(string label)
+			{
+				methodInvoked++;
+				// > cmd.exe /C "exit 0"
+				// this should return immediately with a zero exit status
+				return new ProcessInfo( "cmd.exe", "/C \"exit 0\"" );
+			}
+
+			internal int methodInvoked = 0;
 		}
 	}
 }
