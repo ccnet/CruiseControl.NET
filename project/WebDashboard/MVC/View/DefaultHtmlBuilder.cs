@@ -1,7 +1,7 @@
-using System;
 using System.Web.UI;
 using System.Web.UI.HtmlControls;
 using System.Web.UI.WebControls;
+using ThoughtWorks.CruiseControl.WebDashboard.MVC.Cruise;
 
 namespace ThoughtWorks.CruiseControl.WebDashboard.MVC.View
 {
@@ -84,7 +84,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.MVC.View
 		public Button CreateButton(string id, string text)
 		{
 			Button button = new Button();
-			button.ID = ConfiguredActionFactory.ACTION_PARAMETER_PREFIX + id;
+			button.ID = CruiseActionFactory.ACTION_PARAMETER_PREFIX + id;
 			button.Text = text;
 			return button;
 		}

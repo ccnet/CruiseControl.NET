@@ -11,7 +11,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard
 
 		private void Page_Load(object sender, EventArgs e)
 		{
-			RequestController controller = new RequestController(new ConfiguredActionFactory(new CruiseConfiguredActionFactoryConfiguration(), new CruiseActionInstantiator()));
+			RequestController controller = new RequestController(new CruiseActionFactory());
 			controller.Do(ParentControl, new NameValueCollectionRequest(Request.Params));
 		}
 

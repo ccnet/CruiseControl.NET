@@ -27,7 +27,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.MVC.Cruise
 			table.Rows.Add(TR(TD(), TD("* denotes currently mandatory fields")));
 			if (model.AllowSave)
 			{
-				table.Rows.Add(TR(TD(Button("AddProjectSave", "Save")), TD()));
+				table.Rows.Add(TR(TD(Button(CruiseActionFactory.ADD_PROJECT_SAVE_ACTION_NAME, "Save")), TD()));
 			}
 			return table;
 		}

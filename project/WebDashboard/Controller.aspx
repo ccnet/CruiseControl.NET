@@ -5,7 +5,6 @@
 	</HEAD>
 	<body>
 		<form runat="server">
-			<P><STRONG><FONT color="#ff3333">This page is in development and not yet complete!</FONT></STRONG></P>
 			<div id="ParentControl" runat="server" />
 		</form>
 	</body>

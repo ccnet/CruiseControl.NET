@@ -298,6 +298,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Dashboard\ActionSpecifierWithName.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Dashboard\Build.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -353,6 +358,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Dashboard\IActionSpecifier.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Dashboard\IBuildNameFormatter.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -394,6 +404,11 @@
                 />
                 <File
                     RelPath = "Dashboard\LocalCruiseManagerAggregator.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Dashboard\NullActionSpecifier.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -571,12 +586,12 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "MVC\Cruise\CruiseActionInstantiator.cs"
+                    RelPath = "MVC\Cruise\CruiseActionFactory.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "MVC\Cruise\CruiseConfiguredActionFactoryConfiguration.cs"
+                    RelPath = "MVC\Cruise\DefaultCruiseAction.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -587,6 +602,11 @@
                 />
                 <File
                     RelPath = "MVC\Cruise\SaveNewProjectAction.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "MVC\Cruise\UnknownActionAction.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

@@ -38,6 +38,20 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 		}
 
 		[Test]
+		public void ShouldBuildUrlAddingCorrectlyFormattedAction()
+		{
+			// Setup
+			pathMapperMock.ExpectAndReturn("GetAbsoluteURLForRelativePath", "http://local/foo.htm", "foo.htm");
+			
+			// Execute
+			string url = urlBuilder.BuildUrl("foo.htm", new ActionSpecifierWithName("myAction"));
+
+			// Verify
+			AssertEquals("http://local/foo.htm?_action_myAction=true", url);
+			VerifyAll();
+		}
+
+		[Test]
 		public void IfPartialQueryStringSpecifiedThenAddItToEndOfUrl()
 		{
 			// Setup
@@ -48,6 +62,20 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 
 			// Verify
 			AssertEquals("http://local/foo.htm?myparam=myvalue", url);
+			VerifyAll();
+		}
+
+		[Test]
+		public void ShouldBuildUrlWithActionAndQueryString()
+		{
+			// Setup
+			pathMapperMock.ExpectAndReturn("GetAbsoluteURLForRelativePath", "http://local/foo.htm", "foo.htm");
+			
+			// Execute
+			string url = urlBuilder.BuildUrl("foo.htm", new ActionSpecifierWithName("myAction"), "myparam=myvalue");
+
+			// Verify
+			AssertEquals("http://local/foo.htm?_action_myAction=true&amp;myparam=myvalue", url);
 			VerifyAll();
 		}
 
@@ -65,6 +93,20 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 			VerifyAll();
 		}
 		
+		[Test]
+		public void ShouldBuildServerUrlAddingCorrectlyFormattedAction()
+		{
+			// Setup
+			pathMapperMock.ExpectAndReturn("GetAbsoluteURLForRelativePath", "http://local/foo.htm", "foo.htm");
+			
+			// Execute
+			string url = urlBuilder.BuildServerUrl("foo.htm", new ActionSpecifierWithName("myAction"), "myserver");
+
+			// Verify
+			AssertEquals("http://local/foo.htm?_action_myAction=true&amp;server=myserver", url);
+			VerifyAll();
+		}
+
 		[Test]
 		public void ShouldBuildProjectUrl()
 		{

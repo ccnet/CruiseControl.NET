@@ -1,9 +1,10 @@
-using System;
 using System.Web.UI;
 using System.Web.UI.HtmlControls;
 using NMock;
+using NMock.Constraints;
 using NUnit.Framework;
 using ThoughtWorks.CruiseControl.WebDashboard.Dashboard;
+using ThoughtWorks.CruiseControl.WebDashboard.MVC.Cruise;
 using ThoughtWorks.CruiseControl.WebDashboard.MVC.View;
 
 namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
@@ -39,10 +40,10 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 		public void ShouldReturnLinkToAddProjectForFarmView()
 		{
 			// Setup
-			urlBuilderMock.ExpectAndReturn("BuildUrl", "returnedurl", "controller.aspx");
+			urlBuilderMock.ExpectAndReturn("BuildUrl", "returnedurl", "controller.aspx", new PropertyIs("ActionName", CruiseActionFactory.ADD_PROJECT_DISPLAY_ACTION_NAME));
 
 			// Execute
-			HtmlTable table = (HtmlTable) viewBuilder.GetFarmSideBar();
+			HtmlTable table = viewBuilder.GetFarmSideBar();
 			HtmlAnchor anchor = new HtmlAnchor();
 			anchor.HRef = "returnedurl";
 			anchor.InnerHtml = "Add Project";
@@ -57,7 +58,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 		public void ShouldReturnLinkToAddProjectAndServerLogForServerView()
 		{
 			// Setup
-			urlBuilderMock.ExpectAndReturn("BuildServerUrl", "returnedurl1", "ViewServerLog.aspx", "myServer");
+			urlBuilderMock.ExpectAndReturn("BuildServerUrl", "returnedurl1", "ViewServerLog.aspx", new PropertyIs("ActionName", CruiseActionFactory.ADD_PROJECT_DISPLAY_ACTION_NAME), "myServer");
 			urlBuilderMock.ExpectAndReturn("BuildServerUrl", "returnedurl2", "controller.aspx", "myServer");
 			HtmlAnchor expectedAnchor1 = new HtmlAnchor();
 			expectedAnchor1.HRef = "returnedurl1";
@@ -67,7 +68,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 			expectedAnchor2.InnerHtml = "Add Project";
 
 			// Execute
-			HtmlTable table = (HtmlTable) viewBuilder.GetServerSideBar("myServer");
+			HtmlTable table = viewBuilder.GetServerSideBar("myServer");
 
 			Assert(TableContains(table, expectedAnchor1));
 			Assert(TableContains(table, expectedAnchor2));
@@ -88,7 +89,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 			expectedAnchor1.InnerHtml = "Latest";
 
 			// Execute
-			HtmlTable table = (HtmlTable) viewBuilder.GetProjectSideBar("myServer", "myProject");
+			HtmlTable table = viewBuilder.GetProjectSideBar("myServer", "myProject");
 
 			Assert(TableContains(table, expectedAnchor1));
 			

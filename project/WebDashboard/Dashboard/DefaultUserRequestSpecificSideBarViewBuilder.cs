@@ -1,5 +1,6 @@
 using System.Web.UI;
 using System.Web.UI.HtmlControls;
+using ThoughtWorks.CruiseControl.WebDashboard.MVC.Cruise;
 using ThoughtWorks.CruiseControl.WebDashboard.MVC.View;
 
 namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
@@ -21,13 +22,13 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 		public HtmlTable GetFarmSideBar()
 		{
 			return Table(
-				TR( TD( A("Add Project", urlBuilder.BuildUrl("controller.aspx")))));
+				TR( TD( A("Add Project", urlBuilder.BuildUrl("controller.aspx", new ActionSpecifierWithName(CruiseActionFactory.ADD_PROJECT_DISPLAY_ACTION_NAME))))));
 		}
 
 		public HtmlTable GetServerSideBar(string serverName)
 		{
 			return Table(
-				TR( TD( A("View Server Log", urlBuilder.BuildServerUrl("ViewServerLog.aspx", serverName)))),
+				TR( TD( A("View Server Log", urlBuilder.BuildServerUrl("ViewServerLog.aspx", new ActionSpecifierWithName(CruiseActionFactory.ADD_PROJECT_DISPLAY_ACTION_NAME), serverName)))),
 				TR( TD( A("Add Project", urlBuilder.BuildServerUrl("controller.aspx", serverName)))));
 		}
 
