@@ -175,14 +175,14 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers.Test
 		public void TestGetFilenameForFailedBuild()
 		{
 			IntegrationResult result = CreateIntegrationResult(IntegrationStatus.Failure, true);
-			string expected = "log20020203000000.xml";
+			string expected = "log00010101000000.xml";
 			AssertEquals(expected, _publisher.GetFilename(result));
 		}
 		
 		public void TestGetFilenameForGoodBuild()
 		{
 			IntegrationResult result = CreateIntegrationResult(IntegrationStatus.Success, true);
-			string expected = "log20020203000000Lbuild.1.xml";
+			string expected = "log00010101000000Lbuild.1.xml";
 			AssertEquals(expected, _publisher.GetFilename(result));
 		}
 		

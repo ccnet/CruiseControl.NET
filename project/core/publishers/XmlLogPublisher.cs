@@ -75,11 +75,11 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
 		
 		public string GetFilename(IntegrationResult result)
 		{
-			DateTime lastModDate = result.LastModificationDate;
+			DateTime startTime = result.StartTime;
 			if (result.Succeeded)
-				return LogFileUtil.CreateSuccessfulBuildLogFileName(lastModDate, result.Label);
+				return LogFileUtil.CreateSuccessfulBuildLogFileName(startTime, result.Label);
 			else 
-				return LogFileUtil.CreateFailedBuildLogFileName(lastModDate);
+				return LogFileUtil.CreateFailedBuildLogFileName(startTime);
 		}
 
 		/// <summary>
