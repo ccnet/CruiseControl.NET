@@ -22,15 +22,7 @@ namespace ThoughtWorks.CruiseControl.Web
 
 		private void Page_Load(object sender, System.EventArgs e)
 		{
-			try
-			{
-				string logfile = WebUtil.ResolveLogFile(Context);
-				BodyArea.InnerHtml = LogFileLister.Transform(logfile, WebUtil.GetXslFilename("timing.xsl", Request));
-			}
-			catch(CruiseControlException ex)
-			{
-				BodyArea.InnerHtml += new HtmlExceptionFormatter(ex).ToString();
-			}
+			BodyArea.InnerHtml = new PageTransformer(WebUtil.ResolveLogFile(Context),"timing.xsl").LoadPageContent();
 		}
 		
 		#region Web Form Designer generated code

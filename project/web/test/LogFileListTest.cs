@@ -74,47 +74,7 @@ namespace ThoughtWorks.CruiseControl.Web.Test
 			AssertEquals("log20030507042535.xml", LogFileLister.GetCurrentFilename(new DirectoryInfo(_tempFolder)));
 		}
 		
-		public void TestTransform()
-		{
-			string logfile = TempFileUtil.CreateTempXmlFile(TestFolder, "samplelog.xml", TestData.LogFileContents);
-			string xslfile = TempFileUtil.CreateTempXmlFile(TestFolder, "samplestylesheet.xsl", TestData.StyleSheetContents);
-
-			string output = LogFileLister.Transform(logfile, xslfile);
-			AssertNotNull(output);
-			Assert("Transform returned no data", ! String.Empty.Equals(output));
-		}
-
-		[ExpectedException(typeof(CruiseControlException))]
-		public void TestTransform_LogfileMissing()
-		{
-			string logfile = "nosuchlogfile";
-			string xslfile = XslFileGood;				
-			string output = LogFileLister.Transform(logfile, xslfile);
-		}
-
-		[ExpectedException(typeof(CruiseControlException))]
-		public void TestTransform_logfileBadFormat()
-		{
-			string logfile = LogFileBadFormat;
-			string xslfile = XslFileGood;
-			LogFileLister.Transform(logfile, xslfile);
-		}
-
-		[ExpectedException(typeof(CruiseControlException))]
-		public void TestTransform_stylesheetMissing()
-		{
-			string logfile = LogFileGood;
-			string xslfile = "nosuchstylefile";
-			LogFileLister.Transform(logfile, xslfile);			
-		}
-
-		[ExpectedException(typeof(CruiseControlException))]
-		public void TestTransform_stylesheetBadFormat()
-		{
-			string logfile = LogFileGood;
-			string xslfile = XslFileBadFormat;
-			LogFileLister.Transform(logfile, xslfile);			
-		}
+		
 
 		public void TestInitAdjacentAnchors_NoLogFiles()
 		{
@@ -136,36 +96,5 @@ namespace ThoughtWorks.CruiseControl.Web.Test
 			AssertEquals("Next link set", String.Empty, next.HRef);
 		}
 
-		private string LogFileGood
-		{
-			get 
-			{
-				return TempFileUtil.CreateTempXmlFile(
-					  TestFolder, "samplelog.xml", TestData.LogFileContents); }
-		}
-
-		private string LogFileBadFormat
-		{
-			get 
-			{
-				return  TempFileUtil.CreateTempXmlFile(
-					  TestFolder, "samplelog.xsl", @"<i am so bad it's almost good & so is my friend"); }
-		}
-
-		private string XslFileGood
-		{
-			get 
-			{
-				return TempFileUtil.CreateTempXmlFile(
-					  TestFolder, "samplestylesheet.xsl", TestData.StyleSheetContents); }
-		}
-
-		private string XslFileBadFormat
-		{
-			get 
-			{
-				return  TempFileUtil.CreateTempXmlFile(
-					  TestFolder, "samplestylesheet.xsl", @"<xsl:i am so bad it hurts"); }
-		}
 	}
 }

@@ -8,7 +8,7 @@ namespace ThoughtWorks.CruiseControl.Core.Util.Test
 	public class HtmlExceptionFormatterTest : CustomAssertion
 	{
 		[Test]
-		public void FormatShouldReplaceNewLinesWithBrTags()
+		public void FormatShouldReplaceNewLinesWithBRTags()
 		{
 			HtmlExceptionFormatter formatter  = new HtmlExceptionFormatter(new Exception("foo"+Environment.NewLine+"Bar"));
 		    string formattedString = formatter.ToString();

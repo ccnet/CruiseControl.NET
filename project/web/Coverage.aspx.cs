@@ -11,20 +11,20 @@ using System.Web.SessionState;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 using System.Web.UI.HtmlControls;
-using System.Xml;
+
 using ThoughtWorks.CruiseControl.Core;
 using ThoughtWorks.CruiseControl.Util;
 
 namespace ThoughtWorks.CruiseControl.Web
 {
-	public class FxCop : System.Web.UI.Page
+	public class Coverage : System.Web.UI.Page
 	{
 		protected System.Web.UI.WebControls.Label results;
 		protected HtmlGenericControl BodyArea;
 
 		private void Page_Load(object sender, System.EventArgs e)
 		{
-			BodyArea.InnerHtml = new PageTransformer(WebUtil.ResolveLogFile(Context),"FxCopReport.xsl").LoadPageContent();
+			BodyArea.InnerHtml = new PageTransformer(WebUtil.ResolveLogFile(Context),"Ncover.xsl").LoadPageContent();
 		}
 
 		#region Web Form Designer generated code

@@ -87,45 +87,5 @@ namespace ThoughtWorks.CruiseControl.Web
 			return (filenames.Length == 0) ? null : filenames[filenames.Length - 1];
 		}
 
-		public static string Transform(string logfile, string xslfile)
-		{
-			// todo: error handling for:
-			// 1. missing file
-			// 2. bad xml in log file - raises also point of: should check that our writer has not been duped into writing bad xml (eg. cvs comment has <foo></moo>)
-			if (! File.Exists(logfile))
-			{
-				throw new CruiseControlException(string.Format("Logfile not found: {0}", logfile));
-			}
-			try
-			{		
-				XslTransform transform = new XslTransform();
-				LoadStylesheet(transform, xslfile);
-				XmlReader reader = transform.Transform(new XPathDocument(logfile), null); 
-
-				XmlDocument output = new XmlDocument();
-				output.Load(reader);
-				return output.OuterXml;
-			}
-			catch(XmlException ex)
-			{
-				throw new CruiseControlException("Unable to execute transform: " + xslfile, ex);
-			}
-		}
-
-		private static void LoadStylesheet(XslTransform transform, string xslfile)
-		{
-			try
-			{
-				transform.Load(xslfile);
-			}
-			catch(FileNotFoundException)
-			{
-				throw new CruiseControlException(string.Format("XSL stylesheet file not found: {0}", xslfile));
-			}
-			catch(XmlException ex)
-			{
-				throw new CruiseControlException("Unable to load transform: " + xslfile, ex);
-			}
-		}
 	}
 }
