@@ -833,67 +833,12 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "sourcecontrol\test\CvsHistoryParserTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "sourcecontrol\test\CvsMother.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
                     RelPath = "sourcecontrol\test\CvsTest.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "sourcecontrol\test\FileSourceControlTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "sourcecontrol\test\FilteredSourceControlTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
                     RelPath = "sourcecontrol\test\MockSourceControl.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "sourcecontrol\test\ModificationMother.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "sourcecontrol\test\ModificationTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "sourcecontrol\test\MultiSourceControlTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "sourcecontrol\test\PathFilterTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "sourcecontrol\test\ProcessSourceControlTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "sourcecontrol\test\PvcsHistoryParserTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "sourcecontrol\test\PvcsMother.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -918,36 +863,6 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "sourcecontrol\test\SvnHistoryParserTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "sourcecontrol\test\SvnTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "sourcecontrol\test\VaultHistoryParserTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "sourcecontrol\test\VaultTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "sourcecontrol\test\ViewCVSBuilderTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "sourcecontrol\test\VssApplyLabelTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
                     RelPath = "sourcecontrol\test\VssHistoryParserTest.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -959,11 +874,6 @@
                 />
                 <File
                     RelPath = "sourcecontrol\test\VssTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "sourcecontrol\test\WebSVNBuilderTest.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -1033,17 +943,7 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "test\CruiseServerTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
                     RelPath = "test\FileMother.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "test\IntegrationRequestQueueTest.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -1053,22 +953,7 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "test\IntegrationResultManagerTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
                     RelPath = "test\IntegrationResultMother.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "test\IntegrationResultTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "test\LogFileTest.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -1078,17 +963,7 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "test\ProjectIntegratorTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
                     RelPath = "test\ProjectTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "test\RemoteCruiseServerTest.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -1108,16 +983,6 @@
                 />
                 <File
                     RelPath = "test\TraceListenerBackup.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "test\WorkflowResultTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "test\WorkflowTest.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

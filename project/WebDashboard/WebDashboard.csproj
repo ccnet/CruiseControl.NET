@@ -964,7 +964,6 @@
                     RelPath = "templates\TopMenu.vm"
                     BuildAction = "None"
                 />
-                <Folder RelPath = "test\" />
                 <File
                     RelPath = "xsl\compile.xsl"
                     Link = "..\xsl\compile.xsl"
