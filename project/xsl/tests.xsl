@@ -40,13 +40,13 @@
 					<td class="yellow-sectionheader" colspan="3" valign="top">
 						<xsl:choose>
 							<xsl:when test="$failure.count > 0">
-								<img src="images\fxcop-critical-error.gif"/>
+								<img src="images/fxcop-critical-error.gif"/>
 							</xsl:when>
 							<xsl:when test="$ignored.count > 0">
-								<img src="images\fxcop-error.gif"/>
+								<img src="images/fxcop-error.gif"/>
 							</xsl:when>
 							<xsl:otherwise>
-								<img src="images\check.jpg" width="16" height="16"/>
+								<img src="images/check.jpg" width="16" height="16"/>
 							</xsl:otherwise>
 						</xsl:choose>
 				
