@@ -10,5 +10,6 @@ Animate icon to display server activity
 - checking for mods
 - building
 - sleeping
+Modify StatusMonitor to raise events when server activity changes
 
 put link http://www.microsoft.com/msagent/downloads/user.asp in docs somewhere
