@@ -58,6 +58,7 @@ namespace tw.ccnet.core
 			set { _endTime = value; }
 		}
 
+		[XmlIgnore]
 		public string Output
 		{
 			get { return _output; }
@@ -162,8 +163,7 @@ namespace tw.ccnet.core
 				&& this.Status == other.Status
 				&& this.Label == other.Label
 				&& this.StartTime == other.StartTime
-				&& this.EndTime == other.EndTime
-				&& this.Output == other.Output;
+				&& this.EndTime == other.EndTime;
 				// && this.ExceptionResult == other.ExceptionResult;
 		}
 
