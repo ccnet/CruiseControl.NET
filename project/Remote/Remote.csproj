@@ -145,6 +145,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "IRemotingService.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "ITrigger.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -171,6 +176,11 @@
                 />
                 <File
                     RelPath = "ProjectStatus.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "RemotingServiceAdapter.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

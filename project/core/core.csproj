@@ -514,6 +514,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "publishers\ForceBuildPublisher.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "publishers\HtmlDetailsMessageBuilder.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -595,6 +600,11 @@
                 />
                 <File
                     RelPath = "publishers\test\ExecutablePublisherTest.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "publishers\test\ForceBuildPublisherTest.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
