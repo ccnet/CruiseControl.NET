@@ -659,6 +659,16 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "sourcecontrol\Mks.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "sourcecontrol\MksHistoryParser.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "sourcecontrol\Modification.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
