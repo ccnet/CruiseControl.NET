@@ -465,7 +465,7 @@ namespace tw.ccnet.remote.monitor
 
 		void contextMenu_Popup(object sender, System.EventArgs e)
 		{
-			mnuForceBuild.Enabled (statusMonitor.ProjectStatus.Activity==ProjectActivity.Sleeping);
+			mnuForceBuild.Enabled = (statusMonitor.ProjectStatus.Activity==ProjectActivity.Sleeping);
 		}
 
 		#endregion
