@@ -9,22 +9,25 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 	{
 		private ProcessExecutor _executor;
 		private IHistoryParser _historyParser;
-	    public ProcessSourceControl(IHistoryParser historyParser) : this(historyParser,new ProcessExecutor()) { }
 
-	    public ProcessSourceControl(IHistoryParser histParser, ProcessExecutor executor)
+		public ProcessSourceControl(IHistoryParser historyParser) : this(historyParser, new ProcessExecutor())
 		{
-			_executor=executor;
-			_historyParser=histParser;
+		}
+
+		public ProcessSourceControl(IHistoryParser histParser, ProcessExecutor executor)
+		{
+			_executor = executor;
+			_historyParser = histParser;
 		}
 
 		// todo: make configurable
 		public int Timeout
 		{
-			get { return 30000; }
+			get { return 600000; }
 		}
 
-
 		public abstract ProcessInfo CreateHistoryProcessInfo(DateTime from, DateTime to);
+
 		public abstract ProcessInfo CreateLabelProcessInfo(string label, DateTime timeStamp);
 
 		public bool ShouldRun(IntegrationResult result)
@@ -44,7 +47,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			return ParseModifications(new StringReader(result.StandardOutput), from, to);
 		}
 
-		public void LabelSourceControl(string label, DateTime timeStamp) 
+		public void LabelSourceControl(string label, DateTime timeStamp)
 		{
 			ProcessInfo processInfo = CreateLabelProcessInfo(label, timeStamp);
 			_executor.Timeout = Timeout;
@@ -57,7 +60,13 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			ProcessResult result = _executor.Execute(processInfo);
 
 			// check for stderr
-			if (result.HasError) throw new CruiseControlException(string.Format("Error: {0}", result.StandardError));
+			if (result.HasError)
+				throw new CruiseControlException(string.Format("Error: {0}", result.StandardError));
+			else if (result.TimedOut)
+				throw new CruiseControlException("Source control operation has timed out.");
+			else if (result.StandardOutput == null)
+				throw new CruiseControlException("Standard output is null, but no error was produced");
+
 			return result;
 		}
 

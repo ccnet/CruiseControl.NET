@@ -155,6 +155,28 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test
 			vss.GetModifications(DateTime.Now, DateTime.Now);
 		}
 
+		[Test, ExpectedException(typeof(CruiseControlException))]
+		public void ShouldFailWhenStandardOutputIsNull()
+		{
+			Mock mockProcessExecutor = new DynamicMock(typeof(ProcessExecutor));
+			mockProcessExecutor.ExpectAndReturn("Execute", new ProcessResult(null, null, 1, false), new NMock.Constraints.IsAnything());
+			
+			Vss vss = new Vss(new VssHistoryParser(), (ProcessExecutor)mockProcessExecutor.MockInstance);
+			vss.Executable = "foo";
+			vss.GetModifications(DateTime.Now, DateTime.Now);
+		}
+
+		[Test, ExpectedException(typeof(CruiseControlException))]
+		public void ShouldFailIfProcessTimesOut()
+		{
+			Mock mockProcessExecutor = new DynamicMock(typeof(ProcessExecutor));
+			mockProcessExecutor.ExpectAndReturn("Execute", new ProcessResult("x", null, 1, true), new NMock.Constraints.IsAnything());
+			
+			Vss vss = new Vss(new VssHistoryParser(), (ProcessExecutor)mockProcessExecutor.MockInstance);
+			vss.Executable = "foo";
+			vss.GetModifications(DateTime.Now, DateTime.Now);
+		}
+
 		private Vss CreateVss()
 		{
 			Vss vss = new Vss();

@@ -111,8 +111,6 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 		/// </summary>
 		/// <param name="date"></param>
 		/// <returns>Date string formatted for the specified locale as expected by the VSS command-line.</returns>
-
-
 		internal string FormatCommandDate(DateTime date)
 		{
 			return string.Concat(date.ToString("d", CultureInfo), ";", date.ToString("t", CultureInfo)).Replace(" ", string.Empty).TrimEnd('M', 'm');

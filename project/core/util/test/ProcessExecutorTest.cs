@@ -62,6 +62,8 @@ operable program or batch file.", result.StandardError.Trim());
 				ProcessResult result = executor.Execute(filename, null);
 
 				Assert("process should have timed out", result.TimedOut);
+				AssertNull(result.StandardOutput);
+				AssertNull(result.StandardError);
 			}
 			finally
 			{
