@@ -97,6 +97,18 @@
 
     </target>
 
+	<!-- Used for manually testing the webapp. Don't include this in an automated build
+		unless we copy files to distribute to a different location -->
+	<target name="test-web" depends="deploy.webapp">
+		<copy todir="${webapp.dir}">
+			<fileset basedir="project\WebTest">
+				<includes name="**\*" />
+				<excludes name="obj\**\*" />
+				<excludes name="bin\**\*" />
+			</fileset>
+		</copy>
+	</target>
+
 	<!-- DEPLOY -->
 	<target name="deploy" depends="deploy.builder, deploy.cctray, deploy.webapp, deploy.webdashboard" />
 	
@@ -237,6 +249,13 @@
 				<excludes name="**\CVS\**\*" />
 			</fileset>
 		</zip>
+	</target>
+	
+	<target name="reporting" depends="compile">
+		<mkdir dir="build\fxcop" />
+		<exec program="tools\fxcop\fxcopcmd.exe" 
+			  commandline="/p:tools\fxcop\ccnet.fxcop /o:build\fxcop\ccnet-fxcop.xml"/>
+	
 	</target>
 	
 	<!-- FOR RUNNING CCNET AGAINST ITSELF -->
