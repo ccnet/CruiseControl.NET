@@ -758,11 +758,6 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "sourcecontrol\test\VssFunctionalTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
                     RelPath = "sourcecontrol\test\VssHistoryParserTest.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
