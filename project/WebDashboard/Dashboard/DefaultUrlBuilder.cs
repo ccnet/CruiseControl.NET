@@ -1,4 +1,3 @@
-using System;
 using ThoughtWorks.CruiseControl.WebDashboard.IO;
 using ThoughtWorks.CruiseControl.WebDashboard.MVC.Cruise;
 
