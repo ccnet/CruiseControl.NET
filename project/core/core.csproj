@@ -249,12 +249,22 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "builder\CommandLineBuilder.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "builder\IBuilder.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
                     RelPath = "builder\NAntBuilder.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "builder\test\CommandLineBuilderTest.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

@@ -47,8 +47,7 @@ namespace ThoughtWorks.CruiseControl.Core.Builder
 
 		/// <summary>
 		/// Gets and sets the maximum number of seconds that the build may take.  If the build process takes longer than
-		/// this period, it will be killed.  Specify this value as zero (or equivalently, omit it from the Xml configuration)
-		/// to disable process timeouts.
+		/// this period, it will be killed.  Specify this value as zero to disable process timeouts.
 		/// </summary>
 		[ReflectorProperty("buildTimeoutSeconds", Required = false)] 
 		public int BuildTimeoutSeconds = DEFAULT_BUILD_TIMEOUT;
