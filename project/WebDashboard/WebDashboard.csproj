@@ -17,7 +17,7 @@
                 DelaySign = "false"
                 OutputType = "Library"
                 PreBuildEvent = ""
-                PostBuildEvent = 'copy "$(ProjectDir)test\test.config" "$(TargetPath).config"'
+                PostBuildEvent = ""
                 RootNamespace = "ThoughtWorks.CruiseControl.WebDashboard"
                 RunPostBuildEvent = "OnBuildSuccess"
                 StartupObject = ""
@@ -343,11 +343,6 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "Dashboard\DefaultBuildUrlGenerator.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
                     RelPath = "Dashboard\DefaultUrlBuilder.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -384,11 +379,6 @@
                 />
                 <File
                     RelPath = "Dashboard\IBuildRetrieverForRequest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Dashboard\IBuildUrlGenerator.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -686,26 +676,7 @@
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
-                <File
-                    RelPath = "Plugins\SiteTemplatePlugin\DefaultBuildLister.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Plugins\SiteTemplatePlugin\IBuildLister.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Plugins\SiteTemplatePlugin\SiteTemplate.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Plugins\SiteTemplatePlugin\SiteTemplateResults.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
+                <Folder RelPath = "Plugins\SiteTemplatePlugin\" />
                 <File
                     RelPath = "ServerConnection\IBuildSpecifier.cs"
                     SubType = "Code"
@@ -751,15 +722,7 @@
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
-                <File
-                    RelPath = "test\test.config"
-                    BuildAction = "None"
-                />
-                <File
-                    RelPath = "test\TestData.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
+                <Folder RelPath = "test\" />
                 <File
                     RelPath = "xsl\compile.xsl"
                     BuildAction = "Content"

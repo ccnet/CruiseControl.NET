@@ -244,11 +244,6 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "WebDashboard\Dashboard\DefaultBuildUrlGeneratorTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
                     RelPath = "WebDashboard\Dashboard\DefaultUrlBuilderTest.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -302,16 +297,6 @@
                 <Folder RelPath = "WebDashboard\Plugins\ProjectReporter\" />
                 <File
                     RelPath = "WebDashboard\Plugins\ServerLogViewerPlugin\ServerLogViewerPageRendererTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "WebDashboard\Plugins\SiteTemplatePlugin\DefaultBuildListerTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "WebDashboard\Plugins\SiteTemplatePlugin\SiteTemplateTest.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
