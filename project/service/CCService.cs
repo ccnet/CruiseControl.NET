@@ -1,30 +1,33 @@
 using System;
 using System.Configuration;
-using System.Diagnostics;
 using System.IO;
 using System.ServiceProcess;
 using ThoughtWorks.CruiseControl.Core;
+using ThoughtWorks.CruiseControl.Core.Util;
 using ThoughtWorks.CruiseControl.Remote;
 
 namespace ThoughtWorks.CruiseControl.Service
 {
 	public class CCService : ServiceBase
 	{
-		private static void Main()
-		{
-			ServiceBase.Run(new ServiceBase[] {new CCService()});
-		}
+		private const string DefaultServiceName = "CCService";
+		private const string DefaultConfigFileName = "ccnet.config";
+		private readonly string DefaultDirectory = AppDomain.CurrentDomain.BaseDirectory;
 
 		private ICruiseServer server;
 
 		public CCService()
 		{
-			this.ServiceName = "CCService";
+			ServiceName = LookupServiceName();
 		}
 
-		private string ConfigFileName
+		private string ConfigFilename
 		{
-			get { return ConfigurationSettings.AppSettings["ccnet.config"]; }
+			get 
+			{
+				string configFilename = ConfigurationSettings.AppSettings["ccnet.config"];
+				return StringUtil.IsBlank(configFilename) ? DefaultConfigFilePath() : configFilename;
+			}
 		}
 
 		private string Remoting
@@ -35,34 +38,29 @@ namespace ThoughtWorks.CruiseControl.Service
 		protected override void OnStart(string[] args)
 		{
 			// Set working directory to service executable's home directory.
-			Directory.SetCurrentDirectory(AppDomain.CurrentDomain.BaseDirectory);
+			Directory.SetCurrentDirectory(DefaultDirectory);
 
-			string configFile = GetConfigFilename();
-			VerifyConfigFileExists(configFile);
-			CreateAndStartCruiseServer(configFile);
+			VerifyConfigFileExists();
+			CreateAndStartCruiseServer();
 		}
 
-		private string GetConfigFilename()
+		private string DefaultConfigFilePath()
 		{
-			string appDirectory = AppDomain.CurrentDomain.BaseDirectory;
-			string defaultConfigFile = appDirectory + @"\ccnet.config";
-			string configFile = ConfigFileName;
-			if (configFile == null || configFile.Trim().Length == 0) configFile = defaultConfigFile;
-			return configFile;
+			return Path.Combine(DefaultDirectory, DefaultConfigFileName);			
 		}
-		
-		private void VerifyConfigFileExists(string configFile)
+
+		private void VerifyConfigFileExists()
 		{
-			FileInfo configFileInfo = new FileInfo(configFile);
+			FileInfo configFileInfo = new FileInfo(ConfigFilename);
 			if (!configFileInfo.Exists)
 			{
 				throw new Exception(string.Format("CruiseControl.NET configuration file {0} does not exist.", configFileInfo.FullName));
 			}			
 		}
 		
-		private void CreateAndStartCruiseServer(string configFile)
+		private void CreateAndStartCruiseServer()
 		{
-			server = new CruiseServerFactory().Create(UseRemoting(), configFile);
+			server = new CruiseServerFactory().Create(UseRemoting(), ConfigFilename);
 			server.Start();
 		}
 
@@ -84,6 +82,17 @@ namespace ThoughtWorks.CruiseControl.Service
 		protected override void OnContinue()
 		{
 			server.Start();
+		}
+
+		private string LookupServiceName()
+		{
+			string serviceName = ConfigurationSettings.AppSettings["service.name"];
+			return StringUtil.IsBlank(serviceName) ? DefaultServiceName : serviceName;
+		}
+
+		private static void Main()
+		{
+			ServiceBase.Run(new ServiceBase[] {new CCService()});
 		}
 	}
 }
