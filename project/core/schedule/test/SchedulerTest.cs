@@ -134,7 +134,7 @@ namespace tw.ccnet.core.schedule.test
 			_project = new ExceptionMockProject("exception", new Schedule());
 			_scheduler = CreateScheduler(Schedule.Infinite);
 			_scheduler.Start();
-			Thread.Sleep(10);		// block for thread to start
+			Thread.Sleep(1000);		// block for thread to start
 
 			// verify _scheduler is still running - but is logging exceptions
 			AssertEquals(SchedulerState.Running, _scheduler.State);
