@@ -23,7 +23,7 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers.Test
 
 			object result = NetReflector.Read(xml);
 			AssertNotNull(result);
-			AssertEquals(typeof(NetSendPublisher), result.GetType());
+			AssertEquals(typeof(NetSendPublisher), result);
 
 			NetSendPublisher netsend = result as NetSendPublisher;
 			AssertEquals("orogers", netsend.Names);

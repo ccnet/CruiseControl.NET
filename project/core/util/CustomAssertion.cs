@@ -21,6 +21,18 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 			Assert(message, !assert);
 		}
 
+		public static void AssertEquals(Type type, object obj)
+		{
+			if (type == null)
+			{
+				Assertion.AssertEquals(type, obj);
+				return;
+			}
+			AssertNotNull(string.Format("object of expected type {0} is null", type.FullName), obj);
+			Type actualType = (obj is Type) ? (Type)obj : obj.GetType();
+			AssertEquals("object of the wrong type", type, actualType);
+		}
+
 		public static void AssertNotEquals(object expected, object actual)
 		{
 			string message = string.Format("Values ({0}) and ({1}) should not be equal", expected, actual);

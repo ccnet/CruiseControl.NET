@@ -19,25 +19,25 @@ namespace ThoughtWorks.CruiseControl.Core.Util.Test
 		[Test]
 		public void ExecuteProcessAndEchoResultsBackThroughStandardOut()
 		{
-			ProcessResult result = executor.Execute("cmd.exe", "/C @echo Hello World");
+			ProcessResult result = executor.Execute(new ProcessInfo("cmd.exe", "/C @echo Hello World"));
 			AssertEquals("Hello World", result.StandardOutput.Trim());
-			AssertEquals(false, result.HasError);
+			AssertProcessExitsSuccessfully(result);
 		}
 
 		[Test]
 		public void ExecuteProcessAndEchoResultsBackThroughStandardOutWhereALargeAmountOfOutputIsProduced()
 		{
-			ProcessResult result = executor.Execute("cmd.exe", "/C @dir " + Environment.SystemDirectory);
+			ProcessResult result = executor.Execute(new ProcessInfo("cmd.exe", "/C @dir " + Environment.SystemDirectory));
 			Assert("process should not have timed out", ! result.TimedOut);
-			AssertEquals(false, result.HasError);
+			AssertProcessExitsSuccessfully(result);
 		}
 
 		[Test]
-		public void StartProcessRunningBatchFileCallingNonExistentFile()
+		public void StartProcessRunningCmdExeCallingNonExistentFile()
 		{
-			ProcessResult result = executor.Execute("cmd.exe", "/C @zerk.exe foo");
+			ProcessResult result = executor.Execute(new ProcessInfo("cmd.exe", "/C @zerk.exe foo"));
 
-			AssertEquals(true, result.HasError);
+			AssertProcessExitsWithFailure(result, 1);
 			AssertEquals(@"'zerk.exe' is not recognized as an internal or external command,
 operable program or batch file.", result.StandardError.Trim());
 			AssertEquals(string.Empty, result.StandardOutput);
@@ -52,6 +52,7 @@ operable program or batch file.", result.StandardError.Trim());
 			ProcessResult result = executor.Execute(processInfo);
 
 			AssertEquals("foo=bar\r\n", result.StandardOutput);
+			AssertProcessExitsSuccessfully(result);
 		}
 
 		[Test]
@@ -66,8 +67,7 @@ operable program or batch file.", result.StandardError.Trim());
 
 				Assert("process should have timed out", result.TimedOut);
 				AssertNotNull("some output should have been produced", result.StandardOutput);
-				AssertFalse(result.HasError);
-				AssertEquals(-1, result.ExitCode);
+				AssertProcessExitsWithFailure(result, ProcessResult.TIMED_OUT_EXIT_CODE);
 			}
 			finally
 			{
@@ -79,7 +79,19 @@ operable program or batch file.", result.StandardError.Trim());
 		public void SupplyInvalidFilenameAndVerifyException()
 		{
 			ProcessExecutor executor = new ProcessExecutor();
-			executor.Execute("foodaddy.bat", null);
+			executor.Execute(new ProcessInfo("foodaddy.bat"));
+		}
+
+		private void AssertProcessExitsSuccessfully(ProcessResult result)
+		{
+			AssertEquals(ProcessResult.SUCCESSFUL_EXIT_CODE, result.ExitCode);
+			AssertFalse("process should not return an error", result.Failed);
+		}
+
+		private void AssertProcessExitsWithFailure(ProcessResult result, int expectedExitCode)
+		{
+			AssertEquals(expectedExitCode, result.ExitCode);
+			Assert("process should return an error", result.Failed);
 		}
 	}
 }

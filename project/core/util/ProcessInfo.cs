@@ -9,6 +9,8 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 		private const int DEFAULT_TIMEOUT = 120000;
 		private ProcessStartInfo startInfo = new ProcessStartInfo();
 
+		public ProcessInfo(string filename) : this(filename, null) { }
+
 		public ProcessInfo(string filename, string arguments) : this(filename, arguments, null) { }
 
 		public ProcessInfo(string filename, string arguments, string workingDirectory)

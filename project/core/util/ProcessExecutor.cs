@@ -3,18 +3,15 @@ using System.Diagnostics;
 
 namespace ThoughtWorks.CruiseControl.Core.Util
 {
+	/// <summary>
+	/// The ProcessExecutor executes a new <see cref="Process"/> using the properties specified in the input <see cref="ProcessInfo" />.
+	/// ProcessExecutor is designed specifically to deal with processes that redirect the results of both
+	/// the standard output and the standard error streams.  Reading from these streams is performed in
+	/// a separate thread using the <see cref="ProcessReader"/> class, in order to prevent deadlock while 
+	/// blocking on <see cref="Process.WaitForExit"/>.
+	/// </summary>
 	public class ProcessExecutor
 	{
-		public ProcessResult Execute(string filename, string arguments)
-		{
-			return Execute(new ProcessInfo(filename, arguments));
-		}
-
-		public ProcessResult Execute(string filename, string arguments, string workingDirectory)
-		{
-			return Execute(new ProcessInfo(filename, arguments, workingDirectory));
-		}
-
 		public virtual ProcessResult Execute(ProcessInfo processInfo)
 		{
 			using(Process process = processInfo.CreateAndStartNewProcess())

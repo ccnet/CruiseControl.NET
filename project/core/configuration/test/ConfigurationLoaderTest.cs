@@ -91,14 +91,10 @@ namespace ThoughtWorks.CruiseControl.Core.Config.Test
 		{
 			Project project = configuration.Projects[projectName] as Project;
 			AssertEquals(projectName, project.Name);
-			AssertNotNull("missing builder", project.Builder);
-			AssertEquals(typeof(MockBuilder), project.Builder.GetType());
-
-			AssertNotNull("missing sourcecontrol", project.SourceControl);
-			AssertEquals(typeof(DefaultSourceControl), project.SourceControl.GetType());
-
-			AssertEquals("missing publisher", 1, project.Publishers.Count);
-			AssertEquals(typeof(MockPublisher), project.Publishers[0].GetType());
+			AssertEquals(typeof(MockBuilder), project.Builder);
+			AssertEquals(typeof(DefaultSourceControl), project.SourceControl);
+			AssertEquals("missing publisher", 1, project.Publishers.Length);
+			AssertEquals(typeof(MockPublisher), project.Publishers[0]);
 
 		}
 
@@ -120,7 +116,7 @@ namespace ThoughtWorks.CruiseControl.Core.Config.Test
 			string xml = @"<customtestproject name=""foo"" />";
 			IConfiguration configuration = loader.PopulateProjectsFromXml(ConfigurationFixture.GenerateConfig(xml));
 			AssertNotNull(configuration.Projects["foo"]);
-			AssertEquals(typeof(CustomTestProject), configuration.Projects["foo"].GetType());
+			AssertEquals(typeof(CustomTestProject), configuration.Projects["foo"]);
 			AssertEquals("foo", ((CustomTestProject) configuration.Projects["foo"]).Name);
 		}
 
@@ -131,7 +127,6 @@ namespace ThoughtWorks.CruiseControl.Core.Config.Test
 			public IntegrationResult RunIntegration(BuildCondition buildCondition) { return null; }
 			public IntegrationStatus GetLatestBuildStatus() { return IntegrationStatus.Success; }
 			public string WebURL { get {return ""; }	}
-
 		}
 	}
 }

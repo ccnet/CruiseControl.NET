@@ -22,7 +22,7 @@ namespace ThoughtWorks.CruiseControl.Core.Test
 </workflow>";
 			object obj = NetReflector.Read(xml);
 			AssertNotNull(obj);
-			AssertEquals(typeof(Workflow), obj.GetType());
+			AssertEquals(typeof(Workflow), obj);
 			Workflow project = (Workflow)obj;
 			AssertEquals("foo", project.Name);
 			AssertEquals(2, project.Tasks.Count);

@@ -1,9 +1,7 @@
 using System;
 using System.Collections;
 using System.ComponentModel;
-
 using Exortech.NetReflector;
-
 using ThoughtWorks.CruiseControl.Core.Label;
 using ThoughtWorks.CruiseControl.Core.Publishers;
 using ThoughtWorks.CruiseControl.Core.Schedules;
@@ -39,58 +37,52 @@ namespace ThoughtWorks.CruiseControl.Core
 		/// <summary>
 		/// Raised whenever an integration is completed.
 		/// </summary>
-		public event IntegrationCompletedEventHandler IntegrationCompleted;
+		public event IntegrationCompletedEventHandler IntegrationCompleted ;
 
 		private string _webURL = "http://localhost/CruiseControl.NET/"; // default value
 		private ISourceControl _sourceControl;
 		private IBuilder _builder;
-		private ILabeller _labeller = new DefaultLabeller();
-		private ArrayList _publishers = new ArrayList();
+		private ILabeller _labeller = new DefaultLabeller ();
+		private IIntegrationCompletedEventHandler[] _publishers;
 		private IntegrationResult _lastIntegrationResult = null;
 		private ProjectActivity _currentActivity = ProjectActivity.Unknown;
 		private int _modificationDelaySeconds = 0;
 
-		[ReflectorProperty("webURL", Required=false)]
+		[ReflectorProperty("webURL", Required=false)] 
 		public string WebURL
 		{
 			get { return _webURL; }
 			set { _webURL = value; }
 		}
 
-		[ReflectorProperty("build", InstanceTypeKey="type")]
+		[ReflectorProperty("build", InstanceTypeKey="type")] 
 		public IBuilder Builder
 		{
 			get { return _builder; }
 			set { _builder = value; }
 		}
 
-		[ReflectorProperty("sourcecontrol", InstanceTypeKey="type")]
+		[ReflectorProperty("sourcecontrol", InstanceTypeKey="type")] 
 		public ISourceControl SourceControl
 		{
 			get { return _sourceControl; }
 			set { _sourceControl = value; }
-		}		
+		}
 
 		/// <summary>
 		/// The list of build-completed publishers used by this project.  This property is
-		/// intended to be set via Xml configuration.  Additional publishers should be
-		/// added via the <see cref="AddPublisher"/> method.
+		/// intended to be set via Xml configuration.
 		/// </summary>
-		[ReflectorCollection("publishers", InstanceType=typeof(ArrayList), Required=false)]
-		public ArrayList Publishers
+		[ReflectorArray("publishers", Required=false)] 
+		public IIntegrationCompletedEventHandler[] Publishers
 		{
 			get { return _publishers; }
-			set 
-			{ 
-				_publishers = value; 
-
-				// an arraylist is used for netreflector, and this array cast ensures
-				// strong typing at runtime
-				IIntegrationCompletedEventHandler[] handlers
-					= (IIntegrationCompletedEventHandler[])_publishers.ToArray(typeof(IIntegrationCompletedEventHandler));
+			set
+			{
+				_publishers = value;
 
 				// register each of these event handlers
-				foreach (IIntegrationCompletedEventHandler handler in handlers)
+				foreach (IIntegrationCompletedEventHandler handler in _publishers)
 					IntegrationCompleted += handler.IntegrationCompletedEventHandler;
 			}
 		}
@@ -101,46 +93,46 @@ namespace ThoughtWorks.CruiseControl.Core
 		/// passed.  The intention is to allow a developer to complete a multi-stage
 		/// checkin.
 		/// </summary>
-		[ReflectorProperty("modificationDelaySeconds", Required=false)]
+		[ReflectorProperty("modificationDelaySeconds", Required=false)] 
 		public int ModificationDelaySeconds
 		{
 			get { return _modificationDelaySeconds; }
 			set { _modificationDelaySeconds = value; }
 		}
 
-		[ReflectorProperty("labeller", InstanceTypeKey="type", Required=false)]
+		[ReflectorProperty("labeller", InstanceTypeKey="type", Required=false)] 
 		public ILabeller Labeller
 		{
 			get { return _labeller; }
 			set { _labeller = value; }
 		}
 
-		public ProjectActivity CurrentActivity 
+		public ProjectActivity CurrentActivity
 		{
 			get { return _currentActivity; }
 		}
 
 		public IntegrationResult LastIntegrationResult
 		{
-			get 
-			{ 
+			get
+			{
 				if (_lastIntegrationResult == null)
-					_lastIntegrationResult = LoadLastIntegration();
+					_lastIntegrationResult = LoadLastIntegration ();
 
-				return _lastIntegrationResult; 
+				return _lastIntegrationResult;
 			}
 
 			set { _lastIntegrationResult = value; }
 		}
 
-		public IntegrationStatus GetLatestBuildStatus()
+		public IntegrationStatus GetLatestBuildStatus ()
 		{
 			return LastIntegrationResult.Status;
 		}
 
 		public IntegrationResult RunIntegration(BuildCondition buildCondition)
 		{
-			if (buildCondition==BuildCondition.ForceBuild)
+			if (buildCondition == BuildCondition.ForceBuild)
 				Log.Info("Build forced");
 
 			IntegrationResult results = null;
@@ -150,7 +142,7 @@ namespace ThoughtWorks.CruiseControl.Core
 				CreateNewIntegrationResult(out results);
 				GetSourceModifications(results);
 				attemptingBuild = ShouldRunBuild(results, buildCondition);
-			
+
 				if (attemptingBuild)
 					RunBuild(results);
 			}
@@ -171,6 +163,7 @@ namespace ThoughtWorks.CruiseControl.Core
 				if (attemptingBuild)
 					PostBuild(results);
 			}
+			results.MarkEndTime ();
 
 			// go to sleep
 			_currentActivity = ProjectActivity.Sleeping;
@@ -180,18 +173,18 @@ namespace ThoughtWorks.CruiseControl.Core
 
 		internal void CreateNewIntegrationResult(out IntegrationResult results)
 		{
-			results = new IntegrationResult();
+			results = new IntegrationResult ();
 			results.ProjectName = Name;
 			results.LastIntegrationStatus = LastIntegrationResult.Status; // test
 			results.Label = Labeller.Generate(LastIntegrationResult);
-			results.MarkStartTime();
+			results.MarkStartTime ();
 		}
 
 		internal void GetSourceModifications(IntegrationResult results)
 		{
 			_currentActivity = ProjectActivity.CheckingModifications;
 
-			results.Modifications = SourceControl.GetModifications(LastIntegrationResult.StartTime,  results.StartTime);
+			results.Modifications = SourceControl.GetModifications(LastIntegrationResult.StartTime, results.StartTime);
 
 			Log.Info(GetModificationsDetectedMessage(results));
 		}
@@ -200,7 +193,7 @@ namespace ThoughtWorks.CruiseControl.Core
 		{
 			switch (result.Modifications.Length)
 			{
-				case 0: 
+				case 0:
 					return "No modifications detected.";
 				case 1:
 					return "1 modification detected.";
@@ -214,26 +207,24 @@ namespace ThoughtWorks.CruiseControl.Core
 			_currentActivity = ProjectActivity.Building;
 
 			Log.Info("Building");
-			
+
 			Builder.Run(results);
 
-			Log.Info("Build complete: " + results.Status); 
+			Log.Info("Build complete: " + results.Status);
 		}
 
 		internal void PostBuild(IntegrationResult results)
 		{
-			results.MarkEndTime();
-
 			AttemptToSaveState(results);
-			
+
 			HandleProjectLabelling(results);
-			
+
 			// raise event (publishers do their thing in response)
 			OnIntegrationCompleted(new IntegrationCompletedEventArgs(results));
-			
+
 			// update reference to the most recent result
 			LastIntegrationResult = results;
-			
+
 			Log.Info("Integration complete: " + results.EndTime);
 		}
 
@@ -252,17 +243,17 @@ namespace ThoughtWorks.CruiseControl.Core
 			}
 		}
 
-		private IntegrationResult LoadLastIntegration()
+		private IntegrationResult LoadLastIntegration ()
 		{
-			if (StateManager.StateFileExists())
+			if (StateManager.StateFileExists ())
 			{
-				return StateManager.LoadState();
+				return StateManager.LoadState ();
 			}
 			else
 			{
 				// no integration result is on record
 				// TODO consider something such as IntegrationResult.Empty, to indicate 'unknown state'
-				return new IntegrationResult();
+				return new IntegrationResult ();
 			}
 		}
 
@@ -276,7 +267,7 @@ namespace ThoughtWorks.CruiseControl.Core
 			if (buildCondition == BuildCondition.ForceBuild)
 				return true;
 
-			if (results.HasModifications()) 
+			if (results.HasModifications ())
 				return !DoModificationsExistWithinModificationDelay(results);
 
 			return false;
@@ -289,15 +280,15 @@ namespace ThoughtWorks.CruiseControl.Core
 		/// </summary>
 		private bool DoModificationsExistWithinModificationDelay(IntegrationResult results)
 		{
-			if (ModificationDelaySeconds <= 0) 
+			if (ModificationDelaySeconds <= 0)
 				return false;
 
 			TimeSpan diff = DateTime.Now - results.LastModificationDate;
-			if (diff.TotalMilliseconds < ModificationDelaySeconds) 
+			if (diff.TotalMilliseconds < ModificationDelaySeconds)
 			{
 				// The new approach of polling the schedule for when-to-build means that
 				// this log message would appear a few times each second.
-				//				Log("Changes found within the modification delay");
+				Log.Info("Changes found within the modification delay");
 				return true;
 			}
 
@@ -308,9 +299,9 @@ namespace ThoughtWorks.CruiseControl.Core
 		/// Raises the IntegrationCompleted event.
 		/// </summary>
 		/// <param name="e">Arguments to pass with the raised event.</param>
-		protected virtual void OnIntegrationCompleted(IntegrationCompletedEventArgs e)
+		protected void OnIntegrationCompleted(IntegrationCompletedEventArgs e)
 		{
-			if (IntegrationCompleted!=null)
+			if (IntegrationCompleted != null)
 				IntegrationCompleted(this, e);
 		}
 
@@ -319,7 +310,7 @@ namespace ThoughtWorks.CruiseControl.Core
 		/// </summary>
 		private void HandleProjectLabelling(IntegrationResult result)
 		{
-			if (result.Succeeded) 
+			if (result.Succeeded)
 				SourceControl.LabelSourceControl(result.Label, result.StartTime);
 		}
 	}

@@ -1,9 +1,10 @@
+using Exortech.NetReflector;
+using NMock;
+using NMock.Constraints;
+using NUnit.Framework;
 using System;
 using System.Globalization;
 using System.IO;
-using NMock;
-using NUnit.Framework;
-using Exortech.NetReflector;
 using ThoughtWorks.CruiseControl.Core.Util;
 
 namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test
@@ -150,7 +151,18 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test
 		public void ShouldWorkWhenStandardErrorIsNull()
 		{
 			Mock mockProcessExecutor = new DynamicMock(typeof(ProcessExecutor));
-			mockProcessExecutor.ExpectAndReturn("Execute", new ProcessResult("foo", null, 1, false), new NMock.Constraints.IsAnything());
+			mockProcessExecutor.ExpectAndReturn("Execute", new ProcessResult("foo", null, ProcessResult.SUCCESSFUL_EXIT_CODE, false), new IsAnything());
+			
+			Vss vss = new Vss(new VssHistoryParser(), (ProcessExecutor)mockProcessExecutor.MockInstance);
+			vss.Executable = "foo";
+			vss.GetModifications(DateTime.Now, DateTime.Now);
+		}
+
+		[Test]
+		public void ShouldWorkWhenStandardErrorIsNotNullButExitCodeIsZero()
+		{
+			Mock mockProcessExecutor = new DynamicMock(typeof(ProcessExecutor));
+			mockProcessExecutor.ExpectAndReturn("Execute", new ProcessResult("foo", "bar", ProcessResult.SUCCESSFUL_EXIT_CODE, false), new IsAnything());
 			
 			Vss vss = new Vss(new VssHistoryParser(), (ProcessExecutor)mockProcessExecutor.MockInstance);
 			vss.Executable = "foo";
@@ -161,7 +173,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test
 		public void ShouldFailIfProcessTimesOut()
 		{
 			Mock mockProcessExecutor = new DynamicMock(typeof(ProcessExecutor));
-			mockProcessExecutor.ExpectAndReturn("Execute", new ProcessResult("x", null, 1, true), new NMock.Constraints.IsAnything());
+			mockProcessExecutor.ExpectAndReturn("Execute", new ProcessResult("x", null, ProcessResult.TIMED_OUT_EXIT_CODE, true), new IsAnything());
 			
 			Vss vss = new Vss(new VssHistoryParser(), (ProcessExecutor)mockProcessExecutor.MockInstance);
 			vss.Executable = "foo";

@@ -4,6 +4,11 @@ using System.Threading;
 
 namespace ThoughtWorks.CruiseControl.Core.Util
 {
+	/// <summary>
+	/// ProcessReader asynchronously reads from the supplied TextReader stream.  The output of the stream is stored
+	/// in the Output property.  The ProcessReader needs to operate in a separate thread, otherwise if the stream filled while
+	/// the thread is blocked waiting for the process to exit, deadlock will occur.
+	/// </summary>
 	public class ProcessReader
 	{
 		private Thread thread;
