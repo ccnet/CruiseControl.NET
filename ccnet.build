@@ -18,6 +18,7 @@
 
     <property name="core.dll" value="ThoughtWorks.CruiseControl.Core.dll"/>
     <property name="web.dll" value="ThoughtWorks.CruiseControl.Web.dll"/>
+    <property name="webdashboard.dll" value="ThoughtWorks.CruiseControl.WebDashboard.dll"/>
     <property name="console.exe" value="ccnet.exe"/>
     <property name="service.exe" value="ccservice.exe"/>
     <property name="controlpanel.exe" value="controlpanel.exe"/>
@@ -51,6 +52,7 @@
 	<target name="test.unit" description="runs unit tests">
 		<exec program="${nunit-console.exe}" workingdir="${build.dir}\core" commandline="${core.dll} /xml:../${core.dll}-results.xml /nologo"/>
 		<exec program="${nunit-console.exe}" workingdir="${build.dir}\web" commandline="${web.dll} /xml:../${web.dll}-results.xml /nologo"/>
+		<exec program="${nunit-console.exe}" workingdir="${build.dir}\webdashboard" commandline="${webdashboard.dll} /xml:../${webdashboard.dll}-results.xml /nologo"/>
 		<exec program="${nunit-console.exe}" workingdir="${build.dir}\server" commandline="${console.exe} /xml:../${console.exe}-results.xml /nologo"/>
 		<exec program="${nunit-console.exe}" workingdir="${build.dir}\service" commandline="${service.exe} /xml:../${service.exe}-results.xml /nologo"/>
 		<exec program="${nunit-console.exe}" workingdir="${build.dir}\controlpanel" commandline="${controlpanel.exe} /xml:../${controlpanel.exe}-results.xml /nologo"/>

@@ -17,6 +17,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard
 		protected DataList menu;
 		protected HtmlGenericControl buildStats;
 		protected HtmlGenericControl ProjectPluginLinks;
+		protected HtmlAnchor latestLog;
 		protected HtmlAnchor nextLog;
 		protected HtmlAnchor previousLog;
 		protected Title Title1;
@@ -25,10 +26,12 @@ namespace ThoughtWorks.CruiseControl.WebDashboard
 		protected HtmlTableCell Td2;
 		protected Title Title3;
 		protected HtmlTableCell contentCell;
+		protected WebUtil webUtil;
 
 		private void Page_Load(object sender, EventArgs e)
 		{
-			string path = WebUtil.Create(Request, Context).GetLogDirectory().FullName;
+			webUtil = WebUtil.Create(Request, Context);
+			string path = webUtil.GetLogDirectory().FullName;
 			InitBuildStats(path);
 			InitLogFileList(path);
 			InitAdjacentAnchors(path);
@@ -45,15 +48,14 @@ namespace ThoughtWorks.CruiseControl.WebDashboard
 			string pluginLinksHtml = "";
 			foreach (PluginSpecification spec in (IEnumerable) ConfigurationSettings.GetConfig("CCNet/projectPlugins"))
 			{
-				pluginLinksHtml += String.Format(@"|&nbsp; <a class=""link"" href=""{0}"">{1}</a> ", spec.LinkUrl, spec.LinkText);
+				pluginLinksHtml += String.Format(@"|&nbsp; <a class=""link"" href=""{0}"">{1}</a> ", DecoratePluginLinkWithProjectName(spec.LinkUrl), spec.LinkText);
 			}
 			ProjectPluginLinks.InnerHtml = pluginLinksHtml;
 		}
 
-		private string BuildLogFileUri(string baseUri)
+		private string DecoratePluginLinkWithProjectName(string url)
 		{
-			string logFile = Request.QueryString[LogFileUtil.LogQueryString];
-			return (logFile != null && logFile.Length > 0) ? baseUri + LogFileUtil.CreateUrl(logFile) : baseUri;
+			return string.Format("{0}?{1}={2}", url, LogFileUtil.ProjectQueryString, webUtil.GetCurrentlyViewedProjectName());
 		}
 
 		private void InitBuildStats(string path)
@@ -86,12 +88,12 @@ namespace ThoughtWorks.CruiseControl.WebDashboard
 		private void InitAdjacentAnchors(string path)
 		{			
 			string currentFile = Request.QueryString[LogFileUtil.LogQueryString];
-			LogFileLister.InitAdjacentAnchors(previousLog, nextLog, path, currentFile);			
+			LogFileLister.InitAdjacentAnchors(latestLog, previousLog, nextLog, path, currentFile, webUtil.GetCurrentlyViewedProjectName());			
 		}
 
 		private void InitLogFileList(string path)
 		{
-			menu.DataSource = LogFileLister.GetLinks(path);
+			menu.DataSource = LogFileLister.GetLinks(path, webUtil.GetCurrentlyViewedProjectName());
 			menu.DataBind();
 		}
 

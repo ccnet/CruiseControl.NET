@@ -17,7 +17,7 @@
 						<img src="images/ccnet_logo.gif" border="0"></a>
 				</td>
 				<td valign="center" align="right">
-					<a class="link" href=".">latest</a> |&nbsp; <a class="link" id="nextLog" runat="server">
+					<a class="link" id="latestLog" href="." runat="server">latest</a> |&nbsp; <a class="link" id="nextLog" runat="server">
 						next</a> |&nbsp; <a class="link" id="previousLog" runat="server">previous</a>
 					<span id="ProjectPluginLinks" runat="server" runAt="server">&nbsp;</span>
 				</td>

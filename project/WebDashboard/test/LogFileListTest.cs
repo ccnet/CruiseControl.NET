@@ -41,16 +41,16 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Test
 			};
 			TempFileUtil.CreateTempFiles(TestFolder, testFilenames);
 
-			HtmlAnchor[] actualLinks = LogFileLister.GetLinks(_tempFolder);
+			HtmlAnchor[] actualLinks = LogFileLister.GetLinks(_tempFolder, "myproject");
 			AssertEquals(6, actualLinks.Length);
 
 			// expected Date format: dd MMM yyyy HH:mm
-			AssertEquals("?log=log20020830164057Lbuild.6.xml", actualLinks[0].HRef);
-			AssertEquals("?log=log20020507042535.xml", actualLinks[1].HRef);
-			AssertEquals("?log=log20020507023858.xml", actualLinks[2].HRef);
-			AssertEquals("?log=log20020507010355.xml", actualLinks[3].HRef);
-			AssertEquals("?log=log19750101120000.xml", actualLinks[4].HRef);
-			AssertEquals("?log=log19741224120000.xml", actualLinks[5].HRef);
+			AssertEquals("?log=log20020830164057Lbuild.6.xml&project=myproject", actualLinks[0].HRef);
+			AssertEquals("?log=log20020507042535.xml&project=myproject", actualLinks[1].HRef);
+			AssertEquals("?log=log20020507023858.xml&project=myproject", actualLinks[2].HRef);
+			AssertEquals("?log=log20020507010355.xml&project=myproject", actualLinks[3].HRef);
+			AssertEquals("?log=log19750101120000.xml&project=myproject", actualLinks[4].HRef);
+			AssertEquals("?log=log19741224120000.xml&project=myproject", actualLinks[5].HRef);
 
 			AssertEquals("<nobr>30 Aug 2002 16:40 (6)</nobr>", actualLinks[0].InnerText);
 			AssertEquals("<nobr>07 May 2002 04:25 (Failed)</nobr>", actualLinks[1].InnerHtml);
@@ -100,9 +100,10 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Test
 		[Test]
 		public void InitAdjacentAnchors_NoLogFiles()
 		{
+			HtmlAnchor latest = new HtmlAnchor();
 			HtmlAnchor previous = new HtmlAnchor();
 			HtmlAnchor next = new HtmlAnchor();
-			LogFileLister.InitAdjacentAnchors(previous, next, _tempFolder, null);
+			LogFileLister.InitAdjacentAnchors(latest, previous, next, _tempFolder, null, "myproject");
 			AssertEquals("Previous link set", String.Empty, previous.HRef);
 			AssertEquals("Next link set", String.Empty, next.HRef);
 		}
@@ -110,10 +111,11 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Test
 		[Test]
 		public void InitAdjacentAnchors_OneLogFile()
 		{
+			HtmlAnchor latest = new HtmlAnchor();
 			HtmlAnchor previous = new HtmlAnchor();
 			HtmlAnchor next = new HtmlAnchor();
 			TempFileUtil.CreateTempFile(_tempFolder, LogFileUtil.CreateSuccessfulBuildLogFileName(new DateTime(), "2"));
-			LogFileLister.InitAdjacentAnchors(new HtmlAnchor(), new HtmlAnchor(), _tempFolder, null);
+			LogFileLister.InitAdjacentAnchors(latest, new HtmlAnchor(), new HtmlAnchor(), _tempFolder, null, "myproject");
 			AssertEquals("Previous link set", String.Empty, previous.HRef);
 			AssertEquals("Next link set", String.Empty, next.HRef);
 		}

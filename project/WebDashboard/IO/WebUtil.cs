@@ -10,8 +10,6 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.IO
 {
 	public class WebUtil
 	{
-		public static readonly string ProjectNameQueryString = "project";
-
 		private readonly IConfigurationGetter configurationGetter;
 		private readonly NameValueCollection queryString;
 		private readonly IPathMapper pathMapper;
@@ -74,6 +72,11 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.IO
 			return Path.Combine(pathMapper.MapPath("xsl"), xslfile);
 		}
 
+		public string GetCurrentlyViewedProjectName()
+		{
+			return queryString[LogFileUtil.ProjectQueryString];
+		}
+
 		private string GetLogFilename()
 		{
 			DirectoryInfo logDirectory = GetLogDirectory();
@@ -93,7 +96,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.IO
 				throw new ApplicationException("<projects> section not configured correctly in web.config");
 			}
 
-			string requestedProject = queryString[ProjectNameQueryString];
+			string requestedProject = GetCurrentlyViewedProjectName();
 			if (requestedProject == null || requestedProject == string.Empty)
 			{
 				throw new ApplicationException("[project] parameter not specified on query string");

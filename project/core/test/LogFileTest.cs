@@ -208,5 +208,14 @@ namespace ThoughtWorks.CruiseControl.Core.Test
 			string actual = LogFileUtil.CreateUrl(filename);				
 			AssertEquals(expected, actual);
 		}
+
+		[Test]
+		public void TestCreateUrlWithGivenFilenameAndProjectName()
+		{
+			string filename = "log20020222120000Lbuild.0.xml";
+			string expected = "?log=log20020222120000Lbuild.0.xml&project=myproject";
+			string actual = LogFileUtil.CreateUrl(filename, "myproject");				
+			AssertEquals(expected, actual);
+		}
 	}
 }

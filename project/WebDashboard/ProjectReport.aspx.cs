@@ -26,12 +26,14 @@ namespace ThoughtWorks.CruiseControl.WebDashboard
 		protected HtmlGenericControl BodyLabel;
 
 		private string logfile;
+		private WebUtil webUtil;
 
 		private void Page_Load(object sender, EventArgs e)
 		{
 			try
 			{
-				logfile = WebUtil.Create(Request, Context).GetLogFileAndCheckItExists();
+				webUtil = WebUtil.Create(Request, Context);
+				logfile = webUtil.GetLogFileAndCheckItExists();
 				GeneratePluginLinks();
 				InitDisplayLogFile();
 			}
@@ -74,7 +76,8 @@ namespace ThoughtWorks.CruiseControl.WebDashboard
 
 		private string GenerateLogUrl(string urlPrefix)
 		{
-			return ResolveUrl(String.Format("{0}{1}", urlPrefix, new FileInfo(logfile).Name));
+			// OK, this is icky, I know... (MR)
+			return ResolveUrl(String.Format("{0}{1}", urlPrefix, LogFileUtil.CreateUrl(new FileInfo(logfile).Name, webUtil.GetCurrentlyViewedProjectName())));
 		}
 		
 		private void InitDisplayLogFile()

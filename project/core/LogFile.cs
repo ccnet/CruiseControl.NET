@@ -18,6 +18,7 @@ namespace ThoughtWorks.CruiseControl.Core
 
 		public const string FilenamePrefix ="log";
 		public const string LogQueryString = "log";
+		public const string ProjectQueryString = "project";
 		public const string DateFormat = "yyyyMMddHHmmss";
 		public static readonly Regex BuildNumber = new Regex(@"Lbuild\.(.+)\.xml");
 
@@ -174,6 +175,11 @@ namespace ThoughtWorks.CruiseControl.Core
 		public static string CreateUrl(string filename)
 		{
 			return string.Format("?{0}={1}", LogQueryString, filename);
+		}
+
+		public static string CreateUrl(string filename, string projectname)
+		{
+			return string.Format("{0}&{1}={2}", CreateUrl(filename), ProjectQueryString, projectname);
 		}
 		
 		public static string CreateUrl(IntegrationResult result)
