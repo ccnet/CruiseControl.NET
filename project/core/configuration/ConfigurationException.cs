@@ -5,6 +5,7 @@ namespace ThoughtWorks.CruiseControl.Core.Config
 	/// <summary>
 	/// Typed exception for use within CruiseControl configuration.
 	/// </summary>
+	[Serializable]
 	public class ConfigurationException : CruiseControlException
 	{
 		public ConfigurationException(string s) : base(s) {}

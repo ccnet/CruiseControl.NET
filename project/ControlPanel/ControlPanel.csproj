@@ -104,6 +104,21 @@
                     AssemblyName = "marathon.framework"
                     HintPath = "..\..\lib\marathon.framework.dll"
                 />
+                <Reference
+                    Name = "core"
+                    Project = "{F8113DB9-6C47-4FD1-8A01-655FCF151747}"
+                    Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
+                />
+                <Reference
+                    Name = "Shared"
+                    Project = "{FA6F61A0-6332-4236-B861-FEA43B74A092}"
+                    Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
+                />
+                <Reference
+                    Name = "Remote"
+                    Project = "{E820CF3B-8C5A-4002-BC16-B7818D3D54A8}"
+                    Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
+                />
             </References>
         </Build>
         <Files>

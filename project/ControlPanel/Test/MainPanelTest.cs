@@ -11,7 +11,17 @@ namespace ThoughtWorks.CruiseControl.ControlPanel.Test
 	{
 		private DirectoryInfo _tmpDir;
 		public const string _configFile = @"<cruisecontrol>
-  <project name=""MyProject"">
+  <project name='MyProject'>
+    <sourcecontrol type='cvs'>
+      <executable>C:\program files\tortoisecvs\cvs</executable>
+      <workingDirectory>c:\dev\ccnet\projects\marathon.net</workingDirectory>
+    </sourcecontrol>
+
+    <build type='nant'>
+      <executable>c:\dev\ccnet\projects\marathon.net\tools\nant\nant.exe</executable>
+      <baseDirectory>c:\dev\ccnet\projects\marathon.net</baseDirectory>
+      <buildFile>cruise.build</buildFile>
+    </build>
   </project>
 </cruisecontrol>";
 
@@ -28,7 +38,7 @@ namespace ThoughtWorks.CruiseControl.ControlPanel.Test
 			_tmpDir.Delete(true);
 		}
 
-		[Test, Ignore("Jeremy's working on it")]
+		[Test]
 		public void OpeningExistingConfigFileShowsProjectName()
 		{
 			using (StreamWriter writer = new StreamWriter(_tmpDir + "/ccnet.config")) 
@@ -38,24 +48,27 @@ namespace ThoughtWorks.CruiseControl.ControlPanel.Test
 
 			TestableMainPanel panel = new TestableMainPanel();
 			panel.FileToOpen = _tmpDir + "/ccnet.config";
-			using (new MarathonThread(panel)) 
+			using (MarathonThread thread = new MarathonThread(panel)) 
 			{
 				using (MForm form = new MForm("Cruise Control - Control Panel")) 
 				{
-					System.Threading.Thread.Sleep(5000);
+					form.Check("projectName", "");
+
 					form.Press("&File.&Open");
 
 					// this is not working in marathon yet, so we hacked around it
-//					using (MForm openFileDialog = new MForm("Open File")) 
-//					{
-//						openFileDialog.Enter("File Name:", _tmpDir + "/ccnet.config");
-//						openFileDialog.Press("Open");
-//					}
+					//					using (MForm openFileDialog = new MForm("Open File")) 
+					//					{
+					//						openFileDialog.Enter("File Name:", _tmpDir + "/ccnet.config");
+					//						openFileDialog.Press("Open");
+					//					}
 
-					form.Check("Project Name:", "MyProject");
+					form.Check("projectName", "MyProject");
 				}
 			}
 		}
+
+		// test invalid build file
 
 		private class TestableMainPanel : MainPanel 
 		{

@@ -41,12 +41,7 @@ namespace ThoughtWorks.CruiseControl.Core
 					project.LastIntegrationResult.Label));
 			}
 
-			ProjectStatus [] result = new ProjectStatus[projects.Count];
-			for (int i = 0; i < result.Length; i++)
-			{
-				result[i] = (ProjectStatus) projects[i];
-			}
-			return result;				
+			return (ProjectStatus []) projects.ToArray(typeof(ProjectStatus));
 		}
 
 		public void ForceBuild(string projectName)
