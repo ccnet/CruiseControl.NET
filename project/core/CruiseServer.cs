@@ -114,7 +114,4 @@ namespace ThoughtWorks.CruiseControl.Core
 			WaitForExit();
 		}
 	}
-
-
-
 }

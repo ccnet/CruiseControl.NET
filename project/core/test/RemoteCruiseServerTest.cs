@@ -1,4 +1,3 @@
-using System;
 using System.Runtime.Remoting;
 using System.Runtime.Remoting.Channels;
 using NMock;
@@ -58,6 +57,7 @@ namespace ThoughtWorks.CruiseControl.Core.Test
 			IMock mockCruiseServer = new DynamicMock(typeof(ICruiseServer));
 			mockCruiseServer.ExpectAndReturn("CruiseManager", mockCruiseManager.MockInstance);
 			mockCruiseServer.ExpectAndReturn("CruiseManager", mockCruiseManager.MockInstance);
+			mockCruiseServer.Expect("Dispose");
 
 			using(RemoteCruiseServer server = new RemoteCruiseServer((ICruiseServer) mockCruiseServer.MockInstance, configFile))
 			{
@@ -72,6 +72,8 @@ namespace ThoughtWorks.CruiseControl.Core.Test
 				AssertNotNull("cruiseserver should be registered on http channel", remoteManager);
 			}
 			AssertEquals("all registered channels should be closed.", 0, ChannelServices.RegisteredChannels.Length);
+			mockCruiseServer.Verify();
+			mockCruiseManager.Verify();
 		}
 	}
 }

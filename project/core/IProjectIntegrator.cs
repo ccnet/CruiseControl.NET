@@ -3,7 +3,7 @@ using ThoughtWorks.CruiseControl.Remote;
 
 namespace ThoughtWorks.CruiseControl.Core
 {
-	public interface IProjectIntegrator : IDisposable
+	public interface IProjectIntegrator
 	{
 		// TODO look into whether the setters are required for these properties
 		ISchedule Schedule { get; } 

@@ -76,6 +76,7 @@ namespace ThoughtWorks.CruiseControl.Core
 				Log.Info("Unregistering channel: " + channel.ChannelName);
 				ChannelServices.UnregisterChannel(channel);
 			}
+			_server.Dispose();
 		}
 	}
 }

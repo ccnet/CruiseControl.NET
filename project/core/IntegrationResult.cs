@@ -170,20 +170,17 @@ namespace ThoughtWorks.CruiseControl.Core
             return (ProjectName + Label + StartTime.Ticks).GetHashCode();
         }
 
-    	public static IntegrationResult Initial
+    	public static IntegrationResult CreateInitialIntegrationResult(string project)
     	{
-			get
-			{
-				IntegrationResult result = new IntegrationResult();
-				result.StartTime = DateTime.Now.AddDays(-1);
-				result.EndTime = DateTime.Now;
-				return result;
-			}
+    		IntegrationResult result = new IntegrationResult(project);
+    		result.StartTime = DateTime.Now.AddDays(-1);
+    		result.EndTime = DateTime.Now;
+    		return result;
     	}
 
     	public bool IsInitial()
     	{
-    		return ProjectName == null;
+    		return (LastIntegrationStatus == IntegrationStatus.Unknown) && (Status == IntegrationStatus.Unknown);
     	}
     }
 }

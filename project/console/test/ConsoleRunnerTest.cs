@@ -1,10 +1,8 @@
-using System;
 using System.Diagnostics;
 using NMock;
 using NUnit.Framework;
-using ThoughtWorks.CruiseControl.Core;
-using ThoughtWorks.CruiseControl.Remote;
 using ThoughtWorks.CruiseControl.Core.Util;
+using ThoughtWorks.CruiseControl.Remote;
 
 namespace ThoughtWorks.CruiseControl.Console.Test
 {
@@ -14,7 +12,7 @@ namespace ThoughtWorks.CruiseControl.Console.Test
 		private TestTraceListener listener;
 
 		[SetUp]
-		protected void SetUp()
+		public void SetUp()
 		{
 			Trace.Listeners.Clear();
 			listener = new TestTraceListener();
@@ -23,7 +21,7 @@ namespace ThoughtWorks.CruiseControl.Console.Test
 		}
 
 		[TearDown]
-		protected void TearDown()
+		public void TearDown()
 		{
 			Trace.Listeners.Remove(listener);
 			TempFileUtil.DeleteTempDir("ConsoleRunnerTest");
@@ -62,9 +60,6 @@ namespace ThoughtWorks.CruiseControl.Console.Test
 		[Test]
 		public void StartCruiseServerProject()
 		{
-			string xml = @"<cruisecontrol><workflow name=""test""><tasks /></workflow></cruisecontrol>";
-			string configFile = TempFileUtil.CreateTempXmlFile("ConsoleRunnerTest", "myconfig.config", xml);
-
 			Mock mockCruiseServer = new DynamicMock(typeof(ICruiseServer));
 			mockCruiseServer.Expect("Start");
 			mockCruiseServer.Expect("WaitForExit");

@@ -4,7 +4,7 @@ using ThoughtWorks.CruiseControl.Core.Util;
 
 namespace ThoughtWorks.CruiseControl.Console
 {
-	public class ArgumentParser
+	public class ArgumentParser : IArgumentParser
 	{
 		public const string DEFAULT_CONFIG_PATH = @"ccnet.config";
 		public const string Usage = 

@@ -15,7 +15,7 @@ namespace ThoughtWorks.CruiseControl.Core
 	///		is called.</item>
 	/// </list>
 	/// </summary>
-	public class ProjectIntegrator : IProjectIntegrator
+	public class ProjectIntegrator : IProjectIntegrator, IDisposable
 	{
 		private ISchedule _schedule;
 		private IProject _project;

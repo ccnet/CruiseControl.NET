@@ -47,16 +47,28 @@ namespace ThoughtWorks.CruiseControl.Console
 
 		private void LaunchServer()
 		{
-			if (_parser.Project == null)
+			using (ConsoleEventHandler handler = new ConsoleEventHandler())
 			{
-				_server.Start();
-				_server.WaitForExit();
+				handler.OnConsoleEvent += new EventHandler(HandleControlEvent);
+			
+				if (_parser.Project == null)
+				{
+					_server.Start();
+					_server.WaitForExit();
+				}
+				else
+				{
+					_server.CruiseManager.ForceBuild(_parser.Project);
+					_server.CruiseManager.WaitForExit(_parser.Project);
+				}
 			}
-			else
-			{
-				_server.CruiseManager.ForceBuild(_parser.Project);
-				_server.CruiseManager.WaitForExit(_parser.Project);
-			}
+		}
+
+		private void HandleControlEvent(object sender, EventArgs args)
+		{
+			ConsoleEventHandler handler = (ConsoleEventHandler)sender;
+			handler.OnConsoleEvent -= new EventHandler(HandleControlEvent);	// remove handler to prevent event from being called again
+			_server.Dispose();
 		}
 	}
 }

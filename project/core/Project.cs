@@ -292,7 +292,7 @@ namespace ThoughtWorks.CruiseControl.Core
 			else
 			{
 				// no integration result is on record
-				return IntegrationResult.Initial;
+				return IntegrationResult.CreateInitialIntegrationResult(Name);
 			}
 		}
 

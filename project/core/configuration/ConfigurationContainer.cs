@@ -4,7 +4,7 @@ using ThoughtWorks.CruiseControl.Core.Util;
 
 namespace ThoughtWorks.CruiseControl.Core.Config
 {
-	public class ConfigurationContainer : IConfigurationContainer, IDisposable
+	public class ConfigurationContainer : IConfigurationContainer
 	{
 		private IConfigurationLoader _loader;
 		private IFileWatcher _watcher;
@@ -98,11 +98,6 @@ namespace ThoughtWorks.CruiseControl.Core.Config
 			{
 				Log.Error(ex);
 			}
-		}
-
-		void IDisposable.Dispose() 
-		{
-			_watcher.Dispose();
 		}
 	}
 }

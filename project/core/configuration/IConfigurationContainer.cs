@@ -1,5 +1,3 @@
-using System;
-
 namespace ThoughtWorks.CruiseControl.Core.Config
 {
 	public delegate void ConfigurationChangedHandler(IConfiguration configuration);

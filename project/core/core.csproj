@@ -606,6 +606,10 @@
                     BuildAction = "Content"
                 />
                 <File
+                    RelPath = "publishers\xsl\Mailstyle.css"
+                    BuildAction = "Content"
+                />
+                <File
                     RelPath = "publishers\xsl\modifications.xsl"
                     BuildAction = "Content"
                 />
@@ -669,7 +673,17 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "sourcecontrol\FilteredSourceControl.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "sourcecontrol\IHistoryParser.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "sourcecontrol\IModificationFilter.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -710,6 +724,11 @@
                 />
                 <File
                     RelPath = "sourcecontrol\P4HistoryParser.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "sourcecontrol\PathFilter.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -814,7 +833,17 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "sourcecontrol\test\FilteredSourceControlTest.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "sourcecontrol\test\MockSourceControl.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "sourcecontrol\test\ModificationMother.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -840,6 +869,11 @@
                 />
                 <File
                     RelPath = "sourcecontrol\test\P4Test.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "sourcecontrol\test\PathFilterTest.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

@@ -17,7 +17,7 @@
                 DelaySign = "false"
                 OutputType = "Exe"
                 PreBuildEvent = ""
-                PostBuildEvent = "copy $(ProjectDir)\*.bat $(TargetDir)&#xd;&#xa;copy $(ProjectDir)\ccnet.config $(TargetDir)"
+                PostBuildEvent = 'copy "$(ProjectDir)\*.bat" "$(TargetDir)"&#xd;&#xa;copy "$(ProjectDir)\ccnet.config" "$(TargetDir)"'
                 RootNamespace = "ThoughtWorks.CruiseControl.Console"
                 RunPostBuildEvent = "OnBuildSuccess"
                 StartupObject = ""
@@ -151,6 +151,11 @@
                     BuildAction = "None"
                 />
                 <File
+                    RelPath = "ConsoleEventHandler.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "ConsoleRunner.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -164,6 +169,11 @@
                     BuildAction = "None"
                 />
                 <File
+                    RelPath = "IArgumentParser.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "ITimeout.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -171,11 +181,6 @@
                 <File
                     RelPath = "StartCCNet.bat"
                     BuildAction = "None"
-                />
-                <File
-                    RelPath = "Timeout.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
                 />
                 <File
                     RelPath = "test\ArgumentParserTest.cs"
