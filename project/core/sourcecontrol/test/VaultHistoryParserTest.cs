@@ -11,7 +11,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test
 		//Creating the date string this way will give us a string in the format of the builder's locale.
 		//Can end up with DateTime parsing errors in the test otherwise...
 		//e.g. US format date string "5/13/2003" gives format exception when parsed on UK locale system.
-		private static string XML_COMMENT_DATE = (new DateTime(2003, 5, 13, 22, 41, 30)).ToString();
+		private static string XML_COMMENT_DATE = new DateTime(2003, 5, 13, 22, 41, 30).ToString();
 		private static readonly string XML = 
 			@"<vault>
 				<history>

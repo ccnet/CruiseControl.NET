@@ -22,12 +22,11 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 
 		public static string CreateTempDir(string dirname, bool overwrite)
 		{
-			string path = GetTempPath(dirname);
-			if (overwrite && Directory.Exists(path))
+			if (overwrite)
 			{
 				DeleteTempDir(dirname);
 			}
-			return Directory.CreateDirectory(path).FullName;
+			return Directory.CreateDirectory(GetTempPath(dirname)).FullName;
 		}
 
 		public static string GetTempPath(string dirname)
@@ -47,9 +46,10 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 
 		public static bool DeleteTempDir(string dirname)
 		{
-			if (Directory.Exists(GetTempPath(dirname)))
+			string tempDir = GetTempPath(dirname);
+			if (Directory.Exists(tempDir))
 			{
-				Directory.Delete(GetTempPath(dirname), true); 
+				Directory.Delete(tempDir, true); 
 				return true;
 			}
 			else

@@ -63,7 +63,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test
 
 			ProcessInfo actual = vss.CreateHistoryProcessInfo(from, to);
 
-			string expectedArgs = @"history $/fooProject -R -Vd02/22/2002;20:00~01/21/2001;20:00 -YAdmin,admin -I-Y";				
+			string expectedArgs = @"history $/fooProject -R -Vd02/22/2002;20:00:00~01/21/2001;20:00:00 -YAdmin,admin -I-Y";				
 
 			Assert.IsNotNull(actual);
 			Assert.AreEqual(DEFAULT_SS_EXE_PATH, actual.FileName);

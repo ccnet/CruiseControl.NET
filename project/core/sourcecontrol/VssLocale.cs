@@ -100,7 +100,16 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 		/// <returns>Date string formatted for the specified locale as expected by the VSS command-line.</returns>
 		public string FormatCommandDate(DateTime date)
 		{
-			return string.Concat(date.ToString("d", cultureInfo), ";", date.ToString("t", cultureInfo)).Replace(" ", string.Empty).TrimEnd('M', 'm');
+			DateTimeFormatInfo info = CreateDateTimeInfo();
+			if (info.LongTimePattern.IndexOf('h') >= 0 || info.LongTimePattern.IndexOf('t') >= 0)
+			{
+				info.LongTimePattern = string.Format("h{0}mm{0}sst", info.TimeSeparator);
+			}
+			else
+			{
+				info.LongTimePattern = string.Format("H{0}mm{0}ss", info.TimeSeparator);				
+			}
+			return string.Concat(date.ToString("d", info), ";", date.ToString("T", info));
 		}
 
 		public override string ToString()
