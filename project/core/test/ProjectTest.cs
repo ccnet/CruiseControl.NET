@@ -201,7 +201,7 @@ namespace ThoughtWorks.CruiseControl.Core.Test
 			Assert.AreEqual("label", result.Label);
 			AssertFalse("unexpected modifications were returned", result.HasModifications());
 			AssertEqualArrays(new Modification[0], result.Modifications);
-			Assert.AreEqual(MockBuilder.BUILDER_OUTPUT, result.Output, "no output is expected as builder is not called");
+			Assert.AreEqual(MockBuilder.BUILDER_OUTPUT, result.TaskOutput, "no output is expected as builder is not called");
 			Assert.IsTrue(result.EndTime >= result.StartTime);
 			VerifyAll();
 		}
@@ -226,7 +226,7 @@ namespace ThoughtWorks.CruiseControl.Core.Test
 			Assert.AreEqual("label", result.Label);
 			AssertFalse("unexpected modifications were returned", result.HasModifications());
 			AssertEqualArrays(new Modification[0], result.Modifications);
-			Assert.IsNull(result.Output, "no output is expected as builder is not called");
+			Assert.AreEqual(string.Empty, result.TaskOutput, "no output is expected as builder is not called");
 			Assert.IsTrue(result.EndTime >= result.StartTime);
 			VerifyAll();
 		}
@@ -307,7 +307,6 @@ namespace ThoughtWorks.CruiseControl.Core.Test
 		{
 			IntegrationResult expected = new IntegrationResult();
 			expected.Label = "previous";
-			expected.Output = "<foo>blah</foo>";
 			expected.Status = IntegrationStatus.Success;
 
 			_mockStateManager.ExpectAndReturn("StateFileExists", true);

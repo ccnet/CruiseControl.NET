@@ -8,28 +8,33 @@ namespace ThoughtWorks.CruiseControl.Core.Test
 	[TestFixture]
 	public class IntegrationResultTest
 	{
+		private IntegrationResult result;
+
+		[SetUp]
+		protected void CreateIntegrationResult()
+		{
+			result = new IntegrationResult();			
+		}
+
 		[Test]
 		public void LastModificationDate()
 		{
-			IntegrationResult integrationResult = new IntegrationResult();
-			
 			Modification earlierModification = new Modification();
 			earlierModification.ModifiedTime = new DateTime(0);
 			
 			Modification laterModification = new Modification();
 			laterModification.ModifiedTime = new DateTime(1);
 
-			integrationResult.Modifications = new Modification[] {earlierModification, laterModification};
-			Assert.AreEqual(laterModification.ModifiedTime, integrationResult.LastModificationDate);
+			result.Modifications = new Modification[] {earlierModification, laterModification};
+			Assert.AreEqual(laterModification.ModifiedTime, result.LastModificationDate);
 		}
 
 		[Test]
 		public void LastModificationDateWhenThereAreNoModifications()
 		{
 			// Project relies on this behavior, but is it really what we want?
-			IntegrationResult integrationResult = new IntegrationResult();
 			DateTime yesterday = DateTime.Now.AddDays(-1).Date;
-			Assert.AreEqual(yesterday, integrationResult.LastModificationDate.Date);
+			Assert.AreEqual(yesterday, result.LastModificationDate.Date);
 		}	
   
 		[Test]
@@ -50,7 +55,7 @@ namespace ThoughtWorks.CruiseControl.Core.Test
 		[Test]
 		public void ShouldReturnZeroAsLastChangeNumberIfNoModifications()
 		{
-			Assert.AreEqual(0, new IntegrationResult().LastChangeNumber);
+			Assert.AreEqual(0, result.LastChangeNumber);
 		}
 
 		[Test]
@@ -62,7 +67,6 @@ namespace ThoughtWorks.CruiseControl.Core.Test
 			Modification mod2 = new Modification();
 			mod2.ChangeNumber = 20;
 
-			IntegrationResult result = new IntegrationResult();
 			result.Modifications = new Modification[] { mod1 };
 			Assert.AreEqual(10, result.LastChangeNumber);
 			result.Modifications = new Modification[] { mod1, mod2 };
@@ -74,7 +78,6 @@ namespace ThoughtWorks.CruiseControl.Core.Test
 		[Test] 
 		public void ShouldNotRunBuildIfThereAreNoModifications()
 		{
-			IntegrationResult result = new IntegrationResult();
 			result.Modifications = new Modification[0];
 			Assert.IsFalse(result.ShouldRunBuild(0));
 		}
@@ -82,7 +85,6 @@ namespace ThoughtWorks.CruiseControl.Core.Test
 		[Test] 
 		public void ShouldRunBuildIfThereAreModifications()
 		{
-			IntegrationResult result = new IntegrationResult();
 			Modification modification = ModificationMother.CreateModification("foo", DateTime.Now.AddSeconds(-2));
 			result.Modifications = new Modification[] {modification};
 			Assert.IsTrue(result.ShouldRunBuild(0));
@@ -91,7 +93,6 @@ namespace ThoughtWorks.CruiseControl.Core.Test
 		[Test] 
 		public void ShouldNotRunBuildIfThereAreModificationsWithinModificationDelay()
 		{
-			IntegrationResult result = new IntegrationResult();
 			Modification modification = ModificationMother.CreateModification("foo", DateTime.Now.AddSeconds(-2));
 			result.Modifications = new Modification[] {modification};
 			Assert.IsFalse(result.ShouldRunBuild(100));
@@ -100,7 +101,6 @@ namespace ThoughtWorks.CruiseControl.Core.Test
 		[Test] 
 		public void ShouldRunBuildIfLastModificationOutsideModificationDelay()
 		{
-			IntegrationResult result = new IntegrationResult();
 			Modification modification = ModificationMother.CreateModification("foo", DateTime.Now.AddMinutes(-2));
 			result.Modifications = new Modification[] {modification};
 			Assert.IsTrue(result.ShouldRunBuild(100));
@@ -109,9 +109,16 @@ namespace ThoughtWorks.CruiseControl.Core.Test
 		[Test] 
 		public void ShouldRunBuildIfInForcedCondition()
 		{
-			IntegrationResult result = new IntegrationResult();
 			result.BuildCondition = BuildCondition.ForceBuild;
 			Assert.IsTrue(result.ShouldRunBuild(0));
+		}
+
+		[Test]
+		public void TaskOutputShouldAggregateOutputOfTaskResults()
+		{
+			result.AddTaskResult("<foo/>");
+			result.AddTaskResult("<bar/>");
+			Assert.AreEqual("<foo/><bar/>", result.TaskOutput);
 		}
 	}
 }

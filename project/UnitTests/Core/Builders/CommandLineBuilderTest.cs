@@ -1,12 +1,11 @@
+using System.ComponentModel;
 using System.IO;
 using Exortech.NetReflector;
 using NMock;
 using NMock.Constraints;
 using NUnit.Framework;
-using System.ComponentModel;
 using ThoughtWorks.CruiseControl.Core.Util;
 using ThoughtWorks.CruiseControl.Remote;
-using ThoughtWorks.CruiseControl.Core.Builder;
 
 namespace ThoughtWorks.CruiseControl.Core.Builder.Test
 {
@@ -76,7 +75,7 @@ namespace ThoughtWorks.CruiseControl.Core.Builder.Test
 
 			Assert.IsTrue(result.Succeeded);
 			Assert.AreEqual(IntegrationStatus.Success, result.Status);
-			Assert.AreEqual(returnVal.StandardOutput + "\n" + returnVal.StandardError, result.Output);
+			Assert.AreEqual(returnVal.StandardOutput + "\n" + returnVal.StandardError, result.TaskOutput);
 			VerifyAll();
 		}
 
@@ -91,7 +90,7 @@ namespace ThoughtWorks.CruiseControl.Core.Builder.Test
 
 			Assert.IsTrue(result.Failed);
 			Assert.AreEqual(IntegrationStatus.Failure, result.Status);
-			Assert.AreEqual(returnVal.StandardOutput + "\n" + returnVal.StandardError, result.Output);
+			Assert.AreEqual(returnVal.StandardOutput + "\n" + returnVal.StandardError, result.TaskOutput);
 			VerifyAll();
 		}
 
@@ -179,7 +178,6 @@ namespace ThoughtWorks.CruiseControl.Core.Builder.Test
 			Assert.AreEqual(expectedBaseDirectory, info.WorkingDirectory);
 			VerifyAll();
 		}
-
 
 		private ProcessResult CreateSuccessfulProcessResult()
 		{

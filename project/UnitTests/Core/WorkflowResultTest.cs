@@ -1,20 +1,10 @@
 using NUnit.Framework;
-using System;
 
 namespace ThoughtWorks.CruiseControl.Core.Test
 {
 	[TestFixture]
 	public class WorkflowResultTest 
 	{
-		[Test]
-		public void AppendOutput()
-		{
-			WorkflowResult result = new WorkflowResult();
-			result.Output = "foo";
-			result.Output = "bar";
-			Assert.AreEqual("foobar", result.Output);
-		}
-
 		[Test]
 		public void AppendModifications()
 		{

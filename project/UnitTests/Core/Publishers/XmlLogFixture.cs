@@ -8,7 +8,7 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers.Test
 	{
 		public string CreateExpectedBuildXml(IntegrationResult result)
 		{
-			return CreateExpectedBuildXml(result, result.Output);
+			return CreateExpectedBuildXml(result, null);
 		}
 
 		public static string CreateExpectedBuildXml(IntegrationResult result, string expectedBuildOutput)

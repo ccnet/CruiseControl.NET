@@ -64,8 +64,7 @@ namespace ThoughtWorks.CruiseControl.Core.Builder
 		{
 			ProcessResult processResult = AttemptToExecute(result.WorkingDirectory);
 			result.Status = (processResult.Failed) ? IntegrationStatus.Failure : IntegrationStatus.Success;
-			result.Output = processResult.StandardOutput;
-			result.TaskResults.Add(new DevenvTaskResult(result.Output));
+			result.AddTaskResult(new DevenvTaskResult(processResult.StandardOutput));
 			Log.Info("Devenv build complete.  Status: " + result.Status);
 			
 			if (processResult.TimedOut)

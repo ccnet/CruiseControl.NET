@@ -101,7 +101,7 @@ namespace ThoughtWorks.CruiseControl.Core.Builder
 		public void Run(IIntegrationResult result)
 		{
 			ProcessResult processResult = AttemptExecute(CreateProcessInfo(result));
-			result.Output = processResult.StandardOutput;
+			result.AddTaskResult(processResult.StandardOutput);
 
 			if (processResult.TimedOut)
 			{

@@ -124,7 +124,7 @@ namespace ThoughtWorks.CruiseControl.Core.State.Test
 			IntegrationResult result = new IntegrationResult();
 			result.ProjectName = "<<%_&";
 			result.Label = "<&/<>";
-			result.Output = "<badxml>>";
+			result.AddTaskResult("<badxml>>");
 			_state.SaveState(result);
 		}
 

@@ -1,7 +1,6 @@
 using System;
 using System.IO;
 using NUnit.Framework;
-using ThoughtWorks.CruiseControl.Core.Tasks;
 using ThoughtWorks.CruiseControl.Core.Test;
 using ThoughtWorks.CruiseControl.Core.Util;
 using ThoughtWorks.CruiseControl.Remote;
@@ -29,7 +28,7 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers.Test
 
 			_writer.Write(result);
 
-			string expected = @"<cruisecontrol project=""proj""><modifications />" + CreateExpectedBuildXml(result) + "</cruisecontrol>";
+			string expected = string.Format(@"<cruisecontrol project=""proj""><modifications />{0}</cruisecontrol>", CreateExpectedBuildXml(result));
 			Assert.AreEqual(expected, buffer.ToString());
 		}
 
@@ -83,8 +82,7 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers.Test
         [Test]
         public void WriteIntegrationResult()
         {
-            IntegrationResult result = new IntegrationResult();
-            result.Status = IntegrationStatus.Success;
+            IntegrationResult result = IntegrationResultMother.CreateSuccessful();
             string output = GenerateBuildOutput(result);
             Assert.AreEqual(CreateExpectedBuildXml(result), output);
 			XmlUtil.VerifyXmlIsWellFormed(output);
@@ -94,7 +92,7 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers.Test
 		public void WriteTaskResultsWithInvalidXmlShouldBeWrappedInCDATA()
 		{
 			IntegrationResult result = IntegrationResultMother.CreateSuccessful();
-			result.TaskResults.Add(new DataTaskResult("<foo>"));
+			result.AddTaskResult("<foo>");
 			_writer.Write(result);			
 			AssertContains("<![CDATA[<foo>]]>", buffer.ToString());
 		}
@@ -102,54 +100,57 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers.Test
         [Test]
         public void WriteIntegrationResultOutput()
         {
-            IntegrationResult result = new IntegrationResult();
-            result.Status = IntegrationStatus.Success;
-            result.Output = "<tag></tag>";
+            IntegrationResult result = IntegrationResultMother.CreateSuccessful();
+            result.AddTaskResult("<tag></tag>");
             string output = GenerateBuildOutput(result);
-            Assert.AreEqual(CreateExpectedBuildXml(result), output);
+            Assert.AreEqual(CreateExpectedBuildXml(result, "<tag></tag>"), output);
 			XmlUtil.VerifyXmlIsWellFormed(output);
         }
 
         [Test]
         public void WriteIntegrationResultOutputWithEmbeddedCDATA()
         {
-            IntegrationResult result = new IntegrationResult();
-            result.Status = IntegrationStatus.Success;
-            result.Output = "<tag><![CDATA[a b <c>]]></tag>";
+			IntegrationResult result = IntegrationResultMother.CreateSuccessful();
+			result.AddTaskResult("<tag><![CDATA[a b <c>]]></tag>");
         	string output = GenerateBuildOutput(result);
-        	Assert.AreEqual(CreateExpectedBuildXml(result), output);
+        	Assert.AreEqual(CreateExpectedBuildXml(result, "<tag><![CDATA[a b <c>]]></tag>"), output);
 			XmlUtil.VerifyXmlIsWellFormed(output);
         }
+
+		[Test]
+		public void WriteIntegrationResultOutputWithMultiLineCDATA()
+		{
+			IntegrationResult result = IntegrationResultMother.CreateSuccessful();
+			
+			StringWriter swWithoutNull = new StringWriter();
+			swWithoutNull.WriteLine("<tag><![CDATA[");
+			swWithoutNull.WriteLine("This is a line with a null in it");
+			swWithoutNull.WriteLine("]]></tag>");
+			result.AddTaskResult(swWithoutNull.ToString());
+
+			string expectedResult = CreateExpectedBuildXml(result, swWithoutNull.ToString());
+			XmlUtil.VerifyXmlIsWellFormed(expectedResult);
+		}
 
         [Test]
         public void WriteIntegrationResultOutputWithNullCharacterInCDATA()
         {
-            IntegrationResult result = new IntegrationResult();
-            result.Status = IntegrationStatus.Success;
-
-            StringWriter swWithoutNull = new StringWriter();
-            swWithoutNull.WriteLine("<tag><![CDATA[");
-            swWithoutNull.WriteLine("This is a line with a null in it");
-            swWithoutNull.WriteLine("]]></tag>");
-            result.Output = swWithoutNull.ToString();
-
-            string expectedResult = CreateExpectedBuildXml(result);
-			XmlUtil.VerifyXmlIsWellFormed(expectedResult);
-
-            StringWriter swWithNull = new StringWriter();
+			IntegrationResult result = IntegrationResultMother.CreateSuccessful();
+			StringWriter swWithNull = new StringWriter();
             swWithNull.WriteLine("<tag><![CDATA[");
             swWithNull.WriteLine("This is a line with a null in it\0");
             swWithNull.WriteLine("]]></tag>");
-            result.Output = swWithNull.ToString();
+			result.AddTaskResult(swWithNull.ToString());
 
-            Assert.AreEqual(expectedResult, GenerateBuildOutput(result));
+			string expectedResult = CreateExpectedBuildXml(result, swWithNull.ToString());
+			Assert.AreEqual(expectedResult.Replace("\0", string.Empty), GenerateBuildOutput(result));
         }
 
         [Test]
         public void WriteOutputWithInvalidXml()
         {
             IntegrationResult result = new IntegrationResult();
-            result.Output = "<tag><c></tag>";
+            result.AddTaskResult("<tag><c></tag>");
             string output = GenerateBuildOutput(result);
         	Assert.AreEqual(CreateExpectedBuildXml(result, @"<![CDATA[<tag><c></tag>]]>"), output);
 			XmlUtil.VerifyXmlIsWellFormed(output);
@@ -159,7 +160,7 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers.Test
 		public void ShouldStripXmlDeclaration()
 		{
 			IntegrationResult result = new IntegrationResult();
-			result.Output = @"<?xml version=""1.0""?> <foo>Data</foo>" ;
+			result.AddTaskResult(@"<?xml version=""1.0""?> <foo>Data</foo>");
 			string output = GenerateBuildOutput(result);
 			XmlUtil.VerifyXmlIsWellFormed(output);
 			Assert.AreEqual(-1, output.IndexOf("<![CDATA>"));
@@ -186,9 +187,9 @@ http://nant.sourceforge.net
 <buildresults project=""test"" />";
 
 			IntegrationResult result = CreateIntegrationResult(IntegrationStatus.Success, false);
-			result.Output = nantOut;
+			result.AddTaskResult(nantOut);
 
-			Assert.AreEqual(CreateExpectedBuildXml(result), GenerateBuildOutput(result));
+			Assert.AreEqual(CreateExpectedBuildXml(result, nantOut), GenerateBuildOutput(result));
 		}
 
         private IntegrationResult CreateIntegrationResult(IntegrationStatus status, bool addModifications)

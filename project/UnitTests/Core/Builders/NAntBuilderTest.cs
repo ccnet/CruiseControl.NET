@@ -89,7 +89,7 @@ namespace ThoughtWorks.CruiseControl.Core.Builder.Test
 
 			Assert.IsTrue(result.Succeeded);
 			Assert.AreEqual(IntegrationStatus.Success, result.Status);
-			Assert.AreEqual(returnVal.StandardOutput, result.Output);
+			Assert.AreEqual(returnVal.StandardOutput, result.TaskOutput);
 		}
 
 		[Test]
@@ -103,7 +103,7 @@ namespace ThoughtWorks.CruiseControl.Core.Builder.Test
 
 			Assert.IsTrue(result.Failed);
 			Assert.AreEqual(IntegrationStatus.Failure, result.Status);
-			Assert.AreEqual(returnVal.StandardOutput, result.Output);
+			Assert.AreEqual(returnVal.StandardOutput, result.TaskOutput);
 		}
 
 		[Test, ExpectedException(typeof (BuilderException))]

@@ -18,7 +18,6 @@ namespace ThoughtWorks.CruiseControl.Core.Builder.Test
 		private DevenvBuilder builder;
 		private IMock mockRegistry;
 		private IMock mockProcessExecutor;
-		private IProject project;
 
 		[SetUp]
 		public void Setup()
@@ -26,7 +25,6 @@ namespace ThoughtWorks.CruiseControl.Core.Builder.Test
 			mockRegistry = new DynamicMock(typeof(IRegistry)); 
 			mockProcessExecutor = new DynamicMock(typeof(ProcessExecutor)); 
 			builder = new DevenvBuilder((IRegistry) mockRegistry.MockInstance, (ProcessExecutor) mockProcessExecutor.MockInstance);
-			project = (IProject) new DynamicMock(typeof(IProject)).MockInstance;
 		}
 
 		[TearDown]
@@ -112,8 +110,7 @@ namespace ThoughtWorks.CruiseControl.Core.Builder.Test
 			builder.Run(result);
 
 			Assert.AreEqual(IntegrationStatus.Success, result.Status);
-			CustomAssertion.AssertMatches(@"Rebuild All: \d+ succeeded, \d+ failed, \d+ skipped", result.Output);
-			Assert.IsTrue(result.TaskResults[0] is DevenvTaskResult);
+			CustomAssertion.AssertMatches(@"Rebuild All: \d+ succeeded, \d+ failed, \d+ skipped", result.TaskOutput);
 		}
 
 		[Test]
@@ -134,8 +131,7 @@ namespace ThoughtWorks.CruiseControl.Core.Builder.Test
 			Assert.AreEqual("myWorkingDirectory", info.WorkingDirectory);
 
 			Assert.AreEqual(IntegrationStatus.Failure, result.Status);
-			CustomAssertion.AssertMatches(@"(\.|\n)*could not be found and will not be loaded", result.Output);
-			Assert.IsTrue(result.TaskResults[0] is DevenvTaskResult);
+			CustomAssertion.AssertMatches(@"(\.|\n)*could not be found and will not be loaded", result.TaskOutput);
 		}
 
 		[Test, ExpectedException(typeof(BuilderException))]

@@ -16,14 +16,16 @@ namespace ThoughtWorks.CruiseControl.Core
 		DateTime EndTime { get; }
 		TimeSpan TotalIntegrationTime { get; }
 		IList TaskResults { get; }
-		string Output { get; set; }
 		DateTime LastModificationDate { get; }
 		int LastChangeNumber { get; }
 		Modification[] Modifications { get; set; }
 		Exception ExceptionResult { get; set; }
 		string ArtifactDirectory { get; set;}
 		string ProjectUrl { get; set;}
+		string TaskOutput { get; }
 
+		void AddTaskResult(string result);
+		void AddTaskResult(ITaskResult result);
 		bool IsInitial();
 		bool HasModifications();
 		bool Working { get; }

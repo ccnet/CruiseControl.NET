@@ -1,7 +1,4 @@
-using System;
-
 using Exortech.NetReflector;
-
 using ThoughtWorks.CruiseControl.Remote;
 
 namespace ThoughtWorks.CruiseControl.Core.Builder.Test
@@ -15,7 +12,7 @@ namespace ThoughtWorks.CruiseControl.Core.Builder.Test
 		public void Run(IIntegrationResult result)
 		{
 			result.Status = IntegrationStatus.Success;
-			result.Output = BUILDER_OUTPUT;
+			result.AddTaskResult(BUILDER_OUTPUT);
 			HasRun = true;
 		}
 	}

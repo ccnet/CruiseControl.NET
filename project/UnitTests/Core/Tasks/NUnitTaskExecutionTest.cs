@@ -38,10 +38,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks.Test
 			_processExecutor.ExpectAndReturn("Execute", new ProcessResult(setupData, String.Empty, 0, false), new IsTypeOf(typeof (ProcessInfo)));
 			_task.Run(_result);
 
-			Assert.AreEqual(1, _result.TaskResults.Count);
-			ITaskResult taskResult = (ITaskResult) _result.TaskResults[0];
-			Assert.IsNotNull(taskResult);
-			Assert.AreEqual(setupData, taskResult.Data);
+			Assert.AreEqual(setupData, _result.TaskOutput);
 			_processExecutor.Verify();
 		}
 
@@ -52,7 +49,5 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks.Test
 			_task.Run(_result);
 			_processExecutor.Verify();
 		}
-
-
 	}
 }

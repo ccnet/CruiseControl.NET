@@ -21,7 +21,6 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
 			_writer.WriteAttributeString("project", result.ProjectName);
 			WriteModifications(result.Modifications);
 			WriteBuildElement(result);
-			WriteTaskResults(result);
 			WriteException(result);
 			_writer.WriteEndElement();
 		}
@@ -47,12 +46,7 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
 				_writer.WriteAttributeString("error", "true");
 			}
 			_writer.WriteAttributeString("buildcondition", result.BuildCondition.ToString());
-
-			if (result.Output != null)
-			{
-				WriteOutput(result.Output);
-			}
-	
+			WriteTaskResults(result);
 			_writer.WriteEndElement();
 		}
 

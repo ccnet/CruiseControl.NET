@@ -31,9 +31,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks.Test
 			_task.MergeFiles = new string[] {tempFile};
 			_task.Run(_result);
 
-			Assert.AreEqual(1, _result.TaskResults.Count);
-			ITaskResult taskResult = (ITaskResult) _result.TaskResults[0];
-			Assert.AreEqual(fileData, taskResult.Data);
+			Assert.AreEqual(fileData, _result.TaskOutput);
 		}
 
 		[Test]
@@ -47,9 +45,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks.Test
 
 			_task.MergeFiles = new string[] {_fullPathToTempDir + @"\*.xml"};
 			_task.Run(_result);
-			IList list = _result.TaskResults;
-			Assert.AreEqual(1, list.Count);
-			Assert.AreEqual(fileData, ((ITaskResult) list[0]).Data);
+			Assert.AreEqual(fileData, _result.TaskOutput);
 		}
 
 		[Test]
@@ -64,9 +60,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks.Test
 			_result.WorkingDirectory = _fullPathToTempDir;
 			_task.MergeFiles = new string[] {@"*.xml"};
 			_task.Run(_result);
-			IList list = _result.TaskResults;
-			Assert.AreEqual(1, list.Count);
-			Assert.AreEqual(fileData, ((ITaskResult) list[0]).Data);
+			Assert.AreEqual(fileData, _result.TaskOutput);
 		}
 
 		[Test]
@@ -100,7 +94,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks.Test
 		{
 			_task.MergeFiles = new string[] {@"c:\nonExistantFile.txt"};
 			_task.Run(_result);
-			Assert.AreEqual(0, _result.TaskResults.Count);
+			Assert.AreEqual(string.Empty, _result.TaskOutput);
 		}
 
 		[Test]

@@ -62,7 +62,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 			_builder.Run(result);
 			_nunit.Run(result);
 			_instrument.Report();
-			result.TaskResults.Add(new FileTaskResult(new FileInfo(_reportFileName)));
+			result.AddTaskResult(new FileTaskResult(new FileInfo(_reportFileName)));
 		}
 	}
 }

@@ -12,7 +12,6 @@ namespace ThoughtWorks.CruiseControl.Core.Test
 			result.Status = IntegrationStatus.Success;
 			result.Label = "hello";
 			result.Modifications = new Modification[] { new Modification() };
-			result.Output = "<somexml>output</somexml>";
 			result.MarkEndTime();
 			return result;
 		}
@@ -29,7 +28,7 @@ namespace ThoughtWorks.CruiseControl.Core.Test
 		<modification/>
 	</modifications>
 	<output>{4}</output>
-</buildResult>", result.Status, result.Label, result.StartTime, result.EndTime, result.Output, result.ProjectName));
+</buildResult>", result.Status, result.Label, result.StartTime, result.EndTime, result.TaskOutput, result.ProjectName));
 		}
 	}
 }

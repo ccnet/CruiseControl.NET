@@ -1,6 +1,8 @@
 using System;
 using System.Collections;
+using System.Text;
 using System.Xml.Serialization;
+using ThoughtWorks.CruiseControl.Core.Tasks;
 using ThoughtWorks.CruiseControl.Core.Util;
 using ThoughtWorks.CruiseControl.Remote;
 
@@ -118,17 +120,6 @@ namespace ThoughtWorks.CruiseControl.Core
             get { return EndTime - StartTime; }
         }
 
-        /// <summary>
-        /// Contains the output from the build process.  In the case of NAntBuilder, this is the 
-        /// redirected StdOut of the nant.exe process.
-        /// </summary>
-        [XmlIgnore] 
-		public virtual string Output
-        {
-            get { return _output; }
-            set { _output = value; }
-        }
-
         [XmlIgnore] // Exceptions cannot be serialised because of permission attributes
         public Exception ExceptionResult
         {
@@ -161,7 +152,17 @@ namespace ThoughtWorks.CruiseControl.Core
 			set	{ _projectUrl = value; }
 		}
 
-		public void MarkStartTime()
+    	public void AddTaskResult(string result)
+    	{
+    		AddTaskResult(new DataTaskResult(result));
+    	}
+
+    	public void AddTaskResult(ITaskResult result)
+    	{
+    		_taskResults.Add(result);
+    	}
+
+    	public void MarkStartTime()
         {
             _startTime = DateTime.Now;
         }
@@ -291,5 +292,22 @@ namespace ThoughtWorks.CruiseControl.Core
 
 			return false;
 		}
+
+		/// <summary>
+		/// Contains the output from the build process.  In the case of NAntBuilder, this is the 
+		/// redirected StdOut of the nant.exe process.
+		/// </summary>
+		[XmlIgnore] 
+		public string TaskOutput
+    	{
+    		get {
+    			StringBuilder builder = new StringBuilder();
+				foreach (ITaskResult result in _taskResults)
+				{
+					builder.Append(result.Data);
+				}
+				return builder.ToString();
+    		}
+    	}
     }
 }

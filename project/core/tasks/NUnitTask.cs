@@ -42,7 +42,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 			{
 				Log.Debug(string.Format("Running unit tests: {0} {1}", NUnitPath, args));
 				ProcessResult nunitResult = _processExecutor.Execute(new ProcessInfo(NUnitPath, args));
-				result.TaskResults.Add(new DataTaskResult(nunitResult.StandardOutput));
+				result.AddTaskResult(nunitResult.StandardOutput);
 			}
 
 		}

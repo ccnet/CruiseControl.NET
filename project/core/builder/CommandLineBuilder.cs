@@ -1,7 +1,7 @@
 using System;
 using System.IO;
-using ThoughtWorks.CruiseControl.Core.Util;
 using Exortech.NetReflector;
+using ThoughtWorks.CruiseControl.Core.Util;
 using ThoughtWorks.CruiseControl.Remote;
 
 namespace ThoughtWorks.CruiseControl.Core.Builder
@@ -66,7 +66,8 @@ namespace ThoughtWorks.CruiseControl.Core.Builder
 		public void Run(IIntegrationResult result)
 		{
 			ProcessResult processResult = AttemptExecute(CreateProcessInfo(result));
-			result.Output = processResult.StandardOutput + "\n" + processResult.StandardError;
+			string output = processResult.StandardOutput + "\n" + processResult.StandardError;
+			result.AddTaskResult(output);
 
 			if (processResult.TimedOut)
 			{

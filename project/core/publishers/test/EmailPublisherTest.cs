@@ -94,7 +94,7 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers.Test
 			IntegrationResult result = IntegrationResultMother.CreateStillSuccessful();
 			IMock mockTaskResult = new DynamicMock(typeof (ITaskResult));
 			mockTaskResult.SetupResult("Data", "<test-results name=\"foo\" total=\"10\" failures=\"0\" not-run=\"0\"><test-suite></test-suite></test-results>");
-			result.TaskResults.Add((ITaskResult) mockTaskResult.MockInstance);
+			result.AddTaskResult((ITaskResult)mockTaskResult.MockInstance);
 			_publisher.IncludeDetails = true;
 			string message = _publisher.CreateMessage(result);
 			Assert.IsTrue(message.IndexOf("Tests run") >= 0);
