@@ -13,41 +13,42 @@ namespace ThoughtWorks.CruiseControl.Core.Builder
 	{
 		public const int DEFAULT_BUILD_TIMEOUT = 600;
 		public const string DEFAULT_EXECUTABLE = "nant.exe";
-		public const string DEFAULT_LABEL = "NO-LABEL";
 		public const string DEFAULT_LOGGER = "NAnt.Core.XmlLogger";
 
 		private ProcessExecutor _executor;
 
-		public NAntBuilder() : this(new ProcessExecutor()) { }
+		public NAntBuilder() : this(new ProcessExecutor())
+		{
+		}
 
 		public NAntBuilder(ProcessExecutor executor)
 		{
 			_executor = executor;
 		}
 
-		[ReflectorProperty("executable", Required = false)] 
+		[ReflectorProperty("executable", Required = false)]
 		public string Executable = DEFAULT_EXECUTABLE;
 
-		[ReflectorProperty("baseDirectory", Required = false)] 
+		[ReflectorProperty("baseDirectory", Required = false)]
 		public string ConfiguredBaseDirectory;
 
-		[ReflectorProperty("buildFile", Required = false)] 
+		[ReflectorProperty("buildFile", Required = false)]
 		public string BuildFile;
 
-		[ReflectorProperty("buildArgs", Required = false)] 
+		[ReflectorProperty("buildArgs", Required = false)]
 		public string BuildArgs;
 
 		[ReflectorProperty("logger", Required = false)]
 		public string Logger = DEFAULT_LOGGER;
 
-		[ReflectorArray("targetList", Required = false)] 
+		[ReflectorArray("targetList", Required = false)]
 		public string[] Targets = new string[0];
 
 		/// <summary>
 		/// Gets and sets the maximum number of seconds that the build may take.  If the build process takes longer than
 		/// this period, it will be killed.  Specify this value as zero to disable process timeouts.
 		/// </summary>
-		[ReflectorProperty("buildTimeoutSeconds", Required = false)] 
+		[ReflectorProperty("buildTimeoutSeconds", Required = false)]
 		public int BuildTimeoutSeconds = DEFAULT_BUILD_TIMEOUT;
 
 		/// <summary>
@@ -105,7 +106,7 @@ namespace ThoughtWorks.CruiseControl.Core.Builder
 			try
 			{
 				return _executor.Execute(info);
-			}			
+			}
 			catch (Exception e)
 			{
 				throw new BuilderException(this, string.Format("Unable to execute: {0}\n{1}", BuildCommand, e), e);
@@ -122,29 +123,59 @@ namespace ThoughtWorks.CruiseControl.Core.Builder
 		/// specify the build-file name, the targets to build to, 
 		/// </summary>
 		/// <returns></returns>
-		internal string CreateArgs(IIntegrationResult result)
+		private string CreateArgs(IIntegrationResult result)
 		{
-			return string.Format("{0} {1} {2} {3} {4}", CreateBuildFileArg(), CreateLoggerArg(), BuildArgs, CreateLabelToApplyArg(result), string.Join(" ", Targets)).Trim();
+			StringBuilder buffer = new StringBuilder();
+			AppendBuildFileArg(buffer);
+			AppendLoggerArg(buffer);
+			AppendIfNotBlank(buffer, BuildArgs);
+			AppendIntegrationResultProperties(buffer, result);
+			AppendTargets(buffer);
+			return buffer.ToString();
 		}
 
-		private string CreateBuildFileArg()
+		private void AppendBuildFileArg(StringBuilder buffer)
 		{
-			if (StringUtil.IsBlank(BuildFile)) return string.Empty;
-
-			return "-buildfile:" + BuildFile;
+			AppendIfNotBlank(buffer, @"-buildfile:{0}", SurroundInQuotesIfContainsSpace(BuildFile));
 		}
 
-		private string CreateLoggerArg()
+		private void AppendLoggerArg(StringBuilder buffer)
 		{
-			if (StringUtil.IsBlank(Logger)) return string.Empty;
-
-			return "-logger:" + Logger;
+			AppendIfNotBlank(buffer, "-logger:{0}", Logger);
 		}
 
-		private string CreateLabelToApplyArg(IIntegrationResult result)
+		private void AppendIntegrationResultProperties(StringBuilder buffer, IIntegrationResult result)
 		{
-			string label = StringUtil.IsBlank(result.Label) ? DEFAULT_LABEL : result.Label;
-			return "-D:label-to-apply=" + label;
+			string label = SurroundInQuotesIfContainsSpace(result.Label);
+			AppendIfNotBlank(buffer, @"-D:label-to-apply={0}", label);
+			AppendIfNotBlank(buffer, @"-D:ccnet.label={0}", label);
+			AppendIfNotBlank(buffer, @"-D:ccnet.buildcondition={0}", result.BuildCondition.ToString());
+		}
+
+		private void AppendTargets(StringBuilder buffer)
+		{
+			AppendIfNotBlank(buffer, string.Join(" ", Targets));
+		}
+
+		private void AppendIfNotBlank(StringBuilder buffer, string value)
+		{
+			AppendIfNotBlank(buffer, "{0}", value);
+		}
+
+		private void AppendIfNotBlank(StringBuilder buffer, string format, string value)
+		{
+			if (! StringUtil.IsBlank(value))
+			{
+				if (buffer.Length > 0) buffer.Append(" ");
+				buffer.AppendFormat(format, value);
+			}
+		}
+
+		private string SurroundInQuotesIfContainsSpace(string value)
+		{
+			if (! StringUtil.IsBlank(value) && value.IndexOf(' ') >= 0)
+				return string.Format(@"""{0}""", value);
+			return value;
 		}
 
 		public bool ShouldRun(IIntegrationResult result)
@@ -163,42 +194,29 @@ namespace ThoughtWorks.CruiseControl.Core.Builder
 			get
 			{
 				StringBuilder combined = new StringBuilder();
-				bool isFirst = true;
 				foreach (string file in Targets)
 				{
-					if (! isFirst)
-					{
-						combined.Append(Environment.NewLine);
-					}
+					if (combined.Length > 0) combined.Append(Environment.NewLine);
 					combined.Append(file);
-					isFirst = false;
 				}
 				return combined.ToString();
 			}
 			set
 			{
-				if (value == null || value == string.Empty)
+				if (StringUtil.IsBlank(value))
 				{
 					Targets = new string[0];
 					return;
 				}
-				ArrayList files = new ArrayList();
+				ArrayList targets = new ArrayList();
 				using (StringReader reader = new StringReader(value))
 				{
-					while(true)
+					while (reader.Peek() >= 0)
 					{
-						string line = reader.ReadLine();
-						if(line != null)
-						{
-							files.Add(line);
-						}
-						else
-						{
-							break;
-						}
+						targets.Add(reader.ReadLine());
 					}
 				}
-				Targets = (string[]) files.ToArray(typeof (string));
+				Targets = (string[]) targets.ToArray(typeof (string));
 			}
 		}
 	}

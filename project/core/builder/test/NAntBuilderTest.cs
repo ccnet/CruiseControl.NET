@@ -144,7 +144,7 @@ namespace ThoughtWorks.CruiseControl.Core.Builder.Test
 			Assert.AreEqual(_builder.Executable, info.FileName);
 			Assert.AreEqual(_builder.ConfiguredBaseDirectory, info.WorkingDirectory);
 			Assert.AreEqual(2000, info.TimeOut);
-			Assert.AreEqual("-buildfile:mybuild.build -logger:" + NAntBuilder.DEFAULT_LOGGER + " myArgs -D:label-to-apply=1.0 target1 target2", info.Arguments);
+			Assert.AreEqual(@"-buildfile:mybuild.build -logger:NAnt.Core.XmlLogger myArgs -D:label-to-apply=1.0 -D:ccnet.label=1.0 -D:ccnet.buildcondition=NoBuild target1 target2", info.Arguments);
 		}
 
 		[Test]
@@ -159,7 +159,21 @@ namespace ThoughtWorks.CruiseControl.Core.Builder.Test
 			ProcessInfo info = (ProcessInfo) constraint.Parameter;
 			Assert.AreEqual(_builder.Executable, NAntBuilder.DEFAULT_EXECUTABLE);
 			Assert.AreEqual(NAntBuilder.DEFAULT_BUILD_TIMEOUT*1000, info.TimeOut);
-			Assert.AreEqual("-logger:" + NAntBuilder.DEFAULT_LOGGER + "  -D:label-to-apply=NO-LABEL", info.Arguments);
+			Assert.AreEqual("-logger:NAnt.Core.XmlLogger -D:ccnet.buildcondition=NoBuild", info.Arguments);
+		}
+
+		[Test]
+		public void ShouldPutQuotesAroundBuildFileIfItContainsASpace()
+		{
+			ProcessResult returnVal = CreateSuccessfulProcessResult();
+			CollectingConstraint constraint = new CollectingConstraint();
+			_mockExecutor.ExpectAndReturn("Execute", returnVal, constraint);
+
+			_builder.BuildFile = "my project.build";
+			_builder.Run(new IntegrationResult());
+
+			ProcessInfo info = (ProcessInfo) constraint.Parameter;
+			Assert.AreEqual(@"-buildfile:""my project.build"" -logger:NAnt.Core.XmlLogger -D:ccnet.buildcondition=NoBuild", info.Arguments);
 		}
 
 		[Test]
@@ -256,7 +270,6 @@ namespace ThoughtWorks.CruiseControl.Core.Builder.Test
 			Assert.AreEqual(0, _builder.Targets.Length);
 		}
 
-
 		private ProcessResult CreateSuccessfulProcessResult()
 		{
 			return new ProcessResult("output", null, SUCCESSFUL_EXIT_CODE, false);
@@ -265,6 +278,7 @@ namespace ThoughtWorks.CruiseControl.Core.Builder.Test
 		private IntegrationResult CreateIntegrationResultWithModifications(IntegrationStatus status)
 		{
 			IntegrationResult result = new IntegrationResult();
+			result.BuildCondition = BuildCondition.ForceBuild;
 			result.Status = status;
 			result.Modifications = new Modification[] {new Modification()};
 			return result;
