@@ -478,6 +478,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "publishers\ExecutablePublisher.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "publishers\FileTaskResult.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -559,6 +564,11 @@
                 />
                 <File
                     RelPath = "publishers\test\EmailPublisherTest.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "publishers\test\ExecutablePublisherTest.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
