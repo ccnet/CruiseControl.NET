@@ -10,7 +10,6 @@
 	</HEAD>
 	<body topmargin="0" leftmargin="0" marginheight="0" marginwidth="0" bgcolor="#000066">
 		<!-- head: logo, controls -->
-		<form runat="server" ID="DecoratorForm">
 			<table class="main-panel" border="0" align="center" cellpadding="0" cellspacing="0" width="100%">
 				<tr>
 					<td valign="middle" align="left">
@@ -66,6 +65,5 @@
 					</td>
 				</tr>
 			</table>
-		</form>
 	</body>
 </HTML>
