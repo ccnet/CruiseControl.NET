@@ -13,7 +13,7 @@ namespace tw.ccnet.core.builder.test
 	{
 		public const string TEMP_DIR = "NAntBuilderTest";
 		public static readonly string NANT_TEST_BASEDIR = ".";
-		public static readonly string NANT_TEST_EXECUTABLE = @"C:\nant-0.8.2-rc3\bin\nant.exe";
+		public static readonly string NANT_TEST_EXECUTABLE = @"..\tools\nant\nant.exe"; // @"C:\nant-0.8.2-rc3\bin\nant.exe";
 		public static readonly string NANT_TEST_BUILDFILE = TempFileUtil.GetTempFilePath("nant-build-temp", "test.build");
 		public static readonly string NANT_TEST_TARGET = "success";
 

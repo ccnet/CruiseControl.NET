@@ -1,0 +1,54 @@
+Microsoft Visual Studio Solution File, Format Version 7.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ccnet2002.remote", "ccnet.remote\ccnet2002.remote.csproj", "{E820CF3B-8C5A-4002-BC16-B7818D3D54A8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "console2002", "console\console2002.csproj", "{E14EE67D-C24E-4088-B01B-35B742E99E85}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "core2002", "core\core2002.csproj", "{F8113DB9-6C47-4FD1-8A01-655FCF151747}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "integration2002", "integration\integration2002.csproj", "{BDFCDEE6-98EC-499C-8792-47D2DFC08647}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "service2002", "service\service2002.csproj", "{4DE3AEAD-FAFB-4D15-A0D7-3A9AAECF08E1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "web2002", "web\web2002.csproj", "{317E46BA-74DE-411D-A09D-37193EEFD856}"
+EndProject
+Global
+	GlobalSection(SolutionConfiguration) = preSolution
+		ConfigName.0 = Debug
+		ConfigName.1 = Release
+	EndGlobalSection
+	GlobalSection(ProjectDependencies) = postSolution
+	EndGlobalSection
+	GlobalSection(ProjectConfiguration) = postSolution
+		{E820CF3B-8C5A-4002-BC16-B7818D3D54A8}.Debug.ActiveCfg = Debug|.NET
+		{E820CF3B-8C5A-4002-BC16-B7818D3D54A8}.Debug.Build.0 = Debug|.NET
+		{E820CF3B-8C5A-4002-BC16-B7818D3D54A8}.Release.ActiveCfg = Release|.NET
+		{E820CF3B-8C5A-4002-BC16-B7818D3D54A8}.Release.Build.0 = Release|.NET
+		{E14EE67D-C24E-4088-B01B-35B742E99E85}.Debug.ActiveCfg = Debug|.NET
+		{E14EE67D-C24E-4088-B01B-35B742E99E85}.Debug.Build.0 = Debug|.NET
+		{E14EE67D-C24E-4088-B01B-35B742E99E85}.Release.ActiveCfg = Release|.NET
+		{E14EE67D-C24E-4088-B01B-35B742E99E85}.Release.Build.0 = Release|.NET
+		{F8113DB9-6C47-4FD1-8A01-655FCF151747}.Debug.ActiveCfg = Debug|.NET
+		{F8113DB9-6C47-4FD1-8A01-655FCF151747}.Debug.Build.0 = Debug|.NET
+		{F8113DB9-6C47-4FD1-8A01-655FCF151747}.Release.ActiveCfg = Release|.NET
+		{F8113DB9-6C47-4FD1-8A01-655FCF151747}.Release.Build.0 = Release|.NET
+		{BDFCDEE6-98EC-499C-8792-47D2DFC08647}.Debug.ActiveCfg = Debug|.NET
+		{BDFCDEE6-98EC-499C-8792-47D2DFC08647}.Debug.Build.0 = Debug|.NET
+		{BDFCDEE6-98EC-499C-8792-47D2DFC08647}.Release.ActiveCfg = Release|.NET
+		{BDFCDEE6-98EC-499C-8792-47D2DFC08647}.Release.Build.0 = Release|.NET
+		{4DE3AEAD-FAFB-4D15-A0D7-3A9AAECF08E1}.Debug.ActiveCfg = Debug|.NET
+		{4DE3AEAD-FAFB-4D15-A0D7-3A9AAECF08E1}.Debug.Build.0 = Debug|.NET
+		{4DE3AEAD-FAFB-4D15-A0D7-3A9AAECF08E1}.Release.ActiveCfg = Release|.NET
+		{4DE3AEAD-FAFB-4D15-A0D7-3A9AAECF08E1}.Release.Build.0 = Release|.NET
+		{317E46BA-74DE-411D-A09D-37193EEFD856}.Debug.ActiveCfg = Debug|.NET
+		{317E46BA-74DE-411D-A09D-37193EEFD856}.Debug.Build.0 = Debug|.NET
+		{317E46BA-74DE-411D-A09D-37193EEFD856}.Release.ActiveCfg = Release|.NET
+		{317E46BA-74DE-411D-A09D-37193EEFD856}.Release.Build.0 = Release|.NET
+	EndGlobalSection
+	GlobalSection(SolutionItems) = postSolution
+		Item:1 = ..\ccnet.build
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+	EndGlobalSection
+	GlobalSection(ExtensibilityAddIns) = postSolution
+	EndGlobalSection
+EndGlobal

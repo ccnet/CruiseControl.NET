@@ -7,8 +7,8 @@ namespace tw.ccnet.core.test
 	[TestFixture]
 	public class AssemblyLabellerTest
 	{
-		public const int BUILD = 1210;
-		public const int REVISION = 29078;
+		public const int BUILD = 1137;
+		public const int REVISION = 41003;
 
 		[Test]
 		public void TestIncrementNetReflectorRevision() 
