@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <FxCopProject Version="1.21" Name="My FxCop Project">
  <ProjectOptions>
   <SharedProject>True</SharedProject>
@@ -11,7 +11,8 @@
   <PermitAnalysis>True</PermitAnalysis>
  </ProjectOptions>
  <Targets>
-  <Target Name="$(ProjectDir)/../../project/core/bin/Debug/ccnet.core.dll" Analyze="True" AnalyzeAllChildren="True" />
+  <Target Name="$(ProjectDir)/../../build/remote/ThoughtWorks.CruiseControl.Remote.dll" Analyze="True" AnalyzeAllChildren="True" />
+  <Target Name="$(ProjectDir)/../../build/core/ThoughtWorks.CruiseControl.Core.dll" Analyze="True" AnalyzeAllChildren="True" />
  </Targets>
  <RuleFiles>
   <RuleFile Name="$(FxCopDir)\Rules\DesignRules.dll" Enabled="True" AllRulesEnabled="True" />

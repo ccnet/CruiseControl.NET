@@ -4,13 +4,13 @@
     <xs:element name="FxCopReport">
         <xs:complexType>
             <xs:all>
-                <xs:element ref="Namespaces" minOccurs="0" maxOccurs="1"/>
+                <xs:element ref="Namespaces" minOccurs="0" maxOccurs="1" />
                 <xs:element ref="Targets" minOccurs="0" maxOccurs="1" />
                 <xs:element ref="Notes" minOccurs="0" maxOccurs="1" />
                 <xs:element ref="Rules" minOccurs="0" maxOccurs="1" />
             </xs:all>
             <xs:attribute name="Version" type="xs:double" use="required" />
-            <xs:attribute name="LastAnalysis" type="xs:dateTime" use="optional" />
+            <xs:attribute name="LastAnalysis" type="xs:string" use="optional" />
         </xs:complexType>
     </xs:element>
     <!-- Message & Note element type definitions -->
@@ -48,24 +48,39 @@
             <xs:element name="Note" type="NoteIdentifier" minOccurs="0" maxOccurs="unbounded" />
         </xs:sequence>
     </xs:complexType>
-    <xs:complexType name="Resolution" mixed="true">
-        <xs:sequence>
-            <xs:any minOccurs="0" maxOccurs="unbounded" processContents="skip"></xs:any>
-        </xs:sequence>
-    </xs:complexType>
-    <!-- Message & Note definitions -->
+    <xs:complexType name="Resolution">
+      <xs:sequence>
+        <xs:any namespace="##other" processContents="skip"/> 
+      </xs:sequence>
+    </xs:complexType>    
+    <!-- Message & Issue definitions -->
+    <xs:element name="Issue">
+        <xs:complexType>
+            <xs:all>
+                <xs:element ref="SourceCode" minOccurs="0" maxOccurs="1" />
+                <xs:element name="Resolution" minOccurs="1" maxOccurs="1"/>
+            </xs:all>
+	    <xs:attribute name="Certainty" type="Certainty" use="required" />
+            <xs:attribute name="Level" type="MessageLevel" use="required" />
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="Issues">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="Issue" minOccurs="1" maxOccurs="unbounded" />
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
     <xs:element name="Message">
         <xs:complexType>
             <xs:all>
                 <xs:element name="Rule" type="RuleIdentifier" minOccurs="1" maxOccurs="1" />
+                <xs:element ref="Issues" minOccurs="1" maxOccurs="1" />
                 <xs:element name="Notes" type="NoteIdentifiers" minOccurs="0" maxOccurs="1" />
-                <xs:element name="Resolution" type="Resolution" minOccurs="1" maxOccurs="1" />
             </xs:all>
-            <xs:attribute name="Level" type="MessageLevel" use="required" />
-            <xs:attribute name="Certainty" type="Certainty" use="required" />
             <xs:attribute name="Status" type="MessageStatus" use="required" />
-            <xs:attribute name="Created" type="xs:dateTime" use="required" />
-            <xs:attribute name="LastSeen" type="xs:dateTime" use="required" />
+            <xs:attribute name="Created" type="xs:string" use="required" />
+            <xs:attribute name="LastSeen" type="xs:string" use="optional" />
         </xs:complexType>
     </xs:element>
     <xs:element name="Messages">
@@ -75,11 +90,19 @@
             </xs:sequence>
         </xs:complexType>
     </xs:element>
+    <xs:element name="SourceCode">
+        <xs:complexType>
+            <xs:attribute name="Path" type="xs:string" use="required" />
+            <xs:attribute name="File" type="xs:string" use="required" />
+            <xs:attribute name="Line" type="xs:integer" use="required" />
+        </xs:complexType>
+    </xs:element>
+    <!-- Note definition -->
     <xs:element name="Note">
         <xs:complexType>
             <xs:simpleContent>
                 <xs:extension base="NoteIdentifier">
-                    <xs:attribute name="Modified" type="xs:dateTime" use="required" />
+                    <xs:attribute name="Modified" type="xs:string" use="required" />
                     <xs:attribute name="UserName" type="xs:string" use="required" />
                 </xs:extension>
             </xs:simpleContent>
@@ -119,7 +142,7 @@
         <xs:complexType>
             <xs:complexContent>
                 <xs:extension base="RuleIdentifier">
-                    <xs:all>
+                    <xs:sequence>
                         <xs:element name="Name" type="xs:string" minOccurs="1" maxOccurs="1" />
                         <xs:element name="Description" type="xs:string" minOccurs="1" maxOccurs="1" />
                         <xs:element name="LongDescription" type="xs:string" minOccurs="1" maxOccurs="1" />
@@ -129,7 +152,7 @@
                         <xs:element name="Email" type="xs:string" minOccurs="1" maxOccurs="1" />
                         <xs:element name="MessageLevel" type="RuleMessageLevel" minOccurs="1" maxOccurs="1" />
                         <xs:element name="File" type="RuleFile" minOccurs="1" maxOccurs="1" />
-                    </xs:all>
+                    </xs:sequence>
                 </xs:extension>
             </xs:complexContent>
         </xs:complexType>
@@ -150,64 +173,64 @@
     <xs:complexType name="Parameter">
         <xs:complexContent>
             <xs:extension base="NamedElement">
-                <xs:all>
+                <xs:sequence>
                     <xs:element ref="Messages" minOccurs="0" maxOccurs="1" />
-                </xs:all>
+                </xs:sequence>
             </xs:extension>
         </xs:complexContent>
     </xs:complexType>
     <xs:complexType name="Method">
         <xs:complexContent>
             <xs:extension base="NamedElement">
-                <xs:all>
+                <xs:sequence>
                     <xs:element ref="Messages" minOccurs="0" maxOccurs="1" />
                     <xs:element ref="Parameters" minOccurs="0" maxOccurs="1" />
-                </xs:all>
+                </xs:sequence>
             </xs:extension>
         </xs:complexContent>
     </xs:complexType>
     <xs:complexType name="Field">
         <xs:complexContent>
             <xs:extension base="NamedElement">
-                <xs:all>
+                <xs:sequence>
                     <xs:element ref="Messages" minOccurs="0" maxOccurs="1" />
-                </xs:all>
+                </xs:sequence>
             </xs:extension>
         </xs:complexContent>
     </xs:complexType>
     <xs:complexType name="Event">
         <xs:complexContent>
             <xs:extension base="NamedElement">
-                <xs:all>
+                <xs:sequence>
                     <xs:element ref="Messages" minOccurs="0" maxOccurs="1" />
                     <xs:element ref="Methods" minOccurs="0" maxOccurs="1" />
-                </xs:all>
+                </xs:sequence>
             </xs:extension>
         </xs:complexContent>
     </xs:complexType>
     <xs:complexType name="Property">
         <xs:complexContent>
             <xs:extension base="NamedElement">
-                <xs:all>
+                <xs:sequence>
                     <xs:element ref="Messages" minOccurs="0" maxOccurs="1" />
                     <xs:element ref="Methods" minOccurs="0" maxOccurs="1" />
-                </xs:all>
+                </xs:sequence>
             </xs:extension>
         </xs:complexContent>
     </xs:complexType>
     <xs:complexType name="Constructor">
         <xs:complexContent>
             <xs:extension base="NamedElement">
-                <xs:all>
+                <xs:sequence>
                     <xs:element ref="Messages" minOccurs="0" maxOccurs="1" />
                     <xs:element ref="Parameters" minOccurs="0" maxOccurs="1" />
-                </xs:all>
+                </xs:sequence>
             </xs:extension>
         </xs:complexContent>
     </xs:complexType>
     <!-- Target types -->
     <xs:group name="ClassElements">
-        <xs:all>
+        <xs:sequence>
             <xs:element ref="Messages" minOccurs="0" maxOccurs="1" />
             <xs:element ref="Classes" minOccurs="0" maxOccurs="1" />
             <xs:element ref="Enums" minOccurs="0" maxOccurs="1" />
@@ -219,7 +242,7 @@
             <xs:element ref="Constructors" minOccurs="0" maxOccurs="1" />
             <xs:element ref="Events" minOccurs="0" maxOccurs="1" />
             <xs:element ref="Properties" minOccurs="0" maxOccurs="1" />
-        </xs:all>
+        </xs:sequence>
     </xs:group>
     <xs:complexType name="Class">
         <xs:complexContent>
@@ -238,28 +261,28 @@
     <xs:complexType name="Enum">
         <xs:complexContent>
             <xs:extension base="NamedElement">
-                <xs:all>
+                <xs:sequence>
                     <xs:element ref="Messages" minOccurs="0" maxOccurs="1" />
                     <xs:element ref="Fields" minOccurs="0" maxOccurs="1" />
-                </xs:all>
+                </xs:sequence>
             </xs:extension>
         </xs:complexContent>
     </xs:complexType>
     <xs:complexType name="Delegate">
         <xs:complexContent>
             <xs:extension base="NamedElement">
-                <xs:all>
+                <xs:sequence>
                     <xs:element ref="Messages" minOccurs="0" maxOccurs="1" />
                     <xs:element ref="Constructors" minOccurs="0" maxOccurs="1" />
                     <xs:element ref="Methods" minOccurs="0" maxOccurs="1" />
-                </xs:all>
+                </xs:sequence>
             </xs:extension>
         </xs:complexContent>
     </xs:complexType>
     <xs:complexType name="Interface">
         <xs:complexContent>
             <xs:extension base="NamedElement">
-                <xs:all>
+                <xs:sequence>
                     <xs:element ref="Messages" minOccurs="0" maxOccurs="1" />
                     <xs:element ref="Methods" minOccurs="0" maxOccurs="1" />
                     <xs:element ref="Properties" minOccurs="0" maxOccurs="1" />
@@ -268,7 +291,7 @@
                     <xs:element ref="Classes" minOccurs="0" maxOccurs="1" />
                     <xs:element ref="Fields" minOccurs="0" maxOccurs="1" />
                     <xs:element ref="Constructors" minOccurs="0" maxOccurs="1" />
-                </xs:all>
+                </xs:sequence>
             </xs:extension>
         </xs:complexContent>
     </xs:complexType>
@@ -276,7 +299,7 @@
     <xs:complexType name="Namespace">
         <xs:complexContent>
             <xs:extension base="NamedElement">
-                <xs:all>
+                <xs:sequence>
                     <xs:element ref="Messages" minOccurs="0" maxOccurs="1" />
                     <xs:element ref="Classes" minOccurs="0" maxOccurs="1" />
                     <xs:element ref="ValueTypes" minOccurs="0" maxOccurs="1" />
@@ -285,17 +308,17 @@
                     <xs:element ref="Interfaces" minOccurs="0" maxOccurs="1" />
                     <xs:element ref="Methods" minOccurs="0" maxOccurs="1" />
                     <xs:element ref="Fields" minOccurs="0" maxOccurs="1" />
-                </xs:all>
+                </xs:sequence>
             </xs:extension>
         </xs:complexContent>
     </xs:complexType>
     <xs:complexType name="Module">
         <xs:complexContent>
             <xs:extension base="NamedElement">
-                <xs:all>
+                <xs:sequence>
                     <xs:element ref="Messages" minOccurs="0" maxOccurs="1" />
                     <xs:element ref="Namespaces" minOccurs="0" maxOccurs="1" />
-                </xs:all>
+                </xs:sequence>
             </xs:extension>
         </xs:complexContent>
     </xs:complexType>
@@ -303,9 +326,9 @@
     <xs:complexType name="Resource">
         <xs:complexContent>
             <xs:extension base="NamedElement">
-                <xs:all>
+                <xs:sequence>
                     <xs:element ref="Messages" minOccurs="0" maxOccurs="1" />
-                </xs:all>
+                </xs:sequence>
             </xs:extension>
         </xs:complexContent>
     </xs:complexType>
@@ -313,11 +336,11 @@
     <xs:complexType name="Target">
         <xs:complexContent>
             <xs:extension base="NamedElement">
-                <xs:all>
+                <xs:sequence>
                     <xs:element ref="Messages" minOccurs="0" maxOccurs="1" />
                     <xs:element ref="Modules" minOccurs="0" maxOccurs="1" />
                     <xs:element ref="Resources" minOccurs="0" maxOccurs="1" />
-                </xs:all>
+                </xs:sequence>
             </xs:extension>
         </xs:complexContent>
     </xs:complexType>

@@ -5,12 +5,16 @@
 
 <xsl:output method="text"/>
 
-<xsl:template match="Message">
-	<xsl:apply-templates select="SourceCode"/>
-	<xsl:apply-templates select="Rule"/>
-	<xsl:apply-templates select=".." mode="parent"/> : <xsl:apply-templates select="Resolution/Text" />
-	<xsl:text disable-output-escaping="yes">&#xD;&#xA;</xsl:text>
+<xsl:template match="/">
+	<xsl:apply-templates select="//Issue" />
 </xsl:template>
+
+<xsl:template match="Issue">
+	<xsl:apply-templates select="SourceCode"/><xsl:value-of select="@Level" /> : <xsl:apply-templates select="../.." mode="parentMessage" /><xsl:apply-templates select="Resolution/Text" /><xsl:text disable-output-escaping="yes">&#xD;&#xA;</xsl:text>
+</xsl:template>
+
+<xsl:template match="Message" mode="parentMessage">	
+<xsl:apply-templates select="Rule"/><xsl:apply-templates select=".." mode="parent"/> : </xsl:template>
 
 <xsl:template match="SourceCode"><xsl:value-of select="@Path"/>\<xsl:value-of select="@File"/>(<xsl:value-of select="@Line"/>) : </xsl:template>
 
@@ -34,6 +38,10 @@
 
 <xsl:template match="Namespaces" mode="parent">
 	<xsl:if test="not(name(..)='FxCopReport')"><xsl:apply-templates select=".." mode="parent"/></xsl:if>
+</xsl:template>
+
+<xsl:template match="Target" mode="parent">
+	<xsl:value-of select="@Name" />
 </xsl:template>
 
 <xsl:template match="*" mode="parent">

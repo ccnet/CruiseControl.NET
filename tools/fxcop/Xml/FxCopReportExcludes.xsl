@@ -5,14 +5,16 @@
 
 <xsl:template match="/FxCopReport">
 	<html>
-	<head><title>Analysis Report, excluded violations</title></head>
+	<head><title>Analysis Report</title></head>
 	<style>
 		#Title {font-family: Verdana; font-size: 14pt; color: black; font-weight: bold}
 		.ColumnHeader {font-family: Verdana; font-size: 8pt; background-color:white; color: black}
-		.Severity1 {font-family: Verdana; font-size: 8pt; color: darkred; font-weight: bold; text-align: center}
-		.Severity2 {font-family: Verdana; font-size: 8pt; color: royalblue; font-weight: bold; text-align: center}
-		.Severity3 {font-family: Verdana; font-size: 8pt; color: green; font-weight: bold; text-align: center}
-		.Severity4 {font-family: Verdana; font-size: 8pt; color: darkgray; font-weight: bold; text-align: center}
+		.CriticalError {font-family: Verdana; font-size: 8pt; color: darkred; font-weight: bold; text-align: center}
+		.Error {font-family: Verdana; font-size: 8pt; color: royalblue; font-weight: bold; text-align: center}
+		.CriticalWarning {font-family: Verdana; font-size: 8pt; color: green; font-weight: bold; text-align: center}
+		.Warning {font-family: Verdana; font-size: 8pt; color: darkgray; font-weight: bold; text-align: center}
+		.Information {font-family: Verdana; font-size: 8pt; color: black; font-weight: bold; text-align: center}
+
 		.PropertyName {font-family: Verdana; font-size: 8pt; color: black; font-weight: bold}
 		.PropertyContent {font-family: Verdana; font-size: 8pt; color: black}
 		.NodeIcon { font-family: WebDings; font-size: 12pt; color: navy; padding-right: 5;}
@@ -77,7 +79,7 @@
 
 	<!-- Report Title -->
 	<div id="Title">
-		FxCop <xsl:value-of select="@Version"/> Analysis Report, excluded violations
+		FxCop <xsl:value-of select="@Version"/> Analysis Report
 	</div>
 	<br/>
 	<table>
@@ -221,7 +223,7 @@
 
 		<table width="100%">
 			<tr>
-				<td class="ColumnHeader">Severity</td>
+				<td class="ColumnHeader">Message Level</td>
 				<td class="ColumnHeader">Certainty</td>
 				<td class="ColumnHeader" width="100%">Resolution</td>
 			</tr>
@@ -238,6 +240,30 @@
 	<xsl:variable name="messageId" select="generate-id()"/>
 	<xsl:variable name="rulename" select="Rule/@TypeName"/>
 
+        <xsl:apply-templates select="Issues/Issue" >
+                <xsl:with-param name="messageId"><xsl:value-of select="$messageId"/></xsl:with-param>
+        </xsl:apply-templates>
+
+	<tr>
+		<td colspan="3">
+			<div class="MessageDiv" style="display: none">
+				<xsl:attribute name="id">
+					<xsl:value-of select="$messageId"/>
+				</xsl:attribute>
+
+    			<!--- Rule Details  -->
+				<table width="100%" class="RuleBlock">
+                                        <xsl:apply-templates select="Notes" mode="notes"/>
+	                                <xsl:apply-templates select="SourceCode"/>
+					<xsl:apply-templates select="/FxCopReport/Rules/Rule[@TypeName=$rulename]" mode="ruledetails" />
+				</table>
+			</div>
+		</td>
+	</tr>
+</xsl:template>
+
+<xsl:template match="Issue">
+<xsl:param name="messageId"></xsl:param>
 	<tr>
 		<xsl:attribute name="onClick">
 			javascript:ViewState('<xsl:value-of select="$messageId"/>');
@@ -251,34 +277,15 @@
 		</xsl:attribute>
 
 		<td valign="top">
-			<xsl:variable name="severity" select="/FxCopReport/Rules/Rule[@TypeName=$rulename]/Severity" />
-			<xsl:attribute name="class">Severity<xsl:value-of select="$severity" /></xsl:attribute>
-			<xsl:value-of select="$severity" />
+			<xsl:attribute name="class"><xsl:value-of select="@Level" /></xsl:attribute>
+			<xsl:value-of select="@Level" />
 		</td>
 		<td valign="top">
-			<xsl:variable name="certainty" select="/FxCopReport/Rules/Rule[@TypeName=$rulename]/Certainty" />
-			<xsl:attribute name="class">Severity<xsl:value-of select="$certainty" /></xsl:attribute>
-			<xsl:value-of select="$certainty" />
+			<xsl:attribute name="class"><xsl:value-of select="@Level" /></xsl:attribute>
+			<xsl:value-of select="@Certainty" />
 		</td>
 		<td class="Resolution" valign="top">
 			<xsl:value-of select="Resolution/Text/text()" />
-		</td>
-	</tr>
-	<tr>
-		<td colspan="3">
-			<div class="MessageDiv" style="display: none">
-				<xsl:attribute name="id">
-					<xsl:value-of select="$messageId"/>
-				</xsl:attribute>
-
-    			<!--- Rule Details  -->
-				<table width="100%" class="RuleBlock">
-				<xsl:apply-templates select="Notes" mode="notes"/>
-
-	                <xsl:apply-templates select="SourceCode"/>
-					<xsl:apply-templates select="/FxCopReport/Rules/Rule[@TypeName=$rulename]" mode="ruledetails" />
-				</table>
-			</div>
 		</td>
 	</tr>
 </xsl:template>

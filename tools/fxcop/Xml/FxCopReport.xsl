@@ -240,6 +240,30 @@
 	<xsl:variable name="messageId" select="generate-id()"/>
 	<xsl:variable name="rulename" select="Rule/@TypeName"/>
 
+        <xsl:apply-templates select="Issues/Issue" >
+                <xsl:with-param name="messageId"><xsl:value-of select="$messageId"/></xsl:with-param>
+        </xsl:apply-templates>
+
+	<tr>
+		<td colspan="3">
+			<div class="MessageDiv" style="display: none">
+				<xsl:attribute name="id">
+					<xsl:value-of select="$messageId"/>
+				</xsl:attribute>
+
+    			<!--- Rule Details  -->
+				<table width="100%" class="RuleBlock">
+                                        <xsl:apply-templates select="Notes" mode="notes"/>
+	                                <xsl:apply-templates select="SourceCode"/>
+					<xsl:apply-templates select="/FxCopReport/Rules/Rule[@TypeName=$rulename]" mode="ruledetails" />
+				</table>
+			</div>
+		</td>
+	</tr>
+</xsl:template>
+
+<xsl:template match="Issue">
+<xsl:param name="messageId"></xsl:param>
 	<tr>
 		<xsl:attribute name="onClick">
 			javascript:ViewState('<xsl:value-of select="$messageId"/>');
@@ -262,22 +286,6 @@
 		</td>
 		<td class="Resolution" valign="top">
 			<xsl:value-of select="Resolution/Text/text()" />
-		</td>
-	</tr>
-	<tr>
-		<td colspan="3">
-			<div class="MessageDiv" style="display: none">
-				<xsl:attribute name="id">
-					<xsl:value-of select="$messageId"/>
-				</xsl:attribute>
-
-    			<!--- Rule Details  -->
-				<table width="100%" class="RuleBlock">
-	<xsl:apply-templates select="Notes" mode="notes"/>
-	                <xsl:apply-templates select="SourceCode"/>
-					<xsl:apply-templates select="/FxCopReport/Rules/Rule[@TypeName=$rulename]" mode="ruledetails" />
-				</table>
-			</div>
 		</td>
 	</tr>
 </xsl:template>
