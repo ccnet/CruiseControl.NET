@@ -27,7 +27,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 		public virtual void Instrument()
 		{
 			string args = @"/report-name:" + _reportName + @" /recurse:" + _srcFilePath;
-			Console.WriteLine("<instrument>"+_ncoverBinPath+" "+args+"</instrument>");
+			Log.Debug(string.Format("<instrument>{0} {1}</instrument>", _ncoverBinPath, args));
 			RunProcess(_ncoverBinPath, args);
 		}
 
@@ -52,7 +52,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 		private void RemoveInstumentation()
 		{
 			string args = "/report-name:\"" + _reportName + "\"";
-			Console.WriteLine("<removeInstrumentation>"+_nrecoverBinPath+" "+args+"</removeInstrumentation>");
+			Log.Debug(string.Format("<removeInstrumentation>{0} {1}</removeInstrumentation>", _nrecoverBinPath, args));
 			RunProcess(_nrecoverBinPath, args);
 		}
 
@@ -65,7 +65,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 		{
 			string actualPath = new FileInfo(_nunitTask.Assembly[0]).DirectoryName+@"\"+ "actual.xml";
 			string args = "/actual:" +"\""+ actualPath+"\"" + " /report-name:" + "\"" + _reportName + "\"";
-			Console.WriteLine("<report>"+_ncoverReportBinPath+" "+args+"</report>");
+			Log.Debug(string.Format("<report>{0} {1}</report>", _ncoverReportBinPath, args));
 			RunProcess(_ncoverReportBinPath, args);
 		}
 
