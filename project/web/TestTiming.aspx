@@ -3,5 +3,8 @@
 	<HEAD>
 		<TITLE>CruiseControl .NET Build Results</TITLE>
 	</HEAD>
-	<asp:Label id="BodyLabel" runat="server" Width="432px" Height="400px" />
+	<body>
+		<br />
+		<div id="BodyArea" runat="server" />
+	</body>
 </HTML>

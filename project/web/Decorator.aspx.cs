@@ -16,7 +16,6 @@ namespace tw.ccnet.web
 {
 	public class Decorator : System.Web.UI.Page
 	{
-		protected HtmlTableCell contentCell;
 		protected DataList menu;
 		protected HtmlGenericControl buildStats;
 		protected HtmlAnchor nextLog;
@@ -24,8 +23,8 @@ namespace tw.ccnet.web
 		protected SiteMesh.DecoratorControls.Title Title1;
 		protected SiteMesh.DecoratorControls.Body Body1;
 		protected SiteMesh.DecoratorControls.GetProperty prop1;
+		protected System.Web.UI.HtmlControls.HtmlTableCell Td2;
 		protected SiteMesh.DecoratorControls.Title Title3;
-		protected HtmlAnchor testTiming;
 
 		/*
 		public Control Content
@@ -44,10 +43,7 @@ namespace tw.ccnet.web
 			InitBuildStats(path);
 			InitLogFileList(path);
 			InitAdjacentAnchors(path);
-			testTiming.HRef = "TestTiming.aspx";
 			string logFile = Request.QueryString[LogFile.LogQueryString];
-			if (logFile != null && logFile.Length > 0)
-				testTiming.HRef += LogFile.CreateUrl(logFile);
 		}
 
 		private void InitBuildStats(string path)
@@ -104,8 +100,9 @@ namespace tw.ccnet.web
 		
 		private void InitializeComponent()
 		{    
+			this.menu.ItemDataBound += new System.Web.UI.WebControls.DataListItemEventHandler(this.DataList_BindItem);
 			this.Load += new System.EventHandler(this.Page_Load);
-			menu.ItemDataBound += new DataListItemEventHandler(this.DataList_BindItem);
+
 		}
 		#endregion
 	}

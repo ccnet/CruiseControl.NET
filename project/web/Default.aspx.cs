@@ -18,10 +18,20 @@ namespace tw.ccnet.web
 {
 	public class Default : System.Web.UI.Page
 	{
+		protected HtmlTableCell HeaderCell;
+		protected HtmlTableCell DetailsCell;
+		protected System.Web.UI.WebControls.HyperLink TestDetailsLink;
+		protected System.Web.UI.WebControls.HyperLink LogLink;
 		protected System.Web.UI.WebControls.Label BodyLabel;
+
+		private string logfile;
 
 		private void Page_Load(object sender, System.EventArgs e)
 		{
+			resolveLogFile();
+			generateLogLink();
+			generateTestDetailsLink();
+
 			try
 			{
 				InitDisplayLogFile();
@@ -32,17 +42,32 @@ namespace tw.ccnet.web
 			}
 		}
 
-		private void InitDisplayLogFile()
+		private void resolveLogFile()
 		{
-			string logfile = WebUtil.GetLogFilename(Context, Request);
+			logfile = WebUtil.GetLogFilename(Context, Request);
 			if (logfile == null)
 			{
-				return;
+				throw new CruiseControlException("Internal Error - couldn't resolve logfile to use");
 			}
 			if (!File.Exists(logfile))
 			{
 				throw new CruiseControlException(String.Format("Logfile not found: {0}", logfile));
 			}
+		}
+
+		// TODO - assumes log files in 'webdir/log'
+		private void generateLogLink()
+		{
+			LogLink.NavigateUrl = ResolveUrl("log/" + new FileInfo(logfile).Name);
+		}
+
+		private void generateTestDetailsLink()
+		{
+			TestDetailsLink.NavigateUrl = ResolveUrl("TestTiming.aspx?/log=" + new FileInfo(logfile).Name);
+		}
+
+		private void InitDisplayLogFile()
+		{
 			StringBuilder builder = new StringBuilder();
 			try
 			{		
@@ -52,10 +77,14 @@ namespace tw.ccnet.web
 				IList list = (IList) ConfigurationSettings.GetConfig("xslFiles");
 				foreach (string xslFile in list) 
 				{
-					string directory = Path.GetDirectoryName(xslFile);
-					string file = Path.GetFileName(xslFile);
-					string transformFile = Path.Combine(Request.MapPath(directory), file);
-					builder.Append(tw.ccnet.core.publishers.BuildLogTransformer.Transform(document, transformFile)).Append("<br>");
+					if (xslFile.ToLower().IndexOf("header") > -1)
+					{
+						generateHeader(xslFile, document);
+					}
+					else
+					{
+						builder.Append(transform(xslFile, document)).Append("<br>");
+					}
 				}
 			}
 			catch(XmlException ex)
@@ -63,7 +92,20 @@ namespace tw.ccnet.web
 				throw new CruiseControlException(String.Format("Bad XML in logfile: " + ex.Message));
 			}
 
-			BodyLabel.Text = builder.ToString();
+			DetailsCell.InnerHtml = builder.ToString();
+		}
+
+		private void generateHeader(string headerXslfile, XmlDocument logFileDocument)
+		{
+			HeaderCell.InnerHtml = "<br/>" + transform(headerXslfile, logFileDocument);
+		}
+
+		private string transform(string xslfile, XmlDocument logFileDocument)
+		{
+			string directory = Path.GetDirectoryName(xslfile);
+			string file = Path.GetFileName(xslfile);
+			string transformFile = Path.Combine(Request.MapPath(directory), file);
+			return tw.ccnet.core.publishers.BuildLogTransformer.Transform(logFileDocument, transformFile);
 		}
 
 		#region Web Form Designer generated code
@@ -76,6 +118,7 @@ namespace tw.ccnet.web
 		private void InitializeComponent()
 		{    
 			this.Load += new System.EventHandler(this.Page_Load);
+
 		}
 		#endregion
 	}

@@ -17,7 +17,7 @@ namespace tw.ccnet.web
 {
 	public class TestTiming : System.Web.UI.Page
 	{
-		protected System.Web.UI.WebControls.Label BodyLabel;
+		protected HtmlGenericControl BodyArea;
 
 		private void Page_Load(object sender, System.EventArgs e)
 		{
@@ -28,12 +28,12 @@ namespace tw.ccnet.web
 				{
 					return;
 				}
-				BodyLabel.Text = LogFileLister.Transform(logfile, WebUtil.GetXslFilename("timing.xsl", Request));
+				BodyArea.InnerHtml = LogFileLister.Transform(logfile, WebUtil.GetXslFilename("timing.xsl", Request));
 
 			}
 			catch(CruiseControlException ex)
 			{
-				BodyLabel.Text += WebUtil.FormatException(ex);
+				BodyArea.InnerHtml += WebUtil.FormatException(ex);
 			}
 		}
 		
