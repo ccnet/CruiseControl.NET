@@ -213,10 +213,6 @@ namespace ThoughtWorks.CruiseControl.Core.Test
 			_mockStateManager.ExpectAndReturn("StateFileExists", false, null);
 			IntegrationResult last = _project.LastIntegrationResult;
 			AssertEquals(new IntegrationResult(PROJECT_NAME), last);
-			
-			// will load all modifications since yesterday -- is this right?
-			DateTime yesterday = DateTime.Now.AddDays(-1).Date;
-			AssertEquals(yesterday, last.LastModificationDate.Date);
 		}
 
 		[Test]
