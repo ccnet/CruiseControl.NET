@@ -61,7 +61,7 @@ namespace ThoughtWorks.CruiseControl.Core
 				}
 				else
 				{
-					return _configuredWorkingDirectory;
+					return new DirectoryInfo(_configuredWorkingDirectory).FullName;
 				}
 			}
 		}
@@ -76,7 +76,7 @@ namespace ThoughtWorks.CruiseControl.Core
 				}
 				else
 				{
-					return _configuredArtifactDirectory;
+					return new DirectoryInfo(_configuredArtifactDirectory).FullName;
 				}
 			}
 		}
