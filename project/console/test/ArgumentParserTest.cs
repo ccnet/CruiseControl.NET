@@ -15,6 +15,7 @@ namespace ThoughtWorks.CruiseControl.Console.Test
 		[SetUp]
 		protected void AddListener()
 		{
+			Trace.Listeners.Clear();
 			listener = new TestTraceListener();
 			Trace.Listeners.Add(listener);
 		}

@@ -25,11 +25,16 @@ namespace ThoughtWorks.CruiseControl.Console
 
 		private ArgumentParser _parser;
 		private ITimeout _timeout;
+		private ICruiseServer _server;
 
-		public ConsoleRunner(ArgumentParser parser, ITimeout timeout)
+		public ConsoleRunner(ArgumentParser parser, ITimeout timeout) : 
+			this(parser, CruiseServerFactory.Create(parser.IsRemote, parser.ConfigFile), timeout) { }
+
+		public ConsoleRunner(ArgumentParser parser, ICruiseServer server, ITimeout timeout)
 		{
 			_parser = parser;
 			_timeout = timeout;
+			_server = server;
 		}
 
 		public void Run()
@@ -45,19 +50,18 @@ namespace ThoughtWorks.CruiseControl.Console
 
 		private void LaunchServer()
 		{
-			ICruiseServer server = CruiseServerFactory.Create(_parser.IsRemote, _parser.ConfigFile);
 			try
 			{
 				if (_parser.Project == null)
 				{
 					Log.Info("Starting CruiseControl.NET Server");
-					server.Start();
+					_server.Start();
 					// server.WaitForExit();
 				}
 				else
 				{
 					Log.Info("Starting CruiseControl.NET Project: " + _parser.Project);
-					server.ForceBuild(_parser.Project);
+					_server.ForceBuild(_parser.Project);
 					// server.CruiseManager.ForceBuild(_parser.Project);
 					// server.CruiseManager.WaitForExit(_parser.Project);
 				}
@@ -66,7 +70,7 @@ namespace ThoughtWorks.CruiseControl.Console
 			}
 			finally
 			{
-				server.Abort();
+				_server.Abort();
 			}
 		}
 	}
