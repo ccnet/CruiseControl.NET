@@ -49,6 +49,80 @@ namespace ThoughtWorks.CruiseControl.Core.Label.Test
 		}
 
 		[Test]
+		public void Generate_PrefixedLabel_NullResultLabel()
+		{
+			IntegrationResult result = IntegrationResultFixture.CreateIntegrationResult();
+			_labeller.LabelPrefix = "Sample";
+			result.Label = null;
+			Assertion.AssertEquals("Sample" + DefaultLabeller.INITIAL_LABEL, _labeller.Generate(result));
+		}
+
+		[Test]
+		public void Generate_PrefixedLabel_SuccessAndPreviousLabel()
+		{
+			IntegrationResult result = IntegrationResultFixture.CreateIntegrationResult();
+			_labeller.LabelPrefix = "Sample";
+			result.Label = "23";
+			Assertion.AssertEquals("Sample24", _labeller.Generate(result));
+		}
+
+		[Test]
+		public void Generate_PrefixedLabel_FailureAndPreviousLabel()
+		{
+			IntegrationResult result = IntegrationResultFixture.CreateIntegrationResult();
+			_labeller.LabelPrefix = "Sample";
+			result.Label = "23";
+			result.Status = IntegrationStatus.Failure;
+			Assertion.AssertEquals("23", _labeller.Generate(result));
+		}
+
+		[Test]
+		public void Generate_PrefixedLabel_SuccessAndPreviousLabelWithPrefix()
+		{
+			IntegrationResult result = IntegrationResultFixture.CreateIntegrationResult();
+			_labeller.LabelPrefix = "Sample";
+			result.Label = "Sample23";
+			result.Status = IntegrationStatus.Success;
+			Assertion.AssertEquals("Sample24", _labeller.Generate(result));
+		}
+
+		[Test]
+		public void Generate_PrefixedLabel_SuccessAndPreviousLabelWithDifferentPrefix()
+		{
+			IntegrationResult result = IntegrationResultFixture.CreateIntegrationResult();
+			_labeller.LabelPrefix = "Sample";
+			result.Label = "SomethingElse23";
+			result.Status = IntegrationStatus.Success;
+			Assertion.AssertEquals("Sample24", _labeller.Generate(result));
+		}
+
+		[Test]
+		public void IncrementPrefixedLabel()
+		{
+			_labeller.LabelPrefix = "Sample";
+			AssertEquals("24", _labeller.IncrementLabel("Sample23"));
+		}
+
+		[Test]
+		public void IncrementPrefixedLabelDifferentPrefix()
+		{
+			_labeller.LabelPrefix = "Sample";
+			AssertEquals("24", _labeller.IncrementLabel("SomethingElse23"));
+		}
+
+		[Test]
+		public void IncrementPrefixedLabelNumericPrefix()
+		{
+			string prefix = "R3SX";
+			IntegrationResult result = IntegrationResultFixture.CreateIntegrationResult();
+			_labeller.LabelPrefix = prefix;
+			result.Label = prefix + "23";
+			result.Status = IntegrationStatus.Success;
+
+			AssertEquals(prefix + "24", _labeller.Generate(result));
+		}
+
+		[Test]
 		public void ShouldRun()
 		{
 			Assert(_labeller.ShouldRun(new IntegrationResult()));
