@@ -6,23 +6,24 @@ namespace ThoughtWorks.CruiseControl.Web
 {
 	public class PageTransformer : IPageLoader
 	{
-		private ITransformer _transformer;
+		private readonly string xslFile;
+		private readonly string xmlFile;
+		private IFileTransformer _transformer;
 
-		public PageTransformer(string xmlFile, string xslFile)
-		{
-			_transformer = new LogTransformer(xmlFile, xslFile);
-		}
+		public PageTransformer(string xmlFile, string xslFile) : this (new XslFileTransformer(new XslTransformer()), xmlFile, xslFile) { }
 
-		public PageTransformer(ITransformer transformer)
+		public PageTransformer(IFileTransformer fileTransformer, string xmlFile, string xslFile)
 		{
-			_transformer = transformer;
+			_transformer = fileTransformer;
+			this.xmlFile = xmlFile;
+			this.xslFile = xslFile;
 		}
 
 		public string LoadPageContent()
 		{
 			try
 			{
-				return  _transformer.Transform();
+				return  _transformer.Transform(xmlFile, xslFile);
 			}
 			catch (CruiseControlException e)
 			{

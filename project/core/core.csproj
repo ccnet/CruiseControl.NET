@@ -1297,6 +1297,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "util\IFileTransformer.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "util\IFileWatcher.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -1323,11 +1328,6 @@
                 />
                 <File
                     RelPath = "util\LogFileTraceListener.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "util\LogTransformer.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -1403,6 +1403,16 @@
                 />
                 <File
                     RelPath = "util\XmlUtil.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "util\XslFileTransformer.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "util\XslTransformer.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

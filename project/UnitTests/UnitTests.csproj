@@ -309,17 +309,22 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "Core\Util\LogTransformerTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
                     RelPath = "Core\Util\SystemIoFileSystemTest.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
                     RelPath = "Core\Util\XmlFragmentWriterTest.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Core\Util\XslFileTransformerTest.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Core\Util\XslTransformerTest.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
