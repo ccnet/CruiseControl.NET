@@ -1,4 +1,3 @@
-#define USE_MOCK
 using System.ComponentModel;
 using Exortech.NetReflector;
 using NMock;
@@ -103,12 +102,8 @@ namespace ThoughtWorks.CruiseControl.Core.Builder.Test
 		[Test]
 		public void ShouldSetOutputAndIntegrationStatusToSuccessOnSuccessfulBuild()
 		{
-#if USE_MOCK
 			ProcessResult processResult = new ProcessResult(@"Rebuild All: 10 succeeded, 0 failed, 0 skipped", string.Empty, ProcessResult.SUCCESSFUL_EXIT_CODE, false);
 			mockProcessExecutor.ExpectAndReturn("Execute", processResult, new IsAnything());
-#else
-			DevenvBuilder builder = new DevenvBuilder();
-#endif
 			builder.Executable = DEVENV_PATH;
 			builder.SolutionFile = SOLUTION_FILE;
 			builder.Configuration = CONFIGURATION;
@@ -124,12 +119,8 @@ namespace ThoughtWorks.CruiseControl.Core.Builder.Test
 		[Test]
 		public void ShouldSetOutputAndIntegrationStatusToFailedOnFailedBuild()
 		{
-#if USE_MOCK
 			ProcessResult processResult = new ProcessResult(@"D:\dev\ccnet\ccnet\project\nosolution.sln could not be found and will not be loaded", string.Empty, 1, false);
 			mockProcessExecutor.ExpectAndReturn("Execute", processResult, new IsAnything());
-#else
-			DevenvBuilder builder = new DevenvBuilder();
-#endif
 			builder.Executable = DEVENV_PATH;
 			builder.SolutionFile = @"D:\dev\ccnet\ccnet\project\nosolution.sln";
 			builder.Configuration = CONFIGURATION;
@@ -145,11 +136,7 @@ namespace ThoughtWorks.CruiseControl.Core.Builder.Test
 		[Test, ExpectedException(typeof(BuilderException))]
 		public void ShouldThrowBuilderExceptionIfProcessExecutorThrowsAnException()
 		{
-#if USE_MOCK
 			mockProcessExecutor.ExpectAndThrow("Execute", new Win32Exception(), new IsAnything());
-#else
-			DevenvBuilder builder = new DevenvBuilder();
-#endif
 			builder.Executable = DEVENV_PATH + ".some.extra.ext.exe";	// file should not exist
 			builder.SolutionFile = @"D:\dev\ccnet\ccnet\project\nosolution.sln";
 			builder.Configuration = "Debug";
@@ -160,12 +147,8 @@ namespace ThoughtWorks.CruiseControl.Core.Builder.Test
 		[Test, ExpectedException(typeof(BuilderException))]
 		public void	ShouldThrowBuilderExceptionIfProcessTimesOut()
 		{
-#if USE_MOCK
 			ProcessResult processResult = new ProcessResult(string.Empty, string.Empty, ProcessResult.TIMED_OUT_EXIT_CODE, true);
 			mockProcessExecutor.ExpectAndReturn("Execute", processResult, new IsAnything());
-#else
-			DevenvBuilder builder = new DevenvBuilder();
-#endif
 			builder.BuildTimeoutSeconds = 2;
 			builder.Executable = DEVENV_PATH;
 			builder.SolutionFile = SOLUTION_FILE;

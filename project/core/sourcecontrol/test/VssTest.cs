@@ -1,4 +1,3 @@
-#define USE_MOCK
 using System;
 using System.IO;
 using Exortech.NetReflector;
@@ -189,12 +188,8 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test
 		[Test]
 		public void VerifyGetSourceProcessInfo()
 		{
-#if USE_MOCK
 			CollectingConstraint constraint = new CollectingConstraint();
 			mockProcessExecutor.ExpectAndReturn("Execute", new ProcessResult("Getting App.ico", null, ProcessResult.SUCCESSFUL_EXIT_CODE, false), constraint);
-#else
-			Vss vss = new Vss();
-#endif
 			vss.AutoGetSource = true;
 			vss.Project = "$/Refactoring";
 			vss.Username = "orogers";
@@ -203,13 +198,11 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test
 			vss.SsDir = @"..\tools\vss";
 			vss.GetSource(IntegrationResultMother.CreateSuccessful(DateTime.Now));
 
-#if USE_MOCK
 			ProcessInfo info = (ProcessInfo) constraint.Parameter;
 			AssertMatches(@"get \$/Refactoring -R -Vd.* -Yorogers, -I-N", info.Arguments);
 			Assert.AreEqual(DEFAULT_SS_EXE_PATH, info.FileName);
 			Assert.AreEqual(@"c:\source\", info.WorkingDirectory);
 			Assert.AreEqual(@"..\tools\vss", info.EnvironmentVariables[Vss.SS_DIR_KEY]);
-#endif
 		}
 
 		[Test]
