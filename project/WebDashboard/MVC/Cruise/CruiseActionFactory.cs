@@ -1,4 +1,3 @@
-using System;
 using ThoughtWorks.CruiseControl.WebDashboard.Dashboard;
 using ThoughtWorks.CruiseControl.WebDashboard.Plugins.DeleteProject;
 
@@ -21,6 +20,11 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.MVC.Cruise
 		public static readonly string DO_DELETE_PROJECT_ACTION_NAME = "DoDeleteProject";
 
 		public IAction Create(IRequest request)
+		{
+			return ExceptionCatchingActionProxy(CreateSpecificAction(request));
+		}
+
+		public IAction CreateSpecificAction(IRequest request)
 		{
 			string actionName = request.FindParameterStartingWith(ACTION_PARAMETER_PREFIX);
 			if (actionName == "")
@@ -52,6 +56,11 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.MVC.Cruise
 			{
 				return new UnknownActionAction();
 			}
+		}
+
+		public ExceptionCatchingActionProxy ExceptionCatchingActionProxy(IAction proxied)
+		{
+			return new ExceptionCatchingActionProxy(proxied)	;
 		}
 
 		public CruiseActionProxyAction CruiseActionProxyAction(ICruiseAction proxied)

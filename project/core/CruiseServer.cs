@@ -262,10 +262,9 @@ namespace ThoughtWorks.CruiseControl.Core
 			}
 		}
 
-		// ToDo - implement
 		public void DeleteProject(string projectName)
 		{
-			return;
+			throw new CruiseControlException("Delete Project is not currently implemented");
 		}
 
 		private IProjectIntegrator GetIntegrator(string projectName)
