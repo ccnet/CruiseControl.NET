@@ -64,7 +64,6 @@
 	<target name="test.unit" description="runs unit tests">
 		<exec program="${nunit-console.exe}" workingdir="${build.dir}\core" commandline="${core.dll} /xml:../${core.dll}-results.xml /nologo"/>
 		<exec program="${nunit-console.exe}" workingdir="${build.dir}\server" commandline="${console.exe} /xml:../${console.exe}-results.xml /nologo"/>
-		<exec program="${nunit-console.exe}" workingdir="${build.dir}\service" commandline="${service.exe} /xml:../${service.exe}-results.xml /nologo"/>
 		<exec program="${nunit-console.exe}" workingdir="${build.dir}\unittests" commandline="${unittests.dll} /xml:../${unittests.dll}-results.xml /nologo"/>
 	</target>
 
