@@ -16,14 +16,14 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.MVC.Cruise
 				return new DisplayAddProjectPageAction(
 					new AddProjectModelGenerator(
 						new ServerAggregatingCruiseManagerWrapper(new ConfigurationSettingsConfigGetter(), new RemoteCruiseManagerFactory())), 
-					new DisplayAddProjectPageViewBuilder(new DefaultHtmlBuilder(), new AddProjectViewBuilder(new DefaultHtmlBuilder())));
+					new AddProjectViewBuilder(new DefaultHtmlBuilder()));
 			}
 			else
 			{
 				return new SaveNewProjectAction(
 					new AddProjectModelGenerator(
 						new ServerAggregatingCruiseManagerWrapper(new ConfigurationSettingsConfigGetter(), new RemoteCruiseManagerFactory())), 
-					new SaveNewProjectViewBuilder(new DefaultHtmlBuilder(), new AddProjectViewBuilder(new DefaultHtmlBuilder())),
+					new AddProjectViewBuilder(new DefaultHtmlBuilder()),
 					new ServerAggregatingCruiseManagerWrapper(new ConfigurationSettingsConfigGetter(), new RemoteCruiseManagerFactory()),
 					new NetReflectorProjectSerializer());
 			}

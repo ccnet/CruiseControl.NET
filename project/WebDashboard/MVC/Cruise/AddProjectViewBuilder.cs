@@ -1,4 +1,5 @@
 using System.Web.UI;
+using System.Web.UI.HtmlControls;
 using ThoughtWorks.CruiseControl.Core;
 using ThoughtWorks.CruiseControl.Core.Builder;
 using ThoughtWorks.CruiseControl.Core.Publishers;
@@ -16,11 +17,19 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.MVC.Cruise
 
 		public Control BuildView(AddProjectModel model)
 		{
-			return Table(
-				TR(TD("Servers"), TD(DropDown("ServersDropDown", model.ServerNames, model.SelectedServerName))),
-				TR(TD(), TD(BuildProjectView(model.Project))),
-				TR(TD(), TD("* denotes currently mandatory fields"))
-				);
+			HtmlTable table = Table();
+			if (model.Status != null && model.Status != "")
+			{
+				table.Rows.Add(TR(TD(), TD(model.Status)));
+			}
+			table.Rows.Add(TR(TD("Servers"), TD(DropDown("ServersDropDown", model.ServerNames, model.SelectedServerName))));
+			table.Rows.Add(TR(TD(), TD(BuildProjectView(model.Project))));
+			table.Rows.Add(TR(TD(), TD("* denotes currently mandatory fields")));
+			if (model.AllowSave)
+			{
+				table.Rows.Add(TR(TD(Button("AddProjectSave", "Save")), TD()));
+			}
+			return table;
 		}
 
 		private Control BuildProjectView(Project project)

@@ -4,10 +4,10 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.MVC.Cruise
 {
 	public class DisplayAddProjectPageAction : IAction
 	{
-		private readonly DisplayAddProjectPageViewBuilder viewBuilder;
+		private readonly AddProjectViewBuilder viewBuilder;
 		private readonly AddProjectModelGenerator projectModelGenerator;
 
-		public DisplayAddProjectPageAction(AddProjectModelGenerator projectModelGenerator, DisplayAddProjectPageViewBuilder viewBuilder)
+		public DisplayAddProjectPageAction(AddProjectModelGenerator projectModelGenerator, AddProjectViewBuilder viewBuilder)
 		{
 			this.projectModelGenerator = projectModelGenerator;
 			this.viewBuilder = viewBuilder;

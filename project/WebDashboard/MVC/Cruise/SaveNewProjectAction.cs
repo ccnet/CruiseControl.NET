@@ -9,10 +9,10 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.MVC.Cruise
 	{
 		private readonly IProjectSerializer serializer;
 		private readonly ICruiseManagerWrapper cruiseManagerWrapper;
-		private readonly SaveNewProjectViewBuilder viewBuilder;
+		private readonly AddProjectViewBuilder viewBuilder;
 		private readonly AddProjectModelGenerator projectModelGenerator;
 
-		public SaveNewProjectAction(AddProjectModelGenerator projectModelGenerator, SaveNewProjectViewBuilder viewBuilder, 
+		public SaveNewProjectAction(AddProjectModelGenerator projectModelGenerator, AddProjectViewBuilder viewBuilder, 
 			ICruiseManagerWrapper cruiseManagerWrapper, IProjectSerializer serializer)
 		{
 			this.projectModelGenerator = projectModelGenerator;
@@ -28,10 +28,12 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.MVC.Cruise
 			{
 				cruiseManagerWrapper.AddProject(model.SelectedServerName, serializer.Serialize(model.Project));
 				model.Status = "Project saved successfully";
+				model.AllowSave = false;
 			}
 			catch (CruiseControlException e)
 			{
-				model.Status = "Failed to create project. Reason given was: " + e.Message;	
+				model.Status = "Failed to create project. Reason given was: " + e.Message;
+				model.AllowSave = true;
 			}
 			
 			return viewBuilder.BuildView(model);
