@@ -2,7 +2,6 @@ using System.IO;
 using System.Text;
 using System.Xml;
 using Exortech.NetReflector;
-using ThoughtWorks.CruiseControl.Core.Tasks;
 using ThoughtWorks.CruiseControl.Remote;
 
 namespace ThoughtWorks.CruiseControl.Core.Publishers
@@ -14,7 +13,6 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
 		public static readonly string DEFAULT_LOG_SUBDIRECTORY = "buildlogs";
 
         private string _logDir;
-        private MergeFilesTask _mergeTask = new MergeFilesTask();
 
         public XmlLogPublisher() : base()
         {
@@ -44,21 +42,12 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
 			}
 		}
 
-    	[ReflectorArray("mergeFiles", Required = false)] 
-		public string[] MergeFiles
-        {
-            get { return _mergeTask.MergeFiles; }
-
-            set { _mergeTask.MergeFiles = value; }
-        }
-
-        public override void PublishIntegrationResults(IProject project, IIntegrationResult result)
+		public override void PublishIntegrationResults(IProject project, IIntegrationResult result)
         {
             // only deal with known integration status
             if (result.Status == IntegrationStatus.Unknown)
                 return;
 
-			_mergeTask.Run(result);
             using (XmlIntegrationResultWriter integrationWriter = new XmlIntegrationResultWriter(GetXmlWriter(LogDirectory(project), GetFilename(result))))
             {
                 integrationWriter.Write(result);

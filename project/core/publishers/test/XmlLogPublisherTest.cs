@@ -124,43 +124,6 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers.Test
             AssertFalse(FULL_CONFIGURED_LOG_DIR_PATH + " should still not exist at end of this test.", Directory.Exists(FULL_CONFIGURED_LOG_DIR_PATH));
         }
 
-		[Test]
-		public void MergeFilesConfig()
-		{
-			string xml = string.Format(@"		<xmllogger>
-		    <logDir>{0}</logDir>
-			<mergeFiles>
-				<file>d:\foo.xml</file>
-			</mergeFiles>
-		</xmllogger>", FULL_CONFIGURED_LOG_DIR_PATH);
-			XmlLogPublisher pub = NetReflector.Read(xml) as XmlLogPublisher;
-			Assert.AreEqual(1, pub.MergeFiles.Length);
-			Assert.AreEqual(@"d:\foo.xml", pub.MergeFiles[0]);
-		}
-
-		/*
-        [Test]
-        public void MergeFile()
-        {
-            TempFileUtil.CreateTempDir(FULL_CONFIGURED_LOG_DIR);
-            IntegrationResult result = CreateIntegrationResult(IntegrationStatus.Success, false);
-            string logDir = TempFileUtil.GetTempPath(FULL_CONFIGURED_LOG_DIR);
-			string logFile = TempFileUtil.CreateTempXmlFile(logDir, "foo.xml", "<?xml version=\"1.0\" encoding=\"utf-16\" standalone=\"no\"?><foo bar=\"4\">bat</foo>");
-			TempFileUtil.CreateTempXmlFile(logDir, "zip.xml", "<zip/>");
-
-            _publisher.ConfiguredLogDirectory = logDir;
-            _publisher.MergeFiles = new string [] {logFile, Path.Combine(logDir, "zi*.xml")};		// include wildcard filename
-            _publisher.PublishIntegrationResults(null, result);
-
-            string expected = XmlUtil.GenerateIndentedOuterXml("<cruisecontrol project=\"proj\"><modifications />" + CreateExpectedBuildXml(result) + "<foo bar=\"4\">bat</foo><zip /></cruisecontrol>");
-            string actualFilename = Path.Combine(logDir, _publisher.GetFilename(result));
-            using (StreamReader textReader = File.OpenText(actualFilename))
-            {
-				Assert.AreEqual(expected, textReader.ReadToEnd());    
-            }
-        }
-		*/
-
         private void CheckForXml(string path)
         {
         	XmlDocument doc = new XmlDocument();
