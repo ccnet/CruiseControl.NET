@@ -30,7 +30,7 @@ namespace tw.ccnet.core.publishers
 			set { sourceDir = value; }
 		}
 
-		[ReflectorProperty("additionalDir")]
+		[ReflectorProperty("additionalDir", Required=false)]
 		public string AdditionalDir
 		{
 			get { return additionalDir; }
