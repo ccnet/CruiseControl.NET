@@ -1,0 +1,39 @@
+<html>
+<head>
+  <title>CruiseControl.NET Exception Handling</title>
+  <link type="text/css" rel="stylesheet" href="cruisecontrol.css"/>
+</head>
+<body>
+<h1>Exception Handling in the CruiseControl.NET Server</h1>
+
+<p>This document outlines the likely causes of exceptions that can occur within CruiseControl.NET and how the
+CruiseControl.NET server attempts to handle these exceptions when they are raised.  There are two broad
+scenarios for the generation of exceptions: during initialisation and during operation.</p>
+
+<h2>Initialisation Phase Exception Handling</h2>
+<p>Initialisation exceptions occur when the server is launched.  These exceptions are typically related to
+invalid server or remoting configuration data.  Initialisation exceptions will cause the server to shut down immediately
+and report the exception to the console for the command-line runner and to the system event log for the Windows Service
+runner.</p>
+
+<h2>Operational Phase Exception Handling</h2>
+<p>Once the CruiseControl server has started, non-fatal exceptions will be handled and reported by the server without the
+requiring .
+as gracefully as possible.
+Typically
+
+</p>
+
+<h2>Configuration Exceptions</h2>
+Configuration exceptions are caused by errors in the configuration file.  This is typically related to either malformed document
+structure (ie. violates XML that violated well-formedness constraints) or to content that violates the CruiseControl.NET
+configuration object model as described by the configuration schema (ccnet.xsd).
+
+
+
+
+NAntBuilder: BuilderException thrown if exception executing process.
+Could be caused by missing filename argument (InvalidOperationException), invalid filename or problem executing file (W32Exception)
+or problem waiting for process to finish
+</body>
+</html>
