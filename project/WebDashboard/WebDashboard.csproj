@@ -348,11 +348,6 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "Dashboard\IBuildPlugin.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
                     RelPath = "Dashboard\IBuildRetriever.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -364,11 +359,6 @@
                 />
                 <File
                     RelPath = "Dashboard\IBuildUrlGenerator.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Dashboard\IPlugin.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -602,11 +592,6 @@
                 />
                 <File
                     RelPath = "Plugins\BuildReporterPlugin\BuildReportResults.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Plugins\LogViewerPlugin\LogViewer.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

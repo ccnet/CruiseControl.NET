@@ -46,7 +46,9 @@
 						<table border="0" align="center" cellpadding="3" cellspacing="0" width="100%">
 							<tr>
 								<td>
+								<div id="decoratorLocation">
 									<decorator:body id="Body1" runat="server"></decorator:body>
+								</div>
 								</td>
 							</tr>
 						</table>

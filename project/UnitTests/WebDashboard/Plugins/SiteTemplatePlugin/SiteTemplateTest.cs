@@ -1,7 +1,6 @@
 using System.Web.UI.HtmlControls;
 using NMock;
 using NUnit.Framework;
-using ThoughtWorks.CruiseControl.WebDashboard.config;
 using ThoughtWorks.CruiseControl.WebDashboard.Config;
 using ThoughtWorks.CruiseControl.WebDashboard.Dashboard;
 using ThoughtWorks.CruiseControl.WebDashboard.IO;
@@ -57,41 +56,6 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Plugins.SiteTemplate
 		}
 
 		[Test]
-		public void IfNoProjectSpecifiedThenNotProjectMode()
-		{
-			requestWrapperMock.ExpectAndReturn("GetProjectName", "");
-			requestWrapperMock.ExpectAndReturn("GetServerName", "server");
-			SiteTemplateResults results = siteTemplate.Do();
-			AssertEquals(false, results.ProjectMode);
-
-			VerifyMocks();
-		}
-
-		[Test]
-		public void IfNoServerSpecifiedThenNotProjectMode()
-		{
-			requestWrapperMock.ExpectAndReturn("GetProjectName", "project");
-			requestWrapperMock.ExpectAndReturn("GetServerName", "");
-			SiteTemplateResults results = siteTemplate.Do();
-			AssertEquals(false, results.ProjectMode);
-
-			VerifyMocks();
-		}
-
-		[Test]
-		public void IfProjectSpecifiedThenProjectMode()
-		{
-			requestWrapperMock.ExpectAndReturn("GetProjectName", "myProject");
-			requestWrapperMock.ExpectAndReturn("GetServerName", "myProject");
-			buildRetrieverMock.ExpectAndReturn("GetBuild", build, requestWrapper);
-
-			SiteTemplateResults results = siteTemplate.Do();
-			AssertEquals(true, results.ProjectMode);
-
-			VerifyMocks();
-		}
-
-		[Test]
 		public void DoesntGetBuildListFromListerIfNoProjectSpecified()
 		{
 			requestWrapperMock.ExpectAndReturn("GetProjectName", "");
@@ -114,52 +78,6 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Plugins.SiteTemplate
 			SiteTemplateResults results = siteTemplate.Do();
 			AssertEquals(anchor, results.BuildLinkList[0]);
 			VerifyMocks();
-		}
-
-		[Test]
-		public void DoesntCreateListOfBuildPluginsIfNoProjectSpecified()
-		{
-			requestWrapperMock.ExpectAndReturn("GetProjectName", "");
-			requestWrapperMock.ExpectAndReturn("GetServerName", "server");
-			SiteTemplateResults results = siteTemplate.Do();
-			AssertEquals(0, results.BuildPluginsList.Length);
-
-			VerifyMocks();
-		}
-
-		[Test]
-		public void CreatesCorrectListOfBuildPluginLinks()
-		{
-			IPluginSpecification buildPlugin = new AssemblyLoadingPluginSpecification(typeof(TestBuildPlugin).FullName, typeof(TestBuildPlugin).Assembly.CodeBase);
-			IPluginSpecification[] assemblyLoadingPlugins = new IPluginSpecification[] { buildPlugin };
-			configurationGetterMock.ExpectAndReturn("GetConfigFromSection", assemblyLoadingPlugins, PluginsSectionHandler.SectionName);
-			configurationGetterMock.ExpectAndReturn("GetConfigFromSection", assemblyLoadingPlugins, PluginsSectionHandler.SectionName);
-			configurationGetterMock.ExpectAndReturn("GetConfigFromSection", assemblyLoadingPlugins, PluginsSectionHandler.SectionName);
-			requestWrapperMock.ExpectAndReturn("GetProjectName", project);
-			requestWrapperMock.ExpectAndReturn("GetServerName", server);
-			buildRetrieverMock.ExpectAndReturn("GetBuild", build, requestWrapper);
-
-			SiteTemplateResults results = siteTemplate.Do();
-
-			AssertEquals(1, results.BuildPluginsList.Length);
-			AssertEquals("Test Build Plugin", results.BuildPluginsList[0].InnerHtml);
-			AssertEquals("testbuild.aspx", results.BuildPluginsList[0].HRef);
-		}
-	}
-
-	public class TestBuildPlugin : IBuildPlugin
-	{
-		string description = "Test Build Plugin";
-		string url = "testbuild.aspx";
-
-		public string Description
-		{
-			get { return description; }
-		}
-
-		public string CreateURL (string serverName, string projectName, string buildName, IBuildUrlGenerator urlGenerator)
-		{
-			return url;
 		}
 	}
 }
