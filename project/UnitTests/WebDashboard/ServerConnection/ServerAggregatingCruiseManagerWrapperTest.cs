@@ -138,6 +138,26 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.ServerConnection
 		}
 
 		[Test]
+		public void ReturnsCorrectBuildNamesFromCorrectProjectOnCorrectServerWhenNumberOfBuildsSpecified()
+		{
+			// Setup
+			ServerSpecification[] servers = new ServerSpecification[] { new ServerSpecification("myserver", "http://myurl"), new ServerSpecification("myotherserver", "http://myotherurl")};
+
+			configurationGetterMock.ExpectAndReturn("GetConfigFromSection", servers, ServersSectionHandler.SectionName);
+			cruiseManagerFactoryMock.ExpectAndReturn("GetCruiseManager", (ICruiseManager) cruiseManagerMock.MockInstance, "http://myurl");
+			cruiseManagerMock.ExpectAndReturn("GetMostRecentBuildNames", new string[] {"log1", "log2"}, "myproject", 99);
+
+			// Execute
+			string[] returnedBuildNames = managerWrapper.GetMostRecentBuildNames("myserver", "myproject", 99);
+
+			// Verify
+			AssertEquals("log1", returnedBuildNames[0]);
+			AssertEquals(2, returnedBuildNames.Length);
+			
+			VerifyAll();
+		}
+
+		[Test]
 		public void ReturnsServerLogFromCorrectServer()
 		{
 			ServerSpecification[] servers = new ServerSpecification[] { new ServerSpecification("myserver", "http://myurl"), new ServerSpecification("myotherserver", "http://myotherurl")};

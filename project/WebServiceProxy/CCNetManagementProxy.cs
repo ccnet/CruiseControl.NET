@@ -66,6 +66,11 @@ namespace ThoughtWorks.CruiseControl.WebServiceProxy
 			throw new NotImplementedException();
 		}
 
+		public string[] GetMostRecentBuildNames(string projectName, int buildCount)
+		{
+			throw new NotImplementedException();
+		}
+
 		public string GetLog(string projectName, string buildName)
 		{
 			throw new NotImplementedException();

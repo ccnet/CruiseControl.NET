@@ -41,6 +41,11 @@ namespace ThoughtWorks.CruiseControl.Core
 			return cruiseServer.GetBuildNames(projectName);
 		}
 
+		public string[] GetMostRecentBuildNames(string projectName, int buildCount)
+		{
+			return cruiseServer.GetMostRecentBuildNames(projectName, buildCount);
+		}
+
 		public string GetLog(string projectName, string buildName)
 		{
 			return cruiseServer.GetLog(projectName, buildName);

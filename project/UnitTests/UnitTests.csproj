@@ -229,6 +229,16 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "WebDashboard\Dashboard\DecoratingRecentBuildsPanelBuilderTest.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "WebDashboard\Dashboard\DefaultBuildNameFormatterTest.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "WebDashboard\Dashboard\DefaultBuildRetrieverForRequestTest.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -245,6 +255,11 @@
                 />
                 <File
                     RelPath = "WebDashboard\Dashboard\DefaultUserRequestSpecificSideBarViewBuilderTest.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "WebDashboard\Dashboard\RecentBuildListerTest.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

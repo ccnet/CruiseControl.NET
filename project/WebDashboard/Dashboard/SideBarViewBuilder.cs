@@ -1,4 +1,5 @@
 using System.Web.UI;
+using System.Web.UI.HtmlControls;
 using ThoughtWorks.CruiseControl.WebDashboard.IO;
 
 namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
@@ -12,7 +13,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 			this.slaveBuilder = BarUserRequestSpecificSideBarViewBuilder;
 		}
 
-		public Control Execute(ICruiseRequestWrapper request)
+		public HtmlTable Execute(ICruiseRequestWrapper request)
 		{
 			string serverName = request.GetServerName();
 			if (serverName == "")

@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using ThoughtWorks.CruiseControl.Remote;
 using ThoughtWorks.CruiseControl.WebDashboard.config;
@@ -5,7 +6,7 @@ using ThoughtWorks.CruiseControl.WebDashboard.Config;
 
 namespace ThoughtWorks.CruiseControl.WebDashboard.ServerConnection
 {
-	public class ServerAggregatingCruiseManagerWrapper : ICruiseManagerWrapper
+	public class ServerAggregatingCruiseManagerWrapper : ICruiseManagerWrapper, IFarmService
 	{
 		private readonly ICruiseManagerFactory managerFactory;
 		private readonly IConfigurationGetter configurationGetter;
@@ -29,6 +30,11 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.ServerConnection
 		public string[] GetBuildNames(string serverName, string projectName)
 		{
 			return GetCruiseManager(serverName).GetBuildNames(projectName);
+		}
+
+		public string[] GetMostRecentBuildNames(string serverName, string projectName, int buildCount)
+		{
+			return GetCruiseManager(serverName).GetMostRecentBuildNames(projectName,buildCount);
 		}
 
 		public string GetServerLog (string serverName)
@@ -68,5 +74,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.ServerConnection
 		{
 			get { return (IEnumerable) configurationGetter.GetConfigFromSection(ServersSectionHandler.SectionName); }
 		}
+
+	
 	}
 }

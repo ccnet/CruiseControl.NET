@@ -74,6 +74,11 @@ namespace ThoughtWorks.CruiseControl.Core
 			return _server.GetBuildNames(projectName);
 		}
 
+		public string[] GetMostRecentBuildNames(string projectName, int buildCount)
+		{
+			return _server.GetMostRecentBuildNames(projectName, buildCount);
+		}
+
 		public string GetLog(string projectName, string buildName)
 		{
 			return _server.GetLog(projectName, buildName);

@@ -185,6 +185,34 @@ namespace ThoughtWorks.CruiseControl.Core
 			throw new NoSuchProjectException(projectName);
 		}
 
+		public string[] GetMostRecentBuildNames(string projectName, int buildCount)
+		{
+			// TODO - this is a hack - I'll tidy it up later - promise! :) MR
+			foreach (IProjectIntegrator projectIntegrator in projectIntegrators) 
+			{
+				if (projectIntegrator.Name == projectName)
+				{
+					foreach (IIntegrationCompletedEventHandler publisher in ((Project) projectIntegrator.Project).Publishers)
+					{
+						if (publisher is XmlLogPublisher)
+						{
+							// ToDo - check these are sorted?
+							string[] buildNames = LogFileUtil.GetLogFileNames(((XmlLogPublisher) publisher).LogDir);
+							ArrayList buildNamesToReturn = new ArrayList();
+							for (int i = 0; i < buildCount; i++)
+							{
+								buildNamesToReturn.Add(buildNames[i]);
+							}
+							return (string[]) buildNamesToReturn.ToArray(typeof (string));
+						}
+					}
+					throw new CruiseControlException("Unable to find Log Publisher for project so can't find log file");
+				}
+			}
+
+			throw new NoSuchProjectException(projectName);
+		}
+
 		public string GetLog(string projectName, string buildName)
 		{
 			// TODO - this is a hack - I'll tidy it up later - promise! :) MR

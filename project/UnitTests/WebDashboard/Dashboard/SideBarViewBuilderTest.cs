@@ -38,12 +38,12 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 		public void ShouldShowFarmViewIfNoServerSpecified()
 		{
 			// Setup
-			Control actionsControl = new HtmlGenericControl("div");
+			HtmlTable actionsControl = new HtmlTable();
 			cruiseRequestWrapperMock.ExpectAndReturn("GetServerName", "");
 			userRequestSpecificSideBarViewBuilderMock.ExpectAndReturn("GetFarmSideBar", actionsControl);
 
 			// Execute
-			Control sidebarControl = sideBarViewBuilder.Execute(cruiseRequestWrapper);
+			HtmlTable sidebarControl = sideBarViewBuilder.Execute(cruiseRequestWrapper);
 
 			// Verify
 			AssertEquals(actionsControl, sidebarControl);
@@ -54,13 +54,13 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 		public void ShouldShowServerViewIfServerButNoProjectSpecified()
 		{
 			// Setup
-			Control actionsControl = new HtmlGenericControl("div");
+			HtmlTable actionsControl = new HtmlTable();
 			cruiseRequestWrapperMock.ExpectAndReturn("GetServerName", "myServer");
 			cruiseRequestWrapperMock.ExpectAndReturn("GetProjectName", "");
 			userRequestSpecificSideBarViewBuilderMock.ExpectAndReturn("GetServerSideBar", actionsControl, "myServer");
 
 			// Execute
-			Control sidebarControl = sideBarViewBuilder.Execute(cruiseRequestWrapper);
+			HtmlTable sidebarControl = sideBarViewBuilder.Execute(cruiseRequestWrapper);
 
 			// Verify
 			AssertEquals(actionsControl, sidebarControl);
@@ -71,14 +71,14 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 		public void ShouldShowProjectViewIfServerAndProjectButNoBuildSpecified()
 		{
 			// Setup
-			Control actionsControl = new HtmlGenericControl("div");
+			HtmlTable actionsControl = new HtmlTable();
 			cruiseRequestWrapperMock.ExpectAndReturn("GetServerName", "myServer");
 			cruiseRequestWrapperMock.ExpectAndReturn("GetProjectName", "myProject");
 			cruiseRequestWrapperMock.ExpectAndReturn("GetBuildName", "");
 			userRequestSpecificSideBarViewBuilderMock.ExpectAndReturn("GetProjectSideBar", actionsControl, "myServer", "myProject");
 
 			// Execute
-			Control sidebarControl = sideBarViewBuilder.Execute(cruiseRequestWrapper);
+			HtmlTable sidebarControl = sideBarViewBuilder.Execute(cruiseRequestWrapper);
 
 			// Verify
 			AssertEquals(actionsControl, sidebarControl);
@@ -89,14 +89,14 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 		public void ShouldShowBuildViewIfServerAndProjectAndBuildSpecified()
 		{
 			// Setup
-			Control actionsControl = new HtmlGenericControl("div");
+			HtmlTable actionsControl = new HtmlTable();
 			cruiseRequestWrapperMock.ExpectAndReturn("GetServerName", "myServer");
 			cruiseRequestWrapperMock.ExpectAndReturn("GetProjectName", "myProject");
 			cruiseRequestWrapperMock.ExpectAndReturn("GetBuildName", "myBuild");
 			userRequestSpecificSideBarViewBuilderMock.ExpectAndReturn("GetBuildSideBar", actionsControl, "myServer", "myProject", "myBuild");
 
 			// Execute
-			Control sidebarControl = sideBarViewBuilder.Execute(cruiseRequestWrapper);
+			HtmlTable sidebarControl = sideBarViewBuilder.Execute(cruiseRequestWrapper);
 
 			// Verify
 			AssertEquals(actionsControl, sidebarControl);

@@ -13,6 +13,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 	{
 		private DynamicMock urlBuilderMock;
 		private DynamicMock buildNameRetrieverMock;
+		private DynamicMock recentBuildsViewBuilderMock;
 		private DefaultUserRequestSpecificSideBarViewBuilder viewBuilder;
 
 		[SetUp]
@@ -20,15 +21,18 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 		{
 			urlBuilderMock = new DynamicMock(typeof(IUrlBuilder));
 			buildNameRetrieverMock = new DynamicMock(typeof(IBuildNameRetriever));
+			recentBuildsViewBuilderMock = new DynamicMock(typeof(IRecentBuildsPanelViewBuilder));
 			viewBuilder = new DefaultUserRequestSpecificSideBarViewBuilder(new DefaultHtmlBuilder(), 
 				(IUrlBuilder) urlBuilderMock.MockInstance, 
-				(IBuildNameRetriever) buildNameRetrieverMock.MockInstance);
+				(IBuildNameRetriever) buildNameRetrieverMock.MockInstance,
+				(IRecentBuildsPanelViewBuilder) recentBuildsViewBuilderMock.MockInstance);
 		}
 
 		private void VerifyAll()
 		{
 			urlBuilderMock.Verify();
 			buildNameRetrieverMock.Verify();
+			recentBuildsViewBuilderMock.Verify();
 		}
 
 		[Test]
@@ -103,6 +107,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 			urlBuilderMock.ExpectAndReturn("BuildBuildUrl", "nextUrl", "BuildReport.aspx", "myServer", "myProject", "returnedNextBuildName");
 			urlBuilderMock.ExpectAndReturn("BuildBuildUrl", "previousUrl", "BuildReport.aspx", "myServer", "myProject", "returnedPreviousBuildName");
 			urlBuilderMock.ExpectAndReturn("BuildBuildUrl", "viewLogUrl", "ViewLog.aspx", "myServer", "myProject", "myCurrentBuild");
+			HtmlTable buildsPanel = new HtmlTable();
+			recentBuildsViewBuilderMock.ExpectAndReturn("BuildRecentBuildsPanel", buildsPanel, "myServer", "myProject");
 
 			HtmlAnchor expectedAnchor1 = new HtmlAnchor();
 			expectedAnchor1.HRef = "latestUrl";
@@ -118,18 +124,19 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 			expectedAnchor4.InnerHtml = "View Build Log";
 
 			// Execute
-			HtmlTable table = (HtmlTable) viewBuilder.GetBuildSideBar("myServer", "myProject", "myCurrentBuild");
+			HtmlTable table = viewBuilder.GetBuildSideBar("myServer", "myProject", "myCurrentBuild");
 
 			Assert(TableContains(table, expectedAnchor1));
 			Assert(TableContains(table, expectedAnchor2));
 			Assert(TableContains(table, expectedAnchor3));
 			Assert(TableContains(table, expectedAnchor4));
+			Assert(TableContains(table, buildsPanel));
 			
 			// Verify
 			VerifyAll();
 		}
 
-		private bool TableContains(HtmlTable table, HtmlAnchor anchor)
+		private bool TableContains(HtmlTable table, Control expectedControl)
 		{
 			foreach (HtmlTableRow row in table.Rows)
 			{
@@ -137,13 +144,18 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 				{
 					foreach (Control control in cell.Controls)
 					{
-						if (control is HtmlAnchor)
+						if (control is HtmlAnchor && expectedControl is HtmlAnchor)
 						{
 							HtmlAnchor currentAnchor = (HtmlAnchor) control;
-							if (currentAnchor.HRef == anchor.HRef && currentAnchor.InnerHtml == anchor.InnerHtml)
+							HtmlAnchor expectedAnchor = (HtmlAnchor) expectedControl;
+							if (currentAnchor.HRef == expectedAnchor.HRef && currentAnchor.InnerHtml == expectedAnchor.InnerHtml)
 							{
 								return true;
 							}
+						}
+						else if (control == expectedControl)
+						{
+							return true;
 						}
 					}
 				}

@@ -2,7 +2,6 @@ using System;
 using System.Web.UI;
 using System.Web.UI.HtmlControls;
 using ThoughtWorks.CruiseControl.WebDashboard.Dashboard;
-using ThoughtWorks.CruiseControl.WebDashboard.IO;
 using ThoughtWorks.CruiseControl.WebDashboard.MVC.View;
 
 namespace ThoughtWorks.CruiseControl.WebDashboard
@@ -21,7 +20,15 @@ namespace ThoughtWorks.CruiseControl.WebDashboard
 					new DefaultHtmlBuilder(), 
 					new DefaultUrlBuilder(
 						dcFactory.HttpPathMapper),
-					dcFactory.CruiseManagerBuildNameRetriever));
+					dcFactory.CruiseManagerBuildNameRetriever,
+				new DecoratingRecentBuildsPanelBuilder(
+					new DefaultHtmlBuilder(), 
+					new DefaultUrlBuilder(dcFactory.HttpPathMapper),
+					new RecentBuildLister(
+						new DefaultHtmlBuilder(), 
+						new DefaultUrlBuilder(dcFactory.HttpPathMapper),
+						dcFactory.ServerAggregatingCruiseManagerWrapper,
+						new DefaultBuildNameFormatter()))));
 
 			TopControlsViewBuilder topControlsViewBuilder = new TopControlsViewBuilder(
 				new DefaultHtmlBuilder(),
