@@ -1,4 +1,3 @@
-using System.Web.UI;
 using System.Web.UI.HtmlControls;
 using NMock;
 using NUnit.Framework;
@@ -14,32 +13,35 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 	{
 		private TopControlsViewBuilder viewBuilder;
 		private DynamicMock urlBuilderMock;
+		private DynamicMock buildNameFormatterMock;
 
-		private DynamicMock cruiseRequestWrapperMock;
+		private DynamicMock cruiseRequestMock;
 		private ICruiseRequest cruiseRequest;
 
 		[SetUp]
 		public void Setup()
 		{
 			urlBuilderMock = new DynamicMock(typeof(IUrlBuilder));
-			viewBuilder = new TopControlsViewBuilder(new DefaultHtmlBuilder(), (IUrlBuilder) urlBuilderMock.MockInstance);
+			buildNameFormatterMock = new DynamicMock(typeof(IBuildNameFormatter));
+			viewBuilder = new TopControlsViewBuilder(new DefaultHtmlBuilder(), (IUrlBuilder) urlBuilderMock.MockInstance, (IBuildNameFormatter) buildNameFormatterMock.MockInstance);
 
-			cruiseRequestWrapperMock = new DynamicMock(typeof(ICruiseRequest));
-			cruiseRequest = (ICruiseRequest) cruiseRequestWrapperMock.MockInstance;
+			cruiseRequestMock = new DynamicMock(typeof(ICruiseRequest));
+			cruiseRequest = (ICruiseRequest) cruiseRequestMock.MockInstance;
 		}
 
 		private void VerifyAll()
 		{
 			urlBuilderMock.Verify();
-			cruiseRequestWrapperMock.Verify();
+			cruiseRequestMock.Verify();
 		}
 
 		[Test]
 		public void ShouldShowJustLinkToDashboardIfNothingSpecified()
 		{
 			// Setup
-			cruiseRequestWrapperMock.ExpectAndReturn("GetServerName", "");
-			cruiseRequestWrapperMock.ExpectAndReturn("GetProjectName", "");
+			cruiseRequestMock.ExpectAndReturn("GetServerName", "");
+			cruiseRequestMock.ExpectAndReturn("GetProjectName", "");
+			cruiseRequestMock.ExpectAndReturn("GetBuildName", "");
 			urlBuilderMock.ExpectAndReturn("BuildUrl", "returnedurl", "default.aspx");
 
 			// Execute
@@ -53,10 +55,11 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 		public void ShouldShowLinkToDashboardAndServerIfServerButNoProjectSpecified()
 		{
 			// Setup
-			cruiseRequestWrapperMock.ExpectAndReturn("GetServerName", "myServer");
-			cruiseRequestWrapperMock.ExpectAndReturn("GetProjectName", "");
+			cruiseRequestMock.ExpectAndReturn("GetServerName", "myServer");
+			cruiseRequestMock.ExpectAndReturn("GetProjectName", "");
+			cruiseRequestMock.ExpectAndReturn("GetBuildName", "");
 			urlBuilderMock.ExpectAndReturn("BuildUrl", "returnedurl1", "default.aspx");
-			urlBuilderMock.ExpectAndReturn("BuildUrl", "returnedurl2", "default.aspx", "server=myServer");
+			urlBuilderMock.ExpectAndReturn("BuildServerUrl", "returnedurl2", "default.aspx", "myServer");
 
 			// Execute
 			HtmlTable table = (HtmlTable) viewBuilder.Execute(cruiseRequest);
@@ -66,14 +69,35 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 		}
 
 		[Test]
-		public void ShouldShowLinkToDashboardServerAndProjectIfServerAndProjectSpecified()
+		public void ShouldShowLinkToDashboardServerAndProjectIfServerAndProjectButNoBuildSpecified()
 		{
 			// Setup
-			cruiseRequestWrapperMock.ExpectAndReturn("GetServerName", "myServer");
-			cruiseRequestWrapperMock.ExpectAndReturn("GetProjectName", "myProject");
+			cruiseRequestMock.ExpectAndReturn("GetServerName", "myServer");
+			cruiseRequestMock.ExpectAndReturn("GetProjectName", "myProject");
+			cruiseRequestMock.ExpectAndReturn("GetBuildName", "");
 			urlBuilderMock.ExpectAndReturn("BuildUrl", "returnedurl1", "default.aspx");
-			urlBuilderMock.ExpectAndReturn("BuildUrl", "returnedurl2", "default.aspx", "server=myServer");
-			urlBuilderMock.ExpectAndReturn("BuildUrl", "returnedurl3", "BuildReport.aspx", "server=myServer&project=myProject");
+			urlBuilderMock.ExpectAndReturn("BuildServerUrl", "returnedurl2", "default.aspx", "myServer");
+			urlBuilderMock.ExpectAndReturn("BuildProjectUrl", "returnedurl3", "BuildReport.aspx", "myServer", "myProject");
+
+			// Execute
+			HtmlTable table = (HtmlTable) viewBuilder.Execute(cruiseRequest);
+
+			// Verify
+			VerifyAll();
+		}
+
+		[Test]
+		public void ShouldShowLinkToDashboardServerProjectAndBuildIfServerProjectAndBuildSpecified()
+		{
+			// Setup
+			cruiseRequestMock.ExpectAndReturn("GetServerName", "myServer");
+			cruiseRequestMock.ExpectAndReturn("GetProjectName", "myProject");
+			cruiseRequestMock.ExpectAndReturn("GetBuildName", "myBuild");
+			buildNameFormatterMock.ExpectAndReturn("GetPrettyBuildName", "pretty name", "myBuild");
+			urlBuilderMock.ExpectAndReturn("BuildUrl", "returnedurl1", "default.aspx");
+			urlBuilderMock.ExpectAndReturn("BuildServerUrl", "returnedurl2", "default.aspx", "myServer");
+			urlBuilderMock.ExpectAndReturn("BuildProjectUrl", "returnedurl3", "BuildReport.aspx", "myServer", "myProject");
+			urlBuilderMock.ExpectAndReturn("BuildBuildUrl", "returnedurl4", "BuildReport.aspx", "myServer", "myProject", "myBuild");
 
 			// Execute
 			HtmlTable table = (HtmlTable) viewBuilder.Execute(cruiseRequest);

@@ -8,11 +8,13 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 {
 	public class TopControlsViewBuilder : HtmlBuilderViewBuilder
 	{
+		private readonly IBuildNameFormatter buildNameFormatter;
 		private readonly IUrlBuilder urlBuilder;
 
-		public TopControlsViewBuilder(IHtmlBuilder htmlBuilder, IUrlBuilder urlBuilder) : base (htmlBuilder)
+		public TopControlsViewBuilder(IHtmlBuilder htmlBuilder, IUrlBuilder urlBuilder, IBuildNameFormatter buildNameFormatter) : base (htmlBuilder)
 		{
 			this.urlBuilder = urlBuilder;
+			this.buildNameFormatter = buildNameFormatter;
 		}
 
 		public Control Execute(ICruiseRequest request)
@@ -27,14 +29,22 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 			if (serverName != "")
 			{
 				htmlWriter.Write(" &gt; ");
-				A(serverName, urlBuilder.BuildUrl("default.aspx","server=" + serverName)).RenderControl(htmlWriter);
+				A(serverName, urlBuilder.BuildServerUrl("default.aspx", serverName)).RenderControl(htmlWriter);
 			}
 
 			string projectName = request.GetProjectName();
 			if (projectName != "")
 			{
 				htmlWriter.Write(" &gt; ");
-				A(projectName, urlBuilder.BuildUrl("BuildReport.aspx","server=" + serverName + "&project=" + projectName)).RenderControl(htmlWriter);
+				A(projectName, urlBuilder.BuildProjectUrl("BuildReport.aspx", serverName, projectName)).RenderControl(htmlWriter);
+			}
+
+			string buildName = request.GetBuildName();
+			if (buildName != "")
+			{
+				htmlWriter.Write(" &gt; ");
+				A(buildNameFormatter.GetPrettyBuildName(buildName),
+					urlBuilder.BuildBuildUrl("BuildReport.aspx", serverName, projectName, buildName)).RenderControl(htmlWriter);
 			}
 
 			HtmlGenericControl locationMenu = new HtmlGenericControl("div");

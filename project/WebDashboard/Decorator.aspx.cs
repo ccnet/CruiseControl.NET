@@ -28,7 +28,11 @@ namespace ThoughtWorks.CruiseControl.WebDashboard
 						dcFactory.ServerAggregatingCruiseManagerWrapper,
 						dcFactory.DefaultBuildNameFormatter))));
 
-			TopControlsViewBuilder topControlsViewBuilder = new TopControlsViewBuilder(dcFactory.DefaultHtmlBuilder, dcFactory.DefaultUrlBuilder);
+			TopControlsViewBuilder topControlsViewBuilder = 
+				new TopControlsViewBuilder(
+					dcFactory.DefaultHtmlBuilder, 
+					dcFactory.DefaultUrlBuilder,
+					dcFactory.DefaultBuildNameFormatter);
 
 			SideBarLocation.Controls.Add(sideBarViewBuilder.Execute(dcFactory.QueryStringRequestWrapper));
 			TopControlsLocation.Controls.Add(topControlsViewBuilder.Execute(dcFactory.QueryStringRequestWrapper));
