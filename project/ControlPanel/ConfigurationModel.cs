@@ -1,19 +1,9 @@
-using System;
 using System.Collections;
 using System.IO;
-using System.Reflection;
-using System.Text;
-using System.Windows.Forms;
 using System.Xml;
-
-using NUnit.Framework;
 using Exortech.NetReflector;
-
 using ThoughtWorks.CruiseControl.Core;
 using ThoughtWorks.CruiseControl.Core.Config;
-using ThoughtWorks.CruiseControl.Core.Label;
-using ThoughtWorks.CruiseControl.Core.Publishers;
-using ThoughtWorks.CruiseControl.Core.Sourcecontrol;
 
 namespace ThoughtWorks.CruiseControl.ControlPanel
 {
@@ -25,7 +15,7 @@ namespace ThoughtWorks.CruiseControl.ControlPanel
 
 		public void Load(string filename) 
 		{
-			ConfigurationLoader loader = new ConfigurationLoader(filename); 
+			ConfigurationLoader loader = new ConfigurationLoader(filename, null); 
 			Load(loader.Load());
 			_filename = filename;
 		}
@@ -50,7 +40,7 @@ namespace ThoughtWorks.CruiseControl.ControlPanel
 		{
 			try 
 			{
-				new ConfigurationLoader(filename).Load();
+				new ConfigurationLoader(filename, null).Load();
 			} 
 			catch (ConfigurationException e) 
 			{

@@ -1,3 +1,4 @@
+using System.Text;
 using Exortech.NetReflector;
 using System;
 using System.IO;
@@ -10,6 +11,7 @@ namespace ThoughtWorks.CruiseControl.Core.Config
 {
 	public class ConfigurationLoader : IConfigurationLoader
 	{
+		private readonly IProjectSerializer projectSerializer;
 		private const string ROOT_ELEMENT = "cruisecontrol";
 		private const string CONFIG_ASSEMBLY_PATTERN = "ccnet.*.plugin.dll";
 
@@ -19,9 +21,10 @@ namespace ThoughtWorks.CruiseControl.Core.Config
 		private ValidationEventHandler _handler;
 		private XmlSchema _schema;
 
-		public ConfigurationLoader(string configFile) : this()
+		public ConfigurationLoader(string configFile, IProjectSerializer projectSerializer) : this()
 		{
 			ConfigFile = configFile;
+			this.projectSerializer = projectSerializer;
 		}
 
 		internal ConfigurationLoader() 
@@ -67,6 +70,27 @@ namespace ThoughtWorks.CruiseControl.Core.Config
 
 			XmlDocument config = LoadConfiguration();
 			return PopulateProjectsFromXml(config);
+		}
+
+		// ToDo - thread safety?
+		public void Save(IConfiguration config)
+		{
+			XmlDocument doc = new XmlDocument();
+			doc.LoadXml("<cruisecontrol/>");
+
+			StringBuilder concatenatedProjects = new StringBuilder();
+			foreach (Project project in config.Projects)
+			{
+				concatenatedProjects.Append(projectSerializer.Serialize(project));
+			}
+			doc.DocumentElement.InnerXml = concatenatedProjects.ToString();
+
+			using (StreamWriter fileWriter = new StreamWriter(ConfigFile))
+			{
+				XmlTextWriter xmlTextWriter = new XmlTextWriter(fileWriter);
+				doc.WriteTo(xmlTextWriter);
+				xmlTextWriter.Flush();
+			}
 		}
 
 		internal XmlDocument LoadConfiguration()

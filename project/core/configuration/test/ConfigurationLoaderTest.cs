@@ -1,6 +1,10 @@
+using System;
+using System.IO;
 using Exortech.NetReflector;
+using NMock;
 using NUnit.Framework;
 using System.Xml;
+using ThoughtWorks.CruiseControl.Core.Builder;
 using ThoughtWorks.CruiseControl.Core.Builder.Test;
 using ThoughtWorks.CruiseControl.Core.Publishers.Test;
 using ThoughtWorks.CruiseControl.Core.Sourcecontrol;
@@ -13,7 +17,7 @@ namespace ThoughtWorks.CruiseControl.Core.Config.Test
 	public class ConfigurationLoaderTest : CustomAssertion
 	{
 		private ConfigurationLoader loader;
-		
+
 		[SetUp]
 		protected void SetUp()
 		{
@@ -123,6 +127,44 @@ namespace ThoughtWorks.CruiseControl.Core.Config.Test
 			AssertNotNull(configuration.Projects["foo"]);
 			AssertEquals(typeof(CustomTestProject), configuration.Projects["foo"]);
 			AssertEquals("foo", ((CustomTestProject) configuration.Projects["foo"]).Name);
+		}
+
+		[Test]
+		public void ShouldBeAbleToSaveAndLoadMultipleProjectsAcrossInstances()
+		{
+			CommandLineBuilder builder = new CommandLineBuilder();
+			builder.Executable = "foo";
+			FileSourceControl sourceControl = new FileSourceControl();
+			sourceControl.RepositoryRoot = "bar";
+			// Setup
+			Project project1 = new Project();
+			project1.Name = "Project One";
+			project1.Builder = builder;
+			project1.SourceControl = sourceControl;
+			Project project2 = new Project();
+			project2.Name = "Project Two";
+			project2.Builder = builder;
+			project2.SourceControl = sourceControl;
+			ProjectList projectList = new ProjectList();
+			projectList.Add(project1);
+			projectList.Add(project2);
+
+			DynamicMock mockConfiguration = new DynamicMock(typeof(IConfiguration));
+			mockConfiguration.ExpectAndReturn("Projects", projectList);
+
+			string configFilePath = TempFileUtil.CreateTempFile(TempFileUtil.CreateTempDir(this), "loadernet.config");
+
+			// Execute
+			ConfigurationLoader persister1 = new ConfigurationLoader(configFilePath, new NetReflectorProjectSerializer());
+			persister1.Save((IConfiguration) mockConfiguration.MockInstance);
+
+			ConfigurationLoader persister2 = new ConfigurationLoader(configFilePath, null);
+			IConfiguration configuration2 = persister2.Load();
+
+			// Verify
+			AssertNotNull (configuration2.Projects["Project One"]);
+			AssertNotNull (configuration2.Projects["Project Two"]);
+			mockConfiguration.Verify();
 		}
 
 		[ReflectorType("customtestproject")]

@@ -12,7 +12,7 @@ namespace ThoughtWorks.CruiseControl.Core.Config
 		private ConfigurationChangedHandler _handler;
 
 		public ConfigurationContainer(string filename) 
-			: this(new ConfigurationLoader(filename), new FileChangedWatcher(filename)) { }
+			: this(new ConfigurationLoader(filename, new NetReflectorProjectSerializer()), new FileChangedWatcher(filename)) { }
 
 		public ConfigurationContainer(IConfigurationLoader loader, IFileWatcher watcher)
 		{
