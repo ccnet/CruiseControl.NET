@@ -5,7 +5,6 @@ using System.IO;
 using System.Text;
 using System.Web.UI;
 using System.Web.UI.HtmlControls;
-using System.Web.UI.WebControls;
 using System.Xml;
 using System.Xml.XPath;
 using ThoughtWorks.CruiseControl.Core;
@@ -16,22 +15,15 @@ namespace ThoughtWorks.CruiseControl.Web
 {
 	public class Default : Page
 	{
-		protected HtmlTableCell HeaderCell;
-		protected HtmlTableCell DetailsCell;
-		protected HtmlGenericControl PluginLinks;
-		protected HyperLink TestDetailsLink;
-		protected HyperLink LogLink;
+		protected HtmlGenericControl Contents;
+		protected PluginLinks PluginLinks;
 		protected HtmlGenericControl BodyLabel;
-
-		private string logfile;
 
 		private void Page_Load(object sender, EventArgs e)
 		{
 			try
 			{
-				logfile = WebUtil.ResolveLogFile(Context);
-				GeneratePluginLinks();
-				InitDisplayLogFile();
+				ApplyStylesheetsToRenderContent();
 			}
 			catch (CruiseControlException ex)
 			{
@@ -49,45 +41,20 @@ namespace ThoughtWorks.CruiseControl.Web
 			}
 		}
 
-		private void GeneratePluginLinks()
-		{
-			if (ConfigurationSettings.GetConfig("CCNet/buildPlugins") == null)
-			{
-				return;
-			}
-
-			string pluginLinksHtml = "";
-			bool firstLink = true;
-			foreach (PluginSpecification spec in (IEnumerable) ConfigurationSettings.GetConfig("CCNet/buildPlugins"))
-			{
-				if (!firstLink)
-				{
-					pluginLinksHtml += String.Format("|&nbsp; ");
-				}
-				pluginLinksHtml += String.Format(@"<a class=""link"" href=""{0}"">{1}</a> ", GenerateLogUrl(spec.LinkUrl), spec.LinkText);
-				firstLink = false;
-			}
-			PluginLinks.InnerHtml = pluginLinksHtml;
-		}
-
-		private string GenerateLogUrl(string urlPrefix)
-		{
-			return ResolveUrl(String.Format("{0}{1}", urlPrefix, new FileInfo(logfile).Name));
-		}
-		
-		private void InitDisplayLogFile()
+		private void ApplyStylesheetsToRenderContent()
 		{
 			StringBuilder builder = new StringBuilder();
 			try
 			{		
+				string logfile = WebUtil.ResolveLogFile(Context);
 				XPathDocument document = new XPathDocument(logfile);
 				
-				IList list = (IList) ConfigurationSettings.GetConfig("CCNet/xslFiles");
+				IList list = GetSummaryXslFiles();
 				foreach (string xslFile in list) 
 				{
-					if (xslFile.ToLower().IndexOf("header") > -1)
+					if (xslFile.ToLower().IndexOf("header") > -1)	// header content goes first
 					{
-						GenerateHeader(xslFile, document);
+						builder.Insert(0, Transform(xslFile, document));
 					}
 					else
 					{
@@ -100,12 +67,12 @@ namespace ThoughtWorks.CruiseControl.Web
 				throw new CruiseControlException(String.Format("Bad XML in logfile: " + ex.Message));
 			}
 
-			DetailsCell.InnerHtml = builder.ToString();
+			Contents.InnerHtml = builder.ToString();
 		}
 
-		private void GenerateHeader(string headerXslfile, XPathDocument logFileDocument)
+		private IList GetSummaryXslFiles()
 		{
-			HeaderCell.InnerHtml = "<br/>" + Transform(headerXslfile, logFileDocument);
+			return (IList) ConfigurationSettings.GetConfig("CCNet/xslFiles");
 		}
 
 		private string Transform(string xslfile, XPathDocument logFileDocument)
@@ -126,7 +93,6 @@ namespace ThoughtWorks.CruiseControl.Web
 		private void InitializeComponent()
 		{    
 			this.Load += new EventHandler(this.Page_Load);
-
 		}
 		#endregion
 	}

@@ -265,6 +265,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "PluginLinks.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "PluginSpecification.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
