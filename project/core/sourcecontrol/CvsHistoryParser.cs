@@ -7,8 +7,6 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 {
 	public class CvsHistoryParser : IHistoryParser
 	{
-		#region cvs constants
-
 		/// <summary>
 		///  This line delimits seperate files in the CVS log information.
 		///  </summary>
@@ -56,14 +54,6 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 		/// This is the date format required by commands passed to CVS.	 
 		/// </summary>
 		internal static readonly string CVSDATE_FORMAT = "yyyy-MM-dd HH:mm:ss 'GMT'";
-
-
-		/// <summary>
-		/// This is the date format returned in the log information from CVS.
-		/// </summary>
-		internal static readonly string LOGDATE_FORMAT = "yyyy/MM/dd HH:mm:ss z";
-
-		#endregion
 
 		private string _currentLine;
 		private string _workingFileName;
@@ -228,11 +218,8 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 
 		internal DateTime ParseModifiedTime(string dateStamp, string timeStamp)
 		{
-			string dateTimeString = string.Format("{0} {1} +0", dateStamp, timeStamp);
-			return DateTime.ParseExact(
-				dateTimeString,
-				LOGDATE_FORMAT,
-				DateTimeFormatInfo.GetInstance(CultureInfo.InvariantCulture));
+			string dateTimeString = string.Format("{0} {1} GMT", dateStamp, timeStamp);
+			return DateTime.Parse(dateTimeString, DateTimeFormatInfo.GetInstance(CultureInfo.InvariantCulture));
 		}
 
 		internal string ParseType(string stateKeyword, bool isAdded)

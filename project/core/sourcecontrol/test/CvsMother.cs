@@ -1,29 +1,15 @@
 using System;
-using ThoughtWorks.CruiseControl.Core.Util;
 
 namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test
 {
-	/// <summary>
-	/// Summary description for CvsMother.
-	/// </summary>
 	public class CvsMother
 	{
-		public static readonly string CVS_TEMP_DIR = "cvsLogDir";
-
-		public static string CVS_TEST_LOGFILE
-		{
-			get { return TempFileUtil.CreateTempFile(CVS_TEMP_DIR, "cvslog.txt", CVS_LOGFILE_CONTENT); }
-		}
-		
 		public static DateTime OLDEST_ENTRY = DateTime.Parse("2002/03/13 19:38:42");
 		public static DateTime NEWEST_ENTRY = DateTime.Parse("2002/03/15 19:20:28");
 
-		#region CVS_LOGFILE_CONTENT
-		public static string CVS_LOGFILE_CONTENT 
+		public static string CVS_LOGFILE_CONTENT
 		{
-			get 
-			{
-				return @"RCS file: /cvsroot/cruisecontrol/cruisecontrol/main/README.txt,v
+			get { return @"RCS file: /cvsroot/cruisecontrol/cruisecontrol/main/README.txt,v
 Working file: main/README.txt
 head: 1.1
 branch:
@@ -207,9 +193,7 @@ revision 1.4
 date: 2002/03/13 19:38:42;  author: alden;  state: dead;  lines: +0 -0
 Hey, look, another deleted file.
 =============================================================================
-";
-			}
+"; }
 		}
-		#endregion 
 	}
 }
