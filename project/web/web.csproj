@@ -214,6 +214,21 @@
                     BuildAction = "EmbeddedResource"
                 />
                 <File
+                    RelPath = "Tests.aspx"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "Tests.aspx.cs"
+                    DependentUpon = "Tests.aspx"
+                    SubType = "ASPXCodeBehind"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Tests.aspx.resx"
+                    DependentUpon = "Tests.aspx.cs"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
                     RelPath = "TestTiming.aspx"
                     BuildAction = "Content"
                 />
@@ -282,6 +297,10 @@
                     BuildAction = "Content"
                 />
                 <File
+                    RelPath = "log\log20020916143556.xml"
+                    BuildAction = "Content"
+                />                
+                <File
                     RelPath = "log\log20020924144031.xml"
                     BuildAction = "Content"
                 />
@@ -338,6 +357,10 @@
                 />
                 <File
                     RelPath = "xsl\modifications.xsl"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "xsl\tests.xsl"
                     BuildAction = "Content"
                 />
                 <File
