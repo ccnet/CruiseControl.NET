@@ -566,6 +566,21 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "state\IntegrationStateManager.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "state\IStateManager.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "state\test\IntegrationStateManagerTest.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "test\CruiseControlTest.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
