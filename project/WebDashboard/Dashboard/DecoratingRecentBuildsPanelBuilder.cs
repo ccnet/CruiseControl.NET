@@ -29,7 +29,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 			subTable.Rows.Add(TR(TD()));
 			subTable.Rows.Add(TR(
 				TD(A("Show All", 
-				urlBuilder.BuildProjectUrl("Controller.aspx", new ActionSpecifierWithName(CruiseActionFactory.VIEW_ALL_BUILDS_ACTION_NAME), serverName, projectName)))));
+				     urlBuilder.BuildProjectUrl(new ActionSpecifierWithName(CruiseActionFactory.VIEW_ALL_BUILDS_ACTION_NAME), serverName, projectName)))));
 			return subTable;
 		}
 	}

@@ -40,7 +40,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 		public void ShouldReturnLinkToAddProjectForFarmView()
 		{
 			// Setup
-			urlBuilderMock.ExpectAndReturn("BuildUrl", "returnedurl", "controller.aspx", new PropertyIs("ActionName", CruiseActionFactory.ADD_PROJECT_DISPLAY_ACTION_NAME));
+			urlBuilderMock.ExpectAndReturn("BuildUrl", "returnedurl", new PropertyIs("ActionName", CruiseActionFactory.ADD_PROJECT_DISPLAY_ACTION_NAME));
 
 			// Execute
 			HtmlTable table = viewBuilder.GetFarmSideBar();
@@ -58,8 +58,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 		public void ShouldReturnLinkToAddProjectAndServerLogForServerView()
 		{
 			// Setup
-			urlBuilderMock.ExpectAndReturn("BuildServerUrl", "returnedurl1", "ViewServerLog.aspx", new PropertyIs("ActionName", CruiseActionFactory.ADD_PROJECT_DISPLAY_ACTION_NAME), "myServer");
-			urlBuilderMock.ExpectAndReturn("BuildServerUrl", "returnedurl2", "controller.aspx", "myServer");
+			urlBuilderMock.ExpectAndReturn("BuildServerUrl", "returnedurl1", "ViewServerLog.aspx", "myServer");
+			urlBuilderMock.ExpectAndReturn("BuildServerUrl", "returnedurl2", new PropertyIs("ActionName", CruiseActionFactory.ADD_PROJECT_DISPLAY_ACTION_NAME), "myServer");
 			HtmlAnchor expectedAnchor1 = new HtmlAnchor();
 			expectedAnchor1.HRef = "returnedurl1";
 			expectedAnchor1.InnerHtml = "View Server Log";

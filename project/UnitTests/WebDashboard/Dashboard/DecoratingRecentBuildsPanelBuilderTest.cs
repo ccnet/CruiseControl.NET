@@ -57,7 +57,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 			// Setup
 			HtmlTable table = htmlBuilder.CreateTable(htmlBuilder.CreateRow(htmlBuilder.CreateCell("hello decorator")));
 			decoratedBuilderMock.ExpectAndReturn("BuildRecentBuildsTable", table, "myServer", "myProject");
-			urlBuilderMock.ExpectAndReturn("BuildProjectUrl", "returnedurl1", "Controller.aspx", new PropertyIs("ActionName", CruiseActionFactory.VIEW_ALL_BUILDS_ACTION_NAME), "myServer", "myProject");
+			urlBuilderMock.ExpectAndReturn("BuildProjectUrl", "returnedurl1", new PropertyIs("ActionName", CruiseActionFactory.VIEW_ALL_BUILDS_ACTION_NAME), "myServer", "myProject");
 
 			// Execute
 			HtmlTable returnedTable = builder.BuildRecentBuildsTable("myServer", "myProject");

@@ -21,21 +21,21 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 		public HtmlTable GetFarmSideBar()
 		{
 			return Table(
-				TR( TD( A("Add Project", urlBuilder.BuildUrl("controller.aspx", new ActionSpecifierWithName(CruiseActionFactory.ADD_PROJECT_DISPLAY_ACTION_NAME))))));
+				TR( TD( A("Add Project", urlBuilder.BuildUrl(new ActionSpecifierWithName(CruiseActionFactory.ADD_PROJECT_DISPLAY_ACTION_NAME))))));
 		}
 
 		public HtmlTable GetServerSideBar(string serverName)
 		{
 			return Table(
-				TR( TD( A("View Server Log", urlBuilder.BuildServerUrl("ViewServerLog.aspx", new ActionSpecifierWithName(CruiseActionFactory.ADD_PROJECT_DISPLAY_ACTION_NAME), serverName)))),
-				TR( TD( A("Add Project", urlBuilder.BuildServerUrl("controller.aspx", serverName)))));
+				TR( TD( A("View Server Log", urlBuilder.BuildServerUrl("ViewServerLog.aspx", serverName)))),
+				TR( TD( A("Add Project", urlBuilder.BuildServerUrl(new ActionSpecifierWithName(CruiseActionFactory.ADD_PROJECT_DISPLAY_ACTION_NAME), serverName)))));
 		}
 
 		public HtmlTable GetProjectSideBar(string serverName, string projectName)
 		{
 			return Table(
 				TR( TD( A("Latest", urlBuilder.BuildBuildUrl("BuildReport.aspx", serverName, projectName, buildNameRetriever.GetLatestBuildName(serverName, projectName))))),
-				TR( TD( A("Delete Project", urlBuilder.BuildProjectUrl("controller.aspx", new ActionSpecifierWithName(CruiseActionFactory.SHOW_DELETE_PROJECT_ACTION_NAME), serverName, projectName))))
+				TR( TD( A("Delete Project", urlBuilder.BuildProjectUrl(new ActionSpecifierWithName(CruiseActionFactory.SHOW_DELETE_PROJECT_ACTION_NAME), serverName, projectName))))
 				);
 		}
 
