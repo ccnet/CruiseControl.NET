@@ -89,23 +89,30 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 	{
 		public static VSSParser CreateParser(string entry, IVssLocale locale)
 		{
-			int commentIndex = entry.IndexOf(locale.CommentKeyword);
-			commentIndex = commentIndex > -1 ? commentIndex : entry.Length;
-			string nonCommentEntry = entry.Substring(0, commentIndex);
-			if (nonCommentEntry.IndexOf(locale.CheckedInKeyword) > -1)
+			string vssKeyworkdLine = ReadVSSKeywordLine(entry);
+			if (vssKeyworkdLine.IndexOf(locale.CheckedInKeyword) > -1)
 			{
 				return new CheckInParser(entry, locale);
 			}
-			else if (nonCommentEntry.IndexOf(locale.AddedKeyword) > -1)
+			else if (vssKeyworkdLine.IndexOf(locale.AddedKeyword) > -1)
 			{
 				return new AddedParser(entry, locale);
 			}
-			else if (nonCommentEntry.IndexOf(locale.DeletedKeyword) > -1)
+			else if (vssKeyworkdLine.IndexOf(locale.DeletedKeyword) > -1)
 				return new DeletedParser(entry, locale);
-			else if (nonCommentEntry.IndexOf(locale.DestroyedKeyword) > -1)
+			else if (vssKeyworkdLine.IndexOf(locale.DestroyedKeyword) > -1)
 				return new DestroyedParser(entry, locale);
 
 			return new NullParser(entry, locale);
+		}
+
+		private static string ReadVSSKeywordLine(string entry)
+		{
+			StringReader reader = new StringReader(entry);
+			reader.ReadLine();
+			reader.ReadLine();
+			string nonCommentEntry = reader.ReadLine() + Environment.NewLine + reader.ReadLine();
+			return nonCommentEntry;
 		}
 	}
 

@@ -202,7 +202,6 @@ Commentaire: adding this file makes me so happy";
 			AssertEquals("adding this file makes me so happy",mod.Comment);
 		}
 
-
 		[Test]
 		public void ParseFileAndFolderWithNoComment()
 		{
@@ -237,6 +236,24 @@ happyTheFile.txt added
 			AssertEquals(null, mod.Comment);
 		}
 		
+		[Test]
+		public void ParseFileAndFolderIfFolderIsCalledAdded()
+		{
+			string entry = @"*****  added  *****
+Version 8
+User: Admin        Date:  9/16/02   Time:  5:29p
+happyTheFile.txt added
+";
+			string expectedFile = "happyTheFile.txt";
+			string expectedFolder = "added";
+
+			Modification mod = ParseAndAssertFilenameAndFolder(entry, expectedFile, expectedFolder);
+			AssertEquals("Admin", mod.UserName);
+			AssertEquals(new DateTime(2002, 9, 16, 17, 29, 0), mod.ModifiedTime);
+			AssertEquals("added", mod.Type);
+			AssertEquals(null, mod.Comment);
+		}
+
 		[Test]
 		public void ParseFileAndFolder_deleteFromSubfolder()
 		{

@@ -135,6 +135,11 @@
                     AssemblyName = "nmock"
                     HintPath = "..\..\lib\nmock.dll"
                 />
+                <Reference
+                    Name = "System.Data"
+                    AssemblyName = "System.Data"
+                    HintPath = "..\..\..\..\..\WINDOWS\Microsoft.NET\Framework\v1.1.4322\System.Data.dll"
+                />
             </References>
         </Build>
         <Files>
