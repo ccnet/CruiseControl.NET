@@ -2,9 +2,115 @@
 	<head>
 		<title>The CCTray Application</title>
 		<link type="text/css" rel="stylesheet" href="../cruisecontrol.css" />
+		<style>
+		.Question { margin-left: 10px; font-weight:bold; margin-bottom: 0px; padding-bottom:0px; }
+		.Answer { margin-left: 20px; margin-top: 0px; padding-top:0px; }
+		</style>
 	</head>
 	<body>
 		<img align="right" src="../images/ccnet_logo_onwhite.gif" />
+
 		<h1>The CCTray Application</h1>
+		<p>
+		CCTray is an optional utility for use with the CruiseControl.NET Continuous Integration server.  It provides
+		feedback upon build progress, and allows control over some of the server's operations.</p>
+
+		<h3>Main features</h3>
+		<ul>
+			<li> Identify the build status with a glance to the system tray
+			<li> Audio/Visual feedback upon completion of builds, indicating success or failure
+			<li> Force a build from any PC (when the CruiseControl.NET server is sleeping)
+		</ul>
+
+		<h3>Tray Icons</h3>
+		<p>
+		Once started, CCTray is normally only visible as an icon in the windows system tray.</p>
+		<img src="images/cctray-full-green.png" />
+		<p>
+		The colour of the CCTray icon conveys information about the CruiseControl.NET server's state:
+		<ul>
+			<li> <img src="images/cctray-icon-small-green.gif" /> The most recent build was successful
+			<li> <img src="images/cctray-icon-small-red.gif" /> The most recent build failed
+			<li> <img src="images/cctray-icon-small-grey.gif" /> The server is unavailable, or returned an error status
+		</ul>
+
+		<h3>Balloon notifications</h3>
+
+		<img src="images/balloon-fixed.png" /> &nbsp; &nbsp; &nbsp; <img src="images/balloon-broken.png" />
+		<p>
+		Ballon notifications use the standard Windows tray icon popup balloon whenever a build completes.  The text within
+		the balloon is configurable.  Balloon notifications may be enabled/disabled.</p>
+
+		<h3>Menu options</h3>
+
+		<img src="images/context-menu-building.png" />
+		<p>
+		Right-clicking the CCTray system tray icon displays a menu with several options:
+		</p>
+		<p class="Question">Launch web page</p>
+		<p class="Answer">Opens a browser at the CruiseControl.NET build web page for this project.  The web page may also be launched by double-clicking the tray icon.</p>
+
+		<p class="Question">Settings...</p>
+		<p class="Answer">Displays the settings form, from which you may configure CCTray.</p>
+
+		<p class="Question">Force build</p>
+		<p class="Answer">Wakes the CruiseControl.NET server from its sleep and tells it to start building immediately.  This menu item will be unavailable if the server is currently building.</p>
+
+		<p class="Question">Exit</p>
+		<p class="Answer">Closes the CCTray application.</p>
+
+		<h3>Configuration</h3>
+		<p>
+		CCTray's configuration settings is stored in the file "cctray-settings.xml", which is located in the same folder as the executable.
+		The file may be hand edited, though it's simpler to use the settings form.  To launch the settings form, right-click the tray icon and select 'Settings...'.</p>
+
+		<img src="images/form-settings.png" />
+
+		<p class="Question">Poll every <i>n</i> seconds</p>
+		<p class="Answer">CCTray detects changes in the CCNet server state by polling at regular intervals.  This value sets the period between polls.</p>
+
+		<p class="Question">Server</p>
+		<p class="Answer">A Uri to the remoting interface of the CruiseControl.NET server.</p>
+
+		<p class="Question">Project name</p>
+		<p class="Answer">The name of the project to be monitored, as described within the server's configuration file.</p>
+
+		<p class="Question">Show balloon notifications</p>
+		<p class="Answer">Enables or disables notification of completed builds via balloon messages.</p>
+
+		<p class="Question">Show agent</p>
+		<p class="Answer">Enables or disables notification of completed builds via agents.</p>
+
+		<p class="Question">Hide after announcement</p>
+		<p class="Answer">Turns the agent off after they deliver the completed build message.</p>
+
+		<p class="Question">Agent</p>
+		<p class="Answer">The agent to use.  This agent must be installed.</p>
+
+		<p class="Question">Audio</p>
+		<p class="Answer">The location of audio files to play upon completed builds.  The checkbox enables individual sounds.  Use the folder icon to browse for the wav file, and the play icon to preview the sound.</p>
+
+		<h3>FAQ</h3>
+		<p class="Question">My CCTray icon is constantly greyed out.  How can I tell why this is happening?</p>
+		<p class="Answer">A grey icon indicates some sort of connection or server error.  In such cases, the tray icon's tooltip is the exception message.  Set your mouse motionless above the CCTray icon for a second to see this message.</p>
+
+		<p class="Question">"Launch web page" doesn't display the right URL... help!</p>
+		<p class="Answer">The URL at which your CruiseControl.NET build results are available is in the server configuration.  Ensure that your server's configuration has a fully qualified host name (not just localhost).</p>
+
+		<p class="Question">I've selected "Notification Balloon", but it only flickers onto the screen momentarily.</p>
+		<p class="Answer">This has been observed in cases where an envelope icon appears in the system tray (indicating you've got mail -- probably a build report) which nudges the CCTray icon aside, causing the notification balloon to disappear.</p>
+
+		<p class="Question">I've found a bug.  Who can I tell?</p>
+		<p class="Answer">Please send bug reports to the CCNet developer mailing list: <a href="mailto:ccnet-devel@lists.sourceforge.net">ccnet-devel@lists.sourceforge.net</a>.</p>
+<!--
+		<img src="images/cctray-full-green.png" />
+		<img src="images/cctray-full-red.png" />
+		<img src="images/cctray-full-grey.png" />
+		<img src="images/balloon-broken.png" />
+		<img src="images/balloon-fixed.png" />
+		<img src="images/cctray-icon-small-green.gif" />
+		<img src="images/cctray-icon-small-red.gif" />
+		<img src="images/cctray-icon-small-grey.gif" />
+-->
 	</body>
 </html>
