@@ -8,6 +8,14 @@ namespace tw.ccnet.core.sourcecontrol.test
 	{
 		private Modification[] _expectedMods;
 		private bool _invoked = false;
+		private string _anOptionalProperty;
+
+		[ReflectorProperty("anOptionalProperty", Required=false)]
+		public string AnOptionalProperty
+		{
+			get { return _anOptionalProperty; }
+			set { _anOptionalProperty = value; }
+		}
 
 		public Modification[] ExpectedModifications
 		{

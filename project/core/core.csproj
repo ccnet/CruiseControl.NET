@@ -88,7 +88,6 @@
                     Name = "nunit.framework"
                     AssemblyName = "nunit.framework"
                     HintPath = "..\..\lib\nunit.framework.dll"
-                    Private = "True"
                 />
                 <Reference
                     Name = "nmock"
@@ -429,6 +428,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "sourcecontrol\MultiSourceControl.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "sourcecontrol\P4.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -505,6 +509,11 @@
                 />
                 <File
                     RelPath = "sourcecontrol\test\ModificationTest.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "sourcecontrol\test\MultiSourceControlTest.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
