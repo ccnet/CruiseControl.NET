@@ -11,13 +11,13 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test
 	public class CvsHistoryParserTest : CustomAssertion
 	{
 		private CvsHistoryParser _cvs = new CvsHistoryParser();
-		public void TestParseStream() 
+
+		[Test]
+		public void ParseStream() 
 		{
 			TextReader input = new StringReader(CvsMother.CVS_LOGFILE_CONTENT);
 			Modification[] modifications = _cvs.Parse(input, CvsMother.OLDEST_ENTRY, CvsMother.NEWEST_ENTRY);
 			
-			input.Close();
-
 			Assert.AreEqual(5, modifications.Length);
 
 			Modification mod1 = new Modification();
@@ -68,6 +68,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test
 
 			Assert.AreEqual(mod5, modifications[0]);
 		}
+
 		private DateTime CreateDate(string dateString) 
 		{
 			DateTime date = DateTime.ParseExact(dateString,"yyyy/MM/dd HH:mm:ss z",DateTimeFormatInfo.GetInstance(CultureInfo.InvariantCulture));

@@ -2,75 +2,78 @@ using System;
 using System.Collections;
 using System.Globalization;
 using System.IO;
+
 namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
-{	
-	public class CvsHistoryParser : IHistoryParser 
+{
+	public class CvsHistoryParser : IHistoryParser
 	{
 		#region cvs constants
+
 		/// <summary>
 		///  This line delimits seperate files in the CVS log information.
 		///  </summary>
-		internal readonly static string CVS_FILE_DELIM =
+		internal static readonly string CVS_FILE_DELIM =
 			"=============================================================================";
 
 		/// <summary>
 		/// This is the keyword that precedes the name of the RCS filename in the CVS
 		/// log information.
 		/// </summary>
-		private readonly static string CVS_RCSFILE_LINE = "RCS file: ";
+		private static readonly string CVS_RCSFILE_LINE = "RCS file: ";
 
 		/// <summary>
 		/// This is the keyword that precedes the name of the working filename in the
 		/// CVS log information.
 		/// </summary>
-		private readonly static string CVS_WORKINGFILE_LINE = "Working file: ";
+		private static readonly string CVS_WORKINGFILE_LINE = "Working file: ";
 
 		/// <summary>
 		/// This line delimits the different revisions of a file in the CVS log
 		/// information.
 		/// </summary>
-		private readonly static string CVS_REVISION_DELIM =
-						  "----------------------------";
+		private static readonly string CVS_REVISION_DELIM =
+			"----------------------------";
 
 		/// <summary>
 		/// This is the keyword that precedes the timestamp of a file revision in the
 		/// CVS log information.
 		/// </summary>
-		private readonly static string CVS_REVISION_DATE = "date:";
+		private static readonly string CVS_REVISION_DATE = "date:";
 
 		/// <summary>
 		/// This is a state keyword which indicates that a revision to a file was not
 		/// relevant to the current branch, or the revision consisted of a deletion
 		/// of the file (removal from branch..).
 		/// </summary>
-		private readonly static string CVS_REVISION_DEAD = "dead";
+		private static readonly string CVS_REVISION_DEAD = "dead";
 
 		/// <summary>
 		/// System dependent new line seperator.
 		/// </summary>
-		private readonly static string NEW_LINE = "\n";
+		private static readonly string NEW_LINE = "\n";
 
 		/// <summary>
 		/// This is the date format required by commands passed to CVS.	 
 		/// </summary>
-		internal readonly static string CVSDATE_FORMAT = "yyyy-MM-dd HH:mm:ss 'GMT'";
+		internal static readonly string CVSDATE_FORMAT = "yyyy-MM-dd HH:mm:ss 'GMT'";
 
-		
+
 		/// <summary>
 		/// This is the date format returned in the log information from CVS.
 		/// </summary>
-		internal readonly static string LOGDATE_FORMAT = "yyyy/MM/dd HH:mm:ss z";
+		internal static readonly string LOGDATE_FORMAT = "yyyy/MM/dd HH:mm:ss z";
+
 		#endregion
 
 		private string _currentLine;
 		private string _workingFileName;
-		
+
 		public void Init()
 		{
-			_currentLine = "";
-			_workingFileName="";
+			_currentLine = string.Empty;
+			_workingFileName = string.Empty;
 		}
-		
+
 		public Modification[] Parse(TextReader cvsLog, DateTime from, DateTime to)
 		{
 			// Read to the first RCS file name. The first entry in the log
@@ -79,12 +82,12 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			_currentLine = ReadToNotPast(cvsLog, CVS_RCSFILE_LINE, null);
 			ArrayList mods = new ArrayList();
 
-			while (_currentLine != null) 
+			while (_currentLine != null)
 			{
 				// Parse the single file entry, which may include several
 				// modifications.
 				IList entryList = ParseFileEntry(cvsLog);
-		
+
 				//Add all the modifications to the local list.
 				mods.AddRange(entryList);
 
@@ -93,7 +96,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 				_currentLine = ReadToNotPast(cvsLog, CVS_RCSFILE_LINE, null);
 			}
 
-			return (Modification[]) mods.ToArray(typeof(Modification));
+			return (Modification[]) mods.ToArray(typeof (Modification));
 		}
 
 		internal IList ParseFileEntry(TextReader cvsLog)
@@ -103,7 +106,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			_workingFileName = ParseFileNameAndPath(cvsLog);
 
 			_currentLine = ReadToNotPast(cvsLog, CVS_REVISION_DATE, CVS_FILE_DELIM);
-			while (_currentLine != null && !_currentLine.StartsWith(CVS_FILE_DELIM)) 
+			while (_currentLine != null && !_currentLine.StartsWith(CVS_FILE_DELIM))
 			{
 				Modification mod = ParseModification(cvsLog);
 				mods.Add(mod);
@@ -115,7 +118,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			}
 			return mods;
 		}
-		
+
 		internal string ParseFileNameAndPath(TextReader cvsLog)
 		{
 			// Read to the working file name line to get the filename. It is ASSUMED
@@ -132,10 +135,10 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 
 		internal string ReadToNotPast(TextReader reader, string startsWith, string notPast)
 		{
-			_currentLine = reader.ReadLine();		
-			while (_currentLine != null && !_currentLine.StartsWith(startsWith)) 
+			_currentLine = reader.ReadLine();
+			while (_currentLine != null && !_currentLine.StartsWith(startsWith))
 			{
-				if ( (notPast != null) && _currentLine.StartsWith(notPast))
+				if ((notPast != null) && _currentLine.StartsWith(notPast))
 				{
 					return null;
 				}
@@ -148,8 +151,8 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 		{
 			Modification nextModification = ParseDateLine(_currentLine);
 			nextModification.FileName = ParseFileName(_workingFileName);
-			nextModification.FolderName = ParseFolderName(_workingFileName);				
-			nextModification.Comment = ParseComment(reader);				
+			nextModification.FolderName = ParseFolderName(_workingFileName);
+			nextModification.Comment = ParseComment(reader);
 			return nextModification;
 		}
 
@@ -157,18 +160,18 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 		{
 			// All the text from now to the next revision delimiter or working
 			// file delimiter constitutes the comment.
-			string message = "";
+			string message = string.Empty;
 			bool multiLine = false;
-			
+
 			_currentLine = cvsLog.ReadLine();
 			while (_currentLine != null && !_currentLine.StartsWith(CVS_FILE_DELIM)
-				&& !_currentLine.StartsWith(CVS_REVISION_DELIM)) 
+				&& !_currentLine.StartsWith(CVS_REVISION_DELIM))
 			{
-				if (multiLine) 
+				if (multiLine)
 				{
 					message += NEW_LINE;
-				} 
-				else 
+				}
+				else
 				{
 					multiLine = true;
 				}
@@ -183,32 +186,27 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 		internal string ParseFileName(string workingFileName)
 		{
 			int lastSlashIndex = workingFileName.LastIndexOf("/");
-			return workingFileName.Substring(lastSlashIndex + 1);		
+			return workingFileName.Substring(lastSlashIndex + 1);
 		}
 
 		internal string ParseFolderName(string workingFileName)
 		{
 			int lastSlashIndex = workingFileName.LastIndexOf("/");
-			string folderName;
-			if (lastSlashIndex != -1) 
+			string folderName = string.Empty;
+			if (lastSlashIndex != -1)
 			{
 				folderName = workingFileName.Substring(0, lastSlashIndex);
-			} 
-			else 
-			{
-				folderName = "";
 			}
 			return folderName;
 		}
 
 		internal Modification ParseDateLine(string dateLine)
 		{
-			
 			string[] tokens = Split(dateLine);
-			if (tokens.Length <11)
+			if (tokens.Length < 11)
 			{
 				throw new ArgumentException(string.Format(
-						"Required at least 11 tokens but found {0} in Dateline: {1}",tokens.Length,dateLine));
+					"Required at least 11 tokens but found {0} in Dateline: {1}", tokens.Length, dateLine));
 			}
 			// First token is the keyword for date, then the next two should be
 			// the date and time stamps.				
@@ -220,18 +218,17 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 
 			// The next token should be the state keyword, then the state name.
 			string stateKeyword = tokens[10];
-				
 
 			Modification nextModification = new Modification();
-				
 			nextModification.ModifiedTime = ParseModifiedTime(dateStamp, timeStamp);
-			nextModification.UserName = authorName;				
+			nextModification.UserName = authorName;
 			nextModification.Type = ParseType(stateKeyword, IsAdded(tokens));
-			return nextModification;			
+			return nextModification;
 		}
+
 		internal DateTime ParseModifiedTime(string dateStamp, string timeStamp)
 		{
-			string dateTimeString = dateStamp + " " + timeStamp + " +0";
+			string dateTimeString = string.Format("{0} {1} +0", dateStamp, timeStamp);
 			return DateTime.ParseExact(
 				dateTimeString,
 				LOGDATE_FORMAT,
@@ -240,16 +237,16 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 
 		internal string ParseType(string stateKeyword, bool isAdded)
 		{
-			string type;	
-			if (CaseInsensitiveComparer.Default.Compare(stateKeyword, CVS_REVISION_DEAD) == 0) 
+			string type;
+			if (CaseInsensitiveComparer.Default.Compare(stateKeyword, CVS_REVISION_DEAD) == 0)
 			{
 				type = "deleted";
-			} 
-			else if (isAdded) 
+			}
+			else if (isAdded)
 			{
 				type = "added";
-			} 
-			else 
+			}
+			else
 			{
 				type = "modified";
 			}
@@ -258,19 +255,14 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 
 		internal string[] Split(string line)
 		{
-			return line.Split(new char[] {' ','\t','\n','\r','\f',';'});
+			return line.Split(new char[] {' ', '\t', '\n', '\r', '\f', ';'});
 		}
 
 		internal bool IsAdded(string[] tokens)
 		{
 			// if no lines keyword then file is added
-			bool hasLinesKeyword = tokens.Length > 13 && tokens[13].StartsWith("lines:");;
-
+			bool hasLinesKeyword = tokens.Length > 13 && tokens[13].StartsWith("lines:");
 			return !hasLinesKeyword;
 		}
-		
-
 	}
-	
 }
-
