@@ -7,9 +7,9 @@
     >
         <Build>
             <Settings
-                ApplicationIcon = ""
+                ApplicationIcon = "App.ico"
                 AssemblyKeyContainerName = ""
-                AssemblyName = "CCTray"
+                AssemblyName = "ccnet.remote.monitor"
                 AssemblyOriginatorKeyFile = ""
                 DefaultClientScript = "JScript"
                 DefaultHTMLPageLayout = "Grid"
@@ -18,7 +18,7 @@
                 OutputType = "WinExe"
                 PreBuildEvent = ""
                 PostBuildEvent = ""
-                RootNamespace = "CCTray"
+                RootNamespace = "tw.ccnet.remote.monitor"
                 RunPostBuildEvent = "OnBuildSuccess"
                 StartupObject = ""
             >
@@ -70,11 +70,6 @@
                     HintPath = "..\..\..\..\..\..\WINDOWS\Microsoft.NET\Framework\v1.1.4322\System.dll"
                 />
                 <Reference
-                    Name = "System.Data"
-                    AssemblyName = "System.Data"
-                    HintPath = "..\..\..\..\..\..\WINDOWS\Microsoft.NET\Framework\v1.1.4322\System.Data.dll"
-                />
-                <Reference
                     Name = "System.Drawing"
                     AssemblyName = "System.Drawing"
                     HintPath = "..\..\..\..\..\..\WINDOWS\Microsoft.NET\Framework\v1.1.4322\System.Drawing.dll"
@@ -83,11 +78,6 @@
                     Name = "System.Windows.Forms"
                     AssemblyName = "System.Windows.Forms"
                     HintPath = "..\..\..\..\..\..\WINDOWS\Microsoft.NET\Framework\v1.1.4322\System.Windows.Forms.dll"
-                />
-                <Reference
-                    Name = "System.XML"
-                    AssemblyName = "System.Xml"
-                    HintPath = "..\..\..\..\..\..\WINDOWS\Microsoft.NET\Framework\v1.1.4322\System.XML.dll"
                 />
                 <Reference
                     Name = "ccnet.remote"
@@ -99,8 +89,12 @@
         <Files>
             <Include>
                 <File
-                    RelPath = "app.config"
+                    RelPath = "App.config"
                     BuildAction = "None"
+                />
+                <File
+                    RelPath = "App.ico"
+                    BuildAction = "Content"
                 />
                 <File
                     RelPath = "AssemblyInfo.cs"
@@ -108,14 +102,9 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "CCTray.cs"
-                    SubType = "Form"
+                    RelPath = "BuildTransition.cs"
+                    SubType = "Code"
                     BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "CCTray.resx"
-                    DependentUpon = "CCTray.cs"
-                    BuildAction = "EmbeddedResource"
                 />
                 <File
                     RelPath = "Gray.ico"
@@ -126,7 +115,37 @@
                     BuildAction = "EmbeddedResource"
                 />
                 <File
+                    RelPath = "NotifyIconEx.cs"
+                    SubType = "Component"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "NotifyIconEx.resx"
+                    DependentUpon = "NotifyIconEx.cs"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
                     RelPath = "Red.ico"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "StatusMonitor.cs"
+                    SubType = "Component"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "StatusMonitor.resx"
+                    DependentUpon = "StatusMonitor.cs"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "SystemTrayMonitor.cs"
+                    SubType = "Form"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "SystemTrayMonitor.resx"
+                    DependentUpon = "SystemTrayMonitor.cs"
                     BuildAction = "EmbeddedResource"
                 />
             </Include>
