@@ -1,5 +1,7 @@
 using System;
+using System.ComponentModel;
 using ThoughtWorks.CruiseControl.Core.Label;
+using ThoughtWorks.CruiseControl.Core.State;
 using ThoughtWorks.CruiseControl.Core.Util;
 using ThoughtWorks.CruiseControl.Remote;
 using Exortech.NetReflector;
@@ -44,6 +46,20 @@ namespace ThoughtWorks.CruiseControl.Core
 		private IntegrationResult _lastIntegrationResult = null;
 		private ProjectActivity _currentActivity = ProjectActivity.Unknown;
 		private int _modificationDelaySeconds = 0;
+		private IStateManager _state;
+
+		public Project()
+		{
+			_state = new ProjectStateManager(this, new IntegrationStateManager());
+		}
+
+		[ReflectorProperty("state", InstanceTypeKey="type", Required=false)]
+		[Description("State")]
+		public virtual IStateManager StateManager
+		{
+			get { return _state; }
+			set { _state = value; }
+		}
 
 		[ReflectorProperty("webURL", Required=false)]
 		public string WebURL

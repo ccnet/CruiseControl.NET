@@ -127,7 +127,7 @@ namespace ThoughtWorks.CruiseControl.Core.Test
 			AssertEquals(typeof (NAntBuilder), project.Builder);
 			AssertEquals(typeof (MockSourceControl), project.SourceControl);
 			AssertEquals(typeof (DefaultLabeller), project.Labeller);
-			AssertEquals(typeof (IntegrationStateManager), project.StateManager);
+			AssertEquals(typeof (ProjectStateManager), project.StateManager);
 			AssertEquals(typeof (Schedule), project.Schedule);
 			AssertNull("project should contain no publishers", project.Publishers);
 			AssertEquals(0, project.Tasks.Length);

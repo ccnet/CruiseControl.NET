@@ -919,6 +919,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "state\IFileStateManager.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "state\IntegrationStateManager.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -929,7 +934,17 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "state\ProjectStateManager.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "state\test\IntegrationStateManagerTest.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "state\test\ProjectStateManagerTest.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

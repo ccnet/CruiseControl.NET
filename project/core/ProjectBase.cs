@@ -11,7 +11,6 @@ namespace ThoughtWorks.CruiseControl.Core
 	{
 		private string _name;
 		private ISchedule _schedule = new Schedule();
-		private IStateManager _state = new IntegrationStateManager();
 
 		[ReflectorProperty("name")]
 		public virtual string Name
@@ -25,14 +24,6 @@ namespace ThoughtWorks.CruiseControl.Core
 		{
 			get { return _schedule; }
 			set { _schedule = value; }
-		}
-
-		[ReflectorProperty("state", InstanceTypeKey="type", Required=false)]
-		[Description("State")]
-		public virtual IStateManager StateManager
-		{
-			get { return _state; }
-			set { _state = value; }
 		}
 	}
 }

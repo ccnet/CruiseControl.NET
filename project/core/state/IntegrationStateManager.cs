@@ -7,7 +7,7 @@ using Exortech.NetReflector;
 namespace ThoughtWorks.CruiseControl.Core.State
 {
 	[ReflectorType("state")]
-	public class IntegrationStateManager : IStateManager
+	public class IntegrationStateManager : IFileStateManager
 	{
 		private XmlSerializer _serializer;
 		private string _directory = System.IO.Directory.GetCurrentDirectory(); // default
