@@ -38,11 +38,12 @@ namespace ThoughtWorks.CruiseControl.Core
 		/// Raised whenever an integration is completed.
 		/// </summary>
 		public event IntegrationCompletedEventHandler IntegrationCompleted ;
+		public const string DEFAULT_WEB_URL = "http://localhost/CruiseControl.NET/";
 
-		private string _webURL = "http://localhost/CruiseControl.NET/"; // default value
+		private string _webURL = DEFAULT_WEB_URL; // default value
 		private ISourceControl _sourceControl;
 		private IBuilder _builder;
-		private ILabeller _labeller = new DefaultLabeller ();
+		private ILabeller _labeller = new DefaultLabeller();
 		private IIntegrationCompletedEventHandler[] _publishers;
 		private IntegrationResult _lastIntegrationResult = null;
 		private ProjectActivity _currentActivity = ProjectActivity.Unknown;
@@ -107,6 +108,9 @@ namespace ThoughtWorks.CruiseControl.Core
 			set { _labeller = value; }
 		}
 
+		[ReflectorProperty("publishExceptions", Required=false)]
+		public bool PublishExceptions = true;
+
 		public ProjectActivity CurrentActivity
 		{
 			get { return _currentActivity; }
@@ -117,7 +121,7 @@ namespace ThoughtWorks.CruiseControl.Core
 			get
 			{
 				if (_lastIntegrationResult == null)
-					_lastIntegrationResult = LoadLastIntegration ();
+					_lastIntegrationResult = LoadLastIntegration();
 
 				return _lastIntegrationResult;
 			}
@@ -125,9 +129,9 @@ namespace ThoughtWorks.CruiseControl.Core
 			set { _lastIntegrationResult = value; }
 		}
 
-		public IntegrationStatus GetLatestBuildStatus ()
+		public IntegrationStatus LatestBuildStatus
 		{
-			return LastIntegrationResult.Status;
+			get { return LastIntegrationResult.Status; } 
 		}
 
 		public IntegrationResult RunIntegration(BuildCondition buildCondition)
@@ -135,74 +139,60 @@ namespace ThoughtWorks.CruiseControl.Core
 			if (buildCondition == BuildCondition.ForceBuild)
 				Log.Info("Build forced");
 
-			IntegrationResult results = null;
-			bool attemptingBuild = false;
+			IntegrationResult result = CreateNewIntegrationResult();
 			try
 			{
-				CreateNewIntegrationResult(out results);
-				GetSourceModifications(results);
-				attemptingBuild = ShouldRunBuild(results, buildCondition);
-
-				if (attemptingBuild)
-					RunBuild(results);
+				result.Label = Labeller.Generate(LastIntegrationResult);
+				result.Modifications = GetSourceModifications(result);
+				if (ShouldRunBuild(result, buildCondition))
+				{
+					RunBuild(result);
+				}
 			}
-			catch (CruiseControlException ex)
+			catch (Exception ex)
 			{
-				// TODO what happens when build causes other types of exceptions?
 				Log.Error(ex);
-
-				// store exception
-				if (results != null)
-					results.ExceptionResult = ex;
-
-				// if an exception occurred, we're going to log it, so flag postbuild to occur
-				attemptingBuild = true;
+				result.ExceptionResult = ex;
+				result.Status = IntegrationStatus.Exception;
 			}
 			finally
 			{
-				if (attemptingBuild)
-					PostBuild(results);
+				PostBuild(result);
 			}
-			results.MarkEndTime ();
-
-			// go to sleep
-			_currentActivity = ProjectActivity.Sleeping;
-
-			return results;
+			return result;
 		}
 
-		internal void CreateNewIntegrationResult(out IntegrationResult results)
+		private IntegrationResult CreateNewIntegrationResult()
 		{
-			results = new IntegrationResult ();
-			results.ProjectName = Name;
-			results.LastIntegrationStatus = LastIntegrationResult.Status; // test
-			results.Label = Labeller.Generate(LastIntegrationResult);
-			results.MarkStartTime ();
+			IntegrationResult result = new IntegrationResult();
+			result.ProjectName = Name;
+			result.LastIntegrationStatus = LastIntegrationResult.Status; // test
+			result.MarkStartTime();
+			return result;
 		}
 
-		internal void GetSourceModifications(IntegrationResult results)
+		private Modification[] GetSourceModifications(IntegrationResult results)
 		{
 			_currentActivity = ProjectActivity.CheckingModifications;
-
-			results.Modifications = SourceControl.GetModifications(LastIntegrationResult.StartTime, results.StartTime);
-
-			Log.Info(GetModificationsDetectedMessage(results));
+			Modification[] modifications = SourceControl.GetModifications(LastIntegrationResult.StartTime, results.StartTime);
+			Log.Info(GetModificationsDetectedMessage(modifications));
+			return modifications;
 		}
 
-		private string GetModificationsDetectedMessage(IntegrationResult result)
+		private string GetModificationsDetectedMessage(Modification[] modifications)
 		{
-			switch (result.Modifications.Length)
+			switch (modifications.Length)
 			{
 				case 0:
 					return "No modifications detected.";
 				case 1:
 					return "1 modification detected.";
 				default:
-					return string.Format("{0} modifications detected.", result.Modifications.Length);
+					return string.Format("{0} modifications detected.", modifications.Length);
 			}
 		}
 
-		internal void RunBuild(IntegrationResult results)
+		private void RunBuild(IntegrationResult results)
 		{
 			_currentActivity = ProjectActivity.Building;
 
@@ -213,19 +203,36 @@ namespace ThoughtWorks.CruiseControl.Core
 			Log.Info("Build complete: " + results.Status);
 		}
 
-		internal void PostBuild(IntegrationResult results)
+		internal void PostBuild(IntegrationResult result)
 		{
-			AttemptToSaveState(results);
+			result.MarkEndTime();
+			Log.Info("Integration complete: " + result.EndTime);
 
-			HandleProjectLabelling(results);
+			if (ShouldPublishException(result))
+			{
+				AttemptToSaveState(result);
 
-			// raise event (publishers do their thing in response)
-			OnIntegrationCompleted(new IntegrationCompletedEventArgs(results));
+				HandleProjectLabelling(result);
 
-			// update reference to the most recent result
-			LastIntegrationResult = results;
+				// raise event (publishers do their thing in response)
+				OnIntegrationCompleted(new IntegrationCompletedEventArgs(result));
 
-			Log.Info("Integration complete: " + results.EndTime);
+				// update reference to the most recent result
+				LastIntegrationResult = result;
+			}
+			_currentActivity = ProjectActivity.Sleeping;
+		}
+
+		private bool ShouldPublishException(IntegrationResult result)
+		{
+			if (result.Status == IntegrationStatus.Exception)
+			{
+				return PublishExceptions;
+			}
+			else
+			{
+				return result.Status != IntegrationStatus.Unknown;
+			}
 		}
 
 		private void AttemptToSaveState(IntegrationResult results)
@@ -243,17 +250,17 @@ namespace ThoughtWorks.CruiseControl.Core
 			}
 		}
 
-		private IntegrationResult LoadLastIntegration ()
+		private IntegrationResult LoadLastIntegration()
 		{
-			if (StateManager.StateFileExists ())
+			if (StateManager.StateFileExists())
 			{
-				return StateManager.LoadState ();
+				return StateManager.LoadState();
 			}
 			else
 			{
 				// no integration result is on record
 				// TODO consider something such as IntegrationResult.Empty, to indicate 'unknown state'
-				return new IntegrationResult ();
+				return new IntegrationResult();
 			}
 		}
 
@@ -267,8 +274,8 @@ namespace ThoughtWorks.CruiseControl.Core
 			if (buildCondition == BuildCondition.ForceBuild)
 				return true;
 
-			if (results.HasModifications ())
-				return !DoModificationsExistWithinModificationDelay(results);
+			if (results.HasModifications())
+				return ! DoModificationsExistWithinModificationDelay(results);
 
 			return false;
 		}
@@ -283,6 +290,7 @@ namespace ThoughtWorks.CruiseControl.Core
 			if (ModificationDelaySeconds <= 0)
 				return false;
 
+			//TODO: can the last mod date (which is the time on the SCM) be compared with now (which is the time on the build machine)?
 			TimeSpan diff = DateTime.Now - results.LastModificationDate;
 			if (diff.TotalSeconds < ModificationDelaySeconds)
 			{
@@ -297,7 +305,7 @@ namespace ThoughtWorks.CruiseControl.Core
 		/// Raises the IntegrationCompleted event.
 		/// </summary>
 		/// <param name="e">Arguments to pass with the raised event.</param>
-		protected void OnIntegrationCompleted(IntegrationCompletedEventArgs e)
+		private void OnIntegrationCompleted(IntegrationCompletedEventArgs e)
 		{
 			if (IntegrationCompleted != null)
 				IntegrationCompleted(this, e);

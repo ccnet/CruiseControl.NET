@@ -55,7 +55,7 @@ namespace ThoughtWorks.CruiseControl.Core.Test
 			AssertNotNull(project.CurrentIntegration.StartTime);
 			AssertNotNull(project.CurrentIntegration.EndTime);
 			AssertNotNull(project.CurrentIntegration.EndTime > project.CurrentIntegration.StartTime);
-			AssertEquals(project.CurrentIntegration.Status, project.GetLatestBuildStatus());
+			AssertEquals(project.CurrentIntegration.Status, project.LatestBuildStatus);
 			taskMock1.Verify();
 			taskMock2.Verify();
 		}

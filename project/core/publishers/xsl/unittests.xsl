@@ -5,15 +5,15 @@
 
     <xsl:output method="html"/>
 
-    <xsl:variable name="totalnotrun" select="//test-results/@not-run"/>
-    <xsl:variable name="nunit2result.list" select="//test-results"/>
-    <xsl:variable name="nunit2testcount" select="$nunit2result.list/@total"/>
-    <xsl:variable name="nunit2failures" select="$nunit2result.list/@failures"/>
-    <xsl:variable name="nunit2notrun" select="$nunit2result.list/@not-run"/>
-    <xsl:variable name="nunit2case.list" select="$nunit2result.list//test-case"/>
-    <xsl:variable name="nunit2suite.list" select="$nunit2result.list//test-suite"/>
-    <xsl:variable name="nunit2.failure.list" select="$nunit2case.list//failure"/>
-    <xsl:variable name="nunit2.notrun.list" select="$nunit2case.list//reason"/>
+    <xsl:variable name="nunit2.result.list" select="//test-results"/>
+    <xsl:variable name="nunit2.testcount" select="sum($nunit2.result.list/@total)"/>
+    <xsl:variable name="nunit2.failures" select="sum($nunit2.result.list/@failures)"/>
+    <xsl:variable name="nunit2.notrun" select="sum($nunit2.result.list/@not-run)"/>
+    <xsl:variable name="nunit2.time" select="sum($nunit2.result.list/test-suite[position()=1]/@time)"/>
+    <xsl:variable name="nunit2.case.list" select="$nunit2.result.list//test-case"/>
+    <xsl:variable name="nunit2.suite.list" select="$nunit2.result.list//test-suite"/>
+    <xsl:variable name="nunit2.failure.list" select="$nunit2.case.list//failure"/>
+    <xsl:variable name="nunit2.notrun.list" select="$nunit2.case.list//reason"/>
 
     <xsl:variable name="testsuite.list" select="/cruisecontrol/build/buildresults//testsuite"/>
     <xsl:variable name="testcase.list" select="$testsuite.list/testcase"/>
@@ -28,12 +28,12 @@
             <!-- Unit Tests -->
             <tr>
                 <td class="unittests-sectionheader" colspan="2">
-                   &#160;Unit Tests (<xsl:value-of select="count($testcase.list) + count($nunit2case.list)"/>)
+                   &#160;Tests run: <xsl:value-of select="$nunit2.testcount"/>, Failures: <xsl:value-of select="$nunit2.failures"/>, Not run: <xsl:value-of select="$nunit2.notrun"/>, Time: <xsl:value-of select="$nunit2.time"/> seconds
                 </td>
             </tr>
 
             <xsl:choose>
-                <xsl:when test="count($testsuite.list) + count($nunit2suite.list) = 0">
+                <xsl:when test="count($testsuite.list) + count($nunit2.suite.list) = 0">
                     <tr><td colspan="2" class="unittests-data">No Tests Run</td></tr>
                     <tr><td colspan="2" class="unittests-error">This project doesn't have any tests</td></tr>
                 </xsl:when>
@@ -66,21 +66,21 @@
                 </xsl:call-template>
                 
                 <xsl:call-template name="nunit2testdetail">
-                    <xsl:with-param name="detailnodes" select="//test-suite//test-case[.//failure]"/>
+                    <xsl:with-param name="detailnodes" select="//test-suite/results/test-case[.//failure]"/>
                 </xsl:call-template>
 
                 <tr><td colspan="2">&#160;</td></tr>
             </xsl:if>
             
-            <xsl:if test="$nunit2notrun > 0">
+            <xsl:if test="$nunit2.notrun > 0">
                 <tr>
                     <td class="unittests-sectionheader" colspan="2">
-                        &#160;Warning Details&#160;(<xsl:value-of select="$nunit2notrun"/>)
+                        &#160;Warning Details&#160;(<xsl:value-of select="$nunit2.notrun"/>)
                     </td>
                 </tr>
                 <!-- (PENDING) Why doesn't this work if set up as variables up top? -->
                 <xsl:call-template name="nunit2testdetail">
-                    <xsl:with-param name="detailnodes" select="//test-suite//test-case[.//reason]"/>
+                    <xsl:with-param name="detailnodes" select="//test-suite/results/test-case[.//reason]"/>
                 </xsl:call-template>
                 <tr><td colspan="2">&#160;</td></tr>
             </xsl:if>
@@ -202,9 +202,9 @@
 
     <xsl:template name="br-replace">
         <xsl:param name="word"/>
-<!-- </xsl:text> on next line on purpose to get newline -->
-<xsl:variable name="cr"><xsl:text>
-</xsl:text></xsl:variable>
+        <xsl:variable name="cr"><xsl:text>
+        <!-- </xsl:text> on next line on purpose to get newline -->
+        </xsl:text></xsl:variable>
         <xsl:choose>
             <xsl:when test="contains($word,$cr)">
                 <xsl:value-of select="substring-before($word,$cr)"/>

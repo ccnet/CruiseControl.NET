@@ -1,70 +1,62 @@
 using System;
-using System.Text;
 using System.IO;
+using System.Text;
 using System.Xml;
 
 namespace ThoughtWorks.CruiseControl.Core.Publishers
 {
-    public class HtmlDetailsMessageBuilder : IMessageBuilder
-    {
-//		private IBuildLogTransformer _buildLogTransformer;
-        public HtmlDetailsMessageBuilder()
-        {
-//			_buildLogTransformer=new BuildLogTransformer();
-        }
-//		public HtmlDetailsMessageBuilder(IBuildLogTransformer logTransformer)
-//		{
-//			_buildLogTransformer=logTransformer;
-//		}
-
-        public string BuildMessage(IntegrationResult result, string projectURL)
-        {
-            StringBuilder message = new StringBuilder(10000);
-            message.Append(CreateHtmlHeader());
-            message.Append(CreateLinkToWebPage(result, projectURL));
-            message.Append(CreateHorizontalRule());
-            message.Append(CreateHtmlMessageDetails(result));
-            message.Append(CreateHtmlFooter());
-            return message.ToString();
-        }
-
-		private string CreateHtmlHeader()
+	public class HtmlDetailsMessageBuilder : IMessageBuilder
+	{
+		public string BuildMessage(IntegrationResult result, string projectURL)
 		{
-			return string.Format("<html><head>{0}</head><body>", HtmlEmailCss);
+			StringBuilder message = new StringBuilder(10000);
+			AppendHtmlHeader(message);
+			AppendLinkToWebPage(message, result, projectURL);
+			AppendHorizontalRule(message);
+			AppendHtmlMessageDetails(message, result);
+			AppendHtmlFooter(message);
+			return message.ToString();
 		}
 
-		private string CreateLinkToWebPage(IntegrationResult result, string projectURL)
+		private void AppendHtmlHeader(StringBuilder message)
 		{
-			return new HtmlLinkMessageBuilder().BuildMessage(result, projectURL);
+			message.Append("<html><head>");
+			message.Append(HtmlEmailCss);
+			message.Append("</head><body>");
 		}
 
-		private string CreateHorizontalRule()
+		private void AppendLinkToWebPage(StringBuilder message, IntegrationResult result, string projectURL)
 		{
-			return @"<p></p><hr size=""1"" width=""98%"" align=""left"" color=""#888888""/>";
+			message.Append(new HtmlLinkMessageBuilder().BuildMessage(result, projectURL));
 		}
 
-        private string CreateHtmlMessageDetails(IntegrationResult result)
-        {
-            StringWriter buffer = new StringWriter();
+		private void AppendHorizontalRule(StringBuilder message)
+		{
+			message.Append(@"<p></p><hr size=""1"" width=""98%"" align=""left"" color=""#888888""/>");
+		}
 
-            using (XmlIntegrationResultWriter integrationWriter=new XmlIntegrationResultWriter(new XmlTextWriter(buffer)))
+		private void AppendHtmlMessageDetails(StringBuilder message, IntegrationResult result)
+		{
+			StringWriter buffer = new StringWriter();
+
+			using (XmlIntegrationResultWriter integrationWriter = new XmlIntegrationResultWriter(new XmlTextWriter(buffer)))
 			{
 				integrationWriter.Write(result);
 			}
 
 			XmlDocument xml = new XmlDocument();
-            xml.LoadXml(buffer.ToString());
-            return new BuildLogTransformer().TransformResultsWithAllStyleSheets(xml);
-        }
-
-		private string CreateHtmlFooter()
-		{
-		    return "</body></html>";
+			xml.LoadXml(buffer.ToString());			
+			message.Append(new BuildLogTransformer().TransformResultsWithAllStyleSheets(xml));
 		}
 
-        // for now, this is simply a copy of the contents of web/cruisecontrol.css
-        // TODO read this from the actual file (need a way to access the file from this publisher)
-        private const string HtmlEmailCss = @"<style>
+		private void AppendHtmlFooter(StringBuilder message)
+		{
+			message.Append("</body></html>");
+		}
+
+		// for now, this is simply a copy of the contents of web/cruisecontrol.css
+		// TODO read this from the actual file (need a way to access the file from this publisher)
+		private const string HtmlEmailCss = @"<style>
 body, table, form, input, td, th, p, textarea, select
 {
 	font-family: verdana, helvetica, arial;
@@ -122,5 +114,5 @@ a:hover { color:#FC0; }
 .section-table { margin-top:10px; }
 </style>";
 
-    }
+	}
 }

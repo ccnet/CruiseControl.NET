@@ -25,7 +25,7 @@ namespace ThoughtWorks.CruiseControl.Core
 			foreach (Project project in _config.Projects) 
 			{
 				projects.Add(new ProjectStatus(GetStatus(), 
-					project.GetLatestBuildStatus(), 
+					project.LatestBuildStatus, 
 					project.CurrentActivity, 
 					project.Name, 
 					project.WebURL, 

@@ -32,7 +32,7 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers.Test
 			_publisher.SendMessage("from@foo.com", "to@bar.com", "test subject", "test message");
 			AssertEquals(1, _gateway.SentMessages.Count);
 
-			MailMessage message = (MailMessage)_gateway.SentMessages[0];
+			MailMessage message = (MailMessage) _gateway.SentMessages[0];
 			AssertEquals("from@foo.com", message.From);
 			AssertEquals("to@bar.com", message.To);
 			AssertEquals("test subject", message.Subject);
@@ -64,8 +64,7 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers.Test
 		[Test]
 		public void EmailSubject()
 		{
-			string subject = _publisher.CreateSubject(
-				CreateIntegrationResult(IntegrationStatus.Success, IntegrationStatus.Success));
+			string subject = _publisher.CreateSubject(CreateIntegrationResult(IntegrationStatus.Success, IntegrationStatus.Success));
 			AssertEquals("Project#9 Build Successful: Build 0", subject);
 		}
 
@@ -83,21 +82,19 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers.Test
 		[Test]
 		public void EmailSubjectFailedBuild()
 		{
-			string subject = _publisher.CreateSubject(
-				CreateIntegrationResult(IntegrationStatus.Failure, IntegrationStatus.Success));
+			string subject = _publisher.CreateSubject(CreateIntegrationResult(IntegrationStatus.Failure, IntegrationStatus.Success));
 			AssertEquals("Project#9 Build Failed", subject);
 		}
 
 		[Test]
 		public void EmailSubjectFixedBuild()
 		{
-			string subject = _publisher.CreateSubject(
-				CreateIntegrationResult(IntegrationStatus.Success, IntegrationStatus.Failure));
+			string subject = _publisher.CreateSubject(CreateIntegrationResult(IntegrationStatus.Success, IntegrationStatus.Failure));
 			AssertEquals("Project#9 Build Fixed: Build 0", subject);
 		}
-		
+
 		[Test]
-		public void EmailMessageWithDetails() 
+		public void EmailMessageWithDetails()
 		{
 			_publisher.IncludeDetails = true;
 			string message = _publisher.CreateMessage(CreateIntegrationResult(IntegrationStatus.Success, IntegrationStatus.Success));
@@ -105,7 +102,7 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers.Test
 			Assert(message.IndexOf("CruiseControl.NET Build Results for project Project#9") > 0);
 			Assert(message.IndexOf("Modifications since last build") > 0);
 			Assert(message.EndsWith("</html>"));
-		}		
+		}
 
 		[Test]
 		public void CreateRecipientList_BuildStateChanged()
@@ -136,7 +133,7 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers.Test
 
 		[Test]
 		public void CreateModifiersList()
-		{			
+		{
 			Modification[] modifications = CreateModifications();
 			string[] modifiers = _publisher.CreateModifiersList(modifications);
 			AssertEquals("expected 2 modifiers", 2, modifications.Length);
@@ -157,7 +154,7 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers.Test
 
 		[Test]
 		public void CreateNotifyList()
-		{			
+		{
 			string[] always = _publisher.CreateNotifyList(EmailGroup.NotificationType.Always);
 			AssertEquals(1, always.Length);
 			AssertEquals("servid@telus.net", always[0]);
@@ -179,13 +176,13 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers.Test
 		public void UnitTestResultsShouldBeIncludedInEmailMessageWhenIncludesDetailsIsTrue()
 		{
 			IntegrationResult result = CreateIntegrationResult(IntegrationStatus.Success, IntegrationStatus.Success);
-		    IMock mockTaskResult = new DynamicMock(typeof(ITaskResult));
-		    mockTaskResult.SetupResult("Data", "<test-results name=\"foo\" total=\"10\" failures=\"0\" not-run=\"0\"><test-suite></test-suite></test-results>");
-		    result.TaskResults.Add((ITaskResult) mockTaskResult.MockInstance);
-			_publisher.IncludeDetails=true;
+			IMock mockTaskResult = new DynamicMock(typeof(ITaskResult));
+			mockTaskResult.SetupResult("Data", "<test-results name=\"foo\" total=\"10\" failures=\"0\" not-run=\"0\"><test-suite></test-suite></test-results>");
+			result.TaskResults.Add((ITaskResult) mockTaskResult.MockInstance);
+			_publisher.IncludeDetails = true;
 			string message = _publisher.CreateMessage(result);
-			Assert(message.IndexOf("Unit Tests") >= 0);
-		    mockTaskResult.Verify();
+			Assert(message.IndexOf("Tests run") >= 0);
+			mockTaskResult.Verify();
 		}
 
 		[Test]
@@ -239,8 +236,7 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers.Test
 			expected.Add(new EmailUser("rwan", "developers", "rwan@thoughtworks.com"));
 			for (int i = 0; i < expected.Count; i++)
 			{
-				Assert("EmailUser was not loaded from config: " + expected[i], 
-					_publisher.EmailUsers.ContainsValue(expected[i]));
+				Assert("EmailUser was not loaded from config: " + expected[i], _publisher.EmailUsers.ContainsValue(expected[i]));
 			}
 
 			AssertEquals(2, _publisher.EmailGroups.Count);
@@ -263,7 +259,7 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers.Test
 			string actual = _publisher.CreateMessage(result);
 			Assert(actual.IndexOf(result.ExceptionResult.Message) > 0);
 			Assert(actual.IndexOf(result.ExceptionResult.GetType().Name) > 0);
-			Assert(actual.IndexOf("BUILD COMPLETE") == -1);			// verify build complete message is not output
+			Assert(actual.IndexOf("BUILD COMPLETE") == -1); // verify build complete message is not output
 		}
 	}
 }

@@ -55,9 +55,9 @@ namespace ThoughtWorks.CruiseControl.Core.Test
 			return RunIntegration_ReturnValue;
 		}
 
-		public IntegrationStatus GetLatestBuildStatus() 
+		public IntegrationStatus LatestBuildStatus
 		{
-			return IntegrationStatus.Unknown;
+			get { return IntegrationStatus.Unknown; }
 		}
 
 		public ProjectActivity CurrentActivity 

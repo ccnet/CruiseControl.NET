@@ -73,7 +73,7 @@ namespace ThoughtWorks.CruiseControl.Core.Test
 		public void LoadFullySpecifiedProjectFromConfiguration()
 		{
 			string xml = @"
-<project name=""foo"" webURL=""http://localhost/ccnet"">
+<project name=""foo"" webURL=""http://localhost/ccnet"" modificationDelaySeconds=""60"" publishExceptions=""false"">
 	<build type=""nant"" />
 	<sourcecontrol type=""mock"" />
 	<labeller type=""defaultlabeller"" />
@@ -87,10 +87,34 @@ namespace ThoughtWorks.CruiseControl.Core.Test
 			Project project = (Project) NetReflector.Read(xml);
 			AssertEquals("foo", project.Name);
 			AssertEquals("http://localhost/ccnet", project.WebURL);
+			AssertEquals(false, project.PublishExceptions);
+			AssertEquals(60, project.ModificationDelaySeconds);
 			AssertEquals(typeof(NAntBuilder), project.Builder);
 			AssertEquals(typeof(MockSourceControl), project.SourceControl);
 			AssertEquals(typeof(DefaultLabeller), project.Labeller);
 			AssertEquals(typeof(XmlLogPublisher), project.Publishers[0]);
+			AssertEquals(typeof(IntegrationStateManager), project.StateManager);
+			AssertEquals(typeof(Schedule), project.Schedule);
+		}
+
+		[Test]
+		public void LoadMinimalProjectXmlFromConfiguration()
+		{
+			string xml = @"
+<project name=""foo"">
+	<build type=""nant"" />
+	<sourcecontrol type=""mock"" />
+</project>";
+
+			Project project = (Project) NetReflector.Read(xml);
+			AssertEquals("foo", project.Name);
+			AssertEquals(Project.DEFAULT_WEB_URL, project.WebURL);
+			AssertEquals(true, project.PublishExceptions);
+			AssertEquals(0, project.ModificationDelaySeconds);		//TODO: is this the correct default?  should quiet period be turned off by default?  is this sourcecontrol specific?
+			AssertEquals(typeof(NAntBuilder), project.Builder);
+			AssertEquals(typeof(MockSourceControl), project.SourceControl);
+			AssertEquals(typeof(DefaultLabeller), project.Labeller);
+			AssertNull("project should contain no publishers", project.Publishers);
 			AssertEquals(typeof(IntegrationStateManager), project.StateManager);
 			AssertEquals(typeof(Schedule), project.Schedule);
 		}
@@ -110,6 +134,7 @@ namespace ThoughtWorks.CruiseControl.Core.Test
 			AssertEquals(ProjectActivity.Sleeping, _project.CurrentActivity);
 			AssertEquals(IntegrationStatus.Unknown, result.Status);
 			AssertEquals(IntegrationStatus.Unknown, result.LastIntegrationStatus);
+			AssertNotNull(_project.LastIntegrationResult);
 			AssertEquals("label", result.Label);
 			AssertFalse("unexpected modifications were returned", result.HasModifications());
 			AssertEqualArrays(new Modification[0], result.Modifications);
@@ -126,14 +151,15 @@ namespace ThoughtWorks.CruiseControl.Core.Test
 			_mockStateManager.Expect("SaveState", new IsAnything());
 			_mockLabeller.ExpectAndReturn("Generate", "label", new IsAnything());		// generate new label
 			_mockSourceControl.ExpectAndReturn("GetModifications", mods, new IsAnything(), new IsAnything());
-			_mockBuilder.Expect("Run", new IsAnything());
+			_mockSourceControl.Expect("LabelSourceControl", "label", new IsAnything());
 			_mockPublisher.Expect("PublishIntegrationResults", new IsAnything(), new IsAnything());
 
+			_project.Builder = new MockBuilder();										// need to use mock builder in order to set properties on IntegrationResult
 			IntegrationResult result = _project.RunIntegration(BuildCondition.IfModificationExists);
 
 			AssertEquals(PROJECT_NAME, result.ProjectName);
 			AssertEquals(ProjectActivity.Sleeping, _project.CurrentActivity);
-			AssertEquals(IntegrationStatus.Unknown, result.Status);
+			AssertEquals(IntegrationStatus.Success, result.Status);
 			AssertEquals(IntegrationStatus.Unknown, result.LastIntegrationStatus);
 			AssertEquals("label", result.Label);
 			Assert("no modifications were returned", result.HasModifications());
@@ -141,58 +167,56 @@ namespace ThoughtWorks.CruiseControl.Core.Test
 			Assert("end time should come after start time", result.EndTime >= result.StartTime);
 		}
 
+		[Test]
+		public void ShouldNotPublishIntegrationResultsIfPublishExceptionsIsFalseAndSourceControlThrowsAnException()
+		{
+			_mockStateManager.ExpectAndReturn("StateFileExists", false);				// running the first integration (no state file)
+			_mockLabeller.ExpectAndReturn("Generate", "label", new IsAnything());		// generate new label
+			CruiseControlException expectedException = new CruiseControlException();
+			_mockSourceControl.ExpectAndThrow("GetModifications", expectedException, new IsAnything(), new IsAnything());
+			_mockPublisher.ExpectNoCall("PublishIntegrationResults", typeof(IProject), typeof(IntegrationResult));
+			_mockStateManager.ExpectNoCall("SaveState", typeof(IntegrationResult));
+
+			_project.PublishExceptions = false;
+			IntegrationResult result = _project.RunIntegration(BuildCondition.IfModificationExists);
+			AssertEquals(expectedException, result.ExceptionResult);
+		}
+
 		// test: verify correct args are passed to sourcecontrol?  should use date of last modification from last successful build IMO
 
 		[Test]
-		public void GetLastIntegration_NoPreviousBuild()
+		public void ShouldCreateANewIntegrationResultIfThisIsTheFirstIntegration()
 		{
 			_mockStateManager.ExpectAndReturn("StateFileExists", false, null);
 			IntegrationResult last = _project.LastIntegrationResult;
 			AssertEquals(new IntegrationResult(), last);
-
-			AssertEquals(DateTime.Now.AddDays(-1).Date, last.LastModificationDate.Date);		// will load all modifications
+			AssertEquals(DateTime.Now.AddDays(-1).Date, last.LastModificationDate.Date);		// will load all modifications since yesterday -- is this right?
 		}
 
 		[Test]
-		public void GetLastIntegration_LoadLastState()
+		public void ShouldLoadLastStateIfIntegrationHasBeenRunPreviously()
 		{
 			IntegrationResult expected = new IntegrationResult();
 			expected.Label = "previous";
 			expected.Output = "<foo>blah</foo>";
 			expected.Status = IntegrationStatus.Success;
 
-			DynamicMock mock = new DynamicMock(typeof(IStateManager));
-			mock.ExpectAndReturn("StateFileExists", true, null);
-			mock.ExpectAndReturn("LoadState", expected, null);
-			_project.StateManager = (IStateManager)mock.MockInstance;
+			_mockStateManager.ExpectAndReturn("StateFileExists", true);
+			_mockStateManager.ExpectAndReturn("LoadState", expected);
 
 			AssertEquals(expected, _project.LastIntegrationResult);
-			mock.Verify();
-		}
-
-		[Test]
-		public void PreBuild_InitialBuild()
-		{
-			_mockLabeller.ExpectAndReturn("Generate", "1", new IsAnything());
-			_mockStateManager.ExpectAndReturn("StateFileExists", false, null);
-			
-			IntegrationResult results;
-			_project.CreateNewIntegrationResult(out results);
-
-			AssertNotNull(_project.LastIntegrationResult);
-			AssertNotNull(results);
-			AssertEquals("1", results.Label);
-			AssertEquals(_project.Name, results.ProjectName);
 		}
 
 		[Test]
 		public void PostBuild()
 		{
 			IntegrationResult results = new IntegrationResult();
+			results.Status = IntegrationStatus.Success;
 
 			CollectingConstraint constraint = new CollectingConstraint();
 			_mockPublisher.Expect("PublishIntegrationResults", new IsAnything(), constraint);
 			_mockStateManager.Expect("SaveState", results);
+			_mockSourceControl.Expect("LabelSourceControl", new IsAnything(), new IsAnything());
 
 			_project.PostBuild(results);
 
@@ -274,7 +298,7 @@ namespace ThoughtWorks.CruiseControl.Core.Test
 			AssertEquals(ProjectActivity.Unknown, _project.CurrentActivity);
 		}		
 
-		[Test]
+		[Test, Ignore("If there is a problem with StateManager, should we continue building?  ccnet will not be able to save it's state, which could be severe")]
 		public void HandleStateManagerException()
 		{
 			MockPublisher publisher = new MockPublisher();
@@ -299,23 +323,18 @@ namespace ThoughtWorks.CruiseControl.Core.Test
 		[Test]
 		public void HandleLabellerException()
 		{
-			MockPublisher publisher = new MockPublisher();
 			Exception expectedException = new CruiseControlException("expected exception");
 			_mockLabeller.ExpectAndThrow("Generate", expectedException, new NMock.Constraints.IsAnything());
-			_project.IntegrationCompleted += publisher.IntegrationCompletedEventHandler;
-			IMock stateMock = new DynamicMock(typeof(IStateManager));
-			stateMock.ExpectAndReturn("StateFileExists", false);
-			_project.StateManager = (IStateManager)stateMock.MockInstance;
+			_mockStateManager.ExpectAndReturn("StateFileExists", false);
+			_mockStateManager.Expect("SaveState", new IsAnything());
+			_mockPublisher.Expect("PublishIntegrationResults", new IsAnything(), new IsAnything());
 			
 			IntegrationResult results = _project.RunIntegration(BuildCondition.IfModificationExists);
-
-			stateMock.Expect("SaveState", results);
 
 			AssertEquals(results, _project.LastIntegrationResult);
 			AssertEquals(IntegrationStatus.Exception, _project.LastIntegrationResult.Status);
 			AssertEquals(expectedException, _project.LastIntegrationResult.ExceptionResult);
 			AssertNotNull(results.EndTime);
-			Assert(publisher.Published);
 			AssertEquals("No messages logged.", 1, _listener.Traces.Count);
 			Assert("Wrong message logged.", _listener.Traces[0].ToString().IndexOf(expectedException.ToString()) > 0);
 		}
@@ -323,7 +342,6 @@ namespace ThoughtWorks.CruiseControl.Core.Test
 		[Test]
 		public void SourceControlLabeled()
 		{
-			//			SetMockSourceControl();
 			_project.SourceControl = new MockSourceControl();
 			_project.Builder = new MockBuilder();
 			MockPublisher publisher = new MockPublisher();

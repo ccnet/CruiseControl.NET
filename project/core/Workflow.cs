@@ -64,9 +64,9 @@ namespace ThoughtWorks.CruiseControl.Core
 			}
 		}
 		
-		public IntegrationStatus GetLatestBuildStatus()
+		public IntegrationStatus LatestBuildStatus
 		{
-			return _currentIntegrationResult.Status;
+			get { return _currentIntegrationResult.Status; }
 		}
 
 		public int MinimumSleepTimeMillis 

@@ -53,6 +53,6 @@ namespace ThoughtWorks.CruiseControl.Core
 		/// Returns the most recent build status.
 		/// </summary>
 		/// <returns>The most recent build status</returns>
-		IntegrationStatus GetLatestBuildStatus();
+		IntegrationStatus LatestBuildStatus { get; }
 	}
 }

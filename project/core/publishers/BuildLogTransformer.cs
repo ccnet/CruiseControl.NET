@@ -9,31 +9,29 @@ using System.Xml.Xsl;
 namespace ThoughtWorks.CruiseControl.Core.Publishers
 {
 	/// <summary>
-	/// Utility class that provides static methods to transform build results using
+	/// Utility class that provides methods to transform build results using
 	/// Xsl stylesheets.
 	/// </summary>
-	public class BuildLogTransformer //: IBuildLogTransformer
+	public class BuildLogTransformer : IBuildLogTransformer
 	{
-		
-		public BuildLogTransformer() {}
-
 		/// <summary>
 		/// Transforms the specified Xml document using all configured Xsl files,
 		/// and returns the concatenated resulting Xml.
 		/// </summary>
 		/// <param name="document"></param>
 		/// <returns></returns>
-		public string TransformResultsWithAllStyleSheets(XmlDocument document) 
+		public string TransformResultsWithAllStyleSheets(XmlDocument document)
 		{
-			IList list = (IList)ConfigurationSettings.GetConfig("xslFiles");
-			return TransformResults(list,document);
+			IList list = (IList) ConfigurationSettings.GetConfig("xslFiles");
+			return TransformResults(list, document);
 		}
-		
-		public string TransformResults(IList xslFiles,XmlDocument document)
+
+		public string TransformResults(IList xslFiles, XmlDocument document)
 		{
 			StringBuilder builder = new StringBuilder();
-			if(xslFiles == null) return builder.ToString();
-			foreach (string xslFile in xslFiles) 
+			if (xslFiles == null)
+				return builder.ToString();
+			foreach (string xslFile in xslFiles)
 			{
 				builder.Append(Transform(document, xslFile));
 			}
@@ -48,18 +46,18 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
 		/// <returns></returns>
 		public string Transform(XmlDocument document, string xslFile)
 		{
-			try 
-			{		
+			try
+			{
 				XslTransform transform = new XslTransform();
 				LoadStylesheet(transform, xslFile);
 
-				XmlReader reader = transform.Transform(document.DocumentElement, null); 
-				
+				XmlReader reader = transform.Transform(document.DocumentElement, null);
+
 				XmlDocument output = new XmlDocument();
 				output.Load(reader);
 				return output.OuterXml;
 			}
-			catch (Exception ex) 
+			catch (Exception ex)
 			{
 				throw new CruiseControlException("Unable to execute transform: " + xslFile, ex);
 			}
@@ -71,17 +69,17 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
 		/// </summary>
 		/// <param name="transform"></param>
 		/// <param name="xslfile"></param>
-		private void LoadStylesheet(XslTransform transform, string xslFileName) 
+		private void LoadStylesheet(XslTransform transform, string xslFileName)
 		{
-			try 
+			try
 			{
 				transform.Load(xslFileName);
 			}
-			catch (FileNotFoundException) 
+			catch (FileNotFoundException)
 			{
 				throw new CruiseControlException("XSL stylesheet file not found: " + xslFileName);
 			}
-			catch (XmlException ex) 
+			catch (XmlException ex)
 			{
 				throw new CruiseControlException("Bad XML in stylesheet: " + ex.Message);
 			}
