@@ -373,11 +373,6 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "WebDashboard\Dashboard\BuildPluginsTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
                     RelPath = "WebDashboard\Dashboard\BuildRequestTransformerTest.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -429,6 +424,16 @@
                 />
                 <File
                     RelPath = "WebDashboard\Dashboard\PathMappingMultiTransformerTest.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "WebDashboard\Dashboard\PluginsTest.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "WebDashboard\Dashboard\ProjectLinkTest.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

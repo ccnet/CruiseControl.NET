@@ -7,7 +7,7 @@ using ThoughtWorks.CruiseControl.WebDashboard.MVC.Cruise;
 
 namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.BuildReport
 {
-	public class BuildLogBuildPlugin : ICruiseAction, IPluginLinkRenderer, IBuildPlugin
+	public class BuildLogBuildPlugin : ICruiseAction, IPluginLinkRenderer, IPlugin
 	{
 		private readonly IBuildRetriever buildRetriever;
 
@@ -27,19 +27,19 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.BuildReport
 			return control;
 		}
 
-		public string Description
+		public string LinkDescription
 		{
 			get { return "View Build Log"; }
 		}
 
-		public string ActionName
+		public string LinkActionName
 		{
 			get { return "ViewBuildLog"; }
 		}
 
-		public Type ActionType
+		public TypedAction[] Actions
 		{
-			get { return this.GetType(); }
+			get {  return new TypedAction[] { new TypedAction(LinkActionName, this.GetType()) }; }
 		}
 	}
 }

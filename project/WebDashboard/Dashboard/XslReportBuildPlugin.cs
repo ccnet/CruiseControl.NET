@@ -1,11 +1,10 @@
-using System;
 using System.Web.UI;
 using ThoughtWorks.CruiseControl.WebDashboard.IO;
 using ThoughtWorks.CruiseControl.WebDashboard.MVC.Cruise;
 
 namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 {
-	public class XslReportBuildPlugin : ICruiseAction, IPluginLinkRenderer, IBuildPlugin
+	public class XslReportBuildPlugin : ICruiseAction, IPluginLinkRenderer, IPlugin
 	{
 		private readonly string actionName;
 		private readonly string description;
@@ -25,19 +24,19 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 			return buildLogTransformer.Transform(cruiseRequest.BuildSpecifier, xslFileName);
 		}
 
-		public string Description
+		public string LinkDescription
 		{
 			get { return description; }
 		}
 
-		public string ActionName
+		public string LinkActionName
 		{
 			get { return actionName; }
 		}
 
-		public Type ActionType
+		public TypedAction[] Actions
 		{
-			get { return this.GetType(); }
+			get {  return new TypedAction[] { new TypedAction(LinkActionName, this.GetType()) }; }
 		}
 	}
 }

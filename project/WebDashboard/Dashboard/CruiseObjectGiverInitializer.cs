@@ -1,3 +1,4 @@
+using System;
 using System.Web;
 using System.Web.UI;
 using ThoughtWorks.CruiseControl.Core;
@@ -55,20 +56,9 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 			giverAndRegistrar.CreateImplementationMapping(SaveNewProjectAction.ACTION_NAME, 
 				typeof(SaveNewProjectAction)).Decorate(typeof(ServerCheckingProxyAction)).Decorate(typeof(ProjectCheckingProxyAction)).Decorate(typeof(CruiseActionProxyAction)).Decorate(typeof(SecurityCheckingProxyAction));
 
-			giverAndRegistrar.CreateImplementationMapping(DisplayEditProjectPageAction.ACTION_NAME, 
-				typeof(DisplayEditProjectPageAction)).Decorate(typeof(ServerCheckingProxyAction)).Decorate(typeof(ProjectCheckingProxyAction)).Decorate(typeof(CruiseActionProxyAction)).Decorate(typeof(SecurityCheckingProxyAction));
-
-			giverAndRegistrar.CreateImplementationMapping(SaveEditProjectAction.ACTION_NAME, 
-				typeof(SaveEditProjectAction)).Decorate(typeof(ServerCheckingProxyAction)).Decorate(typeof(ProjectCheckingProxyAction)).Decorate(typeof(CruiseActionProxyAction)).Decorate(typeof(SecurityCheckingProxyAction));
 
 			giverAndRegistrar.CreateImplementationMapping(ViewProjectReportAction.ACTION_NAME, 
 				typeof(ViewProjectReportAction)).Decorate(typeof(ServerCheckingProxyAction)).Decorate(typeof(ProjectCheckingProxyAction)).Decorate(typeof(CruiseActionProxyAction));
-
-			giverAndRegistrar.CreateImplementationMapping(ShowDeleteProjectAction.ACTION_NAME, 
-				typeof(ShowDeleteProjectAction)).Decorate(typeof(ServerCheckingProxyAction)).Decorate(typeof(ProjectCheckingProxyAction)).Decorate(typeof(CruiseActionProxyAction)).Decorate(typeof(SecurityCheckingProxyAction));
-
-			giverAndRegistrar.CreateImplementationMapping(DoDeleteProjectAction.ACTION_NAME, 
-				typeof(DoDeleteProjectAction)).Decorate(typeof(ServerCheckingProxyAction)).Decorate(typeof(ProjectCheckingProxyAction)).Decorate(typeof(CruiseActionProxyAction)).Decorate(typeof(SecurityCheckingProxyAction));
 
 			giverAndRegistrar.CreateImplementationMapping(ViewServerLogAction.ACTION_NAME, 
 				typeof(ViewServerLogAction)).Decorate(typeof(ServerCheckingProxyAction)).Decorate(typeof(CruiseActionProxyAction));
@@ -77,21 +67,37 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 				typeof(ViewBuildReportAction)).Decorate(typeof(ServerCheckingProxyAction)).Decorate(typeof(BuildCheckingProxyAction)).Decorate(typeof(ProjectCheckingProxyAction)).Decorate(typeof(CruiseActionProxyAction));
 
 			IConfigurationGetter configurationGetter = (IConfigurationGetter) giverAndRegistrar.GiveObjectByType(typeof(IConfigurationGetter));
-
 			if (configurationGetter == null)
 			{
 				throw new CruiseControlException("Unable to instantiate configuration getter");
 			}
 
+			foreach (IPluginSpecification pluginSpecification in (IPluginSpecification[]) configurationGetter.GetConfigFromSection("CCNet/projectPlugins"))
+			{
+				IPlugin plugin = giverAndRegistrar.GiveObjectByType(pluginSpecification.Type) as IPlugin;
+				if (plugin == null)
+				{
+					throw new CruiseControlException(pluginSpecification.TypeName + " is not a IPlugin");
+				}
+				foreach (TypedAction action in plugin.Actions)
+				{
+					giverAndRegistrar.CreateImplementationMapping(action.ActionName, action.ActionType)
+						.Decorate(typeof(ServerCheckingProxyAction)).Decorate(typeof(ProjectCheckingProxyAction)).Decorate(typeof(CruiseActionProxyAction));
+				}
+			}
+
 			foreach (IPluginSpecification pluginSpecification in (IPluginSpecification[]) configurationGetter.GetConfigFromSection("CCNet/buildPlugins"))
 			{
-				IBuildPlugin buildPlugin = giverAndRegistrar.GiveObjectByType(pluginSpecification.Type) as IBuildPlugin;
-				if (buildPlugin == null)
+				IPlugin plugin = giverAndRegistrar.GiveObjectByType(pluginSpecification.Type) as IPlugin;
+				if (plugin == null)
 				{
-					throw new CruiseControlException(pluginSpecification.TypeName + " is not a IBuildPlugin");
+					throw new CruiseControlException(pluginSpecification.TypeName + " is not a IPlugin");
 				}
-				giverAndRegistrar.CreateImplementationMapping(buildPlugin.ActionName,buildPlugin.ActionType)
-					.Decorate(typeof(ServerCheckingProxyAction)).Decorate(typeof(BuildCheckingProxyAction)).Decorate(typeof(ProjectCheckingProxyAction)).Decorate(typeof(CruiseActionProxyAction));
+				foreach (TypedAction action in plugin.Actions)
+				{
+					giverAndRegistrar.CreateImplementationMapping(action.ActionName,action.ActionType)
+						.Decorate(typeof(ServerCheckingProxyAction)).Decorate(typeof(BuildCheckingProxyAction)).Decorate(typeof(ProjectCheckingProxyAction)).Decorate(typeof(CruiseActionProxyAction));
+				}
 			}
 
 			return giverAndRegistrar;

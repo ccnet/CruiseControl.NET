@@ -10,8 +10,6 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.EditProject
 {
 	public class DisplayEditProjectPageAction : ICruiseAction
 	{
-		public static readonly string ACTION_NAME = "EditProjectDisplay";
-
 		private readonly ICruiseManagerWrapper cruiseManagerWrapper;
 		private readonly IProjectSerializer serializer;
 		private readonly AddProjectViewBuilder viewBuilder;

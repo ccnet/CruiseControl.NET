@@ -4,7 +4,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 {
 	public interface IPluginLinkRenderer
 	{
-		string Description { get; }
-		string ActionName { get; }
+		string LinkDescription { get; }
+		string LinkActionName { get; }
 	}
 }

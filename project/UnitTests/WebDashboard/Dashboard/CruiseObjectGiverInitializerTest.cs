@@ -47,16 +47,11 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 		}
 	}
 
-	public class StubBuildPlugin : IBuildPlugin
+	public class StubBuildPlugin : IPlugin
 	{
-		public string ActionName
+		public TypedAction[] Actions
 		{
-			get { return "My Plugin"; }
-		}
-
-		public Type ActionType
-		{
-			get { return this.GetType(); }
+			get { return new TypedAction[] { new TypedAction("MyPlugin", this.GetType()) }; }
 		}
 	}
 }

@@ -7,8 +7,6 @@ using ThoughtWorks.CruiseControl.WebDashboard.Dashboard;
 using ThoughtWorks.CruiseControl.WebDashboard.MVC.View;
 using ThoughtWorks.CruiseControl.WebDashboard.Plugins.AddProject;
 using ThoughtWorks.CruiseControl.WebDashboard.Plugins.BuildReport;
-using ThoughtWorks.CruiseControl.WebDashboard.Plugins.DeleteProject;
-using ThoughtWorks.CruiseControl.WebDashboard.Plugins.EditProject;
 using ThoughtWorks.CruiseControl.WebDashboard.Plugins.ViewServerLog;
 
 namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
@@ -19,7 +17,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 		private DynamicMock urlBuilderMock;
 		private DynamicMock buildNameRetrieverMock;
 		private DynamicMock recentBuildsViewBuilderMock;
-		private DynamicMock buildPluginLinkCalculatorMock;
+		private DynamicMock pluginLinkCalculatorMock;
 		private DefaultUserRequestSpecificSideBarViewBuilder viewBuilder;
 		private DefaultServerSpecifier serverSpecifier;
 		private IProjectSpecifier projectSpecifier;
@@ -31,7 +29,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 			urlBuilderMock = new DynamicMock(typeof(IUrlBuilder));
 			buildNameRetrieverMock = new DynamicMock(typeof(IBuildNameRetriever));
 			recentBuildsViewBuilderMock = new DynamicMock(typeof(IRecentBuildsViewBuilder));
-			buildPluginLinkCalculatorMock = new DynamicMock(typeof(IBuildPluginLinkCalculator));
+			pluginLinkCalculatorMock = new DynamicMock(typeof(IPluginLinkCalculator));
 			serverSpecifier = new DefaultServerSpecifier("myServer");
 			projectSpecifier = new DefaultProjectSpecifier(serverSpecifier, "myProject");
 			buildSpecifier = new DefaultBuildSpecifier(projectSpecifier, "myBuild");
@@ -40,7 +38,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 				(IUrlBuilder) urlBuilderMock.MockInstance, 
 				(IBuildNameRetriever) buildNameRetrieverMock.MockInstance,
 				(IRecentBuildsViewBuilder) recentBuildsViewBuilderMock.MockInstance,
-				(IBuildPluginLinkCalculator) buildPluginLinkCalculatorMock.MockInstance);
+				(IPluginLinkCalculator) pluginLinkCalculatorMock.MockInstance);
 		}
 
 		private void VerifyAll()
@@ -48,7 +46,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 			urlBuilderMock.Verify();
 			buildNameRetrieverMock.Verify();
 			recentBuildsViewBuilderMock.Verify();
-			buildPluginLinkCalculatorMock.Verify();
+			pluginLinkCalculatorMock.Verify();
 		}
 
 		[Test]
@@ -96,17 +94,28 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 		public void ShouldReturnLinkToProjectReportForProjectView()
 		{
 			// Setup
+			Mock link1Mock = new DynamicMock(typeof(IAbsoluteLink));
+			Mock link2Mock = new DynamicMock(typeof(IAbsoluteLink));
+			link1Mock.SetupResult("Description", "my link 1");
+			link1Mock.SetupResult("AbsoluteURL", "myurl1");
+			link2Mock.SetupResult("Description", "my link 2");
+			link2Mock.SetupResult("AbsoluteURL", "myurl2");
+
+			pluginLinkCalculatorMock.ExpectAndReturn("GetProjectPluginLinks", new IAbsoluteLink[] { (IAbsoluteLink) link1Mock.MockInstance, (IAbsoluteLink) link2Mock.MockInstance }, projectSpecifier);
+
+/*
 			urlBuilderMock.ExpectAndReturn("BuildProjectUrl", "editUrl", new PropertyIs("ActionName", DisplayEditProjectPageAction.ACTION_NAME), projectSpecifier);
 			urlBuilderMock.ExpectAndReturn("BuildProjectUrl", "deleteUrl", new PropertyIs("ActionName", ShowDeleteProjectAction.ACTION_NAME), projectSpecifier);
+*/
 			HtmlTable buildsPanel = new HtmlTable();
 			recentBuildsViewBuilderMock.ExpectAndReturn("BuildRecentBuildsTable", buildsPanel, projectSpecifier);
 
 			HtmlAnchor expectedAnchor1 = new HtmlAnchor();
-			expectedAnchor1.HRef = "editUrl";
-			expectedAnchor1.InnerHtml = "Edit Project";
+			expectedAnchor1.HRef = "myurl1";
+			expectedAnchor1.InnerHtml = "my link 1";
 			HtmlAnchor expectedAnchor2 = new HtmlAnchor();
-			expectedAnchor2.HRef = "deleteUrl";
-			expectedAnchor2.InnerHtml = "Delete Project";
+			expectedAnchor2.HRef = "myurl2";
+			expectedAnchor2.InnerHtml = "my link 2";
 
 			// Execute
 			HtmlTable table = viewBuilder.GetProjectSideBar(projectSpecifier);
@@ -139,7 +148,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 			link2Mock.SetupResult("Description", "my link 2");
 			link2Mock.SetupResult("AbsoluteURL", "myurl2");
 
-			buildPluginLinkCalculatorMock.ExpectAndReturn("GetBuildPluginLinks", new IAbsoluteLink[] { (IAbsoluteLink) link1Mock.MockInstance, (IAbsoluteLink) link2Mock.MockInstance }, buildSpecifier);
+			pluginLinkCalculatorMock.ExpectAndReturn("GetBuildPluginLinks", new IAbsoluteLink[] { (IAbsoluteLink) link1Mock.MockInstance, (IAbsoluteLink) link2Mock.MockInstance }, buildSpecifier);
 			urlBuilderMock.ExpectAndReturn("BuildBuildUrl", "latestUrl", new PropertyIs("ActionName", ViewBuildReportAction.ACTION_NAME), latestBuildSpecifier );
 			urlBuilderMock.ExpectAndReturn("BuildBuildUrl", "nextUrl", new PropertyIs("ActionName", ViewBuildReportAction.ACTION_NAME), nextBuildSpecifier);
 			urlBuilderMock.ExpectAndReturn("BuildBuildUrl", "previousUrl", new PropertyIs("ActionName", ViewBuildReportAction.ACTION_NAME), previousBuildSpecifier );
