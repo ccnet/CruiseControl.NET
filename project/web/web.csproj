@@ -204,6 +204,26 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "ServerLog.aspx"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "ServerLog.aspx.cs"
+                    DependentUpon = "ServerLog.aspx"
+                    SubType = "ASPXCodeBehind"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "ServerLog.aspx.resx"
+                    DependentUpon = "ServerLog.aspx.cs"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "ServerLogFileReader.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Statistics.aspx"
                     BuildAction = "Content"
                 />
@@ -336,6 +356,11 @@
                 />
                 <File
                     RelPath = "test\LogStatisticsTest.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "test\ServerLogFileReaderTest.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
