@@ -25,6 +25,10 @@
                 <tr><td class="header-title" colspan="2">BUILD SUCCESSFUL</td></tr>
             </xsl:if>
 
+			<tr>
+                <td class="header-label"><nobr>Project:</nobr></td>
+                <td class="header-data"><xsl:value-of select="/cruisecontrol/@project"/></td>
+			</tr>
             <tr>
                 <td class="header-label"><nobr>Date of build:</nobr></td>
                 <td class="header-data"><xsl:value-of select="/cruisecontrol/build/@date"/></td>

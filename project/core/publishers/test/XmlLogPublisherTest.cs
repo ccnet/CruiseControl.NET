@@ -130,7 +130,7 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers.Test
             _publisher.MergeFiles = new string [] {logFile, Path.Combine(logDir, "zi*.xml")};		// include wildcard filename
             _publisher.PublishIntegrationResults(null, result);
 
-            string expected = "<cruisecontrol><modifications />" + CreateExpectedBuildXml(result) + "<foo bar=\"4\">bat</foo><zip /></cruisecontrol>";
+            string expected = @"<cruisecontrol project=""proj""><modifications />" + CreateExpectedBuildXml(result) + "<foo bar=\"4\">bat</foo><zip /></cruisecontrol>";
             string actualFilename = Path.Combine(logDir, _publisher.GetFilename(result));
             using (StreamReader textReader = File.OpenText(actualFilename))
             {
@@ -164,7 +164,7 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers.Test
 
         private IntegrationResult CreateIntegrationResult(IntegrationStatus status, bool addModifications)
         {
-            IntegrationResult result = new IntegrationResult();
+            IntegrationResult result = new IntegrationResult("proj");
             result.Label = "1";
             result.Status = status;
             if (addModifications)

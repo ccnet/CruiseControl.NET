@@ -30,7 +30,7 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers.Test
 
 			_writer.Write(result);
 
-			string expected = "<cruisecontrol><modifications />" + CreateExpectedBuildXml(result) + "</cruisecontrol>";
+			string expected = @"<cruisecontrol project=""proj""><modifications />" + CreateExpectedBuildXml(result) + "</cruisecontrol>";
 			AssertEquals(expected, buffer.ToString());
 		}
 
@@ -38,9 +38,9 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers.Test
         public void WriteModifications()
         {
             Modification[] mods = CreateModifications();
-            string expected = mods[0].ToXml();
+            string expected = string.Format("<modifications>{0}</modifications>", mods[0].ToXml());
 
-            _writer.Write(mods);
+            _writer.WriteModifications(mods);
             AssertEquals(expected, buffer.ToString());
         }
 
@@ -153,6 +153,16 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers.Test
             AssertContains("<![CDATA[<tag><c>] ]></tag>]]>", output);
         }
 
+		[Test]
+		public void ShouldStripXmlDeclaration()
+		{
+			IntegrationResult result = new IntegrationResult();
+			result.Output = @"<?xml version=""1.0""?> <foo>Data</foo>" ;
+			string output = GenerateBuildOutput(result);
+			AssertEquals(-1, output.IndexOf("<![CDATA>"));
+			AssertEquals(-1, output.IndexOf("<?xml"));
+		}
+
         [Test]
         public void WriteFailedIntegrationResult()
         {
@@ -164,7 +174,7 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers.Test
 
         private IntegrationResult CreateIntegrationResult(IntegrationStatus status, bool addModifications)
         {
-            IntegrationResult result = new IntegrationResult();
+            IntegrationResult result = new IntegrationResult("proj");
             result.Label = "1";
             result.Status = status;
             if (addModifications)

@@ -7,33 +7,32 @@ using System.Text.RegularExpressions;
 
 namespace ThoughtWorks.CruiseControl.Core.Publishers
 {
-	public class XmlIntegrationResultWriter :IDisposable
+	public class XmlIntegrationResultWriter : IDisposable
 	{
 		private XmlWriter _writer;
 
-	    public XmlIntegrationResultWriter(XmlWriter writer)
-	    {
-	        _writer = writer;
-	    }
-
-	    public void Write(IntegrationResult result)
+		public XmlIntegrationResultWriter(XmlWriter writer)
 		{
-	        _writer.WriteStartElement(Elements.CRUISE_ROOT);
-	        _writer.WriteStartElement(Elements.MODIFICATIONS);
-			Write(result.Modifications);
-	        _writer.WriteEndElement();
+			_writer = writer;
+		}
+
+		public void Write(IntegrationResult result)
+		{
+			_writer.WriteStartElement(Elements.CRUISE_ROOT);
+			_writer.WriteAttributeString("project", result.ProjectName);
+			WriteModifications(result.Modifications);
 			WriteBuildElement(result);
 			WriteTaskResults(result);
 			WriteException(result);
-	        _writer.WriteEndElement();
+			_writer.WriteEndElement();
 		}
 
 		private void WriteTaskResults(IntegrationResult result)
-		{	
-		    foreach (ITaskResult taskResult in result.TaskResults)
-		    {
-		        _writer.WriteRaw(taskResult.Data);
-		    }
+		{
+			foreach (ITaskResult taskResult in result.TaskResults)
+			{
+				WriteOutput(taskResult.Data);
+			}
 		}
 
 		public void WriteBuildElement(IntegrationResult result)
@@ -46,41 +45,47 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
 			_writer.WriteAttributeString("buildtime", string.Format("{0:d2}:{1:d2}:{2:d2}", time.Hours, time.Minutes, time.Seconds));
 			if (result.Failed)
 			{
-				_writer.WriteAttributeString("error", "true"); 
+				_writer.WriteAttributeString("error", "true");
 			}
-			
+
 			if (result.Output != null)
 			{
-				WriteIntegrationResultOutput(result);
+				WriteOutput(result.Output);
 			}
-			
+
 			_writer.WriteEndElement();
 		}
 
-		private void WriteIntegrationResultOutput(IntegrationResult result)
+		private void WriteOutput(string output)
 		{
-			string nullRemovedOutput = RemoveNulls(result.Output);
-			XmlValidatingReader reader = new XmlValidatingReader(nullRemovedOutput, XmlNodeType.Element, null);
-			try 
-			{ 
+			string xmlRemovedOutput = StripXmlDeclaration(RemoveNulls(output));
+			XmlValidatingReader reader = new XmlValidatingReader(xmlRemovedOutput, XmlNodeType.Element, null);
+			try
+			{
 				reader.ReadInnerXml();
 				_writer.WriteNode(reader, false);
 			}
-			catch (XmlException) 
+			catch (XmlException)
 			{
 				// IF we had a problem with the input xml, wrap it in CDATA and put that in instead
-				_writer.WriteCData(XmlUtil.EncodeCDATA(nullRemovedOutput));
+				_writer.WriteCData(XmlUtil.EncodeCDATA(xmlRemovedOutput));
 			}
-			finally 
-			{ 
-				reader.Close(); 
+			finally
+			{
+				reader.Close();
 			}
+		}
+
+		private string StripXmlDeclaration(string xmlString)
+		{
+			return Regex.Replace(xmlString, @"<\?xml.*\?>", "");
 		}
 
 		public string RemoveNulls(string s)
 		{
 			Regex nullStringRegex = new Regex("\0");
-			return nullStringRegex.Replace(s, "");;
+			return nullStringRegex.Replace(s, "");
+			;
 		}
 
 		public void WriteException(IntegrationResult result)
@@ -95,24 +100,26 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
 			_writer.WriteEndElement();
 		}
 
-		public void Dispose()
+		void IDisposable.Dispose()
 		{
 			_writer.Close();
 		}
 
-		public void Write(Modification[] mods)
+		public void WriteModifications(Modification[] mods)
 		{
+			_writer.WriteStartElement(Elements.MODIFICATIONS);
 			if (mods == null)
 			{
 				return;
 			}
 			foreach (Modification mod in mods)
 			{
-				_writer.WriteRaw(mod.ToXml());
+				mod.ToXml(_writer);
 			}
+			_writer.WriteEndElement();
 		}
 
-		public class Elements 
+		public class Elements
 		{
 			public const string BUILD = "build";
 			public const string CRUISE_ROOT = "cruisecontrol";
