@@ -1,5 +1,9 @@
 body, table, form, input, td, th, p, textarea, select {font-family: verdana, helvetica, arial; font-size: 11px;}
 
+h1 { color: #33F; font-size: large }
+h2 { font-size: medium }
+h3 { font-size: small; margin-top: 4px; margin-bottom: 4px}
+
 .link { color:#FFFFFF; text-decoration:none; }
 
 .stylesection { margin-left: 4px; }
@@ -32,3 +36,5 @@ body, table, form, input, td, th, p, textarea, select {font-family: verdana, hel
 .unittests-oddrow { background-color:#CCCCCC }
 .unittests-data { font-size:9px; color:#000000; }
 .unittests-error { font-size:9px; color:#FF0000; }
+
+.comment { color: green }

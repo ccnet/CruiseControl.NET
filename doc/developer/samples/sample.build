@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+
+<project name="ccnet" default="compile">
+	<target name="compile">
+		<csc target="library" output="ccnet.sample.plugin.dll" debug="true">
+			<sources>
+				<includes name="**.cs"/>
+			</sources>
+			<references>
+				<includes name="../../../lib/NetReflector.dll"/>
+				<includes name="../../../build/ccnet.core.dll"/>
+			</references>
+		</csc>
+	</target>
+</project>

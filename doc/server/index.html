@@ -13,7 +13,7 @@
 			<li>
 			Setup your Server environment
 			<LI>
-			Setup your Web Environment, if you are going to use any of the CCNet Web 
+			Setup your Web Environment, if you are going to use any of the CCNet Web
 			Applications
 			<li>
 			Placed your project under one of the supported version control systems
@@ -23,9 +23,9 @@
 		</P>
 		<h3>Create a bootstrap build file<br>
 		</h3>
-		First you need to create a 'bootstrap' build file that is used to get the 
-		latest changes to your source tree whenever an update is comitted. A good place 
-		to put this build file is in the same directory as your project's normal 
+		First you need to create a 'bootstrap' build file that is used to get the
+		latest changes to your source tree whenever an update is comitted. A good place
+		to put this build file is in the same directory as your project's normal
 		buildfile. This bootstrap file should do 2 things:<br>
 		<ol>
 			<li>
@@ -34,36 +34,32 @@
 				Call the appropriate target in the actual project build file<br>
 			</li>
 		</ol>
-		The following is an example for a project under CVS control (it assumes that a 
-		propery called 'cvs.executable' is passed in from CruiseControl.NET - you can 
+		The following is an example for a project under CVS control (it assumes that a
+		propery called 'cvs.executable' is passed in from CruiseControl.NET - you can
 		do this in the build/buildArgs section of the ccnet.config file):<br>
 		<br>
-		<pre>&lt;project name="ccnetlaunch" default="go"&gt;</pre>
-		<pre>&nbsp; &lt;target name="go" depends="update,build"/&gt;</pre>
-		<pre>&nbsp; &lt;target name="update"&gt;</pre>
-		<pre>&nbsp;&nbsp;&nbsp; &lt;ifnot propertyexists="cvs.executable"&gt;</pre>
-		<pre>&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &lt;fail message="cvs.executable property not set, so can't update" /&gt;</pre>
-		<pre>&nbsp;&nbsp;&nbsp; &lt;/ifnot&gt;</pre>
-		<pre>&nbsp;&nbsp;&nbsp; &lt;echo message="CVS Executable at [${cvs.executable}]" /&gt;</pre>
-		<pre>&nbsp;&nbsp;&nbsp; &lt;exec </pre>
-		<pre>&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; basedir="." </pre>
-		<pre>&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; program="${cvs.executable}" </pre>
-		<pre>&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; commandline="-q update -P -d" </pre>
-		<pre>&nbsp;&nbsp;&nbsp; /&gt;</pre>
-		<pre>&nbsp; &lt;/target&gt;</pre>
-		<pre>&nbsp; &lt;target name="build"&gt;</pre>
-		<pre>&nbsp;&nbsp;&nbsp; &lt;nant </pre>
-		<pre>&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; buildfile="myproject.build" </pre>
-		<pre>&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; target="ContinuousIntegration" </pre>
-		<pre>&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; inheritall="true"</pre>
-		<pre>&nbsp;&nbsp;&nbsp; /&gt;</pre>
-		<pre>&nbsp; &lt;/target&gt;</pre>
-		<pre>&lt;/project&gt;<br><br></pre>
+		<pre>
+&lt;project name="ccnetlaunch" default="go"&gt;
+	&lt;target name="go" depends="update,build"/&gt;
+		&lt;target name="update"&gt;
+			&lt;ifnot propertyexists="cvs.executable"&gt;
+				&lt;fail message="cvs.executable property not set, so can't update" /&gt;
+			&lt;/ifnot&gt;
+			&lt;echo message="CVS Executable at [${cvs.executable}]" /&gt;
+			&lt;exec basedir="." program="${cvs.executable}" commandline="-q update -P -d"/&gt;
+		&lt;/target&gt;
+		&lt;target name="build"&gt;
+			&lt;nant buildfile="myproject.build" target="ContinuousIntegration" inheritall="true"/&gt;
+		&lt;/target&gt;
+	&lt;/target&gt;
+&lt;/project&gt;
+		</pre>
+		<br><br>
 		<h3>Perform Initial Checkout</h3>
 		The bootstrap buildfile above only
 		<span style="FONT-STYLE: italic">updates</span>
-		the buildserver's local copy of your project's source. Before you even run 
-		CruiseControl.NET for the first time you need to checkout your project to the 
+		the buildserver's local copy of your project's source. Before you even run
+		CruiseControl.NET for the first time you need to checkout your project to the
 		location on your machine where CruiseControl.NET will build it.<br>
 		<br>
 		<h3>Installing and launching the Server</h3>
@@ -71,13 +67,13 @@
 		<br>
 		<ol>
 			<li>
-				Unzip the distribution as described in <a href="../basicinstallation.html">Basic 
+				Unzip the distribution as described in <a href="../basicinstallation.html">Basic
 					Installation</a>
 			<li>
 				In the 'server' sub-folder, create a ccnet.config file as described <a href="ccnet.config.html">
 					here</a>. (There is an example in the 'server' folder to help you out.)
 			<li>
-				Try starting the Server by executing the 'StartCCNet.bat' file from a command 
+				Try starting the Server by executing the 'StartCCNet.bat' file from a command
 				line. If you have setup your config file correctly your build should run.
 			</li>
 		</ol>
