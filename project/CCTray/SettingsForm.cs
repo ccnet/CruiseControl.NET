@@ -149,7 +149,7 @@ namespace ThoughtWorks.CruiseControl.CCTray
 			this.lblProjectName = new System.Windows.Forms.Label();
 			this.chkShowExceptions = new System.Windows.Forms.CheckBox();
 			this.cboProjectName = new System.Windows.Forms.ComboBox();
-			((System.ComponentModel.ISupportInitialize)(this.numPollInterval)).BeginInit();
+		    this.numPollInterval.BeginInit();
 			this.grpAudio.SuspendLayout();
 			this.grpAgents.SuspendLayout();
 			this.SuspendLayout();
@@ -569,7 +569,7 @@ namespace ThoughtWorks.CruiseControl.CCTray
 			this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
 			this.Text = "CruiseControl.NET Monitor Settings";
-			((System.ComponentModel.ISupportInitialize)(this.numPollInterval)).EndInit();
+		    this.numPollInterval.EndInit();
 			this.grpAudio.ResumeLayout(false);
 			this.grpAgents.ResumeLayout(false);
 			this.ResumeLayout(false);
