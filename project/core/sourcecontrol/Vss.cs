@@ -9,7 +9,6 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 	[ReflectorType("vss")]
 	public class Vss : ProcessSourceControl, ITemporaryLabeller
 	{
-		// required environment variable name
 		internal const string SS_DIR_KEY = "SSDIR";
 		internal const string SS_REGISTRY_PATH = @"Software\\Microsoft\\SourceSafe";
 		internal const string SS_REGISTRY_KEY = "SCCServerPath";
@@ -17,8 +16,8 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 		public const string TEMP_SOURCE_DIRECTORY = "VssSource";
 
 		internal static readonly string HISTORY_COMMAND_FORMAT = @"history {0} -R -Vd{1}~{2} -Y{3},{4} -I-Y";
-		internal static readonly string GET_BY_DATE_COMMAND_FORMAT = @"get {0} -R -Vd{1} -Y{2},{3} -I-N -GWR";
-		internal static readonly string GET_BY_LABEL_COMMAND_FORMAT = @"get {0} -R -VL{1} -Y{2},{3} -I-N -GWR";
+		internal static readonly string GET_BY_DATE_COMMAND_FORMAT = @"get {0} -R -Vd{1} -Y{2},{3} -I-N -GWR -GTM";
+		internal static readonly string GET_BY_LABEL_COMMAND_FORMAT = @"get {0} -R -VL{1} -Y{2},{3} -I-N -GWR -GTM";
 		internal static readonly string LABEL_COMMAND_FORMAT = @"label {0} -L{1} -VL{2} -Y{3},{4} -I-Y";
 		internal static readonly string LABEL_COMMAND_FORMAT_NOTIMESTAMP = @"label {0} -L{1} -Y{2},{3} -I-Y";
 
