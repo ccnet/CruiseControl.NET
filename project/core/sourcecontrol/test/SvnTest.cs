@@ -35,11 +35,11 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test
 		public void CreatingHistoryProcessIncludesCorrectlyFormattedArguments()
 		{
 			Svn svn = CreateSvn(CreateSourceControlXml("svn://someserver/"));
-			DateTime from = new DateTime(2001, 1, 21, 20, 0, 0);
-			DateTime to = new DateTime(2001, 1, 21, 20, 30, 50);
+			DateTime from = DateTime.Parse("2001-01-21  20:00:00 'GMT'");
+			DateTime to = DateTime.Parse("2001-01-21  20:30:50 'GMT'");
 			Process actualProcess = svn.CreateHistoryProcess(from, to);
 
-			AssertEquals("log -v -r \"{2001-01-21T20:00:00}:{2001-01-21T20:30:50}\" --xml svn://someserver/", actualProcess.StartInfo.Arguments);
+			AssertEquals("log -v -r \"{2001-01-21T20:00:00Z}:{2001-01-21T20:30:50Z}\" --xml svn://someserver/", actualProcess.StartInfo.Arguments);
 		}
 
 		private Svn CreateSvn(string xml)

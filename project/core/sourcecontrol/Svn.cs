@@ -12,7 +12,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 		internal readonly static string HISTORY_COMMAND_FORMAT = "log -v -r \"{{{0}}}:{{{1}}}\" --xml {2}";
 		internal readonly static string TAG_COMMAND_FORMAT = "copy {0} {1}";
 
-		internal readonly static string COMMAND_DATE_FORMAT = "yyyy-MM-ddTHH:mm:ss";
+		internal readonly static string COMMAND_DATE_FORMAT = "yyyy-MM-ddTHH:mm:ssZ";
 
 		private IHistoryParser _parser = new SvnHistoryParser();
 
