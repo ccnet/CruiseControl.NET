@@ -26,7 +26,7 @@
         </xsl:if>
     </xsl:template>
 
-    <xsl:template match="message[(contains(text(), 'error') and not (contains(text(), '0 error')))]|message[(contains(text(), 'warning') and not (contains(text(), '0 warning')))]">
+    <xsl:template match="message[(contains(text(), ' error') and not (contains(text(), '0 error')))]|message[(contains(text(), ' warning') and not (contains(text(), '0 warning')))]">
         <pre class="compile-error-data"><xsl:value-of select="text()"/></pre>
     </xsl:template>
 
