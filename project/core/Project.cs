@@ -1,13 +1,8 @@
 using System;
-using System.Collections;
-using System.ComponentModel;
-using Exortech.NetReflector;
 using ThoughtWorks.CruiseControl.Core.Label;
-using ThoughtWorks.CruiseControl.Core.Publishers;
-using ThoughtWorks.CruiseControl.Core.Schedules;
-using ThoughtWorks.CruiseControl.Core.State;
 using ThoughtWorks.CruiseControl.Core.Util;
 using ThoughtWorks.CruiseControl.Remote;
+using Exortech.NetReflector;
 
 namespace ThoughtWorks.CruiseControl.Core
 {
@@ -336,7 +331,7 @@ namespace ThoughtWorks.CruiseControl.Core
 			
 		internal void CreateTemporaryLabelIfNeeded()
 		{
-			if ( typeof( ITemporaryLabeller ).IsInstanceOfType( SourceControl ) )
+			if ( SourceControl is ITemporaryLabeller )
 			{
 				( (ITemporaryLabeller) SourceControl).CreateTemporaryLabel();
 			}
@@ -344,7 +339,7 @@ namespace ThoughtWorks.CruiseControl.Core
 
 		internal void DeleteTemporaryLabelIfNeeded()
 		{
-			if ( typeof( ITemporaryLabeller ).IsInstanceOfType( SourceControl ) )
+			if ( SourceControl is ITemporaryLabeller )
 			{
 				( (ITemporaryLabeller) SourceControl).DeleteTemporaryLabel();
 			}

@@ -2,8 +2,6 @@ using System;
 using System.Collections;
 using Exortech.NetReflector;
 
-using ThoughtWorks.CruiseControl.Core;
-
 namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 {
 	[ReflectorType("multi")]
@@ -62,7 +60,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 		{
 			foreach (ISourceControl sourceControl in SourceControls)
 			{
-				if ( typeof(ITemporaryLabeller).IsInstanceOfType(sourceControl) )
+				if ( sourceControl is ITemporaryLabeller )
 				{
 					( (ITemporaryLabeller) sourceControl ).CreateTemporaryLabel();
 				}
@@ -73,7 +71,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 		{
 			foreach (ISourceControl sourceControl in SourceControls)
 			{
-				if ( typeof(ITemporaryLabeller).IsInstanceOfType(sourceControl) )
+				if ( sourceControl is ITemporaryLabeller )
 				{
 					( (ITemporaryLabeller) sourceControl ).DeleteTemporaryLabel();
 				}
