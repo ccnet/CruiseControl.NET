@@ -454,9 +454,16 @@ namespace ThoughtWorks.CruiseControl.Remote.monitor
 
 		#region Forcing a build
 
-		private void mnuForceBuild_Click(object sender, System.EventArgs e)
+		void mnuForceBuild_Click(object sender, System.EventArgs e)
 		{
-			statusMonitor.ForceBuild(settings.ProjectName);
+			try
+			{
+				statusMonitor.ForceBuild(settings.ProjectName);
+			}
+			catch (Exception ex)
+			{
+				MessageBox.Show(ex.Message, "Unable to force build", MessageBoxButtons.OK, MessageBoxIcon.Error);
+			}
 		}
 
 		#endregion
