@@ -200,7 +200,7 @@ namespace ThoughtWorks.CruiseControl.Core.Builder.Test
 		private void CheckBaseDirectoryIsProjectDirectoryWithGivenRelativePart(string relativeDirectory)
 		{
 			string expectedBaseDirectory = "projectWorkingDirectory";
-			if (relativeDirectory != "")
+			if (relativeDirectory.Length > 0)
 			{
 				expectedBaseDirectory = Path.Combine(expectedBaseDirectory, relativeDirectory);
 			}
