@@ -1,6 +1,4 @@
-using System;
 using System.IO;
-using System.Xml;
 using Exortech.NetReflector;
 
 namespace ThoughtWorks.CruiseControl.Core.Publishers
@@ -10,11 +8,6 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
 	{
 		private string publishDir;
 		private string sourceDir;
-		private string additionalDir;
-
-		public BuildPublisher() : base()
-		{
-		}
 
 		[ReflectorProperty("publishDir")]
 		public string PublishDir
@@ -30,13 +23,6 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
 			set { sourceDir = value; }
 		}
 
-		[ReflectorProperty("additionalDir", Required=false)]
-		public string AdditionalDir
-		{
-			get { return additionalDir; }
-			set { additionalDir = value; }
-		}
-
 		public override void PublishIntegrationResults(IProject project, IIntegrationResult result)
 		{
 			if (result.Succeeded) 
@@ -47,12 +33,6 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
 				DirectoryInfo additionalDestination = null;
 
 				recurseSubDirectories(srcDir, destination);
-
-				if (AdditionalDir != null) 
-				{
-					additionalDestination = pubDir.CreateSubdirectory(AdditionalDir);
-					recurseSubDirectories(srcDir, additionalDestination);
-				}
 			}
 		}
 

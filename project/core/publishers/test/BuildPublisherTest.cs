@@ -14,7 +14,6 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers.Test
 		private string srcDir = "BuildPublisherTest.SrcDir";
 		private string subDir = "SubDir";
 		private string subSubDir = "SubSubDir";
-		private string additionalDir = "BuildPublisherTest.AdditionalDir";
 		private const string fileName = "foo.txt";
 		private const string fileContents = "I'm the contents of foo.txt";
 
@@ -55,7 +54,6 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers.Test
 			BuildPublisher publisher = new BuildPublisher();
 			publisher.PublishDir = pubDir;
 			publisher.SourceDir = srcDir;
-			publisher.AdditionalDir = additionalDir;
 			IntegrationResult result = new IntegrationResult();
 			result.Status = IntegrationStatus.Success;
 			result.Label = "99";
@@ -70,16 +68,6 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers.Test
 
 			resultFile = new FileInfo(pubDir + @"\99\" + subDir + "\\" + subSubDir + "\\" + fileName);
 			Assert.IsTrue(resultFile.Exists, "File not found in sub sub directory");
-
-
-			resultFile = new FileInfo(pubDir + @"\" + additionalDir + @"\" + fileName);
-			Assert.IsTrue(resultFile.Exists, "File not found in additional directory");
-
-			resultFile = new FileInfo(pubDir + @"\" + additionalDir + @"\" + subDir + "\\" + fileName);
-			Assert.IsTrue(resultFile.Exists, "File not found in additional sub directory");
-
-			resultFile = new FileInfo(pubDir + @"\" + additionalDir + @"\" + subDir + "\\" + subSubDir + "\\" + fileName);
-			Assert.IsTrue(resultFile.Exists, "File not found in additional sub sub directory");
 		}
 
 		[TearDown]
