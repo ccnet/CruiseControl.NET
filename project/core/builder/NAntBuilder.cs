@@ -70,9 +70,15 @@ namespace tw.ccnet.core.builder
 			get { return _buildTimeout; }
 			set { _buildTimeout = value; }
 		}
+
+		public string LabelToApply = "NO-LABEL";
 		
 		public void Build(IntegrationResult result)
 		{
+			if (result.Label != null && result.Label != "")
+			{
+				LabelToApply = result.Label;
+			}
 			try
 			{			
 				int exitCode = AttemptExecute(result);
@@ -91,8 +97,8 @@ namespace tw.ccnet.core.builder
 		
 		internal string CreateArgs()
 		{
-			return String.Format("-buildfile:{0} {1} {2}",
-				BuildFile, BuildArgs, String.Join(" ", Targets));
+			return String.Format("-buildfile:{0} {1} -D:label-to-apply={2} {3}",
+				BuildFile, BuildArgs, LabelToApply, String.Join(" ", Targets));
 		}
 
 		protected virtual int AttemptExecute(IntegrationResult result)

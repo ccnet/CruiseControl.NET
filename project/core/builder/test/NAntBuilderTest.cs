@@ -128,15 +128,31 @@ namespace tw.ccnet.core.builder.test
 		{
 			_builder.BuildFile = "foo.xml";
 			_builder.BuildArgs = "-bar";
+			_builder.LabelToApply = "1234";
 			_builder.Targets = new string[] {"a", "b"};
-			Assertion.AssertEquals("-buildfile:foo.xml -bar a b", _builder.CreateArgs());
+			Assertion.AssertEquals("-buildfile:foo.xml -bar -D:label-to-apply=1234 a b", _builder.CreateArgs());
 		}
 
 		public void TestCreateBuildArgs_MissingArguments()
 		{
-			Assertion.AssertEquals("-buildfile: -logger:SourceForge.NAnt.XmlLogger ", _builder.CreateArgs());
+			Assertion.AssertEquals("-buildfile: -logger:SourceForge.NAnt.XmlLogger -D:label-to-apply=NO-LABEL ", _builder.CreateArgs());
 		}
 
+		public void TestLabelGetsPassedThrough() 
+		{
+			CreateTestBuildFile();
+			_builder.Executable = NANT_TEST_EXECUTABLE;
+			_builder.BuildFile = "test.build";
+			_builder.BaseDirectory = TempFileUtil.GetTempPath(TEMP_DIR);
+			_builder.Targets = new string[] {"checkLabel" };
+			IntegrationResult result = new IntegrationResult();
+			result.Label = "ATestLabel";
+			_builder.Build(result);
+			
+			Assertion.Assert("test build should succeed", result.Succeeded);
+			Assertion.Assert(StringUtil.StringContains(result.Output.ToString(), "ATestLabel"));
+		}
+		
 		private string CreateTestBuildFile()
 		{
 			string contents =  
@@ -153,6 +169,10 @@ namespace tw.ccnet.core.builder.test
   <target name=""fail"">
     <echo message=""I am failure itself""/>
     <fail message=""Intentional failure for test purposes, that is to say, purposes of testing, if you will""/>
+  </target>
+
+  <target name=""checkLabel"">
+    <echo message=""${label-to-apply}"" />
   </target>
 
 </project>";
