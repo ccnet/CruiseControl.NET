@@ -58,8 +58,10 @@ namespace ThoughtWorks.CruiseControl.Core
 
 		private void AddProjectIntegrator(IProject project)
 		{
-			if (project.Schedule!=null)
+			if (project.Schedule != null)
+			{
 				_projectIntegrators.Add(new ProjectIntegrator(project.Schedule, project));
+			}
 		}
 
 		public IProjectIntegrator[] ProjectIntegrators
