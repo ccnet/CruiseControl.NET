@@ -131,12 +131,12 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.MVC.Cruise
 
 		public DeleteProjectHtmlViewBuilder DeleteProjectHtmlViewBuilder
 		{
-			get { return new DeleteProjectHtmlViewBuilder(dcFactory.DefaultHtmlBuilder, dcFactory.DefaultUrlBuilder);}
+			get { return new DeleteProjectHtmlViewBuilder(dcFactory.DefaultHtmlBuilder, dcFactory.DefaultUrlBuilderWithHttpPathMapper);}
 		}
 
 		public SaveNewProjectAction SaveNewProjectAction
 		{
-			get { return new SaveNewProjectAction( AddProjectModelGenerator, AddProjectViewBuilder, dcFactory.ServerAggregatingCruiseManagerWrapper, dcFactory.NetReflectorProjectSerializer, dcFactory.DefaultUrlBuilder); }
+			get { return new SaveNewProjectAction( AddProjectModelGenerator, AddProjectViewBuilder, dcFactory.ServerAggregatingCruiseManagerWrapper, dcFactory.NetReflectorProjectSerializer, dcFactory.DefaultUrlBuilderWithPathMapperUsingHostName); }
 		}
 
 		public DisplayAddProjectPageAction DisplayAddProjectPageAction
@@ -151,7 +151,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.MVC.Cruise
 
 		public SaveEditProjectAction SaveEditProjectAction
 		{
-			get { return new SaveEditProjectAction(AddProjectModelGenerator, AddProjectViewBuilder, dcFactory.ServerAggregatingCruiseManagerWrapper, dcFactory.NetReflectorProjectSerializer, dcFactory.DefaultUrlBuilder); }
+			get { return new SaveEditProjectAction(AddProjectModelGenerator, AddProjectViewBuilder, dcFactory.ServerAggregatingCruiseManagerWrapper, dcFactory.NetReflectorProjectSerializer, dcFactory.DefaultUrlBuilderWithPathMapperUsingHostName); }
 		}
 
 		public AddProjectModelGenerator AddProjectModelGenerator
@@ -166,7 +166,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.MVC.Cruise
 
 		public ViewAllBuildsAction ViewAllBuildsAction
 		{
-			get { return new ViewAllBuildsAction(new RecentBuildLister( dcFactory.DefaultHtmlBuilder, dcFactory.DefaultUrlBuilder, dcFactory.ServerAggregatingCruiseManagerWrapper, dcFactory.DefaultBuildNameFormatter)); } 
+			get { return new ViewAllBuildsAction(new RecentBuildLister( dcFactory.DefaultHtmlBuilder, dcFactory.DefaultUrlBuilderWithHttpPathMapper, dcFactory.ServerAggregatingCruiseManagerWrapper, dcFactory.DefaultBuildNameFormatter)); } 
 		}
 
 		private ViewServerLogAction ViewServerLogAction

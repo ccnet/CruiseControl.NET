@@ -485,6 +485,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "IO\PathMapperUsingHostName.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "IO\RequestWrappingCruiseRequest.cs"
                     SubType = "Code"
                     BuildAction = "Compile"

@@ -61,9 +61,24 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 			get { return new HttpPathMapper(context, control); }
 		}
 
-		public DefaultUrlBuilder DefaultUrlBuilder
+		public PathMapperUsingHostName PathMapperUsingHostName
 		{
-			get { return new DefaultUrlBuilder(HttpPathMapper); }
+			get { return new PathMapperUsingHostName(context, control); }
+		}
+
+		public DefaultUrlBuilder DefaultUrlBuilder(IPathMapper pathMapper)
+		{
+			return new DefaultUrlBuilder(pathMapper);
+		}
+
+		public DefaultUrlBuilder DefaultUrlBuilderWithHttpPathMapper
+		{
+			get { return DefaultUrlBuilder(HttpPathMapper); }
+		}
+
+		public DefaultUrlBuilder DefaultUrlBuilderWithPathMapperUsingHostName
+		{
+			get { return DefaultUrlBuilder(PathMapperUsingHostName); }
 		}
 
 		public DefaultHtmlBuilder DefaultHtmlBuilder
