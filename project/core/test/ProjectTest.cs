@@ -378,7 +378,7 @@ namespace ThoughtWorks.CruiseControl.Core.Test
 		[Test]
 		public void InitialActivityState()
 		{
-			Assert.AreEqual(ProjectActivity.Unknown, _project.CurrentActivity);
+			Assert.AreEqual(ProjectActivity.Sleeping, _project.CurrentActivity);
 			VerifyAll();
 		}
 

@@ -10,7 +10,7 @@ namespace ThoughtWorks.CruiseControl.Core.Test
 	{
 		string _name;
 		ITrigger _schedule;
-		ProjectActivity _projectActivity = ProjectActivity.Unknown; // default
+		ProjectActivity _projectActivity = ProjectActivity.Sleeping; // default
 
 		public MockProject(string name, ITrigger Trigger)
 		{

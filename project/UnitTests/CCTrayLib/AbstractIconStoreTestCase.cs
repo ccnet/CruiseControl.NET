@@ -13,7 +13,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib
 		[SetUp]
 		public virtual void Init()
 		{
-			_status = new ProjectStatus(ProjectIntegratorState.Stopped, IntegrationStatus.Unknown,ProjectActivity.Unknown,"foo","http://foo.com",DateTime.Now,"");
+			_status = new ProjectStatus(ProjectIntegratorState.Stopped, IntegrationStatus.Unknown,ProjectActivity.Sleeping,"foo","http://foo.com",DateTime.Now,"");
 			_iconStore = CreateIconStore();    
 		}
 
@@ -64,7 +64,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib
 		[Test]
 		public void ShouldShowFailureIconWhenBuildProjectActivityIsUnknownAndLastBuildWasFailure()
 		{
-			_status.Activity = ProjectActivity.Unknown;
+			_status.Activity = ProjectActivity.Sleeping;
 			_status.BuildStatus = IntegrationStatus.Failure;
 			StatusIcon icon = _iconStore[_status];
 			Validate(ResourceIconStore.FAILURE, icon);

@@ -23,10 +23,5 @@ namespace ThoughtWorks.CruiseControl.Remote
 		/// for this project.
 		/// </summary>
 		Sleeping,
-
-		/// <summary>
-		/// The project's current activity is unknown.
-		/// </summary>
-		Unknown
 	}
 }

@@ -77,7 +77,7 @@ namespace ThoughtWorks.CruiseControl.Core
 
 		public ProjectActivity CurrentActivity 
 		{
-			get { return ProjectActivity.Unknown; }
+			get { return ProjectActivity.Sleeping; }
 		}
 
 		public string WebURL 

@@ -129,6 +129,7 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionItems) = postSolution
 		..\ccnet.build = ..\ccnet.build
+		examples\ccnet.config = examples\ccnet.config
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 	EndGlobalSection

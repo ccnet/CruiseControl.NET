@@ -94,7 +94,7 @@ namespace ThoughtWorks.CruiseControl.CCTray
 		{
 			ProjectStatus status = new ProjectStatus();
 			status.BuildStatus = IntegrationStatus.Unknown;
-			status.Activity = ProjectActivity.Unknown;
+			status.Activity = ProjectActivity.Sleeping;
 			_iconLoader = CreateIconLoader();
 
 			trayIcon.Icon = _iconLoader.LoadIcon(status).Icon;
@@ -429,7 +429,7 @@ namespace ThoughtWorks.CruiseControl.CCTray
 
 		private string CalculateTrayText(ProjectStatus projectStatus)
 		{
-			object activity = (projectStatus.Status == ProjectIntegratorState.Stopped) ? ProjectActivity.Unknown : projectStatus.Activity;
+			object activity = (projectStatus.Status == ProjectIntegratorState.Stopped) ? ProjectActivity.Sleeping : projectStatus.Activity;
 
 			return string.Format(FORMAT_TRAY_TOOLTIP,
 			                     activity,
