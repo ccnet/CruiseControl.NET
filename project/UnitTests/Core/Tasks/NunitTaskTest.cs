@@ -1,29 +1,29 @@
-using System;
-using ThoughtWorks.CruiseControl.Core.Util;
-using NUnit.Framework;
 using Exortech.NetReflector;
+using NUnit.Framework;
+using ThoughtWorks.CruiseControl.Core.Util;
 
 namespace ThoughtWorks.CruiseControl.Core.Tasks.Test
 {
 	[TestFixture]
-	public class NunitTaskTest : CustomAssertion
+	public class NUnitTaskTest : CustomAssertion
 	{
-		private NUnitTask _nunitTask;
+		private NUnitTask task;
 
 		[Test]
 		public void LoadWithSingleAssemblyNunitPath()
 		{
-			string xml="<nunit><path>d:\temp\nunit-console.exe</path><assemblies><assembly>foo.dll</assembly></assemblies></nunit>";
-			_nunitTask= NetReflector.Read(xml) as NUnitTask;
-			Assert.AreEqual("d:\temp\nunit-console.exe",_nunitTask.NUnitPath);
-			Assert.AreEqual(1,_nunitTask.Assembly.Length);
-			Assert.AreEqual("foo.dll",_nunitTask.Assembly[0]);
+			string xml = "<nunit><path>d:\temp\nunit-console.exe</path><assemblies><assembly>foo.dll</assembly></assemblies></nunit>";
+			task = NetReflector.Read(xml) as NUnitTask;
+			Assert.AreEqual("d:\temp\nunit-console.exe", task.NUnitPath);
+			Assert.AreEqual(1, task.Assembly.Length);
+			Assert.AreEqual("foo.dll", task.Assembly[0]);
 
 		}
+
 		[Test]
 		public void LoadWithMultipleAssemblies()
 		{
-			string xml=@"<nunit>
+			string xml = @"<nunit>
 							 <path>d:\temp\nunit-console.exe</path>
 				             <assemblies>
 			                     <assembly>foo.dll</assembly>
@@ -31,10 +31,8 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks.Test
 							</assemblies>
 						 </nunit>";
 
-			_nunitTask= NetReflector.Read(xml) as NUnitTask;
-			AssertEqualArrays(new string[]{"foo.dll","bar.dll"},_nunitTask.Assembly);
+			task = NetReflector.Read(xml) as NUnitTask;
+			AssertEqualArrays(new string[] {"foo.dll", "bar.dll"}, task.Assembly);
 		}
-		
 	}
 }
-

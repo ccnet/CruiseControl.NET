@@ -1,4 +1,3 @@
-using System;
 using Exortech.NetReflector;
 using ThoughtWorks.CruiseControl.Core.Util;
 
@@ -12,23 +11,21 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 		private string _nunitPath;
 
 		public NUnitTask()
-		{
-
-		}
+		{}
 
 		public NUnitTask(ProcessExecutor exec)
 		{
 			_processExecutor = exec;
 		}
 
-		[ReflectorArray("assemblies")] 
+		[ReflectorArray("assemblies")]
 		public string[] Assembly
 		{
 			get { return _assemblies; }
 			set { _assemblies = value; }
 		}
 
-		[ReflectorProperty("path")] 
+		[ReflectorProperty("path")]
 		public string NUnitPath
 		{
 			get { return _nunitPath; }
@@ -38,13 +35,13 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 		public virtual void Run(IIntegrationResult result)
 		{
 			string args = new NUnitArgument(Assembly).ToString();
-			if (args != String.Empty)
-			{
-				Log.Debug(string.Format("Running unit tests: {0} {1}", NUnitPath, args));
-				ProcessResult nunitResult = _processExecutor.Execute(new ProcessInfo(NUnitPath, args));
-				result.AddTaskResult(nunitResult.StandardOutput);
-			}
+			if (StringUtil.IsBlank(args)) 
+				throw new CruiseControlException("No unit test assemblies are specified. Please use the <assemblies> element to specify the test assemblies to run.");
 
+			Log.Debug(string.Format("Running unit tests: {0} {1}", NUnitPath, args));
+			ProcessResult nunitResult = _processExecutor.Execute(new ProcessInfo(NUnitPath, args));
+			if (nunitResult.Failed) throw new CruiseControlException("NUnit tests failed!");
+			result.AddTaskResult(nunitResult.StandardOutput);
 		}
 	}
 }

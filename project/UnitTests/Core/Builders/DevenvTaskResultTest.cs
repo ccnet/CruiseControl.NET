@@ -25,5 +25,12 @@ Build complete -- 1 errors, 0 warnings";
 			DevenvTaskResult result = new DevenvTaskResult(output);
 			Assert.AreEqual(expected, result.Data);
 		}
+
+		[Test]
+		public void ShouldHandleSpecialCharacters()
+		{
+			DevenvTaskResult result = new DevenvTaskResult("<T>");
+			Assert.AreEqual("<buildresults><message>&lt;T&gt;</message></buildresults>", result.Data);
+		}
 	}
 }

@@ -2,6 +2,7 @@ using System;
 using NMock;
 using NMock.Constraints;
 using NUnit.Framework;
+using ThoughtWorks.CruiseControl.Core.Test;
 using ThoughtWorks.CruiseControl.Core.Util;
 
 namespace ThoughtWorks.CruiseControl.Core.Tasks.Test
@@ -12,42 +13,50 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks.Test
 		private const string NUNIT_DUMMY_PATH = @"D:\temp\nunit-console.exe";
 		private string[] TEST_ASSEMBLIES = new string[] {"foo.dll"};
 
-		private IMock _processExecutor;
-		private IMock _processArguments;
+		private IMock executorMock;
+		private IMock mockArguments;
 
-		private NUnitTask _task;
-		private IntegrationResult _result;
+		private NUnitTask task;
+		private IntegrationResult result;
 
 		[SetUp]
 		public void Init()
 		{
-			_processExecutor = new DynamicMock(typeof (ProcessExecutor));
-			_processArguments = new DynamicMock(typeof (NUnitArgument));
-			_task = new NUnitTask(_processExecutor.MockInstance as ProcessExecutor);
-			_task.NUnitPath = NUNIT_DUMMY_PATH;
-			_result = new IntegrationResult("testProject", @"c:\temp");
+			executorMock = new DynamicMock(typeof (ProcessExecutor));
+			mockArguments = new DynamicMock(typeof (NUnitArgument));
+			task = new NUnitTask(executorMock.MockInstance as ProcessExecutor);
+			task.NUnitPath = NUNIT_DUMMY_PATH;
+			result = new IntegrationResult("testProject", @"c:\temp");
 		}
 
 		[Test]
 		public void RunWithNunitPathSetExecutesNunitAndRetrivesStandardOutput()
 		{
-			_task.Assembly = TEST_ASSEMBLIES;
+			mockArguments.Expect("Assemblies", TEST_ASSEMBLIES);
+			executorMock.ExpectAndReturn("Execute", new ProcessResult("foo", String.Empty, 0, false), new IsTypeOf(typeof (ProcessInfo)));
 
-			string setupData = "foo";
-			_processArguments.Expect("Assemblies", TEST_ASSEMBLIES);
-			_processExecutor.ExpectAndReturn("Execute", new ProcessResult(setupData, String.Empty, 0, false), new IsTypeOf(typeof (ProcessInfo)));
-			_task.Run(_result);
+			task.Assembly = TEST_ASSEMBLIES;
+			task.Run(result);
 
-			Assert.AreEqual(setupData, _result.TaskOutput);
-			_processExecutor.Verify();
+			Assert.AreEqual("foo", result.TaskOutput);
+			executorMock.Verify();
 		}
 
-		[Test]
+		[Test, ExpectedException(typeof(CruiseControlException))]
 		public void RunWithNoAssembliesDoesNotCreateTaskResult()
 		{
-			_processExecutor.ExpectNoCall("Execute", typeof (ProcessInfo));
-			_task.Run(_result);
-			_processExecutor.Verify();
+			executorMock.ExpectNoCall("Execute", typeof (ProcessInfo));
+			task.Run(result);
+		}
+
+		[Test, ExpectedException(typeof(CruiseControlException))]
+		public void ShouldThrowExceptionIfTestsFailed()
+		{
+			executorMock.ExpectAndReturn("Execute", ProcessResultFixture.CreateNonZeroExitCodeResult(), new IsAnything());
+
+			task = new NUnitTask((ProcessExecutor) executorMock.MockInstance);
+			task.Assembly = TEST_ASSEMBLIES;
+			task.Run(result);
 		}
 	}
 }
