@@ -25,6 +25,8 @@ namespace tw.ccnet.web
 		protected SiteMesh.DecoratorControls.GetProperty prop1;
 		protected System.Web.UI.HtmlControls.HtmlTableCell Td2;
 		protected SiteMesh.DecoratorControls.Title Title3;
+		protected HtmlAnchor tests;
+		protected HtmlAnchor testTiming;
 
 		/*
 		public Control Content
@@ -43,7 +45,14 @@ namespace tw.ccnet.web
 			InitBuildStats(path);
 			InitLogFileList(path);
 			InitAdjacentAnchors(path);
+			tests.HRef = BuildLogFileUri("Tests.aspx");
+			testTiming.HRef = BuildLogFileUri("TestTiming.aspx");
+		}
+
+		private string BuildLogFileUri(string baseUri)
+		{
 			string logFile = Request.QueryString[LogFile.LogQueryString];
+			return (logFile != null && logFile.Length > 0) ? baseUri + LogFile.CreateUrl(logFile) : baseUri;
 		}
 
 		private void InitBuildStats(string path)

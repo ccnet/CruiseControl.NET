@@ -140,7 +140,11 @@
                     DependentUpon = "ProjectInstaller.cs"
                     BuildAction = "EmbeddedResource"
                 />
-                <Folder RelPath = "test\" />
+                <File
+                    RelPath = "test\ServiceTest.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
             </Include>
         </Files>
     </CSHARP>

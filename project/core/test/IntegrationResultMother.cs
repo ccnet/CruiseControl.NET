@@ -33,5 +33,12 @@ namespace tw.ccnet.core.test
 		{
 			return Create(false, DateTime.Now);
 		}
+
+		public static IntegrationResult CreateFixed()
+		{
+			IntegrationResult result = CreateSuccessful();
+			result.LastIntegrationStatus = IntegrationStatus.Failure;
+			return result;
+		}
 	}
 }

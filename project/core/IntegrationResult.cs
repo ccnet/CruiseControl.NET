@@ -141,6 +141,11 @@ namespace tw.ccnet.core
 			get { return Status == IntegrationStatus.Failure; }
 		}
 
+		public bool Fixed
+		{
+			get { return Succeeded && LastIntegrationStatus == IntegrationStatus.Failure; }
+		}
+
 		public TimeSpan TotalIntegrationTime
 		{
 			get { return EndTime - StartTime; }

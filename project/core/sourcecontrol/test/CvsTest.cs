@@ -10,76 +10,98 @@ using Exortech.NetReflector;
 namespace tw.ccnet.core.sourcecontrol.test
 {
 	[TestFixture]
-	public class CvsTest 
+	public class CvsTest : Assertion
 	{
-		public static string CreateSourceControlXml(string cvsroot)
+		public static string CreateSourceControlXml(string cvsroot, string branch)
 		{
 			cvsroot = (cvsroot == null) ? String.Empty : "<cvsroot>" + cvsroot + "</cvsroot>";
+			branch = (branch == null) ? String.Empty : "<branch>" + branch + "</branch>";
+
 			return String.Format(
 				@"    <sourceControl type=""cvs"">
       <executable>..\tools\cvs.exe</executable>
       <workingDirectory>..</workingDirectory>
       {0}
+	  {1}
     </sourceControl>
 "
-				, cvsroot);	
+				, cvsroot, branch);	
 		}
 
-		public void TestValuePopulation()
+		[Test]
+		public void ValuePopulation()
+		{
+			Cvs cvs = CreateCvs(CreateSourceControlXml("myCvsRoot", "branch"));
+			AssertEquals(@"..\tools\cvs.exe", cvs.Executable);
+			AssertEquals("..",cvs.WorkingDirectory);
+			AssertEquals("myCvsRoot", cvs.CvsRoot);
+			AssertEquals("branch", cvs.Branch);
+		}
+
+		[Test]
+		public void CreateProcess()
 		{
 			Cvs cvs = CreateCvs();
-			Assertion.AssertEquals(@"..\tools\cvs.exe", cvs.Executable);
-			Assertion.AssertEquals("..",cvs.WorkingDirectory);
-			Assertion.AssertEquals("myCvsRoot", cvs.CvsRoot);
-		}
-
-		public void TestCreateProcess()
-		{
-			Cvs cvs = CreateCvs();
-			DateTime from = new DateTime(2001, 1, 21, 20, 0, 0);
-			Process actualProcess = cvs.CreateHistoryProcess(from, new DateTime());
-
-			string expected = String.Format(@"-d myCvsRoot -q log -N ""-d>{0}""", cvs.FormatCommandDate(from));
-			string actual = actualProcess.StartInfo.Arguments;
-			Assertion.AssertEquals(expected, actual);
-		}
-
-		public void TestCreateProcess_MissingCvsRoot()
-		{
-			Cvs cvs = CreateCvs(null);
 			DateTime from = new DateTime(2001, 1, 21, 20, 0, 0);
 			Process actualProcess = cvs.CreateHistoryProcess(from, new DateTime());
 
 			string expected = String.Format(@"-q log -N ""-d>{0}""", cvs.FormatCommandDate(from));
 			string actual = actualProcess.StartInfo.Arguments;
-			Assertion.AssertEquals(expected, actual);
+			AssertEquals(expected, actual);
 		}
 
-		public void TestLabelOnSuccessProcess()
+		[Test]
+		public void HistoryArgs()
 		{
-			Cvs cvs = CreateCvs(null);
+			DateTime from = new DateTime(2001, 1, 21, 20, 0, 0);
 
-			Assertion.AssertNull(cvs.CreateLabelProcess("", new DateTime()));
+			Cvs cvs = new Cvs();
+			cvs.CvsRoot = "myCvsRoot";
+			cvs.Branch = "branch"; 
+			string args = cvs.BuildHistoryProcessArgs(from);
+			string expected = String.Format(@"-d myCvsRoot -q log -N ""-d>{0}"" -rbranch", cvs.FormatCommandDate(from));
+			AssertEquals(expected, args);
+		}
+
+		[Test]
+		public void CreateProcess_MissingCvsRoot()
+		{
+			Cvs cvs = CreateCvs();
+			DateTime from = new DateTime(2001, 1, 21, 20, 0, 0);
+			Process actualProcess = cvs.CreateHistoryProcess(from, new DateTime());
+
+			string expected = String.Format(@"-q log -N ""-d>{0}""", cvs.FormatCommandDate(from));
+			string actual = actualProcess.StartInfo.Arguments;
+			AssertEquals(expected, actual);
+		}
+
+		[Test]
+		public void LabelOnSuccessProcess()
+		{
+			Cvs cvs = CreateCvs();
+
+			AssertNull(cvs.CreateLabelProcess("", new DateTime()));
 
 			cvs.LabelOnSuccess = true;
-			Assertion.AssertNotNull(cvs.CreateLabelProcess("", new DateTime()));
+			AssertNotNull(cvs.CreateLabelProcess("", new DateTime()));
 		}
 	
-		public void TestExecutable_default()
+		[Test]
+		public void Executable_default()
 		{
-			Assertion.AssertEquals("cvs.exe", new Cvs().Executable);
+			AssertEquals("cvs.exe", new Cvs().Executable);
 		}
 
 		private Cvs CreateCvs()
 		{
-			return CreateCvs("myCvsRoot");
+			return CreateCvs(CreateSourceControlXml(null, null));
 		}
 
-		private Cvs CreateCvs(string cvsroot)
+		private Cvs CreateCvs(string xml)
 		{
 			XmlPopulator populator = new XmlPopulator();
 			Cvs cvs = new Cvs();
-			populator.Populate(XmlUtil.CreateDocumentElement(CreateSourceControlXml(cvsroot)), cvs);
+			populator.Populate(XmlUtil.CreateDocumentElement(xml), cvs);
 			return cvs;
 		}
 	} 

@@ -19,7 +19,7 @@ namespace tw.ccnet.service.test
 
 			//execute
 
-			CruiseControlInstaller i = new CruiseControlInstaller();			            
+			ProjectInstaller i = new ProjectInstaller();			            
 
 			//verify
 			mockSPI.Verify();

@@ -19,8 +19,9 @@
 				<td valign="middle" align="right">
 					<a class="link" href=".">latest</a> |&nbsp; <a class="link" id="nextLog" runat="server">
 						next</a> |&nbsp; <a class="link" id="previousLog" runat="server">previous</a>
-					|&nbsp; <a class="link" href="Statistics.aspx">stats</a> |&nbsp; <a class="link" id="testTiming" runat="server">
-						test timing</a>
+					|&nbsp; <a class="link" href="Statistics.aspx">stats</a> 
+					|&nbsp; <a class="link" id="tests" runat="server">tests</a>
+					|&nbsp; <a class="link" id="testTiming" runat="server">test timing</a>
 				</td>
 				<td><img src="images/shim.gif" width="6" border="0"></td>
 			</tr>

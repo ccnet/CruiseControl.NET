@@ -9,7 +9,7 @@ namespace tw.ccnet.core.sourcecontrol
 	[ReflectorType("cvs")]
 	public class Cvs : ProcessSourceControl
 	{
-		internal readonly static string HISTORY_COMMAND_FORMAT = "{0}-q log -N \"-d>{1}\"";
+		internal readonly static string HISTORY_COMMAND_FORMAT = @"{0}-q log -N ""-d>{1}""{2}";
 
 		internal readonly static string COMMAND_DATE_FORMAT = "yyyy-MM-dd HH:mm:ss 'GMT'";
 
@@ -22,30 +22,33 @@ namespace tw.ccnet.core.sourcecontrol
 		[ReflectorProperty("executable")]
 		public string Executable
 		{
-			get{ return _executable;}
-			set{ _executable = value;}
+			get { return _executable;}
+			set { _executable = value;}
 		}
 		
 		[ReflectorProperty("cvsroot", Required=false)]
 		public string CvsRoot
 		{
-			get{ return _cvsRoot;}
-			set{ _cvsRoot = value;}
+			get { return _cvsRoot;}
+			set { _cvsRoot = value;}
 		}
 		
 		[ReflectorProperty("workingDirectory")]
 		public string WorkingDirectory
 		{
-			get{ return _workingDirectory;}
-			set{ _workingDirectory = value;}
+			get { return _workingDirectory;}
+			set { _workingDirectory = value;}
 		}		
 
 		[ReflectorProperty("labelOnSuccess", Required=false)]
 		public bool LabelOnSuccess
 		{
-			get{ return _labelOnSuccess;}
-			set{ _labelOnSuccess = value;}
+			get { return _labelOnSuccess;}
+			set { _labelOnSuccess = value;}
 		}
+
+		[ReflectorProperty("branch", Required=false)]
+		public string Branch;
 
 		protected override IHistoryParser HistoryParser
 		{
@@ -82,11 +85,8 @@ namespace tw.ccnet.core.sourcecontrol
 			// todo: if cvs will accept a 'to' date, it would be nicer to 
 			// include that for some harmony with the vss version
 			string cvsroot = (CvsRoot == null) ? String.Empty : "-d " + CvsRoot + " ";
-			string args = String.Format(HISTORY_COMMAND_FORMAT, 
-				cvsroot,
-				FormatCommandDate(from));
-			return args;
-		}
-		
+			string branch = (Branch == null) ? String.Empty : " -r" + Branch;
+			return String.Format(HISTORY_COMMAND_FORMAT, cvsroot, FormatCommandDate(from), branch);
+		}		
 	}
 }
