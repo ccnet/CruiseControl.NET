@@ -197,7 +197,7 @@ namespace ThoughtWorks.CruiseControl.Core
 		private Modification[] GetSourceModifications(IntegrationResult results)
 		{
 			_currentActivity = ProjectActivity.CheckingModifications;
-			Modification[] modifications = SourceControl.GetModifications(results.StartTime, results.StartTime);
+			Modification[] modifications = SourceControl.GetModifications(LastIntegrationResult.StartTime, results.StartTime);
 			Log.Info(GetModificationsDetectedMessage(modifications));
 			return modifications;
 		}
