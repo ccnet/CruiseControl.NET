@@ -60,8 +60,8 @@
         <call target="compile.console"/>
         <call target="compile.service"/>
         <call target="compile.cctray" />
-        <call target="compile.integration"/>
 <!--        
+        <call target="compile.integration"/>
         <call target="compile.controlpanel"/>
 -->
     </target>
@@ -202,6 +202,7 @@
         <copy file="${src.dir}\CCTray\app.config" tofile="${build.dir}\${cctray.exe}.config" verbose="${verbosity}"/>
     </target>
 
+<!--
     <target name="compile.integration" depends="compile.core" description="compiles the integration project">
         <csc target="library" output="${build.dir}\${integration.dll}" debug="true">
             <sources basedir="${src.dir}\integration">
@@ -212,10 +213,10 @@
                 <includes name="${build.dir}\ccnet.remote.dll"/>
                 <includes name="${lib.dir}\nunit.framework.dll"/>
             </references>
-            <!-- don't warn about uncommented public methods -->
             <arg value="/nowarn:1591"/>
         </csc>
     </target>
+-->
 
     <!-- TEST -->
     <target name="test" description="runs unit and acceptance tests">
@@ -241,11 +242,13 @@
 -->        
     </target>
 
+<!--
     <target name="test.integration" depends="compile.integration" description="runs unit tests">
         <nunit2>
             <test assemblyname="${build.dir}\${integration.dll}" fork="true" type="${nunit.output}"/>
         </nunit2>
     </target>
+-->
 
     <!-- DEPLOY -->
     <target name="deploy" depends="compile" description="deploys the web application">
