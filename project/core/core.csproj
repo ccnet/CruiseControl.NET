@@ -1032,7 +1032,6 @@
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
-                <Folder RelPath = "tasks\test\" />
                 <File
                     RelPath = "test\CruiseServerTest.cs"
                     SubType = "Code"
