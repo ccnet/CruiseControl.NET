@@ -20,7 +20,6 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 		/// <returns></returns>
 		public static bool ReflectionEquals(object o1, object o2)
 		{
-			// verify fields
 			return ValidateTypes(o1, o2) && ValidateFields(o1, o2) && ValidateProperties(o1, o2);
 		}
 

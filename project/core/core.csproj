@@ -254,6 +254,16 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "builder\DevenvBuilder.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "builder\DevenvTaskResult.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "builder\IBuilder.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -265,6 +275,16 @@
                 />
                 <File
                     RelPath = "builder\test\CommandLineBuilderTest.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "builder\test\DevenvBuilderTest.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "builder\test\DevenvTaskResultTest.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -388,11 +408,6 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "publishers\BuildLogTransformerTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
                     RelPath = "publishers\BuildPublisher.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -464,6 +479,11 @@
                 />
                 <File
                     RelPath = "publishers\XmlLogPublisher.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "publishers\test\BuildLogTransformerTest.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

@@ -9,12 +9,23 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 		{
 			using (RegistryKey key = Microsoft.Win32.Registry.LocalMachine.OpenSubKey(path))
 			{
-				try { return key.GetValue(name).ToString(); }
-				catch (NullReferenceException) 
-				{ 
-					throw new CruiseControlException(string.Format(@"Registry key or value name not found: {0}\{1}", path, name)); 
+				object value = null;
+				if (key != null)
+				{
+					value = key.GetValue(name);
 				}
+				return (value == null) ? null : value.ToString();
 			}
+		}
+
+		public string GetExpectedLocalMachineSubKeyValue(string path, string name)
+		{
+			string value = GetLocalMachineSubKeyValue(path, name);
+			if (value == null)
+			{
+				throw new CruiseControlException(string.Format(@"Registry key or value name not found: {0}\{1}", path, name)); 
+			}
+			return value;
 		}
 	}
 }

@@ -1,5 +1,6 @@
-using System;
 using NUnit.Framework;
+using System;
+using System.Text.RegularExpressions;
 
 namespace ThoughtWorks.CruiseControl.Core.Util
 {
@@ -9,6 +10,18 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 		{
 			string message = string.Format("Search substring: {0} is not contained in target: {1}", search, target);
 			Assert(message, target.IndexOf(search) >= 0);
+		}
+
+		public static void AssertStartsWith(string expected, string actual)
+		{
+			string message = string.Format("<{0}> does not start wth \n<{1}>", actual, expected);
+			Assert(message, actual != null && actual.StartsWith(expected));
+		}
+
+		public static void AssertMatches(string pattern, string actual)
+		{
+			string message = string.Format("Pattern string <{0}> does not match \nactual string <{1}>", pattern, actual);
+			Assert(message, Regex.IsMatch(actual, pattern));
 		}
 
 		public static void AssertFalse(bool assert)

@@ -421,7 +421,7 @@ namespace ThoughtWorks.CruiseControl.Core.Test
 		}
 
 		[Test]
-		public void RunIntegration_NoModifications_DoesntCallBuilder()
+		public void RunIntegrationWithNoModificationsShouldNotCallBuilder()
 		{
 			_mockLabeller.ExpectAndReturn("Generate", "1.0", new IsAnything());
 			_mockStateManager.ExpectAndReturn("StateFileExists", false);

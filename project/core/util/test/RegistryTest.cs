@@ -16,16 +16,28 @@ namespace ThoughtWorks.CruiseControl.Core.Util.Test
 			Assert("SharedFilesDir does not exist: " + sharedPath, Directory.Exists(sharedPath));
 		}
 
-		[Test, ExpectedException(typeof(CruiseControlException))]
+		[Test]
 		public void TryToGetInvalidSubKey()
 		{
-			new Registry().GetLocalMachineSubKeyValue(@"SOFTWARE\BozosSoftwareEmporium\Clowns", "Barrios");
+			AssertNull(new Registry().GetLocalMachineSubKeyValue(@"SOFTWARE\BozosSoftwareEmporium\Clowns", "Barrios"));
+		}
+
+		[Test]
+		public void TryToGetInvalidSubKeyValue()
+		{
+			AssertNull(new Registry().GetLocalMachineSubKeyValue(VALID_REGISTRY_PATH, "Barrios"));
 		}
 
 		[Test, ExpectedException(typeof(CruiseControlException))]
-		public void TryToGetInvalidSubKeyValue()
+		public void TryToGetExpectedInvalidSubKey()
 		{
-			new Registry().GetLocalMachineSubKeyValue(VALID_REGISTRY_PATH, "Barrios");
+			new Registry().GetExpectedLocalMachineSubKeyValue(@"SOFTWARE\BozosSoftwareEmporium\Clowns", "Barrios");
+		}
+
+		[Test, ExpectedException(typeof(CruiseControlException))]
+		public void TryToGetExpectedInvalidSubKeyValue()
+		{
+			new Registry().GetExpectedLocalMachineSubKeyValue(VALID_REGISTRY_PATH, "Barrios");
 		}
 	}
 }

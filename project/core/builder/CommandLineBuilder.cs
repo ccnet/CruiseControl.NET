@@ -60,7 +60,7 @@ namespace ThoughtWorks.CruiseControl.Core.Builder
 			else
 			{
 				result.Status = IntegrationStatus.Failure;
-				Log.Info("NAnt build failed: " + processResult.StandardError);
+				Log.Info("Build failed: " + processResult.StandardError);
 			}
 		}
 
@@ -90,7 +90,7 @@ namespace ThoughtWorks.CruiseControl.Core.Builder
 
 		public bool ShouldRun(IntegrationResult result)
 		{
-			return result.Working && result.Modifications.Length > 0;
+			return result.Working && result.HasModifications();
 		}
 
 		public override string ToString()

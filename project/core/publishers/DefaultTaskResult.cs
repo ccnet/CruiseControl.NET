@@ -26,7 +26,7 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
 						return doc.DocumentElement.OuterXml;
 					}
 				}
-				return String.Empty;
+				return string.Empty;
 			}
 		}
 	}
