@@ -6,7 +6,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.MVC.Cruise
 	{
 		private string saveActionName;
 		private readonly Project project;
-		private readonly string selectedServer;
+		private string selectedServer;
 		private readonly string[] servers;
 		private string status;
 		private bool isAdd;
@@ -47,6 +47,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.MVC.Cruise
 		public string SelectedServerName
 		{
 			get { return selectedServer; }
+			set { selectedServer = value; }
 		}
 
 		public string[] ServerNames

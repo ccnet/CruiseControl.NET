@@ -24,10 +24,12 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.MVC.Cruise
 			this.urlBuilder = urlBuilder;
 		}
 
+		// Todo - move both add and edit action to server page and just use server in URL (no dropdown)
 		public Control Execute(ICruiseRequest request)
 		{
 			AddEditProjectModel model = projectModelGenerator.GenerateModel(request.Request);
 			model.Project.Name = request.ProjectName;
+			model.SelectedServerName = request.ServerName;
 			SetProjectUrlIfOneNotSet(model);
 			try
 			{
