@@ -149,21 +149,6 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "Coverage.aspx"
-                    BuildAction = "Content"
-                />
-                <File
-                    RelPath = "Coverage.aspx.cs"
-                    DependentUpon = "Coverage.aspx"
-                    SubType = "ASPXCodeBehind"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Coverage.aspx.resx"
-                    DependentUpon = "Coverage.aspx.cs"
-                    BuildAction = "EmbeddedResource"
-                />
-                <File
                     RelPath = "cruisecontrol.css"
                     BuildAction = "Content"
                 />
@@ -198,61 +183,6 @@
                     BuildAction = "EmbeddedResource"
                 />
                 <File
-                    RelPath = "FxCop.aspx"
-                    BuildAction = "Content"
-                />
-                <File
-                    RelPath = "FxCop.aspx.cs"
-                    DependentUpon = "FxCop.aspx"
-                    SubType = "ASPXCodeBehind"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "FxCop.aspx.resx"
-                    DependentUpon = "FxCop.aspx.cs"
-                    BuildAction = "EmbeddedResource"
-                />
-                <File
-                    RelPath = "HtmlLogFormatter.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "InstallWebConfig.cs"
-                    SubType = "Component"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "InstallWebConfig.resx"
-                    DependentUpon = "InstallWebConfig.cs"
-                    BuildAction = "EmbeddedResource"
-                />
-                <File
-                    RelPath = "IPageLoader.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "ITransformer.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "LogFileLister.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "LogTransformer.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "PageTransformer.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
                     RelPath = "ProjectReport.aspx"
                     BuildAction = "Content"
                 />
@@ -265,51 +195,6 @@
                 <File
                     RelPath = "ProjectReport.aspx.resx"
                     DependentUpon = "ProjectReport.aspx.cs"
-                    BuildAction = "EmbeddedResource"
-                />
-                <File
-                    RelPath = "ServerLog.aspx"
-                    BuildAction = "Content"
-                />
-                <File
-                    RelPath = "ServerLog.aspx.cs"
-                    DependentUpon = "ServerLog.aspx"
-                    SubType = "ASPXCodeBehind"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "ServerLog.aspx.resx"
-                    DependentUpon = "ServerLog.aspx.cs"
-                    BuildAction = "EmbeddedResource"
-                />
-                <File
-                    RelPath = "Tests.aspx"
-                    BuildAction = "Content"
-                />
-                <File
-                    RelPath = "Tests.aspx.cs"
-                    DependentUpon = "Tests.aspx"
-                    SubType = "ASPXCodeBehind"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Tests.aspx.resx"
-                    DependentUpon = "Tests.aspx.cs"
-                    BuildAction = "EmbeddedResource"
-                />
-                <File
-                    RelPath = "TestTiming.aspx"
-                    BuildAction = "Content"
-                />
-                <File
-                    RelPath = "TestTiming.aspx.cs"
-                    DependentUpon = "TestTiming.aspx"
-                    SubType = "ASPXCodeBehind"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "TestTiming.aspx.resx"
-                    DependentUpon = "TestTiming.aspx.cs"
                     BuildAction = "EmbeddedResource"
                 />
                 <File
@@ -343,11 +228,6 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "config\ConfigurationProjectSpecificationRetriever.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
                     RelPath = "config\ConfigurationSettingsConfigGetter.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -364,16 +244,6 @@
                 />
                 <File
                     RelPath = "config\PluginsSectionHandler.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "config\ProjectSpecification.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "config\ProjectsSectionHandler.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -519,92 +389,7 @@
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
-                <File
-                    RelPath = "IO\ServerLogFileReader.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "IO\WebUtil.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "log\log20020910183219Lbuild.67.xml"
-                    BuildAction = "Content"
-                />
-                <File
-                    RelPath = "log\log20020910183219Lbuild.69.xml"
-                    BuildAction = "Content"
-                />
-                <File
-                    RelPath = "log\log20020916143555.xml"
-                    BuildAction = "Content"
-                />
-                <File
-                    RelPath = "log\log20020916143556.xml"
-                    BuildAction = "Content"
-                />
-                <File
-                    RelPath = "log\log20020924144031.xml"
-                    BuildAction = "Content"
-                />
-                <File
-                    RelPath = "log\log20021002095508.xml"
-                    BuildAction = "Content"
-                />
-                <File
-                    RelPath = "log\log20021009102803Lbuild.68.xml"
-                    BuildAction = "Content"
-                />
-                <File
-                    RelPath = "log\log20021009102803Lbuild.69.xml"
-                    BuildAction = "Content"
-                />
-                <File
-                    RelPath = "log\log20030724125704Lbuild.1.xml"
-                    BuildAction = "Content"
-                />
-                <File
-                    RelPath = "log\log20030724130312.xml"
-                    BuildAction = "Content"
-                />
-                <File
-                    RelPath = "log\log20030724130417Lbuild.2.xml"
-                    BuildAction = "Content"
-                />
-                <File
-                    RelPath = "log\log20030724135106Lbuild.3.xml"
-                    BuildAction = "Content"
-                />
-                <File
-                    RelPath = "log\log20030724135208.xml"
-                    BuildAction = "Content"
-                />
-                <File
-                    RelPath = "log\log20030724135640Lbuild.4.xml"
-                    BuildAction = "Content"
-                />
-                <File
-                    RelPath = "log\log20030724162051.xml"
-                    BuildAction = "Content"
-                />
-                <File
-                    RelPath = "log\log20030724162715Lbuild.5.xml"
-                    BuildAction = "Content"
-                />
-                <File
-                    RelPath = "log\log20030728195152Lbuild.6.xml"
-                    BuildAction = "Content"
-                />
-                <File
-                    RelPath = "log\log20031212182634Lbuild.1.xml"
-                    BuildAction = "Content"
-                />
-                <File
-                    RelPath = "log\log20040412170952.xml"
-                    BuildAction = "Content"
-                />
+                <Folder RelPath = "log\" />
                 <File
                     RelPath = "Plugins\PluginFactory.cs"
                     SubType = "Code"
@@ -687,41 +472,6 @@
                 />
                 <File
                     RelPath = "ServerConnection\UnknownServerException.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "test\ConfigSectionTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "test\HtmlLogFormatterTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "test\LogFileListTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "test\LogStatisticsTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "test\LogTransformerTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "test\PageTransformerTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "test\ServerLogFileReaderTest.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

@@ -26,7 +26,6 @@ namespace ThoughtWorks.CruiseControl.WebDashboard
 		protected HtmlTableCell contentCell;
 		protected System.Web.UI.WebControls.Panel ProjectPanel1;
 		protected System.Web.UI.WebControls.Panel ProjectPanel2;
-		protected WebUtil webUtil;
 
 		private void Page_Load(object sender, EventArgs e)
 		{

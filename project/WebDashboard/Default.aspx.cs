@@ -26,7 +26,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard
 		{
 			if (cruiseManager.ProjectDetails.Count > 0)
 			{
-				StatusGrid.DataSource = new ProjectDetailsListGenerator(cruiseManager, new ConfigurationSettingsConfigGetter()).ProjectDetailsList;
+				StatusGrid.DataSource = new ProjectDetailsListGenerator(cruiseManager).ProjectDetailsList;
 				StatusGrid.DataBind();
 				StatusGrid.Visible = true;
 			}
