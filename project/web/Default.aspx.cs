@@ -25,8 +25,7 @@ namespace tw.ccnet.web
 		{
 			try
 			{
-				string path = ConfigurationSettings.AppSettings["logDir"];
-				InitDisplayLogFile(path);
+				InitDisplayLogFile();
 			}
 			catch(CruiseControlException ex)
 			{
@@ -34,9 +33,9 @@ namespace tw.ccnet.web
 			}
 		}
 
-		private void InitDisplayLogFile(string path)
+		private void InitDisplayLogFile()
 		{
-			string logfile = WebUtil.GetLogFilename(path, Request);
+			string logfile = WebUtil.GetLogFilename(Context, Request);
 			if (logfile == null)
 			{
 				return;
@@ -50,7 +49,6 @@ namespace tw.ccnet.web
 			{		
 				XmlDocument document = new XmlDocument();
 				document.Load(logfile);
-
 				
 				IList list = (IList) ConfigurationSettings.GetConfig("xslFiles");
 				foreach (string xslFile in list) 
@@ -60,7 +58,6 @@ namespace tw.ccnet.web
 					string transformFile = Path.Combine(Request.MapPath(directory), file);
 					builder.Append(tw.ccnet.core.publishers.BuildLogTransformer.Transform(document, transformFile)).Append("<br>");
 				}
-
 			}
 			catch(XmlException ex)
 			{

@@ -80,9 +80,9 @@ namespace tw.ccnet.web
 			return LogFile.IsSuccessful(filename) ? "link" : "link-failed";
 		}
 
-		public static string GetCurrentFilename(string path)
+		public static string GetCurrentFilename(DirectoryInfo logDirectory)
 		{
-			string[] filenames = LogFile.GetLogFileNames(path);
+			string[] filenames = LogFile.GetLogFileNames(logDirectory.FullName);
 			return (filenames.Length == 0) ? null : filenames[filenames.Length - 1];
 		}
 

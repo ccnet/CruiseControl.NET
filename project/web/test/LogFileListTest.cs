@@ -1,6 +1,7 @@
 using System;
 using System.Web.UI.HtmlControls;
 using System.Xml;
+using System.IO;
 using NUnit.Framework;
 using tw.ccnet.core;
 using tw.ccnet.core.util;
@@ -70,7 +71,7 @@ namespace tw.ccnet.web.test
 										 "log20020507023858.xml", "log20030507042535.xml", "logfile.txt", "badfile.xml" };
 			TempFileUtil.CreateTempFiles(TestFolder, testFilenames);
 
-			Assertion.AssertEquals("log20030507042535.xml", LogFileLister.GetCurrentFilename(_tempFolder));
+			Assertion.AssertEquals("log20030507042535.xml", LogFileLister.GetCurrentFilename(new DirectoryInfo(_tempFolder)));
 		}
 		
 		public void TestTransform()

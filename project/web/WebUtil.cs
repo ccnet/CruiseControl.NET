@@ -1,20 +1,22 @@
 using System;
 using System.IO;
 using System.Web;
+using System.Configuration;
 using tw.ccnet.core;
 
 namespace tw.ccnet.web
 {
 	public class WebUtil
 	{
-		public static string GetLogFilename(string path, HttpRequest request)
+		public static string GetLogFilename(HttpContext Context, HttpRequest request)
 		{
+			DirectoryInfo logDirectory = GetLogDirectory(Context);
 			string logfile = request.QueryString[LogFile.LogQueryString];
 			if (logfile == null)
 			{
-				logfile = LogFileLister.GetCurrentFilename(path);
+				logfile = LogFileLister.GetCurrentFilename(logDirectory);
 			}
-			return (logfile == null) ? null : Path.Combine(path, logfile);
+			return (logfile == null) ? null : Path.Combine(logDirectory.FullName, logfile);
 		}
 
 		public static string GetXslFilename(string xslfile, HttpRequest request)
@@ -26,6 +28,32 @@ namespace tw.ccnet.web
 		{
 			string message = ex.Message.Replace(Environment.NewLine, "<br>");
 			return "<br/>ERROR: " + message;
+		}
+
+		public static DirectoryInfo GetLogDirectory(HttpContext Context)
+		{
+			string dirName = ConfigurationSettings.AppSettings["logDir"];
+			DirectoryInfo logDirectory = new DirectoryInfo(dirName);
+			if (!logDirectory.Exists)
+			{
+				// Hack to have a guess of whether an absolute path is given in the config
+				if (dirName.IndexOf(':') < 0)
+				{
+					// If so try and treat as relative to the webapp
+					logDirectory = new DirectoryInfo(Context.Server.MapPath(dirName));
+					if (!logDirectory.Exists)
+					{
+						throw new Exception(String.Format("Can't find log directory [{0}] (Full path : [{1}]", 
+							dirName, logDirectory.FullName));
+					}
+				}
+				else
+				{
+					throw new Exception(String.Format("Can't find log directory [{0}] (Full path : [{1}]", 
+						dirName, logDirectory.FullName));
+				}
+			}
+			return logDirectory;
 		}
 	}
 }

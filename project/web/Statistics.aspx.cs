@@ -22,8 +22,7 @@ namespace tw.ccnet.web
 		{
 			try
 			{
-				string path = ConfigurationSettings.AppSettings["logDir"];
-				InitStatistics(path);
+				InitStatistics(WebUtil.GetLogDirectory(Context).FullName);
 			}
 			catch(CruiseControlException ex)
 			{

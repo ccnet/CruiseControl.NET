@@ -28,7 +28,7 @@ namespace tw.ccnet.web
 
 		private void Page_Load(object sender, System.EventArgs e)
 		{
-			string path = ConfigurationSettings.AppSettings["logDir"];
+			string path = WebUtil.GetLogDirectory(Context).FullName;
 			InitBuildStats(path);
 			InitLogFileList(path);
 			InitAdjacentAnchors(path);

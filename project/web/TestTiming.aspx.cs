@@ -23,8 +23,7 @@ namespace tw.ccnet.web
 		{
 			try
 			{
-				string path = ConfigurationSettings.AppSettings["logDir"];
-				string logfile = WebUtil.GetLogFilename(path, Request);
+				string logfile = WebUtil.GetLogFilename(Context, Request);
 				if (logfile == null)
 				{
 					return;
