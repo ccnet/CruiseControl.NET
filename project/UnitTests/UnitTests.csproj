@@ -279,11 +279,6 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "WebDashboard\MVC\DefaultActionFactoryTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
                     RelPath = "WebDashboard\MVC\DefaultHtmlBuilderTest.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -323,7 +318,6 @@
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
-                <Folder RelPath = "WebDashboard\Plugins\AddProjectPlugin\" />
                 <File
                     RelPath = "WebDashboard\Plugins\DeleteProject\DoDeleteProjectActionTest.cs"
                     SubType = "Code"
@@ -334,10 +328,6 @@
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
-                <Folder RelPath = "WebDashboard\Plugins\LogViewerPlugin\" />
-                <Folder RelPath = "WebDashboard\Plugins\ProjectReporter\" />
-                <Folder RelPath = "WebDashboard\Plugins\ServerLogViewerPlugin\" />
-                <Folder RelPath = "WebDashboard\Plugins\SiteTemplatePlugin\LogViewerPlugin\" />
                 <File
                     RelPath = "WebDashboard\Plugins\ViewBuildLog\ViewBuildLogActionTest.cs"
                     SubType = "Code"

@@ -1,8 +1,9 @@
 using System.Web.UI;
 using ThoughtWorks.CruiseControl.WebDashboard.Dashboard;
 using ThoughtWorks.CruiseControl.WebDashboard.IO;
+using ThoughtWorks.CruiseControl.WebDashboard.MVC.Cruise;
 
-namespace ThoughtWorks.CruiseControl.WebDashboard.MVC.Cruise
+namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.ViewAllBuilds
 {
 	public class ViewAllBuildsAction : ICruiseAction
 	{

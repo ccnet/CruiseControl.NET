@@ -1,6 +1,6 @@
 using System;
 
-namespace ThoughtWorks.CruiseControl.WebDashboard.config
+namespace ThoughtWorks.CruiseControl.WebDashboard.Config
 {
 	public class SimplePluginSpecification : IPluginSpecification
 	{

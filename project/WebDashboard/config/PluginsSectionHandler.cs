@@ -1,7 +1,6 @@
 using System.Collections;
 using System.Configuration;
 using System.Xml;
-using ThoughtWorks.CruiseControl.WebDashboard.config;
 
 namespace ThoughtWorks.CruiseControl.WebDashboard.Config
 {

@@ -4,7 +4,6 @@ using System.Drawing;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 using ThoughtWorks.CruiseControl.Remote;
-using ThoughtWorks.CruiseControl.WebDashboard.config;
 using ThoughtWorks.CruiseControl.WebDashboard.Config;
 using ThoughtWorks.CruiseControl.WebDashboard.Dashboard;
 
@@ -119,10 +118,10 @@ namespace ThoughtWorks.CruiseControl.WebDashboard
 		
 		private void InitializeComponent()
 		{    
-			this.RefreshButton.Click += new System.EventHandler(this.RefreshButton_Click);
-			this.StatusGrid.ItemCommand += new System.Web.UI.WebControls.DataGridCommandEventHandler(this.StatusGrid_ItemCommand);
-			this.StatusGrid.ItemDataBound += new System.Web.UI.WebControls.DataGridItemEventHandler(this.StatusGrid_ItemDataBound);
-			this.Load += new System.EventHandler(this.Page_Load);
+			this.RefreshButton.Click += new EventHandler(this.RefreshButton_Click);
+			this.StatusGrid.ItemCommand += new DataGridCommandEventHandler(this.StatusGrid_ItemCommand);
+			this.StatusGrid.ItemDataBound += new DataGridItemEventHandler(this.StatusGrid_ItemDataBound);
+			this.Load += new EventHandler(this.Page_Load);
 
 		}
 		#endregion

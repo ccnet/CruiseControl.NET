@@ -1,7 +1,6 @@
 using NMock;
 using NUnit.Framework;
 using ThoughtWorks.CruiseControl.Remote;
-using ThoughtWorks.CruiseControl.WebDashboard.config;
 using ThoughtWorks.CruiseControl.WebDashboard.Config;
 using ThoughtWorks.CruiseControl.WebDashboard.ServerConnection;
 

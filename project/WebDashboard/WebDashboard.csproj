@@ -450,17 +450,7 @@
                 />
                 <Folder RelPath = "log\" />
                 <File
-                    RelPath = "MVC\ActionFactoryConfigurationException.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
                     RelPath = "MVC\AggregatedRequest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "MVC\ConfiguredActionFactory.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -475,22 +465,7 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "MVC\IConfiguredActionFactoryConfiguration.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
                     RelPath = "MVC\IRequest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "MVC\ITypeInstantiator.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "MVC\ITypeSpecification.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -500,32 +475,7 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "MVC\NullTypeSpecification.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
                     RelPath = "MVC\RequestController.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "MVC\TypeSpecificationWithType.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "MVC\Cruise\AddEditProjectModel.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "MVC\Cruise\AddProjectModelGenerator.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "MVC\Cruise\AddProjectViewBuilder.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -550,16 +500,6 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "MVC\Cruise\DisplayAddProjectPageAction.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "MVC\Cruise\DisplayEditProjectPageAction.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
                     RelPath = "MVC\Cruise\ExceptionCatchingActionProxy.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -575,22 +515,7 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "MVC\Cruise\IViewAllBuildsViewBuilder.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
                     RelPath = "MVC\Cruise\ProjectCheckingProxyAction.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "MVC\Cruise\SaveEditProjectAction.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "MVC\Cruise\SaveNewProjectAction.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -615,16 +540,6 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "MVC\Cruise\ViewAllBuildsAction.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "MVC\Cruise\ViewProjectReportAction.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
                     RelPath = "MVC\View\DefaultHtmlBuilder.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -636,6 +551,31 @@
                 />
                 <File
                     RelPath = "MVC\View\IHtmlBuilder.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Plugins\AddProject\AddEditProjectModel.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Plugins\AddProject\AddProjectModelGenerator.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Plugins\AddProject\AddProjectViewBuilder.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Plugins\AddProject\DisplayAddProjectPageAction.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Plugins\AddProject\SaveNewProjectAction.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -665,12 +605,37 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Plugins\EditProject\DisplayEditProjectPageAction.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Plugins\EditProject\SaveEditProjectAction.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Plugins\ViewAllBuilds\IViewAllBuildsViewBuilder.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Plugins\ViewAllBuilds\ViewAllBuildsAction.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Plugins\ViewBuildLog\ViewBuildLogAction.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
                     RelPath = "Plugins\ViewBuildReport\ViewBuildReportAction.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Plugins\ViewProjectReport\ViewProjectReportAction.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

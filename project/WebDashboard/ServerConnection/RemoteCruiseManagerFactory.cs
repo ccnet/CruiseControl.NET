@@ -1,4 +1,3 @@
-using System;
 using System.Runtime.Remoting;
 using ThoughtWorks.CruiseControl.Remote;
 

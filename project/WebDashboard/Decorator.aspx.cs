@@ -7,7 +7,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard
 {
 	public class Decorator : Page
 	{
-		protected System.Web.UI.HtmlControls.HtmlGenericControl TopControlsLocation;
+		protected HtmlGenericControl TopControlsLocation;
 		protected HtmlGenericControl SideBarLocation;
 
 		private void Page_Load(object sender, EventArgs e)
@@ -47,7 +47,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard
 		
 		private void InitializeComponent()
 		{   
-			this.Load += new System.EventHandler(this.Page_Load);
+			this.Load += new EventHandler(this.Page_Load);
 		}
 		#endregion
 	}

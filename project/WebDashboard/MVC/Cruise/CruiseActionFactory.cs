@@ -1,7 +1,11 @@
 using ThoughtWorks.CruiseControl.WebDashboard.Dashboard;
+using ThoughtWorks.CruiseControl.WebDashboard.Plugins.AddProject;
 using ThoughtWorks.CruiseControl.WebDashboard.Plugins.DeleteProject;
+using ThoughtWorks.CruiseControl.WebDashboard.Plugins.EditProject;
+using ThoughtWorks.CruiseControl.WebDashboard.Plugins.ViewAllBuilds;
 using ThoughtWorks.CruiseControl.WebDashboard.Plugins.ViewBuildLog;
 using ThoughtWorks.CruiseControl.WebDashboard.Plugins.ViewBuildReport;
+using ThoughtWorks.CruiseControl.WebDashboard.Plugins.ViewProjectReport;
 using ThoughtWorks.CruiseControl.WebDashboard.Plugins.ViewServerLog;
 
 namespace ThoughtWorks.CruiseControl.WebDashboard.MVC.Cruise

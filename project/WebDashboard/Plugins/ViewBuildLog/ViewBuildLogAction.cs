@@ -1,4 +1,3 @@
-using System;
 using System.Web.UI;
 using System.Web.UI.HtmlControls;
 using ThoughtWorks.CruiseControl.WebDashboard.Dashboard;

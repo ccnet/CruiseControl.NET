@@ -1,12 +1,13 @@
 using System;
 using System.Web.UI;
+using System.Web.UI.HtmlControls;
 using ThoughtWorks.CruiseControl.WebDashboard.Dashboard;
 
 namespace ThoughtWorks.CruiseControl.WebDashboard
 {
 	public class Controller : Page
 	{
-		protected System.Web.UI.HtmlControls.HtmlGenericControl ParentControl;
+		protected HtmlGenericControl ParentControl;
 
 		private void Page_Load(object sender, EventArgs e)
 		{
@@ -23,7 +24,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard
 		
 		private void InitializeComponent()
 		{    
-			this.Load += new System.EventHandler(this.Page_Load);
+			this.Load += new EventHandler(this.Page_Load);
 		}
 		#endregion
 	}

@@ -1,7 +1,6 @@
 using System.Web.UI;
-using System.Web.UI.HtmlControls;
 
-namespace ThoughtWorks.CruiseControl.WebDashboard.MVC.Cruise
+namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.ViewAllBuilds
 {
 	public interface IViewAllBuildsViewBuilder
 	{

@@ -2,7 +2,7 @@ using System;
 using System.Collections;
 using System.Runtime.Remoting;
 using ThoughtWorks.CruiseControl.Remote;
-using ThoughtWorks.CruiseControl.WebDashboard.config;
+using ThoughtWorks.CruiseControl.WebDashboard.Config;
 
 namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 {
