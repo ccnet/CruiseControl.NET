@@ -1,8 +1,8 @@
 using System;
 using System.Collections;
-using tw.ccnet.remote;
+using ThoughtWorks.CruiseControl.Remote;
 
-namespace tw.ccnet.core
+namespace ThoughtWorks.CruiseControl.Core
 {
 	/// <summary>
 	/// Interface to which all projects must adhere, and via which all application

@@ -1,8 +1,8 @@
 using System;
 using Exortech.NetReflector;
-using tw.ccnet.remote;
+using ThoughtWorks.CruiseControl.Remote;
 
-namespace tw.ccnet.core.schedule
+namespace ThoughtWorks.CruiseControl.Core.Schedules
 {
 	[Serializable]
 	[ReflectorType("schedule")]

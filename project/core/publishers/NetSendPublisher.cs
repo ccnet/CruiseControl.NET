@@ -1,10 +1,10 @@
 using System;
 using System.Diagnostics;
 using Exortech.NetReflector;
-using tw.ccnet.remote;
-using tw.ccnet.core.util;
+using ThoughtWorks.CruiseControl.Remote;
+using ThoughtWorks.CruiseControl.Core.Util;
 
-namespace tw.ccnet.core.publishers
+namespace ThoughtWorks.CruiseControl.Core.Publishers
 {
 	[ReflectorType("netsend")]
 	public class NetSendPublisher : PublisherBase

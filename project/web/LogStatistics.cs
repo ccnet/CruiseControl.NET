@@ -1,9 +1,9 @@
 using System;
 using System.Collections;
 using System.Text;
-using tw.ccnet.core;
+using ThoughtWorks.CruiseControl.Core;
 
-namespace tw.ccnet.web
+namespace ThoughtWorks.CruiseControl.Web
 {
 	public class LogStatistics
 	{

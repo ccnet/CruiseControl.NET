@@ -2,9 +2,9 @@ using System;
 using System.IO;
 using System.Globalization;
 using NUnit.Framework;
-using tw.ccnet.core.util;
+using ThoughtWorks.CruiseControl.Core.Util;
 
-namespace tw.ccnet.core.sourcecontrol.test
+namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test
 {
 	[TestFixture]
 	public class VssHistoryParserTest : CustomAssertion

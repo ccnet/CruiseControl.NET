@@ -2,7 +2,7 @@ using System;
 using System.Diagnostics;
 using System.Collections;
 
-namespace tw.ccnet.core.util
+namespace ThoughtWorks.CruiseControl.Core.Util
 {
 	public class TestTraceListener : TraceListener
 	{

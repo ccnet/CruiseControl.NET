@@ -107,11 +107,6 @@
         <Files>
             <Include>
                 <File
-                    RelPath = "CruiseControl.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
                     RelPath = "CruiseControlException.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -123,6 +118,11 @@
                 />
                 <File
                     RelPath = "CruiseManager.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "CruiseServer.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -644,12 +644,12 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "test\CruiseControlTest.cs"
+                    RelPath = "test\CruiseManagerTest.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "test\CruiseManagerTest.cs"
+                    RelPath = "test\CruiseServerTest.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

@@ -1,8 +1,8 @@
 using System;
-using tw.ccnet.core.util;
-using tw.ccnet.remote;
+using ThoughtWorks.CruiseControl.Core.Util;
+using ThoughtWorks.CruiseControl.Remote;
 
-namespace tw.ccnet.core.test
+namespace ThoughtWorks.CruiseControl.Core.Test
 {
 	public class IntegrationResultFixture
 	{

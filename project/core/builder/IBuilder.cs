@@ -1,6 +1,6 @@
 using System;
 
-namespace tw.ccnet.core
+namespace ThoughtWorks.CruiseControl.Core
 {
 	public interface IBuilder : ITask
 	{

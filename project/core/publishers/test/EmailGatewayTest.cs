@@ -1,9 +1,9 @@
 using System;
 using System.Web.Mail;
 using NUnit.Framework;
-using tw.ccnet.core.util;
+using ThoughtWorks.CruiseControl.Core.Util;
 
-namespace tw.ccnet.core.publishers.test
+namespace ThoughtWorks.CruiseControl.Core.Publishers.Test
 {
 	[TestFixture]
 	public class EmailGatewayTest : CustomAssertion

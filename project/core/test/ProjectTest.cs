@@ -5,17 +5,17 @@ using System.IO;
 using NUnit.Framework;
 using NMock;
 using NMock.Constraints;
-using tw.ccnet.remote;
-using tw.ccnet.core.configuration;
-using tw.ccnet.core.sourcecontrol.test;
-using tw.ccnet.core.builder.test;
-using tw.ccnet.core.publishers;
-using tw.ccnet.core.publishers.test;
-using tw.ccnet.core.schedule;
-using tw.ccnet.core.util;
-using tw.ccnet.core.state;
+using ThoughtWorks.CruiseControl.Remote;
+using ThoughtWorks.CruiseControl.Core.Configuration;
+using ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test;
+using ThoughtWorks.CruiseControl.Core.Builder.test;
+using ThoughtWorks.CruiseControl.Core.Publishers;
+using ThoughtWorks.CruiseControl.Core.Publishers.Test;
+using ThoughtWorks.CruiseControl.Core.Schedules;
+using ThoughtWorks.CruiseControl.Core.Util;
+using ThoughtWorks.CruiseControl.Core.State;
 
-namespace tw.ccnet.core.test
+namespace ThoughtWorks.CruiseControl.Core.Test
 {
 	[TestFixture]
 	public class ProjectTest : CustomAssertion
@@ -160,7 +160,7 @@ namespace tw.ccnet.core.test
 			IMock mockConfig = new DynamicMock(typeof(IConfigurationLoader));
 			mockConfig.ExpectAndReturn("LoadProjects", projects);
 
-			ICruiseControl control = new CruiseControl((IConfigurationLoader)mockConfig.MockInstance);
+			CruiseServer control = new CruiseServer((IConfigurationLoader)mockConfig.MockInstance);
 //			control.AddProject(_project);
 
 			DateTime start = DateTime.Now;

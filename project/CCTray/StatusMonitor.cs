@@ -3,7 +3,7 @@ using System.ComponentModel;
 using System.Runtime.Remoting;
 using System.Windows.Forms;
 
-namespace tw.ccnet.remote.monitor
+namespace ThoughtWorks.CruiseControl.Remote.monitor
 {
 	#region Public delegates
 

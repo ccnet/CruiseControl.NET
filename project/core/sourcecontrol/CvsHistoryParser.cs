@@ -2,7 +2,7 @@ using System;
 using System.Collections;
 using System.Globalization;
 using System.IO;
-namespace tw.ccnet.core.sourcecontrol
+namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 {	
 	public class CvsHistoryParser : IHistoryParser 
 	{

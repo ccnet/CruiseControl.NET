@@ -8,7 +8,7 @@ using System.Runtime.Remoting;
 using System.Web;
 using System.Web.Services;
 
-using tw.ccnet.remote;
+using ThoughtWorks.CruiseControl.Remote;
 
 namespace CCNet.WebService
 {
@@ -65,7 +65,7 @@ namespace CCNet.WebService
 		}
 
 		[WebMethod]
-		public tw.ccnet.remote.CruiseControlStatus GetStatus()
+		public ThoughtWorks.CruiseControl.Remote.CruiseControlStatus GetStatus()
 		{
 			return BackingCruiseManager.GetStatus();
 		}

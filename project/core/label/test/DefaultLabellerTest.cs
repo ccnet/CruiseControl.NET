@@ -1,10 +1,10 @@
 using System;
 using NUnit.Framework;
-using tw.ccnet.core.test;
-using tw.ccnet.remote;
-using tw.ccnet.core.util;
+using ThoughtWorks.CruiseControl.Core.Test;
+using ThoughtWorks.CruiseControl.Remote;
+using ThoughtWorks.CruiseControl.Core.Util;
 
-namespace tw.ccnet.core.label.test
+namespace ThoughtWorks.CruiseControl.Core.Label.Test
 {
 	[TestFixture]
 	public class DefaultLabellerTest : CustomAssertion

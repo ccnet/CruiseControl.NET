@@ -12,9 +12,9 @@ using System.Web.UI;
 using System.Web.UI.WebControls;
 using System.Web.UI.HtmlControls;
 using System.Xml;
-using tw.ccnet.core;
+using ThoughtWorks.CruiseControl.Core;
 
-namespace tw.ccnet.web
+namespace ThoughtWorks.CruiseControl.Web
 {
 	public class Tests : System.Web.UI.Page
 	{
@@ -53,7 +53,7 @@ namespace tw.ccnet.web
 				string directory = Path.GetDirectoryName(xslFile);
 				string file = Path.GetFileName(xslFile);
 				string transformFile = Path.Combine(Request.MapPath(directory), file);
-				builder.Append(tw.ccnet.core.publishers.BuildLogTransformer.Transform(document, transformFile)).Append("<br>");
+				builder.Append(ThoughtWorks.CruiseControl.Core.Publishers.BuildLogTransformer.Transform(document, transformFile)).Append("<br>");
 			}
 			catch(XmlException ex)
 			{

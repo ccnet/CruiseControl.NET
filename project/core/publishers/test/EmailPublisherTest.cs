@@ -3,12 +3,12 @@ using System.Collections;
 using System.Web.Mail;
 using System.Xml;
 using NUnit.Framework;
-using tw.ccnet.core.test;
-using tw.ccnet.core.util;
+using ThoughtWorks.CruiseControl.Core.Test;
+using ThoughtWorks.CruiseControl.Core.Util;
 using Exortech.NetReflector;
-using tw.ccnet.remote;
+using ThoughtWorks.CruiseControl.Remote;
 
-namespace tw.ccnet.core.publishers.test
+namespace ThoughtWorks.CruiseControl.Core.Publishers.Test
 {
 	[TestFixture]
 	public class EmailPublisherTest : Assertion

@@ -3,10 +3,10 @@ using System.Web.UI.HtmlControls;
 using System.Xml;
 using System.IO;
 using NUnit.Framework;
-using tw.ccnet.core;
-using tw.ccnet.core.util;
+using ThoughtWorks.CruiseControl.Core;
+using ThoughtWorks.CruiseControl.Core.Util;
 
-namespace tw.ccnet.web.test
+namespace ThoughtWorks.CruiseControl.Web.Test
 {
 	[TestFixture]
 	public class LogFileListTest : CustomAssertion

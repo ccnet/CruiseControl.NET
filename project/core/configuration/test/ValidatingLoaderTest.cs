@@ -4,10 +4,10 @@ using System.Xml;
 using System.Xml.Schema;
 using NUnit.Framework;
 
-using tw.ccnet.core.util;
-using tw.ccnet.core.configuration;
+using ThoughtWorks.CruiseControl.Core.Util;
+using ThoughtWorks.CruiseControl.Core.Configuration;
 
-namespace tw.ccnet.core.configuration.test
+namespace ThoughtWorks.CruiseControl.Core.Configuration.test
 {
 	[TestFixture]
 	public class ValidatingLoaderTest : CustomAssertion

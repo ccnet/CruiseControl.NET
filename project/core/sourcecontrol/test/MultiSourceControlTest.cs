@@ -3,10 +3,10 @@ using NMock;
 using NUnit.Framework;
 using System;
 using System.Collections;
-using tw.ccnet.core.test;
-using tw.ccnet.core.util;
+using ThoughtWorks.CruiseControl.Core.Test;
+using ThoughtWorks.CruiseControl.Core.Util;
 
-namespace tw.ccnet.core.sourcecontrol.test
+namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test
 {
 	[TestFixture]
 	public class MultiSourceControlTest : CustomAssertion

@@ -1,9 +1,9 @@
 using System;
 using System.Diagnostics;
-using tw.ccnet.core.util;
+using ThoughtWorks.CruiseControl.Core.Util;
 using Exortech.NetReflector;
 
-namespace tw.ccnet.core.sourcecontrol
+namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 {
 	/// <summary>
 	/// Source Controller for StarTeam

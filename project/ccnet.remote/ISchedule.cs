@@ -1,6 +1,6 @@
 using System;
 
-namespace tw.ccnet.remote
+namespace ThoughtWorks.CruiseControl.Remote
 {
 	/// <summary>
 	/// Interface of all integration schedules used by CruiseControl.NET.

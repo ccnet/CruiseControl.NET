@@ -1,7 +1,7 @@
 using System;
 using NUnit.Framework;
 
-namespace tw.ccnet.core.publishers.test
+namespace ThoughtWorks.CruiseControl.Core.Publishers.Test
 {
 	[TestFixture]
 	public class EmailGroupTest

@@ -2,9 +2,9 @@ using System;
 using System.Diagnostics;
 using System.IO;
 using NUnit.Framework;
-using tw.ccnet.core.util;
+using ThoughtWorks.CruiseControl.Core.Util;
 
-namespace tw.ccnet.core.util.test
+namespace ThoughtWorks.CruiseControl.Core.Util.Test
 {
 	[TestFixture]
 	public class ProcessUtilTest : CustomAssertion

@@ -6,9 +6,9 @@ using System.IO;
 using System.Diagnostics;
 using System.Collections;
 using System.Globalization;
-using tw.ccnet.core.util;
+using ThoughtWorks.CruiseControl.Core.Util;
 
-namespace tw.ccnet.core.sourcecontrol
+namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 {
 	[ReflectorType("p4")]
 	public class P4 : ISourceControl

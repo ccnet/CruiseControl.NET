@@ -2,7 +2,7 @@ using System;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
 
-namespace tw.ccnet.remote.monitor
+namespace ThoughtWorks.CruiseControl.Remote.monitor
 {
 	/// <summary>
 	/// Summary description for Audio.

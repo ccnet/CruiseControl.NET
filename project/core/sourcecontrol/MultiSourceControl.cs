@@ -2,9 +2,9 @@ using System;
 using System.Collections;
 using Exortech.NetReflector;
 
-using tw.ccnet.core;
+using ThoughtWorks.CruiseControl.Core;
 
-namespace tw.ccnet.core.sourcecontrol
+namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 {
 	[ReflectorType("multi")]
 	public class MultiSourceControl : ISourceControl

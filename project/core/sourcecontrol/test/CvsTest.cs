@@ -4,11 +4,11 @@ using System.IO;
 using System.Collections;
 using System.Diagnostics;
 using NUnit.Framework;
-using tw.ccnet.core.util;
-using tw.ccnet.core.test;
+using ThoughtWorks.CruiseControl.Core.Util;
+using ThoughtWorks.CruiseControl.Core.Test;
 using Exortech.NetReflector;
 
-namespace tw.ccnet.core.sourcecontrol.test
+namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test
 {
 	[TestFixture]
 	public class CvsTest : CustomAssertion

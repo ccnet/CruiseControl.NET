@@ -2,7 +2,7 @@ using System;
 using System.IO;
 using System.Xml.Serialization;
 
-namespace tw.ccnet.remote.monitor
+namespace ThoughtWorks.CruiseControl.Remote.monitor
 {
 	/// <summary>
 	/// Utility class for managing CruiseControl.NET Monitor settings.

@@ -164,38 +164,38 @@
 								<message><![CDATA[Copying 1 files]]></message>
 							</task>
 							<task name="nunit">
-								<message><![CDATA[Running tw.ccnet.acceptance.AllTests]]></message>
+								<message><![CDATA[Running ThoughtWorks.CruiseControl.acceptance.AllTests]]></message>
 								<message><![CDATA[ERROR: VssTest.TestExecute]]></message>
 								<message><![CDATA[            C:\dev\ccnet\project\acceptance\core\VssTest.cs(32): The system cannot find the path specified]]></message>
 								<message><![CDATA[ERROR: VssTest.TestGetModifications]]></message>
 								<message><![CDATA[            C:\dev\ccnet\project\acceptance\core\VssTest.cs(44): No process is associated with this object.]]></message>
 								<message>
-                      <testsuite name="tw.ccnet.acceptance Tests" tests="14" time="72.474" errors="2" failures="0">
-                        <testcase name="TestExecuteCommand(tw.ccnet.acceptance.BuildRunnerTest)" classname="tw.ccnet.acceptance.BuildRunnerTest" time="0.110" />
-                        <testcase name="TestExecuteCommandWithInvalidFile(tw.ccnet.acceptance.BuildRunnerTest)" classname="tw.ccnet.acceptance.BuildRunnerTest" time="0.000" />
-                        <testcase name="TestBuildSucceed(tw.ccnet.acceptance.BuildRunnerTest)" classname="tw.ccnet.acceptance.BuildRunnerTest" time="0.013" />
-                        <testcase name="TestBuildFailed(tw.ccnet.acceptance.BuildRunnerTest)" classname="tw.ccnet.acceptance.BuildRunnerTest" time="0.073" />
-                        <testcase name="TestBuildWithInvalidBuildFile(tw.ccnet.acceptance.BuildRunnerTest)" classname="tw.ccnet.acceptance.BuildRunnerTest" time="0.140" />
-                        <testcase name="TestExecute(tw.ccnet.acceptance.CvsTest)" classname="tw.ccnet.acceptance.CvsTest" time="0.482" />
-                        <testcase name="TestGetModifications(tw.ccnet.acceptance.CvsTest)" classname="tw.ccnet.acceptance.CvsTest" time="0.113" />
-                        <testcase name="TestEmailGateway(tw.ccnet.acceptance.EmailTest)" classname="tw.ccnet.acceptance.EmailTest" time="0.590" />
-                        <testcase name="TestEmailPublisher(tw.ccnet.acceptance.EmailTest)" classname="tw.ccnet.acceptance.EmailTest" time="0.350" />
-                        <testcase name="TestExecute(tw.ccnet.acceptance.VssTest)" classname="tw.ccnet.acceptance.VssTest" time="0.040">
+                      <testsuite name="ThoughtWorks.CruiseControl.acceptance Tests" tests="14" time="72.474" errors="2" failures="0">
+                        <testcase name="TestExecuteCommand(ThoughtWorks.CruiseControl.acceptance.BuildRunnerTest)" classname="ThoughtWorks.CruiseControl.acceptance.BuildRunnerTest" time="0.110" />
+                        <testcase name="TestExecuteCommandWithInvalidFile(ThoughtWorks.CruiseControl.acceptance.BuildRunnerTest)" classname="ThoughtWorks.CruiseControl.acceptance.BuildRunnerTest" time="0.000" />
+                        <testcase name="TestBuildSucceed(ThoughtWorks.CruiseControl.acceptance.BuildRunnerTest)" classname="ThoughtWorks.CruiseControl.acceptance.BuildRunnerTest" time="0.013" />
+                        <testcase name="TestBuildFailed(ThoughtWorks.CruiseControl.acceptance.BuildRunnerTest)" classname="ThoughtWorks.CruiseControl.acceptance.BuildRunnerTest" time="0.073" />
+                        <testcase name="TestBuildWithInvalidBuildFile(ThoughtWorks.CruiseControl.acceptance.BuildRunnerTest)" classname="ThoughtWorks.CruiseControl.acceptance.BuildRunnerTest" time="0.140" />
+                        <testcase name="TestExecute(ThoughtWorks.CruiseControl.acceptance.CvsTest)" classname="ThoughtWorks.CruiseControl.acceptance.CvsTest" time="0.482" />
+                        <testcase name="TestGetModifications(ThoughtWorks.CruiseControl.acceptance.CvsTest)" classname="ThoughtWorks.CruiseControl.acceptance.CvsTest" time="0.113" />
+                        <testcase name="TestEmailGateway(ThoughtWorks.CruiseControl.acceptance.EmailTest)" classname="ThoughtWorks.CruiseControl.acceptance.EmailTest" time="0.590" />
+                        <testcase name="TestEmailPublisher(ThoughtWorks.CruiseControl.acceptance.EmailTest)" classname="ThoughtWorks.CruiseControl.acceptance.EmailTest" time="0.350" />
+                        <testcase name="TestExecute(ThoughtWorks.CruiseControl.acceptance.VssTest)" classname="ThoughtWorks.CruiseControl.acceptance.VssTest" time="0.040">
                           <error message="The system cannot find the path specified" type="System.ComponentModel.Win32Exception">   at System.Diagnostics.Process.StartWithCreateProcess(ProcessStartInfo startInfo)
                             at System.Diagnostics.Process.Start()
-                          at tw.ccnet.acceptance.VssTest.TestExecute() in C:\dev\ccnet\project\acceptance\core\VssTest.cs:line 32</error>
+                          at ThoughtWorks.CruiseControl.acceptance.VssTest.TestExecute() in C:\dev\ccnet\project\acceptance\core\VssTest.cs:line 32</error>
                         </testcase>
-                        <testcase name="TestGetModifications(tw.ccnet.acceptance.VssTest)" classname="tw.ccnet.acceptance.VssTest" time="0.010">
+                        <testcase name="TestGetModifications(ThoughtWorks.CruiseControl.acceptance.VssTest)" classname="ThoughtWorks.CruiseControl.acceptance.VssTest" time="0.010">
                           <error message="No process is associated with this object." type="System.InvalidOperationException">   at System.Diagnostics.Process.EnsureState(State state)
                             at System.Diagnostics.Process.EnsureState(State state)
                             at System.Diagnostics.Process.GetProcessHandle(Int32 access, Boolean throwIfExited)
                             at System.Diagnostics.Process.WaitForExit(Int32 milliseconds)
-                            at tw.ccnet.core.sourcecontrol.ProcessSourceControl.GetModifications(DateTime from, DateTime to)
-                          at tw.ccnet.acceptance.VssTest.TestGetModifications() in C:\dev\ccnet\project\acceptance\core\VssTest.cs:line 44</error>
+                            at ThoughtWorks.CruiseControl.Core.Sourcecontrol.ProcessSourceControl.GetModifications(DateTime from, DateTime to)
+                          at ThoughtWorks.CruiseControl.acceptance.VssTest.TestGetModifications() in C:\dev\ccnet\project\acceptance\core\VssTest.cs:line 44</error>
                         </testcase>
-                        <testcase name="TestPage(tw.ccnet.acceptance.DefaultTest)" classname="tw.ccnet.acceptance.DefaultTest" time="0.540" />
-                        <testcase name="TestError(tw.ccnet.acceptance.NUnitTest)" classname="tw.ccnet.acceptance.NUnitTest" time="0.000" />
-                        <testcase name="TestPassPlease(tw.ccnet.acceptance.NUnitTest)" classname="tw.ccnet.acceptance.NUnitTest" time="0.000" />
+                        <testcase name="TestPage(ThoughtWorks.CruiseControl.acceptance.DefaultTest)" classname="ThoughtWorks.CruiseControl.acceptance.DefaultTest" time="0.540" />
+                        <testcase name="TestError(ThoughtWorks.CruiseControl.acceptance.NUnitTest)" classname="ThoughtWorks.CruiseControl.acceptance.NUnitTest" time="0.000" />
+                        <testcase name="TestPassPlease(ThoughtWorks.CruiseControl.acceptance.NUnitTest)" classname="ThoughtWorks.CruiseControl.acceptance.NUnitTest" time="0.000" />
                   </testsuite>
 								</message>
 								<message><![CDATA[14 tests: FAILURES: 0 ERRORS: 2]]></message></task></target><message><![CDATA[            BUILD FAILED

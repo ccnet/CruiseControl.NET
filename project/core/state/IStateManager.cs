@@ -1,6 +1,6 @@
 using System;
 
-namespace tw.ccnet.core.state
+namespace ThoughtWorks.CruiseControl.Core.State
 {
 	/// <summary>
 	/// Manages the state of continuous integration for a single project.

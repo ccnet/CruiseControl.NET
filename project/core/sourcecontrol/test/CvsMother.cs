@@ -1,7 +1,7 @@
 using System;
-using tw.ccnet.core.util;
+using ThoughtWorks.CruiseControl.Core.Util;
 
-namespace tw.ccnet.core.sourcecontrol.test
+namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test
 {
 	/// <summary>
 	/// Summary description for CvsMother.

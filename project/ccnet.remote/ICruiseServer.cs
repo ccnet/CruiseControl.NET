@@ -1,6 +1,6 @@
 using System;
 
-namespace tw.ccnet.remote
+namespace ThoughtWorks.CruiseControl.Remote
 {
 	public interface ICruiseServer
 	{

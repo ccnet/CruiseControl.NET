@@ -1,6 +1,6 @@
 using System;
 
-namespace tw.ccnet.core
+namespace ThoughtWorks.CruiseControl.Core
 {
 	/// <summary>
 	/// Enumeration of possible states for a project's integrator.

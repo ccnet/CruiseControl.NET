@@ -2,7 +2,7 @@ using System;
 using System.IO;
 using System.Windows.Forms;
 
-namespace tw.ccnet.remote.monitor
+namespace ThoughtWorks.CruiseControl.Remote.monitor
 {
 	/// <summary>
 	/// Displays user settings for the CruiseControl.NET monitor, allowing

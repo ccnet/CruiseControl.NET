@@ -10,9 +10,8 @@ using System.Web.SessionState;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 using System.Web.UI.HtmlControls;
-//using tw.ccnet.core;
 
-namespace tw.ccnet.webdashboard
+namespace ThoughtWorks.CruiseControl.webdashboard
 {
 	public class Decorator : System.Web.UI.Page
 	{

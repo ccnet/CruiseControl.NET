@@ -2,7 +2,7 @@ using System;
 using System.Text.RegularExpressions;
 using System.Xml;
 
-namespace tw.ccnet.core.util
+namespace ThoughtWorks.CruiseControl.Core.Util
 {
 	public class XmlUtil
 	{

@@ -1,7 +1,7 @@
 using System;
-using tw.ccnet.core.util;
+using ThoughtWorks.CruiseControl.Core.Util;
 
-namespace tw.ccnet.core.test
+namespace ThoughtWorks.CruiseControl.Core.Test
 {	
 	public class FileMother
 	{

@@ -6,7 +6,7 @@ using System.Xml.Schema;
 using System.Reflection;
 using Exortech.NetReflector;
 
-namespace tw.ccnet.core.configuration
+namespace ThoughtWorks.CruiseControl.Core.Configuration
 {
 	public class ConfigurationLoader : IConfigurationLoader, IDisposable
 	{

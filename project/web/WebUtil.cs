@@ -3,9 +3,9 @@ using System.Configuration;
 using System.IO;
 using System.Web;
 
-using tw.ccnet.core;
+using ThoughtWorks.CruiseControl.Core;
 
-namespace tw.ccnet.web
+namespace ThoughtWorks.CruiseControl.Web
 {
 	public class WebUtil
 	{

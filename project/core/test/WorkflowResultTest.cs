@@ -1,7 +1,7 @@
 using NUnit.Framework;
 using System;
 
-namespace tw.ccnet.core.test
+namespace ThoughtWorks.CruiseControl.Core.Test
 {
 	[TestFixture]
 	public class WorkflowResultTest : Assertion

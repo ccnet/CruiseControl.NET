@@ -10,7 +10,7 @@ using System.Windows.Forms;
 
 using Drew.Agents;
 
-namespace tw.ccnet.remote.monitor
+namespace ThoughtWorks.CruiseControl.Remote.monitor
 {
 	/// <summary>
 	/// Monitors CruiseControl.NET build activity from a remote machine (normally a development PC)
@@ -117,13 +117,13 @@ namespace tw.ccnet.remote.monitor
 		private void InitializeComponent()
 		{
 			this.components = new System.ComponentModel.Container();
-			this.trayIcon = new tw.ccnet.remote.monitor.NotifyIconEx();
+			this.trayIcon = new ThoughtWorks.CruiseControl.Remote.monitor.NotifyIconEx();
 			this.contextMenu = new System.Windows.Forms.ContextMenu();
 			this.mnuLaunchWebPage = new System.Windows.Forms.MenuItem();
 			this.mnuSettings = new System.Windows.Forms.MenuItem();
 			this.mnuForceBuild = new System.Windows.Forms.MenuItem();
 			this.mnuExit = new System.Windows.Forms.MenuItem();
-			this.statusMonitor = new tw.ccnet.remote.monitor.StatusMonitor(this.components);
+			this.statusMonitor = new ThoughtWorks.CruiseControl.Remote.monitor.StatusMonitor(this.components);
 			// 
 			// trayIcon
 			// 
@@ -169,9 +169,9 @@ namespace tw.ccnet.remote.monitor
 			// statusMonitor
 			// 
 			this.statusMonitor.Settings = null;
-			this.statusMonitor.Error += new tw.ccnet.remote.monitor.ErrorEventHandler(this.statusMonitor_Error);
-			this.statusMonitor.BuildOccurred += new tw.ccnet.remote.monitor.BuildOccurredEventHandler(this.statusMonitor_BuildOccurred);
-			this.statusMonitor.Polled += new tw.ccnet.remote.monitor.PolledEventHandler(this.statusMonitor_Polled);
+			this.statusMonitor.Error += new ThoughtWorks.CruiseControl.Remote.monitor.ErrorEventHandler(this.statusMonitor_Error);
+			this.statusMonitor.BuildOccurred += new ThoughtWorks.CruiseControl.Remote.monitor.BuildOccurredEventHandler(this.statusMonitor_BuildOccurred);
+			this.statusMonitor.Polled += new ThoughtWorks.CruiseControl.Remote.monitor.PolledEventHandler(this.statusMonitor_Polled);
 			// 
 			// SystemTrayMonitor
 			// 
@@ -357,10 +357,10 @@ namespace tw.ccnet.remote.monitor
 		void LoadIcons()
 		{
 			_icons = new Hashtable(3);
-			_icons[IntegrationStatus.Failure] = LoadIcon("tw.ccnet.remote.monitor.Red.ico");
-			_icons[IntegrationStatus.Success] = LoadIcon("tw.ccnet.remote.monitor.Green.ico");
-			_icons[IntegrationStatus.Unknown] = LoadIcon("tw.ccnet.remote.monitor.Gray.ico");
-			_icons[IntegrationStatus.Exception] = LoadIcon("tw.ccnet.remote.monitor.Gray.ico");
+			_icons[IntegrationStatus.Failure] = LoadIcon("ThoughtWorks.CruiseControl.Remote.monitor.Red.ico");
+			_icons[IntegrationStatus.Success] = LoadIcon("ThoughtWorks.CruiseControl.Remote.monitor.Green.ico");
+			_icons[IntegrationStatus.Unknown] = LoadIcon("ThoughtWorks.CruiseControl.Remote.monitor.Gray.ico");
+			_icons[IntegrationStatus.Exception] = LoadIcon("ThoughtWorks.CruiseControl.Remote.monitor.Gray.ico");
 		}
 
 		Icon LoadIcon(string name) 

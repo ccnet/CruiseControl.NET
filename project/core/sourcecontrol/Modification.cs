@@ -3,9 +3,9 @@ using System.Threading;
 using System.Collections;
 using System.Xml;
 using System.IO;
-using tw.ccnet.core.util;
+using ThoughtWorks.CruiseControl.Core.Util;
 
-namespace tw.ccnet.core
+namespace ThoughtWorks.CruiseControl.Core
 {
 	public class Modification : IComparable 
 	{

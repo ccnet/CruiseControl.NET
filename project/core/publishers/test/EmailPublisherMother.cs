@@ -2,9 +2,9 @@ using System;
 using System.Xml;
 using NUnit.Framework;
 using Exortech.NetReflector;
-using tw.ccnet.core.util;
+using ThoughtWorks.CruiseControl.Core.Util;
 
-namespace tw.ccnet.core.publishers.test
+namespace ThoughtWorks.CruiseControl.Core.Publishers.Test
 {
 	public class EmailPublisherMother
 	{

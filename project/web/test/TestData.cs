@@ -1,6 +1,6 @@
 using System;
 
-namespace tw.ccnet.web.test
+namespace ThoughtWorks.CruiseControl.Web.Test
 {
 	public class TestData
 	{

@@ -4,20 +4,20 @@ using System.Threading;
 using System.Xml;
 using NUnit.Framework;
 using NMock;
-using tw.ccnet.core.util;
-using tw.ccnet.core.schedule;
-using tw.ccnet.core.configuration;
+using ThoughtWorks.CruiseControl.Core.Util;
+using ThoughtWorks.CruiseControl.Core.Schedules;
+using ThoughtWorks.CruiseControl.Core.Configuration;
 
-namespace tw.ccnet.core.test
+namespace ThoughtWorks.CruiseControl.Core.Test
 {
 	[TestFixture]
-	public class CruiseControlTest : CustomAssertion
+	public class CruiseServerTest : CustomAssertion
 	{
 		DynamicMock _mockConfig;
 		MockProject _project1;
 		MockProject _project2;
 		IDictionary _projects;
-		CruiseControl _cc;
+		CruiseServer _cc;
 
 		[SetUp]
 		protected void SetUp()
@@ -46,7 +46,7 @@ namespace tw.ccnet.core.test
 			_projects.Add(projectWithoutSchedule.Name, projectWithoutSchedule);
 			_mockConfig.ExpectAndReturn("LoadProjects", _projects);
 
-			_cc = new CruiseControl((IConfigurationLoader)_mockConfig.MockInstance);
+			_cc = new CruiseServer((IConfigurationLoader)_mockConfig.MockInstance);
 
 			// verify that projects are loaded
 			_mockConfig.Verify();
@@ -66,7 +66,7 @@ namespace tw.ccnet.core.test
 			((Schedule)_project1.Schedule).TotalIterations = 1;
 			((Schedule)_project2.Schedule).TotalIterations = 1;
 
-			_cc = new CruiseControl((IConfigurationLoader)_mockConfig.MockInstance);
+			_cc = new CruiseServer((IConfigurationLoader)_mockConfig.MockInstance);
 			_cc.Start(); // RunIntegration();
 			_cc.WaitForExit();
 
@@ -81,7 +81,7 @@ namespace tw.ccnet.core.test
 			MockConfigurationLoader config = new MockConfigurationLoader();
 			config.Projects = _projects;
 
-			_cc = new CruiseControl(config);
+			_cc = new CruiseServer(config);
 			_cc.Start();
 			// verify configuration projects and schedulers have been loaded
 			AssertEquals(2, _cc.ProjectIntegrators.Count);
@@ -126,7 +126,7 @@ namespace tw.ccnet.core.test
 		{
 			_mockConfig.ExpectAndReturn("LoadProjects", _projects);
 
-			_cc = new CruiseControl((IConfigurationLoader)_mockConfig.MockInstance);
+			_cc = new CruiseServer((IConfigurationLoader)_mockConfig.MockInstance);
 			_cc.Start();
 			foreach (IProjectIntegrator scheduler in _cc.ProjectIntegrators)
 			{
@@ -174,7 +174,7 @@ namespace tw.ccnet.core.test
 		public void StartAndStopTwice()
 		{
 			_mockConfig.ExpectAndReturn("LoadProjects", _projects);
-			_cc = new CruiseControl((IConfigurationLoader)_mockConfig.MockInstance);
+			_cc = new CruiseServer((IConfigurationLoader)_mockConfig.MockInstance);
 
 			_cc.Start();
 			Thread.Sleep(50);
@@ -208,7 +208,7 @@ namespace tw.ccnet.core.test
 		public void IntegrateProjectSpecifiedByName()
 		{
 			_mockConfig.ExpectAndReturn("LoadProjects", _projects);
-			_cc = new CruiseControl((IConfigurationLoader)_mockConfig.MockInstance);
+			_cc = new CruiseServer((IConfigurationLoader)_mockConfig.MockInstance);
 
 			IntegrationResult result = _cc.RunIntegration(_project1.Name);
 			AssertEquals(1, _project1.RunIntegration_CallCount);
@@ -218,7 +218,7 @@ namespace tw.ccnet.core.test
 		public void TryIntegratingUnknownProject()
 		{
 			_mockConfig.ExpectAndReturn("LoadProjects", _projects);
-			_cc = new CruiseControl((IConfigurationLoader)_mockConfig.MockInstance);
+			_cc = new CruiseServer((IConfigurationLoader)_mockConfig.MockInstance);
 
 			IntegrationResult result = _cc.RunIntegration("does not exist");
 		}
@@ -228,9 +228,9 @@ namespace tw.ccnet.core.test
 		{
 			string testProjectName = "TestProjectName";
 
-			tw.ccnet.core.schedule.test.MockSchedule schedule = new tw.ccnet.core.schedule.test.MockSchedule();
+			ThoughtWorks.CruiseControl.Core.Schedules.Test.MockSchedule schedule = new ThoughtWorks.CruiseControl.Core.Schedules.Test.MockSchedule();
 			MockProject mockProject = new MockProject(testProjectName, schedule);
-			mockProject.CurrentActivity = tw.ccnet.remote.ProjectActivity.Building; // already building
+			mockProject.CurrentActivity = ThoughtWorks.CruiseControl.Remote.ProjectActivity.Building; // already building
 			AssertEquals(0, schedule.ForceBuild_CallCount);
 
 			_projects.Clear();
@@ -238,7 +238,7 @@ namespace tw.ccnet.core.test
 			_mockConfig.ExpectAndReturn("LoadProjects", _projects);
 
 			// we're testing this method
-			_cc = new CruiseControl((IConfigurationLoader)_mockConfig.MockInstance);
+			_cc = new CruiseServer((IConfigurationLoader)_mockConfig.MockInstance);
 			_cc.ForceBuild(testProjectName);
 
 			AssertEquals(1, schedule.ForceBuild_CallCount);
@@ -248,7 +248,7 @@ namespace tw.ccnet.core.test
 		public void Abort()
 		{
 			_mockConfig.ExpectAndReturn("LoadProjects", _projects);
-			_cc = new CruiseControl((IConfigurationLoader)_mockConfig.MockInstance);
+			_cc = new CruiseServer((IConfigurationLoader)_mockConfig.MockInstance);
 			_cc.Start();
 			Thread.Sleep(0);
 			AssertEquals(ProjectIntegratorState.Running, ((IProjectIntegrator)_cc.ProjectIntegrators[0]).State);

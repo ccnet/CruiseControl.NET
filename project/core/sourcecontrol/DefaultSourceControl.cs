@@ -1,7 +1,7 @@
 using System;
 using Exortech.NetReflector;
 
-namespace tw.ccnet.core.sourcecontrol
+namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 {
 	[ReflectorType("defaultsourcecontrol")]
 	public class DefaultSourceControl : ISourceControl

@@ -2,9 +2,9 @@ using System;
 using System.Configuration;
 using System.Collections;
 using NUnit.Framework;
-using tw.ccnet.core.util;
+using ThoughtWorks.CruiseControl.Core.Util;
 
-namespace tw.ccnet.core.test
+namespace ThoughtWorks.CruiseControl.Core.Test
 {
 	[TestFixture]
 	public class ConfigSectionHandlerTest : CustomAssertion

@@ -2,7 +2,7 @@ using System;
 using System.Collections;
 using System.Web.Mail;
 
-namespace tw.ccnet.core.publishers.test
+namespace ThoughtWorks.CruiseControl.Core.Publishers.Test
 {
 	public class MockEmailGateway : EmailGateway
 	{

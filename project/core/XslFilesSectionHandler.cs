@@ -5,7 +5,7 @@ using System.Xml;
 using System.IO;
 using System.Text;
 
-namespace tw.ccnet.core
+namespace ThoughtWorks.CruiseControl.Core
 {
 	/// <summary>
 	/// Summary description for XslFilesSectionHandler.

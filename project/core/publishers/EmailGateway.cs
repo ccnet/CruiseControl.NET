@@ -1,7 +1,7 @@
 using System;
 using System.Web.Mail;
 
-namespace tw.ccnet.core.publishers
+namespace ThoughtWorks.CruiseControl.Core.Publishers
 {
 	public class EmailGateway
 	{

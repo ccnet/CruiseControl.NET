@@ -5,7 +5,7 @@ using System.Xml.Xsl;
 using System.IO;
 using System.Drawing;
 
-namespace tw.ccnet.remote.monitor
+namespace ThoughtWorks.CruiseControl.Remote.monitor
 {
 	/// <summary>
 	/// A class to assist loading embedded resources.  Note that files requested in this fashion

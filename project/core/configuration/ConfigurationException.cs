@@ -1,6 +1,6 @@
 using System;
 
-namespace tw.ccnet.core.configuration
+namespace ThoughtWorks.CruiseControl.Core.Configuration
 {
 	public class ConfigurationException : CruiseControlException
 	{

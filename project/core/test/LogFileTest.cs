@@ -2,10 +2,10 @@ using System;
 
 using NUnit.Framework;
 
-using tw.ccnet.core.util;
-using tw.ccnet.remote;
+using ThoughtWorks.CruiseControl.Core.Util;
+using ThoughtWorks.CruiseControl.Remote;
 
-namespace tw.ccnet.core.test
+namespace ThoughtWorks.CruiseControl.Core.Test
 {
 	[TestFixture]
 	public class LogFileTest : CustomAssertion

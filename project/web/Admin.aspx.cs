@@ -17,11 +17,11 @@ using System.Runtime.Remoting.Channels.Http;
 using System.Runtime.Remoting.Channels;
 using System.Net.Sockets;
 
-using tw.ccnet.core;
-using tw.ccnet.remote;
+using ThoughtWorks.CruiseControl.Core;
+using ThoughtWorks.CruiseControl.Remote;
 
 
-namespace tw.ccnet.web 
+namespace ThoughtWorks.CruiseControl.Web 
 {
 	public class Admin : System.Web.UI.Page 
 	{

@@ -3,14 +3,14 @@ using System.Collections;
 
 using Exortech.NetReflector;
 
-using tw.ccnet.core.label;
-using tw.ccnet.core.publishers;
-using tw.ccnet.core.schedule;
-using tw.ccnet.core.state;
-using tw.ccnet.core.util;
-using tw.ccnet.remote;
+using ThoughtWorks.CruiseControl.Core.Label;
+using ThoughtWorks.CruiseControl.Core.Publishers;
+using ThoughtWorks.CruiseControl.Core.Schedules;
+using ThoughtWorks.CruiseControl.Core.State;
+using ThoughtWorks.CruiseControl.Core.Util;
+using ThoughtWorks.CruiseControl.Remote;
 
-namespace tw.ccnet.core
+namespace ThoughtWorks.CruiseControl.Core
 {
 	/// <summary>
 	/// Information about a project and how to integrate it.  As multiple projects

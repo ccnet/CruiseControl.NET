@@ -2,11 +2,11 @@ using System;
 using System.Diagnostics;
 using NUnit.Framework;
 using NMock;
-using tw.ccnet.core.test;
-using tw.ccnet.core.util;
+using ThoughtWorks.CruiseControl.Core.Test;
+using ThoughtWorks.CruiseControl.Core.Util;
 using Exortech.NetReflector;
 
-namespace tw.ccnet.core.sourcecontrol.test
+namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test
 {
 	[TestFixture]
 	public class P4Test : CustomAssertion

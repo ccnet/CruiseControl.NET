@@ -3,7 +3,7 @@ using System.Configuration;
 using System.Collections.Specialized;
 using NUnit.Framework;
 
-namespace tw.ccnet.web.test
+namespace ThoughtWorks.CruiseControl.Web.Test
 {
 	[TestFixture]
 	public class ConfigSectionTest

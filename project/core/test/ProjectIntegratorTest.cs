@@ -3,11 +3,11 @@ using System.Collections;
 using System.Diagnostics;
 using System.Threading;
 using NUnit.Framework;
-using tw.ccnet.core.test;
-using tw.ccnet.core.util;
-using tw.ccnet.core.schedule;
+using ThoughtWorks.CruiseControl.Core.Test;
+using ThoughtWorks.CruiseControl.Core.Util;
+using ThoughtWorks.CruiseControl.Core.Schedules;
 
-namespace tw.ccnet.core.test
+namespace ThoughtWorks.CruiseControl.Core.Test
 {
 	[TestFixture]
 	public class ProjectIntegratorTest : CustomAssertion

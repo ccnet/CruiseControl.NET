@@ -1,7 +1,7 @@
 using System;
-using tw.ccnet.remote;
+using ThoughtWorks.CruiseControl.Remote;
 
-namespace tw.ccnet.core.label
+namespace ThoughtWorks.CruiseControl.Core.Label
 {
 	public class DefaultLabeller : ILabeller
 	{

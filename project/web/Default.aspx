@@ -1,4 +1,4 @@
-<%@ Page language="c#" Codebehind="Default.aspx.cs" Inherits="tw.ccnet.web.Default" AutoEventWireup="false" %>
+<%@ Page language="c#" Codebehind="Default.aspx.cs" Inherits="ThoughtWorks.CruiseControl.Web.Default" AutoEventWireup="false" %>
 <HTML>
 	<HEAD>
 		<TITLE>CruiseControl .NET Build Results</TITLE>

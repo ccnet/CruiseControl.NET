@@ -5,7 +5,7 @@ using System.Xml;
 using System.IO;
 using System.Text;
 
-namespace tw.ccnet.webdashboard
+namespace ThoughtWorks.CruiseControl.webdashboard
 {
 	public class ProjectURLsSectionHandler : IConfigurationSectionHandler
 	{

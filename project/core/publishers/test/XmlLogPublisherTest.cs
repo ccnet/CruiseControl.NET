@@ -4,11 +4,11 @@ using System.IO;
 using System.Xml;
 using NUnit.Framework;
 using Exortech.NetReflector;
-using tw.ccnet.core.util;
-using tw.ccnet.core.test;
-using tw.ccnet.remote;
+using ThoughtWorks.CruiseControl.Core.Util;
+using ThoughtWorks.CruiseControl.Core.Test;
+using ThoughtWorks.CruiseControl.Remote;
 
-namespace tw.ccnet.core.publishers.test 
+namespace ThoughtWorks.CruiseControl.Core.Publishers.Test 
 {
 	[TestFixture]
 	public class XmlLogPublisherTest : CustomAssertion

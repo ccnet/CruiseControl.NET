@@ -5,9 +5,9 @@ using System.Web;
 using System.Web.UI.HtmlControls;
 using System.Xml;
 using System.Xml.Xsl;
-using tw.ccnet.core;
+using ThoughtWorks.CruiseControl.Core;
 
-namespace tw.ccnet.web
+namespace ThoughtWorks.CruiseControl.Web
 {
 	/// <summary>
 	/// LogFileLister: helper method for code-behind page for Default.aspx.

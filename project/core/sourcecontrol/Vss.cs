@@ -4,9 +4,9 @@ using System.Collections;
 using System.Globalization;
 using System.Diagnostics;
 using Exortech.NetReflector;
-using tw.ccnet.core.util;
+using ThoughtWorks.CruiseControl.Core.Util;
 
-namespace tw.ccnet.core.sourcecontrol
+namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 {
 	[ReflectorType("vss")]
 	public class Vss : ProcessSourceControl

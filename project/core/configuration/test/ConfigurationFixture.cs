@@ -1,8 +1,8 @@
 using System;
 using System.Xml;
-using tw.ccnet.core.util;
+using ThoughtWorks.CruiseControl.Core.Util;
 
-namespace tw.ccnet.core.configuration.test
+namespace ThoughtWorks.CruiseControl.Core.Configuration.test
 {
 	public class ConfigurationFixture
 	{

@@ -1,7 +1,7 @@
 using System;
-using tw.ccnet.remote;
+using ThoughtWorks.CruiseControl.Remote;
 
-namespace tw.ccnet.core
+namespace ThoughtWorks.CruiseControl.Core
 {
 	public interface IProjectIntegrator : IDisposable
 	{

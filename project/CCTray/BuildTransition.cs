@@ -1,7 +1,7 @@
 using System;
 using System.Reflection;
 
-namespace tw.ccnet.remote.monitor
+namespace ThoughtWorks.CruiseControl.Remote.monitor
 {
 	public enum BuildTransition
 	{

@@ -1,9 +1,9 @@
 using System;
 using System.Collections;
 using System.Text;
-using tw.ccnet.remote;
+using ThoughtWorks.CruiseControl.Remote;
 
-namespace tw.ccnet.core
+namespace ThoughtWorks.CruiseControl.Core
 {
 	public class WorkflowResult : IntegrationResult
 	{

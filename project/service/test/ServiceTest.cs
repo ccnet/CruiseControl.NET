@@ -1,10 +1,10 @@
-namespace tw.ccnet.service.test 
-{
-	using NUnit.Framework;
-	using NMock;
-	using System.Configuration.Install;
-	using System.ServiceProcess;
+using NUnit.Framework;
+using NMock;
+using System.Configuration.Install;
+using System.ServiceProcess;
 
+namespace ThoughtWorks.CruiseControl.Service.Test 
+{
 	[TestFixture]
 	public class ServiceTest 
 	{	

@@ -1,6 +1,6 @@
 using System;
 
-namespace tw.ccnet.core.builder
+namespace ThoughtWorks.CruiseControl.Core.Builder
 {
 	public class BuilderException : CruiseControlException
 	{

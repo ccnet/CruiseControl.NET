@@ -4,7 +4,7 @@ using System.Xml;
 using System.Xml.Serialization;
 using Exortech.NetReflector;
 
-namespace tw.ccnet.core.state
+namespace ThoughtWorks.CruiseControl.Core.State
 {
 	[ReflectorType("state")]
 	public class IntegrationStateManager : IStateManager

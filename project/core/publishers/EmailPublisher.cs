@@ -6,10 +6,10 @@ using System.Xml;
 using System.Xml.Xsl;
 
 using Exortech.NetReflector;
-using tw.ccnet.core.util;
-using tw.ccnet.remote;
+using ThoughtWorks.CruiseControl.Core.Util;
+using ThoughtWorks.CruiseControl.Remote;
 
-namespace tw.ccnet.core.publishers
+namespace ThoughtWorks.CruiseControl.Core.Publishers
 {
 	/// <summary>
 	/// Publishes results of integrations via email.  This implementation supports

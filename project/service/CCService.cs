@@ -7,10 +7,10 @@ using System.IO;
 using System.Runtime.Remoting;
 using System.ServiceProcess;
 
-using tw.ccnet.core;
-using tw.ccnet.core.configuration;
+using ThoughtWorks.CruiseControl.Core;
+using ThoughtWorks.CruiseControl.Core.Configuration;
 
-namespace tw.ccnet.service
+namespace ThoughtWorks.CruiseControl.Service
 {
 	public class CCService : ServiceBase
 	{
@@ -70,7 +70,7 @@ namespace tw.ccnet.service
 			// in a service application the work has to be done in a separate thread so we use CruiseManager no matter what
 			// we will register it on a channel if remoting is on
 			// TODO: switch to use factory once cruisecontrol operates as a separate thread
-			manager = new CruiseManager(new CruiseControl(new ConfigurationLoader(configFile)));
+			manager = new CruiseManager(new CruiseServer(new ConfigurationLoader(configFile)));
 			
             if (useRemoting()) 
                 manager.RegisterForRemoting();

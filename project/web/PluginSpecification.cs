@@ -1,6 +1,6 @@
 using System;
 
-namespace tw.ccnet.web
+namespace ThoughtWorks.CruiseControl.Web
 {
 	public class PluginSpecification
 	{

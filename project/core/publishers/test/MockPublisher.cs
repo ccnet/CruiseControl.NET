@@ -2,7 +2,7 @@ using System;
 using System.Collections;
 using Exortech.NetReflector;
 
-namespace tw.ccnet.core.publishers.test
+namespace ThoughtWorks.CruiseControl.Core.Publishers.Test
 {
 	[ReflectorType("mockpublisher")]
 	public class MockPublisher : PublisherBase

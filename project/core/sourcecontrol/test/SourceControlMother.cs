@@ -1,7 +1,7 @@
 using System;
 using Exortech.NetReflector;
 
-namespace tw.ccnet.core.sourcecontrol.test
+namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test
 {	
 	public class SourceControlMother
 	{

@@ -1,7 +1,7 @@
 using System;
 using System.Runtime.Serialization;
 
-namespace tw.ccnet.core
+namespace ThoughtWorks.CruiseControl.Core
 {
 	public class CruiseControlRemotingException : CruiseControlException
 	{

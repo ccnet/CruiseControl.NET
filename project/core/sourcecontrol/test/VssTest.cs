@@ -4,9 +4,9 @@ using System.Globalization;
 using System.IO;
 using NUnit.Framework;
 using Exortech.NetReflector;
-using tw.ccnet.core.util;
+using ThoughtWorks.CruiseControl.Core.Util;
 
-namespace tw.ccnet.core.sourcecontrol.test
+namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test
 {
 	[TestFixture]
 	public class VssTest : CustomAssertion

@@ -7,10 +7,10 @@ using NUnit.Framework;
 using NMock;
 using NMock.Constraints;
 using Exortech.NetReflector;
-using tw.ccnet.core.util;
-using tw.ccnet.core.test;
+using ThoughtWorks.CruiseControl.Core.Util;
+using ThoughtWorks.CruiseControl.Core.Test;
 
-namespace tw.ccnet.core.publishers.test
+namespace ThoughtWorks.CruiseControl.Core.Publishers.Test
 {
 	[TestFixture]
 	public class NetSendPublisherTest : CustomAssertion

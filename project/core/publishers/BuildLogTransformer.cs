@@ -6,7 +6,7 @@ using System.Text;
 using System.Xml;
 using System.Xml.Xsl;
 
-namespace tw.ccnet.core.publishers
+namespace ThoughtWorks.CruiseControl.Core.Publishers
 {
 	/// <summary>
 	/// Utility class that provides static methods to transform build results using

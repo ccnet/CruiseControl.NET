@@ -5,10 +5,10 @@ using System.Xml;
 
 using Exortech.NetReflector;
 
-using tw.ccnet.core.util;
-using tw.ccnet.remote;
+using ThoughtWorks.CruiseControl.Core.Util;
+using ThoughtWorks.CruiseControl.Remote;
 
-namespace tw.ccnet.core.publishers 
+namespace ThoughtWorks.CruiseControl.Core.Publishers 
 {
 	[ReflectorType("xmllogger")]
 	public class XmlLogPublisher : PublisherBase

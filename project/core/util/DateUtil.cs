@@ -1,6 +1,6 @@
 using System;
 
-namespace tw.ccnet.core.util
+namespace ThoughtWorks.CruiseControl.Core.Util
 {
 	public class DateUtil
 	{

@@ -1,4 +1,4 @@
-<%@ Page language="c#" Codebehind="Default.aspx.cs" AutoEventWireup="false" Inherits="tw.ccnet.webdashboard.Default" %>
+<%@ Page language="c#" Codebehind="Default.aspx.cs" AutoEventWireup="false" Inherits="ThoughtWorks.CruiseControl.webdashboard.Default" %>
 <HTML>
 	<HEAD>
 		<TITLE>Project Dashboard</TITLE>

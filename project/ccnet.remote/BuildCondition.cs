@@ -1,6 +1,6 @@
 using System;
 
-namespace tw.ccnet.remote
+namespace ThoughtWorks.CruiseControl.Remote
 {
 	/// <summary>
 	/// Enumeration containing possible conditions for the execution of the

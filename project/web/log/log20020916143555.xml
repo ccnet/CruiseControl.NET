@@ -19,16 +19,16 @@ C:\dev\ccnet\etc\nant.compile.test.cs(9,27): error CS0246: The type or namespace
 ]]></message>
 
 <target name="nunit.test">
-    [nunit] Running tw.ccnet.acceptance.NUnitTest
+    [nunit] Running ThoughtWorks.CruiseControl.acceptance.NUnitTest
     [nunit] FAILURE: NUnitTest.TestFail
 C:\dev\ccnet\project\acceptance\NUnitTest.cs(17): We want to test failures
-<testsuite name="tw.ccnet.acceptance.NUnitTest" tests="3" time="0.070" errors="0" failures="1">
-  <testcase name="TestFail(tw.ccnet.acceptance.NUnitTest)" classname="tw.ccnet.acceptance.NUnitTest" time="0.060">
+<testsuite name="ThoughtWorks.CruiseControl.acceptance.NUnitTest" tests="3" time="0.070" errors="0" failures="1">
+  <testcase name="TestFail(ThoughtWorks.CruiseControl.acceptance.NUnitTest)" classname="ThoughtWorks.CruiseControl.acceptance.NUnitTest" time="0.060">
     <failure message="We want to test failures" type="NUnit.Framework.AssertionFailedError">   at NUnit.Framework.Assertion.Fail(String message)
-   at tw.ccnet.acceptance.NUnitTest.TestFail() in C:\dev\ccnet\project\acceptance\NUnitTest.cs:line 17</failure>
+   at ThoughtWorks.CruiseControl.acceptance.NUnitTest.TestFail() in C:\dev\ccnet\project\acceptance\NUnitTest.cs:line 17</failure>
   </testcase>
-  <testcase name="TestError(tw.ccnet.acceptance.NUnitTest)" classname="tw.ccnet.acceptance.NUnitTest" time="0.000" />
-  <testcase name="TestPassPlease(tw.ccnet.acceptance.NUnitTest)" classname="tw.ccnet.acceptance.NUnitTest" time="0.000" />
+  <testcase name="TestError(ThoughtWorks.CruiseControl.acceptance.NUnitTest)" classname="ThoughtWorks.CruiseControl.acceptance.NUnitTest" time="0.000" />
+  <testcase name="TestPassPlease(ThoughtWorks.CruiseControl.acceptance.NUnitTest)" classname="ThoughtWorks.CruiseControl.acceptance.NUnitTest" time="0.000" />
 </testsuite>    [nunit] 3 tests: FAILURES: 1 ERRORS: 0
 </target>
 

@@ -4,9 +4,9 @@ using System.Text.RegularExpressions;
 using System.IO;
 using System.Collections;
 
-using tw.ccnet.core.util;
+using ThoughtWorks.CruiseControl.Core.Util;
 
-namespace tw.ccnet.core.sourcecontrol
+namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 {
 	public class P4HistoryParser : IHistoryParser
 	{

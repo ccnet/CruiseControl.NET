@@ -2,10 +2,10 @@ using System;
 using System.IO;
 using System.Xml;
 using NUnit.Framework;
-using tw.ccnet.core.util;
+using ThoughtWorks.CruiseControl.Core.Util;
 using System.Collections;
 
-namespace tw.ccnet.core.sourcecontrol.test
+namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test
 {
 	[TestFixture]
 	public class ModificationTest : CustomAssertion

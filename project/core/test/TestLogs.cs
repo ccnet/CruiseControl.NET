@@ -1,6 +1,6 @@
 using System;
 
-namespace tw.ccnet.core.test
+namespace ThoughtWorks.CruiseControl.Core.Test
 {
 	public class TestLogs
 	{
@@ -133,7 +133,7 @@ Tests run: 6, Failures: 0, Not run: 0, Time: 0.350504 seconds
           <message><![CDATA[Copying 1 files]]></message>
         </copy>
         <nunit>
-          <message><![CDATA[Running tw.ccnet.acceptance.AllTests]]></message>
+          <message><![CDATA[Running ThoughtWorks.CruiseControl.acceptance.AllTests]]></message>
           <message><![CDATA[1 tests: ALL SUCCESSFUL]]></message>
         </nunit>
         <tstamp>

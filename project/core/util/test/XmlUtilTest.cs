@@ -2,7 +2,7 @@ using System;
 using System.Xml;
 using NUnit.Framework;
 
-namespace tw.ccnet.core.util.test
+namespace ThoughtWorks.CruiseControl.Core.Util.Test
 {
 	[TestFixture]
 	public class XmlUtilTest : CustomAssertion

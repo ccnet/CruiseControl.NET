@@ -1,10 +1,10 @@
 using Exortech.NetReflector;
 using System;
-using tw.ccnet.remote;
-using tw.ccnet.core.schedule;
-using tw.ccnet.core.state;
+using ThoughtWorks.CruiseControl.Remote;
+using ThoughtWorks.CruiseControl.Core.Schedules;
+using ThoughtWorks.CruiseControl.Core.State;
 
-namespace tw.ccnet.core
+namespace ThoughtWorks.CruiseControl.Core
 {
 	public abstract class ProjectBase
 	{

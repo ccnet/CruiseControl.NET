@@ -6,12 +6,12 @@ using System.Runtime.Remoting;
 using System.Runtime.Remoting.Channels;
 using System.Threading;
 
-using tw.ccnet.core;
-using tw.ccnet.core.configuration;
-using tw.ccnet.remote;
-using tw.ccnet.core.util;
+using ThoughtWorks.CruiseControl.Core;
+using ThoughtWorks.CruiseControl.Core.Configuration;
+using ThoughtWorks.CruiseControl.Remote;
+using ThoughtWorks.CruiseControl.Core.Util;
 
-namespace tw.ccnet.core 
+namespace ThoughtWorks.CruiseControl.Core 
 {
 	/// <summary>
 	/// Manages an instance of the CruiseControl.NET main process, an exposes

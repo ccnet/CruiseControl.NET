@@ -1,4 +1,4 @@
-<%@ Page language="c#" Codebehind="Statistics.aspx.cs" AutoEventWireup="false" Inherits="tw.ccnet.web.Statistics" %>
+<%@ Page language="c#" Codebehind="Statistics.aspx.cs" AutoEventWireup="false" Inherits="ThoughtWorks.CruiseControl.Web.Statistics" %>
 <HTML>
 	<HEAD>
 		<TITLE>CruiseControl .NET Statistics</TITLE>

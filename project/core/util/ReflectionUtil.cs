@@ -2,7 +2,7 @@ using System;
 using System.Text;
 using System.Reflection;
 
-namespace tw.ccnet.core.util
+namespace ThoughtWorks.CruiseControl.Core.Util
 {
 	public class ReflectionUtil
 	{

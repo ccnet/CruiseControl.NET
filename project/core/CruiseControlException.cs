@@ -2,7 +2,7 @@ using System;
 using System.Runtime.Serialization;
 using System.Xml.Serialization;
 
-namespace tw.ccnet.core
+namespace ThoughtWorks.CruiseControl.Core
 {
 	[Serializable]
 	public class CruiseControlException : ApplicationException

@@ -1,7 +1,7 @@
 using System;
-using tw.ccnet.remote;
+using ThoughtWorks.CruiseControl.Remote;
 
-namespace tw.ccnet.core.schedule.test
+namespace ThoughtWorks.CruiseControl.Core.Schedules.Test
 {
 	/// <summary>
 	/// Mock implementation of ISchedule for testing purposes.

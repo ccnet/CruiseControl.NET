@@ -4,12 +4,12 @@ using System.IO;
 using System.Xml;
 using Exortech.NetReflector;
 using NUnit.Framework;
-using tw.ccnet.core.util;
-using tw.ccnet.core.builder.test;
-using tw.ccnet.core.sourcecontrol;
-using tw.ccnet.core.publishers.test;
+using ThoughtWorks.CruiseControl.Core.Util;
+using ThoughtWorks.CruiseControl.Core.Builder.test;
+using ThoughtWorks.CruiseControl.Core.Sourcecontrol;
+using ThoughtWorks.CruiseControl.Core.Publishers.Test;
 
-namespace tw.ccnet.core.configuration.test
+namespace ThoughtWorks.CruiseControl.Core.Configuration.test
 {
 	[TestFixture]
 	public class ConfigurationLoaderTest : CustomAssertion

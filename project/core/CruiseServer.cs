@@ -3,24 +3,24 @@ using System.Collections;
 using System.Threading;
 using System.Runtime.Remoting;
 using System.Diagnostics;
-using tw.ccnet.core.configuration;
-using tw.ccnet.core.schedule;
-using tw.ccnet.core.util;
-using tw.ccnet.remote;
+using ThoughtWorks.CruiseControl.Core.Configuration;
+using ThoughtWorks.CruiseControl.Core.Schedules;
+using ThoughtWorks.CruiseControl.Core.Util;
+using ThoughtWorks.CruiseControl.Remote;
 
-namespace tw.ccnet.core
+namespace ThoughtWorks.CruiseControl.Core
 {
 	/// <summary>
 	/// Main CruiseControl engine class.  Responsible for loading and launching CruiseControl projects.
 	/// </summary>
-	public class CruiseControl : ICruiseControl, ICruiseServer, IDisposable
+	public class CruiseServer : ICruiseControl, ICruiseServer, IDisposable
 	{
 		private IConfigurationLoader _loader;
 		private IDictionary _projects;
 		private IList _projectIntegrators = new ArrayList();
 		private bool _stopped = false;
 
-		public CruiseControl(IConfigurationLoader loader)
+		public CruiseServer(IConfigurationLoader loader)
 		{
 			_loader = loader;
 			_loader.AddConfigurationChangedHandler(new ConfigurationChangedHandler(OnConfigurationChanged));

@@ -3,12 +3,12 @@ using System.Xml;
 using System.Diagnostics;
 using System.IO;
 using System.Configuration;
-using tw.ccnet.core.util;
-using tw.ccnet.core.builder;
-using tw.ccnet.remote;
+using ThoughtWorks.CruiseControl.Core.Util;
+using ThoughtWorks.CruiseControl.Core.Builder;
+using ThoughtWorks.CruiseControl.Remote;
 using Exortech.NetReflector;
 
-namespace tw.ccnet.core.builder
+namespace ThoughtWorks.CruiseControl.Core.Builder
 {
 	[ReflectorType("nant")]
 	public class NAntBuilder : IBuilder

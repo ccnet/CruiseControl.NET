@@ -1,9 +1,9 @@
 using System;
 using System.Threading;
-using tw.ccnet.remote;
-using tw.ccnet.core.util;
+using ThoughtWorks.CruiseControl.Remote;
+using ThoughtWorks.CruiseControl.Core.Util;
 
-namespace tw.ccnet.core
+namespace ThoughtWorks.CruiseControl.Core
 {
 	/// <summary>
 	/// An object responsible for the continuous integration of a single project.

@@ -2,7 +2,7 @@ using System;
 using System.IO;
 using System.Xml;
 
-namespace tw.ccnet.core.util
+namespace ThoughtWorks.CruiseControl.Core.Util
 {
 	/// <summary>
 	/// Utility class for managing temp files and folders.

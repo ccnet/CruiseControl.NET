@@ -3,7 +3,7 @@ using System.IO;
 using System.Xml;
 using System.Xml.Schema;
 
-namespace tw.ccnet.core.configuration
+namespace ThoughtWorks.CruiseControl.Core.Configuration
 {
 	/// <summary>
 	/// Summary description for XmlValidatingLoader.

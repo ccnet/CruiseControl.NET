@@ -2,12 +2,12 @@ using System;
 using System.Diagnostics;
 using System.IO;
 
-using tw.ccnet.core;
-using tw.ccnet.core.configuration;
-using tw.ccnet.remote;
-using tw.ccnet.core.util;
+using ThoughtWorks.CruiseControl.Core;
+using ThoughtWorks.CruiseControl.Core.Configuration;
+using ThoughtWorks.CruiseControl.Remote;
+using ThoughtWorks.CruiseControl.Core.Util;
 
-namespace tw.ccnet.console
+namespace ThoughtWorks.CruiseControl.Console
 {
 	/// <summary>
 	/// Runs CruiseControl.NET from the console.
@@ -18,7 +18,7 @@ namespace tw.ccnet.console
 		internal static void Main(string[] args)
 		{
 			ArgumentParser parser = new ArgumentParser(args);
-			Trace.Listeners.Add(new TextWriterTraceListener(Console.Out));
+			Trace.Listeners.Add(new TextWriterTraceListener(System.Console.Out));
 
 			new ConsoleRunner(parser, new Timeout()).Run();
 		}	

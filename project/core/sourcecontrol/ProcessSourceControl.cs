@@ -2,9 +2,9 @@ using System;
 using System.Collections;
 using System.Diagnostics;
 using System.IO;
-using tw.ccnet.core.util;
+using ThoughtWorks.CruiseControl.Core.Util;
 
-namespace tw.ccnet.core.sourcecontrol
+namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 {
 	public abstract class ProcessSourceControl : ISourceControl
 	{

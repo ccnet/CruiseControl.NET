@@ -1,6 +1,6 @@
 using System;
 
-namespace tw.ccnet.console
+namespace ThoughtWorks.CruiseControl.Console
 {
 	public class ArgumentParser
 	{

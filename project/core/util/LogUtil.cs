@@ -2,7 +2,7 @@
 using System;
 using System.Diagnostics;
 
-namespace tw.ccnet.core.util
+namespace ThoughtWorks.CruiseControl.Core.Util
 {
 	public class LogUtil
 	{

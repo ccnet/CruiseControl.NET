@@ -3,7 +3,7 @@ using System.Collections;
 using System.IO;
 using Exortech.NetReflector;
 
-namespace tw.ccnet.core.sourcecontrol
+namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 {
 	[ReflectorType("filesystem")]
 	public class FileSourceControl : ISourceControl

@@ -1,4 +1,4 @@
-<%@ Page language="c#" Codebehind="Admin.aspx.cs" Inherits="tw.ccnet.web.Admin" AutoEventWireup="false" %>
+<%@ Page language="c#" Codebehind="Admin.aspx.cs" Inherits="ThoughtWorks.CruiseControl.Web.Admin" AutoEventWireup="false" %>
 <!DOCTYPE html PUBLIC "-//W3C//Dtd XHTML 1.0 Transitional//EN" "http://localhost/NUnitAsp/dtd/xhtml1-transitional.dtd">
 <HTML>
 	<HEAD>

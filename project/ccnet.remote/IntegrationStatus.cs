@@ -1,6 +1,6 @@
 using System;
 
-namespace tw.ccnet.remote
+namespace ThoughtWorks.CruiseControl.Remote
 {
 	/// <summary>
 	/// Enumeration of possible summations following the integration of a project.

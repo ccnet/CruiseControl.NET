@@ -1,6 +1,6 @@
 using System;
 
-namespace tw.ccnet.core
+namespace ThoughtWorks.CruiseControl.Core
 {
 	/// <summary>
 	/// Defines a task that may be run.

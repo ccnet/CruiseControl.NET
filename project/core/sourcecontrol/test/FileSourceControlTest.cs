@@ -1,10 +1,10 @@
 using System;
 using System.IO;
 using NUnit.Framework;
-using tw.ccnet.core.test;
-using tw.ccnet.core.util;
+using ThoughtWorks.CruiseControl.Core.Test;
+using ThoughtWorks.CruiseControl.Core.Util;
 
-namespace tw.ccnet.core.sourcecontrol.test
+namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test
 {
 	[TestFixture]
 	public class FileSourceControlTest : CustomAssertion

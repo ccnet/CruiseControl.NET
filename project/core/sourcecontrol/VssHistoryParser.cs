@@ -4,9 +4,9 @@ using System.Collections;
 using System.Globalization;
 using System.Text.RegularExpressions;
 using System.Text;
-using tw.ccnet.core.util;
+using ThoughtWorks.CruiseControl.Core.Util;
 
-namespace tw.ccnet.core.sourcecontrol
+namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 {	
 	public class VssHistoryParser : IHistoryParser
 	{		

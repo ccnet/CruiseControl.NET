@@ -3,7 +3,7 @@ using System.IO;
 using System.Xml;
 using Exortech.NetReflector;
 
-namespace tw.ccnet.core.publishers
+namespace ThoughtWorks.CruiseControl.Core.Publishers
 {
 	[ReflectorType("buildpublisher")]
 	public class BuildPublisher : PublisherBase

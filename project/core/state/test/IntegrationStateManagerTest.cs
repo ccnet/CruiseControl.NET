@@ -4,10 +4,10 @@ using System.Xml;
 
 using Exortech.NetReflector;
 using NUnit.Framework;
-using tw.ccnet.core.test;
-using tw.ccnet.core.util;
+using ThoughtWorks.CruiseControl.Core.Test;
+using ThoughtWorks.CruiseControl.Core.Util;
 
-namespace tw.ccnet.core.state.test
+namespace ThoughtWorks.CruiseControl.Core.State.Test
 {
 	[TestFixture]
 	public class IntegrationStateManagerTest : CustomAssertion

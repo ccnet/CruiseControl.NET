@@ -7,13 +7,13 @@ using System.Threading;
 using NUnit.Framework;
 using NMock;
 
-using tw.ccnet.core.configuration;
-using tw.ccnet.core.util;
-using tw.ccnet.remote;
-using tw.ccnet.core.schedule;
-using tw.ccnet.core.schedule.test;
+using ThoughtWorks.CruiseControl.Core.Configuration;
+using ThoughtWorks.CruiseControl.Core.Util;
+using ThoughtWorks.CruiseControl.Remote;
+using ThoughtWorks.CruiseControl.Core.Schedules;
+using ThoughtWorks.CruiseControl.Core.Schedules.Test;
 
-namespace tw.ccnet.core.test
+namespace ThoughtWorks.CruiseControl.Core.Test
 {
 	[TestFixture]
 	public class CruiseManagerTest : CustomAssertion
@@ -67,7 +67,7 @@ namespace tw.ccnet.core.test
 		public void GetSetConfiguration() 
 		{
 			string fileName = CreateTestingCruiseControlConfigurationFile();
-			CruiseManager manager = new CruiseManager(new CruiseControl(new ConfigurationLoader(fileName)));
+			CruiseManager manager = new CruiseManager(new CruiseServer(new ConfigurationLoader(fileName)));
             
 			AssertEquals("<cruisecontrol></cruisecontrol>", manager.Configuration);
 			string xml = SimpleBuildFile.Document.OuterXml;

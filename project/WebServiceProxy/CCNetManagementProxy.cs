@@ -1,5 +1,5 @@
 using System;
-using tw.ccnet.remote;
+using ThoughtWorks.CruiseControl.Remote;
 
 namespace ThoughtWorks.CruiseControl.WebServiceProxy
 {
@@ -27,7 +27,7 @@ namespace ThoughtWorks.CruiseControl.WebServiceProxy
 			}
 		}
 
-		public tw.ccnet.remote.ProjectStatus GetProjectStatus()
+		public ProjectStatus GetProjectStatus()
 		{
 			Generated.ProjectStatus serviceStatus = Service.GetProjectStatus();
 			return new ProjectStatus((CruiseControlStatus) serviceStatus.Status, 
@@ -49,7 +49,7 @@ namespace ThoughtWorks.CruiseControl.WebServiceProxy
 			Service.StartCruiseControl();
 		}
 
-		public tw.ccnet.remote.CruiseControlStatus GetStatus()
+		public CruiseControlStatus GetStatus()
 		{
 			return (CruiseControlStatus) Service.GetStatus();
 		}

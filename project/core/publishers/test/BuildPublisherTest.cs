@@ -1,12 +1,12 @@
 using System;
 using System.IO;
 using NUnit.Framework;
-using tw.ccnet.core;
-using tw.ccnet.core.publishers;
-using tw.ccnet.remote;
-using tw.ccnet.core.util;
+using ThoughtWorks.CruiseControl.Core;
+using ThoughtWorks.CruiseControl.Core.Publishers;
+using ThoughtWorks.CruiseControl.Remote;
+using ThoughtWorks.CruiseControl.Core.Util;
 
-namespace tw.ccnet.core.publishers.test
+namespace ThoughtWorks.CruiseControl.Core.Publishers.Test
 {
 	[TestFixture]
 	public class BuildPublisherTest : CustomAssertion

@@ -12,9 +12,9 @@ using System.Web.UI;
 using System.Web.UI.WebControls;
 using System.Web.UI.HtmlControls;
 using System.Xml;
-using tw.ccnet.core;
+using ThoughtWorks.CruiseControl.Core;
 
-namespace tw.ccnet.web
+namespace ThoughtWorks.CruiseControl.Web
 {
 	public class Default : System.Web.UI.Page
 	{
@@ -130,7 +130,7 @@ namespace tw.ccnet.web
 			string directory = Path.GetDirectoryName(xslfile);
 			string file = Path.GetFileName(xslfile);
 			string transformFile = Path.Combine(Request.MapPath(directory), file);
-			return tw.ccnet.core.publishers.BuildLogTransformer.Transform(logFileDocument, transformFile);
+			return ThoughtWorks.CruiseControl.Core.Publishers.BuildLogTransformer.Transform(logFileDocument, transformFile);
 		}
 
 		#region Web Form Designer generated code

@@ -5,7 +5,7 @@ using System.Xml;
 using System.IO;
 using System.Text;
 
-namespace tw.ccnet.web
+namespace ThoughtWorks.CruiseControl.Web
 {
 	public class PluginsSectionHandler : IConfigurationSectionHandler
 	{

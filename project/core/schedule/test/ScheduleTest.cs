@@ -6,10 +6,10 @@ using System.Threading;
 using Exortech.NetReflector;
 using NUnit.Framework;
 
-using tw.ccnet.remote;
-using tw.ccnet.core.util;
+using ThoughtWorks.CruiseControl.Remote;
+using ThoughtWorks.CruiseControl.Core.Util;
 
-namespace tw.ccnet.core.schedule.test
+namespace ThoughtWorks.CruiseControl.Core.Schedules.Test
 {
 	[TestFixture]
 	public class ScheduleTest : CustomAssertion

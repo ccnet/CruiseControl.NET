@@ -2,10 +2,10 @@ using System;
 using System.Runtime.Serialization;
 using System.Xml;
 using System.Xml.Serialization;
-using tw.ccnet.core.util;
-using tw.ccnet.remote;
+using ThoughtWorks.CruiseControl.Core.Util;
+using ThoughtWorks.CruiseControl.Remote;
 
-namespace tw.ccnet.core
+namespace ThoughtWorks.CruiseControl.Core
 {
 	/// <summary>
 	/// Contains all the results of a project's integration.

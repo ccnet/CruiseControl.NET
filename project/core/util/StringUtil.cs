@@ -3,7 +3,7 @@ using System.Text;
 using System.Collections.Specialized;
 using System.Collections;
 
-namespace tw.ccnet.core.util
+namespace ThoughtWorks.CruiseControl.Core.Util
 {
 	public class StringUtil
 	{

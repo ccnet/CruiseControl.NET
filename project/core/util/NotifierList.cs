@@ -1,7 +1,7 @@
 using System;
 using System.Collections;
 
-namespace tw.ccnet.core.util
+namespace ThoughtWorks.CruiseControl.Core.Util
 {
 	public delegate void NotifierDelegate(object value);
 

@@ -1,7 +1,7 @@
 using System;
 using System.Xml.Serialization;
 
-namespace tw.ccnet.remote
+namespace ThoughtWorks.CruiseControl.Remote
 {
 	/// <summary>
 	/// Value type that contains extensive details about a project's most recent

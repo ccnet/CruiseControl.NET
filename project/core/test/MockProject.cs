@@ -2,10 +2,10 @@ using System;
 using System.Collections;
 using System.Threading;
 
-using tw.ccnet.core.schedule;
-using tw.ccnet.remote;
+using ThoughtWorks.CruiseControl.Core.Schedules;
+using ThoughtWorks.CruiseControl.Remote;
 
-namespace tw.ccnet.core.test
+namespace ThoughtWorks.CruiseControl.Core.Test
 {
 	public class MockProject : IProject
 	{

@@ -3,9 +3,9 @@ using System.ComponentModel;
 using System.Configuration.Install;
 using System.IO;
 using System.Xml;
-using tw.ccnet.core;
+using ThoughtWorks.CruiseControl.Core;
 
-namespace tw.ccnet.web
+namespace ThoughtWorks.CruiseControl.Web
 {
 	[RunInstaller(true)]
 	public class InstallWebConfig : Installer

@@ -2,9 +2,9 @@ using System;
 using System.IO;
 using System.Xml;
 
-using tw.ccnet.core.util;
+using ThoughtWorks.CruiseControl.Core.Util;
 
-namespace tw.ccnet.core.publishers 
+namespace ThoughtWorks.CruiseControl.Core.Publishers 
 {
 	/// <summary>
 	/// Base class for all CruiseControl.NET build result publishers.

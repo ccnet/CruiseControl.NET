@@ -2,10 +2,10 @@ using System;
 using NUnit.Framework;
 using NMock;
 using Exortech.NetReflector;
-using tw.ccnet.remote;
-using tw.ccnet.core.util;
+using ThoughtWorks.CruiseControl.Remote;
+using ThoughtWorks.CruiseControl.Core.Util;
 
-namespace tw.ccnet.core.test
+namespace ThoughtWorks.CruiseControl.Core.Test
 {
 	[TestFixture]
 	public class WorkflowTest : CustomAssertion

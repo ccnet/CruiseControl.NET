@@ -4,10 +4,10 @@ using System.Globalization;
 using System.IO;
 using System.Text.RegularExpressions;
 
-using tw.ccnet.core.util;
-using tw.ccnet.remote;
+using ThoughtWorks.CruiseControl.Core.Util;
+using ThoughtWorks.CruiseControl.Remote;
 
-namespace tw.ccnet.core 
+namespace ThoughtWorks.CruiseControl.Core 
 {
 	/// <summary>
 	/// Provides utility methods for dealing with log files.

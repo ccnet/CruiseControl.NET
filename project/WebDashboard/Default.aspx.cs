@@ -12,10 +12,10 @@ using System.Web.UI.WebControls;
 using System.Web.UI.HtmlControls;
 
 using System.Runtime.Remoting;
-using tw.ccnet.core;
-using tw.ccnet.remote;
+using ThoughtWorks.CruiseControl.Core;
+using ThoughtWorks.CruiseControl.Remote;
 
-namespace tw.ccnet.webdashboard
+namespace ThoughtWorks.CruiseControl.webdashboard
 {
 	public class Default : System.Web.UI.Page
 	{

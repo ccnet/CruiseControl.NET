@@ -1,9 +1,9 @@
 using NUnit.Framework;
 using System;
-using tw.ccnet.core.util;
-using tw.ccnet.core.test;
+using ThoughtWorks.CruiseControl.Core.Util;
+using ThoughtWorks.CruiseControl.Core.Test;
 
-namespace tw.ccnet.core.sourcecontrol.test
+namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test
 {
 	[TestFixture]
 	public class ProcessSourceControlTest : CustomAssertion

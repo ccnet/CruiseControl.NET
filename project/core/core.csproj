@@ -109,7 +109,7 @@
         <Files>
             <Include>
                 <File
-                    RelPath = "CruiseControl.cs"
+                    RelPath = "CruiseServer.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -627,7 +627,7 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "test\CruiseControlTest.cs"
+                    RelPath = "test\CruiseServerTest.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

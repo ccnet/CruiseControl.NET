@@ -1,10 +1,10 @@
 using System;
 using System.IO;
 using NUnit.Framework;
-using tw.ccnet.core;
-using tw.ccnet.core.util;
+using ThoughtWorks.CruiseControl.Core;
+using ThoughtWorks.CruiseControl.Core.Util;
 
-namespace tw.ccnet.console.test
+namespace ThoughtWorks.CruiseControl.Console.test
 {
 	[TestFixture]
 	public class ArgumentParserTest : CustomAssertion

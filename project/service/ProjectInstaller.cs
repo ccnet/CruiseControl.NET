@@ -3,7 +3,7 @@ using System.Collections;
 using System.ComponentModel;
 using System.Configuration.Install;
 
-namespace tw.ccnet.service
+namespace ThoughtWorks.CruiseControl.Service
 {
 	/// <summary>
 	/// Summary description for ProjectInstaller.

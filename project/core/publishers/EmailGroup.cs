@@ -1,8 +1,8 @@
 using System;
-using tw.ccnet.core.util;
+using ThoughtWorks.CruiseControl.Core.Util;
 using Exortech.NetReflector;
 
-namespace tw.ccnet.core.publishers
+namespace ThoughtWorks.CruiseControl.Core.Publishers
 {
 	[ReflectorType("group")]
 	public class EmailGroup

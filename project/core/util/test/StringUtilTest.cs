@@ -1,7 +1,7 @@
 using System;
 using NUnit.Framework;
 
-namespace tw.ccnet.core.util.test
+namespace ThoughtWorks.CruiseControl.Core.Util.Test
 {
 	[TestFixture]
 	public class StringUtilTest : CustomAssertion

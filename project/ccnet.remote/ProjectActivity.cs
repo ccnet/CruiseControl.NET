@@ -1,6 +1,6 @@
 using System;
 
-namespace tw.ccnet.remote
+namespace ThoughtWorks.CruiseControl.Remote
 {
 	/// <summary>
 	/// Enumeration of the possible activities of a project under continuous

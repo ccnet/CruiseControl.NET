@@ -4,10 +4,10 @@ using System;
 using System.IO;
 using System.Reflection;
 using System.Xml;
-using tw.ccnet.core.util;
-using tw.ccnet.remote;
+using ThoughtWorks.CruiseControl.Core.Util;
+using ThoughtWorks.CruiseControl.Remote;
 
-namespace tw.ccnet.core.builder.test
+namespace ThoughtWorks.CruiseControl.Core.Builder.test
 {
 	[TestFixture]
 	public class NAntBuilderTest : CustomAssertion

@@ -1,6 +1,6 @@
 using System;
 
-namespace tw.ccnet.remote
+namespace ThoughtWorks.CruiseControl.Remote
 {
 	/// <remarks>
 	/// Enumeration of possible states for the CruiseControl.NET server.

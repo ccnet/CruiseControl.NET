@@ -1,7 +1,7 @@
 using System;
 using System.Collections;
 
-namespace tw.ccnet.core.configuration
+namespace ThoughtWorks.CruiseControl.Core.Configuration
 {
 	public delegate void ConfigurationChangedHandler();
 

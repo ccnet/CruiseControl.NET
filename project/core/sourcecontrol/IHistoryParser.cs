@@ -1,7 +1,7 @@
 using System;
 using System.IO;
 
-namespace tw.ccnet.core.sourcecontrol
+namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 {	
 	public interface IHistoryParser
 	{

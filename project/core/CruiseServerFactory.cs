@@ -1,14 +1,14 @@
 using System;
-using tw.ccnet.core.configuration;
-using tw.ccnet.remote;
+using ThoughtWorks.CruiseControl.Core.Configuration;
+using ThoughtWorks.CruiseControl.Remote;
 
-namespace tw.ccnet.core
+namespace ThoughtWorks.CruiseControl.Core
 {
 	public class CruiseServerFactory
 	{
 		public static ICruiseServer CreateLocal(string configFile)
 		{
-			return new CruiseControl(new ConfigurationLoader(configFile));
+			return new CruiseServer(new ConfigurationLoader(configFile));
 		}
 
 		public static ICruiseServer CreateRemote(string configFile)
