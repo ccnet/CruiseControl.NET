@@ -3,6 +3,7 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
 using System.IO;
+using System.Net.Sockets;
 using System.Runtime.Remoting;
 using System.Windows.Forms;
 
@@ -297,13 +298,23 @@ namespace ThoughtWorks.CruiseControl.CCTray
 
 		private void statusMonitor_Error(object sender, ErrorEventArgs e)
 		{
-			if (_exception==null && settings.ShowExceptions)
+			if (_exception == null)
 			{
 				// set the exception before displaying the dialog, because the timer keeps polling and subsequent
-				// polls would otherwise cause multiple dialogs to be displayed
+				// polls would otherwise cause multiple dialogs, balloons and agents to be displayed
 				_exception = e.Exception;
 
-				//MessageBox.Show(e.Exception.ToString(), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                if (settings.ShowExceptions)
+                {
+                    MessageBox.Show(e.Exception.ToString(), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+
+                if (ExceptionIsConnectionRefused())
+                {
+                    string description = _exception.Message;
+                    HandleBalloonNotification("No Connection", description, GetNotifyInfoFlag(ErrorLevel.Error));
+                    HandleAgentNotification(description);
+                }
 			}
 
 			_exception = e.Exception;
@@ -313,6 +324,12 @@ namespace ThoughtWorks.CruiseControl.CCTray
 			status.BuildStatus = IntegrationStatus.Exception;
 			trayIcon.Icon = GetStatusIcon(status);
 		}
+
+        private bool ExceptionIsConnectionRefused()
+        {
+            const int WSAECONNREFUSED = 10061;  // Doesn't seem to be an enum for Socket Error codes?
+            return (_exception is SocketException && ((SocketException)_exception).ErrorCode == WSAECONNREFUSED);
+        }
 
 		private void mnuProjectSelected_Click(object sender, System.EventArgs e)
 		{
