@@ -1,0 +1,90 @@
+<html>
+	<head>
+		<title>Obtaining CruiseControl.NET</title>
+		<link type="text/css" rel="stylesheet" href="../cruisecontrol.css">
+	</head>
+	<body>
+		<img align="right" src="../images/ccnet_logo_onwhite.gif">
+		<h1>Subversion Examples</h1>
+		
+		<p>
+			CruiseControl.NET provides basic support for Subversion repositories.
+			Checking for changes and running a build (bootstrapped through NAnt) is
+			supported, but more advanced features such as using Subversion revision
+			numbers and tagging-by-copying are not yet supported. Subversion support
+			is under active development and will improve over time.
+		</p>
+		
+		<p>
+			To configure the CruiseControl.NET server to monitor a Subversion
+			repository, edit <tt>ccnet.config</tt> and configure <tt>sourcecontrol</tt>
+			to point at your repository:
+		</p>
+		
+		<pre>
+&lt;sourcecontrol type="svn"&gt;
+	&lt;executable&gt;c:\program files\subversion\bin\svn.exe&lt;/executable&gt;
+	&lt;trunkUrl&gt;svn://svn.mycompany.com/myfirstproject/trunk&lt;/trunkUrl&gt;
+&lt;/sourcecontrol>
+		</pre>
+			
+		<p>
+			The <tt>executable</tt> tag should contain the full path to your Subversion
+			executable. The <tt>trunkUrl</tt> should specify the URL to use to determine
+			if changes have occurred in your repository. Access to <tt>svn log</tt> for
+			this URL should be available anonymously, because the Subversion client will
+			run without extra authentication priveleges.
+		</p>
+		
+		<p>
+			Next configure your NAnt build for an existing working copy of your
+			repository:
+		</p>
+		
+		<pre>
+&lt;build type="nant">
+	&lt;executable>c:\svn\myfirstproject\tools\nant\nant.exe&lt;/executable>
+	&lt;baseDirectory>c:\svn\myfirstproject&lt;/baseDirectory>
+	&lt;buildArgs>-logger:NAnt.Core.XmlLogger "-D:svn.executable=c:\program files\subversion\bin\svn.exe"&lt;/buildArgs>
+	&lt;buildFile>bootstrap.nant&lt;/buildFile>
+	&lt;targetList>
+		&lt;target>go&lt;/target>
+	&lt;/targetList>
+	&lt;buildTimeoutSeconds>300&lt;/buildTimeoutSeconds>
+&lt;/build>
+		</pre>
+		
+		<p>
+			Note that <tt>baseDirectory</tt> should be a working copy of the repository
+			URL given in <tt>trunkUrl</tt> above. Note that <tt>buildArgs</tt> needs to
+			include the definition of <tt>svn.executable</tt> which will be used to update
+			the working copy.			
+		<p>
+			The <tt>bootstrap.nant</tt> file performs the usual "update to HEAD, then build" cycle:
+		</p>
+		
+		<pre>
+&lt;?xml version="1.0"?>
+&lt;project name="myfirstproject-bootstrap" default="go">
+
+	&lt;target name="go" depends="bootstrap, launchbuild"/>
+
+	&lt;target name="bootstrap">
+		&lt;exec basedir="." program="${svn.executable}" commandline="update" />
+	&lt;/target>
+	
+	&lt;target name="launchbuild">
+		&lt;nant buildfile="build.nant" target="ContinuousIntegration" inheritall="true" />
+	&lt;/target>
+&lt;/project>
+		</pre>
+		
+		<p>
+			When the bootstrap process runs, it will use whatever cached authentication
+			has been recorded by the normal <tt>svn</tt> executable. CruiseControl.NET
+			Subversion integration has so far not been tested in environments where
+			authentication is required for checkouts.
+		</p>
+			
+	</body>
+</html>

@@ -52,6 +52,8 @@
 								<a href="#vss">Visual SourceSafe</a>
 							<li>
 								<a href="#pvcs">PVCS</a></li>
+							<li>
+								<a href="#subversion">Subversion</a></li>
 						</ul>
 					<li>
 						<a href="#build">build</a>
@@ -219,6 +221,20 @@
 		<pre>&lt;sourcecontrol type="vss"&gt;<br>   &lt;!-- you have to put quotes around this because of the spaces in the path --&gt;<br>   &lt;executable&gt;"C:\Program Files\Microsoft Visual Studio\VSS\win32\SS.EXE"&lt;/executable&gt;<br>   &lt;project&gt;$/CCNET&lt;/project&gt;<br>   &lt;username&gt;buildguy&lt;/username&gt;<br>   &lt;password&gt;buildguypw&lt;/password&gt;<br>   &lt;ssdir&gt;c:\repos\&lt;/ssdir&gt;<br>&lt;/sourcecontrol&gt;<br>    </pre>
 		<a href="#top">back to top</a><br>
 		<br>
+		<h4><a name="subversion">Subversion</a></h4>
+		<p>
+			You must configure the trunk URL you wish to check for changes, and must
+			configure the location of the <tt>svn</tt> executable. Subversion revision
+			numbers and tagging-as-copying are not yet supported.
+		</p>
+		<pre>
+&lt;sourcecontrol type="svn"&gt;
+	&lt;executable&gt;c:\program files\subversion\bin\svn.exe&lt;/executable&gt;
+	&lt;trunkUrl&gt;svn://svn.mycompany.com/myfirstproject/trunk&lt;/trunkUrl&gt;
+&lt;/sourcecontrol>
+		</pre>
+		<a href="#top">back to top</a>
+		<br/>
 		<h3><a name="build">build
 				<span style="FONT-STYLE: italic">(mandatory)</span><br>
 			</a>
