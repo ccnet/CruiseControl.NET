@@ -105,6 +105,7 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
 
         public EmailUser GetEmailUser(string username)
         {
+			if (username == null) return null;
             return (EmailUser) _users[username];
         }
 

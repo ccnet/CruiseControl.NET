@@ -153,6 +153,17 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers.Test
 		}
 
 		[Test]
+		public void CreateModifiersListWithUnspecifiedUser()
+		{
+			Modification[] modifications = new Modification[1];
+			modifications[0] = new Modification();
+			modifications[0].UserName = null;
+
+			string[] modifiers = _publisher.CreateModifiersList(modifications);
+			AssertEquals("expected 0 modifier", 0, modifiers.Length);
+		}
+
+		[Test]
 		public void CreateNotifyList()
 		{
 			string[] always = _publisher.CreateNotifyList(EmailGroup.NotificationType.Always);
