@@ -1,0 +1,64 @@
+#if ($forceBuildMessage.Length > 0)
+<P><span id="StatusLabel"><b><font color="#4A3C8C">$forceBuildMessage</font></b></span></P>
+#end
+
+<table cellspacing="0" cellpadding="3" rules="rows" bordercolor="#333399" border="1" id="StatusGrid" bgcolor="White" width="100%">
+	<tr bgcolor="#333399">
+		<td>
+			<font color="Ivory"><b>Project Name</b></font>
+		</td>
+		<td align="Center">
+			<font color="Ivory"><b>Last Build Status</b></font>
+		</td>
+		<td align="Center">
+			<font color="Ivory"><b>Last Build Time</b></font>
+		</td>
+		<td align="Center">
+			<font color="Ivory"><b>Last Build Label</b></font>
+		</td>
+		<td align="Center">
+			<font color="Ivory"><b>CCNet Status</b></font>
+		</td>
+		<td align="Center">
+			<font color="Ivory"><b>Activity</b></font>
+		</td>
+		<td align="Center">
+			<font color="Ivory"><b>Force Build</b></font>
+		</td>
+	</tr>
+	#foreach ($projectGridRow in $projectGrid)
+	<tr bgcolor="Ivory">
+		<td align="Left">
+			<font color="Black">
+				<a href="$projectGridRow.WebURL">$projectGridRow.Name</a>
+			</font>
+		</td>
+		<td align="Center">
+			<font color="$projectGridRow.BuildStatusHtmlColor">
+				<b>$projectGridRow.BuildStatus</b>
+			</font>
+		</td>
+		<td align="Center">
+			<font color="Black">$projectGridRow.LastBuildDate</font>
+		</td>
+		<td align="Center">
+			<font color="Black">$projectGridRow.LastBuildLabel</font>
+		</td>
+		<td align="Center">
+			<font color="Black">$projectGridRow.Status</font>
+		</td>
+		<td align="Center">
+			<font color="Black">$projectGridRow.Activity</font>
+		</td>
+		<td align="Center">
+			<font color="Black">
+				<input type="submit" name="$projectGridRow.ForceBuildButtonName" value="Force"/>
+			</font>
+		</td>
+	</tr>
+	#end
+</table>
+
+<P/>
+<br/>
+<input type="submit" name="$refreshButtonName" value="Refresh status" />

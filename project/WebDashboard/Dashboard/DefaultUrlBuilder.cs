@@ -1,4 +1,6 @@
+using System;
 using ThoughtWorks.CruiseControl.WebDashboard.IO;
+using ThoughtWorks.CruiseControl.WebDashboard.MVC.Cruise;
 
 namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 {
@@ -75,6 +77,17 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 		public string BuildBuildUrl(IActionSpecifier action, IBuildSpecifier buildSpecifier)
 		{
 			return BuildUrl(action, BuildBuildQueryString(buildSpecifier));
+		}
+
+		public string BuildFormName(IActionSpecifier action, params string[] args)
+		{
+			string baseName = CruiseActionFactory.ACTION_PARAMETER_PREFIX + action.ActionName;
+			foreach (string arg in args)
+			{
+				baseName += CruiseActionFactory.ACTION_ARG_SEPARATOR;
+				baseName += arg;
+			}
+			return baseName;
 		}
 
 		private string BuildServerQueryString(IServerSpecifier serverSpecifier)

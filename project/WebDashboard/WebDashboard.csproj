@@ -398,11 +398,6 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "Dashboard\IHashtableTransformer.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
                     RelPath = "Dashboard\ILinkFactory.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -504,11 +499,6 @@
                 />
                 <File
                     RelPath = "Dashboard\SideBarViewBuilder.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Dashboard\StaticInitialisedVelocityTransformer.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -732,12 +722,32 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "MVC\View\DefaultVelocityViewGenerator.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "MVC\View\HtmlBuilderViewBuilder.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
                     RelPath = "MVC\View\IHtmlBuilder.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "MVC\View\IVelocityTransformer.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "MVC\View\IVelocityViewGenerator.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "MVC\View\StaticInitialisedVelocityTransformer.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -852,7 +862,17 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Plugins\ServerReport\ProjectGridRow.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Plugins\ServerReport\ServerLogServerPlugin.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Plugins\ServerReport\ServerReportServerPlugin.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -900,6 +920,10 @@
                     RelPath = "ServerConnection\UnknownServerException.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "templates\ProjectGrid.vm"
+                    BuildAction = "None"
                 />
                 <File
                     RelPath = "templates\ServerLog.vm"

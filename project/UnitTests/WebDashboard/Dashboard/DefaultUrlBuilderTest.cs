@@ -168,5 +168,27 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 			Assert.AreEqual("http://local/foo.htm?_action_myAction=true&server=myserver&project=myproject&build=mybuild", url);
 			VerifyAll();
 		}
+
+		[Test]
+		public void ShouldBuildFormNameBasedOnActionNameWithNoArgs()
+		{
+			// Execute
+			string formName = urlBuilder.BuildFormName(new ActionSpecifierWithName("myAction"));
+
+			// Verify
+			Assert.AreEqual("_action_myAction", formName);
+			VerifyAll();
+		}
+
+		[Test]
+		public void ShouldBuildFormNameBasedOnActionNameAndArgs()
+		{
+			// Execute
+			string formName = urlBuilder.BuildFormName(new ActionSpecifierWithName("myAction"), "arg1", "arg2");
+
+			// Verify
+			Assert.AreEqual("_action_myAction_arg1_arg2", formName);
+			VerifyAll();
+		}
 	}
 }

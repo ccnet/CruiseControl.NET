@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Specialized;
 
 namespace ThoughtWorks.CruiseControl.WebDashboard.MVC
@@ -6,6 +7,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.MVC
 	{
 		private readonly IRequest request2;
 		private readonly IRequest request1;
+		string[] actionArguments = new string[0];
 
 		public AggregatedRequest(IRequest request1, IRequest request2)
 		{
@@ -68,6 +70,12 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.MVC
 				}
 				return combinedParams;
 			}
+		}
+
+		public string[] ActionArguments
+		{
+			set { actionArguments = value; }
+			get { return actionArguments; }
 		}
 	}
 }

@@ -1,11 +1,11 @@
 using System.Collections;
-using System.Web.UI.HtmlControls;
 using NMock;
 using NUnit.Framework;
 using ThoughtWorks.CruiseControl.UnitTests.UnitTestUtils;
 using ThoughtWorks.CruiseControl.WebDashboard.Dashboard;
 using ThoughtWorks.CruiseControl.WebDashboard.IO;
 using ThoughtWorks.CruiseControl.WebDashboard.MVC;
+using ThoughtWorks.CruiseControl.WebDashboard.MVC.View;
 using ThoughtWorks.CruiseControl.WebDashboard.Plugins.ServerReport;
 using ThoughtWorks.CruiseControl.WebDashboard.ServerConnection;
 
@@ -18,23 +18,23 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Plugins.ViewServerLo
 
 		private DynamicMock farmServiceMock;
 		private DynamicMock requestMock;
-		private DynamicMock hashtableTransformerMock;
+		private DynamicMock viewGeneratorMock;
 
 		[SetUp]
 		public void Setup()
 		{
 			requestMock = new DynamicMock(typeof(ICruiseRequest));
 			farmServiceMock = new DynamicMock(typeof(IFarmService));
-			hashtableTransformerMock = new DynamicMock(typeof(IHashtableTransformer));
+			viewGeneratorMock = new DynamicMock(typeof(IVelocityViewGenerator));
 
-			action = new ServerLogServerPlugin((IFarmService) farmServiceMock.MockInstance, (IHashtableTransformer) hashtableTransformerMock.MockInstance);
+			action = new ServerLogServerPlugin((IFarmService) farmServiceMock.MockInstance, (IVelocityViewGenerator) viewGeneratorMock.MockInstance);
 		}
 
 		private void VerifyAll()
 		{
 			farmServiceMock.Verify();
 			requestMock.Verify();
-			hashtableTransformerMock.Verify();
+			viewGeneratorMock.Verify();
 		}
 
 		[Test]
@@ -46,13 +46,14 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Plugins.ViewServerLo
 			Hashtable expectedHashtable = new Hashtable();
 			expectedHashtable["log"] = serverLog;
 
+			IView view = new DefaultView("foo");
+
 			requestMock.ExpectAndReturn("ServerSpecifier", serverSpecifier);
 			farmServiceMock.ExpectAndReturn("GetServerLog", serverLog, serverSpecifier);
-			hashtableTransformerMock.ExpectAndReturn("Transform", "some html", new HashtableConstraint(expectedHashtable), @"templates\ServerLog.vm");
+			viewGeneratorMock.ExpectAndReturn("GenerateView", view, @"ServerLog.vm", new HashtableConstraint(expectedHashtable));
 
 			// Execute
-			IView view = action.Execute((ICruiseRequest) requestMock.MockInstance);
-			Assert.AreEqual("some html", ((HtmlGenericControl) view.Control).InnerHtml);
+			Assert.AreEqual(view, action.Execute((ICruiseRequest) requestMock.MockInstance));
 
 			VerifyAll();
 		}

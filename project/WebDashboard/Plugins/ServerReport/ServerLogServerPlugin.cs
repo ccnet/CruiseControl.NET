@@ -3,6 +3,7 @@ using ThoughtWorks.CruiseControl.WebDashboard.Dashboard;
 using ThoughtWorks.CruiseControl.WebDashboard.IO;
 using ThoughtWorks.CruiseControl.WebDashboard.MVC;
 using ThoughtWorks.CruiseControl.WebDashboard.MVC.Cruise;
+using ThoughtWorks.CruiseControl.WebDashboard.MVC.View;
 using ThoughtWorks.CruiseControl.WebDashboard.ServerConnection;
 
 namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.ServerReport
@@ -10,19 +11,20 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.ServerReport
 	public class ServerLogServerPlugin : ICruiseAction, IPluginLinkRenderer, IPlugin
 	{
 		private readonly IFarmService farmService;
-		private readonly IHashtableTransformer velocityTransformer;
+		private readonly IVelocityViewGenerator viewGenerator;
 
-		public ServerLogServerPlugin(IFarmService farmService, IHashtableTransformer velocityTransformer)
+		public ServerLogServerPlugin(IFarmService farmService, IVelocityViewGenerator viewGenerator)
 		{
 			this.farmService = farmService;
-			this.velocityTransformer = velocityTransformer;
+			this.viewGenerator = viewGenerator;
 		}
 
 		public IView Execute(ICruiseRequest request)
 		{
-			Hashtable viewObjects = new Hashtable();
-			viewObjects["log"] = farmService.GetServerLog(request.ServerSpecifier);
-			return new DefaultView(velocityTransformer.Transform(viewObjects, @"templates\ServerLog.vm"));
+			Hashtable velocityContext = new Hashtable();
+			velocityContext["log"] = farmService.GetServerLog(request.ServerSpecifier);
+
+			return viewGenerator.GenerateView(@"ServerLog.vm", velocityContext);
 		}
 
 		public string LinkDescription

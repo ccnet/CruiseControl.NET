@@ -12,5 +12,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 		string BuildProjectUrl(IActionSpecifier action, IProjectSpecifier projectSpecifier);
 		string BuildBuildUrl(string relativeUrl, IBuildSpecifier buildSpecifier);
 		string BuildBuildUrl(IActionSpecifier action, IBuildSpecifier buildSpecifier);
+
+		string BuildFormName(IActionSpecifier action, params string[] args);
 	}
 }

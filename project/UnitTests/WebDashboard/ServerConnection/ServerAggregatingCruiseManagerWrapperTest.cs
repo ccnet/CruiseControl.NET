@@ -269,5 +269,19 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.ServerConnection
 			
 			VerifyAll();
 		}
+
+		[Test]
+		public void ForcesBuild()
+		{
+			ServerLocation[] servers = new ServerLocation[] { new ServerLocation("myserver", "http://myurl"), new ServerLocation("myotherserver", "http://myotherurl")};
+
+			configurationGetterMock.ExpectAndReturn("GetConfigFromSection", servers, ServersSectionHandler.SectionName);
+			cruiseManagerFactoryMock.ExpectAndReturn("GetCruiseManager", (ICruiseManager) cruiseManagerMock.MockInstance, "http://myurl");
+			cruiseManagerMock.Expect("ForceBuild", "myproject");
+
+			managerWrapper.ForceBuild(projectSpecifier);
+			
+			VerifyAll();
+		}
 	}
 }

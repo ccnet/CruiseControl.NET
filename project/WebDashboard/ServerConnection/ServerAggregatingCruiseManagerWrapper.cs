@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using ThoughtWorks.CruiseControl.Remote;
 using ThoughtWorks.CruiseControl.WebDashboard.Config;
@@ -49,6 +50,16 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.ServerConnection
 		public void DeleteProject(IProjectSpecifier projectSpecifier, bool purgeWorkingDirectory, bool purgeArtifactDirectory, bool purgeSourceControlEnvironment)
 		{
 			GetCruiseManager(projectSpecifier).DeleteProject(projectSpecifier.ProjectName, purgeWorkingDirectory, purgeArtifactDirectory, purgeSourceControlEnvironment);
+		}
+
+		public ProjectStatus[] GetProjectStatusList(IServerSpecifier serverSpecifier)
+		{
+			return GetCruiseManager(serverSpecifier).GetProjectStatus();
+		}
+
+		public void ForceBuild(IProjectSpecifier projectSpecifier)
+		{
+			GetCruiseManager(projectSpecifier.ServerSpecifier).ForceBuild(projectSpecifier.ProjectName);
 		}
 
 		public string GetServerLog(IServerSpecifier serverSpecifier)

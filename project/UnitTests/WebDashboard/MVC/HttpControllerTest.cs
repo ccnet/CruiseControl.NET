@@ -43,11 +43,14 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.MVC
 		}
 
 		[Test]
-		public void RunsActionFromFactoryAndPutsResultInParentControl()
+		public void ShouldExecuteActionFromFactoryPuttingActionArgsOnRequestAndPuttingResultInParentControl()
 		{
 			/// Setup
 			HtmlGenericControl control = new HtmlGenericControl("div");
 			mockActionFactory.ExpectAndReturn("Create", action, request);
+			string [] actionArgs = new string[] {"foo"};
+			mockActionFactory.ExpectAndReturn("ActionArguments", actionArgs, request);
+			mockRequest.Expect("ActionArguments", new object[] {actionArgs});
 			mockAction.ExpectAndReturn("Execute", view, request);
 			mockView.ExpectAndReturn("Control", control);
 
