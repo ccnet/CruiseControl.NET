@@ -17,7 +17,7 @@
                 DelaySign = "false"
                 OutputType = "Exe"
                 PreBuildEvent = ""
-                PostBuildEvent = 'copy "$(ProjectDir)\*.bat" "$(TargetDir)"&#xd;&#xa;copy "$(ProjectDir)\ccnet.config" "$(TargetDir)"'
+                PostBuildEvent = 'copy "$(ProjectDir)\*.bat" "$(TargetDir)"&#xd;&#xa;copy "$(ProjectDir)\ccnet.config" "$(TargetDir)"&#xd;&#xa;copy "$(ProjectDir)\*.build" "$(TargetDir)"'
                 RootNamespace = "ThoughtWorks.CruiseControl.Console"
                 RunPostBuildEvent = "OnBuildSuccess"
                 StartupObject = ""
@@ -177,6 +177,10 @@
                 />
                 <File
                     RelPath = "fail.bat"
+                    BuildAction = "None"
+                />
+                <File
+                    RelPath = "helloworld.build"
                     BuildAction = "None"
                 />
                 <File
