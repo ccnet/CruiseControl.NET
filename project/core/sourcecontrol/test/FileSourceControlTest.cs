@@ -1,6 +1,7 @@
 using System;
 using System.IO;
 using System.Threading;
+using NMock;
 using NUnit.Framework;
 using ThoughtWorks.CruiseControl.Core.Util;
 
@@ -12,14 +13,17 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test
 		private string _tempDir;
 		private string _tempSubDir;
 		private FileSourceControl _sc;
+		private DynamicMock fileSystemMock;
 
 		[SetUp]
 		public void SetUp()
 		{
+			fileSystemMock = new DynamicMock(typeof(IFileSystem));
+
 			_tempDir = TempFileUtil.CreateTempDir("repo");
 			_tempSubDir = TempFileUtil.CreateTempDir("repo\\subrepo");
 
-			_sc = new FileSourceControl();
+			_sc = new FileSourceControl((IFileSystem) fileSystemMock.MockInstance);
 			_sc.RepositoryRoot = _tempDir;
 		}
 
@@ -101,6 +105,29 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test
 			Modification[] mods = _sc.GetModifications(from, DateTime.MaxValue);
 			Assert.AreEqual(1, mods.Length);
 			Assert.AreEqual("file2.txt", mods[0].FileName);
+		}
+
+		[Test]
+		public void ShouldCopyRespositoryRootToWorkingDirectoryForGetSource()
+		{
+			IntegrationResult result = new IntegrationResult("foo", "myWorkingDirectory");
+            _sc.AutoGetSource = true;
+			fileSystemMock.Expect("Copy", _tempDir, "myWorkingDirectory");
+
+			_sc.GetSource(result);
+
+			fileSystemMock.Verify();
+		}
+
+		[Test]
+		public void ShouldNotCopySourceIfAutoGetSourceNotBeenSetToTrue()
+		{
+			IntegrationResult result = new IntegrationResult("foo", "myWorkingDirectory");
+			fileSystemMock.ExpectNoCall("Copy", typeof(string), typeof(string));
+
+			_sc.GetSource(result);
+
+			fileSystemMock.Verify();	
 		}
 	}
 }

@@ -1292,6 +1292,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "util\IFileSystem.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "util\IFileWatcher.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -1358,6 +1363,11 @@
                 />
                 <File
                     RelPath = "util\StringUtil.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "util\SystemIoFileSystem.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

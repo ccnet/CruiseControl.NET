@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.IO;
 using Exortech.NetReflector;
+using ThoughtWorks.CruiseControl.Core.Util;
 
 namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 {
@@ -10,12 +11,20 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 	{
 		private string _repositoryRoot;
 		private bool _ignoreMissingRoot;
+		private readonly IFileSystem fileSystem;
 
 		[ReflectorProperty("repositoryRoot")]
 		public string RepositoryRoot
 		{
 			get { return _repositoryRoot; }
 			set { _repositoryRoot = value; }
+		}
+
+		public FileSourceControl() : this (new SystemIoFileSystem()) { }
+
+		public FileSourceControl(IFileSystem fileSystem)
+		{
+			this.fileSystem = fileSystem;
 		}
 
 		[ReflectorProperty("ignoreMissingRoot", Required=false)]
@@ -25,6 +34,9 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			set { _ignoreMissingRoot = value; }
 		}
 
+		[ReflectorProperty("autoGetSource", Required = false)]
+		public bool AutoGetSource = false;
+		
 		public Modification[] GetModifications(DateTime from, DateTime to)
 		{
 			ArrayList modifications;
@@ -92,6 +104,8 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 
 		public void GetSource(IIntegrationResult result)
 		{
+			if (AutoGetSource)
+				fileSystem.Copy(_repositoryRoot, result.WorkingDirectory);
 		}
 
 		public void Initialize(IProject project)

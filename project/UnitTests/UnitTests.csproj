@@ -309,6 +309,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Core\Util\SystemIoFileSystemTest.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Web\ConfigSectionTest.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
