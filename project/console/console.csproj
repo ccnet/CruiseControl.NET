@@ -174,11 +174,6 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "ITimeout.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
                     RelPath = "StartCCNet.bat"
                     BuildAction = "None"
                 />
