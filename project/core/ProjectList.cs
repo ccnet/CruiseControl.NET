@@ -1,4 +1,3 @@
-using System;
 using System.Collections;
 
 namespace ThoughtWorks.CruiseControl.Core
@@ -20,6 +19,11 @@ namespace ThoughtWorks.CruiseControl.Core
 		IEnumerator IEnumerable.GetEnumerator()
 		{
 			return _projects.Values.GetEnumerator();
+		}
+
+		public void Delete(string name)
+		{
+			_projects.Remove(name);
 		}
 	}
 }

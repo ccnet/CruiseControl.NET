@@ -4,5 +4,6 @@ namespace ThoughtWorks.CruiseControl.Core
 	{
 		IProjectList Projects { get; }
 		void AddProject(IProject project);
+		void DeleteProject(string name);
 	}
 }

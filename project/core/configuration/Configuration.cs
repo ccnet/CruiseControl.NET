@@ -1,3 +1,4 @@
+
 namespace ThoughtWorks.CruiseControl.Core.Config
 {
 	public class Configuration : IConfiguration
@@ -7,6 +8,11 @@ namespace ThoughtWorks.CruiseControl.Core.Config
 		public void AddProject(IProject project)
 		{
 			_projects.Add(project);
+		}
+
+		public void DeleteProject(string name)
+		{
+			_projects.Delete(name);
 		}
 
 		public IProjectList Projects

@@ -262,9 +262,22 @@ namespace ThoughtWorks.CruiseControl.Core
 			}
 		}
 
+		// ToDo - test
+		// ToDo - when we decide how to handle configuration changes, do more here (like stopping project, deleting working dir, etc.)
 		public void DeleteProject(string projectName)
 		{
-			throw new CruiseControlException("Delete Project is not currently implemented");
+			Log.Info("Deleting project - " + projectName);
+			try
+			{
+				IConfiguration configuration = configurationService.Load();
+				configuration.DeleteProject(projectName);
+				configurationService.Save(configuration);
+			}
+			catch (ApplicationException e)
+			{
+				Log.Warning(e);
+				throw new CruiseControlException("Failed to add project. Exception was - " + e.Message);
+			}
 		}
 
 		private IProjectIntegrator GetIntegrator(string projectName)
