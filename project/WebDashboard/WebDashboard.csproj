@@ -433,6 +433,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Dashboard\TopControlsViewBuilder.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Dashboard\UnknownBuildException.cs"
                     SubType = "Code"
                     BuildAction = "Compile"

@@ -9,6 +9,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard
 {
 	public class Decorator : Page
 	{
+		protected System.Web.UI.HtmlControls.HtmlGenericControl TopControlsLocation;
 		protected HtmlGenericControl SideBarLocation;
 
 		private void Page_Load(object sender, EventArgs e)
@@ -19,7 +20,14 @@ namespace ThoughtWorks.CruiseControl.WebDashboard
 					new DefaultUrlBuilder(
 						new HttpPathMapper(Context, this))));
 
+			TopControlsViewBuilder topControlsViewBuilder = new TopControlsViewBuilder(
+				new DefaultHtmlBuilder(),
+				new DefaultUrlBuilder(
+					new HttpPathMapper(Context, this))
+				);
+
 			SideBarLocation.Controls.Add(sideBarViewBuilder.Execute(new QueryStringRequestWrapper(Request.QueryString)));
+			TopControlsLocation.Controls.Add(topControlsViewBuilder.Execute(new QueryStringRequestWrapper(Request.QueryString)));
 
 //			SiteTemplateResults results = new PluginPageRendererFactory(new DashboardComponentFactory(Request, Context, this)).SiteTemplate.Do();
 
@@ -63,11 +71,6 @@ namespace ThoughtWorks.CruiseControl.WebDashboard
 		
 		private void InitializeComponent()
 		{   
-			/*
-			this.ServerPluginsList.ItemDataBound += new System.Web.UI.WebControls.DataListItemEventHandler(this.DataList_BindItem);
-			this.menu.ItemDataBound += new System.Web.UI.WebControls.DataListItemEventHandler(this.DataList_BindItem);
-			this.BuildPluginsList.ItemDataBound += new System.Web.UI.WebControls.DataListItemEventHandler(this.DataList_BindItem);
-			*/
 			this.Load += new System.EventHandler(this.Page_Load);
 
 		}

@@ -264,6 +264,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "WebDashboard\Dashboard\TopControlsViewBuilderTest.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "WebDashboard\IO\QueryStringRequestWrapperTest.cs"
                     SubType = "Code"
                     BuildAction = "Compile"

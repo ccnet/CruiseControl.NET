@@ -37,5 +37,18 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 			VerifyAll();
 		}
 
+		[Test]
+		public void IfPartialQueryStringSpecifiedThenAddItToEndOfUrl()
+		{
+			// Setup
+			pathMapperMock.ExpectAndReturn("GetAbsoluteURLForRelativePath", "http://local/foo.htm", "foo.htm");
+			
+			// Execute
+			string url = urlBuilder.BuildUrl("foo.htm", "myparam=myvalue");
+
+			// Verify
+			AssertEquals("http://local/foo.htm?myparam=myvalue", url);
+			VerifyAll();
+		}
 	}
 }
