@@ -53,7 +53,9 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 				TR( TD( A("Latest", urlBuilder.BuildBuildUrl(new ActionSpecifierWithName(ViewBuildReportAction.ACTION_NAME), serverName, projectName, buildNameRetriever.GetLatestBuildName(serverName, projectName))))),
 				TR( TD( A("Next", urlBuilder.BuildBuildUrl(new ActionSpecifierWithName(ViewBuildReportAction.ACTION_NAME), serverName, projectName, buildNameRetriever.GetNextBuildName(serverName, projectName, buildName))))),
 				TR( TD( A("Previous", urlBuilder.BuildBuildUrl(new ActionSpecifierWithName(ViewBuildReportAction.ACTION_NAME), serverName, projectName, buildNameRetriever.GetPreviousBuildName(serverName, projectName, buildName))))),
+				TR( TD( "&nbsp;")),
 				TR( TD( A("View Build Log", urlBuilder.BuildBuildUrl(new ActionSpecifierWithName(ViewBuildLogAction.ACTION_NAME), serverName, projectName, buildName)))),
+				TR( TD( A("View FxCop Report", urlBuilder.BuildBuildUrl(new ActionSpecifierWithName(ViewFxCopBuildReportAction.ACTION_NAME), serverName, projectName, buildName)))),
 				TR( TD( "&nbsp;")),
 				TR( TD( recentBuildsViewBuilder.BuildRecentBuildsTable(serverName, projectName)))
 					);

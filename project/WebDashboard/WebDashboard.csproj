@@ -656,6 +656,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Plugins\FxCopReport\ViewFxCopBuildReportAction.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Plugins\ViewAllBuilds\IViewAllBuildsViewBuilder.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
