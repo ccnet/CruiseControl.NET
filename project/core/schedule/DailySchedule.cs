@@ -2,6 +2,7 @@ using Exortech.NetReflector;
 using System;
 using System.Globalization;
 using ThoughtWorks.CruiseControl.Core.Config;
+using ThoughtWorks.CruiseControl.Core.Util;
 using ThoughtWorks.CruiseControl.Remote;
 
 namespace ThoughtWorks.CruiseControl.Core.Schedules
@@ -9,8 +10,16 @@ namespace ThoughtWorks.CruiseControl.Core.Schedules
 	[ReflectorType("daily")]
 	public class DailySchedule : ISchedule
 	{
+		private DateTimeProvider _dtProvider;
 		private TimeSpan _integrationTime;
 		private DateTime _nextIntegration;
+
+		public DailySchedule() : this(new DateTimeProvider()) {}
+
+		public DailySchedule(DateTimeProvider dtProvider)
+		{
+			_dtProvider = dtProvider;
+		}
 
 		[ReflectorProperty("integrationTime")]
 		public string IntegrationTime
@@ -21,7 +30,7 @@ namespace ThoughtWorks.CruiseControl.Core.Schedules
 				try
 				{
 					_integrationTime = TimeSpan.Parse(value);
-					SetNextIntegration();
+					SetNextIntegrationDateTime();
 				}
 				catch (Exception ex)
 				{
@@ -31,10 +40,14 @@ namespace ThoughtWorks.CruiseControl.Core.Schedules
 			}
 		}
 
-		private void SetNextIntegration()
+		private void SetNextIntegrationDateTime()
 		{
-			DateTime now = Now;
+			DateTime now = _dtProvider.Now;
 			_nextIntegration = new DateTime(now.Year, now.Month, now.Day, _integrationTime.Hours, _integrationTime.Minutes, 0, 0);
+			if (now >= _nextIntegration)
+			{
+				_nextIntegration = _nextIntegration.AddDays(1);
+			}
 		}
 
 		public bool ShouldStopIntegration()
@@ -42,27 +55,18 @@ namespace ThoughtWorks.CruiseControl.Core.Schedules
 			return false;
 		}
 
-		public void ForceBuild()
-		{
-		
-		}
-
 		public void IntegrationCompleted()
 		{
+			SetNextIntegrationDateTime();
 		}
 
 		public BuildCondition ShouldRunIntegration()
 		{
-			if (Now > _nextIntegration)
+			if (_dtProvider.Now > _nextIntegration)
 			{
 				return BuildCondition.IfModificationExists;
 			}
 			return BuildCondition.NoBuild;
-		}
-
-		protected virtual DateTime Now
-		{
-			get { return DateTime.Now; }
 		}
 	}
 }

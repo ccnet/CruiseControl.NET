@@ -11,7 +11,7 @@ namespace ThoughtWorks.CruiseControl.Core
 	/// a project's integration.
 	/// <list type="1">
 	///		<item>The <see cref="ISchedule"/> instance is asked whether to build or not.</item>
-	///		<item>If a build is required, the <see cref="IProject.RunIntegration()"/>
+	///		<item>If a build is required, the <see cref="IProject.RunIntegration(BuildCondition buildCondition)"/>
 	///		is called.</item>
 	/// </list>
 	/// </summary>
@@ -19,6 +19,7 @@ namespace ThoughtWorks.CruiseControl.Core
 	{
 		private ISchedule _schedule;
 		private IProject _project;
+		private bool _forceBuild;
 		private Thread _thread;
 		private ProjectIntegratorState _state = ProjectIntegratorState.Stopped;
 
@@ -75,14 +76,11 @@ namespace ThoughtWorks.CruiseControl.Core
 			}
 		}
 
-		/// <summary>
-		/// TODO: move force build functionality into project integrator
-		/// </summary>
 		public void ForceBuild()
 		{
 			Log.Info("Force Build for project: " + _project.Name);
+			_forceBuild = true;
 			Start();
-			((Schedules.Schedule)_schedule).ForceBuild();
 		}
 
 		/// <summary>
@@ -95,12 +93,12 @@ namespace ThoughtWorks.CruiseControl.Core
 			while (IsRunning)
 			{
 				// should we integrate this pass?
-				BuildCondition buildCondition = _schedule.ShouldRunIntegration();
+				BuildCondition buildCondition = ShouldRunIntegration();
 				if (buildCondition != BuildCondition.NoBuild)
 				{
 					try
 					{
-						IntegrationResult result = _project.RunIntegration(buildCondition);
+						_project.RunIntegration(buildCondition);
 					}
 					catch (Exception ex) 
 					{ 
@@ -123,6 +121,16 @@ namespace ThoughtWorks.CruiseControl.Core
 			_state = ProjectIntegratorState.Stopped;
 		}
 
+		private BuildCondition ShouldRunIntegration()
+		{
+			if (_forceBuild)
+			{
+				_forceBuild = false;
+				return BuildCondition.ForceBuild;
+			}
+			return _schedule.ShouldRunIntegration();
+		}
+
 		/// <summary>
 		/// Gets a value indicating whether this project integrator is running
 		/// and will continue to run.  If the state is Stopping, this returns false.
@@ -133,7 +141,7 @@ namespace ThoughtWorks.CruiseControl.Core
 		}
 
 		/// <summary>
-		/// Sets the scheduler's state to <see cref="Stopping"/>, telling the scheduler to
+		/// Sets the scheduler's state to <see cref="ProjectIntegratorState.Stopping"/>, telling the scheduler to
 		/// stop at the next possible point in time.
 		/// </summary>
 		public void Stop()

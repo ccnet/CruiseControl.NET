@@ -32,11 +32,5 @@ namespace ThoughtWorks.CruiseControl.Remote
 		/// Notifies the schedule that an integration has completed.
 		/// </summary>
 		void IntegrationCompleted();
-
-		/// <summary>
-		/// Tells the scheduler that an integration should occur the next
-		/// time <see cref="ShouldRunIntegration"/> is called.
-		/// </summary>
-//		void ForceBuild();
 	}
 }

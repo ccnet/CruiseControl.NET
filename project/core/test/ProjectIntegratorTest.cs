@@ -15,13 +15,13 @@ namespace ThoughtWorks.CruiseControl.Core.Test
 		private ProjectIntegrator _integrator;
 
 		[SetUp]
-		protected void SetUp()
+		public void SetUp()
 		{
 			_project = new MockProject("mock", null);
 		}
 
 		[TearDown]
-		protected void TearDown()
+		public void TearDown()
 		{
 			if (_integrator != null)
 			{
@@ -196,7 +196,7 @@ namespace ThoughtWorks.CruiseControl.Core.Test
 		[Test]
 		public void Abort()
 		{
-			_schedule = new Schedule(1, Schedule.Infinite);
+			_schedule = new Schedule(new DateTimeProvider(), 1, Schedule.Infinite);
 			_integrator = new ProjectIntegrator(_schedule, _project);
 			_integrator.Start();
 			Thread.Sleep(0);
@@ -208,7 +208,7 @@ namespace ThoughtWorks.CruiseControl.Core.Test
 		[Test]
 		public void TerminateWhenProjectIsntStarted()
 		{
-			_schedule = new Schedule(1, Schedule.Infinite);
+			_schedule = new Schedule(new DateTimeProvider(),1, Schedule.Infinite);
 			_integrator = new ProjectIntegrator(_schedule, _project);
 			_integrator.Abort();
 			AssertEquals(ProjectIntegratorState.Stopped, _integrator.State);
@@ -217,7 +217,7 @@ namespace ThoughtWorks.CruiseControl.Core.Test
 		[Test]
 		public void TerminateCalledTwice()
 		{
-			_schedule = new Schedule(1, Schedule.Infinite);
+			_schedule = new Schedule(new DateTimeProvider(),1, Schedule.Infinite);
 			_integrator = new ProjectIntegrator(_schedule, _project);
 			_integrator.Start();
 			Thread.Sleep(0);
@@ -244,7 +244,7 @@ namespace ThoughtWorks.CruiseControl.Core.Test
 	
 		private ProjectIntegrator CreateProjectIntegrator(int iterations, int timeout)
 		{
-			_schedule = new Schedule(timeout, iterations);
+			_schedule = new Schedule(new DateTimeProvider(), timeout, iterations);
 			return new ProjectIntegrator(_schedule, _project);
 		}
 	}

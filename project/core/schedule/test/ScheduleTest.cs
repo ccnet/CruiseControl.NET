@@ -1,19 +1,31 @@
 using System;
-using System.Xml;
-using System.Reflection;
-using System.Threading;
-
 using Exortech.NetReflector;
+using NMock;
 using NUnit.Framework;
-
-using ThoughtWorks.CruiseControl.Remote;
 using ThoughtWorks.CruiseControl.Core.Util;
+using ThoughtWorks.CruiseControl.Remote;
 
 namespace ThoughtWorks.CruiseControl.Core.Schedules.Test
 {
 	[TestFixture]
 	public class ScheduleTest : CustomAssertion
 	{
+		private IMock _mockDateTime;
+		private Schedule _schedule;
+
+		[SetUp]
+		public void CreateSchedule()
+		{
+			_mockDateTime = new DynamicMock(typeof(DateTimeProvider));
+			_schedule = new Schedule((DateTimeProvider) _mockDateTime.MockInstance);
+		}
+
+		[TearDown]
+		public void VerifyMocks()
+		{
+			_mockDateTime.Verify();
+		}
+
 		[Test]
 		public void PopulateFromReflector()
 		{
@@ -24,73 +36,53 @@ namespace ThoughtWorks.CruiseControl.Core.Schedules.Test
 		}
 
 		[Test]
-		public void ForceBuild()
+		public void VerifyThatShouldRunIntegrationAfterOneSecond()
 		{
-			Schedule schedule = new Schedule();
-			schedule.SleepSeconds = 10; // longer than this test (ignore)
+			_schedule.SleepSeconds = 10;
 
-			AssertEquals(BuildCondition.IfModificationExists, schedule.ShouldRunIntegration());
-			schedule.IntegrationCompleted();
-			AssertEquals(BuildCondition.NoBuild, schedule.ShouldRunIntegration());
-			
-			schedule.ForceBuild();
-			AssertEquals(BuildCondition.ForceBuild, schedule.ShouldRunIntegration());
-			schedule.IntegrationCompleted();
-			AssertEquals(BuildCondition.NoBuild, schedule.ShouldRunIntegration());
-			
-			schedule.ForceBuild();
-			schedule.ForceBuild();
-			AssertEquals(BuildCondition.ForceBuild, schedule.ShouldRunIntegration());
-			schedule.IntegrationCompleted();
-			AssertEquals(BuildCondition.NoBuild, schedule.ShouldRunIntegration());
-		}
+			_mockDateTime.SetupResult("Now", new DateTime(2004, 1, 1, 1, 0, 0, 0));
+			AssertEquals(BuildCondition.IfModificationExists, _schedule.ShouldRunIntegration());
+			_schedule.IntegrationCompleted();
 
-		[Test]
-		public void ShouldRunIntegration_SleepTime()
-		{
-			Schedule schedule = new Schedule();
-			schedule.SleepSeconds = 1;
+			_mockDateTime.SetupResult("Now", new DateTime(2004, 1, 1, 1, 0, 5, 0)); // 5 seconds later
+			AssertEquals(BuildCondition.NoBuild, _schedule.ShouldRunIntegration());
 
-			AssertEquals(BuildCondition.IfModificationExists, schedule.ShouldRunIntegration());
-			schedule.IntegrationCompleted();
-			AssertEquals(BuildCondition.NoBuild, schedule.ShouldRunIntegration());
-
-			Thread.Sleep(750);
+			_mockDateTime.SetupResult("Now", new DateTime(2004, 1, 1, 1, 0, 9, 0)); // 4 seconds later
 
 			// still before 1sec
-			AssertEquals(BuildCondition.NoBuild, schedule.ShouldRunIntegration());
+			AssertEquals(BuildCondition.NoBuild, _schedule.ShouldRunIntegration());
 			
 			// sleep beyond the 1sec mark
-			Thread.Sleep(500);
+			_mockDateTime.SetupResult("Now", new DateTime(2004, 1, 1, 1, 0, 14, 0)); // 5 seconds later
 			
-			AssertEquals(BuildCondition.IfModificationExists, schedule.ShouldRunIntegration());
-			schedule.IntegrationCompleted();
-			AssertEquals(BuildCondition.NoBuild, schedule.ShouldRunIntegration());
+			AssertEquals(BuildCondition.IfModificationExists, _schedule.ShouldRunIntegration());
+			_schedule.IntegrationCompleted();
+			AssertEquals(BuildCondition.NoBuild, _schedule.ShouldRunIntegration());
 		}
 
 		[Test]
 		public void ShouldRunIntegration_SleepsFromEndOfIntegration()
 		{
-			Schedule schedule = new Schedule();
-			schedule.SleepSeconds = 0.5;
+			_schedule.SleepSeconds = 0.5;
 
-			AssertEquals(BuildCondition.IfModificationExists, schedule.ShouldRunIntegration());
+			_mockDateTime.SetupResult("Now", new DateTime(2004, 1, 1, 1, 0, 0, 0));
+			AssertEquals(BuildCondition.IfModificationExists, _schedule.ShouldRunIntegration());
 
-			Thread.Sleep(550);
+			_mockDateTime.SetupResult("Now", new DateTime(2004, 1, 1, 1, 0, 0, 550));
 
-			AssertEquals(BuildCondition.IfModificationExists, schedule.ShouldRunIntegration());
-			schedule.IntegrationCompleted();
-			AssertEquals(BuildCondition.NoBuild, schedule.ShouldRunIntegration());
+			AssertEquals(BuildCondition.IfModificationExists, _schedule.ShouldRunIntegration());
+			_schedule.IntegrationCompleted();
+			AssertEquals(BuildCondition.NoBuild, _schedule.ShouldRunIntegration());
 
-			Thread.Sleep(550);
+			_mockDateTime.SetupResult("Now", new DateTime(2004, 1, 1, 1, 0, 1, 50));
 
-			AssertEquals(BuildCondition.IfModificationExists, schedule.ShouldRunIntegration());
-			schedule.IntegrationCompleted();
-			AssertEquals(BuildCondition.NoBuild, schedule.ShouldRunIntegration());
+			AssertEquals(BuildCondition.IfModificationExists, _schedule.ShouldRunIntegration());
+			_schedule.IntegrationCompleted();
+			AssertEquals(BuildCondition.NoBuild, _schedule.ShouldRunIntegration());
 
-			Thread.Sleep(550);
+			_mockDateTime.SetupResult("Now", new DateTime(2004, 1, 1, 1, 0, 1, 550));
 
-			AssertEquals(BuildCondition.IfModificationExists, schedule.ShouldRunIntegration());
+			AssertEquals(BuildCondition.IfModificationExists, _schedule.ShouldRunIntegration());
 		}
 
 		[Test]

@@ -1,5 +1,3 @@
-using System;
-using System.Collections;
 using ThoughtWorks.CruiseControl.Remote;
 
 namespace ThoughtWorks.CruiseControl.Core
