@@ -18,7 +18,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard
 			ObjectGiver objectGiver = new CruiseObjectGiverInitializer(new ObjectGiverAndRegistrar()).InitializeGiverForRequest(Request, Context, this);
 
 			SideBarLocation.Controls.Add(((SideBarViewBuilder) objectGiver.GiveObjectByType(typeof(SideBarViewBuilder))).Execute().Control);
-			TopControlsLocation.Controls.Add(((TopControlsViewBuilder) objectGiver.GiveObjectByType(typeof(TopControlsViewBuilder))).Execute());
+			TopControlsLocation.Controls.Add(((TopControlsViewBuilder) objectGiver.GiveObjectByType(typeof(TopControlsViewBuilder))).Execute().Control);
 			((RequestController) objectGiver.GiveObjectByType(typeof(RequestController))).Do(ParentControl);
 		}
 

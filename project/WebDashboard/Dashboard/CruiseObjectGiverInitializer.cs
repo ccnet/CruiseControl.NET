@@ -7,10 +7,7 @@ using ThoughtWorks.CruiseControl.WebDashboard.IO;
 using ThoughtWorks.CruiseControl.WebDashboard.MVC;
 using ThoughtWorks.CruiseControl.WebDashboard.MVC.Cruise;
 using ThoughtWorks.CruiseControl.WebDashboard.Plugins.AddProject;
-using ThoughtWorks.CruiseControl.WebDashboard.Plugins.BuildReport;
 using ThoughtWorks.CruiseControl.WebDashboard.Plugins.EditProject;
-using ThoughtWorks.CruiseControl.WebDashboard.Plugins.ViewAllBuilds;
-using ThoughtWorks.CruiseControl.WebDashboard.Plugins.ViewProjectReport;
 
 namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 {
@@ -41,16 +38,6 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 			// Need to get these into plugin setup
 			giverAndRegistrar.SetDependencyImplementationForIdentifer(SaveNewProjectAction.ACTION_NAME, typeof(IPathMapper), typeof(PathMapperUsingHostName));
 			giverAndRegistrar.SetDependencyImplementationForIdentifer(SaveEditProjectAction.ACTION_NAME, typeof(IPathMapper), typeof(PathMapperUsingHostName));
-
-			// Need to turn these into plugins
-			giverAndRegistrar.CreateImplementationMapping(ViewAllBuildsAction.ACTION_NAME, 
-				typeof(ViewAllBuildsAction)).Decorate(typeof(ServerCheckingProxyAction)).Decorate(typeof(ProjectCheckingProxyAction)).Decorate(typeof(CruiseActionProxyAction));
-
-			giverAndRegistrar.CreateImplementationMapping(ViewProjectReportAction.ACTION_NAME, 
-				typeof(ViewProjectReportAction)).Decorate(typeof(ServerCheckingProxyAction)).Decorate(typeof(ProjectCheckingProxyAction)).Decorate(typeof(CruiseActionProxyAction));
-
-			giverAndRegistrar.CreateImplementationMapping(ViewBuildReportAction.ACTION_NAME, 
-				typeof(ViewBuildReportAction)).Decorate(typeof(ServerCheckingProxyAction)).Decorate(typeof(BuildCheckingProxyAction)).Decorate(typeof(ProjectCheckingProxyAction)).Decorate(typeof(CruiseActionProxyAction));
 
 			IConfigurationGetter configurationGetter = (IConfigurationGetter) giverAndRegistrar.GiveObjectByType(typeof(IConfigurationGetter));
 			if (configurationGetter == null)

@@ -31,9 +31,9 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 			Hashtable primaryContext = new Hashtable();
 			Hashtable secondaryContext = new Hashtable();
 
-			secondaryContext["links"] = linkListFactory.CreateStyledBuildLinkList(farmService.GetMostRecentBuildSpecifiers(projectSpecifier, 10), new ActionSpecifierWithName(ViewBuildReportAction.ACTION_NAME));
+			secondaryContext["links"] = linkListFactory.CreateStyledBuildLinkList(farmService.GetMostRecentBuildSpecifiers(projectSpecifier, 10), new ActionSpecifierWithName(BuildReportBuildPlugin.ACTION_NAME));
 			primaryContext["buildRows"] = velocityTransformer.Transform(@"BuildRows.vm", secondaryContext);
-			primaryContext["allBuildsLink"] = linkFactory.CreateProjectLink(projectSpecifier, "", new ActionSpecifierWithName(ViewAllBuildsAction.ACTION_NAME));
+			primaryContext["allBuildsLink"] = linkFactory.CreateProjectLink(projectSpecifier, "", new ActionSpecifierWithName(ViewAllBuildsProjectPlugin.ACTION_NAME));
 
 			return velocityTransformer.Transform(@"RecentBuilds.vm", primaryContext);
 		}
@@ -43,9 +43,9 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 			Hashtable primaryContext = new Hashtable();
 			Hashtable secondaryContext = new Hashtable();
 
-			secondaryContext["links"] = linkListFactory.CreateStyledBuildLinkList(farmService.GetBuildSpecifiers(projectSpecifier), new ActionSpecifierWithName(ViewBuildReportAction.ACTION_NAME));
+			secondaryContext["links"] = linkListFactory.CreateStyledBuildLinkList(farmService.GetBuildSpecifiers(projectSpecifier), new ActionSpecifierWithName(BuildReportBuildPlugin.ACTION_NAME));
 			primaryContext["buildRows"] = velocityTransformer.Transform(@"BuildRows.vm", secondaryContext);
-			primaryContext["allBuildsLink"] = linkFactory.CreateProjectLink(projectSpecifier, "", new ActionSpecifierWithName(ViewAllBuildsAction.ACTION_NAME));
+			primaryContext["allBuildsLink"] = linkFactory.CreateProjectLink(projectSpecifier, "", new ActionSpecifierWithName(ViewAllBuildsProjectPlugin.ACTION_NAME));
 
 			return velocityViewGenerator.GenerateView(@"RecentBuilds.vm", primaryContext);
 		}

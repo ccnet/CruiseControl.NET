@@ -1,0 +1,18 @@
+<table class="breadcrumbs">
+	<tr>
+		<td>
+			<div>
+				<a href="$farmLink.Url">Dashboard</a>
+				#if ( ! ($serverName == "" ) )
+					 &gt; <a href="$serverLink.Url">$serverLink.Text</a>
+					#if ( ! ( $projectName == "" ) )
+						 &gt; <a href="$projectLink.Url">$projectLink.Text</a>
+						#if ( ! ( $buildName == "" ) )
+							 &gt; <a href="$buildLink.Url">$buildLink.Text</a>
+						#end
+					#end
+				#end
+			</div>
+		</td>
+	</tr>
+</table>

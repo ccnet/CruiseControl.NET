@@ -842,6 +842,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Plugins\ProjectReport\ProjectReportProjectPlugin.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Plugins\ServerReport\ServerLogServerPlugin.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -857,12 +862,7 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "Plugins\ViewAllBuilds\ViewAllBuildsAction.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Plugins\ViewProjectReport\ViewProjectReportAction.cs"
+                    RelPath = "Plugins\ViewAllBuilds\ViewAllBuildsProjectPlugin.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -945,6 +945,10 @@
                 />
                 <File
                     RelPath = "templates\ServerSideBar.vm"
+                    BuildAction = "None"
+                />
+                <File
+                    RelPath = "templates\TopMenu.vm"
                     BuildAction = "None"
                 />
                 <Folder RelPath = "test\" />

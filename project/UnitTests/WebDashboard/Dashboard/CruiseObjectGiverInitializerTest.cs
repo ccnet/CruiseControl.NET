@@ -1,4 +1,3 @@
-using System;
 using System.Web;
 using System.Web.UI.HtmlControls;
 using NUnit.Framework;
@@ -6,10 +5,7 @@ using ThoughtWorks.CruiseControl.WebDashboard.Cache;
 using ThoughtWorks.CruiseControl.WebDashboard.Config;
 using ThoughtWorks.CruiseControl.WebDashboard.Dashboard;
 using ThoughtWorks.CruiseControl.WebDashboard.IO;
-using ThoughtWorks.CruiseControl.WebDashboard.MVC.Cruise;
 using ThoughtWorks.CruiseControl.WebDashboard.MVC.View;
-using ThoughtWorks.CruiseControl.WebDashboard.Plugins.BuildReport;
-using ThoughtWorks.CruiseControl.WebDashboard.Plugins.ViewAllBuilds;
 using ThoughtWorks.CruiseControl.WebDashboard.ServerConnection;
 
 namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
@@ -40,8 +36,6 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 			Assert.IsNotNull(objectGiver.GiveObjectByType(typeof(ServerAggregatingCruiseManagerWrapper)));
 			Assert.IsNotNull(objectGiver.GiveObjectByType(typeof(SideBarViewBuilder)));
 			Assert.IsNotNull(objectGiver.GiveObjectByType(typeof(TopControlsViewBuilder)));
-
-			Assert.IsTrue((objectGiver.GiveObjectById(ViewAllBuildsAction.ACTION_NAME)) is CruiseActionProxyAction);
 
 			// ToDo - test Plugins registered correctly
 		}

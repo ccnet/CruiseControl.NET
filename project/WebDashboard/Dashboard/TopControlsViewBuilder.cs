@@ -1,64 +1,57 @@
-using System.IO;
-using System.Web.UI;
-using System.Web.UI.HtmlControls;
+using System.Collections;
 using ThoughtWorks.CruiseControl.WebDashboard.IO;
+using ThoughtWorks.CruiseControl.WebDashboard.MVC;
 using ThoughtWorks.CruiseControl.WebDashboard.MVC.View;
 using ThoughtWorks.CruiseControl.WebDashboard.Plugins.BuildReport;
+using ThoughtWorks.CruiseControl.WebDashboard.Plugins.FarmReport;
+using ThoughtWorks.CruiseControl.WebDashboard.Plugins.ServerReport;
+using ThoughtWorks.CruiseControl.WebDashboard.Plugins.ProjectReport;
 
 namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 {
-	public class TopControlsViewBuilder : HtmlBuilderViewBuilder
+	public class TopControlsViewBuilder
 	{
 		private readonly ICruiseRequest request;
-		private readonly IBuildNameFormatter buildNameFormatter;
-		private readonly IUrlBuilder urlBuilder;
+		private readonly ILinkFactory linkFactory;
+		private readonly IVelocityViewGenerator velocityViewGenerator;
 
-		public TopControlsViewBuilder(IHtmlBuilder htmlBuilder, IUrlBuilder urlBuilder, IBuildNameFormatter buildNameFormatter, ICruiseRequest request) : base (htmlBuilder)
+		public TopControlsViewBuilder(ICruiseRequest request, ILinkFactory linkFactory, IVelocityViewGenerator velocityViewGenerator)
 		{
-			this.urlBuilder = urlBuilder;
-			this.buildNameFormatter = buildNameFormatter;
 			this.request = request;
+			this.linkFactory = linkFactory;
+			this.velocityViewGenerator = velocityViewGenerator;
 		}
 
-		public Control Execute()
+		public IView Execute()
 		{
-			StringWriter writer = new StringWriter();
-			HtmlTextWriter htmlWriter = new HtmlTextWriter(writer);
-
-			HtmlAnchor dashboard = A("Dashboard", urlBuilder.BuildUrl("default.aspx"));
-			dashboard.RenderControl(htmlWriter);
+			Hashtable velocityContext = new Hashtable();
 
 			string serverName = request.ServerName;
+			string projectName = request.ProjectName;
+			string buildName = request.BuildName;
+
+			velocityContext["serverName"] = serverName;
+			velocityContext["projectName"] = projectName;
+			velocityContext["buildName"] = buildName;
+
+			velocityContext["farmLink"] = linkFactory.CreateFarmLink("Dashboard", new ActionSpecifierWithName(FarmReportFarmPlugin.ACTION_NAME));
+
 			if (serverName != "")
 			{
-				htmlWriter.Write(" &gt; ");
-				A(serverName, urlBuilder.BuildServerUrl("default.aspx", request.ServerSpecifier)).RenderControl(htmlWriter);
+				velocityContext["serverLink"] = linkFactory.CreateServerLink(request.ServerSpecifier, new ActionSpecifierWithName(ServerReportServerPlugin.ACTION_NAME));
 			}
 
-			string projectName = request.ProjectName;
 			if (projectName != "")
 			{
-				htmlWriter.Write(" &gt; ");
-				A(projectName, urlBuilder.BuildProjectUrl(new ActionSpecifierWithName("ViewProjectReport"), request.ProjectSpecifier)).RenderControl(htmlWriter);
+				velocityContext["projectLink"] = linkFactory.CreateProjectLink(request.ProjectSpecifier,  new ActionSpecifierWithName(ProjectReportProjectPlugin.ACTION_NAME));
 			}
 
-			string buildName = request.BuildName;
 			if (buildName != "")
 			{
-				htmlWriter.Write(" &gt; ");
-
-				IBuildSpecifier buildSpecifier = request.BuildSpecifier;
-				A(buildNameFormatter.GetPrettyBuildName(buildSpecifier),
-					urlBuilder.BuildBuildUrl(new ActionSpecifierWithName(ViewBuildReportAction.ACTION_NAME), buildSpecifier)).RenderControl(htmlWriter);
+				velocityContext["buildLink"] = linkFactory.CreateBuildLink(request.BuildSpecifier,  new ActionSpecifierWithName(BuildReportBuildPlugin.ACTION_NAME));
 			}
 
-			HtmlGenericControl locationMenu = new HtmlGenericControl("div");
-			locationMenu.InnerHtml = writer.ToString();
-
-			HtmlTable table = Table();
-			table.Attributes.Add("class", "breadcrumbs");
-			table.Rows.Add(TR( TD( locationMenu )));
-			return table;
+			return velocityViewGenerator.GenerateView("TopMenu.vm", velocityContext);
 		}
 	}
 }

@@ -66,13 +66,13 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 			Hashtable context2 = new Hashtable();
 
 			farmServiceMock.ExpectAndReturn("GetMostRecentBuildSpecifiers", buildSpecifiers, projectSpecifier, 10);
-			linkListFactoryMock.ExpectAndReturn("CreateStyledBuildLinkList", buildLinks, buildSpecifiers, new ActionSpecifierWithName(ViewBuildReportAction.ACTION_NAME) );
+			linkListFactoryMock.ExpectAndReturn("CreateStyledBuildLinkList", buildLinks, buildSpecifiers, new ActionSpecifierWithName(BuildReportBuildPlugin.ACTION_NAME) );
 			context1["links"] = buildLinks;
 			velocityTransformerMock.ExpectAndReturn("Transform", buildRows, @"BuildRows.vm", new HashtableConstraint(context1));
 
 			context2["buildRows"] = buildRows;
 			IAbsoluteLink allBuildsLink = new GeneralAbsoluteLink("foo");
-			linkFactoryMock.ExpectAndReturn("CreateProjectLink", allBuildsLink, projectSpecifier, "", new ActionSpecifierWithName(ViewAllBuildsAction.ACTION_NAME) );
+			linkFactoryMock.ExpectAndReturn("CreateProjectLink", allBuildsLink, projectSpecifier, "", new ActionSpecifierWithName(ViewAllBuildsProjectPlugin.ACTION_NAME) );
 			context2["allBuildsLink"] = allBuildsLink;
 			velocityTransformerMock.ExpectAndReturn("Transform", recentBuilds, @"RecentBuilds.vm", new HashtableConstraint(context2));
 
@@ -92,13 +92,13 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 			Hashtable context2 = new Hashtable();
 
 			farmServiceMock.ExpectAndReturn("GetBuildSpecifiers", new IBuildSpecifier [] { build2Specifier, build1Specifier }, projectSpecifier);
-			linkListFactoryMock.ExpectAndReturn("CreateStyledBuildLinkList", buildLinks, buildSpecifiers, new ActionSpecifierWithName(ViewBuildReportAction.ACTION_NAME) );
+			linkListFactoryMock.ExpectAndReturn("CreateStyledBuildLinkList", buildLinks, buildSpecifiers, new ActionSpecifierWithName(BuildReportBuildPlugin.ACTION_NAME) );
 			context1["links"] = buildLinks;
 			velocityTransformerMock.ExpectAndReturn("Transform", buildRows, @"BuildRows.vm", new HashtableConstraint(context1));
 
 			context2["buildRows"] = buildRows;
 			IAbsoluteLink allBuildsLink = new GeneralAbsoluteLink("foo");
-			linkFactoryMock.ExpectAndReturn("CreateProjectLink", allBuildsLink, projectSpecifier, "", new ActionSpecifierWithName(ViewAllBuildsAction.ACTION_NAME) );
+			linkFactoryMock.ExpectAndReturn("CreateProjectLink", allBuildsLink, projectSpecifier, "", new ActionSpecifierWithName(ViewAllBuildsProjectPlugin.ACTION_NAME) );
 			context2["allBuildsLink"] = allBuildsLink;
 			velocityViewGeneratorMock.ExpectAndReturn("GenerateView", allBuildsView, @"RecentBuilds.vm", new HashtableConstraint(context2));
 

@@ -7,6 +7,8 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.FarmReport
 {
 	public class FarmReportFarmPlugin : ICruiseAction, IPluginLinkRenderer, IPlugin
 	{
+		public static readonly string ACTION_NAME = "ViewFarmReport";
+
 		private readonly IProjectGridAction projectGridAction;
 
 		public FarmReportFarmPlugin(IProjectGridAction projectGridAction)
@@ -26,7 +28,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.FarmReport
 
 		public string LinkActionName
 		{
-			get { return "ViewFarmReport"; }
+			get { return ACTION_NAME; }
 		}
 
 		public TypedAction[] Actions

@@ -1,12 +1,17 @@
+using System.Collections;
 using System.Web.UI.HtmlControls;
 using NMock;
 using NMock.Constraints;
 using NUnit.Framework;
+using ThoughtWorks.CruiseControl.UnitTests.UnitTestUtils;
 using ThoughtWorks.CruiseControl.WebDashboard.Dashboard;
 using ThoughtWorks.CruiseControl.WebDashboard.IO;
+using ThoughtWorks.CruiseControl.WebDashboard.MVC;
 using ThoughtWorks.CruiseControl.WebDashboard.MVC.View;
 using ThoughtWorks.CruiseControl.WebDashboard.Plugins.BuildReport;
-using ThoughtWorks.CruiseControl.WebDashboard.Plugins.ViewProjectReport;
+using ThoughtWorks.CruiseControl.WebDashboard.Plugins.FarmReport;
+using ThoughtWorks.CruiseControl.WebDashboard.Plugins.ProjectReport;
+using ThoughtWorks.CruiseControl.WebDashboard.Plugins.ServerReport;
 
 namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 {
@@ -15,69 +20,96 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 	public class TopControlsViewBuilderTest
 	{
 		private TopControlsViewBuilder viewBuilder;
-		private DynamicMock urlBuilderMock;
-		private DynamicMock buildNameFormatterMock;
 		private DynamicMock cruiseRequestMock;
+		private DynamicMock linkFactoryMock;
+		private DynamicMock velocityViewGeneratorMock;
 		private DefaultServerSpecifier serverSpecifier;
 		private DefaultProjectSpecifier projectSpecifier;
 		private DefaultBuildSpecifier buildSpecifier;
+		private Hashtable expectedVelocityContext;
+		private IView view;
+		private IAbsoluteLink link1;
+		private IAbsoluteLink link2;
+		private IAbsoluteLink link3;
+		private IAbsoluteLink link4;
 
 		[SetUp]
 		public void Setup()
 		{
-			urlBuilderMock = new DynamicMock(typeof(IUrlBuilder));
-			buildNameFormatterMock = new DynamicMock(typeof(IBuildNameFormatter));
 			cruiseRequestMock = new DynamicMock(typeof(ICruiseRequest));
+			linkFactoryMock = new DynamicMock(typeof(ILinkFactory));
+			velocityViewGeneratorMock = new DynamicMock(typeof(IVelocityViewGenerator));
+
+			viewBuilder = new TopControlsViewBuilder((ICruiseRequest) cruiseRequestMock.MockInstance, (ILinkFactory) linkFactoryMock.MockInstance,
+				(IVelocityViewGenerator) velocityViewGeneratorMock.MockInstance);
+
 			serverSpecifier = new DefaultServerSpecifier("myServer");
 			projectSpecifier = new DefaultProjectSpecifier(serverSpecifier, "myProject");
 			buildSpecifier = new DefaultBuildSpecifier(projectSpecifier, "myBuild");
-			viewBuilder = new TopControlsViewBuilder(new DefaultHtmlBuilder(), (IUrlBuilder) urlBuilderMock.MockInstance, 
-				(IBuildNameFormatter) buildNameFormatterMock.MockInstance, (ICruiseRequest) cruiseRequestMock.MockInstance);
-
+			expectedVelocityContext = new Hashtable();
+			view = new DefaultView("foo");
+			link1 = new GeneralAbsoluteLink("1");
+			link2 = new GeneralAbsoluteLink("2");
+			link3 = new GeneralAbsoluteLink("3");
+			link4 = new GeneralAbsoluteLink("4");
 		}
 
 		private void VerifyAll()
 		{
-			urlBuilderMock.Verify();
 			cruiseRequestMock.Verify();
+			linkFactoryMock.Verify();
+			velocityViewGeneratorMock.Verify();
 		}
 
 		[Test]
-		public void ShouldShowJustLinkToDashboardIfNothingSpecified()
+		public void ShouldGenerateFarmLinkIfNothingSpecified()
 		{
 			// Setup
 			cruiseRequestMock.ExpectAndReturn("ServerName", "");
 			cruiseRequestMock.ExpectAndReturn("ProjectName", "");
 			cruiseRequestMock.ExpectAndReturn("BuildName", "");
-			urlBuilderMock.ExpectAndReturn("BuildUrl", "returnedurl", "default.aspx");
 
-			// Execute
-			HtmlTable table = (HtmlTable) viewBuilder.Execute();
-			
-			// Verify
+			expectedVelocityContext["serverName"] = "";
+			expectedVelocityContext["projectName"] = "";
+			expectedVelocityContext["buildName"] = "";
+
+			linkFactoryMock.ExpectAndReturn("CreateFarmLink", link1, "Dashboard", new ActionSpecifierWithName(FarmReportFarmPlugin.ACTION_NAME));
+			expectedVelocityContext["farmLink"] = link1;
+
+			velocityViewGeneratorMock.ExpectAndReturn("GenerateView", view, "TopMenu.vm", new HashtableConstraint(expectedVelocityContext));
+
+			// Execute & Verify
+			Assert.AreEqual(view, viewBuilder.Execute());
 			VerifyAll();
 		}
 
 		[Test]
-		public void ShouldShowLinkToDashboardAndServerIfServerButNoProjectSpecified()
+		public void ShouldGenerateFarmAndServerLinksIfServerButNoProjectSpecified()
 		{
 			// Setup
 			cruiseRequestMock.ExpectAndReturn("ServerName", "myServer");
 			cruiseRequestMock.ExpectAndReturn("ProjectName", "");
 			cruiseRequestMock.ExpectAndReturn("BuildName", "");
 			cruiseRequestMock.ExpectAndReturn("ServerSpecifier", serverSpecifier);
-			urlBuilderMock.ExpectAndReturn("BuildUrl", "returnedurl1", "default.aspx");
-			urlBuilderMock.ExpectAndReturn("BuildServerUrl", "returnedurl2", "default.aspx", serverSpecifier);
 
-			// Execute
-			HtmlTable table = (HtmlTable) viewBuilder.Execute();
-			
-			// Verify
+			expectedVelocityContext["serverName"] = "myServer";
+			expectedVelocityContext["projectName"] = "";
+			expectedVelocityContext["buildName"] = "";
+
+			linkFactoryMock.ExpectAndReturn("CreateFarmLink", link1, "Dashboard", new ActionSpecifierWithName(FarmReportFarmPlugin.ACTION_NAME));
+			linkFactoryMock.ExpectAndReturn("CreateServerLink", link2, serverSpecifier, new ActionSpecifierWithName(ServerReportServerPlugin.ACTION_NAME));
+			expectedVelocityContext["farmLink"] = link1;
+			expectedVelocityContext["serverLink"] = link2;
+
+			velocityViewGeneratorMock.ExpectAndReturn("GenerateView", view, "TopMenu.vm", new HashtableConstraint(expectedVelocityContext));
+
+			// Execute & Verify
+			Assert.AreEqual(view, viewBuilder.Execute());
 			VerifyAll();
 		}
 
 		[Test]
-		public void ShouldShowLinkToDashboardServerAndProjectIfServerAndProjectButNoBuildSpecified()
+		public void ShouldGenerateFarmServerAndProjectLinksIfServerAndProjectButNoBuildSpecified()
 		{
 			// Setup
 			cruiseRequestMock.ExpectAndReturn("ServerName", "myServer");
@@ -85,19 +117,27 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 			cruiseRequestMock.ExpectAndReturn("BuildName", "");
 			cruiseRequestMock.ExpectAndReturn("ServerSpecifier", serverSpecifier);
 			cruiseRequestMock.ExpectAndReturn("ProjectSpecifier", projectSpecifier);
-			urlBuilderMock.ExpectAndReturn("BuildUrl", "returnedurl1", "default.aspx");
-			urlBuilderMock.ExpectAndReturn("BuildServerUrl", "returnedurl2", "default.aspx", serverSpecifier);
-			urlBuilderMock.ExpectAndReturn("BuildProjectUrl", "returnedurl3", new PropertyIs("ActionName", ViewProjectReportAction.ACTION_NAME), projectSpecifier);
 
-			// Execute
-			HtmlTable table = (HtmlTable) viewBuilder.Execute();
+			expectedVelocityContext["serverName"] = "myServer";
+			expectedVelocityContext["projectName"] = "myProject";
+			expectedVelocityContext["buildName"] = "";
 
-			// Verify
+			linkFactoryMock.ExpectAndReturn("CreateFarmLink", link1, "Dashboard", new ActionSpecifierWithName(FarmReportFarmPlugin.ACTION_NAME));
+			linkFactoryMock.ExpectAndReturn("CreateServerLink", link2, serverSpecifier, new ActionSpecifierWithName(ServerReportServerPlugin.ACTION_NAME));
+			linkFactoryMock.ExpectAndReturn("CreateProjectLink", link3, projectSpecifier, new ActionSpecifierWithName(ProjectReportProjectPlugin.ACTION_NAME));
+			expectedVelocityContext["farmLink"] = link1;
+			expectedVelocityContext["serverLink"] = link2;
+			expectedVelocityContext["projectLink"] = link3;
+
+			velocityViewGeneratorMock.ExpectAndReturn("GenerateView", view, "TopMenu.vm", new HashtableConstraint(expectedVelocityContext));
+
+			// Execute & Verify
+			Assert.AreEqual(view, viewBuilder.Execute());
 			VerifyAll();
 		}
 
 		[Test]
-		public void ShouldShowLinkToDashboardServerProjectAndBuildIfServerProjectAndBuildSpecified()
+		public void ShouldGenerateFarmServerProjectAndBuildLinksIfServerProjectAndBuildSpecified()
 		{
 			// Setup
 			cruiseRequestMock.ExpectAndReturn("ServerName", "myServer");
@@ -106,16 +146,24 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 			cruiseRequestMock.ExpectAndReturn("ServerSpecifier", serverSpecifier);
 			cruiseRequestMock.ExpectAndReturn("ProjectSpecifier", projectSpecifier);
 			cruiseRequestMock.ExpectAndReturn("BuildSpecifier", buildSpecifier);
-			buildNameFormatterMock.ExpectAndReturn("GetPrettyBuildName", "pretty name", buildSpecifier);
-			urlBuilderMock.ExpectAndReturn("BuildUrl", "returnedurl1", "default.aspx");
-			urlBuilderMock.ExpectAndReturn("BuildServerUrl", "returnedurl2", "default.aspx", serverSpecifier);
-			urlBuilderMock.ExpectAndReturn("BuildProjectUrl", "returnedurl3", new PropertyIs("ActionName", ViewProjectReportAction.ACTION_NAME), projectSpecifier);
-			urlBuilderMock.ExpectAndReturn("BuildBuildUrl", "returnedurl4", new PropertyIs("ActionName", ViewBuildReportAction.ACTION_NAME), buildSpecifier);
 
-			// Execute
-			HtmlTable table = (HtmlTable) viewBuilder.Execute();
+			expectedVelocityContext["serverName"] = "myServer";
+			expectedVelocityContext["projectName"] = "myProject";
+			expectedVelocityContext["buildName"] = "myBuild";
 
-			// Verify
+			linkFactoryMock.ExpectAndReturn("CreateFarmLink", link1, "Dashboard", new ActionSpecifierWithName(FarmReportFarmPlugin.ACTION_NAME));
+			linkFactoryMock.ExpectAndReturn("CreateServerLink", link2, serverSpecifier, new ActionSpecifierWithName(ServerReportServerPlugin.ACTION_NAME));
+			linkFactoryMock.ExpectAndReturn("CreateProjectLink", link3, projectSpecifier, new ActionSpecifierWithName(ProjectReportProjectPlugin.ACTION_NAME));
+			linkFactoryMock.ExpectAndReturn("CreateBuildLink", link4, buildSpecifier, new ActionSpecifierWithName(BuildReportBuildPlugin.ACTION_NAME));
+			expectedVelocityContext["farmLink"] = link1;
+			expectedVelocityContext["serverLink"] = link2;
+			expectedVelocityContext["projectLink"] = link3;
+			expectedVelocityContext["buildLink"] = link4;
+
+			velocityViewGeneratorMock.ExpectAndReturn("GenerateView", view, "TopMenu.vm", new HashtableConstraint(expectedVelocityContext));
+
+			// Execute & Verify
+			Assert.AreEqual(view, viewBuilder.Execute());
 			VerifyAll();
 		}
 	}

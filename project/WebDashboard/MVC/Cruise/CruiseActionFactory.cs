@@ -24,7 +24,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.MVC.Cruise
 			if (actionName == "")
 			{
 				// euwww - something better here!
-				return giver.GiveObjectById(((FarmReportFarmPlugin) giver.GiveObjectByType(typeof(FarmReportFarmPlugin))).LinkActionName) as IAction;
+				return giver.GiveObjectById(FarmReportFarmPlugin.ACTION_NAME) as IAction;
 			}
 
 			IAction action = giver.GiveObjectById(actionName) as IAction;

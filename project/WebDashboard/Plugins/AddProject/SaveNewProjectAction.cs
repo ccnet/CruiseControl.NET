@@ -3,7 +3,7 @@ using ThoughtWorks.CruiseControl.WebDashboard.Dashboard;
 using ThoughtWorks.CruiseControl.WebDashboard.IO;
 using ThoughtWorks.CruiseControl.WebDashboard.MVC;
 using ThoughtWorks.CruiseControl.WebDashboard.MVC.Cruise;
-using ThoughtWorks.CruiseControl.WebDashboard.Plugins.ViewProjectReport;
+using ThoughtWorks.CruiseControl.WebDashboard.Plugins.ProjectReport;
 using ThoughtWorks.CruiseControl.WebDashboard.ServerConnection;
 
 namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.AddProject
@@ -53,7 +53,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.AddProject
 		{
 			if (model.Project.WebURL == null || model.Project.WebURL == string.Empty)
 			{
-				model.Project.WebURL = urlBuilder.BuildProjectUrl(new ActionSpecifierWithName(ViewProjectReportAction.ACTION_NAME), projectSpecifier);
+				model.Project.WebURL = urlBuilder.BuildProjectUrl(new ActionSpecifierWithName(ProjectReportProjectPlugin.ACTION_NAME), projectSpecifier);
 			}
 		}
 	}

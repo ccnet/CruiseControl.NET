@@ -7,6 +7,8 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.ServerReport
 {
 	public class ServerReportServerPlugin : ICruiseAction, IPluginLinkRenderer, IPlugin
 	{
+		public static readonly string ACTION_NAME = "ViewServerReport";
+
 		private readonly IProjectGridAction projectGridAction;
 
 		public ServerReportServerPlugin(IProjectGridAction projectGridAction)
@@ -26,7 +28,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.ServerReport
 
 		public string LinkActionName
 		{
-			get { return "ViewServerReport"; }
+			get { return ACTION_NAME; }
 		}
 
 		public TypedAction[] Actions

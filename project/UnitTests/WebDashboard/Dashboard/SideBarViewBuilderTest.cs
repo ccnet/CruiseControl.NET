@@ -154,7 +154,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 			buildNameRetrieverMock.ExpectAndReturn("GetNextBuildSpecifier", nextBuildSpecifier, buildSpecifier);
 			buildNameRetrieverMock.ExpectAndReturn("GetPreviousBuildSpecifier", previousBuildSpecifier, buildSpecifier);
 
-			ActionSpecifierWithName actionSpecifier = new ActionSpecifierWithName(ViewBuildReportAction.ACTION_NAME);
+			ActionSpecifierWithName actionSpecifier = new ActionSpecifierWithName(BuildReportBuildPlugin.ACTION_NAME);
 
 			linkFactoryMock.ExpectAndReturn("CreateBuildLink", latestLink, latestBuildSpecifier, "", actionSpecifier);
 			linkFactoryMock.ExpectAndReturn("CreateBuildLink", nextLink, nextBuildSpecifier, "", actionSpecifier);
