@@ -44,10 +44,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test
 	<email>foo.bar@quuuux.quuux.quux.qux</email>
 </modification>", DateUtil.FormatDate(mod.ModifiedTime));
 
-			string actual = mod.ToXml();
-			Console.Out.WriteLine("actual = " + actual);
-			
-			AssertEquals(XmlUtil.GenerateOuterXml(expected), actual);
+			AssertEquals(XmlUtil.GenerateOuterXml(expected), mod.ToXml());
 		}
 
 		[Test]

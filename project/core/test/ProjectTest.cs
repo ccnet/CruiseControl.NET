@@ -78,7 +78,7 @@ namespace ThoughtWorks.CruiseControl.Core.Test
 		public void LoadFullySpecifiedProjectFromConfiguration()
 		{
 			string xml = @"
-<project name=""foo"" webURL=""http://localhost/ccnet"" modificationDelaySeconds=""60"" publishExceptions=""false"">
+<project name=""foo"" webURL=""http://localhost/ccnet"" modificationDelaySeconds=""60"" publishExceptions=""true"">
 	<build type=""nant"" />
 	<sourcecontrol type=""mock"" />
 	<labeller type=""defaultlabeller"" />
@@ -95,7 +95,7 @@ namespace ThoughtWorks.CruiseControl.Core.Test
 			Project project = (Project) NetReflector.Read(xml);
 			AssertEquals("foo", project.Name);
 			AssertEquals("http://localhost/ccnet", project.WebURL);
-			AssertEquals(false, project.PublishExceptions);
+			AssertEquals(true, project.PublishExceptions);
 			AssertEquals(60, project.ModificationDelaySeconds);
 			AssertEquals(typeof(NAntBuilder), project.Builder);
 			AssertEquals(typeof(MockSourceControl), project.SourceControl);
@@ -118,7 +118,7 @@ namespace ThoughtWorks.CruiseControl.Core.Test
 			Project project = (Project) NetReflector.Read(xml);
 			AssertEquals("foo", project.Name);
 			AssertEquals(Project.DEFAULT_WEB_URL, project.WebURL);
-			AssertEquals(true, project.PublishExceptions);
+			AssertEquals(false, project.PublishExceptions);
 			AssertEquals(0, project.ModificationDelaySeconds);		//TODO: is this the correct default?  should quiet period be turned off by default?  is this sourcecontrol specific?
 			AssertEquals(typeof(NAntBuilder), project.Builder);
 			AssertEquals(typeof(MockSourceControl), project.SourceControl);
@@ -193,6 +193,21 @@ namespace ThoughtWorks.CruiseControl.Core.Test
 			AssertEquals(expectedException, result.ExceptionResult);
 		}
 
+		[Test]
+		public void ShouldPublishIntegrationResultsIfPublishExceptionsIsTrueAndSourceControlThrowsAnException()
+		{
+			_mockStateManager.ExpectAndReturn("StateFileExists", false);				// running the first integration (no state file)
+			_mockLabeller.ExpectAndReturn("Generate", "label", new IsAnything());		// generate new label
+			CruiseControlException expectedException = new CruiseControlException();
+			_mockSourceControl.ExpectAndThrow("GetModifications", expectedException, new IsAnything(), new IsAnything());
+			_mockPublisher.Expect("PublishIntegrationResults", new IsAnything(), new IsAnything());
+			_mockStateManager.Expect("SaveState", new IsAnything());
+
+			_project.PublishExceptions = true;
+			IntegrationResult result = _project.RunIntegration(BuildCondition.IfModificationExists);
+			AssertEquals(expectedException, result.ExceptionResult);
+		}
+
 		// test: verify correct args are passed to sourcecontrol?  should use date of last modification from last successful build IMO
 
 		[Test]
@@ -200,7 +215,7 @@ namespace ThoughtWorks.CruiseControl.Core.Test
 		{
 			_mockStateManager.ExpectAndReturn("StateFileExists", false, null);
 			IntegrationResult last = _project.LastIntegrationResult;
-			AssertEquals(new IntegrationResult(), last);
+			AssertEquals(new IntegrationResult(PROJECT_NAME), last);
 			AssertEquals(DateTime.Now.AddDays(-1).Date, last.LastModificationDate.Date);		// will load all modifications since yesterday -- is this right?
 		}
 
@@ -261,93 +276,28 @@ namespace ThoughtWorks.CruiseControl.Core.Test
 			Assert(_project.ShouldRunBuild(results, BuildCondition.ForceBuild));
 		}
 
-		/*		[Test]
-				[Ignore("too fragile")]
-				public void SleepTime() 
-				{
-					_project.CurrentIntegration = _project.LastIntegration;
-					Modification mod = new Modification();
-					mod.ModifiedTime = DateTime.Now;
-					_project.IntegrationTimeout = 100;
-					_project.PreBuild();
-					_project.CurrentIntegration.Modifications = new Modification[1];
-					_project.CurrentIntegration.Modifications[0] = mod;
-			
-			
-					DateTime start = DateTime.Now;
-					_project.Sleep();
-					TimeSpan diff = DateTime.Now - start;
-					Assert("Didn't sleep long enough", !(diff.TotalMilliseconds < 100));
-					_project.ModificationDelay = 50;
-					mod.ModifiedTime = DateTime.Now.AddMilliseconds(-5);
-					Assert("There are modifications within ModificationDelay, project should not run", !_project.ShouldRunBuild());
-					mod.ModifiedTime = DateTime.Now.AddMilliseconds(-5);
-					start = DateTime.Now;
-					_project.Sleep();
-					diff = DateTime.Now - start;
-					Assert("Didn't sleep long enough", !(diff.TotalMilliseconds < 45));
-					Assert("Slept too long", !(diff.TotalMilliseconds > 100));
-				}
-		*/
-
-		[Test]
-		[Ignore("Todo")]
-		public void ActivityStateChange()
-		{
-			// TODO test valid state transitions
-			// TODO test stopping at any point
-			// TODO test state set to starting when started
-			// TODO state set running when running
-			// TODO state set to sleeping
-			// TODO should tests be multithreaded?
-			// TODO should delegate to schedule to determine when to run and how often
-		}
-
 		[Test]
 		public void InitialActivityState()
 		{
 			AssertEquals(ProjectActivity.Unknown, _project.CurrentActivity);
 		}		
 
-		[Test, Ignore("If there is a problem with StateManager, should we continue building?  ccnet will not be able to save it's state, which could be severe")]
-		public void HandleStateManagerException()
+		[Test, ExpectedException(typeof(CruiseControlException))]
+		public void RethrowExceptionIfLoadingStateFileThrowsException()
 		{
-			MockPublisher publisher = new MockPublisher();
-			Exception expectedException = new CruiseControlException("expected exception");
-			_mockStateManager.ExpectAndThrow("StateFileExists", expectedException);
-			_mockStateManager.Expect("SaveState", new IsAnything());
-			_project.IntegrationCompleted += publisher.IntegrationCompletedEventHandler;
+			_mockStateManager.ExpectAndThrow("StateFileExists", new CruiseControlException("expected exception"));
 
-			IntegrationResult results = _project.RunIntegration(BuildCondition.IfModificationExists);
-
-			// if this fails (via NMock), it's because the last integration result was not set
-			AssertEquals(results, _project.LastIntegrationResult);
-
-			AssertEquals(expectedException, _project.LastIntegrationResult.ExceptionResult);
-			AssertEquals(IntegrationStatus.Exception, _project.LastIntegrationResult.Status);
-			AssertNotNull(results.EndTime);
-			Assert(publisher.Published);
-			AssertEquals("No messages logged.", 1, _listener.Traces.Count);
-			Assert("Wrong message logged.", _listener.Traces[0].ToString().IndexOf(expectedException.ToString()) > 0);
+			_project.RunIntegration(BuildCondition.IfModificationExists);
 		}
 
-		[Test]
-		public void HandleLabellerException()
+		[Test, ExpectedException(typeof(CruiseControlException))]
+		public void RethrowExceptionIfLabellerThrowsException()
 		{
 			Exception expectedException = new CruiseControlException("expected exception");
-			_mockLabeller.ExpectAndThrow("Generate", expectedException, new NMock.Constraints.IsAnything());
 			_mockStateManager.ExpectAndReturn("StateFileExists", false);
-			_mockStateManager.Expect("SaveState", new IsAnything());
-			_mockPublisher.Expect("PublishIntegrationResults", new IsAnything(), new IsAnything());
+			_mockLabeller.ExpectAndThrow("Generate", expectedException, new NMock.Constraints.IsAnything());
 			
-			IntegrationResult results = _project.RunIntegration(BuildCondition.IfModificationExists);
-
-			AssertEquals(results, _project.LastIntegrationResult);
-			AssertEquals(IntegrationStatus.Exception, _project.LastIntegrationResult.Status);
-			AssertEquals(expectedException, _project.LastIntegrationResult.ExceptionResult);
-			AssertNotNull(results.EndTime);
-			AssertEquals("No messages logged.", 1, _listener.Traces.Count);
-			Assert("Wrong message logged.", _listener.Traces[0].ToString().IndexOf(expectedException.ToString()) > 0);
+			_project.RunIntegration(BuildCondition.IfModificationExists);
 		}
 
 		[Test]
@@ -438,12 +388,6 @@ namespace ThoughtWorks.CruiseControl.Core.Test
 			Assert(!builder.HasRun);
 			_project.RunIntegration(BuildCondition.IfModificationExists);
 			Assert(!builder.HasRun);
-		}
-
-		[Test]
-		[Ignore("Todo")]
-		public void RunTwiceWithExceptionFirstTime()
-		{
 		}
 
 		private Modification[] CreateModifications()

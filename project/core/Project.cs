@@ -40,7 +40,7 @@ namespace ThoughtWorks.CruiseControl.Core
 		public event IntegrationCompletedEventHandler IntegrationCompleted ;
 		public const string DEFAULT_WEB_URL = "http://localhost/CruiseControl.NET/";
 
-		private string _webURL = DEFAULT_WEB_URL; // default value
+		private string _webURL = DEFAULT_WEB_URL;
 		private ISourceControl _sourceControl;
 		private IBuilder _builder;
 		private ILabeller _labeller = new DefaultLabeller();
@@ -112,7 +112,7 @@ namespace ThoughtWorks.CruiseControl.Core
 		public ITask[] Tasks = new ITask[0];
 
 		[ReflectorProperty("publishExceptions", Required=false)]
-		public bool PublishExceptions = true;
+		public bool PublishExceptions = false;
 
 		public ProjectActivity CurrentActivity
 		{
@@ -128,8 +128,6 @@ namespace ThoughtWorks.CruiseControl.Core
 
 				return _lastIntegrationResult;
 			}
-
-			set { _lastIntegrationResult = value; }
 		}
 
 		public IntegrationStatus LatestBuildStatus
@@ -142,10 +140,26 @@ namespace ThoughtWorks.CruiseControl.Core
 			if (buildCondition == BuildCondition.ForceBuild)
 				Log.Info("Build forced");
 
-			IntegrationResult result = CreateNewIntegrationResult();
+			IntegrationResult result = CreateNewIntegrationResult(buildCondition);
+			AttemptToRunIntegration(buildCondition, result);
+			PostBuild(result);
+			return result;
+		}
+
+		private IntegrationResult CreateNewIntegrationResult(BuildCondition buildCondition)
+		{
+			IntegrationResult result = new IntegrationResult(Name);
+			result.BuildCondition = buildCondition;
+			result.LastIntegrationStatus = LastIntegrationResult.Status;
+			result.Label = Labeller.Generate(LastIntegrationResult);
+			return result;
+		}
+
+		private void AttemptToRunIntegration(BuildCondition buildCondition, IntegrationResult result)
+		{
+			result.MarkStartTime();
 			try
 			{
-				result.Label = Labeller.Generate(LastIntegrationResult);
 				result.Modifications = GetSourceModifications(result);
 				if (ShouldRunBuild(result, buildCondition))
 				{
@@ -159,20 +173,7 @@ namespace ThoughtWorks.CruiseControl.Core
 				result.ExceptionResult = ex;
 				result.Status = IntegrationStatus.Exception;
 			}
-			finally
-			{
-				PostBuild(result);
-			}
-			return result;
-		}
-
-		private IntegrationResult CreateNewIntegrationResult()
-		{
-			IntegrationResult result = new IntegrationResult();
-			result.ProjectName = Name;
-			result.LastIntegrationStatus = LastIntegrationResult.Status; // test
-			result.MarkStartTime();
-			return result;
+			result.MarkEndTime();
 		}
 
 		private Modification[] GetSourceModifications(IntegrationResult results)
@@ -216,11 +217,10 @@ namespace ThoughtWorks.CruiseControl.Core
 		}
 		internal void PostBuild(IntegrationResult result)
 		{
-			result.MarkEndTime();
-			Log.Info("Integration complete: " + result.EndTime);
-
 			if (ShouldPublishException(result))
 			{
+				Log.Info("Integration complete: " + result.EndTime);
+
 				AttemptToSaveState(result);
 
 				HandleProjectLabelling(result);
@@ -229,7 +229,7 @@ namespace ThoughtWorks.CruiseControl.Core
 				OnIntegrationCompleted(new IntegrationCompletedEventArgs(result));
 
 				// update reference to the most recent result
-				LastIntegrationResult = result;
+				_lastIntegrationResult = result;
 			}
 			_currentActivity = ProjectActivity.Sleeping;
 		}
@@ -271,7 +271,7 @@ namespace ThoughtWorks.CruiseControl.Core
 			{
 				// no integration result is on record
 				// TODO consider something such as IntegrationResult.Empty, to indicate 'unknown state'
-				return new IntegrationResult();
+				return new IntegrationResult(Name);
 			}
 		}
 

@@ -14,14 +14,8 @@ namespace ThoughtWorks.CruiseControl.Core
     [Serializable]
     public class IntegrationResult
     {
-        private IntegrationStatus _status = IntegrationStatus.Unknown;
         private Modification[] _modifications = new Modification[0];
-        private IntegrationStatus _lastIntegrationStatus = IntegrationStatus.Unknown;
-        private string _projectName;
-        private string _label;
         private string _output;
-        private DateTime _startTime = new DateTime(1980, 1, 1);
-        private DateTime _endTime = new DateTime(1980, 1, 1);
         private Exception _exception;
         private ArrayList _taskResults = new ArrayList();
 
@@ -32,59 +26,30 @@ namespace ThoughtWorks.CruiseControl.Core
 
         public IntegrationResult(string projectName)
         {
-            _projectName = projectName;
+            ProjectName = projectName;
         }
 
-        public string ProjectName
-        {
-            get { return _projectName; }
-            set { _projectName = value; }
-        }
-
-        /// <summary>
-        /// Gets and sets the status for this integration (e.g. Success, Failed, Exception, etc...)
-        /// </summary>
-        public IntegrationStatus Status
-        {
-            get { return _status; }
-            set { _status = value; }
-        }
-
-        public string Label
-        {
-            get { return _label; }
-            set { _label = value; }
-        }
+        public string ProjectName;
+		public BuildCondition BuildCondition;
+        public IntegrationStatus Status = IntegrationStatus.Unknown;
+		public IntegrationStatus LastIntegrationStatus = IntegrationStatus.Unknown;
+        public string Label;
 
         /// <summary>
         /// Gets and sets the date and time at which the integration commenced.
         /// </summary>
-        public DateTime StartTime
-        {
-            get { return _startTime; }
-            set { _startTime = value; }
-        }
+        public DateTime StartTime = new DateTime(1980, 1, 1);
 
         /// <summary>
         /// Gets and sets the date and time at which the integration was completed.
         /// </summary>
-        public DateTime EndTime
-        {
-            get { return _endTime; }
-            set { _endTime = value; }
-        }
+        public DateTime EndTime = new DateTime(1980, 1, 1);
 
 		[XmlIgnore]
         public virtual Modification[] Modifications
         {
             get { return _modifications; }
             set { _modifications = value; }
-        }
-
-        public IntegrationStatus LastIntegrationStatus
-        {
-            get { return _lastIntegrationStatus; }
-            set { _lastIntegrationStatus = value; }
         }
 
         public DateTime LastModificationDate
@@ -171,25 +136,25 @@ namespace ThoughtWorks.CruiseControl.Core
             }
         }
 
+		[XmlIgnore]
+		public IList TaskResults
+		{
+			get { return _taskResults; }
+		}
+
         public void MarkStartTime()
         {
-            _startTime = DateTime.Now;
+            StartTime = DateTime.Now;
         }
 
         public void MarkEndTime()
         {
-            _endTime = DateTime.Now;
+            EndTime = DateTime.Now;
         }
 
         public bool HasModifications()
         {
             return Modifications.Length > 0;
-        }
-
-		[XmlIgnore]
-        public IList TaskResults
-        {
-            get { return _taskResults; }
         }
 
         public override bool Equals(object obj)

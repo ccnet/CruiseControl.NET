@@ -70,6 +70,7 @@ namespace ThoughtWorks.CruiseControl.Core
 			// start thread if it's not running yet
 			if (_thread.ThreadState != ThreadState.Running)
 			{
+				Log.Info("Starting integrator for project: " + _project.Name);
 				_thread.Start();
 			}
 		}
@@ -90,6 +91,7 @@ namespace ThoughtWorks.CruiseControl.Core
 		private void Run()
 		{
 			// loop, until the integrator is stopped
+			Log.Info("Starting integration for project: " + _project.Name);
 			while (IsRunning)
 			{
 				// should we integrate this pass?
@@ -102,7 +104,6 @@ namespace ThoughtWorks.CruiseControl.Core
 					}
 					catch (Exception ex) 
 					{ 
-						//TODO: what to do with this exception
 						Log.Error(ex);
 					}
 
@@ -122,30 +123,6 @@ namespace ThoughtWorks.CruiseControl.Core
 			_state = ProjectIntegratorState.Stopped;
 		}
 
-//		private void Run()
-//		{
-//			while (IsRunning && _schedule.ShouldRun())
-//			{
-//				try
-//				{
-//					_project.Run(_schedule.ForceBuild);
-//				}
-//				catch (Exception ex) 
-//				{ 
-//					LogUtil.Log(_project, "Project threw an exception: " + ex);
-//				}
-//				_schedule.Update();
-//
-//				TimeSpan sleepTime = _schedule.CalculateTimeToNextIntegration();
-//				if (_project.MinimumSleepTime > 0 && _project.MinimumSleepTime < sleepTime.TotalMilliseconds)
-//					sleepTime = new TimeSpan(0, 0, 0, 0, _project.MinimumSleepTime);
-//				LogUtil.Log(Project, string.Format("Sleeping for {0}", sleepTime));
-//				Thread.Sleep(sleepTime);
-//			}
-//			_state = SchedulerState.Stopped;
-//		}
-
-
 		/// <summary>
 		/// Gets a value indicating whether this project integrator is running
 		/// and will continue to run.  If the state is Stopping, this returns false.
@@ -164,6 +141,7 @@ namespace ThoughtWorks.CruiseControl.Core
 			if (IsRunning)
 			{
 				_state = ProjectIntegratorState.Stopping;
+				Log.Info("Stopping integrator for project: " + _project.Name);
 			}
 		}
 
@@ -174,6 +152,7 @@ namespace ThoughtWorks.CruiseControl.Core
 				_thread.Abort();
 			}
 			_state = ProjectIntegratorState.Stopped;
+			Log.Info("Integrator for project: " + _project.Name + " is now stopped.");
 		}
 
 		public void WaitForExit()
