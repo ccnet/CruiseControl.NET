@@ -11,12 +11,12 @@
 			<li>Unzip the distribution as described in <a href="../basicinstallation.html">Basic Installation</a></li>
 			<li>In IIS, map a virtual directory to the 'webdashboard' subfolder of your CCNet folder</li>
 		</ol>
-		<p>The Dashboard needs to connect to each of Runners you want to report on, so make sure you set 
-		each Runner up for management	(see <a href="../runner/management.html">Enabling Management</a> in the 
-		Runner documentation).</p>
-		<p>To configure the dashboard, in the &lt;projectURLs> section of the dashboard's 'web.config' file, add 
-		a &lt;project> tag for each runner you want to monitor.	The value of the tag is the management URL for the 
-		runner. Here is an example &lt;projectURLs> section:</p>
+		<p>The Dashboard needs to connect to each of Servers you want to report on, so make sure you set
+		each Server up for management	(see <a href="../server/management.html">Enabling Management</a> in the
+		Server documentation).</p>
+		<p>To configure the dashboard, in the &lt;projectURLs> section of the dashboard's 'web.config' file, add
+		a &lt;project> tag for each Server you want to monitor.	The value of the tag is the management URL for the
+		Server. Here is an example &lt;projectURLs> section:</p>
 		<pre>
 &lt;projectURLs>
 	&lt;project url="tcp://localhost:1234/CruiseManager.rem"/>
