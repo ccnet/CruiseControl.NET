@@ -189,6 +189,16 @@
                     BuildAction = "EmbeddedResource"
                 />
                 <File
+                    RelPath = "MultiConfigurationItemControl.cs"
+                    SubType = "UserControl"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "MultiConfigurationItemControl.resx"
+                    DependentUpon = "MultiConfigurationItemControl.cs"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
                     RelPath = "ProjectModel.cs"
                     SubType = "Code"
                     BuildAction = "Compile"

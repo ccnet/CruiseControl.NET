@@ -12,7 +12,7 @@ namespace ThoughtWorks.CruiseControl.ControlPanel
 	/// </summary>
 	public class GroupByCombo : System.Windows.Forms.UserControl
 	{
-		private System.Windows.Forms.Panel subpanel;
+		private GroupBox subpanel;
 		public System.Windows.Forms.ComboBox comboBox;
 		/// <summary> 
 		/// Required designer variable.
@@ -50,7 +50,7 @@ namespace ThoughtWorks.CruiseControl.ControlPanel
 		/// </summary>
 		private void InitializeComponent()
 		{
-			this.subpanel = new System.Windows.Forms.Panel();
+			this.subpanel = new System.Windows.Forms.GroupBox();
 			this.comboBox = new System.Windows.Forms.ComboBox();
 			this.SuspendLayout();
 			// 
@@ -59,11 +59,11 @@ namespace ThoughtWorks.CruiseControl.ControlPanel
 			this.subpanel.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
 				| System.Windows.Forms.AnchorStyles.Left) 
 				| System.Windows.Forms.AnchorStyles.Right)));
-			this.subpanel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-			this.subpanel.Location = new System.Drawing.Point(0, 8);
+			this.subpanel.Location = new System.Drawing.Point(0, 5);
 			this.subpanel.Name = "subpanel";
 			this.subpanel.Size = new System.Drawing.Size(432, 144);
 			this.subpanel.TabIndex = 0;
+			this.subpanel.TabStop = false;
 			// 
 			// comboBox
 			// 

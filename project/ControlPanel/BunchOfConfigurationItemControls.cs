@@ -56,6 +56,8 @@ namespace ThoughtWorks.CruiseControl.ControlPanel
 			{
 				Control childControl = NewChildControl(childItem);
 				Controls.Add(childControl);
+				childControl.Width = Width;
+				childControl.Anchor = AnchorStyles.Left | AnchorStyles.Top | AnchorStyles.Right;
 				childControl.Resize += new EventHandler(ChildControlResized);
 			}
 			ChildControlResized(null, EventArgs.Empty);

@@ -7,7 +7,7 @@ using System.Windows.Forms;
 
 namespace ThoughtWorks.CruiseControl.ControlPanel
 {
-	public class FertileConfigurationItemControl : System.Windows.Forms.UserControl
+	public class MultiConfigurationItemControl : System.Windows.Forms.UserControl
 	{
 		private ConfigurationItem _item;
 		private GroupByCombo groupByBox;
@@ -15,7 +15,7 @@ namespace ThoughtWorks.CruiseControl.ControlPanel
 
 		private System.ComponentModel.Container components = null;
 
-		public FertileConfigurationItemControl()
+		public MultiConfigurationItemControl()
 		{
 			InitializeComponent();
 
@@ -52,16 +52,14 @@ namespace ThoughtWorks.CruiseControl.ControlPanel
 				| System.Windows.Forms.AnchorStyles.Right)));
 			this.groupByBox.Location = new System.Drawing.Point(8, 0);
 			this.groupByBox.Name = "groupByBox";
-			this.groupByBox.Size = new System.Drawing.Size(592, 232);
+			this.groupByBox.Size = new System.Drawing.Size(584, 224);
 			this.groupByBox.TabIndex = 0;
 			// 
 			// childrenPanel
 			// 
-			this.childrenPanel.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-				| System.Windows.Forms.AnchorStyles.Right)));
 			this.childrenPanel.Location = new System.Drawing.Point(16, 32);
 			this.childrenPanel.Name = "childrenPanel";
-			this.childrenPanel.Size = new System.Drawing.Size(576, 184);
+			this.childrenPanel.Size = new System.Drawing.Size(560, 184);
 			this.childrenPanel.TabIndex = 2;
 			// 
 			// FertileConfigurationItemControl
