@@ -27,8 +27,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 		private string _ssDir;
 		private string _executable;
 		private string _lastTempLabel;
-
-		public CultureInfo CultureInfo = CultureInfo.CurrentCulture;
+		private CultureInfo _cultureInfo = CultureInfo.CurrentCulture;
 
 		public Vss(): this(new VssHistoryParser(VssLocaleFactory.Create()), new ProcessExecutor(), new Registry())
 		{
@@ -78,6 +77,13 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 
 		[ReflectorProperty("workingDirectory", Required = false)]
 		public string WorkingDirectory;
+
+		[ReflectorProperty("culture", Required = false)]
+		public string Culture
+		{
+			get { return _cultureInfo.Name; }
+			set { _cultureInfo = new CultureInfo(value); }
+		}
 
 		public override Modification[] GetModifications(DateTime from, DateTime to)
 		{
@@ -150,7 +156,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 		/// <returns>Date string formatted for the specified locale as expected by the VSS command-line.</returns>
 		internal string FormatCommandDate(DateTime date)
 		{
-			return string.Concat(date.ToString("d", CultureInfo), ";", date.ToString("t", CultureInfo)).Replace(" ", string.Empty).TrimEnd('M', 'm');
+			return string.Concat(date.ToString("d", _cultureInfo), ";", date.ToString("t", _cultureInfo)).Replace(" ", string.Empty).TrimEnd('M', 'm');
 		}
 
 		internal void LabelSourceControl( string label )

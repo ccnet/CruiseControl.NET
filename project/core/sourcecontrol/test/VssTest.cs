@@ -1,14 +1,12 @@
 #define USE_MOCK
-
 using System;
-using System.Globalization;
 using System.IO;
 using Exortech.NetReflector;
 using NMock;
 using NMock.Constraints;
 using NUnit.Framework;
-using ThoughtWorks.CruiseControl.Core.Util;
 using ThoughtWorks.CruiseControl.Core.Test;
+using ThoughtWorks.CruiseControl.Core.Util;
 
 namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test
 {
@@ -26,6 +24,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test
 	<applyLabel>true</applyLabel>
 	<timeout>5</timeout>
 	<workingDirectory>C:\temp</workingDirectory>
+	<culture>fr-FR</culture>
 </sourceControl>";	
 
 		private IMock mockProcessExecutor;
@@ -33,20 +32,20 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test
 		private Vss vss;
 		
 		[SetUp]
-		protected void SetUp()
+		public void SetUp()
 		{
 			mockProcessExecutor = new DynamicMock(typeof(ProcessExecutor)); mockProcessExecutor.Strict = true;
 			mockRegistry = new DynamicMock(typeof(IRegistry)); mockProcessExecutor.Strict = true;
 			mockRegistry.SetupResult("GetExpectedLocalMachineSubKeyValue", DEFAULT_SS_EXE_PATH, typeof(string), typeof(string));
 			vss = new Vss(new VssHistoryParser(new EnglishVssLocale()), (ProcessExecutor) mockProcessExecutor.MockInstance, (IRegistry) mockRegistry.MockInstance);
-			vss.CultureInfo = CultureInfo.InvariantCulture;
 			vss.Project = "$/fooProject";
+			vss.Culture = string.Empty; // invariant culture
 			vss.Username = "Admin";
 			vss.Password = "admin";
 		}
 		
 		[TearDown]
-		protected void TearDown()
+		public void TearDown()
 		{
 			mockProcessExecutor.Verify();
 			mockRegistry.Verify();
@@ -80,6 +79,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test
 			AssertEquals(5, vss.Timeout);
 			AssertEquals(true, vss.AutoGetSource);
 			AssertEquals(@"C:\temp", vss.WorkingDirectory);
+			AssertEquals("fr-FR", vss.Culture);
 		}
 
 		[Test]
@@ -99,7 +99,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test
 		[Test]
 		public void FormatDateInUSFormat()
 		{
-			vss.CultureInfo = new CultureInfo("en-US");
+			vss.Culture = "en-US";
 			DateTime date = new DateTime(2002, 2, 22, 20, 0, 0);
 			string expected = "2/22/2002;8:00P";
 			string actual = vss.FormatCommandDate(date);
