@@ -13,16 +13,17 @@ namespace tw.ccnet.remote.monitor
 {
 	public class CCTray : Form
 	{
-		const int DefaultPollingIntervalMillis = 15000;
-
 		IContainer components;
 		ContextMenu contextMenu;
 		NotifyIconEx trayIcon;
 		Hashtable _icons = null;
 
 		MenuItem mnuExit;
-		private System.Windows.Forms.MenuItem mnuLaunchWebPage;
+		MenuItem mnuLaunchWebPage;
+		MenuItem mnuSettings;
 		StatusMonitor statusMonitor;
+		SettingsForm settingsForm;
+		MonitorSettings settings;
 		
 		public CCTray()
 		{
@@ -32,13 +33,28 @@ namespace tw.ccnet.remote.monitor
 
 			this.Visible = false;
 
-			statusMonitor.PollingIntervalSeconds = GetPollingIntervalFromConfiguration();
-			statusMonitor.RemoteServerUrl = GetRemoteServerUrlFromConfiguration();
-			statusMonitor.StartPolling();
+			InitialiseSettings();
+			InitialiseMonitor();
+			InitialiseSettingsForm();
+
+			PlayBuildAudio(BuildTransition.Fixed);
 		}
 
 
 		#region Initialisation
+
+		void InitialiseSettings()
+		{
+			settings = new MonitorSettings();
+			settings.PollingIntervalSeconds = GetPollingIntervalFromConfiguration();
+			settings.RemoteServerUrl = GetRemoteServerUrlFromConfiguration();
+		}
+
+		void InitialiseMonitor()
+		{
+			statusMonitor.Settings = settings;
+			statusMonitor.StartPolling();
+		}
 
 		void InitialiseTrayIcon()
 		{
@@ -67,10 +83,10 @@ namespace tw.ccnet.remote.monitor
 		{
 			int pollingInterval;
 
-			string pollingIntervalString = ConfigurationSettings.AppSettings["check.interval"];
+			string pollingIntervalString = ConfigurationSettings.AppSettings["poll.interval.seconds"];
 			if (pollingIntervalString == null || pollingIntervalString.Length == 0 || Convert.ToInt32(pollingIntervalString) == 0)
 			{
-				pollingInterval = DefaultPollingIntervalMillis;
+				pollingInterval = MonitorSettings.DefaultPollingIntervalSeconds;
 			}
 			else
 			{
@@ -93,6 +109,11 @@ namespace tw.ccnet.remote.monitor
 			// while ALT+TABbing between applications, even though it won't appear
 			// in the taskbar
 			this.Hide();
+		}
+
+		void InitialiseSettingsForm()
+		{
+			settingsForm = new SettingsForm(settings);
 		}
 
 
@@ -121,9 +142,10 @@ namespace tw.ccnet.remote.monitor
 			this.components = new System.ComponentModel.Container();
 			this.trayIcon = new tw.ccnet.remote.monitor.NotifyIconEx();
 			this.contextMenu = new System.Windows.Forms.ContextMenu();
+			this.mnuLaunchWebPage = new System.Windows.Forms.MenuItem();
 			this.mnuExit = new System.Windows.Forms.MenuItem();
 			this.statusMonitor = new tw.ccnet.remote.monitor.StatusMonitor(this.components);
-			this.mnuLaunchWebPage = new System.Windows.Forms.MenuItem();
+			this.mnuSettings = new System.Windows.Forms.MenuItem();
 			// 
 			// trayIcon
 			// 
@@ -137,21 +159,8 @@ namespace tw.ccnet.remote.monitor
 			// 
 			this.contextMenu.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
 																						this.mnuLaunchWebPage,
+																						this.mnuSettings,
 																						this.mnuExit});
-			// 
-			// mnuExit
-			// 
-			this.mnuExit.Index = 1;
-			this.mnuExit.Text = "E&xit";
-			this.mnuExit.Click += new System.EventHandler(this.mnuExit_Click);
-			// 
-			// statusMonitor
-			// 
-			this.statusMonitor.PollingIntervalSeconds = 15;
-			this.statusMonitor.RemoteServerUrl = null;
-			this.statusMonitor.Error += new tw.ccnet.remote.monitor.ErrorEventHandler(this.statusMonitor_Error);
-			this.statusMonitor.BuildOccurred += new tw.ccnet.remote.monitor.BuildOccurredEventHandler(this.statusMonitor_BuildOccurred);
-			this.statusMonitor.Polled += new tw.ccnet.remote.monitor.PolledEventHandler(this.statusMonitor_Polled);
 			// 
 			// mnuLaunchWebPage
 			// 
@@ -159,10 +168,28 @@ namespace tw.ccnet.remote.monitor
 			this.mnuLaunchWebPage.Text = "&Launch web page";
 			this.mnuLaunchWebPage.Click += new System.EventHandler(this.mnuLaunchWebPage_Click);
 			// 
+			// mnuExit
+			// 
+			this.mnuExit.Index = 2;
+			this.mnuExit.Text = "E&xit";
+			this.mnuExit.Click += new System.EventHandler(this.mnuExit_Click);
+			// 
+			// statusMonitor
+			// 
+			this.statusMonitor.Error += new tw.ccnet.remote.monitor.ErrorEventHandler(this.statusMonitor_Error);
+			this.statusMonitor.BuildOccurred += new tw.ccnet.remote.monitor.BuildOccurredEventHandler(this.statusMonitor_BuildOccurred);
+			this.statusMonitor.Polled += new tw.ccnet.remote.monitor.PolledEventHandler(this.statusMonitor_Polled);
+			// 
+			// mnuSettings
+			// 
+			this.mnuSettings.Index = 1;
+			this.mnuSettings.Text = "&Settings...";
+			this.mnuSettings.Click += new System.EventHandler(this.mnuSettings_Click);
+			// 
 			// CCTray
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5, 13);
-			this.ClientSize = new System.Drawing.Size(104, 42);
+			this.ClientSize = new System.Drawing.Size(104, 23);
 			this.ControlBox = false;
 			this.Enabled = false;
 			this.MaximizeBox = false;
@@ -226,6 +253,8 @@ namespace tw.ccnet.remote.monitor
 
 			// show a balloon
 			trayIcon.ShowBalloon(caption, description, icon, 5000);
+
+			PlayBuildAudio(e.BuildTransition);
 		}
 
 		private void statusMonitor_Error(object sender, ErrorEventArgs e)
@@ -234,6 +263,22 @@ namespace tw.ccnet.remote.monitor
 			trayIcon.Icon = GetStatusIcon(IntegrationStatus.Unknown);
 		}
 
+
+		#endregion
+
+		#region Playing of audio
+
+		void PlayBuildAudio(BuildTransition transition)
+		{
+			if (settings.ShouldPlaySoundForTransition(transition))
+			{
+				string resourceName = settings.GetAudioFileLocation(transition);
+				Stream stream = (Stream)ResourceUtil.GetEmbeddedResource(resourceName);
+				byte[] bytes = new byte[stream.Length];
+				stream.Read(bytes, 0, bytes.Length);
+				Audio.PlaySound(bytes, true, true);
+			}
+		}
 
 		#endregion
 
@@ -339,5 +384,10 @@ namespace tw.ccnet.remote.monitor
 		}
 
 		#endregion
+
+		private void mnuSettings_Click(object sender, System.EventArgs e)
+		{
+			settingsForm.Launch();			
+		}
 	}
 }

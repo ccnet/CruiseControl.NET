@@ -25,7 +25,7 @@ namespace tw.ccnet.remote.monitor
 		IContainer components;
 
 		ProjectStatus _currentProjectStatus;
-		string _remoteServerUrl;
+		MonitorSettings _settings;
 
 		#region Constructors
 
@@ -43,35 +43,6 @@ namespace tw.ccnet.remote.monitor
 
 		#endregion
 
-		#region Configuration properties
-
-		public string RemoteServerUrl
-		{
-			get
-			{
-				return _remoteServerUrl;
-			}
-			set
-			{
-				_remoteServerUrl = value;
-			}
-		}
-
-		public double PollingIntervalSeconds
-		{
-			get
-			{
-				return pollTimer.Interval / 1000;
-			}
-			set
-			{
-				pollTimer.Interval = (int)(value * 1000);
-			}
-		}
-
-
-		#endregion
-
 		#region Properties
 
 		public string WebUrl
@@ -81,6 +52,19 @@ namespace tw.ccnet.remote.monitor
 				return _currentProjectStatus.WebURL;
 			}
 		}
+
+		public MonitorSettings Settings
+		{
+			get
+			{
+				return _settings;
+			}
+			set
+			{
+				_settings = value;
+			}
+		}
+
 
 		#endregion
 
@@ -140,6 +124,9 @@ namespace tw.ccnet.remote.monitor
 		void pollTimer_Tick(object sender, EventArgs e)
 		{
 			Poll();
+
+			// update interval, in case it has changed
+			pollTimer.Interval = Settings.PollingIntervalSeconds * 1000;
 		}
 
 		void Poll()
@@ -211,7 +198,8 @@ namespace tw.ccnet.remote.monitor
 
 		ProjectStatus GetRemoteProjectStatus()
 		{
-			ICruiseManager remoteCC = (ICruiseManager)RemotingServices.Connect(typeof(ICruiseManager), _remoteServerUrl);
+			ICruiseManager remoteCC
+				= (ICruiseManager)RemotingServices.Connect(typeof(ICruiseManager), Settings.RemoteServerUrl);
 			return remoteCC.GetProjectStatus();
 		}
 
