@@ -229,6 +229,7 @@ namespace ThoughtWorks.CruiseControl.Core.Test
 		[Test]
 		public void ForceBuild()
 		{
+			_integrator = CreateProjectIntegrator();
 			_integrator.ForceBuild();
 		}
 

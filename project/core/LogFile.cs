@@ -182,7 +182,7 @@ namespace ThoughtWorks.CruiseControl.Core
 			return string.Format("{0}&{1}={2}", CreateUrl(filename), ProjectQueryString, projectname);
 		}
 		
-		public static string CreateUrl(IntegrationResult result)
+		public static string CreateUrl(IIntegrationResult result)
 		{
 			if (result.Status == IntegrationStatus.Success)
 				return CreateUrl(CreateSuccessfulBuildLogFileName(result.StartTime, result.Label));
@@ -190,7 +190,7 @@ namespace ThoughtWorks.CruiseControl.Core
 				return CreateUrl(CreateFailedBuildLogFileName(result.StartTime));
 		}
 
-		public static string CreateUrl(string urlRoot, IntegrationResult result)
+		public static string CreateUrl(string urlRoot, IIntegrationResult result)
 		{
 			return String.Concat(urlRoot, CreateUrl(result));
 		}

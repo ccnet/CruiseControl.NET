@@ -61,7 +61,7 @@ namespace ThoughtWorks.CruiseControl.Core
 		/// </summary>
 		/// <param name="buildCondition"></param>
 		/// <returns>The result of the integration, or null if no integration took place.</returns>
-		IntegrationResult RunIntegration(BuildCondition buildCondition);
+		IIntegrationResult RunIntegration(BuildCondition buildCondition);
 
 		/// <summary>
 		/// Returns the most recent build status.

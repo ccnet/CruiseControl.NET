@@ -35,12 +35,12 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test
 			}
 		}
 
-		public bool ShouldRun(IntegrationResult result, IProject project)
+		public bool ShouldRun(IIntegrationResult result)
 		{
 			return true;
 		}
 
-		public void Run(IntegrationResult result, IProject project)
+		public void Run(IIntegrationResult result)
 		{
 			result.Modifications = GetModifications(result.LastModificationDate, DateTime.Now);
 		}
@@ -61,7 +61,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test
 			this.label = label;
 		}
 
-		public void GetSource(IntegrationResult result)
+		public void GetSource(IIntegrationResult result)
 		{
 		}
 

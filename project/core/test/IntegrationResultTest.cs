@@ -34,13 +34,14 @@ namespace ThoughtWorks.CruiseControl.Core.Test
 		[Test]
 		public void VerifyInitialIntegrationResult()
 		{
-			IntegrationResult initial = IntegrationResult.CreateInitialIntegrationResult("project");
+			IntegrationResult initial = IntegrationResult.CreateInitialIntegrationResult("project", @"c:\temp");
 
 			Assert.AreEqual("project", initial.ProjectName);
 			Assert.AreEqual(IntegrationStatus.Unknown, initial.LastIntegrationStatus, "last integration status is unknown because no previous integrations exist.");
 			Assert.AreEqual(IntegrationStatus.Unknown, initial.Status, "status should be unknown as integration has not run yet.");
 			Assert.AreEqual(DateTime.Now.AddDays(-1).Day, initial.StartTime.Day, "assume start date is yesterday in order to detect some modifications.");
 			Assert.AreEqual(DateTime.Now.Day, initial.EndTime.Day, "assume end date is today in order to detect some modifications.");
+			Assert.AreEqual(@"c:\temp", initial.WorkingDirectory);
 
 			Assert.IsTrue(initial.IsInitial());
 		}

@@ -10,7 +10,7 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
 			this.includeAnchorTag = includeAnchorTag;
 		}
 
-		public string BuildMessage(IntegrationResult result, string projectUrl)
+		public string BuildMessage(IIntegrationResult result, string projectUrl)
 		{
 			string link = LogFileUtil.CreateUrl(projectUrl, result);
 			if (includeAnchorTag) link = string.Format(@"<a href=""{0}"">web page</a>", link);

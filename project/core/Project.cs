@@ -1,11 +1,11 @@
 using System;
 using System.ComponentModel;
 using System.IO;
+using Exortech.NetReflector;
 using ThoughtWorks.CruiseControl.Core.Label;
 using ThoughtWorks.CruiseControl.Core.State;
 using ThoughtWorks.CruiseControl.Core.Util;
 using ThoughtWorks.CruiseControl.Remote;
-using Exortech.NetReflector;
 
 namespace ThoughtWorks.CruiseControl.Core
 {
@@ -44,14 +44,15 @@ namespace ThoughtWorks.CruiseControl.Core
 		private IBuilder _builder;
 		private ILabeller _labeller = new DefaultLabeller();
 		private IIntegrationCompletedEventHandler[] _publishers;
-		private IntegrationResult _lastIntegrationResult = null;
 		private ProjectActivity _currentActivity = ProjectActivity.Unknown;
 		private int _modificationDelaySeconds = 0;
 		private IStateManager _state;
+		private IntegrationResultManager _integrationResultManager;
 
 		public Project()
 		{
 			_state = new ProjectStateManager(this, new IntegrationStateManager());
+			_integrationResultManager = new IntegrationResultManager(this);
 		}
 
 		[ReflectorProperty("state", InstanceTypeKey="type", Required=false)]
@@ -132,15 +133,9 @@ namespace ThoughtWorks.CruiseControl.Core
 			get { return _currentActivity; }
 		}
 
-		public IntegrationResult LastIntegrationResult
+		public IIntegrationResult LastIntegrationResult
 		{
-			get
-			{
-				if (_lastIntegrationResult == null)
-					_lastIntegrationResult = LoadLastIntegration();
-
-				return _lastIntegrationResult;
-			}
+			get { return _integrationResultManager.LastIntegrationResult; }
 		}
 
 		public IntegrationStatus LatestBuildStatus
@@ -148,31 +143,20 @@ namespace ThoughtWorks.CruiseControl.Core
 			get { return LastIntegrationResult.Status; }
 		}
 
-		public IntegrationResult RunIntegration(BuildCondition buildCondition)
+		public IIntegrationResult RunIntegration(BuildCondition buildCondition)
 		{
-			IntegrationResult result = CreateNewIntegrationResult(buildCondition);
+			IIntegrationResult result = CreateNewIntegrationResult(buildCondition);
 			AttemptToRunIntegration(result);
 			PostBuild(result);
 			return result;
 		}
 
-		private IntegrationResult CreateNewIntegrationResult(BuildCondition buildCondition)
+		private IIntegrationResult CreateNewIntegrationResult(BuildCondition buildCondition)
 		{
-			IntegrationResult result = new IntegrationResult(Name);
-			if (LastIntegrationResult.IsInitial())
-			{
-				result.BuildCondition = BuildCondition.ForceBuild;
-			}
-			else
-			{
-				result.BuildCondition = buildCondition;
-				result.LastIntegrationStatus = LastIntegrationResult.Status;				
-			}
-			result.Label = Labeller.Generate(LastIntegrationResult);
-			return result;
+			return _integrationResultManager.StartNewIntegration(buildCondition);
 		}
 
-		private void AttemptToRunIntegration(IntegrationResult result)
+		private void AttemptToRunIntegration(IIntegrationResult result)
 		{
 			result.MarkStartTime();
 			try
@@ -195,10 +179,10 @@ namespace ThoughtWorks.CruiseControl.Core
 			result.MarkEndTime();
 		}
 
-		private Modification[] GetSourceModifications(IntegrationResult results)
+		private Modification[] GetSourceModifications(IIntegrationResult result)
 		{
 			_currentActivity = ProjectActivity.CheckingModifications;
-			Modification[] modifications = SourceControl.GetModifications(LastIntegrationResult.StartTime, results.StartTime);
+			Modification[] modifications = SourceControl.GetModifications(LastIntegrationResult.StartTime, result.StartTime);
 			Log.Info(GetModificationsDetectedMessage(modifications));
 			return modifications;
 		}
@@ -216,7 +200,7 @@ namespace ThoughtWorks.CruiseControl.Core
 			}
 		}
 
-		private void RunBuild(IntegrationResult result)
+		private void RunBuild(IIntegrationResult result)
 		{
 			_currentActivity = ProjectActivity.Building;
 
@@ -225,39 +209,36 @@ namespace ThoughtWorks.CruiseControl.Core
 
 			Log.Info("Building");
 
-			Builder.Run(result, this);
+			Builder.Run(result);
 
 			Log.Info("Build complete: " + result.Status);
 		}
 
-		private void RunTasks(IntegrationResult result)
+		private void RunTasks(IIntegrationResult result)
 		{
 			foreach (ITask task in Tasks)
 			{
-				task.Run(result, this);
+				task.Run(result);
 			}
 		}
 
-		internal void PostBuild(IntegrationResult result)
+		private void PostBuild(IIntegrationResult result)
 		{
 			if (ShouldPublishException(result))
 			{
-				Log.Info("Integration complete: " + result.EndTime);
-
-				AttemptToSaveState(result);
-
 				HandleProjectLabelling(result);
 
 				// raise event (publishers do their thing in response)
 				OnIntegrationCompleted(new IntegrationCompletedEventArgs(result));
 
-				// update reference to the most recent result
-				_lastIntegrationResult = result;
+				_integrationResultManager.FinishIntegration();
 			}
+			Log.Info("Integration complete: " + result.EndTime);
+
 			_currentActivity = ProjectActivity.Sleeping;
 		}
 
-		private bool ShouldPublishException(IntegrationResult result)
+		private bool ShouldPublishException(IIntegrationResult result)
 		{
 			if (result.Status == IntegrationStatus.Exception)
 			{
@@ -269,40 +250,12 @@ namespace ThoughtWorks.CruiseControl.Core
 			}
 		}
 
-		private void AttemptToSaveState(IntegrationResult results)
-		{
-			try
-			{
-				StateManager.SaveState(results);
-			}
-			catch (CruiseControlException ex)
-			{
-				Log.Error(ex);
-
-				if (results.ExceptionResult == null)
-					results.ExceptionResult = ex;
-			}
-		}
-
-		private IntegrationResult LoadLastIntegration()
-		{
-			if (StateManager.StateFileExists())
-			{
-				return StateManager.LoadState();
-			}
-			else
-			{
-				// no integration result is on record
-				return IntegrationResult.CreateInitialIntegrationResult(Name);
-			}
-		}
-
 		/// <summary>
 		/// Determines whether a build should run.  A build should run if there
 		/// are modifications, and none have occurred within the modification
 		/// delay.
 		/// </summary>
-		internal bool ShouldRunBuild(IntegrationResult results)
+		internal bool ShouldRunBuild(IIntegrationResult results)
 		{
 			if (results.BuildCondition == BuildCondition.ForceBuild)
 				return true;
@@ -318,7 +271,7 @@ namespace ThoughtWorks.CruiseControl.Core
 		/// modification delay is not set (has a value of zero or less), this method
 		/// will always return false.
 		/// </summary>
-		private bool DoModificationsExistWithinModificationDelay(IntegrationResult results)
+		private bool DoModificationsExistWithinModificationDelay(IIntegrationResult results)
 		{
 			if (ModificationDelaySeconds <= 0)
 				return false;
@@ -347,7 +300,7 @@ namespace ThoughtWorks.CruiseControl.Core
 		/// <summary>
 		/// Labels the project, if the build was successful.
 		/// </summary>
-		internal void HandleProjectLabelling(IntegrationResult result)
+		internal void HandleProjectLabelling(IIntegrationResult result)
 		{
 			if (result.Succeeded)
 				SourceControl.LabelSourceControl(result.Label, result.StartTime);
@@ -386,11 +339,11 @@ namespace ThoughtWorks.CruiseControl.Core
 			}
 			if (purgeWorkingDirectory && Directory.Exists(WorkingDirectory))
 			{
-				new IoService().DeleteIncludingReadOnlyObjects(WorkingDirectory);	
+				new IoService().DeleteIncludingReadOnlyObjects(WorkingDirectory);
 			}
 			if (purgeArtifactDirectory && Directory.Exists(ArtifactDirectory))
 			{
-				new IoService().DeleteIncludingReadOnlyObjects(ArtifactDirectory);	
+				new IoService().DeleteIncludingReadOnlyObjects(ArtifactDirectory);
 			}
 		}
 	}

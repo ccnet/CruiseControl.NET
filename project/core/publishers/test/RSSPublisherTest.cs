@@ -1,7 +1,4 @@
-using System;
 using NUnit.Framework;
-using NMock;
-using ThoughtWorks.CruiseControl.Core.Publishers;
 using ThoughtWorks.CruiseControl.Remote;
 
 namespace ThoughtWorks.CruiseControl.Core.Publishers.Test
@@ -19,7 +16,7 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers.Test
 			project = new Project();
 			project.Name = "myProject";
 			project.WebURL = "http://somewhere/someplace.html";
-			result = new IntegrationResult("myProject");
+			result = new IntegrationResult("myProject", @"c:\temp");
 			publisher = new RssPublisher();
 		}
 
@@ -27,7 +24,7 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers.Test
 		public void ChannelContainsCorrectDetails()
 		{
 			/// Execute
-			Document document = publisher.GenarateDocument(project, result);
+			Document document = publisher.GenerateDocument(project, result);
 
 			/// Verify
 			Assert.AreEqual("CruiseControl.NET - myProject", document.Channel.Title);
@@ -40,7 +37,7 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers.Test
 		{
 			result.Status = IntegrationStatus.Success;
 			/// Execute
-			Document document = publisher.GenarateDocument(project, result);
+			Document document = publisher.GenerateDocument(project, result);
 
 			Item firstItem = (Item) document.Channel.Items[0];
 			Assert.AreEqual("Successful Build", firstItem.Title);

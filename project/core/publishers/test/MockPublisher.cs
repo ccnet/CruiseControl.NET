@@ -6,19 +6,19 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers.Test
 	public class MockPublisher : PublisherBase
 	{
 		private bool _published = false;
-		private IntegrationResult _result;
+		private IIntegrationResult _result;
 
 		public bool Published
 		{
 			get { return _published; }
 		}
 
-		public IntegrationResult Result
+		public IIntegrationResult Result
 		{
 			get { return _result; }
 		}
 
-		public override void PublishIntegrationResults(IProject project, IntegrationResult result)
+		public override void PublishIntegrationResults(IProject project, IIntegrationResult result)
 		{
 			_published = true;
 			_result = result;

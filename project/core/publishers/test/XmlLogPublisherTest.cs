@@ -1,12 +1,11 @@
 using System;
-using System.Collections;
 using System.IO;
 using System.Xml;
+using Exortech.NetReflector;
 using NMock;
 using NUnit.Framework;
-using Exortech.NetReflector;
-using ThoughtWorks.CruiseControl.Core.Util;
 using ThoughtWorks.CruiseControl.Core.Test;
+using ThoughtWorks.CruiseControl.Core.Util;
 using ThoughtWorks.CruiseControl.Remote;
 
 namespace ThoughtWorks.CruiseControl.Core.Publishers.Test
@@ -67,7 +66,7 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers.Test
         [Test]
         public void GetFilenameForFailedBuild()
         {
-            IntegrationResult result = CreateIntegrationResult(IntegrationStatus.Failure, true);
+            IntegrationResult result = CreateIntegrationResult(IntegrationStatus.Failure,  true);
             string expected = "log19800101000000.xml";
             Assert.AreEqual(expected, _publisher.GetFilename(result));
         }
@@ -160,7 +159,7 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers.Test
 
         private void CheckForXml(string path)
         {
-            XmlDocument doc = new XmlDocument();
+        	XmlDocument doc = new XmlDocument();
             doc.Load(path);
         }
 
@@ -184,15 +183,17 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers.Test
 
         private IntegrationResult CreateIntegrationResult(IntegrationStatus status, bool addModifications)
         {
-            IntegrationResult result = new IntegrationResult("proj");
+        	IntegrationResult result = IntegrationResultMother.Create(status, new DateTime(1980, 1, 1));
+			result.ProjectName = "proj";
 			result.StartTime = new DateTime(1980, 1, 1);
             result.Label = "1";
             result.Status = status;
             if (addModifications)
             {
-                result.Modifications = new Modification[1];
-                result.Modifications[0] = new Modification();
-                result.Modifications[0].ModifiedTime = new DateTime(2002, 2, 3);
+            	Modification[] modifications = new Modification[1];
+                modifications[0] = new Modification();
+                modifications[0].ModifiedTime = new DateTime(2002, 2, 3);
+            	result.Modifications = modifications;
             }
             return result;
         }

@@ -1,9 +1,7 @@
 using System;
-using System.Xml;
-using System.Collections;
-using System.IO;
-using ThoughtWorks.CruiseControl.Core.Util;
 using System.Text.RegularExpressions;
+using System.Xml;
+using ThoughtWorks.CruiseControl.Core.Util;
 
 namespace ThoughtWorks.CruiseControl.Core.Publishers
 {
@@ -16,7 +14,7 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
 			_writer = writer;
 		}
 
-		public void Write(IntegrationResult result)
+		public void Write(IIntegrationResult result)
 		{
 			_writer.WriteStartElement(Elements.CRUISE_ROOT);
 			_writer.WriteAttributeString("project", result.ProjectName);
@@ -27,7 +25,7 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
 			_writer.WriteEndElement();
 		}
 
-		private void WriteTaskResults(IntegrationResult result)
+		private void WriteTaskResults(IIntegrationResult result)
 		{
 			foreach (ITaskResult taskResult in result.TaskResults)
 			{
@@ -35,7 +33,7 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
 			}
 		}
 
-		public void WriteBuildElement(IntegrationResult result)
+		public void WriteBuildElement(IIntegrationResult result)
 		{
 			_writer.WriteStartElement(Elements.BUILD);
 			_writer.WriteAttributeString("date", result.StartTime.ToString());
@@ -88,7 +86,7 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
 			;
 		}
 
-		public void WriteException(IntegrationResult result)
+		public void WriteException(IIntegrationResult result)
 		{
 			if (result.ExceptionResult == null)
 			{

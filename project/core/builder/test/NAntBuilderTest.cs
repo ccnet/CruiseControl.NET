@@ -1,10 +1,10 @@
+using System;
+using System.ComponentModel;
 using System.IO;
 using Exortech.NetReflector;
 using NMock;
 using NMock.Constraints;
 using NUnit.Framework;
-using System;
-using System.ComponentModel;
 using ThoughtWorks.CruiseControl.Core.Util;
 using ThoughtWorks.CruiseControl.Remote;
 
@@ -18,22 +18,17 @@ namespace ThoughtWorks.CruiseControl.Core.Builder.Test
 
 		private NAntBuilder _builder;
 		private IMock _mockExecutor;
-		private DynamicMock projectMock;
-		private IProject project;
 
 		[SetUp]
 		public void SetUp()
 		{
-			_mockExecutor = new DynamicMock(typeof(ProcessExecutor));
+			_mockExecutor = new DynamicMock(typeof (ProcessExecutor));
 			_builder = new NAntBuilder((ProcessExecutor) _mockExecutor.MockInstance);
-			projectMock = new DynamicMock(typeof(IProject));
-			project = (IProject) projectMock.MockInstance;
 		}
 
 		private void VerifyAll()
 		{
 			_mockExecutor.Verify();
-			projectMock.Verify();
 		}
 
 		[TearDown]
@@ -87,7 +82,7 @@ namespace ThoughtWorks.CruiseControl.Core.Builder.Test
 			_mockExecutor.ExpectAndReturn("Execute", returnVal, new IsAnything());
 
 			IntegrationResult result = new IntegrationResult();
-			_builder.Run(result, project);
+			_builder.Run(result);
 
 			Assert.IsTrue(result.Succeeded);
 			Assert.AreEqual(IntegrationStatus.Success, result.Status);
@@ -101,30 +96,30 @@ namespace ThoughtWorks.CruiseControl.Core.Builder.Test
 			_mockExecutor.ExpectAndReturn("Execute", returnVal, new IsAnything());
 
 			IntegrationResult result = new IntegrationResult();
-			_builder.Run(result, project);
+			_builder.Run(result);
 
 			Assert.IsTrue(result.Failed);
 			Assert.AreEqual(IntegrationStatus.Failure, result.Status);
 			Assert.AreEqual(returnVal.StandardOutput, result.Output);
 		}
 
-		[Test, ExpectedException(typeof(BuilderException))]
+		[Test, ExpectedException(typeof (BuilderException))]
 		public void ShouldThrowBuilderExceptionIfProcessTimesOut()
 		{
 			ProcessResult returnVal = new ProcessResult("output", null, SUCCESSFUL_EXIT_CODE, true);
 			_mockExecutor.ExpectAndReturn("Execute", returnVal, new IsAnything());
 
 			IntegrationResult result = new IntegrationResult();
-			_builder.Run(result, project);
+			_builder.Run(result);
 		}
 
-		[Test, ExpectedException(typeof(BuilderException))]
+		[Test, ExpectedException(typeof (BuilderException))]
 		public void ShouldThrowBuilderExceptionIfProcessThrowsException()
 		{
 			_mockExecutor.ExpectAndThrow("Execute", new Win32Exception(), new IsAnything());
 
 			IntegrationResult result = new IntegrationResult();
-			_builder.Run(result, project);
+			_builder.Run(result);
 		}
 
 		[Test]
@@ -133,7 +128,7 @@ namespace ThoughtWorks.CruiseControl.Core.Builder.Test
 			ProcessResult returnVal = CreateSuccessfulProcessResult();
 			CollectingConstraint constraint = new CollectingConstraint();
 			_mockExecutor.ExpectAndReturn("Execute", returnVal, constraint);
-			
+
 			IntegrationResult result = new IntegrationResult();
 			result.Label = "1.0";
 
@@ -141,9 +136,9 @@ namespace ThoughtWorks.CruiseControl.Core.Builder.Test
 			_builder.Executable = "NAnt.exe";
 			_builder.BuildFile = "mybuild.build";
 			_builder.BuildArgs = "myArgs";
-			_builder.Targets = new string[] { "target1", "target2"};
+			_builder.Targets = new string[] {"target1", "target2"};
 			_builder.BuildTimeoutSeconds = 2;
-			_builder.Run(result, project);
+			_builder.Run(result);
 
 			ProcessInfo info = (ProcessInfo) constraint.Parameter;
 			Assert.AreEqual(_builder.Executable, info.FileName);
@@ -158,12 +153,12 @@ namespace ThoughtWorks.CruiseControl.Core.Builder.Test
 			ProcessResult returnVal = CreateSuccessfulProcessResult();
 			CollectingConstraint constraint = new CollectingConstraint();
 			_mockExecutor.ExpectAndReturn("Execute", returnVal, constraint);
-			
-			_builder.Run(new IntegrationResult(), project);
+
+			_builder.Run(new IntegrationResult());
 
 			ProcessInfo info = (ProcessInfo) constraint.Parameter;
 			Assert.AreEqual(_builder.Executable, NAntBuilder.DEFAULT_EXECUTABLE);
-			Assert.AreEqual(NAntBuilder.DEFAULT_BUILD_TIMEOUT * 1000, info.TimeOut);
+			Assert.AreEqual(NAntBuilder.DEFAULT_BUILD_TIMEOUT*1000, info.TimeOut);
 			Assert.AreEqual("-logger:" + NAntBuilder.DEFAULT_LOGGER + "  -D:label-to-apply=NO-LABEL", info.Arguments);
 		}
 
@@ -190,30 +185,28 @@ namespace ThoughtWorks.CruiseControl.Core.Builder.Test
 
 		private void CheckBaseDirectoryIsProjectDirectoryWithGivenRelativePart(string relativeDirectory)
 		{
-			projectMock.ExpectAndReturn("WorkingDirectory", "projectWorkingDirectory");
 			string expectedBaseDirectory = "projectWorkingDirectory";
 			if (relativeDirectory != "")
 			{
 				expectedBaseDirectory = Path.Combine(expectedBaseDirectory, relativeDirectory);
 			}
-			CheckBaseDirectory(expectedBaseDirectory);
+			CheckBaseDirectory(new IntegrationResult("project", "projectWorkingDirectory"), expectedBaseDirectory);
 		}
 
 		[Test]
 		public void IfConfiguredBaseDirectoryIsAbsoluteUseItAtBaseDirectory()
 		{
-			projectMock.ExpectNoCall("WorkingDirectory");
 			_builder.ConfiguredBaseDirectory = @"c:\my\base\directory";
-			CheckBaseDirectory(@"c:\my\base\directory");
+			CheckBaseDirectory(new IntegrationResult(), @"c:\my\base\directory");
 		}
 
-		private void CheckBaseDirectory(string expectedBaseDirectory)
+		private void CheckBaseDirectory(IntegrationResult result, string expectedBaseDirectory)
 		{
 			ProcessResult returnVal = CreateSuccessfulProcessResult();
 			CollectingConstraint constraint = new CollectingConstraint();
 			_mockExecutor.ExpectAndReturn("Execute", returnVal, constraint);
 
-			_builder.Run(new IntegrationResult(), project);
+			_builder.Run(result);
 
 			ProcessInfo info = (ProcessInfo) constraint.Parameter;
 			Assert.AreEqual(expectedBaseDirectory, info.WorkingDirectory);
@@ -223,18 +216,18 @@ namespace ThoughtWorks.CruiseControl.Core.Builder.Test
 		[Test]
 		public void ShouldRun()
 		{
-			AssertFalse(_builder.ShouldRun(new IntegrationResult(), project));
-			Assert.IsTrue(_builder.ShouldRun(CreateIntegrationResultWithModifications(IntegrationStatus.Unknown), project));
-			Assert.IsTrue(_builder.ShouldRun(CreateIntegrationResultWithModifications(IntegrationStatus.Success), project));
-			AssertFalse(_builder.ShouldRun(CreateIntegrationResultWithModifications(IntegrationStatus.Failure), project));
-			AssertFalse(_builder.ShouldRun(CreateIntegrationResultWithModifications(IntegrationStatus.Exception), project));
+			AssertFalse(_builder.ShouldRun(new IntegrationResult()));
+			Assert.IsTrue(_builder.ShouldRun(CreateIntegrationResultWithModifications(IntegrationStatus.Unknown)));
+			Assert.IsTrue(_builder.ShouldRun(CreateIntegrationResultWithModifications(IntegrationStatus.Success)));
+			AssertFalse(_builder.ShouldRun(CreateIntegrationResultWithModifications(IntegrationStatus.Failure)));
+			AssertFalse(_builder.ShouldRun(CreateIntegrationResultWithModifications(IntegrationStatus.Exception)));
 		}
 
 		[Test]
 		public void ShouldGiveAPresentationValueForTargetsThatIsANewLineSeparatedEquivalentOfAllTargets()
 		{
 			_builder.Targets = new string[] {"target1", "target2"};
-			Assert.AreEqual ("target1" + Environment.NewLine + "target2", _builder.TargetsForPresentation);
+			Assert.AreEqual("target1" + Environment.NewLine + "target2", _builder.TargetsForPresentation);
 		}
 
 		[Test]
@@ -269,11 +262,11 @@ namespace ThoughtWorks.CruiseControl.Core.Builder.Test
 			return new ProcessResult("output", null, SUCCESSFUL_EXIT_CODE, false);
 		}
 
-		private IntegrationResult CreateIntegrationResultWithModifications (IntegrationStatus status)
+		private IntegrationResult CreateIntegrationResultWithModifications(IntegrationStatus status)
 		{
-			IntegrationResult result = new IntegrationResult ();
+			IntegrationResult result = new IntegrationResult();
 			result.Status = status;
-			result.Modifications = new Modification[] { new Modification () };
+			result.Modifications = new Modification[] {new Modification()};
 			return result;
 		}
 	}

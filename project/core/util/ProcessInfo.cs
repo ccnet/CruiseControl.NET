@@ -109,6 +109,5 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 			return string.Format("FileName: [{0}] -- Arguments: [{1}] -- WorkingDirectory: [{2}] -- StandardInputContent: [{3}] ",
 				FileName, Arguments, WorkingDirectory, StandardInputContent);
 		}
-
 	}
 }

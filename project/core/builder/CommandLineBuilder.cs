@@ -43,9 +43,9 @@ namespace ThoughtWorks.CruiseControl.Core.Builder
 		[ReflectorProperty("buildTimeoutSeconds", Required = false)] 
 		public int BuildTimeoutSeconds = DEFAULT_BUILD_TIMEOUT;
 
-		public void Run(IntegrationResult result, IProject project)
+		public void Run(IIntegrationResult result)
 		{
-			ProcessResult processResult = AttemptExecute(CreateProcessInfo(result, project));
+			ProcessResult processResult = AttemptExecute(CreateProcessInfo(result));
 			result.Output = processResult.StandardOutput + "\n" + processResult.StandardError;
 
 			if (processResult.TimedOut)
@@ -64,18 +64,18 @@ namespace ThoughtWorks.CruiseControl.Core.Builder
 			}
 		}
 
-		private ProcessInfo CreateProcessInfo(IntegrationResult result, IProject project)
+		private ProcessInfo CreateProcessInfo(IIntegrationResult result)
 		{
-			ProcessInfo info = new ProcessInfo(Executable, BuildArgs, BaseDirectory(project));
+			ProcessInfo info = new ProcessInfo(Executable, BuildArgs, BaseDirectory(result));
 			info.TimeOut = BuildTimeoutSeconds*1000;
 			return info;
 		}
 
-		private string BaseDirectory(IProject project)
+		private string BaseDirectory(IIntegrationResult result)
 		{
 			if (ConfiguredBaseDirectory == null || ConfiguredBaseDirectory == "")
 			{
-				return project.WorkingDirectory;
+				return result.WorkingDirectory;
 			}
 			else if (Path.IsPathRooted(ConfiguredBaseDirectory))
 			{
@@ -83,7 +83,7 @@ namespace ThoughtWorks.CruiseControl.Core.Builder
 			}
 			else
 			{
-				return Path.Combine(project.WorkingDirectory, ConfiguredBaseDirectory);
+				return Path.Combine(result.WorkingDirectory, ConfiguredBaseDirectory);
 			}
 		}
 
@@ -105,7 +105,7 @@ namespace ThoughtWorks.CruiseControl.Core.Builder
 			get { return string.Format("{0} {1}", Executable, BuildArgs); }
 		}
 
-		public bool ShouldRun(IntegrationResult result, IProject project)
+		public bool ShouldRun(IIntegrationResult result)
 		{
 			return result.Working && result.HasModifications();
 		}

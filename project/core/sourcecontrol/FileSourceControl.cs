@@ -35,12 +35,12 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			return (Modification[])modifications.ToArray(typeof(Modification));
 		}
 
-		public bool ShouldRun(IntegrationResult result, IProject project)
+		public bool ShouldRun(IIntegrationResult result)
 		{
 			return result.Working;
 		}
 
-		public void Run(IntegrationResult result, IProject project)
+		public void Run(IIntegrationResult result)
 		{
 			result.Modifications = GetModifications(result.LastModificationDate, DateTime.Now);
 		}
@@ -95,7 +95,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 		{
 		}
 
-		public void GetSource(IntegrationResult result)
+		public void GetSource(IIntegrationResult result)
 		{
 			
 		}

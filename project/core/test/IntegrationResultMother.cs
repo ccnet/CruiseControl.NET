@@ -1,4 +1,5 @@
 using System;
+using System.IO;
 using ThoughtWorks.CruiseControl.Remote;
 
 namespace ThoughtWorks.CruiseControl.Core.Test
@@ -10,13 +11,24 @@ namespace ThoughtWorks.CruiseControl.Core.Test
 			return Create(succeeded, DateTime.Now);
 		}
 
+		public static IntegrationResult Create(IntegrationStatus status)
+		{
+			return Create(status, DateTime.Now);
+		}
+
 		public static IntegrationResult Create(bool succeeded, DateTime date)
 		{
-			IntegrationResult result = new IntegrationResult("test");
-			result.Status = (succeeded) ? IntegrationStatus.Success : IntegrationStatus.Failure;
+			IntegrationStatus status = (succeeded) ? IntegrationStatus.Success : IntegrationStatus.Failure;
+			return Create(status, date);
+		}
+
+		public static IntegrationResult Create(IntegrationStatus status, DateTime date)
+		{
+			IntegrationResult result = new IntegrationResult("test", Path.GetTempPath());
+			result.Status = status;
 			result.StartTime = date;
 			result.EndTime = date;
-			return result;
+			return result;			
 		}
 
 		public static IntegrationResult CreateSuccessful()

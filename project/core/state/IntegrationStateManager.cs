@@ -41,7 +41,7 @@ namespace ThoughtWorks.CruiseControl.Core.State
 			return File.Exists(GetFilePath());
 		}
 
-		public IntegrationResult LoadState()
+		public IIntegrationResult LoadState()
 		{
 			_serializer = new XmlSerializer(typeof(IntegrationResult));
 			using (TextReader reader = CreateTextReader(GetFilePath()))
@@ -50,7 +50,7 @@ namespace ThoughtWorks.CruiseControl.Core.State
 			}
 		}
 		
-		public void SaveState(IntegrationResult result)
+		public void SaveState(IIntegrationResult result)
 		{
 			_serializer = new XmlSerializer(typeof(IntegrationResult));
 			StringWriter buffer = new StringWriter();

@@ -29,7 +29,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 		private string _lastTempLabel;
 		private CultureInfo _cultureInfo = CultureInfo.CurrentCulture;
 
-		public Vss(): this(new VssHistoryParser(VssLocaleFactory.Create()), new ProcessExecutor(), new Registry())
+		public Vss() : this(new VssHistoryParser(VssLocaleFactory.Create()), new ProcessExecutor(), new Registry())
 		{
 		}
 
@@ -38,7 +38,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			_registry = registry;
 		}
 
-		[ReflectorProperty("executable", Required = false)] 
+		[ReflectorProperty("executable", Required = false)]
 		public string Executable
 		{
 			get
@@ -50,16 +50,13 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			set { _executable = value; }
 		}
 
-		[ReflectorProperty("project")]
-		public string Project;
+		[ReflectorProperty("project")] public string Project;
 
-		[ReflectorProperty("username")]
-		public string Username;
+		[ReflectorProperty("username")] public string Username;
 
-		[ReflectorProperty("password")]
-		public string Password;
+		[ReflectorProperty("password")] public string Password;
 
-		[ReflectorProperty("ssdir", Required = false)] 
+		[ReflectorProperty("ssdir", Required = false)]
 		public string SsDir
 		{
 			get { return _ssDir; }
@@ -69,14 +66,11 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 		/// <summary>
 		/// Gets or sets whether this repository should be labeled.
 		/// </summary>
-		[ReflectorProperty("applyLabel", Required = false)]
-		public bool ApplyLabel = false;
+		[ReflectorProperty("applyLabel", Required = false)] public bool ApplyLabel = false;
 
-		[ReflectorProperty("autoGetSource", Required = false)]
-		public bool AutoGetSource = false;
+		[ReflectorProperty("autoGetSource", Required = false)] public bool AutoGetSource = false;
 
-		[ReflectorProperty("workingDirectory", Required = false)]
-		public string WorkingDirectory;
+		[ReflectorProperty("workingDirectory", Required = false)] public string WorkingDirectory;
 
 		[ReflectorProperty("culture", Required = false)]
 		public string Culture
@@ -92,7 +86,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 
 		public override void LabelSourceControl(string newLabel, DateTime dateTime)
 		{
-			if ( ApplyLabel )
+			if (ApplyLabel)
 			{
 				LabelSourceControl(newLabel, _lastTempLabel);
 				_lastTempLabel = null;
@@ -106,16 +100,16 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 
 		public void CreateTemporaryLabel()
 		{
-			if ( ApplyLabel )
+			if (ApplyLabel)
 			{
-				_lastTempLabel = CreateTemporaryLabelName( DateTime.Now );
-				LabelSourceControl( _lastTempLabel );
+				_lastTempLabel = CreateTemporaryLabelName(DateTime.Now);
+				LabelSourceControl(_lastTempLabel);
 			}
 		}
 
 		public void DeleteTemporaryLabel()
 		{
-			if ( ApplyLabel && WasTempLabelApplied() )
+			if (ApplyLabel && WasTempLabelApplied())
 			{
 				DeleteLatestLabel();
 			}
@@ -148,7 +142,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			return processInfo;
 		}
 
-		internal string CreateTemporaryLabelName( DateTime time )
+		internal string CreateTemporaryLabelName(DateTime time)
 		{
 			return "CCNETUNVERIFIED" + time.ToString("MMddyyyyHHmmss");
 		}
@@ -164,7 +158,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			return string.Concat(date.ToString("d", _cultureInfo), ";", date.ToString("t", _cultureInfo)).Replace(" ", string.Empty).TrimEnd('M', 'm');
 		}
 
-		internal void LabelSourceControl( string label )
+		internal void LabelSourceControl(string label)
 		{
 			Execute(CreateLabelProcessInfo(label));
 		}
@@ -180,9 +174,10 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			return Path.Combine(Path.GetDirectoryName(comServerPath), SS_EXE);
 		}
 
-		public override void GetSource(IntegrationResult result)
+		public override void GetSource(IIntegrationResult result)
 		{
-			if (! AutoGetSource) return;
+			if (! AutoGetSource)
+				return;
 
 			if (WorkingDirectory == null)
 			{
@@ -194,34 +189,34 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			}
 
 			Log.Info("Getting source from VSS");
-			ProcessInfo processInfo = CreateProcessInfo( DetermineGetSourceCommand( result ) );
+			ProcessInfo processInfo = CreateProcessInfo(DetermineGetSourceCommand(result));
 			Execute(processInfo);
 		}
 
-		internal string DetermineGetSourceCommand(IntegrationResult result) 
+		internal string DetermineGetSourceCommand(IIntegrationResult result)
 		{
-			if ( ApplyLabel && WasTempLabelApplied() )
+			if (ApplyLabel && WasTempLabelApplied())
 			{
-				return string.Format(GET_BY_LABEL_COMMAND_FORMAT, Project, _lastTempLabel, Username, Password);		
+				return string.Format(GET_BY_LABEL_COMMAND_FORMAT, Project, _lastTempLabel, Username, Password);
 			}
-			else if ( !ApplyLabel )
+			else if (!ApplyLabel)
 			{
-				return string.Format(GET_BY_DATE_COMMAND_FORMAT, Project, FormatCommandDate(result.StartTime), Username, Password);		
+				return string.Format(GET_BY_DATE_COMMAND_FORMAT, Project, FormatCommandDate(result.StartTime), Username, Password);
 			}
-			else 
+			else
 			{
-				throw new CruiseControlException( "illegal state: applylabel true but no temp label" );
+				throw new CruiseControlException("illegal state: applylabel true but no temp label");
 			}
 		}
 
 		private void DeleteLatestLabel()
 		{
-			LabelSourceControl( string.Empty, _lastTempLabel );
+			LabelSourceControl(string.Empty, _lastTempLabel);
 		}
 
 		private bool WasTempLabelApplied()
 		{
-			return ( _lastTempLabel != null );
+			return (_lastTempLabel != null);
 		}
 	}
 }

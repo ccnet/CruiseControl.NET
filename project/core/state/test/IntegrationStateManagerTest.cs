@@ -45,7 +45,7 @@ namespace ThoughtWorks.CruiseControl.Core.State.Test
 			AssertFalse(_state.StateFileExists());
 			_state.SaveState(_result);
 			Assert.IsTrue(_state.StateFileExists());
-			IntegrationResult actual = _state.LoadState();
+			IIntegrationResult actual = _state.LoadState();
 			Assert.AreEqual(_result, actual);
 		}
 
@@ -105,7 +105,7 @@ namespace ThoughtWorks.CruiseControl.Core.State.Test
 			_state.SaveState(result);
 
 			Assert.AreEqual(1, Directory.GetFiles(_tempDir).Length);
-			IntegrationResult actual = _state.LoadState();
+			IIntegrationResult actual = _state.LoadState();
 			Assert.AreEqual("10", actual.Label);
 		}
 
@@ -137,7 +137,7 @@ namespace ThoughtWorks.CruiseControl.Core.State.Test
 			result.ProjectName = "hi there? håkan! \u307b";
 			_state.SaveState(result);
 
-			IntegrationResult actual = _state.LoadState();
+			IIntegrationResult actual = _state.LoadState();
 			Assert.AreEqual(result.ProjectName, actual.ProjectName);
 		}
 	}

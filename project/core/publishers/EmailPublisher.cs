@@ -1,9 +1,5 @@
 using System;
 using System.Collections;
-using System.IO;
-using System.Text;
-using System.Xml;
-using System.Xml.Xsl;
 using Exortech.NetReflector;
 using ThoughtWorks.CruiseControl.Core.Util;
 using ThoughtWorks.CruiseControl.Remote;
@@ -114,7 +110,7 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
             return (EmailGroup) _groups[groupname];
         }
 
-        public override void PublishIntegrationResults(IProject project, IntegrationResult result)
+        public override void PublishIntegrationResults(IProject project, IIntegrationResult result)
         {
             if (result.Status == IntegrationStatus.Unknown)
                 return;
@@ -145,7 +141,7 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
             }
         }
 
-        internal string CreateSubject(IntegrationResult result)
+        internal string CreateSubject(IIntegrationResult result)
         {
             if (result.Status == IntegrationStatus.Success)
             {
@@ -171,7 +167,7 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
             return _messageBuilder.BuildMessage(result, ProjectUrl);
         } 
 
-        internal string CreateRecipientList(IntegrationResult result)
+        internal string CreateRecipientList(IIntegrationResult result)
         {
             string[] always = CreateNotifyList(EmailGroup.NotificationType.Always);
             if (BuildStateChanged(result))
@@ -214,7 +210,7 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
             return (string[]) userList.ToArray(typeof(string));
         }
 
-        private bool BuildStateChanged(IntegrationResult result)
+        private bool BuildStateChanged(IIntegrationResult result)
         {
             return result.LastIntegrationStatus != result.Status;
         }

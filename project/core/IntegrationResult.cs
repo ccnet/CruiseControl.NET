@@ -10,9 +10,17 @@ namespace ThoughtWorks.CruiseControl.Core
     /// Contains all the results of a project's integration.
     /// </summary>
     [Serializable]
-    public class IntegrationResult
+    public class IntegrationResult : IIntegrationResult
     {
-        private Modification[] _modifications = new Modification[0];
+		private string _project;
+		private IntegrationStatus _lastIntegrationStatus = IntegrationStatus.Unknown;
+		private BuildCondition _buildCondition;
+		private string _workingDirectory;
+		private string _label;
+		private IntegrationStatus _status = IntegrationStatus.Unknown;
+		private DateTime _startTime;
+		private DateTime _endTime;
+		private Modification[] _modifications = new Modification[0];
         private string _output;
         private Exception _exception;
         private ArrayList _taskResults = new ArrayList();
@@ -22,28 +30,13 @@ namespace ThoughtWorks.CruiseControl.Core
         {
         }
 
-        public IntegrationResult(string projectName)
+        public IntegrationResult(string projectName, string workingDirectory)
         {
             ProjectName = projectName;
+			_workingDirectory = workingDirectory;
         }
 
-        public string ProjectName;
-		public BuildCondition BuildCondition;
-        public IntegrationStatus Status = IntegrationStatus.Unknown;
-		public IntegrationStatus LastIntegrationStatus = IntegrationStatus.Unknown;
-        public string Label;
-
-        /// <summary>
-        /// Gets and sets the date and time at which the integration commenced.
-        /// </summary>
-        public DateTime StartTime;
-
-        /// <summary>
-        /// Gets and sets the date and time at which the integration was completed.
-        /// </summary>
-        public DateTime EndTime;
-
-		[XmlIgnore]
+    	[XmlIgnore]
         public virtual Modification[] Modifications
         {
             get { return _modifications; }
@@ -129,7 +122,7 @@ namespace ThoughtWorks.CruiseControl.Core
                 _exception = value;
                 if (_exception != null)
                 {
-                    Status = IntegrationStatus.Exception;
+                    _status = IntegrationStatus.Exception;
                 }
             }
         }
@@ -142,7 +135,7 @@ namespace ThoughtWorks.CruiseControl.Core
 
         public void MarkStartTime()
         {
-            StartTime = DateTime.Now;
+            _startTime = DateTime.Now;
         }
 
         public void MarkEndTime()
@@ -170,17 +163,71 @@ namespace ThoughtWorks.CruiseControl.Core
             return (ProjectName + Label + StartTime.Ticks).GetHashCode();
         }
 
-    	public static IntegrationResult CreateInitialIntegrationResult(string project)
+    	public static IntegrationResult CreateInitialIntegrationResult(string project, string workingDirectory)
     	{
-    		IntegrationResult result = new IntegrationResult(project);
+    		IntegrationResult result = new IntegrationResult(project, workingDirectory);
     		result.StartTime = DateTime.Now.AddDays(-1);
     		result.EndTime = DateTime.Now;
     		return result;
+    	}
+
+    	public IntegrationStatus Status
+    	{
+    		get { return _status; }
+			set { _status = value; }
+		}
+
+    	public IntegrationStatus LastIntegrationStatus
+    	{
+    		get { return _lastIntegrationStatus; }
+			set { _lastIntegrationStatus = value; }
     	}
 
     	public bool IsInitial()
     	{
     		return (LastIntegrationStatus == IntegrationStatus.Unknown) && (Status == IntegrationStatus.Unknown);
     	}
+
+    	public string ProjectName
+    	{
+    		get { return _project; }
+			set { _project = value; }
+    	}
+
+    	public BuildCondition BuildCondition
+    	{
+    		get { return _buildCondition; }
+			set { _buildCondition = value; }
+    	}
+
+    	public string Label
+    	{
+    		get { return _label; }
+			set { _label = value; }
+		}
+
+    	/// <summary>
+		/// Gets and sets the date and time at which the integration commenced.
+		/// </summary>
+		public DateTime StartTime
+    	{
+    		get { return _startTime; }
+			set { _startTime = value; }
+		}
+
+		/// <summary>
+		/// Gets and sets the date and time at which the integration was completed.
+		/// </summary>
+		public DateTime EndTime
+    	{
+    		get { return _endTime; }
+			set { _endTime = value; }
+    	}
+
+    	public string WorkingDirectory
+    	{
+    		get { return _workingDirectory; }
+			set { _workingDirectory = value; }
+		}
     }
 }

@@ -1,14 +1,10 @@
 using System;
 using System.Collections;
 using System.Web.Mail;
-using System.Xml;
+using NMock;
 using NUnit.Framework;
 using ThoughtWorks.CruiseControl.Core.Test;
-using ThoughtWorks.CruiseControl.Core.Util;
-using Exortech.NetReflector;
 using ThoughtWorks.CruiseControl.Remote;
-using ThoughtWorks.CruiseControl.Core.Publishers;
-using NMock;
 
 namespace ThoughtWorks.CruiseControl.Core.Publishers.Test
 {

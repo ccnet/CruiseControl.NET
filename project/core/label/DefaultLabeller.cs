@@ -1,8 +1,6 @@
-using System;
 using System.Text.RegularExpressions;
-
-using ThoughtWorks.CruiseControl.Remote;
 using Exortech.NetReflector;
+using ThoughtWorks.CruiseControl.Remote;
 
 namespace ThoughtWorks.CruiseControl.Core.Label
 {
@@ -20,7 +18,7 @@ namespace ThoughtWorks.CruiseControl.Core.Label
 			set { _labelPrefix = value; }
 		}
 
-		public string Generate(IntegrationResult previousResult)
+		public string Generate(IIntegrationResult previousResult)
 		{
 			if (previousResult == null || previousResult.Label == null)
 			{
@@ -36,12 +34,12 @@ namespace ThoughtWorks.CruiseControl.Core.Label
 			}
 		}
 
-		public bool ShouldRun(IntegrationResult result, IProject project)
+		public bool ShouldRun(IIntegrationResult result)
 		{
 			return result.Working;
 		}
 
-		public void Run(IntegrationResult result, IProject project)
+		public void Run(IIntegrationResult result)
 		{
 			result.Label = Generate(result);
 		}

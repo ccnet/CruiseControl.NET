@@ -8,7 +8,7 @@ namespace ThoughtWorks.CruiseControl.Remote
 	/// </summary>
 	/// <remarks>
 	/// This class is serialized to persist CruiseControl.NET's state for a
-	/// particular project, hence is is marked <see cref="Serializable"/>.
+	/// particular project, hence is is marked with a <see cref="SerializableAttribute"/>.
 	/// </remarks>
 	[Serializable]
 	public class ProjectStatus

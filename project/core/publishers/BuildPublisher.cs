@@ -37,7 +37,7 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
 			set { additionalDir = value; }
 		}
 
-		public override void PublishIntegrationResults(IProject project, IntegrationResult result)
+		public override void PublishIntegrationResults(IProject project, IIntegrationResult result)
 		{
 			if (result.Succeeded) 
 			{

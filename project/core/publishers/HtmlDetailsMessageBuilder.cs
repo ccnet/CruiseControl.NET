@@ -10,7 +10,7 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
 		private const string HtmlCSSFile =@"xsl\Mailstyle.css";
 		private string _htmlCss;
 
-		public string BuildMessage(IntegrationResult result, string projectURL)
+		public string BuildMessage(IIntegrationResult result, string projectURL)
 		{
 			StringBuilder message = new StringBuilder(10000);
 			AppendHtmlHeader(message);
@@ -30,7 +30,7 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
 			message.Append("</head><body>");
 		}
 
-		private void AppendLinkToWebPage(StringBuilder message, IntegrationResult result, string projectURL)
+		private void AppendLinkToWebPage(StringBuilder message, IIntegrationResult result, string projectURL)
 		{
 			message.Append(new HtmlLinkMessageBuilder(true).BuildMessage(result, projectURL));
 		}
@@ -40,7 +40,7 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
 			message.Append(@"<p></p><hr size=""1"" width=""98%"" align=""left"" color=""#888888""/>");
 		}
 
-		private void AppendHtmlMessageDetails(StringBuilder message, IntegrationResult result)
+		private void AppendHtmlMessageDetails(StringBuilder message, IIntegrationResult result)
 		{
 			StringWriter buffer = new StringWriter();
 			using (XmlIntegrationResultWriter integrationWriter = new XmlIntegrationResultWriter(new XmlTextWriter(buffer)))

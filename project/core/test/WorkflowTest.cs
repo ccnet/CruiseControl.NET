@@ -1,9 +1,10 @@
 using System;
-using NUnit.Framework;
-using NMock;
 using Exortech.NetReflector;
-using ThoughtWorks.CruiseControl.Remote;
+using NMock;
+using NMock.Constraints;
+using NUnit.Framework;
 using ThoughtWorks.CruiseControl.Core.Util;
+using ThoughtWorks.CruiseControl.Remote;
 
 namespace ThoughtWorks.CruiseControl.Core.Test
 {
@@ -23,7 +24,7 @@ namespace ThoughtWorks.CruiseControl.Core.Test
 			object obj = NetReflector.Read(xml);
 			Assert.IsNotNull(obj);
 			Assert.IsTrue(obj is Workflow);
-			Workflow project = (Workflow)obj;
+			Workflow project = (Workflow) obj;
 			Assert.AreEqual("foo", project.Name);
 			Assert.AreEqual(2, project.Tasks.Count);
 			Assert.IsTrue(project.Tasks[0] is ITask);
@@ -35,17 +36,17 @@ namespace ThoughtWorks.CruiseControl.Core.Test
 		public void Run()
 		{
 			Workflow project = new Workflow();
-			IMock taskMock1 = new DynamicMock(typeof(ITask));
-			taskMock1.ExpectAndReturn("ShouldRun", true, new NMock.Constraints.NotNull(), project);
-			taskMock1.Expect("Run", new NMock.Constraints.NotNull(), project);
+			IMock taskMock1 = new DynamicMock(typeof (ITask));
+			taskMock1.ExpectAndReturn("ShouldRun", true, new NotNull());
+			taskMock1.Expect("Run", new NotNull());
 
-			IMock taskMock2 = new DynamicMock(typeof(ITask));
-			taskMock2.ExpectAndReturn("ShouldRun", true, new NMock.Constraints.NotNull(), project);
-			taskMock2.Expect("Run", new NMock.Constraints.NotNull(), project);
+			IMock taskMock2 = new DynamicMock(typeof (ITask));
+			taskMock2.ExpectAndReturn("ShouldRun", true, new NotNull());
+			taskMock2.Expect("Run", new NotNull());
 
-			IMock taskMock3 = new DynamicMock(typeof(ITask));
-			taskMock3.ExpectAndReturn("ShouldRun", false, new NMock.Constraints.NotNull(), project);
-			taskMock3.Expect("Run", new NMock.Constraints.NotNull(), project);
+			IMock taskMock3 = new DynamicMock(typeof (ITask));
+			taskMock3.ExpectAndReturn("ShouldRun", false, new NotNull());
+			taskMock3.Expect("Run", new NotNull());
 
 			project.Tasks.Add(taskMock1.MockInstance);
 			project.Tasks.Add(taskMock2.MockInstance);
@@ -64,11 +65,11 @@ namespace ThoughtWorks.CruiseControl.Core.Test
 		public void RunForceBuild()
 		{
 			Workflow project = new Workflow();
-			IMock taskMock1 = new DynamicMock(typeof(ITask));
-			taskMock1.Expect("Run", new NMock.Constraints.NotNull(), project);
+			IMock taskMock1 = new DynamicMock(typeof (ITask));
+			taskMock1.Expect("Run", new NotNull());
 
-			IMock taskMock2 = new DynamicMock(typeof(ITask));
-			taskMock2.Expect("Run", new NMock.Constraints.NotNull(), project);
+			IMock taskMock2 = new DynamicMock(typeof (ITask));
+			taskMock2.Expect("Run", new NotNull());
 
 			project.Tasks.Add(taskMock1.MockInstance);
 			project.Tasks.Add(taskMock2.MockInstance);
@@ -84,18 +85,18 @@ namespace ThoughtWorks.CruiseControl.Core.Test
 		{
 			Workflow project = new Workflow();
 			Exception ex = new CruiseControlException("foo");
-			IMock taskMock1 = new DynamicMock(typeof(ITask));
-			taskMock1.ExpectAndReturn("ShouldRun", true, new NMock.Constraints.NotNull(), project);
-			taskMock1.ExpectAndThrow("Run", ex, new NMock.Constraints.NotNull(), project);
+			IMock taskMock1 = new DynamicMock(typeof (ITask));
+			taskMock1.ExpectAndReturn("ShouldRun", true, new NotNull());
+			taskMock1.ExpectAndThrow("Run", ex, new NotNull());
 
-			IMock taskMock2 = new DynamicMock(typeof(ITask));
-			taskMock2.ExpectAndReturn("ShouldRun", true, new NMock.Constraints.NotNull(), project);
-			taskMock2.Expect("Run", new NMock.Constraints.NotNull(), project);
+			IMock taskMock2 = new DynamicMock(typeof (ITask));
+			taskMock2.ExpectAndReturn("ShouldRun", true, new NotNull());
+			taskMock2.Expect("Run", new NotNull());
 
 			project.Tasks.Add(taskMock1.MockInstance);
 			project.Tasks.Add(taskMock2.MockInstance);
 
-			IntegrationResult result = project.RunIntegration(BuildCondition.IfModificationExists);
+			IIntegrationResult result = project.RunIntegration(BuildCondition.IfModificationExists);
 
 			taskMock1.Verify();
 			taskMock2.Verify();

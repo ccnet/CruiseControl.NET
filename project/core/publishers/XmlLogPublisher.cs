@@ -46,13 +46,13 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
             set { _mergeTask.MergeFiles = value; }
         }
 
-        public override void PublishIntegrationResults(IProject project, IntegrationResult result)
+        public override void PublishIntegrationResults(IProject project, IIntegrationResult result)
         {
             // only deal with known integration status
             if (result.Status == IntegrationStatus.Unknown)
                 return;
 
-			_mergeTask.Run(result, project);
+			_mergeTask.Run(result);
             using (XmlIntegrationResultWriter integrationWriter = new XmlIntegrationResultWriter(GetXmlWriter(LogDirectory(project), GetFilename(result))))
             {
                 integrationWriter.Write(result);
@@ -70,7 +70,7 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
             return new XmlTextWriter(path, System.Text.Encoding.UTF8);
         }
 
-        public string GetFilename(IntegrationResult result)
+        public string GetFilename(IIntegrationResult result)
         {
             DateTime startTime = result.StartTime;
             if (result.Succeeded)

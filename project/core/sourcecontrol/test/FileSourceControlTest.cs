@@ -108,10 +108,10 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test
 		public void ShouldRun()
 		{
 			IProject project = (IProject) new DynamicMock(typeof(IProject)).MockInstance;
-			Assert.IsTrue(_sc.ShouldRun(new IntegrationResult(), project));
-			Assert.IsTrue(_sc.ShouldRun(IntegrationResultMother.CreateSuccessful(), project));
-			AssertFalse(_sc.ShouldRun(IntegrationResultMother.CreateFailed(), project));
-			AssertFalse(_sc.ShouldRun(IntegrationResultMother.CreateExceptioned(), project));
+			Assert.IsTrue(_sc.ShouldRun(new IntegrationResult()));
+			Assert.IsTrue(_sc.ShouldRun(IntegrationResultMother.CreateSuccessful()));
+			AssertFalse(_sc.ShouldRun(IntegrationResultMother.CreateFailed()));
+			AssertFalse(_sc.ShouldRun(IntegrationResultMother.CreateExceptioned()));
 		}
 	}
 }

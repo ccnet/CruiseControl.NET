@@ -47,7 +47,7 @@ namespace ThoughtWorks.CruiseControl.Core.Test
 		public int RunIntegration_CallCount = 0;
 		public IntegrationResult RunIntegration_ReturnValue = null;
 		public BuildCondition RunIntegration_buildCondition = (BuildCondition)(-1); // default
-		public virtual IntegrationResult RunIntegration(BuildCondition buildCondition)
+		public virtual IIntegrationResult RunIntegration(BuildCondition buildCondition)
 		{
 			RunIntegration_CallCount++;
 			RunIntegration_buildCondition = buildCondition;
@@ -87,7 +87,7 @@ namespace ThoughtWorks.CruiseControl.Core.Test
 		public const string EXCEPTION_MESSAGE = "Intentional exception";
 		public ExceptionMockProject(string name, Schedule schedule) : base(name, schedule) {}
 
-		public override IntegrationResult RunIntegration(BuildCondition buildCondition)
+		public override IIntegrationResult RunIntegration(BuildCondition buildCondition)
 		{
 			Schedule.IntegrationCompleted();
 			throw new Exception(EXCEPTION_MESSAGE);

@@ -1,4 +1,3 @@
-using System;
 using System.ComponentModel;
 
 namespace ThoughtWorks.CruiseControl.Core
@@ -10,15 +9,15 @@ namespace ThoughtWorks.CruiseControl.Core
 	public interface ITask
 	{
 		/// <summary>
-		/// Runs the task, given the specified <see cref="IntegrationResult"/>, in the specified  <see cref="IProject"/>.
+		/// Runs the task, given the specified <see cref="IntegrationResult"/>, in the specified <see cref="IProject"/>.
 		/// </summary>
 		/// <param name="result"></param>
-		void Run(IntegrationResult result, IProject project);
+		void Run(IIntegrationResult result);
 
 		/// <summary>
-		/// Evaluates if the task should be run, given the specified <see cref="IntegrationResult"/>, in the specified  <see cref="IProject"/>.
+		/// Evaluates if the task should be run, given the specified <see cref="IntegrationResult"/>, in the specified <see cref="IProject"/>.
 		/// </summary>
 		/// <param name="result"></param>
-		bool ShouldRun(IntegrationResult result, IProject project);
+		bool ShouldRun(IIntegrationResult result);
 	}
 }

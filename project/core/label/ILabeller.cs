@@ -1,5 +1,3 @@
-using System;
-
 namespace ThoughtWorks.CruiseControl.Core
 {
 	public interface ILabeller : ITask
@@ -13,6 +11,6 @@ namespace ThoughtWorks.CruiseControl.Core
 		/// </remarks>
 		/// <param name="previousLabel">state information for determining the label</param>
 		/// <returns>the label to apply</returns>
-		string Generate(IntegrationResult previousLabel);
+		string Generate(IIntegrationResult previousLabel);
 	}
 }

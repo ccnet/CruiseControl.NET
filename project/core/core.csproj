@@ -164,12 +164,22 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "IIntegrationResult.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "IntegrationEvents.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
                     RelPath = "IntegrationResult.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "IntegrationResultManager.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -1078,6 +1088,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "tasks\test\CoverageTaskTest.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "tasks\test\DataTaskResultTest.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -1124,6 +1139,11 @@
                 />
                 <File
                     RelPath = "test\IntegrationResultFixture.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "test\IntegrationResultManagerTest.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

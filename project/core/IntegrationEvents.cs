@@ -23,9 +23,9 @@ namespace ThoughtWorks.CruiseControl.Core
 		/// <summary>
 		/// The result of the completed integration.
 		/// </summary>
-		public IntegrationResult IntegrationResult;
+		public IIntegrationResult IntegrationResult;
 
-		public IntegrationCompletedEventArgs(IntegrationResult result)
+		public IntegrationCompletedEventArgs(IIntegrationResult result)
 		{
 			IntegrationResult = result;
 		}

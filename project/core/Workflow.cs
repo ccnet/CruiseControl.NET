@@ -1,4 +1,3 @@
-using System;
 using System.Collections;
 using Exortech.NetReflector;
 using ThoughtWorks.CruiseControl.Remote;
@@ -37,7 +36,7 @@ namespace ThoughtWorks.CruiseControl.Core
 			get { return _currentIntegrationResult; }
 		}
 
-		public IntegrationResult RunIntegration(BuildCondition buildCondition)
+		public IIntegrationResult RunIntegration(BuildCondition buildCondition)
 		{
 			_currentIntegrationResult = new WorkflowResult();
 
@@ -58,9 +57,9 @@ namespace ThoughtWorks.CruiseControl.Core
 
 		private void RunTask(BuildCondition buildCondition, ITask task)
 		{
-			if (buildCondition == BuildCondition.ForceBuild || task.ShouldRun(_currentIntegrationResult, this))
+			if (buildCondition == BuildCondition.ForceBuild || task.ShouldRun(_currentIntegrationResult))
 			{
-				task.Run(_currentIntegrationResult, this);
+				task.Run(_currentIntegrationResult);
 			}
 		}
 		

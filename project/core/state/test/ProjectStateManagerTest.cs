@@ -3,7 +3,7 @@ using NMock;
 using NUnit.Framework;
 using ThoughtWorks.CruiseControl.Core.State;
 
-namespace ThoughtWorks.CruiseControl.Core.state.test
+namespace ThoughtWorks.CruiseControl.Core.State.Test
 {
 	[TestFixture]
 	public class ProjectStateManagerTest

@@ -14,14 +14,14 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 		[ReflectorArray("files")] 
 		public string[] MergeFiles = new string[0];
 
-        public void Run(IntegrationResult result, IProject project)
+        public void Run(IIntegrationResult result)
         {
             foreach (string mergeFile in MergeFiles)
             {
 				string fullMergeFile = mergeFile;
 				if ( !Path.IsPathRooted(mergeFile))
 				{
-					fullMergeFile = Path.Combine(project.WorkingDirectory, mergeFile);
+					fullMergeFile = Path.Combine(result.WorkingDirectory, mergeFile);
 				}
                 WildCardPath path = new WildCardPath(fullMergeFile);
                 FileInfo[] files = path.GetFiles();
@@ -40,7 +40,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
             }
         }
 
-        public bool ShouldRun(IntegrationResult result, IProject project)
+        public bool ShouldRun(IIntegrationResult result)
         {
             return true;
         }

@@ -1,11 +1,9 @@
 using System;
-using NUnit.Framework;
-using System.Xml;
 using System.IO;
-using ThoughtWorks.CruiseControl.Remote;
-using ThoughtWorks.CruiseControl.Core.Util;
+using System.Xml;
+using NUnit.Framework;
 using ThoughtWorks.CruiseControl.Core.Test;
-using ThoughtWorks.CruiseControl.Core.Publishers;
+using ThoughtWorks.CruiseControl.Remote;
 
 namespace ThoughtWorks.CruiseControl.Core.Publishers.Test
 {
@@ -174,7 +172,8 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers.Test
 
         private IntegrationResult CreateIntegrationResult(IntegrationStatus status, bool addModifications)
         {
-            IntegrationResult result = new IntegrationResult("proj");
+            IntegrationResult result = IntegrationResultMother.Create(status);
+			result.ProjectName = "proj";
             result.Label = "1";
             result.Status = status;
             if (addModifications)

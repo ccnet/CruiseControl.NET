@@ -13,10 +13,10 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test
 		{
 			Cvs cvs = new Cvs();
 			IProject project = (IProject) new DynamicMock(typeof(IProject)).MockInstance;
-			Assert.IsTrue(cvs.ShouldRun(new IntegrationResult(), project));
-			Assert.IsTrue(cvs.ShouldRun(IntegrationResultMother.CreateSuccessful(), project));
-			AssertFalse(cvs.ShouldRun(IntegrationResultMother.CreateFailed(), project));
-			AssertFalse(cvs.ShouldRun(IntegrationResultMother.CreateExceptioned(), project));
+			Assert.IsTrue(cvs.ShouldRun(new IntegrationResult()));
+			Assert.IsTrue(cvs.ShouldRun(IntegrationResultMother.CreateSuccessful()));
+			AssertFalse(cvs.ShouldRun(IntegrationResultMother.CreateFailed()));
+			AssertFalse(cvs.ShouldRun(IntegrationResultMother.CreateExceptioned()));
 		}
 	}
 }

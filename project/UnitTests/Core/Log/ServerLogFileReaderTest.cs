@@ -5,7 +5,7 @@ using System.Text.RegularExpressions;
 using ThoughtWorks.Core.Log;
 using ThoughtWorks.CruiseControl.Core.Util;
 
-namespace ThoughtWorks.CruiseControl.UnitTest.Core.Log
+namespace ThoughtWorks.CruiseControl.UnitTests.Core.Log
 {
 	[TestFixture]
 	public class ServerLogFileReaderTest

@@ -18,22 +18,17 @@ namespace ThoughtWorks.CruiseControl.Core.Builder.Test
 
 		private CommandLineBuilder _builder;
 		private IMock _mockExecutor;
-		private IProject project;
-		private DynamicMock projectMock;
 
 		[SetUp]
 		public void SetUp()
 		{
 			_mockExecutor = new DynamicMock(typeof(ProcessExecutor));
 			_builder = new CommandLineBuilder((ProcessExecutor) _mockExecutor.MockInstance);
-			projectMock = new DynamicMock(typeof(IProject));
-			project = (IProject) projectMock.MockInstance;
 		}
 
 		private void VerifyAll()
 		{
 			_mockExecutor.Verify();
-			projectMock.Verify();
 		}
 
 		[Test]
@@ -77,7 +72,7 @@ namespace ThoughtWorks.CruiseControl.Core.Builder.Test
 			_mockExecutor.ExpectAndReturn("Execute", returnVal, new IsAnything());
 
 			IntegrationResult result = new IntegrationResult();
-			_builder.Run(result, project);
+			_builder.Run(result);
 
 			Assert.IsTrue(result.Succeeded);
 			Assert.AreEqual(IntegrationStatus.Success, result.Status);
@@ -92,7 +87,7 @@ namespace ThoughtWorks.CruiseControl.Core.Builder.Test
 			_mockExecutor.ExpectAndReturn("Execute", returnVal, new IsAnything());
 
 			IntegrationResult result = new IntegrationResult();
-			_builder.Run(result, project);
+			_builder.Run(result);
 
 			Assert.IsTrue(result.Failed);
 			Assert.AreEqual(IntegrationStatus.Failure, result.Status);
@@ -107,7 +102,7 @@ namespace ThoughtWorks.CruiseControl.Core.Builder.Test
 			_mockExecutor.ExpectAndThrow("Execute", new Win32Exception(), new IsAnything());
 
 			IntegrationResult result = new IntegrationResult();
-			_builder.Run(result, project);
+			_builder.Run(result);
 			VerifyAll();
 		}
 
@@ -124,7 +119,7 @@ namespace ThoughtWorks.CruiseControl.Core.Builder.Test
 			_builder.Executable = "test-exe";
 			_builder.BuildArgs = "test-args";
 			_builder.BuildTimeoutSeconds = 222;
-			_builder.Run(result, project);
+			_builder.Run(result);
 
 			ProcessInfo info = (ProcessInfo) constraint.Parameter;
 			Assert.AreEqual("test-exe", info.FileName);
@@ -136,11 +131,11 @@ namespace ThoughtWorks.CruiseControl.Core.Builder.Test
 		[Test]
 		public void ShouldRun()
 		{
-			AssertFalse(_builder.ShouldRun(new IntegrationResult(), new Project()));
-			Assert.IsTrue(_builder.ShouldRun(CreateIntegrationResultWithModifications(IntegrationStatus.Unknown), project));
-			Assert.IsTrue(_builder.ShouldRun(CreateIntegrationResultWithModifications(IntegrationStatus.Success), project));
-			AssertFalse(_builder.ShouldRun(CreateIntegrationResultWithModifications(IntegrationStatus.Failure), project));
-			AssertFalse(_builder.ShouldRun(CreateIntegrationResultWithModifications(IntegrationStatus.Exception), project));
+			AssertFalse(_builder.ShouldRun(new IntegrationResult()));
+			Assert.IsTrue(_builder.ShouldRun(CreateIntegrationResultWithModifications(IntegrationStatus.Unknown)));
+			Assert.IsTrue(_builder.ShouldRun(CreateIntegrationResultWithModifications(IntegrationStatus.Success)));
+			AssertFalse(_builder.ShouldRun(CreateIntegrationResultWithModifications(IntegrationStatus.Failure)));
+			AssertFalse(_builder.ShouldRun(CreateIntegrationResultWithModifications(IntegrationStatus.Exception)));
 		}
 
 		[Test]
@@ -166,31 +161,29 @@ namespace ThoughtWorks.CruiseControl.Core.Builder.Test
 
 		private void CheckBaseDirectoryIsProjectDirectoryWithGivenRelativePart(string relativeDirectory)
 		{
-			projectMock.ExpectAndReturn("WorkingDirectory", "projectWorkingDirectory");
 			string expectedBaseDirectory = "projectWorkingDirectory";
 			if (relativeDirectory != "")
 			{
 				expectedBaseDirectory = Path.Combine(expectedBaseDirectory, relativeDirectory);
 			}
-			CheckBaseDirectory(expectedBaseDirectory);
+			CheckBaseDirectory(new IntegrationResult("project", "projectWorkingDirectory"), expectedBaseDirectory);
 			VerifyAll();
 		}
 
 		[Test]
 		public void IfConfiguredBaseDirectoryIsAbsoluteUseItAtBaseDirectory()
 		{
-			projectMock.ExpectNoCall("WorkingDirectory");
 			_builder.ConfiguredBaseDirectory = @"c:\my\base\directory";
-			CheckBaseDirectory(@"c:\my\base\directory");
+			CheckBaseDirectory(new IntegrationResult(), @"c:\my\base\directory");
 		}
 
-		private void CheckBaseDirectory(string expectedBaseDirectory)
+		private void CheckBaseDirectory(IntegrationResult result, string expectedBaseDirectory)
 		{
 			ProcessResult returnVal = CreateSuccessfulProcessResult();
 			CollectingConstraint constraint = new CollectingConstraint();
 			_mockExecutor.ExpectAndReturn("Execute", returnVal, constraint);
 
-			_builder.Run(new IntegrationResult(), project);
+			_builder.Run(result);
 
 			ProcessInfo info = (ProcessInfo) constraint.Parameter;
 			Assert.AreEqual(expectedBaseDirectory, info.WorkingDirectory);

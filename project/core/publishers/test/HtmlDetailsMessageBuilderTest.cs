@@ -1,6 +1,4 @@
-using System;
 using NUnit.Framework;
-using ThoughtWorks.CruiseControl.Core.Publishers;
 using ThoughtWorks.CruiseControl.Core.Test;
 using ThoughtWorks.CruiseControl.Core.Util;
 
@@ -9,10 +7,6 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers.Test
 	[TestFixture]
 	public class HtmlDetailsMessageBuilderTest : CustomAssertion
 	{
-		public HtmlDetailsMessageBuilderTest()
-		{
-		}
-
 	    [Test]
 		public void ShouldCreateStyleElementsInTheMailMessage()
 	    {

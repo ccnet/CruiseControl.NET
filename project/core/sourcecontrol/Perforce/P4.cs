@@ -152,12 +152,12 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Perforce
 			}
 		}
 
-		public bool ShouldRun(IntegrationResult result, IProject project)
+		public bool ShouldRun(IIntegrationResult result)
 		{
 			return true;
 		}
 
-		public void Run(IntegrationResult result, IProject project)
+		public void Run(IIntegrationResult result)
 		{
 			result.Modifications = GetModifications(result.LastModificationDate, DateTime.Now);
 		}
@@ -254,7 +254,7 @@ View:
 			return processInfoCreator.CreateProcessInfo(this, "labelsync -l " + label);
 		}
 
-		public void GetSource(IntegrationResult result)
+		public void GetSource(IIntegrationResult result)
 		{
 			if (AutoGetSource)
 			{

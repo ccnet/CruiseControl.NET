@@ -1,10 +1,7 @@
-using System;
-using System.IO;
 using System.Collections;
+using System.IO;
 using System.Xml.Serialization;
-
 using Exortech.NetReflector;
-
 using ThoughtWorks.CruiseControl.Core.Util;
 
 namespace ThoughtWorks.CruiseControl.Core.Publishers
@@ -31,34 +28,34 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
 			set { logDir = value;}
 		}
 
-		public override void PublishIntegrationResults(IProject project, IntegrationResult result)
+		public override void PublishIntegrationResults(IProject project, IIntegrationResult result)
 		{
 			using (StreamWriter stream = File.CreateText(Filename))
 			{
-				stream.Write(GenarateDocument(project, result));
+				stream.Write(GenerateDocument(project, result));
 			}
 		}
 
-		public Document GenarateDocument(IProject project, IntegrationResult result)
+		public Document GenerateDocument(IProject project, IIntegrationResult result)
 		{
 			Document document = new Document();
-			document.Channel = GenarateChannel(project, result);
+			document.Channel = GenerateChannel(project, result);
 
 			return document;
 		}
 
-		public Channel GenarateChannel(IProject project, IntegrationResult result)
+		public Channel GenerateChannel(IProject project, IIntegrationResult result)
 		{
 			Channel channel = new Channel();
 			channel.Link = project.WebURL;
 			channel.Title = "CruiseControl.NET - " + project.Name;
 			channel.Description = "The latest build results for " + project.Name;
-			channel.Items = GenarateItems(project, result);
+			channel.Items = GenerateItems(project, result);
 
 			return channel;
 		}
 
-		public ArrayList GenarateItems(IProject project, IntegrationResult result)
+		public ArrayList GenerateItems(IProject project, IIntegrationResult result)
 		{
 			ArrayList items = new ArrayList();
 

@@ -10,7 +10,7 @@ namespace ThoughtWorks.CruiseControl.Core
 		Modification[] GetModifications(DateTime from, DateTime to);
 
 		void LabelSourceControl(string label, DateTime timeStamp);
-		void GetSource(IntegrationResult result);
+		void GetSource(IIntegrationResult result);
 
 		void Initialize(IProject project);
 		void Purge(IProject project);

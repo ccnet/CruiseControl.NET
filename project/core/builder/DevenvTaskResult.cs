@@ -1,6 +1,5 @@
-using System;
-using System.Xml;
 using System.IO;
+using System.Xml;
 using ThoughtWorks.CruiseControl.Core.Util;
 
 namespace ThoughtWorks.CruiseControl.Core.Builder
@@ -39,15 +38,12 @@ namespace ThoughtWorks.CruiseControl.Core.Builder
 
 		private string RemoveNulls(string line)
 		{
-			 return line.Replace("\0", string.Empty);
+			return line.Replace("\0", string.Empty);
 		}
 
 		public string Data
 		{
-			get
-			{
-				return data;
-			}
+			get { return data; }
 		}
 	}
 }

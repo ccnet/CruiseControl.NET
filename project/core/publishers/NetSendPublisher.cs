@@ -1,6 +1,4 @@
-using System;
 using Exortech.NetReflector;
-using ThoughtWorks.CruiseControl.Remote;
 using ThoughtWorks.CruiseControl.Core.Util;
 
 namespace ThoughtWorks.CruiseControl.Core.Publishers
@@ -17,7 +15,7 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
 		[ReflectorProperty("fixedMessage", Required=false)]
 		public string FixedMessage = "BUILD FIXED!";
 
-		public override void PublishIntegrationResults(IProject project, IntegrationResult result)
+		public override void PublishIntegrationResults(IProject project, IIntegrationResult result)
 		{
 			if (ShouldSendMessage(result))
 			{
@@ -29,12 +27,12 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
 			}
 		}
 
-		internal bool ShouldSendMessage(IntegrationResult result)
+		internal bool ShouldSendMessage(IIntegrationResult result)
 		{
 			return result.Failed || result.Fixed;
 		}
 
-		internal string GetMessage(IntegrationResult result)
+		internal string GetMessage(IIntegrationResult result)
 		{
 			if (result.Failed)
 			{

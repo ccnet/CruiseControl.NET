@@ -1,4 +1,3 @@
-using System;
 using ThoughtWorks.CruiseControl.Core.Util;
 using ThoughtWorks.CruiseControl.Remote;
 
@@ -8,7 +7,7 @@ namespace ThoughtWorks.CruiseControl.Core.Test
 	{
 		public static IntegrationResult CreateIntegrationResult()
 		{
-			IntegrationResult result = new IntegrationResult("testProject");
+			IntegrationResult result = new IntegrationResult("testProject", @"c:\temp");
 			result.MarkStartTime();
 			result.Status = IntegrationStatus.Success;
 			result.Label = "hello";
@@ -32,6 +31,5 @@ namespace ThoughtWorks.CruiseControl.Core.Test
 	<output>{4}</output>
 </buildResult>", result.Status, result.Label, result.StartTime, result.EndTime, result.Output, result.ProjectName));
 		}
-
 	}
 }

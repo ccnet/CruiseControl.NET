@@ -93,7 +93,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			return new ProcessInfo(Executable, args, WorkingDirectory);
 		}
 
-		public override void GetSource(IntegrationResult result)
+		public override void GetSource(IIntegrationResult result)
 		{
 			if (AutoGetSource)
 			{

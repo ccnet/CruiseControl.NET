@@ -6,7 +6,7 @@ using ThoughtWorks.CruiseControl.Core.Sourcecontrol.Perforce;
 using ThoughtWorks.CruiseControl.Core.Util;
 using Exortech.NetReflector;
 
-namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol.Perforce
+namespace ThoughtWorks.CruiseControl.UnitTests.Core.SourceControl.Perforce
 {
 	// ToDo - tidy up these tests by using mocks for process Executor, and make appropriate methods on P4 private
 	// This already performed for 'Label', 'Get Source', 'Initialize'

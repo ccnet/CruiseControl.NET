@@ -1,4 +1,3 @@
-using System;
 using System.ComponentModel;
 
 namespace ThoughtWorks.CruiseControl.Core.State
@@ -21,12 +20,12 @@ namespace ThoughtWorks.CruiseControl.Core.State
 		/// Loads the state of the project.
 		/// </summary>
 		/// <returns></returns>
-		IntegrationResult LoadState();
+		IIntegrationResult LoadState();
 
 		/// <summary>
 		/// Persists the state of the project.
 		/// </summary>
 		/// <param name="result"></param>
-		void SaveState(IntegrationResult result);
+		void SaveState(IIntegrationResult result);
 	}
 }

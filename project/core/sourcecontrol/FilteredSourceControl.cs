@@ -64,12 +64,12 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			_realScProvider.LabelSourceControl(label, timeStamp);
 		}
 
-		public bool ShouldRun(IntegrationResult result, IProject project)
+		public bool ShouldRun(IIntegrationResult result)
 		{
-			return _realScProvider.ShouldRun(result, project);
+			return _realScProvider.ShouldRun(result);
 		}
 
-		public void Run(IntegrationResult result, IProject project)
+		public void Run(IIntegrationResult result)
 		{
 			result.Modifications = GetModifications(result.LastModificationDate, DateTime.Now);
 		}
@@ -90,7 +90,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			}
 		}
 
-		public void GetSource(IntegrationResult result) 
+		public void GetSource(IIntegrationResult result) 
 		{
 			_realScProvider.GetSource(result);
 		}

@@ -126,10 +126,10 @@ namespace ThoughtWorks.CruiseControl.Core.Label.Test
 		public void ShouldRun()
 		{
 			IProject project = (IProject) new DynamicMock(typeof(IProject)).MockInstance;
-			Assert.IsTrue(_labeller.ShouldRun(new IntegrationResult(), project));
-			Assert.IsTrue(_labeller.ShouldRun(IntegrationResultMother.CreateSuccessful(), project));
-			AssertFalse(_labeller.ShouldRun(IntegrationResultMother.CreateFailed(), project));
-			AssertFalse(_labeller.ShouldRun(IntegrationResultMother.CreateExceptioned(), project));
+			Assert.IsTrue(_labeller.ShouldRun(new IntegrationResult()));
+			Assert.IsTrue(_labeller.ShouldRun(IntegrationResultMother.CreateSuccessful()));
+			AssertFalse(_labeller.ShouldRun(IntegrationResultMother.CreateFailed()));
+			AssertFalse(_labeller.ShouldRun(IntegrationResultMother.CreateExceptioned()));
 		}
 	}
 }

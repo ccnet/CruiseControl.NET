@@ -20,13 +20,13 @@ namespace ThoughtWorks.CruiseControl.Core.State
 			return slaveStateManager.StateFileExists();
 		}
 
-		public IntegrationResult LoadState()
+		public IIntegrationResult LoadState()
 		{
 			SetFileName();
 			return slaveStateManager.LoadState();
 		}
 
-		public void SaveState(IntegrationResult result)
+		public void SaveState(IIntegrationResult result)
 		{
 			SetFileName();
 			slaveStateManager.SaveState(result);
