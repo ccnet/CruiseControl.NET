@@ -146,7 +146,12 @@ namespace tw.ccnet.core
 		}
 		#endregion
 
-		public void Run()
+		public void Run() 
+		{ 
+			Run(true); 
+		}
+
+		public void Run(bool forceBuild)
 		{
 			if (Stopped) return;
 
@@ -156,7 +161,7 @@ namespace tw.ccnet.core
 				PreBuild();
 				DateTime modStart = DateTime.Now;
 				GetSourceModifications();
-				if (ShouldRunBuild())
+				if (forceBuild || ShouldRunBuild())
 				{
 					RunBuild();
 					PostBuild();
@@ -213,19 +218,6 @@ namespace tw.ccnet.core
 			LastIntegration = CurrentIntegration;
 		}
 
-		public void Sleep() 
-		{
-			Sleep(sleepTime);
-		}
-
-		protected void Sleep(int sleepTime)
-		{	
-			TimeSpan span = new TimeSpan(0, 0, 0, 0, sleepTime);
-			Log(String.Format("Sleeping for {0} hours {1} minutes {2} seconds", span.Hours, span.Minutes, span.Seconds));
-			currentActivity = "sleeping";
-			Thread.Sleep(sleepTime);
-		}
-
 		private IntegrationResult LoadLastIntegration()
 		{
 			return (StateManager.Exists()) ? StateManager.Load() : new IntegrationResult();
@@ -251,18 +243,9 @@ namespace tw.ccnet.core
 		{
 			if (CurrentIntegration.ShouldRunIntegration()) 
 			{
-				DateTime lastModified = CurrentIntegration.LastModificationDate;
 				if (ModificationDelay > 0) 
 				{
-					TimeSpan diff = DateTime.Now - lastModified;
-					if (diff.TotalMilliseconds < ModificationDelay) 
-					{
-						sleepTime = ModificationDelay - (int)diff.TotalMilliseconds;
-						Log("Changes found within the modification delay");
-						return false;
-					}
-
-					return true;
+					return CheckModificationDelay();
 				} 
 				else 
 				{
@@ -272,10 +255,24 @@ namespace tw.ccnet.core
 			return false;
 		}
 
+		private bool CheckModificationDelay()
+		{
+			TimeSpan diff = DateTime.Now - CurrentIntegration.LastModificationDate;
+			if (diff.TotalMilliseconds < ModificationDelay) 
+			{
+				sleepTime = ModificationDelay - (int)diff.TotalMilliseconds;
+				Log("Changes found within the modification delay");
+				return false;
+			}
+			return true;
+		}
+
 		public IntegrationStatus GetLastBuildStatus() 
 		{
 			if (LastIntegration != null)
+			{
 				return LastIntegration.Status;
+			}
 			return IntegrationStatus.Unknown;
 		}
 

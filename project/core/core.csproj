@@ -336,11 +336,6 @@
                     BuildAction = "Content"
                 />
                 <File
-                    RelPath = "schedule\ISchedule.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
                     RelPath = "schedule\IScheduler.cs"
                     SubType = "Code"
                     BuildAction = "Compile"

@@ -7,10 +7,9 @@ namespace tw.ccnet.core
 	{
 		string Name { get; }
 		ISchedule Schedule { get; }
-		void Run();
+		void Run(bool forceBuild);
 
 		void AddIntegrationEventHandler(IntegrationEventHandler handler);
 		IntegrationStatus GetLastBuildStatus();
-		void Sleep();
 	}
 }

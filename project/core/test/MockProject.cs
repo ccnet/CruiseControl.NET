@@ -9,12 +9,13 @@ namespace tw.ccnet.core.test
 	{
 		private string name;
 		private int runs = 0;
-		private int sleep = 0;
-		private ISchedule schedule = new Schedule();
+		private ISchedule schedule;
+		public bool ForceBuild;
 
-		public MockProject(string name)
+		public MockProject(string name, ISchedule schedule)
 		{
 			this.name = name;
+			this.schedule = schedule;
 		}
 
 		public string Name 
@@ -25,11 +26,12 @@ namespace tw.ccnet.core.test
 		public ISchedule Schedule 
 		{ 
 			get { return schedule; } 
-			set { schedule = value; }
+			set { schedule = value; } 
 		}
 
-		public virtual void Run()
+		public virtual void Run(bool forceBuild)
 		{
+			ForceBuild = forceBuild;
 			RunIntegration();
 		}
 
@@ -43,28 +45,18 @@ namespace tw.ccnet.core.test
 			get { return runs; }
 		}
 
-		public int SleepTime
-		{
-			get { return sleep; }
-			set { sleep = value; }
-		}
-
 		public void AddIntegrationEventHandler(IntegrationEventHandler handler) {}
 
 		public IntegrationStatus GetLastBuildStatus() 
 		{
 			return IntegrationStatus.Unknown;
 		}
-
-		public void Sleep() 
-		{
-		}
 	}
 
 	public class ExceptionMockProject : MockProject
 	{
 		public const string EXCEPTION_MESSAGE = "Intentional exception";
-		public ExceptionMockProject(string name) : base(name) {}
+		public ExceptionMockProject(string name, Schedule schedule) : base(name, schedule) {}
 
 		public override void RunIntegration()
 		{

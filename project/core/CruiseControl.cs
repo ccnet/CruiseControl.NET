@@ -63,25 +63,6 @@ namespace tw.ccnet.core
 			set { _stopped = value; }
 		}
 
-		public void Run()
-		{
-			while (! Stopped)
-			{
-				RunIntegration();
-			}
-			Trace.WriteLine("CruiseControl stopped");
-		}
-		
-		internal void RunIntegration()
-		{
-			foreach (IProject project in Projects)
-			{
-				project.Run();
-				if (! Stopped)
-					project.Sleep();
-			}
-		}
-
 		public void Start()
 		{
 			foreach (IScheduler scheduler in _schedulers)
@@ -179,6 +160,7 @@ namespace tw.ccnet.core
 		internal void AddProject(IProject project) 
 		{
 			_projects.Add(project.Name, project);
+			_schedulers.Add(new Scheduler(project.Schedule, project));
 		}		
 	}
 }

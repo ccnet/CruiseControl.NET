@@ -13,12 +13,12 @@ namespace tw.ccnet.remote
 		void StartCruiseControl();
 
 		/// <summary>
-		/// Attempts to stop CruiseControl.NET after it completes it's current task.
+		/// Attempts to stop CruiseControl.NET after it completes its current task.
 		/// </summary>
 		void StopCruiseControl();
 
 		/// <summary>
-		/// Stops CruiseControl.NET immediatly
+		/// Stops CruiseControl.NET immediately
 		/// </summary>
 		void StopCruiseControlNow();
 
@@ -31,6 +31,8 @@ namespace tw.ccnet.remote
 		/// Gets information about the last build status, current activity and project name.
 		/// </summary>
 		ProjectStatus GetProjectStatus();
+
+		void Run(string project, ISchedule schedule);
 	}
 
 	/// <remarks>

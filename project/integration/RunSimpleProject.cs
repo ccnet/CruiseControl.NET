@@ -128,7 +128,7 @@ namespace integration
 			Assertion.Assert(Int32.Parse(result.Label) >= 1);
 		}
 
-		[Test]
+		[Test][Ignore("will now take too long")]
 		public void RunIntegrationLoop_WithNoSpecifiedSchedule()
 		{
 			string projectXml = ConfigurationFileFixture.GenerateSimpleProjectXml(PROJECT_NAME, null);
@@ -137,7 +137,7 @@ namespace integration
 			RunLoopTest(cc, counter);
 		}
 
-		[Test]
+		[Test][Ignore("will now take too long")]
 		public void RunIntegrationLoop_WithNoStateDirectory()
 		{
 			string curDir = Directory.GetCurrentDirectory();

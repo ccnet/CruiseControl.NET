@@ -8,6 +8,7 @@ using tw.ccnet.core.sourcecontrol.test;
 using tw.ccnet.core.builder.test;
 using tw.ccnet.core.publishers;
 using tw.ccnet.core.publishers.test;
+using tw.ccnet.core.schedule;
 using tw.ccnet.core.util;
 
 namespace tw.ccnet.core.test
@@ -140,11 +141,13 @@ namespace tw.ccnet.core.test
 			_project.StateManager = (IStateManager)stateMock.MockInstance;
 			_project.IntegrationTimeout = buildTimeout;
 			_project.Name = "Test";
+			_project.Schedule = new Schedule(buildTimeout, 1);
 
 			CruiseControl control = new CruiseControl();
 			control.AddProject(_project);
 			DateTime start = DateTime.Now;
-			control.RunIntegration();
+			control.Start(); // RunIntegration();
+			control.WaitForExit();
 			DateTime stop = DateTime.Now;
 
 			AssertEquals(0, _project.CurrentIntegration.Modifications.Length);
@@ -174,7 +177,7 @@ namespace tw.ccnet.core.test
 			Assert("There are no modifications within ModificationDelay, project should run", _project.ShouldRunBuild());
 		}
 
-		[Test]
+/*		[Test]
 		[Ignore("too fragile")]
 		public void SleepTime() 
 		{
@@ -201,7 +204,7 @@ namespace tw.ccnet.core.test
 			Assert("Didn't sleep long enough", !(diff.TotalMilliseconds < 45));
 			Assert("Slept too long", !(diff.TotalMilliseconds > 100));
 		}
-
+*/
 		public void TestStateChange()
 		{
 			// test valid state transitions
@@ -315,6 +318,20 @@ namespace tw.ccnet.core.test
 			Assert(publisher.Published);
 			mock.Verify();
 			AssertEquals(4, _listener.Traces.Count);
+		}
+
+		[Test]
+		public void ForceBuild()
+		{
+			SourceControlMock sc = new SourceControlMock();
+			sc.ExpectedModifications = new Modification[0];
+			_project.SourceControl = sc;
+			_project.Builder = new MockBuilder();
+			AssertFalse(((MockBuilder)_project.Builder).HasRun);
+
+			_project.Run(true);
+
+			Assert(((MockBuilder)_project.Builder).HasRun);
 		}
 
 		public void RunTwiceWithExceptionFirstTime()

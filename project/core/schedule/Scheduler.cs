@@ -1,5 +1,6 @@
 using System;
 using System.Threading;
+using tw.ccnet.remote;
 using tw.ccnet.core.util;
 
 namespace tw.ccnet.core.schedule
@@ -53,7 +54,7 @@ namespace tw.ccnet.core.schedule
 			{
 				try
 				{
-					_project.Run();
+					_project.Run(_schedule.ForceBuild);
 				}
 				catch (Exception ex) 
 				{ 
@@ -75,6 +76,10 @@ namespace tw.ccnet.core.schedule
 			if (IsRunning)
 			{
 				_state = SchedulerState.Stopping;
+//				if (_thread != null && _thread.ThreadState == ThreadState.WaitSleepJoin)
+//				{
+//					_thread.Resume();
+//				}
 			}
 		}
 

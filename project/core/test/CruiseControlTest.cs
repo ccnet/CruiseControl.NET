@@ -21,8 +21,8 @@ namespace tw.ccnet.core.test
 		[SetUp]
 		protected void SetUp()
 		{
-			_project1 = new MockProject("project1");
-			_project2 = new MockProject("project2");
+			_project1 = new MockProject("project1", new Schedule(1, Schedule.Infinite));
+			_project2 = new MockProject("project2", new Schedule(1, Schedule.Infinite));
 
 			_projects = new Hashtable();
 			_projects.Add("project1", _project1);
@@ -41,8 +41,7 @@ namespace tw.ccnet.core.test
 		[Test]
 		public void LoadConfigurationAtConstruction()
 		{
-			MockProject projectWithoutSchedule = new MockProject("project3");
-			projectWithoutSchedule.Schedule = null;
+			MockProject projectWithoutSchedule = new MockProject("project3", null);
 			_projects.Add(projectWithoutSchedule.Name, projectWithoutSchedule);
 			_mockConfig.ExpectAndReturn("LoadProjects", _projects);
 
@@ -63,9 +62,12 @@ namespace tw.ccnet.core.test
 		public void RunIntegration()
 		{
 			_mockConfig.ExpectAndReturn("LoadProjects", _projects);
+			((Schedule)_project1.Schedule).TotalIterations = 1;
+			((Schedule)_project2.Schedule).TotalIterations = 1;
 
 			_cc = new CruiseControl((IConfigurationLoader)_mockConfig.MockInstance);
-			_cc.RunIntegration();
+			_cc.Start(); // RunIntegration();
+			_cc.WaitForExit();
 
 			_mockConfig.Verify();
 			Assertion.AssertEquals(1, _project1.Runs);
@@ -88,7 +90,7 @@ namespace tw.ccnet.core.test
 			// create new configuration - change schedule for project1, remove project2 and add project3
 			Schedule newSchedule = new Schedule();
 			_project1.Schedule = newSchedule;
-			MockProject project3 = new MockProject("project3");
+			MockProject project3 = new MockProject("project3", new Schedule(1, 1));
 
 			Hashtable projects = new Hashtable();
 			projects.Add(_project1.Name, _project1);
@@ -164,7 +166,8 @@ namespace tw.ccnet.core.test
 			}
 		}
 
-		public void TestStartAndStopTwice()
+		[Test]
+		public void StartAndStopTwice()
 		{
 			_mockConfig.ExpectAndReturn("LoadProjects", _projects);
 			_cc = new CruiseControl((IConfigurationLoader)_mockConfig.MockInstance);

@@ -75,7 +75,7 @@ namespace tw.ccnet.console
 		{
 			ConfigurationLoader configLoader = new ConfigurationLoader(configFile);
 			CruiseControl cruiseControl = new CruiseControl(configLoader);
-			cruiseControl.Run();
+			cruiseControl.Start();
 		}
 
 		private static void BlockForUserInput()

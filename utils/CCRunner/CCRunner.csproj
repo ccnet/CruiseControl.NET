@@ -3,20 +3,20 @@
         ProjectType = "Local"
         ProductVersion = "7.0.9466"
         SchemaVersion = "1.0"
-        ProjectGuid = "{E820CF3B-8C5A-4002-BC16-B7818D3D54A8}"
+        ProjectGuid = "{CE195BE3-8516-445F-9A2E-31A53FA79448}"
     >
         <Build>
             <Settings
-                ApplicationIcon = ""
+                ApplicationIcon = "App.ico"
                 AssemblyKeyContainerName = ""
-                AssemblyName = "ccnet.remote"
+                AssemblyName = "CCRunner"
                 AssemblyOriginatorKeyFile = ""
                 DefaultClientScript = "JScript"
                 DefaultHTMLPageLayout = "Grid"
                 DefaultTargetSchema = "IE50"
                 DelaySign = "false"
-                OutputType = "Library"
-                RootNamespace = "tw.ccnet.remote"
+                OutputType = "Exe"
+                RootNamespace = "CCRunner"
                 StartupObject = ""
             >
                 <Config
@@ -31,7 +31,7 @@
                     FileAlignment = "4096"
                     IncrementalBuild = "true"
                     Optimize = "false"
-                    OutputPath = "..\..\build\"
+                    OutputPath = "bin\Debug\"
                     RegisterForComInterop = "false"
                     RemoveIntegerChecks = "false"
                     TreatWarningsAsErrors = "false"
@@ -69,25 +69,59 @@
                 />
                 <Reference
                     Name = "System.XML"
-                    AssemblyName = "System.Xml"
+                    AssemblyName = "System.XML"
                     HintPath = "C:\WINNT\Microsoft.NET\Framework\v1.0.3705\System.XML.dll"
+                />
+                <Reference
+                    Name = "nunit.framework"
+                    AssemblyName = "nunit.framework"
+                    HintPath = "..\..\lib\nunit.framework.dll"
+                />
+                <Reference
+                    Name = "System.Drawing"
+                    AssemblyName = "System.Drawing"
+                    HintPath = "C:\WINNT\Microsoft.NET\Framework\v1.0.3705\System.Drawing.dll"
+                />
+                <Reference
+                    Name = "System.Windows.Forms"
+                    AssemblyName = "System.Windows.Forms"
+                    HintPath = "C:\WINNT\Microsoft.NET\Framework\v1.0.3705\System.Windows.Forms.dll"
+                />
+                <Reference
+                    Name = "ccnet.remote"
+                    AssemblyName = "ccnet.remote"
+                    HintPath = "..\..\build\ccnet.remote.dll"
+                />
+                <Reference
+                    Name = "nmock"
+                    AssemblyName = "nmock"
+                    HintPath = "..\..\lib\nmock.dll"
                 />
             </References>
         </Build>
         <Files>
             <Include>
                 <File
+                    RelPath = "App.ico"
+                    BuildAction = "Content"
+                />
+                <File
                     RelPath = "AssemblyInfo.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "ICruiseManager.cs"
+                    RelPath = "Runner.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "ISchedule.cs"
+                    RelPath = "Schedule.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "test\RunnerTest.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

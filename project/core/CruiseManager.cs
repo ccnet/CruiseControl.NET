@@ -26,7 +26,7 @@ namespace tw.ccnet.core
 		
 		public void InitializeThread()
 		{
-			_cruiseControlThread = new Thread(new ThreadStart(_cruiseControl.Run));
+			_cruiseControlThread = new Thread(new ThreadStart(_cruiseControl.Start));
 			_cruiseControlThread.Start();
 		}
 		
@@ -88,5 +88,10 @@ namespace tw.ccnet.core
 		{
 			return null;
 		}
+
+		public void Run(string project, ISchedule schedule) 
+		{
+		}
+
 	}
 }

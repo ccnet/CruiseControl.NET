@@ -21,6 +21,7 @@ namespace integration
 		public static Schedule CreateSchedule(int iterations)
 		{
 			Schedule schedule = new Schedule();
+			schedule.TimeOut = 4;
 			schedule.TotalIterations = iterations;
 			return schedule;
 		}

@@ -1,4 +1,5 @@
 using System;
+using tw.ccnet.remote;
 
 namespace tw.ccnet.core
 {
