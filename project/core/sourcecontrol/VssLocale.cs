@@ -109,7 +109,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			{
 				info.LongTimePattern = string.Format("H{0}mm{0}ss", info.TimeSeparator);				
 			}
-			return string.Concat(date.ToString("d", info), ";", date.ToString("T", info));
+			return string.Concat(date.ToString("d", info), ";", date.ToString(info.LongTimePattern, info));
 		}
 
 		public override string ToString()
