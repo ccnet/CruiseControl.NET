@@ -194,6 +194,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "IProjectSerializer.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "ITask.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -205,6 +210,11 @@
                 />
                 <File
                     RelPath = "LogFile.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "NetReflectorProjectSerializer.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

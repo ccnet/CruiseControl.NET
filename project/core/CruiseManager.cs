@@ -2,7 +2,10 @@ using System;
 using System.Collections;
 using System.IO;
 using ThoughtWorks.Core.Log;
+using ThoughtWorks.CruiseControl.Core.Builder;
 using ThoughtWorks.CruiseControl.Core.Publishers;
+using ThoughtWorks.CruiseControl.Core.Sourcecontrol;
+using ThoughtWorks.CruiseControl.Core.Util;
 using ThoughtWorks.CruiseControl.Remote;
 
 namespace ThoughtWorks.CruiseControl.Core 
@@ -112,6 +115,14 @@ namespace ThoughtWorks.CruiseControl.Core
 		public string GetServerLog ()
 		{
 			return new ServerLogFileReader().Read();
+		}
+
+		// ToDo - implement
+		public void AddProject(string serializedProject)
+		{
+			string message = "'AddProject' not yet implemented in Cruise Build Server so project NOT added. Project was : " + serializedProject;
+			Log.Warning(message);
+			throw new CruiseControlException(message);
 		}
 
 		/// <summary>

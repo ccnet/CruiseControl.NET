@@ -1,5 +1,7 @@
+using System;
 using System.Web;
 using System.Web.UI;
+using ThoughtWorks.CruiseControl.Core;
 using ThoughtWorks.CruiseControl.WebDashboard.Cache;
 using ThoughtWorks.CruiseControl.WebDashboard.Config;
 using ThoughtWorks.CruiseControl.WebDashboard.IO;
@@ -68,6 +70,11 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 		public RemoteCruiseManagerFactory RemoteCruiseManagerFactory
 		{
 			get { return new RemoteCruiseManagerFactory(); }
+		}
+
+		public NetReflectorProjectSerializer NetReflectorProjectSerializer
+		{
+			get { return new NetReflectorProjectSerializer(); }
 		}
 	}
 }

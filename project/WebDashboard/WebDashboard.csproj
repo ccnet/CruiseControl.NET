@@ -144,6 +144,21 @@
         <Files>
             <Include>
                 <File
+                    RelPath = "AddProject.aspx"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "AddProject.aspx.cs"
+                    DependentUpon = "AddProject.aspx"
+                    SubType = "ASPXCodeBehind"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "AddProject.aspx.resx"
+                    DependentUpon = "AddProject.aspx.cs"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
                     RelPath = "AssemblyInfo.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -472,6 +487,11 @@
                 <Folder RelPath = "log\" />
                 <File
                     RelPath = "Plugins\PluginPageRendererFactory.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Plugins\AddProjectPlugin\AddProjectPageModel.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

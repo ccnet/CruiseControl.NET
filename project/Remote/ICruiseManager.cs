@@ -1,4 +1,3 @@
-using System;
 
 namespace ThoughtWorks.CruiseControl.Remote
 {
@@ -40,5 +39,10 @@ namespace ThoughtWorks.CruiseControl.Remote
 		/// Returns a log of recent build server activity. How much information that is returned is configured on the build server.
 		/// </summary>
 		string GetServerLog();
+
+		/// <summary>
+		/// Adds a project to the server
+		/// </summary>
+		void AddProject(string serializedProject);
 	}
 }

@@ -1,4 +1,3 @@
-using System;
 using System.Collections;
 using ThoughtWorks.CruiseControl.Remote;
 using ThoughtWorks.CruiseControl.WebDashboard.config;
@@ -37,9 +36,24 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.ServerConnection
 			return GetCruiseManager(serverName).GetServerLog();
 		}
 
+		public string[] GetServerNames()
+		{
+			ArrayList names = new ArrayList();
+			foreach (ServerSpecification server in ServerSpecifcations)
+			{
+				names.Add(server.Name);
+			}
+			return (string[]) names.ToArray(typeof (string));
+		}
+
+		public void AddProject(string serverName, string serializedProject)
+		{
+			GetCruiseManager(serverName).AddProject(serializedProject);
+		}
+
 		private ICruiseManager GetCruiseManager(string serverName)
 		{
-			foreach (ServerSpecification server in (IEnumerable) configurationGetter.GetConfigFromSection(ServersSectionHandler.SectionName))
+			foreach (ServerSpecification server in ServerSpecifcations)
 			{
 				if (server.Name == serverName)
 				{
@@ -48,7 +62,11 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.ServerConnection
 			}
 
 			throw new UnknownServerException(serverName);
+		}
 
+		private IEnumerable ServerSpecifcations
+		{
+			get { return (IEnumerable) configurationGetter.GetConfigFromSection(ServersSectionHandler.SectionName); }
 		}
 	}
 }
