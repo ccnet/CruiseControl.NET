@@ -669,37 +669,37 @@
                     BuildAction = "Content"
                 />
                 <File
-                    RelPath = "schedule\IntervalIntegrationTrigger.cs"
+                    RelPath = "schedule\IntegrationIntervalTrigger.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "schedule\MultipleIntegrationTrigger.cs"
+                    RelPath = "schedule\IntegrationScheduleTrigger.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "schedule\NeverTriggerIntegrationTrigger.cs"
+                    RelPath = "schedule\MultipleTrigger.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "schedule\ScheduleIntegrationTrigger.cs"
+                    RelPath = "schedule\NullTrigger.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "schedule\test\IntervalIntegrationTriggerTest.cs"
+                    RelPath = "schedule\test\IntegrationIntervalTriggerTest.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "schedule\test\IntegrationScheduleTriggerTest.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
                     RelPath = "schedule\test\MockSchedule.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "schedule\test\ScheduleIntegrationTriggerTest.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

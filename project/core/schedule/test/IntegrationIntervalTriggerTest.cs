@@ -8,16 +8,16 @@ using ThoughtWorks.CruiseControl.Remote;
 namespace ThoughtWorks.CruiseControl.Core.Schedules.Test
 {
 	[TestFixture]
-	public class IntervalIntegrationTriggerTest : CustomAssertion
+	public class IntegrationIntervalTriggerTest : CustomAssertion
 	{
 		private IMock _mockDateTime;
-		private IntervalIntegrationTrigger _schedule;
+		private IntegrationIntervalTrigger _schedule;
 
 		[SetUp]
 		public void CreateSchedule()
 		{
 			_mockDateTime = new DynamicMock(typeof(DateTimeProvider));
-			_schedule = new IntervalIntegrationTrigger((DateTimeProvider) _mockDateTime.MockInstance);
+			_schedule = new IntegrationIntervalTrigger((DateTimeProvider) _mockDateTime.MockInstance);
 		}
 
 		[TearDown]
@@ -29,10 +29,10 @@ namespace ThoughtWorks.CruiseControl.Core.Schedules.Test
 		[Test]
 		public void PopulateFromReflector()
 		{
-			string xml = string.Format(@"<interval intervalSeconds=""1"" buildCondition=""ForceBuild"" />");
-			IntervalIntegrationTrigger intervalIntegrationTrigger = (IntervalIntegrationTrigger)NetReflector.Read(xml);
-			Assert.AreEqual(1, intervalIntegrationTrigger.IntervalSeconds);
-			Assert.AreEqual(BuildCondition.ForceBuild, intervalIntegrationTrigger.BuildCondition);
+			string xml = string.Format(@"<integrationInterval seconds=""1"" buildCondition=""ForceBuild"" />");
+			IntegrationIntervalTrigger IntegrationIntervalTrigger = (IntegrationIntervalTrigger)NetReflector.Read(xml);
+			Assert.AreEqual(1, IntegrationIntervalTrigger.IntervalSeconds);
+			Assert.AreEqual(BuildCondition.ForceBuild, IntegrationIntervalTrigger.BuildCondition);
 		}
 
 		[Test]

@@ -5,18 +5,18 @@ using ThoughtWorks.CruiseControl.Remote;
 namespace ThoughtWorks.CruiseControl.Core.Schedules
 {
 	[Serializable]
-	[ReflectorType("multipleIntegrationTriggers")]
-	public class MultipleIntegrationTrigger : IIntegrationTrigger
+	[ReflectorType("multipleTriggers")]
+	public class MultipleTrigger : ITrigger
 	{
-		private IIntegrationTrigger[] triggers;
+		private ITrigger[] triggers;
 
-		public MultipleIntegrationTrigger()
+		public MultipleTrigger()
 		{
-			this.triggers = new IIntegrationTrigger[0];
+			this.triggers = new ITrigger[0];
 		}
 
 		[ReflectorArray("triggers", Required=false)]
-		public IIntegrationTrigger[] Triggers
+		public ITrigger[] Triggers
 		{
 			get
 			{
@@ -31,7 +31,7 @@ namespace ThoughtWorks.CruiseControl.Core.Schedules
 		public BuildCondition ShouldRunIntegration()
 		{
 			BuildCondition overallCondition = BuildCondition.NoBuild;
-			foreach (IIntegrationTrigger trigger in triggers)
+			foreach (ITrigger trigger in triggers)
 			{
 				// Assumes ordering of elements of enum
 				BuildCondition condition = trigger.ShouldRunIntegration();
@@ -45,7 +45,7 @@ namespace ThoughtWorks.CruiseControl.Core.Schedules
 
 		public void IntegrationCompleted()
 		{
-			foreach (IIntegrationTrigger trigger in triggers)
+			foreach (ITrigger trigger in triggers)
 			{
 				trigger.IntegrationCompleted();
 			}

@@ -239,12 +239,12 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "Core\Schedule\MultipleIntegrationTriggerTest.cs"
+                    RelPath = "Core\Schedule\MultipleTriggerTest.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "Core\Schedule\NeverTriggerIntegrationTriggerTest.cs"
+                    RelPath = "Core\Schedule\NullTriggerTriggerTest.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

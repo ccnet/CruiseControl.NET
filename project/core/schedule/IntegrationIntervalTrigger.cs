@@ -6,21 +6,21 @@ using ThoughtWorks.CruiseControl.Remote;
 namespace ThoughtWorks.CruiseControl.Core.Schedules
 {
 	[Serializable]
-	[ReflectorType("interval")]
-	public class IntervalIntegrationTrigger : IIntegrationTrigger
+	[ReflectorType("integrationInterval")]
+	public class IntegrationIntervalTrigger : ITrigger
 	{
 		public const int DefaultIntervalSeconds = 60;
 
 		private DateTime _lastIntegrationCompleteTime = DateTime.MinValue;
 		private DateTimeProvider _dtProvider;
 
-		public IntervalIntegrationTrigger() : this(new DateTimeProvider()) { }
-		public IntervalIntegrationTrigger(DateTimeProvider dtProvider)
+		public IntegrationIntervalTrigger() : this(new DateTimeProvider()) { }
+		public IntegrationIntervalTrigger(DateTimeProvider dtProvider)
 		{
 			_dtProvider = dtProvider;
 		}
 
-		[ReflectorProperty("intervalSeconds")]
+		[ReflectorProperty("seconds")]
 		public double IntervalSeconds = DefaultIntervalSeconds;
 
 		[ReflectorProperty("buildCondition", Required=false)]

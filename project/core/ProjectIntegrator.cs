@@ -10,7 +10,7 @@ namespace ThoughtWorks.CruiseControl.Core
 	/// This integrator, when running, coordinates the top-level life cycle of
 	/// a project's integration.
 	/// <list type="1">
-	///		<item>The <see cref="IIntegrationTrigger"/> instance is asked whether to build or not.</item>
+	///		<item>The <see cref="ITrigger"/> instance is asked whether to build or not.</item>
 	///		<item>If a build is required, the <see cref="IProject.RunIntegration(BuildCondition buildCondition)"/>
 	///		is called.</item>
 	/// </list>
@@ -18,17 +18,17 @@ namespace ThoughtWorks.CruiseControl.Core
 	public class ProjectIntegrator : IProjectIntegrator, IDisposable
 	{
 		private readonly IIntegratable integratable;
-		private IIntegrationTrigger integrationTrigger;
+		private ITrigger Trigger;
 		private IProject _project;
 		private bool _forceBuild;
 		private Thread _thread;
 		private ProjectIntegratorState _state = ProjectIntegratorState.Stopped;
 
-		public ProjectIntegrator(IProject project) : this(project.IntegrationTrigger, project, project) { }
+		public ProjectIntegrator(IProject project) : this(project.Trigger, project, project) { }
 
-		public ProjectIntegrator(IIntegrationTrigger integrationTrigger, IIntegratable integratable, IProject project)
+		public ProjectIntegrator(ITrigger Trigger, IIntegratable integratable, IProject project)
 		{
-			this.integrationTrigger = integrationTrigger;
+			this.Trigger = Trigger;
 			_project = project;
 			this.integratable = integratable;
 		}
@@ -103,7 +103,7 @@ namespace ThoughtWorks.CruiseControl.Core
 					}
 
 					// notify the schedule whether the build was successful or not
-					integrationTrigger.IntegrationCompleted();
+					Trigger.IntegrationCompleted();
 				}
 
 				// sleep for a short while, to avoid hammering CPU
@@ -121,7 +121,7 @@ namespace ThoughtWorks.CruiseControl.Core
 				_forceBuild = false;
 				return BuildCondition.ForceBuild;
 			}
-			return integrationTrigger.ShouldRunIntegration();
+			return Trigger.ShouldRunIntegration();
 		}
 
 		/// <summary>

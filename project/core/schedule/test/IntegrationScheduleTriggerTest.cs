@@ -9,16 +9,16 @@ using ThoughtWorks.CruiseControl.Remote;
 namespace ThoughtWorks.CruiseControl.Core.Schedules.Test
 {
 	[TestFixture]
-	public class ScheduleIntegrationTriggerTest
+	public class IntegrationScheduleTriggerTest
 	{
 		private IMock _mockDateTime;
-		private ScheduleIntegrationTrigger trigger;
+		private IntegrationScheduleTrigger scheduleTrigger;
 
 		[SetUp]
 		public void Setup()
 		{
 			_mockDateTime = new DynamicMock(typeof (DateTimeProvider));
-			trigger = new ScheduleIntegrationTrigger((DateTimeProvider) _mockDateTime.MockInstance);
+			scheduleTrigger = new IntegrationScheduleTrigger((DateTimeProvider) _mockDateTime.MockInstance);
 		}
 
 		[TearDown]
@@ -30,51 +30,51 @@ namespace ThoughtWorks.CruiseControl.Core.Schedules.Test
 		[Test]
 		public void PopulateFromConfiguration()
 		{
-			ScheduleIntegrationTrigger integrationTrigger = (ScheduleIntegrationTrigger) NetReflector.Read(@"<schedule integrationTime=""23:59"" buildCondition=""ForceBuild"" />");
-			Assert.AreEqual(new TimeSpan(23, 59, 0).ToString(), integrationTrigger.IntegrationTime);
-			Assert.AreEqual(BuildCondition.ForceBuild, integrationTrigger.BuildCondition);
+			IntegrationScheduleTrigger integrationScheduleTrigger = (IntegrationScheduleTrigger) NetReflector.Read(@"<integrationSchedule time=""23:59"" buildCondition=""ForceBuild"" />");
+			Assert.AreEqual(new TimeSpan(23, 59, 0).ToString(), integrationScheduleTrigger.IntegrationTime);
+			Assert.AreEqual(BuildCondition.ForceBuild, integrationScheduleTrigger.BuildCondition);
 		}
 
 		[Test, ExpectedException(typeof (ConfigurationException))]
 		public void PopulateFromConfigurationWithInvalidIntegrationTime()
 		{
-			NetReflector.Read(@"<schedule integrationTime=""23b59""/>");
+			NetReflector.Read(@"<integrationSchedule time=""23b59""/>");
 		}
 
 		[Test]
 		public void ShouldRunIntegrationIfCalendarTimeIsAfterIntegrationTime()
 		{
 			_mockDateTime.SetupResult("Now", new DateTime(2004, 1, 1, 23, 25, 0, 0));
-			trigger.IntegrationTime = "23:30";
-			Assert.AreEqual(BuildCondition.NoBuild, trigger.ShouldRunIntegration());
+			scheduleTrigger.IntegrationTime = "23:30";
+			Assert.AreEqual(BuildCondition.NoBuild, scheduleTrigger.ShouldRunIntegration());
 
 			_mockDateTime.SetupResult("Now", new DateTime(2004, 1, 1, 23, 31, 0, 0));
-			Assert.AreEqual(BuildCondition.IfModificationExists, trigger.ShouldRunIntegration());
+			Assert.AreEqual(BuildCondition.IfModificationExists, scheduleTrigger.ShouldRunIntegration());
 		}
 
 		[Test]
 		public void ShouldRunIntegrationOnTheNextDay()
 		{
 			_mockDateTime.SetupResult("Now", new DateTime(2004, 1, 1, 23, 25, 0, 0));
-			trigger.IntegrationTime = "23:30";
+			scheduleTrigger.IntegrationTime = "23:30";
 
 			_mockDateTime.SetupResult("Now", new DateTime(2004, 1, 2, 1, 1, 0, 0));
-			Assert.AreEqual(BuildCondition.IfModificationExists, trigger.ShouldRunIntegration());
+			Assert.AreEqual(BuildCondition.IfModificationExists, scheduleTrigger.ShouldRunIntegration());
 		}
 
 		[Test]
 		public void ShouldIncrementTheIntegrationTimeToTheNextDayAfterIntegrationIsCompleted()
 		{
 			_mockDateTime.SetupResult("Now", new DateTime(2004, 6, 27, 13, 00, 0, 0));
-			trigger.IntegrationTime = "14:30";
+			scheduleTrigger.IntegrationTime = "14:30";
 			_mockDateTime.SetupResult("Now", new DateTime(2004, 6, 27, 15, 00, 0, 0));
 
-			Assert.AreEqual(BuildCondition.IfModificationExists, trigger.ShouldRunIntegration());
-			trigger.IntegrationCompleted();
-			Assert.AreEqual(BuildCondition.NoBuild, trigger.ShouldRunIntegration());
+			Assert.AreEqual(BuildCondition.IfModificationExists, scheduleTrigger.ShouldRunIntegration());
+			scheduleTrigger.IntegrationCompleted();
+			Assert.AreEqual(BuildCondition.NoBuild, scheduleTrigger.ShouldRunIntegration());
 
 			_mockDateTime.SetupResult("Now", new DateTime(2004, 6, 28, 15, 00, 0, 0));
-			Assert.AreEqual(BuildCondition.IfModificationExists, trigger.ShouldRunIntegration());
+			Assert.AreEqual(BuildCondition.IfModificationExists, scheduleTrigger.ShouldRunIntegration());
 		}
 
 		[Test]
@@ -83,12 +83,12 @@ namespace ThoughtWorks.CruiseControl.Core.Schedules.Test
 			foreach (BuildCondition expectedCondition in Enum.GetValues(typeof (BuildCondition)))
 			{
 				_mockDateTime.SetupResult("Now", new DateTime(2004, 1, 1, 23, 25, 0, 0));
-				trigger.IntegrationTime = "23:30";
-				trigger.BuildCondition = expectedCondition;
-				Assert.AreEqual(BuildCondition.NoBuild, trigger.ShouldRunIntegration());
+				scheduleTrigger.IntegrationTime = "23:30";
+				scheduleTrigger.BuildCondition = expectedCondition;
+				Assert.AreEqual(BuildCondition.NoBuild, scheduleTrigger.ShouldRunIntegration());
 
 				_mockDateTime.SetupResult("Now", new DateTime(2004, 1, 1, 23, 31, 0, 0));
-				Assert.AreEqual(expectedCondition, trigger.ShouldRunIntegration());
+				Assert.AreEqual(expectedCondition, scheduleTrigger.ShouldRunIntegration());
 			}
 		}
 	}

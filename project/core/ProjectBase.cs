@@ -11,7 +11,7 @@ namespace ThoughtWorks.CruiseControl.Core
 		public static readonly string DefaultArtifactSubDirectory = "Artifacts";
 
 		private string _name;
-		private IIntegrationTrigger integrationTrigger = new NeverTriggerIntegrationTrigger();
+		private ITrigger trigger = new NullTrigger();
 		private string _configuredWorkingDirectory;
 		private string _configuredArtifactDirectory;
 
@@ -22,11 +22,11 @@ namespace ThoughtWorks.CruiseControl.Core
 			set { _name = value; }
 		}
 
-		[ReflectorProperty("integrationTrigger", InstanceTypeKey="type", Required=false)]
-		public virtual IIntegrationTrigger IntegrationTrigger
+		[ReflectorProperty("trigger", InstanceTypeKey="type", Required=false)]
+		public virtual ITrigger Trigger
 		{
-			get { return integrationTrigger; }
-			set { integrationTrigger = value; }
+			get { return trigger; }
+			set { trigger = value; }
 		}
 
 		[ReflectorProperty("workingDirectory", Required=false)]

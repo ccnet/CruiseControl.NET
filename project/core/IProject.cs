@@ -19,7 +19,7 @@ namespace ThoughtWorks.CruiseControl.Core
 		/// <summary>
 		/// A component to trigger integrations for this project.
 		/// </summary>
-		IIntegrationTrigger IntegrationTrigger 
+		ITrigger Trigger 
 		{
 			get;
 		}

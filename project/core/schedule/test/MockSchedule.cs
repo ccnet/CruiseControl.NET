@@ -6,7 +6,7 @@ namespace ThoughtWorks.CruiseControl.Core.Schedules.Test
 	/// <summary>
 	/// Mock implementation of ISchedule for testing purposes.
 	/// </summary>
-	public class MockSchedule : IIntegrationTrigger
+	public class MockSchedule : ITrigger
 	{
 		public MockSchedule()
 		{

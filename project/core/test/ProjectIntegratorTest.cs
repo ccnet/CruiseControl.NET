@@ -14,7 +14,7 @@ namespace ThoughtWorks.CruiseControl.Core.Test
 		private DynamicMock integrationTriggerMock;
 		private DynamicMock integratableMock;
 		private DynamicMock projectMock;
-		private IIntegrationTrigger integrationTrigger;
+		private ITrigger Trigger;
 		private IIntegratable integratable;
 		private IProject project;
 		private ProjectIntegrator _integrator;
@@ -22,15 +22,15 @@ namespace ThoughtWorks.CruiseControl.Core.Test
 		[SetUp]
 		public void SetUp()
 		{
-			integrationTriggerMock = new DynamicMock(typeof(IIntegrationTrigger));
+			integrationTriggerMock = new DynamicMock(typeof(ITrigger));
 			integratableMock = new DynamicMock(typeof(IIntegratable));
 			projectMock = new DynamicMock(typeof(IProject));
 
-			integrationTrigger = (IIntegrationTrigger) integrationTriggerMock.MockInstance;
+			Trigger = (ITrigger) integrationTriggerMock.MockInstance;
 			integratable = (IIntegratable) integratableMock.MockInstance;
 			project = (IProject) projectMock.MockInstance;
 
-			_integrator = new ProjectIntegrator(integrationTrigger, integratable, project);
+			_integrator = new ProjectIntegrator(Trigger, integratable, project);
 		}
 
 		[TearDown]

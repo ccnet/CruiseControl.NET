@@ -6,21 +6,21 @@ using ThoughtWorks.CruiseControl.Remote;
 namespace ThoughtWorks.CruiseControl.UnitTests.Core.Schedule
 {
 	[TestFixture]
-	public class NeverTriggerIntegrationTriggerTest
+	public class NullTriggerTriggerTest
 	{
-		private NeverTriggerIntegrationTrigger trigger;
+		private NullTrigger trigger;
 
 		[SetUp]
 		public void Setup()
 		{
-			trigger = new NeverTriggerIntegrationTrigger();	
+			trigger = new NullTrigger();	
 		}
 
 		[Test]
 		public void PopulateFromReflector()
 		{
 			string xml = string.Format(@"<neverTriggerIntegration />");
-			NeverTriggerIntegrationTrigger trigger = (NeverTriggerIntegrationTrigger)NetReflector.Read(xml);
+			NullTrigger trigger = (NullTrigger)NetReflector.Read(xml);
 			Assert.AreEqual(BuildCondition.NoBuild, trigger.ShouldRunIntegration());
 		}
 

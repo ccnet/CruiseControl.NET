@@ -6,7 +6,7 @@ namespace ThoughtWorks.CruiseControl.Core.Schedules
 {
 	[Serializable]
 	[ReflectorType("neverTriggerIntegration")]
-	public class NeverTriggerIntegrationTrigger : IIntegrationTrigger
+	public class NullTrigger : ITrigger
 	{
 		public BuildCondition ShouldRunIntegration()
 		{

@@ -9,13 +9,13 @@ namespace ThoughtWorks.CruiseControl.Core.Test
 	public class MockProject : IProject
 	{
 		string _name;
-		IIntegrationTrigger _schedule;
+		ITrigger _schedule;
 		ProjectActivity _projectActivity = ProjectActivity.Unknown; // default
 
-		public MockProject(string name, IIntegrationTrigger integrationTrigger)
+		public MockProject(string name, ITrigger Trigger)
 		{
 			_name = name;
-			_schedule = integrationTrigger;
+			_schedule = Trigger;
 		}
 
 		public string Name 
@@ -28,7 +28,7 @@ namespace ThoughtWorks.CruiseControl.Core.Test
 			get { return 0; }
 		}
 
-		public IIntegrationTrigger IntegrationTrigger 
+		public ITrigger Trigger 
 		{ 
 			get { return _schedule; } 
 			set { _schedule = value; } 
@@ -85,11 +85,11 @@ namespace ThoughtWorks.CruiseControl.Core.Test
 	public class ExceptionMockProject : MockProject
 	{
 		public const string EXCEPTION_MESSAGE = "Intentional exception";
-		public ExceptionMockProject(string name, IntervalIntegrationTrigger intervalIntegrationTrigger) : base(name, intervalIntegrationTrigger) {}
+		public ExceptionMockProject(string name, IntegrationIntervalTrigger IntegrationIntervalTrigger) : base(name, IntegrationIntervalTrigger) {}
 
 		public override IIntegrationResult RunIntegration(BuildCondition buildCondition)
 		{
-			IntegrationTrigger.IntegrationCompleted();
+			Trigger.IntegrationCompleted();
 			throw new Exception(EXCEPTION_MESSAGE);
 		}
 	}

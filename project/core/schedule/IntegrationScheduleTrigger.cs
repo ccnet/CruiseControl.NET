@@ -8,21 +8,21 @@ using ThoughtWorks.CruiseControl.Remote;
 namespace ThoughtWorks.CruiseControl.Core.Schedules
 {
 	[Serializable]
-	[ReflectorType("schedule")]
-	public class ScheduleIntegrationTrigger : IIntegrationTrigger
+	[ReflectorType("integrationSchedule")]
+	public class IntegrationScheduleTrigger : ITrigger
 	{
 		private DateTimeProvider _dtProvider;
 		private TimeSpan _integrationTime;
 		private DateTime _nextIntegration;
 
-		public ScheduleIntegrationTrigger() : this(new DateTimeProvider()) {}
+		public IntegrationScheduleTrigger() : this(new DateTimeProvider()) {}
 
-		public ScheduleIntegrationTrigger(DateTimeProvider dtProvider)
+		public IntegrationScheduleTrigger(DateTimeProvider dtProvider)
 		{
 			_dtProvider = dtProvider;
 		}
 
-		[ReflectorProperty("integrationTime")]
+		[ReflectorProperty("time")]
 		public string IntegrationTime
 		{
 			get { return _integrationTime.ToString(); }

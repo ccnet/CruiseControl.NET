@@ -49,7 +49,7 @@ namespace ThoughtWorks.CruiseControl.Core.Test
 			_mockSourceControl.Strict = true;
 			_mockStateManager = new DynamicMock(typeof (IStateManager));
 			_mockStateManager.Strict = true;
-			_mockIntegrtionTrigger = new DynamicMock(typeof (IIntegrationTrigger));
+			_mockIntegrtionTrigger = new DynamicMock(typeof (ITrigger));
 			_mockIntegrtionTrigger.Strict = true;
 			_mockLabeller = new DynamicMock(typeof (ILabeller));
 			_mockLabeller.Strict = true;
@@ -63,7 +63,7 @@ namespace ThoughtWorks.CruiseControl.Core.Test
 			_project.Builder = (IBuilder) _mockBuilder.MockInstance;
 			_project.SourceControl = (ISourceControl) _mockSourceControl.MockInstance;
 			_project.StateManager = (IStateManager) _mockStateManager.MockInstance;
-			_project.IntegrationTrigger = (IIntegrationTrigger) _mockIntegrtionTrigger.MockInstance;
+			_project.Trigger = (ITrigger) _mockIntegrtionTrigger.MockInstance;
 			_project.Labeller = (ILabeller) _mockLabeller.MockInstance;
 			_project.Publishers = new IIntegrationCompletedEventHandler[] {(IIntegrationCompletedEventHandler) _mockPublisher.MockInstance};
 			_project.Tasks = new ITask[] {(ITask) _mockTask.MockInstance};
@@ -104,8 +104,7 @@ namespace ThoughtWorks.CruiseControl.Core.Test
 	<sourcecontrol type=""mock"" />
 	<labeller type=""defaultlabeller"" />
 	<state type=""state"" />
-	<integrationTrigger type=""interval"" intervalSeconds=""30"" />
-	<stopProjectTrigger type=""stopAfterNumberOfIntegrations"" integrations=""10"" />
+	<trigger type=""integrationInterval"" seconds=""30"" />
 	<publishers>
 		<xmllogger logDir=""C:\temp"" />
 	</publishers>
@@ -123,7 +122,7 @@ namespace ThoughtWorks.CruiseControl.Core.Test
 			Assert.IsTrue(project.SourceControl is MockSourceControl);
 			Assert.IsTrue(project.Labeller is DefaultLabeller);
 			Assert.IsTrue(project.StateManager is IntegrationStateManager);
-			Assert.IsTrue(project.IntegrationTrigger is IntervalIntegrationTrigger);
+			Assert.IsTrue(project.Trigger is IntegrationIntervalTrigger);
 			Assert.IsTrue(project.Publishers[0] is XmlLogPublisher);
 			Assert.IsTrue(project.Tasks[0] is MergeFilesTask);
 			Assert.AreEqual(@"c:\my\working\directory", project.ConfiguredWorkingDirectory);
@@ -148,7 +147,7 @@ namespace ThoughtWorks.CruiseControl.Core.Test
 			Assert.IsTrue(project.Builder is NAntBuilder);
 			Assert.IsTrue(project.SourceControl is MockSourceControl);
 			Assert.IsTrue(project.Labeller is DefaultLabeller);
-			Assert.IsTrue(project.IntegrationTrigger is NeverTriggerIntegrationTrigger);
+			Assert.IsTrue(project.Trigger is NullTrigger);
 			Assert.IsNull(project.Publishers);
 			Assert.AreEqual(0, project.Tasks.Length);
 			VerifyAll();

@@ -7,23 +7,23 @@ using ThoughtWorks.CruiseControl.Remote;
 namespace ThoughtWorks.CruiseControl.UnitTests.Core.Schedule
 {
 	[TestFixture]
-	public class MultipleIntegrationTriggerTest
+	public class MultipleTriggerTest
 	{
 		private DynamicMock subTrigger1Mock;
 		private DynamicMock subTrigger2Mock;
-		private IIntegrationTrigger subTrigger1;
-		private IIntegrationTrigger subTrigger2;
-		private MultipleIntegrationTrigger trigger;
+		private ITrigger subTrigger1;
+		private ITrigger subTrigger2;
+		private MultipleTrigger trigger;
 
 		[SetUp]
 		public void Setup()
 		{
-			subTrigger1Mock = new DynamicMock(typeof(IIntegrationTrigger));
-			subTrigger2Mock = new DynamicMock(typeof(IIntegrationTrigger));
-			subTrigger1 = (IIntegrationTrigger) subTrigger1Mock.MockInstance;
-			subTrigger2 = (IIntegrationTrigger) subTrigger2Mock.MockInstance;
-			trigger = new MultipleIntegrationTrigger();
-			trigger.Triggers = new IIntegrationTrigger[] {subTrigger1, subTrigger2};
+			subTrigger1Mock = new DynamicMock(typeof(ITrigger));
+			subTrigger2Mock = new DynamicMock(typeof(ITrigger));
+			subTrigger1 = (ITrigger) subTrigger1Mock.MockInstance;
+			subTrigger2 = (ITrigger) subTrigger2Mock.MockInstance;
+			trigger = new MultipleTrigger();
+			trigger.Triggers = new ITrigger[] {subTrigger1, subTrigger2};
 		}
 
 		private void VerifyAll()
@@ -35,27 +35,27 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Schedule
 		[Test]
 		public void PopulateFromReflector()
 		{
-			string xml = string.Format(@"<multipleIntegrationTriggers>
+			string xml = string.Format(@"<multipleTriggers>
 	<triggers>
-		<interval intervalSeconds=""60"" />
-		<schedule integrationTime=""08:00"" buildCondition=""ForceBuild"" />
+		<integrationInterval seconds=""60"" />
+		<integrationSchedule time=""08:00"" buildCondition=""ForceBuild"" />
 	</triggers>
-</multipleIntegrationTriggers>");
-			trigger = (MultipleIntegrationTrigger)NetReflector.Read(xml);
+</multipleTriggers>");
+			trigger = (MultipleTrigger)NetReflector.Read(xml);
 			Assert.AreEqual(2, trigger.Triggers.Length);
 		}
 
 		[Test]
 		public void ShouldReturnNoBuildWhenNoTriggers()
 		{
-			trigger = new MultipleIntegrationTrigger();
+			trigger = new MultipleTrigger();
 			Assert.AreEqual(BuildCondition.NoBuild, trigger.ShouldRunIntegration());
 		}
 
 		[Test]
 		public void ShouldNotFailWhenNoTriggersAndIntegrationCompletedCalled()
 		{
-			trigger = new MultipleIntegrationTrigger();
+			trigger = new MultipleTrigger();
 			trigger.IntegrationCompleted();
 		}
 
