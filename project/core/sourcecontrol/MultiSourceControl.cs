@@ -7,15 +7,15 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 	[ReflectorType("multi")]
 	public class MultiSourceControl : ITemporaryLabeller, ISourceControl
 	{
-		private IList _sourceControls;
+		private ISourceControl[] _sourceControls;
 
-		[ReflectorCollection("sourceControls", InstanceType=typeof(ArrayList), Required=true)]
-		public IList SourceControls 
+		[ReflectorArray("sourceControls", Required=true)]
+		public ISourceControl[] SourceControls 
 		{
 			get 
 			{
 				if (_sourceControls == null)
-					_sourceControls = new ArrayList();
+					_sourceControls = new ISourceControl[0];
 
 				return _sourceControls;
 			}

@@ -32,7 +32,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test
 			NetReflector.Read(SourceControlXml, multiSourceControl);
 
 			//// VERIFY
-			Assert.IsTrue(multiSourceControl.SourceControls.Count == 2);
+			Assert.IsTrue(multiSourceControl.SourceControls.Length == 2);
 
 			string optionalProp0 = ((SourceControlMock)multiSourceControl.SourceControls[0]).AnOptionalProperty;
 			string optionalProp1 = ((SourceControlMock)multiSourceControl.SourceControls[1]).AnOptionalProperty;
@@ -56,12 +56,10 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test
 			DynamicMock mockSC2 = new DynamicMock(typeof(ISourceControl));
 			mockSC2.Expect("LabelSourceControl", label, result);
 
-			ArrayList scList = new ArrayList();
-			scList.Add(mockSC1.MockInstance);
-			scList.Add(mockSC2.MockInstance);
+			ISourceControl[] sourceControls = new ISourceControl[] { (ISourceControl) mockSC1.MockInstance, (ISourceControl) mockSC2.MockInstance };
 
 			MultiSourceControl multiSourceControl = new MultiSourceControl();
-			multiSourceControl.SourceControls = scList;
+			multiSourceControl.SourceControls = sourceControls;
 
 			//// EXECUTE
 			multiSourceControl.LabelSourceControl(label, result);
@@ -98,7 +96,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test
 			}
 
 			MultiSourceControl multiSourceControl = new MultiSourceControl();
-			multiSourceControl.SourceControls = scList;
+			multiSourceControl.SourceControls = (ISourceControl[]) scList.ToArray(typeof (ISourceControl));
 
 			//// EXECUTE
 			ArrayList returnedMods = new ArrayList( multiSourceControl.GetModifications(dateTime1, dateTime2) );
@@ -130,7 +128,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test
 			scList.Add( sourceControl.MockInstance );
 			scList.Add( tempLabeller.MockInstance );
 			MultiSourceControl multiSourceControl = new MultiSourceControl();
-			multiSourceControl.SourceControls = scList;
+			multiSourceControl.SourceControls = (ISourceControl[]) scList.ToArray(typeof (ISourceControl));
 
 			//// EXECUTE
 			multiSourceControl.CreateTemporaryLabel();
@@ -153,8 +151,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test
 			mockSC2.Expect("GetSource", result);
 
 			MultiSourceControl multiSourceControl = new MultiSourceControl();
-			multiSourceControl.SourceControls.Add((ISourceControl) mockSC1.MockInstance);
-			multiSourceControl.SourceControls.Add((ISourceControl) mockSC2.MockInstance);
+			multiSourceControl.SourceControls = new ISourceControl[] { (ISourceControl) mockSC1.MockInstance, (ISourceControl) mockSC2.MockInstance };
 			multiSourceControl.GetSource(result);
 
 			mockSC1.Verify();
