@@ -199,7 +199,7 @@ namespace ThoughtWorks.CruiseControl.Core
 							// ToDo - check these are sorted?
 							string[] buildNames = LogFileUtil.GetLogFileNames(((XmlLogPublisher) publisher).LogDir);
 							ArrayList buildNamesToReturn = new ArrayList();
-							for (int i = 0; i < buildCount; i++)
+							for (int i = 0; i < ((buildCount < buildNames.Length) ? buildCount : buildNames.Length); i++)
 							{
 								buildNamesToReturn.Add(buildNames[i]);
 							}

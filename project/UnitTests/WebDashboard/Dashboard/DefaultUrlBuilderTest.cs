@@ -122,6 +122,20 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 		}
 
 		[Test]
+		public void ShouldBuildProjectUrlAddingCorrectlyFormattedAction()
+		{
+			// Setup
+			pathMapperMock.ExpectAndReturn("GetAbsoluteURLForRelativePath", "http://local/foo.htm", "foo.htm");
+
+			// Execute
+			string url = urlBuilder.BuildProjectUrl("foo.htm", new ActionSpecifierWithName("myAction"),"myserver", "myproject");
+
+			// Verify
+			AssertEquals("http://local/foo.htm?_action_myAction=true&amp;server=myserver&amp;project=myproject", url);
+			VerifyAll();
+		}
+
+		[Test]
 		public void ShouldBuildBuildUrl()
 		{
 			// Setup

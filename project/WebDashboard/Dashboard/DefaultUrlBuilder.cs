@@ -1,3 +1,4 @@
+using System;
 using ThoughtWorks.CruiseControl.WebDashboard.IO;
 
 namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
@@ -53,7 +54,12 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 
 		public string BuildProjectUrl(string relativeUrl, string serverName, string projectName)
 		{
-			return BuildUrl(relativeUrl, string.Format("{0}={1}&amp;{2}={3}", 
+			return BuildProjectUrl(relativeUrl, new NullActionSpecifier(), serverName, projectName);
+		}
+
+		public string BuildProjectUrl (string relativeUrl, IActionSpecifier action, string serverName, string projectName)
+		{
+			return BuildUrl(relativeUrl, action, string.Format("{0}={1}&amp;{2}={3}", 
 				QueryStringRequestWrapper.ServerQueryStringParameter, serverName,
 				QueryStringRequestWrapper.ProjectQueryStringParameter, projectName));
 		}

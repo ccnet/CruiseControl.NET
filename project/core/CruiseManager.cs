@@ -1,4 +1,5 @@
 using System;
+using ThoughtWorks.CruiseControl.Core.Util;
 using ThoughtWorks.CruiseControl.Remote;
 
 namespace ThoughtWorks.CruiseControl.Core 
@@ -43,7 +44,15 @@ namespace ThoughtWorks.CruiseControl.Core
 
 		public string[] GetMostRecentBuildNames(string projectName, int buildCount)
 		{
-			return cruiseServer.GetMostRecentBuildNames(projectName, buildCount);
+			try
+			{
+				return cruiseServer.GetMostRecentBuildNames(projectName, buildCount);	
+			}
+			catch (Exception e)
+			{
+				Log.Error(e);
+				throw new CruiseControlException("Unexpected exception caught on server", e);
+			}
 		}
 
 		public string GetLog(string projectName, string buildName)
