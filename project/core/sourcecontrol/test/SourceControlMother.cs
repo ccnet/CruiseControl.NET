@@ -51,7 +51,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test
 			return modifications;
 		}
 
-		public void LabelSourceControl(string label, DateTime timeStamp) 
+		public void LabelSourceControl( string label, IIntegrationResult result ) 
 		{
 			this.label = label;
 		}

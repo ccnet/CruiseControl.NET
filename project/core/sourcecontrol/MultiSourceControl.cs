@@ -38,11 +38,11 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			return (Modification[]) modifications.ToArray(typeof(Modification));
 		}
 
-		public void LabelSourceControl(string label, DateTime timeStamp)
+		public void LabelSourceControl( string label, IIntegrationResult result )
 		{
 			foreach (ISourceControl sourceControl in SourceControls)
 			{
-				sourceControl.LabelSourceControl(label, timeStamp);
+				sourceControl.LabelSourceControl(label, result);
 			}
 		}
 

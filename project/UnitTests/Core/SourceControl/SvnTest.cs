@@ -79,7 +79,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test
 
 			svn.TagOnSuccess = true;
 			executor.ExpectAndReturn("Execute", new ProcessResult("foo", null, 0, false), new IsAnything());
-			svn.LabelSourceControl("foo", DateTime.Now);
+			svn.LabelSourceControl("foo", new IntegrationResult());
 			executor.Verify();
 		}
 
@@ -91,20 +91,58 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test
 
 			svn.TagOnSuccess = false;
 			executor.ExpectNoCall("Execute", typeof(ProcessInfo));
-			svn.LabelSourceControl("foo", DateTime.Now);
+			svn.LabelSourceControl("foo", new IntegrationResult());
 			executor.Verify();
 		}
 
 		[Test]
+		public void CreatingLabelProcessPerformsCopyFromWorkingDirectoryWhenIntegrationResultDoesNotContainRepositoryRevision()
+		{
+			DynamicMock mockIntegrationResult = new DynamicMock(typeof(IIntegrationResult));
+			mockIntegrationResult.ExpectAndReturn("LastChangeNumber", 0);
+
+			Svn svn = CreateSvn(CreateSourceControlXml("svn://someserver/"));
+			svn.TagBaseUrl = "svn://someserver/tags";
+			ProcessInfo actualProcess = svn.CreateLabelProcessInfo("foo", (IIntegrationResult) mockIntegrationResult.MockInstance);
+
+			string expectedOutput = @"copy -m ""CCNET build foo"" ""c:\dev\src"" svn://someserver/tags/foo --non-interactive";
+			Assert.AreEqual(expectedOutput, actualProcess.Arguments);
+
+			mockIntegrationResult.Verify();
+		}
+
+
+		[Test]
+		public void CreatingLabelProcessPerformsServerToServerCopyWithRevisionWhenKnown()
+		{
+			DynamicMock mockIntegrationResult = new DynamicMock(typeof(IIntegrationResult));
+			mockIntegrationResult.ExpectAndReturn("LastChangeNumber", 5);
+
+			Svn svn = CreateSvn(CreateSourceControlXml("svn://someserver/"));
+			svn.TagBaseUrl = "svn://someserver/tags";
+			ProcessInfo actualProcess = svn.CreateLabelProcessInfo("foo", (IIntegrationResult) mockIntegrationResult.MockInstance);
+
+			string expectedOutput = @"copy -m ""CCNET build foo"" ""svn://someserver/"" svn://someserver/tags/foo --non-interactive --revision 5";
+			Assert.AreEqual(expectedOutput, actualProcess.Arguments);
+
+			mockIntegrationResult.Verify();
+		}
+
+
+		[Test]
 		public void CreatingLabelProcessIncludesCorrectlyFormattedArgumentsForUsernameAndPassword()
 		{
+			DynamicMock mockIntegrationResult = new DynamicMock(typeof(IIntegrationResult));
+			mockIntegrationResult.SetupResult("LastChangeNumber", 0);
+
 			Svn svn = CreateSvn(CreateSourceControlXml("svn://someserver/", "user", "password"));
 			svn.TagBaseUrl = "svn://someserver/tags";
-			DateTime date = DateTime.Parse("2001-01-21  20:00:00 'GMT'");
-			ProcessInfo actualProcess = svn.CreateLabelProcessInfo("foo", date);
+			ProcessInfo actualProcess = svn.CreateLabelProcessInfo("foo", (IIntegrationResult) mockIntegrationResult.MockInstance);
 
-			string expectedOutput = @"copy -m ""CCNET build foo"" svn://someserver/ svn://someserver/tags/foo --non-interactive --username ""user"" --password ""password""";
+			string expectedOutput = @"copy -m ""CCNET build foo"" ""c:\dev\src"" svn://someserver/tags/foo --non-interactive --username ""user"" --password ""password""";
 			Assert.AreEqual(expectedOutput, actualProcess.Arguments);
+
+			mockIntegrationResult.Verify();
 		}
 
 		[Test]
@@ -142,7 +180,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test
 		}
 
 		[Test]
-		public void ShouldGetSourceWithCredentialsIfSpecifiedIfTagOnSuccessTrue()
+		public void ShouldGetSourceWithCredentialsIfSpecifiedIfAutoGetSourceTrue()
 		{
 			DynamicMock executor = new DynamicMock(typeof(ProcessExecutor));
 			Svn svn = new Svn((ProcessExecutor) executor.MockInstance);
@@ -159,7 +197,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test
 		}
 
 		[Test]
-		public void ShouldNotGetSourceIfTagOnSuccessFalse()
+		public void ShouldNotGetSourceIfAutoGetSourceFalse()
 		{
 			DynamicMock executor = new DynamicMock(typeof(ProcessExecutor));
 			Svn svn = new Svn((ProcessExecutor) executor.MockInstance);

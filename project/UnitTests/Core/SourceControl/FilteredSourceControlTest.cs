@@ -71,11 +71,11 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test
 		{
 			//// SETUP
 			string label = "testLabel";
-			DateTime dateTime = DateTime.Now;
-			_mockSC.Expect("LabelSourceControl", label, dateTime);
+			IntegrationResult result = new IntegrationResult();
+			_mockSC.Expect("LabelSourceControl", label, result);
 
 			//// EXECUTE
-			_filteredSourceControl.LabelSourceControl(label, dateTime);
+			_filteredSourceControl.LabelSourceControl(label, result);
 		}
 
 		[Test]

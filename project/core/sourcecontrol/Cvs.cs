@@ -86,11 +86,11 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			return modifications;
 		}
 
-		public override void LabelSourceControl(string label, DateTime timeStamp)
+		public override void LabelSourceControl(string label, IIntegrationResult result)
 		{
 			if (LabelOnSuccess)
 			{
-				Execute(CreateLabelProcessInfo(label, timeStamp));
+				Execute(CreateLabelProcessInfo(label, result));
 			}
 		}
 
@@ -99,7 +99,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			return new ProcessInfo(Executable, BuildHistoryProcessInfoArgs(from), WorkingDirectory);
 		}
 
-		public ProcessInfo CreateLabelProcessInfo(string label, DateTime timeStamp) 
+		public ProcessInfo CreateLabelProcessInfo(string label, IIntegrationResult result) 
 		{
 			CommandLineBuilder buffer = new CommandLineBuilder();
 			buffer.AppendArgument("-d {0}", CvsRoot);

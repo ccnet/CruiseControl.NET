@@ -98,7 +98,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			return reposFile.LastWriteTime > date;
 		}
 
-		public void LabelSourceControl(string label, DateTime timeStamp) 
+		public void LabelSourceControl( string label, IIntegrationResult result ) 
 		{
 		}
 

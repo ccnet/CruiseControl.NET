@@ -130,7 +130,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test
 			_clearCase.UseBaseline = true;
 			_clearCase.ProjectVobName = null;
 
-			_clearCase.LabelSourceControl("foo", DateTime.Now);
+			_clearCase.LabelSourceControl("foo", null);
 		}
 
 		[Test]

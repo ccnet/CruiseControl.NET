@@ -90,8 +90,8 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 		///	take only one.
 		/// </remarks>
 		/// <param name="label">the label to apply</param>
-		/// <param name="timeStamp">the timestamp of the label; ignored for this implementation</param>
-		public override void LabelSourceControl( string label, DateTime timeStamp ) 
+		/// <param name="result">the timestamp of the label; ignored for this implementation</param>
+		public override void LabelSourceControl( string label, IIntegrationResult result ) 
 		{
 			if ( UseBaseline )
 			{

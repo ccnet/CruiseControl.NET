@@ -279,7 +279,7 @@ View:
 			processExecutorMock.ExpectAndReturn("Execute", new ProcessResult("", "", 0, false), labelSyncProcess);
 
 			// Execute
-			p4.LabelSourceControl(label,DateTime.Now);
+			p4.LabelSourceControl(label,null);
 
 			// Verify
 			VerifyAll();
@@ -315,7 +315,7 @@ View:
 			processExecutorMock.ExpectAndReturn("Execute", new ProcessResult("", "", 0, false), labelSyncProcess);
 
 			// Execute
-			p4.LabelSourceControl(label,DateTime.Now);
+			p4.LabelSourceControl(label,null);
 
 			// Verify
 			VerifyAll();
@@ -353,7 +353,7 @@ View:
 
 			try
 			{
-				p4.LabelSourceControl(label,DateTime.Now);
+				p4.LabelSourceControl(label,null);
 				Assert.Fail("Perforce labelling should fail if a purely numeric label is attempted to be applied");
 			}
 			catch (CruiseControlException) { }
@@ -372,7 +372,7 @@ View:
 
 			processInfoCreatorMock.ExpectNoCall("CreateProcessInfo", typeof(P4), typeof(string));
 			processExecutorMock.ExpectNoCall("Execute", typeof(ProcessInfo));
-			p4.LabelSourceControl(label,DateTime.Now);
+			p4.LabelSourceControl(label,null);
 
 			VerifyAll();
 		}
@@ -387,7 +387,7 @@ View:
 
 			processInfoCreatorMock.ExpectNoCall("CreateProcessInfo", typeof(P4), typeof(string));
 			processExecutorMock.ExpectNoCall("Execute", typeof(ProcessInfo));
-			p4.LabelSourceControl(label,DateTime.Now);
+			p4.LabelSourceControl(label,null);
 
 			VerifyAll();
 		}

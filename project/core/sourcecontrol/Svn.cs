@@ -10,7 +10,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 	public class Svn : ProcessSourceControl
 	{
 		internal static readonly string HISTORY_COMMAND_FORMAT = "log -v -r \"{{{0}}}:{{{1}}}\" --xml --non-interactive {2}";
-		internal static readonly string TAG_COMMAND_FORMAT = "copy -m \"CCNET build {0}\" {1} {2}/{0} --non-interactive";
+		internal static readonly string TAG_COMMAND_FORMAT = "copy -m \"CCNET build {0}\" \"{1}\" {2}/{0} --non-interactive";
 		internal static readonly string GET_SOURCE_COMMAND_FORMAT = "update --non-interactive";
 
 		internal static readonly string COMMAND_DATE_FORMAT = "yyyy-MM-ddTHH:mm:ssZ";
@@ -91,9 +91,9 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			return new ProcessInfo(Executable, BuildHistoryProcessArgs(from, to), WorkingDirectory);
 		}
 
-		public ProcessInfo CreateLabelProcessInfo(string label, DateTime timeStamp)
+		public ProcessInfo CreateLabelProcessInfo(string label, IIntegrationResult result)
 		{
-			return new ProcessInfo(Executable, BuildTagProcessArgs(label));
+			return new ProcessInfo(Executable, BuildTagProcessArgs(label, result.LastChangeNumber));
 		}
 
 		public override Modification[] GetModifications(DateTime from, DateTime to)
@@ -107,11 +107,11 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			return modifications;
 		}
 
-		public override void LabelSourceControl(string label, DateTime timeStamp)
+		public override void LabelSourceControl( string label, IIntegrationResult result )
 		{
 			if (TagOnSuccess)
 			{
-				Execute(CreateLabelProcessInfo(label, timeStamp));
+				Execute(CreateLabelProcessInfo(label, result));
 			}
 		}
 
@@ -129,11 +129,22 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			if (! StringUtil.IsWhitespace(Password)) buffer.AppendFormat(@" --password ""{0}""", Password);
 		}
 
-		private string BuildTagProcessArgs(string label)
+		private string BuildTagProcessArgs(string label, int revision)
 		{
 			StringBuilder buffer = new StringBuilder();
-			buffer.AppendFormat(TAG_COMMAND_FORMAT, label, _trunkUrl, _tagBaseUrl);
-			AppendUsernameAndPassword(buffer);
+
+			if (revision == 0)
+			{
+				buffer.AppendFormat(TAG_COMMAND_FORMAT, label, _workingDirectory, _tagBaseUrl);
+				AppendUsernameAndPassword(buffer);
+			}
+			else
+			{
+				buffer.AppendFormat(TAG_COMMAND_FORMAT, label, _trunkUrl, _tagBaseUrl);
+				buffer.AppendFormat(" --revision {0}", revision);
+				AppendUsernameAndPassword(buffer);				
+			}
+
 			return buffer.ToString();
 		}
 

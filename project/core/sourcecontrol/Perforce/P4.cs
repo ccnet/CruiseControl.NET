@@ -172,7 +172,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Perforce
 		/// checked out on the client (In theory this could be refined by using the timeStamp, but it would be better
 		/// to wait until CCNet has proper support for atomic-commit change groups, and use that instead)
 		/// </summary>
-		public void LabelSourceControl(string label, DateTime timeStamp) 
+		public void LabelSourceControl(string label, IIntegrationResult result) 
 		{
 			if (ApplyLabel)
 			{

@@ -9,7 +9,7 @@ namespace ThoughtWorks.CruiseControl.Core
 		// TODO: is it necessary to specify 'to' date -- just want changes after 'from' date
 		Modification[] GetModifications(DateTime from, DateTime to);
 
-		void LabelSourceControl(string label, DateTime timeStamp);
+		void LabelSourceControl( string label, IIntegrationResult result );
 		void GetSource(IIntegrationResult result);
 
 		void Initialize(IProject project);

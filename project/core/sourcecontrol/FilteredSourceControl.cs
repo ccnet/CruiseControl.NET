@@ -59,9 +59,9 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			return (Modification[]) acceptedModifications.ToArray(typeof (Modification));
 		}
 
-		public void LabelSourceControl(string label, DateTime timeStamp)
+		public void LabelSourceControl( string label, IIntegrationResult result )
 		{
-			_realScProvider.LabelSourceControl(label, timeStamp);
+			_realScProvider.LabelSourceControl(label, result);
 		}
 
 		public void Run(IIntegrationResult result)

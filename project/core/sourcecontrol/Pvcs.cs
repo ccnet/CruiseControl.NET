@@ -146,7 +146,7 @@ run ->{2} listversionedfiles -z -aw $Project $SubProject
 			}
 		}
 
-		public override void LabelSourceControl(string label, DateTime timeStamp)
+		public override void LabelSourceControl( string label, IIntegrationResult result )
 		{
 		}
 	}

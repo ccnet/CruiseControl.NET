@@ -14,7 +14,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			return mods;
 		}
 
-		public void LabelSourceControl(string label, DateTime timeStamp) 
+		public void LabelSourceControl( string label, IIntegrationResult result ) 
 		{
 		}
 

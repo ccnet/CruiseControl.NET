@@ -267,7 +267,7 @@ namespace ThoughtWorks.CruiseControl.Core
 		internal void HandleProjectLabelling(IIntegrationResult result)
 		{
 			if (result.Succeeded)
-				SourceControl.LabelSourceControl(result.Label, result.StartTime);
+				SourceControl.LabelSourceControl(result.Label, result);
 			else
 				DeleteTemporaryLabelIfNeeded();
 		}

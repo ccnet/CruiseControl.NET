@@ -19,7 +19,7 @@ namespace ThoughtWorks.CruiseControl.Core
 			return arr;
 		}
 
-		public void LabelSourceControl(string label, DateTime timeStamp)
+		public void LabelSourceControl( string label, IIntegrationResult result )
 		{
 			//no op
 		}

@@ -129,18 +129,16 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test
 		[Test]
 		public void ShouldBuildCorrectLabelProcessInfo()
 		{
-			DateTime today = new DateTime();
-			ProcessInfo info = new Cvs().CreateLabelProcessInfo("foo", today);
+			ProcessInfo info = new Cvs().CreateLabelProcessInfo("foo", null);
 			Assert.AreEqual("tag ver-foo", info.Arguments);
 		}
 
 		[Test]
 		public void ShouldBuildCorrectLabelProcessInfoIfCvsRootIsSpecified()
 		{
-			DateTime today = new DateTime();
 			Cvs cvs = new Cvs();
 			cvs.CvsRoot = "myCvsRoot";
-			ProcessInfo info = cvs.CreateLabelProcessInfo("foo", today);
+			ProcessInfo info = cvs.CreateLabelProcessInfo("foo", null);
 			Assert.AreEqual("-d myCvsRoot tag ver-foo", info.Arguments);
 		}
 

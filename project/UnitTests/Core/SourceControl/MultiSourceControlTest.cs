@@ -48,13 +48,13 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test
 		{
 			//// SETUP
 			string label = "testLabel";
-			DateTime dateTime = DateTime.Now;
+			IntegrationResult result = new IntegrationResult();
 
 			DynamicMock mockSC1 = new DynamicMock(typeof(ISourceControl));
-			mockSC1.Expect("LabelSourceControl", label, dateTime);
+			mockSC1.Expect("LabelSourceControl", label, result);
 
 			DynamicMock mockSC2 = new DynamicMock(typeof(ISourceControl));
-			mockSC2.Expect("LabelSourceControl", label, dateTime);
+			mockSC2.Expect("LabelSourceControl", label, result);
 
 			ArrayList scList = new ArrayList();
 			scList.Add(mockSC1.MockInstance);
@@ -64,7 +64,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test
 			multiSourceControl.SourceControls = scList;
 
 			//// EXECUTE
-			multiSourceControl.LabelSourceControl(label, dateTime);
+			multiSourceControl.LabelSourceControl(label, result);
 
 			//// VERIFY
 			mockSC1.Verify();
