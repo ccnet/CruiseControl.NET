@@ -5,8 +5,8 @@
 
     <xsl:output method="html"/>
     
-	<xsl:variable name="totalnotrun" select="/cruisecontrol/build/buildresults//test-results/@not-run"/>
-	<xsl:variable name="nunit2result.list" select="/cruisecontrol/build/buildresults//test-results"/>
+	<xsl:variable name="totalnotrun" select="//test-results/@not-run"/>
+	<xsl:variable name="nunit2result.list" select="//test-results"/>
 	<xsl:variable name="nunit2testcount" select="$nunit2result.list/@total"/>
 	<xsl:variable name="nunit2failures" select="$nunit2result.list/@failures"/>
 	<xsl:variable name="nunit2notrun" select="$nunit2result.list/@not-run"/>
