@@ -6,17 +6,17 @@ namespace ThoughtWorks.CruiseControl.Core.Config
 {
 	public class ConfigurationContainer : IConfigurationContainer
 	{
-		private IConfigurationLoader _loader;
+		private IConfigurationPersister _loader;
 		private IFileWatcher _watcher;
 		private IConfiguration _config;
 		private ConfigurationChangedHandler _handler;
 
 		public ConfigurationContainer(string filename) 
-			: this(new ConfigurationLoader(filename, new NetReflectorProjectSerializer()), new FileChangedWatcher(filename)) { }
+			: this(new ConfigurationPersister(filename, new NetReflectorProjectSerializer()), new FileChangedWatcher(filename)) { }
 
-		public ConfigurationContainer(IConfigurationLoader loader, IFileWatcher watcher)
+		public ConfigurationContainer(IConfigurationPersister persister, IFileWatcher watcher)
 		{
-			_loader = loader;
+			_loader = persister;
 			_watcher = watcher;
 			_watcher.OnFileChanged += new FileSystemEventHandler(HandleConfigurationFileChanged);
 		}

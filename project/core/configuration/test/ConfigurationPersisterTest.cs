@@ -1,0 +1,177 @@
+using Exortech.NetReflector;
+using NMock;
+using NUnit.Framework;
+using System.Xml;
+using ThoughtWorks.CruiseControl.Core.Builder;
+using ThoughtWorks.CruiseControl.Core.Builder.Test;
+using ThoughtWorks.CruiseControl.Core.Publishers.Test;
+using ThoughtWorks.CruiseControl.Core.Sourcecontrol;
+using ThoughtWorks.CruiseControl.Core.Util;
+using ThoughtWorks.CruiseControl.Remote;
+
+namespace ThoughtWorks.CruiseControl.Core.Config.Test
+{
+	[TestFixture]
+	public class ConfigurationPersisterTest : CustomAssertion
+	{
+		private ConfigurationPersister persister;
+
+		[SetUp]
+		protected void SetUp()
+		{
+			persister = new ConfigurationPersister();
+		}
+
+		[TearDown]
+		protected void TearDown() 
+		{
+			TempFileUtil.DeleteTempDir(this);
+		}
+
+		[Test]
+		public void LoadConfigurationFile()
+		{
+			string xml = "<cruisecontrol></cruisecontrol>";
+			persister.ConfigFile = TempFileUtil.CreateTempXmlFile(TempFileUtil.CreateTempDir(this), "loadernet.config", xml);
+			XmlDocument config = persister.LoadConfiguration();
+			AssertNotNull("config file should not be null", config);
+			AssertEquals(xml, config.OuterXml);
+		}
+
+		[Test, ExpectedException(typeof(ConfigurationFileMissingException))]
+		public void LoadConfigurationFile_MissingFile()
+		{
+			persister.ConfigFile = @"c:\unknown\config.file.xml";
+			persister.LoadConfiguration();
+		}
+
+		[Test, ExpectedException(typeof(ConfigurationFileMissingException))]
+		public void LoadConfigurationFile_FileOnlyNoPath()
+		{
+			persister.ConfigFile = @"ccnet_unknown.config";
+			persister.LoadConfiguration();
+		}
+
+		[Test, ExpectedException(typeof(ConfigurationException))]
+		public void LoadConfiguration_BadXml()
+		{
+			persister.ConfigFile = TempFileUtil.CreateTempXmlFile(TempFileUtil.CreateTempDir(this), "loadernet.config"
+				, "<test><a><b/></test>");
+			persister.LoadConfiguration();
+		}
+
+		[Test]
+		public void PopulateProjectsFromXml()
+		{
+			string projectXml = ConfigurationFixture.GenerateProjectXml("test");
+			IConfiguration configuration = persister.PopulateProjectsFromXml(ConfigurationFixture.GenerateConfig(projectXml));
+			ValidateProject(configuration, "test");
+		}
+
+		[Test]
+		public void PopulateProjectsFromXml_TwoProjects()
+		{
+			string projectXml = ConfigurationFixture.GenerateProjectXml("test");
+			string project2Xml = ConfigurationFixture.GenerateProjectXml("test2");
+			IConfiguration configuration = persister.PopulateProjectsFromXml(ConfigurationFixture.GenerateConfig(projectXml + project2Xml));
+			ValidateProject(configuration, "test");
+			ValidateProject(configuration, "test2");
+		}
+
+		[Test, ExpectedException(typeof(ConfigurationException))]
+		public void Populate_MissingProjectProperties()
+		{
+			string projectXml = ConfigurationFixture.GenerateProjectXml(null, null, null, null, null, null);
+			persister.PopulateProjectsFromXml(ConfigurationFixture.GenerateConfig(projectXml));
+		}
+
+		private void ValidateProject(IConfiguration configuration, string projectName)
+		{
+			Project project = configuration.Projects[projectName] as Project;
+			AssertEquals(projectName, project.Name);
+			AssertEquals(typeof(MockBuilder), project.Builder);
+			AssertEquals(typeof(DefaultSourceControl), project.SourceControl);
+			AssertEquals("missing publisher", 1, project.Publishers.Length);
+			AssertEquals(typeof(MockPublisher), project.Publishers[0]);
+
+		}
+
+		[Test, ExpectedException(typeof(ConfigurationException))]
+		public void PopulateProjectsFromXml_EmptyDocument()
+		{
+			persister.PopulateProjectsFromXml(new XmlDocument());
+		}
+
+		[Test, ExpectedException(typeof(ConfigurationException))]
+		public void PopulateProjectsFromXml_InvalidRootElement()
+		{
+			persister.PopulateProjectsFromXml(XmlUtil.CreateDocument("<loader/>"));
+		}
+        
+        [Test]
+        // [CCNET-63] XML comments before project tag was causing NetReflectorException
+        public void PopulateProjectsFromXml_WithComments()
+        {
+            string projectXml = @"<!-- A Comment -->" + ConfigurationFixture.GenerateProjectXml("test");
+            IConfiguration configuration = persister.PopulateProjectsFromXml(ConfigurationFixture.GenerateConfig(projectXml));
+            ValidateProject(configuration, "test");
+        }
+
+		[Test]
+		public void PopulateCustomProjectFromXml()
+		{
+			string xml = @"<customtestproject name=""foo"" />";
+			IConfiguration configuration = persister.PopulateProjectsFromXml(ConfigurationFixture.GenerateConfig(xml));
+			AssertNotNull(configuration.Projects["foo"]);
+			AssertEquals(typeof(CustomTestProject), configuration.Projects["foo"]);
+			AssertEquals("foo", ((CustomTestProject) configuration.Projects["foo"]).Name);
+		}
+
+		[Test]
+		public void ShouldBeAbleToSaveAndLoadMultipleProjectsAcrossInstances()
+		{
+			CommandLineBuilder builder = new CommandLineBuilder();
+			builder.Executable = "foo";
+			FileSourceControl sourceControl = new FileSourceControl();
+			sourceControl.RepositoryRoot = "bar";
+			// Setup
+			Project project1 = new Project();
+			project1.Name = "Project One";
+			project1.Builder = builder;
+			project1.SourceControl = sourceControl;
+			Project project2 = new Project();
+			project2.Name = "Project Two";
+			project2.Builder = builder;
+			project2.SourceControl = sourceControl;
+			ProjectList projectList = new ProjectList();
+			projectList.Add(project1);
+			projectList.Add(project2);
+
+			DynamicMock mockConfiguration = new DynamicMock(typeof(IConfiguration));
+			mockConfiguration.ExpectAndReturn("Projects", projectList);
+
+			string configFilePath = TempFileUtil.CreateTempFile(TempFileUtil.CreateTempDir(this), "loadernet.config");
+
+			// Execute
+			ConfigurationPersister persister1 = new ConfigurationPersister(configFilePath, new NetReflectorProjectSerializer());
+			persister1.Save((IConfiguration) mockConfiguration.MockInstance);
+
+			ConfigurationPersister persister2 = new ConfigurationPersister(configFilePath, null);
+			IConfiguration configuration2 = persister2.Load();
+
+			// Verify
+			AssertNotNull (configuration2.Projects["Project One"]);
+			AssertNotNull (configuration2.Projects["Project Two"]);
+			mockConfiguration.Verify();
+		}
+
+		[ReflectorType("customtestproject")]
+		class CustomTestProject : ProjectBase, IProject
+		{
+			public ProjectActivity CurrentActivity { get { return ProjectActivity.Building; } }
+			public IntegrationResult RunIntegration(BuildCondition buildCondition) { return null; }
+			public IntegrationStatus LatestBuildStatus { get { return IntegrationStatus.Success; } }
+			public string WebURL { get {return ""; } }
+		}
+	}
+}

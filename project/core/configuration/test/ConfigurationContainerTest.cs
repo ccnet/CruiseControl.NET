@@ -17,10 +17,10 @@ namespace ThoughtWorks.CruiseControl.Core.Config.Test
 		protected void SetUp()
 		{
 			mockConfig = new DynamicMock(typeof(IConfiguration));
-			mockLoader = new DynamicMock(typeof(IConfigurationLoader));
+			mockLoader = new DynamicMock(typeof(IConfigurationPersister));
 			configurationChanged = false;
 			watcher = new MockFileWatcher();
-			container = new ConfigurationContainer((IConfigurationLoader)mockLoader.MockInstance, watcher);
+			container = new ConfigurationContainer((IConfigurationPersister)mockLoader.MockInstance, watcher);
 		}
 
 		[TearDown]

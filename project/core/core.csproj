@@ -343,7 +343,7 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "configuration\ConfigurationLoader.cs"
+                    RelPath = "configuration\ConfigurationPersister.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -363,7 +363,7 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "configuration\IConfigurationLoader.cs"
+                    RelPath = "configuration\IConfigurationPersister.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -388,7 +388,7 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "configuration\test\ConfigurationLoaderTest.cs"
+                    RelPath = "configuration\test\ConfigurationPersisterTest.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

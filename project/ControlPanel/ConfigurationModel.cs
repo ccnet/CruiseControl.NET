@@ -15,8 +15,8 @@ namespace ThoughtWorks.CruiseControl.ControlPanel
 
 		public void Load(string filename) 
 		{
-			ConfigurationLoader loader = new ConfigurationLoader(filename, null); 
-			Load(loader.Load());
+			ConfigurationPersister persister = new ConfigurationPersister(filename, null); 
+			Load(persister.Load());
 			_filename = filename;
 		}
 
@@ -40,7 +40,7 @@ namespace ThoughtWorks.CruiseControl.ControlPanel
 		{
 			try 
 			{
-				new ConfigurationLoader(filename, null).Load();
+				new ConfigurationPersister(filename, null).Load();
 			} 
 			catch (ConfigurationException e) 
 			{

@@ -42,7 +42,7 @@ namespace ThoughtWorks.CruiseControl.Core.Config.Test
 		private XmlSchema LoadSchema() 
 		{
 			Assembly ass = Assembly.GetExecutingAssembly();
-			Stream s = ass.GetManifestResourceStream(ConfigurationLoader.XsdSchemaResourceName);
+			Stream s = ass.GetManifestResourceStream(ConfigurationPersister.XsdSchemaResourceName);
 			return XmlSchema.Read(s, new ValidationEventHandler(Handler));
 		}
 
