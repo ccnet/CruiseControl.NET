@@ -61,7 +61,9 @@
         <call target="compile.service"/>
         <call target="compile.cctray" />
         <call target="compile.integration"/>
+<!--        
         <call target="compile.controlpanel"/>
+-->
     </target>
 
     <target name="compile.remote" depends="init" description="compiles remote interface">
@@ -105,6 +107,7 @@
         </copy>
     </target>
 
+<!--
     <target name="compile.controlpanel" depends="init" description="compiles the cc control panel">
 		<resgen compile="true" prepend="tw.ccnet.controlpanel">
 		   <resources basedir="${src.dir}\ControlPanel">
@@ -126,6 +129,7 @@
             <arg value="/nowarn:1591"/>
         </csc>
     </target>
+-->
 
     <target name="compile.web" depends="init" description="compiles the project web client">
         <csc target="library" output="${build.dir}\${web.dll}" debug="true" doc="${build.dir}\web.xml">
@@ -229,10 +233,12 @@
         <nunit2>
             <test assemblyname="${build.dir}\${console.exe}" type="${nunit.output}"/>
         </nunit2>
+<!--        
        	<nunit2>
             <test assemblyname="${build.dir}\ccnet.controlpanel.exe"
                 appconfig="${build.dir}\ccnet.controlpanel.exe.config" type="${nunit.output}"/>
         </nunit2>
+-->        
     </target>
 
     <target name="test.integration" depends="compile.integration" description="runs unit tests">
