@@ -3,7 +3,7 @@ using System;
 namespace tw.ccnet.remote
 {
 	/// <remarks>
-	/// Remote Interface to CruiseControl.NET
+	/// Remote Interface to CruiseControl.NET.
 	/// </remarks>
 	public interface ICruiseManager
 	{
@@ -32,101 +32,20 @@ namespace tw.ccnet.remote
 		/// </summary>
 		ProjectStatus GetProjectStatus();
 
+		/// <summary>
+		/// TODO describe this method.
+		/// </summary>
+		/// <param name="project"></param>
+		/// <param name="schedule"></param>
 		void Run(string project, ISchedule schedule);
 
-        string Configuration { get; set; }
-	}
-
-	/// <remarks>
-	/// Status of cruise control status
-	/// </remarks>
-	public enum CruiseControlStatus
-	{
-		Stopped,
-		Running,
-		WillBeStopped,
-		Unknown
-	}
-
-	public enum ProjectActivity 
-	{
-		CheckingModifications,
-		Building,
-		Sleeping,
-		Unknown
-	}
-
-	[Serializable]
-	public struct ProjectStatus
-	{
-		private CruiseControlStatus status;
-		private IntegrationStatus buildStatus;
-		private ProjectActivity activity;
-		private string name;
-		private string webURL;
-		private DateTime lastBuildDate;
-		private string lastBuildLabel;
-
-		public ProjectStatus(
-			CruiseControlStatus status, 
-			IntegrationStatus buildStatus, 
-			ProjectActivity activity, 
-			string name, 
-			string webURL,
-			DateTime lastBuildDate,
-			string lastBuildLabel
-		) 
+		/// <summary>
+		/// Gets and sets the configuration string for this CruiseControl.NET instance.
+		/// </summary>
+        string Configuration
 		{
-			this.status = status;
-			this.buildStatus = buildStatus;
-			this.activity = activity;
-			this.name = name;
-			this.webURL = webURL;
-			this.lastBuildDate = lastBuildDate;
-			this.lastBuildLabel = lastBuildLabel;
+			get;
+			set;
 		}
-
-		public CruiseControlStatus Status 
-		{
-			get { return status; }
-		}
-
-		public IntegrationStatus BuildStatus 
-		{
-			get { return buildStatus; }
-		}
-
-		public ProjectActivity Activity 
-		{
-			get { return activity; }
-		}
-
-		public string Name 
-		{
-			get { return name; }
-		}
-
-		public string WebURL
-		{
-			get { return webURL; }
-		}
-
-		public DateTime LastBuildDate
-		{
-			get { return lastBuildDate; }
-		}
-
-		public string LastBuildLabel
-		{
-			get { return lastBuildLabel; }
-		}
-	}
-
-	public enum IntegrationStatus
-	{
-		Success,
-		Failure,
-		Exception,
-		Unknown
 	}
 }
