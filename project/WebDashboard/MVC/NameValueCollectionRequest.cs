@@ -3,6 +3,7 @@ using System.Collections.Specialized;
 
 namespace ThoughtWorks.CruiseControl.WebDashboard.MVC
 {
+	// ToDo - test!!
 	public class NameValueCollectionRequest : IRequest
 	{
 		private readonly NameValueCollection map;
@@ -64,6 +65,11 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.MVC
 			{
 				return defaultValue;
 			}
+		}
+
+		public NameValueCollection Params
+		{
+			get { return map; }
 		}
 	}
 }

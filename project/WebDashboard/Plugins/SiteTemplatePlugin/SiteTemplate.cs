@@ -13,13 +13,13 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.SiteTemplatePlugin
 		private readonly IBuildRetrieverForRequest buildRetrieverForRequest;
 		private readonly IConfigurationGetter configurationGetter;
 		private readonly IBuildLister buildLister;
-		private readonly ICruiseRequestWrapper requestWrapper;
+		private readonly ICruiseRequest request;
 		private Build build;
 
-		public SiteTemplate(ICruiseRequestWrapper requestWrapper, IConfigurationGetter configurationGetter, IBuildLister buildLister, 
+		public SiteTemplate(ICruiseRequest request, IConfigurationGetter configurationGetter, IBuildLister buildLister, 
 			IBuildRetrieverForRequest buildRetrieverForRequest, IBuildNameRetriever buildNameRetriever)
 		{
-			this.requestWrapper = requestWrapper;
+			this.request = request;
 			this.buildLister = buildLister;
 			this.configurationGetter = configurationGetter;
 			this.buildRetrieverForRequest = buildRetrieverForRequest;
@@ -28,14 +28,14 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.SiteTemplatePlugin
 
 		public SiteTemplateResults Do()
 		{
-			string serverName = requestWrapper.GetServerName();
-			string projectName = requestWrapper.GetProjectName();
+			string serverName = request.GetServerName();
+			string projectName = request.GetProjectName();
 			if (serverName == string.Empty || projectName == string.Empty)
 			{
 				return new SiteTemplateResults(new HtmlAnchor[0], "", "");
 			}
 
-			build = buildRetrieverForRequest.GetBuild(requestWrapper);
+			build = buildRetrieverForRequest.GetBuild(request);
 			BuildStats stats = GenerateBuildStats(build);
 
 			return new SiteTemplateResults(buildLister.GetBuildLinks(serverName, projectName), stats.Html, stats.Htmlclass);	

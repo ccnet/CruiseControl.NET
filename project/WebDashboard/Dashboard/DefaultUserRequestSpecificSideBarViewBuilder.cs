@@ -7,11 +7,11 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 {
 	public class DefaultUserRequestSpecificSideBarViewBuilder : HtmlBuilderViewBuilder, IUserRequestSpecificSideBarViewBuilder
 	{
-		private readonly IRecentBuildsPanelViewBuilder recentBuildsViewBuilder;
+		private readonly IRecentBuildsViewBuilder recentBuildsViewBuilder;
 		private readonly IBuildNameRetriever buildNameRetriever;
 		private readonly IUrlBuilder urlBuilder;
 
-		public DefaultUserRequestSpecificSideBarViewBuilder(IHtmlBuilder htmlBuilder, IUrlBuilder urlBuilder, IBuildNameRetriever buildNameRetriever, IRecentBuildsPanelViewBuilder recentBuildsViewBuilder) 
+		public DefaultUserRequestSpecificSideBarViewBuilder(IHtmlBuilder htmlBuilder, IUrlBuilder urlBuilder, IBuildNameRetriever buildNameRetriever, IRecentBuildsViewBuilder recentBuildsViewBuilder) 
 			: base (htmlBuilder)
 		{
 			this.urlBuilder = urlBuilder;
@@ -46,7 +46,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 				TR( TD( A("Next", urlBuilder.BuildBuildUrl("BuildReport.aspx", serverName, projectName, buildNameRetriever.GetNextBuildName(serverName, projectName, buildName))))),
 				TR( TD( A("Previous", urlBuilder.BuildBuildUrl("BuildReport.aspx", serverName, projectName, buildNameRetriever.GetPreviousBuildName(serverName, projectName, buildName))))),
 				TR( TD( A("View Build Log", urlBuilder.BuildBuildUrl("ViewLog.aspx", serverName, projectName, buildName)))),
-				TR( TD( recentBuildsViewBuilder.BuildRecentBuildsPanel(serverName, projectName)))
+				TR( TD( recentBuildsViewBuilder.BuildRecentBuildsTable(serverName, projectName)))
 					);
 		}
 	}

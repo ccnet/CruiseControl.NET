@@ -15,7 +15,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 			this.urlBuilder = urlBuilder;
 		}
 
-		public Control Execute(ICruiseRequestWrapper request)
+		public Control Execute(ICruiseRequest request)
 		{
 			StringWriter writer = new StringWriter();
 			HtmlTextWriter htmlWriter = new HtmlTextWriter(writer);

@@ -24,10 +24,10 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Plugins.LogViewerPlu
 		public void Setup()
 		{
 			buildRetrieverforRequestMock = new DynamicMock(typeof(IBuildRetrieverForRequest));
-			requestWrapperMock = new DynamicMock(typeof(ICruiseRequestWrapper));
+			requestWrapperMock = new DynamicMock(typeof(ICruiseRequest));
 			cacheManagerMock = new DynamicMock(typeof(ICacheManager));
 
-			logViewerPageRenderer = new LogViewerPageRenderer((ICruiseRequestWrapper) requestWrapperMock.MockInstance, (IBuildRetrieverForRequest) buildRetrieverforRequestMock.MockInstance,
+			logViewerPageRenderer = new LogViewerPageRenderer((ICruiseRequest) requestWrapperMock.MockInstance, (IBuildRetrieverForRequest) buildRetrieverforRequestMock.MockInstance,
 				(ICacheManager) cacheManagerMock.MockInstance);
 
 			url = "http://foo.bar";
@@ -46,9 +46,9 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Plugins.LogViewerPlu
 		[Test]
 		public void ReturnsURLOfRelevantBuild()
 		{
-			ICruiseRequestWrapper requestWrapper = (ICruiseRequestWrapper) requestWrapperMock.MockInstance;
+			ICruiseRequest request = (ICruiseRequest) requestWrapperMock.MockInstance;
 
-			buildRetrieverforRequestMock.ExpectAndReturn("GetBuild", build, requestWrapper);
+			buildRetrieverforRequestMock.ExpectAndReturn("GetBuild", build, request);
 			cacheManagerMock.ExpectAndReturn("GetURLForFile", url, serverName, projectName, CachingBuildRetriever.CacheDirectory, "mybuild");
 
 			AssertEquals(url, logViewerPageRenderer.Do().RedirectURL);

@@ -17,23 +17,19 @@ namespace ThoughtWorks.CruiseControl.WebDashboard
 
 			SideBarViewBuilder sideBarViewBuilder = new SideBarViewBuilder(
 				new DefaultUserRequestSpecificSideBarViewBuilder(
-					new DefaultHtmlBuilder(), 
-					new DefaultUrlBuilder(
-						dcFactory.HttpPathMapper),
+					dcFactory.DefaultHtmlBuilder, 
+					dcFactory.DefaultUrlBuilder, 
 					dcFactory.CruiseManagerBuildNameRetriever,
 				new DecoratingRecentBuildsPanelBuilder(
-					new DefaultHtmlBuilder(), 
-					new DefaultUrlBuilder(dcFactory.HttpPathMapper),
+					dcFactory.DefaultHtmlBuilder,
+					dcFactory.DefaultUrlBuilder, 
 					new RecentBuildLister(
-						new DefaultHtmlBuilder(), 
-						new DefaultUrlBuilder(dcFactory.HttpPathMapper),
+						dcFactory.DefaultHtmlBuilder, 
+						dcFactory.DefaultUrlBuilder, 
 						dcFactory.ServerAggregatingCruiseManagerWrapper,
-						new DefaultBuildNameFormatter()))));
+						dcFactory.DefaultBuildNameFormatter))));
 
-			TopControlsViewBuilder topControlsViewBuilder = new TopControlsViewBuilder(
-				new DefaultHtmlBuilder(),
-				new DefaultUrlBuilder(
-					dcFactory.HttpPathMapper));
+			TopControlsViewBuilder topControlsViewBuilder = new TopControlsViewBuilder(dcFactory.DefaultHtmlBuilder, dcFactory.DefaultUrlBuilder);
 
 			SideBarLocation.Controls.Add(sideBarViewBuilder.Execute(dcFactory.QueryStringRequestWrapper));
 			TopControlsLocation.Controls.Add(topControlsViewBuilder.Execute(dcFactory.QueryStringRequestWrapper));

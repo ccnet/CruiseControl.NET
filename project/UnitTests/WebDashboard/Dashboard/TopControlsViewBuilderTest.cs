@@ -16,7 +16,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 		private DynamicMock urlBuilderMock;
 
 		private DynamicMock cruiseRequestWrapperMock;
-		private ICruiseRequestWrapper cruiseRequestWrapper;
+		private ICruiseRequest cruiseRequest;
 
 		[SetUp]
 		public void Setup()
@@ -24,8 +24,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 			urlBuilderMock = new DynamicMock(typeof(IUrlBuilder));
 			viewBuilder = new TopControlsViewBuilder(new DefaultHtmlBuilder(), (IUrlBuilder) urlBuilderMock.MockInstance);
 
-			cruiseRequestWrapperMock = new DynamicMock(typeof(ICruiseRequestWrapper));
-			cruiseRequestWrapper = (ICruiseRequestWrapper) cruiseRequestWrapperMock.MockInstance;
+			cruiseRequestWrapperMock = new DynamicMock(typeof(ICruiseRequest));
+			cruiseRequest = (ICruiseRequest) cruiseRequestWrapperMock.MockInstance;
 		}
 
 		private void VerifyAll()
@@ -43,7 +43,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 			urlBuilderMock.ExpectAndReturn("BuildUrl", "returnedurl", "default.aspx");
 
 			// Execute
-			HtmlTable table = (HtmlTable) viewBuilder.Execute(cruiseRequestWrapper);
+			HtmlTable table = (HtmlTable) viewBuilder.Execute(cruiseRequest);
 			
 			// Verify
 			VerifyAll();
@@ -59,7 +59,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 			urlBuilderMock.ExpectAndReturn("BuildUrl", "returnedurl2", "default.aspx", "server=myServer");
 
 			// Execute
-			HtmlTable table = (HtmlTable) viewBuilder.Execute(cruiseRequestWrapper);
+			HtmlTable table = (HtmlTable) viewBuilder.Execute(cruiseRequest);
 			
 			// Verify
 			VerifyAll();
@@ -76,7 +76,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 			urlBuilderMock.ExpectAndReturn("BuildUrl", "returnedurl3", "BuildReport.aspx", "server=myServer&project=myProject");
 
 			// Execute
-			HtmlTable table = (HtmlTable) viewBuilder.Execute(cruiseRequestWrapper);
+			HtmlTable table = (HtmlTable) viewBuilder.Execute(cruiseRequest);
 
 			// Verify
 			VerifyAll();

@@ -16,7 +16,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 		private SideBarViewBuilder sideBarViewBuilder;
 
 		private DynamicMock cruiseRequestWrapperMock;
-		private ICruiseRequestWrapper cruiseRequestWrapper;
+		private ICruiseRequest cruiseRequest;
 
 		[SetUp]
 		public void Setup()
@@ -24,8 +24,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 			userRequestSpecificSideBarViewBuilderMock = new DynamicMock(typeof(IUserRequestSpecificSideBarViewBuilder));
 			sideBarViewBuilder = new SideBarViewBuilder((IUserRequestSpecificSideBarViewBuilder) userRequestSpecificSideBarViewBuilderMock.MockInstance);
 
-			cruiseRequestWrapperMock = new DynamicMock(typeof(ICruiseRequestWrapper));
-			cruiseRequestWrapper = (ICruiseRequestWrapper) cruiseRequestWrapperMock.MockInstance;
+			cruiseRequestWrapperMock = new DynamicMock(typeof(ICruiseRequest));
+			cruiseRequest = (ICruiseRequest) cruiseRequestWrapperMock.MockInstance;
 		}
 		
 		private void VerifyAll()
@@ -43,7 +43,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 			userRequestSpecificSideBarViewBuilderMock.ExpectAndReturn("GetFarmSideBar", actionsControl);
 
 			// Execute
-			HtmlTable sidebarControl = sideBarViewBuilder.Execute(cruiseRequestWrapper);
+			HtmlTable sidebarControl = sideBarViewBuilder.Execute(cruiseRequest);
 
 			// Verify
 			AssertEquals(actionsControl, sidebarControl);
@@ -60,7 +60,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 			userRequestSpecificSideBarViewBuilderMock.ExpectAndReturn("GetServerSideBar", actionsControl, "myServer");
 
 			// Execute
-			HtmlTable sidebarControl = sideBarViewBuilder.Execute(cruiseRequestWrapper);
+			HtmlTable sidebarControl = sideBarViewBuilder.Execute(cruiseRequest);
 
 			// Verify
 			AssertEquals(actionsControl, sidebarControl);
@@ -78,7 +78,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 			userRequestSpecificSideBarViewBuilderMock.ExpectAndReturn("GetProjectSideBar", actionsControl, "myServer", "myProject");
 
 			// Execute
-			HtmlTable sidebarControl = sideBarViewBuilder.Execute(cruiseRequestWrapper);
+			HtmlTable sidebarControl = sideBarViewBuilder.Execute(cruiseRequest);
 
 			// Verify
 			AssertEquals(actionsControl, sidebarControl);
@@ -96,7 +96,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 			userRequestSpecificSideBarViewBuilderMock.ExpectAndReturn("GetBuildSideBar", actionsControl, "myServer", "myProject", "myBuild");
 
 			// Execute
-			HtmlTable sidebarControl = sideBarViewBuilder.Execute(cruiseRequestWrapper);
+			HtmlTable sidebarControl = sideBarViewBuilder.Execute(cruiseRequest);
 
 			// Verify
 			AssertEquals(actionsControl, sidebarControl);

@@ -15,13 +15,13 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.BuildReporterPlugin
 	public class BuildReporterPageRenderer
 	{
 		private readonly IPathMapper pathMapper;
-		private readonly ICruiseRequestWrapper requestWrapper;
+		private readonly ICruiseRequest request;
 		private readonly IBuildRetrieverForRequest buildRetrieverForRequest;
 
-		public BuildReporterPageRenderer(ICruiseRequestWrapper requestWrapper, IBuildRetrieverForRequest buildRetrieverForRequest, IPathMapper pathMapper)
+		public BuildReporterPageRenderer(ICruiseRequest request, IBuildRetrieverForRequest buildRetrieverForRequest, IPathMapper pathMapper)
 		{
 			this.buildRetrieverForRequest = buildRetrieverForRequest;
-			this.requestWrapper = requestWrapper;
+			this.request = request;
 			this.pathMapper = pathMapper;
 		}
 
@@ -30,7 +30,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.BuildReporterPlugin
 			StringBuilder builder = new StringBuilder();
 			try
 			{
-				using(StringReader logReader = new StringReader(buildRetrieverForRequest.GetBuild(requestWrapper).Log))
+				using(StringReader logReader = new StringReader(buildRetrieverForRequest.GetBuild(request).Log))
 				{
 					XPathDocument document = new XPathDocument(logReader);
 					IList list = (IList) ConfigurationSettings.GetConfig("CCNet/xslFiles");

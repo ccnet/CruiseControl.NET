@@ -38,15 +38,31 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 		[Test]
 		public void ShouldRequestRecentBuildsFromServerAndDisplayARowForEachOne()
 		{
-			// Setup
 			farmMock.ExpectAndReturn("GetMostRecentBuildNames", new string [] {"build2", "build1"}, "myServer", "myProject", 10);
+			SetupBuildExpectations();
+			HtmlTable builtTable = Builder.BuildRecentBuildsTable("myServer", "myProject");
+			CheckReturnedTableForCorrectBuilds(builtTable);
+		}
+
+		[Test]
+		public void ShouldRequestAllBuildsFromServerAndDisplayARowForEachOne()
+		{
+			farmMock.ExpectAndReturn("GetBuildNames", new string [] {"build2", "build1"}, "myServer", "myProject");
+			SetupBuildExpectations();
+			HtmlTable builtTable = Builder.BuildAllBuildsTable("myServer", "myProject");
+			CheckReturnedTableForCorrectBuilds(builtTable);
+		}
+
+		private void SetupBuildExpectations()
+		{
 			urlBuilderMock.ExpectAndReturn("BuildBuildUrl", "url1", "BuildReport.aspx", "myServer", "myProject", "build2");
 			urlBuilderMock.ExpectAndReturn("BuildBuildUrl", "url2", "BuildReport.aspx", "myServer", "myProject", "build1");
 			nameFormatterMock.ExpectAndReturn("GetPrettyBuildName", "prettyName2", "build2");
 			nameFormatterMock.ExpectAndReturn("GetPrettyBuildName", "prettyName1", "build1");
+		}
 
-			// Execute
-			HtmlTable builtTable = Builder.BuildRecentBuildsPanel("myServer", "myProject");
+		private void CheckReturnedTableForCorrectBuilds(HtmlTable builtTable)
+		{
 
 			// Verify
 			AssertEquals(2, builtTable.Rows.Count);
@@ -72,13 +88,30 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 			urlBuilderMock.ExpectNoCall("BuildBuildUrl",typeof(string),typeof(string),typeof(string),typeof(string));
 
 			// Execute
-			HtmlTable builtTable = (HtmlTable) Builder.BuildRecentBuildsPanel("myServer", "myProject");
+			HtmlTable builtTable = Builder.BuildRecentBuildsTable("myServer", "myProject");
 
 			// Verify
 			AssertEquals(0, builtTable.Rows.Count);
 
 			VerifyAll();
 		}
+
+		[Test]
+		public void ShouldRequestAllBuildsFromServerAndShowNothingIfNoBuilds()
+		{
+			// Setup
+			farmMock.ExpectAndReturn("GetBuildNames", new string [0], "myServer", "myProject");
+			urlBuilderMock.ExpectNoCall("BuildBuildUrl",typeof(string),typeof(string),typeof(string),typeof(string));
+
+			// Execute
+			HtmlTable builtTable = Builder.BuildAllBuildsTable("myServer", "myProject");
+
+			// Verify
+			AssertEquals(0, builtTable.Rows.Count);
+
+			VerifyAll();
+		}
+
 		private bool TableContains(HtmlTable table, Control expectedControl)
 		{
 			foreach (HtmlTableRow row in table.Rows)

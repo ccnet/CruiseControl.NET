@@ -13,7 +13,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 			this.slaveBuilder = BarUserRequestSpecificSideBarViewBuilder;
 		}
 
-		public HtmlTable Execute(ICruiseRequestWrapper request)
+		public HtmlTable Execute(ICruiseRequest request)
 		{
 			string serverName = request.GetServerName();
 			if (serverName == "")

@@ -363,6 +363,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Dashboard\IAllBuildsViewBuilder.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Dashboard\IBuildNameFormatter.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -388,7 +393,12 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "Dashboard\IRecentBuildsPanelViewBuilder.cs"
+                    RelPath = "Dashboard\ICruiseRequestFactory.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Dashboard\IRecentBuildsViewBuilder.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -404,6 +414,11 @@
                 />
                 <File
                     RelPath = "Dashboard\LocalCruiseManagerAggregator.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Dashboard\NameValueCruiseRequestFactory.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -495,7 +510,7 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "IO\ICruiseRequestWrapper.cs"
+                    RelPath = "IO\ICruiseRequest.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -597,6 +612,11 @@
                 />
                 <File
                     RelPath = "MVC\Cruise\DisplayAddProjectPageAction.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "MVC\Cruise\IViewAllBuildsViewBuilder.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

@@ -22,11 +22,11 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 		{
 			urlBuilderMock = new DynamicMock(typeof(IUrlBuilder));
 			buildNameRetrieverMock = new DynamicMock(typeof(IBuildNameRetriever));
-			recentBuildsViewBuilderMock = new DynamicMock(typeof(IRecentBuildsPanelViewBuilder));
+			recentBuildsViewBuilderMock = new DynamicMock(typeof(IRecentBuildsViewBuilder));
 			viewBuilder = new DefaultUserRequestSpecificSideBarViewBuilder(new DefaultHtmlBuilder(), 
 				(IUrlBuilder) urlBuilderMock.MockInstance, 
 				(IBuildNameRetriever) buildNameRetrieverMock.MockInstance,
-				(IRecentBuildsPanelViewBuilder) recentBuildsViewBuilderMock.MockInstance);
+				(IRecentBuildsViewBuilder) recentBuildsViewBuilderMock.MockInstance);
 		}
 
 		private void VerifyAll()
@@ -109,7 +109,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 			urlBuilderMock.ExpectAndReturn("BuildBuildUrl", "previousUrl", "BuildReport.aspx", "myServer", "myProject", "returnedPreviousBuildName");
 			urlBuilderMock.ExpectAndReturn("BuildBuildUrl", "viewLogUrl", "ViewLog.aspx", "myServer", "myProject", "myCurrentBuild");
 			HtmlTable buildsPanel = new HtmlTable();
-			recentBuildsViewBuilderMock.ExpectAndReturn("BuildRecentBuildsPanel", buildsPanel, "myServer", "myProject");
+			recentBuildsViewBuilderMock.ExpectAndReturn("BuildRecentBuildsTable", buildsPanel, "myServer", "myProject");
 
 			HtmlAnchor expectedAnchor1 = new HtmlAnchor();
 			expectedAnchor1.HRef = "latestUrl";

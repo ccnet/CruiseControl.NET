@@ -21,12 +21,12 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 		public void Setup()
 		{
 			urlBuilderMock = new DynamicMock(typeof(IUrlBuilder));
-			decoratedBuilderMock = new DynamicMock(typeof(IRecentBuildsPanelViewBuilder));
+			decoratedBuilderMock = new DynamicMock(typeof(IRecentBuildsViewBuilder));
 
 			htmlBuilder = new DefaultHtmlBuilder();
 			builder = new DecoratingRecentBuildsPanelBuilder(htmlBuilder, 
 				(IUrlBuilder) urlBuilderMock.MockInstance,
-				(IRecentBuildsPanelViewBuilder) decoratedBuilderMock.MockInstance);
+				(IRecentBuildsViewBuilder) decoratedBuilderMock.MockInstance);
 		}
 
 		private void VerifyAll()
@@ -40,10 +40,10 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 		{
 			// Setup
 			HtmlTable table = htmlBuilder.CreateTable(htmlBuilder.CreateRow(htmlBuilder.CreateCell("hello decorator")));
-			decoratedBuilderMock.ExpectAndReturn("BuildRecentBuildsPanel", table, "myServer", "myProject");
+			decoratedBuilderMock.ExpectAndReturn("BuildRecentBuildsTable", table, "myServer", "myProject");
 
 			// Execute
-			HtmlTable returnedTable = builder.BuildRecentBuildsPanel("myServer", "myProject");
+			HtmlTable returnedTable = builder.BuildRecentBuildsTable("myServer", "myProject");
 
 			// Verify
 			AssertEquals("Recent Builds", returnedTable.Rows[0].Cells[0].InnerHtml);
@@ -56,11 +56,11 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 		{
 			// Setup
 			HtmlTable table = htmlBuilder.CreateTable(htmlBuilder.CreateRow(htmlBuilder.CreateCell("hello decorator")));
-			decoratedBuilderMock.ExpectAndReturn("BuildRecentBuildsPanel", table, "myServer", "myProject");
+			decoratedBuilderMock.ExpectAndReturn("BuildRecentBuildsTable", table, "myServer", "myProject");
 			urlBuilderMock.ExpectAndReturn("BuildProjectUrl", "returnedurl1", "Controller.aspx", new PropertyIs("ActionName", CruiseActionFactory.VIEW_ALL_BUILDS_ACTION_NAME), "myServer", "myProject");
 
 			// Execute
-			HtmlTable returnedTable = builder.BuildRecentBuildsPanel("myServer", "myProject");
+			HtmlTable returnedTable = builder.BuildRecentBuildsTable("myServer", "myProject");
 
 			// Verify
 			AssertEquals("hello decorator", returnedTable.Rows[1].Cells[0].InnerHtml);

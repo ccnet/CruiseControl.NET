@@ -19,10 +19,10 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Plugins.ServerLogVie
 		[SetUp]
 		public void Setup()
 		{
-			requestWrapperMock = new DynamicMock(typeof(ICruiseRequestWrapper));
+			requestWrapperMock = new DynamicMock(typeof(ICruiseRequest));
 			cruiseManagerWrapperMock = new DynamicMock(typeof(ICruiseManagerWrapper));
 
-			serverLogViewerPageRenderer = new ServerLogViewerPageRenderer((ICruiseRequestWrapper) requestWrapperMock.MockInstance, 
+			serverLogViewerPageRenderer = new ServerLogViewerPageRenderer((ICruiseRequest) requestWrapperMock.MockInstance, 
 				(ICruiseManagerWrapper) cruiseManagerWrapperMock.MockInstance);
 
 			serverName = "myserver";

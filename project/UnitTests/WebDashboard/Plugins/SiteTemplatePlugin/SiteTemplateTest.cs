@@ -18,7 +18,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Plugins.SiteTemplate
 		private DynamicMock buildNameRetrieverMock;
 		private SiteTemplate siteTemplate;
 		private Build build;
-		private ICruiseRequestWrapper requestWrapper;
+		private ICruiseRequest request;
 		private string server;
 		private string project;
 		private string buildName;
@@ -26,15 +26,15 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Plugins.SiteTemplate
 		[SetUp]
 		public void Setup()
 		{
-			requestWrapperMock = new DynamicMock(typeof(ICruiseRequestWrapper));
+			requestWrapperMock = new DynamicMock(typeof(ICruiseRequest));
 			configurationGetterMock = new DynamicMock(typeof(IConfigurationGetter));
 			buildListerMock = new DynamicMock(typeof(IBuildLister));
 			buildRetrieverMock = new DynamicMock(typeof(IBuildRetrieverForRequest));
 			buildNameRetrieverMock = new DynamicMock(typeof(IBuildNameRetriever));
 
-			requestWrapper = (ICruiseRequestWrapper) requestWrapperMock.MockInstance;
+			request = (ICruiseRequest) requestWrapperMock.MockInstance;
 			siteTemplate = new SiteTemplate(
-				requestWrapper,
+				request,
 				(IConfigurationGetter) configurationGetterMock.MockInstance,
 				(IBuildLister) buildListerMock.MockInstance,
 				(IBuildRetrieverForRequest) buildRetrieverMock.MockInstance,
@@ -73,7 +73,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Plugins.SiteTemplate
 			requestWrapperMock.ExpectAndReturn("GetProjectName", "myProject");
 			requestWrapperMock.ExpectAndReturn("GetServerName", "myServer");
 			buildListerMock.ExpectAndReturn("GetBuildLinks", new HtmlAnchor[] { anchor } , "myServer", "myProject");
-			buildRetrieverMock.ExpectAndReturn("GetBuild", build, requestWrapper);
+			buildRetrieverMock.ExpectAndReturn("GetBuild", build, request);
 
 			SiteTemplateResults results = siteTemplate.Do();
 			AssertEquals(anchor, results.BuildLinkList[0]);

@@ -4,7 +4,7 @@ using ThoughtWorks.CruiseControl.WebDashboard.ServerConnection;
 
 namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 {
-	public class RecentBuildLister : HtmlBuilderViewBuilder, IRecentBuildsPanelViewBuilder
+	public class RecentBuildLister : HtmlBuilderViewBuilder, IRecentBuildsViewBuilder, IAllBuildsViewBuilder
 	{
 		private readonly IBuildNameFormatter buildNameFormatter;
 		private readonly IFarmService farmService;
@@ -17,16 +17,23 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 			this.buildNameFormatter = buildNameFormatter;
 		}
 
-		public HtmlTable BuildRecentBuildsPanel(string serverName, string projectName)
+		public HtmlTable BuildRecentBuildsTable(string serverName, string projectName)
+		{
+			return BuildBuildsTable(serverName, projectName, farmService.GetMostRecentBuildNames(serverName, projectName, 10));
+		}
+
+		public HtmlTable BuildAllBuildsTable(string serverName, string projectName)
+		{
+			return BuildBuildsTable(serverName, projectName, farmService.GetBuildNames(serverName, projectName));
+		}
+
+		private HtmlTable BuildBuildsTable(string serverName, string projectName, string[] buildNames)
 		{
 			HtmlTable table = Table();
-
-			string[] names = farmService.GetMostRecentBuildNames(serverName, projectName, 10);
-			foreach (string name in names)
+			foreach (string name in buildNames)
 			{
 				table.Rows.Add(TR(TD(A(buildNameFormatter.GetPrettyBuildName(name), urlBuilder.BuildBuildUrl("BuildReport.aspx",serverName, projectName, name)))));	
 			}
-
 			return table;
 		}
 	}

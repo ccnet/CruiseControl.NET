@@ -5,6 +5,7 @@ using ThoughtWorks.CruiseControl.Core;
 using ThoughtWorks.CruiseControl.WebDashboard.Cache;
 using ThoughtWorks.CruiseControl.WebDashboard.Config;
 using ThoughtWorks.CruiseControl.WebDashboard.IO;
+using ThoughtWorks.CruiseControl.WebDashboard.MVC.View;
 using ThoughtWorks.CruiseControl.WebDashboard.ServerConnection;
 
 namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
@@ -57,6 +58,21 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 			get { return new HttpPathMapper(context, control); }
 		}
 
+		public DefaultUrlBuilder DefaultUrlBuilder
+		{
+			get { return new DefaultUrlBuilder(HttpPathMapper); }
+		}
+
+		public DefaultHtmlBuilder DefaultHtmlBuilder
+		{
+			get { return new DefaultHtmlBuilder(); }
+		}
+
+		public DefaultBuildNameFormatter DefaultBuildNameFormatter
+		{
+			get { return new DefaultBuildNameFormatter(); }
+		}
+
 		public ServerAggregatingCruiseManagerWrapper ServerAggregatingCruiseManagerWrapper
 		{
 			get { return new ServerAggregatingCruiseManagerWrapper(ConfigurationSettingsConfigGetter, RemoteCruiseManagerFactory); }
@@ -65,6 +81,11 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 		public QueryStringRequestWrapper QueryStringRequestWrapper
 		{
 			get { return new QueryStringRequestWrapper(request.QueryString); }
+		}
+
+		public NameValueCruiseRequestFactory NameValueCruiseRequestFactory
+		{
+			get { return new NameValueCruiseRequestFactory(); }
 		}
 
 		public RemoteCruiseManagerFactory RemoteCruiseManagerFactory

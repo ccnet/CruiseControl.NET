@@ -1,12 +1,16 @@
-using ThoughtWorks.CruiseControl.Core;
-using ThoughtWorks.CruiseControl.WebDashboard.Config;
-using ThoughtWorks.CruiseControl.WebDashboard.MVC.View;
-using ThoughtWorks.CruiseControl.WebDashboard.ServerConnection;
+using ThoughtWorks.CruiseControl.WebDashboard.Dashboard;
 
 namespace ThoughtWorks.CruiseControl.WebDashboard.MVC.Cruise
 {
 	public class CruiseActionFactory : IActionFactory
 	{
+		private readonly DashboardComponentFactory dcFactory;
+
+		public CruiseActionFactory (DashboardComponentFactory dcFactory)
+		{
+			this.dcFactory = dcFactory;
+		}
+
 		public static readonly string ACTION_PARAMETER_PREFIX = "_action_";
 		public static readonly string ADD_PROJECT_DISPLAY_ACTION_NAME = "AddProjectDisplay";
 		public static readonly string ADD_PROJECT_SAVE_ACTION_NAME = "AddProjectSave";
@@ -22,23 +26,23 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.MVC.Cruise
 			actionName = actionName.Substring(ACTION_PARAMETER_PREFIX.Length);
 			if (actionName == VIEW_ALL_BUILDS_ACTION_NAME)
 			{
-				return new ViewAllBuildsAction();
+				return new ViewAllBuildsAction(
+					new RecentBuildLister(dcFactory.DefaultHtmlBuilder, dcFactory.DefaultUrlBuilder, dcFactory.ServerAggregatingCruiseManagerWrapper, dcFactory.DefaultBuildNameFormatter),
+					dcFactory.NameValueCruiseRequestFactory);
 			}
 			else if (actionName == ADD_PROJECT_DISPLAY_ACTION_NAME)
 			{
 				return new DisplayAddProjectPageAction(
-					new AddProjectModelGenerator(
-					new ServerAggregatingCruiseManagerWrapper(new ConfigurationSettingsConfigGetter(), new RemoteCruiseManagerFactory())), 
-					new AddProjectViewBuilder(new DefaultHtmlBuilder()));
+					new AddProjectModelGenerator(dcFactory.ServerAggregatingCruiseManagerWrapper),
+					new AddProjectViewBuilder(dcFactory.DefaultHtmlBuilder));
 			}
 			else if (actionName == ADD_PROJECT_SAVE_ACTION_NAME)
 			{
 				return new SaveNewProjectAction(
-					new AddProjectModelGenerator(
-					new ServerAggregatingCruiseManagerWrapper(new ConfigurationSettingsConfigGetter(), new RemoteCruiseManagerFactory())), 
-					new AddProjectViewBuilder(new DefaultHtmlBuilder()),
-					new ServerAggregatingCruiseManagerWrapper(new ConfigurationSettingsConfigGetter(), new RemoteCruiseManagerFactory()),
-					new NetReflectorProjectSerializer());
+					new AddProjectModelGenerator(dcFactory.ServerAggregatingCruiseManagerWrapper),
+					new AddProjectViewBuilder(dcFactory.DefaultHtmlBuilder),
+					dcFactory.ServerAggregatingCruiseManagerWrapper, 
+					dcFactory.NetReflectorProjectSerializer);
 			}
 			else
 			{

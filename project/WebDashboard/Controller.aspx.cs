@@ -1,5 +1,6 @@
 using System;
 using System.Web.UI;
+using ThoughtWorks.CruiseControl.WebDashboard.Dashboard;
 using ThoughtWorks.CruiseControl.WebDashboard.MVC;
 using ThoughtWorks.CruiseControl.WebDashboard.MVC.Cruise;
 
@@ -11,7 +12,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard
 
 		private void Page_Load(object sender, EventArgs e)
 		{
-			RequestController controller = new RequestController(new CruiseActionFactory());
+			RequestController controller = new RequestController(new CruiseActionFactory(new DashboardComponentFactory(Request, Context, this)));
 			controller.Do(ParentControl, new NameValueCollectionRequest(Request.Params));
 		}
 

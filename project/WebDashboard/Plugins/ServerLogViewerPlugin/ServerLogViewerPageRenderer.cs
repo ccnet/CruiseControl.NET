@@ -5,13 +5,13 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.ServerLogViewerPlugin
 {
 	public class ServerLogViewerPageRenderer
 	{
-		private readonly ICruiseRequestWrapper requestWrapper;
+		private readonly ICruiseRequest request;
 		private readonly ICruiseManagerWrapper cruiseManagerWrapper;
 
-		public ServerLogViewerPageRenderer(ICruiseRequestWrapper requestWrapper, ICruiseManagerWrapper cruiseManagerWrapper)
+		public ServerLogViewerPageRenderer(ICruiseRequest request, ICruiseManagerWrapper cruiseManagerWrapper)
 		{
 			this.cruiseManagerWrapper = cruiseManagerWrapper;
-			this.requestWrapper = requestWrapper;
+			this.request = request;
 		}
 
 		public ServerLogViewerResults Do ()
@@ -21,7 +21,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.ServerLogViewerPlugin
 
 		private string GenerateLogHtml()
 		{
-			return string.Format("<pre>{0}</pre>", cruiseManagerWrapper.GetServerLog(requestWrapper.GetServerName()));
+			return string.Format("<pre>{0}</pre>", cruiseManagerWrapper.GetServerLog(request.GetServerName()));
 		}
 	}
 }

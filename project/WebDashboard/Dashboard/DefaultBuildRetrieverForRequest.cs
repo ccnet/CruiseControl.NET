@@ -14,11 +14,11 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 			this.buildNameRetriever = buildNameRetriever;
 		}
 
-		public Build GetBuild(ICruiseRequestWrapper requestWrapper)
+		public Build GetBuild(ICruiseRequest request)
 		{
-			string serverName = requestWrapper.GetServerName();
-			string projectName = requestWrapper.GetProjectName();
-			IBuildSpecifier buildSpecifier = requestWrapper.GetBuildSpecifier();
+			string serverName = request.GetServerName();
+			string projectName = request.GetProjectName();
+			IBuildSpecifier buildSpecifier = request.GetBuildSpecifier();
 
 			return buildRetriever.GetBuild(serverName, projectName, GetBuildName(serverName, projectName, buildSpecifier));
 		}

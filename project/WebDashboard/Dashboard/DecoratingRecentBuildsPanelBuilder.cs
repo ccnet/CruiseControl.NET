@@ -5,20 +5,20 @@ using ThoughtWorks.CruiseControl.WebDashboard.MVC.View;
 
 namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 {
-	public class DecoratingRecentBuildsPanelBuilder : HtmlBuilderViewBuilder, IRecentBuildsPanelViewBuilder
+	public class DecoratingRecentBuildsPanelBuilder : HtmlBuilderViewBuilder, IRecentBuildsViewBuilder
 	{
 		private readonly IUrlBuilder urlBuilder;
-		private readonly IRecentBuildsPanelViewBuilder builderToDecorate;
+		private readonly IRecentBuildsViewBuilder builderToDecorate;
 
-		public DecoratingRecentBuildsPanelBuilder(IHtmlBuilder htmlBuilder, IUrlBuilder urlBuilder, IRecentBuildsPanelViewBuilder builderToDecorate) : base(htmlBuilder)
+		public DecoratingRecentBuildsPanelBuilder(IHtmlBuilder htmlBuilder, IUrlBuilder urlBuilder, IRecentBuildsViewBuilder builderToDecorate) : base(htmlBuilder)
 		{
 			this.builderToDecorate = builderToDecorate;
 			this.urlBuilder = urlBuilder;
 		}
 
-		public HtmlTable BuildRecentBuildsPanel(string serverName, string projectName)
+		public HtmlTable BuildRecentBuildsTable(string serverName, string projectName)
 		{
-			HtmlTable subTable = builderToDecorate.BuildRecentBuildsPanel(serverName, projectName);
+			HtmlTable subTable = builderToDecorate.BuildRecentBuildsTable(serverName, projectName);
 			subTable.Rows.Insert(0, TR(TD("Recent Builds")));
 			subTable.Rows.Add(TR(
 				TD(A("Show All", 
