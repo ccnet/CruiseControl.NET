@@ -1,0 +1,67 @@
+<html>
+	<head>
+		<title>Customizing the Web App</title>
+		<link type="text/css" rel="stylesheet" href="cruisecontrol.css" />
+	</head>
+	<body>
+		<img align="right" src="images/ccnet_logo_onwhite.gif" />
+		<h1>Customizing the Web App</h1>
+		<h2>Introduction</h2>
+		<p>CruiseControl.NET offers the ability to add 'plugins' to the Web Application. 2 types of plugin are available :</p>
+		<ul>
+		<li>Project plugins, which do not correspond to any particular build. They are available on the global toolbar at the top of the screen.</li>
+		<li>Build plugins, which reflect the results of one build. They are available on the build toolbar on the build results screen</li>
+		</ul>
+		<p>CruiseControl.NET ships with project and build plugins, e.g.</p>
+		<ul>
+		<li>'project stats' is a project plugin</li>
+		<li>'test timing' is a build plugin, and shows the times taken for each unit test for a given build</li>
+		</ul>
+		<h2>Creating a plugin</h2>
+		<p>A project or build plugin is simply a webpage, so you can create any html page and use it as a plugin. A more powerful option
+		though is to create a ASP.NET page and deploy it as part of the main CCNet web application. To build and deploy such a plugin:</p>
+		<ul>
+			<li>Create a new ASP.NET development project (e.g. in Visual Studio) to contain your plugins</li>
+			<li>Create a new ASP.NET page for your new plugin</li>
+			<li>Add your content to the page, using the following ideas:</li>
+			<ul>
+				<li>The log directory location is available in the <i>appSettings</i> of the Web Apps configuration, under the <i>logDir</i> key.</li>
+				<li>If you are generating a <i>build plugin</i>, the log file name will be passed in as a URL parameter called <i>log</i>
+				<li>The CCNet API will be available to you if necessary - consult the CCNet source for details</li>
+			</ul>
+			<li>Build your project</li>
+			<li>Deploy your plugin as follows:</li>
+			<ul>
+				<li>Deploy the CCNet Web App as normal</li>
+				<li>Deploy your .aspx and other web content files to the CCNet Web App directory.</li>
+				<li>Deploy your built binary files to the CCNet Web App's <i>bin</i> folder</li>
+				<li>Add any custom configuration for your plugin to the CCNet Web App's <i>web.config</i> file</li>
+			</ul>
+		</ul>
+		<p>For examples of plugins, consult the Web App project in the CCNet source, looking at the examples mentioned above.</p>
+		<h2>Configuring CruiseControl.NET to use a plugin</h2>
+		<p>Plugins are configured in the web.config file. An example config file is as below:</p>
+		<pre>
+	&lt;CCNet>
+		&lt;projectPlugins>
+			&lt;plugin linkText="project stats" linkUrl="Statistics.aspx" />
+		&lt;/projectPlugins>
+
+		&lt;buildPlugins>
+			&lt;plugin linkText="test details" linkUrl="Tests.aspx?/log=" />
+			&lt;plugin linkText="test timing" linkUrl="TestTiming.aspx?/log=" />
+			&lt;plugin linkText="original log" linkUrl="log/" />
+		&lt;/buildPlugins>
+		.
+		.
+		.
+	&lt;/CCNet>
+		</pre>
+		<p>So, to add your own plugin simply add an entry in the appropriate section, setting the following attributes:</p>
+		<ul>
+			<li><b>linkText</b> is the text that will appear in the toolbar as a link to your plugin.</li>
+			<li><b>linkUrl</b> is the location of your plugin, relative to the CCNet Web App location.</li>
+		</ul>
+
+	</body>
+</html>
