@@ -112,11 +112,6 @@
                     AssemblyName = "SiteMesh"
                     HintPath = "..\..\lib\SiteMesh.dll"
                 />
-                <Reference
-                    Name = "DecoratorControls"
-                    AssemblyName = "DecoratorControls"
-                    HintPath = "..\..\lib\DecoratorControls.dll"
-                />
             </References>
         </Build>
         <Files>
@@ -187,6 +182,16 @@
                 />
                 <File
                     RelPath = "LogStatistics.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "PluginSpecification.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "PluginsSectionHandler.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

@@ -245,7 +245,7 @@ namespace tw.ccnet.core.test
 			AssertNotNull(_project.CurrentIntegration.EndTime);
 			Assert(publisher.Published);
 			stateMock.Verify();
-			AssertEquals(3, _listener.Traces.Count);
+			AssertEquals(2, _listener.Traces.Count);
 		}
 
 		[Test]
@@ -270,7 +270,7 @@ namespace tw.ccnet.core.test
 			AssertNotNull(_project.CurrentIntegration.EndTime);
 			Assert(publisher.Published);
 			mock.Verify();
-			AssertEquals(3, _listener.Traces.Count);
+			AssertEquals(2, _listener.Traces.Count);
 		}
 
 		[Test]

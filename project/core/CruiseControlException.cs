@@ -10,5 +10,6 @@ namespace tw.ccnet.core
 		public CruiseControlException() : base("") {}
 		public CruiseControlException(string s) : base(s) {}
 		public CruiseControlException(string s, Exception e) : base(s, e) {}
+		public CruiseControlException(SerializationInfo info, StreamingContext context) : base(info, context) { }
 	}
 }

@@ -115,11 +115,6 @@
                     HintPath = "..\..\lib\SiteMesh.dll"
                 />
                 <Reference
-                    Name = "DecoratorControls"
-                    AssemblyName = "DecoratorControls"
-                    HintPath = "..\..\lib\DecoratorControls.dll"
-                />
-                <Reference
                     Name = "nunit.framework"
                     AssemblyName = "nunit.framework"
                     HintPath = "..\..\lib\nunit.framework.dll"

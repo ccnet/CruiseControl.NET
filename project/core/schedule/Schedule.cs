@@ -4,6 +4,7 @@ using tw.ccnet.remote;
 
 namespace tw.ccnet.core.schedule
 {
+	[Serializable]
 	[ReflectorType("schedule")]
 	public class Schedule : ISchedule
 	{

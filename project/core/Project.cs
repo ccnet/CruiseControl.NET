@@ -181,17 +181,16 @@ namespace tw.ccnet.core
 				PostBuild();
 			}
 			currentActivity = ProjectActivity.Sleeping;
-			Log(END_OF_INTEGRATION_LOG_OUTPUT);
 		}
 
 		internal void PreBuild()
 		{
-			Log("Starting new integration...");
 			CurrentIntegration = new IntegrationResult();
 			CurrentIntegration.ProjectName = Name;
 			CurrentIntegration.LastIntegrationStatus = LastIntegration.Status;		// test
 			CurrentIntegration.Label = Labeller.Generate(LastIntegration);
 			CurrentIntegration.Start();
+			Log(String.Format("Starting new integration...{0}", CurrentIntegration.StartTime));
 		}
 
 		internal void GetSourceModifications()
@@ -226,6 +225,7 @@ namespace tw.ccnet.core
 			LabelProject(CurrentIntegration);
 			RaiseIntegrationEvent(CurrentIntegration);
 			LastIntegration = CurrentIntegration;
+			Log(String.Format("Integration Complete... {0}", CurrentIntegration.EndTime));
 		}
 
 		private IntegrationResult LoadLastIntegration()
