@@ -2,7 +2,6 @@ using System;
 using System.Collections;
 using System.Globalization;
 using System.IO;
-using ThoughtWorks.CruiseControl.Core.Util;
 
 namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 {
@@ -77,29 +76,24 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 
 		public Modification[] Parse(TextReader cvsLog, DateTime from, DateTime to)
 		{
-			string cvsOutput = cvsLog.ReadToEnd();
-			Log.Debug(string.Format("Attempting to parse the following CVS Output:\n---Start of CVS output---\n{0}\n---End Of Cvs output---", cvsOutput));
-
-			StringReader cvsOutputReader = new StringReader(cvsOutput);
-
 			// Read to the first RCS file name. The first entry in the log
 			// information will begin with this line. A CVS_FILE_DELIMITER is NOT
 			// present. If no RCS file lines are found then there is nothing to do.
-			_currentLine = ReadToNotPast(cvsOutputReader, CVS_RCSFILE_LINE, null);
+			_currentLine = ReadToNotPast(cvsLog, CVS_RCSFILE_LINE, null);
 			ArrayList mods = new ArrayList();
 
 			while (_currentLine != null)
 			{
 				// Parse the single file entry, which may include several
 				// modifications.
-				IList entryList = ParseFileEntry(cvsOutputReader);
+				IList entryList = ParseFileEntry(cvsLog);
 
 				//Add all the modifications to the local list.
 				mods.AddRange(entryList);
 
 				// Read to the next RCS file line. The CVS_FILE_DELIMITER may have
 				// been consumed by the parseEntry method, so we cannot read to it.
-				_currentLine = ReadToNotPast(cvsOutputReader, CVS_RCSFILE_LINE, null);
+				_currentLine = ReadToNotPast(cvsLog, CVS_RCSFILE_LINE, null);
 			}
 
 			return (Modification[]) mods.ToArray(typeof (Modification));
