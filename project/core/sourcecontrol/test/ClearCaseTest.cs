@@ -143,7 +143,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test
 				+ "%En" + ClearCaseHistoryParser.DELIMITER
 				+ "%Vn" + ClearCaseHistoryParser.DELIMITER + "%o" + ClearCaseHistoryParser.DELIMITER
 				+ "!%l" + ClearCaseHistoryParser.DELIMITER + "!%a" + ClearCaseHistoryParser.DELIMITER
-				+ "%Nc" + ClearCaseHistoryParser.END_OF_STRING_DELIMITER + "\\n\" " + VIEWPATH;
+				+ "%Nc" + ClearCaseHistoryParser.END_OF_LINE_DELIMITER + "\\n\" " + VIEWPATH;
 			ProcessInfo processInfo = _clearCase.CreateHistoryProcessInfo(expectedStartDate, DateTime.Now);
 			Assert.AreEqual("cleartool.exe", processInfo.FileName);
 			Assert.AreEqual(expectedArguments, processInfo.Arguments);

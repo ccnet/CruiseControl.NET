@@ -23,7 +23,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 		/// Unlikely combination of characters to indicate end of one line in query.
 		/// Carriage return (\n) may be used in comments and so is not available to us.
 		/// </summary>
-		public readonly static string END_OF_STRING_DELIMITER = "@#@#@#@#@#@#@#@#@#@#@#@";
+		public readonly static string END_OF_LINE_DELIMITER = "@#@#@#@#@#@#@#@#@#@#@#@";
 		
 		public Modification[] Parse( TextReader history, DateTime from, DateTime to )
 		{
@@ -32,7 +32,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 
 		internal void AssignFileInfo( Modification modification, string file )
 		{
-			int separatorLocation = file.LastIndexOf( System.IO.Path.DirectorySeparatorChar.ToString() );
+			int separatorLocation = file.LastIndexOf( Path.DirectorySeparatorChar.ToString() );
 			if ( separatorLocation > - 1 )
 			{
 				modification.FolderName = file.Substring( 0, separatorLocation );
@@ -122,16 +122,23 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 		internal Modification[] ParseStream( TextReader reader )
 		{
 			ArrayList modifications = new ArrayList();
-			string line;
-			int lineIndex;
-			while ( ( line = reader.ReadLine() ) != null )
+			string nextLine;
+			while ( ( nextLine = reader.ReadLine() ) != null )
 			{
-				Modification modification = null;
-				lineIndex = line.IndexOf( END_OF_STRING_DELIMITER );
-				if ( lineIndex > -1 )
+				string line = null;
+
+				if (nextLine.IndexOf(END_OF_LINE_DELIMITER) == -1)
 				{
-					modification = ParseEntry( line.Substring( 0, lineIndex ) );
+					line = AccumulateMultiLineEntry(nextLine, reader);
 				}
+				else
+				{
+					line = nextLine;
+				}
+
+				int lineIndex = line.IndexOf( END_OF_LINE_DELIMITER );
+				Modification modification = ParseEntry( line.Substring( 0, lineIndex ) );	
+
 				if ( modification != null )
 				{
 					modifications.Add( modification );
@@ -139,6 +146,17 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			}
 			return ( Modification[] ) modifications.ToArray( typeof( Modification ) );
 		}
+
+		private string AccumulateMultiLineEntry(string nextLine, TextReader reader)
+		{
+			string followingLine;
+			while (nextLine.IndexOf(END_OF_LINE_DELIMITER) == -1 && (followingLine = reader.ReadLine()) != null)
+			{
+				nextLine += followingLine;
+			}
+			return nextLine;
+		}
+
 
 		internal string[] TokenizeEntry( string line )
 		{

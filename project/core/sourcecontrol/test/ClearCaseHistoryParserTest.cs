@@ -1,4 +1,5 @@
 using System;
+using System.IO;
 using NUnit.Framework;
 
 namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test
@@ -212,5 +213,50 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test
 			Assert.AreEqual( "!", tokens[6] );
 			Assert.AreEqual( "made from flat file", tokens[7] );
 		}
+
+		[Test]
+		public void CanParseEntryWithNoLineBreakInComment()
+		{
+			Modification modification = _parser.ParseEntry( @"ppunjani#~#Wednesday, November 20, 2002 07:37:22 PM#~#D:\CCase\ppunjani_view\RefArch\tutorial\wwhdata\common\towwhdir.js#~#\main#~#mkelem#~#!#~#!#~#simple comment" );
+			Assert.AreEqual( "ppunjani", modification.UserName );
+			Assert.AreEqual( new DateTime( 2002, 11, 20, 19, 37, 22), modification.ModifiedTime );
+			Assert.AreEqual( @"D:\CCase\ppunjani_view\RefArch\tutorial\wwhdata\common", modification.FolderName );
+			Assert.AreEqual( "towwhdir.js", modification.FileName );
+			Assert.AreEqual( "mkelem", modification.Type );
+			Assert.AreEqual( -1, modification.ChangeNumber );
+			Assert.AreEqual( "simple comment", modification.Comment );
+		}
+
+		[Test]
+		public void CanParseStreamWithNoLineBreakInComment()
+		{
+			string input = @"ppunjani#~#Wednesday, November 20, 2002 07:37:22 PM#~#D:\CCase\ppunjani_view\RefArch\tutorial\wwhdata\common\towwhdir.js#~#\main#~#mkelem#~#!#~#!#~#simple comment@#@#@#@#@#@#@#@#@#@#@#@";
+
+			Modification modification = _parser.Parse(new StringReader(input), DateTime.Now, DateTime.Now)[0];
+			Assert.AreEqual( "ppunjani", modification.UserName );
+			Assert.AreEqual( new DateTime( 2002, 11, 20, 19, 37, 22), modification.ModifiedTime );
+			Assert.AreEqual( @"D:\CCase\ppunjani_view\RefArch\tutorial\wwhdata\common", modification.FolderName );
+			Assert.AreEqual( "towwhdir.js", modification.FileName );
+			Assert.AreEqual( "mkelem", modification.Type );
+			Assert.AreEqual( -1, modification.ChangeNumber );
+			Assert.AreEqual( "simple comment", modification.Comment );
+		}
+
+		[Test]
+		public void CanParseStreamWithLineBreakInComment()
+		{
+			string input = @"ppunjani#~#Wednesday, November 20, 2002 07:37:22 PM#~#D:\CCase\ppunjani_view\RefArch\tutorial\wwhdata\common\towwhdir.js#~#\main#~#mkelem#~#!#~#!#~#simple comment 
+with linebreak@#@#@#@#@#@#@#@#@#@#@#@";
+
+			Modification modification = _parser.Parse(new StringReader(input), DateTime.Now, DateTime.Now)[0];
+			Assert.AreEqual( "ppunjani", modification.UserName );
+			Assert.AreEqual( new DateTime( 2002, 11, 20, 19, 37, 22), modification.ModifiedTime );
+			Assert.AreEqual( @"D:\CCase\ppunjani_view\RefArch\tutorial\wwhdata\common", modification.FolderName );
+			Assert.AreEqual( "towwhdir.js", modification.FileName );
+			Assert.AreEqual( "mkelem", modification.Type );
+			Assert.AreEqual( -1, modification.ChangeNumber );
+			Assert.AreEqual( "simple comment with linebreak", modification.Comment );
+		}
+
 	}
 }

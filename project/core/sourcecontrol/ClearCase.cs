@@ -256,7 +256,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 				+ "%Vd"	+ ClearCaseHistoryParser.DELIMITER + "%En" + ClearCaseHistoryParser.DELIMITER
 				+ "%Vn" + ClearCaseHistoryParser.DELIMITER + "%o" + ClearCaseHistoryParser.DELIMITER
 				+ "!%l" + ClearCaseHistoryParser.DELIMITER + "!%a" + ClearCaseHistoryParser.DELIMITER
-				+ "%Nc" + ClearCaseHistoryParser.END_OF_STRING_DELIMITER + "\\n\" " + _viewPath;
+				+ "%Nc" + ClearCaseHistoryParser.END_OF_LINE_DELIMITER + "\\n\" " + _viewPath;
 		}
 
 		private void RemoveBaseline()
