@@ -79,6 +79,31 @@
 	<target name="test" depends="test.unit" />
 
     <target name="test.unit" depends="compile" description="runs unit tests">
+    	<mkdir dir="build\tests" />
+    	
+<!--
+		<exec basedir="build\tests" 
+			  workingdir="build\tests" 
+			  program="..\..\tools\nunit\nunit-console.exe" 
+			  commandline="..\..\project\core\bin\debug\ccnet.core.dll /xml:ccnet.core-results.xml"/>
+-->
+
+		<exec basedir="${build.dir}" 
+			  workingdir="${build.dir}" 
+			  program="..\tools\nunit\nunit-console.exe" 
+			  commandline="${core.dll} /xml:ccnet-core-results.xml"/>
+
+		<exec basedir="${build.dir}" 
+			  workingdir="${build.dir}" 
+			  program="..\tools\nunit\nunit-console.exe" 
+			  commandline="${console.exe} /xml:ccnet-console-results.xml"/>
+
+		<exec basedir="${build.dir}" 
+			  workingdir="${build.dir}" 
+			  program="..\tools\nunit\nunit-console.exe" 
+			  commandline="${web.dll} /xml:ccnet-web-results.xml"/>
+
+<!--
         <nunit2>
             <test assemblyname="${build.dir}\${web.dll}" appconfig="${build.dir}\ccnet.web.dll.config" type="${nunit.output}"/>
         </nunit2>
@@ -88,6 +113,7 @@
         <nunit2>
             <test assemblyname="${build.dir}\${core.dll}" appconfig="${build.dir}\ccnet.core.dll.config" type="${nunit.output}"/>
         </nunit2>
+-->
     </target>
 
 	<!-- DEPLOY -->
