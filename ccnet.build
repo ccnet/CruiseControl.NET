@@ -67,9 +67,9 @@
 	<target name="copy-test-web-files" depends="deploy.webapp">
 		<copy todir="${webapp.dir}">
 			<fileset basedir="project\WebTest">
-				<includes name="**\*" />
-				<excludes name="obj\**\*" />
-				<excludes name="bin\**\*" />
+				<include name="**\*" />
+				<exclude name="obj\**\*" />
+				<exclude name="bin\**\*" />
 			</fileset>
 		</copy>
 	</target>
@@ -82,25 +82,25 @@
 		<mkdir dir="deployed\server"/>
 		<copy todir="deployed\server" verbose="${verbosity}">
 			<fileset basedir="${build.dir}\server">
-				<includes name="*" />
-				<excludes name="*.incr" />
-				<excludes name="**/PostBuildEvent.bat" />
+				<include name="*" />
+				<exclude name="*.incr" />
+				<exclude name="**/PostBuildEvent.bat" />
 			</fileset>
 		</copy>
 
 		<!-- deliberately copied into same folder as server -->
 		<copy todir="deployed\server" verbose="${verbosity}">
 			<fileset basedir="${build.dir}\service">
-				<includes name="*" />
-				<excludes name="*.incr" />				
-				<excludes name="**/PostBuildEvent.bat" />
+				<include name="*" />
+				<exclude name="*.incr" />				
+				<exclude name="**/PostBuildEvent.bat" />
 			</fileset>
 		</copy>
 
 		<copy todir="deployed\server\xsl" verbose="${verbosity}">
 			<fileset basedir="${src.dir}\xsl">
-				<includes name="**\*.xsl"/>
-				<includes name="**\*.css"/>
+				<include name="**\*.xsl"/>
+				<include name="**\*.css"/>
 			</fileset>
 		</copy>
 
@@ -112,14 +112,14 @@
 
 		<copy todir="deployed\cctray">
 			<fileset basedir="${build.dir}\cctray">
-				<includes name="*" />
-				<excludes name="*.incr" />
+				<include name="*" />
+				<exclude name="*.incr" />
 			</fileset>
 		</copy>
 
 		<copy todir="deployed\cctray">
 			<fileset basedir="project\cctray\Audio">
-				<includes name="*" />
+				<include name="*" />
 			</fileset>
 		</copy>
 	</target>
@@ -128,28 +128,28 @@
 		<mkdir dir="${webapp.dir}" verbose="${verbosity}"/>
 		<copy todir="${webapp.dir}\bin">
 			<fileset basedir="${build.dir}\web">
-				<includes name="*" />
-				<excludes name="PostBuildEvent.bat" />
-				<excludes name="*.xml" />
-				<excludes name="*.incr" />
+				<include name="*" />
+				<exclude name="PostBuildEvent.bat" />
+				<exclude name="*.xml" />
+				<exclude name="*.incr" />
 			</fileset>
 		</copy>
 
 		<copy todir="${webapp.dir}">
 			<fileset basedir="project\web">
-				<includes name="**\*.aspx"/>
-				<includes name="**\*.ascx"/>
-				<includes name="**\*.asax"/>
-				<includes name="**\*.html"/>
-				<includes name="**\*.gif"/>
-				<includes name="**\*.wav"/>
-				<includes name="**\*.css"/>
-				<includes name="**\*.xsl"/>
-				<includes name="**\*.config"/>
+				<include name="**\*.aspx"/>
+				<include name="**\*.ascx"/>
+				<include name="**\*.asax"/>
+				<include name="**\*.html"/>
+				<include name="**\*.gif"/>
+				<include name="**\*.wav"/>
+				<include name="**\*.css"/>
+				<include name="**\*.xsl"/>
+				<include name="**\*.config"/>
 
-				<excludes name="bin\**\*" />
-				<excludes name="obj\**\*" />
-				<excludes name="test\**\*" />
+				<exclude name="bin\**\*" />
+				<exclude name="obj\**\*" />
+				<exclude name="test\**\*" />
 			</fileset>
 		</copy>
 
@@ -167,26 +167,26 @@
 		<mkdir dir="${webdashboard.dir}" verbose="${verbosity}"/>
 		<copy todir="${webdashboard.dir}\bin">
 			<fileset basedir="${build.dir}\webdashboard">
-				<includes name="*.dll" />
-				<excludes name="*.incr" />
+				<include name="*.dll" />
+				<exclude name="*.incr" />
 			</fileset>
 		</copy>
 
 		<copy todir="${webdashboard.dir}">
 			<fileset basedir="project\webdashboard">
-				<includes name="**\*.aspx"/>
-				<includes name="**\*.ascx"/>
-				<includes name="**\*.asax"/>
-				<includes name="**\*.html"/>
-				<includes name="**\*.gif"/>
-				<includes name="**\*.wav"/>
-				<includes name="**\*.css"/>
-				<includes name="**\*.xsl"/>
-				<includes name="**\*.config"/>
+				<include name="**\*.aspx"/>
+				<include name="**\*.ascx"/>
+				<include name="**\*.asax"/>
+				<include name="**\*.html"/>
+				<include name="**\*.gif"/>
+				<include name="**\*.wav"/>
+				<include name="**\*.css"/>
+				<include name="**\*.xsl"/>
+				<include name="**\*.config"/>
 
-				<excludes name="bin\**\*" />
-				<excludes name="obj\**\*" />
-				<excludes name="test\**\*" />
+				<exclude name="bin\**\*" />
+				<exclude name="obj\**\*" />
+				<exclude name="test\**\*" />
 			</fileset>
 		</copy>
 	</target>
@@ -195,27 +195,27 @@
 		<mkdir dir="${webservice.dir}" verbose="${verbosity}"/>
 		<copy todir="${webservice.dir}\bin">
 			<fileset basedir="${build.dir}\webservice">
-				<includes name="*.dll" />
-				<excludes name="*.incr" />
+				<include name="*.dll" />
+				<exclude name="*.incr" />
 			</fileset>
 		</copy>
 
 		<copy todir="${webservice.dir}">
 			<fileset basedir="project\WebService">
-				<includes name="**\*.aspx"/>
-				<includes name="**\*.ascx"/>
-				<includes name="**\*.asax"/>
-				<includes name="**\*.asmx"/>
-				<includes name="**\*.html"/>
-				<includes name="**\*.gif"/>
-				<includes name="**\*.wav"/>
-				<includes name="**\*.css"/>
-				<includes name="**\*.xsl"/>
-				<includes name="**\*.config"/>
+				<include name="**\*.aspx"/>
+				<include name="**\*.ascx"/>
+				<include name="**\*.asax"/>
+				<include name="**\*.asmx"/>
+				<include name="**\*.html"/>
+				<include name="**\*.gif"/>
+				<include name="**\*.wav"/>
+				<include name="**\*.css"/>
+				<include name="**\*.xsl"/>
+				<include name="**\*.config"/>
 
-				<excludes name="bin\**\*" />
-				<excludes name="obj\**\*" />
-				<excludes name="test\**\*" />
+				<exclude name="bin\**\*" />
+				<exclude name="obj\**\*" />
+				<exclude name="test\**\*" />
 			</fileset>
 		</copy>
 	</target>
@@ -225,26 +225,26 @@
 		<copy todir="deployed" file="license.txt" />
 		<copy todir="deployed\doc">
 			<fileset basedir="doc">
-				<includes name="**\*" />
+				<include name="**\*" />
 			</fileset>
 		</copy>
 	
 		<mkdir dir="dist"/>
 		<zip zipfile="dist\CruiseControl.NET.zip">
 			<fileset basedir="deployed">
-				<includes name="**\*" />
+				<include name="**\*" />
 			</fileset>
 		</zip>
 		<zip zipfile="dist\CruiseControl.NET.source.zip">
 			<fileset>
-				<includes name="**\*" />
+				<include name="**\*" />
 
-				<excludes name="build\**\*" />
-				<excludes name="deployed\**\*" />
-				<excludes name="dist\**\*" />
-				<excludes name="**\bin\**\*" />
-				<excludes name="**\obj\**\*" />
-				<excludes name="**\CVS\**\*" />
+				<exclude name="build\**\*" />
+				<exclude name="deployed\**\*" />
+				<exclude name="dist\**\*" />
+				<exclude name="**\bin\**\*" />
+				<exclude name="**\obj\**\*" />
+				<exclude name="**\CVS\**\*" />
 			</fileset>
 		</zip>
 	</target>
@@ -264,7 +264,7 @@
 			<mkdir dir="${publish.dir}" />
 			<copy todir="${publish.dir}">
 					<fileset basedir="dist">
-							<includes name="*"/>
+							<include name="*"/>
 					</fileset>
 			</copy>			
 	</target>
