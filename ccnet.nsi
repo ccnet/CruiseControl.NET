@@ -20,6 +20,9 @@
 !define MUI_ABORTWARNING
 !define MUI_ICON "project\CCTray\App.ico"
 !define MUI_UNICON "project\CCTray\App.ico"
+!define MUI_HEADERIMAGE
+!define MUI_HEADERIMAGE_BITMAP "install\install_logo.bmp"
+!define MUI_HEADERIMAGE_RIGHT
 
 ; Welcome page
 !insertmacro MUI_PAGE_WELCOME
@@ -44,7 +47,9 @@ var ICONS_GROUP
 Page custom InstallService InstallService
 Page custom CreateVirtualDirectory CreateVirtualDirectory
 ; Finish page
-;!define MUI_FINISHPAGE_RUN "$INSTDIR\Server\ccnet.exe"
+Var FinishMessage
+!define MUI_WELCOMEFINISHPAGE_CUSTOMFUNCTION_INIT PrepareFinishPageMessage
+!define MUI_FINISHPAGE_TEXT $FinishMessage
 !insertmacro MUI_PAGE_FINISH
 
 ; Uninstaller pages
@@ -62,13 +67,14 @@ InstallDirRegKey HKLM "${PRODUCT_DIR_REGKEY}" ""
 ShowInstDetails show
 ShowUnInstDetails show
 
+
 Section "CruiseControl.NET Server" SEC01
   SetOutPath "$INSTDIR\server"
   SetOverwrite ifnewer
-  ;File /r /x *.config "deployed\server\*"
-  File /r "deployed\server\*"
+  File /r /x *.config "deployed\server\*"
+  ;File /r "deployed\server\*"
 
-  Call ExtractConfigFilesSafely
+  Call BackupAndExtractConfigFiles
 
   !insertmacro MUI_STARTMENU_WRITE_BEGIN Application
   CreateDirectory "$SMPROGRAMS\$ICONS_GROUP"
@@ -77,8 +83,25 @@ Section "CruiseControl.NET Server" SEC01
   !insertmacro MUI_STARTMENU_WRITE_END
 SectionEnd
 
-Function ExtractConfigFilesSafely
-  ;TODO: Only extract config files if we aren't going to clobber user-modified versions when upgrading.
+Var ConfigBackedUp
+Function BackupAndExtractConfigFiles
+  SetOutPath "$INSTDIR\server"
+  StrCpy $ConfigBackedUp "no"
+
+  IfFileExists $INSTDIR\server\ccnet.exe.config 0 extractCCNetExeConfig
+    Delete $INSTDIR\server\ccnet.exe.config.old
+    Rename $INSTDIR\server\ccnet.exe.config $INSTDIR\server\ccnet.exe.config.old
+    StrCpy $ConfigBackedUp "yes"
+  extractCCNetExeConfig:
+    File "deployed\server\ccnet.exe.config"
+
+  IfFileExists $INSTDIR\server\ccservice.exe.config 0 extractCCServiceExeConfig
+    Delete $INSTDIR\server\ccservice.exe.config.old
+    Rename $INSTDIR\server\ccservice.exe.config $INSTDIR\server\ccservice.exe.config.old
+    StrCpy $ConfigBackedUp "yes"
+  extractCCServiceExeConfig:
+    File "deployed\server\ccservice.exe.config"
+
 FunctionEnd
 
 Section "Web Dashboard" SEC02
@@ -137,7 +160,6 @@ LangString TEXT_IO_SUBTITLE ${LANG_ENGLISH} "Configure the Windows Service and I
 
 Function AdditionalConfiguration
   !insertmacro MUI_HEADER_TEXT "$(TEXT_IO_TITLE)" "$(TEXT_IO_SUBTITLE)"
-;  !insertmacro MUI_INSTALLOPTIONS_DISPLAY ".\install\AdditionalConfiguration.ini"
   !insertmacro MUI_INSTALLOPTIONS_DISPLAY "AdditionalConfiguration.ini"
 FunctionEnd
 
@@ -162,6 +184,14 @@ FunctionEnd
 Function CreateVirtualDirectory
   ;TODO: Actually create the virtual directory.
   ;!insertmacro MUI_INSTALLOPTIONS_READ $CreateVirtualDirectory "AdditionalConfiguration.ini" "Field 2" "State"
+FunctionEnd
+
+Var MessageDetail
+Function PrepareFinishPageMessage
+  StrCmp $ConfigBackedUp "yes" 0 prepMessage
+    StrCpy $MessageDetail "Your existing configuration files have been backed up to ccnet.exe.config.old and ccservice.exe.config.old.\r\n"
+prepMessage:
+  StrCpy $FinishMessage "$(^Name) has been installed on your computer.\r\n\r\n$MessageDetail\r\nClick Finish to close this wizard."
 FunctionEnd
 
 Function un.onUninstSuccess
