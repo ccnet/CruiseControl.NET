@@ -1,4 +1,5 @@
 using System;
+using System.Xml.Serialization;
 
 namespace tw.ccnet.remote
 {
@@ -46,36 +47,43 @@ namespace tw.ccnet.remote
 		public CruiseControlStatus Status 
 		{
 			get { return status; }
+			set { status = value; }
 		}
 
 		public IntegrationStatus BuildStatus 
 		{
 			get { return buildStatus; }
+			set { buildStatus = value; }
 		}
 
 		public ProjectActivity Activity 
 		{
 			get { return activity; }
+			set { activity = value; }
 		}
 
 		public string Name 
 		{
 			get { return name; }
+			set { name = value; }
 		}
 
 		public string WebURL
 		{
 			get { return webURL; }
+			set { webURL = value; }
 		}
 
 		public DateTime LastBuildDate
 		{
 			get { return lastBuildDate; }
+			set { lastBuildDate = value; }
 		}
 
 		public string LastBuildLabel
 		{
 			get { return lastBuildLabel; }
+			set { lastBuildLabel = value; }
 		}
 	}
 }
