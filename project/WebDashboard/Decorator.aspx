@@ -1,10 +1,11 @@
-<%@ Page language="c#" Codebehind="Decorator.aspx.cs" AutoEventWireup="false" Inherits="ThoughtWorks.CruiseControl.WebDashboard.Decorator" %>
 <%@ Register Namespace="SiteMesh.DecoratorControls" TagPrefix="decorator" Assembly="Sitemesh" %>
+<%@ Page language="c#" Codebehind="Decorator.aspx.cs" AutoEventWireup="false" Inherits="ThoughtWorks.CruiseControl.WebDashboard.Decorator" %>
 <!DOCTYPE html PUBLIC "-//W3C//Dtd XHTML 1.0 Transitional//EN" "http://localhost/NUnitAsp/dtd/xhtml1-transitional.dtd">
 <HTML>
 	<HEAD>
 		<title>
 			<decorator:title runat="server" defaulttitle="CruiseControl.Net Build Results" ID="Title1" /></title>
+		<meta name="vs_showGrid" content="True">
 		<link type="text/css" rel="stylesheet" href="cruisecontrol.css">
 	</HEAD>
 	<body background="images/bg_blue_stripe.gif" topmargin="0" leftmargin="0" marginheight="0"
@@ -17,10 +18,8 @@
 						<img src="images/ccnet_logo.gif" border="0"></a>
 				</td>
 				<td valign="middle" align="right">
-					<asp:Panel id="ProjectPanel1" runat="server">
-					<a class="link" id="latestLog" href="." runat="server">latest</a> |&nbsp; <a class="link" id="nextLog" runat="server">
-						next</a> |&nbsp; <a class="link" id="previousLog" runat="server">previous</a>
-					<span id="ProjectPluginLinks" runat="server" runAt="server">&nbsp;</span>
+					<asp:Panel id="ProjectPanel1" runat="server"><A class="link" id="latestLog" href="." runat="server">
+							latest</A> |&nbsp; <A class="link" id="nextLog" runat="server">next</A> |&nbsp; <A class="link" id="previousLog" runat="server">previous</A> <SPAN id="ProjectPluginLinks" runat="server" runAt="server">&nbsp;</SPAN>
 					</asp:Panel>
 				</td>
 				<td><img src="images/shim.gif" width="6" border="0"></td>
@@ -40,15 +39,25 @@
 							<TR>
 								<TD bgColor="#333366">
 									<TABLE cellSpacing="0" cellPadding="0" width="100%" align="center" border="0">
-									<tr>
-										<td><img src="images/shim.gif" width="20"></td>
-										<td nowrap>
-											<span class="buildresults-header">BUILD RESULTS</span><br>
-											<span id="buildStats" runat="server" class="buildresults-data" runAt="server" />
-											<p>
-												<asp:DataList ID="menu" Runat="server" /></p>
-										</td>
-									</tr>
+										<TR>
+											<TD><IMG src="images/shim.gif" width="20"></TD>
+											<TD noWrap><SPAN class="buildresults-header">BUILD 
+                  RESULTS</SPAN>
+												<BR>
+												<SPAN class="buildresults-data" id="buildStats" runat="server" runAt="server"></SPAN></TD>
+										</TR>
+										<TR>
+											<TD><IMG src="images/shim.gif" width="20"></TD>
+											<TD noWrap>
+												<asp:DataList id="menu" Runat="server"></asp:DataList>
+											</TD>
+										</TR>
+										<TR>
+											<TD><IMG src="images/shim.gif" width="20"></TD>
+											<TD noWrap>
+												<asp:DataList id="BuildPluginsList" Runat="server"></asp:DataList>
+											</TD>
+										</TR>
 									</TABLE>
 								</TD>
 								<TD bgColor="#333366"><IMG src="images/shim.gif" border="0"></TD>

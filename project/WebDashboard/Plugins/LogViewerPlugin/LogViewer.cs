@@ -1,28 +1,17 @@
-using ThoughtWorks.CruiseControl.WebDashboard.Cache;
+using System;
 using ThoughtWorks.CruiseControl.WebDashboard.Dashboard;
-using ThoughtWorks.CruiseControl.WebDashboard.IO;
 
 namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.LogViewerPlugin
 {
-	public class LogViewer
+	public class LogViewer : IPlugin
 	{
-		private readonly ICacheManager cacheManager;
-		private readonly IRequestWrapper requestWrapper;
-		private readonly IBuildRetrieverForRequest buildRetrieverForRequest;
-
-		public LogViewer(IRequestWrapper requestWrapper, IBuildRetrieverForRequest buildRetrieverForRequest, ICacheManager cacheManager)
+		public string Description
 		{
-			this.buildRetrieverForRequest = buildRetrieverForRequest;
-			this.requestWrapper = requestWrapper;
-			this.cacheManager = cacheManager;
+			get { return "View Log"; }
 		}
-
-		public LogViewerResults Do()
+		public string Url
 		{
-			Build build = buildRetrieverForRequest.GetBuild(requestWrapper);
-			// ToDo - better way of specifiying the Cache Directory
-			string Url = cacheManager.GetURLForFile(build.ServerName, build.ProjectName, CachingBuildRetriever.CacheDirectory, build.Name);
-			return new LogViewerResults(Url);
+			get { return "ViewLog.aspx"; }
 		}
 	}
 }

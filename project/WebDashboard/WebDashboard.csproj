@@ -228,6 +228,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "config\AssemblyLoadingPluginSpecification.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "config\ConfigurationSettingsConfigGetter.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -238,7 +243,7 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "config\PluginSpecification.cs"
+                    RelPath = "config\IPluginSpecification.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -254,6 +259,11 @@
                 />
                 <File
                     RelPath = "config\ServersSectionHandler.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "config\SimplePluginSpecification.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -299,6 +309,11 @@
                 />
                 <File
                     RelPath = "Dashboard\IBuildRetrieverForRequest.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Dashboard\IPlugin.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -391,12 +406,17 @@
                 />
                 <Folder RelPath = "log\" />
                 <File
-                    RelPath = "Plugins\PluginFactory.cs"
+                    RelPath = "Plugins\PluginPageRendererFactory.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
                     RelPath = "Plugins\LogViewerPlugin\LogViewer.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Plugins\LogViewerPlugin\LogViewerPageRenderer.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -407,6 +427,11 @@
                 />
                 <File
                     RelPath = "Plugins\ProjectReporterPlugin\ProjectReporter.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Plugins\ProjectReporterPlugin\ProjectReporterPageRenderer.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

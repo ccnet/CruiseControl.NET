@@ -7,18 +7,18 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins
 {
 	// ToDo - tests? Its 'just' instantiation. I guess that's a 'yes'...
 	// ToDo - cache instances?
-	public class PluginFactory
+	public class PluginPageRendererFactory
 	{
 		private readonly DashboardComponentFactory dcFactory;
 
-		public PluginFactory(DashboardComponentFactory dcFactory)
+		public PluginPageRendererFactory(DashboardComponentFactory dcFactory)
 		{
 			this.dcFactory = dcFactory;
 		}
 
-		public ProjectReporter ProjectReporter
+		public ProjectReporterPageRenderer ProjectReporterPageRenderer
 		{
-			get { return new ProjectReporter(dcFactory.QueryStringRequestWrapper, dcFactory.DefaultBuildRetrieverForRequest, dcFactory.HttpPathMapper); }
+			get { return new ProjectReporterPageRenderer(dcFactory.QueryStringRequestWrapper, dcFactory.DefaultBuildRetrieverForRequest, dcFactory.HttpPathMapper); }
 		}
 
 		public SiteTemplate SiteTemplate
@@ -27,9 +27,9 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins
 					  DefaultBuildLister, dcFactory.DefaultBuildRetrieverForRequest, dcFactory.CruiseManagerBuildNameRetriever);}
 		}
 
-		public LogViewer LogViewer
+		public LogViewerPageRenderer LogViewerPageRenderer
 		{
-			get { return new LogViewer(dcFactory.QueryStringRequestWrapper, dcFactory.DefaultBuildRetrieverForRequest, dcFactory.LocalFileCacheManager);}
+			get { return new LogViewerPageRenderer(dcFactory.QueryStringRequestWrapper, dcFactory.DefaultBuildRetrieverForRequest, dcFactory.LocalFileCacheManager);}
 		}
 
 		public DefaultBuildLister DefaultBuildLister

@@ -25,11 +25,12 @@ namespace ThoughtWorks.CruiseControl.WebDashboard
 		protected Title Title3;
 		protected HtmlTableCell contentCell;
 		protected System.Web.UI.WebControls.Panel ProjectPanel1;
+		protected System.Web.UI.WebControls.DataList BuildPluginsList;
 		protected System.Web.UI.WebControls.Panel ProjectPanel2;
 
 		private void Page_Load(object sender, EventArgs e)
 		{
-			SiteTemplateResults results = new PluginFactory(new DashboardComponentFactory(Request, Context, this)).SiteTemplate.Do();
+			SiteTemplateResults results = new PluginPageRendererFactory(new DashboardComponentFactory(Request, Context, this)).SiteTemplate.Do();
 
 			if (results.ProjectMode)
 			{
@@ -39,7 +40,8 @@ namespace ThoughtWorks.CruiseControl.WebDashboard
 				menu.DataSource = results.BuildLinkList;
 				menu.DataBind();
 
-				ProjectPluginLinks.InnerHtml = results.PluginLinksHtml;
+				BuildPluginsList.DataSource = results.BuildPluginsList;
+				BuildPluginsList.DataBind();
 
 				latestLog.HRef = results.LatestLogLink;
 				previousLog.HRef = results.PreviousLogLink;
@@ -67,6 +69,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard
 		private void InitializeComponent()
 		{    
 			this.menu.ItemDataBound += new System.Web.UI.WebControls.DataListItemEventHandler(this.DataList_BindItem);
+			this.BuildPluginsList.ItemDataBound += new System.Web.UI.WebControls.DataListItemEventHandler(this.DataList_BindItem);
 			this.Load += new System.EventHandler(this.Page_Load);
 
 		}

@@ -19,6 +19,9 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Plugins.SiteTemplate
 		private SiteTemplate siteTemplate;
 		private Build build;
 		private IRequestWrapper requestWrapper;
+		private string server;
+		private string project;
+		private string buildName;
 
 		[SetUp]
 		public void Setup()
@@ -37,9 +40,10 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Plugins.SiteTemplate
 				(IBuildRetrieverForRequest) buildRetrieverMock.MockInstance,
 				(IBuildNameRetriever) buildNameRetrieverMock.MockInstance);
 
-			string server = "myserver";
-			string project = "myproject";
-			build = new Build("log20040721095851Lbuild.1.xml", "my content", server, project);
+			server = "myserver";
+			project = "myproject";
+			buildName = "log20040721095851Lbuild.1.xml";
+			build = new Build(buildName, "my content", server, project);
 		}
 
 		private void VerifyMocks()
@@ -113,6 +117,50 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Plugins.SiteTemplate
 			SiteTemplateResults results = siteTemplate.Do();
 			AssertEquals(anchor, results.BuildLinkList[0]);
 			VerifyMocks();
+		}
+
+		[Test]
+		public void DoesntCreateListOfBuildPluginsIfNoProjectSpecified()
+		{
+			requestWrapperMock.ExpectAndReturn("GetProjectName", "");
+			requestWrapperMock.ExpectAndReturn("GetServerName", "server");
+			SiteTemplateResults results = siteTemplate.Do();
+			AssertEquals(0, results.BuildPluginsList.Length);
+
+			VerifyMocks();
+		}
+
+		[Test]
+		public void CreatesCorrectListOfBuildPluginLinks()
+		{
+			AssemblyLoadingPluginSpecification assemblyLoadingPlugin = new AssemblyLoadingPluginSpecification(typeof(TestPlugin).FullName, typeof(TestPlugin).Assembly.CodeBase);
+			AssemblyLoadingPluginSpecification[] assemblyLoadingPlugins = new AssemblyLoadingPluginSpecification[] { assemblyLoadingPlugin };
+			configurationGetterMock.ExpectAndReturn("GetConfigFromSection", assemblyLoadingPlugins, PluginsSectionHandler.SectionName);
+			requestWrapperMock.ExpectAndReturn("GetProjectName", project);
+			requestWrapperMock.ExpectAndReturn("GetServerName", server);
+			buildRetrieverMock.ExpectAndReturn("GetBuild", build, requestWrapper);
+
+			SiteTemplateResults results = siteTemplate.Do();
+
+			AssertEquals(1, results.BuildPluginsList.Length);
+			AssertEquals("Test Plugin", results.BuildPluginsList[0].InnerHtml);
+			AssertEquals(string.Format("test.aspx?server={0}&amp;project={1}&amp;build={2}", server, project,  buildName), 
+				results.BuildPluginsList[0].HRef);
+		}
+	}
+
+	public class TestPlugin : IPlugin
+	{
+		string description = "Test Plugin";
+		string url = "test.aspx";
+
+		public string Description
+		{
+			get { return description; }
+		}
+		public string Url
+		{
+			get { return url; }
 		}
 	}
 }

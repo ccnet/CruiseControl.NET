@@ -10,7 +10,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Plugins.LogViewerPlu
 	[TestFixture]
 	public class LogViewerTest : Assertion
 	{
-		private LogViewer logViewer;
+		private LogViewerPageRenderer logViewerPageRenderer;
 
 		private string url;
 		private Build build;
@@ -27,7 +27,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Plugins.LogViewerPlu
 			requestWrapperMock = new DynamicMock(typeof(IRequestWrapper));
 			cacheManagerMock = new DynamicMock(typeof(ICacheManager));
 
-			logViewer = new LogViewer((IRequestWrapper) requestWrapperMock.MockInstance, (IBuildRetrieverForRequest) buildRetrieverforRequestMock.MockInstance,
+			logViewerPageRenderer = new LogViewerPageRenderer((IRequestWrapper) requestWrapperMock.MockInstance, (IBuildRetrieverForRequest) buildRetrieverforRequestMock.MockInstance,
 				(ICacheManager) cacheManagerMock.MockInstance);
 
 			url = "http://foo.bar";
@@ -51,7 +51,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Plugins.LogViewerPlu
 			buildRetrieverforRequestMock.ExpectAndReturn("GetBuild", build, requestWrapper);
 			cacheManagerMock.ExpectAndReturn("GetURLForFile", url, serverName, projectName, CachingBuildRetriever.CacheDirectory, "mybuild");
 
-			AssertEquals(url, logViewer.Do().RedirectURL);
+			AssertEquals(url, logViewerPageRenderer.Do().RedirectURL);
 		}
 	}
 }

@@ -12,9 +12,9 @@ namespace ThoughtWorks.CruiseControl.WebDashboard
 
 		private void Page_Load(object sender, System.EventArgs e)
 		{
-			LogViewer logViewer = new PluginFactory(new DashboardComponentFactory(Request, Context, this)).LogViewer;
+			LogViewerPageRenderer logViewerPageRenderer = new PluginPageRendererFactory(new DashboardComponentFactory(Request, Context, this)).LogViewerPageRenderer;
 
-			LogViewerResults results = logViewer.Do();
+			LogViewerResults results = logViewerPageRenderer.Do();
 			LogLink.HRef = results.RedirectURL;
 		}
 

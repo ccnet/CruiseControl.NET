@@ -1,11 +1,14 @@
 using System.Collections;
 using System.Configuration;
 using System.Xml;
+using ThoughtWorks.CruiseControl.WebDashboard.config;
 
 namespace ThoughtWorks.CruiseControl.WebDashboard.Config
 {
 	public class PluginsSectionHandler : IConfigurationSectionHandler
 	{
+		public static readonly string SectionName = "CCNet/plugins";
+
 		public object Create(object parent, object configContext, XmlNode section)
 		{
 			ArrayList projectPlugins = new ArrayList();
@@ -14,11 +17,20 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Config
 			{
 				if (node.NodeType == XmlNodeType.Element) 
 				{
-					projectPlugins.Add(new PluginSpecification(node.Attributes["linkText"].Value, node.Attributes["linkUrl"].Value));
+					string typeName = node.Attributes["typeName"].Value;
+					XmlAttribute assemblyNameAttribute = node.Attributes["assemblyName"];
+					if (assemblyNameAttribute == null || assemblyNameAttribute.Value == string.Empty)
+					{
+						projectPlugins.Add(new SimplePluginSpecification(typeName));
+					}
+					else
+					{
+						projectPlugins.Add(new AssemblyLoadingPluginSpecification(typeName, assemblyNameAttribute.Value));	
+					}
 				}
 			}
 
-			return projectPlugins;
+			return (IPluginSpecification[]) projectPlugins.ToArray (typeof (IPluginSpecification));
 		}
 	}
 }

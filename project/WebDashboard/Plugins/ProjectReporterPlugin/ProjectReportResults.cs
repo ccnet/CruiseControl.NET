@@ -4,30 +4,16 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.ProjectReporterPlugin
 {
 	public class ProjectReportResults
 	{
-		private readonly string pluginLinksHtml;
-		private readonly string headerCellHtml;
-		private readonly string detailsCellHtml;
-
-		public string HeaderCellHtml
+		private readonly string html;
+		
+		public string Html
 		{
-			get { return headerCellHtml; }
+			get { return html; }
 		}
 
-		public string DetailsCellHtml
+		public ProjectReportResults(string html)
 		{
-			get { return detailsCellHtml; }
-		}
-
-		public string PluginLinksHtml
-		{
-			get { return pluginLinksHtml; }
-		}
-
-		public ProjectReportResults(string headerCellHtml, string detailsCellHtml, string pluginLinksHtml)
-		{
-			this.detailsCellHtml = detailsCellHtml;
-			this.headerCellHtml = headerCellHtml;
-			this.pluginLinksHtml = pluginLinksHtml;
+			this.html = html;
 		}
 	}
 }

@@ -23,6 +23,6 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Config
 			return (ServerSpecification[]) servers.ToArray(typeof (ServerSpecification));
 		}
 
-		public static readonly string SectionName = "servers";
+		public static readonly string SectionName = "CCNet/servers";
 	}
 }

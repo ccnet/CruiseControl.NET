@@ -1,7 +1,8 @@
 using System;
 using System.Collections;
-using System.Text;
+using System.Web.UI.HtmlControls;
 using ThoughtWorks.CruiseControl.Core;
+using ThoughtWorks.CruiseControl.WebDashboard.config;
 using ThoughtWorks.CruiseControl.WebDashboard.Config;
 using ThoughtWorks.CruiseControl.WebDashboard.Dashboard;
 using ThoughtWorks.CruiseControl.WebDashboard.IO;
@@ -15,6 +16,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.SiteTemplatePlugin
 		private readonly IConfigurationGetter configurationGetter;
 		private readonly IBuildLister buildLister;
 		private readonly IRequestWrapper requestWrapper;
+		private Build build;
 
 		public SiteTemplate(IRequestWrapper requestWrapper, IConfigurationGetter configurationGetter, IBuildLister buildLister, 
 			IBuildRetrieverForRequest buildRetrieverForRequest, IBuildNameRetriever buildNameRetriever)
@@ -32,15 +34,53 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.SiteTemplatePlugin
 			string projectName = requestWrapper.GetProjectName();
 			if (serverName == string.Empty || projectName == string.Empty)
 			{
-				return new SiteTemplateResults(false, null, "", "", "", "", "", "");
+				return new SiteTemplateResults(false, new HtmlAnchor[0], "", "", "", "", "", "", new HtmlAnchor[0]);
 			}
 
-			Build build = buildRetrieverForRequest.GetBuild(requestWrapper);
+			build = buildRetrieverForRequest.GetBuild(requestWrapper);
 			BuildStats stats = GenerateBuildStats(build);
 			LatestNextPreviousLinks latestNextPreviousLinks = GenerateLatestNextPreviousLinks(build);
 
-			return new SiteTemplateResults(true, buildLister.GetBuildLinks(serverName, projectName), stats.Html, stats.Htmlclass, GeneratePluginLinks(build), 
-				latestNextPreviousLinks.latestLink, latestNextPreviousLinks.nextLink, latestNextPreviousLinks.previousLink);	
+			return new SiteTemplateResults(true, buildLister.GetBuildLinks(serverName, projectName), stats.Html, stats.Htmlclass, "", 
+				latestNextPreviousLinks.latestLink, latestNextPreviousLinks.nextLink, latestNextPreviousLinks.previousLink, BuildPluginLinks());	
+		}
+
+		private HtmlAnchor[] BuildPluginLinks ()
+		{
+			IPluginSpecification[] pluginSpecifications = configurationGetter.GetConfigFromSection(PluginsSectionHandler.SectionName) as IPluginSpecification[];
+			if (pluginSpecifications == null)
+			{
+				// ToDo - put warning somewhere about misconfiguration
+				return new HtmlAnchor[0];
+			}
+
+			ArrayList pluginAnchors = new ArrayList();
+			foreach (IPluginSpecification pluginSpecification in pluginSpecifications)
+			{
+				Type pluginType = pluginSpecification.Type;
+				if (pluginType == null)
+				{
+					throw new CruiseControlException("unable to create type object for typename " + pluginSpecification.TypeName);
+				}
+				object tempPlugin = Activator.CreateInstance(pluginSpecification.Type);
+				if (tempPlugin is IPlugin)
+				{
+					IPlugin plugin = (IPlugin) tempPlugin;
+					HtmlAnchor anchor = new HtmlAnchor();
+					// ToDo - make a URL generator
+					anchor.HRef = string.Format("{0}?server={1}&amp;project={2}&amp;build={3}", plugin.Url, build.ServerName, build.ProjectName, build.Name);
+					anchor.InnerHtml = plugin.Description;
+					anchor.Attributes["class"] = "link";
+					pluginAnchors.Add(anchor);
+				}
+				else
+				{
+					// ToDo - something better here
+					throw new CruiseControlException(string.Format("The specified plugin {0} does not implement IPlugin", pluginSpecification.TypeName));
+				}
+			}
+
+			return (HtmlAnchor[]) pluginAnchors.ToArray (typeof (HtmlAnchor));
 		}
 
 		private struct BuildStats
@@ -74,23 +114,6 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.SiteTemplatePlugin
 			}
 		}
 
-
-		// ToDo - untested (but are we going to change how we do plugins? )
-		private string GeneratePluginLinks(Build build)
-		{
-			string pluginLinksHtml = "";
-			object pluginSpecs = configurationGetter.GetConfigFromSection("CCNet/projectPlugins");
-
-			if (pluginSpecs != null)
-			{
-				foreach (PluginSpecification spec in (IEnumerable) pluginSpecs)
-				{
-					pluginLinksHtml += String.Format(@"|&nbsp; <a class=""link"" href=""{0}?{1}={2}"">{3}</a> ", 
-						spec.LinkUrl, LogFileUtil.ProjectQueryString, build.ProjectName, spec.LinkText);
-				}
-			}
-			return pluginLinksHtml;
-		}
 
 		private struct LatestNextPreviousLinks
 		{
