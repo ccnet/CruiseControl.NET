@@ -27,7 +27,7 @@ namespace ThoughtWorks.CruiseControl.Core.Config.Test
 		[TearDown]
 		protected void TearDown() 
 		{
-			//TempFileUtil.DeleteTempDir(this);
+			TempFileUtil.DeleteTempDir(this);
 		}
 
 		[Test]
