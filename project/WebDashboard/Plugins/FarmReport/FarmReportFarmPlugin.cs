@@ -21,7 +21,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.FarmReport
 
 		public string LinkDescription
 		{
-			get { return "New Farm Report (in development!)"; }
+			get { return "Farm Report"; }
 		}
 
 		public string LinkActionName

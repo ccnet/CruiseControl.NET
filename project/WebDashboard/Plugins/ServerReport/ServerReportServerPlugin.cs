@@ -21,7 +21,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.ServerReport
 
 		public string LinkDescription
 		{
-			get { return "New Server Report (in development!)"; }
+			get { return "Server Report"; }
 		}
 
 		public string LinkActionName

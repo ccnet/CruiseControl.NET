@@ -31,17 +31,6 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.MVC.Cruise
 		}
 
 		[Test]
-		public void ShouldReturnDefaultActionIfNoActionSpecified()
-		{
-			requestMock.ExpectAndReturn("FindParameterStartingWith", "", CruiseActionFactory.ACTION_PARAMETER_PREFIX);
-			objectGiverMock.ExpectNoCall("GiveObjectById", typeof(string));
-
-			Assert.IsTrue(actionFactory.Create(request) is DefaultCruiseAction);
-
-			VerifyAll();
-		}
-
-		[Test]
 		public void ShouldReturnUnknownActionIfActionIsntAvailable()
 		{
 			requestMock.ExpectAndReturn("FindParameterStartingWith", CruiseActionFactory.ACTION_PARAMETER_PREFIX + "myAction", CruiseActionFactory.ACTION_PARAMETER_PREFIX);

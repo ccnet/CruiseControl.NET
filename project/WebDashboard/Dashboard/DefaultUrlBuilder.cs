@@ -7,7 +7,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 	public class DefaultUrlBuilder : IUrlBuilder
 	{
 		private readonly IPathMapper pathMapper;
-		public static readonly string CONTROLLER_RELATIVE_URL = "controller.aspx";
+		public static readonly string CONTROLLER_RELATIVE_URL = "default.aspx";
 
 		public DefaultUrlBuilder(IPathMapper pathMapper)
 		{
