@@ -1282,6 +1282,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "util\HtmlAwareMultiTransformer.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "util\HtmlExceptionFormatter.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -1303,6 +1308,11 @@
                 />
                 <File
                     RelPath = "util\IFileWatcher.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "util\IMultiTransformer.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

@@ -1,5 +1,6 @@
 using System.Web;
 using System.Web.UI;
+using ThoughtWorks.CruiseControl.Core.Util;
 using ThoughtWorks.CruiseControl.WebDashboard.IO;
 using ThoughtWorks.CruiseControl.WebDashboard.MVC;
 using ThoughtWorks.CruiseControl.WebDashboard.MVC.Cruise;
@@ -28,12 +29,15 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 			giverAndRegistrar.AddTypedObject(typeof(IRequest), new AggregatedRequest(new NameValueCollectionRequest(request.Form), new NameValueCollectionRequest(request.QueryString)));
 			
 			giverAndRegistrar.SetImplementationType(typeof(IPathMapper), typeof(HttpPathMapper));
-			// Would be good to test these next 2
-			giverAndRegistrar.SetDependencyImplementationForIdentifer(SaveNewProjectAction.ACTION_NAME, typeof(IPathMapper), typeof(PathMapperUsingHostName));
-			giverAndRegistrar.SetDependencyImplementationForIdentifer(SaveEditProjectAction.ACTION_NAME, typeof(IPathMapper), typeof(PathMapperUsingHostName));
+			giverAndRegistrar.SetImplementationType(typeof(IMultiTransformer), typeof(PathMappingMultiTransformer));
 
 			giverAndRegistrar.SetDependencyImplementationForType(typeof(DefaultUserRequestSpecificSideBarViewBuilder), typeof(IRecentBuildsViewBuilder), typeof(DecoratingRecentBuildsPanelBuilder));
 			giverAndRegistrar.SetDependencyImplementationForType(typeof(DecoratingRecentBuildsPanelBuilder), typeof(IRecentBuildsViewBuilder), typeof(RecentBuildLister));
+			giverAndRegistrar.SetDependencyImplementationForType(typeof(PathMappingMultiTransformer), typeof(IMultiTransformer), typeof (HtmlAwareMultiTransformer));
+
+			// Would be good to test these next 2
+			giverAndRegistrar.SetDependencyImplementationForIdentifer(SaveNewProjectAction.ACTION_NAME, typeof(IPathMapper), typeof(PathMapperUsingHostName));
+			giverAndRegistrar.SetDependencyImplementationForIdentifer(SaveEditProjectAction.ACTION_NAME, typeof(IPathMapper), typeof(PathMapperUsingHostName));
 
 			giverAndRegistrar.CreateImplementationMapping(ViewAllBuildsAction.ACTION_NAME, 
 				typeof(ViewAllBuildsAction)).Decorate(typeof(ServerCheckingProxyAction)).Decorate(typeof(ProjectCheckingProxyAction)).Decorate(typeof(CruiseActionProxyAction));

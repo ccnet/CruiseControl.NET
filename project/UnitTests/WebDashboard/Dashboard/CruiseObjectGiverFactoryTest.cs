@@ -8,6 +8,7 @@ using ThoughtWorks.CruiseControl.WebDashboard.IO;
 using ThoughtWorks.CruiseControl.WebDashboard.MVC.Cruise;
 using ThoughtWorks.CruiseControl.WebDashboard.MVC.View;
 using ThoughtWorks.CruiseControl.WebDashboard.Plugins.ViewAllBuilds;
+using ThoughtWorks.CruiseControl.WebDashboard.Plugins.ViewBuildReport;
 using ThoughtWorks.CruiseControl.WebDashboard.ServerConnection;
 
 namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
@@ -39,6 +40,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 			Assert.IsNotNull(objectGiver.GiveObjectByType(typeof(TopControlsViewBuilder)));
 
 			Assert.IsTrue((objectGiver.GiveObjectById(ViewAllBuildsAction.ACTION_NAME)) is CruiseActionProxyAction);
+			Assert.IsTrue((objectGiver.GiveObjectById(ViewBuildReportAction.ACTION_NAME)) is CruiseActionProxyAction);
 		}
 	}
 }

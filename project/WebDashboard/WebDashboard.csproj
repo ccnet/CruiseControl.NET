@@ -378,6 +378,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Dashboard\PathMappingMultiTransformer.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Dashboard\ProjectDetailsListGenerator.cs"
                     SubType = "Code"
                     BuildAction = "Compile"

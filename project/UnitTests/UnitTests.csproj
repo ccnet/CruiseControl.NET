@@ -309,6 +309,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Core\Util\HtmlAwareMultiTransformerTest.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Core\Util\SystemIoFileSystemTest.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -414,6 +419,11 @@
                 />
                 <File
                     RelPath = "WebDashboard\Dashboard\ObjectGiverAndRegistrarTest.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "WebDashboard\Dashboard\PathMappingMultiTransformerTest.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
