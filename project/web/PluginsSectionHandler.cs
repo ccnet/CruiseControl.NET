@@ -7,7 +7,7 @@ using System.Text;
 
 namespace tw.ccnet.web
 {
-	public class ProjectPluginsSectionHandler : IConfigurationSectionHandler
+	public class PluginsSectionHandler : IConfigurationSectionHandler
 	{
 		public object Create(object parent, object configContext, System.Xml.XmlNode section)
 		{
@@ -17,7 +17,7 @@ namespace tw.ccnet.web
 			{
 				if (node.NodeType == System.Xml.XmlNodeType.Element) 
 				{
-					projectPlugins.Add(new ProjectPluginSpecification(node.Attributes["linkText"].Value, node.Attributes["linkUrl"].Value));
+					projectPlugins.Add(new PluginSpecification(node.Attributes["linkText"].Value, node.Attributes["linkUrl"].Value));
 				}
 			}
 

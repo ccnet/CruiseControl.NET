@@ -199,12 +199,12 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "ProjectPluginSpecification.cs"
+                    RelPath = "PluginSpecification.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "ProjectPluginsSectionHandler.cs"
+                    RelPath = "PluginsSectionHandler.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

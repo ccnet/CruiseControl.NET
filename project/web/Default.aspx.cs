@@ -20,6 +20,7 @@ namespace tw.ccnet.web
 	{
 		protected HtmlTableCell HeaderCell;
 		protected HtmlTableCell DetailsCell;
+		protected HtmlGenericControl PluginLinks;
 		protected System.Web.UI.WebControls.HyperLink TestDetailsLink;
 		protected System.Web.UI.WebControls.HyperLink LogLink;
 		protected System.Web.UI.WebControls.Label BodyLabel;
@@ -29,8 +30,7 @@ namespace tw.ccnet.web
 		private void Page_Load(object sender, System.EventArgs e)
 		{
 			resolveLogFile();
-			generateLogLink();
-			generateTestDetailsLink();
+			generatePluginLinks();
 
 			try
 			{
@@ -65,17 +65,32 @@ namespace tw.ccnet.web
 			}
 		}
 
-		// TODO - assumes log files in 'webdir/log'
-		private void generateLogLink()
+		private void generatePluginLinks()
 		{
-			LogLink.NavigateUrl = ResolveUrl("log/" + new FileInfo(logfile).Name);
+			if (ConfigurationSettings.GetConfig("CCNet/buildPlugins") == null)
+			{
+				return;
+			}
+
+			string pluginLinksHtml = "";
+			bool firstLink = true;
+			foreach (PluginSpecification spec in (IEnumerable) ConfigurationSettings.GetConfig("CCNet/buildPlugins"))
+			{
+				if (!firstLink)
+				{
+					pluginLinksHtml += String.Format("|&nbsp; ");
+				}
+				pluginLinksHtml += String.Format(@"<a class=""link"" href=""{0}"">{1}</a> ", genLogUrl(spec.LinkUrl), spec.LinkText);
+				firstLink = false;
+			}
+			PluginLinks.InnerHtml = pluginLinksHtml;
 		}
 
-		private void generateTestDetailsLink()
+		private string genLogUrl(string urlPrefix)
 		{
-			TestDetailsLink.NavigateUrl = ResolveUrl("TestTiming.aspx?/log=" + new FileInfo(logfile).Name);
+			return ResolveUrl(String.Format("{0}{1}", urlPrefix, new FileInfo(logfile).Name));
 		}
-
+		
 		private void InitDisplayLogFile()
 		{
 			StringBuilder builder = new StringBuilder();

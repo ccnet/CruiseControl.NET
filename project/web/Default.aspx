@@ -23,9 +23,7 @@
 						<td height="18" width="18" bgcolor="#ffffff"><img src="images/shim.gif" border="0"></td>
 						<td height="18" width="18"><img src="images/shim.gif" border="0"></td>
 						<td valign="middle">
-							<asp:HyperLink class="link" id="TestDetailsLink" runat="server">test details</asp:HyperLink>
-							|&nbsp;
-							<asp:HyperLink class="link" id="LogLink" runat="server">log file</asp:HyperLink>
+							<span id="PluginLinks" runat="server" runAt="server" />
 						</td>
 						<td><img src="images/shim.gif" width="6" border="0"></td>
 					</tr>

@@ -26,9 +26,7 @@ namespace tw.ccnet.web
 		protected SiteMesh.DecoratorControls.GetProperty prop1;
 		protected System.Web.UI.HtmlControls.HtmlTableCell Td2;
 		protected SiteMesh.DecoratorControls.Title Title3;
-		protected HtmlAnchor tests;
 		protected System.Web.UI.HtmlControls.HtmlTableCell contentCell;
-		protected HtmlAnchor testTiming;
 
 		/*
 		public Control Content
@@ -48,8 +46,6 @@ namespace tw.ccnet.web
 			InitLogFileList(path);
 			InitAdjacentAnchors(path);
 			InitProjectPluginLinks();
-			tests.HRef = BuildLogFileUri("Tests.aspx");
-			testTiming.HRef = BuildLogFileUri("TestTiming.aspx");
 		}
 
 		private void InitProjectPluginLinks()
@@ -60,7 +56,7 @@ namespace tw.ccnet.web
 			}
 
 			string pluginLinksHtml = "";
-			foreach (ProjectPluginSpecification spec in (IEnumerable) ConfigurationSettings.GetConfig("CCNet/projectPlugins"))
+			foreach (PluginSpecification spec in (IEnumerable) ConfigurationSettings.GetConfig("CCNet/projectPlugins"))
 			{
 				pluginLinksHtml += String.Format(@"|&nbsp; <a class=""link"" href=""{0}"">{1}</a> ", spec.LinkUrl, spec.LinkText);
 			}

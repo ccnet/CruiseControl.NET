@@ -23,10 +23,6 @@
 					<a class="link" id="nextLog" runat="server">next</a> 
 					|&nbsp; 
 					<a class="link" id="previousLog" runat="server">previous</a> 
-					|&nbsp; 
-					<a class="link" id="tests" runat="server">tests</a> 
-					|&nbsp; 
-					<a class="link" id="testTiming" runat="server">test timing</a>
 					<span id="ProjectPluginLinks" runat="server" runAt="server" />
 					&nbsp;
 				</td>
