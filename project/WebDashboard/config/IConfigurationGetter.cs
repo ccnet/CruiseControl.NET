@@ -5,6 +5,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Config
 	/// </summary>
 	public interface IConfigurationGetter
 	{
-		object GetConfig(string sectionName);
+		string GetSimpleConfigSetting(string keyname);
+		object GetConfigFromSection(string sectionName);
 	}
 }

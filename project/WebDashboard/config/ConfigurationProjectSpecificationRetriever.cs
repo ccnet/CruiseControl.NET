@@ -19,7 +19,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.config
 		{
 			get
 			{
-				object projects = configurationGetter.GetConfig("CCNet/projects");
+				object projects = configurationGetter.GetConfigFromSection("CCNet/projects");
 				if (projects == null)
 				{
 					throw new ApplicationException("<projects> section not configured correctly in web.config");

@@ -32,7 +32,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard
 		{
 			try
 			{
-				webUtil = WebUtil.Create(Request, Context);
+				webUtil = WebUtil.Create(Request, Context, this);
 				logfile = webUtil.GetLogFileAndCheckItExists();
 				GeneratePluginLinks();
 				InitDisplayLogFile();

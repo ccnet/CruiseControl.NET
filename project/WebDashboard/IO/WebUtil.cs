@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Specialized;
 using System.IO;
 using System.Web;
+using System.Web.UI;
 using ThoughtWorks.CruiseControl.Core;
 using ThoughtWorks.CruiseControl.WebDashboard.Config;
 
@@ -15,9 +16,9 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.IO
 		private readonly IPathMapper pathMapper;
 
 		// ToDo - get rid of this when we have enough CDI happening
-		public static WebUtil Create(HttpRequest request, HttpContext context)
+		public static WebUtil Create(HttpRequest request, HttpContext context, Control webControl)
 		{
-			return new WebUtil(new ConfigurationSettingsConfigGetter(), request.QueryString, new HttpContextPathMapper(context));
+			return new WebUtil(new ConfigurationSettingsConfigGetter(), request.QueryString, new HttpPathMapper(context, webControl));
 		}
 
 		public WebUtil(IConfigurationGetter configurationGetter, NameValueCollection queryString, IPathMapper pathMapper)
@@ -51,7 +52,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.IO
 				if (dirName.IndexOf(':') < 0)
 				{
 					// If so try and treat as relative to the webapp
-					logDirectory = new DirectoryInfo(pathMapper.MapPath(dirName));
+					logDirectory = new DirectoryInfo(pathMapper.GetLocalPathFromURLPath(dirName));
 					if (!logDirectory.Exists)
 					{
 						throw new Exception(string.Format("Can't find log directory [{0}] (Full path : [{1}]", 
@@ -69,7 +70,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.IO
 
 		public string GetXslFilename(string xslfile)
 		{
-			return Path.Combine(pathMapper.MapPath("xsl"), xslfile);
+			return Path.Combine(pathMapper.GetLocalPathFromURLPath("xsl"), xslfile);
 		}
 
 		public string GetCurrentlyViewedProjectName()
@@ -90,7 +91,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.IO
 
 		private string GetLogDirName()
 		{
-			object projects = configurationGetter.GetConfig("CCNet/projects");
+			object projects = configurationGetter.GetConfigFromSection("CCNet/projects");
 			if (projects == null)
 			{
 				throw new ApplicationException("<projects> section not configured correctly in web.config");

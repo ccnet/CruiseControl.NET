@@ -480,7 +480,7 @@
                     BuildAction = "Content"
                 />
                 <File
-                    RelPath = "IO\HttpContextPathMapper.cs"
+                    RelPath = "IO\HttpPathMapper.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

@@ -14,7 +14,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard
 		{
 			try
 			{
-				InitStatistics(WebUtil.Create(Request, Context).GetLogDirectory().FullName);
+				InitStatistics(WebUtil.Create(Request, Context, this).GetLogDirectory().FullName);
 			}
 			catch(CruiseControlException ex)
 			{

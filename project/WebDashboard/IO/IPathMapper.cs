@@ -5,6 +5,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.IO
 	/// </summary>
 	public interface IPathMapper
 	{
-		string MapPath(string originalPath);
+		string GetLocalPathFromURLPath(string originalPath);
+		string GetAbsoluteURLForRelativePath(string relativePath);
 	}
 }

@@ -30,7 +30,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard
 
 		private void Page_Load(object sender, EventArgs e)
 		{
-			webUtil = WebUtil.Create(Request, Context);
+			webUtil = WebUtil.Create(Request, Context, this);
 			string path = webUtil.GetLogDirectory().FullName;
 			InitBuildStats(path);
 			InitLogFileList(path);

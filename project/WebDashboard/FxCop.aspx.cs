@@ -11,7 +11,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard
 
 		private void Page_Load(object sender, EventArgs e)
 		{
-			WebUtil webUtil = WebUtil.Create(Request, Context);
+			WebUtil webUtil = WebUtil.Create(Request, Context, this);
 			string xslFilename = webUtil.GetXslFilename("FxCopReport.xsl");
 			BodyArea.InnerHtml = new PageTransformer(webUtil.GetLogFileAndCheckItExists(),xslFilename).LoadPageContent();
 		}

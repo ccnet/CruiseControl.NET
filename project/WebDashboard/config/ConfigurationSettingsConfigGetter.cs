@@ -1,3 +1,6 @@
+using System;
+using System.Configuration;
+
 namespace ThoughtWorks.CruiseControl.WebDashboard.Config
 {
 	/// <summary>
@@ -5,9 +8,14 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Config
 	/// </summary>
 	public class ConfigurationSettingsConfigGetter : IConfigurationGetter
 	{
-		public object GetConfig(string sectionName)
+		public string GetSimpleConfigSetting(string keyname)
 		{
-			return System.Configuration.ConfigurationSettings.GetConfig(sectionName);
+			return ConfigurationSettings.AppSettings[keyname];
+		}
+
+		public object GetConfigFromSection(string sectionName)
+		{
+			return ConfigurationSettings.GetConfig(sectionName);
 		}
 	}
 }

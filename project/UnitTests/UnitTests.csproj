@@ -134,6 +134,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "WebDashboard\Cache\LocalFileCacheManagerTest.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "WebDashboard\IO\QueryStringRequestWrapperTest.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
