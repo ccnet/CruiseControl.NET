@@ -25,14 +25,6 @@ namespace ThoughtWorks.CruiseControl.Core
 		}
 
 		/// <summary>
-		/// A component to trigger when to stop this project.
-		/// </summary>
-		IStopProjectTrigger StopProjectTrigger 
-		{
-			get;
-		}
-
-		/// <summary>
 		/// Where the results web page for this project can be found
 		/// </summary>
 		string WebURL 

@@ -18,19 +18,17 @@ namespace ThoughtWorks.CruiseControl.Core
 	public class ProjectIntegrator : IProjectIntegrator, IDisposable
 	{
 		private readonly IIntegratable integratable;
-		private readonly IStopProjectTrigger stopProjectTrigger;
 		private IIntegrationTrigger integrationTrigger;
 		private IProject _project;
 		private bool _forceBuild;
 		private Thread _thread;
 		private ProjectIntegratorState _state = ProjectIntegratorState.Stopped;
 
-		public ProjectIntegrator(IProject project) : this(project.IntegrationTrigger, project.StopProjectTrigger, project, project) { }
+		public ProjectIntegrator(IProject project) : this(project.IntegrationTrigger, project, project) { }
 
-		public ProjectIntegrator(IIntegrationTrigger integrationTrigger, IStopProjectTrigger stopProjectTrigger, IIntegratable integratable, IProject project)
+		public ProjectIntegrator(IIntegrationTrigger integrationTrigger, IIntegratable integratable, IProject project)
 		{
 			this.integrationTrigger = integrationTrigger;
-			this.stopProjectTrigger = stopProjectTrigger;
 			_project = project;
 			this.integratable = integratable;
 		}
@@ -106,12 +104,7 @@ namespace ThoughtWorks.CruiseControl.Core
 
 					// notify the schedule whether the build was successful or not
 					integrationTrigger.IntegrationCompleted();
-					stopProjectTrigger.IntegrationCompleted();
 				}
-
-				// should we stop the entire continuous integration process for this project?
-				if (stopProjectTrigger.ShouldStopProject())
-					_state = ProjectIntegratorState.Stopping;
 
 				// sleep for a short while, to avoid hammering CPU
 				Thread.Sleep(100);

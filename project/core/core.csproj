@@ -679,22 +679,12 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "schedule\NeverStopProjectTrigger.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
                     RelPath = "schedule\NeverTriggerIntegrationTrigger.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
                     RelPath = "schedule\ScheduleIntegrationTrigger.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "schedule\StopProjectAfterNumberOfIntegrationsTrigger.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

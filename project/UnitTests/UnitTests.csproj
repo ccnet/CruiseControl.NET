@@ -244,17 +244,7 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "Core\Schedule\NeverStopProjectTriggerTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
                     RelPath = "Core\Schedule\NeverTriggerIntegrationTriggerTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Core\Schedule\StopProjectAfterNumberOfIntegrationsTriggerTest.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

@@ -12,7 +12,6 @@ namespace ThoughtWorks.CruiseControl.Core
 
 		private string _name;
 		private IIntegrationTrigger integrationTrigger = new NeverTriggerIntegrationTrigger();
-		private IStopProjectTrigger stopProjectTrigger = new NeverStopProjectTrigger();
 		private string _configuredWorkingDirectory;
 		private string _configuredArtifactDirectory;
 
@@ -28,13 +27,6 @@ namespace ThoughtWorks.CruiseControl.Core
 		{
 			get { return integrationTrigger; }
 			set { integrationTrigger = value; }
-		}
-
-		[ReflectorProperty("stopProjectTrigger", InstanceTypeKey="type", Required=false)]
-		public virtual IStopProjectTrigger StopProjectTrigger
-		{
-			get { return stopProjectTrigger; }
-			set { stopProjectTrigger = value; }
 		}
 
 		[ReflectorProperty("workingDirectory", Required=false)]

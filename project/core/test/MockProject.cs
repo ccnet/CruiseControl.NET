@@ -34,12 +34,6 @@ namespace ThoughtWorks.CruiseControl.Core.Test
 			set { _schedule = value; } 
 		}
 
-		public IStopProjectTrigger StopProjectTrigger
-		{
-			get { return null; }
-			set { return; }
-		}
-
 		public ArrayList Publishers
 		{
 			get { return new ArrayList(); }

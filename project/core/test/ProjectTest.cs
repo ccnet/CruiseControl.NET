@@ -124,7 +124,6 @@ namespace ThoughtWorks.CruiseControl.Core.Test
 			Assert.IsTrue(project.Labeller is DefaultLabeller);
 			Assert.IsTrue(project.StateManager is IntegrationStateManager);
 			Assert.IsTrue(project.IntegrationTrigger is IntervalIntegrationTrigger);
-			Assert.IsTrue(project.StopProjectTrigger is StopProjectAfterNumberOfIntegrationsTrigger);
 			Assert.IsTrue(project.Publishers[0] is XmlLogPublisher);
 			Assert.IsTrue(project.Tasks[0] is MergeFilesTask);
 			Assert.AreEqual(@"c:\my\working\directory", project.ConfiguredWorkingDirectory);
@@ -150,7 +149,6 @@ namespace ThoughtWorks.CruiseControl.Core.Test
 			Assert.IsTrue(project.SourceControl is MockSourceControl);
 			Assert.IsTrue(project.Labeller is DefaultLabeller);
 			Assert.IsTrue(project.IntegrationTrigger is NeverTriggerIntegrationTrigger);
-			Assert.IsTrue(project.StopProjectTrigger is NeverStopProjectTrigger);
 			Assert.IsNull(project.Publishers);
 			Assert.AreEqual(0, project.Tasks.Length);
 			VerifyAll();

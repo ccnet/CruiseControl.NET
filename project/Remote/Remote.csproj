@@ -150,11 +150,6 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "IStopTrigger.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
                     RelPath = "NoSuchProjectException.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
