@@ -21,9 +21,10 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 		private string _workingDirectory;
 		private bool _labelOnSuccess;
         private string _restrictLogins;
-
+		private IUrlBuilder _urlBuilder;
+ 
 		public Cvs() : base(new CvsHistoryParser()) { }
-
+ 
 		[ReflectorProperty("executable")]
 		public string Executable
 		{
@@ -53,10 +54,18 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 		}
 
         [ReflectorProperty("restrictLogins", Required=false)]
-        public string RestrictLogins {
+        public string RestrictLogins 
+		{
             get{ return _restrictLogins; }
             set{ _restrictLogins = value; }
         }
+
+		[ReflectorProperty("webUrlBuilder", InstanceTypeKey="type", Required=false)]
+		public IUrlBuilder UrlBuilder
+		{
+			get { return _urlBuilder; }
+			set { _urlBuilder = value; }
+		}
 
 		[ReflectorProperty("branch", Required=false)]
 		public string Branch;
@@ -68,7 +77,12 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 
 		public override Modification[] GetModifications(DateTime from, DateTime to)
 		{
-			return GetModifications(CreateHistoryProcessInfo(from, to), from, to);
+			Modification[] modifications = GetModifications(CreateHistoryProcessInfo(from, to), from, to);
+			if ( _urlBuilder != null ) 
+			{
+				_urlBuilder.SetupModification(modifications);
+			}
+			return modifications;
 		}
 
 		public override void LabelSourceControl(string label, DateTime timeStamp)

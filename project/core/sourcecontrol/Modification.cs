@@ -18,6 +18,7 @@ namespace ThoughtWorks.CruiseControl.Core
 		private string userName;
 		private string emailAddress;
 		private string comment;
+		private string url;
 
 		#region properties
 		public string Type
@@ -66,6 +67,12 @@ namespace ThoughtWorks.CruiseControl.Core
 			get { return comment; }
 			set { comment = value; }
 		}
+
+		public string Url
+		{
+			get { return url; }
+			set { url = value; }
+		}
 		#endregion
 
 		public XmlDocument ToDocument() 
@@ -84,12 +91,15 @@ namespace ThoughtWorks.CruiseControl.Core
 			userElement.InnerText = userName;
 			XmlElement commentElement = doc.CreateElement("comment");
 			commentElement.InnerText = comment;
+			XmlElement urlElement = doc.CreateElement("url");
+			urlElement.InnerText = url;
 			
 			modificationElement.AppendChild(filenameElement);
 			modificationElement.AppendChild(projectElement);
 			modificationElement.AppendChild(dateElement);
 			modificationElement.AppendChild(userElement);
 			modificationElement.AppendChild(commentElement);
+			modificationElement.AppendChild(urlElement);
 
 			// not all sourcecontrols guarantee a non-null email address
 			if ( emailAddress != null ) 

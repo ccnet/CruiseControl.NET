@@ -34,7 +34,23 @@
 
             <td class="modifications-data" valign="top"><xsl:value-of select="@type"/></td>
             <td class="modifications-data" valign="top"><xsl:value-of select="user"/></td>
-            <td class="modifications-data" valign="top"><xsl:value-of select="project"/>/<xsl:value-of select="filename"/></td>
+            <td class="modifications-data" valign="top">
+            	<xsl:choose>
+            		<xsl:when test="count(url) = 1 ">
+						<a>
+							<xsl:attribute name="href">
+								<xsl:value-of select="url" />
+							</xsl:attribute>
+							<xsl:if test="project != ''"><xsl:value-of select="project"/>/</xsl:if>
+							<xsl:value-of select="filename"/>
+						</a>
+					</xsl:when>
+            		<xsl:otherwise>
+						<xsl:if test="project != ''"><xsl:value-of select="project"/>/</xsl:if>
+						<xsl:value-of select="filename"/>
+		      		</xsl:otherwise>
+            	</xsl:choose>
+			</td>
             <td class="modifications-data" valign="top"><xsl:value-of select="comment"/></td>
         </tr>
     </xsl:template>

@@ -609,6 +609,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "sourcecontrol\IWebUrlBuilder.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "sourcecontrol\Modification.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -664,12 +669,22 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "sourcecontrol\ViewCVSUrlBuilder.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "sourcecontrol\Vss.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
                     RelPath = "sourcecontrol\VssHistoryParser.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "sourcecontrol\WebSVNUrlBuilder.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -764,6 +779,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "sourcecontrol\test\ViewCVSBuilderTest.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "sourcecontrol\test\VssApplyLabelTest.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -780,6 +800,11 @@
                 />
                 <File
                     RelPath = "sourcecontrol\test\VssTest.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "sourcecontrol\test\WebSVNBuilderTest.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

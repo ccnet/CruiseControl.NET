@@ -36,6 +36,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test
 			mod.UserName = "User<>Name";
 			mod.Comment = "Comment";
 			mod.EmailAddress = "foo.bar@quuuux.quuux.quux.qux";
+			mod.Url = "http://localhost/viewcvs/";
 
 			string expected = string.Format(
 @"<modification type=""unknown"">
@@ -44,6 +45,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test
 	<date>{0}</date>
 	<user>User&lt;&gt;Name</user>
 	<comment>Comment</comment>
+	<url>http://localhost/viewcvs/</url>
 	<email>foo.bar@quuuux.quuux.quux.qux</email>
 </modification>", DateUtil.FormatDate(modifiedTime));
 

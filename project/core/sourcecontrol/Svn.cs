@@ -19,11 +19,19 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 		private string _workingDirectory;
 		private bool _tagOnSuccess;
 		private string _tagBaseUrl;
+		private IUrlBuilder _urlBuilder;
 
 		public Svn(ProcessExecutor executor) : base(new SvnHistoryParser(), executor) { }
 
 		public Svn(): base (new SvnHistoryParser())
 		{
+		}
+
+		[ReflectorProperty("webUrlBuilder", InstanceTypeKey="type", Required = false)]
+		public IUrlBuilder UrlBuilder
+		{
+			get { return _urlBuilder; }
+			set { _urlBuilder = value; }
 		}
 
 		[ReflectorProperty("executable")] 
