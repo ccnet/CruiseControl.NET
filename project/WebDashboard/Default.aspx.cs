@@ -72,7 +72,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard
 
 		private string GenerateForceBuildURL(ProjectStatus status)
 		{
-			return "dashboard.aspx?forceBuildFor=" + status.Name;
+			return "Default.aspx?forceBuildFor=" + status.Name;
 		}
 
 		private void HandlePostBack(Hashtable urlsForProjects)
