@@ -17,11 +17,17 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Perforce
 		private string _client;
 		private string _user;
 		private string _port;
+		private string _workingDirectory;
 		private readonly ProcessExecutor processExecutor;
 		private readonly IP4Initializer p4Initializer;
 		private readonly IP4ProcessInfoCreator processInfoCreator;
 
-		public P4() : this (new ProcessExecutor(), new ProcessP4Initializer(new ProcessExecutor()), new P4ConfigProcessInfoCreator()) { }
+		public P4()
+		{
+			processExecutor = new ProcessExecutor();
+			processInfoCreator = new P4ConfigProcessInfoCreator();
+			p4Initializer = new ProcessP4Initializer(processExecutor, processInfoCreator);
+		}
 
 		public P4(ProcessExecutor processExecutor, IP4Initializer initializer, IP4ProcessInfoCreator processInfoCreator)
 		{
@@ -63,6 +69,13 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Perforce
 		{
 			get{ return _port;}
 			set{ _port = value;}
+		}
+
+		[ReflectorProperty("workingDirectory", Required=false)]
+		public string WorkingDirectory
+		{
+			get{ return _workingDirectory;}
+			set{ _workingDirectory = value;}
 		}
 
 		[ReflectorProperty("applyLabel", Required = false)]
@@ -220,9 +233,16 @@ View:
 			return result.StandardOutput.Trim() + "\r\n" + result.StandardError.Trim();
 		}
 
-		public void InitializeDirectory()
+		public void InitializeDirectory(string projectName, string workingDirectory)
 		{
-			p4Initializer.Initialize(this);
+			if (_workingDirectory == null || _workingDirectory == string.Empty)
+			{
+				p4Initializer.Initialize(this, projectName, workingDirectory);	
+			}
+			else
+			{
+				p4Initializer.Initialize(this, projectName, _workingDirectory);
+			}
 		}
 	}
 }

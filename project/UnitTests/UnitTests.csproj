@@ -194,6 +194,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Core\SourceControl\Perforce\ProcessP4InitializerTest.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "WebDashboard\Cache\LocalFileCacheManagerTest.cs"
                     SubType = "Code"
                     BuildAction = "Compile"

@@ -1,20 +1,75 @@
 using System;
+using System.IO;
+using System.Net;
 using ThoughtWorks.CruiseControl.Core.Util;
 
 namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Perforce
 {
+	/// <summary>
+	/// Sets up a Perforce environment by creating a client spec. Uses the P4 command line client to do this.
+	/// We require a client name to do this, so if the user hasn't specified one then we create an appropriate
+	/// one (see tests)
+	/// </summary>
 	public class ProcessP4Initializer : IP4Initializer
 	{
+		public static readonly string ClientPrefix = "CCNet";
+		private readonly IP4ProcessInfoCreator processInfoCreator;
 		private readonly ProcessExecutor executor;
 
-		public ProcessP4Initializer(ProcessExecutor executor)
+		public ProcessP4Initializer(ProcessExecutor executor, IP4ProcessInfoCreator processInfoCreator)
 		{
 			this.executor = executor;
+			this.processInfoCreator = processInfoCreator;
 		}
 
-		public void Initialize(P4 p4)
+		public void Initialize(P4 p4, string project, string workingDirectory)
 		{
-			throw new NotImplementedException();
+			CheckWorkingDirectoryIsValid(workingDirectory);
+			CheckViewIsValid(p4.View);
+			CreateClientNameIfOneNotSet(p4, project);
+			ProcessInfo processInfo = processInfoCreator.CreateProcessInfo(p4, "client -i");
+			processInfo.StandardInputContent = CreateClientSpecification(p4, workingDirectory);
+			executor.Execute(processInfo);
+		}
+
+		private void CreateClientNameIfOneNotSet(P4 p4, string projectName)
+		{
+			if (p4.Client == null || p4.Client == string.Empty)
+			{
+				p4.Client = string.Format("{0}-{1}-{2}", ClientPrefix, Dns.GetHostName(), projectName);
+			}
+		}
+
+		private void CheckViewIsValid(string view)
+		{
+			if (!view.StartsWith("//") || !view.EndsWith("/..."))
+			{
+				throw new CruiseControlException(string.Format(@"[{0}] is not a valid view - it should start with '//' and end with '/...'", view));
+			}
+		}
+
+		private void CheckWorkingDirectoryIsValid(string directory)
+		{
+			if (!Path.IsPathRooted(directory))
+			{
+				throw new CruiseControlException(string.Format("Working directory [{0}] does not represent an absolute path", directory));
+			}
+		}
+
+		private string CreateClientSpecification(P4 p4, string workingDirectory)
+		{
+			return string.Format(@"Client: {0}
+
+Root:   {1}
+
+View:
+        {2}
+", p4.Client, workingDirectory, GenerateClientView(p4.View, p4.Client));
+		}
+
+		private string GenerateClientView(string view, string client)
+		{
+			return view + " " + view.Insert(2, client + "/");
 		}
 	}
 }

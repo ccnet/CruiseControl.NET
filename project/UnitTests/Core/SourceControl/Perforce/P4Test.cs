@@ -49,6 +49,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol.Perforce
   <client>myclient</client>
   <user>me</user>
   <port>anotherserver:2666</port>
+  <workingDirectory>myWorkingDirectory</workingDirectory>
 </sourceControl>
 ";
 			P4 p4 = CreateP4WithNoArgContructor(xml);
@@ -57,18 +58,12 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol.Perforce
 			AssertEquals("myclient", p4.Client);
 			AssertEquals("me", p4.User);
 			AssertEquals("anotherserver:2666", p4.Port);
+			AssertEquals("myWorkingDirectory", p4.WorkingDirectory);
 		}
 
 		private P4 CreateP4WithNoArgContructor(string p4root)
 		{
 			P4 perforce = new P4();
-			NetReflector.Read(p4root, perforce);
-			return perforce;
-		}
-
-		private P4 CreateP4(string p4root)
-		{
-			P4 perforce = CreateP4();
 			NetReflector.Read(p4root, perforce);
 			return perforce;
 		}
@@ -80,18 +75,6 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol.Perforce
 				(IP4ProcessInfoCreator) processInfoCreatorMock.MockInstance);
 		}
 
-		private P4 CreateP4(ProcessExecutor processExecutor, string p4root)
-		{
-			return CreateP4(processExecutor, new ProcessP4Initializer(processExecutor), p4root);
-		}
-
-		private P4 CreateP4(ProcessExecutor processExecutor, IP4Initializer p4Initializer, string p4root)
-		{
-			P4 perforce = new P4(processExecutor, p4Initializer, null);
-			NetReflector.Read(p4root, perforce);
-			return perforce;
-		}
-		
 		[Test]
 		public void ReadConfigDefaults()
 		{
@@ -201,7 +184,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol.Perforce
 		public void CreateGetDescribeProcessWithEvilCode()
 		{
 			string changes = "3327 3328 332; echo 'rm -rf /'";
-			ProcessInfo process = new P4().CreateDescribeProcess(changes);
+			new P4().CreateDescribeProcess(changes);
 		}
 
 		[Test]
@@ -209,7 +192,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol.Perforce
 		public void CreateGetDescribeProcessWithNoChanges()
 		{
 			string changes = "";
-			ProcessInfo process = new P4().CreateDescribeProcess(changes);
+			new P4().CreateDescribeProcess(changes);
 			// this should never happen, but here's a test just in case.
 		}
 
@@ -354,15 +337,47 @@ View:
 		}
 
 		[Test]
-		public void ShouldCallInitializerWithAppropriateArgumentsWhenInitializeDirectoryCalled()
+		public void ShouldCallInitializerWithGivenWorkingDirectoryIfAlternativeNotSet()
 		{
 			// Setup
 			P4 p4 = CreateP4();
 			p4.View = "//depot/myproject/...";
-			p4InitializerMock.Expect("Initialize",  p4);
+			p4InitializerMock.Expect("Initialize",  p4, "myProject", "workingDirFromProject");
 
 			// Execute
-			p4.InitializeDirectory();
+			p4.InitializeDirectory("myProject", "workingDirFromProject");
+
+			// Verify
+			VerifyAll();
+		}
+
+		[Test]
+		public void ShouldCallInitializerWithGivenWorkingDirectoryIfAlternativeSetToEmpty()
+		{
+			// Setup
+			P4 p4 = CreateP4();
+			p4.View = "//depot/myproject/...";
+			p4.WorkingDirectory = "";
+			p4InitializerMock.Expect("Initialize",  p4, "myProject", "workingDirFromProject");
+
+			// Execute
+			p4.InitializeDirectory("myProject", "workingDirFromProject");
+
+			// Verify
+			VerifyAll();
+		}
+
+		[Test]
+		public void ShouldCallInitializerWithConfiguredWorkingDirectoryIfAlternativeIsConfigured()
+		{
+			// Setup
+			P4 p4 = CreateP4();
+			p4.View = "//depot/myproject/...";
+			p4.WorkingDirectory = "p4sOwnWorkingDirectory";
+			p4InitializerMock.Expect("Initialize",  p4, "myProject", "p4sOwnWorkingDirectory");
+
+			// Execute
+			p4.InitializeDirectory("myProject", "workingDirFromProject");
 
 			// Verify
 			VerifyAll();
