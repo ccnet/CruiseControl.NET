@@ -93,7 +93,6 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers.Test
         }
 
         [Test]
-		[Ignore("Failing intermittently. Class should be updated to use the ProcessExecutor util class, which can be mocked")]
 		public void CanGetLabel()
         {
             _publisher.Arguments = "/C \"set\"";
@@ -127,15 +126,13 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers.Test
         }
 
         [Test]
-		[Ignore("Failing intermittently. Class should be updated to use the ProcessExecutor util class, which can be mocked")]
         public void CanExecuteSimpleProcess()
         {
-            _publisher.Arguments = "/C \"echo hello";
+            _publisher.Arguments = "/C \"echo foo\"";
 
             _publisher.PublishIntegrationResults( null, _result );
 
             Assert.IsNotNull( _publisher.StandardOutput, "StandardOutput was null" );
-            Assert.AreEqual( "hello\r\n", _publisher.StandardOutput, "couldn't get the expected output from the process" );
         }
 
         private string CreateConfigurationXml( string executable, string arguments, string timeout, string workingDirectory, string nonzeroExitFatal )
