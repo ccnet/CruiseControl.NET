@@ -112,7 +112,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Config
 		}
         
 		[Test]
-			// [CCNET-63] XML comments before project tag was causing NetReflectorException
+		// [CCNET-63] XML comments before project tag was causing NetReflectorException
 		public void PopulateProjectsFromXml_WithComments()
 		{
 			string projectXml = @"<!-- A Comment -->" + ConfigurationFixture.GenerateProjectXml("test");

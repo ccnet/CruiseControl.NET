@@ -42,19 +42,14 @@ namespace ThoughtWorks.CruiseControl.Console.Test
 		[Test]
 		public void ForceBuildCruiseServerProject()
 		{
-			Mock mockCruiseManager = new DynamicMock(typeof(ICruiseManager));
-			mockCruiseManager.Expect("ForceBuild", "test");
-			mockCruiseManager.Expect("WaitForExit","test");
-
 			Mock mockCruiseServer = new DynamicMock(typeof(ICruiseServer));
-			mockCruiseServer.ExpectAndReturn("CruiseManager", mockCruiseManager.MockInstance);
-			mockCruiseServer.ExpectAndReturn("CruiseManager", mockCruiseManager.MockInstance);
+			mockCruiseServer.Expect("ForceBuild", "test");
+			mockCruiseServer.Expect("WaitForExit","test");
 
 			ArgumentParser parser = new ArgumentParser(new string[] { "-project:test" });
 			new ConsoleRunner(parser, (ICruiseServer)mockCruiseServer.MockInstance).Run();
 
 			mockCruiseServer.Verify();
-			mockCruiseManager.Verify();
 		}	
 
 		[Test]

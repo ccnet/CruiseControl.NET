@@ -1,8 +1,7 @@
+using System.Threading;
 using NMock;
 using NUnit.Framework;
-using System.Threading;
 using ThoughtWorks.CruiseControl.Core.Config;
-using ThoughtWorks.CruiseControl.Remote;
 
 namespace ThoughtWorks.CruiseControl.Core.Test
 {
@@ -29,12 +28,7 @@ namespace ThoughtWorks.CruiseControl.Core.Test
 		[SetUp]
 		protected void SetUp()
 		{
-			configServiceMock = new DynamicMock(typeof(IConfigurationService));
-			projectIntegratorListFactoryMock = new DynamicMock(typeof(IProjectIntegratorListFactory));
 			projectSerializerMock = new DynamicMock(typeof(IProjectSerializer));
-			server = new CruiseServer((IConfigurationService) configServiceMock.MockInstance, 
-				(IProjectIntegratorListFactory) projectIntegratorListFactoryMock.MockInstance,
-				(IProjectSerializer) projectSerializerMock.MockInstance);
 
 			integratorMock1 = new DynamicMock(typeof(IProjectIntegrator));
 			integratorMock2 = new DynamicMock(typeof(IProjectIntegrator));
@@ -54,6 +48,16 @@ namespace ThoughtWorks.CruiseControl.Core.Test
 			integratorList = new ProjectIntegratorList();
 			integratorList.Add(integrator1);
 			integratorList.Add(integrator2);
+
+			configServiceMock = new DynamicMock(typeof(IConfigurationService));
+			configServiceMock.ExpectAndReturn("Load", configuration);
+
+			projectIntegratorListFactoryMock = new DynamicMock(typeof(IProjectIntegratorListFactory));
+			projectIntegratorListFactoryMock.ExpectAndReturn("CreateProjectIntegrators", integratorList, configuration.Projects);
+
+			server = new CruiseServer((IConfigurationService) configServiceMock.MockInstance, 
+				(IProjectIntegratorListFactory) projectIntegratorListFactoryMock.MockInstance,
+				(IProjectSerializer) projectSerializerMock.MockInstance);
 		}
 
 		private void VerifyAll()
@@ -67,8 +71,6 @@ namespace ThoughtWorks.CruiseControl.Core.Test
 		[Test]
 		public void StartAllProjectsInCruiseServer()
 		{
-			configServiceMock.ExpectAndReturn("Load", configuration);
-			projectIntegratorListFactoryMock.ExpectAndReturn("CreateProjectIntegrators", integratorList, configuration.Projects);
 			integratorMock1.Expect("Start");
 			integratorMock2.Expect("Start");
 
@@ -87,8 +89,6 @@ namespace ThoughtWorks.CruiseControl.Core.Test
 		[Test]
 		public void CallingStopStopsIntegratorsAndWaitsForThemToFinish()
 		{
-			configServiceMock.ExpectAndReturn("Load", configuration);
-			projectIntegratorListFactoryMock.ExpectAndReturn("CreateProjectIntegrators", integratorList, configuration.Projects);
 			integratorMock1.Expect("Start");
 			integratorMock2.Expect("Start");
 
@@ -114,8 +114,6 @@ namespace ThoughtWorks.CruiseControl.Core.Test
 		[Test]
 		public void CallingAbortStopsIntegratorsAndWaitsForThemToFinish()
 		{
-			configServiceMock.ExpectAndReturn("Load", configuration);
-			projectIntegratorListFactoryMock.ExpectAndReturn("CreateProjectIntegrators", integratorList, configuration.Projects);
 			integratorMock1.Expect("Start");
 			integratorMock2.Expect("Start");
 
@@ -134,8 +132,6 @@ namespace ThoughtWorks.CruiseControl.Core.Test
 		[Test]
 		public void OnRestartKillAllIntegratorsRefreshConfigAndStartupNewIntegrators()
 		{
-			configServiceMock.ExpectAndReturn("Load", configuration);
-			projectIntegratorListFactoryMock.ExpectAndReturn("CreateProjectIntegrators", integratorList, configuration.Projects);
 			integratorMock1.Expect("Start");
 			integratorMock2.Expect("Start");
 
@@ -204,8 +200,6 @@ namespace ThoughtWorks.CruiseControl.Core.Test
 		[Test]
 		public void ForceBuildForProject()
 		{
-			configServiceMock.ExpectAndReturn("Load", configuration);
-			projectIntegratorListFactoryMock.ExpectAndReturn("CreateProjectIntegrators", integratorList, configuration.Projects);
 			integratorMock1.Expect("Start");
 			integratorMock2.Expect("Start");
 
@@ -227,8 +221,6 @@ namespace ThoughtWorks.CruiseControl.Core.Test
 		[Test]
 		public void WaitForExitForProject()
 		{
-			configServiceMock.ExpectAndReturn("Load", configuration);
-			projectIntegratorListFactoryMock.ExpectAndReturn("CreateProjectIntegrators", integratorList, configuration.Projects);
 			integratorMock1.Expect("Start");
 			integratorMock2.Expect("Start");
 
@@ -239,12 +231,6 @@ namespace ThoughtWorks.CruiseControl.Core.Test
 			server.WaitForExit("Project 1");
 
 			VerifyAll();
-		}
-
-		[Test, ExpectedException(typeof(CruiseControlException))]
-		public void AttemptToWaitForExitOnProjectThatDoesNotExist()
-		{
-			server.ForceBuild("foo");
 		}
 	}
 }

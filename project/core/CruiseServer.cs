@@ -30,15 +30,17 @@ namespace ThoughtWorks.CruiseControl.Core
 			_manager = new CruiseManager(this);
 
 			// By default, no integrators are running
-			projectIntegrators = new ProjectIntegratorList();
+//			projectIntegrators = new ProjectIntegratorList();
 			this.projectSerializer = projectSerializer;
+
+			CreateIntegrators();
 		}
 
 		public void Start()
 		{
 			Log.Info("Starting CruiseControl.NET Server");
 			_monitor.Reset();
-			CreateAndStartIntegrators();
+			StartIntegrators();
 		}
 
 		public void Stop()
@@ -60,7 +62,8 @@ namespace ThoughtWorks.CruiseControl.Core
 			Log.Info("Configuration changed: Restarting CruiseControl.NET Server ");
 
 			StopIntegrators();
-			CreateAndStartIntegrators();
+			CreateIntegrators();
+			StartIntegrators();
 		}
 
 		public void WaitForExit()
@@ -68,30 +71,35 @@ namespace ThoughtWorks.CruiseControl.Core
 			_monitor.WaitOne();
 		}
 
-		private void CreateAndStartIntegrators()
+		private void StartIntegrators()
 		{
-			IConfiguration configuration;
-			try
-			{
-				configuration = configurationService.Load();
-			}
-			catch (ConfigurationException ce)
-			{
-				Log.Error(ce);
-				return;
-			}
-
-			if (configuration == null)
-			{
-				Log.Error("Cruise Server Was not able to get a configuration");
-				return;
-			}
-
-			projectIntegrators = projectIntegratorListFactory.CreateProjectIntegrators(configuration.Projects);
+//			IConfiguration configuration;
+//			try
+//			{
+//				configuration = configurationService.Load();
+//			}
+//			catch (ConfigurationException ce)
+//			{
+//				Log.Error(ce);
+//				return;
+//			}
+//
+//			if (configuration == null)
+//			{
+//				Log.Error("Cruise server was not able to load configuration.");
+//				return;
+//			}
+//
 			foreach (IProjectIntegrator integrator in projectIntegrators)
 			{
 				integrator.Start();
 			}
+		}
+
+		private void CreateIntegrators()
+		{
+			IConfiguration configuration = configurationService.Load();
+			projectIntegrators = projectIntegratorListFactory.CreateProjectIntegrators(configuration.Projects);
 
 			if (projectIntegrators.Count == 0)
 			{
@@ -122,7 +130,7 @@ namespace ThoughtWorks.CruiseControl.Core
 			foreach (IProjectIntegrator integrator in projectIntegrators)
 			{
 				integrator.WaitForExit();
-			}		
+			}
 		}
 
 		public ICruiseManager CruiseManager
@@ -136,16 +144,16 @@ namespace ThoughtWorks.CruiseControl.Core
 			foreach (IProjectIntegrator integrator in projectIntegrators)
 			{
 				Project project = (Project) integrator.Project;
-				projects.Add(new ProjectStatus(integrator.State, 
-					project.LatestBuildStatus, 
-					project.CurrentActivity, 
-					project.Name, 
-					project.WebURL, 
-					project.LastIntegrationResult.StartTime, 
-					project.LastIntegrationResult.Label));
+				projects.Add(new ProjectStatus(integrator.State,
+				                               project.LatestBuildStatus,
+				                               project.CurrentActivity,
+				                               project.Name,
+				                               project.WebURL,
+				                               project.LastIntegrationResult.StartTime,
+				                               project.LastIntegrationResult.Label));
 			}
 
-			return (ProjectStatus []) projects.ToArray(typeof(ProjectStatus));
+			return (ProjectStatus[]) projects.ToArray(typeof (ProjectStatus));
 		}
 
 		public void ForceBuild(string projectName)
@@ -174,7 +182,7 @@ namespace ThoughtWorks.CruiseControl.Core
 		public string[] GetBuildNames(string projectName)
 		{
 			// TODO - this is a hack - I'll tidy it up later - promise! :) MR
-			foreach (IProjectIntegrator projectIntegrator in projectIntegrators) 
+			foreach (IProjectIntegrator projectIntegrator in projectIntegrators)
 			{
 				if (projectIntegrator.Name == projectName)
 				{
@@ -215,7 +223,7 @@ namespace ThoughtWorks.CruiseControl.Core
 		public string GetLog(string projectName, string buildName)
 		{
 			// TODO - this is a hack - I'll tidy it up later - promise! :) MR
-			foreach (IProjectIntegrator projectIntegrator in projectIntegrators) 
+			foreach (IProjectIntegrator projectIntegrator in projectIntegrators)
 			{
 				if (projectIntegrator.Name == projectName)
 				{
@@ -243,7 +251,7 @@ namespace ThoughtWorks.CruiseControl.Core
 		}
 
 		// ToDo - test
-		public string GetServerLog ()
+		public string GetServerLog()
 		{
 			return new ServerLogFileReader().Read();
 		}

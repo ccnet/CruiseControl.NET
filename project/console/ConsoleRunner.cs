@@ -58,8 +58,8 @@ namespace ThoughtWorks.CruiseControl.Console
 				}
 				else
 				{
-					_server.CruiseManager.ForceBuild(_parser.Project);
-					_server.CruiseManager.WaitForExit(_parser.Project);
+					_server.ForceBuild(_parser.Project);
+					_server.WaitForExit(_parser.Project);
 				}
 			}
 		}

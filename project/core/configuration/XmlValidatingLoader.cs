@@ -9,8 +9,8 @@ namespace ThoughtWorks.CruiseControl.Core.Config
 	/// </summary>
 	public class XmlValidatingLoader : IDisposable
 	{
-		XmlValidatingReader _reader;
-		bool _valid;
+		private XmlValidatingReader _reader;
+		private bool _valid;
 
 		public XmlValidatingLoader(XmlReader reader)
 		{
@@ -18,27 +18,18 @@ namespace ThoughtWorks.CruiseControl.Core.Config
 			_reader.ValidationEventHandler += new ValidationEventHandler(ValidationHandler);
 		}
 
-		public event ValidationEventHandler ValidationEventHandler 
+		public event ValidationEventHandler ValidationEventHandler
 		{
-			add 
-			{
-				_reader.ValidationEventHandler += value;
-			}
-			remove 
-			{
-				_reader.ValidationEventHandler -= value;
-			}
-		}	
-
-		public XmlSchemaCollection Schemas 
-		{
-			get 
-			{
-				return _reader.Schemas;
-			}
+			add { _reader.ValidationEventHandler += value; }
+			remove { _reader.ValidationEventHandler -= value; }
 		}
 
-		public XmlDocument Load() 
+		public XmlSchemaCollection Schemas
+		{
+			get { return _reader.Schemas; }
+		}
+
+		public XmlDocument Load()
 		{
 			// lock in case this object is used in a multi-threaded situation
 			lock (this)
@@ -53,20 +44,20 @@ namespace ThoughtWorks.CruiseControl.Core.Config
 
 					// if the load failed, our event handler will have set _worked to false
 					return _valid ? doc : null;
-				} 
-				finally 
+				}
+				finally
 				{
 					_valid = true;
 				}
 			}
 		}
 
-		private void ValidationHandler(object sender, ValidationEventArgs args) 
+		private void ValidationHandler(object sender, ValidationEventArgs args)
 		{
 			_valid = false;
 		}
 
-		public void Dispose() 
+		public void Dispose()
 		{
 			_reader.Close();
 		}
