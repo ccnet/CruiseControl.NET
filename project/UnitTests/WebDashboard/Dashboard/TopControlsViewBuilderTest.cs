@@ -8,6 +8,7 @@ using ThoughtWorks.CruiseControl.WebDashboard.MVC.View;
 
 namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 {
+	// ToDo - actually look at html
 	[TestFixture]
 	public class TopControlsViewBuilderTest : Assertion
 	{
@@ -30,6 +31,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 		private void VerifyAll()
 		{
 			urlBuilderMock.Verify();
+			cruiseRequestWrapperMock.Verify();
 		}
 
 		[Test]
@@ -37,68 +39,47 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 		{
 			// Setup
 			cruiseRequestWrapperMock.ExpectAndReturn("GetServerName", "");
+			cruiseRequestWrapperMock.ExpectAndReturn("GetProjectName", "");
 			urlBuilderMock.ExpectAndReturn("BuildUrl", "returnedurl", "default.aspx");
 
 			// Execute
 			HtmlTable table = (HtmlTable) viewBuilder.Execute(cruiseRequestWrapper);
-			HtmlAnchor anchor = new HtmlAnchor();
-			anchor.HRef = "returnedurl";
-			anchor.InnerHtml = "Dashboard";
-
-			Assert(TableContains(table, anchor));
 			
 			// Verify
 			VerifyAll();
 		}
 
 		[Test]
-		public void ShouldAlsoShowLinkToServerIfServerSpecified()
+		public void ShouldShowLinkToDashboardAndServerIfServerButNoProjectSpecified()
 		{
 			// Setup
 			cruiseRequestWrapperMock.ExpectAndReturn("GetServerName", "myServer");
+			cruiseRequestWrapperMock.ExpectAndReturn("GetProjectName", "");
 			urlBuilderMock.ExpectAndReturn("BuildUrl", "returnedurl1", "default.aspx");
 			urlBuilderMock.ExpectAndReturn("BuildUrl", "returnedurl2", "default.aspx", "server=myServer");
 
 			// Execute
 			HtmlTable table = (HtmlTable) viewBuilder.Execute(cruiseRequestWrapper);
-
-			HtmlAnchor anchor1 = new HtmlAnchor();
-			anchor1.HRef = "returnedurl1";
-			anchor1.InnerHtml = "Dashboard";
-
-			HtmlAnchor anchor2 = new HtmlAnchor();
-			anchor2.HRef = "returnedurl2";
-			anchor2.InnerHtml = "myServer";
-
-			// To Do - easier way to test this? Look at html, maybe?
-//			Assert(TableContains(table, anchor1));
-//			Assert(TableContains(table, anchor2));
 			
 			// Verify
 			VerifyAll();
 		}
 
-		private bool TableContains(HtmlTable table, HtmlAnchor anchor)
+		[Test]
+		public void ShouldShowLinkToDashboardServerAndProjectIfServerAndProjectSpecified()
 		{
-			foreach (HtmlTableRow row in table.Rows)
-			{
-				foreach (HtmlTableCell cell in row.Cells)
-				{
-					foreach (Control control in cell.Controls)
-					{
-						if (control is HtmlAnchor)
-						{
-							HtmlAnchor currentAnchor = (HtmlAnchor) control;
-							if (currentAnchor.HRef == anchor.HRef && currentAnchor.InnerHtml == anchor.InnerHtml)
-							{
-								return true;
-							}
-						}
-					}
-				}
-			}
-			return false;
-		}
+			// Setup
+			cruiseRequestWrapperMock.ExpectAndReturn("GetServerName", "myServer");
+			cruiseRequestWrapperMock.ExpectAndReturn("GetProjectName", "myProject");
+			urlBuilderMock.ExpectAndReturn("BuildUrl", "returnedurl1", "default.aspx");
+			urlBuilderMock.ExpectAndReturn("BuildUrl", "returnedurl2", "default.aspx", "server=myServer");
+			urlBuilderMock.ExpectAndReturn("BuildUrl", "returnedurl3", "ProjectReport.aspx", "server=myServer&project=myProject");
 
+			// Execute
+			HtmlTable table = (HtmlTable) viewBuilder.Execute(cruiseRequestWrapper);
+
+			// Verify
+			VerifyAll();
+		}
 	}
 }

@@ -17,30 +17,31 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 
 		public Control Execute(ICruiseRequestWrapper request)
 		{
+			StringWriter writer = new StringWriter();
+			HtmlTextWriter htmlWriter = new HtmlTextWriter(writer);
+
+			HtmlAnchor dashboard = A("Dashboard", urlBuilder.BuildUrl("default.aspx"));
+			dashboard.RenderControl(htmlWriter);
+
 			string serverName = request.GetServerName();
-			if (serverName == "")
+			if (serverName != "")
 			{
-				return Table(
-					TR( TD( A("Dashboard", urlBuilder.BuildUrl("default.aspx")))));
-			}
-			else
-			{
-				StringWriter writer = new StringWriter();
-				HtmlTextWriter htmlWriter = new HtmlTextWriter(writer);
-
-				HtmlAnchor dashboard = A("Dashboard", urlBuilder.BuildUrl("default.aspx"));
-				HtmlAnchor server = A(serverName, urlBuilder.BuildUrl("default.aspx","server=" + serverName));
-
-				dashboard.RenderControl(htmlWriter);
 				htmlWriter.Write(" &gt; ");
-				server.RenderControl(htmlWriter);
-
-				HtmlGenericControl locationMenu = new HtmlGenericControl("div");
-				locationMenu.InnerHtml = writer.ToString();
-
-				return Table(
-					TR( TD( locationMenu )));
+				A(serverName, urlBuilder.BuildUrl("default.aspx","server=" + serverName)).RenderControl(htmlWriter);
 			}
+
+			string projectName = request.GetProjectName();
+			if (projectName != "")
+			{
+				htmlWriter.Write(" &gt; ");
+				A(projectName, urlBuilder.BuildUrl("ProjectReport.aspx","server=" + serverName + "&project=" + projectName)).RenderControl(htmlWriter);
+			}
+
+			HtmlGenericControl locationMenu = new HtmlGenericControl("div");
+			locationMenu.InnerHtml = writer.ToString();
+
+			return Table(
+				TR( TD( locationMenu )));
 		}
 	}
 }
