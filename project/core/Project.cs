@@ -32,7 +32,8 @@ namespace ThoughtWorks.CruiseControl.Core
 		/// <summary>
 		/// Raised whenever an integration is completed.
 		/// </summary>
-		public event IntegrationCompletedEventHandler IntegrationCompleted ;
+		public event IntegrationCompletedEventHandler IntegrationCompleted;
+
 		public const string DEFAULT_WEB_URL = "http://localhost/CruiseControl.NET/";
 
 		private string _webURL = DEFAULT_WEB_URL;
@@ -44,21 +45,21 @@ namespace ThoughtWorks.CruiseControl.Core
 		private ProjectActivity _currentActivity = ProjectActivity.Unknown;
 		private int _modificationDelaySeconds = 0;
 
-		[ReflectorProperty("webURL", Required=false)] 
+		[ReflectorProperty("webURL", Required=false)]
 		public string WebURL
 		{
 			get { return _webURL; }
 			set { _webURL = value; }
 		}
 
-		[ReflectorProperty("build", InstanceTypeKey="type")] 
+		[ReflectorProperty("build", InstanceTypeKey="type")]
 		public IBuilder Builder
 		{
 			get { return _builder; }
 			set { _builder = value; }
 		}
 
-		[ReflectorProperty("sourcecontrol", InstanceTypeKey="type")] 
+		[ReflectorProperty("sourcecontrol", InstanceTypeKey="type")]
 		public ISourceControl SourceControl
 		{
 			get { return _sourceControl; }
@@ -69,7 +70,7 @@ namespace ThoughtWorks.CruiseControl.Core
 		/// The list of build-completed publishers used by this project.  This property is
 		/// intended to be set via Xml configuration.
 		/// </summary>
-		[ReflectorArray("publishers", Required=false)] 
+		[ReflectorArray("publishers", Required=false)]
 		public IIntegrationCompletedEventHandler[] Publishers
 		{
 			get { return _publishers; }
@@ -89,14 +90,14 @@ namespace ThoughtWorks.CruiseControl.Core
 		/// passed.  The intention is to allow a developer to complete a multi-stage
 		/// checkin.
 		/// </summary>
-		[ReflectorProperty("modificationDelaySeconds", Required=false)] 
+		[ReflectorProperty("modificationDelaySeconds", Required=false)]
 		public int ModificationDelaySeconds
 		{
 			get { return _modificationDelaySeconds; }
 			set { _modificationDelaySeconds = value; }
 		}
 
-		[ReflectorProperty("labeller", InstanceTypeKey="type", Required=false)] 
+		[ReflectorProperty("labeller", InstanceTypeKey="type", Required=false)]
 		public ILabeller Labeller
 		{
 			get { return _labeller; }
@@ -127,7 +128,7 @@ namespace ThoughtWorks.CruiseControl.Core
 
 		public IntegrationStatus LatestBuildStatus
 		{
-			get { return LastIntegrationResult.Status; } 
+			get { return LastIntegrationResult.Status; }
 		}
 
 		public IntegrationResult RunIntegration(BuildCondition buildCondition)
@@ -212,6 +213,7 @@ namespace ThoughtWorks.CruiseControl.Core
 				task.Run(result);
 			}
 		}
+
 		internal void PostBuild(IntegrationResult result)
 		{
 			if (ShouldPublishException(result))
@@ -329,20 +331,20 @@ namespace ThoughtWorks.CruiseControl.Core
 			else
 				DeleteTemporaryLabelIfNeeded();
 		}
-			
+
 		internal void CreateTemporaryLabelIfNeeded()
 		{
-			if ( SourceControl is ITemporaryLabeller )
+			if (SourceControl is ITemporaryLabeller)
 			{
-				( (ITemporaryLabeller) SourceControl).CreateTemporaryLabel();
+				((ITemporaryLabeller) SourceControl).CreateTemporaryLabel();
 			}
 		}
 
 		internal void DeleteTemporaryLabelIfNeeded()
 		{
-			if ( SourceControl is ITemporaryLabeller )
+			if (SourceControl is ITemporaryLabeller)
 			{
-				( (ITemporaryLabeller) SourceControl).DeleteTemporaryLabel();
+				((ITemporaryLabeller) SourceControl).DeleteTemporaryLabel();
 			}
 		}
 

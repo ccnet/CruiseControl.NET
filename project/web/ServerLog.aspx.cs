@@ -1,26 +1,15 @@
 using System;
-using System.Collections;
 using System.Configuration;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.IO;
-using System.Text;
-using System.Web;
-using System.Web.SessionState;
 using System.Web.UI;
-using System.Web.UI.WebControls;
 using System.Web.UI.HtmlControls;
-using System.Xml;
-using ThoughtWorks.CruiseControl.Core;
 
 namespace ThoughtWorks.CruiseControl.Web
 {
-	public class ServerLog : System.Web.UI.Page
+	public class ServerLog : Page
 	{
 		protected HtmlTableCell LogData;
 
-		private void Page_Load(object sender, System.EventArgs e)
+		private void Page_Load(object sender, EventArgs e)
 		{
 			string serverLogFilename = GetServerLogFilenameFromConfig();
 			string logData = ReadLinesFromLog(serverLogFilename, GetServerLogLinesFromConfig());
@@ -53,7 +42,7 @@ namespace ThoughtWorks.CruiseControl.Web
 		
 		private void InitializeComponent()
 		{    
-			this.Load += new System.EventHandler(this.Page_Load);
+			this.Load += new EventHandler(this.Page_Load);
 
 		}
 		#endregion

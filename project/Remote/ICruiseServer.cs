@@ -2,7 +2,7 @@ using System;
 
 namespace ThoughtWorks.CruiseControl.Remote
 {
-	public interface ICruiseServer
+	public interface ICruiseServer : IDisposable
 	{
 		/// <summary>
 		/// Launches the CruiseControl.NET server and starts all project schedules it contains

@@ -3,7 +3,7 @@ using NUnit.Framework;
 
 using ThoughtWorks.CruiseControl.Core.Util;
 
-namespace ThoughtWorks.CruiseControl.Core.util.test
+namespace ThoughtWorks.CruiseControl.Core.Util.Test
 {
 	[TestFixture]
 	public class ProcessInfoTest : CustomAssertion

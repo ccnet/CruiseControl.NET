@@ -1,15 +1,11 @@
 #define USE_MOCK
-
+using System.ComponentModel;
 using Exortech.NetReflector;
 using NMock;
 using NMock.Constraints;
 using NUnit.Framework;
-using System;
 using ThoughtWorks.CruiseControl.Core.Util;
 using ThoughtWorks.CruiseControl.Remote;
-using ThoughtWorks.CruiseControl.Core.Publishers;
-using System.Text.RegularExpressions;
-using System.ComponentModel;
 
 namespace ThoughtWorks.CruiseControl.Core.Builder.Test
 {

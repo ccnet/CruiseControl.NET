@@ -1,34 +1,30 @@
 using System;
 using System.Collections;
 using System.Configuration;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
 using System.Text;
-using System.Web;
-using System.Web.SessionState;
 using System.Web.UI;
-using System.Web.UI.WebControls;
 using System.Web.UI.HtmlControls;
+using System.Web.UI.WebControls;
+using SiteMesh.DecoratorControls;
 using ThoughtWorks.CruiseControl.Core;
 
 namespace ThoughtWorks.CruiseControl.Web
 {
-	public class Decorator : System.Web.UI.Page
+	public class Decorator : Page
 	{
 		protected DataList menu;
 		protected HtmlGenericControl buildStats;
 		protected HtmlGenericControl ProjectPluginLinks;
 		protected HtmlAnchor nextLog;
 		protected HtmlAnchor previousLog;
-		protected SiteMesh.DecoratorControls.Title Title1;
-		protected SiteMesh.DecoratorControls.Body Body1;
-		protected SiteMesh.DecoratorControls.GetProperty prop1;
-		protected System.Web.UI.HtmlControls.HtmlTableCell Td2;
-		protected SiteMesh.DecoratorControls.Title Title3;
-		protected System.Web.UI.HtmlControls.HtmlTableCell contentCell;
+		protected Title Title1;
+		protected Body Body1;
+		protected GetProperty prop1;
+		protected HtmlTableCell Td2;
+		protected Title Title3;
+		protected HtmlTableCell contentCell;
 
-		private void Page_Load(object sender, System.EventArgs e)
+		private void Page_Load(object sender, EventArgs e)
 		{
 			string path = WebUtil.GetLogDirectory(Context).FullName;
 			InitBuildStats(path);
@@ -112,8 +108,8 @@ namespace ThoughtWorks.CruiseControl.Web
 		
 		private void InitializeComponent()
 		{    
-			this.menu.ItemDataBound += new System.Web.UI.WebControls.DataListItemEventHandler(this.DataList_BindItem);
-			this.Load += new System.EventHandler(this.Page_Load);
+			this.menu.ItemDataBound += new DataListItemEventHandler(this.DataList_BindItem);
+			this.Load += new EventHandler(this.Page_Load);
 
 		}
 		#endregion

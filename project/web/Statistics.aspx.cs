@@ -1,24 +1,15 @@
 using System;
-using System.Collections;
-using System.Configuration;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Text;
-using System.Web;
-using System.Web.SessionState;
 using System.Web.UI;
 using System.Web.UI.WebControls;
-using System.Web.UI.HtmlControls;
 using ThoughtWorks.CruiseControl.Core;
 
 namespace ThoughtWorks.CruiseControl.Web
 {
-	public class Statistics : System.Web.UI.Page
+	public class Statistics : Page
 	{
-		protected System.Web.UI.WebControls.Label BodyLabel;
+		protected Label BodyLabel;
 	
-		private void Page_Load(object sender, System.EventArgs e)
+		private void Page_Load(object sender, EventArgs e)
 		{
 			try
 			{
@@ -50,7 +41,7 @@ namespace ThoughtWorks.CruiseControl.Web
 		
 		private void InitializeComponent()
 		{    
-			this.Load += new System.EventHandler(this.Page_Load);
+			this.Load += new EventHandler(this.Page_Load);
 
 		}
 		#endregion

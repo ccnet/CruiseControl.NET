@@ -1,5 +1,4 @@
 using System;
-using System.Collections;
 using System.Threading;
 using ThoughtWorks.CruiseControl.Core.Config;
 using ThoughtWorks.CruiseControl.Core.Util;
@@ -107,6 +106,12 @@ namespace ThoughtWorks.CruiseControl.Core
 		public IConfiguration Configuration
 		{
 			get { return _config; }
+		}
+
+		void IDisposable.Dispose()
+		{
+			Abort();
+			WaitForExit();
 		}
 	}
 

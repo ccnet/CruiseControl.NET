@@ -1,9 +1,7 @@
+using NUnit.Framework;
 using System;
 using System.Diagnostics;
 using System.Threading;
-
-using NUnit.Framework;
-
 using ThoughtWorks.CruiseControl.Core.Schedules;
 using ThoughtWorks.CruiseControl.Core.Util;
 

@@ -23,12 +23,6 @@ run ->{2} listversionedfiles -z -aw $Project $SubProject
 		const string POST_INSTRUCTIONS_TEMPLATE = 
 			@"run -e vlog  ""-xo+e{0}"" ""-d{1}*{2}"" ""@{3}"" ";
 
-//		const string INSTRUCTIONS_TEMPLATE = @"set -vProject ""{0}""
-//set -vSubProject ""{1}""
-//run ->{2} listversionedfiles -z -aw $Project $SubProject
-//run -e vlog  ""-xo+e{3}"" ""-d{4}*{5}"" ""@{2}""
-//";
-
 		private TimeZone _currentTimeZone = TimeZone.CurrentTimeZone;
 
 		public Pvcs() : this(new PvcsHistoryParser(), new ProcessExecutor()) { }
@@ -40,9 +34,6 @@ run ->{2} listversionedfiles -z -aw $Project $SubProject
 
 		[ReflectorProperty("arguments", Required=false)]
 		public string Arguments = COMMAND;
-
-//		[ReflectorProperty("instructions", Required=false)]
-//		public string Instructions = INSTRUCTIONS_TEMPLATE;
 
 		[ReflectorProperty("project")]
 		public string Project;
