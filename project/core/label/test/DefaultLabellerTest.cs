@@ -17,7 +17,8 @@ namespace tw.ccnet.core.label.test
 			_labeller = new DefaultLabeller();
 		}
 
-		public void TestGenerate()
+		[Test]
+		public void Generate()
 		{
 			IntegrationResult result = IntegrationResultFixture.CreateIntegrationResult();
 			result.Label = "35";
@@ -26,7 +27,8 @@ namespace tw.ccnet.core.label.test
 			AssertEquals("36", _labeller.Generate(result));
 		}
 
-		public void TestGenerate_NullLabel()
+		[Test]
+		public void Generate_NullLabel()
 		{
 			IntegrationResult result = IntegrationResultFixture.CreateIntegrationResult();
 			result.Label = null;
@@ -34,7 +36,8 @@ namespace tw.ccnet.core.label.test
 			AssertEquals(DefaultLabeller.INITIAL_LABEL, _labeller.Generate(result));
 		}
 
-		public void TestGenerate_LastBuildFailed()
+		[Test]
+		public void Generate_LastBuildFailed()
 		{
 			IntegrationResult result = IntegrationResultFixture.CreateIntegrationResult();
 			result.Label = "23";
@@ -43,6 +46,15 @@ namespace tw.ccnet.core.label.test
 			DefaultLabeller _labeller = new DefaultLabeller();
 			string label = _labeller.Generate(result);
 			AssertEquals("23", label);
+		}
+
+		[Test]
+		public void ShouldRun()
+		{
+			Assert(_labeller.ShouldRun(new IntegrationResult()));
+			Assert(_labeller.ShouldRun(IntegrationResultMother.CreateSuccessful()));
+			AssertFalse(_labeller.ShouldRun(IntegrationResultMother.CreateFailed()));
+			AssertFalse(_labeller.ShouldRun(IntegrationResultMother.CreateExceptioned()));
 		}
 	}
 }

@@ -23,7 +23,7 @@ namespace tw.ccnet.core.publishers
 		private IAsyncResult _result;
 		private Exception _ex;
 
-		public override void Publish(object source, IntegrationResult result)
+		public override void PublishIntegrationResults(IProject project, IntegrationResult result)
 		{
 			AsyncCallback cb = new AsyncCallback(FinishedCallback);
 
@@ -36,7 +36,7 @@ namespace tw.ccnet.core.publishers
 			try
 			{
 				ICruiseManager manager = GetRemoteCruiseManager();
-				manager.Run(Project, new Schedule(0, 1));
+//				manager.Run(Project, new Schedule(0, 1));
 			}
 			catch (Exception ex)
 			{

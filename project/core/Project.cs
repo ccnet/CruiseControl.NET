@@ -33,7 +33,7 @@ namespace tw.ccnet.core
 	/// </code>
 	/// </remarks>
 	[ReflectorType("project")]
-	public class Project : IProject
+	public class Project : ProjectBase, IProject
 	{
 		/// <summary>
 		/// Raised whenever an integration is completed.
@@ -44,12 +44,10 @@ namespace tw.ccnet.core
 
 		string _name;
 		string _webURL = "http://localhost/CruiseControl.NET/"; // default value
-		ISchedule _schedule;
 		ISourceControl _sourceControl;
 		IBuilder _builder;
 		ILabeller _labeller = new DefaultLabeller();
 		ArrayList _publishers = new ArrayList();
-		IStateManager _state = new IntegrationStateManager();
 		IntegrationResult _lastIntegrationResult = null;
 		ProjectActivity _currentActivity = ProjectActivity.Unknown;
 		int _modificationDelaySeconds = 0;
@@ -58,33 +56,11 @@ namespace tw.ccnet.core
 		#endregion
 
 		#region Properties set via Xml configuration
-
-		[ReflectorProperty("name")]
-		public string Name
-		{
-			get { return _name; }
-			set { _name = value; }
-		}
-
 		[ReflectorProperty("webURL", Required=false)]
 		public string WebURL
 		{
 			get { return _webURL; }
 			set { _webURL = value; }
-		}
-
-		[ReflectorProperty("schedule", InstanceTypeKey="type", Required=false)]
-		public ISchedule Schedule
-		{
-			get 
-			{
-				// construct a new schedule if none exists
-				if (_schedule==null) 
-					_schedule = new Schedule();
-
-				return _schedule; 
-			}
-			set { _schedule = value; }
 		}
 
 		[ReflectorProperty("build", InstanceTypeKey="type")]
@@ -123,13 +99,6 @@ namespace tw.ccnet.core
 				foreach (IIntegrationCompletedEventHandler handler in handlers)
 					IntegrationCompleted += handler.IntegrationCompletedEventHandler;
 			}
-		}
-
-		[ReflectorProperty("state", InstanceTypeKey="type", Required=false)]
-		public IStateManager StateManager
-		{
-			get { return _state; }
-			set { _state = value; }
 		}
 
 		/// <summary>

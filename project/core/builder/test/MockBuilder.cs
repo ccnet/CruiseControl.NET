@@ -9,6 +9,11 @@ namespace tw.ccnet.core.builder.test
 	{
 		public bool HasRun = false;
 
+		public bool ShouldRun(IntegrationResult result)
+		{
+			return true;
+		}
+
 		public void Run(IntegrationResult result)
 		{
 			result.Status = IntegrationStatus.Success;

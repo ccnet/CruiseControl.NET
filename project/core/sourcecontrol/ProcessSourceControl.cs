@@ -19,6 +19,11 @@ namespace tw.ccnet.core.sourcecontrol
 			get;
 		}
 
+		public bool ShouldRun(IntegrationResult result)
+		{
+			return result.Working;
+		}
+
 		public void Run(IntegrationResult result)
 		{
 			result.Modifications = GetModifications(result.LastModificationDate, DateTime.Now);

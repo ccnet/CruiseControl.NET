@@ -32,15 +32,6 @@ namespace tw.ccnet.core
 		}
 
 		/// <summary>
-		/// Gets a list of IPublisher instances, used by this project.
-		/// TODO make this an IPublisher[] (need to check whether NetReflector works with arrays).
-		/// </summary>
-		ArrayList Publishers
-		{
-			get;
-		}
-
-		/// <summary>
 		/// Gets this project's current activity, such as Building, Sleeping, etc...
 		/// </summary>
 		ProjectActivity CurrentActivity 

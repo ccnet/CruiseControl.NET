@@ -73,7 +73,7 @@ namespace tw.ccnet.core
 			set { _endTime = value; }
 		}
 
-		public Modification[] Modifications
+		public virtual Modification[] Modifications
 		{
 			get
 			{
@@ -130,6 +130,11 @@ namespace tw.ccnet.core
 			get { return Succeeded && LastIntegrationStatus == IntegrationStatus.Failure; }
 		}
 
+		public bool Working
+		{
+			get { return Status == IntegrationStatus.Unknown || Succeeded; }
+		}
+
 		/// <summary>
 		/// Gets the time taken to perform the project's integration.
 		/// </summary>
@@ -143,7 +148,7 @@ namespace tw.ccnet.core
 		#region Properties not serialised into Xml
 
 		[XmlIgnore]
-		public string Output
+		public virtual string Output
 		{
 			get { return _output; }
 			set { _output = value; }

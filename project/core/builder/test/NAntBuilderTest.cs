@@ -1,10 +1,11 @@
+using Exortech.NetReflector;
+using NUnit.Framework;
 using System;
 using System.IO;
-using System.Xml;
-using NUnit.Framework;
-using tw.ccnet.core.util;
-using Exortech.NetReflector;
 using System.Reflection;
+using System.Xml;
+using tw.ccnet.core.util;
+using tw.ccnet.remote;
 
 namespace tw.ccnet.core.builder.test
 {
@@ -34,7 +35,7 @@ namespace tw.ccnet.core.builder.test
 		}
 
 		[Test]
-		public void TestPopulateFromReflector()
+		public void PopulateFromReflector()
 		{
 			string xml = string.Format(@"
     <build>
@@ -58,7 +59,8 @@ namespace tw.ccnet.core.builder.test
 			AssertEquals(NANT_TEST_TARGET, _builder.Targets[0]);
 		}
 
-		public void TestExecuteCommand() 
+		[Test]
+		public void ExecuteCommand() 
 		{
 			string tempFile = TempFileUtil.CreateTempFile(TEMP_DIR, "testexecute.bat", "echo hello martin");
 			_builder.Executable = tempFile;
@@ -72,8 +74,8 @@ namespace tw.ccnet.core.builder.test
 			Assert(errorMessage, StringUtil.StringContains(result.Output.ToString(), expected));
 		}
 		
-		[ExpectedException(typeof(BuilderException))]
-		public void TestExecuteCommandWithInvalidFile()
+		[Test, ExpectedException(typeof(BuilderException))]
+		public void ExecuteCommandWithInvalidFile()
 		{
 			// simulate nant missing
 			_builder.Executable = @"\nodir\invalidfile.bat";
@@ -83,7 +85,8 @@ namespace tw.ccnet.core.builder.test
 			_builder.Run(new IntegrationResult());
 		}
 		
-		public void TestBuildSucceed()
+		[Test]
+		public void BuildSucceed()
 		{
 			CreateTestBuildFile();
 			_builder.Executable = NANT_TEST_EXECUTABLE;
@@ -97,7 +100,8 @@ namespace tw.ccnet.core.builder.test
 			Assert(StringUtil.StringContains(result.Output.ToString(), "I am success itself"));
 		}
 		
-		public void TestBuildFailed()
+		[Test]
+		public void BuildFailed()
 		{
 			CreateTestBuildFile();
 			_builder.Executable = NANT_TEST_EXECUTABLE;
@@ -111,8 +115,8 @@ namespace tw.ccnet.core.builder.test
 			Assert(StringUtil.StringContains(result.Output.ToString(), "I am failure itself"));
 		}
 
-		[ExpectedException(typeof(BuilderException))]
-		public void TestBuildWithInvalidBuildFile()
+		[Test, ExpectedException(typeof(BuilderException))]
+		public void BuildWithInvalidBuildFile()
 		{
 			// simulate missing build file
 			_builder.Executable = NANT_TEST_EXECUTABLE;
@@ -124,7 +128,8 @@ namespace tw.ccnet.core.builder.test
 			Fail("Build should fail when invoked with missing buildfile, but didn't!");
 		}
 
-		public void TestCreateBuildArgs()
+		[Test]
+		public void CreateBuildArgs()
 		{
 			_builder.BuildFile = "foo.xml";
 			_builder.BuildArgs = "-bar";
@@ -133,12 +138,14 @@ namespace tw.ccnet.core.builder.test
 			AssertEquals("-buildfile:foo.xml -bar -D:label-to-apply=1234 a b", _builder.CreateArgs());
 		}
 
-		public void TestCreateBuildArgs_MissingArguments()
+		[Test]
+		public void CreateBuildArgs_MissingArguments()
 		{
 			AssertEquals("-buildfile: -logger:NAnt.Core.XmlLogger -D:label-to-apply=NO-LABEL ", _builder.CreateArgs());
 		}
 
-		public void TestLabelGetsPassedThrough() 
+		[Test]
+		public void LabelGetsPassedThrough() 
 		{
 			CreateTestBuildFile();
 			_builder.Executable = NANT_TEST_EXECUTABLE;
@@ -151,6 +158,24 @@ namespace tw.ccnet.core.builder.test
 			
 			Assert("test build should succeed", result.Succeeded);
 			Assert(StringUtil.StringContains(result.Output.ToString(), "ATestLabel"));
+		}
+
+		[Test]
+		public void ShouldRun()
+		{
+			AssertFalse(_builder.ShouldRun(new IntegrationResult()));
+			Assert(_builder.ShouldRun(CreateIntegrationResultWithModifications(IntegrationStatus.Unknown)));
+			Assert(_builder.ShouldRun(CreateIntegrationResultWithModifications(IntegrationStatus.Success)));
+			AssertFalse(_builder.ShouldRun(CreateIntegrationResultWithModifications(IntegrationStatus.Failure)));
+			AssertFalse(_builder.ShouldRun(CreateIntegrationResultWithModifications(IntegrationStatus.Exception)));
+		}
+
+		private IntegrationResult CreateIntegrationResultWithModifications(IntegrationStatus status)
+		{
+			IntegrationResult result = new IntegrationResult();
+			result.Status = status;
+			result.Modifications = new Modification[] { new Modification() };
+			return result;
 		}
 		
 		private string CreateTestBuildFile()

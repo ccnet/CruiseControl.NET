@@ -8,8 +8,6 @@ using tw.ccnet.core.util;
 
 namespace tw.ccnet.core.sourcecontrol
 {
-	// ss history [dir] -R -Vd[now]~[lastBuild] -Y[login] -I-N -O[tempFileName]
-	
 	[ReflectorType("vss")]
 	public class Vss : ProcessSourceControl
 	{
@@ -22,51 +20,24 @@ namespace tw.ccnet.core.sourcecontrol
 
 		internal static readonly string LABEL_COMMAND_FORMAT = @"label {0} -L{1} -Vd{2} -Y{3},{4} -I-Y";
 		
-		// 12-31-2002;8:00P
-		internal static readonly string DATE_FORMAT = "MM-dd-yyyy;h:mmt";
-
 		private IHistoryParser _parser = new VssHistoryParser();
 		
-		private string _project;
-		private string _username;
-		private string _password;		
-		private string _ssDir;
-		private string _executable = "ss.exe";
+		public CultureInfo CultureInfo = CultureInfo.CurrentCulture;
 
 		[ReflectorProperty("executable")]
-		public string Executable
-		{
-			get{ return _executable;}
-			set{ _executable = value;}
-		}
+		public string Executable = "ss.exe";
 
 		[ReflectorProperty("project")]
-		public string Project
-		{
-			get { return _project; }
-			set { _project = value; }
-		}
+		public string Project;
 
 		[ReflectorProperty("username")]
-		public string Username
-		{
-			get { return _username; }
-			set { _username = value; }
-		}
+		public string Username;
 
 		[ReflectorProperty("password")]
-		public string Password
-		{
-			get { return _password; }
-			set { _password = value; }
-		}
+		public string Password;
 
 		[ReflectorProperty("ssdir", Required=false)]
-		public string SsDir
-		{
-			get { return _ssDir; }
-			set { _ssDir = value; }
-		}
+		public string SsDir;
 
 		protected override IHistoryParser HistoryParser
 		{
@@ -76,8 +47,9 @@ namespace tw.ccnet.core.sourcecontrol
 		public override Process CreateHistoryProcess(DateTime from, DateTime until)
 		{		
 			string args = BuildHistoryProcessArgs(from, until);
+			LogUtil.Log("VSSPublisher", string.Format("{0} {1}", Executable, args));
 			Process process = ProcessUtil.CreateProcess(Executable, args);
-			process.StartInfo.EnvironmentVariables[SS_DIR_KEY] = _ssDir;
+			process.StartInfo.EnvironmentVariables[SS_DIR_KEY] = SsDir;
 			return process;
 			
 		}
@@ -86,13 +58,13 @@ namespace tw.ccnet.core.sourcecontrol
 		{ 
 			string args = string.Format(LABEL_COMMAND_FORMAT, Project, label, FormatCommandDate(timeStamp), Username, Password);
 			Process process = ProcessUtil.CreateProcess(Executable, args);
-			process.StartInfo.EnvironmentVariables[SS_DIR_KEY] = _ssDir;
+			process.StartInfo.EnvironmentVariables[SS_DIR_KEY] = SsDir;
 			return process;
 		}
 
 		internal string FormatCommandDate(DateTime date)
 		{
-			return date.ToString(DATE_FORMAT);
+			return string.Concat(date.ToString("d", CultureInfo), ";", date.ToString("t", CultureInfo));
 		}
 
 		internal string BuildHistoryProcessArgs(DateTime from, DateTime to)

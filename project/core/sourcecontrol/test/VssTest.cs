@@ -1,5 +1,6 @@
 using System;
 using System.Diagnostics;
+using System.Globalization;
 using System.IO;
 using NUnit.Framework;
 using Exortech.NetReflector;
@@ -35,7 +36,7 @@ namespace tw.ccnet.core.sourcecontrol.test
 			Process actual = _vss.CreateHistoryProcess(from, to);
 
 			string expectedExecutable = @"..\tools\vss\ss.exe";
-			string expectedArgs = @"history $/fooProject -R -Vd02-22-2002;8:00P~01-21-2001;8:00P -YAdmin,admin -I-Y";				
+			string expectedArgs = @"history $/fooProject -R -Vd02/22/2002;20:00~01/21/2001;20:00 -YAdmin,admin -I-Y";				
 
 			AssertNotNull("process was null", actual);
 			AssertEquals(expectedExecutable, actual.StartInfo.FileName);
@@ -54,12 +55,12 @@ namespace tw.ccnet.core.sourcecontrol.test
 		public void TestFormatDate()
 		{
 			DateTime date = new DateTime(2002, 2, 22, 20, 0, 0);
-			string expected = "02-22-2002;8:00P";
+			string expected = "02/22/2002;20:00";
 			string actual = _vss.FormatCommandDate(date);
 			AssertEquals(expected, actual);
 
 			date = new DateTime(2002, 2, 22, 12, 0, 0);
-			expected = "02-22-2002;12:00P";
+			expected = "02/22/2002;12:00";
 			actual = _vss.FormatCommandDate(date);
 			AssertEquals(expected, actual);
 		}
@@ -69,7 +70,7 @@ namespace tw.ccnet.core.sourcecontrol.test
 		{
 			Process p = ProcessUtil.CreateProcess("cmd.exe", "/C set foo");
 			p.StartInfo.EnvironmentVariables["foo"] = "bar";
-		TextReader reader = ProcessUtil.ExecuteRedirected(p);
+			TextReader reader = ProcessUtil.ExecuteRedirected(p);
 			string result = reader.ReadToEnd();
 			p.WaitForExit();
 
@@ -84,7 +85,7 @@ namespace tw.ccnet.core.sourcecontrol.test
 			Process actual = _vss.CreateLabelProcess(label, dateTime);
 
 			string expectedExecutable = @"..\tools\vss\ss.exe";
-			string expectedArgs = @"label $/fooProject -LtestLabel -Vd04-15-2003;11:12A -YAdmin,admin -I-Y";				
+			string expectedArgs = @"label $/fooProject -LtestLabel -Vd04/15/2003;11:12 -YAdmin,admin -I-Y";				
 
 			AssertNotNull("process was null", actual);
 			AssertEquals(expectedExecutable, actual.StartInfo.FileName);
@@ -101,6 +102,7 @@ namespace tw.ccnet.core.sourcecontrol.test
 			XmlPopulator populator = new XmlPopulator();
 			Vss vss = new Vss();
 			populator.Populate(XmlUtil.CreateDocumentElement(VSS_XML), vss);
+			vss.CultureInfo = CultureInfo.InvariantCulture;
 			return vss;
 		}
 	}

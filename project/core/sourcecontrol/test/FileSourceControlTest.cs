@@ -1,6 +1,7 @@
 using System;
 using System.IO;
 using NUnit.Framework;
+using tw.ccnet.core.test;
 using tw.ccnet.core.util;
 
 namespace tw.ccnet.core.sourcecontrol.test
@@ -29,7 +30,8 @@ namespace tw.ccnet.core.sourcecontrol.test
 			TempFileUtil.DeleteTempDir(_tempDir);
 		}
 
-		public void TestGetModifications_EmptyLocal()
+		[Test]
+		public void GetModifications_EmptyLocal()
 		{
 			string file1 = TempFileUtil.CreateTempFile("repo", "file1.txt", "foo");
 			string file2 = TempFileUtil.CreateTempFile("repo", "file2.txt", "bar");
@@ -53,14 +55,16 @@ namespace tw.ccnet.core.sourcecontrol.test
 			AssertEquals(0, mods.Length);
 		}
 
-		public void TestGetModifications_EmptyRepository()
+		[Test]
+		public void GetModifications_EmptyRepository()
 		{
 			Modification[] mods = _sc.GetModifications(DateTime.MinValue, DateTime.MaxValue);
 			AssertNotNull(mods);
 			AssertEquals(0, mods.Length);
 		}
 
-		public void TestGetModifications_OneUnmodifiedFile()
+		[Test]
+		public void GetModifications_OneUnmodifiedFile()
 		{
 			string file1 = TempFileUtil.CreateTempFile("repo", "file1.txt", "foo");
 			DateTime from = DateTime.Now;
@@ -72,5 +76,13 @@ namespace tw.ccnet.core.sourcecontrol.test
 			AssertEquals("file2.txt", mods[0].FileName);
 		}
 
+		[Test]
+		public void ShouldRun()
+		{
+			Assert(_sc.ShouldRun(new IntegrationResult()));
+			Assert(_sc.ShouldRun(IntegrationResultMother.CreateSuccessful()));
+			AssertFalse(_sc.ShouldRun(IntegrationResultMother.CreateFailed()));
+			AssertFalse(_sc.ShouldRun(IntegrationResultMother.CreateExceptioned()));
+		}
 	}
 }

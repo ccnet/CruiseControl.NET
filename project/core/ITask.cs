@@ -12,5 +12,11 @@ namespace tw.ccnet.core
 		/// </summary>
 		/// <param name="result"></param>
 		void Run(IntegrationResult result);
+
+		/// <summary>
+		/// Evaluates if the task should be run, given the specified <see cref="IntegrationResult"/>.
+		/// </summary>
+		/// <param name="result"></param>
+		bool ShouldRun(IntegrationResult result);
 	}
 }

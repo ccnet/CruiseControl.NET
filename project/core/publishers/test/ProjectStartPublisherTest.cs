@@ -98,7 +98,7 @@ namespace tw.ccnet.core.publishers.test
 		{
 			publisher.Project = project;
 			publisher.Url = url;
-			publisher.Publish(null, IntegrationResultMother.CreateSuccessful());
+			publisher.PublishIntegrationResults(null, IntegrationResultMother.CreateSuccessful());
 			publisher.WaitForCompletion();
 		}
 

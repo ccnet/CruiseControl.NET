@@ -6,7 +6,17 @@ using tw.ccnet.remote;
 namespace tw.ccnet.core
 {
 	/// <summary>
-	/// TODO explain why this class is here...
+	/// A generic project contains a collection of tasks.  It will execute them in the specified order.  It is possible to have multiple tasks of the same type.
+	/// <code>
+	/// <![CDATA[
+	/// <project name="foo">
+	///		<sourcecontrol type="cvs"></sourcecontrol>
+	///		<build type="nant"></build>
+	///		<state type="state"></state>
+	///		<publishers></publishers>
+	/// </project>
+	/// ]]>
+	/// </code>
 	/// </summary>
 	[ReflectorType("generic")]
 	public class GenericProject : IProject
@@ -14,6 +24,8 @@ namespace tw.ccnet.core
 		public event IntegrationCompletedEventHandler IntegrationCompleted;
 
 		private IList _tasks = new ArrayList();
+		private GenericIntegrationResult _currentIntegrationResult;
+
 		public string Name 
 		{ 
 			get { return null; }
@@ -24,31 +36,53 @@ namespace tw.ccnet.core
 			get { return null; }
 		}
 
-		[ReflectorCollection("tasks", InstanceType=typeof(ArrayList))]
+		[ReflectorCollection("tasks", InstanceType = typeof(ArrayList))]
 		public IList Tasks
 		{
 			get { return _tasks; }
 			set { _tasks = value; }
 		}
 
+		public IntegrationResult CurrentIntegration
+		{
+			get { return _currentIntegrationResult; }
+		}
+
 		public IntegrationResult RunIntegration(BuildCondition buildCondition)
 		{
-			return null;
+			_currentIntegrationResult = new GenericIntegrationResult();
+
+			foreach (ITask task in Tasks)
+			{
+				try 
+				{ 
+					RunTask(buildCondition, task); 
+				}
+				catch (CruiseControlException ex) 
+				{
+					_currentIntegrationResult.ExceptionResult = ex;
+					_currentIntegrationResult.Status = IntegrationStatus.Exception;
+				}
+			}
+			return _currentIntegrationResult;
+		}
+
+		private void RunTask(BuildCondition buildCondition, ITask task)
+		{
+			if (buildCondition == BuildCondition.ForceBuild || task.ShouldRun(_currentIntegrationResult))
+			{
+				task.Run(_currentIntegrationResult);
+			}
 		}
 		
 		public IntegrationStatus GetLatestBuildStatus()
 		{
-			return IntegrationStatus.Unknown;
+			return _currentIntegrationResult.Status;
 		}
 
 		public int MinimumSleepTimeMillis 
 		{ 
 			get { return 0; }
-		}
-
-		public ArrayList Publishers
-		{
-			get { return new ArrayList(); }
 		}
 
 		public ProjectActivity CurrentActivity 

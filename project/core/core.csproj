@@ -144,6 +144,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "GenericIntegrationResult.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />                
+                <File
                     RelPath = "IntegrationStatus.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -173,6 +178,11 @@
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
+                <File
+                    RelPath = "ProjectBase.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />                
                 <File
                     RelPath = "ProjectIntegrator.cs"
                     SubType = "Code"
@@ -463,11 +473,6 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "sourcecontrol\SourceControl.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
                     RelPath = "sourcecontrol\StarTeam.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -537,6 +542,11 @@
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
+                <File
+                    RelPath = "sourcecontrol\test\ProcessSourceControlTest.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />                
                 <File
                     RelPath = "sourcecontrol\test\PvcsHistoryParserTest.cs"
                     SubType = "Code"
@@ -621,6 +631,11 @@
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
+                <File
+                    RelPath = "test\GenericIntegrationResultTest.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />                
                 <File
                     RelPath = "test\IntegrationResultFixture.cs"
                     SubType = "Code"

@@ -40,5 +40,12 @@ namespace tw.ccnet.core.test
 			result.LastIntegrationStatus = IntegrationStatus.Failure;
 			return result;
 		}
+
+		public static IntegrationResult CreateExceptioned()
+		{
+			IntegrationResult result = new IntegrationResult();
+			result.Status = IntegrationStatus.Exception;
+			return result;
+		}
 	}
 }

@@ -1,14 +1,15 @@
+using Exortech.NetReflector;
+using NMock;
+using NUnit.Framework;
 using System;
 using System.Collections;
-using NUnit.Framework;
-using NMock;
+using tw.ccnet.core.test;
 using tw.ccnet.core.util;
-using Exortech.NetReflector;
 
 namespace tw.ccnet.core.sourcecontrol.test
 {
 	[TestFixture]
-	public class MultiSourceControlTest : Assertion
+	public class MultiSourceControlTest : CustomAssertion
 	{
 		public static string SourceControlXml = @"<sourcecontrol type=""multi"">
 	<sourceControls>
@@ -112,6 +113,16 @@ namespace tw.ccnet.core.sourcecontrol.test
 			Assert(returnedMods.Contains(mod1));
 			Assert(returnedMods.Contains(mod2));
 			Assert(returnedMods.Contains(mod3));
+		}
+
+		[Test]
+		public void ShouldRun()
+		{
+			FileSourceControl sc = new FileSourceControl();
+			Assert(sc.ShouldRun(new IntegrationResult()));
+			Assert(sc.ShouldRun(IntegrationResultMother.CreateSuccessful()));
+			AssertFalse(sc.ShouldRun(IntegrationResultMother.CreateFailed()));
+			AssertFalse(sc.ShouldRun(IntegrationResultMother.CreateExceptioned()));
 		}
 
 		private DynamicMock createModificationsSourceControlMock(Modification[] mods, DateTime dt1, DateTime dt2)

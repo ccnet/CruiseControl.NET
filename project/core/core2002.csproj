@@ -127,7 +127,17 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "GenericIntegrationResult.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "GenericProject.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "ICruiseControl.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -152,6 +162,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "IProjectIntegrator.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "ITask.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -163,6 +178,21 @@
                 />
                 <File
                     RelPath = "Project.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "ProjectBase.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "ProjectIntegrator.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "ProjectIntegratorState.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -291,11 +321,6 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "publishers\ProjectStartPublisher.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
                     RelPath = "publishers\PublisherBase.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -346,11 +371,6 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "publishers\test\ProjectStartPublisherTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
                     RelPath = "publishers\test\XmlLogPublisherTest.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -380,27 +400,12 @@
                     BuildAction = "Content"
                 />
                 <File
-                    RelPath = "schedule\IScheduler.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
                     RelPath = "schedule\Schedule.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "schedule\Scheduler.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "schedule\SchedulerState.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "schedule\test\SchedulerTest.cs"
+                    RelPath = "schedule\test\MockSchedule.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -445,6 +450,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "sourcecontrol\MultiSourceControl.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "sourcecontrol\P4.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -466,11 +476,6 @@
                 />
                 <File
                     RelPath = "sourcecontrol\PvcsHistoryParser.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "sourcecontrol\SourceControl.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -525,6 +530,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "sourcecontrol\test\MultiSourceControlTest.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "sourcecontrol\test\P4HistoryParserTest.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -536,6 +546,11 @@
                 />
                 <File
                     RelPath = "sourcecontrol\test\P4Test.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "sourcecontrol\test\ProcessSourceControlTest.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -619,6 +634,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "test\GenericIntegrationResultTest.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "test\GenericProjectTest.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -639,7 +659,17 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "test\MockCruiseControl.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "test\MockProject.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "test\ProjectIntegratorTest.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

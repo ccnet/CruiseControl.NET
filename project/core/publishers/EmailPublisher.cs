@@ -29,8 +29,6 @@ namespace tw.ccnet.core.publishers
 		Hashtable _groups = new Hashtable();
 		bool _includeDetails = false;		
 
-		XmlLogPublisher logPublisher;
-
 		#endregion
 
 		public EmailGateway EmailGateway
@@ -110,18 +108,6 @@ namespace tw.ccnet.core.publishers
 			if (result.Status==IntegrationStatus.Unknown)
 			{
 				return;
-			}
-
-			if (project!=null) 
-			{
-				foreach (PublisherBase publisher in project.Publishers) 
-				{
-					if (publisher is XmlLogPublisher) 
-					{
-						logPublisher = (XmlLogPublisher)publisher;
-						break;
-					}
-				}
 			}
 
 			string to = CreateRecipientList(result);
@@ -220,15 +206,7 @@ namespace tw.ccnet.core.publishers
 		{
 			StringWriter buffer = new StringWriter();
 			XmlTextWriter writer = new XmlTextWriter(buffer);
-			if (logPublisher != null)
-			{
-				logPublisher.Write(result, writer);
-			}
-			else
-			{
-				// no log publisher has been set -- create a new one
-				new XmlLogPublisher().Write(result, writer);
-			}
+			new XmlLogPublisher().Write(result, writer);
 			writer.Close();
 			
 			XmlDocument xml = new XmlDocument();

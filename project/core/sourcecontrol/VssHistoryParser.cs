@@ -49,7 +49,7 @@ namespace tw.ccnet.core.sourcecontrol
 		{
 			ArrayList entries = new ArrayList();
 			string currentLine = history.ReadLine();
-			//Console.WriteLine(currentLine);
+			LogUtil.Log("VSSPublisher", currentLine);
 			while(IsEndOfFile(currentLine) == false) 
 			{
 				if(IsEntryDelimiter(currentLine)) 
@@ -126,7 +126,7 @@ namespace tw.ccnet.core.sourcecontrol
 			this.dateTimeFormatInfo = CreateDateTimeInfo(culture);
 		}
 
-		private DateTimeFormatInfo CreateDateTimeInfo(CultureInfo culture) 
+		public static DateTimeFormatInfo CreateDateTimeInfo(CultureInfo culture) 
 		{
 			DateTimeFormatInfo dateTimeFormatInfo = culture.DateTimeFormat.Clone() as DateTimeFormatInfo;
 			dateTimeFormatInfo.AMDesignator = "a";

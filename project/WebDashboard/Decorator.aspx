@@ -1,5 +1,5 @@
+<%@ Register Namespace="SiteMesh.DecoratorControls" TagPrefix="decorator" Assembly="Sitemesh" %>
 <%@ Page language="c#" Codebehind="Decorator.aspx.cs" AutoEventWireup="false" Inherits="tw.ccnet.webdashboard.Decorator" %>
-<%@ Register Namespace="SiteMesh.DecoratorControls" TagPrefix="decorator" Assembly="DecoratorControls" %>
 <!DOCTYPE html PUBLIC "-//W3C//Dtd XHTML 1.0 Transitional//EN" "http://localhost/NUnitAsp/dtd/xhtml1-transitional.dtd">
 <HTML>
 	<HEAD>

@@ -5,12 +5,13 @@ using System.Collections;
 using System.Diagnostics;
 using NUnit.Framework;
 using tw.ccnet.core.util;
+using tw.ccnet.core.test;
 using Exortech.NetReflector;
 
 namespace tw.ccnet.core.sourcecontrol.test
 {
 	[TestFixture]
-	public class CvsTest : Assertion
+	public class CvsTest : CustomAssertion
 	{
 		public static string CreateSourceControlXml(string cvsroot, string branch)
 		{
