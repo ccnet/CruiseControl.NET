@@ -3,22 +3,22 @@
         ProjectType = "Local"
         ProductVersion = "7.10.3077"
         SchemaVersion = "2.0"
-        ProjectGuid = "{D9040862-D7E0-4232-BBD0-CF088706E009}"
+        ProjectGuid = "{C8043AD9-0F30-4366-A263-E2FC0D6A57A9}"
     >
         <Build>
             <Settings
-                ApplicationIcon = "App.ico"
+                ApplicationIcon = ""
                 AssemblyKeyContainerName = ""
-                AssemblyName = "cctray"
+                AssemblyName = "ThoughtWorks.CruiseControl.CCTrayLib"
                 AssemblyOriginatorKeyFile = ""
                 DefaultClientScript = "JScript"
                 DefaultHTMLPageLayout = "Grid"
                 DefaultTargetSchema = "IE50"
                 DelaySign = "false"
-                OutputType = "WinExe"
+                OutputType = "Library"
                 PreBuildEvent = ""
                 PostBuildEvent = ""
-                RootNamespace = "ThoughtWorks.CruiseControl.CCTray"
+                RootNamespace = "ThoughtWorks.CruiseControl.CCTrayLib"
                 RunPostBuildEvent = "OnBuildSuccess"
                 StartupObject = ""
             >
@@ -68,19 +68,19 @@
                     BaseAddress = "285212672"
                     CheckForOverflowUnderflow = "false"
                     ConfigurationOverrideFile = ""
-                    DefineConstants = "DEBUG;TRACE"
+                    DefineConstants = ""
                     DocumentationFile = ""
                     DebugSymbols = "true"
                     FileAlignment = "4096"
-                    IncrementalBuild = "false"
+                    IncrementalBuild = "true"
                     NoStdLib = "false"
                     NoWarn = ""
                     Optimize = "false"
-                    OutputPath = "..\..\build\cctray\"
+                    OutputPath = "..\..\build\CCTrayLib\"
                     RegisterForComInterop = "false"
                     RemoveIntegerChecks = "false"
                     TreatWarningsAsErrors = "false"
-                    WarningLevel = "4"
+                    WarningLevel = "1"
                 />
             </Settings>
             <References>
@@ -90,9 +90,14 @@
                     HintPath = "..\..\..\..\..\..\WINDOWS\Microsoft.NET\Framework\v1.1.4322\System.dll"
                 />
                 <Reference
-                    Name = "System.Drawing"
-                    AssemblyName = "System.Drawing"
-                    HintPath = "..\..\..\..\..\..\WINDOWS\Microsoft.NET\Framework\v1.1.4322\System.Drawing.dll"
+                    Name = "System.Data"
+                    AssemblyName = "System.Data"
+                    HintPath = "..\..\..\..\..\..\WINDOWS\Microsoft.NET\Framework\v1.1.4322\System.Data.dll"
+                />
+                <Reference
+                    Name = "System.XML"
+                    AssemblyName = "System.Xml"
+                    HintPath = "..\..\..\..\..\..\WINDOWS\Microsoft.NET\Framework\v1.1.4322\System.XML.dll"
                 />
                 <Reference
                     Name = "System.Windows.Forms"
@@ -100,13 +105,13 @@
                     HintPath = "..\..\..\..\..\..\WINDOWS\Microsoft.NET\Framework\v1.1.4322\System.Windows.Forms.dll"
                 />
                 <Reference
-                    Name = "System.Data"
-                    AssemblyName = "System.Data"
-                    HintPath = "..\..\..\..\..\WINNT\Microsoft.NET\Framework\v1.1.4322\System.Data.dll"
+                    Name = "Remote"
+                    Project = "{E820CF3B-8C5A-4002-BC16-B7818D3D54A8}"
+                    Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
                 />
                 <Reference
-                    Name = "CCTrayLib"
-                    Project = "{C8043AD9-0F30-4366-A263-E2FC0D6A57A9}"
+                    Name = "WebServiceProxy"
+                    Project = "{19C24DF5-7EE8-4325-AFD6-C18D6C85DD9B}"
                     Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
                 />
                 <Reference
@@ -115,84 +120,129 @@
                     HintPath = "..\..\lib\CCTray\Drew.Agents.dll"
                 />
                 <Reference
-                    Name = "Remote"
-                    Project = "{E820CF3B-8C5A-4002-BC16-B7818D3D54A8}"
-                    Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
+                    Name = "System.Drawing"
+                    AssemblyName = "System.Drawing"
+                    HintPath = "..\..\..\..\..\..\WINDOWS\Microsoft.NET\Framework\v1.1.4322\System.Drawing.dll"
                 />
             </References>
         </Build>
         <Files>
             <Include>
                 <File
-                    RelPath = "App.ico"
-                    BuildAction = "Content"
-                />
-                <File
                     RelPath = "AssemblyInfo.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "NotifyIconEx.cs"
-                    SubType = "Component"
+                    RelPath = "Audio.cs"
+                    SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "NotifyIconEx.resx"
-                    DependentUpon = "NotifyIconEx.cs"
-                    BuildAction = "EmbeddedResource"
-                />
-                <File
-                    RelPath = "SettingsForm.cs"
-                    SubType = "Form"
+                    RelPath = "BuildTransition.cs"
+                    SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "SettingsForm.resx"
-                    DependentUpon = "SettingsForm.cs"
-                    BuildAction = "EmbeddedResource"
-                />
-                <File
-                    RelPath = "SystemTrayMonitor.cs"
-                    SubType = "Form"
+                    RelPath = "ConnectionMethod.cs"
+                    SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "SystemTrayMonitor.resx"
-                    DependentUpon = "SystemTrayMonitor.cs"
+                    RelPath = "DefaultStatusIconLoader.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "FileIconStore.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Gray.ico"
                     BuildAction = "EmbeddedResource"
                 />
                 <File
-                    RelPath = "Audio\broken.wav"
-                    BuildAction = "Content"
+                    RelPath = "Green.ico"
+                    BuildAction = "EmbeddedResource"
                 />
                 <File
-                    RelPath = "Audio\doh.wav"
-                    BuildAction = "Content"
+                    RelPath = "HashStatusIconMapper.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "Audio\fixed.wav"
-                    BuildAction = "Content"
+                    RelPath = "IconNotFoundException.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "Audio\still-failing.wav"
-                    BuildAction = "Content"
+                    RelPath = "IIconStore.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "Audio\still-successful.wav"
-                    BuildAction = "Content"
+                    RelPath = "IRemoteCruiseProxyLoader.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "Audio\woohoo.wav"
-                    BuildAction = "Content"
+                    RelPath = "IStatusIconLoader.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "Images\icon-open-file.gif"
-                    BuildAction = "Content"
+                    RelPath = "IStatusIconMapper.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "Images\icon-play.gif"
-                    BuildAction = "Content"
+                    RelPath = "Red.ico"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "RemoteCruiseProxyLoader.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "ResourceIconStore.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Settings.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "SettingsManager.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Sound.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "StatusIcon.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "StatusMonitor.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "StatusMonitor.resx"
+                    DependentUpon = "StatusMonitor.cs"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "Yellow.ico"
+                    BuildAction = "EmbeddedResource"
                 />
             </Include>
         </Files>

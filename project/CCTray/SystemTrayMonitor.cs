@@ -7,7 +7,10 @@ using System.Net.Sockets;
 using System.Runtime.Remoting;
 using System.Windows.Forms;
 using Drew.Agents;
+using ThoughtWorks.CruiseControl.CCTrayLib;
 using ThoughtWorks.CruiseControl.Remote;
+using ErrorEventArgs = ThoughtWorks.CruiseControl.CCTrayLib.ErrorEventArgs;
+using ErrorEventHandler = ThoughtWorks.CruiseControl.CCTrayLib.ErrorEventHandler;
 
 namespace ThoughtWorks.CruiseControl.CCTray
 {
@@ -19,7 +22,6 @@ namespace ThoughtWorks.CruiseControl.CCTray
 	/// </summary>
 	public class SystemTrayMonitor : Form
 	{
-
 		private IContainer components;
 		private ContextMenu contextMenu;
 		private NotifyIconEx trayIcon;
@@ -39,130 +41,128 @@ namespace ThoughtWorks.CruiseControl.CCTray
 		private MenuItem mnuProject1PlaceHolder;
 		Exception _audioException = null;
 		private string _lastUrl = "";
-		private IStatusIconLoader _iconLoader ;
-
+		private IStatusIconLoader _iconLoader;
 
 		#region Constructor
 
-		public SystemTrayMonitor()
+		public SystemTrayMonitor ()
 		{
-			InitializeComponent();
-			InitialiseSettings();
-			InitialiseTrayIcon();
-			InitialiseMonitor();
-			InitialiseProjectMenu();
-			InitialiseSettingsForm();
-			
-			DisplayStartupBalloon();
+			InitializeComponent ();
+			InitialiseSettings ();
+			InitialiseTrayIcon ();
+			InitialiseMonitor ();
+			InitialiseProjectMenu ();
+			InitialiseSettingsForm ();
+
+			DisplayStartupBalloon ();
 		}
 
 		#endregion
 
 		#region Initialisation
 
-		void InitialiseSettings()
+		void InitialiseSettings ()
 		{
-		    _settings = SettingsManager.LoadSettings();
+			_settings = SettingsManager.LoadSettings ();
 		}
 
-		void InitialiseMonitor()
+		void InitialiseMonitor ()
 		{
 			statusMonitor.Settings = _settings;
-			statusMonitor.StartPolling();
+			statusMonitor.StartPolling ();
 		}
 
-		void InitialiseProjectMenu()
+		void InitialiseProjectMenu ()
 		{
-			this.mnuProjects.MenuItems.Clear();
-			foreach(ProjectStatus project in statusMonitor.GetRemoteProjects())
+			this.mnuProjects.MenuItems.Clear ();
+			foreach (ProjectStatus project in statusMonitor.GetRemoteProjects ())
 			{
-				MenuItem menuItem = new MenuItem(project.Name);
-				menuItem.Click += new EventHandler(this.mnuProjectSelected_Click);
-				menuItem.Checked = (project.Name.Equals(_settings.ProjectName));
-				this.mnuProjects.MenuItems.Add(menuItem);
+				MenuItem menuItem = new MenuItem (project.Name);
+				menuItem.Click += new EventHandler (this.mnuProjectSelected_Click);
+				menuItem.Checked = (project.Name.Equals (_settings.ProjectName));
+				this.mnuProjects.MenuItems.Add (menuItem);
 			}
 
 			_lastUrl = statusMonitor.Settings.RemoteServerUrl;
 		}
 
-		void InitialiseTrayIcon()
+		void InitialiseTrayIcon ()
 		{
-			ProjectStatus status = new ProjectStatus();
+			ProjectStatus status = new ProjectStatus ();
 			status.BuildStatus = IntegrationStatus.Unknown;
 			status.Activity = ProjectActivity.Unknown;
-		    _iconLoader = CreateIconLoader();
+			_iconLoader = CreateIconLoader ();
 
-		    trayIcon.Icon = _iconLoader.LoadIcon(status).Icon;                                  
+			trayIcon.Icon = _iconLoader.LoadIcon (status).Icon;
 		}
 
-	    private IStatusIconLoader CreateIconLoader()
-	    {
-	        if(!_settings.Icons.UseDefaultIcons)
-	        {
+		private IStatusIconLoader CreateIconLoader ()
+		{
+			if (!_settings.Icons.UseDefaultIcons)
+			{
 				try
 				{
-					return new DefaultStatusIconLoader(new FileIconStore(_settings.Icons));    
+					return new DefaultStatusIconLoader (new FileIconStore (_settings.Icons));
 				}
-				catch(IconNotFoundException )
+				catch (IconNotFoundException)
 				{
-					_settings.Icons.UseDefaultIcons = true;					    
+					_settings.Icons.UseDefaultIcons = true;
 				}
-	        }
-           return new DefaultStatusIconLoader(new ResourceIconStore());
-	    }
-
-	    void DisplayStartupBalloon()
-		{
-			if (_settings.NotificationBalloon.ShowBalloon)
-				trayIcon.ShowBalloon("CruiseControl.NET Monitor", "Monitor started.", NotifyInfoFlags.Info, 1500);
+			}
+			return new DefaultStatusIconLoader (new ResourceIconStore ());
 		}
 
-		private void CCTray_Load(object sender, EventArgs e)
+		void DisplayStartupBalloon ()
+		{
+			if (_settings.NotificationBalloon.ShowBalloon)
+				trayIcon.ShowBalloon ("CruiseControl.NET Monitor", "Monitor started.", NotifyInfoFlags.Info, 1500);
+		}
+
+		private void CCTray_Load (object sender, EventArgs e)
 		{
 			// calling Hide on the window ensures the form's icon doesn't appear
 			// while ALT+TABbing between applications, even though it won't appear
 			// in the taskbar
-			this.Hide();
+			this.Hide ();
 		}
 
-		void InitialiseSettingsForm()
+		void InitialiseSettingsForm ()
 		{
-			settingsForm = new SettingsForm(_settings, statusMonitor);
+			settingsForm = new SettingsForm (_settings, statusMonitor);
 		}
-
 
 		#endregion
 
 		#region Windows Form Designer generated code
 
-		protected override void Dispose(bool disposing)
+		protected override void Dispose (bool disposing)
 		{
 			if (disposing)
 			{
-				if (components!=null) 
+				if (components != null)
 				{
-					components.Dispose();
+					components.Dispose ();
 				}
 			}
-			base.Dispose(disposing);
+			base.Dispose (disposing);
 		}
 
 		/// <summary>
 		/// Required method for Designer support - do not modify
 		/// the contents of this method with the code editor.
 		/// </summary>
-		private void InitializeComponent()
+		private void InitializeComponent ()
 		{
-			this.components = new Container();
-			this.trayIcon = new NotifyIconEx();
-			this.contextMenu = new ContextMenu();
-			this.mnuLaunchWebPage = new MenuItem();
-			this.mnuProjects = new MenuItem();
-			this.mnuProject1PlaceHolder = new MenuItem();
-			this.mnuSettings = new MenuItem();
-			this.mnuForceBuild = new MenuItem();
-			this.mnuExit = new MenuItem();
-			this.statusMonitor = new StatusMonitor(new RemoteCruiseProxyLoader());
+			this.components = new Container ();
+			this.trayIcon = new NotifyIconEx ();
+			this.contextMenu = new ContextMenu ();
+			this.mnuLaunchWebPage = new MenuItem ();
+			this.mnuProjects = new MenuItem ();
+			this.mnuProject1PlaceHolder = new MenuItem ();
+			this.mnuSettings = new MenuItem ();
+			this.mnuForceBuild = new MenuItem ();
+			this.mnuExit = new MenuItem ();
+			this.statusMonitor = new StatusMonitor (new RemoteCruiseProxyLoader ());
 			// 
 			// trayIcon
 			// 
@@ -170,29 +170,33 @@ namespace ThoughtWorks.CruiseControl.CCTray
 			this.trayIcon.Icon = null;
 			this.trayIcon.Text = "No Connection";
 			this.trayIcon.Visible = true;
-			this.trayIcon.DoubleClick += new EventHandler(this.trayIcon_DoubleClick);
+			this.trayIcon.DoubleClick += new EventHandler (this.trayIcon_DoubleClick);
 			// 
 			// contextMenu
 			// 
-			this.contextMenu.MenuItems.AddRange(new MenuItem[] {
-																						this.mnuLaunchWebPage,
-																						this.mnuProjects,
-																						this.mnuSettings,
-																						this.mnuForceBuild,
-																						this.mnuExit});
-			this.contextMenu.Popup += new EventHandler(this.contextMenu_Popup);
+			this.contextMenu.MenuItems.AddRange (new MenuItem[]
+				{
+					this.mnuLaunchWebPage,
+					this.mnuProjects,
+					this.mnuSettings,
+					this.mnuForceBuild,
+					this.mnuExit
+				});
+			this.contextMenu.Popup += new EventHandler (this.contextMenu_Popup);
 			// 
 			// mnuLaunchWebPage
 			// 
 			this.mnuLaunchWebPage.Index = 0;
 			this.mnuLaunchWebPage.Text = "&Launch web page";
-			this.mnuLaunchWebPage.Click += new EventHandler(this.mnuLaunchWebPage_Click);
+			this.mnuLaunchWebPage.Click += new EventHandler (this.mnuLaunchWebPage_Click);
 			// 
 			// mnuProjects
 			// 
 			this.mnuProjects.Index = 1;
-			this.mnuProjects.MenuItems.AddRange(new MenuItem[] {
-																						this.mnuProject1PlaceHolder});
+			this.mnuProjects.MenuItems.AddRange (new MenuItem[]
+				{
+					this.mnuProject1PlaceHolder
+				});
 			this.mnuProjects.Text = "&Project";
 			// 
 			// mnuProject1PlaceHolder
@@ -202,33 +206,33 @@ namespace ThoughtWorks.CruiseControl.CCTray
 			// 
 			// mnuSettings
 			// 
-			this.mnuSettings.Index = 2;	//1;
+			this.mnuSettings.Index = 2; //1;
 			this.mnuSettings.Text = "&Settings...";
-			this.mnuSettings.Click += new EventHandler(this.mnuSettings_Click);
+			this.mnuSettings.Click += new EventHandler (this.mnuSettings_Click);
 			// 
 			// mnuForceBuild
 			// 
-			this.mnuForceBuild.Index = 3;	//2;
+			this.mnuForceBuild.Index = 3; //2;
 			this.mnuForceBuild.Text = "&Force build";
-			this.mnuForceBuild.Click += new EventHandler(this.mnuForceBuild_Click);
+			this.mnuForceBuild.Click += new EventHandler (this.mnuForceBuild_Click);
 			// 
 			// mnuExit
 			// 
-			this.mnuExit.Index = 4;	//3;
+			this.mnuExit.Index = 4; //3;
 			this.mnuExit.Text = "E&xit";
-			this.mnuExit.Click += new EventHandler(this.mnuExit_Click);
+			this.mnuExit.Click += new EventHandler (this.mnuExit_Click);
 			// 
 			// statusMonitor
 			// 
 			this.statusMonitor.Settings = null;
-			this.statusMonitor.Error += new ErrorEventHandler(this.statusMonitor_Error);
-			this.statusMonitor.BuildOccurred += new BuildOccurredEventHandler(this.statusMonitor_BuildOccurred);
-			this.statusMonitor.Polled += new PolledEventHandler(this.statusMonitor_Polled);
+			this.statusMonitor.Error += new ErrorEventHandler (this.statusMonitor_Error);
+			this.statusMonitor.BuildOccurred += new BuildOccurredEventHandler (this.statusMonitor_BuildOccurred);
+			this.statusMonitor.Polled += new PolledEventHandler (this.statusMonitor_Polled);
 			// 
 			// SystemTrayMonitor
 			// 
-			this.AutoScaleBaseSize = new Size(5, 13);
-			this.ClientSize = new Size(115, 6);	//(104, 19);
+			this.AutoScaleBaseSize = new Size (5, 13);
+			this.ClientSize = new Size (115, 6); //(104, 19);
 			this.ControlBox = false;
 			this.Enabled = false;
 			this.MaximizeBox = false;
@@ -238,7 +242,7 @@ namespace ThoughtWorks.CruiseControl.CCTray
 			this.SizeGripStyle = SizeGripStyle.Hide;
 			this.Text = "CCTray";
 			this.WindowState = FormWindowState.Minimized;
-			this.Load += new EventHandler(this.CCTray_Load);
+			this.Load += new EventHandler (this.CCTray_Load);
 
 		}
 
@@ -250,287 +254,282 @@ namespace ThoughtWorks.CruiseControl.CCTray
 		/// The main entry point for the application.
 		/// </summary>
 		[STAThread]
-		static void Main(String[] args)
+		static void Main (String[] args)
 		{
 			if (args.Length > 0)
 			{
 				SettingsManager.SettingsFileName = args[0];
 			}
-			
-			Application.Run(new SystemTrayMonitor());
-		}
 
+			Application.Run (new SystemTrayMonitor ());
+		}
 
 		#endregion
 
 		#region Application exit
 
-		private void mnuExit_Click(object sender, EventArgs e)
+		private void mnuExit_Click (object sender, EventArgs e)
 		{
-			Exit();
+			Exit ();
 		}
 
-		void Exit()
+		void Exit ()
 		{
-			statusMonitor.StopPolling();
-			this.Close();
-			Application.Exit();
+			statusMonitor.StopPolling ();
+			this.Close ();
+			Application.Exit ();
 		}
-
 
 		#endregion
 
 		#region Monitor event handlers
 
-		private void statusMonitor_Polled(object sauce, PolledEventArgs e)
+		private void statusMonitor_Polled (object sauce, PolledEventArgs e)
 		{
 			_exception = null;
 
 			// update tray icon and tooltip
-			trayIcon.Text = CalculateTrayText(e.ProjectStatus);
-			trayIcon.Icon = _iconLoader.LoadIcon(e.ProjectStatus).Icon;;
-			if(statusMonitor.Settings.RemoteServerUrl != _lastUrl)
-				InitialiseProjectMenu();
+			trayIcon.Text = CalculateTrayText (e.ProjectStatus);
+			trayIcon.Icon = _iconLoader.LoadIcon (e.ProjectStatus).Icon;
+			;
+			if (statusMonitor.Settings.RemoteServerUrl != _lastUrl)
+				InitialiseProjectMenu ();
 		}
 
-		private void statusMonitor_BuildOccurred(object sauce, BuildOccurredEventArgs e)
+		private void statusMonitor_BuildOccurred (object sauce, BuildOccurredEventArgs e)
 		{
 			_exception = null;
 
 			string caption = e.BuildTransitionInfo.Caption;
-			string description = _settings.Messages.GetMessageForTransition(e.BuildTransition);
-			NotifyInfoFlags icon = GetNotifyInfoFlag(e.BuildTransitionInfo.ErrorLevel);
+			string description = _settings.Messages.GetMessageForTransition (e.BuildTransition);
+			NotifyInfoFlags icon = GetNotifyInfoFlag (e.BuildTransitionInfo.ErrorLevel);
 
-			HandleBalloonNotification(caption, description, icon);
-			HandleAgentNotification(description);
+			HandleBalloonNotification (caption, description, icon);
+			HandleAgentNotification (description);
 
 			// play audio, in accordance to settings
-			PlayBuildAudio(e.BuildTransition);
+			PlayBuildAudio (e.BuildTransition);
 		}
 
 		Exception _exception;
 
-		private void statusMonitor_Error(object sender, ErrorEventArgs e)
+		private void statusMonitor_Error (object sender, ErrorEventArgs e)
 		{
-			if (_exception==null && _settings.ShowExceptions)
+			if (_exception == null && _settings.ShowExceptions)
 			{
 				// set the exception before displaying the dialog, because the timer keeps polling and subsequent
 				// polls would otherwise cause multiple dialogs, balloons and agents to be displayed
 				_exception = e.Exception;
 
-                if (_settings.ShowExceptions)
-                {
-                    MessageBox.Show(e.Exception.ToString(), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
+				if (_settings.ShowExceptions)
+				{
+					MessageBox.Show (e.Exception.ToString (), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+				}
 
-                if (ExceptionIsConnectionRefused())
-                {
-                    string description = _exception.Message;
-                    HandleBalloonNotification("No Connection", description, GetNotifyInfoFlag(ErrorLevel.Error));
-                    HandleAgentNotification(description);
-                }
+				if (ExceptionIsConnectionRefused ())
+				{
+					string description = _exception.Message;
+					HandleBalloonNotification ("No Connection", description, GetNotifyInfoFlag (ErrorLevel.Error));
+					HandleAgentNotification (description);
+				}
 			}
 
 			_exception = e.Exception;
 
-			trayIcon.Text = GetErrorMessage(e.Exception);
-			ProjectStatus status = new ProjectStatus();
+			trayIcon.Text = GetErrorMessage (e.Exception);
+			ProjectStatus status = new ProjectStatus ();
 			status.BuildStatus = IntegrationStatus.Exception;
-			trayIcon.Icon = _iconLoader.LoadIcon(status).Icon;
+			trayIcon.Icon = _iconLoader.LoadIcon (status).Icon;
 		}
 
-        private bool ExceptionIsConnectionRefused()
-        {
-            const int WSAECONNREFUSED = 10061;  // Doesn't seem to be an enum for Socket Error codes?
-            return (_exception is SocketException && ((SocketException)_exception).ErrorCode == WSAECONNREFUSED);
-        }
+		private bool ExceptionIsConnectionRefused ()
+		{
+			const int WSAECONNREFUSED = 10061; // Doesn't seem to be an enum for Socket Error codes?
+			return (_exception is SocketException && ((SocketException) _exception).ErrorCode == WSAECONNREFUSED);
+		}
 
-		private void mnuProjectSelected_Click(object sender, EventArgs e)
+		private void mnuProjectSelected_Click (object sender, EventArgs e)
 		{
 			MenuItem menuItem = (MenuItem) sender;
-		    _settings.ProjectName = menuItem.Text;
-			foreach(MenuItem item in menuItem.Parent.MenuItems)
+			_settings.ProjectName = menuItem.Text;
+			foreach (MenuItem item in menuItem.Parent.MenuItems)
 			{
 				item.Checked = false;
 			}
 			menuItem.Checked = true;
-			SettingsManager.WriteSettings(_settings);
-			statusMonitor.Poll();
+			SettingsManager.WriteSettings (_settings);
+			statusMonitor.Poll ();
 		}
-		
+
 		#endregion
 
 		#region Agent notification
 
-	    void HandleAgentNotification(string description)
+		void HandleAgentNotification (string description)
 		{
 			if (_settings.Agents.ShowAgent)
 			{
-				try 
+				try
 				{
-					EnsureAgentLoaded();
-				
-					_agent.Speak(description);
+					EnsureAgentLoaded ();
+
+					_agent.Speak (description);
 
 					// Hide agent
 					if (_settings.Agents.HideAfterMessage)
 					{
-						_agent.Hide();
+						_agent.Hide ();
 					}
 				}
 				catch (Exception ex)
 				{
 					// only display the first exception with agents
-					if (_agentException==null)
+					if (_agentException == null)
 					{
-						MessageBox.Show(ex.Message, "Unable to initialise agent", MessageBoxButtons.OK, MessageBoxIcon.Error);
+						MessageBox.Show (ex.Message, "Unable to initialise agent", MessageBoxButtons.OK, MessageBoxIcon.Error);
 						_agentException = ex;
 					}
 				}
 			}
 		}
 
-		void EnsureAgentLoaded()
+		void EnsureAgentLoaded ()
 		{
-			if (_agent==null)
-				_agent = _settings.Agents.CreateAgent();
+			if (_agent == null)
+				_agent = _settings.Agents.CreateAgent ();
 		}
-
 
 		#endregion
 
 		#region Balloon notification
 
-		void HandleBalloonNotification(string caption, string description, NotifyInfoFlags icon)
+		void HandleBalloonNotification (string caption, string description, NotifyInfoFlags icon)
 		{
 			// show a balloon
 			if (_settings.NotificationBalloon.ShowBalloon)
-				trayIcon.ShowBalloon(caption, description, icon, 5000);
+				trayIcon.ShowBalloon (caption, description, icon, 5000);
 		}
-
 
 		#endregion
 
 		#region Playing of audio
 
-		void PlayBuildAudio(BuildTransition transition)
+		void PlayBuildAudio (BuildTransition transition)
 		{
-			if (_settings.Sounds.ShouldPlaySoundForTransition(transition))
+			if (_settings.Sounds.ShouldPlaySoundForTransition (transition))
 			{
 				try
 				{
-					PlayAudioFile(_settings.Sounds.GetAudioFileLocation(transition));
+					PlayAudioFile (_settings.Sounds.GetAudioFileLocation (transition));
 				}
 				catch (Exception ex)
 				{
 					// only display the first exception with audio
-					if (_audioException==null)
+					if (_audioException == null)
 					{
-						MessageBox.Show(ex.Message, "Unable to initialise audio", MessageBoxButtons.OK, MessageBoxIcon.Error);
+						MessageBox.Show (ex.Message, "Unable to initialise audio", MessageBoxButtons.OK, MessageBoxIcon.Error);
 						_audioException = ex;
 					}
 				}
 			}
 		}
 
-		void PlayAudioFile(string fileName)
+		void PlayAudioFile (string fileName)
 		{
-		    Stream stream = new FileStream(fileName, FileMode.Open, FileAccess.Read, FileShare.Read);
+			Stream stream = new FileStream (fileName, FileMode.Open, FileAccess.Read, FileShare.Read);
 			byte[] bytes = new byte[stream.Length];
-			stream.Read(bytes, 0, bytes.Length);
-			Audio.PlaySound(bytes, true, true);
+			stream.Read (bytes, 0, bytes.Length);
+			Audio.PlaySound (bytes, true, true);
 		}
 
 		#endregion
 
-
 		#region Presentation calculations
 
-		string CalculateTrayText(ProjectStatus projectStatus)
+		string CalculateTrayText (ProjectStatus projectStatus)
 		{
-			object activity = (projectStatus.Status==ProjectIntegratorState.Stopped) ? ProjectActivity.Unknown : projectStatus.Activity;
+			object activity = (projectStatus.Status == ProjectIntegratorState.Stopped) ? ProjectActivity.Unknown : projectStatus.Activity;
 
-			return string.Format("Server: {0}\nProject: {1}\nLast Build: {2} ({3})", 
-				activity,
-				projectStatus.Name,
-				projectStatus.BuildStatus,
-				projectStatus.LastBuildLabel);
+			return string.Format ("Server: {0}\nProject: {1}\nLast Build: {2} ({3})",
+			                      activity,
+			                      projectStatus.Name,
+			                      projectStatus.BuildStatus,
+			                      projectStatus.LastBuildLabel);
 		}
 
-		NotifyInfoFlags GetNotifyInfoFlag(ErrorLevel errorLevel)
+		NotifyInfoFlags GetNotifyInfoFlag (ErrorLevel errorLevel)
 		{
-			if (errorLevel==ErrorLevel.Error)
+			if (errorLevel == ErrorLevel.Error)
 				return NotifyInfoFlags.Error;
-			else if (errorLevel==ErrorLevel.Info)
+			else if (errorLevel == ErrorLevel.Info)
 				return NotifyInfoFlags.Info;
-			else if (errorLevel==ErrorLevel.Warning)
+			else if (errorLevel == ErrorLevel.Warning)
 				return NotifyInfoFlags.Warning;
 			else
 				return NotifyInfoFlags.None;
 		}
 
-		string GetErrorMessage(Exception ex)
+		string GetErrorMessage (Exception ex)
 		{
 			if (ex is RemotingException)
 				return "No Connection";
 			else
-				return ex.Message;	
+				return ex.Message;
 		}
-
 
 		#endregion
 
 		#region Launching web page
 
-		private void trayIcon_DoubleClick(object sender, EventArgs e)
+		private void trayIcon_DoubleClick (object sender, EventArgs e)
 		{
-			LaunchWebPage();
+			LaunchWebPage ();
 		}
 
-		private void mnuLaunchWebPage_Click(object sender, EventArgs e)
+		private void mnuLaunchWebPage_Click (object sender, EventArgs e)
 		{
-			LaunchWebPage();
+			LaunchWebPage ();
 		}
 
 		// TODO keep tabs on browser process -- if it's still running (and still
 		// on the same server) bring it to the foreground.
 
-		void LaunchWebPage()
+		void LaunchWebPage ()
 		{
-			if (statusMonitor.WebUrl==null || statusMonitor.WebUrl.Trim().Length==0)
-				UnableToLaunchWebPage();
+			if (statusMonitor.WebUrl == null || statusMonitor.WebUrl.Trim ().Length == 0)
+				UnableToLaunchWebPage ();
 			else
-			    Process.Start(statusMonitor.WebUrl);
+				Process.Start (statusMonitor.WebUrl);
 		}
 
-		void UnableToLaunchWebPage()
+		void UnableToLaunchWebPage ()
 		{
 			// TODO this messagebox appears in the background... bring it to the foreground somehow
-			MessageBox.Show(this, "The web page url isn't specified.", "Unable to launch web page", MessageBoxButtons.OK, MessageBoxIcon.Error);
+			MessageBox.Show (this, "The web page url isn't specified.", "Unable to launch web page", MessageBoxButtons.OK, MessageBoxIcon.Error);
 		}
 
 		#endregion
 
 		#region Settings
 
-		private void mnuSettings_Click(object sender, EventArgs e)
+		private void mnuSettings_Click (object sender, EventArgs e)
 		{
-			settingsForm.Launch();
+			settingsForm.Launch ();
 		}
 
 		#endregion
 
 		#region Forcing a build
 
-		void mnuForceBuild_Click(object sender, EventArgs e)
+		void mnuForceBuild_Click (object sender, EventArgs e)
 		{
 			try
 			{
-				statusMonitor.ForceBuild(_settings.ProjectName);
+				statusMonitor.ForceBuild (_settings.ProjectName);
 			}
 			catch (Exception ex)
 			{
-				MessageBox.Show(ex.Message, "Unable to force build", MessageBoxButtons.OK, MessageBoxIcon.Error);
+				MessageBox.Show (ex.Message, "Unable to force build", MessageBoxButtons.OK, MessageBoxIcon.Error);
 			}
 		}
 
@@ -538,9 +537,9 @@ namespace ThoughtWorks.CruiseControl.CCTray
 
 		#region Context menu management
 
-		void contextMenu_Popup(object sender, EventArgs e)
+		void contextMenu_Popup (object sender, EventArgs e)
 		{
-			mnuForceBuild.Enabled = (statusMonitor.ProjectStatus != null && statusMonitor.ProjectStatus.Activity==ProjectActivity.Sleeping);
+			mnuForceBuild.Enabled = (statusMonitor.ProjectStatus != null && statusMonitor.ProjectStatus.Activity == ProjectActivity.Sleeping);
 		}
 
 		#endregion

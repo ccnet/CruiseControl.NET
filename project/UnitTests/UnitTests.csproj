@@ -139,12 +139,62 @@
                     AssemblyName = "nunit.core"
                     HintPath = "..\..\lib\nunit.core.dll"
                 />
+                <Reference
+                    Name = "CCTrayLib"
+                    Project = "{C8043AD9-0F30-4366-A263-E2FC0D6A57A9}"
+                    Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
+                />
+                <Reference
+                    Name = "System.Drawing"
+                    AssemblyName = "System.Drawing"
+                    HintPath = "..\..\..\..\..\..\WINDOWS\Microsoft.NET\Framework\v1.1.4322\System.Drawing.dll"
+                />
+                <Reference
+                    Name = "WebServiceProxy"
+                    Project = "{19C24DF5-7EE8-4325-AFD6-C18D6C85DD9B}"
+                    Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
+                />
             </References>
         </Build>
         <Files>
             <Include>
                 <File
                     RelPath = "AssemblyInfo.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "CCTrayLib\AbstractIconStoreTestCase.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "CCTrayLib\FileIconStoreTest.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "CCTrayLib\IconFileFixture.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "CCTrayLib\RemoteCruiseProxyLoaderTest.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "CCTrayLib\ResourceIconStoreTest.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "CCTrayLib\StatusIconTest.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "CCTrayLib\StatusMonitorTransitionChangeTest.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

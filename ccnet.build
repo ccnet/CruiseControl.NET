@@ -54,7 +54,6 @@
 		<exec program="${nunit-console.exe}" workingdir="${build.dir}\web" commandline="${web.dll} /xml:../${web.dll}-results.xml /nologo"/>
 		<exec program="${nunit-console.exe}" workingdir="${build.dir}\server" commandline="${console.exe} /xml:../${console.exe}-results.xml /nologo"/>
 		<exec program="${nunit-console.exe}" workingdir="${build.dir}\service" commandline="${service.exe} /xml:../${service.exe}-results.xml /nologo"/>
-		<exec program="${nunit-console.exe}" workingdir="${build.dir}\cctray" commandline="${cctray.exe} /xml:../${cctray.exe}-results.xml /nologo"/>
 		<exec program="${nunit-console.exe}" workingdir="${build.dir}\unittests" commandline="${unittests.dll} /xml:../${unittests.dll}-results.xml /nologo"/>
 	</target>
 

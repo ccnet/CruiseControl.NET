@@ -43,6 +43,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnitTests", "UnitTests\Unit
 	ProjectSection(ProjectDependencies) = postProject
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CCTrayLib", "CCTrayLib\CCTrayLib.csproj", "{C8043AD9-0F30-4366-A263-E2FC0D6A57A9}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfiguration) = preSolution
 		Build = Build
@@ -116,6 +120,12 @@ Global
 		{3F93AC24-DF56-469E-91C3-43A2A179C7E1}.Debug.Build.0 = Debug|.NET
 		{3F93AC24-DF56-469E-91C3-43A2A179C7E1}.Release.ActiveCfg = Release|.NET
 		{3F93AC24-DF56-469E-91C3-43A2A179C7E1}.Release.Build.0 = Release|.NET
+		{C8043AD9-0F30-4366-A263-E2FC0D6A57A9}.Build.ActiveCfg = Build|.NET
+		{C8043AD9-0F30-4366-A263-E2FC0D6A57A9}.Build.Build.0 = Build|.NET
+		{C8043AD9-0F30-4366-A263-E2FC0D6A57A9}.Debug.ActiveCfg = Debug|.NET
+		{C8043AD9-0F30-4366-A263-E2FC0D6A57A9}.Debug.Build.0 = Debug|.NET
+		{C8043AD9-0F30-4366-A263-E2FC0D6A57A9}.Release.ActiveCfg = Release|.NET
+		{C8043AD9-0F30-4366-A263-E2FC0D6A57A9}.Release.Build.0 = Release|.NET
 	EndGlobalSection
 	GlobalSection(SolutionItems) = postSolution
 		..\ccnet.build = ..\ccnet.build
