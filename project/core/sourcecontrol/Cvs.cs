@@ -17,6 +17,7 @@ namespace tw.ccnet.core.sourcecontrol
 		private string _executable = "cvs.exe";
 		private string _cvsRoot;
 		private string _workingDirectory;
+		private bool _labelOnSuccess;
 
 		[ReflectorProperty("executable")]
 		public string Executable
@@ -39,6 +40,13 @@ namespace tw.ccnet.core.sourcecontrol
 			set{ _workingDirectory = value;}
 		}		
 
+		[ReflectorProperty("labelOnSuccess", Required=false)]
+		public bool LabelOnSuccess
+		{
+			get{ return _labelOnSuccess;}
+			set{ _labelOnSuccess = value;}
+		}
+
 		protected override IHistoryParser HistoryParser
 		{
 			get { return _parser; }
@@ -56,9 +64,16 @@ namespace tw.ccnet.core.sourcecontrol
 
 		public override Process CreateLabelProcess(string label, DateTime timeStamp) 
 		{
-			string cvsroot = (CvsRoot == null) ? String.Empty : "-d " + CvsRoot + " ";
-			string args = String.Format("{0} tag {1}", cvsroot, "ver-" + label);
-			return ProcessUtil.CreateProcess(Executable, args, WorkingDirectory);
+			if (LabelOnSuccess)
+			{
+				string cvsroot = (CvsRoot == null) ? String.Empty : "-d " + CvsRoot + " ";
+				string args = String.Format("{0} tag {1}", cvsroot, "ver-" + label);
+				return ProcessUtil.CreateProcess(Executable, args, WorkingDirectory);
+			}
+			else
+			{
+				return null;
+			}
 		}
 
 		internal string BuildHistoryProcessArgs(DateTime from)

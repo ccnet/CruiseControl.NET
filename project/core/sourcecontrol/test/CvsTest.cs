@@ -54,6 +54,16 @@ namespace tw.ccnet.core.sourcecontrol.test
 			string actual = actualProcess.StartInfo.Arguments;
 			Assertion.AssertEquals(expected, actual);
 		}
+
+		public void TestLabelOnSuccessProcess()
+		{
+			Cvs cvs = CreateCvs(null);
+
+			Assertion.AssertNull(cvs.CreateLabelProcess("", new DateTime()));
+
+			cvs.LabelOnSuccess = true;
+			Assertion.AssertNotNull(cvs.CreateLabelProcess("", new DateTime()));
+		}
 	
 		public void TestExecutable_default()
 		{
