@@ -7,9 +7,9 @@
     <xsl:template match="/">
    	<xsl:variable name="messages" select="/cruisecontrol//buildresults//message | //builderror//message" />
    	<xsl:if test="count($messages) > 0">   	
-		<xsl:variable name="error.messages" select="$messages[(contains(text(), 'error') and not(contains(text(), '0 error') or contains(text(), 'Build complete'))) or @level='Error']" />
+		<xsl:variable name="error.messages" select="$messages[(contains(text(), 'error') and not(contains(text(), '0 error') or contains(text(), 'errors'))) or @level='Error']" />
 	        <xsl:variable name="error.messages.count" select="count($error.messages)" />
-	        <xsl:variable name="warning.messages" select="$messages[(contains(text(), 'warning') and not(contains(text(), '0 warning') or contains(text(), 'Build complete'))) or @level='Warning']" />
+	        <xsl:variable name="warning.messages" select="$messages[(contains(text(), 'warning') and not(contains(text(), '0 warning') or contains(text(), 'warnings'))) or @level='Warning']" />
 	        <xsl:variable name="warning.messages.count" select="count($warning.messages)" />
 	        <xsl:variable name="total" select="count($error.messages) + count($warning.messages)"/>
 

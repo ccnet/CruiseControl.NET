@@ -17,7 +17,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Xsl
 		public void LoadStyleSheet()
 		{
 			transform = new XslTransform();
-			transform.Load(stylesheet);			
+			transform.Load(stylesheet);
 		}
 
 		[Test]
@@ -39,6 +39,14 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Xsl
 			CustomAssertion.AssertNotContains("Build complete", actualXml);
 		}
 
+		[Test]
+		public void ShouldNotRenderRulesErrorMessage()
+		{
+			string input = @"* Rules gave the following errors:";
+
+			string actualXml = LoadStylesheetAndTransformInput(CreateInfoMessage(input));
+			CustomAssertion.AssertNotContains("Rules", actualXml);
+		}
 
 		private string CreateInfoMessage(string input)
 		{
@@ -52,7 +60,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Xsl
 		{
 			XPathDocument document = new XPathDocument(new StringReader(input));
 			XmlReader output = transform.Transform(document, null);
-			
+
 			XmlDocument outputDocument = new XmlDocument();
 			outputDocument.Load(output);
 			return outputDocument.OuterXml;
