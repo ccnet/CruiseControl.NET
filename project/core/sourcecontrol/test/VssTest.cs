@@ -139,6 +139,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test
 			Process orginal = new Process();
 
 			Vss vss = new Vss();
+			vss.Executable = "ss.exe"; // necessary to stop registry setting from being read
 			Process actual = vss.CreateHistoryProcess(DateTime.Now, DateTime.Now);
 			AssertEquals(orginal.StartInfo.EnvironmentVariables[Vss.SS_DIR_KEY], actual.StartInfo.EnvironmentVariables[Vss.SS_DIR_KEY]);
 		}
