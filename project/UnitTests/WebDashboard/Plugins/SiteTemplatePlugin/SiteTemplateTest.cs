@@ -139,6 +139,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Plugins.SiteTemplate
 			IPluginSpecification[] assemblyLoadingPlugins = new IPluginSpecification[] { buildPlugin, serverPlugin };
 			configurationGetterMock.ExpectAndReturn("GetConfigFromSection", assemblyLoadingPlugins, PluginsSectionHandler.SectionName);
 			configurationGetterMock.ExpectAndReturn("GetConfigFromSection", assemblyLoadingPlugins, PluginsSectionHandler.SectionName);
+			configurationGetterMock.ExpectAndReturn("GetConfigFromSection", assemblyLoadingPlugins, PluginsSectionHandler.SectionName);
 			requestWrapperMock.ExpectAndReturn("GetProjectName", project);
 			requestWrapperMock.ExpectAndReturn("GetServerName", server);
 			buildRetrieverMock.ExpectAndReturn("GetBuild", build, requestWrapper);
@@ -167,6 +168,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Plugins.SiteTemplate
 			IPluginSpecification buildPlugin = new AssemblyLoadingPluginSpecification(typeof(TestBuildPlugin).FullName, typeof(TestBuildPlugin).Assembly.CodeBase);
 			IPluginSpecification serverPlugin = new AssemblyLoadingPluginSpecification(typeof(TestServerPlugin).FullName, typeof(TestServerPlugin).Assembly.CodeBase);
 			IPluginSpecification[] assemblyLoadingPlugins = new IPluginSpecification[] { buildPlugin, serverPlugin };
+			configurationGetterMock.ExpectAndReturn("GetConfigFromSection", assemblyLoadingPlugins, PluginsSectionHandler.SectionName);
 			configurationGetterMock.ExpectAndReturn("GetConfigFromSection", assemblyLoadingPlugins, PluginsSectionHandler.SectionName);
 			configurationGetterMock.ExpectAndReturn("GetConfigFromSection", assemblyLoadingPlugins, PluginsSectionHandler.SectionName);
 			requestWrapperMock.ExpectAndReturn("GetProjectName", project);

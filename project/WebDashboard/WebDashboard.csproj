@@ -318,6 +318,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Dashboard\DefaultProjectUrlGenerator.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Dashboard\DefaultServerUrlGenerator.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -349,6 +354,16 @@
                 />
                 <File
                     RelPath = "Dashboard\IPlugin.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Dashboard\IProjectPlugin.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Dashboard\IProjectUrlGenerator.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -467,6 +482,11 @@
                 />
                 <File
                     RelPath = "Plugins\LogViewerPlugin\LogViewerResults.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Plugins\ProjectReporterPlugin\LatestProjectReporter.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

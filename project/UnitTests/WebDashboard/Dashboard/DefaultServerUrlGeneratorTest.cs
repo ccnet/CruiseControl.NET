@@ -7,11 +7,10 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 	public class DefaultServerUrlGeneratorTest : Assertion
 	{
 		[Test]
-		public void CombinesBaseUrlAndBuildToCreateCorrectUrl()
+		public void CombinesBaseUrlAndServerToCreateCorrectUrl()
 		{
 			string returnedUrl = new DefaultServerUrlGenerator().GenerateUrl("foo.aspx", "myserver");
 			AssertEquals("foo.aspx?server=myserver", returnedUrl);
 		}
-
 	}
 }

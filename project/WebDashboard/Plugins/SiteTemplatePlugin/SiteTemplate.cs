@@ -52,7 +52,11 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.SiteTemplatePlugin
 
 		private HtmlAnchor[] BuildPluginLinks()
 		{
-			return PluginLinks(typeof(IBuildPlugin));
+			// ToDo - this better!
+			ArrayList list = new ArrayList();
+			list.AddRange(PluginLinks(typeof(IProjectPlugin)));
+			list.AddRange(PluginLinks(typeof(IBuildPlugin)));
+			return (HtmlAnchor[]) list.ToArray (typeof (HtmlAnchor));
 		}
 
 		private HtmlAnchor[] PluginLinks(Type pluginClassification)
@@ -83,6 +87,10 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.SiteTemplatePlugin
 						if (pluginClassification == typeof(IServerPlugin))
 						{
 							anchor.HRef = ((IServerPlugin) plugin).CreateURL(build.ServerName, new DefaultServerUrlGenerator());
+						}
+						else if (pluginClassification == typeof(IProjectPlugin))
+						{
+							anchor.HRef = ((IProjectPlugin) plugin).CreateURL(build.ServerName, build.ProjectName, new DefaultProjectUrlGenerator());
 						}
 						else if (pluginClassification == typeof(IBuildPlugin))
 						{
