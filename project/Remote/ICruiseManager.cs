@@ -54,5 +54,10 @@ namespace ThoughtWorks.CruiseControl.Remote
 		/// Deletes the specified project from the server
 		/// </summary>
 		void DeleteProject(string projectName);
+
+		/// <summary>
+		/// Returns the serialized form of the requested project from the server
+		/// </summary>
+		string GetProject(string projectName);
 	}
 }

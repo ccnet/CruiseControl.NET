@@ -18,7 +18,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.MVC.Cruise
 			this.cruiseManagerWrapper = cruiseManagerWrapper;
 		}
 
-		public AddProjectModel GenerateModel(IRequest request)
+		public AddEditProjectModel GenerateModel(IRequest request)
 		{
 			string selectedServerName = request.GetText("ServersDropDown");
 			string[] serverNames = cruiseManagerWrapper.GetServerNames();
@@ -35,7 +35,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.MVC.Cruise
 			project.Tasks = new ITask[] {mergeFilesTask};
 			project.Publishers = new IIntegrationCompletedEventHandler[] { new XmlLogPublisher() };
 
-			return new AddProjectModel(project, selectedServerName, serverNames);
+			return new AddEditProjectModel(project, selectedServerName, serverNames);
 		}
 
 		private IBuilder GenerateBuilder(IRequest request)

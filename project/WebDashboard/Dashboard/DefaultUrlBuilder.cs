@@ -1,4 +1,3 @@
-using System;
 using ThoughtWorks.CruiseControl.WebDashboard.IO;
 
 namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
@@ -80,17 +79,17 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 
 		private string BuildServerQueryString(string serverName)
 		{
-			return string.Format("{0}={1}", QueryStringRequestWrapper.ServerQueryStringParameter, serverName);
+			return string.Format("{0}={1}", RequestWrappingCruiseRequest.ServerQueryStringParameter, serverName);
 		}
 
 		private string BuildProjectQueryString(string serverName, string projectName)
 		{
-			return string.Format("{0}&{1}={2}",BuildServerQueryString(serverName), QueryStringRequestWrapper.ProjectQueryStringParameter, projectName);
+			return string.Format("{0}&{1}={2}",BuildServerQueryString(serverName), RequestWrappingCruiseRequest.ProjectQueryStringParameter, projectName);
 		}
 
 		private string BuildBuildQueryString(string serverName, string projectName, string buildName)
 		{
-			return string.Format("{0}&{1}={2}",BuildProjectQueryString(serverName, projectName), QueryStringRequestWrapper.BuildQueryStringParameter, buildName);
+			return string.Format("{0}&{1}={2}",BuildProjectQueryString(serverName, projectName), RequestWrappingCruiseRequest.BuildQueryStringParameter, buildName);
 		}
 	}
 }

@@ -274,6 +274,13 @@ namespace ThoughtWorks.CruiseControl.Core
 			}
 		}
 
+		// ToDo - this done TDD
+		public string GetProject(string name)
+		{
+			Log.Info("Getting project - " + name);
+			return new NetReflectorProjectSerializer().Serialize((Project) configurationService.Load().Projects[name]);
+		}
+
 		private IProjectIntegrator GetIntegrator(string projectName)
 		{
 			IProjectIntegrator integrator = projectIntegrators[projectName];

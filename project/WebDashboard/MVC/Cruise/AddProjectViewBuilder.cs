@@ -18,27 +18,37 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.MVC.Cruise
 		{
 		}
 
-		public Control BuildView(AddProjectModel model)
+		public Control BuildView(AddEditProjectModel model)
 		{
 			HtmlTable table = Table();
 			if (model.Status != null && model.Status != "")
 			{
 				table.Rows.Add(TR(TD(), TD(model.Status)));
 			}
-			table.Rows.Add(TR(TD("Servers"), TD(DropDown("ServersDropDown", model.ServerNames, model.SelectedServerName))));
-			table.Rows.Add(TR(TD(), TD(BuildProjectView(model.Project))));
-			table.Rows.Add(TR(TD(), TD("* denotes currently mandatory fields")));
-			if (model.AllowSave)
+			if (model.IsAdd)
 			{
-				table.Rows.Add(TR(TD(Button(CruiseActionFactory.ADD_PROJECT_SAVE_ACTION_NAME, "Save")), TD()));
+				table.Rows.Add(TR(TD("Servers"), TD(DropDown("ServersDropDown", model.ServerNames, model.SelectedServerName))));	
+			}
+			table.Rows.Add(TR(TD(), TD(BuildProjectView(model.Project, model.IsAdd))));
+			table.Rows.Add(TR(TD(), TD("* denotes currently mandatory fields")));
+			if (model.SaveActionName != string.Empty)
+			{
+				table.Rows.Add(TR(TD(Button(model.SaveActionName, "Save")), TD()));
 			}
 			return table;
 		}
 
-		private Control BuildProjectView(Project project)
+		private Control BuildProjectView(Project project, bool isAdd)
 		{
 			ArrayList rows = new ArrayList();
-			rows.Add(TR(TD("Project Name *"), TD(TextBox("Project.Name", project.Name))));
+			if (isAdd)
+			{
+				rows.Add(TR(TD("Project Name *"), TD(TextBox("Project.Name", project.Name))));
+			}
+			else
+			{
+				rows.Add(TR(TD("Project Name *"), TD(project.Name)));
+			}
 			rows.AddRange(BuildSourceControlSelectionAndView(project.SourceControl));
 			rows.AddRange(BuildBuilderSelectionAndView(project.Builder));
 			rows.Add(TR(TD("Files To Merge"), TD(MultiLineTextBox("Project.Tasks.0.MergeFilesForPresentation", ((MergeFilesTask) project.Tasks[0]).MergeFilesForPresentation))));

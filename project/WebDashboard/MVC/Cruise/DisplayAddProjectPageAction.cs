@@ -15,7 +15,11 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.MVC.Cruise
 
 		public Control Execute(IRequest request)
 		{
-			return viewBuilder.BuildView(projectModelGenerator.GenerateModel(request));
+			AddEditProjectModel model = projectModelGenerator.GenerateModel(request);
+			model.SaveActionName = CruiseActionFactory.ADD_PROJECT_SAVE_ACTION_NAME;
+			model.IsAdd = true;
+			model.Status = "";
+			return viewBuilder.BuildView(model);
 		}
 	}
 }

@@ -1,10 +1,13 @@
 using System;
+using System.Collections.Specialized;
 using System.Web;
 using System.Web.UI;
 using ThoughtWorks.CruiseControl.Core;
 using ThoughtWorks.CruiseControl.WebDashboard.Cache;
 using ThoughtWorks.CruiseControl.WebDashboard.Config;
 using ThoughtWorks.CruiseControl.WebDashboard.IO;
+using ThoughtWorks.CruiseControl.WebDashboard.MVC;
+using ThoughtWorks.CruiseControl.WebDashboard.MVC.Cruise;
 using ThoughtWorks.CruiseControl.WebDashboard.MVC.View;
 using ThoughtWorks.CruiseControl.WebDashboard.ServerConnection;
 
@@ -78,9 +81,19 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 			get { return new ServerAggregatingCruiseManagerWrapper(ConfigurationSettingsConfigGetter, RemoteCruiseManagerFactory); }
 		}
 
-		public QueryStringRequestWrapper QueryStringRequestWrapper
+		public AggregatedRequest AggregatedRequest
 		{
-			get { return new QueryStringRequestWrapper(request.QueryString); }
+			get { return new AggregatedRequest(NameValueCollectionRequest(request.Form), NameValueCollectionRequest(request.QueryString));}
+		}
+
+		public NameValueCollectionRequest NameValueCollectionRequest(NameValueCollection map)
+		{
+			return new NameValueCollectionRequest(map);
+		}
+
+		public RequestWrappingCruiseRequest RequestWrappingCruiseRequest
+		{
+			get { return new RequestWrappingCruiseRequest(AggregatedRequest); }
 		}
 
 		public NameValueCruiseRequestFactory NameValueCruiseRequestFactory
@@ -96,6 +109,16 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 		public NetReflectorProjectSerializer NetReflectorProjectSerializer
 		{
 			get { return new NetReflectorProjectSerializer(); }
+		}
+
+		public RequestController RequestController
+		{
+			get { return new RequestController(CruiseActionFactory); }
+		}
+
+		public CruiseActionFactory CruiseActionFactory
+		{
+			get { return new CruiseActionFactory(this);}
 		}
 	}
 }

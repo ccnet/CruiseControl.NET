@@ -1,4 +1,3 @@
-using System;
 using ThoughtWorks.CruiseControl.WebDashboard.Dashboard;
 using ThoughtWorks.CruiseControl.WebDashboard.Plugins.DeleteProject;
 using ThoughtWorks.CruiseControl.WebDashboard.Plugins.ViewServerLog;
@@ -17,6 +16,8 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.MVC.Cruise
 		public static readonly string ACTION_PARAMETER_PREFIX = "_action_";
 		public static readonly string ADD_PROJECT_DISPLAY_ACTION_NAME = "AddProjectDisplay";
 		public static readonly string ADD_PROJECT_SAVE_ACTION_NAME = "AddProjectSave";
+		public static readonly string EDIT_PROJECT_DISPLAY_ACTION_NAME = "EditProjectDisplay";
+		public static readonly string EDIT_PROJECT_SAVE_ACTION_NAME = "EditProjectSave";
 		public static readonly string VIEW_ALL_BUILDS_ACTION_NAME = "ViewAllBuilds";
 		public static readonly string SHOW_DELETE_PROJECT_ACTION_NAME = "ShowDeleteProject";
 		public static readonly string DO_DELETE_PROJECT_ACTION_NAME = "DoDeleteProject";
@@ -46,6 +47,10 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.MVC.Cruise
 			else if (actionName == ADD_PROJECT_SAVE_ACTION_NAME)
 			{
 				return SecurityCheckingProxyAction(SaveNewProjectAction);
+			}
+			else if (actionName == EDIT_PROJECT_DISPLAY_ACTION_NAME)
+			{
+				return SecurityCheckingProxyAction(CruiseActionProxyAction(ProjectCheckingProxyAction(ServerCheckingProxyAction(DisplayEditProjectPageAction))));
 			}
 			else if (actionName == SHOW_DELETE_PROJECT_ACTION_NAME)
 			{
@@ -123,6 +128,11 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.MVC.Cruise
 		public DisplayAddProjectPageAction DisplayAddProjectPageAction
 		{
 			get { return new DisplayAddProjectPageAction(AddProjectModelGenerator, AddProjectViewBuilder); }
+		}
+
+		public DisplayEditProjectPageAction DisplayEditProjectPageAction
+		{
+			get { return new DisplayEditProjectPageAction(AddProjectModelGenerator, AddProjectViewBuilder, dcFactory.ServerAggregatingCruiseManagerWrapper, dcFactory.NetReflectorProjectSerializer); }
 		}
 
 		public AddProjectModelGenerator AddProjectModelGenerator

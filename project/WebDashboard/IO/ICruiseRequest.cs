@@ -1,3 +1,4 @@
+using ThoughtWorks.CruiseControl.WebDashboard.MVC;
 using ThoughtWorks.CruiseControl.WebDashboard.ServerConnection;
 
 namespace ThoughtWorks.CruiseControl.WebDashboard.IO
@@ -8,5 +9,6 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.IO
 		string ServerName { get; }
 		string ProjectName { get; }
 		string BuildName { get; }
+		IRequest Request { get; }
 	}
 }

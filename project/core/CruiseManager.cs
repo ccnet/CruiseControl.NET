@@ -75,6 +75,11 @@ namespace ThoughtWorks.CruiseControl.Core
 			cruiseServer.DeleteProject(projectName);
 		}
 
+		public string GetProject(string projectName)
+		{
+			return cruiseServer.GetProject(projectName);
+		}
+
 		public override object InitializeLifetimeService()
 		{
 			return null;

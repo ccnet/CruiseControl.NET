@@ -7,7 +7,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 	{
 		public ICruiseRequest CreateCruiseRequest (IRequest request)
 		{
-			return new QueryStringRequestWrapper(request.Params);
+			return new RequestWrappingCruiseRequest(request);
 		}
 	}
 }

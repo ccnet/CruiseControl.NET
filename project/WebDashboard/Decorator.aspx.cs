@@ -34,8 +34,8 @@ namespace ThoughtWorks.CruiseControl.WebDashboard
 					dcFactory.DefaultUrlBuilder,
 					dcFactory.DefaultBuildNameFormatter);
 
-			SideBarLocation.Controls.Add(sideBarViewBuilder.Execute(dcFactory.QueryStringRequestWrapper));
-			TopControlsLocation.Controls.Add(topControlsViewBuilder.Execute(dcFactory.QueryStringRequestWrapper));
+			SideBarLocation.Controls.Add(sideBarViewBuilder.Execute(dcFactory.RequestWrappingCruiseRequest));
+			TopControlsLocation.Controls.Add(topControlsViewBuilder.Execute(dcFactory.RequestWrappingCruiseRequest));
 		}
 
 		#region Web Form Designer generated code

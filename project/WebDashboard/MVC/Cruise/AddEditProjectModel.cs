@@ -2,23 +2,23 @@ using ThoughtWorks.CruiseControl.Core;
 
 namespace ThoughtWorks.CruiseControl.WebDashboard.MVC.Cruise
 {
-	public class AddProjectModel
+	public class AddEditProjectModel
 	{
-		private bool allowSave;
+		private string saveActionName;
 		private readonly Project project;
 		private readonly string selectedServer;
 		private readonly string[] servers;
 		private string status;
+		private bool isAdd;
 
-		public AddProjectModel(Project project, string selectedServer, string[] servers) : this (project, selectedServer, servers, "", true) { }
-
-		public AddProjectModel(Project project, string selectedServer, string[] servers, string status, bool allowSave)
+		public AddEditProjectModel(Project project, string selectedServer, string[] servers) 
 		{
 			this.project = project;
 			this.selectedServer = selectedServer;
 			this.servers = servers;
-			this.status = status;
-			this.allowSave = allowSave;
+			this.status = "";
+			this.isAdd = true;
+			this.saveActionName = "";
 		}
 
 		public string Status
@@ -27,10 +27,16 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.MVC.Cruise
 			set { status = value; }
 		}
 
-		public bool AllowSave
+		public bool IsAdd
 		{
-			get { return allowSave; }
-			set { allowSave = value; }
+			get { return isAdd; }
+			set { isAdd = value; }
+		}
+
+		public string SaveActionName
+		{
+			get { return saveActionName; }
+			set { saveActionName = value; }
 		}
 
 		public Project Project

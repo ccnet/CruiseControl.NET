@@ -175,6 +175,25 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.ServerConnection
 		}
 
 		[Test]
+		public void GetsProjectFromCorrectServer()
+		{
+			// Setup
+			ServerSpecification[] servers = new ServerSpecification[] { new ServerSpecification("myserver", "http://myurl"), new ServerSpecification("myotherserver", "http://myotherurl")};
+			string serializedProject = "a serialized project";
+
+			configurationGetterMock.ExpectAndReturn("GetConfigFromSection", servers, ServersSectionHandler.SectionName);
+			cruiseManagerFactoryMock.ExpectAndReturn("GetCruiseManager", (ICruiseManager) cruiseManagerMock.MockInstance, "http://myurl");
+			cruiseManagerMock.ExpectAndReturn("GetProject", serializedProject, "myproject");
+
+			// Execute
+			string returnedProject = managerWrapper.GetProject("myserver", "myproject");
+
+			// Verify
+			VerifyAll();
+			Assert.AreEqual(serializedProject, returnedProject);
+		}
+
+		[Test]
 		public void ReturnsServerLogFromCorrectServer()
 		{
 			ServerSpecification[] servers = new ServerSpecification[] { new ServerSpecification("myserver", "http://myurl"), new ServerSpecification("myotherserver", "http://myotherurl")};

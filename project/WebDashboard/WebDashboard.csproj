@@ -485,7 +485,7 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "IO\QueryStringRequestWrapper.cs"
+                    RelPath = "IO\RequestWrappingCruiseRequest.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -556,7 +556,7 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "MVC\Cruise\AddProjectModel.cs"
+                    RelPath = "MVC\Cruise\AddEditProjectModel.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -592,6 +592,11 @@
                 />
                 <File
                     RelPath = "MVC\Cruise\DisplayAddProjectPageAction.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "MVC\Cruise\DisplayEditProjectPageAction.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

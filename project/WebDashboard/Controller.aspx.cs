@@ -1,8 +1,6 @@
 using System;
 using System.Web.UI;
 using ThoughtWorks.CruiseControl.WebDashboard.Dashboard;
-using ThoughtWorks.CruiseControl.WebDashboard.MVC;
-using ThoughtWorks.CruiseControl.WebDashboard.MVC.Cruise;
 
 namespace ThoughtWorks.CruiseControl.WebDashboard
 {
@@ -12,12 +10,8 @@ namespace ThoughtWorks.CruiseControl.WebDashboard
 
 		private void Page_Load(object sender, EventArgs e)
 		{
-			RequestController controller = new RequestController(new CruiseActionFactory(new DashboardComponentFactory(Request, Context, this)));
-			controller.Do(ParentControl, 
-				new AggregatedRequest(
-					new NameValueCollectionRequest(Request.Form),
-					new NameValueCollectionRequest(Request.QueryString)
-				));
+			DashboardComponentFactory dcFactory = new DashboardComponentFactory(Request, Context, this);
+			dcFactory.RequestController.Do(ParentControl,dcFactory.AggregatedRequest);
 		}
 
 		#region Web Form Designer generated code

@@ -62,6 +62,11 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.ServerConnection
 			GetCruiseManager(serverName).AddProject(serializedProject);
 		}
 
+		public string GetProject(string serverName, string projectName)
+		{
+			return GetCruiseManager(serverName).GetProject(projectName);
+		}
+
 		private ICruiseManager GetCruiseManager(string serverName)
 		{
 			foreach (ServerSpecification server in ServerSpecifcations)
@@ -79,7 +84,5 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.ServerConnection
 		{
 			get { return (IEnumerable) configurationGetter.GetConfigFromSection(ServersSectionHandler.SectionName); }
 		}
-
-
 	}
 }

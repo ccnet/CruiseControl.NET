@@ -17,12 +17,12 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins
 
 		public BuildReporterPageRenderer BuildReporterPageRenderer
 		{
-			get { return new BuildReporterPageRenderer(dcFactory.QueryStringRequestWrapper, dcFactory.DefaultBuildRetrieverForRequest, dcFactory.HttpPathMapper); }
+			get { return new BuildReporterPageRenderer(dcFactory.RequestWrappingCruiseRequest, dcFactory.DefaultBuildRetrieverForRequest, dcFactory.HttpPathMapper); }
 		}
 
 		public LogViewerPageRenderer LogViewerPageRenderer
 		{
-			get { return new LogViewerPageRenderer(dcFactory.QueryStringRequestWrapper, dcFactory.DefaultBuildRetrieverForRequest, dcFactory.LocalFileCacheManager);}
+			get { return new LogViewerPageRenderer(dcFactory.RequestWrappingCruiseRequest, dcFactory.DefaultBuildRetrieverForRequest, dcFactory.LocalFileCacheManager);}
 		}
 	}
 }

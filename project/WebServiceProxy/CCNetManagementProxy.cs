@@ -91,6 +91,11 @@ namespace ThoughtWorks.CruiseControl.WebServiceProxy
 			throw new NotImplementedException();
 		}
 
+		public string GetProject(string projectName)
+		{
+			throw new NotImplementedException();
+		}
+
 		public void StartCruiseControl()
 		{
 			Service.StartCruiseControl();

@@ -1,4 +1,3 @@
-using System;
 using System.Web.UI;
 using ThoughtWorks.CruiseControl.Core;
 using ThoughtWorks.CruiseControl.WebDashboard.Dashboard;
@@ -26,24 +25,26 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.MVC.Cruise
 
 		public Control Execute(IRequest request)
 		{
-			AddProjectModel model = projectModelGenerator.GenerateModel(request);
+			AddEditProjectModel model = projectModelGenerator.GenerateModel(request);
 			SetProjectUrlIfOneNotSet(model);
 			try
 			{
 				cruiseManagerWrapper.AddProject(model.SelectedServerName, serializer.Serialize(model.Project));
 				model.Status = "Project saved successfully";
-				model.AllowSave = false;
+				model.IsAdd = true;
+				model.SaveActionName = "";
 			}
 			catch (CruiseControlException e)
 			{
 				model.Status = "Failed to create project. Reason given was: " + e.Message;
-				model.AllowSave = true;
+				model.SaveActionName = CruiseActionFactory.ADD_PROJECT_SAVE_ACTION_NAME;
+				model.IsAdd = true;
 			}
 			
 			return viewBuilder.BuildView(model);
 		}
 
-		private void SetProjectUrlIfOneNotSet(AddProjectModel model)
+		private void SetProjectUrlIfOneNotSet(AddEditProjectModel model)
 		{
 			if (model.Project.WebURL == null || model.Project.WebURL == string.Empty)
 			{

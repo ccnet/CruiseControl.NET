@@ -1,5 +1,3 @@
-using ThoughtWorks.CruiseControl.Remote;
-
 namespace ThoughtWorks.CruiseControl.WebDashboard.ServerConnection
 {
 	public interface ICruiseManagerWrapper
@@ -10,5 +8,6 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.ServerConnection
 		string GetServerLog(string serverName);
 		string[] GetServerNames();
 		void AddProject(string serverName, string serializedProject);
+		string GetProject(string serverName, string projectName);
 	}
 }

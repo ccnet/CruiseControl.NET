@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Specialized;
 using System.Web.UI;
 using NMock;
@@ -29,7 +28,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.MVC.Cruise
 				(ICruiseAction) proxiedActionMock.MockInstance,
 				(ICruiseRequestFactory) cruiseRequestFactoryMock.MockInstance);
 
-			cruiseRequest = new QueryStringRequestWrapper(null);
+			cruiseRequest = new RequestWrappingCruiseRequest(null);
 			request = new NameValueCollectionRequest(new NameValueCollection());
 		}
 
