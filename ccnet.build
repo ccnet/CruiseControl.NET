@@ -105,7 +105,6 @@
 		</copy>
 
 		<copy file="${src.dir}\console\ccnet.example.config" todir="deployed\server"  verbose="${verbosity}"/>
-		<copy file="${src.dir}\console\StartCCNet.bat" todir="deployed\server" verbose="${verbosity}"/>
 	</target>
 	
 	<target name="deploy.cctray">
