@@ -211,8 +211,7 @@ namespace ThoughtWorks.CruiseControl.Core.Test
 		public void ShouldCreateANewIntegrationResultIfThisIsTheFirstIntegration()
 		{
 			_mockStateManager.ExpectAndReturn("StateFileExists", false, null);
-			IntegrationResult last = _project.LastIntegrationResult;
-			AssertEquals(new IntegrationResult(PROJECT_NAME), last);
+			AssertEquals(new IntegrationResult(PROJECT_NAME), _project.LastIntegrationResult);
 		}
 
 		[Test]
