@@ -75,8 +75,8 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			// TODO: this call will block until the process ends (so there's no point calling WaitForExit below)
 			// to do this pattern properly, the output must be read in another thread
 			// see the class NAntBuilder.StdOutReader (which could be made a public utility class)
+			// MR - I'm not sure this is true - I've deleted the 'if result empty throw exception' since this is failing when really being used
 			string result = reader.ReadToEnd();
-			if (result == string.Empty) throw new CruiseControlException("No data returned from process.  Check stderr.");
 			
 			process.WaitForExit(120000);
 			return new StringReader(result);
