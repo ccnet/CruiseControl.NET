@@ -17,7 +17,7 @@
                 DelaySign = "false"
                 OutputType = "Library"
                 PreBuildEvent = ""
-                PostBuildEvent = 'copy "$(ProjectDir)test\test.config" "$(TargetPath).config"&#xd;&#xa;mkdir "$(TargetDir)xsl"&#xd;&#xa;copy "$(ProjectDir)publishers\xsl\*.xsl" "$(TargetDir)xsl"&#xd;&#xa;copy "$(ProjectDir)publishers\xsl\*.css" "$(TargetDir)xsl"'
+                PostBuildEvent = '@echo off&#xd;&#xa;copy "$(ProjectDir)test\test.config" "$(TargetPath).config"&#xd;&#xa;mkdir "$(TargetDir)xsl"&#xd;&#xa;copy "$(SolutionDir)\xsl\*.xsl" "$(TargetDir)xsl"&#xd;&#xa;copy "$(ProjectDir)publishers\xsl\*.css" "$(TargetDir)xsl"'
                 RootNamespace = "ThoughtWorks.CruiseControl.Core"
                 RunPostBuildEvent = "OnBuildSuccess"
                 StartupObject = ""
@@ -634,10 +634,12 @@
                 />
                 <File
                     RelPath = "publishers\xsl\compile.xsl"
+                    Link = "..\xsl\compile.xsl"
                     BuildAction = "Content"
                 />
                 <File
                     RelPath = "publishers\xsl\header.xsl"
+                    Link = "..\xsl\header.xsl"
                     BuildAction = "Content"
                 />
                 <File
@@ -646,10 +648,12 @@
                 />
                 <File
                     RelPath = "publishers\xsl\modifications.xsl"
+                    Link = "..\xsl\modifications.xsl"
                     BuildAction = "Content"
                 />
                 <File
                     RelPath = "publishers\xsl\unittests.xsl"
+                    Link = "..\xsl\unittests.xsl"
                     BuildAction = "Content"
                 />
                 <File
