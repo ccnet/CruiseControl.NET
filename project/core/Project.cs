@@ -284,10 +284,8 @@ namespace ThoughtWorks.CruiseControl.Core
 				return false;
 
 			TimeSpan diff = DateTime.Now - results.LastModificationDate;
-			if (diff.TotalMilliseconds < ModificationDelaySeconds)
+			if (diff.TotalSeconds < ModificationDelaySeconds)
 			{
-				// The new approach of polling the schedule for when-to-build means that
-				// this log message would appear a few times each second.
 				Log.Info("Changes found within the modification delay");
 				return true;
 			}
