@@ -4,10 +4,10 @@ using System.Xml;
 using System.Xml.Schema;
 
 using NUnit.Framework;
-
+using ThoughtWorks.CruiseControl.Core.Config;
 using ThoughtWorks.CruiseControl.Core.Util;
 
-namespace ThoughtWorks.CruiseControl.Core.Config.Test
+namespace ThoughtWorks.CruiseControl.UnitTests.Core.Config
 {
 	[TestFixture]
 	public class ValidatingLoaderTest : CustomAssertion
@@ -40,7 +40,7 @@ namespace ThoughtWorks.CruiseControl.Core.Config.Test
 
 		private XmlSchema LoadSchema() 
 		{
-			Assembly ass = Assembly.GetExecutingAssembly();
+			Assembly ass = typeof(DefaultConfigurationFileLoader).Assembly;
 			Stream s = ass.GetManifestResourceStream(DefaultConfigurationFileLoader.XsdSchemaResourceName);
 			return XmlSchema.Read(s, new ValidationEventHandler(Handler));
 		}

@@ -13,7 +13,7 @@ namespace ThoughtWorks.CruiseControl.Core.Config
 		private const string ROOT_ELEMENT = "cruisecontrol";
 		private const string CONFIG_ASSEMBLY_PATTERN = "ccnet.*.plugin.dll";
 
-		internal const string XsdSchemaResourceName = "ThoughtWorks.CruiseControl.Core.configuration.ccnet.xsd";
+		public const string XsdSchemaResourceName = "ThoughtWorks.CruiseControl.Core.configuration.ccnet.xsd";
 
 		private ValidationEventHandler _handler;
 		private XmlSchema _schema;

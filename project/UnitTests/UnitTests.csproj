@@ -305,6 +305,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Core\Config\ConfigurationFixture.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Core\Config\ConfigurationTest.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -316,6 +321,16 @@
                 />
                 <File
                     RelPath = "Core\Config\FileConfigurationServiceTest.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Core\Config\ValidatingLoaderTest.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Core\Config\XslFilesSectionHandlerTest.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -745,11 +760,6 @@
                 />
                 <File
                     RelPath = "UnitTestUtils\HashtableConstraint.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Web\ConfigSectionTest.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

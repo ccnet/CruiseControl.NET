@@ -1,7 +1,8 @@
 using NUnit.Framework;
-using System;
+using ThoughtWorks.CruiseControl.Core;
+using ThoughtWorks.CruiseControl.Core.Config;
 
-namespace ThoughtWorks.CruiseControl.Core.Config.Test
+namespace ThoughtWorks.CruiseControl.UnitTests.Core.Config
 {
 	[TestFixture]
 	public class ConfigurationTest

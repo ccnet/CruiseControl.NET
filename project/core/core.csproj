@@ -389,21 +389,6 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "configuration\test\ConfigurationFixture.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "configuration\test\ValidatingLoaderTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "configuration\test\XslFilesSectionHandlerTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
                     RelPath = "label\DefaultLabeller.cs"
                     SubType = "Code"
                     BuildAction = "Compile"

@@ -3,7 +3,7 @@ using System.Configuration;
 using NUnit.Framework;
 using ThoughtWorks.CruiseControl.Core.Util;
 
-namespace ThoughtWorks.CruiseControl.Core.Config.Test
+namespace ThoughtWorks.CruiseControl.UnitTests.Core.Config
 {
 	[TestFixture]
 	public class XslFilesSectionHandler : CustomAssertion
