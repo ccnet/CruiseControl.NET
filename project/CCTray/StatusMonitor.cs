@@ -253,7 +253,7 @@ namespace ThoughtWorks.CruiseControl.CCTray
 
 			if (Settings.ConnectionMethod==ConnectionMethod.WebService)
 			{
-				return (ICruiseManager)new ThoughtWorks.CruiseControl.WebServiceProxy.CCNetManagementProxy(Settings.RemoteServerUrl);
+				return new ThoughtWorks.CruiseControl.WebServiceProxy.CCNetManagementProxy(Settings.RemoteServerUrl);
 			}
 
 			throw new NotImplementedException("Connection method " + Settings.ConnectionMethod + " is not implemented.");
