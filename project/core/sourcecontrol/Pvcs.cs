@@ -28,8 +28,8 @@ run -e vlog  ""-xo+e{3}"" ""-d{4}*{5}"" ""@{2}""
 		private string _subproject;
 		private string _arguments = COMMAND;
 		private string _instructions = INSTRUCTIONS_TEMPLATE;
+		private TimeZone _currentTimeZone = TimeZone.CurrentTimeZone;
 		
-
 		[ReflectorProperty("executable")]
 		public string Executable
 		{
@@ -65,6 +65,11 @@ run -e vlog  ""-xo+e{3}"" ""-d{4}*{5}"" ""@{2}""
 			set{ _subproject = value;}
 		}		
 
+		public TimeZone CurrentTimeZone
+		{
+			set{ _currentTimeZone = value;}
+		}
+
 		protected override IHistoryParser HistoryParser
 		{
 			get { return _parser; }
@@ -73,11 +78,8 @@ run -e vlog  ""-xo+e{3}"" ""-d{4}*{5}"" ""@{2}""
 		public override ProcessInfo CreateHistoryProcessInfo(DateTime from, DateTime to)
 		{
 			// required due to DayLightSavings bug in PVCS 7.5.1
-			if (IsDayLightSavings()) 
-			{
-				from = SubtractAnHour(from);
-				to = SubtractAnHour(to);
-			}
+			from = AdjustForDayLightSavingsBug(from);
+			to = AdjustForDayLightSavingsBug(to);
 
 			string content = CreatePcliContents(
 				from.ToString(TO_PVCS_DATE_FORMAT),
@@ -119,17 +121,14 @@ run -e vlog  ""-xo+e{3}"" ""-d{4}*{5}"" ""@{2}""
 			return new StreamReader(stream);
 		}
 
-		public Boolean IsDayLightSavings() 
+		public DateTime AdjustForDayLightSavingsBug(DateTime date)
 		{
-			TimeZone tz = TimeZone.CurrentTimeZone;
-			return tz.IsDaylightSavingTime(DateTime.Now);
+			if(_currentTimeZone.IsDaylightSavingTime(DateTime.Now))
+			{
+				TimeSpan anHour = new TimeSpan(1, 0, 0);
+				return date.Subtract(anHour);
+			}
+			return date;
 		}
-
-		public DateTime SubtractAnHour(DateTime date) 
-		{
-			TimeSpan anHour = new TimeSpan(1, 0, 0);
-			return date.Subtract(anHour);
-		}
-		
 	}
 }
