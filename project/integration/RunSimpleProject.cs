@@ -8,7 +8,6 @@ using tw.ccnet.core.configuration;
 using tw.ccnet.core.util;
 using tw.ccnet.remote;
 using tw.ccnet.core.schedule;
-using tw.ccnet.core.history;
 
 namespace integration
 {
@@ -28,9 +27,9 @@ namespace integration
 		[TearDown]
 		protected void TearDown()
 		{
-			Thread.Sleep(1000);
+			Thread.Sleep(100);
 			TempFileUtil.DeleteTempDir(PROJECT_NAME);
-			Thread.Sleep(1000);
+			Thread.Sleep(100);
 		}
 
 		[Test]
@@ -139,7 +138,7 @@ namespace integration
 		}
 
 		[Test]
-		public void RunIntegrationLoop_WithNoSpecifiedHistory()
+		public void RunIntegrationLoop_WithNoStateDirectory()
 		{
 			string curDir = Directory.GetCurrentDirectory();
 			string tempdir = TempFileUtil.CreateTempDir(PROJECT_NAME);

@@ -83,10 +83,11 @@
 										</xs:sequence>
 									</xs:complexType>
 								</xs:element>
-								<xs:element name="history">
+								<xs:element name="state">
 									<xs:complexType>
 										<xs:attribute name="type" type="xs:string" use="required" />
-										<xs:attribute name="historyDir" type="xs:string" use="optional" />
+										<xs:attribute name="directory" type="xs:string" use="optional" />
+										<xs:attribute name="filename" type="xs:string" use="optional" />
 									</xs:complexType>
 								</xs:element>
 								<xs:element name="modificationDelay" type="xs:unsignedShort" />

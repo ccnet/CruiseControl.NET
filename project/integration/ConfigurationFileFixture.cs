@@ -4,7 +4,6 @@ using tw.ccnet.core.configuration.test;
 using tw.ccnet.core;
 using tw.ccnet.core.util;
 using tw.ccnet.core.schedule;
-using tw.ccnet.core.history;
 
 namespace integration
 {
@@ -18,7 +17,7 @@ namespace integration
 
 		public static string GenerateSimpleProjectXml(string projectName, Schedule schedule)
 		{
-			string historyXml = ConfigurationFixture.GenerateXmlBuildHistoryXml(TempFileUtil.CreateTempDir(projectName));
+			string historyXml = ConfigurationFixture.GenerateStateManagerXml(TempFileUtil.CreateTempDir(projectName));
 			return GenerateSimpleProjectXml(projectName, schedule, historyXml);
 		}
 

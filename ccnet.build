@@ -42,8 +42,8 @@
 
   <!-- CLEAN -->
   <target name="clean" description="cleans up everything">
-    <delete dir="${build.dir}" failonerror="false" verbose="${verbosity}"/>
-    <mkdir dir="${build.dir}" verbose="${verbosity}"/>
+    <delete dir="${build.dir}" failonerror="false"/>
+    <mkdir dir="${build.dir}" />
   </target>
   
   <!-- INIT -->

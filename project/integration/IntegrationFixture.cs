@@ -2,7 +2,7 @@ using System;
 using tw.ccnet.core;
 using tw.ccnet.core.configuration;
 using tw.ccnet.core.schedule;
-using tw.ccnet.core.history;
+using tw.ccnet.core.state;
 using tw.ccnet.core.util;
 
 namespace integration
@@ -39,9 +39,9 @@ namespace integration
 
 		public static IntegrationResult LoadIntegrationResult(string dirName)
 		{
-			XmlBuildHistory history = new XmlBuildHistory();
-			history.LogDir = TempFileUtil.GetTempPath(dirName);
-			return history.Load();
+			IntegrationStateManager stateManager = new IntegrationStateManager();
+			stateManager.Directory = TempFileUtil.GetTempPath(dirName);
+			return stateManager.Load();
 		}
 	}
 

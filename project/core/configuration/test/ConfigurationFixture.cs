@@ -31,7 +31,7 @@ namespace tw.ccnet.core.configuration.test
 
 		public static string GenerateProjectXml(string name)
 		{
-			return GenerateProjectXml(name, GenerateMockBuildXml(), GenerateDefaultSourceControlXml(), GenerateMockPublisherXml(), GenerateScheduleXml(), GenerateXmlBuildHistoryXml());
+			return GenerateProjectXml(name, GenerateMockBuildXml(), GenerateDefaultSourceControlXml(), GenerateMockPublisherXml(), GenerateScheduleXml(), GenerateStateManagerXml());
 		}
 
 		public static string GenerateMockBuildXml()
@@ -59,14 +59,14 @@ namespace tw.ccnet.core.configuration.test
 			return String.Format(@"<schedule type=""schedule"" timeout=""1"" iterations=""{0}""/>", iterations);
 		}
 
-		public static string GenerateXmlBuildHistoryXml()
+		public static string GenerateStateManagerXml()
 		{
-			return @"<history type=""xmlhistory"" />";
+			return @"<state type=""state"" />";
 		}
 
-		public static string GenerateXmlBuildHistoryXml(string historyDir)
+		public static string GenerateStateManagerXml(string dir)
 		{
-			return String.Format(@"<history type=""xmlhistory"" historyDir=""{0}"" />", historyDir);
+			return String.Format(@"<state type=""state"" directory=""{0}"" />", dir);
 		}
 	}
 }

@@ -216,31 +216,6 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "history\IBuildHistory.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "history\XmlBuildHistory.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "history\test\MockBuildHistory.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "history\test\XmlBuildHistoryTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "history\test\XmlSerializationTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
                     RelPath = "label\AssemblyVersionLabeller.cs"
                     SubType = "Code"
                     BuildAction = "Compile"

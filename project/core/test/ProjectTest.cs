@@ -35,9 +35,9 @@ namespace tw.ccnet.core.test
 		}
 
 		[Test]
-		public void GetLastIntegration_NoPreviousBuildInBuildHistory()
+		public void GetLastIntegration_NoPreviousBuild()
 		{
-			Mock mock = SetMockBuildHistory(false, null);
+			Mock mock = SetMockStateManager(false, null);
 			IntegrationResult last = _project.LastIntegration;
 			AssertNotNull(last);
 			AssertEquals(DateTime.Now.AddDays(-1), last.LastModificationDate);		// will load all modifications
@@ -45,16 +45,16 @@ namespace tw.ccnet.core.test
 		}
 
 		[Test]
-		public void GetLastIntegration_LoadFromBuildHistory()
+		public void GetLastIntegration_LoadLastState()
 		{
 			IntegrationResult expected = new IntegrationResult();
 			expected.Label = "previous";
 			expected.Output = "<foo>blah</foo>";
 
-			DynamicMock mock = new DynamicMock(typeof(IBuildHistory));
+			DynamicMock mock = new DynamicMock(typeof(IStateManager));
 			mock.ExpectAndReturn("Exists", true, null);
 			mock.ExpectAndReturn("Load", expected, null);
-			_project.BuildHistory = (IBuildHistory)mock.MockInstance;
+			_project.StateManager = (IStateManager)mock.MockInstance;
 
 			AssertEquals(expected, _project.LastIntegration);
 			mock.Verify();
@@ -79,11 +79,11 @@ namespace tw.ccnet.core.test
 			CollectingConstraint constraint = new CollectingConstraint();
 			publisherMock.Expect("Publish", new IsAnything(), constraint);
 
-			DynamicMock historyMock = new DynamicMock(typeof(IBuildHistory));
-			historyMock.Expect("Save", _project.CurrentIntegration);
+			DynamicMock stateMock = new DynamicMock(typeof(IStateManager));
+			stateMock.Expect("Save", _project.CurrentIntegration);
 
 			_project.AddPublisher((PublisherBase)publisherMock.MockInstance);
-			_project.BuildHistory = (IBuildHistory)historyMock.MockInstance;
+			_project.StateManager = (IStateManager)stateMock.MockInstance;
 
 			_project.PostBuild();
 
@@ -92,8 +92,8 @@ namespace tw.ccnet.core.test
 			AssertNotNull(constraint.Parameter);
 			AssertEquals(_project.CurrentIntegration, (IntegrationResult)constraint.Parameter);
 
-			// verify build was written to history
-			historyMock.Verify();
+			// verify build was written to state manager
+			stateMock.Verify();
 
 			AssertEquals("verify that current build has become last build", _project.CurrentIntegration, _project.LastIntegration);
 		}
@@ -104,12 +104,12 @@ namespace tw.ccnet.core.test
 			DynamicMock builderMock = new DynamicMock(typeof(IBuilder));
 			builderMock.Expect("Build", new IsAnything());
 
-			DynamicMock historyMock = new DynamicMock(typeof(IBuildHistory));
-			historyMock.ExpectAndReturn("Exists", false);
+			DynamicMock stateMock = new DynamicMock(typeof(IStateManager));
+			stateMock.ExpectAndReturn("Exists", false);
 
 			_project.SourceControl = new MockSourceControl();
 			_project.Builder = (IBuilder)builderMock.MockInstance;
-			_project.BuildHistory = (IBuildHistory)historyMock.MockInstance;
+			_project.StateManager = (IStateManager)stateMock.MockInstance;
 
 			_project.Run();
 
@@ -129,15 +129,15 @@ namespace tw.ccnet.core.test
 			DynamicMock builderMock = new DynamicMock(typeof(IBuilder));
 			builderMock.ExpectNoCall("Build");
 
-			DynamicMock historyMock = new DynamicMock(typeof(IBuildHistory));
-			historyMock.ExpectAndReturn("Exists", false);
+			DynamicMock stateMock = new DynamicMock(typeof(IStateManager));
+			stateMock.ExpectAndReturn("Exists", false);
 			int buildTimeout = 1000;
 
 			_project.LastIntegration = new IntegrationResult();
 			_project.LastIntegration.Modifications = CreateModifications();
 			_project.SourceControl = new MockSourceControl();
 			_project.Builder = (IBuilder)builderMock.MockInstance;
-			_project.BuildHistory = (IBuildHistory)historyMock.MockInstance;
+			_project.StateManager = (IStateManager)stateMock.MockInstance;
 			_project.IntegrationTimeout = buildTimeout;
 			_project.Name = "Test";
 
@@ -175,7 +175,7 @@ namespace tw.ccnet.core.test
 		}
 
 		[Test]
-			[Ignore("too fragile")]
+//			[Ignore("too fragile")]
 		public void SleepTime() 
 		{
 			_project.CurrentIntegration = _project.LastIntegration;
@@ -222,13 +222,13 @@ namespace tw.ccnet.core.test
 		}
 
 		[Test]
-		public void HandleBuildHistoryException()
+		public void HandleStateManagerException()
 		{
 			MockPublisher publisher = new MockPublisher();
-			IMock historyMock = new DynamicMock(typeof(IBuildHistory));
+			IMock stateMock = new DynamicMock(typeof(IStateManager));
 			Exception expectedException = new CruiseControlException("expected exception");
-			historyMock.ExpectAndThrow("Exists", expectedException);
-			_project.BuildHistory = (IBuildHistory)historyMock.MockInstance;
+			stateMock.ExpectAndThrow("Exists", expectedException);
+			_project.StateManager = (IStateManager)stateMock.MockInstance;
 			_project.AddIntegrationEventHandler(publisher.IntegrationEventHandler);
 
 			_project.Run();
@@ -238,7 +238,7 @@ namespace tw.ccnet.core.test
 			AssertEquals(IntegrationStatus.Exception, _project.LastIntegration.Status);
 			AssertNotNull(_project.CurrentIntegration.EndTime);
 			Assert(publisher.Published);
-			historyMock.Verify();
+			stateMock.Verify();
 			AssertEquals(2, _listener.Traces.Count);
 		}
 
@@ -251,6 +251,10 @@ namespace tw.ccnet.core.test
 			mock.ExpectAndThrow("Generate", expectedException, new NMock.Constraints.IsAnything());
 			_project.Labeller = (ILabeller)mock.MockInstance;
 			_project.AddIntegrationEventHandler(publisher.IntegrationEventHandler);
+			IMock stateMock = new DynamicMock(typeof(IStateManager));
+			stateMock.ExpectAndReturn("Exists", false);
+			stateMock.Expect("Save", _project.CurrentIntegration);
+			_project.StateManager = (IStateManager)stateMock.MockInstance;
 			
 			_project.Run();
 
@@ -266,14 +270,14 @@ namespace tw.ccnet.core.test
 		[Test]
 		public void HandleBuildResultSaveException()
 		{
-			IMock mock = new DynamicMock(typeof(IBuildHistory));
+			IMock mock = new DynamicMock(typeof(IStateManager));
 			mock.ExpectAndReturn("Exists", false);
 			Exception expectedException = new CruiseControlException("expected exception");
 			mock.ExpectAndThrow("Save", expectedException, new NMock.Constraints.IsAnything());
-			_project.BuildHistory = (IBuildHistory)mock.MockInstance;
+			_project.StateManager = (IStateManager)mock.MockInstance;
 			MockPublisher publisher = new MockPublisher();
 			_project.AddIntegrationEventHandler(publisher.IntegrationEventHandler);
-			SetMockSourceControl();
+			_project.SourceControl = new MockSourceControl();
 			_project.Builder = new MockBuilder();
 			
 			_project.Run();
@@ -291,14 +295,14 @@ namespace tw.ccnet.core.test
 		[Test]
 		public void HandlePublisherException()
 		{
-			IMock mock = new DynamicMock(typeof(IBuildHistory));
+			IMock mock = new DynamicMock(typeof(IStateManager));
 			mock.ExpectAndReturn("Exists", false);
 			Exception expectedException = new CruiseControlException("expected exception");
 			mock.ExpectAndThrow("Save", expectedException, new NMock.Constraints.IsAnything());
-			_project.BuildHistory = (IBuildHistory)mock.MockInstance;
+			_project.StateManager = (IStateManager)mock.MockInstance;
 			MockPublisher publisher = new MockPublisher();
 			_project.AddIntegrationEventHandler(publisher.IntegrationEventHandler);
-			SetMockSourceControl();
+			_project.SourceControl = new MockSourceControl();
 			_project.Builder = new MockBuilder();
 			
 			_project.Run();
@@ -325,29 +329,13 @@ namespace tw.ccnet.core.test
 			return mods;
 		}
 
-		private Mock SetMockBuildHistory(object exists, object result)
+		private Mock SetMockStateManager(object exists, object result)
 		{
-			DynamicMock mock = new DynamicMock(typeof(IBuildHistory));
-			_project.BuildHistory = (IBuildHistory)mock.MockInstance;
+			DynamicMock mock = new DynamicMock(typeof(IStateManager));
+			_project.StateManager = (IStateManager)mock.MockInstance;
 			if (exists != null)	mock.ExpectAndReturn("Exists", exists, null);
 			if (result != null) mock.ExpectAndReturn("LoadRecent", result, null);
 			return mock;
-		}
-
-		private void SetMockSourceControl()
-		{
-			// TODO: fix nmock bug
-			// create mock source control that returns modifications
-			//			DynamicMock sourceControlMock = new DynamicMock(typeof(ISourceControl));
-			//			Modification[] expected = new Modification[2];
-			//			expected[0] = new Modification();
-			//			expected[1] = new Modification();
-			//			sourceControlMock.ExpectAndReturn("GetModifications", expected, DateTime.MinValue, DateTime.MaxValue);
-			//			_project.SourceControl = (ISourceControl)sourceControlMock.MockInstance;
-			_project.SourceControl = new MockSourceControl();
-
-			// verify that modifications were requested
-			//			sourceControlMock.Verify();
 		}
 	}
 }

@@ -3,7 +3,7 @@ using System.Collections;
 using System.Diagnostics;
 using System.Threading;
 using Exortech.NetReflector;
-using tw.ccnet.core.history;
+using tw.ccnet.core.state;
 using tw.ccnet.core.label;
 using tw.ccnet.core.publishers;
 using tw.ccnet.core;
@@ -14,13 +14,13 @@ using tw.ccnet.core.util;
 namespace tw.ccnet.core
 {
 	/// <remarks>
-	/// A project is the combination of the source control location, build command, publishers, and history elements.
+	/// A project is the combination of the source control location, build command, publishers, and state elements.
 	/// <code>
 	/// <![CDATA[
 	/// <project name="foo">
 	///		<sourcecontrol type="cvs"></sourcecontrol>
 	///		<build type="nant"></build>
-	///		<history type="xml"></history>
+	///		<state type="state"></state>
 	///		<publishers></publishers>
 	/// </project>
 	/// ]]>
@@ -35,7 +35,7 @@ namespace tw.ccnet.core
 		private IBuilder _builder;
 		private ILabeller _labeller = new DefaultLabeller();
 		private IList _publishers = new ArrayList();
-		private IBuildHistory _history = new XmlBuildHistory();
+		private IStateManager _state = new IntegrationStateManager();
 		private int _timeout = 60000;
 		private bool _stopped = false;
 		private IntegrationResult _lastIntegration;
@@ -105,11 +105,11 @@ namespace tw.ccnet.core
 			set { _stopped = value; }
 		}
 
-		[ReflectorProperty("history", InstanceTypeKey="type", Required=false)]
-		public IBuildHistory BuildHistory
+		[ReflectorProperty("state", InstanceTypeKey="type", Required=false)]
+		public IStateManager StateManager
 		{
-			get { return _history; }
-			set { _history = value; }
+			get { return _state; }
+			set { _state = value; }
 		}
 
 		public ILabeller Labeller
@@ -124,7 +124,7 @@ namespace tw.ccnet.core
 			{ 
 				if (_lastIntegration == null)
 				{
-					_lastIntegration = (BuildHistory.Exists()) ? BuildHistory.Load() : new IntegrationResult();
+					_lastIntegration = LoadLastIntegration();
 				}
 				return _lastIntegration; 
 			}
@@ -199,11 +199,11 @@ namespace tw.ccnet.core
 			CurrentIntegration.End();
 			try
 			{
-				BuildHistory.Save(CurrentIntegration);
+				StateManager.Save(CurrentIntegration);
 			}
 			catch (CruiseControlException ex)
 			{
-				Log("Exception when saving build history", ex);
+				Log("Exception when saving integration state", ex);
 				if (CurrentIntegration.ExceptionResult == null)
 				{
 					CurrentIntegration.ExceptionResult = ex;
@@ -228,7 +228,7 @@ namespace tw.ccnet.core
 
 		private IntegrationResult LoadLastIntegration()
 		{
-			return (BuildHistory.Exists()) ? BuildHistory.Load() : new IntegrationResult();
+			return (StateManager.Exists()) ? StateManager.Load() : new IntegrationResult();
 		}
 
 		private void Log(string message)

@@ -25,7 +25,7 @@ namespace tw.ccnet.core.state
 			set { _directory = value; }
 		}
 
-		[ReflectorProperty("filename")]
+		[ReflectorProperty("filename", Required=false)]
 		public string Filename
 		{
 			get { return _filename; }
@@ -58,9 +58,15 @@ namespace tw.ccnet.core.state
 		public void Save(IntegrationResult result)
 		{
 			TextWriter writer = CreateTextWriter(GetFilePath());
-			_serializer.Serialize(writer, result);
-			writer.Flush();
-			writer.Close();
+			try
+			{
+				_serializer.Serialize(writer, result);
+				writer.Flush();
+			}
+			finally
+			{
+				writer.Close();
+			}
 		}
 
 		private TextReader CreateTextReader(string path)

@@ -29,7 +29,7 @@ namespace tw.ccnet.core.configuration.test
 		}
 
 		[Test]
-		public void SuccededLoad() 
+		public void SucceededLoad() 
 		{
 			ValidationEventHandler hd = new ValidationEventHandler(handler);
 			XmlSchema schema = loadSchema();
