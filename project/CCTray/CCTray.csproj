@@ -168,6 +168,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "FileIconStore.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Gray.ico"
                     BuildAction = "EmbeddedResource"
                 />
@@ -176,12 +181,32 @@
                     BuildAction = "EmbeddedResource"
                 />
                 <File
+                    RelPath = "HashStatusIconMapper.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "IconNotFoundException.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "IIconStore.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "IRemoteCruiseProxyLoader.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
                     RelPath = "IStatusIconLoader.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "IStatusIconMapper.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -205,6 +230,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "ResourceIconStore.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Settings.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -221,6 +251,11 @@
                 />
                 <File
                     RelPath = "SettingsManager.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Sound.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -286,12 +321,32 @@
                     BuildAction = "Content"
                 />
                 <File
-                    RelPath = "Test\DefaultStatusIconLoaderTest.cs"
+                    RelPath = "Test\AbstractIconStoreTestCase.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Test\FileIconStoreTest.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Test\IconFileFixture.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
                     RelPath = "Test\RemoteCruiseProxyLoaderTest.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Test\ResourceIconStoreTest.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Test\StatusIconTest.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

@@ -57,15 +57,9 @@ namespace ThoughtWorks.CruiseControl.Shared.Util.Test
 			string expected = "hello my name is rosebud";
 			string path = TempFileUtil.CreateTempFile(TempDir, "TestCreateTempFile_withContent.txt", expected);
 			Assert("expected file to exist: " + path, File.Exists(path));
-			StreamReader stream = null;
-			try
+			using (StreamReader stream = File.OpenText(path))
 			{
-				stream = File.OpenText(path);
-				AssertEquals(expected, stream.ReadToEnd());				
-			}
-			finally
-			{
-				stream.Close();
+			    AssertEquals(expected, stream.ReadToEnd());				
 			}
 		}
 	}

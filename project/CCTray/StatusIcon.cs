@@ -5,21 +5,45 @@ using System.Reflection;
 
 namespace ThoughtWorks.CruiseControl.CCTray
 {
+	[Serializable]
 	public class StatusIcon
 	{
 		private Icon _icon;
-		public static readonly StatusIcon NOW_BUILDING = new StatusIcon("ThoughtWorks.CruiseControl.CCTray.Yellow.ico");
-		public static readonly  StatusIcon EXCEPTION = new StatusIcon("ThoughtWorks.CruiseControl.CCTray.Gray.ico");
-		public static readonly  StatusIcon SUCCESS = new StatusIcon("ThoughtWorks.CruiseControl.CCTray.Green.ico");
-		public static readonly StatusIcon FAILURE = new StatusIcon("ThoughtWorks.CruiseControl.CCTray.Red.ico");
-		public static readonly StatusIcon UNKNOWN = new StatusIcon("ThoughtWorks.CruiseControl.CCTray.Gray.ico");
-
-		private StatusIcon(String fileName)
-		{	 Stream stream = Assembly.GetCallingAssembly().GetManifestResourceStream(fileName);
-			_icon = System.Drawing.Icon.FromHandle(((Bitmap)Image.FromStream(stream)).GetHicon());
+		
+		public StatusIcon()
+		{
 		}
 
-	    public Icon Icon
+		public StatusIcon(String resourceName)
+		{	 
+			Stream stream = Assembly.GetCallingAssembly().GetManifestResourceStream(resourceName);
+			_icon = System.Drawing.Icon.FromHandle(((Bitmap)Image.FromStream(stream)).GetHicon());
+		}
+		public StatusIcon(Icon i)
+		{
+		    _icon = i;
+		}
+
+		public static StatusIcon LoadFromFile(string file)
+		{
+			FileStream iconFile = null; 
+			try
+			{
+				iconFile = File.Open(file,FileMode.Open);
+				return new StatusIcon(new Icon(iconFile));
+			}
+			catch(SystemException ex)
+			{
+				throw new IconNotFoundException(file, ex);    
+			}
+			finally
+			{
+				if(iconFile != null)
+					iconFile.Close();    
+			}
+		}
+
+		public Icon Icon
 	    {
 	        get { return _icon; }
 	    }

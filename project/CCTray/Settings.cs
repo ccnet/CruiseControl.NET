@@ -1,7 +1,6 @@
-using Drew.Agents;
 using System;
-using System.Xml;
 using System.Xml.Serialization;
+using Drew.Agents;				  
 
 namespace ThoughtWorks.CruiseControl.CCTray
 {
@@ -9,7 +8,7 @@ namespace ThoughtWorks.CruiseControl.CCTray
 	/// Encapsulates all user-settings for the CruiseControl.NET Monitor.  This class
 	/// is designed to work with Xml serialisation, for persisting user settings.
 	/// </summary>
-	[XmlRootAttribute("CruiseControlMonitor", Namespace="http://www.sf.net/projects/ccnet", IsNullable=false)]
+	[XmlRoot("CruiseControlMonitor", Namespace="http://www.sf.net/projects/ccnet", IsNullable=false)]
 	public class Settings
 	{
 		public int PollingIntervalSeconds;
@@ -24,6 +23,7 @@ namespace ThoughtWorks.CruiseControl.CCTray
 		public Messages Messages = new Messages();
 
 		public Agents Agents = new Agents();
+		public StatusIcons Icons= new StatusIcons();
 
 		public ConnectionMethod ConnectionMethod;
 
@@ -46,7 +46,7 @@ namespace ThoughtWorks.CruiseControl.CCTray
 			defaults.NotificationBalloon = NotificationBalloon.CreateDefaultSettings();
 			defaults.Messages = Messages.CreateDefaultSettings();
 			defaults.Agents = Agents.CreateDefaultSettings();
-
+			defaults.Icons = StatusIcons.CreateDefaultSettings(); 
 			defaults.PollingIntervalSeconds = 15;
 			defaults.RemoteServerUrl = "tcp://localhost:21234/CruiseManager.rem";
 
@@ -126,6 +126,24 @@ namespace ThoughtWorks.CruiseControl.CCTray
 	}
 
 	#endregion
+
+	public class StatusIcons
+	{
+		public string Unknown;
+		public string BuildSuccessful;
+		public string BuildFailed;
+	    public string NowBuilding;		
+		public string Error;		
+		[XmlAttribute]
+		public bool UseDefaultIcons = true;
+
+	    public static StatusIcons CreateDefaultSettings()
+	    {
+			StatusIcons defaults = new StatusIcons();
+			defaults.UseDefaultIcons =true;
+			return defaults;
+	    }
+	}
 
 	#region Agents
 
@@ -270,25 +288,7 @@ namespace ThoughtWorks.CruiseControl.CCTray
 
 			throw new Exception("Unsupported build transition.");
 		}
-
-
 		#endregion
 	}
-
-	[Serializable]
-	public struct Sound
-	{
-		[XmlAttribute()]
-		public bool Play;
-		[XmlAttribute()]
-		public string FileName;
-
-		public Sound(string fileName)
-		{
-			Play = false;
-			FileName = fileName;
-		}
-	}
-
 	#endregion
 }

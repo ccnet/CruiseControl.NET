@@ -9,17 +9,11 @@ namespace ThoughtWorks.CruiseControl.CCTray
 	/// </summary>
 	public class SettingsManager
 	{
-		#region Private constructor
-
 		/// <summary>
 		/// Utility class, not intended for instantiation.
 		/// </summary>
 		private SettingsManager()
 		{ }
-
-		#endregion
-
-		#region Settings file name location
 
 		private const string DEFAULT_SETTINGS_FILE = "cctray-settings.xml";
 
@@ -47,10 +41,6 @@ namespace ThoughtWorks.CruiseControl.CCTray
 				return Path.Combine(AppDomain.CurrentDomain.BaseDirectory, _settingsFileName);
 			}
 		}
-
-		#endregion
-
-		#region Read and write settings
 
 		/// <summary>
 		/// Writes the specified settings using Xml serialisation.
@@ -86,20 +76,11 @@ namespace ThoughtWorks.CruiseControl.CCTray
 			}
 
 			// file exists, so deserialise it
-			TextReader reader = null;
-			try 
-			{
 				XmlSerializer serializer = new XmlSerializer(typeof(Settings));
-				reader = new StreamReader(SettingsPathAndFileName);
-				return (Settings)serializer.Deserialize(reader);
-			}
-			finally
-			{
-				if (reader!=null)
-					reader.Close();
-			}
+				using (TextReader reader = new StreamReader(SettingsPathAndFileName))
+				{
+					return (Settings)serializer.Deserialize(reader);    
+				}
 		}
-
-		#endregion
 	}
 }

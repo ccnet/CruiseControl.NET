@@ -4,7 +4,7 @@ using NMock.Constraints;
 using NUnit.Framework;
 using ThoughtWorks.CruiseControl.Remote;
 
-namespace ThoughtWorks.CruiseControl.CCTray
+namespace ThoughtWorks.CruiseControl.CCTray.Test
 {
     [NUnit.Framework.TestFixture]
 	public class StatusMonitorTransitionChangeTest : Assertion
