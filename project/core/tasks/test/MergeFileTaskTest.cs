@@ -15,6 +15,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks.Test
         private MergeFilesTask _task;
         private string _fullPathToTempDir;
     	private IProject project;
+    	private DynamicMock projectMock;
 
     	[SetUp]
         public void CreateTempDir ()
@@ -22,7 +23,8 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks.Test
             _fullPathToTempDir = TempFileUtil.CreateTempDir (TEMP_DIR);
             _task = new MergeFilesTask ();
             _result = new IntegrationResult ();
-			project = (IProject) new DynamicMock(typeof(IProject)).MockInstance;
+    		projectMock = new DynamicMock(typeof(IProject));
+    		project = (IProject) projectMock.MockInstance;
         }
 
         [Test]
@@ -56,6 +58,23 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks.Test
             Assert.AreEqual (fileData, ((ITaskResult) list[0]).Data);
         }
 
+		[Test]
+		public void UseProjectWorkingDirectoryAsPrefixIfMergeFileLocationIsRelative()
+		{
+			String fileData = "<foo bar=\"4\">bat</foo>";
+			TempFileUtil.CreateTempDir (TEMP_DIR + "\\sub");
+			TempFileUtil.CreateTempXmlFile (TEMP_DIR, "foo.xml", fileData);
+			TempFileUtil.CreateTempFile (TEMP_DIR, "foo.bat", "blah");
+			TempFileUtil.CreateTempXmlFile (TEMP_DIR + "\\sub", "foo.xml", "<foo bar=\"9\">bat</foo>");
+
+			projectMock.ExpectAndReturn("WorkingDirectory", _fullPathToTempDir);
+			_task.MergeFiles = new string[] { @"*.xml"};
+			_task.Run (_result, project);
+			IList list = _result.TaskResults;
+			Assert.AreEqual (1, list.Count);
+			Assert.AreEqual (fileData, ((ITaskResult) list[0]).Data);
+		}
+
         [Test]
         public void ResolveWildCardsForMoreThanOneMergeFiles ()
         {
@@ -85,7 +104,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks.Test
         [Test]
         public void IgnoresFilesNotFound ()
         {
-			_task.MergeFiles = new string[] {"nonExistantFile.txt"};
+			_task.MergeFiles = new string[] {@"c:\nonExistantFile.txt"};
 			_task.Run (_result, project);
 			Assert.AreEqual (0, _result.TaskResults.Count);
         }

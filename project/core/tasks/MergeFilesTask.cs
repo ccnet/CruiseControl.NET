@@ -18,7 +18,12 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         {
             foreach (string mergeFile in MergeFiles)
             {
-                WildCardPath path = new WildCardPath(mergeFile);
+				string fullMergeFile = mergeFile;
+				if ( !Path.IsPathRooted(mergeFile))
+				{
+					fullMergeFile = Path.Combine(project.WorkingDirectory, mergeFile);
+				}
+                WildCardPath path = new WildCardPath(fullMergeFile);
                 FileInfo[] files = path.GetFiles();
                 foreach (FileInfo fileInfo in files)
                 {
