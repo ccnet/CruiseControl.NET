@@ -19,7 +19,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.ServerConnection
 
 		public string GetLatestLogName(string serverName, string projectName)
 		{
-			return GetCruiseManager(serverName).GetLatestLogName(projectName);
+			return GetCruiseManager(serverName).GetLatestBuildName(projectName);
 		}
 
 		public string GetLog(string serverName, string projectName, string buildName)

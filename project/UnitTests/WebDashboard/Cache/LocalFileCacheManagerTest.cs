@@ -19,6 +19,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Cache
 		private string subdirectory;
 		private string filename;
 		private string content;
+		private string fullfilename;
 
 		[SetUp]
 		public void Setup()
@@ -31,6 +32,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Cache
 			projectname = "myproject";
 			subdirectory = "subdir";
 			filename = "myfile.xml";
+			fullfilename = Path.Combine(cacheRootDirectory, @"myserver\myproject\subdir\myfile.xml");
 			content = "some\r\ncontent";
 			TempFileUtil.DeleteTempDir("cache");
 		}
@@ -46,14 +48,19 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Cache
 		{
 			Assert(! Directory.Exists(cacheRootDirectory));
 			LocalFileCacheManager manager = new LocalFileCacheManager((IPathMapper) pathMapperMock.MockInstance, (IConfigurationGetter) configurationGetterMock.MockInstance);
+			pathMapperMock.ExpectAndReturn("GetLocalPathFromURLPath", fullfilename, fullfilename);
 			manager.AddContent(servername, projectname, subdirectory, filename, content);
 			Assert(Directory.Exists(cacheRootDirectory));
+
+			pathMapperMock.Verify();
+			configurationGetterMock.Verify();
 		}
 
 		[Test]
 		public void CanAddNewContent()
 		{
 			LocalFileCacheManager manager = new LocalFileCacheManager((IPathMapper) pathMapperMock.MockInstance, (IConfigurationGetter) configurationGetterMock.MockInstance);
+			pathMapperMock.ExpectAndReturn("GetLocalPathFromURLPath", fullfilename, fullfilename);
 			manager.AddContent(servername, projectname, subdirectory, filename, content);
 			string expectedFile = Path.Combine(cacheRootDirectory, @"myserver\myproject\subdir\myfile.xml");
 
@@ -64,22 +71,33 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Cache
 			}
 
 			AssertEquals(content, readContent);
+			pathMapperMock.Verify();
+			configurationGetterMock.Verify();
 		}
 
 		[Test]
 		public void GetContentReturnsNullIfRequestedContentDoesntExist()
 		{
 			LocalFileCacheManager manager = new LocalFileCacheManager((IPathMapper) pathMapperMock.MockInstance, (IConfigurationGetter) configurationGetterMock.MockInstance);
+			pathMapperMock.ExpectAndReturn("GetLocalPathFromURLPath", fullfilename, fullfilename);
 			AssertNull(manager.GetContent(servername, projectname, subdirectory, filename));
+			pathMapperMock.Verify();
+			configurationGetterMock.Verify();
 		}
 
 		[Test]
 		public void GetContentReturnsContentIfItExistsAcrossInstances()
 		{
 			LocalFileCacheManager manager = new LocalFileCacheManager((IPathMapper) pathMapperMock.MockInstance, (IConfigurationGetter) configurationGetterMock.MockInstance);
+			pathMapperMock.ExpectAndReturn("GetLocalPathFromURLPath", fullfilename, fullfilename);
 			manager.AddContent(servername, projectname, subdirectory, filename, content);
+
+			pathMapperMock.ExpectAndReturn("GetLocalPathFromURLPath", fullfilename, fullfilename);
 			manager = new LocalFileCacheManager((IPathMapper) pathMapperMock.MockInstance, (IConfigurationGetter) configurationGetterMock.MockInstance);
 			AssertEquals(content, manager.GetContent(servername, projectname, subdirectory, filename));
+
+			pathMapperMock.Verify();
+			configurationGetterMock.Verify();
 		}
 
 		[Test]
@@ -90,6 +108,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Cache
 			LocalFileCacheManager manager = new LocalFileCacheManager((IPathMapper) pathMapperMock.MockInstance, (IConfigurationGetter) configurationGetterMock.MockInstance);
 			AssertEquals("http://foo.bar/baz", manager.GetURLForFile(servername, projectname, subdirectory, filename));
 			pathMapperMock.Verify();
+			configurationGetterMock.Verify();
 		}
 	}
 }

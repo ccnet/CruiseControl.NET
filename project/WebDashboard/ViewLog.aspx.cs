@@ -10,7 +10,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard
 {
 	public class ViewLog : System.Web.UI.Page
 	{
-		protected HtmlGenericControl BodyArea;
+		protected HtmlAnchor LogLink;
 
 		private void Page_Load(object sender, System.EventArgs e)
 		{
@@ -22,8 +22,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard
 			);
 
 			LogViewerResults results = logViewer.Do();
-
-			Response.Redirect(results.RedirectURL);
+			LogLink.HRef = results.RedirectURL;
 		}
 
 		override protected void OnInit(EventArgs e)

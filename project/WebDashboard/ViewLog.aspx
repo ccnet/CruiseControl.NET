@@ -4,5 +4,10 @@
 	<HEAD>
 		<TITLE>View Log</TITLE>
 	</HEAD>
-	<div id="BodyArea" runat="server" />
+	<body>
+	<p>
+	<!-- Seems hard to do refresh / redirect with Sitemesh - will come back to it -->
+	Click <a id="LogLink" runat="server" href="">here</a> for your build log
+	</p>
+	</body>
 </HTML>

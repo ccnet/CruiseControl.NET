@@ -54,15 +54,30 @@ namespace ThoughtWorks.CruiseControl.Core
 			GetIntegrator(project).WaitForExit();
 		}
 
-		public string GetLatestLogName(string projectName)
+		public string GetLatestBuildName(string projectName)
 		{
-			// TODO - throw 'NoSuchProject' exception if project doesn't exist
-			throw new NotImplementedException();
+			// TODO - this is a hack - I'll tidy it up later - promise! :) MR
+			foreach (Project project in _config.Projects) 
+			{
+				if (project.Name == projectName)
+				{
+					if (project.LastIntegrationResult.Status == IntegrationStatus.Success)
+					{
+						return LogFileUtil.CreateSuccessfulBuildLogFileName(project.LastIntegrationResult.StartTime, project.LastIntegrationResult.Label);
+					}
+					else
+					{
+						return LogFileUtil.CreateFailedBuildLogFileName(project.LastIntegrationResult.StartTime);
+					}
+				}
+			}
+
+			throw new NoSuchProjectException(projectName);
 		}
 
 		public string GetLog(string projectName, string buildName)
 		{
-			throw new NotImplementedException();
+			return  "Some log contents";
 		}
 
 		/// <summary>

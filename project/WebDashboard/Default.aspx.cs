@@ -5,6 +5,7 @@ using System.Drawing;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 using ThoughtWorks.CruiseControl.Remote;
+using ThoughtWorks.CruiseControl.WebDashboard.config;
 using ThoughtWorks.CruiseControl.WebDashboard.Config;
 using ThoughtWorks.CruiseControl.WebDashboard.Dashboard;
 
@@ -19,7 +20,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard
 		protected Label StatusLabel;
 		protected DataGrid StatusGrid;
 		protected Button RefreshButton;
-		private LocalCruiseManagerAggregator cruiseManager = new LocalCruiseManagerAggregator((IList)ConfigurationSettings.GetConfig("projectURLs"));
+		private LocalCruiseManagerAggregator cruiseManager = new LocalCruiseManagerAggregator((ServerSpecification[])ConfigurationSettings.GetConfig(ServersSectionHandler.SectionName));
 	
 		private void RefreshDetails()
 		{

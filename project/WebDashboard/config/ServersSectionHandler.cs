@@ -20,7 +20,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Config
 				}
 			}
 
-			return servers;
+			return (ServerSpecification[]) servers.ToArray(typeof (ServerSpecification));
 		}
 
 		public static readonly string SectionName = "servers";

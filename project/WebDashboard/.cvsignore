@@ -1,3 +1,4 @@
 *.csproj.user
 bin
 obj
+projectcache

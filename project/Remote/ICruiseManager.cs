@@ -24,7 +24,7 @@ namespace ThoughtWorks.CruiseControl.Remote
 		/// <summary>
 		/// Returns the name of the most recent build log for the specified project
 		/// </summary>
-		string GetLatestLogName(string projectName);
+		string GetLatestBuildName(string projectName);
 
 		/// <summary>
 		/// Returns the build log contents for requested project and build name

@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Runtime.Remoting;
 using ThoughtWorks.CruiseControl.Remote;
+using ThoughtWorks.CruiseControl.WebDashboard.config;
 
 namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 {
@@ -11,27 +12,27 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 		private ArrayList projectDetails = new ArrayList();
 		private IDictionary urlsForProjects = new Hashtable();
 
-		public LocalCruiseManagerAggregator(IList urls) 
+		public LocalCruiseManagerAggregator(ServerSpecification[] servers) 
 		{
-			ConnectToRemoteServers(urls);
+			ConnectToRemoteServers(servers);
 		}
 
-		private void ConnectToRemoteServers(IList urls)
+		private void ConnectToRemoteServers(ServerSpecification[] servers)
 		{
-			foreach (string url in urls)
+			foreach (ServerSpecification server in servers)
 			{
 				try
 				{
-					ICruiseManager remoteCC = (ICruiseManager) RemotingServices.Connect(typeof(ICruiseManager), url);
+					ICruiseManager remoteCC = (ICruiseManager) RemotingServices.Connect(typeof(ICruiseManager), server.Url);
 					foreach (ProjectStatus status in remoteCC.GetProjectStatus())
 					{
 						projectDetails.Add(status);
-						urlsForProjects[status.Name] = url;
+						urlsForProjects[status.Name] = server.Url;
 					}
 				}
 				catch (Exception ex)
 				{
-					connectionExceptions.Add(new ConnectionException(url, ex));
+					connectionExceptions.Add(new ConnectionException(server.Url, ex));
 				}
 			}
 		}
