@@ -1,4 +1,5 @@
 using System;
+using Exortech.NetReflector;
 using NMock;
 using NUnit.Framework;
 using ThoughtWorks.CruiseControl.Core.Triggers;
@@ -10,59 +11,59 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Triggers
 	[TestFixture]
 	public class ScheduleTriggerTest
 	{
-		private IMock _mockDateTime;
+		private IMock mockDateTime;
 		private ScheduleTrigger trigger;
 
 		[SetUp]
 		public void Setup()
 		{
-			_mockDateTime = new DynamicMock(typeof (DateTimeProvider));
-			trigger = new ScheduleTrigger((DateTimeProvider) _mockDateTime.MockInstance);
+			mockDateTime = new DynamicMock(typeof (DateTimeProvider));
+			trigger = new ScheduleTrigger((DateTimeProvider) mockDateTime.MockInstance);
 		}
 
 		[TearDown]
 		public void VerifyAll()
 		{
-			_mockDateTime.Verify();
+			mockDateTime.Verify();
 		}
 
 		[Test]
 		public void ShouldRunIntegrationIfCalendarTimeIsAfterIntegrationTime()
 		{
-			_mockDateTime.SetupResult("Now", new DateTime(2004, 1, 1, 23, 25, 0, 0));
+			mockDateTime.SetupResult("Now", new DateTime(2004, 1, 1, 23, 25, 0, 0));
 			trigger.Time = "23:30";
 			trigger.BuildCondition = BuildCondition.IfModificationExists;
 
 			Assert.AreEqual(BuildCondition.NoBuild, trigger.ShouldRunIntegration());
 
-			_mockDateTime.SetupResult("Now", new DateTime(2004, 1, 1, 23, 31, 0, 0));
+			mockDateTime.SetupResult("Now", new DateTime(2004, 1, 1, 23, 31, 0, 0));
 			Assert.AreEqual(BuildCondition.IfModificationExists, trigger.ShouldRunIntegration());
 		}
 
 		[Test]
 		public void ShouldRunIntegrationOnTheNextDay()
 		{
-			_mockDateTime.SetupResult("Now", new DateTime(2004, 1, 1, 23, 25, 0, 0));
+			mockDateTime.SetupResult("Now", new DateTime(2004, 1, 1, 23, 25, 0, 0));
 			trigger.Time = "23:30";
 			trigger.BuildCondition = BuildCondition.IfModificationExists;
 
-			_mockDateTime.SetupResult("Now", new DateTime(2004, 1, 2, 1, 1, 0, 0));
+			mockDateTime.SetupResult("Now", new DateTime(2004, 1, 2, 1, 1, 0, 0));
 			Assert.AreEqual(BuildCondition.IfModificationExists, trigger.ShouldRunIntegration());
 		}
 
 		[Test]
 		public void ShouldIncrementTheIntegrationTimeToTheNextDayAfterIntegrationIsCompleted()
 		{
-			_mockDateTime.SetupResult("Now", new DateTime(2004, 6, 27, 13, 00, 0, 0));
+			mockDateTime.SetupResult("Now", new DateTime(2004, 6, 27, 13, 00, 0, 0));
 			trigger.Time = "14:30";
 			trigger.BuildCondition = BuildCondition.IfModificationExists;
-			_mockDateTime.SetupResult("Now", new DateTime(2004, 6, 27, 15, 00, 0, 0));
+			mockDateTime.SetupResult("Now", new DateTime(2004, 6, 27, 15, 00, 0, 0));
 
 			Assert.AreEqual(BuildCondition.IfModificationExists, trigger.ShouldRunIntegration());
 			trigger.IntegrationCompleted();
 			Assert.AreEqual(BuildCondition.NoBuild, trigger.ShouldRunIntegration());
 
-			_mockDateTime.SetupResult("Now", new DateTime(2004, 6, 28, 15, 00, 0, 0));
+			mockDateTime.SetupResult("Now", new DateTime(2004, 6, 28, 15, 00, 0, 0));
 			Assert.AreEqual(BuildCondition.IfModificationExists, trigger.ShouldRunIntegration());
 		}
 
@@ -71,12 +72,12 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Triggers
 		{
 			foreach (BuildCondition expectedCondition in Enum.GetValues(typeof (BuildCondition)))
 			{
-				_mockDateTime.SetupResult("Now", new DateTime(2004, 1, 1, 23, 25, 0, 0));
+				mockDateTime.SetupResult("Now", new DateTime(2004, 1, 1, 23, 25, 0, 0));
 				trigger.Time = "23:30";
 				trigger.BuildCondition = expectedCondition;
 				Assert.AreEqual(BuildCondition.NoBuild, trigger.ShouldRunIntegration());
 
-				_mockDateTime.SetupResult("Now", new DateTime(2004, 1, 1, 23, 31, 0, 0));
+				mockDateTime.SetupResult("Now", new DateTime(2004, 1, 1, 23, 31, 0, 0));
 				Assert.AreEqual(expectedCondition, trigger.ShouldRunIntegration());
 			}
 		}
@@ -87,11 +88,37 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Triggers
 			trigger.WeekDays = new DayOfWeek[] { DayOfWeek.Monday, DayOfWeek.Wednesday };
 			trigger.BuildCondition = BuildCondition.ForceBuild;
 
-			_mockDateTime.SetupResult("Now", new DateTime(2004, 12, 1));
+			mockDateTime.SetupResult("Now", new DateTime(2004, 12, 1));
 			Assert.AreEqual(BuildCondition.ForceBuild, trigger.ShouldRunIntegration());
 
-			_mockDateTime.SetupResult("Now", new DateTime(2004, 12, 2));
+			mockDateTime.SetupResult("Now", new DateTime(2004, 12, 2));
 			Assert.AreEqual(BuildCondition.NoBuild, trigger.ShouldRunIntegration());
+		}
+
+		[Test]
+		public void ShouldFullyPopulateFromReflector()
+		{
+			string xml = string.Format(@"<scheduleTrigger time=""12:00:00"" buildCondition=""ForceBuild"">
+<weekDays>
+	<weekDay>Monday</weekDay>
+	<weekDay>Tuesday</weekDay>
+</weekDays>
+</scheduleTrigger>");
+			trigger = (ScheduleTrigger)NetReflector.Read(xml);
+			Assert.AreEqual("12:00:00", trigger.Time);
+			Assert.AreEqual(DayOfWeek.Monday, trigger.WeekDays[0]);
+			Assert.AreEqual(DayOfWeek.Tuesday, trigger.WeekDays[1]);
+			Assert.AreEqual(BuildCondition.ForceBuild, trigger.BuildCondition);
+		}
+
+		[Test]
+		public void ShouldMinimallyPopulateFromReflector()
+		{
+			string xml = string.Format(@"<scheduleTrigger time=""10:00:00"" />");
+			trigger = (ScheduleTrigger)NetReflector.Read(xml);
+			Assert.AreEqual("10:00:00", trigger.Time);
+			Assert.AreEqual(7, trigger.WeekDays.Length);
+			Assert.AreEqual(BuildCondition.IfModificationExists, trigger.BuildCondition);
 		}
 	}
 }

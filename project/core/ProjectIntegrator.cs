@@ -100,7 +100,7 @@ namespace ThoughtWorks.CruiseControl.Core
 					Thread.Sleep(100);
 				}
 			}
-			catch (ThreadAbortException ex)
+			catch (ThreadAbortException)
 			{
 				Thread.ResetAbort();
 			}

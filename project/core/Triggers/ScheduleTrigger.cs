@@ -1,33 +1,35 @@
 using System;
 using System.Globalization;
+using Exortech.NetReflector;
 using ThoughtWorks.CruiseControl.Core.Config;
 using ThoughtWorks.CruiseControl.Core.Util;
 using ThoughtWorks.CruiseControl.Remote;
 
 namespace ThoughtWorks.CruiseControl.Core.Triggers
 {
+	[ReflectorType("scheduleTrigger")]
 	public class ScheduleTrigger : ITrigger
 	{
-		private DateTimeProvider _dtProvider;
-		private BuildCondition buildCondition;
-		private TimeSpan _integrationTime;
-		private DateTime _nextIntegration;
+		private DateTimeProvider dtProvider;
+		private TimeSpan integrationTime;
+		private DateTime nextIntegration;
 
 		public ScheduleTrigger() : this(new DateTimeProvider()) {}
+
 		public ScheduleTrigger(DateTimeProvider dtProvider)
 		{
-			_dtProvider = dtProvider;
-			this.buildCondition = BuildCondition.NoBuild;
+			this.dtProvider = dtProvider;
 		}
 
+		[ReflectorProperty("time")]
 		public virtual string Time
 		{
-			get { return _integrationTime.ToString(); }
+			get { return integrationTime.ToString(); }
 			set 
 			{ 
 				try
 				{
-					_integrationTime = TimeSpan.Parse(value);
+					integrationTime = TimeSpan.Parse(value);
 					SetNextIntegrationDateTime();
 				}
 				catch (Exception ex)
@@ -38,21 +40,19 @@ namespace ThoughtWorks.CruiseControl.Core.Triggers
 			}
 		}
 
-		public virtual BuildCondition BuildCondition
-		{
-			get { return buildCondition; }
-			set { buildCondition = value; }
-		}
+		[ReflectorProperty("buildCondition", Required=false)]
+		public BuildCondition BuildCondition = BuildCondition.IfModificationExists;
 
+		[ReflectorArray("weekDays", Required=false)]
 		public DayOfWeek[] WeekDays = (DayOfWeek[]) DayOfWeek.GetValues(typeof(DayOfWeek));
 
 		private void SetNextIntegrationDateTime()
 		{
-			DateTime now = _dtProvider.Now;
-			_nextIntegration = new DateTime(now.Year, now.Month, now.Day, _integrationTime.Hours, _integrationTime.Minutes, 0, 0);
-			if (now >= _nextIntegration)
+			DateTime now = dtProvider.Now;
+			nextIntegration = new DateTime(now.Year, now.Month, now.Day, integrationTime.Hours, integrationTime.Minutes, 0, 0);
+			if (now >= nextIntegration)
 			{
-				_nextIntegration = _nextIntegration.AddDays(1);
+				nextIntegration = nextIntegration.AddDays(1);
 			}
 		}
 
@@ -63,8 +63,8 @@ namespace ThoughtWorks.CruiseControl.Core.Triggers
 
 		public virtual BuildCondition ShouldRunIntegration()
 		{
-			DateTime now = _dtProvider.Now;
-			if (now > _nextIntegration && Array.IndexOf(WeekDays, now.DayOfWeek) >= 0)
+			DateTime now = dtProvider.Now;
+			if (now > nextIntegration && Array.IndexOf(WeekDays, now.DayOfWeek) >= 0)
 			{
 				return BuildCondition;
 			}
