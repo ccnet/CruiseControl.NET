@@ -1,0 +1,75 @@
+<html>
+    <head>
+        <title>CruiseControl.NET : MergeFileTask</title>
+	    <link rel="stylesheet" href="styles/site.css" type="text/css" />
+    </head>
+
+    <body>
+	    <table class="pagecontent" border="0" cellpadding="0" cellspacing="0" width="100%" bgcolor="#ffffff">
+		    <tr>
+			    <td valign="top" class="pagebody">
+				    <div class="pageheader">
+					    <span class="pagetitle">
+                            CruiseControl.NET : MergeFileTask
+                                                    </span>
+				    </div>
+				    <div class="pagesubheading">
+					    This page last changed on Apr 22, 2004 by <font color="#0050B2">orogers</font>.
+				    </div>
+
+				    <p class="paragraph">Most build processes interact with external tools that write their output to file (eg. NUnit or FxCop or NCover).  In order to make the output of these tools available to CruiseControl.NET to be used in the build process or displayed in the CCNet web page or included in CCNet emails,  these files need to be merged into the CCNet integration.</p>To merge these files, you need to include a <a href="">MergeFileTask</a> in your CCNet project.  To do so, you need to modify your <b class="strong">ccnet.config</b> file as follows:
+
+<div class="code"><pre>&lt;cruisecontrol&gt;&#10;   &lt;project name=&quot;project&quot;&gt;&#10;      ...&#10;      &lt;tasks&gt;&#10;         &lt;merge&gt;&#10;             &lt;files&gt;&#10;                  &lt;file&gt;&lt;&#33;&#45;&#45; path to NUnit test file &#45;&#45;&gt;&lt;/file&gt;&#10;                  &lt;file&gt;&lt;&#33;&#45;&#45; path to FxCop file &#45;&#45;&gt;&lt;/file&gt;&#10;             &lt;/files&gt;&#10;         &lt;/merge&gt;&#10;      &lt;/tasks&gt;&#10;   &lt;/project&gt;&#10;&lt;/cruisecontrol&gt;</pre></div><p class="paragraph">Modify the contents of the <b class="strong">&lt;files&gt;</b> element to contain the path of the files that you wish to merge.  The file can be specified using an asterisk (&quot;&#42;&quot;) wildcard in order to include multiple files that match the specified pattern (ie. &quot;*<b class="strong">-results.xml</b>&quot; will merge all files ending with the suffix &quot;<b class="strong">-results.xml</b>&quot;).   The asterisk wildcard can only be used in the filename, not in the path.</p>The <a href="">MergeFileTask</a> is part of the set of generic tasks that can be added to a CruiseControl.NET project.  The tasks included in this section will be executed in the order specified in the <b class="strong">ccnet.config</b> file.<p class="paragraph"><img src="./icons/emoticons/warning.png" height="16" width="16" align="absmiddle" alt="" border="0"/> NOTE: It is also possible to merge files into the integration by using the <a href="XmlLogPublisher.html">XmlLogPublisher</a> (represented by the <b class="strong">&lt;xmllogger&gt;</b> element).  This approach is now considered to be deprecated.  If you are including external files into the integration, you should use the <a href="">MergeFileTask</a> instead.  Do not use both approaches, otherwise the files will be included twice into the integration.</p><h3 class="heading3"> Why are the merged results not showing up in the <a href="CCNet Web Application.html">CCNet Web Application</a>?</h3><p class="paragraph">If you have set up the configuration for the MergeFileTask as described above and you are still not ending up with the appropriate results showing up within the web application, please try the following steps:<ol>
+<li> Click the <b class="strong">orginal log</b> link and check to see if the merged content is included in the xml.  If it is missing then got onto step 2.  If it is present and is still not showing up in the web page then try emailing the <span class="nobr"><a href="mailto:ccnet-user@lists.sourceforge.net">CCNet users list<sup><img src="./icons/mail_small.gif" height="12" width="13" align="absmiddle" alt="&gt;&gt;" border="0"/></sup></a></span>.</li>
+<li> Check the folder that contains the files that should be merged.  If they are not there then you need to dig into your build script to find out why they aren&#039;t getting created.</li>
+<li> If the files are there but aren&#039;t getting merged, double-check your <b class="strong">ccnet.config</b> file.  Is the Xml specified correctly as specified above?  Remember case matters.</li>
+<li> Check the <b class="strong">ccnet.log</b> file.  You should see Info-level log messages stating that the files have been merged.</li>
+</ol></p>
+
+				    
+                                            <div class="tabletitle">
+                            <a name="comments">Comments:</a>
+                        </div>
+
+                        <table border="0" width="100%">
+                                                        <tr>
+                                <td >
+                                    <a name="comment-377"></a>
+                                    <font class="smallfont"><p class="paragraph">I think that should really be:<br/>
+&lt;tasks&gt;
+  &lt;merge&gt;
+    &lt;files&gt;
+      &lt;file&gt; &lt;!-- path to NUnit test results --&gt; &lt;/file&gt;
+    &lt;/files&gt;
+  &lt;/merge&gt;<br/>
+&lt;/task&gt;</p></font>
+                                    <div align="left" class="smallfont" style="color: #666666; width: 98%">
+                                        <img src="icons/comment_16.gif" height="16" width="16" border="0" align="absmiddle"/>
+                                        Posted by blowery at Apr 15, 2004 21:05
+                                    </div>
+                                </td>
+                            </tr>
+                                                        <tr>
+                                <td  style="border-top: 1px dashed #666666">
+                                    <a name="comment-379"></a>
+                                    <font class="smallfont"><p class="paragraph">thanks!</p></font>
+                                    <div align="left" class="smallfont" style="color: #666666; width: 98%">
+                                        <img src="icons/comment_16.gif" height="16" width="16" border="0" align="absmiddle"/>
+                                        Posted by orogers at Apr 17, 2004 08:39
+                                    </div>
+                                </td>
+                            </tr>
+                                                    </table>
+                    			    </td>
+		    </tr>
+	    </table>
+	    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+			<tr>
+				<td height="12" background="border/border_bottom.gif"><img src="border/spacer.gif" width="1" height="1" border="0"/></td>
+			</tr>
+		    <tr>
+			    <td align="center"><font color="grey">Document generated by Confluence on Apr 23, 2004 00:07</font></td>
+		    </tr>
+	    </table>
+    </body>
+</html>

@@ -1,0 +1,645 @@
+body, p, td, table, tr, .bodytext, .stepfield {
+	font-family: Verdana, arial, sans-serif;
+	font-size: 11px;
+	line-height: 16px;
+	color: #000000;
+	font-weight: normal;
+}
+
+body {
+	margin: 0px;
+	padding: 0px;
+	text-align: center;
+    background-color: #f0f0f0;
+}
+
+p.paragraph {
+    margin: 5px 0px 5px 0px;
+    padding: 0px;
+}
+
+ul, ol {
+    margin-top: 2px;
+    margin-bottom: 2px;
+    padding-top: 0px;
+    padding-bottom: 0px;
+}
+
+.code {
+    background-color: #f0f0f0;
+ 	border: 1px dashed #3c78b5;
+    padding: 0px 10px 0px 10px;
+    margin: 10px;
+    font-size: 11px;
+	font-family: Courier;
+	line-height: 13px;
+}
+
+pre {
+    padding: 0px;
+    margin: 5px;
+}
+
+.preformatted {
+ 	border: 1px dashed #3c78b5;
+    font-size: 11px;
+	font-family: Courier;
+    margin: 10px;
+	line-height: 13px;
+}
+
+.preformattedHeader {
+    background-color: #f0f0f0;
+ 	border-bottom: 1px dashed #3c78b5;
+    padding: 3px;
+	text-align: center;
+}
+
+.preformattedContent {
+    background-color: #f0f0f0;
+    padding: 3px;
+}
+
+.panel {
+ 	border: 1px dashed #3c78b5;
+    margin: 10px;
+}
+
+.panelHeader {
+    background-color: #f0f0f0;
+ 	border-bottom: 1px dashed #3c78b5;
+    padding: 3px;
+	text-align: center;
+}
+
+.panelContent {
+    background-color: #f0f0f0;
+    padding: 5px;
+}
+
+.anonymousAlert {
+    background-color: #f0f0f0;
+ 	border: 1px dashed red;
+    font-size: 11px;
+    padding: 10px 5px 10px 5px;
+    margin: 4px;
+	line-height: 13px;
+}
+
+.java-keyword {
+  color: #000066;
+  background-color: inherit;
+}
+
+.java-object {
+  color: #660066;
+  background-color: inherit;
+}
+
+.java-quote {
+  color: #006600;
+  background-color: inherit;
+}
+
+.xml-keyword {
+  font-weight: bold;
+}
+
+.xml-tag {
+  color: #0000aa;
+  background-color: inherit;
+}
+
+.breadcrumbs {
+    background-color: #f0f0f0;
+ 	border-color: #3c78b5;
+	border-width: 1px 0px 1px 0px;
+	border-style: solid;
+    font-size: 11px;
+    padding: 3px 0px 3px 0px;
+}
+
+.navmenu {
+    border: 1px solid #ccc;
+}
+
+.menuheading {
+    font-weight: bold;
+    background-color: #f0f0f0;
+ 	border-bottom: 1px solid #3c78b5;
+	padding: 4px 4px 2px 4px;
+}
+
+.menuitems {
+	padding: 4px 4px 20px 4px;
+}
+
+.helpheading {
+    font-weight: bold;
+    background-color: #D0D9BD;
+ 	border-bottom: 1px solid #3c78b5;
+	padding: 4px 4px 4px 4px;
+	margin: 0px;
+}
+.helpcontent {
+	padding: 4px 4px 20px 4px;
+    background-color: #f5f7f1;
+}
+.helptab-unselected {
+    font-weight: bold;
+	padding: 5px;
+    background-color: #f5f7f1;
+}
+.helptab-selected {
+    font-weight: bold;
+    background-color: #D0D9BD;
+	padding: 5px;
+}
+.helptabs {
+    margin: 0px;
+    background-color: #f5f7f1;
+	padding: 5px;
+}
+.infopanel-heading {
+    font-weight: bold;
+ 	border-bottom: 1px solid #3c78b5;
+	padding: 4px 0px 2px 0px;
+}
+
+#Content {
+	text-align: left;
+	background-color: #fff;
+	padding: 0px;
+	margin: 0px;
+    border-top: 10px solid #003366;
+}
+
+.pagebody {
+}
+
+.pageheader {
+	padding: 5px 5px 5px 0px;
+ 	border-bottom: 1px solid #3c78b5;
+}
+
+.pagetitle {
+	font-size: 22px;
+	font-weight: bold;
+	font-family: Arial, sans-serif;
+	color: #003366;
+}
+
+.steptitle {
+	font-size: 18px;
+	font-weight: bold;
+	font-family: Arial, sans-serif;
+	color: #003366;
+	margin-bottom: 7px;
+}
+
+.stepdesc {
+    font-family: Verdana, arial, sans-serif;
+	font-size: 11px;
+	line-height: 16px;
+	font-weight: normal;
+    color: #666666;
+    margin-top: 7px;
+    margin-bottom: 7px;
+}
+
+.steplabel {
+    font-weight: bold;
+    margin-right: 4px;
+    color: black;
+    float: left;
+    width: 15%;
+    text-align: right;
+}
+
+.stepfield {
+    background: #f0f0f0;
+    padding: 5px;
+}
+
+.tabletitle {
+	font-size: 14px;
+	font-weight: bold;
+	font-family: Arial, sans-serif;
+    padding: 3px 0px 2px 0px;
+    margin: 8px 4px 2px 0px;
+	color: #003366;
+	border-bottom: 1px solid #3c78b5;
+}
+.pagesubheading {
+    color: #666666;
+    font-size: 10px;
+    padding: 0px 0px 5px 0px;
+}
+
+HR {
+	color: 3c78b5;
+	height: 1;
+}
+
+A:link, A:visited, A:active, A:hover {
+	color: #003366;
+}
+
+h1 A:link, h1 A:visited, h1 A:active {
+	text-decoration: none;
+}
+
+h1 A:hover {
+    border-bottom: 1px dotted #003366;
+}
+
+
+.logocell {
+    padding: 10px;
+}
+
+input {
+	font-family: verdana, geneva, arial, sans-serif;
+	font-size: 11px;
+	color: #000000;
+}
+
+textarea, textarea.editor {
+	font-family: verdana, geneva, arial, sans-serif;
+	font-size: 11px;
+	color: #333333;
+}
+
+.spacenametitle {
+	font: 31px/41px Impact, Arial, Helvetica;
+    font-weight: 100;
+    color: #999999;
+	margin: 0px;
+}
+.spacenametitle a {
+    text-decoration: none;
+    color: #999999;
+}
+.spacenametitle a:visited {
+    text-decoration: none;
+    color: #999999;
+}
+.spacenametitle-printable {
+	font: 20px/25px Impact, Arial, Helvetica;
+    font-weight: 100;
+    color: #999999;
+	margin: 0px;
+}
+.spacenametitle-printable a {
+    text-decoration: none;
+    color: #999999;
+}
+.spacenametitle-printable a:visited {
+    text-decoration: none;
+    color: #999999;
+}
+
+.blogHeading {
+    font-size: 20px;
+	line-height: normal;
+	font-weight: bold;
+	padding: 10px 0px 0px 0px;
+	margin: 10px 0px 0px 0px;
+}
+
+h1 {
+	font-size: 24px;
+	line-height: normal;
+	font-weight: bold;
+	background-color: #f0f0f0;
+	color: #003366;
+ 	border-bottom: 1px solid #3c78b5;
+	padding: 2px;
+	margin: 36px 0px 4px 0px;
+}
+
+h2 {
+	font-size: 18px;
+	line-height: normal;
+	font-weight: bold;
+	background-color: #f0f0f0;
+ 	border-bottom: 1px solid #3c78b5;
+	padding: 2px;
+	margin: 27px 0px 4px 0px;
+}
+
+h3 {
+	font-size: 14px;
+	line-height: normal;
+	font-weight: bold;
+	background-color: #f0f0f0;
+	padding: 2px;
+	margin: 21px 0px 4px 0px;
+}
+
+h4 {
+	font-size: 12px;
+	line-height: normal;
+	font-weight: bold;
+	background-color: #f0f0f0;
+	padding: 2px;
+	margin: 18px 0px 4px 0px;
+}
+
+h4.search {
+	font-size: 12px;
+	line-height: normal;
+	font-weight: normal;
+	background-color: #f0f0f0;
+	padding: 4px;
+	margin: 18px 0px 4px 0px;
+}
+
+h5 {
+	font-size: 10px;
+	line-height: normal;
+	font-weight: bold;
+	background-color: #f0f0f0;
+	padding: 2px;
+	margin: 14px 0px 4px 0px;
+}
+
+h6 {
+	font-size: 8px;
+	line-height: normal;
+	font-weight: bold;
+	background-color: #f0f0f0;
+	padding: 2px;
+	margin: 14px 0px 4px 0px;
+}
+
+.smallfont, .commentblock {
+    font-size: 10px;
+}
+.descfont {
+    font-size: 10px;
+    color: #666666;
+}
+.smallerfont {
+    font-size: 9px;
+}
+.smalltext {
+    color: #666666;
+    font-size: 10px;
+}
+.smalltext a {
+    color: #666666;
+}
+.smalltext-blue {
+    color: #3c78b5;
+    font-size: 10px;
+}
+.surtitle {
+    margin-left: 1px;
+    margin-bottom: 5px;
+    font-size: 14px;
+    color: #666666;
+}
+
+/* css hack found here:  http://www.fo3nix.pwp.blueyonder.co.uk/tutorials/css/hacks/ */
+.navItemOver { font-size: 10px; font-weight: bold; color: #ffffff; background-color: #003366; cursor: hand; voice-family: '\'}\''; voice-family:inherit; cursor: pointer;}
+.navItemOver a { color: #ffffff; background-color:#003366; text-decoration: none; }
+.navItemOver a:visited { color: #ffffff; background-color:#003366; text-decoration: none; }
+.navItemOver a:hover { color: #ffffff; background-color:#003366; text-decoration: none; }
+.navItem { font-size: 10px; font-weight: bold; color: #ffffff; background-color: #3c78b5; }
+.navItem a { color: #ffffff; text-decoration: none; }
+.navItem a:hover { color: #ffffff; text-decoration: none; }
+.navItem a:visited { color: #ffffff; text-decoration: none; }
+
+div.centered { text-align: center; margin: 10px; }
+div.centered table {margin: 0px auto; text-align: left; }
+.grid {
+    margin: 2px 0px 5px 0px;
+    border-collapse: collapse;
+}
+.grid th  {
+    border: 1px solid #ccc;
+    padding: 2px 4px 2px 4px;
+    background: #f0f0f0;
+    text-align: center;
+}
+.grid td  {
+    border: 1px solid #ccc;
+    padding: 3px 4px 3px 4px;
+}
+.gridHover {
+	background-color: #f9f9f9;
+}
+
+td.infocell {
+    background-color: #f0f0f0;
+}
+.label {
+	font-weight: bold;
+}
+.error {
+	background-color: #fcc;
+}
+.errorBox {
+	background-color: #fcc;
+    border: 1px solid #c00;
+    padding: 5px;
+    margin: 5px;
+}
+.errorMessage {
+	color: #c00;
+}
+
+blockquote {
+	padding-left: 10px;
+	padding-right: 10px;
+	margin-left: 5px;
+	margin-right: 0px;
+	border-left: 1px solid #3c78b5;
+}
+
+.wikitable, .wiki-table {
+    margin: 5px;
+    border-collapse: collapse;
+}
+.wikitable td, .wikitable th, .wiki-table td, .wiki-table th {
+    border: 1px solid #ccc;
+    padding: 3px 4px 3px 4px;
+}
+.wikitable th, .wiki-table th {
+    background: #f0f0f0;
+    text-align: center;
+}
+
+DIV.small {
+	font-size: 9px;
+}
+
+H1.pagename {
+	margin-top: 0px;
+}
+
+IMG.inline  {}
+
+.loginform {
+    margin: 5px;
+    border: 1px solid #ccc;
+}
+
+/* The text how the "This is a preview" comment should be shown. */
+.previewnote { text-align: center;
+                font-size: 11px;
+                    color: red; }
+
+/* How the preview content should be shown */
+.previewcontent { background: #E0E0E0; }
+
+/* How the system messages should be shown (DisplayMessage.jsp) */
+.messagecontent { background: #E0E0E0; }
+
+/* How the "This page has been modified..." -comment should be shown. */
+.conflictnote { }
+
+.createlink {
+    color: maroon;
+}
+a.createlink {
+    color: maroon;
+}
+.templateparameter {
+    font-size: 9px;
+    color: darkblue;
+}
+
+.diffadded {
+    background: #ddffdd;
+    padding: 1px 1px 1px 4px;
+	border-left: 4px solid darkgreen;
+}
+.diffdeleted {
+    color: #999;
+    background: #ffdddd;
+    padding: 1px 1px 1px 4px;
+	border-left: 4px solid darkred;
+}
+.diffnochange {
+    padding: 1px 1px 1px 4px;
+	border-left: 4px solid lightgrey;
+}
+.differror {
+    background: brown;
+}
+.diff {
+    font-family: lucida console, courier new, fixed-width;
+	font-size: 12px;
+	line-height: 14px;
+}
+.diffaddedchars {
+    background-color:#99ff99;
+    font-weight:bolder;
+}
+.diffremovedchars {
+    background-color:#ff9999;
+    text-decoration: line-through;
+    font-weight:bolder;
+}
+
+.greybackground {
+    background: #f0f0f0
+}
+
+.greybox {
+ 	border: 1px solid #ddd;
+	padding: 3px;
+	margin: 1px 1px 10px 1px;
+}
+
+.greyboxfilled {
+ 	border: 1px solid #ddd;
+	padding: 3px;
+	margin: 1px 1px 10px 1px;
+	background: #f0f0f0;
+}
+
+.previewBoxTop {
+	background-color: #fcc;
+    border-width: 1px 1px 0px 1px;
+    border-style: solid;
+    border-color: #c00;
+    padding: 5px;
+    margin: 5px 0px 0px 0px;
+    text-align: center;
+}
+.previewContent {
+    background-color: #fff;
+ 	border-color: #c00;
+	border-width: 0px 1px 0px 1px;
+	border-style: solid;
+	padding: 10px;
+	margin: 0px;
+}
+.previewBoxBottom {
+	background-color: #fcc;
+    border-width: 0px 1px 1px 1px;
+    border-style: solid;
+    border-color: #c00;
+    padding: 5px;
+    margin: 0px 0px 5px 0px;
+    text-align: center;
+}
+
+.functionbox {
+    background-color: #f0f0f0;
+ 	border: 1px solid #3c78b5;
+	padding: 3px;
+	margin: 1px 1px 10px 1px;
+}
+
+.functionbox-greyborder {
+    background-color: #f0f0f0;
+ 	border: 1px solid #ddd;
+	padding: 3px;
+	margin: 1px 1px 10px 1px;
+}
+
+.search-highlight {
+    background-color: #ffffcc;
+}
+
+/* normal (white) background */
+.rowNormal {
+    background-color: #ffffff;
+ }
+
+/* alternate (pale yellow) background */
+.rowAlternate {
+    background-color: #fffff0;
+}
+
+TD.greenbar {FONT-SIZE: 2px; BACKGROUND: #00df00; BORDER: 1px solid #9c9c9c; PADDING: 0px; }
+TD.redbar {FONT-SIZE: 2px; BACKGROUND: #df0000; BORDER: 1px solid #9c9c9c; PADDING: 0px; }
+TD.darkredbar {FONT-SIZE: 2px; BACKGROUND: #af0000; BORDER: 1px solid #9c9c9c; PADDING: 0px; }
+
+TR.testpassed {FONT-SIZE: 2px; BACKGROUND: #ddffdd; PADDING: 0px; }
+TR.testfailed {FONT-SIZE: 2px; BACKGROUND: #ffdddd; PADDING: 0px; }
+
+.toolbar {
+    margin: 0px;
+    border-collapse: collapse;
+}
+.toolbar td  {
+    border: 1px solid #ccc;
+    padding: 2px 2px 2px 2px;
+    color: #ccc;
+}
+
+td.noformatting {
+    border-width: 0px;
+    border-style: none;
+    text-align: center;
+	padding: 0px;
+}
+
+.commentblock {
+    margin: 12px 0 12px 0;
+}

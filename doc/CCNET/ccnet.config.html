@@ -1,0 +1,64 @@
+<html>
+    <head>
+        <title>CruiseControl.NET : ccnet.config</title>
+	    <link rel="stylesheet" href="styles/site.css" type="text/css" />
+    </head>
+
+    <body>
+	    <table class="pagecontent" border="0" cellpadding="0" cellspacing="0" width="100%" bgcolor="#ffffff">
+		    <tr>
+			    <td valign="top" class="pagebody">
+				    <div class="pageheader">
+					    <span class="pagetitle">
+                            CruiseControl.NET : ccnet.config
+                                                    </span>
+				    </div>
+				    <div class="pagesubheading">
+					    This page last changed on Apr 15, 2004 by <font color="#0050B2">orogers</font>.
+				    </div>
+
+				    <p class="paragraph"><a name="ccnet.config-top" ></a><br/>
+Outside of writing your build scripts to support Continuous Integration, your main configuration task in getting an instance of CruiseControl.NET running for your project is editting the Server&#039;s configuration. This is defined in  the XML file &#039;ccnet.config&#039; file in the same directory as the ccnet.exe application. (Actually it can called something else for advanced deployments, but we&#039;ll ignore that for now.)</p>This page goes over each section of the file and describes what you need to do. As a guide to our discussion, we&#039;ll use the following example config file, but note that this uses specific options (for Source Control systems, etc.)  so it is just a guide:
+
+<div class="code"><pre>&lt;cruisecontrol&gt;&#10;  &lt;project name=&quot;MyProject&quot;&gt;&#10;    &lt;webURL&gt;http&#58;//mybuildserver/ccnet/&lt;/webURL&gt;&#10;    &lt;schedule type=&quot;schedule&quot; sleepSeconds=&quot;60&quot;/&gt;&#10;    &lt;modificationDelaySeconds&gt;10&lt;/modificationDelaySeconds&gt;&#10;    &lt;sourcecontrol type=&quot;cvs&quot;&gt;&#10;      &lt;executable&gt;c&#58;&#92;putty&#92;cvswithplinkrsh.bat&lt;/executable&gt;&#10;      &lt;workingDirectory&gt;c&#58;&#92;fromcvs&#92;myrepo&lt;/workingDirectory&gt;&#10;      &lt;cvsroot&gt;&#58;ext&#58;mycvsserver&#58;/cvsroot/myrepo&lt;/cvsroot&gt;&#10;    &lt;/sourcecontrol&gt;&#10;    &lt;build type=&quot;nant&quot;&gt;&#10;      &lt;executable&gt;c&#58;&#92;fromcvs&#92;myrepo&#92;myproject&#92;tools&#92;nant&#92;nant.exe&lt;/executable&gt;&#10;      &lt;baseDirectory&gt;c&#58;&#92;fromcvs&#92;myrepo&#92;myproject&lt;/baseDirectory&gt;&#10;      &lt;buildArgs&gt;&#45;D&#58;cvs.executable=c&#58;&#92;putty&#92;cvswithplinkrsh.bat&lt;/buildArgs&gt;&#10;      &lt;buildFile&gt;cruise.build&lt;/buildFile&gt;&#10;      &lt;targetList&gt;&#10;        &lt;target&gt;run&lt;/target&gt;&#10;      &lt;/targetList&gt;&#10;      &lt;buildTimeoutSeconds&gt;300&lt;/buildTimeoutSeconds&gt;&#10;    &lt;/build&gt;&#10;    &lt;publishers&gt;&#10;      &lt;email from=&quot;buildmaster&#64;mycompany.com&quot; mailhost=&quot;smtp.mycompany.com&quot; includeDetails=&quot;TRUE&quot;&gt;&#10;       &lt;projectUrl&gt;http&#58;//buildserver/myproject&lt;/projectUrl&gt;&#10;       &lt;users&gt;&#10;          &lt;user name=&quot;BuildGuru&quot; group=&quot;buildmaster&quot; address=&quot;buildguru&#64;mycompany.com&quot;/&gt;&#10;          &lt;user name=&quot;JoeDeveloper&quot; group=&quot;developers&quot; address=&quot;joedeveloper&#64;thoughtworks.com&quot;/&gt;&#10;        &lt;/users&gt;&#10;        &lt;groups&gt;&#10;          &lt;group name=&quot;developers&quot; notification=&quot;change&quot;/&gt;&#10;          &lt;group name=&quot;buildmaster&quot; notification=&quot;always&quot;/&gt;&#10;        &lt;/groups&gt;&#10;      &lt;/email&gt;&#10;      &lt;xmllogger&gt;&#10;        &lt;logDir&gt;..&#92;..&#92;website&#92;log&lt;/logDir&gt;&#10;        &lt;mergeFiles&gt;&#10;            &lt;file&gt;c&#58;&#92;fromcvs&#92;myrepo&#92;myproject&#92;build&#92;tests&#42;&#45;results.xml&lt;/file&gt;&#10;        &lt;/mergeFiles&gt;&#10;      &lt;/xmllogger&gt;&#10;    &lt;/publishers&gt;&#10;  &lt;/project&gt;&#10;&lt;/cruisecontrol&gt;</pre></div><p class="paragraph"><h3 class="heading3"> Sections of the ccnet.config file</h3><ul class="star">
+<li> project<ul class="star">
+<li> schedule</li>
+<li> webURL</li>
+<li> modificationDelaySeconds</li>
+<li> state</li>
+<li> sourcecontrol<ul class="star">
+<li> <a href="cvs.html">cvs</a></li>
+<li> <a href="perforce.html">perforce</a></li>
+<li> <a href="StarTeam.html">StarTeam</a></li>
+<li> <a href="VSS.html">Visual SourceSafe</a></li>
+<li> <a href="PVCS.html">PVCS</a></li>
+<li> <a href="Subversion.html">Subversion</a></li>
+<li> <a href="FileSourceControl.html">File</a></li>
+<li> <a href="MultiSourceControl.html">Multi</a></li>
+</ul></li>
+<li> build<ul class="star">
+<li> <a href="NAntBuilder.html">nant</a></li>
+</ul></li>
+<li> publishers<ul class="star">
+<li> <a href="XmlLogPublisher.html">XML Logger</a></li>
+<li> <a href="EmailPublisher.html">Emailer</a></li>
+</ul></li>
+</ul></li>
+</ul>
+<h4 class="heading4"> project (required)</h4></p>The project tag contains all of the information about a certain project (In later versions of CruiseControl.NET we plan to enable multi-project support). It is a wrapper for every other configuration section for a project. You need to specify the &#039;name&#039; attribute, and this will appear in emails, log files, etc.<p class="paragraph"><a href="#ccnet.config-top">back to top</a></p><h4 class="heading4"> schedule(optional)</h4><p class="paragraph">The &lt;schedule&gt; section allows you to specify when CruiseControl.NET will start a new integration cycle.</p>The typical scenario is to specify a &#039;sleepSeconds&#039; value, which means that CruiseControl.NET will wait for that time between the end of one integration cycle and the start of the next one. For example, specifying a &#039;sleepSeconds&#039; value of 300 would mean that there would be a 5 minute gap between cycles (and consequently at times when people are not checking anything into SourceControl, approximately 5 minutes between polls of your SourceControl server.)<p class="paragraph">This section is optional, and if you don&#039;t specify it, CruiseControl.NET will use a default timeout of 1 minute.</p>TODO: description of other &lt;schedule&gt; options<p class="paragraph"><a href="#ccnet.config-top">back to top</a></p><h4 class="heading4"> webURL (optional)</h4><p class="paragraph">The URL of the CruiseControl.NET Web App for your project. This will be used to automatically link users of the management applications.</p><a href="#ccnet.config-top">back to top</a><p class="paragraph"><h4 class="heading4"> modificationDelaySeconds (optional)</h4></p>The minimum number of seconds allowed between the last check in and the start of a valid build. <p class="paragraph">If any modifications are found within this interval the system will sleep long enough so the last checkin is just outside this interval. For example if the modification delay is set to 10 seconds and the last checkin was 7 seconds ago the system will sleep for 3 seconds and check again. This process will repeat until no modifications have been found within the modification delay window.</p>This feature is in CruiseControl.NET for Source Control systems, like CVS, that do not support atomic checkins since starting a build half way through someone checking in their work could result in invalid &#039;logical&#039; passes or failures. The property is optional though so if you are using a source control system with atomic checkins, leave it out (and it will default to &#039;0&#039;)<p class="paragraph"><a href="#ccnet.config-top">back to top</a></p><h4 class="heading4"> state (optional)</h4><p class="paragraph">By default, CruiseControl.NET stores state (last build time, etc.)  in the file &#039;ccnet.state&#039; in the CruiseControl Server&#039;s &#039;bin&#039; folder. If you want it to use a different file, you can add a &lt;state&gt; section, e.g. as follows:</p><div class="code"><pre>&lt;state type=&quot;state&quot; directory=&quot;c&#58;&#92;somewhere&#45;else&quot; filename=&quot;myproject.state&quot; /&gt;</pre></div><p class="paragraph">Each of these attributes are themselves optional, so in the example above if you hadn&#039;t specified a directory then the default of CruiseControl&#039;s &#039;bin&#039; folder would have been used.</p><a href="#ccnet.config-top">back to top</a><p class="paragraph"><h4 class="heading4"> sourcecontrol (mandatory)</h4></p>The source control element tells Cruise Control.NET what source control system to use, and how to query the repository, when checking for any new changes. You tell Cruise Control.NET which source code control provider to use by setting the mandatory type attribute of the source control element.<p class="paragraph"><h4 class="heading4"> build (mandatory)</h4></p>If CruiseControl.NET detects new changes in yor Source Control repository, it starts a build as defined in the &lt;build&gt; section. <p class="paragraph"><h4 class="heading4"> publishers</h4>
+A publisher is anything that runs after the build has been run. CruiseControl.NET currently defines two publishers email and xmllogger.</p>
+
+				    
+                    			    </td>
+		    </tr>
+	    </table>
+	    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+			<tr>
+				<td height="12" background="border/border_bottom.gif"><img src="border/spacer.gif" width="1" height="1" border="0"/></td>
+			</tr>
+		    <tr>
+			    <td align="center"><font color="grey">Document generated by Confluence on Apr 23, 2004 00:07</font></td>
+		    </tr>
+	    </table>
+    </body>
+</html>

@@ -1,0 +1,46 @@
+<html>
+    <head>
+        <title>CruiseControl.NET : Subversion</title>
+	    <link rel="stylesheet" href="styles/site.css" type="text/css" />
+    </head>
+
+    <body>
+	    <table class="pagecontent" border="0" cellpadding="0" cellspacing="0" width="100%" bgcolor="#ffffff">
+		    <tr>
+			    <td valign="top" class="pagebody">
+				    <div class="pageheader">
+					    <span class="pagetitle">
+                            CruiseControl.NET : Subversion
+                                                    </span>
+				    </div>
+				    <div class="pagesubheading">
+					    This page last changed on Apr 21, 2004 by <font color="#0050B2">mgm</font>.
+				    </div>
+
+				    <p class="paragraph">CruiseControl.NET provides basic support for Subversion repositories. Checking for changes, running builds (bootstrapped through NAnt), and tagging-by-copying are supported, but more advanced features such as using Subversion revision numbers are not yet supported. Subversion support is under active development and will improve over time.</p>To configure the CruiseControl.NET server to monitor a Subversion repository, edit ccnet.config and configure sourcecontrol to point at your repository:
+<div class="code"><pre>&lt;sourcecontrol type=&quot;svn&quot;&gt;&#10;	&lt;executable&gt;c&#58;&#92;program files&#92;subversion&#92;bin&#92;svn.exe&lt;/executable&gt;&#10;	&lt;trunkUrl&gt;svn&#58;//svn.mycompany.com/myfirstproject/trunk&lt;/trunkUrl&gt;&#10;&lt;/sourcecontrol&gt;</pre></div>
+	
+The <b class="strong">&lt;executable&gt;</b> tag should contain the full path to your Subversion executable. The <b class="strong">&lt;trunkUrl&gt;</b> tag should specify the URL to use to determine if changes have occurred in your repository. Access to svn log for this URL should be available anonymously, because the Subversion client will run without extra authentication priveleges. <p class="paragraph">Next configure your NAnt build for an existing working copy of your repository:</p><div class="code"><pre>&lt;build type=&quot;nant&quot;&gt;&#10;	&lt;executable&gt;c&#58;&#92;svn&#92;myfirstproject&#92;tools&#92;nant&#92;nant.exe&lt;/executable&gt;&#10;	&lt;baseDirectory&gt;c&#58;&#92;svn&#92;myfirstproject&lt;/baseDirectory&gt;&#10;	&lt;buildArgs&gt;&#45;logger&#58;NAnt.Core.XmlLogger &quot;&#45;D&#58;svn.executable=c&#58;&#92;program files&#92;subversion&#92;bin&#92;svn.exe&quot;&lt;/buildArgs&gt;&#10;	&lt;buildFile&gt;bootstrap.nant&lt;/buildFile&gt;&#10;	&lt;targetList&gt;&#10;		&lt;target&gt;go&lt;/target&gt;&#10;	&lt;/targetList&gt;&#10;	&lt;buildTimeoutSeconds&gt;300&lt;/buildTimeoutSeconds&gt;&#10;&lt;/build&gt;</pre></div>
+		
+Note that <b class="strong">&lt;baseDirectory&gt;</b> should be a working copy of the repository URL given in trunkUrl above., and that <b class="strong">&lt;buildArgs&gt;</b> needs to include the definition of svn.executable which will be used to update the working copy. <p class="paragraph">The bootstrap.nant file performs the usual &quot;update to HEAD, then build&quot; cycle:</p><div class="code"><pre>&lt;&#63;xml version=&quot;1.0&quot;&#63;&gt;&#10;&lt;project name=&quot;myfirstproject&#45;bootstrap&quot; default=&quot;go&quot;&gt;&#10;&#10;	&lt;target name=&quot;go&quot; depends=&quot;bootstrap, launchbuild&quot;/&gt;&#10;&#10;	&lt;target name=&quot;bootstrap&quot;&gt;&#10;		&lt;exec basedir=&quot;.&quot; program=&quot;$&#123;svn.executable&#125;&quot; commandline=&quot;update&quot; /&gt;&#10;	&lt;/target&gt;&#10;	&#10;	&lt;target name=&quot;launchbuild&quot;&gt;&#10;		&lt;nant buildfile=&quot;build.nant&quot; target=&quot;ContinuousIntegration&quot; inheritall=&quot;true&quot; /&gt;&#10;	&lt;/target&gt;&#10;&lt;/project&gt;</pre></div>
+		
+When the bootstrap process runs, it will use whatever cached authentication has been recorded by the normal svn executable. CruiseControl.NET Subversion integration has so far not been tested in environments where authentication is required for checkouts. <p class="paragraph"><h3 class="heading3"> Linking modifications to WebSVN</h3></p>You can link the modifications detected by CruiseControl.NET to the appropriate WebSVN page by adding the following additional configuration information to the Subversion source control section: 
+
+<div class="code"><pre>&lt;webUrlBuilder type=&quot;websvn&quot;&gt;&#10;                &lt;url&gt;http&#58;//localhost&#58;7899/websvn/diff.php&#63;repname=MiniACE&amp;path=&#123;0&#125;&amp;rev=&#123;1&#125;&amp;sc=1&lt;/url&gt;&#10;&lt;/webUrlBuilder&gt;</pre></div><p class="paragraph">Change the <b class="strong">&lt;url&gt;</b> element to point to the root url for the WebSVN site.  The <b class="strong">path</b> and <b class="strong">rev</b> parameters will be filled in by CruiseControl.NET when it generates the link to the code file page.</p>NOTE: The standard url for WebSVN 1.38 contains rep=3 r instead of repname=MiniACE.  Adding a new repository to the SvnParentPath will change the number of the rep parameter, so you may need to make the following change to diff.php to decode the repname parameter:
+ 
+<div class="code"><pre>$repname = &#64;$&#95;REQUEST&#91;&quot;repname&quot;&#93;;&#10;&#10;<span class="java&#45;keyword">if</span> (isset($repname))&#10;&#123;&#10;    $rep = $config&#45;&gt;findRepository($repname);&#10;&#125;</pre></div>
+
+				    
+                    			    </td>
+		    </tr>
+	    </table>
+	    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+			<tr>
+				<td height="12" background="border/border_bottom.gif"><img src="border/spacer.gif" width="1" height="1" border="0"/></td>
+			</tr>
+		    <tr>
+			    <td align="center"><font color="grey">Document generated by Confluence on Apr 23, 2004 00:07</font></td>
+		    </tr>
+	    </table>
+    </body>
+</html>
