@@ -73,7 +73,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Perforce
 
 		public string BuildCommandArguments(DateTime from, DateTime to)
 		{
-			StringBuilder args = new StringBuilder(BuildCommonArguments());
+			StringBuilder args = new StringBuilder();
 			args.Append("changes -s submitted ");
 			args.Append(View);
 			if (from==DateTime.MinValue) 
@@ -87,9 +87,14 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Perforce
 			return args.ToString();
 		}
 
+		private string FormatDate(DateTime date)
+		{
+			return date.ToString(COMMAND_DATE_FORMAT, CultureInfo.InvariantCulture);
+		}
+		
 		public virtual ProcessInfo CreateChangeListProcess(DateTime from, DateTime to) 
 		{
-			return new ProcessInfo(Executable, BuildCommandArguments(from, to));
+			return processInfoCreator.CreateProcessInfo(this, BuildCommandArguments(from, to));
 		}
 
 		public virtual ProcessInfo CreateDescribeProcess(string changes)
@@ -103,8 +108,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Perforce
 					throw new CruiseControlException("Invalid changes list encountered");
 			}
 
-			string args = BuildCommonArguments() + "describe -s " + changes;
-			return new ProcessInfo(Executable, args);
+			return processInfoCreator.CreateProcessInfo(this, "describe -s " + changes);
 		}
 
 		public Modification[] GetModifications(DateTime from, DateTime to) 
@@ -145,13 +149,16 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Perforce
 		{
 			if (ApplyLabel)
 			{
-				ProcessInfo process = CreateLabelSpecificationProcess(label);
+				if (label == null || label.Length == 0)
+					throw new ApplicationException("Internal Exception - Invalid (null or empty) label passed");
+
 				try
 				{
 					int.Parse(label);
 					throw new CruiseControlException("Perforce cannot handle purely numeric labels - you must use a label prefix for your project");
 				}
 				catch (FormatException) { }
+				ProcessInfo process = CreateLabelSpecificationProcess(label);
 
 				string processOutput = Execute(process);
 				if (containsErrors(processOutput))
@@ -177,7 +184,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Perforce
 
 		private ProcessInfo CreateLabelSpecificationProcess(string label)
 		{
-			ProcessInfo processInfo = new ProcessInfo(Executable, BuildCommonArguments() + "label -i");
+			ProcessInfo processInfo = processInfoCreator.CreateProcessInfo(this, "label -i");
 			processInfo.StandardInputContent = string.Format(@"Label:	{0}
 
 Description:
@@ -193,18 +200,14 @@ View:
 
 		private ProcessInfo CreateLabelSyncProcess(string label)
 		{
-			if (label == null || label.Length == 0)
-				throw new ApplicationException("Internal Exception - Invalid (null or empty) label passed");
-
-			string args = BuildCommonArguments() + "labelsync -l " + label;
-			return new ProcessInfo(Executable, args);
+			return processInfoCreator.CreateProcessInfo(this, "labelsync -l " + label);
 		}
 
 		public void GetSource(IntegrationResult result)
 		{
 			if (AutoGetSource)
 			{
-				ProcessInfo info = new ProcessInfo(Executable, BuildCommonArguments() + "sync");
+				ProcessInfo info = processInfoCreator.CreateProcessInfo(this, "sync");
 				Log.Info(string.Format("Getting source from Perforce: {0} {1}", info.FileName, info.Arguments));
 				Execute(info);
 			}
@@ -212,38 +215,14 @@ View:
 
 		protected virtual string Execute(ProcessInfo p)
 		{
-			Log.Debug("Perforce integration - running:" + p.ToString());
+			Log.Debug("Perforce plugin - running:" + p.ToString());
 			ProcessResult result = processExecutor.Execute(p);
 			return result.StandardOutput.Trim() + "\r\n" + result.StandardError.Trim();
 		}
 
-		private string FormatDate(DateTime date)
-		{
-			return date.ToString(COMMAND_DATE_FORMAT, CultureInfo.InvariantCulture);
-		}
-		
-		private string BuildCommonArguments() 
-		{
-			StringBuilder args = new StringBuilder();
-			args.Append("-s "); // for "scripting" mode
-			if (Client!=null) 
-			{
-				args.Append("-c " + Client + " ");
-			}
-			if (Port!=null) 
-			{
-				args.Append("-p " + Port + " ");
-			}
-			if (User!=null)
-			{
-				args.Append("-u " + User + " ");
-			}
-			return args.ToString();
-		}
-
 		public void InitializeDirectory()
 		{
-			p4Initializer.Initialize(Executable, View, Client, User, Port);
+			p4Initializer.Initialize(this);
 		}
 	}
 }

@@ -12,7 +12,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Perforce
 			this.executor = executor;
 		}
 
-		public void Initialize(string executable, string view, string client, string user, string port)
+		public void Initialize(P4 p4)
 		{
 			throw new NotImplementedException();
 		}

@@ -8,16 +8,29 @@ using Exortech.NetReflector;
 
 namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol.Perforce
 {
+	// ToDo - tidy up these tests by using mocks for process Executor, and make appropriate methods on P4 private
+	// This already performed for 'Label', 'Get Source', 'Initialize'
 	[TestFixture]
 	public class P4Test : CustomAssertion
 	{
-		DynamicMock mockProcessExecutor;
+		private DynamicMock processExecutorMock;
+		private DynamicMock p4InitializerMock;
+		private DynamicMock processInfoCreatorMock;
 
 		[SetUp]
 		public void Setup()
 		{
-			mockProcessExecutor = new DynamicMock(typeof(ProcessExecutor)); 
-			mockProcessExecutor.Strict = true;
+			processExecutorMock = new DynamicMock(typeof(ProcessExecutor)); 
+			processExecutorMock.Strict = true;
+			p4InitializerMock = new DynamicMock(typeof(IP4Initializer));
+			processInfoCreatorMock = new DynamicMock(typeof(IP4ProcessInfoCreator));
+		}
+
+		private void VerifyAll()
+		{
+			processExecutorMock.Verify();
+			p4InitializerMock.Verify();
+			processInfoCreatorMock.Verify();
 		}
 
 		[TearDown]
@@ -38,7 +51,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol.Perforce
   <port>anotherserver:2666</port>
 </sourceControl>
 ";
-			P4 p4 = CreateP4(xml);
+			P4 p4 = CreateP4WithNoArgContructor(xml);
 			AssertEquals(@"c:\bin\p4.exe", p4.Executable);
 			AssertEquals("//depot/myproject/...", p4.View);
 			AssertEquals("myclient", p4.Client);
@@ -46,13 +59,27 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol.Perforce
 			AssertEquals("anotherserver:2666", p4.Port);
 		}
 
-		private P4 CreateP4(string p4root)
+		private P4 CreateP4WithNoArgContructor(string p4root)
 		{
 			P4 perforce = new P4();
 			NetReflector.Read(p4root, perforce);
 			return perforce;
 		}
-		
+
+		private P4 CreateP4(string p4root)
+		{
+			P4 perforce = CreateP4();
+			NetReflector.Read(p4root, perforce);
+			return perforce;
+		}
+
+		private P4 CreateP4()
+		{
+			return new P4((ProcessExecutor) processExecutorMock.MockInstance, 
+				(IP4Initializer) p4InitializerMock.MockInstance,
+				(IP4ProcessInfoCreator) processInfoCreatorMock.MockInstance);
+		}
+
 		private P4 CreateP4(ProcessExecutor processExecutor, string p4root)
 		{
 			return CreateP4(processExecutor, new ProcessP4Initializer(processExecutor), p4root);
@@ -73,7 +100,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol.Perforce
   <view>//depot/anotherproject/...</view>
 </sourceControl>
 ";
-			P4 p4 = CreateP4(xml);
+			P4 p4 = CreateP4WithNoArgContructor(xml);
 			AssertEquals("p4", p4.Executable);
 			AssertEquals("//depot/anotherproject/...", p4.View);
 			AssertNull(p4.Client);
@@ -89,7 +116,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol.Perforce
 <sourceControl name=""p4"">
 </sourceControl>
 ";
-			CreateP4(xml);
+			CreateP4WithNoArgContructor(xml);
 		}
 
 		[Test]
@@ -128,7 +155,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol.Perforce
 			string expectedArgs = "-s -c myclient -p anotherserver:2666 -u me"
 				+ " changes -s submitted //depot/myproject/...@2003/11/20:02:10:32,@2004/10/31:05:05:01";
 			
-			P4 p4 = CreateP4(xml);
+			P4 p4 = CreateP4WithNoArgContructor(xml);
 			ProcessInfo process = p4.CreateChangeListProcess(from, to);
 
 			AssertEquals("c:\\bin\\p4.exe", process.FileName);
@@ -162,7 +189,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol.Perforce
 			string expectedArgs = "-s -c myclient -p anotherserver:2666 -u me"
 				+ " describe -s " + changes;
 			
-			P4 p4 = CreateP4(xml);
+			P4 p4 = CreateP4WithNoArgContructor(xml);
 			ProcessInfo process = p4.CreateDescribeProcess(changes);
 
 			AssertEquals("c:\\bin\\p4.exe", process.FileName);
@@ -216,17 +243,15 @@ exit: 0
 		[Test]
 		public void LabelSourceControlIfApplyLabelTrue()
 		{
-				string configXml = @"
-<sourceControl name=""p4"">
-  <executable>c:\bin\p4.exe</executable>
-  <view>//depot/myproject/...</view>
-  <client>myclient</client>
-  <user>me</user>
-  <port>anotherserver:2666</port>
-  <applyLabel>true</applyLabel>
-</sourceControl>
-";
-			string expectedLabelView = @"Label:	foo-123
+			P4 p4 = CreateP4();
+			p4.View = "//depot/myproject/...";
+			p4.ApplyLabel = true;
+
+			string label = "foo-123";
+
+			ProcessInfo labelSpecProcess = new ProcessInfo("spec");
+			ProcessInfo labelSpecProcessWithStdInContent = new ProcessInfo("spec");
+			labelSpecProcessWithStdInContent.StandardInputContent = @"Label:	foo-123
 
 Description:
 	Created by CCNet
@@ -236,165 +261,111 @@ Options:	unlocked
 View:
 	//depot/myproject/...
 ";
-			string label = "foo-123";
+			ProcessInfo labelSyncProcess = new ProcessInfo("sync");
 
-			ProcessInfo expectedLabelSpecProcess = new ProcessInfo("c:\\bin\\p4.exe", "-s -c myclient -p anotherserver:2666 -u me label -i");
-			expectedLabelSpecProcess.StandardInputContent = expectedLabelView;
+			processInfoCreatorMock.ExpectAndReturn("CreateProcessInfo", labelSpecProcess, p4, "label -i");
+			processExecutorMock.ExpectAndReturn("Execute", new ProcessResult("", "", 0, false), labelSpecProcessWithStdInContent);
+			processInfoCreatorMock.ExpectAndReturn("CreateProcessInfo", labelSyncProcess, p4, "labelsync -l foo-123");
+			processExecutorMock.ExpectAndReturn("Execute", new ProcessResult("", "", 0, false), labelSyncProcess);
 
-			ProcessInfo expectedLabelSyncProcess = new ProcessInfo("c:\\bin\\p4.exe", "-s -c myclient -p anotherserver:2666 -u me labelsync -l foo-123");
+			// Execute
+			p4.LabelSourceControl(label,DateTime.Now);
 
-			mockProcessExecutor.ExpectAndReturn("Execute", new ProcessResult("", "", 0, false), expectedLabelSpecProcess);
-			mockProcessExecutor.ExpectAndReturn("Execute", new ProcessResult("", "", 0, false), expectedLabelSyncProcess);
-			CreateP4((ProcessExecutor) mockProcessExecutor.MockInstance, configXml).LabelSourceControl(label,DateTime.Now);
-
-			mockProcessExecutor.Verify();
+			// Verify
+			VerifyAll();
 		}
 
 		[Test]
 		public void LabelSourceControlFailsIfLabelIsOnlyNumeric()
 		{
-			string configXml = @"
-<sourceControl name=""p4"">
-  <executable>c:\bin\p4.exe</executable>
-  <view>//depot/myproject/...</view>
-  <client>myclient</client>
-  <user>me</user>
-  <port>anotherserver:2666</port>
-  <applyLabel>true</applyLabel>
-</sourceControl>
-";
+			P4 p4 = CreateP4();
+			p4.View = "//depot/myproject/...";
+			p4.ApplyLabel = true;
+
 			string label = "123";
 
 			try
 			{
-				CreateP4((ProcessExecutor) mockProcessExecutor.MockInstance, configXml).LabelSourceControl(label,DateTime.Now);
+				p4.LabelSourceControl(label,DateTime.Now);
 				Fail("Perforce labelling should fail if a purely numeric label is attempted to be applied");
 			}
 			catch (CruiseControlException) { }
 
-			mockProcessExecutor.Verify();
+			VerifyAll();
 		}
 
 		[Test]
 		public void DontLabelSourceControlIfApplyLabelFalse()
 		{
-			string configXml = @"
-<sourceControl name=""p4"">
-  <executable>c:\bin\p4.exe</executable>
-  <view>//depot/myproject/...</view>
-  <client>myclient</client>
-  <user>me</user>
-  <port>anotherserver:2666</port>
-  <applyLabel>false</applyLabel>
-</sourceControl>
-";
+			P4 p4 = CreateP4();
+			p4.View = "//depot/myproject/...";
+			p4.ApplyLabel = false;
+
 			string label = "foo-123";
 
-			mockProcessExecutor.ExpectNoCall("Execute", typeof(ProcessInfo));
-			CreateP4((ProcessExecutor) mockProcessExecutor.MockInstance, configXml).LabelSourceControl(label,DateTime.Now);
+			processInfoCreatorMock.ExpectNoCall("CreateProcessInfo", typeof(P4), typeof(string));
+			processExecutorMock.ExpectNoCall("Execute", typeof(ProcessInfo));
+			p4.LabelSourceControl(label,DateTime.Now);
 
-			mockProcessExecutor.Verify();
+			VerifyAll();
 		}
 
 		[Test]
 		public void DontLabelSourceControlIfApplyLabelNotSetEvenIfInvalidLabel()
 		{
-			string configXml = @"
-<sourceControl name=""p4"">
-  <executable>c:\bin\p4.exe</executable>
-  <view>//depot/myproject/...</view>
-  <client>myclient</client>
-  <user>me</user>
-  <port>anotherserver:2666</port>
-</sourceControl>
-";
+			P4 p4 = CreateP4();
+			p4.View = "//depot/myproject/...";
+
 			string label = "123";
 
-			mockProcessExecutor.ExpectNoCall("Execute", typeof(ProcessInfo));
-			CreateP4((ProcessExecutor) mockProcessExecutor.MockInstance, configXml).LabelSourceControl(label,DateTime.Now);
+			processInfoCreatorMock.ExpectNoCall("CreateProcessInfo", typeof(P4), typeof(string));
+			processExecutorMock.ExpectNoCall("Execute", typeof(ProcessInfo));
+			p4.LabelSourceControl(label,DateTime.Now);
 
-			mockProcessExecutor.Verify();
+			VerifyAll();
 		}
 
 		[Test]
 		public void GetSourceIfGetSourceTrue()
 		{
-			string configXml = @"
-<sourceControl name=""p4"">
-  <executable>c:\bin\p4.exe</executable>
-  <view>//depot/myproject/...</view>
-  <client>myclient</client>
-  <user>me</user>
-  <port>anotherserver:2666</port>
-  <autoGetSource>true</autoGetSource>
-</sourceControl>
-";
+			P4 p4 = CreateP4();
+			p4.View = "//depot/myproject/...";
+			p4.AutoGetSource = true;
 
-			ProcessInfo expectedSyncProcess = new ProcessInfo("c:\\bin\\p4.exe", "-s -c myclient -p anotherserver:2666 -u me sync");
+			ProcessInfo processInfo = new ProcessInfo("getSource");
+			processInfoCreatorMock.ExpectAndReturn("CreateProcessInfo", processInfo, p4, "sync");
+			processExecutorMock.ExpectAndReturn("Execute", new ProcessResult("", "", 0, false), processInfo);
+			p4.GetSource(new IntegrationResult());
 
-			mockProcessExecutor.ExpectAndReturn("Execute", new ProcessResult("", "", 0, false), expectedSyncProcess);
-			CreateP4((ProcessExecutor) mockProcessExecutor.MockInstance, configXml).GetSource(new IntegrationResult());
-
-			mockProcessExecutor.Verify();
+			VerifyAll();
 		}
 
 		[Test]
-		public void DontGetSourceIfGetSourceFalseOrNotSet()
+		public void DontGetSourceIfGetSourceFalse()
 		{
-			string configXml = @"
-<sourceControl name=""p4"">
-  <executable>c:\bin\p4.exe</executable>
-  <view>//depot/myproject/...</view>
-  <client>myclient</client>
-  <user>me</user>
-  <port>anotherserver:2666</port>
-</sourceControl>
-";
+			P4 p4 = CreateP4();
+			p4.View = "//depot/myproject/...";
+			p4.AutoGetSource = false;
 
-			mockProcessExecutor.ExpectNoCall("Execute", typeof(ProcessInfo));
-			CreateP4((ProcessExecutor) mockProcessExecutor.MockInstance, configXml).GetSource(new IntegrationResult());
-
-			mockProcessExecutor.Verify();
-
-			configXml = @"
-<sourceControl name=""p4"">
-  <executable>c:\bin\p4.exe</executable>
-  <view>//depot/myproject/...</view>
-  <client>myclient</client>
-  <user>me</user>
-  <port>anotherserver:2666</port>
-  <autoGetSource>false</autoGetSource>
-</sourceControl>
-";
-
-			CreateP4((ProcessExecutor) mockProcessExecutor.MockInstance, configXml).GetSource(new IntegrationResult());
+			processInfoCreatorMock.ExpectNoCall("CreateProcessInfo", typeof(P4), typeof(string));
+			processExecutorMock.ExpectNoCall("Execute", typeof(ProcessInfo));
+			p4.GetSource(new IntegrationResult());
+			VerifyAll();
 		}
 
 		[Test]
 		public void ShouldCallInitializerWithAppropriateArgumentsWhenInitializeDirectoryCalled()
 		{
 			// Setup
-			string configXml = @"
-<sourceControl name=""p4"">
-  <executable>c:\bin\p4.exe</executable>
-  <view>//depot/myproject/...</view>
-  <client>myclient</client>
-  <user>me</user>
-  <port>anotherserver:2666</port>
-</sourceControl>
-";
-			DynamicMock p4InitializerMock = new DynamicMock(typeof(IP4Initializer));
-			P4 p4 = CreateP4((ProcessExecutor) mockProcessExecutor.MockInstance, (IP4Initializer) p4InitializerMock.MockInstance, configXml);
-			p4InitializerMock.Expect("Initialize",  @"c:\bin\p4.exe", "//depot/myproject/...", "myclient", "me", "anotherserver:2666");
+			P4 p4 = CreateP4();
+			p4.View = "//depot/myproject/...";
+			p4InitializerMock.Expect("Initialize",  p4);
 
 			// Execute
 			p4.InitializeDirectory();
 
 			// Verify
-			mockProcessExecutor.Verify();
-			p4InitializerMock.Verify();
-
-
+			VerifyAll();
 		}
 	}
 }
