@@ -249,6 +249,8 @@
 				<exclude name="**\CVS\**\*" />
 			</fileset>
 		</zip>
+		
+		<exec program="tools\NSIS\makensis.exe" commandline="ccnet.nsi" />
 	</target>
 	
 	<target name="reporting" depends="compile">
