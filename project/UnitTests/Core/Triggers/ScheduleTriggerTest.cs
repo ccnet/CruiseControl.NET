@@ -85,7 +85,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Triggers
 		[Test]
 		public void ShouldOnlyRunOnSpecifiedDays()
 		{
-			trigger.WeekDays = new DayOfWeek[] { DayOfWeek.Monday, DayOfWeek.Wednesday };
+			trigger.WeekDays = new DayOfWeek[] {DayOfWeek.Monday, DayOfWeek.Wednesday};
 			trigger.BuildCondition = BuildCondition.ForceBuild;
 
 			mockDateTime.SetupResult("Now", new DateTime(2004, 12, 1));
@@ -104,7 +104,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Triggers
 	<weekDay>Tuesday</weekDay>
 </weekDays>
 </scheduleTrigger>");
-			trigger = (ScheduleTrigger)NetReflector.Read(xml);
+			trigger = (ScheduleTrigger) NetReflector.Read(xml);
 			Assert.AreEqual("12:00:00", trigger.Time);
 			Assert.AreEqual(DayOfWeek.Monday, trigger.WeekDays[0]);
 			Assert.AreEqual(DayOfWeek.Tuesday, trigger.WeekDays[1]);
@@ -115,10 +115,43 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Triggers
 		public void ShouldMinimallyPopulateFromReflector()
 		{
 			string xml = string.Format(@"<scheduleTrigger time=""10:00:00"" />");
-			trigger = (ScheduleTrigger)NetReflector.Read(xml);
+			trigger = (ScheduleTrigger) NetReflector.Read(xml);
 			Assert.AreEqual("10:00:00", trigger.Time);
 			Assert.AreEqual(7, trigger.WeekDays.Length);
 			Assert.AreEqual(BuildCondition.IfModificationExists, trigger.BuildCondition);
+		}
+
+		[Test]
+		public void NextBuildTimeShouldBeSameTimeNextDay()
+		{
+			mockDateTime.SetupResult("Now", new DateTime(2005, 2, 4, 13, 13, 0));
+			trigger.Time = "10:00";
+			trigger.WeekDays = new DayOfWeek[] {DayOfWeek.Friday, DayOfWeek.Saturday, DayOfWeek.Sunday};
+			trigger.IntegrationCompleted();
+			DateTime expectedDate = new DateTime(2005, 2, 5, 10, 0, 0);
+			Assert.AreEqual(expectedDate, trigger.NextBuild);
+		}
+
+		[Test]
+		public void NextBuildTimeShouldBeTheNextSpecifiedDay()
+		{
+			mockDateTime.SetupResult("Now", new DateTime(2005, 2, 4, 13, 13, 0));
+			trigger.Time = "10:00";
+			trigger.WeekDays = new DayOfWeek[] {DayOfWeek.Friday, DayOfWeek.Sunday};
+			trigger.IntegrationCompleted();
+			DateTime expectedDate = new DateTime(2005, 2, 6, 10, 0, 0);
+			Assert.AreEqual(expectedDate, trigger.NextBuild);
+		}
+
+		[Test]
+		public void NextBuildTimeShouldBeTheNextSpecifiedDayWithTheNextDayFarAway()
+		{
+			mockDateTime.SetupResult("Now", new DateTime(2005, 2, 4, 13, 13, 0));
+			trigger.Time = "10:00";
+			trigger.WeekDays = new DayOfWeek[] {DayOfWeek.Friday, DayOfWeek.Thursday};
+			trigger.IntegrationCompleted();
+			DateTime expectedDate = new DateTime(2005, 2, 10, 10, 0, 0);
+			Assert.AreEqual(expectedDate, trigger.NextBuild);
 		}
 	}
 }

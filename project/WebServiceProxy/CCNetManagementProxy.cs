@@ -43,7 +43,8 @@ namespace ThoughtWorks.CruiseControl.WebServiceProxy
 											serviceStatus.Name,
 											serviceStatus.WebURL,
 											serviceStatus.LastBuildDate,
-											serviceStatus.LastBuildLabel)};
+											serviceStatus.LastBuildLabel, 
+											serviceStatus.NextBuildTime)};
 		}
 
 		public void ForceBuild(string projectName)

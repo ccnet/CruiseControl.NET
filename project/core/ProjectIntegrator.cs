@@ -18,8 +18,8 @@ namespace ThoughtWorks.CruiseControl.Core
 	/// </summary>
 	public class ProjectIntegrator : IProjectIntegrator, IDisposable
 	{
-		private readonly IIntegratable integratable;
-		private ITrigger Trigger;
+		private readonly IIntegratable _integratable;
+		private ITrigger _trigger;
 		private IProject _project;
 		private bool _forceBuild;
 		private Thread _thread;
@@ -29,11 +29,11 @@ namespace ThoughtWorks.CruiseControl.Core
 		{
 		}
 
-		public ProjectIntegrator(ITrigger Trigger, IIntegratable integratable, IProject project)
+		public ProjectIntegrator(ITrigger trigger, IIntegratable integratable, IProject project)
 		{
-			this.Trigger = Trigger;
+			_trigger = trigger;
 			_project = project;
-			this.integratable = integratable;
+			_integratable = integratable;
 		}
 
 		public string Name
@@ -44,6 +44,11 @@ namespace ThoughtWorks.CruiseControl.Core
 		public IProject Project
 		{
 			get { return _project; }
+		}
+
+		public ITrigger Trigger
+		{
+			get { return _trigger; }
 		}
 
 		public ProjectIntegratorState State
@@ -118,7 +123,7 @@ namespace ThoughtWorks.CruiseControl.Core
 			{
 				try
 				{
-					integratable.RunIntegration(buildCondition);
+					_integratable.RunIntegration(buildCondition);
 				}
 				catch (Exception ex)
 				{
@@ -126,7 +131,7 @@ namespace ThoughtWorks.CruiseControl.Core
 				}
 
 				// notify the schedule whether the build was successful or not
-				Trigger.IntegrationCompleted();
+				_trigger.IntegrationCompleted();
 			}
 		}
 
@@ -137,7 +142,7 @@ namespace ThoughtWorks.CruiseControl.Core
 				_forceBuild = false;
 				return BuildCondition.ForceBuild;
 			}
-			return Trigger.ShouldRunIntegration();
+			return _trigger.ShouldRunIntegration();
 		}
 
 		private void Stopped()

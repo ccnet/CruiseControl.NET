@@ -8,6 +8,8 @@ namespace ThoughtWorks.CruiseControl.Core
 
 		string Name { get; }
 
+		ITrigger Trigger { get; }
+
 		/// <summary>
 		/// Starts the integration of this project on a separate thread.  If
 		/// this integrator has already started, this method causes no action.
@@ -33,18 +35,12 @@ namespace ThoughtWorks.CruiseControl.Core
 		/// Gets a value indicating whether this project integrator is currently
 		/// running.
 		/// </summary>
-		bool IsRunning
-		{
-			get;
-		}
+		bool IsRunning { get; }
 
 		/// <summary>
 		/// Gets a value indicating the project integrator's current state.
 		/// </summary>
-		ProjectIntegratorState State
-		{
-			get;
-		}
+		ProjectIntegratorState State { get; }
 
 		void ForceBuild();
 	}

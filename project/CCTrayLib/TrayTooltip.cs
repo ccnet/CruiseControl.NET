@@ -1,3 +1,4 @@
+using System;
 using ThoughtWorks.CruiseControl.Remote;
 
 namespace ThoughtWorks.CruiseControl.CCTrayLib
@@ -7,12 +8,19 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib
 	/// </summary>
 	public class TrayTooltip
 	{
-		private readonly ProjectStatus status;
-		private const string FORMAT_TRAY_TOOLTIP = "Server: {0}\nProject: {1}\nLast Build: {2} ({3})";
+		private const string FORMAT_TRAY_TOOLTIP = "Server: {0}\nProject: {1}\nLast Build: {2} ({3}) \nNext Build in {4}";
 
-		public TrayTooltip(ProjectStatus status)
+		private readonly ProjectStatus status;
+		private DateTimeProvider dtProvider;
+
+		public TrayTooltip(ProjectStatus status) : this(status, new DateTimeProvider())
+		{
+		}
+
+		public TrayTooltip(ProjectStatus status, DateTimeProvider dateTimeProvider)
 		{
 			this.status = status;
+			dtProvider = dateTimeProvider;
 		}
 
 		public string Text
@@ -23,14 +31,15 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib
 		private string CalculateTrayText()
 		{
 			object activity = (status.Status == ProjectIntegratorState.Stopped) ? ProjectActivity.Sleeping : status.Activity;
-
+			TimeSpan timeRemaining = status.NextBuildTime.Subtract(dtProvider.Now);
+			string formattedNextBuildTime = String.Format("{0} Day(s), {1} Hour(s), {2} Minute(s)", 
+				timeRemaining.Days, timeRemaining.Hours, timeRemaining.Minutes);
 			return string.Format(FORMAT_TRAY_TOOLTIP,
-				activity,
-				status.Name,
-				status.BuildStatus,
-				status.LastBuildLabel);
+			                     activity,
+			                     status.Name,
+			                     status.BuildStatus,
+			                     status.LastBuildLabel,
+			                     formattedNextBuildTime);
 		}
-
 	}
-
 }

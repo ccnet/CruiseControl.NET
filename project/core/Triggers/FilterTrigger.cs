@@ -11,6 +11,7 @@ namespace ThoughtWorks.CruiseControl.Core.Triggers
 		private readonly DateTimeProvider dtProvider;
 		private TimeSpan startTime;
 		private TimeSpan endTime;
+		private DayOfWeek[] weekDays = (DayOfWeek[]) DayOfWeek.GetValues(typeof (DayOfWeek));
 
 		public FilterTrigger() : this(new DateTimeProvider())
 		{
@@ -43,8 +44,6 @@ namespace ThoughtWorks.CruiseControl.Core.Triggers
 			return TimeSpan.Parse(timeString);
 		}
 
-		[ReflectorArray("weekDays", Required=false)]
-		public DayOfWeek[] WeekDays = (DayOfWeek[]) DayOfWeek.GetValues(typeof (DayOfWeek));
 
 		[ReflectorProperty("buildCondition", Required=false)]
 		public BuildCondition BuildCondition = BuildCondition.NoBuild;
@@ -52,27 +51,60 @@ namespace ThoughtWorks.CruiseControl.Core.Triggers
 		public BuildCondition ShouldRunIntegration()
 		{
 			DateTime now = dtProvider.Now;
-			if (IsNowOutsideOfWeekDayRange(now) && IsNowOutsideOfTimeRange(now))
+			if (IsInFilterRange(now))
 			{
-				return InnerTrigger.ShouldRunIntegration();
+				return BuildCondition;
 			}
-			return BuildCondition;
+			return InnerTrigger.ShouldRunIntegration();
 		}
 
-		private bool IsNowOutsideOfWeekDayRange(DateTime now)
+		private bool IsInFilterRange(DateTime now)
 		{
-			return Array.IndexOf(WeekDays, now.DayOfWeek) >= 0;
+			return IsDateInFilterWeekDays(now) && IsTimeInFilterTimeRange(now);
 		}
 
-		private bool IsNowOutsideOfTimeRange(DateTime now)
+		private bool IsDateInFilterWeekDays(DateTime dateTime)
 		{
-			TimeSpan timeOfDay = now.TimeOfDay;
-			return timeOfDay < startTime || now.TimeOfDay > endTime;
+			return Array.IndexOf(WeekDays, dateTime.DayOfWeek) >= 0;
+		}
+
+		private bool IsTimeInFilterTimeRange(DateTime dateTime)
+		{
+			TimeSpan timeOfDay = dateTime.TimeOfDay;
+			return timeOfDay >= startTime && dateTime.TimeOfDay <= endTime;
 		}
 
 		public void IntegrationCompleted()
 		{
 			InnerTrigger.IntegrationCompleted();
+		}
+
+		public DateTime NextBuild
+		{
+			get
+			{
+				DateTime innerTriggerBuild = InnerTrigger.NextBuild;
+				if (IsInFilterRange(innerTriggerBuild))
+				{
+					DateTime nextBuild = new DateTime(innerTriggerBuild.Year, innerTriggerBuild.Month, innerTriggerBuild.Day);
+					nextBuild += endTime;
+					return nextBuild;
+				}
+				return innerTriggerBuild;
+			}
+		}
+
+		[ReflectorArray("weekDays", Required=false)]
+		public DayOfWeek[] WeekDays
+		{
+			get { return weekDays; }
+			set
+			{
+				if (value.Length != 0)
+				{
+					weekDays = value;
+				}
+			}
 		}
 	}
 }

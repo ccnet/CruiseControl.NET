@@ -127,5 +127,21 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Triggers
 			Assert.AreEqual(BuildCondition.ForceBuild, trigger.ShouldRunIntegration());
 			VerifyAll();
 		}
+
+		[Test]
+		public void ShouldReturnCurrentTimeForNextBuildOnServerStart()
+		{
+			Assert.AreEqual(DateTime.Now, trigger.NextBuild);			
+		}
+
+		[Test]
+		public void ShouldReturnIntervalTimeIfLastBuildJustOccured()
+		{
+			trigger.IntervalSeconds = 10;
+			DateTime stubNow = new DateTime(2004, 1, 1, 1, 0, 0, 0);
+			_mockDateTime.SetupResult("Now", stubNow);
+			trigger.IntegrationCompleted();
+			Assert.AreEqual(stubNow.AddSeconds(10), trigger.NextBuild);
+		}
 	}
 }

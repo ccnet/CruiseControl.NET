@@ -135,20 +135,21 @@ namespace ThoughtWorks.CruiseControl.Core
 
 		public ProjectStatus[] GetProjectStatus()
 		{
-			ArrayList projects = new ArrayList();
+			ArrayList projectStatusList = new ArrayList();
 			foreach (IProjectIntegrator integrator in projectIntegrators)
 			{
 				Project project = (Project) integrator.Project;
-				projects.Add(new ProjectStatus(integrator.State,
-				                               project.LatestBuildStatus,
-				                               project.CurrentActivity,
-				                               project.Name,
-				                               project.WebURL,
-				                               project.LastIntegrationResult.StartTime,
-				                               project.LastIntegrationResult.Label));
+				projectStatusList.Add(new ProjectStatus(integrator.State,
+				                                        project.LatestBuildStatus,
+				                                        project.CurrentActivity,
+				                                        project.Name,
+				                                        project.WebURL,
+				                                        project.LastIntegrationResult.StartTime,
+				                                        project.LastIntegrationResult.Label,
+				                                        integrator.Trigger.NextBuild));
 			}
 
-			return (ProjectStatus[]) projects.ToArray(typeof (ProjectStatus));
+			return (ProjectStatus[]) projectStatusList.ToArray(typeof (ProjectStatus));
 		}
 
 		public void ForceBuild(string projectName)
@@ -332,7 +333,7 @@ namespace ThoughtWorks.CruiseControl.Core
 		{
 			lock (this)
 			{
-				if (_disposed) return;		
+				if (_disposed) return;
 				_disposed = true;
 			}
 			Abort();

@@ -14,7 +14,9 @@ namespace ThoughtWorks.CruiseControl.Core.Triggers
 		private TimeSpan integrationTime;
 		private DateTime nextIntegration;
 
-		public ScheduleTrigger() : this(new DateTimeProvider()) {}
+		public ScheduleTrigger() : this(new DateTimeProvider())
+		{
+		}
 
 		public ScheduleTrigger(DateTimeProvider dtProvider)
 		{
@@ -25,8 +27,8 @@ namespace ThoughtWorks.CruiseControl.Core.Triggers
 		public virtual string Time
 		{
 			get { return integrationTime.ToString(); }
-			set 
-			{ 
+			set
+			{
 				try
 				{
 					integrationTime = TimeSpan.Parse(value);
@@ -40,11 +42,11 @@ namespace ThoughtWorks.CruiseControl.Core.Triggers
 			}
 		}
 
-		[ReflectorProperty("buildCondition", Required=false)]
+		[ReflectorProperty("buildCondition", Required=false)] 
 		public BuildCondition BuildCondition = BuildCondition.IfModificationExists;
 
-		[ReflectorArray("weekDays", Required=false)]
-		public DayOfWeek[] WeekDays = (DayOfWeek[]) DayOfWeek.GetValues(typeof(DayOfWeek));
+		[ReflectorArray("weekDays", Required=false)] 
+		public DayOfWeek[] WeekDays = (DayOfWeek[]) DayOfWeek.GetValues(typeof (DayOfWeek));
 
 		private void SetNextIntegrationDateTime()
 		{
@@ -54,6 +56,24 @@ namespace ThoughtWorks.CruiseControl.Core.Triggers
 			{
 				nextIntegration = nextIntegration.AddDays(1);
 			}
+
+			nextIntegration = CalculateNextIntegrationTime(nextIntegration);
+		}
+
+		private DateTime CalculateNextIntegrationTime(DateTime nextIntegration)
+		{
+			while (true)
+			{
+				if (IsValidWeekDay(nextIntegration.DayOfWeek))
+					break;
+				nextIntegration = nextIntegration.AddDays(1);
+			}
+			return nextIntegration;
+		}
+
+		private bool IsValidWeekDay(DayOfWeek nextIntegrationDay)
+		{
+			return Array.IndexOf(WeekDays, nextIntegrationDay) >= 0;
 		}
 
 		public virtual void IntegrationCompleted()
@@ -61,10 +81,15 @@ namespace ThoughtWorks.CruiseControl.Core.Triggers
 			SetNextIntegrationDateTime();
 		}
 
+		public DateTime NextBuild
+		{
+			get { return nextIntegration; }
+		}
+
 		public virtual BuildCondition ShouldRunIntegration()
 		{
 			DateTime now = dtProvider.Now;
-			if (now > nextIntegration && Array.IndexOf(WeekDays, now.DayOfWeek) >= 0)
+			if (now > nextIntegration && IsValidWeekDay(now.DayOfWeek))
 			{
 				return BuildCondition;
 			}

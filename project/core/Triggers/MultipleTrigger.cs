@@ -1,3 +1,4 @@
+using System;
 using Exortech.NetReflector;
 using ThoughtWorks.CruiseControl.Remote;
 
@@ -49,5 +50,20 @@ namespace ThoughtWorks.CruiseControl.Core.Triggers
 				trigger.IntegrationCompleted();
 			}
 		}
+
+		public DateTime NextBuild
+		{
+			get
+			{
+				DateTime earliestDate = DateTime.MaxValue;
+				foreach (ITrigger trigger in triggers)
+				{
+					if(trigger.NextBuild <= earliestDate)
+						earliestDate = trigger.NextBuild;
+				}
+				return earliestDate;
+			}
+		}
+
 	}
 }

@@ -1,4 +1,4 @@
-using Exortech.NetReflector;
+using System;
 using NMock;
 using NUnit.Framework;
 using ThoughtWorks.CruiseControl.Core.Triggers;
@@ -18,8 +18,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Triggers
 		[SetUp]
 		public void Setup()
 		{
-			subTrigger1Mock = new DynamicMock(typeof(ITrigger));
-			subTrigger2Mock = new DynamicMock(typeof(ITrigger));
+			subTrigger1Mock = new DynamicMock(typeof (ITrigger));
+			subTrigger2Mock = new DynamicMock(typeof (ITrigger));
 			subTrigger1 = (ITrigger) subTrigger1Mock.MockInstance;
 			subTrigger2 = (ITrigger) subTrigger2Mock.MockInstance;
 			trigger = new MultipleTrigger();
@@ -116,6 +116,23 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Triggers
 			subTrigger2Mock.ExpectAndReturn("ShouldRunIntegration", BuildCondition.ForceBuild);
 			Assert.AreEqual(BuildCondition.ForceBuild, trigger.ShouldRunIntegration());
 			VerifyAll();
+		}
+
+		[Test]
+		public void ShouldReturnNeverIfNoTriggerExists()
+		{
+			trigger = new MultipleTrigger();
+			Assert.AreEqual(DateTime.MaxValue, trigger.NextBuild);
+		}
+
+		[Test]
+		public void ShouldReturnEarliestTriggerTimeForNextBuild()
+		{
+			DateTime earlierDate = new DateTime(2005, 1, 1);
+			subTrigger1Mock.SetupResult("NextBuild", earlierDate);
+			DateTime laterDate = new DateTime(2005, 1, 2);
+			subTrigger2Mock.SetupResult("NextBuild", laterDate);
+			Assert.AreEqual(earlierDate, trigger.NextBuild);
 		}
 	}
 }

@@ -7,7 +7,7 @@ namespace ThoughtWorks.CruiseControl.Remote
 	/// Interface of all integration schedules used by CruiseControl.NET.
 	/// A schedule applies to a particular project.
 	/// </summary>
-	[TypeConverter(typeof(ExpandableObjectConverter))]
+	[TypeConverter(typeof (ExpandableObjectConverter))]
 	public interface ITrigger
 	{
 		/// <summary>
@@ -25,5 +25,10 @@ namespace ThoughtWorks.CruiseControl.Remote
 		/// Notifies the schedule that an integration has completed.
 		/// </summary>
 		void IntegrationCompleted();
+
+		/// <summary>
+		/// Returns the time of the next build.
+		/// </summary>
+		DateTime NextBuild { get; }
 	}
 }

@@ -46,6 +46,16 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Triggers
 		}
 
 		[Test]
+		public void ShouldNotInvokeDecoratedTriggerWhenWeekDaysNotSpecified()
+		{
+			mockTrigger.ExpectNoCall("ShouldRunIntegration");
+			mockDateTime.ExpectAndReturn("Now", new DateTime(2004, 12, 1, 10, 30, 0, 0));
+			trigger.WeekDays = new DayOfWeek[] {};
+
+			Assert.AreEqual(BuildCondition.NoBuild, trigger.ShouldRunIntegration());
+		}
+
+		[Test]
 		public void ShouldInvokeDecoratedTriggerWhenTimeIsOutsideOfRange()
 		{
 			mockTrigger.ExpectAndReturn("ShouldRunIntegration", BuildCondition.IfModificationExists);
@@ -68,10 +78,10 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Triggers
 		[Test]
 		public void ShouldNotInvokeDecoratedTriggerWhenTodayIsOneOfSpecifiedWeekdays()
 		{
-			mockTrigger.ExpectNoCall("ShouldRunIntegration");
+			mockTrigger.ExpectAndReturn("ShouldRunIntegration", BuildCondition.IfModificationExists);
 			mockDateTime.ExpectAndReturn("Now", new DateTime(2004, 12, 2, 10, 30, 0, 0));
 
-			Assert.AreEqual(BuildCondition.NoBuild, trigger.ShouldRunIntegration());
+			Assert.AreEqual(BuildCondition.IfModificationExists, trigger.ShouldRunIntegration());
 		}
 
 		[Test]
@@ -82,15 +92,39 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Triggers
 		}
 
 		[Test]
+		public void ShouldUseInnerTriggersNextBuildTimeIfNoFilterExists()
+		{
+			DateTime nextBuildTime = DateTime.Now.AddDays(-1);
+			mockTrigger.ExpectAndReturn("NextBuild", nextBuildTime);
+			Assert.AreEqual(nextBuildTime, trigger.NextBuild);
+		}
+
+		[Test]
+		public void ShouldUseFilterEndTimeIfTriggerBuildTimeIsInFilter()
+		{
+			DateTime triggerNextBuildTime = new DateTime(2004, 12, 1, 10, 30, 00);
+			mockTrigger.SetupResult("NextBuild", triggerNextBuildTime);
+			Assert.AreEqual(new DateTime(2004, 12, 1, 11, 00, 00), trigger.NextBuild);
+		}
+
+		[Test]
+		public void ShouldNotFilterIfTriggerBuildDayIsNotInFilter()
+		{
+			DateTime triggerNextBuildTime = new DateTime(2004, 12, 4, 10, 00, 00);
+			mockTrigger.SetupResult("NextBuild", triggerNextBuildTime);
+			Assert.AreEqual(triggerNextBuildTime, trigger.NextBuild);
+		}
+
+		[Test]
 		public void ShouldFullyPopulateFromReflector()
 		{
 			string xml = string.Format(@"<filterTrigger startTime=""8:30:30"" endTime=""22:30:30"" buildCondition=""ForceBuild"">
-	<trigger type=""scheduleTrigger"" time=""12:00:00"" />
-	<weekDays>
-		<weekDay>Monday</weekDay>
-		<weekDay>Tuesday</weekDay>
-	</weekDays>
-</filterTrigger>");
+											<trigger type=""scheduleTrigger"" time=""12:00:00""/>
+											<weekDays>
+												<weekDay>Monday</weekDay>
+												<weekDay>Tuesday</weekDay>
+											</weekDays>
+										</filterTrigger>");
 			trigger = (FilterTrigger) NetReflector.Read(xml);
 			Assert.AreEqual("08:30:30", trigger.StartTime);
 			Assert.AreEqual("22:30:30", trigger.EndTime);
@@ -104,8 +138,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Triggers
 		public void ShouldMinimallyPopulateFromReflector()
 		{
 			string xml = string.Format(@"<filterTrigger startTime=""8:30:30"" endTime=""22:30:30"">
-	<trigger type=""scheduleTrigger"" time=""12:00:00"" />
-</filterTrigger>");
+											<trigger type=""scheduleTrigger"" time=""12:00:00"" />
+										</filterTrigger>");
 			trigger = (FilterTrigger) NetReflector.Read(xml);
 			Assert.AreEqual("08:30:30", trigger.StartTime);
 			Assert.AreEqual("22:30:30", trigger.EndTime);
