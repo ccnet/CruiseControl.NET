@@ -25,7 +25,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.IO
 
 		public string GetAbsoluteURLForRelativePath(string relativePath)
 		{
-			return webControl.ResolveUrl(relativePath);
+			return string.Format("{0}://{1}{2}", context.Request.Url.Scheme, context.Request.Url.Host, webControl.ResolveUrl(relativePath));
 		}
 	}
 }
