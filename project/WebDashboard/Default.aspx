@@ -15,7 +15,9 @@
 			<asp:BoundColumn DataField="Name" HeaderText="Project Name">
 				<ItemStyle Font-Bold="True"></ItemStyle>
 			</asp:BoundColumn>
-			<asp:BoundColumn DataField="BuildStatus" HeaderText="Build Status"></asp:BoundColumn>
+			<asp:BoundColumn DataField="BuildStatus" HeaderText="Build Status">
+				<ItemStyle Font-Bold="True"></ItemStyle>
+			</asp:BoundColumn>
 			<asp:BoundColumn DataField="Status" HeaderText="CCNet Status"></asp:BoundColumn>
 			<asp:BoundColumn DataField="Activity" HeaderText="Activity"></asp:BoundColumn>
 		</Columns>
