@@ -84,7 +84,7 @@ namespace tw.ccnet.web
 				XmlDocument document = new XmlDocument();
 				document.Load(logfile);
 				
-				IList list = (IList) ConfigurationSettings.GetConfig("xslFiles");
+				IList list = (IList) ConfigurationSettings.GetConfig("CCNet/xslFiles");
 				foreach (string xslFile in list) 
 				{
 					if (xslFile.ToLower().IndexOf("header") > -1)

@@ -18,6 +18,7 @@ namespace tw.ccnet.web
 	{
 		protected DataList menu;
 		protected HtmlGenericControl buildStats;
+		protected HtmlGenericControl ProjectPluginLinks;
 		protected HtmlAnchor nextLog;
 		protected HtmlAnchor previousLog;
 		protected SiteMesh.DecoratorControls.Title Title1;
@@ -26,6 +27,7 @@ namespace tw.ccnet.web
 		protected System.Web.UI.HtmlControls.HtmlTableCell Td2;
 		protected SiteMesh.DecoratorControls.Title Title3;
 		protected HtmlAnchor tests;
+		protected System.Web.UI.HtmlControls.HtmlTableCell contentCell;
 		protected HtmlAnchor testTiming;
 
 		/*
@@ -45,8 +47,24 @@ namespace tw.ccnet.web
 			InitBuildStats(path);
 			InitLogFileList(path);
 			InitAdjacentAnchors(path);
+			InitProjectPluginLinks();
 			tests.HRef = BuildLogFileUri("Tests.aspx");
 			testTiming.HRef = BuildLogFileUri("TestTiming.aspx");
+		}
+
+		private void InitProjectPluginLinks()
+		{
+			if (ConfigurationSettings.GetConfig("CCNet/projectPlugins") == null)
+			{
+				return;
+			}
+
+			string pluginLinksHtml = "";
+			foreach (ProjectPluginSpecification spec in (IEnumerable) ConfigurationSettings.GetConfig("CCNet/projectPlugins"))
+			{
+				pluginLinksHtml += String.Format(@"|&nbsp; <a class=""link"" href=""{0}"">{1}</a> ", spec.LinkUrl, spec.LinkText);
+			}
+			ProjectPluginLinks.InnerHtml = pluginLinksHtml;
 		}
 
 		private string BuildLogFileUri(string baseUri)

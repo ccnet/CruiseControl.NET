@@ -3,7 +3,8 @@
 <!DOCTYPE html PUBLIC "-//W3C//Dtd XHTML 1.0 Transitional//EN" "http://localhost/NUnitAsp/dtd/xhtml1-transitional.dtd">
 <HTML>
 	<HEAD>
-		<title><decorator:title runat="server" defaulttitle="CruiseControl.Net Build Results" ID="Title1" /></title>
+		<title>
+			<decorator:title runat="server" defaulttitle="CruiseControl.Net Build Results" ID="Title1" /></title>
 		<link type="text/css" rel="stylesheet" href="cruisecontrol.css">
 	</HEAD>
 	<body background="images/bg_blue_stripe.gif" topmargin="0" leftmargin="0" marginheight="0"
@@ -17,11 +18,17 @@
 						<img src="images/ccnet_logo.gif" border="0"></a>
 				</td>
 				<td valign="middle" align="right">
-					<a class="link" href=".">latest</a> |&nbsp; <a class="link" id="nextLog" runat="server">
-						next</a> |&nbsp; <a class="link" id="previousLog" runat="server">previous</a>
-					|&nbsp; <a class="link" href="Statistics.aspx">stats</a> 
-					|&nbsp; <a class="link" id="tests" runat="server">tests</a>
-					|&nbsp; <a class="link" id="testTiming" runat="server">test timing</a>
+					<a class="link" href=".">latest</a> 
+					|&nbsp; 
+					<a class="link" id="nextLog" runat="server">next</a> 
+					|&nbsp; 
+					<a class="link" id="previousLog" runat="server">previous</a> 
+					|&nbsp; 
+					<a class="link" id="tests" runat="server">tests</a> 
+					|&nbsp; 
+					<a class="link" id="testTiming" runat="server">test timing</a>
+					<span id="ProjectPluginLinks" runat="server" runAt="server" />
+					&nbsp;
 				</td>
 				<td><img src="images/shim.gif" width="6" border="0"></td>
 			</tr>
@@ -40,12 +47,12 @@
 							<td bgcolor="#333366">
 								<table border="0" align="center" cellpadding="0" cellspacing="0" width="100%">
 									<tr>
-										<td><img src="images/shim.gif" width="20" /></td>
-										<td nowrap="true">
-											<span class="buildresults-header">BUILD RESULTS</span><br />
+										<td><img src="images/shim.gif" width="20"></td>
+										<td nowrap>
+											<span class="buildresults-header">BUILD RESULTS</span><br>
 											<span id="buildStats" runat="server" class="buildresults-data" runAt="server" />
-											<p />
-											<asp:DataList ID="menu" Runat="server" />
+											<p>
+												<asp:DataList ID="menu" Runat="server" /></p>
 										</td>
 									</tr>
 								</table>

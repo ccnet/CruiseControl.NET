@@ -199,6 +199,16 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "ProjectPluginSpecification.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "ProjectPluginsSectionHandler.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Statistics.aspx"
                     BuildAction = "Content"
                 />
@@ -299,7 +309,7 @@
                 <File
                     RelPath = "log\log20020916143556.xml"
                     BuildAction = "Content"
-                />                
+                />
                 <File
                     RelPath = "log\log20020924144031.xml"
                     BuildAction = "Content"
