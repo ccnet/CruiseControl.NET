@@ -50,6 +50,7 @@ namespace ThoughtWorks.CruiseControl.Core.Builder.Test
     	</targetList>
 		<logger>SourceForge.NAnt.XmlLogger</logger>
 		<buildTimeoutSeconds>123</buildTimeoutSeconds>
+		<nologo>FALSE</nologo>
     </nant>";
 
 			NetReflector.Read(xml, _builder);
@@ -60,6 +61,7 @@ namespace ThoughtWorks.CruiseControl.Core.Builder.Test
 			Assert.AreEqual(123, _builder.BuildTimeoutSeconds);
 			Assert.AreEqual("SourceForge.NAnt.XmlLogger", _builder.Logger);
 			Assert.AreEqual("foo", _builder.Targets[0]);
+			Assert.AreEqual(false, _builder.NoLogo);
 		}
 
 		[Test]
@@ -73,6 +75,7 @@ namespace ThoughtWorks.CruiseControl.Core.Builder.Test
 			Assert.AreEqual(0, _builder.Targets.Length);
 			Assert.AreEqual(NAntBuilder.DEFAULT_BUILD_TIMEOUT, _builder.BuildTimeoutSeconds);
 			Assert.AreEqual(NAntBuilder.DEFAULT_LOGGER, _builder.Logger);
+			Assert.AreEqual(NAntBuilder.DEFAULT_NOLOGO, _builder.NoLogo);
 		}
 
 		[Test]

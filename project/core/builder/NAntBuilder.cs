@@ -14,6 +14,7 @@ namespace ThoughtWorks.CruiseControl.Core.Builder
 		public const int DEFAULT_BUILD_TIMEOUT = 600;
 		public const string DEFAULT_EXECUTABLE = "nant.exe";
 		public const string DEFAULT_LOGGER = "NAnt.Core.XmlLogger";
+		public const bool DEFAULT_NOLOGO = true;
 
 		private ProcessExecutor _executor;
 
@@ -32,9 +33,11 @@ namespace ThoughtWorks.CruiseControl.Core.Builder
 		private string buildArgs = "";
 		private string logger = DEFAULT_LOGGER;
 		private int buildTimeoutSeconds = DEFAULT_BUILD_TIMEOUT;
+		private bool nologo = DEFAULT_NOLOGO;
 
 		[ReflectorArray("targetList", Required = false)]
 		public string[] Targets = new string[0];
+
 
 		[ReflectorProperty("executable", Required = false)] 
 		public string Executable
@@ -69,6 +72,13 @@ namespace ThoughtWorks.CruiseControl.Core.Builder
 		{
 			get { return logger; }
 			set { logger = value; }
+		}
+
+		[ReflectorProperty("nologo", Required = false)]
+		public bool NoLogo
+		{
+			get { return nologo; }
+			set { nologo = value; }
 		}
 
 		/// <summary>
@@ -168,7 +178,7 @@ namespace ThoughtWorks.CruiseControl.Core.Builder
 
 		private void AppendNoLogoArg(StringBuilder buffer)
 		{
-			buffer.Append("-nologo");
+			if (nologo) buffer.Append("-nologo");
 		}
 
 		private void AppendBuildFileArg(StringBuilder buffer)
