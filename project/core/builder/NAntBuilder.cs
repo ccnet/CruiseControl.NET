@@ -18,7 +18,7 @@ namespace tw.ccnet.core.builder
 		private string _baseDirectory;
 		private string _buildArgs = DEFAULT_BUILDARGS;
 		private string _buildfile;
-		private int _buildTimeout = 60000;
+		private int _buildTimeout = 0;
 		private string[] _targets;
 
 		[ReflectorProperty("executable")]
@@ -107,8 +107,15 @@ namespace tw.ccnet.core.builder
 			try
 			{
 				TextReader stdOut = ProcessUtil.ExecuteRedirected(process);
-				result.Output = stdOut.ReadToEnd();			
-				process.WaitForExit(BuildTimeout);
+				result.Output = stdOut.ReadToEnd();
+				if (BuildTimeout > 0)
+				{
+					process.WaitForExit(BuildTimeout);
+				}
+				else
+				{
+					process.WaitForExit();
+				}
 				return process.ExitCode;
 			}
 			finally

@@ -221,10 +221,10 @@ than one target is the same as manually running Nant yourself with more
 than one target.</li>
   <li>buildTimeout <span style="font-style: italic;">(optional) </span>-
 This element may be set to indicate the maximum amount of time in
-milliseconds CruiseControl.NET should wait for the build to finish. The
-default is 60000 or 1 minute. For most builds that isn't very long sp
-you should consider increasing it (in the example, we set it to be 5
-minutes)<br>
+milliseconds CruiseControl.NET should wait for the build to finish. If
+you leave this element out, or set it to 0, then CruiseControl.NET will
+wait indefinitely for Nant to finish (so if Nant 'hangs', so will
+CruiseControl.NET)<br>
   </li>
 </ul>
 <p> 	</p>
