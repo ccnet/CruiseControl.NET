@@ -1,4 +1,5 @@
 using System;
+using System.Text.RegularExpressions;
 using System.Xml;
 
 namespace tw.ccnet.core.util
@@ -94,6 +95,12 @@ namespace tw.ccnet.core.util
 				throw new CruiseControlException("Document missing required value at xpath: " + xpath);
 			}
 			return node.InnerText;
+		}
+
+		public static string EncodeCDATA(string text)
+		{
+			Regex CDATACloseTag = new Regex(@"\]\]>");
+			return CDATACloseTag.Replace(text, @"] ]>");
 		}
 	}
 }

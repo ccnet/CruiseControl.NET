@@ -100,5 +100,12 @@ namespace tw.ccnet.core.util.test
 			XmlDocument document = XmlUtil.CreateDocument("<configuration><martin></martin></configuration>");
 			string value = XmlUtil.SelectRequiredValue(document, "/configuration/larry");
 		}
+
+		[Test]
+		public void VerifyCDATAEncode()
+		{
+			string test = "a b <f>]]></a>";
+			Assertion.AssertEquals("a b <f>] ]></a>", XmlUtil.EncodeCDATA(test));
+		}
 	}
 }
