@@ -3,19 +3,16 @@ using ThoughtWorks.CruiseControl.WebDashboard.Dashboard;
 
 namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.ProjectReporterPlugin
 {
-	public class ProjectReporter : IPlugin
+	public class ProjectReporter : IBuildPlugin
 	{
 		public string Description
 		{
 			get { return "Build Report"; }
 		}
-		public string Url
+
+		public string CreateURL (string serverName, string projectName, string buildName, IBuildUrlGenerator urlGenerator)
 		{
-			get { return "ProjectReport.aspx"; }
-		}
-		public PluginBehavior Behavior
-		{
-			get { return PluginBehavior.Build; }
+			return urlGenerator.GenerateUrl("ProjectReport.aspx", serverName, projectName, buildName);
 		}
 	}
 }

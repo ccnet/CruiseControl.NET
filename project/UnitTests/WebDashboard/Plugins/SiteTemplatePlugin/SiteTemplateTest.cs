@@ -1,4 +1,3 @@
-using System;
 using System.Web.UI.HtmlControls;
 using NMock;
 using NUnit.Framework;
@@ -148,8 +147,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Plugins.SiteTemplate
 
 			AssertEquals(1, results.BuildPluginsList.Length);
 			AssertEquals("Test Build Plugin", results.BuildPluginsList[0].InnerHtml);
-			AssertEquals(string.Format("testbuild.aspx?server={0}&amp;project={1}&amp;build={2}", server, project,  buildName), 
-				results.BuildPluginsList[0].HRef);
+			AssertEquals("testbuild.aspx", results.BuildPluginsList[0].HRef);
 		}
 
 		[Test]
@@ -179,12 +177,11 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Plugins.SiteTemplate
 
 			AssertEquals(1, results.ServerPluginsList.Length);
 			AssertEquals("Test Server Plugin", results.ServerPluginsList[0].InnerHtml);
-			AssertEquals(string.Format("testserver.aspx?server={0}&amp;project={1}&amp;build={2}", server, project,  buildName), 
-				results.ServerPluginsList[0].HRef);
+			AssertEquals("testserver.aspx",results.ServerPluginsList[0].HRef);
 		}
 	}
 
-	public class TestBuildPlugin : IPlugin
+	public class TestBuildPlugin : IBuildPlugin
 	{
 		string description = "Test Build Plugin";
 		string url = "testbuild.aspx";
@@ -193,17 +190,14 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Plugins.SiteTemplate
 		{
 			get { return description; }
 		}
-		public string Url
+
+		public string CreateURL (string serverName, string projectName, string buildName, IBuildUrlGenerator urlGenerator)
 		{
-			get { return url; }
-		}
-		public PluginBehavior Behavior
-		{
-			get { return PluginBehavior.Build; }
+			return url;
 		}
 	}
 
-	public class TestServerPlugin : IPlugin
+	public class TestServerPlugin : IServerPlugin
 	{
 		string description = "Test Server Plugin";
 		string url = "testserver.aspx";
@@ -212,13 +206,10 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Plugins.SiteTemplate
 		{
 			get { return description; }
 		}
-		public string Url
+
+		public string CreateURL (string serverName, IServerUrlGenerator urlGenerator)
 		{
-			get { return url; }
-		}
-		public PluginBehavior Behavior
-		{
-			get { return PluginBehavior.Server; }
+			return url;
 		}
 	}
 }

@@ -47,15 +47,15 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.SiteTemplatePlugin
 
 		private HtmlAnchor[] ServerPluginLinks()
 		{
-			return PluginLinks(PluginBehavior.Server);
+			return PluginLinks(typeof(IServerPlugin));
 		}
 
-		private HtmlAnchor[] BuildPluginLinks ()
+		private HtmlAnchor[] BuildPluginLinks()
 		{
-			return PluginLinks(PluginBehavior.Build);
+			return PluginLinks(typeof(IBuildPlugin));
 		}
 
-		private HtmlAnchor[] PluginLinks(PluginBehavior behavior)
+		private HtmlAnchor[] PluginLinks(Type pluginClassification)
 		{
 			IPluginSpecification[] pluginSpecifications = configurationGetter.GetConfigFromSection(PluginsSectionHandler.SectionName) as IPluginSpecification[];
 			if (pluginSpecifications == null)
@@ -76,11 +76,19 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.SiteTemplatePlugin
 				if (tempPlugin is IPlugin)
 				{
 					IPlugin plugin = (IPlugin) tempPlugin;
-					if (plugin.Behavior == behavior)
+					if (pluginClassification.IsAssignableFrom(plugin.GetType()))
 					{
 						HtmlAnchor anchor = new HtmlAnchor();
-						// ToDo - make a URL generator
-						anchor.HRef = string.Format("{0}?server={1}&amp;project={2}&amp;build={3}", plugin.Url, build.ServerName, build.ProjectName, build.Name);
+						// ToDo - clean this up
+						if (pluginClassification == typeof(IServerPlugin))
+						{
+							anchor.HRef = ((IServerPlugin) plugin).CreateURL(build.ServerName, new DefaultServerUrlGenerator());
+						}
+						else if (pluginClassification == typeof(IBuildPlugin))
+						{
+							anchor.HRef = ((IBuildPlugin) plugin).CreateURL(build.ServerName, build.ProjectName, build.Name, new DefaultBuildUrlGenerator());
+						}
+					 
 						anchor.InnerHtml = plugin.Description;
 						anchor.Attributes["class"] = "link";
 						pluginAnchors.Add(anchor);

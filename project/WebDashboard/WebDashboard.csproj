@@ -313,7 +313,22 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Dashboard\DefaultBuildUrlGenerator.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Dashboard\DefaultServerUrlGenerator.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Dashboard\IBuildNameRetriever.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Dashboard\IBuildPlugin.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -328,7 +343,22 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Dashboard\IBuildUrlGenerator.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Dashboard\IPlugin.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Dashboard\IServerPlugin.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Dashboard\IServerUrlGenerator.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

@@ -3,19 +3,16 @@ using ThoughtWorks.CruiseControl.WebDashboard.Dashboard;
 
 namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.LogViewerPlugin
 {
-	public class LogViewer : IPlugin
+	public class LogViewer : IBuildPlugin
 	{
 		public string Description
 		{
 			get { return "View Log"; }
 		}
-		public string Url
+
+		public string CreateURL (string serverName, string projectName, string buildName, IBuildUrlGenerator urlGenerator)
 		{
-			get { return "ViewLog.aspx"; }
-		}
-		public PluginBehavior Behavior
-		{
-			get { return PluginBehavior.Build; }
+			return urlGenerator.GenerateUrl("ViewLog.aspx", serverName, projectName, buildName);
 		}
 	}
 }
