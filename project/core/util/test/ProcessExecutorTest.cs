@@ -34,7 +34,7 @@ namespace ThoughtWorks.CruiseControl.Core.Util.Test
 		public void ShouldNotUseATimeoutIfTimeoutSetToZeroOnProcessInfo()
 		{
 			ProcessInfo processInfo = new ProcessInfo("cmd.exe", "/C @echo Hello World");
-			processInfo.TimeOut = 0;
+			processInfo.TimeOut = ProcessInfo.INFINITE_TIMEOUT;
 			ProcessResult result = executor.Execute(processInfo);
 			Assert.AreEqual("Hello World", result.StandardOutput.Trim());
 			AssertProcessExitsSuccessfully(result);

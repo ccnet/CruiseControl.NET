@@ -7,12 +7,18 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 	public class ProcessInfo
 	{
 		private const int DEFAULT_TIMEOUT = 120000;
+		public const int INFINITE_TIMEOUT = 0;
 		private ProcessStartInfo startInfo = new ProcessStartInfo();
 		private string standardInputContent = null;
+		private int timeout = DEFAULT_TIMEOUT;
 
-		public ProcessInfo(string filename) : this(filename, null) { }
+		public ProcessInfo(string filename) : this(filename, null)
+		{
+		}
 
-		public ProcessInfo(string filename, string arguments) : this(filename, arguments, null) { }
+		public ProcessInfo(string filename, string arguments) : this(filename, arguments, null)
+		{
+		}
 
 		public ProcessInfo(string filename, string arguments, string workingDirectory)
 		{
@@ -49,7 +55,7 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 			get { return startInfo.FileName; }
 		}
 
-		public string Arguments 
+		public string Arguments
 		{
 			get { return startInfo.Arguments; }
 		}
@@ -70,7 +76,11 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 			}
 		}
 
-		public int TimeOut = DEFAULT_TIMEOUT;
+		public int TimeOut
+		{
+			get { return timeout; }
+			set { timeout = (value == INFINITE_TIMEOUT) ? 0x7fffffff : value; }
+		}
 
 		public Process CreateProcess()
 		{
@@ -101,7 +111,7 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 		public override string ToString()
 		{
 			return string.Format("FileName: [{0}] -- Arguments: [{1}] -- WorkingDirectory: [{2}] -- StandardInputContent: [{3}] ",
-				FileName, Arguments, WorkingDirectory, StandardInputContent);
+			                     FileName, Arguments, WorkingDirectory, StandardInputContent);
 		}
 	}
 }

@@ -1,8 +1,5 @@
-using NMock;
-using NUnit.Framework;
-using System;
 using System.IO;
-using System.Threading;
+using NUnit.Framework;
 
 namespace ThoughtWorks.CruiseControl.Core.Util.Test
 {
@@ -12,15 +9,12 @@ namespace ThoughtWorks.CruiseControl.Core.Util.Test
 		[Test]
 		public void EnsureThatStreamIsClosedOnceReadingIsComplete()
 		{
-			IMock mockStream = new DynamicMock(typeof(TextReader));
-			mockStream.ExpectAndReturn("ReadToEnd", "string to read");
-			mockStream.Expect("Close");
-
-			ProcessReader reader = new ProcessReader((TextReader) mockStream.MockInstance);
-			reader.Start();
-			reader.WaitForExit();
-
-			mockStream.Verify();	
+			StringReader stream = new StringReader("string to read");
+			using (ProcessReader reader = new ProcessReader(stream))
+			{
+				reader.WaitForExit();
+				Assert.AreEqual("string to read", reader.Output);				
+			}
 		}
 	}
 }
