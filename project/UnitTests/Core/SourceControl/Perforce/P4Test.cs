@@ -222,7 +222,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.SourceControl.Perforce
 		}
 
 		[Test]
-		[Ignore("This test is terrible - *never* test classes by testing a mock. Redesign until you can test properly (or use TDD and you won't get this anyway)")]
+// Owen: I'm tired of looking at this comment in the build log.  The test seems to pass.  Either keep it or delete it.
+//		[Ignore("This test is terrible - *never* test classes by testing a mock. Redesign until you can test properly (or use TDD and you won't get this anyway)")]
 		public void GetModifications()
 		{
 			DateTime from = new DateTime(2002, 11, 1);

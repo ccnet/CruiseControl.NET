@@ -48,7 +48,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Perforce
 		}
 
 		[ReflectorProperty("view")]
-		public string View
+		public virtual string View
 		{
 			get{ return _view;}
 			set{ _view = value;}
