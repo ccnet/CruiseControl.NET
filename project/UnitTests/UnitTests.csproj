@@ -239,6 +239,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Core\SourceControl\QuietPeriodTest.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Core\SourceControl\Perforce\P4ConfigProcessInfoCreatorTest.cs"
                     SubType = "Code"
                     BuildAction = "Compile"

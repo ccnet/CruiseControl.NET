@@ -1,4 +1,5 @@
 using System;
+using System.Threading;
 
 namespace ThoughtWorks.CruiseControl.Core.Util
 {
@@ -7,6 +8,11 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 		public virtual DateTime Now
 		{
 			get { return DateTime.Now; }
+		}
+
+		public virtual void Sleep(int milliseconds)
+		{
+			Thread.Sleep(milliseconds);
 		}
 	}
 }

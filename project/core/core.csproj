@@ -779,6 +779,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "sourcecontrol\QuietPeriod.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "sourcecontrol\StarTeam.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -1223,6 +1228,11 @@
                 />
                 <File
                     RelPath = "test\TestLogs.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "test\TraceListenerBackup.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
