@@ -95,9 +95,9 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.SourceControl.Perforce
 			P4 p4 = CreateP4WithNoArgContructor(xml);
 			Assert.AreEqual("p4", p4.Executable);
 			Assert.AreEqual("//depot/anotherproject/...", p4.View);
-			Assert.IsNull(p4.Client);
-			Assert.IsNull(p4.User);
-			Assert.IsNull(p4.Port);
+			Assert.AreEqual("", p4.Client);
+			Assert.AreEqual("", p4.User);
+			Assert.AreEqual("", p4.Port);
 		}
 
 		[Test]

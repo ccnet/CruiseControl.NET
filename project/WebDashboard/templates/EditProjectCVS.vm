@@ -1,0 +1,36 @@
+<!-- Start of EditProjectCVS.vm -->
+<table>
+	<tr>
+		<td>Executable</td>
+		<td><input name="Project.SourceControl.Executable" id="Project.SourceControl.Executable" value="$model.Executable" type="text" /></td>
+	</tr>
+	<tr>
+		<td>Timeout</td>
+		<td><input name="Project.SourceControl.Timeout"  id="Project.SourceControl.Timeout" value="$model.Timeout" type="text" /></td>
+	</tr>
+	<tr>
+		<td>CvsRoot</td>
+		<td><input name="Project.SourceControl.CvsRoot" id="Project.SourceControl.CvsRoot" value="$model.CvsRoot" type="text" /></td>
+	</tr>
+	<tr>
+		<td>Working Directory</td>
+		<td><input name="Project.SourceControl.WorkingDirectory" id="Project.SourceControl.WorkingDirectory" value="$model.WorkingDirectory" type="text" /></td>
+	</tr>
+	<tr>
+		<td>Label On Success</td>
+		<td><input name="Project.SourceControl.LabelOnSuccess" id="Project.SourceControl.LabelOnSuccess" value="Project.SourceControl.LabelOnSuccess" type="checkbox" #if ($model.LabelOnSuccess) checked="checked" #end /></td>
+	</tr>
+	<tr>
+		<td>AutoGetSource *</td>
+		<td><input name="Project.SourceControl.AutoGetSource" id="Project.SourceControl.AutoGetSource" value="Project.SourceControl.AutoGetSource" type="checkbox" #if ($model.AutoGetSource) checked="checked" #end /></td>
+	</tr>
+	<tr>
+		<td>Restrict Logins</td>
+		<td><input name="Project.SourceControl.RestrictLogins" id="Project.SourceControl.RestrictLogins" value="$model.RestrictLogins" type="text" /></td>
+	</tr>
+	<tr>
+		<td>Branch</td>
+		<td><input name="Project.SourceControl.Branch"  id="Project.SourceControl.Branch" value="$model.Branch" type="text" /></td>
+	</tr>
+</table>
+<!-- End of EditProjectCVS.vm -->

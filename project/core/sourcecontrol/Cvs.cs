@@ -16,8 +16,11 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 		public const string GET_SOURCE_COMMAND_FORMAT = @"-q update -d -P -C";	// build directories, prune empty directories, get clean copy
 		public const string COMMAND_DATE_FORMAT = "yyyy-MM-dd HH:mm:ss 'GMT'";
 		private string _executable = "cvs.exe";
-		private string _workingDirectory;
-		private string _cvsRoot;
+		private string _workingDirectory = "";
+		private string _cvsRoot = "";
+		private bool labelOnSuccess = false;
+		private string restrictLogins = "";
+		private string branch = "";
 
 		public Cvs() : this(new CvsHistoryParser(), new ProcessExecutor()) { }
 
@@ -44,21 +47,33 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			set { _workingDirectory = value; }
 		}
 
-		[ReflectorProperty("labelOnSuccess", Required=false)]
-		public bool LabelOnSuccess;
+		[ReflectorProperty("labelOnSuccess", Required=false)] 
+		public bool LabelOnSuccess
+		{
+			get { return labelOnSuccess; }
+			set { labelOnSuccess = value; }
+		}
 
-        [ReflectorProperty("restrictLogins", Required=false)]
-        public string RestrictLogins; 
+		[ReflectorProperty("restrictLogins", Required=false)] 
+		public string RestrictLogins
+		{
+			get { return restrictLogins; }
+			set { restrictLogins = value; }
+		}
 
 		[ReflectorProperty("webUrlBuilder", InstanceTypeKey="type", Required=false)]
 		public IModificationUrlBuilder UrlBuilder;
 
-		[ReflectorProperty("branch", Required=false)]
-		public string Branch;
-
 		[ReflectorProperty("autoGetSource", Required = false)]
 		public bool AutoGetSource = false;
-		
+
+		[ReflectorProperty("branch", Required=false)] 
+		public string Branch
+		{
+			get { return branch; }
+			set { branch = value; }
+		}
+
 		public string FormatCommandDate(DateTime date)
 		{
 			return date.ToUniversalTime().ToString(COMMAND_DATE_FORMAT, CultureInfo.InvariantCulture);
@@ -109,10 +124,10 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			// in cvs, date 'to' is implicitly now
 			// todo: if cvs will accept a 'to' date, it would be nicer to 
 			// include that for some harmony with the vss version
-			string cvsroot = (CvsRoot == null) ? String.Empty : "-d " + CvsRoot + " ";
-			string branch = (Branch == null) ? String.Empty : " -r" + Branch;
+			string cvsroot = (CvsRoot == null || CvsRoot == string.Empty) ? String.Empty : "-d " + CvsRoot + " ";
+			string branch = (Branch == null || Branch == string.Empty) ? String.Empty : " -r" + Branch;
 			string args = string.Format(HISTORY_COMMAND_FORMAT, cvsroot, FormatCommandDate(from), branch, (branch == String.Empty) ? "b" : "");
-            if (RestrictLogins != null) 
+            if (RestrictLogins != null && RestrictLogins != string.Empty) 
             {
                 foreach (string login in RestrictLogins.Split(',')) {
                     args += " -w" + login;

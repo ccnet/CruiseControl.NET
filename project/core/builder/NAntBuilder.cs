@@ -26,30 +26,61 @@ namespace ThoughtWorks.CruiseControl.Core.Builder
 			_executor = executor;
 		}
 
-		[ReflectorProperty("executable", Required = false)]
-		public string Executable = DEFAULT_EXECUTABLE;
-
-		[ReflectorProperty("baseDirectory", Required = false)]
-		public string ConfiguredBaseDirectory;
-
-		[ReflectorProperty("buildFile", Required = false)]
-		public string BuildFile;
-
-		[ReflectorProperty("buildArgs", Required = false)]
-		public string BuildArgs;
-
-		[ReflectorProperty("logger", Required = false)]
-		public string Logger = DEFAULT_LOGGER;
+		private string _executable = DEFAULT_EXECUTABLE;
+		private string buildFile = "";
+		private string configuredBaseDirectory = "";
+		private string buildArgs = "";
+		private string logger = DEFAULT_LOGGER;
+		private int buildTimeoutSeconds = DEFAULT_BUILD_TIMEOUT;
 
 		[ReflectorArray("targetList", Required = false)]
 		public string[] Targets = new string[0];
+
+		[ReflectorProperty("executable", Required = false)] 
+		public string Executable
+		{
+			get { return _executable; }
+			set { _executable = value; }
+		}
+
+		[ReflectorProperty("buildFile", Required = false)] 
+		public string BuildFile
+		{
+			get { return buildFile; }
+			set { buildFile = value; }
+		}
+
+		[ReflectorProperty("baseDirectory", Required = false)]
+		public string ConfiguredBaseDirectory
+		{
+			get { return configuredBaseDirectory; }
+			set { configuredBaseDirectory = value; }
+		}
+
+		[ReflectorProperty("buildArgs", Required = false)]
+		public string BuildArgs
+		{
+			get { return buildArgs; }
+			set { buildArgs = value; }
+		}
+
+		[ReflectorProperty("logger", Required = false)]
+		public string Logger
+		{
+			get { return logger; }
+			set { logger = value; }
+		}
 
 		/// <summary>
 		/// Gets and sets the maximum number of seconds that the build may take.  If the build process takes longer than
 		/// this period, it will be killed.  Specify this value as zero to disable process timeouts.
 		/// </summary>
-		[ReflectorProperty("buildTimeoutSeconds", Required = false)]
-		public int BuildTimeoutSeconds = DEFAULT_BUILD_TIMEOUT;
+		[ReflectorProperty("buildTimeoutSeconds", Required = false)] 
+		public int BuildTimeoutSeconds
+		{
+			get { return buildTimeoutSeconds; }
+			set { buildTimeoutSeconds = value; }
+		}
 
 		/// <summary>
 		/// Runs the integration using NAnt.  The build number is provided for labelling, build
@@ -64,7 +95,7 @@ namespace ThoughtWorks.CruiseControl.Core.Builder
 
 			if (processResult.TimedOut)
 			{
-				throw new BuilderException(this, "NAnt process timed out (after " + BuildTimeoutSeconds + " seconds)");
+				throw new BuilderException(this, "NAnt process timed out (after " + buildTimeoutSeconds + " seconds)");
 			}
 
 			if (processResult.ExitCode == 0)
@@ -81,23 +112,23 @@ namespace ThoughtWorks.CruiseControl.Core.Builder
 		private ProcessInfo CreateProcessInfo(IIntegrationResult result)
 		{
 			ProcessInfo info = new ProcessInfo(Executable, CreateArgs(result), BaseDirectory(result));
-			info.TimeOut = BuildTimeoutSeconds*1000;
+			info.TimeOut = buildTimeoutSeconds*1000;
 			return info;
 		}
 
 		private string BaseDirectory(IIntegrationResult result)
 		{
-			if (StringUtil.IsBlank(ConfiguredBaseDirectory))
+			if (StringUtil.IsBlank(configuredBaseDirectory))
 			{
 				return result.WorkingDirectory;
 			}
-			else if (Path.IsPathRooted(ConfiguredBaseDirectory))
+			else if (Path.IsPathRooted(configuredBaseDirectory))
 			{
-				return ConfiguredBaseDirectory;
+				return configuredBaseDirectory;
 			}
 			else
 			{
-				return Path.Combine(result.WorkingDirectory, ConfiguredBaseDirectory);
+				return Path.Combine(result.WorkingDirectory, configuredBaseDirectory);
 			}
 		}
 
@@ -115,7 +146,7 @@ namespace ThoughtWorks.CruiseControl.Core.Builder
 
 		private string BuildCommand
 		{
-			get { return string.Format("{0} {1}", Executable, BuildArgs); }
+			get { return string.Format("{0} {1}", Executable, buildArgs); }
 		}
 
 		/// <summary>
@@ -129,7 +160,7 @@ namespace ThoughtWorks.CruiseControl.Core.Builder
 			AppendNoLogoArg(buffer);
 			AppendBuildFileArg(buffer);
 			AppendLoggerArg(buffer);
-			AppendIfNotBlank(buffer, BuildArgs);
+			AppendIfNotBlank(buffer, buildArgs);
 			AppendIntegrationResultProperties(buffer, result);
 			AppendTargets(buffer);
 			return buffer.ToString();
@@ -142,12 +173,12 @@ namespace ThoughtWorks.CruiseControl.Core.Builder
 
 		private void AppendBuildFileArg(StringBuilder buffer)
 		{
-			AppendIfNotBlank(buffer, @"-buildfile:{0}", SurroundInQuotesIfContainsSpace(BuildFile));
+			AppendIfNotBlank(buffer, @"-buildfile:{0}", SurroundInQuotesIfContainsSpace(buildFile));
 		}
 
 		private void AppendLoggerArg(StringBuilder buffer)
 		{
-			AppendIfNotBlank(buffer, "-logger:{0}", Logger);
+			AppendIfNotBlank(buffer, "-logger:{0}", logger);
 		}
 
 		private void AppendIntegrationResultProperties(StringBuilder buffer, IIntegrationResult result)
@@ -186,8 +217,8 @@ namespace ThoughtWorks.CruiseControl.Core.Builder
 
 		public override string ToString()
 		{
-			string baseDirectory = (ConfiguredBaseDirectory != null ? ConfiguredBaseDirectory : "");
-			return string.Format(@" BaseDirectory: {0}, Targets: {1}, Executable: {2}, BuildFile: {3}", baseDirectory, string.Join(", ", Targets), Executable, BuildFile);
+			string baseDirectory = (configuredBaseDirectory != null ? configuredBaseDirectory : "");
+			return string.Format(@" BaseDirectory: {0}, Targets: {1}, Executable: {2}, BuildFile: {3}", baseDirectory, string.Join(", ", Targets), Executable, buildFile);
 		}
 
 		public string TargetsForPresentation

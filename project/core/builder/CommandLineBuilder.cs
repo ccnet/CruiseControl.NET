@@ -16,7 +16,6 @@ namespace ThoughtWorks.CruiseControl.Core.Builder
 	public class CommandLineBuilder : IBuilder
 	{
 		public const int DEFAULT_BUILD_TIMEOUT = 600;
-		public const string DEFAULT_BUILDARGS = "";
 
 		private ProcessExecutor _executor;
 
@@ -27,21 +26,42 @@ namespace ThoughtWorks.CruiseControl.Core.Builder
 			_executor = executor;
 		}
 
+		private string executable = "";
+		private string configuredBaseDirectory = "";
+		private string buildArgs = "";
+		private int buildTimeoutSeconds = DEFAULT_BUILD_TIMEOUT;
+
 		[ReflectorProperty("executable", Required = true)] 
-		public string Executable;
+		public string Executable
+		{
+			get { return executable; }
+			set { executable = value; }
+		}
 
 		[ReflectorProperty("baseDirectory", Required = false)] 
-		public string ConfiguredBaseDirectory;
+		public string ConfiguredBaseDirectory
+		{
+			get { return configuredBaseDirectory; }
+			set { configuredBaseDirectory = value; }
+		}
 
 		[ReflectorProperty("buildArgs", Required = false)] 
-		public string BuildArgs = DEFAULT_BUILDARGS;
+		public string BuildArgs
+		{
+			get { return buildArgs; }
+			set { buildArgs = value; }
+		}
 
 		/// <summary>
 		/// Gets and sets the maximum number of seconds that the build may take.  If the build process takes longer than
 		/// this period, it will be killed.  Specify this value as zero to disable process timeouts.
 		/// </summary>
 		[ReflectorProperty("buildTimeoutSeconds", Required = false)] 
-		public int BuildTimeoutSeconds = DEFAULT_BUILD_TIMEOUT;
+		public int BuildTimeoutSeconds
+		{
+			get { return buildTimeoutSeconds; }
+			set { buildTimeoutSeconds = value; }
+		}
 
 		public void Run(IIntegrationResult result)
 		{
@@ -50,7 +70,7 @@ namespace ThoughtWorks.CruiseControl.Core.Builder
 
 			if (processResult.TimedOut)
 			{
-				throw new BuilderException(this, "Command Line Build timed out (after " + BuildTimeoutSeconds + " seconds)");
+				throw new BuilderException(this, "Command Line Build timed out (after " + buildTimeoutSeconds + " seconds)");
 			}
 
 			if (processResult.ExitCode == 0)
@@ -66,24 +86,24 @@ namespace ThoughtWorks.CruiseControl.Core.Builder
 
 		private ProcessInfo CreateProcessInfo(IIntegrationResult result)
 		{
-			ProcessInfo info = new ProcessInfo(Executable, BuildArgs, BaseDirectory(result));
-			info.TimeOut = BuildTimeoutSeconds*1000;
+			ProcessInfo info = new ProcessInfo(executable, buildArgs, BaseDirectory(result));
+			info.TimeOut = buildTimeoutSeconds*1000;
 			return info;
 		}
 
 		private string BaseDirectory(IIntegrationResult result)
 		{
-			if (ConfiguredBaseDirectory == null || ConfiguredBaseDirectory == "")
+			if (configuredBaseDirectory == null || configuredBaseDirectory == "")
 			{
 				return result.WorkingDirectory;
 			}
-			else if (Path.IsPathRooted(ConfiguredBaseDirectory))
+			else if (Path.IsPathRooted(configuredBaseDirectory))
 			{
-				return ConfiguredBaseDirectory;
+				return configuredBaseDirectory;
 			}
 			else
 			{
-				return Path.Combine(result.WorkingDirectory, ConfiguredBaseDirectory);
+				return Path.Combine(result.WorkingDirectory, configuredBaseDirectory);
 			}
 		}
 
@@ -102,12 +122,12 @@ namespace ThoughtWorks.CruiseControl.Core.Builder
 
 		private string BuildCommand
 		{
-			get { return string.Format("{0} {1}", Executable, BuildArgs); }
+			get { return string.Format("{0} {1}", executable, buildArgs); }
 		}
 
 		public override string ToString()
 		{
-			return string.Format(@" BaseDirectory: {0}, Executable: {1}", ConfiguredBaseDirectory, Executable);
+			return string.Format(@" BaseDirectory: {0}, Executable: {1}", configuredBaseDirectory, executable);
 		}
 	}
 }

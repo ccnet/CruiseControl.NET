@@ -9,7 +9,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 	[ReflectorType("filesystem")]
 	public class FileSourceControl : ISourceControl
 	{
-		private string _repositoryRoot;
+		private string _repositoryRoot = "";
 		private bool _ignoreMissingRoot;
 		private readonly IFileSystem fileSystem;
 

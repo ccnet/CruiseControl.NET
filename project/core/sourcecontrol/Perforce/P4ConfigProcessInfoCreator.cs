@@ -16,15 +16,15 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Perforce
 		{
 			StringBuilder args = new StringBuilder();
 			args.Append("-s "); // for "scripting" mode
-			if (p4.Client!=null) 
+			if (p4.Client != null && p4.Client != string.Empty) 
 			{
 				args.Append("-c " + p4.Client + " ");
 			}
-			if (p4.Port!=null) 
+			if (p4.Port != null && p4.Port != string.Empty) 
 			{
 				args.Append("-p " + p4.Port + " ");
 			}
-			if (p4.User!=null)
+			if (p4.User != null && p4.Port != string.Empty)
 			{
 				args.Append("-u " + p4.User + " ");
 			}

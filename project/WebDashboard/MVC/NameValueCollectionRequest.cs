@@ -31,8 +31,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.MVC
 			string text = map[id];
 			if (text == null || text == string.Empty)
 			{
-				// This is valid becuase of the way our config objects work
-				return null;
+				return string.Empty;
 			}
 			else
 			{

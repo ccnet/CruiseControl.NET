@@ -15,11 +15,11 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Perforce
 		internal readonly static string COMMAND_DATE_FORMAT = "yyyy/MM/dd:HH:mm:ss";
 
 		private string _executable = "p4";
-		private string _view;
-		private string _client;
-		private string _user;
-		private string _port;
-		private string _workingDirectory;
+		private string _view = "";
+		private string _client = "";
+		private string _user = "";
+		private string _port = "";
+		private string _workingDirectory = "";
 		private readonly ProcessExecutor processExecutor;
 		private readonly IP4Initializer p4Initializer;
 		private readonly IP4ProcessInfoCreator processInfoCreator;
@@ -241,6 +241,14 @@ View:
 					builder.Append(Environment.NewLine);
 				}
 				return builder.ToString();
+			}
+		}
+
+		public string ViewForDisplay
+		{
+			get
+			{
+				return View.Replace(",", Environment.NewLine);
 			}
 		}
 

@@ -1,0 +1,32 @@
+<!-- Start of EditProjectP4.vm -->
+<table>
+	<tr>
+		<td>View *</td>
+		<td><textarea name="Project.SourceControl.View" id="Project.SourceControl.View" rows="3" cols="40">$model.ViewForDisplay</textarea></td>
+	</tr>
+	<tr>
+		<td>Executable</td>
+		<td><input name="Project.SourceControl.Executable" id="Project.SourceControl.Executable" value="$model.Executable" type="text" /></td>
+	</tr>
+	<tr>
+		<td>Client</td>
+		<td><input name="Project.SourceControl.Client"  id="Project.SourceControl.Client" value="$model.Client" type="text" /></td>
+	</tr>
+	<tr>
+		<td>User</td>
+		<td><input name="Project.SourceControl.User" id="Project.SourceControl.User" value="$model.User" type="text" /></td>
+	</tr>
+	<tr>
+		<td>Port</td>
+		<td><input name="Project.SourceControl.Port" id="Project.SourceControl.Port" value="$model.Port" type="text" /></td>
+	</tr>
+	<tr>
+		<td>ApplyLabel</td>
+		<td><input name="Project.SourceControl.ApplyLabel" id="Project.SourceControl.ApplyLabel" value="Project.SourceControl.ApplyLabel" type="checkbox" #if ($model.ApplyLabel) checked="checked" #end /></td>
+	</tr>
+	<tr>
+		<td>AutoGetSource *</td>
+		<td><input name="Project.SourceControl.AutoGetSource" id="Project.SourceControl.AutoGetSource" value="Project.SourceControl.AutoGetSource" type="checkbox" #if ($model.AutoGetSource) checked="checked" #end /></td>
+	</tr>
+</table>
+<!-- End of EditProjectP4.vm -->

@@ -1,0 +1,12 @@
+<!-- Start of EditProjectFileSourceControl.vm -->
+<table>
+	<tr>
+		<td>Repository Root</td>
+		<td><input name="Project.SourceControl.RepositoryRoot" id="Project.SourceControl.RepositoryRoot" value="$model.RepositoryRoot" type="text" /></td>
+	</tr>
+	<tr>
+		<td>IgnoreMissingRoot</td>
+		<td><input name="Project.SourceControl.IgnoreMissingRoot" id="Project.SourceControl.IgnoreMissingRoot" value="Project.SourceControl.IgnoreMissingRoot" type="checkbox" #if ($model.IgnoreMissingRoot) checked="checked" #end /></td>
+	</tr>
+</table>
+<!-- End of EditProjectFileSourceControl.vm -->

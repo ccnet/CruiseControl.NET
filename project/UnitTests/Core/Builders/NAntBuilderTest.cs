@@ -68,7 +68,7 @@ namespace ThoughtWorks.CruiseControl.Core.Builder.Test
 			string xml = @"<nant />";
 
 			NetReflector.Read(xml, _builder);
-			Assert.AreEqual(null, _builder.ConfiguredBaseDirectory);
+			Assert.AreEqual("", _builder.ConfiguredBaseDirectory);
 			Assert.AreEqual(NAntBuilder.DEFAULT_EXECUTABLE, _builder.Executable);
 			Assert.AreEqual(0, _builder.Targets.Length);
 			Assert.AreEqual(NAntBuilder.DEFAULT_BUILD_TIMEOUT, _builder.BuildTimeoutSeconds);

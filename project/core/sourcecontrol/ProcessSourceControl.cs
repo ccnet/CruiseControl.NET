@@ -21,8 +21,14 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			_historyParser = historyParser;
 		}
 
-		[ReflectorProperty("timeout", Required=false)]
-		public int Timeout = DEFAULT_TIMEOUT;
+		private int timeout = DEFAULT_TIMEOUT;
+
+		[ReflectorProperty("timeout", Required=false)] 
+		public int Timeout
+		{
+			get { return timeout; }
+			set { timeout = value; }
+		}
 
 		public void Run(IIntegrationResult result)
 		{

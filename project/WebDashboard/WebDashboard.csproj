@@ -752,12 +752,22 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "Plugins\AddProject\DisplayAddProjectPageAction.cs"
+                    RelPath = "Plugins\AddProject\ContinueAddProjectPageAction.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Plugins\AddProject\NameAndSelected.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
                     RelPath = "Plugins\AddProject\SaveNewProjectAction.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Plugins\AddProject\StartAddProjectPageAction.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -921,6 +931,10 @@
                     BuildAction = "None"
                 />
                 <File
+                    RelPath = "templates\AddProject.vm"
+                    BuildAction = "None"
+                />
+                <File
                     RelPath = "templates\AllBuilds.vm"
                     BuildAction = "None"
                 />
@@ -934,6 +948,26 @@
                 />
                 <File
                     RelPath = "templates\BuildSideBar.vm"
+                    BuildAction = "None"
+                />
+                <File
+                    RelPath = "templates\EditProjectCommandLineBuilder.vm"
+                    BuildAction = "None"
+                />
+                <File
+                    RelPath = "templates\EditProjectCVS.vm"
+                    BuildAction = "None"
+                />
+                <File
+                    RelPath = "templates\EditProjectFileSourceControl.vm"
+                    BuildAction = "None"
+                />
+                <File
+                    RelPath = "templates\EditProjectNantBuilder.vm"
+                    BuildAction = "None"
+                />
+                <File
+                    RelPath = "templates\EditProjectP4.vm"
                     BuildAction = "None"
                 />
                 <File
