@@ -22,6 +22,8 @@ namespace tw.ccnet.core.publishers
 		private Hashtable _groups = new Hashtable();
 		private bool _includeDetails = false;		
 
+		private XmlLogPublisher logPublisher;
+
 		public EmailGateway EmailGateway
 		{
 			get { return _emailGateway; }
@@ -87,6 +89,19 @@ namespace tw.ccnet.core.publishers
 			if (result.Status == IntegrationStatus.Unknown)
 			{
 				return;
+			}
+
+			Project p = (Project) source;
+			if (p != null) 
+			{
+				foreach (PublisherBase publisher in p.Publishers) 
+				{
+					if (publisher is XmlLogPublisher) 
+					{
+						logPublisher = (XmlLogPublisher) publisher;
+						break;
+					}
+				}
 			}
 
 			string to = CreateRecipientList(result);
@@ -162,7 +177,10 @@ namespace tw.ccnet.core.publishers
 		{
 			StringWriter buffer = new StringWriter();
 			XmlTextWriter writer = new XmlTextWriter(buffer);
-			new XmlLogPublisher().Write(result, writer);
+			if (logPublisher != null)
+				logPublisher.Write(result, writer);
+			else
+				new XmlLogPublisher().Write(result, writer);
 			writer.Close();
 			
 			XmlDocument xml = new XmlDocument();

@@ -156,7 +156,7 @@ namespace tw.ccnet.core.publishers.test
 		public void TestHandleIntegrationEvent()
 		{
 			IntegrationEventHandler handler = _publisher.IntegrationEventHandler;
-			handler(this, CreateIntegrationResult(IntegrationStatus.Success, IntegrationStatus.Success));
+			handler(null, CreateIntegrationResult(IntegrationStatus.Success, IntegrationStatus.Success));
 			Assert("Mail message was not sent!", _gateway.SentMessages.Count > 0);
 		}
 
