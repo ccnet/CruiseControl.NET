@@ -222,7 +222,9 @@ namespace ThoughtWorks.CruiseControl.Core
 			try
 			{
 				IConfiguration configuration = configurationService.Load();
-				configuration.AddProject(projectSerializer.Deserialize(serializedProject));
+				Project project = projectSerializer.Deserialize(serializedProject);
+				configuration.AddProject(project);
+				project.Initialize();
 				configurationService.Save(configuration);
 			}
 			catch (ApplicationException e)

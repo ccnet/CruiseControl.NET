@@ -1,5 +1,4 @@
 using System;
-using System.ComponentModel;
 using Exortech.NetReflector;
 
 namespace ThoughtWorks.CruiseControl.Core
@@ -33,6 +32,10 @@ namespace ThoughtWorks.CruiseControl.Core
 		public void GetSource(IntegrationResult result)
 		{
 			// no op
+		}
+
+		public void Initialize(string projectName, string workingDirectory)
+		{
 		}
 	}
 }

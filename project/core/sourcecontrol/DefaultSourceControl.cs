@@ -23,6 +23,10 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			
 		}
 
+		public void Initialize(string projectName, string workingDirectory)
+		{
+		}
+
 		public bool ShouldRun(IntegrationResult result)
 		{
 			return result.Working;

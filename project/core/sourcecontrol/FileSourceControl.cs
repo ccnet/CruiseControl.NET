@@ -99,5 +99,9 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 		{
 			
 		}
+
+		public void Initialize(string projectName, string workingDirectory)
+		{
+		}
 	}
 }

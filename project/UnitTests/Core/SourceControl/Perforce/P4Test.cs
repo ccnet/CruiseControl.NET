@@ -345,7 +345,7 @@ View:
 			p4InitializerMock.Expect("Initialize",  p4, "myProject", "workingDirFromProject");
 
 			// Execute
-			p4.InitializeDirectory("myProject", "workingDirFromProject");
+			p4.Initialize("myProject", "workingDirFromProject");
 
 			// Verify
 			VerifyAll();
@@ -361,7 +361,7 @@ View:
 			p4InitializerMock.Expect("Initialize",  p4, "myProject", "workingDirFromProject");
 
 			// Execute
-			p4.InitializeDirectory("myProject", "workingDirFromProject");
+			p4.Initialize("myProject", "workingDirFromProject");
 
 			// Verify
 			VerifyAll();
@@ -377,7 +377,7 @@ View:
 			p4InitializerMock.Expect("Initialize",  p4, "myProject", "p4sOwnWorkingDirectory");
 
 			// Execute
-			p4.InitializeDirectory("myProject", "workingDirFromProject");
+			p4.Initialize("myProject", "workingDirFromProject");
 
 			// Verify
 			VerifyAll();

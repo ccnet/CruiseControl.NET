@@ -78,5 +78,9 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 		public virtual void GetSource(IntegrationResult result)
 		{
 		}
+
+		public virtual void Initialize(string projectName, string workingDirectory)
+		{
+		}
 	}
 }

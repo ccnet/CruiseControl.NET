@@ -11,5 +11,6 @@ namespace ThoughtWorks.CruiseControl.Core
 
 		void LabelSourceControl(string label, DateTime timeStamp);
 		void GetSource(IntegrationResult result);
+		void Initialize(string projectName, string workingDirectory);
 	}
 }

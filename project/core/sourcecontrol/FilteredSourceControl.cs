@@ -95,6 +95,10 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			_realScProvider.GetSource(result);
 		}
 
+		public void Initialize(string projectName, string workingDirectory)
+		{
+		}
+
 		/// <remarks>
 		/// Modification is accepted by default if there isn't any
 		/// inclusion filter or if the modification is accepted by

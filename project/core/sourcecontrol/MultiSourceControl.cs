@@ -85,5 +85,9 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 				sourceControl.GetSource(result);
 			}
 		}
+
+		public void Initialize(string projectName, string workingDirectory)
+		{
+		}
 	}
 }

@@ -1,5 +1,6 @@
 using System;
 using System.ComponentModel;
+using System.IO;
 using ThoughtWorks.CruiseControl.Core.Label;
 using ThoughtWorks.CruiseControl.Core.State;
 using ThoughtWorks.CruiseControl.Core.Util;
@@ -37,8 +38,10 @@ namespace ThoughtWorks.CruiseControl.Core
 		public event IntegrationCompletedEventHandler IntegrationCompleted;
 
 		public const string DEFAULT_WEB_URL = "http://localhost/CruiseControl.NET/";
+		public static readonly string DefaultWorkingDirectory = "WorkingDirectory";
 
 		private string _webURL = DEFAULT_WEB_URL;
+		private string _workingDirectory;
 		private ISourceControl _sourceControl;
 		private IBuilder _builder;
 		private ILabeller _labeller = new DefaultLabeller();
@@ -66,6 +69,13 @@ namespace ThoughtWorks.CruiseControl.Core
 		{
 			get { return _webURL; }
 			set { _webURL = value; }
+		}
+
+		[ReflectorProperty("workingDirectory", Required=false)]
+		public string WorkingDirectory
+		{
+			get { return _workingDirectory; }
+			set { _workingDirectory = value; }
 		}
 
 		[ReflectorProperty("build", InstanceTypeKey="type")]
@@ -370,5 +380,22 @@ namespace ThoughtWorks.CruiseControl.Core
 			}
 		}
 
+		public void Initialize()
+		{
+			Log.Info(string.Format("Initiatizing Project [{0}]", Name));
+			SourceControl.Initialize(Name, WorkingDirectoryToUse());
+		}
+
+		private string WorkingDirectoryToUse()
+		{
+			if (_workingDirectory == null || _workingDirectory == string.Empty)
+			{
+				return new DirectoryInfo(Path.Combine(Name, DefaultWorkingDirectory)).FullName;
+			}
+			else
+			{
+				return _workingDirectory;
+			}
+		}
 	}
 }

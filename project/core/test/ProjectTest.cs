@@ -1,5 +1,6 @@
 using System;
 using System.Diagnostics;
+using System.IO;
 using Exortech.NetReflector;
 using NMock;
 using NMock.Constraints;
@@ -83,6 +84,7 @@ namespace ThoughtWorks.CruiseControl.Core.Test
 		{
 			string xml = @"
 <project name=""foo"" webURL=""http://localhost/ccnet"" modificationDelaySeconds=""60"" publishExceptions=""true"">
+	<workingDirectory>c:\my\working\directory</workingDirectory>
 	<build type=""nant"" />
 	<sourcecontrol type=""mock"" />
 	<labeller type=""defaultlabeller"" />
@@ -108,6 +110,7 @@ namespace ThoughtWorks.CruiseControl.Core.Test
 			AssertEquals(typeof (Schedule), project.Schedule);
 			AssertEquals(typeof (XmlLogPublisher), project.Publishers[0]);
 			AssertEquals(typeof (MergeFilesTask), project.Tasks[0]);
+			AssertEquals(@"c:\my\working\directory", project.WorkingDirectory);
 		}
 
 		[Test]
@@ -452,6 +455,44 @@ namespace ThoughtWorks.CruiseControl.Core.Test
 			Assert(publisher.Published);
 			AssertEquals("No messages logged.", 1, _listener.Traces.Count);
 			Assert("Wrong message logged.", _listener.Traces[0].ToString().IndexOf(expectedException.ToString()) > 0);
+		}
+
+		[Test]
+		public void ShouldCallSourceControlInitializeWithCalculatedWorkingDirectoryIfOneIsNotSet()
+		{
+			// Setup
+			Project project = new Project();
+			project.Name = "myProject";
+			string workingDirectory = new DirectoryInfo(@"myProject\WorkingDirectory").FullName;
+
+			DynamicMock sourceControlMock = new DynamicMock(typeof(ISourceControl));
+			sourceControlMock.Expect("Initialize", "myProject", workingDirectory);
+			project.SourceControl = (ISourceControl) sourceControlMock.MockInstance;
+
+			// Execute
+			project.Initialize();
+			
+			// Verify
+			sourceControlMock.Verify();
+		}
+
+		[Test]
+		public void ShouldCallSourceControlInitializeWithSpecifiedWorkingDirectoryIfOneIsNotSet()
+		{
+			// Setup
+			Project project = new Project();
+			project.Name = "myProject";
+			project.WorkingDirectory = @"C:\my\working\directory";
+
+			DynamicMock sourceControlMock = new DynamicMock(typeof(ISourceControl));
+			sourceControlMock.Expect("Initialize", "myProject",  @"C:\my\working\directory");
+			project.SourceControl = (ISourceControl) sourceControlMock.MockInstance;
+
+			// Execute
+			project.Initialize();
+			
+			// Verify
+			sourceControlMock.Verify();
 		}
 	}
 }

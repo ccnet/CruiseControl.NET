@@ -64,6 +64,11 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test
 		public void GetSource(IntegrationResult result)
 		{
 		}
+
+		public void Initialize(string projectName, string workingDirectory)
+		{
+		}
+
 	}
 
 }

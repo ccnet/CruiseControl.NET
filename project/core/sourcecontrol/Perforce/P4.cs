@@ -230,10 +230,10 @@ View:
 		{
 			Log.Debug("Perforce plugin - running:" + p.ToString());
 			ProcessResult result = processExecutor.Execute(p);
-			return result.StandardOutput.Trim() + "\r\n" + result.StandardError.Trim();
+			return result.StandardOutput.Trim() + Environment.NewLine + result.StandardError.Trim();
 		}
 
-		public void InitializeDirectory(string projectName, string workingDirectory)
+		public void Initialize(string projectName, string workingDirectory)
 		{
 			if (_workingDirectory == null || _workingDirectory == string.Empty)
 			{
