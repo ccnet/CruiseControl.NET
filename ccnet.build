@@ -9,19 +9,18 @@
     <property name="nunit.output" value="Plain"/>
 
     <!-- CHANGE this property when you want to deploy the webapp to a different URL -->
-    <property name="webapp.name" value="${nant.project.name}"/>
+    <property name="webapp.name" value="ccnetdev"/>
+    <property name="webapp.dir" value=".\web\${webapp.name}"/>
 
     <property name="build.dir" value="build"/>
     <property name="src.dir" value="project"/>
     <property name="lib.dir" value="lib"/>
-    <property name="web.dir" value="c:\inetpub\wwwroot"/>
-    <property name="webapp.dir" value="${web.dir}\${webapp.name}"/>
     <property name="package.dir" value="package"/>
 
     <property name="core.dll" value="ccnet.core.dll"/>
     <property name="console.exe" value="ccnet.exe"/>
     <property name="service.exe" value="service.exe"/>
-    <property name="web.dll" value="${webapp.name}.web.dll"/>
+    <property name="web.dll" value="ccnet.web.dll"/>
     <property name="integration.dll" value="ccnet.integration.test.dll"/>
 
     <!-- ALL -->
@@ -43,7 +42,7 @@
     <!-- CLEAN -->
     <target name="clean" description="cleans up everything">
         <delete dir="${build.dir}" failonerror="false"/>
-        <mkdir dir="${build.dir}"/>
+        <delete dir="${webapp.dir}" failonerror="false"/>
     </target>
 
     <!-- INIT -->
@@ -62,7 +61,6 @@
         <call target="compile.integration"/>
         <call target="compile.controlpanel"/>
     </target>
-
 
     <target name="compile.remote" depends="init" description="compiles remote interface">
         <csc target="library" output="${build.dir}\ccnet.remote.dll" debug="${debug}" define="TRACE" doc="${build.dir}\remote.xml">
@@ -223,23 +221,21 @@
     </target>
 
     <!-- DEPLOY -->
-    <target name="deploy" depends="compile,test.unit" description="deploys the web application">
+    <target name="deploy" depends="compile" description="deploys the web application">
+        <mkdir dir="${webapp.dir}" verbose="${verbosity}"/>
 
-        <!-- Deploy web pages and images -->
-        <call target="deploy.content"/>
+        <!-- Create web application -->
+        <echo message="Setting up IIS V-Dir, physical [${webapp.dir}], virtual [${webapp.name}]" />
+        <mkiisdir dirpath="${webapp.dir}" vdirname="${webapp.name}"/>
 
-        <!-- Deploy web assemblies -->
-        <copy todir="${webapp.dir}\bin" verbose="${verbosity}">
-            <fileset basedir="${build.dir}">
+        <copy todir="${webapp.dir}\bin" overwrite="true">
+            <fileset basedir="build">
+                <includes name="ccnet.remote.dll"/>
                 <includes name="${core.dll}"/>
                 <includes name="${web.dll}"/>
             </fileset>
         </copy>
-    </target>
 
-
-    <!-- DEPLOY WEB CONTENT TO IIS -->
-    <target name="deploy.content" description="deploys the web content (html, gif, css, etc)">
         <copy todir="${webapp.dir}">
             <fileset basedir="${src.dir}\web">
                 <includes name="**\*.aspx"/>
@@ -249,7 +245,7 @@
                 <includes name="**\*.gif"/>
                 <includes name="**\*.wav"/>
                 <includes name="**\*.css"/>
-                <!-- <includes name="log\*.xml"/> -->
+                <includes name="log\*.xml"/>
                 <includes name="**\*.xsl"/>
                 <includes name="**\*.config"/>
             </fileset>
@@ -347,10 +343,6 @@
         <mkdir dir="${package.dir}\ccnet" verbose="${verbosity}"/>
     </target>
 
-    <target name="install">
-        <call target="install.webapp"/>
-    </target>
-
     <target name="package.msi" depends="package.init" description="creates a zip file containing the two msi packages">
         <copy todir="${package.dir}\ccnet\ccnet.server">
             <fileset basedir="project/install.server/release">
@@ -379,23 +371,6 @@
         <echo message="Created CCNet zip package at file://${nant.project.basedir}\${package.msi.zip}"/>
     </target>
 
-    <!-- CREATE IIS WEB APPLICATION AND DEPLOY WEB CONTENT -->
-    <target name="install.webapp">
-        <mkdir dir="${webapp.dir}" verbose="${verbosity}"/>
-
-        <!-- Create web application -->
-        <mkiisdir dirpath="${webapp.dir}" vdirname="${nant.project.name}"/>
-
-        <call target="deploy.content"/>
-
-        <copy todir="${webapp.dir}\bin" overwrite="true">
-            <fileset basedir="build">
-                <includes name="ccnet.core.dll"/>
-                <includes name="ccnet.dll"/>
-            </fileset>
-        </copy>
-    </target>
-
     <!-- EXTRA TEST TARGETS -->
     <!-- use logger:SourceForge.NAnt.XmlLogger to get xml log output -->
     <target name="compile.nant.test">
@@ -406,6 +381,7 @@
         </csc>
     </target>
 
+    <!-- Comment by MR - what's this for? -->
     <target name="updateConfig">
         <property name="in" value="etc/ccnet_update.config"/>
         <property name="out" value="etc/ccnet_new.config"/>
