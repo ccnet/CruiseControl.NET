@@ -687,6 +687,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Plugins\NAnt\ViewNAntBuildReportAction.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Plugins\NCover\ViewNCoverBuildReportAction.cs"
                     SubType = "Code"
                     BuildAction = "Compile"

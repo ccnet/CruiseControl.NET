@@ -8,6 +8,7 @@ using ThoughtWorks.CruiseControl.WebDashboard.MVC.View;
 using ThoughtWorks.CruiseControl.WebDashboard.Plugins.AddProject;
 using ThoughtWorks.CruiseControl.WebDashboard.Plugins.DeleteProject;
 using ThoughtWorks.CruiseControl.WebDashboard.Plugins.EditProject;
+using ThoughtWorks.CruiseControl.WebDashboard.Plugins.NAnt;
 using ThoughtWorks.CruiseControl.WebDashboard.Plugins.NCover;
 using ThoughtWorks.CruiseControl.WebDashboard.Plugins.ViewBuildLog;
 using ThoughtWorks.CruiseControl.WebDashboard.Plugins.ViewBuildReport;
@@ -123,6 +124,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 			urlBuilderMock.ExpectAndReturn("BuildBuildUrl", "viewLogUrl", new PropertyIs("ActionName", ViewBuildLogAction.ACTION_NAME), "myServer", "myProject", "myCurrentBuild");
 			urlBuilderMock.ExpectAndReturn("BuildBuildUrl", "viewTestDetailsUrl", new PropertyIs("ActionName", ViewTestDetailsBuildReportAction.ACTION_NAME), "myServer", "myProject", "myCurrentBuild");
 			urlBuilderMock.ExpectAndReturn("BuildBuildUrl", "viewTestTimingsUrl", new PropertyIs("ActionName", ViewTestTimingsBuildReportAction.ACTION_NAME), "myServer", "myProject", "myCurrentBuild");
+			urlBuilderMock.ExpectAndReturn("BuildBuildUrl", "viewNAntUrl", new PropertyIs("ActionName", ViewNAntBuildReportAction.ACTION_NAME), "myServer", "myProject", "myCurrentBuild");
 			urlBuilderMock.ExpectAndReturn("BuildBuildUrl", "viewFxCopUrl", new PropertyIs("ActionName", ViewFxCopBuildReportAction.ACTION_NAME), "myServer", "myProject", "myCurrentBuild");
 			urlBuilderMock.ExpectAndReturn("BuildBuildUrl", "viewNcoverUrl", new PropertyIs("ActionName", ViewNCoverBuildReportAction.ACTION_NAME), "myServer", "myProject", "myCurrentBuild");
 			HtmlTable buildsPanel = new HtmlTable();
@@ -147,11 +149,14 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 			expectedAnchor6.HRef = "viewTestTimingsUrl";
 			expectedAnchor6.InnerHtml = "View Test Timings";
 			HtmlAnchor expectedAnchor7 = new HtmlAnchor();
-			expectedAnchor7.HRef = "viewFxCopUrl";
-			expectedAnchor7.InnerHtml = "View FxCop Report";
+			expectedAnchor7.HRef = "viewNAntUrl";
+			expectedAnchor7.InnerHtml = "View NAnt Report";
 			HtmlAnchor expectedAnchor8 = new HtmlAnchor();
-			expectedAnchor8.HRef = "viewNcoverUrl";
-			expectedAnchor8.InnerHtml = "View NCover Report";
+			expectedAnchor8.HRef = "viewFxCopUrl";
+			expectedAnchor8.InnerHtml = "View FxCop Report";
+			HtmlAnchor expectedAnchor9 = new HtmlAnchor();
+			expectedAnchor9.HRef = "viewNcoverUrl";
+			expectedAnchor9.InnerHtml = "View NCover Report";
 
 			// Execute
 			HtmlTable table = viewBuilder.GetBuildSideBar("myServer", "myProject", "myCurrentBuild");
@@ -164,6 +169,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 			Assert.IsTrue(TableContains(table, expectedAnchor6));
 			Assert.IsTrue(TableContains(table, expectedAnchor7));
 			Assert.IsTrue(TableContains(table, expectedAnchor8));
+			Assert.IsTrue(TableContains(table, expectedAnchor9));
 			Assert.IsTrue(TableContains(table, buildsPanel));
 			
 			// Verify
