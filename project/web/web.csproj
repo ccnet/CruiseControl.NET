@@ -557,6 +557,11 @@
                     Link = "..\xsl\AlternativeNUnitDetails.xsl"
                     BuildAction = "Content"
                 />
+                <File
+                    RelPath = "xsl\vil.xsl"
+                    Link = "..\xsl\vil.xsl"
+                    BuildAction = "Content"
+                />
             </Include>
         </Files>
     </CSHARP>
