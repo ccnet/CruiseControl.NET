@@ -63,6 +63,12 @@ namespace ThoughtWorks.CruiseControl.Core.Test
 			AssertEquals(9, actual);
 		}
 
+		public void TestGetLatestBuildNumberHandlesString()
+		{
+			int actual = LogFileUtil.GetLatestBuildNumber(new string[] {"log20020830164057Lbuild.v1.1.8.xml"});
+			AssertEquals(118, actual);
+		}
+
 		public void TestListFiles() 
 		{
 			// testFilenames array must be in sorted order -- otherwise links iteration will fail
