@@ -19,5 +19,6 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.MVC.View
 		Button CreateButton(string id, string text);
 		TextBox CreateMultiLineTextBox(string id, string text);
 		HtmlAnchor CreateAnchor(string text, string url);
+		HtmlAnchor CreateAnchor(string text, string url, string cssclass);
 	}
 }

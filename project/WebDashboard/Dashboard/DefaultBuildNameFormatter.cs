@@ -9,5 +9,10 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 			bool isSuccessful = LogFileUtil.IsSuccessful(originalBuildName);
 			return string.Format("{0} ({1})", LogFileUtil.GetFormattedDateString(originalBuildName), isSuccessful ?  LogFileUtil.ParseBuildNumber(originalBuildName) : "Failed");	
 		}
+
+		public string GetCssClassForBuildLink(string originalBuildName)
+		{
+			return LogFileUtil.IsSuccessful(originalBuildName) ? "build-passed-link" : "build-failed-link";
+		}
 	}
 }

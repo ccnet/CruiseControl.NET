@@ -59,6 +59,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 			urlBuilderMock.ExpectAndReturn("BuildBuildUrl", "url2", "BuildReport.aspx", "myServer", "myProject", "build1");
 			nameFormatterMock.ExpectAndReturn("GetPrettyBuildName", "prettyName2", "build2");
 			nameFormatterMock.ExpectAndReturn("GetPrettyBuildName", "prettyName1", "build1");
+			nameFormatterMock.ExpectAndReturn("GetCssClassForBuildLink", "css2", "build2");
+			nameFormatterMock.ExpectAndReturn("GetCssClassForBuildLink", "css1", "build1");
 		}
 
 		private void CheckReturnedTableForCorrectBuilds(HtmlTable builtTable)
@@ -70,9 +72,11 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 			HtmlAnchor expectedAnchor1 = new HtmlAnchor();
 			expectedAnchor1.HRef = "url1";
 			expectedAnchor1.InnerHtml = "prettyName2";
+			expectedAnchor1.Attributes["class"] = "css1";
 			HtmlAnchor expectedAnchor2 = new HtmlAnchor();
 			expectedAnchor2.HRef = "url2";
 			expectedAnchor2.InnerHtml = "prettyName1";
+			expectedAnchor1.Attributes["class"] = "css2";
 
 			Assert.IsTrue(TableContains(builtTable, expectedAnchor1));
 			Assert.IsTrue(TableContains(builtTable, expectedAnchor2));

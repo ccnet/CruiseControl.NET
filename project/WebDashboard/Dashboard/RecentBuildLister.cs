@@ -32,7 +32,11 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 			HtmlTable table = Table();
 			foreach (string name in buildNames)
 			{
-				table.Rows.Add(TR(TD(A(buildNameFormatter.GetPrettyBuildName(name), urlBuilder.BuildBuildUrl("BuildReport.aspx",serverName, projectName, name)))));	
+				table.Rows.Add(TR(TD(A(
+					buildNameFormatter.GetPrettyBuildName(name), 
+					urlBuilder.BuildBuildUrl("BuildReport.aspx",serverName, projectName, name),
+					buildNameFormatter.GetCssClassForBuildLink(name)
+					))));	
 			}
 			return table;
 		}

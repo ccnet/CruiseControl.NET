@@ -189,5 +189,17 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.MVC
 			Assert.AreEqual("hello world", anchor.InnerHtml);
 			Assert.AreEqual("helloworld.htm;", anchor.HRef);
 		}
+
+		[Test]
+		public void ShouldCreateAnchorWithGivenTextUrlAndCssClass()
+		{
+			// Execute
+			HtmlAnchor anchor = new DefaultHtmlBuilder().CreateAnchor("hello world", "helloworld.htm", "pink");
+
+			// Verify
+			Assert.AreEqual("hello world", anchor.InnerHtml);
+			Assert.AreEqual("helloworld.htm", anchor.HRef);
+			Assert.AreEqual("pink", anchor.Attributes["class"]);
+		}
 	}
 }
