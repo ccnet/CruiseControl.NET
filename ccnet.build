@@ -254,7 +254,7 @@
 		<copy todir="deployed" file="license.txt" />
 		<copy todir="deployed\doc">
 			<fileset basedir="doc">
-				<includes name="*" />
+				<includes name="**\*" />
 			</fileset>
 		</copy>
 	
