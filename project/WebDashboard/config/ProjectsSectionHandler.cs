@@ -19,7 +19,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Config
 				}
 			}
 
-			return projects;
+			return (ProjectSpecification[]) projects.ToArray(typeof (ProjectSpecification));
 		}
 	}
 }

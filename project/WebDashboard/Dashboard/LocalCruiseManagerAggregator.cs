@@ -8,7 +8,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 	public class LocalCruiseManagerAggregator
 	{
 		private ArrayList connectionExceptions = new ArrayList();
-		private IList projectDetails = new ArrayList();
+		private ArrayList projectDetails = new ArrayList();
 		private IDictionary urlsForProjects = new Hashtable();
 
 		public LocalCruiseManagerAggregator(IList urls) 
@@ -36,7 +36,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 			}
 		}
 
-		public IList ProjectDetails
+		public ArrayList ProjectDetails
 		{
 			get { return projectDetails; }
 		}

@@ -5,6 +5,7 @@ using System.Drawing;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 using ThoughtWorks.CruiseControl.Remote;
+using ThoughtWorks.CruiseControl.WebDashboard.Config;
 using ThoughtWorks.CruiseControl.WebDashboard.Dashboard;
 
 namespace ThoughtWorks.CruiseControl.WebDashboard
@@ -24,7 +25,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard
 		{
 			if (cruiseManager.ProjectDetails.Count > 0)
 			{
-				StatusGrid.DataSource = cruiseManager.ProjectDetails;
+				StatusGrid.DataSource = new ProjectDetailsListGenerator(cruiseManager, new ConfigurationSettingsConfigGetter()).ProjectDetailsList;
 				StatusGrid.DataBind();
 				StatusGrid.Visible = true;
 			}

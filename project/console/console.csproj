@@ -17,7 +17,7 @@
                 DelaySign = "false"
                 OutputType = "Exe"
                 PreBuildEvent = ""
-                PostBuildEvent = ""
+                PostBuildEvent = "copy $(ProjectDir)\*.bat $(TargetDir)&#xd;&#xa;copy $(ProjectDir)\ccnet.config $(TargetDir)"
                 RootNamespace = "ThoughtWorks.CruiseControl.Console"
                 RunPostBuildEvent = "OnBuildSuccess"
                 StartupObject = ""
@@ -143,6 +143,10 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "ccnet.config"
+                    BuildAction = "None"
+                />
+                <File
                     RelPath = "ccnet.example.config"
                     BuildAction = "None"
                 />
@@ -150,6 +154,14 @@
                     RelPath = "ConsoleRunner.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "echo.bat"
+                    BuildAction = "None"
+                />
+                <File
+                    RelPath = "fail.bat"
+                    BuildAction = "None"
                 />
                 <File
                     RelPath = "ITimeout.cs"

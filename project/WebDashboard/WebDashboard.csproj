@@ -352,6 +352,11 @@
                     BuildAction = "None"
                 />
                 <File
+                    RelPath = "config\ConfigurationProjectSpecificationRetriever.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "config\ConfigurationSettingsConfigGetter.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -388,6 +393,11 @@
                 />
                 <File
                     RelPath = "Dashboard\LocalCruiseManagerAggregator.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Dashboard\ProjectDetailsListGenerator.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
