@@ -10,15 +10,12 @@
 </xsl:template>
 
 <xsl:template match="Issue">
-	<xsl:apply-templates select="SourceCode"/><xsl:value-of select="@Level" /> : <xsl:apply-templates select="../.." mode="parentMessage" /><xsl:apply-templates select="Resolution/Text" /><xsl:text disable-output-escaping="yes">&#xD;&#xA;</xsl:text>
+	<xsl:apply-templates select=".." mode="parentMessage" /><xsl:value-of select="translate(normalize-space(text()),':','')" /><xsl:text disable-output-escaping="yes">&#xD;&#xA;</xsl:text>
 </xsl:template>
 
 <xsl:template match="Message" mode="parentMessage">	
-<xsl:apply-templates select="Rule"/><xsl:apply-templates select=".." mode="parent"/> : </xsl:template>
+<xsl:value-of select="@TypeName"/> : <xsl:apply-templates select=".." mode="signature"/> : </xsl:template>
 
-<xsl:template match="SourceCode"><xsl:value-of select="@Path"/>\<xsl:value-of select="@File"/>(<xsl:value-of select="@Line"/>) : </xsl:template>
-
-<xsl:template match="Rule"><xsl:value-of select="@TypeName"/> : </xsl:template>
 
 <xsl:template match="Text">
 	<xsl:value-of select="translate(normalize-space(text()),':','')"/>
@@ -27,31 +24,27 @@
 <xsl:template match="Rules/Rule"/>
 <xsl:template match="Note"/>
 
-<xsl:template match="Messages" mode="parent">
-	<xsl:apply-templates select=".." mode="parent" />
-</xsl:template>
-
-<xsl:template match="Namespace" mode="parent">
-	<xsl:value-of select="@Name" />
-	<xsl:apply-templates select=".." mode="parent" />
-</xsl:template>
-
-<xsl:template match="Namespaces" mode="parent">
-	<xsl:if test="not(name(..)='FxCopReport')"><xsl:apply-templates select=".." mode="parent"/></xsl:if>
-</xsl:template>
-
-<xsl:template match="Target" mode="parent">
-	<xsl:value-of select="@Name" />
+<xsl:template match="*" mode="signature">
+  <xsl:choose>			
+    <xsl:when test="self::Module"><xsl:value-of select="@Name" />, </xsl:when>
+    <xsl:when test="self::Messages"><xsl:apply-templates select=".." mode="signature" /></xsl:when>
+    <xsl:when test="self::Namespace"><xsl:apply-templates select=".." mode="parent" /><xsl:value-of select="@Name" /></xsl:when>
+    <xsl:when test="self::Namespaces"><xsl:if test="not(name(..)='FxCopReport')"><xsl:apply-templates select=".." mode="parent"/></xsl:if></xsl:when>
+    <xsl:when test="self::Target"><xsl:value-of select="@Name" />, </xsl:when>  
+    <xsl:when test="@Name"><xsl:apply-templates select=".." mode="parent" /><xsl:value-of select="translate(@Name,':', '#')"/></xsl:when>  
+    <xsl:otherwise><xsl:apply-templates select=".." mode="signature" /></xsl:otherwise>
+  </xsl:choose>
 </xsl:template>
 
 <xsl:template match="*" mode="parent">
-	<xsl:for-each select="ancestor-or-self::*[ancestor-or-self::Module]">
-		<xsl:choose>			
-			<xsl:when test="self::Parameter">!Parameter[<xsl:value-of select="@Name" />]</xsl:when>
-			<xsl:when test="self::Module"><xsl:value-of select="@Name" />, </xsl:when>
-			<xsl:otherwise><xsl:value-of select="translate(@Name,':', '#')"/><xsl:if test="@Name"><xsl:if test="not(name(child::node())='Messages')">.</xsl:if></xsl:if></xsl:otherwise>
-		</xsl:choose>
-	</xsl:for-each>
+  <xsl:choose>			
+    <xsl:when test="self::Module"><xsl:value-of select="@Name" />, </xsl:when>
+    <xsl:when test="self::Messages"><xsl:apply-templates select=".." mode="parent" /></xsl:when>
+    <xsl:when test="self::Namespace"><xsl:apply-templates select=".." mode="parent" /><xsl:value-of select="@Name" />.</xsl:when>
+    <xsl:when test="self::Namespaces"><xsl:if test="not(name(..)='FxCopReport')"><xsl:apply-templates select=".." mode="parent"/></xsl:if></xsl:when>
+    <xsl:when test="self::Target"><xsl:value-of select="@Name" />, </xsl:when>    
+    <xsl:otherwise><xsl:apply-templates select=".." mode="parent" /><xsl:if test="@Name"><xsl:value-of select="translate(@Name,':', '#')"/>.</xsl:if></xsl:otherwise>
+  </xsl:choose>
 </xsl:template>
 			
 </xsl:stylesheet>

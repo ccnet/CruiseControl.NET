@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Dictionary>
+ <Words>
+  <Unrecognized>
+   <Word>cb</Word>
+  </Unrecognized>
+  <Recognized>
+   <Word>contravariant</Word>
+  </Recognized>
+  <Deprecated/>
+  <Inappropriate/>
+ </Words>
+ <Acronyms>
+  <CasingExceptions>
+   <Acronym>CJK</Acronym>
+   <Acronym>Pi</Acronym>
+  </CasingExceptions>
+ </Acronyms>
+</Dictionary>

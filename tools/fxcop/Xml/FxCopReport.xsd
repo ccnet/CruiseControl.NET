@@ -21,6 +21,29 @@
             <xs:enumeration value="CriticalWarning" />
             <xs:enumeration value="Warning" />
             <xs:enumeration value="Information" />
+            
+            <xs:enumeration value="CriticalError, Error" />
+            <xs:enumeration value="CriticalError, Error, CriticalWarning" />
+            <xs:enumeration value="CriticalError, Error, CriticalWarning, Warning" />
+            <xs:enumeration value="CriticalError, Error, CriticalWarning, Warning, Information" />
+			<xs:enumeration value="CriticalError, Error, CriticalWarning, Information" />                       
+            <xs:enumeration value="CriticalError, Error, Warning" />
+            <xs:enumeration value="CriticalError, Error, Warning, Information" />
+            <xs:enumeration value="CriticalError, Error, Information" />
+            
+            <xs:enumeration value="Error, CriticalWarning" />
+            <xs:enumeration value="Error, CriticalWarning, Warning" />
+            <xs:enumeration value="Error, CriticalWarning, Warning, Information" />
+			<xs:enumeration value="Error, CriticalWarning, Information" />                       
+            <xs:enumeration value="Error, Warning" />
+            <xs:enumeration value="Error, Warning, Information" />
+            <xs:enumeration value="Error, Information" />
+            
+            <xs:enumeration value="CriticalWarning, Warning" />
+            <xs:enumeration value="CriticalWarning, Warning, Information" />
+			<xs:enumeration value="CriticalWarning, Information" />                       
+            <xs:enumeration value="Warning, Information" />
+            
         </xs:restriction>
     </xs:simpleType>
     <xs:simpleType name="Certainty">
@@ -36,10 +59,51 @@
             <xs:enumeration value="Absent" />
         </xs:restriction>
     </xs:simpleType>
+    <xs:simpleType name="FixCategory">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="Breaking" />
+            <xs:enumeration value="NonBreaking" />
+            <xs:enumeration value="DependsOnFix" />
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="TypeKind">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="Class" />
+            <xs:enumeration value="Delegate" />
+            <xs:enumeration value="Enum" />
+            <xs:enumeration value="Interface" />
+            <xs:enumeration value="Struct" />
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="MemberKind">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="Constructor" />
+            <xs:enumeration value="Event" />
+            <xs:enumeration value="Field" />
+            <xs:enumeration value="Method" />
+            <xs:enumeration value="Property" />
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="Accessibility">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="Public" />
+            <xs:enumeration value="Family" />
+            <xs:enumeration value="FamilyOrAssembly" />
+            <xs:enumeration value="FamilyAndAssembly" />
+            <xs:enumeration value="Assembly" />
+            <xs:enumeration value="Private" />
+        </xs:restriction>
+    </xs:simpleType>    
+    <xs:simpleType name="PascalBoolean">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="True" />
+            <xs:enumeration value="False" />
+        </xs:restriction>
+    </xs:simpleType>    
     <xs:complexType name="NoteIdentifier">
         <xs:simpleContent>
             <xs:extension base="xs:string">
-                <xs:attribute name="ID" type="xs:nonNegativeInteger" use="required" />
+                <xs:attribute name="Id" type="xs:nonNegativeInteger" use="required" />
             </xs:extension>
         </xs:simpleContent>
     </xs:complexType>
@@ -48,39 +112,29 @@
             <xs:element name="Note" type="NoteIdentifier" minOccurs="0" maxOccurs="unbounded" />
         </xs:sequence>
     </xs:complexType>
-    <xs:complexType name="Resolution">
-      <xs:sequence>
-        <xs:any namespace="##other" processContents="skip"/> 
-      </xs:sequence>
-    </xs:complexType>    
     <!-- Message & Issue definitions -->
     <xs:element name="Issue">
         <xs:complexType>
-            <xs:all>
-                <xs:element ref="SourceCode" minOccurs="0" maxOccurs="1" />
-                <xs:element name="Resolution" minOccurs="1" maxOccurs="1"/>
-            </xs:all>
-	    <xs:attribute name="Certainty" type="Certainty" use="required" />
-            <xs:attribute name="Level" type="MessageLevel" use="required" />
-        </xs:complexType>
-    </xs:element>
-    <xs:element name="Issues">
-        <xs:complexType>
-            <xs:sequence>
-                <xs:element ref="Issue" minOccurs="1" maxOccurs="unbounded" />
-            </xs:sequence>
+			<xs:attribute name="Certainty" type="Certainty" use="required" />
+			<xs:attribute name="Path" type="xs:string" use="required" />
+			<xs:attribute name="File" type="xs:string" use="required" />
+			<xs:attribute name="Line" type="xs:integer" use="required" />
+			<xs:attribute name="Level" type="MessageLevel" use="required" />
         </xs:complexType>
     </xs:element>
     <xs:element name="Message">
         <xs:complexType>
             <xs:all>
-                <xs:element name="Rule" type="RuleIdentifier" minOccurs="1" maxOccurs="1" />
-                <xs:element ref="Issues" minOccurs="1" maxOccurs="1" />
+                <xs:element ref="Issue" minOccurs="0" maxOccurs="unbounded" />
                 <xs:element name="Notes" type="NoteIdentifiers" minOccurs="0" maxOccurs="1" />
             </xs:all>
             <xs:attribute name="Status" type="MessageStatus" use="required" />
             <xs:attribute name="Created" type="xs:string" use="required" />
             <xs:attribute name="LastSeen" type="xs:string" use="optional" />
+            <xs:attribute name="Id" type="xs:string" use="optional" />
+            <xs:attribute name="FixCategory" type="FixCategory" use="required" />
+            <xs:attribute name="TypeName" type="xs:string" use="required" />
+            <xs:attribute name="CheckId" type="xs:string" use="required" />
         </xs:complexType>
     </xs:element>
     <xs:element name="Messages">
@@ -88,13 +142,6 @@
             <xs:sequence>
                 <xs:element ref="Message" minOccurs="0" maxOccurs="unbounded" />
             </xs:sequence>
-        </xs:complexType>
-    </xs:element>
-    <xs:element name="SourceCode">
-        <xs:complexType>
-            <xs:attribute name="Path" type="xs:string" use="required" />
-            <xs:attribute name="File" type="xs:string" use="required" />
-            <xs:attribute name="Line" type="xs:integer" use="required" />
         </xs:complexType>
     </xs:element>
     <!-- Note definition -->
@@ -145,9 +192,7 @@
                     <xs:sequence>
                         <xs:element name="Name" type="xs:string" minOccurs="1" maxOccurs="1" />
                         <xs:element name="Description" type="xs:string" minOccurs="1" maxOccurs="1" />
-                        <xs:element name="LongDescription" type="xs:string" minOccurs="1" maxOccurs="1" />
-                        <xs:element name="GroupOwner" type="xs:string" minOccurs="1" maxOccurs="1" />
-                        <xs:element name="DevOwner" type="xs:string" minOccurs="1" maxOccurs="1" />
+                        <xs:element name="Owner" type="xs:string" minOccurs="1" maxOccurs="1" />
                         <xs:element name="Url" type="xs:anyURI" minOccurs="1" maxOccurs="1" />
                         <xs:element name="Email" type="xs:string" minOccurs="1" maxOccurs="1" />
                         <xs:element name="MessageLevel" type="RuleMessageLevel" minOccurs="1" maxOccurs="1" />
@@ -166,259 +211,77 @@
     </xs:element>
     <!-- Target tree element definitions -->
     <!-- Singular target definitions -->
-    <xs:complexType name="NamedElement">
-        <xs:attribute name="Name" type="xs:string" use="required" />
-    </xs:complexType>
     <!-- Target members -->
-    <xs:complexType name="Parameter">
-        <xs:complexContent>
-            <xs:extension base="NamedElement">
-                <xs:sequence>
-                    <xs:element ref="Messages" minOccurs="0" maxOccurs="1" />
-                </xs:sequence>
-            </xs:extension>
-        </xs:complexContent>
+    <xs:complexType name="Member">
+		<xs:all>
+			<xs:element ref="Messages" minOccurs="0" maxOccurs="1" />
+			<xs:element name="Accessors" type="Accessors" minOccurs="0" maxOccurs="1" />
+		</xs:all>
+		<xs:attribute name="Name" type="xs:string" use="required" />
+		<xs:attribute name="Kind" type="MemberKind" use="optional" default="Method" />
+		<xs:attribute name="Static" type="PascalBoolean" use="optional" default="False" />		
+		<xs:attribute name="ExternallyVisible" type="PascalBoolean" use="optional" default="True" />
+		<xs:attribute name="Accessibility" type="Accessibility" use="optional" default="Public" />
     </xs:complexType>
-    <xs:complexType name="Method">
-        <xs:complexContent>
-            <xs:extension base="NamedElement">
-                <xs:sequence>
-                    <xs:element ref="Messages" minOccurs="0" maxOccurs="1" />
-                    <xs:element ref="Parameters" minOccurs="0" maxOccurs="1" />
-                </xs:sequence>
-            </xs:extension>
-        </xs:complexContent>
-    </xs:complexType>
-    <xs:complexType name="Field">
-        <xs:complexContent>
-            <xs:extension base="NamedElement">
-                <xs:sequence>
-                    <xs:element ref="Messages" minOccurs="0" maxOccurs="1" />
-                </xs:sequence>
-            </xs:extension>
-        </xs:complexContent>
-    </xs:complexType>
-    <xs:complexType name="Event">
-        <xs:complexContent>
-            <xs:extension base="NamedElement">
-                <xs:sequence>
-                    <xs:element ref="Messages" minOccurs="0" maxOccurs="1" />
-                    <xs:element ref="Methods" minOccurs="0" maxOccurs="1" />
-                </xs:sequence>
-            </xs:extension>
-        </xs:complexContent>
-    </xs:complexType>
-    <xs:complexType name="Property">
-        <xs:complexContent>
-            <xs:extension base="NamedElement">
-                <xs:sequence>
-                    <xs:element ref="Messages" minOccurs="0" maxOccurs="1" />
-                    <xs:element ref="Methods" minOccurs="0" maxOccurs="1" />
-                </xs:sequence>
-            </xs:extension>
-        </xs:complexContent>
-    </xs:complexType>
-    <xs:complexType name="Constructor">
-        <xs:complexContent>
-            <xs:extension base="NamedElement">
-                <xs:sequence>
-                    <xs:element ref="Messages" minOccurs="0" maxOccurs="1" />
-                    <xs:element ref="Parameters" minOccurs="0" maxOccurs="1" />
-                </xs:sequence>
-            </xs:extension>
-        </xs:complexContent>
+    <xs:complexType name="Accessors">
+		<xs:sequence>
+			<xs:element name="Accessor" type="Member" minOccurs="0" maxOccurs="unbounded" />
+		</xs:sequence>
     </xs:complexType>
     <!-- Target types -->
-    <xs:group name="ClassElements">
-        <xs:sequence>
-            <xs:element ref="Messages" minOccurs="0" maxOccurs="1" />
-            <xs:element ref="Classes" minOccurs="0" maxOccurs="1" />
-            <xs:element ref="Enums" minOccurs="0" maxOccurs="1" />
-            <xs:element ref="Delegates" minOccurs="0" maxOccurs="1" />
-            <xs:element ref="ValueTypes" minOccurs="0" maxOccurs="1" />
-            <xs:element ref="Interfaces" minOccurs="0" maxOccurs="1" />
-            <xs:element ref="Methods" minOccurs="0" maxOccurs="1" />
-            <xs:element ref="Fields" minOccurs="0" maxOccurs="1" />
-            <xs:element ref="Constructors" minOccurs="0" maxOccurs="1" />
-            <xs:element ref="Events" minOccurs="0" maxOccurs="1" />
-            <xs:element ref="Properties" minOccurs="0" maxOccurs="1" />
-        </xs:sequence>
-    </xs:group>
-    <xs:complexType name="Class">
-        <xs:complexContent>
-            <xs:extension base="NamedElement">
-                <xs:group ref="ClassElements" />
-            </xs:extension>
-        </xs:complexContent>
-    </xs:complexType>
-    <xs:complexType name="ValueType">
-        <xs:complexContent>
-            <xs:extension base="NamedElement">
-                <xs:group ref="ClassElements" />
-            </xs:extension>
-        </xs:complexContent>
-    </xs:complexType>
-    <xs:complexType name="Enum">
-        <xs:complexContent>
-            <xs:extension base="NamedElement">
-                <xs:sequence>
-                    <xs:element ref="Messages" minOccurs="0" maxOccurs="1" />
-                    <xs:element ref="Fields" minOccurs="0" maxOccurs="1" />
-                </xs:sequence>
-            </xs:extension>
-        </xs:complexContent>
-    </xs:complexType>
-    <xs:complexType name="Delegate">
-        <xs:complexContent>
-            <xs:extension base="NamedElement">
-                <xs:sequence>
-                    <xs:element ref="Messages" minOccurs="0" maxOccurs="1" />
-                    <xs:element ref="Constructors" minOccurs="0" maxOccurs="1" />
-                    <xs:element ref="Methods" minOccurs="0" maxOccurs="1" />
-                </xs:sequence>
-            </xs:extension>
-        </xs:complexContent>
-    </xs:complexType>
-    <xs:complexType name="Interface">
-        <xs:complexContent>
-            <xs:extension base="NamedElement">
-                <xs:sequence>
-                    <xs:element ref="Messages" minOccurs="0" maxOccurs="1" />
-                    <xs:element ref="Methods" minOccurs="0" maxOccurs="1" />
-                    <xs:element ref="Properties" minOccurs="0" maxOccurs="1" />
-                    <xs:element ref="Events" minOccurs="0" maxOccurs="1" />
-                    <xs:element ref="Interfaces" minOccurs="0" maxOccurs="1" />
-                    <xs:element ref="Classes" minOccurs="0" maxOccurs="1" />
-                    <xs:element ref="Fields" minOccurs="0" maxOccurs="1" />
-                    <xs:element ref="Constructors" minOccurs="0" maxOccurs="1" />
-                </xs:sequence>
-            </xs:extension>
-        </xs:complexContent>
+    <xs:complexType name="Type">
+		<xs:all>
+			<xs:element ref="Messages" minOccurs="0" maxOccurs="1" />
+			<xs:element ref="Members" minOccurs="0" maxOccurs="1" />		
+		</xs:all>
+        <xs:attribute name="Name" type="xs:string" use="required" />
+		<xs:attribute name="Kind" type="TypeKind" use="optional" default="Class" />
+		<xs:attribute name="ExternallyVisible" type="PascalBoolean" use="optional" default="True" />
+		<xs:attribute name="Accessibility" type="Accessibility" use="optional" default="Public" />		
     </xs:complexType>
     <!-- Type containers -->
     <xs:complexType name="Namespace">
-        <xs:complexContent>
-            <xs:extension base="NamedElement">
-                <xs:sequence>
-                    <xs:element ref="Messages" minOccurs="0" maxOccurs="1" />
-                    <xs:element ref="Classes" minOccurs="0" maxOccurs="1" />
-                    <xs:element ref="ValueTypes" minOccurs="0" maxOccurs="1" />
-                    <xs:element ref="Enums" minOccurs="0" maxOccurs="1" />
-                    <xs:element ref="Delegates" minOccurs="0" maxOccurs="1" />
-                    <xs:element ref="Interfaces" minOccurs="0" maxOccurs="1" />
-                    <xs:element ref="Methods" minOccurs="0" maxOccurs="1" />
-                    <xs:element ref="Fields" minOccurs="0" maxOccurs="1" />
-                </xs:sequence>
-            </xs:extension>
-        </xs:complexContent>
+		<xs:sequence>
+			<xs:element ref="Messages" minOccurs="0" maxOccurs="1" />
+			<xs:element ref="Types" minOccurs="0" maxOccurs="1" />
+		</xs:sequence>
+        <xs:attribute name="Name" type="xs:string" use="required" />
     </xs:complexType>
     <xs:complexType name="Module">
-        <xs:complexContent>
-            <xs:extension base="NamedElement">
-                <xs:sequence>
-                    <xs:element ref="Messages" minOccurs="0" maxOccurs="1" />
-                    <xs:element ref="Namespaces" minOccurs="0" maxOccurs="1" />
-                </xs:sequence>
-            </xs:extension>
-        </xs:complexContent>
+		<xs:sequence>
+			<xs:element ref="Messages" minOccurs="0" maxOccurs="1" />
+			<xs:element ref="Namespaces" minOccurs="0" maxOccurs="1" />
+		</xs:sequence>
+        <xs:attribute name="Name" type="xs:string" use="required" />
     </xs:complexType>
     <!-- Resources -->
     <xs:complexType name="Resource">
-        <xs:complexContent>
-            <xs:extension base="NamedElement">
-                <xs:sequence>
-                    <xs:element ref="Messages" minOccurs="0" maxOccurs="1" />
-                </xs:sequence>
-            </xs:extension>
-        </xs:complexContent>
+		<xs:sequence>
+			<xs:element ref="Messages" minOccurs="0" maxOccurs="1" />
+		</xs:sequence>
+        <xs:attribute name="Name" type="xs:string" use="required" />
     </xs:complexType>
     <!-- Top-level target definition -->
     <xs:complexType name="Target">
-        <xs:complexContent>
-            <xs:extension base="NamedElement">
-                <xs:sequence>
-                    <xs:element ref="Messages" minOccurs="0" maxOccurs="1" />
-                    <xs:element ref="Modules" minOccurs="0" maxOccurs="1" />
-                    <xs:element ref="Resources" minOccurs="0" maxOccurs="1" />
-                </xs:sequence>
-            </xs:extension>
-        </xs:complexContent>
+		<xs:sequence>
+			<xs:element ref="Messages" minOccurs="0" maxOccurs="1" />
+			<xs:element ref="Modules" minOccurs="0" maxOccurs="1" />
+			<xs:element ref="Resources" minOccurs="0" maxOccurs="1" />
+		</xs:sequence>
+        <xs:attribute name="Name" type="xs:string" use="required" />
     </xs:complexType>
     <!-- Plural target groups -->
-    <xs:element name="Parameters">
-        <xs:complexType>
-            <xs:sequence>
-                <xs:element name="Parameter" type="Parameter" minOccurs="0" maxOccurs="unbounded" />
-            </xs:sequence>
-        </xs:complexType>
+	<xs:complexType name="Members">
+		<xs:sequence>
+			<xs:element name="Member" type="Member" minOccurs="0" maxOccurs="unbounded" />
+		</xs:sequence>
+	</xs:complexType>    
+    <xs:element name="Members" type="Members">
     </xs:element>
-    <xs:element name="Methods">
+    <xs:element name="Types">
         <xs:complexType>
             <xs:sequence>
-                <xs:element name="Method" type="Method" minOccurs="0" maxOccurs="unbounded" />
-            </xs:sequence>
-        </xs:complexType>
-    </xs:element>
-    <xs:element name="Fields">
-        <xs:complexType>
-            <xs:sequence>
-                <xs:element name="Field" type="Field" minOccurs="0" maxOccurs="unbounded" />
-            </xs:sequence>
-        </xs:complexType>
-    </xs:element>
-    <xs:element name="Events">
-        <xs:complexType>
-            <xs:sequence>
-                <xs:element name="Event" type="Event" minOccurs="0" maxOccurs="unbounded" />
-            </xs:sequence>
-        </xs:complexType>
-    </xs:element>
-    <xs:element name="Properties">
-        <xs:complexType>
-            <xs:sequence>
-                <xs:element name="Property" type="Property" minOccurs="0" maxOccurs="unbounded" />
-            </xs:sequence>
-        </xs:complexType>
-    </xs:element>
-    <xs:element name="Constructors">
-        <xs:complexType>
-            <xs:sequence>
-                <xs:element name="Constructor" type="Constructor" minOccurs="0" maxOccurs="unbounded" />
-            </xs:sequence>
-        </xs:complexType>
-    </xs:element>
-    <xs:element name="Classes">
-        <xs:complexType>
-            <xs:sequence>
-                <xs:element name="Class" type="Class" minOccurs="0" maxOccurs="unbounded" />
-            </xs:sequence>
-        </xs:complexType>
-    </xs:element>
-    <xs:element name="ValueTypes">
-        <xs:complexType>
-            <xs:sequence>
-                <xs:element name="ValueType" type="ValueType" minOccurs="0" maxOccurs="unbounded" />
-            </xs:sequence>
-        </xs:complexType>
-    </xs:element>
-    <xs:element name="Enums">
-        <xs:complexType>
-            <xs:sequence>
-                <xs:element name="Enum" type="Enum" minOccurs="0" maxOccurs="unbounded" />
-            </xs:sequence>
-        </xs:complexType>
-    </xs:element>
-    <xs:element name="Delegates">
-        <xs:complexType>
-            <xs:sequence>
-                <xs:element name="Delegate" type="Delegate" minOccurs="0" maxOccurs="unbounded" />
-            </xs:sequence>
-        </xs:complexType>
-    </xs:element>
-    <xs:element name="Interfaces">
-        <xs:complexType>
-            <xs:sequence>
-                <xs:element name="Interface" type="Interface" minOccurs="0" maxOccurs="unbounded" />
+                <xs:element name="Type" type="Type" minOccurs="0" maxOccurs="unbounded" />
             </xs:sequence>
         </xs:complexType>
     </xs:element>
