@@ -22,6 +22,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.MVC.Cruise
 		public static readonly string SHOW_DELETE_PROJECT_ACTION_NAME = "ShowDeleteProject";
 		public static readonly string DO_DELETE_PROJECT_ACTION_NAME = "DoDeleteProject";
 		public static readonly string VIEW_SERVER_LOG_ACTION_NAME = "ViewServerLog";
+		public static readonly string VIEW_PROJECT_REPORT_ACTION_NAME = "ViewProjectReport";
 
 		public IAction Create(IRequest request)
 		{
@@ -51,6 +52,10 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.MVC.Cruise
 			else if (actionName == EDIT_PROJECT_DISPLAY_ACTION_NAME)
 			{
 				return SecurityCheckingProxyAction(CruiseActionProxyAction(ProjectCheckingProxyAction(ServerCheckingProxyAction(DisplayEditProjectPageAction))));
+			}
+			else if (actionName == VIEW_PROJECT_REPORT_ACTION_NAME)
+			{
+				return CruiseActionProxyAction(ProjectCheckingProxyAction(ServerCheckingProxyAction(ViewProjectReportAction)));
 			}
 			else if (actionName == SHOW_DELETE_PROJECT_ACTION_NAME)
 			{
@@ -113,6 +118,11 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.MVC.Cruise
 		public DoDeleteProjectAction DoDeleteProjectAction
 		{
 			get { return new DoDeleteProjectAction( DeleteProjectHtmlViewBuilder, dcFactory.ServerAggregatingCruiseManagerWrapper );}
+		}
+
+		public ViewProjectReportAction ViewProjectReportAction
+		{
+			get { return new ViewProjectReportAction();}
 		}
 
 		public DeleteProjectHtmlViewBuilder DeleteProjectHtmlViewBuilder

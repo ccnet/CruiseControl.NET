@@ -20,7 +20,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 		{
 			string[] buildNames = cruiseManagerWrapper.GetBuildNames(serverName, projectName);
 
-			if (buildName == buildNames[0])
+			if (buildNames.Length == 0 || buildName == buildNames[0])
 			{
 				return buildName;
 			}

@@ -182,7 +182,13 @@ namespace ThoughtWorks.CruiseControl.Core
 					{
 						if (publisher is XmlLogPublisher)
 						{
-							string[] logFileNames = LogFileUtil.GetLogFileNames(((XmlLogPublisher) publisher).LogDirectory(projectIntegrator.Project));
+							string logDirectory = ((XmlLogPublisher) publisher).LogDirectory(projectIntegrator.Project);
+							if (! Directory.Exists(logDirectory))
+							{
+								Log.Warning("Log Directory [ " + logDirectory + " ] does not exist. Are you sure any builds have completed?");
+								return new string[0];
+							}
+							string[] logFileNames = LogFileUtil.GetLogFileNames(logDirectory);
 							Array.Reverse(logFileNames);
 							return logFileNames;
 						}
@@ -217,7 +223,13 @@ namespace ThoughtWorks.CruiseControl.Core
 					{
 						if (publisher is XmlLogPublisher)
 						{
-							using (StreamReader sr = new StreamReader(Path.Combine(((XmlLogPublisher) publisher).LogDirectory(projectIntegrator.Project), buildName)))
+							string logDirectory = ((XmlLogPublisher) publisher).LogDirectory(projectIntegrator.Project);
+							if (! Directory.Exists(logDirectory))
+							{
+								Log.Warning("Log Directory [ " + logDirectory + " ] does not exist. Are you sure any builds have completed?");
+								return "";
+							}
+							using (StreamReader sr = new StreamReader(Path.Combine(logDirectory, buildName)))
 							{
 								return sr.ReadToEnd();
 							}

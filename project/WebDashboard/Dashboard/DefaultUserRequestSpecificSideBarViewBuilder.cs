@@ -34,9 +34,10 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 		public HtmlTable GetProjectSideBar(string serverName, string projectName)
 		{
 			return Table(
-				TR( TD( A("Latest", urlBuilder.BuildBuildUrl("BuildReport.aspx", serverName, projectName, buildNameRetriever.GetLatestBuildName(serverName, projectName))))),
 				TR( TD( A("Edit Project", urlBuilder.BuildProjectUrl(new ActionSpecifierWithName(CruiseActionFactory.EDIT_PROJECT_DISPLAY_ACTION_NAME), serverName, projectName)))),
-				TR( TD( A("Delete Project", urlBuilder.BuildProjectUrl(new ActionSpecifierWithName(CruiseActionFactory.SHOW_DELETE_PROJECT_ACTION_NAME), serverName, projectName))))
+				TR( TD( A("Delete Project", urlBuilder.BuildProjectUrl(new ActionSpecifierWithName(CruiseActionFactory.SHOW_DELETE_PROJECT_ACTION_NAME), serverName, projectName)))),
+				TR( TD( "&nbsp;")),
+				TR( TD( recentBuildsViewBuilder.BuildRecentBuildsTable(serverName, projectName)))
 				);
 		}
 

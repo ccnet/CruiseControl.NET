@@ -35,7 +35,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.DeleteProject
 		{
 			get
 			{
-				return A("Return to Dashboard", urlBuilder.BuildUrl("/"));
+				return A("Return to Dashboard", urlBuilder.BuildUrl("default.aspx"));
 			}
 		}
 	}

@@ -1,8 +1,10 @@
 using System.Web.UI.HtmlControls;
 using NMock;
+using NMock.Constraints;
 using NUnit.Framework;
 using ThoughtWorks.CruiseControl.WebDashboard.Dashboard;
 using ThoughtWorks.CruiseControl.WebDashboard.IO;
+using ThoughtWorks.CruiseControl.WebDashboard.MVC.Cruise;
 using ThoughtWorks.CruiseControl.WebDashboard.MVC.View;
 
 namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
@@ -77,7 +79,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 			cruiseRequestMock.ExpectAndReturn("BuildName", "");
 			urlBuilderMock.ExpectAndReturn("BuildUrl", "returnedurl1", "default.aspx");
 			urlBuilderMock.ExpectAndReturn("BuildServerUrl", "returnedurl2", "default.aspx", "myServer");
-			urlBuilderMock.ExpectAndReturn("BuildProjectUrl", "returnedurl3", "BuildReport.aspx", "myServer", "myProject");
+			urlBuilderMock.ExpectAndReturn("BuildProjectUrl", "returnedurl3", new PropertyIs("ActionName", CruiseActionFactory.VIEW_PROJECT_REPORT_ACTION_NAME), "myServer", "myProject");
 
 			// Execute
 			HtmlTable table = (HtmlTable) viewBuilder.Execute(cruiseRequest);
@@ -96,7 +98,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 			buildNameFormatterMock.ExpectAndReturn("GetPrettyBuildName", "pretty name", "myBuild");
 			urlBuilderMock.ExpectAndReturn("BuildUrl", "returnedurl1", "default.aspx");
 			urlBuilderMock.ExpectAndReturn("BuildServerUrl", "returnedurl2", "default.aspx", "myServer");
-			urlBuilderMock.ExpectAndReturn("BuildProjectUrl", "returnedurl3", "BuildReport.aspx", "myServer", "myProject");
+			urlBuilderMock.ExpectAndReturn("BuildProjectUrl", "returnedurl3", new PropertyIs("ActionName", CruiseActionFactory.VIEW_PROJECT_REPORT_ACTION_NAME), "myServer", "myProject");
 			urlBuilderMock.ExpectAndReturn("BuildBuildUrl", "returnedurl4", "BuildReport.aspx", "myServer", "myProject", "myBuild");
 
 			// Execute

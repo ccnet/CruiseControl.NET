@@ -36,7 +36,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 			if (projectName != "")
 			{
 				htmlWriter.Write(" &gt; ");
-				A(projectName, urlBuilder.BuildProjectUrl("BuildReport.aspx", serverName, projectName)).RenderControl(htmlWriter);
+				A(projectName, urlBuilder.BuildProjectUrl(new ActionSpecifierWithName("ViewProjectReport"), serverName, projectName)).RenderControl(htmlWriter);
 			}
 
 			string buildName = request.BuildName;

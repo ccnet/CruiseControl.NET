@@ -78,20 +78,27 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 		}
 
 		[Test]
-		public void ShouldReturnLinkToLatestBuildReportForProjectView()
+		public void ShouldReturnLinkToProjectReportForProjectView()
 		{
 			// Setup
-			buildNameRetrieverMock.ExpectAndReturn("GetLatestBuildName", "returnedLatestBuildName", "myServer", "myProject");
-			urlBuilderMock.ExpectAndReturn("BuildBuildUrl", "latestUrl", "BuildReport.aspx", "myServer", "myProject", "returnedLatestBuildName");
+			urlBuilderMock.ExpectAndReturn("BuildProjectUrl", "editUrl", new PropertyIs("ActionName", CruiseActionFactory.EDIT_PROJECT_DISPLAY_ACTION_NAME), "myServer", "myProject");
+			urlBuilderMock.ExpectAndReturn("BuildProjectUrl", "deleteUrl", new PropertyIs("ActionName", CruiseActionFactory.SHOW_DELETE_PROJECT_ACTION_NAME), "myServer", "myProject");
+			HtmlTable buildsPanel = new HtmlTable();
+			recentBuildsViewBuilderMock.ExpectAndReturn("BuildRecentBuildsTable", buildsPanel, "myServer", "myProject");
 
 			HtmlAnchor expectedAnchor1 = new HtmlAnchor();
-			expectedAnchor1.HRef = "latestUrl";
-			expectedAnchor1.InnerHtml = "Latest";
+			expectedAnchor1.HRef = "editUrl";
+			expectedAnchor1.InnerHtml = "Edit Project";
+			HtmlAnchor expectedAnchor2 = new HtmlAnchor();
+			expectedAnchor2.HRef = "deleteUrl";
+			expectedAnchor2.InnerHtml = "Delete Project";
 
 			// Execute
 			HtmlTable table = viewBuilder.GetProjectSideBar("myServer", "myProject");
 
 			Assert.IsTrue(TableContains(table, expectedAnchor1));
+			Assert.IsTrue(TableContains(table, expectedAnchor2));
+			Assert.IsTrue(TableContains(table, buildsPanel));
 			
 			// Verify
 			VerifyAll();
