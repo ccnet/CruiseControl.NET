@@ -23,6 +23,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CCTray", "CCTray\CCTray.csp
 	ProjectSection(ProjectDependencies) = postProject
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebDashboard", "WebDashboard\WebDashboard.csproj", "{482EF049-EC0C-4819-B568-75B5F74BDD5B}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfiguration) = preSolution
 		Debug = Debug
@@ -53,6 +57,10 @@ Global
 		{D9040862-D7E0-4232-BBD0-CF088706E009}.Debug.Build.0 = Debug|.NET
 		{D9040862-D7E0-4232-BBD0-CF088706E009}.Release.ActiveCfg = Release|.NET
 		{D9040862-D7E0-4232-BBD0-CF088706E009}.Release.Build.0 = Release|.NET
+		{482EF049-EC0C-4819-B568-75B5F74BDD5B}.Debug.ActiveCfg = Debug|.NET
+		{482EF049-EC0C-4819-B568-75B5F74BDD5B}.Debug.Build.0 = Debug|.NET
+		{482EF049-EC0C-4819-B568-75B5F74BDD5B}.Release.ActiveCfg = Release|.NET
+		{482EF049-EC0C-4819-B568-75B5F74BDD5B}.Release.Build.0 = Release|.NET
 	EndGlobalSection
 	GlobalSection(SolutionItems) = postSolution
 		..\ccnet.build = ..\ccnet.build

@@ -1,0 +1,42 @@
+body, table, form, input, td, th, p, textarea, select {font-family: verdana, helvetica, arial; font-size: 11px;}
+
+a:hover{ color:#FFCC00; }
+
+.main-panel { color:#FFCC00; }
+
+.link { color:#FFFFFF; text-decoration:none; }
+.link-failed { color:#FF3300; text-decoration:none; }
+.buildresults-header { color: #FFF; font-weight: bold; }
+.buildresults-data { color: #9F3; }
+.buildresults-data-failed { color: #FF3300; }
+
+.stylesection { margin-left: 4px; }
+.header-title { font-size:12px; color:#000000; font-weight:bold; }
+.header-label { font-weight:bold; }
+.header-data { color:#000000; }
+
+.modifications-data { font-size:9px; color:#000000; }
+.modifications-sectionheader { background-color:#000066; color:#FFFFFF; }
+.modifications-oddrow { background-color:#CCCCCC }
+.modifications-evenrow { background-color:#FFFFCC }
+
+.changelists-oddrow { background-color:#CCCCCC }
+.changelists-evenrow { background-color:#FFFFCC }
+.changelists-file-spacer { background-color:#FFFFFF }
+.changelists-file-evenrow { background-color:#EEEEEE }
+.changelists-file-oddrow { background-color:#FFFFEE }
+.changelists-file-header { font-size:9px; background-color:#666666; color:#FFFFFF; }
+
+.compile-data { font-size:9px; color:#000000; }
+.compile-error-data { font-size:9px; color:#FF3300; }
+.compile-warn-data { font-size:9px; color:#CC9900; }
+.compile-sectionheader { background-color:#000066; color:#FFFFFF; }
+
+.distributables-data { font-size:9px; color:#000000; }
+.distributables-sectionheader { background-color:#000066; color:#FFFFFF; }
+.distributables-oddrow { background-color:#CCCCCC }
+
+.unittests-sectionheader { background-color:#000066; color:#FFFFFF; }
+.unittests-oddrow { background-color:#CCCCCC }
+.unittests-data { font-size:9px; color:#000000; }
+.unittests-error { font-size:9px; color:#FF3300; }

@@ -8,6 +8,7 @@
     <property name="nunit.output" value="Plain"/>
 
     <property name="webapp.dir" value="deployed\web"/>
+    <property name="webdashboard.dir" value="deployed\webdashboard"/>
 
     <property name="build.dir" value="build"/>
     <property name="src.dir" value="project"/>
@@ -18,6 +19,7 @@
     <property name="console.exe" value="ccnet.exe"/>
     <property name="service.exe" value="ccnet.service.exe"/>
     <property name="web.dll" value="ccnet.web.dll"/>
+    <property name="webdashboard.dll" value="ccnet.webdashboard.dll"/>
     <property name="cctray.exe" value="CCTray.exe"/>
 
     <target name="all" depends="clean, compile, test, deploy, dist"/>
@@ -89,7 +91,7 @@
     </target>
 
 	<!-- DEPLOY -->
-	<target name="deploy" depends="deploy.builder, deploy.cctray, deploy.webapp" />
+	<target name="deploy" depends="deploy.builder, deploy.cctray, deploy.webapp, deploy.webdashboard" />
 	
 	<target name="deploy.builder" depends="compile">
 		<mkdir dir="deployed\builder"/>
@@ -172,6 +174,33 @@
 		<mkiisdir dirpath="${webapp.dir}" vdirname="ccnetdev"/>
 		-->
 
+	</target>
+
+	<target name="deploy.webdashboard" depends="compile" description="deploys the web dashboard application">
+		<mkdir dir="${webdashboard.dir}" verbose="${verbosity}"/>
+		<copy todir="${webdashboard.dir}\bin">
+			<fileset basedir="project\webdashboard\bin\Debug">
+				<includes name="*.dll" />
+			</fileset>
+		</copy>
+
+		<copy todir="${webdashboard.dir}">
+			<fileset basedir="project\webdashboard">
+				<includes name="**\*.aspx"/>
+				<includes name="**\*.ascx"/>
+				<includes name="**\*.asax"/>
+				<includes name="**\*.html"/>
+				<includes name="**\*.gif"/>
+				<includes name="**\*.wav"/>
+				<includes name="**\*.css"/>
+				<includes name="**\*.xsl"/>
+				<includes name="**\*.config"/>
+
+				<excludes name="bin\**\*" />
+				<excludes name="obj\**\*" />
+				<excludes name="test\**\*" />
+			</fileset>
+		</copy>
 	</target>
 
 	<!-- CREATE DISTRIBUTABLES -->
