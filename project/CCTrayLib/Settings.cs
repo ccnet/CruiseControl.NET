@@ -1,5 +1,4 @@
 using System;
-using System.IO;
 using System.Runtime.Remoting;
 using System.Xml.Serialization;
 using Drew.Agents;
@@ -18,16 +17,11 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib
 		public int PollingIntervalSeconds;
 
 		private string remoteServerUrl = "";
+
 		public string RemoteServerUrl
 		{
-			get
-			{
-				return remoteServerUrl;
-			}
-			set
-			{
-				remoteServerUrl = value.Trim();
-			}
+			get { return remoteServerUrl; }
+			set { remoteServerUrl = value.Trim(); }
 		}
 
 		public string ProjectName;
@@ -68,6 +62,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib
 
 			return defaults;
 		}
+
 		[XmlIgnore]
 		public virtual ICruiseManager CruiseManager
 		{
@@ -82,7 +77,6 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib
 					return (ICruiseManager) RemotingServices.Connect(typeof (ICruiseManager), RemoteServerUrl);
 				}
 				throw new NotImplementedException("Connection method " + ConnectionMethod + " is not implemented.");
-
 			}
 		}
 	}
@@ -91,7 +85,8 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib
 
 	public class NotificationBalloon
 	{
-		[XmlAttribute] public bool ShowBalloon;
+		[XmlAttribute]
+		public bool ShowBalloon;
 
 		public static NotificationBalloon CreateDefaultSettings()
 		{
@@ -107,13 +102,17 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib
 
 	public class Messages
 	{
-		[XmlArrayItem("Message", typeof (string))] public string[] AnotherSuccess = new string[0];
+		[XmlArrayItem("Message", typeof (string))]
+		public string[] AnotherSuccess = new string[0];
 
-		[XmlArrayItem("Message", typeof (string))] public string[] AnotherFailure = new string[0];
+		[XmlArrayItem("Message", typeof (string))]
+		public string[] AnotherFailure = new string[0];
 
-		[XmlArrayItem("Message", typeof (string))] public string[] Fixed = new string[0];
+		[XmlArrayItem("Message", typeof (string))]
+		public string[] Fixed = new string[0];
 
-		[XmlArrayItem("Message", typeof (string))] public string[] Broken = new string[0];
+		[XmlArrayItem("Message", typeof (string))]
+		public string[] Broken = new string[0];
 
 		public static Messages CreateDefaultSettings()
 		{
@@ -158,7 +157,9 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib
 		public string BuildFailed;
 		public string NowBuilding;
 		public string Error;
-		[XmlAttribute] public bool UseDefaultIcons = true;
+
+		[XmlAttribute]
+		public bool UseDefaultIcons = true;
 
 		public static StatusIcons CreateDefaultSettings()
 		{
@@ -172,14 +173,18 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib
 
 	public class Agents
 	{
-		[XmlAttribute] public string CurrentAgentName;
+		[XmlAttribute]
+		public string CurrentAgentName;
 
-		[XmlAttribute] public bool ShowAgent = false;
+		[XmlAttribute]
+		public bool ShowAgent = false;
 
-		[XmlAttribute] public bool HideAfterMessage = true;
+		[XmlAttribute]
+		public bool HideAfterMessage = true;
 
 		[XmlArray("AvailableAgents")]
-		[XmlArrayItem("Agent", typeof (AgentDetails))] public AgentDetails[] AvailableAgents = new AgentDetails[0];
+		[XmlArrayItem("Agent", typeof (AgentDetails))]
+		public AgentDetails[] AvailableAgents = new AgentDetails[0];
 
 		public static Agents CreateDefaultSettings()
 		{
@@ -232,9 +237,14 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib
 
 	public class AgentDetails
 	{
-		[XmlAttribute] public string Name = string.Empty;
-		[XmlAttribute] public string AcsFileName = string.Empty;
-		[XmlAttribute] public bool SpeakOutLoud = false;
+		[XmlAttribute]
+		public string Name = string.Empty;
+
+		[XmlAttribute]
+		public string AcsFileName = string.Empty;
+
+		[XmlAttribute]
+		public bool SpeakOutLoud = false;
 
 		public string AnotherSuccessAction = string.Empty;
 		public string AnotherFailureAction = string.Empty;

@@ -193,11 +193,6 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "IRemoteCruiseProxyLoader.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
                     RelPath = "IStatusIconLoader.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -215,11 +210,6 @@
                 <File
                     RelPath = "Red.ico"
                     BuildAction = "EmbeddedResource"
-                />
-                <File
-                    RelPath = "RemoteCruiseProxyLoader.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
                 />
                 <File
                     RelPath = "ResourceIconStore.cs"
