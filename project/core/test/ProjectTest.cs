@@ -46,7 +46,8 @@ namespace ThoughtWorks.CruiseControl.Core.Test
 			Mock mock = SetMockStateManager(false, null);
 			IntegrationResult last = _project.LastIntegrationResult;
 			AssertNotNull(last);
-			AssertEquals(DateTime.Now.AddDays(-1), last.LastModificationDate);		// will load all modifications
+
+			AssertEquals(DateTime.Now.AddDays(-1).Date, last.LastModificationDate.Date);		// will load all modifications
 			mock.Verify();
 		}
 
