@@ -92,14 +92,6 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Triggers
 		}
 
 		[Test]
-		public void ShouldUseInnerTriggersNextBuildTimeIfNoFilterExists()
-		{
-			DateTime nextBuildTime = DateTime.Now.AddDays(-1);
-			mockTrigger.ExpectAndReturn("NextBuild", nextBuildTime);
-			Assert.AreEqual(nextBuildTime, trigger.NextBuild);
-		}
-
-		[Test]
 		public void ShouldUseFilterEndTimeIfTriggerBuildTimeIsInFilter()
 		{
 			DateTime triggerNextBuildTime = new DateTime(2004, 12, 1, 10, 30, 00);
@@ -114,6 +106,16 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Triggers
 			mockTrigger.SetupResult("NextBuild", triggerNextBuildTime);
 			Assert.AreEqual(triggerNextBuildTime, trigger.NextBuild);
 		}
+
+		[Test]
+		public void ShouldNotFilterIfTriggerBuildTimeIsNotInFilter()
+		{
+			DateTime nextBuildTime = new DateTime(2004, 12, 1, 13, 30, 00);
+			mockTrigger.ExpectAndReturn("NextBuild", nextBuildTime);
+			Assert.AreEqual(nextBuildTime, trigger.NextBuild);
+		}
+
+
 
 		[Test]
 		public void ShouldFullyPopulateFromReflector()
