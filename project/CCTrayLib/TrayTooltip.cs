@@ -32,14 +32,13 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib
 		{
 			object activity = (status.Status == ProjectIntegratorState.Stopped) ? ProjectActivity.Sleeping : status.Activity;
 			TimeSpan timeRemaining = status.NextBuildTime.Subtract(dtProvider.Now);
-			string formattedNextBuildTime = String.Format("{0} Day(s), {1} Hour(s), {2} Minute(s)", 
-				timeRemaining.Days, timeRemaining.Hours, timeRemaining.Minutes);
+			CCTimeFormatter timeFormatter = new CCTimeFormatter(timeRemaining);
 			return string.Format(FORMAT_TRAY_TOOLTIP,
 			                     activity,
 			                     status.Name,
 			                     status.BuildStatus,
 			                     status.LastBuildLabel,
-			                     formattedNextBuildTime);
+			                     timeFormatter.ToString());
 		}
 	}
 }
