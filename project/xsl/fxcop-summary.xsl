@@ -37,11 +37,11 @@
 						<td class="fxcop-summary-sectionheader" colSpan="4">FxCop <xsl:value-of select="$fxcop.version" /> Summary</td>
 					</tr>
 					<tr>
-						<td>Target rules</td>
+						<td><b>Target rules</b></td>
 					</tr>
 					<xsl:apply-templates select="$targets.list"/>					
 					<tr>
-						<td>Namespace rules</td>
+						<td><b>Namespace rules</b></td>
 					</tr>
 					<xsl:apply-templates select="$namespaces.list" />
 				</table>
@@ -70,13 +70,14 @@
 	
 	<xsl:template match="Target">
 		<xsl:if test="@Name">
+			<xsl:variable name="filename" select="translate(@Name, '\', '/')"/>
 			<tr style="cursor:pointer">
-				<xsl:attribute name="onClick">toggleRuleVisiblity('<xsl:value-of select="@Name"/>');</xsl:attribute>
+				<xsl:attribute name="onClick">toggleRuleVisiblity('<xsl:value-of select="$filename"/>');</xsl:attribute>
 				<td colspan="2" class="fxcop-summary-data">
-					<span><xsl:attribute name="id"><xsl:value-of select="@Name"/>.plus</xsl:attribute>+ </span>
+					<span><xsl:attribute name="id"><xsl:value-of select="$filename"/>.plus</xsl:attribute>+ </span>
 					<xsl:value-of select="@Name" />
 					<div style="display: none; border: 1px solid gray">
-						<xsl:attribute name="id"><xsl:value-of select="@Name"/></xsl:attribute>
+						<xsl:attribute name="id"><xsl:value-of select="$filename"/></xsl:attribute>
 						<xsl:apply-templates select="Messages">
 							<xsl:sort select="Message//@Level" />
 						</xsl:apply-templates>
@@ -103,11 +104,11 @@
 
 				<xsl:if test="Messages">
 				<tr>
-				<td>
+					<td>
 					<xsl:apply-templates select="Messages">
 						<xsl:sort select="Message//@Level"/>
 					</xsl:apply-templates>
-				</td>					
+					</td>					
 				</tr>
 				</xsl:if>
 
