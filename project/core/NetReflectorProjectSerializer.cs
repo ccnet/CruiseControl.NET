@@ -17,7 +17,7 @@ namespace ThoughtWorks.CruiseControl.Core
 
 		public Project Deserialize(string serializedProject)
 		{
-			throw new NotImplementedException();
+			return NetReflector.Read(serializedProject) as Project;
 		}
 	}
 }

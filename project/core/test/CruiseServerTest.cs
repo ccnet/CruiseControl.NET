@@ -11,6 +11,7 @@ namespace ThoughtWorks.CruiseControl.Core.Test
 	{
 		private DynamicMock configServiceMock;
 		private DynamicMock projectIntegratorListFactoryMock;
+		private DynamicMock projectSerializerMock;
 		private DynamicMock integratorMock1;
 		private DynamicMock integratorMock2;
 
@@ -30,8 +31,10 @@ namespace ThoughtWorks.CruiseControl.Core.Test
 		{
 			configServiceMock = new DynamicMock(typeof(IConfigurationService));
 			projectIntegratorListFactoryMock = new DynamicMock(typeof(IProjectIntegratorListFactory));
+			projectSerializerMock = new DynamicMock(typeof(IProjectSerializer));
 			server = new CruiseServer((IConfigurationService) configServiceMock.MockInstance, 
-				(IProjectIntegratorListFactory) projectIntegratorListFactoryMock.MockInstance);
+				(IProjectIntegratorListFactory) projectIntegratorListFactoryMock.MockInstance,
+				(IProjectSerializer) projectSerializerMock.MockInstance);
 
 			integratorMock1 = new DynamicMock(typeof(IProjectIntegrator));
 			integratorMock2 = new DynamicMock(typeof(IProjectIntegrator));

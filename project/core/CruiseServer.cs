@@ -12,6 +12,7 @@ namespace ThoughtWorks.CruiseControl.Core
 {
 	public class CruiseServer : ICruiseServer
 	{
+		private readonly IProjectSerializer projectSerializer;
 		private readonly IProjectIntegratorListFactory projectIntegratorListFactory;
 		private IConfigurationService configurationService;
 		private ICruiseManager _manager;
@@ -19,7 +20,7 @@ namespace ThoughtWorks.CruiseControl.Core
 
 		private IProjectIntegratorList projectIntegrators;
 
-		public CruiseServer(IConfigurationService configurationService, IProjectIntegratorListFactory projectIntegratorListFactory)
+		public CruiseServer(IConfigurationService configurationService, IProjectIntegratorListFactory projectIntegratorListFactory, IProjectSerializer projectSerializer)
 		{
 			this.configurationService = configurationService;
 			this.configurationService.AddConfigurationUpdateHandler(new ConfigurationUpdateHandler(Restart));
@@ -30,6 +31,7 @@ namespace ThoughtWorks.CruiseControl.Core
 
 			// By default, no integrators are running
 			projectIntegrators = new ProjectIntegratorList();
+			this.projectSerializer = projectSerializer;
 		}
 
 		public void Start()
@@ -68,7 +70,7 @@ namespace ThoughtWorks.CruiseControl.Core
 
 		private void CreateAndStartIntegrators()
 		{
-			IConfiguration configuration = null;
+			IConfiguration configuration;
 			try
 			{
 				configuration = configurationService.Load();
@@ -213,12 +215,13 @@ namespace ThoughtWorks.CruiseControl.Core
 			return new ServerLogFileReader().Read();
 		}
 
-		// ToDo - implement
+		// ToDo - test
 		public void AddProject(string serializedProject)
 		{
-			string message = "'AddProject' not yet implemented in Cruise Build Server so project NOT added. Project was : " + serializedProject;
-			Log.Warning(message);
-			throw new CruiseControlException(message);
+			Log.Info("Adding project - " + serializedProject);
+			IConfiguration configuration = configurationService.Load();
+			configuration.AddProject(projectSerializer.Deserialize(serializedProject));
+			configurationService.Save(configuration);
 		}
 
 		private IProjectIntegrator GetIntegrator(string projectName)

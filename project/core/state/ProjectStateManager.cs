@@ -1,21 +1,12 @@
-using System;
 using System.IO;
 using System.Text;
-using Exortech.NetReflector;
 
 namespace ThoughtWorks.CruiseControl.Core.State
 {
-	// TODO - remove this when we update NetReflector
-	[ReflectorType("projectstate")]
 	public class ProjectStateManager : IStateManager
 	{
 		private readonly IFileStateManager slaveStateManager;
 		private readonly IProject project;
-
-		public ProjectStateManager()
-		{
-			// DONT USE THIS (Its only here until we update NetReflector serialization)	
-		}
 
 		public ProjectStateManager(IProject project, IFileStateManager slaveStateManager)
 		{

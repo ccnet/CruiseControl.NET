@@ -16,7 +16,8 @@ namespace ThoughtWorks.CruiseControl.Core
 						new DefaultConfigurationFileSaver(new NetReflectorProjectSerializer()),
 						new FileChangedWatcher(configFile),
 						new FileInfo(configFile))),
-				new ProjectIntegratorListFactory());
+				new ProjectIntegratorListFactory(),
+				new NetReflectorProjectSerializer());
 		}
 
 		public static ICruiseServer CreateRemote(string configFile)
