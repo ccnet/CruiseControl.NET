@@ -84,6 +84,11 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 				&& StandardInputContent == otherProcessInfo.StandardInputContent);
 		}
 
+		public override int GetHashCode()
+		{
+			return ToString().GetHashCode();
+		}
+
 		public override string ToString()
 		{
 			return string.Format("FileName: [{0}] -- Arguments: [{1}] -- WorkingDirectory: [{2}] -- StandardInputContent: [{3}] ",

@@ -129,6 +129,10 @@
         <Files>
             <Include>
                 <File
+                    RelPath = "AssemblyInfo.cs"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "CruiseControlRemotingException.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -369,6 +373,11 @@
                 />
                 <File
                     RelPath = "configuration\test\ConfigurationLoaderTest.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "configuration\test\ConfigurationTest.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -879,12 +888,47 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "tasks\DataTaskResult.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "tasks\MergeFilesTask.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "tasks\NUnitArgument.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "tasks\NUnitTask.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "tasks\test\DataTaskResultTest.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "tasks\test\MergeFileTaskTest.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "tasks\test\NUnitArgumentTest.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "tasks\test\NUnitTaskExecutionTest.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "tasks\test\NunitTaskTest.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -1099,6 +1143,11 @@
                 />
                 <File
                     RelPath = "util\test\ProcessInfoTest.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "util\test\ProcessReaderTest.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

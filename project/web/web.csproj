@@ -399,6 +399,10 @@
                     BuildAction = "Content"
                 />
                 <File
+                    RelPath = "log\log20020910183219Lbuild.69.xml"
+                    BuildAction = "Content"
+                />
+                <File
                     RelPath = "log\log20020916143555.xml"
                     BuildAction = "Content"
                 />
@@ -420,6 +424,50 @@
                 />
                 <File
                     RelPath = "log\log20021009102803Lbuild.69.xml"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "log\log20030724125704Lbuild.1.xml"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "log\log20030724130312.xml"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "log\log20030724130417Lbuild.2.xml"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "log\log20030724135106Lbuild.3.xml"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "log\log20030724135208.xml"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "log\log20030724135640Lbuild.4.xml"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "log\log20030724162051.xml"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "log\log20030724162715Lbuild.5.xml"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "log\log20030728195152Lbuild.6.xml"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "log\log20031212182634Lbuild.1.xml"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "log\log20040412170952.xml"
                     BuildAction = "Content"
                 />
                 <File

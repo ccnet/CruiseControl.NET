@@ -223,6 +223,10 @@
                     BuildAction = "Content"
                 />
                 <File
+                    RelPath = "Audio\doh.wav"
+                    BuildAction = "Content"
+                />
+                <File
                     RelPath = "Audio\fixed.wav"
                     BuildAction = "Content"
                 />
@@ -232,6 +236,10 @@
                 />
                 <File
                     RelPath = "Audio\still-successful.wav"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "Audio\woohoo.wav"
                     BuildAction = "Content"
                 />
                 <File
