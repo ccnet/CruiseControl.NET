@@ -42,7 +42,7 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 		private Process Start(ProcessInfo processInfo)
 		{
 			Process process = processInfo.CreateProcess();
-			Log.Debug(string.Format("Attempting to start process [{0}] in working directory [{1}]", process.StartInfo.FileName, process.StartInfo.WorkingDirectory));
+			Log.Debug(string.Format("Attempting to start process [{0}] in working directory [{1}] with arguments [{2}]", process.StartInfo.FileName, process.StartInfo.WorkingDirectory, process.StartInfo.Arguments));
 
 			bool isNewProcess = process.Start();
 			if (! isNewProcess) Log.Debug("Reusing existing process...");
