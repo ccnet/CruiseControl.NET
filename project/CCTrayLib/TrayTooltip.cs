@@ -8,7 +8,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib
 	/// </summary>
 	public class TrayTooltip
 	{
-		private const string FORMAT_TRAY_TOOLTIP = "Server: {0}\nProject: {1}\nLast Build: {2} ({3}) \nNext Build in {4}";
+		private const string FORMAT_TRAY_TOOLTIP = "Server: {0}\nProject: {1}\nLast Build: {2} ({3})";
 
 		private readonly ProjectStatus status;
 		private DateTimeProvider dtProvider;
@@ -30,15 +30,19 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib
 
 		private string CalculateTrayText()
 		{
-			object activity = (status.Status == ProjectIntegratorState.Stopped) ? ProjectActivity.Sleeping : status.Activity;
+			ProjectActivity activity = (status.Status == ProjectIntegratorState.Stopped) ? ProjectActivity.Sleeping : status.Activity;
 			TimeSpan timeRemaining = status.NextBuildTime.Subtract(dtProvider.Now);
 			CCTimeFormatter timeFormatter = new CCTimeFormatter(timeRemaining);
-			return string.Format(FORMAT_TRAY_TOOLTIP,
-			                     activity,
-			                     status.Name,
-			                     status.BuildStatus,
-			                     status.LastBuildLabel,
-			                     timeFormatter.ToString());
+			string text = string.Format(FORMAT_TRAY_TOOLTIP,
+			                            activity,
+			                            status.Name,
+			                            status.BuildStatus,
+			                            status.LastBuildLabel);
+			if (activity == ProjectActivity.Sleeping)
+			{
+				text += string.Format(" \nNext Build in {0}", timeFormatter.ToString());
+			}
+			return text;
 		}
 	}
 }
