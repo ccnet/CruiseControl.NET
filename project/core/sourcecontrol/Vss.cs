@@ -12,7 +12,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 	public class Vss : ProcessSourceControl
 	{
 		// required environment variable name
-		internal static readonly string SS_DIR_KEY = "SSDIR";
+		internal const string SS_DIR_KEY = "SSDIR";
 		
 		// ss history [dir] -R -Vd[now]~[lastBuild] -Y[un,pw] -I-Y -O[tempFileName]
 		internal static readonly string HISTORY_COMMAND_FORMAT = 
@@ -22,6 +22,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 		internal static readonly string LABEL_COMMAND_FORMAT_NOTIMESTAMP = @"label {0} -L{1} -Y{2},{3} -I-Y";
 		
 		private IHistoryParser _parser = new VssHistoryParser();
+		private string _ssDir;
 		
 		public CultureInfo CultureInfo = CultureInfo.CurrentCulture;
 
@@ -38,7 +39,11 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 		public string Password;
 
 		[ReflectorProperty("ssdir", Required=false)]
-		public string SsDir;
+		public string SsDir
+		{
+			get { return _ssDir; }
+			set { _ssDir = value.Trim('"'); }
+		}
 
 		protected override IHistoryParser HistoryParser
 		{
@@ -58,27 +63,27 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 		
 		public override Process CreateHistoryProcess(DateTime from, DateTime until)
 		{		
-			string args = BuildHistoryProcessArgs(from, until);
-			Log.Debug(string.Format("VSSPublisher: {0} {1}", Executable, args));
-			Process process = ProcessUtil.CreateProcess(Executable, args);
-			process.StartInfo.EnvironmentVariables[SS_DIR_KEY] = SsDir;
-			return process;
-			
+			return CreateProcess(BuildHistoryProcessArgs(from, until));
 		}
 
 		public Process CreateLabelProcess(string label) 
 		{
-			string args = String.Format(LABEL_COMMAND_FORMAT_NOTIMESTAMP, Project, label, Username, Password);
-			Process process = ProcessUtil.CreateProcess(Executable, args);
-			process.StartInfo.EnvironmentVariables[SS_DIR_KEY] = SsDir;
-			return process;
+			return CreateProcess(string.Format(LABEL_COMMAND_FORMAT_NOTIMESTAMP, Project, label, Username, Password));
 		}
 
 		public override Process CreateLabelProcess(string label, DateTime timeStamp) 
 		{ 
-			string args = string.Format(LABEL_COMMAND_FORMAT, Project, label, FormatCommandDate(timeStamp), Username, Password);
+			return CreateProcess(string.Format(LABEL_COMMAND_FORMAT, Project, label, FormatCommandDate(timeStamp), Username, Password));
+		}
+
+		private Process CreateProcess(string args)
+		{
+			Log.Debug(string.Format("VSS: {0} {1}", Executable, args));
 			Process process = ProcessUtil.CreateProcess(Executable, args);
-			process.StartInfo.EnvironmentVariables[SS_DIR_KEY] = SsDir;
+			if (SsDir != null)
+			{
+				process.StartInfo.EnvironmentVariables[SS_DIR_KEY] = SsDir;
+			}
 			return process;
 		}
 
@@ -103,6 +108,5 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 				Username, 
 				Password);
 		}
-		
 	}
 }

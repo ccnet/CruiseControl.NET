@@ -28,7 +28,8 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test
 			_vss = CreateVss();
 		}
 		
-		public void TestCreateHistoryProcess()
+		[Test]
+		public void CreateHistoryProcess()
 		{	
 			DateTime from = new DateTime(2001, 1, 21, 20, 0, 0);
 			DateTime to = new DateTime(2002, 2, 22, 20, 0, 0);
@@ -43,7 +44,8 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test
 			AssertEquals(expectedArgs, actual.StartInfo.Arguments);
 		}
 		
-		public void TestValuesSet()
+		[Test]
+		public void ValuesSet()
 		{
 			AssertEquals(@"..\tools\vss\ss.exe", _vss.Executable);
 			AssertEquals(@"admin", _vss.Password);
@@ -122,9 +124,28 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test
 			Assertion.AssertEquals(expectedArgs, actual.StartInfo.Arguments);
 		}
 
-		public void TestExecutable_default()
+		[Test]
+		public void ExecutableDefault()
 		{
 			AssertEquals("ss.exe", new Vss().Executable);
+		}
+
+		[Test]
+		public void StripQuotesFromSSDir()
+		{
+			Vss vss = new Vss();
+			vss.SsDir = @"""C:\Program Files\Microsoft Visual Studio\VSS""";
+			AssertEquals(@"C:\Program Files\Microsoft Visual Studio\VSS", vss.SsDir);
+		}
+
+		[Test]
+		public void SSDirEnvironmentVariableValueShouldNotChangeIfSSDirIsNotSpecified()
+		{
+			Process orginal = new Process();
+
+			Vss vss = new Vss();
+			Process actual = vss.CreateHistoryProcess(DateTime.Now, DateTime.Now);
+			AssertEquals(orginal.StartInfo.EnvironmentVariables[Vss.SS_DIR_KEY], actual.StartInfo.EnvironmentVariables[Vss.SS_DIR_KEY]);
 		}
 
 		private Vss CreateVss()

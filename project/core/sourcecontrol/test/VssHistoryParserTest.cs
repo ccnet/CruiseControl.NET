@@ -146,7 +146,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test
 		{
 			string fileName = "**** Im a file name.fi     ********\r\n jakfakjfnb  **** ** lkjnbfgakj ****";
 			CheckInParser parser = new CheckInParser(fileName, new CultureInfo("en-US"));
-			string actual = parser.parseFileName();
+			string actual = parser.ParseFileName();
 			AssertEquals("Im a file name.fi", actual);
 		}
 
@@ -167,6 +167,20 @@ Comment: added fir to tree file, checked in recursively from project root";
 			AssertEquals(new DateTime(2002, 9, 16, 17, 01, 0), mod.ModifiedTime);
 			AssertEquals("checkin", mod.Type);
 			AssertEquals("added fir to tree file, checked in recursively from project root",mod.Comment);
+		}
+
+		[Test]
+		public void ParseFileAndFolderWithNoComment()
+		{
+			string entry = @"*****  happyTheFile.txt  *****
+Version 3
+User: Admin        Date:  9/16/02   Time:  5:01p
+Checked in $/you/want/folders/i/got/em
+";
+
+			Modification mod = ParseAndAssertFilenameAndFolder(entry, "happyTheFile.txt", "$/you/want/folders/i/got/em");
+			AssertEquals("checkin", mod.Type);
+			AssertNull(mod.Comment);
 		}
 
 		[Test]

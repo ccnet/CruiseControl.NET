@@ -37,7 +37,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			foreach (string entry in entries) 
 			{
 				VSSParser parser = VSSParserFactory.CreateParser(entry, CultureInfo);
-				Modification mod = parser.parse();
+				Modification mod = parser.Parse();
 				if (mod != null)
 					modifications.Add(mod);
 			}
@@ -134,20 +134,20 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			return dateTimeFormatInfo;
 		}
 
-		public virtual Modification parse() 
+		public virtual Modification Parse() 
 		{
 			Modification mod = new Modification();
-			setType(mod);
+			SetType(mod);
 			ParseUsernameAndDate(mod);
 			ParseComment(mod);
-			mod.FileName = this.parseFileName();
-			mod.FolderName = this.parseFolderName();
+			mod.FileName = this.ParseFileName();
+			mod.FolderName = this.ParseFolderName();
 			return mod;
 		}
 
-		internal abstract void setType(Modification mod);
+		internal abstract void SetType(Modification mod);
 
-		internal abstract string parseFileName();
+		internal abstract string ParseFileName();
 
 		internal void ParseUsernameAndDate(Modification mod)
 		{
@@ -176,22 +176,19 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			}
 		}
 
-		internal virtual string parseFolderName() 
+		internal virtual string ParseFolderName() 
 		{
-			string folderName = null;
 			int checkinIndex = entry.IndexOf("Checked in");
-			if (checkinIndex > -1) 
-			{
-				int commentIndex = entry.IndexOf("Comment:");
-				int startIndex = checkinIndex + "Checked in".Length;
-				folderName = entry.Substring(startIndex, commentIndex - startIndex).Trim();
+			if (checkinIndex == -1) return null;
 
-			}
+			int commentIndex = entry.IndexOf("Comment:");
+			if (commentIndex == -1) commentIndex = entry.Length;
 
-			return folderName;
+			int startIndex = checkinIndex + "Checked in".Length;
+			return entry.Substring(startIndex, commentIndex - startIndex).Trim();
 		}
 
-		protected string parseFileNameOther(string type) 
+		protected string ParseFileNameOther(string type) 
 		{
 			int timeIndex = entry.IndexOf("Time:");
 			int newlineIndex = entry.IndexOf("\n", timeIndex);
@@ -200,7 +197,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			return fileName.Trim();
 		}
 
-		internal string parseFirstLineName() 
+		internal string ParseFirstLineName() 
 		{
 			Match match = REGEX_FILE_NAME.Match(entry);
 
@@ -212,14 +209,14 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 	{
 		public CheckInParser(string entry, CultureInfo culture) : base(entry, culture) {}
 
-		internal override void setType(Modification mod) 
+		internal override void SetType(Modification mod) 
 		{
 			mod.Type = "checkin";
 		}
 
-		internal override string parseFileName() 
+		internal override string ParseFileName() 
 		{
-			return parseFirstLineName();
+			return ParseFirstLineName();
 		}
 	}
 
@@ -229,31 +226,31 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 
 		public AddedParser(string entry, CultureInfo cultureInfo) : base(entry, cultureInfo) {}
 
-		public override Modification parse() 
+		public override Modification Parse() 
 		{
-			Modification mod = base.parse();
+			Modification mod = base.Parse();
 			if (mod.FileName.StartsWith("$"))
 				return null;
 			else
 				return mod;
 		}
 
-		internal override void setType(Modification mod) 
+		internal override void SetType(Modification mod) 
 		{
 			mod.Type = type;
 		}
 
-		internal override string parseFileName() 
+		internal override string ParseFileName() 
 		{
-			return parseFileNameOther(type);
+			return ParseFileNameOther(type);
 		}
 
-		internal override string parseFolderName() 
+		internal override string ParseFolderName() 
 		{
 			if (entry.StartsWith(DELIMITER_VERSIONED_START))
 				return  "[projectRoot]";
 			else
-				return parseFirstLineName();
+				return ParseFirstLineName();
 		}
 	}
 
@@ -263,22 +260,22 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 
 		public DeletedParser(string entry, CultureInfo culture) : base(entry, culture) {}
 
-		internal override void setType(Modification mod) 
+		internal override void SetType(Modification mod) 
 		{
 			mod.Type = type;
 		}
 
-		internal override string parseFileName() 
+		internal override string ParseFileName() 
 		{
-			return parseFileNameOther(type);
+			return ParseFileNameOther(type);
 		}
 
-		internal override string parseFolderName() 
+		internal override string ParseFolderName() 
 		{
 			if (entry.StartsWith(DELIMITER_VERSIONED_START))
 				return  "[projectRoot]";
 			else
-				return parseFirstLineName();
+				return ParseFirstLineName();
 		}
 	}
 
@@ -288,22 +285,22 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 
 		public DestroyedParser(string entry, CultureInfo culture) : base(entry, culture) {}
 
-		internal override void setType(Modification mod) 
+		internal override void SetType(Modification mod) 
 		{
 			mod.Type = type;
 		}
 
-		internal override string parseFileName() 
+		internal override string ParseFileName() 
 		{
-			return parseFileNameOther(type);
+			return ParseFileNameOther(type);
 		}
 
-		internal override string parseFolderName() 
+		internal override string ParseFolderName() 
 		{
 			if (entry.StartsWith(DELIMITER_VERSIONED_START))
-				return  "[projectRoot]";
+				return "[projectRoot]";
 			else
-				return parseFirstLineName();
+				return ParseFirstLineName();
 		}
 	}
 
@@ -311,16 +308,16 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 	{
 		public NullParser(string entry, CultureInfo culture) : base(entry, culture) {}
 
-		public override Modification parse() 
+		public override Modification Parse() 
 		{
 			return null;
 		}
 
-		internal override void setType(Modification mod) 
+		internal override void SetType(Modification mod) 
 		{
 		}
 
-		internal override string parseFileName() 
+		internal override string ParseFileName() 
 		{
 			return null;
 		}

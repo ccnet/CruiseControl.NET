@@ -88,7 +88,8 @@ run -e vlog  ""-xo+e{3}"" ""-d{4}*{5}"" ""@{2}""
 			StreamWriter stream = File.CreateText(PVCS_INSTRUCTIONS_FILE);
 			stream.Write(content);
 			stream.Close();
-			
+
+			Log.Debug(string.Format("Pvcs: {0} {1}", Executable, Arguments));
 			return ProcessUtil.CreateProcess(Executable, Arguments);
 		}
 
