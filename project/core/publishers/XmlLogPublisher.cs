@@ -68,7 +68,9 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
             string path = Path.Combine(dirname, filename);
 
 			// create XmlWriter using UTF8 encoding
-            return new XmlTextWriter(path, Encoding.UTF8);
+        	XmlTextWriter writer = new XmlTextWriter(path, Encoding.UTF8);
+			writer.Formatting = Formatting.Indented;
+        	return writer;
         }
 
         public string GetFilename(IIntegrationResult result)

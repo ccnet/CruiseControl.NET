@@ -7,7 +7,7 @@ using ThoughtWorks.CruiseControl.Core.Util;
 namespace ThoughtWorks.CruiseControl.Core.Publishers
 {
 	[ReflectorType("rss")]
-	// This publisher genarates a rss file reporting the latest results for a Project.
+	// This publisher generates a rss file reporting the latest results for a Project.
 	// We use .NET's XMLSerialization to genarate the XML
 	public class RssPublisher : PublisherBase
 	{

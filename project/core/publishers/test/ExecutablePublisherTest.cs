@@ -110,7 +110,7 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers.Test
         [ExpectedException(typeof( CruiseControlException ) )]
         public void CanHandleTimeout()
         {
-            _publisher.Arguments = "/C \"sleep 2\"";
+            _publisher.Arguments = "/C \"sleep 200\"";
             _publisher.Timeout = 1;
 
             _publisher.PublishIntegrationResults( null, _result );

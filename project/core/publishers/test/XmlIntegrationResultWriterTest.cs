@@ -59,7 +59,6 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers.Test
             ExceptionTest(exception, exception.Message);
         }
 
-
         private void ExceptionTest(Exception exception, string exceptionMessage)
         {
             IntegrationResult result = IntegrationResultMother.Create(false);
@@ -71,12 +70,17 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers.Test
             Assert.IsTrue(actual.IndexOf(exceptionMessage) > 0);
             Assert.IsTrue(actual.IndexOf(exception.GetType().Name) > 0);
 
-            //verify xml is well-formed
-            XmlDocument document = new XmlDocument();
-            document.LoadXml(actual);
+        	VerifyXmlIsWellFormed(actual);
         }
 
-        [Test]
+    	private void VerifyXmlIsWellFormed(string actual)
+    	{
+    		//verify xml is well-formed
+    		XmlDocument document = new XmlDocument();
+    		document.LoadXml(actual);
+    	}
+
+    	[Test]
         public void WriteExceptionWithEmbeddedXml()
         {
             ExceptionTest(new CruiseControlException("message with <xml><foo/></xml>"));
@@ -89,6 +93,7 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers.Test
             result.Status = IntegrationStatus.Success;
             string output = GenerateBuildOutput(result);
             Assert.AreEqual(CreateExpectedBuildXml(result), output);
+			VerifyXmlIsWellFormed(output);
         }
 
         [Test]
@@ -99,6 +104,7 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers.Test
             result.Output = "<tag></tag>";
             string output = GenerateBuildOutput(result);
             Assert.AreEqual(CreateExpectedBuildXml(result), output);
+			VerifyXmlIsWellFormed(output);
         }
 
         [Test]
@@ -107,7 +113,9 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers.Test
             IntegrationResult result = new IntegrationResult();
             result.Status = IntegrationStatus.Success;
             result.Output = "<tag><![CDATA[a b <c>]]></tag>";
-            Assert.AreEqual(CreateExpectedBuildXml(result), GenerateBuildOutput(result));
+        	string output = GenerateBuildOutput(result);
+        	Assert.AreEqual(CreateExpectedBuildXml(result), output);
+			VerifyXmlIsWellFormed(output);
         }
 
         [Test]
@@ -123,6 +131,7 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers.Test
             result.Output = swWithoutNull.ToString();
 
             string expectedResult = CreateExpectedBuildXml(result);
+			VerifyXmlIsWellFormed(expectedResult);
 
             StringWriter swWithNull = new StringWriter();
             swWithNull.WriteLine("<tag><![CDATA[");
@@ -139,7 +148,8 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers.Test
             IntegrationResult result = new IntegrationResult();
             result.Output = "<tag><c></tag>";
             string output = GenerateBuildOutput(result);
-            AssertContains("<![CDATA[<tag><c></tag>]]>", output);
+			Assert.AreEqual(@"<build date=""01/01/0001 00:00:00"" buildtime=""00:00:00""><![CDATA[<tag><c></tag>]]></build>", output);
+			VerifyXmlIsWellFormed(output);
         }
 
         [Test]
@@ -148,7 +158,8 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers.Test
             IntegrationResult result = new IntegrationResult();
             result.Output = "<tag><c>]]></tag>";
             string output = GenerateBuildOutput(result);
-            AssertContains("<![CDATA[<tag><c>] ]></tag>]]>", output);
+			Assert.AreEqual(@"<build date=""01/01/0001 00:00:00"" buildtime=""00:00:00""><![CDATA[<tag><c>] ]></tag>]]></build>", output);
+			VerifyXmlIsWellFormed(output);
         }
 
 		[Test]
@@ -157,6 +168,7 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers.Test
 			IntegrationResult result = new IntegrationResult();
 			result.Output = @"<?xml version=""1.0""?> <foo>Data</foo>" ;
 			string output = GenerateBuildOutput(result);
+			VerifyXmlIsWellFormed(output);
 			Assert.AreEqual(-1, output.IndexOf("<![CDATA>"));
 			Assert.AreEqual(-1, output.IndexOf("<?xml"));
 		}
@@ -168,6 +180,7 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers.Test
             result.Status = IntegrationStatus.Failure;
             string output = GenerateBuildOutput(result);
             Assert.AreEqual(CreateExpectedBuildXml(result), output);
+			VerifyXmlIsWellFormed(output);
         }
 
         private IntegrationResult CreateIntegrationResult(IntegrationStatus status, bool addModifications)

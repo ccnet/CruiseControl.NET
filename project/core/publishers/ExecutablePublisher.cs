@@ -90,6 +90,7 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
 				_stopReading = true;
 				standardOutput.Join(50);
 				standardError.Join(50);
+				process.Close();
 			}
 		}
 

@@ -22,7 +22,7 @@ namespace ThoughtWorks.CruiseControl.Core.Util.Test
 			AssertProcessExitsSuccessfully(result);
 		}
 
-		[Test, Ignore("Fails erratically")]
+		[Test]
 		public void ExecuteProcessAndEchoResultsBackThroughStandardOutWhereALargeAmountOfOutputIsProduced()
 		{
 			ProcessResult result = executor.Execute(new ProcessInfo("cmd.exe", "/C @dir " + Environment.SystemDirectory));

@@ -1,4 +1,5 @@
 using System;
+using System.IO;
 using System.Text.RegularExpressions;
 using System.Xml;
 using ThoughtWorks.CruiseControl.Core.Util;
@@ -57,16 +58,25 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
 		private void WriteOutput(string output)
 		{
 			string xmlRemovedOutput = StripXmlDeclaration(RemoveNulls(output));
-			XmlValidatingReader reader = new XmlValidatingReader(xmlRemovedOutput, XmlNodeType.Element, null);
+
 			try
 			{
-				reader.ReadInnerXml();
-				_writer.WriteNode(reader, false);
+				WriteOutput(xmlRemovedOutput, new XmlTextWriter(new StringWriter()));
+				WriteOutput(xmlRemovedOutput, _writer);
 			}
 			catch (XmlException)
 			{
 				// IF we had a problem with the input xml, wrap it in CDATA and put that in instead
 				_writer.WriteCData(XmlUtil.EncodeCDATA(xmlRemovedOutput));
+			}
+		}
+
+		private void WriteOutput(string output, XmlWriter writer)
+		{
+			XmlTextReader reader = new XmlTextReader(new StringReader(output));
+			try
+			{
+				writer.WriteNode(reader, false);
 			}
 			finally
 			{

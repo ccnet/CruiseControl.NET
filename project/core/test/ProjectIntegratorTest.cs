@@ -19,7 +19,7 @@ namespace ThoughtWorks.CruiseControl.Core.Test
 		public void SetUp()
 		{
 			_project = new MockProject("mock", null);
-			Trace.Listeners.Remove("");
+			Trace.Listeners.Clear();
 		}
 
 		[TearDown]

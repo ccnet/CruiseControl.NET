@@ -69,6 +69,13 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			set { _tagBaseUrl = value; }
 		}
 
+ 		[ReflectorProperty("username", Required = false)]
+		public string Username;
+		 
+		[ReflectorProperty("password", Required = false)]
+		public string Password;
+
+
 		public string FormatCommandDate(DateTime date)
 		{
 			return date.ToUniversalTime().ToString(COMMAND_DATE_FORMAT, CultureInfo.InvariantCulture);

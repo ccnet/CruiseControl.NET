@@ -64,9 +64,16 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 
 		public static string GenerateOuterXml(string xmlContent)
 		{
-			XmlDocument document = new XmlDocument();
-			document.LoadXml(xmlContent);
-			return document.OuterXml;
+			return CreateDocument(xmlContent).OuterXml;
+		}
+
+		public static string GenerateIndentedOuterXml(string xmlContent)
+		{
+			StringWriter buffer = new StringWriter();
+			XmlTextWriter writer = new XmlTextWriter(buffer);
+			writer.Formatting = Formatting.Indented;
+			writer.WriteNode(new XmlTextReader(new StringReader(xmlContent)), false);
+			return buffer.ToString();
 		}
 
 		public static string SelectValue(XmlNode node, string xpath, string defaultValue)
