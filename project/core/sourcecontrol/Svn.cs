@@ -87,7 +87,12 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 		public override Modification[] GetModifications(DateTime from, DateTime to)
 		{
 			ProcessResult result = Execute(CreateHistoryProcessInfo(from, to));
-			return ParseModifications(result, from, to);
+			Modification[] modifications = ParseModifications(result, from, to);
+			if ( _urlBuilder != null )
+			{
+				_urlBuilder.SetupModification(modifications);
+			}
+			return modifications;		
 		}
 
 		public override void LabelSourceControl(string label, DateTime timeStamp)
