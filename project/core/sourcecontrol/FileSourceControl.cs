@@ -9,12 +9,20 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 	public class FileSourceControl : ISourceControl
 	{
 		private string _repositoryRoot;
+		private bool _ignoreMissingRoot;
 
 		[ReflectorProperty("repositoryRoot")]
 		public string RepositoryRoot
 		{
 			get { return _repositoryRoot; }
 			set { _repositoryRoot = value; }
+		}
+
+		[ReflectorProperty("ignoreMissingRoot", Required=false)]
+		public bool IgnoreMissingRoot
+		{
+			get { return _ignoreMissingRoot; }
+			set { _ignoreMissingRoot = value; }
 		}
 
 		public Modification[] GetModifications(DateTime from, DateTime to)
@@ -41,19 +49,29 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 		{
 			ArrayList mods = new ArrayList();
 
-			FileInfo[] files = dir.GetFiles();
-			foreach (FileInfo file in files) 
+			try 
 			{
-				if (IsLocalFileChanged(file, from)) 
+				FileInfo[] files = dir.GetFiles();
+				foreach (FileInfo file in files) 
 				{
-					mods.Add(CreateModification(file));
+					if (IsLocalFileChanged(file, from)) 
+					{
+						mods.Add(CreateModification(file));
+					}
 				}
-			}
 
-			DirectoryInfo[] subs = dir.GetDirectories();
-			foreach (DirectoryInfo sub in subs) 
+				DirectoryInfo[] subs = dir.GetDirectories();
+				foreach (DirectoryInfo sub in subs) 
+				{
+					mods.AddRange(getMods(sub, from, to));
+				}
+			} 
+			catch (DirectoryNotFoundException exc) 
 			{
-				mods.AddRange(getMods(sub, from, to));
+				if (!_ignoreMissingRoot) 
+				{
+					throw exc;
+				}
 			}
 
 			return mods;

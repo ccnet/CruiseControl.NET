@@ -30,6 +30,33 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test
 			TempFileUtil.DeleteTempDir(_tempDir);
 		}
 
+		[Test, ExpectedException(typeof(DirectoryNotFoundException))]
+		public void MissingDirectoryThrowsException()
+		{
+			TempFileUtil.DeleteTempDir(_tempSubDir);
+			TempFileUtil.DeleteTempDir(_tempDir);
+
+			_sc.GetModifications(DateTime.MinValue, DateTime.MaxValue);
+		}
+
+		[Test]
+		public void IgnoreMissingDirectoryReturnsZeroMods()
+		{
+			TempFileUtil.DeleteTempDir(_tempSubDir);
+			TempFileUtil.DeleteTempDir(_tempSubDir);
+
+			_sc.IgnoreMissingRoot = true;
+			try 
+			{
+				Modification[] mods = _sc.GetModifications(DateTime.MinValue, DateTime.MaxValue);
+				AssertEquals("Modifications found in a missing directory", 0, mods.Length);
+			} 
+			finally 
+			{
+				_sc.IgnoreMissingRoot = false;
+			}
+		}
+
 		[Test]
 		public void GetModifications_EmptyLocal()
 		{
