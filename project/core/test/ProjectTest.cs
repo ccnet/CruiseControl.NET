@@ -1,23 +1,20 @@
+using System;
+using System.Diagnostics;
 using NMock;
 using NMock.Constraints;
 using NUnit.Framework;
-using System;
-using System.Collections;
-using System.Diagnostics;
 using ThoughtWorks.CruiseControl.Core.Builder.Test;
-using ThoughtWorks.CruiseControl.Core.Config;
 using ThoughtWorks.CruiseControl.Core.Publishers;
 using ThoughtWorks.CruiseControl.Core.Publishers.Test;
 using ThoughtWorks.CruiseControl.Core.Schedules;
 using ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test;
 using ThoughtWorks.CruiseControl.Core.State;
 using ThoughtWorks.CruiseControl.Core.Util;
-using ThoughtWorks.CruiseControl.Core.Util.Test;
 using ThoughtWorks.CruiseControl.Remote;
-using Exortech.NetReflector;
 using ThoughtWorks.CruiseControl.Core.Builder;
 using ThoughtWorks.CruiseControl.Core.Label;
 using ThoughtWorks.CruiseControl.Core.Tasks;
+using Exortech.NetReflector;
 
 namespace ThoughtWorks.CruiseControl.Core.Test
 {
@@ -95,14 +92,14 @@ namespace ThoughtWorks.CruiseControl.Core.Test
 			Project project = (Project) NetReflector.Read(xml);
 			AssertEquals("foo", project.Name);
 			AssertEquals("http://localhost/ccnet", project.WebURL);
-			AssertEquals(true, project.PublishExceptions);
 			AssertEquals(60, project.ModificationDelaySeconds);
+			AssertEquals(true, project.PublishExceptions);
 			AssertEquals(typeof(NAntBuilder), project.Builder);
 			AssertEquals(typeof(MockSourceControl), project.SourceControl);
 			AssertEquals(typeof(DefaultLabeller), project.Labeller);
-			AssertEquals(typeof(XmlLogPublisher), project.Publishers[0]);
 			AssertEquals(typeof(IntegrationStateManager), project.StateManager);
 			AssertEquals(typeof(Schedule), project.Schedule);
+			AssertEquals(typeof(XmlLogPublisher), project.Publishers[0]);
 			AssertEquals(typeof(MergeFilesTask), project.Tasks[0]);
 		}
 
@@ -118,18 +115,18 @@ namespace ThoughtWorks.CruiseControl.Core.Test
 			Project project = (Project) NetReflector.Read(xml);
 			AssertEquals("foo", project.Name);
 			AssertEquals(Project.DEFAULT_WEB_URL, project.WebURL);
-			AssertEquals(false, project.PublishExceptions);
 			AssertEquals(0, project.ModificationDelaySeconds);		//TODO: is this the correct default?  should quiet period be turned off by default?  is this sourcecontrol specific?
+			AssertEquals(false, project.PublishExceptions);
 			AssertEquals(typeof(NAntBuilder), project.Builder);
 			AssertEquals(typeof(MockSourceControl), project.SourceControl);
 			AssertEquals(typeof(DefaultLabeller), project.Labeller);
-			AssertNull("project should contain no publishers", project.Publishers);
 			AssertEquals(typeof(IntegrationStateManager), project.StateManager);
 			AssertEquals(typeof(Schedule), project.Schedule);
+			AssertNull("project should contain no publishers", project.Publishers);
 			AssertEquals(0, project.Tasks.Length);
 		}
 
-		[Test]	//TODO: question: should state be saved after a poll with no mods and no build?? -- i think it should: implication for last build though
+		[Test]	//TODO: question: should state be saved after a poll with no modifications and no build?? -- i think it should: implication for last build though
 		public void RunningFirstIntegrationWithNoModificationsShouldNotBuildOrPublish()
 		{
 			_mockStateManager.ExpectAndReturn("StateFileExists", false);				// running the first integration (no state file)
@@ -155,12 +152,12 @@ namespace ThoughtWorks.CruiseControl.Core.Test
 		[Test]
 		public void RunningFirstIntegrationWithModificationsShouldBuildAndPublish()
 		{
-			Modification[] mods = new Modification[1] { new Modification()};
+			Modification[] modifications = new Modification[1] { new Modification()};
 
 			_mockStateManager.ExpectAndReturn("StateFileExists", false);				// running the first integration (no state file)
 			_mockStateManager.Expect("SaveState", new IsAnything());
 			_mockLabeller.ExpectAndReturn("Generate", "label", new IsAnything());		// generate new label
-			_mockSourceControl.ExpectAndReturn("GetModifications", mods, new IsAnything(), new IsAnything());
+			_mockSourceControl.ExpectAndReturn("GetModifications", modifications, new IsAnything(), new IsAnything());
 			_mockSourceControl.Expect("LabelSourceControl", "label", new IsAnything());
 			_mockPublisher.Expect("PublishIntegrationResults", new IsAnything(), new IsAnything());
 			_mockTask.Expect("Run", new IsAnything());
@@ -174,7 +171,7 @@ namespace ThoughtWorks.CruiseControl.Core.Test
 			AssertEquals(IntegrationStatus.Unknown, result.LastIntegrationStatus);
 			AssertEquals("label", result.Label);
 			Assert("no modifications were returned", result.HasModifications());
-			AssertEquals(mods, result.Modifications);
+			AssertEquals(modifications, result.Modifications);
 			Assert("end time should come after start time", result.EndTime >= result.StartTime);
 		}
 
@@ -216,7 +213,10 @@ namespace ThoughtWorks.CruiseControl.Core.Test
 			_mockStateManager.ExpectAndReturn("StateFileExists", false, null);
 			IntegrationResult last = _project.LastIntegrationResult;
 			AssertEquals(new IntegrationResult(PROJECT_NAME), last);
-			AssertEquals(DateTime.Now.AddDays(-1).Date, last.LastModificationDate.Date);		// will load all modifications since yesterday -- is this right?
+			
+			// will load all modifications since yesterday -- is this right?
+			DateTime yesterday = DateTime.Now.AddDays(-1).Date;
+			AssertEquals(yesterday, last.LastModificationDate.Date);
 		}
 
 		[Test]
@@ -440,14 +440,6 @@ namespace ThoughtWorks.CruiseControl.Core.Test
 			Assert(!builder.HasRun);
 			_project.RunIntegration(BuildCondition.IfModificationExists);
 			Assert(!builder.HasRun);
-		}
-
-		private Modification[] CreateModifications()
-		{
-			Modification[] mods = new Modification[1];
-			mods[0] = new Modification();
-			mods[0].ModifiedTime = MockSourceControl.LastModificationTime;
-			return mods;
 		}
 	}
 }
