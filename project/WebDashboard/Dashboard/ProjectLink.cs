@@ -1,28 +1,22 @@
 
 namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 {
-	public class ProjectLink : IAbsoluteLink
+	public class ProjectLink : GeneralAbsoluteLink
 	{
 		private readonly IProjectSpecifier buildSpecifier;
 		private readonly IActionSpecifier actionSpecifier;
 		private readonly IUrlBuilder urlBuilder;
-		private readonly string description;
 		public readonly string absoluteUrl;
 
-		public ProjectLink(IUrlBuilder urlBuilder, IProjectSpecifier projectSpecifier, string description, IActionSpecifier actionSpecifier)
+		public ProjectLink(IUrlBuilder urlBuilder, IProjectSpecifier projectSpecifier, string text, IActionSpecifier actionSpecifier)
+			: base (text)
 		{
-			this.description = description;
 			this.urlBuilder = urlBuilder;
 			this.actionSpecifier = actionSpecifier;
 			this.buildSpecifier = projectSpecifier;
 		}
 
-		public string Description
-		{
-			get { return description; }
-		}
-
-		public string AbsoluteURL
+		public override string Url
 		{
 			get { return urlBuilder.BuildProjectUrl(actionSpecifier, buildSpecifier); }
 		}

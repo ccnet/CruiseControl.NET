@@ -1,4 +1,3 @@
-using System;
 using System.Collections;
 using ThoughtWorks.CruiseControl.Core;
 using ThoughtWorks.CruiseControl.WebDashboard.Config;

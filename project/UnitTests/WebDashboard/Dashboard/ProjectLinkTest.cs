@@ -31,7 +31,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 		[Test]
 		public void ShouldReturnGivenDescription()
 		{
-			Assert.AreEqual(description, projectLink.Description);
+			Assert.AreEqual(description, projectLink.Text);
 			VerifyAll();
 		}
 
@@ -39,7 +39,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 		public void ShouldReturnCalculatedAbsoluteUrl()
 		{
 			urlBuilderMock.ExpectAndReturn("BuildProjectUrl", "my absolute url", actionSpecifier, projectSpecifier);
-			Assert.AreEqual("my absolute url", projectLink.AbsoluteURL);
+			Assert.AreEqual("my absolute url", projectLink.Url);
 			VerifyAll();
 		}
 	}

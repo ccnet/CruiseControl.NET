@@ -1,11 +1,12 @@
-using System.Web.UI;
-using System.Web.UI.HtmlControls;
+using System.Collections;
 using NMock;
-using NMock.Constraints;
 using NUnit.Framework;
+using ThoughtWorks.CruiseControl.UnitTests.UnitTestUtils;
 using ThoughtWorks.CruiseControl.WebDashboard.Dashboard;
+using ThoughtWorks.CruiseControl.WebDashboard.MVC;
 using ThoughtWorks.CruiseControl.WebDashboard.MVC.View;
 using ThoughtWorks.CruiseControl.WebDashboard.Plugins.BuildReport;
+using ThoughtWorks.CruiseControl.WebDashboard.Plugins.ViewAllBuilds;
 using ThoughtWorks.CruiseControl.WebDashboard.ServerConnection;
 
 namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
@@ -13,10 +14,13 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 	[TestFixture]
 	public class RecentBuildListerTest
 	{
-		private DynamicMock urlBuilderMock;
 		private DynamicMock farmServiceMock;
-		private DynamicMock nameFormatterMock;
-		private RecentBuildLister Builder;
+		private DynamicMock velocityTransformerMock;
+		private DynamicMock velocityViewGeneratorMock;
+		private DynamicMock linkFactoryMock;
+		private DynamicMock linkListFactoryMock;
+
+		private RecentBuildLister lister;
 		private IProjectSpecifier projectSpecifier;
 		private DefaultBuildSpecifier build2Specifier;
 		private DefaultBuildSpecifier build1Specifier;
@@ -24,131 +28,83 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 		[SetUp]
 		public void Setup()
 		{
-			urlBuilderMock = new DynamicMock(typeof(IUrlBuilder));
 			farmServiceMock = new DynamicMock(typeof(IFarmService));
-			nameFormatterMock = new DynamicMock(typeof(IBuildNameFormatter));
+			velocityTransformerMock = new DynamicMock(typeof(IVelocityTransformer));
+			velocityViewGeneratorMock = new DynamicMock(typeof(IVelocityViewGenerator));
+			linkFactoryMock = new DynamicMock(typeof(ILinkFactory));
+			linkListFactoryMock = new DynamicMock(typeof(ILinkListFactory));
+
+			lister = new RecentBuildLister(
+				(IFarmService) farmServiceMock.MockInstance,
+				(IVelocityTransformer) velocityTransformerMock.MockInstance,
+				(IVelocityViewGenerator) velocityViewGeneratorMock.MockInstance,
+				(ILinkFactory) linkFactoryMock.MockInstance,
+				(ILinkListFactory) linkListFactoryMock.MockInstance);
+
 			projectSpecifier = new DefaultProjectSpecifier(new DefaultServerSpecifier("myServer"), "myProject");
 			build2Specifier = new DefaultBuildSpecifier(projectSpecifier, "build2");
 			build1Specifier = new DefaultBuildSpecifier(projectSpecifier, "build1");
-
-			Builder = new RecentBuildLister(new DefaultHtmlBuilder(), 
-				(IUrlBuilder) urlBuilderMock.MockInstance,
-				(IFarmService) farmServiceMock.MockInstance,
-				(IBuildNameFormatter) nameFormatterMock.MockInstance);
 		}
 
 		private void VerifyAll()
 		{
-			urlBuilderMock.Verify();
 			farmServiceMock.Verify();
-			nameFormatterMock.Verify();
+			velocityTransformerMock.Verify();
+			velocityViewGeneratorMock.Verify();
+			linkFactoryMock.Verify();
+			linkListFactoryMock.Verify();
 		}
 
 		[Test]
-		public void ShouldRequestRecentBuildsFromServerAndDisplayARowForEachOne()
+		public void ShouldBuildViewForRecentBuilds()
 		{
-			farmServiceMock.ExpectAndReturn("GetMostRecentBuildSpecifiers", new IBuildSpecifier [] {build2Specifier, build1Specifier }, projectSpecifier, 10);
-			SetupBuildExpectations();
-			HtmlTable builtTable = Builder.BuildRecentBuildsTable(projectSpecifier);
-			CheckReturnedTableForCorrectBuilds(builtTable);
+			IBuildSpecifier[] buildSpecifiers = new IBuildSpecifier [] {build2Specifier, build1Specifier };
+			IAbsoluteLink[] buildLinks = new IAbsoluteLink[] { new GeneralAbsoluteLink("link1"), new GeneralAbsoluteLink("link2") };
+			string buildRows = "renderred Links";
+			string recentBuilds = "recentBuilds";
+			Hashtable context1 = new Hashtable();
+			Hashtable context2 = new Hashtable();
+
+			farmServiceMock.ExpectAndReturn("GetMostRecentBuildSpecifiers", buildSpecifiers, projectSpecifier, 10);
+			linkListFactoryMock.ExpectAndReturn("CreateStyledBuildLinkList", buildLinks, buildSpecifiers, new ActionSpecifierWithName(ViewBuildReportAction.ACTION_NAME) );
+			context1["links"] = buildLinks;
+			velocityTransformerMock.ExpectAndReturn("Transform", buildRows, @"BuildRows.vm", new HashtableConstraint(context1));
+
+			context2["buildRows"] = buildRows;
+			IAbsoluteLink allBuildsLink = new GeneralAbsoluteLink("foo");
+			linkFactoryMock.ExpectAndReturn("CreateProjectLink", allBuildsLink, projectSpecifier, "", new ActionSpecifierWithName(ViewAllBuildsAction.ACTION_NAME) );
+			context2["allBuildsLink"] = allBuildsLink;
+			velocityTransformerMock.ExpectAndReturn("Transform", recentBuilds, @"RecentBuilds.vm", new HashtableConstraint(context2));
+
+			Assert.AreEqual(recentBuilds, lister.BuildRecentBuildsTable(projectSpecifier));
+
+			VerifyAll();
 		}
 
 		[Test]
-		public void ShouldRequestAllBuildsFromServerAndDisplayARowForEachOne()
+		public void ShouldBuildViewForAllBuilds()
 		{
+			IBuildSpecifier[] buildSpecifiers = new IBuildSpecifier [] {build2Specifier, build1Specifier };
+			IAbsoluteLink[] buildLinks = new IAbsoluteLink[] { new GeneralAbsoluteLink("link1"), new GeneralAbsoluteLink("link2") };
+			string buildRows = "renderred Links";
+			IView allBuildsView = new DefaultView("foo");
+			Hashtable context1 = new Hashtable();
+			Hashtable context2 = new Hashtable();
+
 			farmServiceMock.ExpectAndReturn("GetBuildSpecifiers", new IBuildSpecifier [] { build2Specifier, build1Specifier }, projectSpecifier);
-			SetupBuildExpectations();
-			HtmlTable builtTable = Builder.BuildAllBuildsTable(projectSpecifier);
-			CheckReturnedTableForCorrectBuilds(builtTable);
-		}
+			linkListFactoryMock.ExpectAndReturn("CreateStyledBuildLinkList", buildLinks, buildSpecifiers, new ActionSpecifierWithName(ViewBuildReportAction.ACTION_NAME) );
+			context1["links"] = buildLinks;
+			velocityTransformerMock.ExpectAndReturn("Transform", buildRows, @"BuildRows.vm", new HashtableConstraint(context1));
 
-		private void SetupBuildExpectations()
-		{
-			urlBuilderMock.ExpectAndReturn("BuildBuildUrl", "url1", new PropertyIs("ActionName", ViewBuildReportAction.ACTION_NAME), build2Specifier);
-			urlBuilderMock.ExpectAndReturn("BuildBuildUrl", "url2", new PropertyIs("ActionName", ViewBuildReportAction.ACTION_NAME), build1Specifier);
-			nameFormatterMock.ExpectAndReturn("GetPrettyBuildName", "prettyName2", build2Specifier);
-			nameFormatterMock.ExpectAndReturn("GetPrettyBuildName", "prettyName1", build1Specifier);
-			nameFormatterMock.ExpectAndReturn("GetCssClassForBuildLink", "css2", build2Specifier);
-			nameFormatterMock.ExpectAndReturn("GetCssClassForBuildLink", "css1", build1Specifier);
-		}
+			context2["buildRows"] = buildRows;
+			IAbsoluteLink allBuildsLink = new GeneralAbsoluteLink("foo");
+			linkFactoryMock.ExpectAndReturn("CreateProjectLink", allBuildsLink, projectSpecifier, "", new ActionSpecifierWithName(ViewAllBuildsAction.ACTION_NAME) );
+			context2["allBuildsLink"] = allBuildsLink;
+			velocityViewGeneratorMock.ExpectAndReturn("GenerateView", allBuildsView, @"RecentBuilds.vm", new HashtableConstraint(context2));
 
-		private void CheckReturnedTableForCorrectBuilds(HtmlTable builtTable)
-		{
-
-			// Verify
-			HtmlAnchor expectedAnchor1 = new HtmlAnchor();
-			expectedAnchor1.HRef = "url1";
-			expectedAnchor1.InnerHtml = "prettyName2";
-			expectedAnchor1.Attributes["class"] = "css1";
-			HtmlAnchor expectedAnchor2 = new HtmlAnchor();
-			expectedAnchor2.HRef = "url2";
-			expectedAnchor2.InnerHtml = "prettyName1";
-			expectedAnchor1.Attributes["class"] = "css2";
-
-			Assert.IsTrue(TableContains(builtTable, expectedAnchor1));
-			Assert.IsTrue(TableContains(builtTable, expectedAnchor2));
+			Assert.AreEqual(allBuildsView, lister.GenerateAllBuildsView(projectSpecifier));
 
 			VerifyAll();
-		}
-
-		[Test]
-		public void ShouldRequestRecentBuildsFromServerAndShowNothingIfNoBuilds()
-		{
-			// Setup
-			farmServiceMock.ExpectAndReturn("GetMostRecentBuildSpecifiers", new IBuildSpecifier [0], projectSpecifier, 10);
-			urlBuilderMock.ExpectNoCall("BuildBuildUrl",typeof(IActionSpecifier), typeof(IBuildSpecifier));
-
-			// Execute
-			HtmlTable builtTable = Builder.BuildRecentBuildsTable(projectSpecifier);
-
-			// Verify
-			Assert.AreEqual(0, builtTable.Rows.Count);
-
-			VerifyAll();
-		}
-
-		[Test]
-		public void ShouldRequestAllBuildsFromServerAndShowNothingIfNoBuilds()
-		{
-			// Setup
-			farmServiceMock.ExpectAndReturn("GetBuildSpecifiers", new IBuildSpecifier [0], projectSpecifier);
-			urlBuilderMock.ExpectNoCall("BuildBuildUrl", typeof(IActionSpecifier), typeof(IBuildSpecifier));
-
-			// Execute
-			HtmlTable builtTable = Builder.BuildAllBuildsTable(projectSpecifier);
-
-			// Verify
-			// Just comment rows
-			Assert.AreEqual(2, builtTable.Rows.Count);
-
-			VerifyAll();
-		}
-
-		private bool TableContains(HtmlTable table, Control expectedControl)
-		{
-			foreach (HtmlTableRow row in table.Rows)
-			{
-				foreach (HtmlTableCell cell in row.Cells)
-				{
-					foreach (Control control in cell.Controls)
-					{
-						if (control is HtmlAnchor && expectedControl is HtmlAnchor)
-						{
-							HtmlAnchor currentAnchor = (HtmlAnchor) control;
-							HtmlAnchor expectedAnchor = (HtmlAnchor) expectedControl;
-							if (currentAnchor.HRef == expectedAnchor.HRef && currentAnchor.InnerHtml == expectedAnchor.InnerHtml)
-							{
-								return true;
-							}
-						}
-						else if (control == expectedControl)
-						{
-							return true;
-						}
-					}
-				}
-			}
-			return false;
 		}
 	}
 }

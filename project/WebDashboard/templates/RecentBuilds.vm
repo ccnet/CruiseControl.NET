@@ -1,0 +1,6 @@
+<table class="RecentBuildsPanel" align="center" width="100%" cellspacing="0">
+	<tr><th>Recent Builds</th></tr>
+	$buildRows
+	<tr><td/></tr>
+	<tr><td><a href="$allBuildsLink.Url">Show All</a></a></td></tr>
+</table>

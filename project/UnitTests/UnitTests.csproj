@@ -403,22 +403,17 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "WebDashboard\Dashboard\DecoratingRecentBuildsPanelBuilderTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
                     RelPath = "WebDashboard\Dashboard\DefaultBuildNameFormatterTest.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "WebDashboard\Dashboard\DefaultUrlBuilderTest.cs"
+                    RelPath = "WebDashboard\Dashboard\DefaultLinkListFactoryTest.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "WebDashboard\Dashboard\DefaultUserRequestSpecificSideBarViewBuilderTest.cs"
+                    RelPath = "WebDashboard\Dashboard\DefaultUrlBuilderTest.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

@@ -1,9 +1,9 @@
-using System.Web.UI.HtmlControls;
+using ThoughtWorks.CruiseControl.WebDashboard.MVC;
 
 namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 {
 	public interface IAllBuildsViewBuilder
 	{
-		HtmlTable BuildAllBuildsTable(IProjectSpecifier projectSpecifier);	
+		IView GenerateAllBuildsView(IProjectSpecifier projectSpecifier);	
 	}
 }

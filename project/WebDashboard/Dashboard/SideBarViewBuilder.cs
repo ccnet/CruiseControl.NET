@@ -1,49 +1,72 @@
-using System.Web.UI.HtmlControls;
+using System.Collections;
 using ThoughtWorks.CruiseControl.WebDashboard.IO;
+using ThoughtWorks.CruiseControl.WebDashboard.MVC;
+using ThoughtWorks.CruiseControl.WebDashboard.MVC.View;
+using ThoughtWorks.CruiseControl.WebDashboard.Plugins.BuildReport;
 
 namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 {
 	public class SideBarViewBuilder
 	{
 		private readonly ICruiseRequest request;
-		private readonly IUserRequestSpecificSideBarViewBuilder slaveBuilder;
+		private readonly IBuildNameRetriever buildNameRetriever;
+		private readonly IRecentBuildsViewBuilder recentBuildsViewBuilder;
+		private readonly IPluginLinkCalculator pluginLinkCalculator;
+		private readonly IVelocityViewGenerator velocityViewGenerator;
+		private readonly ILinkFactory linkFactory;
 
-		public SideBarViewBuilder(IUserRequestSpecificSideBarViewBuilder BarUserRequestSpecificSideBarViewBuilder, ICruiseRequest request)
+		public SideBarViewBuilder(ICruiseRequest request, IBuildNameRetriever buildNameRetriever, IRecentBuildsViewBuilder recentBuildsViewBuilder, IPluginLinkCalculator pluginLinkCalculator, IVelocityViewGenerator velocityViewGenerator, ILinkFactory linkFactory)
 		{
-			this.slaveBuilder = BarUserRequestSpecificSideBarViewBuilder;
 			this.request = request;
+			this.buildNameRetriever = buildNameRetriever;
+			this.recentBuildsViewBuilder = recentBuildsViewBuilder;
+			this.pluginLinkCalculator = pluginLinkCalculator;
+			this.velocityViewGenerator = velocityViewGenerator;
+			this.linkFactory = linkFactory;
 		}
 
-		public HtmlTable Execute()
+		public IView Execute()
 		{
-			HtmlTable table = null;
+			Hashtable velocityContext = new Hashtable();
+			string velocityTemplateName = "";
+
 			string serverName = request.ServerName;
 			if (serverName == "")
 			{
-				table = slaveBuilder.GetFarmSideBar();
+				velocityTemplateName = @"FarmSideBar.vm";
 			}
 			else
 			{
 				string projectName = request.ProjectName;
 				if (projectName == "")
 				{
-					table = slaveBuilder.GetServerSideBar(request.ServerSpecifier);
+					velocityContext["links"] = pluginLinkCalculator.GetServerPluginLinks(request.ServerSpecifier);
+					velocityTemplateName = @"ServerSideBar.vm";
 				}
 				else
 				{
 					string buildName = request.BuildName;
 					if (buildName == "")
 					{
-						table = slaveBuilder.GetProjectSideBar(request.ProjectSpecifier);	
+						IProjectSpecifier projectSpecifier = request.ProjectSpecifier;
+						velocityContext["links"] = pluginLinkCalculator.GetProjectPluginLinks(projectSpecifier);
+						velocityContext["recentBuildsTable"] = recentBuildsViewBuilder.BuildRecentBuildsTable(projectSpecifier);
+						velocityTemplateName = @"ProjectSideBar.vm";
 					}
 					else
 					{
-						table =  slaveBuilder.GetBuildSideBar(request.BuildSpecifier);
+						IBuildSpecifier buildSpecifier = request.BuildSpecifier;
+						velocityContext["links"] = pluginLinkCalculator.GetBuildPluginLinks(buildSpecifier);
+						velocityContext["recentBuildsTable"] = recentBuildsViewBuilder.BuildRecentBuildsTable(buildSpecifier.ProjectSpecifier);
+						velocityContext["latestLink"] = linkFactory.CreateBuildLink(buildNameRetriever.GetLatestBuildSpecifier(buildSpecifier.ProjectSpecifier), "", new ActionSpecifierWithName(ViewBuildReportAction.ACTION_NAME));
+						velocityContext["nextLink"] = linkFactory.CreateBuildLink(buildNameRetriever.GetNextBuildSpecifier(buildSpecifier), "", new ActionSpecifierWithName(ViewBuildReportAction.ACTION_NAME));
+						velocityContext["previousLink"] = linkFactory.CreateBuildLink(buildNameRetriever.GetPreviousBuildSpecifier(buildSpecifier), "", new ActionSpecifierWithName(ViewBuildReportAction.ACTION_NAME));
+						velocityTemplateName = @"BuildSideBar.vm";
 					}
 				}
 			}
-			table.Width = "100%";
-			return table;
+
+			return velocityViewGenerator.GenerateView(velocityTemplateName, velocityContext);
 		}
 	}
 }

@@ -1,10 +1,11 @@
-using System;
 
 namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 {
 	public interface IAbsoluteLink
 	{
-		string Description { get; }
-		string AbsoluteURL { get; }
+		string Text { get; }
+		string Url { get; }
+
+		string LinkClass { set; }
 	}
 }

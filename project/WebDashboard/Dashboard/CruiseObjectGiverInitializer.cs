@@ -36,8 +36,6 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 			giverAndRegistrar.SetImplementationType(typeof(IPathMapper), typeof(HttpPathMapper));
 			giverAndRegistrar.SetImplementationType(typeof(IMultiTransformer), typeof(PathMappingMultiTransformer));
 
-			giverAndRegistrar.SetDependencyImplementationForType(typeof(DefaultUserRequestSpecificSideBarViewBuilder), typeof(IRecentBuildsViewBuilder), typeof(DecoratingRecentBuildsPanelBuilder));
-			giverAndRegistrar.SetDependencyImplementationForType(typeof(DecoratingRecentBuildsPanelBuilder), typeof(IRecentBuildsViewBuilder), typeof(RecentBuildLister));
 			giverAndRegistrar.SetDependencyImplementationForType(typeof(PathMappingMultiTransformer), typeof(IMultiTransformer), typeof (HtmlAwareMultiTransformer));
 
 			// Need to get these into plugin setup

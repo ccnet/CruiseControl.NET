@@ -18,7 +18,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.ViewAllBuilds
 
 		public IView Execute(ICruiseRequest cruiseRequest)
 		{
-			return new DefaultView(viewBuilder.BuildAllBuildsTable(cruiseRequest.ProjectSpecifier));
+			return viewBuilder.GenerateAllBuildsView(cruiseRequest.ProjectSpecifier);
 		}
 	}
 }
