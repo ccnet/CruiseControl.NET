@@ -1,3 +1,4 @@
+using System;
 using System.IO;
 using NUnit.Framework;
 
@@ -13,7 +14,7 @@ namespace ThoughtWorks.CruiseControl.Core.Util.Test
 			using (ProcessReader reader = new ProcessReader(stream))
 			{
 				reader.WaitForExit();
-				Assert.AreEqual("string to read", reader.Output);				
+				Assert.AreEqual("string to read" + Environment.NewLine, reader.Output);				
 			}
 			Assert.IsTrue(stream.IsClosed);
 		}

@@ -8,31 +8,29 @@ namespace ThoughtWorks.CruiseControl.Console
 	/// <summary>
 	/// Runs CruiseControl.NET from the console.
 	/// </summary>
-	class ConsoleRunner
+	internal class ConsoleRunner
 	{
 		[STAThread]
 		internal static void Main(string[] args)
 		{
 			try
 			{
-				new ConsoleRunner(new ArgumentParser(args)).Run();
+				new ConsoleRunner(new ArgumentParser(args), new CruiseServerFactory()).Run();
 			}
 			catch (Exception ex)
 			{
 				Log.Error(ex);
 			}
-		}	
+		}
 
-		private ArgumentParser _parser;
-		private ICruiseServer _server;
+		private readonly ArgumentParser _parser;
+		private readonly ICruiseServerFactory _serverFactory;
+		private ICruiseServer server;
 
-		public ConsoleRunner(ArgumentParser parser) : 
-			this(parser, CruiseServerFactory.Create(parser.IsRemote, parser.ConfigFile)) { }
-
-		public ConsoleRunner(ArgumentParser parser, ICruiseServer server)
+		public ConsoleRunner(ArgumentParser parser, ICruiseServerFactory serverFactory)
 		{
 			_parser = parser;
-			_server = server;
+			_serverFactory = serverFactory;
 		}
 
 		public void Run()
@@ -50,25 +48,26 @@ namespace ThoughtWorks.CruiseControl.Console
 			using (ConsoleEventHandler handler = new ConsoleEventHandler())
 			{
 				handler.OnConsoleEvent += new EventHandler(HandleControlEvent);
-			
-				if (_parser.Project == null)
+
+				using (server = _serverFactory.Create(_parser.IsRemote, _parser.ConfigFile))
 				{
-					_server.Start();
-					_server.WaitForExit();
-				}
-				else
-				{
-					_server.ForceBuild(_parser.Project);
-					_server.WaitForExit(_parser.Project);
+					if (_parser.Project == null)
+					{
+						server.Start();
+						server.WaitForExit();
+					}
+					else
+					{
+						server.ForceBuild(_parser.Project);
+						server.WaitForExit(_parser.Project);
+					}
 				}
 			}
 		}
 
 		private void HandleControlEvent(object sender, EventArgs args)
 		{
-			ConsoleEventHandler handler = (ConsoleEventHandler)sender;
-			handler.OnConsoleEvent -= new EventHandler(HandleControlEvent);	// remove handler to prevent event from being called again
-			_server.Dispose();
+			server.Dispose();
 		}
 	}
 }

@@ -9,18 +9,7 @@ namespace ThoughtWorks.CruiseControl.Console
 	public class ConsoleEventHandler : IDisposable
 	{
 		private ControlEventHandler handler;
-
-		public delegate void ControlEventHandler(ConsoleEvent consoleEvent);
-		public EventHandler OnConsoleEvent;
-
-		public enum ConsoleEvent
-		{
-			CTRL_C = 0,		// From wincom.h
-			CTRL_BREAK = 1,
-			CTRL_CLOSE = 2,
-			CTRL_LOGOFF = 5,
-			CTRL_SHUTDOWN = 6
-		}
+		public event EventHandler OnConsoleEvent;
 
 		public ConsoleEventHandler()
 		{
@@ -54,6 +43,18 @@ namespace ThoughtWorks.CruiseControl.Console
 				SetConsoleCtrlHandler(handler, false);
 				handler = null;
 			}
+		}
+
+		private delegate void ControlEventHandler(ConsoleEvent consoleEvent);
+
+		// From wincom.h
+		private enum ConsoleEvent
+		{
+			CTRL_C = 0,		
+			CTRL_BREAK = 1,
+			CTRL_CLOSE = 2,
+			CTRL_LOGOFF = 5,
+			CTRL_SHUTDOWN = 6
 		}
 
 		[DllImport("kernel32.dll")]

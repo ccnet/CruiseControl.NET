@@ -1,3 +1,4 @@
+using System;
 using System.Runtime.Remoting;
 using System.Runtime.Remoting.Channels;
 using NMock;
@@ -17,17 +18,63 @@ namespace ThoughtWorks.CruiseControl.Core.Test
 			foreach (IChannel channel in ChannelServices.RegisteredChannels)
 			{
 				ChannelServices.UnregisterChannel(channel);
-			}			
+			}
+			Assert.AreEqual(0, ChannelServices.RegisteredChannels.Length);
 		}
 
 		[TearDown]
 		public void DeleteTempFiles()
 		{
-			TempFileUtil.DeleteTempDir("RemoteCruiseServerTest");	
+			TempFileUtil.DeleteTempDir("RemoteCruiseServerTest");
 		}
 
 		[Test]
 		public void SetupAndTeardownRemotingInfrastructure()
+		{
+			string configFile = CreateTemporaryConfigurationFile();
+
+			IMock mockCruiseManager = new RemotingMock(typeof (ICruiseManager));
+			IMock mockCruiseServer = new DynamicMock(typeof (ICruiseServer));
+			mockCruiseServer.ExpectAndReturn("CruiseManager", mockCruiseManager.MockInstance);
+			mockCruiseServer.ExpectAndReturn("CruiseManager", mockCruiseManager.MockInstance);
+			mockCruiseServer.Expect("Dispose");
+
+			using (new RemoteCruiseServer((ICruiseServer) mockCruiseServer.MockInstance, configFile))
+			{
+				Assert.AreEqual(2, ChannelServices.RegisteredChannels.Length);
+				Assert.IsNotNull(ChannelServices.GetChannel("ccnet"), "ccnet channel is missing");
+				Assert.IsNotNull(ChannelServices.GetChannel("ccnet2"), "ccnet2 channel is missing");
+
+				ICruiseManager remoteManager = (ICruiseManager) RemotingServices.Connect(typeof (ICruiseManager), "tcp://localhost:35354/" + RemoteCruiseServer.URI);
+				Assert.IsNotNull(remoteManager, "cruiseserver should be registered on tcp channel");
+
+				remoteManager = (ICruiseManager) RemotingServices.Connect(typeof (ICruiseManager), "http://localhost:35355/" + RemoteCruiseServer.URI);
+				Assert.IsNotNull(remoteManager, "cruiseserver should be registered on http channel");
+			}
+			Assert.AreEqual(0, ChannelServices.RegisteredChannels.Length, "all registered channels should be closed.");
+			mockCruiseServer.Verify();
+			mockCruiseManager.Verify();
+		}
+
+		[Test]
+		public void ShouldOnlyDisposeOnce()
+		{
+			string configFile = CreateTemporaryConfigurationFile();
+			IMock mockCruiseManager = new RemotingMock(typeof (ICruiseManager));
+			IMock mockCruiseServer = new DynamicMock(typeof (ICruiseServer));
+			mockCruiseServer.ExpectAndReturn("CruiseManager", mockCruiseManager.MockInstance);
+			mockCruiseServer.ExpectAndReturn("CruiseManager", mockCruiseManager.MockInstance);
+			mockCruiseServer.Expect("Dispose");
+
+			RemoteCruiseServer server = new RemoteCruiseServer((ICruiseServer) mockCruiseServer.MockInstance, configFile);
+			((IDisposable)server).Dispose();
+
+			mockCruiseServer.ExpectNoCall("Dispose");
+			((IDisposable)server).Dispose();
+			mockCruiseServer.Verify();
+		}
+
+		private string CreateTemporaryConfigurationFile()
 		{
 			string configXml = @"<configuration>
 	<system.runtime.remoting>
@@ -47,33 +94,10 @@ namespace ThoughtWorks.CruiseControl.Core.Test
 		</application>
 	</system.runtime.remoting>
 </configuration>";
-
-			Assert.AreEqual(0, ChannelServices.RegisteredChannels.Length);
-
+	
+	
 			TempFileUtil.CreateTempDir("RemoteCruiseServerTest");
-			string configFile = TempFileUtil.CreateTempXmlFile("RemoteCruiseServerTest", "remote.config", configXml);
-
-			IMock mockCruiseManager = new RemotingMock(typeof(ICruiseManager));
-			IMock mockCruiseServer = new DynamicMock(typeof(ICruiseServer));
-			mockCruiseServer.ExpectAndReturn("CruiseManager", mockCruiseManager.MockInstance);
-			mockCruiseServer.ExpectAndReturn("CruiseManager", mockCruiseManager.MockInstance);
-			mockCruiseServer.Expect("Dispose");
-
-			using(RemoteCruiseServer server = new RemoteCruiseServer((ICruiseServer) mockCruiseServer.MockInstance, configFile))
-			{
-				Assert.AreEqual(2, ChannelServices.RegisteredChannels.Length);
-				Assert.IsNotNull(ChannelServices.GetChannel("ccnet"), "ccnet channel is missing");
-				Assert.IsNotNull(ChannelServices.GetChannel("ccnet2"), "ccnet2 channel is missing");
-
-				ICruiseManager remoteManager = (ICruiseManager) RemotingServices.Connect(typeof(ICruiseManager), "tcp://localhost:35354/" + RemoteCruiseServer.URI);
-				Assert.IsNotNull(remoteManager, "cruiseserver should be registered on tcp channel");
-
-				remoteManager = (ICruiseManager) RemotingServices.Connect(typeof(ICruiseManager), "http://localhost:35355/" + RemoteCruiseServer.URI);
-				Assert.IsNotNull(remoteManager, "cruiseserver should be registered on http channel");
-			}
-			Assert.AreEqual(0, ChannelServices.RegisteredChannels.Length, "all registered channels should be closed.");
-			mockCruiseServer.Verify();
-			mockCruiseManager.Verify();
+			return TempFileUtil.CreateTempXmlFile("RemoteCruiseServerTest", "remote.config", configXml);
 		}
 	}
 }

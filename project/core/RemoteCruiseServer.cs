@@ -12,6 +12,7 @@ namespace ThoughtWorks.CruiseControl.Core
 
 		private ICruiseServer _server;
 		private static readonly string ConfigurationFile = AppDomain.CurrentDomain.SetupInformation.ConfigurationFile;
+		private bool _disposed;
 
 		public RemoteCruiseServer(ICruiseServer server) : this(server, ConfigurationFile)
 		{
@@ -129,6 +130,11 @@ namespace ThoughtWorks.CruiseControl.Core
 
 		void IDisposable.Dispose()
 		{
+			lock (this)
+			{
+				if (_disposed) return;		
+				_disposed = true;
+			}
 			Log.Info("Disconnecting remote server: ");
 			RemotingServices.Disconnect((MarshalByRefObject)_server.CruiseManager);
 			foreach (IChannel channel in ChannelServices.RegisteredChannels)

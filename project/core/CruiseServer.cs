@@ -19,6 +19,7 @@ namespace ThoughtWorks.CruiseControl.Core
 		private ManualResetEvent _monitor = new ManualResetEvent(true);
 
 		private IProjectIntegratorList projectIntegrators;
+		private bool _disposed;
 
 		public CruiseServer(IConfigurationService configurationService, IProjectIntegratorListFactory projectIntegratorListFactory, IProjectSerializer projectSerializer)
 		{
@@ -30,7 +31,6 @@ namespace ThoughtWorks.CruiseControl.Core
 			_manager = new CruiseManager(this);
 
 			// By default, no integrators are running
-//			projectIntegrators = new ProjectIntegratorList();
 			this.projectSerializer = projectSerializer;
 
 			CreateIntegrators();
@@ -43,6 +43,9 @@ namespace ThoughtWorks.CruiseControl.Core
 			StartIntegrators();
 		}
 
+		/// <summary>
+		/// Stop all integrators, waiting until each integrator has completely stopped, before releasing any threads blocked by WaitForExit. 
+		/// </summary>
 		public void Stop()
 		{
 			Log.Info("Stopping CruiseControl.NET Server");
@@ -50,6 +53,9 @@ namespace ThoughtWorks.CruiseControl.Core
 			_monitor.Set();
 		}
 
+		/// <summary>
+		/// Abort all integrators, waiting until each integrator has completely stopped, before releasing any threads blocked by WaitForExit. 
+		/// </summary>
 		public void Abort()
 		{
 			Log.Info("Aborting CruiseControl.NET Server");
@@ -57,6 +63,9 @@ namespace ThoughtWorks.CruiseControl.Core
 			_monitor.Set();
 		}
 
+		/// <summary>
+		/// Restart server by stopping all integrators, creating a new set of integrators from Configuration and then starting them.
+		/// </summary>
 		public void Restart()
 		{
 			Log.Info("Configuration changed: Restarting CruiseControl.NET Server ");
@@ -66,6 +75,9 @@ namespace ThoughtWorks.CruiseControl.Core
 			StartIntegrators();
 		}
 
+		/// <summary>
+		/// Block thread until all integrators to have been stopped or aborted.
+		/// </summary>
 		public void WaitForExit()
 		{
 			_monitor.WaitOne();
@@ -73,23 +85,6 @@ namespace ThoughtWorks.CruiseControl.Core
 
 		private void StartIntegrators()
 		{
-//			IConfiguration configuration;
-//			try
-//			{
-//				configuration = configurationService.Load();
-//			}
-//			catch (ConfigurationException ce)
-//			{
-//				Log.Error(ce);
-//				return;
-//			}
-//
-//			if (configuration == null)
-//			{
-//				Log.Error("Cruise server was not able to load configuration.");
-//				return;
-//			}
-//
 			foreach (IProjectIntegrator integrator in projectIntegrators)
 			{
 				integrator.Start();
@@ -175,7 +170,7 @@ namespace ThoughtWorks.CruiseControl.Core
 			}
 			else
 			{
-				return "";
+				return string.Empty;
 			}
 		}
 
@@ -335,8 +330,12 @@ namespace ThoughtWorks.CruiseControl.Core
 
 		void IDisposable.Dispose()
 		{
+			lock (this)
+			{
+				if (_disposed) return;		
+				_disposed = true;
+			}
 			Abort();
-			WaitForExit();
 		}
 	}
 }

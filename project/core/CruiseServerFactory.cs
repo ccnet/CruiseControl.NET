@@ -5,9 +5,9 @@ using ThoughtWorks.CruiseControl.Remote;
 
 namespace ThoughtWorks.CruiseControl.Core
 {
-	public class CruiseServerFactory
+	public class CruiseServerFactory : ICruiseServerFactory
 	{
-		public static ICruiseServer CreateLocal(string configFile)
+		private ICruiseServer CreateLocal(string configFile)
 		{
 			return new CruiseServer(
 				new CachingConfigurationService(
@@ -20,12 +20,12 @@ namespace ThoughtWorks.CruiseControl.Core
 				new NetReflectorProjectSerializer());
 		}
 
-		public static ICruiseServer CreateRemote(string configFile)
+		private ICruiseServer CreateRemote(string configFile)
 		{
 			return new RemoteCruiseServer(CreateLocal(configFile));
 		}
 
-		public static ICruiseServer Create(bool remote, string configFile)
+		public ICruiseServer Create(bool remote, string configFile)
 		{
 			return (remote) ? CreateRemote(configFile) : CreateLocal(configFile);
 		}

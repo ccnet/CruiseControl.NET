@@ -134,7 +134,7 @@ namespace ThoughtWorks.CruiseControl.Core.Test
 			string exceptionMessage = "Intentional exception";
 
 			integrationTriggerMock.ExpectAndReturn("ShouldRunIntegration", BuildCondition.ForceBuild);
-			integratableMock.ExpectAndThrow("RunIntegration", new Exception(exceptionMessage), BuildCondition.ForceBuild);
+			integratableMock.ExpectAndThrow("RunIntegration", new CruiseControlException(exceptionMessage), BuildCondition.ForceBuild);
 			integrationTriggerMock.Expect("IntegrationCompleted");
 
 			_integrator.Start();
@@ -162,6 +162,7 @@ namespace ThoughtWorks.CruiseControl.Core.Test
 			Thread.Sleep(0);
 			Assert.AreEqual(ProjectIntegratorState.Running, _integrator.State);
 			_integrator.Abort();
+			_integrator.WaitForExit();
 			Assert.AreEqual(ProjectIntegratorState.Stopped, _integrator.State);
 		}
 

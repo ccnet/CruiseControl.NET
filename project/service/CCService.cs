@@ -48,7 +48,7 @@ namespace ThoughtWorks.CruiseControl.Service
 				return;
 			}
 
-			server = CruiseServerFactory.Create(UseRemoting(), configFile);
+			server = new CruiseServerFactory().Create(UseRemoting(), configFile);
 			server.Start();
 		}
 

@@ -1,3 +1,4 @@
+using System;
 using System.Threading;
 using NMock;
 using NUnit.Framework;
@@ -231,6 +232,21 @@ namespace ThoughtWorks.CruiseControl.Core.Test
 			server.WaitForExit("Project 1");
 
 			VerifyAll();
+		}
+
+		[Test]
+		public void ShouldOnlyDisposeOnce()
+		{
+			integratorMock1.Expect("Abort");
+			integratorMock2.Expect("Abort");
+			((IDisposable)server).Dispose();
+
+			integratorMock1.ExpectNoCall("Abort");
+			integratorMock2.ExpectNoCall("Abort");
+			((IDisposable)server).Dispose();
+
+			integratorMock1.Verify();
+			integratorMock2.Verify();
 		}
 	}
 }

@@ -44,17 +44,18 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 		/// </summary>
 		private void ReadToEnd()
 		{
-			int nextChar;
-			while ((nextChar = stream.Read()) >= 0)
+			string nextLine;
+			while ((nextLine = stream.ReadLine()) != null)
 			{
-				output.Write((char)nextChar);
+				output.WriteLine(nextLine);
+//				Log.Debug(nextLine);
 			}
 		}
 
 		void IDisposable.Dispose()
 		{
 			thread.Abort();
-			stream.Close();
+			WaitForExit();
 		}
 	}
 }

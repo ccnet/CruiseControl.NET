@@ -1,8 +1,8 @@
 using System;
 using System.Threading;
 using ThoughtWorks.CruiseControl.Core.Triggers;
-using ThoughtWorks.CruiseControl.Remote;
 using ThoughtWorks.CruiseControl.Core.Util;
+using ThoughtWorks.CruiseControl.Remote;
 
 namespace ThoughtWorks.CruiseControl.Core
 {
@@ -25,7 +25,9 @@ namespace ThoughtWorks.CruiseControl.Core
 		private Thread _thread;
 		private ProjectIntegratorState _state = ProjectIntegratorState.Stopped;
 
-		public ProjectIntegrator(IProject project) : this(new MultipleTrigger(project.Triggers), project, project) { }
+		public ProjectIntegrator(IProject project) : this(new MultipleTrigger(project.Triggers), project, project)
+		{
+		}
 
 		public ProjectIntegrator(ITrigger Trigger, IIntegratable integratable, IProject project)
 		{
@@ -39,8 +41,8 @@ namespace ThoughtWorks.CruiseControl.Core
 			get { return _project.Name; }
 		}
 
-		public IProject Project 
-		{ 
+		public IProject Project
+		{
 			get { return _project; }
 		}
 
@@ -86,33 +88,42 @@ namespace ThoughtWorks.CruiseControl.Core
 		/// </summary>
 		private void Run()
 		{
-			// loop, until the integrator is stopped
 			Log.Info("Starting integration for project: " + _project.Name);
-			while (IsRunning)
-			{
-				// should we integrate this pass?
-				BuildCondition buildCondition = ShouldRunIntegration();
-				if (buildCondition != BuildCondition.NoBuild)
+			try
+			{				
+				// loop, until the integrator is stopped
+				while (IsRunning)
 				{
-					try
-					{
-						integratable.RunIntegration(buildCondition);
-					}
-					catch (Exception ex) 
-					{ 
-						Log.Error(ex);
-					}
+					Integrate();
 
-					// notify the schedule whether the build was successful or not
-					Trigger.IntegrationCompleted();
+					// sleep for a short while, to avoid hammering CPU
+					Thread.Sleep(100);
+				}
+			}
+			finally
+			{
+				Stopped();				
+			}
+		}
+
+		private void Integrate()
+		{
+			// should we integrate this pass?
+			BuildCondition buildCondition = ShouldRunIntegration();
+			if (buildCondition != BuildCondition.NoBuild)
+			{
+				try
+				{
+					integratable.RunIntegration(buildCondition);
+				}
+				catch (Exception ex)
+				{
+					Log.Error(ex);
 				}
 
-				// sleep for a short while, to avoid hammering CPU
-				Thread.Sleep(100);
+				// notify the schedule whether the build was successful or not
+				Trigger.IntegrationCompleted();
 			}
-
-			// the state was set to 'Stopping', so set it to 'Stopped'
-			_state = ProjectIntegratorState.Stopped;
 		}
 
 		private BuildCondition ShouldRunIntegration()
@@ -123,6 +134,14 @@ namespace ThoughtWorks.CruiseControl.Core
 				return BuildCondition.ForceBuild;
 			}
 			return Trigger.ShouldRunIntegration();
+		}
+
+		private void Stopped()
+		{
+			// the state was set to 'Stopping', so set it to 'Stopped'
+			_state = ProjectIntegratorState.Stopped;
+			_thread = null;
+			Log.Info("Integrator for project: " + _project.Name + " is now stopped.");
 		}
 
 		/// <summary>
@@ -142,19 +161,22 @@ namespace ThoughtWorks.CruiseControl.Core
 		{
 			if (IsRunning)
 			{
-				_state = ProjectIntegratorState.Stopping;
 				Log.Info("Stopping integrator for project: " + _project.Name);
+				_state = ProjectIntegratorState.Stopping;
 			}
 		}
 
+		/// <summary>
+		/// Asynchronously abort project by aborting the project thread.  This needs to be followed by a call to WaitForExit 
+		/// to ensure that the abort has completed.
+		/// </summary>
 		public void Abort()
 		{
 			if (_thread != null)
 			{
+				Log.Info("Aborting integrator for project: " + _project.Name);
 				_thread.Abort();
 			}
-			_state = ProjectIntegratorState.Stopped;
-			Log.Info("Integrator for project: " + _project.Name + " is now stopped.");
 		}
 
 		public void WaitForExit()
