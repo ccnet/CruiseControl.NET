@@ -230,6 +230,11 @@
 				<include name="**\*" />
 			</fileset>
 		</copy>
+		<copy todir="deployed\examples">
+			<fileset basedir="project/examples">
+				<include name="**\*" />
+			</fileset>
+		</copy>
 	
 		<mkdir dir="dist"/>
 		<zip zipfile="dist\CruiseControl.NET.zip">
