@@ -2,6 +2,7 @@
     <head>
         <title>CruiseControl.NET : CCNet 0.6 RC1 Release Notes</title>
 	    <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">	    
     </head>
 
     <body>
@@ -14,34 +15,38 @@
                                                     </span>
 				    </div>
 				    <div class="pagesubheading">
-					    This page last changed on May 03, 2004 by <font color="#0050B2">orogers</font>.
+					    This page last changed on Oct 13, 2004 by <font color="#0050B2">mroberts</font>.
 				    </div>
 
-				    <p class="paragraph"><h3 class="heading3"> Bugs</h3><ul class="star">
-<li> <a href="http://confluence.public.thoughtworks.org/display/CCNET/CCNET-1">CCNET-1</a> - E-mail Contains Incorrect Unit Test Information (Brad Wilson)</li>
-<li> <a href="http://confluence.public.thoughtworks.org/display/CCNET/CCNET-4">CCNET-4</a> - faild to display ccnet.log in web interface</li>
-<li> <a href="http://confluence.public.thoughtworks.org/display/CCNET/CCNET-5">CCNET-5</a> - Comlains of missing XmlLogger when it should not</li>
-<li> <a href="http://confluence.public.thoughtworks.org/display/CCNET/CCNET-23">CCNET-23</a> - Vss writes labelling message to stderr.</li>
-<li> <a href="http://confluence.public.thoughtworks.org/display/CCNET/CCNET-39">CCNET-39</a> - ServerLog is not displayed as it is locked by ccnet server (Joseph Kunjoonju)</li>
+				    <p class="paragraph"><h3 class="heading3"><a name="CCNet0.6RC1ReleaseNotes-Bugs"> Bugs</a></h3>
+<ul class="star">
+<li> CCNET-1 - E-mail Contains Incorrect Unit Test Information (Brad Wilson)</li>
+<li> CCNET-4 - faild to display ccnet.log in web interface</li>
+<li> CCNET-5 - Comlains of missing XmlLogger when it should not</li>
+<li> CCNET-23 - Vss writes labelling message to stderr.</li>
+<li> CCNET-39 - ServerLog is not displayed as it is locked by ccnet server (Joseph Kunjoonju)</li>
 <li> Modification delay fix. Comparison was treating milliseconds like seconds, this is fixed.</li>
 <li> Fixed CCDashboard refresh problem.  Refreshing would force a new build.</li>
 </ul>
-<h3 class="heading3"> New Features</h3><ul class="star">
-<li> <a href="http://confluence.public.thoughtworks.org/display/CCNET/CCNET-11">CCNET-11</a> - Include link to ViewCVS or WebSVN for modifications in the web page (Roberto Paterlini)</li>
-<li> <a href="http://confluence.public.thoughtworks.org/display/CCNET/CCNET-19">CCNET-19</a> - Support for Generic Builder</li>
-<li> <a href="http://confluence.public.thoughtworks.org/display/CCNET/CCNET-34">CCNET-34</a> - CCTray should support multi-project CCNet servers</li>
+<h3 class="heading3"><a name="CCNet0.6RC1ReleaseNotes-NewFeatures"> New Features</a></h3>
+<ul class="star">
+<li> CCNET-11 - Include link to ViewCVS or WebSVN for modifications in the web page (Roberto Paterlini)</li>
+<li> CCNET-19 - Support for Generic Builder</li>
+<li> CCNET-34 - CCTray should support multi-project CCNet servers</li>
 </ul>
-<h3 class="heading3"> Improvements</h3><ul class="star">
-<li> <a href="http://confluence.public.thoughtworks.org/display/CCNET/CCNET-22">CCNET-22</a> - Syntax Error in cmd-line args passed to NAnt (abjolseth)</li>
+<h3 class="heading3"><a name="CCNet0.6RC1ReleaseNotes-Improvements"> Improvements</a></h3>
+<ul class="star">
+<li> CCNET-22 - Syntax Error in cmd-line args passed to NAnt (abjolseth)</li>
 <li> Improved process termination in ProcessExecutor</li>
 <li> Improved label prefixing</li>
 <li> Improvements and fixes to the stylesheets</li>
 <li> Added Build configuration to solution to prevent locking problems with VS.NET</li>
 <li> Refactored NAntBuilder unit tests to remove dependency on NAnt.exe</li>
 </ul>
-<h3 class="heading3"> Configuration Changes</h3><ul class="star">
-<li> Specification of the logger that NAnt should use has moved from the ccnet.exe.config file to the &lt;logger&gt; property in the ccnet.config file.  See <a href="NAntBuilder.html">NAntBuilder</a> for more details.  NOTE: this should only affect users using old versions of NAnt (prior to 0.8.3) or users that are changing the default logger used by NAnt.</li>
-<li> Merge file functionality has been moved from the XmlLogger into the new <a href="MergeFileTask.html">MergeFileTask</a>.  This was done to fix jira issue CCNET-1 so that unit test results merged from NUnit test files could get included into the integration.</li>
+<h3 class="heading3"><a name="CCNet0.6RC1ReleaseNotes-ConfigurationChanges"> Configuration Changes</a></h3>
+<ul class="star">
+<li> Specification of the logger that NAnt should use has moved from the ccnet.exe.config file to the &lt;logger&gt; property in the ccnet.config file.  See <a href="NAnt Builder.html" title="NAnt Builder">NAnt Builder</a> for more details.  NOTE: this should only affect users using old versions of NAnt (prior to 0.8.3) or users that are changing the default logger used by NAnt.</li>
+<li> Merge file functionality has been moved from the XmlLogger into the new <a href="MergeFileTask.html" title="MergeFileTask">MergeFileTask</a>.  This was done to fix jira issue CCNET-1 so that unit test results merged from NUnit test files could get included into the integration.</li>
 </ul></p>
 
 				    
@@ -53,7 +58,7 @@
 				<td height="12" background="border/border_bottom.gif"><img src="border/spacer.gif" width="1" height="1" border="0"/></td>
 			</tr>
 		    <tr>
-			    <td align="center"><font color="grey">Document generated by Confluence on May 31, 2004 05:05</font></td>
+			    <td align="center"><font color="grey">Document generated by Confluence on Nov 01, 2004 14:49</font></td>
 		    </tr>
 	    </table>
     </body>

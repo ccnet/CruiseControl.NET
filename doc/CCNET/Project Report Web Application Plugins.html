@@ -1,0 +1,76 @@
+<html>
+    <head>
+        <title>CruiseControl.NET : Project Report Web Application Plugins</title>
+	    <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">	    
+    </head>
+
+    <body>
+	    <table class="pagecontent" border="0" cellpadding="0" cellspacing="0" width="100%" bgcolor="#ffffff">
+		    <tr>
+			    <td valign="top" class="pagebody">
+				    <div class="pageheader">
+					    <span class="pagetitle">
+                            CruiseControl.NET : Project Report Web Application Plugins
+                                                    </span>
+				    </div>
+				    <div class="pagesubheading">
+					    This page last changed on Oct 13, 2004 by <font color="#0050B2">mroberts</font>.
+				    </div>
+
+				    
+<img src="./icons/emoticons/information.png" height="16" width="16" align="absmiddle" alt="" border="0"/>&#160;<b class="strong">The Project Report Web Application will be deprecated in a not-to-far-away release. The plugins for the replacement project reporting will use a different API.</b><p class="paragraph">CruiseControl.NET offers the ability to add &#039;plugins&#039; to the Project Report Web Application. 2 types of plugin are available :</p><ul class="star">
+<li> <b class="strong">Project plugins</b>: which do not correspond to any particular build. They are available on the global toolbar at the top of the screen.</li>
+<li> <b class="strong">Build plugins</b>: which reflect the results of one build. They are available on the build toolbar on the build results screen</li>
+</ul><br/>
+CruiseControl.NET ships with project and build plugins, e.g.
+<ul class="star">
+<li> &#039;project stats&#039; is a project plugin</li>
+<li> &#039;test timing&#039; is a build plugin, and shows the times taken for each unit test for a given build</li>
+</ul>
+<h3 class="heading3"><a name="ProjectReportWebApplicationPlugins-Creatingaplugin"> Creating a plugin</a></h3>
+A project or build plugin is simply a webpage, so you can create any html page and use it as a plugin. A more powerful option though is to create a ASP.NET page and deploy it as part of the main CCNet web application. To build and deploy such a plugin:<br/>
+
+<ul class="star">
+<li> Create a new ASP.NET development project (e.g. in Visual Studio) to contain your plugins</li>
+<li> Create a new ASP.NET page for your new plugin</li>
+<li> Add your content to the page, using the following ideas:<ul class="star">
+<li> The log directory location is available in the appSettings of the Web Apps configuration, under the logDir key.</li>
+<li> If you are generating a build plugin, the log file name will be passed in as a URL parameter called log</li>
+<li> The CCNet API will be available to you if necessary - consult the CCNet source for details<br/>
+*Build your project<br/>
+*Deploy your plugin as follows:
+</li>
+<li> Deploy the CCNet Web App as normal</li>
+<li> Deploy your .aspx and other web content files to the CCNet Web App directory.</li>
+<li> Deploy your built binary files to the CCNet Web App&#039;s bin folder</li>
+<li> Add any custom configuration for your plugin to the CCNet Web App&#039;s web.config file</li>
+</ul></li>
+</ul><br/>
+For examples of plugins, consult the &#039;web&#039; project in the CCNet source, looking at the examples mentioned above.<p class="paragraph"><h3 class="heading3"><a name="ProjectReportWebApplicationPlugins-ConfiguringCruiseControl.NETtouseaplugin"> Configuring CruiseControl.NET to use a plugin</a></h3></p>Plugins are configured in the web.config file. An example config file is as below:<br/>
+
+<div class="code"><div class="codeContent">
+<pre><span class="xml&#45;tag">&lt;CCNet&gt;</span>&#10;	<span class="xml&#45;tag">&lt;projectPlugins&gt;</span>&#10;		<span class="xml&#45;tag">&lt;plugin linkText=<span class="xml&#45;quote">&quot;project stats&quot;</span> linkUrl=<span class="xml&#45;quote">&quot;Statistics.aspx&quot;</span> /&gt;</span>&#10;	<span class="xml&#45;tag">&lt;/projectPlugins&gt;</span>&#10;&#10;	<span class="xml&#45;tag">&lt;buildPlugins&gt;</span>&#10;		<span class="xml&#45;tag">&lt;plugin linkText=<span class="xml&#45;quote">&quot;test details&quot;</span> linkUrl=<span class="xml&#45;quote">&quot;Tests.aspx&#63;/log=&quot;</span> /&gt;</span>&#10;		<span class="xml&#45;tag">&lt;plugin linkText=<span class="xml&#45;quote">&quot;test timing&quot;</span> linkUrl=<span class="xml&#45;quote">&quot;TestTiming.aspx&#63;/log=&quot;</span> /&gt;</span>&#10;		<span class="xml&#45;tag">&lt;plugin linkText=<span class="xml&#45;quote">&quot;original log&quot;</span> linkUrl=<span class="xml&#45;quote">&quot;log/&quot;</span> /&gt;</span>&#10;	<span class="xml&#45;tag">&lt;/buildPlugins&gt;</span>&#10;	.&#10;	.&#10;	.&#10;<span class="xml&#45;tag">&lt;/CCNet&gt;</span></pre>
+</div></div><br/>
+		
+So, to add your own plugin simply add an entry in the appropriate section, setting the following attributes:<br/>
+
+<ul class="star">
+<li> <b class="strong">linkText</b> is the text that will appear in the toolbar as a link to your plugin.</li>
+<li> <b class="strong">linkUrl</b> is the location of your plugin, relative to the CCNet Web App location.</li>
+</ul>
+
+				    
+                    			    </td>
+		    </tr>
+	    </table>
+	    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+			<tr>
+				<td height="12" background="border/border_bottom.gif"><img src="border/spacer.gif" width="1" height="1" border="0"/></td>
+			</tr>
+		    <tr>
+			    <td align="center"><font color="grey">Document generated by Confluence on Nov 01, 2004 14:49</font></td>
+		    </tr>
+	    </table>
+    </body>
+</html>

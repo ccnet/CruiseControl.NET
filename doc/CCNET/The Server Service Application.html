@@ -1,0 +1,57 @@
+<html>
+    <head>
+        <title>CruiseControl.NET : The Server Service Application</title>
+	    <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">	    
+    </head>
+
+    <body>
+	    <table class="pagecontent" border="0" cellpadding="0" cellspacing="0" width="100%" bgcolor="#ffffff">
+		    <tr>
+			    <td valign="top" class="pagebody">
+				    <div class="pageheader">
+					    <span class="pagetitle">
+                            CruiseControl.NET : The Server Service Application
+                                                    </span>
+				    </div>
+				    <div class="pagesubheading">
+					    This page last changed on Oct 31, 2004 by <font color="#0050B2">mroberts</font>.
+				    </div>
+
+				    <p class="paragraph"><h3 style="margin: 4px 0px 4px 0px;" class="heading3"><a name="TheServerServiceApplication-InstallingCCService"> Installing CCService</a></h3></p>CCService is a Windows Service that can be used to launch the CCNet server.  <br/>
+
+<ol>
+<li> Before starting to use CCService, make sure that everything is set up and configured correctly using the <a href="The Server Console Application.html" title="The Server Console Application">console executable <b class="strong">ccnet.exe</b> </a>.  It is considerably easier to debug configuration issues using the console version of CCNet than it is using CCService.  The console version of CCNet writes its output directly to the console window, so it is much easier to see what the server is doing.  CCService, by default, uses the Event Log and the ccnet.log instead.</li>
+<li> Once you have ascertained that the CCNet server is working, you need to start by configuring CCService.  If you open the <b class="strong">ccnet.service.exe.config</b> file,  you need to change the value of the <b class="strong">ccnet.config</b> setting to point to the location of your ccnet.config file.</li>
+<li> Now you are ready to install the service.  Installing a Windows Service under .NET requires using <b class="strong">installutil</b>. Open up a command prompt, change to the CruiseControl.NET server directory, and run <tt class="monospaced">installutil ccservice.exe</tt>. If installutil is not in your path, you should be able to locate it in something like <tt class="monospaced">C:\WINDOWS\Microsoft.NET\Framework\v1.1.4322</tt>.</li>
+<li> At the username/password prompt, login using a valid user account. By default, the dialog tries to login as a local user account.  If you are logging in as a domain user, the domain will have to be specified. (ie: myacct@mycompany.com, pw: mypassword, and confirm)</li>
+<li> Note: Your user account may need to be granted the &quot;Right to Login as a Service&quot;.  This may be accomplished in two ways. The easiest method is to select a service that currently uses &quot;Local System Account&quot;, and using a specific user account instead.  If necessary, the permissions will be granted automatically. Another method is through the Administrative Tools -&gt; Local Security Policy -&gt; Local Policies -&gt; User Rights Assignment -&gt; Log on as a Service.</li>
+<li> Whatever user that you select needs to have the necessary permissions to access all resources required by CCNet (including network shares).  The LocalSystem user may not have sufficient access.</li>
+<li> Check the EventLog to verify that CCNet output is written there.  You may want to change the CruiseControlSwitch level to reduce the verbosity of the messages to prevent the EventLog from filling.</li>
+</ol>
+<h3 class="heading3"><a name="TheServerServiceApplication-DebuggingCCService"> Debugging CCService</a></h3>
+
+<ol>
+<li> Does CCService show up in the Services Management Console window? (in <b class="strong">Adminstrative Tools</b> under the <b class="strong">Start</b> menu)</li>
+<li> Does the service show as &quot;Started&quot; in the Services Management Console window?   Is it set to start up automatically when you restart the machine?</li>
+<li> Are there any new messages in the <b class="strong">ccnet.log file</b> or in the Event Log?</li>
+<li> Does the CCService user have sufficient priviledges to access all resources required by the CCNet server.  For example, if your source control system is stored on another server, does the user have permissions to access this server? (odds are that the LocalSystem user won&#039;t)</li>
+<li> If you are using <a href="Visual Source Safe Source Control Block.html" title="Visual Source Safe Source Control Block">Visual SourceSafe</a>, does the user account have the SSDIR environment variable defined?  If not, you should explicitly set the SsDir element in your <b class="strong">ccnet.config</b> file.</li>
+<li> Does the user account have registry access?  Can it access the email system (if you are sending the build results by <a href="Email Publisher.html" title="Email Publisher">email</a>?  Can it run Visual Studio.NET if you are using the <a href="Visual Studio Builder.html" title="Visual Studio Builder">Visual Studio Builder</a>?</li>
+<li> Does your build user graphical elements of the .NET Framework? If so, you&#039;ll need to configure your service to have appropriate resources.</li>
+</ol>
+
+				    
+                    			    </td>
+		    </tr>
+	    </table>
+	    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+			<tr>
+				<td height="12" background="border/border_bottom.gif"><img src="border/spacer.gif" width="1" height="1" border="0"/></td>
+			</tr>
+		    <tr>
+			    <td align="center"><font color="grey">Document generated by Confluence on Nov 01, 2004 14:49</font></td>
+		    </tr>
+	    </table>
+    </body>
+</html>

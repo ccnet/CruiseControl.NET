@@ -1,0 +1,76 @@
+<html>
+    <head>
+        <title>CruiseControl.NET : Project Configuration Block</title>
+	    <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">	    
+    </head>
+
+    <body>
+	    <table class="pagecontent" border="0" cellpadding="0" cellspacing="0" width="100%" bgcolor="#ffffff">
+		    <tr>
+			    <td valign="top" class="pagebody">
+				    <div class="pageheader">
+					    <span class="pagetitle">
+                            CruiseControl.NET : Project Configuration Block
+                                                    </span>
+				    </div>
+				    <div class="pagesubheading">
+					    This page last changed on Oct 31, 2004 by <font color="#0050B2">mroberts</font>.
+				    </div>
+
+				    <p class="paragraph">A <tt class="monospaced">&lt;project&gt;</tt> block defines all the configuration for one project running in a CruiseControl.NET server</p><h3 class="heading3"><a name="ProjectConfigurationBlock-Examples"> Examples</a></h3><p class="paragraph">Minimalist example:</p><div class="code"><div class="codeContent">
+<pre><span class="xml&#45;tag">&lt;project&gt;</span>&#10;    <span class="xml&#45;tag">&lt;name&gt;</span>Project 1<span class="xml&#45;tag">&lt;/name&gt;</span>&#10;    <span class="xml&#45;tag">&lt;sourcecontrol type=<span class="xml&#45;quote">&quot;yourSourceControlType&quot;</span> ../&gt;</span>&#10;    <span class="xml&#45;tag">&lt;build type=<span class="xml&#45;quote">&quot;yourBuildType&quot;</span> ../&gt;</span>&#10;<span class="xml&#45;tag">&lt;/project&gt;</span></pre>
+</div></div><p class="paragraph">Full example:</p><div class="code"><div class="codeContent">
+<pre><span class="xml&#45;tag">&lt;project&gt;</span>&#10;    <span class="xml&#45;tag">&lt;name&gt;</span>Project 1<span class="xml&#45;tag">&lt;/name&gt;</span>&#10;    <span class="xml&#45;tag">&lt;workingDirectory&gt;</span>yourWorkingDirectory<span class="xml&#45;tag">&lt;/workingDirectory&gt;</span>&#10;    <span class="xml&#45;tag">&lt;artifactDirectory&gt;</span>yourArtifactDirectory<span class="xml&#45;tag">&lt;/artifactDirectory&gt;</span>&#10;    <span class="xml&#45;tag">&lt;webURL&gt;</span>&#104;ttp://localhost/ccnet/Project1<span class="xml&#45;tag">&lt;/webURL&gt;</span> &#10;    <span class="xml&#45;tag">&lt;modificationDelaySeconds&gt;</span>2<span class="xml&#45;tag">&lt;/modificationDelaySeconds&gt;</span>&#10;    <span class="xml&#45;tag">&lt;publishExceptions&gt;</span>2<span class="xml&#45;tag">&lt;/publishExceptions&gt;</span>&#10;    <span class="xml&#45;tag">&lt;triggers&gt;</span>&#10;        <span class="xml&#45;tag">&lt;yourFirstTriggerType ../&gt;</span>&#10;        <span class="xml&#45;tag">&lt;yourOtherTriggerType ../&gt;</span>&#10;    <span class="xml&#45;tag">&lt;/triggers&gt;</span>&#10;    <span class="xml&#45;tag">&lt;state type=<span class="xml&#45;quote">&quot;yourStateManagerType&quot;</span> ../&gt;</span>&#10;    <span class="xml&#45;tag">&lt;sourcecontrol type=<span class="xml&#45;quote">&quot;yourSourceControlType&quot;</span> ../&gt;</span>&#10;    <span class="xml&#45;tag">&lt;build type=<span class="xml&#45;quote">&quot;yourBuildType&quot;</span> ../&gt;</span>&#10;    <span class="xml&#45;tag">&lt;labeller type=<span class="xml&#45;quote">&quot;yourLabellerType&quot;</span> ../&gt;</span>&#10;    <span class="xml&#45;tag">&lt;tasks&gt;</span>&#10;        <span class="xml&#45;tag">&lt;yourFirstTaskType ../&gt;</span>&#10;        <span class="xml&#45;tag">&lt;yourOtherTaskType ../&gt;</span>&#10;    <span class="xml&#45;tag">&lt;/tasks&gt;</span>&#10;    <span class="xml&#45;tag">&lt;publishers&gt;</span>&#10;        <span class="xml&#45;tag">&lt;yourFirstPublisherType ../&gt;</span>&#10;        <span class="xml&#45;tag">&lt;yourOtherPublisherType ../&gt;</span>&#10;    <span class="xml&#45;tag">&lt;/publishers&gt;</span>&#10;<span class="xml&#45;tag">&lt;/project&gt;</span></pre>
+</div></div>
+<p class="paragraph"><h3 class="heading3"><a name="ProjectConfigurationBlock-ConfigurationElements%3A"> Configuration Elements:</a></h3></p><table class="wikitable">
+<tr>
+<th> Node </th><th> Description </th><th> Type </th><th> Required </th><th> Default </th>
+</tr><tr>
+<td> <a name="ProjectConfigurationBlock-name"></a> name </td><td> The name of your project - this must be unique for any given CruiseControl.NET server </td><td> string </td><td> yes </td><td> n/a </td>
+</tr><tr>
+<td> <a name="ProjectConfigurationBlock-workingDirectory"></a> workingDirectory </td><td> The Working Directory for the project (this is used by other blocks). <b class="strong">Relative paths</b> are relative to a directory called the project Name in the CruiseControl.NET server directory . The Working Directory is meant to contain the checked out version of the project under integration. </td><td> string </td><td> no </td><td> <tt class="monospaced">WorkingDirectory</tt> </td>
+</tr><tr>
+<td> <a name="ProjectConfigurationBlock-artifactDirectory"></a> artifcactDirectory </td><td> The Artifact Directory for the project (this is used by other blocks). <b class="strong">Relative paths</b> are relative to a directory called the project Name in the CruiseControl.NET server directory. The Artifact Directory is meant to be a persistence location for anything you want saved from the results of the build, e.g. build logs, distributables, etc. </td><td> string </td><td> no </td><td> <tt class="monospaced">Artifacts</tt> </td>
+</tr><tr>
+<td> <a name="ProjectConfigurationBlock-webUrl"></a> webUrl </td><td> The full URL to the Project Web Report for this project. This will be used by CCTray, etc </td><td> string </td><td> no </td><td> <a href="http://localhost/CruiseControl.NET" title="Visit page outside Confluence">&#104;ttp://localhost/CruiseControl.NET</a> </td>
+</tr><tr>
+<td> <a name="ProjectConfigurationBlock-modificationDelaySeconds"></a> modificationDelaySeconds </td><td> The minimum number of seconds allowed between the last check in and the start of a valid build. <br clear="all" />
+If any modifications are found within this interval the system will sleep long enough so the last checkin is just outside this interval. For example if the modification delay is set to 10 seconds and the last checkin was 7 seconds ago the system will sleep for 3 seconds and check again. This process will repeat until no modifications have been found within the modification delay window. <br clear="all" />
+This feature is in CruiseControl.NET for Source Control systems, like CVS, that do not support atomic checkins since starting a build half way through someone checking in their work could result in invalid &#039;logical&#039; passes or failures. The property is optional though so if you are using a source control system with atomic checkins, leave it out (and it will default to &#039;0&#039;) </td><td> integer </td><td> no </td><td> 0 </td>
+</tr><tr>
+<td> <a name="ProjectConfigurationBlock-publishExceptions"></a> publishExceptions </td><td> If you are experiencing periodic failures in your build process (such as sporadic <a href="Visual Source Safe Source Control Block.html" title="Visual Source Safe Source Control Block">Visual Source Safe Source Control Block</a> or <a href="CVS Source Control Block.html" title="CVS Source Control Block">CVS Source Control Block</a> connection problems), it is possible to configure the CCNet server to not publish the exception as a failed build.  Set this value to <b class="strong">true</b> to publish exceptions to the build log, or <b class="strong">false</b> to just send them to the server log file </td><td> boolean </td><td> no </td><td> false </td>
+</tr><tr>
+<td> <a name="ProjectConfigurationBlock-sourcecontrol"></a> sourcecontrol </td><td> See <a href="Source Control Blocks.html" title="Source Control Blocks">Source Control Blocks</a> </td><td> <a href="Source Control Blocks.html" title="Source Control Blocks">Source Control Block</a> </td><td> yes </td><td> n/a </td>
+</tr><tr>
+<td> <a name="ProjectConfigurationBlock-build"></a> build </td><td> See <a href="Builder Blocks.html" title="Builder Blocks">Builder Blocks</a> </td><td> <a href="Builder Blocks.html" title="Builder Blocks">Builder Block</a> </td><td> yes </td><td> n/a </td>
+</tr><tr>
+<td> <a name="ProjectConfigurationBlock-triggers"></a> triggers </td><td> See <a href="Trigger Blocks.html" title="Trigger Blocks">Trigger Blocks</a> </td><td> List of <a href="Trigger Blocks.html" title="Trigger Blocks">Trigger Blocks</a> </td><td> no </td><td> Empty list - Integrations are only ever forced manually </td>
+</tr><tr>
+<td> <a name="ProjectConfigurationBlock-state"></a> state </td><td> See <a href="State Manager Blocks.html" title="State Manager Blocks">State Manager Blocks</a> </td><td> <a href="State Manager Blocks.html" title="State Manager Blocks">State Manager Block</a> </td><td> no </td><td> <a href="Project State Manager.html" title="Project State Manager">Project State Manager</a> </td>
+</tr><tr>
+<td> <a name="ProjectConfigurationBlock-labeller"></a> labeller </td><td> See <a href="Labeller Blocks.html" title="Labeller Blocks">Labeller Blocks</a> </td><td> <a href="Labeller Blocks.html" title="Labeller Blocks">Labeller Block</a> </td><td> no </td><td> <a href="Default Labeller.html" title="Default Labeller">Default Labeller</a> </td>
+</tr><tr>
+<td> <a name="ProjectConfigurationBlock-tasks"></a> tasks </td><td> A set of <a href="Task Blocks.html" title="Task Blocks">Tasks</a> to run as part of the build. A failed task will fail the build. Tasks are run sequentially, in the order they appear in the configuration, after the Builder has completed </td><td> List of <a href="Task Blocks.html" title="Task Blocks">Task Blocks</a> </td><td> no </td><td> empty list </td>
+</tr><tr>
+<td> <a name="ProjectConfigurationBlock-publishers"></a> publishers </td><td> See <a href="Publisher Blocks.html" title="Publisher Blocks">Publisher Blocks</a> </td><td> List of <a href="Publisher Blocks.html" title="Publisher Blocks">Publisher Blocks</a> </td><td> no </td><td> empty list </td>
+</tr>
+</table>
+<h3 class="heading3"><a name="ProjectConfigurationBlock-Subsectiontypes"> Sub-section types</a></h3>
+
+<ul><li><a href="Builder Blocks.html" title="Builder Blocks">Builder Blocks</a></li><li><a href="Labeller Blocks.html" title="Labeller Blocks">Labeller Blocks</a></li><li><a href="Publisher Blocks.html" title="Publisher Blocks">Publisher Blocks</a></li><li><a href="Source Control Blocks.html" title="Source Control Blocks">Source Control Blocks</a></li><li><a href="State Manager Blocks.html" title="State Manager Blocks">State Manager Blocks</a></li><li><a href="Task Blocks.html" title="Task Blocks">Task Blocks</a></li><li><a href="Trigger Blocks.html" title="Trigger Blocks">Trigger Blocks</a></li></ul>
+
+				    
+                    			    </td>
+		    </tr>
+	    </table>
+	    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+			<tr>
+				<td height="12" background="border/border_bottom.gif"><img src="border/spacer.gif" width="1" height="1" border="0"/></td>
+			</tr>
+		    <tr>
+			    <td align="center"><font color="grey">Document generated by Confluence on Nov 01, 2004 14:49</font></td>
+		    </tr>
+	    </table>
+    </body>
+</html>

@@ -1,0 +1,86 @@
+<html>
+    <head>
+        <title>CruiseControl.NET : Email Publisher</title>
+	    <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">	    
+    </head>
+
+    <body>
+	    <table class="pagecontent" border="0" cellpadding="0" cellspacing="0" width="100%" bgcolor="#ffffff">
+		    <tr>
+			    <td valign="top" class="pagebody">
+				    <div class="pageheader">
+					    <span class="pagetitle">
+                            CruiseControl.NET : Email Publisher
+                                                    </span>
+				    </div>
+				    <div class="pagesubheading">
+					    This page last changed on Oct 13, 2004 by <font color="#0050B2">mroberts</font>.
+				    </div>
+
+				    
+The email publisher can be used to send email to any number of users. It is common to include one user who gets an email for every build and then also send email to every developer who checked code in for this build. <p class="paragraph"><img src="./icons/emoticons/information.png" height="16" width="16" align="absmiddle" alt="" border="0"/> People tend to prefer to use <a href="CCTray.html" title="CCTray">CCTray</a> rather than email for instant notification these days.</p><div class="code"><div class="codeContent">
+<pre><span class="xml&#45;tag">&lt;email from=<span class="xml&#45;quote">&quot;buildmaster&#64;mycompany.com&quot;</span> mailhost=<span class="xml&#45;quote">&quot;smtp.mycompany.com&quot;</span> includeDetails=<span class="xml&#45;quote">&quot;TRUE&quot;</span>&gt;</span>&#10;    <span class="xml&#45;tag">&lt;projectUrl&gt;</span>&#104;ttp://buildserver/myproject<span class="xml&#45;tag">&lt;/projectUrl&gt;</span>&#10;    <span class="xml&#45;tag">&lt;users&gt;</span>&#10;        <span class="xml&#45;tag">&lt;user name=<span class="xml&#45;quote">&quot;BuildGuru&quot;</span> group=<span class="xml&#45;quote">&quot;buildmaster&quot;</span> address=<span class="xml&#45;quote">&quot;buildguru&#64;mycompany.com&quot;</span>/&gt;</span>&#10;        <span class="xml&#45;tag">&lt;user name=<span class="xml&#45;quote">&quot;JoeDeveloper&quot;</span> group=<span class="xml&#45;quote">&quot;developers&quot;</span> address=<span class="xml&#45;quote">&quot;joedeveloper&#64;thoughtworks.com&quot;</span>/&gt;</span>&#10;    <span class="xml&#45;tag">&lt;/users&gt;</span>&#10;    <span class="xml&#45;tag">&lt;groups&gt;</span>&#10;        <span class="xml&#45;tag">&lt;group name=<span class="xml&#45;quote">&quot;developers&quot;</span> notification=<span class="xml&#45;quote">&quot;change&quot;</span>/&gt;</span>&#10;        <span class="xml&#45;tag">&lt;group name=<span class="xml&#45;quote">&quot;buildmaster&quot;</span> notification=<span class="xml&#45;quote">&quot;always&quot;</span>/&gt;</span>&#10;    <span class="xml&#45;tag">&lt;/groups&gt;</span>&#10;<span class="xml&#45;tag">&lt;/email&gt;</span></pre>
+</div></div><p class="paragraph"><h3 class="heading3"><a name="EmailPublisher-ConfigurationElements%3A"> Configuration Elements:</a></h3></p><table class="wikitable">
+<tr>
+<th> Node </th><th> Description </th><th> Type </th><th> Required</th>
+</tr><tr>
+<td> mailhost </td><td> The SMTP server that CruiseControl.NET will connect to to send email. </td><td> string </td><td> true </td>
+</tr><tr>
+<td> from </td><td> The email address that email will be marked as coming from. </td><td> string </td><td> true </td>
+</tr><tr>
+<td> projectURL </td><td> The URL where the CruiseControl.NET web application can be found. </td><td> string </td><td> true </td>
+</tr><tr>
+<td> users </td><td> A set of &lt;user&gt; elements that define who to send emails to. </td><td> complex </td><td> true </td>
+</tr><tr>
+<td> groups </td><td> A set of &lt;group&gt; elements that identify which the notification policy for a set of users. </td><td> complex </td><td> false </td>
+</tr>
+</table>
+<h4 class="heading4"><a name="EmailPublisher-UserConfigurationElement%3A"> User Configuration Element:</a></h4>
+
+<table class="wikitable">
+<tr>
+<th> Node </th><th> Description </th><th> Type </th><th> Required</th>
+</tr><tr>
+<td> name </td><td> The user name of a user. For &#039;real&#039; users, this should match the user name in Source Control. </td><td> string </td><td> true </td>
+</tr><tr>
+<td> group </td><td> The group that the user is in. This needs to match the name of one &lt;group&gt; elements. </td><td> string </td><td> true </td>
+</tr><tr>
+<td> address </td><td> The (internet form) email address of the user. </td><td> string </td><td> true </td>
+</tr>
+</table>
+<h4 class="heading4"><a name="EmailPublisher-GroupConfigurationElement%3A"> Group Configuration Element:</a></h4>
+
+<table class="wikitable">
+<tr>
+<th> Node </th><th> Description </th><th> Type </th><th> Required</th>
+</tr><tr>
+<td> name </td><td> The name of the group, which corresponds to the &#039;group&#039; values used in the &lt;user&gt; tags. </td><td> string </td><td> true </td>
+</tr><tr>
+<td> notification </td><td> Determines when to send email to this group.  There are two possible notification values:
+<ul class="star">
+<li> &quot;always&quot; - send email when any build occurs</li>
+<li> &quot;change&quot; - send email when the status of the build changes (e.g. from &#039;passed&#039; to &#039;failed&#039;).</li>
+</ul></td><td> string </td><td> true </td>
+</tr>
+</table>
+<h3 class="heading3"><a name="EmailPublisher-Troubleshooting">  Troubleshooting</a></h3><p class="paragraph">You may experience an exception that looks like this when the ccnet server tries to send an email:
+<div class="code"><div class="codeContent">
+<pre><span class="java&#45;object">System</span>.Web.HttpException: Could not access &#039;CDO.Message&#039; object. &#45;&#45;&#45;&gt;&#10;<span class="java&#45;object">System</span>.Reflection.TargetInvocationException: Exception has been thrown by the target of an invocation. &#45;&#45;&#45;&gt;&#10;<span class="java&#45;object">System</span>.<span class="java&#45;object">Runtime</span>.InteropServices.COMException (0x80040213): The transport failed to connect to the server.</pre>
+</div></div><br/>
+This is likely due to not having CDO properly installed on the build server.  To fix this, make sure that you have some sort of email client installed  (Outlook Express is probably there by default).  Outlook Express doesn&#039;t actually initialise CDO until you actually open it, so try and use the client to send an email just to verify that everything works.</p>
+
+				    
+                    			    </td>
+		    </tr>
+	    </table>
+	    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+			<tr>
+				<td height="12" background="border/border_bottom.gif"><img src="border/spacer.gif" width="1" height="1" border="0"/></td>
+			</tr>
+		    <tr>
+			    <td align="center"><font color="grey">Document generated by Confluence on Nov 01, 2004 14:49</font></td>
+		    </tr>
+	    </table>
+    </body>
+</html>

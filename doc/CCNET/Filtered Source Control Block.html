@@ -1,0 +1,77 @@
+<html>
+    <head>
+        <title>CruiseControl.NET : Filtered Source Control Block</title>
+	    <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">	    
+    </head>
+
+    <body>
+	    <table class="pagecontent" border="0" cellpadding="0" cellspacing="0" width="100%" bgcolor="#ffffff">
+		    <tr>
+			    <td valign="top" class="pagebody">
+				    <div class="pageheader">
+					    <span class="pagetitle">
+                            CruiseControl.NET : Filtered Source Control Block
+                                                    </span>
+				    </div>
+				    <div class="pagesubheading">
+					    This page last changed on Oct 31, 2004 by <font color="#0050B2">mroberts</font>.
+				    </div>
+
+				    <p class="paragraph"><h3 style="margin: 4px 0px 4px 0px;" class="heading3"><a name="FilteredSourceControlBlock-WhatisFilteredSourceControl%3F"> What is FilteredSourceControl?</a></h3></p>The FilteredSourceControl allows you to filter out modifications that are used to trigger a build.  If for example, you have certain files (such as web pages or document files) under source control that you don&#039;t want to have trigger the build, you can use this class to ensure that their changes will keep a new build from launching.<p class="paragraph">The FilteredSourceControl works together with all of the source controls supported by CCNet (including the <a href="Multi Source Control Block.html" title="Multi Source Control Block">Multi Source Control Block</a>).  It can also be included under the <a href="Multi Source Control Block.html" title="Multi Source Control Block">Multi Source Control Block</a> provider so that you could have multiple FilterSourceControls each filtering a different set of modifications from different source control providers.  Essentially, it acts as a decorator (or an example of the <a href="http://www.eaipatterns.com/PipesAndFilters.html" title="Visit page outside Confluence">pipes and filters pattern </a>), wrapping around the specific SourceControl provider that you want to use.</p>The FilteredSourceControl includes both <b class="strong">inclusion</b> and <b class="strong">exclusion</b> filters for specifying what modifications should be included/excluded.  Multiple inclusion and exclusion filters can be specified or, alternately, no inclusion or exclusion filter could be specified.  At this point, CCNet only supports a single type of filter called <a href="#FilteredSourceControlBlock-PathFilter" title="PathFilter on Filtered Source Control Block">PathFilter</a>, but it is relatively straightforward to build new filters, (such as one to filter modifications based on username).<p class="paragraph"><h3 class="heading3"><a name="FilteredSourceControlBlock-ConfigurationExamples"> Configuration Examples</a></h3></p><div class="code"><div class="codeContent">
+<pre><span class="xml&#45;tag">&lt;sourcecontrol type=<span class="xml&#45;quote">&quot;filtered&quot;</span>&gt;</span>&#10;    <span class="xml&#45;tag">&lt;sourceControlProvider type=<span class="xml&#45;quote">&quot;vss&quot;</span> autoGetSource=<span class="xml&#45;quote">&quot;true&quot;</span>&gt;</span>&#10;      <span class="xml&#45;tag">&lt;project&gt;</span>$/Kunigunda/ServiceLocator<span class="xml&#45;tag">&lt;/project&gt;</span>&#10;      <span class="xml&#45;tag">&lt;workingDirectory&gt;</span>C:&#92;CCNet&#92;Kunigunda&#92;ServiceLocator<span class="xml&#45;tag">&lt;/workingDirectory&gt;</span>&#10;      <span class="xml&#45;tag">&lt;username&gt;</span>urosn<span class="xml&#45;tag">&lt;/username&gt;</span>&#10;      <span class="xml&#45;tag">&lt;password&gt;</span><span class="xml&#45;tag">&lt;/password&gt;</span>&#10;      <span class="xml&#45;tag">&lt;ssdir&gt;</span>c:&#92;localvss<span class="xml&#45;tag">&lt;/ssdir&gt;</span>&#10;    <span class="xml&#45;tag">&lt;/sourceControlProvider&gt;</span>&#10;    <span class="xml&#45;tag">&lt;inclusionFilters&gt;</span>&#10;      <span class="xml&#45;tag">&lt;pathFilter&gt;</span>&#10;      	<span class="xml&#45;tag">&lt;pattern&gt;</span>$/Kunigunda/ServiceLocator/Sources/&#42;&#42;/&#42;.&#42;<span class="xml&#45;tag">&lt;/pattern&gt;</span>&#10;      <span class="xml&#45;tag">&lt;/pathFilter&gt;</span>&#10;    <span class="xml&#45;tag">&lt;/inclusionFilters&gt;</span>&#10;    <span class="xml&#45;tag">&lt;exclusionFilters&gt;</span>&#10;    	<span class="xml&#45;tag">&lt;pathFilter&gt;</span>&#10;    		<span class="xml&#45;tag">&lt;pattern&gt;</span>$/Kunigunda/ServiceLocator/Sources/Kunigunda.ServiceLocator/AssemblyInfo.cs<span class="xml&#45;tag">&lt;/pattern&gt;</span>&#10;    	<span class="xml&#45;tag">&lt;/pathFilter&gt;</span>&#10;	<span class="xml&#45;tag">&lt;pathFilter&gt;</span>&#10;		<span class="xml&#45;tag">&lt;pattern&gt;</span>$/&#42;&#42;/&#42;.vssscc<span class="xml&#45;tag">&lt;/pattern&gt;</span>&#10;	<span class="xml&#45;tag">&lt;/pathFilter&gt;</span>&#10;    <span class="xml&#45;tag">&lt;/exclusionFilters&gt;</span>&#10;<span class="xml&#45;tag">&lt;/sourcecontrol&gt;</span></pre>
+</div></div><p class="paragraph">This example filters out any modifications to the <b class="strong">AssemblyInfo.cs</b> file that have been checked in to <a href="Visual Source Safe Source Control Block.html" title="Visual Source Safe Source Control Block">Visual Source Safe Source Control Block</a>.</p><h3 class="heading3"><a name="FilteredSourceControlBlock-ConfigurationElements%3A"> Configuration Elements:</a></h3><p class="paragraph"><em class="emphasis">FilteredSourceControl root element</em></p><table class="wikitable">
+<tr>
+<th> Node </th><th> Description </th><th> Type </th><th> Required</th>
+</tr><tr>
+<td> sourceControlProvider </td><td> This element is used to specify the type of source control provider to retrieve modifications from. With the exception of the element name, the configuration for this element is identical to the xml configuration for the specific source control provider you intend to use. </td><td> xml element </td><td> true </td>
+</tr><tr>
+<td> inclusionFilters </td><td> Specifies the filters that should be used to determine which modifications should be included. This element should contain the xml configuration for one or more filters. </td><td> xml element </td><td> false </td>
+</tr><tr>
+<td> exclusionFilters </td><td> Specifies the filters that should be used to determine which modifications should be excluded. This element should contain the xml configuration for one or more filters. </td><td> xml element </td><td> false </td>
+</tr>
+</table><br/>
+<em class="emphasis">PathFilter element</em><br/>
+
+<table class="wikitable">
+<tr>
+<th> Node </th><th> Description </th><th> Type </th><th> Required</th>
+</tr><tr>
+<td> pattern </td><td> This is the pattern used to compare the modification path against. See <a href="#FilteredSourceControlBlock-PathFilter" title="PathFilter on Filtered Source Control Block">below</a> for examples of the syntax for this element </td><td> xml element </td><td> true </td>
+</tr>
+</table>
+<h3 class="heading3"><a name="FilteredSourceControlBlock-%3Caname%3D%22FilteredSourceControlBlockPathFilter%22%3E%3C%2Fa%3EUsingthePathFilter%3A">  <a name="FilteredSourceControlBlock-PathFilter"></a> Using the PathFilter:</a></h3><p class="paragraph">PathFilter supports following wildcards:</p><ol>
+<li> &quot;&#42;&quot; used as part of the path will match none or exactly one subfolder. E.g. pattern &quot;/Kunigunda/&#42;/Sources/&#42;.&#42;&quot; will accept &quot;/Kunigunda/Sources/&#42;.&#42;&quot;, &quot;/Kunigunda/Service/Sources/&#42;.&#42;&quot;, &quot;/Kunigunda/Web/Sources/&#42;.&#42;&quot;, etc.</li>
+<li> &quot;&#42;&quot; used as part of the folder name will match zero or more characters that can appear in the folder name. E.g. pattern &quot;/Kunigunda/Sources/Test&#42;/&#42;.&#42;&quot; will accept &quot;/Kunigunda/Sources/Test/&#42;.&#42;&quot;, &quot;/Kunigunda/Sources/Tests/&#42;.&#42;&quot;, etc.</li>
+<li> &quot;&#42;&quot; used as part of the filename will match zero or more characters that can appear in the file name. E.g. pattern<br/>
+&quot;/Kunigunda/Sources/&#42;.cs&quot; will accept all files in the &quot;/Kunigunda/Sources&quot; folder with the &quot;.cs&quot; extension. If the &quot;&#42;&quot; is prefixed, postfixed or wrapped with one or more characters, then these will be included in the pattern matching. E.g. pattern &quot;/Kunigunda/Sources/&#42;Test.cs&quot;, will<br/>
+accept all files in the &quot;/Kunigunda/Sources/&quot; folder that have &quot;Test&quot; and the end of the name and the &quot;.cs&quot; extension.
+</li>
+<li> &quot;&#42;&quot; used as part of the extension will match zero or more characters that can appear in the extension. E.g. pattern &quot;/Kunigunda/Sources/Build.&#42;&quot; will match all files in &quot;/Kunigunda/Sources&quot; folder named &quot;Build&quot; regardles of their extension. A &quot;&#42;.&#42;&quot; pattern will match any file name and<br/>
+extension. A &quot;&#42;.cs&#42;&quot; will match any file with extension that starts with &quot;cs&quot;.
+</li>
+<li> &quot;&#42;&#42;&quot; used as part of the path will match zero or more subfolders. E.g. pattern &quot;/Kunigunda/Sources/&#42;&#42;/Test/&#42;.&#42;&quot; will accept all files stored in &quot;Test&quot; subfolder anywhere bellow the &quot;/Kunigunda/Sources&quot; tree including &quot;/Kunigunda/Sources/Test/&#42;.&#42;&quot;, &quot;/Kunigunda/Sources/Core/Test/&#42;.&#42;&quot;.</li>
+</ol>
+<h3 class="heading3"><a name="FilteredSourceControlBlock-Potentialenhancements%3A"> Potential enhancements:</a></h3>
+
+<ol>
+<li> Case insensitive pattern matching.</li>
+<li> Support for &quot;?&quot; as a wildcard in patterns.</li>
+<li> Current patterns are only an approximation of the pattersn used in NAnt filesets. Pattern translation and evaluation types in NAnt assembly are not public so it is not possible to use them directly but it would be a nice optimization.</li>
+</ol><br/>
+Implemented and contributed by <b class="strong">Uros Novak</b>.
+
+				    
+                    			    </td>
+		    </tr>
+	    </table>
+	    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+			<tr>
+				<td height="12" background="border/border_bottom.gif"><img src="border/spacer.gif" width="1" height="1" border="0"/></td>
+			</tr>
+		    <tr>
+			    <td align="center"><font color="grey">Document generated by Confluence on Nov 01, 2004 14:49</font></td>
+		    </tr>
+	    </table>
+    </body>
+</html>

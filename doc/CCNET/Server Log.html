@@ -2,6 +2,7 @@
     <head>
         <title>CruiseControl.NET : Server Log</title>
 	    <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">	    
     </head>
 
     <body>
@@ -14,13 +15,20 @@
                                                     </span>
 				    </div>
 				    <div class="pagesubheading">
-					    This page last changed on Apr 08, 2004 by <font color="#0050B2">orogers</font>.
+					    This page last changed on Oct 12, 2004 by <font color="#0050B2">mroberts</font>.
 				    </div>
 
-				    <p class="paragraph"><h4 class="heading4"> Overview</h4>
-Server Log is a project plug-in for the CCNet Web application.  It tails the CCNet server log file (typically called &quot;ccnet.log&quot;) to display the latest set of log entries.  Server Log is available as part of the CCNet 0.5 release (or later).</p><h4 class="heading4"> Installation</h4>
-In order to set up the Server Log plug-in, you will need to make some modifications to the Web.config file for the CCNet Web application.  You can locate the Web.config file in the root folder of the web application.<p class="paragraph">First, you should verify that the Server Log has been set up as a project plug-in.  Locate the &lt;CCNet&gt; section in the Web.config file and verify that it contains a &lt;plugin&gt; entry for the Server Log.  The &lt;CCNet&gt; section should look like this:</p><div class="code"><pre>&lt;CCNet&gt;&#10;	...&#10;	&lt;projectPlugins&gt;&#10;		...&#10;		&lt;plugin linkText=&quot;server log&quot; linkUrl=&quot;ServerLog.aspx&quot; /&gt;&#10;	&lt;/projectPlugins&gt;&#10;&lt;/CCNet&gt;</pre></div><p class="paragraph">Next, you need to configure the Server Log to locate the CCNet server log file.  In the &lt;appSettings&gt; section, verify that the &quot;ServerLogFilePath&quot; key has been added.  The value attribute should point to the location of the &quot;ccnet.log&quot; file, as the example below demonstrates.  You can also configure the number of lines displayed in the web page by modifying the &quot;ServerLogFileLines&quot; value.</p><div class="code"><pre>&lt;appSettings&gt;&#10;	...&#10;	&lt;add key=&quot;ServerLogFilePath&quot; value=&quot;C&#58;&#92;ccnet&#92;server&#92;ccnet.log&quot; /&gt;&#10;	&lt;add key=&quot;ServerLogFileLines&quot; value=&quot;50&quot; /&gt;&#10;&lt;/appSettings&gt;</pre></div><p class="paragraph"><h4 class="heading4"> Usage</h4>
-You can access the Server Log by clicking the &quot;server log&quot; link in the upper right-hand corner of the main page of the CCNet web application.  If everything is set up and configured correctly, you should see something that looks like this:</p><img src="Server&#32;Log_attachments/serverlog.gif" align="absmiddle" border="0"  /> 
+				    
+<h4 class="heading4"><a name="ServerLog-Overview"> Overview</a></h4>
+Server Log is a project plug-in for the CCNet Web application.  It tails the CCNet server log file (typically called &quot;ccnet.log&quot;) to display the latest set of log entries.  Server Log is available as part of the CCNet 0.5 release (or later).<p class="paragraph"><h4 class="heading4"><a name="ServerLog-Installation"> Installation</a></h4>
+In order to set up the Server Log plug-in, you will need to make some modifications to the Web.config file for the CCNet Web application.  You can locate the Web.config file in the root folder of the web application.</p>First, you should verify that the Server Log has been set up as a project plug-in.  Locate the &lt;CCNet&gt; section in the Web.config file and verify that it contains a &lt;plugin&gt; entry for the Server Log.  The &lt;CCNet&gt; section should look like this:<br/>
+
+<div class="code"><div class="codeContent">
+<pre><span class="xml&#45;tag">&lt;CCNet&gt;</span>&#10;	...&#10;	<span class="xml&#45;tag">&lt;projectPlugins&gt;</span>&#10;		...&#10;		<span class="xml&#45;tag">&lt;plugin linkText=<span class="xml&#45;quote">&quot;server log&quot;</span> linkUrl=<span class="xml&#45;quote">&quot;ServerLog.aspx&quot;</span> /&gt;</span>&#10;	<span class="xml&#45;tag">&lt;/projectPlugins&gt;</span>&#10;<span class="xml&#45;tag">&lt;/CCNet&gt;</span></pre>
+</div></div><p class="paragraph">Next, you need to configure the Server Log to locate the CCNet server log file.  In the &lt;appSettings&gt; section, verify that the &quot;ServerLogFilePath&quot; key has been added.  The value attribute should point to the location of the &quot;ccnet.log&quot; file, as the example below demonstrates.  You can also configure the number of lines displayed in the web page by modifying the &quot;ServerLogFileLines&quot; value.</p><div class="code"><div class="codeContent">
+<pre><span class="xml&#45;tag">&lt;appSettings&gt;</span>&#10;	...&#10;	<span class="xml&#45;tag">&lt;add key=<span class="xml&#45;quote">&quot;ServerLogFilePath&quot;</span> value=<span class="xml&#45;quote">&quot;C:&#92;ccnet&#92;server&#92;ccnet.log&quot;</span> /&gt;</span>&#10;	<span class="xml&#45;tag">&lt;add key=<span class="xml&#45;quote">&quot;ServerLogFileLines&quot;</span> value=<span class="xml&#45;quote">&quot;50&quot;</span> /&gt;</span>&#10;<span class="xml&#45;tag">&lt;/appSettings&gt;</span></pre>
+</div></div><p class="paragraph"><h4 class="heading4"><a name="ServerLog-Usage"> Usage</a></h4>
+You can access the Server Log by clicking the &quot;server log&quot; link in the upper right-hand corner of the main page of the CCNet web application.  If everything is set up and configured correctly, you should see something that looks like this:</p><img src="Server Log_attachments/serverlog.gif" align="absmiddle" border="0"  />&#160;<br/>
 
 
 
@@ -46,7 +54,7 @@ You can access the Server Log by clicking the &quot;server log&quot; link in the
 				<td height="12" background="border/border_bottom.gif"><img src="border/spacer.gif" width="1" height="1" border="0"/></td>
 			</tr>
 		    <tr>
-			    <td align="center"><font color="grey">Document generated by Confluence on May 31, 2004 05:05</font></td>
+			    <td align="center"><font color="grey">Document generated by Confluence on Nov 01, 2004 14:49</font></td>
 		    </tr>
 	    </table>
     </body>

@@ -1,0 +1,75 @@
+<html>
+    <head>
+        <title>CruiseControl.NET : Visual Source Safe Source Control Block</title>
+	    <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">	    
+    </head>
+
+    <body>
+	    <table class="pagecontent" border="0" cellpadding="0" cellspacing="0" width="100%" bgcolor="#ffffff">
+		    <tr>
+			    <td valign="top" class="pagebody">
+				    <div class="pageheader">
+					    <span class="pagetitle">
+                            CruiseControl.NET : Visual Source Safe Source Control Block
+                                                    </span>
+				    </div>
+				    <div class="pagesubheading">
+					    This page last changed on Oct 13, 2004 by <font color="#0050B2">mroberts</font>.
+				    </div>
+
+				    
+<h3 class="heading3"><a name="VisualSourceSafeSourceControlBlock-VSSConfigurationExample"> VSS Configuration Example</a></h3>
+For Visual Source Safe you must specify the executable, project, username and password. You may also specify the SSDIR. If SSDIR is not set the default or the SSDIR environment variable will be used. <br/>
+
+<div class="code"><div class="codeContent">
+<pre><span class="xml&#45;tag">&lt;sourcecontrol type=<span class="xml&#45;quote">&quot;vss&quot;</span> autoGetSource=<span class="xml&#45;quote">&quot;true&quot;</span> applyLabel=<span class="xml&#45;quote">&quot;true&quot;</span>&gt;</span>&#10;   <span class="xml&#45;tag">&lt;executable&gt;</span>C:&#92;Program Files&#92;Microsoft Visual Studio&#92;VSS&#92;win32&#92;SS.EXE<span class="xml&#45;tag">&lt;/executable&gt;</span>&#10;   <span class="xml&#45;tag">&lt;project&gt;</span>$/CCNET<span class="xml&#45;tag">&lt;/project&gt;</span>&#10;   <span class="xml&#45;tag">&lt;username&gt;</span>buildguy<span class="xml&#45;tag">&lt;/username&gt;</span>&#10;   <span class="xml&#45;tag">&lt;password&gt;</span>buildguypw<span class="xml&#45;tag">&lt;/password&gt;</span>&#10;   <span class="xml&#45;tag">&lt;ssdir&gt;</span>c:&#92;repos&#92;<span class="xml&#45;tag">&lt;/ssdir&gt;</span>&#10;   <span class="xml&#45;tag">&lt;workingDirectory&gt;</span>c:&#92;myBuild<span class="xml&#45;tag">&lt;/workingDirectory&gt;</span>&#10;   <span class="xml&#45;tag">&lt;culture&gt;</span>fr&#45;FR<span class="xml&#45;tag">&lt;/culture&gt;</span>&#10;<span class="xml&#45;tag">&lt;/sourcecontrol&gt;</span></pre>
+</div></div><p class="paragraph"><h3 class="heading3"><a name="VisualSourceSafeSourceControlBlock-ConfigurationElements%3A"> Configuration Elements:</a></h3></p><table class="wikitable">
+<tr>
+<th> Node </th><th> Description </th><th> Type </th><th> Default </th><th> Required</th>
+</tr><tr>
+<td> project </td><td> The project in the repository to be monitored.  If the project contains a space, enclose the text in double quotes (&quot;) </td><td> string </td><td> N/A </td><td> true </td>
+</tr><tr>
+<td> username</td><td> VSS user ID that CCNet should use to authenticate </td><td> string </td><td> N/A </td><td> true </td>
+</tr><tr>
+<td> password </td><td> Password for the VSS user ID </td><td> string </td><td> N/A </td><td> true</td>
+</tr><tr>
+<td> ssdir </td><td> The directory containing SRCSAFE.INI.  If this SSDIR environment variable is already set then this property may be omitted. </td><td> string </td><td> N/A </td><td> false </td>
+</tr><tr>
+<td> executable </td><td> The location of SS.EXE.  If VSS is installed on the integration server, the location of VSS will be read from the registry and this element may be omitted. </td><td> string </td><td> value from registry </td><td> false </td>
+</tr><tr>
+<td> autoGetSource </td><td> Specifies whether the current version of the source should be retrieved from VSS </td><td> bool </td><td> false </td><td> false </td>
+</tr><tr>
+<td> applyLabel </td><td> Specifies whether the current CCNet label should be applied to all source files under the current project in VSS </td><td> bool </td><td> false </td><td> false </td>
+</tr><tr>
+<td> workingDirectory </td><td> The folder into which the source should be retrived from VSS.  If this folder does not exist, it will be automatically created </td><td> string </td><td> N/A </td><td> true </td>
+</tr><tr>
+<td> timeout </td><td> How long (in milliseconds) the VSS operation will be permitted to run before timing out </td><td> int </td><td> 10 minutes </td><td> false </td>
+</tr><tr>
+<td> culture </td><td> The culture under which VSS is running.  This value must match VSS&#039;s culture for CCNet to work with VSS.  Most of the time the default is OK and you may omit this item. </td><td> string </td><td> the culture of the machine </td><td> false </td>
+</tr>
+</table>
+<h3 class="heading3"><a name="VisualSourceSafeSourceControlBlock-GettingthelatestsourcewithVSS"> Getting the latest source with VSS</a></h3><p class="paragraph">VSS does not automatically remove files from the local workspace that have been deleted from the VSS database.  This does not cause a problem if you are using the <b class="strong">&lt;solution&gt;</b> task or the <a href="Visual Studio Builder.html" title="Visual Studio Builder">Visual Studio Builder</a> to compile your project.  However, if you are packaging the source for deployment or if you are using the <b class="strong">&lt;csc&gt;</b> task to produce a custom build, you may end up compiling these deleted files in your assembly.  To be on the safe side, it might be a good idea to clear the contents of the local workspace after each build.</p><h3 class="heading3"><a name="VisualSourceSafeSourceControlBlock-VSSIssues"> VSS Issues</a></h3><p class="paragraph"><b class="strong">CCNet periodically reports the following error when connecting to VSS: &quot;Unable to open user login file \SourceSafe\Vss60\data\loggedin\&lt;userid&gt;.log.&quot;  What gives?</b></p>If you have set CCNet up to manage multiple projects that all connect to the VSS repository using the same user id then you may sporadically receive this failure.  Our analysis suggests that the root of the problem is caused by the fact that VSS will create the <b class="strong">&lt;userid&gt;.log</b> file when a user logs into VSS and delete it when the user logs out again.  If a second build is using the repository concurrently with the same user, when that second build logs out it looks for <b class="strong">&lt;userid&gt;.log</b>, but it&#039;s gone.  Hence the error.<p class="paragraph">There are three approaches that you can take to deal with this:
+<ul class="star">
+<li> Log into VSS using different users for each CCNet project.</li>
+<li> You can <a href="Project Configuration Block.html#ProjectConfigurationBlock-publishExceptions" title="publishExceptions on Project Configuration Block">keep CCNet from publishing exceptions </a>, so this exception will just get logged into the <b class="strong">ccnet.log</b> file.</li>
+<li> Leave the VSS GUI open on the integration server.  This will mean the <b class="strong">userid.log</b> file never gets deleted.</li>
+</ul><br/>
+<b class="strong">If you&#039;re using a labeller that returns a label equal to one already applied in the repository, the old label will be <ins class="inserted">deleted</ins> when the new one is added.</b></p>This is because of a quirk in how VSS deals with labels of the same name; it should not be a problem with the default labeller.<p class="paragraph">This problem usually occurs when someone is using a custom labeller (a class that implements ILabeller) and that custom labeller returns a constant value.</p><b class="strong">Workaround:</b> If you use a custom labeller, make sure each label is unique.
+<p class="paragraph"><b class="strong">If the project name contains spaces then the VSS command-line will fail.</b><br/>
+Wrap the text in the &lt;project&gt; element in double quotes: eg. &lt;project&gt;&quot;My Project&quot;&lt;/project&gt;</p>
+
+				    
+                    			    </td>
+		    </tr>
+	    </table>
+	    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+			<tr>
+				<td height="12" background="border/border_bottom.gif"><img src="border/spacer.gif" width="1" height="1" border="0"/></td>
+			</tr>
+		    <tr>
+			    <td align="center"><font color="grey">Document generated by Confluence on Nov 01, 2004 14:49</font></td>
+		    </tr>
+	    </table>
+    </body>
+</html>

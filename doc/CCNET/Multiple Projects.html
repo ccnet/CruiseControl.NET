@@ -2,6 +2,7 @@
     <head>
         <title>CruiseControl.NET : Multiple Projects</title>
 	    <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">	    
     </head>
 
     <body>
@@ -14,28 +15,23 @@
                                                     </span>
 				    </div>
 				    <div class="pagesubheading">
-					    This page last changed on Apr 21, 2004 by <font color="#0050B2">orogers</font>.
+					    This page last changed on Oct 19, 2004 by <font color="#0050B2">mroberts</font>.
 				    </div>
 
-				    <p class="paragraph">The CruiseControl.NET server can be configured to manage the integration requirements for several projects concurrently.  To do this, simply include the configuration for the different projects consecutively in the ccnet.config file.</p><div class="code"><pre>&lt;cruisecontrol&gt;&#10;     &lt;project name=&quot;project1&quot;&gt;&#10;          &lt;state type=&quot;state&quot; filename=&quot;project1.ccnet.state&quot; /&gt;&#10;          ...&#10;     &lt;/project&gt;&#10;     &lt;project name=&quot;project2&quot;&gt;&#10;          &lt;state type=&quot;state&quot; filename=&quot;project2.ccnet.state&quot; /&gt;&#10;          ...&#10;     &lt;/project&gt;&#10;&lt;/cruisecontrol&gt;</pre></div><p class="paragraph">One important caveat is to specify different filenames in the <b class="strong">&lt;state&gt;</b> element for each project.  If this is not specified then both projects will use the same state file (&quot;ccnet.state&quot;) which can lead to some pretty confusing results.</p>Similarly, it is important to use different log folders for the <a href="XmlLogPublisher.html"><b class="strong">&lt;xmllogger&gt;</b></a> element.  Otherwise, CCNet will have no way of determining which builds originated from which projects.<p class="paragraph">At this point, the CCNet web application only supports displaying the results for a single project.  So you will need to install and configure one CCNet web application per project.</p>
+				    
+The CruiseControl.NET server can be configured to manage the integration requirements for several projects concurrently.  To do this, simply include the configuration for the different projects consecutively in the ccnet.config file.<br/>
+
+<div class="code"><div class="codeContent">
+<pre><span class="xml&#45;tag">&lt;cruisecontrol&gt;</span>&#10;     <span class="xml&#45;tag">&lt;project name=<span class="xml&#45;quote">&quot;project1&quot;</span>&gt;</span>&#10;          ...&#10;     <span class="xml&#45;tag">&lt;/project&gt;</span>&#10;     <span class="xml&#45;tag">&lt;project name=<span class="xml&#45;quote">&quot;project2&quot;</span>&gt;</span>&#10;          ...&#10;     <span class="xml&#45;tag">&lt;/project&gt;</span>&#10;<span class="xml&#45;tag">&lt;/cruisecontrol&gt;</span></pre>
+</div></div><p class="paragraph">If you use the default values for Project <a href="Project Configuration Block.html#ProjectConfigurationBlock-workingDirectory" title="workingDirectory on Project Configuration Block">working directories</a>, <a href="Project Configuration Block.html#ProjectConfigurationBlock-artifactDirectory" title="artifactDirectory on Project Configuration Block">artifact directories</a>, <a href="State Manager Blocks.html" title="State Manager Blocks">State Managers</a> and <a href="Xml Log Publisher.html" title="Xml Log Publisher">Xml Log Publishers</a>, this should work for you straightaway, but if not, note the following conditions:
+<ul class="star">
+<li> Each project needs its own state file (see <a href="State Manager Blocks.html" title="State Manager Blocks">State Manager Blocks</a>)</li>
+<li> Each project must save build logs to a separate directory (see <a href="Xml Log Publisher.html" title="Xml Log Publisher">Xml Log Publisher</a>)</li>
+<li> Each project must have a separated build working directory (since builds are performed in parallel)</li>
+</ul><br/>
+To configure reporting, read the <a href="Project Report Web Application.html" title="Project Report Web Application">Project Report Web Application</a> section on Multiple Projects.</p>
 
 				    
-                                            <div class="tabletitle">
-                            <a name="comments">Comments:</a>
-                        </div>
-
-                        <table border="0" width="100%">
-                                                        <tr>
-                                <td >
-                                    <a name="comment-479"></a>
-                                    <font class="smallfont"><p class="paragraph">Has there been any concideration put into using an httpModule or even the HttpContext.RewritePath feature of ASP.Net for url rewritting?</p></font>
-                                    <div align="left" class="smallfont" style="color: #666666; width: 98%">
-                                        <img src="icons/comment_16.gif" height="16" width="16" border="0" align="absmiddle"/>
-                                        Posted by cromwellryan@hotmail.com at Apr 26, 2004 09:52
-                                    </div>
-                                </td>
-                            </tr>
-                                                    </table>
                     			    </td>
 		    </tr>
 	    </table>
@@ -44,7 +40,7 @@
 				<td height="12" background="border/border_bottom.gif"><img src="border/spacer.gif" width="1" height="1" border="0"/></td>
 			</tr>
 		    <tr>
-			    <td align="center"><font color="grey">Document generated by Confluence on May 31, 2004 05:05</font></td>
+			    <td align="center"><font color="grey">Document generated by Confluence on Nov 01, 2004 14:49</font></td>
 		    </tr>
 	    </table>
     </body>

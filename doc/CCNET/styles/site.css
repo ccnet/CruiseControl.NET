@@ -13,6 +13,10 @@ body {
     background-color: #f0f0f0;
 }
 
+.monospaceInput {
+    font:12px monospace
+}
+
 p.paragraph {
     margin: 5px 0px 5px 0px;
     padding: 0px;
@@ -25,19 +29,44 @@ ul, ol {
     padding-bottom: 0px;
 }
 
+pre {
+    padding: 0px;
+    margin-top: 5px;
+    margin-left: 15px;
+    margin-bottom: 5px;
+    margin-right: 5px;
+    text-align: left;
+}
+
 .code {
-    background-color: #f0f0f0;
  	border: 1px dashed #3c78b5;
-    padding: 0px 10px 0px 10px;
-    margin: 10px;
     font-size: 11px;
 	font-family: Courier;
+    margin: 10px;
 	line-height: 13px;
 }
 
-pre {
-    padding: 0px;
-    margin: 5px;
+.focusedComment {
+    background: #ffffce;
+}
+
+.commentBox, .focusedComment {
+    padding: 10px;
+    margin: 5px 0 5px 0;
+    border: 1px #bbb solid;
+}
+
+.codeHeader {
+    background-color: #f0f0f0;
+ 	border-bottom: 1px dashed #3c78b5;
+    padding: 3px;
+	text-align: center;
+}
+
+.codeContent {
+    text-align: left;
+    background-color: #f0f0f0;
+    padding: 3px;
 }
 
 .preformatted {
@@ -86,18 +115,74 @@ pre {
 	line-height: 13px;
 }
 
+.lockAlert {
+    background-color: #f0f0f0;
+    width: 50%;
+ 	border: 1px dashed red;
+    font-size: 11px;
+    padding: 10px 5px 10px 5px;
+    margin: 4px;
+	line-height: 13px;
+}
+
+
 .java-keyword {
-  color: #000066;
+  color: #000091;
   background-color: inherit;
 }
 
 .java-object {
-  color: #660066;
+  color: #910091;
   background-color: inherit;
 }
 
 .java-quote {
-  color: #006600;
+  color: #009100;
+  background-color: inherit;
+}
+
+.java-comment {
+  color: #808080;
+  background-color: inherit;
+}
+
+.javascript-keyword {
+  color: #000091;
+  background-color: inherit;
+}
+
+.javascript-object {
+  color: #910091;
+  background-color: inherit;
+}
+
+.javascript-quote {
+  color: #009100;
+  background-color: inherit;
+}
+
+.javascript-comment {
+  color: #808080;
+  background-color: inherit;
+}
+
+.actionscript-keyword {
+  color: #000091;
+  background-color: inherit;
+}
+
+.actionscript-object {
+  color: #910091;
+  background-color: inherit;
+}
+
+.actionscript-quote {
+  color: #009100;
+  background-color: inherit;
+}
+
+.actionscript-comment {
+  color: #808080;
   background-color: inherit;
 }
 
@@ -106,7 +191,32 @@ pre {
 }
 
 .xml-tag {
-  color: #0000aa;
+  color: #000091;
+  background-color: inherit;
+}
+
+.xml-quote {
+  color: #009100;
+  background-color: inherit;
+}
+
+.xml-comment {
+  color: #808080;
+  background-color: inherit;
+}
+
+.sql-keyword {
+  color: #000091;
+  background-color: inherit;
+}
+
+.sql-object {
+  color: #910091;
+  background-color: inherit;
+}
+
+.sql-quote {
+  color: #009100;
   background-color: inherit;
 }
 
@@ -373,7 +483,7 @@ h6 {
 	margin: 14px 0px 4px 0px;
 }
 
-.smallfont, .commentblock {
+.smallfont {
     font-size: 10px;
 }
 .descfont {
@@ -410,6 +520,11 @@ h6 {
 .navItem a { color: #ffffff; text-decoration: none; }
 .navItem a:hover { color: #ffffff; text-decoration: none; }
 .navItem a:visited { color: #ffffff; text-decoration: none; }
+
+div.padded { padding: 4px; }
+h3.macrolibrariestitle {
+    margin: 0px 0px 0px 0px; 
+}
 
 div.centered { text-align: center; margin: 10px; }
 div.centered table {margin: 0px auto; text-align: left; }
@@ -556,8 +671,8 @@ a.createlink {
 
 .greyboxfilled {
  	border: 1px solid #ddd;
-	padding: 3px;
-	margin: 1px 1px 10px 1px;
+	padding: 5px;
+	margin: 10px 1px 10px 1px;
 	background: #f0f0f0;
 }
 
@@ -623,10 +738,11 @@ TD.darkredbar {FONT-SIZE: 2px; BACKGROUND: #af0000; BORDER: 1px solid #9c9c9c; P
 TR.testpassed {FONT-SIZE: 2px; BACKGROUND: #ddffdd; PADDING: 0px; }
 TR.testfailed {FONT-SIZE: 2px; BACKGROUND: #ffdddd; PADDING: 0px; }
 
-.toolbar {
+.toolbar  {
     margin: 0px;
     border-collapse: collapse;
 }
+
 .toolbar td  {
     border: 1px solid #ccc;
     padding: 2px 2px 2px 2px;
@@ -642,4 +758,187 @@ td.noformatting {
 
 .commentblock {
     margin: 12px 0 12px 0;
+}
+
+/*
+ * Divs displaying the license information, if necessary.
+ */
+.license-eval, .license-none, .license-nonprofit {
+    border-top: 1px solid #bbbbbb;
+    text-align: center;
+    font-size: 10px;
+    font-family: Verdana, Arial, Helvetica, sans-serif;
+}
+
+.license-eval, .license-none {
+    background-color: #ffcccc;
+}
+
+.license-eval b, .license-none b {
+    color: #990000
+}
+
+.license-nonprofit {
+    background-color: #ffffff;
+}
+
+/*
+ * The shadow at the bottom of the page between the main content and the
+ * "powered by" section.
+ */
+.bottomshadow {
+    height: 12px;
+    background-image: url("$req.contextPath/images/border/border_bottom.gif");
+    background-repeat: repeat-x;
+}
+
+/*
+ * Styling of the operations box
+ */
+.navmenu .operations li, .navmenu .operations ul {
+    list-style: none;
+    margin-left: 0;
+    padding-left: 0;
+}
+
+.navmenu .operations ul {
+    margin-bottom: 9px;
+}
+
+.navmenu .label {
+    font-weight: inherit;
+}
+
+/*
+ * Styling of ops as a toolbar
+ */
+.toolbar div {
+    display: none;
+}
+
+.toolbar .label {
+    display: none;
+}
+
+.toolbar .operations {
+    display: block;
+}
+
+.toolbar .operations ul {
+    display: inline;
+    list-style: none;
+    margin-left: 10px;
+    padding-left: 0;
+}
+
+.toolbar .operations li {
+    list-style: none;
+    display: inline;
+}
+
+/* list page navigational tabs */
+#foldertab {
+padding: 3px 0;
+margin-left: 0;
+border-bottom: 1px solid #3c78b5;
+font: bold 12px Verdana, sans-serif;
+}
+
+#foldertab li {
+list-style: none;
+margin: 0;
+display: inline;
+}
+
+#foldertab li a {
+padding: 3px 0.5em;
+margin-left: 3px;
+border: 1px solid #3c78b5;
+border-bottom: none;
+background: #3c78b5;
+text-decoration: none;
+}
+
+#foldertab li a:link { color: white; }
+#foldertab li a:visited { color: white; }
+
+#foldertab li a:hover {
+color: #ffffff;
+background: #003366;
+border-color: #003366;
+}
+
+#foldertab li a#current {
+background: white;
+border-bottom: 1px solid white;
+color: black;
+}
+
+/* alphabet list */
+ul#squaretab {
+margin-left: 0;
+padding-left: 0;
+white-space: nowrap;
+font: bold 8px Verdana, sans-serif;
+}
+
+#squaretab li {
+display: inline;
+list-style-type: none;
+}
+
+#squaretab a {
+padding: 2px 6px;
+border: 1px solid #3c78b5;
+}
+
+#squaretab a:link, #squaretab a:visited {
+color: #fff;
+background-color: #3c78b5;
+text-decoration: none;
+}
+
+#squaretab a:hover {
+color: #ffffff;
+background-color: #003366;
+border-color: #003366;
+text-decoration: none;
+}
+
+#squaretab li a#current {
+background: white;
+color: black;
+}
+
+.blogcalendar * {
+    font-family:verdana, arial, sans-serif;
+    font-size:x-small;
+    font-weight:normal;
+    line-height:140%;
+    padding:2px;
+}
+
+.blogcalendar caption {
+    font-family:palatino, georgia, times new roman, serif;
+    font-size:small;
+    font-weight:bold;
+    padding:2px;
+    letter-spacing: .3em;
+    text-transform:uppercase;
+}
+
+.searchGroup { padding: 0 0 10px 0; background: #f0f0f0; }
+.searchGroupHeading { font-size: 10px; font-weight: bold; color: #ffffff; background-color: #3c78b5; padding: 2px 4px 1px 4px; }
+.searchItem { padding: 1px 4px 1px 4px; }
+.searchItemSelected { padding: 1px 4px 1px 4px; font-weight: bold; background: #ddd; }
+
+/* permissions page styles */
+.permissionHeading {
+    border-bottom: #bbb; border-width: 0 0 1px 0; border-style: solid; font-size: 16px; text-align: left;
+}
+.permissionTab {
+    border-width: 0 0 0 1px; border-style: solid; background: #3c78b5; color: white;
+}
+.permissionCell {
+    border-left: #bbb; border-width: 0 0 0 1px; border-style: solid;
 }

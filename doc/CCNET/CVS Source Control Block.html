@@ -1,0 +1,64 @@
+<html>
+    <head>
+        <title>CruiseControl.NET : CVS Source Control Block</title>
+	    <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">	    
+    </head>
+
+    <body>
+	    <table class="pagecontent" border="0" cellpadding="0" cellspacing="0" width="100%" bgcolor="#ffffff">
+		    <tr>
+			    <td valign="top" class="pagebody">
+				    <div class="pageheader">
+					    <span class="pagetitle">
+                            CruiseControl.NET : CVS Source Control Block
+                                                    </span>
+				    </div>
+				    <div class="pagesubheading">
+					    This page last changed on Oct 29, 2004 by <font color="#0050B2">orogers</font>.
+				    </div>
+
+				    <p class="paragraph"><h3 style="margin: 4px 0px 4px 0px;" class="heading3"><a name="CVSSourceControlBlock-CVSConfigurationExamples"> CVS Configuration Examples</a></h3></p>Please refer to <a href="Using CruiseControl.NET with CVS.html" title="Using CruiseControl.NET with CVS">Using CruiseControl.NET with CVS</a> for an overview of this block.<p class="paragraph">For cvs you must define where the cvs executable (if you give a relative path, it must be relative to the ccnet.exe application) is and the working directory for checked out code. You may optionally specify the cvsroot.</p><em class="emphasis">example using pserver authentication</em><br/>
+
+<div class="code"><div class="codeContent">
+<pre><span class="xml&#45;tag">&lt;sourcecontrol type=<span class="xml&#45;quote">&quot;cvs&quot;</span>&gt;</span>&#10;   <span class="xml&#45;tag">&lt;executable&gt;</span>..&#92;tools&#92;cvs.exe<span class="xml&#45;tag">&lt;/executable&gt;</span>&#10;   <span class="xml&#45;tag">&lt;workingDirectory&gt;</span>c:&#92;projects&#92;ccnet<span class="xml&#45;tag">&lt;/workingDirectory&gt;</span>&#10;   <span class="xml&#45;tag">&lt;cvsroot&gt;</span>:pserver:anonymous&#64;cvs.sourceforge.net:/cvsroot/ccnet<span class="xml&#45;tag">&lt;/cvsroot&gt;</span>&#10;<span class="xml&#45;tag">&lt;/sourcecontrol&gt;</span></pre>
+</div></div><p class="paragraph"><em class="emphasis">example using ssh via putty</em></p><div class="code"><div class="codeContent">
+<pre><span class="xml&#45;tag">&lt;sourcecontrol type=<span class="xml&#45;quote">&quot;cvs&quot;</span>&gt;</span>&#10;   <span class="xml&#45;tag">&lt;executable&gt;</span>c:&#92;putty&#92;cvswithplinkrsh.bat<span class="xml&#45;tag">&lt;/executable&gt;</span>&#10;   <span class="xml&#45;tag">&lt;workingDirectory&gt;</span>c:&#92;fromcvs&#92;myrepo<span class="xml&#45;tag">&lt;/workingDirectory&gt;</span>&#10;   <span class="xml&#45;tag">&lt;cvsroot&gt;</span>:ext:mycvsserver:/cvsroot/myrepo<span class="xml&#45;tag">&lt;/cvsroot&gt;</span>&#10;<span class="xml&#45;tag">&lt;/sourcecontrol&gt;</span></pre>
+</div></div><p class="paragraph"><h3 class="heading3"><a name="CVSSourceControlBlock-ConfigurationElements%3A"> Configuration Elements:</a></h3></p><table class="wikitable">
+<tr>
+<th> Node </th><th> Description </th><th> Type </th><th> Required</th>
+</tr><tr>
+<td> executable </td><td> The location of the cvs.exe executable. </td><td> string </td><td> true </td>
+</tr><tr>
+<td> workingDirectory </td><td> The folder that the source has been checked out into. </td><td> string </td><td> true </td>
+</tr><tr>
+<td> cvsroot </td><td> The cvs connection string. If this is unspecified, the CVS client will automatically calculate the correct root based on your working directory (you generally don&#039;t need to specify this element). </td><td> string </td><td> false </td>
+</tr><tr>
+<td> restrictLogins </td><td> Only list modifications checked in by specified logins </td><td> string </td><td> false </td>
+</tr><tr>
+<td> webUrlBuilder </td><td> The url builder section for the ViewCVS server. (see <a href="Using CruiseControl.NET with CVS.html" title="Using CruiseControl.NET with CVS">Using CruiseControl.NET with CVS</a>) </td><td> string </td><td> false </td>
+</tr><tr>
+<td> branch </td><td> The branch to check for modifications on. </td><td> string </td><td> false </td>
+</tr><tr>
+<td> <a name="CVSSourceControlBlock-autoGetSource"></a> autoGetSource </td><td> Specifies whether the current version of the source should be retrieved from CVS.  The default value for this setting is false. </td><td> bool </td><td> false </td>
+</tr><tr>
+<td> <a name="CVSSourceControlBlock-labelOnSuccess"></a> labelOnSuccess </td><td> Specifies whether or not the repository should be labelled after a successful build </td><td> bool </td><td> false </td>
+</tr><tr>
+<td> timeout </td><td> How long (in milliseconds) the CVS operation will be permitted to run before timing out.  The default value is 10 minutes. </td><td> int </td><td> false </td>
+</tr>
+</table>
+
+				    
+                    			    </td>
+		    </tr>
+	    </table>
+	    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+			<tr>
+				<td height="12" background="border/border_bottom.gif"><img src="border/spacer.gif" width="1" height="1" border="0"/></td>
+			</tr>
+		    <tr>
+			    <td align="center"><font color="grey">Document generated by Confluence on Nov 01, 2004 14:49</font></td>
+		    </tr>
+	    </table>
+    </body>
+</html>
