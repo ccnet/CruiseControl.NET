@@ -25,8 +25,6 @@ namespace tw.ccnet.webdashboard
 	
 		private void Page_Load(object sender, System.EventArgs e)
 		{
-			string exceptionString = "";
-
 			IList urls = (IList) ConfigurationSettings.GetConfig("projectURLs");
 			ArrayList statusses = new ArrayList();
 			ArrayList connectionExceptions = new ArrayList();
@@ -69,6 +67,29 @@ namespace tw.ccnet.webdashboard
 			}
 		}
 
+		private void StatusGrid_ItemDataBound(object sender, DataGridItemEventArgs e)
+		{
+			if ((ListItemType)e.Item.ItemType == ListItemType.Item)
+			{
+				ProjectStatus thisProjectsStatus = (ProjectStatus) e.Item.DataItem;
+				TableCell buildStatusCell = (TableCell)e.Item.Controls[1];
+
+				if (thisProjectsStatus.BuildStatus == IntegrationStatus.Success)
+				{
+					buildStatusCell.ForeColor = Color.Green;
+				}
+				else if (thisProjectsStatus.BuildStatus == IntegrationStatus.Unknown)
+				{
+					buildStatusCell.ForeColor = Color.Yellow;
+				}
+				else
+				{
+					buildStatusCell.ForeColor = Color.Red;
+				}
+			}
+
+		}
+
 		#region Web Form Designer generated code
 		override protected void OnInit(EventArgs e)
 		{
@@ -78,11 +99,10 @@ namespace tw.ccnet.webdashboard
 		
 		private void InitializeComponent()
 		{    
+			this.StatusGrid.ItemDataBound += new System.Web.UI.WebControls.DataGridItemEventHandler(this.StatusGrid_ItemDataBound);
 			this.Load += new System.EventHandler(this.Page_Load);
-
 		}
 		#endregion
-
 	}
 
 	public struct ConnectionException
