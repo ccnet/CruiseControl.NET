@@ -31,6 +31,16 @@ namespace ThoughtWorks.CruiseControl.Core.Util.Test
 		}
 
 		[Test]
+		public void ShouldNotUseATimeoutIfTimeoutSetToZeroOnProcessInfo()
+		{
+			ProcessInfo processInfo = new ProcessInfo("cmd.exe", "/C @echo Hello World");
+			processInfo.TimeOut = 0;
+			ProcessResult result = executor.Execute(processInfo);
+			Assert.AreEqual("Hello World", result.StandardOutput.Trim());
+			AssertProcessExitsSuccessfully(result);
+		}
+
+		[Test]
 		public void StartProcessRunningCmdExeCallingNonExistentFile()
 		{
 			ProcessResult result = executor.Execute(new ProcessInfo("cmd.exe", "/C @zerk.exe foo"));

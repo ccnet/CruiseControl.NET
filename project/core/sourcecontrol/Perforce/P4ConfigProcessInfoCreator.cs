@@ -8,7 +8,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Perforce
 		public ProcessInfo CreateProcessInfo(P4 p4, string extraArguments)
 		{
 			ProcessInfo processInfo = new ProcessInfo(p4.Executable, BuildCommonArguments(p4) + extraArguments);
-			processInfo.TimeOut = 10 * 60 * 1000; // 10 minutes
+			processInfo.TimeOut = 0; // Don't time out - this should be configurable
 			return processInfo;
 		}
 

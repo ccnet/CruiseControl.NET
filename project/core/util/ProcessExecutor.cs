@@ -31,7 +31,7 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 				standardOutput.Start();
 				standardError.Start();
 
-				bool hasExited = process.WaitForExit(processInfo.TimeOut);
+				bool hasExited = WaitForExit(processInfo, process);
 				if (! hasExited)
 				{
 					Log.Warning(string.Format("Process timed out: {0} {1}.  Process id: {2}", processInfo.FileName, processInfo.Arguments, process.Id));
@@ -43,6 +43,19 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 
 				return new ProcessResult(standardOutput.Output, standardError.Output, process.ExitCode, ! hasExited);
 			}				
+		}
+
+		private bool WaitForExit(ProcessInfo processInfo, Process process)
+		{
+			if (processInfo.TimeOut == 0)
+			{
+				process.WaitForExit();
+				return true;
+			}
+			else
+			{
+				return process.WaitForExit(processInfo.TimeOut);
+			}
 		}
 	}
 }
