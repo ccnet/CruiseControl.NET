@@ -1,16 +1,13 @@
 <?xml version="1.0"?>
 
-<project name="ccnet" default="all">
+<project name="ccnet" default="test">
 
     <!-- PROPERTIES -->
     <property name="debug" value="true"/>
     <property name="verbosity" value="true"/>
-    <property name="version" value="0.3.1"/>
     <property name="nunit.output" value="Plain"/>
 
-    <!-- CHANGE this property when you want to deploy the webapp to a different URL -->
-    <property name="webapp.name" value="ccnetdev"/>
-    <property name="webapp.dir" value=".\web\${webapp.name}"/>
+    <property name="webapp.dir" value="deployed\web"/>
 
     <property name="build.dir" value="build"/>
     <property name="src.dir" value="project"/>
@@ -19,427 +16,189 @@
 
     <property name="core.dll" value="ccnet.core.dll"/>
     <property name="console.exe" value="ccnet.exe"/>
-    <property name="service.exe" value="service.exe"/>
+    <property name="service.exe" value="ccnet.service.exe"/>
     <property name="web.dll" value="ccnet.web.dll"/>
-    <property name="cctray.exe" value="cctray.exe"/>
-    <property name="integration.dll" value="ccnet.integration.test.dll"/>
+    <property name="cctray.exe" value="CCTray.exe"/>
 
-    <!-- ALL -->
-    <target name="all" description="clean, update, build, unit test">
-        <call target="clean"/>
-        <call target="test.unit"/>
-        <!-- <call target="deploy" /> -->
-    </target>
+    <target name="all" depends="clean, compile, test, deploy, dist"/>
 
-    <target name="all.ccnet">
-        <property name="debug" value="false"/>
-        <property name="nunit.output" value="Xml"/>
+	<target name="clean" description="cleans up everything">
+		<delete dir="${build.dir}" failonerror="false"/>
+		<delete dir="deployed" failonerror="false"/>
+		<delete dir="dist" failonerror="false"/>
+		<delete>
+			<fileset>
+				<includes name="**/bin"/>
+				<includes name="**/obj"/>
+			</fileset>
+		</delete>
+	</target>
 
-        <exec program="tools/cvs.exe" commandline="-q update -P -d"/>
-        <call target="all"/>
-        <call target="test.integration"/>
-    </target>
-
-    <!-- CLEAN -->
-    <target name="clean" description="cleans up everything">
-        <delete dir="${build.dir}" failonerror="false"/>
-        <delete dir="${webapp.dir}" failonerror="false"/>
-    </target>
-
-    <!-- INIT -->
     <target name="init" description="initial compilation setup">
         <mkdir dir="${build.dir}" verbose="${verbosity}"/>
     </target>
 
 
-    <!-- COMPILE -->
-    <target name="compile" depends="init" description="compiles everything">
-        <call target="compile.remote"/>
-        <call target="compile.core"/>
-        <call target="compile.web"/>
-        <call target="compile.console"/>
-        <call target="compile.service"/>
-        <call target="compile.cctray" />
-<!--        
-        <call target="compile.integration"/>
-        <call target="compile.controlpanel"/>
--->
-    </target>
+	<!-- COMPILE -->
+	<target name="compile" depends="init" description="compiles everything to be released">
+		<solution configuration="debug" solutionfile="project\ccnet.sln" />
+		
+		<foreach item="Folder" property="foldername">
+			<in>
+				<items basedir="project">
+					<includes name="*\bin\Debug" />
+				</items>
+			</in>
+			<do>
+				<copy todir="${build.dir}">
+					<fileset basedir="${foldername}">
+						<includes name="*.dll" />
+						<includes name="*.pdb" />
+						<includes name="*.exe" />
+					</fileset>
+				</copy>
+			</do>
+		</foreach>
 
-    <target name="compile.remote" depends="init" description="compiles remote interface">
-        <csc target="library" output="${build.dir}\ccnet.remote.dll" debug="${debug}" define="TRACE" doc="${build.dir}\remote.xml">
-            <sources basedir="${src.dir}\ccnet.remote">
-                <includes name="**\*.cs"/>
-            </sources>
-            <arg value="/nowarn:1591"/>
-        </csc>
-    </target>
+		<copy file="${src.dir}\core\test\ccnet.core.dll.config" todir="${build.dir}"/>
+		<copy file="${src.dir}\web\test\ccnet.web.dll.config" todir="${build.dir}"/>
+		<copy file="${src.dir}\console\app.config" tofile="${build.dir}\${console.exe}.config" verbose="${verbosity}"/>
+		<copy file="${src.dir}\service\app.config" tofile="${build.dir}\${service.exe}.config" verbose="${verbosity}"/>
+		<copy file="${src.dir}\CCTray\app.config" tofile="${build.dir}\${cctray.exe}.config" verbose="${verbosity}"/>
 
-    <target name="compile.core" depends="init" description="compiles the project core">
-        <csc target="library" output="${build.dir}\${core.dll}" debug="${debug}" define="TRACE" doc="${build.dir}\core.xml">
-            <sources basedir="${src.dir}\core">
-                <includes name="**\*.cs"/>
-            </sources>
-            <references>
-                <includes name="${lib.dir}\nunit.framework.dll"/>
-                <includes name="${lib.dir}\NetReflector.dll"/>
-                <includes name="${lib.dir}\nmock.dll"/>
-                <includes name="${build.dir}\ccnet.remote.dll"/>
-            </references>
-            <resources prefix="tw.ccnet.core.configuration">
-                <includes name="${src.dir}\core\configuration\ccnet.xsd"/>
-            </resources>
-            <!-- don't warn about uncommented public methods -->
-            <arg value="/nowarn:1591"/>
-            <arg value="/unsafe"/>
-        </csc>
-        <copy file="${lib.dir}\nunit.framework.dll" todir="${build.dir}"/>
-        <copy file="${lib.dir}\NetReflector.dll" todir="${build.dir}"/>
-        <copy file="${lib.dir}\nmock.dll" todir="${build.dir}"/>
-        <copy file="${lib.dir}\YpluginDLL.dll" todir="${build.dir}"/>
-        <copy file="${src.dir}\core\test\ccnet.core.dll.config" todir="${build.dir}"/>
+		<copy todir="${build.dir}\xsl" verbose="${verbosity}">
+			<fileset basedir="${src.dir}\core\publishers\xsl">
+					<includes name="**\*.xsl"/>
+			</fileset>
+		</copy>
+	</target>
 
-        <!-- copy xsl files.. -->
-        <copy todir="${build.dir}\xsl" verbose="${verbosity}">
-            <fileset basedir="${src.dir}\core\publishers\xsl">
-                <includes name="**\*.xsl"/>
-            </fileset>
-        </copy>
-    </target>
-
-<!--
-    <target name="compile.controlpanel" depends="init" description="compiles the cc control panel">
-		<resgen compile="true" prepend="tw.ccnet.controlpanel">
-		   <resources basedir="${src.dir}\ControlPanel">
-		     <includes name="**.resx"/>
-		   </resources>
-		</resgen>
-        <csc target="winexe" output="${build.dir}\ccnet.controlpanel.exe" debug="${debug}" define="TRACE" doc="${build.dir}\controlpanel.xml">
-            <sources basedir="${src.dir}\ControlPanel">
-                <includes name="**\*.cs"/>
-            </sources>
-            <references>
-                <includes name="${lib.dir}\nunit.framework.dll"/>
-                <includes name="${build.dir}\ccnet.remote.dll"/>
-            </references>
-            <resources prefix="tw.ccnet.controlpanel">
-                <includes name="${src.dir}\ControlPanel\*.ico"/>
-                <includes name="${src.dir}\ControlPanel\*.resources"/>
-            </resources>
-            <arg value="/nowarn:1591"/>
-        </csc>
-    </target>
--->
-
-    <target name="compile.web" depends="init" description="compiles the project web client">
-        <csc target="library" output="${build.dir}\${web.dll}" debug="true" doc="${build.dir}\web.xml">
-            <sources basedir="${src.dir}\web">
-                <includes name="**\*.cs"/>
-            </sources>
-            <references>
-                <includes name="${build.dir}\${core.dll}"/>
-                <includes name="${build.dir}\ccnet.remote.dll"/>
-                <includes name="${lib.dir}\nunit.framework.dll"/>
-                <includes name="${lib.dir}\SiteMesh.dll"/>
-                <includes name="${lib.dir}\DecoratorControls.dll"/>
-            </references>
-            <!-- don't warn about uncommented public methods -->
-            <arg value="/nowarn:1591"/>
-        </csc>
-        <copy file="${src.dir}\web\test\ccnet.web.dll.config" todir="${build.dir}"/>
-    </target>
-
-
-    <target name="compile.console" depends="init" description="compiles the project console exe">
-        <csc target="exe" output="${build.dir}\${console.exe}" debug="${debug}" define="TRACE" doc="${build.dir}\console.xml">
-            <sources basedir="${src.dir}\console">
-                <includes name="**\*.cs"/>
-            </sources>
-            <references>
-                <includes name="${build.dir}\${core.dll}"/>
-                <includes name="${lib.dir}\nunit.framework.dll"/>
-                <includes name="${build.dir}\ccnet.remote.dll"/>
-            </references>
-            <!-- don't warn about uncommented public methods -->
-            <arg value="/nowarn:1591"/>
-        </csc>
-
-        <!-- copy ccnet.exe.config... should be included in distribution package later.. -->
-        <copy file="${src.dir}\console\app.config" tofile="${build.dir}\${console.exe}.config" verbose="${verbosity}"/>
-    </target>
-
-    <target name="compile.service" depends="init" description="compiles the project service exe">
-        <csc target="exe" output="${build.dir}\${service.exe}" debug="${debug}" define="TRACE" doc="${build.dir}\console.xml">
-            <sources basedir="${src.dir}\service">
-                <includes name="*.cs"/>
-            </sources>
-            <references>
-                <includes name="${build.dir}\${core.dll}"/>
-                <includes name="${build.dir}\ccnet.remote.dll"/>
-            </references>
-            <!-- don't warn about uncommented public methods -->
-            <arg value="/nowarn:1591"/>
-        </csc>
-
-        <!-- copy service.exe.config... should be included in distribution package later.. -->
-        <copy file="${src.dir}\service\app.config" tofile="${build.dir}\${service.exe}.config" verbose="${verbosity}"/>
-    </target>
-    
-    <target name="compile.cctray" depends="init, compile.remote" description="Builds the Tray Notifier Application">
-    	<csc target="winexe" output="${build.dir}\${cctray.exe}" debug="${debug}" define="TRACE" doc="${build.dir}\cctray.xml">
-			<sources basedir="${src.dir}\CCTray">
-				<includes name="*.cs"/>
-			</sources>
-			<references>
-				<includes name="${build.dir}\ccnet.remote.dll"/>
-			</references>
-			<resources prefix="CCTray">
-				<includes name="${src.dir}\CCTray\*.ico"/>
-			</resources>
-			<arg value="/nowarn:1591"/>
-    	</csc>
-        <!-- copy cctray.exe.config... should be included in distribution package later.. -->
-        <copy file="${src.dir}\CCTray\app.config" tofile="${build.dir}\${cctray.exe}.config" verbose="${verbosity}"/>
-    </target>
-
-<!--
-    <target name="compile.integration" depends="compile.core" description="compiles the integration project">
-        <csc target="library" output="${build.dir}\${integration.dll}" debug="true">
-            <sources basedir="${src.dir}\integration">
-                <includes name="**\*.cs"/>
-            </sources>
-            <references>
-                <includes name="${build.dir}\${core.dll}"/>
-                <includes name="${build.dir}\ccnet.remote.dll"/>
-                <includes name="${lib.dir}\nunit.framework.dll"/>
-            </references>
-            <arg value="/nowarn:1591"/>
-        </csc>
-    </target>
--->
-
-    <!-- TEST -->
-    <target name="test" description="runs unit and acceptance tests">
-        <call target="test.unit"/>
-        <call target="test.integration"/>
-    </target>
+	<!-- TEST -->
+	<target name="test" depends="test.unit" />
 
     <target name="test.unit" depends="compile" description="runs unit tests">
-        <nunit2>
-            <test assemblyname="${build.dir}\${core.dll}" appconfig="${build.dir}\ccnet.core.dll.config" type="${nunit.output}"/>
-        </nunit2>
         <nunit2>
             <test assemblyname="${build.dir}\${web.dll}" appconfig="${build.dir}\ccnet.web.dll.config" type="${nunit.output}"/>
         </nunit2>
         <nunit2>
             <test assemblyname="${build.dir}\${console.exe}" type="${nunit.output}"/>
         </nunit2>
-<!--        
-       	<nunit2>
-            <test assemblyname="${build.dir}\ccnet.controlpanel.exe"
-                appconfig="${build.dir}\ccnet.controlpanel.exe.config" type="${nunit.output}"/>
-        </nunit2>
--->        
-    </target>
-
-<!--
-    <target name="test.integration" depends="compile.integration" description="runs unit tests">
         <nunit2>
-            <test assemblyname="${build.dir}\${integration.dll}" fork="true" type="${nunit.output}"/>
+            <test assemblyname="${build.dir}\${core.dll}" appconfig="${build.dir}\ccnet.core.dll.config" type="${nunit.output}"/>
         </nunit2>
     </target>
--->
 
-    <!-- DEPLOY -->
-    <target name="deploy" depends="compile" description="deploys the web application">
-        <mkdir dir="${webapp.dir}" verbose="${verbosity}"/>
+	<!-- DEPLOY -->
+	<target name="deploy" depends="deploy.builder, deploy.cctray, deploy.webapp" />
+	
+	<target name="deploy.builder" depends="compile">
+		<mkdir dir="deployed\builder"/>
+		<foreach item="Folder" property="foldername">
+			<in>
+				<items basedir="project">
+					<includes name="core" />
+					<includes name="ccnet.remote" />
+					<includes name="console" />
+					<includes name="service" />
+				</items>
+			</in>
+			<do>
+				<copy todir="deployed\builder">
+					<fileset basedir="${foldername}\bin\Debug">
+						<includes name="*.dll" />
+						<includes name="*.pdb" />
+						<includes name="*.exe" />
+					</fileset>
+				</copy>
+			</do>
+		</foreach>
 
-        <!-- Create web application -->
-        <echo message="Setting up IIS V-Dir, physical [${webapp.dir}], virtual [${webapp.name}]" />
-        <mkiisdir dirpath="${webapp.dir}" vdirname="${webapp.name}"/>
-
-        <copy todir="${webapp.dir}\bin" overwrite="true">
-            <fileset basedir="build">
-                <includes name="ccnet.remote.dll"/>
-                <includes name="${core.dll}"/>
-                <includes name="${web.dll}"/>
-            </fileset>
-        </copy>
-
-        <copy todir="${webapp.dir}\bin" overwrite="true">
-            <fileset basedir="lib">
-                <includes name="SiteMesh.dll"/>
-                <includes name="DecoratorControls.dll"/>
-            </fileset>
-        </copy>
-
-        <copy todir="${webapp.dir}">
-            <fileset basedir="${src.dir}\web">
-                <includes name="**\*.aspx"/>
-                <includes name="**\*.ascx"/>
-                <includes name="**\*.asax"/>
-                <includes name="**\*.html"/>
-                <includes name="**\*.gif"/>
-                <includes name="**\*.wav"/>
-                <includes name="**\*.css"/>
-                <includes name="log\*.xml"/>
-                <includes name="**\*.xsl"/>
-                <includes name="**\*.config"/>
-            </fileset>
-        </copy>
-    </target>
-
-    <!-- DISTRIBUTION BUILD -->
-    <target name="dist" description="build a distribution version of CruiseControl">
-        <property name="build.dir" value="dist"/>
-        <property name="debug" value="false"/>
-        <call target="all"/>
-
-        <!-- DEPLOY CCNET web config to web server -->
-        <copy file="ccnet-config/ccnet.web.config" tofile="c:/inetpub/wwwroot/ccnet/Web.config" overwrite="true"/>
-    </target>
-
-	<target name="dist.cctray" depends="compile.cctray">
-		<copy todir="${package.dir}\cctray">
-			<fileset basedir="${build.dir}">
-				<includes name="${cctray.exe}" />
-				<includes name="${cctray.exe}.config" />
-				<includes name="ccnet.remote.dll" />
+		<copy todir="deployed\builder\xsl" verbose="${verbosity}">
+			<fileset basedir="${src.dir}\core\publishers\xsl">
+				<includes name="**\*.xsl"/>
 			</fileset>
 		</copy>
-		<mkdir dir="dist" />
-		<zip zipfile="dist\cctray.zip">
-			<fileset basedir="${package.dir}\cctray">
+
+		<copy file="${src.dir}\console\app.config" tofile="deployed\builder\${console.exe}.config" verbose="${verbosity}"/>
+		<copy file="${src.dir}\service\app.config" tofile="deployed\builder\${service.exe}.config" verbose="${verbosity}"/>
+
+		<copy file="${src.dir}\console\StartCCNet.bat" todir="deployed\builder" verbose="${verbosity}"/>
+	</target>
+	
+	<target name="deploy.cctray" depends="compile">
+		<mkdir dir="deployed\cctray" />
+		<copy todir="deployed\cctray">
+			<fileset basedir="project\cctray\bin\Debug">
+				<includes name="*.dll" />
+				<includes name="*.pdb" />
+				<includes name="*.exe" />
+			</fileset>
+		</copy>
+		<copy file="${src.dir}\CCTray\app.config" tofile="${build.dir}\${cctray.exe}.config" verbose="${verbosity}"/>
+	</target>
+    
+	<target name="deploy.webapp" depends="compile" description="deploys the web application">
+		<mkdir dir="${webapp.dir}" verbose="${verbosity}"/>
+		<copy todir="${webapp.dir}\bin">
+			<fileset basedir="project\web\bin\Debug">
+				<includes name="*.dll" />
+			</fileset>
+		</copy>
+
+		<copy todir="${webapp.dir}">
+			<fileset basedir="project\web">
+				<includes name="**\*.aspx"/>
+				<includes name="**\*.ascx"/>
+				<includes name="**\*.asax"/>
+				<includes name="**\*.html"/>
+				<includes name="**\*.gif"/>
+				<includes name="**\*.wav"/>
+				<includes name="**\*.css"/>
+				<includes name="**\*.xsl"/>
+				<includes name="**\*.config"/>
+
+				<excludes name="bin\**\*" />
+				<excludes name="obj\**\*" />
+				<excludes name="test\**\*" />
+			</fileset>
+		</copy>
+
+		<mkdir dir="${webapp.dir}\log" />
+
+		<!-- Create web application (This may fail on Windows Server 2003 / IIS 6 -->
+		<!-- MR - need to add NantContrib.dll once Nant 0.8.3 actually released
+		<echo message="Setting up IIS V-Dir, physical [${webapp.dir}], virtual [${webapp.name}]" />
+		<mkiisdir dirpath="${webapp.dir}" vdirname="ccnetdev"/>
+		-->
+
+	</target>
+
+	<!-- CREATE DISTRIBUTABLES -->
+	<target name="dist" depends="deploy">
+		<copy todir="deployed" file="license.txt" />
+		<copy todir="deployed\doc">
+			<fileset basedir="doc">
 				<includes name="*" />
+			</fileset>
+		</copy>
+	
+		<mkdir dir="dist"/>
+		<zip zipfile="dist\CruiseControl.NET.zip">
+			<fileset basedir="deployed">
+				<includes name="**\*" />
+			</fileset>
+		</zip>
+		<zip zipfile="dist\CruiseControl.NET.source.zip">
+			<fileset>
+				<includes name="**\*" />
+
+				<excludes name="build\**\*" />
+				<excludes name="deployed\**\*" />
+				<excludes name="dist\**\*" />
+				<excludes name="**\bin\**\*" />
+				<excludes name="**\obj\**\*" />
+				<excludes name="**\CVS\**\*" />
 			</fileset>
 		</zip>
 	</target>
-	
-	
-    <!-- ZIP PACKAGE -->
-    <target name="package.source" depends="package.init" description="creates a package zip file of sources">
-        <!-- create zip file -->
-        <property name="package.source.zip" value="${package.dir}\${nant.project.name}_source_${version}.zip"/>
-        <delete file="${package.source.zip}" failonerror="false" verbose="${verbosity}"/>
-        <zip zipfile="${package.source.zip}">
-            <fileset>
-                <includes name="**/*"/>
-                <excludes name="**/obj/**"/>
-                <excludes name="**/bin/**"/>
-                <excludes name="dist/**"/>
-                <excludes name="build/**"/>
-                <excludes name="ccnet-config/cclog/**"/>
-                <excludes name="**/*.msi"/>
-                <excludes name="**/*.zip"/>
-                <excludes name="**/Debug/*"/>
-                <excludes name="**/Release/*"/>
-            </fileset>
-        </zip>
-
-        <echo message="Created CCNet zip package at file://${nant.project.basedir}\${package.source.zip}"/>
-    </target>
-
-    <target name="package.binaries" depends="package.init" description="create a package zip file of binaries">
-
-        <copy todir="${package.dir}\ccnet">
-            <fileset>
-                <includes name="ccnet-config/**"/>
-                <excludes name="ccnet-config/ccnet.web.config"/>
-                <includes name="tools/**"/>
-                <includes name="doc/**"/>
-            </fileset>
-        </copy>
-
-        <copy todir="${package.dir}\ccnet\bin">
-            <fileset basedir="dist">
-                <includes name="*.exe"/>
-                <includes name="*.dll"/>
-            </fileset>
-        </copy>
-
-        <copy todir="${package.dir}\ccnet">
-            <fileset basedir="install">
-                <includes name="**"/>
-            </fileset>
-        </copy>
-
-        <copy todir="${package.dir}\ccnet\web">
-            <fileset basedir="project/web">
-                <includes name="**/*.aspx"/>
-                <includes name="**/*.asax"/>
-                <includes name="**/*.resx"/>
-                <includes name="**/*.css"/>
-                <includes name="**/*.config"/>
-                <includes name="**/*.xsl"/>
-                <includes name="**/*.css"/>
-                <includes name="**/*.gif"/>
-                <includes name="**/*.jpg"/>
-            </fileset>
-        </copy>
-
-
-        <!-- create zip file -->
-        <property name="package.bin.zip" value="${package.dir}\${nant.project.name}_bin_${version}.zip"/>
-        <delete file="${package.bin.zip}" failonerror="false" verbose="${verbosity}"/>
-        <zip zipfile="${package.bin.zip}">
-            <fileset basedir="${package.dir}\ccnet">
-                <includes name="**"/>
-            </fileset>
-        </zip>
-
-        <echo message="Created CCNet zip package at file://${nant.project.basedir}\${package.bin.zip}"/>
-    </target>
-
-    <target name="package.init" description="creates the package folder">
-        <mkdir dir="${package.dir}" verbose="${verbosity}"/>
-        <delete dir="${package.dir}\ccnet" failonerror="false" verbose="${verbosity}"/>
-        <mkdir dir="${package.dir}\ccnet" verbose="${verbosity}"/>
-    </target>
-
-    <target name="package.msi" depends="package.init" description="creates a zip file containing the two msi packages">
-        <copy todir="${package.dir}\ccnet\ccnet.server">
-            <fileset basedir="project/install.server/release">
-                <includes name="**"/>
-            </fileset>
-        </copy>
-
-        <copy todir="${package.dir}\ccnet\ccnet.web">
-            <fileset basedir="project/install.web/release">
-                <includes name="**"/>
-            </fileset>
-        </copy>
-
-        <copy todir="${package.dir}\ccnet">
-            <fileset basedir="doc">
-                <includes name="**"/>
-            </fileset>
-        </copy>
-
-        <property name="package.msi.zip" value="${package.dir}\${nant.project.name}_msi_${version}.zip"/>
-        <zip zipfile="${package.msi.zip}">
-            <fileset basedir="${package.dir}\ccnet\">
-                <includes name="**"/>
-            </fileset>
-        </zip>
-        <echo message="Created CCNet zip package at file://${nant.project.basedir}\${package.msi.zip}"/>
-    </target>
-
-    <!-- EXTRA TEST TARGETS -->
-    <!-- use logger:SourceForge.NAnt.XmlLogger to get xml log output -->
-    <target name="compile.nant.test">
-        <csc target="library" output="${build.dir}\nant.compile.test.dll" debug="true">
-            <sources basedir="etc">
-                <includes name="nant.compile.test.cs"/>
-            </sources>
-        </csc>
-    </target>
-
-    <!-- Update CCNET configuration file by using XSL transformation 
-    	 used to upgrade configuration file from one version to another -->
-    <target name="updateConfig">
-        <property name="in" value="etc/ccnet_update.config"/>
-        <property name="out" value="etc/ccnet_new.config"/>
-        <style style="etc/update.xsl" in="${in}" out="${out}"/>
-    </target>
-
 </project>
