@@ -296,7 +296,7 @@ namespace tw.ccnet.core.test
 			Assert(publisher.Published);
 			mock.Verify();
 			AssertEquals("1.2.1", ((MockSourceControl)_project.SourceControl).Label);
-			AssertEquals(4, _listener.Traces.Count);
+			AssertEquals(3, _listener.Traces.Count);
 		}
 
 		[Test]
@@ -321,7 +321,7 @@ namespace tw.ccnet.core.test
 			AssertNotNull(_project.CurrentIntegrationResult.EndTime);
 			Assert(publisher.Published);
 			mock.Verify();
-			AssertEquals(5, _listener.Traces.Count);
+			AssertEquals(4, _listener.Traces.Count);
 		}
 
 		[Test]
@@ -346,7 +346,7 @@ namespace tw.ccnet.core.test
 			AssertNotNull(_project.CurrentIntegrationResult.EndTime);
 			Assert(publisher.Published);
 			mock.Verify();
-			AssertEquals(5, _listener.Traces.Count);
+			AssertEquals(4, _listener.Traces.Count);
 		}
 
 		[Test]

@@ -72,7 +72,7 @@ namespace tw.ccnet.core.publishers.test
 		{
 			_publisher.IncludeDetails = false;
 			string message = _publisher.CreateMessage(CreateIntegrationResult(IntegrationStatus.Success, IntegrationStatus.Success));
-			AssertEquals(@"CC.NET Build Results for Project#9: http://localhost/ccnet?log=log19741224023000Lbuild.0.xml", message);
+			AssertEquals(@"CruiseControl.NET Build Results for project Project#9: http://localhost/ccnet?log=log19741224023000Lbuild.0.xml", message);
 		}
 		
 		public void TestEmailMessageWithDetails() 
@@ -80,7 +80,7 @@ namespace tw.ccnet.core.publishers.test
 			_publisher.IncludeDetails = true;
 			string message = _publisher.CreateMessage(CreateIntegrationResult(IntegrationStatus.Success, IntegrationStatus.Success));
 			Assert(message.StartsWith("<html>"));
-			Assert(message.IndexOf("CC.NET Build Results for Project#9") > 0);
+			Assert(message.IndexOf("CruiseControl.NET Build Results for project Project#9") > 0);
 			Assert(message.IndexOf("Modifications since last build:") > 0);
 			Assert(message.EndsWith("</html>"));
 		}		
@@ -215,7 +215,7 @@ namespace tw.ccnet.core.publishers.test
 			result.ExceptionResult = new CruiseControlException("test exception");
 
 			AssertEquals("Project#9 Build Failed", _publisher.CreateSubject(result));
-			Assert(_publisher.CreateMessage(result).StartsWith("CC.NET Build Results for Project#9"));
+			Assert(_publisher.CreateMessage(result).StartsWith("CruiseControl.NET Build Results for project Project#9"));
 
 			_publisher.IncludeDetails = true;
 			string actual = _publisher.CreateMessage(result);
