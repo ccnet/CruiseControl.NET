@@ -1,14 +1,18 @@
 using System;
+using System.Collections;
+using ThoughtWorks.CruiseControl.WebDashboard.MVC.View;
 
 namespace ThoughtWorks.CruiseControl.WebDashboard.MVC.Cruise
 {
 	public class ExceptionCatchingActionProxy : IAction
 	{
 		private readonly IAction proxiedAction;
+		private readonly IVelocityViewGenerator velocityViewGenerator;
 
-		public ExceptionCatchingActionProxy(IAction proxiedAction)
+		public ExceptionCatchingActionProxy(IAction proxiedAction, IVelocityViewGenerator velocityViewGenerator)
 		{
 			this.proxiedAction = proxiedAction;
+			this.velocityViewGenerator = velocityViewGenerator;
 		}
 
 		public IView Execute(IRequest request)
@@ -19,7 +23,9 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.MVC.Cruise
 			}
 			catch (Exception e)
 			{
-				return new DefaultView(string.Format("<p>There was an exception trying to perform request. Details of the Exception are:</p><p>{0}</p><p>{1}</p>", e.Message, e.StackTrace));
+				Hashtable velocityContext = new Hashtable();
+				velocityContext["exception"] = e;
+				return velocityViewGenerator.GenerateView(@"ActionException.vm", velocityContext);
 			}
 		}
 	}

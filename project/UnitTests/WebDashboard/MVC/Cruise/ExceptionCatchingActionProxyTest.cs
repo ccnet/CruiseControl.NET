@@ -1,9 +1,12 @@
+using System.Collections;
 using System.Web.UI.HtmlControls;
 using NMock;
 using NUnit.Framework;
 using ThoughtWorks.CruiseControl.Core;
+using ThoughtWorks.CruiseControl.UnitTests.UnitTestUtils;
 using ThoughtWorks.CruiseControl.WebDashboard.MVC;
 using ThoughtWorks.CruiseControl.WebDashboard.MVC.Cruise;
+using ThoughtWorks.CruiseControl.WebDashboard.MVC.View;
 
 namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.MVC.Cruise
 {
@@ -11,22 +14,27 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.MVC.Cruise
 	public class ExceptionCatchingActionProxyTest
 	{
 		private DynamicMock actionMock;
+		private DynamicMock velocityViewGeneratorMock;
 		private ExceptionCatchingActionProxy exceptionCatchingAction;
 		private IView view;
+		private IView errorView;
 		private IRequest request;
 
 		[SetUp]
 		public void Setup()
 		{
 			actionMock = new DynamicMock(typeof(IAction));
-			exceptionCatchingAction = new ExceptionCatchingActionProxy((IAction) actionMock.MockInstance);
+			velocityViewGeneratorMock = new DynamicMock(typeof(IVelocityViewGenerator)) ;
+			exceptionCatchingAction = new ExceptionCatchingActionProxy((IAction) actionMock.MockInstance, (IVelocityViewGenerator) velocityViewGeneratorMock.MockInstance);
 			view = new DefaultView("my view");
+			errorView = new DefaultView("error view");
 			request = new NameValueCollectionRequest(null);
 		}
 
 		private void VerifyAll()
 		{
 			actionMock.Verify();
+			velocityViewGeneratorMock.Verify();
 		}
 
 		[Test]
@@ -35,11 +43,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.MVC.Cruise
 			// Setup
 			actionMock.ExpectAndReturn("Execute", view, request);
 
-			// Execute
-			IView returnedControl = exceptionCatchingAction.Execute(request);
-
-			// Verify
-			Assert.AreEqual(view, returnedControl);
+			// Execute & Verify
+			Assert.AreEqual(view, exceptionCatchingAction.Execute(request));
 			VerifyAll();
 		}
 
@@ -50,11 +55,12 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.MVC.Cruise
 			CruiseControlException e = new CruiseControlException("A nasty exception");
 			actionMock.ExpectAndThrow("Execute", e, request);
 
-			// Execute
-			IView returnedView = exceptionCatchingAction.Execute(request);
+			Hashtable expectedContext = new Hashtable();
+			expectedContext["exception"] = e;
+			velocityViewGeneratorMock.ExpectAndReturn("GenerateView", errorView, "ActionException.vm", new HashtableConstraint(expectedContext));
 
-			// Verify
-			Assert.IsTrue(((HtmlGenericControl) returnedView.Control).InnerHtml.IndexOf("A nasty exception") > -1);
+			// Execute & Verify
+			Assert.AreEqual(errorView, exceptionCatchingAction.Execute(request));
 			VerifyAll();
 		}
 	}

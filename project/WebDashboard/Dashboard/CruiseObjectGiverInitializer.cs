@@ -57,7 +57,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 				foreach (TypedAction action in plugin.Actions)
 				{
 					giverAndRegistrar.CreateImplementationMapping(action.ActionName, action.ActionType)
-						.Decorate(typeof(CruiseActionProxyAction));
+						.Decorate(typeof(CruiseActionProxyAction)).Decorate(typeof(ExceptionCatchingActionProxy));
 				}
 			}
 
@@ -71,7 +71,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 				foreach (TypedAction action in plugin.Actions)
 				{
 					giverAndRegistrar.CreateImplementationMapping(action.ActionName, action.ActionType)
-						.Decorate(typeof(ServerCheckingProxyAction)).Decorate(typeof(CruiseActionProxyAction));
+						.Decorate(typeof(ServerCheckingProxyAction)).Decorate(typeof(CruiseActionProxyAction)).Decorate(typeof(ExceptionCatchingActionProxy));
 				}
 			}
 
@@ -85,7 +85,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 				foreach (TypedAction action in plugin.Actions)
 				{
 					giverAndRegistrar.CreateImplementationMapping(action.ActionName, action.ActionType)
-						.Decorate(typeof(ServerCheckingProxyAction)).Decorate(typeof(ProjectCheckingProxyAction)).Decorate(typeof(CruiseActionProxyAction));
+						.Decorate(typeof(ServerCheckingProxyAction)).Decorate(typeof(ProjectCheckingProxyAction)).Decorate(typeof(CruiseActionProxyAction)).Decorate(typeof(ExceptionCatchingActionProxy));
 				}
 			}
 
@@ -99,7 +99,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 				foreach (TypedAction action in plugin.Actions)
 				{
 					giverAndRegistrar.CreateImplementationMapping(action.ActionName,action.ActionType)
-						.Decorate(typeof(ServerCheckingProxyAction)).Decorate(typeof(BuildCheckingProxyAction)).Decorate(typeof(ProjectCheckingProxyAction)).Decorate(typeof(CruiseActionProxyAction));
+						.Decorate(typeof(ServerCheckingProxyAction)).Decorate(typeof(BuildCheckingProxyAction)).Decorate(typeof(ProjectCheckingProxyAction)).Decorate(typeof(CruiseActionProxyAction)).Decorate(typeof(ExceptionCatchingActionProxy));
 				}
 			}
 

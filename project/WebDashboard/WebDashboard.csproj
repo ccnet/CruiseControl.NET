@@ -912,6 +912,10 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "templates\ActionException.vm"
+                    BuildAction = "None"
+                />
+                <File
                     RelPath = "templates\AllBuilds.vm"
                     BuildAction = "None"
                 />

@@ -1,0 +1,5 @@
+<p>There was an exception trying to carry out your request. Details of the Exception are:</p>
+<h2>Exception Message</h2>
+<p>$exception.Message</p>
+<h2>Exception Stack Trace</h2>
+<p>$exception.StackTrace</p>

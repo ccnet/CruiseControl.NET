@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using ThoughtWorks.CruiseControl.WebDashboard.MVC;
 using ThoughtWorks.CruiseControl.WebDashboard.MVC.View;
@@ -26,16 +27,24 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 		}
 
 		// ToDo - use concatenatable views here, not strings
+		// ToDo - something better for errors
 		public string BuildRecentBuildsTable(IProjectSpecifier projectSpecifier)
 		{
 			Hashtable primaryContext = new Hashtable();
 			Hashtable secondaryContext = new Hashtable();
 
-			secondaryContext["links"] = linkListFactory.CreateStyledBuildLinkList(farmService.GetMostRecentBuildSpecifiers(projectSpecifier, 10), new ActionSpecifierWithName(BuildReportBuildPlugin.ACTION_NAME));
-			primaryContext["buildRows"] = velocityTransformer.Transform(@"BuildRows.vm", secondaryContext);
-			primaryContext["allBuildsLink"] = linkFactory.CreateProjectLink(projectSpecifier, "", new ActionSpecifierWithName(ViewAllBuildsProjectPlugin.ACTION_NAME));
+			try
+			{
+				secondaryContext["links"] = linkListFactory.CreateStyledBuildLinkList(farmService.GetMostRecentBuildSpecifiers(projectSpecifier, 10), new ActionSpecifierWithName(BuildReportBuildPlugin.ACTION_NAME));
+				primaryContext["buildRows"] = velocityTransformer.Transform(@"BuildRows.vm", secondaryContext);
+				primaryContext["allBuildsLink"] = linkFactory.CreateProjectLink(projectSpecifier, "", new ActionSpecifierWithName(ViewAllBuildsProjectPlugin.ACTION_NAME));
 
-			return velocityTransformer.Transform(@"RecentBuilds.vm", primaryContext);
+				return velocityTransformer.Transform(@"RecentBuilds.vm", primaryContext);
+			}
+			catch (Exception e)
+			{
+				return "";
+			}
 		}
 
 		public IView GenerateAllBuildsView(IProjectSpecifier projectSpecifier)
