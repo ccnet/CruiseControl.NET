@@ -40,9 +40,9 @@ namespace ThoughtWorks.CruiseControl.WebDashboard
 				}
 			}
 
-			if (Page.IsPostBack)
+			if (this.Request.QueryString.Count > 0)
 			{
-				HandlePostBack(urlsForProjects);
+				HandleQueryString(urlsForProjects);
 			}
 
 			if (projectDetailsList.Count > 0)
@@ -75,16 +75,16 @@ namespace ThoughtWorks.CruiseControl.WebDashboard
 			return "Default.aspx?forceBuildFor=" + status.Name;
 		}
 
-		private void HandlePostBack(Hashtable urlsForProjects)
+		private void HandleQueryString(Hashtable urlsForProjects)
 		{
-			string forceBuildProjectName = Page.Request.Form.Get("forceBuildFor");
+			string forceBuildProjectName = this.Request.QueryString["forceBuildFor"];
 			if (forceBuildProjectName != null && forceBuildProjectName.Length > 0)
 			{
 				ForceBuild(forceBuildProjectName, urlsForProjects);
 			}
 			else
 			{
-				StatusLabel.Text = "Warning - unknown postback occurred";
+				StatusLabel.Text = "Warning - unknown query string parameter(s) found";
 				StatusLabel.Visible = true;
 			}
 		}
