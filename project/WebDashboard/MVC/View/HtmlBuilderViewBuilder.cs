@@ -62,5 +62,10 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.MVC.View
 		{
 			return htmlBuilder.CreateButton(id, text);
 		}
+
+		public HtmlAnchor A(string text, string url)
+		{
+			return htmlBuilder.CreateAnchor(text, url);
+		}
 	}
 }

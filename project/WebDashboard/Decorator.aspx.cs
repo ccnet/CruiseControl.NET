@@ -1,33 +1,31 @@
 using System;
 using System.Web.UI;
 using System.Web.UI.HtmlControls;
-using System.Web.UI.WebControls;
-using SiteMesh.DecoratorControls;
 using ThoughtWorks.CruiseControl.WebDashboard.Dashboard;
 using ThoughtWorks.CruiseControl.WebDashboard.IO;
-using ThoughtWorks.CruiseControl.WebDashboard.Plugins;
-using ThoughtWorks.CruiseControl.WebDashboard.Plugins.SiteTemplatePlugin;
+using ThoughtWorks.CruiseControl.WebDashboard.MVC.View;
 
 namespace ThoughtWorks.CruiseControl.WebDashboard
 {
 	public class Decorator : Page
 	{
-		protected DataList menu;
-		protected HtmlGenericControl buildStats;
-		protected Title Title1;
-		protected Body Body1;
-		protected GetProperty prop1;
-		protected HtmlTableCell Td2;
-		protected Title Title3;
-		protected HtmlTableCell contentCell;
-		protected System.Web.UI.WebControls.DataList BuildPluginsList;
-		protected System.Web.UI.WebControls.DataList ServerPluginsList;
-		protected System.Web.UI.WebControls.Panel ProjectPanel;
+		protected HtmlGenericControl SideBarLocation;
 
 		private void Page_Load(object sender, EventArgs e)
 		{
-			SiteTemplateResults results = new PluginPageRendererFactory(new DashboardComponentFactory(Request, Context, this)).SiteTemplate.Do();
+			SideBarViewBuilder sideBarViewBuilder = new SideBarViewBuilder(
+				new DefaultUserRequestSpecificSideBarViewBuilder(
+					new DefaultHtmlBuilder(), 
+					new DefaultUrlBuilder(
+						new HttpPathMapper(Context, this))));
 
+			SideBarLocation.Controls.Add(sideBarViewBuilder.Execute(new QueryStringRequestWrapper(Request.QueryString)));
+
+//			SiteTemplateResults results = new PluginPageRendererFactory(new DashboardComponentFactory(Request, Context, this)).SiteTemplate.Do();
+
+//			FarmActions.Controls.Add(results.FarmControl);
+
+			/*
 			if (results.ProjectMode)
 			{
 				buildStats.InnerHtml = results.BuildStatsHtml;
@@ -44,14 +42,17 @@ namespace ThoughtWorks.CruiseControl.WebDashboard
 			}
 
 			ProjectPanel.Visible = results.ProjectMode;
+			*/
 		}
 
 		// This binds the HRef control that is each data item into the Controls container of the list
+		/*
 		private void DataList_BindItem(object sender, DataListItemEventArgs e)
 		{
 			if (e.Item.DataItem != null)
 				e.Item.Controls.Add((Control)e.Item.DataItem);
 		}
+		*/
 
 		#region Web Form Designer generated code
 		override protected void OnInit(EventArgs e)
@@ -61,10 +62,12 @@ namespace ThoughtWorks.CruiseControl.WebDashboard
 		}
 		
 		private void InitializeComponent()
-		{    
+		{   
+			/*
 			this.ServerPluginsList.ItemDataBound += new System.Web.UI.WebControls.DataListItemEventHandler(this.DataList_BindItem);
 			this.menu.ItemDataBound += new System.Web.UI.WebControls.DataListItemEventHandler(this.DataList_BindItem);
 			this.BuildPluginsList.ItemDataBound += new System.Web.UI.WebControls.DataListItemEventHandler(this.DataList_BindItem);
+			*/
 			this.Load += new System.EventHandler(this.Page_Load);
 
 		}

@@ -35,28 +35,9 @@
 						</tr>
 						<tr>
 							<td>
-								<asp:Panel id="ProjectPanel" runat="server">
-									<TABLE cellSpacing="0" cellPadding="2" width="196" align="center" border="0">
-										<TR>
-											<TD>
-												<asp:DataList id="ServerPluginsList" Runat="server"></asp:DataList></TD>
-										</TR>
-										<TR>
-											<TD noWrap>
-												<asp:DataList id="BuildPluginsList" Runat="server"></asp:DataList></TD>
-										</TR>
-										<TR>
-											<TD><SPAN class="buildresults-header">BUILD RESULTS</SPAN></TD>
-										</TR>
-										<TR>
-											<TD><SPAN class="buildresults-data" id="buildStats" runat="server" runAt="server"></SPAN></TD>
-										</TR>
-										<TR>
-											<TD noWrap>
-												<asp:DataList id="menu" Runat="server"></asp:DataList></TD>
-										</TR>
-									</TABLE>
-								</asp:Panel>
+								<form runat="server" ID="SideBarForm">
+									<div runat="server" id="SideBarLocation" />
+								</form>
 							</td>
 						</tr>
 					</table>

@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Specialized;
 using ThoughtWorks.CruiseControl.WebDashboard.ServerConnection;
 
@@ -39,6 +40,12 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.IO
 		{
 			string project = queryString[ProjectQueryStringParameter];
 			return (project == null) ? "" : project;
+		}
+
+		public string GetBuildName()
+		{
+			string build = queryString[BuildQueryStringParameter];
+			return (build == null) ? "" : build;
 		}
 	}
 }

@@ -7,5 +7,6 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.IO
 		IBuildSpecifier GetBuildSpecifier();
 		string GetServerName();
 		string GetProjectName();
+		string GetBuildName();
 	}
 }

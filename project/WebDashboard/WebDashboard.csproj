@@ -343,6 +343,16 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Dashboard\DefaultUrlBuilder.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Dashboard\DefaultUserRequestSpecificSideBarViewBuilder.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Dashboard\IBuildNameRetriever.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -398,12 +408,27 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Dashboard\IUrlBuilder.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Dashboard\IUserRequestSpecificSideBarViewBuilder.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Dashboard\LocalCruiseManagerAggregator.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
                     RelPath = "Dashboard\ProjectDetailsListGenerator.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Dashboard\SideBarViewBuilder.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

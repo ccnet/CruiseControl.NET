@@ -58,5 +58,18 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.IO
 			queryString.Add("server", "myserver");
 			AssertEquals("myserver", wrapper.GetServerName());
 		}
+
+		[Test]
+		public void ReturnsEmptyStringIfNoBuildSpecified()
+		{
+			AssertEquals(string.Empty, wrapper.GetBuildName());
+		}
+
+		[Test]
+		public void ReturnsBuildNameIfBuildSpecified()
+		{
+			queryString.Add("build", "mybuild");
+			AssertEquals("mybuild", wrapper.GetBuildName());
+		}
 	}
 }

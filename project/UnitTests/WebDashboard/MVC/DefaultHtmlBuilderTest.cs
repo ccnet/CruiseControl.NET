@@ -150,5 +150,16 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.MVC
 			AssertEquals("entry2", dropDownList.Items[1].Text);
 			AssertEquals(true, dropDownList.Items[1].Selected);
 		}
+
+		[Test]
+		public void ShouldCreateAnchorWithGivenTextAndUrl()
+		{
+			// Execute
+			HtmlAnchor anchor = new DefaultHtmlBuilder().CreateAnchor("hello world", "helloworld.htm;");
+
+			// Verify
+			AssertEquals("hello world", anchor.InnerHtml);
+			AssertEquals("helloworld.htm;", anchor.HRef);
+		}
 	}
 }
