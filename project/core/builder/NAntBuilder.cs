@@ -60,7 +60,7 @@ namespace ThoughtWorks.CruiseControl.Core.Builder
 		public void Run(IIntegrationResult result)
 		{
 			ProcessResult processResult = AttemptExecute(CreateProcessInfo(result));
-			result.Output = processResult.StandardOutput;
+			result.Output = StripNonXmlHeaderIfXmlOutput(processResult.StandardOutput);
 
 			if (processResult.TimedOut)
 			{
@@ -75,6 +75,20 @@ namespace ThoughtWorks.CruiseControl.Core.Builder
 			{
 				result.Status = IntegrationStatus.Failure;
 				Log.Info("NAnt build failed: " + processResult.StandardError);
+			}
+		}
+
+		// http://jira.public.thoughtworks.org/browse/CCNET-214
+		private string StripNonXmlHeaderIfXmlOutput(string output)
+		{
+			int buildResultTagPosition = output.IndexOf("<buildresults");
+			if ( buildResultTagPosition > -1)
+			{
+				return output.Substring(buildResultTagPosition);
+			}
+			else
+			{
+				return output;
 			}
 		}
 

@@ -260,6 +260,46 @@ namespace ThoughtWorks.CruiseControl.Core.Builder.Test
 			Assert.AreEqual(0, _builder.Targets.Length);
 		}
 
+		[Test]
+		public void ShouldStripNonXmlHeaderFromResultsIfOutputFromNantIsXml()
+		{
+			string standardOut = @"NAnt 0.85 (Build 0.85.1714.0; net-1.0.win32; nightly; 10/09/2004)
+Copyright (C) 2001-2004 Gerry Shaw
+http://nant.sourceforge.net
+
+<buildresults project=""test"" />";
+			ProcessResult returnVal = new ProcessResult(standardOut, null, SUCCESSFUL_EXIT_CODE, false);
+
+			_mockExecutor.ExpectAndReturn("Execute", returnVal, new IsAnything());
+
+			IntegrationResult result = new IntegrationResult();
+			_builder.Run(result);
+
+			Assert.IsTrue(result.Succeeded);
+			Assert.AreEqual(IntegrationStatus.Success, result.Status);
+			Assert.AreEqual(@"<buildresults project=""test"" />", result.Output);
+		}
+
+		[Test]
+		public void ShouldLeaveResultsAsIsIfOutputFromNantIsNotXml()
+		{
+			string standardOut = @"NAnt 0.85 (Build 0.85.1714.0; net-1.0.win32; nightly; 10/09/2004)
+Copyright (C) 2001-2004 Gerry Shaw
+http://nant.sourceforge.net
+
+Some stuff that isn't XML";
+			ProcessResult returnVal = new ProcessResult(standardOut, null, SUCCESSFUL_EXIT_CODE, false);
+
+			_mockExecutor.ExpectAndReturn("Execute", returnVal, new IsAnything());
+
+			IntegrationResult result = new IntegrationResult();
+			_builder.Run(result);
+
+			Assert.IsTrue(result.Succeeded);
+			Assert.AreEqual(IntegrationStatus.Success, result.Status);
+			Assert.AreEqual(standardOut, result.Output);
+		}
+
 		private ProcessResult CreateSuccessfulProcessResult()
 		{
 			return new ProcessResult("output", null, SUCCESSFUL_EXIT_CODE, false);
