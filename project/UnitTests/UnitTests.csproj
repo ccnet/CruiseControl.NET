@@ -229,6 +229,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "WebDashboard\MVC\DefaultHtmlBuilderTest.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "WebDashboard\MVC\HttpControllerTest.cs"
                     SubType = "Code"
                     BuildAction = "Compile"

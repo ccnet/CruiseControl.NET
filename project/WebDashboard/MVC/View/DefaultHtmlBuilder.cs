@@ -43,7 +43,31 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.MVC.View
 
 		public HtmlTableCell CreateCell()
 		{
-			return CreateCell("");
+			return new HtmlTableCell();
+		}
+
+		public TextBox CreateTextBox(string id, string text)
+		{
+			TextBox textBox = new TextBox();
+			textBox.ID = id;
+			textBox.Text = text;
+			return textBox;
+		}
+
+		public CheckBox CreateBooleanCheckBox(string id, bool isChecked)
+		{
+			CheckBox checkBox = new CheckBox();
+			checkBox.ID = id;
+			checkBox.Checked = isChecked;
+			return checkBox;
+		}
+
+		public Button CreateButton(string id, string text)
+		{
+			Button button = new Button();
+			button.ID = ConfiguredActionFactory.ACTION_PARAMETER_PREFIX + id;
+			button.Text = text;
+			return button;
 		}
 
 		public DropDownList CreateDropDownList(string id, string[] entries, string selectedEntry)
@@ -57,30 +81,6 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.MVC.View
 				dropDownList.Items.Add(listItem);
 			}
 			return dropDownList;
-		}
-
-		public TextBox CreateTextBox(string id, string text)
-		{
-			TextBox textBox = new TextBox();
-			textBox.ID = id;
-			textBox.Text = text;
-			return textBox;
-		}
-
-		public CheckBox CheckBox(string id, bool isChecked)
-		{
-			CheckBox checkBox = new CheckBox();
-			checkBox.ID = id;
-			checkBox.Checked = isChecked;
-			return checkBox;
-		}
-
-		public Button Button(string id, string text)
-		{
-			Button button = new Button();
-			button.ID = ConfiguredActionFactory.ACTION_PARAMETER_PREFIX + id;
-			button.Text = text;
-			return button;
 		}
 	}
 }

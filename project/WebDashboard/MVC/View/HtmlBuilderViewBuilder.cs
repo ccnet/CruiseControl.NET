@@ -48,14 +48,14 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.MVC.View
 			return htmlBuilder.CreateTextBox(id, text);
 		}
 
-		public CheckBox CheckBox(string id, bool isChecked)
+		public CheckBox BooleanCheckBox(string id, bool isChecked)
 		{
-			return htmlBuilder.CheckBox(id, isChecked);
+			return htmlBuilder.CreateBooleanCheckBox(id, isChecked);
 		}
 
 		public Button Button(string id, string text)
 		{
-			return htmlBuilder.Button(id, text);
+			return htmlBuilder.CreateButton(id, text);
 		}
 	}
 }

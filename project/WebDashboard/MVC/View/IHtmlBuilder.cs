@@ -13,7 +13,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.MVC.View
 		HtmlTableCell CreateCell();
 		DropDownList CreateDropDownList(string id, string[] entries, string selectedEntry);
 		TextBox CreateTextBox(string id, string text);
-		CheckBox CheckBox(string id, bool isChecked);
-		Button Button(string id, string text);
+		CheckBox CreateBooleanCheckBox(string id, bool isChecked);
+		Button CreateButton(string id, string text);
 	}
 }

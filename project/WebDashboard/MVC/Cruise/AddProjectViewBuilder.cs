@@ -39,8 +39,8 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.MVC.Cruise
 				TR(TD("Client"), TD(TextBox("Project.SourceControl.Client", p4.Client))),
 				TR(TD("User"), TD(TextBox("Project.SourceControl.User", p4.User))),
 				TR(TD("Port"), TD(TextBox("Project.SourceControl.Port", p4.Port))),
-				TR(TD("ApplyLabel"), TD(CheckBox("Project.SourceControl.ApplyLabel", p4.ApplyLabel))),
-				TR(TD("AutoGetSource"), TD(CheckBox("Project.SourceControl.AutoGetSource", p4.AutoGetSource)))
+				TR(TD("ApplyLabel"), TD(BooleanCheckBox("Project.SourceControl.ApplyLabel", p4.ApplyLabel))),
+				TR(TD("AutoGetSource"), TD(BooleanCheckBox("Project.SourceControl.AutoGetSource", p4.AutoGetSource)))
 				);
 		}
 
