@@ -4,6 +4,9 @@ using System.IO;
 using Exortech.NetReflector;
 using ThoughtWorks.CruiseControl.Core.Util;
 
+// TODO remove
+using System.Threading;
+
 namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 {
 	[ReflectorType("vss")]
@@ -20,7 +23,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 		// ss history [dir] -R -Vd[now]~[lastBuild] -Y[un,pw] -I-Y -O[tempFileName]
 		internal static readonly string HISTORY_COMMAND_FORMAT = @"history {0} -R -Vd{1}~{2} -Y{3},{4} -I-Y";
 		internal static readonly string GET_COMMAND_FORMAT = @"get {0} -R -Vd{1} -Y{2},{3} -I-N";
-		internal static readonly string LABEL_COMMAND_FORMAT = @"label {0} -L{1} -Vd{2} -Y{3},{4} -I-Y";
+		internal static readonly string LABEL_COMMAND_FORMAT = @"label {0} -L{1} -VL{2} -Y{3},{4} -I-Y";
 		internal static readonly string LABEL_COMMAND_FORMAT_NOTIMESTAMP = @"label {0} -L{1} -Y{2},{3} -I-Y";
 
 		private IRegistry _registry;
@@ -90,13 +93,18 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			return GetModifications(CreateHistoryProcessInfo(from, to), from, to);
 		}
 
-		public override void LabelSourceControl(string label, DateTime timeStamp)
+		public override void LabelSourceControl(string newLabel, DateTime dateTime)
 		{
 			if ( ApplyLabel )
 			{
-				Execute(CreateLabelProcessInfo(label, timeStamp));
+				LabelSourceControl(newLabel, _lastTempLabel);
 				_lastTempLabel = null;
 			}
+		}
+
+		public void LabelSourceControl(string newLabel, string oldLabel)
+		{
+			Execute(CreateLabelProcessInfo(newLabel, oldLabel));
 		}
 
 		public void CreateTemporaryLabel()
@@ -127,9 +135,9 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			return CreateProcessInfo(string.Format(LABEL_COMMAND_FORMAT_NOTIMESTAMP, Project, label, Username, Password));
 		}
 
-		public ProcessInfo CreateLabelProcessInfo(string label, DateTime timeStamp)
+		public ProcessInfo CreateLabelProcessInfo(string label, string oldLabel)
 		{
-			return CreateProcessInfo(string.Format(LABEL_COMMAND_FORMAT, Project, label, FormatCommandDate(timeStamp), Username, Password));
+			return CreateProcessInfo(string.Format(LABEL_COMMAND_FORMAT, Project, label, oldLabel, Username, Password));
 		}
 
 		private ProcessInfo CreateProcessInfo(string args)
@@ -202,7 +210,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 
 		private void DeleteLatestLabel()
 		{
-			LabelSourceControl( "", DateTime.Now );
+			LabelSourceControl( string.Empty, _lastTempLabel );
 		}
 
 		private bool WasTempLabelApplied()

@@ -114,12 +114,12 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test
 		[Test]
 		public void CreateLabelProcess() 
 		{
-			string label = "testLabel";
-			DateTime dateTime = new DateTime(2003, 4, 15, 11, 12, 13, 0);
+			string oldLabel = "oldLabel";
+			string newLabel = "newLabel";
 
-			ProcessInfo actual = vss.CreateLabelProcessInfo(label, dateTime);
+			ProcessInfo actual = vss.CreateLabelProcessInfo(newLabel, oldLabel);
 
-			string expectedArgs = @"label $/fooProject -LtestLabel -Vd04/15/2003;11:12 -YAdmin,admin -I-Y";				
+			string expectedArgs = @"label $/fooProject -LnewLabel -VLoldLabel -YAdmin,admin -I-Y";				
 
 			AssertNotNull("process was null", actual);
 			AssertEquals(DEFAULT_SS_EXE_PATH, actual.FileName);
@@ -198,7 +198,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test
 			vss.AutoGetSource = true;
 			vss.Project = "$/Refactoring";
 			vss.Username = "orogers";
-			vss.Password = "";
+			vss.Password = string.Empty;
 			vss.WorkingDirectory = @"c:\source\";
 			vss.SsDir = @"..\tools\vss";
 			vss.GetSource(IntegrationResultMother.CreateSuccessful(DateTime.Now));
