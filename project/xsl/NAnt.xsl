@@ -3,7 +3,7 @@
     <xsl:output method="html"/>
 
     <xsl:template match="/">
-		<xsl:variable name="buildresults" select="//buildresults" />
+		<xsl:variable name="buildresults" select="/cruisecontrol/build/buildresults" />
 		<xsl:choose>
 			<xsl:when test="count($buildresults) > 0">
 				<xsl:choose>
