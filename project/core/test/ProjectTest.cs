@@ -137,6 +137,7 @@ namespace tw.ccnet.core.test
 
 			_project.LastIntegration = new IntegrationResult();
 			_project.LastIntegration.Modifications = CreateModifications();
+			_project.LastIntegration.StartTime = MockSourceControl.LastModificationTime;
 			_project.SourceControl = new MockSourceControl();
 			_project.Builder = (IBuilder)builderMock.MockInstance;
 			_project.StateManager = (IStateManager)stateMock.MockInstance;

@@ -187,7 +187,7 @@ namespace tw.ccnet.core
 		internal void GetSourceModifications()
 		{
 			currentActivity = ProjectActivity.CheckingModifications;
-			CurrentIntegration.Modifications = SourceControl.GetModifications(LastIntegration.LastModificationDate,  CurrentIntegration.StartTime);
+			CurrentIntegration.Modifications = SourceControl.GetModifications(LastIntegration.StartTime,  CurrentIntegration.StartTime);
 			Log(String.Format("{0} Modifications detected...", CurrentIntegration.Modifications.Length));
 		}
 
