@@ -1,4 +1,5 @@
 using System.IO;
+using System.Xml;
 using NUnit.Framework;
 using ThoughtWorks.CruiseControl.Core.Util;
 
@@ -65,6 +66,16 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Util
 		{
 			writer.WriteNode("<tag><c>]]></tag>");
 			Assert.AreEqual("<![CDATA[<tag><c>] ]></tag>]]>", baseWriter.ToString());
+		}
+
+		[Test]
+		public void IndentOutputWhenFormattingIsSpecified()
+		{
+			writer.Formatting = Formatting.Indented;
+			writer.WriteNode("<foo><bar/></foo>");
+			Assert.AreEqual(@"<foo>
+  <bar />
+</foo>", baseWriter.ToString());
 		}
 	}
 }

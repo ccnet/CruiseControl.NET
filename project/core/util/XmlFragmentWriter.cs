@@ -40,8 +40,16 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 		public override void WriteNode(XmlReader reader, bool defattr)
 		{
 			StringWriter buffer = new StringWriter();
-			new XmlFragmentWriter(buffer).WriteNodeBase(reader, defattr);
+			XmlFragmentWriter writer = CreateXmlWriter(buffer);
+			writer.WriteNodeBase(reader, defattr);
 			WriteRaw(buffer.ToString());
+		}
+
+		private XmlFragmentWriter CreateXmlWriter(StringWriter buffer)
+		{
+			XmlFragmentWriter writer = new XmlFragmentWriter(buffer);
+			writer.Formatting = Formatting;
+			return writer;
 		}
 
 		private void WriteNodeBase(XmlReader reader, bool defattr)
