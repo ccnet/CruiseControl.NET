@@ -1,4 +1,5 @@
 using System;
+using System.ComponentModel;
 
 namespace ThoughtWorks.CruiseControl.Remote
 {
@@ -6,6 +7,7 @@ namespace ThoughtWorks.CruiseControl.Remote
 	/// Interface of all integration schedules used by CruiseControl.NET.
 	/// A schedule applies to a particular project.
 	/// </summary>
+	[TypeConverter(typeof(ExpandableObjectConverter))]
 	public interface ISchedule
 	{
 		/// <summary>

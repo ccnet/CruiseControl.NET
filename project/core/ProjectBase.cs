@@ -1,5 +1,8 @@
-using Exortech.NetReflector;
 using System;
+using System.ComponentModel;
+
+using Exortech.NetReflector;
+
 using ThoughtWorks.CruiseControl.Remote;
 using ThoughtWorks.CruiseControl.Core.Schedules;
 using ThoughtWorks.CruiseControl.Core.State;
@@ -27,6 +30,7 @@ namespace ThoughtWorks.CruiseControl.Core
 		}
 
 		[ReflectorProperty("state", InstanceTypeKey="type", Required=false)]
+		[Description("State")]
 		public virtual IStateManager StateManager
 		{
 			get { return _state; }

@@ -1,7 +1,9 @@
 using System;
+using System.ComponentModel;
 
 namespace ThoughtWorks.CruiseControl.Core
 {
+	[TypeConverter(typeof(ExpandableObjectConverter))]
 	public interface ISourceControl : ITask
 	{
 		// TODO: is it necessary to specify 'to' date -- just want changes after 'from' date

@@ -10,17 +10,15 @@ using ThoughtWorks.CruiseControl.Core.Config;
 
 namespace ThoughtWorks.CruiseControl.ControlPanel
 {
-	/// <summary>
-	/// this is the MainPanel of the ControlPanel
-	/// </summary>
 	public class MainPanel : System.Windows.Forms.Form
 	{
 		private System.Windows.Forms.MainMenu mainMenu1;
 		private System.Windows.Forms.MenuItem fileMenuItem;
 		private System.Windows.Forms.MenuItem openMenuItem;
-		private System.Windows.Forms.Label label1;
-		private System.Windows.Forms.TextBox projectName;
+		private System.Windows.Forms.TabControl tabControl;
+		private System.Windows.Forms.MenuItem saveMenuItem;
 		private System.ComponentModel.Container components = null;
+		private IConfiguration configuration;
 
 		public MainPanel()
 		{
@@ -49,8 +47,8 @@ namespace ThoughtWorks.CruiseControl.ControlPanel
 			this.mainMenu1 = new System.Windows.Forms.MainMenu();
 			this.fileMenuItem = new System.Windows.Forms.MenuItem();
 			this.openMenuItem = new System.Windows.Forms.MenuItem();
-			this.label1 = new System.Windows.Forms.Label();
-			this.projectName = new System.Windows.Forms.TextBox();
+			this.tabControl = new System.Windows.Forms.TabControl();
+			this.saveMenuItem = new System.Windows.Forms.MenuItem();
 			this.SuspendLayout();
 			// 
 			// mainMenu1
@@ -62,7 +60,8 @@ namespace ThoughtWorks.CruiseControl.ControlPanel
 			// 
 			this.fileMenuItem.Index = 0;
 			this.fileMenuItem.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
-																						 this.openMenuItem});
+																						 this.openMenuItem,
+																						 this.saveMenuItem});
 			this.fileMenuItem.Text = "&File";
 			// 
 			// openMenuItem
@@ -71,28 +70,26 @@ namespace ThoughtWorks.CruiseControl.ControlPanel
 			this.openMenuItem.Text = "&Open";
 			this.openMenuItem.Click += new System.EventHandler(this.openMenuItem_Click);
 			// 
-			// label1
+			// tabControl
 			// 
-			this.label1.Location = new System.Drawing.Point(192, 32);
-			this.label1.Name = "label1";
-			this.label1.Size = new System.Drawing.Size(88, 16);
-			this.label1.TabIndex = 0;
-			this.label1.Text = "Project Name:";
+			this.tabControl.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.tabControl.Location = new System.Drawing.Point(0, 0);
+			this.tabControl.Name = "tabControl";
+			this.tabControl.SelectedIndex = 0;
+			this.tabControl.Size = new System.Drawing.Size(992, 649);
+			this.tabControl.TabIndex = 0;
 			// 
-			// projectName
+			// saveMenuItem
 			// 
-			this.projectName.Location = new System.Drawing.Point(288, 32);
-			this.projectName.Name = "projectName";
-			this.projectName.Size = new System.Drawing.Size(248, 20);
-			this.projectName.TabIndex = 1;
-			this.projectName.Text = "";
+			this.saveMenuItem.Index = 1;
+			this.saveMenuItem.Text = "&Save";
+			this.saveMenuItem.Click += new System.EventHandler(this.saveMenuItem_Click);
 			// 
 			// MainPanel
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5, 13);
-			this.ClientSize = new System.Drawing.Size(824, 545);
-			this.Controls.Add(this.projectName);
-			this.Controls.Add(this.label1);
+			this.ClientSize = new System.Drawing.Size(992, 649);
+			this.Controls.Add(this.tabControl);
 			this.Menu = this.mainMenu1;
 			this.Name = "MainPanel";
 			this.Text = "Cruise Control - Control Panel";
@@ -104,16 +101,46 @@ namespace ThoughtWorks.CruiseControl.ControlPanel
 		public static void Main() 
 		{
 			MainPanel panel = new MainPanel();
+			panel.Open(@"c:\tmp\ccnet.config");
 			Application.Run(panel);
 		}
 
 		private void openMenuItem_Click(object sender, System.EventArgs e)
 		{
 			string filename = ChooseFileToOpen();
-			CruiseServer server = new CruiseServer(new ConfigurationLoader(filename));
-			foreach (IProject project in server.Configuration) 
+			if (filename != null) Open(filename);
+		}
+
+		private void Open(string filename) 
+		{
+			configuration = LoadConfiguration(filename);
+			if (configuration == null) return;
+
+			foreach (IProject project in configuration) 
 			{
-				projectName.Text = project.Name;
+				ConfigurationModel model = new ConfigurationModel();
+				model.Load(project);
+				
+				BunchOfConfigurationItemControls controls = new BunchOfConfigurationItemControls();
+				controls.Bind(model.Items);
+				
+				TabPage page = new TabPage(project.Name);
+				page.Controls.Add(controls);
+				
+				tabControl.TabPages.Add(page);
+			}
+		}
+
+		private IConfiguration LoadConfiguration(string filename)
+		{
+			try 
+			{
+				return new CruiseServer(new ConfigurationLoader(filename)).Configuration;
+			}
+			catch (ConfigurationException ex) 
+			{
+				MessageBox.Show("there was an error loading (" + filename + ") : \n" + ex.ToString(), "Error");
+				return null;
 			}
 		}
 
@@ -121,6 +148,12 @@ namespace ThoughtWorks.CruiseControl.ControlPanel
 		{
 			OpenFileDialog dialog = new OpenFileDialog();
 			return DialogResult.OK == dialog.ShowDialog(this) ? dialog.FileName : null;
+		}
+
+		private void saveMenuItem_Click(object sender, System.EventArgs e)
+		{
+
+		
 		}
 	}
 }

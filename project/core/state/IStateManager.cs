@@ -1,4 +1,5 @@
 using System;
+using System.ComponentModel;
 
 namespace ThoughtWorks.CruiseControl.Core.State
 {
@@ -7,6 +8,7 @@ namespace ThoughtWorks.CruiseControl.Core.State
 	/// State must be persisted between shutdown/startup of the CruiseControl.NET
 	/// server, as modification dates and label numbers must follow sequence.
 	/// </summary>
+	[TypeConverter(typeof(ExpandableObjectConverter))]
 	public interface IStateManager
 	{
 		/// <summary>

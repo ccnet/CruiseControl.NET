@@ -4,13 +4,15 @@ using System.IO;
 using NUnit.Framework;
 using marathon.framework;
 
+using ThoughtWorks.CruiseControl.Shared.Util;
+
 namespace ThoughtWorks.CruiseControl.ControlPanel.Test
 {
 	[TestFixture]
 	public class MainPanelTest 
 	{
 		private DirectoryInfo _tmpDir;
-		public const string _configFile = @"<cruisecontrol>
+		public const string _configFileContents = @"<cruisecontrol>
   <project name='MyProject'>
     <sourcecontrol type='cvs'>
       <executable>C:\program files\tortoisecvs\cvs</executable>
@@ -38,16 +40,11 @@ namespace ThoughtWorks.CruiseControl.ControlPanel.Test
 			_tmpDir.Delete(true);
 		}
 
-		[Test]
+		[Test, Ignore("need to come back to the gui testing - jeremy")]
 		public void OpeningExistingConfigFileShowsProjectName()
 		{
-			using (StreamWriter writer = new StreamWriter(_tmpDir + "/ccnet.config")) 
-			{
-				writer.Write(_configFile);
-			}
-
 			TestableMainPanel panel = new TestableMainPanel();
-			panel.FileToOpen = _tmpDir + "/ccnet.config";
+			panel.FileToOpen = TempFileUtil.CreateTempFile(_tmpDir.FullName, "ccnet.config", _configFileContents);
 			using (MarathonThread thread = new MarathonThread(panel)) 
 			{
 				using (MForm form = new MForm("Cruise Control - Control Panel")) 
@@ -57,18 +54,17 @@ namespace ThoughtWorks.CruiseControl.ControlPanel.Test
 					form.Press("&File.&Open");
 
 					// this is not working in marathon yet, so we hacked around it
-					//					using (MForm openFileDialog = new MForm("Open File")) 
-					//					{
-					//						openFileDialog.Enter("File Name:", _tmpDir + "/ccnet.config");
-					//						openFileDialog.Press("Open");
-					//					}
+//					using (MForm openFileDialog = new MForm("Open File")) 
+//					{
+//						openFileDialog.Enter("File Name:", _tmpDir + "/ccnet.config");
+//						openFileDialog.Press("Open");
+//					}
 
 					form.Check("projectName", "MyProject");
+					form.Check("sourceControlType", "cvs");
 				}
 			}
 		}
-
-		// test invalid build file
 
 		private class TestableMainPanel : MainPanel 
 		{

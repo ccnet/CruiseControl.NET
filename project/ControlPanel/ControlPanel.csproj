@@ -110,19 +110,54 @@
                     Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
                 />
                 <Reference
-                    Name = "Shared"
-                    Project = "{FA6F61A0-6332-4236-B861-FEA43B74A092}"
+                    Name = "Remote"
+                    Project = "{E820CF3B-8C5A-4002-BC16-B7818D3D54A8}"
                     Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
                 />
                 <Reference
-                    Name = "Remote"
-                    Project = "{E820CF3B-8C5A-4002-BC16-B7818D3D54A8}"
+                    Name = "Shared"
+                    Project = "{FA6F61A0-6332-4236-B861-FEA43B74A092}"
                     Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
                 />
             </References>
         </Build>
         <Files>
             <Include>
+                <File
+                    RelPath = "BunchOfConfigurationItemControls.cs"
+                    SubType = "UserControl"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "BunchOfConfigurationItemControls.resx"
+                    DependentUpon = "BunchOfConfigurationItemControls.cs"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "ConfigurationItem.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "ConfigurationItemCollection.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "ConfigurationItemControl.cs"
+                    SubType = "UserControl"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "ConfigurationItemControl.resx"
+                    DependentUpon = "ConfigurationItemControl.cs"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "ConfigurationModel.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
                 <File
                     RelPath = "MainPanel.cs"
                     SubType = "Form"
@@ -132,6 +167,11 @@
                     RelPath = "MainPanel.resx"
                     DependentUpon = "MainPanel.cs"
                     BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "Test\ConfigurationModelTest.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
                 />
                 <File
                     RelPath = "Test\MainPanelTest.cs"
