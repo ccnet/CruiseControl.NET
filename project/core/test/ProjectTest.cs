@@ -104,7 +104,7 @@ namespace ThoughtWorks.CruiseControl.Core.Test
 	<sourcecontrol type=""mock"" />
 	<labeller type=""defaultlabeller"" />
 	<state type=""state"" />
-	<trigger type=""integrationInterval"" seconds=""30"" />
+	<trigger type=""pollingInterval"" seconds=""30"" />
 	<publishers>
 		<xmllogger logDir=""C:\temp"" />
 	</publishers>
@@ -122,7 +122,7 @@ namespace ThoughtWorks.CruiseControl.Core.Test
 			Assert.IsTrue(project.SourceControl is MockSourceControl);
 			Assert.IsTrue(project.Labeller is DefaultLabeller);
 			Assert.IsTrue(project.StateManager is IntegrationStateManager);
-			Assert.IsTrue(project.Trigger is IntegrationIntervalTrigger);
+			Assert.IsTrue(project.Trigger is PollingIntervalTrigger);
 			Assert.IsTrue(project.Publishers[0] is XmlLogPublisher);
 			Assert.IsTrue(project.Tasks[0] is MergeFilesTask);
 			Assert.AreEqual(@"c:\my\working\directory", project.ConfiguredWorkingDirectory);

@@ -239,17 +239,17 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "Core\Schedule\IntegrationIntervalTriggerTest.cs"
+                    RelPath = "Core\Schedule\ForceBuildIntervalTriggerTest.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "Core\Schedule\IntegrationScheduleTriggerTest.cs"
+                    RelPath = "Core\Schedule\ForceBuildScheduleTriggerTest.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "Core\Schedule\MockSchedule.cs"
+                    RelPath = "Core\Schedule\IntervalTriggerTest.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -260,6 +260,21 @@
                 />
                 <File
                     RelPath = "Core\Schedule\NullTriggerTriggerTest.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Core\Schedule\PollingIntervalTriggerTest.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Core\Schedule\PollingScheduleTriggerTest.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Core\Schedule\ScheduleTriggerTest.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

@@ -37,8 +37,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Schedule
 		{
 			string xml = string.Format(@"<multipleTriggers>
 	<triggers>
-		<integrationInterval seconds=""60"" />
-		<integrationSchedule time=""08:00"" buildCondition=""ForceBuild"" />
+		<pollingInterval seconds=""60"" />
+		<pollingSchedule time=""08:00"" buildCondition=""ForceBuild"" />
 	</triggers>
 </multipleTriggers>");
 			trigger = (MultipleTrigger)NetReflector.Read(xml);

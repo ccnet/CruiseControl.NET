@@ -17,14 +17,6 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Schedule
 		}
 
 		[Test]
-		public void PopulateFromReflector()
-		{
-			string xml = string.Format(@"<neverTriggerIntegration />");
-			NullTrigger trigger = (NullTrigger)NetReflector.Read(xml);
-			Assert.AreEqual(BuildCondition.NoBuild, trigger.ShouldRunIntegration());
-		}
-
-		[Test]
 		public void ShouldNotTriggerAfterNoIntegrations()
 		{
 			Assert.AreEqual(BuildCondition.NoBuild, trigger.ShouldRunIntegration());

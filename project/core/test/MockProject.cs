@@ -85,7 +85,7 @@ namespace ThoughtWorks.CruiseControl.Core.Test
 	public class ExceptionMockProject : MockProject
 	{
 		public const string EXCEPTION_MESSAGE = "Intentional exception";
-		public ExceptionMockProject(string name, IntegrationIntervalTrigger IntegrationIntervalTrigger) : base(name, IntegrationIntervalTrigger) {}
+		public ExceptionMockProject(string name, PollingIntervalTrigger PollingIntervalTrigger) : base(name, PollingIntervalTrigger) {}
 
 		public override IIntegrationResult RunIntegration(BuildCondition buildCondition)
 		{

@@ -1,4 +1,3 @@
-using Exortech.NetReflector;
 using System;
 using System.Globalization;
 using ThoughtWorks.CruiseControl.Core.Config;
@@ -7,23 +6,21 @@ using ThoughtWorks.CruiseControl.Remote;
 
 namespace ThoughtWorks.CruiseControl.Core.Schedules
 {
-	[Serializable]
-	[ReflectorType("integrationSchedule")]
-	public class IntegrationScheduleTrigger : ITrigger
+	public class ScheduleTrigger : ITrigger
 	{
 		private DateTimeProvider _dtProvider;
+		private BuildCondition buildCondition;
 		private TimeSpan _integrationTime;
 		private DateTime _nextIntegration;
 
-		public IntegrationScheduleTrigger() : this(new DateTimeProvider()) {}
-
-		public IntegrationScheduleTrigger(DateTimeProvider dtProvider)
+		public ScheduleTrigger() : this(new DateTimeProvider()) {}
+		public ScheduleTrigger(DateTimeProvider dtProvider)
 		{
 			_dtProvider = dtProvider;
+			this.buildCondition = BuildCondition.NoBuild;
 		}
 
-		[ReflectorProperty("time")]
-		public string IntegrationTime
+		public virtual string Time
 		{
 			get { return _integrationTime.ToString(); }
 			set 
@@ -41,8 +38,11 @@ namespace ThoughtWorks.CruiseControl.Core.Schedules
 			}
 		}
 
-		[ReflectorProperty("buildCondition", Required=false)]
-		public BuildCondition BuildCondition = BuildCondition.IfModificationExists;
+		public virtual BuildCondition BuildCondition
+		{
+			get { return buildCondition; }
+			set { buildCondition = value; }
+		}
 
 		private void SetNextIntegrationDateTime()
 		{
@@ -54,12 +54,12 @@ namespace ThoughtWorks.CruiseControl.Core.Schedules
 			}
 		}
 
-		public void IntegrationCompleted()
+		public virtual void IntegrationCompleted()
 		{
 			SetNextIntegrationDateTime();
 		}
 
-		public BuildCondition ShouldRunIntegration()
+		public virtual BuildCondition ShouldRunIntegration()
 		{
 			if (_dtProvider.Now > _nextIntegration)
 			{
