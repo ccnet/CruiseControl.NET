@@ -148,6 +148,11 @@
                     BuildAction = "EmbeddedResource"
                 />
                 <File
+                    RelPath = "ProjectDetails.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "ProjectURLsSectionHandler.cs"
                     SubType = "Code"
                     BuildAction = "Compile"

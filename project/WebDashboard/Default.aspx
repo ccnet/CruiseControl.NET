@@ -4,10 +4,11 @@
 		<TITLE>Project Dashboard</TITLE>
 	</HEAD>
 	<h1>Project Dashboard</h1>
-	<P>&nbsp;</P>
-	<asp:datagrid id="StatusGrid" runat="server" BorderColor="White" BorderStyle="Ridge" CellSpacing="1"
-		BorderWidth="2px" BackColor="White" CellPadding="3" GridLines="None" AutoGenerateColumns="False"
-		Width="784px">
+	<P>
+		<asp:Label id="StatusLabel" runat="server" Visible="False"></asp:Label></P>
+	<asp:datagrid id="StatusGrid" Width="784px" AutoGenerateColumns="False" GridLines="None" CellPadding="3"
+		BackColor="White" BorderWidth="2px" CellSpacing="1" BorderStyle="Ridge" BorderColor="White"
+		runat="server">
 		<SelectedItemStyle Font-Bold="True" ForeColor="White" BackColor="#9471DE"></SelectedItemStyle>
 		<ItemStyle ForeColor="Black" BackColor="#DEDFDE"></ItemStyle>
 		<HeaderStyle Font-Size="Larger" Font-Bold="True" ForeColor="#E7E7FF" BackColor="#4A3C8C"></HeaderStyle>
@@ -21,18 +22,17 @@
 			<asp:BoundColumn DataField="LastBuildLabel" HeaderText="Last Build Label"></asp:BoundColumn>
 			<asp:BoundColumn DataField="Status" HeaderText="CCNet Status"></asp:BoundColumn>
 			<asp:BoundColumn DataField="Activity" HeaderText="Activity"></asp:BoundColumn>
+			<asp:HyperLinkColumn Text="Force" DataNavigateUrlField="ForceBuildURL" HeaderText="Force Build"></asp:HyperLinkColumn>
 		</Columns>
 		<PagerStyle HorizontalAlign="Right" ForeColor="Black" BackColor="#C6C3C6"></PagerStyle>
 	</asp:datagrid>
-	<P>
-		<asp:Label id="ExceptionTitleLabel" runat="server">There were exceptions connecting to the following projects:</asp:Label></P>
-	<P>
-		<asp:DataGrid id="ExceptionGrid" runat="server" BorderColor="#CC9966" BorderStyle="None" BorderWidth="1px"
-			BackColor="White" CellPadding="4">
+	<P><asp:label id="ExceptionTitleLabel" runat="server">There were exceptions connecting to the following projects:</asp:label></P>
+	<P><asp:datagrid id="ExceptionGrid" CellPadding="4" BackColor="White" BorderWidth="1px" BorderStyle="None"
+			BorderColor="#CC9966" runat="server">
 			<SelectedItemStyle Font-Bold="True" ForeColor="#663399" BackColor="#FFCC66"></SelectedItemStyle>
 			<ItemStyle ForeColor="#330099" BackColor="White"></ItemStyle>
 			<HeaderStyle Font-Bold="True" ForeColor="#FFFFCC" BackColor="#990000"></HeaderStyle>
 			<FooterStyle ForeColor="#330099" BackColor="#FFFFCC"></FooterStyle>
 			<PagerStyle HorizontalAlign="Center" ForeColor="#330099" BackColor="#FFFFCC"></PagerStyle>
-		</asp:DataGrid></P>
+		</asp:datagrid></P>
 </HTML>

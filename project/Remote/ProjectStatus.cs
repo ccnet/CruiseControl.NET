@@ -12,7 +12,7 @@ namespace ThoughtWorks.CruiseControl.Remote
 	/// particular project, hence is is marked <see cref="Serializable"/>.
 	/// </remarks>
 	[Serializable]
-	public struct ProjectStatus
+	public class ProjectStatus
 	{
 		private CruiseControlStatus status;
 		private IntegrationStatus buildStatus;

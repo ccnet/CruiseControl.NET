@@ -13,13 +13,15 @@ namespace ThoughtWorks.CruiseControl.WebDashboard
 	{
 		protected System.Web.UI.WebControls.Label ExceptionTitleLabel;
 		protected System.Web.UI.WebControls.DataGrid ExceptionGrid;
+		protected System.Web.UI.WebControls.Label StatusLabel;
 		protected System.Web.UI.WebControls.DataGrid StatusGrid;
 	
 		private void Page_Load(object sender, System.EventArgs e)
 		{
 			IList urls = (IList) ConfigurationSettings.GetConfig("projectURLs");
-			ArrayList statusses = new ArrayList();
+			ArrayList projectDetailsList = new ArrayList();
 			ArrayList connectionExceptions = new ArrayList();
+			Hashtable urlsForProjects = new Hashtable();
 
 			foreach (string url in urls)
 			{
@@ -28,7 +30,8 @@ namespace ThoughtWorks.CruiseControl.WebDashboard
 					ICruiseManager remoteCC = (ICruiseManager) RemotingServices.Connect(typeof(ICruiseManager), url);
 					foreach (ProjectStatus status in remoteCC.GetProjectStatus())
 					{
-						statusses.Add(status);
+						projectDetailsList.Add(new ProjectDetails(status, GenerateForceBuildURL(status)));
+						urlsForProjects.Add(status.Name, url);
 					}
 				}
 				catch (Exception f)
@@ -37,9 +40,14 @@ namespace ThoughtWorks.CruiseControl.WebDashboard
 				}
 			}
 
-			if (statusses.Count > 0)
+			if (Page.IsPostBack)
 			{
-				StatusGrid.DataSource = statusses;
+				HandlePostBack(urlsForProjects);
+			}
+
+			if (projectDetailsList.Count > 0)
+			{
+				StatusGrid.DataSource = projectDetailsList;
 				StatusGrid.DataBind();
 				StatusGrid.Visible = true;
 			}
@@ -60,6 +68,40 @@ namespace ThoughtWorks.CruiseControl.WebDashboard
 				ExceptionGrid.Visible = false;
 				ExceptionTitleLabel.Visible = false;
 			}
+		}
+
+		private string GenerateForceBuildURL(ProjectStatus status)
+		{
+			return "dashboard.aspx?forceBuildFor=" + status.Name;
+		}
+
+		private void HandlePostBack(Hashtable urlsForProjects)
+		{
+			string forceBuildProjectName = Page.Request.Form.Get("forceBuildFor");
+			if (forceBuildProjectName != null && forceBuildProjectName.Length > 0)
+			{
+				ForceBuild(forceBuildProjectName, urlsForProjects);
+			}
+			else
+			{
+				StatusLabel.Text = "Warning - unknown postback occurred";
+				StatusLabel.Visible = true;
+			}
+		}
+
+		private void ForceBuild(string projectName, Hashtable urlsForProjects)
+		{
+			try
+			{
+				ICruiseManager remoteCC = (ICruiseManager) RemotingServices.Connect(typeof(ICruiseManager), (string) urlsForProjects[projectName]);
+				remoteCC.ForceBuild(projectName);
+				StatusLabel.Text = "Build Successfully Forced for project [ " + projectName + " ]";
+			}
+			catch (Exception e)
+			{
+				StatusLabel.Text = "Build could not be forced for project [ " + projectName + " ], exception was: " + e.ToString();
+			}
+			StatusLabel.Visible = true;
 		}
 
 		private void StatusGrid_ItemDataBound(object sender, DataGridItemEventArgs e)
