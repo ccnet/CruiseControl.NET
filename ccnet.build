@@ -155,7 +155,6 @@
 				<includes name="*.exe" />
 			</fileset>
 		</copy>
-		<copy file="${src.dir}\CCTray\app.config" tofile="deployed\cctray\${cctray.exe}.config" verbose="${verbosity}"/>
 	</target>
     
 	<target name="deploy.webapp" depends="compile" description="deploys the web application">
