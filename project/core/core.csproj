@@ -612,11 +612,6 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "test\MultiThreadedProjectTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
                     RelPath = "test\ProjectTest.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
