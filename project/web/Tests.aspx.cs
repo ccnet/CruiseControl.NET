@@ -1,67 +1,19 @@
 using System;
-using System.Collections;
-using System.Configuration;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.IO;
-using System.Text;
-using System.Web;
-using System.Web.SessionState;
 using System.Web.UI;
-using System.Web.UI.WebControls;
 using System.Web.UI.HtmlControls;
-using System.Xml;
-using ThoughtWorks.CruiseControl.Core;
-using ThoughtWorks.CruiseControl.Util;
+using System.Web.UI.WebControls;
 
 namespace ThoughtWorks.CruiseControl.Web
 {
-	public class Tests : System.Web.UI.Page
+	public class Tests : Page
 	{
-		protected System.Web.UI.WebControls.Label BodyLabel;
+		protected Label BodyLabel;
+		protected HtmlGenericControl BodyArea;
 
-		private void Page_Load(object sender, System.EventArgs e)
+		private void Page_Load(object sender, EventArgs e)
 		{
-			try
-			{
-				InitDisplayLogFile();
-			}
-			catch(CruiseControlException ex)
-			{
-				BodyLabel.Text += new HtmlExceptionFormatter(ex).ToString();
-			}
-		}
-
-		private void InitDisplayLogFile()
-		{
-			string logfile = WebUtil.GetLogFilename(Context, Request);
-			if (logfile == null)
-			{
-				return;
-			}
-			if (!File.Exists(logfile))
-			{
-				throw new CruiseControlException(String.Format("Logfile not found: {0}", logfile));
-			}
-			StringBuilder builder = new StringBuilder();
-			try
-			{		
-				XmlDocument document = new XmlDocument();
-				document.Load(logfile);
-				
-				string xslFile = "xsl/tests.xsl";
-				string directory = Path.GetDirectoryName(xslFile);
-				string file = Path.GetFileName(xslFile);
-				string transformFile = Path.Combine(Request.MapPath(directory), file);
-				builder.Append(new ThoughtWorks.CruiseControl.Core.Publishers.BuildLogTransformer().Transform(document, transformFile)).Append("<br>");
-			}
-			catch(XmlException ex)
-			{
-				throw new CruiseControlException(String.Format("Bad XML in logfile: {0}\n{1}", logfile, ex));
-			}
-
-			BodyLabel.Text = builder.ToString();
+			string xslFilename = WebUtil.GetXslFilename("tests.xsl", Request);
+			BodyArea.InnerHtml = new PageTransformer(WebUtil.ResolveLogFile(Context),xslFilename).LoadPageContent();
 		}
 
 		#region Web Form Designer generated code
@@ -73,7 +25,8 @@ namespace ThoughtWorks.CruiseControl.Web
 		
 		private void InitializeComponent()
 		{    
-			this.Load += new System.EventHandler(this.Page_Load);
+			this.Load += new EventHandler(this.Page_Load);
+
 		}
 		#endregion
 	}
