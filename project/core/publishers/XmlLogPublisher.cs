@@ -1,5 +1,5 @@
-using System;
 using System.IO;
+using System.Text;
 using System.Xml;
 using Exortech.NetReflector;
 using ThoughtWorks.CruiseControl.Core.Tasks;
@@ -65,18 +65,15 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
             if (!Directory.Exists(dirname))
                 Directory.CreateDirectory(dirname);
 
-            // create Xml writer using UTF8 encoding
             string path = Path.Combine(dirname, filename);
-            return new XmlTextWriter(path, System.Text.Encoding.UTF8);
+
+			// create XmlWriter using UTF8 encoding
+            return new XmlTextWriter(path, Encoding.UTF8);
         }
 
         public string GetFilename(IIntegrationResult result)
         {
-            DateTime startTime = result.StartTime;
-            if (result.Succeeded)
-                return LogFileUtil.CreateSuccessfulBuildLogFileName(startTime, result.Label);
-            else
-                return LogFileUtil.CreateFailedBuildLogFileName(startTime);
+			return new LogFile(result).Filename;
         }
     }
 }

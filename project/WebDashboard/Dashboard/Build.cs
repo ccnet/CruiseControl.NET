@@ -46,7 +46,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 
 		public bool IsSuccessful
 		{
-			get { return LogFileUtil.IsSuccessful(Name); }
+			get { return new LogFile(Name).Succeeded; }
 		}
 	}
 }

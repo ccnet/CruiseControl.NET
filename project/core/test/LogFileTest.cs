@@ -26,23 +26,23 @@ namespace ThoughtWorks.CruiseControl.Core.Test
 		}
 
 		[Test]
-		public void ParseForDate()
+		public void ParseDateFromFilename()
 		{
 			DateTime date = new DateTime(2002, 3, 28, 13, 0, 0);
-			Assert.AreEqual(date,LogFileUtil.ParseForDate("20020328130000"));
+			Assert.AreEqual(date, new LogFile("log20020328130000.xml").Date);
 		}
 		
 		[Test]
-		public void GetFormattedDateString()
+		public void VerifyFormattedDateString()
 		{
 			DateTime date = new DateTime(1971, 5, 14, 15, 0, 0);
-			string actual = LogFileUtil.GetFormattedDateString("log19710514150000.xml");
+			string actual = new LogFile("log19710514150000.xml").FormattedDateString;
 			string expected = DateUtil.FormatDate(date);
 			Assert.AreEqual(expected, actual);
 		}
 		
 		[Test]
-		public void ParseForDateString()
+		public void ParseForFileFormattedDateString()
 		{
 			CheckDateString("19741224120000", "log19741224120000.xml");
 			CheckDateString("19750101120000","log19750101120000.xml");
@@ -153,27 +153,27 @@ namespace ThoughtWorks.CruiseControl.Core.Test
 		
 		private void CheckDateString(string expected, string filename)
 		{
-			string actual = LogFileUtil.ParseForDateString(filename);
+			string actual = new LogFile(filename).FilenameFormattedDateString;
 			Assert.AreEqual(expected, actual);
 		}
 		
 		[Test, ExpectedException(typeof(ArgumentException))]
-		public void ParseForDateStringWrongPrefix()
+		public void AttemptToCreateLogFileForFilenameWithWrongPrefix()
 		{
-			LogFileUtil.ParseForDateString("garbage.txt");
+			new LogFile("garbage.txt");
 		}
 		
 		[Test, ExpectedException(typeof(ArgumentException))]
-		public void ParseForDateStringShortFilename()
+		public void AttemptToCreateLogFileForFilenameWithoutDate()
 		{
-			LogFileUtil.ParseForDateString("log3.xml");
+			new LogFile("log3.xml");
 		}
 		
 		[Test]
 		public void BuildSuccessful()
 		{
-			Assert.IsTrue(!LogFileUtil.IsSuccessful("log19750101120000.xml"));
-			Assert.IsTrue(LogFileUtil.IsSuccessful("log20020830164057Lbuild.6.xml"));
+			Assert.IsTrue(!new LogFile("log19750101120000.xml").Succeeded);
+			Assert.IsTrue(new LogFile("log20020830164057Lbuild.6.xml").Succeeded);
 		}
 		
 		[Test]
@@ -181,7 +181,9 @@ namespace ThoughtWorks.CruiseControl.Core.Test
 		{
 			DateTime date = new DateTime(2002, 3, 28, 13, 0, 0);
 			string expected = "log20020328130000.xml";
-			Assert.AreEqual(expected, LogFileUtil.CreateFailedBuildLogFileName(date));
+			IntegrationResult result = new IntegrationResult();
+			result.StartTime = date;
+			Assert.AreEqual(expected, new LogFile(result).Filename);
 		}
 		
 		[Test]
@@ -189,7 +191,11 @@ namespace ThoughtWorks.CruiseControl.Core.Test
 		{
 			DateTime date = new DateTime(2002, 3, 28, 13, 0, 0);
 			string expected = "log20020328130000Lbuild.33.xml";
-			Assert.AreEqual(expected, LogFileUtil.CreateSuccessfulBuildLogFileName(date, "33"));
+			IntegrationResult result = new IntegrationResult();
+			result.StartTime = date;
+			result.Label = "33";
+			result.Status = IntegrationStatus.Success;
+			Assert.AreEqual(expected, new LogFile(result).Filename);
 		}
 
 		[Test]

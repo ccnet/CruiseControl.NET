@@ -38,7 +38,7 @@ namespace ThoughtWorks.CruiseControl.Web
 			int count = 0;
 			foreach (string logfile in _logfiles)
 			{
-				if (LogFileUtil.IsSuccessful(logfile))
+				if (new LogFile(logfile).Succeeded)
 				{
 					count++;
 				}
@@ -75,7 +75,7 @@ namespace ThoughtWorks.CruiseControl.Web
 			{
 				return false;
 			}
-			return LogFileUtil.IsSuccessful(GetLatestLogFile());
+			return new LogFile(GetLatestLogFile()).Succeeded;
 		}
 
 		public TimeSpan GetTimeSinceLatestBuild()
@@ -84,7 +84,7 @@ namespace ThoughtWorks.CruiseControl.Web
 			{
 				return new TimeSpan(0);
 			}
-			DateTime date = LogFileUtil.ParseForDate(LogFileUtil.ParseForDateString(GetLatestLogFile()));
+			DateTime date = new LogFile(GetLatestLogFile()).Date;
 			return DateTime.Now - date;
 		}
 

@@ -1,11 +1,6 @@
 using System;
-using System.Globalization;
 using System.IO;
-using System.Web;
 using System.Web.UI.HtmlControls;
-using System.Xml;
-using System.Xml.XPath;
-using System.Xml.Xsl;
 using ThoughtWorks.CruiseControl.Core;
 
 namespace ThoughtWorks.CruiseControl.Web
@@ -14,9 +9,9 @@ namespace ThoughtWorks.CruiseControl.Web
 	/// LogFileLister: helper method for code-behind page for Default.aspx.
 	/// </summary>
 	public class LogFileLister
-	{		
+	{
 		public const string FAILED = "(Failed)";
- 
+
 		public static HtmlAnchor[] GetLinks(string path)
 		{
 			string[] filenames = LogFileUtil.GetLogFileNames(path);
@@ -24,61 +19,62 @@ namespace ThoughtWorks.CruiseControl.Web
 			HtmlAnchor[] links = new HtmlAnchor[filenames.Length];
 			for (int i = 0; i < filenames.Length; i++)
 			{
+				LogFile logFile = new LogFile(filenames[i]);
 				int j = filenames.Length - i - 1;
 				links[j] = new HtmlAnchor();
-				links[j].Attributes["class"] = GetLinkClass(filenames[i]);
+				links[j].Attributes["class"] = GetLinkClass(logFile);
 				links[j].HRef = LogFileUtil.CreateUrl(filenames[i]);
-				links[j].InnerHtml = GetDisplayLabel(filenames[i]);
+				links[j].InnerHtml = GetDisplayLabel(logFile);
 			}
 			return links;
 		}
 
 		public static void InitAdjacentAnchors(HtmlAnchor previous, HtmlAnchor next, string path, string currentFile)
-		{			
+		{
 			string[] filenames = LogFileUtil.GetLogFileNames(path);
 			if (filenames.Length <= 1)
 			{
 				return;
 			}
 
-			for (int i=0; i < filenames.Length; i++)
+			for (int i = 0; i < filenames.Length; i++)
 			{
 				if (filenames[i] == currentFile)
-				{					
+				{
 					int previousIndex = Math.Max(0, i - 1);
 					int nextIndex = Math.Min(filenames.Length - 1, i + 1);
-					previous.HRef = LogFileUtil.CreateUrl(filenames[previousIndex]);					
-					next.HRef = LogFileUtil.CreateUrl(filenames[nextIndex]);					
+					previous.HRef = LogFileUtil.CreateUrl(filenames[previousIndex]);
+					next.HRef = LogFileUtil.CreateUrl(filenames[nextIndex]);
 					return;
 				}
 			}
 			next.HRef = ".";
-			previous.HRef = (currentFile == null) ? 
-				LogFileUtil.CreateUrl(filenames[filenames.Length-2]) : ".";
+			previous.HRef = (currentFile == null) ?
+				LogFileUtil.CreateUrl(filenames[filenames.Length - 2]) : ".";
 		}
 
-		public static string GetDisplayLabel(string logFilename)
+		public static string GetDisplayLabel(LogFile logFile)
 		{
 			return string.Format("<nobr>{0} {1}</nobr>",
-				LogFileUtil.GetFormattedDateString(logFilename), 
-				GetBuildStatus(logFilename));	
-		} 
+			                     logFile.FormattedDateString,
+			                     GetBuildStatus(logFile));
+		}
 
-		public static string GetBuildStatus(string filename)
+		public static string GetBuildStatus(LogFile logFile)
 		{
-			if (LogFileUtil.IsSuccessful(filename))
+			if (logFile.Succeeded)
 			{
-				return string.Format("({0})",LogFileUtil.ParseBuildNumber(filename));
+				return string.Format("({0})", logFile.Label);
 			}
-			else 
+			else
 			{
 				return FAILED;
 			}
 		}
 
-		private static string GetLinkClass(string filename)
+		private static string GetLinkClass(LogFile logFile)
 		{
-			return LogFileUtil.IsSuccessful(filename) ? "link" : "link-failed";
+			return logFile.Succeeded ? "link" : "link-failed";
 		}
 
 		public static string GetCurrentFilename(DirectoryInfo logDirectory)

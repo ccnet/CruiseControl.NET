@@ -7,25 +7,25 @@ using ThoughtWorks.CruiseControl.Core.Util;
 
 namespace ThoughtWorks.CruiseControl.Web.Test
 {
-	[NUnit.Framework.TestFixture]
+	[TestFixture]
 	public class LogFileListTest : CustomAssertion
 	{
 		private static readonly string TestFolder = "logfilelist";
 		private string _tempFolder;
 
-		[NUnit.Framework.SetUp]
+		[SetUp]
 		public void Setup()
 		{
 			_tempFolder = TempFileUtil.CreateTempDir(TestFolder);
 		}
 
-		[NUnit.Framework.TearDown]
+		[TearDown]
 		public void Teardown()
 		{
 			TempFileUtil.DeleteTempDir(TestFolder);
 		}
 
-		[NUnit.Framework.Test]
+		[Test]
 		public void GetLinks()
 		{
 			// testFilenames array must be in sorted order -- otherwise links iteration will fail
@@ -41,7 +41,7 @@ namespace ThoughtWorks.CruiseControl.Web.Test
 			};
 			TempFileUtil.CreateTempFiles(TestFolder, testFilenames);
 
-		    HtmlAnchor[] actualLinks = LogFileLister.GetLinks(_tempFolder);
+			HtmlAnchor[] actualLinks = LogFileLister.GetLinks(_tempFolder);
 			Assert.AreEqual(6, actualLinks.Length);
 
 			// expected Date format: dd MMM yyyy HH:mm
@@ -60,7 +60,7 @@ namespace ThoughtWorks.CruiseControl.Web.Test
 			Assert.AreEqual("<nobr>24 Dec 1974 12:00 (Failed)</nobr>", actualLinks[5].InnerHtml);
 		}
 
-		[NUnit.Framework.Test]
+		[Test]
 		public void GetBuildStatus()
 		{
 			CheckBuildStatus("(Failed)", "log19750101120000.xml");
@@ -69,17 +69,17 @@ namespace ThoughtWorks.CruiseControl.Web.Test
 
 		private void CheckBuildStatus(string expected, string input)
 		{
-			Assert.AreEqual(expected, LogFileLister.GetBuildStatus(input));
+			Assert.AreEqual(expected, LogFileLister.GetBuildStatus(new LogFile(input)));
 		}
 
-		[NUnit.Framework.Test]
+		[Test]
 		public void ParseDate()
 		{
-		    DateTime date = new DateTime(2002, 3, 28, 13, 0, 0);
-			Assert.AreEqual(date, LogFileUtil.ParseForDate("20020328130000"));
+			DateTime date = new DateTime(2002, 3, 28, 13, 0, 0);
+			Assert.AreEqual(date, new LogFile("log20020328130000.xml").Date);
 		}
 
-		[NUnit.Framework.Test]
+		[Test]
 		public void GetCurrentFilename()
 		{
 			// testFilenames array must be in sorted order -- otherwise links iteration will fail
@@ -97,7 +97,7 @@ namespace ThoughtWorks.CruiseControl.Web.Test
 			Assert.AreEqual("log20030507042535.xml", LogFileLister.GetCurrentFilename(new DirectoryInfo(_tempFolder)));
 		}
 
-		[NUnit.Framework.Test]
+		[Test]
 		public void InitAdjacentAnchors_NoLogFiles()
 		{
 			HtmlAnchor previous = new HtmlAnchor();
@@ -107,12 +107,12 @@ namespace ThoughtWorks.CruiseControl.Web.Test
 			Assert.AreEqual(String.Empty, next.HRef);
 		}
 
-		[NUnit.Framework.Test]
+		[Test]
 		public void InitAdjacentAnchors_OneLogFile()
 		{
 			HtmlAnchor previous = new HtmlAnchor();
 			HtmlAnchor next = new HtmlAnchor();
-			TempFileUtil.CreateTempFile(_tempFolder, LogFileUtil.CreateSuccessfulBuildLogFileName(new DateTime(), "2"));
+			TempFileUtil.CreateTempFile(_tempFolder, new LogFile(new IntegrationResult()).Filename);
 			LogFileLister.InitAdjacentAnchors(new HtmlAnchor(), new HtmlAnchor(), _tempFolder, null);
 			Assert.AreEqual(String.Empty, previous.HRef);
 			Assert.AreEqual(String.Empty, next.HRef);

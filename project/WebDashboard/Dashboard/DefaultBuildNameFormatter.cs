@@ -6,13 +6,13 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 	{
 		public string GetPrettyBuildName(string originalBuildName)
 		{
-			bool isSuccessful = LogFileUtil.IsSuccessful(originalBuildName);
-			return string.Format("{0} ({1})", LogFileUtil.GetFormattedDateString(originalBuildName), isSuccessful ?  LogFileUtil.ParseBuildNumber(originalBuildName) : "Failed");	
+			LogFile logFile = new LogFile(originalBuildName);
+			return string.Format("{0} ({1})", logFile.FormattedDateString, logFile.Succeeded ? logFile.Label : "Failed");	
 		}
 
 		public string GetCssClassForBuildLink(string originalBuildName)
 		{
-			return LogFileUtil.IsSuccessful(originalBuildName) ? "build-passed-link" : "build-failed-link";
+			return new LogFile(originalBuildName).Succeeded ? "build-passed-link" : "build-failed-link";
 		}
 	}
 }

@@ -83,7 +83,6 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
 		{
 			Regex nullStringRegex = new Regex("\0");
 			return nullStringRegex.Replace(s, "");
-			;
 		}
 
 		public void WriteException(IIntegrationResult result)
@@ -125,6 +124,5 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
 			public const string INFO = "info";
 			public const string EXCEPTION = "exception";
 		}
-
 	}
 }
