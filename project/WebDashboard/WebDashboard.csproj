@@ -1005,11 +1005,6 @@
                     BuildAction = "Content"
                 />
                 <File
-                    RelPath = "xsl\distributables.xsl"
-                    Link = "..\xsl\distributables.xsl"
-                    BuildAction = "Content"
-                />
-                <File
                     RelPath = "xsl\fit.xsl"
                     Link = "..\xsl\fit.xsl"
                     BuildAction = "Content"
