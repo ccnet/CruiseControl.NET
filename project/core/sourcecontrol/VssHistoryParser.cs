@@ -178,14 +178,20 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 
 		internal virtual string ParseFolderName() 
 		{
+			string folderName = null;
 			int checkinIndex = entry.IndexOf("Checked in");
-			if (checkinIndex == -1) return null;
-
-			int commentIndex = entry.IndexOf("Comment:");
-			if (commentIndex == -1) commentIndex = entry.Length;
-
-			int startIndex = checkinIndex + "Checked in".Length;
-			return entry.Substring(startIndex, commentIndex - startIndex).Trim();
+			if (checkinIndex > -1) 
+			{
+				int startIndex = checkinIndex + "Checked in".Length;
+				int length = entry.Length - startIndex;
+				int commentIndex = entry.IndexOf("Comment:");
+				if (commentIndex > 0)
+				{
+					length = commentIndex - startIndex;
+				}
+				folderName = entry.Substring(startIndex, length).Trim();
+			}
+			return folderName;
 		}
 
 		protected string ParseFileNameOther(string type) 
