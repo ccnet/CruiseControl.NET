@@ -13,135 +13,138 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers.Test
     [TestFixture]
     public class XmlLogPublisherTest : XmlLogFixture
     {
-        public static readonly string TEMP_SUBDIR = "XmlLogPublisherTest";
-        public static readonly string LOGDIR = TempFileUtil.GetTempPath(TEMP_SUBDIR);
+        public static readonly string FULL_CONFIGURED_LOG_DIR = "FullConfiguredLogDir";
+        public static readonly string FULL_CONFIGURED_LOG_DIR_PATH = Path.GetFullPath(TempFileUtil.GetTempPath(FULL_CONFIGURED_LOG_DIR));
+
+		public static readonly string ARTIFACTS_DIR = "Artifacts";
+		public static readonly string ARTIFACTS_DIR_PATH = Path.GetFullPath(TempFileUtil.GetTempPath(ARTIFACTS_DIR));
 
         private XmlLogPublisher _publisher;
-    	private string artifactsDirPath;
+    	private DynamicMock projectMock;
+    	private IProject project;
 
     	[SetUp]
         public void SetUp()
         {
-            TempFileUtil.DeleteTempDir(TEMP_SUBDIR);
-            _publisher = CreatePublisher();
-			artifactsDirPath = TempFileUtil.CreateTempDir("artifacts");
+            TempFileUtil.DeleteTempDir(FULL_CONFIGURED_LOG_DIR);
+			TempFileUtil.DeleteTempDir(ARTIFACTS_DIR);
+			TempFileUtil.CreateTempDir(ARTIFACTS_DIR);
+
+			projectMock = new DynamicMock(typeof(IProject));
+			projectMock.SetupResult("ArtifactDirectory", ARTIFACTS_DIR_PATH);
+			project = (IProject) projectMock.MockInstance;
+
+			_publisher = new XmlLogPublisher();
         }
 
         [TearDown]
         public void TearDown()
         {
-            TempFileUtil.DeleteTempDir(TEMP_SUBDIR);
-			TempFileUtil.DeleteTempDir("artifacts");
+            TempFileUtil.DeleteTempDir(FULL_CONFIGURED_LOG_DIR);
+			TempFileUtil.DeleteTempDir(ARTIFACTS_DIR);
 		}
-
-        private XmlLogPublisher CreatePublisher()
-        {
-            string xml = string.Format(@"		<xmllogger>
-		    <logDir>{0}</logDir>
-		</xmllogger>", LOGDIR);
-            return NetReflector.Read(xml) as XmlLogPublisher;
-        }
 
         [Test]
         public void PopulateFromConfig()
         {
-            Assert.IsNotNull(_publisher);
-            Assert.AreEqual(LOGDIR, _publisher.ConfiguredLogDirectory);
+			string xml = string.Format(@"<xmllogger><logDir>foo</logDir></xmllogger>", FULL_CONFIGURED_LOG_DIR_PATH);
+			_publisher = NetReflector.Read(xml) as XmlLogPublisher;
+			Assert.IsNotNull(_publisher);
+            Assert.AreEqual("foo", _publisher.ConfiguredLogDirectory);
         }
 
-        [Test]
-        public void MergeFilesConfig()
+		[Test]
+		public void ShouldPublishSuccessfulBuildWithRelativeConfiguredPath()
+		{
+			// Setup
+			IntegrationResult result = CreateIntegrationResult(IntegrationStatus.Success,  true);
+			_publisher.ConfiguredLogDirectory = "relativePath";
+
+			// Execute
+			_publisher.PublishIntegrationResults(project, result);
+
+			// Verify
+			string expectedOutputPath = Path.Combine(Path.Combine(ARTIFACTS_DIR_PATH, "relativePath"), "log19800101000000Lbuild.1.xml");
+			Assert.IsTrue(File.Exists(expectedOutputPath));
+			CheckForXml(expectedOutputPath);
+		}
+
+		[Test]
+		public void ShouldPublishSuccessfulBuildWithNoConfiguredPath()
+		{
+			// Setup
+			IntegrationResult result = CreateIntegrationResult(IntegrationStatus.Success,  true);
+
+			// Execute
+			_publisher.PublishIntegrationResults(project, result);
+
+			// Verify
+			string expectedOutputPath = Path.Combine(Path.Combine(ARTIFACTS_DIR_PATH, XmlLogPublisher.DEFAULT_LOG_SUBDIRECTORY), "log19800101000000Lbuild.1.xml");
+			Assert.IsTrue(File.Exists(expectedOutputPath));
+			CheckForXml(expectedOutputPath);
+		}
+
+		[Test]
+        public void ShouldPublishFailedBuildWithFullConfiguredPath()
         {
-            string xml = string.Format(@"		<xmllogger>
+			// Setup
+			_publisher.ConfiguredLogDirectory = FULL_CONFIGURED_LOG_DIR_PATH;
+			IntegrationResult result = CreateIntegrationResult(IntegrationStatus.Failure,  true);
+
+			// Execute
+			_publisher.PublishIntegrationResults(project, result);
+
+			// Verify
+			string expectedOutputPath = Path.Combine(FULL_CONFIGURED_LOG_DIR_PATH, "log19800101000000.xml");
+			Assert.IsTrue(File.Exists(expectedOutputPath));
+			CheckForXml(expectedOutputPath);
+		}
+
+        [Test]
+        public void ShouldPublishSuccessfulBuildWithFullConfiguredPath()
+        {
+			// Setup
+			_publisher.ConfiguredLogDirectory = FULL_CONFIGURED_LOG_DIR_PATH;
+			IntegrationResult result = CreateIntegrationResult(IntegrationStatus.Success,  true);
+
+			// Execute
+			_publisher.PublishIntegrationResults(project, result);
+
+			// Verify
+			string expectedOutputPath = Path.Combine(FULL_CONFIGURED_LOG_DIR_PATH, "log19800101000000Lbuild.1.xml");
+			Assert.IsTrue(File.Exists(expectedOutputPath));
+			CheckForXml(expectedOutputPath);
+        }
+
+		[Test]
+        public void ShouldNotPublishResultsWithUnknownStatus()
+        {
+            AssertFalse(FULL_CONFIGURED_LOG_DIR_PATH + " should not exist at start of test.", Directory.Exists(FULL_CONFIGURED_LOG_DIR_PATH));
+            _publisher.PublishIntegrationResults(null, new IntegrationResult());
+            AssertFalse(FULL_CONFIGURED_LOG_DIR_PATH + " should still not exist at end of this test.", Directory.Exists(FULL_CONFIGURED_LOG_DIR_PATH));
+        }
+
+		[Test]
+		public void MergeFilesConfig()
+		{
+			string xml = string.Format(@"		<xmllogger>
 		    <logDir>{0}</logDir>
 			<mergeFiles>
 				<file>d:\foo.xml</file>
 			</mergeFiles>
-		</xmllogger>", LOGDIR);
-            XmlLogPublisher pub = NetReflector.Read(xml) as XmlLogPublisher;
-            Assert.AreEqual(1, pub.MergeFiles.Length);
-            Assert.AreEqual(@"d:\foo.xml", pub.MergeFiles[0]);
-        }
-
-        [Test]
-        public void GetFilenameForFailedBuild()
-        {
-            IntegrationResult result = CreateIntegrationResult(IntegrationStatus.Failure,  true);
-            string expected = "log19800101000000.xml";
-            Assert.AreEqual(expected, _publisher.GetFilename(result));
-        }
-
-        [Test]
-        public void GetFilenameForGoodBuild()
-        {
-            IntegrationResult result = CreateIntegrationResult(IntegrationStatus.Success, true);
-            string expected = "log19800101000000Lbuild.1.xml";
-            Assert.AreEqual(expected, _publisher.GetFilename(result));
-        }
-
-        [Test]
-        public void Publish()
-        {
-            IntegrationResult result = CreateIntegrationResult(IntegrationStatus.Success, true);
-
-            _publisher.PublishIntegrationResults(null, result);
-
-            string filename = _publisher.GetFilename(result);
-            string outputPath = Path.Combine(_publisher.ConfiguredLogDirectory, filename);
-            Assert.IsTrue(File.Exists(outputPath), outputPath + " should exist ");
-
-            CheckForXml(outputPath);
-        }
-
-		[Test]
-		public void ShouldUseProjectArtifactDirectoryInLogDirectoryIfLogDirNotSetWhenPublishing()
-		{
-			IntegrationResult result = CreateIntegrationResult(IntegrationStatus.Success, true);
-
-			DynamicMock projectMock = new DynamicMock(typeof(IProject));
-			projectMock.ExpectAndReturn("ArtifactDirectory", artifactsDirPath);
-
-			_publisher = new XmlLogPublisher();
-			_publisher.PublishIntegrationResults((IProject) projectMock.MockInstance, result);
-
-			string filename = _publisher.GetFilename(result);
-			string outputPath = Path.Combine(Path.Combine(artifactsDirPath, "buildlogs"), filename);
-			Assert.IsTrue(File.Exists(outputPath), outputPath + " should exist ");
-
-			CheckForXml(outputPath);
-			projectMock.Verify();
+		</xmllogger>", FULL_CONFIGURED_LOG_DIR_PATH);
+			XmlLogPublisher pub = NetReflector.Read(xml) as XmlLogPublisher;
+			Assert.AreEqual(1, pub.MergeFiles.Length);
+			Assert.AreEqual(@"d:\foo.xml", pub.MergeFiles[0]);
 		}
 
-		[Test]
-		public void ShouldGiveLogDirectoryAsConfiguredOneIfOneIsConfigured()
-		{
-			Assert.AreEqual(LOGDIR, _publisher.LogDirectory(new Project()));
-		}
-
-		[Test]
-		public void ShouldUseProjectArtifactDirectoryInLogDirectoryIfLogDirNotSet()
-		{
-			DynamicMock projectMock = new DynamicMock(typeof(IProject));
-			projectMock.ExpectAndReturn("ArtifactDirectory", artifactsDirPath);
-			_publisher = new XmlLogPublisher();
-			Assert.AreEqual(Path.Combine(artifactsDirPath, "buildlogs"), _publisher.LogDirectory((IProject) projectMock.MockInstance));
-			projectMock.Verify();
-		}
-
-		[Test]
-        public void Publish_UnknownIntegrationStatus()
-        {
-            AssertFalse(LOGDIR + " should be not exist at start of test.", Directory.Exists(LOGDIR));
-            _publisher.PublishIntegrationResults(null, new IntegrationResult());
-            AssertFalse(LOGDIR + " should still not exist at end of this test.", Directory.Exists(LOGDIR));
-        }
-
+		/*
         [Test]
         public void MergeFile()
         {
-            TempFileUtil.CreateTempDir(TEMP_SUBDIR);
+            TempFileUtil.CreateTempDir(FULL_CONFIGURED_LOG_DIR);
             IntegrationResult result = CreateIntegrationResult(IntegrationStatus.Success, false);
-            string logDir = TempFileUtil.GetTempPath(TEMP_SUBDIR);
+            string logDir = TempFileUtil.GetTempPath(FULL_CONFIGURED_LOG_DIR);
 			string logFile = TempFileUtil.CreateTempXmlFile(logDir, "foo.xml", "<?xml version=\"1.0\" encoding=\"utf-16\" standalone=\"no\"?><foo bar=\"4\">bat</foo>");
 			TempFileUtil.CreateTempXmlFile(logDir, "zip.xml", "<zip/>");
 
@@ -156,29 +159,12 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers.Test
 				Assert.AreEqual(expected, textReader.ReadToEnd());    
             }
         }
+		*/
 
         private void CheckForXml(string path)
         {
         	XmlDocument doc = new XmlDocument();
             doc.Load(path);
-        }
-
-        [Test]
-        public void GetXmlWriter()
-        {
-            AssertGetXmlWriter("TestGetXmlWriter.xml");
-        }
-
-        private void AssertGetXmlWriter(string filename)
-        {
-            XmlWriter writer = _publisher.GetXmlWriter(TempFileUtil.GetTempPath(TEMP_SUBDIR), filename);
-            Assert.IsNotNull(writer);
-
-            writer.WriteStartElement("bar");
-            writer.WriteEndElement();
-            writer.Close();
-
-            Assert.IsTrue(TempFileUtil.TempFileExists(TEMP_SUBDIR, filename));
         }
 
         private IntegrationResult CreateIntegrationResult(IntegrationStatus status, bool addModifications)
@@ -197,16 +183,5 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers.Test
             }
             return result;
         }
-
-        [Test]
-        public void GetXmlWriterTwice()
-        {
-            AssertGetXmlWriter("TestGetXmlWriter1.xml");
-            AssertGetXmlWriter("TestGetXmlWriter2.xml");
-            Assert.IsTrue(TempFileUtil.TempFileExists(TEMP_SUBDIR, "TestGetXmlWriter1.xml"), "there should be two log files");
-            Assert.AreEqual(2, Directory.GetFiles(TempFileUtil.GetTempPath(TEMP_SUBDIR)).Length);
-        }
-
-
     }
 }

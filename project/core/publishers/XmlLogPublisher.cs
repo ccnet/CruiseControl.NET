@@ -7,10 +7,11 @@ using ThoughtWorks.CruiseControl.Remote;
 
 namespace ThoughtWorks.CruiseControl.Core.Publishers
 {
+	// TODO - Make Integration Writer a dependency, and make its method take the filename
     [ReflectorType("xmllogger")]
     public class XmlLogPublisher : PublisherBase
     {
-		private string DEFAULT_LOG_SUBDIRECTORY = "buildlogs";
+		public static readonly string DEFAULT_LOG_SUBDIRECTORY = "buildlogs";
 
         private string _logDir;
         private MergeFilesTask _mergeTask = new MergeFilesTask();
@@ -26,15 +27,20 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
             set { _logDir = value; }
         }
 
+		// This is only public because of a nasty hack which I (MR) put in the code. To be made private later...
 		public string LogDirectory(IProject project)
 		{
-			if (ConfiguredLogDirectory == null || ConfiguredLogDirectory == string.Empty)
+			if (ConfiguredLogDirectory == null || ConfiguredLogDirectory == "")
 			{
 				return Path.Combine(project.ArtifactDirectory, DEFAULT_LOG_SUBDIRECTORY);
 			}
-			else
+			else if (Path.IsPathRooted(ConfiguredLogDirectory))
 			{
 				return ConfiguredLogDirectory;
+			}
+			else
+			{
+				return Path.Combine(project.ArtifactDirectory, ConfiguredLogDirectory);
 			}
 		}
 
@@ -59,7 +65,7 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
             }
         }
 
-        public XmlWriter GetXmlWriter(string dirname, string filename)
+        private XmlWriter GetXmlWriter(string dirname, string filename)
         {
             // create directory if necessary
             if (!Directory.Exists(dirname))
@@ -73,7 +79,7 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
         	return writer;
         }
 
-        public string GetFilename(IIntegrationResult result)
+        private string GetFilename(IIntegrationResult result)
         {
 			return new LogFile(result).Filename;
         }
