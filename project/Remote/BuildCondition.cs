@@ -4,7 +4,7 @@ namespace ThoughtWorks.CruiseControl.Remote
 	/// Enumeration containing possible conditions for the execution of the
 	/// build phase of project integration.
 	/// </summary>
-	public enum		BuildCondition
+	public enum BuildCondition
 	{
 		/// <summary>
 		/// A build should not occur.
