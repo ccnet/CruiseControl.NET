@@ -1,6 +1,6 @@
 using ThoughtWorks.CruiseControl.WebDashboard.Dashboard;
 using ThoughtWorks.CruiseControl.WebDashboard.Plugins.LogViewerPlugin;
-using ThoughtWorks.CruiseControl.WebDashboard.Plugins.ProjectReporterPlugin;
+using ThoughtWorks.CruiseControl.WebDashboard.Plugins.BuildReporterPlugin;
 using ThoughtWorks.CruiseControl.WebDashboard.Plugins.ServerLogViewerPlugin;
 using ThoughtWorks.CruiseControl.WebDashboard.Plugins.SiteTemplatePlugin;
 
@@ -17,9 +17,9 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins
 			this.dcFactory = dcFactory;
 		}
 
-		public ProjectReporterPageRenderer ProjectReporterPageRenderer
+		public BuildReporterPageRenderer BuildReporterPageRenderer
 		{
-			get { return new ProjectReporterPageRenderer(dcFactory.QueryStringRequestWrapper, dcFactory.DefaultBuildRetrieverForRequest, dcFactory.HttpPathMapper); }
+			get { return new BuildReporterPageRenderer(dcFactory.QueryStringRequestWrapper, dcFactory.DefaultBuildRetrieverForRequest, dcFactory.HttpPathMapper); }
 		}
 
 		public SiteTemplate SiteTemplate

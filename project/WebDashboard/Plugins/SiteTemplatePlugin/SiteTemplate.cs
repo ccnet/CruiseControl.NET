@@ -77,13 +77,6 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.SiteTemplatePlugin
 					{
 						HtmlAnchor anchor = new HtmlAnchor();
 
-						// ToDo - this is nasty - we need a Pico like think to construct things, not just use the activator
-						// ToDo if we do keep this, then test.
-						if (plugin is IBuildNameRetrieverSettable)
-						{
-							((IBuildNameRetrieverSettable) plugin).BuildNameRetriever = buildNameRetriever;
-						}
-
 						if (pluginClassification == typeof(IBuildPlugin))
 						{
 							anchor.HRef = ((IBuildPlugin) plugin).CreateURL(build.ServerName, build.ProjectName, build.Name, new DefaultBuildUrlGenerator());

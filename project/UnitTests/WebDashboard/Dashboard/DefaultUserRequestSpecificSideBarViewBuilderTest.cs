@@ -11,19 +11,24 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 	[TestFixture]
 	public class DefaultUserRequestSpecificSideBarViewBuilderTest : Assertion
 	{
-		private DefaultUserRequestSpecificSideBarViewBuilder viewBuilder;
 		private DynamicMock urlBuilderMock;
+		private DynamicMock buildNameRetrieverMock;
+		private DefaultUserRequestSpecificSideBarViewBuilder viewBuilder;
 
 		[SetUp]
 		public void Setup()
 		{
 			urlBuilderMock = new DynamicMock(typeof(IUrlBuilder));
-			viewBuilder = new DefaultUserRequestSpecificSideBarViewBuilder(new DefaultHtmlBuilder(), (IUrlBuilder) urlBuilderMock.MockInstance);
+			buildNameRetrieverMock = new DynamicMock(typeof(IBuildNameRetriever));
+			viewBuilder = new DefaultUserRequestSpecificSideBarViewBuilder(new DefaultHtmlBuilder(), 
+				(IUrlBuilder) urlBuilderMock.MockInstance, 
+				(IBuildNameRetriever) buildNameRetrieverMock.MockInstance);
 		}
 
 		private void VerifyAll()
 		{
 			urlBuilderMock.Verify();
+			buildNameRetrieverMock.Verify();
 		}
 
 		[Test]
@@ -68,19 +73,46 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 		}
 
 		[Test]
-		public void ShouldReturnLinkToLatestProjectReportForProjectView()
+		public void ShouldReturnLinkToLatestBuildReportForProjectView()
 		{
 			// Setup
-			urlBuilderMock.ExpectAndReturn("BuildProjectrUrl", "returnedurl1", "ProjectReport.aspx", "myServer", "myProject");
+			buildNameRetrieverMock.ExpectAndReturn("GetLatestBuildName", "returnedLatestBuildName", "myServer", "myProject");
+			urlBuilderMock.ExpectAndReturn("BuildBuildUrl", "latestUrl", "BuildReport.aspx", "myServer", "myProject", "returnedLatestBuildName");
 
 			HtmlAnchor expectedAnchor1 = new HtmlAnchor();
-			expectedAnchor1.HRef = "returnedurl1";
+			expectedAnchor1.HRef = "latestUrl";
 			expectedAnchor1.InnerHtml = "Latest";
 
 			// Execute
 			HtmlTable table = (HtmlTable) viewBuilder.GetProjectSideBar("myServer", "myProject");
 
 			Assert(TableContains(table, expectedAnchor1));
+			
+			// Verify
+			VerifyAll();
+		}
+
+		[Test]
+		public void ShouldReturnCorrectLinksForBuildView()
+		{
+			// Setup
+			buildNameRetrieverMock.ExpectAndReturn("GetLatestBuildName", "returnedLatestBuildName", "myServer", "myProject");
+			buildNameRetrieverMock.ExpectAndReturn("GetNextBuildName", "returnedNextBuildName", "myServer", "myProject", "myCurrentBuild");
+			urlBuilderMock.ExpectAndReturn("BuildBuildUrl", "latestUrl", "BuildReport.aspx", "myServer", "myProject", "returnedLatestBuildName");
+			urlBuilderMock.ExpectAndReturn("BuildBuildUrl", "nextUrl", "BuildReport.aspx", "myServer", "myProject", "returnedNextBuildName");
+
+			HtmlAnchor expectedAnchor1 = new HtmlAnchor();
+			expectedAnchor1.HRef = "latestUrl";
+			expectedAnchor1.InnerHtml = "Latest";
+			HtmlAnchor expectedAnchor2 = new HtmlAnchor();
+			expectedAnchor2.HRef = "nextUrl";
+			expectedAnchor2.InnerHtml = "Next";
+
+			// Execute
+			HtmlTable table = (HtmlTable) viewBuilder.GetBuildSideBar("myServer", "myProject", "myCurrentBuild");
+
+			Assert(TableContains(table, expectedAnchor1));
+			Assert(TableContains(table, expectedAnchor2));
 			
 			// Verify
 			VerifyAll();

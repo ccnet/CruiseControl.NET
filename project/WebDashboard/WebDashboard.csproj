@@ -149,6 +149,21 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "BuildReport.aspx"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "BuildReport.aspx.cs"
+                    DependentUpon = "BuildReport.aspx"
+                    SubType = "ASPXCodeBehind"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "BuildReport.aspx.resx"
+                    DependentUpon = "BuildReport.aspx.cs"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
                     RelPath = "Controller.aspx"
                     BuildAction = "Content"
                 />
@@ -195,21 +210,6 @@
                 <File
                     RelPath = "Default.aspx.resx"
                     DependentUpon = "Default.aspx.cs"
-                    BuildAction = "EmbeddedResource"
-                />
-                <File
-                    RelPath = "ProjectReport.aspx"
-                    BuildAction = "Content"
-                />
-                <File
-                    RelPath = "ProjectReport.aspx.cs"
-                    DependentUpon = "ProjectReport.aspx"
-                    SubType = "ASPXCodeBehind"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "ProjectReport.aspx.resx"
-                    DependentUpon = "ProjectReport.aspx.cs"
                     BuildAction = "EmbeddedResource"
                 />
                 <File
@@ -344,11 +344,6 @@
                 />
                 <File
                     RelPath = "Dashboard\IBuildNameRetriever.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Dashboard\IBuildNameRetrieverSettable.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -611,6 +606,16 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Plugins\BuildReporterPlugin\BuildReporterPageRenderer.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Plugins\BuildReporterPlugin\BuildReportResults.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Plugins\LogViewerPlugin\LogViewer.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -625,31 +630,7 @@
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
-                <File
-                    RelPath = "Plugins\ProjectReporterPlugin\NextProjectReporter.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Plugins\ProjectReporterPlugin\PreviousProjectReporter.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Plugins\ProjectReporterPlugin\ProjectReporter.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Plugins\ProjectReporterPlugin\ProjectReporterPageRenderer.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Plugins\ProjectReporterPlugin\ProjectReportResults.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
+                <Folder RelPath = "Plugins\ProjectReporterPlugin\" />
                 <File
                     RelPath = "Plugins\ServerLogViewerPlugin\ServerLogViewerPageRenderer.cs"
                     SubType = "Code"

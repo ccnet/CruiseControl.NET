@@ -14,20 +14,22 @@ namespace ThoughtWorks.CruiseControl.WebDashboard
 
 		private void Page_Load(object sender, EventArgs e)
 		{
+			DashboardComponentFactory dcFactory = new DashboardComponentFactory(Request, Context, this);
+
 			SideBarViewBuilder sideBarViewBuilder = new SideBarViewBuilder(
 				new DefaultUserRequestSpecificSideBarViewBuilder(
 					new DefaultHtmlBuilder(), 
 					new DefaultUrlBuilder(
-						new HttpPathMapper(Context, this))));
+						dcFactory.HttpPathMapper),
+					dcFactory.CruiseManagerBuildNameRetriever));
 
 			TopControlsViewBuilder topControlsViewBuilder = new TopControlsViewBuilder(
 				new DefaultHtmlBuilder(),
 				new DefaultUrlBuilder(
-					new HttpPathMapper(Context, this))
-				);
+					dcFactory.HttpPathMapper));
 
-			SideBarLocation.Controls.Add(sideBarViewBuilder.Execute(new QueryStringRequestWrapper(Request.QueryString)));
-			TopControlsLocation.Controls.Add(topControlsViewBuilder.Execute(new QueryStringRequestWrapper(Request.QueryString)));
+			SideBarLocation.Controls.Add(sideBarViewBuilder.Execute(dcFactory.QueryStringRequestWrapper));
+			TopControlsLocation.Controls.Add(topControlsViewBuilder.Execute(dcFactory.QueryStringRequestWrapper));
 
 //			SiteTemplateResults results = new PluginPageRendererFactory(new DashboardComponentFactory(Request, Context, this)).SiteTemplate.Do();
 

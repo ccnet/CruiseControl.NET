@@ -27,11 +27,19 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 			return BuildUrl(relativeUrl, string.Format("{0}={1}", QueryStringRequestWrapper.ServerQueryStringParameter, serverName));
 		}
 
-		public string BuildProjectrUrl(string relativeUrl, string serverName, string projectName)
+		public string BuildProjectUrl(string relativeUrl, string serverName, string projectName)
 		{
 			return BuildUrl(relativeUrl, string.Format("{0}={1}&amp;{2}={3}", 
 				QueryStringRequestWrapper.ServerQueryStringParameter, serverName,
 				QueryStringRequestWrapper.ProjectQueryStringParameter, projectName));
+		}
+
+		public string BuildBuildUrl(string relativeUrl, string serverName, string projectName, string buildName)
+		{
+			return BuildUrl(relativeUrl, string.Format("{0}={1}&amp;{2}={3}&amp;{4}={5}", 
+				QueryStringRequestWrapper.ServerQueryStringParameter, serverName,
+				QueryStringRequestWrapper.ProjectQueryStringParameter, projectName,
+				QueryStringRequestWrapper.BuildQueryStringParameter, buildName));
 		}
 	}
 }

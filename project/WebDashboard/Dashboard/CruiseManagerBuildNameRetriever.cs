@@ -16,43 +16,43 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 			return cruiseManagerWrapper.GetLatestBuildName(serverName, projectName);	
 		}
 
-		public string GetNextBuildName(Build build)
+		public string GetNextBuildName(string serverName, string projectName, string buildName)
 		{
-			string[] buildNames = cruiseManagerWrapper.GetBuildNames(build.ServerName, build.ProjectName);
+			string[] buildNames = cruiseManagerWrapper.GetBuildNames(serverName, projectName);
 
-			if (build.Name == buildNames[0])
+			if (buildName == buildNames[0])
 			{
-				return build.Name;
+				return buildName;
 			}
 
 			for (int i = 1; i < buildNames.Length; i++)
 			{
-				if (build.Name == buildNames[i])
+				if (buildName == buildNames[i])
 				{
 					return buildNames[i-1];
 				}
 			}
-			throw new UnknownBuildException(build);
+			throw new UnknownBuildException(new Build(buildName, "", serverName, projectName));
 		}
 
-		public string GetPreviousBuildName(Build build)
+		public string GetPreviousBuildName(string serverName, string projectName, string buildName)
 		{
-			string[] buildNames = cruiseManagerWrapper.GetBuildNames(build.ServerName, build.ProjectName);
+			string[] buildNames = cruiseManagerWrapper.GetBuildNames(serverName, projectName);
 
-			if (build.Name == buildNames[buildNames.Length - 1])
+			if (buildName == buildNames[buildNames.Length - 1])
 			{
-				return build.Name;
+				return buildName;
 			}
 
 			for (int i = 0; i < buildNames.Length - 1; i++)
 			{
-				if (build.Name == buildNames[i])
+				if (buildName == buildNames[i])
 				{
 					return buildNames[i+1];
 				}
 			}
 
-			throw new UnknownBuildException(build);
+			throw new UnknownBuildException(new Build(buildName, "", serverName, projectName));
 		}
 	}
 }

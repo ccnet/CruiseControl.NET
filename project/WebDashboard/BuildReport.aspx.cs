@@ -4,11 +4,11 @@ using System.Web.UI.HtmlControls;
 using System.Web.UI.WebControls;
 using ThoughtWorks.CruiseControl.WebDashboard.Dashboard;
 using ThoughtWorks.CruiseControl.WebDashboard.Plugins;
-using ThoughtWorks.CruiseControl.WebDashboard.Plugins.ProjectReporterPlugin;
+using ThoughtWorks.CruiseControl.WebDashboard.Plugins.BuildReporterPlugin;
 
 namespace ThoughtWorks.CruiseControl.WebDashboard
 {
-	public class ProjectReport : Page
+	public class BuildReport : Page
 	{
 		protected HtmlTableCell HeaderCell;
 		protected HtmlTableCell DetailsCell;
@@ -20,7 +20,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard
 
 		private void Page_Load(object sender, EventArgs e)
 		{
-			ProjectReportResults results = new PluginPageRendererFactory(new DashboardComponentFactory(Request, Context, this)).ProjectReporterPageRenderer.Do();
+			BuildReportResults results = new PluginPageRendererFactory(new DashboardComponentFactory(Request, Context, this)).BuildReporterPageRenderer.Do();
 			BodyArea.InnerHtml = results.Html;
 		}
 		

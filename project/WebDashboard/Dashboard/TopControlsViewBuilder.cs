@@ -34,7 +34,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 			if (projectName != "")
 			{
 				htmlWriter.Write(" &gt; ");
-				A(projectName, urlBuilder.BuildUrl("ProjectReport.aspx","server=" + serverName + "&project=" + projectName)).RenderControl(htmlWriter);
+				A(projectName, urlBuilder.BuildUrl("BuildReport.aspx","server=" + serverName + "&project=" + projectName)).RenderControl(htmlWriter);
 			}
 
 			HtmlGenericControl locationMenu = new HtmlGenericControl("div");

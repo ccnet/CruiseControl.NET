@@ -66,16 +66,30 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 		}
 		
 		[Test]
-		public void ShouldBuildProjectrUrl()
+		public void ShouldBuildProjectUrl()
 		{
 			// Setup
 			pathMapperMock.ExpectAndReturn("GetAbsoluteURLForRelativePath", "http://local/foo.htm", "foo.htm");
 
 			// Execute
-			string url = urlBuilder.BuildProjectrUrl("foo.htm", "myserver", "myproject");
+			string url = urlBuilder.BuildProjectUrl("foo.htm", "myserver", "myproject");
 
 			// Verify
 			AssertEquals("http://local/foo.htm?server=myserver&amp;project=myproject", url);
+			VerifyAll();
+		}
+
+		[Test]
+		public void ShouldBuildBuildUrl()
+		{
+			// Setup
+			pathMapperMock.ExpectAndReturn("GetAbsoluteURLForRelativePath", "http://local/foo.htm", "foo.htm");
+
+			// Execute
+			string url = urlBuilder.BuildBuildUrl("foo.htm", "myserver", "myproject", "mybuild");
+
+			// Verify
+			AssertEquals("http://local/foo.htm?server=myserver&amp;project=myproject&amp;build=mybuild", url);
 			VerifyAll();
 		}
 	}

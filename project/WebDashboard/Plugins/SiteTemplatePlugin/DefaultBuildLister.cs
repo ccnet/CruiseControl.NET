@@ -36,7 +36,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.SiteTemplatePlugin
 				// To Do - get rid of these static methods - maybe use the Log Specifier class?
 				HtmlAnchor anchor = new HtmlAnchor();
 				anchor.Attributes["class"] =  isSuccessful ? "link" : "link-failed";
-				anchor.HRef = string.Format("{0}?server={1}&amp;project={2}&amp;build={3}", "ProjectReport.aspx", serverName, projectName, buildName);
+				anchor.HRef = string.Format("{0}?server={1}&amp;project={2}&amp;build={3}", "BuildReport.aspx", serverName, projectName, buildName);
 				anchor.InnerHtml = string.Format("<nobr>{0} ({1})</nobr>", 
 					LogFileUtil.GetFormattedDateString(buildName), 
 					isSuccessful ?  LogFileUtil.ParseBuildNumber(buildName) : "Failed");	

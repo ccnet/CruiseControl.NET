@@ -10,22 +10,22 @@ using ThoughtWorks.CruiseControl.Core.Publishers;
 using ThoughtWorks.CruiseControl.WebDashboard.Dashboard;
 using ThoughtWorks.CruiseControl.WebDashboard.IO;
 
-namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.ProjectReporterPlugin
+namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.BuildReporterPlugin
 {
-	public class ProjectReporterPageRenderer
+	public class BuildReporterPageRenderer
 	{
 		private readonly IPathMapper pathMapper;
 		private readonly ICruiseRequestWrapper requestWrapper;
 		private readonly IBuildRetrieverForRequest buildRetrieverForRequest;
 
-		public ProjectReporterPageRenderer(ICruiseRequestWrapper requestWrapper, IBuildRetrieverForRequest buildRetrieverForRequest, IPathMapper pathMapper)
+		public BuildReporterPageRenderer(ICruiseRequestWrapper requestWrapper, IBuildRetrieverForRequest buildRetrieverForRequest, IPathMapper pathMapper)
 		{
 			this.buildRetrieverForRequest = buildRetrieverForRequest;
 			this.requestWrapper = requestWrapper;
 			this.pathMapper = pathMapper;
 		}
 
-		public ProjectReportResults Do()
+		public BuildReportResults Do()
 		{
 			StringBuilder builder = new StringBuilder();
 			try
@@ -46,7 +46,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.ProjectReporterPlugin
 				throw new CruiseControlException(String.Format("Bad XML in logfile: " + ex.Message));
 			}
 
-			return new ProjectReportResults(builder.ToString());
+			return new BuildReportResults(builder.ToString());
 		}
 
 		private string Transform(string xslfile, XPathDocument logFileDocument)
