@@ -77,7 +77,7 @@ namespace tw.ccnet.core.sourcecontrol
 			if (LabelOnSuccess)
 			{
 				string cvsroot = (CvsRoot == null) ? String.Empty : "-d " + CvsRoot + " ";
-				string args = String.Format("{0} tag {1}", cvsroot, "ver-" + label);
+				string args = string.Format("{0} tag {1}", cvsroot, "ver-" + label);
 				return ProcessUtil.CreateProcess(Executable, args, WorkingDirectory);
 			}
 			else
@@ -93,7 +93,7 @@ namespace tw.ccnet.core.sourcecontrol
 			// include that for some harmony with the vss version
 			string cvsroot = (CvsRoot == null) ? String.Empty : "-d " + CvsRoot + " ";
 			string branch = (Branch == null) ? String.Empty : " -r" + Branch;
-			string args = String.Format(HISTORY_COMMAND_FORMAT, cvsroot, FormatCommandDate(from), branch);
+			string args = string.Format(HISTORY_COMMAND_FORMAT, cvsroot, FormatCommandDate(from), branch);
             if (RestrictLogins != null) 
             {
                 foreach (string login in RestrictLogins.Split(',')) {

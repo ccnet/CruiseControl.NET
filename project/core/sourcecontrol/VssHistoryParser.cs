@@ -159,7 +159,7 @@ namespace tw.ccnet.core.sourcecontrol
 
 			// vss gives am and pm as a and p, so we append an m
 			string suffix = (time.EndsWith("a") || time.EndsWith("p")) ? "m" : String.Empty;
-			string dateAndTime = String.Format("{0};{1}{2}", date, time, suffix);
+			string dateAndTime = string.Format("{0};{1}{2}", date, time, suffix);
 			mod.ModifiedTime = DateTime.Parse(dateAndTime, dateTimeFormatInfo);
 		}
 

@@ -3,10 +3,12 @@ using System.IO;
 using System.Collections;
 using System.Globalization;
 using NUnit.Framework;
+using tw.ccnet.core.util;
+
 namespace tw.ccnet.core.sourcecontrol.test 
 {
 	[TestFixture]
-	public class PvcsHistoryParserTest 
+	public class PvcsHistoryParserTest : CustomAssertion
 	{
 		private PvcsHistoryParser _pvcs = new PvcsHistoryParser();
 		
@@ -919,7 +921,7 @@ Initial revision.
 			
 			input.Close();
 
-			Assertion.AssertEquals("Should have returned 2 modifications.", 2, modifications.Length);
+			AssertEquals("Should have returned 2 modifications.", 2, modifications.Length);
 
 			Modification mod1 = new Modification();
 			mod1.Type = PvcsHistoryParser.UNKNOWN;
@@ -938,23 +940,23 @@ Initial revision.
 			mod2.Comment = "made a second hello world comment";
 
 		
-			Assertion.AssertEquals("1", mod1, modifications[0]);
-			Assertion.AssertEquals("2", mod2, modifications[1]);
+			AssertEquals("1", mod1, modifications[0]);
+			AssertEquals("2", mod2, modifications[1]);
 		}
 		
 		public void TestExtendedLogFileContent()
 		{
 			TextReader input = new StringReader(ExtendedLogfileContent);
 			Modification[] modifications = _pvcs.Parse(input);
-			Assertion.AssertEquals(21, modifications.Length);
+			AssertEquals(21, modifications.Length);
 			
 			Modification second = modifications[1];
-			Assertion.AssertEquals("ChessRules.java", second.FileName);
-			Assertion.AssertEquals("kerstinb", second.UserName);
-			Assertion.AssertEquals("Enabled system printouts.", second.Comment);
-			Assertion.AssertEquals(CreateDate("2000/02/01 16:26:14"), second.ModifiedTime);
+			AssertEquals("ChessRules.java", second.FileName);
+			AssertEquals("kerstinb", second.UserName);
+			AssertEquals("Enabled system printouts.", second.Comment);
+			AssertEquals(CreateDate("2000/02/01 16:26:14"), second.ModifiedTime);
 
-			Assertion.AssertEquals(
+			AssertEquals(
 				@"D:\root\PVCS\vm\common\SampleDB\archives\chess\client\ChessRules.java-arc",
 				second.FolderName);
 

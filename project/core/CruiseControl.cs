@@ -10,14 +10,19 @@ using tw.ccnet.remote;
 
 namespace tw.ccnet.core
 {
-	public class CruiseControl : IDisposable
+	/// <summary>
+	/// 
+	/// </summary>
+	public class CruiseControl : ICruiseControl, IDisposable
 	{
-		private IConfigurationLoader _loader;
-		private IDictionary _projects;
-		private IList _schedulers = new ArrayList();
-		private bool _stopped = false;
+		IConfigurationLoader _loader;
+		IDictionary _projects;
+		IList _projectIntegrators = new ArrayList();
+		bool _stopped = false;
 
-		internal CruiseControl() 
+		#region Constructors
+
+		internal CruiseControl()
 		{
 			_projects = new Hashtable();
 		}
@@ -28,79 +33,109 @@ namespace tw.ccnet.core
 			_loader.AddConfigurationChangedHandler(new ConfigurationChangedHandler(OnConfigurationChanged));
 			_projects = _loader.LoadProjects();
 
-			CreateSchedulers();
-		}
-
-		internal void CreateSchedulers()
-		{
-			foreach (IProject project in Projects)
+			foreach (IProject project in _projects.Values)
 			{
-				if (project.Schedule != null)
-				{
-					_schedulers.Add(new Scheduler(project.Schedule, project));
-				}
+				AddProjectIntegrator(project);
 			}
 		}
+
+
+		#endregion
+
+		#region Get / Add projects
 
 		public IProject GetProject(string projectName)
 		{
 			return (IProject)_projects[projectName];
 		}
 
+		public void AddProject(IProject project)
+		{
+			_projects.Add(project.Name, project);
+			AddProjectIntegrator(project);
+		}
+
+		void AddProjectIntegrator(IProject project)
+		{
+			if (project.Schedule!=null)
+				_projectIntegrators.Add(new ProjectIntegrator(project.Schedule, project));
+		}
+		
+
+		#endregion
+
+		#region Properties
+
 		public ICollection Projects
 		{
 			get { return _projects.Values; }
 		}
 
-		internal IList Schedulers
+		public IList ProjectIntegrators
 		{
-			get { return _schedulers; }
+			get { return _projectIntegrators; }
 		}
 
 		public virtual bool Stopped
 		{
 			get { return _stopped; }
-			set { _stopped = value; }
+//			set { _stopped = value; }
 		}
 
+
+		#endregion
+
+		#region Start & Stop
+
+		/// <summary>
+		/// Starts each project's integration cycle.
+		/// </summary>
 		public void Start()
 		{
-			foreach (IScheduler scheduler in _schedulers)
+			_stopped = false;
+
+			foreach (IProjectIntegrator projectIntegrator in _projectIntegrators)
 			{
-				scheduler.Start();
+				projectIntegrator.Start();
 			}
 		}
 
+		/// <summary>
+		/// Stops each project's integration cycle.
+		/// </summary>
 		public void Stop()
 		{
-			foreach (IScheduler scheduler in _schedulers)
+			_stopped = true;
+
+			foreach (IProjectIntegrator projectIntegrator in _projectIntegrators)
 			{
-				scheduler.Stop();
+				projectIntegrator.Stop();
 			}
 		}
 
-		public void WaitForExit()
-		{
-			foreach (IScheduler scheduler in _schedulers)
-			{
-				scheduler.WaitForExit();
-			}
-		}
+
+		#endregion
+
+		#region Configuration loading / reloading
 
 		protected void OnConfigurationChanged()
 		{
-			// reload configuration
+			ReloadConfiguration();
+		}
+
+		private void ReloadConfiguration()
+		{
 			_projects = _loader.LoadProjects();
 
 			IDictionary schedulerMap = CreateSchedulerMap();
-			foreach (IScheduler scheduler in schedulerMap.Values)
+			foreach (IProjectIntegrator scheduler in schedulerMap.Values)
 			{
 				IProject project = (IProject)_projects[scheduler.Project.Name];
 				if (project == null)
 				{
 					// project has been removed, so stop scheduler and remove
 					scheduler.Stop();
-					_schedulers.Remove(scheduler);
+					_projectIntegrators.Remove(scheduler);
 				}
 				else
 				{
@@ -111,12 +146,12 @@ namespace tw.ccnet.core
 
 			foreach (IProject project in _projects.Values)
 			{
-				IScheduler scheduler = (IScheduler)schedulerMap[project.Name];
+				IProjectIntegrator scheduler = (IProjectIntegrator)schedulerMap[project.Name];
 				if (scheduler == null)
 				{
 					// create new scheduler
-					IScheduler newScheduler = new Scheduler(project.Schedule, project);
-					_schedulers.Add(newScheduler);
+					IProjectIntegrator newScheduler = new ProjectIntegrator(project.Schedule, project);
+					_projectIntegrators.Add(newScheduler);
 					newScheduler.Start();
 				}
 			}
@@ -125,16 +160,33 @@ namespace tw.ccnet.core
 		private IDictionary CreateSchedulerMap()
 		{
 			Hashtable schedulerList = new Hashtable();
-			foreach (Scheduler scheduler in _schedulers)
+			foreach (ProjectIntegrator scheduler in _projectIntegrators)
 			{
 				schedulerList.Add(scheduler.Project.Name, scheduler);
 			}
 			return schedulerList;
 		}
 
+		#endregion
+
+		#region Disposing
+
+		/// <summary>
+		/// Stops all integration threads when garbage collected.
+		/// </summary>
 		public void Dispose()
 		{
 			Stop();
+		}
+
+		#endregion
+
+		public void WaitForExit()
+		{
+			foreach (IProjectIntegrator scheduler in _projectIntegrators)
+			{
+				scheduler.WaitForExit();
+			}
 		}
 
 		/// <summary>
@@ -142,7 +194,7 @@ namespace tw.ccnet.core
 		/// instance.
 		/// </summary>
 		/// <returns></returns>
-		public IntegrationStatus GetLatestBuildStatus() 
+		public IntegrationStatus GetLatestBuildStatus()
 		{
 			// TODO determine the most recent where multiple projects exist, rather than simply returning the first
 			foreach (IProject project in Projects) 
@@ -153,7 +205,7 @@ namespace tw.ccnet.core
 			return IntegrationStatus.Unknown;
 		}
 
-		public ProjectActivity CurrentProjectActivity() 
+		public ProjectActivity CurrentProjectActivity()
 		{
 			foreach (IProject project in Projects) 
 			{
@@ -163,10 +215,5 @@ namespace tw.ccnet.core
 			return ProjectActivity.Unknown;
 		}
 
-		internal void AddProject(IProject project) 
-		{
-			_projects.Add(project.Name, project);
-			_schedulers.Add(new Scheduler(project.Schedule, project));
-		}		
 	}
 }

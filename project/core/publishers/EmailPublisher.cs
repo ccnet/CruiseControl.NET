@@ -11,17 +11,27 @@ using tw.ccnet.remote;
 
 namespace tw.ccnet.core.publishers
 {
+	/// <summary>
+	/// Publishes results of integrations via email.  This implementation supports
+	/// plain-text, and Html email formats.  Rules regarding who receives email
+	/// are configurable.
+	/// </summary>
+	/// TODO document email recipient rules a little here...
 	[ReflectorType("email")]
 	public class EmailPublisher : PublisherBase
 	{
-		private EmailGateway _emailGateway = new EmailGateway();
-		private string _projectUrl;
-		private string _fromAddress;
-		private Hashtable _users = new Hashtable();
-		private Hashtable _groups = new Hashtable();
-		private bool _includeDetails = false;		
+		#region Field declarations
 
-		private XmlLogPublisher logPublisher;
+		EmailGateway _emailGateway = new EmailGateway();
+		string _projectUrl;
+		string _fromAddress;
+		Hashtable _users = new Hashtable();
+		Hashtable _groups = new Hashtable();
+		bool _includeDetails = false;		
+
+		XmlLogPublisher logPublisher;
+
+		#endregion
 
 		public EmailGateway EmailGateway
 		{
@@ -132,24 +142,26 @@ namespace tw.ccnet.core.publishers
 			}
 		}
 
+		#region Creating email content
+
 		internal string CreateSubject(IntegrationResult result)
 		{
 			if (result.Status == IntegrationStatus.Success)
 			{
 				if (BuildStateChanged(result))
 				{
-					return String.Format("{0} {1} {2}", 
+					return string.Format("{0} {1} {2}", 
 						result.ProjectName, "Build Fixed: Build", result.Label);
 				}
 				else
 				{
-					return String.Format("{0} {1} {2}", 
+					return string.Format("{0} {1} {2}", 
 						result.ProjectName, "Build Successful: Build", result.Label);
 				}
 			}
 			else
 			{
-				return String.Format("{0} {1}", 
+				return string.Format("{0} {1}", 
 					result.ProjectName, "Build Failed");
 			}
 		}
@@ -157,19 +169,17 @@ namespace tw.ccnet.core.publishers
 		internal string CreateMessage(IntegrationResult result) 
 		{
 			// TODO Add culprit to message text -- especially if modifier is not an email user
+			//      This information is included, when using Html email (all mods are shown)
+
 			if (_includeDetails) 
-			{
 				return CreateHtmlMessage(result);
-			}
 			else
-			{
 				return CreateLinkMessage(result, false);
-			}
 		}
 		
 		string CreateLinkMessage(IntegrationResult result, bool makeHyperlink)
 		{
-			string link = LogFile.CreateUrl(ProjectUrl, result);
+			string link = LogFileUtil.CreateUrl(ProjectUrl, result);
 			
 			if (makeHyperlink)
 				link = string.Format("<a href='{0}'>view results</a>", link);
@@ -231,6 +241,10 @@ BODY { font-family: verdana, arial, helvetica, sans-serif; font-size:9pt; }
 </style>";
 
 		#endregion
+
+		#endregion
+
+		#region Collating email recipients
 				
 		internal string CreateRecipientList(IntegrationResult result)
 		{
@@ -275,6 +289,8 @@ BODY { font-family: verdana, arial, helvetica, sans-serif; font-size:9pt; }
 			}
 			return (string[])userList.ToArray(typeof(string));
 		}
+
+		#endregion
 
 		private bool BuildStateChanged(IntegrationResult result)
 		{

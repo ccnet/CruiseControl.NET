@@ -99,7 +99,7 @@ run -e vlog  ""-xo+e{3}"" ""-d{4}*{5}"" ""@{2}""
 		
 		public string CreatePcliContents(string beforedate, string afterdate) 
 		{
-			return String.Format(
+			return string.Format(
 				Instructions, 
 				Project, Subproject, PVCS_TEMPFILE, PVCS_LOGOUTPUT_FILE, beforedate, afterdate
 			);

@@ -57,7 +57,7 @@ namespace tw.ccnet.core.publishers
 
 		public override string ToString()
 		{
-			return String.Format("Email User: {0} {1} {2}", Name, Address, Group);
+			return string.Format("Email User: {0} {1} {2}", Name, Address, Group);
 		}
 	}
 }

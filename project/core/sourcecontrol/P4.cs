@@ -80,7 +80,7 @@ namespace tw.ccnet.core.sourcecontrol
 			} 
 			else 
 			{
-				args.Append(String.Format("@{0},@{1}", formatDate(from), formatDate(to)));
+				args.Append(string.Format("@{0},@{1}", formatDate(from), formatDate(to)));
 			}
 			return args.ToString();
 		}

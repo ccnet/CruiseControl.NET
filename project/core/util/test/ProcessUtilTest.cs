@@ -7,7 +7,7 @@ using tw.ccnet.core.util;
 namespace tw.ccnet.core.util.test
 {
 	[TestFixture]
-	public class ProcessUtilTest
+	public class ProcessUtilTest : CustomAssertion
 	{
 		private string _tempDir = "processTestTemp";
 
@@ -17,12 +17,12 @@ namespace tw.ccnet.core.util.test
 			Process process = ProcessUtil.CreateProcess(executable, "");
 			TextReader reader = ProcessUtil.ExecuteRedirected(process);		
 			
-			Assertion.Assert("expected process not to have exited", process.HasExited == false);
+			Assert("expected process not to have exited", process.HasExited == false);
 			
 			string read = reader.ReadToEnd();
-			Assertion.Assert("did not find bubba in string", StringUtil.StringContains(read, "bubba"));
+			Assert("did not find bubba in string", StringUtil.StringContains(read, "bubba"));
 			
-			Assertion.Assert("expected process to have exited", process.HasExited);
+			Assert("expected process to have exited", process.HasExited);
 		}
 
 		[TearDown]

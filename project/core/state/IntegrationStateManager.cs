@@ -9,14 +9,16 @@ namespace tw.ccnet.core.state
 	[ReflectorType("state")]
 	public class IntegrationStateManager : IStateManager
 	{
-		private XmlSerializer _serializer;
-		private string _directory = System.IO.Directory.GetCurrentDirectory();
-		private string _filename = "ccnet.state";
+		XmlSerializer _serializer;
+		string _directory = System.IO.Directory.GetCurrentDirectory(); // default
+		string _filename = "ccnet.state"; // default
 
 		public IntegrationStateManager()
 		{
 			_serializer = new XmlSerializer(typeof(IntegrationResult));
 		}
+
+		#region NetReflector managed properties
 
 		[ReflectorProperty("directory", Required=false)]
 		public string Directory
@@ -32,17 +34,21 @@ namespace tw.ccnet.core.state
 			set { _filename = value; }
 		}
 
+		#endregion
+
 		public string GetFilePath()
 		{
 			return Path.Combine(Directory, Filename);
 		}
 
-		public bool Exists()
+		#region Interface implementation
+
+		public bool StateFileExists()
 		{
 			return File.Exists(GetFilePath());
 		}
 
-		public IntegrationResult Load()
+		public IntegrationResult LoadState()
 		{
 			TextReader reader = CreateTextReader(GetFilePath());
 			try
@@ -55,7 +61,7 @@ namespace tw.ccnet.core.state
 			}
 		}
 		
-		public void Save(IntegrationResult result)
+		public void SaveState(IntegrationResult result)
 		{
 			TextWriter writer = CreateTextWriter(GetFilePath());
 			try
@@ -69,6 +75,10 @@ namespace tw.ccnet.core.state
 			}
 		}
 
+		#endregion
+
+		#region Private helper methods: Creating File Reader/Writer
+
 		private TextReader CreateTextReader(string path)
 		{
 			try 
@@ -77,7 +87,7 @@ namespace tw.ccnet.core.state
 			}
 			catch (IOException ex)
 			{
-				throw new CruiseControlException(String.Format("Unable to read the specified state file: {0}.  The path may be invalid.", path), ex); 
+				throw new CruiseControlException(string.Format("Unable to read the specified state file: {0}.  The path may be invalid.", path), ex); 
 			}
 		}
 
@@ -89,8 +99,10 @@ namespace tw.ccnet.core.state
 			}
 			catch (SystemException ex)
 			{
-				throw new CruiseControlException(String.Format("Unable to save the IntegrationResult to the specified directory: {0}", path), ex);
+				throw new CruiseControlException(string.Format("Unable to save the IntegrationResult to the specified directory: {0}", path), ex);
 			}
 		}
+
+		#endregion
 	}
 }

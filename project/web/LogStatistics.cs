@@ -7,18 +7,26 @@ namespace tw.ccnet.web
 {
 	public class LogStatistics
 	{
+		#region Factory method
+
 		public static LogStatistics Create(string path)
 		{
-			return new LogStatistics(LogFile.GetLogFileNames(path));
+			return new LogStatistics(LogFileUtil.GetLogFileNames(path));
 		}
 
+		#endregion
+
 		private string[] _logfiles;
+
+		#region Constructor
 
 		public LogStatistics(string[] logfiles)
 		{
 			_logfiles = logfiles;
 			ArrayList.Adapter(_logfiles).Sort();
 		}
+
+		#endregion
 
 		public string[] LogFilenames
 		{
@@ -30,7 +38,7 @@ namespace tw.ccnet.web
 			int count = 0;
 			foreach (string logfile in _logfiles)
 			{
-				if (LogFile.IsSuccessful(logfile))
+				if (LogFileUtil.IsSuccessful(logfile))
 				{
 					count++;
 				}
@@ -67,7 +75,7 @@ namespace tw.ccnet.web
 			{
 				return false;
 			}
-			return LogFile.IsSuccessful(GetLatestLogFile());
+			return LogFileUtil.IsSuccessful(GetLatestLogFile());
 		}
 
 		public TimeSpan GetTimeSinceLatestBuild()
@@ -76,7 +84,7 @@ namespace tw.ccnet.web
 			{
 				return new TimeSpan(0);
 			}
-			DateTime date = LogFile.ParseForDate(LogFile.ParseForDateString(GetLatestLogFile()));
+			DateTime date = LogFileUtil.ParseForDate(LogFileUtil.ParseForDateString(GetLatestLogFile()));
 			return DateTime.Now - date;
 		}
 

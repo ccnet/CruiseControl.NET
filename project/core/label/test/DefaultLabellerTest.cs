@@ -2,11 +2,12 @@ using System;
 using NUnit.Framework;
 using tw.ccnet.core.test;
 using tw.ccnet.remote;
+using tw.ccnet.core.util;
 
 namespace tw.ccnet.core.label.test
 {
 	[TestFixture]
-	public class DefaultLabellerTest
+	public class DefaultLabellerTest : CustomAssertion
 	{
 		DefaultLabeller _labeller;
 
@@ -22,7 +23,7 @@ namespace tw.ccnet.core.label.test
 			result.Label = "35";
 			result.Status = IntegrationStatus.Success;
 
-			Assertion.AssertEquals("36", _labeller.Generate(result));
+			AssertEquals("36", _labeller.Generate(result));
 		}
 
 		public void TestGenerate_NullLabel()
@@ -30,7 +31,7 @@ namespace tw.ccnet.core.label.test
 			IntegrationResult result = IntegrationResultFixture.CreateIntegrationResult();
 			result.Label = null;
 
-			Assertion.AssertEquals(DefaultLabeller.INITIAL_LABEL, _labeller.Generate(result));
+			AssertEquals(DefaultLabeller.INITIAL_LABEL, _labeller.Generate(result));
 		}
 
 		public void TestGenerate_LastBuildFailed()
@@ -41,7 +42,7 @@ namespace tw.ccnet.core.label.test
 
 			DefaultLabeller _labeller = new DefaultLabeller();
 			string label = _labeller.Generate(result);
-			Assertion.AssertEquals("23", label);
+			AssertEquals("23", label);
 		}
 	}
 }

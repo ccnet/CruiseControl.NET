@@ -20,13 +20,13 @@ namespace tw.ccnet.core.configuration.test
 
 		public static string GenerateConfigXml(string projectXml)
 		{
-			return String.Format("<cruisecontrol>{0}</cruisecontrol>", projectXml);
+			return string.Format("<cruisecontrol>{0}</cruisecontrol>", projectXml);
 		}
 
 		public static string GenerateProjectXml(string name, string buildXml, string sourceControlXml, string publishersXml, string scheduleXml, string historyXml)
 		{
-			return String.Format(@"<project name=""{0}"" sleepTime=""{3}"">{1}{2}{4}{5}{6}</project>", 
-				name, buildXml, sourceControlXml, SleepTime, publishersXml, scheduleXml, historyXml);
+			return string.Format(@"<project name=""{0}"">{1}{2}{3}{4}{5}</project>", 
+				name, buildXml, sourceControlXml, publishersXml, scheduleXml, historyXml);
 		}
 
 		public static string GenerateProjectXml(string name)
@@ -56,7 +56,7 @@ namespace tw.ccnet.core.configuration.test
 
 		public static string GenerateScheduleXml(int iterations)
 		{
-			return String.Format(@"<schedule type=""schedule"" timeout=""1"" iterations=""{0}""/>", iterations);
+			return string.Format(@"<schedule type=""schedule"" sleepSeconds=""1"" iterations=""{0}""/>", iterations);
 		}
 
 		public static string GenerateStateManagerXml()
@@ -66,7 +66,7 @@ namespace tw.ccnet.core.configuration.test
 
 		public static string GenerateStateManagerXml(string dir)
 		{
-			return String.Format(@"<state type=""state"" directory=""{0}"" />", dir);
+			return string.Format(@"<state type=""state"" directory=""{0}"" />", dir);
 		}
 	}
 }

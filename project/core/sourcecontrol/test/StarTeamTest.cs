@@ -8,7 +8,7 @@ using Exortech.NetReflector;
 namespace tw.ccnet.core.sourcecontrol.test
 {
 	[TestFixture]
-	public class StarTeamTest 
+	public class StarTeamTest : CustomAssertion
 	{
 		public const string ST_XML =
 			@"<sourceControl type=""starteam"">
@@ -32,7 +32,7 @@ namespace tw.ccnet.core.sourcecontrol.test
 		[Test]
 		public void TestCreateHistoryProcess()
 		{				
-			//Assertion.AssertNotNull("StarTeam was null", _starteam);
+			//AssertNotNull("StarTeam was null", _starteam);
 			DateTime from = new DateTime(2001, 1, 21, 20, 0, 0);
 			DateTime to = new DateTime(2002, 2, 22, 20, 0, 0);
 
@@ -41,62 +41,62 @@ namespace tw.ccnet.core.sourcecontrol.test
 			string expectedExecutable = @"..\tools\starteam\stcmd.exe";
 			string expectedArgs = "hist -nologo -x -is -filter IO -p \"Admin:admin@10.1.1.64:49201/.NET LAB/CC.NET/starteam-ccnet\" \"*\"";
 
-			Assertion.AssertNotNull("process was null", actual);
-			Assertion.AssertEquals(expectedExecutable, actual.StartInfo.FileName);
-			Assertion.AssertEquals(expectedArgs, actual.StartInfo.Arguments);
+			AssertNotNull("process was null", actual);
+			AssertEquals(expectedExecutable, actual.StartInfo.FileName);
+			AssertEquals(expectedArgs, actual.StartInfo.Arguments);
 		}
 		
 		[Test]
 		public void TestValuesSet()
 		{			
-			//Assertion.AssertNotNull("StarTeam was null", _starteam);
-			Assertion.AssertEquals(@"..\tools\starteam\stcmd.exe", _starteam.Executable);
-			Assertion.AssertEquals("Admin", _starteam.Username);
-			Assertion.AssertEquals("admin", _starteam.Password);
-			Assertion.AssertEquals("10.1.1.64", _starteam.Host);
-			Assertion.AssertEquals(49201, _starteam.Port);
-			Assertion.AssertEquals(".NET LAB", _starteam.Project);
-			Assertion.AssertEquals("CC.NET/starteam-ccnet", _starteam.Path);
+			//AssertNotNull("StarTeam was null", _starteam);
+			AssertEquals(@"..\tools\starteam\stcmd.exe", _starteam.Executable);
+			AssertEquals("Admin", _starteam.Username);
+			AssertEquals("admin", _starteam.Password);
+			AssertEquals("10.1.1.64", _starteam.Host);
+			AssertEquals(49201, _starteam.Port);
+			AssertEquals(".NET LAB", _starteam.Project);
+			AssertEquals("CC.NET/starteam-ccnet", _starteam.Path);
 			
 		}
 
 		[Test]
 		public void TestFormatDate()
 		{
-			//Assertion.AssertNotNull("StarTeam was null", _starteam);
+			//AssertNotNull("StarTeam was null", _starteam);
 			DateTime date = new DateTime(2002, 2, 22, 20, 0, 0);
 			string expected = "02/22/2002 08:00:00 PM";
 			string actual = _starteam.FormatCommandDate(date);
-			Assertion.AssertEquals(expected, actual);
+			AssertEquals(expected, actual);
 
 			date = new DateTime(2002, 2, 22, 12, 0, 0);
 			expected = "02/22/2002 12:00:00 PM";
 			actual = _starteam.FormatCommandDate(date);
-			Assertion.AssertEquals(expected, actual);
+			AssertEquals(expected, actual);
 		}
 
 		[Test]
 		public void TestExecutable_default()
 		{
-			Assertion.AssertEquals("stcmd.exe", new StarTeam().Executable);
+			AssertEquals("stcmd.exe", new StarTeam().Executable);
 		}
 
 		[Test]
 		public void TestHost_default()
 		{
-			Assertion.AssertEquals("127.0.0.1", new StarTeam().Host);
+			AssertEquals("127.0.0.1", new StarTeam().Host);
 		}
 
 		[Test]
 		public void TestPort_default()
 		{
-			Assertion.AssertEquals(49201, new StarTeam().Port);
+			AssertEquals(49201, new StarTeam().Port);
 		}
 
 		[Test]
 		public void TestPath_default()
 		{
-			Assertion.AssertEquals(String.Empty, new StarTeam().Path);
+			AssertEquals(String.Empty, new StarTeam().Path);
 		}
 		
 		private StarTeam CreateStarTeam()

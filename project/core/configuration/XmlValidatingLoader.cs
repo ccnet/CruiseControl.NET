@@ -10,25 +10,24 @@ namespace tw.ccnet.core.configuration
 	/// </summary>
 	public class XmlValidatingLoader : IDisposable
 	{
-		private XmlValidatingReader reader;
-		private bool worked;
+		XmlValidatingReader _reader;
+		bool _valid;
 
 		public XmlValidatingLoader(XmlReader reader)
 		{
-			this.reader = new XmlValidatingReader(reader);
-			this.reader.ValidationEventHandler += new ValidationEventHandler(handler);
+			_reader = new XmlValidatingReader(reader);
+			_reader.ValidationEventHandler += new ValidationEventHandler(ValidationHandler);
 		}
 
 		public event ValidationEventHandler ValidationEventHandler 
 		{
 			add 
 			{
-				reader.ValidationEventHandler += value;
+				_reader.ValidationEventHandler += value;
 			}
-
 			remove 
 			{
-				reader.ValidationEventHandler -= value;
+				_reader.ValidationEventHandler -= value;
 			}
 		}	
 
@@ -36,34 +35,41 @@ namespace tw.ccnet.core.configuration
 		{
 			get 
 			{
-				return reader.Schemas;
+				return _reader.Schemas;
 			}
 		}
 
 		public XmlDocument Load() 
 		{
-			worked = true;
-			try
+			// lock in case this object is used in a multi-threaded situation
+			lock (this)
 			{
-				XmlDocument doc = new XmlDocument();
-				doc.Load(reader);
+				// set the flag true
+				_valid = true;
 
-				return worked ? doc : null;
-			} 
-			finally 
-			{
-				worked = true;
+				try
+				{
+					XmlDocument doc = new XmlDocument();
+					doc.Load(_reader);
+
+					// if the load failed, our event handler will have set _worked to false
+					return _valid ? doc : null;
+				} 
+				finally 
+				{
+					_valid = true;
+				}
 			}
 		}
 
-		private void handler(object sender, ValidationEventArgs args) 
+		private void ValidationHandler(object sender, ValidationEventArgs args) 
 		{
-			worked = false;
+			_valid = false;
 		}
 
 		public void Dispose() 
 		{
-			reader.Close();
+			_reader.Close();
 		}
 	}
 }

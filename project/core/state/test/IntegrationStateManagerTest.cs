@@ -46,10 +46,10 @@ namespace tw.ccnet.core.state.test
 		{
 			_state.Directory = _tempDir;
 			_state.Filename = "ccnet.state";
-			AssertFalse(_state.Exists());
-			_state.Save(_result);
-			Assert(_state.Exists());
-			IntegrationResult actual = _state.Load();
+			AssertFalse(_state.StateFileExists());
+			_state.SaveState(_result);
+			Assert(_state.StateFileExists());
+			IntegrationResult actual = _state.LoadState();
 			AssertEquals(_result, actual);
 		}
 
@@ -58,7 +58,7 @@ namespace tw.ccnet.core.state.test
 		{
 			_state.Directory = @"z:\folder\is\invalid";
 			_state.Filename = "ccnet.state";
-			AssertFalse(_state.Exists());
+			AssertFalse(_state.StateFileExists());
 		}
 
 		[Test]
@@ -71,7 +71,7 @@ namespace tw.ccnet.core.state.test
 			try
 			{
 				AssertFalse(File.Exists(_state.GetFilePath()));
-				_state.Save(_result);
+				_state.SaveState(_result);
 				AssertEquals(1, Directory.GetFiles(_tempDir).Length);
 				Assert(File.Exists(_state.GetFilePath()));
 			}
@@ -86,7 +86,7 @@ namespace tw.ccnet.core.state.test
 		{
 			_state.Directory = @"c:\invalid\folder\";
 			_state.Filename = "ccnet.state";
-			_state.Save(_result);
+			_state.SaveState(_result);
 		}
 
 		[Test, ExpectedException(typeof(CruiseControlException))]
@@ -94,22 +94,22 @@ namespace tw.ccnet.core.state.test
 		{
 			_state.Directory = @"c:\invalid\folder\";
 			_state.Filename = "ccnet.state";
-			_state.Load();
+			_state.LoadState();
 		}
 
 		[Test]
 		public void SaveMultipleTimes()
 		{
 			_state.Directory = _tempDir;
-			_state.Save(IntegrationResultMother.CreateFailed());
-			_state.Save(IntegrationResultMother.CreateSuccessful());
+			_state.SaveState(IntegrationResultMother.CreateFailed());
+			_state.SaveState(IntegrationResultMother.CreateSuccessful());
 
 			IntegrationResult result = IntegrationResultMother.CreateSuccessful();
 			result.Label = "10";
-			_state.Save(result);
+			_state.SaveState(result);
 
 			AssertEquals(1, Directory.GetFiles(_tempDir).Length);
-			IntegrationResult actual = _state.Load();
+			IntegrationResult actual = _state.LoadState();
 			AssertEquals("10", actual.Label);
 		}
 
@@ -117,8 +117,8 @@ namespace tw.ccnet.core.state.test
 		public void Load_NoPreviousStateFileExist()
 		{
 			_state.Directory = _tempDir;
-			AssertFalse(_state.Exists());
-			AssertNull(_state.Load());
+			AssertFalse(_state.StateFileExists());
+			AssertNull(_state.LoadState());
 		}
 	}
 }

@@ -41,7 +41,7 @@ namespace tw.ccnet.core.publishers
 			{
 				string comment = result.Modifications.Length == 0 ? "Unknown" : result.Modifications[0].Comment;
 				string committer = result.Modifications.Length == 0 ? "Unknown" : result.Modifications[0].UserName;
-				return String.Format("{2}\nLast comment: {0}\nLast committer: {1}", comment, committer, FailedMessage);
+				return string.Format("{2}\nLast comment: {0}\nLast committer: {1}", comment, committer, FailedMessage);
 			}
 			else
 			{
@@ -51,7 +51,7 @@ namespace tw.ccnet.core.publishers
 
 		internal int Send(string name, string message)
 		{
-			Process process = ProcessUtil.CreateProcess("net", String.Format("send \"{0}\" \"{1}\"", name, message));
+			Process process = ProcessUtil.CreateProcess("net", string.Format("send \"{0}\" \"{1}\"", name, message));
 			process.StartInfo.UseShellExecute = false;	
 			return ExecuteProcess(process);
 		}

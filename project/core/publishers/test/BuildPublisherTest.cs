@@ -4,11 +4,12 @@ using NUnit.Framework;
 using tw.ccnet.core;
 using tw.ccnet.core.publishers;
 using tw.ccnet.remote;
+using tw.ccnet.core.util;
 
 namespace tw.ccnet.core.publishers.test
 {
 	[TestFixture]
-	public class BuildPublisherTest
+	public class BuildPublisherTest : CustomAssertion
 	{
 		private string pubDir = "BuildPublisherTest.PubDir";
 		private string srcDir = "BuildPublisherTest.SrcDir";
@@ -25,10 +26,10 @@ namespace tw.ccnet.core.publishers.test
 			if (!src.Exists)
 				src.Create();
 
-			DirectoryInfo sub = new DirectoryInfo(String.Format("{0}\\{1}", srcDir, subDir));
+			DirectoryInfo sub = new DirectoryInfo(string.Format("{0}\\{1}", srcDir, subDir));
 			if (!sub.Exists)
 				sub.Create();
-			DirectoryInfo subSub = new DirectoryInfo(String.Format("{0}\\{1}", sub.FullName, subSubDir));
+			DirectoryInfo subSub = new DirectoryInfo(string.Format("{0}\\{1}", sub.FullName, subSubDir));
 			if (!subSub.Exists)
 				subSub.Create();
 
@@ -63,25 +64,25 @@ namespace tw.ccnet.core.publishers.test
 			publisher.PublishIntegrationResults(null, result);
 
 			FileInfo resultFile = new FileInfo(pubDir + @"\99\" + fileName);
-			Assertion.Assert("File not found in build number directory", resultFile.Exists);
+			Assert("File not found in build number directory", resultFile.Exists);
 
 			
 
 			resultFile = new FileInfo(pubDir + @"\99\" + subDir + "\\" + fileName);
-			Assertion.Assert("File not found in sub directory", resultFile.Exists);
+			Assert("File not found in sub directory", resultFile.Exists);
 
 			resultFile = new FileInfo(pubDir + @"\99\" + subDir + "\\" + subSubDir + "\\" + fileName);
-			Assertion.Assert("File not found in sub sub directory", resultFile.Exists);
+			Assert("File not found in sub sub directory", resultFile.Exists);
 
 
 			resultFile = new FileInfo(pubDir + @"\" + additionalDir + @"\" + fileName);
-			Assertion.Assert("File not found in additional directory", resultFile.Exists);
+			Assert("File not found in additional directory", resultFile.Exists);
 
 			resultFile = new FileInfo(pubDir + @"\" + additionalDir + @"\" + subDir + "\\" + fileName);
-			Assertion.Assert("File not found in additional sub directory", resultFile.Exists);
+			Assert("File not found in additional sub directory", resultFile.Exists);
 
 			resultFile = new FileInfo(pubDir + @"\" + additionalDir + @"\" + subDir + "\\" + subSubDir + "\\" + fileName);
-			Assertion.Assert("File not found in additional sub sub directory", resultFile.Exists);
+			Assert("File not found in additional sub sub directory", resultFile.Exists);
 
 		}
 

@@ -1,5 +1,6 @@
 <?xml version="1.0" ?>
-<xs:schema attributeFormDefault="unqualified" elementFormDefault="qualified" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="http://www.w3.org/2001/XMLSchema">
+<xs:schema attributeFormDefault="unqualified" elementFormDefault="qualified" xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	xmlns="http://www.w3.org/2001/XMLSchema">
 	<xs:element name="cruisecontrol">
 		<xs:complexType>
 			<xs:sequence>
@@ -90,11 +91,11 @@
 										<xs:attribute name="filename" type="xs:string" use="optional" />
 									</xs:complexType>
 								</xs:element>
-								<xs:element name="modificationDelay" type="xs:unsignedShort" />
+								<xs:element name="modificationDelaySeconds" type="xs:unsignedShort" />
 								<xs:element name="schedule">
 									<xs:complexType>
 										<xs:attribute name="type" type="xs:string" use="required" />
-										<xs:attribute name="timeout" type="xs:unsignedByte" use="required" />
+										<xs:attribute name="sleepSeconds" type="xs:unsignedByte" use="required" />
 										<xs:attribute name="iterations" type="xs:unsignedByte" use="required" />
 									</xs:complexType>
 								</xs:element>
@@ -102,7 +103,6 @@
 						</xs:sequence>
 						<xs:attribute name="name" type="xs:string" use="required" />
 						<xs:attribute name="logDir" type="xs:string" use="optional" />
-						<xs:attribute name="sleepTime" type="xs:unsignedByte" use="optional" />
 					</xs:complexType>
 				</xs:element>
 			</xs:sequence>

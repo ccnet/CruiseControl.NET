@@ -6,17 +6,18 @@ using NUnit.Framework;
 using NMock;
 using tw.ccnet.core.util;
 using tw.ccnet.core.schedule;
+using tw.ccnet.core.configuration;
 
 namespace tw.ccnet.core.test
 {
 	[TestFixture]
-	public class CruiseControlTest
+	public class CruiseControlTest : CustomAssertion
 	{
-		private DynamicMock _mockConfig;
-		private MockProject _project1;
-		private MockProject _project2;
-		private IDictionary _projects;
-		private CruiseControl _cc;
+		DynamicMock _mockConfig;
+		MockProject _project1;
+		MockProject _project2;
+		IDictionary _projects;
+		ICruiseControl _cc;
 
 		[SetUp]
 		protected void SetUp()
@@ -49,13 +50,13 @@ namespace tw.ccnet.core.test
 
 			// verify that projects are loaded
 			_mockConfig.Verify();
-			Assertion.AssertEquals(_project1, _cc.GetProject("project1"));
-			Assertion.AssertEquals(_project2, _cc.GetProject("project2"));
+			AssertEquals(_project1, _cc.GetProject("project1"));
+			AssertEquals(_project2, _cc.GetProject("project2"));
 
 			// verify that schedulers have been created
-			Assertion.AssertEquals(2, _cc.Schedulers.Count);
-			Assertion.AssertEquals(_project1, ((IScheduler)_cc.Schedulers[1]).Project);
-			Assertion.AssertEquals(_project2, ((IScheduler)_cc.Schedulers[0]).Project);
+			AssertEquals(2, _cc.ProjectIntegrators.Count);
+			AssertEquals(_project1, ((IProjectIntegrator)_cc.ProjectIntegrators[1]).Project);
+			AssertEquals(_project2, ((IProjectIntegrator)_cc.ProjectIntegrators[0]).Project);
 		}
 
 		[Test]
@@ -70,8 +71,8 @@ namespace tw.ccnet.core.test
 			_cc.WaitForExit();
 
 			_mockConfig.Verify();
-			Assertion.AssertEquals(1, _project1.RunIntegration_CallCount);
-			Assertion.AssertEquals(1, _project2.RunIntegration_CallCount);
+			AssertEquals(1, _project1.RunIntegration_CallCount);
+			AssertEquals(1, _project2.RunIntegration_CallCount);
 		}
 
 		[Test]
@@ -83,9 +84,9 @@ namespace tw.ccnet.core.test
 			_cc = new CruiseControl(config);
 			_cc.Start();
 			// verify configuration projects and schedulers have been loaded
-			Assertion.AssertEquals(2, _cc.Schedulers.Count);
-			Assertion.AssertEquals(_project1, ((IScheduler)_cc.Schedulers[1]).Project);
-			Assertion.AssertEquals(_project2, ((IScheduler)_cc.Schedulers[0]).Project);
+			AssertEquals(2, _cc.ProjectIntegrators.Count);
+			AssertEquals(_project1, ((IProjectIntegrator)_cc.ProjectIntegrators[1]).Project);
+			AssertEquals(_project2, ((IProjectIntegrator)_cc.ProjectIntegrators[0]).Project);
 
 			// create new configuration - change schedule for project1, remove project2 and add project3
 			Schedule newSchedule = new Schedule();
@@ -99,18 +100,18 @@ namespace tw.ccnet.core.test
 			config.RaiseConfigurationChangedEvent();
 
 			// verify configuration projects have been updated
-			Assertion.AssertEquals(_project1, _cc.GetProject(_project1.Name));
-			Assertion.AssertNull(_cc.GetProject(_project2.Name));
-			Assertion.AssertEquals(project3, _cc.GetProject(project3.Name));
+			AssertEquals(_project1, _cc.GetProject(_project1.Name));
+			AssertNull(_cc.GetProject(_project2.Name));
+			AssertEquals(project3, _cc.GetProject(project3.Name));
 
 			// verify configuration schedulers have been updated
-			Assertion.AssertEquals(2, _cc.Schedulers.Count);
-			Assertion.AssertEquals(_project1, ((Scheduler)_cc.Schedulers[0]).Project);
-			Assertion.AssertEquals(newSchedule, ((Scheduler)_cc.Schedulers[0]).Schedule);
-			Assertion.AssertEquals(SchedulerState.Running, ((Scheduler)_cc.Schedulers[0]).State);
-			Assertion.AssertEquals(project3, ((Scheduler)_cc.Schedulers[1]).Project);
+			AssertEquals(2, _cc.ProjectIntegrators.Count);
+			AssertEquals(_project1, ((ProjectIntegrator)_cc.ProjectIntegrators[0]).Project);
+			AssertEquals(newSchedule, ((ProjectIntegrator)_cc.ProjectIntegrators[0]).Schedule);
+			AssertEquals(ProjectIntegratorState.Running, ((ProjectIntegrator)_cc.ProjectIntegrators[0]).State);
+			AssertEquals(project3, ((ProjectIntegrator)_cc.ProjectIntegrators[1]).Project);
 			// project3 is automatically started
-			Assertion.AssertEquals(SchedulerState.Running, ((Scheduler)_cc.Schedulers[1]).State);
+			AssertEquals(ProjectIntegratorState.Running, ((ProjectIntegrator)_cc.ProjectIntegrators[1]).State);
 
 			_cc.Stop();
 		}
@@ -127,16 +128,16 @@ namespace tw.ccnet.core.test
 
 			_cc = new CruiseControl((IConfigurationLoader)_mockConfig.MockInstance);
 			_cc.Start();
-			foreach (IScheduler scheduler in _cc.Schedulers)
+			foreach (IProjectIntegrator scheduler in _cc.ProjectIntegrators)
 			{
-				Assertion.AssertEquals(SchedulerState.Running, scheduler.State);
+				AssertEquals(ProjectIntegratorState.Running, scheduler.State);
 			}
 			_cc.Stop();
 			_cc.WaitForExit();
 
-			foreach (IScheduler scheduler in _cc.Schedulers)
+			foreach (IProjectIntegrator scheduler in _cc.ProjectIntegrators)
 			{
-				Assertion.AssertEquals(SchedulerState.Stopped, scheduler.State);
+				AssertEquals(ProjectIntegratorState.Stopped, scheduler.State);
 			}			
 		}
 
@@ -173,42 +174,42 @@ namespace tw.ccnet.core.test
 			_cc = new CruiseControl((IConfigurationLoader)_mockConfig.MockInstance);
 
 			_cc.Start();
-			Thread.Sleep(1);
-			Assertion.AssertEquals(2, _cc.Schedulers.Count);
-			Assertion.AssertEquals(SchedulerState.Running, ((IScheduler)_cc.Schedulers[0]).State);
-			Assertion.AssertEquals(SchedulerState.Running, ((IScheduler)_cc.Schedulers[1]).State);
+			Thread.Sleep(50);
+			AssertEquals(2, _cc.ProjectIntegrators.Count);
+			AssertEquals(ProjectIntegratorState.Running, ((IProjectIntegrator)_cc.ProjectIntegrators[0]).State);
+			AssertEquals(ProjectIntegratorState.Running, ((IProjectIntegrator)_cc.ProjectIntegrators[1]).State);
 
 			// try invoking start again
 			_cc.Start();
 			Thread.Sleep(1);
-			Assertion.AssertEquals(2, _cc.Schedulers.Count);
-			Assertion.AssertEquals(SchedulerState.Running, ((IScheduler)_cc.Schedulers[0]).State);
-			Assertion.AssertEquals(SchedulerState.Running, ((IScheduler)_cc.Schedulers[1]).State);
+			AssertEquals(2, _cc.ProjectIntegrators.Count);
+			AssertEquals(ProjectIntegratorState.Running, ((IProjectIntegrator)_cc.ProjectIntegrators[0]).State);
+			AssertEquals(ProjectIntegratorState.Running, ((IProjectIntegrator)_cc.ProjectIntegrators[1]).State);
 
 			_cc.Stop();
 
 			_cc.WaitForExit();
 			Thread.Sleep(1);
 
-			Assertion.AssertEquals(SchedulerState.Stopped, ((IScheduler)_cc.Schedulers[0]).State);
-			Assertion.AssertEquals(SchedulerState.Stopped, ((IScheduler)_cc.Schedulers[1]).State);
+			AssertEquals(ProjectIntegratorState.Stopped, ((IProjectIntegrator)_cc.ProjectIntegrators[0]).State);
+			AssertEquals(ProjectIntegratorState.Stopped, ((IProjectIntegrator)_cc.ProjectIntegrators[1]).State);
 
 			// try invoking stop again
 			_cc.Stop();
 			Thread.Sleep(1);
-			Assertion.AssertEquals(SchedulerState.Stopped, ((IScheduler)_cc.Schedulers[0]).State);
-			Assertion.AssertEquals(SchedulerState.Stopped, ((IScheduler)_cc.Schedulers[1]).State);
+			AssertEquals(ProjectIntegratorState.Stopped, ((IProjectIntegrator)_cc.ProjectIntegrators[0]).State);
+			AssertEquals(ProjectIntegratorState.Stopped, ((IProjectIntegrator)_cc.ProjectIntegrators[1]).State);
 		}
 
 		//		public void TestStopSleepingProject()
 		//		{
 		//			_project1.Sleep = 100000;
 		//			_cc.Start(_project1);
-		//			Assertion.AssertEquals(1, _cc.Threads.Count);
+		//			AssertEquals(1, _cc.Threads.Count);
 		//			Thread.Sleep(1000);
 		//
 		//			_cc.Stop(_project1);
-		//			Assertion.AssertEquals(0, _cc.Threads.Count);
+		//			AssertEquals(0, _cc.Threads.Count);
 		//		}
 		//
 		//		// test stop if thread has already stopped
@@ -219,7 +220,7 @@ namespace tw.ccnet.core.test
 		//			_project1.Stop();
 		//			Thread.Sleep(1000);
 		//			_cc.Stop(_project1);
-		//			Assertion.AssertEquals(0, _cc.Threads.Count);
+		//			AssertEquals(0, _cc.Threads.Count);
 		//		}
 		//
 		//		public void TestDisposeIfThreadsAreNotStopped()

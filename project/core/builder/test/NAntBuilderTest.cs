@@ -9,7 +9,7 @@ using System.Reflection;
 namespace tw.ccnet.core.builder.test
 {
 	[TestFixture]
-	public class NAntBuilderTest
+	public class NAntBuilderTest : CustomAssertion
 	{
 		public const string TEMP_DIR = "NAntBuilderTest";
 		public static readonly string NANT_TEST_BASEDIR = ".";
@@ -36,7 +36,7 @@ namespace tw.ccnet.core.builder.test
 		[Test]
 		public void TestPopulateFromReflector()
 		{
-			string xml = String.Format(@"
+			string xml = string.Format(@"
     <build>
     	<executable>{0}</executable>
     	<baseDirectory>{1}</baseDirectory>
@@ -47,15 +47,15 @@ namespace tw.ccnet.core.builder.test
     </build>", NANT_TEST_EXECUTABLE, NANT_TEST_BASEDIR, NANT_TEST_BUILDFILE, NANT_TEST_TARGET);
 
 			XmlNode node = XmlUtil.CreateDocumentElement(xml);
-			Assertion.AssertNotNull("Node is null", node);
+			AssertNotNull("Node is null", node);
 			XmlPopulator populator = new XmlPopulator();
 			populator.Reflector.AddReflectorTypes(Assembly.GetExecutingAssembly());
 			populator.Populate(node, _builder);
-			Assertion.AssertEquals(NANT_TEST_BASEDIR, _builder.BaseDirectory);
-			Assertion.AssertEquals(NANT_TEST_BUILDFILE, _builder.BuildFile);
-			Assertion.AssertEquals(NANT_TEST_EXECUTABLE, _builder.Executable);
-			Assertion.AssertEquals(1, _builder.Targets.Length);
-			Assertion.AssertEquals(NANT_TEST_TARGET, _builder.Targets[0]);
+			AssertEquals(NANT_TEST_BASEDIR, _builder.BaseDirectory);
+			AssertEquals(NANT_TEST_BUILDFILE, _builder.BuildFile);
+			AssertEquals(NANT_TEST_EXECUTABLE, _builder.Executable);
+			AssertEquals(1, _builder.Targets.Length);
+			AssertEquals(NANT_TEST_TARGET, _builder.Targets[0]);
 		}
 
 		public void TestExecuteCommand() 
@@ -63,13 +63,13 @@ namespace tw.ccnet.core.builder.test
 			string tempFile = TempFileUtil.CreateTempFile(TEMP_DIR, "testexecute.bat", "echo hello martin");
 			_builder.Executable = tempFile;
 			_builder.BaseDirectory = TempFileUtil.GetTempPath(TEMP_DIR);
-			Assertion.Assert(tempFile + " does not exist!", File.Exists(tempFile));
+			Assert(tempFile + " does not exist!", File.Exists(tempFile));
 			string expected = "hello martin";
 
 			IntegrationResult result = new IntegrationResult();
 			_builder.Run(result);
-			string errorMessage = String.Format("{0} not contained in {1}",expected, result.Output);
-			Assertion.Assert(errorMessage, StringUtil.StringContains(result.Output.ToString(), expected));
+			string errorMessage = string.Format("{0} not contained in {1}",expected, result.Output);
+			Assert(errorMessage, StringUtil.StringContains(result.Output.ToString(), expected));
 		}
 		
 		[ExpectedException(typeof(BuilderException))]
@@ -79,7 +79,7 @@ namespace tw.ccnet.core.builder.test
 			_builder.Executable = @"\nodir\invalidfile.bat";
 			_builder.BuildArgs = "";
 			_builder.BaseDirectory = TempFileUtil.GetTempPath(TEMP_DIR);
-			Assertion.Assert("invalidfile.bat should not exist!",! File.Exists(_builder.Executable));
+			Assert("invalidfile.bat should not exist!",! File.Exists(_builder.Executable));
 			_builder.Run(new IntegrationResult());
 		}
 		
@@ -93,8 +93,8 @@ namespace tw.ccnet.core.builder.test
 			IntegrationResult result = new IntegrationResult();
 			_builder.Run(result);
 			
-			Assertion.Assert("test build should succeed", result.Succeeded);
-			Assertion.Assert(StringUtil.StringContains(result.Output.ToString(), "I am success itself"));
+			Assert("test build should succeed", result.Succeeded);
+			Assert(StringUtil.StringContains(result.Output.ToString(), "I am success itself"));
 		}
 		
 		public void TestBuildFailed()
@@ -107,8 +107,8 @@ namespace tw.ccnet.core.builder.test
 			IntegrationResult result = new IntegrationResult();
 			_builder.Run(result);
 
-			Assertion.Assert("test build should fail", result.Failed);
-			Assertion.Assert(StringUtil.StringContains(result.Output.ToString(), "I am failure itself"));
+			Assert("test build should fail", result.Failed);
+			Assert(StringUtil.StringContains(result.Output.ToString(), "I am failure itself"));
 		}
 
 		[ExpectedException(typeof(BuilderException))]
@@ -121,7 +121,7 @@ namespace tw.ccnet.core.builder.test
 			_builder.BuildFile = "invalidbuildfile";
 			IntegrationResult result = new IntegrationResult();
 			_builder.Run(result);
-			Assertion.Fail("Build should fail when invoked with missing buildfile, but didn't!");
+			Fail("Build should fail when invoked with missing buildfile, but didn't!");
 		}
 
 		public void TestCreateBuildArgs()
@@ -130,12 +130,12 @@ namespace tw.ccnet.core.builder.test
 			_builder.BuildArgs = "-bar";
 			_builder.LabelToApply = "1234";
 			_builder.Targets = new string[] {"a", "b"};
-			Assertion.AssertEquals("-buildfile:foo.xml -bar -D:label-to-apply=1234 a b", _builder.CreateArgs());
+			AssertEquals("-buildfile:foo.xml -bar -D:label-to-apply=1234 a b", _builder.CreateArgs());
 		}
 
 		public void TestCreateBuildArgs_MissingArguments()
 		{
-			Assertion.AssertEquals("-buildfile: -logger:NAnt.Core.XmlLogger -D:label-to-apply=NO-LABEL ", _builder.CreateArgs());
+			AssertEquals("-buildfile: -logger:NAnt.Core.XmlLogger -D:label-to-apply=NO-LABEL ", _builder.CreateArgs());
 		}
 
 		public void TestLabelGetsPassedThrough() 
@@ -149,8 +149,8 @@ namespace tw.ccnet.core.builder.test
 			result.Label = "ATestLabel";
 			_builder.Run(result);
 			
-			Assertion.Assert("test build should succeed", result.Succeeded);
-			Assertion.Assert(StringUtil.StringContains(result.Output.ToString(), "ATestLabel"));
+			Assert("test build should succeed", result.Succeeded);
+			Assert(StringUtil.StringContains(result.Output.ToString(), "ATestLabel"));
 		}
 		
 		private string CreateTestBuildFile()

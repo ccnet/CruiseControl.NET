@@ -65,8 +65,8 @@ namespace tw.ccnet.web
 
 		private string BuildLogFileUri(string baseUri)
 		{
-			string logFile = Request.QueryString[LogFile.LogQueryString];
-			return (logFile != null && logFile.Length > 0) ? baseUri + LogFile.CreateUrl(logFile) : baseUri;
+			string logFile = Request.QueryString[LogFileUtil.LogQueryString];
+			return (logFile != null && logFile.Length > 0) ? baseUri + LogFileUtil.CreateUrl(logFile) : baseUri;
 		}
 
 		private void InitBuildStats(string path)
@@ -98,7 +98,7 @@ namespace tw.ccnet.web
 
 		private void InitAdjacentAnchors(string path)
 		{			
-			string currentFile = Request.QueryString[LogFile.LogQueryString];
+			string currentFile = Request.QueryString[LogFileUtil.LogQueryString];
 			LogFileLister.InitAdjacentAnchors(previousLog, nextLog, path, currentFile);			
 		}
 

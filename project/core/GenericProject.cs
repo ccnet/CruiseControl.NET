@@ -31,8 +31,9 @@ namespace tw.ccnet.core
 			set { _tasks = value; }
 		}
 
-		public void RunIntegration(bool forceBuild)
+		public IntegrationResult RunIntegration(BuildCondition buildCondition)
 		{
+			return null;
 		}
 		
 		public IntegrationStatus GetLatestBuildStatus()
@@ -40,7 +41,7 @@ namespace tw.ccnet.core
 			return IntegrationStatus.Unknown;
 		}
 
-		public int MinimumSleepTime 
+		public int MinimumSleepTimeMillis 
 		{ 
 			get { return 0; }
 		}

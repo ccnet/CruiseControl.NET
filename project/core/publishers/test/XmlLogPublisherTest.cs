@@ -33,7 +33,7 @@ namespace tw.ccnet.core.publishers.test
 
 		private XmlLogPublisher CreatePublisher()
 		{
-			string xml = String.Format(
+			string xml = string.Format(
 				@"		<xmllogger>
 		    <logDir>{0}</logDir>
 		</xmllogger>", LOGDIR);
@@ -114,7 +114,7 @@ namespace tw.ccnet.core.publishers.test
 		[Test]
 		public void MergeFilesConfig() 
 		{
-			string xml = String.Format(
+			string xml = string.Format(
 				@"		<xmllogger>
 		    <logDir>{0}</logDir>
 			<mergeFiles>
@@ -124,8 +124,8 @@ namespace tw.ccnet.core.publishers.test
 			XmlNode node = XmlUtil.CreateDocumentElement(xml);
 			XmlPopulator populator = new XmlPopulator();
 			XmlLogPublisher pub = (XmlLogPublisher)populator.Populate(node);
-			Assertion.AssertEquals(1, pub.MergeFiles.Length);
-			Assertion.AssertEquals(@"d:\foo.xml", pub.MergeFiles[0]);
+			AssertEquals(1, pub.MergeFiles.Length);
+			AssertEquals(@"d:\foo.xml", pub.MergeFiles[0]);
 		}
 
 		[Test]
@@ -139,7 +139,7 @@ namespace tw.ccnet.core.publishers.test
 			XmlTextWriter writer = new XmlTextWriter(actual);
 			_publisher.Write(result, writer);
 			string expected = "<cruisecontrol><modifications />" + CreateExpectedBuildXml(result) + "<foo bar=\"4\">bat</foo></cruisecontrol>";
-			Assertion.AssertEquals(expected, actual.ToString());
+			AssertEquals(expected, actual.ToString());
 		}
 
 		[Test]
@@ -153,12 +153,12 @@ namespace tw.ccnet.core.publishers.test
 
 			_publisher.MergeFiles = new string[] {LOGDIR + "\\*.xml"};
 			ArrayList list = _publisher.GetMergeFileList();
-			Assertion.AssertEquals(1, list.Count);
-			Assertion.AssertEquals(LOGDIR + "\\foo.xml", (string)list[0]);
+			AssertEquals(1, list.Count);
+			AssertEquals(LOGDIR + "\\foo.xml", (string)list[0]);
 
 			_publisher.MergeFiles = new string[] {LOGDIR + "\\foo.*"};
 			list = _publisher.GetMergeFileList();
-			Assertion.AssertEquals(2, list.Count);
+			AssertEquals(2, list.Count);
 		}
 		
 		private string CreateExpectedBuildXml(IntegrationResult result)
@@ -166,12 +166,12 @@ namespace tw.ccnet.core.publishers.test
 			string error = (result.Status == IntegrationStatus.Success) ? String.Empty : " error=\"true\"";
 			if (result.Output == null)
 			{
-				return String.Format
+				return string.Format
 					(@"<build date=""{0}"" buildtime=""00:00:00""{1} />", result.StartTime, error);
 			}
 			else
 			{
-				return String.Format
+				return string.Format
 					(@"<build date=""{0}"" buildtime=""00:00:00""{1}>{2}</build>", result.StartTime, error, result.Output);
 			}
 		}

@@ -4,45 +4,45 @@ using NUnit.Framework;
 namespace tw.ccnet.core.util.test
 {
 	[TestFixture]
-	public class ReflectionUtilTest
+	public class ReflectionUtilTest : CustomAssertion
 	{
 		public void TestReflectionEquals()
 		{
 			ReflectTest o1 = new ReflectTest(1, "hello", new ReflectTest(2, "sub", null));
 			ReflectTest o2 = new ReflectTest(1, "hello", new ReflectTest(2, "sub", null));
-			Assertion.AssertEquals(o1, o2);
+			AssertEquals(o1, o2);
 		}
 
 		public void TestReflectionEquals_BothNull()
 		{
-			Assertion.AssertEquals(null, null);
+			AssertEquals(null, null);
 		}
 
 		public void TestReflectionEquals_OneNull()
 		{
 			ReflectTest o1 = new ReflectTest(1, "hello", new ReflectTest(2, "sub", null));
-			Assertion.Assert(! o1.Equals(null));
+			Assert(! o1.Equals(null));
 		}
 
 		public void TestReflectionEquals_NotEqualFields()
 		{
 			ReflectTest o1 = new ReflectTest(1, "hello", new ReflectTest(2, "sub", null));
 			ReflectTest o2 = new ReflectTest(2, "hello", new ReflectTest(2, "sub", null));
-			Assertion.Assert(! o1.Equals(o2));
+			Assert(! o1.Equals(o2));
 		}
 
 		public void TestReflectionEquals_NotEqualProperties()
 		{
 			ReflectTest o1 = new ReflectTest(1, "hello", new ReflectTest(2, "sub", null));
 			ReflectTest o2 = new ReflectTest(1, "hello", null);
-			Assertion.Assert(! o1.Equals(o2));
+			Assert(! o1.Equals(o2));
 		}
 
 		public void TestReflectionEquals_DifferentTypes()
 		{
 			ReflectTest o1 = new ReflectTest(1, "hello", new ReflectTest(2, "sub", null));
 			string o2 = "testing";
-			Assertion.Assert(! o1.Equals(o2));
+			Assert(! o1.Equals(o2));
 		}
 
 		public void TestReflectionEquals_Arrays()
@@ -51,13 +51,13 @@ namespace tw.ccnet.core.util.test
 			o1.Values = new String[] { "a", "b" };
 			ReflectTest o2 = new ReflectTest(1, "hello", new ReflectTest(2, "sub", null));
 			o2.Values = new String[] { "a", "b" };
-			Assertion.AssertEquals(o1, o2);
+			AssertEquals(o1, o2);
 		}
 
 		public void TestReflectionToString()
 		{
 			ReflectTest o1 = new ReflectTest(1, "hello", new ReflectTest(2, "sub", null));
-			Assertion.AssertEquals("ReflectTest: (id=1,name=hello,Child=ReflectTest: (id=2,name=sub,Child=,Values=),Values=)", ReflectionUtil.ReflectionToString(o1));
+			AssertEquals("ReflectTest: (id=1,name=hello,Child=ReflectTest: (id=2,name=sub,Child=,Values=),Values=)", ReflectionUtil.ReflectionToString(o1));
 		}
 
 		private class ReflectTest

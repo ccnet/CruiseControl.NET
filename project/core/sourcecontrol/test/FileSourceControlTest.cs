@@ -6,7 +6,7 @@ using tw.ccnet.core.util;
 namespace tw.ccnet.core.sourcecontrol.test
 {
 	[TestFixture]
-	public class FileSourceControlTest
+	public class FileSourceControlTest : CustomAssertion
 	{
 		private string _tempDir;
 		private string _tempSubDir;
@@ -37,27 +37,27 @@ namespace tw.ccnet.core.sourcecontrol.test
 
 			Modification[] mods = _sc.GetModifications(DateTime.MinValue, DateTime.MaxValue);
 
-			Assertion.AssertEquals(3, mods.Length);
-			Assertion.AssertEquals("file1.txt", mods[0].FileName);
-			Assertion.AssertEquals("file2.txt", mods[1].FileName);
-			Assertion.AssertEquals("file3.txt", mods[2].FileName);
-			Assertion.AssertEquals(Path.GetDirectoryName(file1), mods[0].FolderName);
-			Assertion.AssertEquals(Path.GetDirectoryName(file2), mods[1].FolderName);
-			Assertion.AssertEquals(Path.GetDirectoryName(file3), mods[2].FolderName);
+			AssertEquals(3, mods.Length);
+			AssertEquals("file1.txt", mods[0].FileName);
+			AssertEquals("file2.txt", mods[1].FileName);
+			AssertEquals("file3.txt", mods[2].FileName);
+			AssertEquals(Path.GetDirectoryName(file1), mods[0].FolderName);
+			AssertEquals(Path.GetDirectoryName(file2), mods[1].FolderName);
+			AssertEquals(Path.GetDirectoryName(file3), mods[2].FolderName);
 			
-			Assertion.AssertEquals(new FileInfo(file1).LastWriteTime, mods[0].ModifiedTime);
-			Assertion.AssertEquals(new FileInfo(file2).LastWriteTime, mods[1].ModifiedTime);
-			Assertion.AssertEquals(new FileInfo(file3).LastWriteTime, mods[2].ModifiedTime);
+			AssertEquals(new FileInfo(file1).LastWriteTime, mods[0].ModifiedTime);
+			AssertEquals(new FileInfo(file2).LastWriteTime, mods[1].ModifiedTime);
+			AssertEquals(new FileInfo(file3).LastWriteTime, mods[2].ModifiedTime);
 
 			mods = _sc.GetModifications(DateTime.Now, DateTime.MaxValue);
-			Assertion.AssertEquals(0, mods.Length);
+			AssertEquals(0, mods.Length);
 		}
 
 		public void TestGetModifications_EmptyRepository()
 		{
 			Modification[] mods = _sc.GetModifications(DateTime.MinValue, DateTime.MaxValue);
-			Assertion.AssertNotNull(mods);
-			Assertion.AssertEquals(0, mods.Length);
+			AssertNotNull(mods);
+			AssertEquals(0, mods.Length);
 		}
 
 		public void TestGetModifications_OneUnmodifiedFile()
@@ -68,8 +68,8 @@ namespace tw.ccnet.core.sourcecontrol.test
 			string file2 = TempFileUtil.CreateTempFile("repo", "file2.txt", "bar");
 
 			Modification[] mods = _sc.GetModifications(from, DateTime.MaxValue);
-			Assertion.AssertEquals(1, mods.Length);
-			Assertion.AssertEquals("file2.txt", mods[0].FileName);
+			AssertEquals(1, mods.Length);
+			AssertEquals("file2.txt", mods[0].FileName);
 		}
 
 	}

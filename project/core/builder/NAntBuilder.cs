@@ -92,18 +92,18 @@ namespace tw.ccnet.core.builder
 			}
 			catch (Exception e) 
 			{
-				throw new BuilderException(this, String.Format("Unable to execute: {0}\n{1}", BuildCommand, e), e);
+				throw new BuilderException(this, string.Format("Unable to execute: {0}\n{1}", BuildCommand, e), e);
 			}
 		}
 
 		private string BuildCommand
 		{
-			get { return String.Format("{0} {1}", Executable, BuildArgs); }
+			get { return string.Format("{0} {1}", Executable, BuildArgs); }
 		}
 		
 		internal string CreateArgs()
 		{
-			return String.Format("-buildfile:{0} {1} -D:label-to-apply={2} {3}",
+			return string.Format("-buildfile:{0} {1} -D:label-to-apply={2} {3}",
 				BuildFile, BuildArgs, LabelToApply, String.Join(" ", Targets));
 		}
 
@@ -132,7 +132,7 @@ namespace tw.ccnet.core.builder
 
 		public override string ToString()
 		{
-			return String.Format(@" BaseDirectory: {0}, Targets: {1}, Executable: {2}, BuildFile: {3}", 
+			return string.Format(@" BaseDirectory: {0}, Targets: {1}, Executable: {2}, BuildFile: {3}", 
 				BaseDirectory, String.Join(", ", Targets), Executable, BuildFile);
 		}
 	}	

@@ -207,7 +207,7 @@ namespace tw.ccnet.core.sourcecontrol
 			string[] tokens = Split(dateLine);
 			if (tokens.Length <11)
 			{
-				throw new ArgumentException(String.Format(
+				throw new ArgumentException(string.Format(
 						"Required at least 11 tokens but found {0} in Dateline: {1}",tokens.Length,dateLine));
 			}
 			// First token is the keyword for date, then the next two should be

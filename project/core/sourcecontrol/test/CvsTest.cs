@@ -17,7 +17,7 @@ namespace tw.ccnet.core.sourcecontrol.test
 			cvsroot = (cvsroot == null) ? String.Empty : "<cvsroot>" + cvsroot + "</cvsroot>";
 			branch = (branch == null) ? String.Empty : "<branch>" + branch + "</branch>";
 
-			return String.Format(
+			return string.Format(
 				@"    <sourceControl type=""cvs"">
       <executable>..\tools\cvs.exe</executable>
       <workingDirectory>..</workingDirectory>
@@ -45,7 +45,7 @@ namespace tw.ccnet.core.sourcecontrol.test
 			DateTime from = new DateTime(2001, 1, 21, 20, 0, 0);
 			Process actualProcess = cvs.CreateHistoryProcess(from, new DateTime());
 
-			string expected = String.Format(@"-q log -N ""-d>{0}""", cvs.FormatCommandDate(from));
+			string expected = string.Format(@"-q log -N ""-d>{0}""", cvs.FormatCommandDate(from));
 			string actual = actualProcess.StartInfo.Arguments;
 			AssertEquals(expected, actual);
 		}
@@ -59,7 +59,7 @@ namespace tw.ccnet.core.sourcecontrol.test
 			cvs.CvsRoot = "myCvsRoot";
 			cvs.Branch = "branch"; 
 			string args = cvs.BuildHistoryProcessArgs(from);
-			string expected = String.Format(@"-d myCvsRoot -q log -N ""-d>{0}"" -rbranch", cvs.FormatCommandDate(from));
+			string expected = string.Format(@"-d myCvsRoot -q log -N ""-d>{0}"" -rbranch", cvs.FormatCommandDate(from));
 			AssertEquals(expected, args);
 		}
 
@@ -70,7 +70,7 @@ namespace tw.ccnet.core.sourcecontrol.test
 			DateTime from = new DateTime(2001, 1, 21, 20, 0, 0);
 			Process actualProcess = cvs.CreateHistoryProcess(from, new DateTime());
 
-			string expected = String.Format(@"-q log -N ""-d>{0}""", cvs.FormatCommandDate(from));
+			string expected = string.Format(@"-q log -N ""-d>{0}""", cvs.FormatCommandDate(from));
 			string actual = actualProcess.StartInfo.Arguments;
 			AssertEquals(expected, actual);
 		}

@@ -3,16 +3,18 @@ using System.IO;
 using System.Collections;
 using System.Globalization;
 using NUnit.Framework;
+using tw.ccnet.core.util;
+
 namespace tw.ccnet.core.sourcecontrol.test 
 {
 	[TestFixture]
-	public class StarTeamHistoryParserTest 
+	public class StarTeamHistoryParserTest : CustomAssertion 
 	{
-		private StarTeamHistoryParser _parser;
-		private DateTimeFormatInfo _dfi;
+		StarTeamHistoryParser _parser;
+		DateTimeFormatInfo _dfi;
 
 		[SetUp]
-		protected void SetUp()
+		public void SetUp()
 		{
 			_parser = new StarTeamHistoryParser();
 			_dfi = new DateTimeFormatInfo();
@@ -21,7 +23,34 @@ namespace tw.ccnet.core.sourcecontrol.test
 			_dfi.MonthDayPattern = @"M/d/yy h:mm:ss tt";
 		}
 
-		#region StarTeamLogContent
+		[Test]
+		[Ignore("This is an incomplete test")]
+		public void TestNothing() 
+		{
+			// why is this test in here?
+			IHistoryParser parser = new StarTeamHistoryParser();
+			int nModification = 0;
+			AssertEquals("Should have returned 0 modifications.", 0, nModification);
+		}
+
+		[Test]
+		public void TestModificationCount()
+		{
+			Modification [] mod = _parser.Parse(StarTeamHistoryParserTest.ContentReader);
+			AssertEquals("Should have returned 4 modifications.", 4, mod.Length);
+		}
+
+		[Test]
+		public void TestModificationContent()
+		{
+			Modification[] actual = _parser.Parse(StarTeamHistoryParserTest.ContentReader);
+			Modification[] expected = getExpectedModifications();
+
+			AssertEqualArrays(actual, expected);
+		}
+
+		#region Test data: Test log content
+
 		public static String StarTeamLogContent
 		{
 			get
@@ -162,7 +191,8 @@ for Star team
 				return new StringReader(StarTeamLogContent);
 			}
 		}
-		private Modification [] getExpectedModifications()
+
+		private Modification[] getExpectedModifications()
 		{
 			Modification [] mod = new Modification[4];
 			mod[0] = new Modification();
@@ -204,50 +234,9 @@ for Star team
 			mod[3].UserName = "Ahsanul Zaki";
 			return mod;
 		}
+
+
 		#endregion
-
-
-
-
-		[Test]
-		public void TestNothing() 
-		{
-			IHistoryParser parser = new StarTeamHistoryParser();
-			int nModification = 0;
-			Assertion.AssertEquals("Should have returned 0 modifications.", 0, nModification);
-		}
-
-		[Test]
-		public void TestModificationCount()
-		{
-			Modification [] mod = _parser.Parse(StarTeamHistoryParserTest.ContentReader);
-			Assertion.AssertEquals("Should have returned 4 modifications.", 4, mod.Length);
-		}
-
-		[Test]
-		public void TestModificationContent()
-		{
-			Modification [] actual = _parser.Parse(StarTeamHistoryParserTest.ContentReader);
-			Modification [] expected = getExpectedModifications();
-			Assertion.AssertEquals(actual.Length, expected.Length);
-			for(int i = 0; i < expected.Length; i++)
-			{
-				AssertEquals(expected[i], actual[i]);
-			}
-
-		}
-
-		public void AssertEquals(Modification expected, Modification actual)
-		{
-			Assertion.AssertEquals(expected.Comment, actual.Comment);
-			Assertion.AssertEquals(expected.EmailAddress, actual.EmailAddress);
-			Assertion.AssertEquals(expected.FileName, actual.FileName);
-			Assertion.AssertEquals(expected.FolderName, actual.FolderName);
-			Assertion.AssertEquals(expected.ModifiedTime, actual.ModifiedTime);
-			Assertion.AssertEquals(expected.Type, actual.Type);
-			Assertion.AssertEquals(expected.UserName, actual.UserName);
-			Assertion.AssertEquals(expected, actual);
-		}
 	}
 }
 

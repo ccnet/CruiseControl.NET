@@ -11,29 +11,30 @@ namespace tw.ccnet.core.test
 	{
 		public event IntegrationCompletedEventHandler IntegrationCompleted;
 
-		private string name;
-		private ISchedule schedule;
+		string _name;
+		ISchedule _schedule;
+		ProjectActivity _projectActivity = ProjectActivity.Unknown; // default
 
 		public MockProject(string name, ISchedule schedule)
 		{
-			this.name = name;
-			this.schedule = schedule;
+			_name = name;
+			_schedule = schedule;
 		}
 
 		public string Name 
 		{ 
-			get { return name; } 
+			get { return _name; } 
 		}
 
-		public int MinimumSleepTime 
+		public int MinimumSleepTimeMillis 
 		{
 			get { return 0; }
 		}
 
 		public ISchedule Schedule 
 		{ 
-			get { return schedule; } 
-			set { schedule = value; } 
+			get { return _schedule; } 
+			set { _schedule = value; } 
 		}
 
 		public ArrayList Publishers
@@ -41,17 +42,14 @@ namespace tw.ccnet.core.test
 			get { return new ArrayList(); }
 		}
 
-		public bool RunIntegration_forceBuild;
-		public virtual void RunIntegration(bool forceBuild)
-		{
-			RunIntegration_forceBuild = forceBuild;
-			RunIntegration();
-		}
-
 		public int RunIntegration_CallCount = 0;
-		public virtual void RunIntegration()
+		public IntegrationResult RunIntegration_ReturnValue = null;
+		public BuildCondition RunIntegration_buildCondition = (BuildCondition)(-1); // default
+		public virtual IntegrationResult RunIntegration(BuildCondition buildCondition)
 		{
 			RunIntegration_CallCount++;
+			RunIntegration_buildCondition = buildCondition;
+			return RunIntegration_ReturnValue;
 		}
 
 		public IntegrationStatus GetLatestBuildStatus() 
@@ -61,7 +59,8 @@ namespace tw.ccnet.core.test
 
 		public ProjectActivity CurrentActivity 
 		{
-			get { return ProjectActivity.Unknown; }
+			get { return _projectActivity; }
+			set { _projectActivity = value; }
 		}
 	}
 
@@ -70,8 +69,9 @@ namespace tw.ccnet.core.test
 		public const string EXCEPTION_MESSAGE = "Intentional exception";
 		public ExceptionMockProject(string name, Schedule schedule) : base(name, schedule) {}
 
-		public override void RunIntegration()
+		public override IntegrationResult RunIntegration(BuildCondition buildCondition)
 		{
+			Schedule.IntegrationCompleted();
 			throw new Exception(EXCEPTION_MESSAGE);
 		}
 	}

@@ -12,7 +12,7 @@ using tw.ccnet.core.publishers.test;
 namespace tw.ccnet.core.configuration.test
 {
 	[TestFixture]
-	public class ConfigurationLoaderTest
+	public class ConfigurationLoaderTest : CustomAssertion
 	{
 		private ConfigurationLoader loader;
 		private int changed;
@@ -36,8 +36,8 @@ namespace tw.ccnet.core.configuration.test
 			string xml = "<cruisecontrol></cruisecontrol>";
 			loader.ConfigFile = TempFileUtil.CreateTempXmlFile(TempFileUtil.CreateTempDir(this), "loadernet.config", xml);
 			XmlDocument config = loader.LoadConfiguration();
-			Assertion.AssertNotNull("config file should not be null", config);
-			Assertion.AssertEquals(xml, config.OuterXml);
+			AssertNotNull("config file should not be null", config);
+			AssertEquals(xml, config.OuterXml);
 		}
 
 		[Test, ExpectedException(typeof(ConfigurationException))]
@@ -90,15 +90,15 @@ namespace tw.ccnet.core.configuration.test
 		private void ValidateProject(IDictionary projects, string projectName)
 		{
 			Project project = (Project)projects[projectName];
-			Assertion.AssertEquals(projectName, project.Name);
-			Assertion.AssertNotNull("missing builder", project.Builder);
-			Assertion.AssertEquals(typeof(MockBuilder), project.Builder.GetType());
+			AssertEquals(projectName, project.Name);
+			AssertNotNull("missing builder", project.Builder);
+			AssertEquals(typeof(MockBuilder), project.Builder.GetType());
 
-			Assertion.AssertNotNull("missing sourcecontrol", project.SourceControl);
-			Assertion.AssertEquals(typeof(DefaultSourceControl), project.SourceControl.GetType());
+			AssertNotNull("missing sourcecontrol", project.SourceControl);
+			AssertEquals(typeof(DefaultSourceControl), project.SourceControl.GetType());
 
-			Assertion.AssertEquals("missing publisher", 1, project.Publishers.Count);
-			Assertion.AssertEquals(typeof(MockPublisher), project.Publishers[0].GetType());
+			AssertEquals("missing publisher", 1, project.Publishers.Count);
+			AssertEquals(typeof(MockPublisher), project.Publishers[0].GetType());
 
 		}
 
@@ -119,8 +119,8 @@ namespace tw.ccnet.core.configuration.test
 		{
 			string xml = @"<customtestproject name=""foo"" />";
 			IDictionary projects = loader.PopulateProjectsFromXml(ConfigurationFixture.GenerateConfig(xml));
-			Assertion.Assert(projects["foo"] is CustomTestProject);
-			Assertion.AssertEquals("foo", ((CustomTestProject) projects["foo"]).Name);
+			Assert(projects["foo"] is CustomTestProject);
+			AssertEquals("foo", ((CustomTestProject) projects["foo"]).Name);
 	}
 
 	[ReflectorType("customtestproject")]
@@ -137,13 +137,13 @@ namespace tw.ccnet.core.configuration.test
 			loader.ConfigFile = configFile;
 			ConfigurationChangedHandler handler = new ConfigurationChangedHandler(OnConfigurationChanged);
 			loader.AddConfigurationChangedHandler(handler);
-			Assertion.AssertEquals("configuration should not have changed yet!", 0, changed);
+			AssertEquals("configuration should not have changed yet!", 0, changed);
 			TempFileUtil.UpdateTempFile(configFile, "<hello/>");
 			// filesystemwatcher runs in separate thread so must wait for wake up
 			System.Threading.Thread.Sleep(1000);
 			lock(loader) 
 			{
-				Assertion.AssertEquals("configuration event should only be called once!", 1, changed);
+				AssertEquals("configuration event should only be called once!", 1, changed);
 			}
 		}
 

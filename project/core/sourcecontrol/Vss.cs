@@ -84,7 +84,7 @@ namespace tw.ccnet.core.sourcecontrol
 
 		public override Process CreateLabelProcess(string label, DateTime timeStamp) 
 		{ 
-			string args = String.Format(LABEL_COMMAND_FORMAT, Project, label, FormatCommandDate(timeStamp), Username, Password);
+			string args = string.Format(LABEL_COMMAND_FORMAT, Project, label, FormatCommandDate(timeStamp), Username, Password);
 			Process process = ProcessUtil.CreateProcess(Executable, args);
 			process.StartInfo.EnvironmentVariables[SS_DIR_KEY] = _ssDir;
 			return process;
@@ -97,7 +97,7 @@ namespace tw.ccnet.core.sourcecontrol
 
 		internal string BuildHistoryProcessArgs(DateTime from, DateTime to)
 		{			
-			return String.Format(
+			return string.Format(
 				HISTORY_COMMAND_FORMAT,
 				Project, 
 				FormatCommandDate(to),

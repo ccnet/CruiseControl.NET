@@ -3,7 +3,7 @@ using System;
 namespace tw.ccnet.remote
 {
 	/// <summary>
-	/// Enumeration of the possible activities of projects under continuous
+	/// Enumeration of the possible activities of a project under continuous
 	/// integration by CruiseControl.NET.
 	/// </summary>
 	public enum ProjectActivity 

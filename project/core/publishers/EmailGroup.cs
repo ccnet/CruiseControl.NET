@@ -65,7 +65,7 @@ namespace tw.ccnet.core.publishers
 
 		public override string ToString()
 		{
-			return String.Format("EmailGroup: [name: {0}, notification: {1}]", _name, _notification);
+			return string.Format("EmailGroup: [name: {0}, notification: {1}]", _name, _notification);
 		}
 	}
 }

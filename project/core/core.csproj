@@ -129,6 +129,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "ICruiseControl.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "IntegrationEvents.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -149,6 +154,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "IProjectIntegrator.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "ITask.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -160,6 +170,16 @@
                 />
                 <File
                     RelPath = "Project.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "ProjectIntegrator.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "ProjectIntegratorState.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -363,27 +383,12 @@
                     BuildAction = "Content"
                 />
                 <File
-                    RelPath = "schedule\IScheduler.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
                     RelPath = "schedule\Schedule.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "schedule\Scheduler.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "schedule\SchedulerState.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "schedule\test\SchedulerTest.cs"
+                    RelPath = "schedule\test\MockSchedule.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -632,7 +637,17 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "test\MockCruiseControl.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "test\MockProject.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "test\ProjectIntegratorTest.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

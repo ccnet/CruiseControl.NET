@@ -6,17 +6,30 @@ namespace tw.ccnet.core.util
 {
 	public class ReflectionUtil
 	{
+		/// <summary>
+		/// Utility class is not intended for instantiation.
+		/// </summary>
+		private ReflectionUtil() { }
+
+		/// <summary>
+		/// Gets a value indicating whether the types, fields and properties of the
+		/// specified objects are equal.
+		/// </summary>
+		/// <param name="o1"></param>
+		/// <param name="o2"></param>
+		/// <returns></returns>
 		public static bool ReflectionEquals(object o1, object o2)
 		{
 			// verify fields
 			return ValidateTypes(o1, o2) && ValidateFields(o1, o2) && ValidateProperties(o1, o2);
 		}
 
+		#region Private helper methods
+
 		private static bool ValidateTypes(object o1, object o2)
 		{
 			return o2 != null && o1.GetType() == o2.GetType();
 		}
-
 
 		private static bool ValidateFields(object o1, object o2)
 		{
@@ -73,6 +86,14 @@ namespace tw.ccnet.core.util
 			return (o1 == null) ? o2 == null : o1.Equals(o2);
 		}
 
+		#endregion
+
+		/// <summary>
+		/// Uses reflection to compile a string representation of an object, by
+		/// querying its type, field names/values, and property names/values.
+		/// </summary>
+		/// <param name="obj"></param>
+		/// <returns></returns>
 		public static string ReflectionToString(object obj)
 		{
 			Type type = obj.GetType();

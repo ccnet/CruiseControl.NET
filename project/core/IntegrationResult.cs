@@ -7,18 +7,23 @@ using tw.ccnet.remote;
 
 namespace tw.ccnet.core
 {
+	/// <summary>
+	/// Contains all the results of a project's integration.
+	/// </summary>
 	[Serializable]
 	public class IntegrationResult
 	{
-		private string _projectName;
-		private IntegrationStatus _status = IntegrationStatus.Unknown;
-		private string _label;
-		private DateTime _startTime;
-		private DateTime _endTime;
-		private string _output;
-		private Modification[] _modifications;
-		private IntegrationStatus _lastIntegrationStatus = IntegrationStatus.Unknown;
-		private Exception _exception;
+		IntegrationStatus _status = IntegrationStatus.Unknown;
+		Modification[] _modifications;
+		IntegrationStatus _lastIntegrationStatus = IntegrationStatus.Unknown;
+		string _projectName;
+		string _label;
+		string _output;
+		DateTime _startTime;
+		DateTime _endTime;
+		Exception _exception;
+
+		#region Constructors
 
 		// Default constructor required for serialization
 		public IntegrationResult() { }
@@ -27,6 +32,10 @@ namespace tw.ccnet.core
 		{
 			_projectName = projectName;
 		}
+
+		#endregion
+
+		#region Read/Write Properties
 
 		public string ProjectName
 		{
@@ -64,13 +73,6 @@ namespace tw.ccnet.core
 			set { _endTime = value; }
 		}
 
-		[XmlIgnore]
-		public string Output
-		{
-			get { return _output; }
-			set { _output = value; }
-		}
-
 		public Modification[] Modifications
 		{
 			get
@@ -90,34 +92,9 @@ namespace tw.ccnet.core
 			set { _lastIntegrationStatus = value; }
 		}
 
-		[XmlIgnore] // Exceptions cannot be serialised because of permission attributes
-		public Exception ExceptionResult
-		{
-			get { return _exception; }
-			set 
-			{ 
-				_exception = value; 
-				if (_exception != null)
-				{
-					Status = IntegrationStatus.Exception;
-				}
-			}
-		}
+		#endregion
 
-		public void MarkStartTime()
-		{
-			_startTime = DateTime.Now;
-		}
-
-		public void MarkEndTime()
-		{
-			_endTime = DateTime.Now;
-		}
-
-		public bool HasModifications()
-		{
-			return Modifications.Length > 0;
-		}
+		#region Readonly properties
 
 		public DateTime LastModificationDate
 		{
@@ -153,10 +130,57 @@ namespace tw.ccnet.core
 			get { return Succeeded && LastIntegrationStatus == IntegrationStatus.Failure; }
 		}
 
+		/// <summary>
+		/// Gets the time taken to perform the project's integration.
+		/// </summary>
 		public TimeSpan TotalIntegrationTime
 		{
 			get { return EndTime - StartTime; }
 		}
+
+		#endregion
+
+		#region Properties not serialised into Xml
+
+		[XmlIgnore]
+		public string Output
+		{
+			get { return _output; }
+			set { _output = value; }
+		}
+
+		[XmlIgnore] // Exceptions cannot be serialised because of permission attributes
+		public Exception ExceptionResult
+		{
+			get { return _exception; }
+			set 
+			{ 
+				_exception = value; 
+				if (_exception != null)
+				{
+					Status = IntegrationStatus.Exception;
+				}
+			}
+		}
+
+		#endregion
+
+		public void MarkStartTime()
+		{
+			_startTime = DateTime.Now;
+		}
+
+		public void MarkEndTime()
+		{
+			_endTime = DateTime.Now;
+		}
+
+		public bool HasModifications()
+		{
+			return Modifications.Length > 0;
+		}
+
+		#region Overridden methods
 
 		public override bool Equals(object obj)
 		{
@@ -182,5 +206,7 @@ namespace tw.ccnet.core
 		{
 			return ReflectionUtil.ReflectionToString(this);
 		}
+
+		#endregion
 	}
 }

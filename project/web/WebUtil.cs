@@ -1,7 +1,8 @@
 using System;
+using System.Configuration;
 using System.IO;
 using System.Web;
-using System.Configuration;
+
 using tw.ccnet.core;
 
 namespace tw.ccnet.web
@@ -11,7 +12,7 @@ namespace tw.ccnet.web
 		public static string GetLogFilename(HttpContext Context, HttpRequest request)
 		{
 			DirectoryInfo logDirectory = GetLogDirectory(Context);
-			string logfile = request.QueryString[LogFile.LogQueryString];
+			string logfile = request.QueryString[LogFileUtil.LogQueryString];
 			if (logfile == null)
 			{
 				logfile = LogFileLister.GetCurrentFilename(logDirectory);
@@ -43,13 +44,13 @@ namespace tw.ccnet.web
 					logDirectory = new DirectoryInfo(Context.Server.MapPath(dirName));
 					if (!logDirectory.Exists)
 					{
-						throw new Exception(String.Format("Can't find log directory [{0}] (Full path : [{1}]", 
+						throw new Exception(string.Format("Can't find log directory [{0}] (Full path : [{1}]", 
 							dirName, logDirectory.FullName));
 					}
 				}
 				else
 				{
-					throw new Exception(String.Format("Can't find log directory [{0}] (Full path : [{1}]", 
+					throw new Exception(string.Format("Can't find log directory [{0}] (Full path : [{1}]", 
 						dirName, logDirectory.FullName));
 				}
 			}

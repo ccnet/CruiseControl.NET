@@ -9,20 +9,23 @@ using tw.ccnet.core.util;
 namespace tw.ccnet.core.sourcecontrol
 {
 	/// <summary>
-	/// Implementation of StarTeamHistoryParser
+	/// Implementation of IHistoryParser to handle StarTeam output that
+	/// describes modifications within the version control system.
 	/// </summary>
 	public class StarTeamHistoryParser : IHistoryParser
 	{
-		internal readonly static String FolderInfoSeparator  = "Folder: ";
-		internal readonly static String FileHistorySeparator = "----------------------------";
+		#region Constants
+
+		internal readonly static string FolderInfoSeparator  = "Folder: ";
+		internal readonly static string FileHistorySeparator = "----------------------------";
 
 		// The regular expression to capture info about each folder
-		public const String FolderRegEx = @"(?m:^Folder: (?<folder_name>.+)  \(working dir: (?<working_directory>.+)\)(?s:.*?)(?=^Folder: ))";
+		public const string FolderRegEx = @"(?m:^Folder: (?<folder_name>.+)  \(working dir: (?<working_directory>.+)\)(?s:.*?)(?=^Folder: ))";
 
 
 		// The regular expression to capture info about each file in a folder
 		// KEEP IT AS IT IS, DO NOT ALIGN LINES
-		internal readonly static String FileRegEx = @"(?m:History for: (?<file_name>.+)
+		internal readonly static string FileRegEx = @"(?m:History for: (?<file_name>.+)
 Description:(?<file_description>.*)
 Locked by:(?<locked_by>.*)
 Status:(?<file_status>.+)
@@ -33,13 +36,17 @@ Status:(?<file_status>.+)
 
 		// The regular expression to capture the history of a file
 		// KEEP IT AS IT IS, DO NOT ALIGN LINES
-		internal readonly static String FileHistoryRegEx = @"(?m:Revision: (?<file_revision>\S+) View: (?<view_name>.+) Branch Revision: (?<branch_revision>\S+)
+		internal readonly static string FileHistoryRegEx = @"(?m:Revision: (?<file_revision>\S+) View: (?<view_name>.+) Branch Revision: (?<branch_revision>\S+)
 Author: (?<author_name>.*?) Date: (?<date_string>\d{01,2}/\d{1,2}/\d\d \d{1,2}:\d\d:\d\d (A|P)M).*\n(?s:(?<change_comment>.*?))-{28})";
 
-		private readonly Regex folderRegex;
-		private readonly Regex fileRegex;
-		private readonly Regex historyRegex;
-		private DateTimeFormatInfo dfi;
+		#endregion
+
+		readonly Regex folderRegex;
+		readonly Regex fileRegex;
+		readonly Regex historyRegex;
+		DateTimeFormatInfo dfi;
+
+		#region Constructor
 
 		public StarTeamHistoryParser()
 		{
@@ -56,8 +63,13 @@ Author: (?<author_name>.*?) Date: (?<date_string>\d{01,2}/\d{1,2}/\d\d \d{1,2}:\
 			dfi.MonthDayPattern = @"M/d/yy h:mm:ss tt";
 		}
 
+
+		#endregion
+
+		#region Parsing modifications from StarTeam output
+
 		/// <summary>
-		///  Method implementaion for IHistoryParser
+		/// Method implementaion for IHistoryParser
 		/// </summary>
 		/// <param name="starTeamLog"></param>
 		/// <returns></returns>
@@ -84,7 +96,7 @@ Author: (?<author_name>.*?) Date: (?<date_string>\d{01,2}/\d{1,2}/\d\d \d{1,2}:\
 				String folder = mFolder.Result("${working_directory}");
 
 				// Scan changes for each file in the folder
-				for(Match mFile = fileRegex.Match(mFolder.Value); mFile.Success; mFile = mFile.NextMatch())
+				for (Match mFile = fileRegex.Match(mFolder.Value); mFile.Success; mFile = mFile.NextMatch())
 				{
 					// Create a Modification object for the current file
 					Modification mod = new Modification();
@@ -103,7 +115,7 @@ Author: (?<author_name>.*?) Date: (?<date_string>\d{01,2}/\d{1,2}/\d\d \d{1,2}:\
 	    			// Only get the first match which describes the 
 					// most recent changes
 					Match mHistory = historyRegex.Match(fileHistory);
-					if(mHistory.Success)
+					if (mHistory.Success)
 					{
 						mod.EmailAddress = "N/A";
 						mod.UserName = mHistory.Result("${author_name}");
@@ -119,5 +131,7 @@ Author: (?<author_name>.*?) Date: (?<date_string>\d{01,2}/\d{1,2}/\d\d \d{1,2}:\
 			}
 			return (Modification[])modList.ToArray(typeof(Modification));
 		}
+
+		#endregion
 	}
 }

@@ -1,7 +1,7 @@
 using System;
 using System.Collections;
 
-namespace tw.ccnet.core
+namespace tw.ccnet.core.configuration
 {
 	public delegate void ConfigurationChangedHandler();
 

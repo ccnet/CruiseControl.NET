@@ -8,7 +8,7 @@ using System.Collections;
 namespace tw.ccnet.core.sourcecontrol.test
 {
 	[TestFixture]
-	public class ModificationTest 
+	public class ModificationTest : CustomAssertion
 	{
 		public void TestCompareTo()
 		{
@@ -18,11 +18,11 @@ namespace tw.ccnet.core.sourcecontrol.test
 			Modification beta = new Modification();
 			alpha.ModifiedTime = new DateTime(1961, 3, 3);
 
-			Assertion.Assert(String.Format("expected alpha greater than beta {0}", 
+			Assert(string.Format("expected alpha greater than beta {0}", 
 				alpha.CompareTo(beta)), alpha.CompareTo(beta) > 0);
-			Assertion.Assert(String.Format("expected alpha-beta equality {0}", 
+			Assert(string.Format("expected alpha-beta equality {0}", 
 				alpha.CompareTo(beta)), alpha.CompareTo(alpha) == 0);
-			Assertion.Assert(String.Format("expected alpha less than beta {0}", 
+			Assert(string.Format("expected alpha less than beta {0}", 
 				alpha.CompareTo(beta)), beta.CompareTo(alpha) < 0);
 		}
 
@@ -37,7 +37,7 @@ namespace tw.ccnet.core.sourcecontrol.test
 			mod.Comment = "Comment";
 			mod.EmailAddress = "foo.bar@quuuux.quuux.quux.qux";
 
-			string expected = String.Format(
+			string expected = string.Format(
 @"<modification type=""unknown"">
 	<filename>File""Name&amp;</filename>
 	<project>Folder'Name</project>
@@ -47,7 +47,7 @@ namespace tw.ccnet.core.sourcecontrol.test
 	<email>foo.bar@quuuux.quuux.quux.qux</email>
 </modification>", DateUtil.FormatDate(modifiedTime));
 
-			Assertion.AssertEquals(XmlUtil.GenerateOuterXml(expected), mod.ToXml());
+			AssertEquals(XmlUtil.GenerateOuterXml(expected), mod.ToXml());
 		}
 
 		public void TestToXml_CommentContainsXmlSymbols()
@@ -64,7 +64,7 @@ namespace tw.ccnet.core.sourcecontrol.test
 			
 			string xpath = "/modification/comment";
 			string actual = XmlUtil.SelectRequiredValue(document, xpath);
-			Assertion.AssertEquals(mod.Comment, actual);
+			AssertEquals(mod.Comment, actual);
 		}
 	}
 }

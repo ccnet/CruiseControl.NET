@@ -3,10 +3,12 @@ using System.IO;
 using System.Collections;
 using System.Globalization;
 using NUnit.Framework;
+using tw.ccnet.core.util;
+
 namespace tw.ccnet.core.sourcecontrol.test 
 {
 	[TestFixture]
-	public class CvsHistoryParserTest 
+	public class CvsHistoryParserTest : CustomAssertion
 	{
 		private CvsHistoryParser _cvs = new CvsHistoryParser();
 		public void TestParseStream() 
@@ -17,7 +19,7 @@ namespace tw.ccnet.core.sourcecontrol.test
 			
 			input.Close();
 
-			Assertion.AssertEquals("Should have returned 5 modifications.", 5, modifications.Length);
+			AssertEquals("Should have returned 5 modifications.", 5, modifications.Length);
 
 			Modification mod1 = new Modification();
 			mod1.Type = "modified";
@@ -60,12 +62,12 @@ namespace tw.ccnet.core.sourcecontrol.test
 			mod5.Comment = "Hey, look, another deleted file.";
 		
 			ArrayList.Adapter(modifications).Sort();
-			Assertion.AssertEquals("1", mod1, modifications[2]);
-			Assertion.AssertEquals("2", mod2, modifications[3]);
-			Assertion.AssertEquals("3", mod3, modifications[4]);
-			Assertion.AssertEquals("4", mod4, modifications[1]);
+			AssertEquals("1", mod1, modifications[2]);
+			AssertEquals("2", mod2, modifications[3]);
+			AssertEquals("3", mod3, modifications[4]);
+			AssertEquals("4", mod4, modifications[1]);
 
-			Assertion.AssertEquals("5", mod5, modifications[0]);
+			AssertEquals("5", mod5, modifications[0]);
 		}
 		private DateTime CreateDate(string dateString) 
 		{

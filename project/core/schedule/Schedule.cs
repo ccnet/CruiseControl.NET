@@ -11,10 +11,13 @@ namespace tw.ccnet.core.schedule
 		public const int Infinite = -1;
 		public const int DefaultTimeOut = 60000;
 
-		private int _timeOut = DefaultTimeOut;
-		private int _totalIterations = Infinite;
-		private int _iterations = 0;
-		private bool _forceBuild = false;
+		double _timeOut = DefaultTimeOut;
+		int _totalIterations = Infinite;
+		int _iterationsSoFar = 0;
+		bool _forceNextBuild = false;
+		DateTime _lastIntegrationCompleteTime = DateTime.MinValue;
+
+		#region Constructors
 
 		public Schedule() { }
 
@@ -24,13 +27,26 @@ namespace tw.ccnet.core.schedule
 			_totalIterations = totalIterations;
 		}
 
-		[ReflectorProperty("timeout")]
-		public int TimeOut
+		#endregion
+
+		#region Xml configuration file properties
+
+		/// <summary>
+		/// Gets and sets the number of seconds between builds for which
+		/// the project integrator should sleep.
+		/// </summary>
+		[ReflectorProperty("sleepSeconds")]
+		public double SleepSeconds
 		{
 			get { return _timeOut; }
 			set { _timeOut = value ; }
 		}
 
+		/// <summary>
+		/// Gets and sets the total number of iterations this schedule will allow
+		/// before stopping integration of the project.  If this value is not
+		/// specified, the number of iterations is not capped.
+		/// </summary>
 		[ReflectorProperty("iterations", Required=false)]
 		public int TotalIterations
 		{
@@ -38,31 +54,54 @@ namespace tw.ccnet.core.schedule
 			set { _totalIterations = value; }
 		}
 
-		[ReflectorProperty("forcebuild", Required=false)]
-		public bool ForceBuild
+		#endregion
+
+		#region Interface implementation
+
+		public void IntegrationCompleted()
 		{
-			get { return _forceBuild; }
-			set { _forceBuild = value; }
+			_iterationsSoFar++;
+			_lastIntegrationCompleteTime = DateTime.Now;
 		}
 
-		public int Iterations
+		public BuildCondition ShouldRunIntegration()
 		{
-			get { return _iterations; }
+			if (ShouldStopIntegration())
+				return BuildCondition.NoBuild;
+
+			if (_forceNextBuild)
+			{
+				_forceNextBuild = false;
+				return BuildCondition.ForceBuild;
+			}
+
+			TimeSpan timeSinceLastBuild = DateTime.Now - _lastIntegrationCompleteTime;
+			if (timeSinceLastBuild.TotalSeconds<SleepSeconds)
+				return BuildCondition.NoBuild;
+
+			return BuildCondition.IfModificationExists;
 		}
 
-		public bool ShouldRun()
+		public bool ShouldStopIntegration()
 		{
-			return (_iterations < _totalIterations || _totalIterations == Infinite);
+			return (_totalIterations!=Infinite && _iterationsSoFar>=_totalIterations);
 		}
 
-		public TimeSpan CalculateTimeToNextIntegration()
+
+		#endregion
+
+		/// <summary>
+		/// Forces <see cref="ShouldRunIntegration"/> to return true on its next
+		/// invocation, regardless of the time since the previous build, etc...
+		/// </summary>
+		public void ForceBuild()
 		{
-			return new TimeSpan(0, 0, 0, 0, _timeOut);
+			_forceNextBuild = true;
 		}
 
-		public void Update()
+		public int IterationsSoFar
 		{
-			_iterations++;
+			get { return _iterationsSoFar; }
 		}
 	}
 }

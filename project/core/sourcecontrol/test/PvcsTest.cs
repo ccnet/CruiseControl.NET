@@ -10,9 +10,8 @@ using Exortech.NetReflector;
 namespace tw.ccnet.core.sourcecontrol.test
 {
 	[TestFixture]
-	public class PvcsTest 
+	public class PvcsTest : CustomAssertion
 	{
-		
 		public static string CreateSourceControlXml()
 		{
 			return @"    <sourceControl type=""pvcs"">
@@ -32,7 +31,7 @@ namespace tw.ccnet.core.sourcecontrol.test
 		public void TestDetectedDayLightSavingsTime_PVCSDayLightSavingsBug() 
 		{
 			Pvcs pvcs = new Pvcs();
-			Assertion.Assert(pvcs.IsDayLightSavings());
+			Assert(pvcs.IsDayLightSavings());
 		}
 
 		public void TestSubtractAnHour_PVCSDayLightSavingsBug() 
@@ -40,15 +39,15 @@ namespace tw.ccnet.core.sourcecontrol.test
 			Pvcs pvcs = new Pvcs();
 			DateTime date1 = new DateTime(2000, 1, 1, 1, 0, 0);
 			DateTime anHourAgo = new DateTime(2000, 1, 1, 0, 0, 0);
-			Assertion.AssertEquals(anHourAgo, pvcs.SubtractAnHour(date1));
+			AssertEquals(anHourAgo, pvcs.SubtractAnHour(date1));
 		}
 
 		public void TestValuePopulation()
 		{
 			Pvcs pvcs = CreatePvcs();
-			Assertion.AssertEquals(@"..\etc\pvcs\mockpcli.bat", pvcs.Executable);
-			Assertion.AssertEquals("fooproject",pvcs.Project);
-			Assertion.AssertEquals("barsub", pvcs.Subproject);
+			AssertEquals(@"..\etc\pvcs\mockpcli.bat", pvcs.Executable);
+			AssertEquals("fooproject",pvcs.Project);
+			AssertEquals("barsub", pvcs.Subproject);
 		}
 
 		public void TestCreateProcess()
@@ -59,7 +58,7 @@ namespace tw.ccnet.core.sourcecontrol.test
 
 			string expected = Pvcs.COMMAND;
 			string actual = actualProcess.StartInfo.Arguments;
-			Assertion.AssertEquals(expected, actual);
+			AssertEquals(expected, actual);
 		}
 
 		private Pvcs CreatePvcs()
@@ -76,9 +75,9 @@ namespace tw.ccnet.core.sourcecontrol.test
 		{
 			Pvcs pvcs = CreatePvcs();
 			Modification[] mods = pvcs.GetModifications(new DateTime(), new DateTime());
-			Assertion.AssertEquals(2, mods.Length);
+			AssertEquals(2, mods.Length);
 			File.Delete(Pvcs.PVCS_LOGOUTPUT_FILE);
-			Assertion.Assert("input file missing", File.Exists(Pvcs.PVCS_INSTRUCTIONS_FILE));
+			Assert("input file missing", File.Exists(Pvcs.PVCS_INSTRUCTIONS_FILE));
 			File.Delete(Pvcs.PVCS_INSTRUCTIONS_FILE);
 		}
 		
@@ -87,7 +86,7 @@ namespace tw.ccnet.core.sourcecontrol.test
 			Pvcs pvcs = CreatePvcs();
 			string actual = pvcs.CreatePcliContents("beforedate", "afterdate");
 			string expected = CreateExpectedContents();
-			Assertion.AssertEquals(expected, actual);
+			AssertEquals(expected, actual);
 		}
 		
 		private string CreateExpectedContents() 

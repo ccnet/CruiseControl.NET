@@ -4,16 +4,13 @@ using System.Xml;
 using System.Xml.Schema;
 using NUnit.Framework;
 
+using tw.ccnet.core.util;
 using tw.ccnet.core.configuration;
 
 namespace tw.ccnet.core.configuration.test
 {
-	/// <summary>
-	/// Summary description for ValidatingLoaderTest.
-	/// </summary>
-	/// 
 	[TestFixture]
-	public class ValidatingLoaderTest
+	public class ValidatingLoaderTest : CustomAssertion
 	{
 		[Test]
 		public void FailedLoad() 
@@ -25,7 +22,7 @@ namespace tw.ccnet.core.configuration.test
 			loader.ValidationEventHandler += hd;
 			loader.Schemas.Add(schema);
 			XmlDocument doc = loader.Load();
-			Assertion.AssertNull(doc);
+			AssertNull(doc);
 		}
 
 		[Test]
@@ -38,7 +35,7 @@ namespace tw.ccnet.core.configuration.test
 			loader.ValidationEventHandler += hd;
 			loader.Schemas.Add(schema);
 			XmlDocument doc = loader.Load();
-			Assertion.AssertNotNull(doc);
+			AssertNotNull(doc);
 		}
 
 		private XmlSchema loadSchema() 

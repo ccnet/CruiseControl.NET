@@ -59,7 +59,7 @@ namespace tw.ccnet.core.publishers
 			catch(Exception ex) 
 			{
 				Console.WriteLine(ex);
-				throw new CruiseControlException(String.Format("Bad XML in logfile: " + ex.Message));
+				throw new CruiseControlException(string.Format("Bad XML in logfile: " + ex.Message));
 			}
 		}
 

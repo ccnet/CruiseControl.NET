@@ -1,20 +1,21 @@
 using System;
 using System.Diagnostics;
-using System.Threading;
-using System.Runtime.Remoting;
-using System.Runtime.Remoting.Channels;
-using System.Runtime.Remoting.Channels.Tcp;
 using System.IO;
+
 using tw.ccnet.core;
 using tw.ccnet.core.configuration;
 
 namespace tw.ccnet.console
 {
+	/// <summary>
+	/// Runs CruiseControl.NET from the console.
+	/// </summary>
 	class ConsoleRunner
 	{
-		private static readonly string HELP_OPTION = "-help";
-		public static readonly string DEFAULT_CONFIG_PATH = ".\\ccnet.config";
-		private static CruiseManager manager;
+		public static readonly string DEFAULT_CONFIG_PATH = @".\ccnet.config";
+		static readonly string HELP_OPTION = "-help";
+
+		static CruiseManager _manager;
 
 		[STAThread]
 		internal static void Main(string[] args)
@@ -22,15 +23,14 @@ namespace tw.ccnet.console
 			try
 			{
 				string configFile = GetConfigFileName(args);
-				if (configFile == null)
+				if (configFile==null)
 				{
-					Usage();
+					DisplayUsage();
 					return;
 				}
 				
-				FileInfo configFileInfo = (new FileInfo(configFile));
-
-				if (! configFileInfo.Exists)
+				FileInfo configFileInfo = new FileInfo(configFile);
+				if (!configFileInfo.Exists)
 				{
 					Console.WriteLine("Config file {0} does not exist - exiting application", configFileInfo.FullName);
 					return;
@@ -38,16 +38,14 @@ namespace tw.ccnet.console
 
 				Trace.Listeners.Add(new TextWriterTraceListener(Console.Out));
 
-				if (GetOption("remoting", args) != null && GetOption("remoting", args).Equals("on"))
-				{
+				bool useRemoting = GetOption("remoting", args)=="on";
+				if (useRemoting)
 					StartRemoteCC(configFile);
-				}
 				else
-				{
 					StartLocalCC(configFile);
-				}
-                Console.WriteLine("Server Started.........");
-                BlockForUserInput();
+
+				Console.WriteLine("Server started");
+				BlockForUserInput();
 			}
 			catch (ConfigurationException ex)
 			{
@@ -56,65 +54,58 @@ namespace tw.ccnet.console
 			}
 			catch (CruiseControlException ex)
 			{
-				Console.WriteLine("Cruise Exception: " + ex.ToString());
+				Console.WriteLine("Cruise Exception: " + ex);
 				Console.WriteLine("Cruise Stacktrace: " + ex.StackTrace);
 			}
 		}
 
-		private static void StartRemoteCC(String configFile)
+		static void StartRemoteCC(string configFile)
 		{
-            manager = new CruiseManager(configFile);
-            manager.RegisterForRemoting();
-            manager.StartCruiseControl();
+			_manager = new CruiseManager(configFile);
+			_manager.RegisterForRemoting();
+			_manager.StartCruiseControl();
 		}
 
-		private static void StartLocalCC(String configFile)
+		static void StartLocalCC(string configFile)
 		{
 			ConfigurationLoader configLoader = new ConfigurationLoader(configFile);
-			CruiseControl cruiseControl = new CruiseControl(configLoader);
+			ICruiseControl cruiseControl = new CruiseControl(configLoader);
 			cruiseControl.Start();
 		}
 
-		private static void BlockForUserInput()
+		static void BlockForUserInput()
 		{
-			Console.WriteLine("Press enter to exit.");
+			Console.WriteLine("Press <enter> to exit");
 			Console.ReadLine();
-			if (manager != null)
-			{
-				manager.StopCruiseControlNow();
-			}
+
+			if (_manager!=null)
+				_manager.StopCruiseControlNow();
 		}
 
 		public static string GetConfigFileName(string[] args)
 		{
-			for (int i = 0; i < args.Length; i++)
+			for (int i=0; i<args.Length; i++)
 			{
-				if (! args[i].StartsWith("-"))
-				{
+				if (!args[i].StartsWith("-"))
 					return args[i];
-				}
 			}
 
-			if (args.Length == 0)
-			{
+			if (args.Length==0)
 				return DEFAULT_CONFIG_PATH;
-			}
 
 			if (HELP_OPTION.Equals(args[0]))
-			{
 				return null;
-			}
 
-			return 	DEFAULT_CONFIG_PATH;
+			return DEFAULT_CONFIG_PATH;
 		}
 
-		internal static String GetOption(String optionRequired,String[] args)
+		internal static string GetOption(string optionRequired, string[] args)
 		{
 			try
 			{
-				for (int i = 0; i < args.Length; i++)
+				for (int i=0; i<args.Length; i++)
 				{
-					String option = args[i].Substring(1, args[i].IndexOf(":") - 1);
+					string option = args[i].Substring(1, args[i].IndexOf(":") - 1);
 					if (option.Equals(optionRequired))
 					{
 						return args[i].Substring(args[i].IndexOf(":") + 1);
@@ -128,7 +119,7 @@ namespace tw.ccnet.console
 			return null;
 		}
 
-		private static void Usage()
+		static void DisplayUsage()
 		{
 			Console.WriteLine("CruiseControl [options] <configFile>");
 			Console.WriteLine("Options:");

@@ -106,7 +106,7 @@ namespace tw.ccnet.core.sourcecontrol
 
 		internal string BuildHistoryProcessArgs(DateTime from, DateTime to)
 		{			
-			return String.Format(
+			return string.Format(
 			HISTORY_COMMAND_FORMAT,
 			Username,
 			Password,

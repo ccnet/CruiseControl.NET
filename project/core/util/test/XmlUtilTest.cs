@@ -5,7 +5,7 @@ using NUnit.Framework;
 namespace tw.ccnet.core.util.test
 {
 	[TestFixture]
-	public class XmlUtilTest
+	public class XmlUtilTest : CustomAssertion
 	{
 		private static string TWO_SUCH_ELEMENTS = "two";
 		private static string ONE_SUCH_ELEMENT = "one";
@@ -23,7 +23,7 @@ namespace tw.ccnet.core.util.test
 		public void TestGetFirstElement()
 		{			
 			XmlElement actual = XmlUtil.GetFirstElement(_doc, TWO_SUCH_ELEMENTS);
-			Assertion.AssertEquals(_elementTwo, actual);
+			AssertEquals(_elementTwo, actual);
 		}
 
 		public void TestGetSingleElement()
@@ -33,7 +33,7 @@ namespace tw.ccnet.core.util.test
 			try
 			{
 				XmlUtil.GetSingleElement(_doc, TWO_SUCH_ELEMENTS);
-				Assertion.Fail("expected death at get single on multiple");
+				Fail("expected death at get single on multiple");
 			}
 			catch(CruiseControlException){}
 		}
@@ -56,35 +56,35 @@ namespace tw.ccnet.core.util.test
 		{
 			XmlDocument document = XmlUtil.CreateDocument("<configuration><monkeys>bananas</monkeys></configuration>");
 			string value = XmlUtil.SelectValue(document, "/configuration/monkeys", "orangutan");
-			Assertion.AssertEquals("bananas", value);			
+			AssertEquals("bananas", value);			
 		}
 
 		public void TestSelectValue_missingValue()
 		{
 			XmlDocument document = XmlUtil.CreateDocument("<configuration><monkeys></monkeys></configuration>");
 			string value = XmlUtil.SelectValue(document, "/configuration/monkeys", "orangutan");
-			Assertion.AssertEquals("orangutan", value);			
+			AssertEquals("orangutan", value);			
 		}
 
 		public void TestSelectValue_missingElement()
 		{
 			XmlDocument document = XmlUtil.CreateDocument("<configuration><monkeys></monkeys></configuration>");
 			string value = XmlUtil.SelectValue(document, "/configuration/apes", "orangutan");
-			Assertion.AssertEquals("orangutan", value);			
+			AssertEquals("orangutan", value);			
 		}
 
 		public void TestSelectValue_attribute()
 		{
 			XmlDocument document = XmlUtil.CreateDocument("<configuration><monkeys part=\"brains\">booyah</monkeys></configuration>");
 			string value = XmlUtil.SelectValue(document, "/configuration/monkeys/@part", "orangutan");
-			Assertion.AssertEquals("brains", value);			
+			AssertEquals("brains", value);			
 		}
 
 		public void TestSelectRequiredValue()
 		{
 			XmlDocument document = XmlUtil.CreateDocument("<configuration><martin>andersen</martin></configuration>");
 			string value = XmlUtil.SelectRequiredValue(document, "/configuration/martin");
-			Assertion.AssertEquals("andersen", value);			
+			AssertEquals("andersen", value);			
 		}
 
 		[ExpectedException(typeof(CruiseControlException))]
@@ -105,7 +105,7 @@ namespace tw.ccnet.core.util.test
 		public void VerifyCDATAEncode()
 		{
 			string test = "a b <f>]]></a>";
-			Assertion.AssertEquals("a b <f>] ]></a>", XmlUtil.EncodeCDATA(test));
+			AssertEquals("a b <f>] ]></a>", XmlUtil.EncodeCDATA(test));
 		}
 	}
 }

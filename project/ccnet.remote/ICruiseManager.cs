@@ -33,11 +33,10 @@ namespace tw.ccnet.remote
 		ProjectStatus GetProjectStatus();
 
 		/// <summary>
-		/// TODO describe this method.
+		/// Forces a build for the named project.
 		/// </summary>
-		/// <param name="project"></param>
-		/// <param name="schedule"></param>
-		void Run(string project, ISchedule schedule);
+		/// <param name="projectName"></param>
+		void ForceBuild(string projectName);
 
 		/// <summary>
 		/// Gets and sets the configuration string for this CruiseControl.NET instance.

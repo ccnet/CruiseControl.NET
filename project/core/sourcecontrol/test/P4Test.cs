@@ -9,9 +9,8 @@ using Exortech.NetReflector;
 namespace tw.ccnet.core.sourcecontrol.test
 {
 	[TestFixture]
-	public class P4Test
+	public class P4Test : CustomAssertion
 	{
-
 		[Test]
 		public void ReadConfig()
 		{
@@ -25,11 +24,11 @@ namespace tw.ccnet.core.sourcecontrol.test
 </sourceControl>
 ";
 			P4 p4 = CreateP4(xml);
-			Assertion.AssertEquals(@"c:\bin\p4.exe", p4.Executable);
-			Assertion.AssertEquals("//depot/myproject/...", p4.View);
-			Assertion.AssertEquals("myclient", p4.Client);
-			Assertion.AssertEquals("me", p4.User);
-			Assertion.AssertEquals("anotherserver:2666", p4.Port);
+			AssertEquals(@"c:\bin\p4.exe", p4.Executable);
+			AssertEquals("//depot/myproject/...", p4.View);
+			AssertEquals("myclient", p4.Client);
+			AssertEquals("me", p4.User);
+			AssertEquals("anotherserver:2666", p4.Port);
 		}
 
 		private P4 CreateP4(string p4root)
@@ -49,11 +48,11 @@ namespace tw.ccnet.core.sourcecontrol.test
 </sourceControl>
 ";
 			P4 p4 = CreateP4(xml);
-			Assertion.AssertEquals("p4", p4.Executable);
-			Assertion.AssertEquals("//depot/anotherproject/...", p4.View);
-			Assertion.AssertNull(p4.Client);
-			Assertion.AssertNull(p4.User);
-			Assertion.AssertNull(p4.Port);
+			AssertEquals("p4", p4.Executable);
+			AssertEquals("//depot/anotherproject/...", p4.View);
+			AssertNull(p4.Client);
+			AssertNull(p4.User);
+			AssertNull(p4.Port);
 		}
 
 		[Test]
@@ -79,8 +78,8 @@ namespace tw.ccnet.core.sourcecontrol.test
 
 			string expectedArgs = "-s changes -s submitted //depot/myproj/...@2002/10/20:02:00:00,@2002/10/31:05:05:00";
 
-			Assertion.AssertEquals("p4", process.StartInfo.FileName);
-			Assertion.AssertEquals(expectedArgs, process.StartInfo.Arguments);
+			AssertEquals("p4", process.StartInfo.FileName);
+			AssertEquals(expectedArgs, process.StartInfo.Arguments);
 		}
 
 		[Test]
@@ -106,8 +105,8 @@ namespace tw.ccnet.core.sourcecontrol.test
 			P4 p4 = CreateP4(xml);
 			Process process = p4.CreateChangeListProcess(from, to);
 
-			Assertion.AssertEquals("c:\\bin\\p4.exe", process.StartInfo.FileName);
-			Assertion.AssertEquals(expectedArgs, process.StartInfo.Arguments);
+			AssertEquals("c:\\bin\\p4.exe", process.StartInfo.FileName);
+			AssertEquals(expectedArgs, process.StartInfo.Arguments);
 		}
 
 		[Test]
@@ -117,8 +116,8 @@ namespace tw.ccnet.core.sourcecontrol.test
 			Process process = new P4().CreateDescribeProcess(changes);
 
 			string expectedArgs = "-s describe -s " + changes;
-			Assertion.AssertEquals("p4", process.StartInfo.FileName);
-			Assertion.AssertEquals(expectedArgs, process.StartInfo.Arguments);
+			AssertEquals("p4", process.StartInfo.FileName);
+			AssertEquals(expectedArgs, process.StartInfo.Arguments);
 		}
 
 		[Test]
@@ -162,7 +161,7 @@ exit: 0
 			Modification[] result = p4.GetModifications(from, to);
 
 			mock.Verify();
-			Assertion.AssertEquals(7, result.Length);
+			AssertEquals(7, result.Length);
 		}
 
 	}

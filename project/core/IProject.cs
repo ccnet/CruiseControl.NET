@@ -32,15 +32,6 @@ namespace tw.ccnet.core
 		}
 
 		/// <summary>
-		/// The minimum period of time for which the build process should wait
-		/// after one build, before starting the next (unless a build is forced).
-		/// </summary>
-		int MinimumSleepTime 
-		{
-			get; 
-		}
-
-		/// <summary>
 		/// Gets a list of IPublisher instances, used by this project.
 		/// TODO make this an IPublisher[] (need to check whether NetReflector works with arrays).
 		/// </summary>
@@ -58,12 +49,11 @@ namespace tw.ccnet.core
 		}
 
 		/// <summary>
-		/// Attempts to run an integration.  If <see cref="forceBuild"/> is not set, then a build
-		/// should occur only if the elapsed sleeping period has occurred.  If <see cref="forceBuild"/>
-		/// if true, then a build should occur regardless of sleeping time.
+		/// Runs an integration of this project.
 		/// </summary>
-		/// <param name="forceBuild"></param>
-		void RunIntegration(bool forceBuild);
+		/// <param name="buildCondition"></param>
+		/// <returns>The result of the integration, or null if no integration took place.</returns>
+		IntegrationResult RunIntegration(BuildCondition buildCondition);
 
 		/// <summary>
 		/// Returns the most recent build status.

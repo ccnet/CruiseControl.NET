@@ -21,7 +21,7 @@ namespace tw.ccnet.web
 			string logFileDir = Context.Parameters["LogFileDir"];
 			if (! Directory.Exists(logFileDir))
 			{
-				throw new CruiseControlException(String.Format(
+				throw new CruiseControlException(string.Format(
 				@"The specified log file folder: {0} does not exist", logFileDir));
 			}	
 			

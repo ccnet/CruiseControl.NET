@@ -2,7 +2,9 @@ using System;
 using System.Collections;
 using System.IO;
 using System.Xml;
+
 using Exortech.NetReflector;
+
 using tw.ccnet.core.util;
 using tw.ccnet.remote;
 
@@ -75,13 +77,9 @@ namespace tw.ccnet.core.publishers
 		{
 			DateTime lastModDate = result.LastModificationDate;
 			if (result.Succeeded)
-			{
-				return LogFile.CreateSuccessfulBuildLogFileName(lastModDate, result.Label);
-			} 
+				return LogFileUtil.CreateSuccessfulBuildLogFileName(lastModDate, result.Label);
 			else 
-			{
-				return LogFile.CreateFailedBuildLogFileName(lastModDate);
-			}
+				return LogFileUtil.CreateFailedBuildLogFileName(lastModDate);
 		}
 
 		/// <summary>

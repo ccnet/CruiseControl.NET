@@ -20,7 +20,7 @@ namespace tw.ccnet.core.test
 
 		public static string GenerateDefaultXml(IntegrationResult result)
 		{
-			return XmlUtil.GenerateOuterXml(String.Format(
+			return XmlUtil.GenerateOuterXml(string.Format(
 @"<buildResult projectName=""{5}"">
 	<status>{0}</status>
 	<label>{1}</label>

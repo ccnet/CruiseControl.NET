@@ -10,14 +10,14 @@ namespace tw.ccnet.core.util
 	/// </summary>
 	public class TempFileUtil
 	{
-		public static string CreateTempDir(string dirname)
-		{
-			return CreateTempDir(dirname, true);
-		}
-
 		public static string CreateTempDir(object obj)
 		{
 			return CreateTempDir(obj.GetType().FullName);
+		}
+
+		public static string CreateTempDir(string dirname)
+		{
+			return CreateTempDir(dirname, true);
 		}
 
 		public static string CreateTempDir(string dirname, bool overwrite)
@@ -32,7 +32,7 @@ namespace tw.ccnet.core.util
 
 		public static string GetTempPath(string dirname)
 		{
-			return Path.Combine(Path.GetTempPath(),dirname);
+			return Path.Combine(Path.GetTempPath(), dirname);
 		}
 
 		public static string GetTempPath(object obj)
