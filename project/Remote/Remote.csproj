@@ -139,6 +139,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "NCoverCheck.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "ProjectActivity.cs"
                     SubType = "Code"
                     BuildAction = "Compile"

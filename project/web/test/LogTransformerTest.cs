@@ -11,7 +11,6 @@ namespace ThoughtWorks.CruiseControl.Web.Test
 	{
 		private static readonly string TestFolder = "logTransformerTest";
 		private string _tempFolder;
-		private LogTransformer _logTransformer;
 
 		[SetUp]
 		public void Setup()
