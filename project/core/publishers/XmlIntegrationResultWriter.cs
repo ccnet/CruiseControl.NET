@@ -59,7 +59,7 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
 		private string RemoveNulls(string s)
 		{
 			Regex nullStringRegex = new Regex("\0");
-			return nullStringRegex.Replace(s, string.Empty);
+			return nullStringRegex.Replace(s, string.Empty).TrimStart();
 		}
 
 		private void WriteException(IIntegrationResult result)

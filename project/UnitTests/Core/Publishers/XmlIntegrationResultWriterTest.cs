@@ -163,8 +163,8 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers.Test
 			result.AddTaskResult(@"<?xml version=""1.0""?> <foo>Data</foo>");
 			string output = GenerateBuildOutput(result);
 			XmlUtil.VerifyXmlIsWellFormed(output);
-			Assert.AreEqual(-1, output.IndexOf("<![CDATA>"));
-			Assert.AreEqual(-1, output.IndexOf("<?xml"));
+			AssertNotContains(output, "<![CDATA");
+			AssertNotContains(output, "<?xml");
 		}
 
         [Test]
@@ -190,6 +190,18 @@ http://nant.sourceforge.net
 			result.AddTaskResult(nantOut);
 
 			Assert.AreEqual(CreateExpectedBuildXml(result, nantOut), GenerateBuildOutput(result));
+		}
+
+		[Test]
+		public void ShouldHandleEmptyLineBeforeXmlDeclaration()
+		{
+			IntegrationResult result = new IntegrationResult();
+			result.AddTaskResult(@"
+<?xml version=""1.0""?> <foo>Data</foo>");
+			string output = GenerateBuildOutput(result);
+			XmlUtil.VerifyXmlIsWellFormed(output);
+			AssertNotContains(output, "<![CDATA");
+			AssertNotContains(output, "<?xml");
 		}
 
         private IntegrationResult CreateIntegrationResult(IntegrationStatus status, bool addModifications)
