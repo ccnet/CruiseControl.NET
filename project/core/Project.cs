@@ -4,6 +4,7 @@ using Exortech.NetReflector;
 using ThoughtWorks.CruiseControl.Core.Label;
 using ThoughtWorks.CruiseControl.Core.Sourcecontrol;
 using ThoughtWorks.CruiseControl.Core.State;
+using ThoughtWorks.CruiseControl.Core.Tasks;
 using ThoughtWorks.CruiseControl.Core.Util;
 using ThoughtWorks.CruiseControl.Remote;
 
@@ -40,7 +41,7 @@ namespace ThoughtWorks.CruiseControl.Core
 
 		private string _webURL = DEFAULT_WEB_URL;
 		private ISourceControl _sourceControl = new NullSourceControl();
-		private IBuilder _builder;
+		private ITask _builder = new NullTask();
 		private ILabeller _labeller = new DefaultLabeller();
 		private ITask[] _tasks = new ITask[0];		
 		private IIntegrationCompletedEventHandler[] _publishers = new IIntegrationCompletedEventHandler[0];
@@ -80,8 +81,8 @@ namespace ThoughtWorks.CruiseControl.Core
 			set { _webURL = value; }
 		}
 
-		[ReflectorProperty("build", InstanceTypeKey="type")]
-		public IBuilder Builder
+		[ReflectorProperty("build", InstanceTypeKey="type", Required=false)]
+		public ITask Builder
 		{
 			get { return _builder; }
 			set { _builder = value; }
@@ -174,7 +175,10 @@ namespace ThoughtWorks.CruiseControl.Core
 
 		public void Run(IIntegrationResult result)
 		{
-			Builder.Run(result);
+			if (Builder != null)
+			{
+				Builder.Run(result);
+			}
 			foreach (ITask task in _tasks)
 			{
 				task.Run(result);

@@ -83,7 +83,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Config
 		[Test, ExpectedException(typeof(ConfigurationException))]
 		public void Populate_MissingProjectProperties()
 		{
-			string projectXml = ConfigurationFixture.GenerateProjectXml(null, null, null, null, null, null);
+			string projectXml = @"<project />";
 			fileLoader.PopulateProjectsFromXml(ConfigurationFixture.GenerateConfig(projectXml));
 		}
 

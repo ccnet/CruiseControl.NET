@@ -609,6 +609,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Core\Tasks\NullTaskTest.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Core\Tasks\NUnitArgumentTest.cs"
                     SubType = "Code"
                     BuildAction = "Compile"

@@ -943,6 +943,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "tasks\NullTask.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "tasks\NUnitArgument.cs"
                     SubType = "Code"
                     BuildAction = "Compile"

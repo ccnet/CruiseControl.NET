@@ -146,16 +146,14 @@ namespace ThoughtWorks.CruiseControl.Core.Test
 		public void LoadMinimalProjectXmlFromConfiguration()
 		{
 			string xml = @"
-<project name=""foo"">
-	<build type=""nant"" />
-</project>";
+<project name=""foo"" />";
 
 			Project project = (Project) NetReflector.Read(xml);
 			Assert.AreEqual("foo", project.Name);
 			Assert.AreEqual(Project.DEFAULT_WEB_URL, project.WebURL);
 			Assert.AreEqual(0, project.ModificationDelaySeconds); //TODO: is this the correct default?  should quiet period be turned off by default?  is this sourcecontrol specific?
 			Assert.AreEqual(true, project.PublishExceptions);
-			Assert.IsTrue(project.Builder is NAntBuilder);
+			Assert.IsTrue(project.Builder is NullTask);
 			Assert.IsTrue(project.SourceControl is NullSourceControl);
 			Assert.IsTrue(project.Labeller is DefaultLabeller);
 			Assert.AreEqual(1, project.Triggers.Length);
@@ -345,7 +343,7 @@ namespace ThoughtWorks.CruiseControl.Core.Test
 		}
 
 		[Test]
-		public void ShouldBuildBuilderAndTasksWhenBuildCalled()
+		public void ShouldBuildBuilderAndThenTasksWhenBuildCalled()
 		{
 			IIntegrationResult result = (IIntegrationResult) new DynamicMock(typeof(IIntegrationResult)).MockInstance;
 			_mockBuilder.Expect("Run", result);
