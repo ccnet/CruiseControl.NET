@@ -24,7 +24,7 @@ namespace tw.ccnet.core
 		{
 			ArrayList files = new ArrayList();
 			
-			foreach (XmlNode node in section.SelectNodes("/file")) 
+			foreach (XmlNode node in section.SelectNodes("/xslFiles/file")) 
 			{
 				files.Add(node.Attributes["name"].Value);
 

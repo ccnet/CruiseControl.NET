@@ -65,14 +65,12 @@ namespace tw.ccnet.core.schedule.test
 
 			// verify that project slept twice
 			TimeSpan delta = stop - start;
-//<<<<<<< SchedulerTest.cs
 			TimeSpan expectedDelta = new TimeSpan(0, 0, 0, 0, (int) _schedule.TimeOut * 2);
 			Assertion.Assert("The project did not sleep",  delta >= expectedDelta);
-//=======
+
 //			TimeSpan expectedDelta = new TimeSpan(_schedule.TimeOut * 2);
 //			// Assert("The project did not sleep",  delta >= expectedDelta);
 //			//Console.WriteLine("expected: " + expectedDelta + " actual: " + delta);
-//>>>>>>> 1.4
 		}
 
 		[Test]
@@ -160,6 +158,7 @@ namespace tw.ccnet.core.schedule.test
 			_scheduler.Schedule = newSchedule;
 			
 			_scheduler.Start();
+			Thread.Sleep(1);
 			_scheduler.WaitForExit();
 			AssertEquals(1, newSchedule.Iterations);
 		}
