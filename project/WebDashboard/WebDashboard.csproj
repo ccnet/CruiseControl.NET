@@ -478,6 +478,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Dashboard\ServerLink.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Dashboard\SideBarViewBuilder.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -672,11 +677,6 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "MVC\Cruise\SecurityCheckingProxyAction.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
                     RelPath = "MVC\Cruise\ServerCheckingProxyAction.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -713,6 +713,11 @@
                 />
                 <File
                     RelPath = "Plugins\AddProject\AddProjectModelGenerator.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Plugins\AddProject\AddProjectPlugin.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -812,6 +817,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Plugins\ServerReport\ServerLogServerPlugin.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Plugins\ViewAllBuilds\IViewAllBuildsViewBuilder.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -823,11 +833,6 @@
                 />
                 <File
                     RelPath = "Plugins\ViewProjectReport\ViewProjectReportAction.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Plugins\ViewServerLog\ViewServerLogAction.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

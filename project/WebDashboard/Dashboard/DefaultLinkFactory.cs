@@ -20,5 +20,10 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 		{
 			return new ProjectLink(urlBuilder, buildSpecifier, description, actionSpecifier);
 		}
+
+		public IAbsoluteLink CreateServerLink(IServerSpecifier serverSpecifier, string description, IActionSpecifier actionSpecifier)
+		{
+			return new ServerLink(urlBuilder, serverSpecifier, description, actionSpecifier);
+		}
 	}
 }

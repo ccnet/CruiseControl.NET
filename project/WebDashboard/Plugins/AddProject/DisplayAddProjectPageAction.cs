@@ -1,13 +1,11 @@
 using System.Web.UI;
-using ThoughtWorks.CruiseControl.WebDashboard.MVC;
+using ThoughtWorks.CruiseControl.WebDashboard.IO;
 using ThoughtWorks.CruiseControl.WebDashboard.MVC.Cruise;
 
 namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.AddProject
 {
-	public class DisplayAddProjectPageAction : IAction
+	public class DisplayAddProjectPageAction : ICruiseAction
 	{
-		public static readonly string ACTION_NAME = "AddProjectDisplay";
-
 		private readonly AddProjectViewBuilder viewBuilder;
 		private readonly AddProjectModelGenerator projectModelGenerator;
 
@@ -17,9 +15,9 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.AddProject
 			this.viewBuilder = viewBuilder;
 		}
 
-		public Control Execute(IRequest request)
+		public Control Execute(ICruiseRequest request)
 		{
-			AddEditProjectModel model = projectModelGenerator.GenerateModel(request);
+			AddEditProjectModel model = projectModelGenerator.GenerateModel(request.Request);
 			model.SaveActionName = SaveNewProjectAction.ACTION_NAME;
 			model.IsAdd = true;
 			model.Status = "";

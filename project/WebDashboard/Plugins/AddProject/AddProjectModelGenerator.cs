@@ -20,6 +20,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.AddProject
 			this.cruiseManagerWrapper = cruiseManagerWrapper;
 		}
 
+		// ToDo - this should probably use a Cruise Request
 		public AddEditProjectModel GenerateModel(IRequest request)
 		{
 			string selectedServerName = request.GetText("ServersDropDown");

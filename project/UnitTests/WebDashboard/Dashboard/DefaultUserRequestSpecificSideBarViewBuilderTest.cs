@@ -5,9 +5,7 @@ using NMock.Constraints;
 using NUnit.Framework;
 using ThoughtWorks.CruiseControl.WebDashboard.Dashboard;
 using ThoughtWorks.CruiseControl.WebDashboard.MVC.View;
-using ThoughtWorks.CruiseControl.WebDashboard.Plugins.AddProject;
 using ThoughtWorks.CruiseControl.WebDashboard.Plugins.BuildReport;
-using ThoughtWorks.CruiseControl.WebDashboard.Plugins.ViewServerLog;
 
 namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 {
@@ -50,35 +48,33 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 		}
 
 		[Test]
-		public void ShouldReturnLinkToAddProjectForFarmView()
+		public void ShouldReturnCorrectLinksForFarmView()
 		{
-			// Setup
-			urlBuilderMock.ExpectAndReturn("BuildUrl", "returnedurl", new PropertyIs("ActionName", DisplayAddProjectPageAction.ACTION_NAME));
-
-			// Execute
-			HtmlTable table = viewBuilder.GetFarmSideBar();
-			HtmlAnchor anchor = new HtmlAnchor();
-			anchor.HRef = "returnedurl";
-			anchor.InnerHtml = "Add Project";
-
-			Assert.IsTrue(TableContains(table, anchor));
+			Assert.IsNotNull(viewBuilder.GetFarmSideBar());
 			
 			// Verify
 			VerifyAll();
 		}
 
 		[Test]
-		public void ShouldReturnLinkToAddProjectAndServerLogForServerView()
+		public void ShouldReturnCorrectLinksForServerView()
 		{
 			// Setup
-			urlBuilderMock.ExpectAndReturn("BuildServerUrl", "returnedurl1", new PropertyIs("ActionName", ViewServerLogAction.ACTION_NAME), serverSpecifier);
-			urlBuilderMock.ExpectAndReturn("BuildServerUrl", "returnedurl2", new PropertyIs("ActionName", DisplayAddProjectPageAction.ACTION_NAME), serverSpecifier);
+			Mock link1Mock = new DynamicMock(typeof(IAbsoluteLink));
+			Mock link2Mock = new DynamicMock(typeof(IAbsoluteLink));
+			link1Mock.SetupResult("Description", "my link 1");
+			link1Mock.SetupResult("AbsoluteURL", "myurl1");
+			link2Mock.SetupResult("Description", "my link 2");
+			link2Mock.SetupResult("AbsoluteURL", "myurl2");
+
+			pluginLinkCalculatorMock.ExpectAndReturn("GetServerPluginLinks", new IAbsoluteLink[] { (IAbsoluteLink) link1Mock.MockInstance, (IAbsoluteLink) link2Mock.MockInstance }, serverSpecifier);
+
 			HtmlAnchor expectedAnchor1 = new HtmlAnchor();
-			expectedAnchor1.HRef = "returnedurl1";
-			expectedAnchor1.InnerHtml = "View Server Log";
+			expectedAnchor1.HRef = "myurl1";
+			expectedAnchor1.InnerHtml = "my link 1";
 			HtmlAnchor expectedAnchor2 = new HtmlAnchor();
-			expectedAnchor2.HRef = "returnedurl2";
-			expectedAnchor2.InnerHtml = "Add Project";
+			expectedAnchor2.HRef = "myurl2";
+			expectedAnchor2.InnerHtml = "my link 2";
 
 			// Execute
 			HtmlTable table = viewBuilder.GetServerSideBar(serverSpecifier);
@@ -91,7 +87,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 		}
 
 		[Test]
-		public void ShouldReturnLinkToProjectReportForProjectView()
+		public void ShouldReturnCorrectLinksForProjectView()
 		{
 			// Setup
 			Mock link1Mock = new DynamicMock(typeof(IAbsoluteLink));
@@ -103,10 +99,6 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 
 			pluginLinkCalculatorMock.ExpectAndReturn("GetProjectPluginLinks", new IAbsoluteLink[] { (IAbsoluteLink) link1Mock.MockInstance, (IAbsoluteLink) link2Mock.MockInstance }, projectSpecifier);
 
-/*
-			urlBuilderMock.ExpectAndReturn("BuildProjectUrl", "editUrl", new PropertyIs("ActionName", DisplayEditProjectPageAction.ACTION_NAME), projectSpecifier);
-			urlBuilderMock.ExpectAndReturn("BuildProjectUrl", "deleteUrl", new PropertyIs("ActionName", ShowDeleteProjectAction.ACTION_NAME), projectSpecifier);
-*/
 			HtmlTable buildsPanel = new HtmlTable();
 			recentBuildsViewBuilderMock.ExpectAndReturn("BuildRecentBuildsTable", buildsPanel, projectSpecifier);
 

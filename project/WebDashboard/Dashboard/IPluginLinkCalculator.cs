@@ -2,7 +2,8 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 {
 	public interface IPluginLinkCalculator
 	{
-		IAbsoluteLink[] GetBuildPluginLinks(IBuildSpecifier buildSpecifier);
+		IAbsoluteLink[] GetServerPluginLinks(IServerSpecifier serverSpecifier);
 		IAbsoluteLink[] GetProjectPluginLinks(IProjectSpecifier projectSpecifier);
+		IAbsoluteLink[] GetBuildPluginLinks(IBuildSpecifier buildSpecifier);
 	}
 }

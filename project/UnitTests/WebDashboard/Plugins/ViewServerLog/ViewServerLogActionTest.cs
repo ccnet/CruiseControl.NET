@@ -3,7 +3,7 @@ using NMock;
 using NUnit.Framework;
 using ThoughtWorks.CruiseControl.WebDashboard.Dashboard;
 using ThoughtWorks.CruiseControl.WebDashboard.IO;
-using ThoughtWorks.CruiseControl.WebDashboard.Plugins.ViewServerLog;
+using ThoughtWorks.CruiseControl.WebDashboard.Plugins.ServerReport;
 using ThoughtWorks.CruiseControl.WebDashboard.ServerConnection;
 
 namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Plugins.ViewServerLog
@@ -11,7 +11,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Plugins.ViewServerLo
 	[TestFixture]
 	public class ViewServerLogActionTest
 	{
-		private ViewServerLogAction action;
+		private ServerLogServerPlugin action;
 
 		private DynamicMock farmServiceMock;
 		private DynamicMock requestMock;
@@ -24,7 +24,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Plugins.ViewServerLo
 			requestMock = new DynamicMock(typeof(ICruiseRequest));
 			farmServiceMock = new DynamicMock(typeof(IFarmService));
 
-			action = new ViewServerLogAction((IFarmService) farmServiceMock.MockInstance);
+			action = new ServerLogServerPlugin((IFarmService) farmServiceMock.MockInstance);
 
 			serverName = "myserver";
 			serverLog = "Some Stuff on the server";

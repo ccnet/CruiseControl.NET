@@ -443,6 +443,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "WebDashboard\Dashboard\ServerLinkTest.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "WebDashboard\Dashboard\SideBarViewBuilderTest.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -489,11 +494,6 @@
                 />
                 <File
                     RelPath = "WebDashboard\MVC\Cruise\ProjectCheckingProxyActionTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "WebDashboard\MVC\Cruise\SecurityCheckingProxyActionTest.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

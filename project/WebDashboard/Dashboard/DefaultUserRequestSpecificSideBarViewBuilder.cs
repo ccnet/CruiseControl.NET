@@ -1,8 +1,6 @@
 using System.Web.UI.HtmlControls;
 using ThoughtWorks.CruiseControl.WebDashboard.MVC.View;
-using ThoughtWorks.CruiseControl.WebDashboard.Plugins.AddProject;
 using ThoughtWorks.CruiseControl.WebDashboard.Plugins.BuildReport;
-using ThoughtWorks.CruiseControl.WebDashboard.Plugins.ViewServerLog;
 
 namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 {
@@ -25,15 +23,19 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 
 		public HtmlTable GetFarmSideBar()
 		{
-			return Table(
-				TR( TD( A("Add Project", urlBuilder.BuildUrl(new ActionSpecifierWithName(DisplayAddProjectPageAction.ACTION_NAME))))));
+			return new HtmlTable();
 		}
 
 		public HtmlTable GetServerSideBar(IServerSpecifier serverSpecifier)
 		{
-			return Table(
-				TR( TD( A("View Server Log", urlBuilder.BuildServerUrl(new ActionSpecifierWithName(ViewServerLogAction.ACTION_NAME), serverSpecifier)))),
-				TR( TD( A("Add Project", urlBuilder.BuildServerUrl(new ActionSpecifierWithName(DisplayAddProjectPageAction.ACTION_NAME), serverSpecifier)))));
+			HtmlTable table = new HtmlTable();
+
+			foreach (IAbsoluteLink link in PluginLinkCalculator.GetServerPluginLinks(serverSpecifier))
+			{
+				table.Rows.Add(TR( TD( A(link.Description, link.AbsoluteURL))));
+			}
+
+			return table;
 		}
 
 		public HtmlTable GetProjectSideBar(IProjectSpecifier projectSpecifier)

@@ -1,20 +1,20 @@
 
 namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 {
-	public class ProjectLink : IAbsoluteLink
+	public class ServerLink : IAbsoluteLink
 	{
-		private readonly IProjectSpecifier buildSpecifier;
+		private readonly IServerSpecifier serverSpecifier;
 		private readonly IActionSpecifier actionSpecifier;
 		private readonly IUrlBuilder urlBuilder;
 		private readonly string description;
 		public readonly string absoluteUrl;
 
-		public ProjectLink(IUrlBuilder urlBuilder, IProjectSpecifier projectSpecifier, string description, IActionSpecifier actionSpecifier)
+		public ServerLink(IUrlBuilder urlBuilder, IServerSpecifier serverSpecifier, string description, IActionSpecifier actionSpecifier)
 		{
 			this.description = description;
 			this.urlBuilder = urlBuilder;
 			this.actionSpecifier = actionSpecifier;
-			this.buildSpecifier = projectSpecifier;
+			this.serverSpecifier = serverSpecifier;
 		}
 
 		public string Description
@@ -24,7 +24,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 
 		public string AbsoluteURL
 		{
-			get { return urlBuilder.BuildProjectUrl(actionSpecifier, buildSpecifier); }
+			get { return urlBuilder.BuildServerUrl(actionSpecifier, serverSpecifier); }
 		}
 	}
 }

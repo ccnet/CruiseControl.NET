@@ -31,7 +31,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.AddProject
 		public Control Execute(ICruiseRequest request)
 		{
 			AddEditProjectModel model = projectModelGenerator.GenerateModel(request.Request);
-			SetProjectUrlIfOneNotSet(model, request.ProjectSpecifier);
+			SetProjectUrlIfOneNotSet(model, new DefaultProjectSpecifier(request.ServerSpecifier, model.Project.Name));
 			try
 			{
 				cruiseManagerWrapper.AddProject(request.ServerSpecifier, serializer.Serialize(model.Project));
