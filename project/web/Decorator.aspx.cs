@@ -28,17 +28,6 @@ namespace ThoughtWorks.CruiseControl.Web
 		protected SiteMesh.DecoratorControls.Title Title3;
 		protected System.Web.UI.HtmlControls.HtmlTableCell contentCell;
 
-		/*
-		public Control Content
-		{
-			set 
-			{ 
-				EnsureChildControls();
-				contentCell.Controls.Add(value); 
-			}
-		}
-		*/
-
 		private void Page_Load(object sender, System.EventArgs e)
 		{
 			string path = WebUtil.GetLogDirectory(Context).FullName;

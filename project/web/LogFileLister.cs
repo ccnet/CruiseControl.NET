@@ -59,7 +59,7 @@ namespace ThoughtWorks.CruiseControl.Web
 
 		public static string GetDisplayLabel(string logFilename)
 		{
-			return string.Format("{0} {1}",
+			return string.Format("<nobr>{0} {1}</nobr>",
 				LogFileUtil.GetFormattedDateString(logFilename), 
 				GetBuildStatus(logFilename));	
 		} 

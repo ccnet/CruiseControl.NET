@@ -11,9 +11,6 @@
 				<td align="right" valign="top">
 					<table class="main-panel" bgcolor="#000066" cellpadding="0" cellspacing="0">
 						<tr>
-							<!--
-						<td height="18" width="18"><img align="top" src="images/corner_white_ur.gif" border="0"></td>
--->
 							<td height="18" width="18" bgcolor="#ffffff"><img src="images/shim.gif" border="0"></td>
 							<td height="18" width="18"><img src="images/shim.gif" border="0"></td>
 							<td colspan="2"><img src="images/shim.gif" border="0"></td>

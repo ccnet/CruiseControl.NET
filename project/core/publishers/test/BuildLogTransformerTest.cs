@@ -7,7 +7,6 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers.Test
 	[TestFixture]
 	public class BuildLogTransformerTest: Assertion
 	{
-
 		[Test]
 		public void TransformingDocumentWithEmptyXSLFilesReturnsEmptyString()
 		{

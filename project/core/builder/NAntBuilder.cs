@@ -65,7 +65,7 @@ namespace ThoughtWorks.CruiseControl.Core.Builder
 
 			if (processResult.TimedOut)
 			{
-				throw new BuilderException(this, "NAnt process timed out(after " + BuildTimeoutSeconds + " seconds)");
+				throw new BuilderException(this, "NAnt process timed out (after " + BuildTimeoutSeconds + " seconds)");
 			}
 
 			if (processResult.ExitCode == 0)
@@ -135,7 +135,7 @@ namespace ThoughtWorks.CruiseControl.Core.Builder
 
 		public bool ShouldRun(IntegrationResult result)
 		{
-			return result.Working && result.Modifications.Length > 0;
+			return result.Working && result.HasModifications();
 		}
 
 		public override string ToString()
