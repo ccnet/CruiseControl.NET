@@ -1,3 +1,4 @@
+using System;
 using System.Web.UI;
 using System.Web.UI.HtmlControls;
 using System.Web.UI.WebControls;
@@ -27,6 +28,11 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.MVC.View
 			return row;
 		}
 
+		public HtmlTableCell CreateCell()
+		{
+			return new HtmlTableCell();
+		}
+
 		public HtmlTableCell CreateCell(string content)
 		{
 			HtmlTableCell cell = new HtmlTableCell();
@@ -41,9 +47,18 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.MVC.View
 			return cell;
 		}
 
-		public HtmlTableCell CreateCell()
+		public HtmlTableCell CreateCell(string content, int colspan)
 		{
-			return new HtmlTableCell();
+			HtmlTableCell cell = CreateCell(content);
+			cell.ColSpan = colspan;
+			return cell;
+		}
+
+		public HtmlTableCell CreateCell(Control control, int colspan)
+		{
+			HtmlTableCell cell = CreateCell(control);
+			cell.ColSpan = colspan;
+			return cell;
 		}
 
 		public TextBox CreateTextBox(string id, string text)

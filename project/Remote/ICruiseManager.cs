@@ -53,7 +53,7 @@ namespace ThoughtWorks.CruiseControl.Remote
 		/// <summary>
 		/// Deletes the specified project from the server
 		/// </summary>
-		void DeleteProject(string projectName);
+		void DeleteProject(string projectName, bool purgeWorkingDirectory, bool purgeArtifactDirectory, bool purgeSourceControlEnvironment);
 
 		/// <summary>
 		/// Returns the serialized form of the requested project from the server

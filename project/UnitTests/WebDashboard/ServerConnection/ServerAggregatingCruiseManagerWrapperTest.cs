@@ -183,10 +183,10 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.ServerConnection
 
 			configurationGetterMock.ExpectAndReturn("GetConfigFromSection", servers, ServersSectionHandler.SectionName);
 			cruiseManagerFactoryMock.ExpectAndReturn("GetCruiseManager", (ICruiseManager) cruiseManagerMock.MockInstance, "http://myurl");
-			cruiseManagerMock.Expect("DeleteProject", "myproject");
+			cruiseManagerMock.Expect("DeleteProject", "myproject", false, true, false);
 
 			// Execute
-			managerWrapper.DeleteProject("myserver", "myproject");
+			managerWrapper.DeleteProject("myserver", "myproject", false, true, false);
 
 			// Verify
 			VerifyAll();

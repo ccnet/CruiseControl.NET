@@ -20,13 +20,17 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.DeleteProject
 		{
 			string serverName = request.ServerName;
 			string projectName = request.ProjectName;
-			farmService.DeleteProject(serverName, projectName);
-			return viewBuilder.BuildView(BuildModel(serverName, projectName));
+			bool purgeWorkingDirectory = request.Request.GetChecked("PurgeWorkingDirectory");
+			bool purgeArtifactDirectory = request.Request.GetChecked("PurgeArtifactDirectory");
+			bool purgeSourceControlEnvironment = request.Request.GetChecked("PurgeSourceControlEnvironment");
+			farmService.DeleteProject(serverName, projectName, purgeWorkingDirectory, purgeArtifactDirectory, purgeSourceControlEnvironment);
+			return viewBuilder.BuildView(BuildModel(serverName, projectName, purgeWorkingDirectory, purgeArtifactDirectory, purgeSourceControlEnvironment));
 		}
 
-		private DeleteProjectModel BuildModel(string serverName, string projectName)
+		private DeleteProjectModel BuildModel(string serverName, string projectName, bool purgeWorkingDirectory, bool purgeArtifactDirectory, bool purgeSourceControlEnvironment)
 		{
-			return new DeleteProjectModel(serverName, projectName, string.Format("Project Deleted"), false);
+			return new DeleteProjectModel(serverName, projectName, string.Format("Project Deleted"), false, 
+				purgeWorkingDirectory, purgeArtifactDirectory, purgeSourceControlEnvironment);
 		}
 	}
 }

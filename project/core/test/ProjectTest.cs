@@ -31,12 +31,18 @@ namespace ThoughtWorks.CruiseControl.Core.Test
 		private IMock _mockPublisher;
 		private IMock _mockTask;
 		private TestTraceListener _listener;
-		private string tempDirPath;
+		private string workingDirPath;
+		private string artifactDirPath;
 		private const string PROJECT_NAME = "test";
 
 		[SetUp]
 		public void SetUp()
 		{
+			workingDirPath = TempFileUtil.CreateTempDir("workingDir");
+			artifactDirPath = TempFileUtil.CreateTempDir("artifactDir");
+			Assert.IsTrue(Directory.Exists(workingDirPath));
+			Assert.IsTrue(Directory.Exists(artifactDirPath));
+
 			_mockBuilder = new DynamicMock(typeof (IBuilder));
 			_mockBuilder.Strict = true;
 			_mockSourceControl = new DynamicMock(typeof (ISourceControl));
@@ -61,21 +67,15 @@ namespace ThoughtWorks.CruiseControl.Core.Test
 			_project.Labeller = (ILabeller) _mockLabeller.MockInstance;
 			_project.Publishers = new IIntegrationCompletedEventHandler[] {(IIntegrationCompletedEventHandler) _mockPublisher.MockInstance};
 			_project.Tasks = new ITask[] {(ITask) _mockTask.MockInstance};
-
-			tempDirPath = TempFileUtil.CreateTempDir("tempDir");
+			_project.ConfiguredWorkingDirectory = workingDirPath;
+			_project.ConfiguredArtifactDirectory = artifactDirPath;
 
 			_listener = new TestTraceListener();
 			Trace.Listeners.Add(_listener);
 		}
 
-		[TearDown]
-		public void TearDown()
+		private void VerifyAll()
 		{
-			Trace.Listeners.Remove(_listener);
-
-			TempFileUtil.DeleteTempDir("tempDir");
-
-			// NONONO - Verify's in teardown are NOT good enough - move these out to a 'VerifyAll' method and call it from every test.
 			_mockBuilder.Verify();
 			_mockSourceControl.Verify();
 			_mockStateManager.Verify();
@@ -83,6 +83,15 @@ namespace ThoughtWorks.CruiseControl.Core.Test
 			_mockLabeller.Verify();
 			_mockPublisher.Verify();
 			_mockTask.Verify();
+		}
+
+		[TearDown]
+		public void TearDown()
+		{
+			Trace.Listeners.Remove(_listener);
+
+			TempFileUtil.DeleteTempDir("workingDir");
+			TempFileUtil.DeleteTempDir("artifactDir");
 		}
 
 		[Test]
@@ -117,6 +126,8 @@ namespace ThoughtWorks.CruiseControl.Core.Test
 			Assert.IsTrue(project.Publishers[0] is XmlLogPublisher);
 			Assert.IsTrue(project.Tasks[0] is MergeFilesTask);
 			Assert.AreEqual(@"c:\my\working\directory", project.ConfiguredWorkingDirectory);
+
+			VerifyAll();
 		}
 
 		[Test]
@@ -139,6 +150,7 @@ namespace ThoughtWorks.CruiseControl.Core.Test
 			Assert.IsTrue(project.Schedule is Schedule);
 			Assert.IsNull(project.Publishers);
 			Assert.AreEqual(0, project.Tasks.Length);
+			VerifyAll();
 		}
 
 		[Test]
@@ -168,6 +180,7 @@ namespace ThoughtWorks.CruiseControl.Core.Test
 			AssertEqualArrays(new Modification[0], result.Modifications);
 			Assert.AreEqual(MockBuilder.BUILDER_OUTPUT, result.Output, "no output is expected as builder is not called");
 			Assert.IsTrue(result.EndTime >= result.StartTime);
+			VerifyAll();
 		}
 
 		[Test] //TODO: question: should state be saved after a poll with no modifications and no build?? -- i think it should: implication for last build though
@@ -192,6 +205,7 @@ namespace ThoughtWorks.CruiseControl.Core.Test
 			AssertEqualArrays(new Modification[0], result.Modifications);
 			Assert.IsNull(result.Output, "no output is expected as builder is not called");
 			Assert.IsTrue(result.EndTime >= result.StartTime);
+			VerifyAll();
 		}
 
 		[Test]
@@ -219,6 +233,7 @@ namespace ThoughtWorks.CruiseControl.Core.Test
 			Assert.IsTrue(result.HasModifications());
 			Assert.AreEqual(modifications, result.Modifications);
 			Assert.IsTrue(result.EndTime >= result.StartTime);
+			VerifyAll();
 		}
 
 		[Test]
@@ -234,6 +249,7 @@ namespace ThoughtWorks.CruiseControl.Core.Test
 			_project.PublishExceptions = false;
 			IntegrationResult result = _project.RunIntegration(BuildCondition.IfModificationExists);
 			Assert.AreEqual(expectedException, result.ExceptionResult);
+			VerifyAll();
 		}
 
 		[Test]
@@ -249,6 +265,7 @@ namespace ThoughtWorks.CruiseControl.Core.Test
 			_project.PublishExceptions = true;
 			IntegrationResult result = _project.RunIntegration(BuildCondition.IfModificationExists);
 			Assert.AreEqual(expectedException, result.ExceptionResult);
+			VerifyAll();
 		}
 
 		// test: verify correct args are passed to sourcecontrol?  should use date of last modification from last successful build IMO
@@ -258,6 +275,7 @@ namespace ThoughtWorks.CruiseControl.Core.Test
 		{
 			_mockStateManager.ExpectAndReturn("StateFileExists", false, null);
 			Assert.IsTrue(_project.LastIntegrationResult.IsInitial());
+			VerifyAll();
 		}
 
 		[Test]
@@ -272,6 +290,7 @@ namespace ThoughtWorks.CruiseControl.Core.Test
 			_mockStateManager.ExpectAndReturn("LoadState", expected);
 
 			Assert.AreEqual(expected, _project.LastIntegrationResult);
+			VerifyAll();
 		}
 
 		[Test]
@@ -291,6 +310,7 @@ namespace ThoughtWorks.CruiseControl.Core.Test
 			Assert.IsNotNull(constraint.Parameter);
 			Assert.AreEqual(results, (IntegrationResult) constraint.Parameter);
 			Assert.AreEqual(results, _project.LastIntegrationResult, "verify that current build has become last build");
+			VerifyAll();
 		}
 
 		[Test]
@@ -311,6 +331,7 @@ namespace ThoughtWorks.CruiseControl.Core.Test
 
 			mod.ModifiedTime = DateTime.Now.AddMinutes(-2);
 			Assert.IsTrue(_project.ShouldRunBuild(results), "There are no modifications within ModificationDelay, project should run");
+			VerifyAll();
 		}
 
 		[Test]
@@ -321,6 +342,7 @@ namespace ThoughtWorks.CruiseControl.Core.Test
 			_mockSourceControl.Expect("CreateTemporaryLabel");
 
 			_project.CreateTemporaryLabelIfNeeded();
+			VerifyAll();
 		}
 
 		[Test]
@@ -328,6 +350,7 @@ namespace ThoughtWorks.CruiseControl.Core.Test
 		{
 			// the mock has strict test to true, so an exception will be thrown in CreateTemporaryLabel is invoked
 			_project.CreateTemporaryLabelIfNeeded();
+			VerifyAll();
 		}
 
 
@@ -341,6 +364,7 @@ namespace ThoughtWorks.CruiseControl.Core.Test
 			_mockSourceControl.Expect("DeleteTemporaryLabel");
 
 			_project.HandleProjectLabelling(result);
+			VerifyAll();
 		}
 
 		[Test]
@@ -353,6 +377,7 @@ namespace ThoughtWorks.CruiseControl.Core.Test
 			_mockSourceControl.ExpectNoCall("DeleteTemporaryLabel");
 
 			_project.HandleProjectLabelling(result);
+			VerifyAll();
 		}
 
 
@@ -363,12 +388,14 @@ namespace ThoughtWorks.CruiseControl.Core.Test
 			result.Status = IntegrationStatus.Success;
 
 			_project.DeleteTemporaryLabelIfNeeded();
+			VerifyAll();
 		}
 
 		[Test]
 		public void InitialActivityState()
 		{
 			Assert.AreEqual(ProjectActivity.Unknown, _project.CurrentActivity);
+			VerifyAll();
 		}
 
 		[Test, ExpectedException(typeof (CruiseControlException))]
@@ -377,6 +404,7 @@ namespace ThoughtWorks.CruiseControl.Core.Test
 			_mockStateManager.ExpectAndThrow("StateFileExists", new CruiseControlException("expected exception"));
 
 			_project.RunIntegration(BuildCondition.IfModificationExists);
+			VerifyAll();
 		}
 
 		[Test, ExpectedException(typeof (CruiseControlException))]
@@ -387,6 +415,7 @@ namespace ThoughtWorks.CruiseControl.Core.Test
 			_mockLabeller.ExpectAndThrow("Generate", expectedException, new IsAnything());
 
 			_project.RunIntegration(BuildCondition.IfModificationExists);
+			VerifyAll();
 		}
 
 		[Test]
@@ -410,6 +439,7 @@ namespace ThoughtWorks.CruiseControl.Core.Test
 			Assert.IsNotNull(results.EndTime);
 			Assert.IsTrue(publisher.Published);
 			Assert.AreEqual("1.2.1", ((MockSourceControl) _project.SourceControl).Label);
+			VerifyAll();
 		}
 
 		[Test]
@@ -435,6 +465,7 @@ namespace ThoughtWorks.CruiseControl.Core.Test
 			Assert.IsTrue(publisher.Published);
 			Assert.AreEqual(1, _listener.Traces.Count, "No messages logged.");
 			Assert.IsTrue(_listener.Traces[0].ToString().IndexOf(expectedException.ToString()) > 0, "Wrong message logged.");
+			VerifyAll();
 		}
 
 		[Test]
@@ -460,87 +491,140 @@ namespace ThoughtWorks.CruiseControl.Core.Test
 			Assert.IsTrue(publisher.Published);
 			Assert.AreEqual(1, _listener.Traces.Count);
 			Assert.IsTrue(_listener.Traces[0].ToString().IndexOf(expectedException.ToString()) > 0, "Wrong message logged.");
+			VerifyAll();
 		}
 
 		[Test]
 		public void ShouldCallSourceControlInitializeOnInitialize()
 		{
 			// Setup
-			Project project = new Project();
-
-			DynamicMock sourceControlMock = new DynamicMock(typeof(ISourceControl));
-			sourceControlMock.Expect("Initialize", project);
-			project.SourceControl = (ISourceControl) sourceControlMock.MockInstance;
+			_mockSourceControl.Expect("Initialize", _project);
 
 			// Execute
-			project.Initialize();
+			_project.Initialize();
 			
 			// Verify
-			sourceControlMock.Verify();
+			VerifyAll();
 		}
 
 		[Test]
-		public void ShouldCallSourceControlPurgeThenDeleteWorkingDirectoryOnPurge()
+		public void ShouldNotCallSourceControlPurgeOrDeleteDirectoriesOnPurgeIfNoDeletesRequested()
 		{
 			// Setup
-			Project project = new Project();
-
-			DynamicMock sourceControlMock = new DynamicMock(typeof(ISourceControl));
-			sourceControlMock.Expect("Purge", project);
-			project.SourceControl = (ISourceControl) sourceControlMock.MockInstance;
-			project.ConfiguredWorkingDirectory = tempDirPath;
-			Assert.IsTrue(Directory.Exists(tempDirPath));
+			_mockSourceControl.ExpectNoCall("Purge", typeof(IProject));
 
 			// Execute
-			project.Purge();
+			_project.Purge(false, false, false);
 			
 			// Verify
-			sourceControlMock.Verify();
-			Assert.IsFalse(Directory.Exists(tempDirPath));
+			VerifyAll();
+			Assert.IsTrue(Directory.Exists(workingDirPath));
+			Assert.IsTrue(Directory.Exists(artifactDirPath));
 		}
 
 		[Test]
-		public void ShouldNotDeleteWorkingDirectoryIfSourceControlFailsOnPurge()
+		public void ShouldCallSourceControlPurgeIfRequested()
 		{
 			// Setup
-			Project project = new Project();
+			_mockSourceControl.Expect("Purge", _project);
 
-			DynamicMock sourceControlMock = new DynamicMock(typeof(ISourceControl));
-			sourceControlMock.ExpectAndThrow("Purge", new CruiseControlException(), project);
-			project.SourceControl = (ISourceControl) sourceControlMock.MockInstance;
-			project.ConfiguredWorkingDirectory = tempDirPath;
-			Assert.IsTrue(Directory.Exists(tempDirPath));
+			// Execute
+			_project.Purge(false, false, true);
+			
+			// Verify
+			VerifyAll();
+		}
+
+		[Test]
+		public void ShouldCallSourceControlPurgeAndDeleteDirectoriesIfRequested()
+		{
+			// Setup
+			_mockSourceControl.Expect("Purge", _project);
+
+			// Execute
+			_project.Purge(true, true, true);
+			
+			// Verify
+			VerifyAll();
+			Assert.IsFalse(Directory.Exists(workingDirPath));
+			Assert.IsFalse(Directory.Exists(artifactDirPath));
+		}
+
+		[Test]
+		public void ShouldDeleteWorkingDirectoryOnPurgeIfRequested()
+		{
+			// Setup
+			_mockSourceControl.ExpectNoCall("Purge", typeof(IProject));
+
+			// Execute
+			_project.Purge(true, false, false);
+			
+			// Verify
+			VerifyAll();
+			Assert.IsFalse(Directory.Exists(workingDirPath));
+		}
+
+		[Test]
+		public void ShouldDeleteArtifactDirectoryOnPurgeIfRequested()
+		{
+			// Setup
+			_mockSourceControl.ExpectNoCall("Purge", typeof(IProject));
+
+			// Execute
+			_project.Purge(false, true, false);
+			
+			// Verify
+			VerifyAll();
+			Assert.IsFalse(Directory.Exists(artifactDirPath));
+		}
+
+		[Test]
+		public void ShouldNotDeleteDirectoriesIfSourceControlFailsOnPurge()
+		{
+			// Setup
+			_mockSourceControl.ExpectAndThrow("Purge", new CruiseControlException(), _project);
 
 			// Execute
 			try
 			{
-				project.Purge();
+				_project.Purge(true, true, true);
 			}
 			catch (CruiseControlException) { }
 			
 			// Verify
-			sourceControlMock.Verify();
-			Assert.IsTrue(Directory.Exists(tempDirPath));
+			VerifyAll();
+			Assert.IsTrue(Directory.Exists(workingDirPath));
+			Assert.IsTrue(Directory.Exists(artifactDirPath));
 		}
 
 		[Test]
 		public void ShouldHandleWorkingDirectoryNotExisting()
 		{
 			// Setup
-			Project project = new Project();
-
-			DynamicMock sourceControlMock = new DynamicMock(typeof(ISourceControl));
-			sourceControlMock.Expect("Purge", project);
-			project.SourceControl = (ISourceControl) sourceControlMock.MockInstance;
-			project.ConfiguredWorkingDirectory = tempDirPath;
-			TempFileUtil.DeleteTempDir("tempDir");
-			Assert.IsFalse(Directory.Exists(tempDirPath));
+			_mockSourceControl.ExpectNoCall("Purge", typeof(IProject));
+			TempFileUtil.DeleteTempDir("workingDir");
+			Assert.IsFalse(Directory.Exists(workingDirPath));
 
 			// Execute
-			project.Purge();
+			_project.Purge(true, false, false);
 			
 			// Verify
-			sourceControlMock.Verify();
+			VerifyAll();
+		}
+
+		[Test]
+		public void ShouldHandleArtifactDirectoryNotExisting()
+		{
+			// Setup
+			_mockSourceControl.ExpectNoCall("Purge", typeof(IProject));
+			TempFileUtil.DeleteTempDir("artifactDir");
+			Assert.IsFalse(Directory.Exists(artifactDirPath));
+
+			// Execute
+			_project.Purge(false, true, false);
+			
+			// Verify
+			VerifyAll();
 		}
 	}
 }

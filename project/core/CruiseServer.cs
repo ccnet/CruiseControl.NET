@@ -269,13 +269,13 @@ namespace ThoughtWorks.CruiseControl.Core
 
 		// ToDo - test
 		// ToDo - when we decide how to handle configuration changes, do more here (like stopping/waiting for project, returning asynchronously, etc.)
-		public void DeleteProject(string projectName)
+		public void DeleteProject(string projectName, bool purgeWorkingDirectory, bool purgeArtifactDirectory, bool purgeSourceControlEnvironment)
 		{
 			Log.Info("Deleting project - " + projectName);
 			try
 			{
 				IConfiguration configuration = configurationService.Load();
-				configuration.Projects[projectName].Purge();
+				configuration.Projects[projectName].Purge(purgeWorkingDirectory, purgeArtifactDirectory, purgeSourceControlEnvironment);
 				configuration.DeleteProject(projectName);
 				configurationService.Save(configuration);
 			}
@@ -294,13 +294,14 @@ namespace ThoughtWorks.CruiseControl.Core
 		}
 
 		// ToDo - this done TDD
+		// ToDo - really delete working dir? What if SCM hasn't changed?
 		public void UpdateProject(string projectName, string serializedProject)
 		{
 			Log.Info("Updating project - " + projectName);
 			try
 			{
 				IConfiguration configuration = configurationService.Load();
-				configuration.Projects[projectName].Purge();
+				configuration.Projects[projectName].Purge(true, false, true);
 				configuration.DeleteProject(projectName);
 				Project project = projectSerializer.Deserialize(serializedProject);
 				configuration.AddProject(project);

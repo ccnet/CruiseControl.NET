@@ -72,6 +72,6 @@ namespace ThoughtWorks.CruiseControl.Core
 		/// <summary>
 		/// This method is called when the project is being deleted from the server. It allows resources to be cleaned up, SCM clients to be unregistered, etc.
 		/// </summary>
-		void Purge();
+		void Purge(bool purgeWorkingDirectory, bool purgeArtifactDirectory, bool purgeSourceControlEnvironment);
 	}
 }

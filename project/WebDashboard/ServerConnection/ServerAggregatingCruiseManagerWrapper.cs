@@ -37,9 +37,9 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.ServerConnection
 			return GetCruiseManager(serverName).GetMostRecentBuildNames(projectName,buildCount);
 		}
 
-		public void DeleteProject(string serverName, string projectName)
+		public void DeleteProject(string serverName, string projectName, bool purgeWorkingDirectory, bool purgeArtifactDirectory, bool purgeSourceControlEnvironment)
 		{
-			GetCruiseManager(serverName).DeleteProject(projectName);
+			GetCruiseManager(serverName).DeleteProject(projectName, purgeWorkingDirectory, purgeArtifactDirectory, purgeSourceControlEnvironment);
 		}
 
 		public string GetServerLog (string serverName)

@@ -70,9 +70,9 @@ namespace ThoughtWorks.CruiseControl.Core
 			cruiseServer.AddProject(serializedProject);
 		}
 
-		public void DeleteProject(string projectName)
+		public void DeleteProject(string projectName, bool purgeWorkingDirectory, bool purgeArtifactDirectory, bool purgeSourceControlEnvironment)
 		{
-			cruiseServer.DeleteProject(projectName);
+			cruiseServer.DeleteProject(projectName, purgeWorkingDirectory, purgeArtifactDirectory, purgeSourceControlEnvironment);
 		}
 
 		public string GetProject(string projectName)

@@ -20,7 +20,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.DeleteProject
 
 		private DeleteProjectModel BuildModel(string serverName, string projectName)
 		{
-			return new DeleteProjectModel(serverName, projectName, string.Format("Are you sure you want to delete {0} on {1}?", projectName, serverName), true);
+			return new DeleteProjectModel(serverName, projectName, string.Format("Please confirm you want to delete {0}, and choose which extra delete actions you want to perform", projectName), true, true, true, true);
 		}
 	}
 }

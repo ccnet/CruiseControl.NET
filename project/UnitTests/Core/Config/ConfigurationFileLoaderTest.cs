@@ -136,7 +136,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Config
 			public ProjectActivity CurrentActivity { get { return ProjectActivity.Building; } }
 			public IntegrationResult RunIntegration(BuildCondition buildCondition) { return null; }
 			public IntegrationStatus LatestBuildStatus { get { return IntegrationStatus.Success; } }
-			public void Purge() { }
+			public void Purge(bool purgeWorkingDirectory, bool purgeArtifactDirectory, bool purgeSourceControlEnvironment) { }
 			public string WebURL { get {return ""; } }
 		}
 	}

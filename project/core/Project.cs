@@ -377,13 +377,20 @@ namespace ThoughtWorks.CruiseControl.Core
 			SourceControl.Initialize(this);
 		}
 
-		public void Purge()
+		public void Purge(bool purgeWorkingDirectory, bool purgeArtifactDirectory, bool purgeSourceControlEnvironment)
 		{
 			Log.Info(string.Format("Purging Project [{0}]", Name));
-			SourceControl.Purge(this);
-			if (Directory.Exists(WorkingDirectory))
+			if (purgeSourceControlEnvironment)
+			{
+				SourceControl.Purge(this);
+			}
+			if (purgeWorkingDirectory && Directory.Exists(WorkingDirectory))
 			{
 				new IoService().DeleteIncludingReadOnlyObjects(WorkingDirectory);	
+			}
+			if (purgeArtifactDirectory && Directory.Exists(ArtifactDirectory))
+			{
+				new IoService().DeleteIncludingReadOnlyObjects(ArtifactDirectory);	
 			}
 		}
 	}

@@ -38,8 +38,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Plugins.DeleteProjec
 			// Setup
 			cruiseRequestMock.ExpectAndReturn("ServerName", "myServer");
 			cruiseRequestMock.ExpectAndReturn("ProjectName", "myProject");
-			string expectedMessage = "Are you sure you want to delete myProject on myServer?";
-			viewBuilderMock.ExpectAndReturn("BuildView", view, new DeleteProjectModel("myServer", "myProject", expectedMessage, true));
+			string expectedMessage = "Please confirm you want to delete myProject, and choose which extra delete actions you want to perform";
+			viewBuilderMock.ExpectAndReturn("BuildView", view, new DeleteProjectModel("myServer", "myProject", expectedMessage, true, true, true, true));
 
 			// Execute
 			Control returnedView = showDeleteProjectAction.Execute(cruiseRequest);

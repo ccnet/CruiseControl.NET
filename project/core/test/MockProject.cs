@@ -59,7 +59,7 @@ namespace ThoughtWorks.CruiseControl.Core.Test
 			get { return IntegrationStatus.Unknown; }
 		}
 
-		public void Purge()
+		public void Purge(bool purgeWorkingDirectory, bool purgeArtifactDirectory, bool purgeSourceControlEnvironment)
 		{
 			return;
 		}

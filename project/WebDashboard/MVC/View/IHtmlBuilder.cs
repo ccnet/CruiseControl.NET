@@ -8,9 +8,11 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.MVC.View
 	{
 		HtmlTable CreateTable(params HtmlTableRow[] rows);
 		HtmlTableRow CreateRow(params HtmlTableCell[] cells);
+		HtmlTableCell CreateCell();
 		HtmlTableCell CreateCell(string content);
 		HtmlTableCell CreateCell(Control control);
-		HtmlTableCell CreateCell();
+		HtmlTableCell CreateCell(string content, int colspan);
+		HtmlTableCell CreateCell(Control control, int colspan);
 		DropDownList CreateDropDownList(string id, string[] entries, string selectedEntry);
 		TextBox CreateTextBox(string id, string text);
 		CheckBox CreateBooleanCheckBox(string id, bool isChecked);

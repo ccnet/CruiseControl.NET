@@ -23,6 +23,16 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.MVC.View
 			return htmlBuilder.CreateRow(cells);
 		}
 
+		public HtmlTableCell TD(string content, int colspan)
+		{
+			return htmlBuilder.CreateCell(content, colspan);
+		}
+
+		public HtmlTableCell TD(Control control, int colspan)
+		{
+			return htmlBuilder.CreateCell(control, colspan);
+		}
+
 		public HtmlTableCell TD(string content)
 		{
 			return htmlBuilder.CreateCell(content);

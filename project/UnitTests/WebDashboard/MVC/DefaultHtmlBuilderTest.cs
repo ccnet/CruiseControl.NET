@@ -70,6 +70,34 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.MVC
 		}
 
 		[Test]
+		public void ShouldCreateCellWithGivenContentAsInnerHtmlWithGivenColspan()
+		{
+			// Setup
+			string content = "<b>Hello</b>";
+
+			// Execute
+			HtmlTableCell cell = new DefaultHtmlBuilder().CreateCell(content,2);
+			
+			// Verify
+			Assert.AreEqual(content, cell.InnerHtml);
+			Assert.AreEqual(2, cell.ColSpan);
+		}
+
+		[Test]
+		public void ShouldCreateCellWithGivenSubControlWithGivenColspan()
+		{
+			// Setup
+			HtmlTable subControl = new HtmlTable();
+
+			// Execute
+			HtmlTableCell cell = new DefaultHtmlBuilder().CreateCell(subControl,2);
+
+			// Verify
+			Assert.AreEqual(subControl, cell.Controls[0]);
+			Assert.AreEqual(2, cell.ColSpan);
+		}
+
+		[Test]
 		public void ShouldCreateAnEmptyCell()
 		{
 			// Execute
