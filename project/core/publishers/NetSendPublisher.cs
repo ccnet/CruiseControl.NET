@@ -17,7 +17,7 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
 		[ReflectorProperty("fixedMessage", Required=false)]
 		public string FixedMessage = "BUILD FIXED!";
 
-		public override void PublishIntegrationResults(IProject project, IIntegrationResult result)
+		public override void PublishIntegrationResults(IIntegrationResult result)
 		{
 			if (ShouldSendMessage(result))
 			{

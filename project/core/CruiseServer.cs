@@ -186,7 +186,7 @@ namespace ThoughtWorks.CruiseControl.Core
 					{
 						if (publisher is XmlLogPublisher)
 						{
-							string logDirectory = ((XmlLogPublisher) publisher).LogDirectory(projectIntegrator.Project);
+							string logDirectory = ((XmlLogPublisher) publisher).LogDirectory(projectIntegrator.Project.ArtifactDirectory);
 							if (! Directory.Exists(logDirectory))
 							{
 								Log.Warning("Log Directory [ " + logDirectory + " ] does not exist. Are you sure any builds have completed?");
@@ -227,7 +227,7 @@ namespace ThoughtWorks.CruiseControl.Core
 					{
 						if (publisher is XmlLogPublisher)
 						{
-							string logDirectory = ((XmlLogPublisher) publisher).LogDirectory(projectIntegrator.Project);
+							string logDirectory = ((XmlLogPublisher) publisher).LogDirectory(projectIntegrator.Project.ArtifactDirectory);
 							if (! Directory.Exists(logDirectory))
 							{
 								Log.Warning("Log Directory [ " + logDirectory + " ] does not exist. Are you sure any builds have completed?");

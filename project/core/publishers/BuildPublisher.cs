@@ -23,7 +23,7 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
 			set { sourceDir = value; }
 		}
 
-		public override void PublishIntegrationResults(IProject project, IIntegrationResult result)
+		public override void PublishIntegrationResults(IIntegrationResult result)
 		{
 			if (result.Succeeded) 
 			{

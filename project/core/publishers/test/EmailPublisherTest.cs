@@ -42,7 +42,7 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers.Test
 			_publisher.EmailGateway = _gateway;
 			_publisher.EmailUsers.Add("bar", new EmailUser("bar", "foo", "bar@foo.com"));
 			_publisher.EmailGroups.Add("foo", new EmailGroup("foo", EmailGroup.NotificationType.Change));
-			_publisher.PublishIntegrationResults(null, IntegrationResultMother.CreateStillSuccessful());
+			_publisher.PublishIntegrationResults(IntegrationResultMother.CreateStillSuccessful());
 			Assert.AreEqual(0, _gateway.SentMessages.Count);
 		}
 
@@ -53,7 +53,7 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers.Test
 			_publisher.EmailGateway = _gateway;
 			_publisher.EmailUsers.Add("bar", new EmailUser("bar", "foo", "bar@foo.com"));
 			_publisher.EmailGroups.Add("foo", new EmailGroup("foo", EmailGroup.NotificationType.Change));
-			_publisher.PublishIntegrationResults(null, IntegrationResultMother.CreateFailed());
+			_publisher.PublishIntegrationResults(IntegrationResultMother.CreateFailed());
 			Assert.AreEqual(1, _gateway.SentMessages.Count);
 		}
 
@@ -83,7 +83,7 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers.Test
 		public void Publish()
 		{
 			IntegrationResult result = IntegrationResultMother.CreateStillSuccessful();
-			_publisher.PublishIntegrationResults(null, result);
+			_publisher.PublishIntegrationResults(result);
 			Assert.AreEqual("mock.gateway.org", _gateway.MailHost);
 			Assert.AreEqual(1, _gateway.SentMessages.Count);
 		}
@@ -104,7 +104,7 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers.Test
 		[Test]
 		public void Publish_UnknownIntegrationStatus()
 		{
-			_publisher.PublishIntegrationResults(null, new IntegrationResult());
+			_publisher.PublishIntegrationResults(new IntegrationResult());
 			Assert.AreEqual(0, _gateway.SentMessages.Count);
 			// verify that no messages are sent if there were no modifications
 		}

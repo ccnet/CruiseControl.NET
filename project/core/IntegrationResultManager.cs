@@ -42,6 +42,8 @@ namespace ThoughtWorks.CruiseControl.Core
 			_currentResult.LastIntegrationStatus = LastIntegrationResult.Status;
 			_currentResult.BuildCondition = DetermineBuildCondition(buildCondition);
 			_currentResult.Label = _project.Labeller.Generate(LastIntegrationResult);
+			_currentResult.ArtifactDirectory = _project.ArtifactDirectory;
+			_currentResult.ProjectUrl = _project.WebURL;
 			return _currentResult;
 		}
 

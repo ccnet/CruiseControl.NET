@@ -98,7 +98,7 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
             set { _groups = value; }
         }
 
-        public override void PublishIntegrationResults(IProject project, IIntegrationResult result)
+        public override void PublishIntegrationResults(IIntegrationResult result)
         {
             if (result.Status == IntegrationStatus.Unknown)
                 return;

@@ -6,7 +6,7 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
 	/// <summary>
 	/// Base class for all CruiseControl.NET build result publishers.
 	/// </summary>
-	public abstract class PublisherBase : IIntegrationCompletedEventHandler
+	public abstract class PublisherBase : IIntegrationCompletedEventHandler, ITask
 	{
 		private IntegrationCompletedEventHandler _publish;
 
@@ -29,7 +29,7 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
 		{
 			try
 			{
-				PublishIntegrationResults((IProject) source, e.IntegrationResult);
+				PublishIntegrationResults(e.IntegrationResult);
 			}
 			catch (Exception ex)
 			{
@@ -41,8 +41,12 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
 		/// <summary>
 		/// Performs all actions for this publisher implementation.
 		/// </summary>
-		/// <param name="project">The project from which results originated.</param>
 		/// <param name="result">The result of this integration.</param>
-		public abstract void PublishIntegrationResults(IProject project, IIntegrationResult result);
+		public abstract void PublishIntegrationResults(IIntegrationResult result);
+
+		public void Run(IIntegrationResult result)
+		{
+			PublishIntegrationResults(result);
+		}
 	}
 }

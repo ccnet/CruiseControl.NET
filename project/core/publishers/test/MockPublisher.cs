@@ -18,7 +18,7 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers.Test
 			get { return _result; }
 		}
 
-		public override void PublishIntegrationResults(IProject project, IIntegrationResult result)
+		public override void PublishIntegrationResults(IIntegrationResult result)
 		{
 			_published = true;
 			_result = result;

@@ -62,7 +62,7 @@ namespace ThoughtWorks.CruiseControl.Core.Test
 			_project.Builder = (IBuilder) _mockBuilder.MockInstance;
 			_project.SourceControl = (ISourceControl) _mockSourceControl.MockInstance;
 			_project.StateManager = (IStateManager) _mockStateManager.MockInstance;
-			_project.Triggers = new ITrigger[] { (ITrigger) _mockIntegrationTrigger.MockInstance } ;
+			_project.Triggers = new ITrigger[] {(ITrigger) _mockIntegrationTrigger.MockInstance};
 			_project.Labeller = (ILabeller) _mockLabeller.MockInstance;
 			_project.Publishers = new IIntegrationCompletedEventHandler[] {(IIntegrationCompletedEventHandler) _mockPublisher.MockInstance};
 			_project.Tasks = new ITask[] {(ITask) _mockTask.MockInstance};
@@ -169,7 +169,7 @@ namespace ThoughtWorks.CruiseControl.Core.Test
 	<sourcecontrol type=""mock"" />
 	<triggers/>
 </project>";
-			
+
 			Project project = (Project) NetReflector.Read(xml);
 			Assert.AreEqual(0, project.Triggers.Length);
 		}
@@ -183,7 +183,7 @@ namespace ThoughtWorks.CruiseControl.Core.Test
 			_mockSourceControl.ExpectAndReturn("GetModifications", new Modification[0], new IsAnything(), new IsAnything()); // return no modifications found
 			_mockSourceControl.Expect("GetSource", new IsAnything());
 			_mockSourceControl.Expect("LabelSourceControl", "label", new IsAnything());
-			_mockPublisher.Expect("PublishIntegrationResults", new IsAnything(), new IsAnything());
+			_mockPublisher.Expect("PublishIntegrationResults", new IsAnything());
 			_mockTask.Expect("Run", new IsAnything());
 			_project.Builder = new MockBuilder(); // need to use mock builder in order to set properties on IntegrationResult
 			_project.ConfiguredWorkingDirectory = @"c:\temp";
@@ -207,14 +207,14 @@ namespace ThoughtWorks.CruiseControl.Core.Test
 		}
 
 		[Test] //TODO: question: should state be saved after a poll with no modifications and no build?? -- i think it should: implication for last build though
-			public void RunningIntegrationWithNoModificationsShouldNotBuildOrPublish()
+		public void RunningIntegrationWithNoModificationsShouldNotBuildOrPublish()
 		{
 			_mockStateManager.ExpectAndReturn("StateFileExists", true); // running the first integration (no state file)
 			_mockStateManager.ExpectAndReturn("LoadState", IntegrationResultMother.CreateSuccessful());
 			_mockLabeller.ExpectAndReturn("Generate", "label", new IsAnything()); // generate new label
 			_mockSourceControl.ExpectAndReturn("GetModifications", new Modification[0], new IsAnything(), new IsAnything()); // return no modifications found
 			_mockBuilder.ExpectNoCall("Run", typeof (IntegrationResult));
-			_mockPublisher.ExpectNoCall("PublishIntegrationResults", typeof (IProject), typeof (IntegrationResult));
+			_mockPublisher.ExpectNoCall("PublishIntegrationResults", typeof (IntegrationResult));
 
 			IIntegrationResult result = _project.RunIntegration(BuildCondition.IfModificationExists);
 
@@ -242,12 +242,13 @@ namespace ThoughtWorks.CruiseControl.Core.Test
 			_mockSourceControl.ExpectAndReturn("GetModifications", modifications, new IsAnything(), new IsAnything());
 			_mockSourceControl.Expect("LabelSourceControl", "label", new IsAnything());
 			_mockSourceControl.Expect("GetSource", new IsAnything());
-			_mockPublisher.Expect("PublishIntegrationResults", new IsAnything(), new IsAnything());
+			_mockPublisher.Expect("PublishIntegrationResults", new IsAnything());
 			_mockTask.Expect("Run", new IsAnything());
 
 			_project.Builder = new MockBuilder(); // need to use mock builder in order to set properties on IntegrationResult
 			IIntegrationResult result = _project.RunIntegration(BuildCondition.IfModificationExists);
 
+			
 			Assert.AreEqual(PROJECT_NAME, result.ProjectName);
 			Assert.AreEqual(ProjectActivity.Sleeping, _project.CurrentActivity);
 			Assert.AreEqual(IntegrationStatus.Success, result.Status);
@@ -266,7 +267,7 @@ namespace ThoughtWorks.CruiseControl.Core.Test
 			_mockLabeller.ExpectAndReturn("Generate", "label", new IsAnything()); // generate new label
 			CruiseControlException expectedException = new CruiseControlException();
 			_mockSourceControl.ExpectAndThrow("GetModifications", expectedException, new IsAnything(), new IsAnything());
-			_mockPublisher.ExpectNoCall("PublishIntegrationResults", typeof (IProject), typeof (IntegrationResult));
+			_mockPublisher.ExpectNoCall("PublishIntegrationResults", typeof (IntegrationResult));
 			_mockStateManager.ExpectNoCall("SaveState", typeof (IntegrationResult));
 
 			_project.PublishExceptions = false;
@@ -282,7 +283,7 @@ namespace ThoughtWorks.CruiseControl.Core.Test
 			_mockLabeller.ExpectAndReturn("Generate", "label", new IsAnything()); // generate new label
 			CruiseControlException expectedException = new CruiseControlException();
 			_mockSourceControl.ExpectAndThrow("GetModifications", expectedException, new IsAnything(), new IsAnything());
-			_mockPublisher.Expect("PublishIntegrationResults", new IsAnything(), new IsAnything());
+			_mockPublisher.Expect("PublishIntegrationResults", new IsAnything());
 			_mockStateManager.Expect("SaveState", new IsAnything());
 
 			_project.PublishExceptions = true;
@@ -356,7 +357,6 @@ namespace ThoughtWorks.CruiseControl.Core.Test
 			VerifyAll();
 		}
 
-
 		[Test]
 		public void DeleteTemporaryLabelMethodIsInvokedIfBuildFailed()
 		{
@@ -382,7 +382,6 @@ namespace ThoughtWorks.CruiseControl.Core.Test
 			_project.HandleProjectLabelling(result);
 			VerifyAll();
 		}
-
 
 		[Test]
 		public void DeleteTemporaryLabelMethodNotInvokedIfNotTemporaryLabeller()
@@ -446,14 +445,14 @@ namespace ThoughtWorks.CruiseControl.Core.Test
 		}
 
 		[Test] // publishers will need to log their own exceptions
-		public void IfPublisherThrowsExceptionShouldStillSaveState()
+			public void IfPublisherThrowsExceptionShouldStillSaveState()
 		{
 			_mockLabeller.ExpectAndReturn("Generate", "1.0", new IsAnything());
 			_mockStateManager.ExpectAndReturn("StateFileExists", false);
 			_mockStateManager.Expect("SaveState", new IsAnything());
 			_mockTask.Expect("Run", new IsAnything());
 			Exception expectedException = new CruiseControlException("expected exception");
-			_mockPublisher.ExpectAndThrow("PublishIntegrationResults", expectedException, new IsAnything(), new IsAnything());
+			_mockPublisher.ExpectAndThrow("PublishIntegrationResults", expectedException, new IsAnything());
 			_project.SourceControl = new MockSourceControl();
 			_project.Builder = new MockBuilder();
 
@@ -561,8 +560,7 @@ namespace ThoughtWorks.CruiseControl.Core.Test
 				_project.Purge(true, true, true);
 			}
 			catch (CruiseControlException)
-			{
-			}
+			{}
 
 			// Verify
 			VerifyAll();

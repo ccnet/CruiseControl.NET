@@ -46,6 +46,8 @@ namespace ThoughtWorks.CruiseControl.Core.Test
 			Assert.AreEqual(@"c:\temp", result.WorkingDirectory);
 			Assert.AreEqual(BuildCondition.ForceBuild, result.BuildCondition);
 			Assert.AreEqual("foo", result.Label);
+			Assert.AreEqual(project.ArtifactDirectory, result.ArtifactDirectory);
+			Assert.AreEqual(project.WebURL, result.ProjectUrl);
 		}
 
 		[Test]
@@ -107,6 +109,8 @@ namespace ThoughtWorks.CruiseControl.Core.Test
 			project.ConfiguredWorkingDirectory = @"c:\temp";
 			project.Labeller = (ILabeller) mockLabeller.MockInstance;
 			project.StateManager = (IStateManager) mockStateManager.MockInstance;
+			project.WebURL = Project.DEFAULT_WEB_URL;
+			project.ConfiguredArtifactDirectory = project.ConfiguredWorkingDirectory;
 			return project;
 		}
 	}

@@ -44,7 +44,7 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers.Test
 			ForceBuildPublisher publisher = new ForceBuildPublisher((IRemotingService)mockRemotingService.MockInstance);
 			publisher.Project = "project";
 			publisher.ServerUri = "tcp://localhost:21234/CruiseManager.rem";
-			publisher.PublishIntegrationResults(project, IntegrationResultMother.CreateSuccessful());
+			publisher.PublishIntegrationResults(IntegrationResultMother.CreateSuccessful());
 
 			mockCruiseManager.Verify();
 			mockRemotingService.Verify();
@@ -59,7 +59,7 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers.Test
 			
 			ForceBuildPublisher publisher = new ForceBuildPublisher((IRemotingService)mockRemotingService.MockInstance);
 			publisher.IntegrationStatus = IntegrationStatus.Exception;
-			publisher.PublishIntegrationResults(null, IntegrationResultMother.CreateFailed());
+			publisher.PublishIntegrationResults(IntegrationResultMother.CreateFailed());
 
 			mockRemotingService.Verify();
 		}

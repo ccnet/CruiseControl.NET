@@ -6,17 +6,14 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers.Test
 	[TestFixture]
 	public class RSSPublisherTest
 	{
-		Project project;
 		IntegrationResult result;
 		RssPublisher publisher;
 
 		[SetUp]
 		public void Setup()
 		{
-			project = new Project();
-			project.Name = "myProject";
-			project.WebURL = "http://somewhere/someplace.html";
 			result = new IntegrationResult("myProject", @"c:\temp");
+			result.ProjectUrl = "http://somewhere/someplace.html";
 			publisher = new RssPublisher();
 		}
 
@@ -24,7 +21,7 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers.Test
 		public void ChannelContainsCorrectDetails()
 		{
 			/// Execute
-			Document document = publisher.GenerateDocument(project, result);
+			Document document = publisher.GenerateDocument(result);
 
 			/// Verify
 			Assert.AreEqual("CruiseControl.NET - myProject", document.Channel.Title);
@@ -37,7 +34,7 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers.Test
 		{
 			result.Status = IntegrationStatus.Success;
 			/// Execute
-			Document document = publisher.GenerateDocument(project, result);
+			Document document = publisher.GenerateDocument(result);
 
 			Item firstItem = (Item) document.Channel.Items[0];
 			Assert.AreEqual("Successful Build", firstItem.Title);

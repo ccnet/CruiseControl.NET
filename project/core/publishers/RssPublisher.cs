@@ -21,34 +21,34 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
 			set { filename = value;}
 		}
 
-		public override void PublishIntegrationResults(IProject project, IIntegrationResult result)
+		public override void PublishIntegrationResults(IIntegrationResult result)
 		{
 			using (StreamWriter stream = File.CreateText(Filename))
 			{
-				stream.Write(GenerateDocument(project, result));
+				stream.Write(GenerateDocument(result));
 			}
 		}
 
-		public Document GenerateDocument(IProject project, IIntegrationResult result)
+		public Document GenerateDocument(IIntegrationResult result)
 		{
 			Document document = new Document();
-			document.Channel = GenerateChannel(project, result);
+			document.Channel = GenerateChannel(result);
 
 			return document;
 		}
 
-		public Channel GenerateChannel(IProject project, IIntegrationResult result)
+		public Channel GenerateChannel(IIntegrationResult result)
 		{
 			Channel channel = new Channel();
-			channel.Link = project.WebURL;
-			channel.Title = "CruiseControl.NET - " + project.Name;
-			channel.Description = "The latest build results for " + project.Name;
-			channel.Items = GenerateItems(project, result);
+			channel.Link = result.ProjectUrl;
+			channel.Title = "CruiseControl.NET - " + result.ProjectName;
+			channel.Description = "The latest build results for " + result.ProjectName;
+			channel.Items = GenerateItems(result);
 
 			return channel;
 		}
 
-		public ArrayList GenerateItems(IProject project, IIntegrationResult result)
+		public ArrayList GenerateItems(IIntegrationResult result)
 		{
 			ArrayList items = new ArrayList();
 

@@ -107,7 +107,7 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers.Test
 
 			NetSendPublisher publisher = (NetSendPublisher)mockPublisher.MockInstance;
 			publisher.Names = "localhost";
-			publisher.PublishIntegrationResults(null, IntegrationResultMother.CreateFailed());
+			publisher.PublishIntegrationResults(IntegrationResultMother.CreateFailed());
 
 			mockPublisher.Verify();
 		}
@@ -128,7 +128,7 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers.Test
 			NetSendPublisher publisher = (NetSendPublisher)mockPublisher.MockInstance;
 			publisher.Names = "machine1,machine2,machine3";
 
-			publisher.PublishIntegrationResults(null, IntegrationResultMother.CreateFailed());
+			publisher.PublishIntegrationResults(IntegrationResultMother.CreateFailed());
 
 			mockPublisher.Verify();
 			Assert.AreEqual(@"send ""machine1""", ((ProcessInfo)process1.Parameter).Arguments.Substring(0, 15));
@@ -141,7 +141,7 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers.Test
 		{
 			NetSendPublisher publisher = new NetSendPublisher();
 			publisher.Names = "localhost";
-			publisher.PublishIntegrationResults(null, CreateFailedIntegrationResult());
+			publisher.PublishIntegrationResults(CreateFailedIntegrationResult());
 
 			Win32Window window = Win32Window.Find("Messenger Service ");
 			Assert.IsNotNull(window);

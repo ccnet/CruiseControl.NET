@@ -21,6 +21,9 @@ namespace ThoughtWorks.CruiseControl.Core
 		int LastChangeNumber { get; }
 		Modification[] Modifications { get; set; }
 		Exception ExceptionResult { get; set; }
+		string ArtifactDirectory { get; set;}
+		string ProjectUrl { get; set;}
+
 		bool IsInitial();
 		bool HasModifications();
 		bool Working { get; }

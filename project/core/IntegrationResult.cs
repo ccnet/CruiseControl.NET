@@ -22,6 +22,8 @@ namespace ThoughtWorks.CruiseControl.Core
 		private DateTime _endTime;
 		private Modification[] _modifications = new Modification[0];
         private string _output;
+		private string _artifactDirectory;
+		private string _projectUrl;
         private Exception _exception;
         private ArrayList _taskResults = new ArrayList();
 
@@ -147,7 +149,19 @@ namespace ThoughtWorks.CruiseControl.Core
 			get { return _taskResults; }
 		}
 
-        public void MarkStartTime()
+		public string ArtifactDirectory
+		{
+			get { return _artifactDirectory; }
+			set	{ _artifactDirectory = value;}
+		}
+
+		public string ProjectUrl
+		{
+			get { return _projectUrl; }
+			set	{ _projectUrl = value; }
+		}
+
+		public void MarkStartTime()
         {
             _startTime = DateTime.Now;
         }
@@ -157,7 +171,7 @@ namespace ThoughtWorks.CruiseControl.Core
             EndTime = DateTime.Now;
         }
 
-        public bool HasModifications()
+    	public bool HasModifications()
         {
             return Modifications.Length > 0;
         }

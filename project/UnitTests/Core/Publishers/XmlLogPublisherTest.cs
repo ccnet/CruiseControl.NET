@@ -2,7 +2,6 @@ using System;
 using System.IO;
 using System.Xml;
 using Exortech.NetReflector;
-using NMock;
 using NUnit.Framework;
 using ThoughtWorks.CruiseControl.Core.Test;
 using ThoughtWorks.CruiseControl.Core.Util;
@@ -20,8 +19,6 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers.Test
 		public static readonly string ARTIFACTS_DIR_PATH = Path.GetFullPath(TempFileUtil.GetTempPath(ARTIFACTS_DIR));
 
         private XmlLogPublisher _publisher;
-    	private DynamicMock projectMock;
-    	private IProject project;
 
     	[SetUp]
         public void SetUp()
@@ -29,10 +26,6 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers.Test
             TempFileUtil.DeleteTempDir(FULL_CONFIGURED_LOG_DIR);
 			TempFileUtil.DeleteTempDir(ARTIFACTS_DIR);
 			TempFileUtil.CreateTempDir(ARTIFACTS_DIR);
-
-			projectMock = new DynamicMock(typeof(IProject));
-			projectMock.SetupResult("ArtifactDirectory", ARTIFACTS_DIR_PATH);
-			project = (IProject) projectMock.MockInstance;
 
 			_publisher = new XmlLogPublisher();
         }
@@ -58,10 +51,11 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers.Test
 		{
 			// Setup
 			IntegrationResult result = CreateIntegrationResult(IntegrationStatus.Success,  true);
+			result.ArtifactDirectory = ARTIFACTS_DIR_PATH;
 			_publisher.ConfiguredLogDirectory = "relativePath";
 
 			// Execute
-			_publisher.PublishIntegrationResults(project, result);
+			_publisher.PublishIntegrationResults(result);
 
 			// Verify
 			string expectedOutputPath = Path.Combine(Path.Combine(ARTIFACTS_DIR_PATH, "relativePath"), "log19800101000000Lbuild.1.xml");
@@ -74,9 +68,10 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers.Test
 		{
 			// Setup
 			IntegrationResult result = CreateIntegrationResult(IntegrationStatus.Success,  true);
+			result.ArtifactDirectory = ARTIFACTS_DIR_PATH;
 
 			// Execute
-			_publisher.PublishIntegrationResults(project, result);
+			_publisher.PublishIntegrationResults(result);
 
 			// Verify
 			string expectedOutputPath = Path.Combine(Path.Combine(ARTIFACTS_DIR_PATH, XmlLogPublisher.DEFAULT_LOG_SUBDIRECTORY), "log19800101000000Lbuild.1.xml");
@@ -92,7 +87,7 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers.Test
 			IntegrationResult result = CreateIntegrationResult(IntegrationStatus.Failure,  true);
 
 			// Execute
-			_publisher.PublishIntegrationResults(project, result);
+			_publisher.PublishIntegrationResults(result);
 
 			// Verify
 			string expectedOutputPath = Path.Combine(FULL_CONFIGURED_LOG_DIR_PATH, "log19800101000000.xml");
@@ -108,7 +103,7 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers.Test
 			IntegrationResult result = CreateIntegrationResult(IntegrationStatus.Success,  true);
 
 			// Execute
-			_publisher.PublishIntegrationResults(project, result);
+			_publisher.PublishIntegrationResults(result);
 
 			// Verify
 			string expectedOutputPath = Path.Combine(FULL_CONFIGURED_LOG_DIR_PATH, "log19800101000000Lbuild.1.xml");
@@ -120,7 +115,7 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers.Test
         public void ShouldNotPublishResultsWithUnknownStatus()
         {
             AssertFalse(FULL_CONFIGURED_LOG_DIR_PATH + " should not exist at start of test.", Directory.Exists(FULL_CONFIGURED_LOG_DIR_PATH));
-            _publisher.PublishIntegrationResults(null, new IntegrationResult());
+            _publisher.PublishIntegrationResults(new IntegrationResult());
             AssertFalse(FULL_CONFIGURED_LOG_DIR_PATH + " should still not exist at end of this test.", Directory.Exists(FULL_CONFIGURED_LOG_DIR_PATH));
         }
 

@@ -24,7 +24,7 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
 		[ReflectorProperty("integrationStatus", Required=false)]
 		public IntegrationStatus IntegrationStatus = IntegrationStatus.Success;
 
-		public override void PublishIntegrationResults(IProject project, IIntegrationResult result)
+		public override void PublishIntegrationResults(IIntegrationResult result)
 		{
 			if (IntegrationStatus != result.Status) return;
 

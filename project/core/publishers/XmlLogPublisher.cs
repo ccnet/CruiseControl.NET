@@ -25,11 +25,11 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
         }
 
 		// This is only public because of a nasty hack which I (MR) put in the code. To be made private later...
-		public string LogDirectory(IProject project)
+		public string LogDirectory(string artifactDirectory)
 		{
 			if (ConfiguredLogDirectory == null || ConfiguredLogDirectory == "")
 			{
-				return Path.Combine(project.ArtifactDirectory, DEFAULT_LOG_SUBDIRECTORY);
+				return Path.Combine(artifactDirectory, DEFAULT_LOG_SUBDIRECTORY);
 			}
 			else if (Path.IsPathRooted(ConfiguredLogDirectory))
 			{
@@ -37,17 +37,17 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
 			}
 			else
 			{
-				return Path.Combine(project.ArtifactDirectory, ConfiguredLogDirectory);
+				return Path.Combine(artifactDirectory, ConfiguredLogDirectory);
 			}
 		}
 
-		public override void PublishIntegrationResults(IProject project, IIntegrationResult result)
+		public override void PublishIntegrationResults(IIntegrationResult result)
         {
             // only deal with known integration status
             if (result.Status == IntegrationStatus.Unknown)
                 return;
 
-            using (XmlIntegrationResultWriter integrationWriter = new XmlIntegrationResultWriter(CreateWriter(LogDirectory(project), GetFilename(result))))
+            using (XmlIntegrationResultWriter integrationWriter = new XmlIntegrationResultWriter(CreateWriter(LogDirectory(result.ArtifactDirectory), GetFilename(result))))
             {
 				integrationWriter.Formatting = Formatting.Indented;
 				integrationWriter.Write(result);
