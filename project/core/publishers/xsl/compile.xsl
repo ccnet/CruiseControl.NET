@@ -8,20 +8,25 @@
 
     <xsl:template match="/">
 
-		<xsl:variable name="error.messages" select="/cruisecontrol/build/buildresults//message[@type='error']" />
+		<xsl:variable name="error.messages" select="/cruisecontrol/build/buildresults//message[contains(text(), 'error')]" />
 		<xsl:variable name="error.messages.count" select="count($error.messages)" />
+		<xsl:variable name="warning.messages" select="/cruisecontrol/build/buildresults//message[contains(text(), 'warning')]" />
+		<xsl:variable name="warning.messages.count" select="count($warning.messages)" />
+		<xsl:variable name="total" select="count($error.messages) + count($warning.messages)"/>
+
 		
-        <xsl:if test="$error.messages.count > 0">
+        <xsl:if test="$total > 0">
             <table cellpadding="2" cellspacing="0" border="0" width="98%">
                 <tr>
-                    <td style="background-color:#000066; color:#FFFFFF;">
-                        &#160;Errors/Warnings: (<xsl:value-of select="$error.messages.count"/>)
+                    <td class="compile-sectionheader">
+                        &#160;Errors/Warnings: (<xsl:value-of select="$total"/>)
                     </td>
                 </tr>
-                <xsl:if test="$error.messages.count > 0">
+                <xsl:if test="$total > 0">
 					<tr>
 						<td>
 							<xsl:apply-templates select="$error.messages"/>
+							<xsl:apply-templates select="$warning.messages"/>
 						</td>
 					</tr>
                 </xsl:if>
@@ -29,8 +34,8 @@
         </xsl:if>
 
     </xsl:template>
-	<xsl:template match="message[@type='error']">
-			<p style="font-size:9px; color:#FF3300;">
+	<xsl:template match="message[contains(text(), 'error')]|message[contains(text(), 'warning')]">
+			<p class="compile-error-data">
 				<xsl:value-of select="text()"/>
 			</p>
 	</xsl:template>

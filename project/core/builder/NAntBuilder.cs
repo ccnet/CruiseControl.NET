@@ -2,6 +2,7 @@ using System;
 using System.Xml;
 using System.Diagnostics;
 using System.IO;
+using System.Configuration;
 using tw.ccnet.core.util;
 using tw.ccnet.core.builder;
 using tw.ccnet.remote;
@@ -12,14 +13,19 @@ namespace tw.ccnet.core.builder
 	[ReflectorType("nant")]
 	public class NAntBuilder : IBuilder
 	{
-		private const string DEFAULT_BUILDARGS = "-logger:SourceForge.NAnt.XmlLogger";
+		private readonly string DEFAULT_BUILDARGS = "-logger:" + ConfigurationSettings.AppSettings["NAnt.Logger"];
 
 		private string _executable;
 		private string _baseDirectory;
-		private string _buildArgs = DEFAULT_BUILDARGS;
+		private string _buildArgs;
 		private string _buildfile;
 		private int _buildTimeout = 0;
 		private string[] _targets;
+
+		public NAntBuilder() 
+		{
+			_buildArgs = DEFAULT_BUILDARGS;
+		}
 
 		[ReflectorProperty("executable")]
 		public string Executable

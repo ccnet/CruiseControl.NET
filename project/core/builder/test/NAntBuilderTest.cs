@@ -135,7 +135,7 @@ namespace tw.ccnet.core.builder.test
 
 		public void TestCreateBuildArgs_MissingArguments()
 		{
-			Assertion.AssertEquals("-buildfile: -logger:SourceForge.NAnt.XmlLogger -D:label-to-apply=NO-LABEL ", _builder.CreateArgs());
+			Assertion.AssertEquals("-buildfile: -logger:NAnt.Core.XmlLogger -D:label-to-apply=NO-LABEL ", _builder.CreateArgs());
 		}
 
 		public void TestLabelGetsPassedThrough() 
