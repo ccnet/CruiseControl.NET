@@ -184,6 +184,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "IProjectIntegratorFactory.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "IProjectIntegratorList.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -239,7 +244,7 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "ProjectIntegratorState.cs"
+                    RelPath = "ProjectIntegratorListFactory.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -319,6 +324,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "configuration\CachingConfigurationService.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "configuration\ccnet.xsd"
                     BuildAction = "EmbeddedResource"
                 />
@@ -333,17 +343,7 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "configuration\ConfigurationContainer.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
                     RelPath = "configuration\ConfigurationException.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "configuration\ConfigurationPersister.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -353,17 +353,37 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "configuration\DefaultConfigurationFileLoader.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "configuration\DefaultConfigurationFileSaver.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "configuration\FileConfigurationService.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "configuration\IConfiguration.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "configuration\IConfigurationContainer.cs"
+                    RelPath = "configuration\IConfigurationFileLoader.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "configuration\IConfigurationPersister.cs"
+                    RelPath = "configuration\IConfigurationFileSaver.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "configuration\IConfigurationService.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -378,17 +398,7 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "configuration\test\ConfigurationContainerTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
                     RelPath = "configuration\test\ConfigurationFixture.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "configuration\test\ConfigurationPersisterTest.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -1069,16 +1079,6 @@
                 />
                 <File
                     RelPath = "tasks\test\NunitTaskTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "test\ConfigurationStub.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "test\CruiseManagerTest.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

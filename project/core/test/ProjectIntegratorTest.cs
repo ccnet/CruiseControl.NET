@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Threading;
 using ThoughtWorks.CruiseControl.Core.Schedules;
 using ThoughtWorks.CruiseControl.Core.Util;
+using ThoughtWorks.CruiseControl.Remote;
 
 namespace ThoughtWorks.CruiseControl.Core.Test
 {

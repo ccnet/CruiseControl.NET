@@ -25,7 +25,7 @@ namespace ThoughtWorks.CruiseControl.CCTray
 
 		private Timer _pollTimer;
 		private IRemoteCruiseProxyLoader _remoteProxyLoader;
-		private ProjectStatus _currentProjectStatus = new ProjectStatus(CruiseControlStatus.Unknown, IntegrationStatus.Unknown, ProjectActivity.Unknown, "unknown", "http://ccnet.thoughtworks.com", DateTime.MinValue, "unknown");
+		private ProjectStatus _currentProjectStatus = new ProjectStatus(ProjectIntegratorState.Stopped, IntegrationStatus.Unknown, ProjectActivity.Unknown, "unknown", "http://ccnet.thoughtworks.com", DateTime.MinValue, "unknown");
 		private Settings _settings;
 
 		public StatusMonitor(IRemoteCruiseProxyLoader remoteProxyLoader)

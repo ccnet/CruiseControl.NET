@@ -49,6 +49,46 @@ namespace ThoughtWorks.CruiseControl.Core
 			get { return _server.CruiseManager; }
 		}
 
+		public ProjectStatus[] GetProjectStatus()
+		{
+			return _server.GetProjectStatus();
+		}
+
+		public void ForceBuild(string projectName)
+		{
+			_server.ForceBuild(projectName);
+		}
+
+		public void WaitForExit(string projectName)
+		{
+			_server.WaitForExit(projectName);
+		}
+
+		public string GetLatestBuildName(string projectName)
+		{
+			return _server.GetLatestBuildName(projectName);
+		}
+
+		public string[] GetBuildNames(string projectName)
+		{
+			return _server.GetBuildNames(projectName);
+		}
+
+		public string GetLog(string projectName, string buildName)
+		{
+			return _server.GetLog(projectName, buildName);
+		}
+
+		public string GetServerLog()
+		{
+			return _server.GetServerLog();
+		}
+
+		public void AddProject(string serializedProject)
+		{
+			_server.AddProject(serializedProject);
+		}
+
 		private void RegisterForRemoting()
 		{
 			MarshalByRefObject marshalByRef = (MarshalByRefObject)_server.CruiseManager;

@@ -35,7 +35,7 @@ namespace ThoughtWorks.CruiseControl.CCTray.Test
 		public void ShouldNotifyPollEventWhenPollingAndNotInvokeError()
 		{
 			_monitor.Polled +=new PolledEventHandler(OnPolled);
-		    ProjectStatus status = new ProjectStatus(CruiseControlStatus.Running, IntegrationStatus.Success, ProjectActivity.Sleeping, "foo", "http://foo.bar", DateTime.Now, "Foo");
+		    ProjectStatus status = new ProjectStatus(ProjectIntegratorState.Running, IntegrationStatus.Success, ProjectActivity.Sleeping, "foo", "http://foo.bar", DateTime.Now, "Foo");
 			Mock cruiseManagerMock = new DynamicMock(typeof(ICruiseManager));
 			ProjectStatus[] statuses = new ProjectStatus[1];
 			statuses [0]= status;

@@ -1,6 +1,5 @@
-using System;
 
-namespace ThoughtWorks.CruiseControl.Core
+namespace ThoughtWorks.CruiseControl.Remote
 {
 	/// <summary>
 	/// Enumeration of possible states for a project's integrator.

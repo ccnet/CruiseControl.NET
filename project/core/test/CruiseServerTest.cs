@@ -1,74 +1,161 @@
+using NMock;
 using NUnit.Framework;
-using System;
 using System.Threading;
 using ThoughtWorks.CruiseControl.Core.Config;
+using ThoughtWorks.CruiseControl.Remote;
 
 namespace ThoughtWorks.CruiseControl.Core.Test
 {
 	[TestFixture]
 	public class CruiseServerTest : Assertion
 	{
-		private ConfigurationStub configStub;
+		private DynamicMock configServiceMock;
+		private DynamicMock projectIntegratorListFactoryMock;
+		private DynamicMock integratorMock1;
+		private DynamicMock integratorMock2;
+
 		private CruiseServer server;
+
+		private Configuration configuration;
+		private Project project1;
+		private Project project2;
+		private IProjectIntegrator integrator1;
+		private IProjectIntegrator integrator2;
+		private ProjectIntegratorList integratorList;
+
 		private ManualResetEvent monitor;
 
 		[SetUp]
 		protected void SetUp()
 		{
-			configStub = new ConfigurationStub(2);
-			server = new CruiseServer(configStub);
+			configServiceMock = new DynamicMock(typeof(IConfigurationService));
+			projectIntegratorListFactoryMock = new DynamicMock(typeof(IProjectIntegratorListFactory));
+			server = new CruiseServer((IConfigurationService) configServiceMock.MockInstance, 
+				(IProjectIntegratorListFactory) projectIntegratorListFactoryMock.MockInstance);
+
+			integratorMock1 = new DynamicMock(typeof(IProjectIntegrator));
+			integratorMock2 = new DynamicMock(typeof(IProjectIntegrator));
+			integrator1 = (IProjectIntegrator) integratorMock1.MockInstance;
+			integrator2 = (IProjectIntegrator) integratorMock2.MockInstance;
+			integratorMock1.SetupResult("Name", "Project 1");
+			integratorMock2.SetupResult("Name", "Project 2");
+
+			configuration = new Configuration();
+			project1 = new Project();
+			project1.Name = "Project 1";
+			project2 = new Project();
+			project2.Name = "Project 2";
+			configuration.AddProject(project1);
+			configuration.AddProject(project2);
+
+			integratorList = new ProjectIntegratorList();
+			integratorList.Add(integrator1);
+			integratorList.Add(integrator2);
+		}
+
+		private void VerifyAll()
+		{
+			configServiceMock.Verify();
+			projectIntegratorListFactoryMock.Verify();
+			integratorMock1.Verify();
+			integratorMock2.Verify();
 		}
 
 		[Test]
 		public void StartAllProjectsInCruiseServer()
 		{
-			configStub.GetIntegratorMock(0).Expect("Start");
-			configStub.GetIntegratorMock(1).Expect("Start");
+			configServiceMock.ExpectAndReturn("Load", configuration);
+			projectIntegratorListFactoryMock.ExpectAndReturn("CreateProjectIntegrators", integratorList, configuration.Projects);
+			integratorMock1.Expect("Start");
+			integratorMock2.Expect("Start");
 
 			server.Start();
 
-			configStub.Verify();
+			VerifyAll();
 		}
 
 		[Test]
-		public void StopAllProjectsInCruiseServer()
+		public void CallingStopBeforeCallingStartDoesntCauseAnError()
 		{
-			configStub.GetIntegratorMock(0).Expect("Stop");
-			configStub.GetIntegratorMock(1).Expect("Stop");
-			configStub.GetIntegratorMock(0).Expect("WaitForExit");
-			configStub.GetIntegratorMock(1).Expect("WaitForExit");
+			server.Stop();
+			VerifyAll();
+		}
+
+		[Test]
+		public void CallingStopStopsIntegratorsAndWaitsForThemToFinish()
+		{
+			configServiceMock.ExpectAndReturn("Load", configuration);
+			projectIntegratorListFactoryMock.ExpectAndReturn("CreateProjectIntegrators", integratorList, configuration.Projects);
+			integratorMock1.Expect("Start");
+			integratorMock2.Expect("Start");
+
+			server.Start();
+
+			integratorMock1.Expect("Stop");
+			integratorMock1.Expect("WaitForExit");
+			integratorMock2.Expect("Stop");
+			integratorMock2.Expect("WaitForExit");
 
 			server.Stop();
 
-			configStub.Verify();
+			VerifyAll();
 		}
 
 		[Test]
-		public void AbortAllProjectsInCruiseServer()
+		public void CallingAbortBeforeCallingStartDoesntCauseAnError()
 		{
-			configStub.GetIntegratorMock(0).Expect("Abort");
-			configStub.GetIntegratorMock(1).Expect("Abort");
-			configStub.GetIntegratorMock(0).Expect("WaitForExit");
-			configStub.GetIntegratorMock(1).Expect("WaitForExit");
+			server.Stop();
+			VerifyAll();
+		}
+
+		[Test]
+		public void CallingAbortStopsIntegratorsAndWaitsForThemToFinish()
+		{
+			configServiceMock.ExpectAndReturn("Load", configuration);
+			projectIntegratorListFactoryMock.ExpectAndReturn("CreateProjectIntegrators", integratorList, configuration.Projects);
+			integratorMock1.Expect("Start");
+			integratorMock2.Expect("Start");
+
+			server.Start();
+
+			integratorMock1.Expect("Abort");
+			integratorMock1.Expect("WaitForExit");
+			integratorMock2.Expect("Abort");
+			integratorMock2.Expect("WaitForExit");
 
 			server.Abort();
 
-			configStub.Verify();
+			VerifyAll();
 		}
 
 		[Test]
-		public void ReloadConfiguration()
+		public void OnRestartKillAllIntegratorsRefreshConfigAndStartupNewIntegrators()
 		{
-			configStub.GetIntegratorMock(0).Expect("Stop");
-			configStub.GetIntegratorMock(1).Expect("Stop");
-			configStub.GetIntegratorMock(0).Expect("WaitForExit");
-			configStub.GetIntegratorMock(1).Expect("WaitForExit");
-			configStub.GetIntegratorMock(0).Expect("Start");
-			configStub.GetIntegratorMock(1).Expect("Start");
+			configServiceMock.ExpectAndReturn("Load", configuration);
+			projectIntegratorListFactoryMock.ExpectAndReturn("CreateProjectIntegrators", integratorList, configuration.Projects);
+			integratorMock1.Expect("Start");
+			integratorMock2.Expect("Start");
 
-			server.ResetConfiguration(configStub);
+			server.Start();
 
-			configStub.Verify();
+			integratorMock1.Expect("Stop");
+			integratorMock1.Expect("WaitForExit");
+			integratorMock2.Expect("Stop");
+			integratorMock2.Expect("WaitForExit");
+
+			configuration = new Configuration();
+			configuration.AddProject(project1);
+			integratorList = new ProjectIntegratorList();
+			integratorList.Add(integrator1);
+			configServiceMock.ExpectAndReturn("Load", configuration);
+			projectIntegratorListFactoryMock.ExpectAndReturn("CreateProjectIntegrators", integratorList, configuration.Projects);
+
+			integratorMock1.Expect("Start");
+			integratorMock2.ExpectNoCall("Start");
+
+			server.Restart();
+
+			VerifyAll();
 		}
 
 		[Test]
@@ -109,6 +196,52 @@ namespace ThoughtWorks.CruiseControl.Core.Test
 			monitor.WaitOne();
 			Thread.Sleep(0);
 			server.Abort();
+		}
+
+		[Test]
+		public void ForceBuildForProject()
+		{
+			configServiceMock.ExpectAndReturn("Load", configuration);
+			projectIntegratorListFactoryMock.ExpectAndReturn("CreateProjectIntegrators", integratorList, configuration.Projects);
+			integratorMock1.Expect("Start");
+			integratorMock2.Expect("Start");
+
+			server.Start();
+
+			integratorMock1.Expect("ForceBuild");
+
+			server.ForceBuild("Project 1");
+
+			VerifyAll();
+		}
+
+		[Test, ExpectedException(typeof(CruiseControlException))]
+		public void AttemptToForceBuildOnProjectThatDoesNotExist()
+		{
+			server.ForceBuild("foo");
+		}
+
+		[Test]
+		public void WaitForExitForProject()
+		{
+			configServiceMock.ExpectAndReturn("Load", configuration);
+			projectIntegratorListFactoryMock.ExpectAndReturn("CreateProjectIntegrators", integratorList, configuration.Projects);
+			integratorMock1.Expect("Start");
+			integratorMock2.Expect("Start");
+
+			server.Start();
+
+			integratorMock1.Expect("WaitForExit");
+
+			server.WaitForExit("Project 1");
+
+			VerifyAll();
+		}
+
+		[Test, ExpectedException(typeof(CruiseControlException))]
+		public void AttemptToWaitForExitOnProjectThatDoesNotExist()
+		{
+			server.ForceBuild("foo");
 		}
 	}
 }

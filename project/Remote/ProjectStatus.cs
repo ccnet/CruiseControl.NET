@@ -13,7 +13,7 @@ namespace ThoughtWorks.CruiseControl.Remote
 	[Serializable]
 	public class ProjectStatus
 	{
-		private CruiseControlStatus status;
+		private ProjectIntegratorState status;
 		private IntegrationStatus buildStatus;
 		private ProjectActivity activity;
 		private string name;
@@ -24,7 +24,7 @@ namespace ThoughtWorks.CruiseControl.Remote
 		public ProjectStatus() { }
 
 		public ProjectStatus(
-			CruiseControlStatus status, 
+			ProjectIntegratorState status, 
 			IntegrationStatus buildStatus, 
 			ProjectActivity activity, 
 			string name, 
@@ -42,10 +42,7 @@ namespace ThoughtWorks.CruiseControl.Remote
 			this.lastBuildLabel = lastBuildLabel;
 		}
 
-		/// <summary>
-		/// The state of the CruiseControl.NET server.
-		/// </summary>
-		public CruiseControlStatus Status 
+		public ProjectIntegratorState Status 
 		{
 			get { return status; }
 			set { status = value; }

@@ -22,6 +22,11 @@ namespace ThoughtWorks.CruiseControl.Core
 			get { return _integrators[projectName] as IProjectIntegrator; }
 		}
 
+		public int Count
+		{
+			get { return _integrators.Values.Count; }
+		}
+
 		IEnumerator IEnumerable.GetEnumerator()
 		{
 			return _integrators.Values.GetEnumerator();

@@ -1,11 +1,4 @@
 using System;
-using System.Collections;
-using System.IO;
-using ThoughtWorks.Core.Log;
-using ThoughtWorks.CruiseControl.Core.Builder;
-using ThoughtWorks.CruiseControl.Core.Publishers;
-using ThoughtWorks.CruiseControl.Core.Sourcecontrol;
-using ThoughtWorks.CruiseControl.Core.Util;
 using ThoughtWorks.CruiseControl.Remote;
 
 namespace ThoughtWorks.CruiseControl.Core 
@@ -16,122 +9,51 @@ namespace ThoughtWorks.CruiseControl.Core
 	/// </summary>
 	public class CruiseManager : MarshalByRefObject, ICruiseManager
 	{
-		private IConfiguration _config; 
+		private readonly ICruiseServer cruiseServer;
 
-		public CruiseManager(IConfiguration config)
+		public CruiseManager(ICruiseServer cruiseServer)
 		{
-			_config = config;
+			this.cruiseServer = cruiseServer;
 		}
 
-		public ProjectStatus [] GetProjectStatus()
+		public ProjectStatus[] GetProjectStatus()
 		{
-			ArrayList projects = new ArrayList();
-			foreach (Project project in _config.Projects) 
-			{
-				projects.Add(new ProjectStatus(GetStatus(), 
-					project.LatestBuildStatus, 
-					project.CurrentActivity, 
-					project.Name, 
-					project.WebURL, 
-					project.LastIntegrationResult.StartTime, 
-					project.LastIntegrationResult.Label));
-			}
-
-			return (ProjectStatus []) projects.ToArray(typeof(ProjectStatus));
-		}
-
-		private IProjectIntegrator GetIntegrator(string project)
-		{
-			IProjectIntegrator integrator = _config.Integrators[project];
-			if (integrator == null)
-			{
-				throw new CruiseControlException("Specified project does not exist: " + project);
-			}
-			return integrator;
+			return cruiseServer.GetProjectStatus();
 		}
 
 		public void ForceBuild(string project)
 		{
-			GetIntegrator(project).ForceBuild();
+			cruiseServer.ForceBuild(project);
 		}
 
 		public void WaitForExit(string project)
 		{
-			GetIntegrator(project).WaitForExit();
+			cruiseServer.WaitForExit(project);
 		}
 
 		public string GetLatestBuildName(string projectName)
 		{
-			return GetBuildNames(projectName)[0];
+			return cruiseServer.GetLatestBuildName(projectName);
 		}
 
 		public string[] GetBuildNames(string projectName)
 		{
-			// TODO - this is a hack - I'll tidy it up later - promise! :) MR
-			foreach (Project project in _config.Projects) 
-			{
-				if (project.Name == projectName)
-				{
-					foreach (IIntegrationCompletedEventHandler publisher in project.Publishers)
-					{
-						if (publisher is XmlLogPublisher)
-						{
-							// ToDo - check these are sorted?
-							return LogFileUtil.GetLogFileNames(((XmlLogPublisher) publisher).LogDir);
-						}
-					}
-					throw new CruiseControlException("Unable to find Log Publisher for project so can't find log file");
-				}
-			}
-
-			throw new NoSuchProjectException(projectName);
+			return cruiseServer.GetBuildNames(projectName);
 		}
 
 		public string GetLog(string projectName, string buildName)
 		{
-			// TODO - this is a hack - I'll tidy it up later - promise! :) MR
-			foreach (Project project in _config.Projects) 
-			{
-				if (project.Name == projectName)
-				{
-					foreach (IIntegrationCompletedEventHandler publisher in project.Publishers)
-					{
-						if (publisher is XmlLogPublisher)
-						{
-							using (StreamReader sr = new StreamReader(Path.Combine(((XmlLogPublisher) publisher).LogDir, buildName)))
-							{
-								return sr.ReadToEnd();
-							}
-						}
-					}
-					throw new CruiseControlException("Unable to find Log Publisher for project so can't find log file");
-				}
-			}
-
-			throw new NoSuchProjectException(projectName);
+			return cruiseServer.GetLog(projectName, buildName);
 		}
 
-		// ToDo - test
-		public string GetServerLog ()
+		public string GetServerLog()
 		{
-			return new ServerLogFileReader().Read();
+			return cruiseServer.GetServerLog();
 		}
 
-		// ToDo - implement
 		public void AddProject(string serializedProject)
 		{
-			string message = "'AddProject' not yet implemented in Cruise Build Server so project NOT added. Project was : " + serializedProject;
-			Log.Warning(message);
-			throw new CruiseControlException(message);
-		}
-
-		/// <summary>
-		/// TODO: deprecate this
-		/// </summary>
-		/// <returns></returns>
-		private CruiseControlStatus GetStatus()
-		{
-			return CruiseControlStatus.Unknown;
+			cruiseServer.AddProject(serializedProject);
 		}
 
 		public override object InitializeLifetimeService()

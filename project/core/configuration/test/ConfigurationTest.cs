@@ -17,14 +17,6 @@ namespace ThoughtWorks.CruiseControl.Core.Config.Test
 			Configuration config = new Configuration();
 			config.AddProject(project1);
 			config.AddProject(project2);
-
-			AssertEquals(project1, config.Integrators["project1"].Project);
-			AssertEquals(project2, config.Integrators["project2"].Project);
-
-			foreach (IProjectIntegrator integrator in config.Integrators)
-			{
-				AssertNotNull(integrator);
-			}
 		}
 	}
 }

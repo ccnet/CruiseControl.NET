@@ -448,7 +448,7 @@ namespace ThoughtWorks.CruiseControl.CCTray
 
 		string CalculateTrayText(ProjectStatus projectStatus)
 		{
-			object activity = (projectStatus.Status==CruiseControlStatus.Stopped) ? ProjectActivity.Unknown : projectStatus.Activity;
+			object activity = (projectStatus.Status==ProjectIntegratorState.Stopped) ? ProjectActivity.Unknown : projectStatus.Activity;
 
 			return string.Format("Server: {0}\nProject: {1}\nLast Build: {2} ({3})", 
 				activity,
