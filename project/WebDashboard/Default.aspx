@@ -18,11 +18,11 @@
 			<asp:BoundColumn DataField="BuildStatus" HeaderText="Last Build Status">
 				<ItemStyle Font-Bold="True"></ItemStyle>
 			</asp:BoundColumn>
-			<asp:BoundColumn DataField="LastBuildDate" HeaderText="Last Build Time"></asp:BoundColumn>
-			<asp:BoundColumn DataField="LastBuildLabel" HeaderText="Last Build Label"></asp:BoundColumn>
-			<asp:BoundColumn DataField="Status" HeaderText="CCNet Status"></asp:BoundColumn>
-			<asp:BoundColumn DataField="Activity" HeaderText="Activity"></asp:BoundColumn>
-			<asp:HyperLinkColumn Text="Force" DataNavigateUrlField="ForceBuildURL" HeaderText="Force Build"></asp:HyperLinkColumn>
+			<asp:BoundColumn DataField="LastBuildDate" HeaderText="Last Build Time" />
+			<asp:BoundColumn DataField="LastBuildLabel" HeaderText="Last Build Label" />
+			<asp:BoundColumn DataField="Status" HeaderText="CCNet Status" />
+			<asp:BoundColumn DataField="Activity" HeaderText="Activity" />
+			<asp:HyperLinkColumn Text="Force" DataNavigateUrlField="Name" DataNavigateUrlFormatString="?project={0}" HeaderText="Force Build" />
 		</Columns>
 		<PagerStyle HorizontalAlign="Right" ForeColor="Black" BackColor="#C6C3C6"></PagerStyle>
 	</asp:datagrid>

@@ -2,9 +2,8 @@ using System;
 using System.Collections;
 using System.Configuration;
 using System.Drawing;
-using System.Runtime.Remoting;
 using System.Web.UI.WebControls;
-
+using System.Web.UI;
 using ThoughtWorks.CruiseControl.Remote;
 
 namespace ThoughtWorks.CruiseControl.WebDashboard
@@ -15,50 +14,35 @@ namespace ThoughtWorks.CruiseControl.WebDashboard
 		protected System.Web.UI.WebControls.DataGrid ExceptionGrid;
 		protected System.Web.UI.WebControls.Label StatusLabel;
 		protected System.Web.UI.WebControls.DataGrid StatusGrid;
+		private LocalCruiseManagerAggregator cruiseManager = new LocalCruiseManagerAggregator((IList)ConfigurationSettings.GetConfig("projectURLs"));
 	
 		private void Page_Load(object sender, System.EventArgs e)
 		{
-			IList urls = (IList) ConfigurationSettings.GetConfig("projectURLs");
-			ArrayList projectDetailsList = new ArrayList();
-			ArrayList connectionExceptions = new ArrayList();
-			Hashtable urlsForProjects = new Hashtable();
+			CheckForceBuild();
+			ShowProjectDetails();
+			ShowExceptionDetails();
+		}
 
-			foreach (string url in urls)
+		private void ShowProjectDetails()
+		{
+			if (cruiseManager.ProjectDetails.Count > 0)
 			{
-				try
-				{
-					ICruiseManager remoteCC = (ICruiseManager) RemotingServices.Connect(typeof(ICruiseManager), url);
-					foreach (ProjectStatus status in remoteCC.GetProjectStatus())
-					{
-						projectDetailsList.Add(new ProjectDetails(status, GenerateForceBuildURL(status)));
-						urlsForProjects.Add(status.Name, url);
-					}
-				}
-				catch (Exception f)
-				{
-					connectionExceptions.Add(new ConnectionException(url, f));
-				}
-			}
-
-			if (this.Request.QueryString.Count > 0)
-			{
-				HandleQueryString(urlsForProjects);
-			}
-
-			if (projectDetailsList.Count > 0)
-			{
-				StatusGrid.DataSource = projectDetailsList;
+				StatusGrid.DataSource = cruiseManager.ProjectDetails;
 				StatusGrid.DataBind();
 				StatusGrid.Visible = true;
 			}
 			else
 			{
 				StatusGrid.Visible = false;
-			}
+			}			
+		}
 
-			if (connectionExceptions.Count > 0)
+		private void ShowExceptionDetails()
+		{
+
+			if (cruiseManager.ConnectionExceptions.Count > 0)
 			{
-				ExceptionGrid.DataSource = connectionExceptions;
+				ExceptionGrid.DataSource = cruiseManager.ConnectionExceptions;
 				ExceptionGrid.DataBind();
 				ExceptionGrid.Visible = true;
 				ExceptionTitleLabel.Visible = true;
@@ -70,31 +54,21 @@ namespace ThoughtWorks.CruiseControl.WebDashboard
 			}
 		}
 
-		private string GenerateForceBuildURL(ProjectStatus status)
+		private void CheckForceBuild()
 		{
-			return "Default.aspx?forceBuildFor=" + status.Name;
-		}
-
-		private void HandleQueryString(Hashtable urlsForProjects)
-		{
-			string forceBuildProjectName = this.Request.QueryString["forceBuildFor"];
-			if (forceBuildProjectName != null && forceBuildProjectName.Length > 0)
+			string forceBuildProject = Request.QueryString["project"];
+			if (forceBuildProject != null)
 			{
-				ForceBuild(forceBuildProjectName, urlsForProjects);
-			}
-			else
-			{
-				StatusLabel.Text = "Warning - unknown query string parameter(s) found";
-				StatusLabel.Visible = true;
+				ForceBuild(forceBuildProject);
+				Response.Redirect(Request.Url.GetLeftPart(UriPartial.Path), true);
 			}
 		}
 
-		private void ForceBuild(string projectName, Hashtable urlsForProjects)
+		private void ForceBuild(string projectName)
 		{
 			try
 			{
-				ICruiseManager remoteCC = (ICruiseManager) RemotingServices.Connect(typeof(ICruiseManager), (string) urlsForProjects[projectName]);
-				remoteCC.ForceBuild(projectName);
+				cruiseManager.ForceBuild(projectName);
 				StatusLabel.Text = "Build Successfully Forced for project [ " + projectName + " ]";
 			}
 			catch (Exception e)
@@ -110,7 +84,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard
 				(e.Item.ItemType == ListItemType.AlternatingItem))
 			{
 				ProjectStatus thisProjectsStatus = (ProjectStatus) e.Item.DataItem;
-				TableCell buildStatusCell = (TableCell)e.Item.Controls[1];
+				TableCell buildStatusCell = e.Item.Cells[1];
 
 				if (thisProjectsStatus.BuildStatus == IntegrationStatus.Success)
 				{
@@ -126,6 +100,15 @@ namespace ThoughtWorks.CruiseControl.WebDashboard
 				}
 			}
 		}
+
+//		private void StatusGrid_ItemCommand(object source, DataGridCommandEventArgs e)
+//		{
+//			if (e.CommandName == "Force")
+//			{
+//				HyperLink link = (HyperLink)e.Item.Cells[0].Controls[0];
+//				ForceBuild(link.Text);
+//			}
+//		}
 
 		#region Web Form Designer generated code
 		override protected void OnInit(EventArgs e)

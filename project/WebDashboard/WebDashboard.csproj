@@ -168,7 +168,7 @@
                     BuildAction = "EmbeddedResource"
                 />
                 <File
-                    RelPath = "ProjectDetails.cs"
+                    RelPath = "LocalCruiseManagerAggregator.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

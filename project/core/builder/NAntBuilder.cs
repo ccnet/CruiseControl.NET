@@ -60,7 +60,7 @@ namespace ThoughtWorks.CruiseControl.Core.Builder
 			get { return _buildArgs; }
 			set 
 			{ 
-				if (value == null || value.IndexOf("-logger:") >=0)
+				if (value == null || value.IndexOf("-logger:") < 0)
 				{
 					Log.Warning("NAntBuilder buildArgs element does not specify that NAnt should use the XmlLogger.  If this is not specified then CruiseControl.NET may not be able to correctly render the output from NAnt.");
 				}
