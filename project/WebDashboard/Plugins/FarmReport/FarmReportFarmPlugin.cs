@@ -21,7 +21,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.FarmReport
 
 		public IView Execute(ICruiseRequest request)
 		{
-			return projectGridAction.Execute(request.Request.ActionArguments, this.LinkActionName, request.Request);
+			return projectGridAction.Execute(request.Request.ActionArguments, ACTION_NAME, request.Request);
 		}
 
 		public string LinkDescription
@@ -29,14 +29,9 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.FarmReport
 			get { return "Farm Report"; }
 		}
 
-		public string LinkActionName
-		{
-			get { return ACTION_NAME; }
-		}
-
 		public INamedAction[] NamedActions
 		{
-			get {  return new INamedAction[] { new ImmutableNamedAction(LinkActionName, this) }; }
+			get {  return new INamedAction[] { new ImmutableNamedAction(ACTION_NAME, this) }; }
 		}
 	}
 }

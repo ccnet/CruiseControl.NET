@@ -8,14 +8,6 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard.GenericPlugins
 		private string description;
 		private INamedAction[] namedActions;
 
-		public string LinkActionName
-		{
-			get
-			{
-				return NamedActions[0].ActionName;
-			}
-		}
-
 		[ReflectorProperty("description")]
 		public string LinkDescription
 		{

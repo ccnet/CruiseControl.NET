@@ -48,14 +48,9 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.ProjectReport
 			get { return "Project Report"; }
 		}
 
-		public string LinkActionName
-		{
-			get { return ACTION_NAME; }
-		}
-
 		public INamedAction[] NamedActions
 		{
-			get {  return new INamedAction[] { new ImmutableNamedAction(LinkActionName, this) }; }
+			get {  return new INamedAction[] { new ImmutableNamedAction(ACTION_NAME, this) }; }
 		}
 	}
 }

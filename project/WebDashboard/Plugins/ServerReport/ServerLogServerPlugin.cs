@@ -34,14 +34,9 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.ServerReport
 			get { return "View Server Log"; }
 		}
 
-		public string LinkActionName
-		{
-			get { return "ViewServerLog"; }
-		}
-
 		public INamedAction[] NamedActions
 		{
-			get {  return new INamedAction[] { new ImmutableNamedAction(LinkActionName, this) }; }
+			get {  return new INamedAction[] { new ImmutableNamedAction("ViewServerLog", this) }; }
 		}
 	}
 }

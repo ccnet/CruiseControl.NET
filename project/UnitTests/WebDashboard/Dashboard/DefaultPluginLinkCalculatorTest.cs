@@ -18,6 +18,12 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 		private DefaultBuildSpecifier buildSpecifier;
 		private IProjectSpecifier projectSpecifier;
 		private DefaultServerSpecifier serverSpecifier;
+		private DynamicMock pluginMock1;
+		private DynamicMock pluginMock2;
+		private INamedAction action1;
+		private INamedAction action2;
+		private IAbsoluteLink link1;
+		private IAbsoluteLink link2;
 
 		[SetUp]
 		public void Setup()
@@ -28,6 +34,17 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 			linkFactoryMock = new DynamicMock(typeof(ILinkFactory));
 			configurationMock = new DynamicMock(typeof(IPluginConfiguration));
 			Plugins = new DefaultPluginLinkCalculator((ILinkFactory) linkFactoryMock.MockInstance, (IPluginConfiguration) configurationMock.MockInstance);
+
+			pluginMock1 = new DynamicMock(typeof(IPlugin));
+			pluginMock2 = new DynamicMock(typeof(IPlugin));
+			action1 = new ImmutableNamedAction("Action Name 1", null);
+			action2 = new ImmutableNamedAction("Action Name 2", null);
+			pluginMock1.ExpectAndReturn("LinkDescription", "Description 1");
+			pluginMock1.ExpectAndReturn("NamedActions", new INamedAction[] { action1 } );
+			pluginMock2.ExpectAndReturn("LinkDescription", "Description 2");
+			pluginMock2.ExpectAndReturn("NamedActions", new INamedAction[] { action2 });
+			link1 = (IAbsoluteLink) new DynamicMock(typeof(IAbsoluteLink)).MockInstance;
+			link2 = (IAbsoluteLink) new DynamicMock(typeof(IAbsoluteLink)).MockInstance;
 		}
 
 		private void VerifyAll()
@@ -39,19 +56,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 		[Test]
 		public void ShouldReturnBuildPluginLinksByQueryingConfiguration()
 		{
-			DynamicMock pluginMock1 = new DynamicMock(typeof(IPlugin));
-			DynamicMock pluginMock2 = new DynamicMock(typeof(IPlugin));
-
 			configurationMock.ExpectAndReturn("BuildPlugins", new IPlugin[] { (IPlugin) pluginMock1.MockInstance, (IPlugin) pluginMock2.MockInstance });
-
-			pluginMock1.ExpectAndReturn("LinkDescription", "Description 1");
-			pluginMock1.ExpectAndReturn("LinkActionName", "Action Name 1");
-			pluginMock2.ExpectAndReturn("LinkDescription", "Description 2");
-			pluginMock2.ExpectAndReturn("LinkActionName", "Action Name 2");
-
-			IAbsoluteLink link1 = (IAbsoluteLink) new DynamicMock(typeof(IAbsoluteLink)).MockInstance;
-			IAbsoluteLink link2 = (IAbsoluteLink) new DynamicMock(typeof(IAbsoluteLink)).MockInstance;
-
 			linkFactoryMock.ExpectAndReturn("CreateBuildLink", link1, buildSpecifier, "Description 1", new PropertyIs("ActionName", "Action Name 1"));
 			linkFactoryMock.ExpectAndReturn("CreateBuildLink", link2, buildSpecifier, "Description 2", new PropertyIs("ActionName", "Action Name 2"));
 
@@ -59,28 +64,14 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 
 			Assert.AreSame(link1, buildLinks[0]);
 			Assert.AreSame(link2, buildLinks[1]);
-
 			Assert.AreEqual(2, buildLinks.Length);
-
 			VerifyAll();
 		}
 
 		[Test]
 		public void ShouldReturnServerPluginLinksByQueryingConfiguration()
 		{
-			DynamicMock pluginMock1 = new DynamicMock(typeof(IPlugin));
-			DynamicMock pluginMock2 = new DynamicMock(typeof(IPlugin));
-
 			configurationMock.ExpectAndReturn("ServerPlugins", new IPlugin[] { (IPlugin) pluginMock1.MockInstance, (IPlugin) pluginMock2.MockInstance });
-
-			pluginMock1.ExpectAndReturn("LinkDescription", "Description 1");
-			pluginMock1.ExpectAndReturn("LinkActionName", "Action Name 1");
-			pluginMock2.ExpectAndReturn("LinkDescription", "Description 2");
-			pluginMock2.ExpectAndReturn("LinkActionName", "Action Name 2");
-
-			IAbsoluteLink link1 = (IAbsoluteLink) new DynamicMock(typeof(IAbsoluteLink)).MockInstance;
-			IAbsoluteLink link2 = (IAbsoluteLink) new DynamicMock(typeof(IAbsoluteLink)).MockInstance;
-
 			linkFactoryMock.ExpectAndReturn("CreateServerLink", link1, serverSpecifier, "Description 1", new PropertyIs("ActionName", "Action Name 1"));
 			linkFactoryMock.ExpectAndReturn("CreateServerLink", link2, serverSpecifier, "Description 2", new PropertyIs("ActionName", "Action Name 2"));
 
@@ -88,28 +79,14 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 
 			Assert.AreSame(link1, buildLinks[0]);
 			Assert.AreSame(link2, buildLinks[1]);
-
 			Assert.AreEqual(2, buildLinks.Length);
-
 			VerifyAll();
 		}
 
 		[Test]
 		public void ShouldReturnFarmPluginLinksByQueryingConfiguration()
 		{
-			DynamicMock pluginMock1 = new DynamicMock(typeof(IPlugin));
-			DynamicMock pluginMock2 = new DynamicMock(typeof(IPlugin));
-
 			configurationMock.ExpectAndReturn("FarmPlugins", new IPlugin[] { (IPlugin) pluginMock1.MockInstance, (IPlugin) pluginMock2.MockInstance });
-
-			pluginMock1.ExpectAndReturn("LinkDescription", "Description 1");
-			pluginMock1.ExpectAndReturn("LinkActionName", "Action Name 1");
-			pluginMock2.ExpectAndReturn("LinkDescription", "Description 2");
-			pluginMock2.ExpectAndReturn("LinkActionName", "Action Name 2");
-
-			IAbsoluteLink link1 = (IAbsoluteLink) new DynamicMock(typeof(IAbsoluteLink)).MockInstance;
-			IAbsoluteLink link2 = (IAbsoluteLink) new DynamicMock(typeof(IAbsoluteLink)).MockInstance;
-
 			linkFactoryMock.ExpectAndReturn("CreateFarmLink", link1, "Description 1", new PropertyIs("ActionName", "Action Name 1"));
 			linkFactoryMock.ExpectAndReturn("CreateFarmLink", link2, "Description 2", new PropertyIs("ActionName", "Action Name 2"));
 
@@ -117,28 +94,14 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 
 			Assert.AreSame(link1, buildLinks[0]);
 			Assert.AreSame(link2, buildLinks[1]);
-
 			Assert.AreEqual(2, buildLinks.Length);
-
 			VerifyAll();
 		}
 
 		[Test]
 		public void ShouldReturnProjectPluginLinksByQueryingConfiguration()
 		{
-			DynamicMock pluginMock1 = new DynamicMock(typeof(IPlugin));
-			DynamicMock pluginMock2 = new DynamicMock(typeof(IPlugin));
-
 			configurationMock.ExpectAndReturn("ProjectPlugins", new IPlugin[] { (IPlugin) pluginMock1.MockInstance, (IPlugin) pluginMock2.MockInstance });
-
-			pluginMock1.ExpectAndReturn("LinkDescription", "Description 1");
-			pluginMock1.ExpectAndReturn("LinkActionName", "Action Name 1");
-			pluginMock2.ExpectAndReturn("LinkDescription", "Description 2");
-			pluginMock2.ExpectAndReturn("LinkActionName", "Action Name 2");
-
-			IAbsoluteLink link1 = (IAbsoluteLink) new DynamicMock(typeof(IAbsoluteLink)).MockInstance;
-			IAbsoluteLink link2 = (IAbsoluteLink) new DynamicMock(typeof(IAbsoluteLink)).MockInstance;
-
 			linkFactoryMock.ExpectAndReturn("CreateProjectLink", link1, projectSpecifier, "Description 1", new PropertyIs("ActionName", "Action Name 1"));
 			linkFactoryMock.ExpectAndReturn("CreateProjectLink", link2, projectSpecifier, "Description 2", new PropertyIs("ActionName", "Action Name 2"));
 
@@ -146,9 +109,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 
 			Assert.AreSame(link1, buildLinks[0]);
 			Assert.AreSame(link2, buildLinks[1]);
-
 			Assert.AreEqual(2, buildLinks.Length);
-
 			VerifyAll();
 		}
 	}

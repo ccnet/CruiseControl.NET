@@ -48,10 +48,5 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 		{
 			get { throw new NotImplementedException(); }
 		}
-
-		public string LinkActionName
-		{
-			get { throw new NotImplementedException(); }
-		}
 	}
 }

@@ -4,6 +4,5 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 	{
 		INamedAction[] NamedActions { get; }
 		string LinkDescription { get; }
-		string LinkActionName { get; }
 	}
 }

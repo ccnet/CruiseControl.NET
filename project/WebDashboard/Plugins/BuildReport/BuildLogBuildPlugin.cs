@@ -19,11 +19,6 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.BuildReport
 			get { return "View Build Log"; }
 		}
 
-		public string LinkActionName
-		{
-			get { return HtmlBuildLogAction.ACTION_NAME; }
-		}
-
 		public INamedAction[] NamedActions
 		{
 			get {  

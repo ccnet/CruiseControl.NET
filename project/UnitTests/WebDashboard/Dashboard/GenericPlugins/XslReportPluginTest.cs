@@ -27,11 +27,11 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard.GenericPlu
 		[Test]
 		public void ShouldUseConfigurableProperties()
 		{
-			plugin.LinkActionName = "MyAction";
+			plugin.ActionName = "MyAction";
 			plugin.LinkDescription = "My Plugin";
 			plugin.XslFileName = @"xsl\myxsl.xsl";
 
-			Assert.AreEqual("MyAction", plugin.LinkActionName);
+			Assert.AreEqual("MyAction", plugin.ActionName);
 			Assert.AreEqual("My Plugin", plugin.LinkDescription);
 			Assert.AreEqual(@"xsl\myxsl.xsl", plugin.XslFileName);
 
@@ -41,7 +41,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard.GenericPlu
 		[Test]
 		public void ShouldCreateAnXslReportActionWithCorrectNameXslFileName()
 		{
-			plugin.LinkActionName = "MyAction";
+			plugin.ActionName = "MyAction";
 			plugin.LinkDescription = "My Plugin";
 			plugin.XslFileName = @"xsl\myxsl.xsl";
 

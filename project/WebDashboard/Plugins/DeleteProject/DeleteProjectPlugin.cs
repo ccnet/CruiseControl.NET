@@ -17,11 +17,6 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.DeleteProject
 			get { return "Delete Project"; }
 		}
 
-		public string LinkActionName
-		{
-			get { return NamedActions[0].ActionName; }
-		}
-
 		public INamedAction[] NamedActions
 		{
 			get

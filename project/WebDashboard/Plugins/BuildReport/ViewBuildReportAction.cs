@@ -23,11 +23,6 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.BuildReport
 			get { return "Build Report"; }
 		}
 
-		public string LinkActionName
-		{
-			get { return ACTION_NAME; }
-		}
-
 		[ReflectorArray("xslFileNames")]
 		public string[] XslFileNames
 		{

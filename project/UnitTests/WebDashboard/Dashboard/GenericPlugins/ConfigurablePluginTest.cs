@@ -9,21 +9,6 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard.GenericPlu
 	public class ConfigurablePluginTest
 	{
 		[Test]
-		public void ShouldUseNameOfFirstNamedActionAsLinkActionName()
-		{
-			DynamicMock actionMock = new DynamicMock(typeof(INamedAction));
-			actionMock.ExpectAndReturn("ActionName", "MyAction");
-			INamedAction action = (INamedAction) actionMock.MockInstance;
-
-			ConfigurablePlugin plugin = new ConfigurablePlugin();
-			plugin.LinkDescription = "My Plugin";
-			plugin.NamedActions = new INamedAction[] { action };
-
-			Assert.AreEqual("MyAction", plugin.LinkActionName);
-			actionMock.Verify();
-		}
-
-		[Test]
 		public void ShouldUseConfigurableProperties()
 		{
 			DynamicMock actionMock = new DynamicMock(typeof(INamedAction));

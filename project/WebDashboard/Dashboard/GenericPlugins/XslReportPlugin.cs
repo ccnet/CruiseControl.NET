@@ -31,7 +31,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard.GenericPlugins
 		}
 
 		[ReflectorProperty("actionName")]
-		public string LinkActionName
+		public string ActionName
 		{
 			get
 			{
