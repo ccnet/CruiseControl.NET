@@ -16,7 +16,7 @@
                 DefaultTargetSchema = "IE50"
                 DelaySign = "false"
                 OutputType = "Library"
-                PreBuildEvent = 'mkdir "$(TargetDir)xsl"&#xd;&#xa;copy "$(SolutionDir)\xsl\*.*" "$(TargetDir)xsl"'
+                PreBuildEvent = 'copy "$(ProjectDir)Web\test.config" "$(TargetPath).config"&#xd;&#xa;mkdir "$(TargetDir)xsl"&#xd;&#xa;copy "$(SolutionDir)\xsl\*.*" "$(TargetDir)xsl"'
                 PostBuildEvent = ""
                 RootNamespace = "ThoughtWorks.CruiseControl.UnitTests"
                 RunPostBuildEvent = "OnBuildSuccess"
@@ -154,6 +154,11 @@
                     Project = "{19C24DF5-7EE8-4325-AFD6-C18D6C85DD9B}"
                     Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
                 />
+                <Reference
+                    Name = "web"
+                    Project = "{317E46BA-74DE-411D-A09D-37193EEFD856}"
+                    Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
+                />
             </References>
         </Build>
         <Files>
@@ -265,6 +270,50 @@
                 />
                 <File
                     RelPath = "Core\SourceControl\Vss\VssLocaleTest.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Web\ConfigSectionTest.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Web\HtmlLogFormatterTest.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Web\LogFileListTest.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Web\LogStatisticsTest.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Web\LogTransformerTest.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Web\PageTransformerTest.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Web\ServerLogFileReaderTest.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Web\test.config"
+                    BuildAction = "None"
+                />
+                <File
+                    RelPath = "Web\TestData.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

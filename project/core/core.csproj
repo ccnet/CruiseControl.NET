@@ -146,6 +146,7 @@
                 <File
                     RelPath = "CommonAssemblyInfo.cs"
                     Link = "..\CommonAssemblyInfo.cs"
+                    SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
@@ -1158,6 +1159,11 @@
                 />
                 <File
                     RelPath = "test\FileMother.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "test\IntegrationRequestQueueTest.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

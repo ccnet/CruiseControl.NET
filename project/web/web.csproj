@@ -17,7 +17,7 @@
                 DelaySign = "false"
                 OutputType = "Library"
                 PreBuildEvent = ""
-                PostBuildEvent = '@echo off&#xd;&#xa;copy "$(ProjectDir)test\test.config" "$(TargetPath).config"&#xd;&#xa;mkdir "$(ProjectDir)\xsl"&#xd;&#xa;copy "$(SolutionDir)\xsl\*.xsl" "$(ProjectDir)\xsl"&#xd;&#xa;copy "$(SolutionDir)\xsl\*.css" "$(ProjectDir)"&#xd;&#xa;'
+                PostBuildEvent = '@echo off&#xd;&#xa;mkdir "$(ProjectDir)\xsl"&#xd;&#xa;copy "$(SolutionDir)\xsl\*.xsl" "$(ProjectDir)\xsl"&#xd;&#xa;copy "$(SolutionDir)\xsl\*.css" "$(ProjectDir)"&#xd;&#xa;'
                 RootNamespace = "ThoughtWorks.CruiseControl.Web"
                 RunPostBuildEvent = "OnBuildSuccess"
                 StartupObject = ""
@@ -125,25 +125,9 @@
                     HintPath = "..\..\lib\SiteMesh.dll"
                 />
                 <Reference
-                    Name = "nunit.framework"
-                    AssemblyName = "nunit.framework"
-                    HintPath = "..\..\lib\nunit.framework.dll"
-                    Private = "True"
-                />
-                <Reference
-                    Name = "nmock"
-                    AssemblyName = "nmock"
-                    HintPath = "..\..\lib\nmock.dll"
-                />
-                <Reference
                     Name = "System.Data"
                     AssemblyName = "System.Data"
                     HintPath = "..\..\..\..\..\WINDOWS\Microsoft.NET\Framework\v1.1.4322\System.Data.dll"
-                />
-                <Reference
-                    Name = "nunit.core"
-                    AssemblyName = "nunit.core"
-                    HintPath = "..\..\lib\nunit.core.dll"
                 />
             </References>
         </Build>
@@ -219,6 +203,16 @@
                     RelPath = "FxCop.aspx.resx"
                     DependentUpon = "FxCop.aspx.cs"
                     BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "Global.asax"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "Global.asax.cs"
+                    DependentUpon = "Global.asax"
+                    SubType = "Code"
+                    BuildAction = "Compile"
                 />
                 <File
                     RelPath = "HtmlLogFormatter.cs"
@@ -339,16 +333,6 @@
                     RelPath = "TestTiming.aspx.resx"
                     DependentUpon = "TestTiming.aspx.cs"
                     BuildAction = "EmbeddedResource"
-                />
-                <File
-                    RelPath = "Global.asax"
-                    BuildAction = "Content"
-                />
-                <File
-                    RelPath = "Global.asax.cs"
-                    DependentUpon = "Global.asax"
-                    SubType = "Code"
-                    BuildAction = "Compile"
                 />
                 <File
                     RelPath = "Web.config"
@@ -486,50 +470,6 @@
                 <File
                     RelPath = "log\log20040412170952.xml"
                     BuildAction = "Content"
-                />
-                <File
-                    RelPath = "test\ConfigSectionTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "test\HtmlLogFormatterTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "test\LogFileListTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "test\LogStatisticsTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "test\LogTransformerTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "test\PageTransformerTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "test\ServerLogFileReaderTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "test\test.config"
-                    BuildAction = "None"
-                />
-                <File
-                    RelPath = "test\TestData.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
                 />
                 <File
                     RelPath = "xsl\compile.xsl"

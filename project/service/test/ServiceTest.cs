@@ -1,7 +1,4 @@
 using NUnit.Framework;
-using NMock;
-using System.Configuration.Install;
-using System.ServiceProcess;
 
 namespace ThoughtWorks.CruiseControl.Service.Test 
 {
