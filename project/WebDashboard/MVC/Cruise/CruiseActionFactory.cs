@@ -37,7 +37,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.MVC.Cruise
 			actionName = actionName.Substring(ACTION_PARAMETER_PREFIX.Length);
 			if (actionName == VIEW_ALL_BUILDS_ACTION_NAME)
 			{
-				return CruiseActionProxyAction(ServerAndProjectCheckingProxyAction(ViewAllBuildsAction));
+				return CruiseActionProxyAction(ProjectCheckingProxyAction(ServerCheckingProxyAction(ViewAllBuildsAction)));
 			}
 			else if (actionName == ADD_PROJECT_DISPLAY_ACTION_NAME)
 			{
@@ -49,11 +49,11 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.MVC.Cruise
 			}
 			else if (actionName == SHOW_DELETE_PROJECT_ACTION_NAME)
 			{
-				return CruiseActionProxyAction(ServerAndProjectCheckingProxyAction(ShowDeleteProjectAction));
+				return CruiseActionProxyAction(ProjectCheckingProxyAction(ServerCheckingProxyAction(ShowDeleteProjectAction)));
 			}
 			else if (actionName == DO_DELETE_PROJECT_ACTION_NAME)
 			{
-				return CruiseActionProxyAction(ServerAndProjectCheckingProxyAction(DoDeleteProjectAction));
+				return CruiseActionProxyAction(ProjectCheckingProxyAction(ServerCheckingProxyAction(DoDeleteProjectAction)));
 			}
 			else if (actionName == VIEW_SERVER_LOG_ACTION_NAME)
 			{
@@ -75,9 +75,14 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.MVC.Cruise
 			return new CruiseActionProxyAction(proxied, dcFactory.NameValueCruiseRequestFactory);
 		}
 
-		public ServerAndProjectCheckingProxyAction ServerAndProjectCheckingProxyAction(ICruiseAction proxied)
+		public BuildCheckingProxyAction BuildCheckingProxyAction(ICruiseAction proxied)
 		{
-			return new ServerAndProjectCheckingProxyAction(proxied, SimpleErrorViewBuilder);
+			return new BuildCheckingProxyAction(proxied, SimpleErrorViewBuilder);
+		}
+
+		public ProjectCheckingProxyAction ProjectCheckingProxyAction(ICruiseAction proxied)
+		{
+			return new ProjectCheckingProxyAction(proxied, SimpleErrorViewBuilder);
 		}
 
 		public ServerCheckingProxyAction ServerCheckingProxyAction(ICruiseAction proxied)

@@ -581,6 +581,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "MVC\Cruise\BuildCheckingProxyAction.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "MVC\Cruise\CruiseActionFactory.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -621,12 +626,12 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "MVC\Cruise\SaveNewProjectAction.cs"
+                    RelPath = "MVC\Cruise\ProjectCheckingProxyAction.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "MVC\Cruise\ServerAndProjectCheckingProxyAction.cs"
+                    RelPath = "MVC\Cruise\SaveNewProjectAction.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

@@ -294,6 +294,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "WebDashboard\MVC\Cruise\BuildCheckingProxyActionTest.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "WebDashboard\MVC\Cruise\CruiseActionProxyActionTest.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -304,7 +309,7 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "WebDashboard\MVC\Cruise\ServerAndProjectCheckingProxyActionTest.cs"
+                    RelPath = "WebDashboard\MVC\Cruise\ProjectCheckingProxyActionTest.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
