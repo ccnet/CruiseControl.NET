@@ -52,7 +52,8 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test
 			AssertEquals(@"Admin", _vss.Username);
 		}
 
-		public void TestFormatDate()
+		[Test]
+		public void FormatDateInCultureInvariantFormat()
 		{
 			DateTime date = new DateTime(2002, 2, 22, 20, 0, 0);
 			string expected = "02/22/2002;20:00";
@@ -61,6 +62,21 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test
 
 			date = new DateTime(2002, 2, 22, 12, 0, 0);
 			expected = "02/22/2002;12:00";
+			actual = _vss.FormatCommandDate(date);
+			AssertEquals(expected, actual);
+		}
+
+		[Test]
+		public void FormatDateInUSFormat()
+		{
+			_vss.CultureInfo = new CultureInfo("en-US");
+			DateTime date = new DateTime(2002, 2, 22, 20, 0, 0);
+			string expected = "2/22/2002;8:00P";
+			string actual = _vss.FormatCommandDate(date);
+			AssertEquals(expected, actual);
+
+			date = new DateTime(2002, 2, 22, 12, 0, 0);
+			expected = "2/22/2002;12:00P";
 			actual = _vss.FormatCommandDate(date);
 			AssertEquals(expected, actual);
 		}

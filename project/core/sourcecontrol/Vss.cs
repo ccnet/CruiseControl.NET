@@ -62,9 +62,15 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			return process;
 		}
 
+		/// <summary>
+		/// Format the date in a format appropriate for the VSS command-line.  The date should not contain any spaces as VSS would treat it as a separate argument.
+		/// The trailing 'M' in 'AM' or 'PM' is also removed.
+		/// </summary>
+		/// <param name="date"></param>
+		/// <returns>Date string formatted for the specified locale as expected by the VSS command-line.</returns>
 		internal string FormatCommandDate(DateTime date)
 		{
-			return string.Concat(date.ToString("d", CultureInfo), ";", date.ToString("t", CultureInfo));
+			 return string.Concat(date.ToString("d", CultureInfo), ";", date.ToString("t", CultureInfo)).Replace(" ", string.Empty).TrimEnd('M', 'm');
 		}
 
 		internal string BuildHistoryProcessArgs(DateTime from, DateTime to)
