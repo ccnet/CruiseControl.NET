@@ -999,6 +999,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "test\ProcessResultFixture.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "test\ProjectIntegratorTest.cs"
                     SubType = "Code"
                     BuildAction = "Compile"

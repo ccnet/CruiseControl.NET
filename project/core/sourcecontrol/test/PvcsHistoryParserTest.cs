@@ -11,9 +11,9 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test
 	{
 		private PvcsHistoryParser _pvcs = new PvcsHistoryParser();
 
-		public void TestParseStream()
+		[Test]
+		public void ParseStream()
 		{
-			
 			TextReader input = new StringReader(PvcsMother.LOGFILE_CONTENT);
 			Modification[] modifications = _pvcs.Parse(input, PvcsMother.OLDEST_ENTRY, PvcsMother.NEWEST_ENTRY);
 			
@@ -36,13 +36,13 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test
 			mod1.ModifiedTime = CreateDate("0001/01/01 00:00:00");
 			mod2.UserName = "virgil";
 			mod2.Comment = "made a second hello world comment";
-
 		
 			AssertEquals("1", mod1, modifications[0]);
 			AssertEquals("2", mod2, modifications[1]);
 		}
 		
-		public void TestExtendedLogFileContent()
+		[Test]
+		public void ExtendedLogFileContent()
 		{
 			TextReader input = new StringReader(PvcsMother.EXTENDED_LOGFILE_CONTENT);
 			Modification[] modifications = _pvcs.Parse(input, PvcsMother.OLDEST_ENTRY, PvcsMother.NEWEST_ENTRY);
@@ -53,10 +53,14 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test
 			AssertEquals("kerstinb", second.UserName);
 			AssertEquals("Enabled system printouts.", second.Comment);
 			AssertEquals(CreateDate("2000/02/01 16:26:14"), second.ModifiedTime);
-
 			AssertEquals(
 				@"D:\root\PVCS\vm\common\SampleDB\archives\chess\client\ChessRules.java-arc",
 				second.FolderName);
+
+			Modification third = modifications[2];
+			AssertEquals("chessviewer.html", third.FileName);
+			AssertEquals(CreateDate("1998/05/18 04:46:38"), third.ModifiedTime);
+
 		}
 
 		private DateTime CreateDate(string dateString) 

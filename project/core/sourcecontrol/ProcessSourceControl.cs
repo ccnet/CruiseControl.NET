@@ -1,5 +1,4 @@
 using System;
-using System.Collections;
 using System.IO;
 using ThoughtWorks.CruiseControl.Core.Util;
 using Exortech.NetReflector;

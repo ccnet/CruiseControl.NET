@@ -168,8 +168,8 @@ Sample Project Database - first revision.
 
 -----------------------------------
 Rev 1.1
-Checked in:     May 18 1998 04:46:38
-Last modified:  May 18 1998 04:45:30
+Checked in:     18 May 1998 04:46:38
+Last modified:  18 May 1998 04:45:30
 Author id: kerstinb     lines deleted/added/moved: 0/0/0
 Added more explantions.
 -----------------------------------

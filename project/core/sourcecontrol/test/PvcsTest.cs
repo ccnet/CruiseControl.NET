@@ -1,10 +1,11 @@
+using System.Text;
 using Exortech.NetReflector;
 using NMock;
+using NMock.Constraints;
 using NUnit.Framework;
 using System;
-using System.Collections;
-using System.Globalization;
 using System.IO;
+using ThoughtWorks.CruiseControl.Core.Test;
 using ThoughtWorks.CruiseControl.Core.Util;
 
 namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test
@@ -12,14 +13,40 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test
 	[TestFixture]
 	public class PvcsTest : CustomAssertion
 	{
-		public static string CreateSourceControlXml()
+		private IMock mockParser;
+		private IMock mockExecutor;
+		private Pvcs pvcs;
+
+		[SetUp]
+		protected void CreatePvcs()
 		{
-			return @"    <sourceControl type=""pvcs"">
+			mockParser = new DynamicMock(typeof(IHistoryParser));
+			mockExecutor = new DynamicMock(typeof(ProcessExecutor));
+			pvcs = new Pvcs((IHistoryParser) mockParser.MockInstance, (ProcessExecutor) mockExecutor.MockInstance);
+		}
+
+		[TearDown]
+		protected void VerifyMocks()
+		{
+			mockParser.Verify();
+			mockExecutor.Verify();
+		}
+
+		[Test]
+		public void ValuePopulation()
+		{
+			string xml = @"    <sourceControl type=""pvcs"">
       <executable>..\etc\pvcs\mockpcli.bat</executable>
 	  <project>fooproject</project>
 	  <subproject>barsub</subproject>
     </sourceControl>
-";
+	";
+
+			NetReflector.Read(xml, pvcs);
+
+			AssertEquals(@"..\etc\pvcs\mockpcli.bat", pvcs.Executable);
+			AssertEquals("fooproject",pvcs.Project);
+			AssertEquals("barsub", pvcs.Subproject);
 		}
 
 		// Daylight savings time bug
@@ -28,7 +55,6 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test
 		[Test]
 		public void AdjustForDayLightSavingsBugDuringDayLightSavings()
 		{
-			Pvcs pvcs = new Pvcs();
 			TimeZone timeZoneWhereItIsAlwaysDayLightSavings = CreateMockTimeZone(true);
 			pvcs.CurrentTimeZone = timeZoneWhereItIsAlwaysDayLightSavings;
 			
@@ -39,75 +65,81 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test
 		[Test]
 		public void AdjustForDayLightSavingsBugOutsideDayLightSavings()
 		{			
-			Pvcs pvcs = new Pvcs();
 			TimeZone timeZoneWhereItIsNeverDayLightSavings = CreateMockTimeZone(false);
-			pvcs.CurrentTimeZone = (TimeZone) timeZoneWhereItIsNeverDayLightSavings;
+			pvcs.CurrentTimeZone = timeZoneWhereItIsNeverDayLightSavings;
 			
 			DateTime date = new DateTime(2000, 1, 1, 1, 0, 0);
 			AssertEquals(date, pvcs.AdjustForDayLightSavingsBug(date));
 		}
 
 		[Test]
-		public void ValuePopulation()
-		{
-			Pvcs pvcs = CreatePvcs();
-			AssertEquals(@"..\etc\pvcs\mockpcli.bat", pvcs.Executable);
-			AssertEquals("fooproject",pvcs.Project);
-			AssertEquals("barsub", pvcs.Subproject);
-		}
-
-		[Test]
 		public void CreateProcess()
 		{
-			Pvcs pvcs = CreatePvcs();
-			DateTime from = new DateTime(2001, 1, 21, 20, 0, 0);
-			ProcessInfo actualProcess = pvcs.CreateHistoryProcessInfo(from, DateTime.Now);
-
+			ProcessInfo actualProcess = pvcs.CreatePVCSProcessInfo();
 			string expected = Pvcs.COMMAND;
 			string actual = actualProcess.Arguments;
 			AssertEquals(expected, actual);
 		}
-
-		private Pvcs CreatePvcs()
-		{
-			Pvcs pvcs = new Pvcs();
-			NetReflector.Read(CreateSourceControlXml(), pvcs);
-			return pvcs;
-		}
 		
-		// TODO: stop cmd window from popping up with this test!!!
 		[Test]
-		[Ignore("Sort out mockpcli stuff")]
+		public void CreatePcliContentsForGeneratingPvcsTemp() 
+		{
+			pvcs.Project = "fooproject";
+			pvcs.Subproject = "barsub";
+			string expected = 				
+@"set -vProject ""fooproject""
+set -vSubProject ""barsub""
+run ->pvcspretemp.txt listversionedfiles -z -aw $Project $SubProject
+";
+
+			string actual = pvcs.CreatePcliContentsForGeneratingPvcsTemp();
+			AssertEquals(expected, actual);
+		}
+
+		[Test]
+		public void CreatePcliContentsForGettingVLog()
+		{
+			string expected = @"run -e vlog  ""-xo+epvcsout.txt"" ""-dbeforedate*afterdate"" ""@pvcstemp.txt"" ";
+			string actual = pvcs.CreatePcliContentsForCreatingVLog("beforedate", "afterdate");
+			AssertEquals(expected, actual);
+		}
+
+		[Test]
 		public void GetModifications() 
 		{
-			Pvcs pvcs = CreatePvcs();
-			Modification[] mods = pvcs.GetModifications(new DateTime(), new DateTime());
+			mockExecutor.ExpectAndReturn("Execute", ProcessResultFixture.CreateSuccessfulResult(), new IsAnything());
+			mockExecutor.ExpectAndReturn("Execute", ProcessResultFixture.CreateSuccessfulResult(), new IsAnything());
+			mockParser.ExpectAndReturn("Parse", new Modification[] { new Modification(), new Modification() }, new IsAnything(), new IsAnything(), new IsAnything());
+			File.CreateText(Pvcs.PVCS_PRETEMPFILE).Close();
+			File.CreateText(Pvcs.PVCS_LOGOUTPUT_FILE).Close();
+
+			Modification[] mods = pvcs.GetModifications(new DateTime(2004, 6, 1, 1, 1, 1), new DateTime(2004, 6, 1, 2, 2, 2));
 			AssertEquals(2, mods.Length);
 			File.Delete(Pvcs.PVCS_LOGOUTPUT_FILE);
 			Assert("input file missing", File.Exists(Pvcs.PVCS_INSTRUCTIONS_FILE));
 			File.Delete(Pvcs.PVCS_INSTRUCTIONS_FILE);
-		}
-		
-		[Test]
-		public void CreatePcliContents() 
-		{
-			Pvcs pvcs = CreatePvcs();
-			string actual = pvcs.CreatePcliContents("beforedate", "afterdate");
-			string expected = CreateExpectedContents();
-			AssertEquals(expected, actual);
-		}
-		
-		private string CreateExpectedContents() 
-		{
-			return 
-				@"set -vProject ""fooproject""
-set -vSubProject ""barsub""
-run ->pvcstemp.txt listversionedfiles -z -aw $Project $SubProject
-run -e vlog  ""-xo+epvcsout.txt"" ""-dbeforedate*afterdate"" ""@pvcstemp.txt""
-";
+			File.Delete(Pvcs.PVCS_PRETEMPFILE);
+			File.Delete(Pvcs.PVCS_TEMPFILE);
 		}
 
-		private TimeZone CreateMockTimeZone(Boolean inDayLightSavings)
+		[Test]
+		public void TransformPvcsTempFile()
+		{
+			string initial = @"""\\FSHOME\Data\projects\prototype\AbstractCommand.cs-arc(D:\Projects\prototype\AbstractCommand.cs)""
+""\\FSHOME\Data\projects\prototype\AbstractModule.cs-arc(D:\Projects\prototype\AbstractModule.cs)""
+""\\FSHOME\Data\projects\prototype\AbstractService.cs-arc(D:\Projects\prototype\AbstractService.cs)""
+";
+			StringBuilder output = new StringBuilder();
+			pvcs.TransformVersionedFileList(new StringReader(initial), new StringWriter(output));
+
+			string expected = @"""\\\FSHOME\Data\projects\prototype\AbstractCommand.cs-arc(D:\Projects\prototype\AbstractCommand.cs)""
+""\\\FSHOME\Data\projects\prototype\AbstractModule.cs-arc(D:\Projects\prototype\AbstractModule.cs)""
+""\\\FSHOME\Data\projects\prototype\AbstractService.cs-arc(D:\Projects\prototype\AbstractService.cs)""
+";
+			AssertEquals(expected, output.ToString());
+		}
+
+		private TimeZone CreateMockTimeZone(bool inDayLightSavings)
 		{			
 			Mock mock = new DynamicMock(typeof(TimeZone));
 			mock.ExpectAndReturn("IsDaylightSavingTime", inDayLightSavings, new NMock.Constraints.IsTypeOf(typeof(DateTime)));
