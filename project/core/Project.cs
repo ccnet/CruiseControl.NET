@@ -108,6 +108,9 @@ namespace ThoughtWorks.CruiseControl.Core
 			set { _labeller = value; }
 		}
 
+		[ReflectorArray("tasks", Required=false)]
+		public ITask[] Tasks = new ITask[0];
+
 		[ReflectorProperty("publishExceptions", Required=false)]
 		public bool PublishExceptions = true;
 
@@ -147,6 +150,7 @@ namespace ThoughtWorks.CruiseControl.Core
 				if (ShouldRunBuild(result, buildCondition))
 				{
 					RunBuild(result);
+					RunTasks(result);
 				}
 			}
 			catch (Exception ex)
@@ -192,17 +196,24 @@ namespace ThoughtWorks.CruiseControl.Core
 			}
 		}
 
-		private void RunBuild(IntegrationResult results)
+		private void RunBuild(IntegrationResult result)
 		{
 			_currentActivity = ProjectActivity.Building;
 
 			Log.Info("Building");
 
-			Builder.Run(results);
+			Builder.Run(result);
 
-			Log.Info("Build complete: " + results.Status);
+			Log.Info("Build complete: " + result.Status);
 		}
 
+		private void RunTasks(IntegrationResult result)
+		{
+			foreach (ITask task in Tasks)
+			{
+				task.Run(result);
+			}
+		}
 		internal void PostBuild(IntegrationResult result)
 		{
 			result.MarkEndTime();

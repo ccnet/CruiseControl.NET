@@ -1,7 +1,6 @@
 <?xml version="1.0"?>
 <xsl:stylesheet
-    xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0"
-    xmlns:lxslt="http://xml.apache.org/xslt">
+    xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0">
 
     <xsl:output method="html"/>
 
@@ -28,7 +27,7 @@
             <!-- Unit Tests -->
             <tr>
                 <td class="unittests-sectionheader" colspan="2">
-                   &#160;Tests run: <xsl:value-of select="$nunit2.testcount"/>, Failures: <xsl:value-of select="$nunit2.failures"/>, Not run: <xsl:value-of select="$nunit2.notrun"/>, Time: <xsl:value-of select="$nunit2.time"/> seconds
+                   Tests run: <xsl:value-of select="$nunit2.testcount"/>, Failures: <xsl:value-of select="$nunit2.failures"/>, Not run: <xsl:value-of select="$nunit2.notrun"/>, Time: <xsl:value-of select="$nunit2.time"/> seconds
                 </td>
             </tr>
 
@@ -47,12 +46,12 @@
             <xsl:apply-templates select="$testcase.failure.list | $nunit2.failure.list"/>
             <xsl:apply-templates select="$nunit2.notrun.list"/>
 
-            <tr><td colspan="2">&#160;</td></tr>
+            <tr><td colspan="2"> </td></tr>
 
             <xsl:if test="$totalErrorsAndFailures > 0">
                 <tr>
                     <td class="unittests-sectionheader" colspan="2">
-                        &#160;Unit Test Failure and Error Details (<xsl:value-of select="$totalErrorsAndFailures"/>)
+                        Unit Test Failure and Error Details (<xsl:value-of select="$totalErrorsAndFailures"/>)
                     </td>
                 </tr>
 
@@ -69,20 +68,20 @@
                     <xsl:with-param name="detailnodes" select="//test-suite/results/test-case[.//failure]"/>
                 </xsl:call-template>
 
-                <tr><td colspan="2">&#160;</td></tr>
+                <tr><td colspan="2"> </td></tr>
             </xsl:if>
             
             <xsl:if test="$nunit2.notrun > 0">
                 <tr>
                     <td class="unittests-sectionheader" colspan="2">
-                        &#160;Warning Details&#160;(<xsl:value-of select="$nunit2.notrun"/>)
+                        Warning Details (<xsl:value-of select="$nunit2.notrun"/>)
                     </td>
                 </tr>
                 <!-- (PENDING) Why doesn't this work if set up as variables up top? -->
                 <xsl:call-template name="nunit2testdetail">
                     <xsl:with-param name="detailnodes" select="//test-suite/results/test-case[.//reason]"/>
                 </xsl:call-template>
-                <tr><td colspan="2">&#160;</td></tr>
+                <tr><td colspan="2"> </td></tr>
             </xsl:if>
         </table>
     </xsl:template>

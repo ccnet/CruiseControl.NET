@@ -74,6 +74,7 @@ namespace ThoughtWorks.CruiseControl.Core
             set { _endTime = value; }
         }
 
+		[XmlIgnore]
         public virtual Modification[] Modifications
         {
             get { return _modifications; }
@@ -185,6 +186,7 @@ namespace ThoughtWorks.CruiseControl.Core
             return Modifications.Length > 0;
         }
 
+		[XmlIgnore]
         public IList TaskResults
         {
             get { return _taskResults; }

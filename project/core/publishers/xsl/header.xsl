@@ -1,7 +1,6 @@
 <?xml version="1.0"?>
 <xsl:stylesheet
-    xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0"
-    xmlns:lxslt="http://xml.apache.org/xslt">
+    xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0">
 
     <xsl:output method="html"/>
 
@@ -50,7 +49,7 @@
                 <td class="header-data"><xsl:value-of select="date"/></td>
             </tr>
             <tr>
-                <td class="header-label"><nobr>Last log entry:</nobr></td>
+                <td class="header-label" valign="top"><nobr>Last log entry:</nobr></td>
                 <td class="header-data"><xsl:value-of select="comment"/></td>
             </tr>
         </xsl:if>

@@ -9,8 +9,6 @@ namespace ThoughtWorks.CruiseControl.Web
 	{
 		private string			_filename;
 		private int				_maxLines;
-		private BufferedStream	_reader = null;
-		private int				_readLines = 0;
 
 		public ServerLogFileReader(string filename, int maxLines)
 		{
@@ -20,70 +18,38 @@ namespace ThoughtWorks.CruiseControl.Web
 
 		public string Read() 
 		{ 
-			StringBuilder builder = new StringBuilder();
-			try
+			StringBuilder builder = new StringBuilder(10000);
+			int readLines = 0;
+			using (Stream stream = OpenFile())
 			{
-				if (OpenFile())
+				SeekPastEnd(stream);
+				while (MovePrevious(stream) && readLines < _maxLines)
 				{
-					SeekPastEnd();
-					while (MovePrevious())
+					builder.Insert(0, ReadChar(stream));
+					if (HasReadNewLine(builder))
 					{
-						if (!LineLimitReached(builder))
-						{
-							builder.Insert(0, ReadChar());
-						}
-						else
-						{
-							break;
-						}
+						readLines++;
 					}
 				}
 			}
-			finally
-			{
-				CloseFile();
-			}
-
 			return builder.ToString().TrimStart();
 		}
 
-		private bool OpenFile()
+		private Stream OpenFile()
 		{
-			Debug.Assert(_reader == null && _readLines == 0);
-			if (_filename != null)
-			{
-				_reader = new BufferedStream(new FileStream(_filename, FileMode.Open, FileAccess.Read));
-				return _reader.Length > 0;
-			}
-			else
-			{
-				return false;
-			}
+			return new BufferedStream(new FileStream(_filename, FileMode.Open, FileAccess.Read, FileShare.ReadWrite));
 		}
 
-		private void CloseFile()
+		private void SeekPastEnd(Stream stream)
 		{
-			if (_reader != null)
-			{
-				_reader.Close();
-				_reader = null;
-			}
-
-			Debug.Assert(_reader == null);
-		}
-		
-		private void SeekPastEnd()
-		{
-			Debug.Assert(_reader != null && _reader.CanRead && _reader.Length > 0);
-			_readLines = 0;
-			_reader.Seek(1, SeekOrigin.End);
+			stream.Seek(1, SeekOrigin.End);
 		}
 
-		private bool MovePrevious()
+		private bool MovePrevious(Stream stream)
 		{
-			if (_reader.Position > 1)
+			if (stream.Position > 1)
 			{
-				_reader.Seek(-2, SeekOrigin.Current);
+				stream.Seek(-2, SeekOrigin.Current);
 				return true;
 			}
 			else
@@ -92,22 +58,21 @@ namespace ThoughtWorks.CruiseControl.Web
 			}
 		}
 
-		private bool LineLimitReached(StringBuilder builder)
+		private bool HasReadNewLine(StringBuilder builder)
 		{
 			if (builder.Length >= Environment.NewLine.Length)
 			{
 				if (builder.ToString(0, Environment.NewLine.Length).Equals(Environment.NewLine))
 				{
-					_readLines++;
+					return true;
 				}
 			}
-
-			return _readLines >= _maxLines;
+			return false;
 		}
 
-		private char ReadChar()
+		private char ReadChar(Stream stream)
 		{
-			return (char)_reader.ReadByte();
+			return (char)stream.ReadByte();
 		}
 	}
 }

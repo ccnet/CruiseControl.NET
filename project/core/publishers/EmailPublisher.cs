@@ -131,7 +131,7 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
             return to != null && to.Trim() != string.Empty;
         }
 
-        internal void SendMessage(string from, string to, string subject, string message)
+        internal virtual void SendMessage(string from, string to, string subject, string message)
         {
             try
             {

@@ -483,6 +483,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "publishers\test\EmailPublisherStub.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "publishers\test\EmailPublisherTest.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -528,10 +533,6 @@
                 />
                 <File
                     RelPath = "publishers\xsl\header.xsl"
-                    BuildAction = "Content"
-                />
-                <File
-                    RelPath = "publishers\xsl\javadoc.xsl"
                     BuildAction = "Content"
                 />
                 <File

@@ -37,8 +37,6 @@ namespace ThoughtWorks.CruiseControl.Core.State
 			return Path.Combine(Directory, Filename);
 		}
 
-		#region Interface implementation
-
 		public bool StateFileExists()
 		{
 			return File.Exists(GetFilePath());
@@ -46,14 +44,9 @@ namespace ThoughtWorks.CruiseControl.Core.State
 
 		public IntegrationResult LoadState()
 		{
-			TextReader reader = CreateTextReader(GetFilePath());
-			try
+			using (TextReader reader = CreateTextReader(GetFilePath()))
 			{
 				return (IntegrationResult)_serializer.Deserialize(reader);
-			}
-			finally
-			{
-				reader.Close();
 			}
 		}
 		
@@ -68,10 +61,6 @@ namespace ThoughtWorks.CruiseControl.Core.State
 				writer.Flush();
 			}
 		}
-
-		#endregion
-
-		#region Private helper methods: Creating File Reader/Writer
 
 		private TextReader CreateTextReader(string path)
 		{
@@ -96,7 +85,5 @@ namespace ThoughtWorks.CruiseControl.Core.State
 				throw new CruiseControlException(string.Format("Unable to save the IntegrationResult to the specified directory: {0}", path), ex);
 			}
 		}
-
-		#endregion
 	}
 }

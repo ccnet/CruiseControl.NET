@@ -17,6 +17,7 @@ using ThoughtWorks.CruiseControl.Remote;
 using Exortech.NetReflector;
 using ThoughtWorks.CruiseControl.Core.Builder;
 using ThoughtWorks.CruiseControl.Core.Label;
+using ThoughtWorks.CruiseControl.Core.Tasks;
 
 namespace ThoughtWorks.CruiseControl.Core.Test
 {
@@ -30,6 +31,7 @@ namespace ThoughtWorks.CruiseControl.Core.Test
 		private IMock _mockSchedule;
 		private IMock _mockLabeller;
 		private IMock _mockPublisher;
+		private IMock _mockTask;
 		private TestTraceListener _listener;
 		private const string PROJECT_NAME = "test";
 
@@ -42,6 +44,7 @@ namespace ThoughtWorks.CruiseControl.Core.Test
 			_mockSchedule = new DynamicMock(typeof(ISchedule)); _mockSchedule.Strict = true;
 			_mockLabeller = new DynamicMock(typeof(ILabeller)); _mockLabeller.Strict = true;
 			_mockPublisher = new DynamicMock((typeof(PublisherBase))); _mockPublisher.Strict = true;
+			_mockTask = new DynamicMock((typeof(ITask))); _mockTask.Strict = true;
 
 			_project = new Project();
 			_project.Name = PROJECT_NAME;
@@ -51,6 +54,7 @@ namespace ThoughtWorks.CruiseControl.Core.Test
 			_project.Schedule = (ISchedule) _mockSchedule.MockInstance;
 			_project.Labeller = (ILabeller) _mockLabeller.MockInstance;
 			_project.Publishers = new IIntegrationCompletedEventHandler [] { (IIntegrationCompletedEventHandler) _mockPublisher.MockInstance };
+			_project.Tasks = new ITask[] { (ITask) _mockTask.MockInstance };
 
 			_listener = new TestTraceListener();
 			Trace.Listeners.Add(_listener);
@@ -67,6 +71,7 @@ namespace ThoughtWorks.CruiseControl.Core.Test
 			_mockSchedule.Verify();
 			_mockLabeller.Verify();
 			_mockPublisher.Verify();
+			_mockTask.Verify();
 		}
 
 		[Test]
@@ -82,6 +87,9 @@ namespace ThoughtWorks.CruiseControl.Core.Test
 	<publishers>
 		<xmllogger logDir=""C:\temp"" />
 	</publishers>
+	<tasks>
+		<merge files="""" />
+	</tasks>
 </project>";
 
 			Project project = (Project) NetReflector.Read(xml);
@@ -95,6 +103,7 @@ namespace ThoughtWorks.CruiseControl.Core.Test
 			AssertEquals(typeof(XmlLogPublisher), project.Publishers[0]);
 			AssertEquals(typeof(IntegrationStateManager), project.StateManager);
 			AssertEquals(typeof(Schedule), project.Schedule);
+			AssertEquals(typeof(MergeFilesTask), project.Tasks[0]);
 		}
 
 		[Test]
@@ -117,6 +126,7 @@ namespace ThoughtWorks.CruiseControl.Core.Test
 			AssertNull("project should contain no publishers", project.Publishers);
 			AssertEquals(typeof(IntegrationStateManager), project.StateManager);
 			AssertEquals(typeof(Schedule), project.Schedule);
+			AssertEquals(0, project.Tasks.Length);
 		}
 
 		[Test]	//TODO: question: should state be saved after a poll with no mods and no build?? -- i think it should: implication for last build though
@@ -153,6 +163,7 @@ namespace ThoughtWorks.CruiseControl.Core.Test
 			_mockSourceControl.ExpectAndReturn("GetModifications", mods, new IsAnything(), new IsAnything());
 			_mockSourceControl.Expect("LabelSourceControl", "label", new IsAnything());
 			_mockPublisher.Expect("PublishIntegrationResults", new IsAnything(), new IsAnything());
+			_mockTask.Expect("Run", new IsAnything());
 
 			_project.Builder = new MockBuilder();										// need to use mock builder in order to set properties on IntegrationResult
 			IntegrationResult result = _project.RunIntegration(BuildCondition.IfModificationExists);
@@ -345,9 +356,8 @@ namespace ThoughtWorks.CruiseControl.Core.Test
 			_project.SourceControl = new MockSourceControl();
 			_project.Builder = new MockBuilder();
 			MockPublisher publisher = new MockPublisher();
-			IMock mock = new DynamicMock(typeof(ILabeller));
-			mock.ExpectAndReturn("Generate", "1.2.1", new IsAnything());
-			_project.Labeller = (ILabeller)mock.MockInstance;
+			_mockLabeller.ExpectAndReturn("Generate", "1.2.1", new IsAnything());
+			_mockTask.Expect("Run", new IsAnything());
 			_project.IntegrationCompleted += publisher.IntegrationCompletedEventHandler;
 			IMock stateMock = new DynamicMock(typeof(IStateManager));
 			stateMock.ExpectAndReturn("StateFileExists", false);
@@ -360,7 +370,6 @@ namespace ThoughtWorks.CruiseControl.Core.Test
 			AssertEquals(results, _project.LastIntegrationResult);
 			AssertNotNull(results.EndTime);
 			Assert(publisher.Published);
-			mock.Verify();
 			AssertEquals("1.2.1", ((MockSourceControl)_project.SourceControl).Label);
 		}
 
@@ -371,6 +380,7 @@ namespace ThoughtWorks.CruiseControl.Core.Test
 			_mockStateManager.ExpectAndReturn("StateFileExists", false);
 			Exception expectedException = new CruiseControlException("expected exception");
 			_mockStateManager.ExpectAndThrow("SaveState", expectedException, new NMock.Constraints.IsAnything());
+			_mockTask.Expect("Run", new IsAnything());
 			MockPublisher publisher = new MockPublisher();
 			_project.IntegrationCompleted += publisher.IntegrationCompletedEventHandler;
 			_project.SourceControl = new MockSourceControl();
@@ -395,6 +405,7 @@ namespace ThoughtWorks.CruiseControl.Core.Test
 			_mockStateManager.ExpectAndReturn("StateFileExists", false);
 			Exception expectedException = new CruiseControlException("expected exception");
 			_mockStateManager.ExpectAndThrow("SaveState", expectedException, new NMock.Constraints.IsAnything());
+			_mockTask.Expect("Run", new IsAnything());
 			MockPublisher publisher = new MockPublisher();
 			_project.IntegrationCompleted += publisher.IntegrationCompletedEventHandler;
 			_project.SourceControl = new MockSourceControl();

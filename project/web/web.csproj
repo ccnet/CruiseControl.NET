@@ -194,6 +194,11 @@
                     BuildAction = "EmbeddedResource"
                 />
                 <File
+                    RelPath = "HtmlLogFormatter.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "InstallWebConfig.cs"
                     SubType = "Component"
                     BuildAction = "Compile"
@@ -383,6 +388,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "test\HtmlLogFormatterTest.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "test\LogFileListTest.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -428,10 +438,6 @@
                 />
                 <File
                     RelPath = "xsl\header.xsl"
-                    BuildAction = "Content"
-                />
-                <File
-                    RelPath = "xsl\javadoc.xsl"
                     BuildAction = "Content"
                 />
                 <File

@@ -24,7 +24,7 @@ namespace ThoughtWorks.CruiseControl.Web
 		{
 			string serverLogFilename = GetServerLogFilenameFromConfig();
 			string logData = ReadLinesFromLog(serverLogFilename, GetServerLogLinesFromConfig());
-			LogData.InnerHtml += WebUtil.FormatMultiline(logData);
+			LogData.InnerHtml += logData;
 		}
 
 		private string GetServerLogFilenameFromConfig()
@@ -40,7 +40,8 @@ namespace ThoughtWorks.CruiseControl.Web
 
 		private string ReadLinesFromLog(string filename, int lines)
 		{
-			return new ServerLogFileReader(filename, lines).Read();
+			string logFileData = new ServerLogFileReader(filename, lines).Read();
+			return new HtmlLogFormatter().Format(logFileData);
 		}
 
 		#region Web Form Designer generated code

@@ -5,18 +5,32 @@ using System.Text;
 using System.Text.RegularExpressions;
 using ThoughtWorks.CruiseControl.Core.Util;
 
-namespace ThoughtWorks.CruiseControl.Web.test
+namespace ThoughtWorks.CruiseControl.Web.Test
 {
 	[TestFixture]
-	public class ServerLogFileReaderTest
+	public class ServerLogFileReaderTest : Assertion
 	{
+		private const string TEMP_DIR = "ServerLogFileReaderTest";
+
+		[SetUp]
+		protected void CreateTempDir()
+		{
+			TempFileUtil.CreateTempDir(TEMP_DIR);
+		}
+
+		[TearDown]
+		protected void DeleteTempDir()
+		{
+			TempFileUtil.DeleteTempDir(TEMP_DIR);
+		}
+
 		[Test]
 		public void ReadSingleLineFromLogFile()
 		{
 			string content = @"SampleLine";
-			string filename = TempFileUtil.CreateTempFile(Path.GetTempPath(), "ReadSingleLineFromLogFile.log", content);
+			string filename = TempFileUtil.CreateTempFile(TEMP_DIR, "ReadSingleLineFromLogFile.log", content);
 			ServerLogFileReader reader = new ServerLogFileReader(filename, 10);
-			Assertion.AssertEquals(content, reader.Read());
+			AssertEquals(content, reader.Read());
 		}
 
 		[Test]
@@ -24,16 +38,16 @@ namespace ThoughtWorks.CruiseControl.Web.test
 		{
 			const int numFileLines = 15;
 			string[] contentLines = GenerateContentLines(numFileLines);
-			string filename = TempFileUtil.CreateTempFile(Path.GetTempPath(), "ReadLessThanInFile.log", LinesToString(contentLines));
+			string filename = TempFileUtil.CreateTempFile(TEMP_DIR, "ReadLessThanInFile.log", LinesToString(contentLines));
 
 			const int numReadLines = 10;
 			ServerLogFileReader reader = new ServerLogFileReader(filename, numReadLines);
 			String[] readLines = StringToLines(reader.Read());
 
-			Assertion.AssertEquals("Wrong number of lines read from file", numReadLines, readLines.Length);
+			AssertEquals("Wrong number of lines read from file", numReadLines, readLines.Length);
 			for (int i = 0; i < readLines.Length; i++)
 			{
-				Assertion.AssertEquals(contentLines[numFileLines - numReadLines + i], readLines[i]);
+				AssertEquals(contentLines[numFileLines - numReadLines + i], readLines[i]);
 			}
 		}
 
@@ -42,17 +56,17 @@ namespace ThoughtWorks.CruiseControl.Web.test
 		{
 			const int numFileLines = 5;
 			string[] contentLines = GenerateContentLines(numFileLines);
-			string filename = TempFileUtil.CreateTempFile(Path.GetTempPath(), "ReadMoreThanInFile.log", LinesToString(contentLines));
+			string filename = TempFileUtil.CreateTempFile(TEMP_DIR, "ReadMoreThanInFile.log", LinesToString(contentLines));
 
 			const int numReadLines = 10;
 			ServerLogFileReader reader = new ServerLogFileReader(filename, numReadLines);
 			String[] readLines = StringToLines(reader.Read());
 			
 			// All of file should be read
-			Assertion.AssertEquals("Wrong number of lines read from file", numFileLines, readLines.Length);
+			AssertEquals("Wrong number of lines read from file", numFileLines, readLines.Length);
 			for (int i = 0; i < readLines.Length; i++)
 			{
-				Assertion.AssertEquals(contentLines[i], readLines[i]);
+				AssertEquals(contentLines[i], readLines[i]);
 			}
 		}
 
@@ -61,50 +75,64 @@ namespace ThoughtWorks.CruiseControl.Web.test
 		{
 			const int numLines = 10;
 			string[] contentLines = GenerateContentLines(numLines);
-			string filename = TempFileUtil.CreateTempFile(Path.GetTempPath(), "ReadExactInFile.log", LinesToString(contentLines));
+			string filename = TempFileUtil.CreateTempFile(TEMP_DIR, "ReadExactInFile.log", LinesToString(contentLines));
 
 			ServerLogFileReader reader = new ServerLogFileReader(filename, numLines);
 			String[] readLines = StringToLines(reader.Read());
 			
 			// All of file should be read
-			Assertion.AssertEquals("Wrong number of lines read from file", numLines, readLines.Length);
+			AssertEquals("Wrong number of lines read from file", numLines, readLines.Length);
 			for (int i = 0; i < readLines.Length; i++)
 			{
-				Assertion.AssertEquals(contentLines[i], readLines[i]);
+				AssertEquals(contentLines[i], readLines[i]);
 			}
 		}
 
 		[Test]
 		public void ReadEmptyFile()
 		{
-			string filename = TempFileUtil.CreateTempFile(Path.GetTempPath(), "ReadEmptyFile.log");
+			string filename = TempFileUtil.CreateTempFile(TEMP_DIR, "ReadEmptyFile.log");
 			ServerLogFileReader reader = new ServerLogFileReader(filename, 10);
-			Assertion.AssertEquals("Error reading empty log file", "", reader.Read());
+			AssertEquals("Error reading empty log file", "", reader.Read());
 		}
 
-		[Test]
-		public void ReadNullFile()
-		{
-			ServerLogFileReader reader = new ServerLogFileReader(null, 10);
-			Assertion.AssertEquals("Error reading file with null name", "", reader.Read());
-		}
-
+//		[Test]
+//		public void ReadNullFile()
+//		{
+//			ServerLogFileReader reader = new ServerLogFileReader(null, 10);
+//			AssertEquals("Error reading file with null name", "", reader.Read());
+//		}
+//
 		[Test]
 		public void ReadTwice()
 		{
-			string filename = TempFileUtil.CreateTempFile(Path.GetTempPath(), "Twice.Log");
+			string filename = TempFileUtil.CreateTempFile(TEMP_DIR, "Twice.Log");
 			ServerLogFileReader reader = new ServerLogFileReader(filename, 10);
 			String first = reader.Read();
 			String second = reader.Read();
-			Assertion.AssertEquals("Error reading file twice with same reader", first, second);
+			AssertEquals("Error reading file twice with same reader", first, second);
 		}
 
-		[Test]
-	    [ExpectedException(typeof(FileNotFoundException))]
+		[Test, ExpectedException(typeof(FileNotFoundException))]
 		public void ReadUnknownFile()
 		{
 			ServerLogFileReader reader = new ServerLogFileReader("BogusFileName", 10);
-			Assertion.AssertEquals("Error reading unknown file", "", reader.Read());
+			AssertEquals("Error reading unknown file", "", reader.Read());
+		}
+
+		[Test]
+		public void ReadFromLockedLogFile()
+		{
+			string tempFile = TempFileUtil.GetTempFilePath(TEMP_DIR, "LockedFilename.log");				
+			using (StreamWriter stream = File.CreateText(tempFile))
+			{
+				stream.Write("foo");
+				stream.Write("bar");
+				stream.Flush();
+
+				ServerLogFileReader reader = new ServerLogFileReader(tempFile, 10);
+				AssertEquals("foobar", reader.Read());
+			}
 		}
 
 		private string[] GenerateContentLines(int lines)

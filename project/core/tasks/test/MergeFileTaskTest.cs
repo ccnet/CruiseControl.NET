@@ -29,7 +29,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks.Test
 			string fileData = @"<foo></foo>";
 			string tempFile = TempFileUtil.CreateTempFile(TEMP_DIR, "MergeFileTask", fileData);
 
-            _task.MergeFiles.Add(tempFile);
+			_task.MergeFiles = new string[] { tempFile };
             _task.Run(_result);
 
 			AssertEquals(1, _result.TaskResults.Count);
@@ -47,7 +47,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks.Test
 			TempFileUtil.CreateTempFile(TEMP_DIR, "foo.bat", "blah");
 			TempFileUtil.CreateTempXmlFile(TEMP_DIR + "\\sub", "foo.xml", "<foo bar=\"9\">bat</foo>");
 
-		    _task.MergeFiles.Add(_fullPathToTempDir+ @"\*.xml");
+			_task.MergeFiles = new string[] { _fullPathToTempDir+ @"\*.xml" };
 		    _task.Run(_result);
 			IList list = _result.TaskResults;
 			AssertEquals(1, list.Count);
@@ -66,8 +66,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks.Test
 			TempFileUtil.CreateTempFile(TEMP_DIR, "foo.bat", fooBatFileData);
 			TempFileUtil.CreateTempXmlFile(TEMP_DIR + @"\sub", "foo.xml", subFooXmlFileData);
 
-			_task.MergeFiles.Add(_fullPathToTempDir+@"\sub"+ @"\*.xml");
-			_task.MergeFiles.Add(_fullPathToTempDir+ @"\foo.*");
+			_task.MergeFiles = new string[] { _fullPathToTempDir+@"\sub"+ @"\*.xml", _fullPathToTempDir+ @"\foo.*"};
 
 			_task.Run(_result);
 			IList list = _result.TaskResults;
@@ -80,9 +79,9 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks.Test
 		[Test]
 		public void LoadFromConfig()
 		{
-			string xml=@"<mergefiles><files><file>foo.xml</file> <file>bar.xml</file> </files> </mergefiles>";
+			string xml=@"<merge><files><file>foo.xml</file> <file>bar.xml</file> </files> </merge>";
 			MergeFilesTask task = NetReflector.Read(xml) as MergeFilesTask;
-			AssertEquals(2,task.MergeFiles.Count);
+			AssertEquals(2,task.MergeFiles.Length);
 			AssertEquals("foo.xml",task.MergeFiles[0]);
 			AssertEquals("bar.xml",task.MergeFiles[1]);
 		}

@@ -1,8 +1,6 @@
 <?xml version="1.0"?>
 <xsl:stylesheet
-    version="1.0"
-    xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-    xmlns="http://www.w3.org/TR/html4/strict.dtd" >
+    xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0">
 
     <xsl:output method="html"/>
 
@@ -17,7 +15,7 @@
             <table class="section-table" cellpadding="2" cellspacing="0" border="0" width="98%">
                 <tr>
                     <td class="compile-sectionheader">
-                        &#160;Errors/Warnings (<xsl:value-of select="$total"/>)
+                        Errors/Warnings (<xsl:value-of select="$total"/>)
                     </td>
                 </tr>
                 <xsl:if test="$total > 0">
