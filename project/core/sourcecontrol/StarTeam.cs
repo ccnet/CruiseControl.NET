@@ -24,19 +24,13 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 		private string _project;
 		private string _path;
 
-		private IHistoryParser _parser = new StarTeamHistoryParser();
 
-		public StarTeam()
+		public StarTeam(): base(new StarTeamHistoryParser())
 		{
 			_executable = "stcmd.exe";
 			_host = "127.0.0.1";
 			_port = 49201;
 			_path = String.Empty;
-		}
-
-		protected override IHistoryParser HistoryParser
-		{
-			get { return _parser; }
 		}
 
 		public override ProcessInfo CreateHistoryProcessInfo(DateTime from, DateTime to)

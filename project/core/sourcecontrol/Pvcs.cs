@@ -21,15 +21,15 @@ run ->{2} listversionedfiles -z -aw $Project $SubProject
 run -e vlog  ""-xo+e{3}"" ""-d{4}*{5}"" ""@{2}""
 ";
 		
-
-		private IHistoryParser _parser = new PvcsHistoryParser();
 		private string _executable = "pcli";
 		private string _project;
 		private string _subproject;
 		private string _arguments = COMMAND;
 		private string _instructions = INSTRUCTIONS_TEMPLATE;
 		private TimeZone _currentTimeZone = TimeZone.CurrentTimeZone;
-		
+
+		public Pvcs() : base(new PvcsHistoryParser()) { }
+
 		[ReflectorProperty("executable")]
 		public string Executable
 		{
@@ -70,11 +70,6 @@ run -e vlog  ""-xo+e{3}"" ""-d{4}*{5}"" ""@{2}""
 			set{ _currentTimeZone = value;}
 		}
 
-		protected override IHistoryParser HistoryParser
-		{
-			get { return _parser; }
-		}
-		
 		public override ProcessInfo CreateHistoryProcessInfo(DateTime from, DateTime to)
 		{
 			// required due to DayLightSavings bug in PVCS 7.5.1

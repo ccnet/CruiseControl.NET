@@ -140,7 +140,7 @@ namespace ThoughtWorks.CruiseControl.Core.Test
 		public void Build_NoModifications()
 		{
 			DynamicMock builderMock = new DynamicMock(typeof(IBuilder));
-			builderMock.ExpectNoCall("Run");
+			builderMock.ExpectNoCall("Run", typeof(IntegrationResult));
 
 			DynamicMock stateMock = new DynamicMock(typeof(IStateManager));
 			stateMock.ExpectAndReturn("StateFileExists", false);

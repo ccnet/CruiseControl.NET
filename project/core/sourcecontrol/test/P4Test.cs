@@ -174,9 +174,9 @@ info: Change 3327 on 2002/10/31 by someone@somewhere 'Joe's test '
 info: Change 332 on 2002/10/31 by someone@somewhere 'thingy'
 exit: 0
 ";
-			mock.ExpectAndReturn("Execute", changes);
+			mock.ExpectAndReturn("Execute", changes, new NMock.Constraints.IsTypeOf(typeof(ProcessInfo)));
 
-			mock.ExpectAndReturn("Execute", P4Mother.P4_LOGFILE_CONTENT); 
+			mock.ExpectAndReturn("Execute", P4Mother.P4_LOGFILE_CONTENT, new NMock.Constraints.IsAnything()); 
 
 			P4 p4 = (P4)mock.MockInstance;
 			Modification[] result = p4.GetModifications(from, to);

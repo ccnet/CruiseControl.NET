@@ -110,7 +110,7 @@ run -e vlog  ""-xo+epvcsout.txt"" ""-dbeforedate*afterdate"" ""@pvcstemp.txt""
 		private TimeZone CreateMockTimeZone(Boolean inDayLightSavings)
 		{			
 			Mock mock = new DynamicMock(typeof(TimeZone));
-			mock.ExpectAndReturn("IsDaylightSavingTime", inDayLightSavings);
+			mock.ExpectAndReturn("IsDaylightSavingTime", inDayLightSavings, new NMock.Constraints.IsTypeOf(typeof(DateTime)));
 			return (TimeZone) mock.MockInstance;
 		}
 	}	

@@ -13,13 +13,13 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 
 		internal readonly static string COMMAND_DATE_FORMAT = "yyyy-MM-ddTHH:mm:ssZ";
 
-		private IHistoryParser _parser = new SvnHistoryParser();
-
 		private string _executable = "svn.exe";
 		private string _trunkUrl;
 		private string _workingDirectory;
 		private bool _tagOnSuccess;
 		private string _tagBaseUrl;
+
+		public Svn(): base (new SvnHistoryParser())	{}
 
 		[ReflectorProperty("executable")]
 		public string Executable
@@ -54,11 +54,6 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			set { _tagBaseUrl = value;}
 		}
 
-		protected override IHistoryParser HistoryParser
-		{
-			get { return _parser; }
-		}
-		
 		public string FormatCommandDate(DateTime date)
 		{
 			return date.ToUniversalTime().ToString(COMMAND_DATE_FORMAT);

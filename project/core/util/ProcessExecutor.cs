@@ -19,16 +19,12 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 			return Execute(new ProcessInfo(filename, arguments, workingDirectory));
 		}
 
-		public ProcessResult Execute(ProcessInfo processInfo)
+		public virtual ProcessResult Execute(ProcessInfo processInfo)
 		{
-			System.Diagnostics.Process process = null;
-			try
+			using(Process process = System.Diagnostics.Process.Start(processInfo.startInfo))
 			{
-				process = System.Diagnostics.Process.Start(processInfo.startInfo);
-
 				ProcessReader standardOutput = new ProcessReader(process.StandardOutput);
 				ProcessReader standardError = new ProcessReader(process.StandardError);
-
 				standardOutput.Start();
 				standardError.Start();
 
@@ -45,11 +41,7 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 					process.Kill();
 					return new ProcessResult(standardOutput.Output, standardError.Output, KILLED_PROCESS_EXIT_CODE, ! process.HasExited);
 				}
-			}
-			finally
-			{
-				if (process != null) process.Close();
-			}
+			}				
 		}
 	}
 }

@@ -7,7 +7,15 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 {
 	public abstract class ProcessSourceControl : ISourceControl
 	{
-		private ProcessExecutor executor = new ProcessExecutor();
+		private ProcessExecutor _executor;
+		private IHistoryParser _historyParser;
+	    public ProcessSourceControl(IHistoryParser historyParser) : this(historyParser,new ProcessExecutor()) { }
+
+	    public ProcessSourceControl(IHistoryParser histParser, ProcessExecutor executor)
+		{
+			_executor=executor;
+			_historyParser=histParser;
+		}
 
 		// todo: make configurable
 		public int Timeout
@@ -15,10 +23,6 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			get { return 30000; }
 		}
 
-		protected abstract IHistoryParser HistoryParser
-		{
-			get;
-		}
 
 		public abstract ProcessInfo CreateHistoryProcessInfo(DateTime from, DateTime to);
 		public abstract ProcessInfo CreateLabelProcessInfo(string label, DateTime timeStamp);
@@ -43,14 +47,14 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 		public void LabelSourceControl(string label, DateTime timeStamp) 
 		{
 			ProcessInfo processInfo = CreateLabelProcessInfo(label, timeStamp);
-			executor.Timeout = Timeout;
+			_executor.Timeout = Timeout;
 			Execute(processInfo);
 		}
 
 		protected virtual ProcessResult Execute(ProcessInfo processInfo)
 		{
-			executor.Timeout = Timeout;
-			ProcessResult result = executor.Execute(processInfo);
+			_executor.Timeout = Timeout;
+			ProcessResult result = _executor.Execute(processInfo);
 
 			// check for stderr
 			if (result.StandardError != string.Empty) throw new CruiseControlException("Error: " + result.StandardError);
@@ -59,7 +63,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 
 		protected Modification[] ParseModifications(TextReader reader, DateTime from, DateTime to)
 		{
-			return HistoryParser.Parse(reader, from, to);
+			return _historyParser.Parse(reader, from, to);
 		}
 	}
 }

@@ -46,7 +46,7 @@ namespace ThoughtWorks.CruiseControl.Console.Test
 		{
 			Mock mockCruiseManager = new DynamicMock(typeof(ICruiseManager));
 			mockCruiseManager.Expect("ForceBuild", "test");
-			mockCruiseManager.Expect("WaitForExit");
+			mockCruiseManager.Expect("WaitForExit","test");
 
 			Mock mockCruiseServer = new DynamicMock(typeof(ICruiseServer));
 			mockCruiseServer.ExpectAndReturn("CruiseManager", mockCruiseManager.MockInstance);

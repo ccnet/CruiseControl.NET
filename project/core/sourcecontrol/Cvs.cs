@@ -16,12 +16,13 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 
 		internal readonly static string COMMAND_DATE_FORMAT = "yyyy-MM-dd HH:mm:ss 'GMT'";
 
-		private IHistoryParser _parser = new CvsHistoryParser();
 		private string _executable = "cvs.exe";
 		private string _cvsRoot;
 		private string _workingDirectory;
 		private bool _labelOnSuccess;
         private string _restrictLogins;
+
+		public Cvs() : base(new CvsHistoryParser()) { }
 
 		[ReflectorProperty("executable")]
 		public string Executable
@@ -59,11 +60,6 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 
 		[ReflectorProperty("branch", Required=false)]
 		public string Branch;
-
-		protected override IHistoryParser HistoryParser
-		{
-			get { return _parser; }
-		}
 		
 		public string FormatCommandDate(DateTime date)
 		{

@@ -33,7 +33,7 @@ namespace ThoughtWorks.CruiseControl.Shared.Client.Services.Test
 			ICruiseService service2 = (ICruiseService) service2Mock.MockInstance;
 
 			service1Mock.ExpectAndReturn("Run", _result, _command);
-			service2Mock.ExpectNoCall("Run");
+			service2Mock.ExpectNoCall("Run",typeof(ICruiseCommand));
 
 			CompositeService service = new CompositeService(new ICruiseService[] {service1, service2} );
 			AssertEquals(_result, service.Run(_command));

@@ -22,11 +22,17 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 		internal static readonly string LABEL_COMMAND_FORMAT = @"label {0} -L{1} -Vd{2} -Y{3},{4} -I-Y";
 		internal static readonly string LABEL_COMMAND_FORMAT_NOTIMESTAMP = @"label {0} -L{1} -Y{2},{3} -I-Y";
 
-		private IHistoryParser _parser = new VssHistoryParser();
 		private string _ssDir;
 		private string _executable;
 
 		public CultureInfo CultureInfo = CultureInfo.CurrentCulture;
+
+		public Vss (): base(new VssHistoryParser())
+		{
+		}
+		public Vss (IHistoryParser historyParser, ProcessExecutor executor): base(historyParser, executor)
+		{
+		}
 
 		[ReflectorProperty("executable", Required = false)]
 		public string Executable
@@ -62,20 +68,14 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 		[ReflectorProperty("applyLabel", Required = false)]
 		public bool ApplyLabel = false;
 
-		protected override IHistoryParser HistoryParser
-		{
-			get { return _parser; }
-		}
-
 		public override Modification[] GetModifications(DateTime from, DateTime to)
 		{
 			Modification[] result = base.GetModifications(from, to);
-			if(result.Length > 0)
+			if(result.Length > 0 && ApplyLabel)
 			{
-				ProcessInfo p = CreateLabelProcessInfo("CCNETUNVERIFIED" + to.ToString("MMddyyyyHHmmss"));
-				Execute(p);
+				string label = "CCNETUNVERIFIED" + to.ToString("MMddyyyyHHmmss");
+				base.LabelSourceControl(label,to);
 			}
-
 			return result;
 		}
 
