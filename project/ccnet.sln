@@ -35,6 +35,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ControlPanel", "ControlPane
 	ProjectSection(ProjectDependencies) = postProject
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CCTray", "CCTray\CCTray.csproj", "{D9040862-D7E0-4232-BBD0-CF088706E009}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfiguration) = preSolution
 		Debug = Debug
@@ -74,6 +78,10 @@ Global
 		{039090B7-A3B1-4345-83F5-E856333E6D8C}.Debug.Build.0 = Debug|.NET
 		{039090B7-A3B1-4345-83F5-E856333E6D8C}.Release.ActiveCfg = Release|.NET
 		{039090B7-A3B1-4345-83F5-E856333E6D8C}.Release.Build.0 = Release|.NET
+		{D9040862-D7E0-4232-BBD0-CF088706E009}.Debug.ActiveCfg = Debug|.NET
+		{D9040862-D7E0-4232-BBD0-CF088706E009}.Debug.Build.0 = Debug|.NET
+		{D9040862-D7E0-4232-BBD0-CF088706E009}.Release.ActiveCfg = Release|.NET
+		{D9040862-D7E0-4232-BBD0-CF088706E009}.Release.Build.0 = Release|.NET
 	EndGlobalSection
 	GlobalSection(SolutionItems) = postSolution
 		..\ccnet.build = ..\ccnet.build

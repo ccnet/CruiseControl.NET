@@ -21,6 +21,7 @@
     <property name="console.exe" value="ccnet.exe"/>
     <property name="service.exe" value="service.exe"/>
     <property name="web.dll" value="ccnet.web.dll"/>
+    <property name="cctray.exe" value="cctray.exe"/>
     <property name="integration.dll" value="ccnet.integration.test.dll"/>
 
     <!-- ALL -->
@@ -58,6 +59,7 @@
         <call target="compile.web"/>
         <call target="compile.console"/>
         <call target="compile.service"/>
+        <call target="compile.cctray" />
         <call target="compile.integration"/>
         <call target="compile.controlpanel"/>
     </target>
@@ -176,6 +178,23 @@
         <!-- copy service.exe.config... should be included in distribution package later.. -->
         <copy file="${src.dir}\service\app.config" tofile="${build.dir}\${service.exe}.config" verbose="${verbosity}"/>
     </target>
+    
+    <target name="compile.cctray" depends="init, compile.remote" description="Builds the Tray Notifier Application">
+    	<csc target="winexe" output="${build.dir}\${cctray.exe}" debug="${debug}" define="TRACE" doc="${build.dir}\cctray.xml">
+			<sources basedir="${src.dir}\CCTray">
+				<includes name="*.cs"/>
+			</sources>
+			<references>
+				<includes name="${build.dir}\ccnet.remote.dll"/>
+			</references>
+			<resources prefix="CCTray">
+				<includes name="${src.dir}\CCTray\*.ico"/>
+			</resources>
+			<arg value="/nowarn:1591"/>
+    	</csc>
+        <!-- copy cctray.exe.config... should be included in distribution package later.. -->
+        <copy file="${src.dir}\CCTray\app.config" tofile="${build.dir}\${cctray.exe}.config" verbose="${verbosity}"/>
+    </target>
 
     <target name="compile.integration" depends="compile.core" description="compiles the integration project">
         <csc target="library" output="${build.dir}\${integration.dll}" debug="true">
@@ -252,7 +271,6 @@
         </copy>
     </target>
 
-
     <!-- DISTRIBUTION BUILD -->
     <target name="dist" description="build a distribution version of CruiseControl">
         <property name="build.dir" value="dist"/>
@@ -263,6 +281,23 @@
         <copy file="ccnet-config/ccnet.web.config" tofile="c:/inetpub/wwwroot/ccnet/Web.config" overwrite="true"/>
     </target>
 
+	<target name="dist.cctray" depends="compile.cctray">
+		<copy todir="${package.dir}\cctray">
+			<fileset basedir="${build.dir}">
+				<includes name="${cctray.exe}" />
+				<includes name="${cctray.exe}.config" />
+				<includes name="ccnet.remote.dll" />
+			</fileset>
+		</copy>
+		<mkdir dir="dist" />
+		<zip zipfile="dist\cctray.zip">
+			<fileset basedir="${package.dir}\cctray">
+				<includes name="*" />
+			</fileset>
+		</zip>
+	</target>
+	
+	
     <!-- ZIP PACKAGE -->
     <target name="package.source" depends="package.init" description="creates a package zip file of sources">
         <!-- create zip file -->
