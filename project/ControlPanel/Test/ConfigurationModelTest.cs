@@ -82,7 +82,7 @@ namespace ThoughtWorks.CruiseControl.ControlPanel.Test
 			ConfigurationItem item = model.Projects[0].Items["sourcecontrol"];
 
 			AssertEquals("cvs", item.ValueAsString);
-			AssertEquals("cvs,defaultsourcecontrol,filesystem,multi,p4,pvcs,starteam,svn,vss", 
+			AssertEquals("clearCase,cvs,defaultsourcecontrol,filesystem,multi,p4,pvcs,starteam,svn,vss", 
 				string.Join(",", item.AvailableValues));
 
 			AssertEquals("c:/bin/cvs.exe", item.Items["executable"].ValueAsString);
