@@ -342,9 +342,9 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 		{
 			// Setup
 			ProjectStatus projectStatus1 = new ProjectStatus(ProjectIntegratorState.Running, 
-				IntegrationStatus.Success, ProjectActivity.Sleeping, "b", "url", DateTime.Today, "1", DateTime.Today);
+				IntegrationStatus.Success, ProjectActivity.Sleeping, "a", "url", DateTime.Today, "1", DateTime.Today);
 			ProjectStatus projectStatus2 = new ProjectStatus(ProjectIntegratorState.Running, 
-				IntegrationStatus.Failure, ProjectActivity.Sleeping, "a", "url", DateTime.Today.AddHours(1), "1", DateTime.Today);
+				IntegrationStatus.Failure, ProjectActivity.Sleeping, "b", "url", DateTime.Today.AddHours(1), "1", DateTime.Today);
 			ProjectStatusOnServer[] statusses = new ProjectStatusOnServer[]
 				{
 					new ProjectStatusOnServer(projectStatus1, new DefaultServerSpecifier("server")),
