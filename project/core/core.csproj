@@ -414,16 +414,6 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "configuration\test\ConfigurationTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "configuration\test\CruiseControlConfigSectionHandlerTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
                     RelPath = "configuration\test\ValidatingLoaderTest.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -544,16 +534,6 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "publishers\test\BuildLogTransformerTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "publishers\test\BuildPublisherTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
                     RelPath = "publishers\test\EmailGatewayTest.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -579,22 +559,7 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "publishers\test\ExecutablePublisherTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "publishers\test\ForceBuildPublisherTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
                     RelPath = "publishers\test\HtmlDetailsMessageBuilderTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "publishers\test\HtmlLinkMessageBuilderTest.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -610,26 +575,6 @@
                 />
                 <File
                     RelPath = "publishers\test\NetSendPublisherTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "publishers\test\RSSPublisherTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "publishers\test\XmlIntegrationResultWriterTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "publishers\test\XmlLogFixture.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "publishers\test\XmlLogPublisherTest.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
