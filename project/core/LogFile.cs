@@ -19,7 +19,7 @@ namespace ThoughtWorks.CruiseControl.Core
 		public const string FilenamePrefix ="log";
 		public const string LogQueryString = "log";
 		public const string DateFormat = "yyyyMMddHHmmss";
-		public static readonly Regex BuildNumber = new Regex(@"Lbuild\.(\d+)\.xml"); 
+		public static readonly Regex BuildNumber = new Regex(@"Lbuild\.(.+)\.xml");
 
 		#endregion
 
@@ -57,14 +57,14 @@ namespace ThoughtWorks.CruiseControl.Core
 			return filename[characterIndex] == 'L';
 		}
 		
-		public static int ParseBuildNumber(string filename)
+		public static string ParseBuildNumber(string filename)
 		{
 			string value = BuildNumber.Match(filename).Groups[1].Value;
-			
-			if (value==null || value.Length==0)
-				return 0;
 
-			return Int32.Parse(value);
+			if (value==null || value.Length==0)
+				return "0";
+
+			return value;
 		}
 
 		#endregion
@@ -119,11 +119,16 @@ namespace ThoughtWorks.CruiseControl.Core
 			int result = 0;
 			foreach(string filename in filenames)
 			{
-				result = Math.Max(result, ParseBuildNumber(filename));
+				result = Math.Max(result, GetNumericBuildNumber(ParseBuildNumber(filename)));
 			}
 			return result;
 		}
-		
+
+		private static int GetNumericBuildNumber(string buildlabel)
+		{
+			return Int32.Parse(Regex.Replace(buildlabel, @"\D", ""));
+		}
+
 		public static DateTime GetLastBuildDate(string[] filenames, DateTime defaultValue)
 		{
 			if (filenames.Length == 0)
