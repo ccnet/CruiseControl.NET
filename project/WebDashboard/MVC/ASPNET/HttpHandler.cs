@@ -19,7 +19,18 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.MVC.ASPNET
 			}
 
 			ObjectGiver objectGiver = new CruiseObjectGiverInitializer(new ManagableObjectGiver()).SetupObjectGiverForRequest(context);
-			context.Response.Write(((RequestController) objectGiver.GiveObjectByType(typeof(RequestController))).Do());
+			IView view = ((RequestController) objectGiver.GiveObjectByType(typeof(RequestController))).Do();
+
+			// After 0.9, update API to use 'IResponse' to clean this up
+			if (view is RedirectView)
+			{
+				context.Response.Redirect(view.ResponseFragment);
+			}
+			else
+			{
+				context.Response.Write(view.ResponseFragment);
+			}
+
 			context.Response.Flush();
 		}
 

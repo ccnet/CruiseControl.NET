@@ -1,6 +1,7 @@
 using NMock;
 using NUnit.Framework;
 using ObjectWizard;
+using ThoughtWorks.CruiseControl.WebDashboard.Dashboard.Actions;
 using ThoughtWorks.CruiseControl.WebDashboard.MVC;
 using ThoughtWorks.CruiseControl.WebDashboard.MVC.Cruise;
 
@@ -37,6 +38,19 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.MVC.Cruise
 			objectGiverMock.ExpectAndReturn("GiveObjectById", null, "myAction");
 
 			Assert.IsTrue(actionFactory.Create(request) is UnknownActionAction);
+
+			VerifyAll();
+		}
+
+		[Test]
+		public void ShouldReturnDefaultActionIfNoActionSpecified()
+		{
+			requestMock.ExpectAndReturn("FindParameterStartingWith", "", CruiseActionFactory.ACTION_PARAMETER_PREFIX);
+
+			IAction stubAction = (IAction) new DynamicMock(typeof(IAction)).MockInstance;
+			objectGiverMock.ExpectAndReturn("GiveObjectByType", stubAction, typeof(DefaultAction));
+
+			Assert.AreEqual(stubAction, actionFactory.Create(request));
 
 			VerifyAll();
 		}

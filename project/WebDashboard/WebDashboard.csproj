@@ -507,6 +507,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Dashboard\Actions\DefaultAction.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Dashboard\Actions\MultipleXslReportBuildAction.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -647,6 +652,11 @@
                 />
                 <File
                     RelPath = "MVC\NameValueCollectionRequest.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "MVC\RedirectView.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -1000,6 +1010,11 @@
                     BuildAction = "None"
                 />
                 <File
+                    RelPath = "xsl\AlternativeNUnitDetails.xsl"
+                    Link = "..\xsl\AlternativeNUnitDetails.xsl"
+                    BuildAction = "Content"
+                />
+                <File
                     RelPath = "xsl\compile.xsl"
                     Link = "..\xsl\compile.xsl"
                     BuildAction = "Content"
@@ -1047,11 +1062,6 @@
                 <File
                     RelPath = "xsl\unittests.xsl"
                     Link = "..\xsl\unittests.xsl"
-                    BuildAction = "Content"
-                />
-                <File
-                    RelPath = "xsl\AlternativeNUnitDetails.xsl"
-                    Link = "..\xsl\AlternativeNUnitDetails.xsl"
                     BuildAction = "Content"
                 />
                 <File

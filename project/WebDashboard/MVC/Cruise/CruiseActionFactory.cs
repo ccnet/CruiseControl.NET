@@ -1,5 +1,5 @@
 using ObjectWizard;
-using ThoughtWorks.CruiseControl.WebDashboard.Plugins.FarmReport;
+using ThoughtWorks.CruiseControl.WebDashboard.Dashboard.Actions;
 
 namespace ThoughtWorks.CruiseControl.WebDashboard.MVC.Cruise
 {
@@ -23,8 +23,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.MVC.Cruise
 
 			if (actionName == "")
 			{
-				// euwww - something better here!
-				return giver.GiveObjectById(FarmReportFarmPlugin.ACTION_NAME) as IAction;
+				return giver.GiveObjectByType(typeof(DefaultAction)) as IAction;
 			}
 
 			IAction action = giver.GiveObjectById(actionName) as IAction;

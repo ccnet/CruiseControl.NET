@@ -11,11 +11,11 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.MVC
 			this.request = request;
 		}
 
-		public string Do()
+		public IView Do()
 		{
 			IAction action = actionFactory.Create(request);
 			request.ActionArguments = actionFactory.ActionArguments(request);
-			return action.Execute(request).ResponseFragment;
+			return action.Execute(request);
 		}
 	}
 }

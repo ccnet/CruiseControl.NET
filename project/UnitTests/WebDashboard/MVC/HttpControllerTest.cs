@@ -1,5 +1,3 @@
-using System.Web.UI;
-using System.Web.UI.HtmlControls;
 using NMock;
 using NUnit.Framework;
 using ThoughtWorks.CruiseControl.WebDashboard.MVC;
@@ -51,10 +49,9 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.MVC
 			mockActionFactory.ExpectAndReturn("ActionArguments", actionArgs, request);
 			mockRequest.Expect("ActionArguments", new object[] {actionArgs});
 			mockAction.ExpectAndReturn("Execute", view, request);
-			mockView.ExpectAndReturn("ResponseFragment", "my html");
 
 			/// Execute & Verify
-			Assert.AreEqual("my html", controller.Do());
+			Assert.AreEqual(view, controller.Do());
 			VerifyAll();
 		}
 	}
