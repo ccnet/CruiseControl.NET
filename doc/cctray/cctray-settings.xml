@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<CruiseControlMonitor xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.sf.net/projects/ccnet">
+  <PollingIntervalSeconds>10</PollingIntervalSeconds>
+  <RemoteServerUrl>tcp://YourHostname:1234/CruiseManager.rem</RemoteServerUrl>
+  <ProjectName>YourProjectName</ProjectName>
+  <NotificationBalloon ShowBalloon="true" />
+  <Sounds>
+    <AnotherSuccessfulBuildSound Play="true" FileName="woohoo.wav" />
+    <AnotherFailedBuildSound Play="true" FileName="doh.wav" />
+    <BrokenBuildSound Play="true" FileName="doh.wav" />
+    <FixedBuildSound Play="true" FileName="excellent.wav" />
+  </Sounds>
+  <Messages>
+    <AnotherSuccess>
+      <Message>Yet another succesful build!</Message>
+      <Message>That's what I'm talkin' about!</Message>
+      <Message>I like your style...</Message>
+    </AnotherSuccess>
+    <AnotherFailure>
+      <Message>The build is still broken...</Message>
+      <Message>Oh oh, the build's still broken.</Message>
+      <Message>That didn't work...</Message>
+      <Message>Better luck next time!</Message>
+    </AnotherFailure>
+    <Fixed>
+      <Message>Recent checkins have fixed the build.</Message>
+      <Message>Yeeeha! woo Woo WOO!!!</Message>
+    </Fixed>
+    <Broken>
+      <Message>Recent checkins have broken the build.</Message>
+      <Message>If it ain't broke, don't fix it!</Message>
+    </Broken>
+  </Messages>
+  <Agents CurrentAgentName="Peedy" ShowAgent="false" HideAfterMessage="false">
+    <AvailableAgents>
+      <Agent Name="Peedy" AcsFileName="Peedy.acs" SpeakOutLoud="false" />
+      <Agent Name="Cat" AcsFileName="C:\Program Files\Microsoft Office\Office\OFFCAT.ACS" SpeakOutLoud="false" />
+      <Agent Name="Clippy" AcsFileName="C:\Program Files\Microsoft Office\Office\CLIPPIT.ACS" SpeakOutLoud="false" />
+    </AvailableAgents>
+  </Agents>
+</CruiseControlMonitor>
