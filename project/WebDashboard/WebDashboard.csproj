@@ -333,6 +333,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Dashboard\IBuildNameRetrieverSettable.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Dashboard\IBuildPlugin.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -487,6 +492,16 @@
                 />
                 <File
                     RelPath = "Plugins\ProjectReporterPlugin\LatestProjectReporter.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Plugins\ProjectReporterPlugin\NextProjectReporter.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Plugins\ProjectReporterPlugin\PreviousProjectReporter.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

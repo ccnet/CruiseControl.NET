@@ -84,8 +84,6 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Plugins.SiteTemplate
 			requestWrapperMock.ExpectAndReturn("GetProjectName", "myProject");
 			requestWrapperMock.ExpectAndReturn("GetServerName", "myProject");
 			buildRetrieverMock.ExpectAndReturn("GetBuild", build, requestWrapper);
-			buildNameRetrieverMock.ExpectAndReturn("GetPreviousBuildName", "previousBuild", build);
-			buildNameRetrieverMock.ExpectAndReturn("GetNextBuildName", "nextBuild", build);
 
 			SiteTemplateResults results = siteTemplate.Do();
 			AssertEquals(true, results.ProjectMode);
@@ -112,8 +110,6 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Plugins.SiteTemplate
 			requestWrapperMock.ExpectAndReturn("GetServerName", "myServer");
 			buildListerMock.ExpectAndReturn("GetBuildLinks", new HtmlAnchor[] { anchor } , "myServer", "myProject");
 			buildRetrieverMock.ExpectAndReturn("GetBuild", build, requestWrapper);
-			buildNameRetrieverMock.ExpectAndReturn("GetPreviousBuildName", "previousBuild", build);
-			buildNameRetrieverMock.ExpectAndReturn("GetNextBuildName", "nextBuild", build);
 
 			SiteTemplateResults results = siteTemplate.Do();
 			AssertEquals(anchor, results.BuildLinkList[0]);

@@ -34,15 +34,14 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.SiteTemplatePlugin
 			string projectName = requestWrapper.GetProjectName();
 			if (serverName == string.Empty || projectName == string.Empty)
 			{
-				return new SiteTemplateResults(false, new HtmlAnchor[0], "", "", "", "", "", "", new HtmlAnchor[0], new HtmlAnchor[0]);
+				return new SiteTemplateResults(false, new HtmlAnchor[0], "", "", "", new HtmlAnchor[0], new HtmlAnchor[0]);
 			}
 
 			build = buildRetrieverForRequest.GetBuild(requestWrapper);
 			BuildStats stats = GenerateBuildStats(build);
-			LatestNextPreviousLinks latestNextPreviousLinks = GenerateLatestNextPreviousLinks(build);
 
 			return new SiteTemplateResults(true, buildLister.GetBuildLinks(serverName, projectName), stats.Html, stats.Htmlclass, "", 
-				latestNextPreviousLinks.latestLink, latestNextPreviousLinks.nextLink, latestNextPreviousLinks.previousLink, BuildPluginLinks(), ServerPluginLinks());	
+				BuildPluginLinks(), ServerPluginLinks());	
 		}
 
 		private HtmlAnchor[] ServerPluginLinks()
@@ -83,6 +82,14 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.SiteTemplatePlugin
 					if (pluginClassification.IsAssignableFrom(plugin.GetType()))
 					{
 						HtmlAnchor anchor = new HtmlAnchor();
+
+						// ToDo - this is nasty - we need a Pico like think to construct things, not just use the activator
+						// ToDo if we do keep this, then test.
+						if (plugin is IBuildNameRetrieverSettable)
+						{
+							((IBuildNameRetrieverSettable) plugin).BuildNameRetriever = buildNameRetriever;
+						}
+
 						// ToDo - clean this up
 						if (pluginClassification == typeof(IServerPlugin))
 						{
@@ -141,44 +148,6 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.SiteTemplatePlugin
 			{
 				return string.Format("{0} minutes", (int)interval.TotalMinutes);
 			}
-		}
-
-
-		private struct LatestNextPreviousLinks
-		{
-			public string latestLink;
-			public string previousLink;
-			public string nextLink;
-		}
-
-		// ToDo - untested
-		private LatestNextPreviousLinks GenerateLatestNextPreviousLinks(Build build)
-		{
-			LatestNextPreviousLinks links = new LatestNextPreviousLinks();
-
-			links.latestLink = ProjectReportPageWithNoBuild(build);
-			links.previousLink = ProjectReportPageWithBuild(buildNameRetriever.GetPreviousBuildName(build), build);
-			links.nextLink = ProjectReportPageWithBuild(buildNameRetriever.GetNextBuildName(build), build);
-
-			return links;
-		}
-
-		// ToDo - we need a URL generator
-		private string ProjectReportPageWithNoBuild(Build currentlyViewedBuild)
-		{
-			return "projectreport.aspx" + string.Format("?{0}={1}&{2}={3}", 
-				QueryStringRequestWrapper.ServerQueryStringParameter, 
-				currentlyViewedBuild.ServerName,
-				QueryStringRequestWrapper.ProjectQueryStringParameter,
-				currentlyViewedBuild.ProjectName);
-		}
-
-		private string ProjectReportPageWithBuild(string buildName, Build currentlyViewedBuild)
-		{
-			return string.Format("{0}&{1}={2}", 
-				ProjectReportPageWithNoBuild(currentlyViewedBuild), 
-				QueryStringRequestWrapper.BuildQueryStringParameter,
-				buildName);
 		}
 	}
 }

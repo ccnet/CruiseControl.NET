@@ -7,9 +7,6 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.SiteTemplatePlugin
 	{
 		private readonly HtmlAnchor[] serverPluginsList;
 		private readonly HtmlAnchor[] buildPluginList;
-		private readonly string latestLogLink;
-		private readonly string previousLogLink;
-		private readonly string nextLogLink;
 		private readonly string buildStatsClass;
 		private readonly string buildStatsHtml;
 		private readonly bool projectMode;
@@ -17,7 +14,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.SiteTemplatePlugin
 		private readonly string pluginLinksHtml;
 
 		public SiteTemplateResults(bool projectMode, HtmlAnchor[] buildLinkList, string buildStatsHtml, string buildStatsClass, 
-			string pluginLinksHtml, string latestLogLink, string nextLogLink, string previousLogLink, HtmlAnchor[] buildPluginList,
+			string pluginLinksHtml, HtmlAnchor[] buildPluginList,
 			HtmlAnchor[] serverPluginsList)
 		{
 			this.buildLinkList = buildLinkList;
@@ -25,9 +22,6 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.SiteTemplatePlugin
 			this.buildStatsHtml = buildStatsHtml;
 			this.buildStatsClass = buildStatsClass;
 			this.pluginLinksHtml = pluginLinksHtml;
-			this.latestLogLink = latestLogLink;
-			this.nextLogLink = nextLogLink;
-			this.previousLogLink = previousLogLink;
 			this.buildPluginList = buildPluginList;
 			this.serverPluginsList = serverPluginsList;
 		}
@@ -55,21 +49,6 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.SiteTemplatePlugin
 		public string PluginLinksHtml
 		{
 			get { return pluginLinksHtml; }
-		}
-
-		public string LatestLogLink
-		{
-			get { return latestLogLink; }
-		}
-
-		public string PreviousLogLink
-		{
-			get { return previousLogLink; }
-		}
-
-		public string NextLogLink
-		{
-			get { return nextLogLink; }
 		}
 
 		public HtmlAnchor[] BuildPluginsList

@@ -1,5 +1,5 @@
-<%@ Register Namespace="SiteMesh.DecoratorControls" TagPrefix="decorator" Assembly="Sitemesh" %>
 <%@ Page language="c#" Codebehind="Decorator.aspx.cs" AutoEventWireup="false" Inherits="ThoughtWorks.CruiseControl.WebDashboard.Decorator" %>
+<%@ Register Namespace="SiteMesh.DecoratorControls" TagPrefix="decorator" Assembly="Sitemesh" %>
 <!DOCTYPE html PUBLIC "-//W3C//Dtd XHTML 1.0 Transitional//EN" "http://localhost/NUnitAsp/dtd/xhtml1-transitional.dtd">
 <HTML>
 	<HEAD>
@@ -17,12 +17,6 @@
 					<img src="images/shim.gif" width="6" border="0"> <a href="http://ccnet.thoughtworks.com">
 						<img src="images/ccnet_logo.gif" border="0"></a>
 				</td>
-				<td valign="middle" align="right">
-					<asp:Panel id="ProjectPanel1" runat="server"><A class="link" id="latestLog" href="." runat="server">
-							latest</A> |&nbsp; <A class="link" id="nextLog" runat="server">next</A> |&nbsp; <A class="link" id="previousLog" runat="server">previous</A> <SPAN id="ProjectPluginLinks" runat="server" runAt="server">&nbsp;</SPAN>
-					</asp:Panel>
-				</td>
-				<td><img src="images/shim.gif" width="6" border="0"></td>
 			</tr>
 		</table>
 		<!-- body: main content panels -->
@@ -30,7 +24,7 @@
 			<tr>
 				<td width="196" valign="top">
 					<!-- build results -->
-					<asp:Panel id="ProjectPanel2" runat="server">
+					<asp:Panel id="ProjectPanel" runat="server">
 						<TABLE cellSpacing="0" cellPadding="0" width="196" align="center" border="0">
 							<TR>
 								<TD width="100%" bgColor="#333366"><IMG src="images/shim.gif" border="0"></TD>

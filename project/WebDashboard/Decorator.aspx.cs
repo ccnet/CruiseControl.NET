@@ -14,20 +14,15 @@ namespace ThoughtWorks.CruiseControl.WebDashboard
 	{
 		protected DataList menu;
 		protected HtmlGenericControl buildStats;
-		protected HtmlGenericControl ProjectPluginLinks;
-		protected HtmlAnchor latestLog;
-		protected HtmlAnchor nextLog;
-		protected HtmlAnchor previousLog;
 		protected Title Title1;
 		protected Body Body1;
 		protected GetProperty prop1;
 		protected HtmlTableCell Td2;
 		protected Title Title3;
 		protected HtmlTableCell contentCell;
-		protected System.Web.UI.WebControls.Panel ProjectPanel1;
 		protected System.Web.UI.WebControls.DataList BuildPluginsList;
 		protected System.Web.UI.WebControls.DataList ServerPluginsList;
-		protected System.Web.UI.WebControls.Panel ProjectPanel2;
+		protected System.Web.UI.WebControls.Panel ProjectPanel;
 
 		private void Page_Load(object sender, EventArgs e)
 		{
@@ -46,14 +41,9 @@ namespace ThoughtWorks.CruiseControl.WebDashboard
 
 				BuildPluginsList.DataSource = results.BuildPluginsList;
 				BuildPluginsList.DataBind();
-
-				latestLog.HRef = results.LatestLogLink;
-				previousLog.HRef = results.PreviousLogLink;
-				nextLog.HRef = results.NextLogLink;
 			}
 
-			ProjectPanel1.Visible = results.ProjectMode;
-			ProjectPanel2.Visible = results.ProjectMode;
+			ProjectPanel.Visible = results.ProjectMode;
 		}
 
 		// This binds the HRef control that is each data item into the Controls container of the list
@@ -72,9 +62,9 @@ namespace ThoughtWorks.CruiseControl.WebDashboard
 		
 		private void InitializeComponent()
 		{    
+			this.ServerPluginsList.ItemDataBound += new System.Web.UI.WebControls.DataListItemEventHandler(this.DataList_BindItem);
 			this.menu.ItemDataBound += new System.Web.UI.WebControls.DataListItemEventHandler(this.DataList_BindItem);
 			this.BuildPluginsList.ItemDataBound += new System.Web.UI.WebControls.DataListItemEventHandler(this.DataList_BindItem);
-			this.ServerPluginsList.ItemDataBound += new System.Web.UI.WebControls.DataListItemEventHandler(this.DataList_BindItem);
 			this.Load += new System.EventHandler(this.Page_Load);
 
 		}
