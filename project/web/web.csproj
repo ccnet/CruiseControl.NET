@@ -17,7 +17,7 @@
                 DelaySign = "false"
                 OutputType = "Library"
                 PreBuildEvent = ""
-                PostBuildEvent = 'copy "$(ProjectDir)test\test.config" "$(TargetPath)"'
+                PostBuildEvent = 'copy "$(ProjectDir)test\test.config" "$(TargetDir)"'
                 RootNamespace = "ThoughtWorks.CruiseControl.Web"
                 RunPostBuildEvent = "OnBuildSuccess"
                 StartupObject = ""

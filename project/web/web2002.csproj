@@ -305,6 +305,10 @@
                     BuildAction = "Content"
                 />
                 <File
+                    RelPath = "log\log20020910183219Lbuild.69.xml"
+                    BuildAction = "Content"
+                />
+                <File
                     RelPath = "log\log20020916143555.xml"
                     BuildAction = "Content"
                 />
@@ -326,6 +330,14 @@
                 />
                 <File
                     RelPath = "log\log20021009102803Lbuild.69.xml"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "log\log20031212182634Lbuild.1.xml"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "log\log20041002095508.xml"
                     BuildAction = "Content"
                 />
                 <File
@@ -366,6 +378,10 @@
                 />
                 <File
                     RelPath = "xsl\FxCopReport.xsl"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "xsl\fxcop-summary.xsl"
                     BuildAction = "Content"
                 />
                 <File
