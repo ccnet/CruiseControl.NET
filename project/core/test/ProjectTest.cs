@@ -441,11 +441,6 @@ namespace ThoughtWorks.CruiseControl.Core.Test
 			// failure to save the integration result will register as a failed project
 			Assert.AreEqual(results, _project.LastIntegrationResult, "new integration result has not been set to the last integration result");
 			Assert.IsNotNull(results.EndTime);
-
-//			Assert.AreEqual(IntegrationStatus.Exception, _project.LastIntegrationResult.Status);
-//			Assert.AreEqual(expectedException, _project.LastIntegrationResult.ExceptionResult);
-//			Assert.AreEqual(1, _listener.Traces.Count);
-//			Assert.IsTrue(_listener.Traces[0].ToString().IndexOf(expectedException.ToString()) > 0, "Wrong message logged.");
 			VerifyAll();
 		}
 

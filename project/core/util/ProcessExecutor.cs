@@ -1,3 +1,4 @@
+using System;
 using System.Diagnostics;
 
 namespace ThoughtWorks.CruiseControl.Core.Util
@@ -7,7 +8,7 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 	/// ProcessExecutor is designed specifically to deal with processes that redirect the results of both
 	/// the standard output and the standard error streams.  Reading from these streams is performed in
 	/// a separate thread using the <see cref="ProcessReader"/> class, in order to prevent deadlock while 
-	/// blocking on <see cref="Process.WaitForExit"/>.
+	/// blocking on <see cref="Process.WaitForExit(int)"/>.
 	/// </summary>
 	public class ProcessExecutor
 	{

@@ -49,20 +49,15 @@ namespace ThoughtWorks.CruiseControl.Core.Util.Test
 			doc.Load(path);
 		}
 
-		public void TestCreateTempFile_withContent()
+		[Test]
+		public void CreateTempFileWithContent()
 		{
 			string expected = "hello my name is rosebud";
 			string path = TempFileUtil.CreateTempFile(TempDir, "TestCreateTempFile_withContent.txt", expected);
 			Assert.IsTrue(File.Exists(path));
-			StreamReader stream = null;
-			try
+			using (StreamReader stream = File.OpenText(path))
 			{
-				stream = File.OpenText(path);
 				Assert.AreEqual(expected, stream.ReadToEnd());				
-			}
-			finally
-			{
-				stream.Close();
 			}
 		}
 	}
