@@ -1,1 +1,0 @@
-copy ..\etc\pvcs\pvcsout.txt .
