@@ -1,6 +1,4 @@
 using System.Web.UI;
-using System.Web.UI.HtmlControls;
-using ThoughtWorks.CruiseControl.Core.Util;
 using ThoughtWorks.CruiseControl.WebDashboard.Dashboard;
 using ThoughtWorks.CruiseControl.WebDashboard.IO;
 using ThoughtWorks.CruiseControl.WebDashboard.MVC.Cruise;
@@ -11,22 +9,16 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.ViewBuildReport
 	{
 		public static readonly string ACTION_NAME = "ViewTestDetailsBuildReport";
 
-		private readonly IMultiTransformer transformer;
+		private readonly IRequestTransformer requestTransformer;
 
-		private readonly IBuildRetriever buildRetriever;
-
-		public ViewTestDetailsBuildReportAction(IBuildRetriever buildRetriever, IMultiTransformer transformer)
+		public ViewTestDetailsBuildReportAction(IRequestTransformer requestTransformer)
 		{
-			this.buildRetriever = buildRetriever;
-			this.transformer = transformer;
+			this.requestTransformer = requestTransformer;
 		}
 
 		public Control Execute (ICruiseRequest cruiseRequest)
 		{
-			string log = buildRetriever.GetBuild(cruiseRequest.ServerName, cruiseRequest.ProjectName, cruiseRequest.BuildName).Log;
-			HtmlGenericControl control = new HtmlGenericControl("div");
-			control.InnerHtml = transformer.Transform(log, new string[] { @"xsl\tests.xsl" });
-			return control;
+			return requestTransformer.Transform(cruiseRequest, @"xsl\tests.xsl");
 		}
 	}
 }

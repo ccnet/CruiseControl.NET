@@ -1,6 +1,4 @@
 using System.Web.UI;
-using System.Web.UI.HtmlControls;
-using ThoughtWorks.CruiseControl.Core.Util;
 using ThoughtWorks.CruiseControl.WebDashboard.Dashboard;
 using ThoughtWorks.CruiseControl.WebDashboard.IO;
 using ThoughtWorks.CruiseControl.WebDashboard.MVC.Cruise;
@@ -11,22 +9,16 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.NCover
 	{
 		public static readonly string ACTION_NAME = "ViewNCoverBuildReport";
 
-		private readonly IMultiTransformer transformer;
+		private readonly IRequestTransformer requestTransformer;
 
-		private readonly IBuildRetriever buildRetriever;
-
-		public ViewNCoverBuildReportAction(IBuildRetriever buildRetriever, IMultiTransformer transformer)
+		public ViewNCoverBuildReportAction(IRequestTransformer requestTransformer)
 		{
-			this.buildRetriever = buildRetriever;
-			this.transformer = transformer;
+			this.requestTransformer = requestTransformer;
 		}
 
-		public Control Execute(ICruiseRequest cruiseRequest)
+		public Control Execute (ICruiseRequest cruiseRequest)
 		{
-			string log = buildRetriever.GetBuild(cruiseRequest.ServerName, cruiseRequest.ProjectName, cruiseRequest.BuildName).Log;
-			HtmlGenericControl control = new HtmlGenericControl("div");
-			control.InnerHtml = transformer.Transform(log, new string[] { @"xsl\NCover.xsl" });
-			return control;
+			return requestTransformer.Transform(cruiseRequest, @"xsl\NCover.xsl");
 		}
 	}
 }

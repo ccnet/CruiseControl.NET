@@ -378,6 +378,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "WebDashboard\Dashboard\BuildRequestTransformerTest.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "WebDashboard\Dashboard\BuildTest.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
