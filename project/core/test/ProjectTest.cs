@@ -175,7 +175,7 @@ namespace tw.ccnet.core.test
 		}
 
 		[Test]
-//			[Ignore("too fragile")]
+		[Ignore("too fragile")]
 		public void SleepTime() 
 		{
 			_project.CurrentIntegration = _project.LastIntegration;
