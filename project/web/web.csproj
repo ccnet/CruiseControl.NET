@@ -187,7 +187,7 @@
                     RelPath = "FxCop.aspx.resx"
                     DependentUpon = "FxCop.aspx.cs"
                     BuildAction = "EmbeddedResource"
-                />                
+                />
                 <File
                     RelPath = "InstallWebConfig.cs"
                     SubType = "Component"
@@ -301,6 +301,10 @@
                     BuildAction = "Content"
                 />
                 <File
+                    RelPath = "images\corner_white_ur.GIF"
+                    BuildAction = "Content"
+                />
+                <File
                     RelPath = "images\shim.gif"
                     BuildAction = "Content"
                 />
@@ -365,6 +369,14 @@
                 />
                 <File
                     RelPath = "xsl\fit.xsl"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "xsl\FxCopReport.xsl"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "xsl\fxcop-summary.xsl"
                     BuildAction = "Content"
                 />
                 <File

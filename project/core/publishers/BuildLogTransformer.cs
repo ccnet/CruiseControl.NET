@@ -56,9 +56,9 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
 				output.Load(reader);
 				return output.OuterXml;
 			}
-			catch(Exception ex) 
+			catch (Exception ex) 
 			{
-				throw new CruiseControlException(string.Format("Bad XML in logfile: " + ex.Message));
+				throw new CruiseControlException("Unable to execute transform: " + xslFile, ex);
 			}
 		}
 

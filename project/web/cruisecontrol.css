@@ -53,3 +53,7 @@ a:hover { color:#FC0; }
 .javadoc-warning { font-size:9px; color:#000; white-space:pre; }
 
 .section-table { margin-top:10px; }
+
+.fxcop-summary-sectionheader { background-color:#006; color:#FFF; }
+.fxcop-summary-oddrow { background-color:#F0F7FF; }
+.fxcop-summary-data { font-size:9px; color:#000; }

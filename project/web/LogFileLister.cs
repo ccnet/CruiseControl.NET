@@ -111,7 +111,7 @@ namespace ThoughtWorks.CruiseControl.Web
 			}
 			catch(XmlException ex)
 			{
-				throw new CruiseControlException(string.Format("Bad XML in logfile: " + ex.Message));
+				throw new CruiseControlException("Unable to execute transform: " + xslfile, ex);
 			}
 		}
 
@@ -127,7 +127,7 @@ namespace ThoughtWorks.CruiseControl.Web
 			}
 			catch(XmlException ex)
 			{
-				throw new CruiseControlException(string.Format("Bad XML in stylesheet: " + ex.Message));
+				throw new CruiseControlException("Unable to load transform: " + xslfile, ex);
 			}
 		}
 	}

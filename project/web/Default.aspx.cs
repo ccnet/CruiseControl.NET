@@ -43,7 +43,7 @@ namespace ThoughtWorks.CruiseControl.Web
 				// Why is BodyLabel null?  (drewnoakes: I saw this problem while working with
 				// invalid Xsl in file modifications.xsl)
 				if (BodyLabel==null)
-					throw ex;
+					throw new CruiseControlException("Unable to render page.", ex);
 
 				if (BodyLabel.InnerText==null)
 					BodyLabel.InnerText = string.Empty;
