@@ -93,6 +93,7 @@
                     Name = "nunit.framework"
                     AssemblyName = "nunit.framework"
                     HintPath = "..\..\lib\nunit.framework.dll"
+                    Private = "True"
                 />
                 <Reference
                     Name = "nmock"
@@ -119,6 +120,7 @@
                 />
                 <File
                     RelPath = "AssemblyInfo.cs"
+                    SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
