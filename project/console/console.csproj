@@ -123,11 +123,6 @@
                     BuildAction = "Content"
                 />
                 <File
-                    RelPath = "ArgumentParser.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
                     RelPath = "AssemblyInfo.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -139,30 +134,11 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "ConsoleEventHandler.cs"
+                    RelPath = "ConsoleMain.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
-                <File
-                    RelPath = "ConsoleRunner.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "IArgumentParser.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "test\ArgumentParserTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "test\ConsoleRunnerTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
+                <Folder RelPath = "test\" />
             </Include>
         </Files>
     </CSHARP>

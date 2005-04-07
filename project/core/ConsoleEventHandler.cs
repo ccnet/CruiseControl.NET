@@ -1,7 +1,7 @@
 using System;
 using System.Runtime.InteropServices;
 
-namespace ThoughtWorks.CruiseControl.Console
+namespace ThoughtWorks.CruiseControl.Core
 {
 	/// <summary>
 	/// Intercepts events raised by the command console.

@@ -132,6 +132,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 		[Test]
 		public void VerifySchedulerStateAfterException()
 		{
+			backup.Reset();
 			TestTraceListener listener = backup.AddTestTraceListener();
 			string exceptionMessage = "Intentional exception";
 

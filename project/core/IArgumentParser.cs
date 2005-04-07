@@ -1,4 +1,4 @@
-namespace ThoughtWorks.CruiseControl.Console
+namespace ThoughtWorks.CruiseControl.Core
 {
 	public interface IArgumentParser
 	{

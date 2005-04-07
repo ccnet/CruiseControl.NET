@@ -1,28 +1,11 @@
 using System;
-using ThoughtWorks.CruiseControl.Core;
 using ThoughtWorks.CruiseControl.Core.Util;
 using ThoughtWorks.CruiseControl.Remote;
 
-namespace ThoughtWorks.CruiseControl.Console
+namespace ThoughtWorks.CruiseControl.Core
 {
-	/// <summary>
-	/// Runs CruiseControl.NET from the console.
-	/// </summary>
-	internal class ConsoleRunner
+	public class ConsoleRunner
 	{
-		[STAThread]
-		internal static void Main(string[] args)
-		{
-			try
-			{
-				new ConsoleRunner(new ArgumentParser(args), new CruiseServerFactory()).Run();
-			}
-			catch (Exception ex)
-			{
-				Log.Error(ex);
-			}
-		}
-
 		private readonly ArgumentParser _parser;
 		private readonly ICruiseServerFactory _serverFactory;
 		private ICruiseServer server;

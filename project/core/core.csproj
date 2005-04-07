@@ -124,6 +124,11 @@
         <Files>
             <Include>
                 <File
+                    RelPath = "ArgumentParser.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "AssemblyInfo.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -131,6 +136,16 @@
                 <File
                     RelPath = "CommonAssemblyInfo.cs"
                     Link = "..\CommonAssemblyInfo.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "ConsoleEventHandler.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "ConsoleRunner.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -151,6 +166,11 @@
                 />
                 <File
                     RelPath = "CruiseServerFactory.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "IArgumentParser.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

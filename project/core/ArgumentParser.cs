@@ -2,7 +2,7 @@ using System.Collections;
 using System.Text.RegularExpressions;
 using ThoughtWorks.CruiseControl.Core.Util;
 
-namespace ThoughtWorks.CruiseControl.Console
+namespace ThoughtWorks.CruiseControl.Core
 {
 	public class ArgumentParser : IArgumentParser
 	{
