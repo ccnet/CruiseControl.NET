@@ -53,7 +53,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Publishers
         public void CanInitFromXml()
         {
             _publisher = new ExecutablePublisher();
-            NetReflector.Read( CreateConfigurationXml( _EXECUTABLE,
+        	NetReflector.Read( CreateConfigurationXml( _EXECUTABLE,
                 _ARGUMENTS,
                 _TIMEOUT.ToString(),
                 _WORKING_DIRECTORY,

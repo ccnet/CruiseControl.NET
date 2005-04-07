@@ -1,8 +1,8 @@
-using NUnit.Framework;
 using System;
 using System.Text.RegularExpressions;
+using NUnit.Framework;
 
-namespace ThoughtWorks.CruiseControl.Core.Util
+namespace ThoughtWorks.CruiseControl.UnitTests
 {
 	public class CustomAssertion
 	{

@@ -1,10 +1,10 @@
+using System;
+using System.IO;
 using System.Text;
 using Exortech.NetReflector;
 using NMock;
 using NMock.Constraints;
 using NUnit.Framework;
-using System;
-using System.IO;
 using ThoughtWorks.CruiseControl.Core;
 using ThoughtWorks.CruiseControl.Core.Sourcecontrol;
 using ThoughtWorks.CruiseControl.Core.Util;
@@ -143,7 +143,7 @@ run ->pvcspretemp.txt listversionedfiles -z -aw $Project $SubProject
 		private TimeZone CreateMockTimeZone(bool inDayLightSavings)
 		{			
 			Mock mock = new DynamicMock(typeof(TimeZone));
-			mock.ExpectAndReturn("IsDaylightSavingTime", inDayLightSavings, new NMock.Constraints.IsTypeOf(typeof(DateTime)));
+			mock.ExpectAndReturn("IsDaylightSavingTime", inDayLightSavings, new IsTypeOf(typeof(DateTime)));
 			return (TimeZone) mock.MockInstance;
 		}
 	}	

@@ -1,8 +1,8 @@
 using Exortech.NetReflector;
 using NUnit.Framework;
-using ThoughtWorks.CruiseControl.Core.Util;
+using ThoughtWorks.CruiseControl.Core;
 
-namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test
+namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 {
 	[TestFixture]
 	public class ViewCVSUrlBuilderTest : CustomAssertion

@@ -1,7 +1,6 @@
 using System.Collections;
 using System.Configuration;
 using NUnit.Framework;
-using ThoughtWorks.CruiseControl.Core.Util;
 
 namespace ThoughtWorks.CruiseControl.UnitTests.Core.Config
 {

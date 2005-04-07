@@ -2,6 +2,7 @@ using NMock;
 using NUnit.Framework;
 using ThoughtWorks.CruiseControl.Core;
 using ThoughtWorks.CruiseControl.Core.Util;
+using ThoughtWorks.CruiseControl.UnitTests;
 
 namespace ThoughtWorks.CruiseControl.Web.Test
 {

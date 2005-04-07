@@ -1,4 +1,3 @@
-using System;
 using NMock;
 using NUnit.Framework;
 using ThoughtWorks.CruiseControl.Core.Util;

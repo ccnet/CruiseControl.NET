@@ -1,9 +1,10 @@
+using System;
 using Exortech.NetReflector;
 using NUnit.Framework;
-using System;
-using ThoughtWorks.CruiseControl.Core.Util;
+using ThoughtWorks.CruiseControl.Core;
+using ThoughtWorks.CruiseControl.Core.Sourcecontrol;
 
-namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test
+namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 {
 	[TestFixture]
 	public class WebSVNUrlBuilderTest : CustomAssertion

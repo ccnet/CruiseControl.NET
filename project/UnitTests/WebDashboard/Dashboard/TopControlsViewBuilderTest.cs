@@ -1,7 +1,5 @@
 using System.Collections;
-using System.Web.UI.HtmlControls;
 using NMock;
-using NMock.Constraints;
 using NUnit.Framework;
 using ThoughtWorks.CruiseControl.UnitTests.UnitTestUtils;
 using ThoughtWorks.CruiseControl.WebDashboard.Dashboard;

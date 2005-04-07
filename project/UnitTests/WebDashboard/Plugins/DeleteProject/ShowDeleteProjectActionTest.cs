@@ -1,4 +1,3 @@
-using System.Web.UI;
 using NMock;
 using NUnit.Framework;
 using ThoughtWorks.CruiseControl.WebDashboard.Dashboard;

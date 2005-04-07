@@ -2,9 +2,11 @@ using System;
 using System.Collections;
 using Exortech.NetReflector;
 using NUnit.Framework;
+using ThoughtWorks.CruiseControl.Core;
+using ThoughtWorks.CruiseControl.Core.Tasks;
 using ThoughtWorks.CruiseControl.Core.Util;
 
-namespace ThoughtWorks.CruiseControl.Core.Tasks.Test
+namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 {
 	[TestFixture]
 	public class MergeFileTaskTest : CustomAssertion

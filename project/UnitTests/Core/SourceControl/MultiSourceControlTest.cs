@@ -3,10 +3,10 @@ using System.Collections;
 using Exortech.NetReflector;
 using NMock;
 using NUnit.Framework;
-using ThoughtWorks.CruiseControl.Core.Util;
-using ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol;
+using ThoughtWorks.CruiseControl.Core;
+using ThoughtWorks.CruiseControl.Core.Sourcecontrol;
 
-namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test
+namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 {
 	[TestFixture]
 	public class MultiSourceControlTest : CustomAssertion

@@ -1,7 +1,8 @@
 using Exortech.NetReflector;
 using NUnit.Framework;
+using ThoughtWorks.CruiseControl.Core;
 
-namespace ThoughtWorks.CruiseControl.Core.Tasks.Test
+namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 {
 	[TestFixture]
 	public class CoverageTaskIntegrationTest

@@ -1,5 +1,4 @@
 using System.Xml;
-
 using ThoughtWorks.CruiseControl.Core.Util;
 
 namespace ThoughtWorks.CruiseControl.UnitTests.Core.Config

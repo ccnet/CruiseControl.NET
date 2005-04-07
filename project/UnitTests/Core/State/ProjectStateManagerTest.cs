@@ -1,9 +1,10 @@
 using System.IO;
 using NMock;
 using NUnit.Framework;
+using ThoughtWorks.CruiseControl.Core;
 using ThoughtWorks.CruiseControl.Core.State;
 
-namespace ThoughtWorks.CruiseControl.Core.State.Test
+namespace ThoughtWorks.CruiseControl.UnitTests.Core.State
 {
 	[TestFixture]
 	public class ProjectStateManagerTest

@@ -1,6 +1,5 @@
 using NUnit.Framework;
 using ThoughtWorks.CruiseControl.CCTrayLib;
-using ThoughtWorks.CruiseControl.UnitTests.CCTrayLib;
 
 namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib
 {

@@ -1,6 +1,6 @@
 using System;
 using NUnit.Framework;
-using ThoughtWorks.CruiseControl.Core.Util;
+using ThoughtWorks.CruiseControl.UnitTests;
 
 namespace ThoughtWorks.CruiseControl.Web.Test
 {

@@ -22,7 +22,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Util
 		public void StringWithNoWildCardsReturnsSingleFile()
 		{
 			WildCardPath wildCard = new WildCardPath("foo.xml");
-		    IList files = wildCard.GetFiles();
+			IList files = wildCard.GetFiles();
 			Assert.AreEqual(1, files.Count);
 		}
 
@@ -38,7 +38,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Util
 		public void HandlesWhiteSpaceInTheFileName()
 		{
 			WildCardPath wildCard = new WildCardPath("fooo.xml    ");
-		    FileInfo[] files = wildCard.GetFiles();
+			FileInfo[] files = wildCard.GetFiles();
 			Assert.AreEqual(1, files.Length);
 			Assert.AreEqual("fooo.xml", files[0].Name);
 

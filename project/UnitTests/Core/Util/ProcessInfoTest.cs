@@ -1,6 +1,5 @@
 using System.Diagnostics;
 using NUnit.Framework;
-
 using ThoughtWorks.CruiseControl.Core.Util;
 
 namespace ThoughtWorks.CruiseControl.UnitTests.Core.Util

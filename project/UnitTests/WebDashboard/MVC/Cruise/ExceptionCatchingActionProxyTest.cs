@@ -1,5 +1,4 @@
 using System.Collections;
-using System.Web.UI.HtmlControls;
 using NMock;
 using NUnit.Framework;
 using ThoughtWorks.CruiseControl.Core;

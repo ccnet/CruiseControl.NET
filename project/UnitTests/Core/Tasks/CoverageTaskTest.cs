@@ -3,8 +3,10 @@ using Exortech.NetReflector;
 using NMock;
 using NMock.Constraints;
 using NUnit.Framework;
+using ThoughtWorks.CruiseControl.Core;
+using ThoughtWorks.CruiseControl.Core.Tasks;
 
-namespace ThoughtWorks.CruiseControl.Core.Tasks.Test
+namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 {
 	[TestFixture, Ignore("sreekanth: should this be deleted?  it was not included in the project.")]
 	public class CoverageTaskTest

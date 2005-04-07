@@ -1,6 +1,5 @@
 using System;
 using NUnit.Framework;
-using ThoughtWorks.CruiseControl.Core.Util;
 using ThoughtWorks.CruiseControl.Util;
 
 namespace ThoughtWorks.CruiseControl.UnitTests.Core.Util

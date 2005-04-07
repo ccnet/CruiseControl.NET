@@ -1,7 +1,6 @@
 using NUnit.Framework;
-using ThoughtWorks.CruiseControl.Core.Util;
 
-namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test
+namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 {
 	[TestFixture]
 	public class ProcessSourceControlTest : CustomAssertion

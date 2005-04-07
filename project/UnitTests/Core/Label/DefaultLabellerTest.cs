@@ -1,9 +1,9 @@
 using NUnit.Framework;
+using ThoughtWorks.CruiseControl.Core;
+using ThoughtWorks.CruiseControl.Core.Label;
 using ThoughtWorks.CruiseControl.Remote;
-using ThoughtWorks.CruiseControl.Core.Util;
-using ThoughtWorks.CruiseControl.UnitTests.Core;
 
-namespace ThoughtWorks.CruiseControl.Core.Label.Test
+namespace ThoughtWorks.CruiseControl.UnitTests.Core.Label
 {
 	[TestFixture]
 	public class DefaultLabellerTest : CustomAssertion

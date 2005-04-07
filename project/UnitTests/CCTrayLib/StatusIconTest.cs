@@ -17,7 +17,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib
 	    public void ShouldLoadIconFromFileWhenFileExists()
 	    {
 	    	StatusIcon iconFile = StatusIcon.LoadFromFile(_file);
-	        Size size = iconFile.Icon.Size;
+	    	Size size = iconFile.Icon.Size;
 			Assert.AreEqual(_originalIcon.Size,size);
 	    }
 

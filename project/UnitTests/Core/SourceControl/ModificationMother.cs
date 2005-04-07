@@ -1,6 +1,7 @@
 using System;
+using ThoughtWorks.CruiseControl.Core;
 
-namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test
+namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 {
 	public class ModificationMother
 	{

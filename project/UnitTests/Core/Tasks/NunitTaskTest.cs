@@ -1,8 +1,8 @@
 using Exortech.NetReflector;
 using NUnit.Framework;
-using ThoughtWorks.CruiseControl.Core.Util;
+using ThoughtWorks.CruiseControl.Core.Tasks;
 
-namespace ThoughtWorks.CruiseControl.Core.Tasks.Test
+namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 {
 	[TestFixture]
 	public class NUnitTaskTest : CustomAssertion

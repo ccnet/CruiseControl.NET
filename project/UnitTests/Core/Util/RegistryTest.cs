@@ -1,5 +1,5 @@
-using NUnit.Framework;
 using System.IO;
+using NUnit.Framework;
 using ThoughtWorks.CruiseControl.Core;
 using ThoughtWorks.CruiseControl.Core.Util;
 

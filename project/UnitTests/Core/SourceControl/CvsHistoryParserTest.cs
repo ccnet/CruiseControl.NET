@@ -1,11 +1,12 @@
 using System;
-using System.IO;
 using System.Collections;
 using System.Globalization;
+using System.IO;
 using NUnit.Framework;
-using ThoughtWorks.CruiseControl.Core.Util;
+using ThoughtWorks.CruiseControl.Core;
+using ThoughtWorks.CruiseControl.Core.Sourcecontrol;
 
-namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test 
+namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 {
 	[TestFixture]
 	public class CvsHistoryParserTest : CustomAssertion

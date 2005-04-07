@@ -1,5 +1,4 @@
 using NUnit.Framework;
-using ThoughtWorks.CruiseControl.Core.Util;
 
 namespace ThoughtWorks.CruiseControl.UnitTests.Xsl
 {

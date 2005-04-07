@@ -1,10 +1,11 @@
 using System.IO;
 using Exortech.NetReflector;
 using NUnit.Framework;
+using ThoughtWorks.CruiseControl.Core;
+using ThoughtWorks.CruiseControl.Core.State;
 using ThoughtWorks.CruiseControl.Core.Util;
-using ThoughtWorks.CruiseControl.UnitTests.Core;
 
-namespace ThoughtWorks.CruiseControl.Core.State.Test
+namespace ThoughtWorks.CruiseControl.UnitTests.Core.State
 {
 	[TestFixture]
 	public class IntegrationStateManagerTest : CustomAssertion

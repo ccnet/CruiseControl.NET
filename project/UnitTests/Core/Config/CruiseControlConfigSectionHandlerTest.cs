@@ -1,5 +1,4 @@
 using System.Xml;
-
 using NUnit.Framework;
 using ThoughtWorks.CruiseControl.Core;
 using ThoughtWorks.CruiseControl.Core.Config;

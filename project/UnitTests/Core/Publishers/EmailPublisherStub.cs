@@ -12,7 +12,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Publishers
 
 		public override void SendMessage(string from, string to, string subject, string message)
 		{
-			ThoughtWorks.CruiseControl.Core.Util.Log.Debug("email message = " + message);
+			CruiseControl.Core.Util.Log.Debug("email message = " + message);
 			if (SaveToFile)
 			{
 				using (StreamWriter writer = File.CreateText("emailstub.html"))

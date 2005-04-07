@@ -4,7 +4,7 @@ using NUnit.Framework;
 using ThoughtWorks.CruiseControl.CCTrayLib;
 using ThoughtWorks.CruiseControl.Remote;
 
-namespace ThoughtWorks.CruiseControl.CCTray
+namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib
 {
 	[TestFixture]
 	public class TrayTooltipTest
