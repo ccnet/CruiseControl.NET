@@ -96,8 +96,6 @@
 	<target name="test" depends="compile, test.unit" />
 
 	<target name="test.unit" description="runs unit tests">
-		<exec program="${nunit-console.exe}" workingdir="${build.dir}\core" commandline="${core.dll} /xml:../${core.dll}-results.xml /nologo"/>
-		<exec program="${nunit-console.exe}" workingdir="${build.dir}\server" commandline="${console.exe} /xml:../${console.exe}-results.xml /nologo"/>
 		<exec program="regsvr32" workingdir="tools\ncover" commandline="/s CoverLib.dll" />
 		<exec program="${ncover-console.exe}" workingdir="${build.dir}\unittests" commandline="/w . /c &quot;..\..\${nunit-console.exe}&quot; &quot;${unittests.dll} /xml:../${unittests.dll}-results.xml /nologo&quot;"/>
 	</target>
