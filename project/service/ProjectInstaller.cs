@@ -33,24 +33,42 @@ namespace ThoughtWorks.CruiseControl.Service
 				});
 		}
 
-		private void SetServiceName(string serviceName)
-		{
-			serviceInstaller.DisplayName = serviceName;
-			serviceInstaller.ServiceName = serviceName;
-		}
-
 		public override string HelpText
 		{
 			get { return string.Format("Usage: installutil [/u] [/{0}=MyCCService] ccnet.service.exe", ServiceNameSwitch); }
 		}
 
-		public override void Install(IDictionary stateSaver)
+		protected override void OnBeforeInstall(IDictionary stateSaver)
 		{
-			if (stateSaver.Contains(ServiceNameSwitch))
+			string serviceName = ServiceName(stateSaver);
+			stateSaver[serviceName] = serviceName;
+			SetServiceName(serviceName);
+			base.OnBeforeInstall(stateSaver);
+		}
+
+		protected override void OnBeforeUninstall(IDictionary savedState)
+		{
+			SetServiceName(ServiceName(savedState));
+			base.OnBeforeUninstall(savedState);
+		}
+
+		private string ServiceName(IDictionary savedState)
+		{
+			if (Context.Parameters.ContainsKey(ServiceNameSwitch))
 			{
-				SetServiceName(stateSaver[ServiceNameSwitch].ToString());
+				return Context.Parameters[ServiceNameSwitch];
 			}
-			base.Install(stateSaver);
+			else if(savedState.Contains(ServiceNameSwitch))
+			{
+				return savedState[ServiceNameSwitch].ToString();
+			}
+			return CCService.DefaultServiceName;
+		}
+
+		private void SetServiceName(string serviceName)
+		{
+			serviceInstaller.DisplayName = serviceName;
+			serviceInstaller.ServiceName = serviceName;
 		}
 	}
 }
