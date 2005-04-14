@@ -1,5 +1,5 @@
-using System;
 using NUnit.Framework;
+using ThoughtWorks.CruiseControl.Core;
 using ThoughtWorks.CruiseControl.Core.Tasks;
 
 namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
@@ -7,36 +7,33 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 	[TestFixture]
 	public class NUnitArgumentTest : CustomAssertion
 	{
-		[Test]
-		public void	IfNoAssembliesAreSpecifiedThenTheArgumentIsInvalid()
+		[Test, ExpectedException(typeof(CruiseControlException))]
+		public void IfNoAssembliesAreSpecifiedThenTheArgumentIsInvalid()
 		{
-			NUnitArgument arg=new NUnitArgument(null);
-		    string argString = arg.ToString();
-			Assert.AreEqual(String.Empty,argString);
-		}
-		[Test]
-		public void	NoLogoIsOnAlwaysIfValidAssemblyExists()
-		{
-			NUnitArgument arg = new NUnitArgument(new string[] {"foo.dll"});
-			string argString = arg.ToString();
-			AssertContains(" /nologo ", argString);
-		}
-		[Test]
-		public void	XmlConsoleFlagIsAlwaysOnIfAssemblyExists()
-		{
-			NUnitArgument arg = new NUnitArgument(new string[] {"foo.dll"});
-			string argString = arg.ToString();
-			AssertContains(" /xmlConsole ", argString);
+			new NUnitArgument(null, null);
 		}
 
 		[Test]
-		public void	IfAssembliesAreSpecifiedAllAssembliesExistInTheResult()
+		public void ShouldUseNoLogoArgument()
 		{
-			NUnitArgument arg = new NUnitArgument(new string[]{"foo.dll","bar.dll","car.dll"});
-			string argString = arg.ToString();
-			AssertContains(" foo.dll ",argString);
-			AssertContains(" bar.dll ",argString);
-			AssertContains(" car.dll ",argString);
+			string argString = new NUnitArgument(new string[] {"foo.dll"}, "testfile.xml").ToString();
+			AssertContains(" /nologo", argString);
+		}
+
+		[Test]
+		public void ShouldSpecifyXmlOutputFileToUse()
+		{
+			string argString = new NUnitArgument(new string[] {"foo.dll"}, "testfile.xml").ToString();
+			AssertContains(@" /xml=testfile.xml", argString);
+		}
+
+		[Test]
+		public void AllAssembliesShouldBeIncludedInTheArgument()
+		{
+			string argString = new NUnitArgument(new string[] {"foo.dll", "bar.dll", "car.dll"}, "testfile.xml").ToString();
+			AssertContains(" foo.dll ", argString);
+			AssertContains(" bar.dll ", argString);
+			AssertContains(" car.dll ", argString);
 		}
 	}
 }

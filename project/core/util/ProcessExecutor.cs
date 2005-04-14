@@ -1,4 +1,6 @@
+using System.ComponentModel;
 using System.Diagnostics;
+using System.IO;
 
 namespace ThoughtWorks.CruiseControl.Core.Util
 {
@@ -44,9 +46,17 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 			Process process = processInfo.CreateProcess();
 			Log.Debug(string.Format("Attempting to start process [{0}] in working directory [{1}] with arguments [{2}]", process.StartInfo.FileName, process.StartInfo.WorkingDirectory, process.StartInfo.Arguments));
 
-			bool isNewProcess = process.Start();
-			if (! isNewProcess) Log.Debug("Reusing existing process...");
-
+			try
+			{
+				bool isNewProcess = process.Start();
+				if (! isNewProcess) Log.Debug("Reusing existing process...");
+			}
+			catch (Win32Exception e)
+			{
+				string filename = Path.Combine(process.StartInfo.WorkingDirectory, process.StartInfo.FileName);
+				string msg = string.Format("Unable to execute file [{0}].  The file may not exist or may not be executable.", filename);
+				throw new IOException(msg, e);
+			}
 			return process;
 		}
 

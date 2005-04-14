@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Specialized;
 using System.Diagnostics;
 using System.IO;
@@ -14,12 +13,10 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 		private int timeout = DEFAULT_TIMEOUT;
 
 		public ProcessInfo(string filename) : this(filename, null)
-		{
-		}
+		{}
 
 		public ProcessInfo(string filename, string arguments) : this(filename, arguments, null)
-		{
-		}
+		{}
 
 		public ProcessInfo(string filename, string arguments, string workingDirectory)
 		{
@@ -64,6 +61,7 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 		public string WorkingDirectory
 		{
 			get { return startInfo.WorkingDirectory; }
+			set { startInfo.WorkingDirectory = value; }
 		}
 
 		public string StandardInputContent

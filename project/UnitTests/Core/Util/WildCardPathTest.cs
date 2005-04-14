@@ -10,12 +10,12 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Util
 	public class WildCardPathTest : CustomAssertion
 	{
 		private const string TEMP_FOLDER = "WildCardPathTest";
-		private string _tempFolderFullPath;
+		private string tempFolderFullPath;
 
 		[SetUp]
 		public void CreateTempDir()
 		{
-			_tempFolderFullPath = TempFileUtil.CreateTempDir(TEMP_FOLDER);
+			tempFolderFullPath = TempFileUtil.CreateTempDir(TEMP_FOLDER);
 		}
 
 		[Test]
@@ -41,7 +41,6 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Util
 			FileInfo[] files = wildCard.GetFiles();
 			Assert.AreEqual(1, files.Length);
 			Assert.AreEqual("fooo.xml", files[0].Name);
-
 		}
 
 		[Test]
@@ -49,7 +48,19 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Util
 		{
 			string tempFile1Path = TempFileUtil.CreateTempFile(TEMP_FOLDER, "foo.txt", "foofoo");
 			string tempFile2Path = TempFileUtil.CreateTempFile(TEMP_FOLDER, "bar.txt", "barbar");
-			WildCardPath wildCard = new WildCardPath(_tempFolderFullPath + @"\" + "*.txt");
+			WildCardPath wildCard = new WildCardPath(tempFolderFullPath + @"\" + "*.txt");
+			IList files = wildCard.GetFiles();
+			Assert.AreEqual(2, files.Count);
+			AssertListContainsPath(files, tempFile2Path);
+			AssertListContainsPath(files, tempFile1Path);
+		}
+
+		[Test]
+		public void StringWithPrefixAndWildcardsReturnsAllMatchingFiles()
+		{
+			string tempFile1Path = TempFileUtil.CreateTempFile(TEMP_FOLDER, "prefix-foo.txt", "foofoo");
+			string tempFile2Path = TempFileUtil.CreateTempFile(TEMP_FOLDER, "prefix-bar.txt", "barbar");
+			WildCardPath wildCard = new WildCardPath(tempFolderFullPath + @"\" + "prefix-*.txt");
 			IList files = wildCard.GetFiles();
 			Assert.AreEqual(2, files.Count);
 			AssertListContainsPath(files, tempFile2Path);
@@ -64,9 +75,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Util
 					return;
 			}
 			Assert.Fail(String.Format("Element {0} not found in the list", s));
-
 		}
-
 
 		[TearDown]
 		public void DeleteTempDir()

@@ -1,5 +1,6 @@
 using System;
 using System.ComponentModel;
+using System.IO;
 using NUnit.Framework;
 using ThoughtWorks.CruiseControl.Core.Util;
 
@@ -84,7 +85,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Util
 			}
 		}
 
-		[Test, ExpectedException(typeof(Win32Exception))]
+		[Test, ExpectedException(typeof(IOException))]
 		public void SupplyInvalidFilenameAndVerifyException()
 		{
 			ProcessExecutor executor = new ProcessExecutor();

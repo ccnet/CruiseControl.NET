@@ -12,12 +12,18 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 		[Test]
 		public void LoadWithSingleAssemblyNunitPath()
 		{
-			string xml = "<nunit><path>d:\temp\nunit-console.exe</path><assemblies><assembly>foo.dll</assembly></assemblies></nunit>";
+			string xml = @"<nunit>
+	<path>d:\temp\nunit-console.exe</path>
+	<assemblies>
+		<assembly>foo.dll</assembly>
+	</assemblies>
+	<outputfile>c:\testfile.xml</outputfile>
+</nunit>";
 			task = NetReflector.Read(xml) as NUnitTask;
-			Assert.AreEqual("d:\temp\nunit-console.exe", task.NUnitPath);
-			Assert.AreEqual(1, task.Assembly.Length);
-			Assert.AreEqual("foo.dll", task.Assembly[0]);
-
+			Assert.AreEqual(@"d:\temp\nunit-console.exe", task.NUnitPath);
+			Assert.AreEqual(1, task.Assemblies.Length);
+			Assert.AreEqual("foo.dll", task.Assemblies[0]);
+			Assert.AreEqual(@"c:\testfile.xml", task.OutputFile);
 		}
 
 		[Test]
@@ -32,7 +38,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 						 </nunit>";
 
 			task = NetReflector.Read(xml) as NUnitTask;
-			AssertEqualArrays(new string[] {"foo.dll", "bar.dll"}, task.Assembly);
+			AssertEqualArrays(new string[] {"foo.dll", "bar.dll"}, task.Assemblies);
 		}
 	}
 }

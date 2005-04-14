@@ -1,34 +1,29 @@
-using System;
 using System.Text;
 
 namespace ThoughtWorks.CruiseControl.Core.Tasks
 {
 	public class NUnitArgument
 	{
-		private string[] _assemblies = new string[0];
+		public readonly string[] assemblies;
+		private readonly string outputfile;
 
-		public NUnitArgument(string[] assemblies)
+		public NUnitArgument(string[] assemblies, string outputfile)
 		{
-			_assemblies = assemblies;
-		}
-
-		public virtual string[] Assemblies
-		{
-			get { return _assemblies; }
+			if (assemblies == null || assemblies.Length == 0)
+			{
+				throw new CruiseControlException("No unit test assemblies are specified. Please use the <assemblies> element to specify the test assemblies to run.");
+			}
+			this.assemblies = assemblies;
+			this.outputfile = outputfile;
 		}
 
 		public override string ToString()
 		{
-			if (_assemblies == null || _assemblies.Length == 0)
-			{
-				return String.Empty;
-			}
-
 			StringBuilder argsBuilder = new StringBuilder();
-			argsBuilder.Append(" /xmlConsole ");
+			argsBuilder.AppendFormat(@" /xml={0} ", outputfile);
 			argsBuilder.Append(" /nologo ");
 
-			foreach (string assemblyName in Assemblies)
+			foreach (string assemblyName in assemblies)
 			{
 				argsBuilder.AppendFormat(" {0} ", assemblyName);
 			}

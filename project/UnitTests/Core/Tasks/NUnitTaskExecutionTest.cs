@@ -11,43 +11,43 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 	[TestFixture]
 	public class NUnitTaskExecutionTest : CustomAssertion
 	{
-		private const string NUNIT_DUMMY_PATH = @"D:\temp\nunit-console.exe";
+		private const string NUnitConsolePath = @"D:\temp\nunit-console.exe";
 		private string[] TEST_ASSEMBLIES = new string[] {"foo.dll"};
+		const string WORKING_DIRECTORY = @"c:\temp";
 
 		private IMock executorMock;
-		private IMock mockArguments;
-
 		private NUnitTask task;
 		private IntegrationResult result;
 
 		[SetUp]
-		public void Init()
+		protected void Init()
 		{
 			executorMock = new DynamicMock(typeof (ProcessExecutor));
-			mockArguments = new DynamicMock(typeof (NUnitArgument));
+
 			task = new NUnitTask(executorMock.MockInstance as ProcessExecutor);
-			task.NUnitPath = NUNIT_DUMMY_PATH;
-			result = new IntegrationResult("testProject", @"c:\temp");
+			task.Assemblies = TEST_ASSEMBLIES;
+			task.NUnitPath = NUnitConsolePath;
+			task.OutputFile = TempFileUtil.CreateTempFile("NUnitTask", "results.xml", "foo");
+			result = new IntegrationResult("testProject", WORKING_DIRECTORY);
+			result.ArtifactDirectory = WORKING_DIRECTORY;
+		}
+
+		[TearDown]
+		protected void DeleteTempFile()
+		{
+			TempFileUtil.DeleteTempFile(task.OutputFile);
 		}
 
 		[Test]
-		public void RunWithNunitPathSetExecutesNunitAndRetrivesStandardOutput()
+		public void ExecuteNUnitConsoleAndRetrieveResultsFromFile()
 		{
-			mockArguments.Expect("Assemblies", TEST_ASSEMBLIES);
-			executorMock.ExpectAndReturn("Execute", new ProcessResult("foo", String.Empty, 0, false), new IsTypeOf(typeof (ProcessInfo)));
+			ProcessInfo info = new ProcessInfo(NUnitConsolePath, @" /xml=" + task.OutputFile + "  /nologo  foo.dll ", WORKING_DIRECTORY);
+			executorMock.ExpectAndReturn("Execute", new ProcessResult("", String.Empty, 0, false), info);
 
-			task.Assembly = TEST_ASSEMBLIES;
 			task.Run(result);
 
 			Assert.AreEqual("foo", result.TaskOutput);
 			executorMock.Verify();
-		}
-
-		[Test, ExpectedException(typeof(CruiseControlException))]
-		public void RunWithNoAssembliesDoesNotCreateTaskResult()
-		{
-			executorMock.ExpectNoCall("Execute", typeof (ProcessInfo));
-			task.Run(result);
 		}
 
 		[Test, ExpectedException(typeof(CruiseControlException))]
@@ -56,7 +56,6 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 			executorMock.ExpectAndReturn("Execute", ProcessResultFixture.CreateNonZeroExitCodeResult(), new IsAnything());
 
 			task = new NUnitTask((ProcessExecutor) executorMock.MockInstance);
-			task.Assembly = TEST_ASSEMBLIES;
 			task.Run(result);
 		}
 	}
