@@ -2,6 +2,7 @@ using System;
 using System.IO;
 using System.Xml;
 using System.Xml.Schema;
+using Exortech.NetReflector;
 using ThoughtWorks.CruiseControl.Core.Util;
 
 namespace ThoughtWorks.CruiseControl.Core.Config
@@ -19,7 +20,8 @@ namespace ThoughtWorks.CruiseControl.Core.Config
 		public DefaultConfigurationFileLoader(NetReflectorConfigurationReader reader)
 		{
 			this.reader = reader;
-			handler = new ValidationEventHandler(handleSchemaEvent);
+			reader.UnusedNodeEventHandler += new UnusedNodeEventHandler(WarnOnUnusedNodes);
+			handler = new ValidationEventHandler(HandleSchemaEvent);
 		}
 
 		public IConfiguration Load(FileInfo configFile)
@@ -74,9 +76,14 @@ namespace ThoughtWorks.CruiseControl.Core.Config
 			return reader.Read(configXml);
 		}
 
-		private void handleSchemaEvent(object sender, ValidationEventArgs args)
+		private void HandleSchemaEvent(object sender, ValidationEventArgs args)
 		{
 			Log.Info("Loading config schema: " + args.Message);
+		}
+
+		private void WarnOnUnusedNodes(XmlNode node)
+		{
+			Log.Warning(string.Format("Unused node detected in configuration: {0}.", node.OuterXml));		
 		}
 	}
 }

@@ -58,8 +58,6 @@ namespace ThoughtWorks.CruiseControl.Core.Config
 		{
 			if (UnusedNodeEventHandler != null)
 				UnusedNodeEventHandler(node);
-//			Console.Out.WriteLine("node.OuterXml = {0}", node.OuterXml);
-//			Log.Warning(string.Format("Unused node detected in configuration: {0} - {1}", );
 		}
 	}
 }
