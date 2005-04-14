@@ -1,11 +1,14 @@
 using System;
 using System.Collections;
 using System.Text;
+using System.Text.RegularExpressions;
 
 namespace ThoughtWorks.CruiseControl.Core.Util
 {
 	public class StringUtil
 	{
+		private static Regex NullStringRegex = new Regex("\0");
+
 		public static bool Contains(string text, string fragment)
 		{
 			return text.IndexOf(fragment) > -1;
@@ -115,6 +118,11 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 				builder.Append(obj.ToString());
 			}
 			return builder.ToString();
+		}
+
+		public static string RemoveNulls(string s)
+		{
+			return NullStringRegex.Replace(s, string.Empty).TrimStart();
 		}
 	}
 }

@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.IO;
 using System.Text;
 using System.Xml.Serialization;
 using ThoughtWorks.CruiseControl.Core.Tasks;
@@ -271,7 +272,19 @@ namespace ThoughtWorks.CruiseControl.Core
 					 ! DoModificationsExistWithinModificationDelay(modificationDelaySeconds));
 		}
 
-		/// <summary>
+		public string BaseFromArtifactsDirectory(string fileToBase, string defaultFilename)
+    	{
+			if (StringUtil.IsBlank(fileToBase)) return Path.Combine(ArtifactDirectory, defaultFilename);
+    		return Path.Combine(ArtifactDirectory, fileToBase);
+    	}
+
+		public string BaseFromWorkingDirectory(string fileToBase, string defaultFilename)
+    	{
+			if (StringUtil.IsBlank(fileToBase)) return Path.Combine(WorkingDirectory, defaultFilename);
+    		return Path.Combine(WorkingDirectory, fileToBase);
+    	}
+
+    	/// <summary>
 		/// Checks whether modifications occurred within the modification delay.  If the
 		/// modification delay is not set (has a value of zero or less), this method
 		/// will always return false.

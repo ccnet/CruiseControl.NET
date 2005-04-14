@@ -6,7 +6,12 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 	{
 		public static ProcessResult CreateSuccessfulResult()
 		{
-			return new ProcessResult("success", "", ProcessResult.SUCCESSFUL_EXIT_CODE, false);
+			return CreateSuccessfulResult("success");
+		}
+
+		public static ProcessResult CreateSuccessfulResult(string stdOut)
+		{
+			return new ProcessResult(stdOut, "", ProcessResult.SUCCESSFUL_EXIT_CODE, false);
 		}
 
 		public static ProcessResult CreateTimedOutResult()

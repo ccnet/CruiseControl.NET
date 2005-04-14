@@ -1,6 +1,5 @@
 using System;
 using System.IO;
-using System.Text.RegularExpressions;
 using System.Xml;
 using ThoughtWorks.CruiseControl.Core.Util;
 
@@ -52,14 +51,7 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
 
 		private void WriteOutput(string output)
 		{
-			string xmlRemovedOutput = RemoveNulls(output);
-			_writer.WriteNode(xmlRemovedOutput);
-		}
-
-		private string RemoveNulls(string s)
-		{
-			Regex nullStringRegex = new Regex("\0");
-			return nullStringRegex.Replace(s, string.Empty).TrimStart();
+			_writer.WriteNode(StringUtil.RemoveNulls(output));
 		}
 
 		private void WriteException(IIntegrationResult result)

@@ -1,6 +1,7 @@
 using System.IO;
 using System.Xml;
 using Exortech.NetReflector;
+using ThoughtWorks.CruiseControl.Core.Util;
 using ThoughtWorks.CruiseControl.Remote;
 
 namespace ThoughtWorks.CruiseControl.Core.Publishers
@@ -27,7 +28,7 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
 		// This is only public because of a nasty hack which I (MR) put in the code. To be made private later...
 		public string LogDirectory(string artifactDirectory)
 		{
-			if (ConfiguredLogDirectory == null || ConfiguredLogDirectory == "")
+			if (StringUtil.IsBlank(ConfiguredLogDirectory))
 			{
 				return Path.Combine(artifactDirectory, DEFAULT_LOG_SUBDIRECTORY);
 			}

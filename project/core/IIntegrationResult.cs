@@ -35,5 +35,6 @@ namespace ThoughtWorks.CruiseControl.Core
 		void MarkStartTime();
 		void MarkEndTime();
 		bool ShouldRunBuild(int modificationDelaySeconds);
+		string BaseFromArtifactsDirectory(string fileToBase, string defaultFilename);
 	}
 }

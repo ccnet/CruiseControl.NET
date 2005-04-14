@@ -4,26 +4,27 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 {
 	public class WildCardPath
 	{
-		private string _pathPattern;
+		private string pathPattern;
+
 		public WildCardPath(string pathPattern)
-		{										 
-			_pathPattern = pathPattern;	
+		{
+			this.pathPattern = pathPattern;
 		}
 
 		public FileInfo[] GetFiles()
 		{
-			FileInfo[] files= new FileInfo[0];
-			if(HasWildCards(_pathPattern))
+			FileInfo[] files = new FileInfo[0];
+			if (HasWildCards(pathPattern))
 			{
-				string dir = Path.GetDirectoryName(_pathPattern);
+				string dir = Path.GetDirectoryName(pathPattern);
 				DirectoryInfo info = new DirectoryInfo(dir);
-				string pattern = Path.GetFileName(_pathPattern);
-				if(info.Exists)
-					files =info.GetFiles(pattern);
+				string pattern = Path.GetFileName(pathPattern);
+				if (info.Exists)
+					files = info.GetFiles(pattern);
 			}
 			else
 			{
-				files = new FileInfo[] { new FileInfo(_pathPattern.Trim()) };
+				files = new FileInfo[] {new FileInfo(pathPattern.Trim())};
 			}
 			return files;
 		}
