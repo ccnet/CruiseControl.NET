@@ -1,14 +1,8 @@
 using System.IO;
 using System.Xml;
-using Exortech.NetReflector;
 using NUnit.Framework;
-using ThoughtWorks.CruiseControl.Core;
 using ThoughtWorks.CruiseControl.Core.Config;
-using ThoughtWorks.CruiseControl.Core.Sourcecontrol;
-using ThoughtWorks.CruiseControl.Core.Tasks.Test;
 using ThoughtWorks.CruiseControl.Core.Util;
-using ThoughtWorks.CruiseControl.Remote;
-using ThoughtWorks.CruiseControl.UnitTests.Core.Publishers;
 
 namespace ThoughtWorks.CruiseControl.UnitTests.Core.Config
 {
@@ -59,83 +53,6 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Config
 			FileInfo configFile = new FileInfo(TempFileUtil.CreateTempXmlFile(TempFileUtil.CreateTempDir(this), "loadernet.config"
 				, "<test><a><b/></test>"));
 			fileLoader.LoadConfiguration(configFile);
-		}
-
-		[Test]
-		public void PopulateProjectsFromXml()
-		{
-			string projectXml = ConfigurationFixture.GenerateProjectXml("test");
-			IConfiguration configuration = fileLoader.PopulateProjectsFromXml(ConfigurationFixture.GenerateConfig(projectXml));
-			ValidateProject(configuration, "test");
-		}
-
-		[Test]
-		public void PopulateProjectsFromXml_TwoProjects()
-		{
-			string projectXml = ConfigurationFixture.GenerateProjectXml("test");
-			string project2Xml = ConfigurationFixture.GenerateProjectXml("test2");
-			IConfiguration configuration = fileLoader.PopulateProjectsFromXml(ConfigurationFixture.GenerateConfig(projectXml + project2Xml));
-			ValidateProject(configuration, "test");
-			ValidateProject(configuration, "test2");
-		}
-
-		[Test, ExpectedException(typeof(ConfigurationException))]
-		public void Populate_MissingProjectProperties()
-		{
-			string projectXml = @"<project />";
-			fileLoader.PopulateProjectsFromXml(ConfigurationFixture.GenerateConfig(projectXml));
-		}
-
-		private void ValidateProject(IConfiguration configuration, string projectName)
-		{
-			Project project = configuration.Projects[projectName] as Project;
-			Assert.AreEqual(projectName, project.Name);
-			Assert.IsTrue(project.Builder is MockBuilder);
-			Assert.IsTrue(project.SourceControl is NullSourceControl);
-			Assert.AreEqual(1, project.Publishers.Length);
-			Assert.IsTrue(project.Publishers[0] is MockPublisher);
-
-		}
-
-		[Test, ExpectedException(typeof(ConfigurationException))]
-		public void PopulateProjectsFromXml_EmptyDocument()
-		{
-			fileLoader.PopulateProjectsFromXml(new XmlDocument());
-		}
-
-		[Test, ExpectedException(typeof(ConfigurationException))]
-		public void PopulateProjectsFromXml_InvalidRootElement()
-		{
-			fileLoader.PopulateProjectsFromXml(XmlUtil.CreateDocument("<loader/>"));
-		}
-        
-		[Test]
-		// [CCNET-63] XML comments before project tag was causing NetReflectorException
-		public void PopulateProjectsFromXml_WithComments()
-		{
-			string projectXml = @"<!-- A Comment -->" + ConfigurationFixture.GenerateProjectXml("test");
-			IConfiguration configuration = fileLoader.PopulateProjectsFromXml(ConfigurationFixture.GenerateConfig(projectXml));
-			ValidateProject(configuration, "test");
-		}
-
-		[Test]
-		public void PopulateCustomProjectFromXml()
-		{
-			string xml = @"<customtestproject name=""foo"" />";
-			IConfiguration configuration = fileLoader.PopulateProjectsFromXml(ConfigurationFixture.GenerateConfig(xml));
-			Assert.IsNotNull(configuration.Projects["foo"]);
-			Assert.IsTrue(configuration.Projects["foo"] is CustomTestProject);
-			Assert.AreEqual("foo", ((CustomTestProject) configuration.Projects["foo"]).Name);
-		}
-
-		[ReflectorType("customtestproject")]
-			class CustomTestProject : ProjectBase, IProject
-		{
-			public ProjectActivity CurrentActivity { get { return ProjectActivity.Building; } }
-			public IIntegrationResult RunIntegration(BuildCondition buildCondition) { return null; }
-			public IntegrationStatus LatestBuildStatus { get { return IntegrationStatus.Success; } }
-			public void Purge(bool purgeWorkingDirectory, bool purgeArtifactDirectory, bool purgeSourceControlEnvironment) { }
-			public string WebURL { get {return ""; } }
 		}
 	}
 }

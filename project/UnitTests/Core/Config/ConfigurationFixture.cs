@@ -22,15 +22,15 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Config
 			return string.Format("<cruisecontrol>{0}</cruisecontrol>", projectXml);
 		}
 
-		public static string GenerateProjectXml(string name, string buildXml, string sourceControlXml, string publishersXml, string scheduleXml, string historyXml)
+		public static string GenerateProjectXml(string name, string buildXml, string sourceControlXml, string publishersXml, string historyXml)
 		{
-			return string.Format(@"<project name=""{0}"">{1}{2}{3}{4}{5}</project>", 
-				name, buildXml, sourceControlXml, publishersXml, scheduleXml, historyXml);
+			return string.Format(@"<project name=""{0}"">{1}{2}{3}{4}</project>", 
+				name, buildXml, sourceControlXml, publishersXml, historyXml);
 		}
 
 		public static string GenerateProjectXml(string name)
 		{
-			return GenerateProjectXml(name, GenerateMockBuildXml(), GenerateNullSourceControlXml(), GenerateMockPublisherXml(), GenerateScheduleXml(), GenerateStateManagerXml());
+			return GenerateProjectXml(name, GenerateMockBuildXml(), GenerateNullSourceControlXml(), GenerateMockPublisherXml(), GenerateStateManagerXml());
 		}
 
 		public static string GenerateMockBuildXml()
@@ -46,16 +46,6 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Config
 		public static string GenerateMockPublisherXml()
 		{
 			return @"<publishers><mockpublisher/></publishers>";
-		}
-
-		public static string GenerateScheduleXml()
-		{
-			return GenerateScheduleXml(1);
-		}
-
-		public static string GenerateScheduleXml(int iterations)
-		{
-			return string.Format(@"<schedule type=""schedule"" sleepSeconds=""1"" iterations=""{0}""/>", iterations);
 		}
 
 		public static string GenerateStateManagerXml()

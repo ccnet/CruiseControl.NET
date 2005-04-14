@@ -384,6 +384,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Core\Config\NetReflectorConfigurationReaderTest.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Core\Config\ValidatingLoaderTest.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
