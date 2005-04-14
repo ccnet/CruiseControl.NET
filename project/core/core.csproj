@@ -689,6 +689,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "sourcecontrol\VssLocale.ja.resx"
+                    DependentUpon = "VssLocale.cs"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
                     RelPath = "sourcecontrol\VssLocale.resx"
                     DependentUpon = "VssLocale.cs"
                     BuildAction = "EmbeddedResource"
