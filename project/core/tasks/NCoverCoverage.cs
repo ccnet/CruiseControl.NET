@@ -63,7 +63,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 
 		private void GenerateReport()
 		{
-			string actualPath = new FileInfo(_nunitTask.Assembly[0]).DirectoryName + @"\" + "actual.xml";
+			string actualPath = new FileInfo(_nunitTask.Assemblies[0]).DirectoryName + @"\" + "actual.xml";
 			string args = "/actual:" + "\"" + actualPath + "\"" + " /report-name:" + "\"" + _reportName + "\"";
 			Log.Debug(string.Format("<report>{0} {1}</report>", _ncoverReportBinPath, args));
 			RunProcess(_ncoverReportBinPath, args);

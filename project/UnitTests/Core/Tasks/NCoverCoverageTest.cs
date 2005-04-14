@@ -53,7 +53,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 		public void ShouldReportToFile()
 		{
 			_coverage.NUnitTask = new NUnitTask();
-			_coverage.NUnitTask.Assembly = new string[1] {@"c:\temp\foo.dll"};
+			_coverage.NUnitTask.Assemblies = new string[1] {@"c:\temp\foo.dll"};
 
 			_processMock.ExpectAndReturn("Execute", ExpectedProcessResult, _constraint);
 			_processMock.SetupResult("Execute", ExpectedProcessResult, typeof (ProcessInfo));
@@ -69,7 +69,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 		public void ShouldLoadActualFileFromFolderWhereAssemblyLies()
 		{
 			_coverage.NUnitTask = new NUnitTask();
-			_coverage.NUnitTask.Assembly = new string[1] {@"c:\temp\foo.dll"};
+			_coverage.NUnitTask.Assemblies = new string[1] {@"c:\temp\foo.dll"};
 			_processMock.ExpectAndReturn("Execute", ExpectedProcessResult, _constraint);
 			_processMock.SetupResult("Execute", ExpectedProcessResult, typeof (ProcessInfo));
 			_coverage.ReportName = ReportName;
