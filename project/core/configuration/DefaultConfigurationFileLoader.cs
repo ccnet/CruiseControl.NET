@@ -20,7 +20,7 @@ namespace ThoughtWorks.CruiseControl.Core.Config
 		public DefaultConfigurationFileLoader(NetReflectorConfigurationReader reader)
 		{
 			this.reader = reader;
-			reader.UnusedNodeEventHandler += new UnusedNodeEventHandler(WarnOnUnusedNodes);
+			reader.InvalidNodeEventHandler += new InvalidNodeEventHandler(WarnOnInvalidNode);
 			handler = new ValidationEventHandler(HandleSchemaEvent);
 		}
 
@@ -81,9 +81,9 @@ namespace ThoughtWorks.CruiseControl.Core.Config
 			Log.Info("Loading config schema: " + args.Message);
 		}
 
-		private void WarnOnUnusedNodes(XmlNode node)
+		private void WarnOnInvalidNode(InvalidNodeEventArgs args)
 		{
-			Log.Warning(string.Format("Unused node detected in configuration: {0}.", node.OuterXml));		
+			Log.Warning(args.Message);		
 		}
 	}
 }

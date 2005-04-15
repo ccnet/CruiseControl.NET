@@ -12,14 +12,14 @@ namespace ThoughtWorks.CruiseControl.Core.Config
 		private readonly NetReflectorTypeTable typeTable;
 		private NetReflectorReader reader;
 
-		public event UnusedNodeEventHandler UnusedNodeEventHandler;
+		public event InvalidNodeEventHandler InvalidNodeEventHandler;
 
 		public NetReflectorConfigurationReader()
 		{
 			typeTable = new NetReflectorTypeTable();
 			typeTable.Add(AppDomain.CurrentDomain);
 			typeTable.Add(Directory.GetCurrentDirectory(), CONFIG_ASSEMBLY_PATTERN);
-			typeTable.UnusedNode += new UnusedNodeEventHandler(HandleUnusedNode);
+			typeTable.InvalidNode += new InvalidNodeEventHandler(HandleUnusedNode);
 			reader = new NetReflectorReader(typeTable);
 		}
 
@@ -54,10 +54,10 @@ namespace ThoughtWorks.CruiseControl.Core.Config
 			}
 		}
 
-		private void HandleUnusedNode(XmlNode node)
+		private void HandleUnusedNode(InvalidNodeEventArgs args)
 		{
-			if (UnusedNodeEventHandler != null)
-				UnusedNodeEventHandler(node);
+			if (InvalidNodeEventHandler != null)
+				InvalidNodeEventHandler(args);
 		}
 	}
 }

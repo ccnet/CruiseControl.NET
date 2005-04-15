@@ -16,14 +16,14 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Config
 	public class NetReflectorConfigurationReaderTest
 	{
 		private NetReflectorConfigurationReader reader;
-		private IList unusedNodes;
+		private IList invalidNodes;
 
 		[SetUp]
 		protected void CreateReader()
 		{
 			reader = new NetReflectorConfigurationReader();
-			reader.UnusedNodeEventHandler += new UnusedNodeEventHandler(CheckUnusedNodes);
-			unusedNodes = new ArrayList();
+			reader.InvalidNodeEventHandler += new InvalidNodeEventHandler(CheckInvalidNode);
+			invalidNodes = new ArrayList();
 		}
 
 		[Test]
@@ -68,8 +68,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Config
 			string xml = @"<customtestproject name=""foo"" bar=""baz"" />";
 			IConfiguration configuration = reader.Read(ConfigurationFixture.GenerateConfig(xml));
 			Assert.IsNotNull(configuration.Projects["foo"]);
-			Assert.AreEqual(1, unusedNodes.Count);
-			Assert.AreEqual("bar", ((XmlNode)unusedNodes[0]).Name);
+			Assert.AreEqual(1, invalidNodes.Count);
+			Assert.AreEqual("bar", ((InvalidNodeEventArgs)invalidNodes[0]).Node.Name);
 		}
 
 		[Test, ExpectedException(typeof(ConfigurationException))]
@@ -99,8 +99,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Config
 			Assert.IsTrue(project.SourceControl is NullSourceControl);
 			Assert.AreEqual(1, project.Publishers.Length);
 			Assert.IsTrue(project.Publishers[0] is MockPublisher);
-			if (unusedNodes.Count > 0) 
-				Assert.Fail("The xml contains nodes that are no longer used: {0}.", ((XmlNode)unusedNodes[0]).OuterXml);				
+			if (invalidNodes.Count > 0) 
+				Assert.Fail("The xml contains nodes that are no longer used: {0}.", ((XmlNode)invalidNodes[0]).OuterXml);				
 		}
 
 		[ReflectorType("customtestproject")]
@@ -113,9 +113,9 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Config
 			public string WebURL { get {return ""; } }
 		}
 
-		private void CheckUnusedNodes(XmlNode node)
+		private void CheckInvalidNode(InvalidNodeEventArgs args)
 		{
-			unusedNodes.Add(node);
+			invalidNodes.Add(args);
 		}
 	}
 }
