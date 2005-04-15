@@ -41,7 +41,7 @@ namespace ThoughtWorks.CruiseControl.Service
 		protected override void OnBeforeInstall(IDictionary stateSaver)
 		{
 			string serviceName = ServiceName(stateSaver);
-			stateSaver[serviceName] = serviceName;
+			stateSaver[ServiceNameSwitch] = serviceName;
 			SetServiceName(serviceName);
 			base.OnBeforeInstall(stateSaver);
 		}
