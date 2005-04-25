@@ -295,11 +295,6 @@
                     BuildAction = "EmbeddedResource"
                 />
                 <File
-                    RelPath = "ServerLogFileReader.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
                     RelPath = "Simian.aspx"
                     BuildAction = "Content"
                 />

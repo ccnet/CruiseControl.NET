@@ -409,6 +409,16 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Log\CircularArray.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Log\EnumeratorDirection.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Log\ServerLogFileReader.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -839,6 +849,11 @@
                 />
                 <File
                     RelPath = "tasks\NUnitTask.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "tasks\ProcessTaskResult.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

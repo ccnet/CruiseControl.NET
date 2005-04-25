@@ -1,90 +1,61 @@
-using System;
 using System.Configuration;
 using System.IO;
-using System.Text;
+using ThoughtWorks.CruiseControl.Core.Util;
 
-namespace ThoughtWorks.Core.Log
+namespace ThoughtWorks.CruiseControl.Core.Logging
 {
 	public class ServerLogFileReader
 	{
-		private string			_filename;
-		private int				_maxLines;
+		private const int DefaultMaxLines = 80;
+		private string filename;
+		private int maxLines;
 
-		public ServerLogFileReader()
-		{
-			string linesToReadConfig = ConfigurationSettings.AppSettings["ServerLogFileLines"];
-			_maxLines = (linesToReadConfig != null) ? int.Parse(ConfigurationSettings.AppSettings["ServerLogFileLines"]) : 80;
-
-			_filename = ConfigurationSettings.AppSettings["ServerLogFilePath"];
-			if (_filename == null || _filename == string.Empty)
-			{
-				_filename = "ccnet.log";
-			}
-		}
+		public ServerLogFileReader() : this(ReadFilenameFromConfig(), ReadMaxLinesFromConfig())
+		{}
 
 		public ServerLogFileReader(string filename, int maxLines)
 		{
-			_filename = filename;
-			_maxLines = maxLines;
+			this.filename = filename;
+			this.maxLines = maxLines;
 		}
 
-		public string Read() 
-		{ 
-			StringBuilder builder = new StringBuilder(10000);
-			int readLines = 0;
+		public string Read()
+		{
+			return Read(EnumeratorDirection.Forward);
+		}
+
+		public string Read(EnumeratorDirection direction)
+		{
+			CircularArray buffer = new CircularArray(maxLines);
 			using (Stream stream = OpenFile())
 			{
-				SeekPastEnd(stream);
-				while (MovePrevious(stream) && readLines < _maxLines)
+				using (StreamReader reader = new StreamReader(stream))
 				{
-					builder.Insert(0, ReadChar(stream));
-					if (HasReadNewLine(builder))
+					string line;
+					while ((line = reader.ReadLine()) != null)
 					{
-						readLines++;
+						buffer.Add(line);
 					}
 				}
 			}
-			return builder.ToString().TrimStart();
+			return buffer.ToString(direction);
 		}
 
 		private Stream OpenFile()
 		{
-			return new BufferedStream(new FileStream(_filename, FileMode.Open, FileAccess.Read, FileShare.ReadWrite));
+			return new FileStream(filename, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
 		}
 
-		private void SeekPastEnd(Stream stream)
+		private static string ReadFilenameFromConfig()
 		{
-			stream.Seek(1, SeekOrigin.End);
+			string filename = ConfigurationSettings.AppSettings["ServerLogFilePath"];
+			return StringUtil.IsBlank(filename) ? "ccnet.log" : filename;
 		}
 
-		private bool MovePrevious(Stream stream)
+		private static int ReadMaxLinesFromConfig()
 		{
-			if (stream.Position > 1)
-			{
-				stream.Seek(-2, SeekOrigin.Current);
-				return true;
-			}
-			else
-			{
-				return false;
-			}
-		}
-
-		private bool HasReadNewLine(StringBuilder builder)
-		{
-			if (builder.Length >= Environment.NewLine.Length)
-			{
-				if (builder.ToString(0, Environment.NewLine.Length).Equals(Environment.NewLine))
-				{
-					return true;
-				}
-			}
-			return false;
-		}
-
-		private char ReadChar(Stream stream)
-		{
-			return (char)stream.ReadByte();
+			string linesToReadConfig = ConfigurationSettings.AppSettings["ServerLogFileLines"];
+			return (linesToReadConfig != null) ? int.Parse(ConfigurationSettings.AppSettings["ServerLogFileLines"]) : DefaultMaxLines;
 		}
 	}
 }

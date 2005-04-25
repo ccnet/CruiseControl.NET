@@ -90,11 +90,6 @@
                     HintPath = "..\..\..\..\..\..\WINDOWS\Microsoft.NET\Framework\v1.1.4322\System.dll"
                 />
                 <Reference
-                    Name = "System.Data"
-                    AssemblyName = "System.Data"
-                    HintPath = "..\..\..\..\..\..\WINDOWS\Microsoft.NET\Framework\v1.1.4322\System.Data.dll"
-                />
-                <Reference
                     Name = "System.XML"
                     AssemblyName = "System.Xml"
                     HintPath = "..\..\..\..\..\..\WINDOWS\Microsoft.NET\Framework\v1.1.4322\System.XML.dll"
@@ -404,9 +399,23 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Core\Log\CircularArrayTest.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Core\Log\CircularArrayTestResources.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Core\Log\ServerLogFileReaderTest.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Core\Log\TestLog.txt"
+                    BuildAction = "EmbeddedResource"
                 />
                 <File
                     RelPath = "Core\Publishers\BuildLogTransformerTest.cs"

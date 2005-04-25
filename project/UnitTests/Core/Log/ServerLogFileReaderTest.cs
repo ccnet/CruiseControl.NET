@@ -2,10 +2,10 @@ using System;
 using System.IO;
 using System.Text.RegularExpressions;
 using NUnit.Framework;
-using ThoughtWorks.Core.Log;
+using ThoughtWorks.CruiseControl.Core.Logging;
 using ThoughtWorks.CruiseControl.Core.Util;
 
-namespace ThoughtWorks.CruiseControl.UnitTests.Core.Log
+namespace ThoughtWorks.CruiseControl.UnitTests.Core.Logging
 {
 	[TestFixture]
 	public class ServerLogFileReaderTest

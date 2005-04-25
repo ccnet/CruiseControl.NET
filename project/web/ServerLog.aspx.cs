@@ -2,6 +2,7 @@ using System;
 using System.Configuration;
 using System.Web.UI;
 using System.Web.UI.HtmlControls;
+using ThoughtWorks.CruiseControl.Core.Logging;
 
 namespace ThoughtWorks.CruiseControl.Web
 {
