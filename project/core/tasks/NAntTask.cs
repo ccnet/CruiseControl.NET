@@ -27,7 +27,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 			_executor = executor;
 		}
 
-		private string _executable = DEFAULT_EXECUTABLE;
+		private string executable = DEFAULT_EXECUTABLE;
 		private string buildFile = "";
 		private string configuredBaseDirectory = "";
 		private string buildArgs = "";
@@ -42,8 +42,8 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 		[ReflectorProperty("executable", Required = false)] 
 		public string Executable
 		{
-			get { return _executable; }
-			set { _executable = value; }
+			get { return executable; }
+			set { executable = value; }
 		}
 
 		[ReflectorProperty("buildFile", Required = false)] 
@@ -129,18 +129,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 
 		private string BaseDirectory(IIntegrationResult result)
 		{
-			if (StringUtil.IsBlank(configuredBaseDirectory))
-			{
-				return result.WorkingDirectory;
-			}
-			else if (Path.IsPathRooted(configuredBaseDirectory))
-			{
-				return configuredBaseDirectory;
-			}
-			else
-			{
-				return Path.Combine(result.WorkingDirectory, configuredBaseDirectory);
-			}
+			return result.BaseFromWorkingDirectory(configuredBaseDirectory);
 		}
 
 		protected ProcessResult AttemptExecute(ProcessInfo info)

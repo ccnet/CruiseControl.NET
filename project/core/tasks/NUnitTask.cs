@@ -24,11 +24,11 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 		public string NUnitPath;
 
 		[ReflectorProperty("outputfile", Required=false)]
-		public string OutputFile;
+		public string OutputFile = DefaultOutputFile;
 
 		public virtual void Run(IIntegrationResult result)
 		{
-			string outputFile = result.BaseFromArtifactsDirectory(OutputFile, DefaultOutputFile);
+			string outputFile = result.BaseFromArtifactsDirectory(OutputFile);
 			string args = new NUnitArgument(Assemblies, outputFile).ToString();
 			Log.Debug(string.Format("Running unit tests: {0} {1}", NUnitPath, args));
 

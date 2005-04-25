@@ -126,46 +126,28 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 		public void ShouldBaseRelativePathFromArtifactsDirectory()
 		{
 			result.ArtifactDirectory = @"c:\";
-			Assert.AreEqual(@"c:\hello.bat", result.BaseFromArtifactsDirectory("hello.bat", "default.bat"));
+			Assert.AreEqual(@"c:\hello.bat", result.BaseFromArtifactsDirectory("hello.bat"));
 		}
 
 		[Test]
 		public void ShouldNotReBaseRelativeToArtifactsDirectoryForAbsolutePath()
 		{
 			result.ArtifactDirectory = @"c:\";
-			Assert.AreEqual(@"d:\hello.bat", result.BaseFromArtifactsDirectory(@"d:\hello.bat", "default.bat"));
-			Assert.AreEqual(@"c:\temp\hello.bat", result.BaseFromArtifactsDirectory(@"c:\temp\hello.bat", "default.bat"));
-		}
-
-		[Test]
-		public void ShouldBaseFromArtifactsDirUsingDefaultFileIfPathIsEmptyOrNull()
-		{
-			result.ArtifactDirectory = @"c:\";
-			Assert.AreEqual(@"c:\foo.bat", result.BaseFromArtifactsDirectory(null, "foo.bat"));
-			Assert.AreEqual(@"c:\foo.bat", result.BaseFromArtifactsDirectory(string.Empty, "foo.bat"));
+			Assert.AreEqual(@"d:\hello.bat", result.BaseFromArtifactsDirectory(@"d:\hello.bat"));
 		}
 
 		[Test]
 		public void ShouldBaseRelativePathFromWorkingDirectory()
 		{
 			result.WorkingDirectory = @"c:\";
-			Assert.AreEqual(@"c:\hello.bat", result.BaseFromWorkingDirectory("hello.bat", "default.bat"));
+			Assert.AreEqual(@"c:\hello.bat", result.BaseFromWorkingDirectory("hello.bat"));
 		}
 
 		[Test]
 		public void ShouldNotReBaseRelativeToWorkingDirectoryForAbsolutePath()
 		{
 			result.WorkingDirectory = @"c:\";
-			Assert.AreEqual(@"d:\hello.bat", result.BaseFromWorkingDirectory(@"d:\hello.bat", "default.bat"));
-			Assert.AreEqual(@"c:\temp\hello.bat", result.BaseFromWorkingDirectory(@"c:\temp\hello.bat", "default.bat"));
-		}
-
-		[Test]
-		public void ShouldBaseFromWorkingDirUsingDefaultFileIfPathIsEmptyOrNull()
-		{
-			result.WorkingDirectory = @"c:\";
-			Assert.AreEqual(@"c:\foo.bat", result.BaseFromWorkingDirectory(null, "foo.bat"));
-			Assert.AreEqual(@"c:\foo.bat", result.BaseFromWorkingDirectory(string.Empty, "foo.bat"));
+			Assert.AreEqual(@"d:\hello.bat", result.BaseFromWorkingDirectory(@"d:\hello.bat"));
 		}
 	}
 }

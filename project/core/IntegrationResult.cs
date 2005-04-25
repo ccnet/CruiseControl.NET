@@ -272,17 +272,17 @@ namespace ThoughtWorks.CruiseControl.Core
 					 ! DoModificationsExistWithinModificationDelay(modificationDelaySeconds));
 		}
 
-		public string BaseFromArtifactsDirectory(string fileToBase, string defaultFilename)
+    	public string BaseFromArtifactsDirectory(string pathToBase)
     	{
-			if (StringUtil.IsBlank(fileToBase)) return Path.Combine(ArtifactDirectory, defaultFilename);
-    		return Path.Combine(ArtifactDirectory, fileToBase);
+			if (StringUtil.IsBlank(pathToBase)) return ArtifactDirectory;
+    		return Path.Combine(ArtifactDirectory, pathToBase);
     	}
 
-		public string BaseFromWorkingDirectory(string fileToBase, string defaultFilename)
+		public string BaseFromWorkingDirectory(string pathToBase)
     	{
-			if (StringUtil.IsBlank(fileToBase)) return Path.Combine(WorkingDirectory, defaultFilename);
-    		return Path.Combine(WorkingDirectory, fileToBase);
-    	}
+			if (StringUtil.IsBlank(pathToBase)) return WorkingDirectory;
+    		return Path.Combine(WorkingDirectory, pathToBase);
+		}
 
     	/// <summary>
 		/// Checks whether modifications occurred within the modification delay.  If the

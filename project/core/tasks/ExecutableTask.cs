@@ -1,5 +1,4 @@
 using System;
-using System.IO;
 using Exortech.NetReflector;
 using ThoughtWorks.CruiseControl.Core.Util;
 using ThoughtWorks.CruiseControl.Remote;
@@ -94,18 +93,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 
 		private string BaseDirectory(IIntegrationResult result)
 		{
-			if (configuredBaseDirectory == null || configuredBaseDirectory == "")
-			{
-				return result.WorkingDirectory;
-			}
-			else if (Path.IsPathRooted(configuredBaseDirectory))
-			{
-				return configuredBaseDirectory;
-			}
-			else
-			{
-				return Path.Combine(result.WorkingDirectory, configuredBaseDirectory);
-			}
+			return result.BaseFromWorkingDirectory(configuredBaseDirectory);
 		}
 
 

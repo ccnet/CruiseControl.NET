@@ -110,7 +110,6 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 			project.ConfiguredWorkingDirectory = @"c:\temp";
 			project.Labeller = (ILabeller) mockLabeller.MockInstance;
 			project.StateManager = (IStateManager) mockStateManager.MockInstance;
-			project.WebURL = Project.DEFAULT_WEB_URL;
 			project.ConfiguredArtifactDirectory = project.ConfiguredWorkingDirectory;
 			return project;
 		}
