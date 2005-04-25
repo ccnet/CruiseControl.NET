@@ -952,11 +952,6 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "Web\ServerLogFileReaderTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
                     RelPath = "Web\test.config"
                     BuildAction = "None"
                 />
