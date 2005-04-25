@@ -1,6 +1,7 @@
 using System.IO;
 using Exortech.NetReflector;
 using ThoughtWorks.CruiseControl.Core.Triggers;
+using ThoughtWorks.CruiseControl.Core.Util;
 using ThoughtWorks.CruiseControl.Remote;
 
 namespace ThoughtWorks.CruiseControl.Core
@@ -11,8 +12,8 @@ namespace ThoughtWorks.CruiseControl.Core
 		public static readonly string DefaultArtifactSubDirectory = "Artifacts";
 
 		private string _name;
-		private string _configuredWorkingDirectory = "";
-		private string _configuredArtifactDirectory = "";
+		private string configuredWorkingDirectory = "";
+		private string configuredArtifactDirectory = "";
 		private ITrigger[] triggers = new ITrigger[] { new IntervalTrigger() };
 		private ExternalLink[] externalLinks = new ExternalLink[0];
 
@@ -33,15 +34,15 @@ namespace ThoughtWorks.CruiseControl.Core
 		[ReflectorProperty("workingDirectory", Required=false)]
 		public string ConfiguredWorkingDirectory
 		{
-			get { return _configuredWorkingDirectory; }
-			set { _configuredWorkingDirectory = value; }
+			get { return configuredWorkingDirectory; }
+			set { configuredWorkingDirectory = value; }
 		}
 
 		[ReflectorProperty("artifactDirectory", Required=false)]
 		public string ConfiguredArtifactDirectory
 		{
-			get { return _configuredArtifactDirectory; }
-			set { _configuredArtifactDirectory = value; }
+			get { return configuredArtifactDirectory; }
+			set { configuredArtifactDirectory = value; }
 		}
 
 		[ReflectorArray("externalLinks", Required=false)]
@@ -55,14 +56,11 @@ namespace ThoughtWorks.CruiseControl.Core
 		{
 			get
 			{
-				if (_configuredWorkingDirectory == null || _configuredWorkingDirectory == string.Empty)
+				if (StringUtil.IsBlank(configuredWorkingDirectory))
 				{
 					return new DirectoryInfo(Path.Combine(Name, DefaultWorkingSubDirectory)).FullName;
 				}
-				else
-				{
-					return new DirectoryInfo(_configuredWorkingDirectory).FullName;
-				}
+				return new DirectoryInfo(configuredWorkingDirectory).FullName;
 			}
 		}
 
@@ -70,14 +68,11 @@ namespace ThoughtWorks.CruiseControl.Core
 		{
 			get
 			{
-				if (_configuredArtifactDirectory == null || _configuredArtifactDirectory == string.Empty)
+				if (StringUtil.IsBlank(configuredArtifactDirectory))
 				{
 					return new DirectoryInfo(Path.Combine(Name, DefaultArtifactSubDirectory)).FullName;
 				}
-				else
-				{
-					return new DirectoryInfo(_configuredArtifactDirectory).FullName;
-				}
+				return new DirectoryInfo(configuredArtifactDirectory).FullName;
 			}
 		}
 	}

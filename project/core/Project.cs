@@ -1,3 +1,4 @@
+using System;
 using System.ComponentModel;
 using System.IO;
 using Exortech.NetReflector;
@@ -37,62 +38,60 @@ namespace ThoughtWorks.CruiseControl.Core
 		/// </summary>
 		public event IntegrationCompletedEventHandler IntegrationCompleted;
 
-		public const string DEFAULT_WEB_URL = "http://localhost/CruiseControl.NET/";
-
-		private string _webURL = DEFAULT_WEB_URL;
-		private ISourceControl _sourceControl = new NullSourceControl();
-		private ITask _builder = new NullTask();
-		private ILabeller _labeller = new DefaultLabeller();
-		private ITask[] _tasks = new ITask[0];		
-		private IIntegrationCompletedEventHandler[] _publishers = new IIntegrationCompletedEventHandler[0];
-		private ProjectActivity _currentActivity = ProjectActivity.Sleeping;
-		private int _modificationDelaySeconds = 0;
-		private IStateManager _state;
-		private IIntegrationResultManager _integrationResultManager;
-		private bool _publishExceptions = true;
+		private string webUrl = DefaultUrl();
+		private ISourceControl sourceControl = new NullSourceControl();
+		private ITask builder = new NullTask();
+		private ILabeller labeller = new DefaultLabeller();
+		private ITask[] tasks = new ITask[0];
+		private IIntegrationCompletedEventHandler[] publishers = new IIntegrationCompletedEventHandler[0];
+		private ProjectActivity currentActivity = ProjectActivity.Sleeping;
+		private int modificationDelaySeconds = 0;
+		private IStateManager state;
+		private IIntegrationResultManager integrationResultManager;
+		private bool publishExceptions = true;
 		private IIntegratable integratable;
 
 		public Project()
 		{
-			_state = new ProjectStateManager(this, new IntegrationStateManager());
-			_integrationResultManager = new IntegrationResultManager(this);
-			this.integratable = new IntegrationRunner(_integrationResultManager, this);
+			state = new ProjectStateManager(this, new IntegrationStateManager());
+			integrationResultManager = new IntegrationResultManager(this);
+			integratable = new IntegrationRunner(integrationResultManager, this);
 		}
 
 		// This is nasty - test constructors and real constructors should be linked, but we have circular references here that need
 		// to be sorted out
-		public Project(IIntegratable integratable) : this ()
-		{ 
+		public Project(IIntegratable integratable) : this()
+		{
 			this.integratable = integratable;
 		}
 
 		[ReflectorProperty("state", InstanceTypeKey="type", Required=false)]
 		[Description("State")]
-		public virtual IStateManager StateManager
+		public IStateManager StateManager
 		{
-			get { return _state; }
-			set { _state = value; }
+			get { return state; }
+			set { state = value; }
 		}
 
 		[ReflectorProperty("webURL", Required=false)]
 		public string WebURL
 		{
-			get { return _webURL; }
-			set { _webURL = value; }
+			get { return webUrl; }
+			set { webUrl = value; }
 		}
 
 		[ReflectorProperty("build", InstanceTypeKey="type", Required=false)]
 		public ITask Builder
 		{
-			get { return _builder; }
-			set { _builder = value; }
+			get { return builder; }
+			set { builder = value; }
 		}
 
 		[ReflectorProperty("sourcecontrol", InstanceTypeKey="type", Required=false)]
 		public ISourceControl SourceControl
 		{
-			get { return _sourceControl; }
-			set { _sourceControl = value; }
+			get { return sourceControl; }
+			set { sourceControl = value; }
 		}
 
 		/// <summary>
@@ -102,13 +101,13 @@ namespace ThoughtWorks.CruiseControl.Core
 		[ReflectorArray("publishers", Required=false)]
 		public IIntegrationCompletedEventHandler[] Publishers
 		{
-			get { return _publishers; }
+			get { return publishers; }
 			set
 			{
-				_publishers = value;
+				publishers = value;
 
 				// register each of these event handlers
-				foreach (IIntegrationCompletedEventHandler handler in _publishers)
+				foreach (IIntegrationCompletedEventHandler handler in publishers)
 					IntegrationCompleted += handler.IntegrationCompletedEventHandler;
 			}
 		}
@@ -122,45 +121,45 @@ namespace ThoughtWorks.CruiseControl.Core
 		[ReflectorProperty("modificationDelaySeconds", Required=false)]
 		public int ModificationDelaySeconds
 		{
-			get { return _modificationDelaySeconds; }
-			set { _modificationDelaySeconds = value; }
+			get { return modificationDelaySeconds; }
+			set { modificationDelaySeconds = value; }
 		}
 
 		[ReflectorProperty("labeller", InstanceTypeKey="type", Required=false)]
 		public ILabeller Labeller
 		{
-			get { return _labeller; }
-			set { _labeller = value; }
+			get { return labeller; }
+			set { labeller = value; }
 		}
 
 		[ReflectorArray("tasks", Required=false)]
 		public ITask[] Tasks
 		{
-			get { return _tasks; }
-			set { _tasks = value; }
+			get { return tasks; }
+			set { tasks = value; }
 		}
 
 		[ReflectorProperty("publishExceptions", Required=false)]
 		public bool PublishExceptions
 		{
-			get { return _publishExceptions; }
-			set { _publishExceptions = value; }
+			get { return publishExceptions; }
+			set { publishExceptions = value; }
 		}
 
 		// Move this ideally
 		public ProjectActivity Activity
 		{
-			set { _currentActivity = value; }
+			set { currentActivity = value; }
 		}
 
 		public ProjectActivity CurrentActivity
 		{
-			get { return _currentActivity; }
+			get { return currentActivity; }
 		}
 
 		public IIntegrationResult LastIntegrationResult
 		{
-			get { return _integrationResultManager.LastIntegrationResult; }
+			get { return integrationResultManager.LastIntegrationResult; }
 		}
 
 		public IntegrationStatus LatestBuildStatus
@@ -179,7 +178,7 @@ namespace ThoughtWorks.CruiseControl.Core
 			{
 				Builder.Run(result);
 			}
-			foreach (ITask task in _tasks)
+			foreach (ITask task in tasks)
 			{
 				task.Run(result);
 			}
@@ -215,6 +214,11 @@ namespace ThoughtWorks.CruiseControl.Core
 			{
 				new IoService().DeleteIncludingReadOnlyObjects(ArtifactDirectory);
 			}
+		}
+
+		public static string DefaultUrl()
+		{
+			return string.Format("http://{0}/ccnet", Environment.MachineName);
 		}
 	}
 }
