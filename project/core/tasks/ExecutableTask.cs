@@ -88,6 +88,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 		{
 			ProcessInfo info = new ProcessInfo(executable, buildArgs, BaseDirectory(result));
 			info.TimeOut = buildTimeoutSeconds*1000;
+			info.EnvironmentVariables.Add("ccnet.label", result.Label);
 			return info;
 		}
 

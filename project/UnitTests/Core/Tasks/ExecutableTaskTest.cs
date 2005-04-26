@@ -126,6 +126,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 			Assert.AreEqual("test-exe", info.FileName);
 			Assert.AreEqual(222000, info.TimeOut);
 			Assert.AreEqual("test-args", info.Arguments);
+			Assert.AreEqual("1.0", info.EnvironmentVariables["ccnet.label"]);
 			VerifyAll();
 		}
 
