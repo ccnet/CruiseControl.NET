@@ -1,6 +1,7 @@
 using System;
 using System.Globalization;
 using Exortech.NetReflector;
+using NMock;
 using NUnit.Framework;
 using ThoughtWorks.CruiseControl.Core;
 using ThoughtWorks.CruiseControl.Core.Sourcecontrol;
@@ -75,7 +76,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 			const string newName = "HiImANewBaselineName";
 			ProcessInfo info = _clearCase.CreateRenameBaselineProcessInfo(newName);
 
-			Assert.AreEqual(string.Format("{0} rename baseline:{1}@\\{2} {3}",
+			Assert.AreEqual(string.Format("{0} rename baseline:{1}@\\{2} \"{3}\"",
 			                              EXECUTABLE,
 			                              _clearCase.TempBaseline,
 			                              _clearCase.ProjectVobName,
@@ -167,7 +168,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 		{
 			string label = "This-is-a-test";
 			ProcessInfo labelTypeProcess = _clearCase.CreateLabelTypeProcessInfo(label);
-			Assert.AreEqual(" mklbtype -c \"CRUISECONTROL Comment\" " + label, labelTypeProcess.Arguments);
+			Assert.AreEqual(" mklbtype -c \"CRUISECONTROL Comment\" \"" + label + "\"", labelTypeProcess.Arguments);
 			Assert.AreEqual("cleartool.exe", labelTypeProcess.FileName);
 		}
 
@@ -176,7 +177,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 		{
 			const string label = "This-is-a-test";
 			ProcessInfo labelProcess = _clearCase.CreateMakeLabelProcessInfo(label);
-			Assert.AreEqual(@" mklabel -recurse " + label + " " + VIEWPATH, labelProcess.Arguments);
+			Assert.AreEqual(@" mklabel -recurse """ + label + "\" " + VIEWPATH, labelProcess.Arguments);
 			Assert.AreEqual("cleartool.exe", labelProcess.FileName);
 		}
 
@@ -190,6 +191,39 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 		public void CanDetectError()
 		{
 			Assert.IsTrue(_clearCase.HasFatalError(ClearCaseMother.REAL_ERROR_WITH_VOB));
+		}
+
+		[Test]
+		public void ShouldGetSourceIfAutoGetSourceTrue()
+		{
+			DynamicMock executor = new DynamicMock(typeof(ProcessExecutor));
+			ClearCase clearCase = new ClearCase((ProcessExecutor) executor.MockInstance);
+			clearCase.Executable = EXECUTABLE;
+			clearCase.ViewPath = VIEWPATH;
+			clearCase.AutoGetSource = true;
+
+			IntegrationResult result = new IntegrationResult();
+			ProcessInfo expectedProcessRequest = new ProcessInfo(EXECUTABLE, @"update -force -overwrite """ + VIEWPATH + @"""");
+
+			executor.ExpectAndReturn("Execute", new ProcessResult("foo", null, 0, false), expectedProcessRequest);
+			clearCase.GetSource(result);
+			executor.Verify();
+		}
+
+		[Test]
+		public void ShouldNotGetSourceIfAutoGetSourceFalse()
+		{
+			DynamicMock executor = new DynamicMock(typeof(ProcessExecutor));
+			ClearCase clearCase = new ClearCase((ProcessExecutor) executor.MockInstance);
+			clearCase.Executable = EXECUTABLE;
+			clearCase.ViewPath = VIEWPATH;
+			clearCase.AutoGetSource = false;
+
+			IntegrationResult result = new IntegrationResult();
+
+			executor.ExpectNoCall("Execute", typeof(ProcessInfo));
+			clearCase.GetSource(result);
+			executor.Verify();
 		}
 	}
 }

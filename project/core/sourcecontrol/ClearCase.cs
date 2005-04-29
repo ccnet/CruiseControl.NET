@@ -29,6 +29,11 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 		{
 		}
 
+		public ClearCase( ProcessExecutor executor )
+			: base( new ClearCaseHistoryParser(), executor )
+		{
+		}
+
 		[ReflectorProperty("executable", Required=false)]
 		public string Executable 
 		{
@@ -70,6 +75,9 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			get { return _viewPath; }
 			set { _viewPath = value; }
 		}
+
+		[ReflectorProperty("autoGetSource", Required = false)]
+		public bool AutoGetSource = false;
 
 		public string TempBaseline
 		{
@@ -138,7 +146,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 
 		// This is a HACK.  ProcessSourceControl.Execute doesn't allow the flexibility ClearCase needs
 		// to allow nonzero exit codes and to selectively ignore certian error messages.
-		internal void ExecuteIgnoreNonVobObjects( ProcessInfo info )
+		private void ExecuteIgnoreNonVobObjects( ProcessInfo info )
 		{
 			info.TimeOut = Timeout;
 			ProcessResult result = _executor.Execute( info );
@@ -209,7 +217,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 		/// <returns>the process execution info</returns>
 		public ProcessInfo CreateLabelTypeProcessInfo( string label )
 		{
-			string args = " mklbtype -c \"CRUISECONTROL Comment\" " + label;
+			string args = " mklbtype -c \"CRUISECONTROL Comment\" \"" + label + "\"";
 			Log.Debug( string.Format( "mklbtype: {0} {1}; [working dir: {2}]", Executable, args, ViewPath ) );
 			return new ProcessInfo( Executable, args, ViewPath );
 		}
@@ -221,7 +229,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 		/// <returns>the process execution info</returns>
 		public ProcessInfo CreateMakeLabelProcessInfo( string label )
 		{
-			string args = String.Format( @" mklabel -recurse {0} {1}", label, ViewPath );
+			string args = String.Format( @" mklabel -recurse ""{0}"" {1}", label, ViewPath );
 			Log.Debug( string.Format( "mklabel: {0} {1}", Executable, args ) );
 			return new ProcessInfo( Executable, args );
 		}
@@ -235,7 +243,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 
 		public ProcessInfo CreateRenameBaselineProcessInfo( string name )
 		{
-			string args = string.Format( "rename baseline:{0}@\\{1} {2}", TempBaseline, ProjectVobName, name  );
+			string args = string.Format( "rename baseline:{0}@\\{1} \"{2}\"", TempBaseline, ProjectVobName, name  );
 			Log.Debug( string.Format( "rename baseline: {0} {1}", Executable, args ) );
 			return new ProcessInfo( Executable, args );
 		}
@@ -279,6 +287,21 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			{
 				throw new CruiseControlException( "you must specify the project VOB and view name if UseBaseLine is true" );
 			}
-		}	
+		}
+
+		public override void GetSource( IIntegrationResult result )
+		{
+			if (AutoGetSource)
+			{
+				ProcessInfo info = new ProcessInfo(Executable, BuildGetSourceArguments());
+				Log.Info(string.Format("Getting source from ClearCase: {0} {1}", info.FileName, info.Arguments));
+				Execute(info);
+			}
+		}
+
+		private string BuildGetSourceArguments()
+		{
+			return string.Format(@"update -force -overwrite ""{0}""", ViewPath);
+		}
 	}
 }
