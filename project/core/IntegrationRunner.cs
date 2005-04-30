@@ -30,6 +30,8 @@ namespace ThoughtWorks.CruiseControl.Core
 				result.Modifications = GetSourceModifications(sourceControl, result, lastResult);
 				if (result.ShouldRunBuild(target.ModificationDelaySeconds))
 				{
+					target.Activity = ProjectActivity.Building;
+
 					CreateWorkingDirectoryIfItDoesntExist();
 					CreateTemporaryLabelIfNeeded(sourceControl);
 					sourceControl.GetSource(result);
@@ -77,7 +79,7 @@ namespace ThoughtWorks.CruiseControl.Core
 				Directory.CreateDirectory(target.WorkingDirectory);
 		}
 
-		internal void CreateTemporaryLabelIfNeeded(ISourceControl sourceControl)
+		private void CreateTemporaryLabelIfNeeded(ISourceControl sourceControl)
 		{
 			if (sourceControl is ITemporaryLabeller)
 			{
@@ -87,7 +89,6 @@ namespace ThoughtWorks.CruiseControl.Core
 
 		private void RunBuild(IIntegrationResult result)
 		{
-			target.Activity = ProjectActivity.Building;
 			if (result.BuildCondition == BuildCondition.ForceBuild)
 				Log.Info("Build forced");
 
@@ -98,9 +99,8 @@ namespace ThoughtWorks.CruiseControl.Core
 
 		private void PostBuild(IIntegrationResult result, IIntegrationResultManager resultManager)
 		{
-			if (ShouldPublishException(result))
+			if (ShouldPublishResult(result))
 			{
-				// Shouldn't this be outside the if?
 				HandleProjectLabelling(result);
 
 				// raise event (publishers do their thing in response)
@@ -113,7 +113,7 @@ namespace ThoughtWorks.CruiseControl.Core
 			target.Activity = ProjectActivity.Sleeping;
 		}
 
-		private bool ShouldPublishException(IIntegrationResult result)
+		private bool ShouldPublishResult(IIntegrationResult result)
 		{
 			IntegrationStatus integrationStatus = result.Status;
 			if (integrationStatus == IntegrationStatus.Exception)
