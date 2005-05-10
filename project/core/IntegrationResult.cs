@@ -15,19 +15,19 @@ namespace ThoughtWorks.CruiseControl.Core
     [Serializable]
     public class IntegrationResult : IIntegrationResult
     {
-		private string _project;
-		private IntegrationStatus _lastIntegrationStatus = IntegrationStatus.Unknown;
-		private BuildCondition _buildCondition;
-		private string _workingDirectory;
-		private string _label;
-		private IntegrationStatus _status = IntegrationStatus.Unknown;
-		private DateTime _startTime;
-		private DateTime _endTime;
-		private Modification[] _modifications = new Modification[0];
-		private string _artifactDirectory;
-		private string _projectUrl;
-        private Exception _exception;
-        private ArrayList _taskResults = new ArrayList();
+		private string project;
+		private IntegrationStatus lastIntegrationStatus = IntegrationStatus.Unknown;
+		private BuildCondition buildCondition;
+		private string workingDirectory;
+		private string label;
+		private IntegrationStatus status = IntegrationStatus.Unknown;
+		private DateTime startTime;
+		private DateTime endTime;
+		private Modification[] modifications = new Modification[0];
+		private string artifactDirectory;
+		private string projectUrl;
+        private Exception exception;
+        private ArrayList taskResults = new ArrayList();
 
         // Default constructor required for serialization
         public IntegrationResult()
@@ -37,14 +37,14 @@ namespace ThoughtWorks.CruiseControl.Core
         public IntegrationResult(string projectName, string workingDirectory)
         {
             ProjectName = projectName;
-			_workingDirectory = workingDirectory;
+        	this.workingDirectory = workingDirectory;
         }
 
     	[XmlIgnore]
         public virtual Modification[] Modifications
         {
-            get { return _modifications; }
-            set { _modifications = value; }
+            get { return modifications; }
+            set { modifications = value; }
         }
 
         public DateTime LastModificationDate
@@ -71,7 +71,7 @@ namespace ThoughtWorks.CruiseControl.Core
 			get
 			{
 				int lastChangeNumber = 0;
-				foreach (Modification _modification in _modifications)
+				foreach (Modification _modification in modifications)
 				{
 					if (_modification.ChangeNumber > lastChangeNumber)
 						lastChangeNumber = _modification.ChangeNumber;
@@ -123,13 +123,13 @@ namespace ThoughtWorks.CruiseControl.Core
         [XmlIgnore] // Exceptions cannot be serialised because of permission attributes
         public Exception ExceptionResult
         {
-            get { return _exception; }
+            get { return exception; }
             set
             {
-                _exception = value;
-                if (_exception != null)
+            	exception = value;
+                if (exception != null)
                 {
-                    _status = IntegrationStatus.Exception;
+                	status = IntegrationStatus.Exception;
                 }
             }
         }
@@ -137,19 +137,19 @@ namespace ThoughtWorks.CruiseControl.Core
 		[XmlIgnore]
 		public IList TaskResults
 		{
-			get { return _taskResults; }
+			get { return taskResults; }
 		}
 
 		public string ArtifactDirectory
 		{
-			get { return _artifactDirectory; }
-			set	{ _artifactDirectory = value;}
+			get { return artifactDirectory; }
+			set	{ artifactDirectory = value;}
 		}
 
 		public string ProjectUrl
 		{
-			get { return _projectUrl; }
-			set	{ _projectUrl = value; }
+			get { return projectUrl; }
+			set	{ projectUrl = value; }
 		}
 
     	public void AddTaskResult(string result)
@@ -159,12 +159,13 @@ namespace ThoughtWorks.CruiseControl.Core
 
     	public void AddTaskResult(ITaskResult result)
     	{
-    		_taskResults.Add(result);
+    		taskResults.Add(result);
+			if (! Failed) status = result.Succeeded() ? IntegrationStatus.Success : IntegrationStatus.Failure;
     	}
 
     	public void MarkStartTime()
         {
-            _startTime = DateTime.Now;
+    		startTime = DateTime.Now;
         }
 
         public void MarkEndTime()
@@ -202,14 +203,14 @@ namespace ThoughtWorks.CruiseControl.Core
 
     	public IntegrationStatus Status
     	{
-    		get { return _status; }
-			set { _status = value; }
+    		get { return status; }
+			set { status = value; }
 		}
 
     	public IntegrationStatus LastIntegrationStatus
     	{
-    		get { return _lastIntegrationStatus; }
-			set { _lastIntegrationStatus = value; }
+    		get { return lastIntegrationStatus; }
+			set { lastIntegrationStatus = value; }
     	}
 
     	public bool IsInitial()
@@ -219,20 +220,20 @@ namespace ThoughtWorks.CruiseControl.Core
 
     	public string ProjectName
     	{
-    		get { return _project; }
-			set { _project = value; }
+    		get { return project; }
+			set { project = value; }
     	}
 
     	public BuildCondition BuildCondition
     	{
-    		get { return _buildCondition; }
-			set { _buildCondition = value; }
+    		get { return buildCondition; }
+			set { buildCondition = value; }
     	}
 
     	public string Label
     	{
-    		get { return _label; }
-			set { _label = value; }
+    		get { return label; }
+			set { label = value; }
 		}
 
     	/// <summary>
@@ -240,8 +241,8 @@ namespace ThoughtWorks.CruiseControl.Core
 		/// </summary>
 		public DateTime StartTime
     	{
-    		get { return _startTime; }
-			set { _startTime = value; }
+    		get { return startTime; }
+			set { startTime = value; }
 		}
 
 		/// <summary>
@@ -249,14 +250,14 @@ namespace ThoughtWorks.CruiseControl.Core
 		/// </summary>
 		public DateTime EndTime
     	{
-    		get { return _endTime; }
-			set { _endTime = value; }
+    		get { return endTime; }
+			set { endTime = value; }
     	}
 
     	public string WorkingDirectory
     	{
-    		get { return _workingDirectory; }
-			set { _workingDirectory = value; }
+    		get { return workingDirectory; }
+			set { workingDirectory = value; }
 		}
 
 		/// <summary>
@@ -314,7 +315,7 @@ namespace ThoughtWorks.CruiseControl.Core
     	{
     		get {
     			StringBuilder builder = new StringBuilder();
-				foreach (ITaskResult result in _taskResults)
+				foreach (ITaskResult result in taskResults)
 				{
 					builder.Append(result.Data);
 				}
