@@ -10,7 +10,7 @@ namespace ThoughtWorks.CruiseControl.Core
 	/// Value object representing the data associated with a source control modification.
 	/// </summary>
 	[XmlRoot("modification")]
-	public class Modification : IComparable 
+	public class Modification : IComparable
 	{
 		public string Type = "unknown";
 		public string FileName;
@@ -18,6 +18,7 @@ namespace ThoughtWorks.CruiseControl.Core
 		public DateTime ModifiedTime;
 		public string UserName;
 		public int ChangeNumber;
+		public string Version = "";
 		public string Comment;
 		public string Url;
 		public string EmailAddress;
@@ -38,20 +39,24 @@ namespace ThoughtWorks.CruiseControl.Core
 			writer.WriteElementString("date", DateUtil.FormatDate(ModifiedTime));
 			writer.WriteElementString("user", UserName);
 			writer.WriteElementString("comment", Comment);
-			writer.WriteElementString("changeNumber", ChangeNumber.ToString());
+			if (Version.Length == 0)
+				writer.WriteElementString("changeNumber", ChangeNumber.ToString());
+			else
+				writer.WriteElementString("changeNumber", Version);
 			XmlUtil.WriteNonNullElementString(writer, "url", Url);
 			XmlUtil.WriteNonNullElementString(writer, "email", EmailAddress);
 			writer.WriteEndElement();
 		}
 
-		public int CompareTo(Object o) {
+		public int CompareTo(Object o)
+		{
 			Modification modification = (Modification) o;
 			return ModifiedTime.CompareTo(modification.ModifiedTime);
 		}
 
 		public override int GetHashCode()
 		{
-			return ToString().GetHashCode();			
+			return ToString().GetHashCode();
 		}
 
 		public override bool Equals(object obj)
