@@ -188,6 +188,7 @@
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
+                <Folder RelPath = "bin\Debug\" />
                 <File
                     RelPath = "CCTrayLib\AbstractIconStoreTestCase.cs"
                     SubType = "Code"
@@ -728,11 +729,6 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "Core\Tasks\CoverageTaskIntegrationTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
                     RelPath = "Core\Tasks\CoverageTaskTest.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -799,6 +795,11 @@
                 />
                 <File
                     RelPath = "Core\Tasks\NunitTaskTest.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Core\Tasks\ProcessTaskResultTest.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

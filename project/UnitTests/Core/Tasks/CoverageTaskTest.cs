@@ -36,7 +36,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 			_ncoverTask = NetReflector.Read(xml) as CoverageTask;
 			Assert.IsNotNull(_ncoverTask);
 			Assert.IsNotNull(_ncoverTask.DevEnvTask);
-			Assert.IsNotNull(_ncoverTask.Nunit);
+			Assert.IsNotNull(_ncoverTask.NUnit);
 		}
 
 		[Test]

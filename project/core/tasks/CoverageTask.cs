@@ -24,7 +24,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 		}
 
 		[ReflectorProperty("nunit")]
-		public NUnitTask Nunit
+		public NUnitTask NUnit
 		{
 			get { return _nunit; }
 			set { _nunit = value; }

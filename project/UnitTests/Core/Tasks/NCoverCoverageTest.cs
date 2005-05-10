@@ -16,7 +16,6 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 
 		private const string NCoverInstrumentPath = @"c:\ncover\bin\ncover-console.exe";
 		private const string NCoverReportPath = @"c:\ncover\bin\ncoverreport.exe";
-		private const string NRecoverPath = @"c:\ncover\bin\nrecover.exe";
 		private const string ReportName = "MyReport";
 		private CollectingConstraint _constraint;
 
@@ -78,21 +77,6 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 			AssertContains(@"c:\temp\actual.xml", processInfo.Arguments);
 			_processMock.Verify();
 
-		}
-
-		[Test, Ignore("Need to fix this, and understand to use mocks")]
-		public void ShouldCleanupAfterReporting()
-		{
-			string reportName = "MyReport";
-			_processMock.SetupResult("Execute", ExpectedProcessResult, typeof (ProcessInfo));
-			_processMock.ExpectAndReturn("Execute", ExpectedProcessResult, _constraint);
-
-			_coverage.ReportName = reportName;
-			_coverage.Report();
-			ProcessInfo processInfo = (ProcessInfo) _constraint.Parameter;
-			AssertContains(reportName, processInfo.Arguments);
-			AssertContains(NRecoverPath, processInfo.FileName);
-			_processMock.Verify();
 		}
 	}
 }
