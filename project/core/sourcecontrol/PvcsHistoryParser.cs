@@ -1,129 +1,121 @@
 using System;
 using System.Collections;
-using System.Globalization;
 using System.IO;
+using System.Text.RegularExpressions;
 
 namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 {
 	public class PvcsHistoryParser : IHistoryParser
 	{
-		public const string UNKNOWN = "checked in";
+		private static Regex _searchRegEx = new Regex(@"(?<Archive>Archive:\s+.*?\r\n(.|\s)*?(={35}(\r\n|$)))", RegexOptions.Compiled | RegexOptions.IgnorePatternWhitespace | RegexOptions.ExplicitCapture | RegexOptions.IgnoreCase);
+		private static Regex _archiveRegEx = new Regex(@"Archive:\s+(?<ArchiveName>.*?)\nWorkfile:\s+(?<Filename>.*?)\nArchive\screated:\s+(?<CreatedDate>.*?)\r\n(.|\s)*?-{35}\r\n(?<Revision>Rev\s\d+(\.\d+)*\r\n(.*\r\n)*?Author\sid:.*?\r\n((?!(={35}|-{35}))(.|\s)*?\r\n)?(-{35}|={35})(\r\n|$))+", RegexOptions.Compiled | RegexOptions.IgnorePatternWhitespace | RegexOptions.ExplicitCapture | RegexOptions.IgnoreCase);
+		private static Regex _revisionRegEx = new Regex(@"Rev\s(?<Version>\d(\.\d+)*)\r\n(.*?\r\n)?Checked\sin:\s+(?<CheckIn>.*?)\r\n(.*?\r\n)?Last\smodified:\s+(?<PreviousModification>.*?)\r\n(.*?\r\n)?Author\sid:\s+(?<Author>.*?)\s.*?\r\n(Branches:\s+.*?\r\n)?(?<Comment>(((?!(={35}|-{35}))(.|\s)*?)\r\n)?)(={35}|-{35})(\r\n|$)", RegexOptions.Compiled | RegexOptions.IgnorePatternWhitespace | RegexOptions.ExplicitCapture | RegexOptions.IgnoreCase);
 
 		public Modification[] Parse(TextReader reader, DateTime from, DateTime to)
 		{
+			string modificationFile = reader.ReadToEnd();
+			ArrayList mods = new ArrayList();
 
-			PvcsModificationBuilder builder = new PvcsModificationBuilder();
-			string line;
-			while ((line = reader.ReadLine()) != null)
+			MatchCollection matches = _searchRegEx.Matches(modificationFile);
+			foreach (Match archive in matches)
 			{
-				builder.addLine(line);
+				// We have an archive, now find modifications
+				MatchCollection archives = _archiveRegEx.Matches(archive.Value);
+				foreach (Match archiveDetails in archives)
+				{
+					ParseArchive(archiveDetails, mods);
+				}
 			}
-			ArrayList mods = builder.getList();
-			mods = (mods == null) ? new ArrayList() : mods;
-			return (Modification[]) mods.ToArray(typeof (Modification));
+			// Ensure that duplicates were not pulled back in the Vlog (this can be caused by doing a get using Labels)
+			return PvcsHistoryParser.AnalyzeModifications(mods);
 		}
 
+		private void ParseArchive(Match archive, IList modifications)
+		{
+			string archivePath = archive.Groups["ArchiveName"].Value.Trim();
+			DateTime createdDate = Pvcs.GetDate(archive.Groups["CreatedDate"].Value.Trim());
+
+			MatchCollection revisions = _revisionRegEx.Matches(archive.Value);
+			foreach (Match revision in revisions)
+			{
+				modifications.Add(ParseModification(revision, archivePath, createdDate));
+			}
+		}
+
+		private Modification ParseModification(Match revision, string path, DateTime createdDate)
+		{
+			Modification mod = new Modification();
+			mod.Comment = revision.Groups["Comment"].Value.Trim();
+			mod.FileName = Path.GetFileName(path);
+			mod.FolderName = Path.GetDirectoryName(path).Trim();
+			mod.ModifiedTime = Pvcs.GetDate(revision.Groups["CheckIn"].Value.Trim());
+			mod.UserName = revision.Groups["Author"].Value.Trim();
+			mod.Version = revision.Groups["Version"].Value.Trim();
+			mod.Type = (mod.ModifiedTime == createdDate) ? "New" : "Checked in";
+			return mod;
+		}
+
+		/// <summary>
+		/// Build the Modification list of what files will be built 
+		/// with this Release
+		/// </summary>
+		/// <param name="mods"></param>
+		/// <returns></returns>
+		public static Modification[] AnalyzeModifications(IList mods)
+		{
+			// Hashtables are used so we can compare on the keys in search of duplicates
+			Hashtable allFiles = new Hashtable();
+			foreach (Modification mod in mods)
+			{
+				string key = mod.FolderName + mod.FileName;
+				if (!allFiles.ContainsKey(key))
+					allFiles.Add(key, mod);
+				else
+				{
+					// If the revision number on the original is larger, then
+					// do the comparision against the original modification
+					// in search to see which revision is higher
+					// example: 1.64.1 < 1.65 but you need to compare against the 
+					// larger string of 1.64.1 because we are splitting the numbers individually
+					// so 1 is compared to 1 and 64 is compared to 65.
+					Modification compareMod = allFiles[key] as Modification;
+					string[] originalVersion = compareMod.Version.Split(char.Parse("."));
+					string[] currentVersion = mod.Version.Split(char.Parse("."));
+					int len1 = originalVersion.Length;
+					int len2 = currentVersion.Length;
+					int usingLen = -1;
+					int otherLen = -1;
+					if (len1 >= len2)
+					{
+						usingLen = len1;
+						otherLen = len2;
+					}
+					else
+					{
+						usingLen = len2;
+						otherLen = len1;
+					}
+
+					for (int i = 0; i < usingLen; i++)
+					{
+						if (i > otherLen)
+							continue;
+						if (Convert.ToInt32(currentVersion[i]) > Convert.ToInt32(originalVersion[i]))
+						{
+							allFiles[compareMod.FolderName + compareMod.FileName] = mod;
+							break;
+						}
+					}
+				}
+			}
+			// Convert the Hashtables to Modification arrays
+			Modification[] validMods = new Modification[allFiles.Count];
+			int count = 0;
+			foreach (string key in allFiles.Keys)
+			{
+				validMods[count++] = allFiles[key] as Modification;
+			}
+			return validMods;
+		}
 	}
-
-	public class PvcsModificationBuilder
-	{
- 		readonly string[] FROM_PVCS_DATE_FORMATS = new String[] {"MMM dd yyyy HH:mm:ss", "dd MMM yyyy HH:mm:ss"};
-//		const string FROM_PVCS_DATE_FORMAT = "MMM dd yyyy HH:mm:ss";
-		const string ARCHIVE = "Archive:";
-		private Modification modification;
-		private ArrayList modifications = null;
-		private bool firstModifiedTime = true;
-		private bool firstUserName = true;
-		private bool nextLineIsComment = false;
-		private bool waitingForNextValidStart = false;
-
-		public ArrayList getList()
-		{
-			return modifications;
-		}
-
-		private void initializeModification()
-		{
-			if (modifications == null)
-			{
-				modifications = new ArrayList();
-			}
-			modification = new Modification();
-			modification.Type = PvcsHistoryParser.UNKNOWN;
-			modification.FolderName = PvcsHistoryParser.UNKNOWN;
-			firstModifiedTime = true;
-			firstUserName = true;
-			nextLineIsComment = false;
-			waitingForNextValidStart = false;
-		}
-
-		public void addLine(string line)
-		{
-			if (line.StartsWith(ARCHIVE))
-			{
-				initializeModification();
-				modification.FolderName = line.Substring(ARCHIVE.Length).Trim();
-			}
-			else if (waitingForNextValidStart || line.StartsWith("Branches:"))
-			{
-				// we're in this state after we've got the last useful line
-				// from the previous item, but haven't yet started a new one
-				// -- we should just skip these lines till we start a new one
-				return;
-			}
-			else if (line.StartsWith("Workfile:"))
-			{
-				modification.FileName = line.Substring(18);
-			}
-			else if (line.StartsWith("Checked in:"))
-			{
-				// if this is the newest revision...
-				if (firstModifiedTime)
-				{
-					firstModifiedTime = false;
-					string lastMod = line.Substring(16);
-					modification.ModifiedTime = ParseDateTime(lastMod);
-				}
-			}
-			else if (nextLineIsComment == true)
-			{
-				// used boolean because don't know what comment will startWith....
-				modification.Comment = line;
-				// comment is last line we need, so add this mod to list,
-				//  then set indicator to ignore future lines till next new item
-				modifications.Add(modification);
-				waitingForNextValidStart = true;
-			}
-			else if (line.StartsWith("Author id:"))
-			{
-				// if this is the newest revision...
-				if (firstUserName)
-				{
-					modification.UserName = ParseUserName(line);
-					firstUserName = false;
-					nextLineIsComment = true;
-				}
-			} // end of Author id
-
-		} // end of addLine
-
-		public string ParseUserName(string line)
-		{
-			return line.Substring(11).Split()[0].Trim();
-		}
-
-		private DateTime ParseDateTime(string dateString)
-		{
-			try
-			{
-				return DateTime.ParseExact(dateString, FROM_PVCS_DATE_FORMATS, DateTimeFormatInfo.GetInstance(CultureInfo.InvariantCulture), DateTimeStyles.None);
-			}
-			catch (Exception ex)
-			{
-				throw new CruiseControlException("Unable to parse: " + dateString, ex);
-			}
-		}
-
-	} // end of class ModificationBuilder
-
 }
