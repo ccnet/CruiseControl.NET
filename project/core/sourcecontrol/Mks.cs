@@ -115,14 +115,6 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 
 		public override void LabelSourceControl(string label, IIntegrationResult result)
 		{
-/*
-			string arguments = String.Format(ADD_LABEL_COMMAND_TEMPLATE,
-			                                 SandboxRoot + "\\" + SandboxFile, User, Password, "_" + label, SandboxFile);
-			ProcessInfo info = new ProcessInfo(Executable, arguments);
-			Log.Info(string.Format("Labelling source on MKS: {0} {1}", info.FileName, info.Arguments));
-			Execute(info);
-*/
-
 		}
 
 		public override void GetSource(IIntegrationResult result)

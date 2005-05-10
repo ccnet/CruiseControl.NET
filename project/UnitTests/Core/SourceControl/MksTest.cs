@@ -65,19 +65,6 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 			Assert.AreEqual(true, mks.AutoGetSource);
 		}
 
-		[Test, Ignore("The Add label command needs to be replaced by check pointing")]
-		public void LabelSourceControl()
-		{
-			IHistoryParser mockHistoryParser = (IHistoryParser) new DynamicMock(typeof (IHistoryParser)).MockInstance;
-			DynamicMock mockExecutorWrapper = new DynamicMock(typeof (ProcessExecutor));
-			mockExecutorWrapper.ExpectAndReturn("Execute", new ProcessResult(null, null, 0, false), new IsTypeOf(typeof (ProcessInfo)));
-			ProcessExecutor mockProcessExecutor = (ProcessExecutor) mockExecutorWrapper.MockInstance;
-
-			Mks mks = CreateMks(CreateSourceControlXml(), mockHistoryParser, mockProcessExecutor);
-			mks.LabelSourceControl("dummy Label", IntegrationResultMother.CreateSuccessful());
-			mockExecutorWrapper.Verify();
-		}
-
 		[Test]
 		public void GetSource()
 		{
