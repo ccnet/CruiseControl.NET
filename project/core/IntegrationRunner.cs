@@ -42,7 +42,6 @@ namespace ThoughtWorks.CruiseControl.Core
 			{
 				Log.Error(ex);
 				result.ExceptionResult = ex;
-				result.Status = IntegrationStatus.Exception;
 			}
 			result.MarkEndTime();
 

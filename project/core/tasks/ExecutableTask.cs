@@ -65,22 +65,11 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 		public void Run(IIntegrationResult result)
 		{
 			ProcessResult processResult = AttemptExecute(CreateProcessInfo(result));
-			string output = processResult.StandardOutput + "\n" + processResult.StandardError;
-			result.AddTaskResult(output);
+			result.AddTaskResult(new ProcessTaskResult(processResult));
 
 			if (processResult.TimedOut)
 			{
 				throw new BuilderException(this, "Command Line Build timed out (after " + buildTimeoutSeconds + " seconds)");
-			}
-
-			if (processResult.ExitCode == 0)
-			{
-				result.Status = IntegrationStatus.Success;
-			}
-			else
-			{
-				result.Status = IntegrationStatus.Failure;
-				Log.Info("Build failed: " + processResult.StandardError);
 			}
 		}
 

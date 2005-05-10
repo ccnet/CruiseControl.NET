@@ -11,11 +11,12 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 		public ProcessTaskResult(ProcessResult result)
 		{
 			this.result = result;
+			if (Failed()) Log.Info("Task failed: " + result.StandardError);
 		}
 
 		public virtual string Data
 		{
-			get { throw new NotImplementedException(); }
+			get { return StringUtil.Join(Environment.NewLine, result.StandardOutput, result.StandardError); }
 		}
 
 		public virtual void WriteTo(XmlWriter writer)

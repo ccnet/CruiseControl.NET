@@ -1,12 +1,9 @@
-using System;
-
 namespace ThoughtWorks.CruiseControl.Core
 {
 	public interface ITaskResult
 	{
-		string Data 
-		{ 
-			get;
-		}
+		string Data { get; }
+		bool Succeeded();
+		bool Failed();
 	}
 }

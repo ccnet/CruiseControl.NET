@@ -4,7 +4,6 @@ using System.IO;
 using System.Text;
 using Exortech.NetReflector;
 using ThoughtWorks.CruiseControl.Core.Util;
-using ThoughtWorks.CruiseControl.Remote;
 
 namespace ThoughtWorks.CruiseControl.Core.Tasks
 {
@@ -101,22 +100,12 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 		public void Run(IIntegrationResult result)
 		{
 			ProcessResult processResult = AttemptExecute(CreateProcessInfo(result));
-			result.AddTaskResult(processResult.StandardOutput);
+			result.AddTaskResult(new ProcessTaskResult(processResult));
 
 			// is this right?? or should this break the build
 			if (processResult.TimedOut)
 			{
 				throw new BuilderException(this, "NAnt process timed out (after " + buildTimeoutSeconds + " seconds)");
-			}
-
-			if (processResult.ExitCode == 0)
-			{
-				result.Status = IntegrationStatus.Success;
-			}
-			else
-			{
-				result.Status = IntegrationStatus.Failure;
-				Log.Info("NAnt build failed: " + processResult.StandardError);
 			}
 		}
 

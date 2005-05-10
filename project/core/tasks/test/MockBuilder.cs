@@ -1,5 +1,4 @@
 using Exortech.NetReflector;
-using ThoughtWorks.CruiseControl.Remote;
 
 namespace ThoughtWorks.CruiseControl.Core.Tasks.Test
 {
@@ -11,7 +10,6 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks.Test
 
 		public void Run(IIntegrationResult result)
 		{
-			result.Status = IntegrationStatus.Success;
 			result.AddTaskResult(BUILDER_OUTPUT);
 			HasRun = true;
 		}

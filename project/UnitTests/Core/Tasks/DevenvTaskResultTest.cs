@@ -23,14 +23,14 @@ Build complete -- 1 errors, 0 warnings";
 "<message>Build complete -- 1 errors, 0 warnings</message>" +
 "</buildresults>";
 
-			DevenvTaskResult result = new DevenvTaskResult(output);
+			DevenvTaskResult result = new DevenvTaskResult(ProcessResultFixture.CreateSuccessfulResult(output));
 			Assert.AreEqual(expected, result.Data);
 		}
 
 		[Test]
 		public void ShouldHandleSpecialCharacters()
 		{
-			DevenvTaskResult result = new DevenvTaskResult("<T>");
+			DevenvTaskResult result = new DevenvTaskResult(ProcessResultFixture.CreateSuccessfulResult("<T>"));
 			Assert.AreEqual("<buildresults><message>&lt;T&gt;</message></buildresults>", result.Data);
 		}
 	}

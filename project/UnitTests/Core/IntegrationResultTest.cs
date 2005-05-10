@@ -1,6 +1,7 @@
 using System;
 using NUnit.Framework;
 using ThoughtWorks.CruiseControl.Core;
+using ThoughtWorks.CruiseControl.Core.Tasks;
 using ThoughtWorks.CruiseControl.Remote;
 using ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol;
 
@@ -148,6 +149,21 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 		{
 			result.WorkingDirectory = @"c:\";
 			Assert.AreEqual(@"d:\hello.bat", result.BaseFromWorkingDirectory(@"d:\hello.bat"));
+		}
+
+		[Test]
+		public void ShouldSucceedIfContainsOnlySuccessfulTaskResults()
+		{
+			result.AddTaskResult(new ProcessTaskResult(ProcessResultFixture.CreateSuccessfulResult()));
+			Assert.IsTrue(result.Succeeded);
+		}
+
+		[Test]
+		public void ShouldHaveFailedIfContainsFailedTaskResults()
+		{
+			result.AddTaskResult(new ProcessTaskResult(ProcessResultFixture.CreateNonZeroExitCodeResult()));
+			result.AddTaskResult(new ProcessTaskResult(ProcessResultFixture.CreateSuccessfulResult()));
+			Assert.IsTrue(result.Failed);
 		}
 	}
 }

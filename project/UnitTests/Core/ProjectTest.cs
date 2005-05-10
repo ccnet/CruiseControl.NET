@@ -341,16 +341,6 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 		}
 
 		[Test]
-		public void ShouldBuildBuilderAndThenTasksWhenBuildCalled()
-		{
-			IIntegrationResult result = (IIntegrationResult) new DynamicMock(typeof(IIntegrationResult)).MockInstance;
-			mockBuilder.Expect("Run", result);
-			mockTask.Expect("Run", result);
-			project.Run(result);
-			VerifyAll();
-		}
-
-		[Test]
 		public void ShouldCallIntegratableWhenRunIntegrationCalled()
 		{
 			DynamicMock integratableMock = new DynamicMock(typeof(IIntegratable));
@@ -526,6 +516,47 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 			Assert.IsNotNull(results.EndTime);
 			Assert.IsTrue(integrationCompletedCalled);
 			VerifyAll();
+		}
+
+		// Run Tasks
+
+		[Test]
+		public void ShouldRunBuilderFirst()
+		{
+			IntegrationResult result = new IntegrationResult();
+			mockTask.Expect("Run", result);
+			MockBuilder builder = new MockBuilder();
+			project.Builder = builder;
+			project.Run(result);
+			Assert.IsTrue(builder.HasRun);
+			AssertStartsWith(MockBuilder.BUILDER_OUTPUT, result.TaskOutput);
+			VerifyAll();
+		}
+
+		[Test]
+		public void ShouldNotRunBuilderIfItDoesNotExist()
+		{
+			IntegrationResult result = new IntegrationResult();
+			mockTask.Expect("Run", result);
+			project.Builder = null;
+			project.Run(result);
+			VerifyAll();
+		}
+
+		[Test]
+		public void ShouldStopBuildIfTaskFails()
+		{
+			IntegrationResult result = IntegrationResultMother.CreateFailed();
+			mockTask.Expect("Run", result);
+
+			IMock secondTask = new DynamicMock(typeof(ITask));
+			secondTask.ExpectNoCall("Run", typeof(IntegrationResult));
+
+			project.Tasks = new ITask[] { (ITask)mockTask.MockInstance, (ITask)secondTask.MockInstance };
+			project.Builder = null;
+			project.Run(result);
+			VerifyAll();
+			secondTask.Verify();
 		}
 
 		private Modification[] CreateModifications()

@@ -1,16 +1,20 @@
+using System;
 using System.IO;
 using System.Xml;
+using ThoughtWorks.CruiseControl.Core.Tasks;
 using ThoughtWorks.CruiseControl.Core.Util;
 
 namespace ThoughtWorks.CruiseControl.Core.Tasks
 {
-	public class DevenvTaskResult : ITaskResult
+	public class DevenvTaskResult : ProcessTaskResult
 	{
-		private string data;
-
-		public DevenvTaskResult(string devenvOutput)
+		public DevenvTaskResult(ProcessResult result) : base(result)
 		{
-			data = TransformDevenvOutput(devenvOutput);
+		}
+
+		public override string Data
+		{
+			get { return TransformDevenvOutput(result.StandardOutput); }
 		}
 
 		private string TransformDevenvOutput(string devenvOutput)
@@ -31,19 +35,9 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 				string line = reader.ReadLine();
 				if (! StringUtil.IsBlank(line))
 				{
-					writer.WriteElementString("message", RemoveNulls(line));
+					writer.WriteElementString("message", StringUtil.RemoveNulls(line));
 				}
 			}
-		}
-
-		private string RemoveNulls(string line)
-		{
-			return line.Replace("\0", string.Empty);
-		}
-
-		public string Data
-		{
-			get { return data; }
 		}
 	}
 }

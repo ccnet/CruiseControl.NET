@@ -1,17 +1,30 @@
+using System;
+
 namespace ThoughtWorks.CruiseControl.Core.Tasks
 {
 	public class DataTaskResult : ITaskResult
 	{
-		private string _data;
+		private string data;
 
 		public DataTaskResult(string data)
 		{
-			_data = data;
+			this.data = data;
 		}
 
 		public string Data
 		{
-			get { return _data; }
+			get { return data; }
 		}
+
+		public bool Succeeded()
+		{
+			return true;
+		}
+
+		public bool Failed()
+		{
+			return false;
+		}
+
 	}
 }

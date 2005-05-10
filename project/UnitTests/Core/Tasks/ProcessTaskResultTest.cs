@@ -1,8 +1,8 @@
+using System;
 using System.IO;
 using System.Xml;
 using NUnit.Framework;
 using ThoughtWorks.CruiseControl.Core.Tasks;
-using ThoughtWorks.CruiseControl.Core.Test;
 using ThoughtWorks.CruiseControl.Core.Util;
 
 namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
@@ -34,6 +34,22 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 			ProcessTaskResult result = new ProcessTaskResult(ProcessResultFixture.CreateTimedOutResult());
 			Assert.IsFalse(result.Succeeded());
 			Assert.IsTrue(result.Failed());
+		}
+
+		[Test]
+		public void DataShouldBeStdOutIfNoStdErr()
+		{
+			ProcessResult processResult = new ProcessResult("stdout", null, 5, false);
+			ProcessTaskResult result = new ProcessTaskResult(processResult);
+			Assert.AreEqual("stdout", result.Data);
+		}
+
+		[Test]
+		public void DataShouldBeStdOutAndStdErrIfStdErrExists()
+		{
+			ProcessResult processResult = new ProcessResult("stdout", "error", 5, false);
+			ProcessTaskResult result = new ProcessTaskResult(processResult);
+			Assert.AreEqual(string.Format("stdout{0}error", Environment.NewLine), result.Data);
 		}
 
 		[Test]

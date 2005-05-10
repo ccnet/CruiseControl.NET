@@ -44,18 +44,17 @@ namespace ThoughtWorks.CruiseControl.Core
 			{
 				try 
 				{ 
-					RunTask(buildCondition, task); 
+					RunTask(task); 
 				}
 				catch (CruiseControlException ex) 
 				{
 					_currentIntegrationResult.ExceptionResult = ex;
-					_currentIntegrationResult.Status = IntegrationStatus.Exception;
 				}
 			}
 			return _currentIntegrationResult;
 		}
 
-		private void RunTask(BuildCondition buildCondition, ITask task)
+		private void RunTask(ITask task)
 		{
 			task.Run(_currentIntegrationResult);
 		}

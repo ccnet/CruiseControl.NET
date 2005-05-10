@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.ComponentModel;
 using System.IO;
 using Exortech.NetReflector;
@@ -174,13 +175,13 @@ namespace ThoughtWorks.CruiseControl.Core
 
 		public void Run(IIntegrationResult result)
 		{
-			if (Builder != null)
-			{
-				Builder.Run(result);
-			}
-			foreach (ITask task in tasks)
+			IList tasksToRun = new ArrayList(tasks);
+			if (Builder != null) tasksToRun.Insert(0, builder);
+
+			foreach (ITask task in tasksToRun)
 			{
 				task.Run(result);
+				if (result.Failed) break;
 			}
 		}
 

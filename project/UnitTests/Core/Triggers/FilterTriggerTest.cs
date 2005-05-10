@@ -115,8 +115,6 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Triggers
 			Assert.AreEqual(nextBuildTime, trigger.NextBuild);
 		}
 
-
-
 		[Test]
 		public void ShouldFullyPopulateFromReflector()
 		{

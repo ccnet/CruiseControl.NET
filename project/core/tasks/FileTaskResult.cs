@@ -5,7 +5,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 {
 	public class FileTaskResult : ITaskResult
 	{
-		private string _data;
+		private string data;
 
 		public FileTaskResult(string filename) : this(new FileInfo(filename))
 		{}
@@ -17,7 +17,17 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 
 		public string Data
 		{
-			get { return _data; }
+			get { return data; }
+		}
+
+		public bool Succeeded()
+		{
+			return true;
+		}
+
+		public bool Failed()
+		{
+			return false;
 		}
 
 		private void ReadFileContents(FileInfo file)
@@ -26,7 +36,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 			{
 				using (StreamReader reader = file.OpenText())
 				{
-					_data = reader.ReadToEnd();
+					data = reader.ReadToEnd();
 				}
 			}
 			catch (Exception ex)

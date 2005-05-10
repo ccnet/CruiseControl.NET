@@ -1,7 +1,6 @@
 using System;
 using System.Collections;
 using System.Web.Mail;
-using NMock;
 using NUnit.Framework;
 using ThoughtWorks.CruiseControl.Core;
 using ThoughtWorks.CruiseControl.Core.Publishers;
@@ -93,13 +92,11 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Publishers
 		public void UnitTestResultsShouldBeIncludedInEmailMessageWhenIncludesDetailsIsTrue()
 		{
 			IntegrationResult result = IntegrationResultMother.CreateStillSuccessful();
-			IMock mockTaskResult = new DynamicMock(typeof (ITaskResult));
-			mockTaskResult.SetupResult("Data", "<test-results name=\"foo\" total=\"10\" failures=\"0\" not-run=\"0\"><test-suite></test-suite></test-results>");
-			result.AddTaskResult((ITaskResult)mockTaskResult.MockInstance);
+			string results = "<test-results name=\"foo\" total=\"10\" failures=\"0\" not-run=\"0\"><test-suite></test-suite></test-results>";
+			result.AddTaskResult(results);
 			_publisher.IncludeDetails = true;
 			string message = _publisher.CreateMessage(result);
 			Assert.IsTrue(message.IndexOf("Tests run") >= 0);
-			mockTaskResult.Verify();
 		}
 
 		[Test]

@@ -1,8 +1,7 @@
-using Exortech.NetReflector;
 using System;
-using ThoughtWorks.CruiseControl.Core.Util;
 using System.IO;
-using ThoughtWorks.CruiseControl.Remote;
+using Exortech.NetReflector;
+using ThoughtWorks.CruiseControl.Core.Util;
 
 namespace ThoughtWorks.CruiseControl.Core.Tasks
 {
@@ -63,8 +62,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 		public virtual void Run(IIntegrationResult result)
 		{
 			ProcessResult processResult = AttemptToExecute(result.WorkingDirectory);
-			result.Status = (processResult.Failed) ? IntegrationStatus.Failure : IntegrationStatus.Success;
-			result.AddTaskResult(new DevenvTaskResult(processResult.StandardOutput));
+			result.AddTaskResult(new DevenvTaskResult(processResult));
 			Log.Info("Devenv build complete.  Status: " + result.Status);
 			
 			if (processResult.TimedOut)

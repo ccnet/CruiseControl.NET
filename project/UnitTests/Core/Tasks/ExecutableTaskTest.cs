@@ -77,7 +77,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 
 			Assert.IsTrue(result.Succeeded);
 			Assert.AreEqual(IntegrationStatus.Success, result.Status);
-			Assert.AreEqual(returnVal.StandardOutput + "\n" + returnVal.StandardError, result.TaskOutput);
+			Assert.AreEqual(returnVal.StandardOutput, result.TaskOutput);
 			VerifyAll();
 		}
 
@@ -92,7 +92,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 
 			Assert.IsTrue(result.Failed);
 			Assert.AreEqual(IntegrationStatus.Failure, result.Status);
-			Assert.AreEqual(returnVal.StandardOutput + "\n" + returnVal.StandardError, result.TaskOutput);
+			Assert.AreEqual(returnVal.StandardOutput, result.TaskOutput);
 			VerifyAll();
 		}
 
