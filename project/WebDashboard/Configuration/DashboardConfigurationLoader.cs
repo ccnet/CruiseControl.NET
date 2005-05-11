@@ -1,5 +1,5 @@
+using System;
 using System.IO;
-using System.Reflection;
 using System.Xml;
 using Exortech.NetReflector;
 using ObjectWizard.NetReflector;
@@ -50,7 +50,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Configuration
 			XmlNode node = XmlUtil.SelectNode(dashboardConfig, xpath);
 
 			NetReflectorTypeTable typeTable = NetReflectorTypeTable.CreateDefault(instantiator);
-			typeTable.Add(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "ccnet.*.plugin.dll");
+			typeTable.Add(Path.GetDirectoryName(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, AppDomain.CurrentDomain.RelativeSearchPath)), "ccnet.*.plugin.dll");
 			return NetReflector.Read(node, typeTable);
 		}
 
