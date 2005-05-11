@@ -1,3 +1,4 @@
+using System.Globalization;
 using NUnit.Framework;
 using ThoughtWorks.CruiseControl.WebDashboard.Dashboard;
 
@@ -14,14 +15,14 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 		[Test]
 		public void ShouldFormatPassedBuildCorrectly()
 		{
-			string formattedBuildName = new DefaultBuildNameFormatter().GetPrettyBuildName(CreateBuildSpecifier("log20020830164057Lbuild.6.xml"));
+			string formattedBuildName = new DefaultBuildNameFormatter().GetPrettyBuildName(CreateBuildSpecifier("log20020830164057Lbuild.6.xml"), CultureInfo.InvariantCulture);
 			Assert.AreEqual("30 Aug 2002 16:40:57 (6)", formattedBuildName);
 		}
 
 		[Test]
 		public void ShouldFormatFailedBuildCorrectly()
 		{
-			string formattedBuildName = new DefaultBuildNameFormatter().GetPrettyBuildName(CreateBuildSpecifier("log20020507042535.xml"));
+			string formattedBuildName = new DefaultBuildNameFormatter().GetPrettyBuildName(CreateBuildSpecifier("log20020507042535.xml"), CultureInfo.InvariantCulture);
 			Assert.AreEqual("07 May 2002 04:25:35 (Failed)", formattedBuildName);
 		}
 
