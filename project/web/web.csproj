@@ -260,6 +260,21 @@
                     BuildAction = "EmbeddedResource"
                 />
                 <File
+                    RelPath = "NAntTiming.aspx"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "NAntTiming.aspx.cs"
+                    DependentUpon = "NAntTiming.aspx"
+                    SubType = "ASPXCodeBehind"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "NAntTiming.aspx.resx"
+                    DependentUpon = "NAntTiming.aspx.cs"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
                     RelPath = "PageTransformer.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -518,6 +533,10 @@
                     BuildAction = "Content"
                 />
                 <File
+                    RelPath = "xsl\Copy of NAntTiming.xsl"
+                    BuildAction = "Content"
+                />
+                <File
                     RelPath = "xsl\fit.xsl"
                     Link = "..\xsl\fit.xsl"
                     BuildAction = "Content"
@@ -545,6 +564,11 @@
                 <File
                     RelPath = "xsl\NAnt.xsl"
                     Link = "..\xsl\NAnt.xsl"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "xsl\NAntTiming.xsl"
+                    Link = "..\xsl\NAntTiming.xsl"
                     BuildAction = "Content"
                 />
                 <File

@@ -1033,6 +1033,11 @@
                     BuildAction = "Content"
                 />
                 <File
+                    RelPath = "xsl\NAntTiming.xsl"
+                    Link = "..\xsl\NAntTiming.xsl"
+                    BuildAction = "Content"
+                />
+                <File
                     RelPath = "xsl\NCover.xsl"
                     Link = "..\xsl\NCover.xsl"
                     BuildAction = "Content"
