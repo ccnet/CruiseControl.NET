@@ -33,13 +33,9 @@
 	<target name="all" depends="clean, compile, test, deploy, dist"/>
 
 	<target name="clean" description="cleans up everything">
-		<!-- These mkdirs here to stop warnings -->
-		<mkdir dir="${build.dir}" />
-		<mkdir dir="deployed" />
-		<mkdir dir="dist" />
-		<delete dir="${build.dir}" failonerror="false"/>
-		<delete dir="deployed" failonerror="false"/>
-		<delete dir="dist" failonerror="false"/>
+		<delete dir="${build.dir}" if="${directory::exists(build.dir)}"/>
+		<delete dir="deployed" if="${directory::exists('deployed')}"/>
+		<delete dir="dist" if="${directory::exists('dist')}"/>
 	</target>
 
 	<target name="clean-vs" description="Delete Visual Studio artifacts">
@@ -315,7 +311,7 @@
 
 	   <asminfo output="project/CommonAssemblyInfo.cs" language="CSharp">
 		<imports>
-		    <import name="System.Reflection" />
+		    <import namespace="System.Reflection" />
 		</imports>
 		<attributes>
 		    <attribute type="AssemblyVersionAttribute" value="${build.number}" />
@@ -326,25 +322,21 @@
 	    </asminfo>
 	</target>
 
-	<target name="ContinuousIntegration">
+	<target name="ContinuousIntegration" depends="transform.build.number, createAssemblyInfo, all, dist.publish, reporting">	
+		<echo message="CI Run for build number ${ccnet.label} successfully completed" />
+	</target>
+	
+	<target name="verify.ccnet.label" description="Verifies that the ccnet.label property has been set">
 		<ifnot test="${property::exists('ccnet.label')}">
 			<fail message="ccnet.label property not set, so can't create labelled distribution files" />
 		</ifnot>
+	</target> 
 	
-		<call target="transform.build.number" />
-		<call target="createAssemblyInfo" />
-		<call target="all" />
-		<call target="dist.publish" />
-		<echo message="CI Run for build number ${ccnet.label} successfully completed" />
-		<call target="reporting" />
-	</target>
-	
-	<target name="transform.build.number" >
+	<target name="transform.build.number" depends="verify.ccnet.label">
 		<regex pattern="(?'major'\d+)_(?'minor'\d+)_(?'revision'\d+)_(?'build'\d+)" input="${ccnet.label}" />
 		<property name="build.number" value="${major}.${minor}.${revision}.${build}" />
 		<echo message="Build number: ${build.number}"/>
 	</target>
-	
 	
 	<target name="netreflector.docs" depends="compile">
 		<loadtasks assembly="lib\NetReflectorDocumenterTask.dll"/>
