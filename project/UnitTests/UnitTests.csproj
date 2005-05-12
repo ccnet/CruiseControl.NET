@@ -174,6 +174,11 @@
                     Project = "{A81B8A36-19CC-49FA-93A4-E7E607F48567}"
                     Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
                 />
+                <Reference
+                    Name = "System.Data"
+                    AssemblyName = "System.Data"
+                    HintPath = "..\..\..\..\..\WINDOWS\Microsoft.NET\Framework\v1.1.4322\System.Data.dll"
+                />
             </References>
         </Build>
         <Files>
@@ -233,6 +238,26 @@
                     RelPath = "CCTrayLib\TrayTooltipTest.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Config\ccnet.config"
+                    Link = "..\examples\ccnet.config"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "Config\CCNetConfigFileValidationTest.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Config\CVSAndNAntAndEmailPublisherCCNet.config"
+                    Link = "..\examples\CVSAndNAntAndEmailPublisherCCNet.config"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "Config\VSSAndDevenvAndNUnitCCNet.config"
+                    Link = "..\examples\VSSAndDevenvAndNUnitCCNet.config"
+                    BuildAction = "EmbeddedResource"
                 />
                 <File
                     RelPath = "Core\ArgumentParserTest.cs"
