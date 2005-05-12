@@ -33,7 +33,6 @@ namespace ThoughtWorks.CruiseControl.Core
 					target.Activity = ProjectActivity.Building;
 
 					CreateWorkingDirectoryIfItDoesntExist();
-					CreateTemporaryLabelIfNeeded(sourceControl);
 					sourceControl.GetSource(result);
 					RunBuild(result);
 				}
@@ -45,7 +44,7 @@ namespace ThoughtWorks.CruiseControl.Core
 			}
 			result.MarkEndTime();
 
-			PostBuild(result,resultManager);
+			PostBuild(result, resultManager);
 
 			return result;
 		}
@@ -76,14 +75,6 @@ namespace ThoughtWorks.CruiseControl.Core
 		{
 			if (! Directory.Exists(target.WorkingDirectory))
 				Directory.CreateDirectory(target.WorkingDirectory);
-		}
-
-		private void CreateTemporaryLabelIfNeeded(ISourceControl sourceControl)
-		{
-			if (sourceControl is ITemporaryLabeller)
-			{
-				((ITemporaryLabeller) sourceControl).CreateTemporaryLabel();
-			}
 		}
 
 		private void RunBuild(IIntegrationResult result)
@@ -127,18 +118,8 @@ namespace ThoughtWorks.CruiseControl.Core
 
 		private void HandleProjectLabelling(IIntegrationResult result)
 		{
-			if (result.Succeeded)
-			{
-				// This call to result.Label unnecessary
-				target.SourceControl.LabelSourceControl(result.Label, result);
-			}
-			else
-			{
-				if (target.SourceControl is ITemporaryLabeller)
-				{
-					((ITemporaryLabeller) target.SourceControl).DeleteTemporaryLabel();
-				}
-			}
+			// This call to result.Label is unnecessary
+			target.SourceControl.LabelSourceControl(result.Label, result);
 		}
 	}
 }

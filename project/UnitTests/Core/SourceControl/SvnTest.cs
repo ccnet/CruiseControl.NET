@@ -81,7 +81,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 
 			svn.TagOnSuccess = true;
 			executor.ExpectAndReturn("Execute", new ProcessResult("foo", null, 0, false), new IsAnything());
-			svn.LabelSourceControl("foo", new IntegrationResult());
+			svn.LabelSourceControl("foo", IntegrationResultMother.CreateSuccessful());
 			executor.Verify();
 		}
 
@@ -93,7 +93,19 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 
 			svn.TagOnSuccess = false;
 			executor.ExpectNoCall("Execute", typeof(ProcessInfo));
-			svn.LabelSourceControl("foo", new IntegrationResult());
+			svn.LabelSourceControl("foo", IntegrationResultMother.CreateSuccessful());
+			executor.Verify();
+		}
+
+		[Test]
+		public void ShouldNotApplyLabelIfIntegrationFailed()
+		{
+			DynamicMock executor = new DynamicMock(typeof(ProcessExecutor));
+			Svn svn = new Svn((ProcessExecutor) executor.MockInstance);
+
+			svn.TagOnSuccess = true;
+			executor.ExpectNoCall("Execute", typeof(ProcessInfo));
+			svn.LabelSourceControl("foo", IntegrationResultMother.CreateFailed());
 			executor.Verify();
 		}
 

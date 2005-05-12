@@ -53,7 +53,6 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 		}
 
 		[Test]
-		[Ignore("This is failing - I don't know how to get the Trace stuff working. Why are we even testing at the trace level? Can we not do something with the Log class?")]
 		public void InstantiateWithMoreInvalidArguments()
 		{
 			ArgumentParser parser = new ArgumentParser(new string[] { "-foo:bar" });

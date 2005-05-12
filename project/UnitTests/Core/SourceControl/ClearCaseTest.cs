@@ -133,7 +133,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 			_clearCase.UseBaseline = true;
 			_clearCase.ProjectVobName = null;
 
-			_clearCase.LabelSourceControl("foo", null);
+			_clearCase.LabelSourceControl("foo", IntegrationResultMother.CreateSuccessful());
 		}
 
 		[Test]

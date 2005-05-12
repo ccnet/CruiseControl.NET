@@ -91,19 +91,6 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 		}
 
 		[Test]
-		public void InvokesMethodsOnTemporaryLabeller() 
-		{
-			//// SETUP
-			DynamicMock mockSC = new DynamicMock(typeof(ITemporaryLabeller));
-			mockSC.Expect("CreateTemporaryLabel");
-			mockSC.Expect("DeleteTemporaryLabel");
-
-			//// EXECUTE
-			_filteredSourceControl.CreateTemporaryLabel();
-			_filteredSourceControl.DeleteTemporaryLabel();
-		}
-
-		[Test]
 		public void InvokesRunOnSCProvider() 
 		{
 			//// SETUP

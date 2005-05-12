@@ -88,7 +88,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 
 		public override void LabelSourceControl(string label, IIntegrationResult result)
 		{
-			if (LabelOnSuccess)
+			if (LabelOnSuccess && result.Succeeded)
 			{
 				Execute(CreateLabelProcessInfo(label, result));
 			}

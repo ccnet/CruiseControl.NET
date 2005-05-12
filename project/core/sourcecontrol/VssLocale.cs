@@ -114,7 +114,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 
 		public override string ToString()
 		{
-			return string.Format("VssLocale culture: {0}", cultureInfo.Name);
+			return string.Format("VssLocale culture: {0}", cultureInfo.DisplayName);
 		}
 
 		public override bool Equals(object obj)

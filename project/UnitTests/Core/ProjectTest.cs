@@ -464,6 +464,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 			mockLabeller.ExpectAndReturn("Generate", "label", new IsAnything()); // generate new label
 			CruiseControlException expectedException = new CruiseControlException();
 			mockSourceControl.ExpectAndThrow("GetModifications", expectedException, new IsAnything(), new IsAnything());
+			mockSourceControl.Expect("LabelSourceControl", "label", new IsAnything());
 			mockPublisher.Expect("PublishIntegrationResults", new IsAnything());
 			mockStateManager.Expect("SaveState", new IsAnything());
 

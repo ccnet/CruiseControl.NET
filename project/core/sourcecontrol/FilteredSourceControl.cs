@@ -5,7 +5,7 @@ using Exortech.NetReflector;
 namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 {
 	[ReflectorType("filtered")]
-	public class FilteredSourceControl : ISourceControl, ITemporaryLabeller
+	public class FilteredSourceControl : ISourceControl
 	{
 		private ISourceControl _realScProvider;
 		private IList _inclusionFilters;
@@ -67,22 +67,6 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 		public void Run(IIntegrationResult result)
 		{
 			result.Modifications = GetModifications(result.LastModificationDate, DateTime.Now);
-		}
-
-		public void CreateTemporaryLabel()
-		{
-			if (_realScProvider is ITemporaryLabeller)
-			{
-				((ITemporaryLabeller) _realScProvider).CreateTemporaryLabel();
-			}
-		}
-
-		public void DeleteTemporaryLabel()
-		{
-			if (_realScProvider is ITemporaryLabeller)
-			{
-				((ITemporaryLabeller) _realScProvider).DeleteTemporaryLabel();
-			}
 		}
 
 		public void GetSource(IIntegrationResult result)

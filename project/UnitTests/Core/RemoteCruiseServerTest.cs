@@ -98,7 +98,6 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 	</system.runtime.remoting>
 </configuration>";
 	
-	
 			TempFileUtil.CreateTempDir("RemoteCruiseServerTest");
 			return TempFileUtil.CreateTempXmlFile("RemoteCruiseServerTest", "remote.config", configXml);
 		}

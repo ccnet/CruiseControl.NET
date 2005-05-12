@@ -54,7 +54,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 
 		public void LabelSourceControl( string label, IIntegrationResult result ) 
 		{
-			this.label = label;
+			if (result.Succeeded) this.label = label;
 		}
 
 		public void GetSource(IIntegrationResult result)

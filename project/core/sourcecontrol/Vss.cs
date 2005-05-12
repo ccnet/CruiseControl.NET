@@ -7,7 +7,7 @@ using ThoughtWorks.CruiseControl.Core.Util;
 namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 {
 	[ReflectorType("vss")]
-	public class Vss : ProcessSourceControl, ITemporaryLabeller
+	public class Vss : ProcessSourceControl
 	{
 		public const string SS_DIR_KEY = "SSDIR";
 		public const string SS_REGISTRY_PATH = @"Software\\Microsoft\\SourceSafe";
@@ -28,12 +28,10 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 		private IVssLocale _locale;
 
 		public Vss() : this(new VssLocale(CultureInfo.CurrentCulture))
-		{
-		}
+		{}
 
 		private Vss(IVssLocale locale) : this(locale, new VssHistoryParser(locale), new ProcessExecutor(), new Registry())
-		{
-		}
+		{}
 
 		public Vss(IVssLocale locale, IHistoryParser historyParser, ProcessExecutor executor, IRegistry registry) : base(historyParser, executor)
 		{
@@ -93,16 +91,22 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			return GetModifications(CreateHistoryProcessInfo(from, to), from, to);
 		}
 
-		public override void LabelSourceControl( string newLabel, IIntegrationResult dateTime )
+		public override void LabelSourceControl(string newLabel, IIntegrationResult result)
 		{
-			if (ApplyLabel)
+			if (! ApplyLabel) return;
+
+			if (result.Succeeded)
 			{
 				LabelSourceControl(newLabel, _lastTempLabel);
-				_lastTempLabel = null;
 			}
+			else
+			{
+				DeleteTemporaryLabel();
+			}
+			_lastTempLabel = null;
 		}
 
-		public void LabelSourceControl(string newLabel, string oldLabel)
+		private void LabelSourceControl(string newLabel, string oldLabel)
 		{
 			Execute(CreateLabelProcessInfo(newLabel, oldLabel));
 		}
@@ -116,7 +120,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			}
 		}
 
-		public void DeleteTemporaryLabel()
+		private void DeleteTemporaryLabel()
 		{
 			if (ApplyLabel && WasTempLabelApplied())
 			{
@@ -151,12 +155,12 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			return processInfo;
 		}
 
-		internal string CreateTemporaryLabelName(DateTime time)
+		private string CreateTemporaryLabelName(DateTime time)
 		{
 			return "CCNETUNVERIFIED" + time.ToString("MMddyyyyHHmmss");
 		}
 
-		internal void LabelSourceControl(string label)
+		private void LabelSourceControl(string label)
 		{
 			Execute(CreateLabelProcessInfo(label));
 		}
@@ -174,6 +178,8 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 
 		public override void GetSource(IIntegrationResult result)
 		{
+			CreateTemporaryLabel();
+
 			if (! AutoGetSource)
 				return;
 

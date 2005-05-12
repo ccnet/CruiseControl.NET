@@ -1,6 +1,5 @@
 using System;
 using System.Collections;
-using System.Globalization;
 using System.IO;
 using System.Xml;
 
@@ -37,28 +36,18 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			return log.DocumentElement;
 		}
 
-		internal ArrayList ParseModificationsFromLogEntry(XmlNode logEntry, DateTime from, DateTime to)
+		private ArrayList ParseModificationsFromLogEntry(XmlNode logEntry, DateTime from, DateTime to)
 		{
-			String revision = GetAttributeFromNode(logEntry, "revision");
-			int changeNumber = int.Parse(revision);
-
-			XmlNode dateNode = logEntry.SelectSingleNode("date");
-			DateTime changeTime = ParseDate(dateNode.InnerText);
+			DateTime changeTime = ParseDate(logEntry);
 			if (changeTime < from || to < changeTime)
 			{
 				// Work around issue 1642 in Subversion
 				return new ArrayList();
 			}
 
-			String author = "";
-			XmlNode authorNode = logEntry.SelectSingleNode("author");
-			if (authorNode != null)
-			{
-				author = authorNode.InnerText;
-			}
-
-			XmlNode msgNode = logEntry.SelectSingleNode("msg");
-			String message = msgNode.InnerText;
+			int changeNumber = ParseChangeNumber(logEntry);
+			string author = ParseAuthor(logEntry);
+			string message = ParseMessage(logEntry);
 
 			ArrayList mods = new ArrayList();
 			XmlNodeList paths = logEntry.SelectNodes("paths/path");
@@ -69,31 +58,58 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 				mod.ModifiedTime = changeTime;
 				mod.UserName = author;
 				mod.Comment = message;
-
-				String action = GetAttributeFromNode(path, "action");
-				switch (action)
-				{
-					case "A":
-						mod.Type = "Added";
-						break;
-					case "D":
-						mod.Type = "Deleted";
-						break;
-					case "M":
-						mod.Type = "Modified";
-						break;
-					default:
-						mod.Type = "Unknown action: " + action;
-						break;
-				}
+				mod.Type = ModificationType(path);
 				string fullFileName = path.InnerText;
 				mod.FolderName = GetFolderFromPath(fullFileName);
 				mod.FileName = GetFileFromPath(fullFileName);
-
 				mods.Add(mod);
 			}
-
 			return mods;
+		}
+
+		private string ModificationType(XmlNode path)
+		{
+			string action = GetAttributeFromNode(path, "action");
+			switch (action)
+			{
+				case "A":
+					return "Added";
+				case "D":
+					return "Deleted";
+				case "M":
+					return "Modified";
+				default:
+					return "Unknown action: " + action;
+			}
+		}
+
+		private static string ParseMessage(XmlNode logEntry)
+		{
+			XmlNode msgNode = logEntry.SelectSingleNode("msg");
+			return msgNode.InnerText;
+		}
+
+		private string ParseAuthor(XmlNode logEntry)
+		{
+			String author = "";
+			XmlNode authorNode = logEntry.SelectSingleNode("author");
+			if (authorNode != null)
+			{
+				author = authorNode.InnerText;
+			}
+			return author;
+		}
+
+		private DateTime ParseDate(XmlNode logEntry)
+		{
+			XmlNode dateNode = logEntry.SelectSingleNode("date");
+			return ParseDate(dateNode.InnerText);
+		}
+
+		private int ParseChangeNumber(XmlNode logEntry)
+		{
+			String revision = GetAttributeFromNode(logEntry, "revision");
+			return int.Parse(revision);
 		}
 
 		internal string GetFolderFromPath(string fullFileName)

@@ -12,7 +12,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 	/// Written by Garrett M. Smith (gsmith@thoughtworks.com).
 	/// </remarks>
 	[ReflectorType("clearCase")]
-	public class ClearCase : ProcessSourceControl, ITemporaryLabeller
+	public class ClearCase : ProcessSourceControl
 	{
 		private string		_executable		= "cleartool.exe";
 		private string		_viewPath;
@@ -101,19 +101,26 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 		/// <param name="result">the timestamp of the label; ignored for this implementation</param>
 		public override void LabelSourceControl( string label, IIntegrationResult result ) 
 		{
-			if ( UseBaseline )
+			if (result.Succeeded)
 			{
-				RenameBaseline( label );
+				if ( UseBaseline )
+				{
+					RenameBaseline( label );
+				}
+				if ( UseLabel )
+				{
+					ProcessResult processResult = base.Execute( CreateLabelTypeProcessInfo( label ) );
+					Log.Debug( "standard output from label: " + processResult.StandardOutput );
+					ExecuteIgnoreNonVobObjects( CreateMakeLabelProcessInfo( label ) );
+				}
 			}
-			if ( UseLabel )
+			else
 			{
-				ProcessResult processResult = base.Execute( CreateLabelTypeProcessInfo( label ) );
-				Log.Debug( "standard output from label: " + processResult.StandardOutput );
-				ExecuteIgnoreNonVobObjects( CreateMakeLabelProcessInfo( label ) );
+				DeleteTemporaryLabel();
 			}
 		}
 
-		public void CreateTemporaryLabel()
+		private void CreateTemporaryLabel()
 		{
 			if ( UseBaseline )
 			{
@@ -291,6 +298,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 
 		public override void GetSource( IIntegrationResult result )
 		{
+			CreateTemporaryLabel();
 			if (AutoGetSource)
 			{
 				ProcessInfo info = new ProcessInfo(Executable, BuildGetSourceArguments());

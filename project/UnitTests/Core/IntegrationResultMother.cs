@@ -37,6 +37,11 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 			return Create(true, DateTime.Now);
 		}
 
+		public static IntegrationResult CreateUnknown()
+		{
+			return Create(IntegrationStatus.Unknown, DateTime.Now);
+		}
+
 		public static IntegrationResult CreateSuccessful(DateTime startDate)
 		{
 			return Create(true, startDate);

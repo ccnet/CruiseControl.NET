@@ -589,11 +589,6 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "sourcecontrol\ITemporaryLabeller.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
                     RelPath = "sourcecontrol\IVssLocale.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -854,6 +849,11 @@
                 />
                 <File
                     RelPath = "tasks\ProcessTaskResult.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "tasks\TaskFailureException.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

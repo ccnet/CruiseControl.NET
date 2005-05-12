@@ -114,35 +114,6 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 		}
 
 		[Test]
-		public void TemporaryLabellersHaveMethodsInvoked()
-		{
-			//// SETUP
-			DynamicMock sourceControl = new DynamicMock(typeof(ISourceControl));
-			DynamicMock tempLabeller = new DynamicMock(typeof(ITemporaryLabeller));
-
-			tempLabeller.Expect( "CreateTemporaryLabel" );
-			tempLabeller.Expect( "DeleteTemporaryLabel" );
-			ArrayList mocks = new ArrayList();
-			mocks.Add( sourceControl );
-			mocks.Add( tempLabeller );
-			ArrayList scList = new ArrayList( 2 );
-			scList.Add( sourceControl.MockInstance );
-			scList.Add( tempLabeller.MockInstance );
-			MultiSourceControl multiSourceControl = new MultiSourceControl();
-			multiSourceControl.SourceControls = (ISourceControl[]) scList.ToArray(typeof (ISourceControl));
-
-			//// EXECUTE
-			multiSourceControl.CreateTemporaryLabel();
-			multiSourceControl.DeleteTemporaryLabel();
-
-			//// VERIFY
-			foreach (DynamicMock mock in mocks)
-			{
-				mock.Verify();
-			}
-		}
-
-		[Test]
 		public void ShouldInstructAggregatedSourceControlsToGetSource()
 		{
 			IntegrationResult result = new IntegrationResult();

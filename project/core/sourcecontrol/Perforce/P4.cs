@@ -174,7 +174,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Perforce
 		/// </summary>
 		public void LabelSourceControl(string label, IIntegrationResult result) 
 		{
-			if (ApplyLabel)
+			if (ApplyLabel && result.Succeeded)
 			{
 				if (label == null || label.Length == 0)
 					throw new ApplicationException("Internal Exception - Invalid (null or empty) label passed");

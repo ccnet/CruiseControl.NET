@@ -28,8 +28,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Util
 			TempFileUtil.DeleteTempDir(TEMP_DIR);
 		}
 
-		[Test]
-		[Ignore("Ignored by Mike - this failing since moving to UnitTests but we should fix this ASAP")]
+		[Test, Ignore("temp")]
 		public void LoggingAnEntryShouldFlushLogFileIfAutoFlushIsEnabled()
 		{
 			Trace.AutoFlush = true;

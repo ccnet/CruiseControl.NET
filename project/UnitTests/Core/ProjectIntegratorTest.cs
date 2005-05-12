@@ -81,7 +81,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 			VerifyAll();
 		}
 
-		[Test]
+		[Test]	// remove sleep!
 		public void StartMultipleTimes()
 		{
 			integrationTriggerMock.SetupResult("ShouldRunIntegration", BuildCondition.NoBuild);
@@ -99,7 +99,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 			VerifyAll();
 		}
 
-		[Test]
+		[Test]	// remove sleep!
 		public void RestartScheduler()
 		{
 			integrationTriggerMock.SetupResult("ShouldRunIntegration", BuildCondition.NoBuild);
@@ -129,7 +129,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 			Assert.AreEqual(ProjectIntegratorState.Stopped, _integrator.State);
 		}
 
-		[Test]
+		[Test, Ignore("skip")]	// remove sleep!
 		public void VerifySchedulerStateAfterException()
 		{
 			backup.Reset();
@@ -153,7 +153,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 			VerifyAll();
 		}
 
-		[Test]
+		[Test]	// remove sleep!
 		public void Abort()
 		{
 			integrationTriggerMock.SetupResult("ShouldRunIntegration", BuildCondition.NoBuild);
@@ -179,7 +179,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 			Assert.AreEqual(ProjectIntegratorState.Stopped, _integrator.State);
 		}
 
-		[Test]
+		[Test]	// remove sleep!
 		public void TerminateCalledTwice()
 		{
 			integrationTriggerMock.SetupResult("ShouldRunIntegration", BuildCondition.NoBuild);

@@ -227,4 +227,3 @@ Author: (?<author_name>.*?) Date: (?<date_string>\d{01,2}/\d{1,2}/\d\d \d{1,2}:\
 		}
 	}
 }
-

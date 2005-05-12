@@ -185,8 +185,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 		[Test]
 		public void OnlyGetSourceIfAutoGetSourceIsSpecified()
 		{
-			mockProcessExecutor.ExpectNoCall("Execute", typeof(ProcessInfo));
-
+			ExpectThatExecuteWillNotBeCalled();
 			vss.GetSource(IntegrationResultMother.CreateSuccessful(DateTime.Now));
 		}
 
@@ -204,24 +203,59 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 		}
 
 		[Test]
-		public void LabelNotAppliedByDefault()
+		public void TemporaryLabelNotAppliedByDefault()
 		{
-			PseudoMockVss vss = new PseudoMockVss();
-
+			// applyLabel is false by default
+			ExpectThatExecuteWillNotBeCalled();
 			vss.CreateTemporaryLabel();
-
-			Assert.AreEqual(0, vss.methodInvoked );
 		}
 
 		[Test]
-		public void LabelAppliedIfApplyLabelTrue()
+		public void TemporaryLabelAppliedIfApplyLabelTrue()
 		{
-			PseudoMockVss vss = new PseudoMockVss();
-			vss.ApplyLabel = true;
+			CollectingConstraint constraint = new CollectingConstraint();
+			mockProcessExecutor.ExpectAndReturn("Execute", ProcessResultFixture.CreateSuccessfulResult(), constraint);
 
+			vss.ApplyLabel = true;
 			vss.CreateTemporaryLabel();
 
-			Assert.AreEqual(1, vss.methodInvoked );
+			ProcessInfo info = (ProcessInfo) constraint.Parameter;
+			AssertContains("label $/fooProject -LCCNETUNVERIFIED", info.Arguments);
+		}
+
+		[Test]
+		public void ShouldLabelOnlyIfIntegrationSucceeded()
+		{
+			CollectingConstraint constraint = new CollectingConstraint();
+			mockProcessExecutor.ExpectAndReturn("Execute", ProcessResultFixture.CreateSuccessfulResult(), new IsAnything());
+			mockProcessExecutor.ExpectAndReturn("Execute", ProcessResultFixture.CreateSuccessfulResult(), constraint);
+
+			vss.ApplyLabel = true;
+			vss.GetSource(IntegrationResultMother.CreateUnknown());
+			vss.LabelSourceControl("foo", IntegrationResultMother.CreateSuccessful());
+
+			ProcessInfo info = (ProcessInfo) constraint.Parameter;
+			AssertContains("label $/fooProject -Lfoo -VLCCNETUNVERIFIED", info.Arguments);
+		}
+
+		[Test]
+		public void ShouldDeleteTemporaryLabelIfIntegrationFailed()
+		{
+			CollectingConstraint constraint = new CollectingConstraint();
+			mockProcessExecutor.ExpectAndReturn("Execute", ProcessResultFixture.CreateSuccessfulResult(), new IsAnything());
+			mockProcessExecutor.ExpectAndReturn("Execute", ProcessResultFixture.CreateSuccessfulResult(), constraint);
+
+			vss.ApplyLabel = true;
+			vss.GetSource(IntegrationResultMother.CreateUnknown());
+			vss.LabelSourceControl("foo", IntegrationResultMother.CreateFailed());
+
+			ProcessInfo info = (ProcessInfo) constraint.Parameter;
+			AssertContains("label $/fooProject -L -VLCCNETUNVERIFIED", info.Arguments);
+		}
+
+		private void ExpectThatExecuteWillNotBeCalled()
+		{
+			mockProcessExecutor.ExpectNoCall("Execute", typeof(ProcessInfo));
 		}
 
 		[Test]
@@ -229,19 +263,6 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 		{
 			vss.Culture = "en-GB";
 			Assert.AreEqual(new VssLocale(new CultureInfo("en-GB")), _historyParser.Locale);
-		}
-
-		private class PseudoMockVss : Vss
-		{
-			public override ProcessInfo CreateLabelProcessInfo(string label)
-			{
-				methodInvoked++;
-				// > cmd.exe /C "exit 0"
-				// this should return immediately with a zero exit status
-				return new ProcessInfo( "cmd.exe", "/C \"exit 0\"" );
-			}
-
-			internal int methodInvoked = 0;
 		}
 	}
 }

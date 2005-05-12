@@ -378,7 +378,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 		public override void LabelSourceControl(string label, IIntegrationResult result)
 		{
 			// If no changes or LabelOnSuccess is false exit
-			if (result.Modifications.Length < 1 || LabelOnSuccess == false) //|| _temporaryLabel.Length == 0
+			if (result.Modifications.Length < 1 || LabelOnSuccess == false || ! result.Succeeded) //|| _temporaryLabel.Length == 0
 				return;
 
 			_modifications = result.Modifications;

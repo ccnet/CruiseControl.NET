@@ -101,48 +101,6 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 			VerifyAll();
 		}
 
-		[Test]
-		public void ShouldNotLabelIfBuildFailed()
-		{
-			SetupPreambleExpections();
-			SetupShouldBuildExpectations();
-			SetupBuildFailExpectations();
-
-			IIntegrationResult returnedResult = runner.RunIntegration(BuildCondition.IfModificationExists);
-
-			Assert.AreEqual(result, returnedResult);
-			VerifyAll();
-		}
-
-		[Test]
-		public void ShouldCreateTemporaryLabelIfSourceControlIsTemporaryLabeller()
-		{
-			SetupPreambleExpections(typeof(ITemporaryLabeller));
-			SetupShouldBuildExpectations();
-			SetupBuildPassExpectations();
-			sourceControlMock.Expect("CreateTemporaryLabel");
-
-			IIntegrationResult returnedResult = runner.RunIntegration(BuildCondition.IfModificationExists);
-
-			Assert.AreEqual(result, returnedResult);
-			VerifyAll();
-		}
-
-		[Test]
-		public void ShouldDeleteTemporaryManuallyIfSourceControlIsTemporaryLabellerAndBuildFailed()
-		{
-			SetupPreambleExpections(typeof(ITemporaryLabeller));
-			SetupShouldBuildExpectations();
-			SetupBuildFailExpectations();
-			sourceControlMock.Expect("CreateTemporaryLabel");
-			sourceControlMock.Expect("DeleteTemporaryLabel");
-
-			IIntegrationResult returnedResult = runner.RunIntegration(BuildCondition.IfModificationExists);
-
-			Assert.AreEqual(result, returnedResult);
-			VerifyAll();
-		}
-
 		private void SetupPreambleExpections()
 		{
 			SetupPreambleExpections(typeof(ISourceControl));
@@ -184,17 +142,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 		{
 			resultMock.ExpectAndReturn("Status", IntegrationStatus.Success);
 			resultMock.ExpectAndReturn("Status", IntegrationStatus.Success);
-			resultMock.ExpectAndReturn("Succeeded", true);
 			resultMock.ExpectAndReturn("Label", "mylabel");
 			sourceControlMock.Expect("LabelSourceControl", "mylabel", result);
-			targetMock.Expect("OnIntegrationCompleted", result);
-		}
-
-		private void SetupBuildFailExpectations()
-		{
-			resultMock.ExpectAndReturn("Status", IntegrationStatus.Failure);
-			resultMock.ExpectAndReturn("Status", IntegrationStatus.Failure);
-			resultMock.ExpectAndReturn("Succeeded", false);
 			targetMock.Expect("OnIntegrationCompleted", result);
 		}
 	}

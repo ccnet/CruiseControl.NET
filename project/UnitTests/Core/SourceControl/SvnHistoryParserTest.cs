@@ -79,6 +79,16 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 			Assert.AreEqual(3, modifications.Length);
 		}
 
+		[Test, Ignore("needs more work and thought to complete.")]
+		public void ShouldHandleConvertingDatesToAndFromUTC()
+		{
+			DateTime newest = new DateTime(2003, 12, 12, 17, 09, 40);
+			DateTime oldest = new DateTime(2003, 12, 12, 16, 48, 52);
+
+			Modification[] modifications = svn.Parse(new StringReader(fullLogXml), oldest, newest);
+			Assert.AreEqual(3, modifications.Length);			
+		}
+
 		[Test, ExpectedException(typeof(CruiseControlException))]
 		public void HandleInvalidXml()
 		{
