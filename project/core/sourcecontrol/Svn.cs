@@ -91,9 +91,9 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			return new ProcessInfo(Executable, BuildHistoryProcessArgs(from, to), WorkingDirectory);
 		}
 
-		public ProcessInfo CreateLabelProcessInfo(string label, IIntegrationResult result)
+		public ProcessInfo CreateLabelProcessInfo(IIntegrationResult result)
 		{
-			return new ProcessInfo(Executable, BuildTagProcessArgs(label, result.LastChangeNumber));
+			return new ProcessInfo(Executable, BuildTagProcessArgs(result.Label, result.LastChangeNumber));
 		}
 
 		public override Modification[] GetModifications(DateTime from, DateTime to)
@@ -107,11 +107,11 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			return modifications;
 		}
 
-		public override void LabelSourceControl(string label, IIntegrationResult result)
+		public override void LabelSourceControl(IIntegrationResult result)
 		{
 			if (TagOnSuccess && result.Succeeded)
 			{
-				Execute(CreateLabelProcessInfo(label, result));
+				Execute(CreateLabelProcessInfo(result));
 			}
 		}
 

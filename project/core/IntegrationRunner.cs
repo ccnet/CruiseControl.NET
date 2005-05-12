@@ -119,7 +119,7 @@ namespace ThoughtWorks.CruiseControl.Core
 		private void HandleProjectLabelling(IIntegrationResult result)
 		{
 			// This call to result.Label is unnecessary
-			target.SourceControl.LabelSourceControl(result.Label, result);
+			target.SourceControl.LabelSourceControl(result);
 		}
 	}
 }

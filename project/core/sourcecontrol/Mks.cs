@@ -113,7 +113,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			return base.GetModifications(info, from, to);
 		}
 
-		public override void LabelSourceControl(string label, IIntegrationResult result)
+		public override void LabelSourceControl(IIntegrationResult result)
 		{
 		}
 

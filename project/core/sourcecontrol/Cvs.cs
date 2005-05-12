@@ -86,11 +86,11 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			return modifications;
 		}
 
-		public override void LabelSourceControl(string label, IIntegrationResult result)
+		public override void LabelSourceControl(IIntegrationResult result)
 		{
 			if (LabelOnSuccess && result.Succeeded)
 			{
-				Execute(CreateLabelProcessInfo(label, result));
+				Execute(CreateLabelProcessInfo(result));
 			}
 		}
 
@@ -99,11 +99,11 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			return new ProcessInfo(Executable, BuildHistoryProcessInfoArgs(from), WorkingDirectory);
 		}
 
-		public ProcessInfo CreateLabelProcessInfo(string label, IIntegrationResult result) 
+		public ProcessInfo CreateLabelProcessInfo(IIntegrationResult result) 
 		{
 			CommandLineBuilder buffer = new CommandLineBuilder();
 			buffer.AppendArgument("-d {0}", CvsRoot);
-			buffer.AppendArgument("tag ver-{0}", label);
+			buffer.AppendArgument("tag ver-{0}", result.Label);
 			return new ProcessInfo(Executable, buffer.ToString(), WorkingDirectory);
 		}
 

@@ -11,7 +11,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			return new Modification[0];
 		}
 
-		public void LabelSourceControl( string label, IIntegrationResult result ) 
+		public void LabelSourceControl(IIntegrationResult result) 
 		{
 		}
 

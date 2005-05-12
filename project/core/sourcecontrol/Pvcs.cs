@@ -375,7 +375,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 
 		#region LabelSourceControl Logic
 
-		public override void LabelSourceControl(string label, IIntegrationResult result)
+		public override void LabelSourceControl(IIntegrationResult result)
 		{
 			// If no changes or LabelOnSuccess is false exit
 			if (result.Modifications.Length < 1 || LabelOnSuccess == false || ! result.Succeeded) //|| _temporaryLabel.Length == 0
@@ -383,8 +383,8 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 
 			_modifications = result.Modifications;
 
-			LabelSourceControl("", label);
-			LabelSourceControl(label, LabelOrPromotionName);
+			LabelSourceControl("", result.Label);
+			LabelSourceControl(result.Label, LabelOrPromotionName);
 		}
 
 		private void LabelSourceControl(string oldLabel, string newLabel)

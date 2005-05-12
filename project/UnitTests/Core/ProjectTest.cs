@@ -363,7 +363,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 			mockLabeller.ExpectAndReturn("Generate", "label", new IsAnything()); // generate new label
 			mockSourceControl.ExpectAndReturn("GetModifications", new Modification[0], new IsAnything(), new IsAnything()); // return no modifications found
 			mockSourceControl.Expect("GetSource", new IsAnything());
-			mockSourceControl.Expect("LabelSourceControl", "label", new IsAnything());
+			mockSourceControl.Expect("LabelSourceControl", new IsAnything());
 			mockPublisher.Expect("PublishIntegrationResults", new IsAnything());
 			mockTask.Expect("Run", new IsAnything());
 			project.Builder = new MockBuilder(); // need to use mock builder in order to set properties on IntegrationResult
@@ -421,7 +421,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 			mockStateManager.Expect("SaveState", new IsAnything());
 			mockLabeller.ExpectAndReturn("Generate", "label", new IsAnything()); // generate new label
 			mockSourceControl.ExpectAndReturn("GetModifications", modifications, new IsAnything(), new IsAnything());
-			mockSourceControl.Expect("LabelSourceControl", "label", new IsAnything());
+			mockSourceControl.Expect("LabelSourceControl", new IsAnything());
 			mockSourceControl.Expect("GetSource", new IsAnything());
 			mockPublisher.Expect("PublishIntegrationResults", new IsAnything());
 			mockTask.Expect("Run", new IsAnything());
@@ -464,7 +464,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 			mockLabeller.ExpectAndReturn("Generate", "label", new IsAnything()); // generate new label
 			CruiseControlException expectedException = new CruiseControlException();
 			mockSourceControl.ExpectAndThrow("GetModifications", expectedException, new IsAnything(), new IsAnything());
-			mockSourceControl.Expect("LabelSourceControl", "label", new IsAnything());
+			mockSourceControl.Expect("LabelSourceControl", new IsAnything());
 			mockPublisher.Expect("PublishIntegrationResults", new IsAnything());
 			mockStateManager.Expect("SaveState", new IsAnything());
 
@@ -502,7 +502,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 			mockTask.Expect("Run", new IsAnything());
 			mockSourceControl.ExpectAndReturn("GetModifications", CreateModifications(), new IsAnything(), new IsAnything());
 			mockSourceControl.Expect("GetSource", new IsAnything());
-			mockSourceControl.Expect("LabelSourceControl", "1.2.1", new IsAnything());
+			mockSourceControl.Expect("LabelSourceControl", new IsAnything());
 			integrationCompletedCalled = false;
 			project.IntegrationCompleted += new IntegrationCompletedEventHandler(Project_IntegrationCompleted);
 			IMock stateMock = new DynamicMock(typeof (IStateManager));
@@ -585,7 +585,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 			mockStateManager.Expect("SaveState", new IsAnything());
 			mockSourceControl.ExpectAndReturn("GetModifications", CreateModifications(), new IsAnything(), new IsAnything());
 			mockSourceControl.Expect("GetSource", new IsAnything());
-			mockSourceControl.Expect("LabelSourceControl", "1.0", new IsAnything());
+			mockSourceControl.Expect("LabelSourceControl", new IsAnything());
 			mockTask.Expect("Run", new IsAnything());
 			Exception expectedException = new CruiseControlException("expected exception");
 			mockPublisher.ExpectAndThrow("PublishIntegrationResults", expectedException, new IsAnything());

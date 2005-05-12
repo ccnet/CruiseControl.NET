@@ -258,8 +258,6 @@ exit: 0
 			p4.View = "//depot/myproject/...";
 			p4.ApplyLabel = true;
 
-			string label = "foo-123";
-
 			ProcessInfo labelSpecProcess = new ProcessInfo("spec");
 			ProcessInfo labelSpecProcessWithStdInContent = new ProcessInfo("spec");
 			labelSpecProcessWithStdInContent.StandardInputContent = @"Label:	foo-123
@@ -280,7 +278,7 @@ View:
 			processExecutorMock.ExpectAndReturn("Execute", new ProcessResult("", "", 0, false), labelSyncProcess);
 
 			// Execute
-			p4.LabelSourceControl(label, IntegrationResultMother.CreateSuccessful());
+			p4.LabelSourceControl(IntegrationResultMother.CreateSuccessful("foo-123"));
 
 			// Verify
 			VerifyAll();
@@ -292,8 +290,6 @@ View:
 			P4 p4 = CreateP4();
 			p4.View = "//depot/myproj/...,//myotherdepot/proj/...";
 			p4.ApplyLabel = true;
-
-			string label = "foo-123";
 
 			ProcessInfo labelSpecProcess = new ProcessInfo("spec");
 			ProcessInfo labelSpecProcessWithStdInContent = new ProcessInfo("spec");
@@ -316,7 +312,7 @@ View:
 			processExecutorMock.ExpectAndReturn("Execute", new ProcessResult("", "", 0, false), labelSyncProcess);
 
 			// Execute
-			p4.LabelSourceControl(label, IntegrationResultMother.CreateSuccessful());
+			p4.LabelSourceControl(IntegrationResultMother.CreateSuccessful("foo-123"));
 
 			// Verify
 			VerifyAll();
@@ -350,11 +346,9 @@ View:
 			p4.View = "//depot/myproject/...";
 			p4.ApplyLabel = true;
 
-			string label = "123";
-
 			try
 			{
-				p4.LabelSourceControl(label, IntegrationResultMother.CreateSuccessful());
+				p4.LabelSourceControl(IntegrationResultMother.CreateSuccessful("123"));
 				Assert.Fail("Perforce labelling should fail if a purely numeric label is attempted to be applied");
 			}
 			catch (CruiseControlException)
@@ -370,11 +364,9 @@ View:
 			p4.View = "//depot/myproject/...";
 			p4.ApplyLabel = false;
 
-			string label = "foo-123";
-
 			processInfoCreatorMock.ExpectNoCall("CreateProcessInfo", typeof (P4), typeof (string));
 			processExecutorMock.ExpectNoCall("Execute", typeof (ProcessInfo));
-			p4.LabelSourceControl(label, IntegrationResultMother.CreateSuccessful());
+			p4.LabelSourceControl(IntegrationResultMother.CreateSuccessful("foo-123"));
 
 			VerifyAll();
 		}
@@ -386,11 +378,9 @@ View:
 			p4.View = "//depot/myproject/...";
 			p4.ApplyLabel = true;
 
-			string label = "foo-123";
-
 			processInfoCreatorMock.ExpectNoCall("CreateProcessInfo", typeof (P4), typeof (string));
 			processExecutorMock.ExpectNoCall("Execute", typeof (ProcessInfo));
-			p4.LabelSourceControl(label, IntegrationResultMother.CreateFailed());
+			p4.LabelSourceControl(IntegrationResultMother.CreateFailed("foo-123"));
 
 			VerifyAll();
 		}
@@ -401,11 +391,9 @@ View:
 			P4 p4 = CreateP4();
 			p4.View = "//depot/myproject/...";
 
-			string label = "123";
-
 			processInfoCreatorMock.ExpectNoCall("CreateProcessInfo", typeof (P4), typeof (string));
 			processExecutorMock.ExpectNoCall("Execute", typeof (ProcessInfo));
-			p4.LabelSourceControl(label, null);
+			p4.LabelSourceControl(IntegrationResultMother.CreateSuccessful("123"));
 
 			VerifyAll();
 		}

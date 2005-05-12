@@ -55,7 +55,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			return GetModifications(CreateHistoryProcessInfo(from, to), from, to);
 		}
 
-		public override void LabelSourceControl( string label, IIntegrationResult result )
+		public override void LabelSourceControl(IIntegrationResult result)
 		{
 		}
 

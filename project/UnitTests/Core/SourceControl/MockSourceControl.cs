@@ -39,7 +39,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 			result.Modifications = GetModifications(result.LastModificationDate, DateTime.Now);
 		}
 
-		public void LabelSourceControl( string label, IIntegrationResult result ) 
+		public void LabelSourceControl(IIntegrationResult result) 
 		{
 		}
 

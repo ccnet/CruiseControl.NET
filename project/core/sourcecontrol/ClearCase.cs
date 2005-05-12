@@ -14,28 +14,26 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 	[ReflectorType("clearCase")]
 	public class ClearCase : ProcessSourceControl
 	{
-		private string		_executable		= "cleartool.exe";
-		private string		_viewPath;
-		private string		_viewName;
-		private bool		_useBaseline	= false;
-		private bool		_useLabel		= true;
-		private string		_tempBaseline;
-		private string		_projectVobName;
+		private string _executable = "cleartool.exe";
+		private string _viewPath;
+		private string _viewName;
+		private bool _useBaseline = false;
+		private bool _useLabel = true;
+		private string _tempBaseline;
+		private string _projectVobName;
 
 		private const string _TEMPORARY_BASELINE_PREFIX = "CruiseControl.NETTemporaryBaseline_";
 		public const string DATETIME_FORMAT = "dd-MMM-yyyy.HH:mm:ss";
 
 		public ClearCase() : base(new ClearCaseHistoryParser())
-		{
-		}
+		{}
 
-		public ClearCase( ProcessExecutor executor )
-			: base( new ClearCaseHistoryParser(), executor )
-		{
-		}
+		public ClearCase(ProcessExecutor executor)
+			: base(new ClearCaseHistoryParser(), executor)
+		{}
 
 		[ReflectorProperty("executable", Required=false)]
-		public string Executable 
+		public string Executable
 		{
 			get { return _executable; }
 			set { _executable = value; }
@@ -63,14 +61,14 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 		}
 
 		[ReflectorProperty("viewName", Required=false)]
-		public string ViewName 
+		public string ViewName
 		{
 			get { return _viewName; }
 			set { _viewName = value; }
 		}
 
 		[ReflectorProperty("viewPath", Required=false)]
-		public string ViewPath 
+		public string ViewPath
 		{
 			get { return _viewPath; }
 			set { _viewPath = value; }
@@ -85,9 +83,9 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			set { _tempBaseline = value; }
 		}
 
-		public override Modification[] GetModifications( DateTime from, DateTime to )
+		public override Modification[] GetModifications(DateTime from, DateTime to)
 		{
-			return base.GetModifications( CreateHistoryProcessInfo( from, to ), from, to );
+			return base.GetModifications(CreateHistoryProcessInfo(from, to), from, to);
 		}
 
 		/// <summary>
@@ -97,21 +95,20 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 		///	ClearCase needs to execute two processes to label a source tree; most source control systems
 		///	take only one.
 		/// </remarks>
-		/// <param name="label">the label to apply</param>
 		/// <param name="result">the timestamp of the label; ignored for this implementation</param>
-		public override void LabelSourceControl( string label, IIntegrationResult result ) 
+		public override void LabelSourceControl(IIntegrationResult result)
 		{
 			if (result.Succeeded)
 			{
-				if ( UseBaseline )
+				if (UseBaseline)
 				{
-					RenameBaseline( label );
+					RenameBaseline(result.Label);
 				}
-				if ( UseLabel )
+				if (UseLabel)
 				{
-					ProcessResult processResult = base.Execute( CreateLabelTypeProcessInfo( label ) );
-					Log.Debug( "standard output from label: " + processResult.StandardOutput );
-					ExecuteIgnoreNonVobObjects( CreateMakeLabelProcessInfo( label ) );
+					ProcessResult processResult = base.Execute(CreateLabelTypeProcessInfo(result.Label));
+					Log.Debug("standard output from label: " + processResult.StandardOutput);
+					ExecuteIgnoreNonVobObjects(CreateMakeLabelProcessInfo(result.Label));
 				}
 			}
 			else
@@ -122,50 +119,50 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 
 		private void CreateTemporaryLabel()
 		{
-			if ( UseBaseline )
+			if (UseBaseline)
 			{
 				TempBaseline = CreateTemporaryBaselineName();
 				ValidateBaselineConfiguration();
-				base.Execute( CreateTempBaselineProcessInfo( TempBaseline ) );
+				base.Execute(CreateTempBaselineProcessInfo(TempBaseline));
 			}
 		}
 
 		public void DeleteTemporaryLabel()
 		{
-			if ( UseBaseline )
+			if (UseBaseline)
 			{
 				ValidateBaselineConfiguration();
 				RemoveBaseline();
 			}
 		}
 
-		public ProcessInfo CreateTempBaselineProcessInfo( string name )
+		public ProcessInfo CreateTempBaselineProcessInfo(string name)
 		{
-			string args = string.Format( "mkbl -view {0} -identical {1}", ViewName, name );
-			Log.Debug( string.Format( "command line is: {0} {1}", Executable, args) );
-			return new ProcessInfo( Executable, args );
+			string args = string.Format("mkbl -view {0} -identical {1}", ViewName, name);
+			Log.Debug(string.Format("command line is: {0} {1}", Executable, args));
+			return new ProcessInfo(Executable, args);
 		}
 
 		internal string CreateTemporaryBaselineName()
 		{
-			return _TEMPORARY_BASELINE_PREFIX + DateTime.Now.ToString( "MM-dd-yyyy-HH-mm-ss" );
+			return _TEMPORARY_BASELINE_PREFIX + DateTime.Now.ToString("MM-dd-yyyy-HH-mm-ss");
 		}
 
 		// This is a HACK.  ProcessSourceControl.Execute doesn't allow the flexibility ClearCase needs
 		// to allow nonzero exit codes and to selectively ignore certian error messages.
-		private void ExecuteIgnoreNonVobObjects( ProcessInfo info )
+		private void ExecuteIgnoreNonVobObjects(ProcessInfo info)
 		{
 			info.TimeOut = Timeout;
-			ProcessResult result = _executor.Execute( info );
+			ProcessResult result = _executor.Execute(info);
 
 			if (result.TimedOut)
 			{
 				throw new CruiseControlException("Source control operation has timed out.");
 			}
-			else if (result.Failed && HasFatalError( result.StandardError ) )
+			else if (result.Failed && HasFatalError(result.StandardError))
 			{
-				throw new CruiseControlException(string.Format("Source control operation failed: {0}. Process command: {1} {2}", 
-					result.StandardError, info.FileName, info.Arguments));
+				throw new CruiseControlException(string.Format("Source control operation failed: {0}. Process command: {1} {2}",
+				                                               result.StandardError, info.FileName, info.Arguments));
 			}
 			else if (result.HasErrorOutput)
 			{
@@ -183,19 +180,19 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 		/// </remarks>
 		/// <param name="standardError">the standard error from the process</param>
 		/// <returns><c>true</c> if there is a fatal error</returns>
-		public bool HasFatalError( string standardError )
+		public bool HasFatalError(string standardError)
 		{
-			if ( standardError == null )
+			if (standardError == null)
 			{
 				return false;
 			}
-			StringReader reader = new StringReader( standardError );
-			try 
+			StringReader reader = new StringReader(standardError);
+			try
 			{
 				String line = null;
-				while ( ( line = reader.ReadLine() ) != null )
+				while ((line = reader.ReadLine()) != null)
 				{
-					if ( line.IndexOf( "Error: Not a vob object:" ) == -1 )
+					if (line.IndexOf("Error: Not a vob object:") == -1)
 					{
 						return true;
 					}
@@ -208,12 +205,12 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			}
 		}
 
-		public ProcessInfo CreateHistoryProcessInfo( DateTime from, DateTime to )
+		public ProcessInfo CreateHistoryProcessInfo(DateTime from, DateTime to)
 		{
-			string fromDate = from.ToString( DATETIME_FORMAT );
-			string args = CreateHistoryArguments( fromDate );
-			Log.Debug( string.Format( "cleartool commandline: {0} {1}", Executable, args ) );
-			ProcessInfo processInfo = new ProcessInfo( Executable, args );
+			string fromDate = from.ToString(DATETIME_FORMAT);
+			string args = CreateHistoryArguments(fromDate);
+			Log.Debug(string.Format("cleartool commandline: {0} {1}", Executable, args));
+			ProcessInfo processInfo = new ProcessInfo(Executable, args);
 			return processInfo;
 		}
 
@@ -222,11 +219,11 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 		/// </summary>
 		/// <param name="label">the label to apply</param>
 		/// <returns>the process execution info</returns>
-		public ProcessInfo CreateLabelTypeProcessInfo( string label )
+		public ProcessInfo CreateLabelTypeProcessInfo(string label)
 		{
 			string args = " mklbtype -c \"CRUISECONTROL Comment\" \"" + label + "\"";
-			Log.Debug( string.Format( "mklbtype: {0} {1}; [working dir: {2}]", Executable, args, ViewPath ) );
-			return new ProcessInfo( Executable, args, ViewPath );
+			Log.Debug(string.Format("mklbtype: {0} {1}; [working dir: {2}]", Executable, args, ViewPath));
+			return new ProcessInfo(Executable, args, ViewPath);
 		}
 
 		/// <summary>
@@ -234,41 +231,41 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 		/// </summary>
 		/// <param name="label">the label to apply</param>
 		/// <returns>the process execution info</returns>
-		public ProcessInfo CreateMakeLabelProcessInfo( string label )
+		public ProcessInfo CreateMakeLabelProcessInfo(string label)
 		{
-			string args = String.Format( @" mklabel -recurse ""{0}"" {1}", label, ViewPath );
-			Log.Debug( string.Format( "mklabel: {0} {1}", Executable, args ) );
-			return new ProcessInfo( Executable, args );
+			string args = String.Format(@" mklabel -recurse ""{0}"" {1}", label, ViewPath);
+			Log.Debug(string.Format("mklabel: {0} {1}", Executable, args));
+			return new ProcessInfo(Executable, args);
 		}
 
 		public ProcessInfo CreateRemoveBaselineProcessInfo()
 		{
-			string args = string.Format( "rmbl -force {0}@\\{1}", TempBaseline, ProjectVobName );
-			Log.Debug( string.Format( "remove baseline: {0} {1}", Executable, args ) );
-			return new ProcessInfo( Executable, args );
+			string args = string.Format("rmbl -force {0}@\\{1}", TempBaseline, ProjectVobName);
+			Log.Debug(string.Format("remove baseline: {0} {1}", Executable, args));
+			return new ProcessInfo(Executable, args);
 		}
 
-		public ProcessInfo CreateRenameBaselineProcessInfo( string name )
+		public ProcessInfo CreateRenameBaselineProcessInfo(string name)
 		{
-			string args = string.Format( "rename baseline:{0}@\\{1} \"{2}\"", TempBaseline, ProjectVobName, name  );
-			Log.Debug( string.Format( "rename baseline: {0} {1}", Executable, args ) );
-			return new ProcessInfo( Executable, args );
+			string args = string.Format("rename baseline:{0}@\\{1} \"{2}\"", TempBaseline, ProjectVobName, name);
+			Log.Debug(string.Format("rename baseline: {0} {1}", Executable, args));
+			return new ProcessInfo(Executable, args);
 		}
 
-		public void ValidateBaselineName( string name )
+		public void ValidateBaselineName(string name)
 		{
-			if ( name == null
+			if (name == null
 				|| name.Length == 0
-				|| name.IndexOf( " " ) > -1 )
+				|| name.IndexOf(" ") > -1)
 			{
-				throw new CruiseControlException( string.Format( "invalid baseline name: \"{0}\" (Does your prefix have a space in it?)", name ) );
+				throw new CruiseControlException(string.Format("invalid baseline name: \"{0}\" (Does your prefix have a space in it?)", name));
 			}
 		}
 
-		private string CreateHistoryArguments( string fromDate )
+		private string CreateHistoryArguments(string fromDate)
 		{
 			return "lshist  -r  -nco -since " + fromDate + " -fmt \"%u" + ClearCaseHistoryParser.DELIMITER
-				+ "%Vd"	+ ClearCaseHistoryParser.DELIMITER + "%En" + ClearCaseHistoryParser.DELIMITER
+				+ "%Vd" + ClearCaseHistoryParser.DELIMITER + "%En" + ClearCaseHistoryParser.DELIMITER
 				+ "%Vn" + ClearCaseHistoryParser.DELIMITER + "%o" + ClearCaseHistoryParser.DELIMITER
 				+ "!%l" + ClearCaseHistoryParser.DELIMITER + "!%a" + ClearCaseHistoryParser.DELIMITER
 				+ "%Nc" + ClearCaseHistoryParser.END_OF_LINE_DELIMITER + "\\n\" " + _viewPath;
@@ -276,27 +273,27 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 
 		private void RemoveBaseline()
 		{
-			base.Execute( CreateRemoveBaselineProcessInfo() );
+			base.Execute(CreateRemoveBaselineProcessInfo());
 		}
 
-		private void RenameBaseline( string name )
+		private void RenameBaseline(string name)
 		{
 			ValidateBaselineConfiguration();
-			ValidateBaselineName( name );
-			base.Execute( CreateRenameBaselineProcessInfo( name ) );
+			ValidateBaselineName(name);
+			base.Execute(CreateRenameBaselineProcessInfo(name));
 		}
 
 		private void ValidateBaselineConfiguration()
 		{
-			if ( UseBaseline
-				&& ( ProjectVobName == null 
-				|| ViewName == null ) )
+			if (UseBaseline
+				&& (ProjectVobName == null
+					|| ViewName == null))
 			{
-				throw new CruiseControlException( "you must specify the project VOB and view name if UseBaseLine is true" );
+				throw new CruiseControlException("you must specify the project VOB and view name if UseBaseLine is true");
 			}
 		}
 
-		public override void GetSource( IIntegrationResult result )
+		public override void GetSource(IIntegrationResult result)
 		{
 			CreateTemporaryLabel();
 			if (AutoGetSource)

@@ -71,12 +71,11 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 		public void PassesThroughLabelSourceControl()
 		{
 			//// SETUP
-			string label = "testLabel";
 			IntegrationResult result = new IntegrationResult();
-			_mockSC.Expect("LabelSourceControl", label, result);
+			_mockSC.Expect("LabelSourceControl", result);
 
 			//// EXECUTE
-			_filteredSourceControl.LabelSourceControl(label, result);
+			_filteredSourceControl.LabelSourceControl(result);
 		}
 
 		[Test]

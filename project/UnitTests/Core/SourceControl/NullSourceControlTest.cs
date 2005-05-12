@@ -28,7 +28,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.SourceControl
 			sourceControl.Initialize(null);
 			sourceControl.Purge(null);
 			sourceControl.Run(null);
-			sourceControl.LabelSourceControl("", null);
+			sourceControl.LabelSourceControl(null);
 		}
 	}
 }

@@ -48,14 +48,13 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 		public void PassesThroughLabelSourceControl()
 		{
 			//// SETUP
-			string label = "testLabel";
 			IntegrationResult result = new IntegrationResult();
 
 			DynamicMock mockSC1 = new DynamicMock(typeof(ISourceControl));
-			mockSC1.Expect("LabelSourceControl", label, result);
+			mockSC1.Expect("LabelSourceControl", result);
 
 			DynamicMock mockSC2 = new DynamicMock(typeof(ISourceControl));
-			mockSC2.Expect("LabelSourceControl", label, result);
+			mockSC2.Expect("LabelSourceControl", result);
 
 			ISourceControl[] sourceControls = new ISourceControl[] { (ISourceControl) mockSC1.MockInstance, (ISourceControl) mockSC2.MockInstance };
 
@@ -63,7 +62,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 			multiSourceControl.SourceControls = sourceControls;
 
 			//// EXECUTE
-			multiSourceControl.LabelSourceControl(label, result);
+			multiSourceControl.LabelSourceControl(result);
 
 			//// VERIFY
 			mockSC1.Verify();

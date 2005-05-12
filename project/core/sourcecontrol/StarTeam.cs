@@ -161,7 +161,7 @@ Author: (?<author_name>.*?) Date: (?<date_string>\d{01,2}/\d{1,2}/\d\d \d{1,2}:\
 			return GetModifications(CreateHistoryProcessInfo(from, to), from, to);
 		}
 
-		public override void LabelSourceControl(string label, IIntegrationResult result)
+		public override void LabelSourceControl(IIntegrationResult result)
 		{
 		}
 

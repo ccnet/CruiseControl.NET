@@ -172,20 +172,20 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Perforce
 		/// checked out on the client (In theory this could be refined by using the timeStamp, but it would be better
 		/// to wait until CCNet has proper support for atomic-commit change groups, and use that instead)
 		/// </summary>
-		public void LabelSourceControl(string label, IIntegrationResult result) 
+		public void LabelSourceControl(IIntegrationResult result) 
 		{
 			if (ApplyLabel && result.Succeeded)
 			{
-				if (label == null || label.Length == 0)
+				if (result.Label == null || result.Label.Length == 0)
 					throw new ApplicationException("Internal Exception - Invalid (null or empty) label passed");
 
 				try
 				{
-					int.Parse(label);
+					int.Parse(result.Label);
 					throw new CruiseControlException("Perforce cannot handle purely numeric labels - you must use a label prefix for your project");
 				}
 				catch (FormatException) { }
-				ProcessInfo process = CreateLabelSpecificationProcess(label);
+				ProcessInfo process = CreateLabelSpecificationProcess(result.Label);
 
 				string processOutput = Execute(process);
 				if (containsErrors(processOutput))
@@ -194,7 +194,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Perforce
 					return;
 				}
 
-				process = CreateLabelSyncProcess(label);
+				process = CreateLabelSyncProcess(result.Label);
 				processOutput = Execute(process);
 				if (containsErrors(processOutput))
 				{

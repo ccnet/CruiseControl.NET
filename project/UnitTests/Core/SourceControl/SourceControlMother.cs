@@ -52,7 +52,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 			return modifications;
 		}
 
-		public void LabelSourceControl( string label, IIntegrationResult result ) 
+		public void LabelSourceControl(IIntegrationResult result) 
 		{
 			if (result.Succeeded) this.label = label;
 		}

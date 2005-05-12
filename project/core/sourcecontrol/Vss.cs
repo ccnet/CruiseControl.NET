@@ -91,13 +91,13 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			return GetModifications(CreateHistoryProcessInfo(from, to), from, to);
 		}
 
-		public override void LabelSourceControl(string newLabel, IIntegrationResult result)
+		public override void LabelSourceControl(IIntegrationResult result)
 		{
 			if (! ApplyLabel) return;
 
 			if (result.Succeeded)
 			{
-				LabelSourceControl(newLabel, _lastTempLabel);
+				LabelSourceControl(result.Label, _lastTempLabel);
 			}
 			else
 			{

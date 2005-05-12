@@ -37,7 +37,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 
 		public abstract Modification[] GetModifications(DateTime from, DateTime to);
 
-		public abstract void LabelSourceControl(string label, IIntegrationResult result);
+		public abstract void LabelSourceControl(IIntegrationResult result);
 
 		protected Modification[] GetModifications(ProcessInfo info, DateTime from, DateTime to)
 		{

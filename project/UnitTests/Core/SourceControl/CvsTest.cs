@@ -131,7 +131,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 		[Test]
 		public void ShouldBuildCorrectLabelProcessInfo()
 		{
-			ProcessInfo info = new Cvs().CreateLabelProcessInfo("foo", null);
+			ProcessInfo info = new Cvs().CreateLabelProcessInfo(IntegrationResultMother.CreateSuccessful("foo"));
 			Assert.AreEqual("tag ver-foo", info.Arguments);
 		}
 
@@ -140,7 +140,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 		{
 			Cvs cvs = new Cvs();
 			cvs.CvsRoot = "myCvsRoot";
-			ProcessInfo info = cvs.CreateLabelProcessInfo("foo", null);
+			ProcessInfo info = cvs.CreateLabelProcessInfo(IntegrationResultMother.CreateSuccessful("foo"));
 			Assert.AreEqual("-d myCvsRoot tag ver-foo", info.Arguments);
 		}
 

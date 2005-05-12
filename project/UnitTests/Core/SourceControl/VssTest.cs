@@ -231,8 +231,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 			mockProcessExecutor.ExpectAndReturn("Execute", ProcessResultFixture.CreateSuccessfulResult(), constraint);
 
 			vss.ApplyLabel = true;
-			vss.GetSource(IntegrationResultMother.CreateUnknown());
-			vss.LabelSourceControl("foo", IntegrationResultMother.CreateSuccessful());
+			vss.GetSource(IntegrationResultMother.CreateUnknown("foo"));
+			vss.LabelSourceControl(IntegrationResultMother.CreateSuccessful("foo"));
 
 			ProcessInfo info = (ProcessInfo) constraint.Parameter;
 			AssertContains("label $/fooProject -Lfoo -VLCCNETUNVERIFIED", info.Arguments);
@@ -246,8 +246,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 			mockProcessExecutor.ExpectAndReturn("Execute", ProcessResultFixture.CreateSuccessfulResult(), constraint);
 
 			vss.ApplyLabel = true;
-			vss.GetSource(IntegrationResultMother.CreateUnknown());
-			vss.LabelSourceControl("foo", IntegrationResultMother.CreateFailed());
+			vss.GetSource(IntegrationResultMother.CreateUnknown("foo"));
+			vss.LabelSourceControl(IntegrationResultMother.CreateFailed("foo"));
 
 			ProcessInfo info = (ProcessInfo) constraint.Parameter;
 			AssertContains("label $/fooProject -L -VLCCNETUNVERIFIED", info.Arguments);

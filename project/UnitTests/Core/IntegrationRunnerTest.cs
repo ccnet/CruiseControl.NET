@@ -142,8 +142,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 		{
 			resultMock.ExpectAndReturn("Status", IntegrationStatus.Success);
 			resultMock.ExpectAndReturn("Status", IntegrationStatus.Success);
-			resultMock.ExpectAndReturn("Label", "mylabel");
-			sourceControlMock.Expect("LabelSourceControl", "mylabel", result);
+			sourceControlMock.Expect("LabelSourceControl", result);
 			targetMock.Expect("OnIntegrationCompleted", result);
 		}
 	}
