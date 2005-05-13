@@ -644,11 +644,6 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "Core\SourceControl\SourceControlMother.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
                     RelPath = "Core\SourceControl\StarTeamHistoryParserTest.cs"
                     SubType = "Code"
                     BuildAction = "Compile"

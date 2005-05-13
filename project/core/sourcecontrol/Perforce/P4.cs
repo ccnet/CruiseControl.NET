@@ -160,11 +160,6 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Perforce
 			}
 		}
 
-		public void Run(IIntegrationResult result)
-		{
-			result.Modifications = GetModifications(result.LastModificationDate, DateTime.Now);
-		}
-
 		/// <summary>
 		/// Labelling in Perforce requires 2 activities. First you create a 'label specification' which is the name of the label, and what
 		/// part of the source repository it is associated with. Secondly you actually populate the label with files and associated

@@ -27,9 +27,5 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 		public void Purge(IProject project)
 		{
 		}
-
-		public void Run(IIntegrationResult result)
-		{
-		}
 	}
 }

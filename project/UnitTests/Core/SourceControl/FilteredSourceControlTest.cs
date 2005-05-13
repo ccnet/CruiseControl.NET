@@ -90,17 +90,6 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 		}
 
 		[Test]
-		public void InvokesRunOnSCProvider() 
-		{
-			//// SETUP
-			IntegrationResult result = new IntegrationResult();
-			_mockSC.ExpectAndReturn("GetModifications", Modifications, new IsTypeOf(typeof(DateTime)), new IsTypeOf(typeof(DateTime)));
-
-			//// EXECUTE
-			_filteredSourceControl.Run(result);
-		}
-
-		[Test]
 		public void AppliesFiltersOnModifications()
 		{
 			//// SETUP

@@ -47,11 +47,6 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			return (Modification[])modifications.ToArray(typeof(Modification));
 		}
 
-		public void Run(IIntegrationResult result)
-		{
-			result.Modifications = GetModifications(result.LastModificationDate, DateTime.Now);
-		}
-
 		private ArrayList GetMods(DirectoryInfo dir, DateTime from, DateTime to) 
 		{
 			ArrayList mods = new ArrayList();

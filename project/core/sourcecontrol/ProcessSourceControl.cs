@@ -30,11 +30,6 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			set { timeout = value; }
 		}
 
-		public void Run(IIntegrationResult result)
-		{
-			result.Modifications = GetModifications(result.LastModificationDate, DateTime.Now);
-		}
-
 		public abstract Modification[] GetModifications(DateTime from, DateTime to);
 
 		public abstract void LabelSourceControl(IIntegrationResult result);

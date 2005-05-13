@@ -17,8 +17,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 			string xml = @"
 <workflow name=""foo"">
 	<tasks>
-		<mock/>
-		<mock/>
+		<nullTask/>
+		<nullTask/>
 	</tasks>
 </workflow>";
 			object obj = NetReflector.Read(xml);

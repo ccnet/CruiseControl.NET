@@ -34,11 +34,6 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 			return _expectedMods;
 		}
 
-		public void Run(IIntegrationResult result)
-		{
-			result.Modifications = GetModifications(result.LastModificationDate, DateTime.Now);
-		}
-
 		public void LabelSourceControl(IIntegrationResult result) 
 		{
 		}
