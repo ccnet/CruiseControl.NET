@@ -42,7 +42,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 			TempFileUtil.DeleteTempDir(_tempSubDir);
 			TempFileUtil.DeleteTempDir(_tempDir);
 
-			_sc.GetModifications(DateTime.MinValue, DateTime.MaxValue);
+			_sc.GetModifications(IntegrationResult(DateTime.MinValue), IntegrationResult(DateTime.MaxValue));
 		}
 
 		[Test]
@@ -54,7 +54,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 			_sc.IgnoreMissingRoot = true;
 			try 
 			{
-				Modification[] mods = _sc.GetModifications(DateTime.MinValue, DateTime.MaxValue);
+				Modification[] mods = _sc.GetModifications(IntegrationResult(DateTime.MinValue), IntegrationResult(DateTime.MaxValue));
 				Assert.AreEqual(0, mods.Length, "Modifications found in a missing directory");
 			} 
 			finally 
@@ -70,7 +70,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 			string file2 = TempFileUtil.CreateTempFile("repo", "file2.txt", "bar");
 			string file3 = TempFileUtil.CreateTempFile("repo\\subrepo", "file3.txt", "bat");
 
-			Modification[] mods = _sc.GetModifications(DateTime.MinValue, DateTime.MaxValue);
+			Modification[] mods = _sc.GetModifications(IntegrationResult(DateTime.MinValue), IntegrationResult(DateTime.MaxValue));
 
 			Assert.AreEqual(3, mods.Length);
 			Assert.AreEqual("file1.txt", mods[0].FileName);
@@ -84,14 +84,14 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 			Assert.AreEqual(new FileInfo(file2).LastWriteTime, mods[1].ModifiedTime);
 			Assert.AreEqual(new FileInfo(file3).LastWriteTime, mods[2].ModifiedTime);
 
-			mods = _sc.GetModifications(DateTime.Now, DateTime.MaxValue);
+			mods = _sc.GetModifications(IntegrationResult(DateTime.Now), IntegrationResult(DateTime.MaxValue));
 			Assert.AreEqual(0, mods.Length);
 		}
 
 		[Test]
 		public void GetModifications_EmptyRepository()
 		{
-			Modification[] mods = _sc.GetModifications(DateTime.MinValue, DateTime.MaxValue);
+			Modification[] mods = _sc.GetModifications(IntegrationResult(DateTime.MinValue), IntegrationResult(DateTime.MaxValue));
 			Assert.IsNotNull(mods);
 			Assert.AreEqual(0, mods.Length);
 		}
@@ -104,7 +104,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 			Thread.Sleep(100);
 			TempFileUtil.CreateTempFile("repo", "file2.txt", "bar");
 
-			Modification[] mods = _sc.GetModifications(from, DateTime.MaxValue);
+			Modification[] mods = _sc.GetModifications(IntegrationResult(from), IntegrationResult(DateTime.MaxValue));
 			Assert.AreEqual(1, mods.Length);
 			Assert.AreEqual("file2.txt", mods[0].FileName);
 		}
@@ -130,6 +130,11 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 			_sc.GetSource(result);
 
 			fileSystemMock.Verify();	
+		}
+
+		private IntegrationResult IntegrationResult(DateTime date)
+		{
+			return IntegrationResultMother.CreateSuccessful(date);
 		}
 	}
 }

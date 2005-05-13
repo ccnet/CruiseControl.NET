@@ -96,10 +96,10 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			return new ProcessInfo(Executable, BuildTagProcessArgs(result.Label, result.LastChangeNumber));
 		}
 
-		public override Modification[] GetModifications(DateTime from, DateTime to)
+		public override Modification[] GetModifications(IIntegrationResult from, IIntegrationResult to)
 		{
-			ProcessResult result = Execute(CreateHistoryProcessInfo(from, to));
-			Modification[] modifications = ParseModifications(result, from, to);
+			ProcessResult result = Execute(CreateHistoryProcessInfo(from.StartTime, to.StartTime));
+			Modification[] modifications = ParseModifications(result, from.StartTime, to.StartTime);
 			if (urlBuilder != null)
 			{
 				urlBuilder.SetupModification(modifications);

@@ -91,7 +91,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 			ProcessExecutor mockProcessExecutor = (ProcessExecutor) mockExecutorWrapper.MockInstance;
 
 			Mks mks = CreateMks(CreateSourceControlXml(), mockHistoryParser, mockProcessExecutor);
-			mks.GetModifications(from, to);
+			mks.GetModifications(IntegrationResultMother.CreateSuccessful(from), IntegrationResultMother.CreateSuccessful(to));
 			mockHistoryParserWrapper.Verify();
 			mockExecutorWrapper.Verify();
 		}

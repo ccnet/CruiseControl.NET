@@ -52,7 +52,7 @@ namespace ThoughtWorks.CruiseControl.Core
 		private Modification[] GetSourceModifications(ISourceControl sourceControl, IIntegrationResult result, IIntegrationResult lastResult)
 		{
 			target.Activity = ProjectActivity.CheckingModifications;
-			Modification[] modifications = sourceControl.GetModifications(lastResult.StartTime, result.StartTime);
+			Modification[] modifications = sourceControl.GetModifications(lastResult, result);
 			Log.Info(GetModificationsDetectedMessage(modifications));
 			return modifications;
 		}

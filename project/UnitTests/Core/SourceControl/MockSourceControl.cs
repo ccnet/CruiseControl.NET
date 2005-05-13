@@ -1,4 +1,3 @@
-using System;
 using Exortech.NetReflector;
 using ThoughtWorks.CruiseControl.Core;
 
@@ -28,7 +27,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 			return _invoked;
 		}
 
-		public Modification[] GetModifications(DateTime from, DateTime to)
+		public Modification[] GetModifications(IIntegrationResult from, IIntegrationResult to)
 		{
 			_invoked = true;
 			return _expectedMods;

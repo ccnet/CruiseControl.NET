@@ -30,7 +30,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			set { timeout = value; }
 		}
 
-		public abstract Modification[] GetModifications(DateTime from, DateTime to);
+		public abstract Modification[] GetModifications(IIntegrationResult from, IIntegrationResult to);
 
 		public abstract void LabelSourceControl(IIntegrationResult result);
 

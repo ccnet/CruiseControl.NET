@@ -14,15 +14,16 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			this.dtProvider = dtProvider;
 		}
 
-		public Modification[] GetModifications(ISourceControl sc, DateTime from, DateTime to)
+		public Modification[] GetModifications(ISourceControl sc, IIntegrationResult from, IIntegrationResult to)
 		{
-			Modification[] modifications = GetMods(sc, from, to);				
-			while (ModificationsAreDetectedInQuietPeriod(modifications, to))
+			Modification[] modifications = GetMods(sc, from, to);
+			DateTime startTime = to.StartTime;
+			while (ModificationsAreDetectedInQuietPeriod(modifications, startTime))
 			{
-				double secondsUntilNextBuild = ModificationDelaySeconds - SecondsSinceLastBuild(modifications, to);
-				to = to.AddSeconds(secondsUntilNextBuild);
+				double secondsUntilNextBuild = ModificationDelaySeconds - SecondsSinceLastBuild(modifications, startTime);
+				startTime = startTime.AddSeconds(secondsUntilNextBuild);
 
-				Log.Info("Modifications have been detected in the quiet delay; waiting until " + to);
+				Log.Info("Modifications have been detected in the quiet delay; waiting until " + startTime);
 				dtProvider.Sleep((int)(secondsUntilNextBuild * 1000));
 
 				modifications = GetMods(sc, from, to);
@@ -30,7 +31,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			return modifications;
 		}
 
-		private Modification[] GetMods(ISourceControl sc, DateTime from, DateTime to)
+		private Modification[] GetMods(ISourceControl sc, IIntegrationResult from, IIntegrationResult to)
 		{
 			Modification[] modifications = sc.GetModifications(from, to);
 			if (modifications == null) modifications = new Modification[0];

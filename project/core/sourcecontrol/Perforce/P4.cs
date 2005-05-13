@@ -143,10 +143,10 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Perforce
 			return processInfoCreator.CreateProcessInfo(this, "describe -s " + changes);
 		}
 
-		public Modification[] GetModifications(DateTime from, DateTime to) 
+		public Modification[] GetModifications(IIntegrationResult from, IIntegrationResult to)
 		{
 			P4HistoryParser parser = new P4HistoryParser();
-			ProcessInfo process = CreateChangeListProcess(from, to);
+			ProcessInfo process = CreateChangeListProcess(from.StartTime, to.StartTime);
 			string processResult = Execute(process);
 			String changes = parser.ParseChanges(processResult);
 			if (changes.Length == 0)
@@ -156,7 +156,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Perforce
 			else
 			{
 				process = CreateDescribeProcess(changes);
-				return parser.Parse(new StringReader(Execute(process)), from, to);
+				return parser.Parse(new StringReader(Execute(process)), from.StartTime, to.StartTime);
 			}
 		}
 

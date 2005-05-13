@@ -142,8 +142,13 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 		public void ShouldWorkWhenStandardErrorIsNull()
 		{
 			mockProcessExecutor.ExpectAndReturn("Execute", new ProcessResult("foo", null, ProcessResult.SUCCESSFUL_EXIT_CODE, false), new IsAnything());
-			
-			vss.GetModifications(DateTime.Now, DateTime.Now);
+
+			vss.GetModifications(IntegrationResult(DateTime.Now), IntegrationResult(DateTime.Now));
+		}
+
+		private IntegrationResult IntegrationResult(DateTime now)
+		{
+			return IntegrationResultMother.CreateSuccessful(now);
 		}
 
 		[Test]
@@ -151,7 +156,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 		{
 			mockProcessExecutor.ExpectAndReturn("Execute", new ProcessResult("foo", "bar", ProcessResult.SUCCESSFUL_EXIT_CODE, false), new IsAnything());
 			
-			vss.GetModifications(DateTime.Now, DateTime.Now);
+			vss.GetModifications(IntegrationResult(DateTime.Now), IntegrationResult(DateTime.Now));
 		}
 
 		[Test, ExpectedException(typeof(CruiseControlException))]
@@ -159,7 +164,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 		{
 			mockProcessExecutor.ExpectAndReturn("Execute", new ProcessResult("x", null, ProcessResult.TIMED_OUT_EXIT_CODE, true), new IsAnything());
 		
-			vss.GetModifications(DateTime.Now, DateTime.Now);
+			vss.GetModifications(IntegrationResult(DateTime.Now), IntegrationResult(DateTime.Now));
 		}
 
 		[Test]

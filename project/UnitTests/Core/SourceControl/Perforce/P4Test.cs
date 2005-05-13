@@ -245,7 +245,7 @@ exit: 0
 			mock.SetupResult("View", "ViewDataForDodgyUnitTest");
 
 			P4 p4 = (P4) mock.MockInstance;
-			Modification[] result = p4.GetModifications(from, to);
+			Modification[] result = p4.GetModifications(new IntegrationResult(), new IntegrationResult());
 
 			mock.Verify();
 			Assert.AreEqual(7, result.Length);

@@ -76,9 +76,9 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			return date.ToUniversalTime().ToString(COMMAND_DATE_FORMAT, CultureInfo.InvariantCulture);
 		}
 
-		public override Modification[] GetModifications(DateTime from, DateTime to)
+		public override Modification[] GetModifications(IIntegrationResult from, IIntegrationResult to)
 		{
-			Modification[] modifications = GetModifications(CreateHistoryProcessInfo(from, to), from, to);
+			Modification[] modifications = GetModifications(CreateHistoryProcessInfo(from.StartTime, to.StartTime), from.StartTime, to.StartTime);
 			if (UrlBuilder != null ) 
 			{
 				UrlBuilder.SetupModification(modifications);

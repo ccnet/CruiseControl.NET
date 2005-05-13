@@ -1,4 +1,3 @@
-using System;
 using System.Collections;
 using Exortech.NetReflector;
 
@@ -44,7 +43,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			set { _inclusionFilters = value; }
 		}
 
-		public Modification[] GetModifications(DateTime from, DateTime to)
+		public Modification[] GetModifications(IIntegrationResult from, IIntegrationResult to)
 		{
 			Modification[] allModifications = _realScProvider.GetModifications(from, to);
 			ArrayList acceptedModifications = new ArrayList();

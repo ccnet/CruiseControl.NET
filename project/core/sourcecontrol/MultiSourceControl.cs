@@ -1,4 +1,3 @@
-using System;
 using System.Collections;
 using Exortech.NetReflector;
 
@@ -23,7 +22,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			set { _sourceControls = value; }
 		}
 
-		public Modification[] GetModifications(DateTime from, DateTime to)
+		public Modification[] GetModifications(IIntegrationResult from, IIntegrationResult to)
 		{
 			ArrayList modifications = new ArrayList();
 			foreach (ISourceControl sourceControl in SourceControls)

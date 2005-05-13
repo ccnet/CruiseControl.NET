@@ -1,4 +1,3 @@
-using System;
 using Exortech.NetReflector;
 
 namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
@@ -6,7 +5,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 	[ReflectorType("nullSourceControl")]
 	public class NullSourceControl : ISourceControl
 	{
-		public Modification[] GetModifications(DateTime from, DateTime to)
+		public Modification[] GetModifications(IIntegrationResult from, IIntegrationResult to)
 		{
 			return new Modification[0];
 		}

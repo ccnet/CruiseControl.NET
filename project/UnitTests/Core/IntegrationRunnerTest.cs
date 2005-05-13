@@ -22,8 +22,6 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 		private IIntegrationResult lastResult;
 
 		private Modification[] modifications;
-		private DateTime time1;
-		private DateTime time2;
 		private DateTime time3;
 		private int modificationDelay = 55;
 
@@ -47,8 +45,6 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 			lastResultMock.Strict = true;
 			lastResult = (IIntegrationResult) lastResultMock.MockInstance;
 
-			time1 = new DateTime(2004,1,1);
-			time2 = new DateTime(2005,1,1);
 			time3 = new DateTime(2005,2,1);
 			modifications = new Modification[] { new Modification() };
 
@@ -112,12 +108,10 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 			resultManagerMock.ExpectAndReturn("StartNewIntegration", result, BuildCondition.IfModificationExists);
 			resultMock.Expect("MarkStartTime");
 			resultManagerMock.ExpectAndReturn("LastIntegrationResult", lastResult);
-			lastResultMock.ExpectAndReturn("StartTime", time1);
-			resultMock.ExpectAndReturn("StartTime", time2);
 			sourceControlMock = new DynamicMock(sourceControlType);
 			sourceControlMock.Strict = true;
 			targetMock.SetupResult("SourceControl", sourceControlMock.MockInstance);
-			sourceControlMock.ExpectAndReturn("GetModifications", modifications, time1, time2);
+			sourceControlMock.ExpectAndReturn("GetModifications", modifications, lastResult, result);
 			resultMock.ExpectAndReturn("Modifications", modifications);
 			targetMock.ExpectAndReturn("ModificationDelaySeconds", modificationDelay);
 		}

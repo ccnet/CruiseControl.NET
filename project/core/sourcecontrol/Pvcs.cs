@@ -148,11 +148,11 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			get { return _tempFile = TempFileNameIfBlank(_tempFile); }
 		}
 
-		public override Modification[] GetModifications(DateTime from, DateTime to)
+		public override Modification[] GetModifications(IIntegrationResult from, IIntegrationResult to)
 		{
-			using (TextReader reader = ExecuteVLog(from, to))
+			using (TextReader reader = ExecuteVLog(from.StartTime, to.StartTime))
 			{
-				_modifications = base.ParseModifications(reader, from, to);
+				_modifications = base.ParseModifications(reader, from.StartTime, to.StartTime);
 			}
 			return _modifications;
 		}

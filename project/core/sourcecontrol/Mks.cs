@@ -106,11 +106,11 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			base.Initialize(project);
 		}
 
-		public override Modification[] GetModifications(DateTime from, DateTime to)
+		public override Modification[] GetModifications(IIntegrationResult from, IIntegrationResult to)
 		{
 			ProcessInfo info = createProcess(MODIFICATIONS_COMMAND_TEMPLATE);
 			Log.Info(string.Format("Getting Modifications on MKS: {0} {1}", info.FileName, info.Arguments));
-			return base.GetModifications(info, from, to);
+			return base.GetModifications(info, from.StartTime, to.StartTime);
 		}
 
 		public override void LabelSourceControl(IIntegrationResult result)

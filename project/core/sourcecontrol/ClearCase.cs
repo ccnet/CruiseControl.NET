@@ -83,9 +83,9 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			set { _tempBaseline = value; }
 		}
 
-		public override Modification[] GetModifications(DateTime from, DateTime to)
+		public override Modification[] GetModifications(IIntegrationResult from, IIntegrationResult to)
 		{
-			return base.GetModifications(CreateHistoryProcessInfo(from, to), from, to);
+			return base.GetModifications(CreateHistoryProcessInfo(from.StartTime, to.StartTime), from.StartTime, to.StartTime);
 		}
 
 		/// <summary>

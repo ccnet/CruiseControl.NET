@@ -37,12 +37,12 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 		[ReflectorProperty("autoGetSource", Required = false)]
 		public bool AutoGetSource = false;
 		
-		public Modification[] GetModifications(DateTime from, DateTime to)
+		public Modification[] GetModifications(IIntegrationResult from, IIntegrationResult to)
 		{
 			ArrayList modifications;
 			DirectoryInfo root = new DirectoryInfo(RepositoryRoot);
 
-			modifications = GetMods(root, from , to);
+			modifications = GetMods(root, from.StartTime, to.StartTime);
 
 			return (Modification[])modifications.ToArray(typeof(Modification));
 		}

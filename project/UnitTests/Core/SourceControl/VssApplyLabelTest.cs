@@ -46,7 +46,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 			_executor.ExpectAndReturn("Execute", result, new IsTypeOf(typeof(ProcessInfo)));
 			_executor.ExpectNoCall("Execute", typeof(ProcessInfo));
 
-			_vss.GetModifications(DateTime.Now, DateTime.Now);
+			_vss.GetModifications(IntegrationResultMother.CreateSuccessful(DateTime.Now), IntegrationResultMother.CreateSuccessful(DateTime.Now));
 		}
 
 		[Test]
@@ -58,7 +58,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 			_executor.ExpectAndReturn("Execute", result, new IsTypeOf(typeof(ProcessInfo)));
 			_executor.ExpectNoCall("Execute", typeof(ProcessInfo));
 
-			_vss.GetModifications(DateTime.Now, DateTime.Now);
+			_vss.GetModifications(IntegrationResultMother.CreateSuccessful(DateTime.Now), IntegrationResultMother.CreateSuccessful(DateTime.Now));
 		}
 	}
 }

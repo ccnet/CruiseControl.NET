@@ -1,7 +1,6 @@
 using System;
 using Exortech.NetReflector;
 using NMock;
-using NMock.Constraints;
 using NUnit.Framework;
 using ThoughtWorks.CruiseControl.Core;
 using ThoughtWorks.CruiseControl.Core.Sourcecontrol;
@@ -93,20 +92,25 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 		public void AppliesFiltersOnModifications()
 		{
 			//// SETUP
-			DateTime dateTime1 = DateTime.Now;
-			DateTime dateTime2 = dateTime1.AddDays(10);
-			_mockSC.ExpectAndReturn("GetModifications", Modifications, dateTime1, dateTime2);
+			IntegrationResult from = IntegrationResult(DateTime.Now);
+			IntegrationResult to = IntegrationResult(DateTime.Now.AddDays(10));
+			_mockSC.ExpectAndReturn("GetModifications", Modifications, from, to);
 
 			NetReflector.Read(SourceControlXml, _filteredSourceControl);
 			_filteredSourceControl.SourceControlProvider = (ISourceControl)_mockSC.MockInstance;
 
 			//// EXECUTE
-			Modification[] filteredResult = _filteredSourceControl.GetModifications(dateTime1, dateTime2);
+			Modification[] filteredResult = _filteredSourceControl.GetModifications(from, to);
 
 			//// VERIFY
 			Assert.AreEqual(1, filteredResult.Length);
 		}
-		
+
+		private IntegrationResult IntegrationResult(DateTime dateTime1)
+		{
+			return IntegrationResultMother.CreateSuccessful(dateTime1);
+		}
+
 		public static readonly Modification[] Modifications = new Modification[]
 				{
 					ModificationMother.CreateModification("project.info", "/"),

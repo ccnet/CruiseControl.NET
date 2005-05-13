@@ -156,9 +156,9 @@ Author: (?<author_name>.*?) Date: (?<date_string>\d{01,2}/\d{1,2}/\d\d \d{1,2}:\
 			return new ProcessInfo(Executable, args);
 		}
 
-		public override Modification[] GetModifications(DateTime from, DateTime to)
+		public override Modification[] GetModifications(IIntegrationResult from, IIntegrationResult to)
 		{
-			return GetModifications(CreateHistoryProcessInfo(from, to), from, to);
+			return GetModifications(CreateHistoryProcessInfo(from.StartTime, to.StartTime), from.StartTime, to.StartTime);
 		}
 
 		public override void LabelSourceControl(IIntegrationResult result)

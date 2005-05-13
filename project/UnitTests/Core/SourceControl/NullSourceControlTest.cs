@@ -18,7 +18,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.SourceControl
 		[Test]
 		public void ShouldReturnEmptyListOfModifications()
 		{
-			Assert.AreEqual(0, sourceControl.GetModifications(DateTime.MinValue, DateTime.MaxValue).Length);
+			Assert.AreEqual(0, sourceControl.GetModifications(IntegrationResultMother.CreateSuccessful(DateTime.MinValue), IntegrationResultMother.CreateSuccessful(DateTime.MaxValue)).Length);
 		}
 
 		[Test]

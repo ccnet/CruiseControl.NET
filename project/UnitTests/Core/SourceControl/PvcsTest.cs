@@ -104,7 +104,8 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test
 			mockExecutor.ExpectAndReturn("Execute", ProcessResultFixture.CreateSuccessfulResult(), new IsAnything());
 			mockParser.ExpectAndReturn("Parse", new Modification[] {new Modification(), new Modification()}, new IsAnything(), new IsAnything(), new IsAnything());
 
-			Modification[] mods = pvcs.GetModifications(new DateTime(2004, 6, 1, 1, 1, 1), new DateTime(2004, 6, 1, 2, 2, 2));
+			Modification[] mods = pvcs.GetModifications(IntegrationResultMother.CreateSuccessful(new DateTime(2004, 6, 1, 1, 1, 1)), 
+				IntegrationResultMother.CreateSuccessful(new DateTime(2004, 6, 1, 2, 2, 2)));
 			Assert.AreEqual(2, mods.Length);
 		}
 
