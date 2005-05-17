@@ -22,11 +22,12 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 				@"    <sourceControl type=""cvs"" autoGetSource=""true"">
       <executable>..\tools\cvs.exe</executable>
       <workingDirectory>..</workingDirectory>
+	  <useHistory>true</useHistory>
       {0}
 	  {1}
     </sourceControl>
 "
-				, cvsroot, branch);	
+				, cvsroot, branch);
 		}
 
 		[Test]
@@ -34,10 +35,12 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 		{
 			Cvs cvs = CreateCvs(CreateSourceControlXml("myCvsRoot", "branch"));
 			Assert.AreEqual(@"..\tools\cvs.exe", cvs.Executable);
-			Assert.AreEqual("..",cvs.WorkingDirectory);
+			Assert.AreEqual("..", cvs.WorkingDirectory);
 			Assert.AreEqual("myCvsRoot", cvs.CvsRoot);
 			Assert.AreEqual("branch", cvs.Branch);
 			Assert.AreEqual(true, cvs.AutoGetSource);
+			Assert.AreEqual(true, cvs.UseHistory);
+			Assert.AreEqual(true, cvs.CleanCopy);
 		}
 
 		[Test]
@@ -45,9 +48,9 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 		{
 			Cvs cvs = CreateCvs();
 			DateTime from = new DateTime(2001, 1, 21, 20, 0, 0);
-			ProcessInfo actualProcess = cvs.CreateHistoryProcessInfo(from, new DateTime());
+			ProcessInfo actualProcess = cvs.CreateLogProcessInfo(from);
 
-			string expected = string.Format(@"-q log -Nb ""-d>{0}""", cvs.FormatCommandDate(from));
+			string expected = string.Format(@"-q log -N -l -b ""-d>{0}""", cvs.FormatCommandDate(from));
 			string actual = actualProcess.Arguments;
 			Assert.AreEqual(expected, actual);
 		}
@@ -59,10 +62,10 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 
 			Cvs cvs = new Cvs();
 			cvs.CvsRoot = "myCvsRoot";
-			cvs.Branch = "branch"; 
-			string args = cvs.BuildHistoryProcessInfoArgs(from);
+			cvs.Branch = "branch";
+			ProcessInfo info = cvs.CreateLogProcessInfo(from);
 			string expected = string.Format(@"-d myCvsRoot -q log -N ""-d>{0}"" -rbranch", cvs.FormatCommandDate(from));
-			Assert.AreEqual(expected, args);
+			Assert.AreEqual(expected, info.Arguments);
 		}
 
 		[Test]
@@ -70,15 +73,39 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 		{
 			Cvs cvs = CreateCvs();
 			DateTime from = new DateTime(2001, 1, 21, 20, 0, 0);
-			ProcessInfo actualProcess = cvs.CreateHistoryProcessInfo(from, new DateTime());
+			ProcessInfo actualProcess = cvs.CreateLogProcessInfo(from);
 
-			string expected = string.Format(@"-q log -Nb ""-d>{0}""", cvs.FormatCommandDate(from));
+			string expected = string.Format(@"-q log -N -l -b ""-d>{0}""", cvs.FormatCommandDate(from));
 			string actual = actualProcess.Arguments;
 			Assert.AreEqual(expected, actual);
 		}
 
+		[Test]	// new
+		public void CreateProcessUsingHistoryWithDirectory()
+		{
+			string dir = @"\temp";
+			DateTime today = new DateTime();
+			Cvs cvs = new Cvs();
+			cvs.UseHistory = true;
+			cvs.WorkingDirectory = dir;
+			ProcessInfo info = cvs.CreateLogProcessInfo(today, dir);
+			Assert.AreEqual(string.Format(@"-q log -N -l -b ""-d>{0}"" ""{1}""", cvs.FormatCommandDate(today), dir), info.Arguments);
+		}
+
+		[Test] // new
+		public void CreateProcessUsingHistoryWithNoDirectory()
+		{
+			string dir = @"\temp";
+			DateTime today = new DateTime();
+			Cvs cvs = new Cvs();
+			cvs.UseHistory = true;
+			cvs.WorkingDirectory = dir;
+			ProcessInfo info = cvs.CreateLogProcessInfo(today);
+			Assert.AreEqual(string.Format(@"-q log -N -l -b ""-d>{0}""", cvs.FormatCommandDate(today)), info.Arguments);
+		}
+
 		[Test]
-		public void Executable_default()
+		public void CvsExeShouldBeDefaultExecutable()
 		{
 			Assert.AreEqual("cvs.exe", new Cvs().Executable);
 		}
@@ -93,14 +120,15 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 		[Test]
 		public void VerifyProcessInfoForGetSource()
 		{
-			IMock mockHistoryParser = new DynamicMock(typeof(IHistoryParser));
-			IMock mockProcessExecutor = new DynamicMock(typeof(ProcessExecutor));
+			IMock mockHistoryParser = new DynamicMock(typeof (IHistoryParser));
+			IMock mockProcessExecutor = new DynamicMock(typeof (ProcessExecutor));
 			CollectingConstraint args = new CollectingConstraint();
 			mockProcessExecutor.ExpectAndReturn("Execute", new ProcessResult("output", null, ProcessResult.SUCCESSFUL_EXIT_CODE, false), args); // ProcessResult Execute(ProcessInfo processInfo)
 			IntegrationResult result = new IntegrationResult();
-			
+
 			Cvs cvs = new Cvs((IHistoryParser) mockHistoryParser.MockInstance, (ProcessExecutor) mockProcessExecutor.MockInstance);
 			cvs.AutoGetSource = true;
+			cvs.CleanCopy = true; // set as default
 			cvs.WorkingDirectory = @"C:\temp";
 			cvs.Executable = @"C:\Program Files\TortoiseCVS";
 			cvs.GetSource(result);
@@ -117,15 +145,15 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 		[Test]
 		public void ShouldNotGetSourceIfAutoGetSourceIsFalse()
 		{
-			IMock mockProcessExecutor = new DynamicMock(typeof(ProcessExecutor));
-			mockProcessExecutor.ExpectNoCall("Execute", typeof(ProcessInfo));
+			IMock mockProcessExecutor = new DynamicMock(typeof (ProcessExecutor));
+			mockProcessExecutor.ExpectNoCall("Execute", typeof (ProcessInfo));
 			IntegrationResult result = new IntegrationResult();
-			
+
 			Cvs cvs = new Cvs(null, (ProcessExecutor) mockProcessExecutor.MockInstance);
 			cvs.AutoGetSource = false;
 			cvs.GetSource(result);
 
-			mockProcessExecutor.Verify();			
+			mockProcessExecutor.Verify();
 		}
 
 		[Test]
@@ -151,8 +179,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 			Cvs cvs = new Cvs();
 			cvs.CvsRoot = "myCvsRoot";
 			cvs.RestrictLogins = "exortech, monkey";
-			ProcessInfo info = cvs.CreateHistoryProcessInfo(today, today);
-			Assert.AreEqual(string.Format(@"-d myCvsRoot -q log -Nb ""-d>{0}"" -wexortech -wmonkey", cvs.FormatCommandDate(today)), info.Arguments);
+			ProcessInfo info = cvs.CreateLogProcessInfo(today);
+			Assert.AreEqual(string.Format(@"-d myCvsRoot -q log -N -b ""-d>{0}"" -wexortech -wmonkey", cvs.FormatCommandDate(today)), info.Arguments);
 		}
 
 		private Cvs CreateCvs()
@@ -166,6 +194,5 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 			NetReflector.Read(xml, cvs);
 			return cvs;
 		}
-	} 
-	
+	}
 }
