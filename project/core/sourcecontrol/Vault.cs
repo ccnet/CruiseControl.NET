@@ -7,20 +7,16 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 	[ReflectorType("vault")]
 	public class Vault : ProcessSourceControl
 	{
-		// rowlimit 0 or -1 means unlimited (default is 1000 if not specified)
-		// TODO: might want to make rowlimit configurable?
-		private const string COMMAND_LINE = @"history ""{0}"" -host ""{1}"" -user ""{2}"" -password ""{3}"" -repository ""{4}"" -rowlimit 0";
-
-		[ReflectorProperty("username")]
+		[ReflectorProperty("username", Required=false)]
 		public string Username;
 
-		[ReflectorProperty("password")]
+		[ReflectorProperty("password", Required=false)]
 		public string Password;
 
-		[ReflectorProperty("host")]
+		[ReflectorProperty("host", Required=false)]
 		public string Host;
 
-		[ReflectorProperty("repository")]
+		[ReflectorProperty("repository", Required=false)]
 		public string Repository;
 
 		[ReflectorProperty("folder")]
@@ -59,14 +55,27 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 		{
 		}
 
+		// "history ""{0}"" -host ""{1}"" -user ""{2}"" -password ""{3}"" -repository ""{4}"" -rowlimit 0"
+		// rowlimit 0 or -1 means unlimited (default is 1000 if not specified)
+		// TODO: might want to make rowlimit configurable?
 		private string BuildHistoryProcessArgs()
 		{
-			string args = string.Format(COMMAND_LINE, Folder, Host, Username, Password, Repository);
-			if (Ssl)
-			{
-				args += " -ssl";
-			}
-			return args;
+			ProcessArgumentBuilder builder = new ProcessArgumentBuilder();
+			builder.AddInQuotes("history", Folder);
+			builder.AddInQuotes("-host", Host);
+			builder.AddInQuotes("-user", Username);
+			builder.AddInQuotes("-password", Password);
+			builder.AddInQuotes("-repository", Repository);
+			builder.AppendArgument("-rowlimit 0");
+			builder.AppendIf(Ssl, "-ssl");
+			return builder.ToString();
+//
+//			string args = string.Format(COMMAND_LINE, Folder, Host, Username, Password, Repository);
+//			if (Ssl)
+//			{
+//				args += " -ssl";
+//			}
+//			return args;
 		}
 	}
 }

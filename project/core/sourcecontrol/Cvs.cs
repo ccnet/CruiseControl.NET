@@ -2,7 +2,6 @@ using System;
 using System.Collections;
 using System.Globalization;
 using System.IO;
-using System.Text;
 using Exortech.NetReflector;
 using ThoughtWorks.CruiseControl.Core.Util;
 
@@ -113,7 +112,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 
 		public ProcessInfo CreateLabelProcessInfo(IIntegrationResult result)
 		{
-			CommandLineBuilder buffer = new CommandLineBuilder();
+			ProcessArgumentBuilder buffer = new ProcessArgumentBuilder();
 			buffer.AppendArgument("-d {0}", CvsRoot);
 			buffer.AppendArgument("tag ver-{0}", result.Label);
 			return new ProcessInfo(Executable, buffer.ToString(), WorkingDirectory);
@@ -134,7 +133,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 
 		private ProcessInfo CreateGetSourceProcessInfo(string dir)
 		{
-			CommandLineBuilder builder = new CommandLineBuilder();
+			ProcessArgumentBuilder builder = new ProcessArgumentBuilder();
 			builder.AppendArgument(GET_SOURCE_COMMAND_FORMAT);
 			builder.AppendIf(CleanCopy, "-C");
 			builder.AppendIf(UseHistory && dir != null, "-l");
@@ -154,7 +153,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 		// include that for some harmony with the vss version
 		private string BuildHistoryProcessInfoArgs(DateTime from, string dir)
 		{
-			CommandLineBuilder buffer = new CommandLineBuilder();
+			ProcessArgumentBuilder buffer = new ProcessArgumentBuilder();
 			buffer.AppendArgument("-d {0}", CvsRoot);
 			buffer.AppendArgument("-q log -N");
 			buffer.AppendIf(UseHistory, "-l");
@@ -209,7 +208,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 
 		private ProcessInfo CreateHistoryProcessInfo(DateTime from)
 		{
-			CommandLineBuilder buffer = new CommandLineBuilder();
+			ProcessArgumentBuilder buffer = new ProcessArgumentBuilder();
 			buffer.AppendArgument("history -x MAR -a -D \"{0}\"", FormatCommandDate(from));
 			return new ProcessInfo(Executable, buffer.ToString(), WorkingDirectory);
 		}
@@ -274,45 +273,6 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 				return (string) items[DIRECTORY_INDEX];
 
 			return null;		// under what conditions will this happen.  do we really want to return null?
-		}
-
-		private class CommandLineBuilder
-		{
-			private StringBuilder builder = new StringBuilder();
-
-			public void AppendArgument(string format, string value)
-			{
-				if (StringUtil.IsBlank(value)) return;
-
-				AppendSpaceIfNotEmpty();
-				builder.AppendFormat(format, value);
-			}
-
-			public void AppendArgument(string value)
-			{
-				AppendSpaceIfNotEmpty();
-				builder.Append(value);
-			}
-
-			private void AppendSpaceIfNotEmpty()
-			{
-				if (builder.Length > 0) builder.Append(" ");
-			}
-
-			public override string ToString()
-			{
-				return builder.ToString();
-			}
-
-			public void AppendIf(bool condition, string value)
-			{
-				if (condition) AppendArgument(value);
-			}
-
-			public void AppendIf(bool condition, string format, string argument)
-			{
-				if (condition) AppendArgument(format, argument);
-			}
 		}
 	}
 }

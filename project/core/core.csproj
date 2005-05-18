@@ -964,6 +964,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "util\ProcessArgumentBuilder.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "util\ProcessExecutor.cs"
                     SubType = "Code"
                     BuildAction = "Compile"

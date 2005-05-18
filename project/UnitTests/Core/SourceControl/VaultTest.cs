@@ -9,8 +9,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 	[TestFixture]
 	public class VaultTest : CustomAssertion
 	{
-		private Vault _vault;
-		private Vault _sslVault;
+		private Vault vault;
+		private Vault sslVault;
 		private const string COMMAND_LINE_NOSSL = @"history ""{0}"" -host ""{1}"" -user ""{2}"" -password ""{3}"" -repository ""{4}"" -rowlimit 0";
 		private const string COMMAND_LINE_SSL = @"history ""{0}"" -host ""{1}"" -user ""{2}"" -password ""{3}"" -repository ""{4}"" -rowlimit 0 -ssl";
 
@@ -36,8 +36,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 		[SetUp]
 		public void SetUp()
 		{
-			_vault = CreateNoSslVault();
-			_sslVault = CreateSslVault();
+			vault = CreateVault(ST_XML_NOSSL);
+			sslVault = CreateVault(ST_XML_SSL);
 		}
 
 		[Test]
@@ -46,7 +46,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 			DateTime from = new DateTime(2001, 1, 21, 20, 0, 0);
 			DateTime to = new DateTime(2002, 2, 22, 20, 0, 0);
 
-			ProcessInfo actual = _vault.CreateHistoryProcessInfo(from, to);
+			ProcessInfo actual = vault.CreateHistoryProcessInfo(from, to);
 
 			string expectedExecutable = @"c:\program files\sourcegear\vault client\vault.exe";
 			string expectedArgs = string.Format(COMMAND_LINE_NOSSL, "$", "host", "username", "password", "repository");
@@ -62,7 +62,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 			DateTime from = new DateTime(2001, 1, 21, 20, 0, 0);
 			DateTime to = new DateTime(2002, 2, 22, 20, 0, 0);
 
-			ProcessInfo actual = _sslVault.CreateHistoryProcessInfo(from, to);
+			ProcessInfo actual = sslVault.CreateHistoryProcessInfo(from, to);
 
 			string expectedExecutable = @"c:\program files\sourcegear\vault client\vault.exe";
 			string expectedArgs = string.Format(COMMAND_LINE_SSL, "$", "host", "username", "password", "repository");
@@ -75,25 +75,31 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 		[Test]
 		public void ValuesSet()
 		{
-			Assert.AreEqual(@"c:\program files\sourcegear\vault client\vault.exe", _vault.Executable);
-			Assert.AreEqual("username", _vault.Username);
-			Assert.AreEqual("password", _vault.Password);
-			Assert.AreEqual("host", _vault.Host);
-			Assert.AreEqual("repository", _vault.Repository);
-			Assert.AreEqual("$", _vault.Folder);
+			Assert.AreEqual(@"c:\program files\sourcegear\vault client\vault.exe", vault.Executable);
+			Assert.AreEqual("username", vault.Username);
+			Assert.AreEqual("password", vault.Password);
+			Assert.AreEqual("host", vault.Host);
+			Assert.AreEqual("repository", vault.Repository);
+			Assert.AreEqual("$", vault.Folder);
 		}
 
-		private Vault CreateNoSslVault()
+		[Test]
+		public void ConfigureWithMinimumSettings()
 		{
-			Vault vault = new Vault();
-			NetReflector.Read(ST_XML_NOSSL, vault);
-			return vault;
+			Vault vault = CreateVault(@"<sourceControl type=""vault"">
+				<executable>c:\program files\sourcegear\vault client\vault.exe</executable>
+				<folder>$</folder>
+			</sourceControl>");
+
+			ProcessInfo actual = vault.CreateHistoryProcessInfo(DateTime.Now, DateTime.Now);
+			Assert.AreEqual(@"c:\program files\sourcegear\vault client\vault.exe", actual.FileName);
+			Assert.AreEqual(@"history ""$"" -rowlimit 0", actual.Arguments);
 		}
 
-		private Vault CreateSslVault()
+		private Vault CreateVault(string xml)
 		{
 			Vault vault = new Vault();
-			NetReflector.Read(ST_XML_SSL, vault);
+			NetReflector.Read(xml, vault);
 			return vault;
 		}
 	}
