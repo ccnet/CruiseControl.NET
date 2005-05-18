@@ -8,7 +8,7 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
 {
 	// TODO - Make Integration Writer a dependency, and make its method take the filename
     [ReflectorType("xmllogger")]
-    public class XmlLogPublisher : PublisherBase
+    public class XmlLogPublisher : ITask
     {
 		public static readonly string DEFAULT_LOG_SUBDIRECTORY = "buildlogs";
 
@@ -42,7 +42,7 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
 			}
 		}
 
-		public override void PublishIntegrationResults(IIntegrationResult result)
+		public void Run(IIntegrationResult result)
         {
             // only deal with known integration status
             if (result.Status == IntegrationStatus.Unknown)

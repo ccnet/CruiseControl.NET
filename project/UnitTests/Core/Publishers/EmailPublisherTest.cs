@@ -42,7 +42,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Publishers
 			_publisher.EmailGateway = _gateway;
 			_publisher.EmailUsers.Add("bar", new EmailUser("bar", "foo", "bar@foo.com"));
 			_publisher.EmailGroups.Add("foo", new EmailGroup("foo", EmailGroup.NotificationType.Change));
-			_publisher.PublishIntegrationResults(IntegrationResultMother.CreateStillSuccessful());
+			_publisher.Run(IntegrationResultMother.CreateStillSuccessful());
 			Assert.AreEqual(0, _gateway.SentMessages.Count);
 		}
 
@@ -53,7 +53,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Publishers
 			_publisher.EmailGateway = _gateway;
 			_publisher.EmailUsers.Add("bar", new EmailUser("bar", "foo", "bar@foo.com"));
 			_publisher.EmailGroups.Add("foo", new EmailGroup("foo", EmailGroup.NotificationType.Change));
-			_publisher.PublishIntegrationResults(IntegrationResultMother.CreateFailed());
+			_publisher.Run(IntegrationResultMother.CreateFailed());
 			Assert.AreEqual(1, _gateway.SentMessages.Count);
 		}
 
@@ -83,7 +83,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Publishers
 		public void Publish()
 		{
 			IntegrationResult result = IntegrationResultMother.CreateStillSuccessful();
-			_publisher.PublishIntegrationResults(result);
+			_publisher.Run(result);
 			Assert.AreEqual("mock.gateway.org", _gateway.MailHost);
 			Assert.AreEqual(1, _gateway.SentMessages.Count);
 		}
@@ -102,18 +102,9 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Publishers
 		[Test]
 		public void Publish_UnknownIntegrationStatus()
 		{
-			_publisher.PublishIntegrationResults(new IntegrationResult());
+			_publisher.Run(new IntegrationResult());
 			Assert.AreEqual(0, _gateway.SentMessages.Count);
 			// verify that no messages are sent if there were no modifications
-		}
-
-		[Test]
-		public void HandleIntegrationEvent()
-		{
-			IntegrationCompletedEventHandler handler = _publisher.IntegrationCompletedEventHandler;
-			IntegrationResult result = IntegrationResultMother.CreateStillSuccessful();
-			handler(null, new IntegrationCompletedEventArgs(result));
-			Assert.IsTrue(_gateway.SentMessages.Count > 0, "Mail message was not sent!");
 		}
 
 		private Modification[] CreateModifications()

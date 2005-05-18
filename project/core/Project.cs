@@ -37,14 +37,12 @@ namespace ThoughtWorks.CruiseControl.Core
 		/// <summary>
 		/// Raised whenever an integration is completed.
 		/// </summary>
-		public event IntegrationCompletedEventHandler IntegrationCompleted;
-
 		private string webUrl = DefaultUrl();
 		private ISourceControl sourceControl = new NullSourceControl();
 		private ITask builder = new NullTask();
 		private ILabeller labeller = new DefaultLabeller();
 		private ITask[] tasks = new ITask[0];
-		private IIntegrationCompletedEventHandler[] publishers = new IIntegrationCompletedEventHandler[0];
+		private ITask[] publishers = new ITask[0];
 		private ProjectActivity currentActivity = ProjectActivity.Sleeping;
 		private int modificationDelaySeconds = 0;
 		private IStateManager state;
@@ -100,16 +98,12 @@ namespace ThoughtWorks.CruiseControl.Core
 		/// intended to be set via Xml configuration.
 		/// </summary>
 		[ReflectorArray("publishers", Required=false)]
-		public IIntegrationCompletedEventHandler[] Publishers
+		public ITask[] Publishers
 		{
 			get { return publishers; }
 			set
 			{
 				publishers = value;
-
-				// register each of these event handlers
-				foreach (IIntegrationCompletedEventHandler handler in publishers)
-					IntegrationCompleted += handler.IntegrationCompletedEventHandler;
 			}
 		}
 
@@ -187,10 +181,16 @@ namespace ThoughtWorks.CruiseControl.Core
 
 		public void OnIntegrationCompleted(IIntegrationResult result)
 		{
-			if (IntegrationCompleted != null)
+			foreach (ITask publisher in publishers)
 			{
-				IntegrationCompletedEventArgs e = new IntegrationCompletedEventArgs(result);
-				IntegrationCompleted(this, e);
+				try
+				{
+					publisher.Run(result);
+				}
+				catch (Exception e)
+				{
+					Log.Error("Publisher threw exception: " + e);
+				}
 			}
 		}
 

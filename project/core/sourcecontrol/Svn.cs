@@ -136,14 +136,13 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			if (revision == 0)
 			{
 				buffer.AppendFormat(TAG_COMMAND_FORMAT, label, workingDirectory, tagBaseUrl);
-				AppendUsernameAndPassword(buffer);
 			}
 			else
 			{
 				buffer.AppendFormat(TAG_COMMAND_FORMAT, label, trunkUrl, tagBaseUrl);
 				buffer.AppendFormat(" --revision {0}", revision);
-				AppendUsernameAndPassword(buffer);
 			}
+			AppendUsernameAndPassword(buffer);
 
 			return buffer.ToString();
 		}

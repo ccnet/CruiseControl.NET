@@ -10,7 +10,7 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
 	/// 
 	// TODO - Remove this since ExecutableTask should be sufficient - merge features as necessary
 	[ReflectorType("executable")]
-	public class ExecutablePublisher : PublisherBase
+	public class ExecutablePublisher : ITask
 	{
 		private static readonly string _LABEL_ENVIRONMENT_VARIABLE = "ccnet.label";
 
@@ -65,7 +65,7 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
 			this.executor = executor;
 		}
 
-		public override void PublishIntegrationResults(IIntegrationResult result)
+		public void Run(IIntegrationResult result)
 		{
 			ProcessResult output = executor.Execute(CreateProcessInfo(result));
 			StandardOutput = output.StandardOutput;

@@ -56,7 +56,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Publishers
 			_publisher.ConfiguredLogDirectory = "relativePath";
 
 			// Execute
-			_publisher.PublishIntegrationResults(result);
+			_publisher.Run(result);
 
 			// Verify
 			string expectedOutputPath = Path.Combine(Path.Combine(ARTIFACTS_DIR_PATH, "relativePath"), "log19800101000000Lbuild.1.xml");
@@ -72,7 +72,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Publishers
 			result.ArtifactDirectory = ARTIFACTS_DIR_PATH;
 
 			// Execute
-			_publisher.PublishIntegrationResults(result);
+			_publisher.Run(result);
 
 			// Verify
 			string expectedOutputPath = Path.Combine(Path.Combine(ARTIFACTS_DIR_PATH, XmlLogPublisher.DEFAULT_LOG_SUBDIRECTORY), "log19800101000000Lbuild.1.xml");
@@ -88,7 +88,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Publishers
 			IntegrationResult result = CreateIntegrationResult(IntegrationStatus.Failure,  true);
 
 			// Execute
-			_publisher.PublishIntegrationResults(result);
+			_publisher.Run(result);
 
 			// Verify
 			string expectedOutputPath = Path.Combine(FULL_CONFIGURED_LOG_DIR_PATH, "log19800101000000.xml");
@@ -104,7 +104,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Publishers
 			IntegrationResult result = CreateIntegrationResult(IntegrationStatus.Success,  true);
 
 			// Execute
-			_publisher.PublishIntegrationResults(result);
+			_publisher.Run(result);
 
 			// Verify
 			string expectedOutputPath = Path.Combine(FULL_CONFIGURED_LOG_DIR_PATH, "log19800101000000Lbuild.1.xml");
@@ -116,7 +116,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Publishers
         public void ShouldNotPublishResultsWithUnknownStatus()
         {
             AssertFalse(FULL_CONFIGURED_LOG_DIR_PATH + " should not exist at start of test.", Directory.Exists(FULL_CONFIGURED_LOG_DIR_PATH));
-            _publisher.PublishIntegrationResults(new IntegrationResult());
+            _publisher.Run(new IntegrationResult());
             AssertFalse(FULL_CONFIGURED_LOG_DIR_PATH + " should still not exist at end of this test.", Directory.Exists(FULL_CONFIGURED_LOG_DIR_PATH));
         }
 

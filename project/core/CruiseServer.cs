@@ -182,7 +182,7 @@ namespace ThoughtWorks.CruiseControl.Core
 			{
 				if (projectIntegrator.Name == projectName)
 				{
-					foreach (IIntegrationCompletedEventHandler publisher in ((Project) projectIntegrator.Project).Publishers)
+					foreach (ITask publisher in ((Project) projectIntegrator.Project).Publishers)
 					{
 						if (publisher is XmlLogPublisher)
 						{
@@ -223,7 +223,7 @@ namespace ThoughtWorks.CruiseControl.Core
 			{
 				if (projectIntegrator.Name == projectName)
 				{
-					foreach (IIntegrationCompletedEventHandler publisher in ((Project) projectIntegrator.Project).Publishers)
+					foreach (ITask publisher in ((Project) projectIntegrator.Project).Publishers)
 					{
 						if (publisher is XmlLogPublisher)
 						{

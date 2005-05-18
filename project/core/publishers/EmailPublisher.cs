@@ -11,7 +11,7 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
     /// are configurable.
     /// </summary>
     [ReflectorType("email")]
-    public class EmailPublisher : PublisherBase
+    public class EmailPublisher : ITask
     {
         private EmailGateway _emailGateway = new EmailGateway();
         private string _fromAddress;
@@ -90,7 +90,7 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
             set { _groups = value; }
         }
 
-        public override void PublishIntegrationResults(IIntegrationResult result)
+        public void Run(IIntegrationResult result)
         {
             if (result.Status == IntegrationStatus.Unknown)
                 return;

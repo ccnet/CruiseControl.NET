@@ -57,7 +57,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Publishers
 			result.Status = IntegrationStatus.Success;
 			result.Label = "99";
 
-			publisher.PublishIntegrationResults(result);
+			publisher.Run(result);
 
 			FileInfo resultFile = new FileInfo(pubDir + @"\99\" + fileName);
 			Assert.IsTrue(resultFile.Exists, "File not found in build number directory");

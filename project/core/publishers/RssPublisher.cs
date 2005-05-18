@@ -10,7 +10,7 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
 	// This publisher generates a rss file reporting the latest results for a Project.
 	// We use .NET's XMLSerialization to generate the XML
 	// ToDo - more on this, or delete it!
-	public class RssPublisher : PublisherBase
+	public class RssPublisher : ITask
 	{
 		private string filename;
 
@@ -21,7 +21,7 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
 			set { filename = value;}
 		}
 
-		public override void PublishIntegrationResults(IIntegrationResult result)
+		public void Run(IIntegrationResult result)
 		{
 			using (StreamWriter stream = File.CreateText(Filename))
 			{

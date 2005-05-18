@@ -69,13 +69,6 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			builder.AppendArgument("-rowlimit 0");
 			builder.AppendIf(Ssl, "-ssl");
 			return builder.ToString();
-//
-//			string args = string.Format(COMMAND_LINE, Folder, Host, Username, Password, Repository);
-//			if (Ssl)
-//			{
-//				args += " -ssl";
-//			}
-//			return args;
 		}
 	}
 }

@@ -1,7 +1,6 @@
 using NMock;
 using NUnit.Framework;
 using ThoughtWorks.CruiseControl.Core;
-using ThoughtWorks.CruiseControl.Core.Publishers;
 
 namespace ThoughtWorks.CruiseControl.UnitTests.Core.Publishers
 {
@@ -11,9 +10,9 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Publishers
 		[Test]
 		public void PublishersShouldBeTasks()
 		{
-			IMock mock = new DynamicMock(typeof (PublisherBase));
+			IMock mock = new DynamicMock(typeof (ITask));
 			IntegrationResult result = new IntegrationResult();
-			mock.Expect("PublishIntegrationResults", result);
+			mock.Expect("Run", result);
 
 			ITask publisher = (ITask) mock.MockInstance;
 			publisher.Run(result);

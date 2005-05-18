@@ -1,11 +1,10 @@
 using Exortech.NetReflector;
 using ThoughtWorks.CruiseControl.Core;
-using ThoughtWorks.CruiseControl.Core.Publishers;
 
 namespace ThoughtWorks.CruiseControl.UnitTests.Core.Publishers
 {
 	[ReflectorType("mockpublisher")]
-	public class MockPublisher : PublisherBase
+	public class MockPublisher : ITask
 	{
 		private bool _published = false;
 		private IIntegrationResult _result;
@@ -20,7 +19,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Publishers
 			get { return _result; }
 		}
 
-		public override void PublishIntegrationResults(IIntegrationResult result)
+		public void Run(IIntegrationResult result)
 		{
 			_published = true;
 			_result = result;

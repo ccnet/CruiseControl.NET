@@ -200,11 +200,6 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "IntegrationEvents.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
                     RelPath = "IntegrationResult.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -485,11 +480,6 @@
                 />
                 <File
                     RelPath = "publishers\IMessageBuilder.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "publishers\PublisherBase.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

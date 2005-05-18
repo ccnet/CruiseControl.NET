@@ -4,7 +4,7 @@ using Exortech.NetReflector;
 namespace ThoughtWorks.CruiseControl.Core.Publishers
 {
 	[ReflectorType("buildpublisher")]
-	public class BuildPublisher : PublisherBase
+	public class BuildPublisher : ITask
 	{
 		private string publishDir;
 		private string sourceDir;
@@ -23,7 +23,7 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
 			set { sourceDir = value; }
 		}
 
-		public override void PublishIntegrationResults(IIntegrationResult result)
+		public void Run(IIntegrationResult result)
 		{
 			if (result.Succeeded) 
 			{

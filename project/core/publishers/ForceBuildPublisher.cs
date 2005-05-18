@@ -4,7 +4,7 @@ using ThoughtWorks.CruiseControl.Remote;
 namespace ThoughtWorks.CruiseControl.Core.Publishers
 {
 	[ReflectorType("forcebuild")]
-	public class ForceBuildPublisher : PublisherBase
+	public class ForceBuildPublisher : ITask
 	{
 		private readonly IRemotingService remotingService;
 
@@ -24,7 +24,7 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
 		[ReflectorProperty("integrationStatus", Required=false)]
 		public IntegrationStatus IntegrationStatus = IntegrationStatus.Success;
 
-		public override void PublishIntegrationResults(IIntegrationResult result)
+		public void Run(IIntegrationResult result)
 		{
 			if (IntegrationStatus != result.Status) return;
 

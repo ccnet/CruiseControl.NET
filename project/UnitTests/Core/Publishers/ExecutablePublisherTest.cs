@@ -97,7 +97,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Publishers
         	_mockExecutor.ExpectAndReturn("Execute", ProcessResultFixture.CreateSuccessfulResult(), args);
 			
 			_publisher.Arguments = "/C \"set\"";
-            _publisher.PublishIntegrationResults(_result );
+            _publisher.Run(_result );
 
             Assert.IsNotNull( _publisher.StandardOutput, "StandardOutput was null" );
 
@@ -115,7 +115,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Publishers
 			
 			_publisher.Arguments = "/C \"sleep 200\"";
             _publisher.Timeout = 1;
-            _publisher.PublishIntegrationResults(_result );
+            _publisher.Run(_result );
         }
 
         [Test, ExpectedException( typeof( CruiseControlException ) )]
@@ -124,7 +124,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Publishers
 			_mockExecutor.ExpectAndReturn("Execute", ProcessResultFixture.CreateNonZeroExitCodeResult(), new IsAnything());
 
             _publisher.Arguments = "/C \"exit 1\"";
-            _publisher.PublishIntegrationResults(_result );
+            _publisher.Run(_result );
         }
 
         [Test]
@@ -133,7 +133,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Publishers
 			_mockExecutor.ExpectAndReturn("Execute", ProcessResultFixture.CreateSuccessfulResult(), new IsAnything());
 			
 			_publisher.Arguments = "/C \"echo foo\"";
-            _publisher.PublishIntegrationResults(_result );
+            _publisher.Run(_result );
         }
 
         private string CreateConfigurationXml( string executable, string arguments, string timeout, string workingDirectory, string nonzeroExitFatal )
