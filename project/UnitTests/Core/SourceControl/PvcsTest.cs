@@ -1,4 +1,6 @@
 using System;
+using System.Globalization;
+using System.Threading;
 using Exortech.NetReflector;
 using NMock;
 using NMock.Constraints;
@@ -73,6 +75,26 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test
 		}
 
 		[Test]
+		public void VerifyDateStringParser()
+		{
+			DateTime expected = new DateTime(2005, 05, 01, 12, 0, 0, 0);
+			DateTime actual = Pvcs.GetDate("May 1 2005 12:00:00", CultureInfo.InvariantCulture);
+			Assert.AreEqual(expected, actual);
+
+			expected = new DateTime(2005, 10, 01, 15, 0, 0, 0);
+			actual = Pvcs.GetDate("Oct 1 2005 15:00:00", CultureInfo.InvariantCulture);
+			Assert.AreEqual(expected, actual);
+		}
+
+		[Test]
+		public void VerifyDateParser()
+		{
+			string expected = "10/31/2001 18:52";
+			string actual = Pvcs.GetDateString(new DateTime(2001, 10, 31, 18, 52, 13), CultureInfo.InvariantCulture.DateTimeFormat);
+			Assert.AreEqual(expected, actual);
+		}
+
+		[Test]
 		public void CreateProcess()
 		{
 			string fileName = "pcliScript.pcli";
@@ -80,7 +102,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test
 			string expected = Pvcs.COMMAND + fileName;
 			string actual = actualProcess.Arguments;
 			Assert.AreEqual(expected, actual);
-		}
+		}		
 
 		[Test]
 		public void CreatePcliContentsForGettingVLog()
@@ -93,7 +115,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test
 		[Test]
 		public void CreatePcliContentsForLabeling()
 		{
-			string expected = "Vcs -q \"-xo" + pvcs.LogFile + "\" \"-xe" + pvcs.ErrorFile + "\" -v\"temp\" \"@" + pvcs.TempFile + "\"";
+			string expected = "Vcs -q -xo\"" + pvcs.LogFile + "\" -xe\"" + pvcs.ErrorFile + "\"  -v\"temp\" \"@" + pvcs.TempFile + "\"";
 			string actual = pvcs.CreatePcliContentsForLabeling("temp");
 			Assert.AreEqual(expected, actual);
 		}
@@ -110,17 +132,15 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test
 		}
 
 		[Test]
-		public void CreatePcliContentsForCopyLabels()
-		{
-			string expected = "run \"-xo" + pvcs.LogFile + "\" \"-xe" + pvcs.ErrorFile + "\" -y Label -pr\"" + pvcs.Project + "\"  -z -rtemp2 -vtemp1 " + pvcs.Subproject;
-			string actual = pvcs.CreatePcliContentsForCopyingLabels("temp1", "temp2");
-			Assert.AreEqual(expected, actual);
-		}
-
-		[Test]
 		public void CreatePcliContentsForGet()
 		{
-			string expected = "run -y -xe\"" + pvcs.ErrorFile + "\" -xo\"" + pvcs.LogFile + "\" -q Get -pr\"" + pvcs.Project + "\"  @\"" + pvcs.TempFile + "\" ";
+			Thread.CurrentThread.Name = "TEST";
+			pvcs.Project = "foo";
+			pvcs.Subproject = "bar";
+			DateTime dt = DateTime.Now;
+			pvcs.CreateDateSpecificTemporaryLabel(dt);
+			string expected = "run -y -xe\"" + pvcs.ErrorFile + "\" -xo\"" + pvcs.LogFile +
+				"\" -q Get -pr\"foo\"  -z -sp\"/@/RootWorkspace\" -vTEST_" + Convert.ToString(dt.Ticks) + " bar ";
 			string actual = pvcs.CreatePcliContentsForGet();
 			Assert.AreEqual(expected, actual);
 		}
@@ -140,30 +160,13 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test
 		[Test]
 		public void CreateIndividualLabelString()
 		{
-			string expected = @"-r1.0 ""fooproject\archives\test\myfile.txt-arc"" ";
+			string expected = @"-vTestLabel ""fooproject\archives\test\myfile.txt-arc"" ";
 			Modification mod = new Modification();
 			mod.Version = "1.0";
 			mod.FolderName = @"fooproject\archives\test";
 			mod.FileName = "myfile.txt-arc";
-			string actual = pvcs.CreateIndividualLabelString(mod);
+			string actual = pvcs.CreateIndividualLabelString(mod,"TestLabel");
 			Assert.AreEqual(expected, actual);
-		}
-
-		[Test]
-		public void BuildSubProjectListWithOneSubproject()
-		{
-			pvcs.Subproject = "foo";
-			Assert.AreEqual(1, pvcs.SubProjectList.Count);
-			Assert.AreEqual("foo", pvcs.SubProjectList[0]);
-		}
-
-		[Test]
-		public void BuildSubProjectListWithMultipleSubprojects()
-		{
-			pvcs.Subproject = "/foo /bar /baz";
-			Assert.AreEqual(3, pvcs.SubProjectList.Count);
-			Assert.AreEqual("/foo", pvcs.SubProjectList[0]);
-			Assert.AreEqual("/bar", pvcs.SubProjectList[1]);
 		}
 
 		[Test]
