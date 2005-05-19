@@ -15,15 +15,21 @@
                                                     </span>
 				    </div>
 				    <div class="pagesubheading">
-					    This page last changed on Oct 13, 2004 by <font color="#0050B2">mroberts</font>.
+					    This page last changed on Apr 30, 2005 by <font color="#0050B2">gtackley@thoughtworks.com</font>.
 				    </div>
 
-				    
-<h3 class="heading3"><a name="RationalClearCaseSourceControlBlock-RationalClearCaseConfiguration"> Rational ClearCase Configuration</a></h3><p class="paragraph">CCNet supports monitoring a ClearCase repository for modifications and labelling on a successful build.  With ClearCase, CCNet cannot update the view with the latest source like <a href="Visual Source Safe Source Control Block.html" title="Visual Source Safe Source Control Block">Visual Source Safe Source Control Block</a> or <a href="CVS Source Control Block.html" title="CVS Source Control Block">CVS Source Control Block</a>.  You should have your build file perform the update instead.</p><h4 class="heading4"><a name="RationalClearCaseSourceControlBlock-Typical%2FMinimalConfiguration"> Typical / Minimal Configuration</a></h4><p class="paragraph">For most uses the following is all you&#039;ll need in your <a href="Configuring the Server.html" title="Configuring the Server"><tt class="monospaced">ccnet.config</tt> </a>:</p><div class="code"><div class="codeContent">
-<pre><span class="xml&#45;tag">&lt;sourcecontrol type=<span class="xml&#45;quote">&quot;clearCase&quot;</span>&gt;</span>&#10;    <span class="xml&#45;tag">&lt;viewPath&gt;</span>C:&#92;PATH&#92;TO&#92;SOURCE<span class="xml&#45;tag">&lt;/viewPath&gt;</span>&#10;<span class="xml&#45;tag">&lt;/sourcecontrol&gt;</span></pre>
-</div></div><p class="paragraph">This will label the source but not apply baselines.</p><a name="RationalClearCaseSourceControlBlock-viewPath"></a><p class="paragraph">The <tt class="monospaced">&lt;viewPath&gt;</tt> specifies a directory on your filesystem that CCNet monitors for changes.  The path must be a versioned object.  CCNet checks the actual VOB for changes, not the local filesystem.</p><tt class="monospaced">&lt;viewPath&gt;</tt> doesn&#039;t have to be the root of the local ClearCase view.  It may be any of the root&#039;s children or even a single object.
-<p class="paragraph"><h4 class="heading4"><a name="RationalClearCaseSourceControlBlock-FullConfiguration"> Full Configuration</a></h4></p><div class="code"><div class="codeContent">
-<pre><span class="xml&#45;tag">&lt;sourcecontrol type=<span class="xml&#45;quote">&quot;clearCase&quot;</span>&gt;</span>&#10;    <span class="xml&#45;tag">&lt;viewPath&gt;</span>C:&#92;PATH&#92;TO&#92;SOURCE<span class="xml&#45;tag">&lt;/viewPath&gt;</span>&#10;    <span class="xml&#45;tag">&lt;useLabel&gt;</span>true<span class="xml&#45;tag">&lt;/useLabel&gt;</span>&#10;    <span class="xml&#45;tag">&lt;useBaseline&gt;</span>false<span class="xml&#45;tag">&lt;/useBaseline&gt;</span>&#10;    <span class="xml&#45;tag">&lt;projectVobName&gt;</span>PROJECT&#95;VOB&#95;NAME<span class="xml&#45;tag">&lt;/projectVobName&gt;</span>&#10;    <span class="xml&#45;tag">&lt;viewName&gt;</span>PROJECT&#95;VIEW&#95;NAME<span class="xml&#45;tag">&lt;/viewName&gt;</span>&#10;    <span class="xml&#45;tag">&lt;executable&gt;</span>cleartool.exe<span class="xml&#45;tag">&lt;/executable&gt;</span>&#10;    <span class="xml&#45;tag">&lt;timeout&gt;</span>50000<span class="xml&#45;tag">&lt;/timeout&gt;</span>&#10;<span class="xml&#45;tag">&lt;/sourcecontrol&gt;</span></pre>
+				    <p class="paragraph"><h3 style="margin: 4px 0px 4px 0px;" class="heading3"><a name="RationalClearCaseSourceControlBlock-RationalClearCaseConfiguration"> Rational ClearCase Configuration</a></h3></p><h4 class="heading4"><a name="RationalClearCaseSourceControlBlock-Typical%2FMinimalConfiguration"> Typical / Minimal Configuration</a></h4><p class="paragraph">For most uses the following is all you&#039;ll need in your <a href="Configuring the Server.html" title="Configuring the Server"><tt class="monospaced">ccnet.config</tt> </a>:</p><div class="code"><div class="codeContent">
+<pre><span class="xml&#45;tag">&lt;sourcecontrol type=<span class="xml&#45;quote">&quot;clearCase&quot;</span>&gt;</span>&#10;    <span class="xml&#45;tag">&lt;viewPath&gt;</span>C:&#92;PATH&#92;TO&#92;SOURCE<span class="xml&#45;tag">&lt;/viewPath&gt;</span>&#10;    <span class="xml&#45;tag">&lt;autoGetSource&gt;</span>true<span class="xml&#45;tag">&lt;/autoGetSource&gt;</span>&#10;<span class="xml&#45;tag">&lt;/sourcecontrol&gt;</span></pre>
+</div></div><p class="paragraph">This will:
+<ul class="star">
+<li> monitor ClearCase for any changes on the viewPath or below</li>
+<li> retrieve the lastest source from ClearCase when any changes are detected</li>
+<li> apply a label to the built files at the end of the build</li>
+</ul><br/>
+<a name="RationalClearCaseSourceControlBlock-viewPath"></a></p>The <tt class="monospaced">&lt;viewPath&gt;</tt> specifies a directory on your filesystem that CCNet monitors for changes.  The path must be a versioned object.  CCNet checks the actual VOB for changes, not the local filesystem.<p class="paragraph"><tt class="monospaced">&lt;viewPath&gt;</tt> doesn&#039;t have to be the root of the local ClearCase view.  It may be any of the root&#039;s children or even a single object.</p><h4 class="heading4"><a name="RationalClearCaseSourceControlBlock-FullConfiguration"> Full Configuration</a></h4>
+
+<div class="code"><div class="codeContent">
+<pre><span class="xml&#45;tag">&lt;sourcecontrol type=<span class="xml&#45;quote">&quot;clearCase&quot;</span>&gt;</span>&#10;    <span class="xml&#45;tag">&lt;viewPath&gt;</span>C:&#92;PATH&#92;TO&#92;SOURCE<span class="xml&#45;tag">&lt;/viewPath&gt;</span>&#10;    <span class="xml&#45;tag">&lt;autoGetSource&gt;</span>false<span class="xml&#45;tag">&lt;/autoGetSource&gt;</span>&#10;    <span class="xml&#45;tag">&lt;useLabel&gt;</span>true<span class="xml&#45;tag">&lt;/useLabel&gt;</span>&#10;    <span class="xml&#45;tag">&lt;useBaseline&gt;</span>false<span class="xml&#45;tag">&lt;/useBaseline&gt;</span>&#10;    <span class="xml&#45;tag">&lt;projectVobName&gt;</span>PROJECT&#95;VOB&#95;NAME<span class="xml&#45;tag">&lt;/projectVobName&gt;</span>&#10;    <span class="xml&#45;tag">&lt;viewName&gt;</span>PROJECT&#95;VIEW&#95;NAME<span class="xml&#45;tag">&lt;/viewName&gt;</span>&#10;    <span class="xml&#45;tag">&lt;executable&gt;</span>cleartool.exe<span class="xml&#45;tag">&lt;/executable&gt;</span>&#10;    <span class="xml&#45;tag">&lt;timeout&gt;</span>50000<span class="xml&#45;tag">&lt;/timeout&gt;</span>&#10;<span class="xml&#45;tag">&lt;/sourcecontrol&gt;</span></pre>
 </div></div><br/>
 
 <table class="wikitable">
@@ -31,6 +37,8 @@
 <th> Element </th><th> Description </th><th> Type </th><th> Required </th><th> Default </th>
 </tr><tr>
 <td> viewPath </td><td> The path that CCNet will check for modifications and use to apply the label. See <a href="#RationalClearCaseSourceControlBlock-viewPath" title="viewPath on Rational ClearCase Source Control Block">above</a> for full details. </td><td> string </td><td> yes </td><td> none </td>
+</tr><tr>
+<td> autoGetSource </td><td> Specifies whether the current version of the source should be retrieved from ClearCase </td><td> bool </td><td> no</td><td> false </td>
 </tr><tr>
 <td> useLabel </td><td> Specifies whether a label should be applied when the build is successful. </td><td> bool </td><td> no </td><td> true </td>
 </tr><tr>
@@ -51,7 +59,7 @@
 
 <div class="preformatted"><div class="preformattedContent">
 <pre>M:&#92;gsmith&#95;GS&#95;Project&#95;int&#92;GS&#95;UCM&#95;VOB&gt;cleartool lsbl&#10;06&#45;May&#45;04.16:28:27  v1.0.0.1  gsmith   &quot;CruiseControlTemporaryBaseline&#95;05&#45;06&#45;200&#10;4&#45;16&#45;28&#45;26&quot;&#10;  stream: GS&#95;Project&#95;Integration&#64;&#92;GS&#95;PVOB&#10;  component: GS&#95;UCM&#95;VOB&#64;&#92;GS&#95;PVOB&#10;06&#45;May&#45;04.16:34:16  v1.0.0.2  gsmith   &quot;CruiseControl.NETTemporaryBaseline&#95;05&#45;06&#10;&#45;2004&#45;16&#45;34&#45;15&quot;&#10;  stream: GS&#95;Project&#95;Integration&#64;&#92;GS&#95;PVOB&#10;  component: GS&#95;UCM&#95;VOB&#64;&#92;GS&#95;PVOB</pre>
-</div></div>
+</div></div><p class="paragraph"><h5 class="heading5"><a name="RationalClearCaseSourceControlBlock-CruiseControl.NETseescheckinsonallbranches%2Cnotjusttheonespecifiedinmyconfigspec"> CruiseControl.NET sees checkins on all branches, not just the one specified in my config spec</a></h5></p>This is a known issue (<a href="http://jira.public.thoughtworks.org/browse/CCNET-354" title="Visit page outside Confluence">CCNET-354</a>) due to the fact that the ClearCase history command (lshist) returns a complete history for the file, not just the history that can be seen by the config spec. <p class="paragraph">The updates still work correctly so these &quot;phantom&quot; builds contain valid files i.e. not the branched versions that CruiseControl.NET reports on its modification lists.</p>
 
 				    
                     			    </td>
@@ -62,7 +70,7 @@
 				<td height="12" background="border/border_bottom.gif"><img src="border/spacer.gif" width="1" height="1" border="0"/></td>
 			</tr>
 		    <tr>
-			    <td align="center"><font color="grey">Document generated by Confluence on Apr 04, 2005 11:56</font></td>
+			    <td align="center"><font color="grey">Document generated by Confluence on May 19, 2005 14:32</font></td>
 		    </tr>
 	    </table>
     </body>

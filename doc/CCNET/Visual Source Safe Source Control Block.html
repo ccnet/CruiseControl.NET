@@ -15,7 +15,7 @@
                                                     </span>
 				    </div>
 				    <div class="pagesubheading">
-					    This page last changed on Mar 16, 2005 by <font color="#0050B2">mroberts</font>.
+					    This page last changed on May 10, 2005 by <font color="#0050B2">orogers</font>.
 				    </div>
 
 				    <p class="paragraph"><h3 style="margin: 4px 0px 4px 0px;" class="heading3"><a name="VisualSourceSafeSourceControlBlock-VSSConfigurationExample"> VSS Configuration Example</a></h3>
@@ -43,7 +43,7 @@ For Visual Source Safe you must specify the executable, project, username and pa
 </tr><tr>
 <td> timeout </td><td> How long (in milliseconds) the VSS operation will be permitted to run before timing out </td><td> int </td><td> 10 minutes </td><td> false </td>
 </tr><tr>
-<td> culture </td><td> The culture under which VSS is running.  This value must match VSS&#039;s culture for CCNet to work with VSS.  Most of the time the default is OK and you may omit this item. </td><td> string </td><td> the culture of the machine </td><td> false </td>
+<td> culture </td><td> The culture under which VSS is running.  This value must match VSS&#039;s culture for CCNet to work with VSS.  Most of the time the default is OK and you may omit this item. If you are using an english version of VSS on a machine that is not set to an english culture, you should include an emtpy culture block (&lt;culture/&gt;). </td><td> string </td><td> the culture of the server </td><td> false </td>
 </tr>
 </table>
 <h3 class="heading3"><a name="VisualSourceSafeSourceControlBlock-GettingthelatestsourcewithVSS"> Getting the latest source with VSS</a></h3><p class="paragraph">VSS does not automatically remove files from the local workspace that have been deleted from the VSS database.  This does not cause a problem if you are using the <b class="strong">&lt;solution&gt;</b> task or the <a href="Visual Studio Task.html" title="Visual Studio Task">Visual Studio Task</a> to compile your project.  However, if you are packaging the source for deployment or if you are using the <b class="strong">&lt;csc&gt;</b> task to produce a custom build, you may end up compiling these deleted files in your assembly.  To be on the safe side, it might be a good idea to clear the contents of the local workspace after each build.</p><h3 class="heading3"><a name="VisualSourceSafeSourceControlBlock-VSSIssues"> VSS Issues</a></h3><p class="paragraph"><b class="strong">CCNet periodically reports the following error when connecting to VSS: &quot;Unable to open user login file \SourceSafe\Vss60\data\loggedin\&lt;userid&gt;.log.&quot;  What gives?</b></p>If you have set CCNet up to manage multiple projects that all connect to the VSS repository using the same user id then you may sporadically receive this failure.  Our analysis suggests that the root of the problem is caused by the fact that VSS will create the <b class="strong">&lt;userid&gt;.log</b> file when a user logs into VSS and delete it when the user logs out again.  If a second build is using the repository concurrently with the same user, when that second build logs out it looks for <b class="strong">&lt;userid&gt;.log</b>, but it&#039;s gone.  Hence the error.<p class="paragraph">There are three approaches that you can take to deal with this:
@@ -54,9 +54,12 @@ For Visual Source Safe you must specify the executable, project, username and pa
 </ul><br/>
 <b class="strong">If you&#039;re using a labeller that returns a label equal to one already applied in the repository, the old label will be <ins class="inserted">deleted</ins> when the new one is added.</b></p>This is because of a quirk in how VSS deals with labels of the same name; it should not be a problem with the default labeller.<p class="paragraph">This problem usually occurs when someone is using a custom labeller (a class that implements ILabeller) and that custom labeller returns a constant value.</p><b class="strong">Workaround:</b> If you use a custom labeller, make sure each label is unique.
 <p class="paragraph"><b class="strong">If the project name contains spaces then the VSS command-line will fail.</b><br/>
-Wrap the text in the &lt;project&gt; element in double quotes: eg. &lt;project&gt;&quot;My Project&quot;&lt;/project&gt;</p><h3 class="heading3"><a name="VisualSourceSafeSourceControlBlock-UsefulLinks%3A"> Useful Links:</a></h3>
-
-<ul class="star">
+Wrap the text in the &lt;project&gt; element in double quotes: eg. &lt;project&gt;&quot;My Project&quot;&lt;/project&gt;</p><ul class="star">
+<li> When I try to connect to use the &lt;vss&gt; NAntContrib tasks from ccservice I get this error:  Failed to open database <br clear="all" />
+someserver\someshare\vssrep\srcsafe.ini*
+</li>
+</ul><br/>
+There are a number of known issues with SourceSafe 6.0c.  Make sure that you upgrade to the 6.0d version.<p class="paragraph"><h3 class="heading3"><a name="VisualSourceSafeSourceControlBlock-UsefulLinks%3A"> Useful Links:</a></h3></p><ul class="star">
 <li> <a href="http://msdn.microsoft.com/library/default.asp?url=/library/en-us/dnvss/html/vssbest.asp" title="Visit page outside Confluence">Visual SourceSafe Best Practices Guide</a></li>
 <li> <a href="http://support.microsoft.com/default.aspx?scid=kb;en-us;248240&amp;Product=vss" title="Visit page outside Confluence">Using VSS With Multiple Timezones</a></li>
 <li> <a href="http://support.microsoft.com/default.aspx?scid=kb;en-us;837417" title="Visit page outside Confluence">OLE Automation interface Get method behaves differently with VSSVersion and with VSSItem</a></li>
@@ -71,7 +74,7 @@ Wrap the text in the &lt;project&gt; element in double quotes: eg. &lt;project&g
 				<td height="12" background="border/border_bottom.gif"><img src="border/spacer.gif" width="1" height="1" border="0"/></td>
 			</tr>
 		    <tr>
-			    <td align="center"><font color="grey">Document generated by Confluence on Apr 04, 2005 11:57</font></td>
+			    <td align="center"><font color="grey">Document generated by Confluence on May 19, 2005 14:33</font></td>
 		    </tr>
 	    </table>
     </body>
