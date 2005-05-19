@@ -1,24 +1,10 @@
 <?xml version="1.0"?>
-<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns="http://www.w3.org/TR/html4/strict.dtd">
-	
-	<xsl:output method="html"/>
-	
-	<xsl:template match="/">
-		<div id="master">
-			<xsl:apply-templates select="cruisecontrol/build/test-results[.//test-suite]" />
-			<!-- this here for pre-0.9 build logs -->
-			<xsl:apply-templates select="cruisecontrol/test-results[.//test-suite]" />
-		</div>
-	</xsl:template>
-	
-	<xsl:template match="test-results">
+<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns="http://www.w3.org/TR/html4/strict.dtd">	
+	<xsl:output method="html"/>	
 
-		<xsl:variable name="test.suite.id" select="generate-id()" />
-		<xsl:variable name="test.suite.name" select="./@name"/>
-		<xsl:variable name="failure.count" select="count(.//results/test-case[@success='False'])" />
-		<xsl:variable name="ignored.count" select="count(.//results/test-case[@executed='False'])" />
-				
-		<div>
+	<xsl:template match="/">
+		<xsl:variable name="tests.root" select="cruisecontrol//test-results" />
+		<div id="report">
 			<script>
 				function toggleDiv( imgId, divId )
 				{
@@ -37,49 +23,93 @@
 					}
 				}
 			</script>
-			<table cellpadding="2" cellspacing="0" border="0" width="98%">
-				<tr>
-					<td class="yellow-sectionheader" colspan="3" valign="top">
-						<xsl:choose>
-							<xsl:when test="$failure.count > 0">
-								<img src="images/fxcop-critical-error.gif"/>
-							</xsl:when>
-							<xsl:when test="$ignored.count > 0">
-								<img src="images/fxcop-error.gif"/>
-							</xsl:when>
-							<xsl:otherwise>
-								<img src="images/check.jpg" width="16" height="16"/>
-							</xsl:otherwise>
-						</xsl:choose>
-				
-						<input type="image" src="images/arrow_minus_small.gif">
-							<xsl:attribute name="id">img<xsl:value-of select="$test.suite.id"/></xsl:attribute>
-							<xsl:attribute name="onclick">javascript:toggleDiv('img<xsl:value-of select="$test.suite.id"/>', 'divDetails<xsl:value-of select="$test.suite.id"/>');</xsl:attribute>
-						</input>&#160;<xsl:value-of select="$test.suite.name"/>
-             </td>
-				</tr>
-			</table>
-			<div>
-				<xsl:attribute name="id">divDetails<xsl:value-of select="$test.suite.id"/></xsl:attribute>
-				<blockquote>
-					<table>
+			<h1>NUnit Test Results</h1>
+			<div id="summary">
+				<h3>Summary</h3>
+				<table>
+					<tbody>
 						<tr>
-							<th>Test Fixture</th>
-							<th>Status</th>
-							<th>Progress</th>
+							<td>Assemblies tested:</td>
+							<td><xsl:value-of select="count($tests.root)"/></td>
 						</tr>
-						<xsl:apply-templates select=".//test-suite[@success='False'][results/test-case]">
-							<xsl:sort select="@name" order="ascending" data-type="text"/>
-						</xsl:apply-templates>
-						<xsl:apply-templates select=".//test-suite[results/test-case/@executed='False']">
-							<xsl:sort select="@name" order="ascending" data-type="text"/>
-						</xsl:apply-templates>
-						<xsl:apply-templates select=".//test-suite[@success='True'][results/test-case/@executed='True']" mode="success">
-							<xsl:sort select="@name" order="ascending" data-type="text"/>
-						</xsl:apply-templates>
-					</table>
-				</blockquote>
+						<tr>
+							<td>Tests executed:</td>
+							<td><xsl:value-of select="count($tests.root//test-case[@executed = 'True'])"/></td>
+						</tr>
+						<tr>
+							<td>Passes:</td>
+							<td><xsl:value-of select="count($tests.root//test-case[@executed = 'True' and @success = 'True'])"/></td>
+						</tr>
+						<tr>
+							<td>Fails:</td>
+							<td><xsl:value-of select="count($tests.root//test-case[@executed = 'True' and @success = 'False'])"/></td>
+						</tr>
+						<tr>
+							<td>Ignored:</td>
+							<td><xsl:value-of select="count($tests.root//test-case[@executed = 'False'])"/></td>
+						</tr>
+					</tbody>
+				</table>
 			</div>
+			<div id="details">
+				<h3>Assembly Test Details:</h3>
+				<xsl:apply-templates select="$tests.root" />
+			</div>
+		</div>
+	</xsl:template>
+	
+	<xsl:template match="test-results">
+		<xsl:variable name="test.suite.id" select="generate-id()" />
+		<xsl:variable name="test.suite.name" select="./@name"/>
+		<xsl:variable name="failure.count" select="count(.//results/test-case[@success='False'])" />
+		<xsl:variable name="ignored.count" select="count(.//results/test-case[@executed='False'])" />
+				
+		<table cellpadding="2" cellspacing="0" border="0" width="98%">
+			<tr>
+				<td class="yellow-sectionheader" colspan="3" valign="top">
+					<xsl:choose>
+						<xsl:when test="$failure.count > 0">
+							<img src="images/fxcop-critical-error.gif">
+								<xsl:attribute name="title">Failed tests: <xsl:value-of select="$failure.count" /></xsl:attribute>
+							</img>
+						</xsl:when>
+						<xsl:when test="$ignored.count > 0">
+							<img src="images/fxcop-error.gif">
+								<xsl:attribute name="title">Ignored tests: <xsl:value-of select="$ignored.count" /></xsl:attribute>
+							</img>
+						</xsl:when>
+						<xsl:otherwise>
+							<img src="images/check.jpg" width="16" height="16"/>
+						</xsl:otherwise>
+					</xsl:choose>
+			
+					<input type="image" src="images/arrow_minus_small.gif">
+						<xsl:attribute name="id">img<xsl:value-of select="$test.suite.id"/></xsl:attribute>
+						<xsl:attribute name="onclick">javascript:toggleDiv('img<xsl:value-of select="$test.suite.id"/>', 'divDetails<xsl:value-of select="$test.suite.id"/>');</xsl:attribute>
+					</input>&#160;<xsl:value-of select="$test.suite.name"/>
+            </td>
+			</tr>
+		</table>
+		<div>
+			<xsl:attribute name="id">divDetails<xsl:value-of select="$test.suite.id"/></xsl:attribute>
+			<blockquote>
+				<table>
+					<tr>
+						<th>Test Fixture</th>
+						<th>Status</th>
+						<th>Progress</th>
+					</tr>
+					<xsl:apply-templates select=".//test-suite[@success='False'][results/test-case]">
+						<xsl:sort select="@name" order="ascending" data-type="text"/>
+					</xsl:apply-templates>
+					<xsl:apply-templates select=".//test-suite[results/test-case/@executed='False']">
+						<xsl:sort select="@name" order="ascending" data-type="text"/>
+					</xsl:apply-templates>
+					<xsl:apply-templates select=".//test-suite[@success='True'][results/test-case/@executed='True']" mode="success">
+						<xsl:sort select="@name" order="ascending" data-type="text"/>
+					</xsl:apply-templates>
+				</table>
+			</blockquote>
 		</div>
 	</xsl:template>
 
@@ -152,6 +182,7 @@
 			</td>
 		</tr>
 	</xsl:template>
+
 	<xsl:template match="test-case[@success='True']">
 		<tr>
 			<xsl:if test="position() mod 2 = 0">
@@ -189,6 +220,7 @@
 			</td>
 		</tr>
 	</xsl:template>
+
 	<xsl:template match="test-case[@executed='False']">
 		<tr>
 			<xsl:if test="position() mod 2 = 0">
@@ -207,6 +239,7 @@
 			</td>
 		</tr>
 	</xsl:template>
+
 	<xsl:template name="getTestName">
 		<xsl:param name="name"/>
 		<xsl:choose>

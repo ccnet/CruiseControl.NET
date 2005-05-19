@@ -1193,6 +1193,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Xsl\AlternativeNUnitStylesheetTest.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Xsl\CompileStylesheetTest.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -1204,6 +1209,11 @@
                 />
                 <File
                     RelPath = "Xsl\ModificationStylesheetTest.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Xsl\NUnitStylesheetTest.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

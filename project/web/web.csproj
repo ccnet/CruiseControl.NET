@@ -533,10 +533,6 @@
                     BuildAction = "Content"
                 />
                 <File
-                    RelPath = "xsl\Copy of NAntTiming.xsl"
-                    BuildAction = "Content"
-                />
-                <File
                     RelPath = "xsl\fit.xsl"
                     Link = "..\xsl\fit.xsl"
                     BuildAction = "Content"
@@ -574,6 +570,14 @@
                 <File
                     RelPath = "xsl\NCover.xsl"
                     Link = "..\xsl\NCover.xsl"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "xsl\SimianReport.xsl"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "xsl\SimianSummary.xsl"
                     BuildAction = "Content"
                 />
                 <File

@@ -16,7 +16,8 @@
 
 
 	<xsl:template match="/">
-		<script type="text/javascript">
+        <div id="report">
+			<script type="text/javascript">
 				function toggleDiv(imgId, divId)
 				{
 					eDiv = document.getElementById(divId);
@@ -99,8 +100,7 @@
 				.category { padding-left: 21px; font-style: oblique; font-size: smaller;}
 				.clickable { cursor: pointer; }
 			</style>
-        <div id="master">
-			<xsl:for-each select="cruisecontrol/test-results[test-suite]">
+			<xsl:for-each select="//test-results[test-suite]">
 				<xsl:variable name="divId">
 						<xsl:value-of select="generate-id(test-suite/@name)" />
 				</xsl:variable>
