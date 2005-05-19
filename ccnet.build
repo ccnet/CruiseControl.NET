@@ -28,8 +28,9 @@
     <property name="nunit-console.exe" value="tools\nunit\nunit-console.exe" />
     <property name="ncover-console.exe" value="tools\ncover\NCover.Console.exe" />
     <property name="vil.executable" value="tools\vil\vil.exe" />
-    <property name="vil.assemblies" value="comma,separated,list,of,assemblies,to,analyze (full path)" />
-    
+    <property name="vil.assemblies" value="comma,separated,list,of,assemblies,to,analyze (full path)" />    
+    <property name="simian.executable" value="tools\simian\simian.exe" />
+
 	<target name="all" depends="clean, compile, test, deploy, dist"/>
 
 	<target name="clean" description="cleans up everything">
@@ -292,6 +293,7 @@
 		<exec program="tools\fxcop\fxcopcmd.exe" 
 			  commandline="/p:tools\fxcop\ccnet.fxcop /o:build\fxcop\ccnet-fxcop.xml" failonerror="false"/>
 		<call target="vil" />
+		<call target="simian" />
 	</target>
 	
 	<!-- FOR RUNNING CCNET AGAINST ITSELF -->
@@ -349,4 +351,13 @@
 			commandline='/a="${remote.dll},${core.dll},${webdashboard.dll}" /outxml="../ccnet.results-vil.xml"  /m classes,enumerations,structs,types,LOC,events,impInterfaces,WMC,DIT,CBO,RFC,NOC,constructors,methods,imps,fields,properties /sc=type' 
 			failonerror="false"/>
     	</target>
+
+    <target name="simian" description="runs simian">    
+	<exec program="${simian.executable}" failonerror="false">
+		<arg value="-recurse=project\core\*.cs"/>
+		<arg value="-formatter=xml:${build.dir}\ccnet.simian-results.xml"/>
+	</exec>
+	<tstamp/>
+	<echo message="Simian run complete"/>
+    </target>
 </project>
