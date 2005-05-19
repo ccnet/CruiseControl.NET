@@ -95,16 +95,6 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test
 		}
 
 		[Test]
-		public void CreateProcess()
-		{
-			string fileName = "pcliScript.pcli";
-			ProcessInfo actualProcess = pvcs.CreatePVCSProcessInfo(pvcs.Executable, pvcs.Arguments, fileName);
-			string expected = Pvcs.COMMAND + fileName;
-			string actual = actualProcess.Arguments;
-			Assert.AreEqual(expected, actual);
-		}		
-
-		[Test]
 		public void CreatePcliContentsForGettingVLog()
 		{
 			string expected = "run -xe\"" + pvcs.ErrorFile + "\" -xo\"" + pvcs.LogFile + "\" -q vlog -pr\"" + pvcs.Project + "\"  -z -ds\"beforedate\" -de\"afterdate\" " + pvcs.Subproject;

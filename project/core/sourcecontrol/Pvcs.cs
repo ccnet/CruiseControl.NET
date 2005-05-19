@@ -13,8 +13,6 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 	[ReflectorType("pvcs")]
 	public class Pvcs : ProcessSourceControl
 	{
-		public const string COMMAND = "run -s";
-
 		private const string DELETE_LABEL_TEMPLATE =
 			@"run -y -xe""{0}"" -xo""{1}"" DeleteLabel -pr""{2}"" {3} {4} {5} {7}";
 
@@ -36,14 +34,14 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 		private const string INDIVIDUAL_LABEL_REVISION_TEMPLATE =
 			@"{0} ""{1}{2}\{3}"" ";
 
-		private TimeZone _currentTimeZone = TimeZone.CurrentTimeZone;
-		private string _baseLabelName = "";
-		private Modification[] _modifications = null;
-		private Modification[] _baseModifications = null;
-		private string _errorFile = "";
-		private string _logFile = "";
-		private string _tempFile = "";
-		private string _tempLabel = "";
+		private TimeZone currentTimeZone = TimeZone.CurrentTimeZone;
+		private string baseLabelName = "";
+		private Modification[] modifications = null;
+		private Modification[] baseModifications = null;
+		private string errorFile = "";
+		private string logFile = "";
+		private string tempFile = "";
+		private string tempLabel = "";
 
 		public Pvcs() : this(new PvcsHistoryParser(), new ProcessExecutor())
 		{}
@@ -53,9 +51,6 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 
 		[ReflectorProperty("executable")]
 		public string Executable = "pcli";
-
-		[ReflectorProperty("arguments", Required=false)]
-		public string Arguments = COMMAND;
 
 		[ReflectorProperty("project")]
 		public string Project;
@@ -90,48 +85,48 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 		[ReflectorProperty("labelOrPromotionName", Required=false)]
 		public string LabelOrPromotionName
 		{
-			get { return _baseLabelName; }
+			get { return baseLabelName; }
 			set
 			{
-				_baseLabelName = value;
-				LabelOnSuccess = ! StringUtil.IsBlank(_baseLabelName);
+				baseLabelName = value;
+				LabelOnSuccess = ! StringUtil.IsBlank(baseLabelName);
 			}
 		}
 
 		public TimeZone CurrentTimeZone
 		{
-			set { _currentTimeZone = value; }
+			set { currentTimeZone = value; }
 		}
 
 		public string ErrorFile
 		{
-			get { return _errorFile = TempFileNameIfBlank(_errorFile); }
+			get { return errorFile = TempFileNameIfBlank(errorFile); }
 		}
 
 		public string LogFile
 		{
-			get { return _logFile = TempFileNameIfBlank(_logFile); }
+			get { return logFile = TempFileNameIfBlank(logFile); }
 		}
 
 		public string TempFile
 		{
-			get { return _tempFile = TempFileNameIfBlank(_tempFile); }
+			get { return tempFile = TempFileNameIfBlank(tempFile); }
 		}
 
 		public string LabelOrPromotionInput(string label)
 		{
-			return (label.Length == 0) ? "" : (this.IsPromotionGroup == false ? "-v" : "-g") + label;
+			return (label.Length == 0) ? "" : (IsPromotionGroup == false ? "-v" : "-g") + label;
 		}
 
 		public override Modification[] GetModifications(IIntegrationResult from, IIntegrationResult to)
 		{
-			this._baseModifications = null;
+			baseModifications = null;
 
 			using (TextReader reader = ExecuteVLog(from.StartTime, to.StartTime))
 			{
-				_modifications = base.ParseModifications(reader, from.StartTime, to.StartTime);
+				modifications = base.ParseModifications(reader, from.StartTime, to.StartTime);
 			}
-			return _modifications;
+			return modifications;
 		}
 
 		private string GetRecursiveValue()
@@ -191,14 +186,14 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			}
 		}
 
-		public ProcessInfo CreatePVCSProcessInfo(string executable, string arguments, string filename)
+		private ProcessInfo CreatePVCSProcessInfo(string executable, string arguments, string filename)
 		{
 			return new ProcessInfo(executable, arguments + filename);
 		}
 
 		public string CreatePcliContentsForGet()
 		{
-			return string.Format(GET_INSTRUCTIONS_TEMPLATE, ErrorFile, LogFile, Project, GetLogin(false), GetRecursiveValue(), Workspace, this.LabelOrPromotionInput(_tempLabel), this.Subproject);
+			return string.Format(GET_INSTRUCTIONS_TEMPLATE, ErrorFile, LogFile, Project, GetLogin(false), GetRecursiveValue(), Workspace, LabelOrPromotionInput(tempLabel), Subproject);
 		}
 
 		public string CreatePcliContentsForCreatingVLog(string beforedate, string afterdate)
@@ -208,12 +203,12 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 
 		public string CreatePcliContentsForCreatingVlogByLabel(string label)
 		{
-			return string.Format(VLOG_LABEL_INSTRUCTIONS_TEMPLATE, ErrorFile, this.LogFile, this.Project, this.GetLogin(false), this.GetRecursiveValue(), label, this.Subproject);
+			return string.Format(VLOG_LABEL_INSTRUCTIONS_TEMPLATE, ErrorFile, LogFile, Project, GetLogin(false), GetRecursiveValue(), label, Subproject);
 		}
 
 		public string CreatePcliContentsForDeletingLabel(string label)
 		{
-			return string.Format(DELETE_LABEL_TEMPLATE, ErrorFile, LogFile, this.Project, GetLogin(false), GetRecursiveValue(), this.LabelOrPromotionInput(label), this.Subproject);
+			return string.Format(DELETE_LABEL_TEMPLATE, ErrorFile, LogFile, Project, GetLogin(false), GetRecursiveValue(), LabelOrPromotionInput(label), Subproject);
 		}
 
 		public string CreatePcliContentsForLabeling(string label)
@@ -250,7 +245,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 
 		public DateTime AdjustForDayLightSavingsBug(DateTime date)
 		{
-			if (_currentTimeZone.IsDaylightSavingTime(DateTime.Now))
+			if (currentTimeZone.IsDaylightSavingTime(DateTime.Now))
 			{
 				TimeSpan anHour = new TimeSpan(1, 0, 0);
 				return date.Subtract(anHour);
@@ -272,22 +267,22 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 				return;
 
 			// Commented out until TemporaryLabeller logic can be worked out.
-			// Execute( this.CreatePcliContentsForGet() );
+			// Execute( CreatePcliContentsForGet() );
 
 			//Ensure that the working directory and Modifications are not empty
 			WorkingDirectory = (WorkingDirectory.Length < 3) ? result.WorkingDirectory : WorkingDirectory; // why checking for length < 3?
 
 			//Ensure that the Modifications are set locally
-			_modifications = result.Modifications;
+			modifications = result.Modifications;
 
-			if (this.LabelOnSuccess && this.LabelOrPromotionName.Length > 0)
-				this.DetermineMaxRevisions(this.LabelOrPromotionName);
+			if (LabelOnSuccess && LabelOrPromotionName.Length > 0)
+				DetermineMaxRevisions(LabelOrPromotionName);
 
 			// Write the revision to pull from Version Manager and close the file
 			StringDictionary createFolders = new StringDictionary();
 			using (TextWriter stream = File.CreateText(TempFile))
 			{
-				foreach (Modification mod in this._modifications)
+				foreach (Modification mod in modifications)
 				{
 					string fileLoc = DetermineFileLocation(mod.FolderName);
 
@@ -345,13 +340,13 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			if (result.Modifications.Length < 1 || LabelOnSuccess == false || ! result.Succeeded) //|| _temporaryLabel.Length == 0
 				return;
 
-			_modifications = result.Modifications;
+			modifications = result.Modifications;
 
 			// Ensure the Label Or Promotion Name exist
-			if (this.LabelOrPromotionName.Length > 0)
+			if (LabelOrPromotionName.Length > 0)
 				LabelSourceControl("", LabelOrPromotionName);
 			// This allows for the labeller concept to support absolute labelling
-			if (result.Label != this.LabelOrPromotionName)
+			if (result.Label != LabelOrPromotionName)
 				LabelSourceControl(LabelOrPromotionName, result.Label);
 		}
 
@@ -367,7 +362,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			}
 			using (TextWriter stream = File.CreateText(TempFile))
 			{
-				foreach (Modification mod in _modifications)
+				foreach (Modification mod in modifications)
 				{
 					stream.WriteLine(CreateIndividualLabelString(mod, (oldLabel.Length > 0 ? newLabel : "")));
 				}
@@ -381,7 +376,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 		{
 			// Only Execute this one-time during this process
 			// until the GetModifications is run again.
-			if (_baseModifications == null)
+			if (baseModifications == null)
 			{
 				Log.Info("Determine Revisions based on Promotion Group/Label : " + oldLabel);
 				// Execute new VLog Session to get revision for old Label
@@ -389,23 +384,23 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 
 				using (TextReader reader = GetTextReader(LogFile))
 				{
-					_baseModifications = this._historyParser.Parse(reader, DateTime.Now, DateTime.Now);
+					baseModifications = _historyParser.Parse(reader, DateTime.Now, DateTime.Now);
 				}
 			}
 
 			ArrayList allMods = new ArrayList();
 
-			foreach (Modification mod in this._baseModifications)
+			foreach (Modification mod in baseModifications)
 			{
 				allMods.Add(mod);
 			}
-			foreach (Modification mod in this._modifications)
+			foreach (Modification mod in modifications)
 			{
 				allMods.Add(mod);
 			}
 
 			// Only Modifications that need stamp should be generated
-			_modifications = PvcsHistoryParser.AnalyzeModifications(allMods);
+			modifications = PvcsHistoryParser.AnalyzeModifications(allMods);
 
 			// Cleanup
 			allMods.Clear();
@@ -451,23 +446,23 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 		public void CreateDateSpecificTemporaryLabel(DateTime dt)
 		{
 			// this was created public for testing
-			_tempLabel = Thread.CurrentThread.Name + "_" + Convert.ToString(dt.Ticks);
+			tempLabel = Thread.CurrentThread.Name + "_" + Convert.ToString(dt.Ticks);
 		}
 
 		public void CreateTemporaryLabel()
 		{
 			CreateDateSpecificTemporaryLabel(DateTime.Now);
 
-			this.LabelSourceControl("", _tempLabel);
+			LabelSourceControl("", tempLabel);
 
 			// Copy the revisions of the Label / Promotion Group into the temporary label
-			if (this.LabelOnSuccess && this.LabelOrPromotionName.Length > 0)
-				this.LabelSourceControl(this.LabelOrPromotionName, _tempLabel);
+			if (LabelOnSuccess && LabelOrPromotionName.Length > 0)
+				LabelSourceControl(LabelOrPromotionName, tempLabel);
 		}
 
 		public void DeleteTemporaryLabel()
 		{
-			Execute(this.CreatePcliContentsForDeletingLabel(_tempLabel));
+			Execute(CreatePcliContentsForDeletingLabel(tempLabel));
 		}
 
 		#endregion

@@ -112,6 +112,10 @@ Section "Documentation" SEC04
   SetOverwrite on
   File /r "deployed\doc\*"
 
+  SetOutPath "$INSTDIR\Examples"
+  SetOverwrite on
+  File /r "deployed\examples\*.config"
+
   !insertmacro MUI_STARTMENU_WRITE_BEGIN Application
   !insertmacro MUI_STARTMENU_WRITE_END
 SectionEnd
