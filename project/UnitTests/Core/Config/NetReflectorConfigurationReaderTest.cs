@@ -5,7 +5,7 @@ using NUnit.Framework;
 using ThoughtWorks.CruiseControl.Core;
 using ThoughtWorks.CruiseControl.Core.Config;
 using ThoughtWorks.CruiseControl.Core.Sourcecontrol;
-using ThoughtWorks.CruiseControl.Core.Tasks.Test;
+using ThoughtWorks.CruiseControl.Core.Tasks;
 using ThoughtWorks.CruiseControl.Core.Util;
 using ThoughtWorks.CruiseControl.Remote;
 using ThoughtWorks.CruiseControl.UnitTests.Core.Publishers;
@@ -95,7 +95,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Config
 		{
 			Project project = configuration.Projects[projectName] as Project;
 			Assert.AreEqual(projectName, project.Name);
-			Assert.IsTrue(project.Builder is MockBuilder);
+			Assert.IsTrue(project.Tasks[0] is NullTask);
 			Assert.IsTrue(project.SourceControl is NullSourceControl);
 			Assert.AreEqual(1, project.Publishers.Length);
 			Assert.IsTrue(project.Publishers[0] is MockPublisher);

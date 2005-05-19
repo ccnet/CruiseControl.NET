@@ -833,12 +833,6 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "tasks\test\MockBuilder.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <Folder RelPath = "test\" />
-                <File
                     RelPath = "Triggers\FilterTrigger.cs"
                     SubType = "Code"
                     BuildAction = "Compile"

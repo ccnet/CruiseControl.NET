@@ -30,12 +30,12 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Config
 
 		public static string GenerateProjectXml(string name)
 		{
-			return GenerateProjectXml(name, GenerateMockBuildXml(), GenerateNullSourceControlXml(), GenerateMockPublisherXml(), GenerateStateManagerXml());
+			return GenerateProjectXml(name, GenerateMockTasksXml(), GenerateNullSourceControlXml(), GenerateMockPublisherXml(), GenerateStateManagerXml());
 		}
 
-		public static string GenerateMockBuildXml()
+		public static string GenerateMockTasksXml()
 		{
-			return @"<build type=""mockbuildrunner""></build>";
+			return @"<tasks><nullTask /></tasks>";
 		}
 
 		public static string GenerateNullSourceControlXml()
