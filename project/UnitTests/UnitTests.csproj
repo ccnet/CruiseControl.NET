@@ -484,11 +484,6 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "Core\Publishers\ExecutablePublisherTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
                     RelPath = "Core\Publishers\ForceBuildPublisherTest.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
