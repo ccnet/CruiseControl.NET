@@ -23,8 +23,10 @@ namespace ThoughtWorks.CruiseControl.Service
 		private void InitializeComponent()
 		{
 			serviceProcessInstaller = new ServiceProcessInstaller();
+			serviceProcessInstaller.Account = ServiceAccount.NetworkService;
 			serviceInstaller = new ServiceInstaller();
 			SetServiceName(CCService.DefaultServiceName);
+			serviceInstaller.StartType = ServiceStartMode.Automatic;
 
 			Installers.AddRange(new Installer[]
 				{

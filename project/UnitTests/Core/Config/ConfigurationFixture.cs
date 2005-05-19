@@ -30,10 +30,10 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Config
 
 		public static string GenerateProjectXml(string name)
 		{
-			return GenerateProjectXml(name, GenerateMockTasksXml(), GenerateNullSourceControlXml(), GenerateMockPublisherXml(), GenerateStateManagerXml());
+			return GenerateProjectXml(name, GenerateNullTasksXml(), GenerateNullSourceControlXml(), GenerateNullPublishersXml(), GenerateStateManagerXml());
 		}
 
-		public static string GenerateMockTasksXml()
+		public static string GenerateNullTasksXml()
 		{
 			return @"<tasks><nullTask /></tasks>";
 		}
@@ -43,9 +43,9 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Config
 			return @"<sourcecontrol type=""nullSourceControl""></sourcecontrol>";
 		}
 
-		public static string GenerateMockPublisherXml()
+		public static string GenerateNullPublishersXml()
 		{
-			return @"<publishers><mockpublisher/></publishers>";
+			return @"<publishers><nullTask /></publishers>";
 		}
 
 		public static string GenerateStateManagerXml()

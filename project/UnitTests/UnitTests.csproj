@@ -509,11 +509,6 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "Core\Publishers\MockPublisher.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
                     RelPath = "Core\Publishers\PublisherTest.cs"
                     SubType = "Code"
                     BuildAction = "Compile"

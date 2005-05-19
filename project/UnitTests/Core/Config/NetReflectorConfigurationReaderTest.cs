@@ -8,7 +8,6 @@ using ThoughtWorks.CruiseControl.Core.Sourcecontrol;
 using ThoughtWorks.CruiseControl.Core.Tasks;
 using ThoughtWorks.CruiseControl.Core.Util;
 using ThoughtWorks.CruiseControl.Remote;
-using ThoughtWorks.CruiseControl.UnitTests.Core.Publishers;
 
 namespace ThoughtWorks.CruiseControl.UnitTests.Core.Config
 {
@@ -98,7 +97,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Config
 			Assert.IsTrue(project.Tasks[0] is NullTask);
 			Assert.IsTrue(project.SourceControl is NullSourceControl);
 			Assert.AreEqual(1, project.Publishers.Length);
-			Assert.IsTrue(project.Publishers[0] is MockPublisher);
+			Assert.IsTrue(project.Publishers[0] is NullTask);
 			if (invalidNodes.Count > 0) 
 				Assert.Fail("The xml contains nodes that are no longer used: {0}.", ((XmlNode)invalidNodes[0]).OuterXml);				
 		}

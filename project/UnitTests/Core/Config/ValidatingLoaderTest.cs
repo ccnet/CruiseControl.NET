@@ -3,37 +3,62 @@ using System.Reflection;
 using System.Xml;
 using System.Xml.Schema;
 using NUnit.Framework;
+using ThoughtWorks.CruiseControl.Core;
 using ThoughtWorks.CruiseControl.Core.Config;
+using ThoughtWorks.CruiseControl.Core.Util;
 
 namespace ThoughtWorks.CruiseControl.UnitTests.Core.Config
 {
 	[TestFixture]
 	public class ValidatingLoaderTest : CustomAssertion
 	{
+		private string tempfile;
+
 		[Test]
 		public void FailedLoad() 
 		{
-			ValidationEventHandler hd = new ValidationEventHandler(Handler);
-			XmlSchema schema = LoadSchema();
-			XmlTextReader xr = new XmlTextReader(new StringReader(@"<cruisecontrol><projectx></projectx></cruisecontrol>"));
-			XmlValidatingLoader loader = new XmlValidatingLoader(xr);
-			loader.ValidationEventHandler += hd;
-			loader.Schemas.Add(schema);
-			XmlDocument doc = loader.Load();
-			Assert.IsNull(doc);
+			XmlValidatingLoader loader = XmlValidatingLoader(@"<cruisecontrol><projectx></projectx></cruisecontrol>");
+			Assert.IsNull(loader.Load());
 		}
 
 		[Test]
-		public void SucceededLoad() 
+		public void SuccessfulLoad() 
 		{
-			ValidationEventHandler hd = new ValidationEventHandler(Handler);
-			XmlSchema schema = LoadSchema();
-			XmlTextReader xr = new XmlTextReader(new StringReader(ConfigurationFixture.GenerateConfigXml()));
+			XmlValidatingLoader loader = XmlValidatingLoader(ConfigurationFixture.GenerateConfigXml());
+			Assert.IsNotNull(loader.Load());
+		}
+
+		[Test]
+		public void ShouldBeAbleToLoadXmlWithDTD()
+		{
+			tempfile = TempFileUtil.CreateTempFile("config", "project1.xml", @"<project name=""p1"" />");
+			string xml = 
+@"<!DOCTYPE cruisecontrol [ 
+	<!ENTITY project1 SYSTEM ""file:" + tempfile + @""">
+]> 
+<cruisecontrol>&project1;</cruisecontrol>";
+			XmlTextReader xr = new XmlTextReader(new StringReader(xml));
 			XmlValidatingLoader loader = new XmlValidatingLoader(xr);
-			loader.ValidationEventHandler += hd;
-			loader.Schemas.Add(schema);
 			XmlDocument doc = loader.Load();
 			Assert.IsNotNull(doc);
+
+			IConfiguration config = new NetReflectorConfigurationReader().Read(doc);
+			Assert.IsNotNull(config.Projects["p1"]);
+		}
+
+		[TearDown]
+		protected void DeleteTempFile()
+		{
+			if (tempfile != null) TempFileUtil.DeleteTempFile(tempfile);
+		}
+
+		private XmlValidatingLoader XmlValidatingLoader(string xml)
+		{
+			XmlTextReader xr = new XmlTextReader(new StringReader(xml));
+			XmlValidatingLoader loader = new XmlValidatingLoader(xr);
+			loader.ValidationEventHandler += new ValidationEventHandler(Handler);
+			loader.AddSchema(LoadSchema());
+			return loader;
 		}
 
 		private XmlSchema LoadSchema() 
@@ -45,7 +70,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Config
 
 		private void Handler(object sender, ValidationEventArgs args) 
 		{
-			// this handler is required, and not used
+//			throw args.Exception;
 		}
 	}
 }

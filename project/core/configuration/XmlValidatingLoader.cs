@@ -9,24 +9,26 @@ namespace ThoughtWorks.CruiseControl.Core.Config
 	/// </summary>
 	public class XmlValidatingLoader : IDisposable
 	{
-		private XmlValidatingReader _reader;
-		private bool _valid;
+		private XmlValidatingReader reader;
+		private bool valid;
 
 		public XmlValidatingLoader(XmlReader reader)
 		{
-			_reader = new XmlValidatingReader(reader);
-			_reader.ValidationEventHandler += new ValidationEventHandler(ValidationHandler);
+			this.reader = new XmlValidatingReader(reader);
+			this.reader.ValidationType = ValidationType.None;
+			this.reader.ValidationEventHandler += new ValidationEventHandler(ValidationHandler);
 		}
 
 		public event ValidationEventHandler ValidationEventHandler
 		{
-			add { _reader.ValidationEventHandler += value; }
-			remove { _reader.ValidationEventHandler -= value; }
+			add { reader.ValidationEventHandler += value; }
+			remove { reader.ValidationEventHandler -= value; }
 		}
 
-		public XmlSchemaCollection Schemas
+		public void AddSchema(XmlSchema schema)
 		{
-			get { return _reader.Schemas; }
+			reader.Schemas.Add(schema);
+			reader.ValidationType = ValidationType.Schema;
 		}
 
 		public XmlDocument Load()
@@ -35,31 +37,31 @@ namespace ThoughtWorks.CruiseControl.Core.Config
 			lock (this)
 			{
 				// set the flag true
-				_valid = true;
+				valid = true;
 
 				try
 				{
 					XmlDocument doc = new XmlDocument();
-					doc.Load(_reader);
+					doc.Load(reader);
 
-					// if the load failed, our event handler will have set _worked to false
-					return _valid ? doc : null;
+					// if the load failed, our event handler will have set flag to false
+					return valid ? doc : null;
 				}
 				finally
 				{
-					_valid = true;
+					valid = true;
 				}
 			}
 		}
 
 		private void ValidationHandler(object sender, ValidationEventArgs args)
 		{
-			_valid = false;
+			valid = false;
 		}
 
 		public void Dispose()
 		{
-			_reader.Close();
+			reader.Close();
 		}
 	}
 }
