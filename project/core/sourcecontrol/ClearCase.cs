@@ -1,5 +1,6 @@
 using System;
 using System.IO;
+using System.Text;
 using Exortech.NetReflector;
 using ThoughtWorks.CruiseControl.Core.Util;
 
@@ -76,6 +77,9 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 
 		[ReflectorProperty("autoGetSource", Required = false)]
 		public bool AutoGetSource = false;
+
+		[ReflectorProperty("branch", Required = false)]
+		public string Branch;
 
 		public string TempBaseline
 		{
@@ -264,11 +268,20 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 
 		private string CreateHistoryArguments(string fromDate)
 		{
-			return "lshist  -r  -nco -since " + fromDate + " -fmt \"%u" + ClearCaseHistoryParser.DELIMITER
-				+ "%Vd" + ClearCaseHistoryParser.DELIMITER + "%En" + ClearCaseHistoryParser.DELIMITER
+			StringBuilder args = new StringBuilder("lshist -r -nco ");
+
+			if (Branch != null)
+			{
+				args.AppendFormat("-branch \"{0}\" ", Branch);
+			}
+
+			args.Append("-since " + fromDate + " -fmt \"%u" + ClearCaseHistoryParser.DELIMITER
+				+ "%Vd"	+ ClearCaseHistoryParser.DELIMITER + "%En" + ClearCaseHistoryParser.DELIMITER
 				+ "%Vn" + ClearCaseHistoryParser.DELIMITER + "%o" + ClearCaseHistoryParser.DELIMITER
 				+ "!%l" + ClearCaseHistoryParser.DELIMITER + "!%a" + ClearCaseHistoryParser.DELIMITER
-				+ "%Nc" + ClearCaseHistoryParser.END_OF_LINE_DELIMITER + "\\n\" " + _viewPath;
+				+ "%Nc" + ClearCaseHistoryParser.END_OF_LINE_DELIMITER + "\\n\" " + _viewPath);
+
+			return args.ToString();
 		}
 
 		private void RemoveBaseline()
@@ -308,5 +321,6 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 		{
 			return string.Format(@"update -force -overwrite ""{0}""", ViewPath);
 		}
+
 	}
 }

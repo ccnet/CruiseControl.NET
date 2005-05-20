@@ -12,12 +12,13 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 	[TestFixture]
 	public class ClearCaseTest
 	{
-		public static readonly string EXECUTABLE = "cleartool.exe";
-		public static readonly string VIEWPATH = @"C:\DOES_NOT_EXIST";
-		public static readonly string VIEWNAME = @"VIEWNAME_DOES_NOT_EXIST";
-		public static readonly string PROJECT_VOB_NAME = "ProjectVobName";
-		public static readonly string USE_BASELINE = false.ToString();
-		public static readonly string USE_LABEL = true.ToString();
+		public const string EXECUTABLE = "cleartool.exe";
+		public const string VIEWPATH = @"C:\DOES_NOT_EXIST";
+		public const string VIEWNAME = @"VIEWNAME_DOES_NOT_EXIST";
+		public const string PROJECT_VOB_NAME = "ProjectVobName";
+		public const string USE_BASELINE = "false";
+		public static readonly string USE_LABEL = "true";
+		const string BRANCH = "my branch";
 
 		public static readonly string XML_STUB =
 			@"<sourceControl type=""clearCase"">
@@ -27,6 +28,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
     <useLabel>{3}</useLabel>
     <projectVobName>{4}</projectVobName>
 	<viewName>{5}</viewName>
+	<branch>{6}</branch>
 </sourceControl>";
 
 		public static readonly string CLEARCASE_XML = string.Format(XML_STUB,
@@ -35,22 +37,22 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 		                                                            USE_BASELINE,
 		                                                            USE_LABEL,
 		                                                            PROJECT_VOB_NAME,
-		                                                            VIEWNAME);
+		                                                            VIEWNAME, BRANCH);
 
-		private ClearCase _clearCase;
+		private ClearCase clearCase;
 
 		[SetUp]
 		protected void Setup()
 		{
-			_clearCase = new ClearCase();
-			NetReflector.Read(CLEARCASE_XML, _clearCase);
+			clearCase = new ClearCase();
+			NetReflector.Read(CLEARCASE_XML, clearCase);
 		}
 
 		[Test]
 		public void CanCreateTemporaryBaselineProcessInfo()
 		{
 			const string name = "baselinename";
-			ProcessInfo info = _clearCase.CreateTempBaselineProcessInfo(name);
+			ProcessInfo info = clearCase.CreateTempBaselineProcessInfo(name);
 			Assert.AreEqual(string.Format("{0} mkbl -view {1} -identical {2}",
 			                              EXECUTABLE,
 			                              VIEWNAME,
@@ -61,12 +63,12 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 		[Test]
 		public void CanCreateRemoveBaselineProcessInfo()
 		{
-			ProcessInfo info = _clearCase.CreateRemoveBaselineProcessInfo();
+			ProcessInfo info = clearCase.CreateRemoveBaselineProcessInfo();
 
 			Assert.AreEqual(string.Format("{0} rmbl -force {1}@\\{2}",
 			                              EXECUTABLE,
-			                              _clearCase.TempBaseline,
-			                              _clearCase.ProjectVobName),
+			                              clearCase.TempBaseline,
+			                              clearCase.ProjectVobName),
 			                info.FileName + " " + info.Arguments);
 		}
 
@@ -74,12 +76,12 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 		public void CanCreateRenameBaselineProcesInfo()
 		{
 			const string newName = "HiImANewBaselineName";
-			ProcessInfo info = _clearCase.CreateRenameBaselineProcessInfo(newName);
+			ProcessInfo info = clearCase.CreateRenameBaselineProcessInfo(newName);
 
 			Assert.AreEqual(string.Format("{0} rename baseline:{1}@\\{2} \"{3}\"",
 			                              EXECUTABLE,
-			                              _clearCase.TempBaseline,
-			                              _clearCase.ProjectVobName,
+			                              clearCase.TempBaseline,
+			                              clearCase.ProjectVobName,
 			                              newName),
 			                info.FileName + " " + info.Arguments);
 		}
@@ -98,7 +100,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 		public void CanValidateBaselineName1()
 		{
 			const string name = "";
-			_clearCase.ValidateBaselineName(name);
+			clearCase.ValidateBaselineName(name);
 		}
 
 		[Test]
@@ -106,7 +108,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 		public void CanValidateBaselineName2()
 		{
 			const string name = null;
-			_clearCase.ValidateBaselineName(name);
+			clearCase.ValidateBaselineName(name);
 		}
 
 		[Test]
@@ -114,7 +116,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 		public void CanValidateBaselineName3()
 		{
 			const string name = "name with spaces";
-			_clearCase.ValidateBaselineName(name);
+			clearCase.ValidateBaselineName(name);
 		}
 
 		[Test]
@@ -130,10 +132,10 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 		[ExpectedException(typeof (CruiseControlException))]
 		public void CanEnforceProjectVobSetIfBaselineTrue()
 		{
-			_clearCase.UseBaseline = true;
-			_clearCase.ProjectVobName = null;
+			clearCase.UseBaseline = true;
+			clearCase.ProjectVobName = null;
 
-			_clearCase.LabelSourceControl(IntegrationResultMother.CreateSuccessful());
+			clearCase.LabelSourceControl(IntegrationResultMother.CreateSuccessful());
 		}
 
 		[Test]
@@ -141,33 +143,52 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 		{
 			DateTime expectedStartDate = DateTime.Parse("02-Feb-2002.05:00:00", CultureInfo.InvariantCulture);
 
-			string expectedArguments = "lshist  -r  -nco -since " + expectedStartDate.ToString(ClearCase.DATETIME_FORMAT) + " -fmt \"%u"
+			clearCase.Branch = null;
+
+			string expectedArguments = "lshist -r -nco -since " + expectedStartDate.ToString(ClearCase.DATETIME_FORMAT) + " -fmt \"%u"
 				+ ClearCaseHistoryParser.DELIMITER + "%Vd" + ClearCaseHistoryParser.DELIMITER
 				+ "%En" + ClearCaseHistoryParser.DELIMITER
 				+ "%Vn" + ClearCaseHistoryParser.DELIMITER + "%o" + ClearCaseHistoryParser.DELIMITER
 				+ "!%l" + ClearCaseHistoryParser.DELIMITER + "!%a" + ClearCaseHistoryParser.DELIMITER
 				+ "%Nc" + ClearCaseHistoryParser.END_OF_LINE_DELIMITER + "\\n\" " + VIEWPATH;
-			ProcessInfo processInfo = _clearCase.CreateHistoryProcessInfo(expectedStartDate, DateTime.Now);
+			ProcessInfo processInfo = clearCase.CreateHistoryProcessInfo(expectedStartDate, DateTime.Now);
 			Assert.AreEqual("cleartool.exe", processInfo.FileName);
 			Assert.AreEqual(expectedArguments, processInfo.Arguments);
 		}
 
+
+		[Test]
+		public void BranchDetailsAreAppliedToHistroyProcessIfSet()
+		{
+			DateTime expectedStartDate = DateTime.Parse("02-Feb-2002.05:00:00", CultureInfo.InvariantCulture);
+
+			string expectedArguments = "lshist -r -nco -branch \"" + BRANCH + "\" -since " + expectedStartDate.ToString(ClearCase.DATETIME_FORMAT) + " -fmt \"%u"
+				+ ClearCaseHistoryParser.DELIMITER + "%Vd" + ClearCaseHistoryParser.DELIMITER
+				+ "%En" + ClearCaseHistoryParser.DELIMITER
+				+ "%Vn" + ClearCaseHistoryParser.DELIMITER + "%o" + ClearCaseHistoryParser.DELIMITER
+				+ "!%l" + ClearCaseHistoryParser.DELIMITER + "!%a" + ClearCaseHistoryParser.DELIMITER
+				+ "%Nc" + ClearCaseHistoryParser.END_OF_LINE_DELIMITER + "\\n\" " + VIEWPATH;
+			ProcessInfo processInfo = clearCase.CreateHistoryProcessInfo(expectedStartDate, DateTime.Now);
+			Assert.AreEqual("cleartool.exe", processInfo.FileName);
+			Assert.AreEqual(expectedArguments, processInfo.Arguments);
+		}
 		[Test]
 		public void TestConfig()
 		{
-			Assert.AreEqual(EXECUTABLE, _clearCase.Executable);
-			Assert.AreEqual(VIEWPATH, _clearCase.ViewPath);
-			Assert.AreEqual(VIEWNAME, _clearCase.ViewName);
-			Assert.AreEqual(USE_BASELINE, _clearCase.UseBaseline.ToString());
-			Assert.AreEqual(USE_LABEL, _clearCase.UseLabel.ToString());
-			Assert.AreEqual(PROJECT_VOB_NAME, _clearCase.ProjectVobName);
+			Assert.AreEqual(EXECUTABLE, clearCase.Executable);
+			Assert.AreEqual(VIEWPATH, clearCase.ViewPath);
+			Assert.AreEqual(VIEWNAME, clearCase.ViewName);
+			Assert.AreEqual(Convert.ToBoolean(USE_BASELINE), clearCase.UseBaseline);
+			Assert.AreEqual(Convert.ToBoolean(USE_LABEL), clearCase.UseLabel);
+			Assert.AreEqual(PROJECT_VOB_NAME, clearCase.ProjectVobName);
+			Assert.AreEqual(BRANCH, clearCase.Branch);
 		}
 
 		[Test]
 		public void CanCreateLabelType()
 		{
 			string label = "This-is-a-test";
-			ProcessInfo labelTypeProcess = _clearCase.CreateLabelTypeProcessInfo(label);
+			ProcessInfo labelTypeProcess = clearCase.CreateLabelTypeProcessInfo(label);
 			Assert.AreEqual(" mklbtype -c \"CRUISECONTROL Comment\" \"" + label + "\"", labelTypeProcess.Arguments);
 			Assert.AreEqual("cleartool.exe", labelTypeProcess.FileName);
 		}
@@ -176,7 +197,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 		public void CanCreateLabelProcess()
 		{
 			const string label = "This-is-a-test";
-			ProcessInfo labelProcess = _clearCase.CreateMakeLabelProcessInfo(label);
+			ProcessInfo labelProcess = clearCase.CreateMakeLabelProcessInfo(label);
 			Assert.AreEqual(@" mklabel -recurse """ + label + "\" " + VIEWPATH, labelProcess.Arguments);
 			Assert.AreEqual("cleartool.exe", labelProcess.FileName);
 		}
@@ -184,13 +205,13 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 		[Test]
 		public void CanIgnoreVobError()
 		{
-			Assert.IsFalse(_clearCase.HasFatalError(ClearCaseMother.VOB_ERROR_ONLY));
+			Assert.IsFalse(clearCase.HasFatalError(ClearCaseMother.VOB_ERROR_ONLY));
 		}
 
 		[Test]
 		public void CanDetectError()
 		{
-			Assert.IsTrue(_clearCase.HasFatalError(ClearCaseMother.REAL_ERROR_WITH_VOB));
+			Assert.IsTrue(clearCase.HasFatalError(ClearCaseMother.REAL_ERROR_WITH_VOB));
 		}
 
 		[Test]
