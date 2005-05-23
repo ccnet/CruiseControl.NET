@@ -4,17 +4,6 @@ using ThoughtWorks.CruiseControl.Remote;
 
 namespace ThoughtWorks.CruiseControl.CCTrayLib
 {
-
-	#region Public delegates
-
-	public delegate void BuildOccurredEventHandler (object sauce, BuildOccurredEventArgs e);
-
-	public delegate void PolledEventHandler (object sauce, PolledEventArgs e);
-
-	public delegate void ErrorEventHandler (object sauce, ErrorEventArgs e);
-
-	#endregion
-
 	/// <summary>
 	/// Monitors a remote CruiseControl.NET instance, and raises events in
 	/// responses to changes in the server's state.
@@ -37,8 +26,6 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib
 			_pollTimer.Tick += new EventHandler (this.pollTimer_Tick);
 		}
 
-		#region Properties
-
 		/// <summary>
 		/// Gets the Url of the build results web page for the current project.
 		/// </summary>
@@ -57,8 +44,6 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib
 		{
 			get { return _currentProjectStatus; }
 		}
-
-		#endregion
 
 		public void Dispose ()
 		{
@@ -184,8 +169,6 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib
 			GetRemoteCruiseControlProxy ().ForceBuild (projectName);
 		}
 
-		#region Build transitions
-
 		private BuildTransition GetBuildTransition (ProjectStatus projectStatus)
 		{
 			bool wasOk = _currentProjectStatus.BuildStatus == IntegrationStatus.Success;
@@ -203,62 +186,6 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib
 			throw new Exception ("The universe has gone crazy.");
 		}
 
-		#endregion
 	}
 
-	#region Event argument classes
-
-	public class BuildOccurredEventArgs : EventArgs
-	{
-		ProjectStatus _projectStatus;
-		BuildTransition _transition;
-
-		public BuildOccurredEventArgs (ProjectStatus newProjectStatus, BuildTransition transition)
-		{
-			_projectStatus = newProjectStatus;
-			_transition = transition;
-		}
-
-		public ProjectStatus ProjectStatus
-		{
-			get { return _projectStatus; }
-		}
-
-		public BuildTransition BuildTransition
-		{
-			get { return _transition; }
-		}
-	}
-
-	public class PolledEventArgs : EventArgs
-	{
-		ProjectStatus _projectStatus;
-
-		public PolledEventArgs (ProjectStatus projectStatus)
-		{
-			_projectStatus = projectStatus;
-		}
-
-		public ProjectStatus ProjectStatus
-		{
-			get { return _projectStatus; }
-		}
-	}
-
-	public class ErrorEventArgs : EventArgs
-	{
-		Exception _exception;
-
-		public ErrorEventArgs (Exception exception)
-		{
-			_exception = exception;
-		}
-
-		public Exception Exception
-		{
-			get { return _exception; }
-		}
-	}
-
-	#endregion
 }

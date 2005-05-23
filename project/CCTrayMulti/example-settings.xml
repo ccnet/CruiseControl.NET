@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration>
+	<Projects>
+		<Project serverUrl='tcp://localhost:21234/CruiseManager.rem' projectName='PoC' />
+		<!--<Project serverUrl='tcp://blahblah' projectName='ProjectTwo' />-->
+	</Projects>
+</Configuration>

@@ -25,5 +25,11 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib
 		{
 			get { return _errLevel; }
 		}
+
+		public override string ToString()
+		{
+			return Caption;
+		}
+
 	}
 }

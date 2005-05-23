@@ -16,7 +16,7 @@
                 DefaultTargetSchema = "IE50"
                 DelaySign = "false"
                 OutputType = "Library"
-                PreBuildEvent = 'copy "$(ProjectDir)Web\test.config" "$(TargetPath).config"&#xd;&#xa;mkdir "$(TargetDir)xsl"&#xd;&#xa;copy "$(SolutionDir)\xsl\*.*" "$(TargetDir)xsl"&#xd;&#xa;xcopy "$(ProjectDir)\resources\*.*" "$(TargetDir)" /S /Y'
+                PreBuildEvent = 'mkdir "$(TargetDir)xsl"&#xd;&#xa;copy "$(ProjectDir)Web\test.config" "$(TargetPath).config"&#xd;&#xa;xcopy /y/q "$(SolutionDir)\xsl\*.*" "$(TargetDir)xsl"&#xd;&#xa;xcopy "$(ProjectDir)\resources\*.*" "$(TargetDir)" /S /Y /Q'
                 PostBuildEvent = ""
                 RootNamespace = "ThoughtWorks.CruiseControl.UnitTests"
                 RunPostBuildEvent = "OnBuildSuccess"
@@ -130,11 +130,6 @@
                     HintPath = "..\..\lib\NetReflector.dll"
                 />
                 <Reference
-                    Name = "nunit.core"
-                    AssemblyName = "nunit.core"
-                    HintPath = "..\..\lib\nunit.core.dll"
-                />
-                <Reference
                     Name = "CCTrayLib"
                     Project = "{C8043AD9-0F30-4366-A263-E2FC0D6A57A9}"
                     Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
@@ -178,6 +173,11 @@
                     Name = "System.Data"
                     AssemblyName = "System.Data"
                     HintPath = "..\..\..\..\..\WINDOWS\Microsoft.NET\Framework\v1.1.4322\System.Data.dll"
+                />
+                <Reference
+                    Name = "System.Windows.Forms"
+                    AssemblyName = "System.Windows.Forms"
+                    HintPath = "..\..\..\..\WINDOWS\Microsoft.NET\Framework\v1.1.4322\System.Windows.Forms.dll"
                 />
             </References>
         </Build>
@@ -236,6 +236,36 @@
                 />
                 <File
                     RelPath = "CCTrayLib\TrayTooltipTest.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "CCTrayLib\Configuration\CCTrayMultiConfigurationTest.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "CCTrayLib\Monitoring\PollerTest.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "CCTrayLib\Monitoring\ProjectMonitorTest.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "CCTrayLib\Monitoring\ProjectStatusMonitorFactoryTest.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "CCTrayLib\Monitoring\ProjectStatusMonitorTest.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "CCTrayLib\Presentation\ProjectStatusListViewItemAdaptorTest.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
