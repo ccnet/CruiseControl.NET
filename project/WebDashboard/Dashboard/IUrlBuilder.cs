@@ -10,6 +10,6 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 		string BuildBuildUrl(IActionSpecifier action, IBuildSpecifier buildSpecifier);
 		string BuildBuildUrl(IActionSpecifier action, IBuildSpecifier buildSpecifier, string fileName);
 
-		string BuildFormName(IActionSpecifier action, params string[] args);
+		string BuildFormName(IActionSpecifier action);
 	}
 }

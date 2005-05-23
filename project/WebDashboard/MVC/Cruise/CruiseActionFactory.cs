@@ -1,3 +1,5 @@
+using System.Collections;
+using Commons.Collections;
 using ObjectWizard;
 using ThoughtWorks.CruiseControl.WebDashboard.Dashboard.Actions;
 
@@ -14,12 +16,11 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.MVC.Cruise
 		}
 
 		public static readonly string ACTION_PARAMETER_PREFIX = "_action_";
-		public static readonly char ACTION_ARG_SEPARATOR = '_';
 
 		public IAction Create(IRequest request)
 		{
 			string actionParam = request.FindParameterStartingWith(ACTION_PARAMETER_PREFIX);
-			string actionName = getActionName(actionParam);
+			string actionName = actionParam == "" ? "" : actionParam.Substring(ACTION_PARAMETER_PREFIX.Length);;
 
 			if (actionName == "")
 			{
@@ -33,40 +34,6 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.MVC.Cruise
 				return new UnknownActionAction();
 			}
 			return action;
-		}
-
-		public string[] ActionArguments(IRequest request)
-		{
-			string actionParam = request.FindParameterStartingWith(ACTION_PARAMETER_PREFIX);
-			string actionName = getActionName(actionParam);
-			if (actionParam == "" || actionParam.Length == (actionName.Length + ACTION_PARAMETER_PREFIX.Length))
-			{
-				return new string[0];
-			}
-			else
-			{
-				return actionParam.Substring(actionName.Length + ACTION_PARAMETER_PREFIX.Length + 1).Split(ACTION_ARG_SEPARATOR);
-			}
-		}
-
-		private string getActionName(string actionParam)
-		{
-			if (actionParam == "")
-			{
-				return "";
-			}
-			else
-			{
-				string actionNameAndArgs = actionParam.Substring(ACTION_PARAMETER_PREFIX.Length);
-				if (actionNameAndArgs.IndexOf(ACTION_ARG_SEPARATOR) < 0)
-				{
-					return actionNameAndArgs;
-				}
-				else
-				{
-					return actionNameAndArgs.Substring(0, actionNameAndArgs.IndexOf(ACTION_ARG_SEPARATOR));
-				}
-			}
 		}
 	}
 }

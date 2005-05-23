@@ -28,17 +28,13 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 				string projectName = status.Name;
 				rows.Add(
 					new ProjectGridRow(
-						projectName, 
-						status.BuildStatus.ToString(), 
+						projectName, statusOnServer.ServerSpecifier.ServerName, status.BuildStatus.ToString(), 
 						CalculateHtmlColor(status.BuildStatus), 
 						status.LastBuildDate, 
 						(status.LastBuildLabel != null ? status.LastBuildLabel : "no build available") , 
 						status.Status.ToString(), 
 						status.Activity.ToString(), 
-						urlBuilder.BuildFormName(
-							new ActionSpecifierWithName(forceBuildActionName), 
-							serverSpecifier.ServerName, 
-							projectName),
+						urlBuilder.BuildFormName(new ActionSpecifierWithName(forceBuildActionName)),
 						linkFactory.CreateProjectLink(
 							new DefaultProjectSpecifier(serverSpecifier, projectName), new ActionSpecifierWithName(ProjectReportProjectPlugin.ACTION_NAME)
 						).Url

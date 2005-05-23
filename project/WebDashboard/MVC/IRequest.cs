@@ -9,6 +9,5 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.MVC
 		bool GetChecked(string id);
 		int GetInt(string id, int defaultValue);
 		NameValueCollection Params{ get; }
-		string[] ActionArguments { set; get; }
 	}
 }

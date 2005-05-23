@@ -11,7 +11,6 @@
 #end
 
 #if ($projectGrid.Length > 0)
-<form ID="GridForm" method="post">
 <table cellspacing="0" cellpadding="3" rules="rows" bordercolor="#333399" border="1" id="StatusGrid" bgcolor="White" width="100%">
 	<tr bgcolor="#333399" class="ProjectGridHeader">
 		<td>
@@ -61,15 +60,19 @@
 		<td align="Center">
 			<font color="Black">$projectGridRow.Activity</font>
 		</td>
-		<td align="Center">
-			<font color="Black">
-				<input type="submit" name="$projectGridRow.ForceBuildButtonName" value="Force"/>
-			</font>
-		</td>
+		<form method="post">
+			<input type="hidden" name="forcebuild" value="true" />
+			<input type="hidden" name="forceBuildProject" value="$projectGridRow.Name" />
+			<input type="hidden" name="forceBuildServer" value="$projectGridRow.ServerName" />
+			<td align="Center">
+				<font color="Black">
+					<input type="submit" name="$projectGridRow.ForceBuildButtonName" value="Force"/>
+				</font>
+			</td>
+		</form>
 	</tr>
 	#end
 </table>
-</form>
 #end
 
 #if ($exceptions.Length > 0)

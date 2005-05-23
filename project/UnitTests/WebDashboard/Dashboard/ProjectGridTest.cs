@@ -319,7 +319,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 			SetupProjectLinkExpectation();
 
 			IActionSpecifier expectedActionSpecifier = new ActionSpecifierWithName("myAction");
-			urlBuilderMock.ExpectAndReturn("BuildFormName", "myForceButton", expectedActionSpecifier, new string[] { serverSpecifier.ServerName, projectSpecifier.ProjectName });
+			urlBuilderMock.ExpectAndReturn("BuildFormName", "myForceButton", expectedActionSpecifier);
 
 			// Execute
 			ProjectGridRow[] rows = projectGrid.GenerateProjectGridRows(statusses, "myAction", ProjectGridSortColumn.Name, true);

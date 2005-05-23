@@ -7,7 +7,6 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.MVC
 	public class NameValueCollectionRequest : IRequest
 	{
 		private readonly NameValueCollection map;
-		string[] actionArguments = new string[0];
 
 		public NameValueCollectionRequest(NameValueCollection map)
 		{
@@ -70,12 +69,6 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.MVC
 		public NameValueCollection Params
 		{
 			get { return map; }
-		}
-
-		public string[] ActionArguments
-		{
-			set { actionArguments = value; }
-			get { return actionArguments; }
 		}
 	}
 }

@@ -21,7 +21,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.FarmReport
 
 		public IView Execute(ICruiseRequest request)
 		{
-			return projectGridAction.Execute(request.Request.ActionArguments, ACTION_NAME, request.Request);
+			return projectGridAction.Execute(ACTION_NAME, request.Request);
 		}
 
 		public string LinkDescription

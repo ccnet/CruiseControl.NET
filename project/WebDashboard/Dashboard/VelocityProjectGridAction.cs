@@ -23,17 +23,17 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 			this.projectGrid = projectGrid;
 		}
 
-		public IView Execute(string[] actionArguments, string actionName, IRequest request)
+		public IView Execute(string actionName, IRequest request)
 		{
 			Hashtable velocityContext = new Hashtable();
-			velocityContext["forceBuildMessage"] = ForceBuildIfNecessary(actionArguments);
+			velocityContext["forceBuildMessage"] = ForceBuildIfNecessary(request);
 			return GenerateView(farmService.GetProjectStatusListAndCaptureExceptions(), velocityContext, actionName, request, null);
 		}
 
-		public IView Execute(string[] actionArguments, string actionName, IServerSpecifier serverSpecifier, IRequest request)
+		public IView Execute(string actionName, IServerSpecifier serverSpecifier, IRequest request)
 		{
 			Hashtable velocityContext = new Hashtable();
-			velocityContext["forceBuildMessage"] = ForceBuildIfNecessary(actionArguments);
+			velocityContext["forceBuildMessage"] = ForceBuildIfNecessary(request);
 			return GenerateView(farmService.GetProjectStatusListAndCaptureExceptions(serverSpecifier), velocityContext, actionName, request, serverSpecifier);
 		}
 
@@ -93,22 +93,21 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 			}
 		}
 
-		private string ForceBuildIfNecessary(string[] actionArguments)
+		private string ForceBuildIfNecessary(IRequest request)
 		{
-			if (actionArguments.Length == 2)
+			if (request.FindParameterStartingWith("forcebuild") != string.Empty)
 			{
-				return ForceBuild(actionArguments[0], actionArguments[1]);
+				string forceBuildProject = request.GetText("forceBuildProject");
+				farmService.ForceBuild(
+					new DefaultProjectSpecifier(
+						new DefaultServerSpecifier(request.GetText("forceBuildServer")),
+						forceBuildProject));
+				return string.Format("Build successfully forced for {0}", forceBuildProject);
 			}
 			else
 			{
 				return "";
 			}
-		}
-
-		private string ForceBuild(string serverName, string projectName)
-		{
-			farmService.ForceBuild(new DefaultProjectSpecifier(new DefaultServerSpecifier(serverName), projectName));
-			return string.Format("Build successfully forced for {0}", projectName);
 		}
 	}
 }

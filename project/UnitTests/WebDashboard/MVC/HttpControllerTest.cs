@@ -41,13 +41,10 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.MVC
 		}
 
 		[Test]
-		public void ShouldExecuteActionFromFactoryPuttingActionArgsOnRequestAndReturnHtml()
+		public void ShouldExecuteActionFromFactoryAndReturnHtml()
 		{
 			/// Setup
 			mockActionFactory.ExpectAndReturn("Create", action, request);
-			string [] actionArgs = new string[] {"foo"};
-			mockActionFactory.ExpectAndReturn("ActionArguments", actionArgs, request);
-			mockRequest.Expect("ActionArguments", new object[] {actionArgs});
 			mockAction.ExpectAndReturn("Execute", view, request);
 
 			/// Execute & Verify

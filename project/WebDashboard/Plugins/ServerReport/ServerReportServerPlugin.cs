@@ -21,7 +21,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.ServerReport
 
 		public IView Execute(ICruiseRequest request)
 		{
-			return projectGridAction.Execute(request.Request.ActionArguments, ACTION_NAME, request.ServerSpecifier, request.Request);
+			return projectGridAction.Execute(ACTION_NAME, request.ServerSpecifier, request.Request);
 		}
 
 		public string LinkDescription

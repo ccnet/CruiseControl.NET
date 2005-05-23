@@ -74,15 +74,9 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 			return BuildUrl(fileName, action, BuildBuildQueryString(buildSpecifier));
 		}
 
-		public string BuildFormName(IActionSpecifier action, params string[] args)
+		public string BuildFormName(IActionSpecifier action)
 		{
-			string baseName = CruiseActionFactory.ACTION_PARAMETER_PREFIX + action.ActionName;
-			foreach (string arg in args)
-			{
-				baseName += CruiseActionFactory.ACTION_ARG_SEPARATOR;
-				baseName += arg;
-			}
-			return baseName;
+			return CruiseActionFactory.ACTION_PARAMETER_PREFIX + action.ActionName;
 		}
 
 		private string BuildServerQueryString(IServerSpecifier serverSpecifier)

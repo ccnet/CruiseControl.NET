@@ -2,6 +2,7 @@ using NMock;
 using NUnit.Framework;
 using ThoughtWorks.CruiseControl.WebDashboard.Dashboard;
 using ThoughtWorks.CruiseControl.WebDashboard.IO;
+using ThoughtWorks.CruiseControl.WebDashboard.MVC.Cruise;
 
 namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 {
@@ -128,24 +129,13 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 		}
 
 		[Test]
-		public void ShouldBuildFormNameBasedOnActionNameWithNoArgs()
+		public void ShouldBuildFormNameBasedOnActionName()
 		{
 			// Execute
 			string formName = urlBuilder.BuildFormName(new ActionSpecifierWithName("myAction"));
 
 			// Verify
 			Assert.AreEqual("_action_myAction", formName);
-			VerifyAll();
-		}
-
-		[Test]
-		public void ShouldBuildFormNameBasedOnActionNameAndArgs()
-		{
-			// Execute
-			string formName = urlBuilder.BuildFormName(new ActionSpecifierWithName("myAction"), "arg1", "arg2");
-
-			// Verify
-			Assert.AreEqual("_action_myAction_arg1_arg2", formName);
 			VerifyAll();
 		}
 	}
