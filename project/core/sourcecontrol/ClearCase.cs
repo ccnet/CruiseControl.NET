@@ -1,28 +1,13 @@
 using System;
 using System.IO;
-using System.Text;
 using Exortech.NetReflector;
 using ThoughtWorks.CruiseControl.Core.Util;
 
 namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 {
-	/// <summary>
-	/// Provides for using ClearCase.
-	/// </summary>
-	/// <remarks>
-	/// Written by Garrett M. Smith (gsmith@thoughtworks.com).
-	/// </remarks>
 	[ReflectorType("clearCase")]
 	public class ClearCase : ProcessSourceControl
 	{
-		private string _executable = "cleartool.exe";
-		private string _viewPath;
-		private string _viewName;
-		private bool _useBaseline = false;
-		private bool _useLabel = true;
-		private string _tempBaseline;
-		private string _projectVobName;
-
 		private const string _TEMPORARY_BASELINE_PREFIX = "CruiseControl.NETTemporaryBaseline_";
 		public const string DATETIME_FORMAT = "dd-MMM-yyyy.HH:mm:ss";
 
@@ -34,46 +19,22 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 		{}
 
 		[ReflectorProperty("executable", Required=false)]
-		public string Executable
-		{
-			get { return _executable; }
-			set { _executable = value; }
-		}
+		public string Executable = "cleartool.exe";
 
 		[ReflectorProperty("projectVobName", Required=false)]
-		public string ProjectVobName
-		{
-			get { return _projectVobName; }
-			set { _projectVobName = value; }
-		}
+		public string ProjectVobName;
 
 		[ReflectorProperty("useBaseline", Required=false)]
-		public bool UseBaseline
-		{
-			get { return _useBaseline; }
-			set { _useBaseline = value; }
-		}
+		public bool UseBaseline = false;
 
 		[ReflectorProperty("useLabel", Required=false)]
-		public bool UseLabel
-		{
-			get { return _useLabel; }
-			set { _useLabel = value; }
-		}
+		public bool UseLabel = true;
 
 		[ReflectorProperty("viewName", Required=false)]
-		public string ViewName
-		{
-			get { return _viewName; }
-			set { _viewName = value; }
-		}
+		public string ViewName;
 
 		[ReflectorProperty("viewPath", Required=false)]
-		public string ViewPath
-		{
-			get { return _viewPath; }
-			set { _viewPath = value; }
-		}
+		public string ViewPath;
 
 		[ReflectorProperty("autoGetSource", Required = false)]
 		public bool AutoGetSource = false;
@@ -81,11 +42,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 		[ReflectorProperty("branch", Required = false)]
 		public string Branch;
 
-		public string TempBaseline
-		{
-			get { return _tempBaseline; }
-			set { _tempBaseline = value; }
-		}
+		public string TempBaseline;
 
 		public override Modification[] GetModifications(IIntegrationResult from, IIntegrationResult to)
 		{
@@ -225,7 +182,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 		/// <returns>the process execution info</returns>
 		public ProcessInfo CreateLabelTypeProcessInfo(string label)
 		{
-			string args = " mklbtype -c \"CRUISECONTROL Comment\" \"" + label + "\"";
+			string args = string.Format(" mklbtype -c \"CRUISECONTROL Comment\" \"{0}\"", label);
 			Log.Debug(string.Format("mklbtype: {0} {1}; [working dir: {2}]", Executable, args, ViewPath));
 			return new ProcessInfo(Executable, args, ViewPath);
 		}
@@ -237,7 +194,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 		/// <returns>the process execution info</returns>
 		public ProcessInfo CreateMakeLabelProcessInfo(string label)
 		{
-			string args = String.Format(@" mklabel -recurse ""{0}"" {1}", label, ViewPath);
+			string args = string.Format(@" mklabel -recurse ""{0}"" ""{1}""", label, ViewPath);
 			Log.Debug(string.Format("mklabel: {0} {1}", Executable, args));
 			return new ProcessInfo(Executable, args);
 		}
@@ -268,20 +225,14 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 
 		private string CreateHistoryArguments(string fromDate)
 		{
-			StringBuilder args = new StringBuilder("lshist -r -nco ");
-
-			if (Branch != null)
-			{
-				args.AppendFormat("-branch \"{0}\" ", Branch);
-			}
-
-			args.Append("-since " + fromDate + " -fmt \"%u" + ClearCaseHistoryParser.DELIMITER
-				+ "%Vd"	+ ClearCaseHistoryParser.DELIMITER + "%En" + ClearCaseHistoryParser.DELIMITER
-				+ "%Vn" + ClearCaseHistoryParser.DELIMITER + "%o" + ClearCaseHistoryParser.DELIMITER
-				+ "!%l" + ClearCaseHistoryParser.DELIMITER + "!%a" + ClearCaseHistoryParser.DELIMITER
-				+ "%Nc" + ClearCaseHistoryParser.END_OF_LINE_DELIMITER + "\\n\" " + _viewPath);
-
-			return args.ToString();
+			ProcessArgumentBuilder builder = new ProcessArgumentBuilder();
+			builder.AppendArgument("lshist -r -nco");
+			builder.AppendIf(Branch != null, "-branch \"{0}\"", Branch);
+			builder.AppendArgument("-since {0}", fromDate);
+			builder.AppendArgument("-fmt \"%u{0}%Vd{0}%En{0}%Vn{0}%o{0}!%l{0}!%a{0}%Nc", ClearCaseHistoryParser.DELIMITER);
+			builder.Append(ClearCaseHistoryParser.END_OF_LINE_DELIMITER + "\\n\"");
+			builder.AppendArgument("\"{0}\"", ViewPath);
+			return builder.ToString();
 		}
 
 		private void RemoveBaseline()
@@ -321,6 +272,5 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 		{
 			return string.Format(@"update -force -overwrite ""{0}""", ViewPath);
 		}
-
 	}
 }
