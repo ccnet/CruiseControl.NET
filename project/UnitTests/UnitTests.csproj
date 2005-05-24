@@ -179,6 +179,11 @@
                     AssemblyName = "System.Windows.Forms"
                     HintPath = "..\..\..\..\WINDOWS\Microsoft.NET\Framework\v1.1.4322\System.Windows.Forms.dll"
                 />
+                <Reference
+                    Name = "nunit.core"
+                    AssemblyName = "nunit.core"
+                    HintPath = "..\..\lib\nunit.core.dll"
+                />
             </References>
         </Build>
         <Files>
