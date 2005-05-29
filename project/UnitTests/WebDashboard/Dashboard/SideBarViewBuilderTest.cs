@@ -1,6 +1,7 @@
 using System.Collections;
 using NMock;
 using NUnit.Framework;
+using ThoughtWorks.CruiseControl.Core.Reporting.Dashboard.Navigation;
 using ThoughtWorks.CruiseControl.UnitTests.UnitTestUtils;
 using ThoughtWorks.CruiseControl.WebDashboard.Dashboard;
 using ThoughtWorks.CruiseControl.WebDashboard.IO;
@@ -154,11 +155,11 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 			buildNameRetrieverMock.ExpectAndReturn("GetNextBuildSpecifier", nextBuildSpecifier, buildSpecifier);
 			buildNameRetrieverMock.ExpectAndReturn("GetPreviousBuildSpecifier", previousBuildSpecifier, buildSpecifier);
 
-			ActionSpecifierWithName actionSpecifier = new ActionSpecifierWithName(BuildReportBuildPlugin.ACTION_NAME);
+			string action = BuildReportBuildPlugin.ACTION_NAME;
 
-			linkFactoryMock.ExpectAndReturn("CreateBuildLink", latestLink, latestBuildSpecifier, "", actionSpecifier);
-			linkFactoryMock.ExpectAndReturn("CreateBuildLink", nextLink, nextBuildSpecifier, "", actionSpecifier);
-			linkFactoryMock.ExpectAndReturn("CreateBuildLink", previousLink, previousBuildSpecifier, "", actionSpecifier);
+			linkFactoryMock.ExpectAndReturn("CreateBuildLink", latestLink, latestBuildSpecifier, "", action);
+			linkFactoryMock.ExpectAndReturn("CreateBuildLink", nextLink, nextBuildSpecifier, "", action);
+			linkFactoryMock.ExpectAndReturn("CreateBuildLink", previousLink, previousBuildSpecifier, "", action);
 
 			velocityContext["links"] = links;
 			velocityContext["recentBuildsTable"] = recentBuildsView;

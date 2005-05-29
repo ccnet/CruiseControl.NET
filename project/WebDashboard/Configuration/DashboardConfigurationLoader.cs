@@ -3,8 +3,8 @@ using System.IO;
 using System.Xml;
 using Exortech.NetReflector;
 using ObjectWizard.NetReflector;
+using ThoughtWorks.CruiseControl.Core.Reporting.Dashboard.Navigation;
 using ThoughtWorks.CruiseControl.Core.Util;
-using ThoughtWorks.CruiseControl.WebDashboard.IO;
 
 namespace ThoughtWorks.CruiseControl.WebDashboard.Configuration
 {

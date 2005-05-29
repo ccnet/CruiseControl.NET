@@ -1,4 +1,5 @@
 using System.Collections.Specialized;
+using ThoughtWorks.CruiseControl.Core.Reporting.Dashboard.Navigation;
 using ThoughtWorks.CruiseControl.WebDashboard.Dashboard;
 using ThoughtWorks.CruiseControl.WebDashboard.MVC;
 
@@ -6,10 +7,6 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.IO
 {
 	public class RequestWrappingCruiseRequest : ICruiseRequest
 	{
-		public static readonly string BuildQueryStringParameter = "build";
-		public static readonly string ProjectQueryStringParameter = "project";
-		public static readonly string ServerQueryStringParameter = "server";
-
 		private readonly IRequest request;
 
 		private NameValueCollection QueryString
@@ -26,7 +23,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.IO
 		{
 			get
 			{
-				string server = QueryString[ServerQueryStringParameter];
+				string server = QueryString[DefaultCruiseUrlBuilder.ServerQueryStringParameter];
 				return (server == null) ? "" : server;
 			}
 		}
@@ -35,7 +32,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.IO
 		{
 			get
 			{
-				string project = QueryString[ProjectQueryStringParameter];
+				string project = QueryString[DefaultCruiseUrlBuilder.ProjectQueryStringParameter];
 				return (project == null) ? "" : project;
 			}
 		}
@@ -44,7 +41,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.IO
 		{
 			get
 			{
-				string build = QueryString[BuildQueryStringParameter];
+				string build = QueryString[DefaultCruiseUrlBuilder.BuildQueryStringParameter];
 				return (build == null) ? "" : build;
 			}
 		}

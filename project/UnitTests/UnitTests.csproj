@@ -1053,6 +1053,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "WebDashboard\Dashboard\DefaultCruiseUrlBuilderTest.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "WebDashboard\Dashboard\DefaultLinkListFactoryTest.cs"
                     SubType = "Code"
                     BuildAction = "Compile"

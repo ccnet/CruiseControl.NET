@@ -1,7 +1,9 @@
+using ThoughtWorks.CruiseControl.Core.Reporting.Dashboard.Navigation;
+
 namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 {
 	public interface ILinkListFactory
 	{
-		IAbsoluteLink[] CreateStyledBuildLinkList(IBuildSpecifier[] buildSpecifiers, IActionSpecifier actionSpecifier);
+		IAbsoluteLink[] CreateStyledBuildLinkList(IBuildSpecifier[] buildSpecifiers, string action);
 	}
 }

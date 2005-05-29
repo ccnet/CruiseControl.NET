@@ -29,7 +29,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard.Actions
 		public void ShouldReturnRedirectToFarmReport()
 		{
 			IAbsoluteLink link = new GeneralAbsoluteLink("", "http://here");
-			linkFactoryMock.ExpectAndReturn("CreateFarmLink", link, "", new ActionSpecifierWithName(FarmReportFarmPlugin.ACTION_NAME));
+			linkFactoryMock.ExpectAndReturn("CreateFarmLink", link, "", FarmReportFarmPlugin.ACTION_NAME);
 
 			IView view = action.Execute(null);
 

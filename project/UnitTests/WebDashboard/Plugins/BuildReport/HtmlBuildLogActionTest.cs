@@ -1,6 +1,7 @@
 using System.Collections;
 using NMock;
 using NUnit.Framework;
+using ThoughtWorks.CruiseControl.Core.Reporting.Dashboard.Navigation;
 using ThoughtWorks.CruiseControl.UnitTests.UnitTestUtils;
 using ThoughtWorks.CruiseControl.WebDashboard.Dashboard;
 using ThoughtWorks.CruiseControl.WebDashboard.IO;
@@ -58,7 +59,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Plugins.BuildReport
 			requestMock.ExpectAndReturn("BuildSpecifier", buildSpecifier);
 			buildRetrieverMock.ExpectAndReturn("GetBuild", build, buildSpecifier);
 			GeneralAbsoluteLink link = new GeneralAbsoluteLink("some text", "myUrl");
-			linkFactoryMock.ExpectAndReturn("CreateBuildLinkWithFileName", link, buildSpecifier, new ActionSpecifierWithName(XmlBuildLogAction.ACTION_NAME), buildSpecifier.BuildName);
+			linkFactoryMock.ExpectAndReturn("CreateBuildLinkWithFileName", link, buildSpecifier, XmlBuildLogAction.ACTION_NAME, buildSpecifier.BuildName);
 
 			Hashtable expectedContext = new Hashtable();
 			expectedContext["log"] = "some stuff in a log with a &lt; and &gt;";

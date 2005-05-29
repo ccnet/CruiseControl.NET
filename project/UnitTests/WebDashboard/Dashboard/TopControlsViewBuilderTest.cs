@@ -1,6 +1,7 @@
 using System.Collections;
 using NMock;
 using NUnit.Framework;
+using ThoughtWorks.CruiseControl.Core.Reporting.Dashboard.Navigation;
 using ThoughtWorks.CruiseControl.UnitTests.UnitTestUtils;
 using ThoughtWorks.CruiseControl.WebDashboard.Dashboard;
 using ThoughtWorks.CruiseControl.WebDashboard.IO;
@@ -71,7 +72,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 			expectedVelocityContext["projectName"] = "";
 			expectedVelocityContext["buildName"] = "";
 
-			linkFactoryMock.ExpectAndReturn("CreateFarmLink", link1, "Dashboard", new ActionSpecifierWithName(FarmReportFarmPlugin.ACTION_NAME));
+			linkFactoryMock.ExpectAndReturn("CreateFarmLink", link1, "Dashboard", FarmReportFarmPlugin.ACTION_NAME);
 			expectedVelocityContext["farmLink"] = link1;
 
 			velocityViewGeneratorMock.ExpectAndReturn("GenerateView", view, "TopMenu.vm", new HashtableConstraint(expectedVelocityContext));
@@ -94,8 +95,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 			expectedVelocityContext["projectName"] = "";
 			expectedVelocityContext["buildName"] = "";
 
-			linkFactoryMock.ExpectAndReturn("CreateFarmLink", link1, "Dashboard", new ActionSpecifierWithName(FarmReportFarmPlugin.ACTION_NAME));
-			linkFactoryMock.ExpectAndReturn("CreateServerLink", link2, serverSpecifier, new ActionSpecifierWithName(ServerReportServerPlugin.ACTION_NAME));
+			linkFactoryMock.ExpectAndReturn("CreateFarmLink", link1, "Dashboard", FarmReportFarmPlugin.ACTION_NAME);
+			linkFactoryMock.ExpectAndReturn("CreateServerLink", link2, serverSpecifier, ServerReportServerPlugin.ACTION_NAME);
 			expectedVelocityContext["farmLink"] = link1;
 			expectedVelocityContext["serverLink"] = link2;
 
@@ -120,9 +121,9 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 			expectedVelocityContext["projectName"] = "myProject";
 			expectedVelocityContext["buildName"] = "";
 
-			linkFactoryMock.ExpectAndReturn("CreateFarmLink", link1, "Dashboard", new ActionSpecifierWithName(FarmReportFarmPlugin.ACTION_NAME));
-			linkFactoryMock.ExpectAndReturn("CreateServerLink", link2, serverSpecifier, new ActionSpecifierWithName(ServerReportServerPlugin.ACTION_NAME));
-			linkFactoryMock.ExpectAndReturn("CreateProjectLink", link3, projectSpecifier, new ActionSpecifierWithName(ProjectReportProjectPlugin.ACTION_NAME));
+			linkFactoryMock.ExpectAndReturn("CreateFarmLink", link1, "Dashboard", FarmReportFarmPlugin.ACTION_NAME);
+			linkFactoryMock.ExpectAndReturn("CreateServerLink", link2, serverSpecifier, ServerReportServerPlugin.ACTION_NAME);
+			linkFactoryMock.ExpectAndReturn("CreateProjectLink", link3, projectSpecifier, ProjectReportProjectPlugin.ACTION_NAME);
 			expectedVelocityContext["farmLink"] = link1;
 			expectedVelocityContext["serverLink"] = link2;
 			expectedVelocityContext["projectLink"] = link3;
@@ -149,10 +150,10 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 			expectedVelocityContext["projectName"] = "myProject";
 			expectedVelocityContext["buildName"] = "myBuild";
 
-			linkFactoryMock.ExpectAndReturn("CreateFarmLink", link1, "Dashboard", new ActionSpecifierWithName(FarmReportFarmPlugin.ACTION_NAME));
-			linkFactoryMock.ExpectAndReturn("CreateServerLink", link2, serverSpecifier, new ActionSpecifierWithName(ServerReportServerPlugin.ACTION_NAME));
-			linkFactoryMock.ExpectAndReturn("CreateProjectLink", link3, projectSpecifier, new ActionSpecifierWithName(ProjectReportProjectPlugin.ACTION_NAME));
-			linkFactoryMock.ExpectAndReturn("CreateBuildLink", link4, buildSpecifier, new ActionSpecifierWithName(BuildReportBuildPlugin.ACTION_NAME));
+			linkFactoryMock.ExpectAndReturn("CreateFarmLink", link1, "Dashboard", FarmReportFarmPlugin.ACTION_NAME);
+			linkFactoryMock.ExpectAndReturn("CreateServerLink", link2, serverSpecifier, ServerReportServerPlugin.ACTION_NAME);
+			linkFactoryMock.ExpectAndReturn("CreateProjectLink", link3, projectSpecifier, ProjectReportProjectPlugin.ACTION_NAME);
+			linkFactoryMock.ExpectAndReturn("CreateBuildLink", link4, buildSpecifier, BuildReportBuildPlugin.ACTION_NAME);
 			expectedVelocityContext["farmLink"] = link1;
 			expectedVelocityContext["serverLink"] = link2;
 			expectedVelocityContext["projectLink"] = link3;

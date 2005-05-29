@@ -1,4 +1,5 @@
 using System.Collections;
+using ThoughtWorks.CruiseControl.Core.Reporting.Dashboard.Navigation;
 using ThoughtWorks.CruiseControl.WebDashboard.Dashboard;
 using ThoughtWorks.CruiseControl.WebDashboard.IO;
 using ThoughtWorks.CruiseControl.WebDashboard.MVC;
@@ -28,7 +29,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.BuildReport
 			IBuildSpecifier buildSpecifier = cruiseRequest.BuildSpecifier;
 			Build build = buildRetriever.GetBuild(buildSpecifier);
 			velocityContext["log"] = build.Log.Replace("<", "&lt;").Replace(">", "&gt;");
-			velocityContext["logUrl"] = linkFactory.CreateBuildLinkWithFileName(buildSpecifier, new ActionSpecifierWithName(XmlBuildLogAction.ACTION_NAME), buildSpecifier.BuildName).Url;
+			velocityContext["logUrl"] = linkFactory.CreateBuildLinkWithFileName(buildSpecifier, XmlBuildLogAction.ACTION_NAME, buildSpecifier.BuildName).Url;
 
 			return viewGenerator.GenerateView(@"BuildLog.vm", velocityContext);
 		}

@@ -1,4 +1,5 @@
 using System.Collections;
+using ThoughtWorks.CruiseControl.Core.Reporting.Dashboard.Navigation;
 using ThoughtWorks.CruiseControl.WebDashboard.IO;
 using ThoughtWorks.CruiseControl.WebDashboard.MVC;
 using ThoughtWorks.CruiseControl.WebDashboard.MVC.View;
@@ -59,9 +60,9 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 						IBuildSpecifier buildSpecifier = request.BuildSpecifier;
 						velocityContext["links"] = pluginLinkCalculator.GetBuildPluginLinks(buildSpecifier);
 						velocityContext["recentBuildsTable"] = recentBuildsViewBuilder.BuildRecentBuildsTable(buildSpecifier.ProjectSpecifier);
-						velocityContext["latestLink"] = linkFactory.CreateBuildLink(buildNameRetriever.GetLatestBuildSpecifier(buildSpecifier.ProjectSpecifier), "", new ActionSpecifierWithName(BuildReportBuildPlugin.ACTION_NAME));
-						velocityContext["nextLink"] = linkFactory.CreateBuildLink(buildNameRetriever.GetNextBuildSpecifier(buildSpecifier), "", new ActionSpecifierWithName(BuildReportBuildPlugin.ACTION_NAME));
-						velocityContext["previousLink"] = linkFactory.CreateBuildLink(buildNameRetriever.GetPreviousBuildSpecifier(buildSpecifier), "", new ActionSpecifierWithName(BuildReportBuildPlugin.ACTION_NAME));
+						velocityContext["latestLink"] = linkFactory.CreateBuildLink(buildNameRetriever.GetLatestBuildSpecifier(buildSpecifier.ProjectSpecifier), "", BuildReportBuildPlugin.ACTION_NAME);
+						velocityContext["nextLink"] = linkFactory.CreateBuildLink(buildNameRetriever.GetNextBuildSpecifier(buildSpecifier), "", BuildReportBuildPlugin.ACTION_NAME);
+						velocityContext["previousLink"] = linkFactory.CreateBuildLink(buildNameRetriever.GetPreviousBuildSpecifier(buildSpecifier), "", BuildReportBuildPlugin.ACTION_NAME);
 						velocityTemplateName = @"BuildSideBar.vm";
 					}
 				}

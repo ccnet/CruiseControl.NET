@@ -1,6 +1,7 @@
 using System.Collections;
 using Commons.Collections;
 using ObjectWizard;
+using ThoughtWorks.CruiseControl.Core.Reporting.Dashboard.Navigation;
 using ThoughtWorks.CruiseControl.WebDashboard.Dashboard.Actions;
 
 namespace ThoughtWorks.CruiseControl.WebDashboard.MVC.Cruise
@@ -15,12 +16,10 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.MVC.Cruise
 			this.giver = giver;
 		}
 
-		public static readonly string ACTION_PARAMETER_PREFIX = "_action_";
-
 		public IAction Create(IRequest request)
 		{
-			string actionParam = request.FindParameterStartingWith(ACTION_PARAMETER_PREFIX);
-			string actionName = actionParam == "" ? "" : actionParam.Substring(ACTION_PARAMETER_PREFIX.Length);;
+			string actionParam = request.FindParameterStartingWith(DefaultUrlBuilder.ACTION_PARAMETER_PREFIX);
+			string actionName = actionParam == "" ? "" : actionParam.Substring(DefaultUrlBuilder.ACTION_PARAMETER_PREFIX.Length);;
 
 			if (actionName == "")
 			{

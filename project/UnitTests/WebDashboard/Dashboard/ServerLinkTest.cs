@@ -1,5 +1,6 @@
 using NMock;
 using NUnit.Framework;
+using ThoughtWorks.CruiseControl.Core.Reporting.Dashboard.Navigation;
 using ThoughtWorks.CruiseControl.WebDashboard.Dashboard;
 
 namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
@@ -12,14 +13,14 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 		private IServerSpecifier serverSpecifier;
 		private string description = "my description";
 		private ServerLink serverLink;
-		private ActionSpecifierWithName actionSpecifier = new ActionSpecifierWithName("my action");
+		private string action = "my action";
 
 		[SetUp]
 		public void Setup()
 		{
 			serverSpecifier = new DefaultServerSpecifier(serverName);
-			urlBuilderMock = new DynamicMock(typeof(IUrlBuilder));
-			serverLink = new ServerLink((IUrlBuilder) urlBuilderMock.MockInstance, serverSpecifier, description, this.actionSpecifier);
+			urlBuilderMock = new DynamicMock(typeof(ICruiseUrlBuilder));
+			serverLink = new ServerLink((ICruiseUrlBuilder) urlBuilderMock.MockInstance, serverSpecifier, description, this.action);
 		}
 
 		private void VerifyAll()
@@ -37,7 +38,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 		[Test]
 		public void ShouldReturnCalculatedAbsoluteUrl()
 		{
-			urlBuilderMock.ExpectAndReturn("BuildServerUrl", "my absolute url", actionSpecifier, serverSpecifier);
+			urlBuilderMock.ExpectAndReturn("BuildServerUrl", "my absolute url", action, serverSpecifier);
 			Assert.AreEqual("my absolute url", serverLink.Url);
 			VerifyAll();
 		}

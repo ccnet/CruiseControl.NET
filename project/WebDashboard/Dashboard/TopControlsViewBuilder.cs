@@ -34,21 +34,21 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 			velocityContext["projectName"] = projectName;
 			velocityContext["buildName"] = buildName;
 
-			velocityContext["farmLink"] = linkFactory.CreateFarmLink("Dashboard", new ActionSpecifierWithName(FarmReportFarmPlugin.ACTION_NAME));
+			velocityContext["farmLink"] = linkFactory.CreateFarmLink("Dashboard", FarmReportFarmPlugin.ACTION_NAME);
 
 			if (serverName != "")
 			{
-				velocityContext["serverLink"] = linkFactory.CreateServerLink(request.ServerSpecifier, new ActionSpecifierWithName(ServerReportServerPlugin.ACTION_NAME));
+				velocityContext["serverLink"] = linkFactory.CreateServerLink(request.ServerSpecifier, ServerReportServerPlugin.ACTION_NAME);
 			}
 
 			if (projectName != "")
 			{
-				velocityContext["projectLink"] = linkFactory.CreateProjectLink(request.ProjectSpecifier,  new ActionSpecifierWithName(ProjectReportProjectPlugin.ACTION_NAME));
+				velocityContext["projectLink"] = linkFactory.CreateProjectLink(request.ProjectSpecifier,  ProjectReportProjectPlugin.ACTION_NAME);
 			}
 
 			if (buildName != "")
 			{
-				velocityContext["buildLink"] = linkFactory.CreateBuildLink(request.BuildSpecifier,  new ActionSpecifierWithName(BuildReportBuildPlugin.ACTION_NAME));
+				velocityContext["buildLink"] = linkFactory.CreateBuildLink(request.BuildSpecifier,  BuildReportBuildPlugin.ACTION_NAME);
 			}
 
 			return velocityViewGenerator.GenerateView("TopMenu.vm", velocityContext);

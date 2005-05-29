@@ -1,4 +1,4 @@
-using ThoughtWorks.CruiseControl.WebDashboard.Dashboard;
+using ThoughtWorks.CruiseControl.Core.Reporting.Dashboard.Navigation;
 
 namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.DeleteProject
 {

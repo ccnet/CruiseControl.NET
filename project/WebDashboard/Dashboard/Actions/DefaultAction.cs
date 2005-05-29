@@ -14,7 +14,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard.Actions
 
 		public IView Execute(IRequest request)
 		{
-			return new RedirectView(linkFactory.CreateFarmLink("", new ActionSpecifierWithName(FarmReportFarmPlugin.ACTION_NAME)).Url);
+			return new RedirectView(linkFactory.CreateFarmLink("", FarmReportFarmPlugin.ACTION_NAME).Url);
 		}
 	}
 }

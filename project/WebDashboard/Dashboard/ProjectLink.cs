@@ -1,24 +1,25 @@
+using ThoughtWorks.CruiseControl.Core.Reporting.Dashboard.Navigation;
 
 namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 {
 	public class ProjectLink : GeneralAbsoluteLink
 	{
 		private readonly IProjectSpecifier buildSpecifier;
-		private readonly IActionSpecifier actionSpecifier;
-		private readonly IUrlBuilder urlBuilder;
+		private readonly string action;
+		private readonly ICruiseUrlBuilder urlBuilder;
 		public readonly string absoluteUrl;
 
-		public ProjectLink(IUrlBuilder urlBuilder, IProjectSpecifier projectSpecifier, string text, IActionSpecifier actionSpecifier)
+		public ProjectLink(ICruiseUrlBuilder urlBuilder, IProjectSpecifier projectSpecifier, string text, string action)
 			: base (text)
 		{
 			this.urlBuilder = urlBuilder;
-			this.actionSpecifier = actionSpecifier;
+			this.action = action;
 			this.buildSpecifier = projectSpecifier;
 		}
 
 		public override string Url
 		{
-			get { return urlBuilder.BuildProjectUrl(actionSpecifier, buildSpecifier); }
+			get { return urlBuilder.BuildProjectUrl(action, buildSpecifier); }
 		}
 	}
 }

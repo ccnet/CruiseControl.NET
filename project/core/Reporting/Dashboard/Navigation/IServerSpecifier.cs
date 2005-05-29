@@ -1,5 +1,5 @@
 
-namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
+namespace ThoughtWorks.CruiseControl.Core.Reporting.Dashboard.Navigation
 {
 	public interface IServerSpecifier
 	{

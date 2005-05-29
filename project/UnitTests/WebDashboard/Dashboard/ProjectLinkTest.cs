@@ -1,5 +1,6 @@
 using NMock;
 using NUnit.Framework;
+using ThoughtWorks.CruiseControl.Core.Reporting.Dashboard.Navigation;
 using ThoughtWorks.CruiseControl.WebDashboard.Dashboard;
 
 namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
@@ -13,14 +14,14 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 		private IProjectSpecifier projectSpecifier;
 		private string description = "my description";
 		private ProjectLink projectLink;
-		private ActionSpecifierWithName actionSpecifier = new ActionSpecifierWithName("my action");
+		private string action = "my action";
 
 		[SetUp]
 		public void Setup()
 		{
 			projectSpecifier = new DefaultProjectSpecifier(new DefaultServerSpecifier(serverName), projectName);
-			urlBuilderMock = new DynamicMock(typeof(IUrlBuilder));
-			projectLink = new ProjectLink((IUrlBuilder) urlBuilderMock.MockInstance, projectSpecifier, description, this.actionSpecifier);
+			urlBuilderMock = new DynamicMock(typeof(ICruiseUrlBuilder));
+			projectLink = new ProjectLink((ICruiseUrlBuilder) urlBuilderMock.MockInstance, projectSpecifier, description, this.action);
 		}
 
 		private void VerifyAll()
@@ -38,7 +39,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 		[Test]
 		public void ShouldReturnCalculatedAbsoluteUrl()
 		{
-			urlBuilderMock.ExpectAndReturn("BuildProjectUrl", "my absolute url", actionSpecifier, projectSpecifier);
+			urlBuilderMock.ExpectAndReturn("BuildProjectUrl", "my absolute url", action, projectSpecifier);
 			Assert.AreEqual("my absolute url", projectLink.Url);
 			VerifyAll();
 		}

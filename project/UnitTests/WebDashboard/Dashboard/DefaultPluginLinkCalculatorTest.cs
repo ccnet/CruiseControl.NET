@@ -1,6 +1,7 @@
 using NMock;
 using NMock.Constraints;
 using NUnit.Framework;
+using ThoughtWorks.CruiseControl.Core.Reporting.Dashboard.Navigation;
 using ThoughtWorks.CruiseControl.WebDashboard.Configuration;
 using ThoughtWorks.CruiseControl.WebDashboard.Dashboard;
 
@@ -57,8 +58,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 		public void ShouldReturnBuildPluginLinksByQueryingConfiguration()
 		{
 			configurationMock.ExpectAndReturn("BuildPlugins", new IPlugin[] { (IPlugin) pluginMock1.MockInstance, (IPlugin) pluginMock2.MockInstance });
-			linkFactoryMock.ExpectAndReturn("CreateBuildLink", link1, buildSpecifier, "Description 1", new PropertyIs("ActionName", "Action Name 1"));
-			linkFactoryMock.ExpectAndReturn("CreateBuildLink", link2, buildSpecifier, "Description 2", new PropertyIs("ActionName", "Action Name 2"));
+			linkFactoryMock.ExpectAndReturn("CreateBuildLink", link1, buildSpecifier, "Description 1", "Action Name 1");
+			linkFactoryMock.ExpectAndReturn("CreateBuildLink", link2, buildSpecifier, "Description 2", "Action Name 2");
 
 			IAbsoluteLink[] buildLinks = Plugins.GetBuildPluginLinks(buildSpecifier);
 
@@ -72,8 +73,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 		public void ShouldReturnServerPluginLinksByQueryingConfiguration()
 		{
 			configurationMock.ExpectAndReturn("ServerPlugins", new IPlugin[] { (IPlugin) pluginMock1.MockInstance, (IPlugin) pluginMock2.MockInstance });
-			linkFactoryMock.ExpectAndReturn("CreateServerLink", link1, serverSpecifier, "Description 1", new PropertyIs("ActionName", "Action Name 1"));
-			linkFactoryMock.ExpectAndReturn("CreateServerLink", link2, serverSpecifier, "Description 2", new PropertyIs("ActionName", "Action Name 2"));
+			linkFactoryMock.ExpectAndReturn("CreateServerLink", link1, serverSpecifier, "Description 1", "Action Name 1");
+			linkFactoryMock.ExpectAndReturn("CreateServerLink", link2, serverSpecifier, "Description 2", "Action Name 2");
 
 			IAbsoluteLink[] buildLinks = Plugins.GetServerPluginLinks(serverSpecifier);
 
@@ -87,8 +88,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 		public void ShouldReturnFarmPluginLinksByQueryingConfiguration()
 		{
 			configurationMock.ExpectAndReturn("FarmPlugins", new IPlugin[] { (IPlugin) pluginMock1.MockInstance, (IPlugin) pluginMock2.MockInstance });
-			linkFactoryMock.ExpectAndReturn("CreateFarmLink", link1, "Description 1", new PropertyIs("ActionName", "Action Name 1"));
-			linkFactoryMock.ExpectAndReturn("CreateFarmLink", link2, "Description 2", new PropertyIs("ActionName", "Action Name 2"));
+			linkFactoryMock.ExpectAndReturn("CreateFarmLink", link1, "Description 1", "Action Name 1");
+			linkFactoryMock.ExpectAndReturn("CreateFarmLink", link2, "Description 2", "Action Name 2");
 
 			IAbsoluteLink[] buildLinks = Plugins.GetFarmPluginLinks();
 
@@ -102,8 +103,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 		public void ShouldReturnProjectPluginLinksByQueryingConfiguration()
 		{
 			configurationMock.ExpectAndReturn("ProjectPlugins", new IPlugin[] { (IPlugin) pluginMock1.MockInstance, (IPlugin) pluginMock2.MockInstance });
-			linkFactoryMock.ExpectAndReturn("CreateProjectLink", link1, projectSpecifier, "Description 1", new PropertyIs("ActionName", "Action Name 1"));
-			linkFactoryMock.ExpectAndReturn("CreateProjectLink", link2, projectSpecifier, "Description 2", new PropertyIs("ActionName", "Action Name 2"));
+			linkFactoryMock.ExpectAndReturn("CreateProjectLink", link1, projectSpecifier, "Description 1", "Action Name 1");
+			linkFactoryMock.ExpectAndReturn("CreateProjectLink", link2, projectSpecifier, "Description 2", "Action Name 2");
 
 			IAbsoluteLink[] buildLinks = Plugins.GetProjectPluginLinks(projectSpecifier);
 

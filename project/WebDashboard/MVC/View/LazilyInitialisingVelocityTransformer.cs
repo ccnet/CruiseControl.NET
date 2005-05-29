@@ -3,7 +3,7 @@ using System.IO;
 using NVelocity;
 using NVelocity.App;
 using NVelocity.Runtime;
-using ThoughtWorks.CruiseControl.WebDashboard.IO;
+using ThoughtWorks.CruiseControl.Core.Reporting.Dashboard.Navigation;
 
 namespace ThoughtWorks.CruiseControl.WebDashboard.MVC.View
 {

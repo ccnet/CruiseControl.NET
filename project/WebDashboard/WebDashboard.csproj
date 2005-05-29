@@ -221,11 +221,6 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "Dashboard\ActionSpecifierWithName.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
                     RelPath = "Dashboard\Build.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -266,11 +261,6 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "Dashboard\DefaultBuildSpecifier.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
                     RelPath = "Dashboard\DefaultLinkFactory.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -282,21 +272,6 @@
                 />
                 <File
                     RelPath = "Dashboard\DefaultPluginLinkCalculator.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Dashboard\DefaultProjectSpecifier.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Dashboard\DefaultServerSpecifier.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Dashboard\DefaultUrlBuilder.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -317,11 +292,6 @@
                 />
                 <File
                     RelPath = "Dashboard\IActionInstantiator.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Dashboard\IActionSpecifier.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -347,11 +317,6 @@
                 />
                 <File
                     RelPath = "Dashboard\IBuildRetriever.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Dashboard\IBuildSpecifier.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -401,32 +366,12 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "Dashboard\IProjectSpecifier.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
                     RelPath = "Dashboard\IRecentBuildsViewBuilder.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "Dashboard\IServerSpecifier.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Dashboard\IUrlBuilder.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
                     RelPath = "Dashboard\NameValueCruiseRequestFactory.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Dashboard\NullActionSpecifier.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -595,11 +540,6 @@
                 />
                 <File
                     RelPath = "IO\ICruiseRequest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "IO\IPathMapper.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

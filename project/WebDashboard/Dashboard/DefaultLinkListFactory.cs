@@ -1,4 +1,5 @@
 using System.Collections;
+using ThoughtWorks.CruiseControl.Core.Reporting.Dashboard.Navigation;
 
 namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 {
@@ -11,13 +12,13 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 			this.linkFactory = linkFactory;
 		}
 
-		public IAbsoluteLink[] CreateStyledBuildLinkList(IBuildSpecifier[] buildSpecifiers, IActionSpecifier actionSpecifier)
+		public IAbsoluteLink[] CreateStyledBuildLinkList(IBuildSpecifier[] buildSpecifiers, string action)
 		{
 			ArrayList displayableBuildLinkList = new ArrayList();
 			
 			foreach (IBuildSpecifier buildSpecifier in buildSpecifiers)
 			{
-				displayableBuildLinkList.Add(linkFactory.CreateStyledBuildLink(buildSpecifier, actionSpecifier));
+				displayableBuildLinkList.Add(linkFactory.CreateStyledBuildLink(buildSpecifier, action));
 			}
 
 			return (IAbsoluteLink[]) displayableBuildLinkList.ToArray(typeof (IAbsoluteLink));

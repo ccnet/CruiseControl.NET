@@ -2,6 +2,7 @@ using System;
 using System.Drawing;
 using NMock;
 using NUnit.Framework;
+using ThoughtWorks.CruiseControl.Core.Reporting.Dashboard.Navigation;
 using ThoughtWorks.CruiseControl.Remote;
 using ThoughtWorks.CruiseControl.WebDashboard.Dashboard;
 using ThoughtWorks.CruiseControl.WebDashboard.Plugins.ProjectReport;
@@ -46,7 +47,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 
 		private void SetupProjectLinkExpectation(IProjectSpecifier projectSpecifierForLink)
 		{
-			linkFactoryMock.ExpectAndReturn("CreateProjectLink", projectLink, projectSpecifierForLink, new ActionSpecifierWithName(ProjectReportProjectPlugin.ACTION_NAME));
+			linkFactoryMock.ExpectAndReturn("CreateProjectLink", projectLink, projectSpecifierForLink, ProjectReportProjectPlugin.ACTION_NAME);
 		}
 
 		[Test]
@@ -318,8 +319,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 				};
 			SetupProjectLinkExpectation();
 
-			IActionSpecifier expectedActionSpecifier = new ActionSpecifierWithName("myAction");
-			urlBuilderMock.ExpectAndReturn("BuildFormName", "myForceButton", expectedActionSpecifier);
+			urlBuilderMock.ExpectAndReturn("BuildFormName", "myForceButton", "myAction");
 
 			// Execute
 			ProjectGridRow[] rows = projectGrid.GenerateProjectGridRows(statusses, "myAction", ProjectGridSortColumn.Name, true);

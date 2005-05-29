@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using ThoughtWorks.CruiseControl.Core;
+using ThoughtWorks.CruiseControl.Core.Reporting.Dashboard.Navigation;
 using ThoughtWorks.CruiseControl.WebDashboard.MVC;
 using ThoughtWorks.CruiseControl.WebDashboard.MVC.View;
 using ThoughtWorks.CruiseControl.WebDashboard.ServerConnection;
@@ -12,13 +13,15 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 	{
 		private readonly IFarmService farmService;
 		private readonly IUrlBuilder urlBuilder;
+		private readonly ICruiseUrlBuilder cruiseUrlBuilder;
 		private readonly IVelocityViewGenerator viewGenerator;
 		private readonly IProjectGrid projectGrid;
 
-		public VelocityProjectGridAction(IFarmService farmService, IUrlBuilder urlBuilder, IVelocityViewGenerator viewGenerator, IProjectGrid projectGrid)
+		public VelocityProjectGridAction(IFarmService farmService, IUrlBuilder urlBuilder, ICruiseUrlBuilder cruiseUrlBuilder, IVelocityViewGenerator viewGenerator, IProjectGrid projectGrid)
 		{
 			this.farmService = farmService;
 			this.urlBuilder = urlBuilder;
+			this.cruiseUrlBuilder = cruiseUrlBuilder;
 			this.viewGenerator = viewGenerator;
 			this.projectGrid = projectGrid;
 		}
@@ -39,17 +42,16 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 
 		private IView GenerateView(ProjectStatusListAndExceptions projectStatusListAndExceptions, Hashtable velocityContext, string actionName, IRequest request, IServerSpecifier serverSpecifier)
 		{
-			ActionSpecifierWithName actionSpecifier = new ActionSpecifierWithName(actionName);
 			ProjectGridSortColumn sortColumn = GetSortColumn(request);
 			bool sortReverse = SortAscending(request);
 
-			velocityContext["projectNameSortLink"] = GenerateSortLink(serverSpecifier, actionSpecifier, ProjectGridSortColumn.Name, sortColumn, sortReverse);
-			velocityContext["buildStatusSortLink"] = GenerateSortLink(serverSpecifier, actionSpecifier, ProjectGridSortColumn.BuildStatus, sortColumn, sortReverse);
-			velocityContext["lastBuildDateSortLink"] = GenerateSortLink(serverSpecifier, actionSpecifier, ProjectGridSortColumn.LastBuildDate, sortColumn, sortReverse);
+			velocityContext["projectNameSortLink"] = GenerateSortLink(serverSpecifier, actionName, ProjectGridSortColumn.Name, sortColumn, sortReverse);
+			velocityContext["buildStatusSortLink"] = GenerateSortLink(serverSpecifier, actionName, ProjectGridSortColumn.BuildStatus, sortColumn, sortReverse);
+			velocityContext["lastBuildDateSortLink"] = GenerateSortLink(serverSpecifier, actionName, ProjectGridSortColumn.LastBuildDate, sortColumn, sortReverse);
 			velocityContext["projectGrid"] = projectGrid.GenerateProjectGridRows(
 				projectStatusListAndExceptions.StatusAndServerList, actionName, sortColumn, sortReverse);
 			velocityContext["exceptions"] = projectStatusListAndExceptions.Exceptions;
-			velocityContext["refreshButtonName"] = urlBuilder.BuildFormName(actionSpecifier);
+			velocityContext["refreshButtonName"] = urlBuilder.BuildFormName(actionName);
 
 			return viewGenerator.GenerateView(@"ProjectGrid.vm", velocityContext);
 		}
@@ -76,7 +78,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 			}
 		}
 
-		private object GenerateSortLink(IServerSpecifier serverSpecifier, IActionSpecifier actionSpecifier, ProjectGridSortColumn column, ProjectGridSortColumn currentColumn, bool currentReverse)
+		private object GenerateSortLink(IServerSpecifier serverSpecifier, string action, ProjectGridSortColumn column, ProjectGridSortColumn currentColumn, bool currentReverse)
 		{
 			string queryString = "SortColumn=" + column.ToString();
 			if (column == currentColumn && !currentReverse)
@@ -85,11 +87,11 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 			}
 			if (serverSpecifier == null)
 			{
-				return urlBuilder.BuildUrl(actionSpecifier, queryString);
+				return urlBuilder.BuildUrl(action, queryString);
 			}
 			else
 			{
-				return urlBuilder.BuildServerUrl(actionSpecifier, serverSpecifier, queryString);
+				return cruiseUrlBuilder.BuildServerUrl(action, serverSpecifier, queryString);
 			}
 		}
 

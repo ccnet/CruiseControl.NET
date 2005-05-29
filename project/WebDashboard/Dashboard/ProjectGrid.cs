@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Drawing;
+using ThoughtWorks.CruiseControl.Core.Reporting.Dashboard.Navigation;
 using ThoughtWorks.CruiseControl.Remote;
 using ThoughtWorks.CruiseControl.WebDashboard.Plugins.ProjectReport;
 using ThoughtWorks.CruiseControl.WebDashboard.ServerConnection;
@@ -34,10 +35,8 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 						(status.LastBuildLabel != null ? status.LastBuildLabel : "no build available") , 
 						status.Status.ToString(), 
 						status.Activity.ToString(), 
-						urlBuilder.BuildFormName(new ActionSpecifierWithName(forceBuildActionName)),
-						linkFactory.CreateProjectLink(
-							new DefaultProjectSpecifier(serverSpecifier, projectName), new ActionSpecifierWithName(ProjectReportProjectPlugin.ACTION_NAME)
-						).Url
+						urlBuilder.BuildFormName(forceBuildActionName),
+						linkFactory.CreateProjectLink(new DefaultProjectSpecifier(serverSpecifier, projectName), ProjectReportProjectPlugin.ACTION_NAME).Url
 					));
 			}
 

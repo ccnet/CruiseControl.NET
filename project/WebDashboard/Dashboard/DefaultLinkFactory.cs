@@ -1,61 +1,63 @@
-using System;
+using ThoughtWorks.CruiseControl.Core.Reporting.Dashboard.Navigation;
 
 namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 {
 	public class DefaultLinkFactory : ILinkFactory
 	{
 		private readonly IUrlBuilder urlBuilder;
+		private readonly ICruiseUrlBuilder cruiseUrlBuilder;
 		private readonly IBuildNameFormatter buildNameFormatter;
 
-		public DefaultLinkFactory(IUrlBuilder urlBuilder, IBuildNameFormatter buildNameFormatter)
+		public DefaultLinkFactory(IUrlBuilder urlBuilder, ICruiseUrlBuilder cruiseUrlBuilder, IBuildNameFormatter buildNameFormatter)
 		{
 			this.urlBuilder = urlBuilder;
+			this.cruiseUrlBuilder = cruiseUrlBuilder;
 			this.buildNameFormatter = buildNameFormatter;
 		}
 
-		public IAbsoluteLink CreateBuildLink(IBuildSpecifier buildSpecifier, string text, IActionSpecifier actionSpecifier)
+		public IAbsoluteLink CreateBuildLink(IBuildSpecifier buildSpecifier, string text, string action)
 		{
-			return new BuildLink(urlBuilder, buildSpecifier, text, actionSpecifier);
+			return new BuildLink(cruiseUrlBuilder, buildSpecifier, text, action);
 		}
 
-		public IAbsoluteLink CreateBuildLink(IBuildSpecifier buildSpecifier, IActionSpecifier actionSpecifier)
+		public IAbsoluteLink CreateBuildLink(IBuildSpecifier buildSpecifier, string action)
 		{
-			return new BuildLink(urlBuilder, buildSpecifier, buildNameFormatter.GetPrettyBuildName(buildSpecifier), actionSpecifier);
+			return new BuildLink(cruiseUrlBuilder, buildSpecifier, buildNameFormatter.GetPrettyBuildName(buildSpecifier), action);
 		}
 
-		public IAbsoluteLink CreateBuildLinkWithFileName(IBuildSpecifier buildSpecifier, IActionSpecifier actionSpecifier, string fileName)
+		public IAbsoluteLink CreateBuildLinkWithFileName(IBuildSpecifier buildSpecifier, string action, string fileName)
 		{
-			return new BuildLinkWithFileName(urlBuilder, buildSpecifier, buildNameFormatter.GetPrettyBuildName(buildSpecifier), actionSpecifier, fileName);
+			return new BuildLinkWithFileName(cruiseUrlBuilder, buildSpecifier, buildNameFormatter.GetPrettyBuildName(buildSpecifier), action, fileName);
 		}
 
-		public IAbsoluteLink CreateProjectLink(IProjectSpecifier projectSpecifier, string text, IActionSpecifier actionSpecifier)
+		public IAbsoluteLink CreateProjectLink(IProjectSpecifier projectSpecifier, string text, string action)
 		{
-			return new ProjectLink(urlBuilder, projectSpecifier, text, actionSpecifier);
+			return new ProjectLink(cruiseUrlBuilder, projectSpecifier, text, action);
 		}
 
-		public IAbsoluteLink CreateProjectLink(IProjectSpecifier projectSpecifier, IActionSpecifier actionSpecifier)
+		public IAbsoluteLink CreateProjectLink(IProjectSpecifier projectSpecifier, string action)
 		{
-			return new ProjectLink(urlBuilder, projectSpecifier, projectSpecifier.ProjectName, actionSpecifier);
+			return new ProjectLink(cruiseUrlBuilder, projectSpecifier, projectSpecifier.ProjectName, action);
 		}
 
-		public IAbsoluteLink CreateServerLink(IServerSpecifier serverSpecifier, string text, IActionSpecifier actionSpecifier)
+		public IAbsoluteLink CreateServerLink(IServerSpecifier serverSpecifier, string text, string action)
 		{
-			return new ServerLink(urlBuilder, serverSpecifier, text, actionSpecifier);
+			return new ServerLink(cruiseUrlBuilder, serverSpecifier, text, action);
 		}
 
-		public IAbsoluteLink CreateServerLink(IServerSpecifier serverSpecifier, IActionSpecifier actionSpecifier)
+		public IAbsoluteLink CreateServerLink(IServerSpecifier serverSpecifier, string action)
 		{
-			return new ServerLink(urlBuilder, serverSpecifier, serverSpecifier.ServerName, actionSpecifier);
+			return new ServerLink(cruiseUrlBuilder, serverSpecifier, serverSpecifier.ServerName, action);
 		}
 
-		public IAbsoluteLink CreateFarmLink(string text, IActionSpecifier actionSpecifier)
+		public IAbsoluteLink CreateFarmLink(string text, string action)
 		{
-			return new FarmLink(urlBuilder, text, actionSpecifier);
+			return new FarmLink(urlBuilder, text, action);
 		}
 
-		public IAbsoluteLink CreateStyledBuildLink(IBuildSpecifier specifier, IActionSpecifier actionSpecifier)
+		public IAbsoluteLink CreateStyledBuildLink(IBuildSpecifier specifier, string action)
 		{
-			IAbsoluteLink link = CreateBuildLink(specifier, buildNameFormatter.GetPrettyBuildName(specifier), actionSpecifier);
+			IAbsoluteLink link = CreateBuildLink(specifier, buildNameFormatter.GetPrettyBuildName(specifier), action);
 			link.LinkClass = buildNameFormatter.GetCssClassForBuildLink(specifier);
 			return link;
 		}

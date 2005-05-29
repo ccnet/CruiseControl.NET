@@ -1,4 +1,5 @@
 using System.Collections;
+using ThoughtWorks.CruiseControl.Core.Reporting.Dashboard.Navigation;
 using ThoughtWorks.CruiseControl.WebDashboard.Configuration;
 
 namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
@@ -19,7 +20,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 			ArrayList links = new ArrayList();
 			foreach (IPlugin plugin in pluginConfiguration.BuildPlugins)
 			{
-				links.Add(LinkFactory.CreateBuildLink(buildSpecifier, plugin.LinkDescription, new ActionSpecifierWithName(plugin.NamedActions[0].ActionName)));
+				links.Add(LinkFactory.CreateBuildLink(buildSpecifier, plugin.LinkDescription, plugin.NamedActions[0].ActionName));
 			}
 			return (IAbsoluteLink[]) links.ToArray(typeof (IAbsoluteLink));
 		}
@@ -29,7 +30,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 			ArrayList links = new ArrayList();
 			foreach (IPlugin plugin in pluginConfiguration.ServerPlugins)
 			{
-				links.Add(LinkFactory.CreateServerLink(serverSpecifier, plugin.LinkDescription, new ActionSpecifierWithName(plugin.NamedActions[0].ActionName)));
+				links.Add(LinkFactory.CreateServerLink(serverSpecifier, plugin.LinkDescription, plugin.NamedActions[0].ActionName));
 			}
 			return (IAbsoluteLink[]) links.ToArray(typeof (IAbsoluteLink));
 		}
@@ -39,7 +40,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 			ArrayList links = new ArrayList();
 			foreach (IPlugin plugin in pluginConfiguration.ProjectPlugins)
 			{
-				links.Add(LinkFactory.CreateProjectLink(projectSpecifier, plugin.LinkDescription, new ActionSpecifierWithName(plugin.NamedActions[0].ActionName)));
+				links.Add(LinkFactory.CreateProjectLink(projectSpecifier, plugin.LinkDescription, plugin.NamedActions[0].ActionName));
 			}
 			return (IAbsoluteLink[]) links.ToArray(typeof (IAbsoluteLink));
 		}
@@ -49,7 +50,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 			ArrayList links = new ArrayList();
 			foreach (IPlugin plugin in pluginConfiguration.FarmPlugins)
 			{
-				links.Add(LinkFactory.CreateFarmLink(plugin.LinkDescription, new ActionSpecifierWithName(plugin.NamedActions[0].ActionName)));
+				links.Add(LinkFactory.CreateFarmLink(plugin.LinkDescription, plugin.NamedActions[0].ActionName));
 			}
 			return (IAbsoluteLink[]) links.ToArray(typeof (IAbsoluteLink));
 		}

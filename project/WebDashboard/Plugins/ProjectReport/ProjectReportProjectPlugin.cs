@@ -1,5 +1,6 @@
 using System.Collections;
 using Exortech.NetReflector;
+using ThoughtWorks.CruiseControl.Core.Reporting.Dashboard.Navigation;
 using ThoughtWorks.CruiseControl.WebDashboard.Dashboard;
 using ThoughtWorks.CruiseControl.WebDashboard.IO;
 using ThoughtWorks.CruiseControl.WebDashboard.MVC;
@@ -33,7 +34,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.ProjectReport
 			IBuildSpecifier[] buildSpecifiers = farmService.GetMostRecentBuildSpecifiers(projectSpecifier, 1);
 			if (buildSpecifiers.Length == 1)
 			{
-				velocityContext["mostRecentBuildUrl"] = linkFactory.CreateBuildLink(buildSpecifiers[0], new ActionSpecifierWithName(BuildReportBuildPlugin.ACTION_NAME)).Url;
+				velocityContext["mostRecentBuildUrl"] = linkFactory.CreateBuildLink(buildSpecifiers[0], BuildReportBuildPlugin.ACTION_NAME).Url;
 			}
 
 			velocityContext["projectName"] = projectSpecifier.ProjectName;

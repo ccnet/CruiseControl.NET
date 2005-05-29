@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using ThoughtWorks.CruiseControl.Core.Reporting.Dashboard.Navigation;
 using ThoughtWorks.CruiseControl.WebDashboard.MVC;
 using ThoughtWorks.CruiseControl.WebDashboard.MVC.View;
 using ThoughtWorks.CruiseControl.WebDashboard.Plugins.BuildReport;
@@ -35,9 +36,9 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 
 			try
 			{
-				secondaryContext["links"] = linkListFactory.CreateStyledBuildLinkList(farmService.GetMostRecentBuildSpecifiers(projectSpecifier, 10), new ActionSpecifierWithName(BuildReportBuildPlugin.ACTION_NAME));
+				secondaryContext["links"] = linkListFactory.CreateStyledBuildLinkList(farmService.GetMostRecentBuildSpecifiers(projectSpecifier, 10), BuildReportBuildPlugin.ACTION_NAME);
 				primaryContext["buildRows"] = velocityTransformer.Transform(@"BuildRows.vm", secondaryContext);
-				primaryContext["allBuildsLink"] = linkFactory.CreateProjectLink(projectSpecifier, "", new ActionSpecifierWithName(ViewAllBuildsProjectPlugin.ACTION_NAME));
+				primaryContext["allBuildsLink"] = linkFactory.CreateProjectLink(projectSpecifier, "", ViewAllBuildsProjectPlugin.ACTION_NAME);
 
 				return velocityTransformer.Transform(@"RecentBuilds.vm", primaryContext);
 			}
@@ -53,9 +54,9 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 			Hashtable primaryContext = new Hashtable();
 			Hashtable secondaryContext = new Hashtable();
 
-			secondaryContext["links"] = linkListFactory.CreateStyledBuildLinkList(farmService.GetBuildSpecifiers(projectSpecifier), new ActionSpecifierWithName(BuildReportBuildPlugin.ACTION_NAME));
+			secondaryContext["links"] = linkListFactory.CreateStyledBuildLinkList(farmService.GetBuildSpecifiers(projectSpecifier), BuildReportBuildPlugin.ACTION_NAME);
 			primaryContext["buildRows"] = velocityTransformer.Transform(@"BuildRows.vm", secondaryContext);
-			primaryContext["allBuildsLink"] = linkFactory.CreateProjectLink(projectSpecifier, "", new ActionSpecifierWithName(ViewAllBuildsProjectPlugin.ACTION_NAME));
+			primaryContext["allBuildsLink"] = linkFactory.CreateProjectLink(projectSpecifier, "", ViewAllBuildsProjectPlugin.ACTION_NAME);
 
 			return velocityViewGenerator.GenerateView(@"RecentBuilds.vm", primaryContext);
 		}

@@ -1,8 +1,7 @@
 using NMock;
 using NUnit.Framework;
+using ThoughtWorks.CruiseControl.Core.Reporting.Dashboard.Navigation;
 using ThoughtWorks.CruiseControl.WebDashboard.Dashboard;
-using ThoughtWorks.CruiseControl.WebDashboard.IO;
-using ThoughtWorks.CruiseControl.WebDashboard.MVC.Cruise;
 
 namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 {
@@ -11,17 +10,11 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 	{
 		private DynamicMock pathMapperMock;
 		private DefaultUrlBuilder urlBuilder;
-		private DefaultServerSpecifier serverSpecifier;
-		private IProjectSpecifier projectSpecifier;
-		private DefaultBuildSpecifier buildSpecifier;
 
 		[SetUp]
 		public void Setup()
 		{
 			pathMapperMock = new DynamicMock(typeof(IPathMapper));
-			serverSpecifier = new DefaultServerSpecifier("myserver");
-			projectSpecifier = new DefaultProjectSpecifier(serverSpecifier, "myproject");
-			buildSpecifier = new DefaultBuildSpecifier(projectSpecifier, "mybuild");
 			urlBuilder = new DefaultUrlBuilder((IPathMapper) pathMapperMock.MockInstance);
 		}
 
@@ -37,7 +30,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 			pathMapperMock.ExpectAndReturn("GetAbsoluteURLForRelativePath", "http://local/foo.htm", DefaultUrlBuilder.CONTROLLER_RELATIVE_URL);
 			
 			// Execute
-			string url = urlBuilder.BuildUrl(new ActionSpecifierWithName("myAction"));
+			string url = urlBuilder.BuildUrl("myAction");
 
 			// Verify
 			Assert.AreEqual("http://local/foo.htm?_action_myAction=true", url);
@@ -51,7 +44,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 			pathMapperMock.ExpectAndReturn("GetAbsoluteURLForRelativePath", "http://local/foo.htm", DefaultUrlBuilder.CONTROLLER_RELATIVE_URL);
 			
 			// Execute
-			string url = urlBuilder.BuildUrl(new ActionSpecifierWithName("myAction"), "myparam=myvalue");
+			string url = urlBuilder.BuildUrl("myAction", "myparam=myvalue");
 
 			// Verify
 			Assert.AreEqual("http://local/foo.htm?_action_myAction=true&myparam=myvalue", url);
@@ -59,72 +52,16 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 		}
 
 		[Test]
-		public void ShouldBuildServerUrlAddingCorrectlyFormattedAction()
+		public void ShouldBuildUrlWithAlternativeBaseRelativeUrlIfGiven()
 		{
 			// Setup
-			pathMapperMock.ExpectAndReturn("GetAbsoluteURLForRelativePath", "http://local/foo.htm", DefaultUrlBuilder.CONTROLLER_RELATIVE_URL);
+			pathMapperMock.ExpectAndReturn("GetAbsoluteURLForRelativePath", "http://local/foo.htm", "myBaseUrl");
 			
 			// Execute
-			string url = urlBuilder.BuildServerUrl(new ActionSpecifierWithName("myAction"), serverSpecifier);
+			string url = urlBuilder.BuildUrl("myAction", "myparam=myvalue", "myBaseUrl");
 
 			// Verify
-			Assert.AreEqual("http://local/foo.htm?_action_myAction=true&server=myserver", url);
-			VerifyAll();
-		}
-
-		[Test]
-		public void ShouldBuildServerUrlAddingCorrectlyFormattedActionAndQueryString()
-		{
-			// Setup
-			pathMapperMock.ExpectAndReturn("GetAbsoluteURLForRelativePath", "http://local/foo.htm", DefaultUrlBuilder.CONTROLLER_RELATIVE_URL);
-			
-			// Execute
-			string url = urlBuilder.BuildServerUrl(new ActionSpecifierWithName("myAction"), serverSpecifier, "query1=arg1");
-
-			// Verify
-			Assert.AreEqual("http://local/foo.htm?_action_myAction=true&server=myserver&query1=arg1", url);
-			VerifyAll();
-		}
-
-		[Test]
-		public void ShouldBuildProjectUrlAddingCorrectlyFormattedAction()
-		{
-			// Setup
-			pathMapperMock.ExpectAndReturn("GetAbsoluteURLForRelativePath", "http://local/foo.htm", DefaultUrlBuilder.CONTROLLER_RELATIVE_URL);
-
-			// Execute
-			string url = urlBuilder.BuildProjectUrl(new ActionSpecifierWithName("myAction"), projectSpecifier);
-
-			// Verify
-			Assert.AreEqual("http://local/foo.htm?_action_myAction=true&server=myserver&project=myproject", url);
-			VerifyAll();
-		}
-
-		[Test]
-		public void ShouldBuildBuildUrlAddingCorrectlyFormattedAction()
-		{
-			// Setup
-			pathMapperMock.ExpectAndReturn("GetAbsoluteURLForRelativePath", "http://local/foo.htm", DefaultUrlBuilder.CONTROLLER_RELATIVE_URL);
-
-			// Execute
-			string url = urlBuilder.BuildBuildUrl(new ActionSpecifierWithName("myAction"), buildSpecifier);
-
-			// Verify
-			Assert.AreEqual("http://local/foo.htm?_action_myAction=true&server=myserver&project=myproject&build=mybuild", url);
-			VerifyAll();
-		}
-
-		[Test]
-		public void ShouldBuildBuildUrlAddingCorrectlyFormattedActionWithSpecifiedFileName()
-		{
-			// Setup
-			pathMapperMock.ExpectAndReturn("GetAbsoluteURLForRelativePath", "http://local/another.html", "another.html");
-
-			// Execute
-			string url = urlBuilder.BuildBuildUrl(new ActionSpecifierWithName("myAction"), buildSpecifier, "another.html");
-
-			// Verify
-			Assert.AreEqual("http://local/another.html?_action_myAction=true&server=myserver&project=myproject&build=mybuild", url);
+			Assert.AreEqual("http://local/foo.htm?_action_myAction=true&myparam=myvalue", url);
 			VerifyAll();
 		}
 
@@ -132,7 +69,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 		public void ShouldBuildFormNameBasedOnActionName()
 		{
 			// Execute
-			string formName = urlBuilder.BuildFormName(new ActionSpecifierWithName("myAction"));
+			string formName = urlBuilder.BuildFormName("myAction");
 
 			// Verify
 			Assert.AreEqual("_action_myAction", formName);
