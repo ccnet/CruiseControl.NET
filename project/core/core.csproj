@@ -519,6 +519,11 @@
                     BuildAction = "Content"
                 />
                 <File
+                    RelPath = "Reporting\Dashboard\Navigation\AbsolutePathUrlBuilderDecorator.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Reporting\Dashboard\Navigation\DefaultBuildSpecifier.cs"
                     SubType = "Code"
                     BuildAction = "Compile"

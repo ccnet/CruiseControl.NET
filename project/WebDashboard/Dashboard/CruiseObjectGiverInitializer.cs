@@ -4,7 +4,6 @@ using ThoughtWorks.CruiseControl.Core.Reporting.Dashboard.Navigation;
 using ThoughtWorks.CruiseControl.Core.Util;
 using ThoughtWorks.CruiseControl.WebDashboard.Configuration;
 using ThoughtWorks.CruiseControl.WebDashboard.Dashboard.ActionDecorators;
-using ThoughtWorks.CruiseControl.WebDashboard.IO;
 using ThoughtWorks.CruiseControl.WebDashboard.MVC;
 using ThoughtWorks.CruiseControl.WebDashboard.MVC.Cruise;
 using ThoughtWorks.CruiseControl.WebDashboard.Plugins.BuildReport;
@@ -32,8 +31,8 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 
 			// Add functionality to object giver to handle this?
 			giverManager.AddTypedInstance(typeof(IRequest), new AggregatedRequest(new NameValueCollectionRequest(request.Form), new NameValueCollectionRequest(request.QueryString)));
-			
-			giverManager.SetImplementationType(typeof(IPathMapper), typeof(HttpPathMapper));
+
+			giverManager.SetImplementationType(typeof(IUrlBuilder), typeof(DefaultUrlBuilder));
 			giverManager.SetImplementationType(typeof(IMultiTransformer), typeof(PathMappingMultiTransformer));
 
 			giverManager.SetDependencyImplementationForType(typeof(PathMappingMultiTransformer), typeof(IMultiTransformer), typeof (HtmlAwareMultiTransformer));

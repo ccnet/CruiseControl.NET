@@ -24,10 +24,5 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.IO
 		{
 			get { return context.Request.PhysicalApplicationPath; }
 		}
-
-		public string GetAbsoluteURLForRelativePath(string relativePath)
-		{
-			return string.Format("{0}://{1}:{2}{3}/{4}", context.Request.Url.Scheme, context.Request.Url.Host, context.Request.Url.Port, context.Request.ApplicationPath, relativePath);
-		}
 	}
 }

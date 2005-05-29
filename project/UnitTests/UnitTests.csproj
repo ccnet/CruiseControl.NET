@@ -569,6 +569,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Core\Reporting\Dashboard\Navigation\AbsolutePathUrlBuilderDecoratorTest.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Core\SourceControl\ClearCaseHistoryParserTest.cs"
                     SubType = "Code"
                     BuildAction = "Compile"

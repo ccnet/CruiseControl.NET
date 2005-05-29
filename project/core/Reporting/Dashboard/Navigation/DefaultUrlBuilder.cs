@@ -4,14 +4,8 @@ namespace ThoughtWorks.CruiseControl.Core.Reporting.Dashboard.Navigation
 {
 	public class DefaultUrlBuilder : IUrlBuilder
 	{
-		private readonly IPathMapper pathMapper;
 		public static readonly string CONTROLLER_RELATIVE_URL = "default.aspx";
 		public static readonly string ACTION_PARAMETER_PREFIX = "_action_";
-
-		public DefaultUrlBuilder(IPathMapper pathMapper)
-		{
-			this.pathMapper = pathMapper;
-		}
 
 		public string BuildUrl(string action)
 		{
@@ -35,17 +29,13 @@ namespace ThoughtWorks.CruiseControl.Core.Reporting.Dashboard.Navigation
 				}
 				queryString += partialQueryString;
 			}
-			return BuildAbsoluteUrl(baseUrl) + queryString;
+
+			return baseUrl + queryString;
 		}
 
 		public string BuildFormName(string action)
 		{
 			return ACTION_PARAMETER_PREFIX + action;
-		}
-
-		private string BuildAbsoluteUrl(string relativeUrl)
-		{
-			return pathMapper.GetAbsoluteURLForRelativePath(relativeUrl);
 		}
 	}
 }

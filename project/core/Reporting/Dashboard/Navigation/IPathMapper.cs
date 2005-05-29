@@ -6,7 +6,6 @@ namespace ThoughtWorks.CruiseControl.Core.Reporting.Dashboard.Navigation
 	public interface IPathMapper
 	{
 		string GetLocalPathFromURLPath(string originalPath);
-		string GetAbsoluteURLForRelativePath(string relativePath);
 		string PhysicalApplicationPath { get; }
 	}
 }
