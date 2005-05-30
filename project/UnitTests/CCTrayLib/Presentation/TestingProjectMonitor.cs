@@ -49,5 +49,10 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Presentation
 		{
 			OnPolled(new MonitorPolledEventArgs(this));
 		}
+
+		public void ForceBuild()
+		{
+			throw new NotImplementedException();
+		}
 	}
 }

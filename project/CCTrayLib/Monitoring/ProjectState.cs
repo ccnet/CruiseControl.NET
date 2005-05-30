@@ -5,10 +5,6 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
 	/// <summary>
 	/// A summary of the project state as interesting to cctray
 	/// </summary>
-	/// <remarks>
-	/// Currently, the int value of this enum is used as indexers into image lists etc.
-	/// There is probably a more obvious and less fragile way of doing this.
-	/// </remarks>
 	public class ProjectState
 	{
 		/// <summary>

@@ -27,6 +27,11 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
 			get { throw new InvalidOperationException(); }
 		}
 
+		public void ForceBuild()
+		{
+			throw new NotImplementedException();
+		}
+
 		public event MonitorBuildOccurredEventHandler BuildOccurred
 		{
 			add

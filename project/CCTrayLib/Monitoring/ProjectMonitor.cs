@@ -43,7 +43,12 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
 				return ProjectState.Broken;
 			}
 		}
-		
+
+		public void ForceBuild()
+		{
+			cruiseProjectManager.ForceBuild();
+		}
+
 		public void Poll()
 		{
 			try

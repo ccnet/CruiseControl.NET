@@ -225,5 +225,12 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Monitoring
 			Assert.AreEqual(ProjectState.NotConnected, monitor.ProjectState);
 
 		}
+
+		[Test]
+		public void ForceBuildIsForwardedOn()
+		{
+			mockProjectManager.Expect("ForceBuild");
+			monitor.ForceBuild();
+		}
 	}
 }

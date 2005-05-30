@@ -3,15 +3,18 @@ Still to do:
 DONE - Create an aggregating/composite project monitor; subscribe to events on this to update form icon and popup messages
 DONE - Integrate tray icon stuff; keep icon up to date
 DONE - Integrate popup message stuff; popup message on build
-- Implement right-click on projects, "display web page" and "force build"
-- Implement double-click on projects
+DONE - Implement right-click on projects, "display web page" and "force build"
+DONE - Implement double-click on projects (=display web page)
+ (although both of the above are just hacked into the main form VB-hacker-style. There should be a 
+ better abstraction that avoids this -- oh and makes it testable ;) )
+- Error handling when e.g. config file is bad
+- display the error message that was receieved when "not connected"
 - Hide the main window when minimised (just like msn messenger behaviour?)
 - Play sounds on build transition 
-- Fix threading -- create a decorator around IProjectMonitor that uses ISynchronisedInvoke to get the event 
-	across to the winforms thread?
-- Display more information about projects on tray tooltip 
-- Display more information about projects on list view tooltip
 - Settings dialog to allow specification of projects
-- Error handling when e.g. config file is bad
-- display error message when "not connected"
+- Fix threading -- create a decorator around IProjectMonitor that uses ISynchronisedInvoke to get the event 
+	across to the winforms thread? (though the current winforms thread rule breakage doesn't seem to be causing
+	any odd behaviour)
+- Display more information about projects on tray tooltip 
+- Display more information about projects on list view tooltip (or maybe show more information in the list view columns?)
 - Read project list from dashboard
