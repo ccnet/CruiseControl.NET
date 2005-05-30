@@ -1,51 +1,37 @@
 using System;
+using System.ComponentModel;
 using System.Diagnostics;
-using System.Windows.Forms;
+using System.Timers;
 
 namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
 {
 	/// <summary>
-	///  Polls a number of IPollable things
+	///  Polls a an IPollable thing
 	/// </summary>
-	/// <remarks>
-	///	 Deliberately uses the System.Windows.Forms timer to avoid any threading issues
-	/// </remarks>
 	public class Poller
 	{
 		Timer timer;
-		IPollable[] itemsToPoll;
+		IPollable itemToPoll;
 
-		public Poller(int pollIntervalMilliseconds, params IPollable[] itemsToPoll)
+		public Poller(int pollIntervalMilliseconds, IPollable itemToPoll)
 		{
+			this.itemToPoll = itemToPoll;
 			timer = new Timer();
 			timer.Interval = pollIntervalMilliseconds;
-			timer.Tick += new EventHandler(Timer_Tick);
-			this.itemsToPoll = itemsToPoll;
+			timer.AutoReset = true;
+			timer.Elapsed += new ElapsedEventHandler(Timer_Elapsed);
 		}
 
 
-		private void Timer_Tick(object sender, EventArgs e)
+		private void Timer_Elapsed( object sender, ElapsedEventArgs e )
 		{
-			Debug.WriteLine("Poller is polling...");
-
-			foreach (IPollable toPoll in itemsToPoll)
-			{
-				try
-				{
-					toPoll.Poll();
-				}
-				catch (Exception ex)
-				{
-					Debug.WriteLine("Execption ignored during polling: " + ex);
-				}
-			}
-
-			Debug.WriteLine("Polling complete");
+			itemToPoll.Poll();
 		}
 
 		public void Start()
 		{
 			timer.Start();
 		}
+
 	}
 }

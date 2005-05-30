@@ -7,6 +7,7 @@ using System.Runtime.Remoting;
 using System.Windows.Forms;
 using Drew.Agents;
 using ThoughtWorks.CruiseControl.CCTrayLib;
+using ThoughtWorks.CruiseControl.CCTrayLib.Presentation;
 using ThoughtWorks.CruiseControl.Remote;
 
 namespace ThoughtWorks.CruiseControl.CCTray

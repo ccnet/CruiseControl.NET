@@ -301,6 +301,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Monitoring\AggregatingProjectMonitor.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Monitoring\CruiseProjectManager.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -331,12 +336,37 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Monitoring\MonitorBuildOccurredEventArgs.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Monitoring\MonitorPolledEventArgs.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Monitoring\Poller.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
                     RelPath = "Monitoring\ProjectMonitor.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Monitoring\ProjectState.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Presentation\IIconProvider.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Presentation\IProjectStateIconProvider.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -351,8 +381,33 @@
                     BuildAction = "EmbeddedResource"
                 />
                 <File
+                    RelPath = "Presentation\NotifyIconEx.cs"
+                    SubType = "Component"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Presentation\NotifyIconEx.resx"
+                    DependentUpon = "NotifyIconEx.cs"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "Presentation\ProjectStateIconAdaptor.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Presentation\ProjectStatusListViewItemAdaptor.cs"
                     SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Presentation\ResourceProjectStateIconProvider.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Presentation\TrayIcon.cs"
+                    SubType = "Component"
                     BuildAction = "Compile"
                 />
                 <File

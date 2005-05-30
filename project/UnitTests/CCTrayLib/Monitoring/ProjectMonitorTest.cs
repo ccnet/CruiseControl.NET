@@ -14,7 +14,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Monitoring
 		private ProjectMonitor monitor;
 		private int pollCount;
 		private int buildOccurredCount;
-		private BuildOccurredEventArgs lastBuildOccurredArgs;
+		private MonitorBuildOccurredEventArgs lastBuildOccurredArgs;
 
 
 		[SetUp]
@@ -24,8 +24,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Monitoring
 			mockProjectManager = new DynamicMock(typeof (ICruiseProjectManager));
 			mockProjectManager.Strict = true;
 			monitor = new ProjectMonitor((ICruiseProjectManager) mockProjectManager.MockInstance);
-			monitor.Polled += new PolledEventHandler(Monitor_Polled);
-			monitor.BuildOccurred += new BuildOccurredEventHandler(Monitor_BuildOccurred);
+			monitor.Polled += new MonitorPolledEventHandler(Monitor_Polled);
+			monitor.BuildOccurred += new MonitorBuildOccurredEventHandler(Monitor_BuildOccurred);
 		}
 
 		[TearDown]
@@ -48,6 +48,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Monitoring
 			Assert.AreSame(status, monitor.ProjectStatus);
 		}
 
+
 		[Test]
 		public void ThePollEventIsFiredWhenPollIsInvoked()
 		{
@@ -61,6 +62,17 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Monitoring
 			mockProjectManager.ExpectAndReturn("ProjectStatus", status);
 			monitor.Poll();
 			Assert.AreEqual(2, pollCount);
+		}
+
+		[Test]
+		public void WhenPollingEncountersAnExceptionThePolledEventIsStillFired()
+		{
+			Assert.AreEqual(0, pollCount);
+
+			mockProjectManager.ExpectAndThrow("ProjectStatus", new Exception("should be caught") );
+			monitor.Poll();
+			Assert.AreEqual(1, pollCount);
+
 		}
 
 		[Test]
@@ -142,12 +154,12 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Monitoring
 
 
 
-		private void Monitor_Polled(object sauce, PolledEventArgs e)
+		private void Monitor_Polled(object sauce, MonitorPolledEventArgs args)
 		{
 			pollCount++;
 		}
 
-		private void Monitor_BuildOccurred(object sauce, BuildOccurredEventArgs e)
+		private void Monitor_BuildOccurred(object sauce, MonitorBuildOccurredEventArgs e)
 		{
 			buildOccurredCount++;
 			lastBuildOccurredArgs = e;
@@ -160,6 +172,58 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Monitoring
 			status.BuildStatus = integrationStatus;
 			status.LastBuildDate = lastBuildDate;
 			return status;
+		}
+
+		private ProjectStatus CreateProjectStatus(
+			IntegrationStatus integrationStatus, ProjectActivity activity)
+		{
+			ProjectStatus status = new ProjectStatus();
+			status.BuildStatus = integrationStatus;
+			status.Activity = activity;
+			return status;
+		}
+
+		[Test]
+		public void CorrectlyDeterminesProjectState()
+		{
+			Assert.AreEqual(ProjectState.NotConnected, monitor.ProjectState);
+				
+			mockProjectManager.ExpectAndReturn("ProjectStatus", 
+				CreateProjectStatus(IntegrationStatus.Success, ProjectActivity.Sleeping));
+			monitor.Poll();
+
+			Assert.AreEqual(ProjectState.Success, monitor.ProjectState);
+
+			mockProjectManager.ExpectAndReturn("ProjectStatus", 
+				CreateProjectStatus(IntegrationStatus.Exception, ProjectActivity.Sleeping));
+			monitor.Poll();
+
+			Assert.AreEqual(ProjectState.Broken, monitor.ProjectState);
+
+			mockProjectManager.ExpectAndReturn("ProjectStatus", 
+				CreateProjectStatus(IntegrationStatus.Failure, ProjectActivity.Sleeping));
+			monitor.Poll();
+
+			Assert.AreEqual(ProjectState.Broken, monitor.ProjectState);
+
+			mockProjectManager.ExpectAndReturn("ProjectStatus", 
+				CreateProjectStatus(IntegrationStatus.Unknown, ProjectActivity.Sleeping));
+			monitor.Poll();
+
+			Assert.AreEqual(ProjectState.Broken, monitor.ProjectState);
+
+			mockProjectManager.ExpectAndReturn("ProjectStatus", 
+				CreateProjectStatus(IntegrationStatus.Success, ProjectActivity.Building));
+			monitor.Poll();
+
+			Assert.AreEqual(ProjectState.Building, monitor.ProjectState);
+
+			mockProjectManager.ExpectAndReturn("ProjectStatus", 
+				null);
+			monitor.Poll();
+
+			Assert.AreEqual(ProjectState.NotConnected, monitor.ProjectState);
+
 		}
 	}
 }

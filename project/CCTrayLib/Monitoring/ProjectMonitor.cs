@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics;
 using ThoughtWorks.CruiseControl.Remote;
 
 namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
@@ -23,35 +24,63 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
 			get { return cruiseProjectManager.ProjectName; }
 		}
 
+		public ProjectState ProjectState
+		{
+			get
+			{
+				// nb: deliberately copy project status variable for thread safety
+				ProjectStatus status = ProjectStatus;
+
+				if (status  == null)
+					return ProjectState.NotConnected;
+
+				if (status.Activity == ProjectActivity.Building)
+					return ProjectState.Building;
+
+				if (status.BuildStatus == IntegrationStatus.Success)
+					return ProjectState.Success;
+
+				return ProjectState.Broken;
+			}
+		}
+		
 		public void Poll()
 		{
-			ProjectStatus newProjectStatus = cruiseProjectManager.ProjectStatus;
-
-			if (lastProjectStatus != null && newProjectStatus != null)
+			try
 			{
-				if (lastProjectStatus.LastBuildDate != newProjectStatus.LastBuildDate)
+				ProjectStatus newProjectStatus = cruiseProjectManager.ProjectStatus;
+
+				if (lastProjectStatus != null && newProjectStatus != null)
 				{
-					BuildTransition transition = CalculateBuildTransition(lastProjectStatus, newProjectStatus);
-					OnBuildOccurred(new BuildOccurredEventArgs(newProjectStatus,transition));
+					if (lastProjectStatus.LastBuildDate != newProjectStatus.LastBuildDate)
+					{
+						BuildTransition transition = CalculateBuildTransition(lastProjectStatus, newProjectStatus);
+						OnBuildOccurred(new MonitorBuildOccurredEventArgs(this,transition));
+					}
 				}
+
+				lastProjectStatus = newProjectStatus;
+			}
+			catch (Exception ex)
+			{
+				Debug.WriteLine("Exception during poll: " + ex);
+				lastProjectStatus = null;
 			}
 
-			lastProjectStatus = newProjectStatus;
-
-			OnPolled(new PolledEventArgs(ProjectStatus));
+			OnPolled(new MonitorPolledEventArgs(this));
 		}
 
-		public event BuildOccurredEventHandler BuildOccurred;
-		public event PolledEventHandler Polled;
+		public event MonitorBuildOccurredEventHandler BuildOccurred;
+		public event MonitorPolledEventHandler Polled;
 
 
-		protected void OnBuildOccurred(BuildOccurredEventArgs args)
+		protected void OnBuildOccurred(MonitorBuildOccurredEventArgs args)
 		{
 			if (BuildOccurred != null)
 				BuildOccurred(this, args);
 		}
 
-		protected void OnPolled(PolledEventArgs args)
+		protected void OnPolled(MonitorPolledEventArgs args)
 		{
 			if (Polled != null)
 				Polled(this, args); 

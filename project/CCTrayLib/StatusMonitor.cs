@@ -1,5 +1,6 @@
 using System;
 using System.Windows.Forms;
+using ThoughtWorks.CruiseControl.CCTrayLib.Monitoring;
 using ThoughtWorks.CruiseControl.Remote;
 
 namespace ThoughtWorks.CruiseControl.CCTrayLib

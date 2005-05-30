@@ -144,16 +144,6 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "NotifyIconEx.cs"
-                    SubType = "Component"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "NotifyIconEx.resx"
-                    DependentUpon = "NotifyIconEx.cs"
-                    BuildAction = "EmbeddedResource"
-                />
-                <File
                     RelPath = "SettingsForm.cs"
                     SubType = "Form"
                     BuildAction = "Compile"

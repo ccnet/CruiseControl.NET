@@ -7,12 +7,13 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib
 	{
 		public readonly ProjectStatus ProjectStatus;
 
-		public PolledEventArgs (ProjectStatus projectStatus)
+		public PolledEventArgs( ProjectStatus projectStatus )
 		{
 			ProjectStatus = projectStatus;
 		}
+
 	}
 
-	public delegate void PolledEventHandler (object sauce, PolledEventArgs e);
+	public delegate void PolledEventHandler( object sauce, PolledEventArgs e );
 
 }

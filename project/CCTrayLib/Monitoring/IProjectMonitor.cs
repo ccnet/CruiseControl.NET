@@ -13,9 +13,10 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
 	{
 		string ProjectName { get; }
 		ProjectStatus ProjectStatus { get; }
+		ProjectState ProjectState { get; }
 
-		event BuildOccurredEventHandler BuildOccurred;
-		event PolledEventHandler Polled;
+		event MonitorBuildOccurredEventHandler BuildOccurred;
+		event MonitorPolledEventHandler Polled;
 	}
 
 }
