@@ -1,4 +1,3 @@
-using System;
 using Exortech.NetReflector;
 using ThoughtWorks.CruiseControl.Core.Util;
 
@@ -7,6 +6,14 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 	[ReflectorType("vault")]
 	public class Vault : ProcessSourceControl
 	{
+		public const string DefaultExecutable = @"C:\Program Files\SourceGear\Vault Client\vault.exe";
+
+		public Vault() : base(new VaultHistoryParser())
+		{}
+
+		public Vault(IHistoryParser historyParser, ProcessExecutor executor) : base(historyParser, executor)
+		{}
+
 		[ReflectorProperty("username", Required=false)]
 		public string Username;
 
@@ -19,40 +26,63 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 		[ReflectorProperty("repository", Required=false)]
 		public string Repository;
 
-		[ReflectorProperty("folder")]
-		public string Folder;
+		[ReflectorProperty("folder", Required=false)]
+		public string Folder = "$";
 
-		[ReflectorProperty("executable")]
-		public string Executable;
+		[ReflectorProperty("executable", Required=false)]
+		public string Executable = DefaultExecutable;
 
 		[ReflectorProperty("ssl", Required=false)]
 		public bool Ssl = false;
 
-		public Vault() : base(new VaultHistoryParser())
-		{
-		}
+		[ReflectorProperty("autoGetSource", Required=false)]
+		public bool AutoGetSource = false;
 
-		public Vault(IHistoryParser historyParser, ProcessExecutor executor) : base(historyParser, executor)
-		{
-		}
-
-		public ProcessInfo CreateHistoryProcessInfo(DateTime from, DateTime to)
-		{
-			return CreateHistoryProcessInfo(from, to, Folder);
-		}
-
-		public ProcessInfo CreateHistoryProcessInfo(DateTime from, DateTime to, string folder)
-		{
-			return new ProcessInfo(Executable, BuildHistoryProcessArgs());
-		}
+		[ReflectorProperty("applyLabel", Required=false)]
+		public bool ApplyLabel = false;
 
 		public override Modification[] GetModifications(IIntegrationResult from, IIntegrationResult to)
 		{
-			return GetModifications(CreateHistoryProcessInfo(from.StartTime, to.StartTime), from.StartTime, to.StartTime);
+			Log.Info(string.Format("Checking for modifications in Vault from {0} to {1}", from.StartTime, to.StartTime));
+			return GetModifications(ForHistoryProcessInfo(from), from.StartTime, to.StartTime);
 		}
 
 		public override void LabelSourceControl(IIntegrationResult result)
 		{
+			if (! ApplyLabel) return;
+
+			Log.Info("Applying label to Vault");
+			Execute(LabelProcessInfo(result));
+		}
+
+		public override void GetSource(IIntegrationResult result)
+		{
+			if (! AutoGetSource) return;
+
+			Log.Info("Getting source from Vault");
+			Execute(GetSourceProcessInfo(result));
+		}
+
+		private ProcessInfo GetSourceProcessInfo(IIntegrationResult result)
+		{
+			string args = string.Format(@"get ""{0}"" -destpath ""{1}"" -merge overwrite -performdeletions removeworkingcopy -setfiletime checkin -makewritable", Folder, result.WorkingDirectory);
+			return ProcessInfoFor(args, result);
+		}
+
+		private ProcessInfo LabelProcessInfo(IIntegrationResult result)
+		{
+			string args = string.Format(@"label ""{0}"" ""{1}""", Folder, result.Label);
+			return ProcessInfoFor(args, result);
+		}
+
+		private ProcessInfo ForHistoryProcessInfo(IIntegrationResult result)
+		{
+			return ProcessInfoFor(BuildHistoryProcessArgs(), result);
+		}
+
+		private ProcessInfo ProcessInfoFor(string args, IIntegrationResult result)
+		{
+			return new ProcessInfo(Executable, args, result.WorkingDirectory);
 		}
 
 		// "history ""{0}"" -host ""{1}"" -user ""{2}"" -password ""{3}"" -repository ""{4}"" -rowlimit 0"
