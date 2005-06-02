@@ -5,7 +5,7 @@ using ThoughtWorks.CruiseControl.CCTrayLib.Monitoring;
 
 namespace ThoughtWorks.CruiseControl.CCTrayLib.Configuration
 {
-	public class CCTrayMultiConfiguration
+	public class CCTrayMultiConfiguration : ICCTrayMultiConfiguration
 	{
 		PersistentConfiguration persistentConfiguration;
 		ICruiseProjectManagerFactory managerFactory;

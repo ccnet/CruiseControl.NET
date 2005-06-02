@@ -16,26 +16,45 @@ namespace CCTrayMulti
 		private MenuItem menuFileExit;
 		private ListView lvProjects;
 		private ColumnHeader colProject;
-		private ColumnHeader colProjectStatus;
 		private ImageList iconList;
 		private MainMenu mainMenu;
 		private TrayIcon trayIcon;
-		private System.Windows.Forms.ContextMenu projectContextMenu;
-		private System.Windows.Forms.MenuItem mnuForce;
-		private System.Windows.Forms.MenuItem mnuWebPage;
+		private ContextMenu projectContextMenu;
+		private MenuItem mnuForce;
+		private MenuItem mnuWebPage;
+		private MenuItem menuItem1;
+		private MenuItem mnuViewIcons;
+		private MenuItem mnuViewList;
+		private MenuItem mnuViewDetails;
+		private ImageList largeIconList;
+		private Panel panel1;
+		private Button btnForceBuild;
+		private ColumnHeader colLastBuildLabel;
+		private ColumnHeader colActivity;
 		private IContainer components;
 
+		private MainFormController controller;
 
-		public MainForm()
+		public MainForm( MainFormController controller )
 		{
+			this.controller = controller;
+
 			//
 			// Required for Windows Form Designer support
 			//
 			InitializeComponent();
 
-			ApplyTemporaryHackToGetSomethingUpAndRunning();
+			
+			DataBindings.Add( "Icon", controller.ProjectStateIconAdaptor, "Icon" );
+			trayIcon.BindTo( controller.ProjectStateIconAdaptor );
 
-			UpdateProjectContextMenu();
+
+			controller.BindToListView(lvProjects);
+
+			ApplyDataBinding();
+
+			controller.StartMonitoring();
+
 		}
 
 		/// <summary>
@@ -62,88 +81,103 @@ namespace CCTrayMulti
 		private void InitializeComponent()
 		{
 			this.components = new System.ComponentModel.Container();
-			System.Resources.ResourceManager resources = new System.Resources.ResourceManager(typeof(MainForm));
+			System.Resources.ResourceManager resources = new System.Resources.ResourceManager( typeof (MainForm) );
 			this.lvProjects = new System.Windows.Forms.ListView();
 			this.colProject = new System.Windows.Forms.ColumnHeader();
-			this.colProjectStatus = new System.Windows.Forms.ColumnHeader();
 			this.projectContextMenu = new System.Windows.Forms.ContextMenu();
 			this.mnuForce = new System.Windows.Forms.MenuItem();
 			this.mnuWebPage = new System.Windows.Forms.MenuItem();
-			this.iconList = new System.Windows.Forms.ImageList(this.components);
+			this.iconList = new System.Windows.Forms.ImageList( this.components );
 			this.mainMenu = new System.Windows.Forms.MainMenu();
 			this.menuFile = new System.Windows.Forms.MenuItem();
 			this.menuFileExit = new System.Windows.Forms.MenuItem();
 			this.trayIcon = new ThoughtWorks.CruiseControl.CCTrayLib.Presentation.TrayIcon();
+			this.menuItem1 = new System.Windows.Forms.MenuItem();
+			this.mnuViewIcons = new System.Windows.Forms.MenuItem();
+			this.mnuViewList = new System.Windows.Forms.MenuItem();
+			this.mnuViewDetails = new System.Windows.Forms.MenuItem();
+			this.largeIconList = new System.Windows.Forms.ImageList( this.components );
+			this.panel1 = new System.Windows.Forms.Panel();
+			this.btnForceBuild = new System.Windows.Forms.Button();
+			this.colLastBuildLabel = new System.Windows.Forms.ColumnHeader();
+			this.colActivity = new System.Windows.Forms.ColumnHeader();
+			this.panel1.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// lvProjects
 			// 
-			this.lvProjects.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
-																						 this.colProject,
-																						 this.colProjectStatus});
+			this.lvProjects.Columns.AddRange( new System.Windows.Forms.ColumnHeader[]
+				{
+					this.colProject,
+					this.colActivity,
+					this.colLastBuildLabel
+				} );
 			this.lvProjects.ContextMenu = this.projectContextMenu;
 			this.lvProjects.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.lvProjects.Location = new System.Drawing.Point(0, 0);
+			this.lvProjects.LargeImageList = this.largeIconList;
+			this.lvProjects.Location = new System.Drawing.Point( 0, 0 );
 			this.lvProjects.MultiSelect = false;
 			this.lvProjects.Name = "lvProjects";
-			this.lvProjects.Size = new System.Drawing.Size(292, 266);
+			this.lvProjects.Size = new System.Drawing.Size( 597, 266 );
 			this.lvProjects.SmallImageList = this.iconList;
 			this.lvProjects.TabIndex = 0;
-			this.lvProjects.View = System.Windows.Forms.View.List;
-			this.lvProjects.DoubleClick += new System.EventHandler(this.lvProjects_DoubleClick);
-			this.lvProjects.SelectedIndexChanged += new System.EventHandler(this.lvProjects_SelectedIndexChanged);
+			this.lvProjects.View = System.Windows.Forms.View.Details;
+			this.lvProjects.DoubleClick += new System.EventHandler( this.lvProjects_DoubleClick );
+			this.lvProjects.SelectedIndexChanged += new System.EventHandler( this.lvProjects_SelectedIndexChanged );
 			// 
 			// colProject
 			// 
 			this.colProject.Text = "Project";
 			this.colProject.Width = 160;
 			// 
-			// colProjectStatus
-			// 
-			this.colProjectStatus.Text = "Status";
-			this.colProjectStatus.Width = 123;
-			// 
 			// projectContextMenu
 			// 
-			this.projectContextMenu.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
-																							   this.mnuForce,
-																							   this.mnuWebPage});
+			this.projectContextMenu.MenuItems.AddRange( new System.Windows.Forms.MenuItem[]
+				{
+					this.mnuForce,
+					this.mnuWebPage
+				} );
 			// 
 			// mnuForce
 			// 
 			this.mnuForce.Index = 0;
 			this.mnuForce.Text = "&Force Build";
-			this.mnuForce.Click += new System.EventHandler(this.mnuForce_Click);
+			this.mnuForce.Click += new System.EventHandler( this.mnuForce_Click );
 			// 
 			// mnuWebPage
 			// 
 			this.mnuWebPage.Index = 1;
 			this.mnuWebPage.Text = "Display &Web Page";
-			this.mnuWebPage.Click += new System.EventHandler(this.mnuWebPage_Click);
+			this.mnuWebPage.Click += new System.EventHandler( this.mnuWebPage_Click );
 			// 
 			// iconList
 			// 
-			this.iconList.ImageSize = new System.Drawing.Size(16, 16);
-			this.iconList.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("iconList.ImageStream")));
+			this.iconList.ImageSize = new System.Drawing.Size( 16, 16 );
+			this.iconList.ImageStream = ((System.Windows.Forms.ImageListStreamer) (resources.GetObject( "iconList.ImageStream" )));
 			this.iconList.TransparentColor = System.Drawing.Color.Transparent;
 			// 
 			// mainMenu
 			// 
-			this.mainMenu.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
-																					 this.menuFile});
+			this.mainMenu.MenuItems.AddRange( new System.Windows.Forms.MenuItem[]
+				{
+					this.menuFile,
+					this.menuItem1
+				} );
 			// 
 			// menuFile
 			// 
 			this.menuFile.Index = 0;
-			this.menuFile.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
-																					 this.menuFileExit});
+			this.menuFile.MenuItems.AddRange( new System.Windows.Forms.MenuItem[]
+				{
+					this.menuFileExit
+				} );
 			this.menuFile.Text = "&File";
 			// 
 			// menuFileExit
 			// 
 			this.menuFileExit.Index = 0;
 			this.menuFileExit.Text = "&Exit";
-			this.menuFileExit.Click += new System.EventHandler(this.menuFileExit_Click);
+			this.menuFileExit.Click += new System.EventHandler( this.menuFileExit_Click );
 			// 
 			// trayIcon
 			// 
@@ -151,17 +185,85 @@ namespace CCTrayMulti
 			this.trayIcon.Icon = null;
 			this.trayIcon.Text = "CruiseControl.NET\n(This tooltip information still to be implemented)";
 			this.trayIcon.Visible = true;
+			this.trayIcon.Click += new System.EventHandler( this.trayIcon_Click );
+			// 
+			// menuItem1
+			// 
+			this.menuItem1.Index = 1;
+			this.menuItem1.MenuItems.AddRange( new System.Windows.Forms.MenuItem[]
+				{
+					this.mnuViewIcons,
+					this.mnuViewList,
+					this.mnuViewDetails
+				} );
+			this.menuItem1.Text = "&View";
+			// 
+			// mnuViewIcons
+			// 
+			this.mnuViewIcons.Index = 0;
+			this.mnuViewIcons.Text = "&Icons";
+			this.mnuViewIcons.Click += new System.EventHandler( this.mnuViewIcons_Click );
+			// 
+			// mnuViewList
+			// 
+			this.mnuViewList.Index = 1;
+			this.mnuViewList.Text = "&List";
+			this.mnuViewList.Click += new System.EventHandler( this.mnuViewList_Click );
+			// 
+			// mnuViewDetails
+			// 
+			this.mnuViewDetails.Index = 2;
+			this.mnuViewDetails.Text = "&Details";
+			this.mnuViewDetails.Click += new System.EventHandler( this.mnuViewDetails_Click );
+			// 
+			// largeIconList
+			// 
+			this.largeIconList.ImageSize = new System.Drawing.Size( 32, 32 );
+			this.largeIconList.ImageStream = ((System.Windows.Forms.ImageListStreamer) (resources.GetObject( "largeIconList.ImageStream" )));
+			this.largeIconList.TransparentColor = System.Drawing.Color.Transparent;
+			// 
+			// panel1
+			// 
+			this.panel1.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+			this.panel1.Controls.Add( this.btnForceBuild );
+			this.panel1.Dock = System.Windows.Forms.DockStyle.Bottom;
+			this.panel1.Location = new System.Drawing.Point( 0, 221 );
+			this.panel1.Name = "panel1";
+			this.panel1.Size = new System.Drawing.Size( 597, 45 );
+			this.panel1.TabIndex = 1;
+			// 
+			// btnForceBuild
+			// 
+			this.btnForceBuild.FlatStyle = System.Windows.Forms.FlatStyle.System;
+			this.btnForceBuild.Location = new System.Drawing.Point( 10, 10 );
+			this.btnForceBuild.Name = "btnForceBuild";
+			this.btnForceBuild.Size = new System.Drawing.Size( 85, 23 );
+			this.btnForceBuild.TabIndex = 0;
+			this.btnForceBuild.Text = "Force Build";
+			this.btnForceBuild.Click += new System.EventHandler( this.btnForceBuild_Click );
+			// 
+			// colLastBuildLabel
+			// 
+			this.colLastBuildLabel.Text = "Last Build Label";
+			this.colLastBuildLabel.Width = 278;
+			// 
+			// colActivity
+			// 
+			this.colActivity.Text = "Activity";
+			this.colActivity.Width = 132;
 			// 
 			// MainForm
 			// 
-			this.AutoScaleBaseSize = new System.Drawing.Size(5, 13);
-			this.ClientSize = new System.Drawing.Size(292, 266);
-			this.Controls.Add(this.lvProjects);
-			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+			this.AutoScaleBaseSize = new System.Drawing.Size( 5, 13 );
+			this.ClientSize = new System.Drawing.Size( 597, 266 );
+			this.Controls.Add( this.panel1 );
+			this.Controls.Add( this.lvProjects );
+			this.Icon = ((System.Drawing.Icon) (resources.GetObject( "$this.Icon" )));
 			this.Menu = this.mainMenu;
 			this.Name = "MainForm";
 			this.Text = "CruiseControl.NET";
-			this.ResumeLayout(false);
+			this.panel1.ResumeLayout( false );
+			this.ResumeLayout( false );
 
 		}
 
@@ -173,103 +275,76 @@ namespace CCTrayMulti
 		}
 
 
-		private Poller poller;
 
-		private void ApplyTemporaryHackToGetSomethingUpAndRunning()
+
+		private void lvProjects_SelectedIndexChanged( object sender, EventArgs e )
 		{
-			RemoteCruiseManagerFactory remoteCruiseManagerFactory = new RemoteCruiseManagerFactory();
-			ICruiseProjectManagerFactory factory = new CruiseProjectManagerFactory( remoteCruiseManagerFactory );
-
-			CCTrayMultiConfiguration configuration = new CCTrayMultiConfiguration( factory, "settings.xml" );
-
-			IProjectMonitor[] monitors = configuration.GetProjectStatusMonitors();
-
-			CreateListViewAdaptors( monitors );
-
-			IProjectMonitor aggregatedMonitor = new AggregatingProjectMonitor( monitors );
-
-			ProjectStateIconAdaptor projectStateIconAdaptor = new ProjectStateIconAdaptor( aggregatedMonitor, new ResourceProjectStateIconProvider() );
-			DataBindings.Add( "Icon", projectStateIconAdaptor, "Icon" );
-			
-			trayIcon.BindTo(projectStateIconAdaptor);
-			trayIcon.BindTo(aggregatedMonitor);			
-			trayIcon.Visible = true;
-
-			poller = new Poller( 5000, aggregatedMonitor);
-			poller.Start();
-
-			Debug.WriteLine( "started -- thread is " + Thread.CurrentThread.GetHashCode() );
+			if (lvProjects.SelectedItems.Count == 0)
+				controller.SelectedProject = null;
+			else
+				controller.SelectedProject = (IProjectMonitor) lvProjects.SelectedItems[ 0 ].Tag;
 		}
 
-		private void CreateListViewAdaptors( IProjectMonitor[] monitors )
+
+		private void mnuForce_Click( object sender, EventArgs e )
 		{
-			foreach (IProjectMonitor monitor in monitors)
-			{
-				ListViewItem item = new ProjectStatusListViewItemAdaptor().Create( monitor );
-				item.Tag = monitor;
-				lvProjects.Items.Add( item );
-			}
+			controller.ForceBuild();
 		}
 
-		// 
-		// All this hard-coded event stuff really needs a better abstraction
-		// to make it testable and extenable... 
-		//
-		private void lvProjects_SelectedIndexChanged(object sender, System.EventArgs e)
+		private void btnForceBuild_Click( object sender, EventArgs e )
 		{
-			UpdateProjectContextMenu();
+			controller.ForceBuild();
 		}
 
-		private void UpdateProjectContextMenu()
+		private void mnuWebPage_Click( object sender, EventArgs e )
 		{
-			bool isProjectSelected = SelectedProject != null;
-	
-			mnuForce.Enabled = isProjectSelected;
-			mnuWebPage.Enabled = isProjectSelected;
+			controller.DisplayWebPage();
 		}
 
-		private void mnuForce_Click(object sender, System.EventArgs e)
+		private void lvProjects_DoubleClick( object sender, EventArgs e )
 		{
-			try
-			{
-				SelectedProject.ForceBuild();
-			}
-			catch (Exception ex)
-			{
-				MessageBox.Show("Failed to force build: " + ex);
-			}
+			controller.DisplayWebPage();
 		}
 
-		private void mnuWebPage_Click(object sender, System.EventArgs e)
+		private void mnuViewIcons_Click( object sender, EventArgs e )
 		{
-			DisplayWebPageForSelectedProject();
+			lvProjects.View = View.LargeIcon;
 		}
 
-		private void lvProjects_DoubleClick(object sender, System.EventArgs e)
+		private void mnuViewList_Click( object sender, EventArgs e )
 		{
-			DisplayWebPageForSelectedProject();
+			lvProjects.View = View.List;
 		}
 
-		public IProjectMonitor SelectedProject
+		private void mnuViewDetails_Click( object sender, EventArgs e )
 		{
-			get
-			{
-				if (lvProjects.SelectedItems.Count == 0)
-					return null;
-
-				return (IProjectMonitor) lvProjects.SelectedItems[0].Tag;
-			}
+			lvProjects.View = View.Details;
 		}
 
-		private void DisplayWebPageForSelectedProject()
+
+
+		private void trayIcon_Click( object sender, EventArgs e )
 		{
-			IProjectMonitor project = SelectedProject;
-			if (project != null && project.ProjectStatus != null)
-			{
-				string url = project.ProjectStatus.WebURL;
-				Process.Start(url);
-			}
+			WindowState = FormWindowState.Normal;
 		}
 
+		protected override void OnResize( EventArgs e )
+		{
+			base.OnResize( e );
+			ShowInTaskbar = WindowState != FormWindowState.Minimized;
+		}
+
+		private void ApplyDataBinding()
+		{
+			controller.IsProjectSelectedChanged += new EventHandler( Controller_IsProjectSelectedChanged );
+			btnForceBuild.DataBindings.Add( "Enabled", controller, "IsProjectSelected" );
+		}
+
+		private void Controller_IsProjectSelectedChanged( object sender, EventArgs e )
+		{
+			// unfortunately menu items don't support data binding, so we have to do this manually
+			mnuForce.Enabled = controller.IsProjectSelected;
+			mnuWebPage.Enabled = controller.IsProjectSelected;
+		}
 	}
 }

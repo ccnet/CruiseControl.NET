@@ -280,6 +280,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "CCTrayLib\Presentation\MainFormControllerTest.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "CCTrayLib\Presentation\ProjectStateIconAdaptorTest.cs"
                     SubType = "Code"
                     BuildAction = "Compile"

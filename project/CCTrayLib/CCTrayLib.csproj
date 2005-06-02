@@ -291,6 +291,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Configuration\ICCTrayMultiConfiguration.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Configuration\PersistentConfiguration.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -379,6 +384,11 @@
                     RelPath = "Presentation\MainForm.resx"
                     DependentUpon = "MainForm.cs"
                     BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "Presentation\MainFormController.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
                 />
                 <File
                     RelPath = "Presentation\NotifyIconEx.cs"

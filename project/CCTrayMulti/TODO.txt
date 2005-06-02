@@ -9,9 +9,11 @@ DONE - Implement double-click on projects (=display web page)
  better abstraction that avoids this -- oh and makes it testable ;) )
 - Error handling when e.g. config file is bad
 - display the error message that was receieved when "not connected"
-- Hide the main window when minimised (just like msn messenger behaviour?)
+- update csproj so builds to same location as all the other projects
+DONE - Hide the main window when minimised (just like msn messenger behaviour?)
 - Play sounds on build transition 
-- Settings dialog to allow specification of projects
+- ability to switch off balloon popups
+- Settings dialog to allow specification of projects, sounds etc
 - Fix threading -- create a decorator around IProjectMonitor that uses ISynchronisedInvoke to get the event 
 	across to the winforms thread? (though the current winforms thread rule breakage doesn't seem to be causing
 	any odd behaviour)

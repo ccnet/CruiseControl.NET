@@ -31,7 +31,6 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 			monitor.BuildOccurred += new MonitorBuildOccurredEventHandler(Monitor_BuildOccurred);
 		}
 
-		// hmm, something smells here -- this method is untestable...
 		private void Monitor_BuildOccurred( object sender, MonitorBuildOccurredEventArgs e )
 		{
 			string projectName = e.ProjectMonitor.ProjectName;
