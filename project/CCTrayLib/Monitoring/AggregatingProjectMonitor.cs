@@ -32,6 +32,11 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
 			throw new NotImplementedException();
 		}
 
+		public Exception ConnectException
+		{
+			get { throw new NotImplementedException(); }
+		}
+
 		public event MonitorBuildOccurredEventHandler BuildOccurred
 		{
 			add
@@ -86,7 +91,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
 
 				foreach (IProjectMonitor monitor in monitors)
 				{
-					if (monitor.ProjectState.IsWorseThan(worstState))
+					if (monitor.ProjectState.IsMoreImportantThan(worstState))
 						worstState = monitor.ProjectState;
 				}
 

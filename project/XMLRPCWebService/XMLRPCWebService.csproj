@@ -75,7 +75,7 @@
                     IncrementalBuild = "false"
                     NoStdLib = "false"
                     NoWarn = ""
-                    Optimize = "false"
+                    Optimize = "true"
                     OutputPath = "..\..\build\XMLRPCWebService\"
                     RegisterForComInterop = "false"
                     RemoveIntegerChecks = "false"

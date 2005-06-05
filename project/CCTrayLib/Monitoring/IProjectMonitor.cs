@@ -14,6 +14,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
 		string ProjectName { get; }
 		ProjectStatus ProjectStatus { get; }
 		ProjectState ProjectState { get; }
+		Exception ConnectException { get; }
 
 		event MonitorBuildOccurredEventHandler BuildOccurred;
 		event MonitorPolledEventHandler Polled;

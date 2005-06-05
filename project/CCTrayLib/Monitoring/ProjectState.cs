@@ -20,33 +20,33 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
 		/// <summary>
 		/// The build is building
 		/// </summary>
-		public static readonly ProjectState Building = new ProjectState("Building", 3, 10);
+		public static readonly ProjectState Building = new ProjectState("Building", 3, 20);
 
 		/// <summary>
 		/// Not currently connected to the build server (or the build server is in an
 		/// unknown state)
 		/// </summary>
-		public static readonly ProjectState NotConnected = new ProjectState("Not Connected", 0, 20);
+		public static readonly ProjectState NotConnected = new ProjectState("Not Connected", 0, 10);
 
 
 		public readonly string Name;
 		public readonly int ImageIndex;
 
 		/// <summary>
-		///  A relative rating of how "bad" this state is, higher == badder
+		///  A relative rating of how "important" this state is, higher == more important
 		/// </summary>
-		private int badness;
+		private int importance;
 
-		private ProjectState( string name, int imageIndex, int badness )
+		private ProjectState( string name, int imageIndex, int importance )
 		{
 			Name = name;
 			ImageIndex = imageIndex;
-			this.badness = badness;
+			this.importance = importance;
 		}
 
-		public bool IsWorseThan( ProjectState state)
+		public bool IsMoreImportantThan( ProjectState state)
 		{
-			return this.badness > state.badness;
+			return this.importance > state.importance;
 		}
 
 		public override string ToString()

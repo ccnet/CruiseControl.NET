@@ -75,7 +75,7 @@
                     IncrementalBuild = "true"
                     NoStdLib = "false"
                     NoWarn = ""
-                    Optimize = "false"
+                    Optimize = "true"
                     OutputPath = "..\..\build\web\"
                     RegisterForComInterop = "false"
                     RemoveIntegerChecks = "false"

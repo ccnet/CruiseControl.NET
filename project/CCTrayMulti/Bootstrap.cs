@@ -18,13 +18,20 @@ namespace CCTrayMulti
 			Application.EnableVisualStyles();
 			Application.DoEvents();
 
-			ICruiseManagerFactory remoteCruiseManagerFactory = new RemoteCruiseManagerFactory();
-			ICruiseProjectManagerFactory cruiseProjectManagerFactory = new CruiseProjectManagerFactory( remoteCruiseManagerFactory );
-			CCTrayMultiConfiguration configuration = new CCTrayMultiConfiguration( cruiseProjectManagerFactory, "settings.xml" );
+			try
+			{
+				ICruiseManagerFactory remoteCruiseManagerFactory = new RemoteCruiseManagerFactory();
+				ICruiseProjectManagerFactory cruiseProjectManagerFactory = new CruiseProjectManagerFactory( remoteCruiseManagerFactory );
+				CCTrayMultiConfiguration configuration = new CCTrayMultiConfiguration( cruiseProjectManagerFactory, "settings.xml" );
 
-			MainFormController controller = new MainFormController(configuration);
+				MainFormController controller = new MainFormController(configuration);
 
-			Application.Run(new MainForm(controller));
+				Application.Run(new MainForm(controller));
+			}
+			catch (Exception ex)
+			{
+				MessageBox.Show("Failed to start: " + ex.Message, AppDomain.CurrentDomain.FriendlyName);
+			}
 		}
 
 	}

@@ -75,12 +75,12 @@
                     IncrementalBuild = "true"
                     NoStdLib = "false"
                     NoWarn = ""
-                    Optimize = "false"
+                    Optimize = "true"
                     OutputPath = "..\..\build\CCTrayLib\"
                     RegisterForComInterop = "false"
                     RemoveIntegerChecks = "false"
                     TreatWarningsAsErrors = "false"
-                    WarningLevel = "1"
+                    WarningLevel = "4"
                 />
             </Settings>
             <References>
@@ -362,6 +362,26 @@
                 />
                 <File
                     RelPath = "Monitoring\ProjectState.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Presentation\CCTrayMultiSettingsForm.cs"
+                    SubType = "Form"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Presentation\CCTrayMultiSettingsForm.resx"
+                    DependentUpon = "CCTrayMultiSettingsForm.cs"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "Presentation\DetailStringProvider.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Presentation\IDetailStringProvider.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

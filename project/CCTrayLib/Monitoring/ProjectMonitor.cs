@@ -8,6 +8,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
 	{
 		ICruiseProjectManager cruiseProjectManager;
 		ProjectStatus lastProjectStatus;
+		Exception connectException;
 
 		public ProjectMonitor( ICruiseProjectManager cruiseProjectManager )
 		{
@@ -22,6 +23,11 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
 		public string ProjectName
 		{
 			get { return cruiseProjectManager.ProjectName; }
+		}
+
+		public Exception ConnectException
+		{
+			get { return connectException; }
 		}
 
 		public ProjectState ProjectState
@@ -70,6 +76,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
 			{
 				Debug.WriteLine("Exception during poll: " + ex);
 				lastProjectStatus = null;
+				connectException = ex;
 			}
 
 			OnPolled(new MonitorPolledEventArgs(this));

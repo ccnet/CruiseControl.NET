@@ -75,7 +75,7 @@
                     IncrementalBuild = "true"
                     NoStdLib = "false"
                     NoWarn = ""
-                    Optimize = "false"
+                    Optimize = "true"
                     OutputPath = "..\..\build\server\"
                     RegisterForComInterop = "false"
                     RemoveIntegerChecks = "false"

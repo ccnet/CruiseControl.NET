@@ -9,6 +9,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Presentation
 		private ProjectStatus projectStatus;
 		private ProjectState projectState = ProjectState.NotConnected;
 		private string projectName;
+		private Exception connectException;
 
 		public TestingProjectMonitor( string projectName )
 		{
@@ -53,6 +54,19 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Presentation
 		public void ForceBuild()
 		{
 			throw new NotImplementedException();
+		}
+
+		public void SetUpAsIfExceptionOccurredOnConnect( Exception exception )
+		{
+			ProjectState = ProjectState.NotConnected;
+			ProjectStatus = null;
+			ConnectException = exception;
+		}
+
+		public Exception ConnectException
+		{
+			get { return connectException; }
+			set { connectException = value; }
 		}
 	}
 }

@@ -1,6 +1,5 @@
 using System;
 using System.Diagnostics;
-using System.Threading;
 using System.Windows.Forms;
 using ThoughtWorks.CruiseControl.CCTrayLib.Configuration;
 using ThoughtWorks.CruiseControl.CCTrayLib.Monitoring;
@@ -16,7 +15,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 		private IProjectMonitor[] monitors;
 		private ProjectStateIconAdaptor projectStateIconAdaptor;
 
-		public MainFormController( ICCTrayMultiConfiguration configuration)
+		public MainFormController( ICCTrayMultiConfiguration configuration )
 		{
 			this.configuration = configuration;
 			monitors = configuration.GetProjectStatusMonitors();
@@ -66,9 +65,10 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 
 		public void BindToListView( ListView listView )
 		{
+			IDetailStringProvider detailStringProvider = new DetailStringProvider();
 			foreach (IProjectMonitor monitor in monitors)
 			{
-				ListViewItem item = new ProjectStatusListViewItemAdaptor().Create( monitor );
+				ListViewItem item = new ProjectStatusListViewItemAdaptor( detailStringProvider ).Create( monitor );
 				item.Tag = monitor;
 				listView.Items.Add( item );
 			}
@@ -83,6 +83,11 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 		public ProjectStateIconAdaptor ProjectStateIconAdaptor
 		{
 			get { return projectStateIconAdaptor; }
+		}
+
+		public void ShowPreferencesDialog()
+		{
+			new CCTrayMultiSettingsForm().ShowDialog();
 		}
 	}
 }

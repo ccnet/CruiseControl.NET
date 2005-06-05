@@ -75,12 +75,12 @@
                     IncrementalBuild = "true"
                     NoStdLib = "false"
                     NoWarn = ""
-                    Optimize = "false"
+                    Optimize = "true"
                     OutputPath = "..\..\build\unittests\"
                     RegisterForComInterop = "false"
                     RemoveIntegerChecks = "false"
                     TreatWarningsAsErrors = "false"
-                    WarningLevel = "1"
+                    WarningLevel = "4"
                 />
             </Settings>
             <References>
@@ -276,6 +276,11 @@
                 />
                 <File
                     RelPath = "CCTrayLib\Monitoring\ProjectStatusMonitorTest.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "CCTrayLib\Presentation\DetailStringProviderTest.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

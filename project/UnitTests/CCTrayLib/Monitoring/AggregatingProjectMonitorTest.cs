@@ -129,16 +129,16 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Monitoring
 		[Test]
 		public void ProjectStateReturnsTheWorstStateOfAllMonitors()
 		{
-			// so the states, worst first, are:
+			// so the states, most significant first, are:
 			//  Broken
-			//  NotConnected
 			//  Building
+			//  NotConnected
 			//  Success
 
 			Assert.AreEqual(ProjectState.Success, CombinedState(ProjectState.Success, ProjectState.Success, ProjectState.Success));
 			Assert.AreEqual(ProjectState.Building, CombinedState(ProjectState.Success, ProjectState.Building, ProjectState.Success));
+			Assert.AreEqual(ProjectState.Building, CombinedState(ProjectState.Building, ProjectState.Success, ProjectState.NotConnected));
 			Assert.AreEqual(ProjectState.NotConnected, CombinedState(ProjectState.Success, ProjectState.Success, ProjectState.NotConnected));
-			Assert.AreEqual(ProjectState.NotConnected, CombinedState(ProjectState.Building, ProjectState.Success, ProjectState.NotConnected));
 			Assert.AreEqual(ProjectState.Broken, CombinedState(ProjectState.Broken, ProjectState.Success, ProjectState.Success));
 			Assert.AreEqual(ProjectState.Broken, CombinedState(ProjectState.NotConnected, ProjectState.Success, ProjectState.Broken));
 			Assert.AreEqual(ProjectState.Broken, CombinedState(ProjectState.Broken, ProjectState.Building, ProjectState.Success));

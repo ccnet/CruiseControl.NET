@@ -21,27 +21,28 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Monitoring
 		}
 
 		[Test]
-		public void IsWorseThanIsImplementedCorrectly()
+		public void IsMoreImportantThanIsImplementedCorrectly()
 		{
-			// broken is worse
-			Assert.IsTrue(ProjectState.Broken.IsWorseThan(ProjectState.Building));
-			Assert.IsTrue(ProjectState.Broken.IsWorseThan(ProjectState.NotConnected));
-			Assert.IsTrue(ProjectState.Broken.IsWorseThan(ProjectState.Success));
+			// broken is most important state to know about
+			Assert.IsTrue(ProjectState.Broken.IsMoreImportantThan(ProjectState.Building));
+			Assert.IsTrue(ProjectState.Broken.IsMoreImportantThan(ProjectState.NotConnected));
+			Assert.IsTrue(ProjectState.Broken.IsMoreImportantThan(ProjectState.Success));
 
-			// notconnected is just a bit better
-			Assert.IsFalse(ProjectState.NotConnected.IsWorseThan(ProjectState.Broken));
-			Assert.IsTrue(ProjectState.NotConnected.IsWorseThan(ProjectState.Building));
-			Assert.IsTrue(ProjectState.NotConnected.IsWorseThan(ProjectState.Success));
+			// building is slightly less important
+			Assert.IsFalse(ProjectState.Building.IsMoreImportantThan(ProjectState.Broken));
+			Assert.IsTrue(ProjectState.Building.IsMoreImportantThan(ProjectState.NotConnected));
+			Assert.IsTrue(ProjectState.Building.IsMoreImportantThan(ProjectState.Success));
 
-			// building is not even better
-			Assert.IsFalse(ProjectState.Building.IsWorseThan(ProjectState.Broken));
-			Assert.IsFalse(ProjectState.Building.IsWorseThan(ProjectState.NotConnected));
-			Assert.IsTrue(ProjectState.Building.IsWorseThan(ProjectState.Success));
+			// not connected is next
+			Assert.IsFalse(ProjectState.NotConnected.IsMoreImportantThan(ProjectState.Broken));
+			Assert.IsFalse(ProjectState.NotConnected.IsMoreImportantThan(ProjectState.Building));
+			Assert.IsTrue(ProjectState.NotConnected.IsMoreImportantThan(ProjectState.Success));
 
-			// but we really like successful builds the best
-			Assert.IsFalse(ProjectState.Success.IsWorseThan(ProjectState.Broken));
-			Assert.IsFalse(ProjectState.Success.IsWorseThan(ProjectState.NotConnected));
-			Assert.IsFalse(ProjectState.Success.IsWorseThan(ProjectState.Building));
+			// successful builds "least" important -- i.e. only show this if all projects
+			// are in the successful state
+			Assert.IsFalse(ProjectState.Success.IsMoreImportantThan(ProjectState.Broken));
+			Assert.IsFalse(ProjectState.Success.IsMoreImportantThan(ProjectState.NotConnected));
+			Assert.IsFalse(ProjectState.Success.IsMoreImportantThan(ProjectState.Building));
 		}
 
 		[Test]
