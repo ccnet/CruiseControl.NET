@@ -30,7 +30,7 @@ namespace CCTrayMulti
 			}
 			catch (Exception ex)
 			{
-				MessageBox.Show("Failed to start: " + ex.Message, AppDomain.CurrentDomain.FriendlyName);
+				MessageBox.Show("Failed to start: " + ex, AppDomain.CurrentDomain.FriendlyName);
 			}
 		}
 

@@ -49,9 +49,10 @@ namespace CCTrayMulti
 
 			
 			DataBindings.Add( "Icon", controller.ProjectStateIconAdaptor, "Icon" );
-			trayIcon.BindTo( controller.ProjectStateIconAdaptor );
+			trayIcon.BindToIconProvider( controller.ProjectStateIconAdaptor );
 
 
+			controller.PotentiallyHookUpBuildOccurredEvents(trayIcon);
 			controller.BindToListView(lvProjects);
 
 			ApplyDataBinding();

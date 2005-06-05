@@ -14,7 +14,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 	{
 		IIconProvider iconProvider;
 
-		public void BindTo( IIconProvider iconProvider )
+		public void BindToIconProvider( IIconProvider iconProvider )
 		{
 			this.iconProvider = iconProvider;
 			this.Icon = iconProvider.Icon;
@@ -26,7 +26,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 			this.Icon = iconProvider.Icon;
 		}
 
-		public void BindTo( IProjectMonitor monitor)
+		public void ListenToBuildOccurredEvents( IProjectMonitor monitor)
 		{
 			monitor.BuildOccurred += new MonitorBuildOccurredEventHandler(Monitor_BuildOccurred);
 		}

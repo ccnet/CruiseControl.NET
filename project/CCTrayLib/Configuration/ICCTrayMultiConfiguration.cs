@@ -6,5 +6,6 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Configuration
 	{
 		IProjectMonitor[] GetProjectStatusMonitors();
 		Project[] Projects { get; }
+		bool ShouldShowBalloonOnBuildTransition { get; }
 	}
 }

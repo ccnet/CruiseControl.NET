@@ -1,4 +1,3 @@
-using System;
 using System.IO;
 using System.Xml.Serialization;
 using ThoughtWorks.CruiseControl.CCTrayLib.Monitoring;
@@ -7,9 +6,9 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Configuration
 {
 	public class CCTrayMultiConfiguration : ICCTrayMultiConfiguration
 	{
-		PersistentConfiguration persistentConfiguration;
-		ICruiseProjectManagerFactory managerFactory;
-		
+		private PersistentConfiguration persistentConfiguration;
+		private ICruiseProjectManagerFactory managerFactory;
+
 		public CCTrayMultiConfiguration( ICruiseProjectManagerFactory managerFactory, string configFileName )
 		{
 			this.managerFactory = managerFactory;
@@ -19,12 +18,10 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Configuration
 
 		private void ReadConfigurationFile( string configFileName )
 		{
-			XmlSerializer serializer = new XmlSerializer(typeof(PersistentConfiguration));
-	
-			using (StreamReader configFile = File.OpenText(configFileName))
-			{
-				persistentConfiguration = (PersistentConfiguration) serializer.Deserialize(configFile);
-			}
+			XmlSerializer serializer = new XmlSerializer( typeof (PersistentConfiguration) );
+
+			using (StreamReader configFile = File.OpenText( configFileName ))
+				persistentConfiguration = (PersistentConfiguration) serializer.Deserialize( configFile );
 		}
 
 		public IProjectMonitor[] GetProjectStatusMonitors()
@@ -34,8 +31,8 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Configuration
 			for (int i = 0; i < Projects.Length; i++)
 			{
 				Project project = Projects[ i ];
-				ICruiseProjectManager projectManager = managerFactory.Create(project.ServerUrl, project.ProjectName);
-				retVal[i] = new ProjectMonitor(projectManager);
+				ICruiseProjectManager projectManager = managerFactory.Create( project.ServerUrl, project.ProjectName );
+				retVal[ i ] = new ProjectMonitor( projectManager );
 			}
 
 			return retVal;
@@ -44,6 +41,17 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Configuration
 		public Project[] Projects
 		{
 			get { return persistentConfiguration.Projects; }
+		}
+
+		public bool ShouldShowBalloonOnBuildTransition
+		{
+			get
+			{
+				if (persistentConfiguration.BuildTransitionNotification == null)
+					return true;
+
+				return persistentConfiguration.BuildTransitionNotification.ShowBalloon;
+			}
 		}
 	}
 
