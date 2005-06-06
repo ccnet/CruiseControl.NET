@@ -9,18 +9,18 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 	[TestFixture]
 	public class VssHistoryParserTest : CustomAssertion
 	{
-		private VssHistoryParser _parser;
+		private VssHistoryParser parser;
 
 		[SetUp]
 		public void SetUp()
 		{
-			_parser = new VssHistoryParser(new VssLocale(CultureInfo.InvariantCulture));
+			parser = new VssHistoryParser(new VssLocale(CultureInfo.InvariantCulture));
 		}
 
 		[Test]
 		public void Parse()
 		{
-			Modification[] mods = _parser.Parse(VssMother.ContentReader, VssMother.OLDEST_ENTRY, VssMother.NEWEST_ENTRY);
+			Modification[] mods = parser.Parse(VssMother.ContentReader, VssMother.OLDEST_ENTRY, VssMother.NEWEST_ENTRY);
 			Assert.IsNotNull(mods, "mods should not be null");
 			Assert.AreEqual(19, mods.Length);			
 		}
@@ -28,7 +28,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 		[Test]
 		public void ReadAllEntriesTest() 
 		{
-			string[] entries = _parser.ReadAllEntries(VssMother.ContentReader);
+			string[] entries = parser.ReadAllEntries(VssMother.ContentReader);
 			Assert.AreEqual(24, entries.Length);
 		}
 
@@ -36,16 +36,16 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 		public void IsEntryDelimiter()
 		{
 			string line = "*****  cereal.txt  *****";
-			Assert.IsTrue(_parser.IsEntryDelimiter(line), "should recognize as delim");
+			Assert.IsTrue(parser.IsEntryDelimiter(line), "should recognize as delim");
 
 			line = "*****************  Version 8   *****************";
-			Assert.IsTrue(_parser.IsEntryDelimiter(line), "should recognize as delim");
+			Assert.IsTrue(parser.IsEntryDelimiter(line), "should recognize as delim");
 
 			line = "*****";
-			Assert.IsTrue(_parser.IsEntryDelimiter(line) == false, string.Format("should not recognize as delim '{0}'", line));
+			Assert.IsTrue(parser.IsEntryDelimiter(line) == false, string.Format("should not recognize as delim '{0}'", line));
 
 			line = "*****************  Version 4   *****************";
-			Assert.IsTrue(_parser.IsEntryDelimiter(line), "should recognize as delim");
+			Assert.IsTrue(parser.IsEntryDelimiter(line), "should recognize as delim");
 		}
 
 		[Test]
@@ -61,7 +61,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 			expected.FileName = "[none]";
 			expected.FolderName = "plant";
 
-			Modification[] actual = _parser.ParseModifications(makeArray(entry));
+			Modification[] actual = parser.ParseModifications(makeArray(entry));
 			Assert.IsNotNull(actual, "expected a mod");
 			Assert.AreEqual(0, actual.Length, "created should not have produced a modification");
 		}
@@ -197,7 +197,7 @@ Comment: added fir to tree file, checked in recursively from project root";
 		public void ParseCheckedInFileAndFolderInFrench()
 		{
 			// change the parser culture for this test only
-			_parser = new VssHistoryParser(new VssLocale(new CultureInfo("fr-FR")));
+			parser = new VssHistoryParser(new VssLocale(new CultureInfo("fr-FR")));
 
 			string entry = @"*****  happyTheFile.txt  *****
 Version 16
@@ -314,7 +314,7 @@ happyTheFile.txt deleted";
 		{
 			string[] entries = makeArray(entry);
 
-			Modification[] mod = _parser.ParseModifications(entries);
+			Modification[] mod = parser.ParseModifications(entries);
 			
 			Assert.IsNotNull(mod);
 			Assert.AreEqual(1, mod.Length);

@@ -69,7 +69,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			set { cultureInfo = new CultureInfo(value); }
 		}
 
-		public virtual DateTimeFormatInfo CreateDateTimeInfo()
+		public DateTimeFormatInfo CreateDateTimeInfo()
 		{
 			DateTimeFormatInfo dateTimeFormatInfo = cultureInfo.DateTimeFormat.Clone() as DateTimeFormatInfo;
 			dateTimeFormatInfo.AMDesignator = "a";
@@ -77,11 +77,11 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			return dateTimeFormatInfo;
 		}
 
-		public virtual DateTime ParseDateTime(string date, string time)
+		public DateTime ParseDateTime(string date, string time)
 		{
 			// vss gives am and pm as a and p, so we append an m
-			string suffix = (time.EndsWith("a") || time.EndsWith("p")) ? "m" : String.Empty;
-			string dateAndTime = string.Format("{0};{1}{2}", date, time, suffix);
+			string suffix = (time.EndsWith("a") || time.EndsWith("p")) ? "m" : string.Empty;
+			string dateAndTime = string.Format("{0} {1}{2}", date, time, suffix);
 			try
 			{
 				return DateTime.Parse(dateAndTime, CreateDateTimeInfo());				
