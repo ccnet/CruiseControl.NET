@@ -1,3 +1,3 @@
 @echo off
 cls
-tools\nant\NAnt.exe -buildfile:ccnet.build -nologo %*
+tools\nant\NAnt.exe -t:net-1.1 -buildfile:ccnet.build -nologo %*
