@@ -23,7 +23,7 @@
 						<tr><td>$sidebar</td></tr>
 					</table>
 				</td>
-				<td width="2">
+				<td width="2"><img src="images/shim.gif" alt="" width="2"/></td>
 				<td valign="top" bgcolor="#ffffff">
 					<table border="0" align="center" cellpadding="3" cellspacing="0" width="100%">
 						<tr><td>$mainContent</td></tr>
