@@ -3,14 +3,10 @@ namespace ThoughtWorks.CruiseControl.Core
 	public interface ILabeller : ITask
 	{
 		/// <summary>
-		/// Returns the label to apply.
+		/// Returns the label to use for the current build.
 		/// </summary>
-		/// <remarks>
-		/// There is a known issue with implementations for VSS that return labels that are the same
-		/// as a previous label.  See http://confluence.public.thoughtworks.org/display/CCNET/VSS.
-		/// </remarks>
-		/// <param name="previousLabel">state information for determining the label</param>
-		/// <returns>the label to apply</returns>
-		string Generate(IIntegrationResult previousLabel);
+		/// <param name="resultFromLastBuild">IntegrationResult from last build used to determine the next label</param>
+		/// <returns>the label for the new build</returns>
+		string Generate(IIntegrationResult resultFromLastBuild);
 	}
 }

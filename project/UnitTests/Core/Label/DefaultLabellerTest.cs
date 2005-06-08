@@ -1,3 +1,4 @@
+using Exortech.NetReflector;
 using NUnit.Framework;
 using ThoughtWorks.CruiseControl.Core;
 using ThoughtWorks.CruiseControl.Core.Label;
@@ -8,117 +9,110 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Label
 	[TestFixture]
 	public class DefaultLabellerTest : CustomAssertion
 	{
-		DefaultLabeller _labeller;
+		DefaultLabeller labeller;
 
 		[SetUp]
 		public void SetUp()
 		{
-			_labeller = new DefaultLabeller();
+			labeller = new DefaultLabeller();
 		}
 
 		[Test]
-		public void Generate()
+		public void GenerateIncrementedLabel()
 		{
-			IntegrationResult result = IntegrationResultFixture.CreateIntegrationResult();
-			result.Label = "35";
-			result.Status = IntegrationStatus.Success;
-
-			Assert.AreEqual("36", _labeller.Generate(result));
+			Assert.AreEqual("36", labeller.Generate(IntegrationResultFromSuccessfulBuild("35")));
 		}
 
 		[Test]
-		public void Generate_NullLabel()
+		public void GenerateInitialLabel()
 		{
-			IntegrationResult result = IntegrationResultFixture.CreateIntegrationResult();
-			result.Label = null;
-
-			Assert.AreEqual(DefaultLabeller.INITIAL_LABEL, _labeller.Generate(result));
+			Assert.AreEqual(DefaultLabeller.INITIAL_LABEL, labeller.Generate(InitialIntegrationResult()));
 		}
 
 		[Test]
-		public void Generate_LastBuildFailed()
+		public void GenerateLabelWhenLastBuildFailed()
 		{
-			IntegrationResult result = IntegrationResultFixture.CreateIntegrationResult();
-			result.Label = "23";
-			result.Status = IntegrationStatus.Failure;
-
-			DefaultLabeller _labeller = new DefaultLabeller();
-			string label = _labeller.Generate(result);
-			Assert.AreEqual("23", label);
+			Assert.AreEqual("23", labeller.Generate(IntegrationResultFromFailedBuild("23")));
 		}
 
 		[Test]
-		public void Generate_PrefixedLabel_NullResultLabel()
+		public void GenerateInitialPrefixedLabel()
 		{
-			IntegrationResult result = IntegrationResultFixture.CreateIntegrationResult();
-			_labeller.LabelPrefix = "Sample";
-			result.Label = null;
-			Assert.AreEqual("Sample" + DefaultLabeller.INITIAL_LABEL, _labeller.Generate(result));
+			labeller.LabelPrefix = "Sample";
+			Assert.AreEqual("Sample" + DefaultLabeller.INITIAL_LABEL, labeller.Generate(InitialIntegrationResult()));
 		}
 
 		[Test]
-		public void Generate_PrefixedLabel_SuccessAndPreviousLabel()
+		public void GeneratePrefixedLabelWhenLastBuildSucceeded()
 		{
-			IntegrationResult result = IntegrationResultFixture.CreateIntegrationResult();
-			_labeller.LabelPrefix = "Sample";
-			result.Label = "23";
-			Assert.AreEqual("Sample24", _labeller.Generate(result));
+			labeller.LabelPrefix = "Sample";
+			Assert.AreEqual("Sample36", labeller.Generate(IntegrationResultFromSuccessfulBuild("35")));
 		}
 
 		[Test]
-		public void Generate_PrefixedLabel_FailureAndPreviousLabel()
+		public void GeneratePrefixedLabelWhenLastBuildFailed()
 		{
-			IntegrationResult result = IntegrationResultFixture.CreateIntegrationResult();
-			_labeller.LabelPrefix = "Sample";
-			result.Label = "23";
-			result.Status = IntegrationStatus.Failure;
-			Assert.AreEqual("23", _labeller.Generate(result));
+			labeller.LabelPrefix = "Sample";
+			Assert.AreEqual("23", labeller.Generate(IntegrationResultFromFailedBuild("23")));
 		}
 
 		[Test]
-		public void Generate_PrefixedLabel_SuccessAndPreviousLabelWithPrefix()
+		public void GeneratePrefixedLabelWhenLastBuildSucceededAndHasLabelWithPrefix()
 		{
-			IntegrationResult result = IntegrationResultFixture.CreateIntegrationResult();
-			_labeller.LabelPrefix = "Sample";
-			result.Label = "Sample23";
-			result.Status = IntegrationStatus.Success;
-			Assert.AreEqual("Sample24", _labeller.Generate(result));
+			labeller.LabelPrefix = "Sample";
+			Assert.AreEqual("Sample24", labeller.Generate(IntegrationResultFromSuccessfulBuild("Sample23")));
 		}
 
 		[Test]
-		public void Generate_PrefixedLabel_SuccessAndPreviousLabelWithDifferentPrefix()
+		public void GeneratePrefixedLabelWhenPrefixAndLastIntegrationLabelDontMatch()
 		{
-			IntegrationResult result = IntegrationResultFixture.CreateIntegrationResult();
-			_labeller.LabelPrefix = "Sample";
-			result.Label = "SomethingElse23";
-			result.Status = IntegrationStatus.Success;
-			Assert.AreEqual("Sample24", _labeller.Generate(result));
+			labeller.LabelPrefix = "Sample";
+			Assert.AreEqual("Sample24", labeller.Generate(IntegrationResultFromSuccessfulBuild("SomethingElse23")));
 		}
 
 		[Test]
-		public void IncrementPrefixedLabel()
+		public void GeneratePrefixedLabelWhenPrefixIsNumeric()
 		{
-			_labeller.LabelPrefix = "Sample";
-			Assert.AreEqual("24", _labeller.IncrementLabel("Sample23"));
+			labeller.LabelPrefix = "R3SX";
+			Assert.AreEqual("R3SX24", labeller.Generate(IntegrationResultFromSuccessfulBuild("R3SX23")));
 		}
 
 		[Test]
-		public void IncrementPrefixedLabelDifferentPrefix()
+		public void IncrementLabelOnFailedBuildIfIncrementConditionIsAlways()
 		{
-			_labeller.LabelPrefix = "Sample";
-			Assert.AreEqual("24", _labeller.IncrementLabel("SomethingElse23"));
+			labeller.IncrementOnFailed = true;
+			Assert.AreEqual("24", labeller.Generate(IntegrationResultFromFailedBuild("23")));
 		}
 
 		[Test]
-		public void IncrementPrefixedLabelNumericPrefix()
+		public void PopulateFromConfiguration()
 		{
-			string prefix = "R3SX";
-			IntegrationResult result = IntegrationResultFixture.CreateIntegrationResult();
-			_labeller.LabelPrefix = prefix;
-			result.Label = prefix + "23";
-			result.Status = IntegrationStatus.Success;
+			string xml = @"<defaultLabeller prefix=""foo"" incrementOnFailure=""true"" />";
+			NetReflector.Read(xml, labeller);
+			Assert.AreEqual("foo", labeller.LabelPrefix);
+			Assert.AreEqual(true, labeller.IncrementOnFailed);
+		}
 
-			Assert.AreEqual(prefix + "24", _labeller.Generate(result));
+		[Test]
+		public void DefaultValues()
+		{
+			Assert.AreEqual(string.Empty, labeller.LabelPrefix);
+			Assert.AreEqual(false, labeller.IncrementOnFailed);
+		}
+
+		private IntegrationResult InitialIntegrationResult()
+		{
+			return IntegrationResultMother.Create(IntegrationStatus.Unknown);
+		}
+
+		private IntegrationResult IntegrationResultFromSuccessfulBuild(string label)
+		{
+			return IntegrationResultMother.CreateSuccessful(label);
+		}
+
+		private static IntegrationResult IntegrationResultFromFailedBuild(string label)
+		{
+			return IntegrationResultMother.CreateFailed(label);
 		}
 	}
 }
