@@ -1,11 +1,12 @@
 using Exortech.NetReflector;
 using ThoughtWorks.CruiseControl.WebDashboard.Dashboard;
+using ThoughtWorks.CruiseControl.WebDashboard.Dashboard.GenericPlugins;
 
 namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.BuildReport
 {
 	// ToDo - Test!
 	[ReflectorType("buildLogBuildPlugin")]
-	public class BuildLogBuildPlugin : IPlugin
+	public class BuildLogBuildPlugin : ProjectConfigurableBuildPlugin
 	{
 		private readonly IActionInstantiator actionInstantiator;
 
@@ -14,12 +15,12 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.BuildReport
 			this.actionInstantiator = actionInstantiator;
 		}
 
-		public string LinkDescription
+		public override string LinkDescription
 		{
 			get { return "View Build Log"; }
 		}
 
-		public INamedAction[] NamedActions
+		public override INamedAction[] NamedActions
 		{
 			get {  
 				return new INamedAction[]

@@ -7,6 +7,6 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Configuration
 		IPlugin[] FarmPlugins { get; set; }
 		IPlugin[] ServerPlugins { get; set; }
 		IPlugin[] ProjectPlugins { get; set; }
-		IPlugin[] BuildPlugins { get; set; }
+		IBuildPlugin[] BuildPlugins { get; set; }
 	}
 }

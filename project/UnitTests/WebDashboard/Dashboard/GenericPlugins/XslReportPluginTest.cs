@@ -28,7 +28,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard.GenericPlu
 		public void ShouldUseConfigurableProperties()
 		{
 			buildPlugin.ActionName = "MyAction";
-			buildPlugin.LinkDescription = "My Plugin";
+			buildPlugin.ConfiguredLinkDescription = "My Plugin";
 			buildPlugin.XslFileName = @"xsl\myxsl.xsl";
 
 			Assert.AreEqual("MyAction", buildPlugin.ActionName);
@@ -42,7 +42,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard.GenericPlu
 		public void ShouldCreateAnXslReportActionWithCorrectNameXslFileName()
 		{
 			buildPlugin.ActionName = "MyAction";
-			buildPlugin.LinkDescription = "My Plugin";
+			buildPlugin.ConfiguredLinkDescription = "My Plugin";
 			buildPlugin.XslFileName = @"xsl\myxsl.xsl";
 
 			XslReportBuildAction xslReportAction = new XslReportBuildAction(null);

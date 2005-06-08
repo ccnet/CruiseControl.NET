@@ -5,7 +5,7 @@ using ThoughtWorks.CruiseControl.WebDashboard.Dashboard.Actions;
 namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard.GenericPlugins
 {
 	[ReflectorType("xslReportBuildPlugin")]
-	public class XslReportBuildPlugin : IPlugin
+	public class XslReportBuildPlugin : ProjectConfigurableBuildPlugin
 	{
 		private readonly IActionInstantiator actionInstantiator;
 		private string xslFileName = "";
@@ -17,8 +17,9 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard.GenericPlugins
 			this.actionInstantiator = actionInstantiator;
 		}
 
+		// These 2 are separate due to inheritence / property monkey-ness
 		[ReflectorProperty("description")]
-		public string LinkDescription
+		public string ConfiguredLinkDescription
 		{
 			get
 			{
@@ -27,6 +28,15 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard.GenericPlugins
 			set
 			{
 				description = value;
+			}
+		}
+
+		// See note on ConfiguredLinkDescription
+		public override string LinkDescription
+		{
+			get
+			{
+				return description;
 			}
 		}
 
@@ -56,7 +66,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard.GenericPlugins
 			}
 		}
 
-		public INamedAction[] NamedActions
+		public override INamedAction[] NamedActions
 		{
 			get
 			{

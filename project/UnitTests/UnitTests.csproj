@@ -1178,6 +1178,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "WebDashboard\Dashboard\GenericPlugins\ProjectConfigurableBuildPluginTest.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "WebDashboard\Dashboard\GenericPlugins\XslReportPluginTest.cs"
                     SubType = "Code"
                     BuildAction = "Compile"

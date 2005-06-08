@@ -18,9 +18,12 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 		public IAbsoluteLink[] GetBuildPluginLinks(IBuildSpecifier buildSpecifier)
 		{
 			ArrayList links = new ArrayList();
-			foreach (IPlugin plugin in pluginConfiguration.BuildPlugins)
+			foreach (IBuildPlugin plugin in pluginConfiguration.BuildPlugins)
 			{
-				links.Add(LinkFactory.CreateBuildLink(buildSpecifier, plugin.LinkDescription, plugin.NamedActions[0].ActionName));
+				if (plugin.IsDisplayedForProject(buildSpecifier.ProjectSpecifier))
+				{
+					links.Add(LinkFactory.CreateBuildLink(buildSpecifier, plugin.LinkDescription, plugin.NamedActions[0].ActionName));
+				}
 			}
 			return (IAbsoluteLink[]) links.ToArray(typeof (IAbsoluteLink));
 		}

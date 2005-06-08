@@ -1,12 +1,13 @@
 using Exortech.NetReflector;
 using ThoughtWorks.CruiseControl.WebDashboard.Dashboard;
 using ThoughtWorks.CruiseControl.WebDashboard.Dashboard.Actions;
+using ThoughtWorks.CruiseControl.WebDashboard.Dashboard.GenericPlugins;
 
 namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.BuildReport
 {
 	// ToDo - Test!
 	[ReflectorType("buildReportBuildPlugin")]
-	public class BuildReportBuildPlugin : IPlugin
+	public class BuildReportBuildPlugin : ProjectConfigurableBuildPlugin
 	{
 		public static readonly string ACTION_NAME = "ViewBuildReport";
 
@@ -18,7 +19,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.BuildReport
 			this.actionInstantiator = actionInstantiator;
 		}
 
-		public string LinkDescription
+		public override string LinkDescription
 		{
 			get { return "Build Report"; }
 		}
@@ -36,7 +37,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.BuildReport
 			}
 		}
 
-		public INamedAction[] NamedActions
+		public override INamedAction[] NamedActions
 		{
 			get
 			{

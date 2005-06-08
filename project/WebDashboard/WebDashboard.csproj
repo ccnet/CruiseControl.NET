@@ -316,6 +316,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Dashboard\IBuildPlugin.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Dashboard\IBuildRetriever.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -457,6 +462,11 @@
                 />
                 <File
                     RelPath = "Dashboard\GenericPlugins\ConfigurablePlugin.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Dashboard\GenericPlugins\ProjectConfigurableBuildPlugin.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

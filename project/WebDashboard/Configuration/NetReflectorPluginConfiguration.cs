@@ -9,7 +9,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Configuration
 		private IPlugin[] farmPlugins = new IPlugin[0];
 		private IPlugin[] serverPlugins = new IPlugin[0];
 		private IPlugin[] projectPlugins = new IPlugin[0];
-		private IPlugin[] buildPlugins = new IPlugin[0];
+		private IBuildPlugin[] buildPlugins = new IBuildPlugin[0];
 
 		[ReflectorArray("farmPlugins", Required=true)]
 		public IPlugin[] FarmPlugins
@@ -51,7 +51,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Configuration
 		}
 
 		[ReflectorArray("buildPlugins", Required=true)]
-		public IPlugin[] BuildPlugins
+		public IBuildPlugin[] BuildPlugins
 		{
 			get
 			{
