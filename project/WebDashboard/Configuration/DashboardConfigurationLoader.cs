@@ -1,5 +1,6 @@
 using System;
 using System.IO;
+using System.Reflection;
 using System.Xml;
 using Exortech.NetReflector;
 using ObjectWizard.NetReflector;
@@ -20,8 +21,8 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Configuration
 			this.pathMapper = pathMapper;
 		}
 
-		IRemoteServicesConfiguration remoteServicesConfiguration;
-		IPluginConfiguration pluginsConfiguration;
+		private IRemoteServicesConfiguration remoteServicesConfiguration;
+		private IPluginConfiguration pluginsConfiguration;
 
 		private void LoadRemoteServicesConfiguration()
 		{
@@ -42,7 +43,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Configuration
 		private object Load(string xpath)
 		{
 			string dashboardConfig = "";
-			using (StreamReader sr = new StreamReader(Path.Combine(pathMapper.PhysicalApplicationPath, "dashboard.config"))) 
+			using (StreamReader sr = new StreamReader(Path.Combine(pathMapper.PhysicalApplicationPath, "dashboard.config")))
 			{
 				dashboardConfig = sr.ReadToEnd();
 			}
@@ -51,6 +52,8 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Configuration
 
 			NetReflectorTypeTable typeTable = NetReflectorTypeTable.CreateDefault(instantiator);
 			typeTable.Add(Path.GetDirectoryName(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, AppDomain.CurrentDomain.RelativeSearchPath)), "ccnet.*.plugin.dll");
+			typeTable.Add(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "ccnet.*.plugin.dll");
+
 			return NetReflector.Read(node, typeTable);
 		}
 
