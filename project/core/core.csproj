@@ -709,6 +709,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "sourcecontrol\UserFilter.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "sourcecontrol\Vault.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
