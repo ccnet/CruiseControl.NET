@@ -164,6 +164,15 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 		}
 
 		[Test]
+		public void ShouldUseTagPrefixInLabelSpecificationIfSpecified()
+		{
+			Cvs cvs = new Cvs();
+			cvs.TagPrefix = "MyCustomPrefix_";
+			ProcessInfo info = cvs.CreateLabelProcessInfo(IntegrationResultMother.CreateSuccessful("foo"));
+			Assert.AreEqual("tag MyCustomPrefix_foo", info.Arguments);
+		}
+
+		[Test]
 		public void ShouldBuildCorrectLabelProcessInfoIfCvsRootIsSpecified()
 		{
 			Cvs cvs = new Cvs();

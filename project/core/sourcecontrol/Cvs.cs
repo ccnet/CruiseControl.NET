@@ -50,6 +50,9 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 		[ReflectorProperty("branch", Required=false)]
 		public string Branch = string.Empty;
 
+		[ReflectorProperty("tagPrefix", Required=false)]
+		public string TagPrefix = "ver-";
+
 		public string FormatCommandDate(DateTime date)
 		{
 			return date.ToUniversalTime().ToString(COMMAND_DATE_FORMAT, CultureInfo.InvariantCulture);
@@ -114,7 +117,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 		{
 			ProcessArgumentBuilder buffer = new ProcessArgumentBuilder();
 			buffer.AppendArgument("-d {0}", CvsRoot);
-			buffer.AppendArgument("tag ver-{0}", result.Label);
+			buffer.AppendArgument(string.Format("tag {0}{1}", TagPrefix, result.Label));
 			return new ProcessInfo(Executable, buffer.ToString(), WorkingDirectory);
 		}
 
