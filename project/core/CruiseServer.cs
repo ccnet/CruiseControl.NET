@@ -146,6 +146,7 @@ namespace ThoughtWorks.CruiseControl.Core
 				                                        project.WebURL,
 				                                        project.LastIntegrationResult.StartTime,
 				                                        project.LastIntegrationResult.Label,
+														project.LastIntegrationResult.LastSuccessfulIntegrationLabel,
 				                                        integrator.Trigger.NextBuild));
 			}
 
