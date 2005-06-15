@@ -395,6 +395,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Core\ProcessExecutorTestFixtureBase.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Core\ProcessResultFixture.cs"
                     SubType = "Code"
                     BuildAction = "Compile"

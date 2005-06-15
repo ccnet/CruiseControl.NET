@@ -12,10 +12,49 @@ using ThoughtWorks.CruiseControl.Core.Util;
 namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 {
 	[TestFixture]
-	public class VssTest : CustomAssertion
+	public class VssTest : ProcessExecutorTestFixtureBase
 	{
 		public const string DEFAULT_SS_EXE_PATH = @"C:\Program Files\Microsoft Visual Studio\VSS\win32\ss.exe";
-		public const string VSS_XML =
+
+		private IMock mockRegistry;
+		private VssHistoryParser historyParser;
+		private Vss vss;
+		private DateTime today;
+		private DateTime yesterday;
+
+		[SetUp]
+		public void SetUp()
+		{
+			CreateProcessExecutorMock(DEFAULT_SS_EXE_PATH);
+			mockRegistry = new DynamicMock(typeof(IRegistry)); mockProcessExecutor.Strict = true;
+			mockRegistry.SetupResult("GetExpectedLocalMachineSubKeyValue", DEFAULT_SS_EXE_PATH, typeof(string), typeof(string));
+			VssLocale locale = new VssLocale(CultureInfo.InvariantCulture);
+			historyParser = new VssHistoryParser(locale);
+
+			vss = new Vss(locale, historyParser, (ProcessExecutor) mockProcessExecutor.MockInstance, (IRegistry) mockRegistry.MockInstance);
+			vss.Project = "$/fooProject";
+			vss.Culture = string.Empty; // invariant culture
+			vss.Username = "Admin";
+			vss.Password = "admin";
+			vss.WorkingDirectory = @"c:\source\";
+
+			today = DateTime.Now;
+			yesterday = today.AddDays(-1);
+		}
+		
+		[TearDown]
+		public void TearDown()
+		{
+			base.Verify();
+			mockRegistry.Verify();
+		}
+
+		// Configuration tests
+
+		[Test]
+		public void ShouldDeserialiseFromXml()
+		{
+			string xml =
 			@"<sourceControl type=""vss"" autoGetSource=""true"">
     <executable>..\tools\vss\ss.exe</executable>
     <ssdir>..\tools\vss</ssdir>
@@ -26,55 +65,10 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 	<timeout>5</timeout>
 	<workingDirectory>C:\temp</workingDirectory>
 	<culture>fr-FR</culture>
+	<cleanCopy>false</cleanCopy>
 </sourceControl>";	
 
-		private IMock mockProcessExecutor;
-		private IMock mockRegistry;
-		private VssHistoryParser _historyParser;
-		private Vss vss;
-
-		[SetUp]
-		public void SetUp()
-		{
-			mockProcessExecutor = new DynamicMock(typeof(ProcessExecutor)); mockProcessExecutor.Strict = true;
-			mockRegistry = new DynamicMock(typeof(IRegistry)); mockProcessExecutor.Strict = true;
-			mockRegistry.SetupResult("GetExpectedLocalMachineSubKeyValue", DEFAULT_SS_EXE_PATH, typeof(string), typeof(string));
-			VssLocale locale = new VssLocale(CultureInfo.InvariantCulture);
-			_historyParser = new VssHistoryParser(locale);
-
-			vss = new Vss(locale, _historyParser, (ProcessExecutor) mockProcessExecutor.MockInstance, (IRegistry) mockRegistry.MockInstance);
-			vss.Project = "$/fooProject";
-			vss.Culture = string.Empty; // invariant culture
-			vss.Username = "Admin";
-			vss.Password = "admin";
-		}
-		
-		[TearDown]
-		public void TearDown()
-		{
-			mockProcessExecutor.Verify();
-			mockRegistry.Verify();
-		}
-
-		[Test]
-		public void CreateHistoryProcess()
-		{	
-			DateTime from = new DateTime(2001, 1, 21, 20, 0, 0);
-			DateTime to = new DateTime(2002, 2, 22, 20, 0, 0);
-
-			ProcessInfo actual = vss.CreateHistoryProcessInfo(from, to);
-
-			string expectedArgs = @"history $/fooProject -R -Vd02/22/2002;20:00~01/21/2001;20:00 -YAdmin,admin -I-Y";				
-
-			Assert.IsNotNull(actual);
-			Assert.AreEqual(DEFAULT_SS_EXE_PATH, actual.FileName);
-			Assert.AreEqual(expectedArgs, actual.Arguments);
-		}
-		
-		[Test]
-		public void ValuesSet()
-		{
-			NetReflector.Read(VSS_XML, vss);
+			NetReflector.Read(xml, vss);
 			Assert.AreEqual(@"..\tools\vss\ss.exe", vss.Executable);
 			Assert.AreEqual(@"admin", vss.Password);
 			Assert.AreEqual(@"$/root", vss.Project);
@@ -85,50 +79,14 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 			Assert.AreEqual(true, vss.AutoGetSource);
 			Assert.AreEqual(@"C:\temp", vss.WorkingDirectory);
 			Assert.AreEqual("fr-FR", vss.Culture);
+			Assert.AreEqual(false, vss.CleanCopy);
 		}
-
-		[Test]
-		public void CreateLabelProcess() 
-		{
-			string oldLabel = "oldLabel";
-			string newLabel = "newLabel";
-
-			ProcessInfo actual = vss.CreateLabelProcessInfo(newLabel, oldLabel);
-
-			string expectedArgs = @"label $/fooProject -LnewLabel -VLoldLabel -YAdmin,admin -I-Y";				
-
-			Assert.IsNotNull(actual);
-			Assert.AreEqual(DEFAULT_SS_EXE_PATH, actual.FileName);
-			Assert.AreEqual(expectedArgs, actual.Arguments);
-		}
-
-		[Test]
-		public void CreateLabelProcessForCurrentVersion()
-		{
-			string label = "testLabel";
-
-			ProcessInfo actual = vss.CreateLabelProcessInfo(label);
-
-			string expectedArgs = @"label $/fooProject -LtestLabel -YAdmin,admin -I-Y";				
-			Assert.IsNotNull(actual);
-			Assert.AreEqual(DEFAULT_SS_EXE_PATH, actual.FileName);
-			Assert.AreEqual(expectedArgs, actual.Arguments);
-		}
-
+		
 		[Test]
 		public void StripQuotesFromSSDir()
 		{
 			vss.SsDir = @"""C:\Program Files\Microsoft Visual Studio\VSS""";
 			Assert.AreEqual(@"C:\Program Files\Microsoft Visual Studio\VSS", vss.SsDir);
-		}
-
-		[Test]
-		public void SSDirEnvironmentVariableValueShouldNotChangeIfSSDirIsNotSpecified()
-		{
-			ProcessInfo orginal = new ProcessInfo("foo", "bar");
-
-			ProcessInfo actual = vss.CreateHistoryProcessInfo(DateTime.Now, DateTime.Now);
-			Assert.AreEqual(orginal.EnvironmentVariables[Vss.SS_DIR_KEY], actual.EnvironmentVariables[Vss.SS_DIR_KEY]);
 		}
 
 		[Test]
@@ -139,135 +97,166 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 		}
 
 		[Test]
-		public void ShouldWorkWhenStandardErrorIsNull()
+		public void ShouldSetLocaleOnVssHistoryParserIfCultureChanges()
 		{
-			mockProcessExecutor.ExpectAndReturn("Execute", new ProcessResult("foo", null, ProcessResult.SUCCESSFUL_EXIT_CODE, false), new IsAnything());
-
-			vss.GetModifications(IntegrationResult(DateTime.Now), IntegrationResult(DateTime.Now));
+			vss.Culture = "en-GB";
+			Assert.AreEqual(new VssLocale(new CultureInfo("en-GB")), historyParser.Locale);
 		}
 
-		private IntegrationResult IntegrationResult(DateTime now)
+		// GetModifications tests
+
+		[Test]
+		public void VerifyHistoryProcessInfoArguments()
 		{
-			return IntegrationResultMother.CreateSuccessful(now);
+			ExpectToExecuteArguments(string.Format("history $/fooProject -R -Vd{0}~{1} -YAdmin,admin -I-Y", CommandDate(today), CommandDate(yesterday)));
+			vss.GetModifications(IntegrationResultMother.CreateSuccessful(yesterday), IntegrationResultMother.CreateSuccessful(today));
+		}
+
+		[Test]
+		public void ShouldWorkWhenStandardErrorIsNull()
+		{
+			ExpectToExecuteAndReturn(new ProcessResult("foo", null, ProcessResult.SUCCESSFUL_EXIT_CODE, false));
+			vss.GetModifications(IntegrationResult(yesterday), IntegrationResult(today));
 		}
 
 		[Test]
 		public void ShouldWorkWhenStandardErrorIsNotNullButExitCodeIsZero()
 		{
-			mockProcessExecutor.ExpectAndReturn("Execute", new ProcessResult("foo", "bar", ProcessResult.SUCCESSFUL_EXIT_CODE, false), new IsAnything());
-			
-			vss.GetModifications(IntegrationResult(DateTime.Now), IntegrationResult(DateTime.Now));
+			ExpectToExecuteAndReturn(new ProcessResult("foo", "bar", ProcessResult.SUCCESSFUL_EXIT_CODE, false));
+			vss.GetModifications(IntegrationResult(yesterday), IntegrationResult(today));
 		}
 
 		[Test, ExpectedException(typeof(CruiseControlException))]
 		public void ShouldFailIfProcessTimesOut()
 		{
-			mockProcessExecutor.ExpectAndReturn("Execute", new ProcessResult("x", null, ProcessResult.TIMED_OUT_EXIT_CODE, true), new IsAnything());
-		
-			vss.GetModifications(IntegrationResult(DateTime.Now), IntegrationResult(DateTime.Now));
+			ExpectToExecuteAndReturn(new ProcessResult("x", null, ProcessResult.TIMED_OUT_EXIT_CODE, true));
+			vss.GetModifications(IntegrationResult(yesterday), IntegrationResult(today));
 		}
+
+		// GetSource tests
 
 		[Test]
 		public void VerifyGetSourceProcessInfo()
 		{
-			CollectingConstraint constraint = new CollectingConstraint();
-			mockProcessExecutor.ExpectAndReturn("Execute", new ProcessResult("Getting App.ico", null, ProcessResult.SUCCESSFUL_EXIT_CODE, false), constraint);
-			vss.AutoGetSource = true;
-			vss.Project = "$/Refactoring";
-			vss.Username = "orogers";
-			vss.Password = string.Empty;
-			vss.WorkingDirectory = @"c:\source\";
-			vss.SsDir = @"..\tools\vss";
-			vss.GetSource(IntegrationResultMother.CreateSuccessful(DateTime.Now));
+			ExpectToExecuteArguments(string.Format("get $/fooProject -R -Vd{0} -YAdmin,admin -I-N -GTM -GWR", CommandDate(today)));
 
-			ProcessInfo info = (ProcessInfo) constraint.Parameter;
-			AssertMatches(@"get \$/Refactoring -R -Vd.* -Yorogers, -I-N", info.Arguments);
-			Assert.AreEqual(DEFAULT_SS_EXE_PATH, info.FileName);
-			Assert.AreEqual(@"c:\source\", info.WorkingDirectory);
-			Assert.AreEqual(@"..\tools\vss", info.EnvironmentVariables[Vss.SS_DIR_KEY]);
+			vss.AutoGetSource = true;
+			vss.GetSource(IntegrationResultMother.CreateSuccessful(today));
+		}
+
+		[Test]
+		public void GetSourceShouldNotGetCleanCopy()
+		{
+			ExpectToExecuteArguments(string.Format("get $/fooProject -R -Vd{0} -YAdmin,admin -I-N -GTM", CommandDate(today)));
+
+			vss.AutoGetSource = true;
+			vss.CleanCopy = false;
+			vss.GetSource(IntegrationResultMother.CreateSuccessful(today));
 		}
 
 		[Test]
 		public void OnlyGetSourceIfAutoGetSourceIsSpecified()
 		{
 			ExpectThatExecuteWillNotBeCalled();
-			vss.GetSource(IntegrationResultMother.CreateSuccessful(DateTime.Now));
+			vss.GetSource(IntegrationResultMother.CreateSuccessful(today));
 		}
 
 		[Test]
-		public void UseTemporaryDirectoryIfWorkingDirectoryIsNull()
+		public void CreateWorkingDirectoryIfItDoesNotExist()
 		{
-			CollectingConstraint constraint = new CollectingConstraint();
-			mockProcessExecutor.ExpectAndReturn("Execute", new ProcessResult("Getting App.ico", null, ProcessResult.SUCCESSFUL_EXIT_CODE, false), constraint);
+			string workingDirectory = TempFileUtil.GetTempPath("VSS");
+			Assert.IsFalse(Directory.Exists(workingDirectory));
+
+			ExpectToExecuteAndReturn(SuccessfulProcessResult());
+			vss.AutoGetSource = true;
+			vss.WorkingDirectory = workingDirectory;
+			vss.GetSource(new IntegrationResult("project", Path.GetTempPath()));
+
+			Assert.IsTrue(Directory.Exists(workingDirectory));
+			Directory.Delete(workingDirectory);
+		}
+
+		[Test]
+		public void RebaseRelativeWorkingDirectoryPathFromProjectWorkingDirectory()
+		{
+			string expectedWorkingDirectory = TempFileUtil.GetTempPath("VSS");
+			string args = string.Format("get $/fooProject -R -Vd{0} -YAdmin,admin -I-N -GTM -GWR", CommandDate(today));
+			ExpectToExecute(new ProcessInfo(DEFAULT_SS_EXE_PATH, args, expectedWorkingDirectory));
+			IntegrationResult result = IntegrationResultMother.CreateSuccessful(today);
+			result.WorkingDirectory = Path.GetTempPath();
 
 			vss.AutoGetSource = true;
-			vss.GetSource(IntegrationResultMother.CreateSuccessful(DateTime.Now));
+			vss.WorkingDirectory = "VSS";
+			vss.GetSource(result);
+			Directory.Delete(expectedWorkingDirectory);
+		}
 
-			ProcessInfo info = (ProcessInfo) constraint.Parameter;
-			AssertStartsWith(Path.GetTempPath(), info.WorkingDirectory);
+		// ApplyLabel tests
+
+		[Test]
+		public void VerifyLabelProcessInfoArguments()
+		{
+			ExpectToExecuteArguments("label $/fooProject -LnewLabel -VL -YAdmin,admin -I-Y");
+
+			vss.ApplyLabel = true;
+			vss.LabelSourceControl(IntegrationResultMother.CreateSuccessful("newLabel"));
+		}
+
+		[Test]
+		public void VerifyLabelProcessInfoArgumentsWhenCreatingAndOverwritingTemporaryLabel()
+		{
+			ExpectToExecuteArguments("label $/fooProject -LCCNETUNVERIFIED06102005182431 -YAdmin,admin -I-Y");
+			ExpectToExecuteArguments("label $/fooProject -LnewLabel -VLCCNETUNVERIFIED06102005182431 -YAdmin,admin -I-Y");
+
+			IntegrationResult result = IntegrationResultMother.CreateSuccessful("newLabel");
+			result.StartTime = new DateTime(2005, 6, 10, 18, 24, 31);
+
+			vss.ApplyLabel = true;
+			vss.AutoGetSource = false;
+			vss.GetSource(result);
+			vss.LabelSourceControl(result);
 		}
 
 		[Test]
 		public void TemporaryLabelNotAppliedByDefault()
 		{
-			// applyLabel is false by default
 			ExpectThatExecuteWillNotBeCalled();
-			vss.CreateTemporaryLabel();
+			vss.ApplyLabel = false;
+			vss.AutoGetSource = false;
+			vss.GetSource(IntegrationResultMother.CreateSuccessful());
 		}
 
 		[Test]
-		public void TemporaryLabelAppliedIfApplyLabelTrue()
+		public void ShouldApplyTemporaryLabelBeforeGettingSource()
 		{
-			CollectingConstraint constraint = new CollectingConstraint();
-			mockProcessExecutor.ExpectAndReturn("Execute", ProcessResultFixture.CreateSuccessfulResult(), constraint);
+			ExpectToExecuteArguments("label $/fooProject -LCCNETUNVERIFIED06102005182431 -YAdmin,admin -I-Y");
+
+			IntegrationResult result = IntegrationResultMother.CreateSuccessful("newLabel");
+			result.StartTime = new DateTime(2005, 6, 10, 18, 24, 31);
 
 			vss.ApplyLabel = true;
-			vss.CreateTemporaryLabel();
-
-			ProcessInfo info = (ProcessInfo) constraint.Parameter;
-			AssertContains("label $/fooProject -LCCNETUNVERIFIED", info.Arguments);
-		}
-
-		[Test]
-		public void ShouldLabelOnlyIfIntegrationSucceeded()
-		{
-			CollectingConstraint constraint = new CollectingConstraint();
-			mockProcessExecutor.ExpectAndReturn("Execute", ProcessResultFixture.CreateSuccessfulResult(), new IsAnything());
-			mockProcessExecutor.ExpectAndReturn("Execute", ProcessResultFixture.CreateSuccessfulResult(), constraint);
-
-			vss.ApplyLabel = true;
-			vss.GetSource(IntegrationResultMother.CreateUnknown("foo"));
-			vss.LabelSourceControl(IntegrationResultMother.CreateSuccessful("foo"));
-
-			ProcessInfo info = (ProcessInfo) constraint.Parameter;
-			AssertContains("label $/fooProject -Lfoo -VLCCNETUNVERIFIED", info.Arguments);
+			vss.AutoGetSource = false;
+			vss.WorkingDirectory = @"c:\source\";
+			vss.GetSource(result);
 		}
 
 		[Test]
 		public void ShouldDeleteTemporaryLabelIfIntegrationFailed()
 		{
-			CollectingConstraint constraint = new CollectingConstraint();
-			mockProcessExecutor.ExpectAndReturn("Execute", ProcessResultFixture.CreateSuccessfulResult(), new IsAnything());
-			mockProcessExecutor.ExpectAndReturn("Execute", ProcessResultFixture.CreateSuccessfulResult(), constraint);
+			mockProcessExecutor.ExpectAndReturn("Execute", SuccessfulProcessResult(), new IsAnything());
+			ExpectToExecuteArguments("label $/fooProject -L -VLCCNETUNVERIFIED06102005182431 -YAdmin,admin -I-Y");
 
+			IntegrationResult result = IntegrationResultMother.CreateFailed("foo");
+			result.StartTime = new DateTime(2005, 6, 10, 18, 24, 31);
+				
 			vss.ApplyLabel = true;
-			vss.GetSource(IntegrationResultMother.CreateUnknown("foo"));
-			vss.LabelSourceControl(IntegrationResultMother.CreateFailed("foo"));
-
-			ProcessInfo info = (ProcessInfo) constraint.Parameter;
-			AssertContains("label $/fooProject -L -VLCCNETUNVERIFIED", info.Arguments);
+			vss.GetSource(result);
+			vss.LabelSourceControl(result);
 		}
 
-		private void ExpectThatExecuteWillNotBeCalled()
+		private string CommandDate(DateTime date)
 		{
-			mockProcessExecutor.ExpectNoCall("Execute", typeof(ProcessInfo));
-		}
-
-		[Test]
-		public void ShouldSetLocaleOnVssHistoryParserIfCultureChanges()
-		{
-			vss.Culture = "en-GB";
-			Assert.AreEqual(new VssLocale(new CultureInfo("en-GB")), _historyParser.Locale);
+			return new VssLocale().FormatCommandDate(date);
 		}
 	}
 }
