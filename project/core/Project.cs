@@ -52,7 +52,7 @@ namespace ThoughtWorks.CruiseControl.Core
 
 		public Project()
 		{
-			state = new ProjectStateManager(this, new IntegrationStateManager());
+			state = new FileStateManager();
 			integrationResultManager = new IntegrationResultManager(this);
 			integratable = new IntegrationRunner(integrationResultManager, this);
 		}
@@ -64,8 +64,7 @@ namespace ThoughtWorks.CruiseControl.Core
 			this.integratable = integratable;
 		}
 
-		[ReflectorProperty("state", InstanceTypeKey="type", Required=false)]
-		[Description("State")]
+		[ReflectorProperty("state", InstanceTypeKey="type", Required=false), Description("State")]
 		public IStateManager StateManager
 		{
 			get { return state; }

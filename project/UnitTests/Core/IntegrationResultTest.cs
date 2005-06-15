@@ -165,5 +165,13 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 			result.AddTaskResult(new ProcessTaskResult(ProcessResultFixture.CreateSuccessfulResult()));
 			Assert.IsTrue(result.Failed);
 		}
+
+		[Test]
+		public void InitiallyLastSuccessfulIntegrationLabelShouldBeCurrentLabel()
+		{
+			IntegrationResult result = IntegrationResult.CreateInitialIntegrationResult("foo", @"c:\");
+			result.Label = "initial";
+			Assert.AreEqual("initial", result.LastSuccessfulIntegrationLabel);
+		}
 	}
 }

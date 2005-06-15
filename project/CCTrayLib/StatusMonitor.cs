@@ -16,7 +16,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib
 		public event ErrorEventHandler Error;
 
 		private Timer _pollTimer;
-		private ProjectStatus _currentProjectStatus = new ProjectStatus (ProjectIntegratorState.Stopped, IntegrationStatus.Unknown, ProjectActivity.Sleeping, "unknown", "http://ccnet.thoughtworks.com", DateTime.MinValue, "unknown", DateTime.MaxValue);
+		private ProjectStatus _currentProjectStatus = new ProjectStatus (ProjectIntegratorState.Stopped, IntegrationStatus.Unknown, ProjectActivity.Sleeping, "unknown", "http://ccnet.thoughtworks.com", DateTime.MinValue, "unknown", "unknown", DateTime.MaxValue);
 		private Settings _settings;
 
 		public StatusMonitor (Settings settings)

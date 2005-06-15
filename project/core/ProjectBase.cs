@@ -11,7 +11,7 @@ namespace ThoughtWorks.CruiseControl.Core
 		public static readonly string DefaultWorkingSubDirectory = "WorkingDirectory";
 		public static readonly string DefaultArtifactSubDirectory = "Artifacts";
 
-		private string _name;
+		private string name;
 		private string configuredWorkingDirectory = "";
 		private string configuredArtifactDirectory = "";
 		private ITrigger[] triggers = new ITrigger[] { new IntervalTrigger() };
@@ -20,8 +20,8 @@ namespace ThoughtWorks.CruiseControl.Core
 		[ReflectorProperty("name")]
 		public virtual string Name
 		{
-			get { return _name; }
-			set { _name = value; }
+			get { return name; }
+			set { name = value; }
 		}
 
 		[ReflectorArray("triggers", Required=false)]

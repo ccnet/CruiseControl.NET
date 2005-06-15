@@ -1,4 +1,4 @@
-namespace ThoughtWorks.CruiseControl.Core.Logging.Test
+namespace ThoughtWorks.CruiseControl.UnitTests.Logging
 {
 	public class CircularArrayTestResources
 	{

@@ -33,8 +33,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Presentation
 				ProjectIntegratorState.Running, 
 				IntegrationStatus.Unknown, 
 				ProjectActivity.Sleeping, 
-				"NAME", "url", DateTime.MinValue, "lastLabel",
-				nextBuildTime);
+				"NAME", "url", DateTime.MinValue, "lastLabel", null, nextBuildTime);
 			monitor.ProjectState = ProjectState.Success;
 
 			Assert.AreEqual(

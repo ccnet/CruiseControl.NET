@@ -9,6 +9,7 @@ namespace ThoughtWorks.CruiseControl.Core
 	public class RemoteCruiseServer : ICruiseServer
 	{
 		public const string URI = "CruiseManager.rem";
+		public const string DefaultUri = "tcp://localhost:21234/{0}" + URI;
 
 		private ICruiseServer _server;
 		private bool _disposed;

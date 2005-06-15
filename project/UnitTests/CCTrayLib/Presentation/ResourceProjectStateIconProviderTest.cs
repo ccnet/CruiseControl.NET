@@ -1,11 +1,10 @@
-using System;
 using NUnit.Framework;
 using ThoughtWorks.CruiseControl.CCTrayLib.Monitoring;
 using ThoughtWorks.CruiseControl.CCTrayLib.Presentation;
 
 namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Presentation
 {
-[TestFixture]
+	[TestFixture]
 	public class ResourceProjectStateIconProviderTest
 	{
 		[Test]

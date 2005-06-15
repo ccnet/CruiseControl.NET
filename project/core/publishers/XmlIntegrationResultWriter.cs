@@ -7,21 +7,21 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
 {
 	public class XmlIntegrationResultWriter : IDisposable
 	{
-		private XmlFragmentWriter _writer;
+		private XmlFragmentWriter writer;
 
 		public XmlIntegrationResultWriter(TextWriter textWriter)
 		{
-			_writer = new XmlFragmentWriter(textWriter);
+			writer = new XmlFragmentWriter(textWriter);
 		}
 
 		public void Write(IIntegrationResult result)
 		{
-			_writer.WriteStartElement(Elements.CRUISE_ROOT);
-			_writer.WriteAttributeString("project", result.ProjectName);
+			writer.WriteStartElement(Elements.CRUISE_ROOT);
+			writer.WriteAttributeString("project", result.ProjectName);
 			WriteModifications(result.Modifications);
 			WriteBuildElement(result);
 			WriteException(result);
-			_writer.WriteEndElement();
+			writer.WriteEndElement();
 		}
 
 		private void WriteTaskResults(IIntegrationResult result)
@@ -34,24 +34,24 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
 
 		public void WriteBuildElement(IIntegrationResult result)
 		{
-			_writer.WriteStartElement(Elements.BUILD);
-			_writer.WriteAttributeString("date", result.StartTime.ToString());
+			writer.WriteStartElement(Elements.BUILD);
+			writer.WriteAttributeString("date", result.StartTime.ToString());
 
 			// hide the milliseconds
 			TimeSpan time = result.TotalIntegrationTime;
-			_writer.WriteAttributeString("buildtime", string.Format("{0:d2}:{1:d2}:{2:d2}", time.Hours, time.Minutes, time.Seconds));
+			writer.WriteAttributeString("buildtime", string.Format("{0:d2}:{1:d2}:{2:d2}", time.Hours, time.Minutes, time.Seconds));
 			if (result.Failed)
 			{
-				_writer.WriteAttributeString("error", "true");
+				writer.WriteAttributeString("error", "true");
 			}
-			_writer.WriteAttributeString("buildcondition", result.BuildCondition.ToString());
+			writer.WriteAttributeString("buildcondition", result.BuildCondition.ToString());
 			WriteTaskResults(result);
-			_writer.WriteEndElement();
+			writer.WriteEndElement();
 		}
 
 		private void WriteOutput(string output)
 		{
-			_writer.WriteNode(StringUtil.RemoveNulls(output));
+			writer.WriteNode(StringUtil.RemoveNulls(output));
 		}
 
 		private void WriteException(IIntegrationResult result)
@@ -61,28 +61,28 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
 				return;
 			}
 
-			_writer.WriteStartElement(Elements.EXCEPTION);
-			_writer.WriteCData(XmlUtil.EncodeCDATA(result.ExceptionResult.ToString()));
-			_writer.WriteEndElement();
+			writer.WriteStartElement(Elements.EXCEPTION);
+			writer.WriteCData(result.ExceptionResult.ToString());
+			writer.WriteEndElement();
 		}
 
 		void IDisposable.Dispose()
 		{
-			_writer.Close();
+			writer.Close();
 		}
 
 		public void WriteModifications(Modification[] mods)
 		{
-			_writer.WriteStartElement(Elements.MODIFICATIONS);
+			writer.WriteStartElement(Elements.MODIFICATIONS);
 			if (mods == null)
 			{
 				return;
 			}
 			foreach (Modification mod in mods)
 			{
-				mod.ToXml(_writer);
+				mod.ToXml(writer);
 			}
-			_writer.WriteEndElement();
+			writer.WriteEndElement();
 		}
 
 		private class Elements
@@ -95,7 +95,7 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
 
 		public Formatting Formatting
 		{
-			set { _writer.Formatting = value; }
+			set { writer.Formatting = value; }
 		}
 	}
 }

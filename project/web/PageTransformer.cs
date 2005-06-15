@@ -1,6 +1,5 @@
 using ThoughtWorks.CruiseControl.Core;
 using ThoughtWorks.CruiseControl.Core.Util;
-using ThoughtWorks.CruiseControl.Util;
 
 namespace ThoughtWorks.CruiseControl.Web
 {
@@ -10,7 +9,8 @@ namespace ThoughtWorks.CruiseControl.Web
 		private readonly string xmlFile;
 		private IFileTransformer _transformer;
 
-		public PageTransformer(string xmlFile, string xslFile) : this (new XslFileTransformer(new XslTransformer()), xmlFile, xslFile) { }
+		public PageTransformer(string xmlFile, string xslFile) : this(new XslFileTransformer(new XslTransformer()), xmlFile, xslFile)
+		{}
 
 		public PageTransformer(IFileTransformer fileTransformer, string xmlFile, string xslFile)
 		{
@@ -23,7 +23,7 @@ namespace ThoughtWorks.CruiseControl.Web
 		{
 			try
 			{
-				return  _transformer.Transform(xmlFile, xslFile);
+				return _transformer.Transform(xmlFile, xslFile);
 			}
 			catch (CruiseControlException e)
 			{

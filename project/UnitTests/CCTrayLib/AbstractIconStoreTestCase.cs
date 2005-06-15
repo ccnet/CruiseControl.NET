@@ -13,7 +13,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib
 		[SetUp]
 		public virtual void Init()
 		{
-			_status = new ProjectStatus(ProjectIntegratorState.Stopped, IntegrationStatus.Unknown,ProjectActivity.Sleeping,"foo","http://foo.com",DateTime.Now,"", DateTime.Now);
+			_status = new ProjectStatus(ProjectIntegratorState.Stopped, IntegrationStatus.Unknown,ProjectActivity.Sleeping,"foo","http://foo.com",DateTime.Now,"", null, DateTime.Now);
 			_iconStore = CreateIconStore();    
 		}
 

@@ -8,8 +8,9 @@ namespace ThoughtWorks.CruiseControl.Core
 	{
 		string ProjectName { get; }
 		BuildCondition BuildCondition { get; }
-		string WorkingDirectory { get; }
+		string WorkingDirectory { get; set; }
 		string Label { get; set; }
+		string LastSuccessfulIntegrationLabel { get; }
 		IntegrationStatus Status { get; set; }
 		IntegrationStatus LastIntegrationStatus { get; }
 		DateTime StartTime { get; }

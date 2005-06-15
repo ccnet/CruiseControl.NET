@@ -505,6 +505,16 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Core\Label\RemoteProjectLabellerTest.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Core\Label\StateFileLabellerTest.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Core\Log\CircularArrayTest.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -819,12 +829,7 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "Core\State\IntegrationStateManagerTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Core\State\ProjectStateManagerTest.cs"
+                    RelPath = "Core\State\FileStateManagerTest.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

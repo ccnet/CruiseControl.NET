@@ -404,6 +404,16 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "label\RemoteProjectLabeller.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "label\StateFileLabeller.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Log\CircularArray.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -803,22 +813,12 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "state\IFileStateManager.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "state\IntegrationStateManager.cs"
+                    RelPath = "state\FileStateManager.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
                     RelPath = "state\IStateManager.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "state\ProjectStateManager.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

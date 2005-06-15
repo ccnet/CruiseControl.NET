@@ -28,8 +28,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib
 				"CCNet",
 				"http://foo/index.html",
 				now,
-				"1.0.0.123",
-				now.AddMinutes(6));
+				"1.0.0.123", null, now.AddMinutes(6));
 
 			return new TrayTooltip(projectStatus, (DateTimeProvider) mock.MockInstance);
 		}

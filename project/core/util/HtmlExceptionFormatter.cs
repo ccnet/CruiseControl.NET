@@ -1,7 +1,6 @@
 using System;
 
-	
-namespace ThoughtWorks.CruiseControl.Util
+namespace ThoughtWorks.CruiseControl.Core.Util
 {
 	/// <summary>
 	/// Formats the Exception into HTML. Need to see if this can be moved to CCException class.

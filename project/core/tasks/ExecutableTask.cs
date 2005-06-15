@@ -17,95 +17,69 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 
 		private ProcessExecutor _executor;
 
-		public ExecutableTask() : this(new ProcessExecutor()) { }
+		public ExecutableTask() : this(new ProcessExecutor())
+		{}
 
 		public ExecutableTask(ProcessExecutor executor)
 		{
 			_executor = executor;
 		}
 
-		private string executable = "";
-		private string configuredBaseDirectory = "";
-		private string buildArgs = "";
-		private int buildTimeoutSeconds = DEFAULT_BUILD_TIMEOUT;
+		[ReflectorProperty("executable", Required = true)]
+		public string Executable = string.Empty;
 
-		[ReflectorProperty("executable", Required = true)] 
-		public string Executable
-		{
-			get { return executable; }
-			set { executable = value; }
-		}
+		[ReflectorProperty("baseDirectory", Required = false)]
+		public string ConfiguredBaseDirectory = string.Empty;
 
-		[ReflectorProperty("baseDirectory", Required = false)] 
-		public string ConfiguredBaseDirectory
-		{
-			get { return configuredBaseDirectory; }
-			set { configuredBaseDirectory = value; }
-		}
-
-		[ReflectorProperty("buildArgs", Required = false)] 
-		public string BuildArgs
-		{
-			get { return buildArgs; }
-			set { buildArgs = value; }
-		}
+		[ReflectorProperty("buildArgs", Required = false)]
+		public string BuildArgs = string.Empty;
 
 		/// <summary>
 		/// Gets and sets the maximum number of seconds that the build may take.  If the build process takes longer than
 		/// this period, it will be killed.  Specify this value as zero to disable process timeouts.
 		/// </summary>
-		[ReflectorProperty("buildTimeoutSeconds", Required = false)] 
-		public int BuildTimeoutSeconds
-		{
-			get { return buildTimeoutSeconds; }
-			set { buildTimeoutSeconds = value; }
-		}
+		[ReflectorProperty("buildTimeoutSeconds", Required = false)]
+		public int BuildTimeoutSeconds = DEFAULT_BUILD_TIMEOUT;
 
 		public void Run(IIntegrationResult result)
 		{
-			ProcessResult processResult = AttemptExecute(CreateProcessInfo(result));
+			ProcessResult processResult = AttemptToExecute(NewProcessInfoFrom(result));
 			result.AddTaskResult(new ProcessTaskResult(processResult));
 
 			if (processResult.TimedOut)
 			{
-				throw new BuilderException(this, "Command Line Build timed out (after " + buildTimeoutSeconds + " seconds)");
+				throw new BuilderException(this, "Command Line Build timed out (after " + BuildTimeoutSeconds + " seconds)");
 			}
 		}
 
-		private ProcessInfo CreateProcessInfo(IIntegrationResult result)
+		private ProcessInfo NewProcessInfoFrom(IIntegrationResult result)
 		{
-			ProcessInfo info = new ProcessInfo(executable, buildArgs, BaseDirectory(result));
-			info.TimeOut = buildTimeoutSeconds*1000;
+			ProcessInfo info = new ProcessInfo(Executable, BuildArgs, BaseDirectory(result));
+			info.TimeOut = BuildTimeoutSeconds*1000;
 			info.EnvironmentVariables.Add("ccnet.label", result.Label);
 			return info;
 		}
 
 		private string BaseDirectory(IIntegrationResult result)
 		{
-			return result.BaseFromWorkingDirectory(configuredBaseDirectory);
+			return result.BaseFromWorkingDirectory(ConfiguredBaseDirectory);
 		}
 
-
-		protected ProcessResult AttemptExecute(ProcessInfo info)
+		protected ProcessResult AttemptToExecute(ProcessInfo info)
 		{
 			try
 			{
 				return _executor.Execute(info);
-			}			
+			}
 			catch (Exception e)
 			{
-				throw new BuilderException(this, string.Format("Unable to execute: {0}\n{1}", BuildCommand, e), e);
+				throw new BuilderException(this, string.Format("Unable to execute: {0}\n{1}", info, e), e);
 			}
-		}
-
-		private string BuildCommand
-		{
-			get { return string.Format("{0} {1}", executable, buildArgs); }
 		}
 
 		public override string ToString()
 		{
-			return string.Format(@" BaseDirectory: {0}, Executable: {1}", configuredBaseDirectory, executable);
+			return string.Format(@" BaseDirectory: {0}, Executable: {1}", ConfiguredBaseDirectory, Executable);
 		}
 	}
 }

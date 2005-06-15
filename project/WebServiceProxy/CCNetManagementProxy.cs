@@ -44,6 +44,7 @@ namespace ThoughtWorks.CruiseControl.WebServiceProxy
 											serviceStatus.WebURL,
 											serviceStatus.LastBuildDate,
 											serviceStatus.LastBuildLabel, 
+											serviceStatus.LastSuccessfulBuildLabel, 
 											serviceStatus.NextBuildTime)};
 		}
 

@@ -7,6 +7,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 {
 	public class IntegrationResultMother
 	{
+		public const string DefaultProjectName = "test";
+
 		public static IntegrationResult Create(bool succeeded)
 		{
 			return Create(succeeded, DateTime.Now);
@@ -25,7 +27,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 
 		public static IntegrationResult Create(IntegrationStatus status, DateTime date)
 		{
-			IntegrationResult result = new IntegrationResult("test", Path.GetTempPath());
+			IntegrationResult result = new IntegrationResult(DefaultProjectName, Path.GetTempPath());
 			result.Status = status;
 			result.StartTime = date;
 			result.EndTime = date;

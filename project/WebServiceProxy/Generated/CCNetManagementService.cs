@@ -195,6 +195,9 @@ namespace ThoughtWorks.CruiseControl.WebServiceProxy.Generated {
         /// <remarks/>
         public string LastBuildLabel;
 
+        /// <remarks/>
+        public string LastSuccessfulBuildLabel;
+
     	public DateTime NextBuildTime;
     	
     }

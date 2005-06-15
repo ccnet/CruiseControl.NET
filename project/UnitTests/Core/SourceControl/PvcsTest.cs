@@ -5,11 +5,13 @@ using Exortech.NetReflector;
 using NMock;
 using NMock.Constraints;
 using NUnit.Framework;
+using ThoughtWorks.CruiseControl.Core;
+using ThoughtWorks.CruiseControl.Core.Sourcecontrol;
 using ThoughtWorks.CruiseControl.Core.Util;
 using ThoughtWorks.CruiseControl.UnitTests;
 using ThoughtWorks.CruiseControl.UnitTests.Core;
 
-namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test
+namespace ThoughtWorks.CruiseControl.UnitTests.Sourcecontrol
 {
 	[TestFixture]
 	public class PvcsTest : CustomAssertion

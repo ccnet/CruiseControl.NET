@@ -1,8 +1,9 @@
 using System.IO;
 using System.Reflection;
 using NUnit.Framework;
+using ThoughtWorks.CruiseControl.Core.Logging;
 
-namespace ThoughtWorks.CruiseControl.Core.Logging.Test
+namespace ThoughtWorks.CruiseControl.UnitTests.Logging
 {
 	[TestFixture()]
 	public class CircularArrayTest

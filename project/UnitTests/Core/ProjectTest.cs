@@ -30,7 +30,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 		private string workingDirPath;
 		private string artifactDirPath;
 		private TraceListenerBackup backup;
-		private const string PROJECT_NAME = "test";
+		private const string ProjectName = "test";
 
 		[SetUp]
 		public void SetUp()
@@ -64,7 +64,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 
 		private void SetupProject()
 		{
-			project.Name = PROJECT_NAME;
+			project.Name = ProjectName;
 			project.Builder = (ITask) mockBuilder.MockInstance;
 			project.SourceControl = (ISourceControl) mockSourceControl.MockInstance;
 			project.StateManager = (IStateManager) mockStateManager.MockInstance;
@@ -132,7 +132,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 			Assert.IsTrue(project.Builder is NAntTask);
 			Assert.IsTrue(project.SourceControl is FileSourceControl);
 			Assert.IsTrue(project.Labeller is DefaultLabeller);
-			Assert.IsTrue(project.StateManager is IntegrationStateManager);
+			Assert.IsTrue(project.StateManager is FileStateManager);
 			Assert.IsTrue(project.Triggers[0] is ScheduleTrigger);
 			Assert.IsTrue(project.Publishers[0] is XmlLogPublisher);
 			Assert.IsTrue(project.Publishers[1] is NullTask);
@@ -179,22 +179,13 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 		// test: verify correct args are passed to sourcecontrol?  should use date of last modification from last successful build IMO
 
 		[Test]
-		public void ShouldCreateInitialIntegrationResultIfThisIsTheFirstIntegration()
-		{
-			mockStateManager.ExpectAndReturn("StateFileExists", false, null);
-			Assert.IsTrue(project.LastIntegrationResult.IsInitial());
-			VerifyAll();
-		}
-
-		[Test]
 		public void ShouldLoadLastStateIfIntegrationHasBeenRunPreviously()
 		{
 			IntegrationResult expected = new IntegrationResult();
 			expected.Label = "previous";
 			expected.Status = IntegrationStatus.Success;
 
-			mockStateManager.ExpectAndReturn("StateFileExists", true);
-			mockStateManager.ExpectAndReturn("LoadState", expected);
+			mockStateManager.ExpectAndReturn("LoadState", expected, ProjectName);
 
 			Assert.AreEqual(expected, project.LastIntegrationResult);
 			VerifyAll();
@@ -359,7 +350,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 		[Test]
 		public void RunningFirstIntegrationShouldForceBuild()
 		{
-			mockStateManager.ExpectAndReturn("StateFileExists", false); // running the first integration (no state file)
+			mockStateManager.ExpectAndReturn("LoadState", IntegrationResult.CreateInitialIntegrationResult(ProjectName, @"c:\temp"), ProjectName); // running the first integration (no state file)
 			mockStateManager.Expect("SaveState", new IsAnything());
 			mockLabeller.ExpectAndReturn("Generate", "label", new IsAnything()); // generate new label
 			mockSourceControl.ExpectAndReturn("GetModifications", new Modification[0], new IsAnything(), new IsAnything()); // return no modifications found
@@ -372,7 +363,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 
 			IIntegrationResult result = project.RunIntegration(BuildCondition.IfModificationExists);
 
-			Assert.AreEqual(PROJECT_NAME, result.ProjectName);
+			Assert.AreEqual(ProjectName, result.ProjectName);
 			Assert.AreEqual(null, result.ExceptionResult);
 			Assert.AreEqual(ProjectActivity.Sleeping, project.CurrentActivity);
 			Assert.AreEqual(IntegrationStatus.Success, result.Status);
@@ -391,8 +382,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 		[Test] //TODO: question: should state be saved after a poll with no modifications and no build?? -- i think it should: implication for last build though
 		public void RunningIntegrationWithNoModificationsShouldNotBuildOrPublish()
 		{
-			mockStateManager.ExpectAndReturn("StateFileExists", true); // running the first integration (no state file)
-			mockStateManager.ExpectAndReturn("LoadState", IntegrationResultMother.CreateSuccessful());
+			mockStateManager.ExpectAndReturn("LoadState", IntegrationResultMother.CreateSuccessful(), ProjectName);
 			mockLabeller.ExpectAndReturn("Generate", "label", new IsAnything()); // generate new label
 			mockSourceControl.ExpectAndReturn("GetModifications", new Modification[0], new IsAnything(), new IsAnything()); // return no modifications found
 			mockBuilder.ExpectNoCall("Run", typeof (IntegrationResult));
@@ -400,7 +390,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 
 			IIntegrationResult result = project.RunIntegration(BuildCondition.IfModificationExists);
 
-			Assert.AreEqual(PROJECT_NAME, result.ProjectName);
+			Assert.AreEqual(ProjectName, result.ProjectName);
 			Assert.AreEqual(null, result.ExceptionResult);
 			Assert.AreEqual(ProjectActivity.Sleeping, project.CurrentActivity);
 			Assert.AreEqual(IntegrationStatus.Unknown, result.Status);
@@ -418,7 +408,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 		{
 			Modification[] modifications = new Modification[1] {new Modification()};
 
-			mockStateManager.ExpectAndReturn("StateFileExists", false); // running the first integration (no state file)
+			mockStateManager.ExpectAndReturn("LoadState", IntegrationResult.CreateInitialIntegrationResult(ProjectName, @"c:\temp"), ProjectName); // running the first integration (no state file)
 			mockStateManager.Expect("SaveState", new IsAnything());
 			mockLabeller.ExpectAndReturn("Generate", "label", new IsAnything()); // generate new label
 			mockSourceControl.ExpectAndReturn("GetModifications", modifications, new IsAnything(), new IsAnything());
@@ -429,9 +419,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 
 			project.Builder = new MockBuilder(); // need to use mock builder in order to set properties on IntegrationResult
 			IIntegrationResult result = project.RunIntegration(BuildCondition.IfModificationExists);
-
 			
-			Assert.AreEqual(PROJECT_NAME, result.ProjectName);
+			Assert.AreEqual(ProjectName, result.ProjectName);
 			Assert.AreEqual(ProjectActivity.Sleeping, project.CurrentActivity);
 			Assert.AreEqual(IntegrationStatus.Success, result.Status);
 			Assert.AreEqual(IntegrationStatus.Unknown, result.LastIntegrationStatus);
@@ -445,7 +434,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 		[Test]
 		public void ShouldNotPublishIntegrationResultsIfPublishExceptionsIsFalseAndSourceControlThrowsAnException()
 		{
-			mockStateManager.ExpectAndReturn("StateFileExists", false); // running the first integration (no state file)
+			mockStateManager.ExpectAndReturn("LoadState", IntegrationResult.CreateInitialIntegrationResult(ProjectName, @"c:\temp"), ProjectName); // running the first integration (no state file)
 			mockLabeller.ExpectAndReturn("Generate", "label", new IsAnything()); // generate new label
 			CruiseControlException expectedException = new CruiseControlException();
 			mockSourceControl.ExpectAndThrow("GetModifications", expectedException, new IsAnything(), new IsAnything());
@@ -461,7 +450,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 		[Test]
 		public void ShouldPublishIntegrationResultsIfPublishExceptionsIsTrueAndSourceControlThrowsAnException()
 		{
-			mockStateManager.ExpectAndReturn("StateFileExists", false); // running the first integration (no state file)
+			mockStateManager.ExpectAndReturn("LoadState", IntegrationResult.CreateInitialIntegrationResult(ProjectName, @"c:\temp"), ProjectName); // running the first integration (no state file)
 			mockLabeller.ExpectAndReturn("Generate", "label", new IsAnything()); // generate new label
 			CruiseControlException expectedException = new CruiseControlException();
 			mockSourceControl.ExpectAndThrow("GetModifications", expectedException, new IsAnything(), new IsAnything());
@@ -478,7 +467,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 		[Test, ExpectedException(typeof (CruiseControlException))]
 		public void RethrowExceptionIfLoadingStateFileThrowsException()
 		{
-			mockStateManager.ExpectAndThrow("StateFileExists", new CruiseControlException("expected exception"));
+			mockStateManager.ExpectAndThrow("LoadState", new CruiseControlException("expected exception"), ProjectName);
 
 			project.RunIntegration(BuildCondition.IfModificationExists);
 			VerifyAll();
@@ -488,7 +477,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 		public void RethrowExceptionIfLabellerThrowsException()
 		{
 			Exception expectedException = new CruiseControlException("expected exception");
-			mockStateManager.ExpectAndReturn("StateFileExists", false);
+			mockStateManager.ExpectAndReturn("LoadState", IntegrationResult.CreateInitialIntegrationResult(ProjectName, @"c:\temp"), ProjectName); // running the first integration (no state file)
 			mockLabeller.ExpectAndThrow("Generate", expectedException, new IsAnything());
 
 			project.RunIntegration(BuildCondition.IfModificationExists);
@@ -496,7 +485,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 		}
 
 		[Test]
-		public void SourceControlLabeled()
+		public void SourceControlLabelled()
 		{
 			project.Builder = new MockBuilder();
 			mockLabeller.ExpectAndReturn("Generate", "1.2.1", new IsAnything());
@@ -506,7 +495,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 			mockSourceControl.Expect("LabelSourceControl", new IsAnything());
 			mockPublisher.Expect("Run", new IsAnything());
 			IMock stateMock = new DynamicMock(typeof (IStateManager));
-			stateMock.ExpectAndReturn("StateFileExists", false);
+			stateMock.ExpectAndReturn("LoadState", IntegrationResult.CreateInitialIntegrationResult(ProjectName, @"c:\temp"), ProjectName); // running the first integration (no state file)
 			project.StateManager = (IStateManager) stateMock.MockInstance;
 
 			IIntegrationResult results = project.RunIntegration(BuildCondition.IfModificationExists);
@@ -574,7 +563,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 		public void IfPublisherThrowsExceptionShouldStillSaveState()
 		{
 			mockLabeller.ExpectAndReturn("Generate", "1.0", new IsAnything());
-			mockStateManager.ExpectAndReturn("StateFileExists", false);
+			mockStateManager.ExpectAndReturn("LoadState", IntegrationResult.CreateInitialIntegrationResult(ProjectName, @"c:\temp"), ProjectName); // running the first integration (no state file)
 			mockStateManager.Expect("SaveState", new IsAnything());
 			mockSourceControl.ExpectAndReturn("GetModifications", CreateModifications(), new IsAnything(), new IsAnything());
 			mockSourceControl.Expect("GetSource", new IsAnything());

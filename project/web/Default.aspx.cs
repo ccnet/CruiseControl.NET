@@ -9,7 +9,7 @@ using System.Xml;
 using System.Xml.XPath;
 using ThoughtWorks.CruiseControl.Core;
 using ThoughtWorks.CruiseControl.Core.Publishers;
-using ThoughtWorks.CruiseControl.Util;
+using ThoughtWorks.CruiseControl.Core.Util;
 
 namespace ThoughtWorks.CruiseControl.Web
 {
@@ -31,10 +31,10 @@ namespace ThoughtWorks.CruiseControl.Web
 				// a NullReferenceException.  The original exception (ex) was being lost.
 				// Why is BodyLabel null?  (drewnoakes: I saw this problem while working with
 				// invalid Xsl in file modifications.xsl)
-				if (BodyLabel==null)
+				if (BodyLabel == null)
 					throw new CruiseControlException("Unable to render page.", ex);
 
-				if (BodyLabel.InnerText==null)
+				if (BodyLabel.InnerText == null)
 					BodyLabel.InnerText = string.Empty;
 
 				BodyLabel.InnerText += new HtmlExceptionFormatter(ex).ToString();
@@ -45,14 +45,14 @@ namespace ThoughtWorks.CruiseControl.Web
 		{
 			StringBuilder builder = new StringBuilder();
 			try
-			{		
+			{
 				string logfile = WebUtil.ResolveLogFile(Context);
 				XPathDocument document = new XPathDocument(logfile);
-				
+
 				IList list = GetSummaryXslFiles();
-				foreach (string xslFile in list) 
+				foreach (string xslFile in list)
 				{
-					if (xslFile.ToLower().IndexOf("header") > -1)	// header content goes first
+					if (xslFile.ToLower().IndexOf("header") > -1) // header content goes first
 					{
 						builder.Insert(0, Transform(xslFile, document));
 					}
@@ -62,7 +62,7 @@ namespace ThoughtWorks.CruiseControl.Web
 					}
 				}
 			}
-			catch(XmlException ex)
+			catch (XmlException ex)
 			{
 				throw new CruiseControlException(String.Format("Bad XML in logfile: " + ex.Message));
 			}
@@ -84,16 +84,18 @@ namespace ThoughtWorks.CruiseControl.Web
 		}
 
 		#region Web Form Designer generated code
-		override protected void OnInit(EventArgs e)
+
+		protected override void OnInit(EventArgs e)
 		{
 			InitializeComponent();
 			base.OnInit(e);
 		}
-		
+
 		private void InitializeComponent()
-		{    
+		{
 			this.Load += new EventHandler(this.Page_Load);
 		}
+
 		#endregion
 	}
 }

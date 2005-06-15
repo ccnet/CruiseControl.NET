@@ -11,16 +11,10 @@ namespace ThoughtWorks.CruiseControl.Core.State
 	public interface IStateManager
 	{
 		/// <summary>
-		/// Gets a value indicating whether the state file exists.
-		/// </summary>
-		/// <returns></returns>
-		bool StateFileExists();
-
-		/// <summary>
 		/// Loads the state of the project.
 		/// </summary>
 		/// <returns></returns>
-		IIntegrationResult LoadState();
+		IIntegrationResult LoadState(string project);
 
 		/// <summary>
 		/// Persists the state of the project.

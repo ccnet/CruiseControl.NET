@@ -118,8 +118,8 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 
 		public static string EncodeCDATA(string text)
 		{
-			Regex CDATACloseTag = new Regex(@"\]\]>");
-			return CDATACloseTag.Replace(text, @"] ]>");
+			Regex CDataCloseTag = new Regex(@"\]\]>");
+			return CDataCloseTag.Replace(text, @"] ]>");
 		}
 
 		public static string StringSerialize(object o)

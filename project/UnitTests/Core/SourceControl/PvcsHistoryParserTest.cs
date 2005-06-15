@@ -2,9 +2,11 @@ using System;
 using System.Globalization;
 using System.IO;
 using NUnit.Framework;
+using ThoughtWorks.CruiseControl.Core;
+using ThoughtWorks.CruiseControl.Core.Sourcecontrol;
 using ThoughtWorks.CruiseControl.UnitTests;
 
-namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Test
+namespace ThoughtWorks.CruiseControl.UnitTests.Sourcecontrol
 {
 	[TestFixture]
 	public class PvcsHistoryParserTest

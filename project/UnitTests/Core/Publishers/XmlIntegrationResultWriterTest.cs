@@ -1,5 +1,6 @@
 using System;
 using System.IO;
+using System.Xml.XPath;
 using NUnit.Framework;
 using ThoughtWorks.CruiseControl.Core;
 using ThoughtWorks.CruiseControl.Core.Publishers;
@@ -13,13 +14,13 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Publishers
     {
         public const string TEMP_SUBDIR = "XmlIntegrationResultWriterTest";
         private StringWriter buffer;
-        private XmlIntegrationResultWriter _writer;
+        private XmlIntegrationResultWriter writer;
 
         [SetUp]
         protected void SetUp()
         {
             buffer = new StringWriter();
-            _writer = new XmlIntegrationResultWriter(buffer);
+        	writer = new XmlIntegrationResultWriter(buffer);
         }
 
 		[Test]
@@ -27,7 +28,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Publishers
 		{
 			IntegrationResult result = CreateIntegrationResult(IntegrationStatus.Success, false);
 
-			_writer.Write(result);
+			writer.Write(result);
 
 			string expected = string.Format(@"<cruisecontrol project=""proj""><modifications />{0}</cruisecontrol>", CreateExpectedBuildXml(result));
 			Assert.AreEqual(expected, buffer.ToString());
@@ -39,7 +40,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Publishers
             Modification[] mods = CreateModifications();
             string expected = string.Format("<modifications>{0}</modifications>", mods[0].ToXml());
 
-            _writer.WriteModifications(mods);
+        	writer.WriteModifications(mods);
             Assert.AreEqual(expected, buffer.ToString());
         }
 
@@ -65,7 +66,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Publishers
             IntegrationResult result = IntegrationResultMother.Create(false);
             result.ExceptionResult = exception;
 
-            _writer.Write(result);
+        	writer.Write(result);
             string actual = buffer.ToString();
 
             Assert.IsTrue(actual.IndexOf(exceptionMessage) > 0);
@@ -94,7 +95,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Publishers
 		{
 			IntegrationResult result = IntegrationResultMother.CreateSuccessful();
 			result.AddTaskResult("<foo>");
-			_writer.Write(result);			
+			writer.Write(result);			
 			AssertContains("<![CDATA[<foo>]]>", buffer.ToString());
 		}
 
@@ -205,6 +206,21 @@ http://nant.sourceforge.net
 			AssertNotContains(output, "<?xml");
 		}
 
+		[Test]
+		public void WriteCPlusPlusOutput()
+		{
+			IntegrationResult result = new IntegrationResult("foo", "c:\\temp");
+			result.AddTaskResult(@"e:\RW\WORKSPACES\WIN2000\MSVC60\8S\INCLUDE\iterator(563) : warning C4284: return type for 'std::reverse_iterator<class std::vector<bool,class std::allocator>::iterator,bool,class std::vector<bool,class std::allocator>::reference,bool *,int>::operator ->' is 'bool *' (ie; not a UDT or reference to a UDT.  Will produce errors if applied using infix notation)
+
+        e:\RW\WORKSPACES\WIN2000\MSVC60\8S\INCLUDE\vector(1045) : see reference to class template instantiation 'std::reverse_iterator<class std::vector<bool,class std::allocator>::iterator,bool,class std::vector<bool,class std::allocator>::reference,bool *,int>' being compiled
+
+e:\RW\WORKSPACES\WIN2000\MSVC60\8S\INCLUDE\iterator(563) : warning C4284: return type for 'std::reverse_iterator<class std::vector<bool,class std::allocator>::const_iterator,bool,bool,bool const *,int>::operator ->' is 'const bool *' (ie; not a UDT or reference to a UDT.  Will produce errors if applied using infix notation)
+
+        e:\RW\WORKSPACES\WIN2000\MSVC60\8S\INCLUDE\vector(1047) : see reference to class template instantiation 'std::reverse_iterator<class std::vector<bool,class std::allocator>::const_iterator,bool,bool,bool const *,int>' being compiled");
+			writer.Write(result);
+			new XPathDocument(new StringReader(buffer.ToString()));
+		}
+
         private IntegrationResult CreateIntegrationResult(IntegrationStatus status, bool addModifications)
         {
             IntegrationResult result = IntegrationResultMother.Create(status);
@@ -222,7 +238,7 @@ http://nant.sourceforge.net
 
         private string GenerateBuildOutput(IntegrationResult input)
         {
-            _writer.WriteBuildElement(input);
+        	writer.WriteBuildElement(input);
             return buffer.ToString();
         }
 

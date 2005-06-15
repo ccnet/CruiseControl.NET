@@ -6,45 +6,44 @@ namespace ThoughtWorks.CruiseControl.Core
 {
 	public class IntegrationResultManager : IIntegrationResultManager
 	{
-		private readonly Project _project;
-		private IIntegrationResult _lastResult;
-		private IntegrationResult _currentResult;
+		private readonly Project project;
+		private IIntegrationResult lastResult;
+		private IntegrationResult currentResult;
 
 		public IntegrationResultManager(Project project)
 		{
-			_project = project;
+			this.project = project;
 		}
 
 		public IIntegrationResult LastIntegrationResult
 		{
 			get
 			{
-				if (_lastResult == null)
+				if (lastResult == null)
 				{
-					_lastResult = LoadLastIntegration();
+					lastResult = LoadLastIntegration();
 				}
-				return _lastResult;
+				return lastResult;
 			}
 		}
 
 		private IIntegrationResult LoadLastIntegration()
 		{
-			if (_project.StateManager.StateFileExists())
-			{
-				return _project.StateManager.LoadState();
-			}
-			return IntegrationResult.CreateInitialIntegrationResult(_project.Name, _project.WorkingDirectory);
+			IIntegrationResult result = project.StateManager.LoadState(project.Name);
+			result.WorkingDirectory = project.WorkingDirectory;
+			return result;
 		}
 
 		public IIntegrationResult StartNewIntegration(BuildCondition buildCondition)
 		{
-			_currentResult = new IntegrationResult(_project.Name, _project.WorkingDirectory);
-			_currentResult.LastIntegrationStatus = LastIntegrationResult.Status;
-			_currentResult.BuildCondition = DetermineBuildCondition(buildCondition);
-			_currentResult.Label = _project.Labeller.Generate(LastIntegrationResult);
-			_currentResult.ArtifactDirectory = _project.ArtifactDirectory;
-			_currentResult.ProjectUrl = _project.WebURL;
-			return _currentResult;
+			currentResult = new IntegrationResult(project.Name, project.WorkingDirectory);
+			currentResult.LastIntegrationStatus = LastIntegrationResult.Status;
+			currentResult.BuildCondition = DetermineBuildCondition(buildCondition);
+			currentResult.Label = project.Labeller.Generate(LastIntegrationResult);
+			currentResult.ArtifactDirectory = project.ArtifactDirectory;
+			currentResult.ProjectUrl = project.WebURL;
+			currentResult.LastSuccessfulIntegrationLabel = LastIntegrationResult.LastSuccessfulIntegrationLabel;
+			return currentResult;
 		}
 
 		private BuildCondition DetermineBuildCondition(BuildCondition buildCondition)
@@ -60,13 +59,14 @@ namespace ThoughtWorks.CruiseControl.Core
 		{
 			try
 			{
-				_project.StateManager.SaveState(_currentResult);
+				project.StateManager.SaveState(currentResult);
 			}
 			catch (Exception ex)
 			{
+				// swallow exception???
 				Log.Error("Unable to save integration result: " + ex.ToString());
 			}
-			_lastResult = _currentResult;
+			lastResult = currentResult;
 		}
 	}
 }

@@ -64,7 +64,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Monitoring
 
 		private static ProjectStatus CreateProjectStatus(string projectName)
 		{
-			return new ProjectStatus(ProjectIntegratorState.Running, IntegrationStatus.Failure, ProjectActivity.Sleeping, projectName, "url", DateTime.Now, "label", DateTime.Now );
+			return new ProjectStatus(ProjectIntegratorState.Running, IntegrationStatus.Failure, ProjectActivity.Sleeping, projectName, "url", DateTime.Now, "label", null, DateTime.Now );
 		}
 
 		[Test]

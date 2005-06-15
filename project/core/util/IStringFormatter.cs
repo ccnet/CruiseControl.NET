@@ -1,6 +1,4 @@
-using System;
-
-namespace ThoughtWorks.CruiseControl.Util
+namespace ThoughtWorks.CruiseControl.Core.Util
 {
 	/// <summary>
 	/// Summary description for IStringFormatter.

@@ -10,96 +10,86 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Util
 	{
 		private static string TWO_SUCH_ELEMENTS = "two";
 		private static string ONE_SUCH_ELEMENT = "one";
-		private XmlDocument _doc;
-		private XmlElement _elementOne;
-		private XmlElement _elementTwo;
-		private XmlElement _elementTwoAgain;
+		private XmlDocument doc;
+		private XmlElement elementOne;
+		private XmlElement elementTwo;
+		private XmlElement elementTwoAgain;
 		
 		[SetUp]
 		public void SetUp()
 		{
-			InitTestDocument();
+			doc = new XmlDocument();
+			doc.AppendChild(doc.CreateElement("root"));
+
+			elementOne = doc.CreateElement(ONE_SUCH_ELEMENT);
+			elementTwo = doc.CreateElement(TWO_SUCH_ELEMENTS);
+			elementTwoAgain = doc.CreateElement(TWO_SUCH_ELEMENTS);
+
+			doc.DocumentElement.AppendChild(elementOne);
+			doc.DocumentElement.AppendChild(elementTwo);
+			doc.DocumentElement.AppendChild(elementTwoAgain);
 		}
 
-		public void TestGetFirstElement()
-		{			
-			XmlElement actual = XmlUtil.GetFirstElement(_doc, TWO_SUCH_ELEMENTS);
-			Assert.AreEqual(_elementTwo, actual);
-		}
-
-		public void TestGetSingleElement()
+		[Test]
+		public void GetFirstElement()
 		{
-			XmlUtil.GetSingleElement(_doc, ONE_SUCH_ELEMENT);
-
-			try
-			{
-				XmlUtil.GetSingleElement(_doc, TWO_SUCH_ELEMENTS);
-				Assert.Fail("expected death at get single on multiple");
-			}
-			catch(CruiseControlException){}
+			Assert.AreEqual(elementTwo, XmlUtil.GetFirstElement(doc, TWO_SUCH_ELEMENTS));
 		}
 
-		protected void InitTestDocument()
+		[Test, ExpectedException(typeof(CruiseControlException))]
+		public void GetSingleElement()
 		{
-			_doc = new XmlDocument();
-			_doc.AppendChild(_doc.CreateElement("root"));
-
-			_elementOne = _doc.CreateElement(ONE_SUCH_ELEMENT);
-			_elementTwo = _doc.CreateElement(TWO_SUCH_ELEMENTS);
-			_elementTwoAgain = _doc.CreateElement(TWO_SUCH_ELEMENTS);
-
-			_doc.DocumentElement.AppendChild(_elementOne);
-			_doc.DocumentElement.AppendChild(_elementTwo);
-			_doc.DocumentElement.AppendChild(_elementTwoAgain);
+			XmlUtil.GetSingleElement(doc, ONE_SUCH_ELEMENT);
+			XmlUtil.GetSingleElement(doc, TWO_SUCH_ELEMENTS);
 		}
 
-		public void TestSelectValue()
+		[Test]
+		public void SelectValue()
 		{
 			XmlDocument document = XmlUtil.CreateDocument("<configuration><monkeys>bananas</monkeys></configuration>");
-			string value = XmlUtil.SelectValue(document, "/configuration/monkeys", "orangutan");
-			Assert.AreEqual("bananas", value);			
+			Assert.AreEqual("bananas", XmlUtil.SelectValue(document, "/configuration/monkeys", "orangutan"));			
 		}
 
-		public void TestSelectValue_missingValue()
+		[Test]
+		public void SelectValueWithMissingValue()
 		{
 			XmlDocument document = XmlUtil.CreateDocument("<configuration><monkeys></monkeys></configuration>");
-			string value = XmlUtil.SelectValue(document, "/configuration/monkeys", "orangutan");
-			Assert.AreEqual("orangutan", value);			
+			Assert.AreEqual("orangutan", XmlUtil.SelectValue(document, "/configuration/monkeys", "orangutan"));			
 		}
 
-		public void TestSelectValue_missingElement()
+		[Test]
+		public void SelectValueWithMissingElement()
 		{
 			XmlDocument document = XmlUtil.CreateDocument("<configuration><monkeys></monkeys></configuration>");
-			string value = XmlUtil.SelectValue(document, "/configuration/apes", "orangutan");
-			Assert.AreEqual("orangutan", value);			
+			Assert.AreEqual("orangutan", XmlUtil.SelectValue(document, "/configuration/apes", "orangutan"));			
 		}
 
-		public void TestSelectValue_attribute()
+		[Test]
+		public void SelectValueWithAttribute()
 		{
 			XmlDocument document = XmlUtil.CreateDocument("<configuration><monkeys part=\"brains\">booyah</monkeys></configuration>");
-			string value = XmlUtil.SelectValue(document, "/configuration/monkeys/@part", "orangutan");
-			Assert.AreEqual("brains", value);			
+			Assert.AreEqual("brains", XmlUtil.SelectValue(document, "/configuration/monkeys/@part", "orangutan"));			
 		}
 
-		public void TestSelectRequiredValue()
+		[Test]
+		public void SelectRequiredValue()
 		{
 			XmlDocument document = XmlUtil.CreateDocument("<configuration><martin>andersen</martin></configuration>");
-			string value = XmlUtil.SelectRequiredValue(document, "/configuration/martin");
-			Assert.AreEqual("andersen", value);			
+			Assert.AreEqual("andersen", XmlUtil.SelectRequiredValue(document, "/configuration/martin"));			
 		}
 
-		[ExpectedException(typeof(CruiseControlException))]
-		public void TestSelectRequiredValue_missingValue()
+		[Test, ExpectedException(typeof(CruiseControlException))]
+		public void SelectRequiredValueWithMissingValue()
 		{
 			XmlDocument document = XmlUtil.CreateDocument("<configuration><martin></martin></configuration>");
-			string value = XmlUtil.SelectRequiredValue(document, "/configuration/martin");
+			XmlUtil.SelectRequiredValue(document, "/configuration/martin");
 		}
 
-		[ExpectedException(typeof(CruiseControlException))]
-		public void TestSelectRequiredValue_missingElement()
+		[Test, ExpectedException(typeof(CruiseControlException))]
+		public void SelectRequiredValueWithMissingElement()
 		{
 			XmlDocument document = XmlUtil.CreateDocument("<configuration><martin></martin></configuration>");
-			string value = XmlUtil.SelectRequiredValue(document, "/configuration/larry");
+			XmlUtil.SelectRequiredValue(document, "/configuration/larry");
 		}
 
 		[Test]
