@@ -1,4 +1,3 @@
-using System;
 using System.Text;
 
 namespace ThoughtWorks.CruiseControl.Core.Util
@@ -49,9 +48,25 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 			builder.AppendFormat(string.Format("{0} \"{1}\"", arg, value));
 		}
 
+		public void AddInQuotes(string value)
+		{
+			if (StringUtil.IsBlank(value)) return;
+
+			AppendSpaceIfNotEmpty();
+			builder.AppendFormat(string.Format("\"{0}\"", value));
+		}
+
 		public void Append(string text)
 		{
 			builder.Append(text);
+		}
+
+		public void Add(string arg, string value)
+		{
+			if (StringUtil.IsBlank(value)) return;
+
+			AppendSpaceIfNotEmpty();
+			builder.AppendFormat(string.Format("{0} {1}", arg, value));			
 		}
 	}
 }

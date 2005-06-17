@@ -1,3 +1,4 @@
+using System;
 using Exortech.NetReflector;
 using NMock;
 using NMock.Constraints;
@@ -9,22 +10,21 @@ using ThoughtWorks.CruiseControl.Core.Util;
 namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 {
 	[TestFixture]
-	public class VaultTest : CustomAssertion
+	public class VaultTest : ProcessExecutorTestFixtureBase
 	{
 		private Vault vault;
-		private DynamicMock mockExecutor;
 		private DynamicMock mockHistoryParser;
 		private IntegrationResult result;
 
 		[SetUp]
 		public void SetUp()
 		{
-			mockExecutor = new DynamicMock(typeof (ProcessExecutor));
+			CreateProcessExecutorMock(Vault.DefaultExecutable);
 			mockHistoryParser = new DynamicMock(typeof(IHistoryParser));
-			vault = new Vault((IHistoryParser) mockHistoryParser.MockInstance, (ProcessExecutor) mockExecutor.MockInstance);
+			vault = new Vault((IHistoryParser) mockHistoryParser.MockInstance, (ProcessExecutor) mockProcessExecutor.MockInstance);
 
 			result = IntegrationResultMother.CreateSuccessful("foo");
-			result.WorkingDirectory = "c:\\dev";
+			result.WorkingDirectory = DefaultWorkingDirectory;
 		}
 
 		[Test]
@@ -66,72 +66,105 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 		[Test]
 		public void ShouldBuildGetModificationsArgumentsCorrectly()
 		{
-			string args = @"history ""$"" -host ""host"" -user ""username"" -password ""password"" -repository ""repository"" -rowlimit 0 -ssl";
-			mockExecutor.ExpectAndReturn("Execute", ProcessResultFixture.CreateSuccessfulResult(), ProcessInfoWithArg(args));
-			mockHistoryParser.ExpectAndReturn("Parse", new Modification[0], new IsAnything(), new IsAnything(), new IsAnything());
+			DateTime today = DateTime.Now;
+			DateTime yesterday = today.AddDays(-1);
+			result.StartTime = yesterday;
+			string args = string.Format(@"history ""$"" -excludeactions label -rowlimit 0 -begindate {0:s} -enddate {1:s}{2}", 
+				yesterday, today, CommonOptionalArguments());
+			ExpectToExecuteArguments(args);
+			ExpectToParseHistory();
 
-			vault.Host = "host";
-			vault.Username = "username";
-			vault.Password = "password";
-			vault.Repository = "repository";
-			vault.Ssl = true;
-			vault.GetModifications(result, IntegrationResultMother.CreateSuccessful());
-			mockExecutor.Verify();
-			mockHistoryParser.Verify();
+			SetHostUsernamePasswordRepositoryAndSsl();
+			vault.GetModifications(result, IntegrationResultMother.CreateSuccessful(today));
+			VerifyAll();
 		}
 
 		[Test]
 		public void ShouldNotIncludeUnspecifiedArgumentsWhenGettingModifications()
 		{
-			mockExecutor.ExpectAndReturn("Execute", ProcessResultFixture.CreateSuccessfulResult(), ProcessInfoWithArg(@"history ""$"" -rowlimit 0"));
-			mockHistoryParser.ExpectAndReturn("Parse", new Modification[0], new IsAnything(), new IsAnything(), new IsAnything());
+			DateTime today = DateTime.Now;
+			DateTime yesterday = today.AddDays(-1);
+			result.StartTime = yesterday;
+			string args = string.Format(@"history ""$"" -excludeactions label -rowlimit 0 -begindate {0:s} -enddate {1:s}", yesterday, today);
+			ExpectToExecuteArguments(args);
+			ExpectToParseHistory();
+			
 			vault.GetModifications(result, IntegrationResultMother.CreateSuccessful());
-			mockExecutor.Verify();
-			mockHistoryParser.Verify();
+			VerifyAll();
 		}
 
 		[Test]
 		public void ShouldBuildGetSourceArgumentsCorrectly()
 		{
-			string args = @"get ""$"" -destpath ""c:\dev"" -merge overwrite -performdeletions removeworkingcopy -setfiletime checkin -makewritable";
-			mockExecutor.ExpectAndReturn("Execute", ProcessResultFixture.CreateSuccessfulResult(), ProcessInfoWithArg(args));
+			ExpectToExecuteArguments(@"get ""$"" -destpath ""c:\source\"" -merge overwrite -performdeletions removeworkingcopy -setfiletime checkin -makewritable");
 			vault.AutoGetSource = true;
 			vault.Folder = "$";
 			vault.GetSource(result);
-			mockExecutor.Verify();
+			VerifyAll();
+		}
+
+		[Test]
+		public void ShouldBuildGetSourceWithOptionalArgumentsIncluded()
+		{
+			ExpectToExecuteArguments(@"get ""$"" -destpath ""c:\source\"" -merge overwrite -performdeletions removeworkingcopy -setfiletime checkin -makewritable" + CommonOptionalArguments());
+			vault.AutoGetSource = true;
+			vault.Folder = "$";
+			SetHostUsernamePasswordRepositoryAndSsl();
+			vault.GetSource(result);
+			VerifyAll();
 		}
 
 		[Test]
 		public void ShouldNotGetSourceIfAutoGetSourceIsFalse()
 		{
-			mockExecutor.ExpectNoCall("Execute", typeof (ProcessInfo));
+			ExpectThatExecuteWillNotBeCalled();
 			vault.AutoGetSource = false;
 			vault.GetSource(IntegrationResultMother.CreateSuccessful());
-			mockExecutor.Verify();
+			VerifyAll();
 		}
 
 		[Test]
 		public void ShouldNotApplyLabelIfApplyLabelIsFalse()
 		{
-			mockExecutor.ExpectNoCall("Execute", typeof (ProcessInfo));
+			ExpectThatExecuteWillNotBeCalled();
 			vault.ApplyLabel = false;
 			vault.LabelSourceControl(IntegrationResultMother.CreateSuccessful());
-			mockExecutor.Verify();
+			VerifyAll();
 		}
 
 		[Test]
 		public void ShouldBuildApplyLabelArgumentsCorrectly()
 		{
-			mockExecutor.ExpectAndReturn("Execute", ProcessResultFixture.CreateSuccessfulResult(), ProcessInfoWithArg(@"label ""$"" ""foo"""));
+			ExpectToExecuteArguments(@"label ""$"" ""foo""");
 			vault.ApplyLabel = true;
 			vault.Folder = "$";
 			vault.LabelSourceControl(result);
-			mockExecutor.Verify();
+			VerifyAll();
 		}
 
-		private ProcessInfo ProcessInfoWithArg(string args)
+		[Test]
+		public void ShouldBuildApplyLabelArgumentsIncludingCommonOptionalArguments()
 		{
-			return new ProcessInfo(Vault.DefaultExecutable, args, "c:\\dev");
+			ExpectToExecuteArguments(@"label ""$"" ""foo""" + CommonOptionalArguments());
+			vault.ApplyLabel = true;
+			vault.Folder = "$";
+			SetHostUsernamePasswordRepositoryAndSsl();
+			vault.LabelSourceControl(result);
+			VerifyAll();
+		}
+
+		private string CommonOptionalArguments()
+		{
+			return @" -host ""host"" -user ""username"" -password ""password"" -repository ""repository"" -ssl";
+		}
+
+		private void SetHostUsernamePasswordRepositoryAndSsl()
+		{
+			vault.Host = "host";
+			vault.Username = "username";
+			vault.Password = "password";
+			vault.Repository = "repository";
+			vault.Ssl = true;
 		}
 
 		private Vault CreateVault(string xml)
@@ -139,6 +172,17 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 			Vault vault = new Vault();
 			NetReflector.Read(xml, vault);
 			return vault;
+		}
+
+		private void ExpectToParseHistory()
+		{
+			mockHistoryParser.ExpectAndReturn("Parse", new Modification[0], new IsAnything(), new IsAnything(), new IsAnything());
+		}
+
+		private void VerifyAll()
+		{
+			Verify();
+			mockHistoryParser.Verify();
 		}
 	}
 }

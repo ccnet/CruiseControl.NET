@@ -1,3 +1,4 @@
+using System;
 using Exortech.NetReflector;
 using ThoughtWorks.CruiseControl.Core.Util;
 
@@ -44,7 +45,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 		public override Modification[] GetModifications(IIntegrationResult from, IIntegrationResult to)
 		{
 			Log.Info(string.Format("Checking for modifications in Vault from {0} to {1}", from.StartTime, to.StartTime));
-			return GetModifications(ForHistoryProcessInfo(from), from.StartTime, to.StartTime);
+			return GetModifications(ForHistoryProcessInfo(from, to), from.StartTime, to.StartTime);
 		}
 
 		public override void LabelSourceControl(IIntegrationResult result)
@@ -65,19 +66,26 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 
 		private ProcessInfo GetSourceProcessInfo(IIntegrationResult result)
 		{
-			string args = string.Format(@"get ""{0}"" -destpath ""{1}"" -merge overwrite -performdeletions removeworkingcopy -setfiletime checkin -makewritable", Folder, result.WorkingDirectory);
-			return ProcessInfoFor(args, result);
+			ProcessArgumentBuilder builder = new ProcessArgumentBuilder();
+			builder.AddInQuotes("get", Folder);
+			builder.AddInQuotes("-destpath", result.WorkingDirectory);
+			builder.AppendArgument("-merge overwrite -performdeletions removeworkingcopy -setfiletime checkin -makewritable");
+			AddCommonOptionalArguments(builder);
+			return ProcessInfoFor(builder.ToString(), result);
 		}
 
 		private ProcessInfo LabelProcessInfo(IIntegrationResult result)
 		{
-			string args = string.Format(@"label ""{0}"" ""{1}""", Folder, result.Label);
-			return ProcessInfoFor(args, result);
+			ProcessArgumentBuilder builder = new ProcessArgumentBuilder();
+			builder.AddInQuotes("label", Folder);
+			builder.AddInQuotes(result.Label);
+			AddCommonOptionalArguments(builder);
+			return ProcessInfoFor(builder.ToString(), result);
 		}
 
-		private ProcessInfo ForHistoryProcessInfo(IIntegrationResult result)
+		private ProcessInfo ForHistoryProcessInfo(IIntegrationResult from, IIntegrationResult to)
 		{
-			return ProcessInfoFor(BuildHistoryProcessArgs(), result);
+			return ProcessInfoFor(BuildHistoryProcessArgs(from.StartTime, to.StartTime), from);
 		}
 
 		private ProcessInfo ProcessInfoFor(string args, IIntegrationResult result)
@@ -85,20 +93,27 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			return new ProcessInfo(Executable, args, result.WorkingDirectory);
 		}
 
-		// "history ""{0}"" -host ""{1}"" -user ""{2}"" -password ""{3}"" -repository ""{4}"" -rowlimit 0"
+		// "history ""{0}"" -excludeactions label -rowlimit 0 -begindate {1:s} -enddate {2:s}
 		// rowlimit 0 or -1 means unlimited (default is 1000 if not specified)
 		// TODO: might want to make rowlimit configurable?
-		private string BuildHistoryProcessArgs()
+		private string BuildHistoryProcessArgs(DateTime from, DateTime to)
 		{
 			ProcessArgumentBuilder builder = new ProcessArgumentBuilder();
 			builder.AddInQuotes("history", Folder);
+			builder.AppendArgument("-excludeactions label -rowlimit 0");
+			builder.Add("-begindate", from.ToString("s"));
+			builder.Add("-enddate", to.ToString("s"));
+			AddCommonOptionalArguments(builder);
+			return builder.ToString();
+		}
+
+		private void AddCommonOptionalArguments(ProcessArgumentBuilder builder)
+		{
 			builder.AddInQuotes("-host", Host);
 			builder.AddInQuotes("-user", Username);
 			builder.AddInQuotes("-password", Password);
 			builder.AddInQuotes("-repository", Repository);
-			builder.AppendArgument("-rowlimit 0");
 			builder.AppendIf(Ssl, "-ssl");
-			return builder.ToString();
 		}
 	}
 }
