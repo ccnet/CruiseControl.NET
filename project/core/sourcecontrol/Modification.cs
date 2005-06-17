@@ -39,10 +39,8 @@ namespace ThoughtWorks.CruiseControl.Core
 			writer.WriteElementString("date", DateUtil.FormatDate(ModifiedTime));
 			writer.WriteElementString("user", UserName);
 			writer.WriteElementString("comment", Comment);
-			if (Version.Length == 0)
-				writer.WriteElementString("changeNumber", ChangeNumber.ToString());
-			else
-				writer.WriteElementString("changeNumber", Version);
+			writer.WriteElementString("changeNumber", ChangeNumber.ToString());
+			if (! StringUtil.IsBlank(Version)) writer.WriteElementString("version", Version);
 			XmlUtil.WriteNonNullElementString(writer, "url", Url);
 			XmlUtil.WriteNonNullElementString(writer, "email", EmailAddress);
 			writer.WriteEndElement();

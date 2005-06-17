@@ -8,8 +8,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Perforce
 {
 	public class P4HistoryParser : IHistoryParser
 	{
-		private static Regex modRegex = new Regex(@"info1: (?<folder>//.*)/(?<file>.*)#\d+ (?<type>\w+)");
-//		private static Regex changeRegex = new Regex(@"text: Change \w+ by (?<email>(?<user>.*)@.*) on (?<date>\d{4}/\d{2}/\d{2} \d{2}:\d{2}:\d{2})");
+		private static Regex modRegex = new Regex(@"info1: (?<folder>//.*)/(?<file>.*)#(?<revision>\d+) (?<type>\w+)");
 		private static Regex changeRegex = new Regex(@"text: Change (?<change>.*) by (?<email>(?<user>.*)@.*) on (?<date>\d{4}/\d{2}/\d{2} \d{2}:\d{2}:\d{2})");
 
 		/// <summary>
@@ -71,6 +70,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Perforce
 					// when this line is matched, we're finished with this mod, so add it
 					Modification mod = new Modification();
 					mod.ChangeNumber = Int32.Parse(change);
+					mod.Version = modificationMatch.Groups["revision"].Value;
 					mod.FolderName = modificationMatch.Groups["folder"].Value;
 					mod.FileName = modificationMatch.Groups["file"].Value;
 					mod.Type = modificationMatch.Groups["type"].Value;

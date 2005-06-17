@@ -16,13 +16,13 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.SourceControl.Perforce
 		{
 			Modification[] mods = parser.Parse(P4Mother.ContentReader, P4Mother.OLDEST_ENTRY, P4Mother.NEWEST_ENTRY);
 			Assert.AreEqual(7, mods.Length);
-			AssertModification(mods[0], 3328, "SpoonCrusher.cs", "//depot/myproject/something", new DateTime(2002, 10, 31, 18, 20, 59), "edit", "someone@somewhere", "someone", "Something important\r\nso there!");
-			AssertModification(mods[1], 3328, "AppleEater.cs", "//depot/myproject/something", new DateTime(2002, 10, 31, 18, 20, 59), "add", "someone@somewhere", "someone", "Something important\r\nso there!");
-			AssertModification(mods[2], 3328, "MonkeyToucher.cs", "//depot/myproject/something", new DateTime(2002, 10, 31, 18, 20, 59), "edit", "someone@somewhere", "someone", "Something important\r\nso there!");
-			AssertModification(mods[3], 3327, "IPerson.cs", "//depot/myproject/foo", new DateTime(2002, 10, 31, 14, 20, 59), "edit", "someone@somewhere", "someone", "One line\r\n\r\nAnother line");
-			AssertModification(mods[4], 3327, "MiniMike.cs", "//depot/myproject/foo", new DateTime(2002, 10, 31, 14, 20, 59), "add", "someone@somewhere", "someone", "One line\r\n\r\nAnother line");
-			AssertModification(mods[5], 3327, "JoeJoeJoe.cs", "//depot/myproject/foo", new DateTime(2002, 10, 31, 14, 20, 59), "add", "someone@somewhere", "someone", "One line\r\n\r\nAnother line");
-			AssertModification(mods[6], 332, "Fish.cs", "//depot/myproject/tank", new DateTime(2002, 10, 31, 11, 20, 59), "add", "bob@nowhere", "bob", "thingy\r\n(evil below)\r\nAffected files ...\r\nChange 123 by someone@somewhere on 2002/10/31 11:20:59\r\n(end of evil)");
+			AssertModification(mods[0], 3328, "3", "SpoonCrusher.cs", "//depot/myproject/something", new DateTime(2002, 10, 31, 18, 20, 59), "edit", "someone@somewhere", "someone", "Something important\r\nso there!");
+			AssertModification(mods[1], 3328, "1", "AppleEater.cs", "//depot/myproject/something", new DateTime(2002, 10, 31, 18, 20, 59), "add", "someone@somewhere", "someone", "Something important\r\nso there!");
+			AssertModification(mods[2], 3328, "811", "MonkeyToucher.cs", "//depot/myproject/something", new DateTime(2002, 10, 31, 18, 20, 59), "edit", "someone@somewhere", "someone", "Something important\r\nso there!");
+			AssertModification(mods[3], 3327, "3", "IPerson.cs", "//depot/myproject/foo", new DateTime(2002, 10, 31, 14, 20, 59), "edit", "someone@somewhere", "someone", "One line\r\n\r\nAnother line");
+			AssertModification(mods[4], 3327, "1", "MiniMike.cs", "//depot/myproject/foo", new DateTime(2002, 10, 31, 14, 20, 59), "add", "someone@somewhere", "someone", "One line\r\n\r\nAnother line");
+			AssertModification(mods[5], 3327, "1", "JoeJoeJoe.cs", "//depot/myproject/foo", new DateTime(2002, 10, 31, 14, 20, 59), "add", "someone@somewhere", "someone", "One line\r\n\r\nAnother line");
+			AssertModification(mods[6], 332, "3", "Fish.cs", "//depot/myproject/tank", new DateTime(2002, 10, 31, 11, 20, 59), "add", "bob@nowhere", "bob", "thingy\r\n(evil below)\r\nAffected files ...\r\nChange 123 by someone@somewhere on 2002/10/31 11:20:59\r\n(end of evil)");
 			Assert.AreEqual(7, mods.Length);
 		}
 
@@ -49,9 +49,11 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.SourceControl.Perforce
 			Assert.AreEqual("//shipping", mods[0].FolderName);
 			Assert.AreEqual("edit", mods[0].Type);
 			Assert.AreEqual("a test comment", mods[0].Comment);
+			Assert.AreEqual(23680, mods[0].ChangeNumber);
+			Assert.AreEqual("10", mods[0].Version);
 		}
 
-		private void AssertModification(Modification mod, int changeNumber, string file, string folder, DateTime modifiedTime, string type, string email, string username, string comment)
+		private void AssertModification(Modification mod, int changeNumber, string revision, string file, string folder, DateTime modifiedTime, string type, string email, string username, string comment)
 		{
 			Assert.AreEqual(changeNumber, mod.ChangeNumber);
 			Assert.AreEqual(file, mod.FileName);
@@ -61,6 +63,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.SourceControl.Perforce
 			Assert.AreEqual(email, mod.EmailAddress);
 			Assert.AreEqual(username, mod.UserName);
 			Assert.AreEqual(comment, mod.Comment);
+			Assert.AreEqual(revision, mod.Version);
 		}
 
 		[Test]

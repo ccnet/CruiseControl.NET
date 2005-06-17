@@ -43,7 +43,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.SourceControl.Perforce
 			// Setup
 			DynamicMock p4Mock = new DynamicMock(typeof(P4));
 			P4 p4 = (P4) p4Mock.MockInstance;
-			p4Mock.SetupResult("Client", "myClient");
+			p4.Client = "myClient";
 
 			ProcessInfo processInfo = new ProcessInfo("deleteclient");
 			processInfoCreatorMock.ExpectAndReturn("CreateProcessInfo", processInfo, p4, "client -d myClient");
@@ -65,7 +65,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.SourceControl.Perforce
 			// Setup
 			DynamicMock p4Mock = new DynamicMock(typeof(P4));
 			P4 p4 = (P4) p4Mock.MockInstance;
-			p4Mock.SetupResult("Client", null);
+			p4.Client = null;
 
 			processInfoCreatorMock.ExpectNoCall("CreateProcessInfo", typeof(P4), typeof(string));
 			processExecutorMock.ExpectNoCall("Execute", typeof(ProcessInfo));
@@ -86,7 +86,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.SourceControl.Perforce
 			// Setup
 			DynamicMock p4Mock = new DynamicMock(typeof(P4));
 			P4 p4 = (P4) p4Mock.MockInstance;
-			p4Mock.SetupResult("Client", "myClient");
+			p4.Client = "myClient";
 
 			ProcessInfo processInfo = new ProcessInfo("deleteclient");
 			processInfoCreatorMock.ExpectAndReturn("CreateProcessInfo", processInfo, p4, "client -d myClient");

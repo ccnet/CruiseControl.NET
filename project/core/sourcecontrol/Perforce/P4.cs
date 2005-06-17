@@ -1,9 +1,9 @@
-using System.Collections;
-using Exortech.NetReflector;
 using System;
-using System.IO;
+using System.Collections;
 using System.Globalization;
+using System.IO;
 using System.Text;
+using Exortech.NetReflector;
 using ThoughtWorks.CruiseControl.Core.Util;
 
 namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Perforce
@@ -12,15 +12,8 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Perforce
 	public class P4 : ISourceControl
 	{
 		private readonly IP4Purger p4Purger;
-		internal readonly static string COMMAND_DATE_FORMAT = "yyyy/MM/dd:HH:mm:ss";
+		internal static readonly string COMMAND_DATE_FORMAT = "yyyy/MM/dd:HH:mm:ss";
 
-		private string _executable = "p4";
-		private string _view = "";
-		private string _client = "";
-		private string _user = "";
-		private string _port = "";
-		private string _workingDirectory = "";
-		private bool forceSync = false;
 		private readonly ProcessExecutor processExecutor;
 		private readonly IP4Initializer p4Initializer;
 		private readonly IP4ProcessInfoCreator processInfoCreator;
@@ -42,46 +35,22 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Perforce
 		}
 
 		[ReflectorProperty("executable", Required=false)]
-		public string Executable
-		{
-			get{ return _executable;}
-			set{ _executable = value;}
-		}
+		public string Executable = "p4";
 
 		[ReflectorProperty("view")]
-		public virtual string View
-		{
-			get{ return _view;}
-			set{ _view = value;}
-		}
+		public string View;
 
 		[ReflectorProperty("client", Required=false)]
-		public virtual string Client
-		{
-			get{ return _client;}
-			set{ _client = value;}
-		}
+		public string Client = string.Empty;
 
 		[ReflectorProperty("user", Required=false)]
-		public string User
-		{
-			get{ return _user;}
-			set{ _user = value;}
-		}
+		public string User = string.Empty;
 
 		[ReflectorProperty("port", Required=false)]
-		public string Port
-		{
-			get{ return _port;}
-			set{ _port = value;}
-		}
+		public string Port = string.Empty;
 
 		[ReflectorProperty("workingDirectory", Required=false)]
-		public string WorkingDirectory
-		{
-			get{ return _workingDirectory;}
-			set{ _workingDirectory = value;}
-		}
+		public string WorkingDirectory = string.Empty;
 
 		[ReflectorProperty("applyLabel", Required = false)]
 		public bool ApplyLabel = false;
@@ -90,11 +59,10 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Perforce
 		public bool AutoGetSource = false;
 
 		[ReflectorProperty("forceSync", Required = false)]
-		public bool ForceSync
-		{
-			get { return forceSync; }
-			set { forceSync = value; }
-		}
+		public bool ForceSync = false;
+
+		[ReflectorProperty(@"p4WebURLFormat", Required=false)]
+		public string P4WebURLFormat;
 
 		public string BuildModificationsCommandArguments(DateTime from, DateTime to)
 		{
@@ -107,11 +75,11 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Perforce
 			foreach (string viewline in View.Split(','))
 			{
 				args.Append(viewline);
-				if (from==DateTime.MinValue) 
+				if (from == DateTime.MinValue)
 				{
 					args.Append("@" + FormatDate(to));
-				} 
-				else 
+				}
+				else
 				{
 					args.Append(string.Format("@{0},@{1} ", FormatDate(from), FormatDate(to)));
 				}
@@ -123,8 +91,8 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Perforce
 		{
 			return date.ToString(COMMAND_DATE_FORMAT, CultureInfo.InvariantCulture);
 		}
-		
-		public virtual ProcessInfo CreateChangeListProcess(DateTime from, DateTime to) 
+
+		public virtual ProcessInfo CreateChangeListProcess(DateTime from, DateTime to)
 		{
 			return processInfoCreator.CreateProcessInfo(this, BuildModificationsCommandArguments(from, to));
 		}
@@ -136,7 +104,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Perforce
 
 			foreach (char c in changes)
 			{
-				if (! (Char.IsDigit(c) || c == ' ') )
+				if (! (Char.IsDigit(c) || c == ' '))
 					throw new CruiseControlException("Invalid changes list encountered");
 			}
 
@@ -156,7 +124,15 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Perforce
 			else
 			{
 				process = CreateDescribeProcess(changes);
-				return parser.Parse(new StringReader(Execute(process)), from.StartTime, to.StartTime);
+				Modification[] mods = parser.Parse(new StringReader(Execute(process)), from.StartTime, to.StartTime);
+				if (! StringUtil.IsBlank(P4WebURLFormat))
+				{
+					foreach (Modification mod in mods)
+					{
+						mod.Url = string.Format(P4WebURLFormat, mod.ChangeNumber);
+					}
+				}
+				return mods;
 			}
 		}
 
@@ -167,7 +143,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Perforce
 		/// checked out on the client (In theory this could be refined by using the timeStamp, but it would be better
 		/// to wait until CCNet has proper support for atomic-commit change groups, and use that instead)
 		/// </summary>
-		public void LabelSourceControl(IIntegrationResult result) 
+		public void LabelSourceControl(IIntegrationResult result)
 		{
 			if (ApplyLabel && result.Succeeded)
 			{
@@ -179,13 +155,14 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Perforce
 					int.Parse(result.Label);
 					throw new CruiseControlException("Perforce cannot handle purely numeric labels - you must use a label prefix for your project");
 				}
-				catch (FormatException) { }
+				catch (FormatException)
+				{}
 				ProcessInfo process = CreateLabelSpecificationProcess(result.Label);
 
 				string processOutput = Execute(process);
 				if (containsErrors(processOutput))
 				{
-					Log.Error(string.Format("Perforce labelling failed:\r\n\t process was : {0} \r\n\t output from process was: {1}", process.ToString(),  processOutput));
+					Log.Error(string.Format("Perforce labelling failed:\r\n\t process was : {0} \r\n\t output from process was: {1}", process.ToString(), processOutput));
 					return;
 				}
 
@@ -193,7 +170,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Perforce
 				processOutput = Execute(process);
 				if (containsErrors(processOutput))
 				{
-					Log.Error(string.Format("Perforce labelling failed:\r\n\t process was : {0} \r\n\t output from process was: {1}", process.ToString(),  processOutput));
+					Log.Error(string.Format("Perforce labelling failed:\r\n\t process was : {0} \r\n\t output from process was: {1}", process.ToString(), processOutput));
 					return;
 				}
 			}
@@ -249,10 +226,7 @@ View:
 
 		public string ViewForDisplay
 		{
-			get
-			{
-				return View.Replace(",", Environment.NewLine);
-			}
+			get { return View.Replace(",", Environment.NewLine); }
 		}
 
 		private ProcessInfo CreateLabelSyncProcess(string label)
@@ -289,25 +263,25 @@ View:
 
 		public void Initialize(IProject project)
 		{
-			if (_workingDirectory == null || _workingDirectory == string.Empty)
+			if (StringUtil.IsBlank(WorkingDirectory))
 			{
-				p4Initializer.Initialize(this, project.Name, project.WorkingDirectory);	
+				p4Initializer.Initialize(this, project.Name, project.WorkingDirectory);
 			}
 			else
 			{
-				p4Initializer.Initialize(this, project.Name, _workingDirectory);
+				p4Initializer.Initialize(this, project.Name, WorkingDirectory);
 			}
 		}
 
 		public void Purge(IProject project)
 		{
-			if (_workingDirectory == null || _workingDirectory == string.Empty)
+			if (StringUtil.IsBlank(WorkingDirectory))
 			{
-				p4Purger.Purge(this, project.WorkingDirectory);	
+				p4Purger.Purge(this, project.WorkingDirectory);
 			}
 			else
 			{
-				p4Purger.Purge(this, _workingDirectory);
+				p4Purger.Purge(this, WorkingDirectory);
 			}
 		}
 	}

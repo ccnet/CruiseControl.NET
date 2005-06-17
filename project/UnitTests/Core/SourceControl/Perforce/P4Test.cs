@@ -1,7 +1,6 @@
 using System;
 using Exortech.NetReflector;
 using NMock;
-using NMock.Constraints;
 using NUnit.Framework;
 using ThoughtWorks.CruiseControl.Core;
 using ThoughtWorks.CruiseControl.Core.Sourcecontrol.Perforce;
@@ -12,9 +11,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.SourceControl.Perforce
 	// ToDo - tidy up these tests by using mocks for process Executor, and make appropriate methods on P4 private
 	// This already performed for 'Label', 'Get Source', 'Initialize'
 	[TestFixture]
-	public class P4Test : CustomAssertion
+	public class P4Test : ProcessExecutorTestFixtureBase
 	{
-		private DynamicMock processExecutorMock;
 		private DynamicMock p4InitializerMock;
 		private DynamicMock processInfoCreatorMock;
 		private DynamicMock projectMock;
@@ -24,8 +22,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.SourceControl.Perforce
 		[SetUp]
 		public void Setup()
 		{
-			processExecutorMock = new DynamicMock(typeof (ProcessExecutor));
-			processExecutorMock.Strict = true;
+			CreateProcessExecutorMock("p4");
 			p4InitializerMock = new DynamicMock(typeof (IP4Initializer));
 			p4PurgerMock = new DynamicMock(typeof (IP4Purger));
 			processInfoCreatorMock = new DynamicMock(typeof (IP4ProcessInfoCreator));
@@ -35,7 +32,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.SourceControl.Perforce
 
 		private void VerifyAll()
 		{
-			processExecutorMock.Verify();
+			Verify();
 			p4InitializerMock.Verify();
 			p4PurgerMock.Verify();
 			processInfoCreatorMock.Verify();
@@ -59,6 +56,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.SourceControl.Perforce
   <user>me</user>
   <port>anotherserver:2666</port>
   <workingDirectory>myWorkingDirectory</workingDirectory>
+  <p4WebURLFormat>http://perforceWebServer:8080/@md=d&amp;cd=//&amp;c=3IB@/{0}?ac=10</p4WebURLFormat>
 </sourceControl>
 ";
 			P4 p4 = CreateP4WithNoArgContructor(xml);
@@ -79,7 +77,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.SourceControl.Perforce
 
 		private P4 CreateP4()
 		{
-			return new P4((ProcessExecutor) processExecutorMock.MockInstance,
+			return new P4((ProcessExecutor) mockProcessExecutor.MockInstance,
 			              (IP4Initializer) p4InitializerMock.MockInstance,
 			              (IP4Purger) p4PurgerMock.MockInstance,
 			              (IP4ProcessInfoCreator) processInfoCreatorMock.MockInstance);
@@ -101,8 +99,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.SourceControl.Perforce
 			Assert.AreEqual("", p4.Port);
 		}
 
-		[Test]
-		[ExpectedException(typeof (NetReflectorException))]
+		[Test, ExpectedException(typeof (NetReflectorException))]
 		public void ReadConfigBarfsWhenViewIsExcluded()
 		{
 			string xml = @"
@@ -213,42 +210,39 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.SourceControl.Perforce
 			new P4().CreateDescribeProcess(changes);
 		}
 
-		[Test]
-		[ExpectedException(typeof (Exception))]
+		[Test, ExpectedException(typeof (Exception))]
 		public void CreateGetDescribeProcessWithNoChanges()
 		{
-			string changes = "";
-			new P4().CreateDescribeProcess(changes);
+			new P4().CreateDescribeProcess("");
 			// this should never happen, but here's a test just in case.
 		}
 
 		[Test]
-// Owen: I'm tired of looking at this comment in the build log.  The test seems to pass.  Either keep it or delete it.
-//		[Ignore("This test is terrible - *never* test classes by testing a mock. Redesign until you can test properly (or use TDD and you won't get this anyway)")]
-			public void GetModifications()
+		public void GetModifications()
 		{
-			DateTime from = new DateTime(2002, 11, 1);
-			DateTime to = new DateTime(2002, 11, 14);
-
-			DynamicMock mock = new DynamicMock(typeof (P4));
-			mock.Ignore("GetModifications");
-			mock.Ignore("CreateChangeListProcess");
-
 			string changes = @"
 info: Change 3328 on 2002/10/31 by someone@somewhere 'Something important '
 info: Change 3327 on 2002/10/31 by someone@somewhere 'Joe's test '
 info: Change 332 on 2002/10/31 by someone@somewhere 'thingy'
 exit: 0
 ";
-			mock.ExpectAndReturn("Execute", changes, new IsTypeOf(typeof (ProcessInfo)));
-			mock.ExpectAndReturn("Execute", P4Mother.P4_LOGFILE_CONTENT, new IsAnything());
-			mock.SetupResult("View", "ViewDataForDodgyUnitTest");
 
-			P4 p4 = (P4) mock.MockInstance;
+			P4 p4 = CreateP4();
+
+			ProcessInfo info = new ProcessInfo("p4.exe");
+			processInfoCreatorMock.ExpectAndReturn("CreateProcessInfo", info, p4, "changes -s submitted ViewData@0001/01/01:00:00:00");
+			mockProcessExecutor.ExpectAndReturn("Execute", new ProcessResult(changes, "", 0, false), info);
+			processInfoCreatorMock.ExpectAndReturn("CreateProcessInfo", info, p4, "describe -s 3328 3327 332");
+			mockProcessExecutor.ExpectAndReturn("Execute", new ProcessResult(P4Mother.P4_LOGFILE_CONTENT, "", 0, false), info);
+
+			p4.View = "ViewData";
+			p4.P4WebURLFormat = "http://perforceWebServer:8080/@md=d&amp;cd=//&amp;c=3IB@/{0}?ac=10";
 			Modification[] result = p4.GetModifications(new IntegrationResult(), new IntegrationResult());
 
-			mock.Verify();
+			VerifyAll();
 			Assert.AreEqual(7, result.Length);
+			Assert.AreEqual("http://perforceWebServer:8080/@md=d&amp;cd=//&amp;c=3IB@/3328?ac=10", result[0].Url);
+			Assert.AreEqual("http://perforceWebServer:8080/@md=d&amp;cd=//&amp;c=3IB@/3327?ac=10", result[3].Url);
 		}
 
 		[Test]
@@ -273,9 +267,9 @@ View:
 			ProcessInfo labelSyncProcess = new ProcessInfo("sync");
 
 			processInfoCreatorMock.ExpectAndReturn("CreateProcessInfo", labelSpecProcess, p4, "label -i");
-			processExecutorMock.ExpectAndReturn("Execute", new ProcessResult("", "", 0, false), labelSpecProcessWithStdInContent);
+			mockProcessExecutor.ExpectAndReturn("Execute", new ProcessResult("", "", 0, false), labelSpecProcessWithStdInContent);
 			processInfoCreatorMock.ExpectAndReturn("CreateProcessInfo", labelSyncProcess, p4, "labelsync -l foo-123");
-			processExecutorMock.ExpectAndReturn("Execute", new ProcessResult("", "", 0, false), labelSyncProcess);
+			mockProcessExecutor.ExpectAndReturn("Execute", new ProcessResult("", "", 0, false), labelSyncProcess);
 
 			// Execute
 			p4.LabelSourceControl(IntegrationResultMother.CreateSuccessful("foo-123"));
@@ -307,9 +301,9 @@ View:
 			ProcessInfo labelSyncProcess = new ProcessInfo("sync");
 
 			processInfoCreatorMock.ExpectAndReturn("CreateProcessInfo", labelSpecProcess, p4, "label -i");
-			processExecutorMock.ExpectAndReturn("Execute", new ProcessResult("", "", 0, false), labelSpecProcessWithStdInContent);
+			mockProcessExecutor.ExpectAndReturn("Execute", new ProcessResult("", "", 0, false), labelSpecProcessWithStdInContent);
 			processInfoCreatorMock.ExpectAndReturn("CreateProcessInfo", labelSyncProcess, p4, "labelsync -l foo-123");
-			processExecutorMock.ExpectAndReturn("Execute", new ProcessResult("", "", 0, false), labelSyncProcess);
+			mockProcessExecutor.ExpectAndReturn("Execute", new ProcessResult("", "", 0, false), labelSyncProcess);
 
 			// Execute
 			p4.LabelSourceControl(IntegrationResultMother.CreateSuccessful("foo-123"));
@@ -365,7 +359,7 @@ View:
 			p4.ApplyLabel = false;
 
 			processInfoCreatorMock.ExpectNoCall("CreateProcessInfo", typeof (P4), typeof (string));
-			processExecutorMock.ExpectNoCall("Execute", typeof (ProcessInfo));
+			mockProcessExecutor.ExpectNoCall("Execute", typeof (ProcessInfo));
 			p4.LabelSourceControl(IntegrationResultMother.CreateSuccessful("foo-123"));
 
 			VerifyAll();
@@ -379,7 +373,7 @@ View:
 			p4.ApplyLabel = true;
 
 			processInfoCreatorMock.ExpectNoCall("CreateProcessInfo", typeof (P4), typeof (string));
-			processExecutorMock.ExpectNoCall("Execute", typeof (ProcessInfo));
+			mockProcessExecutor.ExpectNoCall("Execute", typeof (ProcessInfo));
 			p4.LabelSourceControl(IntegrationResultMother.CreateFailed("foo-123"));
 
 			VerifyAll();
@@ -392,7 +386,7 @@ View:
 			p4.View = "//depot/myproject/...";
 
 			processInfoCreatorMock.ExpectNoCall("CreateProcessInfo", typeof (P4), typeof (string));
-			processExecutorMock.ExpectNoCall("Execute", typeof (ProcessInfo));
+			mockProcessExecutor.ExpectNoCall("Execute", typeof (ProcessInfo));
 			p4.LabelSourceControl(IntegrationResultMother.CreateSuccessful("123"));
 
 			VerifyAll();
@@ -407,7 +401,7 @@ View:
 
 			ProcessInfo processInfo = new ProcessInfo("getSource");
 			processInfoCreatorMock.ExpectAndReturn("CreateProcessInfo", processInfo, p4, "sync");
-			processExecutorMock.ExpectAndReturn("Execute", new ProcessResult("", "", 0, false), processInfo);
+			mockProcessExecutor.ExpectAndReturn("Execute", new ProcessResult("", "", 0, false), processInfo);
 			p4.GetSource(new IntegrationResult());
 
 			VerifyAll();
@@ -423,7 +417,7 @@ View:
 
 			ProcessInfo processInfo = new ProcessInfo("getSource");
 			processInfoCreatorMock.ExpectAndReturn("CreateProcessInfo", processInfo, p4, "sync -f");
-			processExecutorMock.ExpectAndReturn("Execute", new ProcessResult("", "", 0, false), processInfo);
+			mockProcessExecutor.ExpectAndReturn("Execute", new ProcessResult("", "", 0, false), processInfo);
 			p4.GetSource(new IntegrationResult());
 
 			VerifyAll();
@@ -437,7 +431,7 @@ View:
 			p4.AutoGetSource = false;
 
 			processInfoCreatorMock.ExpectNoCall("CreateProcessInfo", typeof (P4), typeof (string));
-			processExecutorMock.ExpectNoCall("Execute", typeof (ProcessInfo));
+			mockProcessExecutor.ExpectNoCall("Execute", typeof (ProcessInfo));
 			p4.GetSource(new IntegrationResult());
 			VerifyAll();
 		}

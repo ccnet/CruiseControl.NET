@@ -34,8 +34,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.SourceControl.Perforce
 			// Setup
 			DynamicMock p4Mock = new DynamicMock(typeof(P4));
 			P4 p4 = (P4) p4Mock.MockInstance;
+			p4.Client = "myClient";
 
-			p4Mock.SetupResult("Client", "myClient");
 			p4Mock.SetupResult("ViewForSpecifications", new string[] { "//mydepot/...", "//myotherdepot/..." });
 
 			ProcessInfo processInfo = new ProcessInfo("createclient");
