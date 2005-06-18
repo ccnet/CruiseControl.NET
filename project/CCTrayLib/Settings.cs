@@ -37,7 +37,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib
 
 		public ConnectionMethod ConnectionMethod;
 
-		public bool ShowExceptions = true;
+		public bool ShowExceptions = false;
 
 		public Settings()
 		{
