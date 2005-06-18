@@ -50,6 +50,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 			Assert.AreEqual(DateTime.Now.AddDays(-1).Day, initial.StartTime.Day, "assume start date is yesterday in order to detect some modifications.");
 			Assert.AreEqual(DateTime.Now.Day, initial.EndTime.Day, "assume end date is today in order to detect some modifications.");
 			Assert.AreEqual(@"c:\temp", initial.WorkingDirectory);
+			Assert.AreEqual(IntegrationResult.InitialLabel, initial.Label);
 
 			Assert.IsTrue(initial.IsInitial());
 		}

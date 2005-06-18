@@ -15,11 +15,12 @@ namespace ThoughtWorks.CruiseControl.Core
 	[Serializable]
 	public class IntegrationResult : IIntegrationResult
 	{
+		public const string InitialLabel = "UNKNOWN";
 		private string project;
 		private IntegrationStatus lastIntegrationStatus = IntegrationStatus.Unknown;
 		private BuildCondition buildCondition;
 		private string workingDirectory;
-		private string label;
+		private string label = InitialLabel;
 		private string lastSuccessfulIntegrationLabel;
 		private IntegrationStatus status = IntegrationStatus.Unknown;
 		private DateTime startTime;
