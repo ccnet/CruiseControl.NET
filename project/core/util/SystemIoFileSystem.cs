@@ -34,7 +34,7 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 			if (Directory.Exists(destPath))
 				CopyFileToDirectory(sourcePath, destPath);
 			else
-                CopyFileToFile(sourcePath, destPath);
+				CopyFileToFile(sourcePath, destPath);
 		}
 
 		private void CopyFileToDirectory(string sourcePath, string destPath)
@@ -49,9 +49,17 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 				Directory.CreateDirectory(destDir);
 
 			if (File.Exists(destPath))
-				File.SetAttributes(destPath,FileAttributes.Normal);
+				File.SetAttributes(destPath, FileAttributes.Normal);
 
 			File.Copy(sourcePath, destPath, true);
+		}
+
+		public void Save(string file, string content)
+		{
+			using (StreamWriter stream = File.CreateText(file))
+			{
+				stream.Write(content);
+			}
 		}
 	}
 }

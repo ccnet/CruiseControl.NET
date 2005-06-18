@@ -874,6 +874,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Core\Tasks\ModificationWriterTaskTest.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Core\Tasks\NAntTaskTest.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -1000,6 +1005,11 @@
                 />
                 <File
                     RelPath = "Core\Util\WildCardPathTest.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Core\Util\XmlConstraints.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
