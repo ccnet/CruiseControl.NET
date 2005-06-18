@@ -868,6 +868,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "tasks\ModificationWriterTask.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "tasks\NAntTask.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
