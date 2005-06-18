@@ -1,8 +1,6 @@
 using System;
-using System.ComponentModel;
 using System.IO;
 using Exortech.NetReflector;
-using NMock;
 using NMock.Constraints;
 using NUnit.Framework;
 using ThoughtWorks.CruiseControl.Core;
@@ -13,30 +11,21 @@ using ThoughtWorks.CruiseControl.Remote;
 namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 {
 	[TestFixture]
-	public class NAntTaskTest : CustomAssertion
+	public class NAntTaskTest : ProcessExecutorTestFixtureBase
 	{
-		public const int SUCCESSFUL_EXIT_CODE = 0;
-		public const int FAILED_EXIT_CODE = -1;
-
 		private NAntTask builder;
-		private IMock mockExecutor;
 
 		[SetUp]
 		public void SetUp()
 		{
-			mockExecutor = new DynamicMock(typeof (ProcessExecutor));
-			builder = new NAntTask((ProcessExecutor) mockExecutor.MockInstance);
-		}
-
-		private void VerifyAll()
-		{
-			mockExecutor.Verify();
+			CreateProcessExecutorMock(NAntTask.DefaultExecutable);
+			builder = new NAntTask((ProcessExecutor) mockProcessExecutor.MockInstance);
 		}
 
 		[TearDown]
 		public void TearDown()
 		{
-			mockExecutor.Verify();
+			Verify();
 		}
 
 		[Test]
@@ -73,114 +62,100 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 
 			NetReflector.Read(xml, builder);
 			Assert.AreEqual("", builder.ConfiguredBaseDirectory);
-			Assert.AreEqual(NAntTask.DEFAULT_EXECUTABLE, builder.Executable);
+			Assert.AreEqual(NAntTask.DefaultExecutable, builder.Executable);
 			Assert.AreEqual(0, builder.Targets.Length);
-			Assert.AreEqual(NAntTask.DEFAULT_BUILD_TIMEOUT, builder.BuildTimeoutSeconds);
-			Assert.AreEqual(NAntTask.DEFAULT_LOGGER, builder.Logger);
-			Assert.AreEqual(NAntTask.DEFAULT_NOLOGO, builder.NoLogo);
+			Assert.AreEqual(NAntTask.DefaultBuildTimeout, builder.BuildTimeoutSeconds);
+			Assert.AreEqual(NAntTask.DefaultLogger, builder.Logger);
+			Assert.AreEqual(NAntTask.DefaultNoLogo, builder.NoLogo);
 		}
 
 		[Test]
 		public void ShouldSetSuccessfulStatusAndBuildOutputAsAResultOfASuccessfulBuild()
 		{
-			ProcessResult returnVal = CreateSuccessfulProcessResult();
-			mockExecutor.ExpectAndReturn("Execute", returnVal, new IsAnything());
+			ExpectToExecuteAndReturn(SuccessfulProcessResult());
 
 			IntegrationResult result = new IntegrationResult();
 			builder.Run(result);
 
 			Assert.IsTrue(result.Succeeded);
 			Assert.AreEqual(IntegrationStatus.Success, result.Status);
-			Assert.AreEqual(returnVal.StandardOutput, result.TaskOutput);
+			Assert.AreEqual(SuccessfulProcessResult().StandardOutput, result.TaskOutput);
 		}
 
 		[Test]
 		public void ShouldSetFailedStatusAndBuildOutputAsAResultOfFailedBuild()
 		{
-			ProcessResult returnVal = new ProcessResult("output", null, FAILED_EXIT_CODE, false);
-			mockExecutor.ExpectAndReturn("Execute", returnVal, new IsAnything());
+			ExpectToExecuteAndReturn(FailedProcessResult());
 
 			IntegrationResult result = new IntegrationResult();
 			builder.Run(result);
 
 			Assert.IsTrue(result.Failed);
 			Assert.AreEqual(IntegrationStatus.Failure, result.Status);
-			Assert.AreEqual(returnVal.StandardOutput, result.TaskOutput);
+			Assert.AreEqual(FailedProcessResult().StandardOutput, result.TaskOutput);
 		}
 
 		[Test, ExpectedException(typeof (BuilderException))]
 		public void ShouldThrowBuilderExceptionIfProcessTimesOut()
 		{
-			ProcessResult returnVal = new ProcessResult("output", null, SUCCESSFUL_EXIT_CODE, true);
-			mockExecutor.ExpectAndReturn("Execute", returnVal, new IsAnything());
-
-			IntegrationResult result = new IntegrationResult();
-			builder.Run(result);
+			ExpectToExecuteAndReturn(TimedOutProcessResult());
+			builder.Run(IntegrationResult());
 		}
 
 		[Test, ExpectedException(typeof (BuilderException))]
 		public void ShouldThrowBuilderExceptionIfProcessThrowsException()
 		{
-			mockExecutor.ExpectAndThrow("Execute", new Win32Exception(), new IsAnything());
-
-			IntegrationResult result = new IntegrationResult();
-			builder.Run(result);
+			ExpectToExecuteAndThrow();
+			builder.Run(IntegrationResult());
 		}
 
 		[Test]
 		public void ShouldPassSpecifiedPropertiesAsProcessInfoArgumentsToProcessExecutor()
 		{
-			ProcessResult returnVal = CreateSuccessfulProcessResult();
-			CollectingConstraint constraint = new CollectingConstraint();
-			mockExecutor.ExpectAndReturn("Execute", returnVal, constraint);
+			string args = @"-nologo -buildfile:mybuild.build -logger:NAnt.Core.XmlLogger myArgs -D:label-to-apply=1.0 -D:ccnet.label=1.0 -D:ccnet.buildcondition=NoBuild -D:ccnet.working.directory=C:\temp -D:ccnet.artifact.directory=C:\temp target1 target2";
+			ProcessInfo info = NewProcessInfo(args);
+			info.TimeOut = 2000;
+			ExpectToExecute(info);
 
 			IntegrationResult result = new IntegrationResult();
 			result.Label = "1.0";
 			result.WorkingDirectory = @"C:\temp";
 			result.ArtifactDirectory = @"C:\temp";
 
-			builder.ConfiguredBaseDirectory = @"c:\";
-			builder.Executable = "NAnt.exe";
+			builder.ConfiguredBaseDirectory = DefaultWorkingDirectory;
 			builder.BuildFile = "mybuild.build";
 			builder.BuildArgs = "myArgs";
 			builder.Targets = new string[] {"target1", "target2"};
 			builder.BuildTimeoutSeconds = 2;
 			builder.Run(result);
-
-			ProcessInfo info = (ProcessInfo) constraint.Parameter;
-			Assert.AreEqual(builder.Executable, info.FileName);
-			Assert.AreEqual(builder.ConfiguredBaseDirectory, info.WorkingDirectory);
-			Assert.AreEqual(2000, info.TimeOut);
-			Assert.AreEqual(@"-nologo -buildfile:mybuild.build -logger:NAnt.Core.XmlLogger myArgs -D:label-to-apply=1.0 -D:ccnet.label=1.0 -D:ccnet.buildcondition=NoBuild -D:ccnet.working.directory=""C:\temp"" -D:ccnet.artifact.directory=""C:\temp"" target1 target2", info.Arguments);
 		}
 
 		[Test]
 		public void ShouldPassAppropriateDefaultPropertiesAsProcessInfoArgumentsToProcessExecutor()
 		{
-			ProcessResult returnVal = CreateSuccessfulProcessResult();
-			CollectingConstraint constraint = new CollectingConstraint();
-			mockExecutor.ExpectAndReturn("Execute", returnVal, constraint);
-
-			builder.Run(new IntegrationResult());
-
-			ProcessInfo info = (ProcessInfo) constraint.Parameter;
-			Assert.AreEqual(builder.Executable, NAntTask.DEFAULT_EXECUTABLE);
-			Assert.AreEqual(NAntTask.DEFAULT_BUILD_TIMEOUT*1000, info.TimeOut);
-			Assert.AreEqual("-nologo -logger:NAnt.Core.XmlLogger -D:ccnet.buildcondition=NoBuild", info.Arguments);
+			ExpectToExecuteArguments(@"-nologo -logger:NAnt.Core.XmlLogger -D:ccnet.buildcondition=NoBuild -D:ccnet.working.directory=c:\source");
+			builder.Run(IntegrationResult());
 		}
 
 		[Test]
 		public void ShouldPutQuotesAroundBuildFileIfItContainsASpace()
 		{
-			ProcessResult returnVal = CreateSuccessfulProcessResult();
-			CollectingConstraint constraint = new CollectingConstraint();
-			mockExecutor.ExpectAndReturn("Execute", returnVal, constraint);
+			ExpectToExecuteArguments(@"-nologo -buildfile:""my project.build"" -logger:NAnt.Core.XmlLogger -D:ccnet.buildcondition=NoBuild -D:ccnet.working.directory=c:\source");
 
 			builder.BuildFile = "my project.build";
-			builder.Run(new IntegrationResult());
+			builder.Run(IntegrationResult());
+		}
 
-			ProcessInfo info = (ProcessInfo) constraint.Parameter;
-			Assert.AreEqual(@"-nologo -buildfile:""my project.build"" -logger:NAnt.Core.XmlLogger -D:ccnet.buildcondition=NoBuild", info.Arguments);
+		[Test]
+		public void ShouldEncloseDirectoriesInQuotesIfTheyContainSpaces()
+		{
+			DefaultWorkingDirectory = @"c:\dir with spaces";
+			ExpectToExecuteArguments(@"-nologo -logger:NAnt.Core.XmlLogger -D:ccnet.buildcondition=NoBuild -D:ccnet.working.directory=""c:\dir with spaces"" -D:ccnet.artifact.directory=""c:\dir with spaces""");
+
+			builder.ConfiguredBaseDirectory = DefaultWorkingDirectory;
+			IIntegrationResult result = IntegrationResult();
+			result.ArtifactDirectory = DefaultWorkingDirectory;
+			builder.Run(result);
 		}
 
 		[Test]
@@ -223,15 +198,15 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 
 		private void CheckBaseDirectory(IntegrationResult result, string expectedBaseDirectory)
 		{
-			ProcessResult returnVal = CreateSuccessfulProcessResult();
+			ProcessResult returnVal = SuccessfulProcessResult();
 			CollectingConstraint constraint = new CollectingConstraint();
-			mockExecutor.ExpectAndReturn("Execute", returnVal, constraint);
+			mockProcessExecutor.ExpectAndReturn("Execute", returnVal, constraint);
 
 			builder.Run(result);
 
 			ProcessInfo info = (ProcessInfo) constraint.Parameter;
 			Assert.AreEqual(expectedBaseDirectory, info.WorkingDirectory);
-			VerifyAll();
+			Verify();
 		}
 
 		[Test]
@@ -265,11 +240,6 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 			Assert.AreEqual(0, builder.Targets.Length);
 			builder.TargetsForPresentation = null;
 			Assert.AreEqual(0, builder.Targets.Length);
-		}
-
-		private ProcessResult CreateSuccessfulProcessResult()
-		{
-			return new ProcessResult("output", null, SUCCESSFUL_EXIT_CODE, false);
 		}
 	}
 }

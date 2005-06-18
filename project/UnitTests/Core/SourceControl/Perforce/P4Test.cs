@@ -66,6 +66,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.SourceControl.Perforce
 			Assert.AreEqual("me", p4.User);
 			Assert.AreEqual("anotherserver:2666", p4.Port);
 			Assert.AreEqual("myWorkingDirectory", p4.WorkingDirectory);
+			Assert.AreEqual("http://perforceWebServer:8080/@md=d&cd=//&c=3IB@/{0}?ac=10", p4.P4WebURLFormat);
 		}
 
 		private P4 CreateP4WithNoArgContructor(string p4root)

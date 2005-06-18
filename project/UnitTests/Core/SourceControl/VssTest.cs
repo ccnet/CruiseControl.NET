@@ -165,6 +165,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 		public void CreateWorkingDirectoryIfItDoesNotExist()
 		{
 			string workingDirectory = TempFileUtil.GetTempPath("VSS");
+			TempFileUtil.DeleteTempDir(workingDirectory);
 			Assert.IsFalse(Directory.Exists(workingDirectory));
 
 			ExpectToExecuteAndReturn(SuccessfulProcessResult());
@@ -173,7 +174,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 			vss.GetSource(new IntegrationResult("project", Path.GetTempPath()));
 
 			Assert.IsTrue(Directory.Exists(workingDirectory));
-			Directory.Delete(workingDirectory);
+			TempFileUtil.DeleteTempDir(workingDirectory);
 		}
 
 		[Test]
@@ -181,7 +182,9 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 		{
 			string expectedWorkingDirectory = TempFileUtil.GetTempPath("VSS");
 			string args = string.Format("get $/fooProject -R -Vd{0} -YAdmin,admin -I-N -GTM -GWR", CommandDate(today));
-			ExpectToExecute(new ProcessInfo(DEFAULT_SS_EXE_PATH, args, expectedWorkingDirectory));
+			ProcessInfo info = new ProcessInfo(DEFAULT_SS_EXE_PATH, args, expectedWorkingDirectory);
+			info.TimeOut = DefaultTimeout;
+			ExpectToExecute(info);
 			IntegrationResult result = IntegrationResultMother.CreateSuccessful(today);
 			result.WorkingDirectory = Path.GetTempPath();
 

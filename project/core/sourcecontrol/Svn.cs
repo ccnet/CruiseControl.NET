@@ -12,17 +12,11 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 	[ReflectorType("svn")]
 	public class Svn : ProcessSourceControl
 	{
+		public const string DefaultExecutable = "svn.exe";
 		internal static readonly string HISTORY_COMMAND_FORMAT = "log -v -r \"{{{0}}}:{{{1}}}\" --xml --non-interactive {2}";
 		internal static readonly string TAG_COMMAND_FORMAT = "copy -m \"CCNET build {0}\" \"{1}\" {2}/{0} --non-interactive";
 		internal static readonly string GET_SOURCE_COMMAND_FORMAT = "update --non-interactive";
 		internal static readonly string COMMAND_DATE_FORMAT = "yyyy-MM-ddTHH:mm:ssZ";
-
-		private string executable = "svn.exe";
-		private string trunkUrl;
-		private string workingDirectory;
-		private bool tagOnSuccess;
-		private string tagBaseUrl;
-		private IModificationUrlBuilder urlBuilder;
 
 		public Svn(ProcessExecutor executor) : base(new SvnHistoryParser(), executor)
 		{}
@@ -31,46 +25,22 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 		{}
 
 		[ReflectorProperty("webUrlBuilder", InstanceTypeKey="type", Required = false)]
-		public IModificationUrlBuilder UrlBuilder
-		{
-			get { return urlBuilder; }
-			set { urlBuilder = value; }
-		}
+		public IModificationUrlBuilder UrlBuilder;
 
 		[ReflectorProperty("executable")]
-		public string Executable
-		{
-			get { return executable; }
-			set { executable = value; }
-		}
+		public string Executable = DefaultExecutable;
 
 		[ReflectorProperty("trunkUrl")]
-		public string TrunkUrl
-		{
-			get { return trunkUrl; }
-			set { trunkUrl = value; }
-		}
+		public string TrunkUrl;
 
 		[ReflectorProperty("workingDirectory")]
-		public string WorkingDirectory
-		{
-			get { return workingDirectory; }
-			set { workingDirectory = value; }
-		}
+		public string WorkingDirectory;
 
 		[ReflectorProperty("tagOnSuccess", Required = false)]
-		public bool TagOnSuccess
-		{
-			get { return tagOnSuccess; }
-			set { tagOnSuccess = value; }
-		}
+		public bool TagOnSuccess;
 
 		[ReflectorProperty("tagBaseUrl", Required = false)]
-		public string TagBaseUrl
-		{
-			get { return tagBaseUrl; }
-			set { tagBaseUrl = value; }
-		}
+		public string TagBaseUrl;
 
 		[ReflectorProperty("username", Required = false)]
 		public string Username;
@@ -88,21 +58,21 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 
 		public ProcessInfo CreateHistoryProcessInfo(DateTime from, DateTime to)
 		{
-			return new ProcessInfo(Executable, BuildHistoryProcessArgs(from, to), WorkingDirectory);
+			return NewProcessInfo(BuildHistoryProcessArgs(from, to));
 		}
 
-		public ProcessInfo CreateLabelProcessInfo(IIntegrationResult result)
+		public ProcessInfo NewLabelProcessInfo(IIntegrationResult result)
 		{
-			return new ProcessInfo(Executable, BuildTagProcessArgs(result.Label, result.LastChangeNumber));
+			return NewProcessInfo(BuildTagProcessArgs(result.Label, result.LastChangeNumber));
 		}
 
 		public override Modification[] GetModifications(IIntegrationResult from, IIntegrationResult to)
 		{
 			ProcessResult result = Execute(CreateHistoryProcessInfo(from.StartTime, to.StartTime));
 			Modification[] modifications = ParseModifications(result, from.StartTime, to.StartTime);
-			if (urlBuilder != null)
+			if (UrlBuilder != null)
 			{
-				urlBuilder.SetupModification(modifications);
+				UrlBuilder.SetupModification(modifications);
 			}
 			return modifications;
 		}
@@ -111,14 +81,14 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 		{
 			if (TagOnSuccess && result.Succeeded)
 			{
-				Execute(CreateLabelProcessInfo(result));
+				Execute(NewLabelProcessInfo(result));
 			}
 		}
 
 		private string BuildHistoryProcessArgs(DateTime from, DateTime to)
 		{
 			StringBuilder buffer = new StringBuilder();
-			buffer.AppendFormat(HISTORY_COMMAND_FORMAT, FormatCommandDate(from), FormatCommandDate(to), trunkUrl);
+			buffer.AppendFormat(HISTORY_COMMAND_FORMAT, FormatCommandDate(from), FormatCommandDate(to), TrunkUrl);
 			AppendUsernameAndPassword(buffer);
 			return buffer.ToString();
 		}
@@ -135,11 +105,11 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 
 			if (revision == 0)
 			{
-				buffer.AppendFormat(TAG_COMMAND_FORMAT, label, workingDirectory, tagBaseUrl);
+				buffer.AppendFormat(TAG_COMMAND_FORMAT, label, WorkingDirectory.TrimEnd('\\'), TagBaseUrl);
 			}
 			else
 			{
-				buffer.AppendFormat(TAG_COMMAND_FORMAT, label, trunkUrl, tagBaseUrl);
+				buffer.AppendFormat(TAG_COMMAND_FORMAT, label, TrunkUrl, TagBaseUrl);
 				buffer.AppendFormat(" --revision {0}", revision);
 			}
 			AppendUsernameAndPassword(buffer);
@@ -151,7 +121,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 		{
 			if (AutoGetSource)
 			{
-				ProcessInfo info = new ProcessInfo(Executable, BuildGetSourceArguments(result.LastChangeNumber), WorkingDirectory);
+				ProcessInfo info = NewProcessInfo(BuildGetSourceArguments(result.LastChangeNumber));
 				Log.Info(string.Format("Getting source from Subversion: {0} {1}", info.FileName, info.Arguments));
 				Execute(info);
 			}
@@ -168,6 +138,11 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			}
 			AppendUsernameAndPassword(buffer);
 			return buffer.ToString();
+		}
+
+		private ProcessInfo NewProcessInfo(string args)
+		{
+			return new ProcessInfo(Executable, args, WorkingDirectory);
 		}
 	}
 }

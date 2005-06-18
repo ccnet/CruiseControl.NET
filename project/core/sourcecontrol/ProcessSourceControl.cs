@@ -7,7 +7,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 {
 	public abstract class ProcessSourceControl : ISourceControl
 	{
-		private const int DEFAULT_TIMEOUT = 600000;
+		public const int DEFAULT_TIMEOUT = 600000;
 		protected ProcessExecutor _executor;
 		protected IHistoryParser _historyParser;
 

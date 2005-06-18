@@ -121,7 +121,7 @@ namespace ThoughtWorks.CruiseControl.Core
 		}
 
 		[XmlIgnore] // Exceptions cannot be serialised because of permission attributes
-			public Exception ExceptionResult
+		public Exception ExceptionResult
 		{
 			get { return exception; }
 			set

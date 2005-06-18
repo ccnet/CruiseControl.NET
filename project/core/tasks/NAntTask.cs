@@ -10,12 +10,12 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 	[ReflectorType("nant")]
 	public class NAntTask : ITask
 	{
-		public const int DEFAULT_BUILD_TIMEOUT = 600;
-		public const string DEFAULT_EXECUTABLE = "nant.exe";
-		public const string DEFAULT_LOGGER = "NAnt.Core.XmlLogger";
-		public const bool DEFAULT_NOLOGO = true;
+		public const int DefaultBuildTimeout = 600;
+		public const string DefaultExecutable = "nant.exe";
+		public const string DefaultLogger = "NAnt.Core.XmlLogger";
+		public const bool DefaultNoLogo = true;
 
-		private ProcessExecutor _executor;
+		private ProcessExecutor executor;
 
 		public NAntTask() : this(new ProcessExecutor())
 		{
@@ -23,73 +23,36 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 
 		public NAntTask(ProcessExecutor executor)
 		{
-			_executor = executor;
+			this.executor = executor;
 		}
-
-		private string executable = DEFAULT_EXECUTABLE;
-		private string buildFile = "";
-		private string configuredBaseDirectory = "";
-		private string buildArgs = "";
-		private string logger = DEFAULT_LOGGER;
-		private int buildTimeoutSeconds = DEFAULT_BUILD_TIMEOUT;
-		private bool nologo = DEFAULT_NOLOGO;
 
 		[ReflectorArray("targetList", Required = false)]
 		public string[] Targets = new string[0];
 
-
 		[ReflectorProperty("executable", Required = false)] 
-		public string Executable
-		{
-			get { return executable; }
-			set { executable = value; }
-		}
+		public string Executable = DefaultExecutable;
 
 		[ReflectorProperty("buildFile", Required = false)] 
-		public string BuildFile
-		{
-			get { return buildFile; }
-			set { buildFile = value; }
-		}
+		public string BuildFile = string.Empty;
 
 		[ReflectorProperty("baseDirectory", Required = false)]
-		public string ConfiguredBaseDirectory
-		{
-			get { return configuredBaseDirectory; }
-			set { configuredBaseDirectory = value; }
-		}
+		public string ConfiguredBaseDirectory = string.Empty;
 
 		[ReflectorProperty("buildArgs", Required = false)]
-		public string BuildArgs
-		{
-			get { return buildArgs; }
-			set { buildArgs = value; }
-		}
+		public string BuildArgs = string.Empty;
 
 		[ReflectorProperty("logger", Required = false)]
-		public string Logger
-		{
-			get { return logger; }
-			set { logger = value; }
-		}
+		public string Logger = DefaultLogger;
 
 		[ReflectorProperty("nologo", Required = false)]
-		public bool NoLogo
-		{
-			get { return nologo; }
-			set { nologo = value; }
-		}
+		public bool NoLogo = DefaultNoLogo;
 
 		/// <summary>
 		/// Gets and sets the maximum number of seconds that the build may take.  If the build process takes longer than
 		/// this period, it will be killed.  Specify this value as zero to disable process timeouts.
 		/// </summary>
 		[ReflectorProperty("buildTimeoutSeconds", Required = false)] 
-		public int BuildTimeoutSeconds
-		{
-			get { return buildTimeoutSeconds; }
-			set { buildTimeoutSeconds = value; }
-		}
+		public int BuildTimeoutSeconds = DefaultBuildTimeout;
 
 		/// <summary>
 		/// Runs the integration using NAnt.  The build number is provided for labelling, build
@@ -105,27 +68,27 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 			// is this right?? or should this break the build
 			if (processResult.TimedOut)
 			{
-				throw new BuilderException(this, "NAnt process timed out (after " + buildTimeoutSeconds + " seconds)");
+				throw new BuilderException(this, "NAnt process timed out (after " + BuildTimeoutSeconds + " seconds)");
 			}
 		}
 
 		private ProcessInfo CreateProcessInfo(IIntegrationResult result)
 		{
 			ProcessInfo info = new ProcessInfo(Executable, CreateArgs(result), BaseDirectory(result));
-			info.TimeOut = buildTimeoutSeconds*1000;
+			info.TimeOut = BuildTimeoutSeconds*1000;
 			return info;
 		}
 
 		private string BaseDirectory(IIntegrationResult result)
 		{
-			return result.BaseFromWorkingDirectory(configuredBaseDirectory);
+			return result.BaseFromWorkingDirectory(ConfiguredBaseDirectory);
 		}
 
 		protected ProcessResult AttemptExecute(ProcessInfo info)
 		{
 			try
 			{
-				return _executor.Execute(info);
+				return executor.Execute(info);
 			}
 			catch (Exception e)
 			{
@@ -135,21 +98,17 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 
 		private string BuildCommand
 		{
-			get { return string.Format("{0} {1}", Executable, buildArgs); }
+			get { return string.Format("{0} {1}", Executable, BuildArgs); }
 		}
 
-		/// <summary>
-		/// Creates the command line arguments to the nant.exe executable. These arguments
-		/// specify the build-file name, the targets to build to, 
-		/// </summary>
-		/// <returns></returns>
+		/// TODO: refactor to use ProcessArgumentBuilder
 		private string CreateArgs(IIntegrationResult result)
 		{
 			StringBuilder buffer = new StringBuilder();
 			AppendNoLogoArg(buffer);
 			AppendBuildFileArg(buffer);
 			AppendLoggerArg(buffer);
-			AppendIfNotBlank(buffer, buildArgs);
+			AppendIfNotBlank(buffer, BuildArgs);
 			AppendIntegrationResultProperties(buffer, result);
 			AppendTargets(buffer);
 			return buffer.ToString();
@@ -157,17 +116,17 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 
 		private void AppendNoLogoArg(StringBuilder buffer)
 		{
-			if (nologo) buffer.Append("-nologo");
+			if (NoLogo) buffer.Append("-nologo");
 		}
 
 		private void AppendBuildFileArg(StringBuilder buffer)
 		{
-			AppendIfNotBlank(buffer, @"-buildfile:{0}", SurroundInQuotesIfContainsSpace(buildFile));
+			AppendIfNotBlank(buffer, @"-buildfile:{0}", SurroundInQuotesIfContainsSpace(BuildFile));
 		}
 
 		private void AppendLoggerArg(StringBuilder buffer)
 		{
-			AppendIfNotBlank(buffer, "-logger:{0}", logger);
+			AppendIfNotBlank(buffer, "-logger:{0}", Logger);
 		}
 
 		private void AppendIntegrationResultProperties(StringBuilder buffer, IIntegrationResult result)
@@ -176,8 +135,13 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 			AppendIfNotBlank(buffer, @"-D:label-to-apply={0}", label);
 			AppendIfNotBlank(buffer, @"-D:ccnet.label={0}", label);
 			AppendIfNotBlank(buffer, @"-D:ccnet.buildcondition={0}", result.BuildCondition.ToString());
-			AppendIfNotBlank(buffer, @"-D:ccnet.working.directory=""{0}""", result.WorkingDirectory);
-			AppendIfNotBlank(buffer, @"-D:ccnet.artifact.directory=""{0}""", result.ArtifactDirectory);
+			AppendIfNotBlank(buffer, @"-D:ccnet.working.directory={0}", SurroundInQuotesIfContainsSpace(RemoveTrailingSlash(result.WorkingDirectory)));
+			AppendIfNotBlank(buffer, @"-D:ccnet.artifact.directory={0}", SurroundInQuotesIfContainsSpace(RemoveTrailingSlash(result.ArtifactDirectory)));
+		}
+
+		private string RemoveTrailingSlash(string directory)
+		{			
+			return StringUtil.IsBlank(directory) ? string.Empty : directory.TrimEnd('\\');
 		}
 
 		private void AppendTargets(StringBuilder buffer)
@@ -208,8 +172,8 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 
 		public override string ToString()
 		{
-			string baseDirectory = (configuredBaseDirectory != null ? configuredBaseDirectory : "");
-			return string.Format(@" BaseDirectory: {0}, Targets: {1}, Executable: {2}, BuildFile: {3}", baseDirectory, string.Join(", ", Targets), Executable, buildFile);
+			string baseDirectory = (ConfiguredBaseDirectory != null ? ConfiguredBaseDirectory : "");
+			return string.Format(@" BaseDirectory: {0}, Targets: {1}, Executable: {2}, BuildFile: {3}", baseDirectory, string.Join(", ", Targets), Executable, BuildFile);
 		}
 
 		public string TargetsForPresentation

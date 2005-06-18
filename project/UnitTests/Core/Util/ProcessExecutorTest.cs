@@ -1,5 +1,4 @@
 using System;
-using System.ComponentModel;
 using System.IO;
 using NUnit.Framework;
 using ThoughtWorks.CruiseControl.Core.Util;
@@ -37,7 +36,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Util
 		public void ShouldNotUseATimeoutIfTimeoutSetToZeroOnProcessInfo()
 		{
 			ProcessInfo processInfo = new ProcessInfo("cmd.exe", "/C @echo Hello World");
-			processInfo.TimeOut = ProcessInfo.INFINITE_TIMEOUT;
+			processInfo.TimeOut = ProcessInfo.InfiniteTimeout;
 			ProcessResult result = executor.Execute(processInfo);
 			Assert.AreEqual("Hello World", result.StandardOutput.Trim());
 			AssertProcessExitsSuccessfully(result);
