@@ -10,6 +10,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 	[ReflectorType("cvs")]
 	public class Cvs : ProcessSourceControl
 	{
+		public const string DefaultCvsExecutable = "cvs.exe";
 		public const string GET_SOURCE_COMMAND_FORMAT = @"-q update -d -P"; // build directories, prune empty directories
 		public const string COMMAND_DATE_FORMAT = "yyyy-MM-dd HH:mm:ss 'GMT'";
 		public const int DIRECTORY_INDEX = 7;
@@ -21,7 +22,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 		{}
 
 		[ReflectorProperty("executable")]
-		public string Executable = "cvs.exe";
+		public string Executable = DefaultCvsExecutable;
 
 		[ReflectorProperty("cvsroot", Required=false)]
 		public string CvsRoot = string.Empty;
@@ -99,85 +100,40 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 		{
 			if (LabelOnSuccess && result.Succeeded)
 			{
-				Execute(CreateLabelProcessInfo(result));
+				Execute(NewLabelProcessInfo(result));
 			}
-		}
-
-		public ProcessInfo CreateLogProcessInfo(DateTime from)
-		{
-			return CreateLogProcessInfo(from, null); // null?
-		}
-
-		public ProcessInfo CreateLogProcessInfo(DateTime from, string dir)
-		{
-			return new ProcessInfo(Executable, BuildHistoryProcessInfoArgs(from, dir), WorkingDirectory);
-		}
-
-		public ProcessInfo CreateLabelProcessInfo(IIntegrationResult result)
-		{
-			ProcessArgumentBuilder buffer = new ProcessArgumentBuilder();
-			buffer.AppendArgument("-d {0}", CvsRoot);
-			buffer.AppendArgument(string.Format("tag {0}{1}", TagPrefix, result.Label));
-			return new ProcessInfo(Executable, buffer.ToString(), WorkingDirectory);
 		}
 
 		public override void GetSource(IIntegrationResult result)
 		{
 			if (AutoGetSource)
 			{
-				Execute(CreateGetSourceProcessInfo(null));
+				Execute(NewGetSourceProcessInfo(null));
 			}
 		}
 
 		private void UpdateSource(string file)
 		{
-			Execute(CreateGetSourceProcessInfo(file));
+			Execute(NewGetSourceProcessInfo(file));
 		}
 
-		private ProcessInfo CreateGetSourceProcessInfo(string dir)
+		private ProcessInfo NewGetSourceProcessInfo(string dir)
 		{
 			ProcessArgumentBuilder builder = new ProcessArgumentBuilder();
 			builder.AppendArgument(GET_SOURCE_COMMAND_FORMAT);
 			builder.AppendIf(CleanCopy, "-C");
 			builder.AppendIf(UseHistory && dir != null, "-l");
 			builder.AppendIf(UseHistory && dir != null, "\"{0}\"", dir);
-	
-			ProcessInfo info = new ProcessInfo(Executable, builder.ToString(), WorkingDirectory);
+
+			ProcessInfo info = NewProcessInfoWithArgs(builder.ToString());
 			Log.Info(string.Format("Getting source from CVS: {0} {1}", info.FileName, info.Arguments));
 			return info;
-		}
-
-		// cvs [-d :ext:mycvsserver:/cvsroot/myrepo] -q log -N "-d>2004-12-24 12:00:00 'GMT'" -rmy_branch (with branch)
-		// cvs [-d :ext:mycvsserver:/cvsroot/myrepo] -q log -Nb "-d>2004-12-24 12:00:00 'GMT'" (without branch)
-//		public const string HISTORY_COMMAND_FORMAT = @"{0}-q log -N{3} ""-d>{1}""{2}";		// -N means 'do not show tags'
-
-		// in cvs, date 'to' is implicitly now
-		// todo: if cvs will accept a 'to' date, it would be nicer to 
-		// include that for some harmony with the vss version
-		private string BuildHistoryProcessInfoArgs(DateTime from, string dir)
-		{
-			ProcessArgumentBuilder buffer = new ProcessArgumentBuilder();
-			buffer.AppendArgument("-d {0}", CvsRoot);
-			buffer.AppendArgument("-q log -N");
-			buffer.AppendIf(UseHistory, "-l");
-			buffer.AppendIf(StringUtil.IsBlank(Branch), "-b");
-			buffer.AppendArgument(@"""-d>{0}""", FormatCommandDate(from));
-			buffer.AppendArgument("-r{0}", Branch);
-			if (! StringUtil.IsBlank(RestrictLogins))
-			{
-				foreach (string login in RestrictLogins.Split(','))
-				{
-					buffer.AppendArgument("-w{0}", login.Trim());
-				}
-			}
-			buffer.AppendIf(UseHistory && dir != null, @"""{0}""", dir);
-			return buffer.ToString();
 		}
 
 		private string[] GetDirectoriesContainingChanges(DateTime from)
 		{
 			Log.Info("Get changes in working directory: " + WorkingDirectory);
-			ProcessResult result = Execute(CreateHistoryProcessInfo(from));
+			ProcessResult result = Execute(NewHistoryProcessInfo(from));
 
 			StringReader reader = new StringReader(result.StandardOutput);
 			ArrayList entryList = new ArrayList();
@@ -209,11 +165,11 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			return (string[]) entryList.ToArray(typeof (string));
 		}
 
-		private ProcessInfo CreateHistoryProcessInfo(DateTime from)
+		private ProcessInfo NewHistoryProcessInfo(DateTime from)
 		{
 			ProcessArgumentBuilder buffer = new ProcessArgumentBuilder();
 			buffer.AppendArgument("history -x MAR -a -D \"{0}\"", FormatCommandDate(from));
-			return new ProcessInfo(Executable, buffer.ToString(), WorkingDirectory);
+			return NewProcessInfoWithArgs(buffer.ToString());
 		}
 
 		/// <summary>
@@ -275,7 +231,52 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			if (items.Count > DIRECTORY_INDEX)
 				return (string) items[DIRECTORY_INDEX];
 
-			return null;		// under what conditions will this happen.  do we really want to return null?
+			return null; // under what conditions will this happen.  do we really want to return null?
+		}
+
+		private ProcessInfo CreateLogProcessInfo(DateTime from, string dir)
+		{
+			return NewProcessInfoWithArgs(BuildHistoryProcessInfoArgs(from, dir));
+		}
+
+		private ProcessInfo NewLabelProcessInfo(IIntegrationResult result)
+		{
+			ProcessArgumentBuilder buffer = new ProcessArgumentBuilder();
+			buffer.AppendArgument("-d {0}", CvsRoot);
+			buffer.AppendArgument(string.Format("tag {0}{1}", TagPrefix, result.Label));
+			return NewProcessInfoWithArgs(buffer.ToString());
+		}
+
+		private ProcessInfo NewProcessInfoWithArgs(string args)
+		{
+			return new ProcessInfo(Executable, args, WorkingDirectory);
+		}
+
+		// cvs [-d :ext:mycvsserver:/cvsroot/myrepo] -q log -N "-d>2004-12-24 12:00:00 'GMT'" -rmy_branch (with branch)
+		// cvs [-d :ext:mycvsserver:/cvsroot/myrepo] -q log -Nb "-d>2004-12-24 12:00:00 'GMT'" (without branch)
+		//		public const string HISTORY_COMMAND_FORMAT = @"{0}-q log -N{3} ""-d>{1}""{2}";		// -N means 'do not show tags'
+
+		// in cvs, date 'to' is implicitly now
+		// todo: if cvs will accept a 'to' date, it would be nicer to 
+		// include that for some harmony with the vss version
+		private string BuildHistoryProcessInfoArgs(DateTime from, string dir)
+		{
+			ProcessArgumentBuilder buffer = new ProcessArgumentBuilder();
+			buffer.AppendArgument("-d {0}", CvsRoot);
+			buffer.AppendArgument("-q log -N");
+			buffer.AppendIf(UseHistory, "-l");
+			buffer.AppendIf(StringUtil.IsBlank(Branch), "-b");
+			buffer.AppendArgument(@"""-d>{0}""", FormatCommandDate(from));
+			buffer.AppendArgument("-r{0}", Branch);
+			if (! StringUtil.IsBlank(RestrictLogins))
+			{
+				foreach (string login in RestrictLogins.Split(','))
+				{
+					buffer.AppendArgument("-w{0}", login.Trim());
+				}
+			}
+			buffer.AppendIf(UseHistory && dir != null, @"""{0}""", dir);
+			return buffer.ToString();
 		}
 	}
 }

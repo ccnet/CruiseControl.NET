@@ -14,6 +14,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 		private DynamicMock integratableMock;
 		private DynamicMock projectMock;
 		private ITrigger Trigger;
+		private IIntegratable integratable;
 		private IProject project;
 		private ProjectIntegrator _integrator;
 		private TraceListenerBackup backup;
@@ -27,9 +28,10 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 			projectMock = new DynamicMock(typeof(IProject));
 
 			Trigger = (ITrigger) integrationTriggerMock.MockInstance;
+			integratable = (IIntegratable) integratableMock.MockInstance;
 			project = (IProject) projectMock.MockInstance;
 
-			_integrator = new ProjectIntegrator(Trigger, project, new ThreadPond());
+			_integrator = new ProjectIntegrator(Trigger, integratable, project);
 		}
 
 		[TearDown]
