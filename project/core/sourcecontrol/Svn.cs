@@ -1,6 +1,6 @@
 using System;
 using System.Globalization;
-using System.Text;
+using System.IO;
 using Exortech.NetReflector;
 using ThoughtWorks.CruiseControl.Core.Util;
 
@@ -13,12 +13,9 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 	public class Svn : ProcessSourceControl
 	{
 		public const string DefaultExecutable = "svn.exe";
-		internal static readonly string HISTORY_COMMAND_FORMAT = "log -v -r \"{{{0}}}:{{{1}}}\" --xml --non-interactive {2}";
-		internal static readonly string TAG_COMMAND_FORMAT = "copy -m \"CCNET build {0}\" \"{1}\" {2}/{0} --non-interactive";
-		internal static readonly string GET_SOURCE_COMMAND_FORMAT = "update --non-interactive";
 		internal static readonly string COMMAND_DATE_FORMAT = "yyyy-MM-ddTHH:mm:ssZ";
 
-		public Svn(ProcessExecutor executor) : base(new SvnHistoryParser(), executor)
+		public Svn(ProcessExecutor executor, IHistoryParser parser) : base(parser, executor)
 		{}
 
 		public Svn() : base(new SvnHistoryParser())
@@ -56,11 +53,6 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			return date.ToUniversalTime().ToString(COMMAND_DATE_FORMAT, CultureInfo.InvariantCulture);
 		}
 
-		public ProcessInfo CreateHistoryProcessInfo(DateTime from, DateTime to)
-		{
-			return NewProcessInfo(BuildHistoryProcessArgs(from, to));
-		}
-
 		public ProcessInfo NewLabelProcessInfo(IIntegrationResult result)
 		{
 			return NewProcessInfo(BuildTagProcessArgs(result.Label, result.LastChangeNumber));
@@ -68,7 +60,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 
 		public override Modification[] GetModifications(IIntegrationResult from, IIntegrationResult to)
 		{
-			ProcessResult result = Execute(CreateHistoryProcessInfo(from.StartTime, to.StartTime));
+			ProcessResult result = Execute(NewHistoryProcessInfo(from.StartTime, to.StartTime));
 			Modification[] modifications = ParseModifications(result, from.StartTime, to.StartTime);
 			if (UrlBuilder != null)
 			{
@@ -85,38 +77,6 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			}
 		}
 
-		private string BuildHistoryProcessArgs(DateTime from, DateTime to)
-		{
-			StringBuilder buffer = new StringBuilder();
-			buffer.AppendFormat(HISTORY_COMMAND_FORMAT, FormatCommandDate(from), FormatCommandDate(to), TrunkUrl);
-			AppendUsernameAndPassword(buffer);
-			return buffer.ToString();
-		}
-
-		private void AppendUsernameAndPassword(StringBuilder buffer)
-		{
-			if (! StringUtil.IsWhitespace(Username)) buffer.AppendFormat(@" --username ""{0}""", Username);
-			if (! StringUtil.IsWhitespace(Password)) buffer.AppendFormat(@" --password ""{0}""", Password);
-		}
-
-		private string BuildTagProcessArgs(string label, int revision)
-		{
-			StringBuilder buffer = new StringBuilder();
-
-			if (revision == 0)
-			{
-				buffer.AppendFormat(TAG_COMMAND_FORMAT, label, WorkingDirectory.TrimEnd('\\'), TagBaseUrl);
-			}
-			else
-			{
-				buffer.AppendFormat(TAG_COMMAND_FORMAT, label, TrunkUrl, TagBaseUrl);
-				buffer.AppendFormat(" --revision {0}", revision);
-			}
-			AppendUsernameAndPassword(buffer);
-
-			return buffer.ToString();
-		}
-
 		public override void GetSource(IIntegrationResult result)
 		{
 			if (AutoGetSource)
@@ -127,17 +87,82 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			}
 		}
 
+		private ProcessInfo NewHistoryProcessInfo(DateTime from, DateTime to)
+		{
+			return NewProcessInfo(BuildHistoryProcessArgs(from, to));
+		}
+
+//		HISTORY_COMMAND_FORMAT = "log TrunkUrl --revision \"{{{StartDate}}}:{{{EndDate}}}\" --verbose --xml --non-interactive";
+		private string BuildHistoryProcessArgs(DateTime from, DateTime to)
+		{
+			ProcessArgumentBuilder buffer = new ProcessArgumentBuilder();
+			buffer.AppendArgument("log");
+			buffer.AppendArgument(TrunkUrl);
+			buffer.AppendArgument(string.Format("-r \"{{{0}}}:{{{1}}}\"", FormatCommandDate(from), FormatCommandDate(to)));
+			buffer.AppendArgument("--verbose --xml");
+			AppendCommonSwitches(buffer);
+			return buffer.ToString();
+		}
+
+//		TAG_COMMAND_FORMAT = "copy --message "CCNET build label" "trunkUrl" "tagBaseUrl/label"
+		private string BuildTagProcessArgs(string label, int revision)
+		{
+			ProcessArgumentBuilder buffer = new ProcessArgumentBuilder();
+			buffer.AppendArgument("copy");
+			buffer.AppendArgument(TagMessage(label));
+			buffer.AppendArgument(TagSource(revision));
+			buffer.AppendArgument(TagDestination(label));
+			AppendRevision(buffer, revision);
+			AppendCommonSwitches(buffer);
+			return buffer.ToString();
+		}
+
+		private string TagMessage(string label)
+		{
+			return string.Format("-m \"CCNET build {0}\"", label);
+		}
+
+		private string TagSource(int revision)
+		{
+			string trunkUrl = TrunkUrl;
+			if (revision == 0)
+			{
+				trunkUrl = WorkingDirectory.TrimEnd(Path.DirectorySeparatorChar);
+			}
+			return SurroundInQuotesIfContainsSpace(trunkUrl);
+		}
+
+		private string TagDestination(string label)
+		{
+			return SurroundInQuotesIfContainsSpace(string.Format("{0}/{1}", TagBaseUrl, label));
+		}
+
 		private string BuildGetSourceArguments(int revision)
 		{
-			StringBuilder buffer = new StringBuilder();
-			buffer.Append(GET_SOURCE_COMMAND_FORMAT);
-			if (revision > 0)
-			{
-				buffer.Append(" -r");
-				buffer.Append(revision);
-			}
-			AppendUsernameAndPassword(buffer);
+			ProcessArgumentBuilder buffer = new ProcessArgumentBuilder();
+			buffer.Append("update");
+			AppendRevision(buffer, revision);
+			AppendCommonSwitches(buffer);
 			return buffer.ToString();
+		}
+
+		private void AppendCommonSwitches(ProcessArgumentBuilder buffer)
+		{
+			buffer.AppendArgument("--username {0}", SurroundInQuotesIfContainsSpace(Username));
+			buffer.AppendArgument("--password {0}", SurroundInQuotesIfContainsSpace(Password));
+			buffer.AppendArgument("--non-interactive");
+		}
+
+		private string SurroundInQuotesIfContainsSpace(string value)
+		{
+			if (! StringUtil.IsBlank(value) && value.IndexOf(' ') >= 0)
+				return string.Format(@"""{0}""", value);
+			return value;
+		}
+
+		private void AppendRevision(ProcessArgumentBuilder buffer, int revision)
+		{
+			buffer.AppendIf(revision > 0, "--revision {0}", revision.ToString());
 		}
 
 		private ProcessInfo NewProcessInfo(string args)

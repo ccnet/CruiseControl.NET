@@ -45,7 +45,7 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 			if (StringUtil.IsBlank(value)) return;
 
 			AppendSpaceIfNotEmpty();
-			builder.AppendFormat(string.Format("{0} \"{1}\"", arg, value));
+			builder.AppendFormat("{0} \"{1}\"", arg, value);
 		}
 
 		public void AddInQuotes(string value)
@@ -53,7 +53,7 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 			if (StringUtil.IsBlank(value)) return;
 
 			AppendSpaceIfNotEmpty();
-			builder.AppendFormat(string.Format("\"{0}\"", value));
+			builder.AppendFormat("\"{0}\"", value);
 		}
 
 		public void Append(string text)
@@ -66,7 +66,7 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 			if (StringUtil.IsBlank(value)) return;
 
 			AppendSpaceIfNotEmpty();
-			builder.AppendFormat(string.Format("{0} {1}", arg, value));			
+			builder.AppendFormat(string.Format("{0} {1}", arg, value));
 		}
 	}
 }
