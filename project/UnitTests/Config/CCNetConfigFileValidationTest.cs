@@ -19,7 +19,11 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Config
 			NetReflectorConfigurationReader reader = new NetReflectorConfigurationReader();
 			reader.InvalidNodeEventHandler += new InvalidNodeEventHandler(reader_InvalidNodeEventHandler);
 
-			foreach (string f in new string[] {"ccnet.config", "CVSAndNAntAndEmailPublisherCCNet.config", "VSSAndDevenvAndNUnitCCNet.config"})
+			string[] configFiles = new string[]
+				{
+					"ccnet.config", "CVSAndNAntAndEmailPublisherCCNet.config", "VSSAndDevenvAndNUnitCCNet.config", "P4AndDevenv.config"
+				};
+			foreach (string f in configFiles)
 			{
 				filename = f;
 				XmlDocument xml = LoadConfigXml(filename);

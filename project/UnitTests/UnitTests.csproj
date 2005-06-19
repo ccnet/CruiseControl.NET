@@ -330,6 +330,11 @@
                     BuildAction = "EmbeddedResource"
                 />
                 <File
+                    RelPath = "Config\P4AndDevenv.config"
+                    Link = "..\examples\P4AndDevenv.config"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
                     RelPath = "Config\VSSAndDevenvAndNUnitCCNet.config"
                     Link = "..\examples\VSSAndDevenvAndNUnitCCNet.config"
                     BuildAction = "EmbeddedResource"
