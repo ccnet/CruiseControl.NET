@@ -133,14 +133,14 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 		[Test]
 		public void ShouldPassAppropriateDefaultPropertiesAsProcessInfoArgumentsToProcessExecutor()
 		{
-			ExpectToExecuteArguments(@"-nologo -logger:NAnt.Core.XmlLogger -D:ccnet.buildcondition=NoBuild -D:ccnet.working.directory=c:\source");
+			ExpectToExecuteArguments(@"-nologo -logger:NAnt.Core.XmlLogger -D:label-to-apply=UNKNOWN -D:ccnet.label=UNKNOWN -D:ccnet.buildcondition=NoBuild -D:ccnet.working.directory=c:\source");
 			builder.Run(IntegrationResult());
 		}
 
 		[Test]
 		public void ShouldPutQuotesAroundBuildFileIfItContainsASpace()
 		{
-			ExpectToExecuteArguments(@"-nologo -buildfile:""my project.build"" -logger:NAnt.Core.XmlLogger -D:ccnet.buildcondition=NoBuild -D:ccnet.working.directory=c:\source");
+			ExpectToExecuteArguments(@"-nologo -buildfile:""my project.build"" -logger:NAnt.Core.XmlLogger -D:label-to-apply=UNKNOWN -D:ccnet.label=UNKNOWN -D:ccnet.buildcondition=NoBuild -D:ccnet.working.directory=c:\source");
 
 			builder.BuildFile = "my project.build";
 			builder.Run(IntegrationResult());
@@ -150,7 +150,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 		public void ShouldEncloseDirectoriesInQuotesIfTheyContainSpaces()
 		{
 			DefaultWorkingDirectory = @"c:\dir with spaces";
-			ExpectToExecuteArguments(@"-nologo -logger:NAnt.Core.XmlLogger -D:ccnet.buildcondition=NoBuild -D:ccnet.working.directory=""c:\dir with spaces"" -D:ccnet.artifact.directory=""c:\dir with spaces""");
+			ExpectToExecuteArguments(@"-nologo -logger:NAnt.Core.XmlLogger -D:label-to-apply=UNKNOWN -D:ccnet.label=UNKNOWN -D:ccnet.buildcondition=NoBuild -D:ccnet.working.directory=""c:\dir with spaces"" -D:ccnet.artifact.directory=""c:\dir with spaces""");
 
 			builder.ConfiguredBaseDirectory = DefaultWorkingDirectory;
 			IIntegrationResult result = IntegrationResult();

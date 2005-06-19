@@ -141,7 +141,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 
 		private string RemoveTrailingSlash(string directory)
 		{			
-			return StringUtil.IsBlank(directory) ? string.Empty : directory.TrimEnd('\\');
+			return StringUtil.IsBlank(directory) ? string.Empty : directory.TrimEnd(Path.DirectorySeparatorChar);
 		}
 
 		private void AppendTargets(StringBuilder buffer)

@@ -17,7 +17,7 @@ namespace ThoughtWorks.CruiseControl.Core.Label
 
 		public string Generate(IIntegrationResult previousResult)
 		{
-			if (previousResult == null || previousResult.Label == null)
+			if (previousResult == null || previousResult.IsInitial())
 			{
 				return LabelPrefix + INITIAL_LABEL;
 			}
