@@ -198,7 +198,6 @@
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
-                <Folder RelPath = "bin\Debug\" />
                 <File
                     RelPath = "CCTrayLib\AbstractIconStoreTestCase.cs"
                     SubType = "Code"

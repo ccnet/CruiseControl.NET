@@ -11,7 +11,7 @@ using ThoughtWorks.CruiseControl.Core.Util;
 using ThoughtWorks.CruiseControl.UnitTests;
 using ThoughtWorks.CruiseControl.UnitTests.Core;
 
-namespace ThoughtWorks.CruiseControl.UnitTests.Sourcecontrol
+namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 {
 	[TestFixture]
 	public class PvcsTest : CustomAssertion

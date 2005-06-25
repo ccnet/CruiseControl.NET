@@ -165,7 +165,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 		}
 
 		[Test]
-		public void asf()
+		public void LoadMinimalProjectXmlWithAnEmptyTriggersBlock()
 		{
 			string xml = @"
 <project name=""foo"">
@@ -578,6 +578,25 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 			// failure to save the integration result will register as a failed project
 			Assert.AreEqual(results, project.LastIntegrationResult, "new integration result has not been set to the last integration result");
 			Assert.IsNotNull(results.EndTime);
+			VerifyAll();
+		}
+
+		[Test]
+		public void TimedoutTaskShouldFailBuildIfPublishExceptionsIsTrue()
+		{
+			mockLabeller.ExpectAndReturn("Generate", "1.0", new IsAnything());
+			mockStateManager.ExpectAndReturn("LoadState", IntegrationResult.CreateInitialIntegrationResult(ProjectName, @"c:\temp"), ProjectName); // running the first integration (no state file)
+			mockStateManager.Expect("SaveState", new IsAnything());
+			mockTask.ExpectAndThrow("Run", new CruiseControlException(), new IsAnything());
+			mockSourceControl.ExpectAndReturn("GetModifications", CreateModifications(), new IsAnything(), new IsAnything());
+			mockSourceControl.Expect("GetSource", new IsAnything());
+			mockSourceControl.Expect("LabelSourceControl", new IsAnything());
+			mockPublisher.Expect("Run", new IsAnything());
+
+			project.Builder = null;
+			project.PublishExceptions = true;
+			project.RunIntegration(BuildCondition.ForceBuild);
+
 			VerifyAll();
 		}
 	}

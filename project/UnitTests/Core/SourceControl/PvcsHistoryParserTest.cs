@@ -6,7 +6,7 @@ using ThoughtWorks.CruiseControl.Core;
 using ThoughtWorks.CruiseControl.Core.Sourcecontrol;
 using ThoughtWorks.CruiseControl.UnitTests;
 
-namespace ThoughtWorks.CruiseControl.UnitTests.Sourcecontrol
+namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 {
 	[TestFixture]
 	public class PvcsHistoryParserTest

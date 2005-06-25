@@ -71,7 +71,13 @@ namespace ThoughtWorks.CruiseControl.Core.Triggers
 		private bool IsTimeInFilterTimeRange(DateTime dateTime)
 		{
 			TimeSpan timeOfDay = dateTime.TimeOfDay;
-			return timeOfDay >= startTime && dateTime.TimeOfDay <= endTime;
+			if (startTime < endTime){
+				return timeOfDay >= startTime && dateTime.TimeOfDay <= endTime;
+			} 
+			else 
+			{
+				return !(timeOfDay <= startTime) || !(dateTime.TimeOfDay >= endTime);
+			}
 		}
 
 		public void IntegrationCompleted()

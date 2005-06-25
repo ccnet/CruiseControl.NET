@@ -65,6 +65,42 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Triggers
 		}
 
 		[Test]
+		public void ShouldNotInvokeOverMidnightTriggerWhenCurrentTimeIsBeforeMidnight()
+		{
+			trigger.StartTime = "23:00";
+			trigger.EndTime = "7:00";
+
+			mockTrigger.ExpectNoCall("ShouldRunIntegration");
+			mockDateTime.ExpectAndReturn("Now", new DateTime(2004, 12, 1, 23, 30, 0, 0));
+
+			Assert.AreEqual(BuildCondition.NoBuild, trigger.ShouldRunIntegration());
+		}
+
+		[Test]
+		public void ShouldNotInvokeOverMidnightTriggerWhenCurrentTimeIsAfterMidnight()
+		{
+			trigger.StartTime = "23:00";
+			trigger.EndTime = "7:00";
+
+			mockTrigger.ExpectNoCall("ShouldRunIntegration");
+			mockDateTime.ExpectAndReturn("Now", new DateTime(2004, 12, 1, 00, 30, 0, 0));
+
+			Assert.AreEqual(BuildCondition.NoBuild, trigger.ShouldRunIntegration());
+		}
+
+		[Test]
+		public void ShouldInvokeOverMidnightTriggerWhenCurrentTimeIsOutsideOfRange()
+		{
+			trigger.StartTime = "23:00";
+			trigger.EndTime = "7:00";
+
+			mockTrigger.ExpectAndReturn("ShouldRunIntegration", BuildCondition.IfModificationExists);
+			mockDateTime.ExpectAndReturn("Now", new DateTime(2004, 12, 1, 11, 30, 0, 0));
+
+			Assert.AreEqual(BuildCondition.IfModificationExists, trigger.ShouldRunIntegration());
+		}
+
+		[Test]
 		public void ShouldNotInvokeDecoratedTriggerWhenTimeIsEqualToStartTimeOrEndTime()
 		{
 			mockTrigger.ExpectNoCall("ShouldRunIntegration");
@@ -147,5 +183,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Triggers
 			Assert.AreEqual(7, trigger.WeekDays.Length);
 			Assert.AreEqual(BuildCondition.NoBuild, trigger.BuildCondition);
 		}
+
+
 	}
 }
