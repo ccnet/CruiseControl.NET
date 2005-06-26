@@ -6,69 +6,80 @@ using Exortech.NetReflector;
 namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 {
 	[ReflectorType("pathFilter")]
-	public class PathFilter: IModificationFilter
+	public class PathFilter : IModificationFilter
 	{
-		private string _pathPattern;
-		private Regex _exFileName;
-		private Regex _exFolder;
+		private string pathPattern;
+		private Regex exFileName;
+		private Regex exFolder;
 
 		[ReflectorProperty("pattern", Required=true)]
-		public string Pattern 
+		public string Pattern
 		{
-			get { return _pathPattern; }
-			set 
-			{ 
-				_pathPattern = value; 
+			get { return pathPattern; }
+			set
+			{
+				pathPattern = value;
 				PrepareFileNameRegex();
 				PrepareFolderRegex();
 			}
 		}
 
-		public bool Accept(Modification modification) 
+		public bool Accept(Modification modification)
 		{
-			return _exFolder.IsMatch(modification.FolderName) &&
-				_exFileName.IsMatch(modification.FileName);
+			return MatchesFolder(modification) && MatchesFilename(modification);
+		}
+
+		private bool MatchesFilename(Modification modification)
+		{
+			if (modification.FileName == null) return false;
+			return exFileName.IsMatch(modification.FileName);
+		}
+
+		private bool MatchesFolder(Modification modification)
+		{
+			if (modification.FolderName == null) return false;
+			return exFolder.IsMatch(modification.FolderName);
 		}
 
 		private void PrepareFileNameRegex()
 		{
-			string fileNamePattern = Path.GetFileNameWithoutExtension(_pathPattern);
-			string extensionPattern = Path.GetExtension(_pathPattern);
+			string fileNamePattern = Path.GetFileNameWithoutExtension(pathPattern);
+			string extensionPattern = Path.GetExtension(pathPattern);
 
-			if ( fileNamePattern.Equals(string.Empty) )
+			if (fileNamePattern.Equals(string.Empty))
 				fileNamePattern = "*";
 
 			fileNamePattern = EscapeAndReplaceAsterisk(fileNamePattern);
 
-			if ( ! extensionPattern.Equals(string.Empty) ) 
+			if (! extensionPattern.Equals(string.Empty))
 			{
 				bool optionalExtension = extensionPattern.Equals(".*");
 
 				extensionPattern = EscapeAndReplaceAsterisk(extensionPattern);
 
-				if ( optionalExtension )
+				if (optionalExtension)
 					extensionPattern = "(" + extensionPattern + ")?";
 			}
 
-			_exFileName = new Regex("^" + fileNamePattern + extensionPattern + "$");
+			exFileName = new Regex("^" + fileNamePattern + extensionPattern + "$");
 		}
 
-		private void PrepareFolderRegex() 
+		private void PrepareFolderRegex()
 		{
-			string folderPattern = Path.GetDirectoryName(_pathPattern);
+			string folderPattern = Path.GetDirectoryName(pathPattern);
 			string altFolderPattern = folderPattern.Replace(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar);
 			string strippedFolderPattern;
 			string strippedAltFolderPattern;
 
-			ConstructFolderRegex(folderPattern, Path.DirectorySeparatorChar, 
-				out strippedFolderPattern, out folderPattern);
+			ConstructFolderRegex(folderPattern, Path.DirectorySeparatorChar,
+			                     out strippedFolderPattern, out folderPattern);
 
 			ConstructFolderRegex(altFolderPattern, Path.AltDirectorySeparatorChar,
-				out strippedAltFolderPattern, out altFolderPattern);
+			                     out strippedAltFolderPattern, out altFolderPattern);
 
-			_exFolder = new Regex("(^" + folderPattern + 
-				"$)|(^" + strippedFolderPattern + 
-				"$)|(^" + altFolderPattern + 
+			exFolder = new Regex("(^" + folderPattern +
+				"$)|(^" + strippedFolderPattern +
+				"$)|(^" + altFolderPattern +
 				"$)|(^" + strippedAltFolderPattern + "$)");
 		}
 
@@ -83,7 +94,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 
 			simplePattern = sourcePattern.Replace("*", "");
 			simplePattern = simplePattern.Replace(doubleDirSeparator, dirSeparator);
-			if ( simplePattern.EndsWith(dirSeparator) )
+			if (simplePattern.EndsWith(dirSeparator))
 				simplePattern = simplePattern.Substring(0, simplePattern.Length - 1);
 			simplePattern = Regex.Escape(simplePattern);
 
@@ -92,7 +103,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			flexiblePattern = flexiblePattern.Replace("\\*", GetWildCardRegexPatternForFolderName());
 		}
 
-		private string EscapeAndReplaceAsterisk(string s) 
+		private string EscapeAndReplaceAsterisk(string s)
 		{
 			s = Regex.Escape(s);
 			return s.Replace("\\*", GetAcceptableCharacterRange());
@@ -105,7 +116,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 		/// At least one character is required to successfully
 		/// match the pattern.
 		/// </remarks>
-		private string GetAcceptableCharacterRange() 
+		private string GetAcceptableCharacterRange()
 		{
 			return string.Concat("[^", Regex.Escape(InvalidPathCharacters), "]+");
 		}
@@ -136,11 +147,11 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			return string.Concat("[^", Regex.Escape(invalidCharacters), "]*");
 		}
 
-		private static readonly string InvalidPathCharacters = 
+		private static readonly string InvalidPathCharacters =
 			new String(Path.InvalidPathChars);
 
-		private static readonly string DirectorySeparators = 
+		private static readonly string DirectorySeparators =
 			new string(Path.DirectorySeparatorChar, 1) +
-			new string(Path.AltDirectorySeparatorChar, 1);
+				new string(Path.AltDirectorySeparatorChar, 1);
 	}
 }

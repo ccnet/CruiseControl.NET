@@ -9,69 +9,88 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 	public class PathFilterTest
 	{
 		[Test]
-		public void TestExactFileNameMatch()
+		public void ExactFileNameMatch()
 		{
 			ExactFileNameTestSet.RunTests();
 		}
 
 		[Test]
-		public void TestAnyFileNameMatch()
+		public void AnyFileNameMatch()
 		{
 			AnyFileNameTestSet.RunTests();
 		}
 
 		[Test]
-		public void TestExactFolderAnyNameMatch()
+		public void ExactFolderAnyNameMatch()
 		{
 			ExactFolderAnyNameTestSet.RunTests();
 		}
 
 		[Test]
-		public void TestAnyFolderExactNameMatch()
+		public void AnyFolderExactNameMatch()
 		{
 			AnyFolderExactNameTestSet.RunTests();
 		}
 
 		[Test]
-		public void TestExactSubfolderAnyNameMatch()
+		public void ExactSubfolderAnyNameMatch()
 		{
 			ExactSubfolderAnyNameTestSet.RunTests();
 		}
 
 		[Test]
-		public void TestAcceptAllMatch()
+		public void AcceptAllMatch()
 		{
 			AcceptAllTestSet.RunTests();
 		}
 
 		[Test]
-		public void TestPartialNameMatch() 
+		public void PartialNameMatch() 
 		{
 			PartialNameTestSet.RunTests();
 		}
 
 		[Test]
-		public void TestAnyFolderExactExtensionMatch()
+		public void AnyFolderExactExtensionMatch()
 		{
 			AnyFolderExactExtensionTestSet.RunTests();
 		}
 
 		[Test]
-		public void TestPartialFolderAnyNameMatch() 
+		public void PartialFolderAnyNameMatch() 
 		{
 			PartialFolderAnyNameTestSet.RunTests();
 		}
 
 		[Test]
-		public void TestAnyFolderPartialExtensionMatch()
+		public void AnyFolderPartialExtensionMatch()
 		{
 			AnyFolderPartialExtentsionTestSet.RunTests();
 		}
 
 		[Test]
-		public void TestPartialPathAnyNameMatch() 
+		public void PartialPathAnyNameMatch() 
 		{
 			PartialPathAnyNameTestSet.RunTests();
+		}
+
+		[Test]
+		public void ShouldNotAcceptModificationsWithNullFolder()
+		{
+			Modification modification = new Modification();
+			PathFilter filter = new PathFilter();
+			filter.Pattern = "*.*";
+			Assert.IsFalse(filter.Accept(modification));
+		}
+
+		[Test]
+		public void ShouldNotAcceptModificationsWithNullFilename()
+		{
+			Modification modification = new Modification();
+			modification.FolderName = "c:\\";
+			PathFilter filter = new PathFilter();
+			filter.Pattern = "c:\\*.*";
+			Assert.IsFalse(filter.Accept(modification));
 		}
 
 		private static Modification[] Modifications = 
@@ -238,29 +257,29 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 
 	public class PathFilterTestHelper 
 	{
-		private PathFilter _filter;
-		private Modification[] _modifications;
-		private bool[] _expectedResults;
+		private PathFilter filter;
+		private Modification[] modifications;
+		private bool[] expectedResults;
 
 		public PathFilterTestHelper(string xmlFragment,
 			Modification[] modifications,
 			bool[] expectedResults) 
 		{
-			_filter = new PathFilter();
-			NetReflector.Read(xmlFragment, _filter);
+			filter = new PathFilter();
+			NetReflector.Read(xmlFragment, filter);
 
-			_modifications = modifications;
-			_expectedResults = expectedResults;
+			this.modifications = modifications;
+			this.expectedResults = expectedResults;
 		}
 
 		public void RunTests() 
 		{
 			int i = 0;
 
-			foreach (Modification m in _modifications) 
+			foreach (Modification m in modifications) 
 			{
-				Assert.IsTrue(_filter.Accept(m) == _expectedResults[i], 
-					DescribeExpectedResult(m, _expectedResults[i]));
+				Assert.IsTrue(filter.Accept(m) == expectedResults[i], 
+					DescribeExpectedResult(m, expectedResults[i]));
 				i++;
 			}
 		}
