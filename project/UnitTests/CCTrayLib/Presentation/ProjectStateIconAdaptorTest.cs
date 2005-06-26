@@ -11,13 +11,13 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Presentation
 	public class ProjectStateIconAdaptorTest
 	{
 		private DynamicMock mockIconProvider;
-		private TestingProjectMonitor monitor;
+		private StubProjectMonitor monitor;
 		private IProjectStateIconProvider iconProvider;
 
 		[SetUp]
 		public void SetUp()
 		{
-			monitor = new TestingProjectMonitor( "testProject" );
+			monitor = new StubProjectMonitor( "testProject" );
 
 			mockIconProvider = new DynamicMock( typeof (IProjectStateIconProvider) );
 			this.mockIconProvider.Strict = true;

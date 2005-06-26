@@ -4,14 +4,14 @@ using ThoughtWorks.CruiseControl.Remote;
 
 namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Presentation
 {
-	public class TestingProjectMonitor : IProjectMonitor
+	public class StubProjectMonitor : IProjectMonitor
 	{
 		private ProjectStatus projectStatus;
 		private ProjectState projectState = ProjectState.NotConnected;
 		private string projectName;
 		private Exception connectException;
 
-		public TestingProjectMonitor( string projectName )
+		public StubProjectMonitor( string projectName )
 		{
 			this.projectName = projectName;
 		}

@@ -304,7 +304,7 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "CCTrayLib\Presentation\TestingProjectMonitor.cs"
+                    RelPath = "CCTrayLib\Presentation\StubProjectMonitor.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

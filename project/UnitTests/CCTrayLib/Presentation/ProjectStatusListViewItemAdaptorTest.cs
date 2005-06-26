@@ -23,7 +23,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Presentation
 		[Test]
 		public void CanCreateListViewItem()
 		{
-			TestingProjectMonitor projectMonitor = new TestingProjectMonitor( "projectName" );
+			StubProjectMonitor projectMonitor = new StubProjectMonitor( "projectName" );
 
 			ProjectStatusListViewItemAdaptor adaptor = new ProjectStatusListViewItemAdaptor( detailStringFormatter );
 			ListViewItem item = adaptor.Create( projectMonitor );
@@ -36,7 +36,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Presentation
 		[Test]
 		public void WhenTheStateOfTheProjectChangesTheIconIsUpdated()
 		{
-			TestingProjectMonitor projectMonitor = new TestingProjectMonitor( "projectName" );
+			StubProjectMonitor projectMonitor = new StubProjectMonitor( "projectName" );
 			ProjectStatusListViewItemAdaptor adaptor = new ProjectStatusListViewItemAdaptor( detailStringFormatter );
 			ListViewItem item = adaptor.Create( projectMonitor );
 
@@ -54,7 +54,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Presentation
 		[Test]
 		public void WhenTheStateOfTheProjectChangesTheStatusEntriesOnTheListViewItemAreUpdated()
 		{
-			TestingProjectMonitor projectMonitor = new TestingProjectMonitor( "projectName" );
+			StubProjectMonitor projectMonitor = new StubProjectMonitor( "projectName" );
 			projectMonitor.ProjectState = ProjectState.Building;
 			projectMonitor.ProjectStatus = null;
 
@@ -83,7 +83,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Presentation
 		[Test]
 		public void UsesDescriptionBuilderToGenerateDetailCaption()
 		{
-			TestingProjectMonitor projectMonitor = new TestingProjectMonitor( "projectName" );
+			StubProjectMonitor projectMonitor = new StubProjectMonitor( "projectName" );
 			mockProjectDetailStringFormatter.Strict = true;
 
 			mockProjectDetailStringFormatter.ExpectAndReturn( "FormatDetailString", "test1", projectMonitor );

@@ -81,18 +81,18 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Monitoring
 			buildOccurredCount = 0;
 			lastBuildOccurredEventArgs = null;
 
-			TestingProjectMonitor testingProjectMonitor1 = new TestingProjectMonitor( "project1" );
-			TestingProjectMonitor testingProjectMonitor2 = new TestingProjectMonitor( "project2" );
+			StubProjectMonitor stubProjectMonitor1 = new StubProjectMonitor( "project1" );
+			StubProjectMonitor stubProjectMonitor2 = new StubProjectMonitor( "project2" );
 
-			aggregator = new AggregatingProjectMonitor( testingProjectMonitor1, testingProjectMonitor2 );
+			aggregator = new AggregatingProjectMonitor( stubProjectMonitor1, stubProjectMonitor2 );
 			aggregator.BuildOccurred += new MonitorBuildOccurredEventHandler( Aggregator_BuildOccurred );
 
 			Assert.AreEqual(0, buildOccurredCount);
 			ProjectStatus status = new ProjectStatus();
-			testingProjectMonitor1.OnBuildOccurred(new MonitorBuildOccurredEventArgs(testingProjectMonitor1, BuildTransition.Fixed));
+			stubProjectMonitor1.OnBuildOccurred(new MonitorBuildOccurredEventArgs(stubProjectMonitor1, BuildTransition.Fixed));
 
 			Assert.AreEqual(1, buildOccurredCount);
-			Assert.AreSame(testingProjectMonitor1, lastBuildOccurredEventArgs.ProjectMonitor);
+			Assert.AreSame(stubProjectMonitor1, lastBuildOccurredEventArgs.ProjectMonitor);
 			Assert.AreEqual(BuildTransition.Fixed, lastBuildOccurredEventArgs.BuildTransition);
 		}
 
@@ -109,14 +109,14 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Monitoring
 		{
 			pollCount = 0;
 
-			TestingProjectMonitor testingProjectMonitor1 = new TestingProjectMonitor( "project1" );
-			TestingProjectMonitor testingProjectMonitor2 = new TestingProjectMonitor( "project2" );
+			StubProjectMonitor stubProjectMonitor1 = new StubProjectMonitor( "project1" );
+			StubProjectMonitor stubProjectMonitor2 = new StubProjectMonitor( "project2" );
 
-			aggregator = new AggregatingProjectMonitor( testingProjectMonitor1, testingProjectMonitor2 );
+			aggregator = new AggregatingProjectMonitor( stubProjectMonitor1, stubProjectMonitor2 );
 			aggregator.Polled += new MonitorPolledEventHandler(Aggregator_Polled);
 
 			Assert.AreEqual(0, pollCount);
-			testingProjectMonitor1.OnPolled(new MonitorPolledEventArgs(testingProjectMonitor1));
+			stubProjectMonitor1.OnPolled(new MonitorPolledEventArgs(stubProjectMonitor1));
 
 			Assert.AreEqual(1, pollCount);
 		}

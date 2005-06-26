@@ -12,7 +12,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Presentation
 		[Test]
 		public void WhenTheProjecStatusIndicatesAnExceptionItsMessageIsReportedInTheDetailString()
 		{
-			TestingProjectMonitor monitor = new TestingProjectMonitor("name");
+			StubProjectMonitor monitor = new StubProjectMonitor("name");
 			DetailStringProvider provider = new DetailStringProvider();
 
 			Assert.AreEqual("Connecting...", provider.FormatDetailString(monitor));
@@ -25,7 +25,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Presentation
 		[Test]
 		public void WhenSleepingIndicatesTimeOfNextBuildCheck()
 		{
-			TestingProjectMonitor monitor = new TestingProjectMonitor("name");
+			StubProjectMonitor monitor = new StubProjectMonitor("name");
 			DetailStringProvider provider = new DetailStringProvider();
 			DateTime nextBuildTime = new DateTime(2005, 7, 20, 15, 12, 30);
 

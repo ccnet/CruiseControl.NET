@@ -5,7 +5,7 @@ using ThoughtWorks.CruiseControl.CCTrayLib.Monitoring;
 using ThoughtWorks.CruiseControl.CCTrayLib.Presentation;
 using ThoughtWorks.CruiseControl.CCTrayLib.ServerConnection;
 
-namespace CCTrayMulti
+namespace ThoughtWorks.CruiseControl.CCTrayMulti
 {
 	public class Bootstrap
 	{
