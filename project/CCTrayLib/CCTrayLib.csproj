@@ -436,6 +436,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Presentation\SynchronizedProjectMonitor.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Presentation\TrayIcon.cs"
                     SubType = "Component"
                     BuildAction = "Compile"

@@ -10,15 +10,14 @@ DONE - display the error message that was receieved when "not connected"
 DONE - update csproj so builds to same location as all the other projects
 DONE - Hide the main window when minimised (just like msn messenger behaviour?)
 DONE - ability to switch off balloon popups
-- Fix threading -- create a decorator around IProjectMonitor that uses ISynchronisedInvoke to get the event 
+DONE - Fix threading -- create a decorator around IProjectMonitor that uses ISynchronisedInvoke to get the event 
 	across to the winforms thread? (though the current winforms thread rule breakage doesn't seem to be causing
 	any odd behaviour)
 - Settings dialog to allow specification of projects, sounds etc
 - Play sounds on build transition 
 - Display more information about projects on tray tooltip 
 - add to zip file (in parallel with cctray) so people can try it out
-- fix issue with window sometimes not reappearing when clicking on tray icon
-- Display more information about projects on list view tooltip (or maybe show more information in the list view columns?)
+DONE - fix issue with window sometimes not reappearing when clicking on tray icon (threading fix should fix this)
 - Read project list from dashboard
 - obtain project status going via the dashboard not direct via remoting?
 - document on confluence

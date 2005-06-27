@@ -24,9 +24,12 @@ namespace ThoughtWorks.CruiseControl.CCTrayMulti
 				ICruiseProjectManagerFactory cruiseProjectManagerFactory = new CruiseProjectManagerFactory( remoteCruiseManagerFactory );
 				CCTrayMultiConfiguration configuration = new CCTrayMultiConfiguration( cruiseProjectManagerFactory, "settings.xml" );
 
-				MainFormController controller = new MainFormController(configuration);
+				MainForm mainForm = new MainForm();
+				MainFormController controller = new MainFormController(configuration, mainForm);
 
-				Application.Run(new MainForm(controller));
+				mainForm.AttachController(controller);
+
+				Application.Run(mainForm);
 			}
 			catch (Exception ex)
 			{

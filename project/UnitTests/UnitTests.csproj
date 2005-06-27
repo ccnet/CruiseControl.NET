@@ -309,6 +309,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "CCTrayLib\Presentation\SynchronizedProjectMonitorTest.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "CCTrayLib\Presentation\TrayIconTest.cs"
                     SubType = "Code"
                     BuildAction = "Compile"

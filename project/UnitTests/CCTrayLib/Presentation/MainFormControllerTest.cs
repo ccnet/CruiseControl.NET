@@ -19,11 +19,11 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Presentation
 		[SetUp]
 		public void SetUp()
 		{
-			mockProjectMonitor = new DynamicMock( typeof (IProjectMonitor) );
+			mockProjectMonitor = new DynamicMock(typeof (IProjectMonitor));
 			mockProjectMonitor.Strict = true;
 			projectMonitor = (IProjectMonitor) mockProjectMonitor.MockInstance;
 
-			mockConfiguration = new DynamicMock(typeof(ICCTrayMultiConfiguration));
+			mockConfiguration = new DynamicMock(typeof (ICCTrayMultiConfiguration));
 			mockConfiguration.Strict = true;
 			configuration = (ICCTrayMultiConfiguration) mockConfiguration.MockInstance;
 
@@ -35,18 +35,18 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Presentation
 		{
 			eventCount = 0;
 
-			MainFormController controller = new MainFormController(configuration );
+			MainFormController controller = new MainFormController(configuration, null);
 
-			Assert.IsFalse( controller.IsProjectSelected );
-			controller.IsProjectSelectedChanged += new EventHandler( Controller_IsProjectSelectedChanged );
+			Assert.IsFalse(controller.IsProjectSelected);
+			controller.IsProjectSelectedChanged += new EventHandler(Controller_IsProjectSelectedChanged);
 			controller.SelectedProject = projectMonitor;
 
-			Assert.IsTrue( controller.IsProjectSelected );
-			Assert.AreEqual( 1, eventCount );
+			Assert.IsTrue(controller.IsProjectSelected);
+			Assert.AreEqual(1, eventCount);
 
 		}
 
-		private void Controller_IsProjectSelectedChanged( object sender, EventArgs e )
+		private void Controller_IsProjectSelectedChanged(object sender, EventArgs e)
 		{
 			eventCount++;
 		}
@@ -54,7 +54,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Presentation
 		[Test]
 		public void ForceBuildInvokesForceBuildOnTheSelectedProject()
 		{
-			MainFormController controller = new MainFormController(configuration);
+			MainFormController controller = new MainFormController(configuration, null);
 			controller.SelectedProject = projectMonitor;
 
 			mockProjectMonitor.Expect("ForceBuild");
@@ -66,7 +66,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Presentation
 		[Test]
 		public void ForceBuildDoesNothingIfNoProjectSelected()
 		{
-			MainFormController controller = new MainFormController(configuration);
+			MainFormController controller = new MainFormController(configuration, null);
 			Assert.IsNull(controller.SelectedProject);
 			controller.ForceBuild();
 			mockProjectMonitor.Verify();
@@ -75,7 +75,6 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Presentation
 		[Test]
 		public void CanDisplayWebPageForSelectedProject()
 		{
-			
 		}
 	}
 }

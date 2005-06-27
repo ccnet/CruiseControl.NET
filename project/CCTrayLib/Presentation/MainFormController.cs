@@ -1,4 +1,5 @@
 using System;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.Windows.Forms;
 using ThoughtWorks.CruiseControl.CCTrayLib.Configuration;
@@ -15,12 +16,18 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 		private IProjectMonitor[] monitors;
 		private ProjectStateIconAdaptor projectStateIconAdaptor;
 
-		public MainFormController( ICCTrayMultiConfiguration configuration )
+		public MainFormController(ICCTrayMultiConfiguration configuration, ISynchronizeInvoke owner)
 		{
 			this.configuration = configuration;
 			monitors = configuration.GetProjectStatusMonitors();
-			aggregatedMonitor = new AggregatingProjectMonitor( monitors );
-			projectStateIconAdaptor = new ProjectStateIconAdaptor( aggregatedMonitor, new ResourceProjectStateIconProvider() );
+
+			for (int i = 0; i < monitors.Length; i++)
+			{
+				monitors[i] = new SynchronizedProjectMonitor(monitors[i], owner);
+			}
+
+			aggregatedMonitor = new AggregatingProjectMonitor(monitors);
+			projectStateIconAdaptor = new ProjectStateIconAdaptor(aggregatedMonitor, new ResourceProjectStateIconProvider());
 		}
 
 
@@ -31,7 +38,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 			{
 				selectedProject = value;
 				if (IsProjectSelectedChanged != null)
-					IsProjectSelectedChanged( this, EventArgs.Empty );
+					IsProjectSelectedChanged(this, EventArgs.Empty);
 			}
 		}
 
@@ -53,33 +60,33 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 			if (IsProjectSelected && SelectedProject.ProjectStatus != null)
 			{
 				string url = SelectedProject.ProjectStatus.WebURL;
-				Process.Start( url );
+				Process.Start(url);
 			}
 		}
 
-		public void PotentiallyHookUpBuildOccurredEvents( TrayIcon trayIcon )
+		public void PotentiallyHookUpBuildOccurredEvents(TrayIcon trayIcon)
 		{
 			if (configuration.ShouldShowBalloonOnBuildTransition)
 			{
-				trayIcon.ListenToBuildOccurredEvents( aggregatedMonitor );
+				trayIcon.ListenToBuildOccurredEvents(aggregatedMonitor);
 			}
 		}
 
 
-		public void BindToListView( ListView listView )
+		public void BindToListView(ListView listView)
 		{
 			IDetailStringProvider detailStringProvider = new DetailStringProvider();
 			foreach (IProjectMonitor monitor in monitors)
 			{
-				ListViewItem item = new ProjectStatusListViewItemAdaptor( detailStringProvider ).Create( monitor );
+				ListViewItem item = new ProjectStatusListViewItemAdaptor(detailStringProvider).Create(monitor);
 				item.Tag = monitor;
-				listView.Items.Add( item );
+				listView.Items.Add(item);
 			}
 		}
 
 		public void StartMonitoring()
 		{
-			poller = new Poller( 5000, aggregatedMonitor );
+			poller = new Poller(5000, aggregatedMonitor);
 			poller.Start();
 		}
 
