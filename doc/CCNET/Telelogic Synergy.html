@@ -1,0 +1,135 @@
+<html>
+    <head>
+        <title>CruiseControl.NET : Telelogic Synergy</title>
+	    <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">	    
+    </head>
+
+    <body>
+	    <table class="pagecontent" border="0" cellpadding="0" cellspacing="0" width="100%" bgcolor="#ffffff">
+		    <tr>
+			    <td valign="top" class="pagebody">
+				    <div class="pageheader">
+					    <span class="pagetitle">
+                            CruiseControl.NET : Telelogic Synergy
+                                                    </span>
+				    </div>
+				    <div class="pagesubheading">
+					    This page last changed on Jun 19, 2005 by <font color="#0050B2">orogers</font>.
+				    </div>
+
+				    <p class="paragraph"><h2 style="margin: 4px 0px 4px 0px;" class="heading2"><a name="TelelogicSynergy-Abstract"> Abstract</a></h2></p>This page describes integration of CruiseControl.NET with Telelogic&#039;s Synergy SCM product suite, specifically CM Synergy as well as ChangeSynergy.  Detection of modifications is entirely task based rather than object based, which may present problems for pre-6.3 lifecycles. Successful integration may be published through shared manual task folders and/or baselining.<br/>
+
+<div align='center'><div class='informationMacroPadding'><table cellpadding='5' width='85%' cellspacing='0' class='warningMacro' border='0'><tr><td width='16' valign='top'><img src="/images/icons/emoticons/forbidden.png" width="16" height="16" align="absmiddle" alt="" border="0"></td><td><b class="strong">Warning</b><br /><br/>
+This integration has been thoroughly tested against CM Synergy 6.3 SP4 and ChangeSynergy 4.3 SP3 Windows/Informix with the DCM option enabled.  While untested, CM Synergy installations on Unix/Informix or Unix/Oracle should function properly.
+</td></tr></table></div></div><p class="paragraph"><h2 class="heading2"><a name="TelelogicSynergy-Background"> Background</a></h2></p><a href="http://confluence.public.thoughtworks.org/display/CC/CMSynergyConcepts" title="CMSynergyConcepts">CM Synergy Concepts</a> is arguably one of the best conceptual explanations of CM Synergy.  Consider it a prerequisite for implementing continuous integration with CM Synergy.  <a href="http://confluence.public.thoughtworks.org/display/~rjmpsmith" title="View profile for Robert J. Smith">Robert Smith</a>, from the CruiseControl for Java site, deserves a great deal of credit for explaining the product better than Telelogic ever has.<p class="paragraph"><h2 class="heading2"><a name="TelelogicSynergy-MethodologyofintegrationwithCCNET"> Methodology of integration with CCNET</a></h2></p>Certain assumptions have been made about the integration of CruiseControl.NET and CM Synergy. First, it is assumed that all projects use a task based reconfigure template, rather than an object based.<br/>
+
+<ul class="star">
+<li> The reconfigure template for all projects is task based, not object status based.</li>
+<li> Developers have there own projects with purpose &quot;Insulated Development&quot;</li>
+<li> There&#039;s no real point to continuous integration for &quot;Collaborative Development&quot; purpose projects, since Synergy is not a label based system.</li>
+<li> Build Managers test completed tasks in a project with purpose &quot;Integration Testing&quot; (or similar).</li>
+<li> We could create a baseline in the integration project to push completed tasks to the developers; however, this is less than ideal. Baselines in Synergy are expensive and were intended for milestone events like completion of a feature, or a configuration used for a QA testing round.</li>
+<li> The more efficient approach is to have a shared task folder that is included in each developer&#039;s reconfigure template/properties.<ul class="star">
+<li>  Successfully integrated tasks can be manually added to this folder.</li>
+<li> This will push newly completed and integrated tasks to developers when they reconfigure (i.e., &quot;update members&quot;).</li>
+</ul></li>
+</ul>
+<h2 class="heading2"><a name="TelelogicSynergy-CMSynergyExampleConfigurations"> CM Synergy Example Configurations</a></h2>
+
+<div class="code" style="border-style: solid; "><div class="codeHeader" style="border-bottom-style: solid; "><b>Example using Defaults</b></div><div class="codeContent">
+<pre><span class="xml&#45;tag">&lt;sourcecontrol type=<span class="xml&#45;quote">&quot;synergy&quot;</span>&gt;</span>&#10;    <span class="xml&#45;tag">&lt;connection&gt;</span>&#10;        <span class="xml&#45;tag">&lt;host&gt;</span>myserver<span class="xml&#45;tag">&lt;/host&gt;</span>&#10;        <span class="xml&#45;tag">&lt;database&gt;</span>&#92;&#92;myserver&#92;share&#92;mydatabase<span class="xml&#45;tag">&lt;/database&gt;</span>&#10;    <span class="xml&#45;tag">&lt;/connection&gt;</span>&#10;    <span class="xml&#45;tag">&lt;project&gt;</span>&#10;        <span class="xml&#45;tag">&lt;release&gt;</span>Product/1.0<span class="xml&#45;tag">&lt;/release&gt;</span>&#10;        <span class="xml&#45;tag">&lt;projectSpecification&gt;</span>Product&#45;1<span class="xml&#45;tag">&lt;/projectSpecification&gt;</span>&#10;        <span class="xml&#45;tag">&lt;taskFolder&gt;</span>1234<span class="xml&#45;tag">&lt;/taskFolder&gt;</span>&#10;    <span class="xml&#45;tag">&lt;/project&gt;</span>&#10;    <span class="xml&#45;tag">&lt;changeSynergy&gt;</span>&#10;        <span class="xml&#45;tag">&lt;url&gt;</span>&#104;ttp://myserver:8060<span class="xml&#45;tag">&lt;/url&gt;</span>&#10;    <span class="xml&#45;tag">&lt;/changeSynergy&gt;</span>&#10;<span class="xml&#45;tag">&lt;/sourcecontrol&gt;</span></pre>
+</div></div><br/>
+
+<div class="code" style="border-style: solid; "><div class="codeHeader" style="border-bottom-style: solid; "><b>Full Example</b></div><div class="codeContent">
+<pre><span class="xml&#45;tag">&lt;sourcecontrol type=<span class="xml&#45;quote">&quot;synergy&quot;</span>&gt;</span>&#10;    <span class="xml&#45;tag">&lt;connection&gt;</span>&#10;        <span class="xml&#45;tag">&lt;host&gt;</span>myserver<span class="xml&#45;tag">&lt;/host&gt;</span>&#10;        <span class="xml&#45;tag">&lt;database&gt;</span>&#92;&#92;myserver&#92;share&#92;mydatabase<span class="xml&#45;tag">&lt;/database&gt;</span>&#10;        <span class="xml&#45;tag">&lt;delimiter&gt;</span>&#45;<span class="xml&#45;tag">&lt;/delimiter&gt;</span>&#10;        <span class="xml&#45;tag"><span class="xml&#45;comment">&lt;&#33;&#45;&#45; store values in an environmental variable&#45;&#45;&gt;</span></span>&#10;        <span class="xml&#45;tag">&lt;username&gt;</span>&#37;CCM&#95;USER&#37;<span class="xml&#45;tag">&lt;/username&gt;</span>&#10;        <span class="xml&#45;tag">&lt;password&gt;</span>&#37;CCM&#95;PWD&#37;<span class="xml&#45;tag">&lt;/password&gt;</span>&#10;        <span class="xml&#45;tag">&lt;role&gt;</span>build&#95;mgr<span class="xml&#45;tag">&lt;/role&gt;</span>&#10;        <span class="xml&#45;tag">&lt;homeDirectory&gt;</span>D:&#92;cmsynergy&#37;CCM&#95;USER&#37;<span class="xml&#45;tag">&lt;/homeDirectory&gt;</span>&#10;        <span class="xml&#45;tag">&lt;clientDatabaseDirectory&gt;</span>D:&#92;cmsynergy&#92;uidb<span class="xml&#45;tag">&lt;/clientDatabaseDirectory&gt;</span>&#10;        <span class="xml&#45;tag">&lt;polling&gt;</span>true<span class="xml&#45;tag">&lt;/polling&gt;</span>&#10;        <span class="xml&#45;tag">&lt;timeout&gt;</span>3600<span class="xml&#45;tag">&lt;/timeout&gt;</span>&#10;    <span class="xml&#45;tag">&lt;/connection&gt;</span>&#10;    <span class="xml&#45;tag">&lt;project&gt;</span>&#10;        <span class="xml&#45;tag">&lt;release&gt;</span>Product/1.0<span class="xml&#45;tag">&lt;/release&gt;</span>&#10;        <span class="xml&#45;tag">&lt;projectSpecification&gt;</span>Product&#45;1<span class="xml&#45;tag">&lt;/projectSpecification&gt;</span>&#10;        <span class="xml&#45;tag">&lt;taskFolder&gt;</span>1234<span class="xml&#45;tag">&lt;/taskFolder&gt;</span>&#10;        <span class="xml&#45;tag">&lt;baseline&gt;</span>false<span class="xml&#45;tag">&lt;/baseline&gt;</span>&#10;        <span class="xml&#45;tag">&lt;purpose&gt;</span>Integration Testing<span class="xml&#45;tag">&lt;/purpose&gt;</span>&#10;        <span class="xml&#45;tag">&lt;template&gt;</span>true<span class="xml&#45;tag">&lt;/template&gt;</span>&#10;    <span class="xml&#45;tag">&lt;/project&gt;</span>&#10;    <span class="xml&#45;tag">&lt;changeSynergy&gt;</span>&#10;        <span class="xml&#45;tag">&lt;role&gt;</span>User<span class="xml&#45;tag">&lt;/role&gt;</span>&#10;        <span class="xml&#45;tag">&lt;url&gt;</span>&#104;ttp://myserver:8060<span class="xml&#45;tag">&lt;/url&gt;</span>&#10;        <span class="xml&#45;tag">&lt;username&gt;</span>&#37;CS&#95;USER&#37;<span class="xml&#45;tag">&lt;/username&gt;</span>&#10;        <span class="xml&#45;tag">&lt;password&gt;</span>&#37;CS&#95;PWD&#37;<span class="xml&#45;tag">&lt;/password&gt;</span>&#10;    <span class="xml&#45;tag">&lt;/changeSynergy&gt;</span>&#10;<span class="xml&#45;tag">&lt;/sourcecontrol&gt;</span></pre>
+</div></div> 
+<p class="paragraph"><h2 class="heading2"><a name="TelelogicSynergy-CMSynergyConfigurationElements"> CM Synergy Configuration Elements</a></h2></p><div align='center'><div class='informationMacroPadding'><table cellpadding='5' width='85%' cellspacing='0' class='tipMacro' border='0'><tr><td width='16' valign='top'><img src="/images/icons/emoticons/check.png" width="16" height="16" align="absmiddle" alt="" border="0"></td><td><b class="strong">Configuration Reuse</b><br /><br/>
+By creating separate child nodes for the &lt;connection&gt;, &lt;project&gt;, and &lt;changeSynergy&gt; configuration elements, it is very easy to create reusable blocks of XML.  For more information on XML DTD entities and reusable configuration blocks, see  <a href="http://jira.public.thoughtworks.org/browse/CCNET-239" title="Visit page outside Confluence">JIRA issue CCNET-239</a> and <a href="http://peeps.dallas.focus-technologies.com/roller/page/nithy/20040128#using_the_entity_includes_in" title="Visit page outside Confluence">Nithy Palanivelu's Weblog </a>
+</td></tr></table></div></div><p class="paragraph"><h4 class="heading4"><a name="TelelogicSynergy-%26lt%3Bconnection%26gt%3Bnode%28required%29"> &lt;connection&gt; node (required)</a></h4>
+<table class="wikitable">
+<tr>
+<th>Connection Item</th><th>Description</th><th>Type</th><th>Environmental Variable Expansion</th><th>Default</th>
+</tr><tr>
+<td>workingDirectory</td><td>The directory to execute all CM Synergy commands from.</td><td>string</td><td>Yes</td><td>&quot;&#37;PROGRAMFILES&#37;\Telelogic\CM Synergy 6.3\bin&quot;</td>
+</tr><tr>
+<td>executable</td><td>The executable filename/path for the CM Synergy command line interface.</td><td>string</td><td>Yes</td><td>&quot;ccm.exe&quot;</td>
+</tr><tr>
+<td>host</td><td>The hostname of the Synergy server.</td><td>string</td><td>No</td><td>&quot;localhost&quot;</td>
+</tr><tr>
+<td>database</td><td>The physical path to the Informix database for the Synergy database.</td><td>string</td><td>No</td><td>Required.</td>
+</tr><tr>
+<td>username</td><td>The username for the Synergy session.</td><td>string</td><td>Yes</td><td>&quot;&#37;USERNAME&#37;&quot;</td>
+</tr><tr>
+<td>password</td><td>The Synergy password for the associated username.</td><td>string</td><td>Yes</td><td>&quot;&quot;</td>
+</tr><tr>
+<td>role</td><td>The role to use for the Synergy session.</td><td>string</td><td>No</td><td>&quot;build_mgr&quot;</td>
+</tr><tr>
+<td>homeDirectory</td><td>The full physical path of the home directory for the associated username on the client machine.</td><td>string</td><td>Yes</td><td>&quot;&#37;SystemDrive&#37;\cmsynergy<br clear="all" />
+\%USERNAME%&quot;</td>
+</tr><tr>
+<td>clientDatabaseDirectory</td><td>Path for the remote client session to copy database information to.</td><td>string</td><td>Yes</td><td>&quot;&#37;SystemDrive&#37;\cmsynergy\uidb&quot;</td>
+</tr><tr>
+<td>delimiter</td><td>The configured database delimiter for object and project specifications.</td><td>char</td><td>No</td><td>&#039;-&#039;</td>
+</tr><tr>
+<td>polling</td><td>If enabled, queues commands while the server is offline.</td><td>boolean</td><td>No</td><td>false</td>
+</tr><tr>
+<td>timeout</td><td>Timeout in seconds for all Synergy commands.</td><td>int</td><td>No</td><td>3600</td>
+</tr>
+</table>
+<div align='center'><div class='informationMacroPadding'><table cellpadding='5' width='85%' cellspacing='0' class='infoMacro' border='0'><tr><td width='16' valign='top'><img src="/images/icons/emoticons/information.png" width="16" height="16" align="absmiddle" alt="" border="0"></td><td><b class="strong">The Polling Feature</b><br /><br/>
+The polling feature is useful if your Synergy installation routinely goes offline (i.e., &quot;protected mode&quot;).  Long runing builds may inadventently conflict with the routine downtime schedules.  For example, polling allows your build to queue CM Synergy commands until the nightly backup completes.
+</td></tr></table></div></div></p><div align='center'><div class='informationMacroPadding'><table cellpadding='5' width='85%' cellspacing='0' class='infoMacro' border='0'><tr><td width='16' valign='top'><img src="/images/icons/emoticons/information.png" width="16" height="16" align="absmiddle" alt="" border="0"></td><td><b class="strong">Environmental Variables</b><br /><br/>
+Environmental variable support enables you to keep your sensitive build manager credentials out of the CCNET configuration file.  This is especially important if the configuration file is under source control, whereby it would be readable by all CM Synergy users.
+</td></tr></table></div></div><p class="paragraph"><h4 class="heading4"><a name="TelelogicSynergy-%26lt%3Bproject%26gt%3Bnode%28required%29"> &lt;project&gt; node (required)</a></h4>
+<table class="wikitable">
+<tr>
+<th>Project Item</th><th>Description</th><th>Type</th><th>Environmental Variable Expansion</th><th>Default</th>
+</tr><tr>
+<td>release</td><td>The component + version specification.</td><td>string</td><td>No</td><td>Required.</td>
+</tr><tr>
+<td>projectSpecification</td><td>The Synergy project specification for the integration project.</td><td>string</td><td>No</td><td>Required.</td>
+</tr><tr>
+<td>taskFolder</td><td>The folder specification for the shared folder which will be used to &quot;manually&quot; add successfully integrated tasks added to.</td><td>int</td><td>No</td><td>0</td>
+</tr><tr>
+<td>baseline</td><td>Flag to creates a new baseline of the project configuration after a successful integration.</td><td>boolean</td><td>No</td><td>false</td>
+</tr><tr>
+<td>purpose</td><td>The Synergy purpose specification for baselines created by CruiseControl.NET.</td><td>string</td><td>No</td><td>&quot;Integration Testing&quot;</td>
+</tr>
+</table></p><h4 class="heading4"><a name="TelelogicSynergy-%26lt%3BchangeSynergy%26gt%3Bnode%28optional%29"> &lt;changeSynergy&gt; node (optional)</a></h4>
+<table class="wikitable">
+<tr>
+<th>Change Synergy Item</th><th>Description</th><th>Type</th><th>Environmental Variable Expansion</th><th>Default</th>
+</tr><tr>
+<td>url</td><td>The base HTTP URL for your ChangeSynergy installation</td><td>string</td><td>No</td><td>Required.</td>
+</tr><tr>
+<td>username</td><td>The <b class="strong">optional</b> username for ChangeSynergy anonymous access.</td><td>string</td><td>Yes</td><td>Optional.</td>
+</tr><tr>
+<td>password</td><td>The <b class="strong">optional</b> password for ChangeSynergy anonymous access.</td><td>string</td><td>Yes</td><td>Optional.</td>
+</tr><tr>
+<td>role</td><td>The role to use for the Synergy session.</td><td>string</td><td>No</td><td>&quot;User&quot;</td>
+</tr>
+</table>
+<div align='center'><div class='informationMacroPadding'><table cellpadding='5' width='85%' cellspacing='0' class='warningMacro' border='0'><tr><td width='16' valign='top'><img src="/images/icons/emoticons/forbidden.png" width="16" height="16" align="absmiddle" alt="" border="0"></td><td><b class="strong">Security Warning</b><br /><br/>
+Be careful about specifying a ChangeSynergy username and password.  If you do not specify these optional values, the end-user will be prompted by ChangeSynergy to enter valid credentials.  If an anonymous access account is used, specify a user that has only read-only permissions within ChangeSynergy.  This will prevent someone from modifying objects, such as tasks, through ChangeSynergy.  If you specify an impersonation account with write permissions, a malicious user could bypass auditing in ChangeSynergy.
+</td></tr></table></div></div><br/>
+
+
+<ul class="star">
+<li> Contributed by Steve Jansen</li>
+</ul>
+
+				    
+                    			    </td>
+		    </tr>
+	    </table>
+	    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+			<tr>
+				<td height="12" background="border/border_bottom.gif"><img src="border/spacer.gif" width="1" height="1" border="0"/></td>
+			</tr>
+		    <tr>
+			    <td align="center"><font color="grey">Document generated by Confluence on Jun 26, 2005 17:23</font></td>
+		    </tr>
+	    </table>
+    </body>
+</html>

@@ -15,7 +15,7 @@
                                                     </span>
 				    </div>
 				    <div class="pagesubheading">
-					    This page last changed on Mar 16, 2005 by <font color="#0050B2">mroberts</font>.
+					    This page last changed on Jun 17, 2005 by <font color="#0050B2">orogers</font>.
 				    </div>
 
 				    <p class="paragraph"><h3 style="margin: 4px 0px 4px 0px;" class="heading3"><a name="PerforceSourceControlBlock-PerforceConfigurationExamples"> Perforce Configuration Examples</a></h3></p>Example using defaults:<br/>
@@ -23,7 +23,7 @@
 <div class="code"><div class="codeContent">
 <pre><span class="xml&#45;tag">&lt;sourcecontrol type=<span class="xml&#45;quote">&quot;p4&quot;</span>&gt;</span>&#10;   <span class="xml&#45;tag">&lt;view&gt;</span>//projects/myproject/...<span class="xml&#45;tag">&lt;/view&gt;</span>&#10;<span class="xml&#45;tag">&lt;/sourcecontrol&gt;</span></pre>
 </div></div><p class="paragraph">Full example:</p><div class="code"><div class="codeContent">
-<pre><span class="xml&#45;tag">&lt;sourcecontrol type=<span class="xml&#45;quote">&quot;p4&quot;</span>&gt;</span>&#10;   <span class="xml&#45;tag">&lt;view&gt;</span>//projects/ccnet/...,//tools/nant/...<span class="xml&#45;tag">&lt;/view&gt;</span>&#10;   <span class="xml&#45;tag">&lt;executable&gt;</span>c:&#92;perforce&#92;p4.exe<span class="xml&#45;tag">&lt;/executable&gt;</span>&#10;   <span class="xml&#45;tag">&lt;client&gt;</span>ccnet&#45;buildhost<span class="xml&#45;tag">&lt;/client&gt;</span>&#10;   <span class="xml&#45;tag">&lt;user&gt;</span>public<span class="xml&#45;tag">&lt;/user&gt;</span>&#10;   <span class="xml&#45;tag">&lt;port&gt;</span>perforce01.thoughtworks.net:1666<span class="xml&#45;tag">&lt;/port&gt;</span>&#10;   <span class="xml&#45;tag">&lt;applyLabel&gt;</span>true<span class="xml&#45;tag">&lt;/applyLabel&gt;</span>&#10;   <span class="xml&#45;tag">&lt;autoGetSource&gt;</span>true<span class="xml&#45;tag">&lt;/autoGetSource&gt;</span>&#10;   <span class="xml&#45;tag">&lt;forceSync&gt;</span>true<span class="xml&#45;tag">&lt;/forceSync&gt;</span>&#10;<span class="xml&#45;tag">&lt;/sourcecontrol&gt;</span></pre>
+<pre><span class="xml&#45;tag">&lt;sourcecontrol type=<span class="xml&#45;quote">&quot;p4&quot;</span>&gt;</span>&#10;   <span class="xml&#45;tag">&lt;view&gt;</span>//projects/ccnet/...,//tools/nant/...<span class="xml&#45;tag">&lt;/view&gt;</span>&#10;   <span class="xml&#45;tag">&lt;executable&gt;</span>c:&#92;perforce&#92;p4.exe<span class="xml&#45;tag">&lt;/executable&gt;</span>&#10;   <span class="xml&#45;tag">&lt;client&gt;</span>ccnet&#45;buildhost<span class="xml&#45;tag">&lt;/client&gt;</span>&#10;   <span class="xml&#45;tag">&lt;user&gt;</span>public<span class="xml&#45;tag">&lt;/user&gt;</span>&#10;   <span class="xml&#45;tag">&lt;port&gt;</span>perforce01.thoughtworks.net:1666<span class="xml&#45;tag">&lt;/port&gt;</span>&#10;   <span class="xml&#45;tag">&lt;applyLabel&gt;</span>true<span class="xml&#45;tag">&lt;/applyLabel&gt;</span>&#10;   <span class="xml&#45;tag">&lt;autoGetSource&gt;</span>true<span class="xml&#45;tag">&lt;/autoGetSource&gt;</span>&#10;   <span class="xml&#45;tag">&lt;forceSync&gt;</span>true<span class="xml&#45;tag">&lt;/forceSync&gt;</span>&#10;   <span class="xml&#45;tag">&lt;p4WebURLFormat&gt;</span>&#104;ttp://perforceWebServer:8080/&#64;md=d&amp;cd=//&amp;c=3IB&#64;/&#123;0&#125;&#63;ac=10<span class="xml&#45;tag">&lt;/p4WebURLFormat&gt;</span>&#10;<span class="xml&#45;tag">&lt;/sourcecontrol&gt;</span></pre>
 </div></div>
 <p class="paragraph"><h3 class="heading3"><a name="PerforceSourceControlBlock-ConfigurationElements%3A"> Configuration Elements:</a></h3></p><table class="wikitable">
 <tr>
@@ -44,6 +44,8 @@
 <td> autoGetSource </td><td> Whether to automatically &#039;sync&#039; the latest changes from source control before performing the build. The sync target is the entire view exposed by the specified <tt class="monospaced">client</tt> - the <tt class="monospaced">view</tt> has no effect on sycning. </td><td> bool </td><td> false </td><td> false </td>
 </tr><tr>
 <td> forceSync </td><td> If <tt class="monospaced">autoGetSource</tt> is set to true, then whether to use the <tt class="monospaced">-f</tt> option to sync. See <a href="http://www.perforce.com/perforce/doc.042/manuals/cmdref/sync.html" title="Visit page outside Confluence">here</a> for more details </td><td> boolean </td><td> no </td><td> false </td>
+</tr><tr>
+<td> p4WebURLFormat </td><td> Creates a link to the P4Web change list page for each detected modification.  The specified value is transformed using String.Format where the first argument (&#123;0&#125;) will be the substituted change list number </td><td> false </td><td> <em class="emphasis">n.a.</em> </td>
 </tr>
 </table>
 <h3 class="heading3"><a name="PerforceSourceControlBlock-Client%2FUser%2FPassword%2FPortusage"> Client / User / Password / Port usage</a></h3><p class="paragraph">You may specify any of the Perforce client, user and port (ie &#039;host:port&#039; in Perforce standards) settings to use. If you don&#039;t specify them, then Cruise Control .NET will use the defaults in your registry (use &#039;p4 set&#039; to view and edit these.) NB: If you use a user with a non-empty password, you must use the user specified in the registry, and its password must be set in the registry too. This is done whenever you use &#039;P4Win&#039; and tell it to remember your password.</p>Note that the <em class="emphasis">client</em> specification is only used for syncing and applying labels, it is not used when checking for changes. This is significant since it means that the <em class="emphasis">view</em> in the specified <em class="emphasis">client</em> does not effect the plugin&#039;s behaviour when checking for changes.<p class="paragraph"><h3 class="heading3"><a name="PerforceSourceControlBlock-PerforceIssues"> Perforce Issues</a></h3></p>Perforce cannot apply purely numeric labels, which is what CCNet uses by default. Therefore, if you have &#039;applyLabel&#039; set to true, you <b class="strong">must</b> also setup a custom Labeller in your project, e.g. by using the <a href="Default Labeller.html" title="Default Labeller">Default Labeller</a>.
@@ -57,7 +59,7 @@
 				<td height="12" background="border/border_bottom.gif"><img src="border/spacer.gif" width="1" height="1" border="0"/></td>
 			</tr>
 		    <tr>
-			    <td align="center"><font color="grey">Document generated by Confluence on May 19, 2005 15:32</font></td>
+			    <td align="center"><font color="grey">Document generated by Confluence on Jun 26, 2005 17:22</font></td>
 		    </tr>
 	    </table>
     </body>
