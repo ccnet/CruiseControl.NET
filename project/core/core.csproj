@@ -604,6 +604,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "sourcecontrol\CvsHistoryCommandParser.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "sourcecontrol\CvsHistoryParser.cs"
                     SubType = "Code"
                     BuildAction = "Compile"

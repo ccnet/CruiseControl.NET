@@ -30,6 +30,10 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 		[ReflectorProperty("workingDirectory", Required=false)]
 		public string WorkingDirectory = string.Empty;
 
+		// what's the purpose of this property?
+		[ReflectorProperty("localOnly", Required=false)]
+		public bool LocalOnly = false;
+
 		[ReflectorProperty("labelOnSuccess", Required=false)]
 		public bool LabelOnSuccess = false;
 
@@ -66,8 +70,10 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			// Run a true 'cvs history' command
 			if (UseHistory)
 			{
-				Log.Info("Using cvs history command");
-				dirs = GetDirectoriesContainingChanges(from.StartTime);
+				Log.Debug("Using cvs history command");
+				CvsHistoryCommandParser history = new CvsHistoryCommandParser(_executor, Executable, WorkingDirectory);
+				history.LocalOnly = LocalOnly;
+				dirs = history.GetDirectoriesContainingChanges(from.StartTime);
 			}
 
 			// Get list of target files to run 'cvs log' against
@@ -75,14 +81,14 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			ArrayList mods = new ArrayList();
 			foreach (string dir in dirs)
 			{
-				Log.Info(string.Format("Checking directory {0} for modifications.", dir));
+				string reportDir = Path.Combine(WorkingDirectory, dir);
+				Log.Info(string.Format("Checking directory {0} for modifications.", reportDir));
 				Modification[] modifications = GetModifications(CreateLogProcessInfo(from.StartTime, dir), from.StartTime, to.StartTime);
-				foreach (Modification mod in modifications)
-				{
-					mods.Add(mod);
-				}
+				mods.AddRange(modifications);
 
-				if ((modifications.Length > 0) && UseHistory)
+				// Update the source if there are modifications or the user explicity states to.
+ 				if ((modifications.Length > 0) && UseHistory)
+//				if (modifications.Length > 0 || AutoGetSource)	// do we really want to do this?
 				{
 					UpdateSource(dir);
 				}
@@ -106,9 +112,9 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 
 		public override void GetSource(IIntegrationResult result)
 		{
-			if (AutoGetSource)
+			if (AutoGetSource && !UseHistory)
 			{
-				Execute(NewGetSourceProcessInfo(null));
+				UpdateSource(null);
 			}
 		}
 
@@ -122,116 +128,14 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			ProcessArgumentBuilder builder = new ProcessArgumentBuilder();
 			builder.AppendArgument(GET_SOURCE_COMMAND_FORMAT);
 			builder.AppendIf(CleanCopy, "-C");
-			builder.AppendIf(UseHistory && dir != null, "-l");
-			builder.AppendIf(UseHistory && dir != null, "\"{0}\"", dir);
+//			builder.AppendIf(UseHistory && dir != null, "-l");
+//			builder.AppendIf(UseHistory && dir != null, "\"{0}\"", dir);
+ 			builder.AppendIf((UseHistory && dir != null) || LocalOnly, "-l");
+ 			builder.AppendIf(dir != null, "\"{0}\"", dir);
 
 			ProcessInfo info = NewProcessInfoWithArgs(builder.ToString());
 			Log.Info(string.Format("Getting source from CVS: {0} {1}", info.FileName, info.Arguments));
 			return info;
-		}
-
-		private string[] GetDirectoriesContainingChanges(DateTime from)
-		{
-			Log.Info("Get changes in working directory: " + WorkingDirectory);
-			ProcessResult result = Execute(NewHistoryProcessInfo(from));
-
-			StringReader reader = new StringReader(result.StandardOutput);
-			ArrayList entryList = new ArrayList();
-			string line;
-			while ((line = reader.ReadLine()) != null)
-			{
-				string dir = ParseEntry(line);
-				if (dir == null)
-				{
-					continue;
-				}
-
-				// We need to replace forward slash returned by cvs to directory separator of
-				// the platform this is running on.
-				dir = dir.Replace('/', Path.DirectorySeparatorChar);
-				int index;
-				if ((index = AcceptEntry(WorkingDirectory, dir)) != -1)
-				{
-					Log.Debug("Accepted dir: " + dir);
-					string entry = dir.Substring(index);
-					if (!entryList.Contains(entry))
-					{
-						Log.Debug("Added entry: " + entry);
-						entryList.Add(entry);
-					}
-				}
-			}
-
-			return (string[]) entryList.ToArray(typeof (string));
-		}
-
-		private ProcessInfo NewHistoryProcessInfo(DateTime from)
-		{
-			ProcessArgumentBuilder buffer = new ProcessArgumentBuilder();
-			buffer.AppendArgument("history -x MAR -a -D \"{0}\"", FormatCommandDate(from));
-			return NewProcessInfoWithArgs(buffer.ToString());
-		}
-
-		/// <summary>
-		/// Check to see if the directory passed in is part of the absolute directory
-		/// that is passed in.
-		/// </summary>
-		/// <param name="absolutePath"></param>
-		/// <param name="relativePath"></param>
-		/// <returns>Relative repo path</returns>
-		private int AcceptEntry(string absolutePath, string relativePath)
-		{
-			char[] delimeter = new char[] {Path.DirectorySeparatorChar};
-			string[] absoluteParts = absolutePath.Split(delimeter);
-			string[] relativeParts = relativePath.Split(delimeter);
-
-			string relative = relativeParts[0];
-			bool addToString = false;
-			string newPath = "";
-			foreach (string part in absoluteParts)
-			{
-				if (part.Equals(relative))
-				{
-					addToString = true;
-				}
-
-				if (addToString)
-				{
-					newPath += part + Path.DirectorySeparatorChar;
-				}
-			}
-
-			int retVal = -1;
-			if (relativePath.IndexOf(newPath) != -1 && (!newPath.Equals("")))
-			{
-				retVal = newPath.Length;
-			}
-			return retVal;
-		}
-
-		/// <summary>
-		/// Find the directory listed by the history command
-		/// </summary>
-		/// <param name="line"></param>
-		/// <returns></returns>
-		private string ParseEntry(string line)
-		{
-			ArrayList items = new ArrayList(9);
-			char[] delimeters = new char[] {' ', '\t'};
-			string[] tokens = line.Split(delimeters);
-			foreach (string token in tokens)
-			{
-				if (!StringUtil.IsWhitespace(token))
-				{
-					Log.Debug("Token: " + token);
-					items.Add(token);
-				}
-			}
-
-			if (items.Count > DIRECTORY_INDEX)
-				return (string) items[DIRECTORY_INDEX];
-
-			return null; // under what conditions will this happen.  do we really want to return null?
 		}
 
 		private ProcessInfo CreateLogProcessInfo(DateTime from, string dir)
