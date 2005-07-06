@@ -384,7 +384,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 
 				using (TextReader reader = GetTextReader(LogFile))
 				{
-					baseModifications = _historyParser.Parse(reader, DateTime.Now, DateTime.Now);
+					baseModifications = historyParser.Parse(reader, DateTime.Now, DateTime.Now);
 				}
 			}
 

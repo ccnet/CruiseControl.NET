@@ -1,34 +1,27 @@
 using System;
 using System.IO;
-using ThoughtWorks.CruiseControl.Core.Util;
 using Exortech.NetReflector;
+using ThoughtWorks.CruiseControl.Core.Util;
 
 namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 {
 	public abstract class ProcessSourceControl : ISourceControl
 	{
-		public const int DEFAULT_TIMEOUT = 600000;
-		protected ProcessExecutor _executor;
-		protected IHistoryParser _historyParser;
+		public const int DefaultTimeout = 600000;
+		protected ProcessExecutor executor;
+		protected IHistoryParser historyParser;
 
 		public ProcessSourceControl(IHistoryParser historyParser) : this(historyParser, new ProcessExecutor())
-		{
-		}
+		{}
 
 		public ProcessSourceControl(IHistoryParser historyParser, ProcessExecutor executor)
 		{
-			_executor = executor;
-			_historyParser = historyParser;
+			this.executor = executor;
+			this.historyParser = historyParser;
 		}
 
-		private int timeout = DEFAULT_TIMEOUT;
-
-		[ReflectorProperty("timeout", Required=false)] 
-		public int Timeout
-		{
-			get { return timeout; }
-			set { timeout = value; }
-		}
+		[ReflectorProperty("timeout", Required=false)]
+		public int Timeout = DefaultTimeout;
 
 		public abstract Modification[] GetModifications(IIntegrationResult from, IIntegrationResult to);
 
@@ -43,7 +36,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 		protected ProcessResult Execute(ProcessInfo processInfo)
 		{
 			processInfo.TimeOut = Timeout;
-			ProcessResult result = _executor.Execute(processInfo);
+			ProcessResult result = executor.Execute(processInfo);
 
 			if (result.TimedOut)
 			{
@@ -51,8 +44,8 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			}
 			else if (result.Failed)
 			{
-				throw new CruiseControlException(string.Format("Source control operation failed: {0}. Process command: {1} {2}", 
-					result.StandardError, processInfo.FileName, processInfo.Arguments));
+				throw new CruiseControlException(string.Format("Source control operation failed: {0}. Process command: {1} {2}",
+				                                               result.StandardError, processInfo.FileName, processInfo.Arguments));
 			}
 			else if (result.HasErrorOutput)
 			{
@@ -68,19 +61,16 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 
 		protected Modification[] ParseModifications(TextReader reader, DateTime from, DateTime to)
 		{
-			return _historyParser.Parse(reader, from, to);
+			return historyParser.Parse(reader, from, to);
 		}
 
 		public virtual void GetSource(IIntegrationResult result)
-		{
-		}
+		{}
 
 		public virtual void Initialize(IProject project)
-		{
-		}
+		{}
 
 		public void Purge(IProject project)
-		{
-		}
+		{}
 	}
 }

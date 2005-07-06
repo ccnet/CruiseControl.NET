@@ -13,7 +13,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 		protected const int SuccessfulExitCode = 0;
 		protected const int FailedExitCode = -1;
 		protected string DefaultWorkingDirectory = @"c:\source\";
-		protected int DefaultTimeout = ProcessSourceControl.DEFAULT_TIMEOUT;
+		protected int DefaultTimeout = ProcessSourceControl.DefaultTimeout;
+		protected string ProcessResultOutput = "output";
 
 		protected IMock mockProcessExecutor;
 		protected string defaultExecutable;
@@ -74,7 +75,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 
 		protected ProcessResult FailedProcessResult()
 		{
-			return new ProcessResult("output", null, FailedExitCode, false);
+			return new ProcessResult(ProcessResultOutput, null, FailedExitCode, false);
 		}
 
 		protected ProcessResult TimedOutProcessResult()

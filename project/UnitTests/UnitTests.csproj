@@ -68,7 +68,7 @@
                     BaseAddress = "285212672"
                     CheckForOverflowUnderflow = "false"
                     ConfigurationOverrideFile = ""
-                    DefineConstants = ""
+                    DefineConstants = "TRACE"
                     DocumentationFile = ""
                     DebugSymbols = "true"
                     FileAlignment = "4096"
@@ -649,6 +649,11 @@
                 />
                 <File
                     RelPath = "Core\SourceControl\ClearCaseTest.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Core\SourceControl\CvsHistoryCommandParserTest.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

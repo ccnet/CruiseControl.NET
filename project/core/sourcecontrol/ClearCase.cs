@@ -114,7 +114,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 		private void ExecuteIgnoreNonVobObjects(ProcessInfo info)
 		{
 			info.TimeOut = Timeout;
-			ProcessResult result = _executor.Execute(info);
+			ProcessResult result = executor.Execute(info);
 
 			if (result.TimedOut)
 			{

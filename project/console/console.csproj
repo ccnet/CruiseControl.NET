@@ -17,7 +17,7 @@
                 DelaySign = "false"
                 OutputType = "Exe"
                 PreBuildEvent = ""
-                PostBuildEvent = 'xcopy /y /q "$(ProjectDir)\..\examples\*.bat" "$(TargetDir)"&#xd;&#xa;xcopy /y /q "$(ProjectDir)\..\examples\ccnet.config" "$(TargetDir)"&#xd;&#xa;xcopy /y /q "$(ProjectDir)\..\examples\*.build" "$(TargetDir)"'
+                PostBuildEvent = ""
                 RootNamespace = "ThoughtWorks.CruiseControl.Console"
                 RunPostBuildEvent = "OnBuildSuccess"
                 StartupObject = ""

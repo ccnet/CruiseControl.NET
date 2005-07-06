@@ -17,13 +17,15 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 		private IMock mockHistoryParser;
 		private DateTime from;
 		private DateTime to;
+		private IMock mockHistoryDirectoryParser;
 
 		[SetUp]
 		protected void CreateCvs()
 		{
 			mockHistoryParser = new DynamicMock(typeof (IHistoryParser));
+			mockHistoryDirectoryParser = new DynamicMock(typeof(CvsHistoryCommandParser));
 			CreateProcessExecutorMock(Cvs.DefaultCvsExecutable);
-			cvs = new Cvs((IHistoryParser) mockHistoryParser.MockInstance, (ProcessExecutor) mockProcessExecutor.MockInstance);
+			cvs = new Cvs((IHistoryParser) mockHistoryParser.MockInstance, (ProcessExecutor) mockProcessExecutor.MockInstance, (CvsHistoryCommandParser) mockHistoryDirectoryParser.MockInstance);
 			from = new DateTime(2001, 1, 21, 20, 0, 0);
 			to = from.AddDays(1);
 		}
@@ -33,6 +35,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 		{
 			base.Verify();
 			mockHistoryParser.Verify();
+			mockHistoryDirectoryParser.Verify();
 		}
 
 		[Test]
@@ -89,24 +92,24 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 			cvs.GetModifications(IntegrationResult(from), IntegrationResult(to));
 		}
 
-		[Test, Ignore("owen - need to resolve workingDirectory")]
+		[Test]
 		public void VerifyLogCommandArgumentsUsingHistoryWithDirectory()
 		{
 			ExpectToExecuteArguments(string.Format(@"history -x MAR -a -D ""{0}""", cvs.FormatCommandDate(from)));
 			ExpectToExecuteArguments(string.Format(@"-q log -N -l -b ""-d>{0}"" ""{1}""", cvs.FormatCommandDate(from), @"\temp"));
 			ExpectToParseAndReturnNoModifications();
+			mockHistoryDirectoryParser.ExpectAndReturn("ParseOutputFrom", new string[] { @"\temp"}, ProcessResultOutput);
 
 			cvs.UseHistory = true;
 			cvs.WorkingDirectory = DefaultWorkingDirectory;
 			cvs.GetModifications(IntegrationResult(from), IntegrationResult(to));
 		}
 
-		[Test, Ignore("owen - need to resolve workingDirectory")]
-		public void VerifyLogCommandArgumentsUsingHistoryWithNoDirectory()
+		[Test]
+		public void VerifyLogCommandArgumentsUsingHistoryWithNoDirectoryDoesNotExecuteLogCommand()
 		{
 			ExpectToExecuteArguments(string.Format(@"history -x MAR -a -D ""{0}""", cvs.FormatCommandDate(from)));
-			ExpectToExecuteArguments(string.Format(@"-q log -N -l -b ""-d>{0}""", cvs.FormatCommandDate(from)));
-			ExpectToParseAndReturnNoModifications();
+			mockHistoryDirectoryParser.ExpectAndReturn("ParseOutputFrom", new string[0], ProcessResultOutput);
 
 			cvs.UseHistory = true;
 			cvs.WorkingDirectory = DefaultWorkingDirectory;
@@ -134,7 +137,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 			cvs.AutoGetSource = true;
 			cvs.CleanCopy = true; // set as default
 			cvs.WorkingDirectory = DefaultWorkingDirectory;
-			cvs.GetSource(new IntegrationResult());
+			cvs.GetSource(IntegrationResult());
 		}
 
 		[Test]
@@ -143,7 +146,21 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 			ExpectThatExecuteWillNotBeCalled();
 
 			cvs.AutoGetSource = false;
-			cvs.GetSource(new IntegrationResult());
+			cvs.GetSource(IntegrationResult());
+		}
+		
+		[Test]
+		public void ShouldRebaseWorkingDirectoryForGetSource()
+		{
+			base.DefaultWorkingDirectory = @"c:\devl\myproject";
+			ExpectToExecuteArguments(@"-q update -d -P -C");
+
+			cvs.AutoGetSource = true;
+			cvs.CleanCopy = true; // set as default
+			cvs.WorkingDirectory = "myproject";
+			IntegrationResult result = new IntegrationResult();
+			result.WorkingDirectory = @"c:\devl";
+			cvs.GetSource(result);			
 		}
 
 		[Test]
@@ -174,6 +191,16 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 			cvs.LabelOnSuccess = true;
 			cvs.WorkingDirectory = DefaultWorkingDirectory;
 			cvs.LabelSourceControl(IntegrationResultMother.CreateSuccessful("foo"));
+		}
+
+		[Test]
+		public void ShouldConvertLabelsThatContainIllegalCharacters()
+		{
+			ExpectToExecuteArguments("-d myCvsRoot tag ver-2_1_4");
+			cvs.CvsRoot = "myCvsRoot";
+			cvs.LabelOnSuccess = true;
+			cvs.WorkingDirectory = DefaultWorkingDirectory;
+			cvs.LabelSourceControl(IntegrationResultMother.CreateSuccessful("2.1.4"));			
 		}
 
 		private void ExpectToParseAndReturnNoModifications()

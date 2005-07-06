@@ -1,10 +1,11 @@
 using NMock;
 using NUnit.Framework;
+using ThoughtWorks.CruiseControl.Core;
 using ThoughtWorks.CruiseControl.Core.Label;
 using ThoughtWorks.CruiseControl.Core.State;
 using ThoughtWorks.CruiseControl.UnitTests.Core;
 
-namespace ThoughtWorks.CruiseControl.Core.label.tests
+namespace ThoughtWorks.CruiseControl.UnitTests.Core.Label
 {
 	[TestFixture]
 	public class StateFileLabellerTest

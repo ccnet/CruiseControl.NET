@@ -56,7 +56,7 @@ Author: (?<author_name>.*?) Date: (?<date_string>\d{01,2}/\d{1,2}/\d\d \d{1,2}:\
 			_pathOverrideFolderWorkingDir = String.Empty;
 			// We have to do this here since we can't pass a reference to 'this' as part of the call to 'base' above
 			// Its nasty, but I don't like inheritence anyway (Mike R)
-			_historyParser = new StarTeamHistoryParser(this);
+			historyParser = new StarTeamHistoryParser(this);
 		}
 
 		[ReflectorProperty("executable")]

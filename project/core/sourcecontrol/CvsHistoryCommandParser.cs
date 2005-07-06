@@ -1,7 +1,5 @@
-using System;
 using System.Collections;
 using System.Configuration;
-using System.Globalization;
 using System.IO;
 using ThoughtWorks.CruiseControl.Core.Util;
 
@@ -13,27 +11,11 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 	public class CvsHistoryCommandParser
 	{
 		public const string COMMAND_DATE_FORMAT = "yyyy-MM-dd HH:mm:ss 'GMT'";
+		private static readonly string cvsRepositoryFilePath = Path.Combine("CVS", "Repository");
 
-		private string repoFilePath = Path.Combine("CVS", "Repository");
 		private string repositoryDirectory = null;
 
-		public CvsHistoryCommandParser(ProcessExecutor executor) : this(executor, null, null)
-		{}
-
-		public CvsHistoryCommandParser(ProcessExecutor executor, string executable, string workingDir)
-		{
-			Executor = executor;
-			Executable = executable;
-			WorkingDirectory = workingDir;
-		}
-
-		public ProcessExecutor Executor = null;
-
 		public string WorkingDirectory = ".";
-
-		public string Executable = "cvs.exe";
-
-		public bool LocalOnly = false;
 
 		public string Repository
 		{
@@ -41,41 +23,15 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			{
 				if (repositoryDirectory == null)
 				{
-					repositoryDirectory = GetRepository(new DirectoryInfo(WorkingDirectory));
+					repositoryDirectory = ReadCvsRepositoryDirectory(new DirectoryInfo(WorkingDirectory));
 				}
 				return repositoryDirectory;
 			}
 		}
 
-		public string FormatCommandDate(DateTime date)
+		public virtual string[] ParseOutputFrom(string output)
 		{
-			return date.ToUniversalTime().ToString(COMMAND_DATE_FORMAT, CultureInfo.InvariantCulture);
-		}
-
-		public string[] GetDirectoriesContainingChanges(DateTime from)
-		{
-			if (LocalOnly)
-			{
-				return new string[] {"."};
-			}
-
-			ProcessResult result = ExecuteHistoryCommand(from);
-			return ParseOutputFrom(result);
-		}
-
-		private ProcessResult ExecuteHistoryCommand(DateTime from)
-		{
-			Log.Info("Get changes in working directory: " + WorkingDirectory);
-			ProcessArgumentBuilder buffer = new ProcessArgumentBuilder();
-			buffer.AppendArgument(string.Format("history -x MAR -a -D \"{0}\"", FormatCommandDate(from)));
-	
-			ProcessInfo ps = new ProcessInfo(Executable, buffer.ToString(), WorkingDirectory);
-			return Executor.Execute(ps);
-		}
-
-		private string[] ParseOutputFrom(ProcessResult result)
-		{
-			StringReader reader = new StringReader(result.StandardOutput);
+			StringReader reader = new StringReader(output);
 			ArrayList entryList = new ArrayList();
 			string line;
 			while ((line = reader.ReadLine()) != null)
@@ -90,18 +46,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 				// the platform this is running on.
 				dir = FormatPathForOS(dir);
 
-				string repoFile = "";
-				try
-				{
-					repoFile = Repository;
-				}
-				catch (ConfigurationException)
-				{
-					Log.Info(string.Format("Couldn't find directory: {0}", WorkingDirectory));
-					Log.Info(string.Format("Trying directory: {0}", Directory.GetParent(WorkingDirectory)));
-
-					repoFile = GetRepository(Directory.GetParent(WorkingDirectory));
-				}
+				string repoFile = GetRepository();
 
 				string entry;
 				if (!dir.Equals(FormatPathForOS(repoFile)))
@@ -119,8 +64,23 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 					entryList.Add(entry);
 				}
 			}
-	
+
 			return (string[]) entryList.ToArray(typeof (string));
+		}
+
+		public string GetRepository()
+		{
+			try
+			{
+				return Repository;
+			}
+			catch (ConfigurationException)
+			{
+				Log.Info(string.Format("Couldn't find directory: {0}", WorkingDirectory));
+				Log.Info(string.Format("Trying directory: {0}", Directory.GetParent(WorkingDirectory)));
+
+				return ReadCvsRepositoryDirectory(Directory.GetParent(WorkingDirectory));
+			}
 		}
 
 		/// <summary>
@@ -175,10 +135,9 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			return retVal;
 		}
 
-		public string GetRepository(DirectoryInfo dir)
+		public string ReadCvsRepositoryDirectory(DirectoryInfo dir)
 		{
-			FileInfo repo = new FileInfo(Path.Combine(dir.FullName, repoFilePath));
-
+			FileInfo repo = new FileInfo(Path.Combine(dir.FullName, cvsRepositoryFilePath));
 			if (!repo.Exists)
 			{
 				throw new ConfigurationException(string.Format("Working directory {0} is not a CVS directory.", WorkingDirectory));

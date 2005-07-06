@@ -5,11 +5,11 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 {
 	public class LogFileTraceListener : TraceListener
 	{
-		private TextWriterTraceListener _listener;
+		private TextWriterTraceListener listener;
 
 		public LogFileTraceListener(string logfile) : base(logfile) 
 		{ 
-			_listener = new TextWriterTraceListener(logfile);
+			listener = new TextWriterTraceListener(logfile);
 		}
 
 		private string CreateMessage()
@@ -24,60 +24,60 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 
 		public override void Write(string message) 
 		{
-			_listener.Write(message, CreateMessage());
+			listener.Write(message, CreateMessage());
 		}
 
 		public override void Write(object obj) 
 		{
-			_listener.Write(obj, CreateMessage());
+			listener.Write(obj, CreateMessage());
 		}
 
 		public override void Write(string message, string category) 
 		{
-			_listener.Write(message, CreateMessage(category));
+			listener.Write(message, CreateMessage(category));
 		}
 
 		public override void Write(object obj, string category) 
 		{
-			_listener.Write(obj, CreateMessage(category));
+			listener.Write(obj, CreateMessage(category));
 		}
 
 		public override void WriteLine(string message) 
 		{
-			_listener.WriteLine(message, CreateMessage());
+			listener.WriteLine(message, CreateMessage());
 		}
 
 		public override void WriteLine(object obj) 
 		{
-			_listener.WriteLine(obj, CreateMessage());
+			listener.WriteLine(obj, CreateMessage());
 		}
 
 		public override void WriteLine(string message, string category) 
 		{
-			_listener.WriteLine(message, CreateMessage(category));
+			listener.WriteLine(message, CreateMessage(category));
 		}
 
 		public override void WriteLine(object obj, string category) 
 		{
-			_listener.WriteLine(obj, CreateMessage(category));
+			listener.WriteLine(obj, CreateMessage(category));
 		}
 
 		public override void Flush()
 		{
 			base.Flush();
-			_listener.Flush();
+			listener.Flush();
 		}
 
 		public override void Close()
 		{
 			base.Close();
-			_listener.Close();
+			listener.Close();
 		}
 
 		protected override void Dispose(bool disposing)
 		{
 			base.Dispose(disposing);
-			if (disposing) _listener.Dispose();
+			if (disposing) listener.Dispose();
 		}
 	}
 }

@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Globalization;
 using System.IO;
+using System.Text.RegularExpressions;
 using Exortech.NetReflector;
 using ThoughtWorks.CruiseControl.Core.Util;
 
@@ -13,13 +14,15 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 		public const string DefaultCvsExecutable = "cvs.exe";
 		public const string GET_SOURCE_COMMAND_FORMAT = @"-q update -d -P"; // build directories, prune empty directories
 		public const string COMMAND_DATE_FORMAT = "yyyy-MM-dd HH:mm:ss 'GMT'";
-		public const int DIRECTORY_INDEX = 7;
+		private readonly CvsHistoryCommandParser historyCommandParser;
 
-		public Cvs() : this(new CvsHistoryParser(), new ProcessExecutor())
+		public Cvs() : this(new CvsHistoryParser(), new ProcessExecutor(), new CvsHistoryCommandParser())
 		{}
 
-		public Cvs(IHistoryParser parser, ProcessExecutor executor) : base(parser, executor)
-		{}
+		public Cvs(IHistoryParser parser, ProcessExecutor executor, CvsHistoryCommandParser historyCommandParser) : base(parser, executor)
+		{
+			this.historyCommandParser = historyCommandParser;
+		}
 
 		[ReflectorProperty("executable")]
 		public string Executable = DefaultCvsExecutable;
@@ -30,10 +33,6 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 		[ReflectorProperty("workingDirectory", Required=false)]
 		public string WorkingDirectory = string.Empty;
 
-		// what's the purpose of this property?
-		[ReflectorProperty("localOnly", Required=false)]
-		public bool LocalOnly = false;
-
 		[ReflectorProperty("labelOnSuccess", Required=false)]
 		public bool LabelOnSuccess = false;
 
@@ -41,7 +40,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 		public string RestrictLogins = string.Empty;
 
 		[ReflectorProperty("webUrlBuilder", InstanceTypeKey="type", Required=false)]
-		public IModificationUrlBuilder UrlBuilder;
+		public IModificationUrlBuilder UrlBuilder = new NullUrlBuilder();
 
 		[ReflectorProperty("autoGetSource", Required = false)]
 		public bool AutoGetSource = false;
@@ -65,41 +64,18 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 
 		public override Modification[] GetModifications(IIntegrationResult from, IIntegrationResult to)
 		{
-			// by default use the WorkingDirectory to keep backward compatibility
-			string[] dirs = {WorkingDirectory};
-			// Run a true 'cvs history' command
+			Modification[] modifications = null;
 			if (UseHistory)
 			{
-				Log.Debug("Using cvs history command");
-				CvsHistoryCommandParser history = new CvsHistoryCommandParser(_executor, Executable, WorkingDirectory);
-				history.LocalOnly = LocalOnly;
-				dirs = history.GetDirectoriesContainingChanges(from.StartTime);
+				modifications = GetModificationsUsingHistory(from, to);
 			}
-
-			// Get list of target files to run 'cvs log' against
-			// Loop through file list update the directory then run the 'cvs log'
-			ArrayList mods = new ArrayList();
-			foreach (string dir in dirs)
+			else
 			{
-				string reportDir = Path.Combine(WorkingDirectory, dir);
-				Log.Info(string.Format("Checking directory {0} for modifications.", reportDir));
-				Modification[] modifications = GetModifications(CreateLogProcessInfo(from.StartTime, dir), from.StartTime, to.StartTime);
-				mods.AddRange(modifications);
-
-				// Update the source if there are modifications or the user explicity states to.
- 				if ((modifications.Length > 0) && UseHistory)
-//				if (modifications.Length > 0 || AutoGetSource)	// do we really want to do this?
-				{
-					UpdateSource(dir);
-				}
+				modifications = GetModifications(WorkingDirectory, from, to);
 			}
 
-			Modification[] modArray = (Modification[]) mods.ToArray(typeof (Modification));
-			if (UrlBuilder != null)
-			{
-				UrlBuilder.SetupModification(modArray);
-			}
-			return modArray;
+			UrlBuilder.SetupModification(modifications);
+			return modifications;
 		}
 
 		public override void LabelSourceControl(IIntegrationResult result)
@@ -114,46 +90,94 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 		{
 			if (AutoGetSource && !UseHistory)
 			{
-				UpdateSource(null);
+				UpdateSource(result, null);
 			}
 		}
 
-		private void UpdateSource(string file)
+		private void UpdateSource(IIntegrationResult result, string file)
 		{
-			Execute(NewGetSourceProcessInfo(file));
+			Execute(NewGetSourceProcessInfo(result, file));
 		}
 
-		private ProcessInfo NewGetSourceProcessInfo(string dir)
+		private ProcessInfo NewGetSourceProcessInfo(IIntegrationResult result, string dir)
 		{
 			ProcessArgumentBuilder builder = new ProcessArgumentBuilder();
 			builder.AppendArgument(GET_SOURCE_COMMAND_FORMAT);
 			builder.AppendIf(CleanCopy, "-C");
-//			builder.AppendIf(UseHistory && dir != null, "-l");
-//			builder.AppendIf(UseHistory && dir != null, "\"{0}\"", dir);
- 			builder.AppendIf((UseHistory && dir != null) || LocalOnly, "-l");
- 			builder.AppendIf(dir != null, "\"{0}\"", dir);
+			builder.AppendIf(UseHistory && dir != null, "-l");
+			builder.AppendIf(UseHistory && dir != null, "\"{0}\"", dir);
 
-			ProcessInfo info = NewProcessInfoWithArgs(builder.ToString());
+			ProcessInfo info = NewProcessInfoWithArgs(result, builder.ToString());
 			Log.Info(string.Format("Getting source from CVS: {0} {1}", info.FileName, info.Arguments));
 			return info;
 		}
 
-		private ProcessInfo CreateLogProcessInfo(DateTime from, string dir)
+		private Modification[] GetModifications(string directory, IIntegrationResult from, IIntegrationResult to)
 		{
-			return NewProcessInfoWithArgs(BuildHistoryProcessInfoArgs(from, dir));
+			Log.Info(String.Format("Checking directory {0} for modifications.", directory));
+			return GetModifications(CreateLogProcessInfo(from, directory), from.StartTime, to.StartTime);
+		}
+
+		private Modification[] GetModificationsUsingHistory(IIntegrationResult from, IIntegrationResult to)
+		{
+			Log.Debug("Using cvs history command");
+			string[] dirs = GetDirectoriesContainingChanges(from);
+
+			// Get list of target files to run 'cvs log' against
+			// Loop through file list update the directory then run the 'cvs log'
+			ArrayList mods = new ArrayList();
+			foreach (string dir in dirs)
+			{
+				string reportDir = Path.Combine(WorkingDirectory, dir);
+				Modification[] modifications = GetModifications(reportDir, from, to);
+				mods.AddRange(modifications);
+
+				// Update the source if there are modifications or the user explicity states to.
+				if (modifications.Length > 0)
+				{
+					UpdateSource(from, dir);
+				}
+			}
+			return (Modification[]) mods.ToArray(typeof (Modification));
+		}
+
+		private string[] GetDirectoriesContainingChanges(IIntegrationResult from)
+		{
+			ProcessResult result = ExecuteHistoryCommand(from);
+			historyCommandParser.WorkingDirectory = from.BaseFromWorkingDirectory(WorkingDirectory);
+			return historyCommandParser.ParseOutputFrom(result.StandardOutput);
+		}
+
+		private ProcessResult ExecuteHistoryCommand(IIntegrationResult from)
+		{
+			Log.Info("Get changes in working directory: " + WorkingDirectory);
+			ProcessArgumentBuilder buffer = new ProcessArgumentBuilder();
+			buffer.AppendArgument(string.Format("history -x MAR -a -D \"{0}\"", FormatCommandDate(from.StartTime)));
+
+			return Execute(NewProcessInfoWithArgs(from, buffer.ToString()));
+		}
+
+		private ProcessInfo CreateLogProcessInfo(IIntegrationResult from, string dir)
+		{
+			return NewProcessInfoWithArgs(from, BuildHistoryProcessInfoArgs(from.StartTime, dir));
 		}
 
 		private ProcessInfo NewLabelProcessInfo(IIntegrationResult result)
 		{
 			ProcessArgumentBuilder buffer = new ProcessArgumentBuilder();
 			buffer.AppendArgument("-d {0}", CvsRoot);
-			buffer.AppendArgument(string.Format("tag {0}{1}", TagPrefix, result.Label));
-			return NewProcessInfoWithArgs(buffer.ToString());
+			buffer.AppendArgument(string.Format("tag {0}{1}", TagPrefix, ConvertIllegalCharactersInLabel(result)));
+			return NewProcessInfoWithArgs(result, buffer.ToString());
 		}
 
-		private ProcessInfo NewProcessInfoWithArgs(string args)
+		private string ConvertIllegalCharactersInLabel(IIntegrationResult result)
 		{
-			return new ProcessInfo(Executable, args, WorkingDirectory);
+			return Regex.Replace(result.Label, @"\.", "_");
+		}
+
+		private ProcessInfo NewProcessInfoWithArgs(IIntegrationResult result, string args)
+		{
+			return new ProcessInfo(Executable, args, result.BaseFromWorkingDirectory(WorkingDirectory));
 		}
 
 		// cvs [-d :ext:mycvsserver:/cvsroot/myrepo] -q log -N "-d>2004-12-24 12:00:00 'GMT'" -rmy_branch (with branch)
@@ -182,5 +206,11 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			buffer.AppendIf(UseHistory && dir != null, @"""{0}""", dir);
 			return buffer.ToString();
 		}
+	}
+
+	internal class NullUrlBuilder : IModificationUrlBuilder
+	{
+		public void SetupModification(Modification[] modifications)
+		{}
 	}
 }
