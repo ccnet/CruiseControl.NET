@@ -30,6 +30,7 @@
     <property name="vil.executable" value="tools\vil\vil.exe" />
     <property name="vil.assemblies" value="comma,separated,list,of,assemblies,to,analyze (full path)" />    
     <property name="simian.executable" value="tools\simian\simian.exe" />
+    <property name="ccnet.artifact.directory" value="${build.dir}" />
 
 	<target name="all" depends="clean, compile, test, deploy, dist"/>
 
@@ -75,15 +76,7 @@
 
 	<!-- COMPILE -->
 	<target name="compile" depends="init" description="compiles everything to be released">
-		<solution configuration="build" solutionfile="project\ccnet.sln" />
-		
-		<!-- Visual Studio doesn't allow you to turn off build events for specific configurations -->
-		<delete file="${build.dir}\server\echo.bat" />
-		<delete file="${build.dir}\server\fail.bat" />
-		<delete file="${build.dir}\server\ccnet.config" />
-		<delete file="${build.dir}\server\helloworld.build" />
-		<delete file="${build.dir}\server\PostBuildEvent.bat" />
-		
+		<solution configuration="build" solutionfile="project\ccnet.sln" />		
 		<copy file="${src.dir}\console\app.config" tofile="${build.dir}\server\${console.exe}.config" verbose="${verbosity}"/>
 		<copy file="${src.dir}\service\app.config" tofile="${build.dir}\service\${service.exe}.config" verbose="${verbosity}"/>		
 		<copy file="${src.dir}\service\ccnet.config" tofile="${build.dir}\service\ccnet.config" verbose="${verbosity}"/>
@@ -299,6 +292,7 @@
 	<!-- FOR RUNNING CCNET AGAINST ITSELF -->
 	<target name="dist.publish" depends="dist">
 			
+			<!-- <property name="publish.dir" value="${ccnet.artifact.directory}\${ccnet.label}" /> -->
 			<property name="publish.dir" value="D:\download-area\CCNet-Builds\${ccnet.label}" />
 
 			<mkdir dir="${publish.dir}" />
