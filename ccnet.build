@@ -30,7 +30,7 @@
     <property name="vil.executable" value="tools\vil\vil.exe" />
     <property name="vil.assemblies" value="comma,separated,list,of,assemblies,to,analyze (full path)" />    
     <property name="simian.executable" value="tools\simian\simian.exe" />
-    <property name="ccnet.artifact.directory" value="${build.dir}" />
+    <property name="ccnet.artifact.directory" value="${build.dir}" readonly="false" />
 
 	<target name="all" depends="clean, compile, test, deploy, dist"/>
 
@@ -323,9 +323,9 @@
 	</target>
 	
 	<target name="verify.ccnet.label" description="Verifies that the ccnet.label property has been set">
-		<ifnot test="${property::exists('ccnet.label')}">
+		<if test="${not property::exists('ccnet.label')}">
 			<fail message="ccnet.label property not set, so can't create labelled distribution files" />
-		</ifnot>
+		</if>
 	</target> 
 	
 	<target name="transform.build.number" depends="verify.ccnet.label">
