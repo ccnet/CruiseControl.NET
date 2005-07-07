@@ -30,7 +30,7 @@
     <property name="vil.executable" value="tools\vil\vil.exe" />
     <property name="vil.assemblies" value="comma,separated,list,of,assemblies,to,analyze (full path)" />    
     <property name="simian.executable" value="tools\simian\simian.exe" />
-    <property name="ccnet.artifact.directory" value="${build.dir}" readonly="false" />
+    <property name="ccnet.artifact.directory" value="${build.dir}" overwrite="false" />
 
 	<target name="all" depends="clean, compile, test, deploy, dist"/>
 
