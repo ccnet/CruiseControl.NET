@@ -67,7 +67,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Util
 		[Test]
 		public void ForceProcessTimeoutBecauseTargetIsNonTerminating()
 		{
-			ProcessInfo processInfo = new ProcessInfo("cmd.exe", "/C prompt hello");
+			ProcessInfo processInfo = new ProcessInfo("cmd.exe", "/C pause");
 			processInfo.TimeOut = 10;
 			ProcessResult result = executor.Execute(processInfo);
 
