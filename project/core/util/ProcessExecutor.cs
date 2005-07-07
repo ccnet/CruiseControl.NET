@@ -1,3 +1,4 @@
+using System;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
@@ -65,9 +66,16 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 			Log.Warning(string.Format("Process timed out: {0} {1}.  Process id: {2}.  This process will now be killed.", processInfo.FileName, processInfo.Arguments, process.Id));
 			Log.Debug(string.Format("Process stdout: {0}", standardOutput.Output));
 			Log.Debug(string.Format("Process stderr: {0}", standardError.Output));
-			process.Kill();
-			if (! process.WaitForExit(WAIT_FOR_KILLED_PROCESS_TIMEOUT)) 
-				throw new CruiseControlException(string.Format(@"The killed process {0} did not terminate within the allotted timeout period {1}.  The process or one of its child processes may not have died.  This may create problems when trying to re-execute the process.  It may be necessary to reboot the server to recover.", process.Id, WAIT_FOR_KILLED_PROCESS_TIMEOUT, process));
+			try
+			{
+				process.Kill();
+				if (! process.WaitForExit(WAIT_FOR_KILLED_PROCESS_TIMEOUT)) 
+					throw new CruiseControlException(string.Format(@"The killed process {0} did not terminate within the allotted timeout period {1}.  The process or one of its child processes may not have died.  This may create problems when trying to re-execute the process.  It may be necessary to reboot the server to recover.", process.Id, WAIT_FOR_KILLED_PROCESS_TIMEOUT, process));
+			}
+			catch (InvalidOperationException)
+			{
+				Log.Warning(string.Format("Process has already exited before getting killed: {0}", process.Id));				
+			}
 			Log.Warning(string.Format("The timed out process has been killed: {0}", process.Id));
 		}
 
