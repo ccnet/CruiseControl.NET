@@ -67,24 +67,16 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Util
 		[Test]
 		public void ForceProcessTimeoutBecauseTargetIsNonTerminating()
 		{
-			string filename = TempFileUtil.CreateTempFile("ProcessTest", "run.bat", "@:foo\r\ngoto foo");
-			try
-			{
-				ProcessInfo processInfo = new ProcessInfo(filename, null);
-				processInfo.TimeOut = 10;
-				ProcessResult result = executor.Execute(processInfo);
+			ProcessInfo processInfo = new ProcessInfo("cmd.exe", "/C prompt hello");
+			processInfo.TimeOut = 10;
+			ProcessResult result = executor.Execute(processInfo);
 
-				Assert.IsTrue(result.TimedOut);
-				Assert.IsNotNull(result.StandardOutput, "some output should have been produced");
-				AssertProcessExitsWithFailure(result, ProcessResult.TIMED_OUT_EXIT_CODE);
-			}
-			finally
-			{
-				TempFileUtil.DeleteTempDir("ProcessTest");
-			}
+			Assert.IsTrue(result.TimedOut);
+			Assert.IsNotNull(result.StandardOutput, "some output should have been produced");
+			AssertProcessExitsWithFailure(result, ProcessResult.TIMED_OUT_EXIT_CODE);
 		}
 
-		[Test, ExpectedException(typeof(IOException))]
+		[Test, ExpectedException(typeof (IOException))]
 		public void SupplyInvalidFilenameAndVerifyException()
 		{
 			ProcessExecutor executor = new ProcessExecutor();
