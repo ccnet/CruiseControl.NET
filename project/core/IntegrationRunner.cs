@@ -1,5 +1,6 @@
 using System;
 using System.IO;
+using ThoughtWorks.CruiseControl.Core.Sourcecontrol;
 using ThoughtWorks.CruiseControl.Core.Util;
 using ThoughtWorks.CruiseControl.Remote;
 
@@ -9,10 +10,12 @@ namespace ThoughtWorks.CruiseControl.Core
 	{
 		public IIntegrationRunnerTarget target;
 		private readonly IIntegrationResultManager resultManager;
+		private readonly IQuietPeriod quietPeriod;
 
-		public IntegrationRunner(IIntegrationResultManager resultManager, IIntegrationRunnerTarget target)
+		public IntegrationRunner(IIntegrationResultManager resultManager, IIntegrationRunnerTarget target, IQuietPeriod quietPeriod)
 		{
 			this.target = target;
+			this.quietPeriod = quietPeriod;
 			this.resultManager = resultManager;
 		}
 
@@ -27,7 +30,7 @@ namespace ThoughtWorks.CruiseControl.Core
 			result.MarkStartTime();
 			try
 			{
-				result.Modifications = GetSourceModifications(sourceControl, result, lastResult);
+				result.Modifications = GetSourceModifications(result, lastResult);
 				if (result.ShouldRunBuild(target.ModificationDelaySeconds))
 				{
 					target.Activity = ProjectActivity.Building;
@@ -49,10 +52,12 @@ namespace ThoughtWorks.CruiseControl.Core
 			return result;
 		}
 
-		private Modification[] GetSourceModifications(ISourceControl sourceControl, IIntegrationResult result, IIntegrationResult lastResult)
+		private Modification[] GetSourceModifications(IIntegrationResult result, IIntegrationResult lastResult)
 		{
 			target.Activity = ProjectActivity.CheckingModifications;
-			Modification[] modifications = sourceControl.GetModifications(lastResult, result);
+
+			Modification[] modifications = quietPeriod.GetModifications(target.SourceControl, lastResult, result);
+//			Modification[] modifications = sourceControl.GetModifications(lastResult, result);
 			Log.Info(GetModificationsDetectedMessage(modifications));
 			return modifications;
 		}
@@ -118,7 +123,6 @@ namespace ThoughtWorks.CruiseControl.Core
 
 		private void HandleProjectLabelling(IIntegrationResult result)
 		{
-			// This call to result.Label is unnecessary
 			target.SourceControl.LabelSourceControl(result);
 		}
 	}

@@ -2,6 +2,7 @@ using System;
 using NMock;
 using NUnit.Framework;
 using ThoughtWorks.CruiseControl.Core;
+using ThoughtWorks.CruiseControl.Core.Sourcecontrol;
 using ThoughtWorks.CruiseControl.Core.Util;
 using ThoughtWorks.CruiseControl.Remote;
 
@@ -17,6 +18,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 		private DynamicMock resultMock;
 		private DynamicMock lastResultMock;
 		private DynamicMock sourceControlMock;
+		private IMock quietPeriodMock;
 
 		private IIntegrationResult result;
 		private IIntegrationResult lastResult;
@@ -28,25 +30,28 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 		[SetUp]
 		public void Setup()
 		{
-			targetMock = new DynamicMock(typeof(IIntegrationRunnerTarget));
+			targetMock = new DynamicMock(typeof (IIntegrationRunnerTarget));
 			targetMock.Strict = true;
 
-			resultManagerMock = new DynamicMock(typeof(IIntegrationResultManager));
+			resultManagerMock = new DynamicMock(typeof (IIntegrationResultManager));
 			resultManagerMock.Strict = true;
 
-			runner = new IntegrationRunner((IIntegrationResultManager) resultManagerMock.MockInstance,
-				(IIntegrationRunnerTarget) targetMock.MockInstance);
+			quietPeriodMock = new DynamicMock(typeof (IQuietPeriod));
 
-			resultMock = new DynamicMock(typeof(IIntegrationResult));
+			runner = new IntegrationRunner((IIntegrationResultManager) resultManagerMock.MockInstance,
+			                               (IIntegrationRunnerTarget) targetMock.MockInstance,
+			                               (IQuietPeriod) quietPeriodMock.MockInstance);
+
+			resultMock = new DynamicMock(typeof (IIntegrationResult));
 			resultMock.Strict = true;
 			result = (IIntegrationResult) resultMock.MockInstance;
 
-			lastResultMock = new DynamicMock(typeof(IIntegrationResult));
+			lastResultMock = new DynamicMock(typeof (IIntegrationResult));
 			lastResultMock.Strict = true;
 			lastResult = (IIntegrationResult) lastResultMock.MockInstance;
 
-			time3 = new DateTime(2005,2,1);
-			modifications = new Modification[] { new Modification() };
+			time3 = new DateTime(2005, 2, 1);
+			modifications = new Modification[] {new Modification()};
 
 			targetMock.SetupResult("WorkingDirectory", TempFileUtil.CreateTempDir("workingDir"));
 		}
@@ -99,7 +104,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 
 		private void SetupPreambleExpections()
 		{
-			SetupPreambleExpections(typeof(ISourceControl));
+			SetupPreambleExpections(typeof (ISourceControl));
 		}
 
 		private void SetupPreambleExpections(Type sourceControlType)
@@ -111,7 +116,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 			sourceControlMock = new DynamicMock(sourceControlType);
 			sourceControlMock.Strict = true;
 			targetMock.SetupResult("SourceControl", sourceControlMock.MockInstance);
-			sourceControlMock.ExpectAndReturn("GetModifications", modifications, lastResult, result);
+			quietPeriodMock.ExpectAndReturn("GetModifications", modifications, sourceControlMock.MockInstance, lastResult, result);
 			resultMock.ExpectAndReturn("Modifications", modifications);
 			targetMock.ExpectAndReturn("ModificationDelaySeconds", modificationDelay);
 		}

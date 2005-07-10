@@ -28,7 +28,9 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.SourceControl
 			mods[0].ModifiedTime = new DateTime(2004, 12, 1, 12, 1, 30);			
 
 			mockSourceControl = new DynamicMock(typeof(ISourceControl));
+			mockSourceControl.Strict = true;
 			mockDateTimeProvider = new DynamicMock(typeof(DateTimeProvider));
+			mockDateTimeProvider.Strict = true;
 			quietPeriod = new QuietPeriod((DateTimeProvider)mockDateTimeProvider.MockInstance);
 		}
 
@@ -51,7 +53,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.SourceControl
 			Assert.AreEqual(mods, actualMods);
 		}
 
-		[Test, Ignore("Owen - Need to rework and actually include in project workflow.")]
+		[Test]
 		public void ShouldCheckModificationsUntilThereAreNoModsInModificationDelay()
 		{
 			Modification[] newMods = new Modification[2];
@@ -61,11 +63,10 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.SourceControl
 
 			mockSourceControl.ExpectAndReturn("GetModifications", mods, from, to);
 			mockDateTimeProvider.Expect("Sleep", 30000);
-			to.StartTime = to.StartTime.AddSeconds(30);
-			mockSourceControl.ExpectAndReturn("GetModifications", newMods, from, to);
+
+			mockSourceControl.ExpectAndReturn("GetModifications", newMods, from, IntegrationResultMother.CreateSuccessful(to.StartTime.AddSeconds(30)));
 			mockDateTimeProvider.Expect("Sleep", 40000);
-			to.StartTime = to.StartTime.AddSeconds(70);
-			mockSourceControl.ExpectAndReturn("GetModifications", newMods, from, to);
+			mockSourceControl.ExpectAndReturn("GetModifications", newMods, from, IntegrationResultMother.CreateSuccessful(to.StartTime.AddSeconds(70)));
 
 			quietPeriod.ModificationDelaySeconds = 60;
 			Modification[] actualMods = quietPeriod.GetModifications((ISourceControl) mockSourceControl.MockInstance, from, to);
