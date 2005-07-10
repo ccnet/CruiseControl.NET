@@ -33,5 +33,9 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
 			timer.Start();
 		}
 
+		public void Stop()
+		{
+			timer.Stop();
+		}
 	}
 }

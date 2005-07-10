@@ -1,6 +1,7 @@
 using System;
 using System.ComponentModel;
 using System.Windows.Forms;
+using ThoughtWorks.CruiseControl.CCTrayLib.Configuration;
 using ThoughtWorks.CruiseControl.CCTrayLib.Monitoring;
 
 namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
@@ -30,19 +31,21 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 		private MenuItem mnuFilePreferences;
 		private MenuItem menuItem3;
 		private ColumnHeader colDetail;
-
 		private MainFormController controller;
+		private ICCTrayMultiConfiguration configuration;
 
-		public MainForm()
+		public MainForm(ICCTrayMultiConfiguration configuration)
 		{
+			this.configuration = configuration;
+
 			InitializeComponent();
+			CreateController();
 		}
 
-
-		public void AttachController(MainFormController controller)
+		private void CreateController()
 		{
-			this.controller = controller;
-
+			controller = new MainFormController(configuration, this);
+		
 			DataBindings.Add("Icon", controller.ProjectStateIconAdaptor, "Icon");
 			trayIcon.BindToIconProvider(controller.ProjectStateIconAdaptor);
 
@@ -52,7 +55,6 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 			ApplyDataBinding();
 
 			controller.StartMonitoring();
-
 		}
 
 
@@ -367,7 +369,25 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 
 		private void mnuFilePreferences_Click(object sender, EventArgs e)
 		{
-			controller.ShowPreferencesDialog();
+			controller.StopMonitoring();
+
+			try
+			{
+				if (new CCTrayMultiSettingsForm(configuration).ShowDialog() == DialogResult.OK)
+				{
+					configuration.Reload();
+					lvProjects.Items.Clear();
+					DataBindings.Clear();
+					btnForceBuild.DataBindings.Clear();
+					CreateController();
+				}
+
+				
+			}
+			finally
+			{
+				controller.StartMonitoring();
+			}
 		}
 	}
 }

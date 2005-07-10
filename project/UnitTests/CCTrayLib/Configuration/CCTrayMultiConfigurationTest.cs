@@ -1,3 +1,4 @@
+using System;
 using System.IO;
 using NMock;
 using NUnit.Framework;
@@ -48,9 +49,10 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Configuration
 			Assert.IsTrue(configuration.ShouldShowBalloonOnBuildTransition);
 		}
 
+		const string configFileName = "test_config.xml";
+
 		private CCTrayMultiConfiguration CreateTestConfiguration(string configFileContents)
 		{
-			const string configFileName = "test_config.xml";
 			using (TextWriter configFile = File.CreateText( configFileName ))
 				configFile.Write( configFileContents );
 
@@ -74,6 +76,34 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Configuration
 			Assert.AreEqual(2, monitorList.Length);
 
 			mockServerConfigFactory.Verify();
+		}
+
+		[Test]
+		public void CanPersist()
+		{
+			const string SimpleConfig= @"
+<Configuration>
+	<Projects />
+</Configuration>";
+
+			CCTrayMultiConfiguration configuration = CreateTestConfiguration(SimpleConfig);
+			configuration.Projects = new Project[1] { new Project("url", "projName") };
+
+			configuration.Persist();
+
+			using (TextReader configFile = File.OpenText( configFileName ))
+			{
+				string content = configFile.ReadToEnd();
+
+				const string expectedContent = @"<?xml version=""1.0"" encoding=""utf-8""?>
+<Configuration xmlns:xsd=""http://www.w3.org/2001/XMLSchema"" xmlns:xsi=""http://www.w3.org/2001/XMLSchema-instance"">
+  <Projects>
+    <Project serverUrl=""url"" projectName=""projName"" />
+  </Projects>
+</Configuration>";
+
+				Assert.AreEqual(expectedContent, content);
+			}
 		}
 	}
 

@@ -95,9 +95,9 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 			get { return projectStateIconAdaptor; }
 		}
 
-		public void ShowPreferencesDialog()
+		public void StopMonitoring()
 		{
-			new CCTrayMultiSettingsForm().ShowDialog();
+			poller.Stop();
 		}
 	}
 }

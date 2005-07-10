@@ -1,3 +1,4 @@
+using System;
 using System.IO;
 using System.Xml.Serialization;
 using ThoughtWorks.CruiseControl.CCTrayLib.Monitoring;
@@ -8,21 +9,16 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Configuration
 	{
 		private PersistentConfiguration persistentConfiguration;
 		private ICruiseProjectManagerFactory managerFactory;
+		private readonly string configFileName;
 
-		public CCTrayMultiConfiguration( ICruiseProjectManagerFactory managerFactory, string configFileName )
+		public CCTrayMultiConfiguration(ICruiseProjectManagerFactory managerFactory, string configFileName)
 		{
 			this.managerFactory = managerFactory;
+			this.configFileName = configFileName;
 
-			ReadConfigurationFile( configFileName );
+			ReadConfigurationFile();
 		}
 
-		private void ReadConfigurationFile( string configFileName )
-		{
-			XmlSerializer serializer = new XmlSerializer( typeof (PersistentConfiguration) );
-
-			using (StreamReader configFile = File.OpenText( configFileName ))
-				persistentConfiguration = (PersistentConfiguration) serializer.Deserialize( configFile );
-		}
 
 		public IProjectMonitor[] GetProjectStatusMonitors()
 		{
@@ -30,9 +26,9 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Configuration
 
 			for (int i = 0; i < Projects.Length; i++)
 			{
-				Project project = Projects[ i ];
-				ICruiseProjectManager projectManager = managerFactory.Create( project.ServerUrl, project.ProjectName );
-				retVal[ i ] = new ProjectMonitor( projectManager );
+				Project project = Projects[i];
+				ICruiseProjectManager projectManager = managerFactory.Create(project.ServerUrl, project.ProjectName);
+				retVal[i] = new ProjectMonitor(projectManager);
 			}
 
 			return retVal;
@@ -41,6 +37,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Configuration
 		public Project[] Projects
 		{
 			get { return persistentConfiguration.Projects; }
+			set { persistentConfiguration.Projects = value; }
 		}
 
 		public bool ShouldShowBalloonOnBuildTransition
@@ -52,7 +49,45 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Configuration
 
 				return persistentConfiguration.BuildTransitionNotification.ShowBalloon;
 			}
+
+			set
+			{
+				persistentConfiguration.BuildTransitionNotification = new BuildTransitionNotification();
+				persistentConfiguration.BuildTransitionNotification.ShowBalloon = value;
+			}
 		}
+
+		public void Persist()
+		{
+			WriteConfigurationFile();
+		}
+
+		private void ReadConfigurationFile()
+		{
+			XmlSerializer serializer = new XmlSerializer(typeof (PersistentConfiguration));
+
+			using (StreamReader configFile = File.OpenText(configFileName))
+				persistentConfiguration = (PersistentConfiguration) serializer.Deserialize(configFile);
+		}
+
+		private void WriteConfigurationFile()
+		{
+			XmlSerializer serializer = new XmlSerializer(typeof (PersistentConfiguration));
+
+			using (StreamWriter configFile = File.CreateText(configFileName))
+				serializer.Serialize(configFile, persistentConfiguration);
+		}
+
+		public void Reload()
+		{
+			ReadConfigurationFile();
+		}
+
+		public ICCTrayMultiConfiguration Clone()
+		{
+			return new CCTrayMultiConfiguration(managerFactory, configFileName);			
+		}
+
 	}
 
 }

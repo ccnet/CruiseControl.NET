@@ -13,11 +13,13 @@ DONE - ability to switch off balloon popups
 DONE - Fix threading -- create a decorator around IProjectMonitor that uses ISynchronisedInvoke to get the event 
 	across to the winforms thread? (though the current winforms thread rule breakage doesn't seem to be causing
 	any odd behaviour)
-- Settings dialog to allow specification of projects, sounds etc
+DONE - Settings dialog to allow specification of projects, sounds etc
 - Play sounds on build transition 
 - Display more information about projects on tray tooltip 
+- right click menu on toolbar icon
+- close button should minimise not close (hide minimse/maximise?)
 - add to zip file (in parallel with cctray) so people can try it out
-DONE - fix issue with window sometimes not reappearing when clicking on tray icon (threading fix should fix this)
+- fix issue with window sometimes not reappearing when clicking on tray icon (threading fix should fix this)
 - Read project list from dashboard
 - obtain project status going via the dashboard not direct via remoting?
 - document on confluence

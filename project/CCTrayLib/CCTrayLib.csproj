@@ -366,6 +366,16 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Presentation\AddEditProject.cs"
+                    SubType = "Form"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Presentation\AddEditProject.resx"
+                    DependentUpon = "AddEditProject.cs"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
                     RelPath = "Presentation\CCTrayMultiSettingsForm.cs"
                     SubType = "Form"
                     BuildAction = "Compile"
@@ -419,6 +429,11 @@
                     RelPath = "Presentation\NotifyIconEx.resx"
                     DependentUpon = "NotifyIconEx.cs"
                     BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "Presentation\ProjectConfigurationListViewItemAdaptor.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
                 />
                 <File
                     RelPath = "Presentation\ProjectStateIconAdaptor.cs"
