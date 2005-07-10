@@ -13,7 +13,7 @@ namespace ThoughtWorks.CruiseControl.Core
 		string LastSuccessfulIntegrationLabel { get; }
 		IntegrationStatus Status { get; set; }
 		IntegrationStatus LastIntegrationStatus { get; }
-		DateTime StartTime { get; }
+		DateTime StartTime { get; set; }
 		DateTime EndTime { get; }
 		TimeSpan TotalIntegrationTime { get; }
 		IList TaskResults { get; }
@@ -38,5 +38,6 @@ namespace ThoughtWorks.CruiseControl.Core
 		bool ShouldRunBuild(int modificationDelaySeconds);
 		string BaseFromArtifactsDirectory(string pathToBase);
 		string BaseFromWorkingDirectory(string pathToBase);
+		IDictionary IntegrationProperties { get; }
 	}
 }

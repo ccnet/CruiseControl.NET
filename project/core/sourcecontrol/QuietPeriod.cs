@@ -31,8 +31,6 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 				Log.Info("Modifications have been detected in the quiet delay; waiting until " + nextBuildTime);
 				dtProvider.Sleep((int) (secondsUntilNextBuild*1000));
 				to.StartTime = nextBuildTime;
-
-				// TODO: need to increment the start time for to to include the modification delay!!
 				modifications = GetMods(sourceControl, from, to);
 			}
 			return modifications;

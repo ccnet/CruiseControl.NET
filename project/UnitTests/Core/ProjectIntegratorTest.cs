@@ -14,9 +14,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 		private DynamicMock integratableMock;
 		private DynamicMock projectMock;
 		private ITrigger Trigger;
-		private IIntegratable integratable;
 		private IProject project;
-		private ProjectIntegrator _integrator;
+		private ProjectIntegrator integrator;
 		private TraceListenerBackup backup;
 
 		[SetUp]
@@ -28,10 +27,9 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 			projectMock = new DynamicMock(typeof(IProject));
 
 			Trigger = (ITrigger) integrationTriggerMock.MockInstance;
-			integratable = (IIntegratable) integratableMock.MockInstance;
 			project = (IProject) projectMock.MockInstance;
 
-			_integrator = new ProjectIntegrator(Trigger, integratable, project);
+			integrator = new ProjectIntegrator(Trigger, project, new ThreadPond());
 		}
 
 		[TearDown]
@@ -39,10 +37,10 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 		{
 			backup.Reset();
 
-			if (_integrator != null)
+			if (integrator != null)
 			{
-				_integrator.Stop();
-				_integrator.WaitForExit();
+				integrator.Stop();
+				integrator.WaitForExit();
 			}
 		}
 
@@ -60,8 +58,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 			integratableMock.ExpectNoCall("RunIntegration", typeof(BuildCondition));
 			integrationTriggerMock.ExpectNoCall("IntegrationCompleted");
 
-			_integrator.Start();
-			Assert.AreEqual(ProjectIntegratorState.Running, _integrator.State);
+			integrator.Start();
+			Assert.AreEqual(ProjectIntegratorState.Running, integrator.State);
 			VerifyAll();
 		}
 
@@ -72,12 +70,12 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 			integratableMock.ExpectNoCall("RunIntegration", typeof(BuildCondition));
 			integrationTriggerMock.ExpectNoCall("IntegrationCompleted");
 
-			_integrator.Start();
-			Assert.AreEqual(ProjectIntegratorState.Running, _integrator.State);
+			integrator.Start();
+			Assert.AreEqual(ProjectIntegratorState.Running, integrator.State);
 
-			_integrator.Stop();
-			_integrator.WaitForExit();
-			Assert.AreEqual(ProjectIntegratorState.Stopped, _integrator.State);
+			integrator.Stop();
+			integrator.WaitForExit();
+			Assert.AreEqual(ProjectIntegratorState.Stopped, integrator.State);
 			VerifyAll();
 		}
 
@@ -88,14 +86,14 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 			integratableMock.ExpectNoCall("RunIntegration", typeof(BuildCondition));
 			integrationTriggerMock.ExpectNoCall("IntegrationCompleted");
 
-			_integrator.Start();
-			_integrator.Start();
+			integrator.Start();
+			integrator.Start();
 			Thread.Sleep(110);
-			_integrator.Start();
-			Assert.AreEqual(ProjectIntegratorState.Running, _integrator.State);
-			_integrator.Stop();
-			_integrator.WaitForExit();
-			Assert.AreEqual(ProjectIntegratorState.Stopped, _integrator.State);
+			integrator.Start();
+			Assert.AreEqual(ProjectIntegratorState.Running, integrator.State);
+			integrator.Stop();
+			integrator.WaitForExit();
+			Assert.AreEqual(ProjectIntegratorState.Stopped, integrator.State);
 			VerifyAll();
 		}
 
@@ -106,15 +104,15 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 			integratableMock.ExpectNoCall("RunIntegration", typeof(BuildCondition));
 			integrationTriggerMock.ExpectNoCall("IntegrationCompleted");
 
-			_integrator.Start();
+			integrator.Start();
 			Thread.Sleep(110);
-			_integrator.Stop();
-			_integrator.WaitForExit();
+			integrator.Stop();
+			integrator.WaitForExit();
 
-			_integrator.Start();
+			integrator.Start();
 			Thread.Sleep(110);
-			_integrator.Stop();
-			_integrator.WaitForExit();		
+			integrator.Stop();
+			integrator.WaitForExit();		
 			VerifyAll();
 		}
 
@@ -125,11 +123,11 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 			integratableMock.ExpectNoCall("RunIntegration", typeof(BuildCondition));
 			integrationTriggerMock.ExpectNoCall("IntegrationCompleted");
 
-			_integrator.Stop();
-			Assert.AreEqual(ProjectIntegratorState.Stopped, _integrator.State);
+			integrator.Stop();
+			Assert.AreEqual(ProjectIntegratorState.Stopped, integrator.State);
 		}
 
-		[Test, Ignore("skip")]	// remove sleep!
+		[Test, Ignore("Owen - test needss to be reworked")]	// remove sleep!
 		public void VerifySchedulerStateAfterException()
 		{
 			backup.Reset();
@@ -140,12 +138,12 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 			integratableMock.ExpectAndThrow("RunIntegration", new CruiseControlException(exceptionMessage), BuildCondition.ForceBuild);
 			integrationTriggerMock.Expect("IntegrationCompleted");
 
-			_integrator.Start();
-			Assert.AreEqual(ProjectIntegratorState.Running, _integrator.State);
+			integrator.Start();
+			Assert.AreEqual(ProjectIntegratorState.Running, integrator.State);
 			Thread.Sleep(110);
-			_integrator.Stop();
-			_integrator.WaitForExit();
-			Assert.AreEqual(ProjectIntegratorState.Stopped, _integrator.State);
+			integrator.Stop();
+			integrator.WaitForExit();
+			Assert.AreEqual(ProjectIntegratorState.Stopped, integrator.State);
 
 			Assert.IsTrue(listener.Traces.Count > 0);
 			Assert.IsTrue(listener.Traces[0].ToString().IndexOf(exceptionMessage) > 0);
@@ -160,12 +158,12 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 			integratableMock.ExpectNoCall("RunIntegration", typeof(BuildCondition));
 			integrationTriggerMock.ExpectNoCall("IntegrationCompleted");
 
-			_integrator.Start();
+			integrator.Start();
 			Thread.Sleep(110);
-			Assert.AreEqual(ProjectIntegratorState.Running, _integrator.State);
-			_integrator.Abort();
-			_integrator.WaitForExit();
-			Assert.AreEqual(ProjectIntegratorState.Stopped, _integrator.State);
+			Assert.AreEqual(ProjectIntegratorState.Running, integrator.State);
+			integrator.Abort();
+			integrator.WaitForExit();
+			Assert.AreEqual(ProjectIntegratorState.Stopped, integrator.State);
 		}
 
 		[Test]
@@ -175,8 +173,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 			integratableMock.ExpectNoCall("RunIntegration", typeof(BuildCondition));
 			integrationTriggerMock.ExpectNoCall("IntegrationCompleted");
 
-			_integrator.Abort();
-			Assert.AreEqual(ProjectIntegratorState.Stopped, _integrator.State);
+			integrator.Abort();
+			Assert.AreEqual(ProjectIntegratorState.Stopped, integrator.State);
 		}
 
 		[Test]	// remove sleep!
@@ -186,11 +184,11 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 			integratableMock.ExpectNoCall("RunIntegration", typeof(BuildCondition));
 			integrationTriggerMock.ExpectNoCall("IntegrationCompleted");
 
-			_integrator.Start();
+			integrator.Start();
 			Thread.Sleep(110);
-			Assert.AreEqual(ProjectIntegratorState.Running, _integrator.State);
-			_integrator.Abort();
-			_integrator.Abort();
+			Assert.AreEqual(ProjectIntegratorState.Running, integrator.State);
+			integrator.Abort();
+			integrator.Abort();
 		}
 
 		[Test]
@@ -199,7 +197,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 			integrationTriggerMock.SetupResult("ShouldRunIntegration", BuildCondition.NoBuild);
 			integratableMock.ExpectNoCall("RunIntegration", typeof(BuildCondition));
 			integrationTriggerMock.ExpectNoCall("IntegrationCompleted");
-			_integrator.ForceBuild();
+			integrator.ForceBuild();
 		}
 	}
 }

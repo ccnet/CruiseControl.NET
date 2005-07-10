@@ -15,14 +15,14 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 	{
 		public const int DEFAULT_BUILD_TIMEOUT = 600;
 
-		private ProcessExecutor _executor;
+		private ProcessExecutor executor;
 
 		public ExecutableTask() : this(new ProcessExecutor())
 		{}
 
 		public ExecutableTask(ProcessExecutor executor)
 		{
-			_executor = executor;
+			this.executor = executor;
 		}
 
 		[ReflectorProperty("executable", Required = true)]
@@ -56,8 +56,16 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 		{
 			ProcessInfo info = new ProcessInfo(Executable, BuildArgs, BaseDirectory(result));
 			info.TimeOut = BuildTimeoutSeconds*1000;
-			info.EnvironmentVariables.Add("ccnet.label", result.Label);
+			foreach (string key in result.IntegrationProperties.Keys)
+			{
+				info.EnvironmentVariables[key] = Convert(result.IntegrationProperties[key]);
+			}
 			return info;
+		}
+
+		private string Convert(object obj)
+		{
+			return (obj == null) ? null : obj.ToString();
 		}
 
 		private string BaseDirectory(IIntegrationResult result)
@@ -69,7 +77,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 		{
 			try
 			{
-				return _executor.Execute(info);
+				return executor.Execute(info);
 			}
 			catch (Exception e)
 			{

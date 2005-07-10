@@ -34,9 +34,6 @@ namespace ThoughtWorks.CruiseControl.Core
 	[ReflectorType("project")]
 	public class Project : ProjectBase, IProject, IIntegrationRunnerTarget
 	{
-		/// <summary>
-		/// Raised whenever an integration is completed.
-		/// </summary>
 		private string webUrl = DefaultUrl();
 		private ISourceControl sourceControl = new NullSourceControl();
 		private ITask builder = new NullTask();
@@ -54,7 +51,7 @@ namespace ThoughtWorks.CruiseControl.Core
 		{
 			state = new FileStateManager();
 			integrationResultManager = new IntegrationResultManager(this);
-			integratable = new IntegrationRunner(integrationResultManager, this);
+			integratable = new IntegrationRunner(integrationResultManager, this, new QuietPeriod(new DateTimeProvider()));
 		}
 
 		// This is nasty - test constructors and real constructors should be linked, but we have circular references here that need

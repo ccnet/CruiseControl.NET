@@ -131,12 +131,18 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 
 		private void AppendIntegrationResultProperties(StringBuilder buffer, IIntegrationResult result)
 		{
-			string label = SurroundInQuotesIfContainsSpace(result.Label);
-			AppendIfNotBlank(buffer, @"-D:label-to-apply={0}", label);
-			AppendIfNotBlank(buffer, @"-D:ccnet.label={0}", label);
-			AppendIfNotBlank(buffer, @"-D:ccnet.buildcondition={0}", result.BuildCondition.ToString());
-			AppendIfNotBlank(buffer, @"-D:ccnet.working.directory={0}", SurroundInQuotesIfContainsSpace(RemoveTrailingSlash(result.WorkingDirectory)));
-			AppendIfNotBlank(buffer, @"-D:ccnet.artifact.directory={0}", SurroundInQuotesIfContainsSpace(RemoveTrailingSlash(result.ArtifactDirectory)));
+			foreach (string key in result.IntegrationProperties.Keys)
+			{
+				object value = result.IntegrationProperties[key];
+				if (value != null)
+					AppendIfNotBlank(buffer, string.Format("-D:{0}={1}", key, SurroundInQuotesIfContainsSpace(RemoveTrailingSlash(value.ToString()))));
+			}
+//			string label = SurroundInQuotesIfContainsSpace(result.Label);
+//			AppendIfNotBlank(buffer, @"-D:label-to-apply={0}", label);
+//			AppendIfNotBlank(buffer, @"-D:ccnet.label={0}", label);
+//			AppendIfNotBlank(buffer, @"-D:ccnet.buildcondition={0}", result.BuildCondition.ToString());
+//			AppendIfNotBlank(buffer, @"-D:ccnet.working.directory={0}", SurroundInQuotesIfContainsSpace(RemoveTrailingSlash(result.WorkingDirectory)));
+//			AppendIfNotBlank(buffer, @"-D:ccnet.artifact.directory={0}", SurroundInQuotesIfContainsSpace(RemoveTrailingSlash(result.ArtifactDirectory)));
 		}
 
 		private string RemoveTrailingSlash(string directory)
@@ -172,7 +178,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 
 		public override string ToString()
 		{
-			string baseDirectory = (ConfiguredBaseDirectory != null ? ConfiguredBaseDirectory : "");
+			string baseDirectory = ConfiguredBaseDirectory != null ? ConfiguredBaseDirectory : "";
 			return string.Format(@" BaseDirectory: {0}, Targets: {1}, Executable: {2}, BuildFile: {3}", baseDirectory, string.Join(", ", Targets), Executable, BuildFile);
 		}
 

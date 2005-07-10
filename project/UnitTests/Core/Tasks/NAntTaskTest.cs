@@ -14,12 +14,15 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 	public class NAntTaskTest : ProcessExecutorTestFixtureBase
 	{
 		private NAntTask builder;
+		private IIntegrationResult result;
 
 		[SetUp]
 		public void SetUp()
 		{
 			CreateProcessExecutorMock(NAntTask.DefaultExecutable);
 			builder = new NAntTask((ProcessExecutor) mockProcessExecutor.MockInstance);
+			result = IntegrationResult();
+			result.Label = "1.0";
 		}
 
 		[TearDown]
@@ -74,7 +77,6 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 		{
 			ExpectToExecuteAndReturn(SuccessfulProcessResult());
 
-			IntegrationResult result = new IntegrationResult();
 			builder.Run(result);
 
 			Assert.IsTrue(result.Succeeded);
@@ -87,7 +89,6 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 		{
 			ExpectToExecuteAndReturn(FailedProcessResult());
 
-			IntegrationResult result = new IntegrationResult();
 			builder.Run(result);
 
 			Assert.IsTrue(result.Failed);
@@ -99,25 +100,25 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 		public void ShouldThrowBuilderExceptionIfProcessTimesOut()
 		{
 			ExpectToExecuteAndReturn(TimedOutProcessResult());
-			builder.Run(IntegrationResult());
+			builder.Run(result);
 		}
 
 		[Test, ExpectedException(typeof (BuilderException))]
 		public void ShouldThrowBuilderExceptionIfProcessThrowsException()
 		{
 			ExpectToExecuteAndThrow();
-			builder.Run(IntegrationResult());
+			builder.Run(result);
 		}
 
 		[Test]
 		public void ShouldPassSpecifiedPropertiesAsProcessInfoArgumentsToProcessExecutor()
 		{
-			string args = @"-nologo -buildfile:mybuild.build -logger:NAnt.Core.XmlLogger myArgs -D:label-to-apply=1.0 -D:ccnet.label=1.0 -D:ccnet.buildcondition=NoBuild -D:ccnet.working.directory=C:\temp -D:ccnet.artifact.directory=C:\temp target1 target2";
+//			string ip = @"-D:ccnet.artifact.directory=C:\temp -D:ccnet.buildcondition=NoBuild -D:ccnet.integration.status=Unknown -D:ccnet.label=1.0 -D:ccnet.lastintegration.status=Unknown -D:ccnet.working.directory=C:\temp";
+			string args = @"-nologo -buildfile:mybuild.build -logger:NAnt.Core.XmlLogger myArgs -D:ccnet.artifact.directory=C:\temp " + IntegrationProperties(@"C:\temp") + " target1 target2";
 			ProcessInfo info = NewProcessInfo(args);
 			info.TimeOut = 2000;
 			ExpectToExecute(info);
 
-			IntegrationResult result = new IntegrationResult();
 			result.Label = "1.0";
 			result.WorkingDirectory = @"C:\temp";
 			result.ArtifactDirectory = @"C:\temp";
@@ -133,28 +134,33 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 		[Test]
 		public void ShouldPassAppropriateDefaultPropertiesAsProcessInfoArgumentsToProcessExecutor()
 		{
-			ExpectToExecuteArguments(@"-nologo -logger:NAnt.Core.XmlLogger -D:label-to-apply=UNKNOWN -D:ccnet.label=UNKNOWN -D:ccnet.buildcondition=NoBuild -D:ccnet.working.directory=c:\source");
-			builder.Run(IntegrationResult());
+			ExpectToExecuteArguments(@"-nologo -logger:NAnt.Core.XmlLogger " + IntegrationProperties(@"c:\source"));
+			builder.Run(result);
 		}
 
 		[Test]
 		public void ShouldPutQuotesAroundBuildFileIfItContainsASpace()
 		{
-			ExpectToExecuteArguments(@"-nologo -buildfile:""my project.build"" -logger:NAnt.Core.XmlLogger -D:label-to-apply=UNKNOWN -D:ccnet.label=UNKNOWN -D:ccnet.buildcondition=NoBuild -D:ccnet.working.directory=c:\source");
+			ExpectToExecuteArguments(@"-nologo -buildfile:""my project.build"" -logger:NAnt.Core.XmlLogger " + IntegrationProperties(@"c:\source"));
 
 			builder.BuildFile = "my project.build";
-			builder.Run(IntegrationResult());
+			builder.Run(result);
+		}
+
+		private string IntegrationProperties(string workingDirectory)
+		{
+			return string.Format(@"-D:ccnet.buildcondition=NoBuild -D:ccnet.integration.status=Success -D:ccnet.label=1.0 -D:ccnet.lastintegration.status=Unknown -D:ccnet.project=test -D:ccnet.working.directory={0}", workingDirectory);
 		}
 
 		[Test]
 		public void ShouldEncloseDirectoriesInQuotesIfTheyContainSpaces()
 		{
 			DefaultWorkingDirectory = @"c:\dir with spaces";
-			ExpectToExecuteArguments(@"-nologo -logger:NAnt.Core.XmlLogger -D:label-to-apply=UNKNOWN -D:ccnet.label=UNKNOWN -D:ccnet.buildcondition=NoBuild -D:ccnet.working.directory=""c:\dir with spaces"" -D:ccnet.artifact.directory=""c:\dir with spaces""");
+			ExpectToExecuteArguments(@"-nologo -logger:NAnt.Core.XmlLogger -D:ccnet.artifact.directory=""c:\dir with spaces"" " + IntegrationProperties(@"""c:\dir with spaces"""));
 
 			builder.ConfiguredBaseDirectory = DefaultWorkingDirectory;
-			IIntegrationResult result = IntegrationResult();
 			result.ArtifactDirectory = DefaultWorkingDirectory;
+			result.WorkingDirectory = DefaultWorkingDirectory;
 			builder.Run(result);
 		}
 

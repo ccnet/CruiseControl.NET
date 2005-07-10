@@ -11,7 +11,12 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 		public ProcessTaskResult(ProcessResult result)
 		{
 			this.result = result;
-			if (Failed()) Log.Info("Task failed: " + result.StandardError);
+			if (Failed())
+			{
+				Log.Info("Task execution failed");
+				Log.Info("Task output: " + result.StandardOutput);
+				if (! StringUtil.IsBlank(result.StandardError)) Log.Info("Task error: " + result.StandardError);
+			}
 		}
 
 		public virtual string Data

@@ -8,14 +8,14 @@ using ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol;
 namespace ThoughtWorks.CruiseControl.UnitTests.Core
 {
 	[TestFixture]
-	public class IntegrationResultTest
+	public class IntegrationResultTest : CustomAssertion
 	{
 		private IntegrationResult result;
 
 		[SetUp]
 		protected void CreateIntegrationResult()
 		{
-			result = new IntegrationResult();			
+			result = new IntegrationResult();
 		}
 
 		[Test]
@@ -23,7 +23,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 		{
 			Modification earlierModification = new Modification();
 			earlierModification.ModifiedTime = new DateTime(0);
-			
+
 			Modification laterModification = new Modification();
 			laterModification.ModifiedTime = new DateTime(1);
 
@@ -37,8 +37,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 			// Project relies on this behavior, but is it really what we want?
 			DateTime yesterday = DateTime.Now.AddDays(-1).Date;
 			Assert.AreEqual(yesterday, result.LastModificationDate.Date);
-		}	
-  
+		}
+
 		[Test]
 		public void VerifyInitialIntegrationResult()
 		{
@@ -70,38 +70,38 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 			Modification mod2 = new Modification();
 			mod2.ChangeNumber = 20;
 
-			result.Modifications = new Modification[] { mod1 };
+			result.Modifications = new Modification[] {mod1};
 			Assert.AreEqual(10, result.LastChangeNumber);
-			result.Modifications = new Modification[] { mod1, mod2 };
+			result.Modifications = new Modification[] {mod1, mod2};
 			Assert.AreEqual(20, result.LastChangeNumber);
-			result.Modifications = new Modification[] { mod2, mod1 };
+			result.Modifications = new Modification[] {mod2, mod1};
 			Assert.AreEqual(20, result.LastChangeNumber);
 		}
 
-		[Test] 
+		[Test]
 		public void ShouldNotRunBuildIfThereAreNoModifications()
 		{
 			result.Modifications = new Modification[0];
 			Assert.IsFalse(result.ShouldRunBuild(0));
 		}
 
-		[Test] 
+		[Test]
 		public void ShouldRunBuildIfThereAreModifications()
 		{
 			Modification modification = ModificationMother.CreateModification("foo", DateTime.Now.AddSeconds(-2));
 			result.Modifications = new Modification[] {modification};
 			Assert.IsTrue(result.ShouldRunBuild(0));
 		}
-		
-		[Test] 
+
+		[Test]
 		public void ShouldNotRunBuildIfThereAreModificationsWithinModificationDelay()
 		{
 			Modification modification = ModificationMother.CreateModification("foo", DateTime.Now.AddSeconds(-2));
 			result.Modifications = new Modification[] {modification};
 			Assert.IsFalse(result.ShouldRunBuild(100));
 		}
-		
-		[Test] 
+
+		[Test]
 		public void ShouldRunBuildIfLastModificationOutsideModificationDelay()
 		{
 			Modification modification = ModificationMother.CreateModification("foo", DateTime.Now.AddMinutes(-2));
@@ -109,7 +109,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 			Assert.IsTrue(result.ShouldRunBuild(100));
 		}
 
-		[Test] 
+		[Test]
 		public void ShouldRunBuildIfInForcedCondition()
 		{
 			result.BuildCondition = BuildCondition.ForceBuild;
@@ -173,6 +173,20 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 			IntegrationResult result = IntegrationResult.CreateInitialIntegrationResult("foo", @"c:\");
 			result.Label = "initial";
 			Assert.AreEqual("initial", result.LastSuccessfulIntegrationLabel);
+		}
+
+		[Test]
+		public void MapIntegrationProperties()
+		{
+			IntegrationResult result = new IntegrationResult("project", @"c:\workingdir\");
+			result.BuildCondition = BuildCondition.IfModificationExists;
+			result.Label = "label";
+			result.ArtifactDirectory = @"c:\artifactdir\";
+
+			Assert.AreEqual(7, result.IntegrationProperties.Count);
+			Assert.AreEqual("label", result.IntegrationProperties["ccnet.label"]);
+			Assert.AreEqual(@"c:\artifactdir\", result.IntegrationProperties["ccnet.artifact.directory"]);
+			Assert.AreEqual(BuildCondition.IfModificationExists, result.IntegrationProperties["ccnet.buildcondition"]);
 		}
 	}
 }

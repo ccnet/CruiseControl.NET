@@ -16,29 +16,99 @@ namespace ThoughtWorks.CruiseControl.Core
 	public class IntegrationResult : IIntegrationResult
 	{
 		public const string InitialLabel = "UNKNOWN";
-		private string project;
-		private IntegrationStatus lastIntegrationStatus = IntegrationStatus.Unknown;
-		private BuildCondition buildCondition;
-		private string workingDirectory;
-		private string label = InitialLabel;
 		private string lastSuccessfulIntegrationLabel;
-		private IntegrationStatus status = IntegrationStatus.Unknown;
 		private DateTime startTime;
 		private DateTime endTime;
 		private Modification[] modifications = new Modification[0];
-		private string artifactDirectory;
-		private string projectUrl;
 		private Exception exception;
 		private ArrayList taskResults = new ArrayList();
+		private IDictionary properties = new SortedList();
 
 		// Default constructor required for serialization
 		public IntegrationResult()
-		{}
+		{
+			BuildCondition = BuildCondition.NoBuild;
+			Label = InitialLabel;
+			Status = IntegrationStatus.Unknown;
+			LastIntegrationStatus = IntegrationStatus.Unknown;
+		}
 
-		public IntegrationResult(string projectName, string workingDirectory)
+		public IntegrationResult(string projectName, string workingDirectory) : this()
 		{
 			ProjectName = projectName;
-			this.workingDirectory = workingDirectory;
+			WorkingDirectory = workingDirectory;
+		}
+
+		public string ProjectName
+		{
+			get { return Convert(properties["ccnet.project"]); }
+			set { properties["ccnet.project"] = value; }
+		}
+
+		public string ProjectUrl
+		{
+			get { return Convert(properties["ccnet.project.url"]); }
+			set { properties["ccnet.project.url"] = value; }
+		}
+
+		public BuildCondition BuildCondition
+		{
+			get { return (BuildCondition) properties["ccnet.buildcondition"]; }
+			set { properties["ccnet.buildcondition"] = value; }
+		}
+
+		public string Label
+		{
+			get { return Convert(properties["ccnet.label"]); }
+			set { properties["ccnet.label"] = value; }
+		}
+
+		public string WorkingDirectory
+		{
+			get { return Convert(properties["ccnet.working.directory"]); }
+			set { properties["ccnet.working.directory"] = value; }
+		}
+
+		public string ArtifactDirectory
+		{
+			get { return Convert(properties["ccnet.artifact.directory"]); }
+			set { properties["ccnet.artifact.directory"] = value; }
+		}
+
+		public IntegrationStatus Status
+		{
+			get { return (IntegrationStatus) properties["ccnet.integration.status"]; }
+			set { properties["ccnet.integration.status"] = value; }
+		}
+
+		public IntegrationStatus LastIntegrationStatus
+		{
+			get { return (IntegrationStatus) properties["ccnet.lastintegration.status"]; }
+			set { properties["ccnet.lastintegration.status"] = value; }
+		}
+
+		public string LastSuccessfulIntegrationLabel
+		{
+			get { return (Succeeded || lastSuccessfulIntegrationLabel == null) ? Label : lastSuccessfulIntegrationLabel; }
+			set { lastSuccessfulIntegrationLabel = value; }
+		}
+
+		/// <summary>
+		/// Gets and sets the date and time at which the integration commenced.
+		/// </summary>
+		public DateTime StartTime
+		{
+			get { return startTime; }
+			set { startTime = value; }
+		}
+
+		/// <summary>
+		/// Gets and sets the date and time at which the integration was completed.
+		/// </summary>
+		public DateTime EndTime
+		{
+			get { return endTime; }
+			set { endTime = value; }
 		}
 
 		[XmlIgnore]
@@ -82,6 +152,14 @@ namespace ThoughtWorks.CruiseControl.Core
 		}
 
 		/// <summary>
+		/// Identifies if this is the first integration ever performed for this project (ie. there are no previous integrations).
+		/// </summary>
+		public bool IsInitial()
+		{
+			return (LastIntegrationStatus == IntegrationStatus.Unknown) && (Status == IntegrationStatus.Unknown);
+		}
+
+		/// <summary>
 		/// Gets a value indicating the success of this integration.
 		/// </summary>
 		public bool Succeeded
@@ -121,7 +199,8 @@ namespace ThoughtWorks.CruiseControl.Core
 			get { return EndTime - StartTime; }
 		}
 
-		[XmlIgnore] // Exceptions cannot be serialised because of permission attributes
+		// Exceptions cannot be serialised because of permission attributes
+		[XmlIgnore]
 		public Exception ExceptionResult
 		{
 			get { return exception; }
@@ -130,7 +209,7 @@ namespace ThoughtWorks.CruiseControl.Core
 				exception = value;
 				if (exception != null)
 				{
-					status = IntegrationStatus.Exception;
+					Status = IntegrationStatus.Exception;
 				}
 			}
 		}
@@ -141,18 +220,6 @@ namespace ThoughtWorks.CruiseControl.Core
 			get { return taskResults; }
 		}
 
-		public string ArtifactDirectory
-		{
-			get { return artifactDirectory; }
-			set { artifactDirectory = value; }
-		}
-
-		public string ProjectUrl
-		{
-			get { return projectUrl; }
-			set { projectUrl = value; }
-		}
-
 		public void AddTaskResult(string result)
 		{
 			AddTaskResult(new DataTaskResult(result));
@@ -161,12 +228,12 @@ namespace ThoughtWorks.CruiseControl.Core
 		public void AddTaskResult(ITaskResult result)
 		{
 			taskResults.Add(result);
-			if (! Failed) status = result.Succeeded() ? IntegrationStatus.Success : IntegrationStatus.Failure;
+			if (! Failed) Status = result.Succeeded() ? IntegrationStatus.Success : IntegrationStatus.Failure;
 		}
 
 		public void MarkStartTime()
 		{
-			startTime = DateTime.Now;
+			StartTime = DateTime.Now;
 		}
 
 		public void MarkEndTime()
@@ -189,8 +256,7 @@ namespace ThoughtWorks.CruiseControl.Core
 			return this.ProjectName == other.ProjectName &&
 				this.Status == other.Status &&
 				this.Label == other.Label &&
-				this.StartTime == other.StartTime &&
-				this.EndTime == other.EndTime;
+				this.StartTime == other.StartTime;
 		}
 
 		public override int GetHashCode()
@@ -204,71 +270,6 @@ namespace ThoughtWorks.CruiseControl.Core
 			result.StartTime = DateTime.Now.AddDays(-1);
 			result.EndTime = DateTime.Now;
 			return result;
-		}
-
-		public IntegrationStatus Status
-		{
-			get { return status; }
-			set { status = value; }
-		}
-
-		public IntegrationStatus LastIntegrationStatus
-		{
-			get { return lastIntegrationStatus; }
-			set { lastIntegrationStatus = value; }
-		}
-
-		public bool IsInitial()
-		{
-			return (LastIntegrationStatus == IntegrationStatus.Unknown) && (Status == IntegrationStatus.Unknown);
-		}
-
-		public string ProjectName
-		{
-			get { return project; }
-			set { project = value; }
-		}
-
-		public BuildCondition BuildCondition
-		{
-			get { return buildCondition; }
-			set { buildCondition = value; }
-		}
-
-		public string Label
-		{
-			get { return label; }
-			set { label = value; }
-		}
-
-		public string LastSuccessfulIntegrationLabel
-		{
-			get { return (Succeeded || lastSuccessfulIntegrationLabel == null) ? label : lastSuccessfulIntegrationLabel; }
-			set { lastSuccessfulIntegrationLabel = value; }
-		}
-
-		/// <summary>
-		/// Gets and sets the date and time at which the integration commenced.
-		/// </summary>
-		public DateTime StartTime
-		{
-			get { return startTime; }
-			set { startTime = value; }
-		}
-
-		/// <summary>
-		/// Gets and sets the date and time at which the integration was completed.
-		/// </summary>
-		public DateTime EndTime
-		{
-			get { return endTime; }
-			set { endTime = value; }
-		}
-
-		public string WorkingDirectory
-		{
-			get { return workingDirectory; }
-			set { workingDirectory = value; }
 		}
 
 		/// <summary>
@@ -333,6 +334,23 @@ namespace ThoughtWorks.CruiseControl.Core
 				}
 				return builder.ToString();
 			}
+		}
+
+		[XmlIgnore]
+		public IDictionary IntegrationProperties
+		{
+			get { return properties; }
+		}
+
+		
+		private string Convert(object obj)
+		{
+			return (obj == null) ? null : obj.ToString();
+		}
+
+		public override string ToString()
+		{
+			return string.Format("Project: {0}, Status: {1}, Label: {2}, StartTime: {3}", ProjectName, Status, Label, StartTime);
 		}
 	}
 }

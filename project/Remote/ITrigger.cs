@@ -4,8 +4,8 @@ using System.ComponentModel;
 namespace ThoughtWorks.CruiseControl.Remote
 {
 	/// <summary>
-	/// Interface of all integration schedules used by CruiseControl.NET.
-	/// A schedule applies to a particular project.
+	/// Interface of all integration trigger used by CruiseControl.NET.
+	/// A trigger applies to a particular project.
 	/// </summary>
 	[TypeConverter(typeof (ExpandableObjectConverter))]
 	public interface ITrigger
@@ -22,7 +22,7 @@ namespace ThoughtWorks.CruiseControl.Remote
 		BuildCondition ShouldRunIntegration();
 
 		/// <summary>
-		/// Notifies the schedule that an integration has completed.
+		/// Notifies the trigger that an integration has completed.
 		/// </summary>
 		void IntegrationCompleted();
 
