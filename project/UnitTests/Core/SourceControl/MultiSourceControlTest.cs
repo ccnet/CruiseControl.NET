@@ -135,5 +135,121 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 			mock.ExpectAndReturn("GetModifications", mods, dt1, dt2);
 			return mock;
 		}
+
+		[Test]
+		public void IfRequireChangesFromAllTrueAndSecondSourceControlHasEmptyChangesThenReturnEmpty()
+		{
+			//// SETUP
+			IntegrationResult from = IntegrationResultMother.CreateSuccessful(DateTime.Now);
+			IntegrationResult to = IntegrationResultMother.CreateSuccessful(DateTime.Now.AddDays(10));
+
+			Modification mod1 = new Modification();
+			mod1.Comment = "Testing Multi";
+
+			ArrayList mocks = new ArrayList();
+			mocks.Add(CreateModificationsSourceControlMock(new Modification[] {mod1}, from, to));
+			mocks.Add(CreateModificationsSourceControlMock(new Modification[0], from, to));
+
+			ArrayList scList = new ArrayList();
+			foreach (DynamicMock mock in mocks)
+			{
+				scList.Add(mock.MockInstance);
+			}
+
+			MultiSourceControl multiSourceControl = new MultiSourceControl();
+			multiSourceControl.SourceControls = (ISourceControl[]) scList.ToArray(typeof (ISourceControl));
+			multiSourceControl.RequireChangesFromAll = true;
+
+			//// EXECUTE
+			ArrayList returnedMods = new ArrayList(multiSourceControl.GetModifications(from, to));
+
+			//// VERIFY
+			foreach (DynamicMock mock in mocks)
+			{
+				mock.Verify();
+			}
+
+			Assert.AreEqual(0, returnedMods.Count);
+		}
+
+		[Test]
+		public void IfRequireChangesFromAllTrueAndFirstSourceControlHasEmptyChangesThenReturnEmpty()
+		{
+			//// SETUP
+			IntegrationResult from = IntegrationResultMother.CreateSuccessful(DateTime.Now);
+			IntegrationResult to = IntegrationResultMother.CreateSuccessful(DateTime.Now.AddDays(10));
+
+			Modification mod1 = new Modification();
+			mod1.Comment = "Testing Multi";
+
+			ArrayList mocks = new ArrayList();
+			mocks.Add(CreateModificationsSourceControlMock(new Modification[0], from, to));
+			DynamicMock nonCalledMock = new DynamicMock(typeof (ISourceControl));
+			nonCalledMock.ExpectNoCall("GetModifications", typeof(IIntegrationResult), typeof(IIntegrationResult));
+			mocks.Add(nonCalledMock);
+
+			ArrayList scList = new ArrayList();
+			foreach (DynamicMock mock in mocks)
+			{
+				scList.Add(mock.MockInstance);
+			}
+
+			MultiSourceControl multiSourceControl = new MultiSourceControl();
+			multiSourceControl.SourceControls = (ISourceControl[]) scList.ToArray(typeof (ISourceControl));
+			multiSourceControl.RequireChangesFromAll = true;
+
+			//// EXECUTE
+			ArrayList returnedMods = new ArrayList(multiSourceControl.GetModifications(from, to));
+
+			//// VERIFY
+			foreach (DynamicMock mock in mocks)
+			{
+				mock.Verify();
+			}
+
+			Assert.AreEqual(0, returnedMods.Count);
+		}
+
+		[Test]
+		public void IfRequireChangesFromAllTrueAndNoSourceControlHasEmptyChangesThenReturnChanges()
+		{
+			//// SETUP
+			IntegrationResult from = IntegrationResultMother.CreateSuccessful(DateTime.Now);
+			IntegrationResult to = IntegrationResultMother.CreateSuccessful(DateTime.Now.AddDays(10));
+
+			Modification mod1 = new Modification();
+			mod1.Comment = "Testing Multi";
+			Modification mod2 = new Modification();
+			mod2.Comment = "More Multi";
+			Modification mod3 = new Modification();
+			mod3.Comment = "Yet More Multi";
+
+			ArrayList mocks = new ArrayList();
+			mocks.Add(CreateModificationsSourceControlMock(new Modification[] {mod1, mod2}, from, to));
+			mocks.Add(CreateModificationsSourceControlMock(new Modification[] {mod3}, from, to));
+
+			ArrayList scList = new ArrayList();
+			foreach (DynamicMock mock in mocks)
+			{
+				scList.Add(mock.MockInstance);
+			}
+
+			MultiSourceControl multiSourceControl = new MultiSourceControl();
+			multiSourceControl.RequireChangesFromAll = true;
+			multiSourceControl.SourceControls = (ISourceControl[]) scList.ToArray(typeof (ISourceControl));
+
+			//// EXECUTE
+			ArrayList returnedMods = new ArrayList(multiSourceControl.GetModifications(from, to));
+
+			//// VERIFY
+			foreach (DynamicMock mock in mocks)
+			{
+				mock.Verify();
+			}
+
+			Assert.IsTrue(returnedMods.Contains(mod1));
+			Assert.IsTrue(returnedMods.Contains(mod2));
+			Assert.IsTrue(returnedMods.Contains(mod3));
+		}
 	}
 }

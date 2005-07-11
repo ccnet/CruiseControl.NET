@@ -8,6 +8,9 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 	{
 		private ISourceControl[] _sourceControls;
 
+		[ReflectorProperty("requireChangesFromAll", Required=false)]
+		public bool RequireChangesFromAll = false;
+
 		[ReflectorArray("sourceControls", Required=true)]
 		public ISourceControl[] SourceControls 
 		{
@@ -22,15 +25,20 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			set { _sourceControls = value; }
 		}
 
-		public Modification[] GetModifications(IIntegrationResult from, IIntegrationResult to)
+		public virtual Modification[] GetModifications(IIntegrationResult from, IIntegrationResult to)
 		{
 			ArrayList modifications = new ArrayList();
 			foreach (ISourceControl sourceControl in SourceControls)
 			{
 				Modification[] mods = sourceControl.GetModifications(from, to);
-				if (mods != null)
+				if (mods != null && mods.Length > 0)
 				{
 					modifications.AddRange(mods);
+				}
+				else if (RequireChangesFromAll)
+				{
+					modifications.Clear();
+					break;
 				}
 			}
 
