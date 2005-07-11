@@ -9,12 +9,14 @@
 				<td valign="middle" align="left">
 					<img src="images/shim.gif" width="6" border="0">
 					<a href="http://ccnet.thoughtworks.com"><img src="images/ccnet_logo.gif" border="0"></a>
-					version : $dashboardversion
 				</td>
 			</tr>
 		</table>
 		<table class="TopControls" border="0" width="100%" cellpadding="3" cellspacing="0" height="25">
-			<tr><td valign="middle" align="left">$breadcrumbs</td></tr>
+			<tr>
+				<td valign="middle" align="left">$breadcrumbs</td>
+				<td valign="middle" align="right"><p>version : $dashboardversion</p></td>
+			</tr>
 		</table>
 		<table border="0" align="center" cellpadding="0" cellspacing="0" width="100%" bgcolor="#333399">
 			<tr>

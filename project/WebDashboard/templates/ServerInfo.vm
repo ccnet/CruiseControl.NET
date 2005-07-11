@@ -1,13 +1,25 @@
-<table class="RecentBuildsPanel" width="100%">
-	<tr>
-		<td>servername</td>
-		<td>serverversion</td>
+<table cellspacing="0" cellpadding="3" rules="rows" bordercolor="#333399" border="1" id="StatusGrid" bgcolor="White" width="100%">
+	<tr bgcolor="#333399" class="ProjectGridHeader">
+		<td align="Center">
+			<b>Server Name</b>
+		</td>
+		<td align="Center">
+			<b>Server Version</b>
+		</td>
 	</tr>
+	<tr bgcolor="Ivory">
+		<td align="Center">
+			<font color="Black">
+				$servername
+			</font>
+		</td>
+		<td align="Center">
+			<font color="Black">
+				$serverversion
+			</font>
+		</td>
+	</tr>
+</table>
 
-	<tr>
-		<td>$servername</td>
-		<td>$serverversion</td>
-	</tr>
-</table 
 
 
