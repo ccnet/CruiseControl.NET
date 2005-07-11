@@ -28,7 +28,18 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard.ActionDecorators
 			velocityContext["sidebar"] = (((SideBarViewBuilder) objectGiver.GiveObjectByType(typeof(SideBarViewBuilder))).Execute()).ResponseFragment;
 			velocityContext["mainContent"] = decoratedAction.Execute(cruiseRequest).ResponseFragment;
 
+			velocityContext["dashboardversion"] = GetVersion();
+
 			return velocityViewGenerator.GenerateView("SiteTemplate.vm", velocityContext);
 		}
+
+		private string GetVersion()
+		{
+			System.Reflection.Assembly assembly;
+			
+			assembly = System.Reflection.Assembly.GetExecutingAssembly();
+			return assembly.GetName().Version.ToString();
+		}
+
 	}
 }

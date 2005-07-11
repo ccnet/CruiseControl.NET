@@ -115,6 +115,11 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.ServerConnection
 			return GetCruiseManager(serverSpecifier).GetServerLog();
 		}
 
+		public string GetServerVersion(IServerSpecifier serverSpecifier)
+		{
+			return GetCruiseManager(serverSpecifier).GetServerVersion();
+		}
+
 		public IServerSpecifier[] GetServerSpecifiers()
 		{
 			ArrayList serverSpecifiers = new ArrayList();

@@ -1,0 +1,13 @@
+<table class="RecentBuildsPanel" width="100%">
+	<tr>
+		<td>servername</td>
+		<td>serverversion</td>
+	</tr>
+
+	<tr>
+		<td>$servername</td>
+		<td>$serverversion</td>
+	</tr>
+</table 
+
+

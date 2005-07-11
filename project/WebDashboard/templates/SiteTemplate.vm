@@ -9,6 +9,7 @@
 				<td valign="middle" align="left">
 					<img src="images/shim.gif" width="6" border="0">
 					<a href="http://ccnet.thoughtworks.com"><img src="images/ccnet_logo.gif" border="0"></a>
+					version : $dashboardversion
 				</td>
 			</tr>
 		</table>

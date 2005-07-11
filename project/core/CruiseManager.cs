@@ -94,5 +94,10 @@ namespace ThoughtWorks.CruiseControl.Core
 		{
 			return null;
 		}
+
+		public string GetServerVersion()
+		{
+			return cruiseServer.GetVersion();
+		}
 	}
 }

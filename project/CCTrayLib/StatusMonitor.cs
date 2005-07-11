@@ -160,6 +160,21 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib
 			}
 		}
 
+		public string GetServerVersion()
+		{
+			try
+			{
+				return GetRemoteCruiseControlProxy ().GetServerVersion();
+
+			}
+			catch
+			{
+				// Ignore the error
+				return "Unable to retrieve";
+			}
+		}
+
+
 		private ICruiseManager GetRemoteCruiseControlProxy ()
 		{
 			return _settings.CruiseManager;

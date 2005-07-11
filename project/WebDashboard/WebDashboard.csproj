@@ -803,6 +803,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Plugins\ServerReport\ServerInformationServerPlugin.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Plugins\ServerReport\ServerLogServerPlugin.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -924,6 +929,10 @@
                 />
                 <File
                     RelPath = "templates\RecentBuilds.vm"
+                    BuildAction = "None"
+                />
+                <File
+                    RelPath = "templates\ServerInfo.vm"
                     BuildAction = "None"
                 />
                 <File

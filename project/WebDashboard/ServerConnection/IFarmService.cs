@@ -14,5 +14,6 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.ServerConnection
 		ProjectStatusListAndExceptions GetProjectStatusListAndCaptureExceptions();
 		ProjectStatusListAndExceptions GetProjectStatusListAndCaptureExceptions(IServerSpecifier serverSpecifier);
 		ExternalLink[] GetExternalLinks(IProjectSpecifier projectSpecifier);
+		string GetServerVersion(IServerSpecifier serverSpecifier);
 	}
 }

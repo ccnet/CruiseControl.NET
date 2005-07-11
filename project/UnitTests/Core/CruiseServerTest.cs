@@ -249,5 +249,13 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 			integratorMock1.Verify();
 			integratorMock2.Verify();
 		}
+
+		[Test]
+		public void DetectVersionMethod()
+		{string ServerVersion;
+
+			ServerVersion = server.GetVersion();
+			Assert.IsFalse(ServerVersion.Length==0,"Version not retrieved");
+		}
 	}
 }

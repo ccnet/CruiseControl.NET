@@ -123,6 +123,13 @@ namespace ThoughtWorks.CruiseControl.WebServiceProxy
 			Service.StopCruiseControlNow();
 		}
 
+
+		public string GetServerVersion()
+		{
+			 throw new NotImplementedException();
+		}
+
+
 		#endregion
 
 		public Generated.CCNetManagementService Service

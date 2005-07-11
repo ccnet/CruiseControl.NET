@@ -39,6 +39,10 @@ namespace ThoughtWorks.CruiseControl.CCTray
 		private MenuItem mnuProject1PlaceHolder;
 		private Exception _audioException = null;
 		private string _lastUrl = "";
+		private System.Windows.Forms.MenuItem mnuSeparator1;
+		private System.Windows.Forms.MenuItem mnuSeparator2;
+		private System.Windows.Forms.MenuItem mnuServerVersion;
+		private System.Windows.Forms.MenuItem mnuTrayVersion;
 		private IStatusIconLoader _iconLoader;
 
 		#region Constructor
@@ -53,6 +57,17 @@ namespace ThoughtWorks.CruiseControl.CCTray
 			InitialiseProjectMenu();
 
 			DisplayStartupBalloon();
+
+			ShowVersions();
+		}
+
+		private void ShowVersions()
+		{
+			System.Reflection.Assembly assembly;
+			assembly = System.Reflection.Assembly.GetExecutingAssembly();                 
+
+			this.mnuServerVersion.Text = "Server Version : " + _statusMonitor.GetServerVersion();
+			this.mnuTrayVersion.Text = "Tray Version : " + assembly.GetName().Version.ToString();
 		}
 
 		#endregion
@@ -146,15 +161,18 @@ namespace ThoughtWorks.CruiseControl.CCTray
 		/// </summary>
 		private void InitializeComponent()
 		{
-			this.components = new Container();
-			this.trayIcon = new NotifyIconEx();
-			this.contextMenu = new ContextMenu();
-			this.mnuLaunchWebPage = new MenuItem();
-			this.mnuProjects = new MenuItem();
-			this.mnuProject1PlaceHolder = new MenuItem();
-			this.mnuSettings = new MenuItem();
-			this.mnuForceBuild = new MenuItem();
-			this.mnuExit = new MenuItem();
+			this.trayIcon = new ThoughtWorks.CruiseControl.CCTrayLib.Presentation.NotifyIconEx();
+			this.contextMenu = new System.Windows.Forms.ContextMenu();
+			this.mnuLaunchWebPage = new System.Windows.Forms.MenuItem();
+			this.mnuProjects = new System.Windows.Forms.MenuItem();
+			this.mnuProject1PlaceHolder = new System.Windows.Forms.MenuItem();
+			this.mnuSettings = new System.Windows.Forms.MenuItem();
+			this.mnuForceBuild = new System.Windows.Forms.MenuItem();
+			this.mnuExit = new System.Windows.Forms.MenuItem();
+			this.mnuSeparator1 = new System.Windows.Forms.MenuItem();
+			this.mnuSeparator2 = new System.Windows.Forms.MenuItem();
+			this.mnuServerVersion = new System.Windows.Forms.MenuItem();
+			this.mnuTrayVersion = new System.Windows.Forms.MenuItem();
 
 			// 
 			// trayIcon
@@ -163,33 +181,35 @@ namespace ThoughtWorks.CruiseControl.CCTray
 			this.trayIcon.Icon = null;
 			this.trayIcon.Text = "No Connection";
 			this.trayIcon.Visible = true;
-			this.trayIcon.DoubleClick += new EventHandler(this.trayIcon_DoubleClick);
+			this.trayIcon.DoubleClick += new System.EventHandler(this.trayIcon_DoubleClick);
+
+
 			// 
 			// contextMenu
 			// 
-			this.contextMenu.MenuItems.AddRange(new MenuItem[]
-				{
+			this.contextMenu.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
 					this.mnuLaunchWebPage,
 					this.mnuProjects,
 					this.mnuSettings,
 					this.mnuForceBuild,
-					this.mnuExit
-				});
-			this.contextMenu.Popup += new EventHandler(this.contextMenu_Popup);
+																						this.mnuSeparator1,
+																						this.mnuServerVersion,
+																						this.mnuTrayVersion,
+																						this.mnuSeparator2,
+																						this.mnuExit});
+			this.contextMenu.Popup += new System.EventHandler(this.contextMenu_Popup);
 			// 
 			// mnuLaunchWebPage
 			// 
 			this.mnuLaunchWebPage.Index = 0;
 			this.mnuLaunchWebPage.Text = "&Launch web page";
-			this.mnuLaunchWebPage.Click += new EventHandler(this.mnuLaunchWebPage_Click);
+			this.mnuLaunchWebPage.Click += new System.EventHandler(this.mnuLaunchWebPage_Click);
 			// 
 			// mnuProjects
 			// 
 			this.mnuProjects.Index = 1;
-			this.mnuProjects.MenuItems.AddRange(new MenuItem[]
-				{
-					this.mnuProject1PlaceHolder
-				});
+			this.mnuProjects.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
+																						this.mnuProject1PlaceHolder});
 			this.mnuProjects.Text = "&Project";
 			// 
 			// mnuProject1PlaceHolder
@@ -199,42 +219,55 @@ namespace ThoughtWorks.CruiseControl.CCTray
 			// 
 			// mnuSettings
 			// 
-			this.mnuSettings.Index = 2; //1;
+			this.mnuSettings.Index = 2;
 			this.mnuSettings.Text = "&Settings...";
-			this.mnuSettings.Click += new EventHandler(this.mnuSettings_Click);
+			this.mnuSettings.Click += new System.EventHandler(this.mnuSettings_Click);
 			// 
 			// mnuForceBuild
 			// 
-			this.mnuForceBuild.Index = 3; //2;
+			this.mnuForceBuild.Index = 3;
 			this.mnuForceBuild.Text = "&Force build";
-			this.mnuForceBuild.Click += new EventHandler(this.mnuForceBuild_Click);
+			this.mnuForceBuild.Click += new System.EventHandler(this.mnuForceBuild_Click);
 			// 
 			// mnuExit
 			// 
-			this.mnuExit.Index = 4; //3;
+			this.mnuExit.Index = 8;
 			this.mnuExit.Text = "E&xit";
-			this.mnuExit.Click += new EventHandler(this.mnuExit_Click);
+			this.mnuExit.Click += new System.EventHandler(this.mnuExit_Click);
 			// 
-			// statusMonitor
+			// mnuSeparator1
 			// 
-			this._statusMonitor.Error += new ErrorEventHandler(this.statusMonitor_Error);
-			this._statusMonitor.BuildOccurred += new BuildOccurredEventHandler(this.statusMonitor_BuildOccurred);
-			this._statusMonitor.Polled += new PolledEventHandler(this.statusMonitor_Polled);
+			this.mnuSeparator1.Index = 4;
+			this.mnuSeparator1.Text = "-";
+			// 
+			// mnuSeparator2
+			// 
+			this.mnuSeparator2.Index = 7;
+			this.mnuSeparator2.Text = "-";
+			// 
+			// mnuServerVersion
+			// 
+			this.mnuServerVersion.Index = 5;
+			this.mnuServerVersion.Text = "Server Version";
+			// 
+			// mnuTrayVersion
+			// 
+			this.mnuTrayVersion.Index = 6;
+			this.mnuTrayVersion.Text = "Tray Version";
 			// 
 			// SystemTrayMonitor
 			// 
-			this.AutoScaleBaseSize = new Size(5, 13);
-			this.ClientSize = new Size(115, 6); //(104, 19);
+			this.AutoScaleBaseSize = new System.Drawing.Size(5, 13);
+			this.ClientSize = new System.Drawing.Size(115, 0);
 			this.ControlBox = false;
 			this.Enabled = false;
 			this.MaximizeBox = false;
 			this.MinimizeBox = false;
 			this.Name = "SystemTrayMonitor";
 			this.ShowInTaskbar = false;
-			this.SizeGripStyle = SizeGripStyle.Hide;
 			this.Text = "CCTray";
-			this.WindowState = FormWindowState.Minimized;
-			this.Load += new EventHandler(this.CCTray_Load);
+			this.WindowState = System.Windows.Forms.FormWindowState.Minimized;
+			this.Load += new System.EventHandler(this.CCTray_Load);
 
 		}
 

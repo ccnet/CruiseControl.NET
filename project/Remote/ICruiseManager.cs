@@ -46,6 +46,11 @@ namespace ThoughtWorks.CruiseControl.Remote
 		string GetServerLog();
 
 		/// <summary>
+		/// Returns the version of the server
+		/// </summary>
+		string GetServerVersion();
+
+		/// <summary>
 		/// Adds a project to the server
 		/// </summary>
 		void AddProject(string serializedProject);

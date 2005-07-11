@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.IO;
+using System.Reflection;
 using System.Threading;
 using ThoughtWorks.CruiseControl.Core.Config;
 using ThoughtWorks.CruiseControl.Core.Logging;
@@ -296,6 +297,20 @@ namespace ThoughtWorks.CruiseControl.Core
 		{
 			Log.Info("Getting project - " + name);
 			return new NetReflectorProjectSerializer().Serialize((Project) configurationService.Load().Projects[name]);
+		}
+
+		public string GetVersion()
+		{
+			Log.Info("Returning version number");
+			try
+			{
+				return Assembly.GetExecutingAssembly().GetName().Version.ToString();
+			}
+			catch (ApplicationException e)
+			{
+				Log.Warning(e);
+				throw new CruiseControlException("Failed to get project version . Exception was - " + e.Message);
+			}
 		}
 
 		// ToDo - this done TDD
