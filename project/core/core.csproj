@@ -265,6 +265,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "ModificationSet.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "NetReflectorProjectSerializer.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -914,6 +919,11 @@
                 />
                 <File
                     RelPath = "tasks\ModificationWriterTask.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "tasks\MsBuildTask.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

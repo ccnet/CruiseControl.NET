@@ -137,12 +137,6 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 				if (value != null)
 					AppendIfNotBlank(buffer, string.Format("-D:{0}={1}", key, SurroundInQuotesIfContainsSpace(RemoveTrailingSlash(value.ToString()))));
 			}
-//			string label = SurroundInQuotesIfContainsSpace(result.Label);
-//			AppendIfNotBlank(buffer, @"-D:label-to-apply={0}", label);
-//			AppendIfNotBlank(buffer, @"-D:ccnet.label={0}", label);
-//			AppendIfNotBlank(buffer, @"-D:ccnet.buildcondition={0}", result.BuildCondition.ToString());
-//			AppendIfNotBlank(buffer, @"-D:ccnet.working.directory={0}", SurroundInQuotesIfContainsSpace(RemoveTrailingSlash(result.WorkingDirectory)));
-//			AppendIfNotBlank(buffer, @"-D:ccnet.artifact.directory={0}", SurroundInQuotesIfContainsSpace(RemoveTrailingSlash(result.ArtifactDirectory)));
 		}
 
 		private string RemoveTrailingSlash(string directory)

@@ -113,7 +113,6 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 		[Test]
 		public void ShouldPassSpecifiedPropertiesAsProcessInfoArgumentsToProcessExecutor()
 		{
-//			string ip = @"-D:ccnet.artifact.directory=C:\temp -D:ccnet.buildcondition=NoBuild -D:ccnet.integration.status=Unknown -D:ccnet.label=1.0 -D:ccnet.lastintegration.status=Unknown -D:ccnet.working.directory=C:\temp";
 			string args = @"-nologo -buildfile:mybuild.build -logger:NAnt.Core.XmlLogger myArgs -D:ccnet.artifact.directory=C:\temp " + IntegrationProperties(@"C:\temp") + " target1 target2";
 			ProcessInfo info = NewProcessInfo(args);
 			info.TimeOut = 2000;
@@ -145,11 +144,6 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 
 			builder.BuildFile = "my project.build";
 			builder.Run(result);
-		}
-
-		private string IntegrationProperties(string workingDirectory)
-		{
-			return string.Format(@"-D:ccnet.buildcondition=NoBuild -D:ccnet.integration.status=Success -D:ccnet.label=1.0 -D:ccnet.lastintegration.status=Unknown -D:ccnet.project=test -D:ccnet.working.directory={0}", workingDirectory);
 		}
 
 		[Test]
@@ -246,6 +240,11 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 			Assert.AreEqual(0, builder.Targets.Length);
 			builder.TargetsForPresentation = null;
 			Assert.AreEqual(0, builder.Targets.Length);
+		}
+
+		private string IntegrationProperties(string workingDirectory)
+		{
+			return string.Format(@"-D:ccnet.buildcondition=NoBuild -D:ccnet.integration.status=Success -D:ccnet.label=1.0 -D:ccnet.lastintegration.status=Unknown -D:ccnet.project=test -D:ccnet.working.directory={0}", workingDirectory);
 		}
 	}
 }

@@ -12,7 +12,6 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 	public class Cvs : ProcessSourceControl
 	{
 		public const string DefaultCvsExecutable = "cvs.exe";
-		public const string GET_SOURCE_COMMAND_FORMAT = @"-q update -d -P"; // build directories, prune empty directories
 		public const string COMMAND_DATE_FORMAT = "yyyy-MM-dd HH:mm:ss 'GMT'";
 		private readonly CvsHistoryCommandParser historyCommandParser;
 
@@ -102,7 +101,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 		private ProcessInfo NewGetSourceProcessInfo(IIntegrationResult result, string dir)
 		{
 			ProcessArgumentBuilder builder = new ProcessArgumentBuilder();
-			builder.AppendArgument(GET_SOURCE_COMMAND_FORMAT);
+			builder.AppendArgument("-q update -d -P"); // build directories, prune empty directories
 			builder.AppendIf(CleanCopy, "-C");
 			builder.AppendIf(UseHistory && dir != null, "-l");
 			builder.AppendIf(UseHistory && dir != null, "\"{0}\"", dir);
