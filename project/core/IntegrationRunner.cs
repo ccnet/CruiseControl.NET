@@ -25,6 +25,7 @@ namespace ThoughtWorks.CruiseControl.Core
 			IIntegrationResult result = resultManager.StartNewIntegration(buildCondition);
 			IIntegrationResult lastResult = resultManager.LastIntegrationResult;
 
+			CreateWorkingDirectoryIfItDoesntExist();
 			ISourceControl sourceControl = target.SourceControl;
 
 			result.MarkStartTime();
@@ -34,8 +35,6 @@ namespace ThoughtWorks.CruiseControl.Core
 				if (result.ShouldRunBuild(target.ModificationDelaySeconds))
 				{
 					target.Activity = ProjectActivity.Building;
-
-					CreateWorkingDirectoryIfItDoesntExist();
 					sourceControl.GetSource(result);
 					RunBuild(result);
 				}
@@ -57,7 +56,6 @@ namespace ThoughtWorks.CruiseControl.Core
 			target.Activity = ProjectActivity.CheckingModifications;
 
 			Modification[] modifications = quietPeriod.GetModifications(target.SourceControl, lastResult, result);
-//			Modification[] modifications = sourceControl.GetModifications(lastResult, result);
 			Log.Info(GetModificationsDetectedMessage(modifications));
 			return modifications;
 		}

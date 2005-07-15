@@ -40,6 +40,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 				<ssl>True</ssl>
 				<autoGetSource>True</autoGetSource>
 				<applyLabel>True</applyLabel>
+				<historyArgs></historyArgs>
 			</sourceControl>";
 
 			vault = CreateVault(ST_XML_SSL);
@@ -51,6 +52,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 			Assert.AreEqual("$\\foo", vault.Folder);
 			Assert.AreEqual(true, vault.AutoGetSource);
 			Assert.AreEqual(true, vault.ApplyLabel);
+			Assert.AreEqual(string.Empty, vault.HistoryArgs);
 		}
 
 		[Test]
@@ -61,6 +63,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 			Assert.AreEqual("$", vault.Folder);
 			Assert.AreEqual(false, vault.AutoGetSource);
 			Assert.AreEqual(false, vault.ApplyLabel);
+			Assert.AreEqual(Vault.DefaultHistoryArgs, vault.HistoryArgs);
 		}
 
 		[Test]

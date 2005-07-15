@@ -8,6 +8,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 	public class Vault : ProcessSourceControl
 	{
 		public const string DefaultExecutable = @"C:\Program Files\SourceGear\Vault Client\vault.exe";
+		public const string DefaultHistoryArgs = "-excludeactions label -rowlimit 0";
 
 		public Vault() : base(new VaultHistoryParser())
 		{}
@@ -41,6 +42,9 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 
 		[ReflectorProperty("applyLabel", Required=false)]
 		public bool ApplyLabel = false;
+
+		[ReflectorProperty("historyArgs", Required=false)]
+		public string HistoryArgs = DefaultHistoryArgs;
 
 		public override Modification[] GetModifications(IIntegrationResult from, IIntegrationResult to)
 		{
@@ -85,7 +89,9 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 
 		private ProcessInfo ForHistoryProcessInfo(IIntegrationResult from, IIntegrationResult to)
 		{
-			return ProcessInfoFor(BuildHistoryProcessArgs(from.StartTime, to.StartTime), from);
+			ProcessInfo info = ProcessInfoFor(BuildHistoryProcessArgs(from.StartTime, to.StartTime), from);
+			Log.Debug("Vault History command: " + info.ToString());
+			return info;
 		}
 
 		private ProcessInfo ProcessInfoFor(string args, IIntegrationResult result)
@@ -100,7 +106,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 		{
 			ProcessArgumentBuilder builder = new ProcessArgumentBuilder();
 			builder.AddInQuotes("history", Folder);
-			builder.AppendArgument("-excludeactions label -rowlimit 0");
+			builder.AppendArgument(HistoryArgs);
 			builder.Add("-begindate", from.ToString("s"));
 			builder.Add("-enddate", to.ToString("s"));
 			AddCommonOptionalArguments(builder);
