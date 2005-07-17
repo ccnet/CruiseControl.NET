@@ -1,4 +1,3 @@
-using System;
 using System.IO;
 using System.Xml.Serialization;
 using ThoughtWorks.CruiseControl.CCTrayLib.Monitoring;
@@ -42,19 +41,8 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Configuration
 
 		public bool ShouldShowBalloonOnBuildTransition
 		{
-			get
-			{
-				if (persistentConfiguration.BuildTransitionNotification == null)
-					return true;
-
-				return persistentConfiguration.BuildTransitionNotification.ShowBalloon;
-			}
-
-			set
-			{
-				persistentConfiguration.BuildTransitionNotification = new BuildTransitionNotification();
-				persistentConfiguration.BuildTransitionNotification.ShowBalloon = value;
-			}
+			get { return persistentConfiguration.BuildTransitionNotification.ShowBalloon; }
+			set { persistentConfiguration.BuildTransitionNotification.ShowBalloon = value; }
 		}
 
 		public void Persist()
@@ -64,6 +52,12 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Configuration
 
 		private void ReadConfigurationFile()
 		{
+			if (!File.Exists(configFileName))
+			{
+				persistentConfiguration = new PersistentConfiguration();
+				return;
+			}
+
 			XmlSerializer serializer = new XmlSerializer(typeof (PersistentConfiguration));
 
 			using (StreamReader configFile = File.OpenText(configFileName))
@@ -85,9 +79,13 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Configuration
 
 		public ICCTrayMultiConfiguration Clone()
 		{
-			return new CCTrayMultiConfiguration(managerFactory, configFileName);			
+			return new CCTrayMultiConfiguration(managerFactory, configFileName);
 		}
 
+		public AudioFiles Audio
+		{
+			get { return persistentConfiguration.BuildTransitionNotification.AudioFiles; }
+		}
 	}
 
 }

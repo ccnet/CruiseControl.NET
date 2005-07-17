@@ -1,4 +1,5 @@
 using System;
+using ThoughtWorks.CruiseControl.Core;
 using ThoughtWorks.CruiseControl.Remote;
 
 namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
@@ -34,7 +35,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
 						return status;
 				}
 
-				return null;
+				throw new ApplicationException("Project '" + projectName + "' not found on server");
 			}
 		}
 

@@ -376,6 +376,16 @@
                     BuildAction = "EmbeddedResource"
                 />
                 <File
+                    RelPath = "Presentation\AudioPlayer.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Presentation\BuildTransitionSoundPlayer.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Presentation\CCTrayMultiSettingsForm.cs"
                     SubType = "Form"
                     BuildAction = "Compile"
@@ -387,6 +397,11 @@
                 />
                 <File
                     RelPath = "Presentation\DetailStringProvider.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Presentation\IAudioPlayer.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -421,6 +436,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Presentation\NativeMethods.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Presentation\NotifyIconEx.cs"
                     SubType = "Component"
                     BuildAction = "Compile"
@@ -447,6 +467,11 @@
                 />
                 <File
                     RelPath = "Presentation\ResourceProjectStateIconProvider.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Presentation\SelectAudioFileController.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

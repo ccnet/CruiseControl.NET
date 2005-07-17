@@ -1,4 +1,5 @@
 using System;
+using System.Text;
 using ThoughtWorks.CruiseControl.Remote;
 
 namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
@@ -11,6 +12,11 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
 		{
 			this.monitors = monitors;
 
+			foreach (IProjectMonitor monitor in this.monitors)
+			{
+				monitor.Polled += new MonitorPolledEventHandler(Monitor_Polled);
+				monitor.BuildOccurred += new MonitorBuildOccurredEventHandler(Monitor_BuildOccurred);
+			}
 		}
 
 		public string ProjectName
@@ -36,44 +42,45 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
 		{
 			get { throw new NotImplementedException(); }
 		}
-
-		public event MonitorBuildOccurredEventHandler BuildOccurred
+		public string SummaryStatusString
 		{
-			add
+			get
 			{
+				StringBuilder result = new StringBuilder();
+				bool firstOne = true;
+
 				foreach (IProjectMonitor monitor in monitors)
 				{
-					monitor.BuildOccurred += value;
+					if (!firstOne)
+						result.Append('\n');
+
+					firstOne = false;
+
+					result.Append(monitor.SummaryStatusString);
 				}
-			}
-			remove
-			{
-				foreach (IProjectMonitor monitor in monitors)
-				{
-					monitor.BuildOccurred -= value;
-				}
+
+				return result.ToString();
 			}
 		}
 
-		public event MonitorPolledEventHandler Polled
+		public event MonitorBuildOccurredEventHandler BuildOccurred;
+		private void Monitor_BuildOccurred(object sender, MonitorBuildOccurredEventArgs e)
 		{
-			add
+			if (BuildOccurred != null)
 			{
-				foreach (IProjectMonitor monitor in monitors)
-				{
-					monitor.Polled += value;
-				}
-			}
-
-			remove
-			{
-				foreach (IProjectMonitor monitor in monitors)
-				{
-					monitor.Polled -= value;
-				}
+				BuildOccurred(this, e);
 			}
 		}
 
+
+		public event MonitorPolledEventHandler Polled;
+		private void Monitor_Polled(object sender, MonitorPolledEventArgs args)
+		{
+			if (Polled != null)
+			{
+				Polled(this, args);
+			}
+		}
 
 		public void Poll()
 		{
@@ -98,6 +105,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
 				return worstState;
 			}
 		}
+
 
 	}
 }

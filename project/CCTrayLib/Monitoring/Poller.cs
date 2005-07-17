@@ -1,7 +1,9 @@
 using System;
 using System.ComponentModel;
 using System.Diagnostics;
+using System.Threading;
 using System.Timers;
+using Timer = System.Threading.Timer;
 
 namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
 {
@@ -12,30 +14,33 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
 	{
 		Timer timer;
 		IPollable itemToPoll;
+		private readonly int pollIntervalMilliseconds;
 
 		public Poller(int pollIntervalMilliseconds, IPollable itemToPoll)
 		{
 			this.itemToPoll = itemToPoll;
-			timer = new Timer();
-			timer.Interval = pollIntervalMilliseconds;
-			timer.AutoReset = true;
-			timer.Elapsed += new ElapsedEventHandler(Timer_Elapsed);
+			this.pollIntervalMilliseconds = pollIntervalMilliseconds;
 		}
 
 
-		private void Timer_Elapsed( object sender, ElapsedEventArgs e )
+		private void Timer_Elapsed( object args )
 		{
 			itemToPoll.Poll();
 		}
 
 		public void Start()
 		{
-			timer.Start();
+			Stop();
+			timer = new Timer(new TimerCallback(Timer_Elapsed), null, 0, pollIntervalMilliseconds);
 		}
 
 		public void Stop()
 		{
-			timer.Stop();
+			if (timer != null)
+			{
+				timer.Dispose();
+				timer = null;
+			}
 		}
 	}
 }

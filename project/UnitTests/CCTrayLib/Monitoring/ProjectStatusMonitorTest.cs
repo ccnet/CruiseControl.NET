@@ -48,8 +48,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Monitoring
 			Assert.AreSame(result[1], manager.ProjectStatus);
 		}
 
-		[Test]
-		public void ProjectStatusReturnsNullIfProjectNotFound()
+		[Test, ExpectedException(typeof(ApplicationException), "Project 'projectName' not found on server")]
+		public void ProjectStatusThrowsIfProjectNotFound()
 		{
 			ProjectStatus[] result = new ProjectStatus[]
 				{

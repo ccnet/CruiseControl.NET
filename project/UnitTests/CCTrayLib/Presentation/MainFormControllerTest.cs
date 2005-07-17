@@ -24,7 +24,6 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Presentation
 			projectMonitor = (IProjectMonitor) mockProjectMonitor.MockInstance;
 
 			mockConfiguration = new DynamicMock(typeof (ICCTrayMultiConfiguration));
-			mockConfiguration.Strict = true;
 			configuration = (ICCTrayMultiConfiguration) mockConfiguration.MockInstance;
 
 			mockConfiguration.SetupResult("GetProjectStatusMonitors", new IProjectMonitor[0]);

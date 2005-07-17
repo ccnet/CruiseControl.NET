@@ -68,5 +68,9 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Presentation
 			get { return connectException; }
 			set { connectException = value; }
 		}
+		public string SummaryStatusString
+		{
+			get { throw new NotImplementedException(); }
+		}
 	}
 }

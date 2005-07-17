@@ -114,5 +114,10 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
 
 			throw new Exception ("The universe has gone crazy.");
 		}
+
+		public string SummaryStatusString
+		{
+			get { return ProjectName + ": " + ProjectState; }
+		}
 	}
 }

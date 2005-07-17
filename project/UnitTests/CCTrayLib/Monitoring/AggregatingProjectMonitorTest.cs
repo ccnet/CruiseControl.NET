@@ -23,7 +23,6 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Monitoring
 			monitor1 = new DynamicMock( typeof (IProjectMonitor) );
 			monitor2 = new DynamicMock( typeof (IProjectMonitor) );
 			monitor3 = new DynamicMock( typeof (IProjectMonitor) );
-			monitor1.Strict = monitor2.Strict = monitor3.Strict = true;
 
 			monitors = new IProjectMonitor[]
 				{
@@ -88,7 +87,6 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Monitoring
 			aggregator.BuildOccurred += new MonitorBuildOccurredEventHandler( Aggregator_BuildOccurred );
 
 			Assert.AreEqual(0, buildOccurredCount);
-			ProjectStatus status = new ProjectStatus();
 			stubProjectMonitor1.OnBuildOccurred(new MonitorBuildOccurredEventArgs(stubProjectMonitor1, BuildTransition.Fixed));
 
 			Assert.AreEqual(1, buildOccurredCount);
@@ -103,6 +101,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Monitoring
 		}
 
 		private int pollCount;
+		private object lastPolledSource;
+		private MonitorPolledEventArgs lastPolledArgs;
 
 		[Test]
 		public void PolledIsFiredWheneverAnyContainedProjectStatusFiresIt()
@@ -121,10 +121,28 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Monitoring
 			Assert.AreEqual(1, pollCount);
 		}
 
-		private void Aggregator_Polled( object sauce, MonitorPolledEventArgs args )
+		private void Aggregator_Polled( object source, MonitorPolledEventArgs args )
 		{
 			pollCount++;
+			lastPolledSource = source;
+			lastPolledArgs = args;
 		}
+
+
+		[Test]
+		public void WhenPolledIsFiredTheSourcePointToTheAggregatorNotTheFiringProject()
+		{
+			StubProjectMonitor stubProjectMonitor1 = new StubProjectMonitor( "project1" );
+
+			aggregator = new AggregatingProjectMonitor( stubProjectMonitor1);
+			aggregator.Polled += new MonitorPolledEventHandler(Aggregator_Polled);
+
+			stubProjectMonitor1.OnPolled(new MonitorPolledEventArgs(stubProjectMonitor1));
+
+			Assert.AreSame(lastPolledSource, aggregator);
+			Assert.AreSame(lastPolledArgs.ProjectMonitor, stubProjectMonitor1);
+		}
+
 
 		[Test]
 		public void ProjectStateReturnsTheWorstStateOfAllMonitors()
@@ -152,6 +170,17 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Monitoring
 			monitor3.SetupResult("ProjectState", state3);
 
 			return aggregator.ProjectState;
+		}
+
+		[Test]
+		public void ProjectSummaryStringCombinesAllStringsWithNewLinesBetween()
+		{
+			monitor1.ExpectAndReturn("SummaryStatusString", "hello from monitor1");
+			monitor2.ExpectAndReturn("SummaryStatusString", "and from monitor2");
+			monitor3.ExpectAndReturn("SummaryStatusString", "goodbye from monitor3");
+			string statusString = aggregator.SummaryStatusString;
+
+			Assert.AreEqual("hello from monitor1\nand from monitor2\ngoodbye from monitor3", statusString);
 		}
 	}
 }

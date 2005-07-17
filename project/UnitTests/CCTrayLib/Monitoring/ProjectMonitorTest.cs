@@ -232,5 +232,18 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Monitoring
 			mockProjectManager.Expect("ForceBuild");
 			monitor.ForceBuild();
 		}
+
+		[Test]
+		public void SummaryStatusStringReturnsASummaryStatusString()
+		{
+			ProjectStatus status = new ProjectStatus();
+			status.BuildStatus = IntegrationStatus.Success;
+			mockProjectManager.ExpectAndReturn("ProjectStatus", status);
+			mockProjectManager.ExpectAndReturn("ProjectName", "projName");
+
+			monitor.Poll();
+
+			Assert.AreEqual("projName: Success", monitor.SummaryStatusString);
+		}
 	}
 }

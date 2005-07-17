@@ -28,6 +28,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 
 			aggregatedMonitor = new AggregatingProjectMonitor(monitors);
 			projectStateIconAdaptor = new ProjectStateIconAdaptor(aggregatedMonitor, new ResourceProjectStateIconProvider());
+			new BuildTransitionSoundPlayer(aggregatedMonitor, new AudioPlayer(), configuration.Audio);
 		}
 
 
@@ -86,6 +87,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 
 		public void StartMonitoring()
 		{
+			StopMonitoring();
 			poller = new Poller(5000, aggregatedMonitor);
 			poller.Start();
 		}
@@ -97,7 +99,11 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 
 		public void StopMonitoring()
 		{
-			poller.Stop();
+			if (poller != null)
+			{
+				poller.Stop();
+				poller = null;
+			}
 		}
 	}
 }

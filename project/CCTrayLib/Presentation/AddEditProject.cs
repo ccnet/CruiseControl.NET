@@ -2,6 +2,8 @@ using System;
 using System.ComponentModel;
 using System.Windows.Forms;
 using ThoughtWorks.CruiseControl.CCTrayLib.Configuration;
+using ThoughtWorks.CruiseControl.CCTrayLib.ServerConnection;
+using ThoughtWorks.CruiseControl.Remote;
 
 namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 {
@@ -189,7 +191,28 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 
 		private void btnFetch_Click(object sender, EventArgs e)
 		{
-			MessageBox.Show(this, "Sorry, not yet implemented");
+			Cursor.Current = Cursors.WaitCursor;
+			try
+			{
+				RemoteCruiseManagerFactory factory = new RemoteCruiseManagerFactory();
+				ICruiseManager manager = factory.GetCruiseManager(txtServer.Text);
+				ProjectStatus[] projectStatuses = manager.GetProjectStatus();
+
+				txtProject.Items.Clear();
+				foreach (ProjectStatus status in projectStatuses)
+				{
+					txtProject.Items.Add(status.Name);
+				}
+				txtProject.DroppedDown = true;
+			}
+			catch (Exception ex)
+			{
+				MessageBox.Show(this, "Unable to connect to server: " + ex.Message, "Error");
+			}
+			finally
+			{
+				Cursor.Current = Cursors.Default;
+			}
 		}
 	}
 }

@@ -43,6 +43,10 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 		{
 			get { return projectMonitor.ConnectException; }
 		}
+		public string SummaryStatusString
+		{
+			get { return projectMonitor.SummaryStatusString; }
+		}
 
 		public void ForceBuild()
 		{
@@ -53,6 +57,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 		{
 			projectMonitor.Poll();
 		}
+
 
 		public event MonitorBuildOccurredEventHandler BuildOccurred;
 		public event MonitorPolledEventHandler Polled;

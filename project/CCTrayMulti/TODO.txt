@@ -14,13 +14,16 @@ DONE - Fix threading -- create a decorator around IProjectMonitor that uses ISyn
 	across to the winforms thread? (though the current winforms thread rule breakage doesn't seem to be causing
 	any odd behaviour)
 DONE - Settings dialog to allow specification of projects, sounds etc
-- Play sounds on build transition 
-- Display more information about projects on tray tooltip 
-- right click menu on toolbar icon
-- close button should minimise not close (hide minimse/maximise?)
-- add to zip file (in parallel with cctray) so people can try it out
-- fix issue with window sometimes not reappearing when clicking on tray icon (threading fix should fix this)
+DONE - Play sounds on build transition 
+DONE - Display more information about projects on tray tooltip 
+DONE - should start up without settings file
+- behaviour when dodgy url entered in settings dialog
+DONE - message when project not found on server
+DONE - right click menu on toolbar icon
+DONE - close button should minimise not close (hide minimse/maximise?)
+DONE - add to zip file (in parallel with cctray) so people can try it out
+DONE - fix issue with window sometimes not reappearing when clicking on tray icon (threading fix should fix this)
+- document on confluence
+- install as part of setup 
 - Read project list from dashboard
 - obtain project status going via the dashboard not direct via remoting?
-- document on confluence
-- install as part of msi

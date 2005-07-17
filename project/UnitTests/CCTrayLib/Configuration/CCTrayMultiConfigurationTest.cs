@@ -91,19 +91,29 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Configuration
 
 			configuration.Persist();
 
-			using (TextReader configFile = File.OpenText( configFileName ))
-			{
-				string content = configFile.ReadToEnd();
+			configuration.Reload();
+			Assert.AreEqual(1, configuration.Projects.Length);
+			Assert.AreEqual("projName", configuration.Projects[0].ProjectName);
 
-				const string expectedContent = @"<?xml version=""1.0"" encoding=""utf-8""?>
-<Configuration xmlns:xsd=""http://www.w3.org/2001/XMLSchema"" xmlns:xsi=""http://www.w3.org/2001/XMLSchema-instance"">
-  <Projects>
-    <Project serverUrl=""url"" projectName=""projName"" />
-  </Projects>
-</Configuration>";
+		}
 
-				Assert.AreEqual(expectedContent, content);
-			}
+		[Test]
+		public void CreatesAnEmptySettingsFileIfTheConfigFileIsNotFound()
+		{
+			mockServerConfigFactory = new DynamicMock(typeof(ICruiseProjectManagerFactory));
+			mockServerConfigFactory.Strict = true;
+			CCTrayMultiConfiguration configuration = new CCTrayMultiConfiguration( 
+				(ICruiseProjectManagerFactory) mockServerConfigFactory.MockInstance,  
+				"config_file_that_isnt_present.xml" );
+
+			Assert.IsNotNull(configuration);
+			Assert.AreEqual(0, configuration.Projects.Length);
+			Assert.IsTrue(configuration.ShouldShowBalloonOnBuildTransition);
+			Assert.IsNull(configuration.Audio.BrokenBuildSound);
+			Assert.IsNull(configuration.Audio.FixedBuildSound);
+			Assert.IsNull(configuration.Audio.StillFailingBuildSound);
+			Assert.IsNull(configuration.Audio.StillSuccessfulBuildSound);
+
 		}
 	}
 

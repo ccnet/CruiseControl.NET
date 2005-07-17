@@ -13,6 +13,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 	public class TrayIcon : NotifyIconEx
 	{
 		IIconProvider iconProvider;
+		IProjectMonitor monitor;
 
 		public void BindToIconProvider( IIconProvider iconProvider )
 		{
@@ -28,7 +29,9 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 
 		public void ListenToBuildOccurredEvents( IProjectMonitor monitor)
 		{
+			this.monitor = monitor;
 			monitor.BuildOccurred += new MonitorBuildOccurredEventHandler(Monitor_BuildOccurred);
+			monitor.Polled  += new MonitorPolledEventHandler(Monitor_Polled);
 		}
 
 		private void Monitor_BuildOccurred( object sender, MonitorBuildOccurredEventArgs e )
@@ -40,6 +43,11 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 
 			ShowBalloon(caption, e.BuildTransition.Message,
 				e.BuildTransition.ErrorLevel.NotifyInfo, 5000);
+		}
+
+		private void Monitor_Polled(object sender, MonitorPolledEventArgs args)
+		{
+			this.Text = monitor.SummaryStatusString;
 		}
 	}
 }

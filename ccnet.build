@@ -104,7 +104,7 @@
 
 	<!-- DEPLOY -->
 
-	<target name="deploy" depends="compile, deploy.server, deploy.cctray, deploy.webapp, deploy.webdashboard, deploy.webservice" />
+	<target name="deploy" depends="compile, deploy.server, deploy.cctray, deploy.cctraymulti, deploy.webapp, deploy.webdashboard, deploy.webservice" />
 	
 	<target name="deploy.server" depends="compile">
 		<mkdir dir="deployed\server"/>
@@ -149,6 +149,19 @@
 			</fileset>
 		</copy>
 	</target>
+
+	<target name="deploy.cctraymulti">
+		<mkdir dir="deployed\cctraymulti" />
+
+		<copy todir="deployed\cctraymulti">
+			<fileset basedir="${build.dir}\cctraymulti">
+				<include name="*" />
+				<exclude name="*.incr" />
+			</fileset>
+		</copy>
+
+	</target>
+
     
 	<target name="deploy.webapp" description="deploys the web application">
 		<mkdir dir="${webapp.dir}" verbose="${verbosity}"/>

@@ -11,5 +11,6 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Configuration
 		void Reload();
 		ICCTrayMultiConfiguration Clone();
 		void Persist();
+		AudioFiles Audio { get; }
 	}
 }
