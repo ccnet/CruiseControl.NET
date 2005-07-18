@@ -47,6 +47,9 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 		private SelectAudioFileController brokenAudio;
 		private SelectAudioFileController fixedAudio;
 		private SelectAudioFileController stillFailingAudio;
+		private System.Windows.Forms.Label label2;
+		private System.Windows.Forms.Label label3;
+		private System.Windows.Forms.NumericUpDown numPollPeriod;
 		private SelectAudioFileController successfulAudio;
 
 		public CCTrayMultiSettingsForm(ICCTrayMultiConfiguration configuration)
@@ -56,6 +59,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 			InitializeComponent();
 
 			chkShowBalloons.DataBindings.Add("Checked", configuration, "ShouldShowBalloonOnBuildTransition");
+			numPollPeriod.Value = configuration.PollPeriodSeconds;
 
 			BindListView();
 
@@ -111,6 +115,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 		/// </summary>
 		private void InitializeComponent()
 		{
+			System.Resources.ResourceManager resources = new System.Resources.ResourceManager(typeof(CCTrayMultiSettingsForm));
 			this.chkShowBalloons = new System.Windows.Forms.CheckBox();
 			this.grpServers = new System.Windows.Forms.GroupBox();
 			this.btnEdit = new System.Windows.Forms.Button();
@@ -142,8 +147,12 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 			this.txtAudioFileBroken = new System.Windows.Forms.TextBox();
 			this.txtAudioFileFailing = new System.Windows.Forms.TextBox();
 			this.dlgOpenFile = new System.Windows.Forms.OpenFileDialog();
+			this.label2 = new System.Windows.Forms.Label();
+			this.label3 = new System.Windows.Forms.Label();
+			this.numPollPeriod = new System.Windows.Forms.NumericUpDown();
 			this.grpServers.SuspendLayout();
 			this.grpAudio.SuspendLayout();
+			((System.ComponentModel.ISupportInitialize)(this.numPollPeriod)).BeginInit();
 			this.SuspendLayout();
 			// 
 			// chkShowBalloons
@@ -168,10 +177,10 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 			this.grpServers.Controls.Add(this.btnMoveUp);
 			this.grpServers.Controls.Add(this.btnRemove);
 			this.grpServers.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.grpServers.Location = new System.Drawing.Point(15, 185);
+			this.grpServers.Location = new System.Drawing.Point(15, 200);
 			this.grpServers.Name = "grpServers";
-			this.grpServers.Size = new System.Drawing.Size(580, 230);
-			this.grpServers.TabIndex = 2;
+			this.grpServers.Size = new System.Drawing.Size(580, 275);
+			this.grpServers.TabIndex = 5;
 			this.grpServers.TabStop = false;
 			this.grpServers.Text = "Build Servers";
 			// 
@@ -197,7 +206,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 			this.lvProjects.HideSelection = false;
 			this.lvProjects.Location = new System.Drawing.Point(10, 55);
 			this.lvProjects.Name = "lvProjects";
-			this.lvProjects.Size = new System.Drawing.Size(475, 165);
+			this.lvProjects.Size = new System.Drawing.Size(475, 210);
 			this.lvProjects.TabIndex = 1;
 			this.lvProjects.View = System.Windows.Forms.View.Details;
 			this.lvProjects.DoubleClick += new System.EventHandler(this.lvProjects_DoubleClick);
@@ -268,9 +277,9 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 			this.btnOK.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
 			this.btnOK.DialogResult = System.Windows.Forms.DialogResult.OK;
 			this.btnOK.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.btnOK.Location = new System.Drawing.Point(224, 433);
+			this.btnOK.Location = new System.Drawing.Point(224, 488);
 			this.btnOK.Name = "btnOK";
-			this.btnOK.TabIndex = 3;
+			this.btnOK.TabIndex = 6;
 			this.btnOK.Text = "OK";
 			this.btnOK.Click += new System.EventHandler(this.btnOK_Click);
 			// 
@@ -279,9 +288,9 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 			this.btnCancel.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
 			this.btnCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
 			this.btnCancel.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.btnCancel.Location = new System.Drawing.Point(314, 433);
+			this.btnCancel.Location = new System.Drawing.Point(314, 488);
 			this.btnCancel.Name = "btnCancel";
-			this.btnCancel.TabIndex = 4;
+			this.btnCancel.TabIndex = 7;
 			this.btnCancel.Text = "Cancel";
 			// 
 			// grpAudio
@@ -305,10 +314,10 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 			this.grpAudio.Controls.Add(this.txtAudioFileBroken);
 			this.grpAudio.Controls.Add(this.txtAudioFileFailing);
 			this.grpAudio.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.grpAudio.Location = new System.Drawing.Point(15, 45);
+			this.grpAudio.Location = new System.Drawing.Point(15, 65);
 			this.grpAudio.Name = "grpAudio";
 			this.grpAudio.Size = new System.Drawing.Size(580, 128);
-			this.grpAudio.TabIndex = 1;
+			this.grpAudio.TabIndex = 4;
 			this.grpAudio.TabStop = false;
 			this.grpAudio.Text = "Audio";
 			// 
@@ -470,21 +479,49 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 			this.dlgOpenFile.Filter = "Wave Files|*.wav|All Files|*.*";
 			this.dlgOpenFile.Title = "Select wave file";
 			// 
+			// label2
+			// 
+			this.label2.Location = new System.Drawing.Point(15, 40);
+			this.label2.Name = "label2";
+			this.label2.Size = new System.Drawing.Size(100, 20);
+			this.label2.TabIndex = 1;
+			this.label2.Text = "Poll servers every";
+			// 
+			// label3
+			// 
+			this.label3.Location = new System.Drawing.Point(175, 40);
+			this.label3.Name = "label3";
+			this.label3.Size = new System.Drawing.Size(100, 20);
+			this.label3.TabIndex = 3;
+			this.label3.Text = "seconds";
+			// 
+			// numPollPeriod
+			// 
+			this.numPollPeriod.Location = new System.Drawing.Point(115, 37);
+			this.numPollPeriod.Name = "numPollPeriod";
+			this.numPollPeriod.Size = new System.Drawing.Size(50, 20);
+			this.numPollPeriod.TabIndex = 2;
+			// 
 			// CCTrayMultiSettingsForm
 			// 
 			this.AcceptButton = this.btnOK;
 			this.AutoScaleBaseSize = new System.Drawing.Size(5, 13);
 			this.CancelButton = this.btnCancel;
-			this.ClientSize = new System.Drawing.Size(612, 471);
+			this.ClientSize = new System.Drawing.Size(612, 526);
+			this.Controls.Add(this.numPollPeriod);
+			this.Controls.Add(this.label3);
+			this.Controls.Add(this.label2);
 			this.Controls.Add(this.grpAudio);
 			this.Controls.Add(this.btnCancel);
 			this.Controls.Add(this.btnOK);
 			this.Controls.Add(this.grpServers);
 			this.Controls.Add(this.chkShowBalloons);
+			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
 			this.Name = "CCTrayMultiSettingsForm";
 			this.Text = "CruiseControl.NET Tray Settings";
 			this.grpServers.ResumeLayout(false);
 			this.grpAudio.ResumeLayout(false);
+			((System.ComponentModel.ISupportInitialize)(this.numPollPeriod)).EndInit();
 			this.ResumeLayout(false);
 
 		}
@@ -582,6 +619,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 
 			configuration.Projects = newProjectList;
 			configuration.ShouldShowBalloonOnBuildTransition = chkShowBalloons.Checked;
+			configuration.PollPeriodSeconds = (int) numPollPeriod.Value;
 
 			configuration.Audio.BrokenBuildSound = brokenAudio.Value;
 			configuration.Audio.FixedBuildSound = fixedAudio.Value;

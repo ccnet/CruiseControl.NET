@@ -88,7 +88,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 		public void StartMonitoring()
 		{
 			StopMonitoring();
-			poller = new Poller(5000, aggregatedMonitor);
+			poller = new Poller(configuration.PollPeriodSeconds * 1000, aggregatedMonitor);
 			poller.Start();
 		}
 

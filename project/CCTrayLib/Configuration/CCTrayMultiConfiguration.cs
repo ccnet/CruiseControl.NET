@@ -1,3 +1,4 @@
+using System;
 using System.IO;
 using System.Xml.Serialization;
 using ThoughtWorks.CruiseControl.CCTrayLib.Monitoring;
@@ -43,6 +44,12 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Configuration
 		{
 			get { return persistentConfiguration.BuildTransitionNotification.ShowBalloon; }
 			set { persistentConfiguration.BuildTransitionNotification.ShowBalloon = value; }
+		}
+
+		public int PollPeriodSeconds
+		{
+			get { return persistentConfiguration.PollPeriodSeconds; }
+			set { persistentConfiguration.PollPeriodSeconds = value; }
 		}
 
 		public void Persist()
