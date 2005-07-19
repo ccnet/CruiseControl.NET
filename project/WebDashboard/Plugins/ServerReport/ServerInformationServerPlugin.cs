@@ -12,7 +12,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.ServerReport
 	/// <summary>
 	/// General information about a CCNet server
 	/// </summary>
-	[ReflectorType("ServerInformationServerPlugin")]
+	[ReflectorType("serverInformationServerPlugin")]
 	public class ServerInformationServerPlugin : ICruiseAction, IPlugin
 	{
 		private readonly IFarmService farmService;
