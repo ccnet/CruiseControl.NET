@@ -13,5 +13,27 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Publishers
 			EmailGroup group = new EmailGroup();
 			group.SetNotification("invalidnotification");			
 		}
+
+		[Test]
+		public void TestSetNotificationAlways()
+		{
+			EmailGroup group = new EmailGroup();
+			group.SetNotification("Always");			
+		}
+
+		[Test]
+		public void TestSetNotificationChange()
+		{
+			EmailGroup group = new EmailGroup();
+			group.SetNotification("Change");			
+		}
+
+		[Test]
+		public void TestSetNotificationFailed()
+		{
+			EmailGroup group = new EmailGroup();
+			group.SetNotification("Failed");			
+		}
+		
 	}
 }

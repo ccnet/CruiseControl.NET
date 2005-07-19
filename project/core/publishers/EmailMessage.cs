@@ -23,16 +23,36 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
 		{
 			get
 			{
+				//TODO clean up logic
 				string[] always = CreateNotifyList(EmailGroup.NotificationType.Always);
+
 				if (BuildStateChanged(result))
 				{
 					string[] change = CreateNotifyList(EmailGroup.NotificationType.Change);
+					
+					if (this.result.Status == IntegrationStatus.Failure )
+					{
+						string[] failed = CreateNotifyList(EmailGroup.NotificationType.Failed);
+						return  StringUtil.JoinUnique(", ", always, change, failed);
+					}
+					else
+					{
 					return StringUtil.JoinUnique(", ", always, change);
 				}
+				}
+				else
+				{
+					if (this.result.Status == IntegrationStatus.Failure )
+					{
+						string[] failed = CreateNotifyList(EmailGroup.NotificationType.Failed);
+						return  StringUtil.JoinUnique(", ", always, Modifiers, failed);
+					}
 				else
 				{
 					return StringUtil.JoinUnique(", ", always, Modifiers);
 				}
+			}
+
 			}
 		}
 

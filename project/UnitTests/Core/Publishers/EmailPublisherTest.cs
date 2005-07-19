@@ -46,6 +46,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Publishers
 			Assert.AreEqual(0, _gateway.SentMessages.Count);
 		}
 
+		
 		[Test]
 		public void ShouldSendMessageIfRecipientIsNotSpecifiedAndBuildFailed()
 		{
@@ -56,6 +57,60 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Publishers
 			_publisher.Run(IntegrationResultMother.CreateFailed());
 			Assert.AreEqual(1, _gateway.SentMessages.Count);
 		}
+
+
+		[Test]
+		public void ShouldSendMessageIfBuildFailed()
+		{
+			_publisher = new EmailPublisher();
+			_publisher.EmailGateway = _gateway;
+			_publisher.EmailUsers.Add("bar", new EmailUser("bar", "foo", "bar@foo.com"));
+			_publisher.EmailGroups.Add("foo", new EmailGroup("foo", EmailGroup.NotificationType.Failed));
+			_publisher.Run(IntegrationResultMother.CreateFailed() );
+			
+			Assert.AreEqual(1, _gateway.SentMessages.Count);
+			Assert.AreEqual(1, _gateway.Recipients.Count);
+		}
+
+		[Test]
+		public void ShouldSendMessageIfBuildFailedAndPreviousFailed()
+		{
+			_publisher = new EmailPublisher();
+			_publisher.EmailGateway = _gateway;
+			
+			_publisher.EmailUsers.Add("dev", new EmailUser("dev", "changing", "dev@foo.com"));
+			_publisher.EmailUsers.Add("admin", new EmailUser("admin", "failing", "bar@foo.com"));
+
+			_publisher.EmailGroups.Add("changing", new EmailGroup("changing", EmailGroup.NotificationType.Change));
+			_publisher.EmailGroups.Add("failing", new EmailGroup("failing", EmailGroup.NotificationType.Failed));
+
+			_publisher.Run(IntegrationResultMother.CreateFailed(IntegrationStatus.Failure) );
+			
+			Assert.AreEqual(1, _gateway.SentMessages.Count);
+			Assert.AreEqual(1, _gateway.Recipients.Count);
+		}
+
+
+		[Test]
+		public void ShouldSendMessageIfBuildFailedAndPreviousOK()
+		{
+			_publisher = new EmailPublisher();
+			_publisher.EmailGateway = _gateway;
+			
+			_publisher.EmailUsers.Add("dev", new EmailUser("dev", "changing", "dev@foo.com"));
+			_publisher.EmailUsers.Add("admin", new EmailUser("admin", "failing", "bar@foo.com"));
+
+			_publisher.EmailGroups.Add("changing", new EmailGroup("changing", EmailGroup.NotificationType.Change));
+			_publisher.EmailGroups.Add("failing", new EmailGroup("failing", EmailGroup.NotificationType.Failed));
+
+			_publisher.Run(IntegrationResultMother.CreateFailed(IntegrationStatus.Success) );
+
+			Assert.AreEqual(1, _gateway.SentMessages.Count);
+			Assert.AreEqual(2, _gateway.Recipients.Count);
+		}
+
+
+
 
 		private IntegrationResult CreateIntegrationResult(IntegrationStatus current, IntegrationStatus last)
 		{

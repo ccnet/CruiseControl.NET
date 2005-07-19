@@ -75,6 +75,16 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 			return Create(false, DateTime.Now);
 		}
 
+
+		public static IntegrationResult CreateFailed(IntegrationStatus previousIntegrationStatus)
+		{
+			IntegrationResult result = CreateFailed();
+			result.LastIntegrationStatus = previousIntegrationStatus;
+
+			return result;
+		}
+
+		
 		public static IntegrationResult CreateFailed(string label)
 		{
 			IntegrationResult result = CreateFailed();
