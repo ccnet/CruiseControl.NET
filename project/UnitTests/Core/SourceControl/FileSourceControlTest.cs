@@ -12,9 +12,9 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 	[TestFixture]
 	public class FileSourceControlTest : CustomAssertion
 	{
-		private string _tempDir;
-		private string _tempSubDir;
-		private FileSourceControl _sc;
+		private string tempDir;
+		private string tempSubDir;
+		private FileSourceControl sc;
 		private DynamicMock fileSystemMock;
 
 		[SetUp]
@@ -22,44 +22,44 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 		{
 			fileSystemMock = new DynamicMock(typeof(IFileSystem));
 
-			_tempDir = TempFileUtil.CreateTempDir("repo");
-			_tempSubDir = TempFileUtil.CreateTempDir("repo\\subrepo");
+			tempDir = TempFileUtil.CreateTempDir("repo");
+			tempSubDir = TempFileUtil.CreateTempDir("repo\\subrepo");
 
-			_sc = new FileSourceControl((IFileSystem) fileSystemMock.MockInstance);
-			_sc.RepositoryRoot = _tempDir;
+			sc = new FileSourceControl((IFileSystem) fileSystemMock.MockInstance);
+			sc.RepositoryRoot = tempDir;
 		}
 
 		[TearDown]
 		public void TearDown() 
 		{
-			TempFileUtil.DeleteTempDir(_tempSubDir);
-			TempFileUtil.DeleteTempDir(_tempDir);
+			TempFileUtil.DeleteTempDir(tempSubDir);
+			TempFileUtil.DeleteTempDir(tempDir);
 		}
 
 		[Test, ExpectedException(typeof(DirectoryNotFoundException))]
 		public void MissingDirectoryThrowsException()
 		{
-			TempFileUtil.DeleteTempDir(_tempSubDir);
-			TempFileUtil.DeleteTempDir(_tempDir);
+			TempFileUtil.DeleteTempDir(tempSubDir);
+			TempFileUtil.DeleteTempDir(tempDir);
 
-			_sc.GetModifications(IntegrationResult(DateTime.MinValue), IntegrationResult(DateTime.MaxValue));
+			sc.GetModifications(IntegrationResult(DateTime.MinValue), IntegrationResult(DateTime.MaxValue));
 		}
 
 		[Test]
 		public void IgnoreMissingDirectoryReturnsZeroMods()
 		{
-			TempFileUtil.DeleteTempDir(_tempSubDir);
-			TempFileUtil.DeleteTempDir(_tempSubDir);
+			TempFileUtil.DeleteTempDir(tempSubDir);
+			TempFileUtil.DeleteTempDir(tempSubDir);
 
-			_sc.IgnoreMissingRoot = true;
+			sc.IgnoreMissingRoot = true;
 			try 
 			{
-				Modification[] mods = _sc.GetModifications(IntegrationResult(DateTime.MinValue), IntegrationResult(DateTime.MaxValue));
+				Modification[] mods = sc.GetModifications(IntegrationResult(DateTime.MinValue), IntegrationResult(DateTime.MaxValue));
 				Assert.AreEqual(0, mods.Length, "Modifications found in a missing directory");
 			} 
 			finally 
 			{
-				_sc.IgnoreMissingRoot = false;
+				sc.IgnoreMissingRoot = false;
 			}
 		}
 
@@ -70,7 +70,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 			string file2 = TempFileUtil.CreateTempFile("repo", "file2.txt", "bar");
 			string file3 = TempFileUtil.CreateTempFile("repo\\subrepo", "file3.txt", "bat");
 
-			Modification[] mods = _sc.GetModifications(IntegrationResult(DateTime.MinValue), IntegrationResult(DateTime.MaxValue));
+			Modification[] mods = sc.GetModifications(IntegrationResult(DateTime.MinValue), IntegrationResult(DateTime.MaxValue));
 
 			Assert.AreEqual(3, mods.Length);
 			Assert.AreEqual("file1.txt", mods[0].FileName);
@@ -84,27 +84,26 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 			Assert.AreEqual(new FileInfo(file2).LastWriteTime, mods[1].ModifiedTime);
 			Assert.AreEqual(new FileInfo(file3).LastWriteTime, mods[2].ModifiedTime);
 
-			mods = _sc.GetModifications(IntegrationResult(DateTime.Now), IntegrationResult(DateTime.MaxValue));
+			mods = sc.GetModifications(IntegrationResult(DateTime.Now.AddHours(1)), IntegrationResult(DateTime.MaxValue));
 			Assert.AreEqual(0, mods.Length);
 		}
 
 		[Test]
-		public void GetModifications_EmptyRepository()
+		public void GetModificationsWhenRepositoryFolderIsEmpty()
 		{
-			Modification[] mods = _sc.GetModifications(IntegrationResult(DateTime.MinValue), IntegrationResult(DateTime.MaxValue));
+			Modification[] mods = sc.GetModifications(IntegrationResult(DateTime.MinValue), IntegrationResult(DateTime.MaxValue));
 			Assert.IsNotNull(mods);
 			Assert.AreEqual(0, mods.Length);
 		}
 
 		[Test]
-		public void GetModifications_OneUnmodifiedFile()
+		public void GetModificationsWhenRepositoryRootContainsOneUnmodifiedFile()
 		{
 			TempFileUtil.CreateTempFile("repo", "file1.txt", "foo");
-			DateTime from = DateTime.Now;
-			Thread.Sleep(100);
-			TempFileUtil.CreateTempFile("repo", "file2.txt", "bar");
+			string file2 = TempFileUtil.CreateTempFile("repo", "file2.txt", "bar");
+			new FileInfo(file2).LastWriteTime = DateTime.Now.AddHours(2);
 
-			Modification[] mods = _sc.GetModifications(IntegrationResult(from), IntegrationResult(DateTime.MaxValue));
+			Modification[] mods = sc.GetModifications(IntegrationResult(DateTime.Now.AddHours(1)), IntegrationResult(DateTime.MaxValue));
 			Assert.AreEqual(1, mods.Length);
 			Assert.AreEqual("file2.txt", mods[0].FileName);
 		}
@@ -113,10 +112,10 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 		public void ShouldCopyRespositoryRootToWorkingDirectoryForGetSource()
 		{
 			IntegrationResult result = new IntegrationResult("foo", "myWorkingDirectory");
-            _sc.AutoGetSource = true;
-			fileSystemMock.Expect("Copy", _tempDir, "myWorkingDirectory");
+			sc.AutoGetSource = true;
+			fileSystemMock.Expect("Copy", tempDir, "myWorkingDirectory");
 
-			_sc.GetSource(result);
+			sc.GetSource(result);
 
 			fileSystemMock.Verify();
 		}
@@ -127,7 +126,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 			IntegrationResult result = new IntegrationResult("foo", "myWorkingDirectory");
 			fileSystemMock.ExpectNoCall("Copy", typeof(string), typeof(string));
 
-			_sc.GetSource(result);
+			sc.GetSource(result);
 
 			fileSystemMock.Verify();	
 		}

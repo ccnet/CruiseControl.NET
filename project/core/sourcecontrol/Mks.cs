@@ -101,11 +101,6 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			set { autoGetSource = value; }
 		}
 
-		public override void Initialize(IProject project)
-		{
-			base.Initialize(project);
-		}
-
 		public override Modification[] GetModifications(IIntegrationResult from, IIntegrationResult to)
 		{
 			ProcessInfo info = createProcess(MODIFICATIONS_COMMAND_TEMPLATE);

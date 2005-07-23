@@ -9,68 +9,53 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 	[ReflectorType("filesystem")]
 	public class FileSourceControl : ISourceControl
 	{
-		private string _repositoryRoot = "";
-		private bool _ignoreMissingRoot;
 		private readonly IFileSystem fileSystem;
 
-		[ReflectorProperty("repositoryRoot")]
-		public string RepositoryRoot
-		{
-			get { return _repositoryRoot; }
-			set { _repositoryRoot = value; }
-		}
-
-		public FileSourceControl() : this (new SystemIoFileSystem()) { }
+		public FileSourceControl() : this(new SystemIoFileSystem())
+		{}
 
 		public FileSourceControl(IFileSystem fileSystem)
 		{
 			this.fileSystem = fileSystem;
 		}
 
+		[ReflectorProperty("repositoryRoot")]
+		public string RepositoryRoot;
+
 		[ReflectorProperty("ignoreMissingRoot", Required=false)]
-		public bool IgnoreMissingRoot
-		{
-			get { return _ignoreMissingRoot; }
-			set { _ignoreMissingRoot = value; }
-		}
+		public bool IgnoreMissingRoot;
 
 		[ReflectorProperty("autoGetSource", Required = false)]
 		public bool AutoGetSource = false;
-		
+
 		public Modification[] GetModifications(IIntegrationResult from, IIntegrationResult to)
 		{
-			ArrayList modifications;
 			DirectoryInfo root = new DirectoryInfo(RepositoryRoot);
-
-			modifications = GetMods(root, from.StartTime, to.StartTime);
-
-			return (Modification[])modifications.ToArray(typeof(Modification));
+			ArrayList modifications = GetMods(root, from.StartTime);
+			return (Modification[]) modifications.ToArray(typeof (Modification));
 		}
 
-		private ArrayList GetMods(DirectoryInfo dir, DateTime from, DateTime to) 
+		private ArrayList GetMods(DirectoryInfo dir, DateTime from)
 		{
 			ArrayList mods = new ArrayList();
-
-			try 
+			try
 			{
-				FileInfo[] files = dir.GetFiles();
-				foreach (FileInfo file in files) 
+				foreach (FileInfo file in dir.GetFiles())
 				{
-					if (IsLocalFileChanged(file, from)) 
+					if (IsLocalFileChanged(file, from))
 					{
 						mods.Add(CreateModification(file));
 					}
 				}
 
-				DirectoryInfo[] subs = dir.GetDirectories();
-				foreach (DirectoryInfo sub in subs) 
+				foreach (DirectoryInfo sub in dir.GetDirectories())
 				{
-					mods.AddRange(GetMods(sub, from, to));
+					mods.AddRange(GetMods(sub, from));
 				}
-			} 
-			catch (DirectoryNotFoundException exc) 
+			}
+			catch (DirectoryNotFoundException exc)
 			{
-				if (!_ignoreMissingRoot) 
+				if (!IgnoreMissingRoot)
 				{
 					throw exc;
 				}
@@ -93,22 +78,19 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			return reposFile.LastWriteTime > date;
 		}
 
-		public void LabelSourceControl(IIntegrationResult result) 
-		{
-		}
+		public void LabelSourceControl(IIntegrationResult result)
+		{}
 
 		public void GetSource(IIntegrationResult result)
 		{
 			if (AutoGetSource)
-				fileSystem.Copy(_repositoryRoot, result.WorkingDirectory);
+				fileSystem.Copy(RepositoryRoot, result.WorkingDirectory);
 		}
 
 		public void Initialize(IProject project)
-		{
-		}
+		{}
 
 		public void Purge(IProject project)
-		{
-		}
+		{}
 	}
 }
