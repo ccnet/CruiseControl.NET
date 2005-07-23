@@ -101,41 +101,40 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 			get { return string.Format("{0} {1}", Executable, BuildArgs); }
 		}
 
-		/// TODO: refactor to use ProcessArgumentBuilder
 		private string CreateArgs(IIntegrationResult result)
 		{
-			StringBuilder buffer = new StringBuilder();
+			ProcessArgumentBuilder buffer = new ProcessArgumentBuilder();
 			AppendNoLogoArg(buffer);
 			AppendBuildFileArg(buffer);
 			AppendLoggerArg(buffer);
-			AppendIfNotBlank(buffer, BuildArgs);
+			buffer.AppendArgument(BuildArgs);
 			AppendIntegrationResultProperties(buffer, result);
 			AppendTargets(buffer);
 			return buffer.ToString();
 		}
 
-		private void AppendNoLogoArg(StringBuilder buffer)
+		private void AppendNoLogoArg(ProcessArgumentBuilder buffer)
 		{
-			if (NoLogo) buffer.Append("-nologo");
+			buffer.AppendIf(NoLogo, "-nologo");
 		}
 
-		private void AppendBuildFileArg(StringBuilder buffer)
+		private void AppendBuildFileArg(ProcessArgumentBuilder buffer)
 		{
-			AppendIfNotBlank(buffer, @"-buildfile:{0}", SurroundInQuotesIfContainsSpace(BuildFile));
+			buffer.AppendArgument(@"-buildfile:{0}", SurroundInQuotesIfContainsSpace(BuildFile));
 		}
 
-		private void AppendLoggerArg(StringBuilder buffer)
+		private void AppendLoggerArg(ProcessArgumentBuilder buffer)
 		{
-			AppendIfNotBlank(buffer, "-logger:{0}", Logger);
+			buffer.AppendArgument("-logger:{0}", Logger);
 		}
 
-		private void AppendIntegrationResultProperties(StringBuilder buffer, IIntegrationResult result)
+		private void AppendIntegrationResultProperties(ProcessArgumentBuilder buffer, IIntegrationResult result)
 		{
 			foreach (string key in result.IntegrationProperties.Keys)
 			{
 				object value = result.IntegrationProperties[key];
 				if (value != null)
-					AppendIfNotBlank(buffer, string.Format("-D:{0}={1}", key, SurroundInQuotesIfContainsSpace(RemoveTrailingSlash(value.ToString()))));
+					buffer.AppendArgument(string.Format("-D:{0}={1}", key, SurroundInQuotesIfContainsSpace(RemoveTrailingSlash(value.ToString()))));
 			}
 		}
 
@@ -144,23 +143,12 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 			return StringUtil.IsBlank(directory) ? string.Empty : directory.TrimEnd(Path.DirectorySeparatorChar);
 		}
 
-		private void AppendTargets(StringBuilder buffer)
+		private void AppendTargets(ProcessArgumentBuilder buffer)
 		{
-			AppendIfNotBlank(buffer, string.Join(" ", Targets));
-		}
-
-		private void AppendIfNotBlank(StringBuilder buffer, string value)
-		{
-			AppendIfNotBlank(buffer, "{0}", value);
-		}
-
-		private void AppendIfNotBlank(StringBuilder buffer, string format, string value)
-		{
-			if (! StringUtil.IsBlank(value))
-			{
-				if (buffer.Length > 0) buffer.Append(" ");
-				buffer.AppendFormat(format, value);
-			}
+			for (int i = 0; i < Targets.Length; i++)
+ 			{
+				buffer.AppendArgument(Targets[i]);
+ 			}
 		}
 
 		private string SurroundInQuotesIfContainsSpace(string value)
