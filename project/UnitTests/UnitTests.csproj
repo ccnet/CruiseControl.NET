@@ -524,6 +524,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Core\Label\IterationLabellerTest.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Core\Label\RemoteProjectLabellerTest.cs"
                     SubType = "Code"
                     BuildAction = "Compile"

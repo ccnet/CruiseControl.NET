@@ -404,6 +404,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "label\IterationLabeller.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "label\RemoteProjectLabeller.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
