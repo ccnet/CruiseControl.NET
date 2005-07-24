@@ -2,8 +2,6 @@ using System;
 using System.Globalization;
 using System.IO;
 using Exortech.NetReflector;
-using ThoughtWorks.CruiseControl.Core;
-using ThoughtWorks.CruiseControl.Core.Sourcecontrol;
 using ThoughtWorks.CruiseControl.Core.Util;
 
 namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Telelogic
@@ -26,7 +24,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Telelogic
 	public class Synergy : ISourceControl, IDisposable
 	{
 		/// <summary>The execution client for the Synergy process.</summary>
-		private SynergyCommand command;
+		private ISynergyCommand command;
 
 		/// <summary>The configured settings for the Synergy server connection.</summary>
 		private SynergyConnectionInfo connection;
@@ -37,14 +35,23 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Telelogic
 		/// <summary>The optional ChangeSynergy URL builder.</summary>
 		private IModificationUrlBuilder urlBuilder;
 
+		private SynergyParser parser;
+
 		/// <summary>
 		///     Default constructor.  Initializes all members to their default values.
 		/// </summary>
-		public Synergy()
+		public Synergy() : this(new SynergyConnectionInfo(), new SynergyProjectInfo())
+		{}
+
+		public Synergy(SynergyConnectionInfo connection, SynergyProjectInfo project) : this(connection, project, new SynergyCommand(connection, project), new SynergyParser())
+		{}
+
+		public Synergy(SynergyConnectionInfo connection, SynergyProjectInfo project, ISynergyCommand command, SynergyParser parser)
 		{
-			connection = new SynergyConnectionInfo();
-			project = new SynergyProjectInfo();
-			command = new SynergyCommand(connection, project);
+			this.connection = connection;
+			this.project = project;
+			this.command = command;
+			this.parser = parser;
 		}
 
 		/// <summary>
@@ -182,11 +189,8 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Telelogic
 		/// <url>element://model:project::CCNet.Synergy.Plugin/design:view:::vt4zadwko_v</url>
 		public Modification[] GetModifications(IIntegrationResult from, IIntegrationResult to)
 		{
-			DateTime fromDate;
-			string comments;
-
 			// default return value
-			Modification[] modifications = new Modification[] {};
+			Modification[] modifications = new Modification[0];
 
 			if (project.TemplateEnabled)
 			{
@@ -199,14 +203,14 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Telelogic
 
 			// default to the minimum date if null was passed, so that all modifications, including
 			// those of prior failed builds will be found
-			fromDate = (null != from) ? from.LastModificationDate : DateTime.MinValue;
+			DateTime fromDate = (null != from) ? from.LastModificationDate : DateTime.MinValue;
 			// this may fail, if a build was forced, and no changes were found
 			ProcessResult result = command.Execute(SynergyCommandBuilder.GetNewTasks(connection, project, fromDate), false);
 
 			if (! result.Failed)
 			{
 				// cache the output of the task/comment query
-				comments = result.StandardOutput;
+				string comments = result.StandardOutput;
 
 				// populate the selection set with the objects associated with the detected tasks
 				result = command.Execute(SynergyCommandBuilder.GetTaskObjects(connection, project), false);
@@ -218,8 +222,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Telelogic
 
 					if (! result.Failed)
 					{
-						SynergyParser historyParser = new SynergyParser();
-						modifications = historyParser.Parse(comments, result.StandardOutput, from.LastModificationDate);
+						modifications = parser.Parse(comments, result.StandardOutput, from.LastModificationDate);
 
 						if (null != urlBuilder)
 						{
@@ -229,7 +232,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Telelogic
 				}
 			}
 
-			return (modifications);
+			return modifications;
 		}
 
 		/// <summary>

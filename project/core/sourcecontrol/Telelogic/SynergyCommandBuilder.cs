@@ -23,7 +23,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Telelogic
 		/// <param name="connection">CM Synergy connection parameters.</param>
 		public static ProcessInfo Heartbeat(SynergyConnectionInfo connection)
 		{
-			return (CreateProcessInfo(connection, "status"));
+			return CreateProcessInfo(connection, "status");
 		}
 
 		/// <summary>
@@ -39,11 +39,8 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Telelogic
 		public static ProcessInfo Start(SynergyConnectionInfo connection, SynergyProjectInfo project)
 		{
 			const string template = @"start -nogui -q -m -h ""{0}"" -d ""{1}"" -p ""{2}"" -n ""{3}"" -pw ""{4}"" -r ""{5}"" -u ""{6}"" -home ""{7}""";
-			string arguments;
-
-			arguments = String.Format(template, connection.Host, connection.Database, project.ProjectSpecification, connection.Username, connection.Password, connection.Role, connection.ClientDatabaseDirectory, connection.HomeDirectory);
-
-			return (CreateProcessInfo(connection, arguments));
+			string arguments = String.Format(template, connection.Host, connection.Database, project.ProjectSpecification, connection.Username, connection.Password, connection.Role, connection.ClientDatabaseDirectory, connection.HomeDirectory);
+			return CreateProcessInfo(connection, arguments);
 		}
 
 		/// <summary>
@@ -57,7 +54,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Telelogic
 		/// <param name="connection">CM Synergy connection parameters.</param>
 		public static ProcessInfo Stop(SynergyConnectionInfo connection)
 		{
-			return (CreateProcessInfo(connection, "stop"));
+			return CreateProcessInfo(connection, "stop");
 		}
 
 		/// <summary>
@@ -72,7 +69,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Telelogic
 		/// <param name="connection">CM Synergy connection parameters.</param>
 		public static ProcessInfo GetDelimiter(SynergyConnectionInfo connection)
 		{
-			return (CreateProcessInfo(connection, "delimiter"));
+			return CreateProcessInfo(connection, "delimiter");
 		}
 
 		/// <summary>
@@ -86,7 +83,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Telelogic
 		/// <param name="connection">CM Synergy connection parameters.</param>
 		public static ProcessInfo GetDcmDelimiter(SynergyConnectionInfo connection)
 		{
-			return (CreateProcessInfo(connection, "dcm /show /delimiter"));
+			return CreateProcessInfo(connection, "dcm /show /delimiter");
 		}
 
 		/// <summary>
@@ -103,7 +100,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Telelogic
 		/// <param name="connection">CM Synergy connection parameters.</param>
 		public static ProcessInfo GetDcmSettings(SynergyConnectionInfo connection)
 		{
-			return (CreateProcessInfo(connection, "dcm /show /settings"));
+			return CreateProcessInfo(connection, "dcm /show /settings");
 		}
 
 		/// <summary>
@@ -120,11 +117,8 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Telelogic
 		public static ProcessInfo GetProjectFullName(SynergyConnectionInfo connection, SynergyProjectInfo project)
 		{
 			const string template = @"properties /format ""%objectname"" /p ""{0}""";
-			string arguments;
-
-			arguments = String.Format(template, project.ProjectSpecification);
-
-			return (CreateProcessInfo(connection, arguments));
+			string arguments = String.Format(template, project.ProjectSpecification);
+			return CreateProcessInfo(connection, arguments);
 		}
 
 		/// <summary>
@@ -141,14 +135,8 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Telelogic
 		public static ProcessInfo GetSubProjects(SynergyConnectionInfo connection, SynergyProjectInfo project)
 		{
 			const string template = @"query hierarchy_project_members('{0}')";
-			ProcessInfo retVal;
-			string arguments;
-
-			arguments = String.Format(template, project.ObjectName);
-
-			retVal = CreateProcessInfo(connection, arguments);
-
-			return (retVal);
+			string arguments = String.Format(template, project.ObjectName);
+			return CreateProcessInfo(connection, arguments);
 		}
 
 		/// <summary>
@@ -165,14 +153,8 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Telelogic
 		public static ProcessInfo SetProjectRelease(SynergyConnectionInfo connection, SynergyProjectInfo project)
 		{
 			const string template = @"attribute /m release /v ""{0}"" @ ";
-			ProcessInfo retVal;
-			string arguments;
-
-			arguments = String.Format(template, project.Release);
-
-			retVal = CreateProcessInfo(connection, arguments);
-
-			return (retVal);
+			string arguments = String.Format(template, project.Release);
+			return CreateProcessInfo(connection, arguments);
 		}
 
 		/// <summary>
@@ -190,11 +172,8 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Telelogic
 		public static ProcessInfo GetLastReconfigureTime(SynergyConnectionInfo connection, SynergyProjectInfo project)
 		{
 			const string template = @"attribute /show reconf_time ""{0}""";
-			string arguments;
-
-			arguments = String.Format(template, project.ObjectName);
-
-			return (CreateProcessInfo(connection, arguments));
+			string arguments = String.Format(template, project.ObjectName);
+			return CreateProcessInfo(connection, arguments);
 		}
 
 		/// <summary>
@@ -211,11 +190,8 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Telelogic
 		public static ProcessInfo UseReconfigureTemplate(SynergyConnectionInfo connection, SynergyProjectInfo project)
 		{
 			const string template = @"reconfigure_properties /reconf_using template /recurse ""{0}""";
-			string arguments;
-
-			arguments = String.Format(template, project.ProjectSpecification);
-
-			return (CreateProcessInfo(connection, arguments));
+			string arguments = String.Format(template, project.ProjectSpecification);
+			return CreateProcessInfo(connection, arguments);
 		}
 
 		/// <summary>
@@ -233,11 +209,8 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Telelogic
 		public static ProcessInfo UpdateReconfigureProperites(SynergyConnectionInfo connection, SynergyProjectInfo project)
 		{
 			const string template = @"reconfigure_properties /refresh /recurse ""{0}""";
-			string arguments;
-
-			arguments = String.Format(template, project.ProjectSpecification);
-
-			return (CreateProcessInfo(connection, arguments));
+			string arguments = String.Format(template, project.ProjectSpecification);
+			return CreateProcessInfo(connection, arguments);
 		}
 
 		/// <summary>
@@ -255,11 +228,8 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Telelogic
 		public static ProcessInfo Reconfigure(SynergyConnectionInfo connection, SynergyProjectInfo project)
 		{
 			const string template = @"reconfigure /recurse /keep_subprojects /project ""{0}""";
-			string arguments;
-
-			arguments = String.Format(template, project.ProjectSpecification);
-
-			return (CreateProcessInfo(connection, arguments));
+			string arguments = String.Format(template, project.ProjectSpecification);
+			return CreateProcessInfo(connection, arguments);
 		}
 
 		/// <summary>
@@ -279,11 +249,8 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Telelogic
 		public static ProcessInfo Reconcile(SynergyConnectionInfo connection, SynergyProjectInfo project, string path)
 		{
 			const string template = @"reconcile /consider_uncontrolled /missing_wa_file /recurse /update_wa ""{0}""";
-			string arguments;
-
-			arguments = String.Format(template, path);
-
-			return (CreateProcessInfo(connection, arguments));
+			string arguments = String.Format(template, path);
+			return CreateProcessInfo(connection, arguments);
 		}
 
 		/// <summary>
@@ -300,11 +267,8 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Telelogic
 		public static ProcessInfo GetWorkArea(SynergyConnectionInfo connection, SynergyProjectInfo project)
 		{
 			const string template = @"info /format ""%wa_path\%name"" /project ""{0}""";
-			string arguments;
-
-			arguments = String.Format(template, project.ProjectSpecification);
-
-			return (CreateProcessInfo(connection, arguments));
+			string arguments = String.Format(template, project.ProjectSpecification);
+			return CreateProcessInfo(connection, arguments);
 		}
 
 		/// <summary>
@@ -341,13 +305,9 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Telelogic
 		/// <returns>A non-null initialized process structure.</returns>
 		public static ProcessInfo GetNewTasks(SynergyConnectionInfo connection, SynergyProjectInfo project, DateTime startDate)
 		{
-			string arguments;
-
 			const string template = @"query /type task /format " + @"""%displayname #### %task_number #### %completion_date #### %resolver #### %task_synopsis #### "" " + @"/nf /u /no_sort """ + /* ignore excluded and automatic tasks (which are used for project creation) */ @"status != 'task_automatic' and status != 'excluded' and " + /* include only tasks completed since the last integration run */ @"completion_date >= time('{2:yyyy/MM/dd HH:mm:ss}') and " + /* exclude any tasks that are already in the shared folder */ @"not ( is_task_in_folder_of(folder('{1}')) or " + /* exclude any tasks that are already in the baseline project */ @"is_task_in_folder_of(is_folder_in_rp_of(is_baseline_project_of('{0}'))) or " + /* exclude any tasks that are already in the baseline project */ @"is_task_in_rp_of(is_baseline_project_of('{0}')) ) and " + /* include all tasks in the reconfigure folders or directly in the reconfigure properties */ @"(is_task_in_folder_of(is_folder_in_rp_of('{0}')) or is_task_in_rp_of('{0}'))""";
-
-			arguments = String.Format(template, project.ObjectName, project.TaskFolder, startDate);
-
-			return (CreateProcessInfo(connection, arguments));
+			string arguments = String.Format(template, project.ObjectName, project.TaskFolder, startDate);
+			return CreateProcessInfo(connection, arguments);
 		}
 
 		/// <summary>
@@ -357,8 +317,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Telelogic
 		public static ProcessInfo GetTaskObjects(SynergyConnectionInfo connection, SynergyProjectInfo project)
 		{
 			const string template = @"task /show objects /no_sort /u @";
-
-			return (CreateProcessInfo(connection, template));
+			return CreateProcessInfo(connection, template);
 		}
 
 		/// <summary>
@@ -375,8 +334,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Telelogic
 		public static ProcessInfo GetObjectPaths(SynergyConnectionInfo connection, SynergyProjectInfo project)
 		{
 			const string template = @"finduse @";
-
-			return (CreateProcessInfo(connection, template));
+			return CreateProcessInfo(connection, template);
 		}
 
 		/// <summary>
@@ -392,14 +350,10 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Telelogic
 		public static ProcessInfo AddTasksToFolder(SynergyConnectionInfo connection, SynergyProjectInfo project, IIntegrationResult result)
 		{
 			const string template = @"folder /modify /add_tasks ""{0}"" /y ""{1}""";
-			string arguments;
-			string tasks;
+			string tasks = GetTaskList(result.Modifications);
+			string arguments = String.Format(template, tasks, project.TaskFolder);
 
-			tasks = GetTaskList(result.Modifications);
-
-			arguments = String.Format(template, tasks, project.TaskFolder);
-
-			return (CreateProcessInfo(connection, arguments));
+			return CreateProcessInfo(connection, arguments);
 		}
 
 		/// <summary>
@@ -413,14 +367,9 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Telelogic
 		public static ProcessInfo AddLabelToTaskComment(SynergyConnectionInfo connection, SynergyProjectInfo project, IIntegrationResult result)
 		{
 			const string template = @"task /modify /description ""Integrated Successfully with CruiseControl.NET project '{0}' build '{1}' on {2}"" ""{3}""";
-			string arguments;
-			string tasks;
-
-			tasks = GetTaskList(result.Modifications);
-
-			arguments = String.Format(template, result.ProjectName, result.Label, result.StartTime, tasks);
-
-			return (CreateProcessInfo(connection, arguments));
+			string tasks = GetTaskList(result.Modifications);
+			string arguments = String.Format(template, result.ProjectName, result.Label, result.StartTime, tasks);
+			return CreateProcessInfo(connection, arguments);
 		}
 
 		/// <summary>
@@ -442,11 +391,8 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Telelogic
 		public static ProcessInfo CreateBaseline(SynergyConnectionInfo connection, SynergyProjectInfo project, IIntegrationResult result)
 		{
 			const string template = @"baseline /create ""{5:yyyyMMdd} CCNET build {1} "" /description ""Integrated Successfully with CruiseControl.NET project '{0}' build '{1}' on {5}"" /release ""{3}"" /purpose ""{4}"" /p ""{2}"" /subprojects";
-			string arguments;
-
-			arguments = String.Format(template, result.ProjectName, result.Label, project.ProjectSpecification, project.Release, project.Purpose, result.StartTime);
-
-			return (CreateProcessInfo(connection, arguments));
+			string arguments = String.Format(template, result.ProjectName, result.Label, project.ProjectSpecification, project.Release, project.Purpose, result.StartTime);
+			return CreateProcessInfo(connection, arguments);
 		}
 
 		/// <summary>
@@ -457,8 +403,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Telelogic
 		/// <returns>A non-null initialized process structure.</returns>
 		private static ProcessInfo CreateProcessInfo(SynergyConnectionInfo connectionInfo, string arguments)
 		{
-			ProcessInfo info = new ProcessInfo(connectionInfo.Executable, arguments, connectionInfo.WorkingDirectory);
-			return (info);
+			return new ProcessInfo(connectionInfo.Executable, arguments, connectionInfo.WorkingDirectory);
 		}
 
 		/// <summary>
@@ -475,28 +420,22 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Telelogic
 		/// </returns>
 		public static string GetTaskList(Modification[] modifications)
 		{
-			StringBuilder retVal;
-			int[] taskList;
-			bool exists = false;
-			int length = 0;
-			int i = 0;
-			int j = 0;
-
 			if (null == modifications || 0 == modifications.Length)
 				throw(new CruiseControlException("Invalid Argument: The Synergy task list cannot be empty"));
 
-			length = modifications.Length;
+			int length = modifications.Length;
 			// initalize a string build with an approximately sized buffer
-			taskList = new int[length];
-			retVal = new StringBuilder(10*length);
+			int[] taskList = new int[length];
+			StringBuilder retVal = new StringBuilder(10*length);
 
 			// build an array of all unique task numbers
+			int j = 0;
 			foreach (Modification task in modifications)
 			{
 				// reset the flag
-				exists = false;
+				bool exists = false;
 
-				for (i = 0; i < length; i++)
+				for (int i = 0; i < length; i++)
 				{
 					if (taskList[i] == task.ChangeNumber)
 					{

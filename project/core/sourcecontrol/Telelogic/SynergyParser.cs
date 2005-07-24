@@ -96,7 +96,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Telelogic
 		///     If changes have occurred since the last integration attempt, an array containing
 		///     each new modification is returned.
 		/// </returns>
-		public Modification[] Parse(string newTasks, string newObjects, DateTime from)
+		public virtual Modification[] Parse(string newTasks, string newObjects, DateTime from)
 		{
 			ArrayList modifications = new ArrayList();
 			Hashtable tasks = null;
@@ -198,7 +198,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Telelogic
 				}
 			}
 
-			return (retVal);
+			return retVal;
 		}
 
 		/// <summary>

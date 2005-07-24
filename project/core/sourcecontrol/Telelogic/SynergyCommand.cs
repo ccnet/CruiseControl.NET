@@ -2,8 +2,6 @@ using System;
 using System.IO;
 using System.Text.RegularExpressions;
 using System.Threading;
-using ThoughtWorks.CruiseControl.Core;
-using ThoughtWorks.CruiseControl.Core.Sourcecontrol;
 using ThoughtWorks.CruiseControl.Core.Util;
 
 namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Telelogic
@@ -22,7 +20,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Telelogic
 	///     </notes>
 	/// </remarks>
 	/// <include file="example.xml" path="/example" />
-	public class SynergyCommand : IDisposable
+	public class SynergyCommand : ISynergyCommand
 	{
 		/// <summary>
 		///     Specifies the remote function call (RFC) address (host:socket) for the CM Synergy engine.
@@ -53,30 +51,30 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Telelogic
 		private static readonly object PadLock;
 
 		/// <summary>The CCNET process launcher.</summary>
-		private ProcessExecutor _Executor;
+		private ProcessExecutor executor;
 
 		/// <summary>The configured settings for the Synergy server connection.</summary>
-		private SynergyConnectionInfo _Connection;
+		private SynergyConnectionInfo connection;
 
 		/// <summary>The configured settings for the Synergy integration project.</summary>
-		private SynergyProjectInfo _Project;
+		private SynergyProjectInfo project;
 
 		/// <summary>Track whether Dispose has been called.</summary>
-		private bool _disposed;
+		private bool disposed;
 
 		/// <summary>Track whether we have an active connection.</summary>
-		private bool _isOpen;
+		private bool isOpen;
 
 		/// <summary>
 		///     Default constructor.  Initializes all members to their default values.
 		/// </summary>
 		public SynergyCommand(SynergyConnectionInfo connectionInfo, SynergyProjectInfo projectInfo)
 		{
-			_disposed = false;
-			_isOpen = false;
-			_Executor = new SynergyProcessExecutor();
-			_Connection = connectionInfo;
-			_Project = projectInfo;
+			disposed = false;
+			isOpen = false;
+			executor = new SynergyProcessExecutor();
+			connection = connectionInfo;
+			project = projectInfo;
 
 			// register for server shutdown, to close all connections
 			AppDomain.CurrentDomain.DomainUnload += new EventHandler(AppDomain_Unload);
@@ -124,12 +122,12 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Telelogic
 
 			// Check to see if Dispose has already been called.
 			// If disposing equals true, close the Synergy session.
-			if (! _disposed)
+			if (! disposed)
 			{
 				// The Synergy session will be cleaned up by the Dispose method,
 				// so we can take this instance off the finalization queue.
 				GC.SuppressFinalize(this);
-				_disposed = true;
+				disposed = true;
 			}
 		}
 
@@ -148,9 +146,9 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Telelogic
 			string temp;
 			string message;
 
-			if (! _isOpen)
+			if (! isOpen)
 			{
-				info = SynergyCommandBuilder.Start(_Connection, _Project);
+				info = SynergyCommandBuilder.Start(connection, project);
 
 				/* Serialize the calls to <c>ccm.exe start</c>, as the CM Synergy
                  * client does not properly support concurrent calls to this command for the
@@ -165,38 +163,38 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Telelogic
 					Log.Debug("Acquired lock to open a session");
 					/* Don't call this.Execute(), as it will cause an infinite loop 
                      * once this.ValidateSession is called. */
-					result = _Executor.Execute(info);
+					result = executor.Execute(info);
 					Log.Debug("Releasing lock to open a session");
 				}
 
 				if (result.TimedOut)
 				{
-					message = String.Format(@"Synergy connection timed out after {0} seconds.", _Connection.Timeout);
+					message = String.Format(@"Synergy connection timed out after {0} seconds.", connection.Timeout);
 					throw(new CruiseControlException(message));
 				}
 
 				// suspend the thread if the database is protected, and the sleep option is enabled
 				if (result.Failed)
 				{
-					if (_Connection.PollingEnabled)
+					if (connection.PollingEnabled)
 					{
-						if (IsDatabaseProtected(result.StandardError, _Connection.Host, _Connection.Database))
+						if (IsDatabaseProtected(result.StandardError, connection.Host, connection.Database))
 						{
 							// sleep the thread for timeout until the database is unprotected
-							Log.Warning(String.Format("Database {0} on Host {1} Is Protected.  Waiting 60 seconds to reconnect.", _Connection.Host, _Connection.Database));
+							Log.Warning(String.Format("Database {0} on Host {1} Is Protected.  Waiting 60 seconds to reconnect.", connection.Host, connection.Database));
 							Thread.Sleep(new TimeSpan(0, 1, 0));
 
 							// save the original timeout
-							originalTimeout = _Connection.Timeout;
+							originalTimeout = connection.Timeout;
 
 							// decrement the time to wait for the backup to complete, so that we don't wait forever
-							_Connection.Timeout -= 60;
+							connection.Timeout -= 60;
 
 							//recursively call the open function
 							Open();
 
 							// revent the timeout prior to recursion
-							_Connection.Timeout = originalTimeout;
+							connection.Timeout = originalTimeout;
 
 							// exit the call stack, breaking out of the recursive loop
 							return;
@@ -208,8 +206,8 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Telelogic
 
 				if (null != temp && temp.Length > 0)
 				{
-					_Connection.SessionId = temp.Trim();
-					Log.Info(String.Concat("CCM_ADDR set to '", _Connection.SessionId, "'"));
+					connection.SessionId = temp.Trim();
+					Log.Info(String.Concat("CCM_ADDR set to '", connection.SessionId, "'"));
 				}
 				else
 				{
@@ -220,14 +218,14 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Telelogic
 				Initialize();
 
 				// update the release setting of the project and all subprojects
-				info = SynergyCommandBuilder.GetSubProjects(_Connection, _Project);
-				info.EnvironmentVariables[SessionToken] = _Connection.SessionId;
-				_Executor.Execute(info);
-				info = SynergyCommandBuilder.SetProjectRelease(_Connection, _Project);
-				info.EnvironmentVariables[SessionToken] = _Connection.SessionId;
-				_Executor.Execute(info);
+				info = SynergyCommandBuilder.GetSubProjects(connection, project);
+				info.EnvironmentVariables[SessionToken] = connection.SessionId;
+				executor.Execute(info);
+				info = SynergyCommandBuilder.SetProjectRelease(connection, project);
+				info.EnvironmentVariables[SessionToken] = connection.SessionId;
+				executor.Execute(info);
 
-				_isOpen = true;
+				isOpen = true;
 			}
 		}
 
@@ -238,21 +236,21 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Telelogic
 		{
 			ProcessInfo info;
 
-			if (_isOpen)
+			if (isOpen)
 			{
-				info = SynergyCommandBuilder.Stop(_Connection);
+				info = SynergyCommandBuilder.Stop(connection);
 				/* This should be a fire-and-forget call.
                  * We don't want an exception thrown if the session cannot be stopped. */
 				/* don't call this.Execute(), as it will cause an infinite loop 
                  * once this.ValidateSession is called. */
-				_Executor.Execute(info);
+				executor.Execute(info);
 
 				// reset the CCM_ADDR value and delimiter fields
-				_Connection.Reset();
+				connection.Reset();
 			}
 
 			// reset the open flag
-			_isOpen = false;
+			isOpen = false;
 		}
 
 		/// <summary>
@@ -276,13 +274,13 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Telelogic
 			try
 			{
 				// set the delimiter for the database
-				info = SynergyCommandBuilder.GetDelimiter(_Connection);
-				info.EnvironmentVariables[SessionToken] = _Connection.SessionId;
+				info = SynergyCommandBuilder.GetDelimiter(connection);
+				info.EnvironmentVariables[SessionToken] = connection.SessionId;
 				result = Execute(info);
 				temp = result.StandardOutput;
 				if (temp.Length == 0)
 					throw(new CruiseControlException("Failed to read the CM Synergy delimiter"));
-				_Connection.Delimiter = temp[0];
+				connection.Delimiter = temp[0];
 			}
 			catch (Exception inner)
 			{
@@ -292,36 +290,36 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Telelogic
 			try
 			{
 				// set the project spec
-				info = SynergyCommandBuilder.GetProjectFullName(_Connection, _Project);
-				info.EnvironmentVariables[SessionToken] = _Connection.SessionId;
+				info = SynergyCommandBuilder.GetProjectFullName(connection, project);
+				info.EnvironmentVariables[SessionToken] = connection.SessionId;
 				result = Execute(info);
 				temp = result.StandardOutput.Trim();
-				_Project.ObjectName = temp;
+				project.ObjectName = temp;
 			}
 			catch (Exception inner)
 			{
-				temp = String.Concat(@"CM Synergy Project """, _Project.ProjectSpecification, @""" not found");
+				temp = String.Concat(@"CM Synergy Project """, project.ProjectSpecification, @""" not found");
 				throw(new CruiseControlException(temp, inner));
 			}
 
 			try
 			{
 				// read the project work area path, to use for the working directory for ccm commands
-				info = SynergyCommandBuilder.GetWorkArea(_Connection, _Project);
-				info.EnvironmentVariables[SessionToken] = _Connection.SessionId;
+				info = SynergyCommandBuilder.GetWorkArea(connection, project);
+				info.EnvironmentVariables[SessionToken] = connection.SessionId;
 				result = Execute(info);
 
-				_Project.WorkAreaPath = Path.GetFullPath(result.StandardOutput.Trim());
-				if (! Directory.Exists(_Project.WorkAreaPath))
+				project.WorkAreaPath = Path.GetFullPath(result.StandardOutput.Trim());
+				if (! Directory.Exists(project.WorkAreaPath))
 				{
 					throw(new CruiseControlException(String.Concat("CM Synergy work area '", result.StandardOutput.Trim(), "' not found.")));
 				}
 
-				Log.Info(String.Concat(_Project.ProjectSpecification, " work area is '", _Project.WorkAreaPath, "'"));
+				Log.Info(String.Concat(project.ProjectSpecification, " work area is '", project.WorkAreaPath, "'"));
 			}
 			catch (Exception inner)
 			{
-				temp = String.Concat(@"CM Synergy Work Area for Project """, _Project.ProjectSpecification, @""" could not be determined.");
+				temp = String.Concat(@"CM Synergy Work Area for Project """, project.ProjectSpecification, @""" could not be determined.");
 				throw(new CruiseControlException(temp, inner));
 			}
 		}
@@ -331,35 +329,31 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Telelogic
 		/// </summary>
 		private void ValidateSession()
 		{
-			bool isValid = false; // fail closed, assume a session is not opened
-			ProcessInfo info;
-			ProcessResult result;
-
 			// check that we have a CCM Address
-			isValid = (null != _Connection.SessionId && _Connection.SessionId.Length > 0);
+			bool isValid = (null != connection.SessionId && connection.SessionId.Length > 0);
 
 			// if the connection is open, execute the heartbeat command
 			// to ensure that the server connection was not lost
-			if (_isOpen && isValid)
+			if (isOpen && isValid)
 			{
-				info = SynergyCommandBuilder.Heartbeat(_Connection);
-				if (null != _Project && null != _Project.WorkAreaPath && _Project.WorkAreaPath.Length > 0)
+				ProcessInfo info = SynergyCommandBuilder.Heartbeat(connection);
+				if (null != project && null != project.WorkAreaPath && project.WorkAreaPath.Length > 0)
 				{
-					info = new ProcessInfo(info.FileName, info.Arguments, _Project.WorkAreaPath);
+					info = new ProcessInfo(info.FileName, info.Arguments, project.WorkAreaPath);
 				}
 
 				// set the session id for ccm.exe to use
-				if (null != _Connection && null != _Connection.SessionId && _Connection.SessionId.Length > 0)
+				if (null != connection && null != connection.SessionId && connection.SessionId.Length > 0)
 				{
-					info.EnvironmentVariables[SessionToken] = _Connection.SessionId;
+					info.EnvironmentVariables[SessionToken] = connection.SessionId;
 				}
 
 				/* don't call this.Execute(), as it will cause an infinite loop 
                  * once this.ValidateSession is called. */
-				result = _Executor.Execute(info);
+				ProcessResult result = executor.Execute(info);
 
 				// reset the valid flag, if ccm status does not report the session token
-				isValid = IsSessionAlive(result.StandardOutput, _Connection.SessionId, _Connection.Database);
+				isValid = IsSessionAlive(result.StandardOutput, connection.SessionId, connection.Database);
 
 				if (! isValid)
 				{
@@ -447,7 +441,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Telelogic
 		/// <returns>The result of the command.</returns>
 		public ProcessResult Execute(ProcessInfo processInfo)
 		{
-			return (Execute(processInfo, true));
+			return Execute(processInfo, true);
 		}
 
 		/// <summary>
@@ -470,9 +464,6 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Telelogic
 		/// <returns>The result of the command.</returns>
 		public ProcessResult Execute(ProcessInfo processInfo, bool failOnError)
 		{
-			ProcessResult result;
-			string message;
-
 			// require an active session
 			ValidateSession();
 
@@ -480,30 +471,29 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Telelogic
              * This should be OK, thanks to the ProcessInfo.RepathExecutableIfItIsInWorkingDirectory
              * implementation, which is called by the non-default ProcessInfo(string,string,string)
              * constructor that we use in SynergyCommandBuilder.CreateProcessInfo */
-			if (null != _Project && null != _Project.WorkAreaPath && _Project.WorkAreaPath.Length > 0)
+			if (null != project && null != project.WorkAreaPath && project.WorkAreaPath.Length > 0)
 			{
-				processInfo = new ProcessInfo(processInfo.FileName, processInfo.Arguments, _Project.WorkAreaPath);
+				processInfo = new ProcessInfo(processInfo.FileName, processInfo.Arguments, project.WorkAreaPath);
 			}
 
 			// set the session id for ccm.exe to use
-			processInfo.EnvironmentVariables[SessionToken] = _Connection.SessionId;
+			processInfo.EnvironmentVariables[SessionToken] = connection.SessionId;
 			// always use invariant (EN-US) date/time formats
 			processInfo.EnvironmentVariables[DateTimeFormat] = DateTimeFormat;
 
 			// convert from seconds to milliseconds
-			processInfo.TimeOut = _Connection.Timeout*1000;
+			processInfo.TimeOut = connection.Timeout*1000;
 
-			result = _Executor.Execute(processInfo);
-
+			ProcessResult result = executor.Execute(processInfo);
 			if (result.TimedOut)
 			{
-				message = String.Format(@"Synergy source control operation has timed out after {0} seconds. Process command: ""{1}"" {2}", _Connection.Timeout, processInfo.FileName, processInfo.Arguments);
+				string message = String.Format(@"Synergy source control operation has timed out after {0} seconds. Process command: ""{1}"" {2}", connection.Timeout, processInfo.FileName, processInfo.Arguments);
 				throw(new CruiseControlException(message));
 			}
 
 			if (result.Failed && failOnError)
 			{
-				message = String.Format("Synergy source control operation failed.\r\n" + "Command: \"{0}\" {1}\r\n" + "Error Code: {2}\r\n" + "Errors:\r\n{3}\r\n{4}", processInfo.FileName, processInfo.Arguments, result.ExitCode, result.StandardError, result.StandardOutput);
+				string message = String.Format("Synergy source control operation failed.\r\n" + "Command: \"{0}\" {1}\r\n" + "Error Code: {2}\r\n" + "Errors:\r\n{3}\r\n{4}", processInfo.FileName, processInfo.Arguments, result.ExitCode, result.StandardError, result.StandardOutput);
 
 				if (result.HasErrorOutput)
 				{

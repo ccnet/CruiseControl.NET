@@ -1,6 +1,9 @@
 using System;
 using Exortech.NetReflector;
+using NMock;
+using NMock.Constraints;
 using NUnit.Framework;
+using ThoughtWorks.CruiseControl.Core;
 using ThoughtWorks.CruiseControl.Core.Sourcecontrol.Telelogic;
 
 namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol.Telelogic
@@ -164,6 +167,22 @@ Database: \\myserver\share\mydatabase
 Current project could not be identified.
 ";
 			AssertSession(status, "COMPUTERNAME:8888:127.0.0.1", @"\\myserver\share\mydatabase", true);
+		}
+		
+		[Test]
+		public void GetModifications()
+		{
+			IMock mockCommand = new DynamicMock(typeof(ISynergyCommand));
+			mockCommand.ExpectAndReturn("Execute", ProcessResultFixture.CreateSuccessfulResult("output"), new IsAnything());
+			mockCommand.ExpectAndReturn("Execute", ProcessResultFixture.CreateSuccessfulResult("output"), new IsAnything(), false);
+			mockCommand.ExpectAndReturn("Execute", ProcessResultFixture.CreateSuccessfulResult("output"), new IsAnything(), false);
+			mockCommand.ExpectAndReturn("Execute", ProcessResultFixture.CreateSuccessfulResult("output"), new IsAnything(), false);
+			IMock mockParser = new DynamicMock(typeof(SynergyParser));
+			mockParser.ExpectAndReturn("Parse", new Modification[0], new IsAnything(), new IsAnything(), new NotNull());
+
+			Synergy synergy = new Synergy(new SynergyConnectionInfo(), new SynergyProjectInfo(), (ISynergyCommand) mockCommand.MockInstance, (SynergyParser) mockParser.MockInstance);
+			Modification[] modifications = synergy.GetModifications(new IntegrationResult(), new IntegrationResult());
+			mockCommand.Verify();
 		}
 
 		private void AssertSession(string status, string sessionId, string database, bool isAlive)

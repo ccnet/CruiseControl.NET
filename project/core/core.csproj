@@ -823,6 +823,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "sourcecontrol\Telelogic\ISynergyCommand.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "sourcecontrol\Telelogic\Synergy.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
