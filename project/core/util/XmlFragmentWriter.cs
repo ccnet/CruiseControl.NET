@@ -22,7 +22,9 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 			}
 			catch (XmlException ex)
 			{
-				Log.Warning(ex);
+				Log.Debug("Supplied output is not valid xml.  Writing as CDATA");
+				Log.Debug("Output: " + xml);
+				Log.Debug("Exception: " + ex.ToString());
 				WriteCData(xml);
 			}
 			reader.Close();

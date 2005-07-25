@@ -17,14 +17,21 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 		public void ShouldUseNoLogoArgument()
 		{
 			string argString = new NUnitArgument(new string[] {"foo.dll"}, "testfile.xml").ToString();
-			AssertContains(" /nologo", argString);
+			AssertContains("/nologo", argString);
 		}
 
 		[Test]
 		public void ShouldSpecifyXmlOutputFileToUse()
 		{
 			string argString = new NUnitArgument(new string[] {"foo.dll"}, "testfile.xml").ToString();
-			AssertContains(@" /xml=testfile.xml", argString);
+			AssertContains(@"/xml=testfile.xml", argString);
+		}
+
+		[Test]
+		public void ShouldWrapOutputFileInQuotesIfItContainsASpace()
+		{
+			string argString = new NUnitArgument(new string[] {"foo.dll"}, @"c:\program files\cruisecontrol.net\testfile.xml").ToString();
+			AssertContains(@"/xml=""c:\program files\cruisecontrol.net\testfile.xml""", argString);
 		}
 
 		[Test]
@@ -33,7 +40,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 			string argString = new NUnitArgument(new string[] {"foo.dll", "bar.dll", "car.dll"}, "testfile.xml").ToString();
 			AssertContains(" foo.dll ", argString);
 			AssertContains(" bar.dll ", argString);
-			AssertContains(" car.dll ", argString);
+			AssertContains(" car.dll", argString);
 		}
 	}
 }

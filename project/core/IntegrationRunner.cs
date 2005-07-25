@@ -31,7 +31,7 @@ namespace ThoughtWorks.CruiseControl.Core
 			result.MarkStartTime();
 			try
 			{
-				result.Modifications = GetSourceModifications(result, lastResult);
+				result.Modifications = GetSourceModifications(lastResult, result);
 				if (result.ShouldRunBuild(target.ModificationDelaySeconds))
 				{
 					target.Activity = ProjectActivity.Building;
@@ -51,26 +51,10 @@ namespace ThoughtWorks.CruiseControl.Core
 			return result;
 		}
 
-		private Modification[] GetSourceModifications(IIntegrationResult result, IIntegrationResult lastResult)
+		private Modification[] GetSourceModifications(IIntegrationResult from, IIntegrationResult to)
 		{
 			target.Activity = ProjectActivity.CheckingModifications;
-
-			Modification[] modifications = quietPeriod.GetModifications(target.SourceControl, lastResult, result);
-			Log.Info(GetModificationsDetectedMessage(modifications));
-			return modifications;
-		}
-
-		private string GetModificationsDetectedMessage(Modification[] modifications)
-		{
-			switch (modifications.Length)
-			{
-				case 0:
-					return "No modifications detected.";
-				case 1:
-					return "1 modification detected.";
-				default:
-					return string.Format("{0} modifications detected.", modifications.Length);
-			}
+			return quietPeriod.GetModifications(target.SourceControl, from, to);
 		}
 
 		// ToDo - MR - this is temporary until we know for certain that 'Project.Initialize' will have been called at some point

@@ -27,11 +27,6 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 			if (builder.Length > 0) builder.Append(" ");
 		}
 
-		public override string ToString()
-		{
-			return builder.ToString();
-		}
-
 		public void AppendIf(bool condition, string value)
 		{
 			if (condition) AppendArgument(value);
@@ -42,45 +37,25 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 			if (condition) AppendArgument(format, argument);
 		}
 
-		public void AddInQuotes(string arg, string value)
-		{
-			if (StringUtil.IsBlank(value)) return;
-
-			AppendSpaceIfNotEmpty();
-			builder.AppendFormat("{0} \"{1}\"", arg, value);
-		}
-
-		public void AddInQuotes(string value)
-		{
-			if (StringUtil.IsBlank(value)) return;
-
-			AppendSpaceIfNotEmpty();
-			builder.AppendFormat("\"{0}\"", value);
-		}
-
 		public void Append(string text)
 		{
 			builder.Append(text);
 		}
 
-		public void Add(string arg, string value)
-		{
-			if (StringUtil.IsBlank(value)) return;
-
-			AppendSpaceIfNotEmpty();
-			builder.AppendFormat("{0} {1}", arg, value);
-		}
-
 //		public string Separator = ":";
 
-//		public void AddArgument(string arg, string value)
-//		{
-//			if (StringUtil.IsBlank(value)) return;
-//			AppendSpaceIfNotEmpty();
-//
-//			string a = string.Format("{0}{1}{2}", arg, Separator, value);
-//			builder.Append(SurroundInQuotesIfContainsSpace(a));
-//		}
+		public void AddArgument(string arg, string value)
+		{
+			AddArgument(arg, " ", value);
+		}
+
+		public void AddArgument(string arg, string separator, string value)
+		{
+			if (StringUtil.IsBlank(value)) return;
+			AppendSpaceIfNotEmpty();
+
+			builder.Append(string.Format("{0}{1}{2}", arg, separator, SurroundInQuotesIfContainsSpace(value)));
+		}
 
 		public void AddArgument(string value)
 		{
@@ -95,6 +70,11 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 			if (! StringUtil.IsBlank(value) && value.IndexOf(' ') >= 0)
 				return string.Format(@"""{0}""", value);
 			return value;
+		}
+
+		public override string ToString()
+		{
+			return builder.ToString();
 		}
 	}
 }

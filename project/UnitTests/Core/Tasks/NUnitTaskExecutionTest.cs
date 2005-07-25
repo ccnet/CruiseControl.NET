@@ -41,7 +41,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 		[Test]
 		public void ExecuteNUnitConsoleAndRetrieveResultsFromFile()
 		{
-			ProcessInfo info = new ProcessInfo(NUnitConsolePath, @" /xml=" + task.OutputFile + "  /nologo  foo.dll ", WORKING_DIRECTORY);
+			ProcessInfo info = new ProcessInfo(NUnitConsolePath, @"/xml=" + task.OutputFile + " /nologo foo.dll", WORKING_DIRECTORY);
 			info.TimeOut = NUnitTask.DefaultTimeout * 1000;
 			executorMock.ExpectAndReturn("Execute", new ProcessResult("", String.Empty, 0, false), info);
 

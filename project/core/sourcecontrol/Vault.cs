@@ -71,8 +71,8 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 		private ProcessInfo GetSourceProcessInfo(IIntegrationResult result)
 		{
 			ProcessArgumentBuilder builder = new ProcessArgumentBuilder();
-			builder.AddInQuotes("get", Folder);
-			builder.AddInQuotes("-destpath", result.WorkingDirectory);
+			builder.AddArgument("get", Folder);
+			builder.AddArgument("-destpath", result.WorkingDirectory);
 			builder.AppendArgument("-merge overwrite -performdeletions removeworkingcopy -setfiletime checkin -makewritable");
 			AddCommonOptionalArguments(builder);
 			return ProcessInfoFor(builder.ToString(), result);
@@ -81,8 +81,8 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 		private ProcessInfo LabelProcessInfo(IIntegrationResult result)
 		{
 			ProcessArgumentBuilder builder = new ProcessArgumentBuilder();
-			builder.AddInQuotes("label", Folder);
-			builder.AddInQuotes(result.Label);
+			builder.AddArgument("label", Folder);
+			builder.AddArgument(result.Label);
 			AddCommonOptionalArguments(builder);
 			return ProcessInfoFor(builder.ToString(), result);
 		}
@@ -105,20 +105,20 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 		private string BuildHistoryProcessArgs(DateTime from, DateTime to)
 		{
 			ProcessArgumentBuilder builder = new ProcessArgumentBuilder();
-			builder.AddInQuotes("history", Folder);
+			builder.AddArgument("history", Folder);
 			builder.AppendArgument(HistoryArgs);
-			builder.Add("-begindate", from.ToString("s"));
-			builder.Add("-enddate", to.ToString("s"));
+			builder.AddArgument("-begindate", from.ToString("s"));
+			builder.AddArgument("-enddate", to.ToString("s"));
 			AddCommonOptionalArguments(builder);
 			return builder.ToString();
 		}
 
 		private void AddCommonOptionalArguments(ProcessArgumentBuilder builder)
 		{
-			builder.AddInQuotes("-host", Host);
-			builder.AddInQuotes("-user", Username);
-			builder.AddInQuotes("-password", Password);
-			builder.AddInQuotes("-repository", Repository);
+			builder.AddArgument("-host", Host);
+			builder.AddArgument("-user", Username);
+			builder.AddArgument("-password", Password);
+			builder.AddArgument("-repository", Repository);
 			builder.AppendIf(Ssl, "-ssl");
 		}
 	}

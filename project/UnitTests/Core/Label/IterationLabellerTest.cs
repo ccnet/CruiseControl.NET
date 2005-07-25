@@ -1,4 +1,5 @@
 using System;
+using Exortech.NetReflector;
 using NUnit.Framework;
 using ThoughtWorks.CruiseControl.Core;
 using ThoughtWorks.CruiseControl.Core.Label;
@@ -16,6 +17,18 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Label
 		{
 			labeller = new IterationLabeller();
 			labeller.ReleaseStartDate = releaseStartDate;
+		}
+
+		[Test]
+		public void PopulateFromConfiguration()
+		{
+			DateTime releaseStartDate = new DateTime(2005, 1, 1);
+			string xml = string.Format(@"<iterationlabeller duration=""1"" releaseStartDate=""{0}"" prefix=""foo"" separator=""-"" />", releaseStartDate);
+			labeller = (IterationLabeller) NetReflector.Read(xml);
+			Assert.AreEqual(1, labeller.Duration);
+			Assert.AreEqual("foo", labeller.LabelPrefix);
+			Assert.AreEqual("-", labeller.Separator);
+			Assert.AreEqual(releaseStartDate, labeller.ReleaseStartDate);
 		}
 
 		[Test]

@@ -6,24 +6,13 @@ using ThoughtWorks.CruiseControl.Remote;
 
 namespace ThoughtWorks.CruiseControl.Core.Publishers
 {
-	// TODO - Make Integration Writer a dependency, and make its method take the filename
     [ReflectorType("xmllogger")]
     public class XmlLogPublisher : ITask
     {
 		public static readonly string DEFAULT_LOG_SUBDIRECTORY = "buildlogs";
 
-        private string _logDir;
-
-        public XmlLogPublisher() : base()
-        {
-        }
-
         [ReflectorProperty("logDir", Required = false)] 
-		public string ConfiguredLogDirectory
-        {
-            get { return _logDir; }
-            set { _logDir = value; }
-        }
+		public string ConfiguredLogDirectory;
 
 		// This is only public because of a nasty hack which I (MR) put in the code. To be made private later...
 		public string LogDirectory(string artifactDirectory)

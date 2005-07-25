@@ -40,7 +40,21 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 		{
 			Modification[] modifications = sc.GetModifications(from, to);
 			if (modifications == null) modifications = new Modification[0];
+			Log.Info(GetModificationsDetectedMessage(modifications));
 			return modifications;
+		}
+
+		private string GetModificationsDetectedMessage(Modification[] modifications)
+		{
+			switch (modifications.Length)
+			{
+				case 0:
+					return "No modifications detected.";
+				case 1:
+					return "1 modification detected.";
+				default:
+					return string.Format("{0} modifications detected.", modifications.Length);
+			}
 		}
 
 		private bool ModificationsAreDetectedInQuietPeriod(Modification[] modifications, DateTime to)

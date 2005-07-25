@@ -1,6 +1,5 @@
 using System;
 using System.IO;
-using System.Threading;
 using NMock;
 using NUnit.Framework;
 using ThoughtWorks.CruiseControl.Core;
@@ -20,7 +19,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 		[SetUp]
 		public void SetUp()
 		{
-			fileSystemMock = new DynamicMock(typeof(IFileSystem));
+			fileSystemMock = new DynamicMock(typeof (IFileSystem));
 
 			tempDir = TempFileUtil.CreateTempDir("repo");
 			tempSubDir = TempFileUtil.CreateTempDir("repo\\subrepo");
@@ -30,13 +29,13 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 		}
 
 		[TearDown]
-		public void TearDown() 
+		public void TearDown()
 		{
 			TempFileUtil.DeleteTempDir(tempSubDir);
 			TempFileUtil.DeleteTempDir(tempDir);
 		}
 
-		[Test, ExpectedException(typeof(DirectoryNotFoundException))]
+		[Test, ExpectedException(typeof (DirectoryNotFoundException))]
 		public void MissingDirectoryThrowsException()
 		{
 			TempFileUtil.DeleteTempDir(tempSubDir);
@@ -52,12 +51,12 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 			TempFileUtil.DeleteTempDir(tempSubDir);
 
 			sc.IgnoreMissingRoot = true;
-			try 
+			try
 			{
 				Modification[] mods = sc.GetModifications(IntegrationResult(DateTime.MinValue), IntegrationResult(DateTime.MaxValue));
 				Assert.AreEqual(0, mods.Length, "Modifications found in a missing directory");
-			} 
-			finally 
+			}
+			finally
 			{
 				sc.IgnoreMissingRoot = false;
 			}
@@ -79,7 +78,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 			Assert.AreEqual(Path.GetDirectoryName(file1), mods[0].FolderName);
 			Assert.AreEqual(Path.GetDirectoryName(file2), mods[1].FolderName);
 			Assert.AreEqual(Path.GetDirectoryName(file3), mods[2].FolderName);
-			
+
 			Assert.AreEqual(new FileInfo(file1).LastWriteTime, mods[0].ModifiedTime);
 			Assert.AreEqual(new FileInfo(file2).LastWriteTime, mods[1].ModifiedTime);
 			Assert.AreEqual(new FileInfo(file3).LastWriteTime, mods[2].ModifiedTime);
@@ -124,11 +123,11 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 		public void ShouldNotCopySourceIfAutoGetSourceNotBeenSetToTrue()
 		{
 			IntegrationResult result = new IntegrationResult("foo", "myWorkingDirectory");
-			fileSystemMock.ExpectNoCall("Copy", typeof(string), typeof(string));
+			fileSystemMock.ExpectNoCall("Copy", typeof (string), typeof (string));
 
 			sc.GetSource(result);
 
-			fileSystemMock.Verify();	
+			fileSystemMock.Verify();
 		}
 
 		private IntegrationResult IntegrationResult(DateTime date)

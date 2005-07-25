@@ -1,4 +1,4 @@
-using System.Text;
+using ThoughtWorks.CruiseControl.Core.Util;
 
 namespace ThoughtWorks.CruiseControl.Core.Tasks
 {
@@ -19,13 +19,13 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 
 		public override string ToString()
 		{
-			StringBuilder argsBuilder = new StringBuilder();
-			argsBuilder.AppendFormat(@" /xml={0} ", outputfile);
-			argsBuilder.Append(" /nologo ");
+			ProcessArgumentBuilder argsBuilder = new ProcessArgumentBuilder();
+			argsBuilder.AddArgument("/xml", "=", outputfile);
+			argsBuilder.AddArgument("/nologo");
 
 			foreach (string assemblyName in assemblies)
 			{
-				argsBuilder.AppendFormat(" {0} ", assemblyName);
+				argsBuilder.AddArgument(assemblyName);
 			}
 			return argsBuilder.ToString();
 		}

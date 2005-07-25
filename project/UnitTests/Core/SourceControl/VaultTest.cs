@@ -30,7 +30,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 		[Test]
 		public void ValuesShouldBeSetFromConfigurationXml()
 		{
-			const string ST_XML_SSL = @"<sourceControl type=""vault"">
+			const string ST_XML_SSL = @"<vault>
 				<executable>d:\program files\sourcegear\vault client\vault.exe</executable>
 				<username>username</username>
 				<password>password</password>
@@ -41,7 +41,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 				<autoGetSource>True</autoGetSource>
 				<applyLabel>True</applyLabel>
 				<historyArgs></historyArgs>
-			</sourceControl>";
+			</vault>";
 
 			vault = CreateVault(ST_XML_SSL);
 			Assert.AreEqual(@"d:\program files\sourcegear\vault client\vault.exe", vault.Executable);
@@ -58,7 +58,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 		[Test]
 		public void ShouldBePopulatedWithDefaultValuesWhenLoadingFromMinimalXml()
 		{
-			Vault vault = CreateVault(@"<sourceControl type=""vault"" />");
+			Vault vault = CreateVault(@"<vault />");
 			Assert.AreEqual(Vault.DefaultExecutable, vault.Executable);
 			Assert.AreEqual("$", vault.Folder);
 			Assert.AreEqual(false, vault.AutoGetSource);
@@ -72,7 +72,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 			DateTime today = DateTime.Now;
 			DateTime yesterday = today.AddDays(-1);
 			result.StartTime = yesterday;
-			string args = string.Format(@"history ""$"" -excludeactions label -rowlimit 0 -begindate {0:s} -enddate {1:s}{2}", 
+			string args = string.Format(@"history $ -excludeactions label -rowlimit 0 -begindate {0:s} -enddate {1:s}{2}", 
 				yesterday, today, CommonOptionalArguments());
 			ExpectToExecuteArguments(args);
 			ExpectToParseHistory();
@@ -88,7 +88,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 			DateTime today = DateTime.Now;
 			DateTime yesterday = today.AddDays(-1);
 			result.StartTime = yesterday;
-			string args = string.Format(@"history ""$"" -excludeactions label -rowlimit 0 -begindate {0:s} -enddate {1:s}", yesterday, today);
+			string args = string.Format(@"history $ -excludeactions label -rowlimit 0 -begindate {0:s} -enddate {1:s}", yesterday, today);
 			ExpectToExecuteArguments(args);
 			ExpectToParseHistory();
 			
@@ -99,7 +99,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 		[Test]
 		public void ShouldBuildGetSourceArgumentsCorrectly()
 		{
-			ExpectToExecuteArguments(@"get ""$"" -destpath ""c:\source\"" -merge overwrite -performdeletions removeworkingcopy -setfiletime checkin -makewritable");
+			ExpectToExecuteArguments(@"get $ -destpath c:\source\ -merge overwrite -performdeletions removeworkingcopy -setfiletime checkin -makewritable");
 			vault.AutoGetSource = true;
 			vault.Folder = "$";
 			vault.GetSource(result);
@@ -109,7 +109,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 		[Test]
 		public void ShouldBuildGetSourceWithOptionalArgumentsIncluded()
 		{
-			ExpectToExecuteArguments(@"get ""$"" -destpath ""c:\source\"" -merge overwrite -performdeletions removeworkingcopy -setfiletime checkin -makewritable" + CommonOptionalArguments());
+			ExpectToExecuteArguments(@"get $ -destpath c:\source\ -merge overwrite -performdeletions removeworkingcopy -setfiletime checkin -makewritable" + CommonOptionalArguments());
 			vault.AutoGetSource = true;
 			vault.Folder = "$";
 			SetHostUsernamePasswordRepositoryAndSsl();
@@ -138,7 +138,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 		[Test]
 		public void ShouldBuildApplyLabelArgumentsCorrectly()
 		{
-			ExpectToExecuteArguments(@"label ""$"" ""foo""");
+			ExpectToExecuteArguments(@"label $ foo");
 			vault.ApplyLabel = true;
 			vault.Folder = "$";
 			vault.LabelSourceControl(result);
@@ -148,7 +148,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 		[Test]
 		public void ShouldBuildApplyLabelArgumentsIncludingCommonOptionalArguments()
 		{
-			ExpectToExecuteArguments(@"label ""$"" ""foo""" + CommonOptionalArguments());
+			ExpectToExecuteArguments(@"label $ foo" + CommonOptionalArguments());
 			vault.ApplyLabel = true;
 			vault.Folder = "$";
 			SetHostUsernamePasswordRepositoryAndSsl();
@@ -158,23 +158,21 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 
 		private string CommonOptionalArguments()
 		{
-			return @" -host ""host"" -user ""username"" -password ""password"" -repository ""repository"" -ssl";
+			return @" -host ""my host"" -user username -password password -repository ""my repository"" -ssl";
 		}
 
 		private void SetHostUsernamePasswordRepositoryAndSsl()
 		{
-			vault.Host = "host";
+			vault.Host = "my host";
 			vault.Username = "username";
 			vault.Password = "password";
-			vault.Repository = "repository";
+			vault.Repository = "my repository";
 			vault.Ssl = true;
 		}
 
 		private Vault CreateVault(string xml)
 		{
-			Vault vault = new Vault();
-			NetReflector.Read(xml, vault);
-			return vault;
+			return (Vault) NetReflector.Read(xml);
 		}
 
 		private void ExpectToParseHistory()

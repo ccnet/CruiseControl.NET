@@ -22,7 +22,7 @@ namespace ThoughtWorks.CruiseControl.Core.Label
 		/// Duration of the interation measured in weeks,
 		/// default is 2.
 		/// </summary>
-		[ReflectorProperty("duration")]
+		[ReflectorProperty("duration", Required=false)]
 		public int Duration = 2;
 
 		[ReflectorProperty("releaseStartDate")]

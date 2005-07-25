@@ -19,7 +19,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Publishers
 		public static readonly string ARTIFACTS_DIR = "Artifacts";
 		public static readonly string ARTIFACTS_DIR_PATH = Path.GetFullPath(TempFileUtil.GetTempPath(ARTIFACTS_DIR));
 
-        private XmlLogPublisher _publisher;
+        private XmlLogPublisher publisher;
 
     	[SetUp]
         public void SetUp()
@@ -28,7 +28,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Publishers
 			TempFileUtil.DeleteTempDir(ARTIFACTS_DIR);
 			TempFileUtil.CreateTempDir(ARTIFACTS_DIR);
 
-			_publisher = new XmlLogPublisher();
+    		publisher = new XmlLogPublisher();
         }
 
         [TearDown]
@@ -42,9 +42,9 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Publishers
         public void PopulateFromConfig()
         {
 			string xml = string.Format(@"<xmllogger><logDir>foo</logDir></xmllogger>", FULL_CONFIGURED_LOG_DIR_PATH);
-			_publisher = NetReflector.Read(xml) as XmlLogPublisher;
-			Assert.IsNotNull(_publisher);
-            Assert.AreEqual("foo", _publisher.ConfiguredLogDirectory);
+        	publisher = NetReflector.Read(xml) as XmlLogPublisher;
+			Assert.IsNotNull(publisher);
+            Assert.AreEqual("foo", publisher.ConfiguredLogDirectory);
         }
 
 		[Test]
@@ -53,10 +53,10 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Publishers
 			// Setup
 			IntegrationResult result = CreateIntegrationResult(IntegrationStatus.Success,  true);
 			result.ArtifactDirectory = ARTIFACTS_DIR_PATH;
-			_publisher.ConfiguredLogDirectory = "relativePath";
+			publisher.ConfiguredLogDirectory = "relativePath";
 
 			// Execute
-			_publisher.Run(result);
+			publisher.Run(result);
 
 			// Verify
 			string expectedOutputPath = Path.Combine(Path.Combine(ARTIFACTS_DIR_PATH, "relativePath"), "log19800101000000Lbuild.1.xml");
@@ -72,7 +72,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Publishers
 			result.ArtifactDirectory = ARTIFACTS_DIR_PATH;
 
 			// Execute
-			_publisher.Run(result);
+			publisher.Run(result);
 
 			// Verify
 			string expectedOutputPath = Path.Combine(Path.Combine(ARTIFACTS_DIR_PATH, XmlLogPublisher.DEFAULT_LOG_SUBDIRECTORY), "log19800101000000Lbuild.1.xml");
@@ -84,11 +84,11 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Publishers
         public void ShouldPublishFailedBuildWithFullConfiguredPath()
         {
 			// Setup
-			_publisher.ConfiguredLogDirectory = FULL_CONFIGURED_LOG_DIR_PATH;
+			publisher.ConfiguredLogDirectory = FULL_CONFIGURED_LOG_DIR_PATH;
 			IntegrationResult result = CreateIntegrationResult(IntegrationStatus.Failure,  true);
 
 			// Execute
-			_publisher.Run(result);
+			publisher.Run(result);
 
 			// Verify
 			string expectedOutputPath = Path.Combine(FULL_CONFIGURED_LOG_DIR_PATH, "log19800101000000.xml");
@@ -100,11 +100,11 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Publishers
         public void ShouldPublishSuccessfulBuildWithFullConfiguredPath()
         {
 			// Setup
-			_publisher.ConfiguredLogDirectory = FULL_CONFIGURED_LOG_DIR_PATH;
+        	publisher.ConfiguredLogDirectory = FULL_CONFIGURED_LOG_DIR_PATH;
 			IntegrationResult result = CreateIntegrationResult(IntegrationStatus.Success,  true);
 
 			// Execute
-			_publisher.Run(result);
+        	publisher.Run(result);
 
 			// Verify
 			string expectedOutputPath = Path.Combine(FULL_CONFIGURED_LOG_DIR_PATH, "log19800101000000Lbuild.1.xml");
@@ -116,7 +116,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Publishers
         public void ShouldNotPublishResultsWithUnknownStatus()
         {
             AssertFalse(FULL_CONFIGURED_LOG_DIR_PATH + " should not exist at start of test.", Directory.Exists(FULL_CONFIGURED_LOG_DIR_PATH));
-            _publisher.Run(new IntegrationResult());
+			publisher.Run(new IntegrationResult());
             AssertFalse(FULL_CONFIGURED_LOG_DIR_PATH + " should still not exist at end of this test.", Directory.Exists(FULL_CONFIGURED_LOG_DIR_PATH));
         }
 

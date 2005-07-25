@@ -77,5 +77,18 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Util
   <bar />
 </foo>", baseWriter.ToString());
 		}
+
+		[Test]
+		public void WriteTextContainingMalformedXmlElements()
+		{
+			string text = @"log4net:ERROR XmlConfigurator: Failed to find configuration section
+'log4net' in the application's .config file. Check your .config file for the
+
+<log4net> and <configSections> elements. The configuration section should
+look like: <section name=""log4net""
+type=""log4net.Config.Log4NetConfigurationSectionHandler,log4net"" />";
+			writer.WriteNode(text);
+			Assert.AreEqual(string.Format("<![CDATA[{0}]]>", text), baseWriter.ToString());			
+		}
 	}
 }

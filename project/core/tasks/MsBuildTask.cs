@@ -53,7 +53,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 		private string Args(IIntegrationResult result)
 		{
 			ProcessArgumentBuilder builder = new ProcessArgumentBuilder();
-			builder.Append("/nologo");
+			builder.AddArgument("/nologo");
 			builder.AppendIf(! StringUtil.IsBlank(Targets), "/t:{0}", Targets);
 
 			builder.AppendArgument("/p:");
@@ -66,7 +66,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 				count++;
 			}
 
-			builder.AppendArgument(BuildArgs);
+			builder.AddArgument(BuildArgs);
 			builder.AddArgument(ProjectFile);
 			return builder.ToString();
 		}
