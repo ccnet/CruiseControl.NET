@@ -1,3 +1,4 @@
+using System.IO;
 using Exortech.NetReflector;
 using ThoughtWorks.CruiseControl.Core.Util;
 
@@ -7,6 +8,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 	public class MsBuildTask : ITask
 	{
 		public const string DefaultExecutable = "MSBuild.exe";
+		public const string DefaultLogger = "ThoughtWorks.CruiseControl.MsBuild.XmlLogger,ThoughtWorks.CruiseControl.MsBuild.dll";
 		public const int DefaultTimeout = 600;
 
 		private readonly ProcessExecutor executor;
@@ -34,6 +36,9 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 		[ReflectorProperty("targets", Required=false)]
 		public string Targets;
 
+		[ReflectorProperty("logger", Required=false)]
+		public string Logger = DefaultLogger;
+
 		[ReflectorProperty("timeout", Required=false)]
 		public int Timeout = DefaultTimeout;
 
@@ -54,7 +59,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 		{
 			ProcessArgumentBuilder builder = new ProcessArgumentBuilder();
 			builder.AddArgument("/nologo");
-			builder.AppendIf(! StringUtil.IsBlank(Targets), "/t:{0}", Targets);
+			if (! StringUtil.IsBlank(Targets)) builder.AddArgument("/t:" + Targets);
 
 			builder.AppendArgument("/p:");
 
@@ -68,6 +73,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 
 			builder.AddArgument(BuildArgs);
 			builder.AddArgument(ProjectFile);
+			builder.AddArgument("/l", ":", string.Format("{0};{1}", Logger, Path.Combine(result.ArtifactDirectory, "msbuild-results.xml")));
 			return builder.ToString();
 		}
 	}

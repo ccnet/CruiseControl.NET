@@ -8,8 +8,6 @@ using ThoughtWorks.CruiseControl.Remote;
 
 namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 {
-	// TODO: verbosity?, loggers, spaces in properties
-
 	[TestFixture]
 	public class MsBuildTaskTest : ProcessExecutorTestFixtureBase
 	{
@@ -22,6 +20,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 			CreateProcessExecutorMock(MsBuildTask.DefaultExecutable);
 			result = IntegrationResult();
 			result.Label = "1.0";
+			result.ArtifactDirectory = @"c:\artifacts";
 			task = new MsBuildTask((ProcessExecutor) mockProcessExecutor.MockInstance);
 		}
 
@@ -34,7 +33,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 		[Test]
 		public void ExecuteSpecifiedProject()
 		{
-			ExpectToExecuteArguments("/nologo /t:target1;target2 " + IntegrationProperties() + " /p:Configuration=Release myproject.sln");
+			string args = "/nologo /t:target1;target2 " + IntegrationProperties() + " /p:Configuration=Release myproject.sln" + DefaultLogger();
+			ExpectToExecuteArguments(args);
 
 			task.ProjectFile = "myproject.sln";
 			task.Targets = "target1;target2";
@@ -47,23 +47,36 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 			Assert.AreEqual(ProcessResultOutput, result.TaskOutput);
 		}
 
+		private string DefaultLogger()
+		{
+			return string.Format(@" /l:{0};c:\artifacts\msbuild-results.xml", MsBuildTask.DefaultLogger);
+		}
+
 		private string IntegrationProperties()
 		{
-			return string.Format(@"/p:ccnet.buildcondition=NoBuild;ccnet.integration.status=Success;ccnet.label=1.0;ccnet.lastintegration.status=Unknown;ccnet.project=test;ccnet.working.directory=" + DefaultWorkingDirectory);
+			return string.Format(@"/p:ccnet.artifact.directory=c:\artifacts;ccnet.buildcondition=NoBuild;ccnet.integration.status=Success;ccnet.label=1.0;ccnet.lastintegration.status=Unknown;ccnet.project=test;ccnet.working.directory=" + DefaultWorkingDirectory);
 		}
 
 		[Test]
 		public void AddQuotesAroundProjectsWithSpacesAndHandleNoSpecifiedTargets()
 		{
-			ExpectToExecuteArguments(@"/nologo " + IntegrationProperties() + @" ""my project.proj""");
+			ExpectToExecuteArguments(@"/nologo " + IntegrationProperties() + @" ""my project.proj""" + DefaultLogger());
 			task.ProjectFile = "my project.proj";
+			task.Run(result);
+		}
+
+		[Test]
+		public void AddQuotesAroundTargetsWithSpaces()
+		{
+			ExpectToExecuteArguments(@"/nologo ""/t:first;next task"" " + IntegrationProperties() + DefaultLogger());
+			task.Targets = "first;next task";
 			task.Run(result);
 		}
 
 		[Test]
 		public void RebaseFromWorkingDirectory()
 		{
-			ProcessInfo info = NewProcessInfo("/nologo " + IntegrationProperties());
+			ProcessInfo info = NewProcessInfo("/nologo " + IntegrationProperties() + DefaultLogger());
 			info.WorkingDirectory = Path.Combine(DefaultWorkingDirectory, "src");
 			ExpectToExecute(info);
 			task.WorkingDirectory = "src";
@@ -88,6 +101,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 	<buildArgs>/p:Configuration=Debug /v:diag</buildArgs>
 	<targets>Build;Test</targets>
 	<timeout>15</timeout>
+	<logger>Kobush.Build.Logging.XmlLogger,Kobush.MSBuild.dll;buildresult.xml</logger>
 </msbuild>";
 			task = (MsBuildTask) NetReflector.Read(xml);
 			Assert.AreEqual(@"C:\WINDOWS\Microsoft.NET\Framework\v2.0.50215\MSBuild.exe", task.Executable);
@@ -96,6 +110,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 			Assert.AreEqual("Build;Test", task.Targets);
 			Assert.AreEqual("/p:Configuration=Debug /v:diag", task.BuildArgs);
 			Assert.AreEqual(15, task.Timeout);
+			Assert.AreEqual("Kobush.Build.Logging.XmlLogger,Kobush.MSBuild.dll;buildresult.xml", task.Logger);
 		}
 
 		[Test]
@@ -104,6 +119,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 			task = (MsBuildTask) NetReflector.Read("<msbuild />");
 			Assert.AreEqual(defaultExecutable, task.Executable);
 			Assert.AreEqual(MsBuildTask.DefaultTimeout, task.Timeout);
+			Assert.AreEqual(MsBuildTask.DefaultLogger, task.Logger);
 		}
 	}
 }
