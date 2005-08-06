@@ -10,13 +10,18 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Label
 	public class IterationLabellerTest : CustomAssertion
 	{
 		private IterationLabeller labeller;
-		private DateTime releaseStartDate = new DateTime(2005, 01, 01, 00, 00, 00, 00);
 
 		[SetUp]
 		public void SetUp()
 		{
 			labeller = new IterationLabeller();
-			labeller.ReleaseStartDate = releaseStartDate;
+			
+			// one week iterations
+			labeller.Duration = 1;
+
+			// For the test data to work, the release start date needs to be 14 iterations ago
+			// from today.  So take today's date and remove 14 weeks and a couple more days.
+			labeller.ReleaseStartDate = DateTime.Today.AddDays(- (14 * 7 + 2) );
 		}
 
 		[Test]
@@ -94,5 +99,30 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Label
 			labeller.LabelPrefix = "1.0";
 			Assert.AreEqual("1.0.14.24", labeller.Generate(IntegrationResultMother.CreateSuccessful("1.0.14.23")));
 		}
-	}
+		
+		[Test]
+		public void WhenTheBuildIsPerformedDuringANewIterationTheIterationNumberIsUpdatedAndTheLabelReset()
+		{
+			// Set the release start date needs to be 15 iterations ago
+			// from today.  So take today's date and remove 15 weeks and a couple more days.
+			labeller.ReleaseStartDate = DateTime.Today.AddDays(- (15 * 7 + 2) );
+
+			Assert.AreEqual("15.1", labeller.Generate(IntegrationResultMother.CreateSuccessful("14.35")));
+						
+		}
+
+		[Test]
+		public void WhenTheLabelIsUpdatedDueToANewIterationThePrefixRemains()
+		{
+			// Set the release start date needs to be 15 iterations ago
+			// from today.  So take today's date and remove 15 weeks and a couple more days.
+			labeller.ReleaseStartDate = DateTime.Today.AddDays(- (15 * 7 + 2) );
+
+			labeller.LabelPrefix = "R3SX";
+
+			Assert.AreEqual("R3SX.15.1", labeller.Generate(IntegrationResultMother.CreateSuccessful("R3SX.14.23")));
+						
+		}
+
+			}
 }
