@@ -208,11 +208,6 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "CCTrayLib\FileIconStoreTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
                     RelPath = "CCTrayLib\IconFileFixture.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -223,17 +218,7 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "CCTrayLib\SettingsTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
                     RelPath = "CCTrayLib\StatusIconTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "CCTrayLib\StatusMonitorTransitionChangeTest.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

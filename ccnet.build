@@ -9,7 +9,6 @@
     <property name="build.number" value="0" />    
 
     <property name="webdashboard.dir" value="deployed\webdashboard"/>
-    <property name="webservice.dir" value="deployed\webservice" />
 
     <property name="build.dir" value="build"/>
     <property name="src.dir" value="project"/>
@@ -89,7 +88,7 @@
 
 	<!-- DEPLOY -->
 
-	<target name="deploy" depends="compile, deploy.server, deploy.cctray, deploy.cctraymulti, deploy.webdashboard, deploy.webservice" />
+	<target name="deploy" depends="compile, deploy.server, deploy.cctray, deploy.webdashboard" />
 	
 	<target name="deploy.server" depends="compile">
 		<mkdir dir="deployed\server"/>
@@ -135,18 +134,6 @@
 		</copy>
 	</target>
 
-	<target name="deploy.cctraymulti">
-		<mkdir dir="deployed\cctraymulti" />
-
-		<copy todir="deployed\cctraymulti">
-			<fileset basedir="${build.dir}\cctraymulti">
-				<include name="*" />
-				<exclude name="*.incr" />
-			</fileset>
-		</copy>
-
-	</target>
-    
 	<target name="deploy.webdashboard" description="deploys the web dashboard application">
 		<mkdir dir="${webdashboard.dir}" verbose="${verbosity}"/>
 		<copy todir="${webdashboard.dir}\bin">
@@ -169,34 +156,6 @@
 				<include name="**\*.xsl"/>
 				<include name="**\*.config"/>
 				<include name="**\*.vm" />
-
-				<exclude name="bin\**\*" />
-				<exclude name="obj\**\*" />
-				<exclude name="test\**\*" />
-			</fileset>
-		</copy>
-	</target>
-
-	<target name="deploy.webservice" description="deploys the web service">
-		<mkdir dir="${webservice.dir}" verbose="${verbosity}"/>
-		<copy todir="${webservice.dir}\bin">
-			<fileset basedir="${build.dir}\webservice">
-				<include name="*.dll" />
-				<exclude name="*.incr" />
-			</fileset>
-		</copy>
-		<copy todir="${webservice.dir}">
-			<fileset basedir="project\WebService">
-				<include name="**\*.aspx"/>
-				<include name="**\*.ascx"/>
-				<include name="**\*.asax"/>
-				<include name="**\*.asmx"/>
-				<include name="**\*.html"/>
-				<include name="**\*.gif"/>
-				<include name="**\*.wav"/>
-				<include name="**\*.css"/>
-				<include name="**\*.xsl"/>
-				<include name="**\*.config"/>
 
 				<exclude name="bin\**\*" />
 				<exclude name="obj\**\*" />

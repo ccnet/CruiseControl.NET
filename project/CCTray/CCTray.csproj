@@ -7,7 +7,7 @@
     >
         <Build>
             <Settings
-                ApplicationIcon = "App.ico"
+                ApplicationIcon = ""
                 AssemblyKeyContainerName = ""
                 AssemblyName = "cctray"
                 AssemblyOriginatorKeyFile = ""
@@ -87,42 +87,32 @@
                 <Reference
                     Name = "System"
                     AssemblyName = "System"
-                    HintPath = "..\..\..\..\..\..\WINDOWS\Microsoft.NET\Framework\v1.1.4322\System.dll"
-                />
-                <Reference
-                    Name = "System.Drawing"
-                    AssemblyName = "System.Drawing"
-                    HintPath = "..\..\..\..\..\..\WINDOWS\Microsoft.NET\Framework\v1.1.4322\System.Drawing.dll"
-                />
-                <Reference
-                    Name = "System.Windows.Forms"
-                    AssemblyName = "System.Windows.Forms"
-                    HintPath = "..\..\..\..\..\..\WINDOWS\Microsoft.NET\Framework\v1.1.4322\System.Windows.Forms.dll"
+                    HintPath = "..\..\..\..\WINDOWS\Microsoft.NET\Framework\v1.1.4322\System.dll"
                 />
                 <Reference
                     Name = "System.Data"
                     AssemblyName = "System.Data"
-                    HintPath = "..\..\..\..\..\WINNT\Microsoft.NET\Framework\v1.1.4322\System.Data.dll"
+                    HintPath = "..\..\..\..\WINDOWS\Microsoft.NET\Framework\v1.1.4322\System.Data.dll"
+                />
+                <Reference
+                    Name = "System.Drawing"
+                    AssemblyName = "System.Drawing"
+                    HintPath = "..\..\..\..\WINDOWS\Microsoft.NET\Framework\v1.1.4322\System.Drawing.dll"
+                />
+                <Reference
+                    Name = "System.Windows.Forms"
+                    AssemblyName = "System.Windows.Forms"
+                    HintPath = "..\..\..\..\WINDOWS\Microsoft.NET\Framework\v1.1.4322\System.Windows.Forms.dll"
+                />
+                <Reference
+                    Name = "System.XML"
+                    AssemblyName = "System.Xml"
+                    HintPath = "..\..\..\..\WINDOWS\Microsoft.NET\Framework\v1.1.4322\System.XML.dll"
                 />
                 <Reference
                     Name = "CCTrayLib"
                     Project = "{C8043AD9-0F30-4366-A263-E2FC0D6A57A9}"
                     Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
-                />
-                <Reference
-                    Name = "Drew.Agents"
-                    AssemblyName = "Drew.Agents"
-                    HintPath = "..\..\lib\CCTray\Drew.Agents.dll"
-                />
-                <Reference
-                    Name = "Remote"
-                    Project = "{E820CF3B-8C5A-4002-BC16-B7818D3D54A8}"
-                    Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
-                />
-                <Reference
-                    Name = "System.XML"
-                    AssemblyName = "System.Xml"
-                    HintPath = "C:\Windows\Microsoft.NET\Framework\v1.1.4322\System.XML.dll"
                 />
             </References>
         </Build>
@@ -138,61 +128,18 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Bootstrap.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "CommonAssemblyInfo.cs"
                     Link = "..\CommonAssemblyInfo.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "SettingsForm.cs"
-                    SubType = "Form"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "SettingsForm.resx"
-                    DependentUpon = "SettingsForm.cs"
-                    BuildAction = "EmbeddedResource"
-                />
-                <File
-                    RelPath = "SystemTrayMonitor.cs"
-                    SubType = "Form"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "SystemTrayMonitor.resx"
-                    DependentUpon = "SystemTrayMonitor.cs"
-                    BuildAction = "EmbeddedResource"
-                />
-                <File
-                    RelPath = "Audio\broken.wav"
-                    BuildAction = "Content"
-                />
-                <File
-                    RelPath = "Audio\doh.wav"
-                    BuildAction = "Content"
-                />
-                <File
-                    RelPath = "Audio\fixed.wav"
-                    BuildAction = "Content"
-                />
-                <File
-                    RelPath = "Audio\still-failing.wav"
-                    BuildAction = "Content"
-                />
-                <File
-                    RelPath = "Audio\still-successful.wav"
-                    BuildAction = "Content"
-                />
-                <File
-                    RelPath = "Audio\woohoo.wav"
-                    BuildAction = "Content"
-                />
-                <File
-                    RelPath = "Images\icon-open-file.gif"
-                    BuildAction = "Content"
-                />
-                <File
-                    RelPath = "Images\icon-play.gif"
+                    RelPath = "TODO.txt"
                     BuildAction = "Content"
                 />
             </Include>

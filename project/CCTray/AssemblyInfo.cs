@@ -4,6 +4,6 @@ using System.Reflection;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 //
-[assembly : AssemblyTitle("CC.NET SysTray Watcher")]
+[assembly : AssemblyTitle("CruiseControl.NET Multi-Project Tray Application")]
 [assembly : AssemblyDescription("")]
 [assembly : AssemblyConfiguration("")]

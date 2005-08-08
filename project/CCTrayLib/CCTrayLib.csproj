@@ -110,11 +110,6 @@
                     Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
                 />
                 <Reference
-                    Name = "Drew.Agents"
-                    AssemblyName = "Drew.Agents"
-                    HintPath = "..\..\lib\CCTray\Drew.Agents.dll"
-                />
-                <Reference
                     Name = "System.Drawing"
                     AssemblyName = "System.Drawing"
                     HintPath = "..\..\..\..\..\..\WINDOWS\Microsoft.NET\Framework\v1.1.4322\System.Drawing.dll"
@@ -185,11 +180,6 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "FileIconStore.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
                     RelPath = "Gray.ico"
                     BuildAction = "EmbeddedResource"
                 />
@@ -242,16 +232,6 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "Settings.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "SettingsManager.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
                     RelPath = "Sound.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -265,16 +245,6 @@
                     RelPath = "StatusIcon.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "StatusMonitor.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "StatusMonitor.resx"
-                    DependentUpon = "StatusMonitor.cs"
-                    BuildAction = "EmbeddedResource"
                 />
                 <File
                     RelPath = "TrayTooltip.cs"
