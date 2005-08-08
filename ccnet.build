@@ -8,7 +8,6 @@
     <property name="nunit.output" value="Plain"/>
     <property name="build.number" value="0" />    
 
-    <property name="webapp.dir" value="deployed\web"/>
     <property name="webdashboard.dir" value="deployed\webdashboard"/>
     <property name="webservice.dir" value="deployed\webservice" />
 
@@ -19,7 +18,6 @@
 
     <property name="remote.dll" value="ThoughtWorks.CruiseControl.Remote.dll"/>
     <property name="core.dll" value="ThoughtWorks.CruiseControl.Core.dll"/>
-    <property name="web.dll" value="ThoughtWorks.CruiseControl.Web.dll"/>
     <property name="webdashboard.dll" value="ThoughtWorks.CruiseControl.WebDashboard.dll"/>
     <property name="unittests.dll" value="ThoughtWorks.CruiseControl.UnitTests.dll"/>
     <property name="console.exe" value="ccnet.exe"/>
@@ -73,7 +71,6 @@
 		<mkdir dir="${build.dir}" verbose="${verbosity}"/>
 	</target>
 
-
 	<!-- COMPILE -->
 	<target name="compile" depends="init" description="compiles everything to be released">
 		<solution configuration="build" solutionfile="project\ccnet.sln" />		
@@ -90,21 +87,9 @@
 		<exec program="${ncover-console.exe}" workingdir="${build.dir}\unittests" commandline="/w . /c &quot;..\..\${nunit-console.exe}&quot; &quot;${unittests.dll} /xml:../${unittests.dll}-results.xml /nologo&quot;"/>
 	</target>
 
-	<!-- Used for manually testing the webapp. Don't include this in an automated build
-		unless we copy files to distribute to a different location -->
-	<target name="copy-test-web-files" depends="deploy.webapp">
-		<copy todir="${webapp.dir}">
-			<fileset basedir="project\WebTest">
-				<include name="**\*" />
-				<exclude name="obj\**\*" />
-				<exclude name="bin\**\*" />
-			</fileset>
-		</copy>
-	</target>
-
 	<!-- DEPLOY -->
 
-	<target name="deploy" depends="compile, deploy.server, deploy.cctray, deploy.cctraymulti, deploy.webapp, deploy.webdashboard, deploy.webservice" />
+	<target name="deploy" depends="compile, deploy.server, deploy.cctray, deploy.cctraymulti, deploy.webdashboard, deploy.webservice" />
 	
 	<target name="deploy.server" depends="compile">
 		<mkdir dir="deployed\server"/>
@@ -161,41 +146,7 @@
 		</copy>
 
 	</target>
-
     
-	<target name="deploy.webapp" description="deploys the web application">
-		<mkdir dir="${webapp.dir}" verbose="${verbosity}"/>
-		<copy todir="${webapp.dir}\bin">
-			<fileset basedir="${build.dir}\web">
-				<include name="*" />
-				<exclude name="PostBuildEvent.bat" />
-				<exclude name="*.xml" />
-				<exclude name="*.incr" />
-			</fileset>
-		</copy>
-
-		<copy todir="${webapp.dir}">
-			<fileset basedir="project\web">
-				<include name="**\*.aspx"/>
-				<include name="**\*.ascx"/>
-				<include name="**\*.asax"/>
-				<include name="**\*.html"/>
-				<include name="**\*.jpg"/>
-				<include name="**\*.gif"/>
-				<include name="**\*.wav"/>
-				<include name="**\*.css"/>
-				<include name="**\*.xsl"/>
-				<include name="**\*.config"/>
-
-				<exclude name="bin\**\*" />
-				<exclude name="obj\**\*" />
-				<exclude name="test\**\*" />
-			</fileset>
-		</copy>
-
-		<mkdir dir="${webapp.dir}\log" />
-	</target>
-	
 	<target name="deploy.webdashboard" description="deploys the web dashboard application">
 		<mkdir dir="${webdashboard.dir}" verbose="${verbosity}"/>
 		<copy todir="${webdashboard.dir}\bin">
@@ -204,7 +155,6 @@
 				<exclude name="*.incr" />
 			</fileset>
 		</copy>
-
 		<copy todir="${webdashboard.dir}">
 			<fileset basedir="project\webdashboard">
 				<include name="**\*.aspx"/>
@@ -235,7 +185,6 @@
 				<exclude name="*.incr" />
 			</fileset>
 		</copy>
-
 		<copy todir="${webservice.dir}">
 			<fileset basedir="project\WebService">
 				<include name="**\*.aspx"/>
@@ -269,17 +218,17 @@
 				<include name="**\*" />
 			</fileset>
 		</copy>
-	
+
 		<mkdir dir="dist"/>
 		<zip zipfile="dist\CruiseControl.NET.zip">
 			<fileset basedir="deployed">
 				<include name="**\*" />
 			</fileset>
 		</zip>
+		
 		<zip zipfile="dist\CruiseControl.NET.source.zip">
 			<fileset>
 				<include name="**\*" />
-
 				<exclude name="build\**" />
 				<exclude name="deployed\**" />
 				<exclude name="dist\**" />
@@ -290,7 +239,7 @@
 				<exclude name="**\_Resharper*\**" />
 			</fileset>
 		</zip>
-		
+
 		<exec program="tools\NSIS\makensis.exe" commandline="ccnet.nsi" />
 	</target>
 	
@@ -317,7 +266,6 @@
 	</target>
 	
 	<target name="createAssemblyInfo" description="Create an assembly info file with the current build number" >
-
 	   <asminfo output="project/CommonAssemblyInfo.cs" language="CSharp">
 		<imports>
 		    <import namespace="System.Reflection" />

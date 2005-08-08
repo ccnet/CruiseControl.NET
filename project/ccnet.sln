@@ -39,10 +39,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "service", "service\service.
 	ProjectSection(ProjectDependencies) = postProject
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "web", "web\web.csproj", "{317E46BA-74DE-411D-A09D-37193EEFD856}"
-	ProjectSection(ProjectDependencies) = postProject
-	EndProjectSection
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ObjectWizard", "ObjectWizard\ObjectWizard.csproj", "{A81B8A36-19CC-49FA-93A4-E7E607F48567}"
 	ProjectSection(ProjectDependencies) = postProject
 	EndProjectSection
@@ -118,12 +114,6 @@ Global
 		{4DE3AEAD-FAFB-4D15-A0D7-3A9AAECF08E1}.Debug.Build.0 = Debug|.NET
 		{4DE3AEAD-FAFB-4D15-A0D7-3A9AAECF08E1}.Release.ActiveCfg = Release|.NET
 		{4DE3AEAD-FAFB-4D15-A0D7-3A9AAECF08E1}.Release.Build.0 = Release|.NET
-		{317E46BA-74DE-411D-A09D-37193EEFD856}.Build.ActiveCfg = Build|.NET
-		{317E46BA-74DE-411D-A09D-37193EEFD856}.Build.Build.0 = Build|.NET
-		{317E46BA-74DE-411D-A09D-37193EEFD856}.Debug.ActiveCfg = Debug|.NET
-		{317E46BA-74DE-411D-A09D-37193EEFD856}.Debug.Build.0 = Debug|.NET
-		{317E46BA-74DE-411D-A09D-37193EEFD856}.Release.ActiveCfg = Release|.NET
-		{317E46BA-74DE-411D-A09D-37193EEFD856}.Release.Build.0 = Release|.NET
 		{A81B8A36-19CC-49FA-93A4-E7E607F48567}.Build.ActiveCfg = Build|.NET
 		{A81B8A36-19CC-49FA-93A4-E7E607F48567}.Build.Build.0 = Build|.NET
 		{A81B8A36-19CC-49FA-93A4-E7E607F48567}.Debug.ActiveCfg = Debug|.NET

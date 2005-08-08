@@ -16,7 +16,7 @@
                 DefaultTargetSchema = "IE50"
                 DelaySign = "false"
                 OutputType = "Library"
-                PreBuildEvent = 'mkdir "$(TargetDir)xsl"&#xd;&#xa;copy "$(ProjectDir)Web\test.config" "$(TargetPath).config"&#xd;&#xa;xcopy /y/q "$(SolutionDir)\xsl\*.*" "$(TargetDir)xsl"&#xd;&#xa;xcopy "$(ProjectDir)\resources\*.*" "$(TargetDir)" /S /Y /Q'
+                PreBuildEvent = 'mkdir "$(TargetDir)xsl"&#xd;&#xa;copy "$(ProjectDir)test.config" "$(TargetPath).config"&#xd;&#xa;xcopy /y/q "$(SolutionDir)\xsl\*.*" "$(TargetDir)xsl"&#xd;&#xa;xcopy "$(ProjectDir)\resources\*.*" "$(TargetDir)" /S /Y /Q'
                 PostBuildEvent = ""
                 RootNamespace = "ThoughtWorks.CruiseControl.UnitTests"
                 RunPostBuildEvent = "OnBuildSuccess"
@@ -145,11 +145,6 @@
                     Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
                 />
                 <Reference
-                    Name = "web"
-                    Project = "{317E46BA-74DE-411D-A09D-37193EEFD856}"
-                    Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
-                />
-                <Reference
                     Name = "NVelocity"
                     AssemblyName = "NVelocity"
                     HintPath = "..\..\lib\NVelocity.dll"
@@ -197,6 +192,10 @@
                     RelPath = "CustomAssertion.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "test.config"
+                    BuildAction = "None"
                 />
                 <File
                     RelPath = "CCTrayLib\AbstractIconStoreTestCase.cs"
@@ -1078,16 +1077,6 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "Core\Util\XslFileTransformerTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Core\Util\XslTransformerTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
                     RelPath = "ObjectWizard\ManagableObjectGiverTest.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -1106,35 +1095,7 @@
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
-                <File
-                    RelPath = "Web\HtmlLogFormatterTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Web\LogFileListTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Web\LogStatisticsTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Web\PageTransformerTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Web\test.config"
-                    BuildAction = "None"
-                />
-                <File
-                    RelPath = "Web\TestData.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
+                <Folder RelPath = "Web\" />
                 <Folder RelPath = "WebDashboard\Cache\" />
                 <File
                     RelPath = "WebDashboard\Dashboard\ActionInstantiatorWithObjectGiverTest.cs"
