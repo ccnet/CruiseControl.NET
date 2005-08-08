@@ -158,7 +158,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 			Assert.IsTrue(project.SourceControl is NullSourceControl);
 			Assert.IsTrue(project.Labeller is DefaultLabeller);
 			Assert.AreEqual(1, project.Triggers.Length);
-			Assert.AreEqual(0, project.Publishers.Length);
+			Assert.AreEqual(1, project.Publishers.Length);
+			Assert.IsTrue(project.Publishers[0] is XmlLogPublisher);
 			Assert.AreEqual(0, project.Tasks.Length);
 			Assert.AreEqual(0, project.ExternalLinks.Length);
 			VerifyAll();

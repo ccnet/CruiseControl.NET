@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.IO;
 using Exortech.NetReflector;
 using ThoughtWorks.CruiseControl.Core.Label;
+using ThoughtWorks.CruiseControl.Core.Publishers;
 using ThoughtWorks.CruiseControl.Core.Sourcecontrol;
 using ThoughtWorks.CruiseControl.Core.State;
 using ThoughtWorks.CruiseControl.Core.Tasks;
@@ -39,7 +40,7 @@ namespace ThoughtWorks.CruiseControl.Core
 		private ITask builder = new NullTask();
 		private ILabeller labeller = new DefaultLabeller();
 		private ITask[] tasks = new ITask[0];
-		private ITask[] publishers = new ITask[0];
+		private ITask[] publishers = new ITask[] { new XmlLogPublisher() };
 		private ProjectActivity currentActivity = ProjectActivity.Sleeping;
 		private int modificationDelaySeconds = 0;
 		private IStateManager state;
