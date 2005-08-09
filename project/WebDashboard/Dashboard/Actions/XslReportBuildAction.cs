@@ -17,13 +17,13 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard.Actions
 			this.buildLogTransformer = buildLogTransformer;
 		}
 
-		public IView Execute(ICruiseRequest cruiseRequest)
+		public IResponse Execute(ICruiseRequest cruiseRequest)
 		{
 			if (xslFileName == null)
 			{
 				throw new ApplicationException("XSL File Name has not been set for XSL Report Action");
 			}
-			return new StringView(buildLogTransformer.Transform(cruiseRequest.BuildSpecifier, xslFileName));
+			return new HtmlFragmentResponse(buildLogTransformer.Transform(cruiseRequest.BuildSpecifier, xslFileName));
 		}
 
 		[ReflectorProperty("xslFileName")]

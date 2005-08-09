@@ -26,7 +26,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 		private DefaultProjectSpecifier projectSpecifier;
 		private DefaultBuildSpecifier buildSpecifier;
 		private Hashtable expectedVelocityContext;
-		private IView view;
+		private IResponse response;
 		private IAbsoluteLink link1;
 		private IAbsoluteLink link2;
 		private IAbsoluteLink link3;
@@ -46,7 +46,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 			projectSpecifier = new DefaultProjectSpecifier(serverSpecifier, "myProject");
 			buildSpecifier = new DefaultBuildSpecifier(projectSpecifier, "myBuild");
 			expectedVelocityContext = new Hashtable();
-			view = new StringView("foo");
+			response = new HtmlFragmentResponse("foo");
 			link1 = new GeneralAbsoluteLink("1");
 			link2 = new GeneralAbsoluteLink("2");
 			link3 = new GeneralAbsoluteLink("3");
@@ -75,10 +75,10 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 			linkFactoryMock.ExpectAndReturn("CreateFarmLink", link1, "Dashboard", FarmReportFarmPlugin.ACTION_NAME);
 			expectedVelocityContext["farmLink"] = link1;
 
-			velocityViewGeneratorMock.ExpectAndReturn("GenerateView", view, "TopMenu.vm", new HashtableConstraint(expectedVelocityContext));
+			velocityViewGeneratorMock.ExpectAndReturn("GenerateView", response, "TopMenu.vm", new HashtableConstraint(expectedVelocityContext));
 
 			// Execute & Verify
-			Assert.AreEqual(view, viewBuilder.Execute());
+			Assert.AreEqual(response, viewBuilder.Execute());
 			VerifyAll();
 		}
 
@@ -100,10 +100,10 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 			expectedVelocityContext["farmLink"] = link1;
 			expectedVelocityContext["serverLink"] = link2;
 
-			velocityViewGeneratorMock.ExpectAndReturn("GenerateView", view, "TopMenu.vm", new HashtableConstraint(expectedVelocityContext));
+			velocityViewGeneratorMock.ExpectAndReturn("GenerateView", response, "TopMenu.vm", new HashtableConstraint(expectedVelocityContext));
 
 			// Execute & Verify
-			Assert.AreEqual(view, viewBuilder.Execute());
+			Assert.AreEqual(response, viewBuilder.Execute());
 			VerifyAll();
 		}
 
@@ -128,10 +128,10 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 			expectedVelocityContext["serverLink"] = link2;
 			expectedVelocityContext["projectLink"] = link3;
 
-			velocityViewGeneratorMock.ExpectAndReturn("GenerateView", view, "TopMenu.vm", new HashtableConstraint(expectedVelocityContext));
+			velocityViewGeneratorMock.ExpectAndReturn("GenerateView", response, "TopMenu.vm", new HashtableConstraint(expectedVelocityContext));
 
 			// Execute & Verify
-			Assert.AreEqual(view, viewBuilder.Execute());
+			Assert.AreEqual(response, viewBuilder.Execute());
 			VerifyAll();
 		}
 
@@ -159,10 +159,10 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 			expectedVelocityContext["projectLink"] = link3;
 			expectedVelocityContext["buildLink"] = link4;
 
-			velocityViewGeneratorMock.ExpectAndReturn("GenerateView", view, "TopMenu.vm", new HashtableConstraint(expectedVelocityContext));
+			velocityViewGeneratorMock.ExpectAndReturn("GenerateView", response, "TopMenu.vm", new HashtableConstraint(expectedVelocityContext));
 
 			// Execute & Verify
-			Assert.AreEqual(view, viewBuilder.Execute());
+			Assert.AreEqual(response, viewBuilder.Execute());
 			VerifyAll();
 		}
 	}

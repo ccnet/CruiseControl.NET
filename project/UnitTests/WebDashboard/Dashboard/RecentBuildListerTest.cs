@@ -88,7 +88,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 			IBuildSpecifier[] buildSpecifiers = new IBuildSpecifier [] {build2Specifier, build1Specifier };
 			IAbsoluteLink[] buildLinks = new IAbsoluteLink[] { new GeneralAbsoluteLink("link1"), new GeneralAbsoluteLink("link2") };
 			string buildRows = "renderred Links";
-			IView allBuildsView = new StringView("foo");
+			IResponse allBuildsResponse = new HtmlFragmentResponse("foo");
 			Hashtable context1 = new Hashtable();
 			Hashtable context2 = new Hashtable();
 
@@ -101,9 +101,9 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 			IAbsoluteLink allBuildsLink = new GeneralAbsoluteLink("foo");
 			linkFactoryMock.ExpectAndReturn("CreateProjectLink", allBuildsLink, projectSpecifier, "", ViewAllBuildsProjectPlugin.ACTION_NAME);
 			context2["allBuildsLink"] = allBuildsLink;
-			velocityViewGeneratorMock.ExpectAndReturn("GenerateView", allBuildsView, @"RecentBuilds.vm", new HashtableConstraint(context2));
+			velocityViewGeneratorMock.ExpectAndReturn("GenerateView", allBuildsResponse, @"RecentBuilds.vm", new HashtableConstraint(context2));
 
-			Assert.AreEqual(allBuildsView, lister.GenerateAllBuildsView(projectSpecifier));
+			Assert.AreEqual(allBuildsResponse, lister.GenerateAllBuildsView(projectSpecifier));
 
 			VerifyAll();
 		}

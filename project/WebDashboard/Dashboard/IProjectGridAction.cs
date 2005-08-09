@@ -6,7 +6,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 {
 	public interface IProjectGridAction
 	{
-		IView Execute(string actionName, IRequest request);
-		IView Execute(string actionName, IServerSpecifier serverSpecifer, IRequest request);
+		IResponse Execute(string actionName, IRequest request);
+		IResponse Execute(string actionName, IServerSpecifier serverSpecifer, IRequest request);
 	}
 }

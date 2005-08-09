@@ -3,9 +3,9 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.MVC.Cruise
 {
 	public class DefaultCruiseAction : IAction
 	{
-		public IView Execute(IRequest request)
+		public IResponse Execute(IRequest request)
 		{
-			return new StringView("To Do - Default Cruise Action");
+			return new HtmlFragmentResponse("To Do - Default Cruise Action");
 		}
 	}
 }

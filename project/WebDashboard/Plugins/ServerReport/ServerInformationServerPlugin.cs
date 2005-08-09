@@ -24,7 +24,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.ServerReport
 			this.viewGenerator = viewGenerator;
 		}
 
-		public IView Execute(ICruiseRequest request)
+		public IResponse Execute(ICruiseRequest request)
 		{
 			Hashtable velocityContext = new Hashtable();
 			

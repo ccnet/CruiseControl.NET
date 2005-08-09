@@ -6,6 +6,6 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.MVC.Cruise
 	// See CruiseActionProxyAction
 	public interface ICruiseAction
 	{
-		IView Execute(ICruiseRequest cruiseRequest);
+		IResponse Execute(ICruiseRequest cruiseRequest);
 	}
 }

@@ -40,34 +40,34 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.MVC.Cruise
 		[Test]
 		public void ShouldProxyIfServerPresent()
 		{
-			IView view = new StringView("foo");
+			IResponse response = new HtmlFragmentResponse("foo");
 			// Setup
 			cruiseRequestMock.ExpectAndReturn("ServerName", "myServer");
 			errorViewBuilderMock.ExpectNoCall("BuildView", typeof(string));
-			proxiedActionMock.ExpectAndReturn("Execute", view, cruiseRequest);
+			proxiedActionMock.ExpectAndReturn("Execute", response, cruiseRequest);
 
 			// Execute
-			IView returnedView = checkingAction.Execute(cruiseRequest);
+			IResponse returnedResponse = checkingAction.Execute(cruiseRequest);
 
 			// Verify
-			Assert.AreEqual(view, returnedView);
+			Assert.AreEqual(response, returnedResponse);
 			VerifyAll();
 		}
 
 		[Test]
 		public void ShouldNotProxyAndShowErrorMessageIfServerMissing()
 		{
-			IView view = new StringView("foo");
+			IResponse response = new HtmlFragmentResponse("foo");
 			// Setup
 			cruiseRequestMock.ExpectAndReturn("ServerName", "");
-			errorViewBuilderMock.ExpectAndReturn("BuildView", view, new IsTypeOf(typeof(string)));
+			errorViewBuilderMock.ExpectAndReturn("BuildView", response, new IsTypeOf(typeof(string)));
 			proxiedActionMock.ExpectNoCall("Execute", typeof(ICruiseRequest));
 
 			// Execute
-			IView returnedView = checkingAction.Execute(cruiseRequest);
+			IResponse returnedResponse = checkingAction.Execute(cruiseRequest);
 
 			// Verify
-			Assert.AreEqual(view, returnedView);
+			Assert.AreEqual(response, returnedResponse);
 			VerifyAll();
 		}
 	}

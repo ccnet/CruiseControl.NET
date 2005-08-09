@@ -16,9 +16,9 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.BuildReport
 			this.buildRetriever = buildRetriever;
 		}
 
-		public IView Execute(ICruiseRequest cruiseRequest)
+		public IResponse Execute(ICruiseRequest cruiseRequest)
 		{
-			return new StringView(buildRetriever.GetBuild(cruiseRequest.BuildSpecifier).Log);
+			return new HtmlFragmentResponse(buildRetriever.GetBuild(cruiseRequest.BuildSpecifier).Log);
 		}
 	}
 }

@@ -57,19 +57,19 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Plugins.ProjectRepor
 			expectedContext["externalLinks"] = links;
 			expectedContext["noLogsAvailable"] = false;
 			expectedContext["mostRecentBuildUrl"] = "buildUrl";
-			IView view = new StringView("myView");
+			IResponse response = new HtmlFragmentResponse("myView");
 
 			cruiseRequestMock.ExpectAndReturn("ProjectSpecifier", projectSpecifier);
 			farmServiceMock.ExpectAndReturn("GetMostRecentBuildSpecifiers", new IBuildSpecifier[] { buildSpecifier }, projectSpecifier, 1);
 			farmServiceMock.ExpectAndReturn("GetExternalLinks", links, projectSpecifier);
 			linkFactoryMock.ExpectAndReturn("CreateBuildLink", new GeneralAbsoluteLink("foo", "buildUrl"), buildSpecifier, BuildReportBuildPlugin.ACTION_NAME);
-			viewGeneratorMock.ExpectAndReturn("GenerateView", view, @"ProjectReport.vm", new HashtableConstraint(expectedContext));
+			viewGeneratorMock.ExpectAndReturn("GenerateView", response, @"ProjectReport.vm", new HashtableConstraint(expectedContext));
 
 			// Execute
-			IView returnedView = plugin.Execute(cruiseRequest);
+			IResponse returnedResponse = plugin.Execute(cruiseRequest);
 
 			// Verify
-			Assert.AreEqual(view, returnedView);
+			Assert.AreEqual(response, returnedResponse);
 			VerifyAll();
 		}
 
@@ -82,19 +82,19 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Plugins.ProjectRepor
 			expectedContext["projectName"] = "myProject";
 			expectedContext["externalLinks"] = links;
 			expectedContext["noLogsAvailable"] = true;
-			IView view = new StringView("myView");
+			IResponse response = new HtmlFragmentResponse("myView");
 
 			IProjectSpecifier projectSpecifier = new DefaultProjectSpecifier(new DefaultServerSpecifier("myServer"), "myProject");
 			cruiseRequestMock.ExpectAndReturn("ProjectSpecifier", projectSpecifier);
 			farmServiceMock.ExpectAndReturn("GetMostRecentBuildSpecifiers", new IBuildSpecifier[0], projectSpecifier, 1);
 			farmServiceMock.ExpectAndReturn("GetExternalLinks", links, projectSpecifier);
-			viewGeneratorMock.ExpectAndReturn("GenerateView", view, @"ProjectReport.vm", new HashtableConstraint(expectedContext));
+			viewGeneratorMock.ExpectAndReturn("GenerateView", response, @"ProjectReport.vm", new HashtableConstraint(expectedContext));
 
 			// Execute
-			IView returnedView = plugin.Execute(cruiseRequest);
+			IResponse returnedResponse = plugin.Execute(cruiseRequest);
 
 			// Verify
-			Assert.AreEqual(view, returnedView);
+			Assert.AreEqual(response, returnedResponse);
 			VerifyAll();
 		}
 	}

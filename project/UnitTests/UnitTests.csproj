@@ -1042,6 +1042,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Core\Util\TestData.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Core\Util\WildCardPathTest.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -1058,6 +1063,11 @@
                 />
                 <File
                     RelPath = "Core\Util\XmlUtilTest.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Core\Util\XslTransformerTest.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

@@ -26,7 +26,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 			this.linkFactory = linkFactory;
 		}
 
-		public IView Execute()
+		public IResponse Execute()
 		{
 			Hashtable velocityContext = new Hashtable();
 			string velocityTemplateName = "";

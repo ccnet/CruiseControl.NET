@@ -15,8 +15,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.MVC.Cruise
 		private DynamicMock actionMock;
 		private DynamicMock velocityViewGeneratorMock;
 		private ExceptionCatchingActionProxy exceptionCatchingAction;
-		private IView view;
-		private IView errorView;
+		private IResponse response;
+		private IResponse errorResponse;
 		private IRequest request;
 
 		[SetUp]
@@ -25,8 +25,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.MVC.Cruise
 			actionMock = new DynamicMock(typeof(IAction));
 			velocityViewGeneratorMock = new DynamicMock(typeof(IVelocityViewGenerator)) ;
 			exceptionCatchingAction = new ExceptionCatchingActionProxy((IAction) actionMock.MockInstance, (IVelocityViewGenerator) velocityViewGeneratorMock.MockInstance);
-			view = new StringView("my view");
-			errorView = new StringView("error view");
+			response = new HtmlFragmentResponse("my view");
+			errorResponse = new HtmlFragmentResponse("error view");
 			request = new NameValueCollectionRequest(null);
 		}
 
@@ -40,10 +40,10 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.MVC.Cruise
 		public void ShouldReturnProxiedViewIfProxiedActionDoesntThrowException()
 		{
 			// Setup
-			actionMock.ExpectAndReturn("Execute", view, request);
+			actionMock.ExpectAndReturn("Execute", response, request);
 
 			// Execute & Verify
-			Assert.AreEqual(view, exceptionCatchingAction.Execute(request));
+			Assert.AreEqual(response, exceptionCatchingAction.Execute(request));
 			VerifyAll();
 		}
 
@@ -56,10 +56,10 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.MVC.Cruise
 
 			Hashtable expectedContext = new Hashtable();
 			expectedContext["exception"] = e;
-			velocityViewGeneratorMock.ExpectAndReturn("GenerateView", errorView, "ActionException.vm", new HashtableConstraint(expectedContext));
+			velocityViewGeneratorMock.ExpectAndReturn("GenerateView", errorResponse, "ActionException.vm", new HashtableConstraint(expectedContext));
 
 			// Execute & Verify
-			Assert.AreEqual(errorView, exceptionCatchingAction.Execute(request));
+			Assert.AreEqual(errorResponse, exceptionCatchingAction.Execute(request));
 			VerifyAll();
 		}
 	}

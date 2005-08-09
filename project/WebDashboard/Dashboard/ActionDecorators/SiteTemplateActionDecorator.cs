@@ -21,7 +21,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard.ActionDecorators
 			this.objectGiver = objectGiver;
 		}
 
-		public IView Execute(ICruiseRequest cruiseRequest)
+		public IResponse Execute(ICruiseRequest cruiseRequest)
 		{
 			Hashtable velocityContext = new Hashtable();
 			velocityContext["breadcrumbs"] = (((TopControlsViewBuilder) objectGiver.GiveObjectByType(typeof(TopControlsViewBuilder))).Execute()).ResponseFragment;

@@ -13,7 +13,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.MVC.Cruise
 			this.cruiseRequestFactory = cruiseRequestFactory;
 		}
 
-		public IView Execute(IRequest request)
+		public IResponse Execute(IRequest request)
 		{
 			return proxiedAction.Execute(cruiseRequestFactory.CreateCruiseRequest(request));
 		}

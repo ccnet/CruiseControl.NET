@@ -26,21 +26,21 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 			this.projectGrid = projectGrid;
 		}
 
-		public IView Execute(string actionName, IRequest request)
+		public IResponse Execute(string actionName, IRequest request)
 		{
 			Hashtable velocityContext = new Hashtable();
 			velocityContext["forceBuildMessage"] = ForceBuildIfNecessary(request);
 			return GenerateView(farmService.GetProjectStatusListAndCaptureExceptions(), velocityContext, actionName, request, null);
 		}
 
-		public IView Execute(string actionName, IServerSpecifier serverSpecifier, IRequest request)
+		public IResponse Execute(string actionName, IServerSpecifier serverSpecifier, IRequest request)
 		{
 			Hashtable velocityContext = new Hashtable();
 			velocityContext["forceBuildMessage"] = ForceBuildIfNecessary(request);
 			return GenerateView(farmService.GetProjectStatusListAndCaptureExceptions(serverSpecifier), velocityContext, actionName, request, serverSpecifier);
 		}
 
-		private IView GenerateView(ProjectStatusListAndExceptions projectStatusListAndExceptions, Hashtable velocityContext, string actionName, IRequest request, IServerSpecifier serverSpecifier)
+		private IResponse GenerateView(ProjectStatusListAndExceptions projectStatusListAndExceptions, Hashtable velocityContext, string actionName, IRequest request, IServerSpecifier serverSpecifier)
 		{
 			ProjectGridSortColumn sortColumn = GetSortColumn(request);
 			bool sortReverse = SortAscending(request);

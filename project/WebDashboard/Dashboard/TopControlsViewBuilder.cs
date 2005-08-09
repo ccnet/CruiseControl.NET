@@ -22,7 +22,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 			this.velocityViewGenerator = velocityViewGenerator;
 		}
 
-		public IView Execute()
+		public IResponse Execute()
 		{
 			Hashtable velocityContext = new Hashtable();
 

@@ -36,18 +36,18 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Plugins.DeleteProjec
 		[Test]
 		public void ShouldPassValidModelToBuilderAndReturnBuildersResult()
 		{
-			IView view = new StringView("foo");
+			IResponse response = new HtmlFragmentResponse("foo");
 			// Setup
 			IProjectSpecifier projectSpecifier = new DefaultProjectSpecifier(new DefaultServerSpecifier("myServer"), "myProject");
 			cruiseRequestMock.ExpectAndReturn("ProjectSpecifier", projectSpecifier);
 			string expectedMessage = "Please confirm you want to delete myProject, and choose which extra delete actions you want to perform";
-			viewBuilderMock.ExpectAndReturn("BuildView", view, new DeleteProjectModel(projectSpecifier, expectedMessage, true, true, true, true));
+			viewBuilderMock.ExpectAndReturn("BuildView", response, new DeleteProjectModel(projectSpecifier, expectedMessage, true, true, true, true));
 
 			// Execute
-			IView returnedView = showDeleteProjectAction.Execute(cruiseRequest);
+			IResponse returnedResponse = showDeleteProjectAction.Execute(cruiseRequest);
 
 			// Verify
-			Assert.AreEqual(view, returnedView);
+			Assert.AreEqual(response, returnedResponse);
 			VerifyAll();
 		}
 	}

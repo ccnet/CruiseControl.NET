@@ -4,6 +4,6 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.DeleteProject
 {
 	public interface IDeleteProjectViewBuilder
 	{
-		IView BuildView(DeleteProjectModel model);
+		IResponse BuildView(DeleteProjectModel model);
 	}
 }

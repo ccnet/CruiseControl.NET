@@ -564,6 +564,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "MVC\HtmlFragmentResponse.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "MVC\IAction.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -579,7 +584,7 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "MVC\IView.cs"
+                    RelPath = "MVC\IResponse.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -589,17 +594,12 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "MVC\RedirectView.cs"
+                    RelPath = "MVC\RedirectResponse.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
                     RelPath = "MVC\RequestController.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "MVC\StringView.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

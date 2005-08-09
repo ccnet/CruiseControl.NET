@@ -1,12 +1,11 @@
 
 namespace ThoughtWorks.CruiseControl.WebDashboard.MVC
 {
-	// After 0.9, update API to use 'IResponse' to clean up this nastiness (See HttpHandler)
-	public class RedirectView : IView
+	public class RedirectResponse : IResponse
 	{
 		private readonly string redirectUrl;
 
-		public RedirectView(string redirectURL)
+		public RedirectResponse(string redirectURL)
 		{
 			redirectUrl = redirectURL;
 		}

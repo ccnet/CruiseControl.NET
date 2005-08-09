@@ -19,7 +19,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.ServerReport
 			this.projectGridAction = projectGridAction;
 		}
 
-		public IView Execute(ICruiseRequest request)
+		public IResponse Execute(ICruiseRequest request)
 		{
 			return projectGridAction.Execute(ACTION_NAME, request.ServerSpecifier, request.Request);
 		}

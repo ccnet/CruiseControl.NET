@@ -1,6 +1,6 @@
 namespace ThoughtWorks.CruiseControl.WebDashboard.MVC
 {
-	public interface IView
+	public interface IResponse
 	{
 		string ResponseFragment { get; }
 	}

@@ -11,7 +11,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.MVC
 			this.request = request;
 		}
 
-		public IView Do()
+		public IResponse Do()
 		{
 			IAction action = actionFactory.Create(request);
 			return action.Execute(request);

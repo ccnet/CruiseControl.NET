@@ -40,16 +40,16 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.MVC.Cruise
 		[Test]
 		public void ShouldGetCruiseRequestForRequestAndProxyAction()
 		{
-			IView view = new StringView("foo");
+			IResponse response = new HtmlFragmentResponse("foo");
 			// Setup
 			cruiseRequestFactoryMock.ExpectAndReturn("CreateCruiseRequest", cruiseRequest, request);
-			proxiedActionMock.ExpectAndReturn("Execute", view, cruiseRequest);
+			proxiedActionMock.ExpectAndReturn("Execute", response, cruiseRequest);
 
 			// Execute
-			IView returnedView = proxy.Execute(request);
+			IResponse returnedResponse = proxy.Execute(request);
 
 			// Verify
-			Assert.AreEqual(view, returnedView);
+			Assert.AreEqual(response, returnedResponse);
 			VerifyAll();
 		}
 	}

@@ -16,7 +16,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.DeleteProject
 			this.viewBuilder = viewBuilder;
 		}
 
-		public IView Execute(ICruiseRequest request)
+		public IResponse Execute(ICruiseRequest request)
 		{
 			return viewBuilder.BuildView(BuildModel(request.ProjectSpecifier));
 		}

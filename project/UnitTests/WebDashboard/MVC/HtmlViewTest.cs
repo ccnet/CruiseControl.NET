@@ -9,9 +9,9 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.MVC
 		[Test]
 		public void ShouldGiveHtmlFragmentIfStringConstructorUsed()
 		{
-			StringView view = new StringView("Some HTML");
+			HtmlFragmentResponse responseFragment = new HtmlFragmentResponse("Some HTML");
 
-			Assert.AreEqual("Some HTML", view.ResponseFragment );
+			Assert.AreEqual("Some HTML", responseFragment.ResponseFragment );
 		}
 	}
 }

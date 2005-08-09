@@ -19,7 +19,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.ViewAllBuilds
 			this.viewBuilder = viewBuilder;
 		}
 
-		public IView Execute(ICruiseRequest cruiseRequest)
+		public IResponse Execute(ICruiseRequest cruiseRequest)
 		{
 			return viewBuilder.GenerateAllBuildsView(cruiseRequest.ProjectSpecifier);
 		}

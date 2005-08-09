@@ -31,9 +31,9 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard.Actions
 			IAbsoluteLink link = new GeneralAbsoluteLink("", "http://here");
 			linkFactoryMock.ExpectAndReturn("CreateFarmLink", link, "", FarmReportFarmPlugin.ACTION_NAME);
 
-			IView view = action.Execute(null);
+			IResponse response = action.Execute(null);
 
-			Assert.AreEqual("http://here", ((RedirectView) view).ResponseFragment);
+			Assert.AreEqual("http://here", ((RedirectResponse) response).ResponseFragment);
 			VerifyAll();
 		}
 	}

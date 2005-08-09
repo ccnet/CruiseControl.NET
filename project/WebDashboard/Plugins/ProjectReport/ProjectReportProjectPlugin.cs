@@ -26,7 +26,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.ProjectReport
 			this.linkFactory = linkFactory;
 		}
 
-		public IView Execute(ICruiseRequest cruiseRequest)
+		public IResponse Execute(ICruiseRequest cruiseRequest)
 		{
 			Hashtable velocityContext = new Hashtable();
 			IProjectSpecifier projectSpecifier = cruiseRequest.ProjectSpecifier;

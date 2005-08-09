@@ -12,9 +12,9 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard.Actions
 			this.linkFactory = linkFactory;
 		}
 
-		public IView Execute(IRequest request)
+		public IResponse Execute(IRequest request)
 		{
-			return new RedirectView(linkFactory.CreateFarmLink("", FarmReportFarmPlugin.ACTION_NAME).Url);
+			return new RedirectResponse(linkFactory.CreateFarmLink("", FarmReportFarmPlugin.ACTION_NAME).Url);
 		}
 	}
 }

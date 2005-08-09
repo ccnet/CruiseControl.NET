@@ -19,7 +19,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.DeleteProject
 			this.farmService = farmService;
 		}
 
-		public IView Execute(ICruiseRequest request)
+		public IResponse Execute(ICruiseRequest request)
 		{
 			IProjectSpecifier projectSpecifier = request.ProjectSpecifier;
 			bool purgeWorkingDirectory = request.Request.GetChecked("PurgeWorkingDirectory");

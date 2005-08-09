@@ -34,10 +34,10 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.MVC.View
 			velocityTransformerMock.ExpectAndReturn("Transform", "transformed", "myTemplate", new HashtableConstraint(context));
 
 			// Execute
-			IView view = viewGenerator.GenerateView("myTemplate", context);
+			IResponse response = viewGenerator.GenerateView("myTemplate", context);
 
 			// Verify
-			Assert.AreEqual("transformed", view.ResponseFragment);
+			Assert.AreEqual("transformed", response.ResponseFragment);
 			VerifyAll();
 		}
 	}

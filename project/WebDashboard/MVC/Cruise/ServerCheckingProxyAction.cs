@@ -13,7 +13,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.MVC.Cruise
 			this.errorViewBuilder = errorViewBuilder;
 		}
 
-		public IView Execute(ICruiseRequest cruiseRequest)
+		public IResponse Execute(ICruiseRequest cruiseRequest)
 		{
 			if (cruiseRequest.ServerName == string.Empty)
 			{

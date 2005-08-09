@@ -15,7 +15,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.MVC.Cruise
 			this.velocityViewGenerator = velocityViewGenerator;
 		}
 
-		public IView Execute(IRequest request)
+		public IResponse Execute(IRequest request)
 		{
 			try
 			{

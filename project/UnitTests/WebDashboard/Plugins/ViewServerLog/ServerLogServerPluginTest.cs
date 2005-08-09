@@ -47,14 +47,14 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Plugins.ViewServerLo
 			Hashtable expectedHashtable = new Hashtable();
 			expectedHashtable["log"] = serverLog;
 
-			IView view = new StringView("foo");
+			IResponse response = new HtmlFragmentResponse("foo");
 
 			requestMock.ExpectAndReturn("ServerSpecifier", serverSpecifier);
 			farmServiceMock.ExpectAndReturn("GetServerLog", serverLog, serverSpecifier);
-			viewGeneratorMock.ExpectAndReturn("GenerateView", view, @"ServerLog.vm", new HashtableConstraint(expectedHashtable));
+			viewGeneratorMock.ExpectAndReturn("GenerateView", response, @"ServerLog.vm", new HashtableConstraint(expectedHashtable));
 
 			// Execute
-			Assert.AreEqual(view, action.Execute((ICruiseRequest) requestMock.MockInstance));
+			Assert.AreEqual(response, action.Execute((ICruiseRequest) requestMock.MockInstance));
 
 			VerifyAll();
 		}

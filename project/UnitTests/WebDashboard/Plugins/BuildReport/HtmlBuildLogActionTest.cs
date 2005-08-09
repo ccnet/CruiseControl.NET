@@ -24,7 +24,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Plugins.BuildReport
 		private string buildLog;
 		private Build build;
 		private DefaultBuildSpecifier buildSpecifier;
-		private IView view;
+		private IResponse response;
 
 		[SetUp]
 		public void Setup()
@@ -41,7 +41,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Plugins.BuildReport
 			buildLog = "some stuff in a log with a < and >";
 			buildSpecifier = new DefaultBuildSpecifier(new DefaultProjectSpecifier(new DefaultServerSpecifier("myserver"), "myproject"), "mybuild");
 			build = new Build(buildSpecifier, buildLog);
-			view = new StringView("foo");
+			response = new HtmlFragmentResponse("foo");
 		}
 
 		private void VerifyAll()
@@ -65,10 +65,10 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Plugins.BuildReport
 			expectedContext["log"] = "some stuff in a log with a &lt; and &gt;";
 			expectedContext["logUrl"] = "myUrl";
 
-			velocityViewGeneratorMock.ExpectAndReturn("GenerateView", view, "BuildLog.vm", new HashtableConstraint(expectedContext));
+			velocityViewGeneratorMock.ExpectAndReturn("GenerateView", response, "BuildLog.vm", new HashtableConstraint(expectedContext));
 
 			// Execute & Verify
-			Assert.AreEqual(view, buildLogAction.Execute((ICruiseRequest) requestMock.MockInstance));
+			Assert.AreEqual(response, buildLogAction.Execute((ICruiseRequest) requestMock.MockInstance));
 
 			VerifyAll();
 		}

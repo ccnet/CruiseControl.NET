@@ -14,7 +14,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.MVC
 
 		private RequestController controller;
 		private IAction action;
-		private IView view;
+		private IResponse response;
 		IRequest request;
 
 		[SetUp]
@@ -23,11 +23,11 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.MVC
 			mockActionFactory = new DynamicMock(typeof(IActionFactory));
 			mockRequest = new DynamicMock(typeof(IRequest));
 			mockAction = new DynamicMock(typeof(IAction));
-			mockView = new DynamicMock(typeof(IView));
+			mockView = new DynamicMock(typeof(IResponse));
 
 			action = (IAction) mockAction.MockInstance;
 			request = (IRequest) mockRequest.MockInstance;
-			view = (IView) mockView.MockInstance;
+			response = (IResponse) mockView.MockInstance;
 
 			controller = new RequestController((IActionFactory) mockActionFactory.MockInstance, request);
 		}
@@ -45,10 +45,10 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.MVC
 		{
 			/// Setup
 			mockActionFactory.ExpectAndReturn("Create", action, request);
-			mockAction.ExpectAndReturn("Execute", view, request);
+			mockAction.ExpectAndReturn("Execute", response, request);
 
 			/// Execute & Verify
-			Assert.AreEqual(view, controller.Do());
+			Assert.AreEqual(response, controller.Do());
 			VerifyAll();
 		}
 	}
