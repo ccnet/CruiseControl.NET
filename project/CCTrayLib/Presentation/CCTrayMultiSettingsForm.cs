@@ -600,6 +600,8 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 		private void btnAdd_Click(object sender, EventArgs e)
 		{
 			Project newProject = new Project();
+			newProject.ServerUrl = "tcp://localhost:21234/CruiseManager.rem";
+
 			AddEditProject addEditProject = new AddEditProject(newProject);
 			if (addEditProject.ShowDialog(this) == DialogResult.OK)
 			{
