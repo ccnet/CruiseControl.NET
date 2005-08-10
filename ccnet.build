@@ -1,4 +1,4 @@
-<?xml version="1.0"?>
+﻿<?xml version="1.0"?>
 
 <project name="ccnet" default="test">
 
@@ -206,6 +206,7 @@
 		</zip>
 
 		<exec program="tools\NSIS\makensis.exe" commandline="ccnet.nsi" />
+		<exec program="tools\NSIS\makensis.exe" commandline="cctray.nsi" />
 	</target>
 	
 	<target name="reporting" depends="compile">

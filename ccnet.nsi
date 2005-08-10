@@ -2,7 +2,7 @@
 
 ; HM NIS Edit Wizard helper defines
 !define PRODUCT_NAME "CruiseControl.NET"
-!define PRODUCT_VERSION "0.9.2"
+!define PRODUCT_VERSION "1.0.RC1"
 !define PRODUCT_PUBLISHER "ThoughtWorks"
 !define PRODUCT_WEB_SITE "http://ccnet.thoughtworks.com/"
 !define PRODUCT_DIR_REGKEY "Software\Microsoft\Windows\CurrentVersion\App Paths\ccnet.exe"
@@ -17,6 +17,8 @@
 
 ; MUI 1.67 compatible ------
 !include "MUI.nsh"
+
+SetCompressor lzma
 
 ; MUI Settings
 !define MUI_ABORTWARNING
@@ -100,14 +102,6 @@ Section "Web Dashboard" SEC02
   Call CreateVirtualDirectory
 SectionEnd
 
-Section "CCTray" SEC03
-  SetOutPath "$INSTDIR\CCTray"
-  SetOverwrite ifnewer
-  File "deployed\cctray\*"
-
-  !insertmacro MUI_STARTMENU_WRITE_BEGIN Application
-  !insertmacro MUI_STARTMENU_WRITE_END
-SectionEnd
 
 Section "Documentation" SEC04
   SetOutPath "$INSTDIR\Doc"
@@ -148,7 +142,6 @@ SectionEnd
 !insertmacro MUI_FUNCTION_DESCRIPTION_BEGIN
   !insertmacro MUI_DESCRIPTION_TEXT ${SEC01} "The core CruiseControl.NET server."
   !insertmacro MUI_DESCRIPTION_TEXT ${SEC02} "The ASP.NET Web Dashboard for configuring and monitoring builds managed by CruiseControl.NET."
-  !insertmacro MUI_DESCRIPTION_TEXT ${SEC03} "The system tray applet for remotely monitoring and triggering builds managed by CruiseControl.NET."
   !insertmacro MUI_DESCRIPTION_TEXT ${SEC04} "Documetation for the CruiseControl.NET Product Suite"
 !insertmacro MUI_FUNCTION_DESCRIPTION_END
 
