@@ -7,7 +7,7 @@
     >
         <Build>
             <Settings
-                ApplicationIcon = ""
+                ApplicationIcon = "App.ico"
                 AssemblyKeyContainerName = ""
                 AssemblyName = "cctray"
                 AssemblyOriginatorKeyFile = ""
@@ -118,6 +118,10 @@
         </Build>
         <Files>
             <Include>
+                <File
+                    RelPath = "app.config"
+                    BuildAction = "None"
+                />
                 <File
                     RelPath = "App.ico"
                     BuildAction = "Content"

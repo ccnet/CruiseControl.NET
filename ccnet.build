@@ -238,7 +238,7 @@
 		</imports>
 		<attributes>
 		    <attribute type="AssemblyVersionAttribute" value="${build.number}" />
-		    <attribute type="AssemblyCopyrightAttribute" value="Copyright © 2004 ThoughtWorks Inc." />
+		    <attribute type="AssemblyCopyrightAttribute" value="Copyright © 2005 ThoughtWorks Inc." />
 		    <attribute type="AssemblyCompanyAttribute" value="ThoughtWorks" />
 		    <attribute type="AssemblyProductAttribute" value="CruiseControl.NET" />
 		</attributes>
