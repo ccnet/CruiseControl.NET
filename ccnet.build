@@ -94,18 +94,20 @@
 		<mkdir dir="deployed\server"/>
 		<copy todir="deployed\server" verbose="${verbosity}">
 			<fileset basedir="${build.dir}\server">
-				<include name="**/*" />
-				<exclude name="*.incr" />
-				<exclude name="**/PostBuildEvent.bat" />
+				<include name="**\*" />
+				<exclude name="**\*.pdb" />
+				<exclude name="**\*.incr" />
+				<exclude name="**\PostBuildEvent.bat" />
 			</fileset>
 		</copy>
 
 		<!-- deliberately copied into same folder as server -->
 		<copy todir="deployed\server" verbose="${verbosity}">
 			<fileset basedir="${build.dir}\service">
-				<include name="*" />
-				<exclude name="*.incr" />				
-				<exclude name="**/PostBuildEvent.bat" />
+				<include name="**\*" />
+				<exclude name="**\*.pdb" />
+				<exclude name="**\*.incr" />
+				<exclude name="**\PostBuildEvent.bat" />
 			</fileset>
 		</copy>
 
@@ -122,8 +124,10 @@
 
 		<copy todir="deployed\cctray">
 			<fileset basedir="${build.dir}\cctray">
-				<include name="*" />
-				<exclude name="*.incr" />
+				<include name="**\*" />
+				<exclude name="**\*.pdb" />
+				<exclude name="**\*.incr" />
+				<exclude name="**\PostBuildEvent.bat" />
 			</fileset>
 		</copy>
 
@@ -138,8 +142,10 @@
 		<mkdir dir="${webdashboard.dir}" verbose="${verbosity}"/>
 		<copy todir="${webdashboard.dir}\bin">
 			<fileset basedir="${build.dir}\webdashboard">
-				<include name="*.dll" />
-				<exclude name="*.incr" />
+				<include name="**\*" />
+				<exclude name="**\*.pdb" />
+				<exclude name="**\*.incr" />
+				<exclude name="**\PostBuildEvent.bat" />
 			</fileset>
 		</copy>
 		<copy todir="${webdashboard.dir}">
