@@ -58,7 +58,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 				foreach (INamedAction action in plugin.NamedActions)
 				{
 					giverManager.CreateInstanceMapping(action.ActionName, action.Action)
-						.Decorate(typeof(SiteTemplateActionDecorator)).Decorate(typeof(CruiseActionProxyAction)).Decorate(typeof(ExceptionCatchingActionProxy));
+						.Decorate(typeof(CruiseActionProxyAction)).Decorate(typeof(ExceptionCatchingActionProxy)).Decorate(typeof(SiteTemplateActionDecorator));
 				}
 			}
 
@@ -67,7 +67,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 				foreach (INamedAction action in plugin.NamedActions)
 				{
 					giverManager.CreateInstanceMapping(action.ActionName, action.Action)
-						.Decorate(typeof(ServerCheckingProxyAction)).Decorate(typeof(SiteTemplateActionDecorator)).Decorate(typeof(CruiseActionProxyAction)).Decorate(typeof(ExceptionCatchingActionProxy));
+						.Decorate(typeof(ServerCheckingProxyAction)).Decorate(typeof(CruiseActionProxyAction)).Decorate(typeof(ExceptionCatchingActionProxy)).Decorate(typeof(SiteTemplateActionDecorator));
 				}
 			}
 
@@ -76,7 +76,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 				foreach (INamedAction action in plugin.NamedActions)
 				{
 					giverManager.CreateInstanceMapping(action.ActionName, action.Action)
-						.Decorate(typeof(ServerCheckingProxyAction)).Decorate(typeof(ProjectCheckingProxyAction)).Decorate(typeof(SiteTemplateActionDecorator)).Decorate(typeof(CruiseActionProxyAction)).Decorate(typeof(ExceptionCatchingActionProxy));
+						.Decorate(typeof(ServerCheckingProxyAction)).Decorate(typeof(ProjectCheckingProxyAction)).Decorate(typeof(CruiseActionProxyAction)).Decorate(typeof(ExceptionCatchingActionProxy)).Decorate(typeof(SiteTemplateActionDecorator));
 				}
 			}
 
@@ -85,7 +85,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 				foreach (INamedAction action in plugin.NamedActions)
 				{
 					giverManager.CreateInstanceMapping(action.ActionName,action.Action)
-						.Decorate(typeof(ServerCheckingProxyAction)).Decorate(typeof(BuildCheckingProxyAction)).Decorate(typeof(ProjectCheckingProxyAction)).Decorate(typeof(SiteTemplateActionDecorator)).Decorate(typeof(CruiseActionProxyAction)).Decorate(typeof(ExceptionCatchingActionProxy));
+						.Decorate(typeof(ServerCheckingProxyAction)).Decorate(typeof(BuildCheckingProxyAction)).Decorate(typeof(ProjectCheckingProxyAction)).Decorate(typeof(CruiseActionProxyAction)).Decorate(typeof(ExceptionCatchingActionProxy)).Decorate(typeof(SiteTemplateActionDecorator));
 				}
 			}
 

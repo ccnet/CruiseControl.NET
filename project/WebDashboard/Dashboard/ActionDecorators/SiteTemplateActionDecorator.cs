@@ -1,27 +1,24 @@
-using System;
 using System.Collections;
 using ObjectWizard;
-using ThoughtWorks.CruiseControl.WebDashboard.IO;
 using ThoughtWorks.CruiseControl.WebDashboard.MVC;
-using ThoughtWorks.CruiseControl.WebDashboard.MVC.Cruise;
 using ThoughtWorks.CruiseControl.WebDashboard.MVC.View;
 
 namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard.ActionDecorators
 {
-	public class SiteTemplateActionDecorator : ICruiseAction
+	public class SiteTemplateActionDecorator : IAction
 	{
-		private readonly ICruiseAction decoratedAction;
+		private readonly IAction decoratedAction;
 		private readonly IVelocityViewGenerator velocityViewGenerator;
 		private readonly ObjectGiver objectGiver;
 
-		public SiteTemplateActionDecorator(ICruiseAction decoratedAction, IVelocityViewGenerator velocityViewGenerator, ObjectGiver objectGiver)
+		public SiteTemplateActionDecorator(IAction decoratedAction, IVelocityViewGenerator velocityViewGenerator, ObjectGiver objectGiver)
 		{
 			this.decoratedAction = decoratedAction;
 			this.velocityViewGenerator = velocityViewGenerator;
 			this.objectGiver = objectGiver;
 		}
 
-		public IResponse Execute(ICruiseRequest cruiseRequest)
+		public IResponse Execute(IRequest cruiseRequest)
 		{
 			Hashtable velocityContext = new Hashtable();
 			velocityContext["breadcrumbs"] = (((TopControlsViewBuilder) objectGiver.GiveObjectByType(typeof(TopControlsViewBuilder))).Execute()).ResponseFragment;
