@@ -58,7 +58,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 
 		protected virtual IIntegrationResult IntegrationResult()
 		{
-			return IntegrationResult(DateTime.Now);
+			return IntegrationResult(new DateTime(2005,06,06,08,45,00));
 		}
 
 		protected IIntegrationResult IntegrationResult(DateTime start)

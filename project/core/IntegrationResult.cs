@@ -339,7 +339,13 @@ namespace ThoughtWorks.CruiseControl.Core
 		[XmlIgnore]
 		public IDictionary IntegrationProperties
 		{
-			get { return properties; }
+			get
+			{
+				IDictionary fullProps = new Hashtable(properties);
+				fullProps["ccnet.build.date"] = StartTime.ToShortDateString();
+				fullProps["ccnet.build.time"] = StartTime.ToLongTimeString();
+				return fullProps;
+			}
 		}
 
 		

@@ -113,7 +113,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 		[Test]
 		public void ShouldPassSpecifiedPropertiesAsProcessInfoArgumentsToProcessExecutor()
 		{
-			string args = @"-nologo -buildfile:mybuild.build -logger:NAnt.Core.XmlLogger myArgs -D:ccnet.artifact.directory=C:\temp " + IntegrationProperties(@"C:\temp") + " target1 target2";
+			string args = @"-nologo -buildfile:mybuild.build -logger:NAnt.Core.XmlLogger myArgs " + IntegrationProperties(@"C:\temp", @"C:\temp") + " target1 target2";
 			ProcessInfo info = NewProcessInfo(args);
 			info.TimeOut = 2000;
 			ExpectToExecute(info);
@@ -133,16 +133,22 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 		[Test]
 		public void ShouldPassAppropriateDefaultPropertiesAsProcessInfoArgumentsToProcessExecutor()
 		{
-			ExpectToExecuteArguments(@"-nologo -logger:NAnt.Core.XmlLogger " + IntegrationProperties(@"c:\source"));
+			ExpectToExecuteArguments(@"-nologo -logger:NAnt.Core.XmlLogger " + IntegrationProperties(@"c:\source", @"c:\source"));
+			builder.ConfiguredBaseDirectory = DefaultWorkingDirectory;
+			result.ArtifactDirectory = DefaultWorkingDirectory;
+			result.WorkingDirectory = DefaultWorkingDirectory;
 			builder.Run(result);
 		}
 
 		[Test]
 		public void ShouldPutQuotesAroundBuildFileIfItContainsASpace()
 		{
-			ExpectToExecuteArguments(@"-nologo -buildfile:""my project.build"" -logger:NAnt.Core.XmlLogger " + IntegrationProperties(@"c:\source"));
+			ExpectToExecuteArguments(@"-nologo -buildfile:""my project.build"" -logger:NAnt.Core.XmlLogger " + IntegrationProperties(@"c:\source", @"c:\source"));
 
 			builder.BuildFile = "my project.build";
+			builder.ConfiguredBaseDirectory = DefaultWorkingDirectory;
+			result.ArtifactDirectory = DefaultWorkingDirectory;
+			result.WorkingDirectory = DefaultWorkingDirectory;
 			builder.Run(result);
 		}
 
@@ -150,7 +156,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 		public void ShouldEncloseDirectoriesInQuotesIfTheyContainSpaces()
 		{
 			DefaultWorkingDirectory = @"c:\dir with spaces";
-			ExpectToExecuteArguments(@"-nologo -logger:NAnt.Core.XmlLogger -D:ccnet.artifact.directory=""c:\dir with spaces"" " + IntegrationProperties(@"""c:\dir with spaces"""));
+			ExpectToExecuteArguments(@"-nologo -logger:NAnt.Core.XmlLogger " + IntegrationProperties(@"""c:\dir with spaces""", @"""c:\dir with spaces"""));
 
 			builder.ConfiguredBaseDirectory = DefaultWorkingDirectory;
 			result.ArtifactDirectory = DefaultWorkingDirectory;
@@ -242,9 +248,9 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 			Assert.AreEqual(0, builder.Targets.Length);
 		}
 
-		private string IntegrationProperties(string workingDirectory)
+		private string IntegrationProperties(string workingDirectory, string artifactDirectory)
 		{
-			return string.Format(@"-D:ccnet.buildcondition=NoBuild -D:ccnet.integration.status=Success -D:ccnet.label=1.0 -D:ccnet.lastintegration.status=Unknown -D:ccnet.project=test -D:ccnet.working.directory={0}", workingDirectory);
+			return string.Format(@"-D:ccnet.build.date=06/06/2005 -D:ccnet.artifact.directory={1} -D:ccnet.integration.status=Success -D:ccnet.lastintegration.status=Unknown -D:ccnet.buildcondition=NoBuild -D:ccnet.working.directory={0} -D:ccnet.label=1.0 -D:ccnet.project=test -D:ccnet.build.time=08:45:00", workingDirectory, artifactDirectory);
 		}
 	}
 }

@@ -182,10 +182,13 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 			result.BuildCondition = BuildCondition.IfModificationExists;
 			result.Label = "label";
 			result.ArtifactDirectory = @"c:\artifactdir\";
+			result.StartTime = new DateTime(2005,06,06,08,45,00);
 
-			Assert.AreEqual(7, result.IntegrationProperties.Count);
+			Assert.AreEqual(9, result.IntegrationProperties.Count);
 			Assert.AreEqual("label", result.IntegrationProperties["ccnet.label"]);
 			Assert.AreEqual(@"c:\artifactdir\", result.IntegrationProperties["ccnet.artifact.directory"]);
+			Assert.AreEqual(new DateTime(2005,06,06).ToShortDateString(), result.IntegrationProperties["ccnet.build.date"]);
+			Assert.AreEqual(new DateTime(2001,01,01,08,45,00).ToLongTimeString(), result.IntegrationProperties["ccnet.build.time"]);
 			Assert.AreEqual(BuildCondition.IfModificationExists, result.IntegrationProperties["ccnet.buildcondition"]);
 		}
 	}
