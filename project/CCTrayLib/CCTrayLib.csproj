@@ -155,22 +155,7 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "ConnectionMethod.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
                     RelPath = "DateTimeProvider.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "DefaultStatusIconLoader.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "ErrorEventArgs.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -188,27 +173,7 @@
                     BuildAction = "EmbeddedResource"
                 />
                 <File
-                    RelPath = "HashStatusIconMapper.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
                     RelPath = "IconNotFoundException.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "IIconStore.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "IStatusIconLoader.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "IStatusIconMapper.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -218,36 +183,11 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "PolledEventArgs.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
                     RelPath = "Red.ico"
                     BuildAction = "EmbeddedResource"
                 />
                 <File
-                    RelPath = "ResourceIconStore.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Sound.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Sounds.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
                     RelPath = "StatusIcon.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "TrayTooltip.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

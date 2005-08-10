@@ -119,10 +119,6 @@
         <Files>
             <Include>
                 <File
-                    RelPath = "app.config"
-                    BuildAction = "None"
-                />
-                <File
                     RelPath = "App.ico"
                     BuildAction = "Content"
                 />
@@ -141,10 +137,6 @@
                     Link = "..\CommonAssemblyInfo.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "TODO.txt"
-                    BuildAction = "Content"
                 />
             </Include>
         </Files>
