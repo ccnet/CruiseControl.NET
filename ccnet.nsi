@@ -9,6 +9,8 @@
 !define PRODUCT_UNINST_KEY "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PRODUCT_NAME}"
 !define PRODUCT_UNINST_ROOT_KEY "HKLM"
 !define PRODUCT_STARTMENU_REGVAL "NSIS:StartMenuDir"
+!define PRODUCT_DEFAULT_DIR_KEY "Software\${PRODUCT_PUBLISHER}\${PRODUCT_NAME}${PRODUCT_VERSION}\InstallDir"
+
 
 ; Plug-ins
 !addplugindir install
@@ -66,7 +68,7 @@ Var FinishMessage
 Name "${PRODUCT_NAME} ${PRODUCT_VERSION}"
 OutFile "dist\${PRODUCT_NAME}-${PRODUCT_VERSION}-Setup.exe"
 InstallDir "$PROGRAMFILES\CruiseControl.NET"
-InstallDirRegKey HKLM "${PRODUCT_DIR_REGKEY}" ""
+InstallDirRegKey HKLM "${PRODUCT_DEFAULT_DIR_KEY}" ""
 ShowInstDetails show
 ShowUnInstDetails show
 
@@ -139,6 +141,7 @@ Section -Post
   WriteRegStr ${PRODUCT_UNINST_ROOT_KEY} "${PRODUCT_UNINST_KEY}" "DisplayVersion" "${PRODUCT_VERSION}"
   WriteRegStr ${PRODUCT_UNINST_ROOT_KEY} "${PRODUCT_UNINST_KEY}" "URLInfoAbout" "${PRODUCT_WEB_SITE}"
   WriteRegStr ${PRODUCT_UNINST_ROOT_KEY} "${PRODUCT_UNINST_KEY}" "Publisher" "${PRODUCT_PUBLISHER}"
+  WriteRegStr HKLM "${PRODUCT_DEFAULT_DIR_KEY}" "" "$INSTDIR"
 SectionEnd
 
 ; Section descriptions
