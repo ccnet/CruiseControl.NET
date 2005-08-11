@@ -27,7 +27,7 @@
     <property name="vil.executable" value="tools\vil\vil.exe" />
     <property name="vil.assemblies" value="comma,separated,list,of,assemblies,to,analyze (full path)" />    
     <property name="simian.executable" value="tools\simian\simian.exe" />
-    <property name="ccnet.artifact.directory" value="${build.dir}" overwrite="false" />
+    <property name="CCNetArtifactDirectory" value="${build.dir}" overwrite="false" />
 
 	<target name="all" depends="clean, compile, test, deploy, dist"/>
 
@@ -220,8 +220,8 @@
 	<!-- FOR RUNNING CCNET AGAINST ITSELF -->
 	<target name="dist.publish" depends="dist">
 			
-			<!-- <property name="publish.dir" value="${ccnet.artifact.directory}\${ccnet.label}" /> -->
-			<property name="publish.dir" value="D:\download-area\CCNet-Builds\${ccnet.label}" />
+			<!-- <property name="publish.dir" value="${CCNetArtifactDirectory}\${CCNetLabel}" /> -->
+			<property name="publish.dir" value="D:\download-area\CCNet-Builds\${CCNetLabel}" />
 
 			<mkdir dir="${publish.dir}" />
 			<copy todir="${publish.dir}">
@@ -246,17 +246,17 @@
 	</target>
 
 	<target name="ContinuousIntegration" depends="transform.build.number, createAssemblyInfo, all, dist.publish, reporting">	
-		<echo message="CI Run for build number ${ccnet.label} successfully completed" />
+		<echo message="CI Run for build number ${CCNetLabel} successfully completed" />
 	</target>
 	
-	<target name="verify.ccnet.label" description="Verifies that the ccnet.label property has been set">
-		<if test="${not property::exists('ccnet.label')}">
-			<fail message="ccnet.label property not set, so can't create labelled distribution files" />
+	<target name="verify.CCNetLabel" description="Verifies that the CCNetLabel property has been set">
+		<if test="${not property::exists('CCNetLabel')}">
+			<fail message="CCNetLabel property not set, so can't create labelled distribution files" />
 		</if>
 	</target> 
 	
-	<target name="transform.build.number" depends="verify.ccnet.label">
-		<regex pattern="(?'major'\d+)_(?'minor'\d+)_(?'revision'\d+)_(?'build'\d+)" input="${ccnet.label}" />
+	<target name="transform.build.number" depends="verify.CCNetLabel">
+		<regex pattern="(?'major'\d+)_(?'minor'\d+)_(?'revision'\d+)_(?'build'\d+)" input="${CCNetLabel}" />
 		<property name="build.number" value="${major}.${minor}.${revision}.${build}" />
 		<echo message="Build number: ${build.number}"/>
 	</target>

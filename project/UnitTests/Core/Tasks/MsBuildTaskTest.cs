@@ -54,7 +54,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 
 		private string IntegrationProperties()
 		{
-			return string.Format(@"/p:ccnet.build.date=06/06/2005;ccnet.artifact.directory=c:\artifacts;ccnet.integration.status=Success;ccnet.lastintegration.status=Unknown;ccnet.buildcondition=NoBuild;ccnet.working.directory={0};ccnet.label=1.0;ccnet.project=test;ccnet.build.time=08:45:00", DefaultWorkingDirectory);
+			return string.Format(@"/p:CCNetIntegrationStatus=Success;CCNetBuildDate=06/06/2005;CCNetArtifactDirectory=c:\artifacts;CCNetBuildTime=08:45:00;CCNetProject=test;CCNetLabel=1.0;CCNetWorkingDirectory={0};CCNetLastIntegrationStatus=Unknown;CCNetBuildCondition=NoBuild", DefaultWorkingDirectory);
 		}
 
 		[Test]

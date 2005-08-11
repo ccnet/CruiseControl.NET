@@ -41,50 +41,50 @@ namespace ThoughtWorks.CruiseControl.Core
 
 		public string ProjectName
 		{
-			get { return Convert(properties["ccnet.project"]); }
-			set { properties["ccnet.project"] = value; }
+			get { return Convert(properties["CCNetProject"]); }
+			set { properties["CCNetProject"] = value; }
 		}
 
 		public string ProjectUrl
 		{
-			get { return Convert(properties["ccnet.project.url"]); }
-			set { properties["ccnet.project.url"] = value; }
+			get { return Convert(properties["CCNetProjectUrl"]); }
+			set { properties["CCNetProjectUrl"] = value; }
 		}
 
 		public BuildCondition BuildCondition
 		{
-			get { return (BuildCondition) properties["ccnet.buildcondition"]; }
-			set { properties["ccnet.buildcondition"] = value; }
+			get { return (BuildCondition) properties["CCNetBuildCondition"]; }
+			set { properties["CCNetBuildCondition"] = value; }
 		}
 
 		public string Label
 		{
-			get { return Convert(properties["ccnet.label"]); }
-			set { properties["ccnet.label"] = value; }
+			get { return Convert(properties["CCNetLabel"]); }
+			set { properties["CCNetLabel"] = value; }
 		}
 
 		public string WorkingDirectory
 		{
-			get { return Convert(properties["ccnet.working.directory"]); }
-			set { properties["ccnet.working.directory"] = value; }
+			get { return Convert(properties["CCNetWorkingDirectory"]); }
+			set { properties["CCNetWorkingDirectory"] = value; }
 		}
 
 		public string ArtifactDirectory
 		{
-			get { return Convert(properties["ccnet.artifact.directory"]); }
-			set { properties["ccnet.artifact.directory"] = value; }
+			get { return Convert(properties["CCNetArtifactDirectory"]); }
+			set { properties["CCNetArtifactDirectory"] = value; }
 		}
 
 		public IntegrationStatus Status
 		{
-			get { return (IntegrationStatus) properties["ccnet.integration.status"]; }
-			set { properties["ccnet.integration.status"] = value; }
+			get { return (IntegrationStatus) properties["CCNetIntegrationStatus"]; }
+			set { properties["CCNetIntegrationStatus"] = value; }
 		}
 
 		public IntegrationStatus LastIntegrationStatus
 		{
-			get { return (IntegrationStatus) properties["ccnet.lastintegration.status"]; }
-			set { properties["ccnet.lastintegration.status"] = value; }
+			get { return (IntegrationStatus) properties["CCNetLastIntegrationStatus"]; }
+			set { properties["CCNetLastIntegrationStatus"] = value; }
 		}
 
 		public string LastSuccessfulIntegrationLabel
@@ -342,8 +342,8 @@ namespace ThoughtWorks.CruiseControl.Core
 			get
 			{
 				IDictionary fullProps = new Hashtable(properties);
-				fullProps["ccnet.build.date"] = StartTime.ToShortDateString();
-				fullProps["ccnet.build.time"] = StartTime.ToLongTimeString();
+				fullProps["CCNetBuildDate"] = StartTime.ToShortDateString();
+				fullProps["CCNetBuildTime"] = StartTime.ToLongTimeString();
 				return fullProps;
 			}
 		}

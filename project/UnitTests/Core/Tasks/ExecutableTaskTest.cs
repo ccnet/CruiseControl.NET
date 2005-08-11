@@ -120,10 +120,10 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 			Assert.AreEqual("test-exe", info.FileName);
 			Assert.AreEqual(222000, info.TimeOut);
 			Assert.AreEqual("test-args", info.Arguments);
-			Assert.AreEqual("1.0", info.EnvironmentVariables["ccnet.label"]);
-			Assert.AreEqual("ForceBuild", info.EnvironmentVariables["ccnet.buildcondition"]);
-			Assert.AreEqual(@"c:\workingdir\", info.EnvironmentVariables["ccnet.working.directory"]);
-			Assert.AreEqual(@"c:\artifactdir\", info.EnvironmentVariables["ccnet.artifact.directory"]);
+			Assert.AreEqual("1.0", info.EnvironmentVariables["CCNetLabel"]);
+			Assert.AreEqual("ForceBuild", info.EnvironmentVariables["CCNetBuildCondition"]);
+			Assert.AreEqual(@"c:\workingdir\", info.EnvironmentVariables["CCNetWorkingDirectory"]);
+			Assert.AreEqual(@"c:\artifactdir\", info.EnvironmentVariables["CCNetArtifactDirectory"]);
 			Verify();
 		}
 
