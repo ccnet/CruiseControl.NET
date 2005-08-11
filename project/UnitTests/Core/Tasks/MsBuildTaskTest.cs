@@ -74,6 +74,16 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 		}
 
 		[Test]
+		public void AddQuotesAroundPropertiesWithSpaces()
+		{
+			string expectedProperties = @"/p:CCNetIntegrationStatus=Success;CCNetBuildDate=06/06/2005;CCNetArtifactDirectory=c:\artifacts;CCNetBuildTime=08:45:00;CCNetProject=test;CCNetLabel=My Label;CCNetWorkingDirectory=c:\source\;CCNetLastIntegrationStatus=Unknown;CCNetBuildCondition=NoBuild";
+			ExpectToExecuteArguments(@"/nologo " + @"""" + expectedProperties + @"""" + DefaultLogger());
+			result.Label = @"My Label";			
+			task.Run(result);
+		}
+
+
+		[Test]
 		public void RebaseFromWorkingDirectory()
 		{
 			ProcessInfo info = NewProcessInfo("/nologo " + IntegrationProperties() + DefaultLogger());

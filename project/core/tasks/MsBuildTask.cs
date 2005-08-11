@@ -61,7 +61,18 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 			builder.AddArgument("/nologo");
 			if (! StringUtil.IsBlank(Targets)) builder.AddArgument("/t:" + Targets);
 
-			builder.AppendArgument("/p:");
+			builder.AddArgument(GetPropertyArgs(result));
+
+			builder.AddArgument(BuildArgs);
+			builder.AddArgument(ProjectFile);
+			builder.AddArgument("/l", ":", string.Format("{0};{1}", Logger, Path.Combine(result.ArtifactDirectory, "msbuild-results.xml")));
+			return builder.ToString();
+		}
+
+		private string GetPropertyArgs(IIntegrationResult result)
+		{
+			ProcessArgumentBuilder builder = new ProcessArgumentBuilder();
+			builder.Append("/p:");
 
 			int count = 0;
 			foreach (string key in result.IntegrationProperties.Keys)
@@ -71,9 +82,6 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 				count++;
 			}
 
-			builder.AddArgument(BuildArgs);
-			builder.AddArgument(ProjectFile);
-			builder.AddArgument("/l", ":", string.Format("{0};{1}", Logger, Path.Combine(result.ArtifactDirectory, "msbuild-results.xml")));
 			return builder.ToString();
 		}
 	}
