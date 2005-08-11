@@ -54,6 +54,7 @@ Var FinishMessage
 !define MUI_FINISHPAGE_NOAUTOCLOSE
 !define MUI_WELCOMEFINISHPAGE_CUSTOMFUNCTION_INIT PrepareFinishPageMessage
 !define MUI_FINISHPAGE_TEXT $FinishMessage
+!define MUI_FINISHPAGE_RUN "$INSTDIR\ccTray.exe"
 !insertmacro MUI_PAGE_FINISH
 
 ; Uninstaller pages
@@ -71,17 +72,6 @@ InstallDirRegKey HKLM "${PRODUCT_DEFAULT_DIR_KEY}" ""
 ShowInstDetails show
 ShowUnInstDetails show
 
-Section "CCTay Desktop shortcut" SEC_DESKTOP
-  SetOutPath "$INSTDIR"
-  SetOverwrite ifnewer
-
-  !insertmacro MUI_STARTMENU_WRITE_BEGIN Application
-  CreateShortCut "$DESKTOP\CCTray.lnk" "$INSTDIR\ccTray.exe"
-  !insertmacro MUI_STARTMENU_WRITE_END
-  
-SectionEnd
-
-
 Section "CCTray" SEC_CCTRAY
   SetOutPath "$INSTDIR"
   SetOverwrite ifnewer
@@ -93,6 +83,14 @@ Section "CCTray" SEC_CCTRAY
   !insertmacro MUI_STARTMENU_WRITE_END
 SectionEnd
 
+Section "CCTray desktop shortcut" SEC_DESKTOP
+  SetOutPath "$INSTDIR"
+  SetOverwrite ifnewer
+
+  !insertmacro MUI_STARTMENU_WRITE_BEGIN Application
+  CreateShortCut "$DESKTOP\CCTray.lnk" "$INSTDIR\ccTray.exe"
+  !insertmacro MUI_STARTMENU_WRITE_END
+SectionEnd
 
 Section -AdditionalIcons
   SetOutPath $INSTDIR
@@ -117,12 +115,9 @@ SectionEnd
 
 ; Section descriptions
 !insertmacro MUI_FUNCTION_DESCRIPTION_BEGIN
-  !insertmacro MUI_DESCRIPTION_TEXT ${SEC_DESKTOP} "The system tray applet Desktop shortcut."
   !insertmacro MUI_DESCRIPTION_TEXT ${SEC_CCTRAY} "The system tray applet for remotely monitoring and triggering builds managed by CruiseControl.NET."
+  !insertmacro MUI_DESCRIPTION_TEXT ${SEC_DESKTOP} "The system tray applet Desktop shortcut."
 !insertmacro MUI_FUNCTION_DESCRIPTION_END
-
-
-
 
 Function PrepareFinishPageMessage
   StrCpy $FinishMessage "$(^Name) has been installed on your computer.\r\nClick Finish to close this wizard."

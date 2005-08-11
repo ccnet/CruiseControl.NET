@@ -86,6 +86,7 @@ Section "CruiseControl.NET Server" SEC01
   CreateDirectory "$SMPROGRAMS\$ICONS_GROUP"
   CreateShortCut "$SMPROGRAMS\$ICONS_GROUP\CruiseControl.NET.lnk" "$INSTDIR\server\ccnet.exe"
   CreateShortCut "$DESKTOP\CruiseControl.NET.lnk" "$INSTDIR\server\ccnet.exe"
+  CreateShortCut "$SMPROGRAMS\$ICONS_GROUP\CruiseControl.NET Config.lnk" "$INSTDIR\server\ccnet.config"
   !insertmacro MUI_STARTMENU_WRITE_END
   
   Call InstallService
