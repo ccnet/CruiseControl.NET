@@ -133,6 +133,10 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "ccnet.config"
+                    BuildAction = "None"
+                />
+                <File
                     RelPath = "CCService.cs"
                     SubType = "Component"
                     BuildAction = "Compile"
