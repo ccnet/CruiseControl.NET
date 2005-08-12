@@ -15,6 +15,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 		protected string DefaultWorkingDirectory = @"c:\source\";
 		protected int DefaultTimeout = ProcessSourceControl.DefaultTimeout;
 		protected string ProcessResultOutput = "output";
+		protected DateTime testDate = new DateTime(2005,06,06,08,45,00);
 
 		protected IMock mockProcessExecutor;
 		protected string defaultExecutable;
@@ -58,7 +59,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 
 		protected virtual IIntegrationResult IntegrationResult()
 		{
-			return IntegrationResult(new DateTime(2005,06,06,08,45,00));
+			return IntegrationResult(testDate);
 		}
 
 		protected IIntegrationResult IntegrationResult(DateTime start)
