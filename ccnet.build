@@ -1,4 +1,4 @@
-﻿<?xml version="1.0"?>
+<?xml version="1.0"?>
 
 <project name="ccnet" default="test">
 
@@ -221,7 +221,7 @@
 	<target name="dist.publish" depends="dist">
 			
 			<!-- <property name="publish.dir" value="${CCNetArtifactDirectory}\${CCNetLabel}" /> -->
-			<property name="publish.dir" value="D:\download-area\CCNet-Builds\${CCNetLabel}" />
+			<property name="publish.dir" value="E:\download-area\CCNet-Builds\${CCNetLabel}" />
 
 			<mkdir dir="${publish.dir}" />
 			<copy todir="${publish.dir}">
