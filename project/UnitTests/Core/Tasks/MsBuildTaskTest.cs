@@ -1,3 +1,4 @@
+using System;
 using System.IO;
 using Exortech.NetReflector;
 using NUnit.Framework;
@@ -54,7 +55,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 
 		private string IntegrationProperties()
 		{
-			return string.Format(@"/p:CCNetIntegrationStatus=Success;CCNetBuildDate=06/06/2005;CCNetArtifactDirectory=c:\artifacts;CCNetBuildTime=08:45:00;CCNetProject=test;CCNetLabel=1.0;CCNetWorkingDirectory={0};CCNetLastIntegrationStatus=Unknown;CCNetBuildCondition=NoBuild", DefaultWorkingDirectory);
+			return string.Format(@"/p:CCNetIntegrationStatus=Success;CCNetBuildDate={1};CCNetArtifactDirectory=c:\artifacts;CCNetBuildTime=08:45:00;CCNetProject=test;CCNetLabel=1.0;CCNetWorkingDirectory={0};CCNetLastIntegrationStatus=Unknown;CCNetBuildCondition=NoBuild", DefaultWorkingDirectory, new DateTime(2005,6,6).ToShortDateString());
 		}
 
 		[Test]
@@ -76,7 +77,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 		[Test]
 		public void AddQuotesAroundPropertiesWithSpaces()
 		{
-			string expectedProperties = @"/p:CCNetIntegrationStatus=Success;CCNetBuildDate=06/06/2005;CCNetArtifactDirectory=c:\artifacts;CCNetBuildTime=08:45:00;CCNetProject=test;CCNetLabel=My Label;CCNetWorkingDirectory=c:\source\;CCNetLastIntegrationStatus=Unknown;CCNetBuildCondition=NoBuild";
+			string expectedProperties = string.Format(@"/p:CCNetIntegrationStatus=Success;CCNetBuildDate={0};CCNetArtifactDirectory=c:\artifacts;CCNetBuildTime=08:45:00;CCNetProject=test;CCNetLabel=My Label;CCNetWorkingDirectory=c:\source\;CCNetLastIntegrationStatus=Unknown;CCNetBuildCondition=NoBuild",new DateTime(2005,6,6).ToShortDateString());
 			ExpectToExecuteArguments(@"/nologo " + @"""" + expectedProperties + @"""" + DefaultLogger());
 			result.Label = @"My Label";			
 			task.Run(result);
