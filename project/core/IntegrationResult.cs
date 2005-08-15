@@ -342,8 +342,8 @@ namespace ThoughtWorks.CruiseControl.Core
 			get
 			{
 				IDictionary fullProps = new Hashtable(properties);
-				fullProps["CCNetBuildDate"] = StartTime.ToShortDateString();
-				fullProps["CCNetBuildTime"] = StartTime.ToLongTimeString();
+				fullProps["CCNetBuildDate"] = StartTime.ToString("yyyy-MM-dd", null);
+				fullProps["CCNetBuildTime"] = StartTime.ToString("HH:mm:ss", null);
 				return fullProps;
 			}
 		}

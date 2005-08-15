@@ -187,8 +187,9 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 			Assert.AreEqual(9, result.IntegrationProperties.Count);
 			Assert.AreEqual("label", result.IntegrationProperties["CCNetLabel"]);
 			Assert.AreEqual(@"c:\artifactdir\", result.IntegrationProperties["CCNetArtifactDirectory"]);
-			Assert.AreEqual(new DateTime(2005,06,06).ToShortDateString(), result.IntegrationProperties["CCNetBuildDate"]);
-			Assert.AreEqual(new DateTime(2001,01,01,08,45,00).ToLongTimeString(), result.IntegrationProperties["CCNetBuildTime"]);
+			// We purposefully use culture-independent string formats
+			Assert.AreEqual("2005-06-06", result.IntegrationProperties["CCNetBuildDate"]);
+			Assert.AreEqual("08:45:00", result.IntegrationProperties["CCNetBuildTime"]);
 			Assert.AreEqual(BuildCondition.IfModificationExists, result.IntegrationProperties["CCNetBuildCondition"]);
 		}
 	}
