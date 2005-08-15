@@ -18,27 +18,78 @@
 					    This page last changed on Oct 18, 2004 by <font color="#0050B2">mroberts</font>.
 				    </div>
 
-				    <p class="paragraph"><img class="rendericon" src="./icons/emoticons/warning.png" height="16" width="16" align="absmiddle" alt="" border="0"/> This page is meant for committers to the CruiseControl.NET project only</p><img class="rendericon" src="./icons/emoticons/information.png" height="16" width="16" align="absmiddle" alt="" border="0"/> This page still needs to be thrashed out, but here are some opening thoughts<p class="paragraph">Configurable blocks should be documented under <a href="Configuring the server.html" title="Configuring the Server">Configuring the server</a>. The hierarchy under this page mirrors the hierarchy of the Configuration itself.</p>Documentation for a specific block, should be something like :<p class="paragraph"><hr class="line"/></p>This is the introduction to my block. It shouldn&#039;t be detailed, but should give a basic overview.<p class="paragraph"><h4 class="heading4"><a name="DocumentationGuidelines-Examples"> Examples</a></h4></p>Minimalist example: <p class="paragraph"><em class="emphasis">this should be the smallest configuration possible, using all defaults available</em></p><div class="code"><div class="codeContent">
-<pre><span class="xml&#45;tag">&lt;myBlockFamily type=<span class="xml&#45;quote">&quot;myBlockSpecificReflectorType&quot;</span>/&gt;</span></pre>
-</div></div><p class="paragraph"><em class="emphasis">or</em></p><div class="code"><div class="codeContent">
-<pre><span class="xml&#45;tag">&lt;myBlockSpecificReflectorType /&gt;</span></pre>
-</div></div>
-<p class="paragraph">Full example:</p><em class="emphasis">this should give an example for every configurable value</em><br/>
+				    <p><img class="emoticon" src="./icons/emoticons/warning.gif" height="16" width="16" align="absmiddle" alt="" border="0"/> This page is meant for committers to the CruiseControl.NET project only</p>
+
+<p><img class="emoticon" src="./icons/emoticons/information.gif" height="16" width="16" align="absmiddle" alt="" border="0"/> This page still needs to be thrashed out, but here are some opening thoughts</p>
+
+<p>Configurable blocks should be documented under <a href="Configuring the server.html" title="Configuring the Server">Configuring the server</a>. The hierarchy under this page mirrors the hierarchy of the Configuration itself.</p>
+
+<p>Documentation for a specific block, should be something like :</p>
+
+<hr />
+
+<p>This is the introduction to my block. It shouldn't be detailed, but should give a basic overview.</p>
+
+<h4><a name="DocumentationGuidelines-Examples">Examples</a></h4>
+
+<p>Minimalist example: </p>
+
+<p><em>this should be the smallest configuration possible, using all defaults available</em></p>
 
 <div class="code"><div class="codeContent">
-<pre><span class="xml&#45;tag">&lt;myBlockSpecificReflectorType param1=<span class="xml&#45;quote">&quot;value1&quot;</span>&gt;</span>&#10;        <span class="xml&#45;tag">&lt;param2&gt;</span>value2<span class="xml&#45;tag">&lt;/param2&gt;</span>&#10;    <span class="xml&#45;tag">&lt;/myBlockSpecificReflectorType&gt;</span></pre>
-</div></div><p class="paragraph"><em class="emphasis">Using attributes or sub tags is a stylistic choice, right now</em></p><h4 class="heading4"><a name="DocumentationGuidelines-ConfigurationElements%3A"> Configuration Elements:</a></h4>
+<pre class="code-xml"><span class="code-tag">&lt;myBlockFamily type=<span class="code-quote">"myBlockSpecificReflectorType"</span>/&gt;</span></pre>
+</div></div>
 
-<table class="wikitable">
+<p><em>or</em></p>
+
+<div class="code"><div class="codeContent">
+<pre class="code-xml"><span class="code-tag">&lt;myBlockSpecificReflectorType /&gt;</span></pre>
+</div></div>
+
+
+<p>Full example:</p>
+
+<p><em>this should give an example for every configurable value</em></p>
+
+<div class="code"><div class="codeContent">
+<pre class="code-xml"><span class="code-tag">&lt;myBlockSpecificReflectorType param1=<span class="code-quote">"value1"</span>&gt;</span>
+        <span class="code-tag">&lt;param2&gt;</span>value2<span class="code-tag">&lt;/param2&gt;</span>
+    <span class="code-tag">&lt;/myBlockSpecificReflectorType&gt;</span></pre>
+</div></div>
+
+<p><em>Using attributes or sub tags is a stylistic choice, right now</em></p>
+
+<h4><a name="DocumentationGuidelines-ConfigurationElements%3A">Configuration Elements:</a></h4>
+
+<table class='confluenceTable'>
 <tr>
-<th> Node </th><th> Description </th><th> Type </th><th> Required</th><th> Default </th>
-</tr><tr>
-<td> param1 </td><td> A brief description </td><td> type </td><td> true or false </td><td> default value, or n/a if not defaultable  </td>
-</tr><tr>
-<td> param2 </td><td> A brief description </td><td> type </td><td> true or false </td><td> default value, or n/a if not defaultable  </td>
+<th class='confluenceTh'> Node </th>
+<th class='confluenceTh'> Description </th>
+<th class='confluenceTh'> Type </th>
+<th class='confluenceTh'> Required</th>
+<th class='confluenceTh'> Default </th>
+</tr>
+<tr>
+<td class='confluenceTd'> param1 </td>
+<td class='confluenceTd'> A brief description </td>
+<td class='confluenceTd'> type </td>
+<td class='confluenceTd'> true or false </td>
+<td class='confluenceTd'> default value, or n/a if not defaultable  </td>
+</tr>
+<tr>
+<td class='confluenceTd'> param2 </td>
+<td class='confluenceTd'> A brief description </td>
+<td class='confluenceTd'> type </td>
+<td class='confluenceTd'> true or false </td>
+<td class='confluenceTd'> default value, or n/a if not defaultable  </td>
 </tr>
 </table>
-<hr class="line"/><p class="paragraph">Any notes should be kept short. Extra detail probably needs to belong to the next type of page.</p>Integration with other tools should be detailed in a page under the <a href="Using CruiseControl.NET with other applications.html" title="Using CruiseControl.NET with other applications">Using CruiseControl.NET with other applications</a> page. These pages should detail what needs to be done across all apps (e.g. server and web) and should link to the relevant configurable block pages
+
+<hr />
+
+<p>Any notes should be kept short. Extra detail probably needs to belong to the next type of page.</p>
+
+<p>Integration with other tools should be detailed in a page under the <a href="Using CruiseControl.NET with other applications.html" title="Using CruiseControl.NET with other applications">Using CruiseControl.NET with other applications</a> page. These pages should detail what needs to be done across all apps (e.g. server and web) and should link to the relevant configurable block pages</p>
 
 				    
                     			    </td>
@@ -49,7 +100,7 @@
 				<td height="12" background="border/border_bottom.gif"><img src="border/spacer.gif" width="1" height="1" border="0"/></td>
 			</tr>
 		    <tr>
-			    <td align="center"><font color="grey">Document generated by Confluence on Jun 26, 2005 17:22</font></td>
+			    <td align="center"><font color="grey">Document generated by Confluence on Aug 15, 2005 13:58</font></td>
 		    </tr>
 	    </table>
     </body>

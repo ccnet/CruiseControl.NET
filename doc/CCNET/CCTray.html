@@ -15,71 +15,151 @@
                                                     </span>
 				    </div>
 				    <div class="pagesubheading">
-					    This page last changed on Jun 26, 2005 by <font color="#0050B2">orogers</font>.
+					    This page last changed on Aug 10, 2005 by <font color="#0050B2">gtackley@thoughtworks.com</font>.
 				    </div>
 
-				    
-CCTray is an optional utility for use with the CruiseControl.NET Continuous Integration server. It provides feedback upon build progress, and allows control over some of the server&#039;s operations.<p class="paragraph"><hr class="line"/></p><h4 class="heading4"><a name="CCTray-Mainfeatures"> Main features</a></h4>
-<ul class="star">
-<li> Identify the build status with a glance to the system tray</li>
-<li> Audio/Visual feedback upon completion of builds, indicating success or failure</li>
-<li> Force a build from any PC (when the CruiseControl.NET server is sleeping)</li>
-</ul>
-<hr class="line"/><p class="paragraph"><h4 class="heading4"><a name="CCTray-TrayIcons"> Tray Icons</a></h4>
-Once started, CCTray is normally only visible as an icon in the windows system tray.</p><img src="CCTray_attachments/cctray-full-green.png" align="absmiddle" border="0" /><br/>
- <p class="paragraph">The colour of the CCTray icon conveys information about the CruiseControl.NET server&#039;s state:</p><ul class="star">
-<li> <img src="CCTray_attachments/cctray-icon-small-green.png" align="absmiddle" border="0" /> The most recent build was successful</li>
-<li> <img src="CCTray_attachments/cctray-icon-small-red.png" align="absmiddle" border="0" /> The most recent build failed</li>
-<li> <img src="CCTray_attachments/cctray-icon-small-grey.png" align="absmiddle" border="0" /> The server is unavailable, or returned an error status</li>
-<li> <img src="CCTray_attachments/cctray-icon-small-yellow.png" align="absmiddle" border="0" /> The server is currently building the code.
-<hr class="line"/>
-</li>
-</ul>
-<h4 class="heading4"><a name="CCTray-Balloonnotifications"> Balloon notifications</a></h4><p class="paragraph">Ballon notifications use the standard Windows tray icon popup balloon whenever a build completes. The text within the balloon is configurable. Balloon notifications may be enabled/disabled.<br/>
-<img src="CCTray_attachments/balloon-fixed.png" align="absmiddle" border="0" />&#160;<img src="CCTray_attachments/balloon-broken.png" align="absmiddle" border="0" />
-<hr class="line"/></p><h4 class="heading4"><a name="CCTray-Menuoptions"> Menu options</a></h4>
-<img src="CCTray_attachments/context-menu-building.png" align="right" border="0" /><br/>
-Right-clicking the CCTray system tray icon displays a menu with several options: <br/>
+				    <div class="information-block" align='center'><div class='informationMacroPadding'><table cellpadding='5' width='85%' cellspacing='0' class='warningMacro' border='0'><tr><td width='16' valign='top'><img src="/images/icons/emoticons/forbidden.gif" width="16" height="16" align="absmiddle" alt="" border="0"></td><td>Please note this documentation is not yet complete</td></tr></table></div></div>
 
-<ul class="star">
-<li> <b class="strong">Launch web page</b><ul class="star">
-<li> Opens a browser at the CruiseControl.NET build web page for this project. The web page may also be launched by double-clicking the tray icon.</li>
-</ul></li>
+
+<p>CCTray is an optional utility for use with the CruiseControl.NET Continuous Integration server. It provides feedback upon build progress, and allows control over some of the server's operations.</p>
+
+<hr />
+
+<h4><a name="CCTray-Mainfeatures">Main features</a></h4>
+<ul>
+	<li>Monitor multiple projects on many build servers</li>
+	<li>Identify the build status with a glance to the system tray</li>
+	<li>See the status of individual builds in a popup window</li>
+	<li>Audio/Visual feedback upon completion of builds, indicating success or failure</li>
+	<li>Force a build from any PC (when the CruiseControl.NET server is sleeping)</li>
 </ul>
-<ul class="star">
-<li> <b class="strong">Settings...</b><ul class="star">
-<li> Displays the settings form, from which you may configure CCTray.</li>
-</ul></li>
+
+
+<hr />
+
+<h4><a name="CCTray-Mainwindow">Main window</a></h4>
+<p>The CCTray user interface is modelled on popular Instant Messaging application user interfaces.  </p>
+<ul>
+	<li>To exit, choose Exit from the file menu or from the tray icon right click menu</li>
+	<li>Closing the main window does not exit the CCTray</li>
+	<li>Double-click the tray icon to redisplay the main window</li>
 </ul>
-<ul class="star">
-<li> <b class="strong">Force build</b><ul class="star">
-<li> Wakes the CruiseControl.NET server from its sleep and tells it to start building immediately. This menu item will be unavailable if the server is currently building.</li>
-</ul></li>
+
+
+<p>The main window shows a list of all the builds that CCTray is monitoring.  For each build, some status information is shown along with an icon that indicates the build status.</p>
+
+<div class="information-block" align='center'><div class='informationMacroPadding'><table cellpadding='5' width='85%' cellspacing='0' class='noteMacro' border='0'><tr><td width='16' valign='top'><img src="/images/icons/emoticons/warning.gif" width="16" height="16" align="absmiddle" alt="" border="0"></td><td>screenshot here</td></tr></table></div></div>
+
+<p>The colour of the CCTray icon conveys information about the CruiseControl.NET server's state: </p>
+
+<ul>
+	<li><img src="CCTray_attachments/cctray-icon-small-green.png" align="absmiddle" border="0" /> The most recent build was successful</li>
+	<li><img src="CCTray_attachments/cctray-icon-small-red.png" align="absmiddle" border="0" /> The most recent build failed</li>
+	<li><img src="CCTray_attachments/cctray-icon-small-grey.png" align="absmiddle" border="0" /> The server is unavailable, or returned an error status</li>
+	<li><img src="CCTray_attachments/cctray-icon-small-yellow.png" align="absmiddle" border="0" /> The server is currently building the code.</li>
 </ul>
-<ul class="star">
-<li> <b class="strong">Exit</b><ul class="star">
-<li> Closes the CCTray application.</li>
-</ul></li>
+
+
+<p>Right-clicking on a project displays a popup menu:</p>
+
+<ul>
+	<li><b>Force build</b> Wakes the CruiseControl.NET server from its sleep and tells it to start building immediately.</li>
+	<li><b>Display Web Page</b>  Opens a browser at the CruiseControl.NET build web page for this project. The web page may also be launched by double-clicking the project.</li>
 </ul>
-<hr class="line"/><p class="paragraph"><h4 class="heading4"><a name="CCTray-Configuration"> Configuration</a></h4></p>CCTray&#039;s configuration settings is stored in the file &quot;<b class="strong">cctray-settings.xml</b>&quot; (see a <a href="cctray-settings.xml.html" title="cctray-settings.xml">sample</a>), which is located in the same folder as the executable. The file may be hand edited, though it&#039;s simpler to use the settings form. To launch the settings form, right-click the tray icon and select &#039;Settings...&#039;.<p class="paragraph"><img src="CCTray_attachments/form-settings.png" align="left" border="0" /></p><b class="strong">Poll every n seconds</b><br/>
-CCTray detects changes in the CCNet server state by polling at regular intervals. This value sets the period between polls.<p class="paragraph"><b class="strong">Server</b><br/>
-A Uri to the remoting interface of the CruiseControl.NET server.</p><b class="strong">Project name</b><br/>
-The name of the project to be monitored, as described within the server&#039;s configuration file.<p class="paragraph"><b class="strong">Show balloon notifications</b><br/>
-Enables or disables notification of completed builds via balloon messages.</p><b class="strong">Show agent</b><br/>
-Enables or disables notification of completed builds via agents.<p class="paragraph"><b class="strong">Hide after announcement</b><br/>
-Turns the agent off after they deliver the completed build message.</p><b class="strong">Agent</b><br/>
-The agent to use. This agent must be installed.<p class="paragraph"><b class="strong">Audio</b><br/>
-The location of audio files to play upon completed builds. The checkbox enables individual sounds. Use the folder icon to browse for the wav file, and the play icon to preview the sound.</p><br clear="all" />
-<hr class="line"/><p class="paragraph"><h4 class="heading4"><a name="CCTray-Agents"> Agents</a></h4></p><img src="CCTray_attachments/agent-peedy-speak.png" align="right" border="0" /><br/>
-MS agents may be used to notify you of completed builds. Agents must be installed on your PC before you can use them (they&#039;re not part of a default Windows install). The MS Agent homepage is <a href="http://www.microsoft.com/msagent," title="Visit page outside Confluence">&#104;ttp://www.microsoft.com/msagent,</a> and the download page is <a href="http://www.microsoft.com/msagent/downloads/user.asp" title="Visit page outside Confluence">here </a> (you can download the software that enables speech here too). An agent WebRing exists here <a href="http://www.msagentring.org." title="Visit page outside Confluence">&#104;ttp://www.msagentring.org.</a><p class="paragraph">The agent shown above is Peedy. Peedy&#039;s installer should give CCTray access to the relevant ACS (Agent Character Script) file. Other agents (such as those used by Microsoft office) must be referenced by absolute paths, and the cctray-settings.xml file must currently be edited by hand. The agents that ship with MS Office 2000 are kept in the folder C:\Program Files\Microsoft Office\Office\.</p><hr class="line"/><p class="paragraph"><h4 class="heading4"><a name="CCTray-FAQ"> FAQ</a></h4></p><b class="strong">My CCTray icon is constantly greyed out. How can I tell why this is happening?</b><br/>
-A grey icon indicates some sort of connection or server error. In such cases, the tray icon&#039;s tooltip is the exception message. Set your mouse motionless above the CCTray icon for a second to see this message.<p class="paragraph"><b class="strong">&quot;Launch web page&quot; doesn&#039;t display the right URL&#8230; help!</b><br/>
-The URL at which your CruiseControl.NET build results are available is in the server configuration. Ensure that your server&#039;s configuration has a fully qualified host name (not just localhost).</p><b class="strong">I&#039;ve selected &quot;Notification Balloon&quot;, but it only flickers onto the screen momentarily.</b><br/>
-This has been observed in cases where an envelope icon appears in the system tray (indicating you&#039;ve got mail &#8211; probably a build report) which nudges the CCTray icon aside, causing the notification balloon to disappear.<p class="paragraph"><b class="strong">I&#039;ve found a bug. Who can I tell?</b><br/>
-Please send help requests to the CCNet user mailing list: <a href="mailto:ccnet-user@lists.sourceforge.net" title="Send mail to ccnet-user@lists.sourceforge.net">ccnet-user@lists.sourceforge.net</a>.</p><ul class="star">
-<li> I hate how message boxes pop up when the server goes down.  How can I fix this?*<br/>
-Uncheck the &quot;Show exceptions&quot; checkbox on the main cctray form.
-</li>
+
+
+<h4><a name="CCTray-TrayIcons">Tray Icons</a></h4>
+<p>CCTray displays an icon in the windows system tray indicating a summary of the status of all of the builds it is monitoring.</p>
+
+<p><img src="CCTray_attachments/cctray-full-green.png" align="absmiddle" border="0" /></p>
+
+<p>The following rules are applied, in this order, to determine the icon colour:</p>
+
+<ul>
+	<li>If at least one build is red, the icon is red</li>
+	<li>If no builds are red but at least one is yellow, the icon is yellow</li>
+	<li>If no build are red or yellow, but least one is grey, the icon is grey</li>
+	<li>If all the builds are green, the icon is green</li>
 </ul>
+
+
+<hr />
+
+<h4><a name="CCTray-Balloonnotifications">Balloon notifications</a></h4>
+
+<p>Ballon notifications use the standard Windows tray icon popup balloon whenever a build completes. Balloon notifications may be enabled/disabled.<br/>
+<img src="CCTray_attachments/balloon-fixed.png" align="absmiddle" border="0" /> <img src="CCTray_attachments/balloon-broken.png" align="absmiddle" border="0" /></p>
+<div class="information-block" align='center'><div class='informationMacroPadding'><table cellpadding='5' width='85%' cellspacing='0' class='noteMacro' border='0'><tr><td width='16' valign='top'><img src="/images/icons/emoticons/warning.gif" width="16" height="16" align="absmiddle" alt="" border="0"></td><td>screenshots to be updated</td></tr></table></div></div>
+<hr />
+
+<h4><a name="CCTray-Menuoptions">Menu options</a></h4>
+<div class="information-block" align='center'><div class='informationMacroPadding'><table cellpadding='5' width='85%' cellspacing='0' class='noteMacro' border='0'><tr><td width='16' valign='top'><img src="/images/icons/emoticons/warning.gif" width="16" height="16" align="absmiddle" alt="" border="0"></td><td>screenshot to be updated</td></tr></table></div></div>
+<p><img src="CCTray_attachments/context-menu-building.png" align="right" border="0" /><br/>
+Right-clicking the CCTray system tray icon displays a menu with several options: </p>
+
+<ul>
+	<li><b>Settings...</b>
+	<ul>
+		<li>Displays the settings form, from which you may configure CCTray.</li>
+	</ul>
+	</li>
+</ul>
+
+
+<ul>
+	<li><b>Show Status Window</b>
+	<ul>
+		<li>Display the main status window. Double-clicking the tray icon does this too.</li>
+	</ul>
+	</li>
+</ul>
+
+
+<ul>
+	<li><b>Exit</b>
+	<ul>
+		<li>Closes the CCTray application.</li>
+	</ul>
+	</li>
+</ul>
+
+
+<hr />
+
+<h4><a name="CCTray-Configuration">Configuration</a></h4>
+
+<p>CCTray's configuration settings is stored in the file "<b>settings.xml</b>" (see a sample), which is located in the same folder as the executable. The file may be hand edited, though it's simpler to use the settings form. To launch the settings form, right-click the tray icon and select 'Settings...'.</p>
+
+<div class="information-block" align='center'><div class='informationMacroPadding'><table cellpadding='5' width='85%' cellspacing='0' class='noteMacro' border='0'><tr><td width='16' valign='top'><img src="/images/icons/emoticons/warning.gif" width="16" height="16" align="absmiddle" alt="" border="0"></td><td>screenshot to be updated</td></tr></table></div></div>
+<p><img src="CCTray_attachments/form-settings.png" align="left" border="0" /></p>
+
+<p><b>Poll every n seconds</b><br/>
+CCTray detects changes in the CCNet server state by polling at regular intervals. This value sets the period between polls.</p>
+
+<p><b>Show balloon notifications</b><br/>
+Enables or disables notification of completed builds via balloon messages.</p>
+
+<p><b>Audio</b><br/>
+The location of audio files to play upon completed builds. The checkbox enables individual sounds. Use the Browse button to browse for the wav file, and the play button to preview the sound.</p>
+
+<p><b>Show balloon notifications</b><br/>
+Enables or disables notification of completed builds via balloon messages.</p>
+
+<p><b>Build servers</b><br/>
+Allows configuration of the build projects that CCTray should monitor.
+<br clear="all" /></p>
+<hr />
+
+<h4><a name="CCTray-FAQ">FAQ</a></h4>
+
+<p><b>"Launch web page" doesn't display the right URL... help!</b><br/>
+The URL at which your CruiseControl.NET build results are available is in the server configuration. Ensure that your server's configuration has a fully qualified host name (not just localhost).</p>
+
+<p><b>I've selected "Notification Balloon", but it only flickers onto the screen momentarily.</b><br/>
+This has been observed in cases where an envelope icon appears in the system tray (indicating you've got mail &#8211; probably a build report) which nudges the CCTray icon aside, causing the notification balloon to disappear.</p>
+
+<p><b>I've found a bug. Who can I tell?</b><br/>
+Please send help requests to the CCNet user mailing list: <a href="mailto:ccnet-user@lists.sourceforge.net" title="Send mail to ccnet-user@lists.sourceforge.net">ccnet-user@lists.sourceforge.net</a>.</p>
 
 				    					    <br/>
                         <div class="tabletitle">
@@ -133,7 +213,7 @@ Uncheck the &quot;Show exceptions&quot; checkbox on the main cctray form.
 				<td height="12" background="border/border_bottom.gif"><img src="border/spacer.gif" width="1" height="1" border="0"/></td>
 			</tr>
 		    <tr>
-			    <td align="center"><font color="grey">Document generated by Confluence on Jun 26, 2005 17:22</font></td>
+			    <td align="center"><font color="grey">Document generated by Confluence on Aug 15, 2005 13:58</font></td>
 		    </tr>
 	    </table>
     </body>

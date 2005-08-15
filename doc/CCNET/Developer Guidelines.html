@@ -19,42 +19,55 @@
 				    </div>
 
 				    
-<h3 class="heading3"><a name="DeveloperGuidelines-DevelopmentPractices"> Development Practices</a></h3>
-<ul class="star">
-<li> Test-first development. Code without unit tests will not be accepted.</li>
-<li> Refactor mercilessly; however, notify the list before making large, broad-reaching refactorings.</li>
-<li> Small methods (no more than 15 lines). Long methods will be collected and emailed to the list until a refactored solution is found.</li>
-<li> Use guard clauses.</li>
-<li> Write acceptance tests wherever possible.</li>
+<h3><a name="DeveloperGuidelines-DevelopmentPractices">Development Practices</a></h3>
+<ul>
+	<li>Test-first development. Code without unit tests will not be accepted.</li>
+	<li>Refactor mercilessly; however, notify the list before making large, broad-reaching refactorings.</li>
+	<li>Small methods (no more than 15 lines). Long methods will be collected and emailed to the list until a refactored solution is found.</li>
+	<li>Use guard clauses.</li>
+	<li>Write acceptance tests wherever possible.</li>
 </ul>
-<h3 class="heading3"><a name="DeveloperGuidelines-TDDStandards%28UnitTestingandDesign%29"> TDD Standards (Unit Testing and Design)</a></h3><p class="paragraph"><em class="emphasis">These standards are ideals, and not necessarily the current state of the code</em></p><ul class="star">
-<li> No unit-testing of private methods. TDD implies it is unnecessary.</li>
-<li> Don&#039;t make methods public just so you can test them (see above)</li>
-<li> Use Constructor Dependency Injection where possible.</li>
-<li> Use Dynamic Mocks for Constructor Dependencies.</li>
-<li> Interface-first design is preferred (i.e. all Constructor Dependencies should be interfaces)</li>
-<li> DefaultXYZ as a name is a smell. What <b class="strong">exact</b> type of interface are you implementing?</li>
+
+
+<h3><a name="DeveloperGuidelines-TDDStandards%28UnitTestingandDesign%29">TDD Standards (Unit Testing and Design)</a></h3>
+
+<p><em>These standards are ideals, and not necessarily the current state of the code</em></p>
+
+<ul>
+	<li>No unit-testing of private methods. TDD implies it is unnecessary.</li>
+	<li>Don't make methods public just so you can test them (see above)</li>
+	<li>Use Constructor Dependency Injection where possible.</li>
+	<li>Use Dynamic Mocks for Constructor Dependencies.</li>
+	<li>Interface-first design is preferred (i.e. all Constructor Dependencies should be interfaces)</li>
+	<li>DefaultXYZ as a name is a smell. What <b>exact</b> type of interface are you implementing?</li>
 </ul>
-<h3 class="heading3"><a name="DeveloperGuidelines-CodingStandards"> Coding Standards</a></h3>
-<ul class="star">
-<li> Respect the brace style. Curly braces at the start of the line:
+
+
+<h3><a name="DeveloperGuidelines-CodingStandards">Coding Standards</a></h3>
+<ul>
+	<li>Respect the brace style. Curly braces at the start of the line:
 <div class="code"><div class="codeContent">
-<pre><span class="java&#45;keyword">public</span>&#160;<span class="java&#45;object">Class</span> Foo&#10;&#123;&#10;                <span class="java&#45;keyword">public</span> Foo()&#10;                &#123;&#10;                                Console.WriteLine(<span class="java&#45;quote">&quot;Hello World&#33;&quot;</span>);&#10;                &#125;&#10;&#125;</pre>
-</div></div>
-</li>
-<li> Use C# naming conventions: methods, properties, classes should all start with upper-case letters.</li>
-<li> Namespaces should be C# style. They should start with &#039;ThoughtWorks.CruiseControl.XYZ&#039; where XYZ is the Visual Studio  Project Name. Sub-namespaces should map to directories where source files are saved.</li>
-<li> One file, one class &#8211; unless the inner class is private.</li>
-<li> All member variables should be prefixed with an underscore (ie. _name).</li>
-<li> The ternary operator is fine as long as the conditions are very simple.</li>
-<li> Avoid assignment in conditionals &#8211; extract to method instead</li>
-<li> Avoid magic numbers, use a nested enum or an inner class with public const members instead.</li>
-<li> Use spaces after punctuation such as commas and spaces, in accordance with standard written grammar. For example, please include spaces after semi-colons, between equals signs and after keywords
+<pre class="code-java"><span class="code-keyword">public</span> <span class="code-object">Class</span> Foo
+{
+                <span class="code-keyword">public</span> Foo()
+                {
+                                Console.WriteLine(<span class="code-quote">"Hello World!"</span>);
+                }
+}</pre>
+</div></div></li>
+	<li>Use C# naming conventions: methods, properties, classes should all start with upper-case letters.</li>
+	<li>Namespaces should be C# style. They should start with 'ThoughtWorks.CruiseControl.XYZ' where XYZ is the Visual Studio  Project Name. Sub-namespaces should map to directories where source files are saved.</li>
+	<li>One file, one class &#8211; unless the inner class is private.</li>
+	<li>All member variables should be prefixed with an underscore (ie. _name).</li>
+	<li>The ternary operator is fine as long as the conditions are very simple.</li>
+	<li>Avoid assignment in conditionals &#8211; extract to method instead</li>
+	<li>Avoid magic numbers, use a nested enum or an inner class with public const members instead.</li>
+	<li>Use spaces after punctuation such as commas and spaces, in accordance with standard written grammar. For example, please include spaces after semi-colons, between equals signs and after keywords
 <div class="code"><div class="codeContent">
-<pre><span class="java&#45;keyword">for</span> (<span class="java&#45;object">int</span> i = 0; i &lt; array.Count; i&#43;&#43;):</pre>
-</div></div>
-</li>
+<pre class="code-java"><span class="code-keyword">for</span> (<span class="code-object">int</span> i = 0; i &lt; array.Count; i++):</pre>
+</div></div></li>
 </ul>
+
 
 				    
                     			    </td>
@@ -65,7 +78,7 @@
 				<td height="12" background="border/border_bottom.gif"><img src="border/spacer.gif" width="1" height="1" border="0"/></td>
 			</tr>
 		    <tr>
-			    <td align="center"><font color="grey">Document generated by Confluence on Jun 26, 2005 17:22</font></td>
+			    <td align="center"><font color="grey">Document generated by Confluence on Aug 15, 2005 13:58</font></td>
 		    </tr>
 	    </table>
     </body>

@@ -15,33 +15,68 @@
                                                     </span>
 				    </div>
 				    <div class="pagesubheading">
-					    This page last changed on Jun 08, 2005 by <font color="#0050B2">mroberts</font>.
+					    This page last changed on Jul 19, 2005 by <font color="#0050B2">mroberts</font>.
 				    </div>
 
-				    <p class="paragraph">The Web Dashboard comes pre-configured to use a default set of plugins. To change what plugins you want to use for your CruiseControl.NET deployment, use the <tt class="monospaced">&lt;plugins&gt;</tt> section of the Dashboard configuration.</p>The section is split up into 4 parts, representing the Farm, Server, Project and Build views available in the Dashboard. Each section can be configured with any number of plugins. Most <b class="strong">Build Plugins</b> can be <a href="Project Configurable Build Plugin.html" title="Project Configurable Build Plugin">configured</a> just to be used for certain Projects.<p class="paragraph">Example:</p><div class="code"><div class="codeContent">
-<pre><span class="xml&#45;tag">&lt;plugins&gt;</span>&#10;    <span class="xml&#45;tag">&lt;farmPlugins&gt;</span>&#10;    .&#10;    .&#10;    <span class="xml&#45;tag">&lt;/farmPlugins&gt;</span>&#10;    <span class="xml&#45;tag">&lt;serverPlugins&gt;</span>&#10;    .&#10;    .&#10;    <span class="xml&#45;tag">&lt;/serverPlugins&gt;</span>&#10;    <span class="xml&#45;tag">&lt;projectPlugins&gt;</span>&#10;    .&#10;    .&#10;    <span class="xml&#45;tag">&lt;/projectPlugins&gt;</span>&#10;    <span class="xml&#45;tag">&lt;buildPlugins&gt;</span>&#10;    .&#10;    .&#10;    <span class="xml&#45;tag">&lt;/buildPlugins&gt;</span>&#10;<span class="xml&#45;tag">&lt;/plugins&gt;</span></pre>
-</div></div><p class="paragraph">The following plugins are shipped with CruiseControl.NET:</p><h4 class="heading4"><a name="PluginsConfigurationBlock-FarmPlugins"> Farm Plugins</a></h4>
-<ul class="star">
-<li> <a href="Farm Report Farm Plugin.html" title="Farm Report Farm Plugin">Farm Report Farm Plugin</a></li>
-</ul>
-<h4 class="heading4"><a name="PluginsConfigurationBlock-ServerPlugins"> Server Plugins</a></h4>
-<ul class="star">
-<li> <a href="Server Report Server Plugin.html" title="Server Report Server Plugin">Server Report Server Plugin</a></li>
-<li> <a href="Server Log Server Plugin.html" title="Server Log Server Plugin">Server Log Server Plugin</a></li>
-</ul>
-<h4 class="heading4"><a name="PluginsConfigurationBlock-ProjectPlugins"> Project Plugins</a></h4>
-<ul class="star">
-<li> <a href="Project Report Project Plugin.html" title="Project Report Project Plugin">Project Report Project Plugin</a></li>
-<li> <a href="View All Builds Project Plugin.html" title="View All Builds Project Plugin">View All Builds Project Plugin</a></li>
-</ul>
-<h4 class="heading4"><a name="PluginsConfigurationBlock-BuildPlugins"> Build Plugins</a></h4>
-<ul class="star">
-<li> <a href="Build Report Build Plugin.html" title="Build Report Build Plugin">Build Report Build Plugin</a></li>
-<li> <a href="Build Log Build Plugin.html" title="Build Log Build Plugin">Build Log Build Plugin</a></li>
-<li> <a href="XSL Report Build Plugin.html" title="XSL Report Build Plugin">XSL Report Build Plugin</a></li>
-</ul><br/>
-If you are interested in writing your own Dashboard plugins, read <a href="Developing Web Dashboard Plugins.html" title="Developing Web Dashboard Plugins">Developing Web Dashboard Plugins</a>.
+				    <p>The Web Dashboard comes pre-configured to use a default set of plugins. To change what plugins you want to use for your CruiseControl.NET deployment, use the <tt>&lt;plugins&gt;</tt> section of the Dashboard configuration.</p>
 
+<p>The section is split up into 4 parts, representing the Farm, Server, Project and Build views available in the Dashboard. Each section can be configured with any number of plugins. Most <b>Build Plugins</b> can be <a href="Project Configurable Build Plugin.html" title="Project Configurable Build Plugin">configured</a> just to be used for certain Projects.</p>
+
+<p>Example:</p>
+
+<div class="code"><div class="codeContent">
+<pre class="code-xml"><span class="code-tag">&lt;plugins&gt;</span>
+    <span class="code-tag">&lt;farmPlugins&gt;</span>
+    .
+    .
+    <span class="code-tag">&lt;/farmPlugins&gt;</span>
+    <span class="code-tag">&lt;serverPlugins&gt;</span>
+    .
+    .
+    <span class="code-tag">&lt;/serverPlugins&gt;</span>
+    <span class="code-tag">&lt;projectPlugins&gt;</span>
+    .
+    .
+    <span class="code-tag">&lt;/projectPlugins&gt;</span>
+    <span class="code-tag">&lt;buildPlugins&gt;</span>
+    .
+    .
+    <span class="code-tag">&lt;/buildPlugins&gt;</span>
+<span class="code-tag">&lt;/plugins&gt;</span></pre>
+</div></div>
+
+<p>The following plugins are shipped with CruiseControl.NET:</p>
+
+<h4><a name="PluginsConfigurationBlock-FarmPlugins">Farm Plugins</a></h4>
+<ul>
+	<li><a href="Farm Report Farm Plugin.html" title="Farm Report Farm Plugin">Farm Report Farm Plugin</a></li>
+</ul>
+
+
+<h4><a name="PluginsConfigurationBlock-ServerPlugins">Server Plugins</a></h4>
+<ul>
+	<li><a href="Server Report Server Plugin.html" title="Server Report Server Plugin">Server Report Server Plugin</a></li>
+	<li><a href="Server Log Server Plugin.html" title="Server Log Server Plugin">Server Log Server Plugin</a></li>
+	<li><a href="Server Information Server Plugin.html" title="Server Information Server Plugin">Server Information Server Plugin</a></li>
+</ul>
+
+
+<h4><a name="PluginsConfigurationBlock-ProjectPlugins">Project Plugins</a></h4>
+<ul>
+	<li><a href="Project Report Project Plugin.html" title="Project Report Project Plugin">Project Report Project Plugin</a></li>
+	<li><a href="View All Builds Project Plugin.html" title="View All Builds Project Plugin">View All Builds Project Plugin</a></li>
+</ul>
+
+
+<h4><a name="PluginsConfigurationBlock-BuildPlugins">Build Plugins</a></h4>
+<ul>
+	<li><a href="Build Report Build Plugin.html" title="Build Report Build Plugin">Build Report Build Plugin</a></li>
+	<li><a href="Build Log Build Plugin.html" title="Build Log Build Plugin">Build Log Build Plugin</a></li>
+	<li><a href="XSL Report Build Plugin.html" title="XSL Report Build Plugin">XSL Report Build Plugin</a></li>
+</ul>
+
+
+<p>If you are interested in writing your own Dashboard plugins, read <a href="Developing Web Dashboard Plugins.html" title="Developing Web Dashboard Plugins">Developing Web Dashboard Plugins</a>.</p>
 
 				    
                     			    </td>
@@ -52,7 +87,7 @@ If you are interested in writing your own Dashboard plugins, read <a href="Devel
 				<td height="12" background="border/border_bottom.gif"><img src="border/spacer.gif" width="1" height="1" border="0"/></td>
 			</tr>
 		    <tr>
-			    <td align="center"><font color="grey">Document generated by Confluence on Jun 26, 2005 17:22</font></td>
+			    <td align="center"><font color="grey">Document generated by Confluence on Aug 15, 2005 13:58</font></td>
 		    </tr>
 	    </table>
     </body>

@@ -18,35 +18,52 @@
 					    This page last changed on May 19, 2005 by <font color="#0050B2">orogers</font>.
 				    </div>
 
-				    <p class="paragraph">The following is an example of what steps the CruiseControl.NET server goes through when running an integration on a project built using NAnt and checked into a Visual Source Safe (VSS) Source Control Server.</p>This process is basically the same for all other build tools and source control systems.<br/>
+				    <p>The following is an example of what steps the CruiseControl.NET server goes through when running an integration on a project built using NAnt and checked into a Visual Source Safe (VSS) Source Control Server.</p>
 
-<div align="center"><img src="CruiseControl.NET Integration Process_attachments/image002.gif" border="0" /></div><p class="paragraph"><img class="rendericon" src="./icons/emoticons/warning.png" height="16" width="16" align="absmiddle" alt="" border="0"/> This guide is only meant as an example. For exact configuration details, please refer to the documentation for the <a href="CruiseControl.NET Server.html" title="CruiseControl.NET Server">CruiseControl.NET Server</a> or <a href="Web Dashboard.html" title="Web Dashboard">Web Dashboard</a>.</p><ol>
-<li> The <a href="CruiseControl.NET Server.html" title="CruiseControl.NET Server">CruiseControl.NET Server</a> is started, and a project is started according to a <a href="Project Configuration Block.html" title="Project Configuration Block">Project Configuration Block</a> in the <a href="Configuring the Server.html" title="Configuring the Server">Server's Configuration</a></li>
-<li> CCNet checks the source code repository for modifications that have occurred since the last build attempt.<ol>
-<li> When modifications are detected<ol>
-<li> CCNet labels the project with CCNETUNVERIFIEDxxx (xxx = date/time) (Visual Source Safe only, optionally)</li>
-<li> CCNet gets the latest version of the source from the source control repository</li>
-<li> CCNet starts the build by executing the tasks in the <b class="strong">&lt;tasks&gt;</b> section of the <b class="strong">ccnet.config</b> file. In this example, the build will execute the <b class="strong">&lt;nant&gt;</b> task to run the NAnt build file.</li>
-</ol></li>
-</ol></li>
-<li> NAnt processes the build script specified by the <b class="strong">&lt;nant&gt;</b> element .  The following steps make up one possible scenario.<ol>
-<li> NAnt runs VS.NET using either the <b class="strong">&lt;exec&gt;</b> task or the <b class="strong">&lt;solution&gt;</b> task.  The <b class="strong">&lt;solution&gt;</b> task provides better reporting capability for later steps.</li>
-<li> NAnt runs NUnit using the <b class="strong">&lt;nunit2&gt;</b> task or the <b class="strong">&lt;exec&gt;</b> task</li>
-<li> NAnt runs FxCop using the <b class="strong">&lt;exec&gt;</b> task</li>
-</ol></li>
-<li> CCNet receives the outcome of the NAnt execution (Success/Failed)<ol>
-<li> If the build was successful, CCNet replaces the CCNETUNVERIFIEDxxx label with the next sequential build number. (VSS only)</li>
-<li> The XML output files are gathered from each step using the <a href="File Merge Task.html" title="File Merge Task">File Merge Task</a> and output as an xml file in the log directory specified in the <b class="strong">&lt;logDir&gt;</b> element.</li>
-</ol></li>
-<li> CCNet sends out email based on the <b class="strong">&lt;publishers&gt;&lt;email&gt;</b> elements in <b class="strong">ccnet.config</b> (Optional).<ol>
-<li> If <b class="strong">&lt;group notification=&quot;change&quot;&gt;</b> is set, then the individuals will only receive email if the status of the build changes (Success -&gt; Fail, or Fail -&gt; Success)</li>
-<li> If <b class="strong">&lt;group notification=&quot;always&quot;&gt;</b> is set, then the individuals will receive email for every build.</li>
-</ol></li>
-<li> CCTray displays current status of the build in the client system tray.  The user can use the &quot;Launch web page&quot; menu item to browse to the build status website.</li>
-<li> Project Dashboard enables multiple continuous integration projects to be viewed.</li>
-</ol><br/>
-Content supplied by Noel Gifford.
+<p>This process is basically the same for all other build tools and source control systems.</p>
 
+<p><div align="center"><img src="CruiseControl.NET Integration Process_attachments/image002.gif" border="0" /></div></p>
+
+<p><img class="emoticon" src="./icons/emoticons/warning.gif" height="16" width="16" align="absmiddle" alt="" border="0"/> This guide is only meant as an example. For exact configuration details, please refer to the documentation for the <a href="CruiseControl.NET Server.html" title="CruiseControl.NET Server">CruiseControl.NET Server</a> or <a href="Web Dashboard.html" title="Web Dashboard">Web Dashboard</a>.</p>
+
+<ol>
+	<li>The <a href="CruiseControl.NET Server.html" title="CruiseControl.NET Server">CruiseControl.NET Server</a> is started, and a project is started according to a <a href="Project Configuration Block.html" title="Project Configuration Block">Project Configuration Block</a> in the <a href="Configuring the Server.html" title="Configuring the Server">Server's Configuration</a></li>
+	<li>CCNet checks the source code repository for modifications that have occurred since the last build attempt.
+	<ol>
+		<li>When modifications are detected
+		<ol>
+			<li>CCNet labels the project with CCNETUNVERIFIEDxxx (xxx = date/time) (Visual Source Safe only, optionally)</li>
+			<li>CCNet gets the latest version of the source from the source control repository</li>
+			<li>CCNet starts the build by executing the tasks in the <b>&lt;tasks&gt;</b> section of the <b>ccnet.config</b> file. In this example, the build will execute the <b>&lt;nant&gt;</b> task to run the NAnt build file.</li>
+		</ol>
+		</li>
+	</ol>
+	</li>
+	<li>NAnt processes the build script specified by the <b>&lt;nant&gt;</b> element .  The following steps make up one possible scenario.
+	<ol>
+		<li>NAnt runs VS.NET using either the <b>&lt;exec&gt;</b> task or the <b>&lt;solution&gt;</b> task.  The <b>&lt;solution&gt;</b> task provides better reporting capability for later steps.</li>
+		<li>NAnt runs NUnit using the <b>&lt;nunit2&gt;</b> task or the <b>&lt;exec&gt;</b> task</li>
+		<li>NAnt runs FxCop using the <b>&lt;exec&gt;</b> task</li>
+	</ol>
+	</li>
+	<li>CCNet receives the outcome of the NAnt execution (Success/Failed)
+	<ol>
+		<li>If the build was successful, CCNet replaces the CCNETUNVERIFIEDxxx label with the next sequential build number. (VSS only)</li>
+		<li>The XML output files are gathered from each step using the <a href="File Merge Task.html" title="File Merge Task">File Merge Task</a> and output as an xml file in the log directory specified in the <b>&lt;logDir&gt;</b> element.</li>
+	</ol>
+	</li>
+	<li>CCNet sends out email based on the <b>&lt;publishers&gt;&lt;email&gt;</b> elements in <b>ccnet.config</b> (Optional).
+	<ol>
+		<li>If <b>&lt;group notification="change"&gt;</b> is set, then the individuals will only receive email if the status of the build changes (Success -&gt; Fail, or Fail -&gt; Success)</li>
+		<li>If <b>&lt;group notification="always"&gt;</b> is set, then the individuals will receive email for every build.</li>
+	</ol>
+	</li>
+	<li>CCTray displays current status of the build in the client system tray.  The user can use the "Launch web page" menu item to browse to the build status website.</li>
+	<li>Project Dashboard enables multiple continuous integration projects to be viewed.</li>
+</ol>
+
+
+<p>Content supplied by Noel Gifford.</p>
 
 				    					    <br/>
                         <div class="tabletitle">
@@ -67,7 +84,7 @@ Content supplied by Noel Gifford.
 				<td height="12" background="border/border_bottom.gif"><img src="border/spacer.gif" width="1" height="1" border="0"/></td>
 			</tr>
 		    <tr>
-			    <td align="center"><font color="grey">Document generated by Confluence on Jun 26, 2005 17:22</font></td>
+			    <td align="center"><font color="grey">Document generated by Confluence on Aug 15, 2005 13:58</font></td>
 		    </tr>
 	    </table>
     </body>

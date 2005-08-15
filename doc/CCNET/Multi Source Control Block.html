@@ -15,17 +15,53 @@
                                                     </span>
 				    </div>
 				    <div class="pagesubheading">
-					    This page last changed on Oct 13, 2004 by <font color="#0050B2">mroberts</font>.
+					    This page last changed on Jul 11, 2005 by <font color="#0050B2">mroberts</font>.
 				    </div>
 
-				    
-<h3 class="heading3"><a name="MultiSourceControlBlock-%26%23039%3BMulti%26%23039%3BSourceControlConfigurationExample"> &#039;Multi&#039; Source Control Configuration Example</a></h3>
-You can use the &#039;Multi&#039; Source Control plugin to check for modifications from any number of source control repositories. You may want to do this if (for example) you want to build if the source for your project changes, or if the binaries your project depends on change (which may be stored on a file server). Here&#039;s an example: <br/>
+				    <h3><a name="MultiSourceControlBlock-%27Multi%27SourceControlConfigurationExample">'Multi' Source Control Configuration Example</a></h3>
+<p>You can use the 'Multi' Source Control plugin to check for modifications from any number of source control repositories. You may want to do this if (for example) you want to build if the source for your project changes, or if the binaries your project depends on change (which may be stored on a file server). Here's an example: </p>
 
 <div class="code"><div class="codeContent">
-<pre><span class="xml&#45;tag">&lt;sourcecontrol type=<span class="xml&#45;quote">&quot;multi&quot;</span>&gt;</span>&#10;  <span class="xml&#45;tag">&lt;sourceControls&gt;</span>&#10;	<span class="xml&#45;tag">&lt;filesystem&gt;</span>&#10;	  <span class="xml&#45;tag"><span class="xml&#45;comment">&lt;&#33;&#45;&#45; Check for changes in the latest 1.2 version of the server&#8230; &#45;&#45;&gt;</span></span>&#10;	  <span class="xml&#45;tag">&lt;repositoryRoot&gt;</span>&#92;&#92;DistributionFileServer&#92;Server&#92;1.2.latest<span class="xml&#45;tag">&lt;/repositoryRoot&gt;</span>&#10;	<span class="xml&#45;tag">&lt;/filesystem&gt;</span>&#10;	<span class="xml&#45;tag">&lt;cvs&gt;</span>&#10;	  <span class="xml&#45;tag"><span class="xml&#45;comment">&lt;&#33;&#45;&#45; ...or in the source of the client project &#45;&#45;&gt;</span></span>&#10;	  <span class="xml&#45;tag">&lt;executable&gt;</span>c:&#92;tools&#92;cvs&#45;exe&#92;cvswithplinkrsh.bat<span class="xml&#45;tag">&lt;/executable&gt;</span>&#10;	  <span class="xml&#45;tag">&lt;workingDirectory&gt;</span>c:&#92;localcvs&#92;myproject&#92;client<span class="xml&#45;tag">&lt;/workingDirectory&gt;</span>&#10;	<span class="xml&#45;tag">&lt;/cvs&gt;</span>&#10;  <span class="xml&#45;tag">&lt;/sourceControls&gt;</span>&#10;<span class="xml&#45;tag">&lt;/sourcecontrol&gt;</span></pre>
+<pre class="code-xml"><span class="code-tag">&lt;sourcecontrol type=<span class="code-quote">"multi"</span>&gt;</span>
+  <span class="code-tag">&lt;sourceControls&gt;</span>
+	<span class="code-tag">&lt;filesystem&gt;</span>
+	  <span class="code-tag"><span class="code-comment">&lt;!-- Check for changes in the latest 1.2 version of the server... --&gt;</span></span>
+	  <span class="code-tag">&lt;repositoryRoot&gt;</span>\\DistributionFileServer\Server\1.2.latest<span class="code-tag">&lt;/repositoryRoot&gt;</span>
+	<span class="code-tag">&lt;/filesystem&gt;</span>
+	<span class="code-tag">&lt;cvs&gt;</span>
+	  <span class="code-tag"><span class="code-comment">&lt;!-- ...or in the source of the client project --&gt;</span></span>
+	  <span class="code-tag">&lt;executable&gt;</span>c:\tools\cvs-exe\cvswithplinkrsh.bat<span class="code-tag">&lt;/executable&gt;</span>
+	  <span class="code-tag">&lt;workingDirectory&gt;</span>c:\localcvs\myproject\client<span class="code-tag">&lt;/workingDirectory&gt;</span>
+	<span class="code-tag">&lt;/cvs&gt;</span>
+  <span class="code-tag">&lt;/sourceControls&gt;</span>
+<span class="code-tag">&lt;/sourcecontrol&gt;</span></pre>
 </div></div>
 
+<h3><a name="MultiSourceControlBlock-ConfigurationElements%3A">Configuration Elements:</a></h3>
+
+<table class='confluenceTable'>
+<tr>
+<th class='confluenceTh'> Node </th>
+<th class='confluenceTh'> Description </th>
+<th class='confluenceTh'> Type </th>
+<th class='confluenceTh'> Required </th>
+<th class='confluenceTh'> Default </th>
+</tr>
+<tr>
+<td class='confluenceTd'> sourceControls </td>
+<td class='confluenceTd'> The list of other <a href="Source Control Blocks.html" title="Source Control Blocks">Source Control Blocks</a> to include </td>
+<td class='confluenceTd'> list of <a href="Source Control Blocks.html" title="Source Control Blocks">Source Control Blocks</a> </td>
+<td class='confluenceTd'> true </td>
+<td class='confluenceTd'> <em>n.a.</em> </td>
+</tr>
+<tr>
+<td class='confluenceTd'> requireChangesFromAll </td>
+<td class='confluenceTd'> If true, only return a list of modifications if <b>all</b> <tt>sourceControl</tt> sections return a non-empty list. Note that this is short-circuiting, i.e. if the first <tt>sourceControl</tt> returns an empty list, the next won't be called (this can be useful for situations where you have a slow source control server and you want to check a specific file first as a trigger) </td>
+<td class='confluenceTd'> boolean </td>
+<td class='confluenceTd'> false </td>
+<td class='confluenceTd'> false </td>
+</tr>
+</table>
 
 				    
                     			    </td>
@@ -36,7 +72,7 @@ You can use the &#039;Multi&#039; Source Control plugin to check for modificatio
 				<td height="12" background="border/border_bottom.gif"><img src="border/spacer.gif" width="1" height="1" border="0"/></td>
 			</tr>
 		    <tr>
-			    <td align="center"><font color="grey">Document generated by Confluence on Jun 26, 2005 17:22</font></td>
+			    <td align="center"><font color="grey">Document generated by Confluence on Aug 15, 2005 13:58</font></td>
 		    </tr>
 	    </table>
     </body>

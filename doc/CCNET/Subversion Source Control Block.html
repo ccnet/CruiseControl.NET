@@ -18,46 +18,129 @@
 					    This page last changed on Nov 22, 2004 by <font color="#0050B2">mroberts</font>.
 				    </div>
 
-				    <p class="paragraph">CruiseControl.NET provides basic support for Subversion repositories. Checking for changes, running builds (bootstrapped through NAnt), and tagging-by-copying are supported, but more advanced features such as using Subversion revision numbers are not yet supported. Subversion support is under active development and will improve over time.</p>To configure the CruiseControl.NET server to monitor a Subversion repository, edit ccnet.config and configure sourcecontrol to point at your repository: 
+				    <p>CruiseControl.NET provides basic support for Subversion repositories. Checking for changes, running builds (bootstrapped through NAnt), and tagging-by-copying are supported, but more advanced features such as using Subversion revision numbers are not yet supported. Subversion support is under active development and will improve over time. </p>
+
+<p>To configure the CruiseControl.NET server to monitor a Subversion repository, edit ccnet.config and configure sourcecontrol to point at your repository: </p>
 <div class="code"><div class="codeContent">
-<pre><span class="xml&#45;tag">&lt;sourcecontrol type=<span class="xml&#45;quote">&quot;svn&quot;</span>&gt;</span>&#10;	<span class="xml&#45;tag">&lt;executable&gt;</span>c:&#92;program files&#92;subversion&#92;bin&#92;svn.exe<span class="xml&#45;tag">&lt;/executable&gt;</span>&#10;	<span class="xml&#45;tag">&lt;trunkUrl&gt;</span>svn://svn.mycompany.com/myfirstproject/trunk<span class="xml&#45;tag">&lt;/trunkUrl&gt;</span>&#10;	<span class="xml&#45;tag">&lt;workingDirectory&gt;</span>c:&#92;dev&#92;ccnet<span class="xml&#45;tag">&lt;/workingDirectory&gt;</span>&#10;<span class="xml&#45;tag">&lt;/sourcecontrol&gt;</span></pre>
-</div></div><br/>
-	
-The <b class="strong">&lt;executable&gt;</b> tag should contain the full path to your Subversion executable. The <b class="strong">&lt;trunkUrl&gt;</b> tag should specify the URL to use to determine if changes have occurred in your repository. Access to svn log for this URL should be available anonymously, because the Subversion client will run without extra authentication priveleges. <p class="paragraph"><h3 class="heading3"><a name="SubversionSourceControlBlock-ConfigurationElements%3A"> Configuration Elements:</a></h3></p><table class="wikitable">
+<pre class="code-xml"><span class="code-tag">&lt;sourcecontrol type=<span class="code-quote">"svn"</span>&gt;</span>
+	<span class="code-tag">&lt;executable&gt;</span>c:\program files\subversion\bin\svn.exe<span class="code-tag">&lt;/executable&gt;</span>
+	<span class="code-tag">&lt;trunkUrl&gt;</span>svn://svn.mycompany.com/myfirstproject/trunk<span class="code-tag">&lt;/trunkUrl&gt;</span>
+	<span class="code-tag">&lt;workingDirectory&gt;</span>c:\dev\ccnet<span class="code-tag">&lt;/workingDirectory&gt;</span>
+<span class="code-tag">&lt;/sourcecontrol&gt;</span></pre>
+</div></div>
+
+<p>The <b>&lt;executable&gt;</b> tag should contain the full path to your Subversion executable. The <b>&lt;trunkUrl&gt;</b> tag should specify the URL to use to determine if changes have occurred in your repository. Access to svn log for this URL should be available anonymously, because the Subversion client will run without extra authentication priveleges. </p>
+
+<h3><a name="SubversionSourceControlBlock-ConfigurationElements%3A">Configuration Elements:</a></h3>
+
+<table class='confluenceTable'>
 <tr>
-<th> Node </th><th> Description </th><th> Type </th><th> Default </th><th> Required</th>
-</tr><tr>
-<td> executable </td><td> The location of the svn executable </td><td> string </td><td> &quot;svn.exe&quot; </td><td> true </td>
-</tr><tr>
-<td> trunkUrl </td><td> The url for your repository (eg. svn://svnserver/) </td><td> string </td><td> N/A </td><td> true </td>
-</tr><tr>
-<td> workingDirectory </td><td> The directory containing the locally checked out workspace. </td><td> string </td><td> N/A </td><td> true</td>
-</tr><tr>
-<td> username </td><td> The username to use for authentication when connecting to the repository. </td><td> string </td><td> N/A </td><td> false </td>
-</tr><tr>
-<td> password </td><td> The password to use for authentication when connecting to the repository. </td><td> string </td><td> N/A </td><td> false </td>
-</tr><tr>
-<td> <a name="SubversionSourceControlBlock-autoGetSource"></a> autoGetSource </td><td> Whether to retrieve the updates from Subversion for a particular build. </td><td> bool </td><td> false </td><td> false </td>
-</tr><tr>
-<td> webUrlBuilder </td><td> The root url for the WebSVN site </td><td> string </td><td> N/A </td><td> false </td>
-</tr><tr>
-<td> tagOnSuccess </td><td> Indicates that the repository should be tagged if the build succeeds. </td><td> bool </td><td> false </td><td> false </td>
-</tr><tr>
-<td> tagBaseUrl </td><td> The base url for tags in your repository. </td><td> string </td><td> false </td><td> false </td>
-</tr><tr>
-<td> timeout </td><td> How long (in milliseconds) the operation will be permitted to run before timing out </td><td> int </td><td> 10 minutes </td><td> false </td>
+<th class='confluenceTh'> Node </th>
+<th class='confluenceTh'> Description </th>
+<th class='confluenceTh'> Type </th>
+<th class='confluenceTh'> Default </th>
+<th class='confluenceTh'> Required</th>
+</tr>
+<tr>
+<td class='confluenceTd'> executable </td>
+<td class='confluenceTd'> The location of the svn executable </td>
+<td class='confluenceTd'> string </td>
+<td class='confluenceTd'> "svn.exe" </td>
+<td class='confluenceTd'> true </td>
+</tr>
+<tr>
+<td class='confluenceTd'> trunkUrl </td>
+<td class='confluenceTd'> The url for your repository (eg. svn://svnserver/) </td>
+<td class='confluenceTd'> string </td>
+<td class='confluenceTd'> N/A </td>
+<td class='confluenceTd'> true </td>
+</tr>
+<tr>
+<td class='confluenceTd'> workingDirectory </td>
+<td class='confluenceTd'> The directory containing the locally checked out workspace. </td>
+<td class='confluenceTd'> string </td>
+<td class='confluenceTd'> N/A </td>
+<td class='confluenceTd'> true</td>
+</tr>
+<tr>
+<td class='confluenceTd'> username </td>
+<td class='confluenceTd'> The username to use for authentication when connecting to the repository. </td>
+<td class='confluenceTd'> string </td>
+<td class='confluenceTd'> N/A </td>
+<td class='confluenceTd'> false </td>
+</tr>
+<tr>
+<td class='confluenceTd'> password </td>
+<td class='confluenceTd'> The password to use for authentication when connecting to the repository. </td>
+<td class='confluenceTd'> string </td>
+<td class='confluenceTd'> N/A </td>
+<td class='confluenceTd'> false </td>
+</tr>
+<tr>
+<td class='confluenceTd'> <a name="SubversionSourceControlBlock-autoGetSource"></a> autoGetSource </td>
+<td class='confluenceTd'> Whether to retrieve the updates from Subversion for a particular build. </td>
+<td class='confluenceTd'> bool </td>
+<td class='confluenceTd'> false </td>
+<td class='confluenceTd'> false </td>
+</tr>
+<tr>
+<td class='confluenceTd'> webUrlBuilder </td>
+<td class='confluenceTd'> The root url for the WebSVN site </td>
+<td class='confluenceTd'> string </td>
+<td class='confluenceTd'> N/A </td>
+<td class='confluenceTd'> false </td>
+</tr>
+<tr>
+<td class='confluenceTd'> tagOnSuccess </td>
+<td class='confluenceTd'> Indicates that the repository should be tagged if the build succeeds. </td>
+<td class='confluenceTd'> bool </td>
+<td class='confluenceTd'> false </td>
+<td class='confluenceTd'> false </td>
+</tr>
+<tr>
+<td class='confluenceTd'> tagBaseUrl </td>
+<td class='confluenceTd'> The base url for tags in your repository. </td>
+<td class='confluenceTd'> string </td>
+<td class='confluenceTd'> false </td>
+<td class='confluenceTd'> false </td>
+</tr>
+<tr>
+<td class='confluenceTd'> timeout </td>
+<td class='confluenceTd'> How long (in milliseconds) the operation will be permitted to run before timing out </td>
+<td class='confluenceTd'> int </td>
+<td class='confluenceTd'> 10 minutes </td>
+<td class='confluenceTd'> false </td>
 </tr>
 </table>
-<h3 class="heading3"><a name="SubversionSourceControlBlock-LinkingmodificationstoWebSVN"> Linking modifications to WebSVN</a></h3><p class="paragraph">You can link the modifications detected by CruiseControl.NET to the appropriate WebSVN page by adding the following additional configuration information to the Subversion source control section:</p><div class="code"><div class="codeContent">
-<pre><span class="xml&#45;tag">&lt;webUrlBuilder type=<span class="xml&#45;quote">&quot;websvn&quot;</span>&gt;</span>&#10;                <span class="xml&#45;tag">&lt;url&gt;</span>&#104;ttp://localhost:7899/websvn/diff.php&#63;repname=MiniACE&amp;path=&#123;0&#125;&amp;rev=&#123;1&#125;&amp;sc=1<span class="xml&#45;tag">&lt;/url&gt;</span>&#10;<span class="xml&#45;tag">&lt;/webUrlBuilder&gt;</span></pre>
-</div></div><p class="paragraph">Change the <b class="strong">&lt;url&gt;</b> element to point to the root url for the WebSVN site.  The <b class="strong">path</b> and <b class="strong">rev</b> parameters will be filled in by CruiseControl.NET when it generates the link to the code file page.</p>NOTE: The standard url for WebSVN 1.38 contains rep=3 r instead of repname=MiniACE.  Adding a new repository to the SvnParentPath will change the number of the rep parameter, so you may need to make the following change to diff.php to decode the repname parameter:<br/>
- 
+
+<h3><a name="SubversionSourceControlBlock-LinkingmodificationstoWebSVN">Linking modifications to WebSVN</a></h3>
+
+<p>You can link the modifications detected by CruiseControl.NET to the appropriate WebSVN page by adding the following additional configuration information to the Subversion source control section: </p>
+
 <div class="code"><div class="codeContent">
-<pre>$repname = &#64;$&#95;REQUEST&#91;<span class="java&#45;quote">&quot;repname&quot;</span>&#93;;&#10;&#10;<span class="java&#45;keyword">if</span> (isset($repname))&#10;&#123;&#10;    $rep = $config&#45;&gt;findRepository($repname);&#10;&#125;</pre>
-</div></div><p class="paragraph">External contributors:
-<ul class="star">
-<li> Matt Petteys</li>
-</ul></p>
+<pre class="code-xml"><span class="code-tag">&lt;webUrlBuilder type=<span class="code-quote">"websvn"</span>&gt;</span>
+                <span class="code-tag">&lt;url&gt;</span>http://localhost:7899/websvn/diff.php?repname=MiniACE&amp;amp;path={0}&amp;amp;rev={1}&amp;amp;sc=1<span class="code-tag">&lt;/url&gt;</span>
+<span class="code-tag">&lt;/webUrlBuilder&gt;</span></pre>
+</div></div>
+
+<p>Change the <b>&lt;url&gt;</b> element to point to the root url for the WebSVN site.  The <b>path</b> and <b>rev</b> parameters will be filled in by CruiseControl.NET when it generates the link to the code file page.  </p>
+
+<p>NOTE: The standard url for WebSVN 1.38 contains rep=3 r instead of repname=MiniACE.  Adding a new repository to the SvnParentPath will change the number of the rep parameter, so you may need to make the following change to diff.php to decode the repname parameter:</p>
+
+<div class="code"><div class="codeContent">
+<pre class="code-java">$repname = @$_REQUEST[<span class="code-quote">"repname"</span>];
+
+<span class="code-keyword">if</span> (isset($repname))
+{
+    $rep = $config-&gt;findRepository($repname);
+}</pre>
+</div></div>
+
+<p>External contributors:</p>
+<ul>
+	<li>Matt Petteys</li>
+</ul>
+
 
 				    
                                             <div class="tabletitle">
@@ -68,8 +151,9 @@ The <b class="strong">&lt;executable&gt;</b> tag should contain the full path to
                                                         <tr>
                                 <td >
                                     <a name="comment-763"></a>
-                                    <font class="smallfont"><p class="paragraph">WebSVN&#039;s URL format has changed in 1.40.  As such, there is no need to make the change to diff.php described above</p>Tim
-</font>
+                                    <font class="smallfont"><p>WebSVN's URL format has changed in 1.40.  As such, there is no need to make the change to diff.php described above</p>
+
+<p>Tim</p></font>
                                     <div align="left" class="smallfont" style="color: #666666; width: 98%; margin-bottom: 10px;">
                                         <img src="icons/comment_16.gif" height="16" width="16" border="0" align="absmiddle"/>
                                         Posted by  at Jun 10, 2004 06:57
@@ -85,7 +169,7 @@ The <b class="strong">&lt;executable&gt;</b> tag should contain the full path to
 				<td height="12" background="border/border_bottom.gif"><img src="border/spacer.gif" width="1" height="1" border="0"/></td>
 			</tr>
 		    <tr>
-			    <td align="center"><font color="grey">Document generated by Confluence on Jun 26, 2005 17:23</font></td>
+			    <td align="center"><font color="grey">Document generated by Confluence on Aug 15, 2005 13:58</font></td>
 		    </tr>
 	    </table>
     </body>

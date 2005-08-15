@@ -18,15 +18,52 @@
 					    This page last changed on Jun 08, 2005 by <font color="#0050B2">mroberts</font>.
 				    </div>
 
-				    <p class="paragraph">Most Build Plugins can be configured to be used only for certain projects. If they can be, it will say on their own documentation page.</p>A Build Plugin by default will appear on the Build Plugins list for all projects, but you can specify either a specific <em class="emphasis">inclusion</em> or <em class="emphasis">exclusion</em> list. These are described below. You cannot have both an inclusion <b class="strong">and</b> an exclusion list (if you do, you will get a configuration exception.)<p class="paragraph"><h3 class="heading3"><a name="ProjectConfigurableBuildPlugin-Example"> Example</a></h3></p>The name of the plugin (<em class="emphasis">myBuildPlugin</em>) is just an example - it will actually be the name of the specific type of Build Plugin you are using. Also, the other property shown (<em class="emphasis">myBuildPluginsOwnProperty</em>) is just an example of where the plugin-specific properties would go.<p class="paragraph">By default, you don&#039;t have to specify either an <tt class="monospaced">&lt;includedProjects /&gt;</tt> or <tt class="monospaced">&lt;excludedProjects /&gt;</tt> section, in which case your Build Plugin will be shown for all projects.</p><div class="code"><div class="codeContent">
-<pre><span class="xml&#45;tag">&lt;myBuildPlugin myBuildPluginsOwnProperty=<span class="xml&#45;quote">&quot;Something&quot;</span>&gt;</span>&#10;    <span class="xml&#45;tag">&lt;includedProjects&gt;</span>&#10;        <span class="xml&#45;tag">&lt;projectName&gt;</span>My Project<span class="xml&#45;tag">&lt;/projectName&gt;</span>&#10;        <span class="xml&#45;tag">&lt;projectName&gt;</span>My Other Project<span class="xml&#45;tag">&lt;/projectName&gt;</span>&#10;    <span class="xml&#45;tag">&lt;/includedProjects&gt;</span>&#10;<span class="xml&#45;tag">&lt;/myBuildPlugin&gt;</span></pre>
-</div></div><p class="paragraph"><b class="strong">OR</b></p><div class="code"><div class="codeContent">
-<pre><span class="xml&#45;tag">&lt;myBuildPlugin myBuildPluginsOwnProperty=<span class="xml&#45;quote">&quot;Something&quot;</span>&gt;</span>&#10;    <span class="xml&#45;tag">&lt;excludedProjects&gt;</span>&#10;        <span class="xml&#45;tag">&lt;projectName&gt;</span>My Project<span class="xml&#45;tag">&lt;/projectName&gt;</span>&#10;        <span class="xml&#45;tag">&lt;projectName&gt;</span>My Other Project<span class="xml&#45;tag">&lt;/projectName&gt;</span>&#10;    <span class="xml&#45;tag">&lt;/excludedProjects&gt;</span>&#10;<span class="xml&#45;tag">&lt;/myBuildPlugin&gt;</span></pre>
-</div></div><p class="paragraph"><h3 class="heading3"><a name="ProjectConfigurableBuildPlugin-ConfigurationElements"> Configuration Elements</a></h3></p><table class="wikitable">
+				    <p>Most Build Plugins can be configured to be used only for certain projects. If they can be, it will say on their own documentation page.</p>
+
+<p>A Build Plugin by default will appear on the Build Plugins list for all projects, but you can specify either a specific <em>inclusion</em> or <em>exclusion</em> list. These are described below. You cannot have both an inclusion <b>and</b> an exclusion list (if you do, you will get a configuration exception.)</p>
+
+<h3><a name="ProjectConfigurableBuildPlugin-Example">Example</a></h3>
+
+<p>The name of the plugin (<em>myBuildPlugin</em>) is just an example - it will actually be the name of the specific type of Build Plugin you are using. Also, the other property shown (<em>myBuildPluginsOwnProperty</em>) is just an example of where the plugin-specific properties would go.</p>
+
+<p>By default, you don't have to specify either an <tt>&lt;includedProjects /&gt;</tt> or <tt>&lt;excludedProjects /&gt;</tt> section, in which case your Build Plugin will be shown for all projects.</p>
+
+<div class="code"><div class="codeContent">
+<pre class="code-xml"><span class="code-tag">&lt;myBuildPlugin myBuildPluginsOwnProperty=<span class="code-quote">"Something"</span>&gt;</span>
+    <span class="code-tag">&lt;includedProjects&gt;</span>
+        <span class="code-tag">&lt;projectName&gt;</span>My Project<span class="code-tag">&lt;/projectName&gt;</span>
+        <span class="code-tag">&lt;projectName&gt;</span>My Other Project<span class="code-tag">&lt;/projectName&gt;</span>
+    <span class="code-tag">&lt;/includedProjects&gt;</span>
+<span class="code-tag">&lt;/myBuildPlugin&gt;</span></pre>
+</div></div>
+
+<p><b>OR</b></p>
+
+<div class="code"><div class="codeContent">
+<pre class="code-xml"><span class="code-tag">&lt;myBuildPlugin myBuildPluginsOwnProperty=<span class="code-quote">"Something"</span>&gt;</span>
+    <span class="code-tag">&lt;excludedProjects&gt;</span>
+        <span class="code-tag">&lt;projectName&gt;</span>My Project<span class="code-tag">&lt;/projectName&gt;</span>
+        <span class="code-tag">&lt;projectName&gt;</span>My Other Project<span class="code-tag">&lt;/projectName&gt;</span>
+    <span class="code-tag">&lt;/excludedProjects&gt;</span>
+<span class="code-tag">&lt;/myBuildPlugin&gt;</span></pre>
+</div></div>
+
+<h3><a name="ProjectConfigurableBuildPlugin-ConfigurationElements">Configuration Elements</a></h3>
+
+<table class='confluenceTable'>
 <tr>
-<th> Node </th><th> Description </th><th> Type </th><th> Required </th><th> Default </th>
-</tr><tr>
-<td> includedProjects <b class="strong">OR</b> excludedProjects </td><td> A list of project names. If you use an &lt;includedProjects&gt; section the build plugin will only appear for those projects. If you use an &lt;excludedProjects&gt; section the build plugin will appear for <b class="strong">all</b> projects apart from the specified ones. In <b class="strong">both</b> cases, the project names must match <b class="strong">exactly</b> to those specified in your build server config files, including use of spaces and capital letters </td><td> string list</td><td> no </td><td> empty lists for both sections, plugin used for all projects. </td>
+<th class='confluenceTh'> Node </th>
+<th class='confluenceTh'> Description </th>
+<th class='confluenceTh'> Type </th>
+<th class='confluenceTh'> Required </th>
+<th class='confluenceTh'> Default </th>
+</tr>
+<tr>
+<td class='confluenceTd'> includedProjects <b>OR</b> excludedProjects </td>
+<td class='confluenceTd'> A list of project names. If you use an &lt;includedProjects&gt; section the build plugin will only appear for those projects. If you use an &lt;excludedProjects&gt; section the build plugin will appear for <b>all</b> projects apart from the specified ones. In <b>both</b> cases, the project names must match <b>exactly</b> to those specified in your build server config files, including use of spaces and capital letters </td>
+<td class='confluenceTd'> string list</td>
+<td class='confluenceTd'> no </td>
+<td class='confluenceTd'> empty lists for both sections, plugin used for all projects. </td>
 </tr>
 </table>
 
@@ -40,7 +77,7 @@
 				<td height="12" background="border/border_bottom.gif"><img src="border/spacer.gif" width="1" height="1" border="0"/></td>
 			</tr>
 		    <tr>
-			    <td align="center"><font color="grey">Document generated by Confluence on Jun 26, 2005 17:22</font></td>
+			    <td align="center"><font color="grey">Document generated by Confluence on Aug 15, 2005 13:58</font></td>
 		    </tr>
 	    </table>
     </body>

@@ -18,44 +18,139 @@
 					    This page last changed on Mar 08, 2005 by <font color="#0050B2">mroberts</font>.
 				    </div>
 
-				    <p class="paragraph"><h3 style="margin: 4px 0px 4px 0px;" class="heading3"><a name="StarTeamSourceControlBlock-StarTeamConfigurationExample"> StarTeam Configuration Example</a></h3>
-For StarTeam you must specify the executable, project, username and password. You may also specify the host, port and path. The host defaults to 127.0.0.1. The port to 49201. The path to the empty string.</p><div class="code"><div class="codeContent">
-<pre><span class="xml&#45;tag">&lt;sourcecontrol type=<span class="xml&#45;quote">&quot;starteam&quot;</span>&gt;</span>&#10;   <span class="xml&#45;tag">&lt;executable&gt;</span>c:&#92;starteam&#92;stcmd.exe<span class="xml&#45;tag">&lt;/executable&gt;</span>&#10;   <span class="xml&#45;tag">&lt;project&gt;</span>ccnet<span class="xml&#45;tag">&lt;/project&gt;</span>&#10;   <span class="xml&#45;tag">&lt;username&gt;</span>buildguy<span class="xml&#45;tag">&lt;/username&gt;</span>&#10;   <span class="xml&#45;tag">&lt;password&gt;</span>buildguypw<span class="xml&#45;tag">&lt;/password&gt;</span>&#10;   <span class="xml&#45;tag">&lt;host&gt;</span>thebuildmachine<span class="xml&#45;tag">&lt;/host&gt;</span>&#10;   <span class="xml&#45;tag">&lt;port&gt;</span>49201<span class="xml&#45;tag">&lt;/port&gt;</span>&#10;   <span class="xml&#45;tag">&lt;path&gt;</span>release2.0<span class="xml&#45;tag">&lt;/path&gt;</span>&#10;   <span class="xml&#45;tag">&lt;autoGetSource&gt;</span>true<span class="xml&#45;tag">&lt;/autoGetSource&gt;</span>&#10;   <span class="xml&#45;tag">&lt;folderRegEx&gt;</span>customRegEx<span class="xml&#45;tag">&lt;/folderRegEx&gt;</span>&#10;   <span class="xml&#45;tag">&lt;fileRegEx&gt;</span>customRegEx<span class="xml&#45;tag">&lt;/fileRegEx&gt;</span>&#10;   <span class="xml&#45;tag">&lt;fileHistoryRegEx&gt;</span>customRegEx<span class="xml&#45;tag">&lt;/fileHistoryRegEx&gt;</span>&#10;<span class="xml&#45;tag">&lt;/sourcecontrol&gt;</span></pre>
-</div></div><p class="paragraph"><h3 class="heading3"><a name="StarTeamSourceControlBlock-ConfigurationElements%3A"> Configuration Elements:</a></h3></p><table class="wikitable">
+				    <h3><a name="StarTeamSourceControlBlock-StarTeamConfigurationExample">StarTeam Configuration Example</a></h3>
+<p>For StarTeam you must specify the executable, project, username and password. You may also specify the host, port and path. The host defaults to 127.0.0.1. The port to 49201. The path to the empty string. </p>
+
+<div class="code"><div class="codeContent">
+<pre class="code-xml"><span class="code-tag">&lt;sourcecontrol type=<span class="code-quote">"starteam"</span>&gt;</span>
+   <span class="code-tag">&lt;executable&gt;</span>c:\starteam\stcmd.exe<span class="code-tag">&lt;/executable&gt;</span>
+   <span class="code-tag">&lt;project&gt;</span>ccnet<span class="code-tag">&lt;/project&gt;</span>
+   <span class="code-tag">&lt;username&gt;</span>buildguy<span class="code-tag">&lt;/username&gt;</span>
+   <span class="code-tag">&lt;password&gt;</span>buildguypw<span class="code-tag">&lt;/password&gt;</span>
+   <span class="code-tag">&lt;host&gt;</span>thebuildmachine<span class="code-tag">&lt;/host&gt;</span>
+   <span class="code-tag">&lt;port&gt;</span>49201<span class="code-tag">&lt;/port&gt;</span>
+   <span class="code-tag">&lt;path&gt;</span>release2.0<span class="code-tag">&lt;/path&gt;</span>
+   <span class="code-tag">&lt;autoGetSource&gt;</span>true<span class="code-tag">&lt;/autoGetSource&gt;</span>
+   <span class="code-tag">&lt;folderRegEx&gt;</span>customRegEx<span class="code-tag">&lt;/folderRegEx&gt;</span>
+   <span class="code-tag">&lt;fileRegEx&gt;</span>customRegEx<span class="code-tag">&lt;/fileRegEx&gt;</span>
+   <span class="code-tag">&lt;fileHistoryRegEx&gt;</span>customRegEx<span class="code-tag">&lt;/fileHistoryRegEx&gt;</span>
+<span class="code-tag">&lt;/sourcecontrol&gt;</span></pre>
+</div></div>
+
+<h3><a name="StarTeamSourceControlBlock-ConfigurationElements%3A">Configuration Elements:</a></h3>
+
+<table class='confluenceTable'>
 <tr>
-<th> Node </th><th> Description </th><th> Type </th><th> Default </th><th> Required</th>
-</tr><tr>
-<td> executable </td><td> The local path for the StarTeam command-line client (eg. c:\starteam\stcmd.exe) </td><td> string </td><td> &quot;stcmd.exe&quot; </td><td> true </td>
-</tr><tr>
-<td> username</td><td> StarTeam ID that CCNet should use </td><td> string </td><td> N/A </td><td> true </td>
-</tr><tr>
-<td> password </td><td> Password for the StarTeam user ID </td><td> string </td><td> N/A </td><td> true</td>
-</tr><tr>
-<td> host </td><td> The IP address or machine name of the StarTeam server. </td><td> string </td><td> N/A </td><td> false </td>
-</tr><tr>
-<td> port </td><td> The port on the StarTeam server to connect to. </td><td> integer </td><td> 49201 </td><td> false </td>
-</tr><tr>
-<td> project </td><td> The StarTeam project (and view) to monitor (eg. project/view) </td><td> string </td><td> N/A </td><td> true </td>
-</tr><tr>
-<td> path </td><td> The path to monitor. </td><td> string </td><td> &quot;&quot; </td><td> false </td>
-</tr><tr>
-<td> autoGetSource </td><td> Instruct CCNet whether or not you want it to automatically retrieve the latest source from the repository. </td><td> bool </td><td> false </td><td> false </td>
-</tr><tr>
-<td> overrideViewWorkingDir </td><td> If set, use the -rp option to use a different View Working Directory </td><td> string </td><td> false </td><td> &quot;&quot; </td>
-</tr><tr>
-<td> overrideFolderWorkingDir </td><td> If set, use the -fp option to use a different Folder Working Directory. Will not be used if <tt class="monospaced">overrideViewWorkingDir</tt> is set. </td><td> string </td><td> false </td><td> &quot;&quot; </td>
-</tr><tr>
-<td> folderRegEx </td><td> Allows you to use your own RegEx to parse StarTeam&#039;s folder output. See RegEx&#039;s below. </td><td> string </td><td> false </td><td> See below </td>
-</tr><tr>
-<td> fileRegEx </td><td> Allows you to use your own RegEx to parse StarTeam&#039;s file output. See RegEx&#039;s below. </td><td> string </td><td> false </td><td> See below </td>
-</tr><tr>
-<td> fileHistoryRegEx </td><td> Allows you to use your own RegEx to parse StarTeam&#039;s file history. See RegEx&#039;s below. </td><td> string </td><td> false </td><td> See below </td>
+<th class='confluenceTh'> Node </th>
+<th class='confluenceTh'> Description </th>
+<th class='confluenceTh'> Type </th>
+<th class='confluenceTh'> Default </th>
+<th class='confluenceTh'> Required</th>
+</tr>
+<tr>
+<td class='confluenceTd'> executable </td>
+<td class='confluenceTd'> The local path for the StarTeam command-line client (eg. c:\starteam\stcmd.exe) </td>
+<td class='confluenceTd'> string </td>
+<td class='confluenceTd'> "stcmd.exe" </td>
+<td class='confluenceTd'> true </td>
+</tr>
+<tr>
+<td class='confluenceTd'> username</td>
+<td class='confluenceTd'> StarTeam ID that CCNet should use </td>
+<td class='confluenceTd'> string </td>
+<td class='confluenceTd'> N/A </td>
+<td class='confluenceTd'> true </td>
+</tr>
+<tr>
+<td class='confluenceTd'> password </td>
+<td class='confluenceTd'> Password for the StarTeam user ID </td>
+<td class='confluenceTd'> string </td>
+<td class='confluenceTd'> N/A </td>
+<td class='confluenceTd'> true</td>
+</tr>
+<tr>
+<td class='confluenceTd'> host </td>
+<td class='confluenceTd'> The IP address or machine name of the StarTeam server. </td>
+<td class='confluenceTd'> string </td>
+<td class='confluenceTd'> N/A </td>
+<td class='confluenceTd'> false </td>
+</tr>
+<tr>
+<td class='confluenceTd'> port </td>
+<td class='confluenceTd'> The port on the StarTeam server to connect to. </td>
+<td class='confluenceTd'> integer </td>
+<td class='confluenceTd'> 49201 </td>
+<td class='confluenceTd'> false </td>
+</tr>
+<tr>
+<td class='confluenceTd'> project </td>
+<td class='confluenceTd'> The StarTeam project (and view) to monitor (eg. project/view) </td>
+<td class='confluenceTd'> string </td>
+<td class='confluenceTd'> N/A </td>
+<td class='confluenceTd'> true </td>
+</tr>
+<tr>
+<td class='confluenceTd'> path </td>
+<td class='confluenceTd'> The path to monitor. </td>
+<td class='confluenceTd'> string </td>
+<td class='confluenceTd'> "" </td>
+<td class='confluenceTd'> false </td>
+</tr>
+<tr>
+<td class='confluenceTd'> autoGetSource </td>
+<td class='confluenceTd'> Instruct CCNet whether or not you want it to automatically retrieve the latest source from the repository. </td>
+<td class='confluenceTd'> bool </td>
+<td class='confluenceTd'> false </td>
+<td class='confluenceTd'> false </td>
+</tr>
+<tr>
+<td class='confluenceTd'> overrideViewWorkingDir </td>
+<td class='confluenceTd'> If set, use the -rp option to use a different View Working Directory </td>
+<td class='confluenceTd'> string </td>
+<td class='confluenceTd'> false </td>
+<td class='confluenceTd'> "" </td>
+</tr>
+<tr>
+<td class='confluenceTd'> overrideFolderWorkingDir </td>
+<td class='confluenceTd'> If set, use the -fp option to use a different Folder Working Directory. Will not be used if <tt>overrideViewWorkingDir</tt> is set. </td>
+<td class='confluenceTd'> string </td>
+<td class='confluenceTd'> false </td>
+<td class='confluenceTd'> "" </td>
+</tr>
+<tr>
+<td class='confluenceTd'> folderRegEx </td>
+<td class='confluenceTd'> Allows you to use your own RegEx to parse StarTeam's folder output. See RegEx's below. </td>
+<td class='confluenceTd'> string </td>
+<td class='confluenceTd'> false </td>
+<td class='confluenceTd'> See below </td>
+</tr>
+<tr>
+<td class='confluenceTd'> fileRegEx </td>
+<td class='confluenceTd'> Allows you to use your own RegEx to parse StarTeam's file output. See RegEx's below. </td>
+<td class='confluenceTd'> string </td>
+<td class='confluenceTd'> false </td>
+<td class='confluenceTd'> See below </td>
+</tr>
+<tr>
+<td class='confluenceTd'> fileHistoryRegEx </td>
+<td class='confluenceTd'> Allows you to use your own RegEx to parse StarTeam's file history. See RegEx's below. </td>
+<td class='confluenceTd'> string </td>
+<td class='confluenceTd'> false </td>
+<td class='confluenceTd'> See below </td>
 </tr>
 </table>
-<h3 class="heading3"><a name="StarTeamSourceControlBlock-RegExConfiguration"> RegEx Configuration</a></h3><p class="paragraph">CruiseControl.NET uses StarTeam&#039;s command line interface to find changes submitted to Source Control. 3 regular expressions are used in doing this, as specified above. You have the option of changing these regular expressions to choose how your instance of CruiseControl.NET parses StarTeam output. It is recommended if you do this that you download the source version of CruiseControl.NET to see the default RegEx&#039;s and how they are used.</p>One suggested alternative RegEx so far is for the <tt class="monospaced">fileHistoryRegEx</tt>, as follows:
+
+<h3><a name="StarTeamSourceControlBlock-RegExConfiguration">RegEx Configuration</a></h3>
+
+<p>CruiseControl.NET uses StarTeam's command line interface to find changes submitted to Source Control. 3 regular expressions are used in doing this, as specified above. You have the option of changing these regular expressions to choose how your instance of CruiseControl.NET parses StarTeam output. It is recommended if you do this that you download the source version of CruiseControl.NET to see the default RegEx's and how they are used.</p>
+
+<p>One suggested alternative RegEx so far is for the <tt>fileHistoryRegEx</tt>, as follows:</p>
 <div class="preformatted"><div class="preformattedContent">
-<pre>&#94;Revision: (&#63;&lt;file&#95;revision&gt;&#92;S&#43;) View: (&#63;&lt;view&#95;name&gt;.&#43;) Branch Revision: (&#63;&lt;branch&#95;revision&gt;&#92;S&#43;).&#92;nAuthor: (&#63;&lt;author&#95;name&gt;.&#42;) Date: (&#63;&lt;date&#95;string&gt;.&#42;) &#92;w&#43;&#92;r&#92;n(&#63;&lt;change&#95;comment&gt;.&#42;)</pre>
-</div></div>&#160;<p class="paragraph">(Note that this is all one line)</p>
+<pre>^Revision: (?&lt;file_revision&gt;\S+) View: (?&lt;view_name&gt;.+) Branch Revision: (?&lt;branch_revision&gt;\S+).\nAuthor: (?&lt;author_name&gt;.*) Date: (?&lt;date_string&gt;.*) \w+\r\n(?&lt;change_comment&gt;.*)
+</pre>
+</div></div> 
+
+<p>(Note that this is all one line)</p>
 
 				    
                     			    </td>
@@ -66,7 +161,7 @@ For StarTeam you must specify the executable, project, username and password. Yo
 				<td height="12" background="border/border_bottom.gif"><img src="border/spacer.gif" width="1" height="1" border="0"/></td>
 			</tr>
 		    <tr>
-			    <td align="center"><font color="grey">Document generated by Confluence on Jun 26, 2005 17:23</font></td>
+			    <td align="center"><font color="grey">Document generated by Confluence on Aug 15, 2005 13:58</font></td>
 		    </tr>
 	    </table>
     </body>

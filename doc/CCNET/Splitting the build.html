@@ -18,13 +18,89 @@
 					    This page last changed on Nov 25, 2004 by <font color="#0050B2">orogers</font>.
 				    </div>
 
-				    <p class="paragraph">As your codebase grows and your build starts to take an increasingly long time, it often makes sense to think about splitting your build process into a set of dependent builds (&lt;shamless-plug&gt;check out my paper &quot;Scaling Continuous Integration&quot; from XP2004 for some tips on how to do this&lt;/shamless-plug&gt;).  Currently, the main way to go about triggering dependent builds is to set up a separate project containing the secondary build process that you want to run.  It can be triggered by changes to a file or folder that is being monitored by a <a href="Filesystem Source Control Block.html" title="Filesystem Source Control Block">FileSystemSourceControl</a>.  Here&#039;s an example of what your <b class="strong">ccnet.config</b> file might look like:</p><div class="code"><div class="codeContent">
-<pre><span class="xml&#45;tag">&lt;cruisecontrol&gt;</span>&#10;	<span class="xml&#45;tag">&lt;project name=<span class="xml&#45;quote">&quot;developerBuild&quot;</span>&gt;</span>&#10;		<span class="xml&#45;tag">&lt;sourcecontrol type=<span class="xml&#45;quote">&quot;cvs&quot;</span>&gt;</span>&#10;			...&#10;		<span class="xml&#45;tag">&lt;/sourcecontrol&gt;</span>&#10;		<span class="xml&#45;tag">&lt;build type=<span class="xml&#45;quote">&quot;nant&quot;</span>&gt;</span>&#10;			<span class="xml&#45;tag">&lt;buildfile&gt;</span>main.build<span class="xml&#45;tag">&lt;/buildfile&gt;</span>&#10;			<span class="xml&#45;tag">&lt;targets&gt;</span>&#10;				<span class="xml&#45;tag">&lt;target&gt;</span>compile<span class="xml&#45;tag">&lt;/target&gt;</span>&#10;				<span class="xml&#45;tag">&lt;target&gt;</span>unit.test<span class="xml&#45;tag">&lt;/target&gt;</span>&#10;				<span class="xml&#45;tag">&lt;target&gt;</span>publish.distribution<span class="xml&#45;tag">&lt;/target&gt;</span>&#10;			<span class="xml&#45;tag">&lt;/targets&gt;</span>&#10;		<span class="xml&#45;tag">&lt;/build&gt;</span>&#10;		<span class="xml&#45;tag">&lt;triggers&gt;</span><span class="xml&#45;tag">&lt;pollingInterval seconds=<span class="xml&#45;quote">&quot;60&quot;</span> /&gt;</span><span class="xml&#45;tag">&lt;/triggers&gt;</span>&#10;		...&#10;	<span class="xml&#45;tag">&lt;/project&gt;</span>&#10;	<span class="xml&#45;tag">&lt;project name=<span class="xml&#45;quote">&quot;customerBuild&quot;</span>&gt;</span>&#10;		<span class="xml&#45;tag">&lt;sourcecontrol type=<span class="xml&#45;quote">&quot;filesystem&quot;</span>&gt;</span>&#10;			<span class="xml&#45;tag">&lt;repositoryRoot&gt;</span>C:&#92;project&#92;distribution<span class="xml&#45;tag">&lt;/repositoryRoot&gt;</span>&#10;		<span class="xml&#45;tag">&lt;/sourcecontrol&gt;</span>&#10;		<span class="xml&#45;tag">&lt;build type=<span class="xml&#45;quote">&quot;nant&quot;</span>&gt;</span>&#10;			<span class="xml&#45;tag">&lt;buildfile&gt;</span>integration.build<span class="xml&#45;tag">&lt;/buildfile&gt;</span>&#10;			<span class="xml&#45;tag">&lt;targets&gt;</span>&#10;				<span class="xml&#45;tag">&lt;target&gt;</span>acceptance.test<span class="xml&#45;tag">&lt;/target&gt;</span>&#10;				<span class="xml&#45;tag">&lt;target&gt;</span>ncover<span class="xml&#45;tag">&lt;/target&gt;</span>&#10;			<span class="xml&#45;tag">&lt;/targets&gt;</span>			&#10;		<span class="xml&#45;tag">&lt;/build&gt;</span>&#10;		<span class="xml&#45;tag">&lt;triggers&gt;</span><span class="xml&#45;tag">&lt;pollingInterval seconds=<span class="xml&#45;quote">&quot;300&quot;</span> /&gt;</span><span class="xml&#45;tag">&lt;/triggers&gt;</span>&#10;		...&#10;	<span class="xml&#45;tag">&lt;/project&gt;</span>&#10;<span class="xml&#45;tag">&lt;/cruisecontrol&gt;</span></pre>
-</div></div><p class="paragraph">The targets are meant to be illustrative of the types of things that you might want to put into the different builds.</p>As of CCNet 0.7.1, there is a new publisher called <a href="ForceBuildPublisher.html" title="ForceBuildPublisher">ForceBuildPublisher</a> that can be used to force build for a project on a local or remote ccnet server.  The <a href="ForceBuildPublisher.html" title="ForceBuildPublisher">ForceBuildPublisher</a> can be set to force a dependent build depending on the status of the integration: whether it succeeded, failed or generated an exception.  Here&#039;s what the above <b class="strong">ccnet.config</b> file would look like if you used this publisher:<br/>
+				    <p>As your codebase grows and your build starts to take an increasingly long time, it often makes sense to think about splitting your build process into a set of dependent builds (&lt;shamless-plug&gt;check out my paper "Scaling Continuous Integration" from XP2004 for some tips on how to do this&lt;/shamless-plug&gt;).  Currently, the main way to go about triggering dependent builds is to set up a separate project containing the secondary build process that you want to run.  It can be triggered by changes to a file or folder that is being monitored by a <a href="Filesystem Source Control Block.html" title="Filesystem Source Control Block">FileSystemSourceControl</a>.  Here's an example of what your <b>ccnet.config</b> file might look like:</p>
 
 <div class="code"><div class="codeContent">
-<pre><span class="xml&#45;tag">&lt;cruisecontrol&gt;</span>&#10;	<span class="xml&#45;tag">&lt;project name=<span class="xml&#45;quote">&quot;developerBuild&quot;</span>&gt;</span>&#10;		<span class="xml&#45;tag">&lt;sourcecontrol type=<span class="xml&#45;quote">&quot;cvs&quot;</span>&gt;</span>&#10;			...&#10;		<span class="xml&#45;tag">&lt;/sourcecontrol&gt;</span>&#10;		<span class="xml&#45;tag">&lt;build type=<span class="xml&#45;quote">&quot;nant&quot;</span>&gt;</span>&#10;			<span class="xml&#45;tag">&lt;buildfile&gt;</span>main.build<span class="xml&#45;tag">&lt;/buildfile&gt;</span>&#10;			<span class="xml&#45;tag">&lt;targets&gt;</span>&#10;				<span class="xml&#45;tag">&lt;target&gt;</span>compile<span class="xml&#45;tag">&lt;/target&gt;</span>&#10;				<span class="xml&#45;tag">&lt;target&gt;</span>unit.test<span class="xml&#45;tag">&lt;/target&gt;</span>&#10;				<span class="xml&#45;tag">&lt;target&gt;</span>publish.distribution<span class="xml&#45;tag">&lt;/target&gt;</span>&#10;			<span class="xml&#45;tag">&lt;/targets&gt;</span>&#10;		<span class="xml&#45;tag">&lt;/build&gt;</span>&#10;		<span class="xml&#45;tag">&lt;triggers&gt;</span><span class="xml&#45;tag">&lt;pollingInterval seconds=<span class="xml&#45;quote">&quot;60&quot;</span> /&gt;</span><span class="xml&#45;tag">&lt;/triggers&gt;</span>&#10;		<span class="xml&#45;tag">&lt;publishers&gt;</span>&#10;			<span class="xml&#45;tag">&lt;forcebuild&gt;</span>&#10;				<span class="xml&#45;tag">&lt;project&gt;</span>customerBuild<span class="xml&#45;tag">&lt;/project&gt;</span>&#10;			<span class="xml&#45;tag">&lt;/forcebuild&gt;</span>&#10;			<span class="xml&#45;tag">&lt;serverUri&gt;</span>&#10;				tcp://localhost:21234/CruiseManager.rem&#10;			<span class="xml&#45;tag">&lt;/serverUri&gt;</span>&#10;		<span class="xml&#45;tag">&lt;/publishers&gt;</span>&#10;		...&#10;	<span class="xml&#45;tag">&lt;/project&gt;</span>&#10;	<span class="xml&#45;tag">&lt;project name=<span class="xml&#45;quote">&quot;customerBuild&quot;</span>&gt;</span>&#10;		<span class="xml&#45;tag">&lt;sourcecontrol type=<span class="xml&#45;quote">&quot;test&quot;</span> /&gt;</span>		<span class="xml&#45;tag"><span class="xml&#45;comment">&lt;&#33;&#45;&#45; unfortunately necessary as sourcecontrol is a required element &#45;&#45;&gt;</span></span>&#10;		<span class="xml&#45;tag">&lt;build type=<span class="xml&#45;quote">&quot;nant&quot;</span>&gt;</span>&#10;			<span class="xml&#45;tag">&lt;buildfile&gt;</span>integration.build<span class="xml&#45;tag">&lt;/buildfile&gt;</span>&#10;			<span class="xml&#45;tag">&lt;targets&gt;</span>&#10;				<span class="xml&#45;tag">&lt;target&gt;</span>acceptance.test<span class="xml&#45;tag">&lt;/target&gt;</span>&#10;				<span class="xml&#45;tag">&lt;target&gt;</span>ncover<span class="xml&#45;tag">&lt;/target&gt;</span>&#10;			<span class="xml&#45;tag">&lt;/targets&gt;</span>			&#10;		<span class="xml&#45;tag">&lt;/build&gt;</span>&#10;		...					<span class="xml&#45;tag"><span class="xml&#45;comment">&lt;&#33;&#45;&#45; no trigger is required as the build will always be forced &#45;&#45;&gt;</span></span>&#10;	<span class="xml&#45;tag">&lt;/project&gt;</span>&#10;<span class="xml&#45;tag">&lt;/cruisecontrol&gt;</span></pre>
-</div></div><p class="paragraph">Note: that you can easily change the serverUri property to refer to a ccnet server running on a remote machine if you want to distribute your build process.</p>See also <a href="Enterprise Continuous Integration with Binary Dependencies example.html" title="Enterprise Continuous Integration with Binary Dependencies example">Enterprise Continuous Integration with Binary Dependencies example</a> for some other examples demonstrating how to do this.
+<pre class="code-xml"><span class="code-tag">&lt;cruisecontrol&gt;</span>
+	<span class="code-tag">&lt;project name=<span class="code-quote">"developerBuild"</span>&gt;</span>
+		<span class="code-tag">&lt;sourcecontrol type=<span class="code-quote">"cvs"</span>&gt;</span>
+			...
+		<span class="code-tag">&lt;/sourcecontrol&gt;</span>
+		<span class="code-tag">&lt;build type=<span class="code-quote">"nant"</span>&gt;</span>
+			<span class="code-tag">&lt;buildfile&gt;</span>main.build<span class="code-tag">&lt;/buildfile&gt;</span>
+			<span class="code-tag">&lt;targets&gt;</span>
+				<span class="code-tag">&lt;target&gt;</span>compile<span class="code-tag">&lt;/target&gt;</span>
+				<span class="code-tag">&lt;target&gt;</span>unit.test<span class="code-tag">&lt;/target&gt;</span>
+				<span class="code-tag">&lt;target&gt;</span>publish.distribution<span class="code-tag">&lt;/target&gt;</span>
+			<span class="code-tag">&lt;/targets&gt;</span>
+		<span class="code-tag">&lt;/build&gt;</span>
+		<span class="code-tag">&lt;triggers&gt;</span><span class="code-tag">&lt;pollingInterval seconds=<span class="code-quote">"60"</span> /&gt;</span><span class="code-tag">&lt;/triggers&gt;</span>
+		...
+	<span class="code-tag">&lt;/project&gt;</span>
+	<span class="code-tag">&lt;project name=<span class="code-quote">"customerBuild"</span>&gt;</span>
+		<span class="code-tag">&lt;sourcecontrol type=<span class="code-quote">"filesystem"</span>&gt;</span>
+			<span class="code-tag">&lt;repositoryRoot&gt;</span>C:\project\distribution<span class="code-tag">&lt;/repositoryRoot&gt;</span>
+		<span class="code-tag">&lt;/sourcecontrol&gt;</span>
+		<span class="code-tag">&lt;build type=<span class="code-quote">"nant"</span>&gt;</span>
+			<span class="code-tag">&lt;buildfile&gt;</span>integration.build<span class="code-tag">&lt;/buildfile&gt;</span>
+			<span class="code-tag">&lt;targets&gt;</span>
+				<span class="code-tag">&lt;target&gt;</span>acceptance.test<span class="code-tag">&lt;/target&gt;</span>
+				<span class="code-tag">&lt;target&gt;</span>ncover<span class="code-tag">&lt;/target&gt;</span>
+			<span class="code-tag">&lt;/targets&gt;</span>			
+		<span class="code-tag">&lt;/build&gt;</span>
+		<span class="code-tag">&lt;triggers&gt;</span><span class="code-tag">&lt;pollingInterval seconds=<span class="code-quote">"300"</span> /&gt;</span><span class="code-tag">&lt;/triggers&gt;</span>
+		...
+	<span class="code-tag">&lt;/project&gt;</span>
+<span class="code-tag">&lt;/cruisecontrol&gt;</span></pre>
+</div></div>
+
+<p>The targets are meant to be illustrative of the types of things that you might want to put into the different builds.</p>
+
+<p>As of CCNet 0.7.1, there is a new publisher called <a href="ForceBuildPublisher.html" title="ForceBuildPublisher">ForceBuildPublisher</a> that can be used to force build for a project on a local or remote ccnet server.  The <a href="ForceBuildPublisher.html" title="ForceBuildPublisher">ForceBuildPublisher</a> can be set to force a dependent build depending on the status of the integration: whether it succeeded, failed or generated an exception.  Here's what the above <b>ccnet.config</b> file would look like if you used this publisher:</p>
+
+<div class="code"><div class="codeContent">
+<pre class="code-xml"><span class="code-tag">&lt;cruisecontrol&gt;</span>
+	<span class="code-tag">&lt;project name=<span class="code-quote">"developerBuild"</span>&gt;</span>
+		<span class="code-tag">&lt;sourcecontrol type=<span class="code-quote">"cvs"</span>&gt;</span>
+			...
+		<span class="code-tag">&lt;/sourcecontrol&gt;</span>
+		<span class="code-tag">&lt;build type=<span class="code-quote">"nant"</span>&gt;</span>
+			<span class="code-tag">&lt;buildfile&gt;</span>main.build<span class="code-tag">&lt;/buildfile&gt;</span>
+			<span class="code-tag">&lt;targets&gt;</span>
+				<span class="code-tag">&lt;target&gt;</span>compile<span class="code-tag">&lt;/target&gt;</span>
+				<span class="code-tag">&lt;target&gt;</span>unit.test<span class="code-tag">&lt;/target&gt;</span>
+				<span class="code-tag">&lt;target&gt;</span>publish.distribution<span class="code-tag">&lt;/target&gt;</span>
+			<span class="code-tag">&lt;/targets&gt;</span>
+		<span class="code-tag">&lt;/build&gt;</span>
+		<span class="code-tag">&lt;triggers&gt;</span><span class="code-tag">&lt;pollingInterval seconds=<span class="code-quote">"60"</span> /&gt;</span><span class="code-tag">&lt;/triggers&gt;</span>
+		<span class="code-tag">&lt;publishers&gt;</span>
+			<span class="code-tag">&lt;forcebuild&gt;</span>
+				<span class="code-tag">&lt;project&gt;</span>customerBuild<span class="code-tag">&lt;/project&gt;</span>
+			<span class="code-tag">&lt;/forcebuild&gt;</span>
+			<span class="code-tag">&lt;serverUri&gt;</span>
+				tcp://localhost:21234/CruiseManager.rem
+			<span class="code-tag">&lt;/serverUri&gt;</span>
+		<span class="code-tag">&lt;/publishers&gt;</span>
+		...
+	<span class="code-tag">&lt;/project&gt;</span>
+	<span class="code-tag">&lt;project name=<span class="code-quote">"customerBuild"</span>&gt;</span>
+		<span class="code-tag">&lt;sourcecontrol type=<span class="code-quote">"test"</span> /&gt;</span>		<span class="code-tag"><span class="code-comment">&lt;!-- unfortunately necessary as sourcecontrol is a required element --&gt;</span></span>
+		<span class="code-tag">&lt;build type=<span class="code-quote">"nant"</span>&gt;</span>
+			<span class="code-tag">&lt;buildfile&gt;</span>integration.build<span class="code-tag">&lt;/buildfile&gt;</span>
+			<span class="code-tag">&lt;targets&gt;</span>
+				<span class="code-tag">&lt;target&gt;</span>acceptance.test<span class="code-tag">&lt;/target&gt;</span>
+				<span class="code-tag">&lt;target&gt;</span>ncover<span class="code-tag">&lt;/target&gt;</span>
+			<span class="code-tag">&lt;/targets&gt;</span>			
+		<span class="code-tag">&lt;/build&gt;</span>
+		...					<span class="code-tag"><span class="code-comment">&lt;!-- no trigger is required as the build will always be forced --&gt;</span></span>
+	<span class="code-tag">&lt;/project&gt;</span>
+<span class="code-tag">&lt;/cruisecontrol&gt;</span></pre>
+</div></div>
+
+<p>Note: that you can easily change the serverUri property to refer to a ccnet server running on a remote machine if you want to distribute your build process.</p>
+
+
+<p>See also <a href="http://confluence.public.thoughtworks.org/display/CCNET/Enterprise+Continuous+Integration+with+Binary+Dependencies+example" title="Enterprise Continuous Integration with Binary Dependencies example">Enterprise Continuous Integration with Binary Dependencies example</a> for some other examples demonstrating how to do this.</p>
 
 				    
                     			    </td>
@@ -35,7 +111,7 @@
 				<td height="12" background="border/border_bottom.gif"><img src="border/spacer.gif" width="1" height="1" border="0"/></td>
 			</tr>
 		    <tr>
-			    <td align="center"><font color="grey">Document generated by Confluence on Jun 26, 2005 17:23</font></td>
+			    <td align="center"><font color="grey">Document generated by Confluence on Aug 15, 2005 13:58</font></td>
 		    </tr>
 	    </table>
     </body>

@@ -19,24 +19,53 @@
 				    </div>
 
 				    
-<h3 class="heading3"><a name="CustomBuilderPlug-in-Steps%3A"> Steps:</a></h3>
+<h3><a name="CustomBuilderPlug-in-Steps%3A">Steps:</a></h3>
 <ol>
-<li> Create a Class Library project to build the assembly that will contain your custom builder plug-in. The assembly that it produces should be named: &#039;<em class="emphasis">ccnet.*.plugin.dll</em>&#039; (where the star represents the name you choose).</li>
-<li> Add your new customer builder class.</li>
-<li> The class must implement the <em class="emphasis">ThoughtWorks.CruiseControl.Core.ITask</em> interface (found in the ccnet.core assembly)</li>
-<li> Mark up your class with the <a href="NetReflector.html" title="NetReflector">NetReflector</a>&#160;<em class="emphasis">ReflectorType</em> attribute. The <em class="emphasis">name</em> argument supplied to the attribute is the name of the element/attribute that will appear in the configuration file</li>
-<li> Add whatever configuration properties you need, marking them up with <a href="NetReflector.html" title="NetReflector">NetReflector</a>&#160;<em class="emphasis">ReflectorProperty</em> attributes accordingly.</li>
-<li> Implement the <em class="emphasis">Run</em> method.  The supplied <em class="emphasis">IntegrationResult</em> should provide you with everything that you need to know about the current build.</li>
-<li> Compile the assembly.</li>
-<li> Copy the assembly into the folder containing the CruiseControl.NET assemblies (or the current directory that you are running the ccnet server from).</li>
-<li> Modify your <em class="emphasis">ccnet.config</em> file in accordance with the sample config file below.</li>
-</ol><br/>
-For more information, please take a look at the sample code contained in the folder <em class="emphasis">/docs/developer/samples</em>.<p class="paragraph"><h3 class="heading3"><a name="CustomBuilderPlug-in-SampleBuilderClass"> Sample Builder Class</a></h3></p><div class="code"><div class="codeContent">
-<pre>using <span class="java&#45;object">System</span>;&#10;using Exortech.NetReflector;&#10;using ThoughtWorks.CruiseControl.Core;&#10;&#10;namespace ThoughtWorks.CruiseControl.Sample.Builder&#10;&#123;&#10;	&#91;ReflectorType(<span class="java&#45;quote">&quot;myBuilder&quot;</span>)&#93;&#10;	<span class="java&#45;keyword">public</span> class NAntBuilder : ITask&#10;	&#123;&#10;		<span class="java&#45;keyword">public</span> void Run(IntegrationResult result)&#10;		&#123;&#10;			Console.WriteLine(<span class="java&#45;quote">&quot;Hello World&#33;&quot;</span>);&#10;		&#125;&#10;	&#125;&#10;&#125;</pre>
-</div></div><p class="paragraph"><h3 class="heading3"><a name="CustomBuilderPlug-in-SampleConfigFile"> Sample Config File</a></h3>
+	<li>Create a Class Library project to build the assembly that will contain your custom builder plug-in. The assembly that it produces should be named: '<em>ccnet.*.plugin.dll</em>' (where the star represents the name you choose).</li>
+	<li>Add your new customer builder class.</li>
+	<li>The class must implement the <em>ThoughtWorks.CruiseControl.Core.ITask</em> interface (found in the ccnet.core assembly)</li>
+	<li>Mark up your class with the <a href="http://confluence.public.thoughtworks.org/display/CCNET/NetReflector" title="NetReflector">NetReflector</a> <em>ReflectorType</em> attribute. The <em>name</em> argument supplied to the attribute is the name of the element/attribute that will appear in the configuration file</li>
+	<li>Add whatever configuration properties you need, marking them up with <a href="http://confluence.public.thoughtworks.org/display/CCNET/NetReflector" title="NetReflector">NetReflector</a> <em>ReflectorProperty</em> attributes accordingly.</li>
+	<li>Implement the <em>Run</em> method.  The supplied <em>IntegrationResult</em> should provide you with everything that you need to know about the current build.</li>
+	<li>Compile the assembly.</li>
+	<li>Copy the assembly into the folder containing the CruiseControl.NET assemblies (or the current directory that you are running the ccnet server from).</li>
+	<li>Modify your <em>ccnet.config</em> file in accordance with the sample config file below.</li>
+</ol>
+
+
+<p>For more information, please take a look at the sample code contained in the folder <em>/docs/developer/samples</em>.</p>
+
+<h3><a name="CustomBuilderPlug-in-SampleBuilderClass">Sample Builder Class</a></h3>
+
 <div class="code"><div class="codeContent">
-<pre>&lt;cruisecontrol&gt;&#10;	&lt;project name=<span class="java&#45;quote">&quot;myproject&quot;</span>&gt;&#10;		&lt;builder type=<span class="java&#45;quote">&quot;mybuilder&quot;</span>&gt;&#10;			&lt;&#33;&#45;&#45; include custom builder properties here &#45;&#45;&gt;&#10;		&lt;/builder&gt;&#10;		&lt;&#33;&#45;&#45; include other project elements here &#45;&#45;&gt;&#10;	&lt;/project&gt;&#10;&lt;/cruisecontrol&gt;</pre>
-</div></div></p>
+<pre class="code-java">using <span class="code-object">System</span>;
+using Exortech.NetReflector;
+using ThoughtWorks.CruiseControl.Core;
+
+namespace ThoughtWorks.CruiseControl.Sample.Builder
+{
+	[ReflectorType(<span class="code-quote">"myBuilder"</span>)]
+	<span class="code-keyword">public</span> class NAntBuilder : ITask
+	{
+		<span class="code-keyword">public</span> void Run(IntegrationResult result)
+		{
+			Console.WriteLine(<span class="code-quote">"Hello World!"</span>);
+		}
+	}
+}</pre>
+</div></div>
+
+<h3><a name="CustomBuilderPlug-in-SampleConfigFile">Sample Config File</a></h3>
+<div class="code"><div class="codeContent">
+<pre class="code-java">&lt;cruisecontrol&gt;
+	&lt;project name=<span class="code-quote">"myproject"</span>&gt;
+		&lt;builder type=<span class="code-quote">"mybuilder"</span>&gt;
+			&lt;!-- include custom builder properties here --&gt;
+		&lt;/builder&gt;
+		&lt;!-- include other project elements here --&gt;
+	&lt;/project&gt;
+&lt;/cruisecontrol&gt;</pre>
+</div></div>
 
 				    
                                             <div class="tabletitle">
@@ -47,7 +76,9 @@ For more information, please take a look at the sample code contained in the fol
                                                         <tr>
                                 <td >
                                     <a name="comment-536"></a>
-                                    <font class="smallfont"><p class="paragraph">You think I could get an example of said custom build properties.  Do these properties involve passing arguments to the plugin or setting fields in the plugin class?</p>-ChazZ</font>
+                                    <font class="smallfont"><p>You think I could get an example of said custom build properties.  Do these properties involve passing arguments to the plugin or setting fields in the plugin class?</p>
+
+<p>-ChazZ</p></font>
                                     <div align="left" class="smallfont" style="color: #666666; width: 98%; margin-bottom: 10px;">
                                         <img src="icons/comment_16.gif" height="16" width="16" border="0" align="absmiddle"/>
                                         Posted by  at May 05, 2004 13:22
@@ -57,7 +88,7 @@ For more information, please take a look at the sample code contained in the fol
                                                         <tr>
                                 <td  style="border-top: 1px dashed #666666">
                                     <a name="comment-1270"></a>
-                                    <font class="smallfont"><p class="paragraph">How would one go about making a plugin for a custom source control provider?  Do these instructions roughly apply (but implementing ISourceControl instead of IBuilder?)</p></font>
+                                    <font class="smallfont"><p>How would one go about making a plugin for a custom source control provider?  Do these instructions roughly apply (but implementing ISourceControl instead of IBuilder?)</p></font>
                                     <div align="left" class="smallfont" style="color: #666666; width: 98%; margin-bottom: 10px;">
                                         <img src="icons/comment_16.gif" height="16" width="16" border="0" align="absmiddle"/>
                                         Posted by  at Aug 27, 2004 14:40
@@ -67,7 +98,7 @@ For more information, please take a look at the sample code contained in the fol
                                                         <tr>
                                 <td  style="border-top: 1px dashed #666666">
                                     <a name="comment-1271"></a>
-                                    <font class="smallfont"><p class="paragraph">Oh, my email is nospamplease75@yahoo.com.  I asked the last question.<br/>
+                                    <font class="smallfont"><p>Oh, my email is nospamplease75@yahoo.com.  I asked the last question.<br/>
 <a href="http://haacked.com/" title="Visit page outside Confluence">&#104;ttp://haacked.com/</a></p></font>
                                     <div align="left" class="smallfont" style="color: #666666; width: 98%; margin-bottom: 10px;">
                                         <img src="icons/comment_16.gif" height="16" width="16" border="0" align="absmiddle"/>
@@ -84,7 +115,7 @@ For more information, please take a look at the sample code contained in the fol
 				<td height="12" background="border/border_bottom.gif"><img src="border/spacer.gif" width="1" height="1" border="0"/></td>
 			</tr>
 		    <tr>
-			    <td align="center"><font color="grey">Document generated by Confluence on Jun 26, 2005 17:22</font></td>
+			    <td align="center"><font color="grey">Document generated by Confluence on Aug 15, 2005 13:58</font></td>
 		    </tr>
 	    </table>
     </body>

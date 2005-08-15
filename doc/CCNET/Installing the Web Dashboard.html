@@ -18,23 +18,35 @@
 					    This page last changed on Apr 04, 2005 by <font color="#0050B2">mroberts</font>.
 				    </div>
 
-				    <div align='center'><div class='informationMacroPadding'><table cellpadding='5' width='85%' cellspacing='0' class='infoMacro' border='0'><tr><td width='16' valign='top'><img src="/images/icons/emoticons/information.png" width="16" height="16" align="absmiddle" alt="" border="0"></td><td>
-Previous versions (0.8 and earlier) of the Dashboard required you to setup a <tt class="monospaced">projectcache</tt> folder with certain privileges. This is no longer necessary. If you have earlier versions of the Dashboard installer you should delete that folder and revert all custom privileges.
-</td></tr></table></div></div><p class="paragraph"><h2 class="heading2"><a name="InstallingtheWebDashboard-SimpleInstallation"> Simple Installation</a></h2></p>The simplest way to install the Web Dashboard is to use the CruiseControl.NET installer, as described in the <a href="Basic Installation.html" title="Basic Installation">Basic Installation</a> section. This should setup everything, resulting in a Dashboard instance being viewable at the Virtual Directory <tt class="monospaced">/ccnet</tt>.<p class="paragraph">If something goes wrong, or you want more control, read the next section</p><h2 class="heading2"><a name="InstallingtheWebDashboard-Selfmanagedinstallation"> Self-managed installation</a></h2><p class="paragraph">First, unzip the distribution as described in <a href="Basic Installation.html" title="Basic Installation">Basic Installation</a></p>Then, in your system&#039;s IIS Admin tool:<br/>
+				    <div class="information-block" align='center'><div class='informationMacroPadding'><table cellpadding='5' width='85%' cellspacing='0' class='infoMacro' border='0'><tr><td width='16' valign='top'><img src="/images/icons/emoticons/information.gif" width="16" height="16" align="absmiddle" alt="" border="0"></td><td>
+<p>Previous versions (0.8 and earlier) of the Dashboard required you to setup a <tt>projectcache</tt> folder with certain privileges. This is no longer necessary. If you have earlier versions of the Dashboard installer you should delete that folder and revert all custom privileges.</p></td></tr></table></div></div>
+
+<h2><a name="InstallingtheWebDashboard-SimpleInstallation">Simple Installation</a></h2>
+
+<p>The simplest way to install the Web Dashboard is to use the CruiseControl.NET installer, as described in the <a href="Basic Installation.html" title="Basic Installation">Basic Installation</a> section. This should setup everything, resulting in a Dashboard instance being viewable at the Virtual Directory <tt>/ccnet</tt>.</p>
+
+<p>If something goes wrong, or you want more control, read the next section</p>
+
+<h2><a name="InstallingtheWebDashboard-Selfmanagedinstallation">Self-managed installation</a></h2>
+
+<p>First, unzip the distribution as described in <a href="Basic Installation.html" title="Basic Installation">Basic Installation</a></p>
+
+<p>Then, in your system's IIS Admin tool:</p>
 
 <ol>
-<li> Map a virtual directory to the &#039;webdashboard&#039; subfolder of your CCNet folder (typically called <b class="strong">ccnet</b>)</li>
-<li> In the configuration for this virtual directory, click the <em class="emphasis">Configuration</em> button of the <em class="emphasis">Virtual Directory</em> tab</li>
-<li> Click <em class="emphasis">Add</em> to add a new Application Mapping</li>
-<li> In <em class="emphasis">Executable</em>, enter the location of the aspnet_isapi.dll file you use (look at the .aspx mapping as an example. A typical value would be c:\WINDOWS\Microsoft.NET\Framework\v1.1.4322\aspnet_isapi.dll)</li>
-<li> In <em class="emphasis">Extension</em>, enter <tt class="monospaced">.xml</tt></li>
-<li> Make sure <em class="emphasis">Script engine</em> is checked and <em class="emphasis">Check that file exists</em> is <b class="strong">not</b> checked</li>
-<li> Click <em class="emphasis">OK</em> as necessary to save your changes</li>
-<li> Under the Virtual Directory&#039;s <em class="emphasis">Documents</em> tab make sure that <tt class="monospaced">default.aspx</tt> is added as a default document</li>
+	<li>Map a virtual directory to the 'webdashboard' subfolder of your CCNet folder (typically called <b>ccnet</b>)</li>
+	<li>In the configuration for this virtual directory, click the <em>Configuration</em> button of the <em>Virtual Directory</em> tab</li>
+	<li>Click <em>Add</em> to add a new Application Mapping</li>
+	<li>In <em>Executable</em>, enter the location of the aspnet_isapi.dll file you use (look at the .aspx mapping as an example. A typical value would be c:\WINDOWS\Microsoft.NET\Framework\v1.1.4322\aspnet_isapi.dll)</li>
+	<li>In <em>Extension</em>, enter <tt>.xml</tt></li>
+	<li>Make sure <em>Script engine</em> is checked and <em>Check that file exists</em> is <b>not</b> checked</li>
+	<li>Click <em>OK</em> as necessary to save your changes</li>
+	<li>Under the Virtual Directory's <em>Documents</em> tab make sure that <tt>default.aspx</tt> is added as a default document</li>
 </ol>
-<div align='center'><div class='informationMacroPadding'><table cellpadding='5' width='85%' cellspacing='0' class='infoMacro' border='0'><tr><td width='16' valign='top'><img src="/images/icons/emoticons/information.png" width="16" height="16" align="absmiddle" alt="" border="0"></td><td>
-If you don&#039;t apply <b class="strong">all</b> these steps some features of the Dashboard will not work.
-</td></tr></table></div></div>
+
+
+<div class="information-block" align='center'><div class='informationMacroPadding'><table cellpadding='5' width='85%' cellspacing='0' class='infoMacro' border='0'><tr><td width='16' valign='top'><img src="/images/icons/emoticons/information.gif" width="16" height="16" align="absmiddle" alt="" border="0"></td><td>
+<p>If you don't apply <b>all</b> these steps some features of the Dashboard will not work.</p></td></tr></table></div></div>
 
 				    
                     			    </td>
@@ -45,7 +57,7 @@ If you don&#039;t apply <b class="strong">all</b> these steps some features of t
 				<td height="12" background="border/border_bottom.gif"><img src="border/spacer.gif" width="1" height="1" border="0"/></td>
 			</tr>
 		    <tr>
-			    <td align="center"><font color="grey">Document generated by Confluence on Jun 26, 2005 17:22</font></td>
+			    <td align="center"><font color="grey">Document generated by Confluence on Aug 15, 2005 13:58</font></td>
 		    </tr>
 	    </table>
     </body>

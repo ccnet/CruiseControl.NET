@@ -18,28 +18,56 @@
 					    This page last changed on Apr 01, 2005 by <font color="#0050B2">mroberts</font>.
 				    </div>
 
-				    <p class="paragraph">Various aspects of the CruiseControl.NET Server are configured in the application configuration file. The name of this file depends on how you are running the server:
-<ul class="star">
-<li> If you are running the Console Application, the application config file is called <b class="strong"><tt class="monospaced">ccnet.exe.config</tt></b>.</li>
-<li> If you are running the Windows Service Application, the application config file is called <b class="strong"><tt class="monospaced">ccservice.exe.config</tt></b></li>
-</ul><br/>
-<b class="strong">For most installations the default settings in this file will be appropriate</b>.</p>This file is a standard .NET application config file. Parts of it that are specific to CruiseControl.NET are as follows:<p class="paragraph"><a name="ServerApplicationConfigFile-xslFiles"></a>
-<h4 class="heading4"><a name="ServerApplicationConfigFile-XSLFileconfiguration"> XSL File configuration</a></h4></p>The <tt class="monospaced">&lt;xslFiles&gt;</tt> section defines what xsl files are included for transforming the build file for reporting behaviour within the server. If you want to include extra xsl files (for example if you have your own build behaviours), then add them here.<p class="paragraph"><a name="ServerApplicationConfigFile-remoting"></a>
-<h4 class="heading4"><a name="ServerApplicationConfigFile-RemotingConfiguration"> Remoting Configuration</a></h4></p>The CruiseControl.NET Server can open a remoting server port so that other applications in the CCNet suite can communicate with it (<a href="CCTray.html" title="CCTray">CCTray</a>, <a href="Web Dashboard.html" title="Web Dashboard">Web Dashboard</a>). By default CCNet listens on port 21234, but this can be changed under the <tt class="monospaced">&lt;system.runtime.remoting&gt;</tt> section.<p class="paragraph"><img class="rendericon" src="./icons/emoticons/information.png" height="16" width="16" align="absmiddle" alt="" border="0"/>&#160;<b class="strong">You&#039;ll need to change this value if you want to run multiple CruiseControl.NET servers on 1 machine</b></p><a name="ServerApplicationConfigFile-logging"></a>
-<h4 class="heading4"><a name="ServerApplicationConfigFile-Loggingconfiguration"> Logging configuration</a></h4><p class="paragraph">Logging of the Server activities (not the build logs themselves) is implemented using .NET Tracing, and this is configurable in the <tt class="monospaced">&lt;system.diagnostics&gt;</tt> section of the application config file. In this section you can change log level (the <tt class="monospaced">&lt;switches&gt;</tt> section), and where log data is sent to (the <tt class="monospaced">&lt;trace&gt;</tt> section).</p>If you are using a <tt class="monospaced">LogFileTraceListener</tt> in the <tt class="monospaced">&lt;trace&gt;</tt> section, then you can configure the server log file name there. This same file name should be set as the value for the <tt class="monospaced">ServerLogFilePath</tt> key in the <tt class="monospaced">&lt;appSettings&gt;</tt> section. This value is used when remote applications request to see the server log file. The number of lines returned from the end of the server log file to the remote application is specified by the <tt class="monospaced">ServerLogFileLines</tt> value.<br/>
+				    <p>Various aspects of the CruiseControl.NET Server are configured in the application configuration file. The name of this file depends on how you are running the server:</p>
+<ul>
+	<li>If you are running the Console Application, the application config file is called <b><tt>ccnet.exe.config</tt></b>.</li>
+	<li>If you are running the Windows Service Application, the application config file is called <b><tt>ccservice.exe.config</tt></b></li>
+</ul>
 
-<div align='center'><div class='informationMacroPadding'><table cellpadding='5' width='85%' cellspacing='0' class='warningMacro' border='0'><tr><td width='16' valign='top'><img src="/images/icons/emoticons/forbidden.png" width="16" height="16" align="absmiddle" alt="" border="0"></td><td>
-Note that with some log levels certain potentially sensitive details may be logged, including source control passwords. Make sure you check your log file and set the log level appropriately.
-</td></tr></table></div></div><p class="paragraph"><a name="ServerApplicationConfigFile-service"></a>
-<h4 class="heading4"><a name="ServerApplicationConfigFile-ServiceSpecificSettings"> Service Specific Settings</a></h4></p>If you are running the console application, you have the option of passing in various arguments on the command line. If however you are using the Service application you can&#039;t do this, but there are extra options you can set in the <tt class="monospaced">&lt;appSettings&gt;</tt> section of the config file, as follows:<br/>
 
-<table class="wikitable">
+<p><b>For most installations the default settings in this file will be appropriate</b>.</p>
+
+<p>This file is a standard .NET application config file. Parts of it that are specific to CruiseControl.NET are as follows:</p>
+
+<a name="ServerApplicationConfigFile-xslFiles"></a>
+<h4><a name="ServerApplicationConfigFile-XSLFileconfiguration">XSL File configuration</a></h4>
+
+<p>The <tt>&lt;xslFiles&gt;</tt> section defines what xsl files are included for transforming the build file for reporting behaviour within the server. If you want to include extra xsl files (for example if you have your own build behaviours), then add them here.</p>
+
+<a name="ServerApplicationConfigFile-remoting"></a>
+<h4><a name="ServerApplicationConfigFile-RemotingConfiguration">Remoting Configuration</a></h4>
+
+<p>The CruiseControl.NET Server can open a remoting server port so that other applications in the CCNet suite can communicate with it (<a href="CCTray.html" title="CCTray">CCTray</a>, <a href="Web Dashboard.html" title="Web Dashboard">Web Dashboard</a>). By default CCNet listens on port 21234, but this can be changed under the <tt>&lt;system.runtime.remoting&gt;</tt> section.</p>
+
+<p><img class="emoticon" src="./icons/emoticons/information.gif" height="16" width="16" align="absmiddle" alt="" border="0"/> <b>You'll need to change this value if you want to run multiple CruiseControl.NET servers on 1 machine</b></p>
+
+<a name="ServerApplicationConfigFile-logging"></a>
+<h4><a name="ServerApplicationConfigFile-Loggingconfiguration">Logging configuration</a></h4>
+
+<p>Logging of the Server activities (not the build logs themselves) is implemented using .NET Tracing, and this is configurable in the <tt>&lt;system.diagnostics&gt;</tt> section of the application config file. In this section you can change log level (the <tt>&lt;switches&gt;</tt> section), and where log data is sent to (the <tt>&lt;trace&gt;</tt> section).</p>
+
+<p>If you are using a <tt>LogFileTraceListener</tt> in the <tt>&lt;trace&gt;</tt> section, then you can configure the server log file name there. This same file name should be set as the value for the <tt>ServerLogFilePath</tt> key in the <tt>&lt;appSettings&gt;</tt> section. This value is used when remote applications request to see the server log file. The number of lines returned from the end of the server log file to the remote application is specified by the <tt>ServerLogFileLines</tt> value.</p>
+
+<div class="information-block" align='center'><div class='informationMacroPadding'><table cellpadding='5' width='85%' cellspacing='0' class='warningMacro' border='0'><tr><td width='16' valign='top'><img src="/images/icons/emoticons/forbidden.gif" width="16" height="16" align="absmiddle" alt="" border="0"></td><td>
+<p>Note that with some log levels certain potentially sensitive details may be logged, including source control passwords. Make sure you check your log file and set the log level appropriately.</p></td></tr></table></div></div>
+
+<a name="ServerApplicationConfigFile-service"></a>
+<h4><a name="ServerApplicationConfigFile-ServiceSpecificSettings">Service Specific Settings</a></h4>
+
+<p>If you are running the console application, you have the option of passing in various arguments on the command line. If however you are using the Service application you can't do this, but there are extra options you can set in the <tt>&lt;appSettings&gt;</tt> section of the config file, as follows:</p>
+
+<table class='confluenceTable'>
 <tr>
-<th> key </th><th> Equivalent startup parameter in <a href="The Server Console Application.html" title="The Server Console Application">The Server Console Application</a> </th>
-</tr><tr>
-<td> <tt class="monospaced">ccnet.config</tt> </td><td> <tt class="monospaced">config</tt> </td>
-</tr><tr>
-<td> <tt class="monospaced">remoting</tt> </td><td> <tt class="monospaced">remoting</tt> </td>
+<th class='confluenceTh'> key </th>
+<th class='confluenceTh'> Equivalent startup parameter in <a href="The Server Console Application.html" title="The Server Console Application">The Server Console Application</a> </th>
+</tr>
+<tr>
+<td class='confluenceTd'> <tt>ccnet.config</tt> </td>
+<td class='confluenceTd'> <tt>config</tt> </td>
+</tr>
+<tr>
+<td class='confluenceTd'> <tt>remoting</tt> </td>
+<td class='confluenceTd'> <tt>remoting</tt> </td>
 </tr>
 </table>
 
@@ -52,7 +80,7 @@ Note that with some log levels certain potentially sensitive details may be logg
 				<td height="12" background="border/border_bottom.gif"><img src="border/spacer.gif" width="1" height="1" border="0"/></td>
 			</tr>
 		    <tr>
-			    <td align="center"><font color="grey">Document generated by Confluence on Jun 26, 2005 17:22</font></td>
+			    <td align="center"><font color="grey">Document generated by Confluence on Aug 15, 2005 13:58</font></td>
 		    </tr>
 	    </table>
     </body>

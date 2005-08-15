@@ -18,23 +18,65 @@
 					    This page last changed on Jun 25, 2005 by <font color="#0050B2">orogers</font>.
 				    </div>
 
-				    <p class="paragraph">The <a href="" title="Filter Trigger">Filter Trigger</a> allows you to prevent builds from occurring at certain times (such as when your source control repository is undergoing backup).  It is used to decorate an existing trigger.  For example, if you have set up a <a href="Interval Trigger.html" title="Interval Trigger">Interval Trigger</a> to cause a new build every 5 minutes, you can use the Filter Trigger to create a window during which the build will not run.</p>If the start time is greater than the end time then the filtered time will span across midnight.  For example, if the start time is 23:00 and the end time is 3:00 then builds will be suppressed over this interval.  <br/>
-<img class="rendericon" src="./icons/emoticons/warning.png" height="16" width="16" align="absmiddle" alt="" border="0"/> NOTE: both the weekday for the start time and the weekday for the end time must be included in the &lt;weekDays&gt; element.<p class="paragraph"><h4 class="heading4"><a name="FilterTrigger-Example"> Example</a></h4></p><div class="code"><div class="codeContent">
-<pre><span class="xml&#45;tag">&lt;filterTrigger startTime=<span class="xml&#45;quote">&quot;23:30&quot;</span> endTime=<span class="xml&#45;quote">&quot;23:45&quot;</span>&gt;</span>&#10;        <span class="xml&#45;tag">&lt;trigger type=<span class="xml&#45;quote">&quot;intervalTrigger&quot;</span> seconds=<span class="xml&#45;quote">&quot;60&quot;</span> /&gt;</span>&#10;        <span class="xml&#45;tag">&lt;weekDays&gt;</span>&#10;            <span class="xml&#45;tag">&lt;weekDay&gt;</span>Sunday<span class="xml&#45;tag">&lt;/weekDay&gt;</span>&#10;        <span class="xml&#45;tag">&lt;/weekDays&gt;</span>&#10;    <span class="xml&#45;tag">&lt;/filterTrigger&gt;</span></pre>
-</div></div><p class="paragraph"><h4 class="heading4"><a name="FilterTrigger-ConfigurationElements%3A"> Configuration Elements:</a></h4></p><table class="wikitable">
+				    <p>The <a href="" title="Filter Trigger">Filter Trigger</a> allows you to prevent builds from occurring at certain times (such as when your source control repository is undergoing backup).  It is used to decorate an existing trigger.  For example, if you have set up a <a href="Interval Trigger.html" title="Interval Trigger">Interval Trigger</a> to cause a new build every 5 minutes, you can use the Filter Trigger to create a window during which the build will not run.  </p>
+
+<p>If the start time is greater than the end time then the filtered time will span across midnight.  For example, if the start time is 23:00 and the end time is 3:00 then builds will be suppressed over this interval.  <br/>
+<img class="emoticon" src="./icons/emoticons/warning.gif" height="16" width="16" align="absmiddle" alt="" border="0"/> NOTE: both the weekday for the start time and the weekday for the end time must be included in the &lt;weekDays&gt; element.</p>
+
+<h4><a name="FilterTrigger-Example">Example</a></h4>
+
+<div class="code"><div class="codeContent">
+<pre class="code-xml"><span class="code-tag">&lt;filterTrigger startTime=<span class="code-quote">"23:30"</span> endTime=<span class="code-quote">"23:45"</span>&gt;</span>
+        <span class="code-tag">&lt;trigger type=<span class="code-quote">"intervalTrigger"</span> seconds=<span class="code-quote">"60"</span> /&gt;</span>
+        <span class="code-tag">&lt;weekDays&gt;</span>
+            <span class="code-tag">&lt;weekDay&gt;</span>Sunday<span class="code-tag">&lt;/weekDay&gt;</span>
+        <span class="code-tag">&lt;/weekDays&gt;</span>
+    <span class="code-tag">&lt;/filterTrigger&gt;</span></pre>
+</div></div>
+
+<h4><a name="FilterTrigger-ConfigurationElements%3A">Configuration Elements:</a></h4>
+
+<table class='confluenceTable'>
 <tr>
-<th> Node </th><th> Description </th><th> Type </th><th> Required</th><th> Default </th>
-</tr><tr>
-<td> startTime </td><td> The start of the filter window.  Builds will not occur after this time and before the end time. </td><td> string </td><td> true </td><td> n/a </td>
-</tr><tr>
-<td> endTime </td><td> The end of the filter window.  Builds will not occur before this time and after the start time. </td><td> string </td><td> true </td><td> n/a </td>
-</tr><tr>
-<td> weekDays </td><td> The week days on which the filter should be applied (eg. Monday, Tuesday).  By default, all days of the week are set. </td><td> elements </td><td> false </td><td> Monday-Sunday </td>
-</tr><tr>
-<td> buildCondition </td><td> The condition that will be returned if a build is requested during the filter window. The default value is <b class="strong">NoBuild</b> indicating that no build will be performed. Legal values are <b class="strong">IfModificationExists</b>, <b class="strong">ForceBuild</b>, <b class="strong">NoBuild</b>. </td><td> string </td><td> false </td><td> NoBuild </td>
+<th class='confluenceTh'> Node </th>
+<th class='confluenceTh'> Description </th>
+<th class='confluenceTh'> Type </th>
+<th class='confluenceTh'> Required</th>
+<th class='confluenceTh'> Default </th>
 </tr>
-</table><br/>
-<img class="rendericon" src="./icons/emoticons/warning.png" height="16" width="16" align="absmiddle" alt="" border="0"/> NOTE: Times should be specified in a locale-specific format (ie. H:mm am/pm is acceptable for US locales.)<p class="paragraph"><b class="strong">With contributions from</b>: Oane Stienstra</p>
+<tr>
+<td class='confluenceTd'> startTime </td>
+<td class='confluenceTd'> The start of the filter window.  Builds will not occur after this time and before the end time. </td>
+<td class='confluenceTd'> string </td>
+<td class='confluenceTd'> true </td>
+<td class='confluenceTd'> n/a </td>
+</tr>
+<tr>
+<td class='confluenceTd'> endTime </td>
+<td class='confluenceTd'> The end of the filter window.  Builds will not occur before this time and after the start time. </td>
+<td class='confluenceTd'> string </td>
+<td class='confluenceTd'> true </td>
+<td class='confluenceTd'> n/a </td>
+</tr>
+<tr>
+<td class='confluenceTd'> weekDays </td>
+<td class='confluenceTd'> The week days on which the filter should be applied (eg. Monday, Tuesday).  By default, all days of the week are set. </td>
+<td class='confluenceTd'> elements </td>
+<td class='confluenceTd'> false </td>
+<td class='confluenceTd'> Monday-Sunday </td>
+</tr>
+<tr>
+<td class='confluenceTd'> buildCondition </td>
+<td class='confluenceTd'> The condition that will be returned if a build is requested during the filter window. The default value is <b>NoBuild</b> indicating that no build will be performed. Legal values are <b>IfModificationExists</b>, <b>ForceBuild</b>, <b>NoBuild</b>. </td>
+<td class='confluenceTd'> string </td>
+<td class='confluenceTd'> false </td>
+<td class='confluenceTd'> NoBuild </td>
+</tr>
+</table>
+
+<p><img class="emoticon" src="./icons/emoticons/warning.gif" height="16" width="16" align="absmiddle" alt="" border="0"/> NOTE: Times should be specified in a locale-specific format (ie. H:mm am/pm is acceptable for US locales.)</p>
+
+<p><b>With contributions from</b>: Oane Stienstra</p>
 
 				    
                     			    </td>
@@ -45,7 +87,7 @@
 				<td height="12" background="border/border_bottom.gif"><img src="border/spacer.gif" width="1" height="1" border="0"/></td>
 			</tr>
 		    <tr>
-			    <td align="center"><font color="grey">Document generated by Confluence on Jun 26, 2005 17:22</font></td>
+			    <td align="center"><font color="grey">Document generated by Confluence on Aug 15, 2005 13:58</font></td>
 		    </tr>
 	    </table>
     </body>

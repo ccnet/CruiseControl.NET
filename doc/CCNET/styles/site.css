@@ -17,9 +17,15 @@ body {
     font:12px monospace
 }
 
-p.paragraph {
-    margin: 5px 0px 5px 0px;
+.wiki-content p, .commentblock p {
+    margin: 16px 0px 16px 0px;
     padding: 0px;
+}
+
+.wiki-content-preview {
+    padding: 5px;
+    border-left: 1px solid #3c78b5;
+    border-right: 1px solid #3c78b5;
 }
 
 ul, ol {
@@ -36,6 +42,19 @@ pre {
     margin-bottom: 5px;
     margin-right: 5px;
     text-align: left;
+}
+
+.helpheading {
+    font-weight: bold;
+    background-color: #D0D9BD;
+        border-bottom: 1px solid #3c78b5;
+        padding: 4px 4px 4px 4px;
+        margin: 0px;
+        margin-top: 10px;
+}
+.helpcontent {
+        padding: 4px 4px 20px 4px;
+    background-color: #f5f7f1;
 }
 
 .code {
@@ -92,6 +111,7 @@ pre {
 .panel {
  	border: 1px dashed #3c78b5;
     margin: 10px;
+    margin-top: 0px;
 }
 
 .panelHeader {
@@ -126,97 +146,34 @@ pre {
 }
 
 
-.java-keyword {
+.code-keyword {
   color: #000091;
   background-color: inherit;
 }
 
-.java-object {
+.code-object {
   color: #910091;
   background-color: inherit;
 }
 
-.java-quote {
+.code-quote {
   color: #009100;
   background-color: inherit;
 }
 
-.java-comment {
+.code-comment {
   color: #808080;
   background-color: inherit;
 }
 
-.javascript-keyword {
-  color: #000091;
-  background-color: inherit;
-}
 
-.javascript-object {
-  color: #910091;
-  background-color: inherit;
-}
-
-.javascript-quote {
-  color: #009100;
-  background-color: inherit;
-}
-
-.javascript-comment {
-  color: #808080;
-  background-color: inherit;
-}
-
-.actionscript-keyword {
-  color: #000091;
-  background-color: inherit;
-}
-
-.actionscript-object {
-  color: #910091;
-  background-color: inherit;
-}
-
-.actionscript-quote {
-  color: #009100;
-  background-color: inherit;
-}
-
-.actionscript-comment {
-  color: #808080;
-  background-color: inherit;
-}
-
-.xml-keyword {
+.code-xml .code-keyword {
+  color: inherit;
   font-weight: bold;
 }
 
-.xml-tag {
+.code-tag {
   color: #000091;
-  background-color: inherit;
-}
-
-.xml-quote {
-  color: #009100;
-  background-color: inherit;
-}
-
-.xml-comment {
-  color: #808080;
-  background-color: inherit;
-}
-
-.sql-keyword {
-  color: #000091;
-  background-color: inherit;
-}
-
-.sql-object {
-  color: #910091;
-  background-color: inherit;
-}
-
-.sql-quote {
-  color: #009100;
   background-color: inherit;
 }
 
@@ -244,14 +201,20 @@ pre {
 	padding: 4px 4px 20px 4px;
 }
 
-.helpheading {
+.rightpanel {
+    border-left: 1px solid #ccc;
+    border-bottom: 1px solid #ccc;
+}
+
+#helpheading {
+    text-align: left;
     font-weight: bold;
     background-color: #D0D9BD;
  	border-bottom: 1px solid #3c78b5;
 	padding: 4px 4px 4px 4px;
 	margin: 0px;
 }
-.helpcontent {
+#helpcontent {
 	padding: 4px 4px 20px 4px;
     background-color: #f5f7f1;
 }
@@ -281,7 +244,6 @@ pre {
 	background-color: #fff;
 	padding: 0px;
 	margin: 0px;
-    border-top: 10px solid #003366;
 }
 
 .pagebody {
@@ -305,6 +267,13 @@ pre {
 	font-family: Arial, sans-serif;
 	color: #003366;
 	margin-bottom: 7px;
+}
+
+.formtitle {
+	font-size: 12px;
+	font-weight: bold;
+	font-family: Arial, sans-serif;
+	color: #003366;
 }
 
 .stepdesc {
@@ -338,7 +307,7 @@ pre {
     padding: 3px 0px 2px 0px;
     margin: 8px 4px 2px 0px;
 	color: #003366;
-	border-bottom: 1px solid #3c78b5;
+	border-bottom: 2px solid #3c78b5;
 }
 .pagesubheading {
     color: #666666;
@@ -363,6 +332,9 @@ h1 A:hover {
     border-bottom: 1px dotted #003366;
 }
 
+.wiki-content > :first-child, .commentblock > :first-child {
+    margin-top: 3px;
+}
 
 .logocell {
     padding: 10px;
@@ -381,7 +353,7 @@ textarea, textarea.editor {
 }
 
 .spacenametitle {
-	font: 31px/41px Impact, Arial, Helvetica;
+	font: 21px/31px Impact, Arial, Helvetica;
     font-weight: 100;
     color: #999999;
 	margin: 0px;
@@ -531,6 +503,27 @@ h3.macrolibrariestitle {
 
 div.centered { text-align: center; margin: 10px; }
 div.centered table {margin: 0px auto; text-align: left; }
+
+.tableview table {
+    margin: 0;
+}
+
+.tableview th {
+    text-align: left;
+    color: #003366;
+    font-size: 12px;
+    padding: 5px 0px 0px 5px;
+    border-bottom: 2px solid #3c78b5;
+}
+.tableview td {
+    text-align: left;
+    border-color: #ccc;
+    border-width: 0px 0px 1px 0px;
+    border-style: solid;
+    margin: 0;
+    padding: 4px 10px 4px 5px;
+}
+
 .grid {
     margin: 2px 0px 5px 0px;
     border-collapse: collapse;
@@ -554,6 +547,7 @@ td.infocell {
 }
 .label {
 	font-weight: bold;
+	color: #003366;
 }
 .error {
 	background-color: #fcc;
@@ -576,15 +570,22 @@ blockquote {
 	border-left: 1px solid #3c78b5;
 }
 
-.wikitable, .wiki-table {
+table.confluenceTable
+{
     margin: 5px;
     border-collapse: collapse;
 }
-.wikitable td, .wikitable th, .wiki-table td, .wiki-table th {
+
+td.confluenceTd
+{
     border: 1px solid #ccc;
     padding: 3px 4px 3px 4px;
 }
-.wikitable th, .wiki-table th {
+
+th.confluenceTh
+{
+    border: 1px solid #ccc;
+    padding: 3px 4px 3px 4px;
     background: #f0f0f0;
     text-align: center;
 }
@@ -731,7 +732,29 @@ a.createlink {
 
 /* alternate (pale yellow) background */
 .rowAlternate {
-    background-color: #fffff0;
+    background-color: #f7f7f7;
+}
+
+/* used in the list attachments table */
+.rowAlternateNoBottomColor {
+    background-color: #f7f7f7;
+}
+
+.rowAlternateNoBottomNoColor {
+}
+
+.rowAlternateNoBottomColor td {
+    border-bottom: 0px;
+}
+
+.rowAlternateNoBottomNoColor td {
+    border-bottom: 0px;
+}
+
+/* row highlight (grey) background */
+.rowHighlight {
+    background-color: #f0f0f0;
+
 }
 
 TD.greenbar {FONT-SIZE: 2px; BACKGROUND: #00df00; BORDER: 1px solid #9c9c9c; PADDING: 0px; }
@@ -839,12 +862,50 @@ td.noformatting {
     display: inline;
 }
 
-/* list page navigational tabs */
-#foldertab {
-padding: 3px 0;
+/* space ops navigational tabs */
+#spaceops_tab {
+padding: 3px 0px 3px 8px;
 margin-left: 0;
 border-bottom: 1px solid #3c78b5;
-font: bold 12px Verdana, sans-serif;
+font: bold 11px Verdana, sans-serif;
+}
+
+#spaceops_tab li {
+list-style: none;
+margin: 0;
+display: inline;
+}
+
+#spaceops_tab li a {
+padding: 3px 0.5em;
+margin-left: 3px;
+border: 1px solid #3c78b5;
+border-bottom: none;
+background: #3c78b5;
+text-decoration: none;
+}
+
+#spaceops_tab li a:link { color: white; }
+#spaceops_tab li a:visited { color: white; }
+
+#spaceops_tab li a:hover {
+color: #ffffff;
+background: #003366;
+border-color: #003366;
+}
+
+#spaceops_tab li a#current {
+background: #f0f0f0;
+border-bottom: 1px solid #f0f0f0;
+color: black;
+}
+
+/* list page navigational tabs */
+#foldertab {
+padding: 3px 0px 3px 8px;
+margin-left: 0;
+border-bottom: 1px solid #3c78b5;
+font: bold 11px Verdana, sans-serif;
 }
 
 #foldertab li {
@@ -926,7 +987,7 @@ table.blogcalendar {
     border: 1px solid #3c78b5;
 }
 
-.blogcalendar th.calendarhead {
+.blogcalendar th.calendarhead, a.calendarhead {
     font-size:x-small;
     font-weight:bold;
     padding:2px;
@@ -970,6 +1031,8 @@ table.blogcalendar {
 
 /* warning panel */
 .warningPanel { background: #FFFFCE; border:#F0C000 1px solid; padding: 8px; margin: 10px; }
+/* alert panel */
+.alertPanel { background: #FFCCCC; border:#C00 1px solid; padding: 8px; margin: 10px; }
 
 /* side menu highlighting (e.g. space content screen) */
 .optionPadded { padding: 2px; }
@@ -982,3 +1045,101 @@ table.blogcalendar {
 .infoMacro { border-style: solid; border-width: 1px; border-color: #3c78b5; background-color: #D8E4F1; }
 .tipMacro { border-style: solid; border-width: 1px; border-color: #090; background-color: #dfd; }
 .informationMacroPadding { padding: 5px 0 0 5px; }
+
+table.infoMacro td, table.warningMacro td, table.tipMacro td, table.noteMacro td, table.sectionMacro td {
+    border: none;
+}
+
+.pagecontent
+{
+    padding: 10px;
+}
+
+/* styles for links in the top bar */
+.topBarDiv a:link {color: white;}
+.topBarDiv a:visited {color: white;}
+.topBarDiv a:active {color: white;}
+.topBarDiv a:hover {color: white;}
+.topBarDiv {color: white;}
+
+.topBar td {
+    background-color: #003366;
+}
+
+
+/* styles for extended operations */
+.greyLinks a:link {color: #666666;}
+.greyLinks a:visited {color: #666666;}
+.greyLinks a:active {color: #666666;}
+.greyLinks a:hover {color: #666666;}
+.greyLinks {color: #666666; display:block; padding: 10px}
+
+.logoSpaceLink a:link {color: #666666; text-decoration: none}
+.logoSpaceLink a:visited {color: #666666; text-decoration: none}
+.logoSpaceLink a:active {color: #666666; text-decoration: none}
+.logoSpaceLink a:hover {color: #003366; text-decoration: none}
+.logoSpaceLink {text-decoration: none}
+
+/* basic panel (basicpanel.vmd) style */
+.basicPanelContainer {border: 1px solid #3c78b5; margin-top: 2px; margin-bottom: 8px; width: 100%}
+.basicPanelTitle {padding: 5px; margin: 0px; background-color: #f0f0f0; color: black; font-weight: bold;}
+.basicPanelBody {padding: 5px; margin: 0px}
+
+.separatorLinks a:link {color: white}
+.separatorLinks a:visited {color: white}
+.separatorLinks a:active {color: white}
+
+.greynavbar {background-color: #f0f0f0; border-top: 1px solid #3c78b5; margin-top: 2px}
+
+div.headerField {
+    float: left;
+    width: auto;
+    height: 100%;
+}
+
+.headerFloat {
+    margin-left: auto;
+    width: 50%;
+}
+
+.headerFloatLeft {
+    float: left;
+    margin-right: 20px;
+    margin-bottom: 10px;
+}
+
+#headerRow {
+    padding: 10px;
+}
+
+div.license-personal {
+   background-color: #003366;
+   color: #ffffff;
+}
+
+div.license-personal a {
+   color: #ffffff;
+}
+
+.greyFormBox {
+    border: 1px solid #cccccc;
+    padding: 5px;
+}
+
+/* IE automatically adds a margin before and after form tags. Use this style to remove that */
+.marginlessForm {
+    margin: 0px;
+}
+
+.openPageHighlight {
+    background-color: #ffffcc;
+    padding: 2px;
+    border: 1px solid #ddd;
+}
+
+.editPageInsertLinks, .editPageInsertLinks a
+{
+    color: #666666;
+    font-weight: bold;
+    font-size: 10px;
+}

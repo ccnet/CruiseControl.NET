@@ -15,22 +15,71 @@
                                                     </span>
 				    </div>
 				    <div class="pagesubheading">
-					    This page last changed on Mar 16, 2005 by <font color="#0050B2">mroberts</font>.
+					    This page last changed on Jul 23, 2005 by <font color="#0050B2">orogers</font>.
 				    </div>
 
-				    <p class="paragraph"><img class="rendericon" src="./icons/emoticons/information.png" height="16" width="16" align="absmiddle" alt="" border="0"/> See <a href="Using CruiseControl.NET with NUnit.html" title="Using CruiseControl.NET with NUnit">Using CruiseControl.NET with NUnit</a> for more details.</p>This task enables you to instruct CCNet to run the unit tests contained within a collection of assemblies.  The results of the unit tests will be automatically included in the CCNet build results.  This can be useful if you have some unit tests that you want to run as part of the integration process, but you don&#039;t need as part of your developer build process.  For example, if you have a set of integration tests that you want to run in a separate build process, it is easy to set up a project to use this task.  <p class="paragraph">If you are using the <a href="Visual Studio Task.html" title="Visual Studio Task">Visual Studio Task</a> and you want to run unit tests then you probably want to use this task. Alternatively you can run NUnit using post-build tasks in your Visual Studio project properties.</p><img class="rendericon" src="./icons/emoticons/warning.png" height="16" width="16" align="absmiddle" alt="" border="0"/> We recommend <b class="strong">not</b> using this task, and using your builder to run your tests if possible. This way if the tests fail and you don&#039;t know why, it is a lot easier to try and replicate the problem on another machine.<p class="paragraph"><h3 class="heading3"><a name="NUnitTask-ConfigurationElements"> Configuration Elements</a></h3></p><table class="wikitable">
+				    <p><img class="emoticon" src="./icons/emoticons/information.gif" height="16" width="16" align="absmiddle" alt="" border="0"/> See <a href="Using CruiseControl.NET with NUnit.html" title="Using CruiseControl.NET with NUnit">Using CruiseControl.NET with NUnit</a> for more details.</p>
+
+<p>This task enables you to instruct CCNet to run the unit tests contained within a collection of assemblies.  The results of the unit tests will be automatically included in the CCNet build results.  This can be useful if you have some unit tests that you want to run as part of the integration process, but you don't need as part of your developer build process.  For example, if you have a set of integration tests that you want to run in a separate build process, it is easy to set up a project to use this task.  </p>
+
+<p>If you are using the <a href="Visual Studio Task.html" title="Visual Studio Task">Visual Studio Task</a> and you want to run unit tests then you probably want to use this task. Alternatively you can run NUnit using post-build tasks in your Visual Studio project properties.</p>
+
+<p><img class="emoticon" src="./icons/emoticons/warning.gif" height="16" width="16" align="absmiddle" alt="" border="0"/> We recommend <b>not</b> using this task, and using your builder to run your tests if possible. This way if the tests fail and you don't know why, it is a lot easier to try and replicate the problem on another machine.</p>
+
+<h3><a name="NUnitTask-ConfigurationElements">Configuration Elements</a></h3>
+
+<table class='confluenceTable'>
 <tr>
-<th> Node </th><th> Description </th><th> Type </th><th> Required</th>
-</tr><tr>
-<td> assemblies </td><td> List of the paths to the assemblies containing the NUnit tests to be run. </td><td> string[] </td><td> true </td>
-</tr><tr>
-<td> path </td><td> Path of <b class="strong">nunit-console.exe</b> application. </td><td> string </td><td> true </td>
+<th class='confluenceTh'> Node </th>
+<th class='confluenceTh'> Description </th>
+<th class='confluenceTh'> Type </th>
+<th class='confluenceTh'> Required</th>
+<th class='confluenceTh'> Default </th>
+</tr>
+<tr>
+<td class='confluenceTd'> assemblies </td>
+<td class='confluenceTd'> List of the paths to the assemblies containing the NUnit tests to be run. </td>
+<td class='confluenceTd'> string[] </td>
+<td class='confluenceTd'> true </td>
+<td class='confluenceTd'>&nbsp;</td>
+</tr>
+<tr>
+<td class='confluenceTd'> path </td>
+<td class='confluenceTd'> Path of <b>nunit-console.exe</b> application. </td>
+<td class='confluenceTd'> string </td>
+<td class='confluenceTd'> false </td>
+<td class='confluenceTd'> C:\Program Files\NUnit 2.2\bin\nunit-console.exe </td>
+</tr>
+<tr>
+<td class='confluenceTd'> outputfile </td>
+<td class='confluenceTd'> The file that NUnit will write the test results to </td>
+<td class='confluenceTd'> string </td>
+<td class='confluenceTd'> false </td>
+<td class='confluenceTd'> nunit-results.xml </td>
+</tr>
+<tr>
+<td class='confluenceTd'> timeout </td>
+<td class='confluenceTd'> The number of seconds that the nunit process will run before timing out </td>
+<td class='confluenceTd'> string </td>
+<td class='confluenceTd'> false </td>
+<td class='confluenceTd'> 600 </td>
 </tr>
 </table>
-<h3 class="heading3"><a name="NUnitTask-ConfigurationExample"> Configuration Example</a></h3><p class="paragraph">The configuration for the NUnitTask should be placed in the <b class="strong">&lt;tasks&gt;</b> section of the <a href="Configuring the Server.html" title="Configuring the Server">Configuring the Server</a> file.
+
+<h3><a name="NUnitTask-ConfigurationExample">Configuration Example</a></h3>
+
+<p>The configuration for the NUnitTask should be placed in the <b>&lt;tasks&gt;</b> section of the <a href="Configuring the Server.html" title="Configuring the Server">Configuring the Server</a> file.</p>
 <div class="code"><div class="codeContent">
-<pre><span class="xml&#45;tag">&lt;tasks&gt;</span>&#10;    	<span class="xml&#45;tag">&lt;nunit&gt;</span>&#10;    		<span class="xml&#45;tag">&lt;path&gt;</span>D:&#92;dev&#92;ccnet&#92;ccnet&#92;tools&#92;nunit&#92;nunit&#45;console.exe<span class="xml&#45;tag">&lt;/path&gt;</span>&#10;    		<span class="xml&#45;tag">&lt;assemblies&gt;</span>&#10;    			<span class="xml&#45;tag">&lt;assembly&gt;</span>D:&#92;dev&#92;Refactoring&#92;bin&#92;Debug&#92;Refactoring.exe<span class="xml&#45;tag">&lt;/assembly&gt;</span>&#10;    			<span class="xml&#45;tag">&lt;assembly&gt;</span>D:&#92;dev&#92;Refactoring&#92;bin&#92;Debug&#92;Refactoring.Core.dll<span class="xml&#45;tag">&lt;/assembly&gt;</span>&#10;    		<span class="xml&#45;tag">&lt;/assemblies&gt;</span>&#10;    	<span class="xml&#45;tag">&lt;/nunit&gt;</span>&#10;    <span class="xml&#45;tag">&lt;/tasks&gt;</span></pre>
-</div></div></p>
+<pre class="code-xml"><span class="code-tag">&lt;tasks&gt;</span>
+    	<span class="code-tag">&lt;nunit&gt;</span>
+    		<span class="code-tag">&lt;path&gt;</span>D:\dev\ccnet\ccnet\tools\nunit\nunit-console.exe<span class="code-tag">&lt;/path&gt;</span>
+    		<span class="code-tag">&lt;assemblies&gt;</span>
+    			<span class="code-tag">&lt;assembly&gt;</span>D:\dev\Refactoring\bin\Debug\Refactoring.exe<span class="code-tag">&lt;/assembly&gt;</span>
+    			<span class="code-tag">&lt;assembly&gt;</span>D:\dev\Refactoring\bin\Debug\Refactoring.Core.dll<span class="code-tag">&lt;/assembly&gt;</span>
+    		<span class="code-tag">&lt;/assemblies&gt;</span>
+    	<span class="code-tag">&lt;/nunit&gt;</span>
+    <span class="code-tag">&lt;/tasks&gt;</span></pre>
+</div></div>
 
 				    
                     			    </td>
@@ -41,7 +90,7 @@
 				<td height="12" background="border/border_bottom.gif"><img src="border/spacer.gif" width="1" height="1" border="0"/></td>
 			</tr>
 		    <tr>
-			    <td align="center"><font color="grey">Document generated by Confluence on Jun 26, 2005 17:22</font></td>
+			    <td align="center"><font color="grey">Document generated by Confluence on Aug 15, 2005 13:58</font></td>
 		    </tr>
 	    </table>
     </body>

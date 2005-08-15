@@ -15,79 +15,253 @@
                                                     </span>
 				    </div>
 				    <div class="pagesubheading">
-					    This page last changed on May 10, 2005 by <font color="#0050B2">gtackley@thoughtworks.com</font>.
+					    This page last changed on Jul 10, 2005 by <font color="#0050B2">orogers</font>.
 				    </div>
 
-				    <p class="paragraph"><h3 style="margin: 4px 0px 4px 0px;" class="heading3"><a name="NAntTask-Examples"> Examples</a></h3></p>Minimalist Example:
-<div class="code"><div class="codeContent">
-<pre><span class="xml&#45;tag">&lt;nant /&gt;</span></pre>
-</div></div><p class="paragraph">Full example:
-<div class="code"><div class="codeContent">
-<pre><span class="xml&#45;tag">&lt;nant&gt;</span>&#10;  <span class="xml&#45;tag">&lt;executable&gt;</span>c:&#92;fromcvs&#92;myrepo&#92;myproject&#92;tools&#92;nant&#92;nant.exe<span class="xml&#45;tag">&lt;/executable&gt;</span>&#10;  <span class="xml&#45;tag">&lt;baseDirectory&gt;</span>c:&#92;fromcvs&#92;myrepo&#92;myproject<span class="xml&#45;tag">&lt;/baseDirectory&gt;</span>&#10;  <span class="xml&#45;tag">&lt;buildArgs&gt;</span>&#45;D:cvs.executable=c:&#92;putty&#92;cvswithplinkrsh.bat<span class="xml&#45;tag">&lt;/buildArgs&gt;</span>&#10;  <span class="xml&#45;tag">&lt;nologo&gt;</span>false<span class="xml&#45;tag">&lt;/nologo&gt;</span>&#10;  <span class="xml&#45;tag">&lt;buildFile&gt;</span>cruise.build<span class="xml&#45;tag">&lt;/buildFile&gt;</span>&#10;  <span class="xml&#45;tag">&lt;logger&gt;</span>My.Other.XmlLogger<span class="xml&#45;tag">&lt;/logger&gt;</span>&#10;  <span class="xml&#45;tag">&lt;targetList&gt;</span>&#10;    <span class="xml&#45;tag">&lt;target&gt;</span>run<span class="xml&#45;tag">&lt;/target&gt;</span>&#10;  <span class="xml&#45;tag">&lt;/targetList&gt;</span>&#10;  <span class="xml&#45;tag">&lt;buildTimeoutSeconds&gt;</span>1200<span class="xml&#45;tag">&lt;/buildTimeoutSeconds&gt;</span>&#10;<span class="xml&#45;tag">&lt;/nant&gt;</span></pre>
-</div></div></p><h3 class="heading3"><a name="NAntTask-ConfigurationElements%3A"> Configuration Elements:</a></h3>
+				    <h3><a name="NAntTask-Examples">Examples</a></h3>
 
-<table class="wikitable">
+<p>Minimalist Example:</p>
+<div class="code"><div class="codeContent">
+<pre class="code-xml"><span class="code-tag">&lt;nant /&gt;</span></pre>
+</div></div>
+
+<p>Full example:</p>
+<div class="code"><div class="codeContent">
+<pre class="code-xml"><span class="code-tag">&lt;nant&gt;</span>
+  <span class="code-tag">&lt;executable&gt;</span>c:\fromcvs\myrepo\myproject\tools\nant\nant.exe<span class="code-tag">&lt;/executable&gt;</span>
+  <span class="code-tag">&lt;baseDirectory&gt;</span>c:\fromcvs\myrepo\myproject<span class="code-tag">&lt;/baseDirectory&gt;</span>
+  <span class="code-tag">&lt;buildArgs&gt;</span>-D:cvs.executable=c:\putty\cvswithplinkrsh.bat<span class="code-tag">&lt;/buildArgs&gt;</span>
+  <span class="code-tag">&lt;nologo&gt;</span>false<span class="code-tag">&lt;/nologo&gt;</span>
+  <span class="code-tag">&lt;buildFile&gt;</span>cruise.build<span class="code-tag">&lt;/buildFile&gt;</span>
+  <span class="code-tag">&lt;logger&gt;</span>My.Other.XmlLogger<span class="code-tag">&lt;/logger&gt;</span>
+  <span class="code-tag">&lt;targetList&gt;</span>
+    <span class="code-tag">&lt;target&gt;</span>run<span class="code-tag">&lt;/target&gt;</span>
+  <span class="code-tag">&lt;/targetList&gt;</span>
+  <span class="code-tag">&lt;buildTimeoutSeconds&gt;</span>1200<span class="code-tag">&lt;/buildTimeoutSeconds&gt;</span>
+<span class="code-tag">&lt;/nant&gt;</span></pre>
+</div></div>
+
+<h3><a name="NAntTask-ConfigurationElements%3A">Configuration Elements:</a></h3>
+
+<table class='confluenceTable'>
 <tr>
-<th> Node </th><th> Description </th><th> Type </th><th> Required </th><th> Default </th>
-</tr><tr>
-<td> executable </td><td> The path of the version of nant.exe you want to run. If this is relative, then must be relative to either (a) the base directory, (b) the CCNet Server application, or (c) if the path doesn&#039;t contain any directory details then can be available in the system or application&#039;s &#039;path&#039; environment variable </td><td> string </td><td> false </td><td> <tt class="monospaced">nant.exe</tt> </td>
-</tr><tr>
-<td> baseDirectory </td><td> The directory to run the NAnt process in. If relative, is a subdirectory of the <a href="Project Configuration Block.html#ProjectConfigurationBlock-workingDirectory" title="workingDirectory on Project Configuration Block">Project Working Directory</a> </td><td> string </td><td> false </td><td> <a href="Project Configuration Block.html#ProjectConfigurationBlock-workingDirectory" title="workingDirectory on Project Configuration Block">Project Working Directory</a></td>
-</tr><tr>
-<td> buildFile </td><td> The name of the build file to run, relative to the baseDirectory. </td><td> string </td><td> false </td><td> no build file specified (NAnt will use the default build file in the working directory) </td>
-</tr><tr>
-<td> buildArgs </td><td> Any arguments to pass through to NAnt (e.g to specify build properties) </td><td> string </td><td> false </td><td> no args specified </td>
-</tr><tr>
-<td> nologo </td><td> Whether to use the <tt class="monospaced">-nologo</tt> argument when calling NAnt </td><td> boolean </td><td> false </td><td> true </td>
-</tr><tr>
-<td> logger </td><td> The NAnt logger to use. If you are using a version of NAnt prior to 0.8.3, you may need to specify this as SourceForge.NAnt.XmlLogger. </td><td> string </td><td> false </td><td> NAnt.Core.XmlLogger </td>
-</tr><tr>
-<td> buildTimeoutSeconds </td><td> Number of seconds to wait before assuming that the process has hung and should be killed. </td><td> int </td><td> false </td><td> 600 (10 minutes) </td>
-</tr><tr>
-<td> targetList </td><td> A list of targets to be called. CruiseControl.NET does not call NAnt once for each target, it uses the NAnt feature of being able to specify multiple targets. </td><td> string list </td><td> false </td><td> no targets specified (NAnt will use the build&#039;s default target </td>
+<th class='confluenceTh'> Node </th>
+<th class='confluenceTh'> Description </th>
+<th class='confluenceTh'> Type </th>
+<th class='confluenceTh'> Required </th>
+<th class='confluenceTh'> Default </th>
+</tr>
+<tr>
+<td class='confluenceTd'> executable </td>
+<td class='confluenceTd'> The path of the version of nant.exe you want to run. If this is relative, then must be relative to either (a) the base directory, (b) the CCNet Server application, or (c) if the path doesn't contain any directory details then can be available in the system or application's 'path' environment variable </td>
+<td class='confluenceTd'> string </td>
+<td class='confluenceTd'> false </td>
+<td class='confluenceTd'> <tt>nant.exe</tt> </td>
+</tr>
+<tr>
+<td class='confluenceTd'> baseDirectory </td>
+<td class='confluenceTd'> The directory to run the NAnt process in. If relative, is a subdirectory of the <a href="Project Configuration Block.html#ProjectConfigurationBlock-workingDirectory" title="workingDirectory on Project Configuration Block">Project Working Directory</a> </td>
+<td class='confluenceTd'> string </td>
+<td class='confluenceTd'> false </td>
+<td class='confluenceTd'> <a href="Project Configuration Block.html#ProjectConfigurationBlock-workingDirectory" title="workingDirectory on Project Configuration Block">Project Working Directory</a></td>
+</tr>
+<tr>
+<td class='confluenceTd'> buildFile </td>
+<td class='confluenceTd'> The name of the build file to run, relative to the baseDirectory. </td>
+<td class='confluenceTd'> string </td>
+<td class='confluenceTd'> false </td>
+<td class='confluenceTd'> no build file specified (NAnt will use the default build file in the working directory) </td>
+</tr>
+<tr>
+<td class='confluenceTd'> buildArgs </td>
+<td class='confluenceTd'> Any arguments to pass through to NAnt (e.g to specify build properties) </td>
+<td class='confluenceTd'> string </td>
+<td class='confluenceTd'> false </td>
+<td class='confluenceTd'> no args specified </td>
+</tr>
+<tr>
+<td class='confluenceTd'> nologo </td>
+<td class='confluenceTd'> Whether to use the <tt>-nologo</tt> argument when calling NAnt </td>
+<td class='confluenceTd'> boolean </td>
+<td class='confluenceTd'> false </td>
+<td class='confluenceTd'> true </td>
+</tr>
+<tr>
+<td class='confluenceTd'> logger </td>
+<td class='confluenceTd'> The NAnt logger to use. If you are using a version of NAnt prior to 0.8.3, you may need to specify this as SourceForge.NAnt.XmlLogger. </td>
+<td class='confluenceTd'> string </td>
+<td class='confluenceTd'> false </td>
+<td class='confluenceTd'> NAnt.Core.XmlLogger </td>
+</tr>
+<tr>
+<td class='confluenceTd'> buildTimeoutSeconds </td>
+<td class='confluenceTd'> Number of seconds to wait before assuming that the process has hung and should be killed. </td>
+<td class='confluenceTd'> int </td>
+<td class='confluenceTd'> false </td>
+<td class='confluenceTd'> 600 (10 minutes) </td>
+</tr>
+<tr>
+<td class='confluenceTd'> targetList </td>
+<td class='confluenceTd'> A list of targets to be called. CruiseControl.NET does not call NAnt once for each target, it uses the NAnt feature of being able to specify multiple targets. </td>
+<td class='confluenceTd'> string list </td>
+<td class='confluenceTd'> false </td>
+<td class='confluenceTd'> no targets specified (NAnt will use the build's default target </td>
 </tr>
 </table>
-<h3 class="heading3"><a name="NAntTask-NAntoutputinXml"> NAnt output in Xml</a></h3><p class="paragraph">CruiseControl.NET expects NAnt to generate its output as Xml so that the build results can be parsed and rendered appropriately.  To accomplish this, CruiseControl.NET will, by default, launch NAnt using the &quot;<b class="strong">-logger:NAnt.Core.XmlLogger</b>&quot; argument.  If you want to override this behaviour, specify the <b class="strong">logger</b> property in the NAntBuilder configuration in the <b class="strong">ccnet.config</b> file.  If this element is specified but is empty then NAnt will be started with the default logger (though this may cause some problems for CCNet).  It is also possible to instruct NAnt to log its output to an Xml file and then merge the file into the build using the <a href="File Merge Task.html" title="File Merge Task">File Merge Task</a>.</p><img class="rendericon" src="./icons/emoticons/warning.png" height="16" width="16" align="absmiddle" alt="" border="0"/> NOTE: the configuration of which NAnt logger to use was orginally specified in the <b class="strong">ccnet.exe.config</b> file.  This has now been deprecated, and the &quot;NAnt.Logger&quot; element in the &lt;appSettings&gt; section can now be removed.<p class="paragraph"><h3 class="heading3"><a name="NAntTask-SourceControlandNAnt"> Source Control and NAnt</a></h3>
-While CruiseControl.NET will detect modifications for you it will not check out changes. It is up to you to add targets to your nant script to do that for you.  So, first you need to create a &#039;bootstrap&#039; build file that is used to get the latest changes to your source tree whenever an update is comitted. A good place to put this build file is in the same directory as your project&#039;s normal buildfile. This bootstrap file should do 2 things:</p><ul class="star">
-<li> Get the latest code from source control</li>
-<li> Call the appropriate target in the actual project build file</li>
-</ul><br/>
-The following is an example for a project under CVS control (it assumes that a propery called &#039;cvs.executable&#039; is passed in from CruiseControl.NET - you can do this in the build/buildArgs section of the ccnet.config file):<br/>
+
+<h3><a name="NAntTask-NAntoutputinXml">NAnt output in Xml</a></h3>
+
+<p>CruiseControl.NET expects NAnt to generate its output as Xml so that the build results can be parsed and rendered appropriately.  To accomplish this, CruiseControl.NET will, by default, launch NAnt using the "<b>-logger:NAnt.Core.XmlLogger</b>" argument.  If you want to override this behaviour, specify the <b>logger</b> property in the NAntBuilder configuration in the <b>ccnet.config</b> file.  If this element is specified but is empty then NAnt will be started with the default logger (though this may cause some problems for CCNet).  It is also possible to instruct NAnt to log its output to an Xml file and then merge the file into the build using the <a href="File Merge Task.html" title="File Merge Task">File Merge Task</a>.</p>
+
+<p><img class="emoticon" src="./icons/emoticons/warning.gif" height="16" width="16" align="absmiddle" alt="" border="0"/> NOTE: the configuration of which NAnt logger to use was orginally specified in the <b>ccnet.exe.config</b> file.  This has now been deprecated, and the "NAnt.Logger" element in the &lt;appSettings&gt; section can now be removed.</p>
+
+<h3><a name="NAntTask-SourceControlandNAnt">Source Control and NAnt</a></h3>
+<p>While CruiseControl.NET will detect modifications for you it will not check out changes. It is up to you to add targets to your nant script to do that for you.  So, first you need to create a 'bootstrap' build file that is used to get the latest changes to your source tree whenever an update is comitted. A good place to put this build file is in the same directory as your project's normal buildfile. This bootstrap file should do 2 things:</p>
+
+<ul>
+	<li>Get the latest code from source control</li>
+	<li>Call the appropriate target in the actual project build file</li>
+</ul>
+
+
+<p>The following is an example for a project under CVS control (it assumes that a propery called 'cvs.executable' is passed in from CruiseControl.NET - you can do this in the build/buildArgs section of the ccnet.config file):</p>
 
 <div class="code"><div class="codeContent">
-<pre><span class="xml&#45;tag">&lt;project name=<span class="xml&#45;quote">&quot;ccnetlaunch&quot;</span> default=<span class="xml&#45;quote">&quot;go&quot;</span>&gt;</span>&#10;  <span class="xml&#45;tag">&lt;target name=<span class="xml&#45;quote">&quot;go&quot;</span> depends=<span class="xml&#45;quote">&quot;update,build&quot;</span>/&gt;</span>&#10;  <span class="xml&#45;tag">&lt;target name=<span class="xml&#45;quote">&quot;update&quot;</span>&gt;</span>&#10;    <span class="xml&#45;tag">&lt;ifnot propertyexists=<span class="xml&#45;quote">&quot;cvs.executable&quot;</span>&gt;</span>&#10;        <span class="xml&#45;tag">&lt;fail message=<span class="xml&#45;quote">&quot;cvs.executable property not set, so can&#039;t update&quot;</span> /&gt;</span>&#10;    <span class="xml&#45;tag">&lt;/ifnot&gt;</span>&#10;    <span class="xml&#45;tag">&lt;echo message=<span class="xml&#45;quote">&quot;CVS Executable at &#91;$&#123;cvs.executable&#125;&#93;&quot;</span> /&gt;</span>&#10;    <span class="xml&#45;tag">&lt;exec &#10;        basedir=<span class="xml&#45;quote">&quot;.&quot;</span> &#10;        program=<span class="xml&#45;quote">&quot;$&#123;cvs.executable&#125;&quot;</span> &#10;        commandline=<span class="xml&#45;quote">&quot;&#45;q update &#45;P &#45;d&quot;</span> &#10;    /&gt;</span>&#10;  <span class="xml&#45;tag">&lt;/target&gt;</span>&#10;  <span class="xml&#45;tag">&lt;target name=<span class="xml&#45;quote">&quot;build&quot;</span>&gt;</span>&#10;    <span class="xml&#45;tag">&lt;nant &#10;        buildfile=<span class="xml&#45;quote">&quot;myproject.build&quot;</span> &#10;        target=<span class="xml&#45;quote">&quot;ContinuousIntegration&quot;</span> &#10;        inheritall=<span class="xml&#45;quote">&quot;true&quot;</span>&#10;    /&gt;</span>&#10;  <span class="xml&#45;tag">&lt;/target&gt;</span>&#10;<span class="xml&#45;tag">&lt;/project&gt;</span></pre>
-</div></div><p class="paragraph">NOTE: The bootstrap buildfile above only updates the buildserver&#039;s local copy of your project&#039;s source. Before you even run CruiseControl.NET for the first time you need to checkout your project to the location on your machine where CruiseControl.NET will build it.</p><h3 class="heading3"><a name="NAntTask-NUnitandNAnt"> NUnit and NAnt</a></h3>
-CruiseControl.NET uses xsl to process the build log and produce html for display on the web page. Since xml is so easy to parse the nunit2 task in NAnt can produce xml output. The tasks must be configured to do that in order for test results to show up on the web page. Typically this is done by adding a formatter element to the nunit2 task and setting the type to be &quot;Xml&quot;. Additionally the usefile flag of the formatter element must be set to &quot;false&quot;. If it isn&#039;t the nunit2 task will try and save the output to a file and not write it out to the build log.<br/>
+<pre class="code-xml"><span class="code-tag">&lt;project name=<span class="code-quote">"ccnetlaunch"</span> default=<span class="code-quote">"go"</span>&gt;</span>
+  <span class="code-tag">&lt;target name=<span class="code-quote">"go"</span> depends=<span class="code-quote">"update,build"</span>/&gt;</span>
+  <span class="code-tag">&lt;target name=<span class="code-quote">"update"</span>&gt;</span>
+    <span class="code-tag">&lt;ifnot propertyexists=<span class="code-quote">"cvs.executable"</span>&gt;</span>
+        <span class="code-tag">&lt;fail message=<span class="code-quote">"cvs.executable property not set, so can't update"</span> /&gt;</span>
+    <span class="code-tag">&lt;/ifnot&gt;</span>
+    <span class="code-tag">&lt;echo message=<span class="code-quote">"CVS Executable at [${cvs.executable}]"</span> /&gt;</span>
+    &lt;exec 
+        basedir=<span class="code-quote">"."</span> 
+        program=<span class="code-quote">"${cvs.executable}"</span> 
+        commandline=<span class="code-quote">"-q update -P -d"</span> 
+    /&gt;
+  <span class="code-tag">&lt;/target&gt;</span>
+  <span class="code-tag">&lt;target name=<span class="code-quote">"build"</span>&gt;</span>
+    &lt;nant 
+        buildfile=<span class="code-quote">"myproject.build"</span> 
+        target=<span class="code-quote">"ContinuousIntegration"</span> 
+        inheritall=<span class="code-quote">"true"</span>
+    /&gt;
+  <span class="code-tag">&lt;/target&gt;</span>
+<span class="code-tag">&lt;/project&gt;</span></pre>
+</div></div>
+
+<p>NOTE: The bootstrap buildfile above only updates the buildserver's local copy of your project's source. Before you even run CruiseControl.NET for the first time you need to checkout your project to the location on your machine where CruiseControl.NET will build it.</p>
+
+<h3><a name="NAntTask-NUnitandNAnt">NUnit and NAnt</a></h3>
+<p>CruiseControl.NET uses xsl to process the build log and produce html for display on the web page. Since xml is so easy to parse the nunit2 task in NAnt can produce xml output. The tasks must be configured to do that in order for test results to show up on the web page. Typically this is done by adding a formatter element to the nunit2 task and setting the type to be "Xml". Additionally the usefile flag of the formatter element must be set to "false". If it isn't the nunit2 task will try and save the output to a file and not write it out to the build log.</p>
 
 <div class="code"><div class="codeContent">
-<pre><span class="xml&#45;tag">&lt;target name=<span class="xml&#45;quote">&quot;test.unit&quot;</span> depends=<span class="xml&#45;quote">&quot;compile&quot;</span> description=<span class="xml&#45;quote">&quot;runs unit tests&quot;</span>&gt;</span>&#10;	<span class="xml&#45;tag">&lt;nunit2&gt;</span>&#10;		<span class="xml&#45;tag">&lt;formatter type=<span class="xml&#45;quote">&quot;Xml&quot;</span> usefile=<span class="xml&#45;quote">&quot;false&quot;</span>/&gt;</span>&#10;		<span class="xml&#45;tag">&lt;test assemblyname=<span class="xml&#45;quote">&quot;$&#123;build.dir&#125;&#92;$&#123;core.dll&#125;&quot;</span> fork=<span class="xml&#45;quote">&quot;true&quot;</span>/&gt;</span>&#10;		<span class="xml&#45;tag">&lt;test assemblyname=<span class="xml&#45;quote">&quot;$&#123;build.dir&#125;&#92;$&#123;console.exe&#125;&quot;</span> fork=<span class="xml&#45;quote">&quot;true&quot;</span>/&gt;</span>&#10;	<span class="xml&#45;tag">&lt;/nunit2&gt;</span>&#10;<span class="xml&#45;tag">&lt;/target&gt;</span></pre>
-</div></div>&#160;<p class="paragraph">It would be pretty tedious for developers to read the xml output when they run the build locally. Define a property for the build output type and set it to &quot;Plain&quot; and use the property in the formatter element..</p><div class="code"><div class="codeContent">
-<pre><span class="xml&#45;tag">&lt;property name=<span class="xml&#45;quote">&quot;outputType&quot;</span> value=<span class="xml&#45;quote">&quot;Plain&quot;</span>/&gt;</span>&#10;	...&#10;	<span class="xml&#45;tag">&lt;formatter type=<span class="xml&#45;quote">&quot;$&#123;outputType&#125;&quot;</span> usefile=<span class="xml&#45;quote">&quot;false&quot;</span>/&gt;</span>&#10;	...</pre>
-</div></div><br/>
-	
-Then in the ccnet.config file pass in a different value for outputType.<br/>
+<pre class="code-xml"><span class="code-tag">&lt;target name=<span class="code-quote">"test.unit"</span> depends=<span class="code-quote">"compile"</span> description=<span class="code-quote">"runs unit tests"</span>&gt;</span>
+	<span class="code-tag">&lt;nunit2&gt;</span>
+		<span class="code-tag">&lt;formatter type=<span class="code-quote">"Xml"</span> usefile=<span class="code-quote">"false"</span>/&gt;</span>
+		<span class="code-tag">&lt;test assemblyname=<span class="code-quote">"${build.dir}\${core.dll}"</span> fork=<span class="code-quote">"true"</span>/&gt;</span>
+		<span class="code-tag">&lt;test assemblyname=<span class="code-quote">"${build.dir}\${console.exe}"</span> fork=<span class="code-quote">"true"</span>/&gt;</span>
+	<span class="code-tag">&lt;/nunit2&gt;</span>
+<span class="code-tag">&lt;/target&gt;</span></pre>
+</div></div> 
+
+<p>It would be pretty tedious for developers to read the xml output when they run the build locally. Define a property for the build output type and set it to "Plain" and use the property in the formatter element..</p>
 
 <div class="code"><div class="codeContent">
-<pre><span class="xml&#45;tag">&lt;nant&gt;</span>&#10;	...&#10;	<span class="xml&#45;tag">&lt;buildArgs&gt;</span><span class="xml&#45;quote">&quot;&#45;DoutputType=Xml&quot;</span><span class="xml&#45;tag">&lt;/buildArgs&gt;</span>&#10;	...&#10;<span class="xml&#45;tag">&lt;/nant&gt;</span></pre>
-</div></div><p class="paragraph"><h3 class="heading3"><a name="NAntTask-AccessingCruiseControl.NETbuildlabelsinNAnt"> Accessing CruiseControl.NET build labels in NAnt</a></h3></p>CCNet will pass the current build label to NAnt via the NAnt property &quot;ccnet.label&quot;.  This means that you can access use this property to, for example, archive the newly built assemblies in a folder with the same name as the build label (this is what we do on <a href="http://ccnetlive.thoughtworks.com/CCNet-builds/" title="Visit page outside Confluence">CCNetLive </a>.  Here&#039;s some example NAnt script demonstrating how to do this:<br/>
+<pre class="code-xml"><span class="code-tag">&lt;property name=<span class="code-quote">"outputType"</span> value=<span class="code-quote">"Plain"</span>/&gt;</span>
+	...
+	<span class="code-tag">&lt;formatter type=<span class="code-quote">"${outputType}"</span> usefile=<span class="code-quote">"false"</span>/&gt;</span>
+	...</pre>
+</div></div>
+
+<p>Then in the ccnet.config file pass in a different value for outputType.</p>
 
 <div class="code"><div class="codeContent">
-<pre><span class="xml&#45;tag">&lt;target name=<span class="xml&#45;quote">&quot;dist.publish&quot;</span> depends=<span class="xml&#45;quote">&quot;dist&quot;</span>&gt;</span>&#10;	<span class="xml&#45;tag">&lt;ifnot propertyexists=<span class="xml&#45;quote">&quot;ccnet.label&quot;</span>&gt;</span>&#10;		<span class="xml&#45;tag">&lt;fail message=<span class="xml&#45;quote">&quot;ccnet.label property not set, so can&#039;t create labelled distribution files&quot;</span> /&gt;</span>&#10;	<span class="xml&#45;tag">&lt;/ifnot&gt;</span>	&#10;	<span class="xml&#45;tag">&lt;property name=<span class="xml&#45;quote">&quot;publish.dir&quot;</span> value=<span class="xml&#45;quote">&quot;D:&#92;download&#45;area&#92;CCNet&#45;Builds&#92;$&#123;ccnet.label&#125;&quot;</span> /&gt;</span>&#10;&#10;	<span class="xml&#45;tag">&lt;mkdir dir=<span class="xml&#45;quote">&quot;$&#123;publish.dir&#125;&quot;</span> /&gt;</span>&#10;	<span class="xml&#45;tag">&lt;copy todir=<span class="xml&#45;quote">&quot;$&#123;publish.dir&#125;&quot;</span>&gt;</span>&#10;		<span class="xml&#45;tag">&lt;fileset basedir=<span class="xml&#45;quote">&quot;dist&quot;</span>&gt;</span>&#10;			<span class="xml&#45;tag">&lt;includes name=<span class="xml&#45;quote">&quot;&#42;&quot;</span>/&gt;</span>&#10;		<span class="xml&#45;tag">&lt;/fileset&gt;</span>&#10;	<span class="xml&#45;tag">&lt;/copy&gt;</span>			&#10;<span class="xml&#45;tag">&lt;/target&gt;</span></pre>
-</div></div><p class="paragraph">CCNet also passes a series of other properties to NAnt:
-<table class="wikitable">
+<pre class="code-xml"><span class="code-tag">&lt;nant&gt;</span>
+	...
+	<span class="code-tag">&lt;buildArgs&gt;</span><span class="code-quote">"-DoutputType=Xml"</span><span class="code-tag">&lt;/buildArgs&gt;</span>
+	...
+<span class="code-tag">&lt;/nant&gt;</span></pre>
+</div></div>
+
+<h3><a name="NAntTask-AccessingCruiseControl.NETbuildlabelsinNAnt">Accessing CruiseControl.NET build labels in NAnt</a></h3>
+
+<p>CCNet will pass the current build label to NAnt via the NAnt property "ccnet.label".  This means that you can access use this property to, for example, archive the newly built assemblies in a folder with the same name as the build label (this is what we do on <a href="http://ccnetlive.thoughtworks.com/CCNet-builds/" title="Visit page outside Confluence">CCNetLive </a>.  Here's some example NAnt script demonstrating how to do this:</p>
+
+<div class="code"><div class="codeContent">
+<pre class="code-xml"><span class="code-tag">&lt;target name=<span class="code-quote">"dist.publish"</span> depends=<span class="code-quote">"dist"</span>&gt;</span>
+	<span class="code-tag">&lt;ifnot propertyexists=<span class="code-quote">"ccnet.label"</span>&gt;</span>
+		<span class="code-tag">&lt;fail message=<span class="code-quote">"ccnet.label property not set, so can't create labelled distribution files"</span> /&gt;</span>
+	<span class="code-tag">&lt;/ifnot&gt;</span>	
+	<span class="code-tag">&lt;property name=<span class="code-quote">"publish.dir"</span> value=<span class="code-quote">"D:\download-area\CCNet-Builds\${ccnet.label}"</span> /&gt;</span>
+
+	<span class="code-tag">&lt;mkdir dir=<span class="code-quote">"${publish.dir}"</span> /&gt;</span>
+	<span class="code-tag">&lt;copy todir=<span class="code-quote">"${publish.dir}"</span>&gt;</span>
+		<span class="code-tag">&lt;fileset basedir=<span class="code-quote">"dist"</span>&gt;</span>
+			<span class="code-tag">&lt;includes name=<span class="code-quote">"*"</span>/&gt;</span>
+		<span class="code-tag">&lt;/fileset&gt;</span>
+	<span class="code-tag">&lt;/copy&gt;</span>			
+<span class="code-tag">&lt;/target&gt;</span></pre>
+</div></div>
+
+<h3><a name="NAntTask-IntegrationProperties">Integration Properties</a></h3>
+
+<p>The following parameters are passed to NAnt as command-line arguments:</p>
+
+<table class='confluenceTable'>
 <tr>
-<th> Label </th><th> Description </th><th> Example </th>
-</tr><tr>
-<td> ccnet.label </td><td> The label used to identify the CCNet build.  This label is generated by the CCNet labeller. </td><td> 1.0.2.120 </td>
-</tr><tr>
-<td> ccnet.buildcondition </td><td> The condition used to trigger the build, indicating if the build was triggered by new modifications or if it was forced.  Legal values are: &quot;IfModificationExists&quot; or &quot;ForceBuild&quot; </td><td> ForceBuild </td>
-</tr><tr>
-<td> ccnet.working.directory </td><td> The <a href="Project Configuration Block.html#ProjectConfigurationBlock-workingDirectory" title="workingDirectory on Project Configuration Block">project working directory</a> </td><td> <tt class="monospaced">c:\program files\CruiseControl.NET\Server\MyProject\WorkingDirectory</tt></td>
-</tr><tr>
-<td> ccnet.artifact.directory </td><td> The <a href="Project Configuration Block.html#ProjectConfigurationBlock-artifactDirectory" title="artifactDirectory on Project Configuration Block">project artifact directory</a> </td><td> <tt class="monospaced">c:\program files\CruiseControl.NET\Server\MyProject\Artifacts</tt></td>
+<th class='confluenceTh'> Label </th>
+<th class='confluenceTh'> Description </th>
+<th class='confluenceTh'> Example </th>
 </tr>
-</table></p><img class="rendericon" src="./icons/emoticons/warning.png" height="16" width="16" align="absmiddle" alt="" border="0"/> NOTE: the &quot;label-to-apply&quot; property has been deprecated and will be removed in future versions of CCNet.  It has now been replaced by the &quot;ccnet.label&quot; property.<br/>
+<tr>
+<td class='confluenceTd'> CCNetBuildCondition </td>
+<td class='confluenceTd'> The condition used to trigger the build, indicating if the build was triggered by new modifications or if it was forced.  Legal values are: "IfModificationExists" or "ForceBuild" </td>
+<td class='confluenceTd'> ForceBuild </td>
+</tr>
+<tr>
+<td class='confluenceTd'> CCNetIntegrationStatus </td>
+<td class='confluenceTd'> The status of the current integration. Could be Success, Failure, Exception or Unknown  </td>
+<td class='confluenceTd'> Success </td>
+</tr>
+<tr>
+<td class='confluenceTd'> CCNetLabel </td>
+<td class='confluenceTd'> The label used to identify the CCNet build.  This label is generated by the CCNet labeller. </td>
+<td class='confluenceTd'> 1.0.2.120 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> CCNetLastIntegrationStatus </td>
+<td class='confluenceTd'> The status of the previous integration. Could be Success, Failure, Exception or Unknown  </td>
+<td class='confluenceTd'> Success </td>
+</tr>
+<tr>
+<td class='confluenceTd'> CCNetProject </td>
+<td class='confluenceTd'> The name of the CCNet project that is being integrated. </td>
+<td class='confluenceTd'> MyProject </td>
+</tr>
+<tr>
+<td class='confluenceTd'> CCNetBuildDate </td>
+<td class='confluenceTd'> The date of the build (in yyyy-MM-dd format) </td>
+<td class='confluenceTd'> 2005-08-10 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> CCNetBuildTime </td>
+<td class='confluenceTd'> The time of the start of the build (in HH:mm:ss format) </td>
+<td class='confluenceTd'> 08:45:12 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> CCNetArtifactDirectory </td>
+<td class='confluenceTd'> The <a href="Project Configuration Block.html#ProjectConfigurationBlock-artifactDirectory" title="artifactDirectory on Project Configuration Block">project artifact directory</a> </td>
+<td class='confluenceTd'> <tt>c:\program files\CruiseControl.NET\Server\MyProject\Artifacts</tt></td>
+</tr>
+<tr>
+<td class='confluenceTd'> CCNetWorkingDirectory </td>
+<td class='confluenceTd'> The <a href="Project Configuration Block.html#ProjectConfigurationBlock-workingDirectory" title="workingDirectory on Project Configuration Block">project working directory</a> </td>
+<td class='confluenceTd'> <tt>c:\program files\CruiseControl.NET\Server\MyProject\WorkingDirectory</tt></td>
+</tr>
+</table>
 
+<p><img class="emoticon" src="./icons/emoticons/warning.gif" height="16" width="16" align="absmiddle" alt="" border="0"/> NOTE: the "label-to-apply" property has been deprecated and will be removed in future versions of CCNet.  It has now been replaced by the "CCNetLabel" property.</p>
 
 
 				    
@@ -99,7 +273,7 @@ Then in the ccnet.config file pass in a different value for outputType.<br/>
 				<td height="12" background="border/border_bottom.gif"><img src="border/spacer.gif" width="1" height="1" border="0"/></td>
 			</tr>
 		    <tr>
-			    <td align="center"><font color="grey">Document generated by Confluence on Jun 26, 2005 17:22</font></td>
+			    <td align="center"><font color="grey">Document generated by Confluence on Aug 15, 2005 13:58</font></td>
 		    </tr>
 	    </table>
     </body>

@@ -15,23 +15,45 @@
                                                     </span>
 				    </div>
 				    <div class="pagesubheading">
-					    This page last changed on May 19, 2005 by <font color="#0050B2">orogers</font>.
+					    This page last changed on Aug 08, 2005 by <font color="#0050B2">mroberts</font>.
 				    </div>
 
-				    <p class="paragraph">The Xml Log Publisher is used to create the log files read by the CruiseControl.NET web page, so if you don&#039;t define an xmllogger the web page will not function.</p><h4 class="heading4"><a name="XmlLogPublisher-Examples"> Examples</a></h4><p class="paragraph">Minimalist example:
+				    <p>The Xml Log Publisher is used to create the log files used by the CruiseControl.NET Web Dashboard, so if you don't define an &lt;xmllogger /&gt;  section the Dashboard will not function correctly. </p>
+
+<div class="information-block" align='center'><div class='informationMacroPadding'><table cellpadding='5' width='85%' cellspacing='0' class='noteMacro' border='0'><tr><td width='16' valign='top'><img src="/images/icons/emoticons/warning.gif" width="16" height="16" align="absmiddle" alt="" border="0"></td><td>You should place the &lt;xmllogger /&gt; in the &lt;publishers /&gt; section, <b>after</b> any <a href="File Merge Task.html" title="File Merge Task">File Merge Task</a>s, in your <a href="Project Configuration Block.html" title="Project Configuration Block">Project Configuration Block</a>.</td></tr></table></div></div>
+
+<h4><a name="XmlLogPublisher-Examples">Examples</a></h4>
+
+<p>Minimalist example:</p>
 <div class="code"><div class="codeContent">
-<pre><span class="xml&#45;tag">&lt;xmllogger /&gt;</span></pre>
-</div></div></p>Full example:
+<pre class="code-xml"><span class="code-tag">&lt;xmllogger /&gt;</span></pre>
+</div></div>
+
+<p>Full example:</p>
 <div class="code"><div class="codeContent">
-<pre><span class="xml&#45;tag">&lt;xmllogger logDir=<span class="xml&#45;quote">&quot;c:&#92;myproject&#92;buildlogs&quot;</span> /&gt;</span></pre>
-</div></div><p class="paragraph"><h4 class="heading4"><a name="XmlLogPublisher-ConfigurationElements%3A"> Configuration Elements:</a></h4></p><table class="wikitable">
+<pre class="code-xml"><span class="code-tag">&lt;xmllogger logDir=<span class="code-quote">"c:\myproject\buildlogs"</span> /&gt;</span></pre>
+</div></div>
+
+<h4><a name="XmlLogPublisher-ConfigurationElements%3A">Configuration Elements:</a></h4>
+
+<table class='confluenceTable'>
 <tr>
-<th> Node </th><th> Description </th><th> Type </th><th> Required</th><th> Default </th>
-</tr><tr>
-<td> <a name="XmlLogPublisher-logDir"></a> logDir </td><td> The directory to save log files to. If relative, then relative to the <a href="Project Configuration Block.html#ProjectConfigurationBlock-artifactDirectory" title="artifactDirectory on Project Configuration Block">Project Artifact Directory</a> </td><td> string </td><td> false </td><td> <tt class="monospaced">buildlogs</tt> </td>
+<th class='confluenceTh'> Node </th>
+<th class='confluenceTh'> Description </th>
+<th class='confluenceTh'> Type </th>
+<th class='confluenceTh'> Required</th>
+<th class='confluenceTh'> Default </th>
 </tr>
-</table><br/>
-<img class="rendericon" src="./icons/emoticons/warning.png" height="16" width="16" align="absmiddle" alt="" border="0"/> If you change this value, make sure update the configuration of the <a href="Project Report Web Application.html" title="Project Report Web Application">Project Report Web Application</a> if you are using it.<p class="paragraph"><img class="rendericon" src="./icons/emoticons/information.png" height="16" width="16" align="absmiddle" alt="" border="0"/> The default location for build logs used to be the <tt class="monospaced">log</tt> directory in the <a href="Project Report Web Application.html" title="Project Report Web Application">Project Report Web Application</a> directory. If you wish to keep this behaviour, set the <tt class="monospaced">logDir</tt> value to <tt class="monospaced">..\..\..\web\log</tt> (assuming that you have not updated the <a href="Project Configuration Block.html#ProjectConfigurationBlock-artifactDirectory" title="artifactDirectory on Project Configuration Block">Project Artifact Directory</a>)</p><img class="rendericon" src="./icons/emoticons/information.png" height="16" width="16" align="absmiddle" alt="" border="0"/> XML Log Publisher used to support the &#039;mergeFiles&#039; option. This functionality is now removed and you should use <a href="File Merge Task.html" title="File Merge Task">File Merge Task</a> instead.
+<tr>
+<td class='confluenceTd'> <a name="XmlLogPublisher-logDir"></a> logDir </td>
+<td class='confluenceTd'> The directory to save log files to. If relative, then relative to the <a href="Project Configuration Block.html#ProjectConfigurationBlock-artifactDirectory" title="artifactDirectory on Project Configuration Block">Project Artifact Directory</a> </td>
+<td class='confluenceTd'> string </td>
+<td class='confluenceTd'> false </td>
+<td class='confluenceTd'> <tt>buildlogs</tt> </td>
+</tr>
+</table>
+
+<p><img class="emoticon" src="./icons/emoticons/information.gif" height="16" width="16" align="absmiddle" alt="" border="0"/> XML Log Publisher used to support the 'mergeFiles' option. This functionality is now removed and you should use <a href="File Merge Task.html" title="File Merge Task">File Merge Task</a> instead.</p>
 
 				    
                     			    </td>
@@ -42,7 +64,7 @@
 				<td height="12" background="border/border_bottom.gif"><img src="border/spacer.gif" width="1" height="1" border="0"/></td>
 			</tr>
 		    <tr>
-			    <td align="center"><font color="grey">Document generated by Confluence on Jun 26, 2005 17:23</font></td>
+			    <td align="center"><font color="grey">Document generated by Confluence on Aug 15, 2005 13:58</font></td>
 		    </tr>
 	    </table>
     </body>
