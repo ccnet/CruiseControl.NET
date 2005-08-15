@@ -2,18 +2,29 @@ using System;
 using System.Text;
 using System.Text.RegularExpressions;
 using Exortech.NetReflector;
+using ThoughtWorks.CruiseControl.Core.Util;
 using ThoughtWorks.CruiseControl.Remote;
 
 namespace ThoughtWorks.CruiseControl.Core.Label
 {
 	/// <summary>
-	/// Summary description for IterationLabeller.
+	/// The IterationLabeller increments the build number automatically after each iteration, where an iteration is defined as a 
+	/// configurable number of weeks (the default is 2).
 	/// </summary>
 	[ReflectorType("iterationlabeller")]
 	public class IterationLabeller : ILabeller
 	{
-		public static readonly int InitialLabel = 1;
-		private readonly int DaysInWeek = 7;
+		private readonly DateTimeProvider dateTimeProvider;
+		public const int InitialLabel = 1;
+		private const int DaysInWeek = 7;
+
+		public IterationLabeller() : this(new DateTimeProvider())
+		{}
+
+		public IterationLabeller(DateTimeProvider dateTimeProvider)
+		{
+			this.dateTimeProvider = dateTimeProvider;
+		}
 
 		[ReflectorProperty("prefix", Required=false)]
 		public string LabelPrefix = "";
@@ -91,7 +102,7 @@ namespace ThoughtWorks.CruiseControl.Core.Label
 
 		private int GetIteration(DateTime startDate)
 		{
-			return GetIteration(startDate, DateTime.Today);
+			return GetIteration(startDate, dateTimeProvider.Today);
 		}
 
 		private int GetIteration(DateTime startDate, DateTime endDate)
