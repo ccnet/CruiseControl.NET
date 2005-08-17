@@ -82,7 +82,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 		public void ShouldNotRunBuildIfThereAreNoModifications()
 		{
 			result.Modifications = new Modification[0];
-			Assert.IsFalse(result.ShouldRunBuild(0));
+			Assert.IsFalse(result.ShouldRunBuild());
 		}
 
 		[Test]
@@ -90,30 +90,14 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 		{
 			Modification modification = ModificationMother.CreateModification("foo", DateTime.Now.AddSeconds(-2));
 			result.Modifications = new Modification[] {modification};
-			Assert.IsTrue(result.ShouldRunBuild(0));
-		}
-
-		[Test]
-		public void ShouldNotRunBuildIfThereAreModificationsWithinModificationDelay()
-		{
-			Modification modification = ModificationMother.CreateModification("foo", DateTime.Now.AddSeconds(-2));
-			result.Modifications = new Modification[] {modification};
-			Assert.IsFalse(result.ShouldRunBuild(100));
-		}
-
-		[Test]
-		public void ShouldRunBuildIfLastModificationOutsideModificationDelay()
-		{
-			Modification modification = ModificationMother.CreateModification("foo", DateTime.Now.AddMinutes(-2));
-			result.Modifications = new Modification[] {modification};
-			Assert.IsTrue(result.ShouldRunBuild(100));
+			Assert.IsTrue(result.ShouldRunBuild());
 		}
 
 		[Test]
 		public void ShouldRunBuildIfInForcedCondition()
 		{
 			result.BuildCondition = BuildCondition.ForceBuild;
-			Assert.IsTrue(result.ShouldRunBuild(0));
+			Assert.IsTrue(result.ShouldRunBuild());
 		}
 
 		[Test]
@@ -191,6 +175,15 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 			Assert.AreEqual("2005-06-06", result.IntegrationProperties["CCNetBuildDate"]);
 			Assert.AreEqual("08:45:00", result.IntegrationProperties["CCNetBuildTime"]);
 			Assert.AreEqual(BuildCondition.IfModificationExists, result.IntegrationProperties["CCNetBuildCondition"]);
+		}
+
+		[Test]
+		public void VerifyIntegrationArtifactDir()
+		{
+			IntegrationResult result = new IntegrationResult();
+			result.ArtifactDirectory = @"c:\artifacts";
+			result.Label = "1.2.3.4";
+			Assert.AreEqual(@"c:\artifacts\1.2.3.4", result.IntegrationArtifactDirectory);
 		}
 	}
 }

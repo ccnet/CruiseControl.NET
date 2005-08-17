@@ -35,7 +35,7 @@ namespace ThoughtWorks.CruiseControl.Core
 		bool Succeeded { get; }
 		void MarkStartTime();
 		void MarkEndTime();
-		bool ShouldRunBuild(int modificationDelaySeconds);
+		bool ShouldRunBuild();
 		string BaseFromArtifactsDirectory(string pathToBase);
 		string BaseFromWorkingDirectory(string pathToBase);
 		IDictionary IntegrationProperties { get; }

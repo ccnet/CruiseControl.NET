@@ -75,6 +75,11 @@ namespace ThoughtWorks.CruiseControl.Core
 			set { properties["CCNetArtifactDirectory"] = value; }
 		}
 
+		public string IntegrationArtifactDirectory
+		{
+			get { return Path.Combine(ArtifactDirectory, Label); }
+		}
+
 		public IntegrationStatus Status
 		{
 			get { return (IntegrationStatus) properties["CCNetIntegrationStatus"]; }
@@ -122,13 +127,15 @@ namespace ThoughtWorks.CruiseControl.Core
 		{
 			get
 			{
-				DateTime latestDate = DateTime.MinValue;
-				if (Modifications.Length == 0) //TODO: why set the date to yesterday's date as a default
-				{ //If there are no modifications then this should be set to the last modification date
-					latestDate = DateTime.Now; // from the last integration (or 1/1/1980 if there is no previous integration).
-					latestDate = latestDate.AddDays(-1.0);
+				//TODO: why set the date to yesterday's date as a default
+				if (Modifications.Length == 0) 
+				{ 
+					//If there are no modifications then this should be set to the last modification date
+					// from the last integration (or 1/1/1980 if there is no previous integration).
+					return DateTime.Now.AddDays(-1.0);
 				}
 
+				DateTime latestDate = DateTime.MinValue;
 				foreach (Modification modification in Modifications)
 				{
 					latestDate = DateUtil.MaxDate(modification.ModifiedTime, latestDate);
@@ -277,12 +284,9 @@ namespace ThoughtWorks.CruiseControl.Core
 		/// are modifications, and none have occurred within the modification
 		/// delay.
 		/// </summary>
-		public bool ShouldRunBuild(int modificationDelaySeconds)
+		public bool ShouldRunBuild()
 		{
-			if (BuildCondition.ForceBuild == BuildCondition)
-				return true;
-			else
-				return (HasModifications() && ! DoModificationsExistWithinModificationDelay(modificationDelaySeconds));
+			return BuildCondition.ForceBuild == BuildCondition || HasModifications();
 		}
 
 		public string BaseFromArtifactsDirectory(string pathToBase)

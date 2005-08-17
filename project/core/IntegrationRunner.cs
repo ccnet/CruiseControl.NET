@@ -25,17 +25,16 @@ namespace ThoughtWorks.CruiseControl.Core
 			IIntegrationResult result = resultManager.StartNewIntegration(buildCondition);
 			IIntegrationResult lastResult = resultManager.LastIntegrationResult;
 
-			CreateWorkingDirectoryIfItDoesntExist();
-			ISourceControl sourceControl = target.SourceControl;
-
+			CreateDirectoryIfItDoesntExist(result.WorkingDirectory);
+			CreateDirectoryIfItDoesntExist(result.ArtifactDirectory);
 			result.MarkStartTime();
 			try
 			{
-				result.Modifications = GetSourceModifications(lastResult, result);
-				if (result.ShouldRunBuild(target.ModificationDelaySeconds))
+				result.Modifications = GetModifications(lastResult, result);
+				if (result.ShouldRunBuild())
 				{
 					target.Activity = ProjectActivity.Building;
-					sourceControl.GetSource(result);
+					target.SourceControl.GetSource(result);
 					RunBuild(result);
 				}
 			}
@@ -51,17 +50,17 @@ namespace ThoughtWorks.CruiseControl.Core
 			return result;
 		}
 
-		private Modification[] GetSourceModifications(IIntegrationResult from, IIntegrationResult to)
+		private Modification[] GetModifications(IIntegrationResult from, IIntegrationResult to)
 		{
 			target.Activity = ProjectActivity.CheckingModifications;
 			return quietPeriod.GetModifications(target.SourceControl, from, to);
 		}
 
 		// ToDo - MR - this is temporary until we know for certain that 'Project.Initialize' will have been called at some point
-		private void CreateWorkingDirectoryIfItDoesntExist()
+		private void CreateDirectoryIfItDoesntExist(string directory)
 		{
-			if (! Directory.Exists(target.WorkingDirectory))
-				Directory.CreateDirectory(target.WorkingDirectory);
+			if (! Directory.Exists(directory))
+				Directory.CreateDirectory(directory);
 		}
 
 		private void RunBuild(IIntegrationResult result)

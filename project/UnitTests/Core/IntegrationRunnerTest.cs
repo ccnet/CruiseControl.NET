@@ -1,4 +1,5 @@
 using System;
+using System.IO;
 using NMock;
 using NUnit.Framework;
 using ThoughtWorks.CruiseControl.Core;
@@ -25,7 +26,6 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 
 		private Modification[] modifications;
 		private DateTime time3;
-		private int modificationDelay = 55;
 
 		[SetUp]
 		public void Setup()
@@ -53,7 +53,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 			time3 = new DateTime(2005, 2, 1);
 			modifications = new Modification[] {new Modification()};
 
-			targetMock.SetupResult("WorkingDirectory", TempFileUtil.CreateTempDir("workingDir"));
+			resultMock.SetupResult("WorkingDirectory", TempFileUtil.GetTempPath("workingDir"));
+			resultMock.SetupResult("ArtifactDirectory", TempFileUtil.GetTempPath("artifactDir"));
 		}
 
 		[TearDown]
@@ -77,7 +78,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 		public void ShouldNotRunBuildIfResultShouldNotBuild()
 		{
 			SetupPreambleExpections();
-			resultMock.ExpectAndReturn("ShouldRunBuild", false, modificationDelay);
+			resultMock.ExpectAndReturn("ShouldRunBuild", false);
 			resultMock.Expect("MarkEndTime");
 			targetMock.Expect("Activity", ProjectActivity.Sleeping);
 			resultMock.ExpectAndReturn("Status", IntegrationStatus.Unknown);
@@ -86,6 +87,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 			IIntegrationResult returnedResult = runner.RunIntegration(BuildCondition.IfModificationExists);
 
 			Assert.AreEqual(result, returnedResult);
+			Assert.IsTrue(Directory.Exists(result.WorkingDirectory));
+			Assert.IsTrue(Directory.Exists(result.ArtifactDirectory));
 			VerifyAll();
 		}
 
@@ -118,12 +121,11 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 			targetMock.SetupResult("SourceControl", sourceControlMock.MockInstance);
 			quietPeriodMock.ExpectAndReturn("GetModifications", modifications, sourceControlMock.MockInstance, lastResult, result);
 			resultMock.ExpectAndReturn("Modifications", modifications);
-			targetMock.ExpectAndReturn("ModificationDelaySeconds", modificationDelay);
 		}
 
 		private void SetupShouldBuildExpectations()
 		{
-			resultMock.ExpectAndReturn("ShouldRunBuild", true, modificationDelay);
+			resultMock.ExpectAndReturn("ShouldRunBuild", true);
 
 			targetMock.Expect("Activity", ProjectActivity.Building);
 
