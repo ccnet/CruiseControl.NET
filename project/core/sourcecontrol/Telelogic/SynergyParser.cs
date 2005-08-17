@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Text.RegularExpressions;
+using ThoughtWorks.CruiseControl.Core.Util;
 
 namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Telelogic
 {
@@ -99,57 +100,59 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Telelogic
 		public virtual Modification[] Parse(string newTasks, string newObjects, DateTime from)
 		{
 			ArrayList modifications = new ArrayList();
-			Hashtable tasks = null;
+			Hashtable tasks = new Hashtable();
 
 			// don't bother doing anything if no modified objects were found
-			if (null != newObjects && newObjects.Length > 0)
+			if (StringUtil.IsBlank(newObjects)) return new Modification[0];
+
+			// optionally, parse the comments from each associated task
+			if (! StringUtil.IsBlank(newTasks))
 			{
-				// optionally, parse the comments from each associated task
-				if (null != newTasks && newTasks.Length > 0)
+				tasks = ParseTasks(newTasks);
+			}
+
+			// look for modifications in the output from the finduse command
+			Regex grep = new Regex(ObjectFormat, RegexOptions.CultureInvariant);
+			MatchCollection matches = grep.Matches(newObjects);
+
+			// each match is a detected modification
+			foreach (Match match in matches)
+			{
+				Modification modification = new Modification();
+				modification.FolderName = match.Groups["folder"].Value;
+				modification.FileName = match.Groups["displayname"].Value;
+				modification.Type = match.Groups["cvtype"].Value;
+				modification.EmailAddress = match.Groups["resolver"].Value;
+				modification.UserName = match.Groups["resolver"].Value;
+
+				/* normalize the folder path to resemble other SCM systems 
+                     * vis a vis the "$/project/folder/file" format */
+				if (modification.FolderName.Length > 0)
 				{
-					tasks = ParseTasks(newTasks);
+					modification.FolderName = String.Concat("$/", modification.FolderName.Replace('\\', '/'));
 				}
 
-				// look for modifications in the output from the finduse command
-				Regex grep = new Regex(ObjectFormat, RegexOptions.CultureInvariant);
-				MatchCollection matches = grep.Matches(newObjects);
-
-				// each match is a detected modification
-				foreach (Match match in matches)
+				// Retrieve the comment, if available
+				CaptureCollection captures = match.Groups["task"].Captures;
+				if (null != captures)
 				{
-					Modification modification = new Modification();
-					modification.FolderName = match.Groups["folder"].Value;
-					modification.FileName = match.Groups["displayname"].Value;
-					modification.Type = match.Groups["cvtype"].Value;
-					modification.EmailAddress = match.Groups["resolver"].Value;
-					modification.UserName = match.Groups["resolver"].Value;
-
-					/* normalize the folder path to resemble other SCM systems 
-                     * vis a vis the "$/project/folder/file" format */
-					if (modification.FolderName.Length > 0)
+					foreach (Capture capture in captures)
 					{
-						modification.FolderName = String.Concat("$/", modification.FolderName.Replace('\\', '/'));
-					}
-
-					// Retrieve the comment, if available
-					CaptureCollection captures = match.Groups["task"].Captures;
-					if (null != tasks && null != captures)
-					{
-						foreach (Capture capture in captures)
+						SynergyTaskInfo info = (SynergyTaskInfo) tasks[capture.Value];
+						if (info == null)
 						{
-							SynergyTaskInfo info = (SynergyTaskInfo) tasks[capture.Value];
-							if (null != info)
-							{
-								modification.ChangeNumber = info.TaskNumber;
-								modification.ModifiedTime = info.CompletionDate;
-								if (null != info.TaskSynopsis)
-									modification.Comment = info.TaskSynopsis;
-							}
+							modification.ChangeNumber = Int32.Parse(Regex.Match(capture.Value, @"\d+").Value);
+						}
+						else
+						{
+							modification.ChangeNumber = info.TaskNumber;
+							modification.ModifiedTime = info.CompletionDate;
+							if (null != info.TaskSynopsis)
+								modification.Comment = info.TaskSynopsis;
 						}
 					}
-
-					modifications.Add(modification);
 				}
+				modifications.Add(modification);
 			}
 			return (Modification[]) modifications.ToArray(typeof (Modification));
 		}
@@ -197,7 +200,6 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Telelogic
 					Debug.Assert(false, "Failed to parse task " + match.Groups["displayname"].Value, ex.Message);
 				}
 			}
-
 			return retVal;
 		}
 

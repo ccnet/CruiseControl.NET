@@ -189,7 +189,11 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Telelogic
 		/// <url>element://model:project::CCNet.Synergy.Plugin/design:view:::vt4zadwko_v</url>
 		public Modification[] GetModifications(IIntegrationResult from, IIntegrationResult to)
 		{
-			// default return value
+			return GetModifications(from.LastModificationDate);
+		}
+
+		private Modification[] GetModifications(DateTime from)
+		{
 			Modification[] modifications = new Modification[0];
 
 			if (project.TemplateEnabled)
@@ -201,12 +205,8 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Telelogic
 			// refresh the query based folders in the reconfigure properties
 			command.Execute(SynergyCommandBuilder.UpdateReconfigureProperites(connection, project));
 
-			// default to the minimum date if null was passed, so that all modifications, including
-			// those of prior failed builds will be found
-			DateTime fromDate = (null != from) ? from.LastModificationDate : DateTime.MinValue;
 			// this may fail, if a build was forced, and no changes were found
-			ProcessResult result = command.Execute(SynergyCommandBuilder.GetNewTasks(connection, project, fromDate), false);
-
+			ProcessResult result = command.Execute(SynergyCommandBuilder.GetNewTasks(connection, project, from), false);
 			if (! result.Failed)
 			{
 				// cache the output of the task/comment query
@@ -219,10 +219,9 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Telelogic
 				{
 					// Get the path information for each object associated with the tasks
 					result = command.Execute(SynergyCommandBuilder.GetObjectPaths(connection, project), false);
-
 					if (! result.Failed)
 					{
-						modifications = parser.Parse(comments, result.StandardOutput, from.LastModificationDate);
+						modifications = parser.Parse(comments, result.StandardOutput, from);
 
 						if (null != urlBuilder)
 						{
@@ -257,16 +256,10 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Telelogic
 		/// <url>element://model:project::CCNet.Synergy.Plugin/design:view:::ow43bejw6wm4was_v</url>
 		public void LabelSourceControl(IIntegrationResult result)
 		{
-			ProcessInfo info;
-			DateTime currentReconfigureTime;
-			string message;
-
-			currentReconfigureTime = GetReconfigureTime();
-
+			DateTime currentReconfigureTime = GetReconfigureTime();
 			if (currentReconfigureTime != project.LastReconfigureTime)
 			{
-				message = String.Format(@"Invalid project state.  Cannot add tasks to shared folder '{0}' because " + @"the integration project '{1}' was internally reconfigured at '{2}' " + @"and externally reconfigured at '{3}'.  Projects cannot be reconfigured " + @"during an integration run.", project.TaskFolder, project.ProjectSpecification, project.LastReconfigureTime, currentReconfigureTime);
-
+				string message = String.Format(@"Invalid project state.  Cannot add tasks to shared folder '{0}' because " + @"the integration project '{1}' was internally reconfigured at '{2}' " + @"and externally reconfigured at '{3}'.  Projects cannot be reconfigured " + @"during an integration run.", project.TaskFolder, project.ProjectSpecification, project.LastReconfigureTime, currentReconfigureTime);
 				throw(new CruiseControlException(message));
 			}
 
@@ -274,29 +267,26 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Telelogic
              * not in the manual folder. This includes all tasks for this integration,
              * and any prior failed integrations.
              * We find these by passing the the maximum range of dates to GetModifications */
-			result.Modifications = GetModifications(null, null);
+			result.Modifications = GetModifications(DateTime.MinValue);
 
 			// skip this step if a build was forced, and no changes were found
 			if (null != result.Modifications && result.Modifications.Length > 0)
 			{
 				// comment those tasks with the "label", for both shared folders and baselines
-				info = SynergyCommandBuilder.AddLabelToTaskComment(connection, project, result);
-				command.Execute(info);
+				command.Execute(SynergyCommandBuilder.AddLabelToTaskComment(connection, project, result));
 
 				// append tasks to the shared folder, if one was specified
 				if (SynergyProjectInfo.DefaultTaskFolder != project.TaskFolder)
 				{
 					// append those tasks in the selection set to the shared build folder
-					info = SynergyCommandBuilder.AddTasksToFolder(connection, project, result);
-					command.Execute(info);
+					command.Execute(SynergyCommandBuilder.AddTasksToFolder(connection, project, result));
 				}
 			}
 
 			// create a baseline, if requested
 			if (project.BaseliningEnabled)
 			{
-				info = SynergyCommandBuilder.CreateBaseline(connection, project, result);
-				command.Execute(info);
+				command.Execute(SynergyCommandBuilder.CreateBaseline(connection, project, result));
 			}
 		}
 
@@ -310,16 +300,13 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Telelogic
 		/// </remarks>
 		private void Reconcile()
 		{
-			ProcessInfo info;
-			string fullPath;
-
 			// force a connection to be established, if it hasn't already
 			// need in case of a forced build
-			info = SynergyCommandBuilder.Heartbeat(connection);
-			command.Execute(info);
+			command.Execute(SynergyCommandBuilder.Heartbeat(connection));
 
 			if (null != project.ReconcilePaths)
 			{
+				string fullPath;
 				foreach (string path in project.ReconcilePaths)
 				{
 					// normalize the path
@@ -332,8 +319,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Telelogic
 					Log.Info(String.Concat("Reconciling work area path '", path, "'"));
 
 					// sync the work area to discard work area changes
-					info = SynergyCommandBuilder.Reconcile(connection, project, path);
-					command.Execute(info);
+					command.Execute(SynergyCommandBuilder.Reconcile(connection, project, path));
 				}
 			}
 		}
@@ -347,27 +333,16 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Telelogic
 		/// <returns></returns>
 		private DateTime GetReconfigureTime()
 		{
-			ProcessInfo info;
-			ProcessResult result;
-			string temp;
-			DateTime retVal;
-
 			// setup the project to reconfigure using the default template
-			info = SynergyCommandBuilder.GetLastReconfigureTime(connection, project);
-			result = command.Execute(info);
-
+			ProcessResult result = command.Execute(SynergyCommandBuilder.GetLastReconfigureTime(connection, project));
 			try
 			{
-				temp = result.StandardOutput;
-				temp = temp.Trim();
-				retVal = DateTime.Parse(temp, CultureInfo.InvariantCulture);
+				return DateTime.Parse(result.StandardOutput.Trim(), CultureInfo.InvariantCulture);
 			}
 			catch (Exception inner)
 			{
 				throw(new CruiseControlException("Failed to read the project's last reconfigure time.", inner));
 			}
-
-			return (retVal);
 		}
 	}
 }

@@ -102,20 +102,37 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol.Telelogic
 		}
 
 		[Test]
-		public void CanParseNewObjects()
+		public void ParseNewObjects()
 		{
 			ParseNewObjects(SynergyMother.NewTaskInfo, SynergyMother.NewObjects);
+		}
+
+		[Test]
+		public void ParseDCMObjects()
+		{
 			ParseNewObjects(SynergyMother.NewDcmTaskInfo, SynergyMother.NewDCMObjects);
+		}
+
+		[Test]
+		public void ParseWhenTasksAreEmpty()
+		{
+			SynergyParser parser = new SynergyParser();
+			// set the from date to be one week back
+			DateTime from = DateTime.Now.AddDays(-7L);
+
+			Modification[] actual = parser.Parse(string.Empty, SynergyMother.NewObjects, from);
+			Assert.AreEqual(7, actual.Length);
+			Assert.AreEqual(15, actual[0].ChangeNumber);
+			Assert.AreEqual(9999, actual[6].ChangeNumber);
 		}
 
 		private void ParseNewObjects(string newTasks, string newObjects)
 		{
 			SynergyParser parser = new SynergyParser();
-			Modification[] actual;
 			// set the from date to be one week back
 			DateTime from = DateTime.Now.AddDays(-7L);
 
-			actual = parser.Parse(newTasks, newObjects, from);
+			Modification[] actual = parser.Parse(newTasks, newObjects, from);
 
 			Assert.IsNotNull(actual);
 			Assert.AreEqual(7, actual.Length);
@@ -171,7 +188,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol.Telelogic
 			// check that reserved regular expression classes are escaped
 			Assert.AreEqual(@"the quick brown fox jumped over the lazy dog ", actual[5].Comment);
 
-			Assert.AreEqual(0, actual[6].ChangeNumber);
+			Assert.AreEqual(9999, actual[6].ChangeNumber);
 			// check that branched version numbers are parsed
 			Assert.AreEqual(@"NotUsed-10", actual[6].FileName);
 			Assert.AreEqual(@"", actual[6].FolderName);

@@ -1,4 +1,5 @@
 using System;
+using System.Globalization;
 using Exortech.NetReflector;
 using NMock;
 using NMock.Constraints;
@@ -181,7 +182,24 @@ Current project could not be identified.
 			mockParser.ExpectAndReturn("Parse", new Modification[0], new IsAnything(), new IsAnything(), new NotNull());
 
 			Synergy synergy = new Synergy(new SynergyConnectionInfo(), new SynergyProjectInfo(), (ISynergyCommand) mockCommand.MockInstance, (SynergyParser) mockParser.MockInstance);
-			Modification[] modifications = synergy.GetModifications(new IntegrationResult(), new IntegrationResult());
+			synergy.GetModifications(new IntegrationResult(), new IntegrationResult());
+			mockCommand.Verify();
+		}
+
+		[Test]
+		public void ApplyLabel()
+		{
+			IMock mockCommand = new DynamicMock(typeof(ISynergyCommand));
+			mockCommand.ExpectAndReturn("Execute", ProcessResultFixture.CreateSuccessfulResult(DateTime.MinValue.ToString(CultureInfo.InvariantCulture)), new IsAnything());
+			mockCommand.ExpectAndReturn("Execute", ProcessResultFixture.CreateSuccessfulResult("output"), new IsAnything());
+			mockCommand.ExpectAndReturn("Execute", ProcessResultFixture.CreateSuccessfulResult("output"), new IsAnything(), false);
+			mockCommand.ExpectAndReturn("Execute", ProcessResultFixture.CreateSuccessfulResult("output"), new IsAnything(), false);
+			mockCommand.ExpectAndReturn("Execute", ProcessResultFixture.CreateSuccessfulResult("output"), new IsAnything(), false);
+			IMock mockParser = new DynamicMock(typeof(SynergyParser));
+			mockParser.ExpectAndReturn("Parse", new Modification[0], new IsAnything(), new IsAnything(), new NotNull());
+
+			Synergy synergy = new Synergy(new SynergyConnectionInfo(), new SynergyProjectInfo(), (ISynergyCommand) mockCommand.MockInstance, (SynergyParser) mockParser.MockInstance);
+			synergy.LabelSourceControl(new IntegrationResult());
 			mockCommand.Verify();
 		}
 
