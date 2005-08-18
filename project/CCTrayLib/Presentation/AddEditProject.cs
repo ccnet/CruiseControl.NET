@@ -140,7 +140,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 			this.label5.Size = new System.Drawing.Size(415, 35);
 			this.label5.TabIndex = 8;
 			this.label5.Text = "Build servers can host multiple projects.  Enter the project name to monitor here" +
-				".  Click Fetch to retrive a list of projects hosted on the server.";
+				".  Click Fetch to retrieve a list of projects hosted on the server.";
 			// 
 			// btnFetch
 			// 
