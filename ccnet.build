@@ -5,15 +5,12 @@
     <!-- PROPERTIES -->
     <property name="debug" value="true"/>
     <property name="verbosity" value="true"/>
-    <property name="nunit.output" value="Plain"/>
-    <property name="build.number" value="0" />    
-
-    <property name="webdashboard.dir" value="deployed\webdashboard"/>
 
     <property name="build.dir" value="build"/>
     <property name="src.dir" value="project"/>
     <property name="lib.dir" value="lib"/>
     <property name="package.dir" value="package"/>
+    <property name="webdashboard.dir" value="deployed\webdashboard"/>
 
     <property name="remote.dll" value="ThoughtWorks.CruiseControl.Remote.dll"/>
     <property name="core.dll" value="ThoughtWorks.CruiseControl.Core.dll"/>
@@ -27,6 +24,7 @@
     <property name="vil.executable" value="tools\vil\vil.exe" />
     <property name="vil.assemblies" value="comma,separated,list,of,assemblies,to,analyze (full path)" />    
     <property name="simian.executable" value="tools\simian\simian.exe" />
+    <property name="CCNetLabel" value="0" overwrite="false" />    
     <property name="CCNetArtifactDirectory" value="${build.dir}" overwrite="false" />
 
 	<target name="all" depends="clean, compile, test, deploy, dist"/>
@@ -237,7 +235,7 @@
 		    <import namespace="System.Reflection" />
 		</imports>
 		<attributes>
-		    <attribute type="AssemblyVersionAttribute" value="${build.number}" />
+		    <attribute type="AssemblyVersionAttribute" value="${CCNetLabel}" />
 		    <attribute type="AssemblyCopyrightAttribute" value="Copyright © 2005 ThoughtWorks Inc." />
 		    <attribute type="AssemblyCompanyAttribute" value="ThoughtWorks" />
 		    <attribute type="AssemblyProductAttribute" value="CruiseControl.NET" />
@@ -245,20 +243,8 @@
 	    </asminfo>
 	</target>
 
-	<target name="ContinuousIntegration" depends="transform.build.number, createAssemblyInfo, all, dist.publish, reporting">	
+	<target name="ContinuousIntegration" depends="createAssemblyInfo, all, dist.publish, reporting">	
 		<echo message="CI Run for build number ${CCNetLabel} successfully completed" />
-	</target>
-	
-	<target name="verify.CCNetLabel" description="Verifies that the CCNetLabel property has been set">
-		<if test="${not property::exists('CCNetLabel')}">
-			<fail message="CCNetLabel property not set, so can't create labelled distribution files" />
-		</if>
-	</target> 
-	
-	<target name="transform.build.number" depends="verify.CCNetLabel">
-		<regex pattern="(?'major'\d+)_(?'minor'\d+)_(?'revision'\d+)_(?'build'\d+)" input="${CCNetLabel}" />
-		<property name="build.number" value="${major}.${minor}.${revision}.${build}" />
-		<echo message="Build number: ${build.number}"/>
 	</target>
 	
 	<target name="netreflector.docs" depends="compile">
@@ -280,5 +266,19 @@
 	</exec>
 	<tstamp/>
 	<echo message="Simian run complete"/>
+    </target>
+    
+    <target name="msbuild">
+    	<property name="nant.settings.currentframework" value="net-2.0"/>
+    	
+	<csc target="library" output="${build.dir}/ThoughtWorks.CruiseControl.MsBuild.XmlLogger.dll" debug="${debug}">
+		<sources basedir=".">
+			<include name="${src.dir}/MsBuildXmlLogger/**/*.cs"/>
+		</sources>
+		<references>
+			<include name="Microsoft.Build.Framework.dll"/>
+			<include name="Microsoft.Build.Utilities.dll"/>
+		</references>
+	</csc>
     </target>
 </project>

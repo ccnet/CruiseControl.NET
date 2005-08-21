@@ -8,7 +8,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 	public class MsBuildTask : ITask
 	{
 		public const string DefaultExecutable = "MSBuild.exe";
-		public const string DefaultLogger = "ThoughtWorks.CruiseControl.MsBuild.XmlLogger,ThoughtWorks.CruiseControl.MsBuild.dll;msbuild-output.xml";
+		public const string DefaultLogger = "ThoughtWorks.CruiseControl.MsBuild.XmlLogger,ThoughtWorks.CruiseControl.MsBuild.dll";
 		public const int DefaultTimeout = 600;
 
 		private readonly ProcessExecutor executor;
