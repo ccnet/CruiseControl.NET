@@ -6,39 +6,23 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
 	[ReflectorType("user")]
 	public class EmailUser
 	{
-		private string _name;
-		private string _address;
-		private string _group;
-
 		public EmailUser() { }
 
 		public EmailUser(string name, string group, string address)
 		{
-			_name = name;
-			_address = address;
-			_group = group;
+			Name = name;
+			Address = address;
+			Group = group;
 		}
 
 		[ReflectorProperty("name")]
-		public string Name
-		{
-			get { return _name; }
-			set { _name = value; }
-		}
+		public string Name;
 
 		[ReflectorProperty("address")]
-		public string Address
-		{
-			get { return _address; }
-			set { _address = value; }
-		}
+		public string Address;
 
 		[ReflectorProperty("group")]
-		public string Group
-		{
-			get { return _group; }
-			set { _group = value; }
-		}
+		public string Group;
 
 		public override bool Equals(Object obj)
 		{

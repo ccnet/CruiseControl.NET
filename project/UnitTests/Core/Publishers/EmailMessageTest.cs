@@ -1,8 +1,7 @@
-using System;
+using System.Text;
 using NUnit.Framework;
 using ThoughtWorks.CruiseControl.Core;
 using ThoughtWorks.CruiseControl.Core.Publishers;
-using ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol;
 
 namespace ThoughtWorks.CruiseControl.UnitTests.Core.Publishers
 {
@@ -12,60 +11,78 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Publishers
 	[TestFixture]
 	public class EmailMessageTest : CustomAssertion
 	{
-		[Test]
-		public void CreateRecipientListForFixedBuild()
+		private static readonly EmailGroup alwaysGroup = new EmailGroup("alwaysGroup", EmailGroup.NotificationType.Always);
+		private static readonly EmailGroup failedGroup = new EmailGroup("failedGroup", EmailGroup.NotificationType.Failed);
+		private static readonly EmailGroup changedGroup = new EmailGroup("changedGroup", EmailGroup.NotificationType.Change);
+		private static readonly EmailUser always = new EmailUser("always", alwaysGroup.Name, "always@thoughtworks.com");
+		private static readonly EmailUser failed = new EmailUser("failed", failedGroup.Name, "failed@thoughtworks.com");
+		private static readonly EmailUser changed = new EmailUser("changed", changedGroup.Name, "changed@thoughtworks.com");
+		private static readonly EmailUser modifier = new EmailUser("modifier", changedGroup.Name, "modifier@thoughtworks.com");
+
+		private EmailPublisher publisher;
+
+		[SetUp]
+		protected void CreatePublisher()
 		{
-			string expected = "dmercier@thoughtworks.com, mandersen@thoughtworks.com, orogers@thoughtworks.com, rwan@thoughtworks.com, servid@telus.net";
-			string actual = new EmailMessage(IntegrationResultMother.CreateFixed(),
-			                                 EmailPublisherMother.Create()).Recipients;
-			Assert.AreEqual(expected, actual);
+			publisher = new EmailPublisher();
+			publisher.EmailGroups.Add(alwaysGroup.Name, alwaysGroup);
+			publisher.EmailGroups.Add(changedGroup.Name, changedGroup);
+			publisher.EmailGroups.Add(failedGroup.Name, failedGroup);
+			publisher.EmailUsers.Add(always.Name, always);
+			publisher.EmailUsers.Add(failed.Name, failed);
+			publisher.EmailUsers.Add(changed.Name, changed);
+			publisher.EmailUsers.Add(modifier.Name, modifier);
 		}
 
 		[Test]
-		public void CreateRecipientListForBuildStillSuccessful()
+		public void VerifyRecipientListForFixedBuild()
 		{
-			string expected = "orogers@thoughtworks.com, servid@telus.net";
-			IntegrationResult integrationResult = IntegrationResultMother.CreateStillSuccessful();
-			integrationResult.Modifications = CreateModifications();
-			string actual = new EmailMessage(integrationResult, EmailPublisherMother.Create()).Recipients;
-			Assert.AreEqual(expected, actual);
+			IIntegrationResult result = AddModification(IntegrationResultMother.CreateFixed());
+			Assert.AreEqual(ExpectedRecipients(always, changed, modifier), new EmailMessage(result, publisher).Recipients);
+		}
+
+		[Test]
+		public void VerifyRecipientListForBuildStillSuccessful()
+		{
+			IIntegrationResult result = AddModification(IntegrationResultMother.CreateStillSuccessful());
+			Assert.AreEqual(ExpectedRecipients(always, modifier), new EmailMessage(result, publisher).Recipients);
+		}
+
+		[Test]
+		public void VerifyRecipientListForFailedBuild()
+		{
+			IIntegrationResult result = AddModification(IntegrationResultMother.CreateFailed());
+			Assert.AreEqual(ExpectedRecipients(always, changed, failed, modifier), new EmailMessage(result, publisher).Recipients);
+		}
+
+		[Test]
+		public void VerifyRecipientListForStillFailingBuild()
+		{
+			IIntegrationResult result = AddModification(IntegrationResultMother.CreateStillFailing());
+			Assert.AreEqual(ExpectedRecipients(always, failed, modifier), new EmailMessage(result, publisher).Recipients);
 		}
 
 		[Test]
 		public void CreateRecipientListWithNoRecipients()
 		{
-			string expected = String.Empty;
-			EmailPublisher publisher = EmailPublisherMother.Create();
-			publisher.EmailUsers.Clear();
-			EmailMessage emailMessage = new EmailMessage(IntegrationResultMother.CreateFixed(), publisher);
-			string actual = emailMessage.Recipients;
-			Assert.AreEqual(expected, actual);
-		}
-
-		[Test]
-		public void CreateModifiersList()
-		{
-			Modification[] modifications = CreateModifications();
-			string[] modifiers = GetEmailMessage(modifications).Modifiers;
-			Assert.AreEqual(2, modifications.Length);
-			Assert.AreEqual("servid@telus.net", modifiers[0]);
-			Assert.AreEqual("orogers@thoughtworks.com", modifiers[1]);
+			EmailMessage emailMessage = new EmailMessage(IntegrationResultMother.CreateFixed(), new EmailPublisher());
+			Assert.AreEqual(string.Empty, emailMessage.Recipients);
 		}
 
 		[Test]
 		public void CreateModifiersListForUnknownUser()
 		{
-			Modification[] modifications = new Modification[1] {ModificationMother.CreateModification("nosuchuser", DateTime.Now)};
-			string[] modifiers = GetEmailMessage(modifications).Modifiers;
-			Assert.AreEqual(0, modifiers.Length);
+			publisher.EmailUsers.Remove(modifier.Name);
+			IIntegrationResult result = AddModification(IntegrationResultMother.CreateStillSuccessful());
+			Assert.AreEqual(ExpectedRecipients(always), new EmailMessage(result, publisher).Recipients);
 		}
 
 		[Test]
 		public void CreateModifiersListWithUnspecifiedUser()
 		{
-			Modification[] modifications = new Modification[1] {ModificationMother.CreateModification(null, DateTime.Now)};
-			string[] modifiers = GetEmailMessage(modifications).Modifiers;
-			Assert.AreEqual(0, modifiers.Length);
+			IIntegrationResult result = AddModification(IntegrationResultMother.CreateStillSuccessful());
+			result.Modifications[0].UserName = null;
+			Assert.AreEqual(ExpectedRecipients(always), new EmailMessage(result, publisher).Recipients);
 		}
 
 		[Test]
@@ -95,19 +112,6 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Publishers
 			string subject = GetEmailMessage(IntegrationResultMother.CreateExceptioned(), true).Subject;
 			Assert.AreEqual("Project#9 Build Failed", subject);
 		}
-		
-/*
-		[Test]
-		public void CreateNotifyList()
-		{
-			string[] always = _publisher.CreateNotifyList(EmailGroup.NotificationType.Always);
-			Assert.AreEqual(1, always.Length);
-			Assert.AreEqual("servid@telus.net", always[0]);
-
-			string[] change = _publisher.CreateNotifyList(EmailGroup.NotificationType.Change);
-			Assert.AreEqual(4, change.Length);
-		}
-*/
 
 		private static EmailMessage GetEmailMessage(IntegrationResult result, bool includeDetails)
 		{
@@ -123,19 +127,23 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Publishers
 			return result;
 		}
 
-		private EmailMessage GetEmailMessage(Modification[] modifications)
+		private IIntegrationResult AddModification(IIntegrationResult result)
 		{
-			IntegrationResult integrationResult = IntegrationResultMother.CreateSuccessful(modifications);
-			return new EmailMessage(integrationResult, EmailPublisherMother.Create());
+			Modification mod = new Modification();
+			mod.UserName = modifier.Name;
+			result.Modifications = new Modification[1] {mod};
+			return result;
 		}
 
-		private Modification[] CreateModifications()
+		private string ExpectedRecipients(params EmailUser[] users)
 		{
-			return new Modification[]
-				{
-					ModificationMother.CreateModification("buildmaster", new DateTime(2004, 1, 1, 10, 0, 0)),
-					ModificationMother.CreateModification("orogers", new DateTime(2004, 1, 1, 10, 0, 0))
-				};
+			StringBuilder builder = new StringBuilder();
+			foreach (EmailUser user in users)
+			{
+				if (builder.Length > 0) builder.Append(", ");
+				builder.Append(user.Address);
+			}
+			return builder.ToString();
 		}
 	}
 }

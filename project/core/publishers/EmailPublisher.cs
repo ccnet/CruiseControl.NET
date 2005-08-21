@@ -13,22 +13,22 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
     [ReflectorType("email")]
     public class EmailPublisher : ITask
     {
-        private EmailGateway _emailGateway = new EmailGateway();
-        private string _fromAddress;
-        private Hashtable _users = new Hashtable();
-        private Hashtable _groups = new Hashtable();
-        private IMessageBuilder _messageBuilder = new HtmlLinkMessageBuilder(false);
+        private EmailGateway emailGateway = new EmailGateway();
+        private string fromAddress;
+        private Hashtable users = new Hashtable();
+        private Hashtable groups = new Hashtable();
+        private IMessageBuilder messageBuilder = new HtmlLinkMessageBuilder(false);
 
         public EmailGateway EmailGateway
         {
-            get { return _emailGateway; }
-            set { _emailGateway = value; }
+            get { return emailGateway; }
+            set { emailGateway = value; }
         }
 
         public IMessageBuilder MessageBuilder
         {
-            get { return _messageBuilder; }
-            set { _messageBuilder = value; }
+            get { return messageBuilder; }
+            set { messageBuilder = value; }
         }
 
         /// <summary>
@@ -48,8 +48,8 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
         [ReflectorProperty("from")] 
 		public string FromAddress
         {
-            get { return _fromAddress; }
-            set { _fromAddress = value; }
+            get { return fromAddress; }
+            set { fromAddress = value; }
         }
 
         /// <summary>
@@ -61,17 +61,17 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
         { 
             get 
 			{
-				return _messageBuilder is HtmlDetailsMessageBuilder; 
+				return messageBuilder is HtmlDetailsMessageBuilder; 
 			}
             set
             {
                 if (value)
                 {
-                    _messageBuilder = new HtmlDetailsMessageBuilder();
+                	messageBuilder = new HtmlDetailsMessageBuilder();
                 }
                 else
                 {
-                    _messageBuilder = new HtmlLinkMessageBuilder(false);
+                	messageBuilder = new HtmlLinkMessageBuilder(false);
                 }
             }
         }
@@ -79,15 +79,15 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
         [ReflectorHash("users", "name")] 
 		public Hashtable EmailUsers
         {
-            get { return _users; }
-            set { _users = value; }
+            get { return users; }
+            set { users = value; }
         }
 
         [ReflectorHash("groups", "name")] 
 		public Hashtable EmailGroups
         {
-            get { return _groups; }
-            set { _groups = value; }
+            get { return groups; }
+            set { groups = value; }
         }
 
         public void Run(IIntegrationResult result)
@@ -101,7 +101,7 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
             string message = CreateMessage(result);
             if (IsRecipientSpecified(to))
             {
-                SendMessage(_fromAddress, to, subject, message);
+                SendMessage(fromAddress, to, subject, message);
             }
         }
 
@@ -114,7 +114,7 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
         {
             try
             {
-                _emailGateway.Send(from, to, subject, message);
+            	emailGateway.Send(from, to, subject, message);
             }
             catch (Exception e)
             {
@@ -126,7 +126,7 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
         {
             // TODO Add culprit to message text -- especially if modifier is not an email user
             //      This information is included, when using Html email (all mods are shown)
-            return _messageBuilder.BuildMessage(result);
+            return messageBuilder.BuildMessage(result);
         }
     }
 }

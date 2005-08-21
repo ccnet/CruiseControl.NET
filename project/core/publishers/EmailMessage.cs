@@ -1,5 +1,5 @@
 using System.Collections;
-using ThoughtWorks.CruiseControl.Core.Util;
+using System.Text;
 using ThoughtWorks.CruiseControl.Remote;
 
 namespace ThoughtWorks.CruiseControl.Core.Publishers
@@ -23,53 +23,51 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
 		{
 			get
 			{
-				//TODO clean up logic
-				string[] always = CreateNotifyList(EmailGroup.NotificationType.Always);
+				IDictionary recipients = new SortedList();
+				AddRecipients(recipients, EmailGroup.NotificationType.Always);
+				AddModifiers(recipients);
 
 				if (BuildStateChanged(result))
 				{
-					string[] change = CreateNotifyList(EmailGroup.NotificationType.Change);
-					
-					if (this.result.Status == IntegrationStatus.Failure )
-					{
-						string[] failed = CreateNotifyList(EmailGroup.NotificationType.Failed);
-						return  StringUtil.JoinUnique(", ", always, change, failed);
-					}
-					else
-					{
-					return StringUtil.JoinUnique(", ", always, change);
+					AddRecipients(recipients, EmailGroup.NotificationType.Change);
 				}
-				}
-				else
-				{
-					if (this.result.Status == IntegrationStatus.Failure )
-					{
-						string[] failed = CreateNotifyList(EmailGroup.NotificationType.Failed);
-						return  StringUtil.JoinUnique(", ", always, Modifiers, failed);
-					}
-				else
-				{
-					return StringUtil.JoinUnique(", ", always, Modifiers);
-				}
-			}
 
+				if (this.result.Status == IntegrationStatus.Failure)
+				{
+					AddRecipients(recipients, EmailGroup.NotificationType.Failed);
+				}
+
+				StringBuilder buffer = new StringBuilder();
+				foreach (string key in recipients.Keys)
+				{
+					if (buffer.Length > 0) buffer.Append(", ");
+					buffer.Append(key);
+				}
+				return buffer.ToString();
 			}
 		}
 
-		public string[] Modifiers
+		private void AddModifiers(IDictionary recipients)
 		{
-			get
+			foreach (Modification modification in result.Modifications)
 			{
-				ArrayList modifiers = new ArrayList();
-				foreach (Modification modification in result.Modifications)
+				EmailUser user = GetEmailUser(modification.UserName);
+				if (user != null)
 				{
-					EmailUser user = GetEmailUser(modification.UserName);
-					if (user != null)
-					{
-						modifiers.Add(user.Address);
-					}
+					recipients[user.Address] = user;
 				}
-				return (string[]) modifiers.ToArray(typeof (string));
+			}
+		}
+
+		private void AddRecipients(IDictionary recipients, EmailGroup.NotificationType notificationType)
+		{
+			foreach (EmailUser user in emailPublisher.EmailUsers.Values)
+			{
+				EmailGroup group = GetEmailGroup(user.Group);
+				if (group != null && group.Notification == notificationType)
+				{
+					recipients[user.Address] = user;
+				}
 			}
 		}
 
@@ -104,20 +102,6 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
 		private EmailGroup GetEmailGroup(string groupname)
 		{
 			return (EmailGroup) emailPublisher.EmailGroups[groupname];
-		}
-
-		private string[] CreateNotifyList(EmailGroup.NotificationType notification)
-		{
-			ArrayList userList = new ArrayList();
-			foreach (EmailUser user in emailPublisher.EmailUsers.Values)
-			{
-				EmailGroup group = GetEmailGroup(user.Group);
-				if (group != null && group.Notification.Equals(notification))
-				{
-					userList.Add(user.Address);
-				}
-			}
-			return (string[]) userList.ToArray(typeof (string));
 		}
 
 		private bool BuildStateChanged(IIntegrationResult result)
