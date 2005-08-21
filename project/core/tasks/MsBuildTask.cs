@@ -7,7 +7,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 	[ReflectorType("msbuild")]
 	public class MsBuildTask : ITask
 	{
-		public const string DefaultExecutable = "MSBuild.exe";
+		public const string DefaultExecutable = @"C:\WINDOWS\Microsoft.NET\Framework\v2.0.50215\MSBuild.exe";
 		public const string DefaultLogger = "ThoughtWorks.CruiseControl.MsBuild.XmlLogger,ThoughtWorks.CruiseControl.MsBuild.dll";
 		public const int DefaultTimeout = 600;
 
