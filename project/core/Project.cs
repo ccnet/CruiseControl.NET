@@ -42,21 +42,20 @@ namespace ThoughtWorks.CruiseControl.Core
 		private ITask[] tasks = new ITask[0];
 		private ITask[] publishers = new ITask[] { new XmlLogPublisher() };
 		private ProjectActivity currentActivity = ProjectActivity.Sleeping;
-		private int modificationDelaySeconds = 0;
 		private IStateManager state;
 		private IIntegrationResultManager integrationResultManager;
 		private bool publishExceptions = true;
 		private IIntegratable integratable;
+		private QuietPeriod quietPeriod;
 
 		public Project()
 		{
 			state = new FileStateManager();
 			integrationResultManager = new IntegrationResultManager(this);
-			integratable = new IntegrationRunner(integrationResultManager, this, new QuietPeriod(new DateTimeProvider()));
+			quietPeriod = new QuietPeriod(new DateTimeProvider());
+			integratable = new IntegrationRunner(integrationResultManager, this, quietPeriod);
 		}
 
-		// This is nasty - test constructors and real constructors should be linked, but we have circular references here that need
-		// to be sorted out
 		public Project(IIntegratable integratable) : this()
 		{
 			this.integratable = integratable;
@@ -111,10 +110,10 @@ namespace ThoughtWorks.CruiseControl.Core
 		/// checkin.
 		/// </summary>
 		[ReflectorProperty("modificationDelaySeconds", Required=false)]
-		public int ModificationDelaySeconds
+		public double ModificationDelaySeconds
 		{
-			get { return modificationDelaySeconds; }
-			set { modificationDelaySeconds = value; }
+			get { return quietPeriod.ModificationDelaySeconds; }
+			set { quietPeriod.ModificationDelaySeconds = value; }
 		}
 
 		[ReflectorProperty("labeller", InstanceTypeKey="type", Required=false)]

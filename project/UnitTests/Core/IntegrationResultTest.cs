@@ -152,6 +152,14 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 		}
 
 		[Test]
+		public void ShouldHaveExceptionStatusIfExceptionHasBeenThrown()
+		{
+			result.ExceptionResult = new Exception("build blew up");
+			result.AddTaskResult(new ProcessTaskResult(ProcessResultFixture.CreateSuccessfulResult()));
+			Assert.AreEqual(IntegrationStatus.Exception, result.Status);
+		}
+
+		[Test]
 		public void InitiallyLastSuccessfulIntegrationLabelShouldBeCurrentLabel()
 		{
 			IntegrationResult result = IntegrationResult.CreateInitialIntegrationResult("foo", @"c:\");

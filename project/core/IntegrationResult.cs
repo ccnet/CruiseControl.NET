@@ -235,7 +235,7 @@ namespace ThoughtWorks.CruiseControl.Core
 		public void AddTaskResult(ITaskResult result)
 		{
 			taskResults.Add(result);
-			if (! Failed) Status = result.Succeeded() ? IntegrationStatus.Success : IntegrationStatus.Failure;
+			if (! (Failed || Status == IntegrationStatus.Exception)) Status = result.Succeeded() ? IntegrationStatus.Success : IntegrationStatus.Failure;
 		}
 
 		public void MarkStartTime()
@@ -302,27 +302,6 @@ namespace ThoughtWorks.CruiseControl.Core
 		}
 
 		/// <summary>
-		/// Checks whether modifications occurred within the modification delay.  If the
-		/// modification delay is not set (has a value of zero or less), this method
-		/// will always return false.
-		/// </summary>
-		private bool DoModificationsExistWithinModificationDelay(int modificationDelaySeconds)
-		{
-			if (modificationDelaySeconds <= 0)
-				return false;
-
-			//TODO: can the last mod date (which is the time on the SCM) be compared with now (which is the time on the build machine)?
-			TimeSpan diff = DateTime.Now - LastModificationDate;
-			if (diff.TotalSeconds < modificationDelaySeconds)
-			{
-				Log.Info("Changes found within the modification delay");
-				return true;
-			}
-
-			return false;
-		}
-
-		/// <summary>
 		/// Contains the output from the build process.  In the case of NAntBuilder, this is the 
 		/// redirected StdOut of the nant.exe process.
 		/// </summary>
@@ -351,7 +330,6 @@ namespace ThoughtWorks.CruiseControl.Core
 				return fullProps;
 			}
 		}
-
 		
 		private string Convert(object obj)
 		{
