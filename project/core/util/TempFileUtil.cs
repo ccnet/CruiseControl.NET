@@ -69,11 +69,15 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 		public static string CreateTempXmlFile(string dirname, string filename, string contents)
 		{
 			string path = Path.Combine(GetTempPath(dirname),filename);
-		    XmlTextWriter writer = new XmlTextWriter(path, Encoding.Unicode);
+			CreateTempXmlFile(path, contents);
+			return path;
+		}
+
+		public static void CreateTempXmlFile(string path, string contents)
+		{
+			XmlTextWriter writer = new XmlTextWriter(path, Encoding.Unicode);
 			writer.WriteRaw(contents);
 			writer.Close();
-
-			return path;
 		}
 
 		public static string CreateTempFile(string tempDir, string filename)

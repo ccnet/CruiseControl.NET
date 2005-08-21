@@ -11,6 +11,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 	[TestFixture]
 	public class MsBuildTaskTest : ProcessExecutorTestFixtureBase
 	{
+		private string logfile;
 		private IIntegrationResult result;
 		private MsBuildTask task;
 
@@ -20,7 +21,9 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 			CreateProcessExecutorMock(MsBuildTask.DefaultExecutable);
 			result = IntegrationResult();
 			result.Label = "1.0";
-			result.ArtifactDirectory = @"c:\artifacts";
+			result.ArtifactDirectory = Path.GetTempPath();
+			logfile = Path.Combine(result.ArtifactDirectory, MsBuildTask.LogFilename);
+			TempFileUtil.DeleteTempFile(logfile);
 			task = new MsBuildTask((ProcessExecutor) mockProcessExecutor.MockInstance);
 		}
 
@@ -47,16 +50,6 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 			Assert.AreEqual(ProcessResultOutput, result.TaskOutput);
 		}
 
-		private string DefaultLogger()
-		{
-			return string.Format(@" /l:{0};c:\artifacts\msbuild-results.xml", MsBuildTask.DefaultLogger);
-		}
-
-		private string IntegrationProperties()
-		{
-			return string.Format(@"/p:CCNetIntegrationStatus=Success;CCNetBuildDate={1};CCNetArtifactDirectory=c:\artifacts;CCNetBuildTime={2};CCNetProject=test;CCNetLabel=1.0;CCNetWorkingDirectory={0};CCNetLastIntegrationStatus=Unknown;CCNetBuildCondition=NoBuild", DefaultWorkingDirectory, testDateString, testTimeString);
-		}
-
 		[Test]
 		public void AddQuotesAroundProjectsWithSpacesAndHandleNoSpecifiedTargets()
 		{
@@ -76,12 +69,11 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 		[Test]
 		public void AddQuotesAroundPropertiesWithSpaces()
 		{
-			string expectedProperties = string.Format(@"/p:CCNetIntegrationStatus=Success;CCNetBuildDate={0};CCNetArtifactDirectory=c:\artifacts;CCNetBuildTime={1};CCNetProject=test;CCNetLabel=My Label;CCNetWorkingDirectory=c:\source\;CCNetLastIntegrationStatus=Unknown;CCNetBuildCondition=NoBuild",testDateString, testTimeString);
+			string expectedProperties = string.Format(@"/p:CCNetIntegrationStatus=Success;CCNetBuildDate={0};CCNetArtifactDirectory={2};CCNetBuildTime={1};CCNetProject=test;CCNetLabel=My Label;CCNetWorkingDirectory=c:\source\;CCNetLastIntegrationStatus=Unknown;CCNetBuildCondition=NoBuild",testDateString, testTimeString, result.ArtifactDirectory);
 			ExpectToExecuteArguments(@"/nologo " + @"""" + expectedProperties + @"""" + DefaultLogger());
 			result.Label = @"My Label";			
 			task.Run(result);
 		}
-
 
 		[Test]
 		public void RebaseFromWorkingDirectory()
@@ -99,6 +91,16 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 			ExpectToExecuteAndReturn(TimedOutProcessResult());
 			task.Run(result);
 			Assert.AreEqual(IntegrationStatus.Failure, result.Status);
+		}
+
+		[Test]
+		public void ShouldAutomaticallyMergeTheBuildOutputFile()
+		{
+			TempFileUtil.CreateTempXmlFile(logfile, "<output/>");
+			ExpectToExecuteAndReturn(SuccessfulProcessResult());
+			task.Run(result);
+			Assert.AreEqual(1, result.TaskResults.Count);
+			Assert.AreEqual("<output/>", result.TaskOutput);
 		}
 
 		[Test]
@@ -130,6 +132,16 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 			Assert.AreEqual(defaultExecutable, task.Executable);
 			Assert.AreEqual(MsBuildTask.DefaultTimeout, task.Timeout);
 			Assert.AreEqual(MsBuildTask.DefaultLogger, task.Logger);
+		}
+
+		private string DefaultLogger()
+		{
+			return string.Format(@" /l:{0};{1}", MsBuildTask.DefaultLogger, logfile);
+		}
+
+		private string IntegrationProperties()
+		{
+			return string.Format(@"/p:CCNetIntegrationStatus=Success;CCNetBuildDate={1};CCNetArtifactDirectory={3};CCNetBuildTime={2};CCNetProject=test;CCNetLabel=1.0;CCNetWorkingDirectory={0};CCNetLastIntegrationStatus=Unknown;CCNetBuildCondition=NoBuild", DefaultWorkingDirectory, testDateString, testTimeString, result.ArtifactDirectory);
 		}
 	}
 }

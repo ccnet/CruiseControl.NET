@@ -9,6 +9,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 	{
 		public const string DefaultExecutable = @"C:\WINDOWS\Microsoft.NET\Framework\v2.0.50215\MSBuild.exe";
 		public const string DefaultLogger = "ThoughtWorks.CruiseControl.MsBuild.XmlLogger,ThoughtWorks.CruiseControl.MsBuild.dll";
+		public const string LogFilename = "msbuild-results.xml";
 		public const int DefaultTimeout = 600;
 
 		private readonly ProcessExecutor executor;
@@ -45,7 +46,15 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 		public void Run(IIntegrationResult result)
 		{
 			ProcessResult processResult = executor.Execute(NewProcessInfo(result));
-			result.AddTaskResult(new ProcessTaskResult(processResult));
+			string buildOutputFile = MsBuildOutputFile(result);
+			if (File.Exists(buildOutputFile))
+			{
+				result.AddTaskResult(new FileTaskResult(buildOutputFile));
+			}
+			else
+			{
+				result.AddTaskResult(new ProcessTaskResult(processResult));				
+			}
 		}
 
 		private ProcessInfo NewProcessInfo(IIntegrationResult result)
@@ -91,8 +100,13 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 			builder.Append("/l:");
 			builder.Append(Logger);
 			builder.Append(";");
-			builder.Append(Path.Combine(result.ArtifactDirectory, "msbuild-results.xml"));
+			builder.Append(MsBuildOutputFile(result));
 			return builder.ToString();
+		}
+
+		private string MsBuildOutputFile(IIntegrationResult result)
+		{
+			return Path.Combine(result.ArtifactDirectory, LogFilename);
 		}
 	}
 }
