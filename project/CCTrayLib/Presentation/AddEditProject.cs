@@ -103,6 +103,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 			this.txtProject.Location = new System.Drawing.Point(180, 100);
 			this.txtProject.Name = "txtProject";
 			this.txtProject.Size = new System.Drawing.Size(335, 21);
+			this.txtProject.Sorted = true;
 			this.txtProject.TabIndex = 4;
 			// 
 			// btnOK
