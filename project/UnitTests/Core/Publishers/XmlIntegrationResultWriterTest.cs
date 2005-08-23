@@ -9,19 +9,19 @@ using ThoughtWorks.CruiseControl.Remote;
 
 namespace ThoughtWorks.CruiseControl.UnitTests.Core.Publishers
 {
-    [TestFixture]
-    public class XmlIntegrationResultWriterTest : XmlLogFixture
-    {
-        public const string TEMP_SUBDIR = "XmlIntegrationResultWriterTest";
-        private StringWriter buffer;
-        private XmlIntegrationResultWriter writer;
+	[TestFixture]
+	public class XmlIntegrationResultWriterTest : XmlLogFixture
+	{
+		public const string TEMP_SUBDIR = "XmlIntegrationResultWriterTest";
+		private StringWriter buffer;
+		private XmlIntegrationResultWriter writer;
 
-        [SetUp]
-        protected void SetUp()
-        {
-            buffer = new StringWriter();
-        	writer = new XmlIntegrationResultWriter(buffer);
-        }
+		[SetUp]
+		protected void SetUp()
+		{
+			buffer = new StringWriter();
+			writer = new XmlIntegrationResultWriter(buffer);
+		}
 
 		[Test]
 		public void WriteBuildEvent()
@@ -34,96 +34,96 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Publishers
 			Assert.AreEqual(expected, buffer.ToString());
 		}
 
-        [Test]
-        public void WriteModifications()
-        {
-            Modification[] mods = CreateModifications();
-            string expected = string.Format("<modifications>{0}</modifications>", mods[0].ToXml());
+		[Test]
+		public void WriteModifications()
+		{
+			Modification[] mods = CreateModifications();
+			string expected = string.Format("<modifications>{0}</modifications>", mods[0].ToXml());
 
-        	writer.WriteModifications(mods);
-            Assert.AreEqual(expected, buffer.ToString());
-        }
+			writer.WriteModifications(mods);
+			Assert.AreEqual(expected, buffer.ToString());
+		}
 
-        [Test]
-        public void WriteExceptionWithEmbeddedCDATA()
-        {
-            ExceptionTest(new CruiseControlException("message with <xml><![CDATA[<foo/>]]></xml>"), "message with <xml><![CDATA[<foo/>] ]></xml>");
-        }
+		[Test]
+		public void WriteExceptionWithEmbeddedCDATA()
+		{
+			ExceptionTest(new CruiseControlException("message with <xml><![CDATA[<foo/>]]></xml>"), "message with <xml><![CDATA[<foo/>] ]></xml>");
+		}
 
-        [Test]
-        public void WriteException()
-        {
-            ExceptionTest(new CruiseControlException("test exception"));
-        }
+		[Test]
+		public void WriteException()
+		{
+			ExceptionTest(new CruiseControlException("test exception"));
+		}
 
-        private void ExceptionTest(Exception exception)
-        {
-            ExceptionTest(exception, exception.Message);
-        }
+		private void ExceptionTest(Exception exception)
+		{
+			ExceptionTest(exception, exception.Message);
+		}
 
-        private void ExceptionTest(Exception exception, string exceptionMessage)
-        {
-            IntegrationResult result = IntegrationResultMother.Create(false);
-            result.ExceptionResult = exception;
+		private void ExceptionTest(Exception exception, string exceptionMessage)
+		{
+			IntegrationResult result = IntegrationResultMother.Create(false);
+			result.ExceptionResult = exception;
 
-        	writer.Write(result);
-            string actual = buffer.ToString();
+			writer.Write(result);
+			string actual = buffer.ToString();
 
-            Assert.IsTrue(actual.IndexOf(exceptionMessage) > 0);
-            Assert.IsTrue(actual.IndexOf(exception.GetType().Name) > 0);
+			Assert.IsTrue(actual.IndexOf(exceptionMessage) > 0);
+			Assert.IsTrue(actual.IndexOf(exception.GetType().Name) > 0);
 
-        	XmlUtil.VerifyXmlIsWellFormed(actual);
-        }
+			XmlUtil.VerifyXmlIsWellFormed(actual);
+		}
 
-    	[Test]
-        public void WriteExceptionWithEmbeddedXml()
-        {
-            ExceptionTest(new CruiseControlException("message with <xml><foo/></xml>"));
-        }
+		[Test]
+		public void WriteExceptionWithEmbeddedXml()
+		{
+			ExceptionTest(new CruiseControlException("message with <xml><foo/></xml>"));
+		}
 
-        [Test]
-        public void WriteIntegrationResult()
-        {
-            IntegrationResult result = IntegrationResultMother.CreateSuccessful();
-            string output = GenerateBuildOutput(result);
-            Assert.AreEqual(CreateExpectedBuildXml(result), output);
+		[Test]
+		public void WriteIntegrationResult()
+		{
+			IntegrationResult result = IntegrationResultMother.CreateSuccessful();
+			string output = GenerateBuildOutput(result);
+			Assert.AreEqual(CreateExpectedBuildXml(result), output);
 			XmlUtil.VerifyXmlIsWellFormed(output);
-        }
+		}
 
 		[Test]
 		public void WriteTaskResultsWithInvalidXmlShouldBeWrappedInCDATA()
 		{
 			IntegrationResult result = IntegrationResultMother.CreateSuccessful();
 			result.AddTaskResult("<foo>");
-			writer.Write(result);			
+			writer.Write(result);
 			AssertContains("<![CDATA[<foo>]]>", buffer.ToString());
 		}
 
-        [Test]
-        public void WriteIntegrationResultOutput()
-        {
-            IntegrationResult result = IntegrationResultMother.CreateSuccessful();
-            result.AddTaskResult("<tag></tag>");
-            string output = GenerateBuildOutput(result);
-            Assert.AreEqual(CreateExpectedBuildXml(result, "<tag></tag>"), output);
+		[Test]
+		public void WriteIntegrationResultOutput()
+		{
+			IntegrationResult result = IntegrationResultMother.CreateSuccessful();
+			result.AddTaskResult("<tag></tag>");
+			string output = GenerateBuildOutput(result);
+			Assert.AreEqual(CreateExpectedBuildXml(result, "<tag></tag>"), output);
 			XmlUtil.VerifyXmlIsWellFormed(output);
-        }
+		}
 
-        [Test]
-        public void WriteIntegrationResultOutputWithEmbeddedCDATA()
-        {
+		[Test]
+		public void WriteIntegrationResultOutputWithEmbeddedCDATA()
+		{
 			IntegrationResult result = IntegrationResultMother.CreateSuccessful();
 			result.AddTaskResult("<tag><![CDATA[a b <c>]]></tag>");
-        	string output = GenerateBuildOutput(result);
-        	Assert.AreEqual(CreateExpectedBuildXml(result, "<tag><![CDATA[a b <c>]]></tag>"), output);
+			string output = GenerateBuildOutput(result);
+			Assert.AreEqual(CreateExpectedBuildXml(result, "<tag><![CDATA[a b <c>]]></tag>"), output);
 			XmlUtil.VerifyXmlIsWellFormed(output);
-        }
+		}
 
 		[Test]
 		public void WriteIntegrationResultOutputWithMultiLineCDATA()
 		{
 			IntegrationResult result = IntegrationResultMother.CreateSuccessful();
-			
+
 			StringWriter swWithoutNull = new StringWriter();
 			swWithoutNull.WriteLine("<tag><![CDATA[");
 			swWithoutNull.WriteLine("This is a line with a null in it");
@@ -134,29 +134,29 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Publishers
 			XmlUtil.VerifyXmlIsWellFormed(expectedResult);
 		}
 
-        [Test]
-        public void WriteIntegrationResultOutputWithNullCharacterInCDATA()
-        {
+		[Test]
+		public void WriteIntegrationResultOutputWithNullCharacterInCDATA()
+		{
 			IntegrationResult result = IntegrationResultMother.CreateSuccessful();
 			StringWriter swWithNull = new StringWriter();
-            swWithNull.WriteLine("<tag><![CDATA[");
-            swWithNull.WriteLine("This is a line with a null in it\0");
-            swWithNull.WriteLine("]]></tag>");
+			swWithNull.WriteLine("<tag><![CDATA[");
+			swWithNull.WriteLine("This is a line with a null in it\0");
+			swWithNull.WriteLine("]]></tag>");
 			result.AddTaskResult(swWithNull.ToString());
 
 			string expectedResult = CreateExpectedBuildXml(result, swWithNull.ToString());
 			Assert.AreEqual(expectedResult.Replace("\0", string.Empty), GenerateBuildOutput(result));
-        }
+		}
 
-        [Test]
-        public void WriteOutputWithInvalidXml()
-        {
-            IntegrationResult result = new IntegrationResult();
-            result.AddTaskResult("<tag><c></tag>");
-            string output = GenerateBuildOutput(result);
-        	Assert.AreEqual(CreateExpectedBuildXml(result, @"<![CDATA[<tag><c></tag>]]>"), output);
+		[Test]
+		public void WriteOutputWithInvalidXml()
+		{
+			IntegrationResult result = new IntegrationResult();
+			result.AddTaskResult("<tag><c></tag>");
+			string output = GenerateBuildOutput(result);
+			Assert.AreEqual(CreateExpectedBuildXml(result, @"<![CDATA[<tag><c></tag>]]>"), output);
 			XmlUtil.VerifyXmlIsWellFormed(output);
-        }
+		}
 
 		[Test]
 		public void ShouldStripXmlDeclaration()
@@ -169,15 +169,15 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Publishers
 			AssertNotContains(output, "<?xml");
 		}
 
-        [Test]
-        public void WriteFailedIntegrationResult()
-        {
-            IntegrationResult result = new IntegrationResult();
-            result.Status = IntegrationStatus.Failure;
-            string output = GenerateBuildOutput(result);
-            Assert.AreEqual(CreateExpectedBuildXml(result), output);
+		[Test]
+		public void WriteFailedIntegrationResult()
+		{
+			IntegrationResult result = new IntegrationResult();
+			result.Status = IntegrationStatus.Failure;
+			string output = GenerateBuildOutput(result);
+			Assert.AreEqual(CreateExpectedBuildXml(result), output);
 			XmlUtil.VerifyXmlIsWellFormed(output);
-        }
+		}
 
 		[Test]
 		public void ShouldNotEncloseBuilderOutputInCDATAIfNotSingleRootedXml()
@@ -221,41 +221,41 @@ e:\RW\WORKSPACES\WIN2000\MSVC60\8S\INCLUDE\iterator(563) : warning C4284: return
 			new XPathDocument(new StringReader(buffer.ToString()));
 		}
 
-        private IntegrationResult CreateIntegrationResult(IntegrationStatus status, bool addModifications)
-        {
-            IntegrationResult result = IntegrationResultMother.Create(status);
+		private IntegrationResult CreateIntegrationResult(IntegrationStatus status, bool addModifications)
+		{
+			IntegrationResult result = IntegrationResultMother.Create(status);
 			result.ProjectName = "proj";
-            result.Label = "1";
-            result.Status = status;
-            if (addModifications)
-            {
-                result.Modifications = new Modification[1];
-                result.Modifications[0] = new Modification();
-                result.Modifications[0].ModifiedTime = new DateTime(2002, 2, 3);
-            }
-            return result;
-        }
+			result.Label = "1";
+			result.Status = status;
+			if (addModifications)
+			{
+				result.Modifications = new Modification[1];
+				result.Modifications[0] = new Modification();
+				result.Modifications[0].ModifiedTime = new DateTime(2002, 2, 3);
+			}
+			return result;
+		}
 
-        private string GenerateBuildOutput(IntegrationResult input)
-        {
-        	writer.WriteBuildElement(input);
-            return buffer.ToString();
-        }
+		private string GenerateBuildOutput(IntegrationResult input)
+		{
+			writer.WriteBuildElement(input);
+			return buffer.ToString();
+		}
 
-        private Modification[] CreateModifications()
-        {
-            Modification result = new Modification();
-            result.Type = "added";
-            result.FileName = "ntserver_protocol.dll";
-            result.FolderName = "tools";
-            result.ModifiedTime = new DateTime(2002, 9, 5, 11, 38, 30);
-            result.UserName = "owen";
-            result.EmailAddress = "";
-            result.Comment = "ccnet self-admin config folder files";
+		private Modification[] CreateModifications()
+		{
+			Modification result = new Modification();
+			result.Type = "added";
+			result.FileName = "ntserver_protocol.dll";
+			result.FolderName = "tools";
+			result.ModifiedTime = new DateTime(2002, 9, 5, 11, 38, 30);
+			result.UserName = "owen";
+			result.EmailAddress = "";
+			result.Comment = "ccnet self-admin config folder files";
 
-            Modification[] mods = new Modification[1];
-            mods[0] = result;
-            return mods;
-        }
-    }
+			Modification[] mods = new Modification[1];
+			mods[0] = result;
+			return mods;
+		}
+	}
 }

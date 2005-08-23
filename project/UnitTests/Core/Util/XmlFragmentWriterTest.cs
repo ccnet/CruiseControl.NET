@@ -1,6 +1,8 @@
+using System;
 using System.IO;
 using System.Xml;
 using NUnit.Framework;
+using ThoughtWorks.CruiseControl.Core.Tasks;
 using ThoughtWorks.CruiseControl.Core.Util;
 
 namespace ThoughtWorks.CruiseControl.UnitTests.Core.Util
@@ -89,6 +91,24 @@ look like: <section name=""log4net""
 type=""log4net.Config.Log4NetConfigurationSectionHandler,log4net"" />";
 			writer.WriteNode(text);
 			Assert.AreEqual(string.Format("<![CDATA[{0}]]>", text), baseWriter.ToString());			
+		}
+
+		[Test]
+		public void XmlWithoutClosingElementShouldEncloseInCDATA()
+		{
+			string text = "<a><b><c/></b>";
+			writer.WriteNode(text);
+			Assert.AreEqual(string.Format("<![CDATA[{0}]]>", text), baseWriter.ToString());			
+		}
+
+		[Test]
+		public void UnclosedXmlFragmentEndingInCarriageReturnShouldCloseOpenElement()
+		{
+			string xml = @"<a>
+";
+			writer.WriteNode(xml);
+			Assert.AreEqual(@"<a>
+</a>", baseWriter.ToString());
 		}
 	}
 }
