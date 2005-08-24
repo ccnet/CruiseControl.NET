@@ -44,6 +44,7 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 			StringWriter buffer = new StringWriter();
 			XmlFragmentWriter writer = CreateXmlWriter(buffer);
 			writer.WriteNodeBase(reader, defattr);
+			writer.Close();
 			WriteRaw(buffer.ToString());
 		}
 
