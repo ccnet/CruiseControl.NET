@@ -25,19 +25,19 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.SourceControl
 
 			mods = new Modification[1];
 			mods[0] = new Modification();
-			mods[0].ModifiedTime = new DateTime(2004, 12, 1, 12, 1, 30);			
+			mods[0].ModifiedTime = new DateTime(2004, 12, 1, 12, 1, 30);
 
-			mockSourceControl = new DynamicMock(typeof(ISourceControl));
+			mockSourceControl = new DynamicMock(typeof (ISourceControl));
 			mockSourceControl.Strict = true;
-			mockDateTimeProvider = new DynamicMock(typeof(DateTimeProvider));
+			mockDateTimeProvider = new DynamicMock(typeof (DateTimeProvider));
 			mockDateTimeProvider.Strict = true;
-			quietPeriod = new QuietPeriod((DateTimeProvider)mockDateTimeProvider.MockInstance);
+			quietPeriod = new QuietPeriod((DateTimeProvider) mockDateTimeProvider.MockInstance);
 		}
 
 		[TearDown]
 		protected void VerifyMock()
 		{
-			mockSourceControl.Verify();	
+			mockSourceControl.Verify();
 			mockDateTimeProvider.Verify();
 		}
 
@@ -45,7 +45,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.SourceControl
 		public void ShouldCheckModificationsAndReturnIfDelayIsZero()
 		{
 			mockSourceControl.ExpectAndReturn("GetModifications", mods, from, to);
-			mockDateTimeProvider.ExpectNoCall("Sleep", typeof(int));
+			mockDateTimeProvider.ExpectNoCall("Sleep", typeof (int));
 
 			quietPeriod.ModificationDelaySeconds = 0;
 			Modification[] actualMods = quietPeriod.GetModifications((ISourceControl) mockSourceControl.MockInstance, from, to);
@@ -78,12 +78,26 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.SourceControl
 		public void ShouldHandleIfNoModificationsAreReturned()
 		{
 			mockSourceControl.ExpectAndReturn("GetModifications", null, from, to);
-			mockDateTimeProvider.ExpectNoCall("Sleep", typeof(int));
+			mockDateTimeProvider.ExpectNoCall("Sleep", typeof (int));
 
 			quietPeriod.ModificationDelaySeconds = 60;
 			Modification[] actualMods = quietPeriod.GetModifications((ISourceControl) mockSourceControl.MockInstance, from, to);
 
 			Assert.AreEqual(new Modification[0], actualMods);
+		}
+
+		[Test]
+		public void ShouldHandleTimeDifferencesThatAreLessThanOneMillisecondFromModificationDelay()
+		{
+			to = IntegrationResultMother.CreateSuccessful(mods[0].ModifiedTime.AddSeconds(60).AddTicks(-1));
+
+			mockSourceControl.ExpectAndReturn("GetModifications", mods, from, to);
+			mockDateTimeProvider.ExpectNoCall("Sleep", typeof (int));
+
+			quietPeriod.ModificationDelaySeconds = 60;
+			Modification[] actualMods = quietPeriod.GetModifications((ISourceControl) mockSourceControl.MockInstance, from, to);
+
+			Assert.AreEqual(mods, actualMods);
 		}
 	}
 }

@@ -25,10 +25,10 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			DateTime nextBuildTime = to.StartTime;
 			while (ModificationsAreDetectedInQuietPeriod(modifications, nextBuildTime))
 			{
-				double secondsUntilNextBuild = ModificationDelaySeconds - SecondsSinceLastModification(modifications, nextBuildTime);
+				double secondsUntilNextBuild = SecondsUntilNextBuild(modifications, nextBuildTime);
 				nextBuildTime = nextBuildTime.AddSeconds(secondsUntilNextBuild);
 
-				Log.Info(string.Format("Modifications have been detected in the quiet period.  Sleep for {0} seconds until {1}.", secondsUntilNextBuild, nextBuildTime));
+				Log.Info(string.Format("Modifications have been detected in the quiet period.  Sleeping for {0} seconds until {1}.", secondsUntilNextBuild, nextBuildTime));
 				dtProvider.Sleep((int) (secondsUntilNextBuild*1000));
 				to.StartTime = nextBuildTime;
 				modifications = GetMods(sourceControl, from, to);
@@ -59,12 +59,14 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 
 		private bool ModificationsAreDetectedInQuietPeriod(Modification[] modifications, DateTime to)
 		{
-			return SecondsSinceLastModification(modifications, to) < ModificationDelaySeconds;
-//			return ModificationDelaySeconds != TurnOffQuietPeriod && SecondsSinceLastBuild(modifications, to) < ModificationDelaySeconds;
+			return SecondsUntilNextBuild(modifications, to) > 0;
 		}
 
+		private int SecondsUntilNextBuild(Modification[] modifications, DateTime to)
+		{
+			return (int) (ModificationDelaySeconds - SecondsSinceLastModification(modifications, to));
+		}
 
-		// -60 < 180
 		private double SecondsSinceLastModification(Modification[] modifications, DateTime to)
 		{
 			return (to - GetMostRecentModificationDate(modifications)).TotalSeconds;
