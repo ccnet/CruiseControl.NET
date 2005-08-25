@@ -25,11 +25,11 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			DateTime nextBuildTime = to.StartTime;
 			while (ModificationsAreDetectedInQuietPeriod(modifications, nextBuildTime))
 			{
-				double secondsUntilNextBuild = SecondsUntilNextBuild(modifications, nextBuildTime);
+				int secondsUntilNextBuild = SecondsUntilNextBuild(modifications, nextBuildTime);
 				nextBuildTime = nextBuildTime.AddSeconds(secondsUntilNextBuild);
 
 				Log.Info(string.Format("Modifications have been detected in the quiet period.  Sleeping for {0} seconds until {1}.", secondsUntilNextBuild, nextBuildTime));
-				dtProvider.Sleep((int) (secondsUntilNextBuild*1000));
+				dtProvider.Sleep(secondsUntilNextBuild*1000);
 				to.StartTime = nextBuildTime;
 				modifications = GetMods(sourceControl, from, to);
 			}
