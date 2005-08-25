@@ -59,7 +59,8 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 
 		private bool ModificationsAreDetectedInQuietPeriod(Modification[] modifications, DateTime to)
 		{
-			return SecondsUntilNextBuild(modifications, to) > 0;
+//			return SecondsUntilNextBuild(modifications, to) > 0;
+			return false;
 		}
 
 		private int SecondsUntilNextBuild(Modification[] modifications, DateTime to)
