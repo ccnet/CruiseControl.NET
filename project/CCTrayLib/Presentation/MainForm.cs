@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.ComponentModel;
 using System.Windows.Forms;
 using ThoughtWorks.CruiseControl.CCTrayLib.Configuration;
@@ -40,6 +41,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 		private System.Windows.Forms.MenuItem mnuTrayExit;
 		private System.Windows.Forms.MenuItem menuItem5;
 		private ICCTrayMultiConfiguration configuration;
+		private System.Windows.Forms.ColumnHeader colLastBuildTime;
 		private bool systemShutdownInProgress;
 
 		public MainForm(ICCTrayMultiConfiguration configuration)
@@ -96,6 +98,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 			this.colActivity = new System.Windows.Forms.ColumnHeader();
 			this.colDetail = new System.Windows.Forms.ColumnHeader();
 			this.colLastBuildLabel = new System.Windows.Forms.ColumnHeader();
+			this.colLastBuildTime = new System.Windows.Forms.ColumnHeader();
 			this.projectContextMenu = new System.Windows.Forms.ContextMenu();
 			this.mnuForce = new System.Windows.Forms.MenuItem();
 			this.mnuWebPage = new System.Windows.Forms.MenuItem();
@@ -114,10 +117,10 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 			this.mnuTrayContextMenu = new System.Windows.Forms.ContextMenu();
 			this.mnuTraySettings = new System.Windows.Forms.MenuItem();
 			this.mnuShow = new System.Windows.Forms.MenuItem();
+			this.menuItem5 = new System.Windows.Forms.MenuItem();
 			this.mnuTrayExit = new System.Windows.Forms.MenuItem();
 			this.panel1 = new System.Windows.Forms.Panel();
 			this.btnForceBuild = new System.Windows.Forms.Button();
-			this.menuItem5 = new System.Windows.Forms.MenuItem();
 			this.panel1.SuspendLayout();
 			this.SuspendLayout();
 			// 
@@ -127,7 +130,8 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 																						 this.colProject,
 																						 this.colActivity,
 																						 this.colDetail,
-																						 this.colLastBuildLabel});
+																						 this.colLastBuildLabel,
+																						 this.colLastBuildTime});
 			this.lvProjects.ContextMenu = this.projectContextMenu;
 			this.lvProjects.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.lvProjects.LargeImageList = this.largeIconList;
@@ -139,6 +143,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 			this.lvProjects.TabIndex = 0;
 			this.lvProjects.View = System.Windows.Forms.View.Details;
 			this.lvProjects.DoubleClick += new System.EventHandler(this.lvProjects_DoubleClick);
+			this.lvProjects.ColumnClick += new System.Windows.Forms.ColumnClickEventHandler(this.lvProjects_ColumnClick);
 			this.lvProjects.SelectedIndexChanged += new System.EventHandler(this.lvProjects_SelectedIndexChanged);
 			// 
 			// colProject
@@ -160,6 +165,11 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 			// 
 			this.colLastBuildLabel.Text = "Last Build Label";
 			this.colLastBuildLabel.Width = 192;
+			// 
+			// colLastBuildTime
+			// 
+			this.colLastBuildTime.Text = "Last Build Time";
+			this.colLastBuildTime.Width = 112;
 			// 
 			// projectContextMenu
 			// 
@@ -281,6 +291,11 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 			this.mnuShow.Text = "Show Status &Window";
 			this.mnuShow.Click += new System.EventHandler(this.mnuShow_Click);
 			// 
+			// menuItem5
+			// 
+			this.menuItem5.Index = 2;
+			this.menuItem5.Text = "-";
+			// 
 			// mnuTrayExit
 			// 
 			this.mnuTrayExit.Index = 3;
@@ -306,11 +321,6 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 			this.btnForceBuild.TabIndex = 0;
 			this.btnForceBuild.Text = "Force Build";
 			this.btnForceBuild.Click += new System.EventHandler(this.btnForceBuild_Click);
-			// 
-			// menuItem5
-			// 
-			this.menuItem5.Index = 2;
-			this.menuItem5.Text = "-";
 			// 
 			// MainForm
 			// 
@@ -469,7 +479,74 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 			}
 		}
 
+		private void lvProjects_ColumnClick(object sender, System.Windows.Forms.ColumnClickEventArgs e)
+		{
+			// Set the ListViewItemSorter as appropriate.
+			ListViewItemComparer compare = this.lvProjects.ListViewItemSorter as ListViewItemComparer;
 
+			if ( compare == null )
+			{
+				lvProjects.ListViewItemSorter = new ListViewItemComparer(e.Column, true);
+			}
+			else
+			{
+				if ( compare.SortColumn == e.Column )
+				{
+					// Sort on same column, just the opposite direction.
+					compare.SortAscending = !compare.SortAscending;
+				}
+				else
+				{
+					compare.SortAscending = false;
+					compare.SortColumn = e.Column;
+				}
+			}
 
+			lvProjects.Sort();
+		}
+
+		// Implements the manual sorting of items by columns.
+		private class ListViewItemComparer : IComparer 
+		{
+			private int col;
+			private bool ascendingOrder;
+
+			public int SortColumn
+			{
+				get { return col; }
+				set { col = value; }
+			}
+
+			public bool SortAscending
+			{
+				get { return ascendingOrder; }
+				set { ascendingOrder = value; }
+			}
+
+			public ListViewItemComparer() : this (0, true)
+			{
+			}
+
+			public ListViewItemComparer(int column) : this(column, true)
+			{
+			}
+
+			public ListViewItemComparer(int column, bool ascending)
+			{
+				SortColumn = column;
+				SortAscending = ascending;
+			}
+
+			public int Compare(object x, object y) 
+			{
+				int compare = String.Compare(((ListViewItem)x).SubItems[SortColumn].Text, ((ListViewItem)y).SubItems[SortColumn].Text);
+				if ( !ascendingOrder )
+				{
+					compare = -compare;
+				}
+
+				return compare;
+			}
+		}
 	}
 }

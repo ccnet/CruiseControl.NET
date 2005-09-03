@@ -10,6 +10,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 		private readonly ListViewItem.ListViewSubItem activity;
 		private readonly ListViewItem.ListViewSubItem detail;
 		private readonly ListViewItem.ListViewSubItem lastBuildLabel;
+		private readonly ListViewItem.ListViewSubItem lastBuildTime;
 
 		public ProjectStatusListViewItemAdaptor(IDetailStringProvider detailStringProvider)
 		{
@@ -20,7 +21,8 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 			item.SubItems.Add( detail );
 			lastBuildLabel = new ListViewItem.ListViewSubItem( item, "" );
 			item.SubItems.Add( lastBuildLabel );
-
+			lastBuildTime = new ListViewItem.ListViewSubItem( item, "" );
+			item.SubItems.Add( lastBuildTime );
 		}
 
 		public ListViewItem Create( IProjectMonitor projectMonitor )
@@ -46,6 +48,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 			if (monitor.ProjectStatus != null)
 			{
 				lastBuildLabel.Text = monitor.ProjectStatus.LastBuildLabel;
+				lastBuildTime.Text = monitor.ProjectStatus.LastBuildDate.ToString();
 				activity.Text = monitor.ProjectStatus.Activity.ToString();
 			}
 			else
