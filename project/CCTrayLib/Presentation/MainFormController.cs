@@ -58,19 +58,15 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 
 		public void DisplayWebPage()
 		{
-			if (IsProjectSelected && SelectedProject.ProjectStatus != null)
+			if (IsProjectSelected)
 			{
-				string url = SelectedProject.ProjectStatus.WebURL;
-				Process.Start(url);
+				DisplayWebPageForProject(SelectedProject);
 			}
 		}
 
 		public void PotentiallyHookUpBuildOccurredEvents(TrayIcon trayIcon)
 		{
-			if (configuration.ShouldShowBalloonOnBuildTransition)
-			{
-				trayIcon.ListenToBuildOccurredEvents(aggregatedMonitor);
-			}
+			trayIcon.ListenToBuildOccurredEvents(aggregatedMonitor, configuration.ShouldShowBalloonOnBuildTransition);
 		}
 
 
@@ -103,6 +99,29 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 			{
 				poller.Stop();
 				poller = null;
+			}
+		}
+
+		public bool OnDoubleClick()
+		{
+			if (configuration.TrayIconDoubleClickAction == TrayIconDoubleClickAction.NavigateToWebPageOfFirstProject)
+			{
+				if (monitors.Length != 0)
+				{
+					DisplayWebPageForProject(monitors[0]);
+					return true;
+				}
+			}
+			
+			return false;
+		}
+		
+		private void DisplayWebPageForProject(IProjectMonitor project)
+		{
+			if (project.ProjectStatus != null)
+			{
+				string url = project.ProjectStatus.WebURL;
+				Process.Start(url);
 			}
 		}
 	}

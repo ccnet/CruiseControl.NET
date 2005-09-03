@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics;
 using ThoughtWorks.CruiseControl.CCTrayLib.Monitoring;
 
 namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
@@ -18,20 +19,22 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 		public void BindToIconProvider( IIconProvider iconProvider )
 		{
 			this.iconProvider = iconProvider;
-			this.Icon = iconProvider.Icon;
+			Icon = iconProvider.Icon;
 			iconProvider.IconChanged += new EventHandler(IconProvider_IconChanged);
 		}
 
 		private void IconProvider_IconChanged(object sender, EventArgs e)
 		{
-			this.Icon = iconProvider.Icon;
+			Icon = iconProvider.Icon;
 		}
 
-		public void ListenToBuildOccurredEvents( IProjectMonitor monitor)
+		public void ListenToBuildOccurredEvents( IProjectMonitor monitor, bool showBalloonMessages)
 		{
 			this.monitor = monitor;
-			monitor.BuildOccurred += new MonitorBuildOccurredEventHandler(Monitor_BuildOccurred);
 			monitor.Polled  += new MonitorPolledEventHandler(Monitor_Polled);
+			
+			if (showBalloonMessages)
+				monitor.BuildOccurred += new MonitorBuildOccurredEventHandler(Monitor_BuildOccurred);
 		}
 
 		private void Monitor_BuildOccurred( object sender, MonitorBuildOccurredEventArgs e )
@@ -47,7 +50,8 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 
 		private void Monitor_Polled(object sender, MonitorPolledEventArgs args)
 		{
-			this.Text = monitor.SummaryStatusString;
+			Text = monitor.SummaryStatusString;
+			Debug.WriteLine("Tray message: " + Text);
 		}
 	}
 }

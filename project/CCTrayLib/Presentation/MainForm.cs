@@ -1,6 +1,8 @@
 using System;
 using System.Collections;
 using System.ComponentModel;
+using System.Drawing;
+using System.Resources;
 using System.Windows.Forms;
 using ThoughtWorks.CruiseControl.CCTrayLib.Configuration;
 using ThoughtWorks.CruiseControl.CCTrayLib.Monitoring;
@@ -34,14 +36,14 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 		private MenuItem menuItem3;
 		private ColumnHeader colDetail;
 		private MainFormController controller;
-		private System.Windows.Forms.MenuItem mnuView;
-		private System.Windows.Forms.ContextMenu mnuTrayContextMenu;
-		private System.Windows.Forms.MenuItem mnuTraySettings;
-		private System.Windows.Forms.MenuItem mnuShow;
-		private System.Windows.Forms.MenuItem mnuTrayExit;
-		private System.Windows.Forms.MenuItem menuItem5;
+		private MenuItem mnuView;
+		private ContextMenu mnuTrayContextMenu;
+		private MenuItem mnuTraySettings;
+		private MenuItem mnuShow;
+		private MenuItem mnuTrayExit;
+		private MenuItem menuItem5;
 		private ICCTrayMultiConfiguration configuration;
-		private System.Windows.Forms.ColumnHeader colLastBuildTime;
+		private ColumnHeader colLastBuildTime;
 		private bool systemShutdownInProgress;
 
 		public MainForm(ICCTrayMultiConfiguration configuration)
@@ -57,7 +59,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 		private void CreateController()
 		{
 			controller = new MainFormController(configuration, this);
-		
+
 			DataBindings.Add("Icon", controller.ProjectStateIconAdaptor, "Icon");
 			trayIcon.BindToIconProvider(controller.ProjectStateIconAdaptor);
 
@@ -421,7 +423,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 					CreateController();
 				}
 
-				
+
 			}
 			finally
 			{
@@ -429,14 +431,14 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 			}
 		}
 
-		private void mnuView_Popup(object sender, System.EventArgs e)
+		private void mnuView_Popup(object sender, EventArgs e)
 		{
 			mnuViewIcons.Checked = (lvProjects.View == View.LargeIcon);
 			mnuViewList.Checked = (lvProjects.View == View.List);
 			mnuViewDetails.Checked = (lvProjects.View == View.Details);
 		}
 
-		private void mnuShow_Click(object sender, System.EventArgs e)
+		private void mnuShow_Click(object sender, EventArgs e)
 		{
 			Show();
 			NativeMethods.SetForegroundWindow(Handle);
@@ -448,10 +450,13 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 				NativeMethods.SetForegroundWindow(Handle);
 		}
 
-		private void trayIcon_DoubleClick(object sender, System.EventArgs e)
+		private void trayIcon_DoubleClick(object sender, EventArgs e)
 		{
-			Show();
-			NativeMethods.SetForegroundWindow(Handle);		
+			if (!controller.OnDoubleClick())
+			{
+				Show();
+				NativeMethods.SetForegroundWindow(Handle);
+			}
 		}
 
 		protected override void WndProc(ref Message m)
@@ -460,10 +465,10 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 			{
 				systemShutdownInProgress = true;
 			}
-			base.WndProc (ref m);
+			base.WndProc(ref m);
 		}
 
-		private void MainForm_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+		private void MainForm_Closing(object sender, CancelEventArgs e)
 		{
 			// Do not close this form, just minimize instead
 			// Except when systemShutdown
@@ -479,18 +484,18 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 			}
 		}
 
-		private void lvProjects_ColumnClick(object sender, System.Windows.Forms.ColumnClickEventArgs e)
+		private void lvProjects_ColumnClick(object sender, ColumnClickEventArgs e)
 		{
 			// Set the ListViewItemSorter as appropriate.
-			ListViewItemComparer compare = this.lvProjects.ListViewItemSorter as ListViewItemComparer;
+			ListViewItemComparer compare = lvProjects.ListViewItemSorter as ListViewItemComparer;
 
-			if ( compare == null )
+			if (compare == null)
 			{
 				lvProjects.ListViewItemSorter = new ListViewItemComparer(e.Column, true);
 			}
 			else
 			{
-				if ( compare.SortColumn == e.Column )
+				if (compare.SortColumn == e.Column)
 				{
 					// Sort on same column, just the opposite direction.
 					compare.SortAscending = !compare.SortAscending;
@@ -506,7 +511,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 		}
 
 		// Implements the manual sorting of items by columns.
-		private class ListViewItemComparer : IComparer 
+		private class ListViewItemComparer : IComparer
 		{
 			private int col;
 			private bool ascendingOrder;
@@ -523,7 +528,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 				set { ascendingOrder = value; }
 			}
 
-			public ListViewItemComparer() : this (0, true)
+			public ListViewItemComparer() : this(0, true)
 			{
 			}
 
@@ -537,10 +542,11 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 				SortAscending = ascending;
 			}
 
-			public int Compare(object x, object y) 
+			public int Compare(object x, object y)
 			{
-				int compare = String.Compare(((ListViewItem)x).SubItems[SortColumn].Text, ((ListViewItem)y).SubItems[SortColumn].Text);
-				if ( !ascendingOrder )
+				int compare =
+					String.Compare(((ListViewItem) x).SubItems[SortColumn].Text, ((ListViewItem) y).SubItems[SortColumn].Text);
+				if (!ascendingOrder)
 				{
 					compare = -compare;
 				}

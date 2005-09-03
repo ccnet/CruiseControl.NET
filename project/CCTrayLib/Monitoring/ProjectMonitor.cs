@@ -117,7 +117,15 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
 
 		public string SummaryStatusString
 		{
-			get { return ProjectName + ": " + ProjectState; }
+			get
+			{
+				ProjectState state = ProjectState;
+				
+				if (state == ProjectState.Success)
+					return String.Empty;
+				
+				return ProjectName + ": " + state;
+			}
 		}
 	}
 }

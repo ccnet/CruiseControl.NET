@@ -234,16 +234,29 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Monitoring
 		}
 
 		[Test]
-		public void SummaryStatusStringReturnsASummaryStatusString()
+		public void SummaryStatusStringReturnsASummaryStatusStringWhenTheStateNotSuccess()
 		{
 			ProjectStatus status = new ProjectStatus();
-			status.BuildStatus = IntegrationStatus.Success;
+			status.BuildStatus = IntegrationStatus.Failure;
 			mockProjectManager.ExpectAndReturn("ProjectStatus", status);
 			mockProjectManager.ExpectAndReturn("ProjectName", "projName");
 
 			monitor.Poll();
 
-			Assert.AreEqual("projName: Success", monitor.SummaryStatusString);
+			Assert.AreEqual("projName: Broken", monitor.SummaryStatusString);
 		}
+		
+		[Test]
+		public void SummaryStatusStringReturnsEmptyStringWhenTheStateIsSuccess()
+		{
+			ProjectStatus status = new ProjectStatus();
+			status.BuildStatus = IntegrationStatus.Success;
+			mockProjectManager.ExpectAndReturn("ProjectStatus", status);
+
+			monitor.Poll();
+
+			Assert.AreEqual(string.Empty, monitor.SummaryStatusString);
+		}
+
 	}
 }

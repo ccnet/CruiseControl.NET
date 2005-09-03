@@ -51,14 +51,21 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
 
 				foreach (IProjectMonitor monitor in monitors)
 				{
+					string statusString = monitor.SummaryStatusString;
+					if (statusString.Length == 0)
+						continue;
+
 					if (!firstOne)
 						result.Append('\n');
 
 					firstOne = false;
 
-					result.Append(monitor.SummaryStatusString);
+					result.Append(statusString);
 				}
 
+				if (result.Length == 0)
+					return "All builds are good";
+				
 				return result.ToString();
 			}
 		}

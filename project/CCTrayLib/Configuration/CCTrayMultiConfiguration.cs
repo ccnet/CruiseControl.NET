@@ -93,6 +93,13 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Configuration
 		{
 			get { return persistentConfiguration.BuildTransitionNotification.AudioFiles; }
 		}
+
+		public TrayIconDoubleClickAction TrayIconDoubleClickAction
+		{
+			get { return persistentConfiguration.TrayIconDoubleClickAction ; }
+			set { persistentConfiguration.TrayIconDoubleClickAction  = value; }
+		}
+
 	}
 
 }

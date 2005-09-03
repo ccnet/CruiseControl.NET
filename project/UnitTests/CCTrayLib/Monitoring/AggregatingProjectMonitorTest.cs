@@ -182,5 +182,28 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Monitoring
 
 			Assert.AreEqual("hello from monitor1\nand from monitor2\ngoodbye from monitor3", statusString);
 		}
+		
+		[Test]
+		public void ProjectSummaryStringDoesNotIncludeBlankLinesWhenAProjectReturnsNothing()
+		{
+			monitor1.ExpectAndReturn("SummaryStatusString", "hello from monitor1");
+			monitor2.ExpectAndReturn("SummaryStatusString", string.Empty);
+			monitor3.ExpectAndReturn("SummaryStatusString", "goodbye from monitor3");
+			string statusString = aggregator.SummaryStatusString;
+
+			Assert.AreEqual("hello from monitor1\ngoodbye from monitor3", statusString);
+		}
+
+		[Test]
+		public void ProjectSummaryStringReturnsADefaultMessageIfAllProjectsReturnEmptyString()
+		{
+			monitor1.ExpectAndReturn("SummaryStatusString", string.Empty);
+			monitor2.ExpectAndReturn("SummaryStatusString", string.Empty);
+			monitor3.ExpectAndReturn("SummaryStatusString", string.Empty);
+			string statusString = aggregator.SummaryStatusString;
+
+			Assert.AreEqual("All builds are good", statusString);
+		}
+
 	}
 }
