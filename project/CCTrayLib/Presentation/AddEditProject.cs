@@ -20,6 +20,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 		private TextBox txtServer;
 		private ComboBox txtProject;
 		private Button btnFetch;
+		private System.Windows.Forms.ErrorProvider errorProvider;
 		/// <summary>
 		/// Required designer variable.
 		/// </summary>
@@ -29,6 +30,8 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 		{
 			this.project = project;
 			InitializeComponent();
+
+			errorProvider.SetIconAlignment(txtServer, ErrorIconAlignment.MiddleLeft);
 		}
 
 		/// <summary>
@@ -54,6 +57,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 		/// </summary>
 		private void InitializeComponent()
 		{
+			System.Resources.ResourceManager resources = new System.Resources.ResourceManager(typeof(AddEditProject));
 			this.label1 = new System.Windows.Forms.Label();
 			this.label2 = new System.Windows.Forms.Label();
 			this.txtServer = new System.Windows.Forms.TextBox();
@@ -64,6 +68,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 			this.label4 = new System.Windows.Forms.Label();
 			this.label5 = new System.Windows.Forms.Label();
 			this.btnFetch = new System.Windows.Forms.Button();
+			this.errorProvider = new System.Windows.Forms.ErrorProvider();
 			this.SuspendLayout();
 			// 
 			// label1
@@ -78,31 +83,32 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 			// 
 			this.label2.Location = new System.Drawing.Point(10, 40);
 			this.label2.Name = "label2";
-			this.label2.Size = new System.Drawing.Size(165, 15);
+			this.label2.Size = new System.Drawing.Size(100, 15);
 			this.label2.TabIndex = 1;
-			this.label2.Text = "Build Server Connection String:";
+			this.label2.Text = "Build Server:";
 			// 
 			// txtServer
 			// 
-			this.txtServer.Location = new System.Drawing.Point(180, 35);
+			this.txtServer.Location = new System.Drawing.Point(115, 35);
 			this.txtServer.Name = "txtServer";
-			this.txtServer.Size = new System.Drawing.Size(415, 20);
+			this.txtServer.Size = new System.Drawing.Size(480, 20);
 			this.txtServer.TabIndex = 2;
 			this.txtServer.Text = "";
+			this.txtServer.Validating += new System.ComponentModel.CancelEventHandler(this.txtServer_Validating);
 			// 
 			// label3
 			// 
 			this.label3.Location = new System.Drawing.Point(10, 105);
 			this.label3.Name = "label3";
-			this.label3.Size = new System.Drawing.Size(165, 15);
+			this.label3.Size = new System.Drawing.Size(100, 15);
 			this.label3.TabIndex = 3;
 			this.label3.Text = "Project name:";
 			// 
 			// txtProject
 			// 
-			this.txtProject.Location = new System.Drawing.Point(180, 100);
+			this.txtProject.Location = new System.Drawing.Point(115, 100);
 			this.txtProject.Name = "txtProject";
-			this.txtProject.Size = new System.Drawing.Size(335, 21);
+			this.txtProject.Size = new System.Drawing.Size(400, 21);
 			this.txtProject.Sorted = true;
 			this.txtProject.TabIndex = 4;
 			// 
@@ -118,6 +124,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 			// 
 			// btnCancel
 			// 
+			this.btnCancel.CausesValidation = false;
 			this.btnCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
 			this.btnCancel.FlatStyle = System.Windows.Forms.FlatStyle.System;
 			this.btnCancel.Location = new System.Drawing.Point(308, 175);
@@ -127,18 +134,19 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 			// 
 			// label4
 			// 
-			this.label4.Location = new System.Drawing.Point(180, 60);
+			this.label4.Location = new System.Drawing.Point(115, 60);
 			this.label4.Name = "label4";
-			this.label4.Size = new System.Drawing.Size(415, 35);
+			this.label4.Size = new System.Drawing.Size(480, 35);
 			this.label4.TabIndex = 7;
-			this.label4.Text = "An example connection string is tcp://server:21234/CruiseManager.rem. Your build " +
-				"server administrator can tell you what to enter here.";
+			this.label4.Text = "Enter the name of the build server here.  If you have configured your build serve" +
+				"r to run on a port other than 21234, you can follow the name of the build server" +
+				" with :port.";
 			// 
 			// label5
 			// 
-			this.label5.Location = new System.Drawing.Point(180, 130);
+			this.label5.Location = new System.Drawing.Point(115, 130);
 			this.label5.Name = "label5";
-			this.label5.Size = new System.Drawing.Size(415, 35);
+			this.label5.Size = new System.Drawing.Size(480, 35);
 			this.label5.TabIndex = 8;
 			this.label5.Text = "Build servers can host multiple projects.  Enter the project name to monitor here" +
 				".  Click Fetch to retrieve a list of projects hosted on the server.";
@@ -151,6 +159,10 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 			this.btnFetch.TabIndex = 9;
 			this.btnFetch.Text = "Fetch";
 			this.btnFetch.Click += new System.EventHandler(this.btnFetch_Click);
+			// 
+			// errorProvider
+			// 
+			this.errorProvider.ContainerControl = this;
 			// 
 			// AddEditProject
 			// 
@@ -169,6 +181,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 			this.Controls.Add(this.label2);
 			this.Controls.Add(this.label1);
 			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
+			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
 			this.Name = "AddEditProject";
 			this.Text = "Project";
 			this.Load += new System.EventHandler(this.AddEditProject_Load);
@@ -180,13 +193,13 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 
 		private void AddEditProject_Load(object sender, EventArgs e)
 		{
-			txtServer.Text = project.ServerUrl;
+			txtServer.Text = project.ServerDisplayName;
 			txtProject.Text = project.ProjectName;
 		}
 
 		private void btnOK_Click(object sender, EventArgs e)
 		{
-			project.ServerUrl = txtServer.Text;
+			project.SetServerUrlFromDisplayName(txtServer.Text);
 			project.ProjectName = txtProject.Text;
 		}
 
@@ -196,7 +209,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 			try
 			{
 				RemoteCruiseManagerFactory factory = new RemoteCruiseManagerFactory();
-				ICruiseManager manager = factory.GetCruiseManager(txtServer.Text);
+				ICruiseManager manager = factory.GetCruiseManager(project.ServerUrl);
 				ProjectStatus[] projectStatuses = manager.GetProjectStatus();
 
 				txtProject.Items.Clear();
@@ -213,6 +226,20 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 			finally
 			{
 				Cursor.Current = Cursors.Default;
+			}
+		}
+
+		private void txtServer_Validating(object sender, System.ComponentModel.CancelEventArgs e)
+		{
+			try
+			{
+				project.SetServerUrlFromDisplayName(txtServer.Text);
+				errorProvider.SetError(txtServer, "");
+			}
+			catch (Exception ex)
+			{
+				errorProvider.SetError(txtServer, ex.Message);
+				e.Cancel = true;
 			}
 		}
 	}
