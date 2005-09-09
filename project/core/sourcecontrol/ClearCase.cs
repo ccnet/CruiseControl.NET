@@ -113,7 +113,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 		// to allow nonzero exit codes and to selectively ignore certian error messages.
 		private void ExecuteIgnoreNonVobObjects(ProcessInfo info)
 		{
-			info.TimeOut = Timeout;
+			info.TimeOut = Timeout.Millis;
 			ProcessResult result = executor.Execute(info);
 
 			if (result.TimedOut)

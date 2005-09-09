@@ -213,7 +213,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 			clearCase.AutoGetSource = true;
 
 			ProcessInfo expectedProcessRequest = new ProcessInfo(EXECUTABLE, @"update -force -overwrite """ + VIEWPATH + @"""");
-			expectedProcessRequest.TimeOut = ProcessSourceControl.DefaultTimeout;
+			expectedProcessRequest.TimeOut = Timeout.DefaultTimeout.Millis;
 
 			executor.ExpectAndReturn("Execute", new ProcessResult("foo", null, 0, false), expectedProcessRequest);
 			clearCase.GetSource(new IntegrationResult());

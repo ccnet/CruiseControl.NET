@@ -58,7 +58,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 			Svn svn = (Svn) NetReflector.Read(CreateSourceControlXml("svn://myserver/mypath"));
 			Assert.AreEqual("..\\tools\\subversion-0.37.0\\svn.exe", svn.Executable);
 			Assert.AreEqual("svn://myserver/mypath", svn.TrunkUrl);
-			Assert.AreEqual(5, svn.Timeout);
+			Assert.AreEqual(new Timeout(5), svn.Timeout);
 			Assert.AreEqual(@"c:\dev\src", svn.WorkingDirectory);
 		}
 

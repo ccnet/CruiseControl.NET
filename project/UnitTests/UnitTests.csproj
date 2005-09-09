@@ -1037,6 +1037,16 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Core\Util\TimeoutSerializationTest.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Core\Util\TimeoutTest.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Core\Util\WildCardPathTest.cs"
                     SubType = "Code"
                     BuildAction = "Compile"

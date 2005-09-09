@@ -7,9 +7,9 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 {
 	public abstract class ProcessSourceControl : ISourceControl
 	{
-		public const int DefaultTimeout = 600000;
 		protected ProcessExecutor executor;
 		protected IHistoryParser historyParser;
+		private	Timeout timeout = Timeout.DefaultTimeout;
 
 		public ProcessSourceControl(IHistoryParser historyParser) : this(historyParser, new ProcessExecutor())
 		{}
@@ -20,8 +20,22 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			this.historyParser = historyParser;
 		}
 
-		[ReflectorProperty("timeout", Required=false)]
-		public int Timeout = DefaultTimeout;
+		[ReflectorProperty("timeout", typeof(TimeoutSerializerFactory))]
+		public Timeout Timeout
+		{
+			get
+			{
+				return timeout;
+			}
+			set
+			{
+				if (value==null) 
+					timeout = Timeout.DefaultTimeout;
+				else 
+					timeout = value;
+			}
+			
+		}
 
 		public abstract Modification[] GetModifications(IIntegrationResult from, IIntegrationResult to);
 
@@ -35,7 +49,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 
 		protected ProcessResult Execute(ProcessInfo processInfo)
 		{
-			processInfo.TimeOut = Timeout;
+			processInfo.TimeOut = Timeout.Millis;
 			ProcessResult result = executor.Execute(processInfo);
 
 			if (result.TimedOut)

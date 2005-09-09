@@ -53,7 +53,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.SourceControl
 			Assert.AreEqual(mods, actualMods);
 		}
 
-		[Test, Ignore("too support problem on hanging tests on server")]
+		[Test]
 		public void ShouldCheckModificationsUntilThereAreNoModsInModificationDelay()
 		{
 			Modification[] newMods = new Modification[2];
@@ -86,7 +86,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.SourceControl
 			Assert.AreEqual(new Modification[0], actualMods);
 		}
 
-		[Test, Ignore("seems to hang on the build server")]
+		[Test]
 		public void ShouldHandleTimeDifferencesThatAreLessThanOneMillisecondFromModificationDelay()
 		{
 			to = IntegrationResultMother.CreateSuccessful(mods[0].ModifiedTime.AddSeconds(60).AddTicks(-1));

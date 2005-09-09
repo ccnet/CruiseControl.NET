@@ -75,7 +75,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 			Assert.AreEqual(@"..\tools\vss", vss.SsDir);
 			Assert.AreEqual(@"Admin", vss.Username);
 			Assert.AreEqual(true, vss.ApplyLabel);
-			Assert.AreEqual(5, vss.Timeout);
+			Assert.AreEqual(new Timeout(5), vss.Timeout);
 			Assert.AreEqual(true, vss.AutoGetSource);
 			Assert.AreEqual(@"C:\temp", vss.WorkingDirectory);
 			Assert.AreEqual("fr-FR", vss.Culture);

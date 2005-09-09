@@ -1128,6 +1128,26 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "util\Timeout.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "util\TimeoutSerializer.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "util\TimeoutSerializerFactory.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "util\TimeUnits.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "util\WildCardPath.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
