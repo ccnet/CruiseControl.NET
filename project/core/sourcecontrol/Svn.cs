@@ -24,7 +24,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 		[ReflectorProperty("webUrlBuilder", InstanceTypeKey="type", Required = false)]
 		public IModificationUrlBuilder UrlBuilder;
 
-		[ReflectorProperty("executable")]
+		[ReflectorProperty("executable", Required = false)]
 		public string Executable = DefaultExecutable;
 
 		[ReflectorProperty("trunkUrl")]

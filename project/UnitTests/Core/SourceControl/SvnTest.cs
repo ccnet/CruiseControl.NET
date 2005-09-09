@@ -43,7 +43,6 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 			return string.Format(
 				@"
 <svn>
-	<executable>..\tools\subversion-0.37.0\svn.exe</executable>
 	<trunkUrl>{0}</trunkUrl>
 	<timeout>5</timeout>
 	<workingDirectory>c:\dev\src</workingDirectory>
@@ -56,7 +55,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 		public void DefaultPropertyPopulationFromXml()
 		{
 			Svn svn = (Svn) NetReflector.Read(CreateSourceControlXml("svn://myserver/mypath"));
-			Assert.AreEqual("..\\tools\\subversion-0.37.0\\svn.exe", svn.Executable);
+			Assert.AreEqual("svn.exe", svn.Executable);
 			Assert.AreEqual("svn://myserver/mypath", svn.TrunkUrl);
 			Assert.AreEqual(new Timeout(5), svn.Timeout);
 			Assert.AreEqual(@"c:\dev\src", svn.WorkingDirectory);
