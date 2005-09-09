@@ -68,7 +68,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 			builder.AddArgument("/nologo");
 			if (! StringUtil.IsBlank(Targets)) builder.AddArgument("/t:" + Targets);
 			builder.AddArgument(GetPropertyArgs(result));
-			builder.AddArgument(BuildArgs);
+			builder.AppendArgument(BuildArgs);
 			builder.AddArgument(ProjectFile);
 			builder.AddArgument(GetLoggerArgs(result));
 

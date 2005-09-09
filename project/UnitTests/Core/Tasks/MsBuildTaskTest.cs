@@ -76,6 +76,14 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 		}
 
 		[Test]
+		public void DoNotAddQuotesAroundBuildArgs()
+		{
+			ExpectToExecuteArguments(@"/nologo " + IntegrationProperties() + @" /noconsolelogger /p:Configuration=Debug" + DefaultLogger());
+			task.BuildArgs = "/noconsolelogger /p:Configuration=Debug";
+			task.Run(result);			
+		}
+
+		[Test]
 		public void RebaseFromWorkingDirectory()
 		{
 			ProcessInfo info = NewProcessInfo("/nologo " + IntegrationProperties() + DefaultLogger());
