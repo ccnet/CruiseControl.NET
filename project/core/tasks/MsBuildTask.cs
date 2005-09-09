@@ -51,10 +51,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 			{
 				result.AddTaskResult(new FileTaskResult(buildOutputFile));
 			}
-			else
-			{
-				result.AddTaskResult(new ProcessTaskResult(processResult));				
-			}
+			result.AddTaskResult(new ProcessTaskResult(processResult));				
 		}
 
 		private ProcessInfo NewProcessInfo(IIntegrationResult result)

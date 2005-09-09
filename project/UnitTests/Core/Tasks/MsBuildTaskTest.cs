@@ -99,8 +99,20 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 			TempFileUtil.CreateTempXmlFile(logfile, "<output/>");
 			ExpectToExecuteAndReturn(SuccessfulProcessResult());
 			task.Run(result);
-			Assert.AreEqual(1, result.TaskResults.Count);
-			Assert.AreEqual("<output/>", result.TaskOutput);
+			Assert.AreEqual(2, result.TaskResults.Count);
+			Assert.AreEqual("<output/>" + ProcessResultOutput, result.TaskOutput);
+			Assert.IsTrue(result.Succeeded);
+		}
+
+		[Test]
+		public void ShouldFailOnFailedProcessResult()
+		{
+			TempFileUtil.CreateTempXmlFile(logfile, "<output/>");
+			ExpectToExecuteAndReturn(FailedProcessResult());
+			task.Run(result);
+			Assert.AreEqual(2, result.TaskResults.Count);
+			Assert.AreEqual("<output/>" + ProcessResultOutput, result.TaskOutput);
+			Assert.IsTrue(result.Failed);			
 		}
 
 		[Test]

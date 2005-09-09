@@ -73,7 +73,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 
 		protected ProcessResult SuccessfulProcessResult()
 		{
-			return ProcessResultFixture.CreateSuccessfulResult("output");
+			return ProcessResultFixture.CreateSuccessfulResult(ProcessResultOutput);
 		}
 
 		protected ProcessResult FailedProcessResult()
