@@ -3,21 +3,21 @@ namespace ThoughtWorks.CruiseControl.Core.Config
 {
 	public class Configuration : IConfiguration
 	{
-		private ProjectList _projects = new ProjectList();
+		private ProjectList projects = new ProjectList();
 
 		public void AddProject(IProject project)
 		{
-			_projects.Add(project);
+			projects.Add(project);
 		}
 
 		public void DeleteProject(string name)
 		{
-			_projects.Delete(name);
+			projects.Delete(name);
 		}
 
 		public IProjectList Projects
 		{
-			get { return _projects; }
+			get { return projects; }
 		}
 	}
 }

@@ -1,5 +1,3 @@
-using System;
-
 namespace ThoughtWorks.CruiseControl.Core.Config
 {
 	public class CachingConfigurationService : IConfigurationService
@@ -10,15 +8,11 @@ namespace ThoughtWorks.CruiseControl.Core.Config
 		public CachingConfigurationService(IConfigurationService slaveService)
 		{
 			this.slaveService = slaveService;
-			// Lazy load - will be instantiated on first call;
-			this.cachedConfig = null;
-
-			slaveService.AddConfigurationUpdateHandler(new ConfigurationUpdateHandler(InvalidateCache));
+			this.slaveService.AddConfigurationUpdateHandler(new ConfigurationUpdateHandler(InvalidateCache));
 		}
 
 		public IConfiguration Load()
 		{
-			// Don't bother synchronizing here - 2 concurrent calls are safe since this class doesn't have any 'real' state
 			if (cachedConfig == null)
 			{
 				cachedConfig = slaveService.Load();

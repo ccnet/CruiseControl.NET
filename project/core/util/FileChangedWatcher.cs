@@ -6,41 +6,40 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 {
 	public class FileChangedWatcher : IFileWatcher
 	{
-		private FileSystemWatcher _watcher;
-		private Timer _timer;
+		private FileSystemWatcher watcher;
+		private Timer timer;
 
 		public FileChangedWatcher(string filename)
 		{
-			_watcher = new FileSystemWatcher();
-			_watcher.Filter = Path.GetFileName(filename);
-			_watcher.Path = new FileInfo(filename).DirectoryName;
-			_watcher.NotifyFilter = NotifyFilters.LastWrite;
-			_watcher.Changed += new FileSystemEventHandler(HandleFileChanged);
+			watcher = new FileSystemWatcher();
+			watcher.Filter = Path.GetFileName(filename);
+			watcher.Path = new FileInfo(filename).DirectoryName;
+			watcher.Changed += new FileSystemEventHandler(HandleFileChanged);
 
-			_timer = new Timer(500);
-			_timer.AutoReset = false;
-			_timer.Elapsed += new ElapsedEventHandler(HandleTimerElapsed);
+			timer = new Timer(500);
+			timer.AutoReset = false;
+			timer.Elapsed += new ElapsedEventHandler(HandleTimerElapsed);
 
-			_watcher.EnableRaisingEvents = true;
+			watcher.EnableRaisingEvents = true;
 		}
 
 		public event FileSystemEventHandler OnFileChanged;
 
 		private void HandleFileChanged(object sender, FileSystemEventArgs args)
 		{
-			_timer.Start();
+			timer.Start();
 		}
 
 		private void HandleTimerElapsed(object sender, ElapsedEventArgs args)
 		{
-			_timer.Stop();
+			timer.Stop();
 			OnFileChanged(sender, null);
 		}
 
 		void IDisposable.Dispose()
 		{
-			_watcher.EnableRaisingEvents = false;
-			_watcher.Dispose();
+			watcher.EnableRaisingEvents = false;
+			watcher.Dispose();
 		}
 	}
 }
