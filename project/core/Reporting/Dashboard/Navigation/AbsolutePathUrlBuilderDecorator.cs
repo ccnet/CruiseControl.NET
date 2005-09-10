@@ -1,5 +1,3 @@
-using System;
-
 namespace ThoughtWorks.CruiseControl.Core.Reporting.Dashboard.Navigation
 {
 	public class AbsolutePathUrlBuilderDecorator : IUrlBuilder
@@ -25,7 +23,7 @@ namespace ThoughtWorks.CruiseControl.Core.Reporting.Dashboard.Navigation
 
 		public string BuildUrl(string action, string partialQueryString, string relativeBaseUrl)
 		{
-			return Decorate(decoratedUrlBuilder.BuildUrl(action, partialQueryString, relativeBaseUrl ));
+			return Decorate(decoratedUrlBuilder.BuildUrl(action, partialQueryString, relativeBaseUrl));
 		}
 
 		public string BuildFormName(string action)

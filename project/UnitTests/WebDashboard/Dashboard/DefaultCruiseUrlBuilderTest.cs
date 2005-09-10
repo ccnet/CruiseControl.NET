@@ -71,6 +71,21 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 		}
 
 		[Test]
+		public void ShouldUrlEncodeProject()
+		{
+			// Setup
+			urlBuilderMock.ExpectAndReturn("BuildUrl", "myUrl", "myAction", "server=myserver&project=myproject%232");
+			projectSpecifier = new DefaultProjectSpecifier(serverSpecifier, "myproject#2");
+
+			// Execute
+			string url = cruiseUrlBuilder.BuildProjectUrl("myAction", projectSpecifier);
+
+			// Verify
+			Assert.AreEqual("myUrl", url);
+			VerifyAll();
+		}
+
+		[Test]
 		public void ShouldBuildBuildUrlAddingCorrectlyFormattedAction()
 		{
 			// Setup

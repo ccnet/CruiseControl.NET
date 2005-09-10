@@ -17,6 +17,10 @@ namespace ThoughtWorks.CruiseControl.Core.Reporting.Dashboard.Navigation
 			return BuildUrl(action, partialQueryString, CONTROLLER_RELATIVE_URL);
 		}
 
+		/// <summary>
+		/// Assumes that the partialQueryString and action have been safely url encoded.
+		/// Instead use a parameter collection and url builder can take care of encoding.
+		/// </summary>
 		public string BuildUrl(string action, string partialQueryString, string baseUrl)
 		{
 			string queryString = string.Format("?{0}{1}=true", ACTION_PARAMETER_PREFIX, action);

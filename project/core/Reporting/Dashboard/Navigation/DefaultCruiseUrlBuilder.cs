@@ -1,3 +1,6 @@
+using System.Web;
+using ThoughtWorks.CruiseControl.Core.Util;
+
 namespace ThoughtWorks.CruiseControl.Core.Reporting.Dashboard.Navigation
 {
 	public class DefaultCruiseUrlBuilder : ICruiseUrlBuilder
@@ -20,12 +23,7 @@ namespace ThoughtWorks.CruiseControl.Core.Reporting.Dashboard.Navigation
 
 		public string BuildServerUrl(string action, IServerSpecifier serverSpecifier, string queryString)
 		{
-			string fullQueryString = BuildServerQueryString(serverSpecifier);
-			if (queryString != null && queryString != string.Empty)
-			{
-				fullQueryString += ("&" + queryString);
-			}
-			return urlBuilder.BuildUrl(action, fullQueryString);
+			return urlBuilder.BuildUrl(action, Combine(BuildServerQueryString(serverSpecifier), queryString));
 		}
 
 		public string BuildProjectUrl(string action, IProjectSpecifier projectSpecifier)
@@ -45,17 +43,28 @@ namespace ThoughtWorks.CruiseControl.Core.Reporting.Dashboard.Navigation
 
 		private string BuildServerQueryString(IServerSpecifier serverSpecifier)
 		{
-			return string.Format("{0}={1}", ServerQueryStringParameter, serverSpecifier.ServerName);
+			return UrlParameter(ServerQueryStringParameter, serverSpecifier.ServerName);
 		}
 
 		private string BuildProjectQueryString(IProjectSpecifier projectSpecifier)
 		{
-			return string.Format("{0}&{1}={2}",BuildServerQueryString(projectSpecifier.ServerSpecifier), ProjectQueryStringParameter, projectSpecifier.ProjectName);
+			return Combine(BuildServerQueryString(projectSpecifier.ServerSpecifier), UrlParameter(ProjectQueryStringParameter, projectSpecifier.ProjectName));
 		}
 
 		private string BuildBuildQueryString(IBuildSpecifier buildSpecifier)
 		{
-			return string.Format("{0}&{1}={2}",BuildProjectQueryString(buildSpecifier.ProjectSpecifier), BuildQueryStringParameter, buildSpecifier.BuildName);
+			return Combine(BuildProjectQueryString(buildSpecifier.ProjectSpecifier), UrlParameter(BuildQueryStringParameter, buildSpecifier.BuildName));
+		}
+
+		private string UrlParameter(string key, string value)
+		{
+			return string.Format("{0}={1}", key, HttpUtility.UrlEncode(value));
+		}
+
+		private string Combine(string root, string addendum)
+		{
+			if (StringUtil.IsBlank(addendum)) return root;
+			return string.Format("{0}&{1}", root, addendum);
 		}
 	}
 }

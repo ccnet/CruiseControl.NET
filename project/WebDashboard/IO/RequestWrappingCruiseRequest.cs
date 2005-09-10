@@ -1,6 +1,5 @@
 using System.Collections.Specialized;
 using ThoughtWorks.CruiseControl.Core.Reporting.Dashboard.Navigation;
-using ThoughtWorks.CruiseControl.WebDashboard.Dashboard;
 using ThoughtWorks.CruiseControl.WebDashboard.MVC;
 
 namespace ThoughtWorks.CruiseControl.WebDashboard.IO
@@ -48,26 +47,17 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.IO
 
 		public IServerSpecifier ServerSpecifier
 		{
-			get
-			{
-				return new DefaultServerSpecifier(ServerName);
-			}
+			get { return new DefaultServerSpecifier(ServerName); }
 		}
 
 		public IProjectSpecifier ProjectSpecifier
 		{
-			get
-			{
-				return new DefaultProjectSpecifier(ServerSpecifier, ProjectName);
-			}
+			get { return new DefaultProjectSpecifier(ServerSpecifier, ProjectName); }
 		}
 
 		public IBuildSpecifier BuildSpecifier
 		{
-			get
-			{
-				return new DefaultBuildSpecifier(ProjectSpecifier, BuildName);
-			}
+			get { return new DefaultBuildSpecifier(ProjectSpecifier, BuildName); }
 		}
 
 		public IRequest Request
