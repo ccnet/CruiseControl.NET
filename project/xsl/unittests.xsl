@@ -267,14 +267,6 @@
             <tr><td class="section-data">Test:</td><td class="section-data"><xsl:value-of select="@name"/></td></tr>
             <tr><td class="section-data">Type:</td><td class="section-data">Warning</td></tr>
             <tr><td class="section-data">Message:</td><td class="section-data"><xsl:value-of select="reason//message"/></td></tr>
-            <tr>
-                <td></td>
-                <td class="section-error">
-                    <pre><xsl:call-template name="br-replace">
-                            <xsl:with-param name="word" select="/stack-trace"/>
-                        </xsl:call-template></pre>
-                </td>
-            </tr>
             </xsl:if>
 
         </xsl:for-each>
