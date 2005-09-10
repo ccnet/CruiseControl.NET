@@ -19,7 +19,6 @@ namespace ThoughtWorks.CruiseControl.Core
 			this.resultManager = resultManager;
 		}
 
-		// ToDo - this is all still a bit messy - could do with cleaning up
 		public IIntegrationResult RunIntegration(BuildCondition buildCondition)
 		{
 			IIntegrationResult result = resultManager.StartNewIntegration(buildCondition);
@@ -45,7 +44,7 @@ namespace ThoughtWorks.CruiseControl.Core
 			}
 			result.MarkEndTime();
 
-			PostBuild(result, resultManager);
+			PostBuild(result);
 
 			return result;
 		}
@@ -56,7 +55,6 @@ namespace ThoughtWorks.CruiseControl.Core
 			return quietPeriod.GetModifications(target.SourceControl, from, to);
 		}
 
-		// ToDo - MR - this is temporary until we know for certain that 'Project.Initialize' will have been called at some point
 		private void CreateDirectoryIfItDoesntExist(string directory)
 		{
 			if (! Directory.Exists(directory))
@@ -73,20 +71,29 @@ namespace ThoughtWorks.CruiseControl.Core
 			Log.Info("Build complete: " + result.Status);
 		}
 
-		private void PostBuild(IIntegrationResult result, IIntegrationResultManager resultManager)
+		private void PostBuild(IIntegrationResult result)
 		{
 			if (ShouldPublishResult(result))
 			{
-				HandleProjectLabelling(result);
-
-				// raise event (publishers do their thing in response)
-				target.OnIntegrationCompleted(result);
-
-				resultManager.FinishIntegration();
+				LabelSourceControl(result);
+				target.PublishResults(result);
 			}
+			resultManager.FinishIntegration();
 			Log.Info("Integration complete: " + result.EndTime);
 
 			target.Activity = ProjectActivity.Sleeping;
+		}
+
+		private void LabelSourceControl(IIntegrationResult result)
+		{
+			try
+			{
+				target.SourceControl.LabelSourceControl(result);
+			}
+			catch (Exception e)
+			{
+				Log.Error(new CruiseControlException("Exception occurred while labelling source control provider.", e));
+			}
 		}
 
 		private bool ShouldPublishResult(IIntegrationResult result)
@@ -100,11 +107,6 @@ namespace ThoughtWorks.CruiseControl.Core
 			{
 				return integrationStatus != IntegrationStatus.Unknown;
 			}
-		}
-
-		private void HandleProjectLabelling(IIntegrationResult result)
-		{
-			target.SourceControl.LabelSourceControl(result);
 		}
 	}
 }

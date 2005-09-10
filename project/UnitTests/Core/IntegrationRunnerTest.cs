@@ -105,6 +105,22 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 			VerifyAll();
 		}
 
+		[Test]
+		public void ShouldStillPublishResultsIfLabellingThrowsException()
+		{
+			SetupPreambleExpections();
+			SetupShouldBuildExpectations();
+			resultMock.ExpectAndReturn("Status", IntegrationStatus.Success);
+			resultMock.ExpectAndReturn("Status", IntegrationStatus.Success);
+			sourceControlMock.ExpectAndThrow("LabelSourceControl", new Exception(), result);
+			targetMock.Expect("PublishResults", result);
+
+			IIntegrationResult returnedResult = runner.RunIntegration(BuildCondition.IfModificationExists);
+
+			Assert.AreEqual(result, returnedResult);
+			VerifyAll();
+		}
+
 		private void SetupPreambleExpections()
 		{
 			SetupPreambleExpections(typeof (ISourceControl));
@@ -114,6 +130,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 		{
 			targetMock.Expect("Activity", ProjectActivity.CheckingModifications);
 			resultManagerMock.ExpectAndReturn("StartNewIntegration", result, BuildCondition.IfModificationExists);
+			resultManagerMock.Expect("FinishIntegration");
 			resultMock.Expect("MarkStartTime");
 			resultManagerMock.ExpectAndReturn("LastIntegrationResult", lastResult);
 			sourceControlMock = new DynamicMock(sourceControlType);
@@ -134,7 +151,6 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 
 			targetMock.Expect("Run", result);
 			resultMock.Expect("MarkEndTime");
-			resultManagerMock.Expect("FinishIntegration");
 			targetMock.Expect("Activity", ProjectActivity.Sleeping);
 			resultMock.ExpectAndReturn("EndTime", time3);
 		}
@@ -144,7 +160,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 			resultMock.ExpectAndReturn("Status", IntegrationStatus.Success);
 			resultMock.ExpectAndReturn("Status", IntegrationStatus.Success);
 			sourceControlMock.Expect("LabelSourceControl", result);
-			targetMock.Expect("OnIntegrationCompleted", result);
+			targetMock.Expect("PublishResults", result);
 		}
 	}
 }

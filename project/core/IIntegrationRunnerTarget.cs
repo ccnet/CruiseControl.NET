@@ -8,7 +8,7 @@ namespace ThoughtWorks.CruiseControl.Core
 
 		bool PublishExceptions { get; }
 
-		void OnIntegrationCompleted(IIntegrationResult result);
+		void PublishResults(IIntegrationResult result);
 
 		// Would like to have this somewhere else really
 		ProjectActivity Activity { set; }

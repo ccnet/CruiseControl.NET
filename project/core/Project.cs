@@ -14,20 +14,18 @@ using ThoughtWorks.CruiseControl.Remote;
 namespace ThoughtWorks.CruiseControl.Core
 {
 	/// <summary>
-	/// Information about a project and how to integrate it.  As multiple projects
-	/// per CruiseControl.NET server are supported, all project-specific information
-	/// must be captured here.
+	/// A project manages the workflow for 
+	/// A project is the combination of source control providers,
+	/// build tasks, publisher tasks, labellers, and state managers.
 	/// </summary>
 	/// <remarks>
-	/// A project is the combination of the source control location,
-	/// build command, publishers, and state elements.
 	/// <code>
 	/// <![CDATA[
 	/// <project name="foo">
-	///		<sourcecontrol type="cvs"></sourcecontrol>
-	///		<build type="nant"></build>
 	///		<state type="state"></state>
-	///		<publishers></publishers>
+	///		<sourcecontrol type="cvs" />
+	///		<tasks><nant /></tasks>
+	///		<publishers><xmllogger /></publishers>
 	/// </project>
 	/// ]]>
 	/// </code>
@@ -40,19 +38,17 @@ namespace ThoughtWorks.CruiseControl.Core
 		private ITask builder = new NullTask();
 		private ILabeller labeller = new DefaultLabeller();
 		private ITask[] tasks = new ITask[0];
-		private ITask[] publishers = new ITask[] { new XmlLogPublisher() };
+		private ITask[] publishers = new ITask[] {new XmlLogPublisher()};
 		private ProjectActivity currentActivity = ProjectActivity.Sleeping;
-		private IStateManager state;
+		private IStateManager state = new FileStateManager();
 		private IIntegrationResultManager integrationResultManager;
 		private bool publishExceptions = true;
 		private IIntegratable integratable;
-		private QuietPeriod quietPeriod;
+		private QuietPeriod quietPeriod = new QuietPeriod(new DateTimeProvider());
 
 		public Project()
 		{
-			state = new FileStateManager();
 			integrationResultManager = new IntegrationResultManager(this);
-			quietPeriod = new QuietPeriod(new DateTimeProvider());
 			integratable = new IntegrationRunner(integrationResultManager, this, quietPeriod);
 		}
 
@@ -97,10 +93,7 @@ namespace ThoughtWorks.CruiseControl.Core
 		public ITask[] Publishers
 		{
 			get { return publishers; }
-			set
-			{
-				publishers = value;
-			}
+			set { publishers = value; }
 		}
 
 		/// <summary>
@@ -175,7 +168,7 @@ namespace ThoughtWorks.CruiseControl.Core
 			}
 		}
 
-		public void OnIntegrationCompleted(IIntegrationResult result)
+		public void PublishResults(IIntegrationResult result)
 		{
 			foreach (ITask publisher in publishers)
 			{
