@@ -119,5 +119,10 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 			result.LastIntegrationStatus = IntegrationStatus.Failure;
 			return result;
 		}
+
+		public static IntegrationResult CreateInitial()
+		{
+			return IntegrationResult.CreateInitialIntegrationResult(DefaultProjectName, "");
+		}
 	}
 }

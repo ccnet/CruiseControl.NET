@@ -77,8 +77,8 @@ namespace ThoughtWorks.CruiseControl.Core
 			{
 				LabelSourceControl(result);
 				target.PublishResults(result);
+				resultManager.FinishIntegration();
 			}
-			resultManager.FinishIntegration();
 			Log.Info("Integration complete: " + result.EndTime);
 
 			target.Activity = ProjectActivity.Sleeping;

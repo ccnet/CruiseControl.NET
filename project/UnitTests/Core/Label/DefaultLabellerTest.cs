@@ -2,14 +2,13 @@ using Exortech.NetReflector;
 using NUnit.Framework;
 using ThoughtWorks.CruiseControl.Core;
 using ThoughtWorks.CruiseControl.Core.Label;
-using ThoughtWorks.CruiseControl.Remote;
 
 namespace ThoughtWorks.CruiseControl.UnitTests.Core.Label
 {
 	[TestFixture]
 	public class DefaultLabellerTest : CustomAssertion
 	{
-		DefaultLabeller labeller;
+		private DefaultLabeller labeller;
 
 		[SetUp]
 		public void SetUp()
@@ -102,7 +101,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Label
 
 		private IntegrationResult InitialIntegrationResult()
 		{
-			return IntegrationResultMother.Create(IntegrationStatus.Unknown);
+			return IntegrationResultMother.CreateInitial();
 		}
 
 		private IntegrationResult IntegrationResultFromSuccessfulBuild(string label)

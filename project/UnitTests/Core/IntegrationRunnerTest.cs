@@ -114,6 +114,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 			resultMock.ExpectAndReturn("Status", IntegrationStatus.Success);
 			sourceControlMock.ExpectAndThrow("LabelSourceControl", new Exception(), result);
 			targetMock.Expect("PublishResults", result);
+			resultManagerMock.Expect("FinishIntegration");
 
 			IIntegrationResult returnedResult = runner.RunIntegration(BuildCondition.IfModificationExists);
 
@@ -130,7 +131,6 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 		{
 			targetMock.Expect("Activity", ProjectActivity.CheckingModifications);
 			resultManagerMock.ExpectAndReturn("StartNewIntegration", result, BuildCondition.IfModificationExists);
-			resultManagerMock.Expect("FinishIntegration");
 			resultMock.Expect("MarkStartTime");
 			resultManagerMock.ExpectAndReturn("LastIntegrationResult", lastResult);
 			sourceControlMock = new DynamicMock(sourceControlType);
@@ -161,6 +161,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 			resultMock.ExpectAndReturn("Status", IntegrationStatus.Success);
 			sourceControlMock.Expect("LabelSourceControl", result);
 			targetMock.Expect("PublishResults", result);
+			resultManagerMock.Expect("FinishIntegration");
 		}
 	}
 }

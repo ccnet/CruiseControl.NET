@@ -23,6 +23,7 @@ namespace ThoughtWorks.CruiseControl.Core
 		private Exception exception;
 		private ArrayList taskResults = new ArrayList();
 		private IDictionary properties = new SortedList();
+		private bool initial = false;
 
 		// Default constructor required for serialization
 		public IntegrationResult()
@@ -158,12 +159,9 @@ namespace ThoughtWorks.CruiseControl.Core
 			}
 		}
 
-		/// <summary>
-		/// Identifies if this is the first integration ever performed for this project (ie. there are no previous integrations).
-		/// </summary>
 		public bool IsInitial()
 		{
-			return (LastIntegrationStatus == IntegrationStatus.Unknown) && (Status == IntegrationStatus.Unknown);
+			return initial;
 		}
 
 		/// <summary>
@@ -188,14 +186,6 @@ namespace ThoughtWorks.CruiseControl.Core
 		public bool Fixed
 		{
 			get { return Succeeded && LastIntegrationStatus == IntegrationStatus.Failure; }
-		}
-
-		/// <summary>
-		/// Gets a value indicating whether this integration is either successful or in an unknown state.
-		/// </summary>
-		public bool Working
-		{
-			get { return Status == IntegrationStatus.Unknown || Succeeded; }
 		}
 
 		/// <summary>
@@ -274,6 +264,7 @@ namespace ThoughtWorks.CruiseControl.Core
 		public static IntegrationResult CreateInitialIntegrationResult(string project, string workingDirectory)
 		{
 			IntegrationResult result = new IntegrationResult(project, workingDirectory);
+			result.initial = true;
 			result.StartTime = DateTime.Now.AddDays(-1);
 			result.EndTime = DateTime.Now;
 			return result;

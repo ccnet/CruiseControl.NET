@@ -29,7 +29,6 @@ namespace ThoughtWorks.CruiseControl.Core
 		void AddTaskResult(ITaskResult result);
 		bool IsInitial();
 		bool HasModifications();
-		bool Working { get; }
 		bool Failed { get; }
 		bool Fixed { get; }
 		bool Succeeded { get; }
