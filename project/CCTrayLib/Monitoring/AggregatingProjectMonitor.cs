@@ -8,7 +8,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
 	{
 		private readonly IProjectMonitor[] monitors;
 
-		public AggregatingProjectMonitor( params IProjectMonitor[] monitors )
+		public AggregatingProjectMonitor(params IProjectMonitor[] monitors)
 		{
 			this.monitors = monitors;
 
@@ -28,6 +28,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
 				throw new InvalidOperationException();
 			}
 		}
+
 		public ProjectStatus ProjectStatus
 		{
 			get { throw new InvalidOperationException(); }
@@ -42,6 +43,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
 		{
 			get { throw new NotImplementedException(); }
 		}
+
 		public string SummaryStatusString
 		{
 			get
@@ -65,12 +67,13 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
 
 				if (result.Length == 0)
 					return "All builds are good";
-				
+
 				return result.ToString();
 			}
 		}
 
 		public event MonitorBuildOccurredEventHandler BuildOccurred;
+
 		private void Monitor_BuildOccurred(object sender, MonitorBuildOccurredEventArgs e)
 		{
 			if (BuildOccurred != null)
@@ -79,8 +82,8 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
 			}
 		}
 
-
 		public event MonitorPolledEventHandler Polled;
+
 		private void Monitor_Polled(object sender, MonitorPolledEventArgs args)
 		{
 			if (Polled != null)
@@ -112,7 +115,5 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
 				return worstState;
 			}
 		}
-
-
 	}
 }

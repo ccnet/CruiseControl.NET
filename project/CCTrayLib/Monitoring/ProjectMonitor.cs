@@ -6,11 +6,11 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
 {
 	public class ProjectMonitor : IProjectMonitor
 	{
-		ICruiseProjectManager cruiseProjectManager;
-		ProjectStatus lastProjectStatus;
-		Exception connectException;
+		private ICruiseProjectManager cruiseProjectManager;
+		private ProjectStatus lastProjectStatus;
+		private Exception connectException;
 
-		public ProjectMonitor( ICruiseProjectManager cruiseProjectManager )
+		public ProjectMonitor(ICruiseProjectManager cruiseProjectManager)
 		{
 			this.cruiseProjectManager = cruiseProjectManager;
 		}
@@ -37,10 +37,10 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
 				// nb: deliberately copy project status variable for thread safety
 				ProjectStatus status = ProjectStatus;
 
-				if (status  == null)
+				if (status == null)
 					return ProjectState.NotConnected;
 
-				if (status.Activity == ProjectActivity.Building)
+				if (status.Activity == ProjectActivity.Building || status.Activity == ProjectActivity.CheckingModifications)
 					return ProjectState.Building;
 
 				if (status.BuildStatus == IntegrationStatus.Success)
@@ -60,16 +60,14 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
 			try
 			{
 				ProjectStatus newProjectStatus = cruiseProjectManager.ProjectStatus;
-
 				if (lastProjectStatus != null && newProjectStatus != null)
 				{
 					if (lastProjectStatus.LastBuildDate != newProjectStatus.LastBuildDate)
 					{
 						BuildTransition transition = CalculateBuildTransition(lastProjectStatus, newProjectStatus);
-						OnBuildOccurred(new MonitorBuildOccurredEventArgs(this,transition));
+						OnBuildOccurred(new MonitorBuildOccurredEventArgs(this, transition));
 					}
 				}
-
 				lastProjectStatus = newProjectStatus;
 			}
 			catch (Exception ex)
@@ -85,7 +83,6 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
 		public event MonitorBuildOccurredEventHandler BuildOccurred;
 		public event MonitorPolledEventHandler Polled;
 
-
 		protected void OnBuildOccurred(MonitorBuildOccurredEventArgs args)
 		{
 			if (BuildOccurred != null)
@@ -95,7 +92,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
 		protected void OnPolled(MonitorPolledEventArgs args)
 		{
 			if (Polled != null)
-				Polled(this, args); 
+				Polled(this, args);
 		}
 
 		private BuildTransition CalculateBuildTransition(ProjectStatus oldStatus, ProjectStatus newStatus)
@@ -112,7 +109,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
 			else if (!wasOk && isOk)
 				return BuildTransition.Fixed;
 
-			throw new Exception ("The universe has gone crazy.");
+			throw new Exception("The universe has gone crazy.");
 		}
 
 		public string SummaryStatusString
@@ -120,10 +117,10 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
 			get
 			{
 				ProjectState state = ProjectState;
-				
+
 				if (state == ProjectState.Success)
 					return String.Empty;
-				
+
 				return ProjectName + ": " + state;
 			}
 		}

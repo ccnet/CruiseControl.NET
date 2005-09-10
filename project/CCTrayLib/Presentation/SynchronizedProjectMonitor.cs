@@ -43,6 +43,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 		{
 			get { return projectMonitor.ConnectException; }
 		}
+
 		public string SummaryStatusString
 		{
 			get { return projectMonitor.SummaryStatusString; }
@@ -58,7 +59,6 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 			projectMonitor.Poll();
 		}
 
-
 		public event MonitorBuildOccurredEventHandler BuildOccurred;
 		public event MonitorPolledEventHandler Polled;
 
@@ -66,7 +66,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 		{
 			if (Polled != null)
 			{
-				synchronizeInvoke.BeginInvoke(Polled, new object[] {sender, args} );
+				synchronizeInvoke.BeginInvoke(Polled, new object[] {sender, args});
 			}
 		}
 
@@ -74,7 +74,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 		{
 			if (BuildOccurred != null)
 			{
-				synchronizeInvoke.BeginInvoke(BuildOccurred, new object[] {sender, args } );
+				synchronizeInvoke.BeginInvoke(BuildOccurred, new object[] {sender, args});
 			}
 		}
 	}

@@ -1,5 +1,4 @@
 using System;
-using ThoughtWorks.CruiseControl.Core;
 using ThoughtWorks.CruiseControl.Remote;
 
 namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
@@ -27,14 +26,12 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
 		{
 			get
 			{
-				Remote.ProjectStatus[] statuses = manager.GetProjectStatus();
-
+				ProjectStatus[] statuses = manager.GetProjectStatus();
 				foreach (ProjectStatus status in statuses)
 				{
 					if (status.Name == ProjectName)
 						return status;
 				}
-
 				throw new ApplicationException("Project '" + projectName + "' not found on server");
 			}
 		}

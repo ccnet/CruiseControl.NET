@@ -1,4 +1,3 @@
-using System;
 using ThoughtWorks.CruiseControl.CCTrayLib.Monitoring;
 using ThoughtWorks.CruiseControl.Remote;
 
@@ -6,9 +5,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 {
 	public class DetailStringProvider : IDetailStringProvider
 	{
-
-
-		public string FormatDetailString( IProjectMonitor monitor )
+		public string FormatDetailString(IProjectMonitor monitor)
 		{
 			if (monitor.ProjectState == ProjectState.NotConnected)
 			{

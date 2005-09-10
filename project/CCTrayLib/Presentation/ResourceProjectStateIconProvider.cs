@@ -1,18 +1,16 @@
-using System;
 using System.Collections;
-using System.Drawing;
 using ThoughtWorks.CruiseControl.CCTrayLib.Monitoring;
 
 namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 {
 	public class ResourceProjectStateIconProvider : IProjectStateIconProvider
 	{
-		public static readonly StatusIcon YELLOW = new StatusIcon ("ThoughtWorks.CruiseControl.CCTrayLib.Yellow.ico");
-		public static readonly StatusIcon GRAY = new StatusIcon ("ThoughtWorks.CruiseControl.CCTrayLib.Gray.ico");
-		public static readonly StatusIcon GREEN = new StatusIcon ("ThoughtWorks.CruiseControl.CCTrayLib.Green.ico");
-		public static readonly StatusIcon RED = new StatusIcon ("ThoughtWorks.CruiseControl.CCTrayLib.Red.ico");
+		public static readonly StatusIcon YELLOW = new StatusIcon("ThoughtWorks.CruiseControl.CCTrayLib.Yellow.ico");
+		public static readonly StatusIcon GRAY = new StatusIcon("ThoughtWorks.CruiseControl.CCTrayLib.Gray.ico");
+		public static readonly StatusIcon GREEN = new StatusIcon("ThoughtWorks.CruiseControl.CCTrayLib.Green.ico");
+		public static readonly StatusIcon RED = new StatusIcon("ThoughtWorks.CruiseControl.CCTrayLib.Red.ico");
 
-		static readonly Hashtable map = new Hashtable();
+		private static readonly Hashtable map = new Hashtable();
 
 		static ResourceProjectStateIconProvider()
 		{
@@ -26,6 +24,5 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 		{
 			return (StatusIcon) map[state];
 		}
-
 	}
 }

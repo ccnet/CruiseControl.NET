@@ -1,8 +1,6 @@
 using System;
 using System.Collections;
 using System.ComponentModel;
-using System.Drawing;
-using System.Resources;
 using System.Windows.Forms;
 using ThoughtWorks.CruiseControl.CCTrayLib.Configuration;
 using ThoughtWorks.CruiseControl.CCTrayLib.Monitoring;
@@ -69,7 +67,6 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 			ApplyDataBinding();
 		}
 
-
 		/// <summary>
 		/// Clean up any resources being used.
 		/// </summary>
@@ -94,7 +91,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 		private void InitializeComponent()
 		{
 			this.components = new System.ComponentModel.Container();
-			System.Resources.ResourceManager resources = new System.Resources.ResourceManager(typeof(MainForm));
+			System.Resources.ResourceManager resources = new System.Resources.ResourceManager(typeof (MainForm));
 			this.lvProjects = new System.Windows.Forms.ListView();
 			this.colProject = new System.Windows.Forms.ColumnHeader();
 			this.colActivity = new System.Windows.Forms.ColumnHeader();
@@ -128,12 +125,14 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 			// 
 			// lvProjects
 			// 
-			this.lvProjects.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
-																						 this.colProject,
-																						 this.colActivity,
-																						 this.colDetail,
-																						 this.colLastBuildLabel,
-																						 this.colLastBuildTime});
+			this.lvProjects.Columns.AddRange(new System.Windows.Forms.ColumnHeader[]
+				{
+					this.colProject,
+					this.colActivity,
+					this.colDetail,
+					this.colLastBuildLabel,
+					this.colLastBuildTime
+				});
 			this.lvProjects.ContextMenu = this.projectContextMenu;
 			this.lvProjects.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.lvProjects.LargeImageList = this.largeIconList;
@@ -175,9 +174,11 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 			// 
 			// projectContextMenu
 			// 
-			this.projectContextMenu.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
-																							   this.mnuForce,
-																							   this.mnuWebPage});
+			this.projectContextMenu.MenuItems.AddRange(new System.Windows.Forms.MenuItem[]
+				{
+					this.mnuForce,
+					this.mnuWebPage
+				});
 			// 
 			// mnuForce
 			// 
@@ -194,28 +195,32 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 			// largeIconList
 			// 
 			this.largeIconList.ImageSize = new System.Drawing.Size(32, 32);
-			this.largeIconList.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("largeIconList.ImageStream")));
+			this.largeIconList.ImageStream = ((System.Windows.Forms.ImageListStreamer) (resources.GetObject("largeIconList.ImageStream")));
 			this.largeIconList.TransparentColor = System.Drawing.Color.Transparent;
 			// 
 			// iconList
 			// 
 			this.iconList.ImageSize = new System.Drawing.Size(16, 16);
-			this.iconList.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("iconList.ImageStream")));
+			this.iconList.ImageStream = ((System.Windows.Forms.ImageListStreamer) (resources.GetObject("iconList.ImageStream")));
 			this.iconList.TransparentColor = System.Drawing.Color.Transparent;
 			// 
 			// mainMenu
 			// 
-			this.mainMenu.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
-																					 this.menuFile,
-																					 this.mnuView});
+			this.mainMenu.MenuItems.AddRange(new System.Windows.Forms.MenuItem[]
+				{
+					this.menuFile,
+					this.mnuView
+				});
 			// 
 			// menuFile
 			// 
 			this.menuFile.Index = 0;
-			this.menuFile.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
-																					 this.mnuFilePreferences,
-																					 this.menuItem3,
-																					 this.menuFileExit});
+			this.menuFile.MenuItems.AddRange(new System.Windows.Forms.MenuItem[]
+				{
+					this.mnuFilePreferences,
+					this.menuItem3,
+					this.menuFileExit
+				});
 			this.menuFile.Text = "&File";
 			// 
 			// mnuFilePreferences
@@ -238,10 +243,12 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 			// mnuView
 			// 
 			this.mnuView.Index = 1;
-			this.mnuView.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
-																					this.mnuViewIcons,
-																					this.mnuViewList,
-																					this.mnuViewDetails});
+			this.mnuView.MenuItems.AddRange(new System.Windows.Forms.MenuItem[]
+				{
+					this.mnuViewIcons,
+					this.mnuViewList,
+					this.mnuViewDetails
+				});
 			this.mnuView.Text = "&View";
 			this.mnuView.Popup += new System.EventHandler(this.mnuView_Popup);
 			// 
@@ -274,11 +281,13 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 			// 
 			// mnuTrayContextMenu
 			// 
-			this.mnuTrayContextMenu.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
-																							   this.mnuTraySettings,
-																							   this.mnuShow,
-																							   this.menuItem5,
-																							   this.mnuTrayExit});
+			this.mnuTrayContextMenu.MenuItems.AddRange(new System.Windows.Forms.MenuItem[]
+				{
+					this.mnuTraySettings,
+					this.mnuShow,
+					this.menuItem5,
+					this.mnuTrayExit
+				});
 			// 
 			// mnuTraySettings
 			// 
@@ -330,7 +339,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 			this.ClientSize = new System.Drawing.Size(892, 305);
 			this.Controls.Add(this.lvProjects);
 			this.Controls.Add(this.panel1);
-			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+			this.Icon = ((System.Drawing.Icon) (resources.GetObject("$this.Icon")));
 			this.MaximizeBox = false;
 			this.Menu = this.mainMenu;
 			this.MinimizeBox = false;
@@ -350,7 +359,6 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 			Application.Exit();
 		}
 
-
 		private void lvProjects_SelectedIndexChanged(object sender, EventArgs e)
 		{
 			if (lvProjects.SelectedItems.Count == 0)
@@ -358,7 +366,6 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 			else
 				controller.SelectedProject = (IProjectMonitor) lvProjects.SelectedItems[0].Tag;
 		}
-
 
 		private void mnuForce_Click(object sender, EventArgs e)
 		{
@@ -422,7 +429,6 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 					btnForceBuild.DataBindings.Clear();
 					CreateController();
 				}
-
 
 			}
 			finally
@@ -529,12 +535,10 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 			}
 
 			public ListViewItemComparer() : this(0, true)
-			{
-			}
+			{}
 
 			public ListViewItemComparer(int column) : this(column, true)
-			{
-			}
+			{}
 
 			public ListViewItemComparer(int column, bool ascending)
 			{

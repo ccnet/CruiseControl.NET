@@ -1,4 +1,3 @@
-using System;
 using System.IO;
 using System.Xml.Serialization;
 using ThoughtWorks.CruiseControl.CCTrayLib.Monitoring;
@@ -19,18 +18,15 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Configuration
 			ReadConfigurationFile();
 		}
 
-
 		public IProjectMonitor[] GetProjectStatusMonitors()
 		{
 			IProjectMonitor[] retVal = new IProjectMonitor[Projects.Length];
-
 			for (int i = 0; i < Projects.Length; i++)
 			{
 				Project project = Projects[i];
 				ICruiseProjectManager projectManager = managerFactory.Create(project.ServerUrl, project.ProjectName);
 				retVal[i] = new ProjectMonitor(projectManager);
 			}
-
 			return retVal;
 		}
 
@@ -96,10 +92,8 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Configuration
 
 		public TrayIconDoubleClickAction TrayIconDoubleClickAction
 		{
-			get { return persistentConfiguration.TrayIconDoubleClickAction ; }
-			set { persistentConfiguration.TrayIconDoubleClickAction  = value; }
+			get { return persistentConfiguration.TrayIconDoubleClickAction; }
+			set { persistentConfiguration.TrayIconDoubleClickAction = value; }
 		}
-
 	}
-
 }
