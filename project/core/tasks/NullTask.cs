@@ -7,7 +7,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 	{
 		public void Run(IIntegrationResult result)
 		{
-			return;
+			result.AddTaskResult(string.Empty);
 		}
 	}
 }
