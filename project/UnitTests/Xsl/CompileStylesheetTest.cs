@@ -49,6 +49,24 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Xsl
 			CustomAssertion.AssertContains("External Program Failed:", actualXml);
 		}
 
+		[Test]
+		public void ShouldRenderNAntInternalErrorElement()
+		{
+			string xml = string.Format(@"<cruisecontrol><build><buildresults><failure><internalerror>
+      <type>System.IO.FileNotFoundException</type>
+      <message><![CDATA[Could not load file or assembly 'nunit.core, Version=2.2.0.0, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77' or one of its dependencies. The system cannot find the file specified.]]></message>
+      <stacktrace><![CDATA[   at NAnt.NUnit2.Tasks.NUnit2Task.ExecuteTask()
+   at NAnt.Core.Task.Execute()
+   at NAnt.Core.Target.Execute()
+   at NAnt.Core.Project.Execute(String targetName, Boolean forceDependencies)
+   at NAnt.Core.Project.Execute()
+   at NAnt.Core.Project.Run()]]></stacktrace>
+    </internalerror></failure></buildresults></build></cruisecontrol>");
+
+			string actualXml = LoadStylesheetAndTransformInput(CreateInfoMessage(xml));
+			CustomAssertion.AssertContains("Could not load file or assembly 'nunit.core", actualXml);			
+		}
+
 		private string CreateInfoMessage(string input)
 		{
 			return string.Format(@"<cruisecontrol><buildresults>
