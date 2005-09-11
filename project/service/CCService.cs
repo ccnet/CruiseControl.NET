@@ -1,6 +1,7 @@
 using System;
 using System.Configuration;
 using System.IO;
+using System.Runtime.InteropServices;
 using System.ServiceProcess;
 using ThoughtWorks.CruiseControl.Core;
 using ThoughtWorks.CruiseControl.Core.Util;
@@ -23,7 +24,7 @@ namespace ThoughtWorks.CruiseControl.Service
 
 		private string ConfigFilename
 		{
-			get 
+			get
 			{
 				string configFilename = ConfigurationSettings.AppSettings["ccnet.config"];
 				return StringUtil.IsBlank(configFilename) ? DefaultConfigFilePath() : configFilename;
@@ -46,7 +47,7 @@ namespace ThoughtWorks.CruiseControl.Service
 
 		private string DefaultConfigFilePath()
 		{
-			return Path.Combine(DefaultDirectory, DefaultConfigFileName);			
+			return Path.Combine(DefaultDirectory, DefaultConfigFileName);
 		}
 
 		private void VerifyConfigFileExists()
@@ -55,9 +56,9 @@ namespace ThoughtWorks.CruiseControl.Service
 			if (!configFileInfo.Exists)
 			{
 				throw new Exception(string.Format("CruiseControl.NET configuration file {0} does not exist.", configFileInfo.FullName));
-			}			
+			}
 		}
-		
+
 		private void CreateAndStartCruiseServer()
 		{
 			server = new CruiseServerFactory().Create(UseRemoting(), ConfigFilename);
@@ -69,6 +70,7 @@ namespace ThoughtWorks.CruiseControl.Service
 			return (Remoting != null && Remoting.Trim().ToLower() == "on");
 		}
 
+		// Should this be stop or abort?
 		protected override void OnStop()
 		{
 			server.Abort();
@@ -92,7 +94,15 @@ namespace ThoughtWorks.CruiseControl.Service
 
 		private static void Main()
 		{
+			// Allocates a Win32 console if needed since Windows does not provide
+			// one to Services by default. Normally that's okay, but we will be
+			// launching console applications and they may fail unless the parent
+			// process supplies them with a console.
+			AllocConsole();
 			ServiceBase.Run(new ServiceBase[] {new CCService()});
 		}
+
+		[DllImport("kernel32.dll", SetLastError = true)]
+		private static extern bool AllocConsole();
 	}
 }
