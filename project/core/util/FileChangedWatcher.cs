@@ -15,6 +15,7 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 			watcher.Filter = Path.GetFileName(filename);
 			watcher.Path = new FileInfo(filename).DirectoryName;
 			watcher.Changed += new FileSystemEventHandler(HandleFileChanged);
+			watcher.Renamed += new RenamedEventHandler(HandleFileChanged);
 
 			timer = new Timer(500);
 			timer.AutoReset = false;
@@ -26,6 +27,11 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 		public event FileSystemEventHandler OnFileChanged;
 
 		private void HandleFileChanged(object sender, FileSystemEventArgs args)
+		{
+			timer.Start();
+		}
+
+		private void HandleFileChanged(object sender, RenamedEventArgs e)
 		{
 			timer.Start();
 		}
