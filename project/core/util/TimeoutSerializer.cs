@@ -7,16 +7,15 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 {
 	public class TimeoutSerializer : XmlMemberSerialiser
 	{
-		public TimeoutSerializer(ReflectorMember info, ReflectorPropertyAttribute attribute) :base(info, attribute)
-		{
-		}
+		public TimeoutSerializer(ReflectorMember info, ReflectorPropertyAttribute attribute) : base(info, attribute)
+		{}
 
 		public override void Write(XmlWriter writer, object target)
 		{
 			Timeout to = target as Timeout;
-			to.write(writer);			
+			to.Write(writer);
 		}
-		
+
 		public override object Read(XmlNode node, NetReflectorTypeTable types)
 		{
 			Timeout timeout = Timeout.DefaultTimeout;
@@ -27,7 +26,7 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 				{
 					timeout = new Timeout(Int32.Parse(a.Value));
 				}
-				catch (Exception e)
+				catch (Exception)
 				{
 					Log.Warning("Could not parse timeout string. Using default timeout.");
 				}
@@ -37,22 +36,20 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 				XmlElement e = (XmlElement) node;
 				try
 				{
-					TimeUnits units = TimeUnits.MILLIS;										
+					TimeUnits units = TimeUnits.MILLIS;
 					string unitsString = e.GetAttribute("units");
-					if (unitsString!=null && unitsString!="")
+					if (unitsString != null && unitsString != "")
 					{
-						units = TimeUnits.Parse(unitsString);					
+						units = TimeUnits.Parse(unitsString);
 					}
 					timeout = new Timeout(Int32.Parse(e.InnerText), units);
 				}
-				catch (Exception ex)
+				catch (Exception)
 				{
 					Log.Warning("Could not parse timeout string. Using default timeout.");
 				}
 			}
 			return timeout;
 		}
-
-
 	}
 }

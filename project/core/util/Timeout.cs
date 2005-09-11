@@ -4,20 +4,18 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 {
 	public class Timeout
 	{
-
-		public static Timeout DefaultTimeout= new Timeout(600000);
+		public static Timeout DefaultTimeout = new Timeout(600000);
 
 		private int timeout;
 		private TimeUnits unit = TimeUnits.MILLIS;
 
-		public Timeout(int periodInMillis) :  this(periodInMillis, TimeUnits.MILLIS)
-		{
-		}
+		public Timeout(int periodInMillis) : this(periodInMillis, TimeUnits.MILLIS)
+		{}
 
 		public Timeout(int period, TimeUnits unit)
 		{
 			this.timeout = period;
-			if (unit!=null) this.unit = unit;
+			if (unit != null) this.unit = unit;
 		}
 
 		public TimeUnits TimeUnits
@@ -32,24 +30,21 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 
 		public override bool Equals(object obj)
 		{
-			if (obj==this) return true;
-			
+			if (obj == this) return true;
 			Timeout other = obj as Timeout;
-			
-			if (obj==null) return false;
-			
+			if (obj == null) return false;
 			return this.Millis == other.Millis;
 		}
-		
+
 		public override int GetHashCode()
 		{
 			return Millis;
 		}
 
-		public void write(XmlWriter writer)
+		public void Write(XmlWriter writer)
 		{
 			writer.WriteStartElement("timeout");
-			if ( !unit.Equals(TimeUnits.MILLIS) )
+			if (!unit.Equals(TimeUnits.MILLIS))
 			{
 				writer.WriteAttributeString("units", unit.ToString());
 			}
@@ -57,12 +52,9 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 			writer.WriteEndElement();
 		}
 
-
 		public override string ToString()
 		{
 			return timeout + " " + unit.ToString();
 		}
 	}
-
-
 }
