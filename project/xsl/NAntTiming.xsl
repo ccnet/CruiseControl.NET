@@ -24,7 +24,7 @@
 		<div id="NAntTimingReport">
 			<h1>NAnt Build Timing Report</h1>
 
-			<xsl:variable name="buildresults" select="//buildresults" />
+			<xsl:variable name="buildresults" select="//build/buildresults" />
 			<xsl:choose>
 				<xsl:when test="count($buildresults) > 0">
 					<xsl:apply-templates select="$buildresults" />
@@ -55,7 +55,7 @@
 			<table width="70%">
 				<thead>
 					<tr>
-						<th>Target</th>
+						<th align="left">Target</th>
 						<th align="right">Duration (in seconds)</th>
 					</tr>
 				</thead>
@@ -96,12 +96,12 @@
 					</ul>
 				</div>
 			</td>
-			<td valign="top" align="right"><xsl:value-of select="round(duration div 1000)" /></td>
+			<td valign="top" align="right"><xsl:value-of select="format-number(duration div 1000,'##0.00')" /></td>
 		</tr>
 	</xsl:template>
 	
 	<xsl:template match="task">
-		<xsl:variable name="duration" select="round(duration div 1000)" />
-		<li><xsl:value-of select="@name" /> (<xsl:value-of select="$duration" /> - <xsl:value-of select="round(($duration * 100000) div ../duration)" /> %)</li>
+		<xsl:variable name="duration" select="format-number(duration div 1000,'##0.00')" />
+		<li><xsl:value-of select="@name" /> - <xsl:value-of select="$duration" /> seconds</li>
 	</xsl:template>
 </xsl:stylesheet>
