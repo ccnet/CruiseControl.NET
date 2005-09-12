@@ -41,6 +41,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 				<autoGetSource>True</autoGetSource>
 				<applyLabel>True</applyLabel>
 				<historyArgs></historyArgs>
+				<useWorkingDirectory>false</useWorkingDirectory>
 			</vault>";
 
 			vault = CreateVault(ST_XML_SSL);
@@ -52,6 +53,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 			Assert.AreEqual("$\\foo", vault.Folder);
 			Assert.AreEqual(true, vault.AutoGetSource);
 			Assert.AreEqual(true, vault.ApplyLabel);
+			Assert.AreEqual(false, vault.UseWorkingDirectory);
 			Assert.AreEqual(string.Empty, vault.HistoryArgs);
 		}
 
@@ -63,6 +65,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 			Assert.AreEqual("$", vault.Folder);
 			Assert.AreEqual(false, vault.AutoGetSource);
 			Assert.AreEqual(false, vault.ApplyLabel);
+			Assert.AreEqual(true, vault.UseWorkingDirectory);
 			Assert.AreEqual(Vault.DefaultHistoryArgs, vault.HistoryArgs);
 		}
 
@@ -97,10 +100,22 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 		}
 
 		[Test]
-		public void ShouldBuildGetSourceArgumentsCorrectly()
+		public void ShouldBuildGetSourceArgumentsCorrectlyUsingWorkingDirectory()
 		{
-			ExpectToExecuteArguments(@"get $ -destpath c:\source\ -merge overwrite -performdeletions removeworkingcopy -setfiletime checkin -makewritable");
+			ExpectToExecuteArguments(@"get $ -merge overwrite -performdeletions removeworkingcopy -setfiletime checkin -makewritable");
 			vault.AutoGetSource = true;
+			vault.UseWorkingDirectory = true;
+			vault.Folder = "$";
+			vault.GetSource(result);
+			VerifyAll();
+		}
+
+		[Test]
+		public void ShouldBuildGetSourceArgumentsCorrectlyNotUsingWorkingDirectory()
+		{
+			ExpectToExecuteArguments(@"get $ -destpath c:\source\ -setfiletime checkin -makewritable");
+			vault.AutoGetSource = true;
+			vault.UseWorkingDirectory = false;
 			vault.Folder = "$";
 			vault.GetSource(result);
 			VerifyAll();
@@ -109,7 +124,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 		[Test]
 		public void ShouldBuildGetSourceWithOptionalArgumentsIncluded()
 		{
-			ExpectToExecuteArguments(@"get $ -destpath c:\source\ -merge overwrite -performdeletions removeworkingcopy -setfiletime checkin -makewritable" + CommonOptionalArguments());
+			ExpectToExecuteArguments(@"get $ -merge overwrite -performdeletions removeworkingcopy -setfiletime checkin -makewritable" + CommonOptionalArguments());
 			vault.AutoGetSource = true;
 			vault.Folder = "$";
 			SetHostUsernamePasswordRepositoryAndSsl();

@@ -5,7 +5,8 @@ using ThoughtWorks.CruiseControl.Core.Util;
 namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 {
 	[ReflectorType("vault")]
-	public class Vault : ProcessSourceControl
+	public class 
+		Vault : ProcessSourceControl
 	{
 		public const string DefaultExecutable = @"C:\Program Files\SourceGear\Vault Client\vault.exe";
 		public const string DefaultHistoryArgs = "-excludeactions label -rowlimit 0";
@@ -46,6 +47,9 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 		[ReflectorProperty("historyArgs", Required=false)]
 		public string HistoryArgs = DefaultHistoryArgs;
 
+		[ReflectorProperty("useWorkingDirectory", Required=false)]
+		public bool UseWorkingDirectory = true;
+
 		public override Modification[] GetModifications(IIntegrationResult from, IIntegrationResult to)
 		{
 			Log.Info(string.Format("Checking for modifications in Vault from {0} to {1}", from.StartTime, to.StartTime));
@@ -72,8 +76,15 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 		{
 			ProcessArgumentBuilder builder = new ProcessArgumentBuilder();
 			builder.AddArgument("get", Folder);
-			builder.AddArgument("-destpath", result.WorkingDirectory);
-			builder.AppendArgument("-merge overwrite -performdeletions removeworkingcopy -setfiletime checkin -makewritable");
+			if (UseWorkingDirectory)
+			{
+				builder.AppendArgument("-merge overwrite -performdeletions removeworkingcopy");				
+			}
+			else
+			{
+				builder.AddArgument("-destpath", result.WorkingDirectory);
+			}
+			builder.AppendArgument("-setfiletime checkin -makewritable");				
 			AddCommonOptionalArguments(builder);
 			return ProcessInfoFor(builder.ToString(), result);
 		}
