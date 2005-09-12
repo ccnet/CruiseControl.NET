@@ -1,4 +1,5 @@
 using System;
+using System.Configuration;
 using System.IO;
 using System.Reflection;
 using System.Xml;
@@ -14,7 +15,9 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Configuration
 	{
 		private readonly ObjectGiverNetReflectorInstantiator instantiator;
 		private readonly IPathMapper pathMapper;
-
+		private static readonly string DashboardConfigAppSettingKey = "DashboardConfigLocation";
+		private static readonly string DefaultDashboardConfigLocation = "dashboard.config";
+		
 		public DashboardConfigurationLoader(ObjectGiverNetReflectorInstantiator instantiator, IPathMapper pathMapper)
 		{
 			this.instantiator = instantiator;
@@ -43,7 +46,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Configuration
 		private object Load(string xpath)
 		{
 			string dashboardConfig = "";
-			using (StreamReader sr = new StreamReader(Path.Combine(pathMapper.PhysicalApplicationPath, "dashboard.config")))
+			using (StreamReader sr = new StreamReader(CalculateDashboardConfigPath()))
 			{
 				dashboardConfig = sr.ReadToEnd();
 			}
@@ -57,22 +60,36 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Configuration
 			return NetReflector.Read(node, typeTable);
 		}
 
-		public IRemoteServicesConfiguration RemoteServices
+		private string CalculateDashboardConfigPath()
 		{
-			get
+			string path = ConfigurationSettings.AppSettings[DashboardConfigAppSettingKey];
+			if (path == null || path == string.Empty)
 			{
-				LoadRemoteServicesConfiguration();
-				return remoteServicesConfiguration;
+				path = DefaultDashboardConfigLocation;
 			}
+			if (! Path.IsPathRooted(path))
+			{
+				path = Path.Combine(pathMapper.PhysicalApplicationPath, path);
+			}
+			return path;
 		}
 
-		public IPluginConfiguration PluginConfiguration
-		{
-			get
+			public IRemoteServicesConfiguration RemoteServices
 			{
-				LoadPluginsConfiguration();
-				return pluginsConfiguration;
+				get
+				{
+					LoadRemoteServicesConfiguration();
+					return remoteServicesConfiguration;
+				}
+			}
+
+		public IPluginConfiguration PluginConfiguration
+			{
+				get
+				{
+					LoadPluginsConfiguration();
+					return pluginsConfiguration;
+				}
 			}
 		}
 	}
-}
