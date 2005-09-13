@@ -51,7 +51,7 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
 
 		private void WriteOutput(string output)
 		{
-			writer.WriteNode(StringUtil.RemoveNulls(output));
+			writer.WriteNode(output);
 		}
 
 		private void WriteException(IIntegrationResult result)

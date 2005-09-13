@@ -1,5 +1,6 @@
 using System;
 using System.IO;
+using System.Text;
 using System.Xml;
 using NUnit.Framework;
 using ThoughtWorks.CruiseControl.Core.Tasks;
@@ -109,6 +110,19 @@ type=""log4net.Config.Log4NetConfigurationSectionHandler,log4net"" />";
 			writer.WriteNode(xml);
 			Assert.AreEqual(@"<a>
 </a>", baseWriter.ToString());
+		}
+
+		[Test]
+		public void ShouldStripIllegalCharacters()
+		{
+			StringBuilder builder = new StringBuilder();
+			for (int i = 0; i < 15; i++)
+			{
+				builder.Append((char)i, 1);				
+			}
+
+			writer.WriteNode("<foo>" + builder.ToString() + "</foo>");
+			Assert.AreEqual("<foo>\t\n\r</foo>", baseWriter.ToString());
 		}
 	}
 }

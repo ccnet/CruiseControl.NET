@@ -1,4 +1,5 @@
 using System.IO;
+using System.Text.RegularExpressions;
 using System.Xml;
 
 namespace ThoughtWorks.CruiseControl.Core.Util
@@ -15,7 +16,7 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 
 		public void WriteNode(string xml)
 		{
-			XmlReader reader = CreateXmlReader(xml);
+			XmlReader reader = CreateXmlReader(StripIllegalCharacters(xml));
 			try
 			{
 				WriteNode(reader, true);
@@ -68,6 +69,18 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 		public override void WriteCData(string text)
 		{
 			base.WriteCData(XmlUtil.EncodeCDATA(text));
+		}
+
+		/// <summary>
+		/// Character values in the range 0x-0x1F (excluding white space characters 0x9, 0x10, and 0x13) are illegal in xml documents.
+		/// This method removes all occurrences of these characters from the document.
+		/// </summary>
+		/// <param name="xml">The xml string to preprocess.</param>
+		/// <returns></returns>
+		private string StripIllegalCharacters(string xml)
+		{
+			Regex IllegalCharRegex = new Regex(@"[\x00\x01\x02\x03\x04\x05\x06\x07\x08\x0b\x0c\x0e\x0f]");	// 9, 10 and 13 are legal
+			return IllegalCharRegex.Replace(xml, string.Empty).TrimStart();
 		}
 	}
 }
