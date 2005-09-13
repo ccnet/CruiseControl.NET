@@ -5,8 +5,8 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Configuration
 {
 	public class Project
 	{
-		const int DefaultPort = 21234;
-		
+		private const int DefaultPort = 21234;
+
 		public Project()
 		{
 		}
@@ -17,12 +17,12 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Configuration
 			ProjectName = projectName;
 		}
 
-		[XmlAttribute( AttributeName="serverUrl" )]
+		[XmlAttribute(AttributeName="serverUrl")]
 		public string ServerUrl;
 
-		[XmlAttribute( AttributeName="projectName"  )]
+		[XmlAttribute(AttributeName="projectName")]
 		public string ProjectName;
-		
+
 		[XmlIgnore]
 		public string ServerDisplayName
 		{
@@ -31,7 +31,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Configuration
 				Uri serverUri = new Uri(ServerUrl);
 				if (serverUri.Port == DefaultPort)
 					return serverUri.Host;
-				
+
 				return serverUri.Host + ":" + serverUri.Port;
 			}
 		}
@@ -39,16 +39,17 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Configuration
 		public void SetServerUrlFromDisplayName(string displayName)
 		{
 			string[] displayNameParts = displayName.Split(':');
-			
+
 			if (displayNameParts.Length == 1)
 			{
-				ServerUrl = string.Format("tcp://{0}:{1}/CruiseManager.rem", displayNameParts[0], DefaultPort);				
+				ServerUrl = string.Format("tcp://{0}:{1}/CruiseManager.rem", displayNameParts[0], DefaultPort);
 			}
 			else if (displayNameParts.Length == 2)
 			{
 				try
 				{
-					ServerUrl = string.Format("tcp://{0}:{1}/CruiseManager.rem", displayNameParts[0], Convert.ToInt32(displayNameParts[1]));
+					ServerUrl =
+						string.Format("tcp://{0}:{1}/CruiseManager.rem", displayNameParts[0], Convert.ToInt32(displayNameParts[1]));
 				}
 				catch (FormatException)
 				{

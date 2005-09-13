@@ -281,13 +281,13 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "Presentation\AddEditProject.cs"
+                    RelPath = "Presentation\AddProjects.cs"
                     SubType = "Form"
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "Presentation\AddEditProject.resx"
-                    DependentUpon = "AddEditProject.cs"
+                    RelPath = "Presentation\AddProjects.resx"
+                    DependentUpon = "AddProjects.cs"
                     BuildAction = "EmbeddedResource"
                 />
                 <File
