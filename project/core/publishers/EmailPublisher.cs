@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using Exortech.NetReflector;
+using ThoughtWorks.CruiseControl.Core.Util;
 using ThoughtWorks.CruiseControl.Remote;
 
 namespace ThoughtWorks.CruiseControl.Core.Publishers
@@ -17,9 +18,17 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
         private string fromAddress;
         private Hashtable users = new Hashtable();
         private Hashtable groups = new Hashtable();
-        private IMessageBuilder messageBuilder = new HtmlLinkMessageBuilder(false);
+        private IMessageBuilder messageBuilder;
 
-        public EmailGateway EmailGateway
+    	public EmailPublisher() : this(new HtmlLinkMessageBuilder(false))
+    	{}
+
+    	public EmailPublisher(IMessageBuilder messageBuilder)
+    	{
+    		this.messageBuilder = messageBuilder;
+    	}
+
+    	public EmailGateway EmailGateway
         {
             get { return emailGateway; }
             set { emailGateway = value; }
@@ -126,7 +135,16 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
         {
             // TODO Add culprit to message text -- especially if modifier is not an email user
             //      This information is included, when using Html email (all mods are shown)
-            return messageBuilder.BuildMessage(result);
+        	try
+        	{
+        		return messageBuilder.BuildMessage(result);
+        	}
+        	catch (Exception e)
+        	{
+        		string message = "Unable to build email message: " + e;
+        		Log.Error(message);
+				return message;
+        	}
         }
     }
 }

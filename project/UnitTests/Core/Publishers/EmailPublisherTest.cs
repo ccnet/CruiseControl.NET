@@ -1,6 +1,8 @@
 using System;
 using System.Collections;
 using System.Web.Mail;
+using NMock;
+using NMock.Constraints;
 using NUnit.Framework;
 using ThoughtWorks.CruiseControl.Core;
 using ThoughtWorks.CruiseControl.Core.Publishers;
@@ -9,7 +11,7 @@ using ThoughtWorks.CruiseControl.Remote;
 namespace ThoughtWorks.CruiseControl.UnitTests.Core.Publishers
 {
 	[TestFixture]
-	public class EmailPublisherTest
+	public class EmailPublisherTest : CustomAssertion
 	{
 		private EmailPublisher publisher;
 		private MockEmailGateway gateway;
@@ -126,6 +128,16 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Publishers
 			Assert.IsTrue(message.IndexOf("CruiseControl.NET Build Results for project Project#9") > 0);
 			Assert.IsTrue(message.IndexOf("Modifications since last build") > 0);
 			Assert.IsTrue(message.EndsWith("</html>"));
+		}
+
+		[Test]
+		public void IfThereIsAnExceptionBuildMessageShouldPublishExceptionMessage()
+		{
+			DynamicMock mock = new DynamicMock(typeof(IMessageBuilder));
+			mock.ExpectAndThrow("BuildMessage", new Exception("oops"), new IsAnything());
+			publisher = new EmailPublisher((IMessageBuilder) mock.MockInstance);
+			string message = publisher.CreateMessage(new IntegrationResult());
+			AssertContains("oops", message);
 		}
 
 		[Test]
