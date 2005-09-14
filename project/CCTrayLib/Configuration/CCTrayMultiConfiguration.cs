@@ -1,3 +1,4 @@
+using System;
 using System.IO;
 using System.Xml.Serialization;
 using ThoughtWorks.CruiseControl.CCTrayLib.Monitoring;
@@ -99,6 +100,11 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Configuration
 		public BalloonMessages BalloonMessages
 		{
 			get { return persistentConfiguration.BuildTransitionNotification.BalloonMessages; }
+		}
+
+		public Icons Icons
+		{
+			get { return persistentConfiguration.Icons; }
 		}
 
 	}

@@ -9,6 +9,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Configuration
 		public int PollPeriodSeconds = 5;
 		public BuildTransitionNotification BuildTransitionNotification = new BuildTransitionNotification();
 		public TrayIconDoubleClickAction TrayIconDoubleClickAction = TrayIconDoubleClickAction.ShowStatusWindow;
+		public Icons Icons = new Icons();
 	}
 
 }

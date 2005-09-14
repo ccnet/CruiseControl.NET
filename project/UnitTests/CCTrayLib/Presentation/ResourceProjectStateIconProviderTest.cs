@@ -17,4 +17,5 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Presentation
 			Assert.AreEqual(ResourceProjectStateIconProvider.GREEN, stateIconProvider.GetStatusIconForState(ProjectState.Success));
 		}
 	}
+
 }

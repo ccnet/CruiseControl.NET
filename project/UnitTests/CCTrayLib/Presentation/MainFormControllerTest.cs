@@ -28,6 +28,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Presentation
 			configuration = (ICCTrayMultiConfiguration) mockConfiguration.MockInstance;
 
 			mockConfiguration.SetupResult("GetProjectStatusMonitors", new IProjectMonitor[0]);
+			mockConfiguration.SetupResult("Icons", new Icons());
 		}
 
 		[Test]

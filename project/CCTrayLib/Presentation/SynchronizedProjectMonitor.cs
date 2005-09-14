@@ -12,7 +12,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 	/// </summary>
 	public class SynchronizedProjectMonitor : IProjectMonitor
 	{
-		private IProjectMonitor projectMonitor;
+		private readonly IProjectMonitor projectMonitor;
 		private readonly ISynchronizeInvoke synchronizeInvoke;
 
 		public SynchronizedProjectMonitor(IProjectMonitor projectMonitor, ISynchronizeInvoke synchronizeInvoke)

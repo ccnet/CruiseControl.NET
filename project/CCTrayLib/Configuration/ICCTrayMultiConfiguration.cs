@@ -12,6 +12,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Configuration
 		AudioFiles Audio { get; }
 		TrayIconDoubleClickAction TrayIconDoubleClickAction { get; set; }
 		BalloonMessages BalloonMessages { get; }
+		Icons Icons { get; }
 
 		void Reload();
 		void Persist();

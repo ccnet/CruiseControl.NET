@@ -16,6 +16,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 		private IProjectMonitor aggregatedMonitor;
 		private IProjectMonitor[] monitors;
 		private ProjectStateIconAdaptor projectStateIconAdaptor;
+		private IProjectStateIconProvider iconProvider;
 
 		public MainFormController(ICCTrayMultiConfiguration configuration, ISynchronizeInvoke owner)
 		{
@@ -28,7 +29,8 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 			}
 
 			aggregatedMonitor = new AggregatingProjectMonitor(monitors);
-			projectStateIconAdaptor = new ProjectStateIconAdaptor(aggregatedMonitor, new ResourceProjectStateIconProvider());
+			iconProvider = new ConfigurableProjectStateIconProvider(configuration.Icons);
+			projectStateIconAdaptor = new ProjectStateIconAdaptor(aggregatedMonitor, iconProvider);
 			new BuildTransitionSoundPlayer(aggregatedMonitor, new AudioPlayer(), configuration.Audio);
 		}
 
@@ -126,6 +128,15 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 				string url = project.ProjectStatus.WebURL;
 				Process.Start(url);
 			}
+		}
+
+		public void PopulateImageList(ImageList imageList)
+		{
+			imageList.Images.Clear();
+			imageList.Images.Add(iconProvider.GetStatusIconForState(ProjectState.NotConnected).Icon);
+			imageList.Images.Add(iconProvider.GetStatusIconForState(ProjectState.Success).Icon);
+			imageList.Images.Add(iconProvider.GetStatusIconForState(ProjectState.Broken).Icon);
+			imageList.Images.Add(iconProvider.GetStatusIconForState(ProjectState.Building).Icon);
 		}
 	}
 
