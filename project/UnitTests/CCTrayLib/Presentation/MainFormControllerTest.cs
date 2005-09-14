@@ -1,6 +1,7 @@
 using System;
 using NMock;
 using NUnit.Framework;
+using ThoughtWorks.CruiseControl.CCTrayLib;
 using ThoughtWorks.CruiseControl.CCTrayLib.Configuration;
 using ThoughtWorks.CruiseControl.CCTrayLib.Monitoring;
 using ThoughtWorks.CruiseControl.CCTrayLib.Presentation;
@@ -71,9 +72,6 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Presentation
 			mockProjectMonitor.Verify();
 		}
 
-		[Test]
-		public void CanDisplayWebPageForSelectedProject()
-		{
-		}
 	}
+
 }

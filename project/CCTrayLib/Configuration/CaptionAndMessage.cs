@@ -1,14 +1,18 @@
-namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
+namespace ThoughtWorks.CruiseControl.CCTrayLib.Configuration
 {
 	public class CaptionAndMessage
 	{
+		public CaptionAndMessage()
+		{
+		}
+
 		public CaptionAndMessage(string caption, string message)
 		{
 			Caption = caption;
 			Message = message;
 		}
 
-		public readonly string Caption;
-		public readonly string Message;
+		public string Caption;
+		public string Message;
 	}
 }

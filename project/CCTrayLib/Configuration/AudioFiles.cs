@@ -7,4 +7,5 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Configuration
 		public string StillFailingBuildSound;
 		public string StillSuccessfulBuildSound;
 	}
+
 }

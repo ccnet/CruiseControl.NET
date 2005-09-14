@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Windows.Forms;
@@ -67,7 +68,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 		public void BindToTrayIcon(TrayIcon trayIcon)
 		{
 			trayIcon.IconProvider = ProjectStateIconAdaptor;
-			trayIcon.BalloonMessageProvider = new HardCodedBalloonMessageProvider();
+			trayIcon.BalloonMessageProvider = new ConfigurableBalloonMessageProvider(configuration.BalloonMessages);
 			trayIcon.BindToProjectMonitor(aggregatedMonitor, configuration.ShouldShowBalloonOnBuildTransition);
 		}
 
@@ -127,4 +128,5 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 			}
 		}
 	}
+
 }

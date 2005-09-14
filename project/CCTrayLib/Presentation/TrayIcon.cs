@@ -1,5 +1,6 @@
 using System;
 using System.Diagnostics;
+using ThoughtWorks.CruiseControl.CCTrayLib.Configuration;
 using ThoughtWorks.CruiseControl.CCTrayLib.Monitoring;
 
 namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation

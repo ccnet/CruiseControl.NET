@@ -263,6 +263,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "CCTrayLib\Presentation\ConfigurableBalloonMessageProviderTest.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "CCTrayLib\Presentation\DetailStringProviderTest.cs"
                     SubType = "Code"
                     BuildAction = "Compile"

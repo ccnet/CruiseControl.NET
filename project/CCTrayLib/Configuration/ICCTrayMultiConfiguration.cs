@@ -11,6 +11,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Configuration
 		int PollPeriodSeconds { get; set; }
 		AudioFiles Audio { get; }
 		TrayIconDoubleClickAction TrayIconDoubleClickAction { get; set; }
+		BalloonMessages BalloonMessages { get; }
 
 		void Reload();
 		void Persist();

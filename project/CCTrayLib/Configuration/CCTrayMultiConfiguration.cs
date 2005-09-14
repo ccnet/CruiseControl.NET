@@ -95,5 +95,11 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Configuration
 			get { return persistentConfiguration.TrayIconDoubleClickAction; }
 			set { persistentConfiguration.TrayIconDoubleClickAction = value; }
 		}
+
+		public BalloonMessages BalloonMessages
+		{
+			get { return persistentConfiguration.BuildTransitionNotification.BalloonMessages; }
+		}
+
 	}
 }
