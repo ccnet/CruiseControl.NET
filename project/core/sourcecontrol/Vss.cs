@@ -15,8 +15,8 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 		public const string SS_EXE = "ss.exe";
 
 		private const string HISTORY_COMMAND_FORMAT = @"history {0} -R -Vd{1}~{2} -Y{3},{4} -I-Y";
-		private const string GET_BY_DATE_COMMAND_FORMAT = @"get {0} -R -Vd{1} -Y{2},{3} -I-N -GTM";
-		private const string GET_BY_LABEL_COMMAND_FORMAT = @"get {0} -R -VL{1} -Y{2},{3} -I-N -GTM";
+		private const string GET_BY_DATE_COMMAND_FORMAT = @"get {0} -R -Vd{1} -Y{2},{3} -I-N -W -GF- -GTM";
+		private const string GET_BY_LABEL_COMMAND_FORMAT = @"get {0} -R -VL{1} -Y{2},{3} -I-N -W -GF- -GTM";
 		private const string LABEL_COMMAND_FORMAT = @"label {0} -L{1} -VL{2} -Y{3},{4} -I-Y";
 		private const string LABEL_COMMAND_FORMAT_NOTIMESTAMP = @"label {0} -L{1} -Y{2},{3} -I-Y";
 
@@ -184,7 +184,6 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 
 		private ProcessInfo NewProcessInfoWith(string args, IIntegrationResult result)
 		{
-			Log.Debug(string.Format("VSS: {0} {1}", Executable, args));
 			string workingDirectory = result.BaseFromWorkingDirectory(WorkingDirectory);
 			if (! Directory.Exists(workingDirectory)) Directory.CreateDirectory(workingDirectory);
 

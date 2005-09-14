@@ -138,7 +138,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 		[Test]
 		public void VerifyGetSourceProcessInfo()
 		{
-			ExpectToExecuteArguments(string.Format("get $/fooProject -R -Vd{0} -YAdmin,admin -I-N -GTM -GWR", CommandDate(today)));
+			ExpectToExecuteArguments(ForGetCommand());
 
 			vss.AutoGetSource = true;
 			vss.GetSource(IntegrationResultMother.CreateSuccessful(today));
@@ -147,7 +147,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 		[Test]
 		public void GetSourceShouldNotGetCleanCopy()
 		{
-			ExpectToExecuteArguments(string.Format("get $/fooProject -R -Vd{0} -YAdmin,admin -I-N -GTM", CommandDate(today)));
+			ExpectToExecuteArguments(string.Format("get $/fooProject -R -Vd{0} -YAdmin,admin -I-N -W -GF- -GTM", CommandDate(today)));
 
 			vss.AutoGetSource = true;
 			vss.CleanCopy = false;
@@ -181,8 +181,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 		public void RebaseRelativeWorkingDirectoryPathFromProjectWorkingDirectory()
 		{
 			string expectedWorkingDirectory = TempFileUtil.GetTempPath("VSS");
-			string args = string.Format("get $/fooProject -R -Vd{0} -YAdmin,admin -I-N -GTM -GWR", CommandDate(today));
-			ProcessInfo info = new ProcessInfo(DEFAULT_SS_EXE_PATH, args, expectedWorkingDirectory);
+			ProcessInfo info = new ProcessInfo(DEFAULT_SS_EXE_PATH, ForGetCommand(), expectedWorkingDirectory);
 			info.TimeOut = DefaultTimeout;
 			ExpectToExecute(info);
 			IntegrationResult result = IntegrationResultMother.CreateSuccessful(today);
@@ -260,6 +259,11 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 		private string CommandDate(DateTime date)
 		{
 			return new VssLocale().FormatCommandDate(date);
+		}
+
+		private string ForGetCommand()
+		{
+			return string.Format("get $/fooProject -R -Vd{0} -YAdmin,admin -I-N -W -GF- -GTM -GWR", CommandDate(today));
 		}
 	}
 }
