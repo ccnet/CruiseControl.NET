@@ -3,28 +3,21 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib
 	public class BuildTransition
 	{
 		public static readonly BuildTransition Broken = 
-			new BuildTransition("Broken build", ErrorLevel.Error, "Recent checkins have broken the build");
+			new BuildTransition("Broken build", ErrorLevel.Error);
 		public static readonly BuildTransition Fixed = 
-			new BuildTransition("Fixed build", ErrorLevel.Info, "Recent checkins have fixed the build");
+			new BuildTransition("Fixed build", ErrorLevel.Info);
 		public static readonly BuildTransition StillSuccessful = 
-			new BuildTransition("Build successful", ErrorLevel.Info, "Yet another successful build!");
+			new BuildTransition("Build successful", ErrorLevel.Info);
 		public static readonly BuildTransition StillFailing = 
-			new BuildTransition("Build still failing", ErrorLevel.Warning, "The build is still broken...");
+			new BuildTransition("Build still failing", ErrorLevel.Warning);
 
 		private readonly string caption;
 		private readonly ErrorLevel errorLevel;
-		private readonly string message;
 
-		private BuildTransition(string caption, ErrorLevel level, string message)
+		private BuildTransition(string caption, ErrorLevel errorLevel)
 		{
-			errorLevel = level;
-			this.message = message;
 			this.caption = caption;
-		}
-
-		public string Caption
-		{
-			get { return caption; }
+			this.errorLevel = errorLevel;
 		}
 
 		public ErrorLevel ErrorLevel
@@ -32,14 +25,9 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib
 			get { return errorLevel; }
 		}
 
-		public string Message
-		{
-			get { return message; }
-		}
-
 		public override string ToString()
 		{
-			return Caption;
+			return caption;
 		}
 
 	}

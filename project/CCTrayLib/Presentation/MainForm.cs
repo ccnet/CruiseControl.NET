@@ -59,12 +59,12 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 			controller = new MainFormController(configuration, this);
 
 			DataBindings.Add("Icon", controller.ProjectStateIconAdaptor, "Icon");
-			trayIcon.BindToIconProvider(controller.ProjectStateIconAdaptor);
 
-			controller.PotentiallyHookUpBuildOccurredEvents(trayIcon);
+			controller.BindToTrayIcon(trayIcon);
 			controller.BindToListView(lvProjects);
 
-			ApplyDataBinding();
+			controller.IsProjectSelectedChanged += new EventHandler(Controller_IsProjectSelectedChanged);
+			btnForceBuild.DataBindings.Add("Enabled", controller, "IsProjectSelected");
 		}
 
 		/// <summary>
@@ -400,12 +400,6 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 		private void mnuViewDetails_Click(object sender, EventArgs e)
 		{
 			lvProjects.View = View.Details;
-		}
-
-		private void ApplyDataBinding()
-		{
-			controller.IsProjectSelectedChanged += new EventHandler(Controller_IsProjectSelectedChanged);
-			btnForceBuild.DataBindings.Add("Enabled", controller, "IsProjectSelected");
 		}
 
 		private void Controller_IsProjectSelectedChanged(object sender, EventArgs e)

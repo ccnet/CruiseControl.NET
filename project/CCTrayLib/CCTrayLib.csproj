@@ -196,6 +196,16 @@
                     BuildAction = "EmbeddedResource"
                 />
                 <File
+                    RelPath = "Configuration\AudioFiles.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Configuration\BuildTransitionNotification.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Configuration\CCTrayMultiConfiguration.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -301,6 +311,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Presentation\CaptionAndMessage.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Presentation\CCTrayMultiSettingsForm.cs"
                     SubType = "Form"
                     BuildAction = "Compile"
@@ -316,7 +331,17 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Presentation\HardCodedBalloonMessageProvider.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Presentation\IAudioPlayer.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Presentation\IBalloonMessageProvider.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -399,6 +424,11 @@
                     RelPath = "Presentation\TrayIcon.cs"
                     SubType = "Component"
                     BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Presentation\TrayIcon.resx"
+                    DependentUpon = "TrayIcon.cs"
+                    BuildAction = "EmbeddedResource"
                 />
                 <File
                     RelPath = "ServerConnection\ICruiseManagerFactory.cs"

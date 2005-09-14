@@ -64,9 +64,11 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 			}
 		}
 
-		public void PotentiallyHookUpBuildOccurredEvents(TrayIcon trayIcon)
+		public void BindToTrayIcon(TrayIcon trayIcon)
 		{
-			trayIcon.ListenToBuildOccurredEvents(aggregatedMonitor, configuration.ShouldShowBalloonOnBuildTransition);
+			trayIcon.IconProvider = ProjectStateIconAdaptor;
+			trayIcon.BalloonMessageProvider = new HardCodedBalloonMessageProvider();
+			trayIcon.BindToProjectMonitor(aggregatedMonitor, configuration.ShouldShowBalloonOnBuildTransition);
 		}
 
 

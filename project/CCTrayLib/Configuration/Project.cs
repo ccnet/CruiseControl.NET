@@ -17,11 +17,9 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Configuration
 			ProjectName = projectName;
 		}
 
-		[XmlAttribute(AttributeName="serverUrl")]
-		public string ServerUrl;
+		[XmlAttribute(AttributeName="serverUrl")] public string ServerUrl;
 
-		[XmlAttribute(AttributeName="projectName")]
-		public string ProjectName;
+		[XmlAttribute(AttributeName="projectName")] public string ProjectName;
 
 		[XmlIgnore]
 		public string ServerDisplayName

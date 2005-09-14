@@ -17,7 +17,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Presentation
 			Assert.IsNull( trayIcon.Icon );
 
 			icon = ResourceProjectStateIconProvider.GRAY.Icon;
-			trayIcon.BindToIconProvider( this );
+			trayIcon.IconProvider = this;
 
 			Assert.AreSame( icon, trayIcon.Icon );
 		}
@@ -32,7 +32,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Presentation
 			TrayIcon trayIcon = new TrayIcon();
 
 			icon = ResourceProjectStateIconProvider.GRAY.Icon;
-			trayIcon.BindToIconProvider( this );
+			trayIcon.IconProvider = this;
 
 			Assert.AreSame( icon, trayIcon.Icon );
 
