@@ -17,7 +17,14 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib
 		public StatusIcon(String resourceName)
 		{
 			Stream stream = Assembly.GetExecutingAssembly().GetManifestResourceStream(resourceName);
-			icon = Icon.FromHandle(((Bitmap) Image.FromStream(stream)).GetHicon());
+			icon = LoadIconFromStreamPreservingColourDepth(stream);
+		}
+
+		private static Icon LoadIconFromStreamPreservingColourDepth(Stream stream)
+		{
+			// If you just do new Icon(Stream) it downgrades any 24-bit icons to 8bit colour.  
+			// This magic incantation preserves the colur depth of 24bpp icons.
+			return Icon.FromHandle(((Bitmap) Image.FromStream(stream)).GetHicon());
 		}
 
 		public StatusIcon(Icon i)
@@ -29,9 +36,9 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib
 		{
 			try
 			{
-				using (FileStream iconFile = File.Open(file, FileMode.Open))
+				using (FileStream stream = File.Open(file, FileMode.Open))
 				{
-					return new StatusIcon(new Icon(iconFile));
+					return new StatusIcon(LoadIconFromStreamPreservingColourDepth(stream));
 				}
 			}
 			catch (SystemException ex)

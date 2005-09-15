@@ -213,6 +213,10 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "CCTrayLib\TestIcon.ico"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
                     RelPath = "CCTrayLib\Configuration\CCTrayMultiConfigurationTest.cs"
                     SubType = "Code"
                     BuildAction = "Compile"

@@ -13,16 +13,16 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib
 			base.Init();
 		}
 
-	    [Test]
-	    public void ShouldLoadIconFromFileWhenFileExists()
-	    {
-	    	StatusIcon iconFile = StatusIcon.LoadFromFile(_file);
-	    	Size size = iconFile.Icon.Size;
-			Assert.AreEqual(_originalIcon.Size,size);
-	    }
+		[Test]
+		public void ShouldLoadIconFromFileWhenFileExists()
+		{
+			StatusIcon iconFile = StatusIcon.LoadFromFile(file);
+			Size size = iconFile.Icon.Size;
+			Assert.AreEqual(originalIcon.Size, size);
+		}
 
 		[Test]
-		[ExpectedException(typeof(IconNotFoundException))]
+		[ExpectedException(typeof (IconNotFoundException))]
 		public void ShouldThrowIconNotFoundExceptionIfFileDoesNotExist()
 		{
 			StatusIcon.LoadFromFile("./fileNotOnDisk.ico");

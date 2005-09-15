@@ -1,35 +1,31 @@
 using System.Drawing;
 using System.IO;
-using ThoughtWorks.CruiseControl.CCTrayLib;
 
 namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib
 {
-	/// <summary>
-	/// Summary description for IconFileFixture.
-	/// </summary>
 	public class IconFileFixture
 	{
-		protected Icon _originalIcon; 
-		protected string _file;
+		protected Icon originalIcon;
+		protected string file;
 
 		public virtual void Init()
 		{
-			_originalIcon = new StatusIcon("ThoughtWorks.CruiseControl.CCTrayLib.Yellow.ico").Icon;
-			_file = "./yellow.ico";
-			using (FileStream stream = File.Create(_file))
+			originalIcon = new Icon(GetType(), "TestIcon.ico");
+			file = "./yellow.ico";
+			using (FileStream stream = File.Create(file))
 			{
-				_originalIcon.Save(stream);    
+				originalIcon.Save(stream);
 			}
 		}
 
 		public virtual void DeleteFile()
 		{
-		    File.Delete(_file); 
+			File.Delete(file);
 		}
 
-	    public string FileName
-	    {
-	        get { return _file; }
-	    }
+		public string FileName
+		{
+			get { return file; }
+		}
 	}
 }
