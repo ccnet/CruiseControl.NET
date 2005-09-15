@@ -1,4 +1,5 @@
 using System;
+using ThoughtWorks.CruiseControl.Core.Util;
 
 namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 {
@@ -49,9 +50,9 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 			get { return buildStatusHtmlColor; }
 		}
 
-		public DateTime LastBuildDate
+		public string LastBuildDate
 		{
-			get { return lastBuildDate; }
+			get { return DateUtil.FormatDate(lastBuildDate); }
 		}
 
 		public string LastBuildLabel

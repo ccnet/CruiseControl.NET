@@ -3,6 +3,7 @@ using System.Drawing;
 using NMock;
 using NUnit.Framework;
 using ThoughtWorks.CruiseControl.Core.Reporting.Dashboard.Navigation;
+using ThoughtWorks.CruiseControl.Core.Util;
 using ThoughtWorks.CruiseControl.Remote;
 using ThoughtWorks.CruiseControl.WebDashboard.Dashboard;
 using ThoughtWorks.CruiseControl.WebDashboard.Plugins.ProjectReport;
@@ -189,7 +190,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 			ProjectGridRow[] rows = projectGrid.GenerateProjectGridRows(statusses, "myAction", ProjectGridSortColumn.Name, true);
 
 			// Verify
-			Assert.AreEqual(date, rows[0].LastBuildDate);
+			Assert.AreEqual(DateUtil.FormatDate(date), rows[0].LastBuildDate);
 			VerifyAll();
 		}
 
