@@ -47,7 +47,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 
 		private void Monitor_BuildOccurred(object sender, MonitorBuildOccurredEventArgs e)
 		{
-			string projectName = e.ProjectMonitor.ProjectName;
+			string projectName = e.ProjectMonitor.Detail.ProjectName;
 
 			CaptionAndMessage captionAndMessage = balloonMessageProvider.GetCaptionAndMessageForBuildTransition(e.BuildTransition);
 			string caption = string.Format("{0}: {1}",

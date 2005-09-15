@@ -11,18 +11,13 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
 	/// </summary>
 	public interface IProjectMonitor : IPollable
 	{
-		string ProjectName { get; }
-		ProjectStatus ProjectStatus { get; }
 		ProjectState ProjectState { get; }
-		Exception ConnectException { get; }
-
-		/// <summary>
-		///  Return a string that summarises the status of the project
-		/// </summary>
+		ISingleProjectDetail Detail { get; }
 		string SummaryStatusString { get; }
 
 		event MonitorBuildOccurredEventHandler BuildOccurred;
 		event MonitorPolledEventHandler Polled;
+
 		void ForceBuild();
 	}
 

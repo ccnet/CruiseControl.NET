@@ -16,87 +16,87 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Presentation
 		[SetUp]
 		public void SetUp()
 		{
-			mockProjectDetailStringFormatter = new DynamicMock( typeof (IDetailStringProvider) );
+			mockProjectDetailStringFormatter = new DynamicMock(typeof (IDetailStringProvider));
 			detailStringFormatter = (IDetailStringProvider) mockProjectDetailStringFormatter.MockInstance;
 		}
 
 		[Test]
 		public void CanCreateListViewItem()
 		{
-			StubProjectMonitor projectMonitor = new StubProjectMonitor( "projectName" );
+			StubProjectMonitor projectMonitor = new StubProjectMonitor("projectName");
 
-			ProjectStatusListViewItemAdaptor adaptor = new ProjectStatusListViewItemAdaptor( detailStringFormatter );
-			ListViewItem item = adaptor.Create( projectMonitor );
+			ProjectStatusListViewItemAdaptor adaptor = new ProjectStatusListViewItemAdaptor(detailStringFormatter);
+			ListViewItem item = adaptor.Create(projectMonitor);
 
-			Assert.AreEqual( "projectName", item.Text );
-			Assert.AreEqual( 0, item.ImageIndex );
+			Assert.AreEqual("projectName", item.Text);
+			Assert.AreEqual(0, item.ImageIndex);
 		}
 
 
 		[Test]
 		public void WhenTheStateOfTheProjectChangesTheIconIsUpdated()
 		{
-			StubProjectMonitor projectMonitor = new StubProjectMonitor( "projectName" );
-			ProjectStatusListViewItemAdaptor adaptor = new ProjectStatusListViewItemAdaptor( detailStringFormatter );
-			ListViewItem item = adaptor.Create( projectMonitor );
+			StubProjectMonitor projectMonitor = new StubProjectMonitor("projectName");
+			ProjectStatusListViewItemAdaptor adaptor = new ProjectStatusListViewItemAdaptor(detailStringFormatter);
+			ListViewItem item = adaptor.Create(projectMonitor);
 
-			Assert.AreEqual( "projectName", item.Text );
-			Assert.AreEqual( 0, item.ImageIndex );
+			Assert.AreEqual("projectName", item.Text);
+			Assert.AreEqual(0, item.ImageIndex);
 
 			projectMonitor.ProjectState = ProjectState.Building;
 
-			projectMonitor.OnPolled( new MonitorPolledEventArgs( projectMonitor ) );
+			projectMonitor.OnPolled(new MonitorPolledEventArgs(projectMonitor));
 
-			Assert.AreEqual( "projectName", item.Text );
-			Assert.AreEqual( ProjectState.Building.ImageIndex, item.ImageIndex );
+			Assert.AreEqual("projectName", item.Text);
+			Assert.AreEqual(ProjectState.Building.ImageIndex, item.ImageIndex);
 		}
 
 		[Test]
 		public void WhenTheStateOfTheProjectChangesTheStatusEntriesOnTheListViewItemAreUpdated()
 		{
-			StubProjectMonitor projectMonitor = new StubProjectMonitor( "projectName" );
+			StubProjectMonitor projectMonitor = new StubProjectMonitor("projectName");
 			projectMonitor.ProjectState = ProjectState.Building;
 			projectMonitor.ProjectStatus = null;
 
-			ProjectStatusListViewItemAdaptor adaptor = new ProjectStatusListViewItemAdaptor( detailStringFormatter );
-			ListViewItem item = adaptor.Create( projectMonitor );
+			ProjectStatusListViewItemAdaptor adaptor = new ProjectStatusListViewItemAdaptor(detailStringFormatter);
+			ListViewItem item = adaptor.Create(projectMonitor);
 
-			Assert.AreEqual( 5, item.SubItems.Count );
-			ListViewItem.ListViewSubItem activity = item.SubItems[ 1 ];
-			ListViewItem.ListViewSubItem label = item.SubItems[ 3 ];
+			Assert.AreEqual(5, item.SubItems.Count);
+			ListViewItem.ListViewSubItem activity = item.SubItems[1];
+			ListViewItem.ListViewSubItem label = item.SubItems[3];
 
-			Assert.AreEqual( "", activity.Text );
-			Assert.AreEqual( "", label.Text );
+			Assert.AreEqual("", activity.Text);
+			Assert.AreEqual("", label.Text);
 
 			ProjectStatus status = new ProjectStatus();
 			status.Activity = ProjectActivity.Sleeping;
 			status.LastBuildLabel = "lastLabel";
 			projectMonitor.ProjectStatus = status;
 
-			projectMonitor.OnPolled( new MonitorPolledEventArgs( projectMonitor ) );
+			projectMonitor.OnPolled(new MonitorPolledEventArgs(projectMonitor));
 
-			Assert.AreEqual( "Sleeping", activity.Text );
-			Assert.AreEqual( "lastLabel", label.Text );
+			Assert.AreEqual("Sleeping", activity.Text);
+			Assert.AreEqual("lastLabel", label.Text);
 
 		}
 
 		[Test]
 		public void UsesDescriptionBuilderToGenerateDetailCaption()
 		{
-			StubProjectMonitor projectMonitor = new StubProjectMonitor( "projectName" );
+			StubProjectMonitor projectMonitor = new StubProjectMonitor("projectName");
 			mockProjectDetailStringFormatter.Strict = true;
 
-			mockProjectDetailStringFormatter.ExpectAndReturn( "FormatDetailString", "test1", projectMonitor );
-			ProjectStatusListViewItemAdaptor adaptor = new ProjectStatusListViewItemAdaptor( detailStringFormatter );
-			ListViewItem item = adaptor.Create( projectMonitor );
+			mockProjectDetailStringFormatter.ExpectAndReturn("FormatDetailString", "test1", projectMonitor);
+			ProjectStatusListViewItemAdaptor adaptor = new ProjectStatusListViewItemAdaptor(detailStringFormatter);
+			ListViewItem item = adaptor.Create(projectMonitor);
 
-			ListViewItem.ListViewSubItem detail = item.SubItems[ 2 ];
-			Assert.AreEqual( "test1", detail.Text );
+			ListViewItem.ListViewSubItem detail = item.SubItems[2];
+			Assert.AreEqual("test1", detail.Text);
 
-			mockProjectDetailStringFormatter.ExpectAndReturn( "FormatDetailString", "test2", projectMonitor );
-			projectMonitor.OnPolled( new MonitorPolledEventArgs( projectMonitor ) );
+			mockProjectDetailStringFormatter.ExpectAndReturn("FormatDetailString", "test2", projectMonitor);
+			projectMonitor.OnPolled(new MonitorPolledEventArgs(projectMonitor));
 
-			Assert.AreEqual( "test2", detail.Text );
+			Assert.AreEqual("test2", detail.Text);
 
 			mockProjectDetailStringFormatter.Verify();
 		}

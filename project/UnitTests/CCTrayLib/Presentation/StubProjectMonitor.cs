@@ -4,7 +4,7 @@ using ThoughtWorks.CruiseControl.Remote;
 
 namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Presentation
 {
-	public class StubProjectMonitor : IProjectMonitor
+	public class StubProjectMonitor : IProjectMonitor, ISingleProjectDetail
 	{
 		private ProjectStatus projectStatus;
 		private ProjectState projectState = ProjectState.NotConnected;
@@ -20,15 +20,53 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Presentation
 		{
 			get { return projectName; }
 		}
+
 		public ProjectStatus ProjectStatus
 		{
 			get { return projectStatus; }
 			set { projectStatus = value; }
 		}
+
+
+		public ISingleProjectDetail Detail
+		{
+			get { return this; }
+		}
+
 		public ProjectState ProjectState
 		{
 			get { return projectState; }
 			set { projectState = value; }
+		}
+
+		public bool IsConnected
+		{
+			get { return ProjectStatus != null; }
+		}
+
+		public ProjectActivity Activity
+		{
+			get { return ProjectStatus.Activity; }
+		}
+
+		public string LastBuildLabel
+		{
+			get { return ProjectStatus.LastBuildLabel; }
+		}
+
+		public DateTime LastBuildTime
+		{
+			get { return ProjectStatus.LastBuildDate; }
+		}
+
+		public DateTime NextBuildTime
+		{
+			get { return ProjectStatus.NextBuildTime; }
+		}
+
+		public string WebURL
+		{
+			get { return ProjectStatus.WebURL; }
 		}
 
 		public void OnBuildOccurred( MonitorBuildOccurredEventArgs args )

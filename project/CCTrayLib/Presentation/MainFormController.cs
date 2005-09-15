@@ -1,5 +1,4 @@
 using System;
-using System.Collections;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Windows.Forms;
@@ -63,7 +62,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 		{
 			if (IsProjectSelected)
 			{
-				DisplayWebPageForProject(SelectedProject);
+				DisplayWebPageForProject(SelectedProject.Detail);
 			}
 		}
 
@@ -89,7 +88,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 		public void StartMonitoring()
 		{
 			StopMonitoring();
-			poller = new Poller(configuration.PollPeriodSeconds * 1000, aggregatedMonitor);
+			poller = new Poller(configuration.PollPeriodSeconds*1000, aggregatedMonitor);
 			poller.Start();
 		}
 
@@ -113,19 +112,19 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 			{
 				if (monitors.Length != 0)
 				{
-					DisplayWebPageForProject(monitors[0]);
+					DisplayWebPageForProject(monitors[0].Detail);
 					return true;
 				}
 			}
-			
+
 			return false;
 		}
-		
-		private void DisplayWebPageForProject(IProjectMonitor project)
+
+		private void DisplayWebPageForProject(ISingleProjectDetail project)
 		{
-			if (project.ProjectStatus != null)
+			if (project.IsConnected)
 			{
-				string url = project.ProjectStatus.WebURL;
+				string url = project.WebURL;
 				Process.Start(url);
 			}
 		}

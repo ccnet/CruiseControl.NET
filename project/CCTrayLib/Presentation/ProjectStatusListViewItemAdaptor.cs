@@ -15,48 +15,48 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 		public ProjectStatusListViewItemAdaptor(IDetailStringProvider detailStringProvider)
 		{
 			this.detailStringProvider = detailStringProvider;
-			activity = new ListViewItem.ListViewSubItem( item, "" );
-			item.SubItems.Add( activity );
-			detail = new ListViewItem.ListViewSubItem( item, "" );
-			item.SubItems.Add( detail );
-			lastBuildLabel = new ListViewItem.ListViewSubItem( item, "" );
-			item.SubItems.Add( lastBuildLabel );
-			lastBuildTime = new ListViewItem.ListViewSubItem( item, "" );
-			item.SubItems.Add( lastBuildTime );
+			activity = new ListViewItem.ListViewSubItem(item, "");
+			item.SubItems.Add(activity);
+			detail = new ListViewItem.ListViewSubItem(item, "");
+			item.SubItems.Add(detail);
+			lastBuildLabel = new ListViewItem.ListViewSubItem(item, "");
+			item.SubItems.Add(lastBuildLabel);
+			lastBuildTime = new ListViewItem.ListViewSubItem(item, "");
+			item.SubItems.Add(lastBuildTime);
 		}
 
-		public ListViewItem Create( IProjectMonitor projectMonitor )
+		public ListViewItem Create(IProjectMonitor projectMonitor)
 		{
-			projectMonitor.Polled += new MonitorPolledEventHandler( Monitor_Polled );
+			projectMonitor.Polled += new MonitorPolledEventHandler(Monitor_Polled);
 
-			item.Text = projectMonitor.ProjectName;
+			item.Text = projectMonitor.Detail.ProjectName;
 
-			DisplayProjectStateInListViewItem( projectMonitor );
+			DisplayProjectStateInListViewItem(projectMonitor);
 
 			return item;
 		}
 
-		private void Monitor_Polled( object sauce, MonitorPolledEventArgs args )
+		private void Monitor_Polled(object sauce, MonitorPolledEventArgs args)
 		{
-			DisplayProjectStateInListViewItem( args.ProjectMonitor );
+			DisplayProjectStateInListViewItem(args.ProjectMonitor);
 		}
 
-		private void DisplayProjectStateInListViewItem( IProjectMonitor monitor )
+		private void DisplayProjectStateInListViewItem(IProjectMonitor monitor)
 		{
 			item.ImageIndex = monitor.ProjectState.ImageIndex;
 
-			if (monitor.ProjectStatus != null)
+			if (monitor.Detail.IsConnected)
 			{
-				lastBuildLabel.Text = monitor.ProjectStatus.LastBuildLabel;
-				lastBuildTime.Text = monitor.ProjectStatus.LastBuildDate.ToString();
-				activity.Text = monitor.ProjectStatus.Activity.ToString();
+				lastBuildLabel.Text = monitor.Detail.LastBuildLabel;
+				lastBuildTime.Text = monitor.Detail.LastBuildTime.ToString();
+				activity.Text = monitor.Detail.Activity.ToString();
 			}
 			else
 			{
 				activity.Text = lastBuildLabel.Text = "";
 			}
 
-			detail.Text = detailStringProvider.FormatDetailString(monitor);
+			detail.Text = detailStringProvider.FormatDetailString(monitor.Detail);
 		}
 	}
 }

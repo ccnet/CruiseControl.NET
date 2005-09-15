@@ -214,6 +214,9 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 
 		private void btnAddServer_Click(object sender, EventArgs e)
 		{
+			if (txtServer.Text.Trim().Length == 0)
+				return;
+			
 			try
 			{
 				// validate

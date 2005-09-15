@@ -19,18 +19,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Presentation
 			SynchronizedProjectMonitor monitor = new SynchronizedProjectMonitor(
 				(IProjectMonitor) mockProjectMonitor.MockInstance, null);
 
-			const string expected = "string";
-			mockProjectMonitor.ExpectAndReturn("ProjectName", expected);
-			Assert.AreEqual(expected, monitor.ProjectName);
-
-			mockProjectMonitor.ExpectAndReturn("ProjectStatus", null);
-			Assert.IsNull(monitor.ProjectStatus);
-
 			mockProjectMonitor.ExpectAndReturn("ProjectState", null);
 			Assert.IsNull(monitor.ProjectState);
-
-			mockProjectMonitor.ExpectAndReturn("ConnectException", null);
-			Assert.IsNull(monitor.ConnectException);
 
 			mockProjectMonitor.Expect("ForceBuild");
 			monitor.ForceBuild();

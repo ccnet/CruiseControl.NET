@@ -19,29 +19,9 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
 			}
 		}
 
-		public string ProjectName
-		{
-			get
-			{
-				// ok, this is a bit of a smell -- the class implements the interface but not all of 
-				// the members make sense...  Probably should be two interfaces?
-				throw new InvalidOperationException();
-			}
-		}
-
-		public ProjectStatus ProjectStatus
-		{
-			get { throw new InvalidOperationException(); }
-		}
-
 		public void ForceBuild()
 		{
 			throw new NotImplementedException();
-		}
-
-		public Exception ConnectException
-		{
-			get { throw new NotImplementedException(); }
 		}
 
 		public string SummaryStatusString
@@ -115,5 +95,11 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
 				return worstState;
 			}
 		}
+
+		public ISingleProjectDetail Detail
+		{
+			get { throw new InvalidOperationException(); }
+		}
+
 	}
 }

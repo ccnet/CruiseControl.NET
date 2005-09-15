@@ -3,8 +3,8 @@ using System.Diagnostics;
 using ThoughtWorks.CruiseControl.Remote;
 
 namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
-{
-	public class ProjectMonitor : IProjectMonitor
+{	
+	public class ProjectMonitor : IProjectMonitor, ISingleProjectDetail
 	{
 		private ICruiseProjectManager cruiseProjectManager;
 		private ProjectStatus lastProjectStatus;
@@ -15,9 +15,40 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
 			this.cruiseProjectManager = cruiseProjectManager;
 		}
 
+		// public for testing only
 		public ProjectStatus ProjectStatus
 		{
 			get { return lastProjectStatus; }
+		}
+
+		public bool IsConnected
+		{
+			get { return lastProjectStatus != null; }
+		}
+
+		public ProjectActivity Activity
+		{
+			get { return lastProjectStatus.Activity; }
+		}
+
+		public string LastBuildLabel
+		{
+			get { return lastProjectStatus.LastBuildLabel; }
+		}
+
+		public DateTime LastBuildTime
+		{
+			get { return lastProjectStatus.LastBuildDate; }
+		}
+
+		public DateTime NextBuildTime
+		{
+			get { return lastProjectStatus.NextBuildTime; }
+		}
+
+		public string WebURL
+		{
+			get { return lastProjectStatus.WebURL; }
 		}
 
 		public string ProjectName
@@ -48,6 +79,11 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
 
 				return ProjectState.Broken;
 			}
+		}
+
+		public ISingleProjectDetail Detail
+		{
+			get { return this; }
 		}
 
 		public void ForceBuild()

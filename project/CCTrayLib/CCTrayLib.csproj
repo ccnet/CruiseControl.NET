@@ -276,6 +276,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Monitoring\ISingleProjectDetail.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Monitoring\MonitorBuildOccurredEventArgs.cs"
                     SubType = "Code"
                     BuildAction = "Compile"

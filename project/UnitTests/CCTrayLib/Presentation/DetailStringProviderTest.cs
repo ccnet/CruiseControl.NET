@@ -15,11 +15,11 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Presentation
 			StubProjectMonitor monitor = new StubProjectMonitor("name");
 			DetailStringProvider provider = new DetailStringProvider();
 
-			Assert.AreEqual("Connecting...", provider.FormatDetailString(monitor));
+			Assert.AreEqual("Connecting...", provider.FormatDetailString(monitor.Detail));
 
 			monitor.SetUpAsIfExceptionOccurredOnConnect(new ApplicationException("message"));
 
-			Assert.AreEqual("Error: message", provider.FormatDetailString(monitor));
+			Assert.AreEqual("Error: message", provider.FormatDetailString(monitor.Detail));
 		}
 
 		[Test]
@@ -38,7 +38,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Presentation
 
 			Assert.AreEqual(
 				string.Format("Next build check: {0:T}", nextBuildTime)		
-				, provider.FormatDetailString(monitor));
+				, provider.FormatDetailString(monitor.Detail));
 			
 		}
 	}

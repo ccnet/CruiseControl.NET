@@ -24,24 +24,16 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 			projectMonitor.BuildOccurred += new MonitorBuildOccurredEventHandler(ProjectMonitor_BuildOccurred);
 		}
 
-		public string ProjectName
-		{
-			get { return projectMonitor.ProjectName; }
-		}
-
-		public ProjectStatus ProjectStatus
-		{
-			get { return projectMonitor.ProjectStatus; }
-		}
 
 		public ProjectState ProjectState
 		{
 			get { return projectMonitor.ProjectState; }
 		}
 
-		public Exception ConnectException
+
+		public ISingleProjectDetail Detail
 		{
-			get { return projectMonitor.ConnectException; }
+			get { return projectMonitor.Detail; }
 		}
 
 		public string SummaryStatusString

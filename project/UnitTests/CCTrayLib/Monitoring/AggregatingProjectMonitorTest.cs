@@ -3,7 +3,6 @@ using NMock;
 using NUnit.Framework;
 using ThoughtWorks.CruiseControl.CCTrayLib;
 using ThoughtWorks.CruiseControl.CCTrayLib.Monitoring;
-using ThoughtWorks.CruiseControl.Remote;
 using ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Presentation;
 
 namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Monitoring
@@ -20,9 +19,9 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Monitoring
 		[SetUp]
 		public void SetUp()
 		{
-			monitor1 = new DynamicMock( typeof (IProjectMonitor) );
-			monitor2 = new DynamicMock( typeof (IProjectMonitor) );
-			monitor3 = new DynamicMock( typeof (IProjectMonitor) );
+			monitor1 = new DynamicMock(typeof (IProjectMonitor));
+			monitor2 = new DynamicMock(typeof (IProjectMonitor));
+			monitor3 = new DynamicMock(typeof (IProjectMonitor));
 
 			monitors = new IProjectMonitor[]
 				{
@@ -31,7 +30,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Monitoring
 					(IProjectMonitor) monitor3.MockInstance,
 				};
 
-			aggregator = new AggregatingProjectMonitor( this.monitors );
+			aggregator = new AggregatingProjectMonitor(monitors);
 
 		}
 
@@ -47,28 +46,19 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Monitoring
 		[Test]
 		public void PollInvokesPollOnAllContainedProjects()
 		{
-			monitor1.Expect( "Poll" );
-			monitor2.Expect( "Poll" );
-			monitor3.Expect( "Poll" );
+			monitor1.Expect("Poll");
+			monitor2.Expect("Poll");
+			monitor3.Expect("Poll");
 			aggregator.Poll();
 		}
 
-		[Test, ExpectedException( typeof (InvalidOperationException) )]
-		public void ProjectNameThrows()
+		[Test, ExpectedException(typeof (InvalidOperationException))]
+		public void ThrowsWhenAttemptingToRetrieveSingleProjectDetail()
 		{
-			string name = aggregator.ProjectName;
+			ISingleProjectDetail detail = aggregator.Detail;
 
 			// this line just here to stop resharper complaining
-			Assert.IsNotNull( name );
-		}
-
-		[Test, ExpectedException( typeof (InvalidOperationException) )]
-		public void ProjectStatusThrows()
-		{
-			ProjectStatus status = aggregator.ProjectStatus;
-
-			// this line just here to stop resharper complaining
-			Assert.IsNotNull( status );
+			Assert.IsNotNull(detail);
 		}
 
 		private int buildOccurredCount;
@@ -80,11 +70,11 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Monitoring
 			buildOccurredCount = 0;
 			lastBuildOccurredEventArgs = null;
 
-			StubProjectMonitor stubProjectMonitor1 = new StubProjectMonitor( "project1" );
-			StubProjectMonitor stubProjectMonitor2 = new StubProjectMonitor( "project2" );
+			StubProjectMonitor stubProjectMonitor1 = new StubProjectMonitor("project1");
+			StubProjectMonitor stubProjectMonitor2 = new StubProjectMonitor("project2");
 
-			aggregator = new AggregatingProjectMonitor( stubProjectMonitor1, stubProjectMonitor2 );
-			aggregator.BuildOccurred += new MonitorBuildOccurredEventHandler( Aggregator_BuildOccurred );
+			aggregator = new AggregatingProjectMonitor(stubProjectMonitor1, stubProjectMonitor2);
+			aggregator.BuildOccurred += new MonitorBuildOccurredEventHandler(Aggregator_BuildOccurred);
 
 			Assert.AreEqual(0, buildOccurredCount);
 			stubProjectMonitor1.OnBuildOccurred(new MonitorBuildOccurredEventArgs(stubProjectMonitor1, BuildTransition.Fixed));
@@ -94,7 +84,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Monitoring
 			Assert.AreEqual(BuildTransition.Fixed, lastBuildOccurredEventArgs.BuildTransition);
 		}
 
-		private void Aggregator_BuildOccurred( object sauce, MonitorBuildOccurredEventArgs e )
+		private void Aggregator_BuildOccurred(object sauce, MonitorBuildOccurredEventArgs e)
 		{
 			buildOccurredCount++;
 			lastBuildOccurredEventArgs = e;
@@ -109,10 +99,10 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Monitoring
 		{
 			pollCount = 0;
 
-			StubProjectMonitor stubProjectMonitor1 = new StubProjectMonitor( "project1" );
-			StubProjectMonitor stubProjectMonitor2 = new StubProjectMonitor( "project2" );
+			StubProjectMonitor stubProjectMonitor1 = new StubProjectMonitor("project1");
+			StubProjectMonitor stubProjectMonitor2 = new StubProjectMonitor("project2");
 
-			aggregator = new AggregatingProjectMonitor( stubProjectMonitor1, stubProjectMonitor2 );
+			aggregator = new AggregatingProjectMonitor(stubProjectMonitor1, stubProjectMonitor2);
 			aggregator.Polled += new MonitorPolledEventHandler(Aggregator_Polled);
 
 			Assert.AreEqual(0, pollCount);
@@ -121,7 +111,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Monitoring
 			Assert.AreEqual(1, pollCount);
 		}
 
-		private void Aggregator_Polled( object source, MonitorPolledEventArgs args )
+		private void Aggregator_Polled(object source, MonitorPolledEventArgs args)
 		{
 			pollCount++;
 			lastPolledSource = source;
@@ -132,9 +122,9 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Monitoring
 		[Test]
 		public void WhenPolledIsFiredTheSourcePointToTheAggregatorNotTheFiringProject()
 		{
-			StubProjectMonitor stubProjectMonitor1 = new StubProjectMonitor( "project1" );
+			StubProjectMonitor stubProjectMonitor1 = new StubProjectMonitor("project1");
 
-			aggregator = new AggregatingProjectMonitor( stubProjectMonitor1);
+			aggregator = new AggregatingProjectMonitor(stubProjectMonitor1);
 			aggregator.Polled += new MonitorPolledEventHandler(Aggregator_Polled);
 
 			stubProjectMonitor1.OnPolled(new MonitorPolledEventArgs(stubProjectMonitor1));
@@ -154,16 +144,21 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Monitoring
 			//  Success
 
 			Assert.AreEqual(ProjectState.Success, CombinedState(ProjectState.Success, ProjectState.Success, ProjectState.Success));
-			Assert.AreEqual(ProjectState.Building, CombinedState(ProjectState.Success, ProjectState.Building, ProjectState.Success));
-			Assert.AreEqual(ProjectState.Building, CombinedState(ProjectState.Building, ProjectState.Success, ProjectState.NotConnected));
-			Assert.AreEqual(ProjectState.NotConnected, CombinedState(ProjectState.Success, ProjectState.Success, ProjectState.NotConnected));
+			Assert.AreEqual(ProjectState.Building,
+			                CombinedState(ProjectState.Success, ProjectState.Building, ProjectState.Success));
+			Assert.AreEqual(ProjectState.Building,
+			                CombinedState(ProjectState.Building, ProjectState.Success, ProjectState.NotConnected));
+			Assert.AreEqual(ProjectState.NotConnected,
+			                CombinedState(ProjectState.Success, ProjectState.Success, ProjectState.NotConnected));
 			Assert.AreEqual(ProjectState.Broken, CombinedState(ProjectState.Broken, ProjectState.Success, ProjectState.Success));
-			Assert.AreEqual(ProjectState.Broken, CombinedState(ProjectState.NotConnected, ProjectState.Success, ProjectState.Broken));
+			Assert.AreEqual(ProjectState.Broken,
+			                CombinedState(ProjectState.NotConnected, ProjectState.Success, ProjectState.Broken));
 			Assert.AreEqual(ProjectState.Broken, CombinedState(ProjectState.Broken, ProjectState.Building, ProjectState.Success));
-			Assert.AreEqual(ProjectState.Broken, CombinedState(ProjectState.Success, ProjectState.Broken, ProjectState.NotConnected));
+			Assert.AreEqual(ProjectState.Broken,
+			                CombinedState(ProjectState.Success, ProjectState.Broken, ProjectState.NotConnected));
 		}
 
-		private ProjectState CombinedState( ProjectState state1, ProjectState state2, ProjectState state3 )
+		private ProjectState CombinedState(ProjectState state1, ProjectState state2, ProjectState state3)
 		{
 			monitor1.SetupResult("ProjectState", state1);
 			monitor2.SetupResult("ProjectState", state2);
@@ -182,7 +177,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Monitoring
 
 			Assert.AreEqual("hello from monitor1\nand from monitor2\ngoodbye from monitor3", statusString);
 		}
-		
+
 		[Test]
 		public void ProjectSummaryStringDoesNotIncludeBlankLinesWhenAProjectReturnsNothing()
 		{
