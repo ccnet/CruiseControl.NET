@@ -6,9 +6,6 @@ using ThoughtWorks.CruiseControl.Core.Util;
 
 namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 {
-	/// <summary>
-	/// TODO: make paths relative to working directory
-	/// </summary>
 	[ReflectorType("svn")]
 	public class Svn : ProcessSourceControl
 	{
@@ -27,14 +24,14 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 		[ReflectorProperty("executable", Required = false)]
 		public string Executable = DefaultExecutable;
 
-		[ReflectorProperty("trunkUrl")]
+		[ReflectorProperty("trunkUrl", Required = false)]
 		public string TrunkUrl;
 
-		[ReflectorProperty("workingDirectory")]
+		[ReflectorProperty("workingDirectory", Required = false)]
 		public string WorkingDirectory;
 
 		[ReflectorProperty("tagOnSuccess", Required = false)]
-		public bool TagOnSuccess;
+		public bool TagOnSuccess = false;
 
 		[ReflectorProperty("tagBaseUrl", Required = false)]
 		public string TagBaseUrl;
@@ -53,14 +50,9 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			return date.ToUniversalTime().ToString(COMMAND_DATE_FORMAT, CultureInfo.InvariantCulture);
 		}
 
-		public ProcessInfo NewLabelProcessInfo(IIntegrationResult result)
-		{
-			return NewProcessInfo(BuildTagProcessArgs(result.Label, result.LastChangeNumber));
-		}
-
 		public override Modification[] GetModifications(IIntegrationResult from, IIntegrationResult to)
 		{
-			ProcessResult result = Execute(NewHistoryProcessInfo(from.StartTime, to.StartTime));
+			ProcessResult result = Execute(NewHistoryProcessInfo(from, to));
 			Modification[] modifications = ParseModifications(result, from.StartTime, to.StartTime);
 			if (UrlBuilder != null)
 			{
@@ -81,40 +73,42 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 		{
 			if (AutoGetSource)
 			{
-				ProcessInfo info = NewProcessInfo(BuildGetSourceArguments(result.LastChangeNumber));
-				Log.Info(string.Format("Getting source from Subversion: {0} {1}", info.FileName, info.Arguments));
-				Execute(info);
+				Execute(NewGetSourceProcessInfo(result));
 			}
 		}
 
-		private ProcessInfo NewHistoryProcessInfo(DateTime from, DateTime to)
+		private ProcessInfo NewGetSourceProcessInfo(IIntegrationResult result)
 		{
-			return NewProcessInfo(BuildHistoryProcessArgs(from, to));
+			ProcessArgumentBuilder buffer = new ProcessArgumentBuilder();
+			buffer.Append("update");
+			AppendRevision(buffer, result.LastChangeNumber);
+			AppendCommonSwitches(buffer);
+			return NewProcessInfo(buffer.ToString(), result);
+		}
+
+//		TAG_COMMAND_FORMAT = "copy --message "CCNET build label" "trunkUrl" "tagBaseUrl/label"
+		private ProcessInfo NewLabelProcessInfo(IIntegrationResult result)
+		{
+			ProcessArgumentBuilder buffer = new ProcessArgumentBuilder();
+			buffer.AppendArgument("copy");
+			buffer.AppendArgument(TagMessage(result.Label));
+			buffer.AppendArgument(TagSource(result.LastChangeNumber));
+			buffer.AppendArgument(TagDestination(result.Label));
+			AppendRevision(buffer, result.LastChangeNumber);
+			AppendCommonSwitches(buffer);
+			return NewProcessInfo(buffer.ToString(), result);
 		}
 
 //		HISTORY_COMMAND_FORMAT = "log TrunkUrl --revision \"{{{StartDate}}}:{{{EndDate}}}\" --verbose --xml --non-interactive";
-		private string BuildHistoryProcessArgs(DateTime from, DateTime to)
+		private ProcessInfo NewHistoryProcessInfo(IIntegrationResult from, IIntegrationResult to)
 		{
 			ProcessArgumentBuilder buffer = new ProcessArgumentBuilder();
 			buffer.AppendArgument("log");
 			buffer.AppendArgument(TrunkUrl);
-			buffer.AppendArgument(string.Format("-r \"{{{0}}}:{{{1}}}\"", FormatCommandDate(from), FormatCommandDate(to)));
+			buffer.AppendArgument(string.Format("-r \"{{{0}}}:{{{1}}}\"", FormatCommandDate(from.StartTime), FormatCommandDate(to.StartTime)));
 			buffer.AppendArgument("--verbose --xml");
 			AppendCommonSwitches(buffer);
-			return buffer.ToString();
-		}
-
-//		TAG_COMMAND_FORMAT = "copy --message "CCNET build label" "trunkUrl" "tagBaseUrl/label"
-		private string BuildTagProcessArgs(string label, int revision)
-		{
-			ProcessArgumentBuilder buffer = new ProcessArgumentBuilder();
-			buffer.AppendArgument("copy");
-			buffer.AppendArgument(TagMessage(label));
-			buffer.AppendArgument(TagSource(revision));
-			buffer.AppendArgument(TagDestination(label));
-			AppendRevision(buffer, revision);
-			AppendCommonSwitches(buffer);
-			return buffer.ToString();
+			return NewProcessInfo(buffer.ToString(), to);
 		}
 
 		private string TagMessage(string label)
@@ -137,15 +131,6 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			return SurroundInQuotesIfContainsSpace(string.Format("{0}/{1}", TagBaseUrl, label));
 		}
 
-		private string BuildGetSourceArguments(int revision)
-		{
-			ProcessArgumentBuilder buffer = new ProcessArgumentBuilder();
-			buffer.Append("update");
-			AppendRevision(buffer, revision);
-			AppendCommonSwitches(buffer);
-			return buffer.ToString();
-		}
-
 		private void AppendCommonSwitches(ProcessArgumentBuilder buffer)
 		{
 			buffer.AppendArgument("--username {0}", SurroundInQuotesIfContainsSpace(Username));
@@ -165,9 +150,9 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			buffer.AppendIf(revision > 0, "--revision {0}", revision.ToString());
 		}
 
-		private ProcessInfo NewProcessInfo(string args)
+		private ProcessInfo NewProcessInfo(string args, IIntegrationResult result)
 		{
-			return new ProcessInfo(Executable, args, WorkingDirectory);
+			return new ProcessInfo(Executable, args, result.BaseFromWorkingDirectory(WorkingDirectory));
 		}
 	}
 }

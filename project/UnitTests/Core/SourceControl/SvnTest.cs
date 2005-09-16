@@ -13,10 +13,14 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 	{
 		private Svn svn;
 		private IMock mockParser;
+		private DateTime from;
+		private DateTime to;
 
 		[SetUp]
 		protected void SetUp()
 		{
+			from = DateTime.Parse("2001-01-21  20:00:00 'GMT'");
+			to = DateTime.Parse("2001-01-21  20:30:50 'GMT'");
 			CreateProcessExecutorMock(Svn.DefaultExecutable);
 			mockParser = new DynamicMock(typeof(IHistoryParser));
 			svn = new Svn((ProcessExecutor) mockProcessExecutor.MockInstance, (IHistoryParser) mockParser.MockInstance);
@@ -32,49 +36,46 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 			mockParser.Verify();
 		}
 
-		private string CreateSourceControlXml(string trunkUrl)
+		[Test]
+		public void PopulateFromFullySpecifiedXml()
 		{
-			return CreateSourceControlXml(trunkUrl, null, null);
-		}
-
-		private string CreateSourceControlXml(string trunkUrl, string username, string password)
-		{
-			string usernameAndPassword = (username == null) ? string.Empty : string.Format("<username>{0}</username><password>{1}</password>", username, password);
-			return string.Format(
-				@"
+			string xml = @"
 <svn>
-	<trunkUrl>{0}</trunkUrl>
+	<executable>c:\svn\svn.exe</executable>
+	<trunkUrl>svn://myserver/mypath</trunkUrl>
 	<timeout>5</timeout>
 	<workingDirectory>c:\dev\src</workingDirectory>
-	{1}
-</svn>"
-				, trunkUrl, usernameAndPassword);
-		}
+	<username>user</username>
+	<password>password</password>
+	<tagOnSuccess>true</tagOnSuccess>
+	<tagBaseUrl>svn://myserver/mypath/tags</tagBaseUrl>
+	<autoGetSource>true</autoGetSource>
+</svn>";
 
-		[Test]
-		public void DefaultPropertyPopulationFromXml()
-		{
-			Svn svn = (Svn) NetReflector.Read(CreateSourceControlXml("svn://myserver/mypath"));
-			Assert.AreEqual("svn.exe", svn.Executable);
+			Svn svn = (Svn) NetReflector.Read(xml);
+			Assert.AreEqual(@"c:\svn\svn.exe", svn.Executable);
 			Assert.AreEqual("svn://myserver/mypath", svn.TrunkUrl);
 			Assert.AreEqual(new Timeout(5), svn.Timeout);
 			Assert.AreEqual(@"c:\dev\src", svn.WorkingDirectory);
+			Assert.AreEqual("user", svn.Username);
+			Assert.AreEqual("password", svn.Password);
+			Assert.AreEqual(true, svn.TagOnSuccess);
+			Assert.AreEqual(true, svn.AutoGetSource);
+			Assert.AreEqual("svn://myserver/mypath/tags", svn.TagBaseUrl);
 		}
 
 		[Test]
-		public void UserAndPasswordPropertyPopulationFromXml()
+		public void SpecifyFromMinimallySpecifiedXml()
 		{
-			Svn svn = (Svn) NetReflector.Read(CreateSourceControlXml("svn://myserver/mypath", "user", "password"));
-			Assert.AreEqual("user", svn.Username);
-			Assert.AreEqual("password", svn.Password);
+			string xml = @"<svn/>";
+			Svn svn = (Svn) NetReflector.Read(xml);
+			Assert.AreEqual("svn.exe", svn.Executable);			
 		}
 
 		[Test]
 		public void CreatingHistoryProcessIncludesCorrectlyFormattedArguments()
 		{
 			ExpectToExecuteArguments("log svn://myserver/mypath -r \"{2001-01-21T20:00:00Z}:{2001-01-21T20:30:50Z}\" --verbose --xml --non-interactive");
-			DateTime from = DateTime.Parse("2001-01-21  20:00:00 'GMT'");
-			DateTime to = DateTime.Parse("2001-01-21  20:30:50 'GMT'");
 			svn.GetModifications(IntegrationResult(from), IntegrationResult(to));
 		}
 
@@ -83,12 +84,19 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 		{
 			string args = @"log svn://myserver/mypath -r ""{2001-01-21T20:00:00Z}:{2001-01-21T20:30:50Z}"" --verbose --xml --username user --password password --non-interactive";
 			ExpectToExecuteArguments(args);
-
-			DateTime from = DateTime.Parse("2001-01-21  20:00:00 'GMT'");
-			DateTime to = DateTime.Parse("2001-01-21  20:30:50 'GMT'");
 			svn.Username = "user";
 			svn.Password = "password";
 			svn.GetModifications(IntegrationResult(from), IntegrationResult(to));
+		}
+
+		[Test]
+		public void ShouldRebaseWorkingDirectoryForHistory()
+		{
+			ExpectToExecuteArguments("log svn://myserver/mypath -r \"{2001-01-21T20:00:00Z}:{2001-01-21T20:30:50Z}\" --verbose --xml --non-interactive");
+			svn.WorkingDirectory = @"source\";
+			IIntegrationResult result = IntegrationResult(to);
+			result.WorkingDirectory = @"c:\";
+			svn.GetModifications(IntegrationResult(from), result);
 		}
 
 		[Test]
@@ -97,6 +105,20 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 			ExpectToExecuteArguments(@"copy -m ""CCNET build foo"" c:\source svn://someserver/tags/foo/foo --non-interactive");
 			svn.TagOnSuccess = true;
 			svn.LabelSourceControl(IntegrationResultMother.CreateSuccessful("foo"));
+		}
+
+		[Test]
+		public void CreatingLabelProcessPerformsServerToServerCopyWithRevisionWhenKnown()
+		{
+			IntegrationResult result = IntegrationResultMother.CreateSuccessful("foo");
+			Modification mod = new Modification();
+			mod.ChangeNumber = 5;
+			result.Modifications = new Modification[] { mod };
+			ExpectToExecuteArguments(@"copy -m ""CCNET build foo"" svn://myserver/mypath svn://someserver/tags/foo --revision 5 --non-interactive");
+
+			svn.TagOnSuccess = true;
+			svn.TagBaseUrl = "svn://someserver/tags";
+			svn.LabelSourceControl(result);
 		}
 
 		[Test]
@@ -113,38 +135,6 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 			ExpectThatExecuteWillNotBeCalled();
 			svn.TagOnSuccess = true;
 			svn.LabelSourceControl(IntegrationResultMother.CreateFailed());
-		}
-
-		[Test]
-		public void CreatingLabelProcessPerformsCopyFromWorkingDirectoryWhenIntegrationResultDoesNotContainRepositoryRevision()
-		{
-			DynamicMock mockIntegrationResult = new DynamicMock(typeof (IIntegrationResult));
-			mockIntegrationResult.ExpectAndReturn("LastChangeNumber", 0);
-			mockIntegrationResult.ExpectAndReturn("Label", "foo");
-
-			svn.TagBaseUrl = "svn://someserver/tags";
-			ProcessInfo actualProcess = svn.NewLabelProcessInfo((IIntegrationResult) mockIntegrationResult.MockInstance);
-
-			string expectedOutput = @"copy -m ""CCNET build foo"" c:\source svn://someserver/tags/foo --non-interactive";
-			Assert.AreEqual(expectedOutput, actualProcess.Arguments);
-
-			mockIntegrationResult.Verify();
-		}
-
-		[Test]
-		public void CreatingLabelProcessPerformsServerToServerCopyWithRevisionWhenKnown()
-		{
-			DynamicMock mockIntegrationResult = new DynamicMock(typeof (IIntegrationResult));
-			mockIntegrationResult.ExpectAndReturn("LastChangeNumber", 5);
-			mockIntegrationResult.ExpectAndReturn("Label", "foo");
-
-			svn.TagBaseUrl = "svn://someserver/tags";
-			ProcessInfo actualProcess = svn.NewLabelProcessInfo((IIntegrationResult) mockIntegrationResult.MockInstance);
-
-			string expectedOutput = @"copy -m ""CCNET build foo"" svn://myserver/mypath svn://someserver/tags/foo --revision 5 --non-interactive";
-			Assert.AreEqual(expectedOutput, actualProcess.Arguments);
-
-			mockIntegrationResult.Verify();
 		}
 
 		[Test]
@@ -168,7 +158,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 		{
 			ExpectToExecuteArguments("update --revision 10 --non-interactive");
 
-			IntegrationResult result = new IntegrationResult();
+			IIntegrationResult result = IntegrationResult();
 			Modification mod = new Modification();
 			mod.ChangeNumber = 10;
 			result.Modifications = new Modification[] {mod};
@@ -183,7 +173,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 		{
 			ExpectToExecuteArguments("update --non-interactive");
 			svn.AutoGetSource = true;
-			svn.GetSource(new IntegrationResult());
+			svn.GetSource(IntegrationResult());
 		}
 
 		[Test]
@@ -193,7 +183,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 			svn.Username = "Buck Rogers";
 			svn.Password = "My Password";
 			svn.AutoGetSource = true;
-			svn.GetSource(new IntegrationResult());
+			svn.GetSource(IntegrationResult());
 		}
 
 		[Test]
@@ -201,7 +191,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 		{
 			ExpectThatExecuteWillNotBeCalled();
 			svn.AutoGetSource = false;
-			svn.GetSource(new IntegrationResult());
+			svn.GetSource(IntegrationResult());
 		}
 	}
 }
