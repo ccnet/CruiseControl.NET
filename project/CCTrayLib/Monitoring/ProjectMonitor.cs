@@ -9,6 +9,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
 		private ICruiseProjectManager cruiseProjectManager;
 		private ProjectStatus lastProjectStatus;
 		private Exception connectException;
+		private BuildDurationTracker buildDurationTracker = new BuildDurationTracker();
 
 		public ProjectMonitor(ICruiseProjectManager cruiseProjectManager)
 		{
@@ -98,9 +99,13 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
 				ProjectStatus newProjectStatus = cruiseProjectManager.ProjectStatus;
 				if (lastProjectStatus != null && newProjectStatus != null)
 				{
+					CheckForBuildStart(lastProjectStatus, newProjectStatus);
+					
 					if (lastProjectStatus.LastBuildDate != newProjectStatus.LastBuildDate)
 					{
 						BuildTransition transition = CalculateBuildTransition(lastProjectStatus, newProjectStatus);
+						
+						CheckForSuccessfulBuild(transition);
 						OnBuildOccurred(new MonitorBuildOccurredEventArgs(this, transition));
 					}
 				}
@@ -115,6 +120,23 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
 
 			OnPolled(new MonitorPolledEventArgs(this));
 		}
+
+		private void CheckForSuccessfulBuild(BuildTransition transition)
+		{
+			if (transition == BuildTransition.Fixed || transition == BuildTransition.StillSuccessful)
+			{
+				buildDurationTracker.OnSuccessfulBuild();
+			}
+		}
+
+		private void CheckForBuildStart(ProjectStatus lastProjectStatus, ProjectStatus newProjectStatus)
+		{
+			if (lastProjectStatus.Activity != ProjectActivity.Building && newProjectStatus.Activity == ProjectActivity.Building)
+			{
+				buildDurationTracker.OnBuildStart();
+			}
+		}
+
 
 		public event MonitorBuildOccurredEventHandler BuildOccurred;
 		public event MonitorPolledEventHandler Polled;
@@ -159,6 +181,12 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
 
 				return ProjectName + ": " + state;
 			}
+		}
+
+
+		public TimeSpan EstimatedTimeRemainingOnCurrentBuild
+		{
+			get { return buildDurationTracker.EstimatedTimeRemainingOnCurrentBuild; }
 		}
 	}
 }

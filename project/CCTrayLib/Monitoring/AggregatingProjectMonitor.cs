@@ -1,6 +1,5 @@
 using System;
 using System.Text;
-using ThoughtWorks.CruiseControl.Remote;
 
 namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
 {

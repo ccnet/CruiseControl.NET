@@ -14,18 +14,13 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib
 
 		public override string ToString()
 		{
-			if (timeSpan < TimeSpan.FromSeconds(2.0))
-			{
-				return "Now Building";
-			}
-			else if (timeSpan < TimeSpan.FromMinutes(1.0))
-			{
+			if (timeSpan < TimeSpan.FromMinutes(1.0))
 				return string.Format("{0} seconds", timeSpan.Seconds);
-			}
+
 			StringBuilder sb = new StringBuilder();
-			AddIfNeeded(sb, timeSpan.Days, "Day");
-			AddIfNeeded(sb, timeSpan.Hours, "Hour");
-			AddIfNeeded(sb, timeSpan.Minutes, "Minute");
+			AddIfNeeded(sb, timeSpan.Days, "day");
+			AddIfNeeded(sb, timeSpan.Hours, "hour");
+			AddIfNeeded(sb, timeSpan.Minutes, "minute");
 			return sb.ToString().Trim();
 		}
 

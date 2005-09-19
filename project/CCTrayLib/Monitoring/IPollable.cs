@@ -4,4 +4,5 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
 	{
 		void Poll();
 	}
+
 }

@@ -212,7 +212,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Monitoring
 			monitor.Poll();
 
 			mockProjectManager.ExpectAndReturn("ProjectStatus",
-			                                   CreateProjectStatus(IntegrationStatus.Success, ProjectActivity.CheckingModifications));
+			                                   CreateProjectStatus(IntegrationStatus.Success,
+			                                                       ProjectActivity.CheckingModifications));
 			monitor.Poll();
 
 			Assert.AreEqual(ProjectState.Success, monitor.ProjectState);

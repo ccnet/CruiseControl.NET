@@ -1,3 +1,4 @@
+using System;
 using ThoughtWorks.CruiseControl.CCTrayLib.Monitoring;
 using ThoughtWorks.CruiseControl.Remote;
 
@@ -19,6 +20,19 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 			{
 				return string.Format("Next build check: {0:T}", projectStatus.NextBuildTime);
 			}
+			
+			TimeSpan durationRemaining = projectStatus.EstimatedTimeRemainingOnCurrentBuild;
+			
+			if (durationRemaining != TimeSpan.MaxValue)
+			{
+				if (durationRemaining <= TimeSpan.Zero)
+				{
+					return string.Format("Taking {0} longer than last build", new CCTimeFormatter(durationRemaining.Negate()));
+				}
+				
+				return string.Format("{0} estimated remaining", new CCTimeFormatter(durationRemaining));
+			}
+			
 			return string.Empty;
 		}
 	}

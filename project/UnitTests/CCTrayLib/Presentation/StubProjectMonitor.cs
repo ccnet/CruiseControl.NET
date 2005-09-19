@@ -69,6 +69,11 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Presentation
 			get { return ProjectStatus.WebURL; }
 		}
 
+		public TimeSpan EstimatedTimeRemainingOnCurrentBuild
+		{
+			get { return TimeSpan.Zero; }
+		}
+
 		public void OnBuildOccurred( MonitorBuildOccurredEventArgs args )
 		{
 			if (BuildOccurred != null)

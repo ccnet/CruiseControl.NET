@@ -232,6 +232,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "CCTrayLib\Monitoring\BuildDurationTrackerTest.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "CCTrayLib\Monitoring\PollerTest.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -253,6 +258,11 @@
                 />
                 <File
                     RelPath = "CCTrayLib\Monitoring\ProjectStatusMonitorTest.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "CCTrayLib\Monitoring\StubCurrentTimeProvider.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
