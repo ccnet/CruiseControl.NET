@@ -92,6 +92,15 @@ Section "CCTray desktop shortcut" SEC_DESKTOP
   !insertmacro MUI_STARTMENU_WRITE_END
 SectionEnd
 
+Section "CCTray start menu shortcut" SEC_STARTUPGROUP
+  SetOutPath "$INSTDIR"
+  SetOverwrite ifnewer
+
+  !insertmacro MUI_STARTMENU_WRITE_BEGIN Application
+  CreateShortCut "$SMPROGRAMS\Startup\CCTray.lnk" "$INSTDIR\ccTray.exe"
+  !insertmacro MUI_STARTMENU_WRITE_END
+SectionEnd
+
 Section -AdditionalIcons
   SetOutPath $INSTDIR
   !insertmacro MUI_STARTMENU_WRITE_BEGIN Application
@@ -117,6 +126,7 @@ SectionEnd
 !insertmacro MUI_FUNCTION_DESCRIPTION_BEGIN
   !insertmacro MUI_DESCRIPTION_TEXT ${SEC_CCTRAY} "The system tray applet for remotely monitoring and triggering builds managed by CruiseControl.NET."
   !insertmacro MUI_DESCRIPTION_TEXT ${SEC_DESKTOP} "The system tray applet Desktop shortcut."
+  !insertmacro MUI_DESCRIPTION_TEXT ${SEC_STARTUPGROUP} "Add the system tray applet to the Program Startup menu group."
 !insertmacro MUI_FUNCTION_DESCRIPTION_END
 
 Function PrepareFinishPageMessage
@@ -141,7 +151,8 @@ Section Uninstall
   Delete "$SMPROGRAMS\$ICONS_GROUP\Website.lnk"
   Delete "$DESKTOP\CCTray.lnk"
   Delete "$SMPROGRAMS\$ICONS_GROUP\CCTray.lnk"
-
+  Delete "$SMPROGRAMS\Startup\CCTray.lnk"
+  
   RMDir "$SMPROGRAMS\$ICONS_GROUP"
   RMDir /r "$INSTDIR"
 
