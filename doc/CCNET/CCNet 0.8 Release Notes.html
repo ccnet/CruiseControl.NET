@@ -1,0 +1,104 @@
+<html>
+    <head>
+        <title>CruiseControl.NET : CCNet 0.8 Release Notes</title>
+	    <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">	    
+    </head>
+
+    <body>
+	    <table class="pagecontent" border="0" cellpadding="0" cellspacing="0" width="100%" bgcolor="#ffffff">
+		    <tr>
+			    <td valign="top" class="pagebody">
+				    <div class="pageheader">
+					    <span class="pagetitle">
+                            CruiseControl.NET : CCNet 0.8 Release Notes
+                                                    </span>
+				    </div>
+				    <div class="pagesubheading">
+					    This page last changed on Jan 16, 2005 by <font color="#0050B2">mroberts</font>.
+				    </div>
+
+				    <h2><a name="CCNet0.8ReleaseNotes-Overview">Overview</a></h2>
+
+<p>CruiseControl.NET 0.8 has the following improvements since 0.7:</p>
+
+<h4><a name="CCNet0.8ReleaseNotes-CruiseControl.NETServer"><a href="CruiseControl.NET Server.html" title="CruiseControl.NET Server">CruiseControl.NET Server</a></a></h4>
+
+<ul>
+	<li><img class="emoticon" src="./icons/emoticons/warning.gif" height="16" width="16" align="absmiddle" alt="" border="0"/> <b>Breaking Change</b> - <b>Force Build Interval Trigger</b> and <b>Polling Interval Trigger</b> have been replaced by <a href="Interval Trigger.html" title="Interval Trigger">Interval Trigger</a>, and the <b>Force Build Schedule Trigger</b> and <b>Polling Schedule Trigger</b> have been replaced by <a href="Schedule Trigger.html" title="Schedule Trigger">Schedule Trigger</a>.</li>
+	<li>Introduced a <a href="Filter Trigger.html" title="Filter Trigger">Filter Trigger</a> to turn off integration at certain times of day.</li>
+	<li>If no <tt>&lt;triggers&gt;</tt> section is specified for a project, it now uses a default interval polling trigger. If an empty <tt>&lt;triggers&gt;</tt> section is specified, no triggers are enabled (for 'forced-only' builds).</li>
+	<li><a href="ForceBuildPublisher.html" title="ForceBuildPublisher">ForceBuildPublisher</a> introduced to allow build pipelines across distributed machines</li>
+	<li>Subversion plugin now allows automatic source updates</li>
+</ul>
+
+
+<h4><a name="CCNet0.8ReleaseNotes-WebDashboardandProjectReportWebApplication"><a href="Web Dashboard.html" title="Web Dashboard">Web Dashboard</a> and Project Report Web Application</a></h4>
+<ul>
+	<li>New NAnt Web plugin for easier diagnosis of NAnt problems</li>
+	<li>Web Dashboard now has all the reporting features of the single project reporting application (we recommend all users migrate to the Web Dashboard for reporting now)</li>
+	<li>Web Dashboard now has the ability to configure what Build, Project and Server plugins are made available to users (this is a breaking change to the Dashboard's web.config file - make sure you update your local version)</li>
+	<li>Improved our NCover and FxCop support</li>
+</ul>
+
+
+<p>We recommend that as part of upgrading that you backup your current CCNet directories, and then read the documentation thoroughly for the plugins you are using.</p>
+
+<p><img class="emoticon" src="./icons/emoticons/warning.gif" height="16" width="16" align="absmiddle" alt="" border="0"/> Some configuration options have changed since 0.7, so make sure you update your CCNet Config file before restarting.</p>
+
+<h2><a name="CCNet0.8ReleaseNotes-JiraIssues">Jira Issues</a></h2>
+
+<h3><a name="CCNet0.8ReleaseNotes-Bug">Bug</a></h3>
+
+<p>CCNET-111 - Checking for new versions in Visual Sourcesafe runs 12 hours behind<br/>
+CCNET-187 - Invalid Xml is included twice in log file<br/>
+CCNET-203 - Changes on other branches course a build to happen. (CVS)<br/>
+CCNET-251 - VSS Parser Error with french environnment<br/>
+CCNET-269 - ERROR: XSL stylesheet file not found: Ncover.xsl<br/>
+CCNET-289 - FxCop summary fails to expand Target elements in javascript</p>
+
+<h3><a name="CCNet0.8ReleaseNotes-NewFeature">New Feature</a></h3>
+
+<p>CCNET-44 - Complete work on ProjectStartPublisher<br/>
+CCNET-211 - Implement Get Source for Subversion<br/>
+CCNET-217 - Add support for Emma Java Code Coverage Tool<br/>
+CCNET-218 - Support JUnit output in unit test report<br/>
+CCNET-254 - Show FxCop Results in Email<br/>
+CCNET-255 - Add FxCop Report to Dashboard<br/>
+CCNET-256 - Allow Test Details report to be viewed in Dashboard<br/>
+CCNET-257 - Allow Test Timings report to be viewed in Dashboard<br/>
+CCNET-258 - Allow NCover report to be viewed in Dashboard<br/>
+CCNET-260 - Create a publisher to force a build on a local/remote server<br/>
+CCNET-275 - Create a conditional trigger (Oane Stienstra)<br/>
+CCNET-298 - Make Dashboard Build Plugins Configurable<br/>
+CCNET-302 - Make Dashboard Project And Server Plugins Configurable</p>
+
+<h3><a name="CCNet0.8ReleaseNotes-Improvement">Improvement</a></h3>
+
+<p>CCNET-60 - NAnt log view<br/>
+CCNET-219 - Improved NCover reporting<br/>
+CCNET-276 - Merge PollingScheduleTrigger and ForceBuildScheduleTrigger (BREAKING CHANGE)<br/>
+CCNET-277 - Create new Xsl to work with FxCop 1.312<br/>
+CCNET-280 - Populate Trigger list with a single Interval Trigger by default<br/>
+CCNET-281 - Exceptions should be published by default<br/>
+CCNET-293 - Merge PollingIntervalTrigger and ForceBuildIntervalTrigger (BREAKING CHANGE)<br/>
+CCNET-308 - Display build plugins on each plugin page for the web page</p>
+
+<h3><a name="CCNet0.8ReleaseNotes-Task">Task</a></h3>
+
+<p>CCNET-250 - Use reflective code to replace 'Factory' classes in Dashboard</p>
+
+				    
+                    			    </td>
+		    </tr>
+	    </table>
+	    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+			<tr>
+				<td height="12" background="border/border_bottom.gif"><img src="border/spacer.gif" width="1" height="1" border="0"/></td>
+			</tr>
+		    <tr>
+			    <td align="center"><font color="grey">Document generated by Confluence on Sep 18, 2005 21:14</font></td>
+		    </tr>
+	    </table>
+    </body>
+</html>

@@ -15,10 +15,10 @@
                                                     </span>
 				    </div>
 				    <div class="pagesubheading">
-					    This page last changed on Aug 15, 2005 by <font color="#0050B2">mroberts</font>.
+					    This page last changed on Sep 21, 2005 by <font color="#0050B2">orogers</font>.
 				    </div>
 
-				    <p>CruiseControl.NET includes an MSBuild Task to integrate MSBuild (.NET 2) projects. The <a href="MSBuild Task.html" title="MsBuild Task">MSBuild Task</a> page is the reference for the task, so that will always contain the most up-to-date documentation, but this page acts as a tutorial.</p>
+				    <p>CruiseControl.NET includes an MSBuild Task to integrate MSBuild (.NET 2) projects. The <a href="http://confluence.public.thoughtworks.org/display/CCNET/MsBuild+Task" title="MsBuild Task">MSBuild Task</a> page is the reference for the task, so that will always contain the most up-to-date documentation, but this page acts as a tutorial.</p>
 
 <h2><a name="UsingCruiseControl.NETwithMSBuild-Decidewhattobuild">Decide what to build</a></h2>
 
@@ -28,25 +28,25 @@
 
 <h2><a name="UsingCruiseControl.NETwithMSBuild-GettheXMLLogger">Get the XML Logger</a></h2>
 
-<p>CruiseControl.NET uses the XML files produces by various tools in order to produce styled results. Unfortunately MSBuild does not come with a XML Logger by default, so you need to use an external logger to get this functionality. Luckily Szymon Kobalczyk was good enough to write one, and donated it to the CruiseControl.NET project. You can download it <a href="Using CruiseControl.NET with MSBuild_attachments/ThoughtWorks.CruiseControl.MSBuild.dll" title="ThoughtWorks.CruiseControl.MSBuild.dll attached to Using CruiseControl.NET with MSBuild">here</a>.</p>
+<p>CruiseControl.NET uses the XML files produces by various tools in order to produce styled results. Unfortunately MSBuild does not come with a XML Logger by default, so you need to use an external logger to get this functionality. Luckily Szymon Kobalczyk was good enough to write one, and donated it to the CruiseControl.NET project. You can download it <a href="http://ccnetlive.thoughtworks.com/MSBuildXmlLogger%2DBuilds/" title="Visit page outside Confluence">here</a>.</p>
 
 <p>Place this dll in your working directory, which will usually be the one where your target file is located.</p>
 
-<p>If you want to use an alternative logger, or use the provided logger in a different way, make sure to read up about the <tt>logger</tt> property of the <a href="MSBuild Task.html" title="MsBuild Task">MSBuild Task</a>.</p>
+<p>If you want to use an alternative logger, or use the provided logger in a different way, make sure to read up about the <tt>logger</tt> property of the <a href="http://confluence.public.thoughtworks.org/display/CCNET/MsBuild+Task" title="MsBuild Task">MSBuild Task</a>.</p>
 
 <h2><a name="UsingCruiseControl.NETwithMSBuild-SetupyourCruiseControl.NETconfigfile">Setup your CruiseControl.NET config file</a></h2>
 
-<p>With all this in place, you can add an <tt>&lt;msbuild /&gt;</tt> <a href="MSBuild Task.html" title="MsBuild Task">task</a> section to your project's config file. There are quite a few properties you can set, but making sure the working directory is correct should be the first thing you look at (and normally that will be the directory your target file is in.)</p>
+<p>With all this in place, you can add an <tt>&lt;msbuild /&gt;</tt> <a href="http://confluence.public.thoughtworks.org/display/CCNET/MsBuild+Task" title="MsBuild Task">task</a> section to your project's config file. There are quite a few properties you can set, but making sure the working directory is correct should be the first thing you look at (and normally that will be the directory your target file is in.)</p>
 
-<p>You also need to make sure you include a <tt>&lt;merge /&gt;</tt> task in your <tt>&lt;publishers /&gt;</tt> section to include the XML file output by the logger since it doesn't get included in the CCNet build log by default. Unless you specified something different in the <tt>logger</tt> property of the MSBuild task, this XML file will be called <tt>msbuild-output.xml</tt> and found in your working directory. You might want to consider setting the <tt>buildArgs</tt> property to include the <tt>/noconsolelogger</tt> argument to suppress console (non XML) log output.</p>
+<p>By default, the <tt>&lt;msbuild&gt;</tt> task will instruct the logger to output to a file called <tt>msbuild-output.xml</tt> in your artifact directory. The <tt>msbuild</tt> task will automatically include the contents of this file in your build results (you don't need to use the <a href="http://confluence.public.thoughtworks.org/display/CCNET/File+Merge+Task" title="File Merge Task">File Merge Task</a>).  You might want to consider setting the <tt>buildArgs</tt> property to include the <tt>/noconsolelogger</tt> argument to suppress console (non XML) log output.</p>
 
 <h2><a name="UsingCruiseControl.NETwithMSBuild-SetuptheDashboard">Setup the Dashboard</a></h2>
 
 <p>With the build server all setup, make sure to configure your Dashboard to show MSBuild results:</p>
 
 <ul>
-	<li>Make sure your <a href="Build Report Build Plugin.html" title="Build Report Build Plugin">Build Report Build Plugin</a> includes the <tt>compile-msbuild.xsl</tt> file</li>
-	<li>You'll probably also want to setup an MSBuild Output <a href="XSL Report Build Plugin.html" title="XSL Report Build Plugin">XSL Report Build Plugin</a> using the <tt>msbuild.xsl</tt> file, e.g. :
+	<li>Make sure your <a href="http://confluence.public.thoughtworks.org/display/CCNET/Build+Report+Build+Plugin" title="Build Report Build Plugin">Build Report Build Plugin</a> includes the <tt>compile-msbuild.xsl</tt> file</li>
+	<li>You'll probably also want to setup an MSBuild Output <a href="http://confluence.public.thoughtworks.org/display/CCNET/XSL+Report+Build+Plugin" title="XSL Report Build Plugin">XSL Report Build Plugin</a> using the <tt>msbuild.xsl</tt> file, e.g. :
 <div class="code"><div class="codeContent">
 <pre class="code-xml"><span class="code-tag">&lt;xslReportBuildPlugin description=<span class="code-quote">"MSBuild Output"</span> actionName=<span class="code-quote">"MSBuildOutputBuildPlugin"</span> xslFileName=<span class="code-quote">"xsl\msbuild.xsl"</span> /&gt;</span></pre>
 </div></div></li>
@@ -57,16 +57,6 @@
 
 <p>You can also use NAnt as your primary build tool, and call MSBuild from a NAnt script. Just make sure you use the MSBuild XMLLogger and include its output in your build log.</p>
 
-				    					    <br/>
-                        <div class="tabletitle">
-                            <a name="attachments">Attachments:</a>
-                        </div>
-
-                        <div class="greybox" align="left">
-                                                            <img src="icons/bullet_blue.gif" height="8" width="8" alt=""/>
-                                <a href="Using CruiseControl.NET with MSBuild_attachments/ThoughtWorks.CruiseControl.MSBuild.dll">ThoughtWorks.CruiseControl.MSBuild.dll</a> (application/x-msdownload)
-                                <br/>
-                                                    </div>
 				    
                     			    </td>
 		    </tr>
@@ -76,7 +66,7 @@
 				<td height="12" background="border/border_bottom.gif"><img src="border/spacer.gif" width="1" height="1" border="0"/></td>
 			</tr>
 		    <tr>
-			    <td align="center"><font color="grey">Document generated by Confluence on Aug 15, 2005 13:58</font></td>
+			    <td align="center"><font color="grey">Document generated by Confluence on Sep 21, 2005 17:55</font></td>
 		    </tr>
 	    </table>
     </body>

@@ -1,0 +1,101 @@
+<html>
+    <head>
+        <title>CruiseControl.NET : CCNet 0.9.2 Release Notes</title>
+	    <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">	    
+    </head>
+
+    <body>
+	    <table class="pagecontent" border="0" cellpadding="0" cellspacing="0" width="100%" bgcolor="#ffffff">
+		    <tr>
+			    <td valign="top" class="pagebody">
+				    <div class="pageheader">
+					    <span class="pagetitle">
+                            CruiseControl.NET : CCNet 0.9.2 Release Notes
+                                                    </span>
+				    </div>
+				    <div class="pagesubheading">
+					    This page last changed on Jun 26, 2005 by <font color="#0050B2">orogers</font>.
+				    </div>
+
+				    <h3><a name="CCNet0.9.2ReleaseNotes-Overview">Overview</a></h3>
+
+<div class="information-block" align='center'><div class='informationMacroPadding'><table cellpadding='5' width='85%' cellspacing='0' class='warningMacro' border='0'><tr><td width='16' valign='top'><img src="/images/icons/emoticons/forbidden.gif" width="16" height="16" align="absmiddle" alt="" border="0"></td><td><b class="strong">Important Changes</b><br />
+<p>If you are explicitly using the <a href="File State Manager.html" title="File State Manager">file state manager configuration block</a> in your <b>ccnet.config</b> file, you should be aware that the <b>filename</b> property has now been removed.  The filename will be inferred from the project name.  If you were setting this value, you will need to rename your state file to reflect the new state file name.  If you are not using this property then you will not be affected by this change, as long as you are upgrading from a version of ccnet post 0.7.</p></td></tr></table></div></div>
+
+<h4><a name="CCNet0.9.2ReleaseNotes-Sourcecontrol">Sourcecontrol</a></h4>
+
+<p>Some improvements have been made to the <a href="SourceGear Vault Source Control Block.html" title="SourceGear Vault Source Control Block">Vault</a> source control provider as labelling and getting the source is now supported.  Support for <a href="Telelogic Synergy.html" title="Telelogic Synergy">Telelogic's Synergy</a> SCM has now been added.  A <a href="Filtered Source Control Block.html" title="Filtered Source Control Block">UserFilter</a> has been added in order to filter modifications made by a particular user.  There is also a new <a href="Modification Writer Task.html" title="Modification Writer Task">Modification Writer Task</a> to write modifications out to an xml file to be used by your build process.</p>
+
+<h4><a name="CCNet0.9.2ReleaseNotes-Labellers">Labellers</a></h4>
+
+<p>Two new labeller providers have been added: <a href="Remote Project Labeller.html" title="Remote Project Labeller">Remote Project Labeller</a> and <a href="State File Labeller.html" title="State File Labeller">State File Labeller</a>.  These labellers can be used to synchronise the labels between a parent project and its children.  It is now also possible to increment the label for failed builds, as well as successful builds &#8211; this is useful if you need to generate and store build artifacts using the ccnet build label.</p>
+
+<p>h4 Triggers</p>
+
+<p>The FilterTrigger now supports filtering out modifications in ranges that span midnight.  This is useful for filtering trigger events if the SCM is unavailable for scheduled backup over the period around midnight.</p>
+
+<h3><a name="CCNet0.9.2ReleaseNotes-JiraIssues">Jira Issues</a></h3>
+
+<h4><a name="CCNet0.9.2ReleaseNotes-Bugs">Bugs</a></h4>
+<ul>
+	<li>CCNET-31 - Launch Web Page from CCTray produces Error</li>
+	<li>CCNET-286 - process.Start(); tries to start process in nonexistent dir</li>
+	<li>CCNET-291 - Vault Source Control considers labels to be changes</li>
+	<li>CCNET-344 - FilterTrigger does not support time range over midnight</li>
+	<li>CCNET-389 - VSS Should create working directory before checking for modifications</li>
+	<li>CCNET-408 - Exception: Source control operation has timed out</li>
+	<li>CCNET-413 - Plugins are not loaded when accessed via the webdashboard</li>
+	<li>CCNET-430 - ViewPath not double-quoted in ClearCase history command</li>
+	<li>CCNET-432 - PathFilter should handle empty folder/filenames</li>
+	<li>CCNET-435 - Even though an error is thrown CCnet still passes the build as a success</li>
+	<li>CCNET-438 - Installing Service</li>
+	<li>CCNET-445 - DateTime parsing under .NET 2.0 has become stricter which causes problems for VSS date parsing</li>
+	<li>CCNET-449 - NANT problem with working directory properties path</li>
+</ul>
+
+
+<h4><a name="CCNet0.9.2ReleaseNotes-NewFeatures">New Features</a></h4>
+<ul>
+	<li>CCNET-140 - Create UserFilter</li>
+	<li>CCNET-241 - Support GetSource() in Vault plugin</li>
+	<li>CCNET-440 - Add labelling support for Vault</li>
+	<li>CCNET-446 - Filter modifications by username</li>
+	<li>CCNET-447 - Dashboard project plugins configurable on a per-project basis</li>
+	<li>CCNET-454 - Add support for retrieving the label from a remote ccnet server</li>
+	<li>CCNET-455 - Add support for retrieving the label from a ccnet state file</li>
+	<li>CCNET-458 - Add support for P4Web urls and change numbers</li>
+	<li>CCNET-460 - Should be able to write modifications to file for use by external programs</li>
+	<li>CCNET-461 - Add support for Telelogic Synergy source control provider</li>
+	<li>CCNET-462 - Add MBUnit stylesheets</li>
+</ul>
+
+
+<h4><a name="CCNet0.9.2ReleaseNotes-Improvements">Improvements</a></h4>
+<ul>
+	<li>CCNET-252 - Perforce should populate the changeNumber modifications field</li>
+	<li>CCNET-353 - Vault should support timeout</li>
+	<li>CCNET-354 - ClearCase Plugin to support branches</li>
+	<li>CCNET-400 - Update Dashboard to allow projects with underscores in names</li>
+	<li>CCNET-431 - Incrementing build number on failed builds</li>
+	<li>CCNET-448 - VSS should support configuring whether to get a clean copy</li>
+	<li>CCNET-453 - Make Tag Prefix Configurable for CVS Provider</li>
+	<li>CCNET-456 - For Vault, Get and Label command should support passing username, password and repository</li>
+	<li>CCNET-459 - CCTray should not show exception dialogs by default</li>
+</ul>
+
+
+				    
+                    			    </td>
+		    </tr>
+	    </table>
+	    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+			<tr>
+				<td height="12" background="border/border_bottom.gif"><img src="border/spacer.gif" width="1" height="1" border="0"/></td>
+			</tr>
+		    <tr>
+			    <td align="center"><font color="grey">Document generated by Confluence on Sep 18, 2005 21:14</font></td>
+		    </tr>
+	    </table>
+    </body>
+</html>

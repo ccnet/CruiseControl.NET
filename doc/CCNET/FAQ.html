@@ -1,0 +1,127 @@
+<html>
+    <head>
+        <title>CruiseControl.NET : FAQ</title>
+	    <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">	    
+    </head>
+
+    <body>
+	    <table class="pagecontent" border="0" cellpadding="0" cellspacing="0" width="100%" bgcolor="#ffffff">
+		    <tr>
+			    <td valign="top" class="pagebody">
+				    <div class="pageheader">
+					    <span class="pagetitle">
+                            CruiseControl.NET : FAQ
+                                                    </span>
+				    </div>
+				    <div class="pagesubheading">
+					    This page last changed on Sep 16, 2005 by <font color="#0050B2">richardjfoster</font>.
+				    </div>
+
+				    <p>This is the CruiseControl.NET <em>Frequently Asked Questions</em> (FAQ)</p>
+
+<p>This FAQ is not meant to be a complete reference to CruiseControl.NET, but does provide some quick ideas about how to get various things done.</p>
+
+<p>If you want to add questions, answers, or both, please use the <a href="http://lists.sourceforge.net/lists/listinfo/ccnet-user" title="Visit page outside Confluence">CruiseControl.NET User's mailing list</a></p>
+
+<h1><a name="FAQ-CruiseControl.NETServer">CruiseControl.NET Server</a></h1>
+
+<h2><a name="FAQ-Debuggingtheserver">Debugging the server</a></h2>
+
+<h4><a name="FAQ-Mybuildisfailing%2CandI%27mnotsurewhy"><em>My build is failing, and I'm not sure why</em></a></h4>
+
+<p>CCNet integrates with external applications via the command-line, hence it is essential that the command executed by CCNet is correct for everything to work:</p>
+<ol>
+	<li>As a first step, verify that you <b>can</b> run your build script or connect to your sourcecontrol system from the command-line.</li>
+	<li>If this works or if you're not too sure what command to execute, you can get CCNet to tell you what command it is using.  To do this, go into your <b>ccnet.exe.config</b> file (or <b>ccservice.exe.config</b> file if you are running ccservice) and increase the trace level of the CruiseControlSwitch to the debug level of 4.  When you restart the CCNet server, it will write out the commands the it is using to the console window (and to the <b>ccnet.log</b> file).  Try copying and pasting this command into a new console window and running it directly.</li>
+	<li>If you are still unsure of what the problem is or if you think that the command that CCNet is creating is incorrect, please send an email to the CCNet user mailing list above including 1) a copy of the command you are executing, 2) the output it produces and 3) a copy of your ccnet.config file.</li>
+</ol>
+
+
+<h4><a name="FAQ-I%27mtryingtoaccesssomeinformationsuppliedbytheserver%2CbutIcan%27t.What%27sgoingwrong%3F"><em>I'm trying to access some information supplied by the server, but I can't. What's going wrong?</em></a></h4>
+
+<p>Many of the examples on the mailing list and user's blogs showing how to use information from the server (such as the build label) are based on the <a href="NAnt task.html" title="NAnt Task">NAnt task</a>, and date from before the first release candidate. Around that time, most of the property names changed, for example <tt>ccnet.label</tt> became <tt>CCNetLabel</tt>. Check the documentation page for the task you are using (ideally the one installed on your machine which should be accurate for the build of CruiseControl you installed) and make sure your build script is using the correct name for the property.</p>
+
+<h2><a name="FAQ-Theccnet.configfile">The ccnet.config file</a></h2>
+
+<h4><a name="FAQ-WhydoIgetanUnusednodedetectederrorwhenIstartuptheCCNetserver%3F"><em>Why do I get an <b>Unused node detected</b> error when I start up the CCNet server?</em></a></h4>
+
+<p>You will get these warnings if your <b>ccnet.config</b> file contains invalid elements or attributes.  Please double check the documentation that came with your installation (in the <b>/doc</b> folder).  Please be aware that the documentation on the web site may reflect a more recent version of ccnet than what you have installed.  If you are attempting to use a task or a property that has not been implemented in your server's version of ccnet then you will get this error.</p>
+
+
+<h4><a name="FAQ-Igettheerror%22INTERNALERROR%3AExpandableObjectConvertercannotconvertfromSystem.String.%22whenusing%3Csourcecontroltype%3D%22multi%22%3E"><em>I get the error "INTERNAL ERROR: ExpandableObjectConverter cannot convert from System.String." when using &lt;sourcecontrol type="multi"&gt;</em></a></h4>
+
+<p>This error occurs if you try and use a &lt;sourcecontrol&gt; block inside a Multi Source Control Block. The name of the element should instead be the same as you would put in the "type" attribute when using a &lt;sourcecontrol&gt; element. For more information and an example, see <a href="Multi Source Control Block.html" title="Multi Source Control Block">Multi Source Control Block</a>.</p>
+
+<a name="FAQ-Service"></a>
+<h2><a name="FAQ-UsingtheCCNetService">Using the CCNet Service</a></h2>
+
+<h4><a name="FAQ-MybuildisfailingandI%27mnotsurewhy"><em>My build is failing and I'm not sure why</em></a></h4>
+
+<ol>
+	<li>If you are having trouble running your build through CCService, start by making sure that everything works via the CCNet console application.  The console application is typically easier to configure and debug.</li>
+	<li>If the console build works but fails when running through the service, please consult the <a href="The Server Service Application.html" title="The Server Service Application">CCService</a> page for a suggestions on solving the common problems that users face.</li>
+</ol>
+
+
+<h2><a name="FAQ-SourceControlIntegration">Source Control Integration</a></h2>
+
+<h3><a name="FAQ-VisualSourceSafe">Visual Source Safe</a></h3>
+
+<h4><a name="FAQ-WhyisthevsssourcecontrolblockthrowingerrorswhenCCNetisrunningasaservicebutworkswhenrunningCCNetfromthecommandline%3F"><em>Why is the vss source control block throwing errors when CCNet is running as a service but works when running CCNet from the command line?</em></a></h4>
+
+<p>In order to access VSS, you must be able to access the shared folder on your VSS server from your CCNet server.  The CCNet service is set to use a local system user account by default which doesn't have access to other machines.  In order for CCNet to access VSS, you must change the log account for the service to a user that has network access to the VSS machine. More details can be found in the <a href="#FAQ-Service" title="Service on FAQ">Service</a> and <a href="Visual Source Safe Source Control Block.html" title="Visual Source Safe Source Control Block">Visual Source Safe Source Control Block</a> sections.</p>
+
+<h2><a name="FAQ-Triggers">Triggers</a></h2>
+
+<h4><a name="FAQ-HowdoIhaveitsothataprojectisonlybuiltwhenforcedmanually%3F"><em>How do I have it so that a project is only built when forced manually?</em></a></h4>
+
+<p>Use an empty <tt>&lt;triggers /&gt;</tt> tag in your config file. Read more at <a href="Trigger Blocks.html" title="Trigger Blocks">Trigger Blocks</a>.</p>
+
+<h2><a name="FAQ-Tasks">Tasks</a></h2>
+
+<h4><a name="FAQ-HowcanIgetCruiseControl.Nettorunallmytesttasks%2Cevenifsomefail%3F"><em>How can I get CruiseControl.Net to run all my test tasks, even if some fail?</em></a></h4>
+
+<p>One of the principles of Continuous Integration is that build failures are reported as quickly as possible. This means that if any item in the <tt>&lt;tasks&gt;</tt> section of the <a href="Project Configuration Block.html" title="Project Configuration Block">Project Configuration Block</a> reports a failure CruiseControl.Net will skip the remaining tasks and continue to the entries in the <tt>&lt;publishers&gt;</tt> section. If you need to do something more complex, we recommend using a tool like NAnt or MSBuild to handle the build tasks. An example showing how to use NAnt and NUnit to execute multiple test fixtures can be found on the <a href="Using CruiseControl.NET with NUnit.html" title="Using CruiseControl.NET with NUnit">Using CruiseControl.NET with NUnit</a> page.</p>
+
+<h2><a name="FAQ-Mergingresults">Merging results</a></h2>
+
+<h4><a name="FAQ-Whyaremytestresultsshowingupwhenthebuildsucceeds%2Cbutnotwhenthebuildfails%3F"><em>Why are my test results showing up when the build succeeds, but not when the build fails?</em></a></h4>
+
+<p>In the <b>ccnet.config</b> file, you need to move your <a href="File Merge Task.html" title="File Merge Task">Merge Task</a> section from the <a href="Task Blocks.html" title="Task Blocks">Tasks Block</a> to the Publishers Block.  The reason is that the first task to fail in the tasks section will prevent any further tasks from being run.  If this task is your <a href="File Merge Task.html" title="File Merge Task">Merge Task</a> then your test result files will not be included in the build.  All tasks in the publishers section will run regardless of whether previous tasks succeed or fail.</p>
+
+<h2><a name="FAQ-MultipleProjects">Multiple Projects</a></h2>
+
+<h4><a name="FAQ-HowcanIforceCruiseControl.Nettoonlybuildoneprojectatatime%3F"><em>How can I force CruiseControl.Net to only build one project at a time?</em></a></h4>
+
+<p>At the moment, you can't (at least not using the released CruiseControl.Net package). It is intended to add this functionality in a future release.</p>
+
+<a name="FAQ-Dashboard"></a>
+<h1><a name="FAQ-WebDashboard">Web Dashboard</a></h1>
+
+<h4><a name="FAQ-HowdoIchangethelookandfeeloftheWebDashboard%3F"><em>How do I change the look and feel of the Web Dashboard?</em></a></h4>
+
+<p>The look and feel of the Dashboard is defined by the velocity templates and xsl files in the <tt>templates</tt> and <tt>xsl</tt> sub-folders of your Web Dashboard folder (which by default is at <tt>C:\Windows\Program Files\CruiseControl.NET\webdashboard</tt> .)</p>
+
+<h4><a name="FAQ-HowdoIusemyownXSLstylesheetsforreports%3F"><em>How do I use my own XSL stylesheets for reports?</em></a></h4>
+
+<p>Both the <a href="Build Report Build Plugin.html" title="Build Report Build Plugin">Build Report Build Plugin</a> and <a href="Xsl Report Build Plugin.html" title="XSL Report Build Plugin">Xsl Report Build Plugin</a> can be configured to use custom stylesheets. Change the configuration of the <a href="Build Report Build Plugin.html" title="Build Report Build Plugin">Build Report Build Plugin</a> if you want to add a stylesheet to the main Build Report, or add a new <a href="Xsl Report Build Plugin.html" title="XSL Report Build Plugin">Xsl Report Build Plugin</a> instance if you want a totally new page for the report.</p>
+
+<h1><a name="FAQ-CCTray">CCTray</a></h1>
+
+<h1><a name="FAQ-Developingyourownplugins">Developing your own plugins</a></h1>
+
+				    
+                    			    </td>
+		    </tr>
+	    </table>
+	    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+			<tr>
+				<td height="12" background="border/border_bottom.gif"><img src="border/spacer.gif" width="1" height="1" border="0"/></td>
+			</tr>
+		    <tr>
+			    <td align="center"><font color="grey">Document generated by Confluence on Sep 18, 2005 21:14</font></td>
+		    </tr>
+	    </table>
+    </body>
+</html>
