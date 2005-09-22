@@ -216,7 +216,10 @@
 			</td>
 			<td bgcolor="gainsboro">
 				<xsl:value-of select="substring-after(failure/message, '-')"/><br/>
-				<xsl:value-of select="failure/message"/>
+				<xsl:value-of select="failure/message"/><br/>
+				<pre>
+					<xsl:value-of select="failure/stack-trace"/>
+				</pre>
 			</td>
 		</tr>
 	</xsl:template>

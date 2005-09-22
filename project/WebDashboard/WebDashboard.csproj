@@ -997,6 +997,11 @@
                     BuildAction = "Content"
                 />
                 <File
+                    RelPath = "xsl\NCoverSummary.xsl"
+                    Link = "..\xsl\NCoverSummary.xsl"
+                    BuildAction = "Content"
+                />
+                <File
                     RelPath = "xsl\tests.xsl"
                     Link = "..\xsl\tests.xsl"
                     BuildAction = "Content"
