@@ -16,7 +16,8 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 
 		public void WriteNode(string xml)
 		{
-			XmlReader reader = CreateXmlReader(StripIllegalCharacters(xml));
+			xml = StripIllegalCharacters(xml);
+			XmlReader reader = CreateXmlReader(xml);
 			try
 			{
 				WriteNode(reader, true);

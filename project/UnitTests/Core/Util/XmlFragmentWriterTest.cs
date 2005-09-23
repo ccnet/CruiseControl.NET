@@ -1,9 +1,7 @@
-using System;
 using System.IO;
 using System.Text;
 using System.Xml;
 using NUnit.Framework;
-using ThoughtWorks.CruiseControl.Core.Tasks;
 using ThoughtWorks.CruiseControl.Core.Util;
 
 namespace ThoughtWorks.CruiseControl.UnitTests.Core.Util
@@ -18,7 +16,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Util
 		public void CreateWriter()
 		{
 			baseWriter = new StringWriter();
-			writer = new XmlFragmentWriter(baseWriter);			
+			writer = new XmlFragmentWriter(baseWriter);
 		}
 
 		[Test]
@@ -47,21 +45,21 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Util
 		public void ShouldBeAbleToWriteWhenFragmentIsSurroundedByText()
 		{
 			writer.WriteNode("outside<foo/>text");
-			Assert.AreEqual("outside<foo />text", baseWriter.ToString());			
+			Assert.AreEqual("outside<foo />text", baseWriter.ToString());
 		}
 
 		[Test]
 		public void ShouldBeAbleToWriteWhenFragmentHasMultipleRootElements()
 		{
 			writer.WriteNode("<foo/><bar/>");
-			Assert.AreEqual("<foo /><bar />", baseWriter.ToString());			
+			Assert.AreEqual("<foo /><bar />", baseWriter.ToString());
 		}
 
 		[Test]
 		public void ShouldIgnoreXmlDeclaration()
 		{
 			writer.WriteNode(@"<?xml version=""1.0"" encoding=""utf-16""?><foo/><bar/>");
-			Assert.AreEqual("<foo /><bar />", baseWriter.ToString());						
+			Assert.AreEqual("<foo /><bar />", baseWriter.ToString());
 		}
 
 		[Test]
@@ -91,7 +89,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Util
 look like: <section name=""log4net""
 type=""log4net.Config.Log4NetConfigurationSectionHandler,log4net"" />";
 			writer.WriteNode(text);
-			Assert.AreEqual(string.Format("<![CDATA[{0}]]>", text), baseWriter.ToString());			
+			Assert.AreEqual(string.Format("<![CDATA[{0}]]>", text), baseWriter.ToString());
 		}
 
 		[Test]
@@ -99,7 +97,7 @@ type=""log4net.Config.Log4NetConfigurationSectionHandler,log4net"" />";
 		{
 			string text = "<a><b><c/></b>";
 			writer.WriteNode(text);
-			Assert.AreEqual(string.Format("<![CDATA[{0}]]>", text), baseWriter.ToString());			
+			Assert.AreEqual(string.Format("<![CDATA[{0}]]>", text), baseWriter.ToString());
 		}
 
 		[Test]
@@ -115,14 +113,25 @@ type=""log4net.Config.Log4NetConfigurationSectionHandler,log4net"" />";
 		[Test]
 		public void ShouldStripIllegalCharacters()
 		{
+			writer.WriteNode(string.Format("<foo>{0}</foo>", IllegalCharacters()));
+			Assert.AreEqual("<foo>\t\n\r</foo>", baseWriter.ToString());
+		}
+
+		[Test]
+		public void ShouldStripIllegalCharactersFromCDATABlock()
+		{
+			writer.WriteNode("a <> b " + IllegalCharacters());
+			Assert.AreEqual("<![CDATA[a <> b \t\n\r]]>", baseWriter.ToString());
+		}
+
+		private string IllegalCharacters()
+		{
 			StringBuilder builder = new StringBuilder();
 			for (int i = 0; i < 15; i++)
 			{
-				builder.Append((char)i, 1);				
+				builder.Append((char) i, 1);
 			}
-
-			writer.WriteNode("<foo>" + builder.ToString() + "</foo>");
-			Assert.AreEqual("<foo>\t\n\r</foo>", baseWriter.ToString());
+			return builder.ToString();
 		}
 	}
 }
