@@ -26,7 +26,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 			this.linkFactory = linkFactory;
 		}
 
-		public IResponse Execute()
+		public HtmlFragmentResponse Execute()
 		{
 			Hashtable velocityContext = new Hashtable();
 			string velocityTemplateName = "";
@@ -60,7 +60,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 						IBuildSpecifier buildSpecifier = request.BuildSpecifier;
 						velocityContext["links"] = pluginLinkCalculator.GetBuildPluginLinks(buildSpecifier);
 						velocityContext["recentBuildsTable"] = recentBuildsViewBuilder.BuildRecentBuildsTable(buildSpecifier.ProjectSpecifier);
-						velocityContext["latestLink"] = linkFactory.CreateBuildLink(buildNameRetriever.GetLatestBuildSpecifier(buildSpecifier.ProjectSpecifier), "", BuildReportBuildPlugin.ACTION_NAME);
+						velocityContext["latestLink"] = linkFactory.CreateProjectLink(request.ProjectSpecifier, LatestBuildReportProjectPlugin.ACTION_NAME);
 						velocityContext["nextLink"] = linkFactory.CreateBuildLink(buildNameRetriever.GetNextBuildSpecifier(buildSpecifier), "", BuildReportBuildPlugin.ACTION_NAME);
 						velocityContext["previousLink"] = linkFactory.CreateBuildLink(buildNameRetriever.GetPreviousBuildSpecifier(buildSpecifier), "", BuildReportBuildPlugin.ACTION_NAME);
 						velocityTemplateName = @"BuildSideBar.vm";
@@ -68,7 +68,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 				}
 			}
 
-			return velocityViewGenerator.GenerateView(velocityTemplateName, velocityContext);
+			return velocityViewGenerator.GenerateView(velocityTemplateName, velocityContext) as HtmlFragmentResponse;
 		}
 	}
 }

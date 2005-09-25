@@ -1,6 +1,9 @@
 using System;
+using System.Web;
 using NUnit.Framework;
+using ObjectWizard;
 using ThoughtWorks.CruiseControl.WebDashboard.Dashboard;
+using ThoughtWorks.CruiseControl.WebDashboard.Plugins.BuildReport;
 
 namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 {
@@ -31,8 +34,18 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 //
 //			// ToDo - test Plugins registered correctly
 //		}
-	}
 
+		// To Do - This still not runnable since ObjectGiverInitialiser still too tied in to ASP.NET - Will sort this out after 1.0 - MikeR
+//		[Test]
+//		public void ShouldSetupObjectGiverToBeAbleToCreateAlwaysRequiredPlugins()
+//		{
+//			HttpContext context = new HttpContext(null);
+//			ObjectGiver objectGiver = new CruiseObjectGiverInitializer(new ManagableObjectGiver()).SetupObjectGiverForRequest(context);
+//	
+//			Assert.IsNotNull(objectGiver.GiveObjectById(LatestBuildReportProjectPlugin.ACTION_NAME));
+//		}
+}
+	
 	public class StubBuildPlugin : IPlugin
 	{
 		public INamedAction[] NamedActions

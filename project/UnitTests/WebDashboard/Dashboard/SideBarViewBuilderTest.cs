@@ -72,7 +72,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 			velocityViewGeneratorMock.ExpectAndReturn("GenerateView", velocityResponse, @"FarmSideBar.vm", new HashtableConstraint(velocityContext));
 
 			// Execute
-			IResponse returnedResponse = sideBarViewBuilder.Execute();
+			HtmlFragmentResponse returnedResponse = sideBarViewBuilder.Execute();
 
 			// Verify
 			Assert.AreEqual(velocityResponse, returnedResponse);
@@ -95,7 +95,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 			velocityViewGeneratorMock.ExpectAndReturn("GenerateView", velocityResponse, @"ServerSideBar.vm", new HashtableConstraint(velocityContext));
 
 			// Execute
-			IResponse returnedResponse = sideBarViewBuilder.Execute();
+			HtmlFragmentResponse returnedResponse = sideBarViewBuilder.Execute();
 
 			// Verify
 			Assert.AreEqual(velocityResponse, returnedResponse);
@@ -122,7 +122,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 			velocityViewGeneratorMock.ExpectAndReturn("GenerateView", velocityResponse, @"ProjectSideBar.vm", new HashtableConstraint(velocityContext));
 
 			// Execute
-			IResponse returnedResponse = sideBarViewBuilder.Execute();
+			HtmlFragmentResponse returnedResponse = sideBarViewBuilder.Execute();
 
 			// Verify
 			Assert.AreEqual(velocityResponse, returnedResponse);
@@ -139,25 +139,24 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 			cruiseRequestWrapperMock.ExpectAndReturn("ProjectName", "myProject");
 			cruiseRequestWrapperMock.ExpectAndReturn("BuildName", "myBuild");
 			cruiseRequestWrapperMock.ExpectAndReturn("BuildSpecifier", buildSpecifier);
+			cruiseRequestWrapperMock.ExpectAndReturn("ProjectSpecifier", projectSpecifier);
 
 			pluginLinkCalculatorMock.ExpectAndReturn("GetBuildPluginLinks", links, buildSpecifier);
 			string recentBuildsView = "";
 			recentBuildsViewBuilderMock.ExpectAndReturn("BuildRecentBuildsTable", recentBuildsView, projectSpecifier);
 
-			IBuildSpecifier latestBuildSpecifier = new DefaultBuildSpecifier(projectSpecifier, "latest");
 			IBuildSpecifier nextBuildSpecifier = new DefaultBuildSpecifier(projectSpecifier, "next");
 			IBuildSpecifier previousBuildSpecifier = new DefaultBuildSpecifier(projectSpecifier, "previous");
 			IAbsoluteLink latestLink = new GeneralAbsoluteLink("test latest");
 			IAbsoluteLink nextLink = new GeneralAbsoluteLink("test next");
 			IAbsoluteLink previousLink = new GeneralAbsoluteLink("test previous");
 
-			buildNameRetrieverMock.ExpectAndReturn("GetLatestBuildSpecifier", latestBuildSpecifier, projectSpecifier);
 			buildNameRetrieverMock.ExpectAndReturn("GetNextBuildSpecifier", nextBuildSpecifier, buildSpecifier);
 			buildNameRetrieverMock.ExpectAndReturn("GetPreviousBuildSpecifier", previousBuildSpecifier, buildSpecifier);
 
 			string action = BuildReportBuildPlugin.ACTION_NAME;
 
-			linkFactoryMock.ExpectAndReturn("CreateBuildLink", latestLink, latestBuildSpecifier, "", action);
+			linkFactoryMock.ExpectAndReturn("CreateProjectLink", latestLink, projectSpecifier, LatestBuildReportProjectPlugin.ACTION_NAME);
 			linkFactoryMock.ExpectAndReturn("CreateBuildLink", nextLink, nextBuildSpecifier, "", action);
 			linkFactoryMock.ExpectAndReturn("CreateBuildLink", previousLink, previousBuildSpecifier, "", action);
 
@@ -170,7 +169,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 			velocityViewGeneratorMock.ExpectAndReturn("GenerateView", velocityResponse, @"BuildSideBar.vm", new HashtableConstraint(velocityContext));
 
 			// Execute
-			IResponse returnedResponse = sideBarViewBuilder.Execute();
+			HtmlFragmentResponse returnedResponse = sideBarViewBuilder.Execute();
 
 			// Verify
 			Assert.AreEqual(velocityResponse, returnedResponse);

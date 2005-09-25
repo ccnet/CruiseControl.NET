@@ -1,3 +1,4 @@
+using System;
 using System.Web;
 using ObjectWizard;
 using ThoughtWorks.CruiseControl.Core.Reporting.Dashboard.Navigation;
@@ -80,6 +81,18 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 				}
 			}
 
+			// Even if the user hasn't specified to use this plugin, we still need it registered since there are links to it elsewhere
+			try
+			{
+				giver.GiveObjectById(LatestBuildReportProjectPlugin.ACTION_NAME);
+			}
+			catch (ApplicationException)
+			{
+				IPlugin latestBuildPlugin = (IPlugin) giver.GiveObjectByType(typeof (LatestBuildReportProjectPlugin));
+				giverManager.CreateInstanceMapping(latestBuildPlugin.NamedActions[0].ActionName, latestBuildPlugin.NamedActions[0].Action)
+					.Decorate(typeof(ServerCheckingProxyAction)).Decorate(typeof(ProjectCheckingProxyAction)).Decorate(typeof(CruiseActionProxyAction)).Decorate(typeof(ExceptionCatchingActionProxy)).Decorate(typeof(SiteTemplateActionDecorator));
+			}
+			
 			foreach (IPlugin plugin in pluginConfig.BuildPlugins)
 			{
 				foreach (INamedAction action in plugin.NamedActions)

@@ -34,7 +34,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.ProjectReport
 			IBuildSpecifier[] buildSpecifiers = farmService.GetMostRecentBuildSpecifiers(projectSpecifier, 1);
 			if (buildSpecifiers.Length == 1)
 			{
-				velocityContext["mostRecentBuildUrl"] = linkFactory.CreateBuildLink(buildSpecifiers[0], BuildReportBuildPlugin.ACTION_NAME).Url;
+				velocityContext["mostRecentBuildUrl"] = linkFactory.CreateProjectLink(projectSpecifier, LatestBuildReportProjectPlugin.ACTION_NAME).Url;
 			}
 
 			velocityContext["projectName"] = projectSpecifier.ProjectName;

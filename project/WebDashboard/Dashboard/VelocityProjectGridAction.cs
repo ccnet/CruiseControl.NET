@@ -40,7 +40,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 			return GenerateView(farmService.GetProjectStatusListAndCaptureExceptions(serverSpecifier), velocityContext, actionName, request, serverSpecifier);
 		}
 
-		private IResponse GenerateView(ProjectStatusListAndExceptions projectStatusListAndExceptions, Hashtable velocityContext, string actionName, IRequest request, IServerSpecifier serverSpecifier)
+		private HtmlFragmentResponse GenerateView(ProjectStatusListAndExceptions projectStatusListAndExceptions, Hashtable velocityContext, string actionName, IRequest request, IServerSpecifier serverSpecifier)
 		{
 			ProjectGridSortColumn sortColumn = GetSortColumn(request);
 			bool sortReverse = SortAscending(request);

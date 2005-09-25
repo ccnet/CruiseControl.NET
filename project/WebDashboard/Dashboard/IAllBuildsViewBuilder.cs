@@ -5,6 +5,6 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 {
 	public interface IAllBuildsViewBuilder
 	{
-		IResponse GenerateAllBuildsView(IProjectSpecifier projectSpecifier);	
+		HtmlFragmentResponse GenerateAllBuildsView(IProjectSpecifier projectSpecifier);	
 	}
 }

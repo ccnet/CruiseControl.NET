@@ -4,6 +4,7 @@ using ThoughtWorks.CruiseControl.Core.Reporting.Dashboard.Navigation;
 using ThoughtWorks.CruiseControl.WebDashboard.Dashboard;
 using ThoughtWorks.CruiseControl.WebDashboard.Dashboard.Actions;
 using ThoughtWorks.CruiseControl.WebDashboard.IO;
+using ThoughtWorks.CruiseControl.WebDashboard.MVC;
 
 namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard.Actions
 {
@@ -26,7 +27,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard.Actions
 			XslReportBuildAction action = new XslReportBuildAction((IBuildLogTransformer) buildLogTransformerMock.MockInstance);
 			action.XslFileName = @"xsl\myxsl.xsl";
 
-			Assert.AreEqual("transformed", action.Execute(cruiseRequest).ResponseFragment);
+			Assert.AreEqual("transformed", ((HtmlFragmentResponse)action.Execute(cruiseRequest)).ResponseFragment);
 
 			buildLogTransformerMock.Verify();
 			cruiseRequestMock.Verify();

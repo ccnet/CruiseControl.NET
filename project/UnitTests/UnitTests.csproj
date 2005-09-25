@@ -1317,6 +1317,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "WebDashboard\Plugins\BuildReport\LatestBuildReportProjectPluginTest.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "WebDashboard\Plugins\DeleteProject\DoDeleteProjectActionTest.cs"
                     SubType = "Code"
                     BuildAction = "Compile"

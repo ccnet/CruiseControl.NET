@@ -729,12 +729,17 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Plugins\BuildReport\BuildReportBuildPlugin.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Plugins\BuildReport\HtmlBuildLogAction.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "Plugins\BuildReport\ViewBuildReportAction.cs"
+                    RelPath = "Plugins\BuildReport\LatestBuildReportProjectPlugin.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

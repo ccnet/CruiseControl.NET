@@ -5,6 +5,7 @@ using ThoughtWorks.CruiseControl.WebDashboard.MVC.View;
 
 namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard.ActionDecorators
 {
+	// ToDo - test - I think doing so will change the design a bit - will probably get more in on the constructor - should do this after 1.0
 	public class SiteTemplateActionDecorator : IAction
 	{
 		private readonly IAction decoratedAction;
@@ -21,13 +22,20 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard.ActionDecorators
 		public IResponse Execute(IRequest cruiseRequest)
 		{
 			Hashtable velocityContext = new Hashtable();
-			velocityContext["breadcrumbs"] = (((TopControlsViewBuilder) objectGiver.GiveObjectByType(typeof(TopControlsViewBuilder))).Execute()).ResponseFragment;
-			velocityContext["sidebar"] = (((SideBarViewBuilder) objectGiver.GiveObjectByType(typeof(SideBarViewBuilder))).Execute()).ResponseFragment;
-			velocityContext["mainContent"] = decoratedAction.Execute(cruiseRequest).ResponseFragment;
+			IResponse decoratedActionResponse = decoratedAction.Execute(cruiseRequest);
+			if (decoratedActionResponse is HtmlFragmentResponse)
+			{
+				velocityContext["breadcrumbs"] = (((TopControlsViewBuilder) objectGiver.GiveObjectByType(typeof(TopControlsViewBuilder))).Execute()).ResponseFragment;
+				velocityContext["sidebar"] = (((SideBarViewBuilder) objectGiver.GiveObjectByType(typeof(SideBarViewBuilder))).Execute()).ResponseFragment;
+				velocityContext["mainContent"] = ((HtmlFragmentResponse) decoratedActionResponse).ResponseFragment;
+				velocityContext["dashboardversion"] = GetVersion();
 
-			velocityContext["dashboardversion"] = GetVersion();
-
-			return velocityViewGenerator.GenerateView("SiteTemplate.vm", velocityContext);
+				return velocityViewGenerator.GenerateView("SiteTemplate.vm", velocityContext);
+			}
+			else
+			{
+				return decoratedActionResponse;
+			}
 		}
 
 		private string GetVersion()
@@ -37,6 +45,5 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard.ActionDecorators
 			assembly = System.Reflection.Assembly.GetExecutingAssembly();
 			return assembly.GetName().Version.ToString();
 		}
-
 	}
 }

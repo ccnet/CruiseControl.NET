@@ -23,11 +23,11 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.MVC.ASPNET
 
 			if (response is RedirectResponse)
 			{
-				context.Response.Redirect(response.ResponseFragment);
+				context.Response.Redirect(((RedirectResponse) response).Url);
 			}
 			else
 			{
-				context.Response.Write(response.ResponseFragment);
+				context.Response.Write(((HtmlFragmentResponse) response).ResponseFragment);
 			}
 
 			context.Response.Flush();

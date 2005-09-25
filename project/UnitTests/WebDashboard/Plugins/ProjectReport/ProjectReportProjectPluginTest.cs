@@ -62,7 +62,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Plugins.ProjectRepor
 			cruiseRequestMock.ExpectAndReturn("ProjectSpecifier", projectSpecifier);
 			farmServiceMock.ExpectAndReturn("GetMostRecentBuildSpecifiers", new IBuildSpecifier[] { buildSpecifier }, projectSpecifier, 1);
 			farmServiceMock.ExpectAndReturn("GetExternalLinks", links, projectSpecifier);
-			linkFactoryMock.ExpectAndReturn("CreateBuildLink", new GeneralAbsoluteLink("foo", "buildUrl"), buildSpecifier, BuildReportBuildPlugin.ACTION_NAME);
+			linkFactoryMock.ExpectAndReturn("CreateProjectLink", new GeneralAbsoluteLink("foo", "buildUrl"), projectSpecifier, LatestBuildReportProjectPlugin.ACTION_NAME);
 			viewGeneratorMock.ExpectAndReturn("GenerateView", response, @"ProjectReport.vm", new HashtableConstraint(expectedContext));
 
 			// Execute

@@ -49,7 +49,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 			}
 		}
 
-		public IResponse GenerateAllBuildsView(IProjectSpecifier projectSpecifier)
+		public HtmlFragmentResponse GenerateAllBuildsView(IProjectSpecifier projectSpecifier)
 		{
 			Hashtable primaryContext = new Hashtable();
 			Hashtable secondaryContext = new Hashtable();

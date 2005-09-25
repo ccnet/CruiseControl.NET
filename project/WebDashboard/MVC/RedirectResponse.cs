@@ -10,7 +10,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.MVC
 			redirectUrl = redirectURL;
 		}
 
-		public string ResponseFragment
+		public string Url
 		{
 			get { return redirectUrl; }
 		}

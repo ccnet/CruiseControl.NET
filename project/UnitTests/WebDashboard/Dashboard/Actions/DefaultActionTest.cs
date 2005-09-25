@@ -33,7 +33,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard.Actions
 
 			IResponse response = action.Execute(null);
 
-			Assert.AreEqual("http://here", ((RedirectResponse) response).ResponseFragment);
+			Assert.AreEqual("http://here", ((RedirectResponse) response).Url);
 			VerifyAll();
 		}
 	}

@@ -11,7 +11,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.MVC.View
 			this.velocityTransformer = velocityTransformer;
 		}
 
-		public IResponse GenerateView(string templateName, Hashtable velocityContext)
+		public HtmlFragmentResponse GenerateView(string templateName, Hashtable velocityContext)
 		{
 			return new HtmlFragmentResponse(velocityTransformer.Transform(templateName, velocityContext));
 		}
