@@ -106,14 +106,11 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			builder.AppendIf(UseHistory && dir != null, "-l");
 			builder.AppendIf(UseHistory && dir != null, "\"{0}\"", dir);
 
-			ProcessInfo info = NewProcessInfoWithArgs(result, builder.ToString());
-			Log.Info(string.Format("Getting source from CVS: {0} {1}", info.FileName, info.Arguments));
-			return info;
+			return NewProcessInfoWithArgs(result, builder.ToString());
 		}
 
 		private Modification[] GetModifications(string directory, IIntegrationResult from, IIntegrationResult to)
 		{
-			Log.Info(String.Format("Checking directory {0} for modifications.", directory));
 			return GetModifications(CreateLogProcessInfo(from, directory), from.StartTime, to.StartTime);
 		}
 
@@ -128,6 +125,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			foreach (string dir in dirs)
 			{
 				string reportDir = Path.Combine(WorkingDirectory, dir);
+				Log.Info(String.Format("Checking directory {0} for modifications.", reportDir));
 				Modification[] modifications = GetModifications(reportDir, from, to);
 				mods.AddRange(modifications);
 
@@ -149,10 +147,8 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 
 		private ProcessResult ExecuteHistoryCommand(IIntegrationResult from)
 		{
-			Log.Info("Get changes in working directory: " + WorkingDirectory);
 			ProcessArgumentBuilder buffer = new ProcessArgumentBuilder();
 			buffer.AppendArgument(string.Format("history -x MAR -a -D \"{0}\"", FormatCommandDate(from.StartTime)));
-
 			return Execute(NewProcessInfoWithArgs(from, buffer.ToString()));
 		}
 
@@ -205,11 +201,5 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			buffer.AppendIf(UseHistory && dir != null, @"""{0}""", dir);
 			return buffer.ToString();
 		}
-	}
-
-	internal class NullUrlBuilder : IModificationUrlBuilder
-	{
-		public void SetupModification(Modification[] modifications)
-		{}
 	}
 }

@@ -11,15 +11,15 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 	[TestFixture]
 	public class CvsHistoryParserTest : CustomAssertion
 	{
-		private CvsHistoryParser _cvs = new CvsHistoryParser();
+		private CvsHistoryParser cvs = new CvsHistoryParser();
 
 		[Test]
 		public void ParseStream() 
 		{
 			TextReader input = new StringReader(CvsMother.CVS_LOGFILE_CONTENT);
-			Modification[] modifications = _cvs.Parse(input, CvsMother.OLDEST_ENTRY, CvsMother.NEWEST_ENTRY);
+			Modification[] modifications = cvs.Parse(input, CvsMother.OLDEST_ENTRY, CvsMother.NEWEST_ENTRY);
 			
-			Assert.AreEqual(5, modifications.Length);
+			Assert.AreEqual(6, modifications.Length);
 
 			Modification mod1 = new Modification();
 			mod1.Type = "modified";
@@ -61,13 +61,28 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 			mod5.UserName = "alden";
 			mod5.Comment = "Hey, look, another deleted file.";
 		
+			Modification mod6 = new Modification();
+			mod6.Type = "modified";
+			mod6.FileName = "File.cs";
+			mod6.FolderName = "Project";
+			mod6.ModifiedTime = CreateDate("2005/09/12 15:01:10 +0");
+			mod6.UserName = "szko";
+			mod6.Comment = "Fixed some bugs.";
+
 			ArrayList.Adapter(modifications).Sort();
+			Assert.AreEqual(mod5, modifications[0]);
+			Assert.AreEqual(mod4, modifications[1]);
 			Assert.AreEqual(mod1, modifications[2]);
 			Assert.AreEqual(mod2, modifications[3]);
 			Assert.AreEqual(mod3, modifications[4]);
-			Assert.AreEqual(mod4, modifications[1]);
+			Assert.AreEqual(mod6, modifications[5]);
+		}
 
-			Assert.AreEqual(mod5, modifications[0]);
+		[Test]
+		public void ParseCvs112Examples() 
+		{
+			TextReader input = new StringReader(CvsMother.Cvs112Examples());
+			cvs.Parse(input, CvsMother.OLDEST_ENTRY, CvsMother.NEWEST_ENTRY);
 		}
 
 		private DateTime CreateDate(string dateString) 

@@ -193,7 +193,63 @@ revision 1.4
 date: 2002/03/13 19:38:42;  author: alden;  state: dead;  lines: +0 -0
 Hey, look, another deleted file.
 =============================================================================
-"; }
+
+RCS file: /data/Project/File.cs,v
+Working file: Project/File.cs
+head: 1.11
+branch:
+locks: strict
+access list:
+keyword substitution: kv
+total revisions: 12; selected revisions: 1
+description:
+----------------------------
+revision 1.11
+date: 2005-09-12 15:01:10 +0000;  author: szko;  state: Exp;  lines: +68 -132
+Fixed some bugs.
+============================================================================= "; }
+		}
+
+		public static string Cvs112Examples()
+		{
+			return @"RCS file: /home/jerome/cvs-repository/CVSROOT/cvswrappers,v
+Working file: cvswrappers
+head: 1.1
+branch:
+locks: strict
+access list:
+symbolic names:
+keyword substitution: kv
+total revisions: 1;	selected revisions: 1
+description:
+----------------------------
+revision 1.1
+date: 2004-03-25 00:58:49 +0000;  author: jerome;  state: Exp;
+initial checkin
+=============================================================================
+
+RCS file: /var/lib/cvs/test/file.txt,v
+Working file: test/file.txt
+head: 1.49
+branch:
+locks: strict
+access list:
+symbolic names:
+	TEST2: 1.47.0.2
+	TEST: 1.49
+	test/: 1.44
+	start: 1.1.1.1
+	cb: 1.1.1
+keyword substitution: kv
+total revisions: 52; selected revisions: 1
+description:
+----------------------------
+revision 1.49
+date: 2005-08-22 17:28:13 +0000; author: jerome; state: Exp; lines: +1 -2
+Test commit
+=============================================================================
+
+";
 		}
 	}
 }
