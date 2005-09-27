@@ -354,7 +354,17 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "configuration\DefaultServerConfiguration.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "configuration\FileConfigurationService.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "configuration\FileWatcherConfigurationService.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -375,6 +385,11 @@
                 />
                 <File
                     RelPath = "configuration\IConfigurationService.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "configuration\IServerConfiguration.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -680,6 +695,11 @@
                 />
                 <File
                     RelPath = "sourcecontrol\NullSourceControl.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "sourcecontrol\NullUrlBuilder.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

@@ -51,7 +51,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 			mockCruiseServer.Expect("ForceBuild", "test");
 			mockCruiseServer.Expect("WaitForExit","test");
 			Mock mockCruiseServerFactory = new DynamicMock(typeof(ICruiseServerFactory));
-			mockCruiseServerFactory.ExpectAndReturn("Create", mockCruiseServer.MockInstance, parser.IsRemote, parser.ConfigFile);
+			mockCruiseServerFactory.ExpectAndReturn("Create", mockCruiseServer.MockInstance, parser.UseRemoting, parser.ConfigFile);
 
 			new ConsoleRunner(parser, (ICruiseServerFactory)mockCruiseServerFactory.MockInstance).Run();
 
@@ -66,7 +66,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 			mockCruiseServer.Expect("Start");
 			mockCruiseServer.Expect("WaitForExit");
 			Mock mockCruiseServerFactory = new DynamicMock(typeof(ICruiseServerFactory));
-			mockCruiseServerFactory.ExpectAndReturn("Create", mockCruiseServer.MockInstance, parser.IsRemote, parser.ConfigFile);
+			mockCruiseServerFactory.ExpectAndReturn("Create", mockCruiseServer.MockInstance, parser.UseRemoting, parser.ConfigFile);
 
 			new ConsoleRunner(parser, (ICruiseServerFactory)mockCruiseServerFactory.MockInstance).Run();
 

@@ -8,7 +8,12 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Util
 	{
 		public event FileSystemEventHandler OnFileChanged;
 
-		public void RaiseEvent() { OnFileChanged(null, null); }
-		void IDisposable.Dispose() { }
+		public void RaiseEvent()
+		{
+			OnFileChanged(null, null);
+		}
+
+		void IDisposable.Dispose()
+		{}
 	}
 }

@@ -3,7 +3,6 @@ using NMock;
 using NUnit.Framework;
 using ThoughtWorks.CruiseControl.Core;
 using ThoughtWorks.CruiseControl.Core.Config;
-using ThoughtWorks.CruiseControl.UnitTests.Core.Util;
 
 namespace ThoughtWorks.CruiseControl.UnitTests.Core.Config
 {
@@ -12,7 +11,6 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Config
 	{
 		private DynamicMock configurationFileLoaderMock;
 		private DynamicMock configurationFileSaverMock;
-		private MockFileWatcher fileWatcher;
 		private FileConfigurationService fileService;
 
 		private DynamicMock configurationMock;
@@ -22,16 +20,15 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Config
 		[SetUp]
 		public void Setup()
 		{
-			configurationFileLoaderMock = new DynamicMock(typeof(IConfigurationFileLoader));
-			configurationFileSaverMock = new DynamicMock(typeof(IConfigurationFileSaver));
-			fileWatcher = new MockFileWatcher();
+			configurationFileLoaderMock = new DynamicMock(typeof (IConfigurationFileLoader));
+			configurationFileSaverMock = new DynamicMock(typeof (IConfigurationFileSaver));
 			configFile = new FileInfo("testFileName");
-			fileService = new FileConfigurationService((IConfigurationFileLoader) configurationFileLoaderMock.MockInstance,
-				(IConfigurationFileSaver) configurationFileSaverMock.MockInstance,
-				fileWatcher,
-				configFile);
 
-			configurationMock = new DynamicMock(typeof(IConfiguration));
+			fileService = new FileConfigurationService((IConfigurationFileLoader) configurationFileLoaderMock.MockInstance,
+			                                           (IConfigurationFileSaver) configurationFileSaverMock.MockInstance,
+			                                           configFile);
+
+			configurationMock = new DynamicMock(typeof (IConfiguration));
 			configuration = (IConfiguration) configurationMock.MockInstance;
 		}
 
@@ -65,30 +62,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Config
 			VerifyAll();
 		}
 
-		[Test]
-		public void CallsUpdateHandlersWhenFileWatcherChanges()
-		{
-			// Setup
-			fileService.AddConfigurationUpdateHandler(new ConfigurationUpdateHandler(OnUpdate));
-			updateCalled = false;
-
-			// Execute
-			fileWatcher.RaiseEvent();
-
-			// Verify
-			Assert.IsTrue(updateCalled);
-		}
-
-		bool updateCalled = false;
-		public void OnUpdate()
-		{
-			updateCalled = true;
-		}
-
-		[Test]
+		[Test, Ignore("unimplemented")]
 		public void DoesSomethingSaneWhenBadLoadThingsHappen()
-		{
-			
-		}
+		{}
 	}
 }

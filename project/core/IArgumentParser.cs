@@ -2,7 +2,7 @@ namespace ThoughtWorks.CruiseControl.Core
 {
 	public interface IArgumentParser
 	{
-		bool IsRemote { get; }
+		bool UseRemoting { get; }
 		string Project { get; }
 		string ConfigFile { get; }
 		bool ShowHelp { get; }

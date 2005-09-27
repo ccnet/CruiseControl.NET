@@ -15,12 +15,12 @@ namespace ThoughtWorks.CruiseControl.Core
 	{
 		private readonly IProjectSerializer projectSerializer;
 		private readonly IProjectIntegratorListFactory projectIntegratorListFactory;
-		private IConfigurationService configurationService;
-		private ICruiseManager _manager;
-		private ManualResetEvent _monitor = new ManualResetEvent(true);
+		private readonly IConfigurationService configurationService;
+		private readonly ICruiseManager manager;
+		private readonly ManualResetEvent monitor = new ManualResetEvent(true);
 
 		private IProjectIntegratorList projectIntegrators;
-		private bool _disposed;
+		private bool disposed;
 
 		public CruiseServer(IConfigurationService configurationService, IProjectIntegratorListFactory projectIntegratorListFactory, IProjectSerializer projectSerializer)
 		{
@@ -29,7 +29,7 @@ namespace ThoughtWorks.CruiseControl.Core
 			this.projectIntegratorListFactory = projectIntegratorListFactory;
 
 			// ToDo - get rid of manager, maybe
-			_manager = new CruiseManager(this);
+			manager = new CruiseManager(this);
 
 			// By default, no integrators are running
 			this.projectSerializer = projectSerializer;
@@ -40,7 +40,7 @@ namespace ThoughtWorks.CruiseControl.Core
 		public void Start()
 		{
 			Log.Info("Starting CruiseControl.NET Server");
-			_monitor.Reset();
+			monitor.Reset();
 			StartIntegrators();
 		}
 
@@ -51,7 +51,7 @@ namespace ThoughtWorks.CruiseControl.Core
 		{
 			Log.Info("Stopping CruiseControl.NET Server");
 			StopIntegrators();
-			_monitor.Set();
+			monitor.Set();
 		}
 
 		/// <summary>
@@ -61,7 +61,7 @@ namespace ThoughtWorks.CruiseControl.Core
 		{
 			Log.Info("Aborting CruiseControl.NET Server");
 			AbortIntegrators();
-			_monitor.Set();
+			monitor.Set();
 		}
 
 		/// <summary>
@@ -81,7 +81,7 @@ namespace ThoughtWorks.CruiseControl.Core
 		/// </summary>
 		public void WaitForExit()
 		{
-			_monitor.WaitOne();
+			monitor.WaitOne();
 		}
 
 		private void StartIntegrators()
@@ -131,7 +131,7 @@ namespace ThoughtWorks.CruiseControl.Core
 
 		public ICruiseManager CruiseManager
 		{
-			get { return _manager; }
+			get { return manager; }
 		}
 
 		public ProjectStatus[] GetProjectStatus()
@@ -354,8 +354,8 @@ namespace ThoughtWorks.CruiseControl.Core
 		{
 			lock (this)
 			{
-				if (_disposed) return;
-				_disposed = true;
+				if (disposed) return;
+				disposed = true;
 			}
 			Abort();
 		}

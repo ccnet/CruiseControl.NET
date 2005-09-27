@@ -29,7 +29,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 		{
 			string[] args = new string[] { "-remoting:off", "-project:foo", @"-config:C:\test dir\cruise.config", "-help" };
 			ArgumentParser parser = new ArgumentParser(args);
-			Assert.AreEqual(false, parser.IsRemote);
+			Assert.AreEqual(false, parser.UseRemoting);
 			Assert.AreEqual("foo", parser.Project);
 			Assert.AreEqual(@"C:\test dir\cruise.config", parser.ConfigFile);
 			Assert.AreEqual(true, parser.ShowHelp);
@@ -39,7 +39,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 		public void InstantiateWithDefaultArguments()
 		{
 			ArgumentParser parser = new ArgumentParser(new string[0]);
-			Assert.AreEqual(true, parser.IsRemote);
+			Assert.AreEqual(true, parser.UseRemoting);
 			Assert.IsNull(parser.Project);
 			Assert.AreEqual(ArgumentParser.DEFAULT_CONFIG_PATH, parser.ConfigFile);	
 			Assert.AreEqual(false, parser.ShowHelp);

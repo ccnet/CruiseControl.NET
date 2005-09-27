@@ -32,7 +32,7 @@ namespace ThoughtWorks.CruiseControl.Core
 			{
 				handler.OnConsoleEvent += new EventHandler(HandleControlEvent);
 
-				using (server = _serverFactory.Create(_parser.IsRemote, _parser.ConfigFile))
+				using (server = _serverFactory.Create(_parser.UseRemoting, _parser.ConfigFile))
 				{
 					if (_parser.Project == null)
 					{

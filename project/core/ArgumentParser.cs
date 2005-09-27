@@ -7,7 +7,7 @@ namespace ThoughtWorks.CruiseControl.Core
 	public class ArgumentParser : IArgumentParser
 	{
 		public const string DEFAULT_CONFIG_PATH = @"ccnet.config";
-		public const string Usage = 
+		public const string Usage =
 			@"ccnet [options]
 Options:
   -config:[ccnet.config]
@@ -15,7 +15,7 @@ Options:
   -project:[projectName]
   -help";
 
-		private string[] validOptions = new string[] { "config", "remoting", "project", "help" };
+		private string[] validOptions = new string[] {"config", "remoting", "project", "help"};
 		private Hashtable options = new Hashtable();
 		private Regex regex = new Regex("-(?<option>[^:]*)(:(?<value>.*))?");
 
@@ -44,13 +44,13 @@ Options:
 				}
 				else
 				{
-				    Log.Warning(string.Format("Invalid argument: {0}", arg));
+					Log.Warning(string.Format("Invalid argument: {0}", arg));
 					options["help"] = true;
 				}
 			}
 		}
 
-		public bool IsRemote
+		public bool UseRemoting
 		{
 			get { return GetOption("remoting") != "off"; }
 		}
@@ -62,10 +62,10 @@ Options:
 
 		public string ConfigFile
 		{
-			get 
+			get
 			{
 				string configFile = GetOption("config");
-				return (configFile == null) ? DEFAULT_CONFIG_PATH : configFile; 
+				return (configFile == null) ? DEFAULT_CONFIG_PATH : configFile;
 			}
 		}
 
