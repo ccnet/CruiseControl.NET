@@ -101,6 +101,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 		private ProcessInfo NewGetSourceProcessInfo(IIntegrationResult result, string dir)
 		{
 			ProcessArgumentBuilder builder = new ProcessArgumentBuilder();
+			AppendCvsRoot(builder);
 			builder.AppendArgument("-q update -d -P"); // build directories, prune empty directories
 			builder.AppendIf(CleanCopy, "-C");
 			builder.AppendIf(UseHistory && dir != null, "-l");
@@ -148,6 +149,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 		private ProcessResult ExecuteHistoryCommand(IIntegrationResult from)
 		{
 			ProcessArgumentBuilder buffer = new ProcessArgumentBuilder();
+			AppendCvsRoot(buffer);
 			buffer.AppendArgument(string.Format("history -x MAR -a -D \"{0}\"", FormatCommandDate(from.StartTime)));
 			return Execute(NewProcessInfoWithArgs(from, buffer.ToString()));
 		}
@@ -160,7 +162,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 		private ProcessInfo NewLabelProcessInfo(IIntegrationResult result)
 		{
 			ProcessArgumentBuilder buffer = new ProcessArgumentBuilder();
-			buffer.AppendArgument("-d {0}", CvsRoot);
+			AppendCvsRoot(buffer);
 			buffer.AppendArgument(string.Format("tag {0}{1}", TagPrefix, ConvertIllegalCharactersInLabel(result)));
 			return NewProcessInfoWithArgs(result, buffer.ToString());
 		}
@@ -185,7 +187,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 		private string BuildHistoryProcessInfoArgs(DateTime from, string dir)
 		{
 			ProcessArgumentBuilder buffer = new ProcessArgumentBuilder();
-			buffer.AppendArgument("-d {0}", CvsRoot);
+			AppendCvsRoot(buffer);
 			buffer.AppendArgument("-q log -N");
 			buffer.AppendIf(UseHistory, "-l");
 			buffer.AppendIf(StringUtil.IsBlank(Branch), "-b");
@@ -200,6 +202,11 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			}
 			buffer.AppendIf(UseHistory && dir != null, @"""{0}""", dir);
 			return buffer.ToString();
+		}
+
+		private void AppendCvsRoot(ProcessArgumentBuilder buffer)
+		{
+			buffer.AppendArgument("-d {0}", CvsRoot);
 		}
 	}
 }

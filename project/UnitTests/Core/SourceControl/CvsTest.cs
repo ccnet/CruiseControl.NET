@@ -117,6 +117,17 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 		}
 
 		[Test]
+		public void VerifyHistoryArgumentUsingCvsRoot()
+		{
+			ExpectToExecuteArguments(string.Format(@"-d myCvsRoot history -x MAR -a -D ""{0}""", cvs.FormatCommandDate(from)));
+			mockHistoryDirectoryParser.ExpectAndReturn("ParseOutputFrom", new string[0], ProcessResultOutput);
+
+			cvs.UseHistory = true;
+			cvs.CvsRoot = "myCvsRoot";
+			cvs.GetModifications(IntegrationResult(from), IntegrationResult(to));
+		}
+
+		[Test]
 		public void CvsExeShouldBeDefaultExecutable()
 		{
 			Assert.AreEqual("cvs.exe", cvs.Executable);
@@ -137,6 +148,16 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 			cvs.AutoGetSource = true;
 			cvs.CleanCopy = true; // set as default
 			cvs.WorkingDirectory = DefaultWorkingDirectory;
+			cvs.GetSource(IntegrationResult());
+		}
+
+		[Test]
+		public void ShouldUseCvsRootWithGetSource()
+		{
+			ExpectToExecuteArguments(@"-d myCvsRoot -q update -d -P -C");
+
+			cvs.AutoGetSource = true;
+			cvs.CvsRoot = "myCvsRoot";
 			cvs.GetSource(IntegrationResult());
 		}
 
