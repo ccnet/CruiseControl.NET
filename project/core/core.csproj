@@ -689,6 +689,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "sourcecontrol\NullUrlBuilder.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "sourcecontrol\PathFilter.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
