@@ -1,4 +1,5 @@
 using System.Diagnostics;
+using System.IO;
 using NUnit.Framework;
 using ThoughtWorks.CruiseControl.Core.Util;
 
@@ -37,12 +38,13 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Util
 
 			Assert.AreEqual(infoWithPreQualifiedExecutable, infoWithoutPathQualifiedExecutable);
 		}
-		
+
 		[Test]
 		public void StripQuotesFromQuotedExecutablePath()
 		{
-			ProcessInfo info = new ProcessInfo(@"""c:\nant\nant.exe""", null, @"""c:\working""");
+			ProcessInfo info = new ProcessInfo(@"""c:\nant\nant.exe""", null, string.Format(@"""{0}""", Path.GetTempPath()));
 			Assert.AreEqual(@"c:\nant\nant.exe", info.FileName);
+			Assert.AreEqual(Path.GetTempPath(), info.WorkingDirectory);
 		}
 	}
 }

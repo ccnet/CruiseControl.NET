@@ -21,6 +21,7 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 
 		public virtual ProcessResult Execute(ProcessInfo processInfo)
 		{
+			Log.Debug(string.Format("Executing process {0} {1} in {2}", processInfo.FileName, processInfo.Arguments, processInfo.WorkingDirectory));
 			using (Process process = Start(processInfo))
 			{
 				using (ProcessReader standardOutput = new ProcessReader(process.StandardOutput), standardError = new ProcessReader(process.StandardError))

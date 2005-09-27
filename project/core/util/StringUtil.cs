@@ -67,7 +67,7 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 				return null;
 			}
 			string[] tokens = input.Split(separators.ToCharArray());
-			for(int i=tokens.Length - 1; i >= 0; i--)
+			for (int i = tokens.Length - 1; i >= 0; i--)
 			{
 				if (IsWhitespace(tokens[i]) == false)
 				{
@@ -89,15 +89,15 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 
 		public static string Strip(string input, params string[] removals)
 		{
-			string revised = input;			
-			foreach(string removal in removals)
-			{			
+			string revised = input;
+			foreach (string removal in removals)
+			{
 				int i = 0;
 				while ((i = revised.IndexOf(removal)) > -1)
 				{
 					revised = revised.Remove(i, removal.Length);
-				}				
-			}			
+				}
+			}
 			return revised;
 		}
 
@@ -105,7 +105,7 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 		{
 			ArrayList list = new ArrayList(input);
 			list.Insert(index, insert);
-			return (string[])list.ToArray(typeof(string));
+			return (string[]) list.ToArray(typeof (string));
 		}
 
 		public static string Join(string separator, params string[] strings)
@@ -123,6 +123,11 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 		public static string RemoveNulls(string s)
 		{
 			return NullStringRegex.Replace(s, string.Empty).TrimStart();
+		}
+
+		public static string StripQuotes(string filename)
+		{
+			return filename == null ? null : filename.Trim('"');
 		}
 	}
 }

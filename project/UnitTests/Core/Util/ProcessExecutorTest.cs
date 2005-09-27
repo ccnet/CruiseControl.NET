@@ -83,6 +83,13 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Util
 			executor.Execute(new ProcessInfo("foodaddy.bat"));
 		}
 
+		[Test, ExpectedException(typeof(DirectoryNotFoundException))]
+		public void ShouldThrowMeaningfulExceptionIfWorkingDirectoryDoesNotExist()
+		{
+			ProcessExecutor executor = new ProcessExecutor();
+			executor.Execute(new ProcessInfo("myExecutable", "", @"c:\invalid_path\that_is_invalid"));
+		}
+
 		private void AssertProcessExitsSuccessfully(ProcessResult result)
 		{
 			Assert.AreEqual(ProcessResult.SUCCESSFUL_EXIT_CODE, result.ExitCode);

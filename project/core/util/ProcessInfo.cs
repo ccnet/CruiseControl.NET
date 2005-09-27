@@ -21,9 +21,9 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 
 		public ProcessInfo(string filename, string arguments, string workingDirectory)
 		{
-			startInfo.FileName = StripQuotes(filename);
+			startInfo.FileName = StringUtil.StripQuotes(filename);
 			startInfo.Arguments = arguments;
-			startInfo.WorkingDirectory = StripQuotes(workingDirectory);
+			startInfo.WorkingDirectory = StringUtil.StripQuotes(workingDirectory);
 			startInfo.UseShellExecute = false;
 			startInfo.CreateNoWindow = true;
 			startInfo.RedirectStandardOutput = true;
@@ -84,6 +84,8 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 
 		public Process CreateProcess()
 		{
+			if (! StringUtil.IsBlank(WorkingDirectory) && ! Directory.Exists(WorkingDirectory)) throw new DirectoryNotFoundException("Directory does not exist: " + WorkingDirectory);
+
 			Process process = new Process();
 			process.StartInfo = startInfo;
 			return process;
@@ -113,11 +115,6 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 		{
 			return string.Format("FileName: [{0}] -- Arguments: [{1}] -- WorkingDirectory: [{2}] -- StandardInputContent: [{3}] -- Timeout: [{4}]",
 			                     FileName, Arguments, WorkingDirectory, StandardInputContent, TimeOut);
-		}
-
-		private string StripQuotes(string filename)
-		{
-			return filename == null ? null : filename.Trim('"');
 		}
 	}
 }
