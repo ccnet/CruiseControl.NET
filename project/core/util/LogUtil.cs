@@ -15,32 +15,32 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 
 		public static void Info(string message)
 		{
-			WriteLine("Info", message, CruiseControlSwitch.TraceInfo);
+			WriteLine(LogTraceLevel.Info, message, CruiseControlSwitch.TraceInfo);
 		}
 
 		public static void Debug(string message)
 		{
-			WriteLine("Debug", message, CruiseControlSwitch.TraceVerbose);
+			WriteLine(LogTraceLevel.Debug, message, CruiseControlSwitch.TraceVerbose);
 		}
 
 		public static void Warning(string message)
 		{
-			WriteLine("Warning", message, CruiseControlSwitch.TraceWarning);
+			WriteLine(LogTraceLevel.Warning, message, CruiseControlSwitch.TraceWarning);
 		}
 
 		public static void Warning(Exception ex)
 		{
-			WriteLine("Warning", ex, CruiseControlSwitch.TraceWarning);
+			WriteLine(LogTraceLevel.Warning, ex, CruiseControlSwitch.TraceWarning);
 		}
 
 		public static void Error(string message)
 		{
-			WriteLine("Error", message, CruiseControlSwitch.TraceError);
+			WriteLine(LogTraceLevel.Error, message, CruiseControlSwitch.TraceError);
 		}
 
 		public static void Error(Exception ex)
 		{
-			WriteLine("Error", ex, CruiseControlSwitch.TraceError);
+			WriteLine(LogTraceLevel.Error, ex, CruiseControlSwitch.TraceError);
 		}
 
 		private static string CreateExceptionMessage(Exception ex)
@@ -64,12 +64,12 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 			return (Thread.CurrentThread.Name == null) ? "CruiseControl Server" : Thread.CurrentThread.Name;
 		}
 
-		private static void WriteLine(string level, Exception ex, bool traceSwitch)
+		private static void WriteLine(LogTraceLevel level, Exception ex, bool traceSwitch)
 		{
 			WriteLine(level, CreateExceptionMessage(ex), traceSwitch);
 		}
 
-		private static void WriteLine(string level, string message, bool traceSwitch)
+		private static void WriteLine(LogTraceLevel level, string message, bool traceSwitch)
 		{
 			if (traceSwitch)
 			{
@@ -77,10 +77,18 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 			}
 		}
 
-		private static void WriteLine(string level, string message)
+		private static void WriteLine(LogTraceLevel level, string message)
 		{
 			string category = string.Format("[{0}:{1}]", GetContextName(), level);
 			Trace.WriteLine(message, category); 
+		}
+
+		enum LogTraceLevel
+		{
+			Error,
+			Warning,
+			Info,
+			Debug
 		}
 
 		private static TraceSwitch CruiseControlSwitch = new CruiseControlTraceSwitch();
@@ -93,6 +101,9 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 				{
 					Level = TraceLevel.Error;
 				}
+
+				if (Level == TraceLevel.Verbose) 
+					WriteLine(LogTraceLevel.Debug, "The trace level is currently set to debug.  This will cause CCNet to log at the most verbose level, which is useful for setting up or debugging the server.  Once your server is running smoothly, we recommend changing this setting in your ccnet.config file to a lower level.");
 			}
 		}
 	}
