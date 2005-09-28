@@ -13,12 +13,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 		public const string SS_REGISTRY_PATH = @"Software\\Microsoft\\SourceSafe";
 		public const string SS_REGISTRY_KEY = "SCCServerPath";
 		public const string SS_EXE = "ss.exe";
-
-		private const string HISTORY_COMMAND_FORMAT = @"history {0} -R -Vd{1}~{2} -Y{3},{4} -I-Y";
-		private const string GET_BY_DATE_COMMAND_FORMAT = @"get {0} -R -Vd{1} -Y{2},{3} -I-N -W -GF- -GTM";
-		private const string GET_BY_LABEL_COMMAND_FORMAT = @"get {0} -R -VL{1} -Y{2},{3} -I-N -W -GF- -GTM";
-		private const string LABEL_COMMAND_FORMAT = @"label {0} -L{1} -VL{2} -Y{3},{4} -I-Y";
-		private const string LABEL_COMMAND_FORMAT_NOTIMESTAMP = @"label {0} -L{1} -Y{2},{3} -I-Y";
+		private const string RecursiveCommandLineOption = "-R";
 
 		private IRegistry registry;
 		private string ssDir;
@@ -63,7 +58,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 		public string SsDir
 		{
 			get { return ssDir; }
-			set { ssDir = value.Trim('"'); }
+			set { ssDir = StringUtil.StripQuotes(value); }
 		}
 
 		/// <summary>
@@ -113,15 +108,21 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 
 		private string GetSourceArgs(IIntegrationResult result)
 		{
-			string cleanCopy = (CleanCopy) ? " -GWR" : string.Empty;
+			ProcessArgumentBuilder builder = new ProcessArgumentBuilder();
+			builder.AddArgument("get", Project);
+			builder.AddArgument(RecursiveCommandLineOption);
 			if (ApplyLabel)
 			{
-				return string.Format(GET_BY_LABEL_COMMAND_FORMAT, Project, tempLabel, Username, Password) + cleanCopy;
+				builder.AddArgument("-VL" + tempLabel);
 			}
 			else
 			{
-				return string.Format(GET_BY_DATE_COMMAND_FORMAT, Project, locale.FormatCommandDate(result.StartTime), Username, Password) + cleanCopy;
+				builder.AddArgument("-Vd" + locale.FormatCommandDate(result.StartTime));
 			}
+			AppendUsernameAndPassword(builder);
+			builder.AppendArgument("-I-N -W -GF- -GTM");
+			builder.AppendIf(CleanCopy, "-GWR");
+			return builder.ToString();
 		}
 
 		private ProcessInfo CreateHistoryProcessInfo(IIntegrationResult from, IIntegrationResult to)
@@ -131,18 +132,13 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 
 		private string HistoryProcessInfoArgs(DateTime from, DateTime to)
 		{
-			return string.Format(HISTORY_COMMAND_FORMAT, 
-			                     Project, locale.FormatCommandDate(to), locale.FormatCommandDate(from), Username, Password);
-		}
-
-		private string ReplaceLabelProcessInfoArgs(string label, string oldLabel)
-		{
-			return string.Format(LABEL_COMMAND_FORMAT, Project, label, oldLabel, Username, Password);
-		}
-
-		private string CreateTemporaryLabelName(DateTime time)
-		{
-			return "CCNETUNVERIFIED" + time.ToString("MMddyyyyHHmmss");
+			ProcessArgumentBuilder builder = new ProcessArgumentBuilder();
+			builder.AddArgument("history", Project);
+			builder.AddArgument(RecursiveCommandLineOption);
+			builder.AddArgument(string.Format("-Vd{0}~{1}", locale.FormatCommandDate(to), locale.FormatCommandDate(from)));
+			AppendUsernameAndPassword(builder);
+			builder.AddArgument("-I-Y");
+			return builder.ToString();
 		}
 
 		private void CreateTemporaryLabel(IIntegrationResult result)
@@ -156,14 +152,14 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 
 		private void LabelSourceControlWith(string label, IIntegrationResult result)
 		{
-			Execute(NewProcessInfoWith(string.Format(LABEL_COMMAND_FORMAT_NOTIMESTAMP, Project, label, Username, Password), result));
+			Execute(NewProcessInfoWith(LabelProcessInfoArgs(label, null), result));
 		}
 
 		private string LabelProcessInfoArgs(IIntegrationResult result)
 		{
 			if (result.Succeeded)
 			{
-				return ReplaceLabelProcessInfoArgs(result.Label, tempLabel);
+				return LabelProcessInfoArgs(result.Label, tempLabel);
 			}
 			else
 			{
@@ -173,7 +169,23 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 
 		private string DeleteLabelProcessInfoArgs()
 		{
-			return ReplaceLabelProcessInfoArgs(string.Empty, tempLabel);
+			return LabelProcessInfoArgs(string.Empty, tempLabel);
+		}
+
+		private string LabelProcessInfoArgs(string label, string oldLabel)
+		{
+			ProcessArgumentBuilder builder = new ProcessArgumentBuilder();
+			builder.AddArgument("label", Project);
+			builder.AddArgument("-L" + label);
+			builder.AddArgument("-VL", "", oldLabel);	// only append argument if old label is specified
+			AppendUsernameAndPassword(builder);
+			builder.AddArgument("-I-Y");
+			return builder.ToString();
+		}
+
+		private string CreateTemporaryLabelName(DateTime time)
+		{
+			return "CCNETUNVERIFIED" + time.ToString("MMddyyyyHHmmss");
 		}
 
 		private string GetExecutableFromRegistry()
@@ -193,6 +205,11 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 				processInfo.EnvironmentVariables[SS_DIR_KEY] = SsDir;
 			}
 			return processInfo;
+		}
+
+		private void AppendUsernameAndPassword(ProcessArgumentBuilder builder)
+		{
+			builder.AppendIf(! StringUtil.IsBlank(Username), string.Format("-Y{0},{1}", Username, Password));
 		}
 	}
 }
