@@ -81,6 +81,13 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 			Assert.AreEqual("fr-FR", vss.Culture);
 			Assert.AreEqual(false, vss.CleanCopy);
 		}
+
+		[Test]
+		public void ShouldPopulateWithMinimalConfiguration()
+		{
+			vss = (Vss) NetReflector.Read("<vss />");
+			Assert.AreEqual(Vss.DefaultProject, vss.Project);
+		}
 		
 		[Test]
 		public void StripQuotesFromSSDir()

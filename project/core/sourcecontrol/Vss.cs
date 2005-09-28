@@ -9,6 +9,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 	[ReflectorType("vss")]
 	public class Vss : ProcessSourceControl
 	{
+		public const string DefaultProject = "$/";
 		public const string SS_DIR_KEY = "SSDIR";
 		public const string SS_REGISTRY_PATH = @"Software\\Microsoft\\SourceSafe";
 		public const string SS_REGISTRY_KEY = "SCCServerPath";
@@ -45,13 +46,13 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			set { executable = value; }
 		}
 
-		[ReflectorProperty("project")]
-		public string Project;
+		[ReflectorProperty("project", Required = false)]
+		public string Project = DefaultProject;
 
-		[ReflectorProperty("username")]
+		[ReflectorProperty("username", Required = false)]
 		public string Username;
 
-		[ReflectorProperty("password")]
+		[ReflectorProperty("password", Required = false)]
 		public string Password;
 
 		[ReflectorProperty("ssdir", Required = false)]
@@ -177,7 +178,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			ProcessArgumentBuilder builder = new ProcessArgumentBuilder();
 			builder.AddArgument("label", Project);
 			builder.AddArgument("-L" + label);
-			builder.AddArgument("-VL", "", oldLabel);	// only append argument if old label is specified
+			builder.AddArgument("-VL", "", oldLabel); // only append argument if old label is specified
 			AppendUsernameAndPassword(builder);
 			builder.AddArgument("-I-Y");
 			return builder.ToString();
