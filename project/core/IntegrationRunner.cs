@@ -63,9 +63,6 @@ namespace ThoughtWorks.CruiseControl.Core
 
 		private void RunBuild(IIntegrationResult result)
 		{
-			if (result.BuildCondition == BuildCondition.ForceBuild)
-				Log.Info("Build forced");
-
 			Log.Info("Building");
 			target.Run(result);
 			Log.Info("Build complete: " + result.Status);

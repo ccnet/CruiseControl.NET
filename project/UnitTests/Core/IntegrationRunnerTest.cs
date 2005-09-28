@@ -143,12 +143,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 		private void SetupShouldBuildExpectations()
 		{
 			resultMock.ExpectAndReturn("ShouldRunBuild", true);
-
 			targetMock.Expect("Activity", ProjectActivity.Building);
-
 			sourceControlMock.Expect("GetSource", result);
-			resultMock.ExpectAndReturn("BuildCondition", BuildCondition.IfModificationExists);
-
 			targetMock.Expect("Run", result);
 			resultMock.Expect("MarkEndTime");
 			targetMock.Expect("Activity", ProjectActivity.Sleeping);
