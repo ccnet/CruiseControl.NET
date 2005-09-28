@@ -1,6 +1,5 @@
 using System.IO;
 using System.Text;
-using System.Text.RegularExpressions;
 using System.Xml;
 
 namespace ThoughtWorks.CruiseControl.Core.Util
@@ -12,8 +11,7 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 	public class XmlFragmentWriter : XmlTextWriter
 	{
 		public XmlFragmentWriter(TextWriter writer) : base(writer)
-		{
-		}
+		{}
 
 		public void WriteNode(string xml)
 		{

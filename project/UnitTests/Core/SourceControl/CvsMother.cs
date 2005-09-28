@@ -248,7 +248,51 @@ revision 1.49
 date: 2005-08-22 17:28:13 +0000; author: jerome; state: Exp; lines: +1 -2
 Test commit
 =============================================================================
+";
+		}
 
+		public static string CvsNTExamples()
+		{
+			return @"RCS file: /var/lib/cvs/test/file.txt,v
+Working file: test/file.txt
+head: 1.49
+branch:
+locks: strict
+access list:
+symbolic names:
+	TEST2: 1.47.0.2
+	TEST: 1.49
+	test/: 1.44
+	start: 1.1.1.1
+	cb: 1.1.1
+keyword substitution: kv
+total revisions: 52; selected revisions: 1
+description:
+----------------------------
+revision 1.49
+date: 2005/05/21 14:05:46; author: abc; state: Exp; kopt: kv; commitid: 3586428f402fbe6a; filename: abc.cs;
+Test commit
+=============================================================================
+
+RCS file: /var/lib/cvs/test/file.txt,v
+Working file: test/file.txt
+head: 1.49
+branch:
+locks: strict
+access list:
+symbolic names:
+	TEST2: 1.47.0.2
+	TEST: 1.49
+	test/: 1.44
+	start: 1.1.1.1
+	cb: 1.1.1
+keyword substitution: kv
+total revisions: 52; selected revisions: 1
+description:
+----------------------------
+revision 1.49
+date: 2005/05/21 14:05:46; author: abc; state: Exp; lines: +2 -0; kopt: kv; commitid: 3586428f402fbe6a; filename: abcd.cs;
+Test commit
 ";
 		}
 	}

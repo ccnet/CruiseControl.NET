@@ -82,7 +82,16 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 		public void ParseCvs112Examples() 
 		{
 			TextReader input = new StringReader(CvsMother.Cvs112Examples());
-			cvs.Parse(input, CvsMother.OLDEST_ENTRY, CvsMother.NEWEST_ENTRY);
+			Modification[] mods = cvs.Parse(input, CvsMother.OLDEST_ENTRY, CvsMother.NEWEST_ENTRY);
+			Assert.AreEqual(2, mods.Length);
+		}
+
+		[Test]
+		public void ParseCvsNTExamples() 
+		{
+			TextReader input = new StringReader(CvsMother.CvsNTExamples());
+			Modification[] mods = cvs.Parse(input, CvsMother.OLDEST_ENTRY, CvsMother.NEWEST_ENTRY);
+			Assert.AreEqual(2, mods.Length);
 		}
 
 		private DateTime CreateDate(string dateString) 

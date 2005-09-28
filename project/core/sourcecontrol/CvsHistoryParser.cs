@@ -93,7 +93,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 				Modification mod = ParseModification(cvsLog);
 				mods.Add(mod);
 
-				if (!currentLine.StartsWith(CVS_FILE_DELIM))
+				if (currentLine != null && !currentLine.StartsWith(CVS_FILE_DELIM))
 				{
 					currentLine = ReadToNotPast(cvsLog, CVS_REVISION_DATE, CVS_FILE_DELIM);
 				}
