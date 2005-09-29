@@ -507,6 +507,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Core\Config\FileWatcherConfigurationServiceTest.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Core\Config\NetReflectorConfigurationReaderTest.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -1363,6 +1368,11 @@
                 />
                 <File
                     RelPath = "Xsl\ModificationStylesheetTest.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Xsl\MsTestSummaryStylesheetTest.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
