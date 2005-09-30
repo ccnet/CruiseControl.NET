@@ -399,6 +399,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "label\DateLabeller.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "label\DefaultLabeller.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -993,6 +998,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Triggers\UrlTrigger.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "util\ConsoleTraceListener.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -1019,6 +1029,11 @@
                 />
                 <File
                     RelPath = "util\HtmlExceptionFormatter.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "util\HttpWrapper.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

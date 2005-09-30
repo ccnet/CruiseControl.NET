@@ -527,6 +527,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Core\Label\DateLabellerTest.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Core\Label\DefaultLabellerTest.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -1001,6 +1006,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Core\Triggers\UrlTriggerTest.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Core\Util\FileChangedWatcherTest.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -1012,6 +1022,11 @@
                 />
                 <File
                     RelPath = "Core\Util\HtmlExceptionFormatterTest.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Core\Util\HttpWrapperTest.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
