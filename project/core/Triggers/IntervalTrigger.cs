@@ -8,9 +8,7 @@ namespace ThoughtWorks.CruiseControl.Core.Triggers
 	[ReflectorType("intervalTrigger")]
 	public class IntervalTrigger : ITrigger
 	{
-		public static readonly double DefaultIntervalSeconds = 60;
-		private double intervalSeconds;
-		private BuildCondition buildCondition;
+		public const double DefaultIntervalSeconds = 60;
 		private readonly DateTimeProvider dateTimeProvider;
 
 		private DateTime lastIntegrationCompleteTime;
@@ -21,25 +19,15 @@ namespace ThoughtWorks.CruiseControl.Core.Triggers
 		public IntervalTrigger(DateTimeProvider dtProvider)
 		{
 			this.dateTimeProvider = dtProvider;
-			this.intervalSeconds = DefaultIntervalSeconds;
-			this.buildCondition = BuildCondition.IfModificationExists;
 			lastIntegrationCompleteTime = DateTime.MinValue;
 			nextBuildTime = dtProvider.Now;
 		}
 
 		[ReflectorProperty("seconds", Required=false)]
-		public virtual double IntervalSeconds
-		{
-			get { return intervalSeconds; }
-			set { intervalSeconds = value; }
-		}
+		public double IntervalSeconds = DefaultIntervalSeconds;
 
 		[ReflectorProperty("buildCondition", Required=false)]
-		public virtual BuildCondition BuildCondition
-		{
-			get { return buildCondition; }
-			set { buildCondition = value; }
-		}
+		public BuildCondition BuildCondition = BuildCondition.IfModificationExists;
 
 		public virtual void IntegrationCompleted()
 		{
@@ -56,10 +44,10 @@ namespace ThoughtWorks.CruiseControl.Core.Triggers
 		public virtual BuildCondition ShouldRunIntegration()
 		{
 			TimeSpan timeSinceLastBuild = dateTimeProvider.Now - lastIntegrationCompleteTime;
-			if (timeSinceLastBuild.TotalSeconds < intervalSeconds)
+			if (timeSinceLastBuild.TotalSeconds < IntervalSeconds)
 				return BuildCondition.NoBuild;
 
-			return buildCondition;
+			return BuildCondition;
 		}
 	}
 }
