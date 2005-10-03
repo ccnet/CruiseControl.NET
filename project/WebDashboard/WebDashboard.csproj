@@ -749,6 +749,16 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Plugins\CCTray\CCTrayDownloadAction.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Plugins\CCTray\CCTrayDownloadPlugin.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Plugins\DeleteProject\DeleteProjectHtmlViewBuilder.cs"
                     SubType = "Code"
                     BuildAction = "Compile"

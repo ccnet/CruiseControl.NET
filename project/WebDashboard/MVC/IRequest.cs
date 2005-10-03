@@ -8,6 +8,6 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.MVC
 		string GetText(string id);
 		bool GetChecked(string id);
 		int GetInt(string id, int defaultValue);
-		NameValueCollection Params{ get; }
+		NameValueCollection Params { get; }
 	}
 }

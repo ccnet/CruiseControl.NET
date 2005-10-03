@@ -1,4 +1,3 @@
-
 namespace ThoughtWorks.CruiseControl.WebDashboard.MVC
 {
 	public class RedirectResponse : IResponse
