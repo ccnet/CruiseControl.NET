@@ -9,19 +9,18 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 	[TestFixture]
 	public class ClearCaseHistoryParserTest 
 	{
-
-		ClearCaseHistoryParser _parser;
+		ClearCaseHistoryParser parser;
 
 		[SetUp]
 		protected void Setup()
 		{
-			_parser = new ClearCaseHistoryParser();
+			parser = new ClearCaseHistoryParser();
 		}
 
 		[Test]
 		public void CanTokenizeWithNoComment()
 		{
-			string[] tokens = _parser.TokenizeEntry( @"ppunjani#~#Friday, September 27, 2002 06:31:36 PM#~#D:\CCase\ppunjani_view\RefArch\tutorial\wwhdata\common\context.js#~#\main\0#~#mkelem#~#!#~#!#~#" );
+			string[] tokens = parser.TokenizeEntry( @"ppunjani#~#Friday, September 27, 2002 06:31:36 PM#~#D:\CCase\ppunjani_view\RefArch\tutorial\wwhdata\common\context.js#~#\main\0#~#mkelem#~#!#~#!#~#" );
 			Assert.AreEqual( 8, tokens.Length );
 			Assert.AreEqual( "ppunjani", tokens[ 0 ] );
 			Assert.AreEqual( "Friday, September 27, 2002 06:31:36 PM", tokens[ 1 ] );
@@ -45,7 +44,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 			const string modificationType = "checkin";
 			const string comment = "implemented dwim";
 			const string change = @"\main\17";
-			Modification modification = _parser.CreateNewModification( userName,
+			Modification modification = parser.CreateNewModification( userName,
 				timeStamp,
 				elementName,
 				modificationType,
@@ -71,7 +70,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 			const string fullPath = path + "\\" + file;
 			Modification modification = new Modification();
 
-			_parser.AssignFileInfo( modification, fullPath );
+			parser.AssignFileInfo( modification, fullPath );
 
 			Assert.AreEqual( path, modification.FolderName );
 			Assert.AreEqual( file, modification.FileName );
@@ -84,7 +83,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 			const string file = "context.js";
 			Modification modification = new Modification();
 
-			_parser.AssignFileInfo( modification, file );
+			parser.AssignFileInfo( modification, file );
 
 			Assert.AreEqual( string.Empty, modification.FolderName );
 			Assert.AreEqual( file, modification.FileName );
@@ -96,7 +95,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 			const string time = "Friday, September 27, 2002 06:31:38 PM";
 			Modification modification = new Modification();
 
-			_parser.AssignModificationTime( modification, time );
+			parser.AssignModificationTime( modification, time );
 
 			Assert.AreEqual( new DateTime( 2002, 09, 27, 18, 31, 38 ), modification.ModifiedTime );
 		}
@@ -107,22 +106,29 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 			const string time = "not a valid time";
 			Modification modification = new Modification();
 
-			_parser.AssignModificationTime( modification, time );
+			parser.AssignModificationTime( modification, time );
 
 			Assert.AreEqual( new DateTime(), modification.ModifiedTime );
 		}
 		
 		[Test]
-		public void CanIgnoreBranchEvent()
+		public void IgnoresMkBranchEvent()
 		{
-			Modification modification = _parser.ParseEntry( "Hi, I'm an invalid entry" );
+			Modification modification = parser.ParseEntry( @"ppunjani#~#Friday, September 27, 2002 06:31:36 PM#~#D:\CCase\ppunjani_view\RefArch\tutorial\wwhdata\common\context.js#~#\main\0#~#mkbranch#~#!#~#!#~#" );
+			Assert.IsNull( modification );
+		}
+
+		[Test]
+		public void IgnoresRmBranchEvent()
+		{
+			Modification modification = parser.ParseEntry( @"ppunjani#~#Friday, September 27, 2002 06:31:36 PM#~#D:\CCase\ppunjani_view\RefArch\tutorial\wwhdata\common\context.js#~#\main\0#~#rmbranch#~#!#~#!#~#" );
 			Assert.IsNull( modification );
 		}
 
 		[Test]
 		public void CanParseChangeNumber()
 		{
-			int changeNumber = _parser.ParseChangeNumber( @"\main\4" );
+			int changeNumber = parser.ParseChangeNumber( @"\main\4" );
 
 			Assert.AreEqual( 4, changeNumber );
 		}
@@ -130,7 +136,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 		[Test]
 		public void CanParseBadChangeNumber1()
 		{
-			int changeNumber = _parser.ParseChangeNumber( null );
+			int changeNumber = parser.ParseChangeNumber( null );
 
 			Assert.AreEqual( -1, changeNumber );
 		}
@@ -138,7 +144,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 		[Test]
 		public void CanParseBadChangeNumber2()
 		{
-			int changeNumber = _parser.ParseChangeNumber( string.Empty );
+			int changeNumber = parser.ParseChangeNumber( string.Empty );
 
 			Assert.AreEqual( -1, changeNumber );
 		}
@@ -147,7 +153,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 		[Test]
 		public void CanParseBadChangeNumber3()
 		{
-			int changeNumber = _parser.ParseChangeNumber( "foobar" );
+			int changeNumber = parser.ParseChangeNumber( "foobar" );
 
 			Assert.AreEqual( -1, changeNumber );
 		}
@@ -155,7 +161,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 		[Test]
 		public void CanParseChangeNumberWithNoNumber()
 		{
-			int changeNumber = _parser.ParseChangeNumber( @"\main" );
+			int changeNumber = parser.ParseChangeNumber( @"\main" );
 
 			Assert.AreEqual( -1, changeNumber );
 		}
@@ -163,14 +169,14 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 		[Test]
 		public void CanParseBadEntry()
 		{
-			Modification modification = _parser.ParseEntry( @"ppunjani#~#Tuesday, February 18, 2003 05:09:14 PM#~#D:\CCase\ppunjani_view\RefArch\tutorial\wwhdata\common\wwhpagef.js#~#\main\0#~#mkbranch#~#!#~#!#~#" );
+			Modification modification = parser.ParseEntry( @"ppunjani#~#Tuesday, February 18, 2003 05:09:14 PM#~#D:\CCase\ppunjani_view\RefArch\tutorial\wwhdata\common\wwhpagef.js#~#\main\0#~#mkbranch#~#!#~#!#~#" );
 			Assert.IsNull( modification );
 		}
 
 		[Test]
 		public void CanParse()
 		{
-			Modification[] mods = _parser.Parse( ClearCaseMother.ContentReader, ClearCaseMother.OLDEST_ENTRY, ClearCaseMother.NEWEST_ENTRY);
+			Modification[] mods = parser.Parse( ClearCaseMother.ContentReader, ClearCaseMother.OLDEST_ENTRY, ClearCaseMother.NEWEST_ENTRY);
 			Assert.IsNotNull( mods, "mods should not be null" );
 			Assert.AreEqual( 28, mods.Length );			
 		}
@@ -178,7 +184,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 		[Test]
 		public void CanParseEntry()
 		{
-			Modification modification = _parser.ParseEntry( @"ppunjani#~#Wednesday, November 20, 2002 07:37:22 PM#~#D:\CCase\ppunjani_view\RefArch\tutorial\wwhdata\common\towwhdir.js#~#\main#~#mkelem#~#!#~#!#~#" );
+			Modification modification = parser.ParseEntry( @"ppunjani#~#Wednesday, November 20, 2002 07:37:22 PM#~#D:\CCase\ppunjani_view\RefArch\tutorial\wwhdata\common\towwhdir.js#~#\main#~#mkelem#~#!#~#!#~#" );
 			Assert.AreEqual( "ppunjani", modification.UserName );
 			Assert.AreEqual( new DateTime( 2002, 11, 20, 19, 37, 22), modification.ModifiedTime );
 			Assert.AreEqual( @"D:\CCase\ppunjani_view\RefArch\tutorial\wwhdata\common", modification.FolderName );
@@ -191,7 +197,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 		[Test]
 		public void CanParseEntryWithNoComment()
 		{
-			Modification modification = _parser.ParseEntry( @"ppunjani#~#Wednesday, February 25, 2004 01:09:36 PM#~#D:\CCase\ppunjani_view\RefArch\tutorial\wwhdata\common\topics.js#~##~#**null operation kind**#~#!#~#!#~#" );
+			Modification modification = parser.ParseEntry( @"ppunjani#~#Wednesday, February 25, 2004 01:09:36 PM#~#D:\CCase\ppunjani_view\RefArch\tutorial\wwhdata\common\topics.js#~##~#**null operation kind**#~#!#~#!#~#" );
 			Assert.AreEqual( "ppunjani", modification.UserName);
 			Assert.AreEqual( new DateTime( 2004, 02, 25, 13, 09, 36 ), modification.ModifiedTime);
 			Assert.AreEqual( @"D:\CCase\ppunjani_view\RefArch\tutorial\wwhdata\common", modification.FolderName);
@@ -204,7 +210,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 		[Test]
 		public void CanTokenize()
 		{
-			string[] tokens = _parser.TokenizeEntry( @"ppunjani#~#Friday, March 21, 2003 03:32:24 PM#~#D:\CCase\ppunjani_view\RefArch\tutorial\wwhdata\common\files.js#~##~#mkelem#~#!#~#!#~#made from flat file" );
+			string[] tokens = parser.TokenizeEntry( @"ppunjani#~#Friday, March 21, 2003 03:32:24 PM#~#D:\CCase\ppunjani_view\RefArch\tutorial\wwhdata\common\files.js#~##~#mkelem#~#!#~#!#~#made from flat file" );
 			Assert.AreEqual( 8, tokens.Length );
 			Assert.AreEqual( "ppunjani", tokens[0] );
 			Assert.AreEqual( "Friday, March 21, 2003 03:32:24 PM", tokens[1] );
@@ -219,7 +225,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 		[Test]
 		public void CanParseEntryWithNoLineBreakInComment()
 		{
-			Modification modification = _parser.ParseEntry( @"ppunjani#~#Wednesday, November 20, 2002 07:37:22 PM#~#D:\CCase\ppunjani_view\RefArch\tutorial\wwhdata\common\towwhdir.js#~#\main#~#mkelem#~#!#~#!#~#simple comment" );
+			Modification modification = parser.ParseEntry( @"ppunjani#~#Wednesday, November 20, 2002 07:37:22 PM#~#D:\CCase\ppunjani_view\RefArch\tutorial\wwhdata\common\towwhdir.js#~#\main#~#mkelem#~#!#~#!#~#simple comment" );
 			Assert.AreEqual( "ppunjani", modification.UserName );
 			Assert.AreEqual( new DateTime( 2002, 11, 20, 19, 37, 22), modification.ModifiedTime );
 			Assert.AreEqual( @"D:\CCase\ppunjani_view\RefArch\tutorial\wwhdata\common", modification.FolderName );
@@ -234,7 +240,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 		{
 			string input = @"ppunjani#~#Wednesday, November 20, 2002 07:37:22 PM#~#D:\CCase\ppunjani_view\RefArch\tutorial\wwhdata\common\towwhdir.js#~#\main#~#mkelem#~#!#~#!#~#simple comment@#@#@#@#@#@#@#@#@#@#@#@";
 
-			Modification modification = _parser.Parse(new StringReader(input), DateTime.Now, DateTime.Now)[0];
+			Modification modification = parser.Parse(new StringReader(input), DateTime.Now, DateTime.Now)[0];
 			Assert.AreEqual( "ppunjani", modification.UserName );
 			Assert.AreEqual( new DateTime( 2002, 11, 20, 19, 37, 22), modification.ModifiedTime );
 			Assert.AreEqual( @"D:\CCase\ppunjani_view\RefArch\tutorial\wwhdata\common", modification.FolderName );
@@ -250,7 +256,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 			string input = @"ppunjani#~#Wednesday, November 20, 2002 07:37:22 PM#~#D:\CCase\ppunjani_view\RefArch\tutorial\wwhdata\common\towwhdir.js#~#\main#~#mkelem#~#!#~#!#~#simple comment 
 with linebreak@#@#@#@#@#@#@#@#@#@#@#@";
 
-			Modification modification = _parser.Parse(new StringReader(input), DateTime.Now, DateTime.Now)[0];
+			Modification modification = parser.Parse(new StringReader(input), DateTime.Now, DateTime.Now)[0];
 			Assert.AreEqual( "ppunjani", modification.UserName );
 			Assert.AreEqual( new DateTime( 2002, 11, 20, 19, 37, 22), modification.ModifiedTime );
 			Assert.AreEqual( @"D:\CCase\ppunjani_view\RefArch\tutorial\wwhdata\common", modification.FolderName );
