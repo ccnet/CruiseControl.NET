@@ -38,7 +38,13 @@ namespace ThoughtWorks.CruiseControl.CCTray
 
 		private static string GetSettingsFilename()
 		{
-			return Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location),"settings.xml");
+			string oldFashionedSettingsFilename = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location),"settings.xml");
+			string newSettingsFilename = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),"cctray-settings.xml");
+			
+			if (File.Exists(oldFashionedSettingsFilename) && !File.Exists(newSettingsFilename))
+				File.Copy(oldFashionedSettingsFilename, newSettingsFilename);
+			
+			return newSettingsFilename;
 		}
 
 	}
