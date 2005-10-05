@@ -71,12 +71,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Perforce
 
 		private string CreateClientSpecification(P4 p4, string workingDirectory)
 		{
-			return string.Format(@"Client: {0}
-
-Root:   {1}
-
-View:
-{2}", p4.Client, workingDirectory, GenerateClientView(p4.ViewForSpecifications, p4.Client));
+			return string.Format("Client: {0}\n\nRoot:   {1}\n\nView:\n{2}", p4.Client, workingDirectory, GenerateClientView(p4.ViewForSpecifications, p4.Client));
 		}
 
 		private string GenerateClientView(string[] view, string client)
@@ -85,7 +80,7 @@ View:
 			foreach (string viewLine in view)
 			{
 				builder.Append(string.Format(" {0} {1}", viewLine, viewLine.Insert(2, client + "/")));
-				builder.Append(Environment.NewLine);
+				builder.Append("\n");
 			}
 			return builder.ToString();
 		}
