@@ -524,11 +524,6 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "publishers\Statistics\IntegrationResultHelper.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
                     RelPath = "publishers\Statistics\Statistic.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
