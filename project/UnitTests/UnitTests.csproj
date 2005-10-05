@@ -237,6 +237,21 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "CCTrayLib\Monitoring\CruiseProjectManagerFactoryTest.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "CCTrayLib\Monitoring\DashboardCruiseProjectManagerTest.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "CCTrayLib\Monitoring\DashboardXmlParserTest.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "CCTrayLib\Monitoring\PollerTest.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -248,11 +263,6 @@
                 />
                 <File
                     RelPath = "CCTrayLib\Monitoring\ProjectStateTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "CCTrayLib\Monitoring\ProjectStatusMonitorFactoryTest.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -1338,6 +1348,15 @@
                 />
                 <File
                     RelPath = "WebDashboard\Plugins\BuildReport\LatestBuildReportProjectPluginTest.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "WebDashboard\Plugins\BuildReport\XmlReportActionSchema.xsd"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "WebDashboard\Plugins\BuildReport\XmlReportActionTest.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

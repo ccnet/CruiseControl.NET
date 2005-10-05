@@ -8,6 +8,7 @@ using ThoughtWorks.CruiseControl.WebDashboard.Dashboard.ActionDecorators;
 using ThoughtWorks.CruiseControl.WebDashboard.MVC;
 using ThoughtWorks.CruiseControl.WebDashboard.MVC.Cruise;
 using ThoughtWorks.CruiseControl.WebDashboard.Plugins.BuildReport;
+using ThoughtWorks.CruiseControl.WebDashboard.Plugins.FarmReport;
 
 namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 {
@@ -107,6 +108,8 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 			giverManager.CreateImplementationMapping(XmlBuildLogAction.ACTION_NAME, typeof(XmlBuildLogAction))
 				.Decorate(typeof(ServerCheckingProxyAction)).Decorate(typeof(BuildCheckingProxyAction)).Decorate(typeof(ProjectCheckingProxyAction)).Decorate(typeof(CruiseActionProxyAction));
 
+			giverManager.CreateImplementationMapping(XmlReportAction.ACTION_NAME, typeof (XmlReportAction));
+			
 			return giver;
 		}
 	}

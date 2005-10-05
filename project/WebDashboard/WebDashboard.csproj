@@ -808,6 +808,11 @@
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
+                <File
+                    RelPath = "Plugins\FarmReport\XmlReportAction.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
                 <Folder RelPath = "Plugins\FxCop\" />
                 <Folder RelPath = "Plugins\NAnt\" />
                 <Folder RelPath = "Plugins\NCover\" />

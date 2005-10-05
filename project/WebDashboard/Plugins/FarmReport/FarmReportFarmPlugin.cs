@@ -1,8 +1,10 @@
+using System;
 using Exortech.NetReflector;
 using ThoughtWorks.CruiseControl.WebDashboard.Dashboard;
 using ThoughtWorks.CruiseControl.WebDashboard.IO;
 using ThoughtWorks.CruiseControl.WebDashboard.MVC;
 using ThoughtWorks.CruiseControl.WebDashboard.MVC.Cruise;
+using ThoughtWorks.CruiseControl.WebDashboard.ServerConnection;
 
 namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.FarmReport
 {
@@ -34,4 +36,6 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.FarmReport
 			get {  return new INamedAction[] { new ImmutableNamedAction(ACTION_NAME, this) }; }
 		}
 	}
+
+
 }

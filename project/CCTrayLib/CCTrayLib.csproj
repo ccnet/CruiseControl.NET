@@ -261,12 +261,27 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Monitoring\DashboardCruiseProjectManager.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Monitoring\DashboardXmlParser.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Monitoring\ICruiseProjectManager.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
                     RelPath = "Monitoring\ICruiseProjectManagerFactory.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Monitoring\IDashboardXmlParser.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -282,6 +297,11 @@
                 />
                 <File
                     RelPath = "Monitoring\ISingleProjectDetail.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Monitoring\IWebRetriever.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -307,6 +327,11 @@
                 />
                 <File
                     RelPath = "Monitoring\ProjectState.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Monitoring\WebRetriever.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

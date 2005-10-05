@@ -1,4 +1,7 @@
+using System;
+using System.Security.Policy;
 using ThoughtWorks.CruiseControl.CCTrayLib.ServerConnection;
+using ThoughtWorks.CruiseControl.Remote;
 
 namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
 {
@@ -13,7 +16,14 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
 
 		public ICruiseProjectManager Create(string serverUrl, string projectName)
 		{
-			return new CruiseProjectManager(cruiseManagerFactory.GetCruiseManager(serverUrl), projectName);
+			Uri serverUri = new Uri(serverUrl);
+			if (serverUri.Scheme == "tcp")
+			{
+				return new CruiseProjectManager(cruiseManagerFactory.GetCruiseManager(serverUrl), projectName);
+			}
+			
+			return new DashboardCruiseProjectManager(new WebRetriever(), new DashboardXmlParser(), serverUri, projectName);
 		}
 	}
+
 }
