@@ -126,5 +126,14 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Label
 			labeller.LabelPrefix = "R3SX";
 			Assert.AreEqual("R3SX.15.1", labeller.Generate(IntegrationResultMother.CreateSuccessful("R3SX.14.23")));
 		}
+
+		[Test]
+		public void ShouldCorrectlyGenerateInitialLabel()
+		{
+			labeller.ReleaseStartDate = new DateTime(2005, 6, 2);
+			labeller.LabelPrefix = "5.3.";
+			labeller.Duration = 1;
+			Assert.AreEqual("5.3.6.1", labeller.Generate(IntegrationResult.CreateInitialIntegrationResult("foo", "c:\\bar")));
+		}
 	}
 }
