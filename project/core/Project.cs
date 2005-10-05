@@ -213,5 +213,7 @@ namespace ThoughtWorks.CruiseControl.Core
 		{
 			return string.Format("http://{0}/ccnet", Environment.MachineName);
 		}
+
 	}
+
 }

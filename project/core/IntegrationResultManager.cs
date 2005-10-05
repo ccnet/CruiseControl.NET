@@ -36,13 +36,16 @@ namespace ThoughtWorks.CruiseControl.Core
 
 		public IIntegrationResult StartNewIntegration(BuildCondition buildCondition)
 		{
+
 			currentResult = new IntegrationResult(project.Name, project.WorkingDirectory);
+			
 			currentResult.LastIntegrationStatus = LastIntegrationResult.Status;
+			currentResult.LastSuccessfulIntegrationLabel = LastIntegrationResult.LastSuccessfulIntegrationLabel;
+
 			currentResult.BuildCondition = DetermineBuildCondition(buildCondition);
 			currentResult.Label = project.Labeller.Generate(LastIntegrationResult);
 			currentResult.ArtifactDirectory = project.ArtifactDirectory;
 			currentResult.ProjectUrl = project.WebURL;
-			currentResult.LastSuccessfulIntegrationLabel = LastIntegrationResult.LastSuccessfulIntegrationLabel;
 			return currentResult;
 		}
 
@@ -69,4 +72,5 @@ namespace ThoughtWorks.CruiseControl.Core
 			lastResult = currentResult;
 		}
 	}
+
 }

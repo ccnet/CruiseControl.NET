@@ -193,5 +193,22 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 			result.Label = "1.2.3.4";
 			Assert.AreEqual(@"c:\artifacts\1.2.3.4", result.IntegrationArtifactDirectory);
 		}
+
+		[Test]
+		public void CanGetPreviousState()
+		{
+			IntegrationResult result = new IntegrationResult();
+			result.LastIntegrationStatus = IntegrationStatus.Exception;
+			result.LastSuccessfulIntegrationLabel = "foo";
+			result.ArtifactDirectory = "dir";
+			Assert.AreEqual(new IntegrationState(IntegrationStatus.Exception, "foo", "dir"), result.LastIntegration);
+		}
+
+		[Test]
+		public void ArtifactDirectory()
+		{
+			IntegrationState state = new IntegrationState(IntegrationStatus.Exception, "foo", "dir");
+			Assert.AreEqual("dir\\foo", state.ArtifactDirectory);
+		}
 	}
 }

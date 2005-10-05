@@ -50,16 +50,22 @@ namespace ThoughtWorks.CruiseControl.UnitTests
 			Assert.IsTrue(!assert, message);
 		}
 
-		public static void AssertEquals(Type type, object obj)
+		/// <summary>
+		/// Verifies that two objects are of the same Type. Objects are the same Type if the actual 
+		/// object is the expected Type, or an instance of the expected Type.
+		/// </summary>
+		/// <param name="expectedType"></param>
+		/// <param name="actual"></param>
+		public static void AssertEquals(Type expectedType, object actual)
 		{
-			if (type == null)
+			if (expectedType == null)
 			{
-				Assert.AreEqual(type, obj);
+				Assert.AreEqual(expectedType, actual);
 				return;
 			}
-			Assert.IsNotNull(obj, string.Format("object of expected type {0} is null", type.FullName));
-			Type actualType = (obj is Type) ? (Type)obj : obj.GetType();
-			Assert.AreEqual(type, actualType, "object of the wrong type");
+			Assert.IsNotNull(actual, string.Format("object of expected type {0} is null", expectedType.FullName));
+			Type actualType = (actual is Type) ? (Type)actual : actual.GetType();
+			Assert.AreEqual(expectedType, actualType, "object of the wrong type");
 		}
 
 		public static void AssertNotEquals(object expected, object actual)

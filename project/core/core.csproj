@@ -519,6 +519,31 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "publishers\Statistics\FirstMatch.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "publishers\Statistics\IntegrationResultHelper.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "publishers\Statistics\Statistic.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "publishers\Statistics\StatisticsPublisher.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "publishers\Statistics\StatisticsPublisherTask.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "publishers\xsl\compile.xsl"
                     Link = "..\xsl\compile.xsl"
                     BuildAction = "Content"

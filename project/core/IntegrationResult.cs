@@ -99,6 +99,11 @@ namespace ThoughtWorks.CruiseControl.Core
 			set { lastSuccessfulIntegrationLabel = value; }
 		}
 
+		public string PreviousLabel
+		{
+			get { return lastSuccessfulIntegrationLabel; }
+		}
+
 		/// <summary>
 		/// Gets and sets the date and time at which the integration commenced.
 		/// </summary>
@@ -311,6 +316,24 @@ namespace ThoughtWorks.CruiseControl.Core
 		}
 
 		[XmlIgnore]
+		public IntegrationState LastIntegration
+		{
+			get
+			{
+				return new IntegrationState(LastIntegrationStatus, PreviousLabel, ArtifactDirectory);
+			}
+		}
+
+		[XmlIgnore]
+		public IntegrationState Integration
+		{
+			get
+			{
+				return new IntegrationState(Status, Label, ArtifactDirectory);
+			}
+		}
+
+		[XmlIgnore]
 		public IDictionary IntegrationProperties
 		{
 			get
@@ -330,6 +353,52 @@ namespace ThoughtWorks.CruiseControl.Core
 		public override string ToString()
 		{
 			return string.Format("Project: {0}, Status: {1}, Label: {2}, StartTime: {3}", ProjectName, Status, Label, StartTime);
+		}
+	}
+
+	public class IntegrationState
+	{
+		private readonly IntegrationStatus status;
+		private readonly DateTime date;
+		private readonly string label;
+		private readonly string baseArtifactDirectory;
+
+		public IntegrationState (IntegrationStatus status, string label, string baseArtifactDirectory)
+		{
+			this.status = status;
+			this.date = date;
+			this.label = label;
+			this.baseArtifactDirectory = baseArtifactDirectory;
+		}
+
+		public override bool Equals (object obj)
+		{
+			if (obj==null) return false;
+			if (obj.GetType()!=this.GetType()) return false;
+
+			IntegrationState other = (IntegrationState) obj;
+			return other.status.Equals(status) && other.date == this.date && other.label==this.label;
+		}
+
+		public override int GetHashCode()
+		{
+			return date.GetHashCode();
+		}
+
+		public string ArtifactDirectory 
+		{
+			get
+			{
+				return baseArtifactDirectory + "\\" + label;
+			}
+		}
+
+		public string Label
+		{
+			get
+			{
+				return label;
+			}
 		}
 	}
 }

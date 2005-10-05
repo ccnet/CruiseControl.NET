@@ -832,6 +832,7 @@
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
+                <Folder RelPath = "Plugins\Statistics\" />
                 <File
                     RelPath = "Plugins\ViewAllBuilds\ViewAllBuildsProjectPlugin.cs"
                     SubType = "Code"
