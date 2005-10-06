@@ -7,10 +7,12 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.MVC
 	public class NameValueCollectionRequest : IRequest
 	{
 		private readonly NameValueCollection map;
+		private readonly string path;
 
-		public NameValueCollectionRequest(NameValueCollection map)
+		public NameValueCollectionRequest(NameValueCollection map, string path)
 		{
 			this.map = map;
+			this.path = path;
 		}
 
 		public string FindParameterStartingWith(string prefix)
@@ -69,6 +71,22 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.MVC
 		public NameValueCollection Params
 		{
 			get { return map; }
+		}
+
+		public string FileNameWithoutExtension
+		{
+			get
+			{
+				int lastSlashIndex = path.LastIndexOf('/');
+				if (lastSlashIndex == -1) 
+					lastSlashIndex = 0;
+
+				int lastPeriod = path.LastIndexOf('.');
+				if (lastPeriod == -1)
+					lastPeriod = path.Length;
+
+				return path.Substring(lastSlashIndex + 1, lastPeriod - lastSlashIndex - 1);
+			}
 		}
 	}
 }

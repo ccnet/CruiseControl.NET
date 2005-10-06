@@ -1,3 +1,5 @@
+using System;
+
 namespace ThoughtWorks.CruiseControl.Core.Reporting.Dashboard.Navigation
 {
 	public class AbsolutePathUrlBuilderDecorator : IUrlBuilder
@@ -21,14 +23,9 @@ namespace ThoughtWorks.CruiseControl.Core.Reporting.Dashboard.Navigation
 			return Decorate(decoratedUrlBuilder.BuildUrl(action, partialQueryString));
 		}
 
-		public string BuildUrl(string action, string partialQueryString, string relativeBaseUrl)
+		public string Extension
 		{
-			return Decorate(decoratedUrlBuilder.BuildUrl(action, partialQueryString, relativeBaseUrl));
-		}
-
-		public string BuildFormName(string action)
-		{
-			return decoratedUrlBuilder.BuildFormName(action);
+			set { decoratedUrlBuilder.Extension = value; }
 		}
 
 		// return string.Format("{0}://{1}:{2}{3}/{4}", context.Request.Url.Scheme, context.Request.Url.Host, context.Request.Url.Port, context.Request.ApplicationPath, relativePath);

@@ -1162,11 +1162,6 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "WebDashboard\Dashboard\BuildLinkWithFileNameTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
                     RelPath = "WebDashboard\Dashboard\BuildRequestTransformerTest.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -1298,6 +1293,11 @@
                 />
                 <File
                     RelPath = "WebDashboard\MVC\HttpControllerTest.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "WebDashboard\MVC\NameValueCollectionRequestTest.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

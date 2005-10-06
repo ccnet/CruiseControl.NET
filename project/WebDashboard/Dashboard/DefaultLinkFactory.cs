@@ -25,11 +25,6 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 			return new BuildLink(cruiseUrlBuilder, buildSpecifier, buildNameFormatter.GetPrettyBuildName(buildSpecifier), action);
 		}
 
-		public IAbsoluteLink CreateBuildLinkWithFileName(IBuildSpecifier buildSpecifier, string action, string fileName)
-		{
-			return new BuildLinkWithFileName(cruiseUrlBuilder, buildSpecifier, buildNameFormatter.GetPrettyBuildName(buildSpecifier), action, fileName);
-		}
-
 		public IAbsoluteLink CreateProjectLink(IProjectSpecifier projectSpecifier, string text, string action)
 		{
 			return new ProjectLink(cruiseUrlBuilder, projectSpecifier, text, action);

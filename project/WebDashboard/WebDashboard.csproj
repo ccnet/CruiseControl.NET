@@ -231,11 +231,6 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "Dashboard\BuildLinkWithFileName.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
                     RelPath = "Dashboard\BuildRequestTransformer.cs"
                     SubType = "Code"
                     BuildAction = "Compile"

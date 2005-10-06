@@ -13,10 +13,9 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 		private readonly string lastBuildLabel;
 		private readonly string status;
 		private readonly string activity;
-		private readonly string forceBuildButtonName;
 		private readonly string url;
 
-		public ProjectGridRow(string name, string serverName, string buildStatus, string buildStatusHtmlColor, DateTime lastBuildDate, string lastBuildLabel, string status, string activity, string forceBuildButtonName, string url)
+		public ProjectGridRow(string name, string serverName, string buildStatus, string buildStatusHtmlColor, DateTime lastBuildDate, string lastBuildLabel, string status, string activity, string url)
 		{
 			this.name = name;
 			this.serverName = serverName;
@@ -26,7 +25,6 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 			this.lastBuildLabel = lastBuildLabel;
 			this.status = status;
 			this.activity = activity;
-			this.forceBuildButtonName = forceBuildButtonName;
 			this.url = url;
 		}
 
@@ -68,11 +66,6 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 		public string Activity
 		{
 			get { return activity; }
-		}
-
-		public string ForceBuildButtonName
-		{
-			get { return forceBuildButtonName; }
 		}
 
 		public string Url

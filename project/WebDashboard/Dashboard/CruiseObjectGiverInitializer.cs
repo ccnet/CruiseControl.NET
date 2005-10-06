@@ -32,7 +32,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 			giverManager.AddTypedInstance(typeof(HttpRequest), request);
 
 			// Add functionality to object giver to handle this?
-			giverManager.AddTypedInstance(typeof(IRequest), new AggregatedRequest(new NameValueCollectionRequest(request.Form), new NameValueCollectionRequest(request.QueryString)));
+			giverManager.AddTypedInstance(typeof(IRequest), new AggregatedRequest(new NameValueCollectionRequest(request.Form, request.Path), new NameValueCollectionRequest(request.QueryString, request.Path)));
 
 			giverManager.SetImplementationType(typeof(IUrlBuilder), typeof(DefaultUrlBuilder));
 			giverManager.SetImplementationType(typeof(IMultiTransformer), typeof(PathMappingMultiTransformer));

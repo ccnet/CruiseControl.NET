@@ -309,28 +309,6 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 		}
 
 		[Test]
-		public void ShouldCreateCorrectForceBuildUrl()
-		{
-			// Setup
-			ProjectStatus projectStatus1 = new ProjectStatus(ProjectIntegratorState.Running, 
-				IntegrationStatus.Success, ProjectActivity.Sleeping, projectSpecifier.ProjectName, "url", DateTime.Today, "1", null, DateTime.Today);
-			ProjectStatusOnServer[] statusses = new ProjectStatusOnServer[]
-				{
-					new ProjectStatusOnServer(projectStatus1, serverSpecifier)
-				};
-			SetupProjectLinkExpectation();
-
-			urlBuilderMock.ExpectAndReturn("BuildFormName", "myForceButton", "myAction");
-
-			// Execute
-			ProjectGridRow[] rows = projectGrid.GenerateProjectGridRows(statusses, "myAction", ProjectGridSortColumn.Name, true);
-
-			// Verify
-			Assert.AreEqual("myForceButton", rows[0].ForceBuildButtonName);
-			VerifyAll();
-		}
-
-		[Test]
 		public void ShouldReturnProjectsSortedByNameIfNameColumnSpecifiedAsSortSeed()
 		{
 			// Setup

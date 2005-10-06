@@ -35,7 +35,6 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 						(status.LastBuildLabel != null ? status.LastBuildLabel : "no build available") , 
 						status.Status.ToString(), 
 						status.Activity.ToString(), 
-						urlBuilder.BuildFormName(forceBuildActionName),
 						linkFactory.CreateProjectLink(new DefaultProjectSpecifier(serverSpecifier, projectName), ProjectReportProjectPlugin.ACTION_NAME).Url
 					));
 			}

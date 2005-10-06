@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Specialized;
 
 namespace ThoughtWorks.CruiseControl.WebDashboard.MVC
@@ -67,6 +68,19 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.MVC
 					}
 				}
 				return combinedParams;
+			}
+		}
+
+		public string FileNameWithoutExtension
+		{
+			get 
+			{
+				string fileName = request1.FileNameWithoutExtension;
+				if (fileName == null || fileName == string.Empty)
+				{
+					fileName = request2.FileNameWithoutExtension;
+				}
+				return fileName;
 			}
 		}
 	}

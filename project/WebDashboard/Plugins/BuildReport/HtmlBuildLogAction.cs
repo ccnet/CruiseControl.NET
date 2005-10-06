@@ -14,13 +14,13 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.BuildReport
 
 		private readonly IBuildRetriever buildRetriever;
 		private readonly IVelocityViewGenerator viewGenerator;
-		private readonly ILinkFactory linkFactory;
+		private readonly ICruiseUrlBuilder urlBuilder;
 
-		public HtmlBuildLogAction(IBuildRetriever buildRetriever, IVelocityViewGenerator viewGenerator, ILinkFactory linkFactory)
+		public HtmlBuildLogAction(IBuildRetriever buildRetriever, IVelocityViewGenerator viewGenerator, ICruiseUrlBuilder urlBuilder)
 		{
 			this.buildRetriever = buildRetriever;
 			this.viewGenerator = viewGenerator;
-			this.linkFactory = linkFactory;
+			this.urlBuilder = urlBuilder;
 		}
 
 		public IResponse Execute(ICruiseRequest cruiseRequest)
@@ -29,7 +29,8 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.BuildReport
 			IBuildSpecifier buildSpecifier = cruiseRequest.BuildSpecifier;
 			Build build = buildRetriever.GetBuild(buildSpecifier);
 			velocityContext["log"] = build.Log.Replace("<", "&lt;").Replace(">", "&gt;");
-			velocityContext["logUrl"] = linkFactory.CreateBuildLinkWithFileName(buildSpecifier, XmlBuildLogAction.ACTION_NAME, buildSpecifier.BuildName).Url;
+			urlBuilder.Extension = "xml";
+			velocityContext["logUrl"] = urlBuilder.BuildBuildUrl(XmlBuildLogAction.ACTION_NAME, buildSpecifier);
 
 			return viewGenerator.GenerateView(@"BuildLog.vm", velocityContext);
 		}

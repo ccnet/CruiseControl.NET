@@ -1,7 +1,4 @@
-using System.Collections;
-using Commons.Collections;
 using ObjectWizard;
-using ThoughtWorks.CruiseControl.Core.Reporting.Dashboard.Navigation;
 using ThoughtWorks.CruiseControl.WebDashboard.Dashboard.Actions;
 
 namespace ThoughtWorks.CruiseControl.WebDashboard.MVC.Cruise
@@ -18,10 +15,10 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.MVC.Cruise
 
 		public IAction Create(IRequest request)
 		{
-			string actionParam = request.FindParameterStartingWith(DefaultUrlBuilder.ACTION_PARAMETER_PREFIX);
-			string actionName = actionParam == "" ? "" : actionParam.Substring(DefaultUrlBuilder.ACTION_PARAMETER_PREFIX.Length);;
+			string actionName = request.FileNameWithoutExtension;
 
-			if (actionName == "")
+			// Can probably do something clever with this in CruiseObjectGiverInitialiser
+			if (actionName == string.Empty || actionName.ToLower() == "default")
 			{
 				return giver.GiveObjectByType(typeof(DefaultAction)) as IAction;
 			}

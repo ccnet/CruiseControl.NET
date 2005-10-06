@@ -1,3 +1,4 @@
+using System;
 using System.Web;
 using ThoughtWorks.CruiseControl.Core.Util;
 
@@ -36,9 +37,9 @@ namespace ThoughtWorks.CruiseControl.Core.Reporting.Dashboard.Navigation
 			return urlBuilder.BuildUrl(action, BuildBuildQueryString(buildSpecifier));
 		}
 
-		public string BuildBuildUrl(string action, IBuildSpecifier buildSpecifier, string fileName)
+		public string Extension
 		{
-			return urlBuilder.BuildUrl(action, BuildBuildQueryString(buildSpecifier), fileName);
+			set { urlBuilder.Extension = value; }
 		}
 
 		private string BuildServerQueryString(IServerSpecifier serverSpecifier)

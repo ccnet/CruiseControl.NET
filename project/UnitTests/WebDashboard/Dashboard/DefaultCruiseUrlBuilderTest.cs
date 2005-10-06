@@ -100,16 +100,15 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 		}
 
 		[Test]
-		public void ShouldBuildBuildUrlAddingCorrectlyFormattedActionWithSpecifiedFileName()
+		public void ShouldDelegateExtensionToSubBuilder()
 		{
 			// Setup
-			urlBuilderMock.ExpectAndReturn("BuildUrl", "myUrl", "myAction", "server=myserver&project=myproject&build=mybuild", "another.html");
+			urlBuilderMock.ExpectAndReturn("Extension", "foo");
 
 			// Execute
-			string url = cruiseUrlBuilder.BuildBuildUrl("myAction", buildSpecifier, "another.html");
+			cruiseUrlBuilder.Extension = "foo";
 
 			// Verify
-			Assert.AreEqual("myUrl", url);
 			VerifyAll();
 		}
 	}

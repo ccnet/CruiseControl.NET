@@ -18,12 +18,10 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Reporting.Dashboard.Navigati
 			string actionName = "myAction";
 			decoratedBuilderMock.ExpectAndReturn("BuildUrl", "myRelativeUrl", actionName);
 			decoratedBuilderMock.ExpectAndReturn("BuildUrl", "myRelativeUrl2", actionName, "query");
-			decoratedBuilderMock.ExpectAndReturn("BuildUrl", "myRelativeUrl3", actionName, "query", "baseUrl");
 
 			/// Execute & Verify
 			Assert.AreEqual(baseUrl + "/" + "myRelativeUrl", decorator.BuildUrl(actionName));
 			Assert.AreEqual(baseUrl + "/" + "myRelativeUrl2", decorator.BuildUrl(actionName, "query"));
-			Assert.AreEqual(baseUrl + "/" + "myRelativeUrl3", decorator.BuildUrl(actionName, "query", "baseUrl"));
 
 			decoratedBuilderMock.Verify();
 		}
@@ -46,18 +44,17 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Reporting.Dashboard.Navigati
 		}
 
 		[Test]
-		public void ShouldNotDecorateFormName()
+		public void ShouldDelegateExtensionToSubBuilder()
 		{
-			/// Setup
+			// Setup
 			DynamicMock decoratedBuilderMock = new DynamicMock(typeof(IUrlBuilder));
-			string baseUrl = "https://myserver:8080/myvdir";
+			decoratedBuilderMock.ExpectAndReturn("Extension", "foo");
 
-			AbsolutePathUrlBuilderDecorator decorator = new AbsolutePathUrlBuilderDecorator((IUrlBuilder) decoratedBuilderMock.MockInstance, baseUrl);
-			decoratedBuilderMock.ExpectAndReturn("BuildFormName", "formName", "myAction");
+			// Execute
+			AbsolutePathUrlBuilderDecorator decorator = new AbsolutePathUrlBuilderDecorator((IUrlBuilder) decoratedBuilderMock.MockInstance, null);
+			decorator.Extension = "foo";
 
-			/// Execute & Verify
-			Assert.AreEqual("formName", decorator.BuildFormName("myAction"));
-
+			// Verify
 			decoratedBuilderMock.Verify();
 		}
 	}

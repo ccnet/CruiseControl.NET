@@ -35,8 +35,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.MVC.Cruise
 		[Test]
 		public void ShouldReturnUnknownActionIfActionIsntAvailable()
 		{
-			requestMock.ExpectAndReturn("FindParameterStartingWith", DefaultUrlBuilder.ACTION_PARAMETER_PREFIX + "myAction", DefaultUrlBuilder.ACTION_PARAMETER_PREFIX);
-			objectGiverMock.ExpectAndReturn("GiveObjectById", null, "myAction");
+			requestMock.ExpectAndReturn("FileNameWithoutExtension", "ThisAintNoAction");
+			objectGiverMock.ExpectAndReturn("GiveObjectById", null, "ThisAintNoAction");
 
 			Assert.IsTrue(actionFactory.Create(request) is UnknownActionAction);
 
@@ -46,7 +46,20 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.MVC.Cruise
 		[Test]
 		public void ShouldReturnDefaultActionIfNoActionSpecified()
 		{
-			requestMock.ExpectAndReturn("FindParameterStartingWith", "", DefaultUrlBuilder.ACTION_PARAMETER_PREFIX);
+			requestMock.ExpectAndReturn("FileNameWithoutExtension", "");
+
+			IAction stubAction = (IAction) new DynamicMock(typeof(IAction)).MockInstance;
+			objectGiverMock.ExpectAndReturn("GiveObjectByType", stubAction, typeof(DefaultAction));
+
+			Assert.AreEqual(stubAction, actionFactory.Create(request));
+
+			VerifyAll();
+		}
+
+		[Test]
+		public void ShouldReturnDefaultActionIfDefaultActionSpecified()
+		{
+			requestMock.ExpectAndReturn("FileNameWithoutExtension", "default");
 
 			IAction stubAction = (IAction) new DynamicMock(typeof(IAction)).MockInstance;
 			objectGiverMock.ExpectAndReturn("GiveObjectByType", stubAction, typeof(DefaultAction));
@@ -59,7 +72,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.MVC.Cruise
 		[Test]
 		public void ShouldReturnRequestedActionIfAvailable()
 		{
-			requestMock.ExpectAndReturn("FindParameterStartingWith", DefaultUrlBuilder.ACTION_PARAMETER_PREFIX + "myAction", DefaultUrlBuilder.ACTION_PARAMETER_PREFIX);
+			requestMock.ExpectAndReturn("FileNameWithoutExtension", "myAction");
 
 			IAction stubAction = (IAction) new DynamicMock(typeof(IAction)).MockInstance;
 			objectGiverMock.ExpectAndReturn("GiveObjectById", stubAction, "myAction");

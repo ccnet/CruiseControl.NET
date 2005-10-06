@@ -51,7 +51,6 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 			velocityContext["projectGrid"] = projectGrid.GenerateProjectGridRows(
 				projectStatusListAndExceptions.StatusAndServerList, actionName, sortColumn, sortReverse);
 			velocityContext["exceptions"] = projectStatusListAndExceptions.Exceptions;
-			velocityContext["refreshButtonName"] = urlBuilder.BuildFormName(actionName);
 
 			return viewGenerator.GenerateView(@"ProjectGrid.vm", velocityContext);
 		}

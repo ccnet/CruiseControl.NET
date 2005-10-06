@@ -17,25 +17,21 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 		[Test]
 		public void ShouldBuildUrlAddingCorrectlyFormattedAction()
 		{
-			Assert.AreEqual("default.aspx?_action_myAction=true", urlBuilder.BuildUrl("myAction"));
+			Assert.AreEqual("myAction.aspx", urlBuilder.BuildUrl("myAction"));
 		}
 
 		[Test]
 		public void ShouldBuildUrlWithActionAndQueryString()
 		{
-			Assert.AreEqual("default.aspx?_action_myAction=true&myparam=myvalue", urlBuilder.BuildUrl("myAction", "myparam=myvalue"));
+			Assert.AreEqual("myAction.aspx?myparam=myvalue", urlBuilder.BuildUrl("myAction", "myparam=myvalue"));
 		}
 
 		[Test]
-		public void ShouldBuildUrlWithAlternativeBaseRelativeUrlIfGiven()
+		public void ShouldUseSpecifiedExtension()
 		{
-			Assert.AreEqual("myBaseUrl?_action_myAction=true&myparam=myvalue", urlBuilder.BuildUrl("myAction", "myparam=myvalue", "myBaseUrl"));
-		}
-
-		[Test]
-		public void ShouldBuildFormNameBasedOnActionName()
-		{
-			Assert.AreEqual("_action_myAction", urlBuilder.BuildFormName("myAction"));
+			urlBuilder.Extension = "foo";
+			Assert.AreEqual("myAction.foo", urlBuilder.BuildUrl("myAction"));
+			Assert.AreEqual("myAction.foo?myparam=myvalue", urlBuilder.BuildUrl("myAction", "myparam=myvalue"));
 		}
 	}
 }

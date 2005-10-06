@@ -11,12 +11,14 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.IO
 		private NameValueCollection queryString;
 		private IRequest underlyingRequest;
 		private RequestWrappingCruiseRequest cruiseRequest;
+		private string path;
 
 		[SetUp]
 		public void Setup()
 		{
 			queryString = new NameValueCollection();
-			underlyingRequest = new NameValueCollectionRequest(queryString);
+			path = "http://bar/baz.html";
+			underlyingRequest = new NameValueCollectionRequest(queryString, path);
 			cruiseRequest = new RequestWrappingCruiseRequest(underlyingRequest);
 		}
 

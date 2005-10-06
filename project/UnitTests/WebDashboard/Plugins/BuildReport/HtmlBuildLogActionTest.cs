@@ -18,7 +18,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Plugins.BuildReport
 
 		private DynamicMock requestMock;
 		private DynamicMock buildRetrieverMock;
-		private DynamicMock linkFactoryMock;
+		private DynamicMock urlBuilderMock;
 		private DynamicMock velocityViewGeneratorMock;
 
 		private string buildLog;
@@ -31,12 +31,12 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Plugins.BuildReport
 		{
 			buildRetrieverMock = new DynamicMock(typeof(IBuildRetriever));
 			velocityViewGeneratorMock = new DynamicMock(typeof(IVelocityViewGenerator));
-			linkFactoryMock = new DynamicMock(typeof(ILinkFactory));
+			urlBuilderMock = new DynamicMock(typeof(ICruiseUrlBuilder));
 			requestMock = new DynamicMock(typeof(ICruiseRequest));
 
 			buildLogAction = new HtmlBuildLogAction((IBuildRetriever) buildRetrieverMock.MockInstance, 
 				(IVelocityViewGenerator) velocityViewGeneratorMock.MockInstance,
-				(ILinkFactory) linkFactoryMock.MockInstance);
+				(ICruiseUrlBuilder) urlBuilderMock.MockInstance);
 
 			buildLog = "some stuff in a log with a < and >";
 			buildSpecifier = new DefaultBuildSpecifier(new DefaultProjectSpecifier(new DefaultServerSpecifier("myserver"), "myproject"), "mybuild");
@@ -49,7 +49,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Plugins.BuildReport
 			requestMock.Verify();
 			buildRetrieverMock.Verify();
 			velocityViewGeneratorMock.Verify();
-			linkFactoryMock.Verify();
+			urlBuilderMock.Verify();
 		}
 
 		[Test]
@@ -58,8 +58,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Plugins.BuildReport
 			// Setup
 			requestMock.ExpectAndReturn("BuildSpecifier", buildSpecifier);
 			buildRetrieverMock.ExpectAndReturn("GetBuild", build, buildSpecifier);
-			GeneralAbsoluteLink link = new GeneralAbsoluteLink("some text", "myUrl");
-			linkFactoryMock.ExpectAndReturn("CreateBuildLinkWithFileName", link, buildSpecifier, XmlBuildLogAction.ACTION_NAME, buildSpecifier.BuildName);
+			urlBuilderMock.Expect("Extension", "xml");
+			urlBuilderMock.ExpectAndReturn("BuildBuildUrl", "myUrl", XmlBuildLogAction.ACTION_NAME, buildSpecifier);
 
 			Hashtable expectedContext = new Hashtable();
 			expectedContext["log"] = "some stuff in a log with a &lt; and &gt;";

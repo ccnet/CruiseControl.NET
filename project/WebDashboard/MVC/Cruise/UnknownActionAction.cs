@@ -6,14 +6,13 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.MVC.Cruise
 	{
 		public IResponse Execute(IRequest request)
 		{
-			string actionName = request.FindParameterStartingWith(DefaultUrlBuilder.ACTION_PARAMETER_PREFIX);
+			string actionName = request.FileNameWithoutExtension;
 			if (actionName == "")
 			{
 				return new HtmlFragmentResponse("Internal Error - 'UnknownActionAction' called but there is no action is request!");
 			}
 			else
 			{
-				actionName = actionName.Substring(DefaultUrlBuilder.ACTION_PARAMETER_PREFIX.Length);	
 				return new HtmlFragmentResponse("Unknown action requested - " + actionName);
 			}
 		}
