@@ -48,7 +48,10 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 		public string HistoryArgs = DefaultHistoryArgs;
 
 		[ReflectorProperty("useWorkingDirectory", Required=false)]
-		public bool UseWorkingDirectory = true;
+		public bool UseVaultWorkingDirectory = true;
+
+		[ReflectorProperty("workingDirectory", Required=false)]
+		public string WorkingDirectory;
 
 		public override Modification[] GetModifications(IIntegrationResult from, IIntegrationResult to)
 		{
@@ -76,13 +79,13 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 		{
 			ProcessArgumentBuilder builder = new ProcessArgumentBuilder();
 			builder.AddArgument("get", Folder);
-			if (UseWorkingDirectory)
+			if (UseVaultWorkingDirectory)
 			{
 				builder.AppendArgument("-merge overwrite -performdeletions removeworkingcopy");				
 			}
 			else
 			{
-				builder.AddArgument("-destpath", result.WorkingDirectory);
+				builder.AddArgument("-destpath", result.BaseFromWorkingDirectory(WorkingDirectory));
 			}
 			builder.AppendArgument("-setfiletime checkin -makewritable");				
 			AddCommonOptionalArguments(builder);
@@ -107,7 +110,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 
 		private ProcessInfo ProcessInfoFor(string args, IIntegrationResult result)
 		{
-			return new ProcessInfo(Executable, args, result.WorkingDirectory);
+			return new ProcessInfo(Executable, args, result.BaseFromWorkingDirectory(WorkingDirectory));
 		}
 
 		// "history ""{0}"" -excludeactions label -rowlimit 0 -begindate {1:s} -enddate {2:s}

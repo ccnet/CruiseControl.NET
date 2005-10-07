@@ -42,6 +42,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 				<applyLabel>True</applyLabel>
 				<historyArgs></historyArgs>
 				<useWorkingDirectory>false</useWorkingDirectory>
+				<workingDirectory>c:\source\</workingDirectory>
 			</vault>";
 
 			vault = CreateVault(ST_XML_SSL);
@@ -53,8 +54,9 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 			Assert.AreEqual("$\\foo", vault.Folder);
 			Assert.AreEqual(true, vault.AutoGetSource);
 			Assert.AreEqual(true, vault.ApplyLabel);
-			Assert.AreEqual(false, vault.UseWorkingDirectory);
+			Assert.AreEqual(false, vault.UseVaultWorkingDirectory);
 			Assert.AreEqual(string.Empty, vault.HistoryArgs);
+			Assert.AreEqual(@"c:\source\", vault.WorkingDirectory);
 		}
 
 		[Test]
@@ -65,7 +67,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 			Assert.AreEqual("$", vault.Folder);
 			Assert.AreEqual(false, vault.AutoGetSource);
 			Assert.AreEqual(false, vault.ApplyLabel);
-			Assert.AreEqual(true, vault.UseWorkingDirectory);
+			Assert.AreEqual(true, vault.UseVaultWorkingDirectory);
 			Assert.AreEqual(Vault.DefaultHistoryArgs, vault.HistoryArgs);
 		}
 
@@ -104,7 +106,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 		{
 			ExpectToExecuteArguments(@"get $ -merge overwrite -performdeletions removeworkingcopy -setfiletime checkin -makewritable");
 			vault.AutoGetSource = true;
-			vault.UseWorkingDirectory = true;
+			vault.UseVaultWorkingDirectory = true;
 			vault.Folder = "$";
 			vault.GetSource(result);
 			VerifyAll();
@@ -115,7 +117,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 		{
 			ExpectToExecuteArguments(@"get $ -destpath c:\source\ -setfiletime checkin -makewritable");
 			vault.AutoGetSource = true;
-			vault.UseWorkingDirectory = false;
+			vault.UseVaultWorkingDirectory = false;
 			vault.Folder = "$";
 			vault.GetSource(result);
 			VerifyAll();
@@ -168,6 +170,20 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 			vault.Folder = "$";
 			SetHostUsernamePasswordRepositoryAndSsl();
 			vault.LabelSourceControl(result);
+			VerifyAll();
+		}
+
+		[Test]
+		public void ShouldUseConfiguredWorkingDirectoryWhenGettingSource()
+		{
+			ProcessInfo info = NewProcessInfo(@"get $ -destpath c:\temp\ -setfiletime checkin -makewritable");
+			info.WorkingDirectory = @"c:\temp\";
+			ExpectToExecute(info);
+
+			vault.AutoGetSource = true;
+			vault.UseVaultWorkingDirectory = false;
+			vault.WorkingDirectory = @"c:\temp\";
+			vault.GetSource(IntegrationResult());
 			VerifyAll();
 		}
 
