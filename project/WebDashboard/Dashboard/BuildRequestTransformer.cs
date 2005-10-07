@@ -16,7 +16,8 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 
 		public string Transform(IBuildSpecifier buildSpecifier, params string[] transformerFileNames)
 		{
-			return transformer.Transform(buildRetriever.GetBuild(buildSpecifier).Log, transformerFileNames);
+			string log = buildRetriever.GetBuild(buildSpecifier).Log;
+			return transformer.Transform(log, transformerFileNames);
 		}
 	}
 }

@@ -32,7 +32,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 			giverManager.AddTypedInstance(typeof(HttpRequest), request);
 
 			// Add functionality to object giver to handle this?
-			giverManager.AddTypedInstance(typeof(IRequest), new AggregatedRequest(new NameValueCollectionRequest(request.Form, request.Path), new NameValueCollectionRequest(request.QueryString, request.Path)));
+			giverManager.AddTypedInstance(typeof(IRequest), new AggregatedRequest(new NameValueCollectionRequest(request.Form, request.Path, request.RawUrl), new NameValueCollectionRequest(request.QueryString, request.Path, request.RawUrl)));
 
 			giverManager.SetImplementationType(typeof(IUrlBuilder), typeof(DefaultUrlBuilder));
 			giverManager.SetImplementationType(typeof(IMultiTransformer), typeof(PathMappingMultiTransformer));
@@ -99,7 +99,8 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 				foreach (INamedAction action in plugin.NamedActions)
 				{
 					giverManager.CreateInstanceMapping(action.ActionName,action.Action)
-						.Decorate(typeof(ServerCheckingProxyAction)).Decorate(typeof(BuildCheckingProxyAction)).Decorate(typeof(ProjectCheckingProxyAction)).Decorate(typeof(CruiseActionProxyAction)).Decorate(typeof(ExceptionCatchingActionProxy)).Decorate(typeof(SiteTemplateActionDecorator));
+						.Decorate(typeof(ServerCheckingProxyAction)).Decorate(typeof(BuildCheckingProxyAction)).Decorate(typeof(ProjectCheckingProxyAction)).Decorate(typeof(CruiseActionProxyAction))
+						.Decorate(typeof(CachingActionProxy)).Decorate(typeof(ExceptionCatchingActionProxy)).Decorate(typeof(SiteTemplateActionDecorator));
 				}
 			}
 

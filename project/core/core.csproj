@@ -1023,6 +1023,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "util\AccurateTimer.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "util\ConsoleTraceListener.cs"
                     SubType = "Code"
                     BuildAction = "Compile"

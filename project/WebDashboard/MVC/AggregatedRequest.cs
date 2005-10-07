@@ -71,6 +71,11 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.MVC
 			}
 		}
 
+		public string RawUrl
+		{
+			get { return request1.RawUrl; }
+		}
+
 		public string FileNameWithoutExtension
 		{
 			get 

@@ -1,3 +1,4 @@
+using System.IO;
 using System.Web;
 using ObjectWizard;
 using ThoughtWorks.CruiseControl.WebDashboard.Dashboard;
@@ -18,8 +19,9 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.MVC.ASPNET
 				context.Response.ContentType = "Text/XML";
 			}
 
-			ObjectGiver objectGiver = new CruiseObjectGiverInitializer(new ManagableObjectGiver()).SetupObjectGiverForRequest(context);
-			IResponse response = ((RequestController) objectGiver.GiveObjectByType(typeof(RequestController))).Do();
+			ObjectGiver objectGiver =
+				new CruiseObjectGiverInitializer(new ManagableObjectGiver()).SetupObjectGiverForRequest(context);
+			IResponse response = ((RequestController) objectGiver.GiveObjectByType(typeof (RequestController))).Do();
 
 			if (response is RedirectResponse)
 			{
@@ -41,7 +43,8 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.MVC.ASPNET
 		private void DoSecurityChecks(HttpContext context)
 		{
 			// Security Fix - see http://www.microsoft.com/security/incident/aspnet.mspx
-			if (context.Request.Path.IndexOf('\\') >= 0 || System.IO.Path.GetFullPath(context.Request.PhysicalPath) != context.Request.PhysicalPath)
+			if (context.Request.Path.IndexOf('\\') >= 0 ||
+			    Path.GetFullPath(context.Request.PhysicalPath) != context.Request.PhysicalPath)
 			{
 				throw new HttpException(404, "not found");
 			}

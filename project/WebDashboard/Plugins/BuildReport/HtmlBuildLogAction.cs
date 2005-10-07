@@ -16,7 +16,8 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.BuildReport
 		private readonly IVelocityViewGenerator viewGenerator;
 		private readonly ICruiseUrlBuilder urlBuilder;
 
-		public HtmlBuildLogAction(IBuildRetriever buildRetriever, IVelocityViewGenerator viewGenerator, ICruiseUrlBuilder urlBuilder)
+		public HtmlBuildLogAction(IBuildRetriever buildRetriever, IVelocityViewGenerator viewGenerator,
+		                          ICruiseUrlBuilder urlBuilder)
 		{
 			this.buildRetriever = buildRetriever;
 			this.viewGenerator = viewGenerator;
@@ -35,4 +36,5 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.BuildReport
 			return viewGenerator.GenerateView(@"BuildLog.vm", velocityContext);
 		}
 	}
+
 }

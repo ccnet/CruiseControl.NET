@@ -18,7 +18,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.IO
 		{
 			queryString = new NameValueCollection();
 			path = "http://bar/baz.html";
-			underlyingRequest = new NameValueCollectionRequest(queryString, path);
+			underlyingRequest = new NameValueCollectionRequest(queryString, path, null);
 			cruiseRequest = new RequestWrappingCruiseRequest(underlyingRequest);
 		}
 

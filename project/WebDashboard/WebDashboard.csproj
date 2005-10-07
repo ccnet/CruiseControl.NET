@@ -549,6 +549,16 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "IO\InMemoryResponseCache.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "IO\IResponseCache.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "IO\RequestWrappingCruiseRequest.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -605,6 +615,11 @@
                 />
                 <File
                     RelPath = "MVC\Cruise\BuildCheckingProxyAction.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "MVC\Cruise\CachingActionProxy.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

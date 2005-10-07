@@ -27,7 +27,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.MVC.Cruise
 			exceptionCatchingAction = new ExceptionCatchingActionProxy((IAction) actionMock.MockInstance, (IVelocityViewGenerator) velocityViewGeneratorMock.MockInstance);
 			response = new HtmlFragmentResponse("my view");
 			errorResponse = new HtmlFragmentResponse("error view");
-			request = new NameValueCollectionRequest(null, null);
+			request = new NameValueCollectionRequest(null, null, null);
 		}
 
 		private void VerifyAll()

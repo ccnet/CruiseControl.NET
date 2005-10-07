@@ -28,7 +28,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.MVC.Cruise
 				(ICruiseRequestFactory) cruiseRequestFactoryMock.MockInstance);
 
 			cruiseRequest = new RequestWrappingCruiseRequest(null);
-			request = new NameValueCollectionRequest(new NameValueCollection(), null);
+			request = new NameValueCollectionRequest(new NameValueCollection(), null, null);
 		}
 
 		private void VerifyAll()

@@ -8,11 +8,13 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.MVC
 	{
 		private readonly NameValueCollection map;
 		private readonly string path;
+		private readonly string rawUrl;
 
-		public NameValueCollectionRequest(NameValueCollection map, string path)
+		public NameValueCollectionRequest(NameValueCollection map, string path, string rawUrl)
 		{
 			this.map = map;
 			this.path = path;
+			this.rawUrl = rawUrl;
 		}
 
 		public string FindParameterStartingWith(string prefix)
@@ -71,6 +73,11 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.MVC
 		public NameValueCollection Params
 		{
 			get { return map; }
+		}
+
+		public string RawUrl
+		{
+			get { return rawUrl; }
 		}
 
 		public string FileNameWithoutExtension
