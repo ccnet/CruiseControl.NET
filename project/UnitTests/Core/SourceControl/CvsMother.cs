@@ -295,5 +295,43 @@ date: 2005/05/21 14:05:46; author: abc; state: Exp; lines: +2 -0; kopt: kv; comm
 Test commit
 ";
 		}
+
+		public static string ExampleOfFileAddedOnBranch()
+		{
+			return @"RCS file: /cvsroot/ccnet/ccnet/project/core/label/DateLabeller.cs,v
+Working file: project/core/label/DateLabeller.cs
+head: 1.2
+branch:
+locks: strict
+access list:
+symbolic names:
+	ver-1_1_0_2014: 1.2
+	ver-1_1_0_2013: 1.2
+	ver-1_0_0_1211: 1.1.2.1
+	ver-1_1_0_2012: 1.2
+	ver-1_1_0_2011: 1.2
+	ver-1_0_0_1210: 1.1.2.1
+	ver-1_1_0_2010: 1.2
+	ver-1_1_0_2009: 1.2
+	ver-1_0_0_1209: 1.1.2.1
+	ver-1_0_0_1208: 1.1.2.1
+	ver-1_1_0_2008: 1.2
+	ver-1_1_0_2007: 1.2
+	ver-1_0_0_1207: 1.1.2.1
+	ver-1_1_0_2006: 1.2
+	ver-1_0_0_1206: 1.1.2.1
+	ver-1_1_0_2005: 1.2
+	ver-1_0_0_1205: 1.1.2.1
+	RB_1_0: 1.1.0.2
+keyword substitution: kv
+total revisions: 3;	selected revisions: 3
+description:
+----------------------------
+revision 1.1
+date: 2005/09/30 17:46:06;  author: exortech;  state: dead;
+branches:  1.1.2;
+file DateLabeller.cs was initially added on branch RB_1_0.
+=============================================================================";
+		}
 	}
 }
