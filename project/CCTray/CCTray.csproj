@@ -114,6 +114,11 @@
                     Project = "{C8043AD9-0F30-4366-A263-E2FC0D6A57A9}"
                     Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
                 />
+                <Reference
+                    Name = "Remote"
+                    Project = "{E820CF3B-8C5A-4002-BC16-B7818D3D54A8}"
+                    Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
+                />
             </References>
         </Build>
         <Files>

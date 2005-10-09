@@ -3,7 +3,6 @@ using System.Collections;
 using System.ComponentModel;
 using System.Windows.Forms;
 using ThoughtWorks.CruiseControl.CCTrayLib.Configuration;
-using ThoughtWorks.CruiseControl.CCTrayLib.ServerConnection;
 using ThoughtWorks.CruiseControl.Remote;
 
 namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
@@ -27,7 +26,6 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 		/// Required designer variable.
 		/// </summary>
 		private Container components = null;
-
 
 		public AddProjects(Project[] projects)
 		{
@@ -77,7 +75,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 		/// </summary>
 		private void InitializeComponent()
 		{
-			System.Resources.ResourceManager resources = new System.Resources.ResourceManager(typeof(AddProjects));
+			System.Resources.ResourceManager resources = new System.Resources.ResourceManager(typeof (AddProjects));
 			this.btnOK = new System.Windows.Forms.Button();
 			this.btnCancel = new System.Windows.Forms.Button();
 			this.label4 = new System.Windows.Forms.Label();
@@ -201,7 +199,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 			this.Controls.Add(this.btnCancel);
 			this.Controls.Add(this.btnOK);
 			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
-			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+			this.Icon = ((System.Drawing.Icon) (resources.GetObject("$this.Icon")));
 			this.Name = "AddProjects";
 			this.Text = "Project";
 			this.groupBox1.ResumeLayout(false);
@@ -216,7 +214,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 		{
 			if (txtServer.Text.Trim().Length == 0)
 				return;
-			
+
 			try
 			{
 				// validate

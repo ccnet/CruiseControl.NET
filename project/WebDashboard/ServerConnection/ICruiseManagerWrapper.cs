@@ -1,5 +1,4 @@
 using ThoughtWorks.CruiseControl.Core.Reporting.Dashboard.Navigation;
-using ThoughtWorks.CruiseControl.WebDashboard.Dashboard;
 
 namespace ThoughtWorks.CruiseControl.WebDashboard.ServerConnection
 {

@@ -475,16 +475,6 @@
                     DependentUpon = "TrayIcon.cs"
                     BuildAction = "EmbeddedResource"
                 />
-                <File
-                    RelPath = "ServerConnection\ICruiseManagerFactory.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "ServerConnection\RemoteCruiseManagerFactory.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
             </Include>
         </Files>
     </CSHARP>

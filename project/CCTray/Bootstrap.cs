@@ -5,7 +5,7 @@ using System.Windows.Forms;
 using ThoughtWorks.CruiseControl.CCTrayLib.Configuration;
 using ThoughtWorks.CruiseControl.CCTrayLib.Monitoring;
 using ThoughtWorks.CruiseControl.CCTrayLib.Presentation;
-using ThoughtWorks.CruiseControl.CCTrayLib.ServerConnection;
+using ThoughtWorks.CruiseControl.Remote;
 
 namespace ThoughtWorks.CruiseControl.CCTray
 {
@@ -15,7 +15,7 @@ namespace ThoughtWorks.CruiseControl.CCTray
 		/// The main entry point for the application.
 		/// </summary>
 		[STAThread]
-		static void Main() 
+		private static void Main()
 		{
 			Application.EnableVisualStyles();
 			Application.DoEvents();
@@ -23,8 +23,8 @@ namespace ThoughtWorks.CruiseControl.CCTray
 			try
 			{
 				ICruiseManagerFactory remoteCruiseManagerFactory = new RemoteCruiseManagerFactory();
-				ICruiseProjectManagerFactory cruiseProjectManagerFactory = new CruiseProjectManagerFactory( remoteCruiseManagerFactory );
-				CCTrayMultiConfiguration configuration = new CCTrayMultiConfiguration( cruiseProjectManagerFactory, GetSettingsFilename() );
+				ICruiseProjectManagerFactory cruiseProjectManagerFactory = new CruiseProjectManagerFactory(remoteCruiseManagerFactory);
+				CCTrayMultiConfiguration configuration = new CCTrayMultiConfiguration(cruiseProjectManagerFactory, GetSettingsFilename());
 
 				MainForm mainForm = new MainForm(configuration);
 
@@ -38,12 +38,12 @@ namespace ThoughtWorks.CruiseControl.CCTray
 
 		private static string GetSettingsFilename()
 		{
-			string oldFashionedSettingsFilename = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location),"settings.xml");
-			string newSettingsFilename = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),"cctray-settings.xml");
-			
+			string oldFashionedSettingsFilename = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "settings.xml");
+			string newSettingsFilename = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "cctray-settings.xml");
+
 			if (File.Exists(oldFashionedSettingsFilename) && !File.Exists(newSettingsFilename))
 				File.Copy(oldFashionedSettingsFilename, newSettingsFilename);
-			
+
 			return newSettingsFilename;
 		}
 

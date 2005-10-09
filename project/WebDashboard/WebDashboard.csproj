@@ -859,11 +859,6 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "ServerConnection\ICruiseManagerFactory.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
                     RelPath = "ServerConnection\ICruiseManagerWrapper.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -880,11 +875,6 @@
                 />
                 <File
                     RelPath = "ServerConnection\ProjectStatusOnServer.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "ServerConnection\RemoteCruiseManagerFactory.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

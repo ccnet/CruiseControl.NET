@@ -145,6 +145,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "ICruiseManagerFactory.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "ICruiseServer.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -186,6 +191,11 @@
                 />
                 <File
                     RelPath = "ProjectStatus.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "RemoteCruiseManagerFactory.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

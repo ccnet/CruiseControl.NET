@@ -1,8 +1,7 @@
-using System;
 using NMock;
 using NUnit.Framework;
 using ThoughtWorks.CruiseControl.CCTrayLib.Monitoring;
-using ThoughtWorks.CruiseControl.CCTrayLib.ServerConnection;
+using ThoughtWorks.CruiseControl.Remote;
 
 namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Monitoring
 {
@@ -14,7 +13,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Monitoring
 		[Test]
 		public void WhenRequestingACruiseProjectManagerWithATCPUrlAsksTheCruiseManagerFactory()
 		{
-			DynamicMock mockCruiseManagerFactory = new DynamicMock(typeof(ICruiseManagerFactory));
+			DynamicMock mockCruiseManagerFactory = new DynamicMock(typeof (ICruiseManagerFactory));
 			mockCruiseManagerFactory.Strict = true;
 			CruiseProjectManagerFactory factory = new CruiseProjectManagerFactory((ICruiseManagerFactory) mockCruiseManagerFactory.MockInstance);
 
@@ -23,14 +22,14 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Monitoring
 
 			ICruiseProjectManager manager = factory.Create(serverUrl, ProjectName);
 			Assert.AreEqual(ProjectName, manager.ProjectName);
-			
+
 			mockCruiseManagerFactory.Verify();
 		}
-		
+
 		[Test]
 		public void WhenRequestingACruiseProjectManagerWithAnHttpUrlConstructsANewDashboardCruiseProjectManager()
 		{
-			DynamicMock mockCruiseManagerFactory = new DynamicMock(typeof(ICruiseManagerFactory));
+			DynamicMock mockCruiseManagerFactory = new DynamicMock(typeof (ICruiseManagerFactory));
 			mockCruiseManagerFactory.Strict = true;
 			CruiseProjectManagerFactory factory = new CruiseProjectManagerFactory((ICruiseManagerFactory) mockCruiseManagerFactory.MockInstance);
 
@@ -38,10 +37,9 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Monitoring
 
 			ICruiseProjectManager manager = factory.Create(serverUrl, ProjectName);
 			Assert.AreEqual(ProjectName, manager.ProjectName);
-			Assert.AreEqual(typeof(DashboardCruiseProjectManager), manager.GetType());
-			
+			Assert.AreEqual(typeof (DashboardCruiseProjectManager), manager.GetType());
+
 			mockCruiseManagerFactory.Verify();
 		}
-
 	}
 }
