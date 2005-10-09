@@ -6,13 +6,14 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
 	[ReflectorType("forcebuild")]
 	public class ForceBuildPublisher : ITask
 	{
-		private readonly IRemotingService remotingService;
+		private readonly ICruiseManagerFactory factory;
 
-		public ForceBuildPublisher() : this(new RemotingServiceAdapter()) { }
+		public ForceBuildPublisher() : this(new RemoteCruiseManagerFactory())
+		{}
 
-		public ForceBuildPublisher(IRemotingService remotingService)
+		public ForceBuildPublisher(ICruiseManagerFactory factory)
 		{
-			this.remotingService = remotingService;
+			this.factory = factory;
 		}
 
 		[ReflectorProperty("project")]
@@ -28,8 +29,7 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
 		{
 			if (IntegrationStatus != result.Status) return;
 
-			ICruiseManager manager = (ICruiseManager) remotingService.Connect(typeof(ICruiseManager), ServerUri);
-			manager.ForceBuild(Project);
+			factory.GetCruiseManager(ServerUri).ForceBuild(Project);
 		}
 	}
 }

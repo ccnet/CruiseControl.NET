@@ -1,4 +1,3 @@
-using System;
 using Exortech.NetReflector;
 using NMock;
 using NMock.Remoting;
@@ -34,31 +33,31 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Publishers
 		[Test]
 		public void ShouldReqestForceBuildOnRemoteCruiseServer()
 		{
-			IMock mockCruiseManager = new RemotingMock(typeof(ICruiseManager));
+			IMock mockCruiseManager = new RemotingMock(typeof (ICruiseManager));
 			mockCruiseManager.Expect("ForceBuild", "project");
-			IMock mockRemotingService = new DynamicMock(typeof(IRemotingService));
-			mockRemotingService.ExpectAndReturn("Connect", mockCruiseManager.MockInstance, typeof(ICruiseManager), "tcp://localhost:21234/CruiseManager.rem");
+			IMock mockManagerFactory = new DynamicMock(typeof (ICruiseManagerFactory));
+			mockManagerFactory.ExpectAndReturn("GetCruiseManager", mockCruiseManager.MockInstance, "tcp://localhost:21234/CruiseManager.rem");
 
-			ForceBuildPublisher publisher = new ForceBuildPublisher((IRemotingService)mockRemotingService.MockInstance);
+			ForceBuildPublisher publisher = new ForceBuildPublisher((ICruiseManagerFactory) mockManagerFactory.MockInstance);
 			publisher.Project = "project";
 			publisher.ServerUri = "tcp://localhost:21234/CruiseManager.rem";
 			publisher.Run(IntegrationResultMother.CreateSuccessful());
 
 			mockCruiseManager.Verify();
-			mockRemotingService.Verify();
+			mockManagerFactory.Verify();
 		}
 
 		[Test]
 		public void ShouldOnlyForceBuildIfIntegrationStatusMatches()
 		{
-			IMock mockRemotingService = new DynamicMock(typeof(IRemotingService));
-			mockRemotingService.ExpectNoCall("Connect", typeof(Type), typeof(string));
-			
-			ForceBuildPublisher publisher = new ForceBuildPublisher((IRemotingService)mockRemotingService.MockInstance);
+			IMock mockManagerFactory = new DynamicMock(typeof (ICruiseManagerFactory));
+			mockManagerFactory.ExpectNoCall("GetCruiseManager", typeof (string));
+
+			ForceBuildPublisher publisher = new ForceBuildPublisher((ICruiseManagerFactory) mockManagerFactory.MockInstance);
 			publisher.IntegrationStatus = IntegrationStatus.Exception;
 			publisher.Run(IntegrationResultMother.CreateFailed());
 
-			mockRemotingService.Verify();
+			mockManagerFactory.Verify();
 		}
 	}
 }
