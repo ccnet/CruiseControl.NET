@@ -1013,6 +1013,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Triggers\ProjectTrigger.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Triggers\ScheduleTrigger.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
