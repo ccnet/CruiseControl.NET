@@ -12,7 +12,7 @@ namespace ThoughtWorks.CruiseControl.Core.Triggers
 		private const int DefaultIntervalSeconds = 5;
 
 		private readonly ICruiseManagerFactory managerFactory;
-		private ProjectStatus lastStatus = new ProjectStatus();
+		private ProjectStatus lastStatus;
 
 		public ProjectTrigger() : this(new RemoteCruiseManagerFactory())
 		{}
@@ -41,6 +41,11 @@ namespace ThoughtWorks.CruiseControl.Core.Triggers
 			IntegrationCompleted();	// reset inner trigger
 
 			ProjectStatus currentStatus = GetCurrentProjectStatus();
+			if (lastStatus == null)
+			{
+				lastStatus = currentStatus;
+				return BuildCondition.NoBuild;
+			}
 			if (currentStatus.LastBuildDate > lastStatus.LastBuildDate && currentStatus.BuildStatus == TriggerStatus)
 			{
 				lastStatus = currentStatus;
@@ -70,7 +75,11 @@ namespace ThoughtWorks.CruiseControl.Core.Triggers
 
 		public DateTime NextBuild
 		{
-			get { return lastStatus.NextBuildTime; }
+			get
+			{
+				if (lastStatus == null) return InnerTrigger.NextBuild;
+				return lastStatus.NextBuildTime;
+			}
 		}
 
 		private static ITrigger NewIntervalTrigger()
