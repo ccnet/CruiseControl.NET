@@ -89,7 +89,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol.Telelogic
 		public void GetSubProjects()
 		{
 			ProcessInfo actual = SynergyCommandBuilder.GetSubProjects(connection, project);
-			ValidateProcessInfo(actual, @"query hierarchy_project_members('MyProject-MyProject_Int:project:1')");
+			ValidateProcessInfo(actual, @"query hierarchy_project_members('MyProject-MyProject_Int:project:1', 'none')");
 		}
 
 		[Test]

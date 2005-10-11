@@ -7,26 +7,6 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Telelogic
 	///     Data structure containing all information for a CM Synergy project (which
 	///     is similar to a "view" in other SCM packages).
 	/// </summary>
-	/// <code language="c#">
-	///     <example>
-	///         using System;
-	///         using ThoughtWorks.CruiseControl.Core.Sourcecontrol.Telelogic;
-	///         
-	///         public class Example
-	///         {
-	///             public static void Main()
-	///             {
-	///                 ProjectInfo info = new ProjectInfo();
-	///                 info.Host = "localhost";
-	///                 info.Database = "\\server\share\folder";
-	///                 info.Release = "PRODUCT/1.0";
-	///                 info.TaskFolder = "1234";
-	///                 Console.WriteLine("Project Name:    {0}", info.ProjectName);
-	///                 Console.WriteLine("Project Version: {0}", info.ProjectVersion);
-	///             }
-	///         }
-	///     </example>
-	/// </code>
 	[ReflectorType("synergyProject")]
 	public class SynergyProjectInfo
 	{

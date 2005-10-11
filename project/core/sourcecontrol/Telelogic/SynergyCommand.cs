@@ -72,7 +72,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Telelogic
 		{
 			disposed = false;
 			isOpen = false;
-			executor = new SynergyProcessExecutor();
+			executor = new ProcessExecutor();
 			connection = connectionInfo;
 			project = projectInfo;
 
@@ -431,7 +431,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Telelogic
 		/// </summary>
 		/// <exception cref="CruiseControlException">
 		///     Thrown if the CM Synergy command exceeds the configured
-		///     <see cref="Timeout"/>.
+		///     <see cref="ProcessInfo.TimeOut"/>.
 		/// </exception>
 		/// <param name="processInfo">
 		///     <see langword="true"/> if a <see cref="CruiseControlException"/>
@@ -449,7 +449,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Telelogic
 		/// </summary>
 		/// <exception cref="CruiseControlException">
 		///     Thrown if the CM Synergy command exceeds the configured
-		///     <see cref="Timeout"/>, or if <paramref see="failOnError" />
+		///     <see cref="ProcessInfo.TimeOut"/>, or if <paramref see="failOnError" />
 		///     is <see langword="true"/> and the commands returns non-zero.
 		/// </exception>
 		/// <param name="processInfo">

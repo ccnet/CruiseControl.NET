@@ -57,10 +57,9 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol.Telelogic
 		public void CanParseNewTasks()
 		{
 			SynergyParser parser = new SynergyParser();
-			Hashtable actual;
-			SynergyParser.SynergyTaskInfo info;
 
-			actual = parser.ParseTasks(SynergyMother.NewTaskInfo);
+			// ngw_de0157~milligan_integrate
+			Hashtable actual = parser.ParseTasks(SynergyMother.NewTaskInfo);
 
 			// validate that a collection of 8 comments is returned
 			Assert.IsNotNull(actual);
@@ -70,7 +69,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol.Telelogic
 			foreach (DictionaryEntry comment in actual)
 			{
 				Assert.IsNotNull(comment);
-				info = (SynergyParser.SynergyTaskInfo) comment.Value;
+				SynergyParser.SynergyTaskInfo info = (SynergyParser.SynergyTaskInfo) comment.Value;
 				Assert.IsNotNull(info.TaskNumber);
 				Assert.IsNotNull(info.TaskSynopsis);
 				Assert.IsNotNull(info.Resolver);

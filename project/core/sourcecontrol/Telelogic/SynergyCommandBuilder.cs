@@ -134,7 +134,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Telelogic
 		/// <returns>A non-null initialized process structure to query for all project members.</returns>
 		public static ProcessInfo GetSubProjects(SynergyConnectionInfo connection, SynergyProjectInfo project)
 		{
-			const string template = @"query hierarchy_project_members('{0}')";
+			const string template = @"query hierarchy_project_members('{0}', 'none')";
 			string arguments = String.Format(template, project.ObjectName);
 			return CreateProcessInfo(connection, arguments);
 		}
