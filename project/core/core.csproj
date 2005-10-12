@@ -754,6 +754,16 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "sourcecontrol\Surround.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "sourcecontrol\SurroundHistoryParser.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />                
+                <File
                     RelPath = "sourcecontrol\Svn.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
