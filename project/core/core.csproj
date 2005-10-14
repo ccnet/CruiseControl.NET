@@ -762,7 +762,7 @@
                     RelPath = "sourcecontrol\SurroundHistoryParser.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
-                />                
+                />
                 <File
                     RelPath = "sourcecontrol\Svn.cs"
                     SubType = "Code"
@@ -824,6 +824,16 @@
                 />
                 <File
                     RelPath = "sourcecontrol\WebSVNUrlBuilder.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "sourcecontrol\BitKeeper\BitKeeper.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "sourcecontrol\BitKeeper\BitKeeperHistoryParser.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

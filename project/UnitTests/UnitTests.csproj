@@ -851,6 +851,16 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Core\SourceControl\BitKeeper\BitKeeperHistoryParserTest.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Core\SourceControl\BitKeeper\BitKeeperTest.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />                
+                <File
                     RelPath = "Core\SourceControl\Perforce\P4ConfigProcessInfoCreatorTest.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
