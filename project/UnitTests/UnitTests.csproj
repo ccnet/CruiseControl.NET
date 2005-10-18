@@ -72,7 +72,7 @@
                     DocumentationFile = ""
                     DebugSymbols = "true"
                     FileAlignment = "4096"
-                    IncrementalBuild = "true"
+                    IncrementalBuild = "false"
                     NoStdLib = "false"
                     NoWarn = ""
                     Optimize = "true"
@@ -794,7 +794,7 @@
                     RelPath = "Core\SourceControl\SurroundTest.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
-                />                                
+                />
                 <File
                     RelPath = "Core\SourceControl\SvnHistoryParserTest.cs"
                     SubType = "Code"
@@ -859,7 +859,7 @@
                     RelPath = "Core\SourceControl\BitKeeper\BitKeeperTest.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
-                />                
+                />
                 <File
                     RelPath = "Core\SourceControl\Perforce\P4ConfigProcessInfoCreatorTest.cs"
                     SubType = "Code"

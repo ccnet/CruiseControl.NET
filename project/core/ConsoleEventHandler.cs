@@ -1,5 +1,6 @@
 using System;
 using System.Runtime.InteropServices;
+using ThoughtWorks.CruiseControl.Core.Util;
 
 namespace ThoughtWorks.CruiseControl.Core
 {
@@ -13,9 +14,13 @@ namespace ThoughtWorks.CruiseControl.Core
 
 		public ConsoleEventHandler()
 		{
-			handler = new ControlEventHandler(HandleControlEvent);
-			SetConsoleCtrlHandler(handler, true);
+			if (ExecutionEnvironment.IsRunningOnWindows)
+			{
+				handler = new ControlEventHandler(HandleControlEvent);
+				SetConsoleCtrlHandler(handler, true);
+			}
 		}
+
 
 		private void HandleControlEvent(ConsoleEvent consoleEvent)
 		{
