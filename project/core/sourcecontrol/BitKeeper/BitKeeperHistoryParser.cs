@@ -1,10 +1,10 @@
 using System;
 using System.Collections;
-using System.IO;
 using System.Globalization;
+using System.IO;
 using System.Text.RegularExpressions;
 
-namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
+namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.BitKeeper
 {
 	public class BitKeeperHistoryParser : IHistoryParser
 	{
@@ -13,7 +13,8 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 		/// </summary>
 		private static readonly string BK_CHANGESET_LINE = "ChangeSet";
 
-		private string currentLine;
+		private string currentLine = string.Empty;
+		private bool fileHistory = false;
 
 		public Modification[] Parse(TextReader bkLog, DateTime from, DateTime to)
 		{
@@ -21,12 +22,17 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			// information will begin with this line. If no ChangeSet file
 			// lines are found then there is nothing to do.
 			currentLine = ReadToNotPast(bkLog, BK_CHANGESET_LINE, null);
+			fileHistory = ContainsFileHistory();
 
 			ArrayList mods = new ArrayList();
 			while (currentLine != null)
 			{
 				// Parse the ChangeSet entry and read till next ChangeSet
-				Modification mod = ParseEntry(bkLog);
+				Modification mod;
+				if (fileHistory)
+					mod = ParseVerboseEntry(bkLog);
+				else
+					mod = ParseNonVerboseEntry(bkLog);
 
 				// Add all the modifications to the local list.
 				mods.Add(mod);
@@ -37,36 +43,45 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			return (Modification[]) mods.ToArray(typeof (Modification));
 		}
 
-		private Modification ParseEntry(TextReader bkLog)
+		private Modification ParseVerboseEntry(TextReader bkLog)
 		{
 			// Example: "ChangeSet\n1.201 05/09/08 14:52:49 hunth@spankyham. +1 -0\nComments"
 			Regex regex = new Regex(@"(?<version>[\d.]+)\s+(?<datetime>\d{2,4}/\d{2}/\d{2} \d{2}:\d{2}:\d{2})\s+(?<username>\S+).*"); // , RegexOptions.Compiled);
 
-			Modification mod = new Modification();
-
-			// Get file name information
-			char[] trims = new char[2];
-			trims[0] = ' ';
-			trims[1] = '\t';
-			currentLine = currentLine.TrimStart(trims);
-			mod.FileName = ParseFileName(currentLine);
-			mod.FolderName = ParseFolderName(currentLine);
+			currentLine = currentLine.TrimStart(new char[2] {' ', '\t'});
+			string filename = ParseFileName(currentLine);
+			string folder = ParseFolderName(currentLine);
 
 			// Get the next line with change info
 			currentLine = bkLog.ReadLine();
 
+			return ParseModification(regex, filename, folder, bkLog);
+		}
+
+		private Modification ParseNonVerboseEntry(TextReader bkLog)
+		{
+			// Example: "ChangeSet@1.6, 2005-10-06 12:58:40-07:00, hunth@survivor.(none)\n  Remove file in subdir."
+			Regex regex = new Regex(@"ChangeSet@(?<version>[\d.]+),\s+(?<datetime>\d{2,4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}[-+]\d{2}:\d{2}),\s+(?<username>\S+).*");
+
+			return ParseModification(regex, "ChangeSet", "", bkLog);
+		}
+
+		private Modification ParseModification(Regex regex, string filename, string folder, TextReader bkLog)
+		{
 			Match match = regex.Match(currentLine);
 			if (!match.Success)
 				throw new Exception("Unable to parse line: " + currentLine);
-
+	
+			Modification mod = new Modification();
+			mod.FileName = filename;
+			mod.FolderName = folder;
 			mod.ModifiedTime = ParseDate(match.Result("${datetime}"));
 			mod.Type = "Modified";
 			mod.UserName = match.Result("${username}");
-			mod.Version = match.Result("${version}");;
-
+			mod.Version = match.Result("${version}");
+	
 			// Read all lines of the comment and flatten them
 			mod.Comment = ParseComment(bkLog);
-
 			return mod;
 		}
 
@@ -86,34 +101,31 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 
 		private DateTime ParseDate(string date)
 		{
+			string sep = (fileHistory) ? "/" : "-";
+
 			// BK is funny - we can't guarantee that the year will be two or four digits,
 			// so we have to check how many digits we got and deal with it
+			int firstSep = date.IndexOf(sep);
+			string dateFormat = (firstSep == 4) ? "yyyy" : "yy";
+			dateFormat += string.Format("'{0}'MM'{0}'dd HH:mm:ss", sep);
+			if (!fileHistory)
+				dateFormat += "zzz";
 
-			string format;
-			int firstSep = date.IndexOf("/");
-			if (firstSep == 4)
-				format = "yyyy'/'MM'/'dd HH:mm:ss";
-			else
-				format = "yy'/'MM'/'dd HH:mm:ss";
-
-			return DateTime.ParseExact(date, format, DateTimeFormatInfo.InvariantInfo);
+			return DateTime.ParseExact(date, dateFormat, DateTimeFormatInfo.InvariantInfo);
 		}
 
 		private string ParseComment(TextReader bkLog)
 		{
 			// All the text from now to the next blank line constitues the comment
 			string message = string.Empty;
-			char[] trimChars = new char[1];
 			bool multiLine = false;
 
-			trimChars[0] = ' ';
-
-			currentLine = bkLog.ReadLine().TrimStart(trimChars);
+			currentLine = bkLog.ReadLine().TrimStart(new char[1] {' '});
 			while (currentLine != null && currentLine.Length != 0)
 			{
 				if (multiLine)
 				{
-					message += System.Environment.NewLine;
+					message += Environment.NewLine;
 				}
 				else
 				{
@@ -125,6 +137,15 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 				currentLine = bkLog.ReadLine();
 			}
 			return message;
+		}
+
+		/// <summary>
+		/// Called on first ChangeSet line to determine if this is verbose or non-verbose output
+		/// </summary>
+		private bool ContainsFileHistory()
+		{
+			// The "@" symbol is in the non-verbose output
+			return (currentLine.IndexOf("@") == -1);
 		}
 
 		private string ParseFileName(string workingFileName)
@@ -144,4 +165,4 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			return folderName;
 		}
 	}
-} 
+}
