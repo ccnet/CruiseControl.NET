@@ -11,6 +11,8 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 	public class QuietPeriod : IQuietPeriod
 	{
 		private readonly TimeSpan GracePeriodInWhichItIsNotWorthApplyingTheQuietPeriod = TimeSpan.FromMilliseconds(100);
+		private readonly TimeSpan AmountOfTimeInTheFutureToWarnAboutFutureModifications = TimeSpan.FromSeconds(10);
+		private readonly TimeSpan AmountOfTimeInTheFutureToSkipQuietPeriod = TimeSpan.FromSeconds(60);
 		private readonly DateTimeProvider dtProvider;
 
 		private TimeSpan modificationDelay = TimeSpan.Zero;
@@ -34,18 +36,33 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 				
 				DateTime timeOfThisBuild = thisBuild.StartTime;
 				DateTime timeOfLatestModification = GetMostRecentModificationDateTime(modifications);
-			
+
+				TimeSpan timeInTheFutureOfLatestModification = timeOfLatestModification - timeOfThisBuild;
+				
+				if (timeInTheFutureOfLatestModification > AmountOfTimeInTheFutureToWarnAboutFutureModifications)
+				{
+					Log.Warning(string.Format("The latest modification is {0:n0} seconds in the future; this probably indicates that the clock of your " +
+						"build server is out of sync with your source control server.  This can adversely impact the behaviour of CruiseControl.NET",
+					            	timeInTheFutureOfLatestModification.TotalSeconds ));					
+				}
+				
+				if (timeInTheFutureOfLatestModification > AmountOfTimeInTheFutureToSkipQuietPeriod)
+				{
+					Log.Warning(" -> because this is more than a minute in the future, quiet period processing has been skipped");
+					return modifications;
+				}
+				
 				DateTime endOfQuietPeriod = timeOfLatestModification + modificationDelay;
 				TimeSpan waitRequiredToReachEndOfQuietPeriod = endOfQuietPeriod - timeOfThisBuild;
 				
 				if (waitRequiredToReachEndOfQuietPeriod < GracePeriodInWhichItIsNotWorthApplyingTheQuietPeriod)
 					return modifications;
-				
+								
 				Log.Info(string.Format("The most recent modification at {0} is within in the modification delay.  Waiting for {1:n1} seconds until {2} before checking again.", 
 				                       timeOfLatestModification, waitRequiredToReachEndOfQuietPeriod.TotalSeconds, endOfQuietPeriod));
 				
 				dtProvider.Sleep(waitRequiredToReachEndOfQuietPeriod);
-				thisBuild.StartTime = endOfQuietPeriod;
+				thisBuild.StartTime = dtProvider.Now;
 			}
 		}
 
