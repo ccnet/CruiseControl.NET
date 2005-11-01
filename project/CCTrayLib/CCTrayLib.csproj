@@ -114,6 +114,11 @@
                     AssemblyName = "System.Data"
                     HintPath = "..\..\..\..\WINDOWS\Microsoft.NET\Framework\v1.1.4322\System.Data.dll"
                 />
+                <Reference
+                    Name = "SerialPort"
+                    AssemblyName = "SerialPort"
+                    HintPath = "..\..\lib\SerialPort.dll"
+                />
             </References>
         </Build>
         <Files>
@@ -237,6 +242,11 @@
                 />
                 <File
                     RelPath = "Configuration\TrayIconDoubleClickAction.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Configuration\X10Configuration.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -474,6 +484,31 @@
                     RelPath = "Presentation\TrayIcon.resx"
                     DependentUpon = "TrayIcon.cs"
                     BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "X10\ILampController.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "X10\IX10LowLevelDriver.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "X10\LampController.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "X10\X10Controller.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "X10\X10LowLevelDriver.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
                 />
             </Include>
         </Files>

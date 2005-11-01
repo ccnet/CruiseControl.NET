@@ -259,5 +259,31 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Monitoring
 
 			Assert.AreEqual(string.Empty, monitor.SummaryStatusString);
 		}
+		
+		[Test]
+		public void ExposesTheIntegrationStatusOfTheContainedProject()
+		{
+			AssertIntegrationStateReturned(IntegrationStatus.Failure);
+			AssertIntegrationStateReturned(IntegrationStatus.Exception);
+			AssertIntegrationStateReturned(IntegrationStatus.Success);
+			AssertIntegrationStateReturned(IntegrationStatus.Unknown);
+		}
+
+		private void AssertIntegrationStateReturned(IntegrationStatus integrationStatus)
+		{
+			ProjectStatus status = new ProjectStatus();
+			status.BuildStatus = integrationStatus;
+			mockProjectManager.ExpectAndReturn("ProjectStatus", status);
+
+			monitor.Poll();
+			
+			Assert.AreEqual(integrationStatus, monitor.IntegrationStatus);
+		}
+
+		[Test]
+		public void WhenNoConnectionHasBeenMadeToTheBuildServerTheIntegrationStatusIsUnknown()
+		{
+			Assert.AreEqual(IntegrationStatus.Unknown, monitor.IntegrationStatus);			
+		}
 	}
 }

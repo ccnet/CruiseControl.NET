@@ -8,6 +8,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Presentation
 	{
 		private ProjectStatus projectStatus;
 		private ProjectState projectState = ProjectState.NotConnected;
+		private IntegrationStatus integrationStatus = IntegrationStatus.Unknown;
 		private string projectName;
 		private Exception connectException;
 
@@ -37,6 +38,12 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Presentation
 		{
 			get { return projectState; }
 			set { projectState = value; }
+		}
+
+		public IntegrationStatus IntegrationStatus
+		{
+			get { return integrationStatus; }
+			set { integrationStatus = value; }
 		}
 
 		public bool IsConnected

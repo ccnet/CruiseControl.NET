@@ -3,6 +3,8 @@ using NMock;
 using NUnit.Framework;
 using ThoughtWorks.CruiseControl.CCTrayLib;
 using ThoughtWorks.CruiseControl.CCTrayLib.Monitoring;
+using ThoughtWorks.CruiseControl.Core;
+using ThoughtWorks.CruiseControl.Remote;
 using ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Presentation;
 
 namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Monitoring
@@ -198,6 +200,38 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Monitoring
 			string statusString = aggregator.SummaryStatusString;
 
 			Assert.AreEqual("All builds are good", statusString);
+		}
+
+		[Test]
+		public void IntegrationResultReturnsTheWorstResultOfAllMonitors()
+		{
+			// so the states, most significant first, are:
+			//  Failure
+			//  Exception
+			//  Unknown
+			//  Success
+
+			Assert.AreEqual(IntegrationStatus.Success, 
+			                CombinedIntegrationStatus(IntegrationStatus.Success, IntegrationStatus.Success, IntegrationStatus.Success));
+			Assert.AreEqual(IntegrationStatus.Unknown,
+							CombinedIntegrationStatus(IntegrationStatus.Success, IntegrationStatus.Success, IntegrationStatus.Unknown));
+			Assert.AreEqual(IntegrationStatus.Exception,
+				CombinedIntegrationStatus(IntegrationStatus.Success, IntegrationStatus.Exception, IntegrationStatus.Success));
+			Assert.AreEqual(IntegrationStatus.Exception,
+				CombinedIntegrationStatus(IntegrationStatus.Success, IntegrationStatus.Exception, IntegrationStatus.Unknown));
+			Assert.AreEqual(IntegrationStatus.Failure,
+				CombinedIntegrationStatus(IntegrationStatus.Failure, IntegrationStatus.Exception, IntegrationStatus.Success));
+			Assert.AreEqual(IntegrationStatus.Failure,
+				CombinedIntegrationStatus(IntegrationStatus.Failure, IntegrationStatus.Success, IntegrationStatus.Success));
+		}
+
+		private IntegrationStatus CombinedIntegrationStatus(IntegrationStatus state1, IntegrationStatus state2, IntegrationStatus state3)
+		{
+			monitor1.SetupResult("IntegrationStatus", state1);
+			monitor2.SetupResult("IntegrationStatus", state2);
+			monitor3.SetupResult("IntegrationStatus", state3);
+
+			return aggregator.IntegrationStatus;
 		}
 
 	}

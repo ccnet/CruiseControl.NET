@@ -82,6 +82,16 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
 			}
 		}
 
+		public IntegrationStatus IntegrationStatus
+		{
+			get
+			{
+				if (lastProjectStatus == null)
+					return IntegrationStatus.Unknown;
+				return lastProjectStatus.BuildStatus;
+			}
+		}
+
 		public ISingleProjectDetail Detail
 		{
 			get { return this; }

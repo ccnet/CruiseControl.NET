@@ -174,6 +174,11 @@
                     AssemblyName = "nunit.framework"
                     HintPath = "..\..\tools\nunit\nunit.framework.dll"
                 />
+                <Reference
+                    Name = "System.Data"
+                    AssemblyName = "System.Data"
+                    HintPath = "..\..\..\..\WINDOWS\Microsoft.NET\Framework\v1.1.4322\System.Data.dll"
+                />
             </References>
         </Build>
         <Files>
@@ -328,6 +333,16 @@
                 />
                 <File
                     RelPath = "CCTrayLib\Presentation\TrayIconTest.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "CCTrayLib\X10\LampControllerTest.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "CCTrayLib\X10\X10ControllerTest.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

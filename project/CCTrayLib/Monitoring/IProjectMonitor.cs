@@ -12,6 +12,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
 	public interface IProjectMonitor : IPollable
 	{
 		ProjectState ProjectState { get; }
+		IntegrationStatus IntegrationStatus { get; }
 		ISingleProjectDetail Detail { get; }
 		string SummaryStatusString { get; }
 

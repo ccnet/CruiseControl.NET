@@ -107,5 +107,10 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Configuration
 			get { return persistentConfiguration.Icons; }
 		}
 
+		public X10Configuration X10
+		{
+			get { return persistentConfiguration.X10; }
+		}
+
 	}
 }

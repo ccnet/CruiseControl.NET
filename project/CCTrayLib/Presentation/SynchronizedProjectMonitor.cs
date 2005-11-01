@@ -69,5 +69,11 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 				synchronizeInvoke.BeginInvoke(BuildOccurred, new object[] {sender, args});
 			}
 		}
+
+
+		public IntegrationStatus IntegrationStatus
+		{
+			get { return projectMonitor.IntegrationStatus; }
+		}
 	}
 }

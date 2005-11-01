@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Windows.Forms;
 using ThoughtWorks.CruiseControl.CCTrayLib.Configuration;
 using ThoughtWorks.CruiseControl.CCTrayLib.Monitoring;
+using ThoughtWorks.CruiseControl.CCTrayLib.X10;
 
 namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 {
@@ -31,6 +32,14 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 			iconProvider = new ConfigurableProjectStateIconProvider(configuration.Icons);
 			projectStateIconAdaptor = new ProjectStateIconAdaptor(aggregatedMonitor, iconProvider);
 			new BuildTransitionSoundPlayer(aggregatedMonitor, new AudioPlayer(), configuration.Audio);
+
+			if (configuration.X10 != null)
+			{
+				if (configuration.X10.Enabled)
+				{
+					new X10Controller(aggregatedMonitor, new LampController(new X10LowLevelDriver(HouseCode.A, configuration.X10.ComPort)));
+				}
+			}
 		}
 
 

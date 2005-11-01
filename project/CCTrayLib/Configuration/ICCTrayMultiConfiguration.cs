@@ -13,6 +13,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Configuration
 		TrayIconDoubleClickAction TrayIconDoubleClickAction { get; set; }
 		BalloonMessages BalloonMessages { get; }
 		Icons Icons { get; }
+		X10Configuration X10 { get; }
 
 		void Reload();
 		void Persist();

@@ -1,6 +1,7 @@
 using System;
 using System.IO;
 using System.Reflection;
+using System.Threading;
 using System.Windows.Forms;
 using ThoughtWorks.CruiseControl.CCTrayLib.Configuration;
 using ThoughtWorks.CruiseControl.CCTrayLib.Monitoring;
@@ -20,6 +21,7 @@ namespace ThoughtWorks.CruiseControl.CCTray
 			Application.EnableVisualStyles();
 			Application.DoEvents();
 
+			Application.ThreadException += new ThreadExceptionEventHandler(UnhandledWinFormException);
 			try
 			{
 				ICruiseManagerFactory remoteCruiseManagerFactory = new RemoteCruiseManagerFactory();
@@ -34,6 +36,11 @@ namespace ThoughtWorks.CruiseControl.CCTray
 			{
 				MessageBox.Show("Failed to start: " + ex, AppDomain.CurrentDomain.FriendlyName);
 			}
+		}
+
+		private static void UnhandledWinFormException(object sender, ThreadExceptionEventArgs e)
+		{
+			MessageBox.Show("Unhandled exception: " + e.Exception);
 		}
 
 		private static string GetSettingsFilename()

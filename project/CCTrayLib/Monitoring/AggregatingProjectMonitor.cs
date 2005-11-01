@@ -1,5 +1,6 @@
 using System;
 using System.Text;
+using ThoughtWorks.CruiseControl.Remote;
 
 namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
 {
@@ -92,6 +93,49 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
 				}
 
 				return worstState;
+			}
+		}
+
+		public IntegrationStatus IntegrationStatus
+		{
+			get 
+			{
+				IntegrationStatus worstStatus = IntegrationStatus.Success;
+
+				foreach (IProjectMonitor monitor in monitors)
+				{
+					worstStatus = WorstStatusOf(worstStatus, monitor.IntegrationStatus);
+				}
+
+				return worstStatus;
+			}
+		}
+
+		private IntegrationStatus WorstStatusOf(IntegrationStatus status1, IntegrationStatus status2)
+		{
+			int importanceOfStatus1 = GetIntegrationStatusImportance(status1);
+			int importanceOfStatus2 = GetIntegrationStatusImportance(status2);
+			
+			if (importanceOfStatus1 > importanceOfStatus2)
+				return status1;
+			
+			return status2;
+		}
+
+		private int GetIntegrationStatusImportance(IntegrationStatus status)
+		{
+			switch (status)
+			{
+				case Remote.IntegrationStatus.Success:
+					return 1;
+				case Remote.IntegrationStatus.Unknown:
+					return 2;
+				case Remote.IntegrationStatus.Exception:
+					return 3;
+				case Remote.IntegrationStatus.Failure:
+					return 4;
+				default:
+					return 5;
 			}
 		}
 
