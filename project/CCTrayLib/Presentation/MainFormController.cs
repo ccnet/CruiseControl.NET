@@ -33,12 +33,13 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 			projectStateIconAdaptor = new ProjectStateIconAdaptor(aggregatedMonitor, iconProvider);
 			new BuildTransitionSoundPlayer(aggregatedMonitor, new AudioPlayer(), configuration.Audio);
 
-			if (configuration.X10 != null)
+			if (configuration.X10 != null && configuration.X10.Enabled)
 			{
-				if (configuration.X10.Enabled)
-				{
-					new X10Controller(aggregatedMonitor, new LampController(new X10LowLevelDriver(HouseCode.A, configuration.X10.ComPort)));
-				}
+				new X10Controller(
+					aggregatedMonitor, 
+					new LampController(new X10LowLevelDriver(HouseCode.A, configuration.X10.ComPort)),
+					new DateTimeProvider(), 
+					configuration.X10);
 			}
 		}
 

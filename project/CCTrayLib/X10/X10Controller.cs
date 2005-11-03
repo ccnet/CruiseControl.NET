@@ -1,5 +1,6 @@
 using System;
 using System.Diagnostics;
+using ThoughtWorks.CruiseControl.CCTrayLib.Configuration;
 using ThoughtWorks.CruiseControl.CCTrayLib.Monitoring;
 using ThoughtWorks.CruiseControl.Remote;
 
@@ -8,11 +9,16 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.X10
 	public class X10Controller
 	{
 		private readonly ILampController lampController;
+		private readonly DateTimeProvider dateTimeProvider;
+		private readonly X10Configuration configuration;
 
-		public X10Controller(IProjectMonitor monitor, ILampController lampController)
+		public X10Controller(IProjectMonitor monitor, ILampController lampController, DateTimeProvider dateTimeProvider,
+		                     X10Configuration configuration)
 		{
 			this.lampController = lampController;
-		
+			this.dateTimeProvider = dateTimeProvider;
+			this.configuration = configuration;
+
 			monitor.Polled += new MonitorPolledEventHandler(Monitor_Polled);
 		}
 
@@ -20,6 +26,13 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.X10
 		{
 			try
 			{
+				if (!IsInsideLampSwitchingHours)
+				{
+					lampController.GreenLightOn = false;
+					lampController.RedLightOn = false;
+					return;
+				}
+
 				switch (args.ProjectMonitor.IntegrationStatus)
 				{
 					case IntegrationStatus.Success:
@@ -32,7 +45,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.X10
 						lampController.GreenLightOn = false;
 						lampController.RedLightOn = true;
 						break;
-					
+
 					default:
 						lampController.GreenLightOn = true;
 						lampController.RedLightOn = true;
@@ -42,6 +55,17 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.X10
 			catch (ApplicationException ex)
 			{
 				Trace.WriteLine("Failed to update X10 device status: " + ex);
+			}
+		}
+
+		private bool IsInsideLampSwitchingHours
+		{
+			get
+			{
+				DateTime now = dateTimeProvider.Now;
+				return ((now.DayOfWeek >= configuration.StartDay && now.DayOfWeek <= configuration.EndDay) &&
+				        (now.TimeOfDay >= configuration.StartTime.TimeOfDay && now.TimeOfDay < configuration.EndTime.TimeOfDay));
+
 			}
 		}
 	}
