@@ -624,6 +624,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "sourcecontrol\ActionFilter.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "sourcecontrol\ClearCase.cs"
                     SubType = "Code"
                     BuildAction = "Compile"

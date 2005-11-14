@@ -2,7 +2,6 @@ using System;
 using System.IO;
 using NUnit.Framework;
 using ThoughtWorks.CruiseControl.Core;
-using ThoughtWorks.CruiseControl.Core.Sourcecontrol;
 using ThoughtWorks.CruiseControl.Core.Sourcecontrol.BitKeeper;
 
 namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol.Bitkeeper
@@ -36,7 +35,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol.Bitkeeper
 			}
 		}
 
-		class BitKeeperTestData
+		private class BitKeeperTestData
 		{
 			public static string VerboseBitKeeperOutput()
 			{
