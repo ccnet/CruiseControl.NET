@@ -13,6 +13,8 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 		public const string VS_REGISTRY_KEY = @"InstallDir";
 		public const string DEVENV_EXE = "devenv.com";
 		public const int DEFAULT_BUILD_TIMEOUT = 600;
+		public const string DEFAULT_BUILDTYPE = "rebuild";
+		public const string DEFAULT_PROJECT = "";
 
 		private IRegistry registry;
 		private ProcessExecutor executor;
@@ -59,6 +61,12 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 		[ReflectorProperty("buildTimeoutSeconds", Required = false)] 
 		public int BuildTimeoutSeconds = DEFAULT_BUILD_TIMEOUT;
 
+		[ReflectorProperty("buildtype", Required = false)]
+		public string BuildType = DEFAULT_BUILDTYPE;
+
+		[ReflectorProperty("project", Required = false)]
+		public string Project  = DEFAULT_PROJECT;
+
 		public virtual void Run(IIntegrationResult result)
 		{
 			ProcessResult processResult = AttemptToExecute(result.WorkingDirectory);
@@ -90,7 +98,17 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 
 		private string Arguments
 		{
-			get { return string.Format("{0} /rebuild {1}", SolutionFile, Configuration); }
+			get 
+			{ 
+				if (! StringUtil.IsBlank(Project))
+				{
+					return string.Format("{0} /{1} {2} /project {3}", SolutionFile, BuildType, Configuration, Project); 
+				}
+				else
+				{
+					return string.Format("{0} /{1} {2}", SolutionFile, BuildType, Configuration); 
+				}
+			}
 		}
 	}
 }
