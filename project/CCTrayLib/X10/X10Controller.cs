@@ -33,7 +33,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.X10
 					return;
 				}
 
-				switch (args.ProjectMonitor.IntegrationStatus)
+				switch (((IProjectMonitor)sender).IntegrationStatus)
 				{
 					case IntegrationStatus.Success:
 						lampController.GreenLightOn = true;
