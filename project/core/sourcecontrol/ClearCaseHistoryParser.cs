@@ -106,7 +106,8 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 				return null;
 			}
 			// A branch event shouldn't be considered a modification
-			if ( "mkbranch".Equals( tokens[4].Trim() ) )
+			string modificationType = tokens[4].Trim().ToLower();
+			if ( modificationType == "mkbranch" || modificationType == "rmbranch" )
 			{
 				return null;
 			}

@@ -15,7 +15,7 @@
                                                     </span>
 				    </div>
 				    <div class="pagesubheading">
-					    This page last changed on Sep 16, 2005 by <font color="#0050B2">richardjfoster</font>.
+					    This page last changed on Nov 01, 2005 by <font color="#0050B2">richardjfoster</font>.
 				    </div>
 
 				    <p>This is the CruiseControl.NET <em>Frequently Asked Questions</em> (FAQ)</p>
@@ -42,12 +42,15 @@
 
 <p>Many of the examples on the mailing list and user's blogs showing how to use information from the server (such as the build label) are based on the <a href="NAnt task.html" title="NAnt Task">NAnt task</a>, and date from before the first release candidate. Around that time, most of the property names changed, for example <tt>ccnet.label</tt> became <tt>CCNetLabel</tt>. Check the documentation page for the task you are using (ideally the one installed on your machine which should be accurate for the build of CruiseControl you installed) and make sure your build script is using the correct name for the property.</p>
 
+<h4><a name="FAQ-Accordingtothedocumentation%2CIneedfilexxxxxxxx.yyy.Thatfileisn%27tinthedistribution%2CwheredoIfindit%3F"><em>According to the documentation, I need file xxxxxxxx.yyy. That file isn't in the distribution, where do I find it?</em></a></h4>
+
+<p>It's likely that you have fallen into the classic mistake of overlooking that the documentation on the web site relates to the most recently <b>built</b> version, not the most recently <b>released</b> one. If the file in question is referenced in the <b>/doc</b> folder of your CCNet installation then ask on the CCNet user mailing list - you have probably found a documentation problem. If the file is not referenced in that folder, but is referenced in the online documentation you may want to try a more recent build from <a href="http://ccnetlive.thoughtworks.com/" title="Visit page outside Confluence">&#104;ttp://ccnetlive.thoughtworks.com/</a>. If you choose to do so, please be aware that builds from CCNetLive may contain more bugs than officially released versions of CCNet.</p>
+
 <h2><a name="FAQ-Theccnet.configfile">The ccnet.config file</a></h2>
 
 <h4><a name="FAQ-WhydoIgetanUnusednodedetectederrorwhenIstartuptheCCNetserver%3F"><em>Why do I get an <b>Unused node detected</b> error when I start up the CCNet server?</em></a></h4>
 
 <p>You will get these warnings if your <b>ccnet.config</b> file contains invalid elements or attributes.  Please double check the documentation that came with your installation (in the <b>/doc</b> folder).  Please be aware that the documentation on the web site may reflect a more recent version of ccnet than what you have installed.  If you are attempting to use a task or a property that has not been implemented in your server's version of ccnet then you will get this error.</p>
-
 
 <h4><a name="FAQ-Igettheerror%22INTERNALERROR%3AExpandableObjectConvertercannotconvertfromSystem.String.%22whenusing%3Csourcecontroltype%3D%22multi%22%3E"><em>I get the error "INTERNAL ERROR: ExpandableObjectConverter cannot convert from System.String." when using &lt;sourcecontrol type="multi"&gt;</em></a></h4>
 
@@ -71,6 +74,14 @@
 <h4><a name="FAQ-WhyisthevsssourcecontrolblockthrowingerrorswhenCCNetisrunningasaservicebutworkswhenrunningCCNetfromthecommandline%3F"><em>Why is the vss source control block throwing errors when CCNet is running as a service but works when running CCNet from the command line?</em></a></h4>
 
 <p>In order to access VSS, you must be able to access the shared folder on your VSS server from your CCNet server.  The CCNet service is set to use a local system user account by default which doesn't have access to other machines.  In order for CCNet to access VSS, you must change the log account for the service to a user that has network access to the VSS machine. More details can be found in the <a href="#FAQ-Service" title="Service on FAQ">Service</a> and <a href="Visual Source Safe Source Control Block.html" title="Visual Source Safe Source Control Block">Visual Source Safe Source Control Block</a> sections.</p>
+
+<h3><a name="FAQ-AllSourceControlPackages">All Source Control Packages</a></h3>
+
+<h4><a name="FAQ-Mybuildprocessupdatesoneormorefilesundersourcecodecontrol.CruiseControl.NETthenthinksmycodehaschangedandrebuildsagain.HowdoIstopthiscycle%3F"><em>My build process updates one or more files under source code control. CruiseControl.NET then thinks my code has changed and rebuilds again. How do I stop this cycle?</em></a></h4>
+
+<p>This problem is most commonly associated with updating AssemblyInfo.cs (or similar) files containing build-specific information.</p>
+
+<p>The simplest solution is to ensure that these files are not placed under source control, but are always generated at build time. Unfortunately, this may not always be an appropriate way to resolve the problem. In such circumstances, you may want to use a <a href="Filtered Source Control Block.html" title="Filtered Source Control Block">Filtered Source Control Block</a> to exclude the files modified during the build process.</p>
 
 <h2><a name="FAQ-Triggers">Triggers</a></h2>
 
@@ -107,6 +118,14 @@
 
 <p>Both the <a href="Build Report Build Plugin.html" title="Build Report Build Plugin">Build Report Build Plugin</a> and <a href="Xsl Report Build Plugin.html" title="XSL Report Build Plugin">Xsl Report Build Plugin</a> can be configured to use custom stylesheets. Change the configuration of the <a href="Build Report Build Plugin.html" title="Build Report Build Plugin">Build Report Build Plugin</a> if you want to add a stylesheet to the main Build Report, or add a new <a href="Xsl Report Build Plugin.html" title="XSL Report Build Plugin">Xsl Report Build Plugin</a> instance if you want a totally new page for the report.</p>
 
+<h4><a name="FAQ-HowdoIpreventalltheseunwantedmessagesfromshowingupinthewarning%2FerrorsectionsoftheWebDashboard%3F"><em>How do I prevent all these unwanted messages from showing up in the warning/error sections of the WebDashboard?</em></a></h4>
+
+<p>When executing external processes, CCNet will identify any output written to the standard error stream in the error or warnings section of the WebDashboard.  To supress these messages, you can redirect the stderr stream to stdout as shown in the example below.  '2' refers to stderr and '&gt;&amp;1' redirects it to stdout ('&amp;1').</p>
+
+<div class="code"><div class="codeContent">
+<pre class="code-java">dir /f 2&gt;&amp;1</pre>
+</div></div> 
+
 <h1><a name="FAQ-CCTray">CCTray</a></h1>
 
 <h1><a name="FAQ-Developingyourownplugins">Developing your own plugins</a></h1>
@@ -120,7 +139,7 @@
 				<td height="12" background="border/border_bottom.gif"><img src="border/spacer.gif" width="1" height="1" border="0"/></td>
 			</tr>
 		    <tr>
-			    <td align="center"><font color="grey">Document generated by Confluence on Sep 18, 2005 21:14</font></td>
+			    <td align="center"><font color="grey">Document generated by Confluence on Nov 13, 2005 23:23</font></td>
 		    </tr>
 	    </table>
     </body>

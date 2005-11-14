@@ -27,23 +27,17 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.BuildReport
 		[ReflectorArray("xslFileNames")]
 		public string[] XslFileNames
 		{
-			get
-			{
-				return xslFileNames;
-			}
-			set
-			{
-				xslFileNames = value;
-			}
+			get { return xslFileNames; }
+			set { xslFileNames = value; }
 		}
 
 		public override INamedAction[] NamedActions
 		{
 			get
 			{
-				MultipleXslReportBuildAction buildAction = (MultipleXslReportBuildAction) actionInstantiator.InstantiateAction(typeof(MultipleXslReportBuildAction));
+				MultipleXslReportBuildAction buildAction = (MultipleXslReportBuildAction) actionInstantiator.InstantiateAction(typeof (MultipleXslReportBuildAction));
 				buildAction.XslFileNames = XslFileNames;
-				return new INamedAction[] { new ImmutableNamedAction(ACTION_NAME, buildAction) } ;
+				return new INamedAction[] {new ImmutableNamedAction(ACTION_NAME, buildAction)};
 			}
 		}
 	}

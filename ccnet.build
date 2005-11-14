@@ -203,18 +203,15 @@
 			</fileset>
 		</zip>
 
-		<exec program="tools\NSIS\makensis.exe" commandline="ccnet.nsi" />
 		<exec program="tools\NSIS\makensis.exe" commandline="cctray.nsi" />
+		<copy todir="${webdashboard.dir}\cctray">
+			<fileset basedir="dist">
+				<include name="*CCTray*.exe" />
+			</fileset>
+		</copy>
+		<exec program="tools\NSIS\makensis.exe" commandline="ccnet.nsi" />
 	</target>
-	
-	<target name="reporting" depends="compile">
-		<mkdir dir="build\fxcop" />
-		<exec program="tools\fxcop\fxcopcmd.exe" 
-			  commandline="/p:tools\fxcop\ccnet.fxcop /o:build\fxcop\ccnet-fxcop.xml" failonerror="false"/>
-		<call target="vil" />
-		<call target="simian" />
-	</target>
-	
+		
 	<!-- FOR RUNNING CCNET AGAINST ITSELF -->
 	<target name="dist.publish" depends="dist">
 			
@@ -252,6 +249,14 @@
 		<netreflector assembly="${build.dir}\core\${core.dll}" />
 	</target>
 	
+	<target name="reporting" depends="compile, fxcop, vil, simian" />
+	
+	<target name="fxcop">
+		<mkdir dir="build\fxcop" />
+		<exec program="tools\fxcop\fxcopcmd.exe" 
+			  commandline="/p:tools\fxcop\ccnet.fxcop /o:build\fxcop\ccnet-fxcop.xml /s" failonerror="false"/>
+	</target>
+
 	<target name="vil">
 		<exec program="${vil.executable}" 
 			workingdir="${build.dir}\webdashboard"
@@ -281,4 +286,13 @@
 		</references>
 	</csc>
     </target>
+    
+    <target name="clean.cvs" description="deletes all backed up merge files from cvs">
+    	<delete>
+    		<fileset>
+    			<include name="**/#.*.*" />
+    		</fileset>
+    	</delete>
+    </target>
+    
 </project>

@@ -1,0 +1,132 @@
+<html>
+    <head>
+        <title>CruiseControl.NET : Seapine Surround Source Control Block</title>
+	    <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">	    
+    </head>
+
+    <body>
+	    <table class="pagecontent" border="0" cellpadding="0" cellspacing="0" width="100%" bgcolor="#ffffff">
+		    <tr>
+			    <td valign="top" class="pagebody">
+				    <div class="pageheader">
+					    <span class="pagetitle">
+                            CruiseControl.NET : Seapine Surround Source Control Block
+                                                    </span>
+				    </div>
+				    <div class="pagesubheading">
+					    This page last changed on Oct 20, 2005 by <font color="#0050B2">richardjfoster</font>.
+				    </div>
+
+				    <h3><a name="SeapineSurroundSourceControlBlock-SurroundSCMConfigurationExample">Surround SCM Configuration Example</a></h3>
+
+<p>For Surround SCM you must specify the executable, branch, repository, working directory, and login. You may also specify the server, a file match pattern, whether to use regular expressions or not, and whether to get recursively or not. The server defaults to connecting to 127.0.0.1:4900. Regular expressions and recursive default to being turned off.</p>
+
+<div class="code"><div class="codeContent">
+<pre class="code-xml"><span class="code-tag">&lt;sourcecontrol type=<span class="code-quote">"surround"</span>&gt;</span>
+   <span class="code-tag">&lt;executable&gt;</span>C:\Program Files\Seapine\Surround SCM\sscm.exe<span class="code-tag">&lt;/executable&gt;</span>
+   <span class="code-tag">&lt;serverconnect&gt;</span>127.0.0.1:4900<span class="code-tag">&lt;/serverconnect&gt;</span>
+   <span class="code-tag">&lt;serverlogin&gt;</span>build:buildpw<span class="code-tag">&lt;/serverlogin&gt;</span>
+   <span class="code-tag">&lt;branch&gt;</span>mybranch<span class="code-tag">&lt;/branch&gt;</span>
+   <span class="code-tag">&lt;repository&gt;</span>myrepository/myproject<span class="code-tag">&lt;/repository&gt;</span>
+   <span class="code-tag">&lt;workingDirectory&gt;</span>C:\myproject<span class="code-tag">&lt;/workingDirectory&gt;</span>
+   <span class="code-tag">&lt;recursive&gt;</span>1<span class="code-tag">&lt;/recursive&gt;</span>
+   <span class="code-tag">&lt;file&gt;</span>*.cpp<span class="code-tag">&lt;/file&gt;</span>
+   <span class="code-tag">&lt;searchregexp&gt;</span>0<span class="code-tag">&lt;/searchregexp&gt;</span>
+<span class="code-tag">&lt;/sourcecontrol&gt;</span></pre>
+</div></div>
+
+<h3><a name="SeapineSurroundSourceControlBlock-ConfigurationElements%3A">Configuration Elements:</a></h3>
+
+<table class='confluenceTable'>
+<tr>
+<th class='confluenceTh'> Element </th>
+<th class='confluenceTh'> Description </th>
+<th class='confluenceTh'> Type </th>
+<th class='confluenceTh'> Default </th>
+<th class='confluenceTh'> Required </th>
+</tr>
+<tr>
+<td class='confluenceTd'> executable </td>
+<td class='confluenceTd'> The local path for the Surround SCM command-line client (eg. C:\Program Files\Seapine\Surround SCM\sscm.exe) </td>
+<td class='confluenceTd'> string </td>
+<td class='confluenceTd'> N/A </td>
+<td class='confluenceTd'> true </td>
+</tr>
+<tr>
+<td class='confluenceTd'> serverconnect </td>
+<td class='confluenceTd'> The IP address or machine name and port number of the Surround SCM server. </td>
+<td class='confluenceTd'> string </td>
+<td class='confluenceTd'> 127.0.0.1:4900 </td>
+<td class='confluenceTd'> false </td>
+</tr>
+<tr>
+<td class='confluenceTd'> serverlogin </td>
+<td class='confluenceTd'> Surround SCM login:password that CCNet should use. </td>
+<td class='confluenceTd'> string </td>
+<td class='confluenceTd'> N/A </td>
+<td class='confluenceTd'> true </td>
+</tr>
+<tr>
+<td class='confluenceTd'> branch </td>
+<td class='confluenceTd'> The Surround SCM branch to monitor. </td>
+<td class='confluenceTd'> string </td>
+<td class='confluenceTd'> N/A </td>
+<td class='confluenceTd'> true </td>
+</tr>
+<tr>
+<td class='confluenceTd'> repository </td>
+<td class='confluenceTd'> The Surround SCM repository to monitor. </td>
+<td class='confluenceTd'> string </td>
+<td class='confluenceTd'> N/A </td>
+<td class='confluenceTd'> true </td>
+</tr>
+<tr>
+<td class='confluenceTd'> workingDirectory </td>
+<td class='confluenceTd'> The local path to get files from Surround SCM to. </td>
+<td class='confluenceTd'> string </td>
+<td class='confluenceTd'> N/A </td>
+<td class='confluenceTd'> true </td>
+</tr>
+<tr>
+<td class='confluenceTd'> recursive </td>
+<td class='confluenceTd'> Monitor and retrieve all files in child repositories of the specified repository. (Value 1 = true, 0 = false) </td>
+<td class='confluenceTd'> int </td>
+<td class='confluenceTd'> 0 </td>
+<td class='confluenceTd'> false </td>
+</tr>
+<tr>
+<td class='confluenceTd'> file </td>
+<td class='confluenceTd'> A filename pattern to match to monitor and retrieve files. </td>
+<td class='confluenceTd'> string </td>
+<td class='confluenceTd'> N/A </td>
+<td class='confluenceTd'> false </td>
+</tr>
+<tr>
+<td class='confluenceTd'> searchregexp </td>
+<td class='confluenceTd'> Treat the filename pattern as a regular expression. (Value 1 = true, 0 = false) </td>
+<td class='confluenceTd'> int </td>
+<td class='confluenceTd'> 0 </td>
+<td class='confluenceTd'> false </td>
+</tr>
+</table>
+
+<ul>
+	<li>Contributed by Yan Shapochnik and Pete Vasiliauskas at Seapine Software</li>
+</ul>
+
+
+				    
+                    			    </td>
+		    </tr>
+	    </table>
+	    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+			<tr>
+				<td height="12" background="border/border_bottom.gif"><img src="border/spacer.gif" width="1" height="1" border="0"/></td>
+			</tr>
+		    <tr>
+			    <td align="center"><font color="grey">Document generated by Confluence on Nov 13, 2005 23:24</font></td>
+		    </tr>
+	    </table>
+    </body>
+</html>

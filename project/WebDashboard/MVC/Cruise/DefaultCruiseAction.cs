@@ -1,4 +1,3 @@
-
 namespace ThoughtWorks.CruiseControl.WebDashboard.MVC.Cruise
 {
 	public class DefaultCruiseAction : IAction

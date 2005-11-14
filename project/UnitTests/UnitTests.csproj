@@ -34,7 +34,7 @@
                     FileAlignment = "4096"
                     IncrementalBuild = "false"
                     NoStdLib = "false"
-                    NoWarn = ""
+                    NoWarn = "1595"
                     Optimize = "false"
                     OutputPath = "bin\Debug\"
                     RegisterForComInterop = "false"
@@ -507,6 +507,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Core\Config\FileWatcherConfigurationServiceTest.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Core\Config\NetReflectorConfigurationReaderTest.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -518,6 +523,11 @@
                 />
                 <File
                     RelPath = "Core\Config\XslFilesSectionHandlerTest.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Core\Label\DateLabellerTest.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -651,6 +661,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Core\SourceControl\ActionFilterTest.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Core\SourceControl\ClearCaseHistoryParserTest.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -771,6 +786,16 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Core\SourceControl\SurroundHistoryParserTest.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Core\SourceControl\SurroundTest.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Core\SourceControl\SvnHistoryParserTest.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -822,6 +847,16 @@
                 />
                 <File
                     RelPath = "Core\SourceControl\WebSVNBuilderTest.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Core\SourceControl\BitKeeper\BitKeeperHistoryParserTest.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Core\SourceControl\BitKeeper\BitKeeperTest.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -991,7 +1026,17 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Core\Triggers\ProjectTriggerTest.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Core\Triggers\ScheduleTriggerTest.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Core\Triggers\UrlTriggerTest.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -1007,6 +1052,11 @@
                 />
                 <File
                     RelPath = "Core\Util\HtmlExceptionFormatterTest.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Core\Util\HttpWrapperTest.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -1363,6 +1413,11 @@
                 />
                 <File
                     RelPath = "Xsl\ModificationStylesheetTest.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Xsl\MsTestSummaryStylesheetTest.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

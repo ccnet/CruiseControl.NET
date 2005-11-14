@@ -15,7 +15,7 @@
                                                     </span>
 				    </div>
 				    <div class="pagesubheading">
-					    This page last changed on Sep 13, 2005 by <font color="#0050B2">orogers</font>.
+					    This page last changed on Oct 09, 2005 by <font color="#0050B2">orogers</font>.
 				    </div>
 
 				    <h3><a name="SourceGearVaultSourceControlBlock-SourceGearVaultConfigurationExamples">SourceGear Vault Configuration Examples</a></h3>
@@ -38,6 +38,7 @@
             <span class="code-tag">&lt;folder&gt;</span>$<span class="code-tag">&lt;/folder&gt;</span>
 	    <span class="code-tag">&lt;ssl&gt;</span>true<span class="code-tag">&lt;/ssl&gt;</span>
 	    <span class="code-tag">&lt;useWorkingDirectory&gt;</span>true<span class="code-tag">&lt;/useWorkingDirectory&gt;</span>
+	    <span class="code-tag">&lt;workingDirectory&gt;</span>project/src<span class="code-tag">&lt;/workingDirectory&gt;</span>
 <span class="code-tag">&lt;/sourcecontrol&gt;</span></pre>
 </div></div>
 
@@ -53,7 +54,7 @@
 </tr>
 <tr>
 <td class='confluenceTd'> executable </td>
-<td class='confluenceTd'> The location of the vault command-line executable </td>
+<td class='confluenceTd'> The location of the Vault command-line executable </td>
 <td class='confluenceTd'> string </td>
 <td class='confluenceTd'> false </td>
 <td class='confluenceTd'> C:\Program Files\SourceGear\Vault Client\vault.exe </td>
@@ -116,7 +117,7 @@
 </tr>
 <tr>
 <td class='confluenceTd'> useWorkingDirectory </td>
-<td class='confluenceTd'> Specify if CCNet should use the working directory that is set up in Vault or if it should override it using the CCNet working directory. </td>
+<td class='confluenceTd'> Determines the working directory into which Vault files will be retrieved. Supply true if you want CCNet to use the Vault folder working directory created for the build user using the Vault GUI (recommended). Supply false if CCNet should use the CCNet working directory. </td>
 <td class='confluenceTd'> bool </td>
 <td class='confluenceTd'> false </td>
 <td class='confluenceTd'> true </td>
@@ -135,6 +136,13 @@
 <td class='confluenceTd'> false </td>
 <td class='confluenceTd'> 10 minutes </td>
 </tr>
+<tr>
+<td class='confluenceTd'> workingDirectory </td>
+<td class='confluenceTd'> The root folder where the latest source will retrieved from Vault.  This path can either be absolute or it can be relative to the CCNet project working directory. </td>
+<td class='confluenceTd'> string </td>
+<td class='confluenceTd'> false </td>
+<td class='confluenceTd'> CCNet project working directory </td>
+</tr>
 </table>
 
 <p><a name="SourceGearVaultSourceControlBlock-optional"></a>*: it is possible to deposit these values with the Vault client so that they do not need to be stored in the ccnet.config file.</p>
@@ -145,7 +153,7 @@
 
 <h3><a name="SourceGearVaultSourceControlBlock-FilteringoutLabelChanges">Filtering out Label Changes</a></h3>
 
-<p>Vault interprets new labels as changes, so if you apply a label as part of your build process, this will kick off another build. To get around this, use a <a href="Filtered Source Control Block.html" title="Filtered Source Control Block">Filtered Source Control Block</a>.  If your build server uses a specific user id to integrate with Vault, you can set up a UserFilter to filter out all changes made by that user.</p>
+<p>Vault interprets new labels as changes, so if you apply a label as part of your build process, this will kick off another build. If you are using Vault 3.x or later, labels will automatically be filtered.  However, if you are using an earlier version of Vault you will need to use a <a href="Filtered Source Control Block.html" title="Filtered Source Control Block">Filtered Source Control Block</a> to get around this.  If your build server uses a specific user id to integrate with Vault, you can set up a UserFilter to filter out all changes made by that user.</p>
 
 <h3><a name="SourceGearVaultSourceControlBlock-ProblemswithCCServiceandVault3.0.2">Problems with CCService and Vault 3.0.2+</a></h3>
 <p>If you are experiencing problems detecting modifications using CCService after upgrading to Vault 3.0.2, it may be related to the enhanced security features of the Vault server.  You should try the following process to fix this issue:</p>
@@ -157,6 +165,10 @@
 
 <h3><a name="SourceGearVaultSourceControlBlock-ProblemswithreleasespriortoVault3.0">Problems with releases prior to Vault 3.0</a></h3>
 <p>For versions of Vault prior to 3.0, the <b>-excludeactions</b> argument is not supported.  To get around this problem you should explicitly specify the <b>&lt;historyArgs&gt;</b> element in your <b>ccnet.config</b> file so that it does not contain that argument (ie. set it to &lt;historyArgs&gt;-rowlimit 0&lt;/historyArgs&gt;.</p>
+
+<h3><a name="SourceGearVaultSourceControlBlock-NAntVaultTasks">NAnt Vault Tasks</a></h3>
+
+<p>SourceGear has produced some NAnt tasks for Vault that can be downloaded from <a href="http://vaultpub.sourcegear.com/build" title="Visit page outside Confluence">here</a>.</p>
 
 
 <p>Code contributed by Ryan Duffield and Leo von Wyss.</p>
@@ -170,7 +182,7 @@
 				<td height="12" background="border/border_bottom.gif"><img src="border/spacer.gif" width="1" height="1" border="0"/></td>
 			</tr>
 		    <tr>
-			    <td align="center"><font color="grey">Document generated by Confluence on Sep 18, 2005 21:17</font></td>
+			    <td align="center"><font color="grey">Document generated by Confluence on Nov 13, 2005 23:24</font></td>
 		    </tr>
 	    </table>
     </body>

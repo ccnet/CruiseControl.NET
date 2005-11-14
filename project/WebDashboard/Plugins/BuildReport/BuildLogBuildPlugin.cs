@@ -10,7 +10,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.BuildReport
 	{
 		private readonly IActionInstantiator actionInstantiator;
 
-		public BuildLogBuildPlugin(IActionInstantiator actionInstantiator) 
+		public BuildLogBuildPlugin(IActionInstantiator actionInstantiator)
 		{
 			this.actionInstantiator = actionInstantiator;
 		}
@@ -22,14 +22,15 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.BuildReport
 
 		public override INamedAction[] NamedActions
 		{
-			get {  
+			get
+			{
 				return new INamedAction[]
-				{
-					new ImmutableNamedAction(HtmlBuildLogAction.ACTION_NAME, actionInstantiator.InstantiateAction(typeof(HtmlBuildLogAction)))
+					{
+						new ImmutableNamedAction(HtmlBuildLogAction.ACTION_NAME, actionInstantiator.InstantiateAction(typeof (HtmlBuildLogAction)))
 // We don't define this here right now since we need a way to define decorators
 // See CruiseObjectGiverInitializer for linked ToDo
 //					new TypedAction(XmlBuildLogAction.ACTION_NAME, typeof(XmlBuildLogAction)), 
-				}; 
+					};
 			}
 		}
 	}

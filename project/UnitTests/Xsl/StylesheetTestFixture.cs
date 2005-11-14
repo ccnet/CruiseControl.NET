@@ -22,6 +22,11 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Xsl
 			return outputDocument.OuterXml;
 		}
 
+		protected string WrapInBuildResultsElement(string xml)
+		{
+			return string.Format(@"<cruisecontrol><build><buildresults>{0}</buildresults></build></cruisecontrol>", xml);
+		}
+
 		[TestFixtureSetUp]
 		public void LoadStyleSheet()
 		{

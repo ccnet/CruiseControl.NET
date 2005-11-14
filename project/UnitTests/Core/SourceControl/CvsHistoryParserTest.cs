@@ -28,6 +28,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 			mod1.ModifiedTime = CreateDate("2002/03/13 13:45:50 -6");
 			mod1.UserName = "alden";
 			mod1.Comment = "Shortening ConversionPattern so we don't use up all of the available screen space.";
+			mod1.Version = "1.2";
 
 			Modification mod2 = new Modification();
 			mod2.Type = "modified";
@@ -36,6 +37,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 			mod2.ModifiedTime = CreateDate("2002/03/13 19:56:34 -6");
 			mod2.UserName = "alden";
 			mod2.Comment = "Added target to clean up test results.";
+			mod2.Version = "1.41";
 
 			Modification mod3 = new Modification();
 			mod3.Type = "modified";
@@ -44,6 +46,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 			mod3.ModifiedTime = CreateDate("2002/03/15 13:20:28 -6");
 			mod3.UserName = "alden";
 			mod3.Comment = "enabled debug info when compiling tests.";
+			mod3.Version = "1.42";
 
 			Modification mod4 = new Modification();
 			mod4.Type = "deleted";
@@ -52,6 +55,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 			mod4.ModifiedTime = CreateDate("2002/03/13 13:45:42 -6");
 			mod4.UserName = "alden";
 			mod4.Comment = "Hey, look, a deleted file.";
+			mod4.Version = "1.2";
 
 			Modification mod5 = new Modification();
 			mod5.Type = "deleted";
@@ -60,6 +64,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 			mod5.ModifiedTime = CreateDate("2002/03/13 13:38:42 -6");
 			mod5.UserName = "alden";
 			mod5.Comment = "Hey, look, another deleted file.";
+			mod5.Version = "1.4";
 		
 			Modification mod6 = new Modification();
 			mod6.Type = "modified";
@@ -68,6 +73,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 			mod6.ModifiedTime = CreateDate("2005/09/12 15:01:10 +0");
 			mod6.UserName = "szko";
 			mod6.Comment = "Fixed some bugs.";
+			mod6.Version = "1.11";
 
 			ArrayList.Adapter(modifications).Sort();
 			Assert.AreEqual(mod5, modifications[0]);
@@ -92,6 +98,14 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 			TextReader input = new StringReader(CvsMother.CvsNTExamples());
 			Modification[] mods = cvs.Parse(input, CvsMother.OLDEST_ENTRY, CvsMother.NEWEST_ENTRY);
 			Assert.AreEqual(2, mods.Length);
+		}
+
+		[Test, Ignore("implement next")]
+		public void ParseExampleOfFileAddedOnBranch()
+		{
+			TextReader input = new StringReader(CvsMother.ExampleOfFileAddedOnBranch());
+			Modification[] mods = cvs.Parse(input, CvsMother.OLDEST_ENTRY, CvsMother.NEWEST_ENTRY);
+			Assert.AreEqual(0, mods.Length);			
 		}
 
 		private DateTime CreateDate(string dateString) 
