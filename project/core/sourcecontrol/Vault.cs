@@ -1,21 +1,23 @@
 using System;
 using Exortech.NetReflector;
 using ThoughtWorks.CruiseControl.Core.Util;
+using ThoughtWorks.CruiseControl.Remote;
 
 namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 {
 	[ReflectorType("vault")]
-	public class 
-		Vault : ProcessSourceControl
+	public class Vault : ProcessSourceControl
 	{
 		public const string DefaultExecutable = @"C:\Program Files\SourceGear\Vault Client\vault.exe";
 		public const string DefaultHistoryArgs = "-excludeactions label -rowlimit 0";
 
 		public Vault() : base(new VaultHistoryParser())
-		{}
+		{
+		}
 
 		public Vault(IHistoryParser historyParser, ProcessExecutor executor) : base(historyParser, executor)
-		{}
+		{
+		}
 
 		[ReflectorProperty("username", Required=false)]
 		public string Username;
@@ -63,31 +65,60 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 		{
 			if (! ApplyLabel) return;
 
-			Log.Info("Applying label to Vault");
-			Execute(LabelProcessInfo(result));
+			if (AutoGetSource)
+			{
+				if ((result.Status == IntegrationStatus.Exception) || (result.Status == IntegrationStatus.Failure))
+				{
+					Log.Info("Removing label from Vault");
+					Execute(RemoveLabelProcessInfo(result));
+				}
+			}
+			else
+			{
+				Log.Info("Applying label to Vault");
+				Execute(LabelProcessInfo(result));
+			}
 		}
 
 		public override void GetSource(IIntegrationResult result)
 		{
 			if (! AutoGetSource) return;
 
-			Log.Info("Getting source from Vault");
-			Execute(GetSourceProcessInfo(result));
+			if (ApplyLabel)
+			{
+				Log.Info("Applying label to Vault");
+				Execute(LabelProcessInfo(result));
+
+				Log.Info("Getting source from Vault");
+				Execute(GetSourceProcessInfo(result, true));
+			}
+			else
+			{
+				Log.Info("Getting source from Vault");
+				Execute(GetSourceProcessInfo(result, false));
+			}
 		}
 
-		private ProcessInfo GetSourceProcessInfo(IIntegrationResult result)
+		private ProcessInfo GetSourceProcessInfo(IIntegrationResult result, bool getByLabel)
 		{
 			ProcessArgumentBuilder builder = new ProcessArgumentBuilder();
-			builder.AddArgument("get", Folder);
+			if (getByLabel)
+			{
+				builder.AddArgument("getlabel", Folder);
+				builder.AddArgument(result.Label);
+			}
+			else
+				builder.AddArgument("get", Folder);
 			if (UseVaultWorkingDirectory)
 			{
-				builder.AppendArgument("-merge overwrite -performdeletions removeworkingcopy");				
+				builder.AppendArgument("-merge overwrite -performdeletions removeworkingcopy");
 			}
 			else
 			{
 				builder.AddArgument("-destpath", result.BaseFromWorkingDirectory(WorkingDirectory));
+				builder.AppendArgument("-merge overwrite");
 			}
-			builder.AppendArgument("-setfiletime checkin -makewritable");				
+			builder.AppendArgument("-setfiletime checkin -makewritable");
 			AddCommonOptionalArguments(builder);
 			return ProcessInfoFor(builder.ToString(), result);
 		}
@@ -96,6 +127,15 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 		{
 			ProcessArgumentBuilder builder = new ProcessArgumentBuilder();
 			builder.AddArgument("label", Folder);
+			builder.AddArgument(result.Label);
+			AddCommonOptionalArguments(builder);
+			return ProcessInfoFor(builder.ToString(), result);
+		}
+
+		private ProcessInfo RemoveLabelProcessInfo(IIntegrationResult result)
+		{
+			ProcessArgumentBuilder builder = new ProcessArgumentBuilder();
+			builder.AddArgument("deletelabel", Folder);
 			builder.AddArgument(result.Label);
 			AddCommonOptionalArguments(builder);
 			return ProcessInfoFor(builder.ToString(), result);

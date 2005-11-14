@@ -20,7 +20,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 		public void SetUp()
 		{
 			CreateProcessExecutorMock(Vault.DefaultExecutable);
-			mockHistoryParser = new DynamicMock(typeof(IHistoryParser));
+			mockHistoryParser = new DynamicMock(typeof (IHistoryParser));
 			vault = new Vault((IHistoryParser) mockHistoryParser.MockInstance, (ProcessExecutor) mockProcessExecutor.MockInstance);
 
 			result = IntegrationResultMother.CreateSuccessful("foo");
@@ -77,8 +77,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 			DateTime today = DateTime.Now;
 			DateTime yesterday = today.AddDays(-1);
 			result.StartTime = yesterday;
-			string args = string.Format(@"history $ -excludeactions label -rowlimit 0 -begindate {0:s} -enddate {1:s}{2}", 
-				yesterday, today, CommonOptionalArguments());
+			string args = string.Format(@"history $ -excludeactions label -rowlimit 0 -begindate {0:s} -enddate {1:s}{2}",
+			                            yesterday, today, CommonOptionalArguments());
 			ExpectToExecuteArguments(args);
 			ExpectToParseHistory();
 
@@ -96,7 +96,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 			string args = string.Format(@"history $ -excludeactions label -rowlimit 0 -begindate {0:s} -enddate {1:s}", yesterday, today);
 			ExpectToExecuteArguments(args);
 			ExpectToParseHistory();
-			
+
 			vault.GetModifications(result, IntegrationResultMother.CreateSuccessful());
 			VerifyAll();
 		}
@@ -115,7 +115,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 		[Test]
 		public void ShouldBuildGetSourceArgumentsCorrectlyNotUsingWorkingDirectory()
 		{
-			ExpectToExecuteArguments(@"get $ -destpath c:\source\ -setfiletime checkin -makewritable");
+			ExpectToExecuteArguments(@"get $ -destpath c:\source\ -merge overwrite -setfiletime checkin -makewritable");
 			vault.AutoGetSource = true;
 			vault.UseVaultWorkingDirectory = false;
 			vault.Folder = "$";
@@ -153,12 +153,89 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 		}
 
 		[Test]
-		public void ShouldBuildApplyLabelArgumentsCorrectly()
+		public void ShouldBuildApplyLabelArgumentsCorrectlyNonAutoGet()
 		{
 			ExpectToExecuteArguments(@"label $ foo");
 			vault.ApplyLabel = true;
+			vault.AutoGetSource = false;
 			vault.Folder = "$";
 			vault.LabelSourceControl(result);
+			VerifyAll();
+		}
+
+		[Test]
+		public void ShouldBuildApplyLabelArgumentsCorrectlyAutoGet()
+		{
+			ExpectToExecuteArguments(@"label $ foo");
+			ExpectToExecuteArguments(@"getlabel $ foo -destpath c:\source\ -merge overwrite -setfiletime checkin -makewritable");
+			vault.ApplyLabel = true;
+			vault.UseVaultWorkingDirectory = false;
+			vault.AutoGetSource = true;
+			vault.Folder = "$";
+			vault.GetSource(result);
+			VerifyAll();
+		}
+
+		[Test]
+		public void ShouldSetAndRemoveLabelOnFailure()
+		{
+			ExpectToExecuteArguments(@"label $ foo");
+			ExpectToExecuteArguments(@"getlabel $ foo -destpath c:\source\ -merge overwrite -setfiletime checkin -makewritable");
+			ExpectToExecuteArguments(@"deletelabel $ foo");
+			vault.ApplyLabel = true;
+			vault.UseVaultWorkingDirectory = false;
+			vault.AutoGetSource = true;
+			vault.Folder = "$";
+			vault.GetSource(result);
+			IntegrationResult failed = IntegrationResultMother.CreateFailed();
+			failed.Label = result.Label;
+			failed.WorkingDirectory = result.WorkingDirectory;
+			vault.LabelSourceControl(failed);
+			VerifyAll();
+		}
+
+		[Test]
+		public void ShouldSetAndLeaveLabelOnSuccess()
+		{
+			ExpectToExecuteArguments(@"label $ foo");
+			ExpectToExecuteArguments(@"getlabel $ foo -destpath c:\source\ -merge overwrite -setfiletime checkin -makewritable");
+			vault.ApplyLabel = true;
+			vault.UseVaultWorkingDirectory = false;
+			vault.AutoGetSource = true;
+			vault.Folder = "$";
+			vault.GetSource(result);
+			IntegrationResult failed = IntegrationResultMother.CreateSuccessful();
+			failed.Label = result.Label;
+			failed.WorkingDirectory = result.WorkingDirectory;
+			vault.LabelSourceControl(failed);
+			VerifyAll();
+		}
+
+		[Test]
+		public void ShouldBuildRemoveLabelArgumentsCorrectlyOnFailureWithAutoGet()
+		{
+			ExpectToExecuteArguments(@"deletelabel $ foo");
+			vault.ApplyLabel = true;
+			vault.AutoGetSource = true;
+			vault.Folder = "$";
+			IntegrationResult failed = IntegrationResultMother.CreateFailed();
+			failed.Label = result.Label;
+			failed.WorkingDirectory = result.WorkingDirectory;
+			vault.LabelSourceControl(failed);
+			VerifyAll();
+		}
+
+		[Test]
+		public void ShouldBuildLabelArgumentsCorrectlyOnFailureNonAutoget()
+		{
+			ExpectToExecuteArguments(@"label $ foo");
+			vault.ApplyLabel = true;
+			vault.AutoGetSource = false;
+			vault.Folder = "$";
+			IntegrationResult failed = IntegrationResultMother.CreateFailed();
+			failed.Label = result.Label;
+			failed.WorkingDirectory = result.WorkingDirectory;
+			vault.LabelSourceControl(failed);
 			VerifyAll();
 		}
 
@@ -170,20 +247,6 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 			vault.Folder = "$";
 			SetHostUsernamePasswordRepositoryAndSsl();
 			vault.LabelSourceControl(result);
-			VerifyAll();
-		}
-
-		[Test]
-		public void ShouldUseConfiguredWorkingDirectoryWhenGettingSource()
-		{
-			ProcessInfo info = NewProcessInfo(@"get $ -destpath c:\temp\ -setfiletime checkin -makewritable");
-			info.WorkingDirectory = @"c:\temp\";
-			ExpectToExecute(info);
-
-			vault.AutoGetSource = true;
-			vault.UseVaultWorkingDirectory = false;
-			vault.WorkingDirectory = @"c:\temp\";
-			vault.GetSource(IntegrationResult());
 			VerifyAll();
 		}
 
