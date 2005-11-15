@@ -1,5 +1,6 @@
 using Exortech.NetReflector;
 using NMock;
+using NMock.Constraints;
 using NUnit.Framework;
 using ThoughtWorks.CruiseControl.Core;
 using ThoughtWorks.CruiseControl.Core.tasks;
@@ -63,6 +64,16 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 			result.ArtifactDirectory = "artifactDir";
 			task.OutputPath = "relativePath";
 			task.Run(result);
+		}
+
+		[Test]
+		public void ShouldWriteXmlUsingUTF8Encoding()
+		{
+			mockIO.Expect("Save", @"artifactDir\modifications.xml", new StartsWith("<?xml version=\"1.0\" encoding=\"utf-8\"?>"));
+
+			IntegrationResult result = IntegrationResultMother.CreateSuccessful();
+			result.ArtifactDirectory = "artifactDir";
+			task.Run(result);			
 		}
 
 		[Test]

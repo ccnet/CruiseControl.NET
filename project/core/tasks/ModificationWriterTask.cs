@@ -1,4 +1,5 @@
 using System.IO;
+using System.Text;
 using System.Xml.Serialization;
 using Exortech.NetReflector;
 using ThoughtWorks.CruiseControl.Core.Util;
@@ -21,9 +22,17 @@ namespace ThoughtWorks.CruiseControl.Core.tasks
 		public void Run(IIntegrationResult result)
 		{
 			XmlSerializer serializer = new XmlSerializer(typeof (Modification[]));
-			StringWriter writer = new StringWriter();
+			StringWriter writer = new Utf8StringWriter();
 			serializer.Serialize(writer, result.Modifications);
 			fileSystem.Save(ModificationFile(result), writer.ToString());
+		}
+
+		private class Utf8StringWriter : StringWriter
+		{
+			public override Encoding Encoding
+			{
+				get { return Encoding.UTF8; }
+			}
 		}
 
 		private string ModificationFile(IIntegrationResult result)
