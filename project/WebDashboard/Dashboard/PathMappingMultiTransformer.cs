@@ -1,4 +1,5 @@
 using System.Collections;
+using System.IO;
 using ThoughtWorks.CruiseControl.Core.Reporting.Dashboard.Navigation;
 using ThoughtWorks.CruiseControl.Core.Util;
 
@@ -7,22 +8,22 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 	public class PathMappingMultiTransformer : IMultiTransformer
 	{
 		private readonly IMultiTransformer transformer;
-		private readonly IPathMapper pathMapper;
+		private readonly IPhysicalApplicationPathProvider physicalApplicationPathProvider;
 
-		public PathMappingMultiTransformer(IPathMapper pathMapper, IMultiTransformer transformer)
+		public PathMappingMultiTransformer(IPhysicalApplicationPathProvider physicalApplicationPathProvider, IMultiTransformer transformer)
 		{
-			this.pathMapper = pathMapper;
+			this.physicalApplicationPathProvider = physicalApplicationPathProvider;
 			this.transformer = transformer;
 		}
 
-		public string Transform(string input, string[] transformerFileNames)
+		public string Transform(string input, string[] transformerFileNames, Hashtable xsltArgs)
 		{
 			ArrayList mappedFiles = new ArrayList();
 			foreach (string transformerFileName in transformerFileNames)
 			{
-				mappedFiles.Add(pathMapper.GetLocalPathFromURLPath(transformerFileName));
+				mappedFiles.Add(Path.Combine(physicalApplicationPathProvider.PhysicalApplicationPath, transformerFileName));
 			}
-			return transformer.Transform(input, (string[]) mappedFiles.ToArray(typeof (string)));
+			return transformer.Transform(input, (string[]) mappedFiles.ToArray(typeof (string)), xsltArgs);
 		}
 	}
 }

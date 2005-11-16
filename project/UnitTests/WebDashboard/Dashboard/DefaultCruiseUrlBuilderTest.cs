@@ -32,7 +32,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 		public void ShouldBuildServerUrlAddingCorrectlyFormattedAction()
 		{
 			// Setup
-			urlBuilderMock.ExpectAndReturn("BuildUrl", "myUrl", "myAction", "server=myserver");
+			urlBuilderMock.ExpectAndReturn("BuildUrl", "myUrl", "myAction", "", "server/myserver");
 			
 			// Execute
 			string url = cruiseUrlBuilder.BuildServerUrl("myAction", serverSpecifier);
@@ -46,7 +46,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 		public void ShouldBuildServerUrlAddingCorrectlyFormattedActionAndQueryString()
 		{
 			// Setup
-			urlBuilderMock.ExpectAndReturn("BuildUrl", "myUrl", "myAction", "server=myserver&query1=arg1");
+			urlBuilderMock.ExpectAndReturn("BuildUrl", "myUrl", "myAction", "query1=arg1", "server/myserver");
 			
 			// Execute
 			string url = cruiseUrlBuilder.BuildServerUrl("myAction", serverSpecifier, "query1=arg1");
@@ -60,7 +60,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 		public void ShouldBuildProjectUrlAddingCorrectlyFormattedAction()
 		{
 			// Setup
-			urlBuilderMock.ExpectAndReturn("BuildUrl", "myUrl", "myAction", "server=myserver&project=myproject");
+			urlBuilderMock.ExpectAndReturn("BuildUrl", "myUrl", "myAction", "", "server/myserver/project/myproject");
 
 			// Execute
 			string url = cruiseUrlBuilder.BuildProjectUrl("myAction", projectSpecifier);
@@ -74,7 +74,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 		public void ShouldUrlEncodeProject()
 		{
 			// Setup
-			urlBuilderMock.ExpectAndReturn("BuildUrl", "myUrl", "myAction", "server=myserver&project=myproject%232");
+			urlBuilderMock.ExpectAndReturn("BuildUrl", "myUrl", "myAction", "", "server/myserver/project/myproject%232");
 			projectSpecifier = new DefaultProjectSpecifier(serverSpecifier, "myproject#2");
 
 			// Execute
@@ -89,7 +89,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 		public void ShouldBuildBuildUrlAddingCorrectlyFormattedAction()
 		{
 			// Setup
-			urlBuilderMock.ExpectAndReturn("BuildUrl", "myUrl", "myAction", "server=myserver&project=myproject&build=mybuild");
+			urlBuilderMock.ExpectAndReturn("BuildUrl", "myUrl", "myAction", "", "server/myserver/project/myproject/build/mybuild");
 
 			// Execute
 			string url = cruiseUrlBuilder.BuildBuildUrl("myAction", buildSpecifier);

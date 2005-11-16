@@ -11,14 +11,19 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.IO
 		private NameValueCollection queryString;
 		private IRequest underlyingRequest;
 		private RequestWrappingCruiseRequest cruiseRequest;
-		private string path;
+		private string applicationPath;
 
 		[SetUp]
 		public void Setup()
 		{
 			queryString = new NameValueCollection();
-			path = "http://bar/baz.html";
-			underlyingRequest = new NameValueCollectionRequest(queryString, path, null);
+			applicationPath = "http://bar/";
+			CreateCruiseRequest("baz.html");
+		}
+
+		private void CreateCruiseRequest(string relativePath)
+		{
+			underlyingRequest = new NameValueCollectionRequest(queryString, applicationPath + relativePath, null, applicationPath);
 			cruiseRequest = new RequestWrappingCruiseRequest(underlyingRequest);
 		}
 
@@ -31,7 +36,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.IO
 		[Test]
 		public void ReturnsProjectNameIfProjectSpecified()
 		{
-			queryString.Add("project", "myproject");
+			CreateCruiseRequest("server/myserver/project/myproject/baz.html");
 			Assert.AreEqual("myproject", cruiseRequest.ProjectName);
 		}
 
@@ -44,7 +49,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.IO
 		[Test]
 		public void ReturnsServerNameIfServerSpecified()
 		{
-			queryString.Add("server", "myserver");
+			CreateCruiseRequest("server/myserver/baz.html");
 			Assert.AreEqual("myserver", cruiseRequest.ServerName);
 		}
 
@@ -57,7 +62,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.IO
 		[Test]
 		public void ReturnsBuildNameIfBuildSpecified()
 		{
-			queryString.Add("build", "mybuild");
+			CreateCruiseRequest("server/myserver/project/myproject/build/mybuild/baz.html");
 			Assert.AreEqual("mybuild", cruiseRequest.BuildName);
 		}
 	}

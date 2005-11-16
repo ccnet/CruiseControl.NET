@@ -746,5 +746,23 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Util
 </xsl:stylesheet>";
 			}
 		}
+
+	
+		public static string StyleSheetContentsWithParam
+		{
+			get 
+			{
+				return @"<?xml version=""1.0""?>
+<xsl:stylesheet xmlns:xsl=""http://www.w3.org/1999/XSL/Transform"" version=""1.0"">
+
+    <xsl:output method=""html""/>
+	<xsl:param name=""myParam""/>
+    <xsl:template match=""/"">
+	<foo><xsl:value-of select=""$myParam""/></foo>
+    </xsl:template>
+
+</xsl:stylesheet>";
+			}
+		}
 	}
 }

@@ -1,4 +1,3 @@
-using System;
 using ThoughtWorks.CruiseControl.Core.Reporting.Dashboard.Navigation;
 
 namespace ThoughtWorks.CruiseControl.Core.Reporting.Dashboard.Navigation
@@ -6,10 +5,16 @@ namespace ThoughtWorks.CruiseControl.Core.Reporting.Dashboard.Navigation
 	public class DefaultUrlBuilder : IUrlBuilder
 	{
 		private string extension;
+		public static readonly string DEFAULT_EXTENSION = "aspx";
 
 		public DefaultUrlBuilder()
 		{
-			extension = "aspx";
+			extension = DEFAULT_EXTENSION;
+		}
+
+		public string Extension
+		{
+			set { this.extension = value; }
 		}
 
 		public string BuildUrl(string action)
@@ -17,13 +22,18 @@ namespace ThoughtWorks.CruiseControl.Core.Reporting.Dashboard.Navigation
 			return BuildUrl(action, null);
 		}
 
-		/// <summary>
-		/// Assumes that the queryString and action have been safely url encoded.
-		/// Instead use a parameter collection and url builder can take care of encoding.
-		/// </summary>
 		public string BuildUrl(string action, string queryString)
 		{
-			string url = string.Format("{0}.{1}", action, extension);
+			return BuildUrl(action, queryString, null);
+		}
+
+		/// <summary>
+		/// Assumes that the path, queryString and action have been safely url encoded.
+		/// Instead use a parameter collection and url builder can take care of encoding.
+		/// </summary>
+		public string BuildUrl(string action, string queryString, string path)
+		{
+			string url = string.Format("{0}{1}.{2}", CalculatePath(path), action, extension);
 			if (queryString!= null && queryString != string.Empty)
 			{
 				url += string.Format("?{0}", queryString);
@@ -31,9 +41,16 @@ namespace ThoughtWorks.CruiseControl.Core.Reporting.Dashboard.Navigation
 			return url;
 		}
 
-		public string Extension
+		private string CalculatePath(string path)
 		{
-			set { this.extension = value; }
+			if (path == null || path.Trim() == string.Empty)
+			{
+				return "";
+			}
+			else
+			{
+				return (path.EndsWith("/") ? path : path + "/");
+			}
 		}
 	}
 }

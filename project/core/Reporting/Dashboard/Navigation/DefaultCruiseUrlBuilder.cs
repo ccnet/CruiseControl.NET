@@ -1,14 +1,12 @@
-using System;
 using System.Web;
-using ThoughtWorks.CruiseControl.Core.Util;
 
 namespace ThoughtWorks.CruiseControl.Core.Reporting.Dashboard.Navigation
 {
 	public class DefaultCruiseUrlBuilder : ICruiseUrlBuilder
 	{
-		public static readonly string BuildQueryStringParameter = "build";
-		public static readonly string ProjectQueryStringParameter = "project";
-		public static readonly string ServerQueryStringParameter = "server";
+		public static readonly string BuildRESTSpecifier = "build";
+		public static readonly string ProjectRESTSpecifier = "project";
+		public static readonly string ServerRESTSpecifier = "server";
 
 		private readonly IUrlBuilder urlBuilder;
 
@@ -24,17 +22,29 @@ namespace ThoughtWorks.CruiseControl.Core.Reporting.Dashboard.Navigation
 
 		public string BuildServerUrl(string action, IServerSpecifier serverSpecifier, string queryString)
 		{
-			return urlBuilder.BuildUrl(action, Combine(BuildServerQueryString(serverSpecifier), queryString));
+			return urlBuilder.BuildUrl(
+				action, 
+				queryString, 
+				GeneratePath(serverSpecifier.ServerName, "", ""));
 		}
 
 		public string BuildProjectUrl(string action, IProjectSpecifier projectSpecifier)
 		{
-			return urlBuilder.BuildUrl(action, BuildProjectQueryString(projectSpecifier));
+			return urlBuilder.BuildUrl(
+				action, 
+				"",
+				GeneratePath(projectSpecifier.ServerSpecifier.ServerName, projectSpecifier.ProjectName, ""));
 		}
 
 		public string BuildBuildUrl(string action, IBuildSpecifier buildSpecifier)
 		{
-			return urlBuilder.BuildUrl(action, BuildBuildQueryString(buildSpecifier));
+			return urlBuilder.BuildUrl(
+				action, 
+				"",
+				GeneratePath(
+					buildSpecifier.ProjectSpecifier.ServerSpecifier.ServerName, 
+					buildSpecifier.ProjectSpecifier.ProjectName, 
+					buildSpecifier.BuildName));
 		}
 
 		public string Extension
@@ -42,30 +52,22 @@ namespace ThoughtWorks.CruiseControl.Core.Reporting.Dashboard.Navigation
 			set { urlBuilder.Extension = value; }
 		}
 
-		private string BuildServerQueryString(IServerSpecifier serverSpecifier)
+		private string GeneratePath(string serverName, string projectName, string buildName)
 		{
-			return UrlParameter(ServerQueryStringParameter, serverSpecifier.ServerName);
-		}
-
-		private string BuildProjectQueryString(IProjectSpecifier projectSpecifier)
-		{
-			return Combine(BuildServerQueryString(projectSpecifier.ServerSpecifier), UrlParameter(ProjectQueryStringParameter, projectSpecifier.ProjectName));
-		}
-
-		private string BuildBuildQueryString(IBuildSpecifier buildSpecifier)
-		{
-			return Combine(BuildProjectQueryString(buildSpecifier.ProjectSpecifier), UrlParameter(BuildQueryStringParameter, buildSpecifier.BuildName));
-		}
-
-		private string UrlParameter(string key, string value)
-		{
-			return string.Format("{0}={1}", key, HttpUtility.UrlEncode(value));
-		}
-
-		private string Combine(string root, string addendum)
-		{
-			if (StringUtil.IsBlank(addendum)) return root;
-			return string.Format("{0}&{1}", root, addendum);
+			string path = "";
+			if (serverName != string.Empty)
+			{
+				path += string.Format("{0}/{1}", ServerRESTSpecifier, HttpUtility.UrlEncode(serverName));
+				if (projectName != string.Empty)
+				{
+					path += string.Format("/{0}/{1}", ProjectRESTSpecifier, HttpUtility.UrlEncode(projectName));
+					if (buildName != string.Empty)
+					{
+						path += string.Format("/{0}/{1}", BuildRESTSpecifier, HttpUtility.UrlEncode(buildName));
+					}
+				}
+			}
+			return path;
 		}
 	}
 }

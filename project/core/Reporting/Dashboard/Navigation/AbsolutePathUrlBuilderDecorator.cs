@@ -23,6 +23,11 @@ namespace ThoughtWorks.CruiseControl.Core.Reporting.Dashboard.Navigation
 			return Decorate(decoratedUrlBuilder.BuildUrl(action, partialQueryString));
 		}
 
+		public string BuildUrl(string action, string partialQueryString, string path)
+		{
+			return Decorate(decoratedUrlBuilder.BuildUrl(action, partialQueryString, path));
+		}
+
 		public string Extension
 		{
 			set { decoratedUrlBuilder.Extension = value; }

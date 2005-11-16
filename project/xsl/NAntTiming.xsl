@@ -1,6 +1,7 @@
 <?xml version="1.0"?>
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0">
     <xsl:output method="html"/>
+    <xsl:param name="applicationPath"/>
 
     <xsl:template match="/">
 		<script type="text/javascript">
@@ -12,12 +13,12 @@
 				if ( eDiv.style.display == "none" )
 				{
 					eDiv.style.display="block";
-					eImg.src="images/arrow_minus_small.gif";
+					eImg.src="<xsl:value-of select="$applicationPath"/>/images/arrow_minus_small.gif";
 				}
 				else
 				{
 					eDiv.style.display = "none";
-					eImg.src="images/arrow_plus_small.gif";
+					eImg.src="<xsl:value-of select="$applicationPath"/>/images/arrow_plus_small.gif";
 				}
 			}
 		</script>
@@ -74,7 +75,7 @@
 				<xsl:variable name="divId">
 						<xsl:value-of select="generate-id()" />
 				</xsl:variable>
-				<img src="images/arrow_plus_small.gif" alt="Toggle to see tasks in this target">
+				<img src="{$applicationPath}/images/arrow_plus_small.gif" alt="Toggle to see tasks in this target">
 					<xsl:attribute name="id">
 						<xsl:text>img-</xsl:text>
 						<xsl:value-of select="$divId" />

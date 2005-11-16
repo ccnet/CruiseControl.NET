@@ -9,19 +9,19 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.MVC
 		[Test]
 		public void ShouldReturnFileNameWithoutExtension()
 		{
-			NameValueCollectionRequest request = new NameValueCollectionRequest(null, "/ccnet/file1.aspx", null);
+			NameValueCollectionRequest request = new NameValueCollectionRequest(null, "/ccnet/file1.aspx", null, null);
 			Assert.AreEqual("file1", request.FileNameWithoutExtension);
 
-			request = new NameValueCollectionRequest(null, "/file2.aspx", null);
+			request = new NameValueCollectionRequest(null, "/file2.aspx", null, null);
 			Assert.AreEqual("file2", request.FileNameWithoutExtension);
 
-			request = new NameValueCollectionRequest(null, "/ccnet/file3", null);
+			request = new NameValueCollectionRequest(null, "/ccnet/file3", null, null);
 			Assert.AreEqual("file3", request.FileNameWithoutExtension);
 
-			request = new NameValueCollectionRequest(null, "/file4", null);
+			request = new NameValueCollectionRequest(null, "/file4", null, null);
 			Assert.AreEqual("file4", request.FileNameWithoutExtension);
 
-			request = new NameValueCollectionRequest(null, "/", null);
+			request = new NameValueCollectionRequest(null, "/", null, null);
 			Assert.AreEqual("", request.FileNameWithoutExtension);
 		}
 	}

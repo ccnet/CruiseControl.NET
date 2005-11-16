@@ -1,4 +1,5 @@
 using System.Collections.Specialized;
+using ThoughtWorks.CruiseControl.Core;
 using ThoughtWorks.CruiseControl.Core.Reporting.Dashboard.Navigation;
 using ThoughtWorks.CruiseControl.WebDashboard.MVC;
 
@@ -22,8 +23,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.IO
 		{
 			get
 			{
-				string server = QueryString[DefaultCruiseUrlBuilder.ServerQueryStringParameter];
-				return (server == null) ? "" : server;
+				return FindRESTSpecifiedResource(DefaultCruiseUrlBuilder.ServerRESTSpecifier);
 			}
 		}
 
@@ -31,8 +31,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.IO
 		{
 			get
 			{
-				string project = QueryString[DefaultCruiseUrlBuilder.ProjectQueryStringParameter];
-				return (project == null) ? "" : project;
+				return FindRESTSpecifiedResource(DefaultCruiseUrlBuilder.ProjectRESTSpecifier);
 			}
 		}
 
@@ -40,9 +39,31 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.IO
 		{
 			get
 			{
-				string build = QueryString[DefaultCruiseUrlBuilder.BuildQueryStringParameter];
-				return (build == null) ? "" : build;
+				return FindRESTSpecifiedResource(DefaultCruiseUrlBuilder.BuildRESTSpecifier);
 			}
+		}
+
+		private string FindRESTSpecifiedResource(string specifier)
+		{
+			string[] subFolders = request.SubFolders;
+
+			for (int i = 0; i < subFolders.Length; i += 2)
+			{
+				if (subFolders[i] == specifier)
+				{
+					if (i < subFolders.Length)
+					{
+						return subFolders[i+1];
+					}
+					else
+					{
+						throw new CruiseControlException(
+							string.Format("unexpected URL format - found {0} REST Specifier, but no following value", specifier));
+					}
+				}
+			}
+
+			return "";
 		}
 
 		public IServerSpecifier ServerSpecifier

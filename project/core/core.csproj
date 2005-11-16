@@ -604,7 +604,7 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "Reporting\Dashboard\Navigation\IPathMapper.cs"
+                    RelPath = "Reporting\Dashboard\Navigation\IPhysicalApplicationPathProvider.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

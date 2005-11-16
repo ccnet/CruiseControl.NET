@@ -1,3 +1,5 @@
+using System;
+using System.Collections;
 using System.IO;
 using System.Xml;
 using System.Xml.XPath;
@@ -7,7 +9,7 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 {
 	public class XslTransformer : ITransformer
 	{
-		public string Transform(string input, string transformerFileName)
+		public string Transform(string input, string transformerFileName, Hashtable xsltArgs)
 		{
 			using (StringReader inputReader = new StringReader(input))
 			{
@@ -16,7 +18,7 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 					XslTransform transform = new XslTransform();
 					LoadStylesheet(transform, transformerFileName);
 					StringWriter output = new StringWriter();
-					transform.Transform(new XPathDocument(inputReader), null, output);
+					transform.Transform(new XPathDocument(inputReader), CreateXsltArgs(xsltArgs), output);
 					return output.ToString();
 				}
 				catch (XmlException ex)
@@ -24,6 +26,19 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 					throw new CruiseControlException("Unable to execute transform: " + transformerFileName, ex);
 				}
 			}
+		}
+
+		private XsltArgumentList CreateXsltArgs(Hashtable xsltArgs)
+		{
+			XsltArgumentList args = new XsltArgumentList();
+			if (xsltArgs != null)
+			{
+				foreach (object key in xsltArgs.Keys)
+				{
+					args.AddParam(key.ToString(), "", xsltArgs[key]);
+				}
+			}
+			return args;
 		}
 
 		private void LoadStylesheet(XslTransform transform, string xslFileName)

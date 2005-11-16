@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Text;
 
 namespace ThoughtWorks.CruiseControl.Core.Util
@@ -12,12 +13,12 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 			this.delegateTransformer = delegateTransformer;
 		}
 
-		public string Transform(string input, string[] transformerFileNames)
+		public string Transform(string input, string[] transformerFileNames, Hashtable xsltArgs)
 		{
 			StringBuilder builder = new StringBuilder();
 			foreach (string transformerFileName in transformerFileNames)
 			{
-				builder.Append(delegateTransformer.Transform(input, transformerFileName));
+				builder.Append(delegateTransformer.Transform(input, transformerFileName, xsltArgs));
 				builder.Append("<br/>");
 			}
 			return builder.ToString();

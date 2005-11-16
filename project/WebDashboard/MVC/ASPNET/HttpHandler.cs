@@ -13,7 +13,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.MVC.ASPNET
 			DoSecurityChecks(context);
 
 			// ToDo - more on MimeTypes?
-			if (context.Request.FilePath.EndsWith(".xml"))
+			if (context.Request.Path.EndsWith(".xml"))
 			{
 				// ToDo - if we are specifying XML, shouldn't we throw valid XML exceptions?
 				context.Response.ContentType = "Text/XML";

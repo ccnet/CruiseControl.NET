@@ -18,10 +18,12 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Reporting.Dashboard.Navigati
 			string actionName = "myAction";
 			decoratedBuilderMock.ExpectAndReturn("BuildUrl", "myRelativeUrl", actionName);
 			decoratedBuilderMock.ExpectAndReturn("BuildUrl", "myRelativeUrl2", actionName, "query");
+			decoratedBuilderMock.ExpectAndReturn("BuildUrl", "myPath/myRelativeUrl3", actionName, "query", "myPath/");
 
 			/// Execute & Verify
-			Assert.AreEqual(baseUrl + "/" + "myRelativeUrl", decorator.BuildUrl(actionName));
-			Assert.AreEqual(baseUrl + "/" + "myRelativeUrl2", decorator.BuildUrl(actionName, "query"));
+			Assert.AreEqual(baseUrl + "/myRelativeUrl", decorator.BuildUrl(actionName));
+			Assert.AreEqual(baseUrl + "/myRelativeUrl2", decorator.BuildUrl(actionName, "query"));
+			Assert.AreEqual(baseUrl + "/myPath/myRelativeUrl3", decorator.BuildUrl(actionName, "query", "myPath/"));
 
 			decoratedBuilderMock.Verify();
 		}

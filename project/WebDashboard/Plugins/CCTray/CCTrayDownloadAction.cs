@@ -9,16 +9,16 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.CCTray
 	public class CCTrayDownloadAction : ICruiseAction
 	{
 		public const string ActionName = "CCTrayDownload";
-		private readonly IPathMapper pathMapper;
+		private readonly IPhysicalApplicationPathProvider physicalApplicationPathProvider;
 
-		public CCTrayDownloadAction(IPathMapper pathMapper)
+		public CCTrayDownloadAction(IPhysicalApplicationPathProvider physicalApplicationPathProvider)
 		{
-			this.pathMapper = pathMapper;
+			this.physicalApplicationPathProvider = physicalApplicationPathProvider;
 		}
 
 		public IResponse Execute(ICruiseRequest cruiseRequest)
 		{
-			DirectoryInfo cctrayPath = new DirectoryInfo(Path.Combine(pathMapper.PhysicalApplicationPath, "CCTray"));
+			DirectoryInfo cctrayPath = new DirectoryInfo(Path.Combine(physicalApplicationPathProvider.PhysicalApplicationPath, "CCTray"));
 			if (cctrayPath.Exists)
 			{
 				FileInfo[] files = cctrayPath.GetFiles("*CCTray*.*");

@@ -2,6 +2,7 @@
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns="http://schemas.microsoft.com/intellisense/ie5">
 
 	<xsl:output method="html"/>
+	<xsl:param name="applicationPath"/>
 
 	<xsl:variable name="fxcop.root" select="//FxCopReport"/>
 	<xsl:variable name="fxcop.version" select="$fxcop.root/@Version" />
@@ -99,7 +100,7 @@
 		<div class="fxcop-class">
 			<table style="WIDTH: 30pc">
 				<tr>
-					<td colspan="2" class="fxcop-class-header"><img src="images/class.gif"/><xsl:value-of select="@Name"/></td>
+					<td colspan="2" class="{$applicationPath}/fxcop-class-header"><img src="images/class.gif"/><xsl:value-of select="@Name"/></td>
 				</tr>
 
 				<xsl:if test="Messages">
@@ -136,7 +137,7 @@
 	<!-- Displays the fields.  These refer to variables at class level -->
 	<xsl:template match="Field">
 		<tr>
-			<td width="20%"><img src="images/field.gif"/><xsl:value-of select="@Name"/></td>
+			<td width="20%"><img src="{$applicationPath}/images/field.gif"/><xsl:value-of select="@Name"/></td>
 			<td>
 				<xsl:apply-templates select="Messages">
 					<xsl:sort select="Message//@Level" />
@@ -148,7 +149,7 @@
 	<!-- Displays methods on the class -->
 	<xsl:template match="Method" mode="fromClass">
 		<tr>
-			<td colspan="2"><img src="images/method.gif"/><xsl:value-of select="@Name"/></td>
+			<td colspan="2"><img src="{$applicationPath}/images/method.gif"/><xsl:value-of select="@Name"/></td>
 		</tr>
 		<tr>
 			<td width="20%"></td>
@@ -163,7 +164,7 @@
 	<!-- Displays the summary of the property -->
 	<xsl:template match="Property">
 		<tr>
-			<td colspan="3"><img src="images/property.gif"/><xsl:value-of select="@Name"/></td>
+			<td colspan="3"><img src="{$applicationPath}/images/property.gif"/><xsl:value-of select="@Name"/></td>
 		</tr>
 			<xsl:apply-templates select="Methods" mode="fromProperty">
 				<xsl:sort select="@Name"/>
@@ -200,16 +201,16 @@
 			<div class="section-data" style="margin-left:10px">
 				<img>
 					<xsl:if test="$level='CriticalError'">
-						<xsl:attribute name="src">images/fxcop-critical-error.gif</xsl:attribute>
+						<xsl:attribute name="src">{$applicationPath}/images/fxcop-critical-error.gif</xsl:attribute>
 					</xsl:if>
 					<xsl:if test="$level='Error'">
-						<xsl:attribute name="src">images/fxcop-error.gif</xsl:attribute>
+						<xsl:attribute name="src">{$applicationPath}/images/fxcop-error.gif</xsl:attribute>
 					</xsl:if>
 					<xsl:if test="$level='Warning'">
-						<xsl:attribute name="src">images/fxcop-warning.gif</xsl:attribute>
+						<xsl:attribute name="src">{$applicationPath}/images/fxcop-warning.gif</xsl:attribute>
 					</xsl:if>
 					<xsl:if test="$level='CriticalWarning'">
-						<xsl:attribute name="src">images/fxcop-critical-warning.gif</xsl:attribute>
+						<xsl:attribute name="src">{$applicationPath}/images/fxcop-critical-warning.gif</xsl:attribute>
 					</xsl:if>
 					<xsl:attribute name="alt"><xsl:value-of select="$level"/> (<xsl:value-of select="$certainty"/>% certainty)</xsl:attribute>
 				</img>

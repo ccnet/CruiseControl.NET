@@ -17,10 +17,10 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.MVC.View
 			Hashtable contextContents = new Hashtable();
 			contextContents["foo"] = "bar";
 
-			DynamicMock pathMapperMock = new DynamicMock(typeof(IPathMapper));
+			DynamicMock pathMapperMock = new DynamicMock(typeof(IPhysicalApplicationPathProvider));
 			pathMapperMock.SetupResult("PhysicalApplicationPath", ".");
 
-			viewTransformer = new LazilyInitialisingVelocityTransformer((IPathMapper) pathMapperMock.MockInstance);
+			viewTransformer = new LazilyInitialisingVelocityTransformer((IPhysicalApplicationPathProvider) pathMapperMock.MockInstance);
 
 			Assert.AreEqual("foo is bar", viewTransformer.Transform("testTransform.vm", contextContents));
 		}

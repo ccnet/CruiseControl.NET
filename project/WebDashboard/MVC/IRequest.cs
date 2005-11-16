@@ -11,5 +11,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.MVC
 		NameValueCollection Params { get; }
 		string RawUrl { get; }
 		string FileNameWithoutExtension { get; }
+		string[] SubFolders { get; }
+		string ApplicationPath { get; }
 	}
 }

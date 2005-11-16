@@ -27,6 +27,24 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 		}
 
 		[Test]
+		public void ShouldBuildUrlWithActionAndQueryStringAndPath()
+		{
+			Assert.AreEqual("myPath/myAction.aspx?myparam=myvalue", urlBuilder.BuildUrl("myAction", "myparam=myvalue", "myPath/"));
+		}
+
+		[Test]
+		public void ShouldAddTrailingSlashToPathIfItDoesntAlreadyHaveOne()
+		{
+			Assert.AreEqual("myPath/myAction.aspx?myparam=myvalue", urlBuilder.BuildUrl("myAction", "myparam=myvalue", "myPath"));
+		}
+
+		[Test]
+		public void ShouldHandlePathsWithMoreThanOneLevel()
+		{
+			Assert.AreEqual("myPath/mySubPath/myAction.aspx?myparam=myvalue", urlBuilder.BuildUrl("myAction", "myparam=myvalue", "myPath/mySubPath"));
+		}
+
+		[Test]
 		public void ShouldUseSpecifiedExtension()
 		{
 			urlBuilder.Extension = "foo";

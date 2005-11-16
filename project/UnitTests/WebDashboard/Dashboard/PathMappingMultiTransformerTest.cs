@@ -13,17 +13,16 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 		public void ShouldCallDelegateTransformerWithCorrectFileNames()
 		{
 			DynamicMock delegateMock = new DynamicMock(typeof(IMultiTransformer));
-			DynamicMock pathMapperMock = new DynamicMock(typeof(IPathMapper));
+			DynamicMock pathProviderStub = new DynamicMock(typeof(IPhysicalApplicationPathProvider));
 
-			PathMappingMultiTransformer transformer = new PathMappingMultiTransformer((IPathMapper) pathMapperMock.MockInstance, (IMultiTransformer) delegateMock.MockInstance);
+			PathMappingMultiTransformer transformer = new PathMappingMultiTransformer((IPhysicalApplicationPathProvider) pathProviderStub.MockInstance, (IMultiTransformer) delegateMock.MockInstance);
 
-			pathMapperMock.ExpectAndReturn("GetLocalPathFromURLPath", "pathed1", "xslFile1");
-			pathMapperMock.ExpectAndReturn("GetLocalPathFromURLPath", "pathed2", "xslFile2");
+			pathProviderStub.SetupResult("PhysicalApplicationPath", @"c:\myAppPath");
 
-			delegateMock.ExpectAndReturn("Transform", "output", "myInput", new string[] { "pathed1", "pathed2" });
+			delegateMock.ExpectAndReturn("Transform", "output", "myInput", new string[] { @"c:\myAppPath\xslFile1", @"c:\myAppPath\xslFile2" }, null);
 
-			Assert.AreEqual("output", transformer.Transform("myInput", new string[] { "xslFile1", "xslFile2"} ));
-			pathMapperMock.Verify();
+			Assert.AreEqual("output", transformer.Transform("myInput", new string[] { "xslFile1", "xslFile2"}, null));
+			pathProviderStub.Verify();
 			delegateMock.Verify();
 		}
 	}

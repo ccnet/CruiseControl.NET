@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using Exortech.NetReflector;
 using ThoughtWorks.CruiseControl.WebDashboard.IO;
 using ThoughtWorks.CruiseControl.WebDashboard.MVC;
@@ -23,7 +24,9 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard.Actions
 			{
 				throw new ApplicationException("XSL File Name has not been set for XSL Report Action");
 			}
-			return new HtmlFragmentResponse(buildLogTransformer.Transform(cruiseRequest.BuildSpecifier, xslFileName));
+			Hashtable xsltArgs = new Hashtable();
+			xsltArgs["applicationPath"] = cruiseRequest.Request.ApplicationPath;
+			return new HtmlFragmentResponse(buildLogTransformer.Transform(cruiseRequest.BuildSpecifier, new string[] {xslFileName}, xsltArgs));
 		}
 
 		[ReflectorProperty("xslFileName")]

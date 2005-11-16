@@ -1,3 +1,4 @@
+using System.Collections;
 using ThoughtWorks.CruiseControl.Core.Reporting.Dashboard.Navigation;
 using ThoughtWorks.CruiseControl.Core.Util;
 
@@ -14,10 +15,10 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 			this.transformer = transformer;
 		}
 
-		public string Transform(IBuildSpecifier buildSpecifier, params string[] transformerFileNames)
+		public string Transform(IBuildSpecifier buildSpecifier, string[] transformerFileNames, Hashtable xsltArgs)
 		{
 			string log = buildRetriever.GetBuild(buildSpecifier).Log;
-			return transformer.Transform(log, transformerFileNames);
+			return transformer.Transform(log, transformerFileNames, xsltArgs);
 		}
 	}
 }

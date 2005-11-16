@@ -11,12 +11,14 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard.ActionDecorators
 		private readonly IAction decoratedAction;
 		private readonly IVelocityViewGenerator velocityViewGenerator;
 		private readonly ObjectGiver objectGiver;
+		private readonly IRequest request;
 
-		public SiteTemplateActionDecorator(IAction decoratedAction, IVelocityViewGenerator velocityViewGenerator, ObjectGiver objectGiver)
+		public SiteTemplateActionDecorator(IAction decoratedAction, IVelocityViewGenerator velocityViewGenerator, ObjectGiver objectGiver, IRequest request)
 		{
 			this.decoratedAction = decoratedAction;
 			this.velocityViewGenerator = velocityViewGenerator;
 			this.objectGiver = objectGiver;
+			this.request = request;
 		}
 
 		public IResponse Execute(IRequest cruiseRequest)
@@ -29,6 +31,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard.ActionDecorators
 				velocityContext["sidebar"] = (((SideBarViewBuilder) objectGiver.GiveObjectByType(typeof(SideBarViewBuilder))).Execute()).ResponseFragment;
 				velocityContext["mainContent"] = ((HtmlFragmentResponse) decoratedActionResponse).ResponseFragment;
 				velocityContext["dashboardversion"] = GetVersion();
+				velocityContext["applicationPath"] = request.ApplicationPath;
 
 				return velocityViewGenerator.GenerateView("SiteTemplate.vm", velocityContext);
 			}

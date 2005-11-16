@@ -1,6 +1,7 @@
 <?xml version="1.0"?>
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns="http://www.w3.org/TR/html4/strict.dtd">	
 	<xsl:output method="html"/>	
+	<xsl:param name="applicationPath"/>
 
 	<xsl:template match="/">
 		<xsl:variable name="tests.root" select="cruisecontrol//test-results" />
@@ -14,12 +15,12 @@
 					if ( eDiv.style.display == "none" )
 					{
 						eDiv.style.display = "block";
-						eImg.src = "images/arrow_minus_small.gif";
+						eImg.src = "<xsl:value-of select="$applicationPath"/>/images/arrow_minus_small.gif";
 					}
 					else
 					{
 						eDiv.style.display = "none";
-						eImg.src = "images/arrow_plus_small.gif";
+						eImg.src = "<xsl:value-of select="$applicationPath"/>/images/arrow_plus_small.gif";
 					}
 				}
 			</script>
@@ -69,21 +70,21 @@
 				<td class="yellow-sectionheader" colspan="3" valign="top">
 					<xsl:choose>
 						<xsl:when test="$failure.count > 0">
-							<img src="images/fxcop-critical-error.gif">
+							<img src="{$applicationPath}/images/fxcop-critical-error.gif">
 								<xsl:attribute name="title">Failed tests: <xsl:value-of select="$failure.count" /></xsl:attribute>
 							</img>
 						</xsl:when>
 						<xsl:when test="$ignored.count > 0">
-							<img src="images/fxcop-error.gif">
+							<img src="{$applicationPath}/images/fxcop-error.gif">
 								<xsl:attribute name="title">Ignored tests: <xsl:value-of select="$ignored.count" /></xsl:attribute>
 							</img>
 						</xsl:when>
 						<xsl:otherwise>
-							<img src="images/check.jpg" width="16" height="16"/>
+							<img src="{$applicationPath}/images/check.jpg" width="16" height="16"/>
 						</xsl:otherwise>
 					</xsl:choose>
 			
-					<input type="image" src="images/arrow_minus_small.gif">
+					<input type="image" src="{$applicationPath}/images/arrow_minus_small.gif">
 						<xsl:attribute name="id">img<xsl:value-of select="$test.suite.id"/></xsl:attribute>
 						<xsl:attribute name="onclick">javascript:toggleDiv('img<xsl:value-of select="$test.suite.id"/>', 'divDetails<xsl:value-of select="$test.suite.id"/>');</xsl:attribute>
 					</input>&#160;<xsl:value-of select="$test.suite.name"/>
@@ -131,7 +132,7 @@
 		<xsl:variable name="testName" select="@name"/>
 		<tr>
 			<td valign="top" width="30%">
-				<input type="image" src="images/arrow_plus_small.gif">
+				<input type="image" src="{$applicationPath}/images/arrow_plus_small.gif">
 					<xsl:attribute name="id">imgTestCase_<xsl:value-of select="@name"/></xsl:attribute>
 					<xsl:attribute name="onClick">javascript:toggleDiv('imgTestCase_<xsl:value-of select="$testName"/>', 'divTest_<xsl:value-of select="$testName"/>');</xsl:attribute>
 				</input>
@@ -189,7 +190,7 @@
 				<xsl:attribute name="class">section-oddrow</xsl:attribute>
 			</xsl:if>
 			<td>
-				<img src="images\check.jpg" width="16" height="16"/>
+				<img src="{$applicationPath}/images/check.jpg" width="16" height="16"/>
 			</td>
 			<td>
 				<xsl:call-template name="getTestName">
@@ -207,7 +208,7 @@
 				<xsl:attribute name="class">section-oddrow</xsl:attribute>
 			</xsl:if>
 			<td>
-				<img src="images\fxcop-critical-error.gif"/>
+				<img src="{$applicationPath}/images/fxcop-critical-error.gif"/>
 			</td>
 			<td>
 				<xsl:call-template name="getTestName">
@@ -230,7 +231,7 @@
 				<xsl:attribute name="class">section-oddrow</xsl:attribute>
 			</xsl:if>
 			<td>
-				<img src="images\fxcop-error.gif"/>
+				<img src="{$applicationPath}/images/fxcop-error.gif"/>
 			</td>
 			<td>
 				<xsl:call-template name="getTestName">

@@ -1,14 +1,14 @@
 <HTML>
 	<HEAD>
 		<title>CruiseControl.NET</title>
-		<link type="text/css" rel="stylesheet" href="cruisecontrol.css">
+		<link type="text/css" rel="stylesheet" href="$applicationPath/cruisecontrol.css">
 	</HEAD>
 	<body class="wholepage" topmargin="0" leftmargin="0" marginheight="0" marginwidth="0">
 		<table class="main-panel" border="0" align="center" cellpadding="0" cellspacing="0" width="100%">
 			<tr>
 				<td valign="middle" align="left">
-					<img src="images/shim.gif" width="6" border="0">
-					<a href="http://ccnet.thoughtworks.com"><img src="images/ccnet_logo.gif" border="0"></a>
+					<img src="$applicationPath/images/shim.gif" width="6" border="0">
+					<a href="http://ccnet.thoughtworks.com"><img src="$applicationPath/images/ccnet_logo.gif" border="0"></a>
 				</td>
 			</tr>
 		</table>
@@ -22,11 +22,11 @@
 			<tr>
 				<td valign="top" id="LeftHandSide" bgcolor="#eeeedd" width="180">
 					<table id="Plugins" cellpadding="3" cellspacing="0" border="0">
-						<tr><td><img src="images/shim.gif" width="180" height="1"></td></tr>
+						<tr><td><img src="$applicationPath/images/shim.gif" width="180" height="1"></td></tr>
 						<tr><td>$sidebar</td></tr>
 					</table>
 				</td>
-				<td width="2"><img src="images/shim.gif" alt="" width="2"/></td>
+				<td width="2"><img src="$applicationPath/images/shim.gif" alt="" width="2"/></td>
 				<td valign="top" bgcolor="#ffffff">
 					<table border="0" align="center" cellpadding="3" cellspacing="0" width="100%">
 						<tr><td>$mainContent</td></tr>
@@ -40,7 +40,7 @@
 		<table width="100%">
 			<tr>
 				<td align="right">
-					<a href="http://www.thoughtworks.com/" border="0"><img src="images/tw_dev_logo.gif" border="0"><img src="images/shim.gif" width="6" border="0"></a>
+					<a href="http://www.thoughtworks.com/" border="0"><img src="$applicationPath/images/tw_dev_logo.gif" border="0"><img src="$applicationPath/images/shim.gif" width="6" border="0"></a>
 				</td>
 			</tr>
 		</table>

@@ -9,13 +9,13 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.MVC.View
 {
 	public class LazilyInitialisingVelocityTransformer : IVelocityTransformer
 	{
-		private readonly IPathMapper pathMapper;
+		private readonly IPhysicalApplicationPathProvider physicalApplicationPathProvider;
 
 		private VelocityEngine lazilyInitialisedEngine = null;
 
-		public LazilyInitialisingVelocityTransformer(IPathMapper pathMapper)
+		public LazilyInitialisingVelocityTransformer(IPhysicalApplicationPathProvider physicalApplicationPathProvider)
 		{
-			this.pathMapper = pathMapper;
+			this.physicalApplicationPathProvider = physicalApplicationPathProvider;
 		}
 
 		public string Transform(string transformerFileName, Hashtable transformable)
@@ -39,7 +39,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.MVC.View
 					{
 						lazilyInitialisedEngine = new VelocityEngine();
 						lazilyInitialisedEngine.SetProperty(RuntimeConstants_Fields.RUNTIME_LOG_LOGSYSTEM_CLASS, "NVelocity.Runtime.Log.NullLogSystem");
-						lazilyInitialisedEngine.SetProperty(RuntimeConstants_Fields.FILE_RESOURCE_LOADER_PATH, Path.Combine(pathMapper.PhysicalApplicationPath, "templates"));
+						lazilyInitialisedEngine.SetProperty(RuntimeConstants_Fields.FILE_RESOURCE_LOADER_PATH, Path.Combine(physicalApplicationPathProvider.PhysicalApplicationPath, "templates"));
 						lazilyInitialisedEngine.SetProperty(RuntimeConstants_Fields.RESOURCE_MANAGER_CLASS, "NVelocity.Runtime.Resource.ResourceManagerImpl");
 						lazilyInitialisedEngine.Init();
 					}

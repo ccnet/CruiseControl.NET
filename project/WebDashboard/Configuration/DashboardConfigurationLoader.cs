@@ -14,14 +14,14 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Configuration
 	public class DashboardConfigurationLoader : IDashboardConfiguration
 	{
 		private readonly ObjectGiverNetReflectorInstantiator instantiator;
-		private readonly IPathMapper pathMapper;
+		private readonly IPhysicalApplicationPathProvider physicalApplicationPathProvider;
 		private static readonly string DashboardConfigAppSettingKey = "DashboardConfigLocation";
 		private static readonly string DefaultDashboardConfigLocation = "dashboard.config";
 		
-		public DashboardConfigurationLoader(ObjectGiverNetReflectorInstantiator instantiator, IPathMapper pathMapper)
+		public DashboardConfigurationLoader(ObjectGiverNetReflectorInstantiator instantiator, IPhysicalApplicationPathProvider physicalApplicationPathProvider)
 		{
 			this.instantiator = instantiator;
-			this.pathMapper = pathMapper;
+			this.physicalApplicationPathProvider = physicalApplicationPathProvider;
 		}
 
 		private IRemoteServicesConfiguration remoteServicesConfiguration;
@@ -69,7 +69,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Configuration
 			}
 			if (! Path.IsPathRooted(path))
 			{
-				path = Path.Combine(pathMapper.PhysicalApplicationPath, path);
+				path = Path.Combine(physicalApplicationPathProvider.PhysicalApplicationPath, path);
 			}
 			return path;
 		}

@@ -13,6 +13,7 @@
     doctype-public="-//W3C//DTD HTML 4.01//EN"
     doctype-system="http://www.w3.org/TR/html4/strict.dtd"
   	indent="yes"/>
+	<xsl:param name="applicationPath"/>
 
 
 	<xsl:template match="/">
@@ -26,12 +27,12 @@
 					if ( eDiv.style.display == "none" )
 					{
 						eDiv.style.display="block";
-						eImg.src="images/arrow_minus_small.gif";
+						eImg.src="<xsl:value-of select="$applicationPath"/>/images/arrow_minus_small.gif";
 				 	}
 					else
 					{
 						eDiv.style.display = "none";
-						eImg.src="images/arrow_plus_small.gif";
+						eImg.src="<xsl:value-of select="$applicationPath"/>/images/arrow_plus_small.gif";
 					}
 				}
 				
@@ -53,12 +54,12 @@
 						{
 							eTr.style.display="block";
 						}
-						eImg.src="images/arrow_minus_small.gif";
+						eImg.src="<xsl:value-of select="$applicationPath"/>/images/arrow_minus_small.gif";
 				 	}
 					else
 					{
 						eTr.style.display = "none";
-						eImg.src="images/arrow_plus_small.gif";
+						eImg.src="<xsl:value-of select="$applicationPath"/>/images/arrow_plus_small.gif";
 					}
 				}
 			</script>
@@ -116,7 +117,7 @@
 						<xsl:text>clickable</xsl:text>
 					</xsl:attribute>
 					
-					<img src="images/arrow_minus_small.gif" alt="Toggle display of Tests contained within this assembly">
+					<img src="{$applicationPath}/images/arrow_minus_small.gif" alt="Toggle display of Tests contained within this assembly">
 						<xsl:attribute name="id">
 							<xsl:text>img-</xsl:text>
 							<xsl:value-of select="$divId" />
@@ -167,7 +168,7 @@
 										<xsl:text>clickable</xsl:text>
 									</xsl:attribute>
 									
-									<img src="images/arrow_plus_small.gif" alt="Toggle display of the tests within this text fixture">
+									<img src="{$applicationPath}/images/arrow_plus_small.gif" alt="Toggle display of the tests within this text fixture">
 										<xsl:attribute name="id">
 											<xsl:text>img-</xsl:text>
 								 			<xsl:value-of select="$testsId" />
@@ -289,13 +290,13 @@
 		
 		<xsl:choose>
 			<xsl:when test="$Executed='False'">
-				<img src="images/fxcop-error.gif" alt="The test wasn't run" width="16" height="16" />
+				<img src="{$applicationPath}/images/fxcop-error.gif" alt="The test wasn't run" width="16" height="16" />
 			</xsl:when>
 			<xsl:when test="$Executed='True' and $Succeeded='False'">
-				<img src="images/fxcop-critical-error.gif" alt="The test failed" width="16" height="16"/>
+				<img src="{$applicationPath}/images/fxcop-critical-error.gif" alt="The test failed" width="16" height="16"/>
 			</xsl:when>
 			<xsl:when test="$Executed='True' and $Succeeded='True'">
-				<img src="images/check.jpg" alt="The test suceeded" width="16" height="16"/>
+				<img src="{$applicationPath}/images/check.jpg" alt="The test suceeded" width="16" height="16"/>
 			</xsl:when>
 		</xsl:choose>
 	</xsl:template>

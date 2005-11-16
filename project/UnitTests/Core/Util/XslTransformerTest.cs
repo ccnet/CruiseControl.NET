@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using NUnit.Framework;
 using ThoughtWorks.CruiseControl.Core;
 using ThoughtWorks.CruiseControl.Core.Util;
@@ -29,9 +30,21 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Util
 			string input = TestData.LogFileContents;
 			string xslfile = TempFileUtil.CreateTempXmlFile(TestFolder, "samplestylesheet.xsl", TestData.StyleSheetContents);
 
-			string output = new XslTransformer().Transform(input, xslfile);
+			string output = new XslTransformer().Transform(input, xslfile, null);
 			Assert.IsNotNull(output);
 			Assert.IsTrue(! String.Empty.Equals(output), "Transform returned no data");
+		}
+
+		[Test]
+		public void ShouldPassThroughXSLTArgs()
+		{
+			string input = TestData.LogFileContents;
+			string xslfile = TempFileUtil.CreateTempXmlFile(TestFolder, "samplestylesheet.xsl", TestData.StyleSheetContentsWithParam);
+
+			Hashtable xsltArgs = new Hashtable();
+			xsltArgs["myParam"] = "myValue";
+			string output = new XslTransformer().Transform(input, xslfile, xsltArgs);
+			Assert.IsTrue(output.IndexOf("myValue") > 0);
 		}
 
 		[ExpectedException(typeof(CruiseControlException))]
@@ -41,7 +54,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Util
 			string input = @"<This is some invalid xml";
 			string xslfile = TempFileUtil.CreateTempXmlFile(TestFolder, "samplestylesheet.xsl", TestData.StyleSheetContents);
 
-			new XslTransformer().Transform(input, xslfile);
+			new XslTransformer().Transform(input, xslfile, null);
 		}
 
 		[ExpectedException(typeof(CruiseControlException))]
@@ -51,7 +64,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Util
 			string logfile = TestData.LogFileContents;
 			string xslfile = "nosuchstylefile";
 
-			new XslTransformer().Transform(logfile, xslfile);			
+			new XslTransformer().Transform(logfile, xslfile, null);			
 		}
 
 		[ExpectedException(typeof(CruiseControlException))]
@@ -60,7 +73,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Util
 		{
 			string logfile = TestData.LogFileContents;;
 			string xslfile = XslFileBadFormat;
-			new XslTransformer().Transform(logfile, xslfile);			
+			new XslTransformer().Transform(logfile, xslfile, null);			
 		}	
 
 		private string XslFileBadFormat

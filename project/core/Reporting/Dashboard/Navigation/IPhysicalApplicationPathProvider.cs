@@ -1,11 +1,10 @@
 namespace ThoughtWorks.CruiseControl.Core.Reporting.Dashboard.Navigation
 {
 	/// <summary>
-	/// Used to (at least) wrap HttpContext.Server.MapPath
+	/// Used to provide where the root directory of the application is hosted on the filesystem
 	/// </summary>
-	public interface IPathMapper
+	public interface IPhysicalApplicationPathProvider
 	{
-		string GetLocalPathFromURLPath(string originalPath);
 		string PhysicalApplicationPath { get; }
 	}
 }

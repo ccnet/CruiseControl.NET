@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Specialized;
 
 namespace ThoughtWorks.CruiseControl.WebDashboard.MVC
@@ -78,15 +79,17 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.MVC
 
 		public string FileNameWithoutExtension
 		{
-			get 
-			{
-				string fileName = request1.FileNameWithoutExtension;
-				if (fileName == null || fileName == string.Empty)
-				{
-					fileName = request2.FileNameWithoutExtension;
-				}
-				return fileName;
-			}
+			get { return request1.FileNameWithoutExtension; }
+		}
+
+		public string[] SubFolders
+		{
+			get { return request1.SubFolders; }
+		}
+
+		public string ApplicationPath
+		{
+			get { return request1.ApplicationPath; }
 		}
 	}
 }

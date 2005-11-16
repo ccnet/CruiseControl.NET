@@ -9,12 +9,14 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.MVC
 		private readonly NameValueCollection map;
 		private readonly string path;
 		private readonly string rawUrl;
+		private readonly string applicationPath;
 
-		public NameValueCollectionRequest(NameValueCollection map, string path, string rawUrl)
+		public NameValueCollectionRequest(NameValueCollection map, string path, string rawUrl, string applicationPath)
 		{
 			this.map = map;
 			this.path = path;
 			this.rawUrl = rawUrl;
+			this.applicationPath = applicationPath;
 		}
 
 		public string FindParameterStartingWith(string prefix)
@@ -95,5 +97,26 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.MVC
 				return path.Substring(lastSlashIndex + 1, lastPeriod - lastSlashIndex - 1);
 			}
 		}
+
+		public string[] SubFolders
+		{
+			get
+			{
+				string relativePath = path.Substring(applicationPath.Length + (applicationPath.EndsWith("/") ? 0 : 1));
+				int lastSlashIndex = relativePath.LastIndexOf('/');
+				if (lastSlashIndex < 0)
+				{
+					return new string[0];
+				}
+
+				return relativePath.Substring(0, lastSlashIndex).Split('/');
+			}
+		}
+
+		public string ApplicationPath
+		{
+			get { return applicationPath; }
+		}
+
 	}
 }

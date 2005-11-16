@@ -15,10 +15,10 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Util
 
 			string input = "myinput";
 
-			delegateMock.ExpectAndReturn("Transform", @"<p>MyFirstOutput<p>",  input, "xslFile1");
-			delegateMock.ExpectAndReturn("Transform", @"<p>MySecondOutput<p>",  input, "xslFile2");
+			delegateMock.ExpectAndReturn("Transform", @"<p>MyFirstOutput<p>",  input, "xslFile1", null);
+			delegateMock.ExpectAndReturn("Transform", @"<p>MySecondOutput<p>",  input, "xslFile2", null);
 
-			Assert.AreEqual(@"<p>MyFirstOutput<p><br/><p>MySecondOutput<p><br/>", transformer.Transform(input, new string[] { "xslFile1", "xslFile2" }));
+			Assert.AreEqual(@"<p>MyFirstOutput<p><br/><p>MySecondOutput<p><br/>", transformer.Transform(input, new string[] { "xslFile1", "xslFile2" }, null));
 			delegateMock.Verify();
 		}
 	}

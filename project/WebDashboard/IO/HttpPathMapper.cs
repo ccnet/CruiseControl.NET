@@ -6,7 +6,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.IO
 	/// <summary>
 	/// Maps paths by using an Http components
 	/// </summary>
-	public class HttpPathMapper : IPathMapper
+	public class HttpPathMapper : IPhysicalApplicationPathProvider
 	{
 		private readonly HttpContext context;
 
