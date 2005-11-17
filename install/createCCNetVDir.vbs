@@ -62,7 +62,8 @@ Function CreateCCNetVDir(webdashboardInstallDir)
 
 	ccnetVDir.AppCreate2 1
 	ccnetVDir.AccessRead = True
-	ccnetVDir.AccessExecute = True
+	ccnetVDir.AccessScript = True
+	' ccnetVDir.AccessNoRemoteExecute = True
 	ccnetVDir.AppFriendlyName = "ccnet"
 	ccnetVDir.KeyType = "IisWebVirtualDir"
         ccnetVDir.DefaultDoc = "default.aspx"
