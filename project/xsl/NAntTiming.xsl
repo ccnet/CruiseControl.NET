@@ -1,7 +1,6 @@
 <?xml version="1.0"?>
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0">
     <xsl:output method="html"/>
-    <xsl:param name="applicationPath"/>
 
     <xsl:template match="/">
 		<script type="text/javascript">
@@ -13,12 +12,12 @@
 				if ( eDiv.style.display == "none" )
 				{
 					eDiv.style.display="block";
-					eImg.src="<xsl:value-of select="$applicationPath"/>/images/arrow_minus_small.gif";
+					eImg.src="images/arrow_minus_small.gif";
 				}
 				else
 				{
 					eDiv.style.display = "none";
-					eImg.src="<xsl:value-of select="$applicationPath"/>/images/arrow_plus_small.gif";
+					eImg.src="images/arrow_plus_small.gif";
 				}
 			}
 		</script>
@@ -57,7 +56,7 @@
 				<thead>
 					<tr>
 						<th align="left">Target</th>
-						<th align="right">Duration (in seconds)</th>
+						<th align="right">Duration</th>
 					</tr>
 				</thead>
 				<tbody>
@@ -75,13 +74,14 @@
 				<xsl:variable name="divId">
 						<xsl:value-of select="generate-id()" />
 				</xsl:variable>
-				<img src="{$applicationPath}/images/arrow_plus_small.gif" alt="Toggle to see tasks in this target">
+				<img src="images/arrow_plus_small.gif" alt="Toggle to see tasks in this target">
 					<xsl:attribute name="id">
 						<xsl:text>img-</xsl:text>
 						<xsl:value-of select="$divId" />
 					</xsl:attribute>
 					<xsl:attribute name="onclick">toggleDiv('img-<xsl:value-of select="$divId" />','<xsl:value-of select="$divId" />')</xsl:attribute>
 				</img>&#0160;
+				<xsl:for-each select="ancestor::target"><xsl:value-of select="@name" />/</xsl:for-each>
 				<xsl:value-of select="@name" />
 				<div>
 					<xsl:attribute name="id">
@@ -97,12 +97,21 @@
 					</ul>
 				</div>
 			</td>
-			<td valign="top" align="right"><xsl:value-of select="format-number(duration div 1000,'##0.00')" /></td>
+			<td valign="top" align="right">
+				<xsl:apply-templates select="duration" />
+			</td>
 		</tr>
 	</xsl:template>
 	
 	<xsl:template match="task">
-		<xsl:variable name="duration" select="format-number(duration div 1000,'##0.00')" />
-		<li><xsl:value-of select="@name" /> - <xsl:value-of select="$duration" /> seconds</li>
+		<li><xsl:value-of select="@name" /> - <xsl:apply-templates select="duration" /></li>
+	</xsl:template>
+
+	<xsl:template match="duration">
+		<xsl:variable name="hours" select="floor(node() div 3600000)" />
+		<xsl:variable name="minutes" select="floor((node() mod 3600000) div 60000)" />
+		<xsl:variable name="seconds" select="(node() mod 60000) div 1000" />
+		<xsl:if test="$hours > 0"><xsl:value-of select="$hours" />:</xsl:if>
+		<xsl:value-of select="format-number($minutes,'00')" />:<xsl:value-of select="format-number($seconds,'00.00')"/>
 	</xsl:template>
 </xsl:stylesheet>
