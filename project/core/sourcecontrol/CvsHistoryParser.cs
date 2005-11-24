@@ -45,7 +45,6 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 
 		private string currentLine;
 		private string workingFileName;
-		private Regex dateLineRegex = new Regex(@"date:\s+(?<date>\S+)\s+(?<time>\S+)\s*(?<timezone>\S*);\s+author:\s+(?<author>.*);\s+state:\s+(?<state>.*);(\s+lines:\s+\+(?<line1>\d+)\s+-(?<line2>\d+))?");
 
 		public Modification[] Parse(TextReader cvsLog, DateTime from, DateTime to)
 		{
@@ -122,7 +121,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 				modification.FolderName = ParseFolderName(workingFileName);
 
 				currentLine = reader.ReadLine();
-				modification.Comment = ParseComment(reader);				
+				modification.Comment = ParseComment(reader);
 			}
 			return modification;
 		}
@@ -137,7 +136,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			{
 				if (message.Length > 0)
 				{
-					message.Append(Environment.NewLine) ;
+					message.Append(Environment.NewLine);
 				}
 				message.Append(currentLine);
 
@@ -164,11 +163,13 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			return folderName;
 		}
 
+		private Regex dateLineRegex = new Regex(@"date:\s+(?<date>\S+)\s+(?<time>\S+)\s*(?<timezone>\S*);\s+author:\s+(?<author>.*);\s+state:\s+(?<state>\S*);(\s+lines:\s+\+(?<line1>\d+)\s+-(?<line2>\d+))?");
+
 		private void ParseDateLine(Modification modification, string dateLine)
 		{
+			Match match = dateLineRegex.Match(dateLine);
 			try
 			{
-				Match match = dateLineRegex.Match(dateLine);
 				modification.ModifiedTime = ParseModifiedTime(match.Groups["date"].Value, match.Groups["time"].Value);
 				modification.UserName = match.Groups["author"].Value;
 				modification.Type = ParseType(match.Groups["state"].Value, match.Groups["line1"].Value);

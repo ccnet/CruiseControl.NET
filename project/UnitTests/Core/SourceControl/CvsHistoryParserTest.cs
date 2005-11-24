@@ -108,6 +108,16 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 			Assert.AreEqual(0, mods.Length);			
 		}
 
+		[Test]
+		public void VerifyModifiedFile() 
+		{
+			TextReader input = new StringReader(CvsMother.CvsModifiedFileExample());
+			Modification[] mods = cvs.Parse(input, CvsMother.OLDEST_ENTRY, CvsMother.NEWEST_ENTRY);
+			Assert.AreEqual(1, mods.Length);
+			Assert.AreEqual("modified", mods[0].Type);
+		}
+		
+
 		private DateTime CreateDate(string dateString) 
 		{
 			DateTime date = DateTime.ParseExact(dateString,"yyyy/MM/dd HH:mm:ss z",DateTimeFormatInfo.GetInstance(CultureInfo.InvariantCulture));

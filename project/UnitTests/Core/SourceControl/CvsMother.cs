@@ -333,5 +333,29 @@ branches:  1.1.2;
 file DateLabeller.cs was initially added on branch RB_1_0.
 =============================================================================";
 		}
+
+		public static string CvsModifiedFileExample()
+		{
+			return @"RCS file: /var/lib/cvs/test/file.txt,v
+Working file: test/file.txt
+head: 1.49
+branch:
+locks: strict
+access list:
+symbolic names:
+	TEST2: 1.47.0.2
+	TEST: 1.49
+	test/: 1.44
+	start: 1.1.1.1
+	cb: 1.1.1
+keyword substitution: kv
+total revisions: 52; selected revisions: 1
+description:
+----------------------------
+revision 1.49
+date: 2005/11/19 18:15:09;  author: abc;  state: Exp;  lines: +2 -1;  kopt: kv;  commitid: 1b3d437f6bac72b4;  filename: abc.c;
+Test commit
+=============================================================================";
+		}
 	}
 }
