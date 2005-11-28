@@ -13,7 +13,6 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Monitoring
 		public void ThrowsWhenParsingXmlThatDoesNotContainProjectEntry()
 		{
 			DashboardXmlParser parser = new DashboardXmlParser();
-			
 			parser.ExtractAsProjectStatus("<Projects />", "projectName");
 		}
 		
@@ -35,8 +34,6 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Monitoring
 			Assert.AreEqual(IntegrationStatus.Success, status.BuildStatus);
 			Assert.AreEqual("13", status.LastBuildLabel);
 			Assert.AreEqual("http://mrtickle/ccnet/", status.WebURL);
-			
 		}
-
 	}
 }

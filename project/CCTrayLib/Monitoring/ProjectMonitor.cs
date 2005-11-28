@@ -72,7 +72,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
 				if (status == null)
 					return ProjectState.NotConnected;
 
-				if (status.Activity == ProjectActivity.Building)
+				if (status.Activity.IsBuilding())
 					return ProjectState.Building;
 
 				if (status.BuildStatus == IntegrationStatus.Success)
@@ -141,7 +141,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
 
 		private void CheckForBuildStart(ProjectStatus lastProjectStatus, ProjectStatus newProjectStatus)
 		{
-			if (lastProjectStatus.Activity != ProjectActivity.Building && newProjectStatus.Activity == ProjectActivity.Building)
+			if (! lastProjectStatus.Activity.IsBuilding() && newProjectStatus.Activity.IsBuilding())
 			{
 				buildDurationTracker.OnBuildStart();
 			}

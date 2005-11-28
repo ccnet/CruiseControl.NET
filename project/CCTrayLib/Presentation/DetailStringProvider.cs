@@ -16,7 +16,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 				return string.Format("Error: {0}", projectStatus.ConnectException.Message);
 			}
 
-			if (projectStatus.Activity == ProjectActivity.Sleeping)
+			if (projectStatus.Activity.IsSleeping())
 			{
 				if (projectStatus.NextBuildTime == DateTime.MaxValue)
 					return "Project is not automatically triggered";

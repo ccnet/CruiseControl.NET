@@ -53,7 +53,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
 						return new ProjectStatus(
 							ProjectIntegratorState.Running, 
 							(IntegrationStatus) Enum.Parse(typeof(IntegrationStatus), project.lastBuildStatus),
-							(ProjectActivity) Enum.Parse(typeof(ProjectActivity), project.activity),
+							new ProjectActivity(project.activity),
 							project.name, 
 							project.webUrl,
 							project.lastBuildTime,
