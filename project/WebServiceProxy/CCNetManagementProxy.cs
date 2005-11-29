@@ -39,7 +39,7 @@ namespace ThoughtWorks.CruiseControl.WebServiceProxy
 			Generated.ProjectStatus serviceStatus = Service.GetProjectStatus();
 			return new ProjectStatus [] {new ProjectStatus((ProjectIntegratorState) serviceStatus.Status, 
 											(IntegrationStatus) serviceStatus.BuildStatus, 
-											(ProjectActivity) serviceStatus.Activity,
+											new ProjectActivity(serviceStatus.Activity.ToString()),
 											serviceStatus.Name,
 											serviceStatus.WebURL,
 											serviceStatus.LastBuildDate,
