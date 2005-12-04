@@ -40,7 +40,7 @@ namespace ThoughtWorks.CruiseControl.Core
 		private ITask[] tasks = new ITask[0];
 		private ITask[] publishers = new ITask[] {new XmlLogPublisher()};
 		private ProjectActivity currentActivity = ProjectActivity.Sleeping;
-		private IStateManager state = new FileStateManager();
+		private IStateManager state = new FileStateManager(new SystemIoFileSystem());
 		private IIntegrationResultManager integrationResultManager;
 		private bool publishExceptions = true;
 		private IIntegratable integratable;

@@ -3,7 +3,7 @@ using NMock;
 using NMock.Constraints;
 using NUnit.Framework;
 using ThoughtWorks.CruiseControl.Core;
-using ThoughtWorks.CruiseControl.Core.tasks;
+using ThoughtWorks.CruiseControl.Core.Tasks;
 using ThoughtWorks.CruiseControl.Core.Util;
 using ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol;
 using ThoughtWorks.CruiseControl.UnitTests.Core.Util;

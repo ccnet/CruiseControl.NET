@@ -1,5 +1,6 @@
 using Exortech.NetReflector;
 using ThoughtWorks.CruiseControl.Core.State;
+using ThoughtWorks.CruiseControl.Core.Util;
 
 namespace ThoughtWorks.CruiseControl.Core.Label
 {
@@ -8,7 +9,7 @@ namespace ThoughtWorks.CruiseControl.Core.Label
 	{
 		private readonly IStateManager stateManager;
 
-		public StateFileLabeller() : this(new FileStateManager())
+		public StateFileLabeller() : this(new FileStateManager(new SystemIoFileSystem()))
 		{}
 
 		public StateFileLabeller(IStateManager stateManager)

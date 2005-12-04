@@ -16,15 +16,18 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 			{
 				foreach (string subdir in Directory.GetDirectories(filename))
 				{
-					DeleteDirectoryEvenIfReadOnly(Path.Combine(filename,subdir));
+					DeleteDirectoryEvenIfReadOnly(Path.Combine(filename, subdir));
 				}
+
 				foreach (string file in Directory.GetFiles(filename))
 				{
-					DeleteFileEvenIfReadOnly(Path.Combine(filename,file));
+					DeleteFileEvenIfReadOnly(Path.Combine(filename, file));
 				}
+
 				File.SetAttributes(filename, FileAttributes.Normal);
 				Directory.Delete(filename);
 			}
+
 		}
 
 		public void DeleteFileEvenIfReadOnly(string filename)

@@ -1239,6 +1239,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "util\Utf8StringWriter.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "util\WildCardPath.cs"
                     SubType = "Code"
                     BuildAction = "Compile"

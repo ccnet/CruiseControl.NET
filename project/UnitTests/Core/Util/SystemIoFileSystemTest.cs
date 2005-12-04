@@ -31,9 +31,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Util
 		public void ShouldCopyFileToDirectory()
 		{
 			TempFileUtil.CreateTempFile(tempDir, "File1");
-
 			new SystemIoFileSystem().Copy(Path.Combine(tempDir, "File1"), tempSubDir);
-
 			Assert.IsTrue(File.Exists(Path.Combine(tempSubDir, "File1")));
 		}
 
@@ -41,21 +39,16 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Util
 		public void ShouldCopyFileToFile()
 		{
 			TempFileUtil.CreateTempFile(tempDir, "File1");
-
 			new SystemIoFileSystem().Copy(Path.Combine(tempDir, "File1"), Path.Combine(tempDir, "File2"));
-
 			Assert.IsTrue(File.Exists(Path.Combine(tempDir, "File2")));
 		}
-
 
 		[Test]
 		public void ShouldAllowOverwrites()
 		{
 			TempFileUtil.CreateTempFile(tempDir, "File1");
 			TempFileUtil.CreateTempFile(tempDir, "File2");
-
 			new SystemIoFileSystem().Copy(Path.Combine(tempDir, "File1"), Path.Combine(tempDir, "File2"));
-
 			Assert.IsTrue(File.Exists(Path.Combine(tempDir, "File2")));
 		}
 
@@ -65,7 +58,6 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Util
 			string file1 = TempFileUtil.CreateTempFile(tempDir, "File1");
 			string file2 = TempFileUtil.CreateTempFile(tempDir, "File2");
 			File.SetAttributes(file2, FileAttributes.ReadOnly);
-
 			new SystemIoFileSystem().Copy(file1, file2);
 
 			Assert.IsTrue(File.Exists(Path.Combine(tempDir, "File2")));
@@ -76,7 +68,6 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Util
 		{
 			TempFileUtil.CreateTempFile(tempDir, "File1");
 			TempFileUtil.CreateTempFile(tempSubDir, "File2");
-
 			new SystemIoFileSystem().Copy(tempDir, tempOtherDir);
 
 			Assert.IsTrue(File.Exists(Path.Combine(tempOtherDir, "File1")));
@@ -94,6 +85,26 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Util
 			{
 				Assert.AreEqual("bar", reader.ReadToEnd());
 			}
+		}
+
+		[Test]
+		public void ShouldSaveUnicodeToFile()
+		{
+			string tempFile = Path.Combine(tempDir, "foo.txt");
+			Assert.IsFalse(File.Exists(tempFile));
+			new SystemIoFileSystem().Save(tempFile, "hi there? håkan! \u307b");
+			Assert.IsTrue(File.Exists(tempFile));
+			using (StreamReader reader = File.OpenText(tempFile))
+			{
+				Assert.AreEqual("hi there? håkan! \u307b", reader.ReadToEnd());
+			}
+		}
+
+		[Test]
+		public void LoadReadsFileContentCorrectly()
+		{
+			TempFileUtil.CreateTempFile(tempDir, "foo.txt", "bar");
+			Assert.AreEqual("bar", new SystemIoFileSystem().Load(Path.Combine(tempDir, "foo.txt")).ReadToEnd());
 		}
 	}
 }
