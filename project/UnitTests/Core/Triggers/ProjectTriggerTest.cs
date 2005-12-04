@@ -155,7 +155,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Triggers
 		{
 			string xml = @"<projectTrigger><project>Foo</project></projectTrigger>";
 			trigger = (ProjectTrigger) NetReflector.Read(xml);
-			Assert.AreEqual(ProjectTrigger.DefaultServerUri, trigger.ServerUri);
+			Assert.AreEqual("tcp://localhost:21234/CruiseManager.rem", trigger.ServerUri);
 			Assert.AreEqual("Foo", trigger.Project);
 			Assert.IsNotNull(trigger.InnerTrigger);
 			Assert.AreEqual(IntegrationStatus.Success, trigger.TriggerStatus);
