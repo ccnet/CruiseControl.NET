@@ -686,6 +686,16 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Core\SourceControl\AlienbrainHistoryParserTest.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Core\SourceControl\AlienbrainTest.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Core\SourceControl\ClearCaseHistoryParserTest.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
