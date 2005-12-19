@@ -43,15 +43,47 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 		private ICCTrayMultiConfiguration configuration;
 		private ColumnHeader colLastBuildTime;
 		private bool systemShutdownInProgress;
+		private PersistWindowState windowState;
 
 		public MainForm(ICCTrayMultiConfiguration configuration)
 		{
 			this.configuration = configuration;
 
 			InitializeComponent();
+			HookPersistentWindowState();
 			CreateController();
 
 			controller.StartMonitoring();
+		}
+
+		private void HookPersistentWindowState()
+		{
+			windowState = new PersistWindowState();
+			windowState.Parent = this;
+			// set registry path in HKEY_CURRENT_USER
+			windowState.RegistryPath = @"Software\ThoughtWorks\CCTray";
+			windowState.LoadState += new WindowStateEventHandler(OnLoadState);
+			windowState.SaveState += new WindowStateEventHandler(OnSaveState);
+		}
+
+		private void OnLoadState(object sender, WindowStateEventArgs e)
+		{
+			// get additional state information from registry
+			colProject.Width = (int) e.Key.GetValue("ProjectColumnWidth", 160);
+			colActivity.Width = (int) e.Key.GetValue("ActivityColumnWidth", 132);
+			colDetail.Width = (int) e.Key.GetValue("DetailColumnWidth", 250);
+			colLastBuildLabel.Width = (int) e.Key.GetValue("LastBuildLabelColumnWidth", 120);
+			colLastBuildTime.Width = (int) e.Key.GetValue("LastBuildTimeColumnWidth", 130);
+		}
+
+		private void OnSaveState(object sender, WindowStateEventArgs e)
+		{
+			// save additional state information to registry
+			e.Key.SetValue("ProjectColumnWidth", colProject.Width);
+			e.Key.SetValue("ActivityColumnWidth", colActivity.Width);
+			e.Key.SetValue("DetailColumnWidth", colDetail.Width);
+			e.Key.SetValue("LastBuildLabelColumnWidth", colLastBuildLabel.Width);
+			e.Key.SetValue("LastBuildTimeColumnWidth", colLastBuildTime.Width);
 		}
 
 		private void CreateController()
@@ -93,7 +125,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 		private void InitializeComponent()
 		{
 			this.components = new System.ComponentModel.Container();
-			System.Resources.ResourceManager resources = new System.Resources.ResourceManager(typeof(MainForm));
+			System.Resources.ResourceManager resources = new System.Resources.ResourceManager(typeof (MainForm));
 			this.lvProjects = new System.Windows.Forms.ListView();
 			this.colProject = new System.Windows.Forms.ColumnHeader();
 			this.colActivity = new System.Windows.Forms.ColumnHeader();
@@ -127,14 +159,18 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 			// 
 			// lvProjects
 			// 
-			this.lvProjects.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
-																						 this.colProject,
-																						 this.colActivity,
-																						 this.colDetail,
-																						 this.colLastBuildLabel,
-																						 this.colLastBuildTime});
+			this.lvProjects.Columns.AddRange(new System.Windows.Forms.ColumnHeader[]
+			                                 	{
+			                                 		this.colProject,
+			                                 		this.colActivity,
+			                                 		this.colDetail,
+			                                 		this.colLastBuildLabel,
+			                                 		this.colLastBuildTime
+			                                 	});
 			this.lvProjects.ContextMenu = this.projectContextMenu;
 			this.lvProjects.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.lvProjects.FullRowSelect = true;
+			this.lvProjects.HideSelection = false;
 			this.lvProjects.LargeImageList = this.largeIconList;
 			this.lvProjects.Location = new System.Drawing.Point(0, 0);
 			this.lvProjects.MultiSelect = false;
@@ -174,9 +210,11 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 			// 
 			// projectContextMenu
 			// 
-			this.projectContextMenu.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
-																							   this.mnuForce,
-																							   this.mnuWebPage});
+			this.projectContextMenu.MenuItems.AddRange(new System.Windows.Forms.MenuItem[]
+			                                           	{
+			                                           		this.mnuForce,
+			                                           		this.mnuWebPage
+			                                           	});
 			// 
 			// mnuForce
 			// 
@@ -202,17 +240,21 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 			// 
 			// mainMenu
 			// 
-			this.mainMenu.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
-																					 this.menuFile,
-																					 this.mnuView});
+			this.mainMenu.MenuItems.AddRange(new System.Windows.Forms.MenuItem[]
+			                                 	{
+			                                 		this.menuFile,
+			                                 		this.mnuView
+			                                 	});
 			// 
 			// menuFile
 			// 
 			this.menuFile.Index = 0;
-			this.menuFile.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
-																					 this.mnuFilePreferences,
-																					 this.menuItem3,
-																					 this.menuFileExit});
+			this.menuFile.MenuItems.AddRange(new System.Windows.Forms.MenuItem[]
+			                                 	{
+			                                 		this.mnuFilePreferences,
+			                                 		this.menuItem3,
+			                                 		this.menuFileExit
+			                                 	});
 			this.menuFile.Text = "&File";
 			// 
 			// mnuFilePreferences
@@ -235,10 +277,12 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 			// mnuView
 			// 
 			this.mnuView.Index = 1;
-			this.mnuView.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
-																					this.mnuViewIcons,
-																					this.mnuViewList,
-																					this.mnuViewDetails});
+			this.mnuView.MenuItems.AddRange(new System.Windows.Forms.MenuItem[]
+			                                	{
+			                                		this.mnuViewIcons,
+			                                		this.mnuViewList,
+			                                		this.mnuViewDetails
+			                                	});
 			this.mnuView.Text = "&View";
 			this.mnuView.Popup += new System.EventHandler(this.mnuView_Popup);
 			// 
@@ -271,11 +315,13 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 			// 
 			// mnuTrayContextMenu
 			// 
-			this.mnuTrayContextMenu.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
-																							   this.mnuTraySettings,
-																							   this.mnuShow,
-																							   this.menuItem5,
-																							   this.mnuTrayExit});
+			this.mnuTrayContextMenu.MenuItems.AddRange(new System.Windows.Forms.MenuItem[]
+			                                           	{
+			                                           		this.mnuTraySettings,
+			                                           		this.mnuShow,
+			                                           		this.menuItem5,
+			                                           		this.mnuTrayExit
+			                                           	});
 			// 
 			// mnuTraySettings
 			// 
@@ -327,17 +373,17 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 			this.ClientSize = new System.Drawing.Size(892, 305);
 			this.Controls.Add(this.lvProjects);
 			this.Controls.Add(this.panel1);
-			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+			this.Icon = ((System.Drawing.Icon) (resources.GetObject("$this.Icon")));
 			this.MaximizeBox = false;
 			this.Menu = this.mainMenu;
 			this.MinimizeBox = false;
 			this.Name = "MainForm";
 			this.ShowInTaskbar = false;
+			this.StartPosition = System.Windows.Forms.FormStartPosition.Manual;
 			this.Text = "CruiseControl.NET";
 			this.Closing += new System.ComponentModel.CancelEventHandler(this.MainForm_Closing);
 			this.panel1.ResumeLayout(false);
 			this.ResumeLayout(false);
-
 		}
 
 		#endregion
@@ -411,7 +457,6 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 					btnForceBuild.DataBindings.Clear();
 					CreateController();
 				}
-
 			}
 			finally
 			{
@@ -517,10 +562,12 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 			}
 
 			public ListViewItemComparer() : this(0, true)
-			{}
+			{
+			}
 
 			public ListViewItemComparer(int column) : this(column, true)
-			{}
+			{
+			}
 
 			public ListViewItemComparer(int column, bool ascending)
 			{

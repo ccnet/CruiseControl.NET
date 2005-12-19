@@ -446,6 +446,16 @@
                     BuildAction = "EmbeddedResource"
                 />
                 <File
+                    RelPath = "Presentation\PersistWindowState.cs"
+                    SubType = "Component"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Presentation\PersistWindowState.resx"
+                    DependentUpon = "PersistWindowState.cs"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
                     RelPath = "Presentation\ProjectConfigurationListViewItemAdaptor.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -484,6 +494,11 @@
                     RelPath = "Presentation\TrayIcon.resx"
                     DependentUpon = "TrayIcon.cs"
                     BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "Presentation\WindowStateEventArgs.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
                 />
                 <File
                     RelPath = "X10\ILampController.cs"
