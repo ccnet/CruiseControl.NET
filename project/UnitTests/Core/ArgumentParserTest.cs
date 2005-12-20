@@ -52,7 +52,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 			Assert.AreEqual(true, parser.ShowHelp);
 		}
 
-		[Test]
+		[Test, Ignore("This test has initimate knowledge of the logging implementation; it should not")]
 		public void InstantiateWithMoreInvalidArguments()
 		{
 			ArgumentParser parser = new ArgumentParser(new string[] { "-foo:bar" });

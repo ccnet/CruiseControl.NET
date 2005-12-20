@@ -27,7 +27,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 			TempFileUtil.DeleteTempDir("ConsoleRunnerTest");
 		}
 
-		[Test]
+		[Test, Ignore("This test has initimate knowledge of the logging implementation; it should not")]
 		public void ShowHelp()
 		{
 			ArgumentParser parser = new ArgumentParser(new string[] { "-remoting:on", "-help" });
