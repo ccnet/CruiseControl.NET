@@ -4,6 +4,7 @@ using Exortech.NetReflector;
 using NMock;
 using NMock.Constraints;
 using NUnit.Framework;
+using ThoughtWorks.CruiseControl.Core;
 using ThoughtWorks.CruiseControl.Core.Sourcecontrol;
 using ThoughtWorks.CruiseControl.Core.Util;
 
@@ -12,17 +13,47 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 	[TestFixture]
 	public class MksTest : CustomAssertion
 	{
+		private static DateTime FROM = DateTime.Now.AddMinutes(-10);
+		private static DateTime TO = DateTime.Now;
+
 		private string sandboxRoot;
+
+		private Mks mks;
+		private IHistoryParser mockHistoryParser;
+		private Mock mockHistoryParserWrapper;
+		private Mock mockExecutorWrapper;
+		private ProcessExecutor mockProcessExecutor;
+		private Mock mockIntegrationResult;
+		private IIntegrationResult integrationResult;
+		private Mock mksHistoryParserWrapper;
+		private MksHistoryParser mksHistoryParser;
 
 		[SetUp]
 		public void SetUp()
 		{
 			sandboxRoot = TempFileUtil.CreateTempDir("MksSandBox");
+
+			mockHistoryParserWrapper = new DynamicMock(typeof (IHistoryParser));
+			mockHistoryParser = (IHistoryParser) mockHistoryParserWrapper.MockInstance;
+
+			mksHistoryParserWrapper = new DynamicMock(typeof (MksHistoryParser));
+			mksHistoryParser = (MksHistoryParser) mksHistoryParserWrapper.MockInstance;
+
+			mockExecutorWrapper = new DynamicMock(typeof (ProcessExecutor));
+			mockProcessExecutor = (ProcessExecutor) mockExecutorWrapper.MockInstance;
+
+			mockIntegrationResult = new DynamicMock(typeof (IIntegrationResult));
+			integrationResult = (IIntegrationResult) mockIntegrationResult.MockInstance;
 		}
 
 		[TearDown]
 		public void TearDown()
 		{
+			mockExecutorWrapper.Verify();
+			mockHistoryParserWrapper.Verify();
+			mksHistoryParserWrapper.Verify();
+			mockIntegrationResult.Verify();
+
 			TempFileUtil.DeleteTempDir("MksSandBox");
 		}
 
@@ -38,6 +69,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 						  <sandboxroot>{0}</sandboxroot>
 						  <sandboxfile>myproject.pj</sandboxfile>
 						  <autoGetSource>true</autoGetSource>
+						  <checkpointOnSuccess>true</checkpointOnSuccess>
 					  </sourceControl>
 				 ", sandboxRoot);
 		}
@@ -45,16 +77,18 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 		[Test]
 		public void CheckDefaults()
 		{
-			Mks mks = new Mks();
-			Assert.AreEqual(@"si.exe", mks.Executable);
-			Assert.AreEqual(8722, mks.Port);
-			Assert.AreEqual(false, mks.AutoGetSource);
+			Mks defalutMks = new Mks();
+			Assert.AreEqual(@"si.exe", defalutMks.Executable);
+			Assert.AreEqual(8722, defalutMks.Port);
+			Assert.AreEqual(false, defalutMks.AutoGetSource);
+			Assert.AreEqual(false, defalutMks.CheckpointOnSuccess);
 		}
 
 		[Test]
 		public void ValuePopulation()
 		{
-			Mks mks = CreateMks(CreateSourceControlXml(), null, null);
+			mks = CreateMks(CreateSourceControlXml(), null, null);
+
 			Assert.AreEqual(@"..\bin\si.exe", mks.Executable);
 			Assert.AreEqual(@"hostname", mks.Hostname);
 			Assert.AreEqual(8722, mks.Port);
@@ -63,37 +97,116 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 			Assert.AreEqual(sandboxRoot, mks.SandboxRoot);
 			Assert.AreEqual(@"myproject.pj", mks.SandboxFile);
 			Assert.AreEqual(true, mks.AutoGetSource);
+			Assert.AreEqual(true, mks.CheckpointOnSuccess);
 		}
 
 		[Test]
 		public void GetSource()
 		{
-			IHistoryParser mockHistoryParser = (IHistoryParser) new DynamicMock(typeof (IHistoryParser)).MockInstance;
-			DynamicMock mockExecutorWrapper = new DynamicMock(typeof (ProcessExecutor));
-			mockExecutorWrapper.ExpectAndReturn("Execute", new ProcessResult(null, null, 0, false), new IsTypeOf(typeof (ProcessInfo)));
-			ProcessExecutor mockProcessExecutor = (ProcessExecutor) mockExecutorWrapper.MockInstance;
+			string expectedCommand = string.Format(@"resync --overwriteChanged --restoreTimestamp -R -S {0}\myproject.pj --user=CCNetUser --password=CCNetPassword --quiet", sandboxRoot);
+			ProcessInfo expectedProcessInfo = ExpectedProcessInfo(expectedCommand);
+			mockExecutorWrapper.ExpectAndReturn("Execute", new ProcessResult(null, null, 0, false), expectedProcessInfo);
 
-			Mks mks = CreateMks(CreateSourceControlXml(), mockHistoryParser, mockProcessExecutor);
+			mks = CreateMks(CreateSourceControlXml(), mockHistoryParser, mockProcessExecutor);
 			mks.GetSource(null);
-			mockExecutorWrapper.Verify();
 		}
 
 		[Test]
-		public void GetModifications()
+		public void CheckpointSourceOnSuccessfulBuild()
 		{
-			DateTime from = DateTime.Now.Subtract(new TimeSpan(15000000));
-			DateTime to = DateTime.Now;
-			DynamicMock mockHistoryParserWrapper = new DynamicMock(typeof (IHistoryParser));
-			mockHistoryParserWrapper.Expect("Parse", new IsTypeOf(typeof (TextReader)), from, to);
-			IHistoryParser mockHistoryParser = (IHistoryParser) mockHistoryParserWrapper.MockInstance;
-			DynamicMock mockExecutorWrapper = new DynamicMock(typeof (ProcessExecutor));
-			mockExecutorWrapper.ExpectAndReturn("Execute", new ProcessResult(null, null, 0, false), new IsTypeOf(typeof (ProcessInfo)));
-			ProcessExecutor mockProcessExecutor = (ProcessExecutor) mockExecutorWrapper.MockInstance;
+			string expectedCommand = string.Format(@"checkpoint -d ""Cruise Control.Net Build - 20"" -L ""Build - 20"" -R -S {0}\myproject.pj --user=CCNetUser --password=CCNetPassword --quiet", sandboxRoot);
+			ProcessInfo expectedProcessInfo = ExpectedProcessInfo(expectedCommand);
+			mockExecutorWrapper.ExpectAndReturn("Execute", new ProcessResult(null, null, 0, false), expectedProcessInfo);
+			mockIntegrationResult.ExpectAndReturn("Succeeded", true);
+			mockIntegrationResult.ExpectAndReturn("Label", "20");
 
-			Mks mks = CreateMks(CreateSourceControlXml(), mockHistoryParser, mockProcessExecutor);
-			mks.GetModifications(IntegrationResultMother.CreateSuccessful(from), IntegrationResultMother.CreateSuccessful(to));
-			mockHistoryParserWrapper.Verify();
-			mockExecutorWrapper.Verify();
+			mks = CreateMks(CreateSourceControlXml(), mockHistoryParser, mockProcessExecutor);
+			mks.LabelSourceControl(integrationResult);
+		}
+
+		[Test]
+		public void CheckpointSourceOnUnSuccessfulBuild()
+		{
+			mockExecutorWrapper.ExpectNoCall("Execute", typeof (ProcessInfo));
+			mockIntegrationResult.ExpectAndReturn("Succeeded", false);
+			mockIntegrationResult.ExpectNoCall("Label", typeof (string));
+
+			mks = CreateMks(CreateSourceControlXml(), mockHistoryParser, mockProcessExecutor);
+			mks.LabelSourceControl(integrationResult);
+		}
+
+		[Test]
+		public void GetModificationsCallsParseOnHistoryParser()
+		{
+			mksHistoryParserWrapper.ExpectAndReturn("Parse", new Modification[0], new IsTypeOf(typeof (TextReader)), FROM, TO);
+			mksHistoryParserWrapper.ExpectNoCall("ParseMemberInfoAndAddToModification", new Type[] {(typeof (Modification)), typeof (StringReader)});
+			ProcessInfo expectedProcessInfo = ExpectedProcessInfo(string.Format(@"mods -R -S {0}\myproject.pj --user=CCNetUser --password=CCNetPassword --quiet", sandboxRoot));
+			mockExecutorWrapper.ExpectAndReturn("Execute", new ProcessResult(null, null, 0, false), expectedProcessInfo);
+
+			mks = CreateMks(CreateSourceControlXml(), mksHistoryParser, mockProcessExecutor);
+			Modification[] modifications = mks.GetModifications(IntegrationResultMother.CreateSuccessful(FROM), IntegrationResultMother.CreateSuccessful(TO));
+			Assert.AreEqual(0, modifications.Length);
+		}
+
+		[Test]
+		public void GetModificationsCallsParseMemberInfo()
+		{
+			Modification addedModification = ModificationMother.CreateModification("myFile.file", "MyFolder");
+			addedModification.Type = "Added";
+
+			mksHistoryParserWrapper.ExpectAndReturn("Parse", new Modification[] {addedModification}, new IsTypeOf(typeof (TextReader)), FROM, TO);
+			mksHistoryParserWrapper.ExpectAndReturn("ParseMemberInfoAndAddToModification", new Modification[] {addedModification}, new IsTypeOf(typeof (Modification)), new IsTypeOf(typeof (StringReader)));
+			mockExecutorWrapper.ExpectAndReturn("Execute", new ProcessResult("", null, 0, false), new IsTypeOf(typeof (ProcessInfo)));
+
+			string expectedCommand = string.Format(@"memberinfo -S {0}\myproject.pj --user=CCNetUser --password=CCNetPassword --quiet {0}\MyFolder\myFile.file", sandboxRoot);
+			ProcessInfo expectedProcessInfo = ExpectedProcessInfo(expectedCommand);
+			mockExecutorWrapper.ExpectAndReturn("Execute", new ProcessResult(null, null, 0, false), expectedProcessInfo);
+
+			mks = CreateMks(CreateSourceControlXml(), mksHistoryParser, mockProcessExecutor);
+			Modification[] modifications = mks.GetModifications(IntegrationResultMother.CreateSuccessful(FROM), IntegrationResultMother.CreateSuccessful(TO));
+			Assert.AreEqual(1, modifications.Length);
+		}
+
+		[Test]
+		public void GetModificationsCallsMemberInfoForNonDeletedModifications()
+		{
+			Modification addedModification = ModificationMother.CreateModification("myFile.file", "MyFolder");
+			addedModification.Type = "Added";
+
+			Modification modifiedModification = ModificationMother.CreateModification("myFile.file", "MyFolder");
+			modifiedModification.Type = "Modified";
+
+			Modification deletedModification = ModificationMother.CreateModification("myFile.file", "MyFolder");
+			deletedModification.Type = "Deleted";
+
+			mksHistoryParserWrapper.ExpectAndReturn("Parse", new Modification[] {addedModification, modifiedModification, deletedModification}, new IsTypeOf(typeof (TextReader)), FROM, TO);
+			mksHistoryParserWrapper.ExpectAndReturn("ParseMemberInfoAndAddToModification", null, addedModification, new IsTypeOf(typeof(StringReader)));
+			mksHistoryParserWrapper.ExpectAndReturn("ParseMemberInfoAndAddToModification", null, modifiedModification, new IsTypeOf(typeof(StringReader)));
+			mockExecutorWrapper.SetupResult("Execute", new ProcessResult("", null, 0, false), new Type[]{typeof (ProcessInfo)});
+
+			mks = CreateMks(CreateSourceControlXml(), mksHistoryParser, mockProcessExecutor);
+			Modification[] modifications = mks.GetModifications(IntegrationResultMother.CreateSuccessful(FROM), IntegrationResultMother.CreateSuccessful(TO));
+			Assert.AreEqual(3, modifications.Length);
+		}
+
+		[Test]
+		public void GetModificationsFiltersByModifiedTimeIfCheckpointOnSuccessIsFalse()
+		{
+			Modification modificationBeforePreviousIntegration = ModificationMother.CreateModification("ccnet", FROM.AddMinutes(-2));
+			Modification modificationInThisIntegration = ModificationMother.CreateModification("ccnet", TO.AddMinutes(-1));
+			Modification modificationAfterIntegrationStartTime = ModificationMother.CreateModification("myFile.file", TO.AddMinutes(1));
+
+			Modification[] integrationModifications = new Modification[] {modificationBeforePreviousIntegration, modificationInThisIntegration, modificationAfterIntegrationStartTime};
+			mksHistoryParserWrapper.ExpectAndReturn("Parse", integrationModifications, new IsTypeOf(typeof (TextReader)), FROM, TO);
+			mksHistoryParserWrapper.ExpectAndReturn("ParseMemberInfoAndAddToModification", null, modificationBeforePreviousIntegration, new IsTypeOf(typeof(StringReader)));
+			mksHistoryParserWrapper.ExpectAndReturn("ParseMemberInfoAndAddToModification", null, modificationInThisIntegration, new IsTypeOf(typeof(StringReader)));
+			mksHistoryParserWrapper.ExpectAndReturn("ParseMemberInfoAndAddToModification", null, modificationAfterIntegrationStartTime, new IsTypeOf(typeof(StringReader)));
+			mockExecutorWrapper.SetupResult("Execute", new ProcessResult("", null, 0, false), new Type[]{typeof (ProcessInfo)});
+
+			mks = CreateMks(CreateSourceControlXml(), mksHistoryParser, mockProcessExecutor);
+			mks.CheckpointOnSuccess = false;
+			Modification[] modifications = mks.GetModifications(IntegrationResultMother.CreateSuccessful(FROM), IntegrationResultMother.CreateSuccessful(TO));
+			Assert.AreEqual(1, modifications.Length);
 		}
 
 		private Mks CreateMks(string xml, IHistoryParser mockHistoryParser, ProcessExecutor mockExecutor)
@@ -101,6 +214,13 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 			Mks mks = new Mks(mockHistoryParser, mockExecutor);
 			NetReflector.Read(xml, mks);
 			return mks;
+		}
+
+		private ProcessInfo ExpectedProcessInfo(string arguments)
+		{
+			ProcessInfo expectedProcessInfo = new ProcessInfo(@"..\bin\si.exe", arguments);
+			expectedProcessInfo.TimeOut = Timeout.DefaultTimeout.Millis;
+			return expectedProcessInfo;
 		}
 	}
 }
