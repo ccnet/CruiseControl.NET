@@ -75,6 +75,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Triggers
 			mockDateTime.SetupResult("Now", initialDateTimeNow.AddSeconds(trigger.IntervalSeconds));
 			mockHttpWrapper.ExpectAndReturn("GetLastModifiedTimeFor", initialDateTimeNow, new Uri(DefaultUrl), initialDateTimeNow);
 			Assert.AreEqual(BuildCondition.NoBuild, trigger.ShouldRunIntegration());					// no build because url has not changed
+			Assert.AreEqual(initialDateTimeNow.AddSeconds(trigger.IntervalSeconds * 2), trigger.NextBuild);		// should not hammer web server
 			VerifyAll();
 		}
 

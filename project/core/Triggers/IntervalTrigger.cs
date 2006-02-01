@@ -11,7 +11,6 @@ namespace ThoughtWorks.CruiseControl.Core.Triggers
 		public const double DefaultIntervalSeconds = 60;
 		private readonly DateTimeProvider dateTimeProvider;
 
-		private DateTime lastIntegrationCompleteTime;
 		private DateTime nextBuildTime;
 
 		public IntervalTrigger() : this(new DateTimeProvider()) { }
@@ -19,7 +18,6 @@ namespace ThoughtWorks.CruiseControl.Core.Triggers
 		public IntervalTrigger(DateTimeProvider dtProvider)
 		{
 			this.dateTimeProvider = dtProvider;
-			lastIntegrationCompleteTime = DateTime.MinValue;
 			nextBuildTime = dtProvider.Now;
 		}
 
@@ -31,9 +29,12 @@ namespace ThoughtWorks.CruiseControl.Core.Triggers
 
 		public virtual void IntegrationCompleted()
 		{
-			DateTime now = dateTimeProvider.Now;
-			lastIntegrationCompleteTime = now;
-			nextBuildTime = now.AddSeconds(IntervalSeconds);
+			IncrementNextBuildTime();
+		}
+
+		protected DateTime IncrementNextBuildTime()
+		{
+			return nextBuildTime = dateTimeProvider.Now.AddSeconds(IntervalSeconds);
 		}
 
 		public DateTime NextBuild
@@ -43,8 +44,7 @@ namespace ThoughtWorks.CruiseControl.Core.Triggers
 
 		public virtual BuildCondition ShouldRunIntegration()
 		{
-			TimeSpan timeSinceLastBuild = dateTimeProvider.Now - lastIntegrationCompleteTime;
-			if (timeSinceLastBuild.TotalSeconds < IntervalSeconds)
+			if (dateTimeProvider.Now < nextBuildTime)
 				return BuildCondition.NoBuild;
 
 			return BuildCondition;

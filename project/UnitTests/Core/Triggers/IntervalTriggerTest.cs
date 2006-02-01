@@ -75,26 +75,6 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Triggers
 		}
 
 		[Test]
-		public void ShouldRunIntegrationIfTimeChanges()
-		{
-			trigger.IntervalSeconds = 10;
-			trigger.BuildCondition = BuildCondition.IfModificationExists;
-
-			mockDateTime.SetupResult("Now", new DateTime(2004, 1, 1, 1, 0, 0, 0));
-			Assert.AreEqual(BuildCondition.IfModificationExists, trigger.ShouldRunIntegration());
-			trigger.IntegrationCompleted();
-
-			mockDateTime.SetupResult("Now", new DateTime(2004, 1, 1, 1, 0, 5, 0)); // 5 seconds later
-			Assert.AreEqual(BuildCondition.NoBuild, trigger.ShouldRunIntegration());
-
-			trigger.IntervalSeconds = 2;
-			Assert.AreEqual(BuildCondition.IfModificationExists, trigger.ShouldRunIntegration());
-			trigger.IntegrationCompleted();
-			Assert.AreEqual(BuildCondition.NoBuild, trigger.ShouldRunIntegration());
-			VerifyAll();
-		}
-
-		[Test]
 		public void ShouldRunIntegration_SleepsFromEndOfIntegration()
 		{
 			trigger.IntervalSeconds = 0.5;

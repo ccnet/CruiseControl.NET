@@ -37,6 +37,8 @@ namespace ThoughtWorks.CruiseControl.Core.Triggers
 			{
 				return BuildCondition;
 			}
+			
+			IncrementNextBuildTime();
 			return BuildCondition.NoBuild;
 		}
 
