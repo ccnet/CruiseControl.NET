@@ -1,7 +1,7 @@
 using System;
 using NMock;
 using NUnit.Framework;
-using ObjectWizard;
+using Objection;
 using ThoughtWorks.CruiseControl.WebDashboard.Dashboard;
 using ThoughtWorks.CruiseControl.WebDashboard.Dashboard.Actions;
 using ThoughtWorks.CruiseControl.WebDashboard.MVC.Cruise;
@@ -14,14 +14,14 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 		[Test]
 		public void ShouldUseObjectGiverToInstantiateActions()
 		{
-			DynamicMock objectGiverMock = new DynamicMock(typeof(ObjectGiver));
+			DynamicMock objectSourceMock = new DynamicMock(typeof(ObjectSource));
 			Type typeToInstantiate = typeof(XslReportBuildAction);
 			ICruiseAction instantiated = new XslReportBuildAction(null);
-			objectGiverMock.ExpectAndReturn("GiveObjectByType", instantiated, typeToInstantiate);
+			objectSourceMock.ExpectAndReturn("GetByType", instantiated, typeToInstantiate);
 
-			ActionInstantiatorWithObjectGiver instantiator = new ActionInstantiatorWithObjectGiver((ObjectGiver) objectGiverMock.MockInstance);
+			ActionInstantiatorWithObjectSource instantiator = new ActionInstantiatorWithObjectSource((ObjectSource) objectSourceMock.MockInstance);
 			Assert.AreEqual(instantiated, instantiator.InstantiateAction(typeToInstantiate));
-			objectGiverMock.Verify();
+			objectSourceMock.Verify();
 		}
 	}
 }

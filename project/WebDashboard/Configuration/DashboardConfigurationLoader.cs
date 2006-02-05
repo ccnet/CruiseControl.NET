@@ -4,7 +4,7 @@ using System.IO;
 using System.Reflection;
 using System.Xml;
 using Exortech.NetReflector;
-using ObjectWizard.NetReflector;
+using Objection.NetReflectorPlugin;
 using ThoughtWorks.CruiseControl.Core.Reporting.Dashboard.Navigation;
 using ThoughtWorks.CruiseControl.Core.Util;
 
@@ -13,12 +13,12 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Configuration
 	// ToDo - testing
 	public class DashboardConfigurationLoader : IDashboardConfiguration
 	{
-		private readonly ObjectGiverNetReflectorInstantiator instantiator;
+		private readonly ObjectionNetReflectorInstantiator instantiator;
 		private readonly IPhysicalApplicationPathProvider physicalApplicationPathProvider;
 		private static readonly string DashboardConfigAppSettingKey = "DashboardConfigLocation";
 		private static readonly string DefaultDashboardConfigLocation = "dashboard.config";
 		
-		public DashboardConfigurationLoader(ObjectGiverNetReflectorInstantiator instantiator, IPhysicalApplicationPathProvider physicalApplicationPathProvider)
+		public DashboardConfigurationLoader(ObjectionNetReflectorInstantiator instantiator, IPhysicalApplicationPathProvider physicalApplicationPathProvider)
 		{
 			this.instantiator = instantiator;
 			this.physicalApplicationPathProvider = physicalApplicationPathProvider;

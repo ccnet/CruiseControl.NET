@@ -1,5 +1,5 @@
 using System.Collections;
-using ObjectWizard;
+using Objection;
 using ThoughtWorks.CruiseControl.WebDashboard.MVC;
 using ThoughtWorks.CruiseControl.WebDashboard.MVC.View;
 
@@ -10,14 +10,14 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard.ActionDecorators
 	{
 		private readonly IAction decoratedAction;
 		private readonly IVelocityViewGenerator velocityViewGenerator;
-		private readonly ObjectGiver objectGiver;
+		private readonly ObjectSource objectSource;
 		private readonly IRequest request;
 
-		public SiteTemplateActionDecorator(IAction decoratedAction, IVelocityViewGenerator velocityViewGenerator, ObjectGiver objectGiver, IRequest request)
+		public SiteTemplateActionDecorator(IAction decoratedAction, IVelocityViewGenerator velocityViewGenerator, ObjectSource objectSource, IRequest request)
 		{
 			this.decoratedAction = decoratedAction;
 			this.velocityViewGenerator = velocityViewGenerator;
-			this.objectGiver = objectGiver;
+			this.objectSource = objectSource;
 			this.request = request;
 		}
 
@@ -27,8 +27,8 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard.ActionDecorators
 			IResponse decoratedActionResponse = decoratedAction.Execute(cruiseRequest);
 			if (decoratedActionResponse is HtmlFragmentResponse)
 			{
-				velocityContext["breadcrumbs"] = (((TopControlsViewBuilder) objectGiver.GiveObjectByType(typeof(TopControlsViewBuilder))).Execute()).ResponseFragment;
-				velocityContext["sidebar"] = (((SideBarViewBuilder) objectGiver.GiveObjectByType(typeof(SideBarViewBuilder))).Execute()).ResponseFragment;
+				velocityContext["breadcrumbs"] = (((TopControlsViewBuilder) objectSource.GetByType(typeof(TopControlsViewBuilder))).Execute()).ResponseFragment;
+				velocityContext["sidebar"] = (((SideBarViewBuilder) objectSource.GetByType(typeof(SideBarViewBuilder))).Execute()).ResponseFragment;
 				velocityContext["mainContent"] = ((HtmlFragmentResponse) decoratedActionResponse).ResponseFragment;
 				velocityContext["dashboardversion"] = GetVersion();
 				velocityContext["applicationPath"] = request.ApplicationPath;

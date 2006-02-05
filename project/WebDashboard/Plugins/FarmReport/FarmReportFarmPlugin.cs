@@ -36,6 +36,4 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.FarmReport
 			get {  return new INamedAction[] { new ImmutableNamedAction(ACTION_NAME, this) }; }
 		}
 	}
-
-
 }

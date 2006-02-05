@@ -1,4 +1,4 @@
-using ObjectWizard;
+using Objection;
 using ThoughtWorks.CruiseControl.WebDashboard.Dashboard.Actions;
 
 namespace ThoughtWorks.CruiseControl.WebDashboard.MVC.Cruise
@@ -6,24 +6,24 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.MVC.Cruise
 	// ToDo - test untested bits!
 	public class CruiseActionFactory : IActionFactory
 	{
-		private readonly ObjectGiver giver;
+		private readonly ObjectSource objectSource;
 
-		public CruiseActionFactory (ObjectGiver giver)
+		public CruiseActionFactory (ObjectSource objectSource)
 		{
-			this.giver = giver;
+			this.objectSource = objectSource;
 		}
 
 		public IAction Create(IRequest request)
 		{
 			string actionName = request.FileNameWithoutExtension;
 
-			// Can probably do something clever with this in CruiseObjectGiverInitialiser
+			// Can probably do something clever with this in CruiseObjectSourceInitialiser
 			if (actionName == string.Empty || actionName.ToLower() == "default")
 			{
-				return giver.GiveObjectByType(typeof(DefaultAction)) as IAction;
+				return objectSource.GetByType(typeof(DefaultAction)) as IAction;
 			}
 
-			IAction action = giver.GiveObjectById(actionName) as IAction;
+			IAction action = objectSource.GetByName(actionName) as IAction;
 
 			if (action == null)
 			{

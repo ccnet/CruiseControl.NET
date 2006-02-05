@@ -1,6 +1,6 @@
 using System.IO;
 using System.Web;
-using ObjectWizard;
+using Objection;
 using ThoughtWorks.CruiseControl.WebDashboard.Dashboard;
 
 namespace ThoughtWorks.CruiseControl.WebDashboard.MVC.ASPNET
@@ -19,9 +19,9 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.MVC.ASPNET
 				context.Response.ContentType = "Text/XML";
 			}
 
-			ObjectGiver objectGiver =
-				new CruiseObjectGiverInitializer(new ManagableObjectGiver()).SetupObjectGiverForRequest(context);
-			IResponse response = ((RequestController) objectGiver.GiveObjectByType(typeof (RequestController))).Do();
+			ObjectSource objectSource =
+				new CruiseObjectSourceInitializer(new ObjectionStore()).SetupObjectSourceForRequest(context);
+			IResponse response = ((RequestController) objectSource.GetByType(typeof (RequestController))).Do();
 
 			if (response is RedirectResponse)
 			{

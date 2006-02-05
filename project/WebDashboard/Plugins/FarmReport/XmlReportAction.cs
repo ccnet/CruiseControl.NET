@@ -12,7 +12,6 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.FarmReport
 
 		private readonly IFarmService farmService;
 
-
 		public XmlReportAction(IFarmService farmService)
 		{
 			this.farmService = farmService;

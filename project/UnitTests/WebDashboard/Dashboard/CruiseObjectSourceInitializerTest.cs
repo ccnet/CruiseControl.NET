@@ -1,14 +1,14 @@
 using System;
 using System.Web;
 using NUnit.Framework;
-using ObjectWizard;
+using Objection;
 using ThoughtWorks.CruiseControl.WebDashboard.Dashboard;
 using ThoughtWorks.CruiseControl.WebDashboard.Plugins.BuildReport;
 
 namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 {
 	[TestFixture]
-	public class CruiseObjectGiverInitializerTest
+	public class CruiseObjectSourceInitializerTest
 	{
 		// See ToDo in CruiseObjectGiver Initializer - needs sorting out
 //		[Test]

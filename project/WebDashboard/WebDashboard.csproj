@@ -140,14 +140,19 @@
                     HintPath = "..\..\lib\log4net.dll"
                 />
                 <Reference
-                    Name = "ObjectWizard"
-                    Project = "{A81B8A36-19CC-49FA-93A4-E7E607F48567}"
-                    Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
-                />
-                <Reference
                     Name = "NetReflector"
                     AssemblyName = "NetReflector"
                     HintPath = "..\..\lib\NetReflector.dll"
+                />
+                <Reference
+                    Name = "Objection"
+                    AssemblyName = "Objection"
+                    HintPath = "..\..\lib\Objection.dll"
+                />
+                <Reference
+                    Name = "ObjectionNetReflectorPlugin"
+                    AssemblyName = "ObjectionNetReflectorPlugin"
+                    HintPath = "..\..\lib\ObjectionNetReflectorPlugin.dll"
                 />
             </References>
         </Build>
@@ -216,7 +221,7 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "Dashboard\ActionInstantiatorWithObjectGiver.cs"
+                    RelPath = "Dashboard\ActionInstantiatorWithObjectSource.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -246,7 +251,7 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "Dashboard\CruiseObjectGiverInitializer.cs"
+                    RelPath = "Dashboard\CruiseObjectSourceInitializer.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -820,6 +825,11 @@
                 />
                 <File
                     RelPath = "Plugins\FarmReport\XmlReportAction.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Plugins\ForceBuild\ForceBuildXmlAction.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

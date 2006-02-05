@@ -130,11 +130,6 @@
                     Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
                 />
                 <Reference
-                    Name = "WebServiceProxy"
-                    Project = "{19C24DF5-7EE8-4325-AFD6-C18D6C85DD9B}"
-                    Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
-                />
-                <Reference
                     Name = "NVelocity"
                     AssemblyName = "NVelocity"
                     HintPath = "..\..\lib\NVelocity.dll"
@@ -148,11 +143,6 @@
                     Name = "log4net"
                     AssemblyName = "log4net"
                     HintPath = "..\..\lib\log4net.dll"
-                />
-                <Reference
-                    Name = "ObjectWizard"
-                    Project = "{A81B8A36-19CC-49FA-93A4-E7E607F48567}"
-                    Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
                 />
                 <Reference
                     Name = "System.Windows.Forms"
@@ -178,6 +168,11 @@
                     Name = "System.Data"
                     AssemblyName = "System.Data"
                     HintPath = "..\..\..\..\WINDOWS\Microsoft.NET\Framework\v1.1.4322\System.Data.dll"
+                />
+                <Reference
+                    Name = "Objection"
+                    AssemblyName = "Objection"
+                    HintPath = "..\..\lib\Objection.dll"
                 />
             </References>
         </Build>
@@ -1181,16 +1176,6 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "ObjectWizard\ManagableObjectGiverTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "ObjectWizard\NetReflector\ObjectGiverNetReflectorInstantiatorTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
                     RelPath = "resources\templates\TestTransform.vm"
                     BuildAction = "None"
                 />
@@ -1227,7 +1212,7 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "WebDashboard\Dashboard\CruiseObjectGiverInitializerTest.cs"
+                    RelPath = "WebDashboard\Dashboard\CruiseObjectSourceInitializerTest.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -1422,6 +1407,11 @@
                 />
                 <File
                     RelPath = "WebDashboard\Plugins\DeleteProject\ShowDeleteProjectActionTest.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "WebDashboard\Plugins\ForceBuild\ForceBuildXmlActionTest.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

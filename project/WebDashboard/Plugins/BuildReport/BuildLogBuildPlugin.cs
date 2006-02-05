@@ -28,7 +28,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.BuildReport
 					{
 						new ImmutableNamedAction(HtmlBuildLogAction.ACTION_NAME, actionInstantiator.InstantiateAction(typeof (HtmlBuildLogAction)))
 // We don't define this here right now since we need a way to define decorators
-// See CruiseObjectGiverInitializer for linked ToDo
+// See CruiseObjectSourceInitializer for linked ToDo
 //					new TypedAction(XmlBuildLogAction.ACTION_NAME, typeof(XmlBuildLogAction)), 
 					};
 			}

@@ -1,6 +1,6 @@
 using NMock;
 using NUnit.Framework;
-using ObjectWizard;
+using Objection;
 using ThoughtWorks.CruiseControl.Core.Reporting.Dashboard.Navigation;
 using ThoughtWorks.CruiseControl.WebDashboard.Dashboard.Actions;
 using ThoughtWorks.CruiseControl.WebDashboard.MVC;
@@ -11,7 +11,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.MVC.Cruise
 	[TestFixture]
 	public class CruiseActionFactoryTest
 	{
-		private DynamicMock objectGiverMock;
+		private DynamicMock objectSourceMock;
 		private CruiseActionFactory actionFactory;
 		private DynamicMock requestMock;
 		private IRequest request;
@@ -19,8 +19,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.MVC.Cruise
 		[SetUp]
 		public void Setup()
 		{
-			objectGiverMock = new DynamicMock(typeof(ObjectGiver))	;
-			actionFactory = new CruiseActionFactory((ObjectGiver) objectGiverMock.MockInstance);
+			objectSourceMock = new DynamicMock(typeof(ObjectSource))	;
+			actionFactory = new CruiseActionFactory((ObjectSource) objectSourceMock.MockInstance);
 
 			requestMock = new DynamicMock(typeof(IRequest));
 			request = (IRequest) requestMock.MockInstance;
@@ -28,7 +28,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.MVC.Cruise
 
 		private void VerifyAll()
 		{
-			objectGiverMock.Verify();
+			objectSourceMock.Verify();
 			requestMock.Verify();
 		}
 
@@ -36,7 +36,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.MVC.Cruise
 		public void ShouldReturnUnknownActionIfActionIsntAvailable()
 		{
 			requestMock.ExpectAndReturn("FileNameWithoutExtension", "ThisAintNoAction");
-			objectGiverMock.ExpectAndReturn("GiveObjectById", null, "ThisAintNoAction");
+			objectSourceMock.ExpectAndReturn("GetByName", null, "ThisAintNoAction");
 
 			Assert.IsTrue(actionFactory.Create(request) is UnknownActionAction);
 
@@ -49,7 +49,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.MVC.Cruise
 			requestMock.ExpectAndReturn("FileNameWithoutExtension", "");
 
 			IAction stubAction = (IAction) new DynamicMock(typeof(IAction)).MockInstance;
-			objectGiverMock.ExpectAndReturn("GiveObjectByType", stubAction, typeof(DefaultAction));
+			objectSourceMock.ExpectAndReturn("GetByType", stubAction, typeof(DefaultAction));
 
 			Assert.AreEqual(stubAction, actionFactory.Create(request));
 
@@ -62,7 +62,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.MVC.Cruise
 			requestMock.ExpectAndReturn("FileNameWithoutExtension", "default");
 
 			IAction stubAction = (IAction) new DynamicMock(typeof(IAction)).MockInstance;
-			objectGiverMock.ExpectAndReturn("GiveObjectByType", stubAction, typeof(DefaultAction));
+			objectSourceMock.ExpectAndReturn("GetByType", stubAction, typeof(DefaultAction));
 
 			Assert.AreEqual(stubAction, actionFactory.Create(request));
 
@@ -75,7 +75,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.MVC.Cruise
 			requestMock.ExpectAndReturn("FileNameWithoutExtension", "myAction");
 
 			IAction stubAction = (IAction) new DynamicMock(typeof(IAction)).MockInstance;
-			objectGiverMock.ExpectAndReturn("GiveObjectById", stubAction, "myAction");
+			objectSourceMock.ExpectAndReturn("GetByName", stubAction, "myAction");
 
 			Assert.AreSame(stubAction, actionFactory.Create(request));
 
