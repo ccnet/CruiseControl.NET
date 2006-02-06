@@ -146,6 +146,15 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Triggers
 		}
 
 		[Test]
+		public void ShouldPopulateFromMinimalConfiguration()
+		{
+			string xml = @"<multiTrigger />";
+			trigger = (MultipleTrigger) NetReflector.Read(xml);
+			Assert.AreEqual(0, trigger.Triggers.Length);
+			Assert.AreEqual(Operator.Or, trigger.Operatior);			
+		}
+
+		[Test]
 		public void UsingAndConditionOnlyTriggersBuildIfBothTriggersShouldBuild()
 		{
 			trigger.Operatior = Operator.And;

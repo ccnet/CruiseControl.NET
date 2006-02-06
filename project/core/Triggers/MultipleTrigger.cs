@@ -17,7 +17,7 @@ namespace ThoughtWorks.CruiseControl.Core.Triggers
 		public MultipleTrigger() : this(new ITrigger[0])
 		{}
 
-		[ReflectorProperty("operator")]
+		[ReflectorProperty("operator", Required=false)]
 		public Operator Operatior = Operator.Or;
 
 		[ReflectorArray("triggers", Required=false)]
