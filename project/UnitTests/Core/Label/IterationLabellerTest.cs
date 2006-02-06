@@ -28,8 +28,9 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Label
 		public void PopulateFromConfiguration()
 		{
 			DateTime releaseStartDate = new DateTime(2005, 1, 1);
-			string xml = string.Format(@"<iterationlabeller duration=""1"" releaseStartDate=""{0}"" prefix=""foo"" separator=""-"" />", releaseStartDate);
+			string xml = string.Format(@"<iterationlabeller incrementOnFailure=""true"" duration=""1"" releaseStartDate=""{0}"" prefix=""foo"" separator=""-"" />", releaseStartDate);
 			labeller = (IterationLabeller) NetReflector.Read(xml);
+			Assert.AreEqual(true, labeller.IncrementOnFailed);
 			Assert.AreEqual(1, labeller.Duration);
 			Assert.AreEqual("foo", labeller.LabelPrefix);
 			Assert.AreEqual("-", labeller.Separator);
@@ -134,6 +135,13 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Label
 			labeller.LabelPrefix = "5.3.";
 			labeller.Duration = 1;
 			Assert.AreEqual("5.3.6.1", labeller.Generate(IntegrationResult.CreateInitialIntegrationResult("foo", "c:\\bar")));
+		}
+
+		[Test]
+		public void GenerateIncrementedLabelOnFailureIfIncrementOnFailedIsTrue()
+		{
+			labeller.IncrementOnFailed = true;
+			Assert.AreEqual("14.36", labeller.Generate(IntegrationResultMother.CreateFailed("14.35")));
 		}
 	}
 }

@@ -12,7 +12,7 @@ namespace ThoughtWorks.CruiseControl.Core.Label
 	/// configurable number of weeks (the default is 2).
 	/// </summary>
 	[ReflectorType("iterationlabeller")]
-	public class IterationLabeller : ILabeller
+	public class IterationLabeller : DefaultLabeller
 	{
 		private readonly DateTimeProvider dateTimeProvider;
 		public const int InitialLabel = 1;
@@ -25,9 +25,6 @@ namespace ThoughtWorks.CruiseControl.Core.Label
 		{
 			this.dateTimeProvider = dateTimeProvider;
 		}
-
-		[ReflectorProperty("prefix", Required=false)]
-		public string LabelPrefix = "";
 
 		/// <summary>
 		/// Duration of the interation measured in weeks,
@@ -42,22 +39,13 @@ namespace ThoughtWorks.CruiseControl.Core.Label
 		[ReflectorProperty("separator", Required=false)]
 		public string Separator = ".";
 
-		/// <summary>
-		/// Runs the task, given the specified <see cref="IIntegrationResult"/>, in the specified <see cref="IProject"/>.
-		/// </summary>
-		/// <param name="result"></param>
-		public void Run(IIntegrationResult result)
-		{
-			result.Label = Generate(result);
-		}
-
-		public string Generate(IIntegrationResult previousResult)
+		public override string Generate(IIntegrationResult previousResult)
 		{
 			if (previousResult == null || previousResult.Label == null || previousResult.IsInitial())
 			{
 				return NewLabel(InitialLabel);
 			}
-			else if (previousResult.Status == IntegrationStatus.Success)
+			else if (previousResult.Status == IntegrationStatus.Success || IncrementOnFailed)
 			{
 				return NewLabel(IncrementLabel(previousResult.Label));
 			}

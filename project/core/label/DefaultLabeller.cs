@@ -7,7 +7,7 @@ namespace ThoughtWorks.CruiseControl.Core.Label
 	[ReflectorType("defaultlabeller")]
 	public class DefaultLabeller : ILabeller
 	{
-		public static readonly string INITIAL_LABEL = "1";
+		public const string INITIAL_LABEL = "1";
 
 		[ReflectorProperty("prefix", Required=false)]
 		public string LabelPrefix = string.Empty;
@@ -15,7 +15,7 @@ namespace ThoughtWorks.CruiseControl.Core.Label
 		[ReflectorProperty("incrementOnFailure", Required=false)]
 		public bool IncrementOnFailed = false;
 
-		public string Generate(IIntegrationResult previousResult)
+		public virtual string Generate(IIntegrationResult previousResult)
 		{
 			if (previousResult == null || previousResult.IsInitial())
 			{
