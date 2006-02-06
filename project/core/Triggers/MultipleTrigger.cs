@@ -4,6 +4,7 @@ using ThoughtWorks.CruiseControl.Remote;
 
 namespace ThoughtWorks.CruiseControl.Core.Triggers
 {
+	[ReflectorType("multiTrigger")]
 	public class MultipleTrigger : ITrigger
 	{
 		private ITrigger[] triggers;
@@ -13,29 +14,29 @@ namespace ThoughtWorks.CruiseControl.Core.Triggers
 			this.triggers = triggers;
 		}
 
-		public MultipleTrigger() : this (new ITrigger[0]) { }
+		public MultipleTrigger() : this(new ITrigger[0])
+		{}
+
+		[ReflectorProperty("operator")]
+		public Operator Operatior = Operator.Or;
 
 		[ReflectorArray("triggers", Required=false)]
 		public ITrigger[] Triggers
 		{
-			get
-			{
-				return triggers;
-			}
-			set
-			{
-				triggers = value;
-			}
+			get { return triggers; }
+			set { triggers = value; }
 		}
-		
+
 		public BuildCondition ShouldRunIntegration()
 		{
 			BuildCondition overallCondition = BuildCondition.NoBuild;
 			foreach (ITrigger trigger in triggers)
 			{
-				// Assumes ordering of elements of enum
 				BuildCondition condition = trigger.ShouldRunIntegration();
-				if (condition > overallCondition)
+
+				if (Operatior == Operator.And && condition == BuildCondition.NoBuild) return condition;
+
+				if (condition > overallCondition) // Assumes ordering of elements of enum
 				{
 					overallCondition = condition;
 				}
@@ -58,12 +59,17 @@ namespace ThoughtWorks.CruiseControl.Core.Triggers
 				DateTime earliestDate = DateTime.MaxValue;
 				foreach (ITrigger trigger in triggers)
 				{
-					if(trigger.NextBuild <= earliestDate)
+					if (trigger.NextBuild <= earliestDate)
 						earliestDate = trigger.NextBuild;
 				}
 				return earliestDate;
 			}
 		}
+	}
 
+	public enum Operator
+	{
+		Or,
+		And
 	}
 }

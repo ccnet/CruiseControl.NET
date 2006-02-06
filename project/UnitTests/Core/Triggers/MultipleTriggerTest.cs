@@ -1,4 +1,5 @@
 using System;
+using Exortech.NetReflector;
 using NMock;
 using NUnit.Framework;
 using ThoughtWorks.CruiseControl.Core.Triggers;
@@ -133,6 +134,24 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Triggers
 			DateTime laterDate = new DateTime(2005, 1, 2);
 			subTrigger2Mock.SetupResult("NextBuild", laterDate);
 			Assert.AreEqual(earlierDate, trigger.NextBuild);
+		}
+
+		[Test]
+		public void ShouldPopulateFromConfiguration()
+		{
+			string xml = @"<multiTrigger operator=""And""><triggers><intervalTrigger /></triggers></multiTrigger>";
+			trigger = (MultipleTrigger) NetReflector.Read(xml);
+			Assert.AreEqual(1, trigger.Triggers.Length);
+			Assert.AreEqual(Operator.And, trigger.Operatior);
+		}
+
+		[Test]
+		public void UsingAndConditionOnlyTriggersBuildIfBothTriggersShouldBuild()
+		{
+			trigger.Operatior = Operator.And;
+			subTrigger1Mock.ExpectAndReturn("ShouldRunIntegration", BuildCondition.NoBuild);
+			subTrigger2Mock.ExpectAndReturn("ShouldRunIntegration", BuildCondition.ForceBuild);
+			Assert.AreEqual(BuildCondition.NoBuild, trigger.ShouldRunIntegration());
 		}
 	}
 }
