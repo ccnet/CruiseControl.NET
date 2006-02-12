@@ -48,9 +48,9 @@ Template path is {1}", transformerFileName, Path.Combine(physicalApplicationPath
 					if (lazilyInitialisedEngine == null)
 					{
 						lazilyInitialisedEngine = new VelocityEngine();
-						lazilyInitialisedEngine.SetProperty(RuntimeConstants_Fields.RUNTIME_LOG_LOGSYSTEM_CLASS, "NVelocity.Runtime.Log.NullLogSystem");
-						lazilyInitialisedEngine.SetProperty(RuntimeConstants_Fields.FILE_RESOURCE_LOADER_PATH, Path.Combine(physicalApplicationPathProvider.PhysicalApplicationPath, "templates"));
-						lazilyInitialisedEngine.SetProperty(RuntimeConstants_Fields.RESOURCE_MANAGER_CLASS, "NVelocity.Runtime.Resource.ResourceManagerImpl");
+						lazilyInitialisedEngine.SetProperty(RuntimeConstants.RUNTIME_LOG_LOGSYSTEM_CLASS, "NVelocity.Runtime.Log.NullLogSystem");
+						lazilyInitialisedEngine.SetProperty(RuntimeConstants.FILE_RESOURCE_LOADER_PATH, Path.Combine(physicalApplicationPathProvider.PhysicalApplicationPath, "templates"));
+						lazilyInitialisedEngine.SetProperty(RuntimeConstants.RESOURCE_MANAGER_CLASS, "NVelocity.Runtime.Resource.ResourceManagerImpl");
 						lazilyInitialisedEngine.Init();
 					}
 				}
