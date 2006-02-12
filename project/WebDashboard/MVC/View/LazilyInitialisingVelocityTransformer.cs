@@ -1,8 +1,10 @@
+using System;
 using System.Collections;
 using System.IO;
 using NVelocity;
 using NVelocity.App;
 using NVelocity.Runtime;
+using ThoughtWorks.CruiseControl.Core;
 using ThoughtWorks.CruiseControl.Core.Reporting.Dashboard.Navigation;
 
 namespace ThoughtWorks.CruiseControl.WebDashboard.MVC.View
@@ -23,7 +25,15 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.MVC.View
 			string output = "";
 			using(TextWriter writer = new StringWriter())
 			{
-				VelocityEngine.MergeTemplate(transformerFileName, new VelocityContext(transformable), writer);
+				try
+				{
+					VelocityEngine.MergeTemplate(transformerFileName, new VelocityContext(transformable), writer);
+				}
+				catch (Exception baseException)
+				{
+					throw new CruiseControlException(string.Format(@"Exception calling NVelocity for template: {0}
+Template path is {1}", transformerFileName, Path.Combine(physicalApplicationPathProvider.PhysicalApplicationPath, "templates")), baseException);
+				}
 				output = writer.ToString();
 			}
 			return output;
