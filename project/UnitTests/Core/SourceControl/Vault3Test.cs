@@ -39,11 +39,11 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 
 		/* 
 		* CleanFolder tests commented out because tests that are tied to a
-		* particular file system layout are undesirable, per Owen 11/29/04
-		*/ 
+		* particular file system layout are undesirable, per Owen 11/29/05
+		* 
 		private string tempFileToTestCleanCopy = null;
 		private bool expectCleanCopy = false;
-		/**/
+		*/
 
 		[SetUp]
 		public virtual void SetUp()
@@ -679,7 +679,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 
 		/* 
 		* CleanFolder tests commented out because tests that are tied to a
-		* particular file system layout are undesirable, per Owen 11/29/04
+		* particular file system layout are undesirable, per Owen 11/29/05
 		*
 		private void CreateTempFileForCleanFolderTest()
 		{
@@ -694,7 +694,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 		{
 			/* 
 			 * CleanFolder tests commented out because tests that are tied to a
-			 * particular file system layout are undesirable, per Owen 11/29/04
+			 * particular file system layout are undesirable, per Owen 11/29/05
 			 * 
 
 			// can't test if we don't know the working folder ahead of time
@@ -711,7 +711,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 		{
 			/* 
 			 * CleanFolder tests commented out because tests that are tied to a
-			 * particular file system layout are undesirable, per Owen 11/29/04
+			 * particular file system layout are undesirable, per Owen 11/29/05
 			 *
 
 			// can't test if we don't know the working folder ahead of time
@@ -728,7 +728,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 		{
 			/* 
 			 * CleanFolder tests commented out because tests that are tied to a
-			 * particular file system layout are undesirable, per Owen 11/29/04
+			 * particular file system layout are undesirable, per Owen 11/29/05
 			 *
 			  
 			if ( !StringUtil.IsBlank(tempFileToTestCleanCopy) )
