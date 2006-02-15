@@ -10,22 +10,33 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 			DeleteFileEvenIfReadOnly(filename);
 		}
 
-		private void DeleteDirectoryEvenIfReadOnly(string filename)
+		/// <summary>
+		/// Deletes all contents of a directory, even those that are read-only, without deleting the directory itself.
+		/// </summary>
+		/// <param name="directoryPath"></param>
+		public void EmptyDirectoryIncludingReadOnlyObjects(string directoryPath)
 		{
-			if (Directory.Exists(filename))
+			if (Directory.Exists(directoryPath))
 			{
-				foreach (string subdir in Directory.GetDirectories(filename))
+				foreach (string subdir in Directory.GetDirectories(directoryPath))
 				{
-					DeleteDirectoryEvenIfReadOnly(Path.Combine(filename, subdir));
+					DeleteDirectoryEvenIfReadOnly(Path.Combine(directoryPath, subdir));
 				}
 
-				foreach (string file in Directory.GetFiles(filename))
+				foreach (string file in Directory.GetFiles(directoryPath))
 				{
-					DeleteFileEvenIfReadOnly(Path.Combine(filename, file));
+					DeleteFileEvenIfReadOnly(Path.Combine(directoryPath, file));
 				}
+			}
+		}
 
-				File.SetAttributes(filename, FileAttributes.Normal);
-				Directory.Delete(filename);
+		private void DeleteDirectoryEvenIfReadOnly(string directoryPath)
+		{
+			if (Directory.Exists(directoryPath))
+			{
+				EmptyDirectoryIncludingReadOnlyObjects(directoryPath);
+				File.SetAttributes(directoryPath, FileAttributes.Normal);
+				Directory.Delete(directoryPath);
 			}
 
 		}

@@ -799,12 +799,22 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "sourcecontrol\Vault.cs"
+                    RelPath = "sourcecontrol\Vault3.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "sourcecontrol\Vault317.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
                     RelPath = "sourcecontrol\VaultHistoryParser.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "sourcecontrol\VaultVersionChecker.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

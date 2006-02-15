@@ -836,12 +836,17 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "Core\SourceControl\VaultHistoryParserTest.cs"
+                    RelPath = "Core\SourceControl\Vault317Test.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "Core\SourceControl\VaultTest.cs"
+                    RelPath = "Core\SourceControl\Vault3Test.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Core\SourceControl\VaultHistoryParserTest.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
