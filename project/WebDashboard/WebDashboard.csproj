@@ -998,6 +998,11 @@
                     BuildAction = "Content"
                 />
                 <File
+                    RelPath = "xsl\fitnesse.xsl"
+                    Link = "..\xsl\fitnesse.xsl"
+                    BuildAction = "Content"
+                />
+                <File
                     RelPath = "xsl\FxCopReport.xsl"
                     Link = "..\xsl\FxCopReport.xsl"
                     BuildAction = "Content"
