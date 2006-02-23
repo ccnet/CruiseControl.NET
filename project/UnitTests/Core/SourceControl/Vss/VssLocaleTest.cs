@@ -47,6 +47,15 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.SourceControl.Vss
 			Assert.AreEqual(new DateTime(2002, 2, 22, 12, 0, 0), vssLocale.ParseDateTime("02/22/2002", "12:00"));
 		}
 
+		[Test]
+		public void FormatDateForEnglishServerWithFrenchLocalCulture()
+		{
+			IVssLocale locale = new VssLocale(FrCulture());
+			locale.ServerCulture = "en-US";
+			Assert.AreEqual("added", locale.AddedKeyword);
+			Assert.AreEqual("22/02/2002;12:00", locale.FormatCommandDate(new DateTime(2002, 2, 22, 12, 0, 0)));
+		}
+
 		private CultureInfo UsCuture()
 		{
 			return new CultureInfo("en-US", false);
@@ -63,5 +72,11 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.SourceControl.Vss
 			cultureInfo.DateTimeFormat.LongTimePattern = cultureInfo.DateTimeFormat.LongTimePattern + " tt";
 			return cultureInfo;
 		}
+
+		
+		private CultureInfo FrCulture()
+	{
+		return new CultureInfo("fr-FR", false);
+		} 
 	}
 }

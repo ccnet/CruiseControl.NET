@@ -77,8 +77,8 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 		[ReflectorProperty("culture", Required = false)]
 		public string Culture
 		{
-			get { return locale.CultureName; }
-			set { locale.CultureName = value; }
+			get { return locale.ServerCulture; }
+			set { locale.ServerCulture = value; }
 		}
 
 		[ReflectorProperty("cleanCopy", Required = false)]

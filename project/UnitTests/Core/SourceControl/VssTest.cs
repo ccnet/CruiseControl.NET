@@ -304,7 +304,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 
 		private string CommandDate(DateTime date)
 		{
-			return new VssLocale().FormatCommandDate(date);
+			return new VssLocale(CultureInfo.InvariantCulture).FormatCommandDate(date);
 		}
 
 		private string ForGetCommand()

@@ -5,22 +5,27 @@ using ThoughtWorks.CruiseControl.Core.Sourcecontrol;
 
 namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 {
+	/// <summary>
+	/// VssLocale takes responsibility for handling locale-specific parsing of dates and keywords produced by the VSS client (ss.exe)
+	/// Keywords are output in the locale of the server and dates are output in the locale of the client, which is, in this case, 
+	/// the current culture for the build server.  Generally these two locales will be the same; however, if they are different, users
+	/// can specify the server locale using the Vss.Culture property.
+	/// </summary>
 	public class VssLocale : IVssLocale
 	{
-		private CultureInfo cultureInfo;
+		private CultureInfo localCulture;
+		private CultureInfo serverCulture;
 		private ResourceManager manager;
-
-		public VssLocale() : this(CultureInfo.InvariantCulture) { }
 
 		public VssLocale(CultureInfo cultureInfo)
 		{
-			this.cultureInfo = cultureInfo;
+			localCulture = serverCulture = cultureInfo;
 			manager = new ResourceManager(typeof(VssLocale));
 		}
 
 		private string GetKeyword(string key)
 		{
-			return manager.GetString(key, cultureInfo);	
+			return manager.GetString(key, serverCulture);	
 		}
 
 		public string CommentKeyword
@@ -63,15 +68,15 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			get { return GetKeyword("Time"); }
 		}
 
-		public string CultureName
+		public string ServerCulture
 		{
-			get { return cultureInfo.Name; }
-			set { cultureInfo = new CultureInfo(value); }
+			get { return serverCulture.Name; }
+			set { serverCulture = new CultureInfo(value); }
 		}
 
-		public DateTimeFormatInfo CreateDateTimeInfo()
+		private DateTimeFormatInfo CreateDateTimeInfo()
 		{
-			DateTimeFormatInfo dateTimeFormatInfo = cultureInfo.DateTimeFormat.Clone() as DateTimeFormatInfo;
+			DateTimeFormatInfo dateTimeFormatInfo = localCulture.DateTimeFormat.Clone() as DateTimeFormatInfo;
 			dateTimeFormatInfo.AMDesignator = "a";
 			dateTimeFormatInfo.PMDesignator = "p";
 			return dateTimeFormatInfo;
@@ -114,19 +119,19 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 
 		public override string ToString()
 		{
-			return string.Format("VssLocale culture: {0}", cultureInfo.DisplayName);
+			return string.Format("VssLocale: local culture = {0}, server culture = {1}", localCulture.DisplayName, serverCulture.DisplayName);
 		}
 
 		public override bool Equals(object obj)
 		{
-			if (obj is VssLocale) 
-				return ((VssLocale)obj).cultureInfo.Name == cultureInfo.Name;
+			if (obj is IVssLocale) 
+				return ((IVssLocale)obj).ServerCulture == ServerCulture;
 			return false;
 		}
 
 		public override int GetHashCode()
 		{
-			return cultureInfo.GetHashCode();
+			return serverCulture.GetHashCode();
 		}
 	}
 }
