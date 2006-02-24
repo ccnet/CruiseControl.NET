@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.Globalization;
 using System.IO;
 using System.Text;
 using System.Xml;
@@ -8,6 +9,15 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 {
 	public class VaultHistoryParser : IHistoryParser
 	{
+		private CultureInfo culture;
+
+		public VaultHistoryParser() : this(CultureInfo.CurrentCulture)
+		{}
+
+		public VaultHistoryParser(CultureInfo culture)
+		{
+			this.culture = culture;
+		}
 
 		public Modification[] Parse(TextReader history, DateTime from, DateTime to)
 		{
@@ -44,7 +54,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 
 		private bool EntryWithinRange(XmlNode node, DateTime from, DateTime to)
 		{
-			DateTime date = DateTime.Parse(node.Attributes["date"].InnerText);
+			DateTime date = DateTime.Parse(node.Attributes["date"].InnerText, culture);
 			return (date > from && date < to);
 		}
 
@@ -79,7 +89,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 				folderName = name.Substring(0, index);
 				fileName = name.Substring(index + 1, name.Length - index - 1);
 			}
-			DateTime date = DateTime.Parse(node.Attributes["date"].InnerText);
+			DateTime date = DateTime.Parse(node.Attributes["date"].InnerText, culture);
 			Modification modification = new Modification();
 			modification.FileName = fileName;
 			modification.FolderName = folderName;

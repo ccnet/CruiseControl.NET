@@ -32,7 +32,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 				<listworkingfolders />
 				<result success=""yes"" />
 			</vault>";
-		
+
 		protected VaultVersionChecker vault;
 		protected DynamicMock mockHistoryParser;
 		protected IntegrationResult result;
@@ -128,7 +128,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 			DateTime yesterday = today.AddDays(-1);
 			result.StartTime = yesterday;
 			string args = string.Format(@"history $ -excludeactions label -rowlimit 0 -begindate {0:s} -enddate {1:s}{2}",
-				yesterday, today, SetAndGetCommonOptionalArguments());
+			                            yesterday, today, SetAndGetCommonOptionalArguments());
 			ExpectToExecuteArguments(args);
 			ExpectToParseHistory();
 
@@ -174,7 +174,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 
 			ExpectToCleanFolder();
 			ExpectToExecuteArguments(@"label $ foo" + SetAndGetCommonOptionalArguments());
-			ExpectToExecuteArguments(@"getlabel $ foo -labelworkingfolder c:\source" 
+			ExpectToExecuteArguments(@"getlabel $ foo -labelworkingfolder c:\source"
 				+ GetWorkingFolderArguments() + GetFileTimeArgument() + SetAndGetCommonOptionalArguments());
 
 			vault.GetSource(result);
@@ -194,7 +194,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 
 			ExpectToNotCleanFolder();
 			ExpectToExecuteArguments(@"label $ foo" + SetAndGetCommonOptionalArguments());
-			ExpectToExecuteArguments(@"getlabel $ foo -labelworkingfolder c:\source" 
+			ExpectToExecuteArguments(@"getlabel $ foo -labelworkingfolder c:\source"
 				+ GetWorkingFolderArguments() + GetFileTimeArgument() + SetAndGetCommonOptionalArguments());
 
 			vault.GetSource(result);
@@ -215,7 +215,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 			this.ProcessResultOutput = listFolderOutputWithWorkingFolderSet;
 			ExpectToExecuteArguments(@"listworkingfolders" + SetAndGetCommonOptionalArguments());
 			ExpectToExecuteArguments(@"label $ foo" + SetAndGetCommonOptionalArguments());
-			ExpectToExecuteArguments(@"getlabel $ foo -labelworkingfolder c:\source" 
+			ExpectToExecuteArguments(@"getlabel $ foo -labelworkingfolder c:\source"
 				+ GetWorkingFolderArguments() + GetFileTimeArgument() + SetAndGetCommonOptionalArguments());
 
 			vault.GetSource(result);
@@ -236,7 +236,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 			this.ProcessResultOutput = listFolderOutputWithWorkingFolderSet;
 			ExpectToExecuteArguments(@"listworkingfolders" + SetAndGetCommonOptionalArguments());
 			ExpectToExecuteArguments(@"label $ foo" + SetAndGetCommonOptionalArguments());
-			ExpectToExecuteArguments(@"getlabel $ foo -labelworkingfolder c:\source" 
+			ExpectToExecuteArguments(@"getlabel $ foo -labelworkingfolder c:\source"
 				+ GetWorkingFolderArguments() + GetFileTimeArgument() + SetAndGetCommonOptionalArguments());
 
 			vault.GetSource(result);
@@ -257,7 +257,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 			this.ProcessResultOutput = "";
 			ExpectToCleanFolder();
 			ExpectToExecuteArguments(@"label $ foo" + SetAndGetCommonOptionalArguments());
-			ExpectToExecuteArguments(@"getlabel $ foo -destpath c:\source" 
+			ExpectToExecuteArguments(@"getlabel $ foo -destpath c:\source"
 				+ GetWorkingFolderArguments() + GetFileTimeArgument() + SetAndGetCommonOptionalArguments());
 
 			vault.GetSource(result);
@@ -278,7 +278,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 			this.ProcessResultOutput = "";
 			ExpectToNotCleanFolder();
 			ExpectToExecuteArguments(@"label $ foo" + SetAndGetCommonOptionalArguments());
-			ExpectToExecuteArguments(@"getlabel $ foo -destpath c:\source" 
+			ExpectToExecuteArguments(@"getlabel $ foo -destpath c:\source"
 				+ GetWorkingFolderArguments() + GetFileTimeArgument() + SetAndGetCommonOptionalArguments());
 
 			vault.GetSource(result);
@@ -299,7 +299,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 			this.ProcessResultOutput = listFolderOutputWithWorkingFolderSet;
 			ExpectToExecuteArguments(@"listworkingfolders" + SetAndGetCommonOptionalArguments());
 			ExpectToExecuteArguments(@"label $ foo" + SetAndGetCommonOptionalArguments());
-			ExpectToExecuteArguments(@"getlabel $ foo -destpath c:\source" 
+			ExpectToExecuteArguments(@"getlabel $ foo -destpath c:\source"
 				+ GetWorkingFolderArguments() + GetFileTimeArgument() + SetAndGetCommonOptionalArguments());
 
 			vault.GetSource(result);
@@ -320,7 +320,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 			this.ProcessResultOutput = listFolderOutputWithWorkingFolderSet;
 			ExpectToExecuteArguments(@"listworkingfolders" + SetAndGetCommonOptionalArguments());
 			ExpectToExecuteArguments(@"label $ foo" + SetAndGetCommonOptionalArguments());
-			ExpectToExecuteArguments(@"getlabel $ foo -destpath c:\source" 
+			ExpectToExecuteArguments(@"getlabel $ foo -destpath c:\source"
 				+ GetWorkingFolderArguments() + GetFileTimeArgument() + SetAndGetCommonOptionalArguments());
 
 			vault.GetSource(result);
@@ -493,7 +493,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 			{
 				vault.GetSource(result);
 			}
-			catch ( Vault3.VaultException )
+			catch (Vault3.VaultException)
 			{
 				VaultExceptionThrown = true;
 			}
@@ -517,7 +517,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 			{
 				vault.GetSource(result);
 			}
-			catch ( Vault3.VaultException )
+			catch (Vault3.VaultException)
 			{
 				VaultExceptionThrown = true;
 			}
@@ -586,7 +586,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 			vault.WorkingDirectory = @"c:\source";
 			vault.AutoGetSource = true;
 			vault.Folder = "$";
-			
+
 			IntegrationResult failed = IntegrationResultMother.CreateFailed();
 			failed.Label = result.Label;
 			failed.WorkingDirectory = result.WorkingDirectory;
@@ -632,7 +632,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 			this.ProcessResultOutput = listFolderOutputWithNonXml;
 			ExpectToExecuteArguments(@"listworkingfolders" + SetAndGetCommonOptionalArguments());
 			ExpectToExecuteArguments(@"label $ foo" + SetAndGetCommonOptionalArguments());
-			ExpectToExecuteArguments(@"getlabel $ foo -labelworkingfolder c:\source" 
+			ExpectToExecuteArguments(@"getlabel $ foo -labelworkingfolder c:\source"
 				+ GetWorkingFolderArguments() + GetFileTimeArgument() + SetAndGetCommonOptionalArguments());
 
 			vault.GetSource(result);
@@ -651,11 +651,11 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 
 		protected string GetWorkingFolderArguments()
 		{
-			if ( vault.ApplyLabel )
+			if (vault.ApplyLabel)
 				return @" -merge overwrite -makewritable";
 			else
 			{
-				if ( vault.UseVaultWorkingDirectory )
+				if (vault.UseVaultWorkingDirectory)
 					return @" -performdeletions removeworkingcopy -merge overwrite -makewritable";
 				else
 					return @" -merge overwrite -makewritable";
@@ -689,7 +689,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 			tempFileToTestCleanCopy = Path.Combine(vault.WorkingDirectory, tempFileNameOnly);
 		}
 		*/
-				
+
 		protected void ExpectToCleanFolder()
 		{
 			/* 

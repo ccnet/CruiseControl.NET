@@ -1,7 +1,6 @@
 using System;
-using System.Xml;
 using System.Text.RegularExpressions;
-using ThoughtWorks.CruiseControl.Core.Sourcecontrol;
+using System.Xml;
 using ThoughtWorks.CruiseControl.Core.Util;
 using ThoughtWorks.CruiseControl.Remote;
 
@@ -10,7 +9,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 	/// <summary>
 	/// Integrates with Vault 3.0.0 - 3.1.6
 	/// </summary>
-	public class Vault3 : ProcessSourceControl 
+	public class Vault3 : ProcessSourceControl
 	{
 		private static readonly Regex MatchVaultElements = new Regex("<vault>(?:.|\n)*</vault>", RegexOptions.IgnoreCase);
 
@@ -31,7 +30,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			this._shim = versionCheckerShim;
 		}
 
-		public override Modification[] GetModifications(IIntegrationResult from, IIntegrationResult to) 
+		public override Modification[] GetModifications(IIntegrationResult from, IIntegrationResult to)
 		{
 			_labelApplied = false;
 			Log.Info(string.Format("Checking for modifications to {0} in Vault Repository \"{1}\" between {2} and {3}", _shim.Folder, _shim.Repository, from.StartTime, to.StartTime));
@@ -43,17 +42,17 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 		/// we labelled just before we retrieved the sourece.  So here, we remove that label if the build failed.
 		/// </summary>
 		/// <param name="result"></param>
-		public override void LabelSourceControl(IIntegrationResult result) 
+		public override void LabelSourceControl(IIntegrationResult result)
 		{
 			if (! _shim.ApplyLabel) return;
 
-			if (_shim.AutoGetSource) 
+			if (_shim.AutoGetSource)
 			{
-				if ( result.Status != IntegrationStatus.Success )
+				if (result.Status != IntegrationStatus.Success)
 				{
 					// Make sure we only remove the label if we actually applied it.  It's possible that the integration 
 					// failed because the label already exists.  In this case, we certainly don't want to remove it.
-					if ( _labelApplied )
+					if (_labelApplied)
 					{
 						Log.Info(string.Format(
 							"Integration failed.  Removing label \"{0}\" from {1} in repository {2}.", result.Label, _shim.Folder, _shim.Repository));
@@ -64,7 +63,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 							"Integration failed, but a label was never successfully applied to {0} in repository {1}, so skipping removal.",
 							_shim.Folder, _shim.Repository));
 				}
-			} 
+			}
 			else
 			{
 				Log.Info(string.Format("Applying label \"{0}\" to {1} in repository {2}.", result.Label, _shim.Folder, _shim.Repository));
@@ -72,22 +71,22 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			}
 		}
 
-		public override void GetSource(IIntegrationResult result) 
+		public override void GetSource(IIntegrationResult result)
 		{
-			if ( !_shim.AutoGetSource ) return;
+			if (!_shim.AutoGetSource) return;
 
 			_labelApplied = false;
 
-			if ( StringUtil.IsBlank(_shim.WorkingDirectory) && !(!_shim.ApplyLabel && _shim.UseVaultWorkingDirectory && !_shim.CleanCopy) )
+			if (StringUtil.IsBlank(_shim.WorkingDirectory) && !(!_shim.ApplyLabel && _shim.UseVaultWorkingDirectory && !_shim.CleanCopy))
 			{
 				_shim.WorkingDirectory = GetVaultWorkingFolder(result);
-				if ( StringUtil.IsBlank(_shim.WorkingDirectory) )
+				if (StringUtil.IsBlank(_shim.WorkingDirectory))
 					throw new VaultException(
-						string.Format("Vault user {0} has no working folder set for {1} in repository {2} and no working directory has been specified.", 
-						_shim.Username, _shim.Folder, _shim.Repository));
+						string.Format("Vault user {0} has no working folder set for {1} in repository {2} and no working directory has been specified.",
+						              _shim.Username, _shim.Folder, _shim.Repository));
 			}
 
-			if ( _shim.ApplyLabel ) 
+			if (_shim.ApplyLabel)
 			{
 				Log.Info(string.Format("Applying label \"{0}\" to {1} in repository {2}.", result.Label, _shim.Folder, _shim.Repository));
 				Execute(LabelProcessInfo(result));
@@ -119,7 +118,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			string value = MatchVaultElements.Match(output).Value;
 			if (value.Length == 0)
 			{
-				throw new Vault3.VaultException(string.Format("The output does not contain the expected <vault> element: {0}", output));
+				throw new VaultException(string.Format("The output does not contain the expected <vault> element: {0}", output));
 			}
 			return value;
 		}
@@ -127,15 +126,15 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 		private ProcessInfo GetSourceProcessInfo(IIntegrationResult result, bool getByLabel)
 		{
 			ProcessArgumentBuilder builder = new ProcessArgumentBuilder();
-			if ( getByLabel )
+			if (getByLabel)
 			{
 				builder.AddArgument("getlabel", _shim.Folder);
 				builder.AddArgument(result.Label);
-				if ( _shim.UseVaultWorkingDirectory )
+				if (_shim.UseVaultWorkingDirectory)
 					builder.AddArgument("-labelworkingfolder", result.BaseFromWorkingDirectory(_shim.WorkingDirectory));
 				else
 					builder.AddArgument("-destpath", result.BaseFromWorkingDirectory(_shim.WorkingDirectory));
-			} 
+			}
 			else
 			{
 				builder.AddArgument("get", _shim.Folder);
@@ -145,15 +144,14 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 					builder.AddArgument("-destpath", result.BaseFromWorkingDirectory(_shim.WorkingDirectory));
 			}
 
-
 			builder.AddArgument("-merge", "overwrite");
-			builder.AppendArgument("-makewritable");				
+			builder.AppendArgument("-makewritable");
 			builder.AddArgument("-setfiletime", _shim.setFileTime);
 			AddCommonOptionalArguments(builder);
 			return ProcessInfoFor(builder.ToString(), result);
 		}
 
-		private ProcessInfo LabelProcessInfo(IIntegrationResult result) 
+		private ProcessInfo LabelProcessInfo(IIntegrationResult result)
 		{
 			ProcessArgumentBuilder builder = new ProcessArgumentBuilder();
 			builder.AddArgument("label", _shim.Folder);
@@ -162,7 +160,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			return ProcessInfoFor(builder.ToString(), result);
 		}
 
-		private ProcessInfo RemoveLabelProcessInfo(IIntegrationResult result) 
+		private ProcessInfo RemoveLabelProcessInfo(IIntegrationResult result)
 		{
 			ProcessArgumentBuilder builder = new ProcessArgumentBuilder();
 			builder.AddArgument("deletelabel", _shim.Folder);
@@ -171,14 +169,14 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			return ProcessInfoFor(builder.ToString(), result);
 		}
 
-		protected ProcessInfo ForHistoryProcessInfo(IIntegrationResult from, IIntegrationResult to) 
+		protected ProcessInfo ForHistoryProcessInfo(IIntegrationResult from, IIntegrationResult to)
 		{
 			ProcessInfo info = ProcessInfoFor(BuildHistoryProcessArgs(from.StartTime, to.StartTime), from);
 			Log.Debug("Vault History command: " + info.ToString());
 			return info;
 		}
 
-		protected ProcessInfo ProcessInfoFor(string args, IIntegrationResult result) 
+		protected ProcessInfo ProcessInfoFor(string args, IIntegrationResult result)
 		{
 			return new ProcessInfo(_shim.Executable, args, result.BaseFromWorkingDirectory(_shim.WorkingDirectory));
 		}
@@ -186,7 +184,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 		// "history ""{0}"" -excludeactions label -rowlimit 0 -begindate {1:s} -enddate {2:s}
 		// rowlimit 0 or -1 means unlimited (default is 1000 if not specified)
 		// TODO: might want to make rowlimit configurable?
-		private string BuildHistoryProcessArgs(DateTime from, DateTime to) 
+		private string BuildHistoryProcessArgs(DateTime from, DateTime to)
 		{
 			ProcessArgumentBuilder builder = new ProcessArgumentBuilder();
 			builder.AddArgument("history", _shim.Folder);
@@ -197,7 +195,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			return builder.ToString();
 		}
 
-		protected void AddCommonOptionalArguments(ProcessArgumentBuilder builder) 
+		protected void AddCommonOptionalArguments(ProcessArgumentBuilder builder)
 		{
 			builder.AddArgument("-host", _shim.Host);
 			builder.AddArgument("-user", _shim.Username);
@@ -236,12 +234,12 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			XmlNodeList workingFolderNodes = xml.SelectNodes("/vault/listworkingfolders/workingfolder");
 			XmlAttribute repositoryFolderAtt;
 			XmlAttribute localFolderAtt;
-			foreach ( XmlNode workingFolderNode in workingFolderNodes )
+			foreach (XmlNode workingFolderNode in workingFolderNodes)
 			{
 				repositoryFolderAtt = workingFolderNode.Attributes["reposfolder"];
 				localFolderAtt = workingFolderNode.Attributes["localfolder"];
-				if ( repositoryFolderAtt != null &&  localFolderAtt != null )
-					if ( repositoryFolderAtt.InnerText == _shim.Folder )
+				if (repositoryFolderAtt != null && localFolderAtt != null)
+					if (repositoryFolderAtt.InnerText == _shim.Folder)
 					{
 						return localFolderAtt.InnerText;
 					}
@@ -257,7 +255,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			{
 				xml.LoadXml(ExtractXmlFromOutput(result.StandardOutput));
 			}
-			catch ( XmlException )
+			catch (XmlException)
 			{
 				throw new VaultException(string.Format(
 					"Unable to parse vault XML output for vault command: [{0}].  Vault Output: [{1}]", info.Arguments, result.StandardOutput));
@@ -267,8 +265,9 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 
 		public class VaultException : CruiseControlException
 		{
-			public VaultException(string message) : base(message) {}
+			public VaultException(string message) : base(message)
+			{}
 		}
-	
+
 	}
 }

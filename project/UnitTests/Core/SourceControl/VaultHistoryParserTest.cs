@@ -1,4 +1,5 @@
 using System;
+using System.Globalization;
 using System.IO;
 using NUnit.Framework;
 using ThoughtWorks.CruiseControl.Core;
@@ -12,7 +13,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 		//Creating the date string this way will give us a string in the format of the builder's locale.
 		//Can end up with DateTime parsing errors in the test otherwise...
 		//e.g. US format date string "5/13/2003" gives format exception when parsed on UK locale system.
-		private static string XML_COMMENT_DATE = new DateTime(2003, 5, 13, 22, 41, 30).ToString();
+		private static string XML_COMMENT_DATE = new DateTime(2003, 5, 13, 22, 41, 30).ToString(CultureInfo.InvariantCulture);
 		private static readonly string XML = 
 			@"<vault>
 				<history>
@@ -35,6 +36,13 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 					<item txid=""13344"" date=""" + XML_COMMENT_DATE + @""" name=""$/2"" type=""10"" version=""318"" user=""jsmith"" comment=""temp file"" actionString=""Added 2.tmp"" />
 				</history>
 			</vault>";
+		private VaultHistoryParser parser;
+
+		[SetUp]
+		protected void SetUp()
+		{
+			parser = new VaultHistoryParser(CultureInfo.InvariantCulture);
+		}
 
 		private StringReader GetReader(string xml)
 		{
@@ -44,7 +52,6 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 		[Test]
 		public void NumberOfModifications()
 		{
-			VaultHistoryParser parser = new VaultHistoryParser();
 			StringReader reader = GetReader(XML);
 			Modification[] modifications = parser.Parse(reader, new DateTime(2003, 5, 12), DateTime.Now);
 			reader.Close();
@@ -54,7 +61,6 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 		[Test]
 		public void NumberOfModificationsWithInvalidDate()
 		{
-			VaultHistoryParser parser = new VaultHistoryParser();
 			StringReader reader = GetReader(XML);
 			Modification[] modifications = parser.Parse(reader, DateTime.Now.AddMinutes(-1), DateTime.Now);
 			reader.Close();
@@ -64,7 +70,6 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 		[Test]
 		public void ModificationData()
 		{
-			VaultHistoryParser parser = new VaultHistoryParser();
 			StringReader reader = GetReader(XML);
 			Modification[] modifications = parser.Parse(reader, new DateTime(2003, 5, 12), DateTime.Now);
 			reader.Close();
@@ -80,7 +85,6 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 		[Test]
 		public void ShouldStripCharactersOutsideOfVaultElement()
 		{
-			VaultHistoryParser parser = new VaultHistoryParser();
 			StringReader reader = GetReader(XML_PADDED_WITH_EXTRA_CHARACTERS);
 			Modification[] modifications = parser.Parse(reader, new DateTime(2003, 5, 12), DateTime.Now);			
 			Assert.AreEqual(1, modifications.Length);
@@ -95,7 +99,6 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 		[Test]
 		public void NoComments()
 		{
-			VaultHistoryParser parser = new VaultHistoryParser();
 			StringReader reader = GetReader(NO_COMMENT_XML);
 			parser.Parse(reader, new DateTime(2003, 5, 12), DateTime.Now);
 			reader.Close();
@@ -104,7 +107,6 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 		[Test]
 		public void ShouldFindFileAndFolderNamesForAddsAndDeletes()
 		{
-			VaultHistoryParser parser = new VaultHistoryParser();
 			StringReader reader = GetReader(ADD_AND_DELETE_FILES_XML);
 			Modification[] modifications = parser.Parse(reader, new DateTime(2003, 5, 12), DateTime.Now);			
 			Assert.AreEqual(2, modifications.Length);

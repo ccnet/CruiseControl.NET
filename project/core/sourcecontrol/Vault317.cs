@@ -1,12 +1,13 @@
 using System;
 using System.Collections;
 using System.Diagnostics;
+using System.Globalization;
 using System.Xml;
 using ThoughtWorks.CruiseControl.Core.Sourcecontrol;
 using ThoughtWorks.CruiseControl.Core.Util;
 using ThoughtWorks.CruiseControl.Remote;
 
-namespace ThoughtWorks.CruiseControl.Core.sourcecontrol
+namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 {
 	/// <summary>
 	/// Integrates with Vault 3.1.7 or later.
@@ -15,6 +16,7 @@ namespace ThoughtWorks.CruiseControl.Core.sourcecontrol
 	{
 		private long _folderVersion;
 		private long _lastTxID;
+		private CultureInfo culture = CultureInfo.CurrentCulture;
 
 		public Vault317(VaultVersionChecker versionCheckerShim) : base(versionCheckerShim)
 		{
@@ -29,13 +31,11 @@ namespace ThoughtWorks.CruiseControl.Core.sourcecontrol
 		/// <param name="historyParser"></param>
 		/// <param name="executor"></param>
 		public Vault317(VaultVersionChecker versionCheckerShim, IHistoryParser historyParser, ProcessExecutor executor) : base(versionCheckerShim, historyParser, executor)
+		{}
+
+		public override Modification[] GetModifications(IIntegrationResult from, IIntegrationResult to)
 		{
-			
-		}
-	
-		public override Modification[] GetModifications(IIntegrationResult from, IIntegrationResult to) 
-		{
-			if ( LookForChangesUsingVersionHistory(from, to) )
+			if (LookForChangesUsingVersionHistory(from, to))
 				return GetModificationsFromItemHistory(from, to);
 			else
 			{
@@ -55,18 +55,17 @@ namespace ThoughtWorks.CruiseControl.Core.sourcecontrol
 			// We've made two history queries, and if changes were committed after our first check it's possible that they would be erroneously
 			// included in the list of mods without this extra check.
 			ArrayList modList = new ArrayList(itemModifications.Length);
-			foreach ( Modification mod in itemModifications )
+			foreach (Modification mod in itemModifications)
 			{
-				if ( mod.ChangeNumber <= _lastTxID )
+				if (mod.ChangeNumber <= _lastTxID)
 					modList.Add(mod);
 			}
 
 			return (Modification[]) modList.ToArray(typeof (Modification));
 		}
-		
+
 		private bool LookForChangesUsingVersionHistory(IIntegrationResult from, IIntegrationResult to)
 		{
-
 			Log.Info(string.Format("Checking for modifications to {0} in Vault Repository \"{1}\" between {2} and {3}", _shim.Folder, _shim.Repository, from.StartTime, to.StartTime));
 
 			bool bFoundChanges = GetFolderVersion(from, to);
@@ -76,21 +75,21 @@ namespace ThoughtWorks.CruiseControl.Core.sourcecontrol
 			return bFoundChanges;
 		}
 
-		public override void GetSource(IIntegrationResult result) 
+		public override void GetSource(IIntegrationResult result)
 		{
-			if ( !_shim.AutoGetSource ) return;
+			if (!_shim.AutoGetSource) return;
 			Debug.Assert(_folderVersion > 0, "_folderVersion <= 0 when attempting to get source.  This shouldn't happen.");
 
-			if (_shim.CleanCopy )
+			if (_shim.CleanCopy)
 			{
 				string cleanCopyWorkingFolder = null;
-				if ( StringUtil.IsBlank(_shim.WorkingDirectory) )
+				if (StringUtil.IsBlank(_shim.WorkingDirectory))
 				{
 					cleanCopyWorkingFolder = GetVaultWorkingFolder(result);
-					if ( StringUtil.IsBlank(cleanCopyWorkingFolder) )
+					if (StringUtil.IsBlank(cleanCopyWorkingFolder))
 						throw new VaultException(
-							string.Format("Vault user {0} has no working folder set for {1} in repository {2} and no working directory has been specified.", 
-							_shim.Username, _shim.Folder, _shim.Repository));
+							string.Format("Vault user {0} has no working folder set for {1} in repository {2} and no working directory has been specified.",
+							              _shim.Username, _shim.Folder, _shim.Repository));
 				}
 				else
 					cleanCopyWorkingFolder = result.BaseFromWorkingDirectory(_shim.WorkingDirectory);
@@ -103,19 +102,19 @@ namespace ThoughtWorks.CruiseControl.Core.sourcecontrol
 			Execute(GetSourceProcessInfo(result));
 		}
 
-		public override void LabelSourceControl(IIntegrationResult result) 
+		public override void LabelSourceControl(IIntegrationResult result)
 		{
 			// only apply label if it's turned on and the integration was a success
-			if ( !_shim.ApplyLabel || result.Status != IntegrationStatus.Success ) return;
+			if (!_shim.ApplyLabel || result.Status != IntegrationStatus.Success) return;
 
 			Debug.Assert(_folderVersion > 0, "_folderVersion <= 0 when attempting to label.  This shouldn't happen.");
 
-			Log.Info(string.Format("Applying label \"{0}\" to version {1} of {2} in repository {3}.", 
-				result.Label, _folderVersion, _shim.Folder, _shim.Repository));
+			Log.Info(string.Format("Applying label \"{0}\" to version {1} of {2} in repository {3}.",
+			                       result.Label, _folderVersion, _shim.Folder, _shim.Repository));
 			Execute(LabelProcessInfo(result));
 		}
 
-		private ProcessInfo LabelProcessInfo(IIntegrationResult result) 
+		private ProcessInfo LabelProcessInfo(IIntegrationResult result)
 		{
 			ProcessArgumentBuilder builder = new ProcessArgumentBuilder();
 			builder.AddArgument("label", _shim.Folder);
@@ -125,7 +124,6 @@ namespace ThoughtWorks.CruiseControl.Core.sourcecontrol
 			return ProcessInfoFor(builder.ToString(), result);
 		}
 
-		 
 		/// <summary>
 		/// Gets the most recent folder version via Vault's versionhistory command.
 		/// 
@@ -156,7 +154,7 @@ namespace ThoughtWorks.CruiseControl.Core.sourcecontrol
 			versionHistoryXml.LoadXml(versionHistory);
 			XmlNodeList versionNodeList = versionHistoryXml.SelectNodes("/vault/history/item");
 			XmlNode folderVersionNode = null;
-			if ( bForceGetLatestVersion )
+			if (bForceGetLatestVersion)
 			{
 				Debug.Assert(versionNodeList.Count == 1, "Attempted to retrieve folder's current version and got no results.");
 				folderVersionNode = versionNodeList.Item(0);
@@ -164,7 +162,7 @@ namespace ThoughtWorks.CruiseControl.Core.sourcecontrol
 			else
 			{
 				Debug.Assert(versionNodeList.Count == 0 || versionNodeList.Count == 1, "Vault versionhistory -rowlimit 1 returned more than 1 row.");
-				if ( versionNodeList.Count == 1 )
+				if (versionNodeList.Count == 1)
 				{
 					folderVersionNode = versionNodeList.Item(0);
 					// We asked vault for only new folder versions, so if we got one, the folder has changed.
@@ -172,26 +170,26 @@ namespace ThoughtWorks.CruiseControl.Core.sourcecontrol
 				}
 			}
 
-			if ( folderVersionNode != null )
+			if (folderVersionNode != null)
 			{
-				if ( bForceGetLatestVersion )
+				if (bForceGetLatestVersion)
 				{
 					// We asked Vault for the most recent folder version.  We have to check its date to
 					// see if this represents a change since the last integration.
-					XmlAttribute dateAttr = (XmlAttribute)folderVersionNode.Attributes.GetNamedItem("date");
+					XmlAttribute dateAttr = (XmlAttribute) folderVersionNode.Attributes.GetNamedItem("date");
 					Debug.Assert(dateAttr != null, "date attribute not found in version history");
-					DateTime dtLastChange = DateTime.Parse(dateAttr.Value);
-					if ( dtLastChange > from.StartTime )
+					DateTime dtLastChange = DateTime.Parse(dateAttr.Value, culture);
+					if (dtLastChange > from.StartTime)
 						bFoundChanges = true;
 				}
 				// get the new most recent folder version
-				XmlAttribute versionAttr = (XmlAttribute)folderVersionNode.Attributes.GetNamedItem("version");
+				XmlAttribute versionAttr = (XmlAttribute) folderVersionNode.Attributes.GetNamedItem("version");
 				Debug.Assert(versionAttr != null, "version attribute not found in version history");
 				_folderVersion = long.Parse(versionAttr.Value);
 				Log.Debug("Most recent folder version: " + _folderVersion);
 
 				// get the new most recent TxId
-				XmlAttribute txIdAttr = (XmlAttribute)folderVersionNode.Attributes.GetNamedItem("txid");
+				XmlAttribute txIdAttr = (XmlAttribute) folderVersionNode.Attributes.GetNamedItem("txid");
 				Debug.Assert(txIdAttr != null, "txid attribute not found in version history");
 				_lastTxID = long.Parse(txIdAttr.Value);
 				Log.Debug("Most recent TxID: " + _lastTxID);
@@ -200,7 +198,6 @@ namespace ThoughtWorks.CruiseControl.Core.sourcecontrol
 			return bFoundChanges;
 		}
 
-
 		private ProcessInfo VersionHistoryProcessInfo(IIntegrationResult from, IIntegrationResult to, bool bForceGetLatestVersion)
 		{
 			ProcessArgumentBuilder builder = new ProcessArgumentBuilder();
@@ -208,10 +205,10 @@ namespace ThoughtWorks.CruiseControl.Core.sourcecontrol
 
 			// Look only for changes, unless caller asked us to get the latest folder 
 			// version regardless of whether there's been a change.
-			if ( !bForceGetLatestVersion )
+			if (!bForceGetLatestVersion)
 			{
 				// use folderVersion when possible because it's faster and more accurate
-				if ( _folderVersion != 0 )
+				if (_folderVersion != 0)
 				{
 					builder.AddArgument("-beginversion", (_folderVersion + 1).ToString());
 				}
@@ -235,8 +232,8 @@ namespace ThoughtWorks.CruiseControl.Core.sourcecontrol
 
 			builder.AddArgument("getversion", _folderVersion.ToString());
 			builder.AddArgument(_shim.Folder);
-			
-			if ( !StringUtil.IsBlank(_shim.WorkingDirectory) )
+
+			if (!StringUtil.IsBlank(_shim.WorkingDirectory))
 			{
 				builder.AddArgument(result.BaseFromWorkingDirectory(_shim.WorkingDirectory));
 				if (_shim.UseVaultWorkingDirectory)
@@ -250,6 +247,5 @@ namespace ThoughtWorks.CruiseControl.Core.sourcecontrol
 			AddCommonOptionalArguments(builder);
 			return ProcessInfoFor(builder.ToString(), result);
 		}
-
 	}
 }

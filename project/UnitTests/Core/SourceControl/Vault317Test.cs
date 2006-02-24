@@ -1,5 +1,7 @@
 using System;
+using System.Globalization;
 using System.Text;
+using System.Threading;
 using NMock;
 using NUnit.Framework;
 using ThoughtWorks.CruiseControl.Core;
@@ -11,15 +13,17 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 	[TestFixture]
 	public class Vault317Test : Vault3Test
 	{
-
 		private bool _bModificationsRetrieved = false;
+		private CultureInfo culture = CultureInfo.InvariantCulture;
 
 		[SetUp]
 		public override void SetUp()
 		{
+			Thread.CurrentThread.CurrentCulture = culture;
+
 			CreateProcessExecutorMock(VaultVersionChecker.DefaultExecutable);
 			mockHistoryParser = new DynamicMock(typeof (IHistoryParser));
-			vault = new VaultVersionChecker(new VaultHistoryParser(), (ProcessExecutor) mockProcessExecutor.MockInstance, VaultVersionChecker.EForcedVaultVersion.Vault317);
+			vault = new VaultVersionChecker(new VaultHistoryParser(culture), (ProcessExecutor) mockProcessExecutor.MockInstance, VaultVersionChecker.EForcedVaultVersion.Vault317);
 
 			this.DefaultWorkingDirectory = @"c:\source";
 
@@ -31,9 +35,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 		[Test]
 		public void FindsSimpleChange()
 		{
-
-			DateTime dtBeforeChange = DateTime.Parse("1/18/2006 3:34:06 PM");
-			DateTime dtAfterChange = DateTime.Parse("1/18/2006 3:34:08 PM");
+			DateTime dtBeforeChange = DateTime.Parse("1/18/2006 3:34:06 PM", culture);
+			DateTime dtAfterChange = DateTime.Parse("1/18/2006 3:34:08 PM", culture);
 			result.StartTime = dtBeforeChange;
 
 			this.ProcessResultOutput = @"
@@ -77,7 +80,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 					</history>
 					<result success=""yes"" />
 				</vault>";
-			dtAfterChange = DateTime.Parse("1/18/2006 3:36:07 PM");
+			dtAfterChange = DateTime.Parse("1/18/2006 3:36:07 PM", culture);
 			itemHistoryArgs = string.Format(@"history $ -excludeactions label -rowlimit 0 -begindate {0:s} -enddate {1:s}{2}",
 				dtBeforeChange, dtAfterChange, SetAndGetCommonOptionalArguments());
 			ExpectToExecuteArguments(itemHistoryArgs);
@@ -91,8 +94,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 		[Test]
 		public void TakesTransactionIntoAccountWhenGettingModifications()
 		{
-			DateTime dtBeforeChange = DateTime.Parse("1/18/2006 3:34:06 PM");
-			DateTime dtAfterChange = DateTime.Parse("1/18/2006 3:34:08 PM");
+			DateTime dtBeforeChange = DateTime.Parse("1/18/2006 3:34:06 PM", culture);
+			DateTime dtAfterChange = DateTime.Parse("1/18/2006 3:34:08 PM", culture);
 
 			result.StartTime = dtBeforeChange;
 
@@ -139,7 +142,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 					</history>
 					<result success=""yes"" />
 				</vault>";
-			DateTime dtEnd = DateTime.Parse("1/18/2006 3:36:07 PM");
+			DateTime dtEnd = DateTime.Parse("1/18/2006 3:36:07 PM", culture);
 			itemHistoryArgs = string.Format(@"history $ -excludeactions label -rowlimit 0 -begindate {0:s} -enddate {1:s}{2}",
 				dtBeforeChange, dtEnd, SetAndGetCommonOptionalArguments());
 			ExpectToExecuteArguments(itemHistoryArgs);
@@ -671,8 +674,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 			if ( _bModificationsRetrieved )
 				return;
 
-			DateTime dtBeforeChange = DateTime.Parse("1/18/2006 3:34:06 PM");
-			DateTime dtAfterChange = DateTime.Parse("1/18/2006 3:34:08 PM");
+			DateTime dtBeforeChange = DateTime.Parse("1/18/2006 3:34:06 PM", CultureInfo.InvariantCulture);
+			DateTime dtAfterChange = DateTime.Parse("1/18/2006 3:34:08 PM", CultureInfo.InvariantCulture);
 			result.StartTime = dtBeforeChange;
 
 			this.ProcessResultOutput = @"
