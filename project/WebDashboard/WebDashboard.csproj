@@ -182,6 +182,10 @@
                     BuildAction = "Content"
                 />
                 <File
+                    RelPath = "fitnesse.css"
+                    BuildAction = "Content"
+                />
+                <File
                     RelPath = "Web.config"
                     BuildAction = "None"
                 />
