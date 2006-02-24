@@ -27,6 +27,16 @@ namespace ThoughtWorks.CruiseControl.Core
 			cruiseServer.ForceBuild(project);
 		}
 
+		public void Start(string project)
+		{
+			cruiseServer.Start(project);
+		}
+
+		public void Stop(string project)
+		{
+			cruiseServer.Stop(project);
+		}
+
 		public void WaitForExit(string project)
 		{
 			cruiseServer.WaitForExit(project);

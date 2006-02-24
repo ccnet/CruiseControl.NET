@@ -10,6 +10,8 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.ServerConnection
 		IBuildSpecifier[] GetBuildSpecifiers(IProjectSpecifier serverSpecifier);
 		void DeleteProject(IProjectSpecifier projectSpecifier, bool purgeWorkingDirectory, bool purgeArtifactDirectory, bool purgeSourceControlEnvironment);
 		string GetServerLog(IServerSpecifier serverSpecifier);
+		void Start(IProjectSpecifier projectSpecifier);
+		void Stop(IProjectSpecifier projectSpecifier);
 		void ForceBuild(IProjectSpecifier projectSpecifier);
 		ProjectStatusListAndExceptions GetProjectStatusListAndCaptureExceptions();
 		ProjectStatusListAndExceptions GetProjectStatusListAndCaptureExceptions(IServerSpecifier serverSpecifier);

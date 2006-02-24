@@ -41,6 +41,16 @@ namespace ThoughtWorks.CruiseControl.Core
 			_server.WaitForExit();
 		}
 
+		public void Start(string project)
+		{
+			_server.Start(project);
+		}
+
+		public void Stop(string project)
+		{
+			throw new NotImplementedException();
+		}
+
 		public ICruiseManager CruiseManager
 		{
 			get { return _server.CruiseManager; }

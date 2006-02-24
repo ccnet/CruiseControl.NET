@@ -47,7 +47,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.MVC
 		public bool GetChecked(string id)
 		{
 			string value = GetText(id);
-			return (value != null && value =="on");
+			return (value != null && value == "on");
 		}
 
 		public int GetInt(string id, int defaultValue)
@@ -58,7 +58,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.MVC
 			{
 				try
 				{
-					return int.Parse(text);		
+					return int.Parse(text);
 				}
 				catch (FormatException)
 				{
@@ -87,7 +87,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.MVC
 			get
 			{
 				int lastSlashIndex = path.LastIndexOf('/');
-				if (lastSlashIndex == -1) 
+				if (lastSlashIndex == -1)
 					lastSlashIndex = 0;
 
 				int lastPeriod = path.LastIndexOf('.');

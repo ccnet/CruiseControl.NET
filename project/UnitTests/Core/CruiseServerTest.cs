@@ -4,6 +4,7 @@ using NMock;
 using NUnit.Framework;
 using ThoughtWorks.CruiseControl.Core;
 using ThoughtWorks.CruiseControl.Core.Config;
+using ThoughtWorks.CruiseControl.Remote;
 
 namespace ThoughtWorks.CruiseControl.UnitTests.Core
 {
@@ -30,10 +31,10 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 		[SetUp]
 		protected void SetUp()
 		{
-			projectSerializerMock = new DynamicMock(typeof(IProjectSerializer));
+			projectSerializerMock = new DynamicMock(typeof (IProjectSerializer));
 
-			integratorMock1 = new DynamicMock(typeof(IProjectIntegrator));
-			integratorMock2 = new DynamicMock(typeof(IProjectIntegrator));
+			integratorMock1 = new DynamicMock(typeof (IProjectIntegrator));
+			integratorMock2 = new DynamicMock(typeof (IProjectIntegrator));
 			integrator1 = (IProjectIntegrator) integratorMock1.MockInstance;
 			integrator2 = (IProjectIntegrator) integratorMock2.MockInstance;
 			integratorMock1.SetupResult("Name", "Project 1");
@@ -51,15 +52,15 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 			integratorList.Add(integrator1);
 			integratorList.Add(integrator2);
 
-			configServiceMock = new DynamicMock(typeof(IConfigurationService));
+			configServiceMock = new DynamicMock(typeof (IConfigurationService));
 			configServiceMock.ExpectAndReturn("Load", configuration);
 
-			projectIntegratorListFactoryMock = new DynamicMock(typeof(IProjectIntegratorListFactory));
+			projectIntegratorListFactoryMock = new DynamicMock(typeof (IProjectIntegratorListFactory));
 			projectIntegratorListFactoryMock.ExpectAndReturn("CreateProjectIntegrators", integratorList, configuration.Projects);
 
-			server = new CruiseServer((IConfigurationService) configServiceMock.MockInstance, 
-				(IProjectIntegratorListFactory) projectIntegratorListFactoryMock.MockInstance,
-				(IProjectSerializer) projectSerializerMock.MockInstance);
+			server = new CruiseServer((IConfigurationService) configServiceMock.MockInstance,
+			                          (IProjectIntegratorListFactory) projectIntegratorListFactoryMock.MockInstance,
+			                          (IProjectSerializer) projectSerializerMock.MockInstance);
 		}
 
 		private void VerifyAll()
@@ -214,7 +215,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 			VerifyAll();
 		}
 
-		[Test, ExpectedException(typeof(CruiseControlException))]
+		[Test, ExpectedException(typeof (NoSuchProjectException))]
 		public void AttemptToForceBuildOnProjectThatDoesNotExist()
 		{
 			server.ForceBuild("foo");
@@ -240,11 +241,11 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 		{
 			integratorMock1.Expect("Abort");
 			integratorMock2.Expect("Abort");
-			((IDisposable)server).Dispose();
+			((IDisposable) server).Dispose();
 
 			integratorMock1.ExpectNoCall("Abort");
 			integratorMock2.ExpectNoCall("Abort");
-			((IDisposable)server).Dispose();
+			((IDisposable) server).Dispose();
 
 			integratorMock1.Verify();
 			integratorMock2.Verify();
@@ -252,10 +253,31 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 
 		[Test]
 		public void DetectVersionMethod()
-		{string ServerVersion;
+		{
+			string ServerVersion = server.GetVersion();
+			Assert.IsFalse(ServerVersion.Length == 0, "Version not retrieved");
+		}
 
-			ServerVersion = server.GetVersion();
-			Assert.IsFalse(ServerVersion.Length==0,"Version not retrieved");
+		[Test]
+		public void StopSpecificProject()
+		{
+			integratorMock1.Expect("Stop");
+			server.Stop("Project 1");
+			integratorMock1.Verify();
+		}
+
+		[Test, ExpectedException(typeof(NoSuchProjectException))]
+		public void ThrowExceptionIfProjectNotFound()
+		{
+			server.Stop("Project unknown");			
+		}
+
+		[Test]
+		public void StartSpecificProject()
+		{
+			integratorMock2.Expect("Start");
+			server.Start("Project 2");
+			integratorMock2.Verify();			
 		}
 	}
 }

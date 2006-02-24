@@ -114,6 +114,16 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.ServerConnection
 			return GetCruiseManager(serverSpecifier).GetServerLog();
 		}
 
+		public void Start(IProjectSpecifier projectSpecifier)
+		{
+			GetCruiseManager(projectSpecifier.ServerSpecifier).Start(projectSpecifier.ProjectName);
+		}
+
+		public void Stop(IProjectSpecifier projectSpecifier)
+		{
+			GetCruiseManager(projectSpecifier.ServerSpecifier).Stop(projectSpecifier.ProjectName);
+		}
+
 		public string GetServerVersion(IServerSpecifier serverSpecifier)
 		{
 			return GetCruiseManager(serverSpecifier).GetServerVersion();

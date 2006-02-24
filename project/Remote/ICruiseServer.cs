@@ -24,6 +24,9 @@ namespace ThoughtWorks.CruiseControl.Remote
 		/// </summary>
 		void WaitForExit();
 
+		void Start(string project);
+		void Stop(string project);
+
 		/// <summary>
 		/// Retrieve CruiseManager interface for the server
 		/// </summary>

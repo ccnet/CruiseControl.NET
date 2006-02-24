@@ -32,7 +32,7 @@
 			<b>Activity</b>
 		</td>
 		<td align="Center">
-			<b>Force Build</b>
+			<b>Admin</b>
 		</td>
 	</tr>
 	
@@ -67,6 +67,7 @@
 			<td align="Center">
 				<font color="Black">
 					<input type="submit" name="ForceBuild" value="Force"/>
+					<input type="submit" name="StopBuild" value="Stop"/>
 				</font>
 			</td>
 		</form>
