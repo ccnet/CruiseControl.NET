@@ -184,15 +184,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Perforce
 		private ProcessInfo CreateLabelSpecificationProcess(string label)
 		{
 			ProcessInfo processInfo = processInfoCreator.CreateProcessInfo(this, "label -i");
-			processInfo.StandardInputContent = string.Format(@"Label:	{0}
-
-Description:
-	Created by CCNet
-
-Options:	unlocked
-
-View:
-{1}", label, ViewForSpecificationsAsNewlineSeparatedString);
+			processInfo.StandardInputContent = string.Format("Label:	{0}\n\nDescription:\n	Created by CCNet\n\nOptions:	unlocked\n\nView:\n{1}", label, ViewForSpecificationsAsNewlineSeparatedString);
 			return processInfo;
 		}
 
@@ -218,7 +210,7 @@ View:
 				{
 					builder.Append(" ");
 					builder.Append(viewLine);
-					builder.Append(Environment.NewLine);
+					builder.Append("\n");
 				}
 				return builder.ToString();
 			}

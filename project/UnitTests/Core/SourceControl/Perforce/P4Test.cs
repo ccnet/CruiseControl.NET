@@ -255,16 +255,7 @@ exit: 0
 
 			ProcessInfo labelSpecProcess = new ProcessInfo("spec");
 			ProcessInfo labelSpecProcessWithStdInContent = new ProcessInfo("spec");
-			labelSpecProcessWithStdInContent.StandardInputContent = @"Label:	foo-123
-
-Description:
-	Created by CCNet
-
-Options:	unlocked
-
-View:
- //depot/myproject/...
-";
+			labelSpecProcessWithStdInContent.StandardInputContent = "Label:	foo-123\n\nDescription:\n	Created by CCNet\n\nOptions:	unlocked\n\nView:\n //depot/myproject/...\n";
 			ProcessInfo labelSyncProcess = new ProcessInfo("sync");
 
 			processInfoCreatorMock.ExpectAndReturn("CreateProcessInfo", labelSpecProcess, p4, "label -i");
@@ -288,17 +279,7 @@ View:
 
 			ProcessInfo labelSpecProcess = new ProcessInfo("spec");
 			ProcessInfo labelSpecProcessWithStdInContent = new ProcessInfo("spec");
-			labelSpecProcessWithStdInContent.StandardInputContent = @"Label:	foo-123
-
-Description:
-	Created by CCNet
-
-Options:	unlocked
-
-View:
- //depot/myproj/...
- //myotherdepot/proj/...
-";
+			labelSpecProcessWithStdInContent.StandardInputContent = "Label:	foo-123\n\nDescription:\n	Created by CCNet\n\nOptions:	unlocked\n\nView:\n //depot/myproj/...\n //myotherdepot/proj/...\n";
 			ProcessInfo labelSyncProcess = new ProcessInfo("sync");
 
 			processInfoCreatorMock.ExpectAndReturn("CreateProcessInfo", labelSpecProcess, p4, "label -i");

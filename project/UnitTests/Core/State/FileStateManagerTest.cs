@@ -1,5 +1,8 @@
+using System;
 using System.IO;
 using Exortech.NetReflector;
+using NMock;
+using NMock.Constraints;
 using NUnit.Framework;
 using ThoughtWorks.CruiseControl.Core;
 using ThoughtWorks.CruiseControl.Core.State;
@@ -10,20 +13,20 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.State
 	[TestFixture]
 	public class FileStateManagerTest : CustomAssertion
 	{
-		private const string TempDirectory = "integrationstate";
 		private const string ProjectName = IntegrationResultMother.DefaultProjectName;
-		private string DefaultStateFilename = "Test.state";
-		private string tempDir;
+		private const string DefaultStateFilename = "Test.state";
 		private FileStateManager state;
 		private IntegrationResult result;
+		private IMock mockIO;
 
 		[SetUp]
 		public void SetUp()
 		{
-			tempDir = TempFileUtil.CreateTempDir(TempDirectory);
+			mockIO = new DynamicMock(typeof (IFileSystem));
+			mockIO.Strict = true;
 
-			state = new FileStateManager();
-			state.StateFileDirectory = tempDir;
+			state = new FileStateManager((IFileSystem) mockIO.MockInstance);
+			state.StateFileDirectory = Path.GetTempPath();
 			result = IntegrationResultMother.CreateSuccessful();
 			result.ProjectName = ProjectName;
 		}
@@ -31,7 +34,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.State
 		[TearDown]
 		public void TearDown()
 		{
-			TempFileUtil.DeleteTempDir(tempDir);
+			mockIO.Verify();
 		}
 
 		[Test]
@@ -45,15 +48,19 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.State
 		[Test]
 		public void LoadShouldReturnInitialIntegrationResultIfStateFileDoesNotExist()
 		{
+			mockIO.ExpectAndReturn("FileExists", false, StateFilename());		
 			Assert.IsTrue(state.LoadState(ProjectName).IsInitial());
 		}
 
 		[Test]
 		public void SaveAndReload()
 		{
-			Assert.IsFalse(File.Exists(StateFilename()));
+			CollectingConstraint contents = new CollectingConstraint();
+			mockIO.Expect("Save", StateFilename(), contents);
 			state.SaveState(result);
-			Assert.IsTrue(File.Exists(StateFilename()));
+
+			mockIO.ExpectAndReturn("FileExists", true, StateFilename());
+			mockIO.ExpectAndReturn("Load", new StringReader(contents.Parameter.ToString()), StateFilename());
 			IIntegrationResult actual = state.LoadState(ProjectName);
 			Assert.AreEqual(result, actual);
 		}
@@ -65,51 +72,52 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.State
 		}
 
 		[Test]
-		public void SaveMultipleTimes()
-		{
-			state.SaveState(IntegrationResultMother.CreateFailed());
-			state.SaveState(IntegrationResultMother.CreateSuccessful());
-
-			IntegrationResult result = IntegrationResultMother.CreateSuccessful();
-			result.Label = "10";
-			state.SaveState(result);
-
-			Assert.AreEqual(1, Directory.GetFiles(tempDir).Length);
-			IIntegrationResult actual = state.LoadState(ProjectName);
-			Assert.AreEqual("10", actual.Label);
-		}
-
-		[Test]
 		public void AttemptToSaveWithInvalidXml()
 		{
-//			result.ProjectName = "<<%_&";  to do -- requires separate test where illegal characters are in project name
+			mockIO.Expect("Save", StateFilename(), new IsAnything());
+
 			result.Label = "<&/<>";
 			result.AddTaskResult("<badxml>>");
 			state.SaveState(result);
 		}
 
 		[Test]
-		public void SaveAndReloadWithUnicodeCharacters()
+		public void SaveProjectWithSpacesInName()
 		{
-			IntegrationResult result = IntegrationResultMother.CreateSuccessful();
-			result.Label= "hi there? håkan! \u307b";
-			state.SaveState(result);
+			mockIO.Expect("Save", Path.Combine(Path.GetTempPath(), "MyProject.state"), new IsAnything());
 
-			IIntegrationResult actual = state.LoadState(ProjectName);
-			Assert.AreEqual(result.Label, actual.Label);
+			result.ProjectName = "my project";
+			state.SaveState(result);
 		}
 
 		[Test]
-		public void SaveProjectWithSpacesInName()
+		public void ShouldWriteXmlUsingUTF8Encoding()
 		{
-			result.ProjectName = "my project";
+			mockIO.Expect("Save", StateFilename(), new StartsWith("<?xml version=\"1.0\" encoding=\"utf-8\"?>"));
+
+			IntegrationResult result = IntegrationResultMother.CreateSuccessful();
+			result.ArtifactDirectory = "artifactDir";
 			state.SaveState(result);
-			Assert.IsTrue(File.Exists(Path.Combine(tempDir, "MyProject.state")));
+		}
+
+		[Test, ExpectedException(typeof(CruiseControlException))]
+		public void HandleExceptionSavingStateFile()
+		{
+			mockIO.ExpectAndThrow("Save", new SystemException(), StateFilename(), new IsAnything());
+			state.SaveState(result);
+		}
+
+		[Test, ExpectedException(typeof(CruiseControlException))]
+		public void HandleExceptionLoadingStateFile()
+		{
+			mockIO.ExpectAndReturn("FileExists", true, StateFilename());
+			mockIO.ExpectAndThrow("Load", new SystemException(), StateFilename());
+			state.LoadState(ProjectName);
 		}
 
 		private string StateFilename()
 		{
-			return Path.Combine(tempDir, DefaultStateFilename);
+			return Path.Combine(Path.GetTempPath(), DefaultStateFilename);
 		}
 	}
 }

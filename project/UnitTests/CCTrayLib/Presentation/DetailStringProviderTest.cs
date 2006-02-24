@@ -30,16 +30,35 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Presentation
 			DateTime nextBuildTime = new DateTime(2005, 7, 20, 15, 12, 30);
 
 			monitor.ProjectStatus = new ProjectStatus(
-				ProjectIntegratorState.Running, 
-				IntegrationStatus.Unknown, 
-				ProjectActivity.Sleeping, 
+				ProjectIntegratorState.Running,
+				IntegrationStatus.Unknown,
+				ProjectActivity.Sleeping,
 				"NAME", "url", DateTime.MinValue, "lastLabel", null, nextBuildTime);
 			monitor.ProjectState = ProjectState.Success;
 
 			Assert.AreEqual(
-				string.Format("Next build check: {0:T}", nextBuildTime)		
+				string.Format("Next build check: {0:T}", nextBuildTime)
 				, provider.FormatDetailString(monitor.Detail));
-			
+
+		}
+
+		[Test]
+		public void WhenTheNextBuildTimeIsMaxValueIndicateThatNoBuildIsScheduled()
+		{
+			StubProjectMonitor monitor = new StubProjectMonitor("name");
+			DetailStringProvider provider = new DetailStringProvider();
+			DateTime nextBuildTime = DateTime.MaxValue;
+
+			monitor.ProjectStatus = new ProjectStatus(
+				ProjectIntegratorState.Running,
+				IntegrationStatus.Unknown,
+				ProjectActivity.Sleeping,
+				"NAME", "url", DateTime.MinValue, "lastLabel", null, nextBuildTime);
+			monitor.ProjectState = ProjectState.Success;
+
+			Assert.AreEqual(
+				"Project is not automatically triggered", provider.FormatDetailString(monitor.Detail));
+
 		}
 	}
 }

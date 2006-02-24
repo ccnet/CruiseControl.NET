@@ -1,4 +1,5 @@
 using System;
+using System.Globalization;
 using System.IO;
 using NMock;
 using NMock.Constraints;
@@ -21,7 +22,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 		{
 			_executor = new DynamicMock(typeof(ProcessExecutor));
 			_historyParser = new DynamicMock(typeof(IHistoryParser));
-			_vss = new Vss(new VssLocale(), (IHistoryParser) _historyParser.MockInstance, (ProcessExecutor) _executor.MockInstance, null);
+			_vss = new Vss(new VssLocale(CultureInfo.InvariantCulture), (IHistoryParser) _historyParser.MockInstance, (ProcessExecutor) _executor.MockInstance, null);
 			_vss.Executable = "ss.exe";
 		}
 

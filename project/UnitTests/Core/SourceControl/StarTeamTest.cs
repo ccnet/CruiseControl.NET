@@ -49,7 +49,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 		public void VerifyFormatOfGetSourceProcessArguments()
 		{				
 			string args = starteam.GetSourceProcessArgs();			
-			Assert.AreEqual("co -nologo -x -is -q -f NCO -p \"Admin:admin@10.1.1.64:49201/.NET LAB/CC.NET/starteam-ccnet\" \"*\"", args);
+			Assert.AreEqual("co -nologo -ts -x -is -q -f NCO -p \"Admin:admin@10.1.1.64:49201/.NET LAB/CC.NET/starteam-ccnet\" \"*\"", args);
 		}
 		
 		[Test]

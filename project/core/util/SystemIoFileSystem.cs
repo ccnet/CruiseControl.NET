@@ -23,6 +23,7 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 			{
 				CopyDirectoryToDirectory(subdir.FullName, Path.Combine(destPath, subdir.Name));
 			}
+
 			foreach (string file in Directory.GetFiles(sourcePath))
 			{
 				CopyFileToDirectory(Path.Combine(sourcePath, file), destPath);
@@ -45,10 +46,13 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 		private void CopyFileToFile(string sourcePath, string destPath)
 		{
 			string destDir = Path.GetDirectoryName(destPath);
+
 			if (! Directory.Exists(destDir))
+
 				Directory.CreateDirectory(destDir);
 
 			if (File.Exists(destPath))
+
 				File.SetAttributes(destPath, FileAttributes.Normal);
 
 			File.Copy(sourcePath, destPath, true);
@@ -61,5 +65,30 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 				stream.Write(content);
 			}
 		}
+
+		public TextReader Load(string file)
+		{
+			using (TextReader reader = new StreamReader(file))
+			{
+				return new StringReader(reader.ReadToEnd());
+			}
+		}
+
+		public bool FileExists(string file)
+		{
+			return File.Exists(file);
+		}
+
+//		private TextReader CreateTextReader(string path)
+//		{
+//			try
+//			{
+//				return new StreamReader(path);
+//			}
+//			catch (IOException ex)
+//			{
+//				throw new CruiseControlException(string.Format("Unable to read the specified state file: {0}.  The path may be invalid.", path), ex);
+//			}
+//		}
 	}
 }

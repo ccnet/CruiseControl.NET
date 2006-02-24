@@ -6,6 +6,7 @@
 	<xsl:output method="html"/>
 
 	<xsl:template match="/">
+	    <div id="msbuild-report">
 		<xsl:variable name="buildresults" select="//msbuild" />
 		<xsl:choose>
 			<xsl:when test="count($buildresults) > 0">
@@ -15,14 +16,14 @@
 				<h2>Log does not contain any XML output from MSBuild.</h2>
 				<p>
 					Please make sure that MSBuild is executed using the XmlLogger
-					(use the argument: <b style="white-space:nowrap">/logger:Kobush.Build.Logging.XmlLogger,Kobush.Build.dll</b>).
 				</p>
 			</xsl:otherwise>
 		</xsl:choose>
+	    </div>
 	</xsl:template>
 
 	<xsl:template match="msbuild">
-		<table class="section-table" cellpadding="2" cellspacing="0" border="0" width="98%">
+			<table class="section-table" cellpadding="2" cellspacing="0" border="0" width="98%">
 			<tr>
 				<td class="sectionheader">
 					Build started <xsl:value-of select="@startTime"/>
@@ -64,7 +65,7 @@
 					Time elapsed <xsl:value-of select="@elapsedTime"/>
 				</td>
 			</tr>
-		</table>
+			</table>
 	</xsl:template>
 
 	<xsl:template match="project">

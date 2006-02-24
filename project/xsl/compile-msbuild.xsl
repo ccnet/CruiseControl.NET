@@ -31,7 +31,7 @@
 	            </tr>
 	            <tr>
 					<td class="section-warn">
-						<xsl:apply-templates select="$warning.events"/>
+						<xsl:apply-templates select="$warnings"/>
 					</td>
 				</tr>
 			</table>

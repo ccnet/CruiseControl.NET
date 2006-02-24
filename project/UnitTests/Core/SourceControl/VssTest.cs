@@ -81,6 +81,13 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 			Assert.AreEqual("fr-FR", vss.Culture);
 			Assert.AreEqual(false, vss.CleanCopy);
 		}
+
+		[Test]
+		public void ShouldPopulateWithMinimalConfiguration()
+		{
+			vss = (Vss) NetReflector.Read("<vss />");
+			Assert.AreEqual(Vss.DefaultProject, vss.Project);
+		}
 		
 		[Test]
 		public void StripQuotesFromSSDir()
@@ -109,6 +116,14 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 		public void VerifyHistoryProcessInfoArguments()
 		{
 			ExpectToExecuteArguments(string.Format("history $/fooProject -R -Vd{0}~{1} -YAdmin,admin -I-Y", CommandDate(today), CommandDate(yesterday)));
+			vss.GetModifications(IntegrationResultMother.CreateSuccessful(yesterday), IntegrationResultMother.CreateSuccessful(today));
+		}
+
+		[Test]
+		public void VerifyHistoryProcessInfoArgumentsWhenUsernameIsNotSpecified()
+		{
+			ExpectToExecuteArguments(string.Format("history $/fooProject -R -Vd{0}~{1} -I-Y", CommandDate(today), CommandDate(yesterday)));
+			vss.Username = null;
 			vss.GetModifications(IntegrationResultMother.CreateSuccessful(yesterday), IntegrationResultMother.CreateSuccessful(today));
 		}
 
@@ -142,6 +157,21 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 
 			vss.AutoGetSource = true;
 			vss.GetSource(IntegrationResultMother.CreateSuccessful(today));
+		}
+
+		[Test]
+		public void VerifyGetSourceProcessInfoIfUsernameIsNotSpecified()
+		{
+			ExpectToExecuteArguments(RemoveUsername(ForGetCommand()));
+
+			vss.AutoGetSource = true;
+			vss.Username = "";
+			vss.GetSource(IntegrationResultMother.CreateSuccessful(today));
+		}
+
+		private string RemoveUsername(string cmd)
+		{
+			return cmd.Replace(" -YAdmin,admin", "");
 		}
 
 		[Test]
@@ -198,7 +228,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 		[Test]
 		public void VerifyLabelProcessInfoArguments()
 		{
-			ExpectToExecuteArguments("label $/fooProject -LnewLabel -VL -YAdmin,admin -I-Y");
+			ExpectToExecuteArguments("label $/fooProject -LnewLabel -YAdmin,admin -I-Y");
 
 			vss.ApplyLabel = true;
 			vss.LabelSourceControl(IntegrationResultMother.CreateSuccessful("newLabel"));
@@ -213,6 +243,22 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 			IntegrationResult result = IntegrationResultMother.CreateSuccessful("newLabel");
 			result.StartTime = new DateTime(2005, 6, 10, 18, 24, 31);
 
+			vss.ApplyLabel = true;
+			vss.AutoGetSource = false;
+			vss.GetSource(result);
+			vss.LabelSourceControl(result);
+		}
+
+		[Test]
+		public void VerifyLabelProcessInfoArgumentsWhenCreatingAndOverwritingTemporaryLabelAndUsernameIsNotSpecified()
+		{
+			ExpectToExecuteArguments("label $/fooProject -LCCNETUNVERIFIED06102005182431 -I-Y");
+			ExpectToExecuteArguments("label $/fooProject -LnewLabel -VLCCNETUNVERIFIED06102005182431 -I-Y");
+
+			IntegrationResult result = IntegrationResultMother.CreateSuccessful("newLabel");
+			result.StartTime = new DateTime(2005, 6, 10, 18, 24, 31);
+
+			vss.Username = null;
 			vss.ApplyLabel = true;
 			vss.AutoGetSource = false;
 			vss.GetSource(result);
@@ -258,7 +304,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 
 		private string CommandDate(DateTime date)
 		{
-			return new VssLocale().FormatCommandDate(date);
+			return new VssLocale(CultureInfo.InvariantCulture).FormatCommandDate(date);
 		}
 
 		private string ForGetCommand()

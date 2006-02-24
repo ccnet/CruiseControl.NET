@@ -24,8 +24,8 @@ namespace ThoughtWorks.CruiseControl.Core.Config
 			{
 				concatenatedProjects.Append(projectSerializer.Serialize(project));
 			}
-			doc.DocumentElement.InnerXml = concatenatedProjects.ToString();
 
+			doc.DocumentElement.InnerXml = concatenatedProjects.ToString();
 			using (StreamWriter fileWriter = new StreamWriter(configFile.FullName))
 			{
 				XmlTextWriter xmlTextWriter = new XmlTextWriter(fileWriter);

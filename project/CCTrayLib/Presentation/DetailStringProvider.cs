@@ -18,6 +18,9 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 
 			if (projectStatus.Activity == ProjectActivity.Sleeping)
 			{
+				if (projectStatus.NextBuildTime == DateTime.MaxValue)
+					return "Project is not automatically triggered";
+				
 				return string.Format("Next build check: {0:T}", projectStatus.NextBuildTime);
 			}
 			

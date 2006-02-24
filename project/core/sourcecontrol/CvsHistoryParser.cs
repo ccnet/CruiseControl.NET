@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Globalization;
 using System.IO;
+using System.Text;
 using System.Text.RegularExpressions;
 using ThoughtWorks.CruiseControl.Core.Util;
 
@@ -16,27 +17,22 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			"=============================================================================";
 
 		/// <summary>
-		/// This is the keyword that precedes the name of the RCS filename in the CVS
-		/// log information.
+		/// This line delimits the different revisions of a file in the CVS log information.
+		/// </summary>
+		private static readonly string CvsModificationDelimiter = "----------------------------";
+
+		/// <summary>
+		/// This is the keyword that precedes the name of the RCS filename in the CVS log information.
 		/// </summary>
 		private static readonly string CVS_RCSFILE_LINE = "RCS file: ";
 
 		/// <summary>
-		/// This is the keyword that precedes the name of the working filename in the
-		/// CVS log information.
+		/// This is the keyword that precedes the name of the working filename in the CVS log information.
 		/// </summary>
 		private static readonly string CVS_WORKINGFILE_LINE = "Working file: ";
 
 		/// <summary>
-		/// This line delimits the different revisions of a file in the CVS log
-		/// information.
-		/// </summary>
-		private static readonly string CVS_REVISION_DELIM =
-			"----------------------------";
-
-		/// <summary>
-		/// This is the keyword that precedes the timestamp of a file revision in the
-		/// CVS log information.
+		/// This is the keyword that precedes the timestamp of a file revision in the CVS log information.
 		/// </summary>
 		private static readonly string CVS_REVISION_DATE = "date:";
 
@@ -47,37 +43,24 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 		/// </summary>
 		private static readonly string CVS_REVISION_DEAD = "dead";
 
-		/// <summary>
-		/// System dependent new line seperator.
-		/// </summary>
-		private static readonly string NEW_LINE = "\n";
-
 		private string currentLine;
 		private string workingFileName;
-		private Regex dateLineRegex = new Regex(@"date:\s+(?<date>\S+)\s+(?<time>\S+)\s*(?<timezone>\S*);\s+author:\s+(?<author>.*);\s+state:\s+(?<state>.*);(\s+lines:\s+\+(?<line1>\d+)\s+-(?<line2>\d+))?");
 
 		public Modification[] Parse(TextReader cvsLog, DateTime from, DateTime to)
 		{
-			// Read to the first RCS file name. The first entry in the log
-			// information will begin with this line. A CVS_FILE_DELIMITER is NOT
-			// present. If no RCS file lines are found then there is nothing to do.
-			currentLine = ReadToNotPast(cvsLog, CVS_RCSFILE_LINE, null);
 			ArrayList mods = new ArrayList();
 
-			while (currentLine != null)
+			// Read to the first RCS file name. The first entry in the log
+			// information will begin with this line. A CVS_FILE_DELIMITER is NOT
+			// present. If no RCS file lines are found then there is nothing to do.			
+			while ((currentLine = ReadToNotPast(cvsLog, CVS_RCSFILE_LINE, null)) != null)
 			{
-				// Parse the single file entry, which may include several
-				// modifications.
+				// Parse the single file entry, which may include several modifications.
 				IList entryList = ParseFileEntry(cvsLog);
 
 				//Add all the modifications to the local list.
 				mods.AddRange(entryList);
-
-				// Read to the next RCS file line. The CVS_FILE_DELIMITER may have
-				// been consumed by the parseEntry method, so we cannot read to it.
-				currentLine = ReadToNotPast(cvsLog, CVS_RCSFILE_LINE, null);
 			}
-
 			return (Modification[]) mods.ToArray(typeof (Modification));
 		}
 
@@ -87,16 +70,10 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 
 			workingFileName = ParseFileNameAndPath(cvsLog);
 
-			currentLine = ReadToNotPast(cvsLog, CVS_REVISION_DATE, CVS_FILE_DELIM);
+			currentLine = ReadToNotPast(cvsLog, CvsModificationDelimiter, CVS_FILE_DELIM);
 			while (currentLine != null && !currentLine.StartsWith(CVS_FILE_DELIM))
 			{
-				Modification mod = ParseModification(cvsLog);
-				mods.Add(mod);
-
-				if (currentLine != null && !currentLine.StartsWith(CVS_FILE_DELIM))
-				{
-					currentLine = ReadToNotPast(cvsLog, CVS_REVISION_DATE, CVS_FILE_DELIM);
-				}
+				mods.Add(ParseModification(cvsLog));
 			}
 			return mods;
 		}
@@ -130,38 +107,43 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 
 		private Modification ParseModification(TextReader reader)
 		{
-			Modification nextModification = ParseDateLine(currentLine);
-			nextModification.FileName = ParseFileName(workingFileName);
-			nextModification.FolderName = ParseFolderName(workingFileName);
-			nextModification.Comment = ParseComment(reader);
-			return nextModification;
+			currentLine = reader.ReadLine();
+			Modification modification = new Modification();
+			if (currentLine.StartsWith("revision"))
+			{
+				modification.Version = currentLine.Substring("revision".Length).Trim();
+				currentLine = reader.ReadLine();
+			}
+			if (currentLine.StartsWith(CVS_REVISION_DATE))
+			{
+				ParseDateLine(modification, currentLine);
+				modification.FileName = ParseFileName(workingFileName);
+				modification.FolderName = ParseFolderName(workingFileName);
+
+				currentLine = reader.ReadLine();
+				modification.Comment = ParseComment(reader);
+			}
+			return modification;
 		}
 
 		private string ParseComment(TextReader cvsLog)
 		{
 			// All the text from now to the next revision delimiter or working
 			// file delimiter constitutes the comment.
-			string message = string.Empty;
-			bool multiLine = false;
-
-			currentLine = cvsLog.ReadLine();
+			StringBuilder message = new StringBuilder();
 			while (currentLine != null && !currentLine.StartsWith(CVS_FILE_DELIM)
-				&& !currentLine.StartsWith(CVS_REVISION_DELIM))
+				&& !currentLine.StartsWith(CvsHistoryParser.CvsModificationDelimiter))
 			{
-				if (multiLine)
+				if (message.Length > 0)
 				{
-					message += NEW_LINE;
+					message.Append(Environment.NewLine);
 				}
-				else
-				{
-					multiLine = true;
-				}
-				message += currentLine;
+				message.Append(currentLine);
 
 				//Go to the next line.
 				currentLine = cvsLog.ReadLine();
 			}
-			return message;
+			return message.ToString();
 		}
 
 		private string ParseFileName(string workingFileName)
@@ -181,17 +163,16 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			return folderName;
 		}
 
-		private Modification ParseDateLine(string dateLine)
+		private Regex dateLineRegex = new Regex(@"date:\s+(?<date>\S+)\s+(?<time>\S+)\s*(?<timezone>\S*);\s+author:\s+(?<author>.*);\s+state:\s+(?<state>\S*);(\s+lines:\s+\+(?<line1>\d+)\s+-(?<line2>\d+))?");
+
+		private void ParseDateLine(Modification modification, string dateLine)
 		{
 			try
 			{
 				Match match = dateLineRegex.Match(dateLine);
-
-				Modification nextModification = new Modification();
-				nextModification.ModifiedTime = ParseModifiedTime(match.Groups["date"].Value, match.Groups["time"].Value);
-				nextModification.UserName = match.Groups["author"].Value;
-				nextModification.Type = ParseType(match.Groups["state"].Value, match.Groups["line1"].Value);
-				return nextModification;
+				modification.ModifiedTime = ParseModifiedTime(match.Groups["date"].Value, match.Groups["time"].Value);
+				modification.UserName = match.Groups["author"].Value;
+				modification.Type = ParseType(match.Groups["state"].Value, match.Groups["line1"].Value);
 			}
 			catch (Exception ex)
 			{

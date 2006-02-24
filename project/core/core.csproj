@@ -399,6 +399,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "label\DateLabeller.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "label\DefaultLabeller.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -599,6 +604,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "sourcecontrol\ActionFilter.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "sourcecontrol\ClearCase.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -729,6 +739,16 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "sourcecontrol\Surround.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "sourcecontrol\SurroundHistoryParser.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "sourcecontrol\Svn.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -774,6 +794,16 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "sourcecontrol\VssLocale.de.resx"
+                    DependentUpon = "VssLocale.cs"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "sourcecontrol\VssLocale.fr.resx"
+                    DependentUpon = "VssLocale.cs"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
                     RelPath = "sourcecontrol\VssLocale.ja.resx"
                     DependentUpon = "VssLocale.cs"
                     BuildAction = "EmbeddedResource"
@@ -784,11 +814,17 @@
                     BuildAction = "EmbeddedResource"
                 />
                 <File
-                    RelPath = "sourcecontrol\VssLocale.fr.resx"
-                    BuildAction = "EmbeddedResource"
+                    RelPath = "sourcecontrol\WebSVNUrlBuilder.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "sourcecontrol\WebSVNUrlBuilder.cs"
+                    RelPath = "sourcecontrol\BitKeeper\BitKeeper.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "sourcecontrol\BitKeeper\BitKeeperHistoryParser.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -988,7 +1024,17 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Triggers\ProjectTrigger.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Triggers\ScheduleTrigger.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Triggers\UrlTrigger.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -1019,6 +1065,11 @@
                 />
                 <File
                     RelPath = "util\HtmlExceptionFormatter.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "util\HttpWrapper.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -1154,6 +1205,11 @@
                 />
                 <File
                     RelPath = "util\TimeUnits.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "util\Utf8StringWriter.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

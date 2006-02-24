@@ -14,6 +14,11 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 		{
 			Thread.Sleep(milliseconds);
 		}
+		
+		public virtual void Sleep(TimeSpan duration)
+		{
+			Thread.Sleep(duration);
+		}
 
 		public virtual DateTime Today
 		{
