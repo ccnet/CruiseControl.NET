@@ -26,8 +26,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 		{
 			urlBuilderMock = new DynamicMock(typeof(IUrlBuilder));
 			linkFactoryMock = new DynamicMock(typeof(ILinkFactory));
-			projectGrid = new ProjectGrid((IUrlBuilder) urlBuilderMock.MockInstance,
-				(ILinkFactory) linkFactoryMock.MockInstance);
+			projectGrid = new ProjectGrid((ILinkFactory) linkFactoryMock.MockInstance);
 
 			serverSpecifier = new DefaultServerSpecifier("server");
 			projectSpecifier = new DefaultProjectSpecifier(serverSpecifier, "my project");

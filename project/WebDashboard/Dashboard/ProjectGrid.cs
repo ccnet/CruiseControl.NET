@@ -9,12 +9,10 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 {
 	public class ProjectGrid : IProjectGrid
 	{
-		private readonly IUrlBuilder urlBuilder;
 		private readonly ILinkFactory linkFactory;
 
-		public ProjectGrid(IUrlBuilder urlBuilder, ILinkFactory linkFactory)
+		public ProjectGrid(ILinkFactory linkFactory)
 		{
-			this.urlBuilder = urlBuilder;
 			this.linkFactory = linkFactory;
 		}
 
@@ -35,7 +33,8 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 						(status.LastBuildLabel != null ? status.LastBuildLabel : "no build available") , 
 						status.Status.ToString(), 
 						status.Activity.ToString(), 
-						linkFactory.CreateProjectLink(new DefaultProjectSpecifier(serverSpecifier, projectName), ProjectReportProjectPlugin.ACTION_NAME).Url
+						linkFactory.CreateProjectLink(new DefaultProjectSpecifier(serverSpecifier, projectName), ProjectReportProjectPlugin.ACTION_NAME).Url,
+						status.Status
 					));
 			}
 

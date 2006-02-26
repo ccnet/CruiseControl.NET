@@ -76,7 +76,6 @@ namespace ThoughtWorks.CruiseControl.Core
 			// start thread if it's not running yet
 			if (_thread.ThreadState != ThreadState.Running)
 			{
-				Log.Info("Starting integrator for project: " + _project.Name);
 				_thread.Start();
 			}
 		}

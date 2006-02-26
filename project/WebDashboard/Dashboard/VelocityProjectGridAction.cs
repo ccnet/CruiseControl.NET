@@ -28,20 +28,21 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 
 		public IResponse Execute(string actionName, IRequest request)
 		{
-			Hashtable velocityContext = new Hashtable();
-			velocityContext["forceBuildMessage"] = ForceBuildIfNecessary(request);
-			return GenerateView(farmService.GetProjectStatusListAndCaptureExceptions(), velocityContext, actionName, request, null);
+			return GenerateView(farmService.GetProjectStatusListAndCaptureExceptions(), actionName, request, null);
 		}
 
 		public IResponse Execute(string actionName, IServerSpecifier serverSpecifier, IRequest request)
 		{
-			Hashtable velocityContext = new Hashtable();
-			velocityContext["forceBuildMessage"] = ForceBuildIfNecessary(request);
-			return GenerateView(farmService.GetProjectStatusListAndCaptureExceptions(serverSpecifier), velocityContext, actionName, request, serverSpecifier);
+			return GenerateView(farmService.GetProjectStatusListAndCaptureExceptions(serverSpecifier), actionName, request, serverSpecifier);
 		}
 
-		private HtmlFragmentResponse GenerateView(ProjectStatusListAndExceptions projectStatusListAndExceptions, Hashtable velocityContext, string actionName, IRequest request, IServerSpecifier serverSpecifier)
+		private HtmlFragmentResponse GenerateView(ProjectStatusListAndExceptions projectStatusListAndExceptions, string actionName, IRequest request, IServerSpecifier serverSpecifier)
 		{
+			Hashtable velocityContext = new Hashtable();
+			velocityContext["forceBuildMessage"] = ForceBuildIfNecessary(request);
+			velocityContext["allowForceBuild"] = true;
+			velocityContext["allowStartStopBuild"] = false;
+
 			ProjectGridSortColumn sortColumn = GetSortColumn(request);
 			bool sortReverse = SortAscending(request);
 

@@ -1,5 +1,6 @@
 using System;
 using ThoughtWorks.CruiseControl.Core.Util;
+using ThoughtWorks.CruiseControl.Remote;
 
 namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 {
@@ -14,8 +15,11 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 		private readonly string status;
 		private readonly string activity;
 		private readonly string url;
+		private readonly string startStopButtonValue;
+		private readonly string startStopButtonName;
 
-		public ProjectGridRow(string name, string serverName, string buildStatus, string buildStatusHtmlColor, DateTime lastBuildDate, string lastBuildLabel, string status, string activity, string url)
+		public ProjectGridRow(string name, string serverName, string buildStatus, string buildStatusHtmlColor, DateTime lastBuildDate, 
+			string lastBuildLabel, string status, string activity, string url, ProjectIntegratorState integratorState)
 		{
 			this.name = name;
 			this.serverName = serverName;
@@ -26,6 +30,8 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 			this.status = status;
 			this.activity = activity;
 			this.url = url;
+			this.startStopButtonName = (integratorState == ProjectIntegratorState.Running) ? "StopBuild" : "StartBuild";
+			this.startStopButtonValue = (integratorState == ProjectIntegratorState.Running) ? "Stop" : "Start";
 		}
 
 		public string Name
@@ -71,6 +77,16 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 		public string Url
 		{
 			get { return url; }
+		}
+
+		public string StartStopButtonName
+		{
+			get { return startStopButtonName; }
+		}
+
+		public string StartStopButtonValue
+		{
+			get { return startStopButtonValue; }
 		}
 	}
 }

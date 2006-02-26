@@ -10,14 +10,8 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Configuration
 		[ReflectorArray("servers")]
 		public ServerLocation[] Servers
 		{
-			get
-			{
-				return servers;
-			}
-			set
-			{
-				servers = value;
-			}
+			get { return servers; }
+			set { servers = value; }
 		}
 	}
 }
