@@ -40,8 +40,6 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 		{
 			Hashtable velocityContext = new Hashtable();
 			velocityContext["forceBuildMessage"] = ForceBuildIfNecessary(request);
-			velocityContext["allowForceBuild"] = true;
-			velocityContext["allowStartStopBuild"] = false;
 
 			ProjectGridSortColumn sortColumn = GetSortColumn(request);
 			bool sortReverse = SortAscending(request);

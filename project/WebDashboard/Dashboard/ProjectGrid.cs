@@ -24,39 +24,16 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 			{
 				ProjectStatus status = statusOnServer.ProjectStatus;
 				IServerSpecifier serverSpecifier = statusOnServer.ServerSpecifier;
-				string projectName = status.Name;
+				DefaultProjectSpecifier projectSpecifier = new DefaultProjectSpecifier(serverSpecifier, status.Name);
 				rows.Add(
-					new ProjectGridRow(
-						projectName, statusOnServer.ServerSpecifier.ServerName, status.BuildStatus.ToString(), 
-						CalculateHtmlColor(status.BuildStatus), 
-						status.LastBuildDate, 
-						(status.LastBuildLabel != null ? status.LastBuildLabel : "no build available") , 
-						status.Status.ToString(), 
-						status.Activity.ToString(), 
-						linkFactory.CreateProjectLink(new DefaultProjectSpecifier(serverSpecifier, projectName), ProjectReportProjectPlugin.ACTION_NAME).Url,
-						status.Status
-					));
+					new ProjectGridRow(status, 
+						serverSpecifier, 
+						linkFactory.CreateProjectLink(projectSpecifier, ProjectReportProjectPlugin.ACTION_NAME).Url));
 			}
 
 			rows.Sort(GetComparer(sortColumn, sortIsAscending));
 
 			return (ProjectGridRow[]) rows.ToArray(typeof (ProjectGridRow));
-		}
-
-		private string CalculateHtmlColor(IntegrationStatus status)
-		{
-			if (status == IntegrationStatus.Success)
-			{
-				return Color.Green.Name;
-			}
-			else if (status == IntegrationStatus.Unknown)
-			{
-				return Color.Yellow.Name;
-			}
-			else
-			{
-				return Color.Red.Name;
-			}
 		}
 
 		private IComparer GetComparer(ProjectGridSortColumn column, bool ascending)

@@ -1,4 +1,5 @@
-using System;
+using System.Drawing;
+using ThoughtWorks.CruiseControl.Core.Reporting.Dashboard.Navigation;
 using ThoughtWorks.CruiseControl.Core.Util;
 using ThoughtWorks.CruiseControl.Remote;
 
@@ -6,72 +7,55 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 {
 	public class ProjectGridRow
 	{
-		private readonly string name;
-		private readonly string serverName;
-		private readonly string buildStatus;
-		private readonly string buildStatusHtmlColor;
-		private readonly DateTime lastBuildDate;
-		private readonly string lastBuildLabel;
-		private readonly string status;
-		private readonly string activity;
+		private readonly ProjectStatus status;
+		private readonly IServerSpecifier serverSpecifier;
 		private readonly string url;
-		private readonly string startStopButtonValue;
-		private readonly string startStopButtonName;
 
-		public ProjectGridRow(string name, string serverName, string buildStatus, string buildStatusHtmlColor, DateTime lastBuildDate, 
-			string lastBuildLabel, string status, string activity, string url, ProjectIntegratorState integratorState)
+		public ProjectGridRow(ProjectStatus status, IServerSpecifier serverSpecifier, string url)
 		{
-			this.name = name;
-			this.serverName = serverName;
-			this.buildStatus = buildStatus;
-			this.buildStatusHtmlColor = buildStatusHtmlColor;
-			this.lastBuildDate = lastBuildDate;
-			this.lastBuildLabel = lastBuildLabel;
 			this.status = status;
-			this.activity = activity;
+			this.serverSpecifier = serverSpecifier;
 			this.url = url;
-			this.startStopButtonName = (integratorState == ProjectIntegratorState.Running) ? "StopBuild" : "StartBuild";
-			this.startStopButtonValue = (integratorState == ProjectIntegratorState.Running) ? "Stop" : "Start";
 		}
 
 		public string Name
 		{
-			get { return name; }
+			get { return status.Name; }
 		}
 
 		public string ServerName
 		{
-			get { return serverName; }
+			get { return serverSpecifier.ServerName; }
 		}
 
 		public string BuildStatus
 		{
-			get { return buildStatus; }
+			get { return status.BuildStatus.ToString(); }
 		}
 
 		public string BuildStatusHtmlColor
 		{
-			get { return buildStatusHtmlColor; }
+			get { return CalculateHtmlColor(status.BuildStatus); }
 		}
 
 		public string LastBuildDate
 		{
-			get { return DateUtil.FormatDate(lastBuildDate); }
+			get { return DateUtil.FormatDate(status.LastBuildDate); }
 		}
 
 		public string LastBuildLabel
 		{
-			get { return lastBuildLabel; }
+			get { return (status.LastBuildLabel != null ? status.LastBuildLabel : "no build available"); }
 		}
 
 		public string Status
 		{
-			get { return status; }
+			get { return status.Status.ToString(); }
 		}
 
 		public string Activity
 		{
-			get { return activity; }
+			get { return status.Activity.ToString(); }
 		}
 
 		public string Url
@@ -81,12 +65,38 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 
 		public string StartStopButtonName
 		{
-			get { return startStopButtonName; }
+			get { return (status.Status == ProjectIntegratorState.Running) ? "StopBuild" : "StartBuild"; }
 		}
 
 		public string StartStopButtonValue
 		{
-			get { return startStopButtonValue; }
+			get { return (status.Status == ProjectIntegratorState.Running) ? "Stop" : "Start"; }
+		}
+
+		public bool AllowForceBuild
+		{
+			get { return this.serverSpecifier.AllowForceBuild; }
+		}
+
+		public bool AllowStartStopBuild
+		{
+			get { return this.serverSpecifier.AllowStartStopBuild; }
+		}
+
+		private string CalculateHtmlColor(IntegrationStatus status)
+		{
+			if (status == IntegrationStatus.Success)
+			{
+				return Color.Green.Name;
+			}
+			else if (status == IntegrationStatus.Unknown)
+			{
+				return Color.Yellow.Name;
+			}
+			else
+			{
+				return Color.Red.Name;
+			}
 		}
 	}
 }

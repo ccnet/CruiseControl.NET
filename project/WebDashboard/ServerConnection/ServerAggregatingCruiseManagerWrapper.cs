@@ -134,7 +134,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.ServerConnection
 			ArrayList serverSpecifiers = new ArrayList();
 			foreach (ServerLocation serverLocation in ServerLocations)
 			{
-				serverSpecifiers.Add(new DefaultServerSpecifier(serverLocation.Name));
+				serverSpecifiers.Add(new DefaultServerSpecifier(serverLocation.Name, serverLocation.AllowForceBuild, serverLocation.AllowStartStopBuild));
 			}
 			return (IServerSpecifier[]) serverSpecifiers.ToArray(typeof (IServerSpecifier));
 		}

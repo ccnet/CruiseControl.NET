@@ -66,10 +66,10 @@
 			<input type="hidden" name="forceBuildServer" value="$projectGridRow.ServerName" />
 			<td align="Center">
 				<font color="Black">
-				#if ($allowForceBuild)
+				#if ($projectGridRow.allowForceBuild)
 					<input type="submit" name="ForceBuild" value="Force"/>
 				#end
-				#if ($allowStartStopBuild)				
+				#if ($projectGridRow.AllowStartStopBuild)				
 					<input type="submit" name="$projectGridRow.StartStopButtonName" value="$projectGridRow.StartStopButtonValue"/>
 				#end
 				</font>

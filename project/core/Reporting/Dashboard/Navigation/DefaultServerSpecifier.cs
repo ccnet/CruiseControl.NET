@@ -3,11 +3,8 @@ namespace ThoughtWorks.CruiseControl.Core.Reporting.Dashboard.Navigation
 	public class DefaultServerSpecifier : IServerSpecifier
 	{
 		private readonly string serverName;
-
-		public string ServerName
-		{
-			get { return serverName; }
-		}
+		private readonly bool allowForceBuild;
+		private readonly bool allowStartStopBuild;
 
 		public DefaultServerSpecifier(string serverName)
 		{
@@ -20,6 +17,28 @@ namespace ThoughtWorks.CruiseControl.Core.Reporting.Dashboard.Navigation
 				throw new CruiseControlException("Server Specifier cannot be instantiated with an empty server name");
 			}
 			this.serverName = serverName;
+		}
+
+		public DefaultServerSpecifier(string serverName, bool allowForceBuild, bool allowStartStopBuild)
+		{
+			this.serverName = serverName;
+			this.allowForceBuild = allowForceBuild;
+			this.allowStartStopBuild = allowStartStopBuild;
+		}
+
+		public string ServerName
+		{
+			get { return serverName; }
+		}
+
+		public bool AllowForceBuild
+		{
+			get { return allowForceBuild; }
+		}
+
+		public bool AllowStartStopBuild
+		{
+			get { return allowStartStopBuild; }
 		}
 
 		public override bool Equals(object obj)
