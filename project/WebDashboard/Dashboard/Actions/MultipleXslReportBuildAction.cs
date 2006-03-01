@@ -29,17 +29,11 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard.Actions
 			return new HtmlFragmentResponse(buildLogTransformer.Transform(cruiseRequest.BuildSpecifier, xslFileNames, xsltArgs));
 		}
 
-		[ReflectorArrayAttribute("xslFileNames")]
+		[ReflectorArray("xslFileNames")]
 		public string[] XslFileNames
 		{
-			get
-			{
-				return xslFileNames;
-			}
-			set
-			{
-				xslFileNames = value;
-			}
+			get { return xslFileNames; }
+			set { xslFileNames = value; }
 		}
 	}
 }

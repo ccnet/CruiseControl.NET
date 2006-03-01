@@ -12,7 +12,7 @@
             <xsl:if test="/cruisecontrol/exception">
                 <tr><td class="header-title" colspan="2">BUILD EXCEPTION</td></tr>
                 <tr>
-                    <td class="header-label"><nobr>Error Message:</nobr></td>
+                    <td class="header-label" valign="top"><nobr>Error Message:</nobr></td>
                     <td class="header-data-error"><xsl:value-of select="/cruisecontrol/exception"/></td>
                 </tr>
             </xsl:if>

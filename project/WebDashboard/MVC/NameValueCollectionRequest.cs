@@ -117,6 +117,5 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.MVC
 		{
 			get { return applicationPath; }
 		}
-
 	}
 }

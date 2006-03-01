@@ -18,7 +18,7 @@ a:hover { color:#FC0; }
 .header-title { font-size:12px; color:#000; font-weight:bold; padding-bottom:10pt; }
 .header-label { font-weight:bold; }
 .header-data { color:#000; }
-.header-data-error { font-family:courier, monospaced; color:#000; white-space:pre; }
+.header-data-error { color:#000; white-space:pre; }
 
 .section-table { margin-top:10px; }
 .sectionheader { background-color:#006; color:#FFF; }
