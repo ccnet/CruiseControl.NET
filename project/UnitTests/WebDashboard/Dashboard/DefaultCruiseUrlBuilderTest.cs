@@ -1,4 +1,3 @@
-using System.Web;
 using NMock;
 using NUnit.Framework;
 using ThoughtWorks.CruiseControl.Core.Reporting.Dashboard.Navigation;
@@ -17,7 +16,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 		[SetUp]
 		public void Setup()
 		{
-			urlBuilderMock = new DynamicMock(typeof(IUrlBuilder));
+			urlBuilderMock = new DynamicMock(typeof (IUrlBuilder));
 			serverSpecifier = new DefaultServerSpecifier("myserver");
 			projectSpecifier = new DefaultProjectSpecifier(serverSpecifier, "myproject");
 			buildSpecifier = new DefaultBuildSpecifier(projectSpecifier, "mybuild");
@@ -34,7 +33,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 		{
 			// Setup
 			urlBuilderMock.ExpectAndReturn("BuildUrl", "myUrl", "myAction", "", "server/myserver");
-			
+
 			// Execute
 			string url = cruiseUrlBuilder.BuildServerUrl("myAction", serverSpecifier);
 
@@ -48,7 +47,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 		{
 			// Setup
 			urlBuilderMock.ExpectAndReturn("BuildUrl", "myUrl", "myAction", "query1=arg1", "server/myserver");
-			
+
 			// Execute
 			string url = cruiseUrlBuilder.BuildServerUrl("myAction", serverSpecifier, "query1=arg1");
 
@@ -89,11 +88,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 		[Test]
 		public void ShouldUrlEncodeProjectWithSpaces()
 		{
-//			Assert.AreEqual("http://server/myserver%201/project/myproject%202", HttpUtility.UrlPathEncode("http://server/myserver 1/project/myproject 2"));
-//			Assert.AreEqual("http://server/myserver%201/project/myproject%202", HttpUtility.UrlEncode("http://server/myserver 1/project/myproject 2"));
-
 			// Setup
-			urlBuilderMock.ExpectAndReturn("BuildUrl", "myUrl", "myAction", "", "server/myserver/project/myproject%202");
+			urlBuilderMock.ExpectAndReturn("BuildUrl", "myUrl", "myAction", "", "server/myserver/project/myproject+2");
 			projectSpecifier = new DefaultProjectSpecifier(serverSpecifier, "myproject 2");
 
 			// Execute
