@@ -1,4 +1,4 @@
-using System.Collections.Specialized;
+using System.Web;
 using ThoughtWorks.CruiseControl.Core;
 using ThoughtWorks.CruiseControl.Core.Reporting.Dashboard.Navigation;
 using ThoughtWorks.CruiseControl.WebDashboard.MVC;
@@ -9,11 +9,6 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.IO
 	{
 		private readonly IRequest request;
 
-		private NameValueCollection QueryString
-		{
-			get { return request.Params; }
-		}
-
 		public RequestWrappingCruiseRequest(IRequest request)
 		{
 			this.request = request;
@@ -21,26 +16,17 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.IO
 
 		public string ServerName
 		{
-			get
-			{
-				return FindRESTSpecifiedResource(DefaultCruiseUrlBuilder.ServerRESTSpecifier);
-			}
+			get { return FindRESTSpecifiedResource(DefaultCruiseUrlBuilder.ServerRESTSpecifier); }
 		}
 
 		public string ProjectName
 		{
-			get
-			{
-				return FindRESTSpecifiedResource(DefaultCruiseUrlBuilder.ProjectRESTSpecifier);
-			}
+			get { return FindRESTSpecifiedResource(DefaultCruiseUrlBuilder.ProjectRESTSpecifier); }
 		}
 
 		public string BuildName
 		{
-			get
-			{
-				return FindRESTSpecifiedResource(DefaultCruiseUrlBuilder.BuildRESTSpecifier);
-			}
+			get { return FindRESTSpecifiedResource(DefaultCruiseUrlBuilder.BuildRESTSpecifier); }
 		}
 
 		private string FindRESTSpecifiedResource(string specifier)
@@ -53,7 +39,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.IO
 				{
 					if (i < subFolders.Length)
 					{
-						return subFolders[i+1];
+						return HttpUtility.UrlDecode(subFolders[i + 1]);
 					}
 					else
 					{

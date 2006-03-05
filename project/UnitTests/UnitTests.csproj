@@ -1317,7 +1317,7 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "WebDashboard\IO\QueryStringRequestWrapperTest.cs"
+                    RelPath = "WebDashboard\IO\RequestWrappingCruiseRequestTest.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

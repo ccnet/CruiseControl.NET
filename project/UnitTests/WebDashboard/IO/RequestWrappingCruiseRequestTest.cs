@@ -6,7 +6,7 @@ using ThoughtWorks.CruiseControl.WebDashboard.MVC;
 namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.IO
 {
 	[TestFixture]
-	public class QueryStringRequestWrapperTest
+	public class RequestWrappingCruiseRequestTest
 	{
 		private NameValueCollection queryString;
 		private IRequest underlyingRequest;
@@ -64,6 +64,20 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.IO
 		{
 			CreateCruiseRequest("server/myserver/project/myproject/build/mybuild/baz.html");
 			Assert.AreEqual("mybuild", cruiseRequest.BuildName);
+		}
+
+		[Test]
+		public void DecodeServerName()
+		{
+			CreateCruiseRequest("server/my+server/baz.html");
+			Assert.AreEqual("my server", cruiseRequest.ServerName);
+		}
+
+		[Test]
+		public void DecodeProjectName()
+		{
+			CreateCruiseRequest("server/my+server/project/my+project%232/baz.html");
+			Assert.AreEqual("my project#2", cruiseRequest.ProjectName);
 		}
 	}
 }

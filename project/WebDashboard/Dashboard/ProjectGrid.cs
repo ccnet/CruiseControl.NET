@@ -1,5 +1,4 @@
 using System.Collections;
-using System.Drawing;
 using ThoughtWorks.CruiseControl.Core.Reporting.Dashboard.Navigation;
 using ThoughtWorks.CruiseControl.Remote;
 using ThoughtWorks.CruiseControl.WebDashboard.Plugins.ProjectReport;
@@ -17,7 +16,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 		}
 
 		public ProjectGridRow[] GenerateProjectGridRows(ProjectStatusOnServer[] statusList, string forceBuildActionName,
-			ProjectGridSortColumn sortColumn, bool sortIsAscending)
+		                                                ProjectGridSortColumn sortColumn, bool sortIsAscending)
 		{
 			ArrayList rows = new ArrayList();
 			foreach (ProjectStatusOnServer statusOnServer in statusList)
@@ -26,9 +25,9 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 				IServerSpecifier serverSpecifier = statusOnServer.ServerSpecifier;
 				DefaultProjectSpecifier projectSpecifier = new DefaultProjectSpecifier(serverSpecifier, status.Name);
 				rows.Add(
-					new ProjectGridRow(status, 
-						serverSpecifier, 
-						linkFactory.CreateProjectLink(projectSpecifier, ProjectReportProjectPlugin.ACTION_NAME).Url));
+					new ProjectGridRow(status,
+					                   serverSpecifier,
+					                   linkFactory.CreateProjectLink(projectSpecifier, ProjectReportProjectPlugin.ACTION_NAME).Url));
 			}
 
 			rows.Sort(GetComparer(sortColumn, sortIsAscending));
@@ -58,15 +57,15 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 				ProjectGridRow rowy = y as ProjectGridRow;
 				if (column == ProjectGridSortColumn.Name)
 				{
-					return rowx.Name.CompareTo(rowy.Name) * (ascending ? 1 : -1);
+					return rowx.Name.CompareTo(rowy.Name)*(ascending ? 1 : -1);
 				}
 				else if (column == ProjectGridSortColumn.LastBuildDate)
 				{
-					return rowx.LastBuildDate.CompareTo(rowy.LastBuildDate) * (ascending ? 1 : -1);
+					return rowx.LastBuildDate.CompareTo(rowy.LastBuildDate)*(ascending ? 1 : -1);
 				}
 				else if (column == ProjectGridSortColumn.BuildStatus)
 				{
-					return rowx.BuildStatus.CompareTo(rowy.BuildStatus) * (ascending ? 1 : -1);
+					return rowx.BuildStatus.CompareTo(rowy.BuildStatus)*(ascending ? 1 : -1);
 				}
 				else
 				{

@@ -1,3 +1,4 @@
+using System.Text;
 using System.Web;
 
 namespace ThoughtWorks.CruiseControl.Core.Reporting.Dashboard.Navigation
@@ -54,20 +55,20 @@ namespace ThoughtWorks.CruiseControl.Core.Reporting.Dashboard.Navigation
 
 		private string GeneratePath(string serverName, string projectName, string buildName)
 		{
-			string path = "";
+			StringBuilder path = new StringBuilder();
 			if (serverName != string.Empty)
 			{
-				path += string.Format("{0}/{1}", ServerRESTSpecifier, HttpUtility.UrlEncode(serverName));
+				path.AppendFormat("{0}/{1}", ServerRESTSpecifier, HttpUtility.UrlEncode(serverName));
 				if (projectName != string.Empty)
 				{
-					path += string.Format("/{0}/{1}", ProjectRESTSpecifier, HttpUtility.UrlEncode(projectName));
+					path.AppendFormat("/{0}/{1}", ProjectRESTSpecifier, HttpUtility.UrlEncode(projectName));
 					if (buildName != string.Empty)
 					{
-						path += string.Format("/{0}/{1}", BuildRESTSpecifier, HttpUtility.UrlEncode(buildName));
+						path.AppendFormat("/{0}/{1}", BuildRESTSpecifier, HttpUtility.UrlEncode(buildName));
 					}
 				}
 			}
-			return path;
+			return path.ToString();
 		}
 	}
 }

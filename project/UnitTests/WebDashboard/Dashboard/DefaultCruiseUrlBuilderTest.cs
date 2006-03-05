@@ -1,3 +1,4 @@
+using System.Web;
 using NMock;
 using NUnit.Framework;
 using ThoughtWorks.CruiseControl.Core.Reporting.Dashboard.Navigation;
@@ -76,6 +77,24 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 			// Setup
 			urlBuilderMock.ExpectAndReturn("BuildUrl", "myUrl", "myAction", "", "server/myserver/project/myproject%232");
 			projectSpecifier = new DefaultProjectSpecifier(serverSpecifier, "myproject#2");
+
+			// Execute
+			string url = cruiseUrlBuilder.BuildProjectUrl("myAction", projectSpecifier);
+
+			// Verify
+			Assert.AreEqual("myUrl", url);
+			VerifyAll();
+		}
+
+		[Test]
+		public void ShouldUrlEncodeProjectWithSpaces()
+		{
+//			Assert.AreEqual("http://server/myserver%201/project/myproject%202", HttpUtility.UrlPathEncode("http://server/myserver 1/project/myproject 2"));
+//			Assert.AreEqual("http://server/myserver%201/project/myproject%202", HttpUtility.UrlEncode("http://server/myserver 1/project/myproject 2"));
+
+			// Setup
+			urlBuilderMock.ExpectAndReturn("BuildUrl", "myUrl", "myAction", "", "server/myserver/project/myproject%202");
+			projectSpecifier = new DefaultProjectSpecifier(serverSpecifier, "myproject 2");
 
 			// Execute
 			string url = cruiseUrlBuilder.BuildProjectUrl("myAction", projectSpecifier);
