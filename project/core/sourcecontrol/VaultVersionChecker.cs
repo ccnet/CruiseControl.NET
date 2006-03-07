@@ -84,6 +84,12 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol {
 		[ReflectorProperty("otherVaultArguments", Required=false)]
 		public string otherVaultArguments;
 
+		[ReflectorProperty("pollRetryWait", Required=false)]
+		public int pollRetryWait = 5;
+
+		[ReflectorProperty("pollRetryAttempts", Required=false)]
+		public int pollRetryAttempts = 3;
+
 		public VaultVersionChecker() {}
 
 		public VaultVersionChecker(IHistoryParser historyParser, ProcessExecutor executor, EForcedVaultVersion forceVersion)

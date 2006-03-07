@@ -1,5 +1,6 @@
 using System;
 using System.Text.RegularExpressions;
+using System.Threading;
 using System.Xml;
 using ThoughtWorks.CruiseControl.Core.Util;
 using ThoughtWorks.CruiseControl.Remote;
@@ -34,7 +35,8 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 		{
 			_labelApplied = false;
 			Log.Info(string.Format("Checking for modifications to {0} in Vault Repository \"{1}\" between {2} and {3}", _shim.Folder, _shim.Repository, from.StartTime, to.StartTime));
-			return GetModifications(ForHistoryProcessInfo(from, to), from.StartTime, to.StartTime);
+			ProcessResult result = ExecuteWithRetries(ForHistoryProcessInfo(from, to));
+			return ParseModifications(result, from.StartTime, to.StartTime);
 		}
 
 		/// <summary>
@@ -261,6 +263,38 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 					"Unable to parse vault XML output for vault command: [{0}].  Vault Output: [{1}]", info.Arguments, result.StandardOutput));
 			}
 			return xml;
+		}
+
+		/// <summary>
+		/// Will execute the provided process and retry according to the configured pollRetryAttempts and pollRetryWait settings.  Use
+		/// with caution because we can't precisely catch only certain failures because we're using the command-line client.  Intended
+		/// to be used when polling for changes to better handle intermittent network issues or Vault server contention.
+		/// </summary>
+		/// <param name="processInfo"></param>
+		/// <returns></returns>
+		protected ProcessResult ExecuteWithRetries(ProcessInfo processInfo)
+		{
+			ProcessResult result = null;
+			for(int i=0; i < _shim.pollRetryAttempts; i++)
+			{
+				try
+				{
+					result = Execute(processInfo);
+					return result;
+				}
+				catch(CruiseControlException e)
+				{
+					if (i+1 == _shim.pollRetryAttempts)
+						throw;
+					else
+					{
+						Log.Warning(string.Format("Attempt {0} of {1}: {2}", i+1, _shim.pollRetryAttempts, e.ToString()));
+						Log.Debug(string.Format("Sleeping {0} seconds", _shim.pollRetryWait));
+						Thread.Sleep(_shim.pollRetryWait * 1000);
+					}
+				}
+			}
+			throw new CruiseControlException("This should never happen.  Failed to execute within the loop, there's probably an off-by-one error above.");
 		}
 
 		public class VaultException : CruiseControlException

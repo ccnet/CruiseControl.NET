@@ -48,7 +48,8 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 		private Modification[] GetModificationsFromItemHistory(IIntegrationResult from, IIntegrationResult to)
 		{
 			Log.Info(string.Format("Retrieving detailed change list for {0} in Vault Repository \"{1}\" between {2} and {3}", _shim.Folder, _shim.Repository, from.StartTime, to.StartTime));
-			Modification[] itemModifications = GetModifications(ForHistoryProcessInfo(from, to), from.StartTime, to.StartTime);
+			ProcessResult result = ExecuteWithRetries(ForHistoryProcessInfo(from, to));
+			Modification[] itemModifications = ParseModifications(result, from.StartTime, to.StartTime);
 			Debug.Assert(itemModifications != null && itemModifications.Length > 0, "Item history returned no changes.  Version history is supposed to determine if changes exist.");
 
 			// Unfortunately we have to go through these one more time to ensure there's nothing beyond the version we're going to retrieve.
@@ -146,7 +147,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			bool bForceGetLatestVersion = (_folderVersion == 0);
 
 			// get version history
-			ProcessResult result = Execute(VersionHistoryProcessInfo(from, to, bForceGetLatestVersion));
+			ProcessResult result = ExecuteWithRetries(VersionHistoryProcessInfo(from, to, bForceGetLatestVersion));
 
 			// parse out changes
 			string versionHistory = Vault3.ExtractXmlFromOutput(result.StandardOutput);
@@ -247,5 +248,6 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			AddCommonOptionalArguments(builder);
 			return ProcessInfoFor(builder.ToString(), result);
 		}
+
 	}
 }
