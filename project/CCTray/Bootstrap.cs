@@ -16,8 +16,14 @@ namespace ThoughtWorks.CruiseControl.CCTray
 		/// The main entry point for the application.
 		/// </summary>
 		[STAThread]
-		private static void Main()
+		private static void Main(string[] args)
 		{
+			if (ShowUsage(args))
+			{
+				MessageBox.Show("usage: cctray [settings file]");
+				return;
+			}
+
 			Application.EnableVisualStyles();
 			Application.DoEvents();
 
@@ -26,7 +32,7 @@ namespace ThoughtWorks.CruiseControl.CCTray
 			{
 				ICruiseManagerFactory remoteCruiseManagerFactory = new RemoteCruiseManagerFactory();
 				ICruiseProjectManagerFactory cruiseProjectManagerFactory = new CruiseProjectManagerFactory(remoteCruiseManagerFactory);
-				CCTrayMultiConfiguration configuration = new CCTrayMultiConfiguration(cruiseProjectManagerFactory, GetSettingsFilename());
+				CCTrayMultiConfiguration configuration = new CCTrayMultiConfiguration(cruiseProjectManagerFactory, GetSettingsFilename(args));
 
 				MainForm mainForm = new MainForm(configuration);
 
@@ -38,13 +44,21 @@ namespace ThoughtWorks.CruiseControl.CCTray
 			}
 		}
 
+		private static bool ShowUsage(string[] args)
+		{
+			if (args.Length == 0) return false;
+			return args.Length > 1 || args[0].IndexOf("help") >= 0 || args[0].IndexOf('?') >= 0;
+		}
+
 		private static void UnhandledWinFormException(object sender, ThreadExceptionEventArgs e)
 		{
 			MessageBox.Show("Unhandled exception: " + e.Exception);
 		}
 
-		private static string GetSettingsFilename()
+		private static string GetSettingsFilename(string[] args)
 		{
+			if (args.Length == 1) return args[0];		// use settings file specified on command line
+
 			string oldFashionedSettingsFilename = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "settings.xml");
 			string newSettingsFilename = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "cctray-settings.xml");
 
