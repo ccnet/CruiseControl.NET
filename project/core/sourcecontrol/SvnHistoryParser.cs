@@ -78,6 +78,8 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 					return "Deleted";
 				case "M":
 					return "Modified";
+				case "R":
+					return "Replaced";
 				default:
 					return "Unknown action: " + action;
 			}

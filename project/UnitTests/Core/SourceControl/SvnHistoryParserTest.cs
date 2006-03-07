@@ -95,6 +95,15 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 			svn.Parse(new StringReader("<foo/><bar/>"), DateTime.Now, DateTime.Now);
 		}
 
+		[Test]
+		public void ParseModificationWithReplaceAction()
+		{
+			string xml = "<?xml version=\"1.0\" encoding=\"utf-8\"?><log><logentry revision=\"4\"><date>2003-12-12T16:48:51Z</date><paths><path action=\"R\">/foo/addedfile.txt</path></paths><msg>i added a file</msg></logentry></log>";
+			Modification[] mods = svn.Parse(new StringReader(xml), oldestEntry, newestEntry);
+			Assert.AreEqual("Replaced", mods[0].Type);
+
+		}
+
 		private DateTime CreateDate(string dateString)
 		{
 			return DateTime.Parse(dateString);
