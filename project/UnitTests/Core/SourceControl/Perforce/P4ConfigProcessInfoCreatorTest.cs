@@ -34,5 +34,18 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.SourceControl.Perforce
 			Assert.AreEqual("p4", info.FileName);
 			Assert.AreEqual("-s my arguments", info.Arguments);
 		}
+		
+		[Test]
+		public void ShouldCreateProcessWithDefaultArgumentsIfOnlyUserIsSet()
+		{
+			// Setup
+			P4 p4 = new P4();
+			p4.User = "myUser";
+
+			ProcessInfo info = new P4ConfigProcessInfoCreator().CreateProcessInfo(p4, "my arguments");
+
+			Assert.AreEqual("p4", info.FileName);
+			Assert.AreEqual("-s -u myUser my arguments", info.Arguments);
+		}
 	}
 }
