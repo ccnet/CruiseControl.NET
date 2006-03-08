@@ -387,6 +387,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Core\IntegrationFixture.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Core\IntegrationRequestQueueTest.cs"
                     SubType = "Code"
                     BuildAction = "Compile"

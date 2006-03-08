@@ -9,7 +9,7 @@ using ThoughtWorks.CruiseControl.Remote;
 namespace ThoughtWorks.CruiseControl.UnitTests.Core
 {
 	[TestFixture]
-	public class WorkflowTest : CustomAssertion
+	public class WorkflowTest : IntegrationFixture
 	{
 		[Test]
 		public void LoadConfiguration()
@@ -47,7 +47,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 
 			project.Tasks.Add(taskMock1.MockInstance);
 			project.Tasks.Add(taskMock2.MockInstance);
-			project.RunIntegration(BuildCondition.IfModificationExists);
+			project.Integrate(Request());
 
 			Assert.IsNotNull(project.CurrentIntegration);
 			Assert.IsNotNull(project.CurrentIntegration.StartTime);
@@ -71,7 +71,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 			project.Tasks.Add(taskMock1.MockInstance);
 			project.Tasks.Add(taskMock2.MockInstance);
 
-			project.RunIntegration(BuildCondition.ForceBuild);
+			project.Integrate(ForceBuildRequest());
 
 			taskMock1.Verify();
 			taskMock2.Verify();
@@ -91,7 +91,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 			project.Tasks.Add(taskMock1.MockInstance);
 			project.Tasks.Add(taskMock2.MockInstance);
 
-			IIntegrationResult result = project.RunIntegration(BuildCondition.IfModificationExists);
+			IIntegrationResult result = project.Integrate(Request());
 
 			taskMock1.Verify();
 			taskMock2.Verify();

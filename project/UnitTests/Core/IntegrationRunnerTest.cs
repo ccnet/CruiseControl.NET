@@ -10,7 +10,7 @@ using ThoughtWorks.CruiseControl.Remote;
 namespace ThoughtWorks.CruiseControl.UnitTests.Core
 {
 	[TestFixture]
-	public class IntegrationRunnerTest
+	public class IntegrationRunnerTest : IntegrationFixture
 	{
 		private IntegrationRunner runner;
 
@@ -84,7 +84,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 			resultMock.ExpectAndReturn("Status", IntegrationStatus.Unknown);
 			resultMock.ExpectAndReturn("EndTime", time3);
 
-			IIntegrationResult returnedResult = runner.RunIntegration(BuildCondition.IfModificationExists);
+			IIntegrationResult returnedResult = runner.Integrate(Request());
 
 			Assert.AreEqual(result, returnedResult);
 			Assert.IsTrue(Directory.Exists(result.WorkingDirectory));
@@ -99,7 +99,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 			SetupShouldBuildExpectations();
 			SetupBuildPassExpectations();
 
-			IIntegrationResult returnedResult = runner.RunIntegration(BuildCondition.IfModificationExists);
+			IIntegrationResult returnedResult = runner.Integrate(Request());
 
 			Assert.AreEqual(result, returnedResult);
 			VerifyAll();
@@ -116,7 +116,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 			targetMock.Expect("PublishResults", result);
 			resultManagerMock.Expect("FinishIntegration");
 
-			IIntegrationResult returnedResult = runner.RunIntegration(BuildCondition.IfModificationExists);
+			IIntegrationResult returnedResult = runner.Integrate(Request());
 
 			Assert.AreEqual(result, returnedResult);
 			VerifyAll();

@@ -22,30 +22,30 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 		public void DeserializesTimeoutAsElement()
 		{
 			string xml =
-			@"<sourceControl type=""vss"" >
+				@"<sourceControl type=""vss"" >
 				<timeout>1000</timeout>
 			</sourceControl>";
 
-			assertTimeoutIs(new Timeout(1000), xml); 
+			AssertTimeoutIs(new Timeout(1000), xml);
 		}
 
 		[Test]
 		public void DeserializesTimeoutAsElementWithUnits()
 		{
 			string xml =
-			@"<sourceControl type=""vss"" >
+				@"<sourceControl type=""vss"" >
 				<timeout units=""minutes"">2</timeout>
 			</sourceControl>";
-			assertTimeoutIs(new Timeout(2, TimeUnits.MINUTES), xml); 
+			AssertTimeoutIs(new Timeout(2, TimeUnits.MINUTES), xml);
 		}
 
 		[Test]
 		public void DeserializesTimeoutAsAttribute()
 		{
 			string xml =
-			@"<sourceControl type=""vss"" timeout=""666"">
+				@"<sourceControl type=""vss"" timeout=""666"">
 			</sourceControl>";
-			assertTimeoutIs(new Timeout(666, TimeUnits.MILLIS), xml); 
+			AssertTimeoutIs(new Timeout(666, TimeUnits.MILLIS), xml);
 		}
 
 		[Test]
@@ -54,7 +54,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 			string xml =
 				@"<sourceControl type=""vss"" >
 			</sourceControl>";
-			assertTimeoutIs(Timeout.DefaultTimeout, xml);
+			AssertTimeoutIs(Timeout.DefaultTimeout, xml);
 		}
 
 		[Test]
@@ -63,9 +63,9 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 			string xml =
 				@"<sourceControl type=""vss"" timeout="""">
 			</sourceControl>";
-			assertTimeoutIs(Timeout.DefaultTimeout, xml);
+			AssertTimeoutIs(Timeout.DefaultTimeout, xml);
 		}
-		
+
 		[Test]
 		public void DeserializesEmptyElementAsDefault()
 		{
@@ -73,7 +73,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 				@"<sourceControl type=""vss"">
 				<timeout></timeout>
 			</sourceControl>";
-			assertTimeoutIs(Timeout.DefaultTimeout, xml);
+			AssertTimeoutIs(Timeout.DefaultTimeout, xml);
 		}
 
 		[Test]
@@ -83,22 +83,21 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 				@"<sourceControl type=""vss"">
 				<timeout units=""foot pounds per furlong"">100</timeout>
 			</sourceControl>";
-			assertTimeoutIs(Timeout.DefaultTimeout, xml);
+			AssertTimeoutIs(Timeout.DefaultTimeout, xml);
 		}
 
-		private static void assertTimeoutIs(Timeout expected, string xml)
+		private static void AssertTimeoutIs(Timeout expected, string xml)
 		{
 			StubSourceControl sc = new StubSourceControl(null, null);
 			NetReflector.Read(xml, sc);
 			Assert.AreEqual(expected, sc.Timeout);
 		}
 	}
-	
-	class StubSourceControl : ProcessSourceControl
+
+	internal class StubSourceControl : ProcessSourceControl
 	{
 		public StubSourceControl(IHistoryParser historyParser, ProcessExecutor executor) : base(historyParser, executor)
-		{
-		}
+		{}
 
 		public override Modification[] GetModifications(IIntegrationResult from, IIntegrationResult to)
 		{

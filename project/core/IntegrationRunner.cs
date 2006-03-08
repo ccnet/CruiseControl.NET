@@ -19,9 +19,9 @@ namespace ThoughtWorks.CruiseControl.Core
 			this.resultManager = resultManager;
 		}
 
-		public IIntegrationResult RunIntegration(BuildCondition buildCondition)
+		public IIntegrationResult Integrate(IntegrationRequest request)
 		{
-			IIntegrationResult result = resultManager.StartNewIntegration(buildCondition);
+			IIntegrationResult result = resultManager.StartNewIntegration(request.BuildCondition);
 			IIntegrationResult lastResult = resultManager.LastIntegrationResult;
 
 			CreateDirectoryIfItDoesntExist(result.WorkingDirectory);

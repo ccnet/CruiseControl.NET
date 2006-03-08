@@ -45,6 +45,7 @@ namespace ThoughtWorks.CruiseControl.Core
 		private bool publishExceptions = true;
 		private IIntegratable integratable;
 		private QuietPeriod quietPeriod = new QuietPeriod(new DateTimeProvider());
+		private IntegrationRequest currentRequest;
 
 		public Project()
 		{
@@ -151,12 +152,17 @@ namespace ThoughtWorks.CruiseControl.Core
 			get { return LastIntegrationResult.Status; }
 		}
 
-		public IIntegrationResult RunIntegration(BuildCondition buildCondition)
+		public IntegrationRequest CurrentRequest
 		{
-			if (buildCondition == BuildCondition.ForceBuild)
+			get { return currentRequest; }
+		}
+
+		public IIntegrationResult Integrate(IntegrationRequest request)
+		{
+			if (request.BuildCondition == BuildCondition.ForceBuild)
 				Log.Info("Build forced");
 
-			return integratable.RunIntegration(buildCondition);
+			return integratable.Integrate(request);				
 		}
 
 		public void Run(IIntegrationResult result)
@@ -213,7 +219,5 @@ namespace ThoughtWorks.CruiseControl.Core
 		{
 			return string.Format("http://{0}/ccnet", Environment.MachineName);
 		}
-
 	}
-
 }

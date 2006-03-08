@@ -43,5 +43,6 @@ namespace ThoughtWorks.CruiseControl.Core
 		ProjectIntegratorState State { get; }
 
 		void ForceBuild();
+		void Request(IntegrationRequest request);
 	}
 }

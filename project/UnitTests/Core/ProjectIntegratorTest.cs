@@ -1,8 +1,9 @@
+using System;
 using System.Threading;
 using NMock;
+using NMock.Constraints;
 using NUnit.Framework;
 using ThoughtWorks.CruiseControl.Core;
-using ThoughtWorks.CruiseControl.Core.Util;
 using ThoughtWorks.CruiseControl.Remote;
 
 namespace ThoughtWorks.CruiseControl.UnitTests.Core
@@ -10,39 +11,35 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 	[TestFixture]
 	public class ProjectIntegratorTest : CustomAssertion
 	{
-		private DynamicMock integrationTriggerMock;
-		private DynamicMock integratableMock;
+		private LatchMock integrationTriggerMock;
+		private LatchMock integratableMock;
 		private DynamicMock projectMock;
 		private ITrigger Trigger;
 		private IIntegratable integratable;
 		private IProject project;
-		private ProjectIntegrator _integrator;
-		private TraceListenerBackup backup;
+		private ProjectIntegrator integrator;
 
 		[SetUp]
 		public void SetUp()
 		{
-			backup = new TraceListenerBackup();
-			integrationTriggerMock = new DynamicMock(typeof(ITrigger));
-			integratableMock = new DynamicMock(typeof(IIntegratable));
-			projectMock = new DynamicMock(typeof(IProject));
+			integrationTriggerMock = new LatchMock(typeof (ITrigger));
+			integratableMock = new LatchMock(typeof (IIntegratable));
+			projectMock = new DynamicMock(typeof (IProject));
 
 			Trigger = (ITrigger) integrationTriggerMock.MockInstance;
 			integratable = (IIntegratable) integratableMock.MockInstance;
 			project = (IProject) projectMock.MockInstance;
 
-			_integrator = new ProjectIntegrator(Trigger, integratable, project);
+			integrator = new ProjectIntegrator(Trigger, integratable, project);
 		}
 
 		[TearDown]
 		public void TearDown()
 		{
-			backup.Reset();
-
-			if (_integrator != null)
+			if (integrator != null)
 			{
-				_integrator.Stop();
-				_integrator.WaitForExit();
+				integrator.Stop();
+				integrator.WaitForExit();
 			}
 		}
 
@@ -56,65 +53,68 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 		[Test]
 		public void ShouldContinueRunningIfNotToldToStop()
 		{
-			integrationTriggerMock.SetupResult("ShouldRunIntegration", BuildCondition.NoBuild);
-			integratableMock.ExpectNoCall("RunIntegration", typeof(BuildCondition));
+			integrationTriggerMock.ExpectAndReturn("ShouldRunIntegration", BuildCondition.NoBuild);
+			integratableMock.ExpectNoCall("Integrate", typeof (IntegrationRequest));
 			integrationTriggerMock.ExpectNoCall("IntegrationCompleted");
 
-			_integrator.Start();
-			Assert.AreEqual(ProjectIntegratorState.Running, _integrator.State);
+			integrator.Start();
+			integrationTriggerMock.WaitForSignal();
+			Assert.AreEqual(ProjectIntegratorState.Running, integrator.State);
 			VerifyAll();
 		}
 
 		[Test]
 		public void ShouldStopWhenStoppedExternally()
 		{
-			integrationTriggerMock.SetupResult("ShouldRunIntegration", BuildCondition.NoBuild);
-			integratableMock.ExpectNoCall("RunIntegration", typeof(BuildCondition));
+			integrationTriggerMock.ExpectAndReturn("ShouldRunIntegration", BuildCondition.NoBuild);
+			integratableMock.ExpectNoCall("Integrate", typeof (IntegrationRequest));
 			integrationTriggerMock.ExpectNoCall("IntegrationCompleted");
 
-			_integrator.Start();
-			Assert.AreEqual(ProjectIntegratorState.Running, _integrator.State);
+			integrator.Start();
+			integrationTriggerMock.WaitForSignal();
+			Assert.AreEqual(ProjectIntegratorState.Running, integrator.State);
 
-			_integrator.Stop();
-			_integrator.WaitForExit();
-			Assert.AreEqual(ProjectIntegratorState.Stopped, _integrator.State);
+			integrator.Stop();
+			integrator.WaitForExit();
+			Assert.AreEqual(ProjectIntegratorState.Stopped, integrator.State);
 			VerifyAll();
 		}
 
-		[Test]	// remove sleep!
+		[Test]
 		public void StartMultipleTimes()
 		{
 			integrationTriggerMock.SetupResult("ShouldRunIntegration", BuildCondition.NoBuild);
-			integratableMock.ExpectNoCall("RunIntegration", typeof(BuildCondition));
+			integratableMock.ExpectNoCall("Integrate", typeof (IntegrationRequest));
 			integrationTriggerMock.ExpectNoCall("IntegrationCompleted");
 
-			_integrator.Start();
-			_integrator.Start();
-			Thread.Sleep(110);
-			_integrator.Start();
-			Assert.AreEqual(ProjectIntegratorState.Running, _integrator.State);
-			_integrator.Stop();
-			_integrator.WaitForExit();
-			Assert.AreEqual(ProjectIntegratorState.Stopped, _integrator.State);
+			integrator.Start();
+			integrator.Start();
+			integrator.Start();
+			integrationTriggerMock.WaitForSignal();
+			Assert.AreEqual(ProjectIntegratorState.Running, integrator.State);
+			integrator.Stop();
+			integrator.WaitForExit();
+			Assert.AreEqual(ProjectIntegratorState.Stopped, integrator.State);
 			VerifyAll();
 		}
 
-		[Test]	// remove sleep!
+		[Test]
 		public void RestartScheduler()
 		{
 			integrationTriggerMock.SetupResult("ShouldRunIntegration", BuildCondition.NoBuild);
-			integratableMock.ExpectNoCall("RunIntegration", typeof(BuildCondition));
+			integratableMock.ExpectNoCall("Integrate", typeof (IntegrationRequest));
 			integrationTriggerMock.ExpectNoCall("IntegrationCompleted");
 
-			_integrator.Start();
-			Thread.Sleep(110);
-			_integrator.Stop();
-			_integrator.WaitForExit();
+			integrator.Start();
+			integrationTriggerMock.WaitForSignal();
+			integrator.Stop();
+			integrator.WaitForExit();
 
-			_integrator.Start();
-			Thread.Sleep(110);
-			_integrator.Stop();
-			_integrator.WaitForExit();		
+			integrationTriggerMock.ResetLatch();
+			integrator.Start();
+			integrationTriggerMock.WaitForSignal();
+			integrator.Stop();
+			integrator.WaitForExit();
 			VerifyAll();
 		}
 
@@ -122,84 +122,165 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 		public void StopUnstartedIntegrator()
 		{
 			integrationTriggerMock.ExpectNoCall("ShouldRunIntegration");
-			integratableMock.ExpectNoCall("RunIntegration", typeof(BuildCondition));
+			integratableMock.ExpectNoCall("Integrate", typeof (IntegrationRequest));
 			integrationTriggerMock.ExpectNoCall("IntegrationCompleted");
 
-			_integrator.Stop();
-			Assert.AreEqual(ProjectIntegratorState.Stopped, _integrator.State);
-		}
-
-		[Test, Ignore("skip")]	// remove sleep!
-		public void VerifySchedulerStateAfterException()
-		{
-			backup.Reset();
-			TestTraceListener listener = backup.AddTestTraceListener();
-			string exceptionMessage = "Intentional exception";
-
-			integrationTriggerMock.ExpectAndReturn("ShouldRunIntegration", BuildCondition.ForceBuild);
-			integratableMock.ExpectAndThrow("RunIntegration", new CruiseControlException(exceptionMessage), BuildCondition.ForceBuild);
-			integrationTriggerMock.Expect("IntegrationCompleted");
-
-			_integrator.Start();
-			Assert.AreEqual(ProjectIntegratorState.Running, _integrator.State);
-			Thread.Sleep(110);
-			_integrator.Stop();
-			_integrator.WaitForExit();
-			Assert.AreEqual(ProjectIntegratorState.Stopped, _integrator.State);
-
-			Assert.IsTrue(listener.Traces.Count > 0);
-			Assert.IsTrue(listener.Traces[0].ToString().IndexOf(exceptionMessage) > 0);
-
+			integrator.Stop();
+			Assert.AreEqual(ProjectIntegratorState.Stopped, integrator.State);
 			VerifyAll();
 		}
 
-		[Test]	// remove sleep!
+		[Test]
+		public void VerifySchedulerStateAfterException()
+		{
+			string exceptionMessage = "Intentional exception";
+
+			integrationTriggerMock.ExpectAndReturn("ShouldRunIntegration", BuildCondition.ForceBuild);
+			integratableMock.ExpectAndThrow("Integrate", new CruiseControlException(exceptionMessage), new HasForceBuildCondition());
+			integrationTriggerMock.Expect("IntegrationCompleted");
+
+			integrator.Start();
+			integratableMock.WaitForSignal();
+			Assert.AreEqual(ProjectIntegratorState.Running, integrator.State);
+			integrator.Stop();
+			integrator.WaitForExit();
+			Assert.AreEqual(ProjectIntegratorState.Stopped, integrator.State);
+			VerifyAll();
+		}
+
+		[Test]
 		public void Abort()
 		{
 			integrationTriggerMock.SetupResult("ShouldRunIntegration", BuildCondition.NoBuild);
-			integratableMock.ExpectNoCall("RunIntegration", typeof(BuildCondition));
+			integratableMock.ExpectNoCall("Integrate", typeof (IntegrationRequest));
 			integrationTriggerMock.ExpectNoCall("IntegrationCompleted");
 
-			_integrator.Start();
-			Thread.Sleep(110);
-			Assert.AreEqual(ProjectIntegratorState.Running, _integrator.State);
-			_integrator.Abort();
-			_integrator.WaitForExit();
-			Assert.AreEqual(ProjectIntegratorState.Stopped, _integrator.State);
+			integrator.Start();
+			integrationTriggerMock.WaitForSignal();
+			Assert.AreEqual(ProjectIntegratorState.Running, integrator.State);
+			integrator.Abort();
+			integrator.WaitForExit();
+			Assert.AreEqual(ProjectIntegratorState.Stopped, integrator.State);
+			VerifyAll();
 		}
 
 		[Test]
 		public void TerminateWhenProjectIsntStarted()
 		{
 			integrationTriggerMock.SetupResult("ShouldRunIntegration", BuildCondition.NoBuild);
-			integratableMock.ExpectNoCall("RunIntegration", typeof(BuildCondition));
+			integratableMock.ExpectNoCall("Integrate", typeof (IntegrationRequest));
 			integrationTriggerMock.ExpectNoCall("IntegrationCompleted");
 
-			_integrator.Abort();
-			Assert.AreEqual(ProjectIntegratorState.Stopped, _integrator.State);
+			integrator.Abort();
+			Assert.AreEqual(ProjectIntegratorState.Stopped, integrator.State);
+			VerifyAll();
 		}
 
-		[Test]	// remove sleep!
+		[Test]
 		public void TerminateCalledTwice()
 		{
 			integrationTriggerMock.SetupResult("ShouldRunIntegration", BuildCondition.NoBuild);
-			integratableMock.ExpectNoCall("RunIntegration", typeof(BuildCondition));
+			integratableMock.ExpectNoCall("Integrate", typeof (IntegrationRequest));
 			integrationTriggerMock.ExpectNoCall("IntegrationCompleted");
 
-			_integrator.Start();
-			Thread.Sleep(110);
-			Assert.AreEqual(ProjectIntegratorState.Running, _integrator.State);
-			_integrator.Abort();
-			_integrator.Abort();
+			integrator.Start();
+			integrationTriggerMock.WaitForSignal();
+			Assert.AreEqual(ProjectIntegratorState.Running, integrator.State);
+			integrator.Abort();
+			integrator.Abort();
+			VerifyAll();
 		}
 
 		[Test]
 		public void ForceBuild()
 		{
-			integrationTriggerMock.SetupResult("ShouldRunIntegration", BuildCondition.NoBuild);
-			integratableMock.ExpectNoCall("RunIntegration", typeof(BuildCondition));
-			integrationTriggerMock.ExpectNoCall("IntegrationCompleted");
-			_integrator.ForceBuild();
+			integrationTriggerMock.ExpectNoCall("ShouldRunIntegration");
+			integratableMock.Expect("Integrate", new HasForceBuildCondition());
+			integratableMock.ExpectNoCall("Integrate", typeof (IntegrationRequest));
+			integrationTriggerMock.Expect("IntegrationCompleted");
+			integrator.ForceBuild();
+			integratableMock.WaitForSignal();
+			integrationTriggerMock.WaitForSignal();
+			VerifyAll();
+		}
+
+		[Test]
+		public void RequestIntegration()
+		{
+			integratableMock.Strict = true;
+			IntegrationRequest request = new IntegrationRequest("project", BuildCondition.IfModificationExists);
+			integratableMock.Expect("Integrate", request);
+			integrator.Request(request);
+			integratableMock.WaitForSignal();
+			Assert.AreEqual(ProjectIntegratorState.Running, integrator.State);
+			VerifyAll();
+		}
+
+		[Test]
+		public void ShouldClearRequestQueueAsSoonAsRequestIsProcessed()
+		{
+			integratableMock.Strict = true;
+			integrationTriggerMock.Strict = true;
+			IntegrationRequest request = new IntegrationRequest("project", BuildCondition.IfModificationExists);
+			integratableMock.Expect("Integrate", request);
+			integrationTriggerMock.Expect("IntegrationCompleted");
+			integrationTriggerMock.ExpectAndReturn("ShouldRunIntegration", BuildCondition.NoBuild);
+
+			integrator.Request(request);
+			integratableMock.WaitForSignal();
+			integrationTriggerMock.WaitForSignal();
+			integrationTriggerMock.ResetLatch();	// should autoreset as soon as signalled.
+			integrationTriggerMock.WaitForSignal();
+			VerifyAll();
+		}
+
+		// should clear request queue as soon as request is processed.
+	}
+
+	public class HasForceBuildCondition : BaseConstraint
+	{
+		public override bool Eval(object val)
+		{
+			return ((IntegrationRequest) val).BuildCondition == BuildCondition.ForceBuild;
+		}
+
+		public override string Message
+		{
+			get { return "IntegrationRequest is not ForceBuild."; }
+		}
+	}
+
+	public class LatchMock : DynamicMock
+	{
+		private ManualResetEvent latch = new ManualResetEvent(false);
+
+		public LatchMock(Type type) : base(type)
+		{}
+
+		public override object Invoke(string methodName, params object[] args)
+		{
+			try
+			{
+				return base.Invoke(methodName, args);
+			}
+			finally
+			{
+				latch.Set();
+			}
+		}
+
+		public void WaitForSignal()
+		{
+			bool signalled = latch.WaitOne(2000, false);
+			if (! signalled)
+			{
+				throw new Exception("Latch has not been signalled before the timeout expired!");
+			}
+		}
+
+		public void ResetLatch()
+		{
+			latch.Reset();
 		}
 	}
 }

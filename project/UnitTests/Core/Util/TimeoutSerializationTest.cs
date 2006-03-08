@@ -6,9 +6,10 @@ using ThoughtWorks.CruiseControl.Core.Util;
 namespace ThoughtWorks.CruiseControl.UnitTests.Core.Util
 {
 	[TestFixture]
-	public class TimeoutSerializationTest { 
-		TimeoutSerializer serializer;
-		XmlDocument doc;		
+	public class TimeoutSerializationTest
+	{
+		private TimeoutSerializer serializer;
+		private XmlDocument doc;
 
 		[SetUp]
 		public void SetUp()
@@ -16,7 +17,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Util
 			serializer = new TimeoutSerializer(null, null);
 			doc = new XmlDocument();
 		}
-		
+
 		[Test]
 		public void MillisAreSerializedWithNoPeriodAttribute()
 		{
@@ -40,7 +41,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Util
 		{
 			XmlAttribute a = doc.CreateAttribute("timeout");
 			a.Value = "100";
-			Assert.AreEqual(new Timeout(100, TimeUnits.MILLIS),serializer.Read(a, null));
+			Assert.AreEqual(new Timeout(100, TimeUnits.MILLIS), serializer.Read(a, null));
 		}
 
 		[Test]
@@ -48,7 +49,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Util
 		{
 			XmlElement e = doc.CreateElement("timeout");
 			e.InnerText = "100";
-			Assert.AreEqual(new Timeout(100, TimeUnits.MILLIS),serializer.Read(e, null));
+			Assert.AreEqual(new Timeout(100, TimeUnits.MILLIS), serializer.Read(e, null));
 		}
 
 		[Test]
@@ -59,7 +60,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Util
 			units.Value = "Seconds";
 			e.Attributes.Append(units);
 			e.InnerText = "2";
-			Assert.AreEqual(new Timeout(2000, TimeUnits.MILLIS),serializer.Read(e, null));
+			Assert.AreEqual(new Timeout(2000, TimeUnits.MILLIS), serializer.Read(e, null));
 		}
 	}
 }

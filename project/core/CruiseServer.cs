@@ -267,7 +267,6 @@ namespace ThoughtWorks.CruiseControl.Core
 			throw new NoSuchProjectException(projectName);
 		}
 
-		// ToDo - test
 		public string GetServerLog()
 		{
 			return new ServerLogFileReader().Read();
@@ -374,6 +373,33 @@ namespace ThoughtWorks.CruiseControl.Core
 				disposed = true;
 			}
 			Abort();
+		}
+
+		public void Request(IntegrationRequest request)
+		{
+			GetIntegrator(request.Project).Request(request);
+		}
+	}
+
+	public class IntegrationRequest
+	{
+		private readonly string project;
+		private readonly BuildCondition buildCondition;
+
+		public IntegrationRequest(string project, BuildCondition buildCondition)
+		{
+			this.project = project;
+			this.buildCondition = buildCondition;
+		}
+
+		public string Project
+		{
+			get { return project; }
+		}
+
+		public BuildCondition BuildCondition
+		{
+			get { return buildCondition; }
 		}
 	}
 }

@@ -36,7 +36,7 @@ namespace ThoughtWorks.CruiseControl.Core
 			get { return _currentIntegrationResult; }
 		}
 
-		public IIntegrationResult RunIntegration(BuildCondition buildCondition)
+		public IIntegrationResult Integrate(IntegrationRequest request)
 		{
 			_currentIntegrationResult = new WorkflowResult();
 

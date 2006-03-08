@@ -146,6 +146,15 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Triggers
 		}
 
 		[Test]
+		public void ShouldPopulateFromConfigurationWithComment()
+		{
+			string xml = @"<multiTrigger><!-- foo --><triggers><intervalTrigger /></triggers></multiTrigger>";
+			trigger = (MultipleTrigger) NetReflector.Read(xml);
+			Assert.AreEqual(1, trigger.Triggers.Length);
+			Assert.AreEqual(typeof(IntervalTrigger), trigger.Triggers[0].GetType());
+		}
+
+		[Test]
 		public void ShouldPopulateFromMinimalConfiguration()
 		{
 			string xml = @"<multiTrigger />";

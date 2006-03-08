@@ -279,5 +279,15 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 			server.Start("Project 2");
 			integratorMock2.Verify();			
 		}
+
+		[Test]
+		public void RequestNewIntegration()
+		{
+			IntegrationRequest request = new IntegrationRequest("Project 2", BuildCondition.IfModificationExists);
+			integratorMock2.Expect("Request", request);
+			server.Request(request);
+			integratorMock1.Verify();
+			integratorMock2.Verify();
+		}
 	}
 }

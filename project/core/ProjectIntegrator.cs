@@ -18,42 +18,41 @@ namespace ThoughtWorks.CruiseControl.Core
 	/// </summary>
 	public class ProjectIntegrator : IProjectIntegrator, IDisposable
 	{
-		private readonly IIntegratable _integratable;
-		private ITrigger _trigger;
-		private IProject _project;
-		private bool _forceBuild;
-		private Thread _thread;
-		private ProjectIntegratorState _state = ProjectIntegratorState.Stopped;
+		private readonly IIntegratable integratable;
+		private readonly ITrigger trigger;
+		private readonly IProject project;
+		private Thread thread;
+		private ProjectIntegratorState state = ProjectIntegratorState.Stopped;
+		public IntegrationRequest request;
 
 		public ProjectIntegrator(IProject project) : this(new MultipleTrigger(project.Triggers), project, project)
-		{
-		}
+		{}
 
 		public ProjectIntegrator(ITrigger trigger, IIntegratable integratable, IProject project)
 		{
-			_trigger = trigger;
-			_project = project;
-			_integratable = integratable;
+			this.trigger = trigger;
+			this.project = project;
+			this.integratable = integratable;
 		}
 
 		public string Name
 		{
-			get { return _project.Name; }
+			get { return project.Name; }
 		}
 
 		public IProject Project
 		{
-			get { return _project; }
+			get { return project; }
 		}
 
 		public ITrigger Trigger
 		{
-			get { return _trigger; }
+			get { return trigger; }
 		}
 
 		public ProjectIntegratorState State
 		{
-			get { return _state; }
+			get { return state; }
 		}
 
 		public void Start()
@@ -63,27 +62,33 @@ namespace ThoughtWorks.CruiseControl.Core
 				if (IsRunning)
 					return;
 
-				_state = ProjectIntegratorState.Running;
+				state = ProjectIntegratorState.Running;
 			}
 
 			// multiple thread instances cannot be created
-			if (_thread == null || _thread.ThreadState == ThreadState.Stopped)
+			if (thread == null || thread.ThreadState == ThreadState.Stopped)
 			{
-				_thread = new Thread(new ThreadStart(Run));
-				_thread.Name = _project.Name;
+				thread = new Thread(new ThreadStart(Run));
+				thread.Name = project.Name;
 			}
 
 			// start thread if it's not running yet
-			if (_thread.ThreadState != ThreadState.Running)
+			if (thread.ThreadState != ThreadState.Running)
 			{
-				_thread.Start();
+				thread.Start();
 			}
 		}
 
 		public void ForceBuild()
 		{
-			Log.Info("Force Build for project: " + _project.Name);
-			_forceBuild = true;
+			Log.Info("Force Build for project: " + project.Name);
+			this.request = new IntegrationRequest(project.Name, BuildCondition.ForceBuild);
+			Start();
+		}
+
+		public void Request(IntegrationRequest request)
+		{
+			this.request = request;
 			Start();
 		}
 
@@ -92,7 +97,7 @@ namespace ThoughtWorks.CruiseControl.Core
 		/// </summary>
 		private void Run()
 		{
-			Log.Info("Starting integration for project: " + _project.Name);
+			Log.Info("Starting integration for project: " + project.Name);
 			try
 			{
 				// loop, until the integrator is stopped
@@ -116,40 +121,41 @@ namespace ThoughtWorks.CruiseControl.Core
 
 		private void Integrate()
 		{
-			// should we integrate this pass?
-			BuildCondition buildCondition = ShouldRunIntegration();
-			if (buildCondition != BuildCondition.NoBuild)
+			if (ShouldRunIntegration())
 			{
+				IntegrationRequest temp = request;
+				request = null;
 				try
 				{
-					_integratable.RunIntegration(buildCondition);
+					integratable.Integrate(request);
 				}
 				catch (Exception ex)
 				{
 					Log.Error(ex);
 				}
-
-				// notify the schedule whether the build was successful or not
-				_trigger.IntegrationCompleted();
+				trigger.IntegrationCompleted();
 			}
 		}
 
-		private BuildCondition ShouldRunIntegration()
+		private bool ShouldRunIntegration()
 		{
-			if (_forceBuild)
+			if (request == null)
 			{
-				_forceBuild = false;
-				return BuildCondition.ForceBuild;
+				BuildCondition buildCondition = trigger.ShouldRunIntegration();
+				if (buildCondition != BuildCondition.NoBuild)
+				{
+					request = new IntegrationRequest(Name, buildCondition);
+				}
 			}
-			return _trigger.ShouldRunIntegration();
+			return request != null;
 		}
 
 		private void Stopped()
 		{
 			// the state was set to 'Stopping', so set it to 'Stopped'
-			_state = ProjectIntegratorState.Stopped;
-			_thread = null;
-			Log.Info("Integrator for project: " + _project.Name + " is now stopped.");
+			state = ProjectIntegratorState.Stopped;
+			thread = null;
+			Log.Info("Integrator for project: " + project.Name + " is now stopped.");
 		}
 
 		/// <summary>
@@ -158,7 +164,7 @@ namespace ThoughtWorks.CruiseControl.Core
 		/// </summary>
 		public bool IsRunning
 		{
-			get { return _state == ProjectIntegratorState.Running; }
+			get { return state == ProjectIntegratorState.Running; }
 		}
 
 		/// <summary>
@@ -169,8 +175,8 @@ namespace ThoughtWorks.CruiseControl.Core
 		{
 			if (IsRunning)
 			{
-				Log.Info("Stopping integrator for project: " + _project.Name);
-				_state = ProjectIntegratorState.Stopping;
+				Log.Info("Stopping integrator for project: " + project.Name);
+				state = ProjectIntegratorState.Stopping;
 			}
 		}
 
@@ -180,24 +186,23 @@ namespace ThoughtWorks.CruiseControl.Core
 		/// </summary>
 		public void Abort()
 		{
-			if (_thread != null)
+			if (thread != null)
 			{
-				Log.Info("Aborting integrator for project: " + _project.Name);
-				_thread.Abort();
+				Log.Info("Aborting integrator for project: " + project.Name);
+				thread.Abort();
 			}
 		}
 
 		public void WaitForExit()
 		{
-			if (_thread != null && _thread.IsAlive)
+			if (thread != null && thread.IsAlive)
 			{
-				_thread.Join();
+				thread.Join();
 			}
 		}
 
 		/// <summary>
-		/// Ensure that the scheduler's thread is terminated when this object is
-		/// garbage collected.
+		/// Ensure that the integrator's thread is aborted when this object is disposed.
 		/// </summary>
 		void IDisposable.Dispose()
 		{

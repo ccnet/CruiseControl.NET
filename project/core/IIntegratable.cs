@@ -1,5 +1,3 @@
-using ThoughtWorks.CruiseControl.Remote;
-
 namespace ThoughtWorks.CruiseControl.Core
 {
 	public interface IIntegratable
@@ -7,8 +5,8 @@ namespace ThoughtWorks.CruiseControl.Core
 		/// <summary>
 		/// Runs an integration of this project.
 		/// </summary>
-		/// <param name="buildCondition"></param>
+		/// <param name="request"></param>
 		/// <returns>The result of the integration, or null if no integration took place.</returns>
-		IIntegrationResult RunIntegration(BuildCondition buildCondition);
+		IIntegrationResult Integrate(IntegrationRequest request);
 	}
 }

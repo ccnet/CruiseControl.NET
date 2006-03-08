@@ -1,12 +1,8 @@
-using System;
-using System.IO;
-using System.Xml;
 using NUnit.Framework;
 using ThoughtWorks.CruiseControl.Core.Util;
 
 namespace ThoughtWorks.CruiseControl.UnitTests.Core.Util
 {
-	
 	[TestFixture]
 	public class TimeoutTest
 	{
@@ -41,7 +37,5 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Util
 			Assert.AreEqual(60*60*1000, period.Millis);
 			Assert.AreEqual(new Timeout(60*60*1000, TimeUnits.MILLIS), period);
 		}
-
 	}
-
 }

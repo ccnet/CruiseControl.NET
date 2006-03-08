@@ -17,7 +17,7 @@ using ThoughtWorks.CruiseControl.Remote;
 namespace ThoughtWorks.CruiseControl.UnitTests.Core
 {
 	[TestFixture]
-	public class ProjectTest : CustomAssertion
+	public class ProjectTest : IntegrationFixture
 	{
 		private Project project;
 		private IMock mockBuilder;
@@ -137,7 +137,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 			Assert.IsTrue(project.Publishers[0] is XmlLogPublisher);
 			Assert.IsTrue(project.Publishers[1] is NullTask);
 			Assert.IsTrue(project.Tasks[0] is MergeFilesTask);
-			Assert.AreEqual("My Other Report", project.ExternalLinks[1].Name );
+			Assert.AreEqual("My Other Report", project.ExternalLinks[1].Name);
 			Assert.AreEqual(@"c:\my\working\directory", project.ConfiguredWorkingDirectory);
 
 			VerifyAll();
@@ -334,15 +334,16 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 		}
 
 		[Test]
-		public void ShouldCallIntegratableWhenRunIntegrationCalled()
+		public void ShouldCallIntegratableWhenIntegrateCalled()
 		{
-			DynamicMock integratableMock = new DynamicMock(typeof(IIntegratable));
+			DynamicMock integratableMock = new DynamicMock(typeof (IIntegratable));
 			project = new Project((IIntegratable) integratableMock.MockInstance);
 			SetupProject();
 
-			IIntegrationResult result = (IIntegrationResult) new DynamicMock(typeof(IIntegrationResult)).MockInstance;
-			integratableMock.ExpectAndReturn("RunIntegration", result, BuildCondition.ForceBuild);
-			Assert.AreEqual(result, project.RunIntegration(BuildCondition.ForceBuild));
+			IIntegrationResult result = (IIntegrationResult) new DynamicMock(typeof (IIntegrationResult)).MockInstance;
+			IntegrationRequest request = ForceBuildRequest();
+			integratableMock.ExpectAndReturn("Integrate", result, request);
+			Assert.AreEqual(result, project.Integrate(request));
 			VerifyAll();
 		}
 
@@ -362,7 +363,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 			project.Builder = new MockBuilder(); // need to use mock builder in order to set properties on IntegrationResult
 			project.ConfiguredWorkingDirectory = @"c:\temp";
 
-			IIntegrationResult result = project.RunIntegration(BuildCondition.IfModificationExists);
+			IIntegrationResult result = project.Integrate(Request());
 
 			Assert.AreEqual(ProjectName, result.ProjectName);
 			Assert.AreEqual(null, result.ExceptionResult);
@@ -381,7 +382,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 		}
 
 		[Test] //TODO: question: should state be saved after a poll with no modifications and no build?? -- i think it should: implication for last build though
-		public void RunningIntegrationWithNoModificationsShouldNotBuildOrPublish()
+			public void RunningIntegrationWithNoModificationsShouldNotBuildOrPublish()
 		{
 			mockStateManager.ExpectAndReturn("LoadState", IntegrationResultMother.CreateSuccessful(), ProjectName);
 			mockLabeller.ExpectAndReturn("Generate", "label", new IsAnything()); // generate new label
@@ -389,7 +390,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 			mockBuilder.ExpectNoCall("Run", typeof (IntegrationResult));
 			mockPublisher.ExpectNoCall("Run", typeof (IntegrationResult));
 
-			IIntegrationResult result = project.RunIntegration(BuildCondition.IfModificationExists);
+			IIntegrationResult result = project.Integrate(Request());
 
 			Assert.AreEqual(ProjectName, result.ProjectName);
 			Assert.AreEqual(null, result.ExceptionResult);
@@ -419,8 +420,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 			mockTask.Expect("Run", new IsAnything());
 
 			project.Builder = new MockBuilder(); // need to use mock builder in order to set properties on IntegrationResult
-			IIntegrationResult result = project.RunIntegration(BuildCondition.IfModificationExists);
-			
+			IIntegrationResult result = project.Integrate(Request());
+
 			Assert.AreEqual(ProjectName, result.ProjectName);
 			Assert.AreEqual(ProjectActivity.Sleeping, project.CurrentActivity);
 			Assert.AreEqual(IntegrationStatus.Success, result.Status);
@@ -443,7 +444,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 			mockStateManager.ExpectNoCall("SaveState", typeof (IntegrationResult));
 
 			project.PublishExceptions = false;
-			IIntegrationResult result = project.RunIntegration(BuildCondition.IfModificationExists);
+			IIntegrationResult result = project.Integrate(Request());
 			Assert.AreEqual(expectedException, result.ExceptionResult);
 			VerifyAll();
 		}
@@ -460,7 +461,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 			mockStateManager.Expect("SaveState", new IsAnything());
 
 			project.PublishExceptions = true;
-			IIntegrationResult result = project.RunIntegration(BuildCondition.IfModificationExists);
+			IIntegrationResult result = project.Integrate(Request());
 			Assert.AreEqual(expectedException, result.ExceptionResult);
 			VerifyAll();
 		}
@@ -470,7 +471,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 		{
 			mockStateManager.ExpectAndThrow("LoadState", new CruiseControlException("expected exception"), ProjectName);
 
-			project.RunIntegration(BuildCondition.IfModificationExists);
+			project.Integrate(Request());
 			VerifyAll();
 		}
 
@@ -481,7 +482,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 			mockStateManager.ExpectAndReturn("LoadState", IntegrationResult.CreateInitialIntegrationResult(ProjectName, @"c:\temp"), ProjectName); // running the first integration (no state file)
 			mockLabeller.ExpectAndThrow("Generate", expectedException, new IsAnything());
 
-			project.RunIntegration(BuildCondition.IfModificationExists);
+			project.Integrate(Request());
 			VerifyAll();
 		}
 
@@ -499,7 +500,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 			stateMock.ExpectAndReturn("LoadState", IntegrationResult.CreateInitialIntegrationResult(ProjectName, @"c:\temp"), ProjectName); // running the first integration (no state file)
 			project.StateManager = (IStateManager) stateMock.MockInstance;
 
-			IIntegrationResult results = project.RunIntegration(BuildCondition.IfModificationExists);
+			IIntegrationResult results = project.Integrate(Request());
 
 			stateMock.Expect("SaveState", results);
 
@@ -539,10 +540,10 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 			IntegrationResult result = IntegrationResultMother.CreateFailed();
 			mockTask.Expect("Run", result);
 
-			IMock secondTask = new DynamicMock(typeof(ITask));
-			secondTask.ExpectNoCall("Run", typeof(IntegrationResult));
+			IMock secondTask = new DynamicMock(typeof (ITask));
+			secondTask.ExpectNoCall("Run", typeof (IntegrationResult));
 
-			project.Tasks = new ITask[] { (ITask)mockTask.MockInstance, (ITask)secondTask.MockInstance };
+			project.Tasks = new ITask[] {(ITask) mockTask.MockInstance, (ITask) secondTask.MockInstance};
 			project.Builder = null;
 			project.Run(result);
 			VerifyAll();
@@ -561,7 +562,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 		}
 
 		[Test] // publishers will need to log their own exceptions
-		public void IfPublisherThrowsExceptionShouldStillSaveState()
+			public void IfPublisherThrowsExceptionShouldStillSaveState()
 		{
 			mockLabeller.ExpectAndReturn("Generate", "1.0", new IsAnything());
 			mockStateManager.ExpectAndReturn("LoadState", IntegrationResult.CreateInitialIntegrationResult(ProjectName, @"c:\temp"), ProjectName); // running the first integration (no state file)
@@ -574,7 +575,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 			mockPublisher.ExpectAndThrow("Run", expectedException, new IsAnything());
 			project.Builder = new MockBuilder();
 
-			IIntegrationResult results = project.RunIntegration(BuildCondition.IfModificationExists);
+			IIntegrationResult results = project.Integrate(Request());
 
 			// failure to save the integration result will register as a failed project
 			Assert.AreEqual(results, project.LastIntegrationResult, "new integration result has not been set to the last integration result");
@@ -596,7 +597,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 
 			project.Builder = null;
 			project.PublishExceptions = true;
-			project.RunIntegration(BuildCondition.ForceBuild);
+			project.Integrate(ForceBuildRequest());
 
 			VerifyAll();
 		}

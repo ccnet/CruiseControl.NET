@@ -120,6 +120,14 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 		}
 
 		[Test]
+		public void VerifyHistoryProcessInfoArgumentsWithSpaceInProjectName()
+		{
+			ExpectToExecuteArguments(string.Format("history \"$/My Project\" -R -Vd{0}~{1} -YAdmin,admin -I-Y", CommandDate(today), CommandDate(yesterday)));
+			vss.Project = "$/My Project";
+			vss.GetModifications(IntegrationResultMother.CreateSuccessful(yesterday), IntegrationResultMother.CreateSuccessful(today));
+		}
+
+		[Test]
 		public void VerifyHistoryProcessInfoArgumentsWhenUsernameIsNotSpecified()
 		{
 			ExpectToExecuteArguments(string.Format("history $/fooProject -R -Vd{0}~{1} -I-Y", CommandDate(today), CommandDate(yesterday)));

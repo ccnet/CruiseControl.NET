@@ -3,7 +3,6 @@ using System.ComponentModel;
 using NMock;
 using NMock.Constraints;
 using ThoughtWorks.CruiseControl.Core;
-using ThoughtWorks.CruiseControl.Core.Sourcecontrol;
 using ThoughtWorks.CruiseControl.Core.Util;
 
 namespace ThoughtWorks.CruiseControl.UnitTests.Core
@@ -15,7 +14,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 		protected string DefaultWorkingDirectory = @"c:\source\";
 		protected int DefaultTimeout = Timeout.DefaultTimeout.Millis;
 		protected string ProcessResultOutput = "output";
-		protected DateTime testDate = new DateTime(2005,06,06,08,45,00);
+		protected DateTime testDate = new DateTime(2005, 06, 06, 08, 45, 00);
 		protected string testDateString = "2005-06-06";
 		protected string testTimeString = "08:45:00";
 
@@ -24,19 +23,19 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 
 		protected void CreateProcessExecutorMock(string executable)
 		{
-			mockProcessExecutor = new DynamicMock(typeof(ProcessExecutor)); 
+			mockProcessExecutor = new DynamicMock(typeof (ProcessExecutor));
 			mockProcessExecutor.Strict = true;
 			defaultExecutable = executable;
 		}
 
 		protected void Verify()
 		{
-			mockProcessExecutor.Verify();	
+			mockProcessExecutor.Verify();
 		}
 
 		protected void ExpectThatExecuteWillNotBeCalled()
 		{
-			mockProcessExecutor.ExpectNoCall("Execute", typeof(ProcessInfo));
+			mockProcessExecutor.ExpectNoCall("Execute", typeof (ProcessInfo));
 		}
 
 		protected void ExpectToExecuteArguments(string args)
@@ -91,6 +90,6 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 			ProcessInfo info = new ProcessInfo(defaultExecutable, args, DefaultWorkingDirectory);
 			info.TimeOut = DefaultTimeout;
 			return info;
-		}		
+		}
 	}
 }
