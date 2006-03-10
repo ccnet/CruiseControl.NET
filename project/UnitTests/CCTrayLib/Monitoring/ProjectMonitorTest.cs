@@ -70,7 +70,6 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Monitoring
 			mockProjectManager.ExpectAndThrow("ProjectStatus", new Exception("should be caught"));
 			monitor.Poll();
 			Assert.AreEqual(1, pollCount);
-
 		}
 
 		[Test]

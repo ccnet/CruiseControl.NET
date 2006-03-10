@@ -15,48 +15,49 @@ namespace ThoughtWorks.CruiseControl.Remote
 	{
 		private ProjectIntegratorState status;
 		private IntegrationStatus buildStatus;
-		private ProjectActivity activity;
+		private ProjectActivity activity = ProjectActivity.Sleeping;
 		private string name;
 		private string webURL;
-		private DateTime lastBuildDate;
+		private SerializableDateTime lastBuildDate = SerializableDateTime.Default;
 		private string lastBuildLabel;
 		private string lastSuccessfulBuildLabel;
-		private readonly DateTime nextBuildTime;
+		private readonly SerializableDateTime nextBuildTime = SerializableDateTime.Default;
 
-		public ProjectStatus() { }
+		public ProjectStatus()
+		{}
 
-		public ProjectStatus(ProjectIntegratorState status, IntegrationStatus buildStatus, ProjectActivity activity, string name, string webURL, DateTime lastBuildDate, string lastBuildLabel, string lastSuccessfulBuildLabel, DateTime nextBuildTime) 
+		public ProjectStatus(ProjectIntegratorState status, IntegrationStatus buildStatus, ProjectActivity activity, string name, string webURL, DateTime lastBuildDate, string lastBuildLabel, string lastSuccessfulBuildLabel, DateTime nextBuildTime)
 		{
 			this.status = status;
 			this.buildStatus = buildStatus;
 			this.activity = activity;
 			this.name = name;
 			this.webURL = webURL;
-			this.lastBuildDate = lastBuildDate;
+			this.lastBuildDate = new SerializableDateTime(lastBuildDate);
 			this.lastBuildLabel = lastBuildLabel;
 			this.lastSuccessfulBuildLabel = lastSuccessfulBuildLabel;
-			this.nextBuildTime = nextBuildTime;
+			this.nextBuildTime = new SerializableDateTime(nextBuildTime);
 		}
 
-		public ProjectIntegratorState Status 
+		public ProjectIntegratorState Status
 		{
 			get { return status; }
 			set { status = value; }
 		}
 
-		public IntegrationStatus BuildStatus 
+		public IntegrationStatus BuildStatus
 		{
 			get { return buildStatus; }
 			set { buildStatus = value; }
 		}
 
-		public ProjectActivity Activity 
+		public ProjectActivity Activity
 		{
 			get { return activity; }
 			set { activity = value; }
 		}
 
-		public string Name 
+		public string Name
 		{
 			get { return name; }
 			set { name = value; }
@@ -70,8 +71,8 @@ namespace ThoughtWorks.CruiseControl.Remote
 
 		public DateTime LastBuildDate
 		{
-			get { return lastBuildDate; }
-			set { lastBuildDate = value; }
+			get { return lastBuildDate.DateTime; }
+			set { lastBuildDate = new SerializableDateTime(value); }
 		}
 
 		public string LastBuildLabel
@@ -88,7 +89,7 @@ namespace ThoughtWorks.CruiseControl.Remote
 
 		public DateTime NextBuildTime
 		{
-			get { return nextBuildTime; }
+			get { return nextBuildTime.DateTime; }
 		}
 	}
 }
