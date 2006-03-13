@@ -50,7 +50,8 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			Log.Info(string.Format("Retrieving detailed change list for {0} in Vault Repository \"{1}\" between {2} and {3}", _shim.Folder, _shim.Repository, from.StartTime, to.StartTime));
 			ProcessResult result = ExecuteWithRetries(ForHistoryProcessInfo(from, to));
 			Modification[] itemModifications = ParseModifications(result, from.StartTime, to.StartTime);
-			Debug.Assert(itemModifications != null && itemModifications.Length > 0, "Item history returned no changes.  Version history is supposed to determine if changes exist.");
+			if (itemModifications == null || itemModifications.Length == 0)
+				Log.Warning("Item history returned no changes.  Version history is supposed to determine if changes exist.  This is usually caused by clock skew between the CC.NET server and the Vault server.");
 
 			// Unfortunately we have to go through these one more time to ensure there's nothing beyond the version we're going to retrieve.
 			// We've made two history queries, and if changes were committed after our first check it's possible that they would be erroneously
