@@ -12,7 +12,7 @@ namespace ThoughtWorks.CruiseControl.Core
 	/// a project's integration.
 	/// <list type="1">
 	///		<item>The <see cref="ITrigger"/> instance is asked whether to build or not.</item>
-	///		<item>If a build is required, the <see cref="IProject.RunIntegration(BuildCondition buildCondition)"/>
+	///		<item>If a build is required, the <see cref="IProject.Integrate(IntegrationRequest request)"/>
 	///		is called.</item>
 	/// </list>
 	/// </summary>
@@ -127,7 +127,7 @@ namespace ThoughtWorks.CruiseControl.Core
 				request = null;
 				try
 				{
-					integratable.Integrate(request);
+					integratable.Integrate(temp);
 				}
 				catch (Exception ex)
 				{

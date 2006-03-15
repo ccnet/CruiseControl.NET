@@ -233,8 +233,6 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 			integrationTriggerMock.WaitForSignal();
 			VerifyAll();
 		}
-
-		// should clear request queue as soon as request is processed.
 	}
 
 	public class HasForceBuildCondition : BaseConstraint
@@ -253,6 +251,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 	public class LatchMock : DynamicMock
 	{
 		private ManualResetEvent latch = new ManualResetEvent(false);
+		private VerifyException ex;
 
 		public LatchMock(Type type) : base(type)
 		{}
@@ -262,6 +261,11 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 			try
 			{
 				return base.Invoke(methodName, args);
+			}
+			catch (VerifyException ex)
+			{
+				this.ex = ex;
+				throw;
 			}
 			finally
 			{
@@ -275,6 +279,10 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 			if (! signalled)
 			{
 				throw new Exception("Latch has not been signalled before the timeout expired!");
+			}
+			if (ex != null)
+			{
+				throw ex;
 			}
 		}
 
