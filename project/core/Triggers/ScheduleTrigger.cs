@@ -12,7 +12,7 @@ namespace ThoughtWorks.CruiseControl.Core.Triggers
 	{
 		private DateTimeProvider dtProvider;
 		private TimeSpan integrationTime;
-		private DateTime nextIntegration;
+		private DateTime nextBuild;
 
 		public ScheduleTrigger() : this(new DateTimeProvider())
 		{
@@ -32,7 +32,6 @@ namespace ThoughtWorks.CruiseControl.Core.Triggers
 				try
 				{
 					integrationTime = TimeSpan.Parse(value);
-					SetNextIntegrationDateTime();
 				}
 				catch (Exception ex)
 				{
@@ -48,16 +47,18 @@ namespace ThoughtWorks.CruiseControl.Core.Triggers
 		[ReflectorArray("weekDays", Required=false)] 
 		public DayOfWeek[] WeekDays = (DayOfWeek[]) DayOfWeek.GetValues(typeof (DayOfWeek));
 
+		private bool triggered;
+
 		private void SetNextIntegrationDateTime()
 		{
 			DateTime now = dtProvider.Now;
-			nextIntegration = new DateTime(now.Year, now.Month, now.Day, integrationTime.Hours, integrationTime.Minutes, 0, 0);
-			if (now >= nextIntegration)
+			nextBuild = new DateTime(now.Year, now.Month, now.Day, integrationTime.Hours, integrationTime.Minutes, 0, 0);
+			if (now >= nextBuild)
 			{
-				nextIntegration = nextIntegration.AddDays(1);
+				nextBuild = nextBuild.AddDays(1);
 			}
 
-			nextIntegration = CalculateNextIntegrationTime(nextIntegration);
+			nextBuild = CalculateNextIntegrationTime(nextBuild);
 		}
 
 		private DateTime CalculateNextIntegrationTime(DateTime nextIntegration)
@@ -78,19 +79,28 @@ namespace ThoughtWorks.CruiseControl.Core.Triggers
 
 		public virtual void IntegrationCompleted()
 		{
-			SetNextIntegrationDateTime();
+			if (triggered) SetNextIntegrationDateTime();
+			triggered = false;
 		}
 
 		public DateTime NextBuild
 		{
-			get { return nextIntegration; }
+			get 
+			{
+				if (nextBuild == DateTime.MinValue)
+				{
+					SetNextIntegrationDateTime();
+				}
+				return nextBuild; 
+			}
 		}
 
 		public virtual BuildCondition ShouldRunIntegration()
 		{
 			DateTime now = dtProvider.Now;
-			if (now > nextIntegration && IsValidWeekDay(now.DayOfWeek))
+			if (now > NextBuild && IsValidWeekDay(now.DayOfWeek))
 			{
+				triggered = true;
 				return BuildCondition;
 			}
 			return BuildCondition.NoBuild;

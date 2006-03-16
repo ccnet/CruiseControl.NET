@@ -33,7 +33,6 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Triggers
 			mockDateTime.SetupResult("Now", new DateTime(2004, 1, 1, 23, 25, 0, 0));
 			trigger.Time = "23:30";
 			trigger.BuildCondition = BuildCondition.IfModificationExists;
-
 			Assert.AreEqual(BuildCondition.NoBuild, trigger.ShouldRunIntegration());
 
 			mockDateTime.SetupResult("Now", new DateTime(2004, 1, 1, 23, 31, 0, 0));
@@ -46,6 +45,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Triggers
 			mockDateTime.SetupResult("Now", new DateTime(2004, 1, 1, 23, 25, 0, 0));
 			trigger.Time = "23:30";
 			trigger.BuildCondition = BuildCondition.IfModificationExists;
+			Assert.AreEqual(BuildCondition.NoBuild, trigger.ShouldRunIntegration());
 
 			mockDateTime.SetupResult("Now", new DateTime(2004, 1, 2, 1, 1, 0, 0));
 			Assert.AreEqual(BuildCondition.IfModificationExists, trigger.ShouldRunIntegration());
@@ -57,8 +57,9 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Triggers
 			mockDateTime.SetupResult("Now", new DateTime(2004, 6, 27, 13, 00, 0, 0));
 			trigger.Time = "14:30";
 			trigger.BuildCondition = BuildCondition.IfModificationExists;
-			mockDateTime.SetupResult("Now", new DateTime(2004, 6, 27, 15, 00, 0, 0));
+			Assert.AreEqual(BuildCondition.NoBuild, trigger.ShouldRunIntegration());
 
+			mockDateTime.SetupResult("Now", new DateTime(2004, 6, 27, 15, 00, 0, 0));
 			Assert.AreEqual(BuildCondition.IfModificationExists, trigger.ShouldRunIntegration());
 			trigger.IntegrationCompleted();
 			Assert.AreEqual(BuildCondition.NoBuild, trigger.ShouldRunIntegration());
@@ -87,8 +88,9 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Triggers
 		{
 			trigger.WeekDays = new DayOfWeek[] {DayOfWeek.Monday, DayOfWeek.Wednesday};
 			trigger.BuildCondition = BuildCondition.ForceBuild;
-
-			mockDateTime.SetupResult("Now", new DateTime(2004, 12, 1));
+			mockDateTime.SetupResult("Now", new DateTime(2004, 11, 30));
+			Assert.AreEqual(new DateTime(2004, 12, 1), trigger.NextBuild);
+			mockDateTime.SetupResult("Now", new DateTime(2004, 12, 1, 0, 0, 1));
 			Assert.AreEqual(BuildCondition.ForceBuild, trigger.ShouldRunIntegration());
 
 			mockDateTime.SetupResult("Now", new DateTime(2004, 12, 2));
@@ -135,12 +137,15 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Triggers
 		[Test]
 		public void NextBuildTimeShouldBeTheNextSpecifiedDay()
 		{
-			mockDateTime.SetupResult("Now", new DateTime(2005, 2, 4, 13, 13, 0));
+			mockDateTime.SetupResult("Now", new DateTime(2005, 2, 4, 13, 13, 0));		// Friday
 			trigger.Time = "10:00";
 			trigger.WeekDays = new DayOfWeek[] {DayOfWeek.Friday, DayOfWeek.Sunday};
+			Assert.AreEqual(new DateTime(2005, 2, 6, 10, 0, 0), trigger.NextBuild);		// Sunday
+
+			mockDateTime.SetupResult("Now", new DateTime(2005, 2, 6, 13, 13, 0));		// Sunday
+			Assert.AreEqual(BuildCondition.IfModificationExists, trigger.ShouldRunIntegration());
 			trigger.IntegrationCompleted();
-			DateTime expectedDate = new DateTime(2005, 2, 6, 10, 0, 0);
-			Assert.AreEqual(expectedDate, trigger.NextBuild);
+			Assert.AreEqual(new DateTime(2005, 2, 11, 10, 0, 0), trigger.NextBuild);	// Friday
 		}
 
 		[Test]
@@ -149,9 +154,24 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Triggers
 			mockDateTime.SetupResult("Now", new DateTime(2005, 2, 4, 13, 13, 0));
 			trigger.Time = "10:00";
 			trigger.WeekDays = new DayOfWeek[] {DayOfWeek.Friday, DayOfWeek.Thursday};
+			Assert.AreEqual(new DateTime(2005, 2, 10, 10, 0, 0), trigger.NextBuild);
+
+			mockDateTime.SetupResult("Now", new DateTime(2005, 2, 10, 13, 13, 0));
+			Assert.AreEqual(BuildCondition.IfModificationExists, trigger.ShouldRunIntegration());
 			trigger.IntegrationCompleted();
-			DateTime expectedDate = new DateTime(2005, 2, 10, 10, 0, 0);
-			Assert.AreEqual(expectedDate, trigger.NextBuild);
+			Assert.AreEqual(new DateTime(2005, 2, 11, 10, 0, 0), trigger.NextBuild);
+		}
+
+		[Test]
+		public void ShouldNotUpdateNextBuildTimeUnlessScheduledBuildHasRun()
+		{
+			mockDateTime.SetupResult("Now", new DateTime(2005, 2, 4, 9, 0, 1));
+			trigger.Time = "10:00";
+			Assert.AreEqual(new DateTime(2005, 2, 4, 10, 0, 0), trigger.NextBuild);			
+
+			mockDateTime.SetupResult("Now", new DateTime(2005, 2, 4, 10, 0, 1));
+			trigger.IntegrationCompleted();
+			Assert.AreEqual(new DateTime(2005, 2, 4, 10, 0, 0), trigger.NextBuild);			
 		}
 	}
 }
