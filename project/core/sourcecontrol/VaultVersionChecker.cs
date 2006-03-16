@@ -8,8 +8,14 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol {
 	[ReflectorType("vault")]
 	public class VaultVersionChecker : ISourceControl
 	{
+		private	Timeout timeout = Timeout.DefaultTimeout;
+
 		public const string DefaultExecutable = @"C:\Program Files\SourceGear\Vault Client\vault.exe";
 		public const string DefaultHistoryArgs = "-excludeactions label -rowlimit 0";
+		public const string DefaultFolder = "$";
+		public const string DefaultFileTime = "checkin";
+		public const int DefaultPollRetryWait = 5;
+		public const int DefaultPollRetryAttempts = 5;
 
 		public enum EForcedVaultVersion
 		{
@@ -20,6 +26,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol {
 
 		private Vault3 _vaultSourceControl = null;
 		private EForcedVaultVersion _forcedVaultVersion = EForcedVaultVersion.None;
+
 
 		[ReflectorProperty("username", Required=false)]
 		public string Username;
@@ -34,7 +41,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol {
 		public string Repository;
 
 		[ReflectorProperty("folder", Required=false)]
-		public string Folder = "$";
+		public string Folder = DefaultFolder;
 
 		[ReflectorProperty("executable", Required=false)]
 		public string Executable = DefaultExecutable;
@@ -51,6 +58,23 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol {
 		[ReflectorProperty("historyArgs", Required=false)]
 		public string HistoryArgs = DefaultHistoryArgs;
 
+		[ReflectorProperty("timeout", typeof(TimeoutSerializerFactory))]
+		public Timeout Timeout
+		{
+			get
+			{
+				return timeout;
+			}
+			set
+			{
+				if (value==null) 
+					timeout = Timeout.DefaultTimeout;
+				else 
+					timeout = value;
+			}
+			
+		}
+
 		[ReflectorProperty("useWorkingDirectory", Required=false)]
 		public bool UseVaultWorkingDirectory = true;
 
@@ -60,7 +84,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol {
 		// A more sensible default here would be "current" IMHO, but "checkin" was hard-coded before the property was added, 
 		// so I'm leaving that as the default so the behavior doesn't change on people when they upgrade.
 		[ReflectorProperty("setFileTime", Required=false)]
-		public string setFileTime = "checkin"; 
+		public string setFileTime = DefaultFileTime; 
 
 		[ReflectorProperty("cleanCopy", Required = false)]
 		public bool CleanCopy = false;
@@ -85,10 +109,15 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol {
 		public string otherVaultArguments;
 
 		[ReflectorProperty("pollRetryWait", Required=false)]
-		public int pollRetryWait = 5;
+		public int pollRetryWait = DefaultPollRetryWait;
 
 		[ReflectorProperty("pollRetryAttempts", Required=false)]
-		public int pollRetryAttempts = 3;
+		public int pollRetryAttempts = DefaultPollRetryAttempts;
+
+		public Vault3 VaultSourceControl
+		{
+			get { return _vaultSourceControl; }
+		}
 
 		public VaultVersionChecker() {}
 
@@ -112,36 +141,36 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol {
 		public void Initialize(IProject project)
 		{
 			GetCorrectVaultInstance();
-			_vaultSourceControl.Initialize(project);
+			VaultSourceControl.Initialize(project);
 		}
 		
 		public Modification[] GetModifications(IIntegrationResult from, IIntegrationResult to)
 		{
 			GetCorrectVaultInstance();
-			return _vaultSourceControl.GetModifications(from, to);
+			return VaultSourceControl.GetModifications(from, to);
 		}
 
 		public void LabelSourceControl(IIntegrationResult result)
 		{
 			GetCorrectVaultInstance();
-			_vaultSourceControl.LabelSourceControl(result);
+			VaultSourceControl.LabelSourceControl(result);
 		}
 
 		public void GetSource(IIntegrationResult result)
 		{
 			GetCorrectVaultInstance();
-			_vaultSourceControl.GetSource(result);
+			VaultSourceControl.GetSource(result);
 		}
 
 		public void Purge(IProject project)
 		{
 			GetCorrectVaultInstance();
-			_vaultSourceControl.Purge(project);
+			VaultSourceControl.Purge(project);
 		}
 
 		private void GetCorrectVaultInstance()
 		{
-			if ( _vaultSourceControl != null )
+			if ( VaultSourceControl != null )
 				return;
 
 			if ( VaultVersionIs317OrBetter() )

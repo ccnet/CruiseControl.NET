@@ -24,11 +24,13 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 		public Vault3(VaultVersionChecker versionCheckerShim) : base(new VaultHistoryParser())
 		{
 			_shim = versionCheckerShim;
+			this.Timeout = _shim.Timeout;
 		}
 
 		public Vault3(VaultVersionChecker versionCheckerShim, IHistoryParser historyParser, ProcessExecutor executor) : base(historyParser, executor)
 		{
 			this._shim = versionCheckerShim;
+			this.Timeout = _shim.Timeout;
 		}
 
 		public override Modification[] GetModifications(IIntegrationResult from, IIntegrationResult to)

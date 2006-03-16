@@ -71,11 +71,19 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 				<ssl>True</ssl>
 				<autoGetSource>True</autoGetSource>
 				<applyLabel>True</applyLabel>
-				<historyArgs></historyArgs>
 				<useWorkingDirectory>false</useWorkingDirectory>
+				<historyArgs>-blah test</historyArgs>
+				<timeout>2400000</timeout>
 				<workingDirectory>c:\source</workingDirectory>
 				<cleanCopy>true</cleanCopy>
 				<setFileTime>current</setFileTime>
+				<proxyServer>proxyhost</proxyServer>
+				<proxyPort>12345</proxyPort>
+				<proxyUser>proxyuser</proxyUser>
+				<proxyPassword>proxypassword</proxyPassword>
+				<proxyDomain>proxydomain</proxyDomain>
+				<pollRetryAttempts>10</pollRetryAttempts>
+				<pollRetryWait>30</pollRetryWait >
 			</vault>";
 
 			vault = CreateVault(ST_XML_SSL);
@@ -85,13 +93,22 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 			Assert.AreEqual("localhost", vault.Host);
 			Assert.AreEqual("repository", vault.Repository);
 			Assert.AreEqual("$\\foo", vault.Folder);
+			Assert.AreEqual(true, vault.Ssl);
 			Assert.AreEqual(true, vault.AutoGetSource);
 			Assert.AreEqual(true, vault.ApplyLabel);
 			Assert.AreEqual(false, vault.UseVaultWorkingDirectory);
-			Assert.AreEqual(string.Empty, vault.HistoryArgs);
+			Assert.AreEqual("-blah test", vault.HistoryArgs);
+			Assert.AreEqual(2400000, vault.Timeout.Millis);
 			Assert.AreEqual(@"c:\source", vault.WorkingDirectory);
 			Assert.AreEqual(true, vault.CleanCopy);
 			Assert.AreEqual("current", vault.setFileTime);
+			Assert.AreEqual("proxyhost", vault.proxyServer);
+			Assert.AreEqual("12345", vault.proxyPort);
+			Assert.AreEqual("proxyuser", vault.proxyUser);
+			Assert.AreEqual("proxypassword", vault.proxyPassword);
+			Assert.AreEqual("proxydomain", vault.proxyDomain);
+			Assert.AreEqual(10, vault.pollRetryAttempts);
+			Assert.AreEqual(30, vault.pollRetryWait);
 		}
 
 		[Test]
@@ -107,18 +124,27 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 				</vault>
 			");
 			Assert.AreEqual(VaultVersionChecker.DefaultExecutable, vault.Executable);
-			Assert.AreEqual("$", vault.Folder);
-			Assert.AreEqual(false, vault.AutoGetSource);
-			Assert.AreEqual(false, vault.ApplyLabel);
-			Assert.AreEqual(true, vault.UseVaultWorkingDirectory);
-			Assert.AreEqual(VaultVersionChecker.DefaultHistoryArgs, vault.HistoryArgs);
-			Assert.AreEqual(false, vault.Ssl);
-			Assert.AreEqual(false, vault.CleanCopy);
-			Assert.AreEqual("checkin", vault.setFileTime);
 			Assert.AreEqual("name", vault.Username);
 			Assert.AreEqual("password", vault.Password);
 			Assert.AreEqual("localhost", vault.Host);
 			Assert.AreEqual("repository", vault.Repository);
+			Assert.AreEqual("$", vault.Folder);
+			Assert.AreEqual(false, vault.Ssl);
+			Assert.AreEqual(false, vault.AutoGetSource);
+			Assert.AreEqual(false, vault.ApplyLabel);
+			Assert.AreEqual(true, vault.UseVaultWorkingDirectory);
+			Assert.AreEqual(VaultVersionChecker.DefaultHistoryArgs, vault.HistoryArgs);
+			Assert.AreEqual(Timeout.DefaultTimeout, vault.Timeout);
+			Assert.IsNull(vault.WorkingDirectory);
+			Assert.AreEqual(false, vault.CleanCopy);
+			Assert.AreEqual("checkin", vault.setFileTime);
+			Assert.IsNull(vault.proxyServer);
+			Assert.IsNull(vault.proxyPort);
+			Assert.IsNull(vault.proxyUser);
+			Assert.IsNull(vault.proxyPassword);
+			Assert.IsNull(vault.proxyDomain);
+			Assert.AreEqual(VaultVersionChecker.DefaultPollRetryAttempts, vault.pollRetryAttempts);
+			Assert.AreEqual(VaultVersionChecker.DefaultPollRetryWait, vault.pollRetryWait);
 		}
 
 		[Test]
