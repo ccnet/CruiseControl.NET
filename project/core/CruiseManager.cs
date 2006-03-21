@@ -2,7 +2,7 @@ using System;
 using ThoughtWorks.CruiseControl.Core.Util;
 using ThoughtWorks.CruiseControl.Remote;
 
-namespace ThoughtWorks.CruiseControl.Core 
+namespace ThoughtWorks.CruiseControl.Core
 {
 	/// <summary>
 	/// Exposes project management functionality (start, stop, status) via remoting.  
@@ -56,7 +56,7 @@ namespace ThoughtWorks.CruiseControl.Core
 		{
 			try
 			{
-				return cruiseServer.GetMostRecentBuildNames(projectName, buildCount);	
+				return cruiseServer.GetMostRecentBuildNames(projectName, buildCount);
 			}
 			catch (Exception e)
 			{

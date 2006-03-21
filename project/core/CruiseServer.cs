@@ -27,13 +27,12 @@ namespace ThoughtWorks.CruiseControl.Core
 			this.configurationService = configurationService;
 			this.configurationService.AddConfigurationUpdateHandler(new ConfigurationUpdateHandler(Restart));
 			this.projectIntegratorListFactory = projectIntegratorListFactory;
+			this.projectSerializer = projectSerializer;
 
 			// ToDo - get rid of manager, maybe
 			manager = new CruiseManager(this);
 
 			// By default, no integrators are running
-			this.projectSerializer = projectSerializer;
-
 			CreateIntegrators();
 		}
 
@@ -68,8 +67,7 @@ namespace ThoughtWorks.CruiseControl.Core
 		/// </summary>
 		public void Stop(string project)
 		{
-			IProjectIntegrator integrator = projectIntegrators[project];
-			if (integrator == null) throw new NoSuchProjectException(project);
+			IProjectIntegrator integrator = GetIntegrator(project);
 			integrator.Stop();
 		}
 

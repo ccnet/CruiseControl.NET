@@ -26,6 +26,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 
 		private Modification[] modifications;
 		private DateTime time3;
+		private IntegrationRequest request;
 
 		[SetUp]
 		public void Setup()
@@ -35,6 +36,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 
 			resultManagerMock = new DynamicMock(typeof (IIntegrationResultManager));
 			resultManagerMock.Strict = true;
+			request = ModificationExistRequest();
 
 			quietPeriodMock = new DynamicMock(typeof (IQuietPeriod));
 
@@ -84,7 +86,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 			resultMock.ExpectAndReturn("Status", IntegrationStatus.Unknown);
 			resultMock.ExpectAndReturn("EndTime", time3);
 
-			IIntegrationResult returnedResult = runner.Integrate(Request());
+			IIntegrationResult returnedResult = runner.Integrate(request);
 
 			Assert.AreEqual(result, returnedResult);
 			Assert.IsTrue(Directory.Exists(result.WorkingDirectory));
@@ -99,7 +101,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 			SetupShouldBuildExpectations();
 			SetupBuildPassExpectations();
 
-			IIntegrationResult returnedResult = runner.Integrate(Request());
+			IIntegrationResult returnedResult = runner.Integrate(request);
 
 			Assert.AreEqual(result, returnedResult);
 			VerifyAll();
@@ -116,7 +118,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 			targetMock.Expect("PublishResults", result);
 			resultManagerMock.Expect("FinishIntegration");
 
-			IIntegrationResult returnedResult = runner.Integrate(Request());
+			IIntegrationResult returnedResult = runner.Integrate(request);
 
 			Assert.AreEqual(result, returnedResult);
 			VerifyAll();
@@ -130,7 +132,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 		private void SetupPreambleExpections(Type sourceControlType)
 		{
 			targetMock.Expect("Activity", ProjectActivity.CheckingModifications);
-			resultManagerMock.ExpectAndReturn("StartNewIntegration", result, BuildCondition.IfModificationExists);
+			resultManagerMock.ExpectAndReturn("StartNewIntegration", result, request);
 			resultMock.Expect("MarkStartTime");
 			resultManagerMock.ExpectAndReturn("LastIntegrationResult", lastResult);
 			sourceControlMock = new DynamicMock(sourceControlType);

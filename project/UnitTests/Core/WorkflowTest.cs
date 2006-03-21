@@ -47,7 +47,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 
 			project.Tasks.Add(taskMock1.MockInstance);
 			project.Tasks.Add(taskMock2.MockInstance);
-			project.Integrate(Request());
+			project.Integrate(ModificationExistRequest());
 
 			Assert.IsNotNull(project.CurrentIntegration);
 			Assert.IsNotNull(project.CurrentIntegration.StartTime);
@@ -91,7 +91,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 			project.Tasks.Add(taskMock1.MockInstance);
 			project.Tasks.Add(taskMock2.MockInstance);
 
-			IIntegrationResult result = project.Integrate(Request());
+			IIntegrationResult result = project.Integrate(ModificationExistRequest());
 
 			taskMock1.Verify();
 			taskMock2.Verify();

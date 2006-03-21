@@ -363,7 +363,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 			project.Builder = new MockBuilder(); // need to use mock builder in order to set properties on IntegrationResult
 			project.ConfiguredWorkingDirectory = @"c:\temp";
 
-			IIntegrationResult result = project.Integrate(Request());
+			IIntegrationResult result = project.Integrate(ModificationExistRequest());
 
 			Assert.AreEqual(ProjectName, result.ProjectName);
 			Assert.AreEqual(null, result.ExceptionResult);
@@ -390,7 +390,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 			mockBuilder.ExpectNoCall("Run", typeof (IntegrationResult));
 			mockPublisher.ExpectNoCall("Run", typeof (IntegrationResult));
 
-			IIntegrationResult result = project.Integrate(Request());
+			IIntegrationResult result = project.Integrate(ModificationExistRequest());
 
 			Assert.AreEqual(ProjectName, result.ProjectName);
 			Assert.AreEqual(null, result.ExceptionResult);
@@ -420,7 +420,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 			mockTask.Expect("Run", new IsAnything());
 
 			project.Builder = new MockBuilder(); // need to use mock builder in order to set properties on IntegrationResult
-			IIntegrationResult result = project.Integrate(Request());
+			IIntegrationResult result = project.Integrate(ModificationExistRequest());
 
 			Assert.AreEqual(ProjectName, result.ProjectName);
 			Assert.AreEqual(ProjectActivity.Sleeping, project.CurrentActivity);
@@ -444,7 +444,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 			mockStateManager.ExpectNoCall("SaveState", typeof (IntegrationResult));
 
 			project.PublishExceptions = false;
-			IIntegrationResult result = project.Integrate(Request());
+			IIntegrationResult result = project.Integrate(ModificationExistRequest());
 			Assert.AreEqual(expectedException, result.ExceptionResult);
 			VerifyAll();
 		}
@@ -461,7 +461,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 			mockStateManager.Expect("SaveState", new IsAnything());
 
 			project.PublishExceptions = true;
-			IIntegrationResult result = project.Integrate(Request());
+			IIntegrationResult result = project.Integrate(ModificationExistRequest());
 			Assert.AreEqual(expectedException, result.ExceptionResult);
 			VerifyAll();
 		}
@@ -471,7 +471,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 		{
 			mockStateManager.ExpectAndThrow("LoadState", new CruiseControlException("expected exception"), ProjectName);
 
-			project.Integrate(Request());
+			project.Integrate(ModificationExistRequest());
 			VerifyAll();
 		}
 
@@ -482,7 +482,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 			mockStateManager.ExpectAndReturn("LoadState", IntegrationResult.CreateInitialIntegrationResult(ProjectName, @"c:\temp"), ProjectName); // running the first integration (no state file)
 			mockLabeller.ExpectAndThrow("Generate", expectedException, new IsAnything());
 
-			project.Integrate(Request());
+			project.Integrate(ModificationExistRequest());
 			VerifyAll();
 		}
 
@@ -500,7 +500,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 			stateMock.ExpectAndReturn("LoadState", IntegrationResult.CreateInitialIntegrationResult(ProjectName, @"c:\temp"), ProjectName); // running the first integration (no state file)
 			project.StateManager = (IStateManager) stateMock.MockInstance;
 
-			IIntegrationResult results = project.Integrate(Request());
+			IIntegrationResult results = project.Integrate(ModificationExistRequest());
 
 			stateMock.Expect("SaveState", results);
 
@@ -575,7 +575,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 			mockPublisher.ExpectAndThrow("Run", expectedException, new IsAnything());
 			project.Builder = new MockBuilder();
 
-			IIntegrationResult results = project.Integrate(Request());
+			IIntegrationResult results = project.Integrate(ModificationExistRequest());
 
 			// failure to save the integration result will register as a failed project
 			Assert.AreEqual(results, project.LastIntegrationResult, "new integration result has not been set to the last integration result");

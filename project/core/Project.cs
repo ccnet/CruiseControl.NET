@@ -45,7 +45,6 @@ namespace ThoughtWorks.CruiseControl.Core
 		private bool publishExceptions = true;
 		private IIntegratable integratable;
 		private QuietPeriod quietPeriod = new QuietPeriod(new DateTimeProvider());
-		private IntegrationRequest currentRequest;
 
 		public Project()
 		{
@@ -150,11 +149,6 @@ namespace ThoughtWorks.CruiseControl.Core
 		public IntegrationStatus LatestBuildStatus
 		{
 			get { return LastIntegrationResult.Status; }
-		}
-
-		public IntegrationRequest CurrentRequest
-		{
-			get { return currentRequest; }
 		}
 
 		public IIntegrationResult Integrate(IntegrationRequest request)

@@ -5,7 +5,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 {
 	public class IntegrationFixture : CustomAssertion
 	{
-		protected IntegrationRequest Request()
+		protected IntegrationRequest ModificationExistRequest()
 		{
 			return Request(BuildCondition.IfModificationExists);
 		}
@@ -17,7 +17,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 		
 		protected IntegrationRequest ForceBuildRequest()
 		{
-			return Request(BuildCondition.IfModificationExists);
+			return Request(BuildCondition.ForceBuild);
 		}
 	}
 }

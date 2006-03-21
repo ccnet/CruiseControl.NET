@@ -8,7 +8,7 @@ using ThoughtWorks.CruiseControl.Remote;
 namespace ThoughtWorks.CruiseControl.UnitTests.Core
 {
 	[TestFixture]
-	public class IntegrationResultManagerTest
+	public class IntegrationResultManagerTest : IntegrationFixture
 	{
 		private IMock mockLabeller;
 		private IMock mockStateManager;
@@ -38,7 +38,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 			mockLabeller.ExpectAndReturn("Generate", "foo", new IsAnything());
 			ExpectToLoadState(IntegrationResultMother.CreateSuccessful("success"));
 
-			IIntegrationResult result = manager.StartNewIntegration(BuildCondition.ForceBuild);
+			IIntegrationResult result = manager.StartNewIntegration(ForceBuildRequest());
 			Assert.AreEqual("project", result.ProjectName);
 			Assert.AreEqual(@"c:\temp", result.WorkingDirectory);
 			Assert.AreEqual(BuildCondition.ForceBuild, result.BuildCondition);
@@ -68,7 +68,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 			IIntegrationResult lastResult = new IntegrationResult();
 			ExpectToLoadState(lastResult);
 
-			IIntegrationResult expected = manager.StartNewIntegration(BuildCondition.IfModificationExists);
+			IIntegrationResult expected = manager.StartNewIntegration(ModificationExistRequest());
 			Assert.AreEqual(lastResult, manager.LastIntegrationResult);
 
 			mockStateManager.Expect("SaveState", expected);

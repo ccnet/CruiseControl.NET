@@ -27,26 +27,25 @@ namespace ThoughtWorks.CruiseControl.Core
 			}
 		}
 
-		private IIntegrationResult LoadLastIntegration()
+		public IIntegrationResult StartNewIntegration(IntegrationRequest request)
 		{
-			IIntegrationResult result = project.StateManager.LoadState(project.Name);
-			result.WorkingDirectory = project.WorkingDirectory;
-			return result;
-		}
-
-		public IIntegrationResult StartNewIntegration(BuildCondition buildCondition)
-		{
-
 			currentResult = new IntegrationResult(project.Name, project.WorkingDirectory);
 			
 			currentResult.LastIntegrationStatus = LastIntegrationResult.Status;
 			currentResult.LastSuccessfulIntegrationLabel = LastIntegrationResult.LastSuccessfulIntegrationLabel;
 
-			currentResult.BuildCondition = DetermineBuildCondition(buildCondition);
+			currentResult.BuildCondition = DetermineBuildCondition(request.BuildCondition);
 			currentResult.Label = project.Labeller.Generate(LastIntegrationResult);
 			currentResult.ArtifactDirectory = project.ArtifactDirectory;
 			currentResult.ProjectUrl = project.WebURL;
 			return currentResult;
+		}
+
+		private IIntegrationResult LoadLastIntegration()
+		{
+			IIntegrationResult result = project.StateManager.LoadState(project.Name);
+			result.WorkingDirectory = project.WorkingDirectory;
+			return result;
 		}
 
 		private BuildCondition DetermineBuildCondition(BuildCondition buildCondition)
