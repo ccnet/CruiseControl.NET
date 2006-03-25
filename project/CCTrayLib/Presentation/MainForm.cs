@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.ComponentModel;
+using System.Reflection;
 using System.Windows.Forms;
 using ThoughtWorks.CruiseControl.CCTrayLib.Configuration;
 using ThoughtWorks.CruiseControl.CCTrayLib.Monitoring;
@@ -380,7 +381,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 			this.Name = "MainForm";
 			this.ShowInTaskbar = false;
 			this.StartPosition = System.Windows.Forms.FormStartPosition.Manual;
-			this.Text = "CruiseControl.NET";
+			this.Text = "CruiseControl.NET " + Assembly.GetExecutingAssembly().GetName().Version;
 			this.Closing += new System.ComponentModel.CancelEventHandler(this.MainForm_Closing);
 			this.panel1.ResumeLayout(false);
 			this.ResumeLayout(false);
