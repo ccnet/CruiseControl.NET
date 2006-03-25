@@ -1,4 +1,5 @@
 using System;
+using System.Reflection;
 using ThoughtWorks.CruiseControl.Core.Util;
 using ThoughtWorks.CruiseControl.Remote;
 
@@ -18,6 +19,12 @@ namespace ThoughtWorks.CruiseControl.Core
 
 		public void Run()
 		{
+			Console.WriteLine("CruiseControl.NET Server {0} -- .NET Continuous Integration Server", Assembly.GetExecutingAssembly().GetName().Version);
+			Console.WriteLine("Copyright (C) 2003-2006 ThoughtWorks Inc.  All Rights Reserved.");
+			Console.WriteLine(".NET Runtime Version: " + Environment.Version);
+			Console.WriteLine("OS Version: " + Environment.OSVersion);
+			Console.WriteLine();
+
 			if (_parser.ShowHelp)
 			{
 				Log.Warning(ArgumentParser.Usage);
