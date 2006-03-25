@@ -10,10 +10,12 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
 		{
 			WebRequest request = WebRequest.Create(uri);
 			using (WebResponse response = request.GetResponse())
-			using (Stream responseStream = response.GetResponseStream())
 			{
-				StreamReader streamReader = new StreamReader(responseStream);
-				return streamReader.ReadToEnd();
+				using (Stream responseStream = response.GetResponseStream())
+				{
+					StreamReader streamReader = new StreamReader(responseStream);
+					return streamReader.ReadToEnd();
+				}
 			}
 		}
 	}

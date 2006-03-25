@@ -41,10 +41,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Label
 
 		private ProjectStatus NewProjectStatus(string projectName, string label)
 		{
-			ProjectStatus status = new ProjectStatus();
-			status.Name = projectName;
-			status.LastSuccessfulBuildLabel = label;
-			return status;
+			return ProjectStatusFixture.New(projectName, label);
 		}
 	}
 }

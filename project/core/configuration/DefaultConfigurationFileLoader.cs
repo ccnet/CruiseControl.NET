@@ -83,7 +83,8 @@ namespace ThoughtWorks.CruiseControl.Core.Config
 
 		private void WarnOnInvalidNode(InvalidNodeEventArgs args)
 		{
-			Log.Warning(args.Message);		
+			throw new ConfigurationException(args.Message);			// collate warnings into a single object
+//			Log.Warning(args.Message);		
 		}
 	}
 }

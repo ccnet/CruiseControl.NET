@@ -124,11 +124,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Triggers
 
 		private ProjectStatus NewProjectStatus(string name, IntegrationStatus integrationStatus, DateTime dateTime)
 		{
-			ProjectStatus status = new ProjectStatus();
-			status.Name = name;
-			status.BuildStatus = integrationStatus;
-			status.LastBuildDate = dateTime;
-			return status;
+			return ProjectStatusFixture.New(name, integrationStatus, dateTime);
 		}
 
 		[Test]
@@ -161,7 +157,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Triggers
 			Assert.AreEqual(IntegrationStatus.Success, trigger.TriggerStatus);
 		}
 
-		[Test]
+		[Test, Ignore("not implemented yet.")]
 		public void HandleExceptionInProjectLocator()
 		{}
 	}

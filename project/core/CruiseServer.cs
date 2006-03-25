@@ -157,10 +157,10 @@ namespace ThoughtWorks.CruiseControl.Core
 			foreach (IProjectIntegrator integrator in projectIntegrators)
 			{
 				Project project = (Project) integrator.Project;
-				projectStatusList.Add(new ProjectStatus(integrator.State,
-				                                        project.LatestBuildStatus,
+				projectStatusList.Add(new ProjectStatus(project.Name,
 				                                        project.CurrentActivity,
-				                                        project.Name,
+				                                        project.LatestBuildStatus,
+				                                        integrator.State,
 				                                        project.WebURL,
 				                                        project.LastIntegrationResult.StartTime,
 				                                        project.LastIntegrationResult.Label,

@@ -38,8 +38,8 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
 
 	public class DashboardXmlParser : IDashboardXmlParser
 	{
-		private readonly XmlSerializer serializer = new XmlSerializer(typeof(DashboardProjects));
-		
+		private readonly XmlSerializer serializer = new XmlSerializer(typeof (DashboardProjects));
+
 		public ProjectStatus ExtractAsProjectStatus(string sourceXml, string projectName)
 		{
 			DashboardProjects projects = (DashboardProjects) serializer.Deserialize(new StringReader(sourceXml));
@@ -51,19 +51,19 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
 					if (project.name == projectName)
 					{
 						return new ProjectStatus(
-							ProjectIntegratorState.Running, 
-							(IntegrationStatus) Enum.Parse(typeof(IntegrationStatus), project.lastBuildStatus),
+							project.name,
 							new ProjectActivity(project.activity),
-							project.name, 
+							(IntegrationStatus) Enum.Parse(typeof (IntegrationStatus), project.lastBuildStatus),
+							ProjectIntegratorState.Running,
 							project.webUrl,
 							project.lastBuildTime,
 							project.lastBuildLabel,
 							project.lastBuildLabel,
-							project.nextBuildTime			);
+							project.nextBuildTime);
 					}
 				}
 			}
-			
+
 			throw new ApplicationException("Project " + projectName + " is not known to the dashboard");
 		}
 	}

@@ -125,7 +125,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Plugins.BuildReport
 		private ProjectStatus CreateProjectStatus()
 		{
 			return
-				new ProjectStatus(ProjectIntegratorState.Running, IntegrationStatus.Success, ProjectActivity.Sleeping, "HelloWorld",
+				new ProjectStatus("HelloWorld", ProjectActivity.Sleeping, IntegrationStatus.Success, ProjectIntegratorState.Running,
 				                  "http://blah", LastBuildTime, "build_8", "build_7",
 				                  NextBuildTime);
 		}

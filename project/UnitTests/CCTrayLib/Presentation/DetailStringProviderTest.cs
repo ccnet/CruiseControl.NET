@@ -30,10 +30,10 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Presentation
 			DateTime nextBuildTime = new DateTime(2005, 7, 20, 15, 12, 30);
 
 			monitor.ProjectStatus = new ProjectStatus(
-				ProjectIntegratorState.Running,
-				IntegrationStatus.Unknown,
+				"NAME",
 				ProjectActivity.Sleeping,
-				"NAME", "url", DateTime.MinValue, "lastLabel", null, nextBuildTime);
+				IntegrationStatus.Unknown,
+				ProjectIntegratorState.Running, "url", DateTime.MinValue, "lastLabel", null, nextBuildTime);
 			monitor.ProjectState = ProjectState.Success;
 
 			Assert.AreEqual(
@@ -50,10 +50,10 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Presentation
 			DateTime nextBuildTime = DateTime.MaxValue;
 
 			monitor.ProjectStatus = new ProjectStatus(
-				ProjectIntegratorState.Running,
-				IntegrationStatus.Unknown,
+				"NAME",
 				ProjectActivity.Sleeping,
-				"NAME", "url", DateTime.MinValue, "lastLabel", null, nextBuildTime);
+				IntegrationStatus.Unknown,
+				ProjectIntegratorState.Running, "url", DateTime.MinValue, "lastLabel", null, nextBuildTime);
 			monitor.ProjectState = ProjectState.Success;
 
 			Assert.AreEqual(

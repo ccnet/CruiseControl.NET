@@ -1,5 +1,4 @@
 using System;
-using System.Xml.Serialization;
 using ThoughtWorks.CruiseControl.Remote;
 
 namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring

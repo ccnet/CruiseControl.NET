@@ -4,6 +4,7 @@ using NUnit.Framework;
 using ThoughtWorks.CruiseControl.CCTrayLib.Monitoring;
 using ThoughtWorks.CruiseControl.CCTrayLib.Presentation;
 using ThoughtWorks.CruiseControl.Remote;
+using ThoughtWorks.CruiseControl.UnitTests.Core;
 
 namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Presentation
 {
@@ -68,9 +69,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Presentation
 			Assert.AreEqual("", activity.Text);
 			Assert.AreEqual("", label.Text);
 
-			ProjectStatus status = new ProjectStatus();
-			status.Activity = ProjectActivity.Sleeping;
-			status.LastBuildLabel = "lastLabel";
+			ProjectStatus status = ProjectStatusFixture.New(ProjectActivity.Sleeping, "lastLabel");
 			projectMonitor.ProjectStatus = status;
 
 			projectMonitor.OnPolled(new MonitorPolledEventArgs(projectMonitor));

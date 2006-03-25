@@ -24,6 +24,7 @@ namespace ThoughtWorks.CruiseControl.Core
 		private ArrayList taskResults = new ArrayList();
 		private IDictionary properties = new SortedList();
 		private bool initial = false;
+		private IntegrationRequest request;
 
 		// Default constructor required for serialization
 		public IntegrationResult()
@@ -40,6 +41,13 @@ namespace ThoughtWorks.CruiseControl.Core
 			WorkingDirectory = workingDirectory;
 		}
 
+		public IntegrationResult(string projectName, string workingDirectory, IntegrationRequest request) : this(projectName, workingDirectory)
+		{
+			this.request = request;
+			BuildCondition = request.BuildCondition;
+		}
+
+		// remove setter
 		public string ProjectName
 		{
 			get { return Convert(properties["CCNetProject"]); }

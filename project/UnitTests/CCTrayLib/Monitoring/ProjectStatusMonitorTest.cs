@@ -3,6 +3,7 @@ using NMock;
 using NUnit.Framework;
 using ThoughtWorks.CruiseControl.CCTrayLib.Monitoring;
 using ThoughtWorks.CruiseControl.Remote;
+using ThoughtWorks.CruiseControl.UnitTests.Core;
 
 namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Monitoring
 {
@@ -64,7 +65,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Monitoring
 
 		private static ProjectStatus CreateProjectStatus(string projectName)
 		{
-			return new ProjectStatus(ProjectIntegratorState.Running, IntegrationStatus.Failure, ProjectActivity.Sleeping, projectName, "url", DateTime.Now, "label", null, DateTime.Now );
+			return ProjectStatusFixture.New(projectName);
 		}
 
 		[Test]

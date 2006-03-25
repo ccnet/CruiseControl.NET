@@ -4,6 +4,7 @@ using NUnit.Framework;
 using ThoughtWorks.CruiseControl.CCTrayLib;
 using ThoughtWorks.CruiseControl.CCTrayLib.Monitoring;
 using ThoughtWorks.CruiseControl.Remote;
+using ThoughtWorks.CruiseControl.UnitTests.Core;
 
 namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Monitoring
 {
@@ -161,19 +162,12 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Monitoring
 
 		private ProjectStatus CreateProjectStatus(IntegrationStatus integrationStatus, DateTime lastBuildDate)
 		{
-			ProjectStatus status = new ProjectStatus();
-			status.BuildStatus = integrationStatus;
-			status.LastBuildDate = lastBuildDate;
-			status.Activity = ProjectActivity.CheckingModifications;
-			return status;
+			return ProjectStatusFixture.New(integrationStatus, lastBuildDate);
 		}
 
 		private ProjectStatus CreateProjectStatus(IntegrationStatus integrationStatus, ProjectActivity activity)
 		{
-			ProjectStatus status = new ProjectStatus();
-			status.BuildStatus = integrationStatus;
-			status.Activity = activity;
-			return status;
+			return ProjectStatusFixture.New(integrationStatus, activity);
 		}
 
 		[Test]
@@ -238,9 +232,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Monitoring
 		[Test]
 		public void SummaryStatusStringReturnsASummaryStatusStringWhenTheStateNotSuccess()
 		{
-			ProjectStatus status = new ProjectStatus();
-			status.BuildStatus = IntegrationStatus.Failure;
-			status.Activity = ProjectActivity.Sleeping;
+			ProjectStatus status = ProjectStatusFixture.New(IntegrationStatus.Failure, ProjectActivity.Sleeping);
 			mockProjectManager.ExpectAndReturn("ProjectStatus", status);
 			mockProjectManager.ExpectAndReturn("ProjectName", "projName");
 
@@ -252,9 +244,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Monitoring
 		[Test]
 		public void SummaryStatusStringReturnsEmptyStringWhenTheStateIsSuccess()
 		{
-			ProjectStatus status = new ProjectStatus();
-			status.BuildStatus = IntegrationStatus.Success;
-			status.Activity = ProjectActivity.Sleeping;
+			ProjectStatus status = ProjectStatusFixture.New(IntegrationStatus.Success, ProjectActivity.Sleeping);
 			mockProjectManager.ExpectAndReturn("ProjectStatus", status);
 
 			monitor.Poll();
@@ -273,9 +263,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Monitoring
 
 		private void AssertIntegrationStateReturned(IntegrationStatus integrationStatus)
 		{
-			ProjectStatus status = new ProjectStatus();
-			status.BuildStatus = integrationStatus;
-			status.Activity = ProjectActivity.CheckingModifications;
+			ProjectStatus status = ProjectStatusFixture.New(integrationStatus, ProjectActivity.CheckingModifications);
 			mockProjectManager.ExpectAndReturn("ProjectStatus", status);
 
 			monitor.Poll();
