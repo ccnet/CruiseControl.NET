@@ -499,11 +499,6 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "publishers\IBuildLogTransformer.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
                     RelPath = "publishers\IMessageBuilder.cs"
                     SubType = "Code"
                     BuildAction = "Compile"

@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.Text;
 using NUnit.Framework;
 using ThoughtWorks.CruiseControl.Core;
 using ThoughtWorks.CruiseControl.Core.Util;

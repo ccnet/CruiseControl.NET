@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.IO;
+using System.Text;
 using NVelocity;
 using NVelocity.App;
 using NVelocity.Runtime;
@@ -27,7 +28,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.MVC.View
 			{
 				try
 				{
-					VelocityEngine.MergeTemplate(transformerFileName, new VelocityContext(transformable), writer);
+					VelocityEngine.MergeTemplate(transformerFileName, RuntimeConstants.ENCODING_DEFAULT, new VelocityContext(transformable), writer);
 				}
 				catch (Exception baseException)
 				{

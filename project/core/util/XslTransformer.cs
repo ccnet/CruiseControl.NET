@@ -8,23 +8,45 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 {
 	public class XslTransformer : ITransformer
 	{
-		public string Transform(string input, string transformerFileName, Hashtable xsltArgs)
+		public string Transform(string input, string xslFilename, Hashtable xsltArgs)
 		{
+			XslTransform transform = NewXslTransform(xslFilename);
+
 			using (StringReader inputReader = new StringReader(input))
 			{
 				try
 				{
-					XslTransform transform = new XslTransform();
-					LoadStylesheet(transform, transformerFileName);
 					StringWriter output = new StringWriter();
 					transform.Transform(new XPathDocument(inputReader), CreateXsltArgs(xsltArgs), output);
 					return output.ToString();
 				}
 				catch (XmlException ex)
 				{
-					throw new CruiseControlException("Unable to execute transform: " + transformerFileName, ex);
+					throw new CruiseControlException("Unable to execute transform: " + xslFilename, ex);
 				}
 			}
+		}
+
+		public string TransformToXml(string xslFilename, XPathDocument document)
+		{
+			XslTransform transform = NewXslTransform(xslFilename);
+			try
+			{
+				StringWriter output = new StringWriter();
+				transform.Transform(document, null, new XmlTextWriter(output));
+				return output.ToString();
+			}
+			catch (XmlException ex)
+			{
+				throw new CruiseControlException("Unable to execute transform: " + xslFilename, ex);
+			}
+		}
+
+		private XslTransform NewXslTransform(string transformerFileName)
+		{
+			XslTransform transform = new XslTransform();
+			LoadStylesheet(transform, transformerFileName);
+			return transform;
 		}
 
 		private XsltArgumentList CreateXsltArgs(Hashtable xsltArgs)
