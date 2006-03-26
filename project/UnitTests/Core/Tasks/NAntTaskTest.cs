@@ -19,6 +19,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 		[SetUp]
 		public void SetUp()
 		{
+			DefaultWorkingDirectory = @"c:\source";
 			CreateProcessExecutorMock(NAntTask.DefaultExecutable);
 			builder = new NAntTask((ProcessExecutor) mockProcessExecutor.MockInstance);
 			result = IntegrationResult();
