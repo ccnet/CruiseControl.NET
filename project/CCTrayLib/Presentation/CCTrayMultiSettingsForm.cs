@@ -1,7 +1,5 @@
 using System;
 using System.ComponentModel;
-using System.Drawing;
-using System.Resources;
 using System.Windows.Forms;
 using ThoughtWorks.CruiseControl.CCTrayLib.Configuration;
 
@@ -126,7 +124,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 		/// </summary>
 		private void InitializeComponent()
 		{
-			System.Resources.ResourceManager resources = new System.Resources.ResourceManager(typeof(CCTrayMultiSettingsForm));
+			System.Resources.ResourceManager resources = new System.Resources.ResourceManager(typeof (CCTrayMultiSettingsForm));
 			this.chkShowBalloons = new System.Windows.Forms.CheckBox();
 			this.grpServers = new System.Windows.Forms.GroupBox();
 			this.lvProjects = new System.Windows.Forms.ListView();
@@ -165,7 +163,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 			this.label4 = new System.Windows.Forms.Label();
 			this.grpServers.SuspendLayout();
 			this.grpAudio.SuspendLayout();
-			((System.ComponentModel.ISupportInitialize)(this.numPollPeriod)).BeginInit();
+			((System.ComponentModel.ISupportInitialize) (this.numPollPeriod)).BeginInit();
 			this.SuspendLayout();
 			// 
 			// chkShowBalloons
@@ -179,8 +177,8 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 			// 
 			// grpServers
 			// 
-			this.grpServers.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-				| System.Windows.Forms.AnchorStyles.Left) 
+			this.grpServers.Anchor = ((System.Windows.Forms.AnchorStyles) ((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+				| System.Windows.Forms.AnchorStyles.Left)
 				| System.Windows.Forms.AnchorStyles.Right)));
 			this.grpServers.Controls.Add(this.lvProjects);
 			this.grpServers.Controls.Add(this.label1);
@@ -198,12 +196,14 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 			// 
 			// lvProjects
 			// 
-			this.lvProjects.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-				| System.Windows.Forms.AnchorStyles.Left) 
+			this.lvProjects.Anchor = ((System.Windows.Forms.AnchorStyles) ((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+				| System.Windows.Forms.AnchorStyles.Left)
 				| System.Windows.Forms.AnchorStyles.Right)));
-			this.lvProjects.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
-																						 this.columnHeader1,
-																						 this.columnHeader2});
+			this.lvProjects.Columns.AddRange(new System.Windows.Forms.ColumnHeader[]
+				{
+					this.columnHeader1,
+					this.columnHeader2
+				});
 			this.lvProjects.FullRowSelect = true;
 			this.lvProjects.HideSelection = false;
 			this.lvProjects.Location = new System.Drawing.Point(10, 55);
@@ -225,7 +225,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 			// 
 			// label1
 			// 
-			this.label1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+			this.label1.Anchor = ((System.Windows.Forms.AnchorStyles) (((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
 				| System.Windows.Forms.AnchorStyles.Right)));
 			this.label1.Location = new System.Drawing.Point(10, 25);
 			this.label1.Name = "label1";
@@ -235,7 +235,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 			// 
 			// btnAdd
 			// 
-			this.btnAdd.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+			this.btnAdd.Anchor = ((System.Windows.Forms.AnchorStyles) ((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
 			this.btnAdd.FlatStyle = System.Windows.Forms.FlatStyle.System;
 			this.btnAdd.Location = new System.Drawing.Point(495, 60);
 			this.btnAdd.Name = "btnAdd";
@@ -245,7 +245,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 			// 
 			// btnMoveDown
 			// 
-			this.btnMoveDown.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+			this.btnMoveDown.Anchor = ((System.Windows.Forms.AnchorStyles) ((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
 			this.btnMoveDown.FlatStyle = System.Windows.Forms.FlatStyle.System;
 			this.btnMoveDown.Location = new System.Drawing.Point(495, 200);
 			this.btnMoveDown.Name = "btnMoveDown";
@@ -255,7 +255,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 			// 
 			// btnMoveUp
 			// 
-			this.btnMoveUp.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+			this.btnMoveUp.Anchor = ((System.Windows.Forms.AnchorStyles) ((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
 			this.btnMoveUp.FlatStyle = System.Windows.Forms.FlatStyle.System;
 			this.btnMoveUp.Location = new System.Drawing.Point(495, 165);
 			this.btnMoveUp.Name = "btnMoveUp";
@@ -265,7 +265,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 			// 
 			// btnRemove
 			// 
-			this.btnRemove.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+			this.btnRemove.Anchor = ((System.Windows.Forms.AnchorStyles) ((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
 			this.btnRemove.FlatStyle = System.Windows.Forms.FlatStyle.System;
 			this.btnRemove.Location = new System.Drawing.Point(495, 95);
 			this.btnRemove.Name = "btnRemove";
@@ -296,7 +296,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 			// 
 			// grpAudio
 			// 
-			this.grpAudio.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+			this.grpAudio.Anchor = ((System.Windows.Forms.AnchorStyles) (((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
 				| System.Windows.Forms.AnchorStyles.Right)));
 			this.grpAudio.Controls.Add(this.btnStillFailingPlay);
 			this.grpAudio.Controls.Add(this.btnStillFailingBrowse);
@@ -324,7 +324,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 			// 
 			// btnStillFailingPlay
 			// 
-			this.btnStillFailingPlay.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+			this.btnStillFailingPlay.Anchor = ((System.Windows.Forms.AnchorStyles) ((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
 			this.btnStillFailingPlay.FlatStyle = System.Windows.Forms.FlatStyle.System;
 			this.btnStillFailingPlay.Location = new System.Drawing.Point(495, 95);
 			this.btnStillFailingPlay.Name = "btnStillFailingPlay";
@@ -333,7 +333,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 			// 
 			// btnStillFailingBrowse
 			// 
-			this.btnStillFailingBrowse.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+			this.btnStillFailingBrowse.Anchor = ((System.Windows.Forms.AnchorStyles) ((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
 			this.btnStillFailingBrowse.FlatStyle = System.Windows.Forms.FlatStyle.System;
 			this.btnStillFailingBrowse.Location = new System.Drawing.Point(410, 95);
 			this.btnStillFailingBrowse.Name = "btnStillFailingBrowse";
@@ -342,7 +342,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 			// 
 			// btnBrokenPlay
 			// 
-			this.btnBrokenPlay.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+			this.btnBrokenPlay.Anchor = ((System.Windows.Forms.AnchorStyles) ((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
 			this.btnBrokenPlay.FlatStyle = System.Windows.Forms.FlatStyle.System;
 			this.btnBrokenPlay.Location = new System.Drawing.Point(495, 71);
 			this.btnBrokenPlay.Name = "btnBrokenPlay";
@@ -351,7 +351,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 			// 
 			// btnBrokenBrowse
 			// 
-			this.btnBrokenBrowse.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+			this.btnBrokenBrowse.Anchor = ((System.Windows.Forms.AnchorStyles) ((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
 			this.btnBrokenBrowse.FlatStyle = System.Windows.Forms.FlatStyle.System;
 			this.btnBrokenBrowse.Location = new System.Drawing.Point(410, 71);
 			this.btnBrokenBrowse.Name = "btnBrokenBrowse";
@@ -360,7 +360,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 			// 
 			// btnFixedPlay
 			// 
-			this.btnFixedPlay.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+			this.btnFixedPlay.Anchor = ((System.Windows.Forms.AnchorStyles) ((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
 			this.btnFixedPlay.FlatStyle = System.Windows.Forms.FlatStyle.System;
 			this.btnFixedPlay.Location = new System.Drawing.Point(495, 47);
 			this.btnFixedPlay.Name = "btnFixedPlay";
@@ -369,7 +369,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 			// 
 			// btnFixedBrowse
 			// 
-			this.btnFixedBrowse.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+			this.btnFixedBrowse.Anchor = ((System.Windows.Forms.AnchorStyles) ((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
 			this.btnFixedBrowse.FlatStyle = System.Windows.Forms.FlatStyle.System;
 			this.btnFixedBrowse.Location = new System.Drawing.Point(410, 47);
 			this.btnFixedBrowse.Name = "btnFixedBrowse";
@@ -378,7 +378,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 			// 
 			// btnSuccessfulPlay
 			// 
-			this.btnSuccessfulPlay.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+			this.btnSuccessfulPlay.Anchor = ((System.Windows.Forms.AnchorStyles) ((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
 			this.btnSuccessfulPlay.FlatStyle = System.Windows.Forms.FlatStyle.System;
 			this.btnSuccessfulPlay.Location = new System.Drawing.Point(495, 23);
 			this.btnSuccessfulPlay.Name = "btnSuccessfulPlay";
@@ -387,7 +387,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 			// 
 			// btnSuccessfulBrowse
 			// 
-			this.btnSuccessfulBrowse.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+			this.btnSuccessfulBrowse.Anchor = ((System.Windows.Forms.AnchorStyles) ((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
 			this.btnSuccessfulBrowse.FlatStyle = System.Windows.Forms.FlatStyle.System;
 			this.btnSuccessfulBrowse.Location = new System.Drawing.Point(410, 23);
 			this.btnSuccessfulBrowse.Name = "btnSuccessfulBrowse";
@@ -396,7 +396,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 			// 
 			// txtAudioFileSuccess
 			// 
-			this.txtAudioFileSuccess.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+			this.txtAudioFileSuccess.Anchor = ((System.Windows.Forms.AnchorStyles) (((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
 				| System.Windows.Forms.AnchorStyles.Right)));
 			this.txtAudioFileSuccess.Location = new System.Drawing.Point(112, 24);
 			this.txtAudioFileSuccess.Name = "txtAudioFileSuccess";
@@ -446,7 +446,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 			// 
 			// txtAudioFileFixed
 			// 
-			this.txtAudioFileFixed.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+			this.txtAudioFileFixed.Anchor = ((System.Windows.Forms.AnchorStyles) (((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
 				| System.Windows.Forms.AnchorStyles.Right)));
 			this.txtAudioFileFixed.Location = new System.Drawing.Point(112, 48);
 			this.txtAudioFileFixed.Name = "txtAudioFileFixed";
@@ -456,7 +456,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 			// 
 			// txtAudioFileBroken
 			// 
-			this.txtAudioFileBroken.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+			this.txtAudioFileBroken.Anchor = ((System.Windows.Forms.AnchorStyles) (((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
 				| System.Windows.Forms.AnchorStyles.Right)));
 			this.txtAudioFileBroken.Location = new System.Drawing.Point(112, 72);
 			this.txtAudioFileBroken.Name = "txtAudioFileBroken";
@@ -466,7 +466,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 			// 
 			// txtAudioFileFailing
 			// 
-			this.txtAudioFileFailing.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+			this.txtAudioFileFailing.Anchor = ((System.Windows.Forms.AnchorStyles) (((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
 				| System.Windows.Forms.AnchorStyles.Right)));
 			this.txtAudioFileFailing.Location = new System.Drawing.Point(112, 96);
 			this.txtAudioFileFailing.Name = "txtAudioFileFailing";
@@ -545,12 +545,12 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 			this.Controls.Add(this.btnOK);
 			this.Controls.Add(this.grpServers);
 			this.Controls.Add(this.chkShowBalloons);
-			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+			this.Icon = ((System.Drawing.Icon) (resources.GetObject("$this.Icon")));
 			this.Name = "CCTrayMultiSettingsForm";
 			this.Text = "CruiseControl.NET Tray Settings";
 			this.grpServers.ResumeLayout(false);
 			this.grpAudio.ResumeLayout(false);
-			((System.ComponentModel.ISupportInitialize)(this.numPollPeriod)).EndInit();
+			((System.ComponentModel.ISupportInitialize) (this.numPollPeriod)).EndInit();
 			this.ResumeLayout(false);
 
 		}
@@ -591,7 +591,12 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 
 		private void btnRemove_Click(object sender, EventArgs e)
 		{
-			lvProjects.Items.RemoveAt(selectedIndex);
+			lvProjects.BeginUpdate();
+			foreach (ListViewItem item in lvProjects.SelectedItems)
+			{
+				lvProjects.Items.Remove(item);
+			}
+			lvProjects.EndUpdate();
 		}
 
 		private void btnMoveUp_Click(object sender, EventArgs e)
@@ -637,8 +642,8 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 
 			configuration.TrayIconDoubleClickAction =
 				(rdoStatusWindow.Checked
-				 	? TrayIconDoubleClickAction.ShowStatusWindow
-				 	: TrayIconDoubleClickAction.NavigateToWebPageOfFirstProject);
+					? TrayIconDoubleClickAction.ShowStatusWindow
+					: TrayIconDoubleClickAction.NavigateToWebPageOfFirstProject);
 
 			configuration.Audio.BrokenBuildSound = brokenAudio.Value;
 			configuration.Audio.FixedBuildSound = fixedAudio.Value;
