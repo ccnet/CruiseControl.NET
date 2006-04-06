@@ -519,7 +519,22 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "publishers\Statistics\BuildStatisticsProcessor.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "publishers\Statistics\FirstMatch.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "publishers\Statistics\IntegrationStatistics.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "publishers\Statistics\MyStatisticsPublisher.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -529,7 +544,7 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "publishers\Statistics\StatisticsPublisher.cs"
+                    RelPath = "publishers\Statistics\StatisticsBuilder.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

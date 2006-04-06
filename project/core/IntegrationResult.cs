@@ -397,7 +397,7 @@ namespace ThoughtWorks.CruiseControl.Core
 		{
 			get
 			{
-				return baseArtifactDirectory + "\\" + label;
+				return baseArtifactDirectory;
 			}
 		}
 

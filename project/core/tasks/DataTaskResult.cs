@@ -1,5 +1,3 @@
-using System;
-
 namespace ThoughtWorks.CruiseControl.Core.Tasks
 {
 	public class DataTaskResult : ITaskResult

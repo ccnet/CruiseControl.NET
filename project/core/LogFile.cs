@@ -13,10 +13,10 @@ namespace ThoughtWorks.CruiseControl.Core
 		public const string FilenameDateFormat = "yyyyMMddHHmmss";
 		public static readonly Regex BuildNumber = new Regex(@"Lbuild\.(.+)\.xml");
 
-		private DateTime _date;
-		private string _label;
-		private bool _succeeded;
-		private IFormatProvider _formatter = CultureInfo.CurrentCulture;
+		private readonly DateTime _date;
+		private readonly string _label;
+		private readonly bool _succeeded;
+		private readonly IFormatProvider _formatter = CultureInfo.CurrentCulture;
 
 		public LogFile(string filename)
 		{

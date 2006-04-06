@@ -680,6 +680,7 @@
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
+                <Folder RelPath = "Core\Publishers\Statistics\" />
                 <File
                     RelPath = "Core\Reporting\Dashboard\Navigation\AbsolutePathUrlBuilderDecoratorTest.cs"
                     SubType = "Code"

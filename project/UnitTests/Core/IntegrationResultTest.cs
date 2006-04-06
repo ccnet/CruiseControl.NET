@@ -208,7 +208,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 		public void ArtifactDirectory()
 		{
 			IntegrationState state = new IntegrationState(IntegrationStatus.Exception, "foo", "dir");
-			Assert.AreEqual("dir\\foo", state.ArtifactDirectory);
+			Assert.AreEqual("dir", state.ArtifactDirectory);
 		}
 	}
 }

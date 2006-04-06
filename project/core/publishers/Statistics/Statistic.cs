@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Xml.XPath;
 
-namespace ThoughtWorks.CruiseControl.UnitTests.Core.Publishers.Statistics
+namespace ThoughtWorks.CruiseControl.Core.Publishers.Statistics
 {
 
 	internal class Statistic
@@ -14,15 +14,20 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Publishers.Statistics
 		protected readonly string name;
 		protected readonly string xpath;
 
+		public Statistic(DictionaryEntry entry) :this (entry.Key.ToString(), entry.Value.ToString())
+		{
+			
+		}
 		public Statistic(string name, string xpath)
 		{
 			this.name = name;
 			this.xpath = xpath;
 		}
 
-		public void Apply(XPathNavigator nav, Hashtable results)
+		public object Apply(XPathNavigator nav)
 		{
-			results[name] = Evaluate(nav);
+			object value = Evaluate(nav);
+			return value;
 		}
 
 		protected virtual object Evaluate(XPathNavigator nav)

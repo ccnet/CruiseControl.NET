@@ -1,13 +1,13 @@
-using System;
 using System.IO;
 using System.Xml;
 using NUnit.Framework;
 using ThoughtWorks.CruiseControl.Core;
+using ThoughtWorks.CruiseControl.Core.Publishers.Statistics;
 
 namespace ThoughtWorks.CruiseControl.UnitTests.Core.Publishers.Statistics
 {
 	[TestFixture]
-	public class StatisticsPublisherTaskTest
+	public class StatisticsPublisherTest
 	{
 		const string TEST_DIR = "build\\temp";
 		private DirectoryInfo tmpdir;
@@ -25,6 +25,10 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Publishers.Statistics
 		[TearDown]
 		public void DeleteTempDirectory()
 		{
+			if (Directory.Exists(TEST_DIR))
+			{
+				Directory.Delete(TEST_DIR, true);
+			}
 		}
 
 		[Test]
@@ -32,14 +36,14 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Publishers.Statistics
 		{
 			IntegrationResult result1 = simulateBuild(1);
 
-			string statsFile = result1.IntegrationArtifactDirectory + "\\statistics.xml";
+			string statsFile = result1.ArtifactDirectory + "\\statistics.xml";
 			Assert.IsTrue(File.Exists(statsFile));
 
 			CountNodes(statsFile, "//statistics/integration", 1);
 
 			IntegrationResult result2 = simulateBuild(2);
 
-			string statsFile2 = result2.IntegrationArtifactDirectory + "\\statistics.xml";
+			string statsFile2 = result2.ArtifactDirectory + "\\statistics.xml";
 			Assert.IsTrue(File.Exists(statsFile2));
 
 			CountNodes(statsFile2, "//statistics/integration", 2);
@@ -51,14 +55,14 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Publishers.Statistics
 		{
 			IntegrationResult result1 = simulateBuild(1);
 
-			string statsFile = result1.IntegrationArtifactDirectory + "\\statistics.csv";
+			string statsFile = result1.ArtifactDirectory + "\\statistics.csv";
 			Assert.IsTrue(File.Exists(statsFile));
 
 			CountLines(statsFile, 2);
 
 			IntegrationResult result2 = simulateBuild(2);
 
-			string statsFile2 = result2.IntegrationArtifactDirectory + "\\statistics.csv";
+			string statsFile2 = result2.ArtifactDirectory + "\\statistics.csv";
 			Assert.IsTrue(File.Exists(statsFile2));
 
 			CountLines(statsFile2, 3);
@@ -67,13 +71,13 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Publishers.Statistics
 
 		private IntegrationResult simulateBuild(int buildLabel)
 		{
-			StatisticsPublisherTask task = new StatisticsPublisherTask();
+			StatisticsPublisher publisher = new StatisticsPublisher();
 
 			IntegrationResult result = IntegrationResultMother.CreateSuccessful(buildLabel.ToString());
 			result.LastSuccessfulIntegrationLabel = (buildLabel - 1).ToString();
 			result.ArtifactDirectory = tmpdir.FullName;
 			
-			task.Run(result);
+			publisher.Run(result);
 			
 			return result;
 		}

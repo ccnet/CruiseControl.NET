@@ -1,19 +1,14 @@
-using System;
 using System.Collections;
 using System.IO;
 using System.Xml;
 using System.Xml.XPath;
-
 using ThoughtWorks.CruiseControl.Core;
 using ThoughtWorks.CruiseControl.Core.Publishers;
 
-namespace ThoughtWorks.CruiseControl.UnitTests.Core.Publishers.Statistics
+namespace ThoughtWorks.CruiseControl.Core.Publishers.Statistics
 {
-
-	public class StatisticsPublisher
+	public class StatisticsBuilder
 	{
-		public const string DEFAULT_FILE_NAME = "Statistics.csv";
-
 		private void Add(Statistic stat)
 		{
 			logStatistics.Add(stat);
@@ -37,14 +32,14 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Publishers.Statistics
 		{
 			XmlDocument doc = new XmlDocument();
 			doc.Load(new StringReader(xmlString));
-			ProcessLog(doc);
+			stats = ProcessLog(doc);
 		}
 
 		public void ProcessFile(string file)
 		{
 			XmlDocument doc = new XmlDocument();
 			doc.Load(file);
-			ProcessLog(doc);
+			stats = ProcessLog(doc);
 		}
 
 		public void Save(TextWriter outStream)
@@ -78,27 +73,28 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Publishers.Statistics
 		private Hashtable stats = new Hashtable();
 		private IList logStatistics = new ArrayList();
 
-		public StatisticsPublisher()
+		public StatisticsBuilder()
 		{
-			Add(new FirstMatch("StartTime", "/cruisecontrol/build/@date"));
-			Add(new FirstMatch("Duration", "/cruisecontrol/build/@buildtime"));
-			Add(new FirstMatch("ProjectName", "/cruisecontrol/@project"));
+			Add(new FirstMatch(new DictionaryEntry("StartTime", "/cruisecontrol/build/@date")));
+			Add(new FirstMatch(new DictionaryEntry("Duration", "/cruisecontrol/build/@buildtime")));
+			Add(new FirstMatch(new DictionaryEntry("ProjectName", "/cruisecontrol/@project")));
 
-			Add(new Statistic("TestCount", "sum(//test-results/@total)"));
-			Add(new Statistic("TestFailures", "sum(//test-results/@failures)"));
-			Add(new Statistic("TestIgnored", "sum(//test-results/@not-run)"));
+			Add(new Statistic(new DictionaryEntry("TestCount", "sum(//test-results/@total)")));
+			Add(new Statistic(new DictionaryEntry("TestFailures", "sum(//test-results/@failures)")));
+			Add(new Statistic(new DictionaryEntry("TestIgnored", "sum(//test-results/@not-run)")));
 
-			Add(new Statistic("FxCop Warnings", "count(//FxCopReport/Namespaces/Namespace/Messages/Message/Issue[@Level='Warning'])"));
-			Add(new Statistic("FxCop Errors", "count(//FxCopReport//Issue[@Level='Error'])"));
+			Add(new Statistic(new DictionaryEntry("FxCop Warnings", "count(//FxCopReport/Namespaces/Namespace/Messages/Message/Issue[@Level='Warning'])")));
+			Add(new Statistic(new DictionaryEntry("FxCop Errors", "count(//FxCopReport//Issue[@Level='Error'])")));
 		}
 
-		private void ProcessLog(XmlDocument doc)
+		private Hashtable ProcessLog(XmlDocument doc)
 		{
 			XPathNavigator nav = doc.CreateNavigator();
 			foreach (Statistic s in logStatistics)
 			{
-				s.Apply(nav, stats);
+				stats[s.Name] = s.Apply(nav);
 			}
+			return stats;
 		}
 
 		public void WriteHeadings(TextWriter writer)
@@ -142,7 +138,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Publishers.Statistics
 			}
 			finally
 			{
-				if (text!=null) text.Close();
+				if (text != null) text.Close();
 			}
 		}
 
@@ -151,5 +147,5 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Publishers.Statistics
 			return stats[name];
 		}
 	}
-	
+
 }

@@ -1,34 +1,33 @@
-using System;
 using System.IO;
 using System.Xml;
 using Exortech.NetReflector;
 using ThoughtWorks.CruiseControl.Core;
-using ThoughtWorks.CruiseControl.Core.Util;
 
-namespace ThoughtWorks.CruiseControl.UnitTests.Core.Publishers.Statistics
+namespace ThoughtWorks.CruiseControl.Core.Publishers.Statistics
 {
-
 	[ReflectorType("statistics")]
-	public class StatisticsPublisherTask : ITask
-	{	
-		
+	public class StatisticsPublisher : ITask
+	{
+		private string xmlFileName = "statistics.xml";
+		private static string csvFileName = "statistics.csv";
+
 		public void Run(IIntegrationResult iresult)
 		{
-			StatisticsPublisher publisher = new StatisticsPublisher();
-			publisher.ProcessBuildResults(iresult);
+			StatisticsBuilder builder = new StatisticsBuilder();
+			builder.ProcessBuildResults(iresult);
 
 			IntegrationState lastIntegration = iresult.LastIntegration;
 			IntegrationState integration = iresult.Integration;
 
-			UpdateXmlFile(publisher, lastIntegration, integration);
-			UpdateCsvFile(publisher, integration, lastIntegration);
+			UpdateXmlFile(builder, lastIntegration, integration);
+			UpdateCsvFile(builder, integration, lastIntegration);
 		}
 
-		private static void UpdateXmlFile(StatisticsPublisher publisher, IntegrationState previousState, IntegrationState currentState)
+		private void UpdateXmlFile(StatisticsBuilder builder, IntegrationState previousState, IntegrationState currentState)
 		{
 			XmlDocument doc = new XmlDocument();
 	
-			string lastFile = previousState.ArtifactDirectory + "\\statistics.xml";
+			string lastFile = xmlStatisticsFile(previousState);
 			XmlElement root = null;
 			if (File.Exists(lastFile))
 			{
@@ -41,25 +40,34 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Publishers.Statistics
 				doc.AppendChild(root);
 			}
 	
-			XmlElement xml = publisher.ToXml(doc);
+			XmlElement xml = builder.ToXml(doc);
 			xml.SetAttribute("build-label", currentState.Label);
 			root.AppendChild(xml);
 	
 			Directory.CreateDirectory(currentState.ArtifactDirectory);
 	
-			doc.Save(currentState.ArtifactDirectory + "\\statistics.xml");
+			doc.Save(xmlStatisticsFile(currentState));
 		}
 
-		private static void UpdateCsvFile(StatisticsPublisher publisher, IntegrationState currentState, IntegrationState previousState)
+		private string xmlStatisticsFile(IntegrationState integrationState)
 		{
-			string newFile = currentState.ArtifactDirectory + "\\statistics.csv";
-			string lastCsvFile = previousState.ArtifactDirectory + "\\statistics.csv";
+			return Path.Combine(integrationState.ArtifactDirectory, xmlFileName);
+		}
+
+		private string csvStatisticsFile(IntegrationState integrationState)
+		{
+			return Path.Combine(integrationState.ArtifactDirectory, csvFileName);
+		}
+
+		private void UpdateCsvFile(StatisticsBuilder builder, IntegrationState currentState, IntegrationState previousState)
+		{
+			string newFile = csvStatisticsFile(currentState);
+			string lastCsvFile = csvStatisticsFile(previousState);
 			if (File.Exists(lastCsvFile))
 			{
 				File.Copy(lastCsvFile, newFile);
 			}
-			publisher.AppendCsv(newFile);
+			builder.AppendCsv(newFile);
 		}
 	}
-	
 }
