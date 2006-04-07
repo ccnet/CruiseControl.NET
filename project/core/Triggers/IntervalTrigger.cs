@@ -10,6 +10,7 @@ namespace ThoughtWorks.CruiseControl.Core.Triggers
 	{
 		public const double DefaultIntervalSeconds = 60;
 		private readonly DateTimeProvider dateTimeProvider;
+		private string name;
 
 		private DateTime nextBuildTime;
 
@@ -19,6 +20,17 @@ namespace ThoughtWorks.CruiseControl.Core.Triggers
 		{
 			this.dateTimeProvider = dtProvider;
 			nextBuildTime = dtProvider.Now;
+		}
+
+		[ReflectorProperty("name", Required=false)]
+		public string Name
+		{
+			get
+			{
+				if (name == null) name = GetType().Name;
+				return name;
+			}
+			set { name = value; }
 		}
 
 		[ReflectorProperty("seconds", Required=false)]
@@ -42,7 +54,14 @@ namespace ThoughtWorks.CruiseControl.Core.Triggers
 			get {  return nextBuildTime;}
 		}
 
-		public virtual BuildCondition ShouldRunIntegration()
+		public virtual IntegrationRequest Fire()
+		{
+			BuildCondition buildCondition = ShouldRunIntegration();
+			if (buildCondition == BuildCondition.NoBuild) return null;
+			return new IntegrationRequest(buildCondition, Name);
+		}
+
+		private BuildCondition ShouldRunIntegration()
 		{
 			if (dateTimeProvider.Now < nextBuildTime)
 				return BuildCondition.NoBuild;

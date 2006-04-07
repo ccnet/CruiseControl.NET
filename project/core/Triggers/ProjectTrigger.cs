@@ -34,26 +34,6 @@ namespace ThoughtWorks.CruiseControl.Core.Triggers
 		[ReflectorProperty("innerTrigger", InstanceTypeKey="type", Required=false)]
 		public ITrigger InnerTrigger = NewIntervalTrigger();
 
-		public BuildCondition ShouldRunIntegration()
-		{
-			BuildCondition buildCondition = InnerTrigger.ShouldRunIntegration();
-			if (buildCondition == BuildCondition.NoBuild) return buildCondition;
-			IntegrationCompleted();	// reset inner trigger
-
-			ProjectStatus currentStatus = GetCurrentProjectStatus();
-			if (lastStatus == null)
-			{
-				lastStatus = currentStatus;
-				return BuildCondition.NoBuild;
-			}
-			if (currentStatus.LastBuildDate > lastStatus.LastBuildDate && currentStatus.BuildStatus == TriggerStatus)
-			{
-				lastStatus = currentStatus;
-				return buildCondition;
-			}
-			return BuildCondition.NoBuild;
-		}
-
 		public void IntegrationCompleted()
 		{
 			InnerTrigger.IntegrationCompleted();
@@ -80,6 +60,26 @@ namespace ThoughtWorks.CruiseControl.Core.Triggers
 				if (lastStatus == null) return InnerTrigger.NextBuild;
 				return lastStatus.NextBuildTime;
 			}
+		}
+
+		public IntegrationRequest Fire()
+		{
+			IntegrationRequest request = InnerTrigger.Fire();
+			if (request == null) return null;
+			IntegrationCompleted();	// reset inner trigger
+
+			ProjectStatus currentStatus = GetCurrentProjectStatus();
+			if (lastStatus == null)
+			{
+				lastStatus = currentStatus;
+				return null;
+			}
+			if (currentStatus.LastBuildDate > lastStatus.LastBuildDate && currentStatus.BuildStatus == TriggerStatus)
+			{
+				lastStatus = currentStatus;
+				return request;
+			}
+			return null;		
 		}
 
 		private static ITrigger NewIntervalTrigger()

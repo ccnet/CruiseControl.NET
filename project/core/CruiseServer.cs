@@ -373,31 +373,9 @@ namespace ThoughtWorks.CruiseControl.Core
 			Abort();
 		}
 
-		public void Request(IntegrationRequest request)
+		public void Request(string project, IntegrationRequest request)
 		{
-			GetIntegrator(request.Project).Request(request);
-		}
-	}
-
-	public class IntegrationRequest
-	{
-		private readonly string project;
-		private readonly BuildCondition buildCondition;
-
-		public IntegrationRequest(string project, BuildCondition buildCondition)
-		{
-			this.project = project;
-			this.buildCondition = buildCondition;
-		}
-
-		public string Project
-		{
-			get { return project; }
-		}
-
-		public BuildCondition BuildCondition
-		{
-			get { return buildCondition; }
+			GetIntegrator(project).Request(request);
 		}
 	}
 }

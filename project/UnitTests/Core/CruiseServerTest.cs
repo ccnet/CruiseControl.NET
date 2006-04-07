@@ -9,7 +9,7 @@ using ThoughtWorks.CruiseControl.Remote;
 namespace ThoughtWorks.CruiseControl.UnitTests.Core
 {
 	[TestFixture]
-	public class CruiseServerTest
+	public class CruiseServerTest : IntegrationFixture
 	{
 		private DynamicMock configServiceMock;
 		private DynamicMock projectIntegratorListFactoryMock;
@@ -283,9 +283,9 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 		[Test]
 		public void RequestNewIntegration()
 		{
-			IntegrationRequest request = new IntegrationRequest("Project 2", BuildCondition.IfModificationExists);
+			IntegrationRequest request = Request(BuildCondition.IfModificationExists);
 			integratorMock2.Expect("Request", request);
-			server.Request(request);
+			server.Request("Project 2", request);
 			integratorMock1.Verify();
 			integratorMock2.Verify();
 		}

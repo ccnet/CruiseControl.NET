@@ -10,9 +10,11 @@ namespace ThoughtWorks.CruiseControl.Core.Triggers
 	[ReflectorType("scheduleTrigger")]
 	public class ScheduleTrigger : ITrigger
 	{
+		private string name;
 		private DateTimeProvider dtProvider;
 		private TimeSpan integrationTime;
 		private DateTime nextBuild;
+		private bool triggered;
 
 		public ScheduleTrigger() : this(new DateTimeProvider())
 		{
@@ -41,13 +43,22 @@ namespace ThoughtWorks.CruiseControl.Core.Triggers
 			}
 		}
 
-		[ReflectorProperty("buildCondition", Required=false)] 
+		[ReflectorProperty("name", Required=false)]
+		public string Name
+		{
+			get
+			{
+				if (name == null) name = GetType().Name;
+				return name;
+			}
+			set { name = value; }
+		}
+
+		[ReflectorProperty("buildCondition", Required=false)]
 		public BuildCondition BuildCondition = BuildCondition.IfModificationExists;
 
-		[ReflectorArray("weekDays", Required=false)] 
+		[ReflectorArray("weekDays", Required=false)]
 		public DayOfWeek[] WeekDays = (DayOfWeek[]) DayOfWeek.GetValues(typeof (DayOfWeek));
-
-		private bool triggered;
 
 		private void SetNextIntegrationDateTime()
 		{
@@ -85,25 +96,25 @@ namespace ThoughtWorks.CruiseControl.Core.Triggers
 
 		public DateTime NextBuild
 		{
-			get 
+			get
 			{
 				if (nextBuild == DateTime.MinValue)
 				{
 					SetNextIntegrationDateTime();
 				}
-				return nextBuild; 
+				return nextBuild;
 			}
 		}
 
-		public virtual BuildCondition ShouldRunIntegration()
+		public IntegrationRequest Fire()
 		{
 			DateTime now = dtProvider.Now;
 			if (now > NextBuild && IsValidWeekDay(now.DayOfWeek))
 			{
 				triggered = true;
-				return BuildCondition;
+				return new IntegrationRequest(BuildCondition, Name);
 			}
-			return BuildCondition.NoBuild;
+			return null;
 		}
 	}
 }

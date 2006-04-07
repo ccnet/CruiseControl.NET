@@ -24,7 +24,6 @@ namespace ThoughtWorks.CruiseControl.Core
 		private ArrayList taskResults = new ArrayList();
 		private IDictionary properties = new SortedList();
 		private bool initial = false;
-		private IntegrationRequest request;
 
 		// Default constructor required for serialization
 		public IntegrationResult()
@@ -43,7 +42,7 @@ namespace ThoughtWorks.CruiseControl.Core
 
 		public IntegrationResult(string projectName, string workingDirectory, IntegrationRequest request) : this(projectName, workingDirectory)
 		{
-			this.request = request;
+			RequestSource = request.Source;
 			BuildCondition = request.BuildCondition;
 		}
 
@@ -101,6 +100,12 @@ namespace ThoughtWorks.CruiseControl.Core
 			set { properties["CCNetLastIntegrationStatus"] = value; }
 		}
 
+		private string RequestSource
+		{
+			get { return Convert(properties["CCNetRequestSource"]); }
+			set { properties["CCNetRequestSource"] = value; }
+		}
+
 		public string LastSuccessfulIntegrationLabel
 		{
 			get { return (Succeeded || lastSuccessfulIntegrationLabel == null) ? Label : lastSuccessfulIntegrationLabel; }
@@ -142,8 +147,8 @@ namespace ThoughtWorks.CruiseControl.Core
 			get
 			{
 				//TODO: why set the date to yesterday's date as a default
-				if (Modifications.Length == 0) 
-				{ 
+				if (Modifications.Length == 0)
+				{
 					//If there are no modifications then this should be set to the last modification date
 					// from the last integration (or 1/1/1980 if there is no previous integration).
 					return DateTime.Now.AddDays(-1.0);
@@ -326,19 +331,13 @@ namespace ThoughtWorks.CruiseControl.Core
 		[XmlIgnore]
 		public IntegrationState LastIntegration
 		{
-			get
-			{
-				return new IntegrationState(LastIntegrationStatus, PreviousLabel, ArtifactDirectory);
-			}
+			get { return new IntegrationState(LastIntegrationStatus, PreviousLabel, ArtifactDirectory); }
 		}
 
 		[XmlIgnore]
 		public IntegrationState Integration
 		{
-			get
-			{
-				return new IntegrationState(Status, Label, ArtifactDirectory);
-			}
+			get { return new IntegrationState(Status, Label, ArtifactDirectory); }
 		}
 
 		[XmlIgnore]
@@ -352,7 +351,7 @@ namespace ThoughtWorks.CruiseControl.Core
 				return fullProps;
 			}
 		}
-		
+
 		private string Convert(object obj)
 		{
 			return (obj == null) ? null : obj.ToString();
@@ -371,7 +370,7 @@ namespace ThoughtWorks.CruiseControl.Core
 		private readonly string label;
 		private readonly string baseArtifactDirectory;
 
-		public IntegrationState (IntegrationStatus status, string label, string baseArtifactDirectory)
+		public IntegrationState(IntegrationStatus status, string label, string baseArtifactDirectory)
 		{
 			this.status = status;
 			this.date = date;
@@ -379,13 +378,13 @@ namespace ThoughtWorks.CruiseControl.Core
 			this.baseArtifactDirectory = baseArtifactDirectory;
 		}
 
-		public override bool Equals (object obj)
+		public override bool Equals(object obj)
 		{
-			if (obj==null) return false;
-			if (obj.GetType()!=this.GetType()) return false;
+			if (obj == null) return false;
+			if (obj.GetType() != this.GetType()) return false;
 
 			IntegrationState other = (IntegrationState) obj;
-			return other.status.Equals(status) && other.date == this.date && other.label==this.label;
+			return other.status.Equals(status) && other.date == this.date && other.label == this.label;
 		}
 
 		public override int GetHashCode()
@@ -393,20 +392,14 @@ namespace ThoughtWorks.CruiseControl.Core
 			return date.GetHashCode();
 		}
 
-		public string ArtifactDirectory 
+		public string ArtifactDirectory
 		{
-			get
-			{
-				return baseArtifactDirectory;
-			}
+			get { return baseArtifactDirectory; }
 		}
 
 		public string Label
 		{
-			get
-			{
-				return label;
-			}
+			get { return label; }
 		}
 	}
 }

@@ -9,7 +9,7 @@ using ThoughtWorks.CruiseControl.Remote;
 namespace ThoughtWorks.CruiseControl.UnitTests.Core.Triggers
 {
 	[TestFixture]
-	public class FilterTriggerTest
+	public class FilterTriggerTest : IntegrationFixture
 	{
 		private IMock mockTrigger;
 		private IMock mockDateTime;
@@ -39,29 +39,29 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Triggers
 		[Test]
 		public void ShouldNotInvokeDecoratedTriggerWhenTimeAndWeekDayMatch()
 		{
-			mockTrigger.ExpectNoCall("ShouldRunIntegration");
+			mockTrigger.ExpectNoCall("Fire");
 			mockDateTime.ExpectAndReturn("Now", new DateTime(2004, 12, 1, 10, 30, 0, 0));
 
-			Assert.AreEqual(BuildCondition.NoBuild, trigger.ShouldRunIntegration());
+			Assert.IsNull(trigger.Fire());
 		}
 
 		[Test]
 		public void ShouldNotInvokeDecoratedTriggerWhenWeekDaysNotSpecified()
 		{
-			mockTrigger.ExpectNoCall("ShouldRunIntegration");
+			mockTrigger.ExpectNoCall("Fire");
 			mockDateTime.ExpectAndReturn("Now", new DateTime(2004, 12, 1, 10, 30, 0, 0));
 			trigger.WeekDays = new DayOfWeek[] {};
 
-			Assert.AreEqual(BuildCondition.NoBuild, trigger.ShouldRunIntegration());
+			Assert.IsNull(trigger.Fire());
 		}
 
 		[Test]
 		public void ShouldInvokeDecoratedTriggerWhenTimeIsOutsideOfRange()
 		{
-			mockTrigger.ExpectAndReturn("ShouldRunIntegration", BuildCondition.IfModificationExists);
+			mockTrigger.ExpectAndReturn("Fire", ModificationExistRequest());
 			mockDateTime.ExpectAndReturn("Now", new DateTime(2004, 12, 1, 11, 30, 0, 0));
 
-			Assert.AreEqual(BuildCondition.IfModificationExists, trigger.ShouldRunIntegration());
+			Assert.AreEqual(ModificationExistRequest(), trigger.Fire());
 		}
 
 		[Test]
@@ -70,10 +70,10 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Triggers
 			trigger.StartTime = "23:00";
 			trigger.EndTime = "7:00";
 
-			mockTrigger.ExpectNoCall("ShouldRunIntegration");
+			mockTrigger.ExpectNoCall("Fire");
 			mockDateTime.ExpectAndReturn("Now", new DateTime(2004, 12, 1, 23, 30, 0, 0));
 
-			Assert.AreEqual(BuildCondition.NoBuild, trigger.ShouldRunIntegration());
+			Assert.IsNull(trigger.Fire());
 		}
 
 		[Test]
@@ -82,10 +82,10 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Triggers
 			trigger.StartTime = "23:00";
 			trigger.EndTime = "7:00";
 
-			mockTrigger.ExpectNoCall("ShouldRunIntegration");
+			mockTrigger.ExpectNoCall("Fire");
 			mockDateTime.ExpectAndReturn("Now", new DateTime(2004, 12, 1, 00, 30, 0, 0));
 
-			Assert.AreEqual(BuildCondition.NoBuild, trigger.ShouldRunIntegration());
+			Assert.IsNull(trigger.Fire());
 		}
 
 		[Test]
@@ -94,30 +94,30 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Triggers
 			trigger.StartTime = "23:00";
 			trigger.EndTime = "7:00";
 
-			mockTrigger.ExpectAndReturn("ShouldRunIntegration", BuildCondition.IfModificationExists);
+			mockTrigger.ExpectAndReturn("Fire", ModificationExistRequest());
 			mockDateTime.ExpectAndReturn("Now", new DateTime(2004, 12, 1, 11, 30, 0, 0));
 
-			Assert.AreEqual(BuildCondition.IfModificationExists, trigger.ShouldRunIntegration());
+			Assert.AreEqual(ModificationExistRequest(), trigger.Fire());
 		}
 
 		[Test]
 		public void ShouldNotInvokeDecoratedTriggerWhenTimeIsEqualToStartTimeOrEndTime()
 		{
-			mockTrigger.ExpectNoCall("ShouldRunIntegration");
+			mockTrigger.ExpectNoCall("Fire");
 			mockDateTime.ExpectAndReturn("Now", new DateTime(2004, 12, 1, 10, 00, 0, 0));
 			mockDateTime.ExpectAndReturn("Now", new DateTime(2004, 12, 1, 11, 00, 0, 0));
 
-			Assert.AreEqual(BuildCondition.NoBuild, trigger.ShouldRunIntegration());
-			Assert.AreEqual(BuildCondition.NoBuild, trigger.ShouldRunIntegration());
+			Assert.IsNull(trigger.Fire());
+			Assert.IsNull(trigger.Fire());
 		}
 
 		[Test]
 		public void ShouldNotInvokeDecoratedTriggerWhenTodayIsOneOfSpecifiedWeekdays()
 		{
-			mockTrigger.ExpectAndReturn("ShouldRunIntegration", BuildCondition.IfModificationExists);
+			mockTrigger.ExpectAndReturn("Fire", ModificationExistRequest());
 			mockDateTime.ExpectAndReturn("Now", new DateTime(2004, 12, 2, 10, 30, 0, 0));
 
-			Assert.AreEqual(BuildCondition.IfModificationExists, trigger.ShouldRunIntegration());
+			Assert.AreEqual(ModificationExistRequest(), trigger.Fire());
 		}
 
 		[Test]
@@ -183,7 +183,5 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Triggers
 			Assert.AreEqual(7, trigger.WeekDays.Length);
 			Assert.AreEqual(BuildCondition.NoBuild, trigger.BuildCondition);
 		}
-
-
 	}
 }

@@ -27,19 +27,19 @@ namespace ThoughtWorks.CruiseControl.Core.Triggers
 			set { uri = new Uri(value); }
 		}
 
-		public override BuildCondition ShouldRunIntegration()
+		public override IntegrationRequest Fire()
 		{
-			BuildCondition condition = base.ShouldRunIntegration();
-			if (condition == BuildCondition.NoBuild) return condition;
+			IntegrationRequest request = base.Fire();
+			if (request ==  null) return null;
 
 			Log.Debug(string.Format("More than {0} seconds since last integration, checking url.", IntervalSeconds));
 			if (HasUrlChanged())
 			{
-				return BuildCondition;
+				return new IntegrationRequest(BuildCondition, Name);
 			}
 			
 			IncrementNextBuildTime();
-			return BuildCondition.NoBuild;
+			return null;
 		}
 
 		private bool HasUrlChanged()

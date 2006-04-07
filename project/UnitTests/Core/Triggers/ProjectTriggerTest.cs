@@ -8,7 +8,7 @@ using ThoughtWorks.CruiseControl.Remote;
 namespace ThoughtWorks.CruiseControl.UnitTests.Core.Triggers
 {
 	[TestFixture]
-	public class ProjectTriggerTest
+	public class ProjectTriggerTest : IntegrationFixture
 	{
 		private IMock mockFactory;
 		private IMock mockCruiseManager;
@@ -40,14 +40,14 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Triggers
 		[Test]
 		public void ShouldNotTriggerOnFirstIntegration()
 		{
-			mockInnerTrigger.ExpectAndReturn("ShouldRunIntegration", BuildCondition.IfModificationExists);
+			mockInnerTrigger.ExpectAndReturn("Fire", ModificationExistRequest());
 			mockInnerTrigger.Expect("IntegrationCompleted");
 			mockFactory.ExpectAndReturn("GetCruiseManager", mockCruiseManager.MockInstance, ProjectTrigger.DefaultServerUri);
 			mockCruiseManager.ExpectAndReturn("GetProjectStatus", new ProjectStatus[]
 				{
 					NewProjectStatus("wrong", IntegrationStatus.Failure, now), NewProjectStatus("project", IntegrationStatus.Success, now)
 				});
-			Assert.AreEqual(BuildCondition.NoBuild, trigger.ShouldRunIntegration());
+			Assert.IsNull(trigger.Fire());
 			Verify();			
 		}
 
@@ -55,35 +55,35 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Triggers
 		public void TriggerWhenDependentProjectBuildsSuccessfully()
 		{
 			ShouldNotTriggerOnFirstIntegration();
-			mockInnerTrigger.ExpectAndReturn("ShouldRunIntegration", BuildCondition.IfModificationExists);
+			mockInnerTrigger.ExpectAndReturn("Fire", ModificationExistRequest());
 			mockInnerTrigger.Expect("IntegrationCompleted");
 			mockFactory.ExpectAndReturn("GetCruiseManager", mockCruiseManager.MockInstance, ProjectTrigger.DefaultServerUri);
 			mockCruiseManager.ExpectAndReturn("GetProjectStatus", new ProjectStatus[]
 				{
 					NewProjectStatus("wrong", IntegrationStatus.Failure, later), NewProjectStatus("project", IntegrationStatus.Success, later)
 				});
-			Assert.AreEqual(BuildCondition.IfModificationExists, trigger.ShouldRunIntegration());
+			Assert.AreEqual(ModificationExistRequest(), trigger.Fire());
 			Verify();
 		}
 
 		[Test]
 		public void DoNotTriggerWhenInnerTriggerReturnsNoBuild()
 		{
-			mockInnerTrigger.ExpectAndReturn("ShouldRunIntegration", BuildCondition.NoBuild);
+			mockInnerTrigger.ExpectAndReturn("Fire", null);
 			mockFactory.ExpectNoCall("GetCruiseManager", typeof(string));
 			mockCruiseManager.ExpectNoCall("GetProjectStatus");
-			Assert.AreEqual(BuildCondition.NoBuild, trigger.ShouldRunIntegration());
+			Assert.IsNull(trigger.Fire());
 			Verify();
 		}
 
 		[Test]
 		public void DoNotTriggerWhenDependentProjectBuildFails()
 		{
-			mockInnerTrigger.ExpectAndReturn("ShouldRunIntegration", BuildCondition.IfModificationExists);
+			mockInnerTrigger.ExpectAndReturn("Fire", ModificationExistRequest());
 			mockInnerTrigger.Expect("IntegrationCompleted");
 			mockFactory.ExpectAndReturn("GetCruiseManager", mockCruiseManager.MockInstance, ProjectTrigger.DefaultServerUri);
 			mockCruiseManager.ExpectAndReturn("GetProjectStatus", new ProjectStatus[] {NewProjectStatus("project", IntegrationStatus.Failure, now)});
-			Assert.AreEqual(BuildCondition.NoBuild, trigger.ShouldRunIntegration());
+			Assert.IsNull(trigger.Fire());
 			Verify();
 		}
 
@@ -91,18 +91,18 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Triggers
 		public void DoNotTriggerIfProjectHasNotBuiltSinceLastPoll()
 		{
 			ProjectStatus status = NewProjectStatus("project", IntegrationStatus.Success, now);
-			mockInnerTrigger.ExpectAndReturn("ShouldRunIntegration", BuildCondition.IfModificationExists);
+			mockInnerTrigger.ExpectAndReturn("Fire", ModificationExistRequest());
 			mockInnerTrigger.Expect("IntegrationCompleted");
 			mockFactory.ExpectAndReturn("GetCruiseManager", mockCruiseManager.MockInstance, ProjectTrigger.DefaultServerUri);
 			mockCruiseManager.ExpectAndReturn("GetProjectStatus", new ProjectStatus[] {status});
 
 			mockFactory.ExpectAndReturn("GetCruiseManager", mockCruiseManager.MockInstance, ProjectTrigger.DefaultServerUri);
-			mockInnerTrigger.ExpectAndReturn("ShouldRunIntegration", BuildCondition.IfModificationExists);
+			mockInnerTrigger.ExpectAndReturn("Fire", ModificationExistRequest());
 			mockInnerTrigger.Expect("IntegrationCompleted");
 			mockCruiseManager.ExpectAndReturn("GetProjectStatus", new ProjectStatus[] {status}); // same build as last time
 
-			Assert.AreEqual(BuildCondition.NoBuild, trigger.ShouldRunIntegration());
-			Assert.AreEqual(BuildCondition.NoBuild, trigger.ShouldRunIntegration());
+			Assert.IsNull(trigger.Fire());
+			Assert.IsNull(trigger.Fire());
 			Verify();
 		}
 

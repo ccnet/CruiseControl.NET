@@ -8,7 +8,7 @@ using ThoughtWorks.CruiseControl.Remote;
 namespace ThoughtWorks.CruiseControl.UnitTests.Core.Triggers
 {
 	[TestFixture]
-	public class MultipleTriggerTest
+	public class MultipleTriggerTest : IntegrationFixture
 	{
 		private DynamicMock subTrigger1Mock;
 		private DynamicMock subTrigger2Mock;
@@ -37,7 +37,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Triggers
 		public void ShouldReturnNoBuildWhenNoTriggers()
 		{
 			trigger = new MultipleTrigger();
-			Assert.AreEqual(BuildCondition.NoBuild, trigger.ShouldRunIntegration());
+			Assert.IsNull(trigger.Fire());
 		}
 
 		[Test]
@@ -59,63 +59,63 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Triggers
 		[Test]
 		public void ShouldReturnNoBuildIfAllNoBuild()
 		{
-			subTrigger1Mock.ExpectAndReturn("ShouldRunIntegration", BuildCondition.NoBuild);
-			subTrigger2Mock.ExpectAndReturn("ShouldRunIntegration", BuildCondition.NoBuild);
-			Assert.AreEqual(BuildCondition.NoBuild, trigger.ShouldRunIntegration());
+			subTrigger1Mock.ExpectAndReturn("Fire", null);
+			subTrigger2Mock.ExpectAndReturn("Fire", null);
+			Assert.IsNull(trigger.Fire());
 			VerifyAll();
 		}
 
 		[Test]
 		public void ShouldReturnIfModificationExistsNoForceBuild()
 		{
-			subTrigger1Mock.ExpectAndReturn("ShouldRunIntegration", BuildCondition.NoBuild);
-			subTrigger2Mock.ExpectAndReturn("ShouldRunIntegration", BuildCondition.IfModificationExists);
-			Assert.AreEqual(BuildCondition.IfModificationExists, trigger.ShouldRunIntegration());
+			subTrigger1Mock.ExpectAndReturn("Fire", null);
+			subTrigger2Mock.ExpectAndReturn("Fire", ModificationExistRequest());
+			Assert.AreEqual(ModificationExistRequest(), trigger.Fire());
 			VerifyAll();
 		}
 
 		[Test]
 		public void ShouldNotCareAboutOrderingForChecking()
 		{
-			subTrigger1Mock.ExpectAndReturn("ShouldRunIntegration", BuildCondition.NoBuild);
-			subTrigger2Mock.ExpectAndReturn("ShouldRunIntegration", BuildCondition.IfModificationExists);
-			Assert.AreEqual(BuildCondition.IfModificationExists, trigger.ShouldRunIntegration());
+			subTrigger1Mock.ExpectAndReturn("Fire", null);
+			subTrigger2Mock.ExpectAndReturn("Fire", ModificationExistRequest());
+			Assert.AreEqual(ModificationExistRequest(), trigger.Fire());
 			VerifyAll();
 		}
 
 		[Test]
 		public void ShouldReturnForceBuildIfOneForceBuildAndOneNoBuild()
 		{
-			subTrigger1Mock.ExpectAndReturn("ShouldRunIntegration", BuildCondition.NoBuild);
-			subTrigger2Mock.ExpectAndReturn("ShouldRunIntegration", BuildCondition.ForceBuild);
-			Assert.AreEqual(BuildCondition.ForceBuild, trigger.ShouldRunIntegration());
+			subTrigger1Mock.ExpectAndReturn("Fire", null);
+			subTrigger2Mock.ExpectAndReturn("Fire", ForceBuildRequest());
+			Assert.AreEqual(ForceBuildRequest(), trigger.Fire());
 			VerifyAll();
 		}
 
 		[Test]
 		public void ShouldReturnForceBuildIfOneForceBuildAndOneIfModifications()
 		{
-			subTrigger1Mock.ExpectAndReturn("ShouldRunIntegration", BuildCondition.IfModificationExists);
-			subTrigger2Mock.ExpectAndReturn("ShouldRunIntegration", BuildCondition.ForceBuild);
-			Assert.AreEqual(BuildCondition.ForceBuild, trigger.ShouldRunIntegration());
+			subTrigger1Mock.ExpectAndReturn("Fire", ModificationExistRequest());
+			subTrigger2Mock.ExpectAndReturn("Fire", ForceBuildRequest());
+			Assert.AreEqual(ForceBuildRequest(), trigger.Fire());
 			VerifyAll();
 		}
 
 		[Test]
 		public void ShouldNotCareAboutOrderingForCheckingForceBuild()
 		{
-			subTrigger1Mock.ExpectAndReturn("ShouldRunIntegration", BuildCondition.ForceBuild);
-			subTrigger2Mock.ExpectAndReturn("ShouldRunIntegration", BuildCondition.IfModificationExists);
-			Assert.AreEqual(BuildCondition.ForceBuild, trigger.ShouldRunIntegration());
+			subTrigger1Mock.ExpectAndReturn("Fire", ForceBuildRequest());
+			subTrigger2Mock.ExpectAndReturn("Fire", ModificationExistRequest());
+			Assert.AreEqual(ForceBuildRequest(), trigger.Fire());
 			VerifyAll();
 		}
 
 		[Test]
 		public void ShouldReturnForceBuildIfAllForceBuild()
 		{
-			subTrigger1Mock.ExpectAndReturn("ShouldRunIntegration", BuildCondition.ForceBuild);
-			subTrigger2Mock.ExpectAndReturn("ShouldRunIntegration", BuildCondition.ForceBuild);
-			Assert.AreEqual(BuildCondition.ForceBuild, trigger.ShouldRunIntegration());
+			subTrigger1Mock.ExpectAndReturn("Fire", ForceBuildRequest());
+			subTrigger2Mock.ExpectAndReturn("Fire", ForceBuildRequest());
+			Assert.AreEqual(ForceBuildRequest(), trigger.Fire());
 			VerifyAll();
 		}
 
@@ -142,7 +142,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Triggers
 			string xml = @"<multiTrigger operator=""And""><triggers><intervalTrigger /></triggers></multiTrigger>";
 			trigger = (MultipleTrigger) NetReflector.Read(xml);
 			Assert.AreEqual(1, trigger.Triggers.Length);
-			Assert.AreEqual(Operator.And, trigger.Operatior);
+			Assert.AreEqual(Operator.And, trigger.Operator);
 		}
 
 		[Test]
@@ -160,16 +160,16 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Triggers
 			string xml = @"<multiTrigger />";
 			trigger = (MultipleTrigger) NetReflector.Read(xml);
 			Assert.AreEqual(0, trigger.Triggers.Length);
-			Assert.AreEqual(Operator.Or, trigger.Operatior);			
+			Assert.AreEqual(Operator.Or, trigger.Operator);			
 		}
 
 		[Test]
 		public void UsingAndConditionOnlyTriggersBuildIfBothTriggersShouldBuild()
 		{
-			trigger.Operatior = Operator.And;
-			subTrigger1Mock.ExpectAndReturn("ShouldRunIntegration", BuildCondition.NoBuild);
-			subTrigger2Mock.ExpectAndReturn("ShouldRunIntegration", BuildCondition.ForceBuild);
-			Assert.AreEqual(BuildCondition.NoBuild, trigger.ShouldRunIntegration());
+			trigger.Operator = Operator.And;
+			subTrigger1Mock.ExpectAndReturn("Fire", null);
+			subTrigger2Mock.ExpectAndReturn("Fire", ForceBuildRequest());
+			Assert.IsNull(trigger.Fire());
 		}
 	}
 }

@@ -6,7 +6,6 @@ namespace ThoughtWorks.CruiseControl.Core
 {
 	public interface IIntegrationResult
 	{
-
 		string ProjectName { get; }
 		string ProjectUrl { get; set;}
 

@@ -18,30 +18,13 @@ namespace ThoughtWorks.CruiseControl.Core.Triggers
 		{}
 
 		[ReflectorProperty("operator", Required=false)]
-		public Operator Operatior = Operator.Or;
+		public Operator Operator = Operator.Or;
 
 		[ReflectorArray("triggers", Required=false)]
 		public ITrigger[] Triggers
 		{
 			get { return triggers; }
 			set { triggers = value; }
-		}
-
-		public BuildCondition ShouldRunIntegration()
-		{
-			BuildCondition overallCondition = BuildCondition.NoBuild;
-			foreach (ITrigger trigger in triggers)
-			{
-				BuildCondition condition = trigger.ShouldRunIntegration();
-
-				if (Operatior == Operator.And && condition == BuildCondition.NoBuild) return condition;
-
-				if (condition > overallCondition) // Assumes ordering of elements of enum
-				{
-					overallCondition = condition;
-				}
-			}
-			return overallCondition;
 		}
 
 		public void IntegrationCompleted()
@@ -65,6 +48,25 @@ namespace ThoughtWorks.CruiseControl.Core.Triggers
 				return earliestDate;
 			}
 		}
+
+		public IntegrationRequest Fire()
+		{
+			IntegrationRequest request = null;
+			foreach (ITrigger trigger in triggers)
+			{
+				IntegrationRequest triggerRequest = trigger.Fire();
+
+				if (Operator == Operator.And && triggerRequest == null) return null;
+
+				if (triggerRequest != null)
+				{
+					if (request == null || triggerRequest.BuildCondition == BuildCondition.ForceBuild)
+						request = triggerRequest;
+				}
+			}
+			return request;
+		}
+
 	}
 
 	public enum Operator

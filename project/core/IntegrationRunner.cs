@@ -32,6 +32,8 @@ namespace ThoughtWorks.CruiseControl.Core
 				result.Modifications = GetModifications(lastResult, result);
 				if (result.ShouldRunBuild())
 				{
+					Log.Info(request.ToString());
+
 					target.Activity = ProjectActivity.Building;
 					target.SourceControl.GetSource(result);
 					RunBuild(result);

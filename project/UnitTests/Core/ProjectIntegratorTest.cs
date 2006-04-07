@@ -9,7 +9,7 @@ using ThoughtWorks.CruiseControl.Remote;
 namespace ThoughtWorks.CruiseControl.UnitTests.Core
 {
 	[TestFixture]
-	public class ProjectIntegratorTest : CustomAssertion
+	public class ProjectIntegratorTest : IntegrationFixture
 	{
 		private LatchMock integrationTriggerMock;
 		private LatchMock integratableMock;
@@ -53,7 +53,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 		[Test]
 		public void ShouldContinueRunningIfNotToldToStop()
 		{
-			integrationTriggerMock.ExpectAndReturn("ShouldRunIntegration", BuildCondition.NoBuild);
+			integrationTriggerMock.ExpectAndReturn("Fire", null);
 			integratableMock.ExpectNoCall("Integrate", typeof (IntegrationRequest));
 			integrationTriggerMock.ExpectNoCall("IntegrationCompleted");
 
@@ -66,7 +66,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 		[Test]
 		public void ShouldStopWhenStoppedExternally()
 		{
-			integrationTriggerMock.ExpectAndReturn("ShouldRunIntegration", BuildCondition.NoBuild);
+			integrationTriggerMock.ExpectAndReturn("Fire", null);
 			integratableMock.ExpectNoCall("Integrate", typeof (IntegrationRequest));
 			integrationTriggerMock.ExpectNoCall("IntegrationCompleted");
 
@@ -83,7 +83,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 		[Test]
 		public void StartMultipleTimes()
 		{
-			integrationTriggerMock.SetupResult("ShouldRunIntegration", BuildCondition.NoBuild);
+			integrationTriggerMock.SetupResult("Fire", null);
 			integratableMock.ExpectNoCall("Integrate", typeof (IntegrationRequest));
 			integrationTriggerMock.ExpectNoCall("IntegrationCompleted");
 
@@ -101,7 +101,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 		[Test]
 		public void RestartScheduler()
 		{
-			integrationTriggerMock.SetupResult("ShouldRunIntegration", BuildCondition.NoBuild);
+			integrationTriggerMock.SetupResult("Fire", null);
 			integratableMock.ExpectNoCall("Integrate", typeof (IntegrationRequest));
 			integrationTriggerMock.ExpectNoCall("IntegrationCompleted");
 
@@ -121,7 +121,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 		[Test]
 		public void StopUnstartedIntegrator()
 		{
-			integrationTriggerMock.ExpectNoCall("ShouldRunIntegration");
+			integrationTriggerMock.ExpectNoCall("Fire");
 			integratableMock.ExpectNoCall("Integrate", typeof (IntegrationRequest));
 			integrationTriggerMock.ExpectNoCall("IntegrationCompleted");
 
@@ -135,7 +135,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 		{
 			string exceptionMessage = "Intentional exception";
 
-			integrationTriggerMock.ExpectAndReturn("ShouldRunIntegration", BuildCondition.ForceBuild);
+			integrationTriggerMock.ExpectAndReturn("Fire", ForceBuildRequest());
 			integratableMock.ExpectAndThrow("Integrate", new CruiseControlException(exceptionMessage), new HasForceBuildCondition());
 			integrationTriggerMock.Expect("IntegrationCompleted");
 
@@ -151,7 +151,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 		[Test]
 		public void Abort()
 		{
-			integrationTriggerMock.SetupResult("ShouldRunIntegration", BuildCondition.NoBuild);
+			integrationTriggerMock.SetupResult("Fire", null);
 			integratableMock.ExpectNoCall("Integrate", typeof (IntegrationRequest));
 			integrationTriggerMock.ExpectNoCall("IntegrationCompleted");
 
@@ -167,7 +167,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 		[Test]
 		public void TerminateWhenProjectIsntStarted()
 		{
-			integrationTriggerMock.SetupResult("ShouldRunIntegration", BuildCondition.NoBuild);
+			integrationTriggerMock.SetupResult("Fire", null);
 			integratableMock.ExpectNoCall("Integrate", typeof (IntegrationRequest));
 			integrationTriggerMock.ExpectNoCall("IntegrationCompleted");
 
@@ -179,7 +179,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 		[Test]
 		public void TerminateCalledTwice()
 		{
-			integrationTriggerMock.SetupResult("ShouldRunIntegration", BuildCondition.NoBuild);
+			integrationTriggerMock.SetupResult("Fire", null);
 			integratableMock.ExpectNoCall("Integrate", typeof (IntegrationRequest));
 			integrationTriggerMock.ExpectNoCall("IntegrationCompleted");
 
@@ -194,7 +194,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 		[Test]
 		public void ForceBuild()
 		{
-			integrationTriggerMock.ExpectNoCall("ShouldRunIntegration");
+			integrationTriggerMock.ExpectNoCall("Fire");
 			integratableMock.Expect("Integrate", new HasForceBuildCondition());
 			integratableMock.ExpectNoCall("Integrate", typeof (IntegrationRequest));
 			integrationTriggerMock.Expect("IntegrationCompleted");
@@ -208,7 +208,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 		public void RequestIntegration()
 		{
 			integratableMock.Strict = true;
-			IntegrationRequest request = new IntegrationRequest("project", BuildCondition.IfModificationExists);
+			IntegrationRequest request = new IntegrationRequest(BuildCondition.IfModificationExists, "intervalTrigger");
 			integratableMock.Expect("Integrate", request);
 			integrator.Request(request);
 			integratableMock.WaitForSignal();
@@ -221,10 +221,10 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 		{
 			integratableMock.Strict = true;
 			integrationTriggerMock.Strict = true;
-			IntegrationRequest request = new IntegrationRequest("project", BuildCondition.IfModificationExists);
+			IntegrationRequest request = new IntegrationRequest(BuildCondition.IfModificationExists, "intervalTrigger");
 			integratableMock.Expect("Integrate", request);
 			integrationTriggerMock.Expect("IntegrationCompleted");
-			integrationTriggerMock.ExpectAndReturn("ShouldRunIntegration", BuildCondition.NoBuild);
+			integrationTriggerMock.ExpectAndReturn("Fire", null);
 
 			integrator.Request(request);
 			integratableMock.WaitForSignal();

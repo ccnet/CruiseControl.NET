@@ -170,19 +170,19 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 		[Test]
 		public void MapIntegrationProperties()
 		{
-			IntegrationResult result = new IntegrationResult("project", @"c:\workingdir\");
-			result.BuildCondition = BuildCondition.IfModificationExists;
+			IntegrationResult result = new IntegrationResult("project", @"c:\workingdir\", new IntegrationRequest(BuildCondition.IfModificationExists, "myTrigger"));
 			result.Label = "label";
 			result.ArtifactDirectory = @"c:\artifactdir\";
 			result.StartTime = new DateTime(2005,06,06,08,45,00);
 
-			Assert.AreEqual(9, result.IntegrationProperties.Count);
+			Assert.AreEqual(10, result.IntegrationProperties.Count);
 			Assert.AreEqual("label", result.IntegrationProperties["CCNetLabel"]);
 			Assert.AreEqual(@"c:\artifactdir\", result.IntegrationProperties["CCNetArtifactDirectory"]);
 			// We purposefully use culture-independent string formats
 			Assert.AreEqual("2005-06-06", result.IntegrationProperties["CCNetBuildDate"]);
 			Assert.AreEqual("08:45:00", result.IntegrationProperties["CCNetBuildTime"]);
 			Assert.AreEqual(BuildCondition.IfModificationExists, result.IntegrationProperties["CCNetBuildCondition"]);
+			Assert.AreEqual("myTrigger", result.IntegrationProperties["CCNetRequestSource"]);
 		}
 
 		[Test]

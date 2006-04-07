@@ -48,16 +48,6 @@ namespace ThoughtWorks.CruiseControl.Core.Triggers
 		[ReflectorProperty("buildCondition", Required=false)]
 		public BuildCondition BuildCondition = BuildCondition.NoBuild;
 
-		public BuildCondition ShouldRunIntegration()
-		{
-			DateTime now = dtProvider.Now;
-			if (IsInFilterRange(now))
-			{
-				return BuildCondition;
-			}
-			return InnerTrigger.ShouldRunIntegration();
-		}
-
 		private bool IsInFilterRange(DateTime now)
 		{
 			return IsDateInFilterWeekDays(now) && IsTimeInFilterTimeRange(now);
@@ -98,6 +88,16 @@ namespace ThoughtWorks.CruiseControl.Core.Triggers
 				}
 				return innerTriggerBuild;
 			}
+		}
+
+		public IntegrationRequest Fire()
+		{
+			DateTime now = dtProvider.Now;
+			if (IsInFilterRange(now))
+			{
+				return null;
+			}
+			return InnerTrigger.Fire();
 		}
 
 		[ReflectorArray("weekDays", Required=false)]

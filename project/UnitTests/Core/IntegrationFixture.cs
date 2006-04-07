@@ -1,21 +1,22 @@
-using ThoughtWorks.CruiseControl.Core;
 using ThoughtWorks.CruiseControl.Remote;
 
 namespace ThoughtWorks.CruiseControl.UnitTests.Core
 {
 	public class IntegrationFixture : CustomAssertion
 	{
-		protected IntegrationRequest ModificationExistRequest()
+		public string Source = "foo";
+
+		public IntegrationRequest ModificationExistRequest()
 		{
 			return Request(BuildCondition.IfModificationExists);
 		}
 
-		protected IntegrationRequest Request(BuildCondition buildCondition)
+		public IntegrationRequest Request(BuildCondition buildCondition)
 		{
-			return new IntegrationRequest("foo", buildCondition);
+			return new IntegrationRequest(buildCondition, Source);
 		}
-		
-		protected IntegrationRequest ForceBuildRequest()
+
+		public IntegrationRequest ForceBuildRequest()
 		{
 			return Request(BuildCondition.ForceBuild);
 		}

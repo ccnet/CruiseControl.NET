@@ -82,7 +82,7 @@ namespace ThoughtWorks.CruiseControl.Core
 		public void ForceBuild()
 		{
 			Log.Info("Force Build for project: " + project.Name);
-			this.request = new IntegrationRequest(project.Name, BuildCondition.ForceBuild);
+			this.request = new IntegrationRequest(BuildCondition.ForceBuild, "intervalTrigger");
 			Start();
 		}
 
@@ -141,11 +141,11 @@ namespace ThoughtWorks.CruiseControl.Core
 		{
 			if (request == null)
 			{
-				BuildCondition buildCondition = trigger.ShouldRunIntegration();
-				if (buildCondition != BuildCondition.NoBuild)
-				{
-					request = new IntegrationRequest(Name, buildCondition);
-				}
+				request = trigger.Fire();
+//				if (buildCondition != BuildCondition.NoBuild)
+//				{
+//					request = new IntegrationRequest(Name, buildCondition, "intervalTrigger");
+//				}
 			}
 			return request != null;
 		}
