@@ -24,6 +24,7 @@ namespace ThoughtWorks.CruiseControl.Core
 		private ArrayList taskResults = new ArrayList();
 		private IDictionary properties = new SortedList();
 		private bool initial = false;
+		private IntegrationRequest request;
 
 		// Default constructor required for serialization
 		public IntegrationResult()
@@ -42,6 +43,7 @@ namespace ThoughtWorks.CruiseControl.Core
 
 		public IntegrationResult(string projectName, string workingDirectory, IntegrationRequest request) : this(projectName, workingDirectory)
 		{
+			this.request = request;
 			RequestSource = request.Source;
 			BuildCondition = request.BuildCondition;
 		}
@@ -338,6 +340,12 @@ namespace ThoughtWorks.CruiseControl.Core
 		public IntegrationState Integration
 		{
 			get { return new IntegrationState(Status, Label, ArtifactDirectory); }
+		}
+
+		[XmlIgnore]
+		public IntegrationRequest IntegrationRequest
+		{
+			get { return request; }
 		}
 
 		[XmlIgnore]

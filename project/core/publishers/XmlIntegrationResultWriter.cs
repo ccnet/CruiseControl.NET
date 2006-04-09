@@ -2,6 +2,7 @@ using System;
 using System.IO;
 using System.Xml;
 using ThoughtWorks.CruiseControl.Core.Util;
+using ThoughtWorks.CruiseControl.Remote;
 
 namespace ThoughtWorks.CruiseControl.Core.Publishers
 {
@@ -18,9 +19,20 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
 		{
 			writer.WriteStartElement(Elements.CRUISE_ROOT);
 			writer.WriteAttributeString("project", result.ProjectName);
+			WriteRequest(result.IntegrationRequest);
 			WriteModifications(result.Modifications);
 			WriteBuildElement(result);
 			WriteException(result);
+			writer.WriteEndElement();
+		}
+
+		private void WriteRequest(IntegrationRequest request)
+		{
+			if (request == null) return;
+			writer.WriteStartElement(Elements.Request);
+			writer.WriteAttributeString("source", request.Source);
+			writer.WriteAttributeString("buildCondition", request.BuildCondition.ToString());
+			writer.WriteString(request.ToString());
 			writer.WriteEndElement();
 		}
 
@@ -91,6 +103,7 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
 			public const string CRUISE_ROOT = "cruisecontrol";
 			public const string MODIFICATIONS = "modifications";
 			public const string EXCEPTION = "exception";
+			public const string Request = "request";
 		}
 
 		public Formatting Formatting

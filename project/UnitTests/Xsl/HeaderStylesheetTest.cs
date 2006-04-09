@@ -11,21 +11,12 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Xsl
 		}
 
 		[Test]
-		public void ShouldOutputBuildConditionForForcedBuilds()
+		public void ShouldOutputIntegrationRequest()
 		{
-			string input = @"<cruisecontrol><build buildcondition=""ForceBuild""/></cruisecontrol>";
+			string input = @"<cruisecontrol><request>foobar</request></cruisecontrol>";
 
 			string actualXml = LoadStylesheetAndTransformInput(input);
-			CustomAssertion.AssertContains("Forced Build", actualXml);
-		}
-
-		[Test]
-		public void ShouldOutputBuildConditionForModificationsDetected()
-		{
-			string input = @"<cruisecontrol><build buildcondition=""IfModificationExists""/></cruisecontrol>";
-
-			string actualXml = LoadStylesheetAndTransformInput(input);
-			CustomAssertion.AssertContains("Modifications Detected", actualXml);
+			CustomAssertion.AssertContains("foobar", actualXml);
 		}
 	}
 }

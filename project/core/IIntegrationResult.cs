@@ -45,5 +45,7 @@ namespace ThoughtWorks.CruiseControl.Core
 		IntegrationState LastIntegration { get; }
 
 		IntegrationState Integration { get; }
+
+		IntegrationRequest IntegrationRequest { get; }
 	}
 }

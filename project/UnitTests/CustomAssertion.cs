@@ -1,5 +1,8 @@
 using System;
+using System.IO;
 using System.Text.RegularExpressions;
+using System.Xml;
+using System.Xml.XPath;
 using NUnit.Framework;
 
 namespace ThoughtWorks.CruiseControl.UnitTests
@@ -20,9 +23,9 @@ namespace ThoughtWorks.CruiseControl.UnitTests
 
 		public static void AssertContainsInArray(object search, object[] target)
 		{
-			foreach(object a in target)
+			foreach (object a in target)
 			{
-				if(a.Equals(search)) return;
+				if (a.Equals(search)) return;
 			}
 			string message = string.Format("Did not find {0} in the array", search);
 			Assert.Fail(message);
@@ -64,7 +67,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests
 				return;
 			}
 			Assert.IsNotNull(actual, string.Format("object of expected type {0} is null", expectedType.FullName));
-			Type actualType = (actual is Type) ? (Type)actual : actual.GetType();
+			Type actualType = (actual is Type) ? (Type) actual : actual.GetType();
 			Assert.AreEqual(expectedType, actualType, "object of the wrong type");
 		}
 
@@ -89,10 +92,36 @@ namespace ThoughtWorks.CruiseControl.UnitTests
 		public static void AssertEqualArrays(Array expected, Array actual)
 		{
 			Assert.AreEqual(actual.Length, expected.Length, "Arrays should have same length");
-			
-			for (int i=0; i<expected.Length; i++)
+
+			for (int i = 0; i < expected.Length; i++)
 			{
 				Assert.AreEqual(expected.GetValue(i), actual.GetValue(i), "Comparing array index " + i);
+			}
+		}
+
+		public static void AssertXPathExists(string xml, string xpath)
+		{
+			Assert.IsTrue(SelectNodeIterator(xpath, xml).Count > 0,
+			              string.Format("Unable to locate xpath expression <{0}>\n\t in xml <{1}>", xpath, xml));
+		}
+
+		public static void AssertXPathNodeValue(string expectedValue, string xml, string xpath)
+		{
+			string actual = SelectNodeIterator(xpath, xml).Current.Value;
+			Assert.AreEqual(expectedValue, actual,
+			                string.Format("Expected value <{0}> does not equal <{1}>\n\t in xml <{2}>", xpath, actual, xml));
+		}
+
+		private static XPathNodeIterator SelectNodeIterator(string xpath, string xml)
+		{
+			try
+			{
+				XPathDocument document = new XPathDocument(new XmlTextReader(new StringReader(xml)));
+				return document.CreateNavigator().Select(xpath);
+			}
+			catch (Exception e)
+			{
+				throw new AssertionException(string.Format("Unable to parse xml <{0}> or xpath expression <{1}>\n\t{2}", xml, xpath, e.ToString()), e);
 			}
 		}
 	}

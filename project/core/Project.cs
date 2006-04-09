@@ -153,9 +153,6 @@ namespace ThoughtWorks.CruiseControl.Core
 
 		public IIntegrationResult Integrate(IntegrationRequest request)
 		{
-			if (request.BuildCondition == BuildCondition.ForceBuild)
-				Log.Info("Build forced");
-
 			return integratable.Integrate(request);				
 		}
 

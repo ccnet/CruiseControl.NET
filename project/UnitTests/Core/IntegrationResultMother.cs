@@ -34,6 +34,20 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 			return result;			
 		}
 
+		private static IntegrationRequest ModificationExistRequest()
+		{
+			return new IntegrationFixture().ModificationExistRequest();
+		}
+
+		public static IntegrationResult CreateSuccessfulWithRequest()
+		{
+			IntegrationResult result = new IntegrationResult(DefaultProjectName, Path.GetTempPath(), ModificationExistRequest());
+			result.Status = IntegrationStatus.Success;
+			result.StartTime = DateTime.Now;
+			result.EndTime = DateTime.Now;
+			return result;			
+		}
+
 		public static IntegrationResult CreateSuccessful()
 		{
 			return Create(true, DateTime.Now);

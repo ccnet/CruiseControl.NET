@@ -1,5 +1,6 @@
 using System;
 using System.IO;
+using System.Xml;
 using System.Xml.XPath;
 using NUnit.Framework;
 using ThoughtWorks.CruiseControl.Core;
@@ -15,23 +16,22 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Publishers
 		public const string TEMP_SUBDIR = "XmlIntegrationResultWriterTest";
 		private StringWriter buffer;
 		private XmlIntegrationResultWriter writer;
+		private IntegrationResult result;
 
 		[SetUp]
 		protected void SetUp()
 		{
 			buffer = new StringWriter();
 			writer = new XmlIntegrationResultWriter(buffer);
+			result = IntegrationResultMother.CreateSuccessfulWithRequest();
 		}
 
 		[Test]
 		public void WriteBuildEvent()
 		{
 			IntegrationResult result = CreateIntegrationResult(IntegrationStatus.Success, false);
-
 			writer.Write(result);
-
-			string expected = string.Format(@"<cruisecontrol project=""proj""><modifications />{0}</cruisecontrol>", CreateExpectedBuildXml(result));
-			Assert.AreEqual(expected, buffer.ToString());
+			AssertContains(CreateExpectedBuildXml(result), buffer.ToString());
 		}
 
 		[Test]
@@ -42,6 +42,16 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Publishers
 
 			writer.WriteModifications(mods);
 			Assert.AreEqual(expected, buffer.ToString());
+		}
+
+		[Test]
+		public void WriteRequest()
+		{
+			writer.Write(result);
+			string xml = buffer.ToString();
+			AssertXPathExists(buffer.ToString(), string.Format("//request[@source='{0}' and @buildCondition='{1}']", 
+			                                                   result.IntegrationRequest.Source, result.IntegrationRequest.BuildCondition));
+			AssertXPathNodeValue(result.IntegrationRequest.ToString(), xml, "//request");
 		}
 
 		[Test]
@@ -63,7 +73,6 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Publishers
 
 		private void ExceptionTest(Exception exception, string exceptionMessage)
 		{
-			IntegrationResult result = IntegrationResultMother.Create(false);
 			result.ExceptionResult = exception;
 
 			writer.Write(result);
@@ -84,7 +93,6 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Publishers
 		[Test]
 		public void WriteIntegrationResult()
 		{
-			IntegrationResult result = IntegrationResultMother.CreateSuccessful();
 			string output = GenerateBuildOutput(result);
 			Assert.AreEqual(CreateExpectedBuildXml(result), output);
 			XmlUtil.VerifyXmlIsWellFormed(output);
@@ -93,7 +101,6 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Publishers
 		[Test]
 		public void WriteTaskResultsWithInvalidXmlShouldBeWrappedInCDATA()
 		{
-			IntegrationResult result = IntegrationResultMother.CreateSuccessful();
 			result.AddTaskResult("<foo>");
 			writer.Write(result);
 			AssertContains("<![CDATA[<foo>]]>", buffer.ToString());
@@ -102,7 +109,6 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Publishers
 		[Test]
 		public void WriteIntegrationResultOutput()
 		{
-			IntegrationResult result = IntegrationResultMother.CreateSuccessful();
 			result.AddTaskResult("<tag></tag>");
 			string output = GenerateBuildOutput(result);
 			Assert.AreEqual(CreateExpectedBuildXml(result, "<tag></tag>"), output);
@@ -112,7 +118,6 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Publishers
 		[Test]
 		public void WriteIntegrationResultOutputWithEmbeddedCDATA()
 		{
-			IntegrationResult result = IntegrationResultMother.CreateSuccessful();
 			result.AddTaskResult("<tag><![CDATA[a b <c>]]></tag>");
 			string output = GenerateBuildOutput(result);
 			Assert.AreEqual(CreateExpectedBuildXml(result, "<tag><![CDATA[a b <c>]]></tag>"), output);
@@ -122,8 +127,6 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Publishers
 		[Test]
 		public void WriteIntegrationResultOutputWithMultiLineCDATA()
 		{
-			IntegrationResult result = IntegrationResultMother.CreateSuccessful();
-
 			StringWriter swWithoutNull = new StringWriter();
 			swWithoutNull.WriteLine("<tag><![CDATA[");
 			swWithoutNull.WriteLine("This is a line with a null in it");
@@ -137,7 +140,6 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Publishers
 		[Test]
 		public void WriteIntegrationResultOutputWithNullCharacterInCDATA()
 		{
-			IntegrationResult result = IntegrationResultMother.CreateSuccessful();
 			StringWriter swWithNull = new StringWriter();
 			swWithNull.WriteLine("<tag><![CDATA[");
 			swWithNull.WriteLine("This is a line with a null in it\0");
@@ -151,7 +153,6 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Publishers
 		[Test]
 		public void WriteOutputWithInvalidXml()
 		{
-			IntegrationResult result = new IntegrationResult();
 			result.AddTaskResult("<tag><c></tag>");
 			string output = GenerateBuildOutput(result);
 			Assert.AreEqual(CreateExpectedBuildXml(result, @"<![CDATA[<tag><c></tag>]]>"), output);
@@ -161,7 +162,6 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Publishers
 		[Test]
 		public void ShouldStripXmlDeclaration()
 		{
-			IntegrationResult result = new IntegrationResult();
 			result.AddTaskResult(@"<?xml version=""1.0""?> <foo>Data</foo>");
 			string output = GenerateBuildOutput(result);
 			XmlUtil.VerifyXmlIsWellFormed(output);
@@ -172,7 +172,6 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Publishers
 		[Test]
 		public void WriteFailedIntegrationResult()
 		{
-			IntegrationResult result = new IntegrationResult();
 			result.Status = IntegrationStatus.Failure;
 			string output = GenerateBuildOutput(result);
 			Assert.AreEqual(CreateExpectedBuildXml(result), output);
@@ -197,7 +196,6 @@ http://nant.sourceforge.net
 		[Test]
 		public void ShouldHandleEmptyLineBeforeXmlDeclaration()
 		{
-			IntegrationResult result = new IntegrationResult();
 			result.AddTaskResult(@"
 <?xml version=""1.0""?> <foo>Data</foo>");
 			string output = GenerateBuildOutput(result);
@@ -209,7 +207,6 @@ http://nant.sourceforge.net
 		[Test]
 		public void WriteCPlusPlusOutput()
 		{
-			IntegrationResult result = new IntegrationResult("foo", "c:\\temp");
 			result.AddTaskResult(@"e:\RW\WORKSPACES\WIN2000\MSVC60\8S\INCLUDE\iterator(563) : warning C4284: return type for 'std::reverse_iterator<class std::vector<bool,class std::allocator>::iterator,bool,class std::vector<bool,class std::allocator>::reference,bool *,int>::operator ->' is 'bool *' (ie; not a UDT or reference to a UDT.  Will produce errors if applied using infix notation)
 
         e:\RW\WORKSPACES\WIN2000\MSVC60\8S\INCLUDE\vector(1045) : see reference to class template instantiation 'std::reverse_iterator<class std::vector<bool,class std::allocator>::iterator,bool,class std::vector<bool,class std::allocator>::reference,bool *,int>' being compiled
@@ -223,7 +220,6 @@ e:\RW\WORKSPACES\WIN2000\MSVC60\8S\INCLUDE\iterator(563) : warning C4284: return
 
 		private IntegrationResult CreateIntegrationResult(IntegrationStatus status, bool addModifications)
 		{
-			IntegrationResult result = IntegrationResultMother.Create(status);
 			result.ProjectName = "proj";
 			result.Label = "1";
 			result.Status = status;
