@@ -10,7 +10,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Publishers
 {
 	namespace Statistics
 	{
-		[TestFixture]
+		[TestFixture, Ignore("")]
 		public class MyStatisticsPublisherTest
 		{
 			private readonly string artifactDirectory = "./ArtifactDirectory";

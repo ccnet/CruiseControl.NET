@@ -124,6 +124,16 @@
                     AssemblyName = "log4net"
                     HintPath = "..\..\lib\log4net.dll"
                 />
+                <Reference
+                    Name = "NPlot"
+                    AssemblyName = "NPlot"
+                    HintPath = "..\..\lib\NPlot.dll"
+                />
+                <Reference
+                    Name = "System.Drawing"
+                    AssemblyName = "System.Drawing"
+                    HintPath = "..\..\..\..\WINDOWS\Microsoft.NET\Framework\v1.1.4322\System.Drawing.dll"
+                />
             </References>
         </Build>
         <Files>
@@ -534,7 +544,17 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "publishers\Statistics\IPlotter.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "publishers\Statistics\MyStatisticsPublisher.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "publishers\Statistics\Plotter.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -549,7 +569,22 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "publishers\Statistics\StatisticsCalculator.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "publishers\Statistics\StatisticsChartGenerator.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "publishers\Statistics\StatisticsPublisherTask.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "publishers\Statistics\UnavailableStatisticsException.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

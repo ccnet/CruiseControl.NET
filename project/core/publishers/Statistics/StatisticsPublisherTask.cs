@@ -8,7 +8,7 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers.Statistics
 	[ReflectorType("statistics")]
 	public class StatisticsPublisher : ITask
 	{
-		private string xmlFileName = "statistics.xml";
+		private static string xmlFileName = "statistics.xml";
 		private static string csvFileName = "statistics.csv";
 
 		public void Run(IIntegrationResult iresult)
@@ -27,7 +27,7 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers.Statistics
 		{
 			XmlDocument doc = new XmlDocument();
 	
-			string lastFile = xmlStatisticsFile(previousState);
+			string lastFile = XmlStatisticsFile(previousState);
 			XmlElement root = null;
 			if (File.Exists(lastFile))
 			{
@@ -46,23 +46,23 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers.Statistics
 	
 			Directory.CreateDirectory(currentState.ArtifactDirectory);
 	
-			doc.Save(xmlStatisticsFile(currentState));
+			doc.Save(XmlStatisticsFile(currentState));
 		}
 
-		private string xmlStatisticsFile(IntegrationState integrationState)
+		private string XmlStatisticsFile(IntegrationState integrationState)
 		{
 			return Path.Combine(integrationState.ArtifactDirectory, xmlFileName);
 		}
 
-		private string csvStatisticsFile(IntegrationState integrationState)
+		private string CsvStatisticsFile(IntegrationState integrationState)
 		{
 			return Path.Combine(integrationState.ArtifactDirectory, csvFileName);
 		}
 
 		private void UpdateCsvFile(StatisticsBuilder builder, IntegrationState currentState, IntegrationState previousState)
 		{
-			string newFile = csvStatisticsFile(currentState);
-			string lastCsvFile = csvStatisticsFile(previousState);
+			string newFile = CsvStatisticsFile(currentState);
+			string lastCsvFile = CsvStatisticsFile(previousState);
 			if (File.Exists(lastCsvFile))
 			{
 				File.Copy(lastCsvFile, newFile);
