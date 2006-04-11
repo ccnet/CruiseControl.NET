@@ -1,5 +1,7 @@
 using System;
 using System.Collections;
+using System.Net.Sockets;
+using ThoughtWorks.CruiseControl.Core;
 using ThoughtWorks.CruiseControl.Core.Reporting.Dashboard.Navigation;
 using ThoughtWorks.CruiseControl.Core.Util;
 using ThoughtWorks.CruiseControl.Remote;
@@ -100,14 +102,23 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.ServerConnection
 						projectStatusOnServers.Add(new ProjectStatusOnServer(projectStatus, serverSpecifier));
 					}
 				}
+				catch (SocketException)
+				{
+					AddException(exceptions, serverSpecifier, new CruiseControlException("Unable to connect to CruiseControl.NET server.  Please either start the server or check the url."));
+				}
 				catch (Exception e)
 				{
-					exceptions.Add(new CruiseServerException(serverSpecifier.ServerName, GetServerUrl(serverSpecifier), e));
+					AddException(exceptions, serverSpecifier, e);
 				}
 			}
 
 			return new ProjectStatusListAndExceptions((ProjectStatusOnServer[]) projectStatusOnServers.ToArray(typeof (ProjectStatusOnServer)),
 			                                          (CruiseServerException[]) exceptions.ToArray(typeof (CruiseServerException)));
+		}
+
+		private void AddException(ArrayList exceptions, IServerSpecifier serverSpecifier, Exception e)
+		{
+			exceptions.Add(new CruiseServerException(serverSpecifier.ServerName, GetServerUrl(serverSpecifier), e));
 		}
 
 		public string GetServerLog(IServerSpecifier serverSpecifier)
