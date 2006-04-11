@@ -1,4 +1,3 @@
-using System;
 using System.IO;
 using Exortech.NetReflector;
 using ThoughtWorks.CruiseControl.Core.Util;
@@ -89,7 +88,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 			{
 				return executor.Execute(processInfo);
 			}
-			catch (Exception ex)
+			catch (IOException ex)
 			{
 				string message = string.Format("Unable to launch the devenv process.  Please verify that you can invoke this command from the command line: {0} {1}", processInfo.FileName, processInfo.Arguments);
 				throw new BuilderException(this, message, ex);

@@ -1,4 +1,4 @@
-using System;
+using System.IO;
 using Exortech.NetReflector;
 using ThoughtWorks.CruiseControl.Core.Util;
 
@@ -79,7 +79,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 			{
 				return executor.Execute(info);
 			}
-			catch (Exception e)
+			catch (IOException e)
 			{
 				throw new BuilderException(this, string.Format("Unable to execute: {0}\n{1}", info, e), e);
 			}

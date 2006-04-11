@@ -90,15 +90,10 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 			{
 				return executor.Execute(info);
 			}
-			catch (Exception e)
+			catch (IOException e)
 			{
-				throw new BuilderException(this, string.Format("Unable to execute: {0}\n{1}", BuildCommand, e), e);
+				throw new BuilderException(this, string.Format("Unable to execute: {0} {1}\n{2}", Executable, BuildArgs, e), e);
 			}
-		}
-
-		private string BuildCommand
-		{
-			get { return string.Format("{0} {1}", Executable, BuildArgs); }
 		}
 
 		private string CreateArgs(IIntegrationResult result)

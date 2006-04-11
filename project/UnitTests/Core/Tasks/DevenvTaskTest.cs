@@ -1,4 +1,4 @@
-using System.ComponentModel;
+using System.IO;
 using Exortech.NetReflector;
 using NMock;
 using NMock.Constraints;
@@ -24,8 +24,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 		[SetUp]
 		public void Setup()
 		{
-			mockRegistry = new DynamicMock(typeof(IRegistry)); 
-			mockProcessExecutor = new DynamicMock(typeof(ProcessExecutor)); 
+			mockRegistry = new DynamicMock(typeof (IRegistry));
+			mockProcessExecutor = new DynamicMock(typeof (ProcessExecutor));
 			task = new DevenvTask((IRegistry) mockRegistry.MockInstance, (ProcessExecutor) mockProcessExecutor.MockInstance);
 		}
 
@@ -54,8 +54,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 			Assert.AreEqual(@"mySolution.sln", task.SolutionFile);
 			Assert.AreEqual(@"Debug", task.Configuration);
 			Assert.AreEqual(4, task.BuildTimeoutSeconds);
- 			Assert.AreEqual(@"Clean", task.BuildType);
- 			Assert.AreEqual(@"MyProject", task.Project);
+			Assert.AreEqual(@"Clean", task.BuildType);
+			Assert.AreEqual(@"MyProject", task.Project);
 		}
 
 		[Test]
@@ -66,14 +66,14 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 			Assert.AreEqual(@"mySolution.sln", task.SolutionFile);
 			Assert.AreEqual(@"Release", task.Configuration);
 			Assert.AreEqual(DevenvTask.DEFAULT_BUILD_TIMEOUT, task.BuildTimeoutSeconds);
- 			Assert.AreEqual(@"rebuild", task.BuildType);
- 			Assert.AreEqual(@"", task.Project);
+			Assert.AreEqual(@"rebuild", task.BuildType);
+			Assert.AreEqual(@"", task.Project);
 		}
 
 		[Test]
 		public void RetrieveExecutableLocationFromRegistryForVS2003()
 		{
-			mockRegistry.ExpectAndReturn("GetLocalMachineSubKeyValue", @"C:\Program Files\Microsoft Visual Studio .NET 2003\Common7\IDE\", 
+			mockRegistry.ExpectAndReturn("GetLocalMachineSubKeyValue", @"C:\Program Files\Microsoft Visual Studio .NET 2003\Common7\IDE\",
 			                             DevenvTask.VS2003_REGISTRY_PATH, DevenvTask.VS_REGISTRY_KEY);
 			Assert.AreEqual(@"C:\Program Files\Microsoft Visual Studio .NET 2003\Common7\IDE\devenv.com", task.Executable);
 		}
@@ -82,7 +82,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 		public void RetrieveExecutableLocationFromRegistryForVS2002()
 		{
 			mockRegistry.ExpectAndReturn("GetLocalMachineSubKeyValue", null, DevenvTask.VS2003_REGISTRY_PATH, DevenvTask.VS_REGISTRY_KEY);
-			mockRegistry.ExpectAndReturn("GetExpectedLocalMachineSubKeyValue", @"C:\Program Files\Microsoft Visual Studio .NET\Common7\IDE\", 
+			mockRegistry.ExpectAndReturn("GetExpectedLocalMachineSubKeyValue", @"C:\Program Files\Microsoft Visual Studio .NET\Common7\IDE\",
 			                             DevenvTask.VS2002_REGISTRY_PATH, DevenvTask.VS_REGISTRY_KEY);
 			Assert.AreEqual(@"C:\Program Files\Microsoft Visual Studio .NET\Common7\IDE\devenv.com", task.Executable);
 		}
@@ -101,7 +101,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 
 			ProcessInfo info = (ProcessInfo) constraint.Parameter;
 			Assert.AreEqual(DEVENV_PATH, info.FileName);
-			Assert.AreEqual(DevenvTask.DEFAULT_BUILD_TIMEOUT * 1000, info.TimeOut);
+			Assert.AreEqual(DevenvTask.DEFAULT_BUILD_TIMEOUT*1000, info.TimeOut);
 			CustomAssertion.AssertStartsWith("mySolution.sln /rebuild Debug", info.Arguments);
 		}
 
@@ -120,10 +120,9 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 
 			ProcessInfo info = (ProcessInfo) constraint.Parameter;
 			Assert.AreEqual(DEVENV_PATH, info.FileName);
-			Assert.AreEqual(DevenvTask.DEFAULT_BUILD_TIMEOUT * 1000, info.TimeOut);
+			Assert.AreEqual(DevenvTask.DEFAULT_BUILD_TIMEOUT*1000, info.TimeOut);
 			CustomAssertion.AssertStartsWith("mySolution.sln /rebuild Debug /project myProject", info.Arguments);
 		}
-
 
 		[Test]
 		public void ShouldSetOutputAndIntegrationStatusToSuccessOnSuccessfulBuild()
@@ -162,21 +161,21 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 			CustomAssertion.AssertMatches(@"(\.|\n)*could not be found and will not be loaded", result.TaskOutput);
 		}
 
-		[Test, ExpectedException(typeof(BuilderException))]
+		[Test, ExpectedException(typeof (BuilderException))]
 		public void ShouldThrowBuilderExceptionIfProcessExecutorThrowsAnException()
 		{
-			mockProcessExecutor.ExpectAndThrow("Execute", new Win32Exception(), new IsAnything());
-			task.Executable = DEVENV_PATH + ".some.extra.ext.exe";	// file should not exist
+			mockProcessExecutor.ExpectAndThrow("Execute", new IOException(), new IsAnything());
+			task.Executable = DEVENV_PATH + ".some.extra.ext.exe"; // file should not exist
 			task.SolutionFile = @"D:\dev\ccnet\ccnet\project\nosolution.sln";
 			task.Configuration = "Debug";
 
 			task.Run(new IntegrationResult());
 		}
 
-		[Test, ExpectedException(typeof(BuilderException))]
+		[Test, ExpectedException(typeof (BuilderException))]
 		public void ShouldThrowBuilderExceptionIfProcessExecutorThrowsAnExceptionUsingUnkownProject()
 		{
-			mockProcessExecutor.ExpectAndThrow("Execute", new Win32Exception(), new IsAnything());
+			mockProcessExecutor.ExpectAndThrow("Execute", new IOException(), new IsAnything());
 			task.Executable = DEVENV_PATH;
 			task.SolutionFile = SOLUTION_FILE;
 			task.Configuration = CONFIGURATION;
@@ -185,9 +184,9 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 			task.Run(new IntegrationResult());
 		}
 
-	
-	[Test, ExpectedException(typeof(BuilderException))]
-		public void	ShouldThrowBuilderExceptionIfProcessTimesOut()
+
+		[Test, ExpectedException(typeof (BuilderException))]
+		public void ShouldThrowBuilderExceptionIfProcessTimesOut()
 		{
 			ProcessResult processResult = new ProcessResult(string.Empty, string.Empty, ProcessResult.TIMED_OUT_EXIT_CODE, true);
 			mockProcessExecutor.ExpectAndReturn("Execute", processResult, new IsAnything());

@@ -1,5 +1,5 @@
 using System;
-using System.ComponentModel;
+using System.IO;
 using NMock;
 using NMock.Constraints;
 using ThoughtWorks.CruiseControl.Core;
@@ -55,7 +55,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 
 		protected void ExpectToExecuteAndThrow()
 		{
-			mockProcessExecutor.ExpectAndThrow("Execute", new Win32Exception(), new IsAnything());
+			mockProcessExecutor.ExpectAndThrow("Execute", new IOException(), new IsAnything());
 		}
 
 		protected virtual IIntegrationResult IntegrationResult()
