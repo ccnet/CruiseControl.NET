@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using ThoughtWorks.CruiseControl.Core.Reporting.Dashboard.Navigation;
+using ThoughtWorks.CruiseControl.Core.Util;
 using ThoughtWorks.CruiseControl.Remote;
 using ThoughtWorks.CruiseControl.WebDashboard.Configuration;
 
@@ -61,7 +62,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.ServerConnection
 		{
 			foreach (ServerLocation serverLocation in ServerLocations)
 			{
-				if (serverLocation.Name == serverSpecifier.ServerName)
+				if (StringUtil.EqualsIgnoreCase(serverLocation.Name, serverSpecifier.ServerName))
 				{
 					return serverLocation.Url;
 				}

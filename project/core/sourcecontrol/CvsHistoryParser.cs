@@ -188,7 +188,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 
 		private string ParseType(string stateKeyword, string line1)
 		{
-			if (StringUtil.EqualsIngnoreCase(stateKeyword, CVS_REVISION_DEAD))
+			if (StringUtil.EqualsIgnoreCase(stateKeyword, CVS_REVISION_DEAD))
 			{
 				return "deleted";
 			}

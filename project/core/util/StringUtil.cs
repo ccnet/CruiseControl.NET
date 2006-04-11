@@ -14,7 +14,7 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 			return text.IndexOf(fragment) > -1;
 		}
 
-		public static bool EqualsIngnoreCase(string a, string b)
+		public static bool EqualsIgnoreCase(string a, string b)
 		{
 			return CaseInsensitiveComparer.Default.Compare(a, b) == 0;
 		}

@@ -295,6 +295,18 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.ServerConnection
 		}
 
 		[Test]
+		public void ShouldMatchServersInCaseInsensitiveWay()
+		{
+			configurationMock.ExpectAndReturn("Servers", new ServerLocation[] {serverLocation, otherServerLocation});
+			cruiseManagerFactoryMock.ExpectAndReturn("GetCruiseManager", (ICruiseManager) cruiseManagerMock.MockInstance, "http://myurl");
+			cruiseManagerMock.ExpectAndReturn("GetServerVersion", "1.1");
+
+			managerWrapper.GetServerVersion(new DefaultServerSpecifier(serverLocation.Name.ToUpper()));
+
+			VerifyAll();
+		}
+
+		[Test]
 		public void GetsExternalLinks()
 		{
 			ServerLocation[] servers = new ServerLocation[] {serverLocation, otherServerLocation};
