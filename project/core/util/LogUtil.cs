@@ -1,5 +1,6 @@
 using System;
 using System.Text;
+using System.Threading;
 using log4net;
 using log4net.Config;
 
@@ -62,6 +63,11 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 
 		private static string CreateExceptionMessage(Exception ex)
 		{
+			if (ex is ThreadAbortException)
+			{
+				return "Thread aborted for Project: " + Thread.CurrentThread.Name;
+			}
+
 			StringBuilder buffer = new StringBuilder();
 			buffer.Append(GetExceptionAlertMessage(ex));
 			buffer.Append(ex.Message).Append(Environment.NewLine);
