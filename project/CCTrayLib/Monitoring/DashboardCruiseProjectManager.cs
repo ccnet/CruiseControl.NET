@@ -23,6 +23,11 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
 			throw new NotImplementedException("Force build not currently supported on dashboard projects");
 		}
 
+		public void FixBuild()
+		{
+			throw new NotImplementedException();
+		}
+
 		public ProjectStatus ProjectStatus
 		{
 			get

@@ -276,5 +276,13 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Monitoring
 		{
 			Assert.AreEqual(IntegrationStatus.Unknown, monitor.IntegrationStatus);			
 		}
+
+		[Test]
+		public void InvokeServerWhenVolunteeringToFixBuild()
+		{
+			mockProjectManager.Expect("FixBuild");
+			monitor.FixBuild();
+			mockProjectManager.Verify();
+		}
 	}
 }

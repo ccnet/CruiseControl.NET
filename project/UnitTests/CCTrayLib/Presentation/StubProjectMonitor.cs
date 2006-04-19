@@ -106,6 +106,11 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Presentation
 			throw new NotImplementedException();
 		}
 
+		public void FixBuild()
+		{
+			throw new NotImplementedException();
+		}
+
 		public void SetUpAsIfExceptionOccurredOnConnect( Exception exception )
 		{
 			ProjectState = ProjectState.NotConnected;

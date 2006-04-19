@@ -71,7 +71,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Monitoring
 		[Test]
 		public void CanForceABuild()
 		{
-			mockCruiseManager.Expect("ForceBuild", PROJECT_NAME);
+			mockCruiseManager.Expect("Request", PROJECT_NAME, new IntegrationRequest(BuildCondition.ForceBuild, Environment.UserName));
 			manager.ForceBuild();
 		}
 	}

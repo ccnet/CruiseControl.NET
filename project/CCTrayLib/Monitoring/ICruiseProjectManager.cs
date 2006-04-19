@@ -1,4 +1,3 @@
-using System;
 using ThoughtWorks.CruiseControl.Remote;
 
 namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
@@ -11,8 +10,8 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
 	public interface ICruiseProjectManager
 	{
 		void ForceBuild();
+		void FixBuild();
 		ProjectStatus ProjectStatus { get; }
 		string ProjectName { get; }
 	}
 }
-

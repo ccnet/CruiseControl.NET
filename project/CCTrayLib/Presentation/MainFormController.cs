@@ -36,9 +36,9 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 			if (configuration.X10 != null && configuration.X10.Enabled)
 			{
 				new X10Controller(
-					aggregatedMonitor, 
+					aggregatedMonitor,
 					new LampController(new X10LowLevelDriver(HouseCode.A, configuration.X10.ComPort)),
-					new DateTimeProvider(), 
+					new DateTimeProvider(),
 					configuration.X10);
 			}
 		}
@@ -93,6 +93,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 				item.Tag = monitor;
 				listView.Items.Add(item);
 			}
+			if (listView.Items.Count > 0) listView.Items[0].Selected = true;
 		}
 
 		public void StartMonitoring()
@@ -147,6 +148,15 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 			imageList.Images.Add(iconProvider.GetStatusIconForState(ProjectState.Broken).Icon);
 			imageList.Images.Add(iconProvider.GetStatusIconForState(ProjectState.Building).Icon);
 		}
-	}
 
+		public bool CanFixBuild()
+		{
+			return IsProjectSelected && selectedProject.ProjectState == ProjectState.Broken;
+		}
+
+		public void VolunteerToFixBuild()
+		{
+			if (IsProjectSelected) selectedProject.FixBuild();
+		}
+	}
 }

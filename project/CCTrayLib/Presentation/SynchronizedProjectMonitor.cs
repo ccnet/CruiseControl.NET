@@ -1,4 +1,3 @@
-using System;
 using System.ComponentModel;
 using ThoughtWorks.CruiseControl.CCTrayLib.Monitoring;
 using ThoughtWorks.CruiseControl.Remote;
@@ -44,6 +43,11 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 		public void ForceBuild()
 		{
 			projectMonitor.ForceBuild();
+		}
+
+		public void FixBuild()
+		{
+			projectMonitor.FixBuild();
 		}
 
 		public void Poll()

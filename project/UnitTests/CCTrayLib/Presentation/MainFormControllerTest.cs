@@ -1,7 +1,6 @@
 using System;
 using NMock;
 using NUnit.Framework;
-using ThoughtWorks.CruiseControl.CCTrayLib;
 using ThoughtWorks.CruiseControl.CCTrayLib.Configuration;
 using ThoughtWorks.CruiseControl.CCTrayLib.Monitoring;
 using ThoughtWorks.CruiseControl.CCTrayLib.Presentation;
@@ -16,6 +15,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Presentation
 		private IProjectMonitor projectMonitor;
 		private DynamicMock mockConfiguration;
 		private ICCTrayMultiConfiguration configuration;
+		private MainFormController controller;
 
 		[SetUp]
 		public void SetUp()
@@ -29,15 +29,15 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Presentation
 
 			mockConfiguration.SetupResult("GetProjectStatusMonitors", new IProjectMonitor[0]);
 			mockConfiguration.SetupResult("Icons", new Icons());
+
+			eventCount = 0;
+
+			controller = new MainFormController(configuration, null);
 		}
 
 		[Test]
 		public void WhenTheSelectedProjectChangesTheIsProjectSelectedPropertyChangesAndEventFires()
 		{
-			eventCount = 0;
-
-			MainFormController controller = new MainFormController(configuration, null);
-
 			Assert.IsFalse(controller.IsProjectSelected);
 			controller.IsProjectSelectedChanged += new EventHandler(Controller_IsProjectSelectedChanged);
 			controller.SelectedProject = projectMonitor;
@@ -55,7 +55,6 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Presentation
 		[Test]
 		public void ForceBuildInvokesForceBuildOnTheSelectedProject()
 		{
-			MainFormController controller = new MainFormController(configuration, null);
 			controller.SelectedProject = projectMonitor;
 
 			mockProjectMonitor.Expect("ForceBuild");
@@ -67,12 +66,52 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Presentation
 		[Test]
 		public void ForceBuildDoesNothingIfNoProjectSelected()
 		{
-			MainFormController controller = new MainFormController(configuration, null);
 			Assert.IsNull(controller.SelectedProject);
 			controller.ForceBuild();
 			mockProjectMonitor.Verify();
 		}
 
-	}
+		[Test]
+		public void CanFixBuildIfBuildIsBroken()
+		{
+			mockProjectMonitor.ExpectAndReturn("ProjectState", ProjectState.Broken);
+			controller.SelectedProject = projectMonitor;
+			Assert.IsTrue(controller.CanFixBuild());
+			mockProjectMonitor.Verify();
+		}
 
+		[Test]
+		public void CannotFixBuildIfBuildIsWorking()
+		{
+			mockProjectMonitor.ExpectAndReturn("ProjectState", ProjectState.Success);
+			controller.SelectedProject = projectMonitor;
+			Assert.IsFalse(controller.CanFixBuild());
+			mockProjectMonitor.Verify();
+		}
+
+		[Test]
+		public void CannotFixBuildIfNoProjectIsSelected()
+		{
+			Assert.IsNull(controller.SelectedProject);
+			Assert.IsFalse(controller.CanFixBuild());
+			mockProjectMonitor.Verify();
+		}
+
+		[Test]
+		public void VolunteeringToFixBuildShouldInvokeServer()
+		{
+			controller.SelectedProject = projectMonitor;
+			mockProjectMonitor.Expect("FixBuild");
+			controller.VolunteerToFixBuild();
+			mockProjectMonitor.Verify();
+		}
+
+		[Test]
+		public void VolunteeringToFixBuildShouldDoNothingIfNoProjectIsSelected()
+		{
+			Assert.IsNull(controller.SelectedProject);
+			controller.VolunteerToFixBuild();
+			mockProjectMonitor.Verify();
+		}
+	}
 }

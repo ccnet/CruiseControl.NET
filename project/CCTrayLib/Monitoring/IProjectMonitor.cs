@@ -1,4 +1,3 @@
-using System;
 using ThoughtWorks.CruiseControl.Remote;
 
 namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
@@ -20,6 +19,6 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
 		event MonitorPolledEventHandler Polled;
 
 		void ForceBuild();
+		void FixBuild();
 	}
-
 }

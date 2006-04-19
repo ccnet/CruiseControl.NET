@@ -19,7 +19,12 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
 
 		public void ForceBuild()
 		{
-			manager.ForceBuild(ProjectName);
+			manager.Request(ProjectName, new IntegrationRequest(BuildCondition.ForceBuild, Environment.UserName));
+		}
+
+		public void FixBuild()
+		{
+			manager.FixBuild(ProjectName);
 		}
 
 		public ProjectStatus ProjectStatus

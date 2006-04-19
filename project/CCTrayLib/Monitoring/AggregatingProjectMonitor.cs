@@ -24,6 +24,11 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
 			throw new NotImplementedException();
 		}
 
+		public void FixBuild()
+		{
+			throw new NotImplementedException();
+		}
+
 		public string SummaryStatusString
 		{
 			get

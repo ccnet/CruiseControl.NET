@@ -43,6 +43,7 @@ namespace ThoughtWorks.CruiseControl.Remote
 		/// </summary>
 		/// <param name="projectName"></param>
 		void ForceBuild(string projectName);
+		void Request(string projectName, IntegrationRequest request);
 
 		void WaitForExit(string projectName);
 		

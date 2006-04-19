@@ -27,6 +27,11 @@ namespace ThoughtWorks.CruiseControl.Core
 			cruiseServer.ForceBuild(project);
 		}
 
+		public void Request(string projectName, IntegrationRequest integrationRequest)
+		{
+			cruiseServer.Request(projectName, integrationRequest);
+		}
+
 		public void Start(string project)
 		{
 			cruiseServer.Start(project);
@@ -35,6 +40,11 @@ namespace ThoughtWorks.CruiseControl.Core
 		public void Stop(string project)
 		{
 			cruiseServer.Stop(project);
+		}
+
+		public void FixBuild(string projectName)
+		{
+			throw new NotImplementedException();
 		}
 
 		public void WaitForExit(string project)

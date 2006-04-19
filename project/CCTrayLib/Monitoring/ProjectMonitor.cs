@@ -102,6 +102,11 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
 			cruiseProjectManager.ForceBuild();
 		}
 
+		public void FixBuild()
+		{
+			cruiseProjectManager.FixBuild();
+		}
+
 		public void Poll()
 		{
 			try

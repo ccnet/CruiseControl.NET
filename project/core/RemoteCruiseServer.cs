@@ -66,6 +66,11 @@ namespace ThoughtWorks.CruiseControl.Core
 			_server.ForceBuild(projectName);
 		}
 
+		public void Request(string projectName, IntegrationRequest request)
+		{
+			_server.Request(projectName, request);
+		}
+
 		public void WaitForExit(string projectName)
 		{
 			_server.WaitForExit(projectName);
