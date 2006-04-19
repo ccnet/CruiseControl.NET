@@ -192,6 +192,7 @@
 		<zip zipfile="dist\CruiseControl.NET.source.zip">
 			<fileset>
 				<include name="**\*" />
+				<exclude name="build.txt" />
 				<exclude name="build\**" />
 				<exclude name="deployed\**" />
 				<exclude name="dist\**" />
