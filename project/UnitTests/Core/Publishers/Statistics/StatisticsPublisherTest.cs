@@ -4,16 +4,26 @@ using System.IO;
 using System.Xml;
 using NUnit.Framework;
 using ThoughtWorks.CruiseControl.Core;
+using ThoughtWorks.CruiseControl.Core.Publishers;
 using ThoughtWorks.CruiseControl.Core.Publishers.Statistics;
 
 namespace ThoughtWorks.CruiseControl.UnitTests.Core.Publishers.Statistics
 {
-	[TestFixture, Ignore("Incomplete")]
+	[TestFixture]
 	public class StatisticsBuilderTest : XmlLogFixture
 	{
 		private const string outDir = "temp";
 		private StatisticsBuilder builder;
 		IntegrationResult result;
+		private string xml;
+
+		[TestFixtureSetUp]
+		public void LoadXML()
+		{
+			StreamReader reader = File.OpenText("buildlog.xml");
+			xml = reader.ReadToEnd();
+			reader.Close();
+		}
 
 		[SetUp]
 		public void SetUp()
@@ -23,9 +33,18 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Publishers.Statistics
 			Directory.CreateDirectory(outDir);
 		}
 
+
 		private string xmlResult()
 		{
-			return "";//IntegrationResultHelper.toXml(result);
+			return toXml(result);
+		}
+
+		private string toXml(IIntegrationResult result)
+		{
+			StringWriter xmlResultString = new StringWriter();
+			XmlIntegrationResultWriter writer = new XmlIntegrationResultWriter(xmlResultString);
+			writer.Write(result);
+			return xmlResultString.ToString();
 		}
 
 		[TearDown]
@@ -65,10 +84,10 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Publishers.Statistics
 		[Test]
 		public void ShouldCollectFxCopStatistics()
 		{
-			builder.ProcessFile(@"E:\dev\dotnet\ccnet-buildfiles\log20050303163138Lbuild.0_8_0_782.xml");
+			builder.ProcessBuildResults(xml);
 
-			AssertHasStatistic("FxCop Warnings", 8);
-			AssertHasStatistic("FxCop Errors", 3079);
+			AssertHasStatistic("FxCop Warnings", 1);
+			AssertHasStatistic("FxCop Errors", 205);
 
 		}
 
@@ -111,6 +130,5 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Publishers.Statistics
 			}
 			Assert.Fail("No node found matching {0}. Actuals were {1}", expectedValue, actuals);
 		}
-
 	}
 }

@@ -696,6 +696,16 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Core\Publishers\Statistics\StatisticsPublisherTaskTest.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Core\Publishers\Statistics\StatisticsPublisherTest.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Core\Reporting\Dashboard\Navigation\AbsolutePathUrlBuilderDecoratorTest.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -1204,6 +1214,18 @@
                     RelPath = "Core\Util\XslTransformerTest.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "resources\buildlog.xml"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "resources\Statistics.csv"
+                    BuildAction = "None"
+                />
+                <File
+                    RelPath = "resources\statistics.xml"
+                    BuildAction = "Content"
                 />
                 <File
                     RelPath = "resources\templates\TestTransform.vm"

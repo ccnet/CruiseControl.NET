@@ -40,6 +40,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.ProjectReport
 			velocityContext["projectName"] = projectSpecifier.ProjectName;
 			velocityContext["externalLinks"] = farmService.GetExternalLinks(projectSpecifier);
 			velocityContext["noLogsAvailable"] = (buildSpecifiers.Length == 0);
+			velocityContext["statisticsAvailable"] = false;
 
 			return viewGenerator.GenerateView(@"ProjectReport.vm", velocityContext);
 		}

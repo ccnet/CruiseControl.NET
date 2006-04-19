@@ -183,24 +183,23 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Publishers.Statistics
 			chartGenerator = new StatisticsChartGenerator((IPlotter)mockPlotter.MockInstance);
 		}
 
-
 		[Test]
 		[ExpectedException(typeof(UnavailableStatisticsException))]
 		public void ShouldThrowExceptionIfAskedToPlotUnavailableStatistics()
 		{
-			mockPlotter.ExpectNoCall("DrawGraph", typeof(IList), typeof(IList), typeof(double));
-			mockPlotter.ExpectNoCall("WriteToStream", typeof(IList), typeof(IList), typeof(double), typeof(Stream));
+			mockPlotter.ExpectNoCall("DrawGraph", typeof(IList), typeof(IList));
+			mockPlotter.ExpectNoCall("WriteToStream", typeof(IList), typeof(IList), typeof(Stream));
 			chartGenerator.RelevantStats = new string[]{"Unavailable"};
-			chartGenerator.Process(statistics);
+			chartGenerator.Process(statistics, "dummy");
 		}
 
 		[Test]
 		public void ShouldPlotChartForAvailableStatistics()
 		{
-			mockPlotter.Expect("DrawGraph", new IsAnything(), new IsAnything(), new IsAnything());
-			mockPlotter.ExpectNoCall("WriteToStream", typeof(IList), typeof(IList), typeof(double), typeof(Stream));
+			mockPlotter.Expect("DrawGraph", new IsAnything(), new IsAnything());
+			mockPlotter.ExpectNoCall("WriteToStream", typeof(IList), typeof(IList), typeof(Stream));
 			chartGenerator.RelevantStats = new string[]{"TestCount"};
-			chartGenerator.Process(statistics);
+			chartGenerator.Process(statistics, "dummy");
 		}
 
 		[Test]
@@ -209,7 +208,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Publishers.Statistics
 		{
 			StatisticsChartGenerator generator = new StatisticsChartGenerator(new Plotter("c:/", "temp.bmp"));
 			generator.RelevantStats = new string[]{"TestCount"};
-			generator.Process(statistics);
+			generator.Process(statistics, "dummy");
 		}
 	}
 }

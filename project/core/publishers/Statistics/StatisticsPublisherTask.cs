@@ -2,6 +2,7 @@ using System.IO;
 using System.Xml;
 using Exortech.NetReflector;
 using ThoughtWorks.CruiseControl.Core;
+using ThoughtWorks.CruiseControl.Core.publishers.Statistics;
 
 namespace ThoughtWorks.CruiseControl.Core.Publishers.Statistics
 {
@@ -11,19 +12,27 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers.Statistics
 		private static string xmlFileName = "statistics.xml";
 		private static string csvFileName = "statistics.csv";
 
-		public void Run(IIntegrationResult iresult)
+		public void Run(IIntegrationResult integrationResult)
 		{
 			StatisticsBuilder builder = new StatisticsBuilder();
-			builder.ProcessBuildResults(iresult);
+			builder.ProcessBuildResults(integrationResult);
 
-			IntegrationState lastIntegration = iresult.LastIntegration;
-			IntegrationState integration = iresult.Integration;
+			IntegrationState lastIntegration = integrationResult.LastIntegration;
+			IntegrationState integration = integrationResult.Integration;
 
-			UpdateXmlFile(builder, lastIntegration, integration);
-			UpdateCsvFile(builder, integration, lastIntegration);
+			XmlDocument xmlDocument = UpdateXmlFile(builder, lastIntegration, integration);
+			ChartGenerator().Process(xmlDocument, integrationResult.ArtifactDirectory);
+			UpdateCsvFile(builder, integration);
 		}
 
-		private void UpdateXmlFile(StatisticsBuilder builder, IntegrationState previousState, IntegrationState currentState)
+		private StatisticsChartGenerator ChartGenerator()
+		{
+			StatisticsChartGenerator chartGenerator = new StatisticsChartGenerator();
+			chartGenerator.RelevantStats = new string[]{"TestCount", "Duration"};
+			return chartGenerator;
+		}
+
+		private XmlDocument UpdateXmlFile(StatisticsBuilder builder, IntegrationState previousState, IntegrationState currentState)
 		{
 			XmlDocument doc = new XmlDocument();
 	
@@ -47,6 +56,7 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers.Statistics
 			Directory.CreateDirectory(currentState.ArtifactDirectory);
 	
 			doc.Save(XmlStatisticsFile(currentState));
+			return doc;
 		}
 
 		private string XmlStatisticsFile(IntegrationState integrationState)
@@ -59,15 +69,10 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers.Statistics
 			return Path.Combine(integrationState.ArtifactDirectory, csvFileName);
 		}
 
-		private void UpdateCsvFile(StatisticsBuilder builder, IntegrationState currentState, IntegrationState previousState)
+		private void UpdateCsvFile(StatisticsBuilder builder, IntegrationState previousState)
 		{
-			string newFile = CsvStatisticsFile(currentState);
-			string lastCsvFile = CsvStatisticsFile(previousState);
-			if (File.Exists(lastCsvFile))
-			{
-				File.Copy(lastCsvFile, newFile);
-			}
-			builder.AppendCsv(newFile);
+			string csvFile = CsvStatisticsFile(previousState);
+			builder.AppendCsv(csvFile);
 		}
 	}
 }

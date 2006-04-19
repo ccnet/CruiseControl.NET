@@ -5,7 +5,7 @@ namespace ThoughtWorks.CruiseControl.Core.publishers.Statistics
 {
 	public interface IPlotter
 	{
-		void DrawGraph(IList ordinateData, IList abscissaData, double sigma);
-		void WriteToStream(IList ordinateData, IList abscissaData, double sigma, Stream stream);
+		void DrawGraph(IList ordinateData, IList abscissaData);
+		void WriteToStream(IList ordinateData, IList abscissaData, Stream stream);
 	}
 }

@@ -18,19 +18,19 @@ namespace ThoughtWorks.CruiseControl.Core.publishers.Statistics
 			this.fileName = fileName;
 		}
 
-		public void DrawGraph(IList ordinateData, IList abscissaData, double sigma)
+		public void DrawGraph(IList ordinateData, IList abscissaData)
 		{
-			Bitmap bitmap = Plot(ordinateData, abscissaData, sigma);
+			Bitmap bitmap = Plot(ordinateData, abscissaData);
 			bitmap.Save(Path.Combine(savePath, fileName));
 		}
 
-		public void WriteToStream(IList ordinateData, IList abscissaData, double sigma, Stream stream)
+		public void WriteToStream(IList ordinateData, IList abscissaData, Stream stream)
 		{
-			Bitmap bitmap = Plot(ordinateData, abscissaData, sigma);
+			Bitmap bitmap = Plot(ordinateData, abscissaData);
 			bitmap.Save(stream, ImageFormat.Png);
 		}
 
-		private Bitmap Plot(IList ordinateData, IList abscissaData, double sigma)
+		private Bitmap Plot(IList ordinateData, IList abscissaData)
 		{
 
 			PlotSurface2D plotSurface2D = new PlotSurface2D(200, 200);
@@ -39,16 +39,6 @@ namespace ThoughtWorks.CruiseControl.Core.publishers.Statistics
 			linePlot.Pen = new Pen(Color.Blue);
 			linePlot.Pen.Width = 2.0f;
 			plotSurface2D.Add(linePlot);
-
-			ArrayList sigmaData = new ArrayList();
-			for (int i = 0; i < abscissaData.Count; i++)
-			{
-				sigmaData.Add(sigma);
-			}
-			LinePlot sigmaLine = new LinePlot(sigmaData, abscissaData);
-			sigmaLine.Pen = new Pen(Color.Red);
-			sigmaLine.Pen.Width = 2.0f;
-			plotSurface2D.Add(sigmaLine);
 			plotSurface2D.Refresh();
 			return plotSurface2D.Bitmap;
 		}

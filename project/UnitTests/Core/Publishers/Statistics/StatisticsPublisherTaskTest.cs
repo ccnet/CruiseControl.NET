@@ -6,7 +6,7 @@ using ThoughtWorks.CruiseControl.Core.Publishers.Statistics;
 
 namespace ThoughtWorks.CruiseControl.UnitTests.Core.Publishers.Statistics
 {
-	[TestFixture, Ignore("")]
+	[TestFixture]
 	public class StatisticsPublisherTest
 	{
 		const string TEST_DIR = "build\\temp";
@@ -93,6 +93,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Publishers.Statistics
 				if (line.Length>0) count++;
 			}
 			Assert.AreEqual(expectedCount, count);
+			text.Close();
 		}
 
 		private static void CountNodes(string statsFile2, string xpath, int count)

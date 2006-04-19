@@ -10,6 +10,10 @@ namespace ThoughtWorks.CruiseControl.Core.publishers.Statistics
 		private string[] relevantStats;
 		private IPlotter plotter;
 
+		public StatisticsChartGenerator()
+		{
+		}
+
 		public StatisticsChartGenerator(IPlotter plotter)
 		{
 			this.plotter = plotter;
@@ -30,14 +34,23 @@ namespace ThoughtWorks.CruiseControl.Core.publishers.Statistics
 			set { relevantStats = value; }
 		}
 
-		public void Process(XmlDocument xmlDocument)
+		private IPlotter GetPlotter(string savePath)
+		{
+			if(plotter == null)
+			{
+				plotter = new Plotter(savePath, "reports.bmp");
+			}
+			return plotter;
+		}
+		
+		public void Process(XmlDocument xmlDocument, string savePath)
 		{
 			for (int i = 0; i < relevantStats.Length; i++)
 			{
 				string relevantStat = relevantStats[i];
 				if (!AvailableStatistics(xmlDocument).Contains(relevantStat))
 				{
-					throw new UnavailableStatisticsException("Unavailable statistics. Check your statistics publisher configuration");
+					throw new UnavailableStatisticsException(relevantStat);
 				}
 				XPathNavigator navigator = xmlDocument.CreateNavigator();
 
@@ -47,7 +60,6 @@ namespace ThoughtWorks.CruiseControl.Core.publishers.Statistics
 
 				ArrayList ordinateData = new ArrayList();
 				IList abscissaData = new ArrayList();
-				StatisticsCalculator statisticsCalculator = new StatisticsCalculator();
 				int dataIndex = 1;
 				while (dataList.MoveNext())
 				{
@@ -55,7 +67,7 @@ namespace ThoughtWorks.CruiseControl.Core.publishers.Statistics
 					abscissaData.Add(dataIndex ++);
 				}
 
-				plotter.DrawGraph(ordinateData, abscissaData, statisticsCalculator.StandardDeviation((double[]) ordinateData.ToArray(typeof (double))));
+				GetPlotter(savePath).DrawGraph(ordinateData, abscissaData);
 			}
 		}
 
