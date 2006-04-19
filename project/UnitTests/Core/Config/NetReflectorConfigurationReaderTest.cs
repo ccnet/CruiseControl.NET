@@ -1,4 +1,3 @@
-using System;
 using System.Collections;
 using System.Xml;
 using Exortech.NetReflector;
@@ -111,6 +110,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Config
 			public IIntegrationResult Integrate(IntegrationRequest request) { return null; }
 			public IntegrationStatus LatestBuildStatus { get { return IntegrationStatus.Success; } }
 			public void Purge(bool purgeWorkingDirectory, bool purgeArtifactDirectory, bool purgeSourceControlEnvironment) { }
+			public void Initialize() {}
 			public string WebURL { get {return ""; } }
 		}
 

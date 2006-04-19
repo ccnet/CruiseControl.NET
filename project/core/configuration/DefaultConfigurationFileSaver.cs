@@ -20,7 +20,7 @@ namespace ThoughtWorks.CruiseControl.Core.Config
 			doc.LoadXml("<cruisecontrol/>");
 
 			StringBuilder concatenatedProjects = new StringBuilder();
-			foreach (Project project in config.Projects)
+			foreach (IProject project in config.Projects)
 			{
 				concatenatedProjects.Append(projectSerializer.Serialize(project));
 			}

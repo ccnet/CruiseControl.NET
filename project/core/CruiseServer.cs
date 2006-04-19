@@ -277,7 +277,7 @@ namespace ThoughtWorks.CruiseControl.Core
 			try
 			{
 				IConfiguration configuration = configurationService.Load();
-				Project project = projectSerializer.Deserialize(serializedProject);
+				IProject project = projectSerializer.Deserialize(serializedProject);
 				configuration.AddProject(project);
 				project.Initialize();
 				configurationService.Save(configuration);
@@ -339,7 +339,7 @@ namespace ThoughtWorks.CruiseControl.Core
 				IConfiguration configuration = configurationService.Load();
 				configuration.Projects[projectName].Purge(true, false, true);
 				configuration.DeleteProject(projectName);
-				Project project = projectSerializer.Deserialize(serializedProject);
+				IProject project = projectSerializer.Deserialize(serializedProject);
 				configuration.AddProject(project);
 				project.Initialize();
 				configurationService.Save(configuration);

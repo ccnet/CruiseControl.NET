@@ -68,5 +68,6 @@ namespace ThoughtWorks.CruiseControl.Core
 		void Purge(bool purgeWorkingDirectory, bool purgeArtifactDirectory, bool purgeSourceControlEnvironment);
 
 		ExternalLink[] ExternalLinks { get; }
+		void Initialize();
 	}
 }

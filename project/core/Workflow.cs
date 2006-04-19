@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using Exortech.NetReflector;
 using ThoughtWorks.CruiseControl.Remote;
@@ -67,6 +68,11 @@ namespace ThoughtWorks.CruiseControl.Core
 		public void Purge(bool purgeWorkingDirectory, bool purgeArtifactDirectory, bool purgeSourceControlEnvironment)
 		{
 			return;
+		}
+
+		public void Initialize()
+		{
+			throw new NotImplementedException();
 		}
 
 		public int MinimumSleepTimeMillis 
