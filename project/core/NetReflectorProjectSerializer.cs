@@ -14,9 +14,9 @@ namespace ThoughtWorks.CruiseControl.Core
 			return buffer.ToString();
 		}
 
-		public Project Deserialize(string serializedProject)
+		public IProject Deserialize(string serializedProject)
 		{
-			return NetReflector.Read(serializedProject) as Project;
+			return NetReflector.Read(serializedProject) as IProject;
 		}
 	}
 }
