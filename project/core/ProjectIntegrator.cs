@@ -18,21 +18,19 @@ namespace ThoughtWorks.CruiseControl.Core
 	/// </summary>
 	public class ProjectIntegrator : IProjectIntegrator, IDisposable
 	{
-		private readonly IIntegratable integratable;
 		private readonly ITrigger trigger;
 		private readonly IProject project;
 		private Thread thread;
 		private ProjectIntegratorState state = ProjectIntegratorState.Stopped;
 		public IntegrationRequest request;
 
-		public ProjectIntegrator(IProject project) : this(new MultipleTrigger(project.Triggers), project, project)
+		public ProjectIntegrator(IProject project) : this(new MultipleTrigger(project.Triggers), project)
 		{}
 
-		public ProjectIntegrator(ITrigger trigger, IIntegratable integratable, IProject project)
+		public ProjectIntegrator(ITrigger trigger, IProject project)
 		{
 			this.trigger = trigger;
 			this.project = project;
-			this.integratable = integratable;
 		}
 
 		public string Name
@@ -55,6 +53,7 @@ namespace ThoughtWorks.CruiseControl.Core
 			get { return state; }
 		}
 
+		// TODO: should not start if stopping (ie. not stopped)
 		public void Start()
 		{
 			lock (this)
@@ -111,6 +110,7 @@ namespace ThoughtWorks.CruiseControl.Core
 			}
 			catch (ThreadAbortException)
 			{
+				// suppress logging of ThreadAbortException
 				Thread.ResetAbort();
 			}
 			finally
@@ -127,7 +127,7 @@ namespace ThoughtWorks.CruiseControl.Core
 				request = null;
 				try
 				{
-					integratable.Integrate(temp);
+					project.Integrate(temp);
 				}
 				catch (Exception ex)
 				{
@@ -137,15 +137,12 @@ namespace ThoughtWorks.CruiseControl.Core
 			}
 		}
 
+		// TODO: threading issues here: request could get overridden by force at this point
 		private bool ShouldRunIntegration()
 		{
 			if (request == null)
 			{
 				request = trigger.Fire();
-//				if (buildCondition != BuildCondition.NoBuild)
-//				{
-//					request = new IntegrationRequest(Name, buildCondition, "intervalTrigger");
-//				}
 			}
 			return request != null;
 		}
@@ -168,7 +165,7 @@ namespace ThoughtWorks.CruiseControl.Core
 		}
 
 		/// <summary>
-		/// Sets the scheduler's state to <see cref="ProjectIntegratorState.Stopping"/>, telling the scheduler to
+		/// Sets the state to <see cref="ProjectIntegratorState.Stopping"/>, telling the project to
 		/// stop at the next possible point in time.
 		/// </summary>
 		public void Stop()
