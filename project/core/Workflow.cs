@@ -75,14 +75,14 @@ namespace ThoughtWorks.CruiseControl.Core
 			throw new NotImplementedException();
 		}
 
+		public ProjectStatus CreateProjectStatus(IProjectIntegrator integrator)
+		{
+			throw new NotImplementedException();
+		}
+
 		public int MinimumSleepTimeMillis 
 		{ 
 			get { return 0; }
-		}
-
-		public ProjectActivity CurrentActivity 
-		{
-			get { return ProjectActivity.Sleeping; }
 		}
 
 		public string WebURL 

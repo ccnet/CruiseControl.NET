@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Xml;
 using Exortech.NetReflector;
@@ -105,12 +106,15 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Config
 		[ReflectorType("customtestproject")]
 		class CustomTestProject : ProjectBase, IProject
 		{
-			public ProjectActivity CurrentActivity { get { return ProjectActivity.Building; } }
-			public IIntegrationResult RunIntegration(BuildCondition buildCondition) { return null; }
 			public IIntegrationResult Integrate(IntegrationRequest request) { return null; }
-			public IntegrationStatus LatestBuildStatus { get { return IntegrationStatus.Success; } }
 			public void Purge(bool purgeWorkingDirectory, bool purgeArtifactDirectory, bool purgeSourceControlEnvironment) { }
 			public void Initialize() {}
+
+			public ProjectStatus CreateProjectStatus(IProjectIntegrator integrator)
+			{
+				throw new NotImplementedException();
+			}
+
 			public string WebURL { get {return ""; } }
 		}
 

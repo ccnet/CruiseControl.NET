@@ -18,6 +18,7 @@ namespace ThoughtWorks.CruiseControl.Core
 
 		/// <summary>
 		/// A component to trigger integrations for this project.
+		/// TODO: remove
 		/// </summary>
 		ITrigger[] Triggers 
 		{
@@ -29,14 +30,6 @@ namespace ThoughtWorks.CruiseControl.Core
 		/// </summary>
 		string WebURL 
 		{ 
-			get;
-		}
-
-		/// <summary>
-		/// Gets this project's current activity, such as Building, Sleeping, etc...
-		/// </summary>
-		ProjectActivity CurrentActivity 
-		{
 			get;
 		}
 
@@ -57,17 +50,12 @@ namespace ThoughtWorks.CruiseControl.Core
 		}
 
 		/// <summary>
-		/// Returns the most recent build status.
-		/// </summary>
-		/// <returns>The most recent build status</returns>
-		IntegrationStatus LatestBuildStatus { get; }
-
-		/// <summary>
 		/// This method is called when the project is being deleted from the server. It allows resources to be cleaned up, SCM clients to be unregistered, etc.
 		/// </summary>
 		void Purge(bool purgeWorkingDirectory, bool purgeArtifactDirectory, bool purgeSourceControlEnvironment);
 
 		ExternalLink[] ExternalLinks { get; }
 		void Initialize();
+		ProjectStatus CreateProjectStatus(IProjectIntegrator integrator);
 	}
 }

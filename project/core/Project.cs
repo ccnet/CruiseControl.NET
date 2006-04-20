@@ -210,5 +210,12 @@ namespace ThoughtWorks.CruiseControl.Core
 		{
 			return string.Format("http://{0}/ccnet", Environment.MachineName);
 		}
+
+		public ProjectStatus CreateProjectStatus(IProjectIntegrator integrator)
+		{
+			return new ProjectStatus(Name, CurrentActivity, LatestBuildStatus, integrator.State, WebURL,
+				LastIntegrationResult.StartTime, LastIntegrationResult.Label, LastIntegrationResult.LastSuccessfulIntegrationLabel, 
+				integrator.Trigger.NextBuild);
+		}
 	}
 }

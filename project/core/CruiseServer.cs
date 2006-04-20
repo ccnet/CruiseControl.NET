@@ -156,18 +156,9 @@ namespace ThoughtWorks.CruiseControl.Core
 			ArrayList projectStatusList = new ArrayList();
 			foreach (IProjectIntegrator integrator in projectIntegrators)
 			{
-				Project project = (Project) integrator.Project;
-				projectStatusList.Add(new ProjectStatus(project.Name,
-				                                        project.CurrentActivity,
-				                                        project.LatestBuildStatus,
-				                                        integrator.State,
-				                                        project.WebURL,
-				                                        project.LastIntegrationResult.StartTime,
-				                                        project.LastIntegrationResult.Label,
-														project.LastIntegrationResult.LastSuccessfulIntegrationLabel,
-				                                        integrator.Trigger.NextBuild));
+				IProject project = integrator.Project;
+				projectStatusList.Add(project.CreateProjectStatus(integrator));
 			}
-
 			return (ProjectStatus[]) projectStatusList.ToArray(typeof (ProjectStatus));
 		}
 
