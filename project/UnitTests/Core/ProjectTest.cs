@@ -1,6 +1,8 @@
 using System;
 using System.IO;
+using System.Reflection;
 using Exortech.NetReflector;
+using Exortech.NetReflector.Util;
 using NMock;
 using NMock.Constraints;
 using NUnit.Framework;
@@ -29,7 +31,6 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 		private IMock mockTask;
 		private string workingDirPath;
 		private string artifactDirPath;
-		private TraceListenerBackup backup;
 		private const string ProjectName = "test";
 
 		[SetUp]
@@ -57,9 +58,6 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 
 			project = new Project();
 			SetupProject();
-
-			backup = new TraceListenerBackup();
-			backup.AddTestTraceListener();
 		}
 
 		private void SetupProject()
@@ -68,7 +66,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 			project.Builder = (ITask) mockBuilder.MockInstance;
 			project.SourceControl = (ISourceControl) mockSourceControl.MockInstance;
 			project.StateManager = (IStateManager) mockStateManager.MockInstance;
-			project.Triggers = new ITrigger[] {(ITrigger) mockIntegrationTrigger.MockInstance};
+			project.Triggers = (ITrigger) mockIntegrationTrigger.MockInstance;
 			project.Labeller = (ILabeller) mockLabeller.MockInstance;
 			project.Publishers = new ITask[] {(ITask) mockPublisher.MockInstance};
 			project.Tasks = new ITask[] {(ITask) mockTask.MockInstance};
@@ -90,10 +88,18 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 		[TearDown]
 		public void TearDown()
 		{
-			backup.Reset();
-
 			TempFileUtil.DeleteTempDir("workingDir");
 			TempFileUtil.DeleteTempDir("artifactDir");
+		}
+
+		[Test]
+		public void ShouldCreateCollectionSerialiserWhenCollectionPropertyIsPassed()
+		{
+			DefaultSerialiserFactory factory = new DefaultSerialiserFactory();
+			PropertyInfo property = typeof (Project).GetProperty("Triggers");
+			ReflectorPropertyAttribute attribute = (ReflectorPropertyAttribute) property.GetCustomAttributes(false)[0];
+			IXmlSerialiser serialiser = factory.Create(ReflectorMember.Create(property), attribute);
+			Assert.AreEqual(typeof(XmlCollectionSerialiser), serialiser.GetType());
 		}
 
 		[Test]
@@ -133,7 +139,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 			Assert.IsTrue(project.SourceControl is FileSourceControl);
 			Assert.IsTrue(project.Labeller is DefaultLabeller);
 			Assert.IsTrue(project.StateManager is FileStateManager);
-			Assert.IsTrue(project.Triggers[0] is ScheduleTrigger);
+			Assert.AreEqual(1, ((MultipleTrigger)project.Triggers).Triggers.Length);
+			Assert.AreEqual(typeof(ScheduleTrigger), ((MultipleTrigger)project.Triggers).Triggers[0].GetType());
 			Assert.IsTrue(project.Publishers[0] is XmlLogPublisher);
 			Assert.IsTrue(project.Publishers[1] is NullTask);
 			Assert.IsTrue(project.Tasks[0] is MergeFilesTask);
@@ -157,7 +164,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 			Assert.IsTrue(project.Builder is NullTask);
 			Assert.IsTrue(project.SourceControl is NullSourceControl);
 			Assert.IsTrue(project.Labeller is DefaultLabeller);
-			Assert.AreEqual(1, project.Triggers.Length);
+			Assert.AreEqual(typeof(MultipleTrigger), project.Triggers.GetType());
+			Assert.AreEqual(typeof(IntervalTrigger), ((MultipleTrigger)project.Triggers).Triggers[0].GetType());
 			Assert.AreEqual(1, project.Publishers.Length);
 			Assert.IsTrue(project.Publishers[0] is XmlLogPublisher);
 			Assert.AreEqual(0, project.Tasks.Length);
@@ -174,7 +182,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 </project>";
 
 			Project project = (Project) NetReflector.Read(xml);
-			Assert.AreEqual(0, project.Triggers.Length);
+			Assert.AreEqual(typeof(MultipleTrigger), project.Triggers.GetType());
 		}
 
 		// test: verify correct args are passed to sourcecontrol?  should use date of last modification from last successful build IMO

@@ -215,7 +215,7 @@ namespace ThoughtWorks.CruiseControl.Core
 		{
 			return new ProjectStatus(Name, CurrentActivity, LatestBuildStatus, integrator.State, WebURL,
 				LastIntegrationResult.StartTime, LastIntegrationResult.Label, LastIntegrationResult.LastSuccessfulIntegrationLabel, 
-				integrator.Trigger.NextBuild);
+				Triggers.NextBuild);
 		}
 	}
 }

@@ -1,13 +1,14 @@
 using System;
+using System.Collections;
 using Exortech.NetReflector;
 using ThoughtWorks.CruiseControl.Remote;
 
 namespace ThoughtWorks.CruiseControl.Core.Triggers
 {
 	[ReflectorType("multiTrigger")]
-	public class MultipleTrigger : ITrigger
+	public class MultipleTrigger : IList, ITrigger
 	{
-		private ITrigger[] triggers;
+		private ITrigger[] triggers = new ITrigger[0];
 
 		public MultipleTrigger(ITrigger[] triggers)
 		{
@@ -16,6 +17,7 @@ namespace ThoughtWorks.CruiseControl.Core.Triggers
 
 		public MultipleTrigger() : this(new ITrigger[0])
 		{}
+
 
 		[ReflectorProperty("operator", Required=false)]
 		public Operator Operator = Operator.Or;
@@ -67,6 +69,84 @@ namespace ThoughtWorks.CruiseControl.Core.Triggers
 			return request;
 		}
 
+		public void CopyTo(Array array, int index)
+		{
+			throw new NotImplementedException();
+		}
+
+		public int Count
+		{
+			get { throw new NotImplementedException(); }
+		}
+
+		public object SyncRoot
+		{
+			get { throw new NotImplementedException(); }
+		}
+
+		public int Add(object value)
+		{
+			ArrayList t = new ArrayList(triggers);
+			t.Add(value);
+			triggers = (ITrigger[]) t.ToArray(typeof(ITrigger));
+			return triggers.Length;
+		}
+
+		public bool Contains(object value)
+		{
+			throw new NotImplementedException();
+		}
+
+		public void Clear()
+		{
+			throw new NotImplementedException();
+		}
+
+		public int IndexOf(object value)
+		{
+			throw new NotImplementedException();
+		}
+
+		public void Insert(int index, object value)
+		{
+			throw new NotImplementedException();
+		}
+
+		public void Remove(object value)
+		{
+			throw new NotImplementedException();
+		}
+
+		public void RemoveAt(int index)
+		{
+			throw new NotImplementedException();
+		}
+
+		public bool IsReadOnly
+		{
+			get { throw new NotImplementedException(); }
+		}
+
+		public bool IsFixedSize
+		{
+			get { throw new NotImplementedException(); }
+		}
+
+		public object this[int index]
+		{
+			get { throw new NotImplementedException(); }
+			set { throw new NotImplementedException(); }
+		}
+
+		public bool IsSynchronized
+		{
+			get { throw new NotImplementedException(); }
+		}
+
+		public IEnumerator GetEnumerator()
+		{
+			return triggers.GetEnumerator();
+		}
 	}
 
 	public enum Operator

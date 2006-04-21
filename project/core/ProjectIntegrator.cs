@@ -1,6 +1,5 @@
 using System;
 using System.Threading;
-using ThoughtWorks.CruiseControl.Core.Triggers;
 using ThoughtWorks.CruiseControl.Core.Util;
 using ThoughtWorks.CruiseControl.Remote;
 
@@ -24,8 +23,10 @@ namespace ThoughtWorks.CruiseControl.Core
 		private ProjectIntegratorState state = ProjectIntegratorState.Stopped;
 		public IntegrationRequest request;
 
-		public ProjectIntegrator(IProject project) : this(new MultipleTrigger(project.Triggers), project)
-		{}
+		public ProjectIntegrator(IProject project) : this(project.Triggers, project)
+//		public ProjectIntegrator(IProject project) : this(new MultipleTrigger(project.Triggers), project)
+		{
+		}
 
 		public ProjectIntegrator(ITrigger trigger, IProject project)
 		{

@@ -14,7 +14,7 @@ namespace ThoughtWorks.CruiseControl.Core
 		private string name;
 		private string configuredWorkingDirectory = "";
 		private string configuredArtifactDirectory = "";
-		private ITrigger[] triggers = new ITrigger[] { new IntervalTrigger() };
+		private ITrigger triggers = new MultipleTrigger(new ITrigger[] {new IntervalTrigger() } );
 		private ExternalLink[] externalLinks = new ExternalLink[0];
 
 		[ReflectorProperty("name")]
@@ -24,8 +24,8 @@ namespace ThoughtWorks.CruiseControl.Core
 			set { name = value; }
 		}
 
-		[ReflectorArray("triggers", Required=false)]
-		public ITrigger[] Triggers
+		[ReflectorProperty("triggers", InstanceType=typeof(MultipleTrigger), Required=false)]
+		public ITrigger Triggers
 		{
 			get { return triggers; }
 			set { triggers = value; }

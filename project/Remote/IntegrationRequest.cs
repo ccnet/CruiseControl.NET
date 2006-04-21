@@ -1,7 +1,9 @@
+using System;
 using ThoughtWorks.CruiseControl.Remote;
 
 namespace ThoughtWorks.CruiseControl.Remote
 {
+	[Serializable]
 	public class IntegrationRequest
 	{
 		private readonly BuildCondition buildCondition;

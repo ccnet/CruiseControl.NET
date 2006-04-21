@@ -8,8 +8,6 @@ namespace ThoughtWorks.CruiseControl.Core
 
 		string Name { get; }
 
-		ITrigger Trigger { get; }
-
 		/// <summary>
 		/// Starts the integration of this project on a separate thread.  If
 		/// this integrator has already started, this method causes no action.

@@ -24,8 +24,9 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 			projectMock = new LatchMock(typeof (IProject));
 			projectMock.Strict = true;
 			projectMock.SetupResult("Name", "project");
+			projectMock.SetupResult("Triggers", integrationTriggerMock.MockInstance);
 
-			integrator = new ProjectIntegrator((ITrigger) integrationTriggerMock.MockInstance, (IProject) projectMock.MockInstance);
+			integrator = new ProjectIntegrator((IProject) projectMock.MockInstance);
 		}
 
 		[TearDown]
