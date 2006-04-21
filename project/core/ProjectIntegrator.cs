@@ -23,14 +23,9 @@ namespace ThoughtWorks.CruiseControl.Core
 		private ProjectIntegratorState state = ProjectIntegratorState.Stopped;
 		public IntegrationRequest request;
 
-		public ProjectIntegrator(IProject project) : this(project.Triggers, project)
-//		public ProjectIntegrator(IProject project) : this(new MultipleTrigger(project.Triggers), project)
+		public ProjectIntegrator(IProject project)
 		{
-		}
-
-		public ProjectIntegrator(ITrigger trigger, IProject project)
-		{
-			this.trigger = trigger;
+			this.trigger = project.Triggers;
 			this.project = project;
 		}
 
@@ -42,11 +37,6 @@ namespace ThoughtWorks.CruiseControl.Core
 		public IProject Project
 		{
 			get { return project; }
-		}
-
-		public ITrigger Trigger
-		{
-			get { return trigger; }
 		}
 
 		public ProjectIntegratorState State
