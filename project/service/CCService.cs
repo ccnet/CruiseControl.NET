@@ -94,12 +94,18 @@ namespace ThoughtWorks.CruiseControl.Service
 
 		private static void Main()
 		{
-			// Allocates a Win32 console if needed since Windows does not provide
-			// one to Services by default. Normally that's okay, but we will be
-			// launching console applications and they may fail unless the parent
-			// process supplies them with a console.
-			AllocConsole();
+			AllocateWin32Console();
 			ServiceBase.Run(new ServiceBase[] {new CCService()});
+		}
+
+		// Allocates a Win32 console if needed since Windows does not provide
+		// one to Services by default. Normally that's okay, but we will be
+		// launching console applications and they may fail unless the parent
+		// process supplies them with a console.
+		private static void AllocateWin32Console()
+		{
+			if (ExecutionEnvironment.IsRunningOnWindows)
+				AllocConsole();			
 		}
 
 		[DllImport("kernel32.dll", SetLastError = true)]
