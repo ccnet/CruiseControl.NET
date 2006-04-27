@@ -1,3 +1,4 @@
+using System.Collections;
 using System.IO;
 using System.Web;
 using Objection;
@@ -17,6 +18,14 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.MVC.ASPNET
 			{
 				// ToDo - if we are specifying XML, shouldn't we throw valid XML exceptions?
 				context.Response.ContentType = "Text/XML";
+			}
+			else
+			{
+				string[] splits = context.Request.Path.Split('.');
+				if(MimeType.Jpg.HasExtension(splits[splits.Length - 1]))
+				{
+					context.Response.ContentType = MimeType.Jpg.ContentType;
+				}
 			}
 
 			ObjectSource objectSource =
@@ -44,9 +53,36 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.MVC.ASPNET
 		{
 			// Security Fix - see http://www.microsoft.com/security/incident/aspnet.mspx
 			if (context.Request.Path.IndexOf('\\') >= 0 ||
-			    Path.GetFullPath(context.Request.PhysicalPath) != context.Request.PhysicalPath)
+				Path.GetFullPath(context.Request.PhysicalPath) != context.Request.PhysicalPath)
 			{
 				throw new HttpException(404, "not found");
+			}
+		}
+	}
+
+	internal class MimeType
+	{
+		public static readonly MimeType Jpg = new MimeType("image/jpeg", "jpg", "jpe");
+		private ArrayList mimeExtension;
+		private string mimeType;
+
+		public MimeType(string mimeType, params string[] extensions)
+		{
+			mimeExtension = new ArrayList();
+			mimeExtension.AddRange(extensions);
+			this.mimeType = mimeType;
+		}
+
+		public bool HasExtension(string extension)
+		{
+			return mimeExtension.Contains(extension);
+		}
+
+		public string ContentType
+		{
+			get
+			{
+				return mimeType;
 			}
 		}
 	}

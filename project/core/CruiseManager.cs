@@ -110,6 +110,16 @@ namespace ThoughtWorks.CruiseControl.Core
 			return cruiseServer.GetExternalLinks(projectName);
 		}
 
+		public string GetArtifactDirectory(string projectName)
+		{
+			return cruiseServer.GetArtifactDirectory(projectName);
+		}
+
+		public string GetStatisticsDocument(string projectName)
+		{
+			return cruiseServer.GetStatisticsDocument(projectName);
+		}
+
 		public override object InitializeLifetimeService()
 		{
 			return null;

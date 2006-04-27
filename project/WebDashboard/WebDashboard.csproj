@@ -862,6 +862,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Plugins\Statistics\ProjectStatisticsPlugin.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Plugins\ViewAllBuilds\ViewAllBuildsProjectPlugin.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -1038,6 +1043,11 @@
                 <File
                     RelPath = "xsl\NCoverSummary.xsl"
                     Link = "..\xsl\NCoverSummary.xsl"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "xsl\statistics.xsl"
+                    Link = "..\xsl\statistics.xsl"
                     BuildAction = "Content"
                 />
                 <File

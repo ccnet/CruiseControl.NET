@@ -686,11 +686,6 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "Core\Publishers\Statistics\MyStatisticsPublisherTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
                     RelPath = "Core\Publishers\Statistics\StatisticsChartGeneratorTest.cs"
                     SubType = "Code"
                     BuildAction = "Compile"

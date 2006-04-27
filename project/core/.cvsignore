@@ -1,3 +1,4 @@
 *.csproj.user
+*.bak
 bin
 obj

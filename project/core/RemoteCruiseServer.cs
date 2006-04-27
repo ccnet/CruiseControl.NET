@@ -131,6 +131,16 @@ namespace ThoughtWorks.CruiseControl.Core
 			return _server.GetExternalLinks(projectName);
 		}
 
+		public string GetArtifactDirectory(string projectName)
+		{
+			return _server.GetArtifactDirectory(projectName);
+		}
+
+		public string GetStatisticsDocument(string projectName)
+		{
+			return _server.GetStatisticsDocument(projectName);
+		}
+
 		private void RegisterForRemoting()
 		{
 			MarshalByRefObject marshalByRef = (MarshalByRefObject)_server.CruiseManager;

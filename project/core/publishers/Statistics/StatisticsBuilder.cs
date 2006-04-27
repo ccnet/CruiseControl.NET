@@ -9,14 +9,26 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers.Statistics
 {
 	public class StatisticsBuilder
 	{
-		private void Add(Statistic stat)
+		private Hashtable stats = new Hashtable();
+		private IList logStatistics = new ArrayList();
+
+		public StatisticsBuilder()
 		{
-			logStatistics.Add(stat);
+			Add(new FirstMatch(new DictionaryEntry("StartTime", "/cruisecontrol/build/@date")));
+			Add(new FirstMatch(new DictionaryEntry("Duration", "/cruisecontrol/build/@buildtime")));
+			Add(new FirstMatch(new DictionaryEntry("ProjectName", "/cruisecontrol/@project")));
+
+			Add(new Statistic(new DictionaryEntry("TestCount", "sum(//test-results/@total)")));
+			Add(new Statistic(new DictionaryEntry("TestFailures", "sum(//test-results/@failures)")));
+			Add(new Statistic(new DictionaryEntry("TestIgnored", "sum(//test-results/@not-run)")));
+
+			Add(new Statistic(new DictionaryEntry("FxCop Warnings", "count(//FxCopReport/Namespaces/Namespace/Messages/Message/Issue[@Level='Warning'])")));
+			Add(new Statistic(new DictionaryEntry("FxCop Errors", "count(//FxCopReport//Issue[@Level='Error'])")));
 		}
 
-		public void ProcessBuildResults(IIntegrationResult result)
+		public Hashtable ProcessBuildResults(IIntegrationResult result)
 		{
-			ProcessBuildResults(toXml(result));
+			return ProcessBuildResults(toXml(result));
 		}
 
 		private string toXml(IIntegrationResult result)
@@ -28,18 +40,12 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers.Statistics
 		}
 
 
-		public void ProcessBuildResults(string xmlString)
+		public Hashtable ProcessBuildResults(string xmlString)
 		{
 			XmlDocument doc = new XmlDocument();
 			doc.Load(new StringReader(xmlString));
 			stats = ProcessLog(doc);
-		}
-
-		public void ProcessFile(string file)
-		{
-			XmlDocument doc = new XmlDocument();
-			doc.Load(file);
-			stats = ProcessLog(doc);
+			return stats;
 		}
 
 		public void Save(TextWriter outStream)
@@ -70,21 +76,9 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers.Statistics
 			return el;
 		}
 
-		private Hashtable stats = new Hashtable();
-		private IList logStatistics = new ArrayList();
-
-		public StatisticsBuilder()
+		private void Add(Statistic stat)
 		{
-			Add(new FirstMatch(new DictionaryEntry("StartTime", "/cruisecontrol/build/@date")));
-			Add(new FirstMatch(new DictionaryEntry("Duration", "/cruisecontrol/build/@buildtime")));
-			Add(new FirstMatch(new DictionaryEntry("ProjectName", "/cruisecontrol/@project")));
-
-			Add(new Statistic(new DictionaryEntry("TestCount", "sum(//test-results/@total)")));
-			Add(new Statistic(new DictionaryEntry("TestFailures", "sum(//test-results/@failures)")));
-			Add(new Statistic(new DictionaryEntry("TestIgnored", "sum(//test-results/@not-run)")));
-
-			Add(new Statistic(new DictionaryEntry("FxCop Warnings", "count(//FxCopReport/Namespaces/Namespace/Messages/Message/Issue[@Level='Warning'])")));
-			Add(new Statistic(new DictionaryEntry("FxCop Errors", "count(//FxCopReport//Issue[@Level='Error'])")));
+			logStatistics.Add(stat);
 		}
 
 		private Hashtable ProcessLog(XmlDocument doc)

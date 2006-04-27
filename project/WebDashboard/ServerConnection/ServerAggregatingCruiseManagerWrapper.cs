@@ -166,6 +166,16 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.ServerConnection
 			GetCruiseManager(projectSpecifier.ServerSpecifier).UpdateProject(projectSpecifier.ProjectName, serializedProject);
 		}
 
+		public string GetArtifactDirectory(IProjectSpecifier projectSpecifier)
+		{
+			return GetCruiseManager(projectSpecifier).GetArtifactDirectory(projectSpecifier.ProjectName);
+		}
+
+		public string GetStatisticsDocument(IProjectSpecifier projectSpecifier)
+		{
+			return GetCruiseManager(projectSpecifier).GetStatisticsDocument(projectSpecifier.ProjectName);
+		}
+
 		private ICruiseManager GetCruiseManager(IBuildSpecifier buildSpecifier)
 		{
 			return GetCruiseManager(buildSpecifier.ProjectSpecifier);

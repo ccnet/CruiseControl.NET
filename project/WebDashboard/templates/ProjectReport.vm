@@ -8,10 +8,6 @@ Click <a href="$mostRecentBuildUrl">here</a> for the most recent build report.
 #end
 </p>
 
-#if ($statisticsAvailable)
-<img src="statistics.jpg" alt="Statistics Chart" border="1">
-#end
-
 #if ($externalLinks.Length > 0)
 <table class="ExternalLinks">
 	<tr>

@@ -1,9 +1,5 @@
 using System;
 using System.Collections;
-using System.Diagnostics;
-using System.Web;
-using System.Web.Caching;
-using ThoughtWorks.CruiseControl.Core.Util;
 using ThoughtWorks.CruiseControl.WebDashboard.MVC.View;
 
 namespace ThoughtWorks.CruiseControl.WebDashboard.MVC.Cruise

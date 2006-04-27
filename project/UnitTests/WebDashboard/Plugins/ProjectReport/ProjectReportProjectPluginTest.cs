@@ -57,7 +57,6 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Plugins.ProjectRepor
 			expectedContext["externalLinks"] = links;
 			expectedContext["noLogsAvailable"] = false;
 			expectedContext["mostRecentBuildUrl"] = "buildUrl";
-			expectedContext["statisticsAvailable"] = false;
 			IResponse response = new HtmlFragmentResponse("myView");
 
 			cruiseRequestMock.ExpectAndReturn("ProjectSpecifier", projectSpecifier);
@@ -83,7 +82,6 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Plugins.ProjectRepor
 			expectedContext["projectName"] = "myProject";
 			expectedContext["externalLinks"] = links;
 			expectedContext["noLogsAvailable"] = true;
-			expectedContext["statisticsAvailable"] = false;
 			IResponse response = new HtmlFragmentResponse("myView");
 
 			IProjectSpecifier projectSpecifier = new DefaultProjectSpecifier(new DefaultServerSpecifier("myServer"), "myProject");

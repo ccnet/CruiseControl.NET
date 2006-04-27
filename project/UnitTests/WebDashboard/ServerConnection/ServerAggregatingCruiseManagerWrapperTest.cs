@@ -161,6 +161,17 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.ServerConnection
 		}
 
 		[Test]
+		public void ReturnCorrectArtifactDirectoryFromCorrectProjectFromCorrectServer()
+		{
+			ServerLocation[] servers = new ServerLocation[] {serverLocation, otherServerLocation};
+
+			configurationMock.ExpectAndReturn("Servers", servers);
+			cruiseManagerFactoryMock.ExpectAndReturn("GetCruiseManager", (ICruiseManager) cruiseManagerMock.MockInstance, "http://myurl");
+			cruiseManagerMock.ExpectAndReturn("GetArtifactDirectory", @"c:\ArtifactDirectory", "myproject");
+			Assert.AreEqual(@"c:\ArtifactDirectory", managerWrapper.GetArtifactDirectory(projectSpecifier));
+		}
+
+		[Test]
 		public void ReturnsCorrectBuildSpecifiersFromCorrectProjectOnCorrectServerWhenNumberOfBuildsSpecified()
 		{
 			// Setup

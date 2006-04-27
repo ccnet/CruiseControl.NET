@@ -3,6 +3,7 @@ using System.Collections;
 using System.IO;
 using System.Reflection;
 using System.Threading;
+using System.Xml;
 using ThoughtWorks.CruiseControl.Core.Config;
 using ThoughtWorks.CruiseControl.Core.Logging;
 using ThoughtWorks.CruiseControl.Core.Publishers;
@@ -345,6 +346,19 @@ namespace ThoughtWorks.CruiseControl.Core
 		public ExternalLink[] GetExternalLinks(string projectName)
 		{
 			return GetIntegrator(projectName).Project.ExternalLinks;
+		}
+
+		public string GetArtifactDirectory(string projectName)
+		{
+			return GetIntegrator(projectName).Project.ArtifactDirectory;
+		}
+
+		public string GetStatisticsDocument(string projectName)
+		{
+			string artifactDirectory = GetIntegrator(projectName).Project.ArtifactDirectory;
+			XmlDocument xmlDocument = new XmlDocument();
+			xmlDocument.Load(Path.Combine(artifactDirectory, "statistics.xml"));
+			return xmlDocument.OuterXml;
 		}
 
 		private IProjectIntegrator GetIntegrator(string projectName)
