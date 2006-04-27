@@ -4,6 +4,7 @@ using System.Xml;
 using Exortech.NetReflector;
 using ThoughtWorks.CruiseControl.Core;
 using ThoughtWorks.CruiseControl.Core.publishers.Statistics;
+using ThoughtWorks.CruiseControl.Remote;
 
 namespace ThoughtWorks.CruiseControl.Core.Publishers.Statistics
 {
@@ -18,12 +19,9 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers.Statistics
 			StatisticsBuilder builder = new StatisticsBuilder();
 			Hashtable stats = builder.ProcessBuildResults(integrationResult);
 
-			IntegrationState lastIntegration = integrationResult.LastIntegration;
-			IntegrationState integration = integrationResult.Integration;
-
-			XmlDocument xmlDocument = UpdateXmlFile(builder, lastIntegration, integration);
+			XmlDocument xmlDocument = UpdateXmlFile(stats, integrationResult);
 			ChartGenerator().Process(xmlDocument, integrationResult.ArtifactDirectory);
-			UpdateCsvFile(builder, integration);
+			UpdateCsvFile(builder, integrationResult.Integration);
 		}
 
 		private StatisticsChartGenerator ChartGenerator()
@@ -33,11 +31,11 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers.Statistics
 			return chartGenerator;
 		}
 
-		private XmlDocument UpdateXmlFile(StatisticsBuilder builder, IntegrationState previousState, IntegrationState currentState)
+		private XmlDocument UpdateXmlFile(Hashtable stats, IIntegrationResult integrationResult)
 		{
 			XmlDocument doc = new XmlDocument();
 	
-			string lastFile = XmlStatisticsFile(previousState);
+			string lastFile = XmlStatisticsFile(integrationResult);
 			XmlElement root = null;
 			if (File.Exists(lastFile))
 			{
@@ -49,20 +47,36 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers.Statistics
 				root = doc.CreateElement("statistics");
 				doc.AppendChild(root);
 			}
-	
-			XmlElement xml = builder.ToXml(doc);
-			xml.SetAttribute("build-label", currentState.Label);
+
+			XmlElement xml = toXml(doc, stats);
+			xml.SetAttribute("build-label", integrationResult.Label);
+			IntegrationStatus status = integrationResult.Status;
+			xml.SetAttribute("status", ((int) status).ToString());
 			root.AppendChild(xml);
 	
-			Directory.CreateDirectory(currentState.ArtifactDirectory);
+			Directory.CreateDirectory(integrationResult.ArtifactDirectory);
 	
-			doc.Save(XmlStatisticsFile(currentState));
+			doc.Save(XmlStatisticsFile(integrationResult));
 			return doc;
 		}
 
-		private string XmlStatisticsFile(IntegrationState integrationState)
+		private XmlElement toXml(XmlDocument doc, Hashtable stats)
 		{
-			return Path.Combine(integrationState.ArtifactDirectory, xmlFileName);
+			XmlElement el = doc.CreateElement("integration");
+			foreach (string key in stats.Keys)
+			{
+				XmlElement stat = doc.CreateElement("statistic");
+				stat.SetAttribute("name", key);
+				stat.InnerText = stats[key].ToString();
+				el.AppendChild(stat);
+			}
+			return el;
+		}
+
+
+		private string XmlStatisticsFile(IIntegrationResult integrationResult)
+		{
+			return Path.Combine(integrationResult.ArtifactDirectory, xmlFileName);
 		}
 
 		private string CsvStatisticsFile(IntegrationState integrationState)

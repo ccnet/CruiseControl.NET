@@ -63,19 +63,6 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers.Statistics
 			writer.WriteEndElement();
 		}
 
-		public XmlElement ToXml(XmlDocument doc)
-		{
-			XmlElement el = doc.CreateElement("integration");
-			foreach (string key in stats.Keys)
-			{
-				XmlElement stat = doc.CreateElement("statistic");
-				stat.SetAttribute("name", key);
-				stat.InnerText = stats[key].ToString();
-				el.AppendChild(stat);
-			}
-			return el;
-		}
-
 		private void Add(Statistic stat)
 		{
 			logStatistics.Add(stat);
