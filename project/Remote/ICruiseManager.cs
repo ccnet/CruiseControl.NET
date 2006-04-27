@@ -1,4 +1,3 @@
-
 namespace ThoughtWorks.CruiseControl.Remote
 {
 	/// <remarks>
@@ -20,7 +19,7 @@ namespace ThoughtWorks.CruiseControl.Remote
 		void Request(string projectName, IntegrationRequest integrationRequest);
 		void Start(string project);
 		void Stop(string project);
-		void FixBuild(string projectName);
+		void SendMessage(string projectName, Message message);
 
 		void WaitForExit(string projectName);
 

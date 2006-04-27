@@ -25,7 +25,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
 
 		public void FixBuild()
 		{
-			throw new NotImplementedException();
+			throw new NotImplementedException("Fix build not currently supported on dashboard projects");
 		}
 
 		public ProjectStatus ProjectStatus

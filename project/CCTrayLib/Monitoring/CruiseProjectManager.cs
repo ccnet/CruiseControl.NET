@@ -24,7 +24,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
 
 		public void FixBuild()
 		{
-			manager.FixBuild(ProjectName);
+			manager.SendMessage(ProjectName, new Message(string.Format("{0} is fixing the build.", Environment.UserName)));
 		}
 
 		public ProjectStatus ProjectStatus

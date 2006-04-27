@@ -98,6 +98,7 @@ namespace ThoughtWorks.CruiseControl.Remote
 		void UpdateProject(string projectName, string serializedProject);
 
 		ExternalLink[] GetExternalLinks(string projectName);
+		void SendMessage(string projectName, Message message);
 
 		string GetArtifactDirectory(string projectName);
 

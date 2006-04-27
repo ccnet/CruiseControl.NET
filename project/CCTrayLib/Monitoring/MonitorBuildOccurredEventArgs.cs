@@ -7,13 +7,12 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
 		public readonly IProjectMonitor ProjectMonitor;
 		public readonly BuildTransition BuildTransition;
 
-		public MonitorBuildOccurredEventArgs( IProjectMonitor projectMonitor, BuildTransition buildTransition )
+		public MonitorBuildOccurredEventArgs(IProjectMonitor projectMonitor, BuildTransition buildTransition)
 		{
 			ProjectMonitor = projectMonitor;
 			BuildTransition = buildTransition;
 		}
 	}
 
-	public delegate void MonitorBuildOccurredEventHandler( object sender, MonitorBuildOccurredEventArgs e );
-
+	public delegate void MonitorBuildOccurredEventHandler(object sender, MonitorBuildOccurredEventArgs e);
 }

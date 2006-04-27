@@ -16,6 +16,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
 			{
 				monitor.Polled += new MonitorPolledEventHandler(Monitor_Polled);
 				monitor.BuildOccurred += new MonitorBuildOccurredEventHandler(Monitor_BuildOccurred);
+				monitor.MessageReceived += new MessageEventHandler(Monitor_MessageReceived);
 			}
 		}
 
@@ -58,23 +59,22 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
 		}
 
 		public event MonitorBuildOccurredEventHandler BuildOccurred;
+		public event MonitorPolledEventHandler Polled;
+		public event MessageEventHandler MessageReceived;
 
 		private void Monitor_BuildOccurred(object sender, MonitorBuildOccurredEventArgs e)
 		{
-			if (BuildOccurred != null)
-			{
-				BuildOccurred(this, e);
-			}
+			if (BuildOccurred != null) BuildOccurred(this, e);
 		}
-
-		public event MonitorPolledEventHandler Polled;
 
 		private void Monitor_Polled(object sender, MonitorPolledEventArgs args)
 		{
-			if (Polled != null)
-			{
-				Polled(this, args);
-			}
+			if (Polled != null) Polled(this, args);
+		}
+
+		private void Monitor_MessageReceived(Message message)
+		{
+			if (MessageReceived != null) MessageReceived(message);
 		}
 
 		public void Poll()
@@ -148,6 +148,5 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
 		{
 			get { throw new InvalidOperationException(); }
 		}
-
 	}
 }

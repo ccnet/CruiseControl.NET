@@ -16,6 +16,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Monitoring
 		private int pollCount;
 		private int buildOccurredCount;
 		private MonitorBuildOccurredEventArgs lastBuildOccurredArgs;
+		private Message actualMessage;
 
 		[SetUp]
 		public void SetUp()
@@ -32,6 +33,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Monitoring
 		public void TearDown()
 		{
 			mockProjectManager.Verify();
+			actualMessage = null;
 		}
 
 		[Test]
@@ -283,6 +285,28 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Monitoring
 			mockProjectManager.Expect("FixBuild");
 			monitor.FixBuild();
 			mockProjectManager.Verify();
+		}
+
+		[Test]
+		public void DisplayBalloonMessageWhenNewMessageIsReceived()
+		{
+			ProjectStatus initial = ProjectStatusFixture.New(IntegrationStatus.Success, ProjectActivity.Sleeping);
+			mockProjectManager.ExpectAndReturn("ProjectStatus", initial);
+
+			Message expectedMessage = new Message("foo");
+			ProjectStatus newStatus = ProjectStatusFixture.New(IntegrationStatus.Success, ProjectActivity.Sleeping);
+			newStatus.Messages = new Message[] { expectedMessage};
+			mockProjectManager.ExpectAndReturn("ProjectStatus", newStatus);
+
+			monitor.MessageReceived += new MessageEventHandler(OnMessageReceived);
+			monitor.Poll();
+			monitor.Poll();
+			Assert.AreEqual(actualMessage, expectedMessage);
+		}
+
+		private void OnMessageReceived(Message message)
+		{
+			actualMessage = message;
 		}
 	}
 }

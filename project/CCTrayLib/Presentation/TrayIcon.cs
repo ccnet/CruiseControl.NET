@@ -2,6 +2,7 @@ using System;
 using System.Diagnostics;
 using ThoughtWorks.CruiseControl.CCTrayLib.Configuration;
 using ThoughtWorks.CruiseControl.CCTrayLib.Monitoring;
+using ThoughtWorks.CruiseControl.Remote;
 
 namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 {
@@ -35,10 +36,18 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 			monitor.Polled += new MonitorPolledEventHandler(Monitor_Polled);
 
 			if (showBalloonMessages)
+			{
 				monitor.BuildOccurred += new MonitorBuildOccurredEventHandler(Monitor_BuildOccurred);
+				monitor.MessageReceived += new MessageEventHandler(Monitor_MessageReceived);
+			}
 		}
 
-		
+		private void Monitor_MessageReceived(Message message)
+		{
+			ShowBalloon(message.ToString(), message.ToString(), NotifyInfoFlags.Info, 5000);
+		}
+
+
 		private void IconProvider_IconChanged(object sender, EventArgs e)
 		{
 			Icon = iconProvider.Icon;

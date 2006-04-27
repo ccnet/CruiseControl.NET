@@ -48,7 +48,7 @@ namespace ThoughtWorks.CruiseControl.Core
 
 		public void Stop(string project)
 		{
-			throw new NotImplementedException();
+			_server.Stop(project);
 		}
 
 		public ICruiseManager CruiseManager
@@ -129,6 +129,11 @@ namespace ThoughtWorks.CruiseControl.Core
 		public ExternalLink[] GetExternalLinks(string projectName)
 		{
 			return _server.GetExternalLinks(projectName);
+		}
+
+		public void SendMessage(string projectName, Message message)
+		{
+			_server.SendMessage(projectName, message);
 		}
 
 		public string GetArtifactDirectory(string projectName)

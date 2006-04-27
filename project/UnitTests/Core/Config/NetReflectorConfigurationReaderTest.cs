@@ -115,6 +115,11 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Config
 				throw new NotImplementedException();
 			}
 
+			public void AddMessage(Message message)
+			{
+				throw new NotImplementedException();
+			}
+
 			public string WebURL { get {return ""; } }
 		}
 

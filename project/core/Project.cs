@@ -45,6 +45,7 @@ namespace ThoughtWorks.CruiseControl.Core
 		private bool publishExceptions = true;
 		private IIntegratable integratable;
 		private QuietPeriod quietPeriod = new QuietPeriod(new DateTimeProvider());
+		private ArrayList messages = new ArrayList();
 
 		public Project()
 		{
@@ -213,9 +214,16 @@ namespace ThoughtWorks.CruiseControl.Core
 
 		public ProjectStatus CreateProjectStatus(IProjectIntegrator integrator)
 		{
-			return new ProjectStatus(Name, CurrentActivity, LatestBuildStatus, integrator.State, WebURL,
-				LastIntegrationResult.StartTime, LastIntegrationResult.Label, LastIntegrationResult.LastSuccessfulIntegrationLabel, 
-				Triggers.NextBuild);
+			ProjectStatus status = new ProjectStatus(Name, CurrentActivity, LatestBuildStatus, integrator.State, WebURL,
+			                                         LastIntegrationResult.StartTime, LastIntegrationResult.Label, LastIntegrationResult.LastSuccessfulIntegrationLabel, 
+			                                         Triggers.NextBuild);
+			status.Messages = (Message[])messages.ToArray(typeof(Message));
+			return status;
+		}
+
+		public void AddMessage(Message message)
+		{
+			messages.Add(message);
 		}
 	}
 }

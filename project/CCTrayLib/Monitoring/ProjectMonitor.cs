@@ -3,7 +3,7 @@ using System.Diagnostics;
 using ThoughtWorks.CruiseControl.Remote;
 
 namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
-{	
+{
 	public class ProjectMonitor : IProjectMonitor, ISingleProjectDetail
 	{
 		private ICruiseProjectManager cruiseProjectManager;
@@ -115,13 +115,18 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
 				if (lastProjectStatus != null && newProjectStatus != null)
 				{
 					CheckForBuildStart(lastProjectStatus, newProjectStatus);
-					
+
 					if (lastProjectStatus.LastBuildDate != newProjectStatus.LastBuildDate)
 					{
 						BuildTransition transition = CalculateBuildTransition(lastProjectStatus, newProjectStatus);
-						
+
 						CheckForSuccessfulBuild(transition);
 						OnBuildOccurred(new MonitorBuildOccurredEventArgs(this, transition));
+					}
+
+					if (lastProjectStatus.Messages.Length < newProjectStatus.Messages.Length)
+					{
+						OnMessageReceived(newProjectStatus.Messages[newProjectStatus.Messages.Length - 1]);
 					}
 				}
 				lastProjectStatus = newProjectStatus;
@@ -155,17 +160,21 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
 
 		public event MonitorBuildOccurredEventHandler BuildOccurred;
 		public event MonitorPolledEventHandler Polled;
+		public event MessageEventHandler MessageReceived;
 
 		protected void OnBuildOccurred(MonitorBuildOccurredEventArgs args)
 		{
-			if (BuildOccurred != null)
-				BuildOccurred(this, args);
+			if (BuildOccurred != null) BuildOccurred(this, args);
 		}
 
 		protected void OnPolled(MonitorPolledEventArgs args)
 		{
-			if (Polled != null)
-				Polled(this, args);
+			if (Polled != null) Polled(this, args);
+		}
+
+		private void OnMessageReceived(Message message)
+		{
+			if (MessageReceived != null) MessageReceived(message);
 		}
 
 		private BuildTransition CalculateBuildTransition(ProjectStatus oldStatus, ProjectStatus newStatus)
@@ -198,10 +207,11 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
 			}
 		}
 
-
 		public TimeSpan EstimatedTimeRemainingOnCurrentBuild
 		{
 			get { return buildDurationTracker.EstimatedTimeRemainingOnCurrentBuild; }
 		}
 	}
+
+	public delegate void MessageEventHandler(Message message);
 }

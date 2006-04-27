@@ -42,9 +42,9 @@ namespace ThoughtWorks.CruiseControl.Core
 			cruiseServer.Stop(project);
 		}
 
-		public void FixBuild(string projectName)
+		public void SendMessage(string projectName, Message message)
 		{
-			throw new NotImplementedException();
+			cruiseServer.SendMessage(projectName, message);
 		}
 
 		public void WaitForExit(string project)

@@ -127,7 +127,7 @@ type=""log4net.Config.Log4NetConfigurationSectionHandler,log4net"" />";
 		private string IllegalCharacters()
 		{
 			StringBuilder builder = new StringBuilder();
-			for (int i  = 0; i < 31; i++)
+			for (int i = 0; i < 31; i++)
 			{
 				builder.Append((char) i, 1);
 			}

@@ -25,7 +25,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 		private IMock mockBuilder;
 		private IMock mockSourceControl;
 		private IMock mockStateManager;
-		private IMock mockIntegrationTrigger;
+		private IMock mockTrigger;
 		private IMock mockLabeller;
 		private IMock mockPublisher;
 		private IMock mockTask;
@@ -47,8 +47,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 			mockSourceControl.Strict = true;
 			mockStateManager = new DynamicMock(typeof (IStateManager));
 			mockStateManager.Strict = true;
-			mockIntegrationTrigger = new DynamicMock(typeof (ITrigger));
-			mockIntegrationTrigger.Strict = true;
+			mockTrigger = new DynamicMock(typeof (ITrigger));
+			mockTrigger.Strict = true;
 			mockLabeller = new DynamicMock(typeof (ILabeller));
 			mockLabeller.Strict = true;
 			mockPublisher = new DynamicMock((typeof (ITask)));
@@ -66,7 +66,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 			project.Builder = (ITask) mockBuilder.MockInstance;
 			project.SourceControl = (ISourceControl) mockSourceControl.MockInstance;
 			project.StateManager = (IStateManager) mockStateManager.MockInstance;
-			project.Triggers = (ITrigger) mockIntegrationTrigger.MockInstance;
+			project.Triggers = (ITrigger) mockTrigger.MockInstance;
 			project.Labeller = (ILabeller) mockLabeller.MockInstance;
 			project.Publishers = new ITask[] {(ITask) mockPublisher.MockInstance};
 			project.Tasks = new ITask[] {(ITask) mockTask.MockInstance};
@@ -79,7 +79,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 			mockBuilder.Verify();
 			mockSourceControl.Verify();
 			mockStateManager.Verify();
-			mockIntegrationTrigger.Verify();
+			mockTrigger.Verify();
 			mockLabeller.Verify();
 			mockPublisher.Verify();
 			mockTask.Verify();
@@ -608,6 +608,18 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 			project.Integrate(ForceBuildRequest());
 
 			VerifyAll();
+		}
+
+		[Test]
+		public void AddedMessageShouldBeIncludedInProjectStatus()
+		{
+			mockStateManager.ExpectAndReturn("LoadState", IntegrationResult.CreateInitialIntegrationResult(ProjectName, @"c:\temp"), ProjectName);
+			mockTrigger.ExpectAndReturn("NextBuild", DateTime.Now);
+
+			Message message = new Message("foo");
+			project.AddMessage(message);
+			ProjectStatus status = project.CreateProjectStatus(new ProjectIntegrator(project));
+			Assert.AreEqual(message, status.Messages[0]);
 		}
 	}
 }

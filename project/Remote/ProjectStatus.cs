@@ -90,5 +90,7 @@ namespace ThoughtWorks.CruiseControl.Remote
 		{
 			get { return nextBuildTime.DateTime; }
 		}
+
+		public Message[] Messages = new Message[0];
 	}
 }

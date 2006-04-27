@@ -80,6 +80,11 @@ namespace ThoughtWorks.CruiseControl.Core
 			throw new NotImplementedException();
 		}
 
+		public void AddMessage(Message message)
+		{
+			throw new NotImplementedException();
+		}
+
 		public int MinimumSleepTimeMillis 
 		{ 
 			get { return 0; }

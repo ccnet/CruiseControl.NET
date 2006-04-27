@@ -304,7 +304,7 @@ namespace ThoughtWorks.CruiseControl.Core
 		public string GetProject(string name)
 		{
 			Log.Info("Getting project - " + name);
-			return new NetReflectorProjectSerializer().Serialize((Project) configurationService.Load().Projects[name]);
+			return new NetReflectorProjectSerializer().Serialize(configurationService.Load().Projects[name]);
 		}
 
 		public string GetVersion()
@@ -346,6 +346,12 @@ namespace ThoughtWorks.CruiseControl.Core
 		public ExternalLink[] GetExternalLinks(string projectName)
 		{
 			return GetIntegrator(projectName).Project.ExternalLinks;
+		}
+
+		public void SendMessage(string projectName, Message message)
+		{
+			Log.Info("New message received: " + message);
+			GetIntegrator(projectName).Project.AddMessage(message);
 		}
 
 		public string GetArtifactDirectory(string projectName)

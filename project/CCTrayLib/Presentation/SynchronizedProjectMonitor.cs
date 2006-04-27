@@ -21,6 +21,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 
 			projectMonitor.Polled += new MonitorPolledEventHandler(ProjectMonitor_Polled);
 			projectMonitor.BuildOccurred += new MonitorBuildOccurredEventHandler(ProjectMonitor_BuildOccurred);
+			projectMonitor.MessageReceived += new MessageEventHandler(ProjectMonitor_MessageReceived);
 		}
 
 
@@ -57,23 +58,22 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 
 		public event MonitorBuildOccurredEventHandler BuildOccurred;
 		public event MonitorPolledEventHandler Polled;
+		public event MessageEventHandler MessageReceived;
 
 		private void ProjectMonitor_Polled(object sender, MonitorPolledEventArgs args)
 		{
-			if (Polled != null)
-			{
-				synchronizeInvoke.BeginInvoke(Polled, new object[] {sender, args});
-			}
+			if (Polled != null) synchronizeInvoke.BeginInvoke(Polled, new object[] {sender, args});
 		}
 
 		private void ProjectMonitor_BuildOccurred(object sender, MonitorBuildOccurredEventArgs args)
 		{
-			if (BuildOccurred != null)
-			{
-				synchronizeInvoke.BeginInvoke(BuildOccurred, new object[] {sender, args});
-			}
+			if (BuildOccurred != null) synchronizeInvoke.BeginInvoke(BuildOccurred, new object[] {sender, args});
 		}
 
+		private void ProjectMonitor_MessageReceived(Message message)
+		{
+			if (MessageReceived != null) synchronizeInvoke.BeginInvoke(MessageReceived, new object[] {message});
+		}
 
 		public IntegrationStatus IntegrationStatus
 		{

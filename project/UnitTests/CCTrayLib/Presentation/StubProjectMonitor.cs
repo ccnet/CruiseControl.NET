@@ -95,6 +95,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Presentation
 
 		public event MonitorBuildOccurredEventHandler BuildOccurred;
 		public event MonitorPolledEventHandler Polled;
+		public event MessageEventHandler MessageReceived;
 
 		public void Poll()
 		{

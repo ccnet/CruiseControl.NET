@@ -57,5 +57,6 @@ namespace ThoughtWorks.CruiseControl.Core
 		ExternalLink[] ExternalLinks { get; }
 		void Initialize();
 		ProjectStatus CreateProjectStatus(IProjectIntegrator integrator);
+		void AddMessage(Message message);
 	}
 }

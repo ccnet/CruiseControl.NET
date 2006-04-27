@@ -17,6 +17,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
 
 		event MonitorBuildOccurredEventHandler BuildOccurred;
 		event MonitorPolledEventHandler Polled;
+		event MessageEventHandler MessageReceived;
 
 		void ForceBuild();
 		void FixBuild();
