@@ -51,7 +51,7 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers.Statistics
 			XmlElement xml = toXml(doc, stats);
 			xml.SetAttribute("build-label", integrationResult.Label);
 			IntegrationStatus status = integrationResult.Status;
-			xml.SetAttribute("status", ((int) status).ToString());
+			xml.SetAttribute("status", status.ToString());
 			root.AppendChild(xml);
 	
 			Directory.CreateDirectory(integrationResult.ArtifactDirectory);

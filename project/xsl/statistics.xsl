@@ -17,6 +17,7 @@
 		<table>
 			<tr>
 				<th>Build Label</th>
+				<th>Status</th>
 				<xsl:for-each select="./integration[1]/statistic">
 					<th>
 						<xsl:value-of select="./@name" />
@@ -26,14 +27,17 @@
 			<xsl:for-each select="./integration">
 				<xsl:variable name="colorClass">
 					<xsl:choose>
-						<xsl:when test="./@status = 0">pass</xsl:when>
-						<xsl:when test="./@status = 3" >unknown</xsl:when>
+						<xsl:when test="./@status = 'Success'">pass</xsl:when>
+						<xsl:when test="./@status = 'Unknown'" >unknown</xsl:when>
 						<xsl:otherwise>fail</xsl:otherwise>
 					</xsl:choose>
 				</xsl:variable>
-				<tr class="{$colorClass}">
+				<tr>
 					<th>
 						<xsl:value-of select="./@build-label"/>
+					</th>
+					<th class="{$colorClass}">
+						<xsl:value-of select="./@status"/>
 					</th>
 					<xsl:for-each select="./statistic">
 						<td>
