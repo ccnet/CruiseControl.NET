@@ -48,6 +48,7 @@
 				</tr>
 			</table>
 		</p>
+		<p><pre><strong>Note: </strong>Only builds run with the statistics publisher enabled will appear on this page!</pre></p>
 		<table>
 			<tr>
 				<th>Build Label</th>
