@@ -56,7 +56,6 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers.Statistics
 			xml.SetAttribute("day", now.Day.ToString());
 			xml.SetAttribute("month", now.ToString("MMM"));
 			xml.SetAttribute("year", now.Year.ToString());
-			xml.SetAttribute("fileName", integrationResult.StatisticsFile);
 			root.AppendChild(xml);
 	
 			Directory.CreateDirectory(integrationResult.ArtifactDirectory);
