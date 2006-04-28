@@ -32,17 +32,17 @@
 					<th>Overall</th>
 				</tr>
 				<tr>
-					<th>Total Builds</th>
+					<th align="left">Total Builds</th>
 					<td><xsl:value-of select="$totalCountForTheDay"/></td>
 					<td><xsl:value-of select="$totalCount"/></td>
 				</tr>
 				<tr>
-					<th>Number of Successful</th>
+					<th align="left">Number of Successful</th>
 					<td><xsl:value-of select="$successCountForTheDay"/></td>
 					<td><xsl:value-of select="$successCount"/></td>
 				</tr>
 				<tr>
-					<th>Number of Failed</th>
+					<th align="left">Number of Failed</th>
 					<td><xsl:value-of select="$failureCountForTheDay"/></td>
 					<td><xsl:value-of select="$failureCount"/></td>
 				</tr>
