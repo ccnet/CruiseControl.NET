@@ -48,6 +48,12 @@ namespace ThoughtWorks.CruiseControl.Core
 			BuildCondition = request.BuildCondition;
 		}
 
+		public IntegrationResult(string projectName, string workingDirectory, 
+			string statisticsFile, IntegrationRequest request) : this(projectName, workingDirectory, request)
+		{
+			StatisticsFile = statisticsFile;
+		}
+
 		// remove setter
 		public string ProjectName
 		{
@@ -83,6 +89,12 @@ namespace ThoughtWorks.CruiseControl.Core
 		{
 			get { return Convert(properties["CCNetArtifactDirectory"]); }
 			set { properties["CCNetArtifactDirectory"] = value; }
+		}
+
+		public string StatisticsFile
+		{
+			get { return (string) properties["ProjectStatisticsFile"]; }
+			set { properties["ProjectStatisticsFile"] = value; }
 		}
 
 		public string IntegrationArtifactDirectory

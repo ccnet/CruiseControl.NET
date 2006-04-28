@@ -12,7 +12,6 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers.Statistics
 	[ReflectorType("statistics")]
 	public class StatisticsPublisher : ITask
 	{
-		private static string xmlFileName = "statistics.xml";
 		private static string csvFileName = "statistics.csv";
 
 		public void Run(IIntegrationResult integrationResult)
@@ -57,6 +56,7 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers.Statistics
 			xml.SetAttribute("day", now.Day.ToString());
 			xml.SetAttribute("month", now.ToString("MMM"));
 			xml.SetAttribute("year", now.Year.ToString());
+			xml.SetAttribute("fileName", integrationResult.StatisticsFile);
 			root.AppendChild(xml);
 	
 			Directory.CreateDirectory(integrationResult.ArtifactDirectory);
@@ -81,7 +81,7 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers.Statistics
 
 		private string XmlStatisticsFile(IIntegrationResult integrationResult)
 		{
-			return Path.Combine(integrationResult.ArtifactDirectory, xmlFileName);
+			return Path.Combine(integrationResult.ArtifactDirectory, integrationResult.StatisticsFile);
 		}
 
 		private string CsvStatisticsFile(IntegrationState integrationState)

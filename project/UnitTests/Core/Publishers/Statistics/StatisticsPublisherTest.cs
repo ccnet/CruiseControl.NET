@@ -1,134 +1,108 @@
-using System;
-using System.Collections;
 using System.IO;
 using System.Xml;
 using NUnit.Framework;
 using ThoughtWorks.CruiseControl.Core;
-using ThoughtWorks.CruiseControl.Core.Publishers;
 using ThoughtWorks.CruiseControl.Core.Publishers.Statistics;
 
 namespace ThoughtWorks.CruiseControl.UnitTests.Core.Publishers.Statistics
 {
 	[TestFixture]
-	public class StatisticsBuilderTest : XmlLogFixture
+	public class StatisticsPublisherTest
 	{
-		private const string outDir = "temp";
-		private StatisticsBuilder builder;
-		IntegrationResult result;
-		private string xml;
-
-		[TestFixtureSetUp]
-		public void LoadXML()
-		{
-			StreamReader reader = File.OpenText("buildlog.xml");
-			xml = reader.ReadToEnd();
-			reader.Close();
-		}
+		const string TEST_DIR = "build\\temp";
+		private DirectoryInfo tmpdir;
 
 		[SetUp]
-		public void SetUp()
+		public void CreateFakeOutputDir()
 		{
-			builder = new StatisticsBuilder();
-			result = IntegrationResultMother.Create(true);
-			Directory.CreateDirectory(outDir);
-		}
-
-
-		private string xmlResult()
-		{
-			return toXml(result);
-		}
-
-		private string toXml(IIntegrationResult result)
-		{
-			StringWriter xmlResultString = new StringWriter();
-			XmlIntegrationResultWriter writer = new XmlIntegrationResultWriter(xmlResultString);
-			writer.Write(result);
-			return xmlResultString.ToString();
+			if (Directory.Exists(TEST_DIR))
+			{
+				Directory.Delete(TEST_DIR, true);
+			}
+			tmpdir = Directory.CreateDirectory(TEST_DIR);
 		}
 
 		[TearDown]
-		public void TearDown()
+		public void DeleteTempDirectory()
 		{
-			Directory.Delete("temp", true);
-		}
-
-		public void AssertHasStatistic(string name, object value)
-		{
-			Assert.AreEqual(value, builder.Statistic(name), "Wrong statistic for {0}", name);
+			if (Directory.Exists(TEST_DIR))
+			{
+				Directory.Delete(TEST_DIR, true);
+			}
 		}
 
 		[Test]
-		public void ShouldPopulateNUnitSummaryFromLog()
+		public void CreatesStatisticsFileInArtifactDirectory()
 		{
-			string xml =
-				@"<task>
-					<test-results total=""6"" failures=""1"" not-run=""2"" date=""2005-04-29"" time=""9:02 PM"">
-						<test-suite />
-					</test-results>
-					<test-results total=""1"" failures=""1"" not-run=""1"" date=""2005-04-29"" time=""9:02 PM"">
-						<test-suite />
-					</test-results>
-				</task>";
+			IntegrationResult result1 = simulateBuild(1);
 
-			result.AddTaskResult(xml);
+			string statsFile = result1.ArtifactDirectory + "\\statistics.xml";
+			Assert.IsTrue(File.Exists(statsFile));
 
-			builder.ProcessBuildResults(xmlResult());
+			CountNodes(statsFile, "//statistics/integration", 1);
 
-			AssertHasStatistic("TestCount", 7);
-			AssertHasStatistic("TestFailures", 2);
-			AssertHasStatistic("TestIgnored", 3);
+			IntegrationResult result2 = simulateBuild(2);
+
+			string statsFile2 = result2.ArtifactDirectory + "\\statistics.xml";
+			Assert.IsTrue(File.Exists(statsFile2));
+
+			CountNodes(statsFile2, "//statistics/integration", 2);
 
 		}
 
 		[Test]
-		public void ShouldCollectFxCopStatistics()
+		public void CreatesCsvFileInArtifactsDirectory()
 		{
-			builder.ProcessBuildResults(xml);
+			IntegrationResult result1 = simulateBuild(1);
 
-			AssertHasStatistic("FxCop Warnings", 1);
-			AssertHasStatistic("FxCop Errors", 205);
+			string statsFile = result1.ArtifactDirectory + "\\statistics.csv";
+			Assert.IsTrue(File.Exists(statsFile));
+
+			CountLines(statsFile, 2);
+
+			IntegrationResult result2 = simulateBuild(2);
+
+			string statsFile2 = result2.ArtifactDirectory + "\\statistics.csv";
+			Assert.IsTrue(File.Exists(statsFile2));
+
+			CountLines(statsFile2, 3);
 
 		}
 
-		[Test]
-		public void ShouldPopulateTimingsFromIntegrationResult()
+		private IntegrationResult simulateBuild(int buildLabel)
 		{
-			result.StartTime = new DateTime(2005, 03, 12, 01, 13, 00);
-			result.EndTime = new DateTime(2005, 03, 12, 01, 45, 00);
-			result.ProjectName = "Foo";
+			StatisticsPublisher publisher = new StatisticsPublisher();
 
-			builder.ProcessBuildResults(xmlResult());
-
-			AssertHasStatistic("StartTime", result.StartTime.ToString());
-			AssertHasStatistic("Duration", new TimeSpan(0, 32, 0).ToString());
-			AssertHasStatistic("ProjectName", "Foo");
-
+			IntegrationResult result = IntegrationResultMother.CreateSuccessful(buildLabel.ToString());
+			result.LastSuccessfulIntegrationLabel = (buildLabel - 1).ToString();
+			result.ArtifactDirectory = tmpdir.FullName;
+			result.StatisticsFile = "statistics.xml";
+			
+			publisher.Run(result);
+			
+			return result;
 		}
 
-		[Test]
-		public void ShouldWriteStatisticsAsXml()
+		private void CountLines(string file, int expectedCount)
 		{
-			builder.ProcessBuildResults(xmlResult());
-			StringWriter writer = new StringWriter();
-			builder.Save(writer);
-			string xml = writer.ToString();
-			AssertXPath(xml, "//statistics/statistic/@name", "ProjectName");
+			StreamReader text = File.OpenText(file);
+			string s = text.ReadToEnd();
+			string[] split = s.Split('\n');
+			int count = 0;
+			foreach(string line in split)
+			{
+				if (line.Length>0) count++;
+			}
+			Assert.AreEqual(expectedCount, count);
+			text.Close();
 		}
 
-		private void AssertXPath(string xml, string xpath, string expectedValue)
+		private static void CountNodes(string statsFile2, string xpath, int count)
 		{
 			XmlDocument doc = new XmlDocument();
-			doc.LoadXml(xml);
+			doc.Load(statsFile2);
 			XmlNodeList node = doc.SelectNodes(xpath);
-			ArrayList actuals = new ArrayList();
-			foreach (XmlNode n in node)
-			{
-				string actual = n.Value;
-				actuals.Add(actual);
-				if (actual == expectedValue) return;
-			}
-			Assert.Fail("No node found matching {0}. Actuals were {1}", expectedValue, actuals);
+			Assert.AreEqual(count, node.Count);
 		}
 	}
 }

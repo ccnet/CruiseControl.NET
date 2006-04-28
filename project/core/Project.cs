@@ -35,7 +35,7 @@ namespace ThoughtWorks.CruiseControl.Core
 	public class Project : ProjectBase, IProject, IIntegrationRunnerTarget
 	{
 		private string webUrl = DefaultUrl();
-		private string statisticsFile = "statistics.xml";
+		private string statisticsFile = "report.xml";
 		private ISourceControl sourceControl = new NullSourceControl();
 		private ITask builder = new NullTask();
 		private ILabeller labeller = new DefaultLabeller();
@@ -79,6 +79,13 @@ namespace ThoughtWorks.CruiseControl.Core
 		{
 			get { return builder; }
 			set { builder = value; }
+		}
+
+		[ReflectorProperty("statisticsFile", Required=false)]
+		public string StatisticsFile
+		{
+			get { return statisticsFile; }
+			set { statisticsFile = value; }
 		}
 
 		[ReflectorProperty("sourcecontrol", InstanceTypeKey="type", Required=false)]
@@ -207,13 +214,6 @@ namespace ThoughtWorks.CruiseControl.Core
 			{
 				new IoService().DeleteIncludingReadOnlyObjects(ArtifactDirectory);
 			}
-		}
-
-		[ReflectorProperty("statisticsFile", Required=false)]
-		public string StatisticsFile
-		{
-			get { return statisticsFile; }
-			set { statisticsFile = value; }
 		}
 
 		public XmlDocument Statistics

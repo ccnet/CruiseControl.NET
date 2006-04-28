@@ -29,7 +29,7 @@ namespace ThoughtWorks.CruiseControl.Core
 
 		public IIntegrationResult StartNewIntegration(IntegrationRequest request)
 		{
-			currentResult = new IntegrationResult(project.Name, project.WorkingDirectory, request);
+			currentResult = new IntegrationResult(project.Name, project.WorkingDirectory, project.StatisticsFile, request);
 			
 			currentResult.LastIntegrationStatus = LastIntegrationResult.Status;
 			currentResult.LastSuccessfulIntegrationLabel = LastIntegrationResult.LastSuccessfulIntegrationLabel;

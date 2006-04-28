@@ -17,6 +17,7 @@ namespace ThoughtWorks.CruiseControl.Core
 		DateTime EndTime { get; }
 		TimeSpan TotalIntegrationTime { get; }
 		string ArtifactDirectory { get; set;}
+		string StatisticsFile {get; set;}
 		bool Failed { get; }
 		bool Fixed { get; }
 		bool Succeeded { get; }
