@@ -1,6 +1,7 @@
 using System;
 using System.Threading;
 using System.Xml;
+using System.Xml.XPath;
 using NMock;
 using NUnit.Framework;
 using ThoughtWorks.CruiseControl.Core;
@@ -325,16 +326,25 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 			XmlDocument fromServer = new XmlDocument();
 			fromServer.LoadXml(statisticsDocument);
 			Assert.AreEqual(statisticsClone.DocumentElement.ChildNodes.Count + 1, fromServer.DocumentElement.ChildNodes.Count);
-//			XPathNavigator navigator = fromServer.CreateNavigator();
-//			object o = navigator.Evaluate("/statistics//timestamp/@day");
-//			string s = o.ToString();
-//			int day = (int) o;
-//			int month = (int) navigator.Evaluate("/statistics//timestamp/@month");
-//			int year = (int) navigator.Evaluate("/statistics//timestamp/@year");
-//
-//			Assert.AreEqual(DateTime.Now.Day, day);
-//			Assert.AreEqual(DateTime.Now.Month, month);
-//			Assert.AreEqual(DateTime.Now.Year, year);
+			XPathNavigator navigator = fromServer.CreateNavigator();
+			XPathNodeIterator nodeIterator = navigator.Select("//timestamp/@day");
+			if(nodeIterator.MoveNext())
+			{
+				int day = Convert.ToInt32(nodeIterator.Current.Value);
+				Assert.AreEqual(DateTime.Now.Day, day);
+			}
+			nodeIterator = navigator.Select("//timestamp/@month");
+			if(nodeIterator.MoveNext())
+			{
+				string month = nodeIterator.Current.Value;
+				Assert.AreEqual(DateTime.Now.ToString("MMM"), month);
+			}
+			nodeIterator = navigator.Select("//timestamp/@year");
+			if(nodeIterator.MoveNext())
+			{
+				int year = Convert.ToInt32(nodeIterator.Current.Value);
+				Assert.AreEqual(DateTime.Now.Year, year);
+			}
 		}
 	}
 }
