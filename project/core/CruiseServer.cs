@@ -361,9 +361,15 @@ namespace ThoughtWorks.CruiseControl.Core
 
 		public string GetStatisticsDocument(string projectName)
 		{
-			string artifactDirectory = GetIntegrator(projectName).Project.ArtifactDirectory;
-			XmlDocument xmlDocument = new XmlDocument();
-			xmlDocument.Load(Path.Combine(artifactDirectory, "statistics.xml"));
+			IProject project = GetIntegrator(projectName).Project;
+			XmlDocument xmlDocument = project.Statistics;
+			XmlElement timeStamp = xmlDocument.CreateElement("timestamp");
+			DateTime now = DateTime.Now;
+			timeStamp.SetAttribute("day", now.Day.ToString());
+			timeStamp.SetAttribute("month", now.ToString("MMM"));
+			timeStamp.SetAttribute("year", now.Year.ToString());
+			xmlDocument.DocumentElement.AppendChild(timeStamp);
+
 			return xmlDocument.OuterXml;
 		}
 

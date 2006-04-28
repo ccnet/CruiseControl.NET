@@ -1,5 +1,6 @@
 using System;
 using System.Threading;
+using System.Xml;
 using NMock;
 using NUnit.Framework;
 using ThoughtWorks.CruiseControl.Core;
@@ -16,17 +17,25 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 		private DynamicMock projectSerializerMock;
 		private DynamicMock integratorMock1;
 		private DynamicMock integratorMock2;
+		private DynamicMock integratorMock3;
 
 		private CruiseServer server;
 
 		private Configuration configuration;
 		private Project project1;
 		private Project project2;
+
+		private IMock mockProject;
+		private IProject mockProjectInstance;
+		
 		private IProjectIntegrator integrator1;
 		private IProjectIntegrator integrator2;
+		private IProjectIntegrator integrator3;
 		private ProjectIntegratorList integratorList;
 
 		private ManualResetEvent monitor;
+		private XmlDocument statistics;
+		private XmlDocument statisticsClone;
 
 		[SetUp]
 		protected void SetUp()
@@ -35,22 +44,40 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 
 			integratorMock1 = new DynamicMock(typeof (IProjectIntegrator));
 			integratorMock2 = new DynamicMock(typeof (IProjectIntegrator));
+			integratorMock3 = new DynamicMock(typeof (IProjectIntegrator));
 			integrator1 = (IProjectIntegrator) integratorMock1.MockInstance;
 			integrator2 = (IProjectIntegrator) integratorMock2.MockInstance;
+			integrator3 = (IProjectIntegrator) integratorMock3.MockInstance;
 			integratorMock1.SetupResult("Name", "Project 1");
 			integratorMock2.SetupResult("Name", "Project 2");
+			integratorMock3.SetupResult("Name", "Project 3");
 
 			configuration = new Configuration();
 			project1 = new Project();
 			project1.Name = "Project 1";
+			
 			project2 = new Project();
 			project2.Name = "Project 2";
+
+			mockProject = new DynamicMock(typeof(IProject));
+			statistics = new XmlDocument();
+			XmlElement root = statistics.CreateElement("statistics");
+			statistics.AppendChild(root);
+			statisticsClone = new XmlDocument();
+			statisticsClone.LoadXml(statistics.OuterXml);
+			mockProject.ExpectAndReturn("Name", "Project 3");
+			mockProject.ExpectAndReturn("Statistics", statistics);
+			mockProjectInstance = (IProject) mockProject.MockInstance;
+			integratorMock3.ExpectAndReturn("Project", mockProjectInstance);
+
 			configuration.AddProject(project1);
 			configuration.AddProject(project2);
+			configuration.AddProject(mockProjectInstance);
 
 			integratorList = new ProjectIntegratorList();
 			integratorList.Add(integrator1);
 			integratorList.Add(integrator2);
+			integratorList.Add(integrator3);
 
 			configServiceMock = new DynamicMock(typeof (IConfigurationService));
 			configServiceMock.ExpectAndReturn("Load", configuration);
@@ -288,6 +315,26 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 			server.Request("Project 2", request);
 			integratorMock1.Verify();
 			integratorMock2.Verify();
+		}
+
+		[Test]
+		public void GetStatisticsDocumentSetsCurrentDate()
+		{
+			mockProject.ExpectAndReturn("Name", "Project 3");
+			string statisticsDocument = server.GetStatisticsDocument(mockProjectInstance.Name);
+			XmlDocument fromServer = new XmlDocument();
+			fromServer.LoadXml(statisticsDocument);
+			Assert.AreEqual(statisticsClone.DocumentElement.ChildNodes.Count + 1, fromServer.DocumentElement.ChildNodes.Count);
+//			XPathNavigator navigator = fromServer.CreateNavigator();
+//			object o = navigator.Evaluate("/statistics//timestamp/@day");
+//			string s = o.ToString();
+//			int day = (int) o;
+//			int month = (int) navigator.Evaluate("/statistics//timestamp/@month");
+//			int year = (int) navigator.Evaluate("/statistics//timestamp/@year");
+//
+//			Assert.AreEqual(DateTime.Now.Day, day);
+//			Assert.AreEqual(DateTime.Now.Month, month);
+//			Assert.AreEqual(DateTime.Now.Year, year);
 		}
 	}
 }

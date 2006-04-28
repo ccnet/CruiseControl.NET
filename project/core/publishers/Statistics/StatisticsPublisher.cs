@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.IO;
 using System.Xml;
@@ -52,6 +53,10 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers.Statistics
 			xml.SetAttribute("build-label", integrationResult.Label);
 			IntegrationStatus status = integrationResult.Status;
 			xml.SetAttribute("status", status.ToString());
+			DateTime now = DateTime.Now;
+			xml.SetAttribute("day", now.Day.ToString());
+			xml.SetAttribute("month", now.ToString("MMM"));
+			xml.SetAttribute("year", now.Year.ToString());
 			root.AppendChild(xml);
 	
 			Directory.CreateDirectory(integrationResult.ArtifactDirectory);

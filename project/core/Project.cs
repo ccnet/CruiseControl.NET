@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.ComponentModel;
 using System.IO;
+using System.Xml;
 using Exortech.NetReflector;
 using ThoughtWorks.CruiseControl.Core.Label;
 using ThoughtWorks.CruiseControl.Core.Publishers;
@@ -34,6 +35,7 @@ namespace ThoughtWorks.CruiseControl.Core
 	public class Project : ProjectBase, IProject, IIntegrationRunnerTarget
 	{
 		private string webUrl = DefaultUrl();
+		private string statisticsFile = "statistics.xml";
 		private ISourceControl sourceControl = new NullSourceControl();
 		private ITask builder = new NullTask();
 		private ILabeller labeller = new DefaultLabeller();
@@ -204,6 +206,24 @@ namespace ThoughtWorks.CruiseControl.Core
 			if (purgeArtifactDirectory && Directory.Exists(ArtifactDirectory))
 			{
 				new IoService().DeleteIncludingReadOnlyObjects(ArtifactDirectory);
+			}
+		}
+
+		[ReflectorProperty("statisticsFile", Required=false)]
+		public string StatisticsFile
+		{
+			get { return statisticsFile; }
+			set { statisticsFile = value; }
+		}
+
+		public XmlDocument Statistics
+		{
+			get
+			{
+				XmlDocument xmlDocument = new XmlDocument();
+				xmlDocument.Load(Path.Combine(ArtifactDirectory, statisticsFile));
+
+				return xmlDocument;
 			}
 		}
 

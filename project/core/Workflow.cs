@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.Xml;
 using Exortech.NetReflector;
 using ThoughtWorks.CruiseControl.Remote;
 
@@ -68,6 +69,11 @@ namespace ThoughtWorks.CruiseControl.Core
 		public void Purge(bool purgeWorkingDirectory, bool purgeArtifactDirectory, bool purgeSourceControlEnvironment)
 		{
 			return;
+		}
+
+		public XmlDocument Statistics
+		{
+			get { throw new NotImplementedException(); }
 		}
 
 		public void Initialize()

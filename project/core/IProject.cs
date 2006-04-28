@@ -1,3 +1,4 @@
+using System.Xml;
 using ThoughtWorks.CruiseControl.Remote;
 
 namespace ThoughtWorks.CruiseControl.Core
@@ -55,6 +56,7 @@ namespace ThoughtWorks.CruiseControl.Core
 		void Purge(bool purgeWorkingDirectory, bool purgeArtifactDirectory, bool purgeSourceControlEnvironment);
 
 		ExternalLink[] ExternalLinks { get; }
+		XmlDocument Statistics { get; }
 		void Initialize();
 		ProjectStatus CreateProjectStatus(IProjectIntegrator integrator);
 		void AddMessage(Message message);

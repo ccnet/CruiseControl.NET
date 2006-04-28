@@ -4,16 +4,50 @@
 	<xsl:template match="/statistics">
 	<style>
 		*.pass{
-			background-color: green;
+			background-color: #33ff99;
 		}
 		*.fail{	
-			background-color: red;
+			background-color: #ff6600;
 		}
 		*.unknown{	
-			background-color: yellow;
+			background-color: #ffffcc;
 		}
 	</style>
-
+		<p>
+			Today is
+			<xsl:variable name="day" select="//timestamp/@day"/>
+			<xsl:variable name="month" select="//timestamp/@month"/>
+			<xsl:variable name="year" select="//timestamp/@year"/>
+			<xsl:value-of select="$day"/>/<xsl:value-of select="$month"/>/<xsl:value-of select="$year"/> <br />
+			<xsl:variable name="totalCount" select="count(integration)"/>
+			<xsl:variable name="successCount" select="count(integration[@status='Success'])"/>
+			<xsl:variable name="failureCount" select="$totalCount - $successCount"/>
+			<xsl:variable name="totalCountForTheDay" select="count(integration[@day=$day and @month=$month and @year=$year])"/>
+			<xsl:variable name="successCountForTheDay" select="count(integration[@status='Success' and @day=$day and @month=$month and @year=$year])"/>
+			<xsl:variable name="failureCountForTheDay" select="$totalCountForTheDay - $successCountForTheDay"/>
+			<table border="1" cellpadding="0" cellspacing="0">
+				<tr>
+					<th>Integration Summary</th>
+					<th>For today</th>
+					<th>Overall</th>
+				</tr>
+				<tr>
+					<th>Total Builds</th>
+					<td><xsl:value-of select="$totalCountForTheDay"/></td>
+					<td><xsl:value-of select="$totalCount"/></td>
+				</tr>
+				<tr>
+					<th>Number of Successful</th>
+					<td><xsl:value-of select="$successCountForTheDay"/></td>
+					<td><xsl:value-of select="$successCount"/></td>
+				</tr>
+				<tr>
+					<th>Number of Failed</th>
+					<td><xsl:value-of select="$failureCountForTheDay"/></td>
+					<td><xsl:value-of select="$failureCount"/></td>
+				</tr>
+			</table>
+		</p>
 		<table>
 			<tr>
 				<th>Build Label</th>
@@ -25,6 +59,7 @@
 				</xsl:for-each>
 			</tr>
 			<xsl:for-each select="./integration">
+				<xsl:sort select="position()" data-type="number" order="descending"/>
 				<xsl:variable name="colorClass">
 					<xsl:choose>
 						<xsl:when test="./@status = 'Success'">pass</xsl:when>

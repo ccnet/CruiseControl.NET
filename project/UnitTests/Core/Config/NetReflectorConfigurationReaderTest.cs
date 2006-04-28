@@ -108,6 +108,12 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Config
 		{
 			public IIntegrationResult Integrate(IntegrationRequest request) { return null; }
 			public void Purge(bool purgeWorkingDirectory, bool purgeArtifactDirectory, bool purgeSourceControlEnvironment) { }
+
+			public XmlDocument Statistics
+			{
+				get { throw new NotImplementedException(); }
+			}
+
 			public void Initialize() {}
 
 			public ProjectStatus CreateProjectStatus(IProjectIntegrator integrator)
