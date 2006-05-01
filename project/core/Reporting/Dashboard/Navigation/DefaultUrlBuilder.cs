@@ -15,6 +15,7 @@ namespace ThoughtWorks.CruiseControl.Core.Reporting.Dashboard.Navigation
 		public string Extension
 		{
 			set { this.extension = value; }
+			get { return extension; }
 		}
 
 		public string BuildUrl(string action)

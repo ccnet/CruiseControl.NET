@@ -30,8 +30,12 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.BuildReport
 			IBuildSpecifier buildSpecifier = cruiseRequest.BuildSpecifier;
 			Build build = buildRetriever.GetBuild(buildSpecifier);
 			velocityContext["log"] = build.Log.Replace("<", "&lt;").Replace(">", "&gt;");
+
+			// TODO - urk, this is a hack, need a better way of setting extensions
+			string oldExtension = urlBuilder.Extension;
 			urlBuilder.Extension = "xml";
 			velocityContext["logUrl"] = urlBuilder.BuildBuildUrl(XmlBuildLogAction.ACTION_NAME, buildSpecifier);
+			urlBuilder.Extension = oldExtension;
 
 			return viewGenerator.GenerateView(@"BuildLog.vm", velocityContext);
 		}

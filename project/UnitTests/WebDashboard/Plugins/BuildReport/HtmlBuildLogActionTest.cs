@@ -58,8 +58,10 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Plugins.BuildReport
 			// Setup
 			requestMock.ExpectAndReturn("BuildSpecifier", buildSpecifier);
 			buildRetrieverMock.ExpectAndReturn("GetBuild", build, buildSpecifier);
+			urlBuilderMock.ExpectAndReturn("Extension", "foo");
 			urlBuilderMock.Expect("Extension", "xml");
 			urlBuilderMock.ExpectAndReturn("BuildBuildUrl", "myUrl", XmlBuildLogAction.ACTION_NAME, buildSpecifier);
+			urlBuilderMock.Expect("Extension", "foo");
 
 			Hashtable expectedContext = new Hashtable();
 			expectedContext["log"] = "some stuff in a log with a &lt; and &gt;";

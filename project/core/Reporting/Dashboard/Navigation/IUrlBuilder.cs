@@ -6,6 +6,6 @@ namespace ThoughtWorks.CruiseControl.Core.Reporting.Dashboard.Navigation
 		string BuildUrl(string action, string queryString);
 		string BuildUrl(string action, string queryString, string path);
 
-		string Extension { set; }
+		string Extension { set; get; }
 	}
 }

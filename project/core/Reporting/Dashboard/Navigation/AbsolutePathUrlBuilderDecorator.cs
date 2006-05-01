@@ -31,6 +31,7 @@ namespace ThoughtWorks.CruiseControl.Core.Reporting.Dashboard.Navigation
 		public string Extension
 		{
 			set { decoratedUrlBuilder.Extension = value; }
+			get { return decoratedUrlBuilder.Extension; }
 		}
 
 		// return string.Format("{0}://{1}:{2}{3}/{4}", context.Request.Url.Scheme, context.Request.Url.Host, context.Request.Url.Port, context.Request.ApplicationPath, relativePath);
