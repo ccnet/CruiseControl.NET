@@ -64,6 +64,9 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Perforce
 		[ReflectorProperty(@"p4WebURLFormat", Required=false)]
 		public string P4WebURLFormat;
 
+		[ReflectorProperty("timeZoneOffset", Required=false)]
+		public double TimeZoneOffset = 0;
+
 		public string BuildModificationsCommandArguments(DateTime from, DateTime to)
 		{
 			return string.Format("changes -s submitted {0}", GenerateRevisionsForView(from, to));
@@ -89,7 +92,8 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Perforce
 
 		private string FormatDate(DateTime date)
 		{
-			return date.ToString(COMMAND_DATE_FORMAT, CultureInfo.InvariantCulture);
+			DateTime offsetDate = date.AddHours(TimeZoneOffset);
+			return offsetDate.ToString(COMMAND_DATE_FORMAT, CultureInfo.InvariantCulture);
 		}
 
 		public virtual ProcessInfo CreateChangeListProcess(DateTime from, DateTime to)

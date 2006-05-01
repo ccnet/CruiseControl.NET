@@ -57,6 +57,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.SourceControl.Perforce
   <port>anotherserver:2666</port>
   <workingDirectory>myWorkingDirectory</workingDirectory>
   <p4WebURLFormat>http://perforceWebServer:8080/@md=d&amp;cd=//&amp;c=3IB@/{0}?ac=10</p4WebURLFormat>
+  <timeZoneOffset>-5.5</timeZoneOffset>
 </sourceControl>
 ";
 			P4 p4 = CreateP4WithNoArgContructor(xml);
@@ -67,6 +68,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.SourceControl.Perforce
 			Assert.AreEqual("anotherserver:2666", p4.Port);
 			Assert.AreEqual("myWorkingDirectory", p4.WorkingDirectory);
 			Assert.AreEqual("http://perforceWebServer:8080/@md=d&cd=//&c=3IB@/{0}?ac=10", p4.P4WebURLFormat);
+			Assert.AreEqual(-5.5, p4.TimeZoneOffset);
 		}
 
 		private P4 CreateP4WithNoArgContructor(string p4root)
@@ -121,6 +123,23 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.SourceControl.Perforce
 			ProcessInfo process = p4.CreateChangeListProcess(from, to);
 
 			string expectedArgs = "-s changes -s submitted //depot/myproj/...@2002/10/20:02:00:00,@2002/10/31:05:05:00 ";
+
+			Assert.AreEqual("p4", process.FileName);
+			Assert.AreEqual(expectedArgs, process.Arguments);
+		}
+
+		[Test]
+		public void CreateGetChangeListsProcessInDifferentTimeZone()
+		{
+			P4 p4 = new P4();
+			p4.View = "//depot/myproj/...";
+			DateTime from = new DateTime(2002, 10, 20, 2, 0, 0);
+			DateTime to = new DateTime(2002, 10, 31, 5, 5, 0);
+			p4.TimeZoneOffset = -4.5;
+
+			ProcessInfo process = p4.CreateChangeListProcess(from, to);
+
+			string expectedArgs = "-s changes -s submitted //depot/myproj/...@2002/10/19:21:30:00,@2002/10/31:00:35:00 ";
 
 			Assert.AreEqual("p4", process.FileName);
 			Assert.AreEqual(expectedArgs, process.Arguments);
