@@ -1,6 +1,6 @@
 using System;
 
-namespace ThoughtWorks.CruiseControl.Core.publishers.Statistics
+namespace ThoughtWorks.CruiseControl.Core.Publishers.Statistics
 {
 	public class UnavailableStatisticsException : ApplicationException
 	{

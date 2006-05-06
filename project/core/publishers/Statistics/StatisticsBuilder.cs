@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.IO;
 using System.Xml;
@@ -14,16 +15,19 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers.Statistics
 
 		public StatisticsBuilder()
 		{
-			Add(new FirstMatch(new DictionaryEntry("StartTime", "/cruisecontrol/build/@date")));
-			Add(new FirstMatch(new DictionaryEntry("Duration", "/cruisecontrol/build/@buildtime")));
-			Add(new FirstMatch(new DictionaryEntry("ProjectName", "/cruisecontrol/@project")));
+			Add(new FirstMatch("BuildErrorType", "//failure/builderror/type"));
+			Add(new FirstMatch("BuildErrorMessage", "//failure/builderror/message"));
 
-			Add(new Statistic(new DictionaryEntry("TestCount", "sum(//test-results/@total)")));
-			Add(new Statistic(new DictionaryEntry("TestFailures", "sum(//test-results/@failures)")));
-			Add(new Statistic(new DictionaryEntry("TestIgnored", "sum(//test-results/@not-run)")));
+			Add(new FirstMatch("StartTime", "/cruisecontrol/build/@date"));
+			Add(new FirstMatch("Duration", "/cruisecontrol/build/@buildtime"));
+			Add(new FirstMatch("ProjectName", "/cruisecontrol/@project"));
 
-			Add(new Statistic(new DictionaryEntry("FxCop Warnings", "count(//FxCopReport/Namespaces/Namespace/Messages/Message/Issue[@Level='Warning'])")));
-			Add(new Statistic(new DictionaryEntry("FxCop Errors", "count(//FxCopReport//Issue[@Level='Error'])")));
+			Add(new Statistic("TestCount", "sum(//test-results/@total)"));
+			Add(new Statistic("TestFailures", "sum(//test-results/@failures)"));
+			Add(new Statistic("TestIgnored", "sum(//test-results/@not-run)"));
+
+			Add(new Statistic("FxCop Warnings", "count(//FxCopReport/Namespaces/Namespace/Messages/Message/Issue[@Level='Warning'])"));
+			Add(new Statistic("FxCop Errors", "count(//FxCopReport//Issue[@Level='Error'])"));			
 		}
 
 		public Hashtable ProcessBuildResults(IIntegrationResult result)
@@ -57,13 +61,13 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers.Statistics
 			{
 				writer.WriteStartElement("statistic");
 				writer.WriteAttributeString("name", key);
-				writer.WriteString(stats[key].ToString());
+				writer.WriteString(Convert.ToString(stats[key]));
 				writer.WriteEndElement();
 			}
 			writer.WriteEndElement();
 		}
 
-		private void Add(Statistic stat)
+		public void Add(Statistic stat)
 		{
 			logStatistics.Add(stat);
 		}

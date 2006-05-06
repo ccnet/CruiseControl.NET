@@ -221,8 +221,11 @@ namespace ThoughtWorks.CruiseControl.Core
 			get
 			{
 				XmlDocument xmlDocument = new XmlDocument();
-				xmlDocument.Load(Path.Combine(ArtifactDirectory, statisticsFile));
-
+				string documentLocation = Path.Combine(ArtifactDirectory, statisticsFile);
+				if(File.Exists(documentLocation))
+				{
+					xmlDocument.Load(documentLocation);
+				}
 				return xmlDocument;
 			}
 		}

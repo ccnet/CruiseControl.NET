@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Xml.XPath;
 
 namespace ThoughtWorks.CruiseControl.Core.Publishers.Statistics
@@ -7,10 +6,6 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers.Statistics
 	{
 		protected readonly string name;
 		protected readonly string xpath;
-
-		public Statistic(DictionaryEntry entry) : this(entry.Key.ToString(), entry.Value.ToString())
-		{
-		}
 
 		public Statistic(string name, string xpath)
 		{

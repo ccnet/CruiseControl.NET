@@ -22,7 +22,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.MVC.ASPNET
 			else
 			{
 				string[] splits = context.Request.Path.Split('.');
-				if(MimeType.Jpg.HasExtension(splits[splits.Length - 1]))
+				if (MimeType.Jpg.HasExtension(splits[splits.Length - 1]))
 				{
 					context.Response.ContentType = MimeType.Jpg.ContentType;
 				}
@@ -35,6 +35,10 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.MVC.ASPNET
 			if (response is RedirectResponse)
 			{
 				context.Response.Redirect(((RedirectResponse) response).Url);
+			}
+			else if (response is BinaryResponse )
+			{
+				context.Response.BinaryWrite(((BinaryResponse)response).Content);
 			}
 			else
 			{
@@ -62,7 +66,11 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.MVC.ASPNET
 
 	internal class MimeType
 	{
+		//TODO: read from config file?
 		public static readonly MimeType Jpg = new MimeType("image/jpeg", "jpg", "jpe");
+		public static readonly MimeType Png = new MimeType("image/png", "png");
+		public static readonly MimeType Xml = new MimeType("text/xml", "xml");
+
 		private ArrayList mimeExtension;
 		private string mimeType;
 
@@ -80,10 +88,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.MVC.ASPNET
 
 		public string ContentType
 		{
-			get
-			{
-				return mimeType;
-			}
+			get { return mimeType; }
 		}
 	}
 }

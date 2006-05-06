@@ -12,7 +12,5 @@ namespace ThoughtWorks.CruiseControl.Core
 
 		// Would like to have this somewhere else really
 		ProjectActivity Activity { set; }
-
-		string StatisticsFile { get; set; }
 	}
 }

@@ -76,6 +76,12 @@ namespace ThoughtWorks.CruiseControl.Core
 			get { throw new NotImplementedException(); }
 		}
 
+		public string StatisticsFile
+		{
+			get { throw new NotImplementedException(); }
+			set { throw new NotImplementedException(); }
+		}
+
 		public void Initialize()
 		{
 			throw new NotImplementedException();

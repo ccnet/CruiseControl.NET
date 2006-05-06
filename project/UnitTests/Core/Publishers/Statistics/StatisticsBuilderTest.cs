@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.IO;
 using System.Xml;
+using System.Xml.XPath;
 using NUnit.Framework;
 using ThoughtWorks.CruiseControl.Core;
 using ThoughtWorks.CruiseControl.Core.Publishers;
@@ -15,13 +16,17 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Publishers.Statistics
 		private const string outDir = "temp";
 		private StatisticsBuilder builder;
 		IntegrationResult result;
-		private string xml;
+		private string successfulBuildLog;
+		private string failedBuildLog;
 
 		[TestFixtureSetUp]
 		public void LoadXML()
 		{
 			StreamReader reader = File.OpenText("buildlog.xml");
-			xml = reader.ReadToEnd();
+			successfulBuildLog = reader.ReadToEnd();
+			reader.Close();
+			reader = File.OpenText("failedbuildlog.xml");
+			failedBuildLog = reader.ReadToEnd();
 			reader.Close();
 		}
 
@@ -78,13 +83,28 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Publishers.Statistics
 			AssertHasStatistic("TestCount", 7);
 			AssertHasStatistic("TestFailures", 2);
 			AssertHasStatistic("TestIgnored", 3);
-
 		}
 
 		[Test]
+		public void ShouldGetFailureReasonForFailedBuildResult()
+		{
+			FirstMatch failureTypeStat = new FirstMatch("BuildErrorType", "//failure/builderror/type");
+			FirstMatch failureMessageStat = new FirstMatch("BuildErrorMessage", "//failure/builderror/message");
+			XmlDocument document = new XmlDocument();
+			document.LoadXml(failedBuildLog);
+			XPathNavigator navigator = document.CreateNavigator();
+
+			string failureType = Convert.ToString(failureTypeStat.Apply(navigator));
+			string failureMessage = Convert.ToString(failureMessageStat.Apply(navigator));
+
+			Assert.IsTrue(failedBuildLog.IndexOf("builderror") > 0);
+			Assert.AreEqual("NAnt.Core.BuildException", failureType);
+			Assert.AreEqual(@"External Program Failed: c:\sf\ccnet\tools\ncover\NCover.Console.exe (return code was 1)", failureMessage);
+		}
+		[Test]
 		public void ShouldCollectFxCopStatistics()
 		{
-			builder.ProcessBuildResults(xml);
+			builder.ProcessBuildResults(successfulBuildLog);
 
 			AssertHasStatistic("FxCop Warnings", 1);
 			AssertHasStatistic("FxCop Errors", 205);

@@ -3,8 +3,6 @@ using System.Collections;
 using System.IO;
 using System.Xml;
 using Exortech.NetReflector;
-using ThoughtWorks.CruiseControl.Core;
-using ThoughtWorks.CruiseControl.Core.publishers.Statistics;
 using ThoughtWorks.CruiseControl.Remote;
 
 namespace ThoughtWorks.CruiseControl.Core.Publishers.Statistics
@@ -71,7 +69,7 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers.Statistics
 			{
 				XmlElement stat = doc.CreateElement("statistic");
 				stat.SetAttribute("name", key);
-				stat.InnerText = stats[key].ToString();
+				stat.InnerText = Convert.ToString(stats[key]);
 				el.AppendChild(stat);
 			}
 			return el;

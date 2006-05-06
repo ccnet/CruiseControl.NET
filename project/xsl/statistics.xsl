@@ -53,7 +53,7 @@
 			<tr>
 				<th>Build Label</th>
 				<th>Status</th>
-				<xsl:for-each select="./integration[1]/statistic">
+				<xsl:for-each select="./integration[last()]/statistic">
 					<th>
 						<xsl:value-of select="./@name" />
 					</th>

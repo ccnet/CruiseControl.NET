@@ -5,7 +5,7 @@ using System.IO;
 using NPlot;
 using PlotSurface2D = NPlot.Bitmap.PlotSurface2D;
 
-namespace ThoughtWorks.CruiseControl.Core.publishers.Statistics
+namespace ThoughtWorks.CruiseControl.Core.Publishers.Statistics
 {
 	public class Plotter : IPlotter
 	{
@@ -34,6 +34,8 @@ namespace ThoughtWorks.CruiseControl.Core.publishers.Statistics
 		{
 
 			PlotSurface2D plotSurface2D = new PlotSurface2D(200, 200);
+
+			BaseSequencePlot baseSequencePlot = new BaseSequencePlot();
 			LinePlot linePlot = new LinePlot(ordinateData, abscissaData);
 			linePlot.ShadowColor = Color.Beige;
 			linePlot.Pen = new Pen(Color.Blue);

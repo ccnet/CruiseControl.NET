@@ -1,7 +1,7 @@
 using System.Collections;
 using System.IO;
 
-namespace ThoughtWorks.CruiseControl.Core.publishers.Statistics
+namespace ThoughtWorks.CruiseControl.Core.Publishers.Statistics
 {
 	public interface IPlotter
 	{

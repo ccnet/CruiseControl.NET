@@ -3,7 +3,7 @@ using System.Collections;
 using System.Xml;
 using System.Xml.XPath;
 
-namespace ThoughtWorks.CruiseControl.Core.publishers.Statistics
+namespace ThoughtWorks.CruiseControl.Core.Publishers.Statistics
 {
 	public class StatisticsChartGenerator
 	{

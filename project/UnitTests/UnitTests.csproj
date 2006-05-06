@@ -1215,6 +1215,10 @@
                     BuildAction = "Content"
                 />
                 <File
+                    RelPath = "resources\failedbuildlog.xml"
+                    BuildAction = "Content"
+                />
+                <File
                     RelPath = "resources\Statistics.csv"
                     BuildAction = "None"
                 />
