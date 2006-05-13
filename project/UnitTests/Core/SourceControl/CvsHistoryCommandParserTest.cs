@@ -20,12 +20,14 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 		}
 
 		[Test]
+		[Ignore("This test relies on ccnet being checked out from CVS!")]
 		public void ReadRepositoryFile()
 		{
 			Assert.IsNotNull(parser.Repository);
 		}
 
 		[Test]
+		[Ignore("This test relies on ccnet being checked out from CVS!")]
 		public void GetChangeList()
 		{
 			string changeString = string.Format("M 2005-06-09 02:45 +0000 user 1.1 file.cpp {0}/lib == <remote>\n"
@@ -38,6 +40,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 		}
 
 		[Test]
+		[Ignore("This test relies on ccnet being checked out from CVS!")]
 		public void ParseEntryCannotStartWithDirectorySeparatorChar()
 		{
 			parser.WorkingDirectory = Path.Combine(workingDir.FullName, "lib");
@@ -52,6 +55,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 
 		/// This test is a duplicate of the one above it other than the assertion
 		[Test]
+		[Ignore("This test relies on ccnet being checked out from CVS!")]
 		public void ParseEntryWithChangeInWorkingDirectory()
 		{
 			parser.WorkingDirectory = Path.Combine(workingDir.FullName, "lib");
@@ -64,6 +68,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 
 		/// This test is a duplicate of the one above it??
 		[Test]
+		[Ignore("This test relies on ccnet being checked out from CVS!")]
 		public void ParseEntryDirectoryNameInFile()
 		{
 			parser.WorkingDirectory = Path.Combine(workingDir.FullName, "lib");
