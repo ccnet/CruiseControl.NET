@@ -1235,7 +1235,6 @@
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
-                <Folder RelPath = "Web\" />
                 <Folder RelPath = "WebDashboard\Cache\" />
                 <File
                     RelPath = "WebDashboard\Dashboard\ActionInstantiatorWithObjectGiverTest.cs"
