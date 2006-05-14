@@ -139,7 +139,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 			this.txtDashboard.Name = "txtDashboard";
 			this.txtDashboard.Size = new System.Drawing.Size(350, 20);
 			this.txtDashboard.TabIndex = 5;
-			this.txtDashboard.Text = "";
+			this.txtDashboard.Text = "http://localhost/ccnet";
 			// 
 			// label3
 			// 
@@ -167,7 +167,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 			this.txtRemoting.Name = "txtRemoting";
 			this.txtRemoting.Size = new System.Drawing.Size(350, 20);
 			this.txtRemoting.TabIndex = 8;
-			this.txtRemoting.Text = "";
+			this.txtRemoting.Text = "localhost";
 			// 
 			// label5
 			// 
@@ -186,7 +186,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 			this.txtHttp.Name = "txtHttp";
 			this.txtHttp.Size = new System.Drawing.Size(350, 20);
 			this.txtHttp.TabIndex = 10;
-			this.txtHttp.Text = "";
+			this.txtHttp.Text = "http://localhost/cruisecontrol/xml.jsp";
 			// 
 			// btnCancel
 			// 
