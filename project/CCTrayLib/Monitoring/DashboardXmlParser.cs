@@ -42,7 +42,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
 
 		public ProjectStatus ExtractAsProjectStatus(string sourceXml, string projectName)
 		{
-			DashboardProjects projects = (DashboardProjects) serializer.Deserialize(new StringReader(sourceXml));
+			DashboardProjects projects = GetProjects(sourceXml);
 
 			if (projects.Project != null)
 			{
@@ -65,6 +65,27 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
 			}
 
 			throw new ApplicationException("Project " + projectName + " is not known to the dashboard");
+		}
+
+		private DashboardProjects GetProjects(string sourceXml)
+		{
+			return (DashboardProjects) serializer.Deserialize(new StringReader(sourceXml));
+		}
+
+		public string[] ExtractProjectNames(string sourceXml)
+		{
+			DashboardProjects projects = GetProjects(sourceXml);
+
+			if (projects.Project == null)
+				return new string[0];
+
+			string[] retVal = new string[projects.Project.Length];
+			for (int i = 0; i < projects.Project.Length; i++)
+			{
+				retVal[i] = projects.Project[i].name;
+			}
+			
+			return retVal;
 		}
 	}
 }

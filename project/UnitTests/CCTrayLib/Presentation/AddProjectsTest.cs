@@ -14,7 +14,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Presentation
 		[Explicit]
 		public void ShowDialogForInteractiveTesting()
 		{
-			AddProjects addProjects = new AddProjects(new Project[0]);
+			AddProjects addProjects = new AddProjects(null, new Project[0]);
 			addProjects.GetListOfNewProjects(null);
 		}
 		
@@ -26,10 +26,10 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Presentation
 			                     	new Project("tcp://otherserver:456/blah", "proj2"),
 			                     };
 			
-			AddProjects addProjects = new AddProjects(projects);
+			AddProjects addProjects = new AddProjects(null, projects);
 			Assert.AreEqual(2, addProjects.lbServer.Items.Count);
-			Assert.AreEqual(projects[0].ServerDisplayName, addProjects.lbServer.Items[0]);
-			Assert.AreEqual(projects[1].ServerDisplayName, addProjects.lbServer.Items[1]);
+			Assert.AreEqual(projects[0].BuildServer, addProjects.lbServer.Items[0]);
+			Assert.AreEqual(projects[1].BuildServer, addProjects.lbServer.Items[1]);
 		}
 
 		[Test]
@@ -40,10 +40,10 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Presentation
 									 new Project("tcp://a:123/blah", "proj2"),
 			};
 			
-			AddProjects addProjects = new AddProjects(projects);
+			AddProjects addProjects = new AddProjects(null, projects);
 			Assert.AreEqual(2, addProjects.lbServer.Items.Count);
-			Assert.AreEqual(projects[1].ServerDisplayName, addProjects.lbServer.Items[0]);
-			Assert.AreEqual(projects[0].ServerDisplayName, addProjects.lbServer.Items[1]);
+			Assert.AreEqual(projects[1].BuildServer, addProjects.lbServer.Items[0]);
+			Assert.AreEqual(projects[0].BuildServer, addProjects.lbServer.Items[1]);
 		}
 		
 		[Test]
@@ -54,9 +54,9 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Presentation
 									 new Project("tcp://localhost:123/blah", "proj2"),
 			};
 			
-			AddProjects addProjects = new AddProjects(projects);
+			AddProjects addProjects = new AddProjects(null, projects);
 			Assert.AreEqual(1, addProjects.lbServer.Items.Count);
-			Assert.AreEqual(projects[0].ServerDisplayName, addProjects.lbServer.Items[0]);
+			Assert.AreEqual(projects[0].BuildServer, addProjects.lbServer.Items[0]);
 			
 		}
 	}

@@ -206,6 +206,16 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Configuration\BuildServer.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Configuration\BuildServerTransport.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Configuration\BuildTransitionNotification.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -261,22 +271,22 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "Monitoring\CruiseProjectManager.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
                     RelPath = "Monitoring\CruiseProjectManagerFactory.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "Monitoring\DashboardCruiseProjectManager.cs"
+                    RelPath = "Monitoring\DashboardXmlParser.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "Monitoring\DashboardXmlParser.cs"
+                    RelPath = "Monitoring\HttpCruiseProjectManager.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Monitoring\HttpProjectListRetriever.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -341,9 +351,29 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Monitoring\RemotingCruiseProjectManager.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Monitoring\RemotingProjectListRetriever.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Monitoring\WebRetriever.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Presentation\AddBuildServer.cs"
+                    SubType = "Form"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Presentation\AddBuildServer.resx"
+                    DependentUpon = "AddBuildServer.cs"
+                    BuildAction = "EmbeddedResource"
                 />
                 <File
                     RelPath = "Presentation\AddProjects.cs"

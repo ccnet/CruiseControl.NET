@@ -1,5 +1,6 @@
 using NMock;
 using NUnit.Framework;
+using ThoughtWorks.CruiseControl.CCTrayLib.Configuration;
 using ThoughtWorks.CruiseControl.CCTrayLib.Monitoring;
 using ThoughtWorks.CruiseControl.Remote;
 
@@ -17,10 +18,10 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Monitoring
 			mockCruiseManagerFactory.Strict = true;
 			CruiseProjectManagerFactory factory = new CruiseProjectManagerFactory((ICruiseManagerFactory) mockCruiseManagerFactory.MockInstance);
 
-			const string serverUrl = "tcp://somethingOrOther";
-			mockCruiseManagerFactory.ExpectAndReturn("GetCruiseManager", null, serverUrl);
+			BuildServer server= new BuildServer("tcp://somethingOrOther");
+			mockCruiseManagerFactory.ExpectAndReturn("GetCruiseManager", null, server.Url);
 
-			ICruiseProjectManager manager = factory.Create(serverUrl, ProjectName);
+			ICruiseProjectManager manager = factory.Create(new Project(server, ProjectName));
 			Assert.AreEqual(ProjectName, manager.ProjectName);
 
 			mockCruiseManagerFactory.Verify();
@@ -33,11 +34,11 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Monitoring
 			mockCruiseManagerFactory.Strict = true;
 			CruiseProjectManagerFactory factory = new CruiseProjectManagerFactory((ICruiseManagerFactory) mockCruiseManagerFactory.MockInstance);
 
-			const string serverUrl = "http://somethingOrOther";
+			BuildServer server = new BuildServer("http://somethingOrOther");
 
-			ICruiseProjectManager manager = factory.Create(serverUrl, ProjectName);
+			ICruiseProjectManager manager = factory.Create(new Project(server, ProjectName));
 			Assert.AreEqual(ProjectName, manager.ProjectName);
-			Assert.AreEqual(typeof (DashboardCruiseProjectManager), manager.GetType());
+			Assert.AreEqual(typeof (HttpCruiseProjectManager), manager.GetType());
 
 			mockCruiseManagerFactory.Verify();
 		}

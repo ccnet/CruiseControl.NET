@@ -3,6 +3,7 @@ using System.Collections;
 using System.ComponentModel;
 using System.Windows.Forms;
 using ThoughtWorks.CruiseControl.CCTrayLib.Configuration;
+using ThoughtWorks.CruiseControl.CCTrayLib.Monitoring;
 using ThoughtWorks.CruiseControl.Remote;
 
 namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
@@ -18,23 +19,26 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 		private GroupBox groupBox1;
 		private Button btnAdd;
 		private GroupBox groupBox2;
-		private TextBox txtServer;
 
-		private Project selectedServer;
+		private BuildServer selectedServer;
 
 		/// <summary>
 		/// Required designer variable.
 		/// </summary>
 		private Container components = null;
 
-		public AddProjects(Project[] projects)
+		private ICruiseProjectManagerFactory cruiseProjectManagerFactory;
+
+		public AddProjects(ICruiseProjectManagerFactory cruiseProjectManagerFactory, Project[] currentProjectList)
 		{
+			this.cruiseProjectManagerFactory = cruiseProjectManagerFactory;
+
 			InitializeComponent();
 
-			foreach (Project project in projects)
+			foreach (Project project in currentProjectList)
 			{
-				if (!lbServer.Items.Contains(project.ServerDisplayName))
-					lbServer.Items.Add(project.ServerDisplayName);
+				if (!lbServer.Items.Contains(project.BuildServer))
+					lbServer.Items.Add(project.BuildServer);
 			}
 		}
 
@@ -45,7 +49,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 				ArrayList newProjects = new ArrayList();
 				foreach (string projectName in lbProject.SelectedItems)
 				{
-					newProjects.Add(new Project(selectedServer.ServerUrl, projectName));
+					newProjects.Add(new Project(selectedServer, projectName));
 				}
 				return (Project[]) newProjects.ToArray(typeof (Project));
 			}
@@ -75,7 +79,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 		/// </summary>
 		private void InitializeComponent()
 		{
-			System.Resources.ResourceManager resources = new System.Resources.ResourceManager(typeof (AddProjects));
+			System.Resources.ResourceManager resources = new System.Resources.ResourceManager(typeof(AddProjects));
 			this.btnOK = new System.Windows.Forms.Button();
 			this.btnCancel = new System.Windows.Forms.Button();
 			this.label4 = new System.Windows.Forms.Label();
@@ -84,7 +88,6 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 			this.lbServer = new System.Windows.Forms.ListBox();
 			this.groupBox1 = new System.Windows.Forms.GroupBox();
 			this.btnAdd = new System.Windows.Forms.Button();
-			this.txtServer = new System.Windows.Forms.TextBox();
 			this.groupBox2 = new System.Windows.Forms.GroupBox();
 			this.groupBox1.SuspendLayout();
 			this.groupBox2.SuspendLayout();
@@ -111,12 +114,11 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 			// 
 			// label4
 			// 
-			this.label4.Location = new System.Drawing.Point(10, 35);
+			this.label4.Location = new System.Drawing.Point(10, 45);
 			this.label4.Name = "label4";
-			this.label4.Size = new System.Drawing.Size(570, 35);
+			this.label4.Size = new System.Drawing.Size(570, 20);
 			this.label4.TabIndex = 1;
-			this.label4.Text = "If you have configured your build server to run on a port other than the default " +
-				"of 21234, you can follow the name of the build server with :port.";
+			this.label4.Text = "If you want to add a new build server, click Add Server.";
 			// 
 			// lbProject
 			// 
@@ -131,9 +133,10 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 			// 
 			this.label1.Location = new System.Drawing.Point(10, 10);
 			this.label1.Name = "label1";
-			this.label1.Size = new System.Drawing.Size(570, 23);
+			this.label1.Size = new System.Drawing.Size(570, 35);
 			this.label1.TabIndex = 0;
-			this.label1.Text = "Select the build server, then select one or more projects to add.";
+			this.label1.Text = "The list on the left shows the build servers that CCTray currently knows about.  " +
+				"Select a build server, then select one or more projects to add.";
 			// 
 			// lbServer
 			// 
@@ -147,7 +150,6 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 			// groupBox1
 			// 
 			this.groupBox1.Controls.Add(this.btnAdd);
-			this.groupBox1.Controls.Add(this.txtServer);
 			this.groupBox1.Controls.Add(this.lbServer);
 			this.groupBox1.FlatStyle = System.Windows.Forms.FlatStyle.System;
 			this.groupBox1.Location = new System.Drawing.Point(10, 80);
@@ -160,21 +162,11 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 			// btnAdd
 			// 
 			this.btnAdd.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.btnAdd.Location = new System.Drawing.Point(190, 185);
+			this.btnAdd.Location = new System.Drawing.Point(100, 185);
 			this.btnAdd.Name = "btnAdd";
 			this.btnAdd.TabIndex = 2;
 			this.btnAdd.Text = "Add Server";
 			this.btnAdd.Click += new System.EventHandler(this.btnAddServer_Click);
-			// 
-			// txtServer
-			// 
-			this.txtServer.AcceptsReturn = true;
-			this.txtServer.Location = new System.Drawing.Point(10, 185);
-			this.txtServer.Name = "txtServer";
-			this.txtServer.Size = new System.Drawing.Size(170, 20);
-			this.txtServer.TabIndex = 1;
-			this.txtServer.Text = "";
-			this.txtServer.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.txtServer_KeyPress);
 			// 
 			// groupBox2
 			// 
@@ -199,7 +191,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 			this.Controls.Add(this.btnCancel);
 			this.Controls.Add(this.btnOK);
 			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
-			this.Icon = ((System.Drawing.Icon) (resources.GetObject("$this.Icon")));
+			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
 			this.Name = "AddProjects";
 			this.Text = "Project";
 			this.groupBox1.ResumeLayout(false);
@@ -212,64 +204,42 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 
 		private void btnAddServer_Click(object sender, EventArgs e)
 		{
-			if (txtServer.Text.Trim().Length == 0)
-				return;
-
-			try
+			AddBuildServer addBuildServer = new AddBuildServer(cruiseProjectManagerFactory);
+			
+			BuildServer buildServer = addBuildServer.ChooseNewBuildServer(this);
+			if (buildServer != null)
 			{
-				// validate
-				new Project().SetServerUrlFromDisplayName(txtServer.Text);
-
-				lbServer.SelectedIndex = lbServer.Items.Add(txtServer.Text);
+				lbServer.SelectedIndex = lbServer.Items.Add(buildServer);
 			}
-			catch (Exception ex)
-			{
-				MessageBox.Show(this, ex.Message, "Invalid Server Name");
-			}
-
 		}
 
 		private void lbServer_SelectedIndexChanged(object sender, EventArgs e)
 		{
-			string serverName = lbServer.Text;
-			selectedServer = new Project();
-			selectedServer.SetServerUrlFromDisplayName(serverName);
-
+			selectedServer = (BuildServer) lbServer.SelectedItem;
 			RetrieveListOfProjects(selectedServer);
 		}
 
-		private void RetrieveListOfProjects(Project server)
+		private void RetrieveListOfProjects(BuildServer server)
 		{
 			Cursor.Current = Cursors.WaitCursor;
 			try
 			{
 				lbProject.Items.Clear();
 
-				RemoteCruiseManagerFactory factory = new RemoteCruiseManagerFactory();
-				ICruiseManager manager = factory.GetCruiseManager(server.ServerUrl);
-				ProjectStatus[] projectStatuses = manager.GetProjectStatus();
+				Project[] projectList = cruiseProjectManagerFactory.GetProjectList(server);
 
-				foreach (ProjectStatus status in projectStatuses)
+				foreach (Project project in projectList)
 				{
-					lbProject.Items.Add(status.Name);
+					lbProject.Items.Add(project.ProjectName);
 				}
 			}
 			catch (Exception ex)
 			{
-				MessageBox.Show(this, "Unable to connect to server " + server.ServerDisplayName + ": " + ex.Message, "Error");
+				MessageBox.Show(this, "Unable to connect to server " + server.DisplayName + ": " + ex.Message, "Error");
 			}
 			finally
 			{
 				Cursor.Current = Cursors.Default;
-			}
-		}
-
-		private void txtServer_KeyPress(object sender, KeyPressEventArgs e)
-		{
-			if (e.KeyChar == 13)
-			{
-				e.Handled = true;
-				btnAddServer_Click(this, EventArgs.Empty);
 			}
 		}
 	}

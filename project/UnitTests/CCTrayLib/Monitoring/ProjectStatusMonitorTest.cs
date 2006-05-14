@@ -20,7 +20,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Monitoring
 			mockCruiseManager = new DynamicMock( typeof (ICruiseManager) );
 			mockCruiseManager.Strict = true;
 
-			manager = new CruiseProjectManager((ICruiseManager) mockCruiseManager.MockInstance, PROJECT_NAME);
+			manager = new RemotingCruiseProjectManager((ICruiseManager) mockCruiseManager.MockInstance, PROJECT_NAME);
 		}
 
 		[TearDown]

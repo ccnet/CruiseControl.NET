@@ -8,12 +8,12 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Configuration
 	public class CCTrayMultiConfiguration : ICCTrayMultiConfiguration
 	{
 		private PersistentConfiguration persistentConfiguration;
-		private ICruiseProjectManagerFactory managerFactory;
+		private ICruiseProjectManagerFactory cruiseProjectManagerFactory;
 		private readonly string configFileName;
 
-		public CCTrayMultiConfiguration(ICruiseProjectManagerFactory managerFactory, string configFileName)
+		public CCTrayMultiConfiguration(ICruiseProjectManagerFactory cruiseProjectManagerFactory, string configFileName)
 		{
-			this.managerFactory = managerFactory;
+			this.cruiseProjectManagerFactory = cruiseProjectManagerFactory;
 			this.configFileName = configFileName;
 
 			ReadConfigurationFile();
@@ -25,7 +25,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Configuration
 			for (int i = 0; i < Projects.Length; i++)
 			{
 				Project project = Projects[i];
-				ICruiseProjectManager projectManager = managerFactory.Create(project.ServerUrl, project.ProjectName);
+				ICruiseProjectManager projectManager = cruiseProjectManagerFactory.Create(project);
 				retVal[i] = new ProjectMonitor(projectManager);
 			}
 			return retVal;
@@ -83,7 +83,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Configuration
 
 		public ICCTrayMultiConfiguration Clone()
 		{
-			return new CCTrayMultiConfiguration(managerFactory, configFileName);
+			return new CCTrayMultiConfiguration(cruiseProjectManagerFactory, configFileName);
 		}
 
 		public AudioFiles Audio
@@ -112,5 +112,9 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Configuration
 			get { return persistentConfiguration.X10; }
 		}
 
+		public ICruiseProjectManagerFactory CruiseProjectManagerFactory
+		{
+			get { return cruiseProjectManagerFactory; }
+		}
 	}
 }

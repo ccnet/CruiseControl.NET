@@ -5,6 +5,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Configuration
 	public interface ICCTrayMultiConfiguration
 	{
 		IProjectMonitor[] GetProjectStatusMonitors();
+		ICruiseProjectManagerFactory CruiseProjectManagerFactory { get; }
 
 		Project[] Projects { get; set; }
 		bool ShouldShowBalloonOnBuildTransition { get; set; }

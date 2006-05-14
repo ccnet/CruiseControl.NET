@@ -217,6 +217,11 @@
                     BuildAction = "EmbeddedResource"
                 />
                 <File
+                    RelPath = "CCTrayLib\Configuration\BuildServerTest.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "CCTrayLib\Configuration\CCTrayMultiConfigurationTest.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -242,12 +247,12 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "CCTrayLib\Monitoring\DashboardCruiseProjectManagerTest.cs"
+                    RelPath = "CCTrayLib\Monitoring\DashboardXmlParserTest.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "CCTrayLib\Monitoring\DashboardXmlParserTest.cs"
+                    RelPath = "CCTrayLib\Monitoring\HttpCruiseProjectManagerTest.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -273,6 +278,11 @@
                 />
                 <File
                     RelPath = "CCTrayLib\Monitoring\StubCurrentTimeProvider.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "CCTrayLib\Presentation\AddBuildServerTest.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

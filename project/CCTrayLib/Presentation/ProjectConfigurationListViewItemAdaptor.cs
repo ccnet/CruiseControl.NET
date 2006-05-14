@@ -12,7 +12,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 		public ProjectConfigurationListViewItemAdaptor(Project project)
 		{
 			this.project = project;
-			item = new ListViewItem(new string[] {project.ServerDisplayName, project.ProjectName});
+			item = new ListViewItem(new string[] {project.BuildServer.DisplayName, project.BuildServer.Transport.ToString(), project.ProjectName});
 			item.Tag = this;
 		}
 
@@ -28,8 +28,9 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 
 		public void Rebind()
 		{
-			item.SubItems[0].Text = project.ServerDisplayName;
-			item.SubItems[1].Text = project.ProjectName;
+			item.SubItems[0].Text = project.BuildServer.DisplayName;
+			item.SubItems[1].Text = project.BuildServer.Transport.ToString();
+			item.SubItems[2].Text = project.ProjectName;
 		}
 	}
 }

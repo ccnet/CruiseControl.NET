@@ -9,7 +9,7 @@ using ThoughtWorks.CruiseControl.WebDashboard.MVC.View;
 using ThoughtWorks.CruiseControl.WebDashboard.Plugins.ServerReport;
 using ThoughtWorks.CruiseControl.WebDashboard.ServerConnection;
 
-namespace ThoughtWkorks.CruiseControl.UnitTests.WebDashboard.Plugins.ViewServerLog
+namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Plugins.ViewServerLog
 {
 	[TestFixture]
 	public class ServerLogServerPluginTest

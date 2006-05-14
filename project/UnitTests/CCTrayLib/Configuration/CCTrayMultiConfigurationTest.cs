@@ -9,7 +9,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Configuration
 	[TestFixture]
 	public class CCTrayMultiConfigurationTest
 	{
-		public const string ConfigXml = @"
+		public const string ConfigXml =
+			@"
 <Configuration>
 	<Projects>
 		<Project serverUrl='tcp://blah1' projectName='ProjectOne' />
@@ -20,18 +21,18 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Configuration
 
 </Configuration>";
 
-		DynamicMock mockServerConfigFactory;
+		private DynamicMock mockServerConfigFactory;
 
 		[Test]
 		public void CanLoadConfigurationFromFile()
 		{
 			CCTrayMultiConfiguration configuration = CreateTestConfiguration(ConfigXml);
 
-			Assert.AreEqual( 2, configuration.Projects.Length );
-			Assert.AreEqual( "tcp://blah1", configuration.Projects[ 0 ].ServerUrl );
-			Assert.AreEqual( "ProjectOne", configuration.Projects[ 0 ].ProjectName );
-			Assert.AreEqual( "tcp://blah2", configuration.Projects[ 1 ].ServerUrl );
-			Assert.AreEqual( "Project Two", configuration.Projects[ 1 ].ProjectName );
+			Assert.AreEqual(2, configuration.Projects.Length);
+			Assert.AreEqual("tcp://blah1", configuration.Projects[0].ServerUrl);
+			Assert.AreEqual("ProjectOne", configuration.Projects[0].ProjectName);
+			Assert.AreEqual("tcp://blah2", configuration.Projects[1].ServerUrl);
+			Assert.AreEqual("Project Two", configuration.Projects[1].ProjectName);
 
 			Assert.IsTrue(configuration.ShouldShowBalloonOnBuildTransition);
 		}
@@ -39,7 +40,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Configuration
 		[Test]
 		public void WhenTheConfigurationDoesNotContainDirectivesRelatingToShowingBalloonsItDefaultsToTrue()
 		{
-			const string ConfigWithoutBalloonStuff= @"
+			const string ConfigWithoutBalloonStuff = @"
 <Configuration>
 	<Projects />
 </Configuration>";
@@ -48,18 +49,18 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Configuration
 			Assert.IsTrue(configuration.ShouldShowBalloonOnBuildTransition);
 		}
 
-		const string configFileName = "test_config.xml";
+		private const string configFileName = "test_config.xml";
 
 		private CCTrayMultiConfiguration CreateTestConfiguration(string configFileContents)
 		{
-			using (TextWriter configFile = File.CreateText( configFileName ))
-				configFile.Write( configFileContents );
+			using (TextWriter configFile = File.CreateText(configFileName))
+				configFile.Write(configFileContents);
 
-			mockServerConfigFactory = new DynamicMock(typeof(ICruiseProjectManagerFactory));
+			mockServerConfigFactory = new DynamicMock(typeof (ICruiseProjectManagerFactory));
 			mockServerConfigFactory.Strict = true;
-			return new CCTrayMultiConfiguration( 
-				(ICruiseProjectManagerFactory) mockServerConfigFactory.MockInstance,  
-				configFileName );
+			return new CCTrayMultiConfiguration(
+				(ICruiseProjectManagerFactory) mockServerConfigFactory.MockInstance,
+				configFileName);
 		}
 
 
@@ -68,8 +69,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Configuration
 		{
 			CCTrayMultiConfiguration provider = CreateTestConfiguration(ConfigXml);
 
-			mockServerConfigFactory.ExpectAndReturn("Create", null, "tcp://blah1", "ProjectOne");
-			mockServerConfigFactory.ExpectAndReturn("Create", null, "tcp://blah2", "Project Two");
+			mockServerConfigFactory.ExpectAndReturn("Create", null, provider.Projects[0]);
+			mockServerConfigFactory.ExpectAndReturn("Create", null, provider.Projects[1]);
 
 			IProjectMonitor[] monitorList = provider.GetProjectStatusMonitors();
 			Assert.AreEqual(2, monitorList.Length);
@@ -80,30 +81,29 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Configuration
 		[Test]
 		public void CanPersist()
 		{
-			const string SimpleConfig= @"
+			const string SimpleConfig = @"
 <Configuration>
 	<Projects />
 </Configuration>";
 
 			CCTrayMultiConfiguration configuration = CreateTestConfiguration(SimpleConfig);
-			configuration.Projects = new Project[1] { new Project("url", "projName") };
+			configuration.Projects = new Project[1] {new Project("url", "projName")};
 
 			configuration.Persist();
 
 			configuration.Reload();
 			Assert.AreEqual(1, configuration.Projects.Length);
 			Assert.AreEqual("projName", configuration.Projects[0].ProjectName);
-
 		}
 
 		[Test]
 		public void CreatesAnEmptySettingsFileIfTheConfigFileIsNotFound()
 		{
-			mockServerConfigFactory = new DynamicMock(typeof(ICruiseProjectManagerFactory));
+			mockServerConfigFactory = new DynamicMock(typeof (ICruiseProjectManagerFactory));
 			mockServerConfigFactory.Strict = true;
-			CCTrayMultiConfiguration configuration = new CCTrayMultiConfiguration( 
-				(ICruiseProjectManagerFactory) mockServerConfigFactory.MockInstance,  
-				"config_file_that_isnt_present.xml" );
+			CCTrayMultiConfiguration configuration = new CCTrayMultiConfiguration(
+				(ICruiseProjectManagerFactory) mockServerConfigFactory.MockInstance,
+				"config_file_that_isnt_present.xml");
 
 			Assert.IsNotNull(configuration);
 			Assert.AreEqual(0, configuration.Projects.Length);
@@ -112,8 +112,6 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Configuration
 			Assert.IsNull(configuration.Audio.FixedBuildSound);
 			Assert.IsNull(configuration.Audio.StillFailingBuildSound);
 			Assert.IsNull(configuration.Audio.StillSuccessfulBuildSound);
-
 		}
 	}
-
 }
