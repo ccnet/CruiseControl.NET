@@ -69,7 +69,10 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers.Statistics
 
 		public void Add(Statistic stat)
 		{
-			logStatistics.Add(stat);
+			if (!logStatistics.Contains(stat))
+			{
+				logStatistics.Add(stat);
+			}
 		}
 
 		private Hashtable ProcessLog(XmlDocument doc)
@@ -130,6 +133,11 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers.Statistics
 		public object Statistic(string name)
 		{
 			return stats[name];
+		}
+
+		public IList Statistics
+		{
+			get { return logStatistics; }
 		}
 	}
 

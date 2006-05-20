@@ -1,11 +1,17 @@
 using System.Xml.XPath;
+using Exortech.NetReflector;
 
 namespace ThoughtWorks.CruiseControl.Core.Publishers.Statistics
 {
+	[ReflectorType("statistic")]
 	public class Statistic
 	{
-		protected readonly string name;
-		protected readonly string xpath;
+		protected string name;
+		protected string xpath;
+
+		public Statistic()
+		{
+		}
 
 		public Statistic(string name, string xpath)
 		{
@@ -13,9 +19,18 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers.Statistics
 			this.xpath = xpath;
 		}
 
+		[ReflectorProperty("xpath")]
+		public string Xpath
+		{
+			get { return xpath; }
+			set { xpath = value; }
+		}
+
+		[ReflectorProperty("name")]
 		public string Name
 		{
 			get { return name; }
+			set { name = value; }
 		}
 
 		public object Apply(XPathNavigator nav)
@@ -27,6 +42,17 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers.Statistics
 		protected virtual object Evaluate(XPathNavigator nav)
 		{
 			return nav.Evaluate(xpath);
+		}
+
+		public override bool Equals(object obj)
+		{
+			Statistic o = (Statistic) obj;
+			return name.Equals(o.Name);
+		}
+
+		public override int GetHashCode()
+		{
+			return base.GetHashCode();
 		}
 	}
 }

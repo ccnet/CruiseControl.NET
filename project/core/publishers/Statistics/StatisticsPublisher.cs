@@ -11,10 +11,16 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers.Statistics
 	public class StatisticsPublisher : ITask
 	{
 		private static string csvFileName = "statistics.csv";
+		private Statistic[] configuredStatistics = new Statistic[0];
 
 		public void Run(IIntegrationResult integrationResult)
 		{
 			StatisticsBuilder builder = new StatisticsBuilder();
+			for (int i = 0; i < configuredStatistics.Length; i++)
+			{
+				Statistic statistic = configuredStatistics[i];
+				builder.Add(statistic);				
+			}
 			Hashtable stats = builder.ProcessBuildResults(integrationResult);
 
 			XmlDocument xmlDocument = UpdateXmlFile(stats, integrationResult);
@@ -27,6 +33,13 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers.Statistics
 			StatisticsChartGenerator chartGenerator = new StatisticsChartGenerator();
 			chartGenerator.RelevantStats = new string[]{"TestCount", "Duration"};
 			return chartGenerator;
+		}
+
+		[ReflectorArray("statisticList", Required=false)]
+		public Statistic[] ConfiguredStatistics
+		{
+			get{ return configuredStatistics;}
+			set{configuredStatistics = value;}
 		}
 
 		private XmlDocument UpdateXmlFile(Hashtable stats, IIntegrationResult integrationResult)

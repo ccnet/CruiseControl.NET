@@ -136,6 +136,17 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Publishers.Statistics
 			AssertXPath(xml, "//statistics/statistic/@name", "ProjectName");
 		}
 
+		[Test]
+		public void ShouldNotAddStatisticWithSameName()
+		{
+			int count = builder.Statistics.Count;
+			Assert.IsTrue(count > 0);
+			builder.Add(new Statistic("abc", "cdf"));
+			Assert.AreEqual(count + 1, builder.Statistics.Count);
+			builder.Add(new Statistic("abc", "cdf"));
+			Assert.AreEqual(count + 1, builder.Statistics.Count, "Duplicate Statistic added");
+		}
+
 		private void AssertXPath(string xml, string xpath, string expectedValue)
 		{
 			XmlDocument doc = new XmlDocument();
