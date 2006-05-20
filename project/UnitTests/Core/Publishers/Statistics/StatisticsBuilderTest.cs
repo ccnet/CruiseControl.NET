@@ -94,8 +94,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Publishers.Statistics
 			document.LoadXml(failedBuildLog);
 			XPathNavigator navigator = document.CreateNavigator();
 
-			string failureType = Convert.ToString(failureTypeStat.Apply(navigator));
-			string failureMessage = Convert.ToString(failureMessageStat.Apply(navigator));
+			string failureType = Convert.ToString(failureTypeStat.Apply(navigator).Value);
+			string failureMessage = Convert.ToString(failureMessageStat.Apply(navigator).Value);
 
 			Assert.IsTrue(failedBuildLog.IndexOf("builderror") > 0);
 			Assert.AreEqual("NAnt.Core.BuildException", failureType);

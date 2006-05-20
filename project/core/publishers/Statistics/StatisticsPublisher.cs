@@ -21,7 +21,7 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers.Statistics
 				Statistic statistic = configuredStatistics[i];
 				builder.Add(statistic);				
 			}
-			Hashtable stats = builder.ProcessBuildResults(integrationResult);
+			IList stats = builder.ProcessBuildResults(integrationResult);
 
 			XmlDocument xmlDocument = UpdateXmlFile(stats, integrationResult);
 			ChartGenerator().Process(xmlDocument, integrationResult.ArtifactDirectory);
@@ -42,7 +42,7 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers.Statistics
 			set{configuredStatistics = value;}
 		}
 
-		private XmlDocument UpdateXmlFile(Hashtable stats, IIntegrationResult integrationResult)
+		private XmlDocument UpdateXmlFile(IList stats, IIntegrationResult integrationResult)
 		{
 			XmlDocument doc = new XmlDocument();
 	
@@ -75,14 +75,14 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers.Statistics
 			return doc;
 		}
 
-		private XmlElement toXml(XmlDocument doc, Hashtable stats)
+		private XmlElement toXml(XmlDocument doc, IList stats)
 		{
 			XmlElement el = doc.CreateElement("integration");
-			foreach (string key in stats.Keys)
+			foreach (StatisticResult statisticResult in stats)
 			{
 				XmlElement stat = doc.CreateElement("statistic");
-				stat.SetAttribute("name", key);
-				stat.InnerText = Convert.ToString(stats[key]);
+				stat.SetAttribute("name", statisticResult.StatName);
+				stat.InnerText = Convert.ToString(statisticResult.Value);
 				el.AppendChild(stat);
 			}
 			return el;

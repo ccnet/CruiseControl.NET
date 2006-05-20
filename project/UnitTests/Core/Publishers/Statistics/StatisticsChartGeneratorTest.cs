@@ -203,7 +203,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Publishers.Statistics
 		}
 
 		[Test]
-		[Ignore("Just if you really want to see a chart")]
+		[Explicit]
 		public void ShouldGenerateChart()
 		{
 			StatisticsChartGenerator generator = new StatisticsChartGenerator(new Plotter("c:/", "temp.bmp"));

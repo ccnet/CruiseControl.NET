@@ -33,10 +33,10 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers.Statistics
 			set { name = value; }
 		}
 
-		public object Apply(XPathNavigator nav)
+		public StatisticResult Apply(XPathNavigator nav)
 		{
 			object value = Evaluate(nav);
-			return value;
+			return new StatisticResult(name, value);
 		}
 
 		protected virtual object Evaluate(XPathNavigator nav)
@@ -53,6 +53,29 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers.Statistics
 		public override int GetHashCode()
 		{
 			return base.GetHashCode();
+		}
+	}
+
+	public class StatisticResult
+	{
+		private readonly string statName;
+		private readonly object value;
+
+		public StatisticResult(string statName, object value)
+		{
+			this.statName = statName;
+			this.value = value;
+
+		}
+
+		public string StatName
+		{
+			get { return statName; }
+		}
+
+		public object Value
+		{
+			get { return value; }
 		}
 	}
 }

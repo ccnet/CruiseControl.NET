@@ -10,7 +10,7 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers.Statistics
 {
 	public class StatisticsBuilder
 	{
-		private Hashtable stats = new Hashtable();
+		private IList stats = new ArrayList();
 		private IList logStatistics = new ArrayList();
 
 		public StatisticsBuilder()
@@ -30,7 +30,7 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers.Statistics
 			Add(new Statistic("FxCop Errors", "count(//FxCopReport//Issue[@Level='Error'])"));			
 		}
 
-		public Hashtable ProcessBuildResults(IIntegrationResult result)
+		public IList ProcessBuildResults(IIntegrationResult result)
 		{
 			return ProcessBuildResults(toXml(result));
 		}
@@ -44,7 +44,7 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers.Statistics
 		}
 
 
-		public Hashtable ProcessBuildResults(string xmlString)
+		public IList ProcessBuildResults(string xmlString)
 		{
 			XmlDocument doc = new XmlDocument();
 			doc.Load(new StringReader(xmlString));
@@ -57,11 +57,11 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers.Statistics
 			XmlTextWriter writer = new XmlTextWriter(outStream);
 			writer.Formatting = Formatting.Indented;
 			writer.WriteStartElement("statistics");
-			foreach (string key in stats.Keys)
+			foreach (StatisticResult statisticResult in stats)
 			{
 				writer.WriteStartElement("statistic");
-				writer.WriteAttributeString("name", key);
-				writer.WriteString(Convert.ToString(stats[key]));
+				writer.WriteAttributeString("name", statisticResult.StatName);
+				writer.WriteString(Convert.ToString(statisticResult.Value));
 				writer.WriteEndElement();
 			}
 			writer.WriteEndElement();
@@ -75,12 +75,12 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers.Statistics
 			}
 		}
 
-		private Hashtable ProcessLog(XmlDocument doc)
+		private IList ProcessLog(XmlDocument doc)
 		{
 			XPathNavigator nav = doc.CreateNavigator();
 			foreach (Statistic s in logStatistics)
 			{
-				stats[s.Name] = s.Apply(nav);
+				stats.Add(s.Apply(nav));
 			}
 			return stats;
 		}
@@ -98,11 +98,11 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers.Statistics
 
 		public void WriteStats(TextWriter writer)
 		{
-			for (int i = 0; i < logStatistics.Count; i++)
+			for (int i = 0; i < stats.Count; i++)
 			{
-				Statistic statistic = (Statistic) logStatistics[i];
+				StatisticResult statistic = (StatisticResult) stats[i];
 				if (i > 0) writer.Write(", ");
-				writer.Write(stats[statistic.Name]);
+				writer.Write(statistic.StatName);
 			}
 			writer.WriteLine();
 		}
@@ -132,7 +132,14 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers.Statistics
 
 		public object Statistic(string name)
 		{
-			return stats[name];
+			foreach (StatisticResult statisticResult in stats)
+			{
+				if(statisticResult.StatName.Equals(name))
+				{
+					return statisticResult.Value;
+				}
+			}
+			return null;
 		}
 
 		public IList Statistics
