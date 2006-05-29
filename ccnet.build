@@ -234,7 +234,7 @@
 		</imports>
 		<attributes>
 		    <attribute type="AssemblyVersionAttribute" value="${CCNetLabel}" />
-		    <attribute type="AssemblyCopyrightAttribute" value="Copyright © 2006 ThoughtWorks Inc." />
+		    <attribute type="AssemblyCopyrightAttribute" value="Copyright Â© 2006 ThoughtWorks Inc." />
 		    <attribute type="AssemblyCompanyAttribute" value="ThoughtWorks" />
 		    <attribute type="AssemblyProductAttribute" value="CruiseControl.NET" />
 		</attributes>
