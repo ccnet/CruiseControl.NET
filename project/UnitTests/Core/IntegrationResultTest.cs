@@ -175,7 +175,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 			result.ArtifactDirectory = @"c:\artifactdir\";
 			result.StartTime = new DateTime(2005,06,06,08,45,00);
 
-			Assert.AreEqual(10, result.IntegrationProperties.Count);
+			Assert.AreEqual(11, result.IntegrationProperties.Count);
 			Assert.AreEqual("label", result.IntegrationProperties["CCNetLabel"]);
 			Assert.AreEqual(@"c:\artifactdir\", result.IntegrationProperties["CCNetArtifactDirectory"]);
 			// We purposefully use culture-independent string formats
