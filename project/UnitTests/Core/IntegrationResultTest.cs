@@ -228,39 +228,6 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 		}
 
 		[Test]
-		public void NumericLabel()	
-		{
-			IntegrationResult result = new IntegrationResult();
-			result.Label = "23";
-			Assert.AreEqual(23, result.NumericLabel);
-		}
-
-		[Test]
-		public void NumericLabelWithPrefix()
-		{
-			IntegrationResult result = new IntegrationResult();
-			result.Label = "Prefix23";
-			Assert.AreEqual(23, result.NumericLabel);
-		}
-
-		[Test]
-		public void NumericLabelWithNumericPrefix()
-		{
-			IntegrationResult result = new IntegrationResult();
-			result.Label = "R3SX23";
-			Assert.AreEqual(23, result.NumericLabel);
-		}
-
-		[Test]
-		public void NumericLabelTextOnly()
-		{
-			IntegrationResult result = new IntegrationResult();
-			result.Label = "foo";
-			// Make sure we don't throw an exception
-			Assert.AreEqual(0, result.NumericLabel);
-		}
-
-		[Test]
 		public void CanGetPreviousState()
 		{
 			IntegrationResult result = new IntegrationResult();
