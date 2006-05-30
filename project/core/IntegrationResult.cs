@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.IO;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Xml.Serialization;
 using ThoughtWorks.CruiseControl.Core.Tasks;
 using ThoughtWorks.CruiseControl.Core.Util;
@@ -76,7 +77,35 @@ namespace ThoughtWorks.CruiseControl.Core
 		public string Label
 		{
 			get { return Convert(properties["CCNetLabel"]); }
-			set { properties["CCNetLabel"] = value; }
+			set
+			{
+				properties["CCNetLabel"] = value;
+				properties["CCNetNumericLabel"] = Regex.Replace(value, @".*?(\d+$)", "$1");
+			}
+		}
+
+		//
+		// If you have a label that can be represented in a simple numeric form,
+		// then this returns it.  If you don't, then this returns "0".
+		// NOTE: "0" is better than "-1" since build numbers are non-negative
+		// and "-" is a character frequently used to separate version components
+		// when represented in string form.  Thus "-1" might give someone
+		// "1-0--1", which might cause all sorts of havoc for them.  Best to
+		// avoid the "-" character.
+		//
+		public int NumericLabel		
+		{
+			get				
+			{
+				int retval = 0;
+				try
+				{
+					retval = int.Parse(Convert(properties["CCNetNumericLabel"]));
+				}
+				catch {}
+
+				return retval;
+			}
 		}
 
 		public string WorkingDirectory
