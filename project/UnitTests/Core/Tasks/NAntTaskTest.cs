@@ -251,7 +251,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 
 		private string IntegrationProperties(string workingDirectory, string artifactDirectory)
 		{
-			return string.Format(@"-D:CCNetIntegrationStatus=Success -D:CCNetBuildDate={2} -D:CCNetArtifactDirectory={1} -D:CCNetBuildTime={3} -D:CCNetProject=test -D:CCNetLabel=1.0 -D:CCNetWorkingDirectory={0} -D:CCNetLastIntegrationStatus=Unknown -D:CCNetBuildCondition=NoBuild", workingDirectory, artifactDirectory, testDateString, testTimeString);
+			return string.Format(@"-D:CCNetIntegrationStatus=Success -D:CCNetBuildDate={2} -D:CCNetArtifactDirectory={1} -D:CCNetBuildTime={3} -D:CCNetProject=test -D:CCNetLabel=1.0 -D:CCNetNumericLable=1 -D:CCNetWorkingDirectory={0} -D:CCNetLastIntegrationStatus=Unknown -D:CCNetBuildCondition=NoBuild", workingDirectory, artifactDirectory, testDateString, testTimeString);
 		}
 	}
 }
