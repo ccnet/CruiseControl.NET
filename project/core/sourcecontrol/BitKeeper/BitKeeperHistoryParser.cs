@@ -3,6 +3,7 @@ using System.Collections;
 using System.Globalization;
 using System.IO;
 using System.Text.RegularExpressions;
+using ThoughtWorks.CruiseControl.Core.Util;
 
 namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.BitKeeper
 {
@@ -40,13 +41,14 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.BitKeeper
 				// Read to the next non-blank line.
 				currentLine = bkLog.ReadLine();
 			}
+
 			return (Modification[]) mods.ToArray(typeof (Modification));
 		}
 
 		private Modification ParseVerboseEntry(TextReader bkLog)
 		{
-			// Example: "ChangeSet\n1.201 05/09/08 14:52:49 hunth@spankyham. +1 -0\nComments"
-			Regex regex = new Regex(@"(?<version>[\d.]+)\s+(?<datetime>\d{2,4}/\d{2}/\d{2} \d{2}:\d{2}:\d{2})\s+(?<username>\S+).*"); // , RegexOptions.Compiled);
+			// Example: "ChangeSet\n1.201 05/09/08 14:52:49 user@host. +1 -0\nComments"
+			Regex regex = new Regex(@"(?<version>[\d.]+)\s+(?<datetime>\d{2,4}/\d{2}/\d{2} \d{2}:\d{2}:\d{2})\s+(?<username>\S+).*");
 
 			currentLine = currentLine.TrimStart(new char[2] {' ', '\t'});
 			string filename = ParseFileName(currentLine);
@@ -60,7 +62,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.BitKeeper
 
 		private Modification ParseNonVerboseEntry(TextReader bkLog)
 		{
-			// Example: "ChangeSet@1.6, 2005-10-06 12:58:40-07:00, hunth@survivor.(none)\n  Remove file in subdir."
+			// Example: "ChangeSet@1.6, 2005-10-06 12:58:40-07:00, user@host.(none)\n  Remove file in subdir."
 			Regex regex = new Regex(@"ChangeSet@(?<version>[\d.]+),\s+(?<datetime>\d{2,4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}[-+]\d{2}:\d{2}),\s+(?<username>\S+).*");
 
 			return ParseModification(regex, "ChangeSet", "", bkLog);
@@ -82,6 +84,30 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.BitKeeper
 	
 			// Read all lines of the comment and flatten them
 			mod.Comment = ParseComment(bkLog);
+
+			// Determine the modification type
+			if (mod.FileName == "ChangeSet")
+			{
+				// Only ChangeSets should have a file name of ChangeSet
+				mod.Type = "ChangeSet";
+			}
+			else if (mod.Comment.IndexOf("Delete: ") != -1
+				&& mod.FolderName.IndexOf("BitKeeper/deleted") == 0)
+			{
+				string fullFilePath = mod.Comment.Substring(mod.Comment.IndexOf("Delete: ") + 8);
+
+				// Deleted files have the name of the BitKeeper/deleted file,
+				// but we would like the name of the original file that was deleted
+				mod.Type = "Deleted";
+				mod.FileName = ParseFileName(fullFilePath);
+				mod.FolderName = ParseFolderName(fullFilePath);
+			}
+			else if (mod.Comment.IndexOf("BitKeeper file") != -1)
+			{
+				// Added files have a comment that starts with "BitKeeper file"
+				mod.Type = "Added";
+			}
+
 			return mod;
 		}
 
@@ -144,6 +170,9 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.BitKeeper
 		/// </summary>
 		private bool ContainsFileHistory()
 		{
+			if (currentLine == null)
+				return false;
+
 			// The "@" symbol is in the non-verbose output
 			return (currentLine.IndexOf("@") == -1);
 		}
