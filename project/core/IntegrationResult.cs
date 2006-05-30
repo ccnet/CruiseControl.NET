@@ -80,18 +80,22 @@ namespace ThoughtWorks.CruiseControl.Core
 			set
 			{
 				properties["CCNetLabel"] = value;
+				properties["CCNetNumericLabel"] = "0";
 				// The regex conversion will fail for certain types of labels, so catch exceptions
 				// and set the numeric label to blank in these cases.
-				try
+				if (value != null)
 				{
-					if (value == null)
-						properties["CCNetNumericLabel"] = "";
-					else
-						properties["CCNetNumericLabel"] = Regex.Replace(value, @".*?(\d+$)", "$1");
-				}
-				catch
-				{
-					properties["CCNetNumericLabel"] = "";
+					try
+					{
+						// NOTE: An all-text label (e.g. "My Label") will be returned
+						// entirely from the regex below.  Thus, we have to check that the
+						// final result is an integer before setting the property.
+						string tempNumericLabel = Regex.Replace(value, @".*?(\d+$)", "$1");
+						properties["CCNetNumericLabel"] = int.Parse(tempNumericLabel);
+					}
+					catch
+					{
+					}
 				}
 			}
 		}

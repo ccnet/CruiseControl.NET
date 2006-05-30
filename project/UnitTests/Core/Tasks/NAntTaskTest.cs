@@ -251,7 +251,10 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 
 		private string IntegrationProperties(string workingDirectory, string artifactDirectory)
 		{
-			return string.Format(@"-D:CCNetIntegrationStatus=Success -D:CCNetBuildDate={2} -D:CCNetArtifactDirectory={1} -D:CCNetBuildTime={3} -D:CCNetProject=test -D:CCNetLabel=1.0 -D:CCNetNumericLable=1 -D:CCNetWorkingDirectory={0} -D:CCNetLastIntegrationStatus=Unknown -D:CCNetBuildCondition=NoBuild", workingDirectory, artifactDirectory, testDateString, testTimeString);
+			// NOTE: Property names are sorted alphabetically when passed as process arguments
+			// Tests that look for the correct arguments will fail if the following properties
+			// are not sorted alphabetically.
+			return string.Format(@"-D:CCNetArtifactDirectory={1} -D:CCNetBuildCondition=NoBuild -D:CCNetBuildDate={2} -D:CCNetBuildTime={3} -D:CCNetIntegrationStatus=Success -D:CCNetLabel=1.0 -D:CCNetLastIntegrationStatus=Unknown -D:CCNetNumericLabel=0 -D:CCNetProject=test -D:CCNetWorkingDirectory={0}", workingDirectory, artifactDirectory, testDateString, testTimeString);
 		}
 	}
 }

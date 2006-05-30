@@ -1,4 +1,5 @@
 using System.IO;
+using System.Collections;
 using Exortech.NetReflector;
 using ThoughtWorks.CruiseControl.Core.Util;
 
@@ -81,7 +82,10 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 			builder.Append("/p:");
 
 			int count = 0;
-			foreach (string key in result.IntegrationProperties.Keys)
+			// We have to sort this alphabetically, else the unit tests
+			// that expect args in a certain order are unpredictable
+			SortedList sortedList = new SortedList(result.IntegrationProperties);
+			foreach (string key in sortedList.Keys)
 			{
 				if (count > 0) builder.Append(";");
 				builder.Append(string.Format("{0}={1}", key, result.IntegrationProperties[key]));

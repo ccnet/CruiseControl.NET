@@ -125,7 +125,10 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 
 		private void AppendIntegrationResultProperties(ProcessArgumentBuilder buffer, IIntegrationResult result)
 		{
-			foreach (string key in result.IntegrationProperties.Keys)
+			// We have to sort this alphabetically, else the unit tests
+			// that expect args in a certain order are unpredictable
+			SortedList sortedList = new SortedList(result.IntegrationProperties);
+			foreach (string key in sortedList.Keys)
 			{
 				object value = result.IntegrationProperties[key];
 				if (value != null)

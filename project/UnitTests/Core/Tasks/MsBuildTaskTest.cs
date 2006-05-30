@@ -69,7 +69,10 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 		[Test]
 		public void AddQuotesAroundPropertiesWithSpaces()
 		{
-			string expectedProperties = string.Format(@"/p:CCNetIntegrationStatus=Success;CCNetBuildDate={0};CCNetArtifactDirectory={2};CCNetBuildTime={1};CCNetProject=test;CCNetLabel=My Label;CCNetWorkingDirectory=c:\source\;CCNetLastIntegrationStatus=Unknown;CCNetBuildCondition=NoBuild",testDateString, testTimeString, result.ArtifactDirectory);
+			// NOTE: Property names are sorted alphabetically when passed as process arguments
+			// Tests that look for the correct arguments will fail if the following properties
+			// are not sorted alphabetically.
+			string expectedProperties = string.Format(@"/p:CCNetArtifactDirectory={2};CCNetBuildCondition=NoBuild;CCNetBuildDate={0};CCNetBuildTime={1};CCNetIntegrationStatus=Success;CCNetLabel=My Label;CCNetLastIntegrationStatus=Unknown;CCNetNumericLabel=0;CCNetProject=test;CCNetWorkingDirectory=c:\source\",testDateString, testTimeString, result.ArtifactDirectory);
 			ExpectToExecuteArguments(@"/nologo " + @"""" + expectedProperties + @"""" + DefaultLogger());
 			result.Label = @"My Label";			
 			task.Run(result);
@@ -161,7 +164,10 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 
 		private string IntegrationProperties()
 		{
-			return string.Format(@"/p:CCNetIntegrationStatus=Success;CCNetBuildDate={1};CCNetArtifactDirectory={3};CCNetBuildTime={2};CCNetProject=test;CCNetLabel=1.0;CCNetNumericLabel=1;CCNetWorkingDirectory={0};CCNetLastIntegrationStatus=Unknown;CCNetBuildCondition=NoBuild", DefaultWorkingDirectory, testDateString, testTimeString, result.ArtifactDirectory);
+			// NOTE: Property names are sorted alphabetically when passed as process arguments
+			// Tests that look for the correct arguments will fail if the following properties
+			// are not sorted alphabetically.
+			return string.Format(@"/p:CCNetArtifactDirectory={3};CCNetBuildCondition=NoBuild;CCNetBuildDate={1};CCNetBuildTime={2};CCNetIntegrationStatus=Success;CCNetLabel=1.0;CCNetLastIntegrationStatus=Unknown;CCNetNumericLabel=0;CCNetProject=test;CCNetWorkingDirectory={0}", DefaultWorkingDirectory, testDateString, testTimeString, result.ArtifactDirectory);
 		}
 	}
 }
