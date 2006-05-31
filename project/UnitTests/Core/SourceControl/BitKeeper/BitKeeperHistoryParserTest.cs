@@ -25,6 +25,21 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol.Bitkeeper
 		}
 
 		[Test]
+		public void ParseRenamed()
+		{
+			BitKeeperHistoryParser parser = new BitKeeperHistoryParser();
+			Modification[] mods = parser.Parse(new StringReader(BitKeeperTestData.RenamedBitKeeperOutput()), DateTime.Now, DateTime.Now);
+			Assert.AreEqual(2, mods.Length);
+
+			// Check specifics of the Renamed mod
+			Assert.AreEqual("user@host.(none)", mods[1].UserName);
+			Assert.AreEqual("Rename: asubdir/baz.txt -> asubdir2/bazzz.txt", mods[1].Comment);
+			Assert.AreEqual("Renamed", mods[1].Type);
+			Assert.AreEqual("bazzz.txt", mods[1].FileName);
+			Assert.AreEqual("asubdir2", mods[1].FolderName);
+		}
+
+		[Test]
 		public void ParseDeletions()
 		{
 			BitKeeperHistoryParser parser = new BitKeeperHistoryParser();
@@ -59,7 +74,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol.Bitkeeper
 		{
 			BitKeeperHistoryParser parser = new BitKeeperHistoryParser();
 			Modification[] mods = parser.Parse(new StringReader(BitKeeperTestData.VerboseBitKeeperOutput()), DateTime.Now, DateTime.Now);
-			Assert.AreEqual(19, mods.Length);
+			Assert.AreEqual(21, mods.Length);
 			foreach (Modification mod in mods)
 			{
 				Assert.AreEqual("user@host.(none)", mod.UserName);
@@ -95,6 +110,18 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol.Bitkeeper
 ";
 			}
 
+			public static string RenamedBitKeeperOutput()
+			{
+				return @"ChangeSet
+  1.7 05/10/06 12:59:40 user@host.(none) +1 -0
+  Rename file in subdir.
+
+  asubdir2/bazzz.txt
+    1.2 05/10/06 12:59:27 user@host.(none) +0 -0
+    Rename: asubdir/baz.txt -> asubdir2/bazzz.txt
+";
+			}
+
 			public static string DeletionsBitKeeperOutput()
 			{
 				return @"ChangeSet
@@ -122,6 +149,14 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol.Bitkeeper
 			public static string VerboseBitKeeperOutput()
 			{
 				return @"ChangeSet
+  1.7 05/10/06 12:59:40 user@host.(none) +1 -0
+  Rename file in subdir.
+
+  asubdir2/bazzz.txt
+    1.2 05/10/06 12:59:27 user@host.(none) +0 -0
+    Rename: asubdir/baz.txt -> asubdir2/bazzz.txt
+
+ChangeSet
   1.6 05/10/06 12:58:40 user@host.(none) +1 -0
   Remove file in subdir.
 

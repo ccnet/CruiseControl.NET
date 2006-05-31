@@ -108,6 +108,11 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.BitKeeper
 				mod.Type = "Added";
 			}
 
+			else if (mod.Comment.IndexOf("Rename: ") != -1)
+			{
+				// Renamed files have a comment that starts with "Rename: "
+				mod.Type = "Renamed";
+			}
 			return mod;
 		}
 
