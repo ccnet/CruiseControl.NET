@@ -22,8 +22,8 @@ SetCompressor lzma
 
 ; MUI Settings
 !define MUI_ABORTWARNING
-!define MUI_ICON "project\CCTray\App.ico"
-!define MUI_UNICON "project\CCTray\App.ico"
+!define MUI_ICON "project\CCTrayLib\Green.ico"
+!define MUI_UNICON "project\CCTrayLib\Green.ico"
 !define MUI_HEADERIMAGE
 !define MUI_HEADERIMAGE_BITMAP "install\install_logo.bmp"
 !define MUI_HEADERIMAGE_RIGHT
