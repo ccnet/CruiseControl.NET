@@ -70,11 +70,16 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.BitKeeper
 
 		public override void GetSource(IIntegrationResult result)
 		{
-			if (! AutoGetSource) return;
+			if (!AutoGetSource)
+				return;
 
+			// Get the latest source
 			ProcessInfo info = NewProcessInfo(BuildGetSourceArguments(), result);
 			Log.Info(string.Format("Getting source from BitKeeper: {0} {1}", info.FileName, info.Arguments));
 			Execute(info);
+
+			// Push any pending labels that failed to push due to remote side having additional revisions
+			Execute(NewProcessInfo(BuildPushProcessArgs(), result));
 
 			if (CloneTo != string.Empty) CloneSource(result);
 		}
