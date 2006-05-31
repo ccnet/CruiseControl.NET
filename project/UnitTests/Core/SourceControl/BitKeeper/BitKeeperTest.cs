@@ -56,6 +56,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol.Bitkeeper
 		public void VerifyGetSourceCommand()
 		{
 			ExpectToExecuteArguments("pull");
+			ExpectToExecuteArguments("push");
 			bitkeeper.AutoGetSource = true;
 			bitkeeper.GetSource(IntegrationResult());
 			VerifyAll();
@@ -65,6 +66,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol.Bitkeeper
 		public void VerifyGetSourceAndCloneCommand()
 		{
 			ExpectToExecuteArguments("pull");
+			ExpectToExecuteArguments("push");
 			ExpectToExecuteArguments("clone . /path/to/child");
 			bitkeeper.AutoGetSource = true;
 			bitkeeper.CloneTo = "/path/to/child";
