@@ -7,7 +7,7 @@
     >
         <Build>
             <Settings
-                ApplicationIcon = "App.ico"
+                ApplicationIcon = "..\CCTrayLib\Green.ico"
                 AssemblyKeyContainerName = ""
                 AssemblyName = "cctray"
                 AssemblyOriginatorKeyFile = ""

@@ -43,7 +43,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 		private ICCTrayMultiConfiguration configuration;
 		private ColumnHeader colLastBuildTime;
 		private bool systemShutdownInProgress;
-		private System.Windows.Forms.MenuItem mnuFixBuild;
+		private MenuItem mnuFixBuild;
 		private PersistWindowState windowState;
 
 		public MainForm(ICCTrayMultiConfiguration configuration)
@@ -136,6 +136,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 			this.projectContextMenu = new System.Windows.Forms.ContextMenu();
 			this.mnuForce = new System.Windows.Forms.MenuItem();
 			this.mnuWebPage = new System.Windows.Forms.MenuItem();
+			this.mnuFixBuild = new System.Windows.Forms.MenuItem();
 			this.largeIconList = new System.Windows.Forms.ImageList(this.components);
 			this.iconList = new System.Windows.Forms.ImageList(this.components);
 			this.mainMenu = new System.Windows.Forms.MainMenu();
@@ -155,7 +156,6 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 			this.mnuTrayExit = new System.Windows.Forms.MenuItem();
 			this.panel1 = new System.Windows.Forms.Panel();
 			this.btnForceBuild = new System.Windows.Forms.Button();
-			this.mnuFixBuild = new System.Windows.Forms.MenuItem();
 			this.panel1.SuspendLayout();
 			this.SuspendLayout();
 			// 
@@ -226,6 +226,12 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 			this.mnuWebPage.Index = 1;
 			this.mnuWebPage.Text = "Display &Web Page";
 			this.mnuWebPage.Click += new System.EventHandler(this.mnuWebPage_Click);
+			// 
+			// mnuFixBuild
+			// 
+			this.mnuFixBuild.Index = 2;
+			this.mnuFixBuild.Text = "&Volunteer to Fix Build";
+			this.mnuFixBuild.Click += new System.EventHandler(this.mnuFixBuild_Click);
 			// 
 			// largeIconList
 			// 
@@ -358,12 +364,6 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 			this.btnForceBuild.Text = "Force &Build";
 			this.btnForceBuild.Click += new System.EventHandler(this.btnForceBuild_Click);
 			// 
-			// mnuFixBuild
-			// 
-			this.mnuFixBuild.Index = 2;
-			this.mnuFixBuild.Text = "&Volunteer to Fix Build";
-			this.mnuFixBuild.Click += new System.EventHandler(this.mnuFixBuild_Click);
-			// 
 			// MainForm
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5, 13);
@@ -473,8 +473,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 
 		private void mnuShow_Click(object sender, EventArgs e)
 		{
-			Show();
-			NativeMethods.SetForegroundWindow(Handle);
+			ShowStatusWindow();
 		}
 
 		private void trayIcon_Click(object sender, EventArgs e)
@@ -487,9 +486,15 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 		{
 			if (!controller.OnDoubleClick())
 			{
-				Show();
-				NativeMethods.SetForegroundWindow(Handle);
+				ShowStatusWindow();
 			}
+		}
+
+		private void ShowStatusWindow()
+		{
+			WindowState = FormWindowState.Normal;
+			Show();
+			NativeMethods.SetForegroundWindow(Handle);
 		}
 
 		protected override void WndProc(ref Message m)
@@ -543,7 +548,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 			lvProjects.Sort();
 		}
 
-		private void mnuFixBuild_Click(object sender, System.EventArgs e)
+		private void mnuFixBuild_Click(object sender, EventArgs e)
 		{
 			controller.VolunteerToFixBuild();
 		}

@@ -15,7 +15,6 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 	/// </summary>
 	public class PersistWindowState : Component
 	{
-
 		public event WindowStateEventHandler LoadState;
 		public event WindowStateEventHandler SaveState;
 
@@ -25,12 +24,6 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 		private int normalTop;
 		private int normalWidth;
 		private int normalHeight;
-		private FormWindowState windowState;
-		private bool allowSaveMinimized = false;
-
-		public PersistWindowState()
-		{
-		}
 
 		public Form Parent
 		{
@@ -58,12 +51,6 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 			get { return regPath; }
 		}
 
-		public bool AllowSaveMinimized
-		{
-			get { return allowSaveMinimized; }
-			set { allowSaveMinimized = value; }
-		}
-
 		private void OnLoad(object sender, EventArgs e)
 		{
 			// attempt to read state from registry
@@ -74,11 +61,9 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 				int top = (int) key.GetValue("Top", parent.Top);
 				int width = (int) key.GetValue("Width", parent.Width);
 				int height = (int) key.GetValue("Height", parent.Height);
-				FormWindowState windowState = (FormWindowState) key.GetValue("WindowState", (int) parent.WindowState);
 
 				parent.Location = new Point(left, top);
 				parent.Size = new Size(width, height);
-				parent.WindowState = windowState;
 
 				// fire LoadState event
 				if (LoadState != null)
@@ -95,15 +80,6 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 			key.SetValue("Width", normalWidth);
 			key.SetValue("Height", normalHeight);
 
-			// check if we are allowed to save the state as minimized (not normally)
-			if (!allowSaveMinimized)
-			{
-				if (windowState == FormWindowState.Minimized)
-					windowState = FormWindowState.Normal;
-			}
-
-			key.SetValue("WindowState", (int) windowState);
-
 			// fire SaveState event
 			if (SaveState != null)
 				SaveState(this, new WindowStateEventArgs(key));
@@ -117,8 +93,6 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 				normalLeft = parent.Left;
 				normalTop = parent.Top;
 			}
-			// save state
-			windowState = parent.WindowState;
 		}
 
 		private void OnResize(object sender, EventArgs e)
