@@ -31,5 +31,11 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Label
 		{
 			Assert.AreEqual("2005.1.1.15", labeller.Generate(IntegrationResultMother.CreateSuccessful("2005.1.1.14")));
 		}
+
+		[Test]
+		public void HandleInvalidLabel()
+		{
+			Assert.AreEqual("2005.1.1.1", labeller.Generate(IntegrationResultMother.CreateSuccessful("13")));			
+		}
 	}
 }
