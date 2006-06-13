@@ -16,6 +16,7 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
     {
         private EmailGateway emailGateway = new EmailGateway();
         private string fromAddress;
+		private string replytoAddress;
         private Hashtable users = new Hashtable();
         private Hashtable groups = new Hashtable();
         private IMessageBuilder messageBuilder;
@@ -60,6 +61,13 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
             get { return fromAddress; }
             set { fromAddress = value; }
         }
+
+		[ReflectorProperty("replyto", Required = false)] 
+		public string ReplyToAddress
+		{
+			get { return replytoAddress; }
+			set { replytoAddress = value; }
+		}
 
         /// <summary>
         /// Set this property (in configuration) to enable HTML emails containing build details.
@@ -106,24 +114,24 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
 
         	EmailMessage  emailMessage = new EmailMessage(result, this); 
             string to = emailMessage.Recipients;
-            string subject = emailMessage.Subject;
+			string subject = emailMessage.Subject;
             string message = CreateMessage(result);
             if (IsRecipientSpecified(to))
             {
-                SendMessage(fromAddress, to, subject, message);
+                SendMessage(fromAddress, to, replytoAddress, subject, message);
             }
-        }
+	    }
 
         private bool IsRecipientSpecified(string to)
         {
             return to != null && to.Trim() != string.Empty;
         }
 
-        public virtual void SendMessage(string from, string to, string subject, string message)
+        public virtual void SendMessage(string from, string to, string replyto, string subject, string message)
         {
             try
             {
-            	emailGateway.Send(from, to, subject, message);
+            	emailGateway.Send(from, to, replyto, subject, message);
             }
             catch (Exception e)
             {

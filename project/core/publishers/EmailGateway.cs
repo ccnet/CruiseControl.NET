@@ -11,11 +11,12 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
 			set { SmtpMail.SmtpServer = value; }
 		}
 
-		public virtual void Send(string from, string to, string subject, string messageText)
+		public virtual void Send(string from, string to, string replyto, string subject, string messageText)
 		{
 			MailMessage mailMessage = new MailMessage();
 			mailMessage.From = from;
 			mailMessage.To = to;
+			mailMessage.Headers.Add("Reply-To", replyto);
 			mailMessage.Subject = subject;
 			mailMessage.BodyFormat = MailFormat.Html;
 			mailMessage.Body = messageText;

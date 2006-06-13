@@ -17,11 +17,12 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Publishers
 			set { _mailhost = value; }
 		}
 
-		public override void Send(string from, string to, string subject, string message)
+		public override void Send(string from, string to, string replyto, string subject, string message)
 		{
 			MailMessage email = new MailMessage();
 			email.From = from;
 			email.To = to;
+			email.Headers["Reply-To"] = replyto;
 			email.Subject = subject;
 			email.Body = message;
 

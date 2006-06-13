@@ -27,12 +27,13 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Publishers
 		[Test]
 		public void SendMessage()
 		{
-			publisher.SendMessage("from@foo.com", "to@bar.com", "test subject", "test message");
+			publisher.SendMessage("from@foo.com", "to@bar.com", "replyto@bar.com", "test subject", "test message");
 			Assert.AreEqual(1, gateway.SentMessages.Count);
 
 			MailMessage message = (MailMessage) gateway.SentMessages[0];
 			Assert.AreEqual("from@foo.com", message.From);
 			Assert.AreEqual("to@bar.com", message.To);
+			Assert.AreEqual("replyto@bar.com", message.Headers["Reply-To"]);
 			Assert.AreEqual("test subject", message.Subject);
 			Assert.AreEqual("test message", message.Body);
 		}
