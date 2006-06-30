@@ -147,11 +147,16 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.BitKeeper
 
 		private string ParseComment(TextReader bkLog)
 		{
-			// All the text from now to the next blank line constitues the comment
+			// All the text from now to the next blank line constitutes the comment
 			string message = string.Empty;
 			bool multiLine = false;
 
-			currentLine = bkLog.ReadLine().TrimStart(new char[1] {' '});
+			// We don't trim the newly read line because blank comments lines
+			// start with two or three spaces, while a blank line between changes
+			// or changesets starts with no spaces.  Thus, we can handle blank comment
+			// lines only if we treat the lines that start with spaces a "non-empty";
+			// therefore, no trimming here!
+			currentLine = bkLog.ReadLine();
 			while (currentLine != null && currentLine.Length != 0)
 			{
 				if (multiLine)
