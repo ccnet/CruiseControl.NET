@@ -18,7 +18,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol.Bitkeeper
 
 			// Check specifics of the ChangeSet mod
 			Assert.AreEqual("user@host.(none)", mods[0].UserName);
-			Assert.AreEqual("Remove file in subdir.", mods[0].Comment);
+			Assert.AreEqual("  Remove file in subdir.", mods[0].Comment);
 			Assert.AreEqual("ChangeSet", mods[0].Type);
 			Assert.AreEqual("ChangeSet", mods[0].FileName);
 			Assert.AreEqual("", mods[0].FolderName);
@@ -33,7 +33,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol.Bitkeeper
 
 			// Check specifics of the Renamed mod
 			Assert.AreEqual("user@host.(none)", mods[1].UserName);
-			Assert.AreEqual("Rename: asubdir/baz.txt -> asubdir2/bazzz.txt", mods[1].Comment);
+			Assert.AreEqual("    Rename: asubdir/baz.txt -> asubdir2/bazzz.txt", mods[1].Comment);
 			Assert.AreEqual("Renamed", mods[1].Type);
 			Assert.AreEqual("bazzz.txt", mods[1].FileName);
 			Assert.AreEqual("asubdir2", mods[1].FolderName);
@@ -48,7 +48,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol.Bitkeeper
 
 			// Check specifics of the Deleted mod
 			Assert.AreEqual("user@host.(none)", mods[1].UserName);
-			Assert.AreEqual("Delete: asubdir/baz.txt", mods[1].Comment);
+			Assert.AreEqual("    Delete: asubdir/baz.txt", mods[1].Comment);
 			Assert.AreEqual("Deleted", mods[1].Type);
 			Assert.AreEqual("baz.txt", mods[1].FileName);
 			Assert.AreEqual("asubdir", mods[1].FolderName);
@@ -63,7 +63,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol.Bitkeeper
 
 			// Check specifics of the Added mod
 			Assert.AreEqual("user@host.(none)", mods[1].UserName);
-			Assert.AreEqual("BitKeeper file /var/lib/bk/demo/dev-1.0/asubdir/baz.txt", mods[1].Comment);
+			Assert.AreEqual("    BitKeeper file /var/lib/bk/demo/dev-1.0/asubdir/baz.txt", mods[1].Comment);
 			Assert.AreEqual("Added", mods[1].Type);
 			Assert.AreEqual("baz.txt", mods[1].FileName);
 			Assert.AreEqual("asubdir", mods[1].FolderName);
