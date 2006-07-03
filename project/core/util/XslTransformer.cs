@@ -33,7 +33,9 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 			try
 			{
 				StringWriter output = new StringWriter();
-				transform.Transform(document, null, new XmlTextWriter(output));
+				XmlTextWriter xmlWriter = new XmlTextWriter(output);
+				xmlWriter.Formatting = Formatting.Indented;
+				transform.Transform(document, null, xmlWriter);
 				return output.ToString();
 			}
 			catch (XmlException ex)
