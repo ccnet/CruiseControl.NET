@@ -35,7 +35,8 @@ namespace ThoughtWorks.CruiseControl.Core
 		}
 
 		/// <summary>
-		/// Gets the project's working directory, where the primary build and checkout happens
+		/// Gets the p
+		///roject's working directory, where the primary build and checkout happens
 		/// </summary>
 		string WorkingDirectory
 		{
