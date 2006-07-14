@@ -77,11 +77,12 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 		// So I'm checking the result to see if there is changes, if not I return nothing
 		public override Modification[] GetModifications(IIntegrationResult from, IIntegrationResult to)
 		{
-			ProcessInfo processinfo = CreateModificationProcess(MODIFICATIONS_COMMAND_TEMPLATE, from.StartTime, to.StartTime);
-			ProcessResult result = Execute(processinfo);
+			ProcessInfo processInfo = CreateModificationProcess(MODIFICATIONS_COMMAND_TEMPLATE, from.StartTime, to.StartTime);
+			processInfo.TimeOut = Timeout.Millis;
+			ProcessResult result = executor.Execute(processInfo);
 			if (!result.StandardOutput.TrimEnd().EndsWith(NO_CHANGE))
 			{
-				return base.ParseModifications(result, from.StartTime, to.StartTime);
+				return ParseModifications(result, from.StartTime, to.StartTime);
 			}
 			else
 			{
@@ -103,7 +104,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 
 		public override void GetSource(IIntegrationResult result)
 		{
-			if (AutoGetSource == true)
+			if (AutoGetSource)
 			{
 				SelectBranch();
 
@@ -111,13 +112,13 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 				{
 					foreach (Modification m in result.Modifications)
 					{
-						ProcessInfo process = CreateGetProcess(GET_COMMAND_TEMPLATE, m.FolderName + "/" + m.FileName);
+						ProcessInfo process = CreateGetProcess(m.FolderName + "/" + m.FileName);
 						Execute(process);
 					}
 				}
 				else
 				{
-					ProcessInfo process = CreateGetProcess(GET_COMMAND_TEMPLATE);
+					ProcessInfo process = CreateGetProcess();
 					Execute(process);
 				}
 			}
@@ -157,16 +158,23 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			return new ProcessInfo(Executable, arguments);
 		}
 
-		public ProcessInfo CreateGetProcess(string processCommand, string filename)
+		public ProcessInfo CreateGetProcess()
 		{
-			string arguments = String.Format(processCommand, filename, Server, Database, Username, Password, WorkingDirectory);
-			return new ProcessInfo(Executable, arguments);
+			return CreateGetProcess(Project);
 		}
 
-		public ProcessInfo CreateGetProcess(string processCommand)
+		public ProcessInfo CreateGetProcess(string filename)
 		{
-			string arguments = String.Format(processCommand, Project, Server, Database, Username, Password, WorkingDirectory);
-			return new ProcessInfo(Executable, arguments);
+			// @"getlatest ""{0}"" -s ""{1}"" -d ""{2}"" -u ""{3}"" -p ""{4}"" -localpath ""{5}"" -overwritewritable replace -overwritecheckedout replace -response:GetLatest.PathInvalid y -response:GetLatest.Writable y -response:GetLatest.CheckedOut y"
+			ProcessArgumentBuilder builder = new ProcessArgumentBuilder();
+			builder.AddArgument("getlatest", filename);
+			builder.AddArgument("-s", Server);
+			builder.AddArgument("-d", Database);
+			builder.AddArgument("-u", Username);
+			builder.AddArgument("-p", Password);
+			builder.AddArgument("-localpath", WorkingDirectory);
+			builder.AppendArgument("-overwritewritable replace -overwritecheckedout replace -response:GetLatest.PathInvalid y -response:GetLatest.Writable y -response:GetLatest.CheckedOut y");
+			return new ProcessInfo(Executable, builder.ToString());
 		}
 
 		public ProcessInfo CreateBranchProcess(string processCommand)

@@ -9,10 +9,11 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 	{
 		protected ProcessExecutor executor;
 		protected IHistoryParser historyParser;
-		private	Timeout timeout = Timeout.DefaultTimeout;
+		private Timeout timeout = Timeout.DefaultTimeout;
 
 		public ProcessSourceControl(IHistoryParser historyParser) : this(historyParser, new ProcessExecutor())
-		{}
+		{
+		}
 
 		public ProcessSourceControl(IHistoryParser historyParser, ProcessExecutor executor)
 		{
@@ -20,21 +21,11 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			this.historyParser = historyParser;
 		}
 
-		[ReflectorProperty("timeout", typeof(TimeoutSerializerFactory))]
+		[ReflectorProperty("timeout", typeof (TimeoutSerializerFactory))]
 		public Timeout Timeout
 		{
-			get
-			{
-				return timeout;
-			}
-			set
-			{
-				if (value==null) 
-					timeout = Timeout.DefaultTimeout;
-				else 
-					timeout = value;
-			}
-			
+			get { return timeout; }
+			set { timeout = (value == null) ? Timeout.DefaultTimeout : value; }
 		}
 
 		public abstract Modification[] GetModifications(IIntegrationResult from, IIntegrationResult to);
@@ -79,12 +70,15 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 		}
 
 		public virtual void GetSource(IIntegrationResult result)
-		{}
+		{
+		}
 
 		public virtual void Initialize(IProject project)
-		{}
+		{
+		}
 
 		public void Purge(IProject project)
-		{}
+		{
+		}
 	}
 }

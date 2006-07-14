@@ -123,18 +123,32 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 		[Test]
 		public void CanCreateGetProcess()
 		{
-			InitialiseAlienbrain();
-			const string name = "ab://existing project/filename.txt";
-			alienbrain.Project = name;
-			ProcessInfo info = alienbrain.CreateGetProcess(Alienbrain.GET_COMMAND_TEMPLATE, name);
-			Assert.AreEqual(EXECUTABLE + " " + String.Format(Alienbrain.GET_COMMAND_TEMPLATE,
-			                                                 name,
-			                                                 SERVER,
-			                                                 DATABASE,
-			                                                 USER,
-			                                                 PASSWORD,
-			                                                 WORKDIR_PATH),
-			                info.FileName + " " + info.Arguments);
+			alienbrain.Executable = "ab.exe";
+			alienbrain.Project = "ab://my project";
+			alienbrain.Server = "s c m";
+			alienbrain.Database = "d b";
+			alienbrain.Username = "o r";
+			alienbrain.Password = "p w";
+			alienbrain.WorkingDirectory = "c:\\my source";
+			ProcessInfo info = alienbrain.CreateGetProcess();
+			Assert.AreEqual("ab.exe", info.FileName);
+			Assert.AreEqual(
+				@"getlatest ""ab://my project"" -s ""s c m"" -d ""d b"" -u ""o r"" -p ""p w"" -localpath ""c:\my source"" -overwritewritable replace -overwritecheckedout replace -response:GetLatest.PathInvalid y -response:GetLatest.Writable y -response:GetLatest.CheckedOut y", info.Arguments);
+		}
+
+		[Test]
+		public void CanCreateGetProcessWithNoWorkingDirectory()
+		{
+			alienbrain.Executable = "ab.exe";
+			alienbrain.Project = "ab://project";
+			alienbrain.Server = "server";
+			alienbrain.Database = "database";
+			alienbrain.Username = "user";
+			alienbrain.Password = "password";
+			ProcessInfo info = alienbrain.CreateGetProcess();
+			Assert.AreEqual("ab.exe", info.FileName);
+			Assert.AreEqual(
+				@"getlatest ab://project -s server -d database -u user -p password -overwritewritable replace -overwritecheckedout replace -response:GetLatest.PathInvalid y -response:GetLatest.Writable y -response:GetLatest.CheckedOut y", info.Arguments);
 		}
 
 		[Test]
@@ -253,6 +267,33 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 		}
 
 		[Test]
+		public void CanGetModificationsIfNoModsAreFound()
+		{
+			DateTime todatetime = DateTime.Today;
+			DateTime fromdatetime = todatetime.AddDays(-1);
+
+			IIntegrationResult from = IntegrationResultMother.CreateSuccessful(fromdatetime);
+			IIntegrationResult to = IntegrationResultMother.CreateSuccessful(todatetime);
+
+			InitialiseAlienbrain();
+			alienbrain.Branch = string.Empty;
+
+			string args = string.Format(Alienbrain.MODIFICATIONS_COMMAND_TEMPLATE,
+			                            PROJECT_PATH,
+			                            SERVER,
+			                            DATABASE,
+			                            USER,
+			                            PASSWORD,
+			                            from.StartTime.ToFileTime(),
+			                            to.StartTime.ToFileTime());
+			ProcessInfo expectedProcessRequest = NewProcessInfo(args);
+
+			executor.ExpectAndReturn("Execute", new ProcessResult(Alienbrain.NO_CHANGE, null, 1, false), expectedProcessRequest);
+			alienbrain.GetModifications(from, to);
+			executor.Verify();
+		}
+
+		[Test]
 		public void ShouldLabelSourceControlifLabelOnSuccessisTrueAndResultisSuccess()
 		{
 			string name = "VALID_LABEL_NAME";
@@ -299,13 +340,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 			InitialiseAlienbrain();
 			alienbrain.AutoGetSource = true;
 
-			string args = string.Format(Alienbrain.GET_COMMAND_TEMPLATE,
-			                            PROJECT_PATH,
-			                            SERVER,
-			                            DATABASE,
-			                            USER,
-			                            PASSWORD,
-			                            WORKDIR_PATH);
+			string args =
+				@"getlatest ab://PATH_DOES_NOT_EXIST -s SERVER_DOES_NOT_EXIST -d DATABASE_DOES_NOT_EXIST -u USER_DOES_NOT_EXIST -p PASSWORD_DOES_NOT_EXIST -localpath C:\DOES_NOT_EXIST -overwritewritable replace -overwritecheckedout replace -response:GetLatest.PathInvalid y -response:GetLatest.Writable y -response:GetLatest.CheckedOut y";
 			ProcessInfo expectedProcessRequest = NewProcessInfo(args);
 
 			executor.ExpectAndReturn("Execute", new ProcessResult("foo", null, 0, false), expectedProcessRequest);
