@@ -113,6 +113,16 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Publishers
 			Assert.AreEqual("Project#9 Build Failed", subject);
 		}
 
+		[Test]
+		public void OnlyEmailModifierRecipientsOnBuildFailure()
+		{
+			publisher = new EmailPublisher();
+			publisher.EmailUsers.Add(modifier.Name, modifier);
+			publisher.EmailUsers.Add(changed.Name, modifier);
+			IIntegrationResult result = AddModification(IntegrationResultMother.CreateFailed());
+			Assert.AreEqual(ExpectedRecipients(modifier), new EmailMessage(result, publisher).Recipients);
+		}
+
 		private static EmailMessage GetEmailMessage(IntegrationResult result, bool includeDetails)
 		{
 			EmailPublisher publisher = EmailPublisherMother.Create();

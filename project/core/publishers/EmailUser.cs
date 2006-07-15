@@ -21,12 +21,12 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
 		[ReflectorProperty("address")]
 		public string Address;
 
-		[ReflectorProperty("group")]
+		[ReflectorProperty("group", Required=false)]
 		public string Group;
 
 		public override bool Equals(Object obj)
 		{
-			if (obj == null || obj.GetType() != this.GetType())
+			if (obj == null || obj.GetType() != GetType())
 			{
 				return false;
 			}

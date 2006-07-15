@@ -27,12 +27,12 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
 				AddRecipients(recipients, EmailGroup.NotificationType.Always);
 				AddModifiers(recipients);
 
-				if (BuildStateChanged(result))
+				if (BuildStateChanged())
 				{
 					AddRecipients(recipients, EmailGroup.NotificationType.Change);
 				}
 
-				if (this.result.Status == IntegrationStatus.Failure)
+				if (result.Status == IntegrationStatus.Failure)
 				{
 					AddRecipients(recipients, EmailGroup.NotificationType.Failed);
 				}
@@ -77,7 +77,7 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
 			{
 				if (result.Status == IntegrationStatus.Success)
 				{
-					if (BuildStateChanged(result))
+					if (BuildStateChanged())
 					{
 						return string.Format("{0} {1} {2}", result.ProjectName, "Build Fixed: Build", result.Label);
 					}
@@ -104,7 +104,7 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
 			return (EmailGroup) emailPublisher.EmailGroups[groupname];
 		}
 
-		private bool BuildStateChanged(IIntegrationResult result)
+		private bool BuildStateChanged()
 		{
 			return result.LastIntegrationStatus != result.Status;
 		}
