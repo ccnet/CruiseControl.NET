@@ -130,9 +130,10 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.BitKeeper
 				mod.FileName = ParseFileName(fullFilePath);
 				mod.FolderName = ParseFolderName(fullFilePath);
 			}
-			else if (mod.Comment.IndexOf("BitKeeper file") != -1)
+			else if (mod.Comment.IndexOf("BitKeeper file") != -1 || mod.Version == "1.0")
 			{
-				// Added files have a comment that starts with "BitKeeper file"
+				// Added files have a comment that starts with "BitKeeper file" in pre-4.0 versions
+                // In post-4.0 versions, the only way to tell is by the revision number being "1.0"
 				mod.Type = "Added";
 			}
 
