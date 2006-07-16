@@ -82,6 +82,19 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol.Bitkeeper
 			}
 		}
 
+        [Test]
+        public void ParseVerbose40Modifications()
+        {
+            BitKeeperHistoryParser parser = new BitKeeperHistoryParser();
+            Modification[] mods = parser.Parse(new StringReader(BitKeeperTestData.VerboseBitKeeper40Output()), DateTime.Now, DateTime.Now);
+            Assert.AreEqual(10, mods.Length);
+            foreach (Modification mod in mods)
+            {
+                Assert.AreEqual("user@host.(none)", mod.UserName);
+                Assert.IsNotNull("filename should not be null", mod.FileName);
+            }
+        }
+
 		[Test]
 		public void ParseNonVerboseModifications()
 		{
@@ -145,6 +158,42 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol.Bitkeeper
     BitKeeper file /var/lib/bk/demo/dev-1.0/asubdir/baz.txt
 ";
 			}
+
+            public static string VerboseBitKeeper40Output()
+            {
+                return @"==== changes -R file://C:/foo/bar/dev-1.0 ====
+ChangeSet@1.1409, 2006-07-14 22:58:22-07:00, user@host.(none) +1 -0
+  Another test.
+
+  test.txt@1.2, 2006-07-14 22:58:20-07:00, user@host.(none) +1 -0
+    Another test.
+
+ChangeSet@1.1403.1.1, 2006-07-14 22:52:33-07:00, user@host.(none) +1 -0
+  testing post incoming trigger after upgrading to 4.0.
+
+  test.txt@1.1, 2006-07-14 22:52:25-07:00, user@host.(none) +1 -0
+    testing post incoming trigger after upgrading to 4.0.
+
+  test.txt@1.0, 2006-07-14 22:52:25-07:00, user@host.(none) +0 -0
+
+ChangeSet@1.1407, 2006-07-14 20:07:56-07:00, user@host.(none) +4 -0
+  Added some more to the Update tool.  Fixed a bug in the hashing method.
+  TAG: dev-8.0-2011
+
+  CommonLib/Certificate.cpp@1.15, 2006-07-14 20:07:42-07:00, user@host.(none) +49 -12
+    Fixed a bug in the hash method.
+
+  CommonLib/Certificate.h@1.9, 2006-07-14 20:07:42-07:00, user@host.(none) +1 -1
+    Fixed a bug in the hash method.
+
+  UpdateTool/UpdateProc.cpp@1.3, 2006-07-14 20:07:42-07:00, user@host.(none) +49 -0
+    Added methods to check for the correctness of the update file.
+
+  UpdateTool/UpdateProc.h@1.2, 2006-07-14 20:07:42-07:00, user@host.(none) +4 -0
+    Added methods to check for the correctness of the update file.
+
+";
+            }
 
 			public static string VerboseBitKeeperOutput()
 			{
