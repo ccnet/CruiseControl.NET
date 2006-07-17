@@ -92,8 +92,8 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			ProcessArgumentBuilder buffer = new ProcessArgumentBuilder();
 			buffer.AppendArgument("copy");
 			buffer.AppendArgument(TagMessage(result.Label));
-			buffer.AppendArgument(TagSource(result.LastChangeNumber));
-			buffer.AppendArgument(TagDestination(result.Label));
+			buffer.AddArgument(TagSource(result));
+			buffer.AddArgument(TagDestination(result.Label));
 			AppendRevision(buffer, result.LastChangeNumber);
 			AppendCommonSwitches(buffer);
 			return NewProcessInfo(buffer.ToString(), result);
@@ -103,8 +103,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 		private ProcessInfo NewHistoryProcessInfo(IIntegrationResult from, IIntegrationResult to)
 		{
 			ProcessArgumentBuilder buffer = new ProcessArgumentBuilder();
-			buffer.AppendArgument("log");
-			buffer.AppendArgument(TrunkUrl);
+			buffer.AddArgument("log", TrunkUrl);
 			buffer.AppendArgument(string.Format("-r \"{{{0}}}:{{{1}}}\"", FormatCommandDate(from.StartTime), FormatCommandDate(to.StartTime)));
 			buffer.AppendArgument("--verbose --xml");
 			AppendCommonSwitches(buffer);
@@ -116,33 +115,25 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			return string.Format("-m \"CCNET build {0}\"", label);
 		}
 
-		private string TagSource(int revision)
+		private string TagSource(IIntegrationResult result)
 		{
-			string trunkUrl = TrunkUrl;
-			if (revision == 0)
+			if (result.LastChangeNumber == 0)
 			{
-				trunkUrl = WorkingDirectory.TrimEnd(Path.DirectorySeparatorChar);
+				return WorkingDirectory.TrimEnd(Path.DirectorySeparatorChar);
 			}
-			return SurroundInQuotesIfContainsSpace(trunkUrl);
+			return TrunkUrl;
 		}
 
 		private string TagDestination(string label)
 		{
-			return SurroundInQuotesIfContainsSpace(string.Format("{0}/{1}", TagBaseUrl, label));
+			return string.Format("{0}/{1}", TagBaseUrl, label);
 		}
 
 		private void AppendCommonSwitches(ProcessArgumentBuilder buffer)
 		{
-			buffer.AppendArgument("--username {0}", SurroundInQuotesIfContainsSpace(Username));
-			buffer.AppendArgument("--password {0}", SurroundInQuotesIfContainsSpace(Password));
-			buffer.AppendArgument("--non-interactive");
-		}
-
-		private string SurroundInQuotesIfContainsSpace(string value)
-		{
-			if (! StringUtil.IsBlank(value) && value.IndexOf(' ') >= 0)
-				return string.Format(@"""{0}""", value);
-			return value;
+			buffer.AddArgument("--username", Username);
+			buffer.AddArgument("--password", Password);
+			buffer.AddArgument("--non-interactive");
 		}
 
 		private void AppendRevision(ProcessArgumentBuilder buffer, int revision)

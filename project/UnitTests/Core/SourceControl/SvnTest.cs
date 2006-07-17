@@ -90,6 +90,14 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 		}
 
 		[Test]
+		public void CreatingHistoryProcessShouldQuoteTrunkUrl()
+		{
+			ExpectToExecuteArguments("log \"svn://my server/mypath\" -r \"{2001-01-21T20:00:00Z}:{2001-01-21T20:30:50Z}\" --verbose --xml --non-interactive");
+			svn.TrunkUrl = "svn://my server/mypath";
+			svn.GetModifications(IntegrationResult(from), IntegrationResult(to));
+		}
+
+		[Test]
 		public void ShouldRebaseWorkingDirectoryForHistory()
 		{
 			ExpectToExecuteArguments("log svn://myserver/mypath -r \"{2001-01-21T20:00:00Z}:{2001-01-21T20:30:50Z}\" --verbose --xml --non-interactive");
