@@ -81,7 +81,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.BitKeeper
         private Modification ParsePost40VerboseEntry(TextReader bkLog)
         {
             // Example: "ChangeSet\n1.201 05/09/08 14:52:49 user@host. +1 -0\nComments"
-            Regex regex = new Regex(@"(?<filename>.+)@(?<version>[\d.]+),\s+(?<datetime>\d{2,4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}-\d{2}:\d{2}),\s+(?<username>\S+).*");
+            Regex regex = new Regex(@"(?<filename>.+)@(?<version>[\d.]+),\s+(?<datetime>\d{2,4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}[-+]\d{2}:\d{2}),\s+(?<username>\S+).*");
 
             currentLine = currentLine.TrimStart(new char[2] { ' ', '\t' });
 
