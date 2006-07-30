@@ -1,11 +1,8 @@
-using System;
-using System.Collections;
-using System.Threading;
-using NMock;
 using NMock.Constraints;
 using NUnit.Framework;
 using ThoughtWorks.CruiseControl.Core;
 using ThoughtWorks.CruiseControl.Remote;
+using ThoughtWorks.CruiseControl.UnitTests.UnitTestUtils;
 
 namespace ThoughtWorks.CruiseControl.UnitTests.Core
 {
@@ -131,7 +128,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 			string exceptionMessage = "Intentional exception";
 
 			integrationTriggerMock.ExpectAndReturn("Fire", ForceBuildRequest());
-			projectMock.ExpectAndThrowAndSignal("Integrate", new CruiseControlException(exceptionMessage), new HasForceBuildCondition());
+			projectMock.ExpectAndThrowAndSignal("Integrate", new CruiseControlException(exceptionMessage),
+			                                    new HasForceBuildCondition());
 			integrationTriggerMock.Expect("IntegrationCompleted");
 
 			integrator.Start();
@@ -223,7 +221,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 			integrator.Request(request);
 			projectMock.WaitForSignal();
 			integrationTriggerMock.WaitForSignal();
-			integrationTriggerMock.ResetLatch();	// should autoreset as soon as signalled.
+			integrationTriggerMock.ResetLatch(); // should autoreset as soon as signalled.
 			integrationTriggerMock.WaitForSignal();
 			VerifyAll();
 		}
@@ -239,75 +237,6 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 		public override string Message
 		{
 			get { return "IntegrationRequest is not ForceBuild."; }
-		}
-	}
-
-	public class LatchMock : DynamicMock
-	{
-		private ManualResetEvent latch = new ManualResetEvent(false);
-		private ArrayList methods = new ArrayList();
-		private VerifyException ex;
-
-		public LatchMock(Type type) : base(type)
-		{}
-
-		public void SetupResultAndSignal(string methodName, object returnVal, params Type[] argTypes)
-		{
-			base.SetupResult(methodName, returnVal, argTypes);
-			methods.Add(methodName);
-		}
-
-		public void ExpectAndSignal(string methodName, params object[] args)
-		{
-			base.Expect(methodName, args);
-			methods.Add(methodName);
-		}
-
-		public void ExpectAndReturnAndSignal(string methodName, object result, params object[] args)
-		{
-			base.ExpectAndReturn(methodName, result, args);
-			methods.Add(methodName);
-		}
-
-		public void ExpectAndThrowAndSignal(string methodName, Exception e, params object[] args)
-		{
-			base.ExpectAndThrow(methodName, e, args);
-			methods.Add(methodName);
-		}
-
-		public override object Invoke(string methodName, params object[] args)
-		{
-			try
-			{
-				return base.Invoke(methodName, args);
-			}
-			catch (VerifyException ex)
-			{
-				this.ex = ex;
-				throw;
-			}
-			finally
-			{
-				if (methods.Contains(methodName)) latch.Set();
-			}
-		}
-
-		public void WaitForSignal()
-		{
-			bool signalled = latch.WaitOne(2000, false);
-			if (! signalled)
-			{
-				throw new Exception("Latch has not been signalled before the timeout expired!");
-			}
-			if (ex != null)
-			{
-				throw ex;
-			}
-		}
-
-		public void ResetLatch()
-		{
-			latch.Reset();
 		}
 	}
 }

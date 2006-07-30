@@ -48,6 +48,7 @@ namespace ThoughtWorks.CruiseControl.Core
 		private IIntegratable integratable;
 		private QuietPeriod quietPeriod = new QuietPeriod(new DateTimeProvider());
 		private ArrayList messages = new ArrayList();
+		[ReflectorProperty("prebuild", Required=false)] public ITask[] PrebuildTasks = new ITask[0];
 
 		public Project()
 		{
@@ -166,11 +167,22 @@ namespace ThoughtWorks.CruiseControl.Core
 			return integratable.Integrate(request);				
 		}
 
+		public void Prebuild(IIntegrationResult result)
+		{
+			result.Label = Labeller.Generate(LastIntegrationResult);
+			RunTasks(result, PrebuildTasks);
+		}
+
 		public void Run(IIntegrationResult result)
 		{
 			IList tasksToRun = new ArrayList(tasks);
 			if (Builder != null) tasksToRun.Insert(0, builder);
 
+			RunTasks(result, tasksToRun);
+		}
+
+		private static void RunTasks(IIntegrationResult result, IList tasksToRun)
+		{
 			foreach (ITask task in tasksToRun)
 			{
 				task.Run(result);

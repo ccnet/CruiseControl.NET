@@ -1,5 +1,4 @@
 using NMock;
-using NMock.Constraints;
 using NUnit.Framework;
 using ThoughtWorks.CruiseControl.Core;
 using ThoughtWorks.CruiseControl.Core.State;
@@ -10,7 +9,6 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 	[TestFixture]
 	public class IntegrationResultManagerTest : IntegrationFixture
 	{
-		private IMock mockLabeller;
 		private IMock mockStateManager;
 		private Project project;
 		private IntegrationResultManager manager;
@@ -18,7 +16,6 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 		[SetUp]
 		public void SetUp()
 		{
-			mockLabeller = new DynamicMock(typeof(ILabeller));
 			mockStateManager = new DynamicMock(typeof(IStateManager));
 
 			project = CreateProject();
@@ -29,20 +26,18 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 		public void Verify()
 		{
 			mockStateManager.Verify();
-			mockLabeller.Verify();
 		}
 
 		[Test]
 		public void StartNewIntegrationShouldCreateNewIntegrationResultAndProperlyPopulate()
 		{
-			mockLabeller.ExpectAndReturn("Generate", "foo", new IsAnything());
 			ExpectToLoadState(IntegrationResultMother.CreateSuccessful("success"));
 
 			IIntegrationResult result = manager.StartNewIntegration(ForceBuildRequest());
 			Assert.AreEqual("project", result.ProjectName);
 			Assert.AreEqual(@"c:\temp", result.WorkingDirectory);
 			Assert.AreEqual(BuildCondition.ForceBuild, result.BuildCondition);
-			Assert.AreEqual("foo", result.Label);
+			Assert.AreEqual(IntegrationResult.InitialLabel, result.Label);
 			Assert.AreEqual(project.ArtifactDirectory, result.ArtifactDirectory);
 			Assert.AreEqual(project.WebURL, result.ProjectUrl);
 			Assert.AreEqual("success", result.LastSuccessfulIntegrationLabel);
@@ -83,10 +78,9 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 
 		private Project CreateProject()
 		{	
-			Project project = new Project();
+			project = new Project();
 			project.Name = "project";
 			project.ConfiguredWorkingDirectory = @"c:\temp";
-			project.Labeller = (ILabeller) mockLabeller.MockInstance;
 			project.StateManager = (IStateManager) mockStateManager.MockInstance;
 			project.ConfiguredArtifactDirectory = project.ConfiguredWorkingDirectory;
 			return project;

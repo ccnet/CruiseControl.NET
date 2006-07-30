@@ -1245,6 +1245,16 @@
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
+                <File
+                    RelPath = "UnitTestUtils\LatchMock.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "UnitTestUtils\Mockery.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
                 <Folder RelPath = "WebDashboard\Cache\" />
                 <File
                     RelPath = "WebDashboard\Dashboard\ActionInstantiatorWithObjectGiverTest.cs"

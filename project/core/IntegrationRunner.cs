@@ -12,7 +12,8 @@ namespace ThoughtWorks.CruiseControl.Core
 		private readonly IIntegrationResultManager resultManager;
 		private readonly IQuietPeriod quietPeriod;
 
-		public IntegrationRunner(IIntegrationResultManager resultManager, IIntegrationRunnerTarget target, IQuietPeriod quietPeriod)
+		public IntegrationRunner(IIntegrationResultManager resultManager, IIntegrationRunnerTarget target,
+		                         IQuietPeriod quietPeriod)
 		{
 			this.target = target;
 			this.quietPeriod = quietPeriod;
@@ -32,11 +33,12 @@ namespace ThoughtWorks.CruiseControl.Core
 				result.Modifications = GetModifications(lastResult, result);
 				if (result.ShouldRunBuild())
 				{
-					Log.Info(request.ToString());
-
+					Log.Info("Building: " + request.ToString());
 					target.Activity = ProjectActivity.Building;
+					target.Prebuild(result);
 					target.SourceControl.GetSource(result);
-					RunBuild(result);
+					target.Run(result);
+					Log.Info("Build complete: " + result.Status);
 				}
 			}
 			catch (Exception ex)
@@ -45,7 +47,6 @@ namespace ThoughtWorks.CruiseControl.Core
 				result.ExceptionResult = ex;
 			}
 			result.MarkEndTime();
-
 			PostBuild(result);
 
 			return result;
@@ -61,13 +62,6 @@ namespace ThoughtWorks.CruiseControl.Core
 		{
 			if (! Directory.Exists(directory))
 				Directory.CreateDirectory(directory);
-		}
-
-		private void RunBuild(IIntegrationResult result)
-		{
-			Log.Info("Building");
-			target.Run(result);
-			Log.Info("Build complete: " + result.Status);
 		}
 
 		private void PostBuild(IIntegrationResult result)

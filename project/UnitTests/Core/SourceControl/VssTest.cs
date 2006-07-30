@@ -45,7 +45,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 		[TearDown]
 		public void TearDown()
 		{
-			base.Verify();
+			Verify();
 			mockRegistry.Verify();
 		}
 

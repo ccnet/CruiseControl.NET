@@ -5,6 +5,7 @@ namespace ThoughtWorks.CruiseControl.Core
 	public interface IIntegrationRunnerTarget : ITask
 	{
 		ISourceControl SourceControl { get; }
+		void Prebuild(IIntegrationResult result);
 
 		bool PublishExceptions { get; }
 

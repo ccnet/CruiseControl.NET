@@ -15,6 +15,7 @@ using ThoughtWorks.CruiseControl.Core.Tasks;
 using ThoughtWorks.CruiseControl.Core.Triggers;
 using ThoughtWorks.CruiseControl.Core.Util;
 using ThoughtWorks.CruiseControl.Remote;
+using ThoughtWorks.CruiseControl.UnitTests.UnitTestUtils;
 
 namespace ThoughtWorks.CruiseControl.UnitTests.Core
 {
@@ -32,6 +33,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 		private string workingDirPath;
 		private string artifactDirPath;
 		private const string ProjectName = "test";
+		private Mockery mockery;
 
 		[SetUp]
 		public void SetUp()
@@ -41,20 +43,14 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 			Assert.IsTrue(Directory.Exists(workingDirPath));
 			Assert.IsTrue(Directory.Exists(artifactDirPath));
 
-			mockBuilder = new DynamicMock(typeof (ITask));
-			mockBuilder.Strict = true;
-			mockSourceControl = new DynamicMock(typeof (ISourceControl));
-			mockSourceControl.Strict = true;
-			mockStateManager = new DynamicMock(typeof (IStateManager));
-			mockStateManager.Strict = true;
-			mockTrigger = new DynamicMock(typeof (ITrigger));
-			mockTrigger.Strict = true;
-			mockLabeller = new DynamicMock(typeof (ILabeller));
-			mockLabeller.Strict = true;
-			mockPublisher = new DynamicMock((typeof (ITask)));
-			mockPublisher.Strict = true;
-			mockTask = new DynamicMock((typeof (ITask)));
-			mockTask.Strict = true;
+			mockery = new Mockery();
+			mockBuilder = mockery.NewStrictMock(typeof (ITask));
+			mockSourceControl = mockery.NewStrictMock(typeof (ISourceControl));
+			mockStateManager = mockery.NewStrictMock(typeof (IStateManager));
+			mockTrigger = mockery.NewStrictMock(typeof (ITrigger));
+			mockLabeller = mockery.NewStrictMock(typeof (ILabeller));
+			mockPublisher = mockery.NewStrictMock((typeof (ITask)));
+			mockTask = mockery.NewStrictMock((typeof (ITask)));
 
 			project = new Project();
 			SetupProject();
@@ -76,20 +72,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 
 		private void VerifyAll()
 		{
-			mockBuilder.Verify();
-			mockSourceControl.Verify();
-			mockStateManager.Verify();
-			mockTrigger.Verify();
-			mockLabeller.Verify();
-			mockPublisher.Verify();
-			mockTask.Verify();
-		}
-
-		[TearDown]
-		public void TearDown()
-		{
-			TempFileUtil.DeleteTempDir("workingDir");
-			TempFileUtil.DeleteTempDir("artifactDir");
+			mockery.Verify();
 		}
 
 		[Test]
@@ -121,6 +104,9 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 		<xmllogger logDir=""C:\temp"" />
 		<nullTask />
 	</publishers>
+	<prebuild>
+		<nullTask />
+	</prebuild>
 	<tasks>
 		<merge files="""" />
 	</tasks>
@@ -130,7 +116,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 	</externalLinks>
 </project>";
 
-			Project project = (Project) NetReflector.Read(xml);
+			project = (Project) NetReflector.Read(xml);
 			Assert.AreEqual("foo", project.Name);
 			Assert.AreEqual("http://localhost/ccnet", project.WebURL);
 			Assert.AreEqual(60, project.ModificationDelaySeconds);
@@ -144,9 +130,9 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 			Assert.IsTrue(project.Publishers[0] is XmlLogPublisher);
 			Assert.IsTrue(project.Publishers[1] is NullTask);
 			Assert.IsTrue(project.Tasks[0] is MergeFilesTask);
+			Assert.IsTrue(project.PrebuildTasks[0] is NullTask);
 			Assert.AreEqual("My Other Report", project.ExternalLinks[1].Name);
 			Assert.AreEqual(@"c:\my\working\directory", project.ConfiguredWorkingDirectory);
-
 			VerifyAll();
 		}
 
@@ -156,7 +142,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 			string xml = @"
 <project name=""foo"" />";
 
-			Project project = (Project) NetReflector.Read(xml);
+			project = (Project) NetReflector.Read(xml);
 			Assert.AreEqual("foo", project.Name);
 			Assert.AreEqual(Project.DefaultUrl(), project.WebURL);
 			Assert.AreEqual(0, project.ModificationDelaySeconds); //TODO: is this the correct default?  should quiet period be turned off by default?  is this sourcecontrol specific?
@@ -181,7 +167,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 	<triggers/>
 </project>";
 
-			Project project = (Project) NetReflector.Read(xml);
+			project = (Project) NetReflector.Read(xml);
 			Assert.AreEqual(typeof(MultipleTrigger), project.Triggers.GetType());
 		}
 
@@ -389,11 +375,11 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 			VerifyAll();
 		}
 
-		[Test] //TODO: question: should state be saved after a poll with no modifications and no build?? -- i think it should: implication for last build though
-			public void RunningIntegrationWithNoModificationsShouldNotBuildOrPublish()
+		//TODO: question: should state be saved after a poll with no modifications and no build?? -- i think it should: implication for last build though
+		[Test] 
+		public void RunningIntegrationWithNoModificationsShouldNotBuildOrPublish()
 		{
 			mockStateManager.ExpectAndReturn("LoadState", IntegrationResultMother.CreateSuccessful(), ProjectName);
-			mockLabeller.ExpectAndReturn("Generate", "label", new IsAnything()); // generate new label
 			mockSourceControl.ExpectAndReturn("GetModifications", new Modification[0], new IsAnything(), new IsAnything()); // return no modifications found
 			mockBuilder.ExpectNoCall("Run", typeof (IntegrationResult));
 			mockPublisher.ExpectNoCall("Run", typeof (IntegrationResult));
@@ -405,7 +391,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 			Assert.AreEqual(ProjectActivity.Sleeping, project.CurrentActivity);
 			Assert.AreEqual(IntegrationStatus.Unknown, result.Status);
 			Assert.IsNotNull(project.LastIntegrationResult);
-			Assert.AreEqual("label", result.Label);
+			Assert.AreEqual(IntegrationResult.InitialLabel, result.Label);
 			AssertFalse("unexpected modifications were returned", result.HasModifications());
 			AssertEqualArrays(new Modification[0], result.Modifications);
 			Assert.AreEqual(string.Empty, result.TaskOutput, "no output is expected as builder is not called");
@@ -445,7 +431,6 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 		public void ShouldNotPublishIntegrationResultsIfPublishExceptionsIsFalseAndSourceControlThrowsAnException()
 		{
 			mockStateManager.ExpectAndReturn("LoadState", IntegrationResult.CreateInitialIntegrationResult(ProjectName, @"c:\temp"), ProjectName); // running the first integration (no state file)
-			mockLabeller.ExpectAndReturn("Generate", "label", new IsAnything()); // generate new label
 			CruiseControlException expectedException = new CruiseControlException();
 			mockSourceControl.ExpectAndThrow("GetModifications", expectedException, new IsAnything(), new IsAnything());
 			mockPublisher.ExpectNoCall("Run", typeof (IntegrationResult));
@@ -461,10 +446,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 		public void ShouldPublishIntegrationResultsIfPublishExceptionsIsTrueAndSourceControlThrowsAnException()
 		{
 			mockStateManager.ExpectAndReturn("LoadState", IntegrationResult.CreateInitialIntegrationResult(ProjectName, @"c:\temp"), ProjectName); // running the first integration (no state file)
-			mockLabeller.ExpectAndReturn("Generate", "label", new IsAnything()); // generate new label
 			CruiseControlException expectedException = new CruiseControlException();
 			mockSourceControl.ExpectAndThrow("GetModifications", expectedException, new IsAnything(), new IsAnything());
-			mockSourceControl.Expect("LabelSourceControl", new IsAnything());
 			mockPublisher.Expect("Run", new IsAnything());
 			mockStateManager.Expect("SaveState", new IsAnything());
 
@@ -478,17 +461,6 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 		public void RethrowExceptionIfLoadingStateFileThrowsException()
 		{
 			mockStateManager.ExpectAndThrow("LoadState", new CruiseControlException("expected exception"), ProjectName);
-
-			project.Integrate(ModificationExistRequest());
-			VerifyAll();
-		}
-
-		[Test, ExpectedException(typeof (CruiseControlException))]
-		public void RethrowExceptionIfLabellerThrowsException()
-		{
-			Exception expectedException = new CruiseControlException("expected exception");
-			mockStateManager.ExpectAndReturn("LoadState", IntegrationResult.CreateInitialIntegrationResult(ProjectName, @"c:\temp"), ProjectName); // running the first integration (no state file)
-			mockLabeller.ExpectAndThrow("Generate", expectedException, new IsAnything());
 
 			project.Integrate(ModificationExistRequest());
 			VerifyAll();
@@ -600,7 +572,6 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 			mockTask.ExpectAndThrow("Run", new CruiseControlException(), new IsAnything());
 			mockSourceControl.ExpectAndReturn("GetModifications", CreateModifications(), new IsAnything(), new IsAnything());
 			mockSourceControl.Expect("GetSource", new IsAnything());
-			mockSourceControl.Expect("LabelSourceControl", new IsAnything());
 			mockPublisher.Expect("Run", new IsAnything());
 
 			project.Builder = null;
@@ -620,6 +591,19 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 			project.AddMessage(message);
 			ProjectStatus status = project.CreateProjectStatus(new ProjectIntegrator(project));
 			Assert.AreEqual(message, status.Messages[0]);
+		}
+
+		[Test]
+		public void PrebuildShouldIncrementLabelAndRunPrebuildTasks()
+		{
+			IntegrationResult result = IntegrationResult.CreateInitialIntegrationResult(ProjectName, "c:\\root");
+			mockStateManager.ExpectAndReturn("LoadState", IntegrationResult.CreateInitialIntegrationResult(ProjectName, @"c:\temp"), ProjectName);
+			mockLabeller.ExpectAndReturn("Generate", "1.0", result);
+			IMock mockPrebuildTask = mockery.NewStrictMock(typeof(ITask));
+			mockPrebuildTask.Expect("Run", result);
+			project.PrebuildTasks = new ITask[] { (ITask) mockPrebuildTask.MockInstance };
+			project.Prebuild(result);
+			Assert.AreEqual("1.0", result.Label);
 		}
 	}
 }
