@@ -26,9 +26,29 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Config
 			foreach (string f in configFiles)
 			{
 				filename = f;
-				XmlDocument xml = LoadConfigXml(filename);
+				XmlDocument xml = LoadConfigXml();
 				Assert.IsNotNull(reader.Read(xml));
 			}
+		}
+		
+		[Test, ExpectedException(typeof(ConfigurationException))]
+		public void InvalidTaskXmlShouldThrowNetReflectorException()
+		{
+			NetReflectorConfigurationReader reader = new NetReflectorConfigurationReader();
+			XmlDocument xml = new XmlDocument();
+			xml.LoadXml(@"
+<cruisecontrol>
+       <project name=""WebTrunkTest"" artifactDirectory=""..\WebTrunkTest"" >
+
+               <tasks>
+                       <build type=""nant"">
+							<executable>d:\build\bin\nant.exe</executable>
+                       </build>
+               </tasks>
+       </project>
+</cruisecontrol>
+");
+			reader.Read(xml);
 		}
 
 		private void reader_InvalidNodeEventHandler(InvalidNodeEventArgs args)
@@ -36,9 +56,9 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Config
 			throw new Exception(string.Format("configuration file {0} contains invalid xml: {1}", filename, args.Message));
 		}
 
-		private XmlDocument LoadConfigXml(string filename)
+		private XmlDocument LoadConfigXml()
 		{
-			Stream stream = Assembly.GetExecutingAssembly().GetManifestResourceStream(this.GetType().Namespace + "." + filename);
+			Stream stream = Assembly.GetExecutingAssembly().GetManifestResourceStream(GetType().Namespace + "." + filename);
 			XmlDocument xml = new XmlDocument();
 			xml.Load(stream);
 			return xml;
