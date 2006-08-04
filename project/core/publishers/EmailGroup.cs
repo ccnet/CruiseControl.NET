@@ -1,6 +1,6 @@
 using System;
-using ThoughtWorks.CruiseControl.Core.Util;
 using Exortech.NetReflector;
+using ThoughtWorks.CruiseControl.Core.Util;
 
 namespace ThoughtWorks.CruiseControl.Core.Publishers
 {
@@ -9,52 +9,34 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
 	{
 		public enum NotificationType
 		{
-			Always, Change, Failed
+			Always,
+			Change,
+			Failed
 		}
 
-		private string _name;
-		private NotificationType _notification;
-
-		public EmailGroup() {}
+		public EmailGroup()
+		{
+		}
 
 		public EmailGroup(string name, NotificationType notification)
 		{
-			_name = name;
-			_notification = notification;
+			Name = name;
+			Notification = notification;
 		}
 
 		[ReflectorProperty("name")]
-		public string Name
-		{
-			get { return _name; }
-			set { _name = value; }
-		}
-
-		public NotificationType Notification
-		{
-			get { return _notification; }
-			set { _notification = value; }
-		}
+		public string Name;
 
 		[ReflectorProperty("notification")]
-		public string NotificationString
-		{
-			set { SetNotification(value); }
-		}
-
-		public void SetNotification(string notification)
-		{
-			_notification = (NotificationType)
-				Enum.Parse(typeof(NotificationType), notification, true);
-		}
+		public NotificationType Notification;
 
 		public override bool Equals(Object o)
 		{
-			if (o == null || o.GetType() != this.GetType())
+			if (o == null || o.GetType() != GetType())
 			{
 				return false;
 			}
-			EmailGroup g = (EmailGroup)o;
+			EmailGroup g = (EmailGroup) o;
 			return Name == g.Name && Notification == g.Notification;
 		}
 
@@ -65,7 +47,7 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
 
 		public override string ToString()
 		{
-			return string.Format("EmailGroup: [name: {0}, notification: {1}]", _name, _notification);
+			return string.Format("EmailGroup: [name: {0}, notification: {1}]", Name, Notification);
 		}
 	}
 }

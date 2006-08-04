@@ -1,4 +1,4 @@
-using System;
+using Exortech.NetReflector;
 using NUnit.Framework;
 using ThoughtWorks.CruiseControl.Core.Publishers;
 
@@ -7,33 +7,32 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Publishers
 	[TestFixture]
 	public class EmailGroupTest
 	{
-		[ExpectedException(typeof(ArgumentException))]
-		public void TestSetNotificationException()
+		[Test, ExpectedException(typeof (NetReflectorException))]
+		public void ReadEmailGroupFromXmlUsingInvalidNotificationType()
 		{
-			EmailGroup group = new EmailGroup();
-			group.SetNotification("invalidnotification");			
+			NetReflector.Read(@"<group name=""foo"" notification=""bar"" />");
 		}
 
 		[Test]
-		public void TestSetNotificationAlways()
+		public void ReadEmailGroupFromXmlUsingAlwaysNotificationType()
 		{
-			EmailGroup group = new EmailGroup();
-			group.SetNotification("Always");			
+			EmailGroup group = (EmailGroup) NetReflector.Read(@"<group name=""foo"" notification=""Always"" />");
+			Assert.AreEqual("foo", group.Name);
+			Assert.AreEqual(EmailGroup.NotificationType.Always, group.Notification);
 		}
 
 		[Test]
-		public void TestSetNotificationChange()
+		public void ReadEmailGroupFromXmlUsingChangeNotificationType()
 		{
-			EmailGroup group = new EmailGroup();
-			group.SetNotification("Change");			
+			EmailGroup group = (EmailGroup) NetReflector.Read(@"<group name=""foo"" notification=""Change"" />");
+			Assert.AreEqual(EmailGroup.NotificationType.Change, group.Notification);
 		}
 
 		[Test]
-		public void TestSetNotificationFailed()
+		public void ReadEmailGroupFromXmlUsingFailedNotificationType()
 		{
-			EmailGroup group = new EmailGroup();
-			group.SetNotification("Failed");			
+			EmailGroup group = (EmailGroup) NetReflector.Read(@"<group name=""foo"" notification=""Failed"" />");
+			Assert.AreEqual(EmailGroup.NotificationType.Failed, group.Notification);
 		}
-		
 	}
 }

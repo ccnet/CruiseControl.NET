@@ -101,6 +101,7 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
 
 		private EmailGroup GetEmailGroup(string groupname)
 		{
+			if (groupname == null) return null;
 			return (EmailGroup) emailPublisher.EmailGroups[groupname];
 		}
 

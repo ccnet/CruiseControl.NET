@@ -118,7 +118,17 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Publishers
 		{
 			publisher = new EmailPublisher();
 			publisher.EmailUsers.Add(modifier.Name, modifier);
-			publisher.EmailUsers.Add(changed.Name, modifier);
+			publisher.EmailUsers.Add(changed.Name, changed);
+			IIntegrationResult result = AddModification(IntegrationResultMother.CreateFailed());
+			Assert.AreEqual(ExpectedRecipients(modifier), new EmailMessage(result, publisher).Recipients);
+		}
+
+		[Test]
+		public void HandleEmailUserWithUnspecifiedGroup()
+		{
+			publisher = new EmailPublisher();
+			publisher.EmailUsers.Add(modifier.Name, modifier);
+			publisher.EmailUsers.Add("foo", new EmailUser("foo", null, "x@x.com"));
 			IIntegrationResult result = AddModification(IntegrationResultMother.CreateFailed());
 			Assert.AreEqual(ExpectedRecipients(modifier), new EmailMessage(result, publisher).Recipients);
 		}
