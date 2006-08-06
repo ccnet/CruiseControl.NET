@@ -54,6 +54,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.SourceControl.Perforce
   <view>//depot/myproject/...</view>
   <client>myclient</client>
   <user>me</user>
+  <password>mypassword</password>
   <port>anotherserver:2666</port>
   <workingDirectory>myWorkingDirectory</workingDirectory>
   <p4WebURLFormat>http://perforceWebServer:8080/@md=d&amp;cd=//&amp;c=3IB@/{0}?ac=10</p4WebURLFormat>
@@ -65,6 +66,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.SourceControl.Perforce
 			Assert.AreEqual("//depot/myproject/...", p4.View);
 			Assert.AreEqual("myclient", p4.Client);
 			Assert.AreEqual("me", p4.User);
+			Assert.AreEqual("mypassword", p4.Password);
 			Assert.AreEqual("anotherserver:2666", p4.Port);
 			Assert.AreEqual("myWorkingDirectory", p4.WorkingDirectory);
 			Assert.AreEqual("http://perforceWebServer:8080/@md=d&cd=//&c=3IB@/{0}?ac=10", p4.P4WebURLFormat);
@@ -99,6 +101,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.SourceControl.Perforce
 			Assert.AreEqual("//depot/anotherproject/...", p4.View);
 			Assert.AreEqual("", p4.Client);
 			Assert.AreEqual("", p4.User);
+			Assert.AreEqual("", p4.Password);
 			Assert.AreEqual("", p4.Port);
 		}
 
@@ -170,6 +173,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.SourceControl.Perforce
   <view>//depot/myproject/...</view>
   <client>myclient</client>
   <user>me</user>
+  <password>mypassword</password>
   <port>anotherserver:2666</port>
 </sourceControl>
 ";
@@ -177,7 +181,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.SourceControl.Perforce
 			DateTime from = new DateTime(2003, 11, 20, 2, 10, 32);
 			DateTime to = new DateTime(2004, 10, 31, 5, 5, 1);
 
-			string expectedArgs = "-s -c myclient -p anotherserver:2666 -u me"
+			string expectedArgs = "-s -c myclient -p anotherserver:2666 -u me -P mypassword"
 				+ " changes -s submitted //depot/myproject/...@2003/11/20:02:10:32,@2004/10/31:05:05:01 ";
 
 			P4 p4 = CreateP4WithNoArgContructor(xml);
@@ -207,12 +211,13 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.SourceControl.Perforce
   <view>//depot/myproject/...</view>
   <client>myclient</client>
   <user>me</user>
+  <password>mypassword</password>
   <port>anotherserver:2666</port>
 </sourceControl>
 ";
 			string changes = "3327 3328 332";
 
-			string expectedArgs = "-s -c myclient -p anotherserver:2666 -u me"
+			string expectedArgs = "-s -c myclient -p anotherserver:2666 -u me -P mypassword"
 				+ " describe -s " + changes;
 
 			P4 p4 = CreateP4WithNoArgContructor(xml);

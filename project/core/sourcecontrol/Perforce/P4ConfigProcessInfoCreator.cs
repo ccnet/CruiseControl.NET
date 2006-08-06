@@ -28,6 +28,10 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Perforce
 			{
 				args.Append("-u " + p4.User + " ");
 			}
+			if (! StringUtil.IsBlank(p4.Password))
+			{
+				args.Append("-P " + p4.Password + " ");
+			}
 			return args.ToString();
 		}
 	}

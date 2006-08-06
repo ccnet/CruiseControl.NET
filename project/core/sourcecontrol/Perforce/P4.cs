@@ -46,6 +46,9 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Perforce
 		[ReflectorProperty("user", Required=false)]
 		public string User = string.Empty;
 
+		[ReflectorProperty("password", Required=false)]
+		public string Password = string.Empty;
+
 		[ReflectorProperty("port", Required=false)]
 		public string Port = string.Empty;
 
