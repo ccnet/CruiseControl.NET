@@ -154,7 +154,9 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Triggers
 		[Test]
 		public void ShouldFullyPopulateFromReflector()
 		{
-			string xml = string.Format(@"<filterTrigger startTime=""8:30:30"" endTime=""22:30:30"" buildCondition=""ForceBuild"">
+			string xml =
+				string.Format(
+					@"<filterTrigger startTime=""8:30:30"" endTime=""22:30:30"" buildCondition=""ForceBuild"">
 											<trigger type=""scheduleTrigger"" time=""12:00:00""/>
 											<weekDays>
 												<weekDay>Monday</weekDay>
@@ -173,7 +175,9 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Triggers
 		[Test]
 		public void ShouldMinimallyPopulateFromReflector()
 		{
-			string xml = string.Format(@"<filterTrigger startTime=""8:30:30"" endTime=""22:30:30"">
+			string xml =
+				string.Format(
+					@"<filterTrigger startTime=""8:30:30"" endTime=""22:30:30"">
 											<trigger type=""scheduleTrigger"" time=""12:00:00"" />
 										</filterTrigger>");
 			trigger = (FilterTrigger) NetReflector.Read(xml);
@@ -182,6 +186,51 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Triggers
 			Assert.AreEqual(typeof (ScheduleTrigger), trigger.InnerTrigger.GetType());
 			Assert.AreEqual(7, trigger.WeekDays.Length);
 			Assert.AreEqual(BuildCondition.NoBuild, trigger.BuildCondition);
+		}
+
+		[Test]
+		public void ShouldHandleNestedFilterTriggers()
+		{
+			string xml =
+				@"<filterTrigger startTime=""19:00"" endTime=""07:00"">
+                    <trigger type=""filterTrigger"" startTime=""0:00"" endTime=""23:59:59"">
+                        <trigger type=""intervalTrigger"" name=""continuous"" seconds=""900"" buildCondition=""ForceBuild""/>
+                        <weekDays>
+                            <weekDay>Saturday</weekDay>
+                            <weekDay>Sunday</weekDay>
+                        </weekDays>
+                    </trigger>
+				  </filterTrigger>";
+			trigger = (FilterTrigger) NetReflector.Read(xml);
+			Assert.AreEqual(typeof (FilterTrigger), trigger.InnerTrigger.GetType());
+			Assert.AreEqual(typeof (IntervalTrigger), ((FilterTrigger) trigger.InnerTrigger).InnerTrigger.GetType());
+		}
+
+		[Test]
+		public void ShouldOnlyBuildBetween7AMAnd7PMOnWeekdays()
+		{
+			FilterTrigger outerTrigger = new FilterTrigger((DateTimeProvider) mockDateTime.MockInstance);
+			outerTrigger.StartTime = "19:00";
+			outerTrigger.EndTime = "7:00";
+			outerTrigger.InnerTrigger = trigger;
+			
+			trigger.StartTime = "0:00";
+			trigger.EndTime = "23:59:59";
+			trigger.WeekDays = new DayOfWeek[] { DayOfWeek.Saturday, DayOfWeek.Sunday };
+			IntegrationRequest request = ModificationExistRequest();
+			mockTrigger.SetupResult("Fire", request);
+			
+			mockDateTime.SetupResult("Now", new DateTime(2006, 8, 10, 11, 30, 0, 0)); // Thurs midday
+			Assert.AreEqual(request, outerTrigger.Fire());
+			
+			mockDateTime.SetupResult("Now", new DateTime(2006, 8, 10, 19, 30, 0, 0)); // Thurs evening
+			Assert.IsNull(outerTrigger.Fire());			
+
+			mockDateTime.SetupResult("Now", new DateTime(2006, 8, 12, 11, 30, 0, 0)); // Sat midday
+			Assert.IsNull(outerTrigger.Fire());			
+
+			mockDateTime.SetupResult("Now", new DateTime(2006, 8, 12, 19, 30, 0, 0)); // Sat evening
+			Assert.IsNull(outerTrigger.Fire());			
 		}
 	}
 }
