@@ -40,6 +40,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.ServerConnection
 			serverLocation = new ServerLocation();
 			serverLocation.Name = "myserver";
 			serverLocation.Url = "http://myurl";
+			serverLocation.AllowForceBuild = true;
 
 			otherServerLocation = new ServerLocation();
 			otherServerLocation.Name = "myotherserver";
@@ -329,6 +330,19 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.ServerConnection
 
 			Assert.AreEqual(links, managerWrapper.GetExternalLinks(projectSpecifier));
 
+			VerifyAll();
+		}
+
+		[Test]
+		public void ReturnsServerConfiguration()
+		{
+			ServerLocation[] servers = new ServerLocation[] {serverLocation, otherServerLocation};
+
+			configurationMock.ExpectAndReturn("Servers", servers);
+
+			IServerSpecifier serverSpecifier = managerWrapper.GetServerConfiguration("myserver");
+			Assert.AreEqual(true, serverSpecifier.AllowForceBuild);
+			
 			VerifyAll();
 		}
 	}

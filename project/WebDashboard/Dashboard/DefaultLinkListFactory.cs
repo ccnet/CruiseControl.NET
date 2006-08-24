@@ -23,5 +23,16 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 
 			return (IAbsoluteLink[]) displayableBuildLinkList.ToArray(typeof (IAbsoluteLink));
 		}
+
+		public IAbsoluteLink[] CreateServerLinkList(IServerSpecifier[] serverSpecifiers, string action)
+		{
+			ArrayList lstLinks = new ArrayList();
+			foreach (IServerSpecifier serverSpecifier in serverSpecifiers)
+			{
+				lstLinks.Add(linkFactory.CreateServerLink(serverSpecifier, action));
+			}
+
+			return (IAbsoluteLink[])lstLinks.ToArray(typeof(IAbsoluteLink));
+		}
 	}
 }

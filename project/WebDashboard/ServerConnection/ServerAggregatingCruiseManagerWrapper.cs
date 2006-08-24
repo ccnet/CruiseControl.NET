@@ -195,5 +195,15 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.ServerConnection
 		{
 			get { return configuration.Servers; }
 		}
+
+		public IServerSpecifier GetServerConfiguration(string serverName)
+		{
+			foreach (ServerLocation serverLocation in this.ServerLocations)
+			{
+				if (serverLocation.ServerName == serverName)
+					return serverLocation;
+			}
+			return null;
+		}
 	}
 }

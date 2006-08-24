@@ -58,6 +58,11 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 			get { return status.Activity.ToString(); }
 		}
 
+		public Message[] Messages
+		{
+			get { return status.Messages; }	
+		}
+
 		public string Url
 		{
 			get { return url; }
@@ -98,5 +103,6 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 				return Color.Red.Name;
 			}
 		}
+
 	}
 }

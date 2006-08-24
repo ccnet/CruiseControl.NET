@@ -13,6 +13,11 @@
 #if ($projectGrid.Length > 0)
 <table cellspacing="0" cellpadding="3" rules="rows" bordercolor="#333399" border="1" id="StatusGrid" bgcolor="White" width="100%">
 	<tr bgcolor="#333399" class="ProjectGridHeader">
+		#if ($wholeFarm)
+		<td align="Center">
+			<a href="$serverNameSortLink"><b>Server</b></a>
+		</td>
+		#end
 		<td>
 			<a href="$projectNameSortLink"><b>Project Name</b></a>
 		</td>
@@ -32,12 +37,20 @@
 			<b>Activity</b>
 		</td>
 		<td align="Center">
+			<b>Messages</b>
+		</td>
+		<td align="Center">
 			<b>Admin</b>
 		</td>
 	</tr>
 	
 	#foreach ($projectGridRow in $projectGrid)
 	<tr bgcolor="Ivory">
+		#if ($wholeFarm)
+		<td align="Left">
+			<b>$projectGridRow.ServerName</b>
+		</td>
+		#end
 		<td align="Left">
 			<font color="Black">
 				<a href="$projectGridRow.Url">$projectGridRow.Name</a>
@@ -58,7 +71,18 @@
 			<font color="Black">$projectGridRow.Status</font>
 		</td>
 		<td align="Center">
-			<font color="Black">$projectGridRow.Activity</font>
+			#if ($projectGridRow.Activity == "Building")
+				<font color="Red">$projectGridRow.Activity</font>
+			#else
+				<font color="Black">$projectGridRow.Activity</font>
+			#end
+		</td>
+		<td align="Center">
+			<font color="Black">
+				#foreach ($Message in $projectGridRow.BuildMessages)
+					$Message<br>
+				#end
+			</font>
 		</td>
 		<form method="post">
 			<input type="hidden" name="forcebuild" value="true" />

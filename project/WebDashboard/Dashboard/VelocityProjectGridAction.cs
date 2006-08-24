@@ -33,6 +33,8 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 
 		public IResponse Execute(string actionName, IServerSpecifier serverSpecifier, IRequest request)
 		{
+			//Added code so since defaultServerSpecifier only sets the name of the server - not the actual config
+			serverSpecifier = farmService.GetServerConfiguration(serverSpecifier.ServerName);
 			return GenerateView(farmService.GetProjectStatusListAndCaptureExceptions(serverSpecifier), actionName, request, serverSpecifier);
 		}
 
@@ -41,12 +43,15 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 			Hashtable velocityContext = new Hashtable();
 			velocityContext["forceBuildMessage"] = ForceBuildIfNecessary(request);
 
+			velocityContext["wholeFarm"] = serverSpecifier == null ?  true : false;
+
 			ProjectGridSortColumn sortColumn = GetSortColumn(request);
 			bool sortReverse = SortAscending(request);
 
 			velocityContext["projectNameSortLink"] = GenerateSortLink(serverSpecifier, actionName, ProjectGridSortColumn.Name, sortColumn, sortReverse);
 			velocityContext["buildStatusSortLink"] = GenerateSortLink(serverSpecifier, actionName, ProjectGridSortColumn.BuildStatus, sortColumn, sortReverse);
 			velocityContext["lastBuildDateSortLink"] = GenerateSortLink(serverSpecifier, actionName, ProjectGridSortColumn.LastBuildDate, sortColumn, sortReverse);
+			velocityContext["serverNameSortLink"] = GenerateSortLink(serverSpecifier, actionName, ProjectGridSortColumn.ServerName, sortColumn, sortReverse);
 			velocityContext["projectGrid"] = projectGrid.GenerateProjectGridRows(
 				projectStatusListAndExceptions.StatusAndServerList, actionName, sortColumn, sortReverse);
 			velocityContext["exceptions"] = projectStatusListAndExceptions.Exceptions;
@@ -114,7 +119,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 		private DefaultProjectSpecifier ProjectSpecifier(IRequest request)
 		{
 			return new DefaultProjectSpecifier(
-				new DefaultServerSpecifier(request.GetText("forceBuildServer")), SelectedProject(request));
+				farmService.GetServerConfiguration(request.GetText("forceBuildServer")), SelectedProject(request));
 		}
 
 		private static string SelectedProject(IRequest request)

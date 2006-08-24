@@ -8,6 +8,7 @@ using ThoughtWorks.CruiseControl.WebDashboard.IO;
 using ThoughtWorks.CruiseControl.WebDashboard.MVC;
 using ThoughtWorks.CruiseControl.WebDashboard.MVC.View;
 using ThoughtWorks.CruiseControl.WebDashboard.Plugins.BuildReport;
+using ThoughtWorks.CruiseControl.WebDashboard.ServerConnection;
 
 namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 {
@@ -20,12 +21,17 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 		private DynamicMock pluginLinkCalculatorMock;
 		private DynamicMock velocityViewGeneratorMock;
 		private DynamicMock linkFactoryMock;
+		private DynamicMock linkListFactoryMock;
+		private DynamicMock farmServiceMock;
 
 		private SideBarViewBuilder sideBarViewBuilder;
 
 		private IResponse velocityResponse;
 		private Hashtable velocityContext;
 		private IAbsoluteLink[] links;
+		private IAbsoluteLink[] serverLinks;
+		private IServerSpecifier[] serverSpecifiers;
+
 
 		[SetUp]
 		public void Setup()
@@ -36,6 +42,9 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 			pluginLinkCalculatorMock = new DynamicMock(typeof(IPluginLinkCalculator));
 			velocityViewGeneratorMock = new DynamicMock(typeof(IVelocityViewGenerator));
 			linkFactoryMock = new DynamicMock(typeof(ILinkFactory));
+			linkListFactoryMock = new DynamicMock(typeof(ILinkListFactory));
+			farmServiceMock = new DynamicMock(typeof(IFarmService));
+
 
 			sideBarViewBuilder = new SideBarViewBuilder(
 				(ICruiseRequest) cruiseRequestWrapperMock.MockInstance,
@@ -43,11 +52,15 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 				(IRecentBuildsViewBuilder) recentBuildsViewBuilderMock.MockInstance,
 				(IPluginLinkCalculator) pluginLinkCalculatorMock.MockInstance,
 				(IVelocityViewGenerator) velocityViewGeneratorMock.MockInstance,
-				(ILinkFactory) linkFactoryMock.MockInstance);
+				(ILinkFactory) linkFactoryMock.MockInstance,
+				(ILinkListFactory)linkListFactoryMock.MockInstance,
+				(IFarmService) farmServiceMock.MockInstance);
 
 			velocityResponse = new HtmlFragmentResponse("velocity view");
 			velocityContext = new Hashtable();
 			links = new IAbsoluteLink[] { new GeneralAbsoluteLink("link")};
+			serverLinks = new IAbsoluteLink[] { new GeneralAbsoluteLink("link")};
+			serverSpecifiers = new IServerSpecifier[] {new DefaultServerSpecifier("test")};
 		}
 		
 		private void VerifyAll()
@@ -58,6 +71,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 			pluginLinkCalculatorMock.Verify();
 			velocityViewGeneratorMock.Verify();
 			linkFactoryMock.Verify();
+			linkListFactoryMock.Verify();
+			farmServiceMock.Verify();
 		}
 
 		[Test]
@@ -66,8 +81,11 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 			// Setup
 			cruiseRequestWrapperMock.ExpectAndReturn("ServerName", "");
 			pluginLinkCalculatorMock.ExpectAndReturn("GetFarmPluginLinks", links);
+			farmServiceMock.ExpectAndReturn("GetServerSpecifiers", serverSpecifiers);
+			linkListFactoryMock.ExpectAndReturn("CreateServerLinkList", serverLinks, serverSpecifiers, "ViewServerReport");
 
 			velocityContext["links"] = links;
+			velocityContext["serverlinks"] = serverLinks;
 
 			velocityViewGeneratorMock.ExpectAndReturn("GenerateView", velocityResponse, @"FarmSideBar.vm", new HashtableConstraint(velocityContext));
 

@@ -12,5 +12,6 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.ServerConnection
 		void AddProject(IServerSpecifier serverSpecifier, string serializedProject);
 		string GetProject(IProjectSpecifier projectSpecifier);
 		void UpdateProject(IProjectSpecifier projectSpecifier, string serializedProject);
+		IServerSpecifier GetServerConfiguration(string serverName);
 	}
 }

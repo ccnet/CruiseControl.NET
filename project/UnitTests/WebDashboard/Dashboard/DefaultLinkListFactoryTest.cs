@@ -43,5 +43,27 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 
 			VerifyAll();
 		}
+
+		[Test]
+		public void ShouldGenerateServerLinks()
+		{
+			string action = "ViewServerReport";
+			IServerSpecifier serverSpecifier1 = new DefaultServerSpecifier("myserver");
+			IServerSpecifier serverSpecifier2 = new DefaultServerSpecifier("myotherserver");
+
+			IAbsoluteLink link1 = new GeneralAbsoluteLink("link 1");
+			IAbsoluteLink link2 = new GeneralAbsoluteLink("link 2");
+
+			linkFactoryMock.ExpectAndReturn("CreateServerLink", link1, serverSpecifier1, action);
+			linkFactoryMock.ExpectAndReturn("CreateServerLink", link2, serverSpecifier2, action);
+
+			IAbsoluteLink[] returnedLinks = linkListFactory.CreateServerLinkList(new IServerSpecifier[] { serverSpecifier1, serverSpecifier2 }, action);
+
+			Assert.AreEqual(2, returnedLinks.Length);
+			Assert.AreEqual(link1, returnedLinks[0]);
+			Assert.AreEqual(link2, returnedLinks[1]);
+
+			VerifyAll();
+		}
 	}
 }

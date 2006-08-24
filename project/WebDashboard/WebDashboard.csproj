@@ -842,10 +842,6 @@
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
-                <Folder RelPath = "Plugins\FxCop\" />
-                <Folder RelPath = "Plugins\NAnt\" />
-                <Folder RelPath = "Plugins\NCover\" />
-                <Folder RelPath = "Plugins\NUnit\" />
                 <File
                     RelPath = "Plugins\ProjectReport\ProjectReportProjectPlugin.cs"
                     SubType = "Code"

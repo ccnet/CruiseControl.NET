@@ -67,6 +67,10 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 				{
 					return rowx.BuildStatus.CompareTo(rowy.BuildStatus)*(ascending ? 1 : -1);
 				}
+				else if (column == ProjectGridSortColumn.ServerName)
+				{
+					return rowx.ServerName.CompareTo(rowy.ServerName)*(ascending ? 1 : -1);
+				}
 				else
 				{
 					return 0;

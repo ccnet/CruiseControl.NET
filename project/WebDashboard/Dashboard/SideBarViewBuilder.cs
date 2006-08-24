@@ -4,6 +4,7 @@ using ThoughtWorks.CruiseControl.WebDashboard.IO;
 using ThoughtWorks.CruiseControl.WebDashboard.MVC;
 using ThoughtWorks.CruiseControl.WebDashboard.MVC.View;
 using ThoughtWorks.CruiseControl.WebDashboard.Plugins.BuildReport;
+using ThoughtWorks.CruiseControl.WebDashboard.ServerConnection;
 
 namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 {
@@ -14,16 +15,21 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 		private readonly IRecentBuildsViewBuilder recentBuildsViewBuilder;
 		private readonly IPluginLinkCalculator pluginLinkCalculator;
 		private readonly IVelocityViewGenerator velocityViewGenerator;
+		private readonly ILinkListFactory linkListFactory;
 		private readonly ILinkFactory linkFactory;
+		private readonly IFarmService farmService;
+		
 
-		public SideBarViewBuilder(ICruiseRequest request, IBuildNameRetriever buildNameRetriever, IRecentBuildsViewBuilder recentBuildsViewBuilder, IPluginLinkCalculator pluginLinkCalculator, IVelocityViewGenerator velocityViewGenerator, ILinkFactory linkFactory)
+		public SideBarViewBuilder(ICruiseRequest request, IBuildNameRetriever buildNameRetriever, IRecentBuildsViewBuilder recentBuildsViewBuilder, IPluginLinkCalculator pluginLinkCalculator, IVelocityViewGenerator velocityViewGenerator, ILinkFactory linkFactory, ILinkListFactory linkListFactory, IFarmService farmService)
 		{
 			this.request = request;
 			this.buildNameRetriever = buildNameRetriever;
 			this.recentBuildsViewBuilder = recentBuildsViewBuilder;
 			this.pluginLinkCalculator = pluginLinkCalculator;
 			this.velocityViewGenerator = velocityViewGenerator;
+			this.linkListFactory = linkListFactory;
 			this.linkFactory = linkFactory;
+			this.farmService = farmService;
 		}
 
 		public HtmlFragmentResponse Execute()
@@ -35,6 +41,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 			if (serverName == "")
 			{
 				velocityContext["links"] = pluginLinkCalculator.GetFarmPluginLinks();
+				velocityContext["serverlinks"] = linkListFactory.CreateServerLinkList(farmService.GetServerSpecifiers(), "ViewServerReport");
 				velocityTemplateName = @"FarmSideBar.vm";
 			}
 			else

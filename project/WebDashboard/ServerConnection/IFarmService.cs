@@ -1,4 +1,3 @@
-using System.Xml;
 using ThoughtWorks.CruiseControl.Core.Reporting.Dashboard.Navigation;
 using ThoughtWorks.CruiseControl.Remote;
 
@@ -16,6 +15,8 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.ServerConnection
 		ProjectStatusListAndExceptions GetProjectStatusListAndCaptureExceptions();
 		ProjectStatusListAndExceptions GetProjectStatusListAndCaptureExceptions(IServerSpecifier serverSpecifier);
 		ExternalLink[] GetExternalLinks(IProjectSpecifier projectSpecifier);
+		IServerSpecifier[] GetServerSpecifiers();
+		IServerSpecifier GetServerConfiguration(string serverName);
 		string GetServerVersion(IServerSpecifier serverSpecifier);
 		string GetArtifactDirectory(IProjectSpecifier projectSpecifier);
 		string GetStatisticsDocument(IProjectSpecifier projectSpecifier);

@@ -13,5 +13,16 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Configuration
 			get { return servers; }
 			set { servers = value; }
 		}
+
+		
+		public ServerLocation GetServerLocation(string serverName)
+		{
+			foreach (ServerLocation server in servers)
+			{
+				if (server.ServerName == serverName)
+					return server;
+			}
+			return null;
+		}
 	}
 }

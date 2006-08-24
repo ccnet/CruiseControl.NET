@@ -2,4 +2,9 @@
 	#foreach ($link in $links)
 	<tr><td><a href="$link.Url" class="$link.LinkClass">$link.Text</a></td></tr>
 	#end
+	<tr><td></td></tr>
+	<tr><td><b>Servers</b></td></tr>
+	#foreach ($slink in $serverlinks)
+	<tr><td><a href="$slink.Url" class="$slink.LinkClass">$slink.Text</a></td></tr>
+	#end
 </table>

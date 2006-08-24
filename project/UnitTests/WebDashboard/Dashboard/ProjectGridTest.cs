@@ -297,6 +297,52 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 		}
 
 		[Test]
+		public void ShouldCopyProjectMessagesToProjectRow()
+		{
+			// Setup
+			ProjectStatus projectStatus1 = new ProjectStatus(projectSpecifier.ProjectName, 
+				ProjectActivity.Sleeping, IntegrationStatus.Success, ProjectIntegratorState.Running, "url", DateTime.Today, "my label", null, DateTime.Today);
+
+			projectStatus1.Messages = new Message[1] {new Message("Test Message")};
+
+			ProjectStatusOnServer[] statusses = new ProjectStatusOnServer[]
+				{
+					new ProjectStatusOnServer(projectStatus1, serverSpecifier)
+				};
+			SetupProjectLinkExpectation();
+
+			// Execute
+			ProjectGridRow[] rows = projectGrid.GenerateProjectGridRows(statusses, "myAction", ProjectGridSortColumn.Name, true);
+
+			// Verify
+			Assert.IsNotNull(rows[0].Messages);
+			Assert.AreEqual("Test Message", rows[0].Messages[0].ToString());
+			VerifyAll();
+
+			// Setup
+			projectStatus1 = new ProjectStatus(projectSpecifier.ProjectName, 
+				ProjectActivity.Sleeping, IntegrationStatus.Success, ProjectIntegratorState.Stopped, "url", DateTime.Today, "my label", null, DateTime.Today);
+
+			projectStatus1.Messages = new Message[2] {new Message(string.Empty), new Message("Second Message")};
+
+			statusses = new ProjectStatusOnServer[]
+				{
+					new ProjectStatusOnServer(projectStatus1, serverSpecifier)
+				};
+			SetupProjectLinkExpectation();
+
+			// Execute
+			rows = projectGrid.GenerateProjectGridRows(statusses, "myAction", ProjectGridSortColumn.Name, true);
+
+			// Verify
+			Assert.IsNotNull(rows[0].Messages);
+			Assert.AreEqual(2, rows[0].Messages.Length);
+			Assert.AreEqual(string.Empty, rows[0].Messages[0].ToString());
+			Assert.AreEqual("Second Message", rows[0].Messages[1].ToString());
+			VerifyAll();
+		}
+
+		[Test]
 		public void ShouldReturnProjectsSortedByNameIfNameColumnSpecifiedAsSortSeed()
 		{
 			// Setup
@@ -417,6 +463,50 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 			Assert.AreEqual(2, rows.Length);
 			Assert.AreEqual("a", rows[0].Name);
 			Assert.AreEqual("b", rows[1].Name);
+
+			VerifyAll();
+		}
+
+		[Test]
+		public void ShouldReturnProjectsSortedByServerIfServerNameColumnSpecifiedAsSortSeed()
+		{
+			// Setup
+			IServerSpecifier serverSpecifierA = new DefaultServerSpecifier("Aserver");
+			IServerSpecifier serverSpecifierB = new DefaultServerSpecifier("Bserver");
+			IProjectSpecifier projectA = new DefaultProjectSpecifier(serverSpecifierA, "a");
+			IProjectSpecifier projectB = new DefaultProjectSpecifier(serverSpecifierB, "b");
+
+			ProjectStatus projectStatus1 = new ProjectStatus("a", 
+				ProjectActivity.Sleeping, IntegrationStatus.Success, ProjectIntegratorState.Running, "url", DateTime.Today, "1", null, DateTime.Today);
+			ProjectStatus projectStatus2 = new ProjectStatus("b", 
+				ProjectActivity.Sleeping, IntegrationStatus.Failure, ProjectIntegratorState.Running, "url", DateTime.Today.AddHours(1), "1", null, DateTime.Today);
+			ProjectStatusOnServer[] statusses = new ProjectStatusOnServer[]
+				{
+					new ProjectStatusOnServer(projectStatus1, serverSpecifierA),
+					new ProjectStatusOnServer(projectStatus2, serverSpecifierB)
+				};
+			SetupProjectLinkExpectation(projectA);
+			SetupProjectLinkExpectation(projectB);
+
+			// Execute
+			ProjectGridRow[] rows = projectGrid.GenerateProjectGridRows(statusses, "myAction", ProjectGridSortColumn.ServerName, true);
+
+			// Verify
+			Assert.AreEqual(2, rows.Length);
+			Assert.AreEqual("a", rows[0].Name);
+			Assert.AreEqual("b", rows[1].Name);
+
+			// Setup
+			SetupProjectLinkExpectation(projectA);
+			SetupProjectLinkExpectation(projectB);
+
+			// Execute
+			rows = projectGrid.GenerateProjectGridRows(statusses, "myAction", ProjectGridSortColumn.ServerName, false);
+
+			// Verify
+			Assert.AreEqual(2, rows.Length);
+			Assert.AreEqual("b", rows[0].Name);
+			Assert.AreEqual("a", rows[1].Name);
 
 			VerifyAll();
 		}
