@@ -1466,6 +1466,11 @@
                     BuildAction = "EmbeddedResource"
                 />
                 <File
+                    RelPath = "WebDashboard\Plugins\BuildReport\XmlReportActionSchema.xsx"
+                    DependentUpon = "XmlReportActionSchema.xsd"
+                    BuildAction = "None"
+                />
+                <File
                     RelPath = "WebDashboard\Plugins\BuildReport\XmlReportActionTest.cs"
                     SubType = "Code"
                     BuildAction = "Compile"

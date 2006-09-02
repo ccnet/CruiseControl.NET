@@ -34,6 +34,9 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
 
 		[XmlAttribute()]
 		public string webUrl;
+
+		[XmlAttribute()]
+		public string category;
 	}
 
 	public class DashboardXmlParser : IDashboardXmlParser
@@ -52,6 +55,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
 					{
 						return new ProjectStatus(
 							project.name,
+							project.category,
 							new ProjectActivity(project.activity),
 							(IntegrationStatus) Enum.Parse(typeof (IntegrationStatus), project.lastBuildStatus),
 							ProjectIntegratorState.Running,

@@ -17,6 +17,7 @@ namespace ThoughtWorks.CruiseControl.Remote
 		private IntegrationStatus buildStatus;
 		private ProjectActivity activity = ProjectActivity.Sleeping;
 		private string name;
+		private string category;
 		private string webURL;
 		private SerializableDateTime lastBuildDate = SerializableDateTime.Default;
 		private string lastBuildLabel;
@@ -33,12 +34,13 @@ namespace ThoughtWorks.CruiseControl.Remote
 			this.lastBuildDate = new SerializableDateTime(lastBuildDate);
 		}
 
-		public ProjectStatus(string name, ProjectActivity activity, IntegrationStatus buildStatus, ProjectIntegratorState status, string webURL, DateTime lastBuildDate, string lastBuildLabel, string lastSuccessfulBuildLabel, DateTime nextBuildTime)
+		public ProjectStatus(string name, string category, ProjectActivity activity, IntegrationStatus buildStatus, ProjectIntegratorState status, string webURL, DateTime lastBuildDate, string lastBuildLabel, string lastSuccessfulBuildLabel, DateTime nextBuildTime)
 		{
 			this.status = status;
 			this.buildStatus = buildStatus;
 			this.activity = activity;
 			this.name = name;
+			this.category = category;
 			this.webURL = webURL;
 			this.lastBuildDate = new SerializableDateTime(lastBuildDate);
 			this.lastBuildLabel = lastBuildLabel;
@@ -64,6 +66,11 @@ namespace ThoughtWorks.CruiseControl.Remote
 		public string Name
 		{
 			get { return name; }
+		}
+
+		public string Category
+		{
+			get { return category; }
 		}
 
 		public string WebURL

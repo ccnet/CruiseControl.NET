@@ -80,6 +80,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Plugins.BuildReport
 			AssertXPathMatches(doc, "/Projects/Project/@lastBuildTime", XmlConvert.ToString(LastBuildTime));
 			AssertXPathMatches(doc, "/Projects/Project/@nextBuildTime", XmlConvert.ToString(NextBuildTime));
 			AssertXPathMatches(doc, "/Projects/Project/@webUrl", "http://blah");
+			AssertXPathMatches(doc, "/Projects/Project/@category", "category");
 
 			mockFarmService.Verify();
 
@@ -125,7 +126,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Plugins.BuildReport
 		private ProjectStatus CreateProjectStatus()
 		{
 			return
-				new ProjectStatus("HelloWorld", ProjectActivity.Sleeping, IntegrationStatus.Success, ProjectIntegratorState.Running,
+				new ProjectStatus("HelloWorld", "category", ProjectActivity.Sleeping, IntegrationStatus.Success, ProjectIntegratorState.Running,
 				                  "http://blah", LastBuildTime, "build_8", "build_7",
 				                  NextBuildTime);
 		}

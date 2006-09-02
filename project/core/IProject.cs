@@ -18,6 +18,14 @@ namespace ThoughtWorks.CruiseControl.Core
 		}
 
 		/// <summary>
+		/// An optional category that groups the project
+		/// </summary>
+		string Category
+		{
+			get;
+		}
+
+		/// <summary>
 		/// A component to trigger integrations for this project.
 		/// TODO: remove
 		/// </summary>

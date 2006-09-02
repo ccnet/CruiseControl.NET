@@ -249,7 +249,7 @@ namespace ThoughtWorks.CruiseControl.Core
 
 		public ProjectStatus CreateProjectStatus(IProjectIntegrator integrator)
 		{
-			ProjectStatus status = new ProjectStatus(Name, CurrentActivity, LatestBuildStatus, integrator.State, WebURL,
+			ProjectStatus status = new ProjectStatus(Name, Category, CurrentActivity, LatestBuildStatus, integrator.State, WebURL,
 			                                         LastIntegrationResult.StartTime, LastIntegrationResult.Label, LastIntegrationResult.LastSuccessfulIntegrationLabel, 
 			                                         Triggers.NextBuild);
 			status.Messages = (Message[])messages.ToArray(typeof(Message));

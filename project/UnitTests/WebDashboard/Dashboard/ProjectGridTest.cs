@@ -186,7 +186,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 		public void ShouldCopyProjectStatusToProjectRow()
 		{
 			// Setup
-			ProjectStatus projectStatus1 = new ProjectStatus(projectSpecifier.ProjectName, 
+			ProjectStatus projectStatus1 = new ProjectStatus(projectSpecifier.ProjectName, "category",
 			                                                 ProjectActivity.Sleeping, IntegrationStatus.Success, ProjectIntegratorState.Running, "url", DateTime.Today, "my label", null, DateTime.Today);
 			ProjectStatusOnServer[] statusses = new ProjectStatusOnServer[]
 				{
@@ -202,7 +202,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 			VerifyAll();
 
 			// Setup
-			projectStatus1 = new ProjectStatus(projectSpecifier.ProjectName, 
+			projectStatus1 = new ProjectStatus(projectSpecifier.ProjectName, "category",
 			                                   ProjectActivity.Sleeping, IntegrationStatus.Success, ProjectIntegratorState.Stopped, "url", DateTime.Today, "my label", null, DateTime.Today);
 			statusses = new ProjectStatusOnServer[]
 				{
@@ -222,7 +222,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 		public void ShouldCopyProjectActivityToProjectRow()
 		{
 			// Setup
-			ProjectStatus projectStatus1 = new ProjectStatus(projectSpecifier.ProjectName, 
+			ProjectStatus projectStatus1 = new ProjectStatus(projectSpecifier.ProjectName, "category", 
 			                                                 ProjectActivity.Sleeping, IntegrationStatus.Success, ProjectIntegratorState.Running, "url", DateTime.Today, "my label", null, DateTime.Today);
 			ProjectStatusOnServer[] statusses = new ProjectStatusOnServer[]
 				{
@@ -238,7 +238,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 			VerifyAll();
 
 			// Setup
-			projectStatus1 = new ProjectStatus(projectSpecifier.ProjectName, 
+			projectStatus1 = new ProjectStatus(projectSpecifier.ProjectName, "category",
 			                                   ProjectActivity.CheckingModifications, IntegrationStatus.Success, ProjectIntegratorState.Stopped, "url", DateTime.Today, "my label", null, DateTime.Today);
 			statusses = new ProjectStatusOnServer[]
 				{
@@ -259,7 +259,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 		{
 			// Setup
 			DateTime date = DateTime.Today;
-			ProjectStatus projectStatus1 = new ProjectStatus(projectSpecifier.ProjectName, 
+			ProjectStatus projectStatus1 = new ProjectStatus(projectSpecifier.ProjectName, "category",
 			                                                 ProjectActivity.Sleeping, IntegrationStatus.Success, ProjectIntegratorState.Running, "url", date, "my label", null, DateTime.Today);
 			ProjectStatusOnServer[] statusses = new ProjectStatusOnServer[]
 				{
@@ -279,7 +279,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 		public void ShouldCreateLinkToProjectReport()
 		{
 			// Setup
-			ProjectStatus projectStatus1 = new ProjectStatus(projectSpecifier.ProjectName, 
+			ProjectStatus projectStatus1 = new ProjectStatus(projectSpecifier.ProjectName, "category",
 			                                                 ProjectActivity.Sleeping, IntegrationStatus.Success, ProjectIntegratorState.Running, "url", DateTime.Today, "1", null, DateTime.Today);
 			
 			ProjectStatusOnServer[] statusses = new ProjectStatusOnServer[]
@@ -300,7 +300,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 		public void ShouldCopyProjectMessagesToProjectRow()
 		{
 			// Setup
-			ProjectStatus projectStatus1 = new ProjectStatus(projectSpecifier.ProjectName, 
+			ProjectStatus projectStatus1 = new ProjectStatus(projectSpecifier.ProjectName, "category",
 				ProjectActivity.Sleeping, IntegrationStatus.Success, ProjectIntegratorState.Running, "url", DateTime.Today, "my label", null, DateTime.Today);
 
 			projectStatus1.Messages = new Message[1] {new Message("Test Message")};
@@ -320,7 +320,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 			VerifyAll();
 
 			// Setup
-			projectStatus1 = new ProjectStatus(projectSpecifier.ProjectName, 
+			projectStatus1 = new ProjectStatus(projectSpecifier.ProjectName, "category",
 				ProjectActivity.Sleeping, IntegrationStatus.Success, ProjectIntegratorState.Stopped, "url", DateTime.Today, "my label", null, DateTime.Today);
 
 			projectStatus1.Messages = new Message[2] {new Message(string.Empty), new Message("Second Message")};
@@ -343,15 +343,55 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 		}
 
 		[Test]
+		public void ShouldCopyProjectCategoryToProjectRow()
+		{
+			// Setup
+			ProjectStatus projectStatus1 = new ProjectStatus(projectSpecifier.ProjectName, "category",
+				ProjectActivity.Sleeping, IntegrationStatus.Success, ProjectIntegratorState.Running, "url", DateTime.Today, "my label", null, DateTime.Today);
+
+
+			ProjectStatusOnServer[] statusses = new ProjectStatusOnServer[]
+				{
+					new ProjectStatusOnServer(projectStatus1, serverSpecifier)
+				};
+			SetupProjectLinkExpectation();
+
+			// Execute
+			ProjectGridRow[] rows = projectGrid.GenerateProjectGridRows(statusses, "myAction", ProjectGridSortColumn.Name, true);
+
+			// Verify
+			Assert.AreEqual("category", rows[0].Category);
+			VerifyAll();
+
+			// Setup
+			projectStatus1 = new ProjectStatus(projectSpecifier.ProjectName, "category1",
+				ProjectActivity.Sleeping, IntegrationStatus.Success, ProjectIntegratorState.Stopped, "url", DateTime.Today, "my label", null, DateTime.Today);
+
+
+			statusses = new ProjectStatusOnServer[]
+				{
+					new ProjectStatusOnServer(projectStatus1, serverSpecifier)
+				};
+			SetupProjectLinkExpectation();
+
+			// Execute
+			rows = projectGrid.GenerateProjectGridRows(statusses, "myAction", ProjectGridSortColumn.Name, true);
+
+			// Verify
+			Assert.AreEqual("category1", rows[0].Category);
+			VerifyAll();
+		}
+
+		[Test]
 		public void ShouldReturnProjectsSortedByNameIfNameColumnSpecifiedAsSortSeed()
 		{
 			// Setup
 			IProjectSpecifier projectA = new DefaultProjectSpecifier(serverSpecifier, "a");
 			IProjectSpecifier projectB = new DefaultProjectSpecifier(serverSpecifier, "b");
 
-			ProjectStatus projectStatus1 = new ProjectStatus("a", 
+			ProjectStatus projectStatus1 = new ProjectStatus("a", "category",
 			                                                 ProjectActivity.Sleeping, IntegrationStatus.Success, ProjectIntegratorState.Running, "url", DateTime.Today, "1", null, DateTime.Today);
-			ProjectStatus projectStatus2 = new ProjectStatus("b", 
+			ProjectStatus projectStatus2 = new ProjectStatus("b", "category",
 			                                                 ProjectActivity.Sleeping, IntegrationStatus.Success, ProjectIntegratorState.Running, "url", DateTime.Today, "1", null, DateTime.Today);
 			ProjectStatusOnServer[] statusses = new ProjectStatusOnServer[]
 				{
@@ -391,9 +431,9 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 			IProjectSpecifier projectA = new DefaultProjectSpecifier(serverSpecifier, "a");
 			IProjectSpecifier projectB = new DefaultProjectSpecifier(serverSpecifier, "b");
 
-			ProjectStatus projectStatus1 = new ProjectStatus("b", 
+			ProjectStatus projectStatus1 = new ProjectStatus("b", "category",
 			                                                 ProjectActivity.Sleeping, IntegrationStatus.Success, ProjectIntegratorState.Running, "url", DateTime.Today, "1", null, DateTime.Today);
-			ProjectStatus projectStatus2 = new ProjectStatus("a", 
+			ProjectStatus projectStatus2 = new ProjectStatus("a", "category",
 			                                                 ProjectActivity.Sleeping, IntegrationStatus.Success, ProjectIntegratorState.Running, "url", DateTime.Today.AddHours(1), "1", null, DateTime.Today);
 			ProjectStatusOnServer[] statusses = new ProjectStatusOnServer[]
 				{
@@ -432,9 +472,9 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 			// Setup
 			IProjectSpecifier projectA = new DefaultProjectSpecifier(serverSpecifier, "a");
 			IProjectSpecifier projectB = new DefaultProjectSpecifier(serverSpecifier, "b");
-			ProjectStatus projectStatus1 = new ProjectStatus("a", 
+			ProjectStatus projectStatus1 = new ProjectStatus("a", "category",
 			                                                 ProjectActivity.Sleeping, IntegrationStatus.Success, ProjectIntegratorState.Running, "url", DateTime.Today, "1", null, DateTime.Today);
-			ProjectStatus projectStatus2 = new ProjectStatus("b", 
+			ProjectStatus projectStatus2 = new ProjectStatus("b", "category",
 			                                                 ProjectActivity.Sleeping, IntegrationStatus.Failure, ProjectIntegratorState.Running, "url", DateTime.Today.AddHours(1), "1", null, DateTime.Today);
 			ProjectStatusOnServer[] statusses = new ProjectStatusOnServer[]
 				{
@@ -476,9 +516,9 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 			IProjectSpecifier projectA = new DefaultProjectSpecifier(serverSpecifierA, "a");
 			IProjectSpecifier projectB = new DefaultProjectSpecifier(serverSpecifierB, "b");
 
-			ProjectStatus projectStatus1 = new ProjectStatus("a", 
+			ProjectStatus projectStatus1 = new ProjectStatus("a", "category",
 				ProjectActivity.Sleeping, IntegrationStatus.Success, ProjectIntegratorState.Running, "url", DateTime.Today, "1", null, DateTime.Today);
-			ProjectStatus projectStatus2 = new ProjectStatus("b", 
+			ProjectStatus projectStatus2 = new ProjectStatus("b", "category",
 				ProjectActivity.Sleeping, IntegrationStatus.Failure, ProjectIntegratorState.Running, "url", DateTime.Today.AddHours(1), "1", null, DateTime.Today);
 			ProjectStatusOnServer[] statusses = new ProjectStatusOnServer[]
 				{

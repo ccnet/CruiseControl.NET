@@ -41,6 +41,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.FarmReport
 
 			xmlWriter.WriteStartElement("Project");
 			xmlWriter.WriteAttributeString("name", status.Name);
+			xmlWriter.WriteAttributeString("category", status.Category);
 			xmlWriter.WriteAttributeString("activity", status.Activity.ToString());
 			xmlWriter.WriteAttributeString("lastBuildStatus", status.BuildStatus.ToString());
 			xmlWriter.WriteAttributeString("lastBuildLabel", status.LastSuccessfulBuildLabel);

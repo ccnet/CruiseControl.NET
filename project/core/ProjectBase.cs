@@ -12,6 +12,7 @@ namespace ThoughtWorks.CruiseControl.Core
 		public static readonly string DefaultArtifactSubDirectory = "Artifacts";
 
 		private string name;
+		private string category = "";
 		private string configuredWorkingDirectory = "";
 		private string configuredArtifactDirectory = "";
 		private ITrigger triggers = new MultipleTrigger(new ITrigger[] {new IntervalTrigger() } );
@@ -22,6 +23,13 @@ namespace ThoughtWorks.CruiseControl.Core
 		{
 			get { return name; }
 			set { name = value; }
+		}
+
+		[ReflectorProperty("category", Required=false)]
+		public virtual string Category
+		{
+			get { return category; }
+			set { category = value; }
 		}
 
 		[ReflectorProperty("triggers", InstanceType=typeof(MultipleTrigger), Required=false)]

@@ -89,7 +89,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 		public void LoadFullySpecifiedProjectFromConfiguration()
 		{
 			string xml = @"
-<project name=""foo"" webURL=""http://localhost/ccnet"" modificationDelaySeconds=""60"" publishExceptions=""true"">
+<project name=""foo"" webURL=""http://localhost/ccnet"" modificationDelaySeconds=""60"" publishExceptions=""true"" category=""category1"">
 	<workingDirectory>c:\my\working\directory</workingDirectory>
 	<build type=""nant"" />
 	<sourcecontrol type=""filesystem"">
@@ -119,6 +119,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 			project = (Project) NetReflector.Read(xml);
 			Assert.AreEqual("foo", project.Name);
 			Assert.AreEqual("http://localhost/ccnet", project.WebURL);
+			Assert.AreEqual("category1", project.Category);
 			Assert.AreEqual(60, project.ModificationDelaySeconds);
 			Assert.AreEqual(true, project.PublishExceptions);
 			Assert.IsTrue(project.Builder is NAntTask);

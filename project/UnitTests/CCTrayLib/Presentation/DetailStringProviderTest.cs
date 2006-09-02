@@ -30,7 +30,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Presentation
 			DateTime nextBuildTime = new DateTime(2005, 7, 20, 15, 12, 30);
 
 			monitor.ProjectStatus = new ProjectStatus(
-				"NAME",
+				"NAME", "category",
 				ProjectActivity.Sleeping,
 				IntegrationStatus.Unknown,
 				ProjectIntegratorState.Running, "url", DateTime.MinValue, "lastLabel", null, nextBuildTime);
@@ -50,7 +50,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Presentation
 			DateTime nextBuildTime = DateTime.MaxValue;
 
 			monitor.ProjectStatus = new ProjectStatus(
-				"NAME",
+				"NAME", "category",
 				ProjectActivity.Sleeping,
 				IntegrationStatus.Unknown,
 				ProjectIntegratorState.Running, "url", DateTime.MinValue, "lastLabel", null, nextBuildTime);

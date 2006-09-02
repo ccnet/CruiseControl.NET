@@ -6,6 +6,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 	public class ProjectStatusFixture
 	{
 		public const string DefaultProject = "project";
+		public const string DefaultCategory = "category";
 		public static readonly ProjectActivity DefaultActivity = ProjectActivity.CheckingModifications;
 		public static readonly DateTime DefaultLastBuildDate = DateTime.Now;
 		public const ProjectIntegratorState DefaultIntegratorState = ProjectIntegratorState.Running;
@@ -51,7 +52,12 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 
 		public static ProjectStatus New(string project, ProjectActivity activity, IntegrationStatus integrationStatus, ProjectIntegratorState integratorState, string label, DateTime lastBuildDate)
 		{
-			return new ProjectStatus(project, activity, integrationStatus, integratorState, DefaultUrl, lastBuildDate, label, label, DefaultLastBuildDate);
+			return new ProjectStatus(project, DefaultCategory, activity, integrationStatus, integratorState, DefaultUrl, lastBuildDate, label, label, DefaultLastBuildDate);
+		}
+
+		public static ProjectStatus New(string project, string category, ProjectActivity activity, IntegrationStatus integrationStatus, ProjectIntegratorState integratorState, string label, DateTime lastBuildDate)
+		{
+			return new ProjectStatus(project, category, activity, integrationStatus, integratorState, DefaultUrl, lastBuildDate, label, label, DefaultLastBuildDate);
 		}
 	}
 }

@@ -28,6 +28,11 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 			get { return serverSpecifier.ServerName; }
 		}
 
+		public string Category
+		{
+			get { return status.Category; }
+		}
+
 		public string BuildStatus
 		{
 			get { return status.BuildStatus.ToString(); }
