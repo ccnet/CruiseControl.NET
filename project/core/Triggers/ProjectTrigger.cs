@@ -13,6 +13,7 @@ namespace ThoughtWorks.CruiseControl.Core.Triggers
 
 		private readonly ICruiseManagerFactory managerFactory;
 		private ProjectStatus lastStatus;
+		private ProjectStatus currentStatus;
 
 		public ProjectTrigger() : this(new RemoteCruiseManagerFactory())
 		{}
@@ -36,6 +37,7 @@ namespace ThoughtWorks.CruiseControl.Core.Triggers
 
 		public void IntegrationCompleted()
 		{
+			lastStatus = currentStatus;
 			InnerTrigger.IntegrationCompleted();
 		}
 
@@ -66,9 +68,9 @@ namespace ThoughtWorks.CruiseControl.Core.Triggers
 		{
 			IntegrationRequest request = InnerTrigger.Fire();
 			if (request == null) return null;
-			IntegrationCompleted();	// reset inner trigger
+			InnerTrigger.IntegrationCompleted(); // reset inner trigger (timer)
 
-			ProjectStatus currentStatus = GetCurrentProjectStatus();
+			currentStatus = GetCurrentProjectStatus();
 			if (lastStatus == null)
 			{
 				lastStatus = currentStatus;
@@ -76,7 +78,6 @@ namespace ThoughtWorks.CruiseControl.Core.Triggers
 			}
 			if (currentStatus.LastBuildDate > lastStatus.LastBuildDate && currentStatus.BuildStatus == TriggerStatus)
 			{
-				lastStatus = currentStatus;
 				return request;
 			}
 			return null;		
