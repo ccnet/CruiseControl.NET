@@ -28,11 +28,9 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Config
 			// Setup
 			Project project1 = new Project();
 			project1.Name = "Project One";
-			project1.Builder = builder;
 			project1.SourceControl = sourceControl;
 			Project project2 = new Project();
 			project2.Name = "Project Two";
-			project2.Builder = builder;
 			project2.SourceControl = sourceControl;
 			ProjectList projectList = new ProjectList();
 			projectList.Add(project1);
@@ -55,6 +53,5 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Config
 			Assert.IsNotNull (configuration2.Projects["Project Two"]);
 			mockConfiguration.Verify();
 		}
-
 	}
 }

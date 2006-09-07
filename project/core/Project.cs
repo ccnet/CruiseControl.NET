@@ -37,9 +37,8 @@ namespace ThoughtWorks.CruiseControl.Core
 		private string webUrl = DefaultUrl();
 		private string statisticsFile = "report.xml";
 		private ISourceControl sourceControl = new NullSourceControl();
-		private ITask builder = new NullTask();
 		private ILabeller labeller = new DefaultLabeller();
-		private ITask[] tasks = new ITask[0];
+		private ITask[] tasks = new ITask[] {new NullTask()};
 		private ITask[] publishers = new ITask[] {new XmlLogPublisher()};
 		private ProjectActivity currentActivity = ProjectActivity.Sleeping;
 		private IStateManager state = new FileStateManager(new SystemIoFileSystem());
@@ -48,8 +47,8 @@ namespace ThoughtWorks.CruiseControl.Core
 		private IIntegratable integratable;
 		private QuietPeriod quietPeriod = new QuietPeriod(new DateTimeProvider());
 		private ArrayList messages = new ArrayList();
-		
-		[ReflectorProperty("prebuild", Required=false)] 
+
+		[ReflectorProperty("prebuild", Required=false)]
 		public ITask[] PrebuildTasks = new ITask[0];
 
 		public Project()
@@ -75,13 +74,6 @@ namespace ThoughtWorks.CruiseControl.Core
 		{
 			get { return webUrl; }
 			set { webUrl = value; }
-		}
-
-		[ReflectorProperty("build", InstanceTypeKey="type", Required=false)]
-		public ITask Builder
-		{
-			get { return builder; }
-			set { builder = value; }
 		}
 
 		[ReflectorProperty("statisticsFile", Required=false)]
@@ -166,7 +158,7 @@ namespace ThoughtWorks.CruiseControl.Core
 
 		public IIntegrationResult Integrate(IntegrationRequest request)
 		{
-			return integratable.Integrate(request);				
+			return integratable.Integrate(request);
 		}
 
 		public void Prebuild(IIntegrationResult result)
@@ -177,10 +169,7 @@ namespace ThoughtWorks.CruiseControl.Core
 
 		public void Run(IIntegrationResult result)
 		{
-			IList tasksToRun = new ArrayList(tasks);
-			if (Builder != null) tasksToRun.Insert(0, builder);
-
-			RunTasks(result, tasksToRun);
+			RunTasks(result, tasks);
 		}
 
 		private static void RunTasks(IIntegrationResult result, IList tasksToRun)
@@ -236,7 +225,7 @@ namespace ThoughtWorks.CruiseControl.Core
 			{
 				XmlDocument xmlDocument = new XmlDocument();
 				string documentLocation = Path.Combine(ArtifactDirectory, statisticsFile);
-				if(File.Exists(documentLocation))
+				if (File.Exists(documentLocation))
 				{
 					xmlDocument.Load(documentLocation);
 				}
@@ -251,10 +240,12 @@ namespace ThoughtWorks.CruiseControl.Core
 
 		public ProjectStatus CreateProjectStatus(IProjectIntegrator integrator)
 		{
-			ProjectStatus status = new ProjectStatus(Name, Category, CurrentActivity, LatestBuildStatus, integrator.State, WebURL,
-			                                         LastIntegrationResult.StartTime, LastIntegrationResult.Label, LastIntegrationResult.LastSuccessfulIntegrationLabel, 
-			                                         Triggers.NextBuild);
-			status.Messages = (Message[])messages.ToArray(typeof(Message));
+			ProjectStatus status =
+				new ProjectStatus(Name, Category, CurrentActivity, LatestBuildStatus, integrator.State, WebURL,
+				                  LastIntegrationResult.StartTime, LastIntegrationResult.Label,
+				                  LastIntegrationResult.LastSuccessfulIntegrationLabel,
+				                  Triggers.NextBuild);
+			status.Messages = (Message[]) messages.ToArray(typeof (Message));
 			return status;
 		}
 

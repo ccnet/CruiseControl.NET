@@ -88,7 +88,6 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 			string xml = @"
 <project name=""foo"" webURL=""http://localhost/ccnet"" modificationDelaySeconds=""60"" publishExceptions=""true"" category=""category1"">
 	<workingDirectory>c:\my\working\directory</workingDirectory>
-	<build type=""nant"" />
 	<sourcecontrol type=""filesystem"">
 		<repositoryRoot>C:\</repositoryRoot>
 	</sourcecontrol>
@@ -119,7 +118,6 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 			Assert.AreEqual("category1", project.Category);
 			Assert.AreEqual(60, project.ModificationDelaySeconds);
 			Assert.AreEqual(true, project.PublishExceptions);
-			Assert.IsTrue(project.Builder is NAntTask);
 			Assert.IsTrue(project.SourceControl is FileSourceControl);
 			Assert.IsTrue(project.Labeller is DefaultLabeller);
 			Assert.IsTrue(project.StateManager is FileStateManager);
@@ -145,14 +143,14 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 			Assert.AreEqual(Project.DefaultUrl(), project.WebURL);
 			Assert.AreEqual(0, project.ModificationDelaySeconds); //TODO: is this the correct default?  should quiet period be turned off by default?  is this sourcecontrol specific?
 			Assert.AreEqual(true, project.PublishExceptions);
-			Assert.IsTrue(project.Builder is NullTask);
 			Assert.IsTrue(project.SourceControl is NullSourceControl);
 			Assert.IsTrue(project.Labeller is DefaultLabeller);
 			Assert.AreEqual(typeof(MultipleTrigger), project.Triggers.GetType());
 			Assert.AreEqual(typeof(IntervalTrigger), ((MultipleTrigger)project.Triggers).Triggers[0].GetType());
 			Assert.AreEqual(1, project.Publishers.Length);
 			Assert.IsTrue(project.Publishers[0] is XmlLogPublisher);
-			Assert.AreEqual(0, project.Tasks.Length);
+			Assert.AreEqual(1, project.Tasks.Length);
+			Assert.AreEqual(typeof(NullTask), project.Tasks[0].GetType());
 			Assert.AreEqual(0, project.ExternalLinks.Length);
 			VerifyAll();
 		}
@@ -352,7 +350,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 			mockSourceControl.Expect("GetSource", new IsAnything());
 			mockSourceControl.Expect("LabelSourceControl", new IsAnything());
 			mockPublisher.Expect("Run", new IsAnything());
-			mockTask.Expect("Run", new IsAnything());
+			mockTask.Expect("Run", new AddTaskResultConstraint());
 			project.ConfiguredWorkingDirectory = @"c:\temp";
 
 			IIntegrationResult result = project.Integrate(ModificationExistRequest());
@@ -407,9 +405,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 			mockSourceControl.Expect("LabelSourceControl", new IsAnything());
 			mockSourceControl.Expect("GetSource", new IsAnything());
 			mockPublisher.Expect("Run", new IsAnything());
-			mockTask.Expect("Run", new IsAnything());
+			mockTask.Expect("Run", new AddTaskResultConstraint());
 
-			project.Builder = new MockBuilder(); // need to use mock builder in order to set properties on IntegrationResult
 			IIntegrationResult result = project.Integrate(ModificationExistRequest());
 
 			Assert.AreEqual(ProjectName, result.ProjectName);
@@ -465,9 +462,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 		[Test]
 		public void SourceControlLabelled()
 		{
-			project.Builder = new MockBuilder();
 			mockLabeller.ExpectAndReturn("Generate", "1.2.1", new IsAnything());
-			mockTask.Expect("Run", new IsAnything());
 			mockSourceControl.ExpectAndReturn("GetModifications", CreateModifications(), new IsAnything(), new IsAnything());
 			mockSourceControl.Expect("GetSource", new IsAnything());
 			mockSourceControl.Expect("LabelSourceControl", new IsAnything());
@@ -475,6 +470,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 			IMock stateMock = new DynamicMock(typeof (IStateManager));
 			stateMock.ExpectAndReturn("LoadState", IntegrationResult.CreateInitialIntegrationResult(ProjectName, @"c:\temp"), ProjectName); // running the first integration (no state file)
 			project.StateManager = (IStateManager) stateMock.MockInstance;
+			mockTask.Expect("Run", new AddTaskResultConstraint());
 
 			IIntegrationResult results = project.Integrate(ModificationExistRequest());
 
@@ -488,29 +484,6 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 		// Run Tasks
 
 		[Test]
-		public void ShouldRunBuilderFirst()
-		{
-			IntegrationResult result = new IntegrationResult();
-			mockTask.Expect("Run", result);
-			MockBuilder builder = new MockBuilder();
-			project.Builder = builder;
-			project.Run(result);
-			Assert.IsTrue(builder.HasRun);
-			AssertStartsWith(MockBuilder.BUILDER_OUTPUT, result.TaskOutput);
-			VerifyAll();
-		}
-
-		[Test]
-		public void ShouldNotRunBuilderIfItDoesNotExist()
-		{
-			IntegrationResult result = new IntegrationResult();
-			mockTask.Expect("Run", result);
-			project.Builder = null;
-			project.Run(result);
-			VerifyAll();
-		}
-
-		[Test]
 		public void ShouldStopBuildIfTaskFails()
 		{
 			IntegrationResult result = IntegrationResultMother.CreateFailed();
@@ -520,7 +493,6 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 			secondTask.ExpectNoCall("Run", typeof (IntegrationResult));
 
 			project.Tasks = new ITask[] {(ITask) mockTask.MockInstance, (ITask) secondTask.MockInstance};
-			project.Builder = null;
 			project.Run(result);
 			VerifyAll();
 			secondTask.Verify();
@@ -546,10 +518,9 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 			mockSourceControl.ExpectAndReturn("GetModifications", CreateModifications(), new IsAnything(), new IsAnything());
 			mockSourceControl.Expect("GetSource", new IsAnything());
 			mockSourceControl.Expect("LabelSourceControl", new IsAnything());
-			mockTask.Expect("Run", new IsAnything());
 			Exception expectedException = new CruiseControlException("expected exception");
 			mockPublisher.ExpectAndThrow("Run", expectedException, new IsAnything());
-			project.Builder = new MockBuilder();
+			mockTask.Expect("Run", new AddTaskResultConstraint());
 
 			IIntegrationResult results = project.Integrate(ModificationExistRequest());
 
@@ -570,7 +541,6 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 			mockSourceControl.Expect("GetSource", new IsAnything());
 			mockPublisher.Expect("Run", new IsAnything());
 
-			project.Builder = null;
 			project.PublishExceptions = true;
 			project.Integrate(ForceBuildRequest());
 
@@ -600,6 +570,22 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 			project.PrebuildTasks = new ITask[] { (ITask) mockPrebuildTask.MockInstance };
 			project.Prebuild(result);
 			Assert.AreEqual("1.0", result.Label);
+		}
+
+		private class AddTaskResultConstraint : BaseConstraint
+		{
+			public override bool Eval(object val)
+			{
+				IntegrationResult result = val as IntegrationResult;
+				if (result == null) return false;
+				result.AddTaskResult("success");
+				return true;
+			}
+
+			public override string Message
+			{
+				get { return "failed AddTaskResultConstraint"; }
+			}
 		}
 	}
 }
