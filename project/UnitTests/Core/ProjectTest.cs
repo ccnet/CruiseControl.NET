@@ -23,7 +23,6 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 	public class ProjectTest : IntegrationFixture
 	{
 		private Project project;
-		private IMock mockBuilder;
 		private IMock mockSourceControl;
 		private IMock mockStateManager;
 		private IMock mockTrigger;
@@ -44,7 +43,6 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 			Assert.IsTrue(Directory.Exists(artifactDirPath));
 
 			mockery = new Mockery();
-			mockBuilder = mockery.NewStrictMock(typeof (ITask));
 			mockSourceControl = mockery.NewStrictMock(typeof (ISourceControl));
 			mockStateManager = mockery.NewStrictMock(typeof (IStateManager));
 			mockTrigger = mockery.NewStrictMock(typeof (ITrigger));
@@ -59,7 +57,6 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 		private void SetupProject()
 		{
 			project.Name = ProjectName;
-			project.Builder = (ITask) mockBuilder.MockInstance;
 			project.SourceControl = (ISourceControl) mockSourceControl.MockInstance;
 			project.StateManager = (IStateManager) mockStateManager.MockInstance;
 			project.Triggers = (ITrigger) mockTrigger.MockInstance;
@@ -347,15 +344,15 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 		[Test]
 		public void RunningFirstIntegrationShouldForceBuild()
 		{
-			mockStateManager.ExpectAndReturn("LoadState", IntegrationResult.CreateInitialIntegrationResult(ProjectName, @"c:\temp"), ProjectName); // running the first integration (no state file)
+			IntegrationResult initialResult = IntegrationResult.CreateInitialIntegrationResult(ProjectName, @"c:\temp");
+			mockStateManager.ExpectAndReturn("LoadState", initialResult, ProjectName); // running the first integration (no state file)
 			mockStateManager.Expect("SaveState", new IsAnything());
-			mockLabeller.ExpectAndReturn("Generate", "label", new IsAnything()); // generate new label
-			mockSourceControl.ExpectAndReturn("GetModifications", new Modification[0], new IsAnything(), new IsAnything()); // return no modifications found
+			mockLabeller.ExpectAndReturn("Generate", "label", initialResult); // generate new label
+			mockSourceControl.ExpectAndReturn("GetModifications", new Modification[0], initialResult, new IsAnything()); // return no modifications found
 			mockSourceControl.Expect("GetSource", new IsAnything());
 			mockSourceControl.Expect("LabelSourceControl", new IsAnything());
 			mockPublisher.Expect("Run", new IsAnything());
 			mockTask.Expect("Run", new IsAnything());
-			project.Builder = new MockBuilder(); // need to use mock builder in order to set properties on IntegrationResult
 			project.ConfiguredWorkingDirectory = @"c:\temp";
 
 			IIntegrationResult result = project.Integrate(ModificationExistRequest());
@@ -371,7 +368,6 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 			Assert.AreEqual("label", result.Label);
 			AssertFalse("unexpected modifications were returned", result.HasModifications());
 			AssertEqualArrays(new Modification[0], result.Modifications);
-			Assert.AreEqual(MockBuilder.BUILDER_OUTPUT, result.TaskOutput, "no output is expected as builder is not called");
 			Assert.IsTrue(result.EndTime >= result.StartTime);
 			VerifyAll();
 		}
@@ -382,7 +378,6 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 		{
 			mockStateManager.ExpectAndReturn("LoadState", IntegrationResultMother.CreateSuccessful(), ProjectName);
 			mockSourceControl.ExpectAndReturn("GetModifications", new Modification[0], new IsAnything(), new IsAnything()); // return no modifications found
-			mockBuilder.ExpectNoCall("Run", typeof (IntegrationResult));
 			mockPublisher.ExpectNoCall("Run", typeof (IntegrationResult));
 
 			IIntegrationResult result = project.Integrate(ModificationExistRequest());

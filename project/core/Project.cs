@@ -48,7 +48,9 @@ namespace ThoughtWorks.CruiseControl.Core
 		private IIntegratable integratable;
 		private QuietPeriod quietPeriod = new QuietPeriod(new DateTimeProvider());
 		private ArrayList messages = new ArrayList();
-		[ReflectorProperty("prebuild", Required=false)] public ITask[] PrebuildTasks = new ITask[0];
+		
+		[ReflectorProperty("prebuild", Required=false)] 
+		public ITask[] PrebuildTasks = new ITask[0];
 
 		public Project()
 		{

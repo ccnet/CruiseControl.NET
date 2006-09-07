@@ -94,15 +94,15 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers.Statistics
 			return Path.Combine(integrationResult.ArtifactDirectory, integrationResult.StatisticsFile);
 		}
 
-		private string CsvStatisticsFile(IntegrationState integrationState)
-		{
-			return Path.Combine(integrationState.ArtifactDirectory, csvFileName);
-		}
-
 		private void UpdateCsvFile(StatisticsBuilder builder, IntegrationState previousState)
 		{
 			string csvFile = CsvStatisticsFile(previousState);
 			builder.AppendCsv(csvFile);
+		}
+
+		private string CsvStatisticsFile(IntegrationState integrationState)
+		{
+			return Path.Combine(integrationState.ArtifactDirectory, csvFileName);
 		}
 	}
 }

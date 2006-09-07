@@ -31,6 +31,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 			result.Status = status;
 			result.StartTime = date;
 			result.EndTime = date;
+			result.Label = "2.0";
 			return result;			
 		}
 

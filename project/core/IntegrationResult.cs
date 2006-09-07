@@ -24,7 +24,6 @@ namespace ThoughtWorks.CruiseControl.Core
 		private Exception exception;
 		private ArrayList taskResults = new ArrayList();
 		private IDictionary properties = new SortedList();
-		private bool initial = false;
 		private IntegrationRequest request;
 
 		// Default constructor required for serialization
@@ -238,7 +237,7 @@ namespace ThoughtWorks.CruiseControl.Core
 
 		public bool IsInitial()
 		{
-			return initial;
+			return Label == InitialLabel;
 		}
 
 		/// <summary>
@@ -341,9 +340,9 @@ namespace ThoughtWorks.CruiseControl.Core
 		public static IntegrationResult CreateInitialIntegrationResult(string project, string workingDirectory)
 		{
 			IntegrationResult result = new IntegrationResult(project, workingDirectory);
-			result.initial = true;
 			result.StartTime = DateTime.Now.AddDays(-1);
 			result.EndTime = DateTime.Now;
+			result.BuildCondition = Remote.BuildCondition.ForceBuild;
 			return result;
 		}
 
@@ -431,14 +430,13 @@ namespace ThoughtWorks.CruiseControl.Core
 	public class IntegrationState
 	{
 		private readonly IntegrationStatus status;
-		private readonly DateTime date;
+		private readonly DateTime date = DateTime.Now;
 		private readonly string label;
 		private readonly string baseArtifactDirectory;
 
 		public IntegrationState(IntegrationStatus status, string label, string baseArtifactDirectory)
 		{
 			this.status = status;
-			this.date = date;
 			this.label = label;
 			this.baseArtifactDirectory = baseArtifactDirectory;
 		}

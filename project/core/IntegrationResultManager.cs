@@ -21,7 +21,7 @@ namespace ThoughtWorks.CruiseControl.Core
 			{
 				if (lastResult == null)
 				{
-					lastResult = LoadLastIntegration();
+					lastResult = project.StateManager.LoadState(project.Name);
 				}
 				return lastResult;
 			}
@@ -30,7 +30,7 @@ namespace ThoughtWorks.CruiseControl.Core
 		public IIntegrationResult StartNewIntegration(IntegrationRequest request)
 		{
 			currentResult = new IntegrationResult(project.Name, project.WorkingDirectory, project.StatisticsFile, request);
-			
+
 			currentResult.LastIntegrationStatus = LastIntegrationResult.Status;
 			currentResult.LastSuccessfulIntegrationLabel = LastIntegrationResult.LastSuccessfulIntegrationLabel;
 
@@ -38,13 +38,6 @@ namespace ThoughtWorks.CruiseControl.Core
 			currentResult.ArtifactDirectory = project.ArtifactDirectory;
 			currentResult.ProjectUrl = project.WebURL;
 			return currentResult;
-		}
-
-		private IIntegrationResult LoadLastIntegration()
-		{
-			IIntegrationResult result = project.StateManager.LoadState(project.Name);
-			result.WorkingDirectory = project.WorkingDirectory;
-			return result;
 		}
 
 		private BuildCondition DetermineBuildCondition(BuildCondition buildCondition)
@@ -70,5 +63,4 @@ namespace ThoughtWorks.CruiseControl.Core
 			lastResult = currentResult;
 		}
 	}
-
 }
