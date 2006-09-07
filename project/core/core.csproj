@@ -1264,6 +1264,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "util\SystemPath.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "util\TempFileUtil.cs"
                     SubType = "Code"
                     BuildAction = "Compile"

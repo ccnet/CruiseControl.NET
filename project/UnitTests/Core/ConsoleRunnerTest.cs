@@ -17,14 +17,12 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 		{
 			backup = new TraceListenerBackup();
 			listener = backup.AddTestTraceListener();
-			TempFileUtil.CreateTempDir("ConsoleRunnerTest");
 		}
 
 		[TearDown]
 		public void TearDown()
 		{
 			backup.Reset();
-			TempFileUtil.DeleteTempDir("ConsoleRunnerTest");
 		}
 
 		[Test, Ignore("This test has initimate knowledge of the logging implementation; it should not")]

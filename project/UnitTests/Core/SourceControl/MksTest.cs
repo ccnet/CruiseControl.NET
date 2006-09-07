@@ -31,7 +31,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 		[SetUp]
 		public void SetUp()
 		{
-			sandboxRoot = TempFileUtil.CreateTempDir("MksSandBox");
+			sandboxRoot = TempFileUtil.GetTempPath("MksSandBox");
 
 			mockHistoryParserWrapper = new DynamicMock(typeof (IHistoryParser));
 			mockHistoryParser = (IHistoryParser) mockHistoryParserWrapper.MockInstance;
@@ -53,8 +53,6 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 			mockHistoryParserWrapper.Verify();
 			mksHistoryParserWrapper.Verify();
 			mockIntegrationResult.Verify();
-
-			TempFileUtil.DeleteTempDir("MksSandBox");
 		}
 
 		private string CreateSourceControlXml()

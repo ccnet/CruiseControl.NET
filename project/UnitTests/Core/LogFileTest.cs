@@ -9,21 +9,6 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 	[TestFixture]
 	public class LogFileTest : CustomAssertion
 	{
-		private static readonly string TestFolder = "logfilelist";
-		private string _tempFolder;
-
-		[SetUp]
-		public void Setup()
-		{
-			_tempFolder = TempFileUtil.CreateTempDir(TestFolder);
-		}
-
-		[TearDown]
-		public void Teardown()
-		{
-			TempFileUtil.DeleteTempDir(TestFolder);
-		}
-
 		[Test]
 		public void ParseDateFromFilename()
 		{
@@ -79,12 +64,15 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 			// testFilenames array must be in sorted order -- otherwise links iteration will fail
 			string[] testFilenames = {"log123.xml", "log200.xml", "logfile.txt", 
 										 "log20020830164057Lbuild.6.xml", "badfile.xml" };
-			TempFileUtil.CreateTempFiles(TestFolder, testFilenames);
-
-			string[] fileNames = LogFileUtil.GetLogFileNames(_tempFolder);
-			Assert.AreEqual(3,fileNames.Length);
-			Assert.AreEqual(testFilenames[0],fileNames[0]);
-			Assert.AreEqual(testFilenames[1],fileNames[1]);
+			
+			using (TempDirectory tempPath = new TempDirectory())
+			{
+				CreateTempFiles(tempPath, testFilenames);
+				string[] fileNames = LogFileUtil.GetLogFileNames(tempPath.ToString());
+				Assert.AreEqual(3,fileNames.Length);
+				Assert.AreEqual(testFilenames[0],fileNames[0]);
+				Assert.AreEqual(testFilenames[1],fileNames[1]);
+			}
 		}
 		
 		[Test]
@@ -95,11 +83,12 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 										 "log20011230164057Lbuild.8.xml", 
 										 "log20010430164057Lbuild.7.xml", 
 										 "badfile.xml" };
-			TempFileUtil.CreateTempFiles(TestFolder, testFilenames);
-			string path = TempFileUtil.GetTempPath(TestFolder);
-
-			string logfile = LogFileUtil.GetLatestLogFileName(path);
-			Assert.AreEqual("log20011230164057Lbuild.8.xml", logfile);
+			using (TempDirectory tempPath = new TempDirectory())
+			{
+				CreateTempFiles(tempPath, testFilenames);
+				string logfile = LogFileUtil.GetLatestLogFileName(tempPath.ToString());
+				Assert.AreEqual("log20011230164057Lbuild.8.xml", logfile);
+			}
 		}
 
 		[Test]
@@ -112,8 +101,10 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 		[Test]
 		public void GetLastLogFileName_EmptyFolder()
 		{
-			string folder = TempFileUtil.CreateTempDir(TestFolder);
-			Assert.IsNull(LogFileUtil.GetLatestLogFileName(folder));
+			using (TempDirectory tempDir = new TempDirectory())
+			{
+				Assert.IsNull(LogFileUtil.GetLatestLogFileName(tempDir.ToString()));
+			}
 		}
 
 		[Test]
@@ -124,13 +115,23 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 										 "log20011230164057Lbuild.6.xml", 
 										 "log20010430164057Lbuild.6.xml", 
 										 "badfile.xml" };
-			TempFileUtil.CreateTempFiles(TestFolder, testFilenames);
-			DateTime expected = new DateTime(2001,12,30,16,40,57);
-			string path = TempFileUtil.GetTempPath(TestFolder);
-			DateTime actual = LogFileUtil.GetLastBuildDate(path, new DateTime());
-			Assert.AreEqual(expected, actual);
+			using (TempDirectory tempPath = new TempDirectory())
+			{
+				CreateTempFiles(tempPath, testFilenames);
+				DateTime expected = new DateTime(2001,12,30,16,40,57);
+				DateTime actual = LogFileUtil.GetLastBuildDate(tempPath.ToString(), new DateTime());
+				Assert.AreEqual(expected, actual);
+			}
 		}
-		
+
+		private void CreateTempFiles(SystemPath path, string[] filenames)
+		{
+			foreach (string filename in filenames)
+			{
+				path.CreateEmptyFile(filename);
+			}
+		}
+
 		[Test]
 		public void GetLastBuildDate_NoDirectory()
 		{
@@ -140,8 +141,10 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 		[Test]
 		public void GetLastBuildDate_NoFiles()
 		{
-			string path = TempFileUtil.CreateTempDir("lastbuilddate_nofiles");
-			Assert.AreEqual(new DateTime(), LogFileUtil.GetLastBuildDate(path, new DateTime()));
+			using (TempDirectory tempDir = new TempDirectory())
+			{				
+				Assert.AreEqual(new DateTime(), LogFileUtil.GetLastBuildDate(tempDir.ToString(), new DateTime()));
+			}
 		}
 
 		[Test]

@@ -7,81 +7,81 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Util
 	[TestFixture]
 	public class SystemIoFileSystemTest
 	{
-		private string tempDir;
-		private string tempSubDir;
-		private string tempOtherDir;
+		private SystemPath tempRoot;
+		private SystemPath tempSubRoot;
+		private SystemPath tempOtherRoot;
 
 		[SetUp]
 		public void Setup()
 		{
-			tempDir = TempFileUtil.CreateTempDir("repo");
-			tempSubDir = TempFileUtil.CreateTempDir("repo\\subrepo");
-			tempOtherDir = TempFileUtil.CreateTempDir("other");
+			tempRoot = SystemPath.UniqueTempPath().CreateDirectory();
+			tempSubRoot = tempRoot.CreateSubDirectory("subrepo");
+			tempOtherRoot = SystemPath.UniqueTempPath().CreateDirectory();
 		}
 
 		[TearDown]
 		public void TearDown()
 		{
-			TempFileUtil.DeleteTempDir(tempOtherDir);
-			TempFileUtil.DeleteTempDir(tempSubDir);
-			TempFileUtil.DeleteTempDir(tempDir);
+			tempRoot.DeleteDirectory();
+			tempOtherRoot.DeleteDirectory();
 		}
 
 		[Test]
 		public void ShouldCopyFileToDirectory()
 		{
-			TempFileUtil.CreateTempFile(tempDir, "File1");
-			new SystemIoFileSystem().Copy(Path.Combine(tempDir, "File1"), tempSubDir);
-			Assert.IsTrue(File.Exists(Path.Combine(tempSubDir, "File1")));
+			SystemPath file1 = tempRoot.CreateEmptyFile("File1");
+			new SystemIoFileSystem().Copy(file1.ToString(), tempSubRoot.ToString());
+			Assert.IsTrue(tempSubRoot.Combine("File1").Exists());
 		}
 
 		[Test]
 		public void ShouldCopyFileToFile()
 		{
-			TempFileUtil.CreateTempFile(tempDir, "File1");
-			new SystemIoFileSystem().Copy(Path.Combine(tempDir, "File1"), Path.Combine(tempDir, "File2"));
-			Assert.IsTrue(File.Exists(Path.Combine(tempDir, "File2")));
+			SystemPath sourceFile = tempRoot.CreateEmptyFile("File1");
+			SystemPath targetFile = tempSubRoot.Combine("File2");
+			new SystemIoFileSystem().Copy(sourceFile.ToString(), targetFile.ToString());
+			Assert.IsTrue(targetFile.Exists());
 		}
 
 		[Test]
 		public void ShouldAllowOverwrites()
-		{
-			TempFileUtil.CreateTempFile(tempDir, "File1");
-			TempFileUtil.CreateTempFile(tempDir, "File2");
-			new SystemIoFileSystem().Copy(Path.Combine(tempDir, "File1"), Path.Combine(tempDir, "File2"));
-			Assert.IsTrue(File.Exists(Path.Combine(tempDir, "File2")));
+		{			
+			SystemPath sourceFile = tempRoot.CreateEmptyFile("File1");
+			SystemPath targetFile = tempSubRoot.CreateEmptyFile("File2");
+			new SystemIoFileSystem().Copy(sourceFile.ToString(), targetFile.ToString());
+			Assert.IsTrue(targetFile.Exists());
 		}
 
 		[Test]
 		public void ShouldAllowOverwritesEvenWhenDestinationHasReadOnlyAttributeSet()
 		{
-			string file1 = TempFileUtil.CreateTempFile(tempDir, "File1");
-			string file2 = TempFileUtil.CreateTempFile(tempDir, "File2");
-			File.SetAttributes(file2, FileAttributes.ReadOnly);
-			new SystemIoFileSystem().Copy(file1, file2);
+			SystemPath sourceFile = tempRoot.CreateEmptyFile("File1");
+			SystemPath targetFile = tempSubRoot.CreateEmptyFile("File2");
+			File.SetAttributes(targetFile.ToString(), FileAttributes.ReadOnly);
+			new SystemIoFileSystem().Copy(sourceFile.ToString(), targetFile.ToString());
 
-			Assert.IsTrue(File.Exists(Path.Combine(tempDir, "File2")));
+			Assert.IsTrue(targetFile.Exists());
 		}
 
 		[Test]
 		public void ShouldCopyDirectoryToDirectoryRecursively()
 		{
-			TempFileUtil.CreateTempFile(tempDir, "File1");
-			TempFileUtil.CreateTempFile(tempSubDir, "File2");
-			new SystemIoFileSystem().Copy(tempDir, tempOtherDir);
+			tempRoot.CreateEmptyFile("File1");
+			tempSubRoot.CreateEmptyFile("File2");
+			new SystemIoFileSystem().Copy(tempRoot.ToString(), tempOtherRoot.ToString());
 
-			Assert.IsTrue(File.Exists(Path.Combine(tempOtherDir, "File1")));
-			Assert.IsTrue(File.Exists(Path.Combine(Path.Combine(tempOtherDir, "subrepo"), "File2")));
+			Assert.IsTrue(tempOtherRoot.Combine("File1").Exists());
+			Assert.IsTrue(tempOtherRoot.Combine("subrepo").Combine("File2").Exists());
 		}
 
 		[Test]
 		public void ShouldSaveToFile()
 		{
-			string tempFile = Path.Combine(tempDir, "foo.txt");
-			Assert.IsFalse(File.Exists(tempFile));
-			new SystemIoFileSystem().Save(tempFile, "bar");
-			Assert.IsTrue(File.Exists(tempFile));
-			using (StreamReader reader = File.OpenText(tempFile))
+			SystemPath tempFile = tempRoot.Combine("foo.txt");
+			Assert.IsFalse(tempFile.Exists());
+			new SystemIoFileSystem().Save(tempFile.ToString(), "bar");
+			Assert.IsTrue(tempFile.Exists());
+			using (StreamReader reader = File.OpenText(tempFile.ToString()))
 			{
 				Assert.AreEqual("bar", reader.ReadToEnd());
 			}
@@ -90,11 +90,11 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Util
 		[Test]
 		public void ShouldSaveUnicodeToFile()
 		{
-			string tempFile = Path.Combine(tempDir, "foo.txt");
-			Assert.IsFalse(File.Exists(tempFile));
-			new SystemIoFileSystem().Save(tempFile, "hi there? håkan! \u307b");
-			Assert.IsTrue(File.Exists(tempFile));
-			using (StreamReader reader = File.OpenText(tempFile))
+			SystemPath tempFile = tempRoot.Combine("foo.txt");
+			Assert.IsFalse(tempFile.Exists());
+			new SystemIoFileSystem().Save(tempFile.ToString(), "hi there? håkan! \u307b");
+			Assert.IsTrue(tempFile.Exists());
+			using (StreamReader reader = File.OpenText(tempFile.ToString()))
 			{
 				Assert.AreEqual("hi there? håkan! \u307b", reader.ReadToEnd());
 			}
@@ -103,8 +103,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Util
 		[Test]
 		public void LoadReadsFileContentCorrectly()
 		{
-			TempFileUtil.CreateTempFile(tempDir, "foo.txt", "bar");
-			Assert.AreEqual("bar", new SystemIoFileSystem().Load(Path.Combine(tempDir, "foo.txt")).ReadToEnd());
+			SystemPath tempFile = tempRoot.CreateTextFile("foo.txt", "bar");
+			Assert.AreEqual("bar", new SystemIoFileSystem().Load(tempFile.ToString()).ReadToEnd());
 		}
 	}
 }

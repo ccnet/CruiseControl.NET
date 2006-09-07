@@ -1,3 +1,4 @@
+using System;
 using System.IO;
 using System.Text;
 using System.Xml;
@@ -6,7 +7,7 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 {
 	/// <summary>
 	/// Utility class for managing temp files and folders.
-	/// Uses your systems temp folder.
+	/// Uses your system's temp folder.
 	/// </summary>
 	public class TempFileUtil
 	{
@@ -41,7 +42,7 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 
 		public static string GetTempFilePath(string dirname, string filename)
 		{
-			return Path.Combine(GetTempPath(dirname),filename);
+			return Path.Combine(GetTempPath(dirname), filename);
 		}
 
 		public static bool DeleteTempDir(string dirname)
@@ -49,13 +50,14 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 			string tempDir = GetTempPath(dirname);
 			if (Directory.Exists(tempDir))
 			{
-				Directory.Delete(tempDir, true); 
+				try { Directory.Delete(tempDir, true); }
+				catch (Exception e) { throw new IOException("Unable to delete directory: " + tempDir, e); }
 				return true;
 			}
 			else
 				return false;
 		}
-		
+
 		public static bool DeleteTempDir(object obj)
 		{
 			return DeleteTempDir(obj.GetType().FullName);
@@ -63,12 +65,12 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 
 		public static bool TempFileExists(string dirname, string filename)
 		{
-			return File.Exists(TempFileUtil.GetTempFilePath(dirname, filename));
+			return File.Exists(GetTempFilePath(dirname, filename));
 		}
 
 		public static string CreateTempXmlFile(string dirname, string filename, string contents)
 		{
-			string path = Path.Combine(GetTempPath(dirname),filename);
+			string path = Path.Combine(GetTempPath(dirname), filename);
 			CreateTempXmlFile(path, contents);
 			return path;
 		}
@@ -81,19 +83,14 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 		}
 
 		public static string CreateTempFile(string tempDir, string filename)
-		{		
-			string path = CreateTempDir(tempDir, false);				
-			path = Path.Combine(path, filename);			
-			using (File.CreateText(path))
-			{
-				return path;
-			}
+		{
+			return CreateTempFile(tempDir, filename, string.Empty);
 		}
 
 		public static string CreateTempFile(string tempDir, string filename, string content)
-		{		
-			string path = CreateTempDir(tempDir, false);				
-			path = Path.Combine(path, filename);			
+		{
+			string path = CreateTempDir(tempDir, false);
+			path = Path.Combine(path, filename);
 			using (StreamWriter stream = File.CreateText(path))
 			{
 				stream.Write(content);
@@ -105,13 +102,13 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 		{
 			for (int i = 0; i < filenames.Length; i++)
 			{
-				CreateTempFile(tempDir,filenames[i]);
+				CreateTempFile(tempDir, filenames[i]);
 			}
 		}
 
 		public static void UpdateTempFile(string filename, string text)
 		{
-			using (StreamWriter writer = File.AppendText(filename)) 
+			using (StreamWriter writer = File.AppendText(filename))
 			{
 				writer.Write(text);
 			}
