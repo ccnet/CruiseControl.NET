@@ -74,17 +74,5 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 		{
 			return File.Exists(file);
 		}
-
-//		private TextReader CreateTextReader(string path)
-//		{
-//			try
-//			{
-//				return new StreamReader(path);
-//			}
-//			catch (IOException ex)
-//			{
-//				throw new CruiseControlException(string.Format("Unable to read the specified state file: {0}.  The path may be invalid.", path), ex);
-//			}
-//		}
 	}
 }

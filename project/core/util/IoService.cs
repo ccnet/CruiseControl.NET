@@ -36,7 +36,7 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 			{
 				EmptyDirectoryIncludingReadOnlyObjects(directoryPath);
 				File.SetAttributes(directoryPath, FileAttributes.Normal);
-				Directory.Delete(directoryPath);
+				Directory.Delete(directoryPath, true);
 			}
 
 		}
