@@ -143,7 +143,7 @@ SectionEnd
 !insertmacro MUI_FUNCTION_DESCRIPTION_BEGIN
   !insertmacro MUI_DESCRIPTION_TEXT ${SEC01} "The core CruiseControl.NET server."
   !insertmacro MUI_DESCRIPTION_TEXT ${SEC02} "The ASP.NET Web Dashboard for configuring and monitoring builds managed by CruiseControl.NET."
-  !insertmacro MUI_DESCRIPTION_TEXT ${SEC04} "Documetation for the CruiseControl.NET Product Suite"
+  !insertmacro MUI_DESCRIPTION_TEXT ${SEC04} "Documentation for the CruiseControl.NET Product Suite"
 !insertmacro MUI_FUNCTION_DESCRIPTION_END
 
 ; Installer functions
