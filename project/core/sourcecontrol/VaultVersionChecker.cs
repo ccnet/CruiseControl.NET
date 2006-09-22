@@ -11,7 +11,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol {
 		private	Timeout timeout = Timeout.DefaultTimeout;
 
 		public const string DefaultExecutable = @"C:\Program Files\SourceGear\Vault Client\vault.exe";
-		public const string DefaultHistoryArgs = "-excludeactions label -rowlimit 0";
+		public const string DefaultHistoryArgs = "-excludeactions label,obliterate -rowlimit 0";
 		public const string DefaultFolder = "$";
 		public const string DefaultFileTime = "checkin";
 		public const int DefaultPollRetryWait = 5;

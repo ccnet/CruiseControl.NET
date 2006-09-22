@@ -185,7 +185,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			return new ProcessInfo(_shim.Executable, args, result.BaseFromWorkingDirectory(_shim.WorkingDirectory));
 		}
 
-		// "history ""{0}"" -excludeactions label -rowlimit 0 -begindate {1:s} -enddate {2:s}
+		// "history ""{0}"" -excludeactions label,obliterate -rowlimit 0 -begindate {1:s} -enddate {2:s}
 		// rowlimit 0 or -1 means unlimited (default is 1000 if not specified)
 		// TODO: might want to make rowlimit configurable?
 		private string BuildHistoryProcessArgs(DateTime from, DateTime to)

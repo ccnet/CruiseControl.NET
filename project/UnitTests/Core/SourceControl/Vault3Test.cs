@@ -114,7 +114,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 		[Test]
 		public virtual void ShouldBePopulatedWithDefaultValuesWhenLoadingFromMinimalXml()
 		{
-			VaultVersionChecker vault = CreateVault
+			vault = CreateVault
 				(@"
 				<vault>
 					<host>localhost</host>
@@ -153,7 +153,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 			DateTime today = DateTime.Now;
 			DateTime yesterday = today.AddDays(-1);
 			result.StartTime = yesterday;
-			string args = string.Format(@"history $ -excludeactions label -rowlimit 0 -begindate {0:s} -enddate {1:s}{2}",
+			string args = string.Format(@"history $ -excludeactions label,obliterate -rowlimit 0 -begindate {0:s} -enddate {1:s}{2}",
 			                            yesterday, today, SetAndGetCommonOptionalArguments());
 			ExpectToExecuteArguments(args);
 			ExpectToParseHistory();

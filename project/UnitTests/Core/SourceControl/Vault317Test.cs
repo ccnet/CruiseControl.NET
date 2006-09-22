@@ -55,7 +55,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 					</history>
 					<result success=""yes"" />
 				</vault>";
-			string itemHistoryArgs = string.Format(@"history $ -excludeactions label -rowlimit 0 -begindate {0:s} -enddate {1:s}{2}",
+			string itemHistoryArgs = string.Format(@"history $ -excludeactions label,obliterate -rowlimit 0 -begindate {0:s} -enddate {1:s}{2}",
 				dtBeforeChange, dtAfterChange, SetAndGetCommonOptionalArguments());
 			ExpectToExecuteArguments(itemHistoryArgs);
 
@@ -81,7 +81,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 					<result success=""yes"" />
 				</vault>";
 			dtAfterChange = DateTime.Parse("1/18/2006 3:36:07 PM", culture);
-			itemHistoryArgs = string.Format(@"history $ -excludeactions label -rowlimit 0 -begindate {0:s} -enddate {1:s}{2}",
+			itemHistoryArgs = string.Format(@"history $ -excludeactions label,obliterate -rowlimit 0 -begindate {0:s} -enddate {1:s}{2}",
 				dtBeforeChange, dtAfterChange, SetAndGetCommonOptionalArguments());
 			ExpectToExecuteArguments(itemHistoryArgs);
 
@@ -116,7 +116,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 					</history>
 					<result success=""yes"" />
 				</vault>";
-			string itemHistoryArgs = string.Format(@"history $ -excludeactions label -rowlimit 0 -begindate {0:s} -enddate {1:s}{2}",
+			string itemHistoryArgs = string.Format(@"history $ -excludeactions label,obliterate -rowlimit 0 -begindate {0:s} -enddate {1:s}{2}",
 				dtBeforeChange, dtAfterChange, SetAndGetCommonOptionalArguments());
 			ExpectToExecuteArguments(itemHistoryArgs);
 
@@ -143,7 +143,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 					<result success=""yes"" />
 				</vault>";
 			DateTime dtEnd = DateTime.Parse("1/18/2006 3:36:07 PM", culture);
-			itemHistoryArgs = string.Format(@"history $ -excludeactions label -rowlimit 0 -begindate {0:s} -enddate {1:s}{2}",
+			itemHistoryArgs = string.Format(@"history $ -excludeactions label,obliterate -rowlimit 0 -begindate {0:s} -enddate {1:s}{2}",
 				dtBeforeChange, dtEnd, SetAndGetCommonOptionalArguments());
 			ExpectToExecuteArguments(itemHistoryArgs);
 
@@ -694,7 +694,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 					</history>
 					<result success=""yes"" />
 				</vault>";
-			string itemHistoryArgs = string.Format(@"history $ -excludeactions label -rowlimit 0 -begindate {0:s} -enddate {1:s}{2}",
+			string itemHistoryArgs = string.Format(@"history $ -excludeactions label,obliterate -rowlimit 0 -begindate {0:s} -enddate {1:s}{2}",
 				dtBeforeChange, dtAfterChange, SetAndGetCommonOptionalArguments());
 			ExpectToExecuteArguments(itemHistoryArgs);
 
