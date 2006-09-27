@@ -24,6 +24,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 		private int normalTop;
 		private int normalWidth;
 		private int normalHeight;
+		private bool visible;
 
 		public Form Parent
 		{
@@ -36,6 +37,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 				parent.Closing += new CancelEventHandler(OnClosing);
 				parent.Move += new EventHandler(OnMove);
 				parent.Resize += new EventHandler(OnResize);
+				parent.VisibleChanged += new EventHandler(OnVisibleChanged);
 
 				// get initial width and height in case form is never resized
 				normalWidth = parent.Width;
@@ -65,10 +67,21 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 				parent.Location = new Point(left, top);
 				parent.Size = new Size(width, height);
 
+				visible = 1 == (int) key.GetValue("Visible", 1);
+				if (!visible)
+				{
+					parent.BeginInvoke(new MethodInvoker(HideParent));
+				}
+				
 				// fire LoadState event
 				if (LoadState != null)
 					LoadState(this, new WindowStateEventArgs(key));
 			}
+		}
+		
+		private void HideParent()
+		{
+			parent.Hide();
 		}
 
 		private void OnClosing(object sender, CancelEventArgs e)
@@ -79,6 +92,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 			key.SetValue("Top", normalTop);
 			key.SetValue("Width", normalWidth);
 			key.SetValue("Height", normalHeight);
+			key.SetValue("Visible", visible ? 1 : 0);
 
 			// fire SaveState event
 			if (SaveState != null)
@@ -103,6 +117,11 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 				normalWidth = parent.Width;
 				normalHeight = parent.Height;
 			}
+		}
+
+		private void OnVisibleChanged(object sender, EventArgs e)
+		{
+			visible = parent.Visible;
 		}
 	}
 }

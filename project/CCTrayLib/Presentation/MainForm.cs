@@ -378,7 +378,6 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 			this.ShowInTaskbar = false;
 			this.StartPosition = System.Windows.Forms.FormStartPosition.Manual;
 			this.Text = "CCTray ";
-			this.WindowState = System.Windows.Forms.FormWindowState.Minimized;
 			this.Closing += new System.ComponentModel.CancelEventHandler(this.MainForm_Closing);
 			this.panel1.ResumeLayout(false);
 			this.ResumeLayout(false);
@@ -389,7 +388,14 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 
 		private void menuFileExit_Click(object sender, EventArgs e)
 		{
-			Application.Exit();
+			// If Application.Exit is called, OnClosing won't get raised, which PersistWindowState 
+			// relies on. Instead, we just close the window. The application will exit anyway, because
+			// the window is the application's main form. We only have to ensure that MainForm_Closing
+			// won't intercept it.
+			
+			//Application.Exit();
+			systemShutdownInProgress = true;
+			Close();
 		}
 
 		private void lvProjects_SelectedIndexChanged(object sender, EventArgs e)
