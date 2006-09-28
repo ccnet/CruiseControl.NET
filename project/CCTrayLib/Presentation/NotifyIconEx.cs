@@ -26,6 +26,8 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 				this.Text = "Hidden NotifyIconTarget Window";
 			}
 
+			private readonly uint TaskbarCreatedMessage = RegisterWindowMessage("TaskbarCreated");
+
 			protected override void DefWndProc (ref Message msg)
 			{
 				if (msg.Msg == 0x400) // WM_USER
@@ -75,7 +77,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 							break;
 					}
 				}
-				else if (msg.Msg == 0xC086) // WM_TASKBAR_CREATED
+				else if (msg.Msg == TaskbarCreatedMessage) // WM_TASKBAR_CREATED
 				{
 					if (TaskbarCreated != null)
 						TaskbarCreated (this, System.EventArgs.Empty);
@@ -140,6 +142,9 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 
 		[DllImport ("User32.Dll")]
 		private static extern System.Int32 SetForegroundWindow (System.IntPtr hWnd);
+
+		[DllImport("user32.dll", SetLastError = true, CharSet = CharSet.Auto)]
+		static extern uint RegisterWindowMessage(string lpString);
 
 		#endregion
 
@@ -411,7 +416,14 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 		private void OnTaskbarCreated (object sender, EventArgs e)
 		{
 			if (m_id != 0)
-				Create (m_id); // keep the id the same
+			{
+				m_messageSink.ClickNotify -= new NotifyIconTarget.NotifyIconHandler(OnClick);
+				m_messageSink.DoubleClickNotify -= new NotifyIconTarget.NotifyIconHandler(OnDoubleClick);
+				m_messageSink.RightClickNotify -= new NotifyIconTarget.NotifyIconHandler(OnRightClick);
+				m_messageSink.ClickBalloonNotify -= new NotifyIconTarget.NotifyIconHandler(OnClickBalloon);
+				m_messageSink.TaskbarCreated -= new EventHandler(OnTaskbarCreated);
+				Create(m_id); // keep the id the same
+			}
 		}
 
 		#endregion
