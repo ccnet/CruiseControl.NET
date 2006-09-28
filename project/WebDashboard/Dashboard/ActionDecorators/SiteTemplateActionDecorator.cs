@@ -31,7 +31,10 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard.ActionDecorators
 				velocityContext["sidebar"] = (((SideBarViewBuilder) objectSource.GetByType(typeof(SideBarViewBuilder))).Execute()).ResponseFragment;
 				velocityContext["mainContent"] = ((HtmlFragmentResponse) decoratedActionResponse).ResponseFragment;
 				velocityContext["dashboardversion"] = GetVersion();
-				velocityContext["applicationPath"] = request.ApplicationPath;
+				if (request.ApplicationPath == "/")
+					velocityContext["applicationPath"] = string.Empty;
+				else
+					velocityContext["applicationPath"] = request.ApplicationPath;
 
 				return velocityViewGenerator.GenerateView("SiteTemplate.vm", velocityContext);
 			}
