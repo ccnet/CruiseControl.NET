@@ -15,28 +15,33 @@
                                                     </span>
 				    </div>
 				    <div class="pagesubheading">
-					    This page last changed on Jun 25, 2005 by <font color="#0050B2">orogers</font>.
+					    This page last changed on Aug 14, 2006 by <font color="#0050B2">gfeldman</font>.
 				    </div>
 
-				    <p>The <a href="" title="Filter Trigger">Filter Trigger</a> allows you to prevent builds from occurring at certain times (such as when your source control repository is undergoing backup).  It is used to decorate an existing trigger.  For example, if you have set up a <a href="Interval Trigger.html" title="Interval Trigger">Interval Trigger</a> to cause a new build every 5 minutes, you can use the Filter Trigger to create a window during which the build will not run.  </p>
+				    <p>The <a href="" title="Filter Trigger">Filter Trigger</a> allows you to prevent builds from occurring at certain times or on certain days (such as when your source control repository is undergoing backup).  It is used to decorate an existing trigger.  For example, if you have set up a <a href="Interval Trigger.html" title="Interval Trigger">Interval Trigger</a> to cause a new build every 5 minutes, you can use the Filter Trigger to create a window during which the build will not run.  </p>
 
-<p>If the start time is greater than the end time then the filtered time will span across midnight.  For example, if the start time is 23:00 and the end time is 3:00 then builds will be suppressed over this interval.  <br/>
-<img class="emoticon" src="./icons/emoticons/warning.gif" height="16" width="16" align="absmiddle" alt="" border="0"/> NOTE: both the weekday for the start time and the weekday for the end time must be included in the &lt;weekDays&gt; element.</p>
+<p>The filter will exclude modifications that occur between the start time and the end time on the days specified. If the start time is greater than the end time then the filtered time will span across midnight.  For example, if the start time is 23:00 and the end time is 3:00 then builds will be suppressed from 23:00-23:59 and 0:00-3:00 on the days specified.</p>
 
-<h4><a name="FilterTrigger-Example">Example</a></h4>
+<table cellpadding='5' width='85%' cellspacing='8px' class='warningMacro' border="0" align='center'><colgroup><col width='24'><col></colgroup><tr><td valign='top'><img src="./icons/emoticons/forbidden.gif" width="16" height="16" align="absmiddle" alt="" border="0"></td><td><b class="strong">Nested trigger syntax is different</b><br />
+<p>As shown below, the configuration of the nested trigger is not the same as when using that trigger outside a filter trigger.  When using the <tt>&lt;filterTrigger&gt;</tt> element, the inner trigger <em>must</em> be specified with the <tt>&lt;trigger&gt;</tt> element.  You could <em>not</em> use the <tt>&lt;intervalTrigger&gt;</tt> trigger element in this example.</p></td></tr></table>
+
+<h4><a name="FilterTrigger-Example"></a>Example</h4>
+<table cellpadding='5' width='85%' cellspacing='8px' class='infoMacro' border="0" align='center'><colgroup><col width='24'><col></colgroup><tr><td valign='top'><img src="./icons/emoticons/information.gif" width="16" height="16" align="absmiddle" alt="" border="0"></td><td>NOTE: Like all triggers, the filterTrigger must be enclosed within a triggers element in the appropriate <a href="Project Configuration Block.html" title="Project Configuration Block">Project Configuration Block</a></td></tr></table>
 
 <div class="code"><div class="codeContent">
 <pre class="code-xml"><span class="code-tag">&lt;filterTrigger startTime=<span class="code-quote">"23:30"</span> endTime=<span class="code-quote">"23:45"</span>&gt;</span>
-        <span class="code-tag">&lt;trigger type=<span class="code-quote">"intervalTrigger"</span> seconds=<span class="code-quote">"60"</span> /&gt;</span>
-        <span class="code-tag">&lt;weekDays&gt;</span>
-            <span class="code-tag">&lt;weekDay&gt;</span>Sunday<span class="code-tag">&lt;/weekDay&gt;</span>
-        <span class="code-tag">&lt;/weekDays&gt;</span>
-    <span class="code-tag">&lt;/filterTrigger&gt;</span></pre>
+    <span class="code-tag">&lt;trigger type=<span class="code-quote">"intervalTrigger"</span> seconds=<span class="code-quote">"60"</span> /&gt;</span>
+    <span class="code-tag">&lt;weekDays&gt;</span>
+        <span class="code-tag">&lt;weekDay&gt;</span>Sunday<span class="code-tag">&lt;/weekDay&gt;</span>
+    <span class="code-tag">&lt;/weekDays&gt;</span>
+<span class="code-tag">&lt;/filterTrigger&gt;</span></pre>
 </div></div>
 
-<h4><a name="FilterTrigger-ConfigurationElements%3A">Configuration Elements:</a></h4>
+<p>This trigger suppresses builds if any modifications are made between 23:30 and 23:45 on Sunday nights.</p>
 
-<table class='confluenceTable'>
+<h4><a name="FilterTrigger-ConfigurationElements%3A"></a>Configuration Elements:</h4>
+
+<table class='confluenceTable'><tbody>
 <tr>
 <th class='confluenceTh'> Node </th>
 <th class='confluenceTh'> Description </th>
@@ -60,7 +65,7 @@
 </tr>
 <tr>
 <td class='confluenceTd'> weekDays </td>
-<td class='confluenceTd'> The week days on which the filter should be applied (eg. Monday, Tuesday).  By default, all days of the week are set. </td>
+<td class='confluenceTd'> The week days on which the filter should be applied (eg. Monday, Tuesday).  By default, all days of the week are set. The filter will have no effect on other days</td>
 <td class='confluenceTd'> elements </td>
 <td class='confluenceTd'> false </td>
 <td class='confluenceTd'> Monday-Sunday </td>
@@ -72,9 +77,25 @@
 <td class='confluenceTd'> false </td>
 <td class='confluenceTd'> NoBuild </td>
 </tr>
-</table>
+</tbody></table>
 
-<p><img class="emoticon" src="./icons/emoticons/warning.gif" height="16" width="16" align="absmiddle" alt="" border="0"/> NOTE: Times should be specified in a locale-specific format (ie. H:mm am/pm is acceptable for US locales.)</p>
+<table cellpadding='5' width='85%' cellspacing='8px' class='infoMacro' border="0" align='center'><colgroup><col width='24'><col></colgroup><tr><td valign='top'><img src="./icons/emoticons/information.gif" width="16" height="16" align="absmiddle" alt="" border="0"></td><td>NOTE: Times should be specified in a locale-specific format (e.g., H:mm am/pm is acceptable for US locales).</td></tr></table>
+
+<h4><a name="FilterTrigger-NestedFilterTriggers%3A"></a>Nested Filter Triggers:</h4>
+
+<p>Sometimes you would like to suppress builds that occur either between certain times or on certain days or in multiple combinations of dates and times.  To acheive this, you can nest multiple filter triggers.  For example, the following xml configures a trigger to filter builds between 7pm and 7am on weekdays and at any time on Saturdays and Sundays.</p>
+
+<div class="code"><div class="codeContent">
+<pre class="code-xml"><span class="code-tag">&lt;filterTrigger startTime=<span class="code-quote">"19:00"</span> endTime=<span class="code-quote">"07:00"</span>&gt;</span>
+    <span class="code-tag">&lt;trigger type=<span class="code-quote">"filterTrigger"</span> startTime=<span class="code-quote">"0:00"</span> endTime=<span class="code-quote">"23:59:59"</span>&gt;</span>
+        <span class="code-tag">&lt;trigger type=<span class="code-quote">"intervalTrigger"</span> name=<span class="code-quote">"continuous"</span> seconds=<span class="code-quote">"900"</span> buildCondition=<span class="code-quote">"ForceBuild"</span>/&gt;</span>
+        <span class="code-tag">&lt;weekDays&gt;</span>
+            <span class="code-tag">&lt;weekDay&gt;</span>Saturday<span class="code-tag">&lt;weekDay&gt;</span>
+            <span class="code-tag">&lt;weekDay&gt;</span>Sunday<span class="code-tag">&lt;/weekDay&gt;</span>
+        <span class="code-tag">&lt;/weekDays&gt;</span>
+    <span class="code-tag">&lt;/trigger&gt;</span>
+<span class="code-tag">&lt;/filterTrigger&gt;</span></pre>
+</div></div>
 
 <p><b>With contributions from</b>: Oane Stienstra</p>
 
@@ -87,7 +108,7 @@
 				<td height="12" background="border/border_bottom.gif"><img src="border/spacer.gif" width="1" height="1" border="0"/></td>
 			</tr>
 		    <tr>
-			    <td align="center"><font color="grey">Document generated by Confluence on Sep 18, 2005 21:14</font></td>
+			    <td align="center"><font color="grey">Document generated by Confluence on Oct 01, 2006 23:02</font></td>
 		    </tr>
 	    </table>
     </body>

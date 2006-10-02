@@ -15,10 +15,10 @@
                                                     </span>
 				    </div>
 				    <div class="pagesubheading">
-					    This page last changed on Jun 17, 2005 by <font color="#0050B2">orogers</font>.
+					    This page last changed on Aug 06, 2006 by <font color="#0050B2">mroberts</font>.
 				    </div>
 
-				    <h3><a name="PerforceSourceControlBlock-PerforceConfigurationExamples">Perforce Configuration Examples</a></h3>
+				    <h3><a name="PerforceSourceControlBlock-PerforceConfigurationExamples"></a>Perforce Configuration Examples</h3>
 
 <p>Example using defaults:</p>
 
@@ -36,7 +36,9 @@
    <span class="code-tag">&lt;executable&gt;</span>c:\perforce\p4.exe<span class="code-tag">&lt;/executable&gt;</span>
    <span class="code-tag">&lt;client&gt;</span>ccnet-buildhost<span class="code-tag">&lt;/client&gt;</span>
    <span class="code-tag">&lt;user&gt;</span>public<span class="code-tag">&lt;/user&gt;</span>
+   <span class="code-tag">&lt;password&gt;</span>mypassword<span class="code-tag">&lt;/password&gt;</span>
    <span class="code-tag">&lt;port&gt;</span>perforce01.thoughtworks.net:1666<span class="code-tag">&lt;/port&gt;</span>
+   <span class="code-tag">&lt;timeZoneOffset&gt;</span>-5<span class="code-tag">&lt;/port&gt;</span>
    <span class="code-tag">&lt;applyLabel&gt;</span>true<span class="code-tag">&lt;/applyLabel&gt;</span>
    <span class="code-tag">&lt;autoGetSource&gt;</span>true<span class="code-tag">&lt;/autoGetSource&gt;</span>
    <span class="code-tag">&lt;forceSync&gt;</span>true<span class="code-tag">&lt;/forceSync&gt;</span>
@@ -45,9 +47,9 @@
 </div></div>
 
 
-<h3><a name="PerforceSourceControlBlock-ConfigurationElements%3A">Configuration Elements:</a></h3>
+<h3><a name="PerforceSourceControlBlock-ConfigurationElements%3A"></a>Configuration Elements:</h3>
 
-<table class='confluenceTable'>
+<table class='confluenceTable'><tbody>
 <tr>
 <th class='confluenceTh'> Node </th>
 <th class='confluenceTh'> Description </th>
@@ -84,11 +86,25 @@
 <td class='confluenceTd'> Perforce environment setting </td>
 </tr>
 <tr>
+<td class='confluenceTd'> password </td>
+<td class='confluenceTd'> The perforce password to use </td>
+<td class='confluenceTd'> string </td>
+<td class='confluenceTd'> false </td>
+<td class='confluenceTd'> Perforce environment setting </td>
+</tr>
+<tr>
 <td class='confluenceTd'> port </td>
 <td class='confluenceTd'> The perforce hostname and port to use </td>
 <td class='confluenceTd'> string </td>
 <td class='confluenceTd'> false </td>
 <td class='confluenceTd'> Perforce environment setting </td>
+</tr>
+<tr>
+<td class='confluenceTd'> timeZoneOffset </td>
+<td class='confluenceTd'> How many hours ahead your Perforce Server is from your build server. E.g. if your build server is in London, and your Perforce server is in New York, this value would be '-5'. </td>
+<td class='confluenceTd'> double </td>
+<td class='confluenceTd'> false </td>
+<td class='confluenceTd'> 0 </td>
 </tr>
 <tr>
 <td class='confluenceTd'> applyLabel </td>
@@ -117,15 +133,15 @@
 <td class='confluenceTd'> false </td>
 <td class='confluenceTd'> <em>n.a.</em> </td>
 </tr>
-</table>
+</tbody></table>
 
-<h3><a name="PerforceSourceControlBlock-Client%2FUser%2FPassword%2FPortusage">Client / User / Password / Port usage</a></h3>
+<h3><a name="PerforceSourceControlBlock-Client%2FUser%2FPassword%2FPortusage"></a>Client / User / Password / Port usage</h3>
 
-<p>You may specify any of the Perforce client, user and port (ie 'host:port' in Perforce standards) settings to use. If you don't specify them, then Cruise Control .NET will use the defaults in your registry (use 'p4 set' to view and edit these.) NB: If you use a user with a non-empty password, you must use the user specified in the registry, and its password must be set in the registry too. This is done whenever you use 'P4Win' and tell it to remember your password.</p>
+<p>You may specify any of the Perforce client, user, password and port (ie 'host:port' in Perforce standards) settings to use. If you don't specify them, then Cruise Control .NET will use the defaults in your registry (use 'p4 set' to view and edit these.)</p>
 
 <p>Note that the <em>client</em> specification is only used for syncing and applying labels, it is not used when checking for changes. This is significant since it means that the <em>view</em> in the specified <em>client</em> does not effect the plugin's behaviour when checking for changes.</p>
 
-<h3><a name="PerforceSourceControlBlock-PerforceIssues">Perforce Issues</a></h3>
+<h3><a name="PerforceSourceControlBlock-PerforceIssues"></a>Perforce Issues</h3>
 
 <p>Perforce cannot apply purely numeric labels, which is what CCNet uses by default. Therefore, if you have 'applyLabel' set to true, you <b>must</b> also setup a custom Labeller in your project, e.g. by using the <a href="Default Labeller.html" title="Default Labeller">Default Labeller</a>.</p>
 
@@ -138,7 +154,7 @@
 				<td height="12" background="border/border_bottom.gif"><img src="border/spacer.gif" width="1" height="1" border="0"/></td>
 			</tr>
 		    <tr>
-			    <td align="center"><font color="grey">Document generated by Confluence on Sep 18, 2005 21:17</font></td>
+			    <td align="center"><font color="grey">Document generated by Confluence on Oct 01, 2006 23:02</font></td>
 		    </tr>
 	    </table>
     </body>

@@ -15,18 +15,18 @@
                                                     </span>
 				    </div>
 				    <div class="pagesubheading">
-					    This page last changed on Jun 09, 2005 by <font color="#0050B2">orogers</font>.
+					    This page last changed on Sep 07, 2006 by <font color="#0050B2">dpiessens</font>.
 				    </div>
 
-				    <h3><a name="FilteredSourceControlBlock-WhatisFilteredSourceControl%3F">What is FilteredSourceControl?</a></h3>
+				    <h3><a name="FilteredSourceControlBlock-WhatisFilteredSourceControl%3F"></a>What is FilteredSourceControl?</h3>
 
 <p>The FilteredSourceControl allows you to filter out modifications that are used to trigger a build.  If for example, you have certain files (such as web pages or document files) under source control that you don't want to have trigger the build, you can use this class to ensure that their changes will keep a new build from launching.</p>
 
 <p>The FilteredSourceControl works together with all of the source controls supported by CCNet (including the <a href="Multi Source Control Block.html" title="Multi Source Control Block">Multi Source Control Block</a>).  It can also be included under the <a href="Multi Source Control Block.html" title="Multi Source Control Block">Multi Source Control Block</a> provider so that you could have multiple FilterSourceControls each filtering a different set of modifications from different source control providers.  Essentially, it acts as a decorator (or an example of the <a href="http://www.eaipatterns.com/PipesAndFilters.html" title="Visit page outside Confluence">pipes and filters pattern </a>), wrapping around the specific SourceControl provider that you want to use.  </p>
 
-<p>The FilteredSourceControl includes both <b>inclusion</b> and <b>exclusion</b> filters for specifying what modifications should be included/excluded.  Multiple inclusion and exclusion filters can be specified or, alternately, no inclusion or exclusion filter could be specified.  If a modification is matched by both the inclusion and exclusion filter, then the exclusion filter will take preference and the modification will not be included in the modification set.  At this point, CCNet only supports two types of filters: <a href="#FilteredSourceControlBlock-PathFilter" title="PathFilter on Filtered Source Control Block">PathFilters</a> and <a href="#FilteredSourceControlBlock-UserFilter" title="UserFilter on Filtered Source Control Block">UserFilters</a>.  It is relatively straightforward to build new filters, (such as one to filter modifications based on email address).</p>
+<p>The FilteredSourceControl includes both <b>inclusion</b> and <b>exclusion</b> filters for specifying what modifications should be included/excluded.  Multiple inclusion and exclusion filters can be specified or, alternately, no inclusion or exclusion filter could be specified.  If a modification is matched by both the inclusion and exclusion filter, then the exclusion filter will take preference and the modification will not be included in the modification set.  At this point, CCNet only supports three types of filters: <a href="#FilteredSourceControlBlock-PathFilter" title="PathFilter on Filtered Source Control Block">PathFilters</a>, <a href="#FilteredSourceControlBlock-UserFilter" title="UserFilter on Filtered Source Control Block">UserFilters</a>, and <a href="#FilteredSourceControlBlock-ActionFilter" title="ActionFilter on Filtered Source Control Block">ActionFilters</a>.  It is relatively straightforward to build new filters, (such as one to filter modifications based on email address).</p>
 
-<h3><a name="FilteredSourceControlBlock-ConfigurationExamples">Configuration Examples</a></h3>
+<h3><a name="FilteredSourceControlBlock-ConfigurationExamples"></a>Configuration Examples</h3>
 
 <div class="code"><div class="codeContent">
 <pre class="code-xml"><span class="code-tag">&lt;sourcecontrol type=<span class="code-quote">"filtered"</span>&gt;</span>
@@ -52,19 +52,22 @@
 	<span class="code-tag">&lt;userFilter&gt;</span>
 		<span class="code-tag">&lt;names&gt;</span><span class="code-tag">&lt;name&gt;</span>Perry<span class="code-tag">&lt;/name&gt;</span><span class="code-tag">&lt;name&gt;</span>Joe<span class="code-tag">&lt;/name&gt;</span><span class="code-tag">&lt;/names&gt;</span>
 	<span class="code-tag">&lt;/userFilter&gt;</span>
+	<span class="code-tag">&lt;actionFilter&gt;</span>
+		<span class="code-tag">&lt;actions&gt;</span><span class="code-tag">&lt;action&gt;</span>deleted<span class="code-tag">&lt;/action&gt;</span><span class="code-tag">&lt;/actions&gt;</span>
+	<span class="code-tag">&lt;/actionFilter&gt;</span>
     <span class="code-tag">&lt;/exclusionFilters&gt;</span>
 <span class="code-tag">&lt;/sourcecontrol&gt;</span></pre>
 </div></div>
 
-<p>This example filters out any modifications to the <b>AssemblyInfo.cs</b> file that have been checked in to <a href="Visual Source Safe Source Control Block.html" title="Visual Source Safe Source Control Block">Visual Source Safe Source Control Block</a>.</p>
+<p>This example filters out any modifications to the <b>AssemblyInfo.cs</b> file that have been checked in to <a href="Visual Source Safe Source Control Block.html" title="Visual Source Safe Source Control Block">Visual Source Safe Source Control Block</a>.  Although it shows the use of all three types of filter, you can choose to use only one or two types of filter as well.</p>
 
-<h3><a name="FilteredSourceControlBlock-ConfigurationElements%3A">Configuration Elements:</a></h3>
+<h3><a name="FilteredSourceControlBlock-ConfigurationElements%3A"></a>Configuration Elements:</h3>
 
 <p><b>FilteredSourceControl root element</b></p>
 
 <p>This is the root configuration element for the FilteredSourceControl.</p>
 
-<table class='confluenceTable'>
+<table class='confluenceTable'><tbody>
 <tr>
 <th class='confluenceTh'> Node </th>
 <th class='confluenceTh'> Description </th>
@@ -89,13 +92,13 @@
 <td class='confluenceTd'> xml element </td>
 <td class='confluenceTd'> false </td>
 </tr>
-</table>
+</tbody></table>
 
 <p><a name="FilteredSourceControlBlock-PathFilter"></a> <b>PathFilter element</b></p>
 
 <p>The PathFilter can be used to filter modifications on the basis of their file path.</p>
 
-<table class='confluenceTable'>
+<table class='confluenceTable'><tbody>
 <tr>
 <th class='confluenceTh'> Node </th>
 <th class='confluenceTh'> Description </th>
@@ -104,17 +107,17 @@
 </tr>
 <tr>
 <td class='confluenceTd'> pattern </td>
-<td class='confluenceTd'> This is the pattern used to compare the modification path against. See <a href="#FilteredSourceControlBlock-PathFilter" title="PathFilter on Filtered Source Control Block">below</a> for examples of the syntax for this element.  Each PathFilter contains a single pattern element. </td>
+<td class='confluenceTd'> This is the pattern used to compare the modification path against. The pattern should match the path of the files in the repository (not the path of the files in the working directory). See <a href="#FilteredSourceControlBlock-PathFilter" title="PathFilter on Filtered Source Control Block">below</a> for examples of the syntax for this element.  Each PathFilter contains a single pattern element. </td>
 <td class='confluenceTd'> string </td>
 <td class='confluenceTd'> true </td>
 </tr>
-</table>
+</tbody></table>
 
 <p><a name="FilteredSourceControlBlock-UserFilter"></a> <b>UserFilter element</b></p>
 
 <p>The UserFilter can be used to filter modifications on the basis of the username that committed the changes.</p>
 
-<table class='confluenceTable'>
+<table class='confluenceTable'><tbody>
 <tr>
 <th class='confluenceTh'> Node </th>
 <th class='confluenceTh'> Description </th>
@@ -127,9 +130,28 @@
 <td class='confluenceTd'> string </td>
 <td class='confluenceTd'> true </td>
 </tr>
-</table>
+</tbody></table>
 
-<h3><a name="FilteredSourceControlBlock-UsingthePathFilter%3A">Using the PathFilter:</a></h3>
+<p><a name="FilteredSourceControlBlock-ActionFilter"></a> <b>ActionFilter element</b></p>
+
+<p>The ActionFilter can be used to filter modifications on the basis of the type of modification that was committed.  Modification types are specific to each source control provider.  Consult each source control provider for the list of actions to filter.</p>
+
+<table class='confluenceTable'><tbody>
+<tr>
+<th class='confluenceTh'> Node </th>
+<th class='confluenceTh'> Description </th>
+<th class='confluenceTh'> Type </th>
+<th class='confluenceTh'> Required</th>
+</tr>
+<tr>
+<td class='confluenceTd'> actions </td>
+<td class='confluenceTd'> This element consists of multiple &lt;action&gt; elements for each action to be filtered. </td>
+<td class='confluenceTd'> string </td>
+<td class='confluenceTd'> true </td>
+</tr>
+</tbody></table>
+
+<h3><a name="FilteredSourceControlBlock-UsingthePathFilter%3A"></a>Using the PathFilter:</h3>
 
 <p>PathFilter supports following wildcards:</p>
 
@@ -145,7 +167,10 @@ extension. A "&#42;.cs&#42;" will match any file with extension that starts with
 </ol>
 
 
-<h3><a name="FilteredSourceControlBlock-Potentialenhancements%3A">Potential enhancements:</a></h3>
+<table cellpadding='5' width='85%' cellspacing='8px' class='noteMacro' border="0" align='center'><colgroup><col width='24'><col></colgroup><tr><td valign='top'><img src="./icons/emoticons/warning.gif" width="16" height="16" align="absmiddle" alt="" border="0"></td><td><b class="strong">A Note On Paths</b><br />
+<p>Paths do not include the root server identifiers. For example, if you are using subversion source control on server "myserver" and trying to exclude path svn://myserver/project1/excludedir/&#42;.&#42; your node should be /project1/excludedir/&#42;.&#42;</p></td></tr></table>
+
+<h3><a name="FilteredSourceControlBlock-Potentialenhancements%3A"></a>Potential enhancements:</h3>
 
 <ol>
 	<li>Case insensitive pattern matching.</li>
@@ -155,7 +180,7 @@ extension. A "&#42;.cs&#42;" will match any file with extension that starts with
 
 
 <p>Implemented and contributed by <b>Uros Novak</b>.<br/>
-UserFilter by Perry Ismangil</p>
+UserFilter and ActionFilter by <b>Perry Ismangil</b>.</p>
 
 				    
                     			    </td>
@@ -166,7 +191,7 @@ UserFilter by Perry Ismangil</p>
 				<td height="12" background="border/border_bottom.gif"><img src="border/spacer.gif" width="1" height="1" border="0"/></td>
 			</tr>
 		    <tr>
-			    <td align="center"><font color="grey">Document generated by Confluence on Sep 18, 2005 21:14</font></td>
+			    <td align="center"><font color="grey">Document generated by Confluence on Oct 01, 2006 23:02</font></td>
 		    </tr>
 	    </table>
     </body>

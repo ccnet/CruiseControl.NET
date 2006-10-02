@@ -15,21 +15,21 @@
                                                     </span>
 				    </div>
 				    <div class="pagesubheading">
-					    This page last changed on Jun 19, 2005 by <font color="#0050B2">orogers</font>.
+					    This page last changed on Sep 22, 2005 by <font color="#0050B2">orogers</font>.
 				    </div>
 
-				    <h2><a name="TelelogicSynergy-Abstract">Abstract</a></h2>
+				    <h2><a name="TelelogicSynergy-Abstract"></a>Abstract</h2>
 
 <p>This page describes integration of CruiseControl.NET with Telelogic's Synergy SCM product suite, specifically CM Synergy as well as ChangeSynergy.  Detection of modifications is entirely task based rather than object based, which may present problems for pre-6.3 lifecycles. Successful integration may be published through shared manual task folders and/or baselining.</p>
 
-<div class="information-block" align='center'><div class='informationMacroPadding'><table cellpadding='5' width='85%' cellspacing='0' class='warningMacro' border='0'><tr><td width='16' valign='top'><img src="/images/icons/emoticons/forbidden.gif" width="16" height="16" align="absmiddle" alt="" border="0"></td><td><b class="strong">Warning</b><br />
-<p>This integration has been thoroughly tested against CM Synergy 6.3 SP4 and ChangeSynergy 4.3 SP3 Windows/Informix with the DCM option enabled.  While untested, CM Synergy installations on Unix/Informix or Unix/Oracle should function properly.</p></td></tr></table></div></div>
+<table cellpadding='5' width='85%' cellspacing='8px' class='warningMacro' border="0" align='center'><colgroup><col width='24'><col></colgroup><tr><td valign='top'><img src="./icons/emoticons/forbidden.gif" width="16" height="16" align="absmiddle" alt="" border="0"></td><td><b class="strong">Warning</b><br />
+<p>This integration has been thoroughly tested against CM Synergy 6.3 SP4 and ChangeSynergy 4.3 SP3 Windows/Informix with the DCM option enabled.  While untested, CM Synergy installations on Unix/Informix or Unix/Oracle should function properly.</p></td></tr></table>
 
-<h2><a name="TelelogicSynergy-Background">Background</a></h2>
+<h2><a name="TelelogicSynergy-Background"></a>Background</h2>
 
-<p><a href="http://confluence.public.thoughtworks.org/display/CC/CMSynergyConcepts" title="CMSynergyConcepts">CM Synergy Concepts</a> is arguably one of the best conceptual explanations of CM Synergy.  Consider it a prerequisite for implementing continuous integration with CM Synergy.  <a href="http://confluence.public.thoughtworks.org/display/~rjmpsmith" title="View profile for Robert J. Smith">Robert Smith</a>, from the CruiseControl for Java site, deserves a great deal of credit for explaining the product better than Telelogic ever has.</p>
+<p><a href="http://confluence.public.thoughtworks.org//display/CC/CMSynergyConcepts" title="CMSynergyConcepts">CM Synergy Concepts</a> is arguably one of the best conceptual explanations of CM Synergy.  Consider it a prerequisite for implementing continuous integration with CM Synergy.  <a href="http://confluence.public.thoughtworks.org//display/~rjmpsmith" title="View profile for Robert J. Smith">Robert Smith</a>, from the CruiseControl for Java site, deserves a great deal of credit for explaining the product better than Telelogic ever has.</p>
 
-<h2><a name="TelelogicSynergy-MethodologyofintegrationwithCCNET">Methodology of integration with CCNET</a></h2>
+<h2><a name="TelelogicSynergy-MethodologyofintegrationwithCCNET"></a>Methodology of integration with CCNET</h2>
 
 <p>Certain assumptions have been made about the integration of CruiseControl.NET and CM Synergy. First, it is assumed that all projects use a task based reconfigure template, rather than an object based.</p>
 
@@ -48,7 +48,7 @@
 </ul>
 
 
-<h2><a name="TelelogicSynergy-CMSynergyExampleConfigurations">CM Synergy Example Configurations</a></h2>
+<h2><a name="TelelogicSynergy-CMSynergyExampleConfigurations"></a>CM Synergy Example Configurations</h2>
 
 <div class="code" style="border-style: solid; "><div class="codeHeader" style="border-bottom-style: solid; "><b>Example using Defaults</b></div><div class="codeContent">
 <pre class="code-xml"><span class="code-tag">&lt;sourcecontrol type=<span class="code-quote">"synergy"</span>&gt;</span>
@@ -100,13 +100,13 @@
 </div></div> 
 
 
-<h2><a name="TelelogicSynergy-CMSynergyConfigurationElements">CM Synergy Configuration Elements</a></h2>
+<h2><a name="TelelogicSynergy-CMSynergyConfigurationElements"></a>CM Synergy Configuration Elements</h2>
 
-<div class="information-block" align='center'><div class='informationMacroPadding'><table cellpadding='5' width='85%' cellspacing='0' class='tipMacro' border='0'><tr><td width='16' valign='top'><img src="/images/icons/emoticons/check.gif" width="16" height="16" align="absmiddle" alt="" border="0"></td><td><b class="strong">Configuration Reuse</b><br />
-<p>By creating separate child nodes for the &lt;connection&gt;, &lt;project&gt;, and &lt;changeSynergy&gt; configuration elements, it is very easy to create reusable blocks of XML.  For more information on XML DTD entities and reusable configuration blocks, see  <a href="http://jira.public.thoughtworks.org/browse/CCNET-239" title="Visit page outside Confluence">JIRA issue CCNET-239</a> and <a href="http://peeps.dallas.focus-technologies.com/roller/page/nithy/20040128#using_the_entity_includes_in" title="Visit page outside Confluence">Nithy Palanivelu's Weblog </a></p></td></tr></table></div></div>
+<table cellpadding='5' width='85%' cellspacing='8px' class='tipMacro' border="0" align='center'><colgroup><col width='24'><col></colgroup><tr><td valign='top'><img src="./icons/emoticons/check.gif" width="16" height="16" align="absmiddle" alt="" border="0"></td><td><b class="strong">Configuration Reuse</b><br />
+<p>By creating separate child nodes for the &lt;connection&gt;, &lt;project&gt;, and &lt;changeSynergy&gt; configuration elements, it is very easy to create reusable blocks of XML.  For more information on XML DTD entities and reusable configuration blocks, see  <a href="http://jira.public.thoughtworks.org/browse/CCNET-239" title="Visit page outside Confluence">JIRA issue CCNET-239</a> and <a href="http://peeps.dallas.focus-technologies.com/roller/page/nithy/20040128#using_the_entity_includes_in" title="Visit page outside Confluence">Nithy Palanivelu's Weblog </a></p></td></tr></table>
 
-<h4><a name="TelelogicSynergy-%3Cconnection%3Enode%28required%29">&lt;connection&gt; node (required)</a></h4>
-<table class='confluenceTable'>
+<h4><a name="TelelogicSynergy-%3Cconnection%3Enode%28required%29"></a>&lt;connection&gt; node (required)</h4>
+<table class='confluenceTable'><tbody>
 <tr>
 <th class='confluenceTh'>Connection Item</th>
 <th class='confluenceTh'>Description</th>
@@ -198,16 +198,16 @@
 <td class='confluenceTd'>No</td>
 <td class='confluenceTd'>3600</td>
 </tr>
-</table>
+</tbody></table>
 
-<div class="information-block" align='center'><div class='informationMacroPadding'><table cellpadding='5' width='85%' cellspacing='0' class='infoMacro' border='0'><tr><td width='16' valign='top'><img src="/images/icons/emoticons/information.gif" width="16" height="16" align="absmiddle" alt="" border="0"></td><td><b class="strong">The Polling Feature</b><br />
-<p>The polling feature is useful if your Synergy installation routinely goes offline (i.e., "protected mode").  Long runing builds may inadventently conflict with the routine downtime schedules.  For example, polling allows your build to queue CM Synergy commands until the nightly backup completes.</p></td></tr></table></div></div>
+<table cellpadding='5' width='85%' cellspacing='8px' class='infoMacro' border="0" align='center'><colgroup><col width='24'><col></colgroup><tr><td valign='top'><img src="./icons/emoticons/information.gif" width="16" height="16" align="absmiddle" alt="" border="0"></td><td><b class="strong">The Polling Feature</b><br />
+<p>The polling feature is useful if your Synergy installation routinely goes offline (i.e., "protected mode").  Long runing builds may inadventently conflict with the routine downtime schedules.  For example, polling allows your build to queue CM Synergy commands until the nightly backup completes.</p></td></tr></table>
 
-<div class="information-block" align='center'><div class='informationMacroPadding'><table cellpadding='5' width='85%' cellspacing='0' class='infoMacro' border='0'><tr><td width='16' valign='top'><img src="/images/icons/emoticons/information.gif" width="16" height="16" align="absmiddle" alt="" border="0"></td><td><b class="strong">Environmental Variables</b><br />
-<p>Environmental variable support enables you to keep your sensitive build manager credentials out of the CCNET configuration file.  This is especially important if the configuration file is under source control, whereby it would be readable by all CM Synergy users.</p></td></tr></table></div></div>
+<table cellpadding='5' width='85%' cellspacing='8px' class='infoMacro' border="0" align='center'><colgroup><col width='24'><col></colgroup><tr><td valign='top'><img src="./icons/emoticons/information.gif" width="16" height="16" align="absmiddle" alt="" border="0"></td><td><b class="strong">Environmental Variables</b><br />
+<p>Environmental variable support enables you to keep your sensitive build manager credentials out of the CCNET configuration file.  This is especially important if the configuration file is under source control, whereby it would be readable by all CM Synergy users.</p></td></tr></table>
 
-<h4><a name="TelelogicSynergy-%3Cproject%3Enode%28required%29">&lt;project&gt; node (required)</a></h4>
-<table class='confluenceTable'>
+<h4><a name="TelelogicSynergy-%3Cproject%3Enode%28required%29"></a>&lt;project&gt; node (required)</h4>
+<table class='confluenceTable'><tbody>
 <tr>
 <th class='confluenceTh'>Project Item</th>
 <th class='confluenceTh'>Description</th>
@@ -250,11 +250,17 @@
 <td class='confluenceTd'>No</td>
 <td class='confluenceTd'>"Integration Testing"</td>
 </tr>
-</table>
+<tr>
+<td class='confluenceTd'>template</td>
+<td class='confluenceTd'>Flag to reset the reconfigure properties for this project and all subprojects to use the reconfigure template.</td>
+<td class='confluenceTd'>boolean</td>
+<td class='confluenceTd'>No</td>
+<td class='confluenceTd'>false</td>
+</tr>
+</tbody></table>
 
-
-<h4><a name="TelelogicSynergy-%3CchangeSynergy%3Enode%28optional%29">&lt;changeSynergy&gt; node (optional)</a></h4>
-<table class='confluenceTable'>
+<h4><a name="TelelogicSynergy-%3CchangeSynergy%3Enode%28optional%29"></a>&lt;changeSynergy&gt; node (optional)</h4>
+<table class='confluenceTable'><tbody>
 <tr>
 <th class='confluenceTh'>Change Synergy Item</th>
 <th class='confluenceTh'>Description</th>
@@ -290,10 +296,10 @@
 <td class='confluenceTd'>No</td>
 <td class='confluenceTd'>"User"</td>
 </tr>
-</table>
+</tbody></table>
 
-<div class="information-block" align='center'><div class='informationMacroPadding'><table cellpadding='5' width='85%' cellspacing='0' class='warningMacro' border='0'><tr><td width='16' valign='top'><img src="/images/icons/emoticons/forbidden.gif" width="16" height="16" align="absmiddle" alt="" border="0"></td><td><b class="strong">Security Warning</b><br />
-<p>Be careful about specifying a ChangeSynergy username and password.  If you do not specify these optional values, the end-user will be prompted by ChangeSynergy to enter valid credentials.  If an anonymous access account is used, specify a user that has only read-only permissions within ChangeSynergy.  This will prevent someone from modifying objects, such as tasks, through ChangeSynergy.  If you specify an impersonation account with write permissions, a malicious user could bypass auditing in ChangeSynergy.</p></td></tr></table></div></div>
+<table cellpadding='5' width='85%' cellspacing='8px' class='warningMacro' border="0" align='center'><colgroup><col width='24'><col></colgroup><tr><td valign='top'><img src="./icons/emoticons/forbidden.gif" width="16" height="16" align="absmiddle" alt="" border="0"></td><td><b class="strong">Security Warning</b><br />
+<p>Be careful about specifying a ChangeSynergy username and password.  If you do not specify these optional values, the end-user will be prompted by ChangeSynergy to enter valid credentials.  If an anonymous access account is used, specify a user that has only read-only permissions within ChangeSynergy.  This will prevent someone from modifying objects, such as tasks, through ChangeSynergy.  If you specify an impersonation account with write permissions, a malicious user could bypass auditing in ChangeSynergy.</p></td></tr></table>
 
 
 <ul>
@@ -310,7 +316,7 @@
 				<td height="12" background="border/border_bottom.gif"><img src="border/spacer.gif" width="1" height="1" border="0"/></td>
 			</tr>
 		    <tr>
-			    <td align="center"><font color="grey">Document generated by Confluence on Sep 18, 2005 21:17</font></td>
+			    <td align="center"><font color="grey">Document generated by Confluence on Oct 01, 2006 23:02</font></td>
 		    </tr>
 	    </table>
     </body>

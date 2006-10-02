@@ -18,8 +18,8 @@
 					    This page last changed on Aug 09, 2005 by <font color="#0050B2">mroberts</font>.
 				    </div>
 
-				    <div class="information-block" align='center'><div class='informationMacroPadding'><table cellpadding='5' width='85%' cellspacing='0' class='warningMacro' border='0'><tr><td width='16' valign='top'><img src="/images/icons/emoticons/forbidden.gif" width="16" height="16" align="absmiddle" alt="" border="0"></td><td>
-<p>The Web Dashboard Plugin API is not yet stabilised. If you do write your own plugins it is recommended that you subscribe to the <a href="http://lists.sourceforge.net/mailman/listinfo/ccnet-checkins" title="Visit page outside Confluence">CCNet Checkins Mailing list</a> and watch for changes to the Dashboard project</p></td></tr></table></div></div>
+				    <table cellpadding='5' width='85%' cellspacing='8px' class='warningMacro' border="0" align='center'><colgroup><col width='24'><col></colgroup><tr><td valign='top'><img src="./icons/emoticons/forbidden.gif" width="16" height="16" align="absmiddle" alt="" border="0"></td><td>
+<p>The Web Dashboard Plugin API is not yet stabilised. If you do write your own plugins it is recommended that you subscribe to the <a href="http://lists.sourceforge.net/mailman/listinfo/ccnet-checkins" title="Visit page outside Confluence">CCNet Checkins Mailing list</a> and watch for changes to the Dashboard project</p></td></tr></table>
 
 <p>The <a href="Web Dashboard.html" title="Web Dashboard">Web Dashboard</a> supports custom plugins. This page is documentation for developing your own Dashboard plugins.</p>
 
@@ -33,15 +33,15 @@
 </ul>
 
 
-<h2><a name="DevelopingWebDashboardPlugins-Actions">Actions</a></h2>
+<h2><a name="DevelopingWebDashboardPlugins-Actions"></a>Actions</h2>
 
-<h3><a name="DevelopingWebDashboardPlugins-AboutActions">About Actions</a></h3>
+<h3><a name="DevelopingWebDashboardPlugins-AboutActions"></a>About Actions</h3>
 
 <p>The CruiseControl.NET Web Dashboard includes its own Web Framework implementation. The fundamental 'component' in this framework is an <b>Action</b>. An Action represents a specific interraction between the application and a user. Some features require multiple actions, e.g. one Action to allow a user to edit some fields, and then another to show the results of this.</p>
 
 <p>Your Dashboard Plugin must include at least 1 Action. It can include more than 1, but only 1 will ever be linked directly from the Dashboard menus (the others must be linked by your other actions.)</p>
 
-<h3><a name="DevelopingWebDashboardPlugins-ImplementingActions">Implementing Actions</a></h3>
+<h3><a name="DevelopingWebDashboardPlugins-ImplementingActions"></a>Implementing Actions</h3>
 
 <p>The Actions you write should implement <tt>ICruiseAction</tt>. This has one method on it:</p>
 <ul>
@@ -51,17 +51,17 @@
 
 <p>The responsibilty of an Action's Execute method is 'Given a request, generate a response'. The response is the 'main panel' part of the Dashboard's UI.</p>
 
-<h3><a name="DevelopingWebDashboardPlugins-Definingdependencies">Defining dependencies</a></h3>
+<h3><a name="DevelopingWebDashboardPlugins-Definingdependencies"></a>Defining dependencies</h3>
 
 <p>The CruiseControl.NET Web Dashboard uses a <a href="http://www.martinfowler.com/articles/injection.html" title="Visit page outside Confluence">Constructor Dependency Injection</a> (<b>CDI</b>) pattern to enable classes to define what types they are dependent on. The Dashboard API has a number of types you can depend upon which can do things like return you the currently viewed build log. You can also specify dependencies to your own types. It is recommended that you use interfaces to define responsibilities.</p>
 
 <p>The Dashboard's CDI implementation does not currently allow for runtime configuration. It will use sensible defaults where available. We plan on adding more configuration later.</p>
 
-<h3><a name="DevelopingWebDashboardPlugins-Howtostart">How to start</a></h3>
+<h3><a name="DevelopingWebDashboardPlugins-Howtostart"></a>How to start</h3>
 
 <p>To implement your own actions, its probably best to first look at the source code for the Dashboard's own plugins. These are available in the <tt>ThoughtWorks.CruiseControl.WebDashboard.Plugins</tt> Namespace.</p>
 
-<h2><a name="DevelopingWebDashboardPlugins-SupportClass">Support Class</a></h2>
+<h2><a name="DevelopingWebDashboardPlugins-SupportClass"></a>Support Class</h2>
 
 <p>Once you've written your action(s), your Plugin is almost complete, but you have one more interface, <tt>IPlugin</tt>, to implement. For simple , single-action, plugins you can just implement this interface on the same class as your action, otherwise it must be implemented on another (single) class.</p>
 
@@ -81,13 +81,13 @@
 
 <p>For all of this look at existing implementations to see how CruiseControl.NET defines its own plugins.</p>
 
-<h3><a name="DevelopingWebDashboardPlugins-BuildPlugins">Build Plugins</a></h3>
+<h3><a name="DevelopingWebDashboardPlugins-BuildPlugins"></a>Build Plugins</h3>
 
 <p><b>Build Plugins</b> have a slight complication, in that they must implement the slightly richer interface <tt>IBuildPlugin</tt> rather than <tt>IPlugin</tt>. Most Build Plugins will do this by extending the <tt>ProjectConfigurableBuildPlugin</tt> class, which automatically makes them a <a href="Project Configurable Build Plugin.html" title="Project Configurable Build Plugin">Project Configurable Build Plugin</a> - simple! <img class="emoticon" src="./icons/emoticons/smile.gif" height="20" width="20" align="absmiddle" alt="" border="0"/></p>
 
 <p>Apart from that Build Plugins are identical to other plugins.</p>
 
-<h2><a name="DevelopingWebDashboardPlugins-DeployingyourPlugin">Deploying your Plugin</a></h2>
+<h2><a name="DevelopingWebDashboardPlugins-DeployingyourPlugin"></a>Deploying your Plugin</h2>
 
 <p>To deploy your plugin:</p>
 <ul>
@@ -106,7 +106,7 @@
 				<td height="12" background="border/border_bottom.gif"><img src="border/spacer.gif" width="1" height="1" border="0"/></td>
 			</tr>
 		    <tr>
-			    <td align="center"><font color="grey">Document generated by Confluence on Sep 18, 2005 21:14</font></td>
+			    <td align="center"><font color="grey">Document generated by Confluence on Oct 01, 2006 23:02</font></td>
 		    </tr>
 	    </table>
     </body>

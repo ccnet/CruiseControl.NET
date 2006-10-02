@@ -1,0 +1,107 @@
+<html>
+    <head>
+        <title>CruiseControl.NET : How to force a CCNet build from a NAnt script</title>
+	    <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">	    
+    </head>
+
+    <body>
+	    <table class="pagecontent" border="0" cellpadding="0" cellspacing="0" width="100%" bgcolor="#ffffff">
+		    <tr>
+			    <td valign="top" class="pagebody">
+				    <div class="pageheader">
+					    <span class="pagetitle">
+                            CruiseControl.NET : How to force a CCNet build from a NAnt script
+                                                    </span>
+				    </div>
+				    <div class="pagesubheading">
+					    This page last changed on Jan 20, 2006 by <font color="#0050B2">thibaut.barrere@gmail.com</font>.
+				    </div>
+
+				    <p>Sometimes (eg: if you want to build a list of projects in sequence) it can be convenient to trigger builds from a NAnt script.</p>
+
+<p>For that purpose one can use the launchccnetbuild NAnt task (source available here: <a href="http://confluence.public.thoughtworks.org//download/attachments/4993/LaunchCruiseControlBuildTask.cs?version=1" title="LaunchCruiseControlBuildTask.cs attached to How to force a CCNet build from a NAnt script">LaunchCruiseControlBuildTask.cs</a>).</p>
+
+<h3><a name="HowtoforceaCCNetbuildfromaNAntscript-Example%3A"></a>Example:</h3>
+
+<div class="code"><div class="codeContent">
+<pre class="code-xml"><span class="code-tag">&lt;launchccnetbuild serverurl=<span class="code-quote">"tcp://buildserver:21234/CruiseManager.rem"</span> projectname=<span class="code-quote">"myproject"</span> /&gt;</span></pre>
+</div></div>
+
+<p>The task works synchronously: it polls the server periodically to check a given project status. A build exception is raised if the build times out or is not successful (although this behavior could easily be altered).</p>
+
+<p>To build a list of projects sequentially and stop the script whenever one project fails to build, you can use something like :</p>
+
+<div class="code"><div class="codeContent">
+<pre class="code-xml"><span class="code-tag">&lt;target name=<span class="code-quote">"build.all"</span>&gt;</span>
+   <span class="code-tag">&lt;property name=<span class="code-quote">"serverurl"</span> value=<span class="code-quote">"tcp://buildserver:21234/CruiseManager.rem"</span> /&gt;</span>
+   <span class="code-tag">&lt;launchccnetbuild serverurl=<span class="code-quote">"${serverurl}"</span> projectname=<span class="code-quote">"myproject"</span> /&gt;</span>
+   <span class="code-tag">&lt;launchccnetbuild serverurl=<span class="code-quote">"${serverurl}"</span> projectname=<span class="code-quote">"mysecondproject"</span> /&gt;</span>
+   <span class="code-tag">&lt;launchccnetbuild serverurl=<span class="code-quote">"${serverurl}"</span> projectname=<span class="code-quote">"mythirdproject"</span> /&gt;</span>
+<span class="code-tag">&lt;/target&gt;</span></pre>
+</div></div>
+
+<h3><a name="HowtoforceaCCNetbuildfromaNAntscript-ConfigurationElements%3A"></a>Configuration Elements:</h3>
+
+<table class='confluenceTable'><tbody>
+<tr>
+<th class='confluenceTh'> Attribute </th>
+<th class='confluenceTh'> Description </th>
+<th class='confluenceTh'> Type </th>
+<th class='confluenceTh'> Required</th>
+<th class='confluenceTh'> Default </th>
+</tr>
+<tr>
+<td class='confluenceTd'> serverurl </td>
+<td class='confluenceTd'> The url of the remote CruiseControl.Net server hosting the project. </td>
+<td class='confluenceTd'> string </td>
+<td class='confluenceTd'> true </td>
+<td class='confluenceTd'> N/A </td>
+</tr>
+<tr>
+<td class='confluenceTd'> projectname </td>
+<td class='confluenceTd'> The name of the project to build. </td>
+<td class='confluenceTd'> string </td>
+<td class='confluenceTd'> true </td>
+<td class='confluenceTd'> N/A </td>
+</tr>
+<tr>
+<td class='confluenceTd'> timeoutinseconds </td>
+<td class='confluenceTd'> After that amount of time, a build exception will be raised. </td>
+<td class='confluenceTd'> int</td>
+<td class='confluenceTd'> false </td>
+<td class='confluenceTd'> 1800 </td>
+</tr>
+<tr>
+<td class='confluenceTd'> pollinginterval </td>
+<td class='confluenceTd'> How many seconds between each project status check. </td>
+<td class='confluenceTd'> int </td>
+<td class='confluenceTd'> false </td>
+<td class='confluenceTd'> 5 </td>
+</tr>
+</tbody></table>
+
+				    					    <br/>
+                        <div class="tabletitle">
+                            <a name="attachments">Attachments:</a>
+                        </div>
+
+                        <div class="greybox" align="left">
+                                                            <img src="icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="How to force a CCNet build from a NAnt script_attachments/LaunchCruiseControlBuildTask.cs">LaunchCruiseControlBuildTask.cs</a> (text/plain)
+                                <br/>
+                                                    </div>
+				    
+                    			    </td>
+		    </tr>
+	    </table>
+	    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+			<tr>
+				<td height="12" background="border/border_bottom.gif"><img src="border/spacer.gif" width="1" height="1" border="0"/></td>
+			</tr>
+		    <tr>
+			    <td align="center"><font color="grey">Document generated by Confluence on Oct 01, 2006 23:02</font></td>
+		    </tr>
+	    </table>
+    </body>
+</html>

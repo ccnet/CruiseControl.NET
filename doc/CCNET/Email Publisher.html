@@ -15,12 +15,16 @@
                                                     </span>
 				    </div>
 				    <div class="pagesubheading">
-					    This page last changed on Jul 19, 2005 by <font color="#0050B2">mroberts</font>.
+					    This page last changed on Aug 15, 2006 by <font color="#0050B2">orogers</font>.
 				    </div>
 
 				    <p>The email publisher can be used to send email to any number of users. It is common to include one user who gets an email for every build and then also send email to every developer who checked code in for this build. </p>
 
 <p><img class="emoticon" src="./icons/emoticons/information.gif" height="16" width="16" align="absmiddle" alt="" border="0"/> People tend to prefer to use <a href="CCTray.html" title="CCTray">CCTray</a> rather than email for instant notification these days.</p>
+
+<table cellpadding='5' width='85%' cellspacing='8px' class='noteMacro' border="0" align='center'><colgroup><col width='24'><col></colgroup><tr><td valign='top'><img src="./icons/emoticons/warning.gif" width="16" height="16" align="absmiddle" alt="" border="0"></td><td>Make sure that all of the Merge Publishers, along with the <a href="Xml Log Publisher.html" title="Xml Log Publisher">Xml Log Publisher</a> task are done before the <tt>&lt;email&gt;</tt> publisher, or else you won't be able to include output from the build in the email.</td></tr></table>
+
+<table cellpadding='5' width='85%' cellspacing='8px' class='noteMacro' border="0" align='center'><colgroup><col width='24'><col></colgroup><tr><td valign='top'><img src="./icons/emoticons/warning.gif" width="16" height="16" align="absmiddle" alt="" border="0"></td><td>A common mistake is to put the email task in the &lt;tasks&gt; section instead of the &lt;publishers&gt; section.  If an error occurs in the &lt;tasks&gt; section, the remaining tasks in that section are skipped, and CC.Net goes right to the &lt;publishers&gt; section.  So if you put the &lt;email&gt; tasks in the &lt;tasks&gt; section, you'll never get any failure messages.</td></tr></table>
 
 <div class="code"><div class="codeContent">
 <pre class="code-xml"><span class="code-tag">&lt;email from=<span class="code-quote">"buildmaster@mycompany.com"</span> mailhost=<span class="code-quote">"smtp.mycompany.com"</span> includeDetails=<span class="code-quote">"TRUE"</span>&gt;</span>
@@ -35,9 +39,9 @@
 <span class="code-tag">&lt;/email&gt;</span></pre>
 </div></div>
 
-<h3><a name="EmailPublisher-ConfigurationElements%3A">Configuration Elements:</a></h3>
+<h3><a name="EmailPublisher-ConfigurationElements%3A"></a>Configuration Elements:</h3>
 
-<table class='confluenceTable'>
+<table class='confluenceTable'><tbody>
 <tr>
 <th class='confluenceTh'> Node </th>
 <th class='confluenceTh'> Description </th>
@@ -80,11 +84,11 @@
 <td class='confluenceTd'> false </td>
 <td class='confluenceTd'> n/a </td>
 </tr>
-</table>
+</tbody></table>
 
-<h4><a name="EmailPublisher-UserConfigurationElement%3A">User Configuration Element:</a></h4>
+<h4><a name="EmailPublisher-UserConfigurationElement%3A"></a>User Configuration Element:</h4>
 
-<table class='confluenceTable'>
+<table class='confluenceTable'><tbody>
 <tr>
 <th class='confluenceTh'> Node </th>
 <th class='confluenceTh'> Description </th>
@@ -101,7 +105,7 @@
 <td class='confluenceTd'> group </td>
 <td class='confluenceTd'> The group that the user is in. This needs to match the name of one &lt;group&gt; elements. </td>
 <td class='confluenceTd'> string </td>
-<td class='confluenceTd'> true </td>
+<td class='confluenceTd'> false </td>
 </tr>
 <tr>
 <td class='confluenceTd'> address </td>
@@ -109,11 +113,15 @@
 <td class='confluenceTd'> string </td>
 <td class='confluenceTd'> true </td>
 </tr>
-</table>
+</tbody></table>
 
-<h4><a name="EmailPublisher-GroupConfigurationElement%3A">Group Configuration Element:</a></h4>
+<p>Users do not need to belong to a group.  If they are not in a group then they will only receive emails when they have committed changes that are part of the current build.  They will receive an email regardless of whether the build succeeds or fails.  </p>
 
-<table class='confluenceTable'>
+<table cellpadding='5' width='85%' cellspacing='8px' class='noteMacro' border="0" align='center'><colgroup><col width='24'><col></colgroup><tr><td valign='top'><img src="./icons/emoticons/warning.gif" width="16" height="16" align="absmiddle" alt="" border="0"></td><td> It is essential that the value of the name attribute matches the name for the user in the sourcecontrol system.  This is the only way that CCNet can reconcile the user that committed their changes with the address to send the email to.</td></tr></table>
+
+<h4><a name="EmailPublisher-GroupConfigurationElement%3A"></a>Group Configuration Element:</h4>
+
+<table class='confluenceTable'><tbody>
 <tr>
 <th class='confluenceTh'> Node </th>
 <th class='confluenceTh'> Description </th>
@@ -128,7 +136,7 @@
 </tr>
 <tr>
 <td class='confluenceTd'> notification </td>
-<td class='confluenceTd'> Determines when to send email to this group.  There are two possible notification values: 
+<td class='confluenceTd'> Determines when to send email to this group.  There are three possible notification values: 
 <ul>
 	<li>"always" - send email when any build occurs</li>
 	<li>"change" - send email when the status of the build changes (e.g. from 'passed' to 'failed').</li>
@@ -138,9 +146,9 @@
 <td class='confluenceTd'> string </td>
 <td class='confluenceTd'> true </td>
 </tr>
-</table>
+</tbody></table>
 
-<h3><a name="EmailPublisher-Troubleshooting">Troubleshooting</a></h3>
+<h3><a name="EmailPublisher-Troubleshooting"></a>Troubleshooting</h3>
 
 <p>You may experience an exception that looks like this when the ccnet server tries to send an email:</p>
 <div class="code"><div class="codeContent">
@@ -150,6 +158,8 @@
 </div></div>
 <p>This is likely due to not having CDO properly installed on the build server.  To fix this, make sure that you have some sort of email client installed  (Outlook Express is probably there by default).  Outlook Express doesn't actually initialise CDO until you actually open it, so try and use the client to send an email just to verify that everything works.</p>
 
+<p>You can find further troubleshooting hints on the <a href="http://www.systemwebmail.com/faq/4.3.9.aspx" title="Visit page outside Confluence">System.Web.Mail faq site</a></p>
+
 				    
                                             <div class="tabletitle">
                             <a name="comments">Comments:</a>
@@ -158,51 +168,6 @@
                         <table border="0" width="100%">
                                                         <tr>
                                 <td >
-                                    <a name="comment-469"></a>
-                                    <font class="smallfont"><p>Are there attributes for specifying login for the SMTP server?</p>
-
-<p>chrs,<br/>
-Mads Nissen<br/>
-mads.nissen@objectware.no</p></font>
-                                    <div align="left" class="smallfont" style="color: #666666; width: 98%; margin-bottom: 10px;">
-                                        <img src="icons/comment_16.gif" height="16" width="16" border="0" align="absmiddle"/>
-                                        Posted by  at Apr 23, 2004 02:44
-                                    </div>
-                                </td>
-                            </tr>
-                                                        <tr>
-                                <td  style="border-top: 1px dashed #666666">
-                                    <a name="comment-470"></a>
-                                    <font class="smallfont"><p>No - we're using the standard email classes in .NET. In .NET 1.0 there is no way of assigning authenticated SMTP options, but in .NET 1.1 there is. At the moment we're trying to stay totally compatible between the 2 .NET versions so won't add this option right now.<br/>
-A work around is to setup the Windows SMTP Server on the same machine as your build server (and use appropriate security options.) It can relay to your actual mail server, and your build server can then use the SMTP server on localhost.</p></font>
-                                    <div align="left" class="smallfont" style="color: #666666; width: 98%; margin-bottom: 10px;">
-                                        <img src="icons/comment_16.gif" height="16" width="16" border="0" align="absmiddle"/>
-                                        Posted by mroberts at Apr 23, 2004 03:40
-                                    </div>
-                                </td>
-                            </tr>
-                                                        <tr>
-                                <td  style="border-top: 1px dashed #666666">
-                                    <a name="comment-621"></a>
-                                    <font class="smallfont"><p>I'm a newbie with cruisecontrol.net. How do I know where the projectURL (cruise control.net web app) is located? I will be using email publisher.</p></font>
-                                    <div align="left" class="smallfont" style="color: #666666; width: 98%; margin-bottom: 10px;">
-                                        <img src="icons/comment_16.gif" height="16" width="16" border="0" align="absmiddle"/>
-                                        Posted by  at May 11, 2004 08:14
-                                    </div>
-                                </td>
-                            </tr>
-                                                        <tr>
-                                <td  style="border-top: 1px dashed #666666">
-                                    <a name="comment-624"></a>
-                                    <font class="smallfont"><p>the projectURL property should point to the url at which you installed the CruiseControl.NET web app.  so if you installed the web app on server: foo using the virtual path: bar, you should set the projectURL property to <a href="http://foo/bar" title="Visit page outside Confluence">&#104;ttp://foo/bar</a>.  am i correctly understanding your question?</p></font>
-                                    <div align="left" class="smallfont" style="color: #666666; width: 98%; margin-bottom: 10px;">
-                                        <img src="icons/comment_16.gif" height="16" width="16" border="0" align="absmiddle"/>
-                                        Posted by orogers at May 12, 2004 03:50
-                                    </div>
-                                </td>
-                            </tr>
-                                                        <tr>
-                                <td  style="border-top: 1px dashed #666666">
                                     <a name="comment-868"></a>
                                     <font class="smallfont"><p>It would be nice if you added an attribute to set the Reply-To header. That way email could be marked as being "From" ccnet-builder@company.com without there actually being such an address. Replies would be sent to the project leader, for instance. It would be misleading to have the email actually come "From" his address; he is not sending these mails, he should just get any replies to them.</p>
 
@@ -218,11 +183,11 @@ A work around is to setup the Windows SMTP Server on the same machine as your bu
                                                         <tr>
                                 <td  style="border-top: 1px dashed #666666">
                                     <a name="comment-876"></a>
-                                    <font class="smallfont"><p>In the example, the projectUrl is <a href="http://buildserver/myproject" title="Visit page outside Confluence">&#104;ttp://buildserver/myproject</a> which sounds like it points to the build deliverables, rather than the CC.Net webapp displaying information about the build.</p>
+                                    <font class="smallfont"><p>In the example, the projectUrl is <a href="http://buildserver/myproject" title="Visit page outside Confluence">http://buildserver/myproject</a> which sounds like it points to the build deliverables, rather than the CC.Net webapp displaying information about the build.</p>
 
 <p>But clearly the CC.Net webapp is what was intended (since CC.Net tacks ?log=logXXX.xml onto the URL to select the build to display; this parameter has no meaning for the app I'm building).</p>
 
-<p>So shouldn't projectUrl rather be <a href="http://mybuildserver/ccnet" title="Visit page outside Confluence">&#104;ttp://mybuildserver/ccnet</a> in this example? That would be in sync with the webURL used in the ccnet.config page, <a href="http://mybuildserver/ccnet" title="Visit page outside Confluence">&#104;ttp://mybuildserver/ccnet</a></p>
+<p>So shouldn't projectUrl rather be <a href="http://mybuildserver/ccnet" title="Visit page outside Confluence">http://mybuildserver/ccnet</a> in this example? That would be in sync with the webURL used in the ccnet.config page, <a href="http://mybuildserver/ccnet" title="Visit page outside Confluence">http://mybuildserver/ccnet</a></p>
 
 <p>Come to think of it, that begs the question: why is the URL to the CC.Net webapp being given again here? The same URL is already specified for each project, in the webUrl property, right?</p></font>
                                     <div align="left" class="smallfont" style="color: #666666; width: 98%; margin-bottom: 10px;">
@@ -266,7 +231,7 @@ A work around is to setup the Windows SMTP Server on the same machine as your bu
 				<td height="12" background="border/border_bottom.gif"><img src="border/spacer.gif" width="1" height="1" border="0"/></td>
 			</tr>
 		    <tr>
-			    <td align="center"><font color="grey">Document generated by Confluence on Sep 18, 2005 21:14</font></td>
+			    <td align="center"><font color="grey">Document generated by Confluence on Oct 01, 2006 23:02</font></td>
 		    </tr>
 	    </table>
     </body>

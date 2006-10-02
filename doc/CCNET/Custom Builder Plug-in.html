@@ -15,18 +15,18 @@
                                                     </span>
 				    </div>
 				    <div class="pagesubheading">
-					    This page last changed on Jun 24, 2005 by <font color="#0050B2">orogers</font>.
+					    This page last changed on Sep 25, 2006 by <font color="#0050B2">gfeldman</font>.
 				    </div>
 
-				    
-<h3><a name="CustomBuilderPlug-in-Steps%3A">Steps:</a></h3>
+				    <h3><a name="CustomBuilderPlug-in-Steps%3A"></a>Steps:</h3>
+
 <ol>
 	<li>Create a Class Library project to build the assembly that will contain your custom builder plug-in. The assembly that it produces should be named: '<em>ccnet.*.plugin.dll</em>' (where the star represents the name you choose).</li>
-	<li>Add your new customer builder class.</li>
-	<li>The class must implement the <em>ThoughtWorks.CruiseControl.Core.ITask</em> interface (found in the ccnet.core assembly)</li>
-	<li>Mark up your class with the <a href="NetReflector.html" title="NetReflector">NetReflector</a> <em>ReflectorType</em> attribute. The <em>name</em> argument supplied to the attribute is the name of the element/attribute that will appear in the configuration file</li>
-	<li>Add whatever configuration properties you need, marking them up with <a href="NetReflector.html" title="NetReflector">NetReflector</a> <em>ReflectorProperty</em> attributes accordingly.</li>
-	<li>Implement the <em>Run</em> method.  The supplied <em>IntegrationResult</em> should provide you with everything that you need to know about the current build.</li>
+	<li>Add your new custom builder class.</li>
+	<li>The class must implement the <em>ThoughtWorks.CruiseControl.Core.ITask</em> interface (found in the ccnet.core assembly).</li>
+	<li>Mark your class with the <a href="NetReflector.html" title="NetReflector">NetReflector</a> <em>ReflectorType</em> attribute. The <em>name</em> argument supplied to the attribute is the name of the element/attribute that will appear in the configuration file.</li>
+	<li>Add any configuration properties that you need, marking them with the <a href="NetReflector.html" title="NetReflector">NetReflector</a> <em>ReflectorProperty</em> attributes accordingly. Note that the attribute names are case sensitive and must match exactly in the configuration.</li>
+	<li>Implement the <em>Run</em> method. The supplied <em>IntegrationResult</em> should provide you with everything that you need to know about the current build.</li>
 	<li>Compile the assembly.</li>
 	<li>Copy the assembly into the folder containing the CruiseControl.NET assemblies (or the current directory that you are running the ccnet server from).</li>
 	<li>Modify your <em>ccnet.config</em> file in accordance with the sample config file below.</li>
@@ -35,7 +35,7 @@
 
 <p>For more information, please take a look at the sample code contained in the folder <em>/docs/developer/samples</em>.</p>
 
-<h3><a name="CustomBuilderPlug-in-SampleBuilderClass">Sample Builder Class</a></h3>
+<h3><a name="CustomBuilderPlug-in-SampleBuilderClass"></a>Sample Builder Class</h3>
 
 <div class="code"><div class="codeContent">
 <pre class="code-java">using <span class="code-object">System</span>;
@@ -44,7 +44,7 @@ using ThoughtWorks.CruiseControl.Core;
 
 namespace ThoughtWorks.CruiseControl.Sample.Builder
 {
-	[ReflectorType(<span class="code-quote">"myBuilder"</span>)]
+	[ReflectorType(<span class="code-quote">"mybuilder"</span>)]
 	<span class="code-keyword">public</span> class NAntBuilder : ITask
 	{
 		<span class="code-keyword">public</span> void Run(IntegrationResult result)
@@ -55,14 +55,16 @@ namespace ThoughtWorks.CruiseControl.Sample.Builder
 }</pre>
 </div></div>
 
-<h3><a name="CustomBuilderPlug-in-SampleConfigFile">Sample Config File</a></h3>
+<h3><a name="CustomBuilderPlug-in-SampleConfigFile"></a>Sample Config File</h3>
+
 <div class="code"><div class="codeContent">
 <pre class="code-java">&lt;cruisecontrol&gt;
 	&lt;project name=<span class="code-quote">"myproject"</span>&gt;
-		&lt;builder type=<span class="code-quote">"mybuilder"</span>&gt;
-			&lt;!-- include custom builder properties here --&gt;
-		&lt;/builder&gt;
-		&lt;!-- include other project elements here --&gt;
+		&lt;tasks&gt;
+			&lt;mybuilder&gt;
+				&lt;!-- include custom builder properties here --&gt;
+			&lt;/mybuilder&gt;
+		&lt;/tasks&gt;
 	&lt;/project&gt;
 &lt;/cruisecontrol&gt;</pre>
 </div></div>
@@ -99,7 +101,7 @@ namespace ThoughtWorks.CruiseControl.Sample.Builder
                                 <td  style="border-top: 1px dashed #666666">
                                     <a name="comment-1271"></a>
                                     <font class="smallfont"><p>Oh, my email is nospamplease75@yahoo.com.  I asked the last question.<br/>
-<a href="http://haacked.com/" title="Visit page outside Confluence">&#104;ttp://haacked.com/</a></p></font>
+<a href="http://haacked.com/" title="Visit page outside Confluence">http://haacked.com/</a></p></font>
                                     <div align="left" class="smallfont" style="color: #666666; width: 98%; margin-bottom: 10px;">
                                         <img src="icons/comment_16.gif" height="16" width="16" border="0" align="absmiddle"/>
                                         Posted by  at Aug 27, 2004 14:41
@@ -115,7 +117,7 @@ namespace ThoughtWorks.CruiseControl.Sample.Builder
 				<td height="12" background="border/border_bottom.gif"><img src="border/spacer.gif" width="1" height="1" border="0"/></td>
 			</tr>
 		    <tr>
-			    <td align="center"><font color="grey">Document generated by Confluence on Sep 18, 2005 21:14</font></td>
+			    <td align="center"><font color="grey">Document generated by Confluence on Oct 01, 2006 23:02</font></td>
 		    </tr>
 	    </table>
     </body>

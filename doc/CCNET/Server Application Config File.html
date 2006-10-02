@@ -15,7 +15,7 @@
                                                     </span>
 				    </div>
 				    <div class="pagesubheading">
-					    This page last changed on Apr 01, 2005 by <font color="#0050B2">mroberts</font>.
+					    This page last changed on Oct 02, 2005 by <font color="#0050B2">orogers</font>.
 				    </div>
 
 				    <p>Various aspects of the CruiseControl.NET Server are configured in the application configuration file. The name of this file depends on how you are running the server:</p>
@@ -29,36 +29,36 @@
 
 <p>This file is a standard .NET application config file. Parts of it that are specific to CruiseControl.NET are as follows:</p>
 
-<a name="ServerApplicationConfigFile-xslFiles"></a>
-<h4><a name="ServerApplicationConfigFile-XSLFileconfiguration">XSL File configuration</a></h4>
+<p><a name="ServerApplicationConfigFile-xslFiles"></a></p>
+<h4><a name="ServerApplicationConfigFile-XSLFileconfiguration"></a>XSL File configuration</h4>
 
 <p>The <tt>&lt;xslFiles&gt;</tt> section defines what xsl files are included for transforming the build file for reporting behaviour within the server. If you want to include extra xsl files (for example if you have your own build behaviours), then add them here.</p>
 
-<a name="ServerApplicationConfigFile-remoting"></a>
-<h4><a name="ServerApplicationConfigFile-RemotingConfiguration">Remoting Configuration</a></h4>
+<p><a name="ServerApplicationConfigFile-remoting"></a></p>
+<h4><a name="ServerApplicationConfigFile-RemotingConfiguration"></a>Remoting Configuration</h4>
 
 <p>The CruiseControl.NET Server can open a remoting server port so that other applications in the CCNet suite can communicate with it (<a href="CCTray.html" title="CCTray">CCTray</a>, <a href="Web Dashboard.html" title="Web Dashboard">Web Dashboard</a>). By default CCNet listens on port 21234, but this can be changed under the <tt>&lt;system.runtime.remoting&gt;</tt> section.</p>
 
 <p><img class="emoticon" src="./icons/emoticons/information.gif" height="16" width="16" align="absmiddle" alt="" border="0"/> <b>You'll need to change this value if you want to run multiple CruiseControl.NET servers on 1 machine</b></p>
 
-<a name="ServerApplicationConfigFile-logging"></a>
-<h4><a name="ServerApplicationConfigFile-Loggingconfiguration">Logging configuration</a></h4>
+<p><a name="ServerApplicationConfigFile-logging"></a></p>
+<h4><a name="ServerApplicationConfigFile-LoggingConfiguration"></a>Logging Configuration</h4>
 
 <p>Logging of the Server activities (not the build logs themselves) is implemented using .NET Tracing, and this is configurable in the <tt>&lt;system.diagnostics&gt;</tt> section of the application config file. In this section you can change log level (the <tt>&lt;switches&gt;</tt> section), and where log data is sent to (the <tt>&lt;trace&gt;</tt> section).</p>
 
 <p>If you are using a <tt>LogFileTraceListener</tt> in the <tt>&lt;trace&gt;</tt> section, then you can configure the server log file name there. This same file name should be set as the value for the <tt>ServerLogFilePath</tt> key in the <tt>&lt;appSettings&gt;</tt> section. This value is used when remote applications request to see the server log file. The number of lines returned from the end of the server log file to the remote application is specified by the <tt>ServerLogFileLines</tt> value.</p>
 
-<div class="information-block" align='center'><div class='informationMacroPadding'><table cellpadding='5' width='85%' cellspacing='0' class='warningMacro' border='0'><tr><td width='16' valign='top'><img src="/images/icons/emoticons/forbidden.gif" width="16" height="16" align="absmiddle" alt="" border="0"></td><td>
-<p>Note that with some log levels certain potentially sensitive details may be logged, including source control passwords. Make sure you check your log file and set the log level appropriately.</p></td></tr></table></div></div>
+<table cellpadding='5' width='85%' cellspacing='8px' class='warningMacro' border="0" align='center'><colgroup><col width='24'><col></colgroup><tr><td valign='top'><img src="./icons/emoticons/forbidden.gif" width="16" height="16" align="absmiddle" alt="" border="0"></td><td>
+<p>Note that with some log levels certain potentially sensitive details may be logged, including source control passwords. Make sure you check your log file and set the log level appropriately.</p></td></tr></table>
 
-<a name="ServerApplicationConfigFile-service"></a>
-<h4><a name="ServerApplicationConfigFile-ServiceSpecificSettings">Service Specific Settings</a></h4>
+<p><a name="ServerApplicationConfigFile-service"></a></p>
+<h4><a name="ServerApplicationConfigFile-ServiceSpecificSettings"></a>Service Specific Settings</h4>
 
 <p>If you are running the console application, you have the option of passing in various arguments on the command line. If however you are using the Service application you can't do this, but there are extra options you can set in the <tt>&lt;appSettings&gt;</tt> section of the config file, as follows:</p>
 
-<table class='confluenceTable'>
+<table class='confluenceTable'><tbody>
 <tr>
-<th class='confluenceTh'> key </th>
+<th class='confluenceTh'> Key </th>
 <th class='confluenceTh'> Equivalent startup parameter in <a href="The Server Console Application.html" title="The Server Console Application">The Server Console Application</a> </th>
 </tr>
 <tr>
@@ -69,7 +69,25 @@
 <td class='confluenceTd'> <tt>remoting</tt> </td>
 <td class='confluenceTd'> <tt>remoting</tt> </td>
 </tr>
-</table>
+</tbody></table>
+
+<h4><a name="ServerApplicationConfigFile-GeneralConfigurationSettings"></a>General Configuration Settings</h4>
+
+<p>The table below describes general configuration settings that are in the <b>appSettings</b> section of the application configuration file.</p>
+
+<table class='confluenceTable'><tbody>
+<tr>
+<th class='confluenceTh'> Key </th>
+<th class='confluenceTh'> Description </th>
+<th class='confluenceTh'> Default Value </th>
+</tr>
+<tr>
+<td class='confluenceTd'>WatchConfigFile</td>
+<td class='confluenceTd'>Turns on/off monitoring of the <b>ccnet.config</b> file for changes.  By default, the CCNet server will monitor this file and will automatically restart the server and reload the updated configuration settings.  Setting this value to false will disable this feature.</td>
+<td class='confluenceTd'>True</td>
+</tr>
+</tbody></table>
+
 
 				    
                     			    </td>
@@ -80,7 +98,7 @@
 				<td height="12" background="border/border_bottom.gif"><img src="border/spacer.gif" width="1" height="1" border="0"/></td>
 			</tr>
 		    <tr>
-			    <td align="center"><font color="grey">Document generated by Confluence on Sep 18, 2005 21:17</font></td>
+			    <td align="center"><font color="grey">Document generated by Confluence on Oct 01, 2006 23:02</font></td>
 		    </tr>
 	    </table>
     </body>

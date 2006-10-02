@@ -18,30 +18,30 @@
 					    This page last changed on May 19, 2005 by <font color="#0050B2">orogers</font>.
 				    </div>
 
-				    <h2><a name="CCNet0.9.1ReleaseNotes-Overview">Overview</a></h2>
+				    <h2><a name="CCNet0.9.1ReleaseNotes-Overview"></a>Overview</h2>
 
-<h4><a name="CCNet0.9.1ReleaseNotes-Configuration">Configuration</a></h4>
+<h4><a name="CCNet0.9.1ReleaseNotes-Configuration"></a>Configuration</h4>
 
-<div class="information-block" align='center'><div class='informationMacroPadding'><table cellpadding='5' width='85%' cellspacing='0' class='warningMacro' border='0'><tr><td width='16' valign='top'><img src="/images/icons/emoticons/forbidden.gif" width="16" height="16" align="absmiddle" alt="" border="0"></td><td><b class="strong">Important Changes</b><br />
-<p>If a tasks included in the <b>&lt;tasks&gt;</b> section fails then none of the subsequent tasks will be executed.  This is useful if you have multiple build or test tasks that you want to execute and you want to halt the build after the first failure.  However, if you currently have tasks included in the <b>&lt;tasks&gt;</b> section that you want to run with every build (such as the Merge File Task, you should move it into the <b>&lt;publishers&gt;</b> section.  The <b>&lt;publishers&gt;</b> section can now contain any CCNet task.  All publisher tasks are guaranteed to be executed with each build, regardless of whether the build fails or succeeds.</p></td></tr></table></div></div>
+<table cellpadding='5' width='85%' cellspacing='8px' class='warningMacro' border="0" align='center'><colgroup><col width='24'><col></colgroup><tr><td valign='top'><img src="./icons/emoticons/forbidden.gif" width="16" height="16" align="absmiddle" alt="" border="0"></td><td><b class="strong">Important Changes</b><br />
+<p>If a tasks included in the <b>&lt;tasks&gt;</b> section fails then none of the subsequent tasks will be executed.  This is useful if you have multiple build or test tasks that you want to execute and you want to halt the build after the first failure.  However, if you currently have tasks included in the <b>&lt;tasks&gt;</b> section that you want to run with every build (such as the Merge File Task, you should move it into the <b>&lt;publishers&gt;</b> section.  The <b>&lt;publishers&gt;</b> section can now contain any CCNet task.  All publisher tasks are guaranteed to be executed with each build, regardless of whether the build fails or succeeds.</p></td></tr></table>
 
 <p>(CCNET-324) When the CruiseControl.NET server starts up, it now provides warning message if the <b>ccnet.config</b> file contains invalid or unused elements.  If you receive such warning messages, please make sure that you correct your <b>ccnet.config</b> file to guarantee that everything is working properly.  Please consult the installed documentation for the correct configuration information.</p>
 
-<h4><a name="CCNet0.9.1ReleaseNotes-SourceControlProviders">Source Control Providers</a></h4>
+<h4><a name="CCNet0.9.1ReleaseNotes-SourceControlProviders"></a>Source Control Providers</h4>
 
 <p>Numerous changes have been made to the PVCS (CCNET-274), CVS (CCNET-123), ClearCase (CCNET-382, CCNET-409) and Vault source control providers.  PVCS now works with v8.  CVS supports a faster way of detecting changes and updating source &#8211; try using the <b>&lt;useHistory&gt;</b> element. ClearCase now has AutoGetSource functionality.</p>
 
-<h4><a name="CCNet0.9.1ReleaseNotes-CCService">CCService</a></h4>
+<h4><a name="CCNet0.9.1ReleaseNotes-CCService"></a>CCService</h4>
 
 <p>(CCNET-33) The CruiseControl.NET service now supports installing multiple versions</p>
 
-<h4><a name="CCNet0.9.1ReleaseNotes-WebDashboard">WebDashboard</a></h4>
+<h4><a name="CCNet0.9.1ReleaseNotes-WebDashboard"></a>WebDashboard</h4>
 
 <p>(CCNET-420) A new report is available via the WebDashboard that shows timing information for the NAnt build.  Requires NAnt 0.85 RC3 to run.</p>
 
-<h2><a name="CCNet0.9.1ReleaseNotes-JiraIssues">Jira Issues</a></h2>
+<h2><a name="CCNet0.9.1ReleaseNotes-JiraIssues"></a>Jira Issues</h2>
 
-<h4><a name="CCNet0.9.1ReleaseNotes-Bug">Bug</a></h4>
+<h4><a name="CCNet0.9.1ReleaseNotes-Bug"></a>Bug</h4>
 <ul>
 	<li>CCNET-109 - Multiple version control provider doesn't work with PVCS</li>
 	<li>CCNET-274 - PVCS Scripts overwrite one another when multiple projects are configured</li>
@@ -57,7 +57,7 @@
 </ul>
 
 
-<h4><a name="CCNet0.9.1ReleaseNotes-NewFeature">New Feature</a></h4>
+<h4><a name="CCNet0.9.1ReleaseNotes-NewFeature"></a>New Feature</h4>
 <ul>
 	<li>CCNET-33 - Allow service name to be configured (Bill Simser)</li>
 	<li>CCNET-123 - Allow CVS plugin to be more configurable</li>
@@ -66,13 +66,13 @@
 </ul>
 
 
-<h4><a name="CCNet0.9.1ReleaseNotes-Task">Task</a></h4>
+<h4><a name="CCNet0.9.1ReleaseNotes-Task"></a>Task</h4>
 <ul>
 	<li>CCNET-391 - Delete net send Publisher</li>
 </ul>
 
 
-<h4><a name="CCNet0.9.1ReleaseNotes-Improvement">Improvement</a></h4>
+<h4><a name="CCNet0.9.1ReleaseNotes-Improvement"></a>Improvement</h4>
 <ul>
 	<li>CCNET-324 - Invalid configuration elements should be notified</li>
 	<li>CCNET-360 - CVS should support timeout</li>
@@ -95,7 +95,7 @@
 				<td height="12" background="border/border_bottom.gif"><img src="border/spacer.gif" width="1" height="1" border="0"/></td>
 			</tr>
 		    <tr>
-			    <td align="center"><font color="grey">Document generated by Confluence on Sep 18, 2005 21:14</font></td>
+			    <td align="center"><font color="grey">Document generated by Confluence on Oct 01, 2006 23:03</font></td>
 		    </tr>
 	    </table>
     </body>

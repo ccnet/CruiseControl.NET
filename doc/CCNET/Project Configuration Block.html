@@ -15,28 +15,25 @@
                                                     </span>
 				    </div>
 				    <div class="pagesubheading">
-					    This page last changed on Sep 13, 2005 by <font color="#0050B2">orogers</font>.
+					    This page last changed on Oct 01, 2006 by <font color="#0050B2">orogers</font>.
 				    </div>
 
 				    <p>A <tt>&lt;project&gt;</tt> block defines all the configuration for one project running in a CruiseControl.NET server</p>
 
-<h3><a name="ProjectConfigurationBlock-Examples">Examples</a></h3>
+<h3><a name="ProjectConfigurationBlock-Examples"></a>Examples</h3>
 
 <p>Minimalist example:</p>
-
 <div class="code"><div class="codeContent">
 <pre class="code-xml"><span class="code-tag">&lt;project name=<span class="code-quote">"Project 1"</span> /&gt;</span></pre>
 </div></div>
-
 <p>Full example:</p>
-
 <div class="code"><div class="codeContent">
 <pre class="code-xml"><span class="code-tag">&lt;project name=<span class="code-quote">"Project 1"</span>&gt;</span>
     <span class="code-tag">&lt;workingDirectory&gt;</span>yourWorkingDirectory<span class="code-tag">&lt;/workingDirectory&gt;</span>
     <span class="code-tag">&lt;artifactDirectory&gt;</span>yourArtifactDirectory<span class="code-tag">&lt;/artifactDirectory&gt;</span>
-    <span class="code-tag">&lt;webURL&gt;</span>http://localhost/ccnet/Project1<span class="code-tag">&lt;/webURL&gt;</span> 
+    <span class="code-tag">&lt;category&gt;</span>Category 1<span class="code-tag">&lt;/category&gt;</span>
+    <span class="code-tag">&lt;webURL&gt;</span>http://localhost/ccnet/Project1<span class="code-tag">&lt;/webURL&gt;</span>
     <span class="code-tag">&lt;modificationDelaySeconds&gt;</span>2<span class="code-tag">&lt;/modificationDelaySeconds&gt;</span>
-    <span class="code-tag">&lt;publishExceptions&gt;</span>true<span class="code-tag">&lt;/publishExceptions&gt;</span>
     <span class="code-tag">&lt;triggers&gt;</span>
         <span class="code-tag">&lt;yourFirstTriggerType ../&gt;</span>
         <span class="code-tag">&lt;yourOtherTriggerType ../&gt;</span>
@@ -44,27 +41,28 @@
     <span class="code-tag">&lt;state type=<span class="code-quote">"yourStateManagerType"</span> ../&gt;</span>
     <span class="code-tag">&lt;sourcecontrol type=<span class="code-quote">"yourSourceControlType"</span> ../&gt;</span>
     <span class="code-tag">&lt;labeller type=<span class="code-quote">"yourLabellerType"</span> ../&gt;</span>
+    <span class="code-tag">&lt;prebuild&gt;</span>
+        <span class="code-tag">&lt;yourFirstPrebuildTask ../&gt;</span>
+        <span class="code-tag">&lt;yourOtherPrebuildTask ../&gt;</span>
+    <span class="code-tag">&lt;/prebuild&gt;</span>
     <span class="code-tag">&lt;tasks&gt;</span>
-        <span class="code-tag">&lt;yourFirstTaskType ../&gt;</span>
-        <span class="code-tag">&lt;yourOtherTaskType ../&gt;</span>
+        <span class="code-tag">&lt;yourFirstTask ../&gt;</span>
+        <span class="code-tag">&lt;yourOtherTask ../&gt;</span>
     <span class="code-tag">&lt;/tasks&gt;</span>
     <span class="code-tag">&lt;publishers&gt;</span>
-        <span class="code-tag">&lt;yourFirstPublisherType ../&gt;</span>
-        <span class="code-tag">&lt;yourOtherPublisherType ../&gt;</span>
+        <span class="code-tag">&lt;yourFirstPublisherTask ../&gt;</span>
+        <span class="code-tag">&lt;yourOtherPublisherTask ../&gt;</span>
     <span class="code-tag">&lt;/publishers&gt;</span>
     <span class="code-tag">&lt;externalLinks&gt;</span>
         <span class="code-tag">&lt;externalLink name=<span class="code-quote">"My First Link"</span> url=<span class="code-quote">"http://somewhere/"</span> /&gt;</span>
         <span class="code-tag">&lt;externalLink name=<span class="code-quote">"My Other Link"</span> url=<span class="code-quote">"http://somewhere.else/"</span> /&gt;</span>
     <span class="code-tag">&lt;/externalLinks&gt;</span>
-    <span class="code-tag"><span class="code-comment">&lt;!-- The following are deprecated elements --&gt;</span></span>
-    <span class="code-tag">&lt;build type=<span class="code-quote">"yourTaskType"</span> ../&gt;</span>
 <span class="code-tag">&lt;/project&gt;</span></pre>
 </div></div>
 
+<h3><a name="ProjectConfigurationBlock-ConfigurationElements%3A"></a>Configuration Elements:</h3>
 
-<h3><a name="ProjectConfigurationBlock-ConfigurationElements%3A">Configuration Elements:</a></h3>
-
-<table class='confluenceTable'>
+<table class='confluenceTable'><tbody>
 <tr>
 <th class='confluenceTh'> Node </th>
 <th class='confluenceTh'> Description </th>
@@ -81,38 +79,40 @@
 </tr>
 <tr>
 <td class='confluenceTd'> <a name="ProjectConfigurationBlock-workingDirectory"></a> workingDirectory </td>
-<td class='confluenceTd'> The Working Directory for the project (this is used by other blocks). <b>Relative paths</b> are relative to a directory called the project Name in the CruiseControl.NET server directory . The Working Directory is meant to contain the checked out version of the project under integration. </td>
+<td class='confluenceTd'> The Working Directory for the project (this is used by other blocks). <b>Relative paths</b> are relative to a directory called the project Name in the directory where the CruiseControl.NET server was launched from. The Working Directory is meant to contain the checked out version of the project under integration. </td>
 <td class='confluenceTd'> string </td>
 <td class='confluenceTd'> no </td>
 <td class='confluenceTd'> <tt>WorkingDirectory</tt> </td>
 </tr>
 <tr>
 <td class='confluenceTd'> <a name="ProjectConfigurationBlock-artifactDirectory"></a> artifactDirectory </td>
-<td class='confluenceTd'> The Artifact Directory for the project (this is used by other blocks). <b>Relative paths</b> are relative to a directory called the project Name in the CruiseControl.NET server directory. The Artifact Directory is meant to be a persistence location for anything you want saved from the results of the build, e.g. build logs, distributables, etc. </td>
+<td class='confluenceTd'> The Artifact Directory for the project (this is used by other blocks). <b>Relative paths</b> are relative to a directory called the project Name in the directory where the CruiseControl.NET server was launched from. The Artifact Directory is meant to be a persistence location for anything you want saved from the results of the build, e.g. build logs, distributables, etc. </td>
 <td class='confluenceTd'> string </td>
 <td class='confluenceTd'> no </td>
 <td class='confluenceTd'> <tt>Artifacts</tt> </td>
 </tr>
 <tr>
-<td class='confluenceTd'> <a name="ProjectConfigurationBlock-webUrl"></a> webUrl </td>
+<td class='confluenceTd'> <a name="ProjectConfigurationBlock-webURL"></a> webURL </td>
 <td class='confluenceTd'> A reporting URL for this project. This is used by CCTray and the Email Publisher. Typically you should navigate to the Project Report on the Dashboard, and use its URL, but make sure to replace any ampersands with &amp; a m p ; (no spaces) </td>
 <td class='confluenceTd'> string </td>
 <td class='confluenceTd'> no </td>
-<td class='confluenceTd'> <a href="http://localhost/CruiseControl.NET" title="Visit page outside Confluence">&#104;ttp://localhost/CruiseControl.NET</a> </td>
+<td class='confluenceTd'> <a href="http://localhost/ccnet" title="Visit page outside Confluence">http://localhost/ccnet</a> </td>
+</tr>
+<tr>
+<td class='confluenceTd'> <a name="ProjectConfigurationBlock-category"></a> category </td>
+<td class='confluenceTd'> A general category for this project. This will be used by CCTray and the dashboard in the future to provide groupings to the project. The groupings can span servers in the farm. </td>
+<td class='confluenceTd'> string </td>
+<td class='confluenceTd'> no </td>
+<td class='confluenceTd'> empty string </td>
 </tr>
 <tr>
 <td class='confluenceTd'> <a name="ProjectConfigurationBlock-modificationDelaySeconds"></a> modificationDelaySeconds </td>
-<td class='confluenceTd'> The minimum number of seconds allowed between the last check in and the start of a valid build. <br clear="all" /> If any modifications are found within this interval the system will sleep long enough so the last checkin is just outside this interval. For example if the modification delay is set to 10 seconds and the last checkin was 7 seconds ago the system will sleep for 3 seconds and check again. This process will repeat until no modifications have been found within the modification delay window. <br clear="all" /> This feature is in CruiseControl.NET for Source Control systems, like CVS, that do not support atomic checkins since starting a build half way through someone checking in their work could result in invalid 'logical' passes or failures. The property is optional though so if you are using a source control system with atomic checkins, leave it out (and it will default to '0') </td>
+<td class='confluenceTd'> The minimum number of seconds allowed between the last check in and the start of a valid build. <br clear="all" />
+ If any modifications are found within this interval the system will sleep long enough so the last checkin is just outside this interval. For example if the modification delay is set to 10 seconds and the last checkin was 7 seconds ago the system will sleep for 3 seconds and check again. This process will repeat until no modifications have been found within the modification delay window. <br clear="all" />
+ This feature is in CruiseControl.NET for Source Control systems, like CVS, that do not support atomic checkins since starting a build half way through someone checking in their work could result in invalid 'logical' passes or failures. The property is optional though so if you are using a source control system with atomic checkins, leave it out (and it will default to '0') </td>
 <td class='confluenceTd'> integer </td>
 <td class='confluenceTd'> no </td>
 <td class='confluenceTd'> 0 </td>
-</tr>
-<tr>
-<td class='confluenceTd'> <a name="ProjectConfigurationBlock-publishExceptions"></a> publishExceptions </td>
-<td class='confluenceTd'> If you are experiencing periodic failures in your build process (such as sporadic <a href="Visual Source Safe Source Control Block.html" title="Visual Source Safe Source Control Block">Visual Source Safe Source Control Block</a> or <a href="CVS Source Control Block.html" title="CVS Source Control Block">CVS Source Control Block</a> connection problems), it is possible to configure the CCNet server to not publish the exception as a failed build.  Set this value to <b>true</b> to publish exceptions to the build log, or <b>false</b> to just send them to the server log file </td>
-<td class='confluenceTd'> boolean </td>
-<td class='confluenceTd'> no </td>
-<td class='confluenceTd'> true </td>
 </tr>
 <tr>
 <td class='confluenceTd'> <a name="ProjectConfigurationBlock-sourcecontrol"></a> sourcecontrol </td>
@@ -144,7 +144,14 @@
 </tr>
 <tr>
 <td class='confluenceTd'> <a name="ProjectConfigurationBlock-tasks"></a> tasks </td>
-<td class='confluenceTd'> A set of <a href="Task Blocks.html" title="Task Blocks">Tasks</a> to run as part of the build. A failed task will fail the build and any subsequent tasks will not run. Tasks are run sequentially, in the order they appear in the configuration. </td>
+<td class='confluenceTd'> A set of <a href="Task Blocks.html" title="Task Blocks">Tasks</a> to run as part of the build. A failed task will fail the build and any subsequent tasks will not run. Tasks and any subsequent tasks will not run. Tasks are run sequentially, in the order they appear in the configuration. </td>
+<td class='confluenceTd'> List of <a href="Task Blocks.html" title="Task Blocks">Task Blocks</a> </td>
+<td class='confluenceTd'> no </td>
+<td class='confluenceTd'> empty list </td>
+</tr>
+<tr>
+<td class='confluenceTd'> <a name="ProjectConfigurationBlock-prebuild"></a> prebuild </td>
+<td class='confluenceTd'> A set of <a href="Task Blocks.html" title="Task Blocks">Tasks</a> to run before the build starts and before the source is updated. A failed task will fail the build and any subsequent tasks will not run. Tasks are run sequentially, in the order they appear in the configuration. &#42;This section is available in the CCNet 1.1 release. </td>
 <td class='confluenceTd'> List of <a href="Task Blocks.html" title="Task Blocks">Task Blocks</a> </td>
 <td class='confluenceTd'> no </td>
 <td class='confluenceTd'> empty list </td>
@@ -157,24 +164,17 @@
 <td class='confluenceTd'> If you don't specify a &lt;publishers /&gt; section at all then a default <a href="Xml Log Publisher.html" title="Xml Log Publisher">Xml Log Publisher</a> is used as the sole publisher. </td>
 </tr>
 <tr>
-<td class='confluenceTd'> <a name="ProjectConfigurationBlock-externalLinks"></a> externalLinks</td>
+<td class='confluenceTd'> <a name="ProjectConfigurationBlock-externalLinks"></a> externalLinks </td>
 <td class='confluenceTd'> See <a href="ExternalLinks.html" title="ExternalLinks">ExternalLinks</a> </td>
 <td class='confluenceTd'> List of <a href="ExternalLinks.html" title="ExternalLinks">ExternalLinks</a> </td>
 <td class='confluenceTd'> no </td>
 <td class='confluenceTd'> empty list </td>
 </tr>
-<tr>
-<td class='confluenceTd'> <a name="ProjectConfigurationBlock-build"></a> build </td>
-<td class='confluenceTd'> <b>DEPRECATED</b> A <a href="Task Blocks.html" title="Task Blocks">Task</a> that will run before all tasks in the <tt>&lt;tasks&gt;</tt> section. This is only provided for backwards compatibility and will be removed in future versions of CCNet. </td>
-<td class='confluenceTd'> <a href="Task Blocks.html" title="Task Blocks">Task Block</a> </td>
-<td class='confluenceTd'> no </td>
-<td class='confluenceTd'> null </td>
-</tr>
-</table>
+</tbody></table>
 
-<h3><a name="ProjectConfigurationBlock-Subsectiontypes">Sub-section types</a></h3>
+<h3><a name="ProjectConfigurationBlock-Subsectiontypes"></a>Sub-section types</h3>
 
-<ul><li><a href="ExternalLinks.html" title="ExternalLinks">ExternalLinks</a></li><li><a href="Labeller Blocks.html" title="Labeller Blocks">Labeller Blocks</a></li><li><a href="Source Control Blocks.html" title="Source Control Blocks">Source Control Blocks</a></li><li><a href="State Manager Blocks.html" title="State Manager Blocks">State Manager Blocks</a></li><li><a href="Task Blocks.html" title="Task Blocks">Task Blocks</a></li><li><a href="Trigger Blocks.html" title="Trigger Blocks">Trigger Blocks</a></li></ul>
+<ul><li><a href="ExternalLinks.html" title="ExternalLinks">ExternalLinks</a></li><li><a href="Labeller Blocks.html" title="Labeller Blocks">Labeller Blocks</a></li><li><a href="Source Control Blocks.html" title="Source Control Blocks">Source Control Blocks</a></li><li><a href="State Manager Blocks.html" title="State Manager Blocks">State Manager Blocks</a></li><li><a href="Task Blocks.html" title="Task Blocks">Task Blocks</a></li><li><a href="Timeout Configuration.html" title="Timeout Configuration">Timeout Configuration</a></li><li><a href="Trigger Blocks.html" title="Trigger Blocks">Trigger Blocks</a></li></ul>
 
 				    
                     			    </td>
@@ -185,7 +185,7 @@
 				<td height="12" background="border/border_bottom.gif"><img src="border/spacer.gif" width="1" height="1" border="0"/></td>
 			</tr>
 		    <tr>
-			    <td align="center"><font color="grey">Document generated by Confluence on Sep 18, 2005 21:17</font></td>
+			    <td align="center"><font color="grey">Document generated by Confluence on Oct 01, 2006 23:02</font></td>
 		    </tr>
 	    </table>
     </body>

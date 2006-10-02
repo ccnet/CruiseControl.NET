@@ -15,12 +15,18 @@
                                                     </span>
 				    </div>
 				    <div class="pagesubheading">
-					    This page last changed on Jul 26, 2005 by <font color="#0050B2">orogers</font>.
+					    This page last changed on Mar 21, 2006 by <font color="#0050B2">gfeldman</font>.
 				    </div>
 
-				    <h3><a name="VisualSourceSafeSourceControlBlock-VSSConfigurationExample">VSS Configuration Example</a></h3>
+				    <h3><a name="VisualSourceSafeSourceControlBlock-VSSConfigurationExample"></a>VSS Configuration Example</h3>
 <p>For Visual Source Safe you must specify the executable, project, username and password. You may also specify the SSDIR. If SSDIR is not set the default or the SSDIR environment variable will be used. </p>
 
+<h4><a name="VisualSourceSafeSourceControlBlock-Minimalconfigurationexample%3A"></a>Minimal configuration example:</h4>
+<div class="code"><div class="codeContent">
+<pre class="code-xml"><span class="code-tag">&lt;sourcecontrol type=<span class="code-quote">"vss"</span> /&gt;</span></pre>
+</div></div>
+
+<h4><a name="VisualSourceSafeSourceControlBlock-Fullconfigurationexample%3A"></a>Full configuration example:</h4>
 <div class="code"><div class="codeContent">
 <pre class="code-xml"><span class="code-tag">&lt;sourcecontrol type=<span class="code-quote">"vss"</span> autoGetSource=<span class="code-quote">"true"</span> applyLabel=<span class="code-quote">"true"</span>&gt;</span>
    <span class="code-tag">&lt;executable&gt;</span>C:\Program Files\Microsoft Visual Studio\VSS\win32\SS.EXE<span class="code-tag">&lt;/executable&gt;</span>
@@ -34,9 +40,9 @@
 <span class="code-tag">&lt;/sourcecontrol&gt;</span></pre>
 </div></div>
 
-<h3><a name="VisualSourceSafeSourceControlBlock-ConfigurationElements%3A">Configuration Elements:</a></h3>
+<h3><a name="VisualSourceSafeSourceControlBlock-ConfigurationElements%3A"></a>Configuration Elements:</h3>
 
-<table class='confluenceTable'>
+<table class='confluenceTable'><tbody>
 <tr>
 <th class='confluenceTh'> Node </th>
 <th class='confluenceTh'> Description </th>
@@ -46,24 +52,24 @@
 </tr>
 <tr>
 <td class='confluenceTd'> project </td>
-<td class='confluenceTd'> The project in the repository to be monitored.  If the project contains a space, enclose the text in double quotes (") </td>
+<td class='confluenceTd'> The project in the repository to be monitored. </td>
 <td class='confluenceTd'> string </td>
-<td class='confluenceTd'> N/A </td>
-<td class='confluenceTd'> true </td>
+<td class='confluenceTd'> $/ </td>
+<td class='confluenceTd'> false </td>
 </tr>
 <tr>
 <td class='confluenceTd'> username</td>
-<td class='confluenceTd'> VSS user ID that CCNet should use to authenticate </td>
+<td class='confluenceTd'> VSS user ID that CCNet should use to authenticate. If the username is unspecified, the VSS client will attempt to authenticate using the NT user. </td>
 <td class='confluenceTd'> string </td>
-<td class='confluenceTd'> N/A </td>
-<td class='confluenceTd'> true </td>
+<td class='confluenceTd'> null </td>
+<td class='confluenceTd'> false </td>
 </tr>
 <tr>
 <td class='confluenceTd'> password </td>
 <td class='confluenceTd'> Password for the VSS user ID </td>
 <td class='confluenceTd'> string </td>
 <td class='confluenceTd'> N/A </td>
-<td class='confluenceTd'> true</td>
+<td class='confluenceTd'> false </td>
 </tr>
 <tr>
 <td class='confluenceTd'> ssdir </td>
@@ -102,10 +108,10 @@
 </tr>
 <tr>
 <td class='confluenceTd'> timeout </td>
-<td class='confluenceTd'> How long (in milliseconds) the VSS operation will be permitted to run before timing out </td>
-<td class='confluenceTd'> int </td>
+<td class='confluenceTd'> Sets the timeout period for the source control operation. See <a href="Timeout Configuration.html" title="Timeout Configuration">Timeout Configuration</a> for details. </td>
+<td class='confluenceTd'> Timeout </td>
 <td class='confluenceTd'> 10 minutes </td>
-<td class='confluenceTd'> false </td>
+<td class='confluenceTd'> false</td>
 </tr>
 <tr>
 <td class='confluenceTd'> culture </td>
@@ -121,19 +127,19 @@
 <td class='confluenceTd'> true </td>
 <td class='confluenceTd'> false </td>
 </tr>
-</table>
+</tbody></table>
 
-<h3><a name="VisualSourceSafeSourceControlBlock-GettingthelatestsourcewithVSS">Getting the latest source with VSS</a></h3>
+<h3><a name="VisualSourceSafeSourceControlBlock-GettingthelatestsourcewithVSS"></a>Getting the latest source with VSS</h3>
 
 <p>VSS does not automatically remove files from the local workspace that have been deleted from the VSS database.  This does not cause a problem if you are using the <b>&lt;solution&gt;</b> task or the <a href="Visual Studio Task.html" title="Visual Studio Task">Visual Studio Task</a> to compile your project.  However, if you are packaging the source for deployment or if you are using the <b>&lt;csc&gt;</b> task to produce a custom build, you may end up compiling these deleted files in your assembly.  To be on the safe side, it might be a good idea to clear the contents of the local workspace after each build.</p>
 
-<h3><a name="VisualSourceSafeSourceControlBlock-UsingaUSEnglishVSSinanonEnglishculture">Using a US English VSS in a non-English culture</a></h3>
+<h3><a name="VisualSourceSafeSourceControlBlock-UsingaUSEnglishVSSinanonEnglishculture"></a>Using a US English VSS in a non-English culture</h3>
 
 <p>If you use an English VSS with machines configured to use a non-English culture, it may happen that CCNet will not detect any modifications after you check-in some code.  The reason for this behaviour is that CCNet uses the selected culture on the build server to determine the language it expects VSS will output for parsing.  For example, with <b>fr-CA</b>, CCNet looks for French keywords in the VSS output.  Hence, if your VSS installation does not use the same language, CCNET will not be able to detect any modification.</p>
 
 <p>If you're using a US VSS installation, the first step in solving this problem is to include a configuration block  set to the US english culture (&lt;culture&gt;en-US&lt;/culture&gt;).  This will make CCNet look for English VSS keywords, and eventually detect modifications.</p>
 
-<h3><a name="VisualSourceSafeSourceControlBlock-VSSIssues">VSS Issues</a></h3>
+<h3><a name="VisualSourceSafeSourceControlBlock-VSSIssues"></a>VSS Issues</h3>
 
 <p><b>CCNet periodically reports the following error when connecting to VSS: "Unable to open user login file \SourceSafe\Vss60\data\loggedin\&lt;userid&gt;.log."  What gives?</b></p>
 
@@ -155,10 +161,6 @@
 
 <p><b>Workaround:</b> If you use a custom labeller, make sure each label is unique.</p>
 
-
-<p><b>If the project name contains spaces then the VSS command-line will fail.</b><br/>
-Wrap the text in the &lt;project&gt; element in double quotes: eg. &lt;project&gt;"My Project"&lt;/project&gt;</p>
-
 <p><b>When I try to connect to use the &lt;vss&gt; NAntContrib tasks from ccservice I get this error:  Failed to open database \\someserver\someshare\vssrep\srcsafe.ini</b></p>
 
 <p>There are a number of known issues with SourceSafe 6.0c.  Make sure that you upgrade to the 6.0d version.</p>
@@ -173,7 +175,7 @@ Wrap the text in the &lt;project&gt; element in double quotes: eg. &lt;project&g
 <p>VSS does not output the paths for added or deleted files.  As a result, the modifications returned by CCNet do not have any specified path information.  If a <a href="Filtered Source Control Block.html" title="Filtered Source Control Block">Filtered Source Control Block</a> is used with a path filter then these modifications are likely to be filtered out.  This is an outstanding issue.</p>
 
 
-<h3><a name="VisualSourceSafeSourceControlBlock-UsefulLinks%3A">Useful Links:</a></h3>
+<h3><a name="VisualSourceSafeSourceControlBlock-UsefulLinks%3A"></a>Useful Links:</h3>
 
 <ul>
 	<li><a href="http://msdn.microsoft.com/library/default.asp?url=/library/en-us/dnvss/html/vssbest.asp" title="Visit page outside Confluence">Visual SourceSafe Best Practices Guide</a></li>
@@ -182,7 +184,7 @@ Wrap the text in the &lt;project&gt; element in double quotes: eg. &lt;project&g
 </ul>
 
 
-<h3><a name="VisualSourceSafeSourceControlBlock-Reasonswhyyoumightwanttoconsideradifferentversioncontrolsystem%3A">Reasons why you might want to consider a different version control system:</a></h3>
+<h3><a name="VisualSourceSafeSourceControlBlock-Reasonswhyyoumightwanttoconsideradifferentversioncontrolsystem%3A"></a>Reasons why you might want to consider a different version control system:</h3>
 <ul>
 	<li><a href="http://www.highprogrammer.com/alan/windev/sourcesafe.html" title="Visit page outside Confluence">Visual SourceSafe: Microsoft's Source Destruction System</a></li>
 	<li><a href="http://www.michaelbolton.net/testing/VSSDefects.html" title="Visit page outside Confluence">Visual SourceSafe Version Control: Unsafe at any Speed?</a></li>
@@ -199,7 +201,7 @@ Wrap the text in the &lt;project&gt; element in double quotes: eg. &lt;project&g
 				<td height="12" background="border/border_bottom.gif"><img src="border/spacer.gif" width="1" height="1" border="0"/></td>
 			</tr>
 		    <tr>
-			    <td align="center"><font color="grey">Document generated by Confluence on Sep 18, 2005 21:17</font></td>
+			    <td align="center"><font color="grey">Document generated by Confluence on Oct 01, 2006 23:02</font></td>
 		    </tr>
 	    </table>
     </body>

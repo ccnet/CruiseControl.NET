@@ -15,35 +15,131 @@
                                                     </span>
 				    </div>
 				    <div class="pagesubheading">
-					    This page last changed on Sep 09, 2005 by <font color="#0050B2">skizz</font>.
+					    This page last changed on Feb 06, 2006 by <font color="#0050B2">orogers</font>.
 				    </div>
 
-				    <h3><a name="SourceControlBlocks-SourceControlBlocks">Source Control Blocks</a></h3>
+				    <h3><a name="SourceControlBlocks-SourceControlBlocks"></a>Source Control Blocks</h3>
 
-<ul><li><a href="CVS Source Control Block.html" title="CVS Source Control Block">CVS Source Control Block</a></li><li><a href="Filesystem Source Control Block.html" title="Filesystem Source Control Block">Filesystem Source Control Block</a></li><li><a href="Filtered Source Control Block.html" title="Filtered Source Control Block">Filtered Source Control Block</a></li><li><a href="MKS Source Integrity Source Control Block.html" title="MKS Source Integrity Source Control Block">MKS Source Integrity Source Control Block</a></li><li><a href="Multi Source Control Block.html" title="Multi Source Control Block">Multi Source Control Block</a></li><li><a href="Null Source Control Block.html" title="Null Source Control Block">Null Source Control Block</a></li><li><a href="Perforce Source Control Block.html" title="Perforce Source Control Block">Perforce Source Control Block</a></li><li><a href="PVCS Source Control Block.html" title="PVCS Source Control Block">PVCS Source Control Block</a></li><li><a href="Rational ClearCase Source Control Block.html" title="Rational ClearCase Source Control Block">Rational ClearCase Source Control Block</a></li><li><a href="SourceGear Vault Source Control Block.html" title="SourceGear Vault Source Control Block">SourceGear Vault Source Control Block</a></li><li><a href="StarTeam Source Control Block.html" title="StarTeam Source Control Block">StarTeam Source Control Block</a></li><li><a href="Subversion Source Control Block.html" title="Subversion Source Control Block">Subversion Source Control Block</a></li><li><a href="Telelogic Synergy.html" title="Telelogic Synergy">Telelogic Synergy</a></li><li><a href="Visual Source Safe Source Control Block.html" title="Visual Source Safe Source Control Block">Visual Source Safe Source Control Block</a></li></ul>
+<ul><li><a href="Alienbrain Source Control Block.html" title="Alienbrain Source Control Block">Alienbrain Source Control Block</a></li><li><a href="BitKeeper Source Control Block.html" title="BitKeeper Source Control Block">BitKeeper Source Control Block</a></li><li><a href="CVS Source Control Block.html" title="CVS Source Control Block">CVS Source Control Block</a></li><li><a href="Filesystem Source Control Block.html" title="Filesystem Source Control Block">Filesystem Source Control Block</a></li><li><a href="Filtered Source Control Block.html" title="Filtered Source Control Block">Filtered Source Control Block</a></li><li><a href="MKS Source Integrity Source Control Block.html" title="MKS Source Integrity Source Control Block">MKS Source Integrity Source Control Block</a></li><li><a href="Multi Source Control Block.html" title="Multi Source Control Block">Multi Source Control Block</a></li><li><a href="Null Source Control Block.html" title="Null Source Control Block">Null Source Control Block</a></li><li><a href="Perforce Source Control Block.html" title="Perforce Source Control Block">Perforce Source Control Block</a></li><li><a href="PVCS Source Control Block.html" title="PVCS Source Control Block">PVCS Source Control Block</a></li><li><a href="Rational ClearCase Source Control Block.html" title="Rational ClearCase Source Control Block">Rational ClearCase Source Control Block</a></li><li><a href="Seapine Surround Source Control Block.html" title="Seapine Surround Source Control Block">Seapine Surround Source Control Block</a></li><li><a href="SourceGear Vault Source Control Block.html" title="SourceGear Vault Source Control Block">SourceGear Vault Source Control Block</a></li><li><a href="StarTeam Source Control Block.html" title="StarTeam Source Control Block">StarTeam Source Control Block</a></li><li><a href="Subversion Source Control Block.html" title="Subversion Source Control Block">Subversion Source Control Block</a></li><li><a href="Telelogic Synergy.html" title="Telelogic Synergy">Telelogic Synergy</a></li><li><a href="Visual Source Safe Source Control Block.html" title="Visual Source Safe Source Control Block">Visual Source Safe Source Control Block</a></li><li><a href="Visual Studio Team Foundation Server Plugin.html" title="Visual Studio Team Foundation Server Plugin">Visual Studio Team Foundation Server Plugin</a></li></ul>
 
-<h3><a name="SourceControlBlocks-CommonConfigurationOptionsTimeout">Common Configuration Options - Timeout</a></h3>
+<h3><a name="SourceControlBlocks-SourceControlFeatureMatrix"></a>Source Control Feature Matrix</h3>
 
-<p>All source control blocks allow you to specify a timeout for operations. By default you specify the timeout in milliseconds. </p>
+<p>This matrix represents the source control provider capabilities as of the CCNet 1.0 release.</p>
 
-<p>If you specify the timout as an element, it can be set in units of milliseconds, seconds, minutes or hours.</p>
-
-<p>If you specify the timeout as an attribute on the sourcecontrol block then it must be specified in milliseconds. </p>
-
-<p><em>Example: Set timeout to 60 seconds (60,000 milliseconds)</em></p>
-
-<div class="code"><div class="codeContent">
-<pre class="code-xml"><span class="code-tag">&lt;timeout&gt;</span>60000<span class="code-tag">&lt;/timeout&gt;</span></pre>
-</div></div>
-
-<p><em>Example: Set the timeout in various units</em></p>
-
-<div class="code"><div class="codeContent">
-<pre class="code-xml"><span class="code-tag">&lt;timeout units=<span class="code-quote">"millis"</span>&gt;</span>60000<span class="code-tag">&lt;/timeout&gt;</span>
-<span class="code-tag">&lt;timeout units=<span class="code-quote">"seconds"</span>&gt;</span>60<span class="code-tag">&lt;/timeout&gt;</span>
-<span class="code-tag">&lt;timeout units=<span class="code-quote">"minutes"</span>&gt;</span>5<span class="code-tag">&lt;/timeout&gt;</span>
-<span class="code-tag">&lt;timeout units=<span class="code-quote">"hours"</span>&gt;</span>1<span class="code-tag">&lt;/timeout&gt;</span></pre>
-</div></div>
+<table class='confluenceTable'><tbody>
+<tr>
+<th class='confluenceTh'><b>Source Control</b></th>
+<th class='confluenceTh'><b>Detect Modifications</b></th>
+<th class='confluenceTh'><b>Get Source</b></th>
+<th class='confluenceTh'><b>Label</b></th>
+<th class='confluenceTh'><b>Modification Urls</b></th>
+</tr>
+<tr>
+<th class='confluenceTh'>Alienbrain</th>
+<th class='confluenceTh'><img class="emoticon" src="./icons/emoticons/check.gif" height="16" width="16" align="absmiddle" alt="" border="0"/></th>
+<th class='confluenceTh'><img class="emoticon" src="./icons/emoticons/check.gif" height="16" width="16" align="absmiddle" alt="" border="0"/></th>
+<th class='confluenceTh'><img class="emoticon" src="./icons/emoticons/check.gif" height="16" width="16" align="absmiddle" alt="" border="0"/></th>
+<th class='confluenceTh'>&nbsp;</th>
+</tr>
+<tr>
+<th class='confluenceTh'>BitKeeper</th>
+<th class='confluenceTh'><img class="emoticon" src="./icons/emoticons/check.gif" height="16" width="16" align="absmiddle" alt="" border="0"/></th>
+<th class='confluenceTh'><img class="emoticon" src="./icons/emoticons/check.gif" height="16" width="16" align="absmiddle" alt="" border="0"/></th>
+<th class='confluenceTh'><img class="emoticon" src="./icons/emoticons/check.gif" height="16" width="16" align="absmiddle" alt="" border="0"/></th>
+<th class='confluenceTh'>&nbsp;</th>
+</tr>
+<tr>
+<th class='confluenceTh'>ClearCase</th>
+<th class='confluenceTh'><img class="emoticon" src="./icons/emoticons/check.gif" height="16" width="16" align="absmiddle" alt="" border="0"/></th>
+<th class='confluenceTh'><img class="emoticon" src="./icons/emoticons/check.gif" height="16" width="16" align="absmiddle" alt="" border="0"/></th>
+<th class='confluenceTh'><img class="emoticon" src="./icons/emoticons/check.gif" height="16" width="16" align="absmiddle" alt="" border="0"/></th>
+<th class='confluenceTh'>&nbsp;</th>
+</tr>
+<tr>
+<th class='confluenceTh'>CVS</th>
+<th class='confluenceTh'><img class="emoticon" src="./icons/emoticons/check.gif" height="16" width="16" align="absmiddle" alt="" border="0"/></th>
+<th class='confluenceTh'><img class="emoticon" src="./icons/emoticons/check.gif" height="16" width="16" align="absmiddle" alt="" border="0"/></th>
+<th class='confluenceTh'><img class="emoticon" src="./icons/emoticons/check.gif" height="16" width="16" align="absmiddle" alt="" border="0"/></th>
+<th class='confluenceTh'><img class="emoticon" src="./icons/emoticons/check.gif" height="16" width="16" align="absmiddle" alt="" border="0"/></th>
+</tr>
+<tr>
+<th class='confluenceTh'>Filesystem</th>
+<th class='confluenceTh'><img class="emoticon" src="./icons/emoticons/check.gif" height="16" width="16" align="absmiddle" alt="" border="0"/></th>
+<th class='confluenceTh'><img class="emoticon" src="./icons/emoticons/error.gif" height="16" width="16" align="absmiddle" alt="" border="0"/></th>
+<th class='confluenceTh'><img class="emoticon" src="./icons/emoticons/error.gif" height="16" width="16" align="absmiddle" alt="" border="0"/></th>
+<th class='confluenceTh'><img class="emoticon" src="./icons/emoticons/error.gif" height="16" width="16" align="absmiddle" alt="" border="0"/></th>
+</tr>
+<tr>
+<th class='confluenceTh'>MKS</th>
+<th class='confluenceTh'><img class="emoticon" src="./icons/emoticons/check.gif" height="16" width="16" align="absmiddle" alt="" border="0"/></th>
+<th class='confluenceTh'><img class="emoticon" src="./icons/emoticons/check.gif" height="16" width="16" align="absmiddle" alt="" border="0"/></th>
+<th class='confluenceTh'><img class="emoticon" src="./icons/emoticons/check.gif" height="16" width="16" align="absmiddle" alt="" border="0"/></th>
+<th class='confluenceTh'>&nbsp;</th>
+</tr>
+<tr>
+<th class='confluenceTh'>Perforce</th>
+<th class='confluenceTh'><img class="emoticon" src="./icons/emoticons/check.gif" height="16" width="16" align="absmiddle" alt="" border="0"/></th>
+<th class='confluenceTh'><img class="emoticon" src="./icons/emoticons/check.gif" height="16" width="16" align="absmiddle" alt="" border="0"/></th>
+<th class='confluenceTh'><img class="emoticon" src="./icons/emoticons/check.gif" height="16" width="16" align="absmiddle" alt="" border="0"/></th>
+<th class='confluenceTh'>&nbsp;</th>
+</tr>
+<tr>
+<th class='confluenceTh'>PVCS</th>
+<th class='confluenceTh'><img class="emoticon" src="./icons/emoticons/check.gif" height="16" width="16" align="absmiddle" alt="" border="0"/></th>
+<th class='confluenceTh'><img class="emoticon" src="./icons/emoticons/check.gif" height="16" width="16" align="absmiddle" alt="" border="0"/></th>
+<th class='confluenceTh'><img class="emoticon" src="./icons/emoticons/check.gif" height="16" width="16" align="absmiddle" alt="" border="0"/></th>
+<th class='confluenceTh'>&nbsp;</th>
+</tr>
+<tr>
+<th class='confluenceTh'>StarTeam</th>
+<th class='confluenceTh'><img class="emoticon" src="./icons/emoticons/check.gif" height="16" width="16" align="absmiddle" alt="" border="0"/></th>
+<th class='confluenceTh'><img class="emoticon" src="./icons/emoticons/check.gif" height="16" width="16" align="absmiddle" alt="" border="0"/></th>
+<th class='confluenceTh'><img class="emoticon" src="./icons/emoticons/error.gif" height="16" width="16" align="absmiddle" alt="" border="0"/></th>
+<th class='confluenceTh'>&nbsp;</th>
+</tr>
+<tr>
+<th class='confluenceTh'>Subversion</th>
+<th class='confluenceTh'><img class="emoticon" src="./icons/emoticons/check.gif" height="16" width="16" align="absmiddle" alt="" border="0"/></th>
+<th class='confluenceTh'><img class="emoticon" src="./icons/emoticons/check.gif" height="16" width="16" align="absmiddle" alt="" border="0"/></th>
+<th class='confluenceTh'><img class="emoticon" src="./icons/emoticons/check.gif" height="16" width="16" align="absmiddle" alt="" border="0"/></th>
+<th class='confluenceTh'><img class="emoticon" src="./icons/emoticons/check.gif" height="16" width="16" align="absmiddle" alt="" border="0"/></th>
+</tr>
+<tr>
+<th class='confluenceTh'>Surround</th>
+<th class='confluenceTh'><img class="emoticon" src="./icons/emoticons/check.gif" height="16" width="16" align="absmiddle" alt="" border="0"/></th>
+<th class='confluenceTh'><img class="emoticon" src="./icons/emoticons/check.gif" height="16" width="16" align="absmiddle" alt="" border="0"/></th>
+<th class='confluenceTh'><img class="emoticon" src="./icons/emoticons/error.gif" height="16" width="16" align="absmiddle" alt="" border="0"/></th>
+<th class='confluenceTh'>&nbsp;</th>
+</tr>
+<tr>
+<th class='confluenceTh'>Synergy</th>
+<th class='confluenceTh'><img class="emoticon" src="./icons/emoticons/check.gif" height="16" width="16" align="absmiddle" alt="" border="0"/></th>
+<th class='confluenceTh'><img class="emoticon" src="./icons/emoticons/check.gif" height="16" width="16" align="absmiddle" alt="" border="0"/></th>
+<th class='confluenceTh'><img class="emoticon" src="./icons/emoticons/check.gif" height="16" width="16" align="absmiddle" alt="" border="0"/></th>
+<th class='confluenceTh'><img class="emoticon" src="./icons/emoticons/check.gif" height="16" width="16" align="absmiddle" alt="" border="0"/></th>
+</tr>
+<tr>
+<th class='confluenceTh'>Vault</th>
+<th class='confluenceTh'><img class="emoticon" src="./icons/emoticons/check.gif" height="16" width="16" align="absmiddle" alt="" border="0"/></th>
+<th class='confluenceTh'><img class="emoticon" src="./icons/emoticons/check.gif" height="16" width="16" align="absmiddle" alt="" border="0"/></th>
+<th class='confluenceTh'><img class="emoticon" src="./icons/emoticons/check.gif" height="16" width="16" align="absmiddle" alt="" border="0"/></th>
+<th class='confluenceTh'>&nbsp;</th>
+</tr>
+<tr>
+<th class='confluenceTh'>Visual Source Safe </th>
+<th class='confluenceTh'><img class="emoticon" src="./icons/emoticons/check.gif" height="16" width="16" align="absmiddle" alt="" border="0"/></th>
+<th class='confluenceTh'><img class="emoticon" src="./icons/emoticons/check.gif" height="16" width="16" align="absmiddle" alt="" border="0"/></th>
+<th class='confluenceTh'><img class="emoticon" src="./icons/emoticons/check.gif" height="16" width="16" align="absmiddle" alt="" border="0"/></th>
+<th class='confluenceTh'>&nbsp;</th>
+</tr>
+<tr>
+<th class='confluenceTh'>Visual Studio Team Foundation Server </th>
+<th class='confluenceTh'><img class="emoticon" src="./icons/emoticons/check.gif" height="16" width="16" align="absmiddle" alt="" border="0"/></th>
+<th class='confluenceTh'><img class="emoticon" src="./icons/emoticons/check.gif" height="16" width="16" align="absmiddle" alt="" border="0"/></th>
+<th class='confluenceTh'>&nbsp;</th>
+<th class='confluenceTh'>&nbsp;</th>
+</tr>
+</tbody></table>
 
 				    
                     			    </td>
@@ -54,7 +150,7 @@
 				<td height="12" background="border/border_bottom.gif"><img src="border/spacer.gif" width="1" height="1" border="0"/></td>
 			</tr>
 		    <tr>
-			    <td align="center"><font color="grey">Document generated by Confluence on Sep 18, 2005 21:17</font></td>
+			    <td align="center"><font color="grey">Document generated by Confluence on Oct 01, 2006 23:02</font></td>
 		    </tr>
 	    </table>
     </body>
