@@ -7,7 +7,7 @@
 	<xsl:variable name="simian.version" select="$simian.root/@version" />
 
 	<xsl:template match="/">
-
+		<xsl:if test="$simian.version!=''">
 			<div id="simian-summary">
 				<table class="section-table" cellSpacing="0" cellPadding="2" width="98%" border="0">
 					<tr>
@@ -19,6 +19,7 @@
 					<xsl:apply-templates select="$simian.root//check"/>					
 				</table>
 			</div>
+		</xsl:if>
 	</xsl:template>
 	
 	<xsl:template match="check">
