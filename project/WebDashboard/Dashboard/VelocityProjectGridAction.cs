@@ -105,6 +105,11 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 				farmService.Stop(ProjectSpecifier(request));
 				return string.Format("Stopping project {0}", SelectedProject(request));
 			}
+			else if (request.FindParameterStartingWith("StartBuild") != string.Empty)
+			{
+				farmService.Start(ProjectSpecifier(request));
+				return string.Format("Starting project {0}", SelectedProject(request));				
+			}
 			else if (request.FindParameterStartingWith("forcebuild") != string.Empty)
 			{
 				farmService.ForceBuild(ProjectSpecifier(request));
