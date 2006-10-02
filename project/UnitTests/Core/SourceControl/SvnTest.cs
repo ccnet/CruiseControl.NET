@@ -124,6 +124,17 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 		}
 
 		[Test]
+		public void ShouldApplyLabelUsingRebasedWorkingDirectory()
+		{
+			ExpectToExecuteArguments(@"copy -m ""CCNET build foo"" c:\source svn://someserver/tags/foo/foo --non-interactive");
+			svn.TagOnSuccess = true;
+			svn.WorkingDirectory = null;
+			IIntegrationResult result = IntegrationResult(from);
+			result.Label = "foo";
+			svn.LabelSourceControl(result);			
+		}
+
+		[Test]
 		public void CreatingLabelProcessPerformsServerToServerCopyWithRevisionWhenKnown()
 		{
 			IntegrationResult result = IntegrationResultMother.CreateSuccessful("foo");

@@ -120,7 +120,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 		{
 			if (result.LastChangeNumber == 0)
 			{
-				return WorkingDirectory.TrimEnd(Path.DirectorySeparatorChar);
+				return result.BaseFromWorkingDirectory(WorkingDirectory).TrimEnd(Path.DirectorySeparatorChar);
 			}
 			return TrunkUrl;
 		}
