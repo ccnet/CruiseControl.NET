@@ -87,7 +87,7 @@ namespace ThoughtWorks.CruiseControl.Core
 		/// </summary>
 		private void Run()
 		{
-			Log.Info("Starting integration for project: " + project.Name);
+			Log.Info("Starting integrator for project: " + project.Name);
 			try
 			{
 				// loop, until the integrator is stopped

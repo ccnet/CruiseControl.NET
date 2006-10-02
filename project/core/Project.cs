@@ -128,13 +128,6 @@ namespace ThoughtWorks.CruiseControl.Core
 			set { tasks = value; }
 		}
 
-		[ReflectorProperty("publishExceptions", Required=false)]
-		public bool PublishExceptions
-		{
-			get { return publishExceptions; }
-			set { publishExceptions = value; }
-		}
-
 		// Move this ideally
 		public ProjectActivity Activity
 		{

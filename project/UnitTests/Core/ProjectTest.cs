@@ -86,7 +86,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 		public void LoadFullySpecifiedProjectFromConfiguration()
 		{
 			string xml = @"
-<project name=""foo"" webURL=""http://localhost/ccnet"" modificationDelaySeconds=""60"" publishExceptions=""true"" category=""category1"">
+<project name=""foo"" webURL=""http://localhost/ccnet"" modificationDelaySeconds=""60"" category=""category1"">
 	<workingDirectory>c:\my\working\directory</workingDirectory>
 	<sourcecontrol type=""filesystem"">
 		<repositoryRoot>C:\</repositoryRoot>
@@ -117,7 +117,6 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 			Assert.AreEqual("http://localhost/ccnet", project.WebURL);
 			Assert.AreEqual("category1", project.Category);
 			Assert.AreEqual(60, project.ModificationDelaySeconds);
-			Assert.AreEqual(true, project.PublishExceptions);
 			Assert.IsTrue(project.SourceControl is FileSourceControl);
 			Assert.IsTrue(project.Labeller is DefaultLabeller);
 			Assert.IsTrue(project.StateManager is FileStateManager);
@@ -142,7 +141,6 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 			Assert.AreEqual("foo", project.Name);
 			Assert.AreEqual(Project.DefaultUrl(), project.WebURL);
 			Assert.AreEqual(0, project.ModificationDelaySeconds); //TODO: is this the correct default?  should quiet period be turned off by default?  is this sourcecontrol specific?
-			Assert.AreEqual(true, project.PublishExceptions);
 			Assert.IsTrue(project.SourceControl is NullSourceControl);
 			Assert.IsTrue(project.Labeller is DefaultLabeller);
 			Assert.AreEqual(typeof(MultipleTrigger), project.Triggers.GetType());
@@ -389,7 +387,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 			AssertFalse("unexpected modifications were returned", result.HasModifications());
 			AssertEqualArrays(new Modification[0], result.Modifications);
 			Assert.AreEqual(string.Empty, result.TaskOutput, "no output is expected as builder is not called");
-			Assert.IsTrue(result.EndTime >= result.StartTime);
+//			Assert.IsTrue(result.EndTime >= result.StartTime);
 			VerifyAll();
 		}
 
@@ -417,36 +415,6 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 			Assert.IsTrue(result.HasModifications());
 			Assert.AreEqual(modifications, result.Modifications);
 			Assert.IsTrue(result.EndTime >= result.StartTime);
-			VerifyAll();
-		}
-
-		[Test]
-		public void ShouldNotPublishIntegrationResultsIfPublishExceptionsIsFalseAndSourceControlThrowsAnException()
-		{
-			mockStateManager.ExpectAndReturn("LoadState", IntegrationResult.CreateInitialIntegrationResult(ProjectName, @"c:\temp"), ProjectName); // running the first integration (no state file)
-			CruiseControlException expectedException = new CruiseControlException();
-			mockSourceControl.ExpectAndThrow("GetModifications", expectedException, new IsAnything(), new IsAnything());
-			mockPublisher.ExpectNoCall("Run", typeof (IntegrationResult));
-			mockStateManager.ExpectNoCall("SaveState", typeof (IntegrationResult));
-
-			project.PublishExceptions = false;
-			IIntegrationResult result = project.Integrate(ModificationExistRequest());
-			Assert.AreEqual(expectedException, result.ExceptionResult);
-			VerifyAll();
-		}
-
-		[Test]
-		public void ShouldPublishIntegrationResultsIfPublishExceptionsIsTrueAndSourceControlThrowsAnException()
-		{
-			mockStateManager.ExpectAndReturn("LoadState", IntegrationResult.CreateInitialIntegrationResult(ProjectName, @"c:\temp"), ProjectName); // running the first integration (no state file)
-			CruiseControlException expectedException = new CruiseControlException();
-			mockSourceControl.ExpectAndThrow("GetModifications", expectedException, new IsAnything(), new IsAnything());
-			mockPublisher.Expect("Run", new IsAnything());
-			mockStateManager.Expect("SaveState", new IsAnything());
-
-			project.PublishExceptions = true;
-			IIntegrationResult result = project.Integrate(ModificationExistRequest());
-			Assert.AreEqual(expectedException, result.ExceptionResult);
 			VerifyAll();
 		}
 
@@ -541,7 +509,6 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 			mockSourceControl.Expect("GetSource", new IsAnything());
 			mockPublisher.Expect("Run", new IsAnything());
 
-			project.PublishExceptions = true;
 			project.Integrate(ForceBuildRequest());
 
 			VerifyAll();

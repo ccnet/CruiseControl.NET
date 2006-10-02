@@ -103,7 +103,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 		public void LoadFromConfig()
 		{
 			string xml = @"<merge><files><file>foo.xml</file><file>bar.xml</file></files></merge>";
-			MergeFilesTask task = NetReflector.Read(xml) as MergeFilesTask;
+			task = NetReflector.Read(xml) as MergeFilesTask;
 			Assert.AreEqual(2, task.MergeFiles.Length);
 			Assert.AreEqual("foo.xml", task.MergeFiles[0]);
 			Assert.AreEqual("bar.xml", task.MergeFiles[1]);
@@ -111,9 +111,9 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 
 		private void AssertDataContainedInList(IList list, string data)
 		{
-			foreach (ITaskResult result in list)
+			foreach (ITaskResult taskResult in list)
 			{
-				if (result.Data == data)
+				if (taskResult.Data == data)
 					return;
 			}
 			Assert.Fail(data + " not found in the list");

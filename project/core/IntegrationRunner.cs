@@ -28,27 +28,15 @@ namespace ThoughtWorks.CruiseControl.Core
 			CreateDirectoryIfItDoesntExist(result.WorkingDirectory);
 			CreateDirectoryIfItDoesntExist(result.ArtifactDirectory);
 			result.MarkStartTime();
-			try
+			result.Modifications = GetModifications(lastResult, result);
+			if (result.ShouldRunBuild())
 			{
-				result.Modifications = GetModifications(lastResult, result);
-				if (result.ShouldRunBuild())
-				{
-					Log.Info("Building: " + request.ToString());
-					target.Activity = ProjectActivity.Building;
-					target.Prebuild(result);
-					target.SourceControl.GetSource(result);
-					target.Run(result);
-					Log.Info("Build complete: " + result.Status);
-				}
+				Log.Info("Building: " + request.ToString());
+				Build(result);
+				PostBuild(result);
+				Log.Info(string.Format("Integration complete: {0} - {1}", result.Status, result.EndTime));
 			}
-			catch (Exception ex)
-			{
-				Log.Error(ex);
-				result.ExceptionResult = ex;
-			}
-			result.MarkEndTime();
-			PostBuild(result);
-
+			target.Activity = ProjectActivity.Sleeping;
 			return result;
 		}
 
@@ -58,48 +46,33 @@ namespace ThoughtWorks.CruiseControl.Core
 			return quietPeriod.GetModifications(target.SourceControl, from, to);
 		}
 
-		private void CreateDirectoryIfItDoesntExist(string directory)
+		private void Build(IIntegrationResult result)
 		{
-			if (! Directory.Exists(directory))
-				Directory.CreateDirectory(directory);
+			target.Activity = ProjectActivity.Building;
+			try
+			{
+				target.Prebuild(result);
+				target.SourceControl.GetSource(result);
+				target.Run(result);
+				target.SourceControl.LabelSourceControl(result);
+			}
+			catch (Exception ex)
+			{
+				result.ExceptionResult = ex;
+			}
+			result.MarkEndTime();			
 		}
 
 		private void PostBuild(IIntegrationResult result)
 		{
-			if (ShouldPublishResult(result))
-			{
-				LabelSourceControl(result);
-				target.PublishResults(result);
-				resultManager.FinishIntegration();
-			}
-			Log.Info("Integration complete: " + result.EndTime);
-
-			target.Activity = ProjectActivity.Sleeping;
+			target.PublishResults(result);
+			resultManager.FinishIntegration();
 		}
 
-		private void LabelSourceControl(IIntegrationResult result)
+		private void CreateDirectoryIfItDoesntExist(string directory)
 		{
-			try
-			{
-				target.SourceControl.LabelSourceControl(result);
-			}
-			catch (Exception e)
-			{
-				Log.Error(new CruiseControlException("Exception occurred while labelling source control provider.", e));
-			}
-		}
-
-		private bool ShouldPublishResult(IIntegrationResult result)
-		{
-			IntegrationStatus integrationStatus = result.Status;
-			if (integrationStatus == IntegrationStatus.Exception)
-			{
-				return target.PublishExceptions;
-			}
-			else
-			{
-				return integrationStatus != IntegrationStatus.Unknown;
-			}
+			if (! Directory.Exists(directory))
+				Directory.CreateDirectory(directory);
 		}
 	}
 }

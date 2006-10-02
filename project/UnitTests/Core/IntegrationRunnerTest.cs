@@ -69,10 +69,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 		{
 			SetupPreambleExpections();
 			resultMock.ExpectAndReturn("ShouldRunBuild", false);
-			resultMock.Expect("MarkEndTime");
 			targetMock.Expect("Activity", ProjectActivity.Sleeping);
-			resultMock.ExpectAndReturn("Status", IntegrationStatus.Unknown);
-			resultMock.ExpectAndReturn("EndTime", endTime);
 
 			IIntegrationResult returnedResult = runner.Integrate(request);
 
@@ -94,23 +91,6 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 			Assert.AreEqual(result, returnedResult);
 			mockery.Verify();
 		}
-
-		[Test]
-		public void ShouldStillPublishResultsIfLabellingThrowsException()
-		{
-			SetupPreambleExpections();
-			SetupShouldBuildExpectations();
-			resultMock.ExpectAndReturn("Status", IntegrationStatus.Success);
-			resultMock.ExpectAndReturn("Status", IntegrationStatus.Success);
-			sourceControlMock.ExpectAndThrow("LabelSourceControl", new Exception(), result);
-			targetMock.Expect("PublishResults", result);
-			resultManagerMock.Expect("FinishIntegration");
-
-			IIntegrationResult returnedResult = runner.Integrate(request);
-
-			Assert.AreEqual(result, returnedResult);
-			mockery.Verify();
-		}
 		
 		[Test]
 		public void ShouldStillPublishResultsIfPrebuildThrowsException()
@@ -126,7 +106,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 			targetMock.Expect("Activity", ProjectActivity.Sleeping);
 			resultMock.ExpectAndReturn("EndTime", endTime);
 			resultMock.ExpectAndReturn("Status", IntegrationStatus.Exception);
-			targetMock.ExpectAndReturn("PublishExceptions", false);
+			targetMock.Expect("PublishResults", result);
+			resultManagerMock.Expect("FinishIntegration");
 
 			runner.Integrate(ModificationExistRequest());
 			mockery.Verify();
@@ -159,7 +140,6 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 
 		private void SetupBuildPassExpectations()
 		{
-			resultMock.ExpectAndReturn("Status", IntegrationStatus.Success);
 			resultMock.ExpectAndReturn("Status", IntegrationStatus.Success);
 			sourceControlMock.Expect("LabelSourceControl", result);
 			targetMock.Expect("PublishResults", result);
