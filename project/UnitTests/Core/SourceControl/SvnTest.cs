@@ -98,6 +98,14 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 		}
 
 		[Test]
+		public void CreatingHistoryProcessShouldHandleImplicitTrunkUrl()
+		{
+			ExpectToExecuteArguments("log -r \"{2001-01-21T20:00:00Z}:{2001-01-21T20:30:50Z}\" --verbose --xml --non-interactive");
+			svn.TrunkUrl = null;
+			svn.GetModifications(IntegrationResult(from), IntegrationResult(to));
+		}
+
+		[Test]
 		public void ShouldRebaseWorkingDirectoryForHistory()
 		{
 			ExpectToExecuteArguments("log svn://myserver/mypath -r \"{2001-01-21T20:00:00Z}:{2001-01-21T20:30:50Z}\" --verbose --xml --non-interactive");

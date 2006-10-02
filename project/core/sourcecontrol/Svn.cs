@@ -103,7 +103,8 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 		private ProcessInfo NewHistoryProcessInfo(IIntegrationResult from, IIntegrationResult to)
 		{
 			ProcessArgumentBuilder buffer = new ProcessArgumentBuilder();
-			buffer.AddArgument("log", TrunkUrl);
+			buffer.AddArgument("log");
+			buffer.AddArgument(TrunkUrl);
 			buffer.AppendArgument(string.Format("-r \"{{{0}}}:{{{1}}}\"", FormatCommandDate(from.StartTime), FormatCommandDate(to.StartTime)));
 			buffer.AppendArgument("--verbose --xml");
 			AppendCommonSwitches(buffer);
