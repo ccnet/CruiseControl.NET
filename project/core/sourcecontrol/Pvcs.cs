@@ -4,7 +4,6 @@ using System.Collections.Specialized;
 using System.Globalization;
 using System.IO;
 using System.Text;
-using System.Threading;
 using Exortech.NetReflector;
 using ThoughtWorks.CruiseControl.Core.Util;
 
@@ -14,7 +13,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 	public class Pvcs : ProcessSourceControl
 	{
 		private const string DELETE_LABEL_TEMPLATE =
-			@"run -y -xe""{0}"" -xo""{1}"" DeleteLabel -pr""{2}"" {3} {4} {5} {7}";
+			@"run -y -xe""{0}"" -xo""{1}"" DeleteLabel -pr""{2}"" {3} {4} {5} {6}";
 
 		private const string APPLY_LABEL_TEMPLATE =
 			@"Vcs -q -xo""{0}"" -xe""{1}"" {2} -v""{3}"" ""@{4}""";
@@ -124,14 +123,14 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 
 			using (TextReader reader = ExecuteVLog(from.StartTime, to.StartTime))
 			{
-				modifications = base.ParseModifications(reader, from.StartTime, to.StartTime);
+				modifications = ParseModifications(reader, from.StartTime, to.StartTime);
 			}
 			return modifications;
 		}
 
 		private string GetRecursiveValue()
 		{
-			return Recursive == true ? "-z" : string.Empty;
+			return Recursive ? "-z" : string.Empty;
 		}
 
 		private TextReader ExecuteVLog(DateTime from, DateTime to)
@@ -344,13 +343,13 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 
 			// Ensure the Label Or Promotion Name exist
 			if (LabelOrPromotionName.Length > 0)
-				LabelSourceControl("", LabelOrPromotionName);
+				LabelSourceControl("", LabelOrPromotionName, result.ProjectName);
 			// This allows for the labeller concept to support absolute labelling
 			if (result.Label != LabelOrPromotionName)
-				LabelSourceControl(LabelOrPromotionName, result.Label);
+				LabelSourceControl(LabelOrPromotionName, result.Label, result.ProjectName);
 		}
 
-		private void LabelSourceControl(string oldLabel, string newLabel)
+		private void LabelSourceControl(string oldLabel, string newLabel, string project)
 		{
 			if (oldLabel.Length > 0)
 			{
@@ -367,7 +366,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 					stream.WriteLine(CreateIndividualLabelString(mod, (oldLabel.Length > 0 ? newLabel : "")));
 				}
 			}
-			Log.Info("Applying PVCS Label " + newLabel + " on Project " + Thread.CurrentThread.Name);
+			Log.Info("Applying PVCS Label " + newLabel + " on Project " + project);
 			// Allow us to use same logic for Executing files
 			ExecuteNonPvcsFunction(CreatePcliContentsForLabeling(newLabel));
 		}
@@ -389,7 +388,6 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			}
 
 			ArrayList allMods = new ArrayList();
-
 			foreach (Modification mod in baseModifications)
 			{
 				allMods.Add(mod);
@@ -401,15 +399,9 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 
 			// Only Modifications that need stamp should be generated
 			modifications = PvcsHistoryParser.AnalyzeModifications(allMods);
-
-			// Cleanup
-			allMods.Clear();
-			allMods = null;
 		}
 
 		#endregion
-
-		#region Date Functions
 
 		public static string GetDateString(DateTime dateToConvert)
 		{
@@ -438,33 +430,5 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 				throw new CruiseControlException("Unable to parse: " + dateToParse, ex);
 			}
 		}
-
-		#endregion
-
-		#region ITemporaryLabeller Members - Not Implemented At this Time 
-
-		public void CreateDateSpecificTemporaryLabel(DateTime dt)
-		{
-			// this was created public for testing
-			tempLabel = Thread.CurrentThread.Name + "_" + Convert.ToString(dt.Ticks);
-		}
-
-		public void CreateTemporaryLabel()
-		{
-			CreateDateSpecificTemporaryLabel(DateTime.Now);
-
-			LabelSourceControl("", tempLabel);
-
-			// Copy the revisions of the Label / Promotion Group into the temporary label
-			if (LabelOnSuccess && LabelOrPromotionName.Length > 0)
-				LabelSourceControl(LabelOrPromotionName, tempLabel);
-		}
-
-		public void DeleteTemporaryLabel()
-		{
-			Execute(CreatePcliContentsForDeletingLabel(tempLabel));
-		}
-
-		#endregion
 	}
 }

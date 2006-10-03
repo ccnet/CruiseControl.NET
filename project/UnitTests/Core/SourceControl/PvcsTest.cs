@@ -1,6 +1,5 @@
 using System;
 using System.Globalization;
-using System.Threading;
 using Exortech.NetReflector;
 using NMock;
 using NMock.Constraints;
@@ -8,8 +7,6 @@ using NUnit.Framework;
 using ThoughtWorks.CruiseControl.Core;
 using ThoughtWorks.CruiseControl.Core.Sourcecontrol;
 using ThoughtWorks.CruiseControl.Core.Util;
-using ThoughtWorks.CruiseControl.UnitTests;
-using ThoughtWorks.CruiseControl.UnitTests.Core;
 
 namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 {
@@ -121,20 +118,6 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 			Modification[] mods = pvcs.GetModifications(IntegrationResultMother.CreateSuccessful(new DateTime(2004, 6, 1, 1, 1, 1)), 
 				IntegrationResultMother.CreateSuccessful(new DateTime(2004, 6, 1, 2, 2, 2)));
 			Assert.AreEqual(2, mods.Length);
-		}
-
-		[Test]
-		public void CreatePcliContentsForGet()
-		{
-			Thread.CurrentThread.Name = "TEST";
-			pvcs.Project = "foo";
-			pvcs.Subproject = "bar";
-			DateTime dt = DateTime.Now;
-			pvcs.CreateDateSpecificTemporaryLabel(dt);
-			string expected = "run -y -xe\"" + pvcs.ErrorFile + "\" -xo\"" + pvcs.LogFile +
-				"\" -q Get -pr\"foo\"  -z -sp\"/@/RootWorkspace\" -vTEST_" + Convert.ToString(dt.Ticks) + " bar ";
-			string actual = pvcs.CreatePcliContentsForGet();
-			Assert.AreEqual(expected, actual);
 		}
 
 		[Test]
