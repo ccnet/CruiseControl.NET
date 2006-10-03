@@ -169,7 +169,7 @@
 	</target>
 
 	<!-- CREATE DISTRIBUTABLES -->
-	<target name="dist" depends="deploy">
+	<target name="dist" depends="deploy">	
 		<copy todir="deployed" file="license.txt" />
 		<copy todir="deployed\doc">
 			<fileset basedir="doc">
@@ -183,6 +183,14 @@
 		</copy>
 
 		<mkdir dir="dist"/>
+
+		<exec program="tools\NSIS\makensis.exe" commandline="cctray.nsi" />		
+		<copy todir="${webdashboard.dir}\cctray">
+			<fileset basedir="dist">
+				<include name="*CCTray*.exe" />
+			</fileset>
+		</copy>
+		
 		<zip zipfile="dist\CruiseControl.NET-${CCNetLabel}.zip">
 			<fileset basedir="deployed">
 				<include name="**\*" />
@@ -203,13 +211,6 @@
 				<exclude name="**\_Resharper*\**" />
 			</fileset>
 		</zip>
-
-		<exec program="tools\NSIS\makensis.exe" commandline="cctray.nsi" />
-		<copy todir="${webdashboard.dir}\cctray">
-			<fileset basedir="dist">
-				<include name="*CCTray*.exe" />
-			</fileset>
-		</copy>
 		<exec program="tools\NSIS\makensis.exe" commandline="ccnet.nsi" />
 	</target>
 		
