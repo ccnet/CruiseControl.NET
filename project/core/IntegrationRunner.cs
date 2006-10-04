@@ -12,8 +12,7 @@ namespace ThoughtWorks.CruiseControl.Core
 		private readonly IIntegrationResultManager resultManager;
 		private readonly IQuietPeriod quietPeriod;
 
-		public IntegrationRunner(IIntegrationResultManager resultManager, IIntegrationRunnerTarget target,
-		                         IQuietPeriod quietPeriod)
+		public IntegrationRunner(IIntegrationResultManager resultManager, IIntegrationRunnerTarget target, IQuietPeriod quietPeriod)
 		{
 			this.target = target;
 			this.quietPeriod = quietPeriod;
