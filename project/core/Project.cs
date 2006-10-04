@@ -43,7 +43,6 @@ namespace ThoughtWorks.CruiseControl.Core
 		private ProjectActivity currentActivity = ProjectActivity.Sleeping;
 		private IStateManager state = new FileStateManager(new SystemIoFileSystem());
 		private IIntegrationResultManager integrationResultManager;
-		private bool publishExceptions = true;
 		private IIntegratable integratable;
 		private QuietPeriod quietPeriod = new QuietPeriod(new DateTimeProvider());
 		private ArrayList messages = new ArrayList();
