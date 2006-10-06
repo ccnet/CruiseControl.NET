@@ -1146,6 +1146,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Core\Util\PathUtilTest.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Core\Util\ProcessExecutorTest.cs"
                     SubType = "Code"
                     BuildAction = "Compile"

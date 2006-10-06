@@ -1219,6 +1219,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "util\PathUtil.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "util\ProcessArgumentBuilder.cs"
                     SubType = "Code"
                     BuildAction = "Compile"

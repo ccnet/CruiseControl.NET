@@ -5,7 +5,7 @@ using ThoughtWorks.CruiseControl.Core.Sourcecontrol;
 
 namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 {
-	[TestFixture]
+    [TestFixture]
 	public class PathFilterTest
 	{
 		[Test]
@@ -92,6 +92,21 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 			filter.Pattern = "c:\\*.*";
 			Assert.IsFalse(filter.Accept(modification));
 		}
+	    
+	    [Test]
+	    public void DeeplyNestedFilters()
+	    {
+            Modification[] modlist = new Modification[]
+                {
+                    ModificationMother.CreateModification("x.cs", "/working/sources"),
+                    ModificationMother.CreateModification("Entries", "/working/sources/CVS"),
+                    ModificationMother.CreateModification("x.build", "/working/build"),
+                    ModificationMother.CreateModification("x.dll", "/working/build/target/sources")                 
+                };
+	        PathFilter filter = new PathFilter();
+	        filter.Pattern = "**/sources/**/*.*";
+	        filter.Accept(modlist[0]);
+        }
 
 		private static Modification[] Modifications = 
 			{

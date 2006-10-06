@@ -117,5 +117,55 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 					ModificationMother.CreateModification("test.csproj", "/sources"),
 					ModificationMother.CreateModification("version.cs", "/sources/info")
 				};
-	}
+        public static readonly Modification[] ModificationsWithCVS = new Modification[]
+                {
+                    ModificationMother.CreateModification("x.cs", "/working/sources"),
+                    ModificationMother.CreateModification("Entries", "/working/sources/CVS"),
+                    ModificationMother.CreateModification("x.build", "/working/build"),
+                    ModificationMother.CreateModification("x.dll", "/working/build/target/sources")                 
+                };
+                
+        private const string SourceControlXmlWithCVS =
+            @"<sourcecontrol type=""filtered"">
+                <sourceControlProvider type=""mocksourcecontrol"">
+                        <anOptionalProperty>foo</anOptionalProperty>
+                </sourceControlProvider>
+                <inclusionFilters>
+                    <pathFilter>
+                        <pattern>**/sources/**/*.*</pattern>
+                    </pathFilter>
+                    <pathFilter>
+                        <pattern>**/build/**/*.*</pattern>
+                    </pathFilter>
+                </inclusionFilters>
+                <exclusionFilters>
+                    <pathFilter>
+                        <pattern>**/CVS/**/*.*</pattern>
+                    </pathFilter>
+                    <pathFilter>
+                        <pattern>**/target/**/*.*</pattern>
+                    </pathFilter>
+                </exclusionFilters>
+              </sourcecontrol>";
+              
+        [Test]
+        public void AppliesInclusionExclusionOnModifications()
+        {
+            // Setup
+            IntegrationResult from = IntegrationResult(DateTime.Now);
+            IntegrationResult to = IntegrationResult(DateTime.Now.AddDays(10));
+            _mockSC.ExpectAndReturn("GetModifications", ModificationsWithCVS, from, to);
+            
+            NetReflector.Read(SourceControlXmlWithCVS, _filteredSourceControl);
+            _filteredSourceControl.SourceControlProvider = (ISourceControl)_mockSC.MockInstance;
+
+            //// EXECUTE
+            Modification[] filteredResult = _filteredSourceControl.GetModifications(from, to);
+
+            //// VERIFY
+            Assert.AreEqual(2, filteredResult.Length);     
+            Assert.AreEqual("x.cs", filteredResult[0].FileName);
+            Assert.AreEqual("x.build", filteredResult[1].FileName);
+        }
+    }
 }
