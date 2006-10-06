@@ -1,13 +1,8 @@
-using System.Collections;
 using NMock;
 using NUnit.Framework;
-using ThoughtWorks.CruiseControl.Core.Reporting.Dashboard.Navigation;
-using ThoughtWorks.CruiseControl.UnitTests.UnitTestUtils;
 using ThoughtWorks.CruiseControl.WebDashboard.Dashboard;
 using ThoughtWorks.CruiseControl.WebDashboard.Dashboard.Actions;
 using ThoughtWorks.CruiseControl.WebDashboard.Dashboard.GenericPlugins;
-using ThoughtWorks.CruiseControl.WebDashboard.IO;
-using ThoughtWorks.CruiseControl.WebDashboard.MVC;
 
 namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard.Actions
 {
@@ -16,12 +11,12 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard.Actions
 	{
 		private DynamicMock actionInstantiatorMock;
 		private XslMultiReportBuildPlugin buildPlugin;
-		private string[] xslFiles = new string[2]{@"xsl\myxsl.xsl", @"xsl\myxsl2.xsl"};
+		private string[] xslFiles = new string[2] {@"xsl\myxsl.xsl", @"xsl\myxsl2.xsl"};
 
 		[SetUp]
 		public void Setup()
 		{
-			actionInstantiatorMock = new DynamicMock(typeof(IActionInstantiator));
+			actionInstantiatorMock = new DynamicMock(typeof (IActionInstantiator));
 			buildPlugin = new XslMultiReportBuildPlugin((IActionInstantiator) actionInstantiatorMock.MockInstance);
 		}
 
@@ -52,7 +47,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard.Actions
 			buildPlugin.XslFileNames = xslFiles;
 
 			MultipleXslReportBuildAction xslReportAction = new MultipleXslReportBuildAction(null);
-			actionInstantiatorMock.ExpectAndReturn("InstantiateAction", xslReportAction, typeof(MultipleXslReportBuildAction));
+			actionInstantiatorMock.ExpectAndReturn("InstantiateAction", xslReportAction, typeof (MultipleXslReportBuildAction));
 
 			INamedAction[] namedActions = buildPlugin.NamedActions;
 
