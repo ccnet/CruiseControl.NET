@@ -1367,6 +1367,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "WebDashboard\Dashboard\Actions\XslMultiGenericReportActionTest.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "WebDashboard\Dashboard\Actions\XslReportActionTest.cs"
                     SubType = "Code"
                     BuildAction = "Compile"

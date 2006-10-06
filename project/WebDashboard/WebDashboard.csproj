@@ -200,6 +200,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Configuration\IDecoratorProvider.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Configuration\IPluginConfiguration.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -475,6 +480,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Dashboard\GenericPlugins\XslMultiReportBuildPlugin.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Dashboard\GenericPlugins\XslReportBuildPlugin.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -684,6 +694,11 @@
                 />
                 <File
                     RelPath = "MVC\Cruise\UnknownActionAction.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "MVC\Cruise\XmlExceptionCatchingActionProxy.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
