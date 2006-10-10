@@ -48,8 +48,7 @@ namespace ThoughtWorks.CruiseControl.Core
 			BuildCondition = request.BuildCondition;
 		}
 
-		public IntegrationResult(string projectName, string workingDirectory, 
-			string statisticsFile, IntegrationRequest request) : this(projectName, workingDirectory, request)
+		public IntegrationResult(string projectName, string workingDirectory, string statisticsFile, IntegrationRequest request) : this(projectName, workingDirectory, request)
 		{
 			StatisticsFile = statisticsFile;
 		}

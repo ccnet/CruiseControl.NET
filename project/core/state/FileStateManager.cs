@@ -33,10 +33,14 @@ namespace ThoughtWorks.CruiseControl.Core.State
 			}
 		}
 
+		public bool HasPreviousState(string project)
+		{
+			return fileSystem.FileExists(GetFilePath(project));
+		}
+		
 		public IIntegrationResult LoadState(string project)
 		{
 			string stateFilePath = GetFilePath(project);
-			if (! fileSystem.FileExists(stateFilePath)) return IntegrationResult.CreateInitialIntegrationResult(project, null);
 
 			XmlSerializer serializer = new XmlSerializer(typeof (IntegrationResult));
 			try

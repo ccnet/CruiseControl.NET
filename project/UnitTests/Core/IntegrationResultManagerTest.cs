@@ -73,6 +73,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 
 		private void ExpectToLoadState(IIntegrationResult result)
 		{
+			mockStateManager.ExpectAndReturn("HasPreviousState", true, "project");
 			mockStateManager.ExpectAndReturn("LoadState", result, "project");
 		}
 

@@ -66,5 +66,10 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 		{
 			savedResult = result;
 		}
+
+		public bool HasPreviousState(string project)
+		{
+			return true;
+		}
 	}
 }

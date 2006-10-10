@@ -21,5 +21,7 @@ namespace ThoughtWorks.CruiseControl.Core.State
 		/// </summary>
 		/// <param name="result"></param>
 		void SaveState(IIntegrationResult result);
+
+		bool HasPreviousState(string project);
 	}
 }

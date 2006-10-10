@@ -21,7 +21,10 @@ namespace ThoughtWorks.CruiseControl.Core
 			{
 				if (lastResult == null)
 				{
-					lastResult = project.StateManager.LoadState(project.Name);
+					if (project.StateManager.HasPreviousState(project.Name))
+						lastResult = project.StateManager.LoadState(project.Name);
+					else
+						lastResult = IntegrationResult.CreateInitialIntegrationResult(project.Name, project.WorkingDirectory);
 				}
 				return lastResult;
 			}

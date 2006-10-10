@@ -45,13 +45,20 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.State
 			Assert.AreEqual(@"c:\temp", state.StateFileDirectory);
 		}
 
-		[Test]
-		public void LoadShouldReturnInitialIntegrationResultIfStateFileDoesNotExist()
+		[Test, ExpectedException(typeof(CruiseControlException))]
+		public void LoadShouldThrowExceptionIfStateFileDoesNotExist()
 		{
-			mockIO.ExpectAndReturn("FileExists", false, StateFilename());		
-			Assert.IsTrue(state.LoadState(ProjectName).IsInitial());
+			mockIO.ExpectAndThrow("Load", new FileNotFoundException(), StateFilename());		
+			state.LoadState(ProjectName);
 		}
 
+		[Test]
+		public void HasPreviousStateIsTrueIfStateFileExists()
+		{
+			mockIO.ExpectAndReturn("FileExists", true, StateFilename());		
+			Assert.IsTrue(state.HasPreviousState(ProjectName));			
+		}
+		
 		[Test]
 		public void SaveAndReload()
 		{
@@ -59,7 +66,6 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.State
 			mockIO.Expect("Save", StateFilename(), contents);
 			state.SaveState(result);
 
-			mockIO.ExpectAndReturn("FileExists", true, StateFilename());
 			mockIO.ExpectAndReturn("Load", new StringReader(contents.Parameter.ToString()), StateFilename());
 			IIntegrationResult actual = state.LoadState(ProjectName);
 			Assert.AreEqual(result, actual);
@@ -95,7 +101,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.State
 		{
 			mockIO.Expect("Save", StateFilename(), new StartsWith("<?xml version=\"1.0\" encoding=\"utf-8\"?>"));
 
-			IntegrationResult result = IntegrationResultMother.CreateSuccessful();
+			result = IntegrationResultMother.CreateSuccessful();
 			result.ArtifactDirectory = "artifactDir";
 			state.SaveState(result);
 		}
@@ -110,7 +116,6 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.State
 		[Test, ExpectedException(typeof(CruiseControlException))]
 		public void HandleExceptionLoadingStateFile()
 		{
-			mockIO.ExpectAndReturn("FileExists", true, StateFilename());
 			mockIO.ExpectAndThrow("Load", new SystemException(), StateFilename());
 			state.LoadState(ProjectName);
 		}

@@ -174,6 +174,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 			expected.Label = "previous";
 			expected.Status = IntegrationStatus.Success;
 
+			mockStateManager.ExpectAndReturn("HasPreviousState", true, ProjectName);
 			mockStateManager.ExpectAndReturn("LoadState", expected, ProjectName);
 
 			Assert.AreEqual(expected, project.LastIntegrationResult);
@@ -340,11 +341,10 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 		[Test]
 		public void RunningFirstIntegrationShouldForceBuild()
 		{
-			IntegrationResult initialResult = IntegrationResult.CreateInitialIntegrationResult(ProjectName, @"c:\temp");
-			mockStateManager.ExpectAndReturn("LoadState", initialResult, ProjectName); // running the first integration (no state file)
+			mockStateManager.ExpectAndReturn("HasPreviousState", false, ProjectName); // running the first integration (no state file)
 			mockStateManager.Expect("SaveState", new IsAnything());
-			mockLabeller.ExpectAndReturn("Generate", "label", initialResult); // generate new label
-			mockSourceControl.ExpectAndReturn("GetModifications", new Modification[0], initialResult, new IsAnything()); // return no modifications found
+			mockLabeller.ExpectAndReturn("Generate", "label", new IsAnything()); // generate new label
+			mockSourceControl.ExpectAndReturn("GetModifications", new Modification[0], new IsAnything(), new IsAnything()); // return no modifications found
 			mockSourceControl.Expect("GetSource", new IsAnything());
 			mockSourceControl.Expect("LabelSourceControl", new IsAnything());
 			mockPublisher.Expect("Run", new IsAnything());
@@ -368,10 +368,10 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 			VerifyAll();
 		}
 
-		//TODO: question: should state be saved after a poll with no modifications and no build?? -- i think it should: implication for last build though
 		[Test] 
 		public void RunningIntegrationWithNoModificationsShouldNotBuildOrPublish()
 		{
+			mockStateManager.ExpectAndReturn("HasPreviousState", true, ProjectName);
 			mockStateManager.ExpectAndReturn("LoadState", IntegrationResultMother.CreateSuccessful(), ProjectName);
 			mockSourceControl.ExpectAndReturn("GetModifications", new Modification[0], new IsAnything(), new IsAnything()); // return no modifications found
 			mockPublisher.ExpectNoCall("Run", typeof (IntegrationResult));
@@ -396,7 +396,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 		{
 			Modification[] modifications = new Modification[1] {new Modification()};
 
-			mockStateManager.ExpectAndReturn("LoadState", IntegrationResult.CreateInitialIntegrationResult(ProjectName, @"c:\temp"), ProjectName); // running the first integration (no state file)
+			mockStateManager.ExpectAndReturn("HasPreviousState", false, ProjectName);
 			mockStateManager.Expect("SaveState", new IsAnything());
 			mockLabeller.ExpectAndReturn("Generate", "label", new IsAnything()); // generate new label
 			mockSourceControl.ExpectAndReturn("GetModifications", modifications, new IsAnything(), new IsAnything());
@@ -413,6 +413,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 			Assert.AreEqual(IntegrationStatus.Unknown, result.LastIntegrationStatus);
 			Assert.AreEqual("label", result.Label);
 			Assert.IsTrue(result.HasModifications());
+			Assert.AreEqual(project.WorkingDirectory, result.WorkingDirectory);
 			Assert.AreEqual(modifications, result.Modifications);
 			Assert.IsTrue(result.EndTime >= result.StartTime);
 			VerifyAll();
@@ -421,6 +422,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 		[Test, ExpectedException(typeof (CruiseControlException))]
 		public void RethrowExceptionIfLoadingStateFileThrowsException()
 		{
+			mockStateManager.ExpectAndReturn("HasPreviousState", true, ProjectName);
 			mockStateManager.ExpectAndThrow("LoadState", new CruiseControlException("expected exception"), ProjectName);
 
 			project.Integrate(ModificationExistRequest());
@@ -435,14 +437,11 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 			mockSourceControl.Expect("GetSource", new IsAnything());
 			mockSourceControl.Expect("LabelSourceControl", new IsAnything());
 			mockPublisher.Expect("Run", new IsAnything());
-			IMock stateMock = new DynamicMock(typeof (IStateManager));
-			stateMock.ExpectAndReturn("LoadState", IntegrationResult.CreateInitialIntegrationResult(ProjectName, @"c:\temp"), ProjectName); // running the first integration (no state file)
-			project.StateManager = (IStateManager) stateMock.MockInstance;
+			mockStateManager.ExpectAndReturn("HasPreviousState", false, ProjectName);
 			mockTask.Expect("Run", new AddTaskResultConstraint());
+			mockStateManager.Expect("SaveState", new IsAnything());
 
 			IIntegrationResult results = project.Integrate(ModificationExistRequest());
-
-			stateMock.Expect("SaveState", results);
 
 			Assert.AreEqual(results, project.LastIntegrationResult, "new integration result has not been set to the last integration result");
 			Assert.IsNotNull(results.EndTime);
@@ -477,11 +476,11 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 			return modifications;
 		}
 
-		[Test] // publishers will need to log their own exceptions
-			public void IfPublisherThrowsExceptionShouldStillSaveState()
+		// publishers will need to log their own exceptions
+		[Test] public void IfPublisherThrowsExceptionShouldStillSaveState()
 		{
 			mockLabeller.ExpectAndReturn("Generate", "1.0", new IsAnything());
-			mockStateManager.ExpectAndReturn("LoadState", IntegrationResult.CreateInitialIntegrationResult(ProjectName, @"c:\temp"), ProjectName); // running the first integration (no state file)
+			mockStateManager.ExpectAndReturn("HasPreviousState", false, ProjectName);
 			mockStateManager.Expect("SaveState", new IsAnything());
 			mockSourceControl.ExpectAndReturn("GetModifications", CreateModifications(), new IsAnything(), new IsAnything());
 			mockSourceControl.Expect("GetSource", new IsAnything());
@@ -502,7 +501,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 		public void TimedoutTaskShouldFailBuildIfPublishExceptionsIsTrue()
 		{
 			mockLabeller.ExpectAndReturn("Generate", "1.0", new IsAnything());
-			mockStateManager.ExpectAndReturn("LoadState", IntegrationResult.CreateInitialIntegrationResult(ProjectName, @"c:\temp"), ProjectName); // running the first integration (no state file)
+			mockStateManager.ExpectAndReturn("HasPreviousState", false, ProjectName);
 			mockStateManager.Expect("SaveState", new IsAnything());
 			mockTask.ExpectAndThrow("Run", new CruiseControlException(), new IsAnything());
 			mockSourceControl.ExpectAndReturn("GetModifications", CreateModifications(), new IsAnything(), new IsAnything());
@@ -517,7 +516,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 		[Test]
 		public void AddedMessageShouldBeIncludedInProjectStatus()
 		{
-			mockStateManager.ExpectAndReturn("LoadState", IntegrationResult.CreateInitialIntegrationResult(ProjectName, @"c:\temp"), ProjectName);
+			mockStateManager.ExpectAndReturn("HasPreviousState", false, ProjectName);
 			mockTrigger.ExpectAndReturn("NextBuild", DateTime.Now);
 
 			Message message = new Message("foo");
@@ -530,7 +529,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 		public void PrebuildShouldIncrementLabelAndRunPrebuildTasks()
 		{
 			IntegrationResult result = IntegrationResult.CreateInitialIntegrationResult(ProjectName, "c:\\root");
-			mockStateManager.ExpectAndReturn("LoadState", IntegrationResult.CreateInitialIntegrationResult(ProjectName, @"c:\temp"), ProjectName);
+			mockStateManager.ExpectAndReturn("HasPreviousState", false, ProjectName);
 			mockLabeller.ExpectAndReturn("Generate", "1.0", result);
 			IMock mockPrebuildTask = mockery.NewStrictMock(typeof(ITask));
 			mockPrebuildTask.Expect("Run", result);
