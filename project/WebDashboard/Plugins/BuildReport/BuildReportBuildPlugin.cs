@@ -20,5 +20,22 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.BuildReport
 		{
 			get { return "Build Report"; }
 		}
+
+		public new string ActionName
+		{
+			get
+			{
+				return ACTION_NAME;
+			}
+			set
+			{
+			}
+		}
+
+		public new string ConfiguredLinkDescription
+		{
+			get { return "Build Report"; }
+			set {}
+		}
 	}
 }
