@@ -32,17 +32,16 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers.Statistics
 
 		public IList ProcessBuildResults(IIntegrationResult result)
 		{
-			return ProcessBuildResults(toXml(result));
+			return ProcessBuildResults(ToXml(result));
 		}
 
-		private string toXml(IIntegrationResult result)
+		private string ToXml(IIntegrationResult result)
 		{
 			StringWriter xmlResultString = new StringWriter();
 			XmlIntegrationResultWriter writer = new XmlIntegrationResultWriter(xmlResultString);
 			writer.Write(result);
 			return xmlResultString.ToString();
 		}
-
 
 		public IList ProcessBuildResults(string xmlString)
 		{
@@ -90,7 +89,7 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers.Statistics
 			for (int i = 0; i < logStatistics.Count; i++)
 			{
 				Statistic statistic = (Statistic) logStatistics[i];
-				writer.Write(", ");
+				if (i > 0) writer.Write(", ");
 				writer.Write('"' + statistic.Name + '"');
 			}
 			writer.WriteLine();
@@ -102,7 +101,7 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers.Statistics
 			{
 				StatisticResult statistic = (StatisticResult) stats[i];
 				if (i > 0) writer.Write(", ");
-				writer.Write(statistic.StatName);
+				writer.Write(statistic.Value);
 			}
 			writer.WriteLine();
 		}

@@ -1,12 +1,13 @@
 using System;
 using System.Collections;
 using System.IO;
+using System.Text;
 using System.Xml;
 using System.Xml.XPath;
 using NUnit.Framework;
 using ThoughtWorks.CruiseControl.Core;
-using ThoughtWorks.CruiseControl.Core.Publishers;
 using ThoughtWorks.CruiseControl.Core.Publishers.Statistics;
+using ThoughtWorks.CruiseControl.Remote;
 
 namespace ThoughtWorks.CruiseControl.UnitTests.Core.Publishers.Statistics
 {
@@ -15,7 +16,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Publishers.Statistics
 	{
 		private const string outDir = "temp";
 		private StatisticsBuilder builder;
-		IntegrationResult result;
+		private IntegrationResult result;
 		private string successfulBuildLog;
 		private string failedBuildLog;
 
@@ -36,20 +37,6 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Publishers.Statistics
 			builder = new StatisticsBuilder();
 			result = IntegrationResultMother.Create(true);
 			Directory.CreateDirectory(outDir);
-		}
-
-
-		private string xmlResult()
-		{
-			return toXml(result);
-		}
-
-		private string toXml(IIntegrationResult result)
-		{
-			StringWriter xmlResultString = new StringWriter();
-			XmlIntegrationResultWriter writer = new XmlIntegrationResultWriter(xmlResultString);
-			writer.Write(result);
-			return xmlResultString.ToString();
 		}
 
 		[TearDown]
@@ -78,7 +65,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Publishers.Statistics
 
 			result.AddTaskResult(xml);
 
-			builder.ProcessBuildResults(xmlResult());
+			builder.ProcessBuildResults(result);
 
 			AssertHasStatistic("TestCount", 7);
 			AssertHasStatistic("TestFailures", 2);
@@ -101,6 +88,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Publishers.Statistics
 			Assert.AreEqual("NAnt.Core.BuildException", failureType);
 			Assert.AreEqual(@"External Program Failed: c:\sf\ccnet\tools\ncover\NCover.Console.exe (return code was 1)", failureMessage);
 		}
+
 		[Test]
 		public void ShouldCollectFxCopStatistics()
 		{
@@ -108,7 +96,6 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Publishers.Statistics
 
 			AssertHasStatistic("FxCop Warnings", 1);
 			AssertHasStatistic("FxCop Errors", 205);
-
 		}
 
 		[Test]
@@ -118,18 +105,17 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Publishers.Statistics
 			result.EndTime = new DateTime(2005, 03, 12, 01, 45, 00);
 			result.ProjectName = "Foo";
 
-			builder.ProcessBuildResults(xmlResult());
+			builder.ProcessBuildResults(result);
 
 			AssertHasStatistic("StartTime", result.StartTime.ToString());
 			AssertHasStatistic("Duration", new TimeSpan(0, 32, 0).ToString());
 			AssertHasStatistic("ProjectName", "Foo");
-
 		}
 
 		[Test]
 		public void ShouldWriteStatisticsAsXml()
 		{
-			builder.ProcessBuildResults(xmlResult());
+			builder.ProcessBuildResults(result);
 			StringWriter writer = new StringWriter();
 			builder.Save(writer);
 			string xml = writer.ToString();
@@ -145,6 +131,23 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Publishers.Statistics
 			Assert.AreEqual(count + 1, builder.Statistics.Count);
 			builder.Add(new Statistic("abc", "cdf"));
 			Assert.AreEqual(count + 1, builder.Statistics.Count, "Duplicate Statistic added");
+		}
+
+		[Test]
+		public void WriteHeadingShouldHaveCorrectNumberOfColumns()
+		{
+			StringBuilder buffer = new StringBuilder();
+			builder.WriteHeadings(new StringWriter(buffer));
+			AssertStartsWith("\"BuildErrorType\", \"BuildErrorMessage\"", buffer.ToString());
+		}
+
+		[Test]
+		public void WriteStatsShouldWriteStatValue()
+		{
+			StringBuilder buffer = new StringBuilder();
+			builder.ProcessBuildResults(result);
+			builder.WriteStats(new StringWriter(buffer));
+			AssertContains(result.ProjectName, buffer.ToString());
 		}
 
 		private void AssertXPath(string xml, string xpath, string expectedValue)

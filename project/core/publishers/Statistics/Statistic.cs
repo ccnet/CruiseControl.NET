@@ -52,7 +52,7 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers.Statistics
 
 		public override int GetHashCode()
 		{
-			return base.GetHashCode();
+			return name.GetHashCode();
 		}
 	}
 
@@ -65,7 +65,6 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers.Statistics
 		{
 			this.statName = statName;
 			this.value = value;
-
 		}
 
 		public string StatName
