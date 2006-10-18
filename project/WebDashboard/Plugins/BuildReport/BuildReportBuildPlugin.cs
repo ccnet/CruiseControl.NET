@@ -5,15 +5,18 @@ using ThoughtWorks.CruiseControl.WebDashboard.Dashboard.GenericPlugins;
 
 namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.BuildReport
 {
-	// ToDo - Test!
+	// ToDo - Refactor to inherit from XslMultiReportBuildPlugin at some point
 	[ReflectorType("buildReportBuildPlugin")]
-	public class BuildReportBuildPlugin : XslMultiReportBuildPlugin
+	public class BuildReportBuildPlugin : ProjectConfigurableBuildPlugin
 	{
 		public static readonly string ACTION_NAME = "ViewBuildReport";
 
-		public BuildReportBuildPlugin(IActionInstantiator actionInstantiator):base(actionInstantiator)
+		private readonly IActionInstantiator actionInstantiator;
+		private string[] xslFileNames = new string[0];
+
+		public BuildReportBuildPlugin(IActionInstantiator actionInstantiator)
 		{
-			ActionName = ACTION_NAME;
+			this.actionInstantiator = actionInstantiator;
 		}
 
 		public override string LinkDescription
@@ -21,21 +24,21 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.BuildReport
 			get { return "Build Report"; }
 		}
 
-		public new string ActionName
+		[ReflectorArray("xslFileNames")]
+		public string[] XslFileNames
+		{
+			get { return xslFileNames; }
+			set { xslFileNames = value; }
+		}
+
+		public override INamedAction[] NamedActions
 		{
 			get
 			{
-				return ACTION_NAME;
+				MultipleXslReportBuildAction buildAction = (MultipleXslReportBuildAction) actionInstantiator.InstantiateAction(typeof (MultipleXslReportBuildAction));
+				buildAction.XslFileNames = XslFileNames;
+				return new INamedAction[] {new ImmutableNamedAction(ACTION_NAME, buildAction)};
 			}
-			set
-			{
-			}
-		}
-
-		public new string ConfiguredLinkDescription
-		{
-			get { return "Build Report"; }
-			set {}
 		}
 	}
 }
