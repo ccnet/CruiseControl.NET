@@ -98,7 +98,6 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 			controller.BindToTrayIcon(trayIcon);
 			controller.BindToListView(lvProjects);
 
-			controller.IsProjectSelectedChanged += new EventHandler(Controller_IsProjectSelectedChanged);
 			btnForceBuild.DataBindings.Add("Enabled", controller, "IsProjectSelected");
 		}
 
@@ -126,7 +125,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 		private void InitializeComponent()
 		{
 			this.components = new System.ComponentModel.Container();
-			System.Resources.ResourceManager resources = new System.Resources.ResourceManager(typeof(MainForm));
+			System.Resources.ResourceManager resources = new System.Resources.ResourceManager(typeof (MainForm));
 			this.lvProjects = new System.Windows.Forms.ListView();
 			this.colProject = new System.Windows.Forms.ColumnHeader();
 			this.colActivity = new System.Windows.Forms.ColumnHeader();
@@ -161,12 +160,14 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 			// 
 			// lvProjects
 			// 
-			this.lvProjects.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
-																						 this.colProject,
-																						 this.colActivity,
-																						 this.colDetail,
-																						 this.colLastBuildLabel,
-																						 this.colLastBuildTime});
+			this.lvProjects.Columns.AddRange(new System.Windows.Forms.ColumnHeader[]
+			                                 	{
+			                                 		this.colProject,
+			                                 		this.colActivity,
+			                                 		this.colDetail,
+			                                 		this.colLastBuildLabel,
+			                                 		this.colLastBuildTime
+			                                 	});
 			this.lvProjects.ContextMenu = this.projectContextMenu;
 			this.lvProjects.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.lvProjects.FullRowSelect = true;
@@ -210,10 +211,14 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 			// 
 			// projectContextMenu
 			// 
-			this.projectContextMenu.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
-																							   this.mnuForce,
-																							   this.mnuWebPage,
-																							   this.mnuFixBuild});
+			this.projectContextMenu.MenuItems.AddRange(new System.Windows.Forms.MenuItem[]
+			                                           	{
+			                                           		this.mnuForce,
+			                                           		this.mnuWebPage,
+			                                           		this.mnuFixBuild
+			                                           	});
+			this.projectContextMenu.Popup += new System.EventHandler(this.projectContextMenu_Popup);
+			
 			// 
 			// mnuForce
 			// 
@@ -245,17 +250,21 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 			// 
 			// mainMenu
 			// 
-			this.mainMenu.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
-																					 this.menuFile,
-																					 this.mnuView});
+			this.mainMenu.MenuItems.AddRange(new System.Windows.Forms.MenuItem[]
+			                                 	{
+			                                 		this.menuFile,
+			                                 		this.mnuView
+			                                 	});
 			// 
 			// menuFile
 			// 
 			this.menuFile.Index = 0;
-			this.menuFile.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
-																					 this.mnuFilePreferences,
-																					 this.menuItem3,
-																					 this.menuFileExit});
+			this.menuFile.MenuItems.AddRange(new System.Windows.Forms.MenuItem[]
+			                                 	{
+			                                 		this.mnuFilePreferences,
+			                                 		this.menuItem3,
+			                                 		this.menuFileExit
+			                                 	});
 			this.menuFile.Text = "&File";
 			// 
 			// mnuFilePreferences
@@ -278,10 +287,12 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 			// mnuView
 			// 
 			this.mnuView.Index = 1;
-			this.mnuView.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
-																					this.mnuViewIcons,
-																					this.mnuViewList,
-																					this.mnuViewDetails});
+			this.mnuView.MenuItems.AddRange(new System.Windows.Forms.MenuItem[]
+			                                	{
+			                                		this.mnuViewIcons,
+			                                		this.mnuViewList,
+			                                		this.mnuViewDetails
+			                                	});
 			this.mnuView.Text = "&View";
 			this.mnuView.Popup += new System.EventHandler(this.mnuView_Popup);
 			// 
@@ -314,11 +325,13 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 			// 
 			// mnuTrayContextMenu
 			// 
-			this.mnuTrayContextMenu.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
-																							   this.mnuTraySettings,
-																							   this.mnuShow,
-																							   this.menuItem5,
-																							   this.mnuTrayExit});
+			this.mnuTrayContextMenu.MenuItems.AddRange(new System.Windows.Forms.MenuItem[]
+			                                           	{
+			                                           		this.mnuTraySettings,
+			                                           		this.mnuShow,
+			                                           		this.menuItem5,
+			                                           		this.mnuTrayExit
+			                                           	});
 			// 
 			// mnuTraySettings
 			// 
@@ -370,7 +383,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 			this.ClientSize = new System.Drawing.Size(892, 305);
 			this.Controls.Add(this.lvProjects);
 			this.Controls.Add(this.panel1);
-			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+			this.Icon = ((System.Drawing.Icon) (resources.GetObject("$this.Icon")));
 			this.MaximizeBox = false;
 			this.Menu = this.mainMenu;
 			this.MinimizeBox = false;
@@ -381,7 +394,6 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 			this.Closing += new System.ComponentModel.CancelEventHandler(this.MainForm_Closing);
 			this.panel1.ResumeLayout(false);
 			this.ResumeLayout(false);
-
 		}
 
 		#endregion
@@ -392,7 +404,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 			// relies on. Instead, we just close the window. The application will exit anyway, because
 			// the window is the application's main form. We only have to ensure that MainForm_Closing
 			// won't intercept it.
-			
+
 			//Application.Exit();
 			systemShutdownInProgress = true;
 			Close();
@@ -441,14 +453,13 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 			lvProjects.View = View.Details;
 		}
 
-		private void Controller_IsProjectSelectedChanged(object sender, EventArgs e)
+		private void projectContextMenu_Popup(object sender, EventArgs e)
 		{
-			// unfortunately menu items don't support data binding, so we have to do this manually
 			mnuForce.Enabled = controller.IsProjectSelected;
 			mnuWebPage.Enabled = controller.IsProjectSelected;
 			mnuFixBuild.Visible = controller.CanFixBuild();
 		}
-
+		
 		private void mnuFilePreferences_Click(object sender, EventArgs e)
 		{
 			controller.StopMonitoring();
