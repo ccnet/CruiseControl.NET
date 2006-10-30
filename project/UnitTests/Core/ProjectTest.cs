@@ -530,7 +530,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 		{
 			IntegrationResult result = IntegrationResult.CreateInitialIntegrationResult(ProjectName, "c:\\root");
 			mockStateManager.ExpectAndReturn("HasPreviousState", false, ProjectName);
-			mockLabeller.ExpectAndReturn("Generate", "1.0", result);
+			mockLabeller.ExpectAndReturn("Generate", "1.0", project.LastIntegrationResult);
 			IMock mockPrebuildTask = mockery.NewStrictMock(typeof(ITask));
 			mockPrebuildTask.Expect("Run", result);
 			project.PrebuildTasks = new ITask[] { (ITask) mockPrebuildTask.MockInstance };

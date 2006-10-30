@@ -1,5 +1,3 @@
-using System;
-
 namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
 {
 	/// <summary>
@@ -16,6 +14,11 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
 		///  The build is broken
 		/// </summary>
 		public static readonly ProjectState Broken = new ProjectState("Broken", 2, 100);
+
+		/// <summary>
+		///  The build is broken
+		/// </summary>
+		public static readonly ProjectState BrokenAndBuilding = new ProjectState("Broken and building", 4, 30);
 
 		/// <summary>
 		/// The build is building
@@ -37,22 +40,21 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
 		/// </summary>
 		private int importance;
 
-		private ProjectState( string name, int imageIndex, int importance )
+		private ProjectState(string name, int imageIndex, int importance)
 		{
 			Name = name;
 			ImageIndex = imageIndex;
 			this.importance = importance;
 		}
 
-		public bool IsMoreImportantThan( ProjectState state)
+		public bool IsMoreImportantThan(ProjectState state)
 		{
-			return this.importance > state.importance;
+			return importance > state.importance;
 		}
 
 		public override string ToString()
 		{
 			return Name;
 		}
-
 	}
 }

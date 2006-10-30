@@ -6,5 +6,6 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Configuration
 		public string BuildingIcon = string.Empty;
 		public string SuccessIcon = string.Empty;
 		public string NotConnectedIcon = string.Empty;
+		public string BrokenAndBuildingIcon = string.Empty;
 	}
 }

@@ -1,4 +1,3 @@
-using System;
 using System.Collections;
 using ThoughtWorks.CruiseControl.CCTrayLib.Monitoring;
 
@@ -10,6 +9,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 		public static readonly StatusIcon GRAY = new StatusIcon("ThoughtWorks.CruiseControl.CCTrayLib.Gray.ico");
 		public static readonly StatusIcon GREEN = new StatusIcon("ThoughtWorks.CruiseControl.CCTrayLib.Green.ico");
 		public static readonly StatusIcon RED = new StatusIcon("ThoughtWorks.CruiseControl.CCTrayLib.Red.ico");
+		public static readonly StatusIcon ORANGE = new StatusIcon("ThoughtWorks.CruiseControl.CCTrayLib.Orange.ico");
 
 		private static readonly Hashtable map = new Hashtable();
 
@@ -17,6 +17,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 		{
 			map.Add(ProjectState.Broken, RED);
 			map.Add(ProjectState.Building, YELLOW);
+			map.Add(ProjectState.BrokenAndBuilding, ORANGE);
 			map.Add(ProjectState.Success, GREEN);
 			map.Add(ProjectState.NotConnected, GRAY);
 		}

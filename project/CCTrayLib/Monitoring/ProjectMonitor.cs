@@ -73,7 +73,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
 					return ProjectState.NotConnected;
 
 				if (status.Activity.IsBuilding())
-					return ProjectState.Building;
+					return (status.BuildStatus == IntegrationStatus.Success) ? ProjectState.Building : ProjectState.BrokenAndBuilding;
 
 				if (status.BuildStatus == IntegrationStatus.Success)
 					return ProjectState.Success;

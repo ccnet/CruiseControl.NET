@@ -183,6 +183,10 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Orange.ico"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
                     RelPath = "Red.ico"
                     BuildAction = "EmbeddedResource"
                 />

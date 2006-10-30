@@ -12,5 +12,4 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Configuration
 		public Icons Icons = new Icons();
 		public X10Configuration X10 = new X10Configuration();
 	}
-
 }

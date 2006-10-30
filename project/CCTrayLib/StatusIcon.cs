@@ -51,6 +51,5 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib
 		{
 			get { return icon; }
 		}
-
 	}
 }

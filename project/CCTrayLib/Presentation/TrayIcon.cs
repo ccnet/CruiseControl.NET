@@ -47,23 +47,19 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 			ShowBalloon(message.ToString(), message.ToString(), NotifyInfoFlags.Info, 5000);
 		}
 
-
 		private void IconProvider_IconChanged(object sender, EventArgs e)
 		{
 			Icon = iconProvider.Icon;
 		}
-
 
 		private void Monitor_BuildOccurred(object sender, MonitorBuildOccurredEventArgs e)
 		{
 			string projectName = e.ProjectMonitor.Detail.ProjectName;
 
 			CaptionAndMessage captionAndMessage = balloonMessageProvider.GetCaptionAndMessageForBuildTransition(e.BuildTransition);
-			string caption = string.Format("{0}: {1}",
-			                               projectName, captionAndMessage.Caption);
+			string caption = string.Format("{0}: {1}", projectName, captionAndMessage.Caption);
 
-			ShowBalloon(caption, captionAndMessage.Message,
-			            e.BuildTransition.ErrorLevel.NotifyInfo, 5000);
+			ShowBalloon(caption, captionAndMessage.Message, e.BuildTransition.ErrorLevel.NotifyInfo, 5000);
 		}
 
 		private void Monitor_Polled(object sender, MonitorPolledEventArgs args)

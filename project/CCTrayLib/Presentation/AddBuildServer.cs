@@ -39,7 +39,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 			//
 			InitializeComponent();
 
-			rdoDashboard.Checked = true;
+			rdoRemoting.Checked = true;
 			UpdateButtons();
 		}
 
@@ -110,6 +110,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 			this.rdoRemoting.Name = "rdoRemoting";
 			this.rdoRemoting.Size = new System.Drawing.Size(345, 24);
 			this.rdoRemoting.TabIndex = 2;
+			this.rdoRemoting.TabStop = true;
 			this.rdoRemoting.Text = "Connect directly using .NET remoting";
 			this.rdoRemoting.CheckedChanged += new System.EventHandler(this.rdoRemoting_CheckedChanged);
 			// 

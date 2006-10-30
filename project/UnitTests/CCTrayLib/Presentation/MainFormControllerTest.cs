@@ -81,8 +81,19 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Presentation
 		}
 
 		[Test]
+		public void CanFixBuildIfBuildIsBrokenAndBuilding()
+		{
+			mockProjectMonitor.ExpectAndReturn("ProjectState", ProjectState.BrokenAndBuilding);
+			mockProjectMonitor.ExpectAndReturn("ProjectState", ProjectState.BrokenAndBuilding);
+			controller.SelectedProject = projectMonitor;
+			Assert.IsTrue(controller.CanFixBuild());
+			mockProjectMonitor.Verify();
+		}
+
+		[Test]
 		public void CannotFixBuildIfBuildIsWorking()
 		{
+			mockProjectMonitor.ExpectAndReturn("ProjectState", ProjectState.Success);
 			mockProjectMonitor.ExpectAndReturn("ProjectState", ProjectState.Success);
 			controller.SelectedProject = projectMonitor;
 			Assert.IsFalse(controller.CanFixBuild());

@@ -59,6 +59,12 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Util
 			}
 		}
 
+		[Test]
+		public void DirectoryNameOnDifferentDrive()
+		{
+			Assert.AreEqual("e:\\foo", new FileInfo("e:\\foo\\ccnet.config").DirectoryName);
+		}
+
 		private void UpdateFile(string text)
 		{
 			TempFileUtil.CreateTempXmlFile("FileChangedWatcherTest", "foo.xml", text);

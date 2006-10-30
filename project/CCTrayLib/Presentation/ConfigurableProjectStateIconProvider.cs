@@ -18,6 +18,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 			LoadIcon(ProjectState.Building, icons.BuildingIcon, ResourceProjectStateIconProvider.YELLOW);
 			LoadIcon(ProjectState.Success, icons.SuccessIcon, ResourceProjectStateIconProvider.GREEN);
 			LoadIcon(ProjectState.NotConnected, icons.NotConnectedIcon, ResourceProjectStateIconProvider.GRAY);
+			LoadIcon(ProjectState.BrokenAndBuilding, icons.BrokenAndBuildingIcon, ResourceProjectStateIconProvider.ORANGE);
 		}
 
 		private void LoadIcon(ProjectState projectState, string iconFilename, StatusIcon defaultIcon)

@@ -147,11 +147,13 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 			imageList.Images.Add(iconProvider.GetStatusIconForState(ProjectState.Success).Icon);
 			imageList.Images.Add(iconProvider.GetStatusIconForState(ProjectState.Broken).Icon);
 			imageList.Images.Add(iconProvider.GetStatusIconForState(ProjectState.Building).Icon);
+			imageList.Images.Add(iconProvider.GetStatusIconForState(ProjectState.BrokenAndBuilding).Icon);
 		}
 
 		public bool CanFixBuild()
 		{
-			return IsProjectSelected && selectedProject.ProjectState == ProjectState.Broken;
+			return IsProjectSelected && 
+			       (selectedProject.ProjectState == ProjectState.Broken || selectedProject.ProjectState == ProjectState.BrokenAndBuilding);
 		}
 
 		public void VolunteerToFixBuild()
