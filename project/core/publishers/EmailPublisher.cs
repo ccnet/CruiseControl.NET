@@ -51,7 +51,21 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
             set { EmailGateway.MailHost = value; }
         }
 
-        /// <summary>
+		[ReflectorProperty("mailhostUsername", Required = false)]
+		public string MailhostUsername
+		{
+			get { return EmailGateway.MailHostUsername; }
+			set { EmailGateway.MailHostUsername = value; }
+		}
+
+		[ReflectorProperty("mailhostPassword", Required = false)]
+		public string MailhostPassword
+		{
+			get { return EmailGateway.MailHostPassword; }
+			set { EmailGateway.MailHostPassword = value; }
+		}
+
+		/// <summary>
         /// The email address from which build results appear to have originated from.  This
         /// value seems to be required for most mail servers.
         /// </summary>

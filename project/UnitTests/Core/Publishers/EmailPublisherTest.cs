@@ -192,6 +192,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Publishers
 			publisher = EmailPublisherMother.Create();
 
 			Assert.AreEqual("smtp.telus.net", publisher.MailHost);
+			Assert.AreEqual("mailuser", publisher.MailhostUsername);
+			Assert.AreEqual("mailpassword", publisher.MailhostPassword);
 			Assert.AreEqual("ccnet@thoughtworks.com", publisher.FromAddress);
 
 			Assert.AreEqual(5, publisher.EmailUsers.Count);

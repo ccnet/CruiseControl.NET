@@ -19,12 +19,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Publishers
 
 		public override void Send(string from, string to, string replyto, string subject, string message)
 		{
-			MailMessage email = new MailMessage();
-			email.From = from;
-			email.To = to;
-			email.Headers["Reply-To"] = replyto;
-			email.Subject = subject;
-			email.Body = message;
+			MailMessage email = GetMailMessage(from, to, replyto, subject, message);
 
 			_sentMessages.Add(email);
 
@@ -48,14 +43,14 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Publishers
 
 		private void AddRecipients(string to)
 		{
-			string[] Recipients;
-			Recipients = to.Split(","[0]);
+			string[] recipients;
+			recipients = to.Split(","[0]);
 
-			foreach (string Recipient in Recipients)
+			foreach (string recipient in recipients)
 			{
-				if (! _recipients.Contains(Recipient) )
+				if (! _recipients.Contains(recipient) )
 				{
-					_recipients.Add(Recipient);
+					_recipients.Add(recipient);
 				}
 			}
 		}
