@@ -411,7 +411,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 		public static string GetDateString(DateTime dateToConvert, DateTimeFormatInfo format)
 		{
 			string pattern = String.Format("{0} {1}", format.ShortDatePattern, format.ShortTimePattern);
-			return dateToConvert.ToString(pattern);
+			return dateToConvert.ToString(pattern, format);
 		}
 
 		public static DateTime GetDate(string dateToParse)
