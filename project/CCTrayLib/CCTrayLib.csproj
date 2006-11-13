@@ -275,6 +275,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Monitoring\CachingWebRetriever.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Monitoring\CruiseProjectManagerFactory.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -291,6 +296,16 @@
                 />
                 <File
                     RelPath = "Monitoring\HttpProjectListRetriever.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Monitoring\ICache.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Monitoring\ICachingWebRetriever.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -563,4 +578,5 @@
         </Files>
     </CSHARP>
 </VisualStudioProject>
+
 

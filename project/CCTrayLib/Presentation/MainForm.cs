@@ -45,14 +45,16 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 		private bool systemShutdownInProgress;
 		private MenuItem mnuFixBuild;
 		private PersistWindowState windowState;
+		private ICache httpCache;
 
-		public MainForm(ICCTrayMultiConfiguration configuration)
+		public MainForm(ICCTrayMultiConfiguration configuration, ICache httpCache)
 		{
 			this.configuration = configuration;
+			this.httpCache = httpCache;
 
 			InitializeComponent();
 			HookPersistentWindowState();
-			CreateController();
+			CreateController(httpCache);
 
 			controller.StartMonitoring();
 		}
@@ -87,9 +89,9 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 			e.Key.SetValue("LastBuildTimeColumnWidth", colLastBuildTime.Width);
 		}
 
-		private void CreateController()
+		private void CreateController(ICache httpCache)
 		{
-			controller = new MainFormController(configuration, this);
+			controller = new MainFormController(configuration, this, httpCache);
 
 			DataBindings.Add("Icon", controller.ProjectStateIconAdaptor, "Icon");
 
@@ -472,7 +474,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 					lvProjects.Items.Clear();
 					DataBindings.Clear();
 					btnForceBuild.DataBindings.Clear();
-					CreateController();
+					CreateController(httpCache);
 				}
 			}
 			finally

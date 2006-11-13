@@ -18,7 +18,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 		private ProjectStateIconAdaptor projectStateIconAdaptor;
 		private IProjectStateIconProvider iconProvider;
 
-		public MainFormController(ICCTrayMultiConfiguration configuration, ISynchronizeInvoke owner)
+		public MainFormController(ICCTrayMultiConfiguration configuration, ISynchronizeInvoke owner, ICache httpCache)
 		{
 			this.configuration = configuration;
 			monitors = configuration.GetProjectStatusMonitors();
@@ -28,7 +28,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 				monitors[i] = new SynchronizedProjectMonitor(monitors[i], owner);
 			}
 
-			aggregatedMonitor = new AggregatingProjectMonitor(monitors);
+			aggregatedMonitor = new AggregatingProjectMonitor(httpCache, monitors);
 			iconProvider = new ConfigurableProjectStateIconProvider(configuration.Icons);
 			projectStateIconAdaptor = new ProjectStateIconAdaptor(aggregatedMonitor, iconProvider);
 			new BuildTransitionSoundPlayer(aggregatedMonitor, new AudioPlayer(), configuration.Audio);
@@ -99,7 +99,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 		public void StartMonitoring()
 		{
 			StopMonitoring();
-			poller = new Poller(configuration.PollPeriodSeconds*1000, aggregatedMonitor);
+			poller = new Poller(configuration.PollPeriodSeconds, aggregatedMonitor);
 			poller.Start();
 		}
 

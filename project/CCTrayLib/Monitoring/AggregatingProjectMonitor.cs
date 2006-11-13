@@ -7,10 +7,12 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
 	public class AggregatingProjectMonitor : IProjectMonitor
 	{
 		private readonly IProjectMonitor[] monitors;
+		private ICache httpCache;
 
-		public AggregatingProjectMonitor(params IProjectMonitor[] monitors)
+		public AggregatingProjectMonitor(ICache httpCache, params IProjectMonitor[] monitors)
 		{
 			this.monitors = monitors;
+			this.httpCache = httpCache;
 
 			foreach (IProjectMonitor monitor in this.monitors)
 			{
@@ -79,9 +81,16 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
 
 		public void Poll()
 		{
-			foreach (IProjectMonitor monitor in monitors)
+			try
 			{
-				monitor.Poll();
+				foreach (IProjectMonitor monitor in monitors)
+				{
+					monitor.Poll();
+				}
+			}
+			finally
+			{
+				httpCache.Clear();
 			}
 		}
 
@@ -103,7 +112,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
 
 		public IntegrationStatus IntegrationStatus
 		{
-			get 
+			get
 			{
 				IntegrationStatus worstStatus = IntegrationStatus.Success;
 
@@ -120,10 +129,10 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
 		{
 			int importanceOfStatus1 = GetIntegrationStatusImportance(status1);
 			int importanceOfStatus2 = GetIntegrationStatusImportance(status2);
-			
+
 			if (importanceOfStatus1 > importanceOfStatus2)
 				return status1;
-			
+
 			return status2;
 		}
 
@@ -131,13 +140,13 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
 		{
 			switch (status)
 			{
-				case Remote.IntegrationStatus.Success:
+				case IntegrationStatus.Success:
 					return 1;
-				case Remote.IntegrationStatus.Unknown:
+				case IntegrationStatus.Unknown:
 					return 2;
-				case Remote.IntegrationStatus.Exception:
+				case IntegrationStatus.Exception:
 					return 3;
-				case Remote.IntegrationStatus.Failure:
+				case IntegrationStatus.Failure:
 					return 4;
 				default:
 					return 5;

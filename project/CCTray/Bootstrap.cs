@@ -30,11 +30,12 @@ namespace ThoughtWorks.CruiseControl.CCTray
 			Application.ThreadException += new ThreadExceptionEventHandler(UnhandledWinFormException);
 			try
 			{
+				ICachingWebRetriever cachedWebRetriever = new CachingWebRetriever(new WebRetriever());
 				ICruiseManagerFactory remoteCruiseManagerFactory = new RemoteCruiseManagerFactory();
-				ICruiseProjectManagerFactory cruiseProjectManagerFactory = new CruiseProjectManagerFactory(remoteCruiseManagerFactory);
+				ICruiseProjectManagerFactory cruiseProjectManagerFactory = new CruiseProjectManagerFactory(remoteCruiseManagerFactory, cachedWebRetriever);
 				CCTrayMultiConfiguration configuration = new CCTrayMultiConfiguration(cruiseProjectManagerFactory, GetSettingsFilename(args));
 
-				MainForm mainForm = new MainForm(configuration);
+				MainForm mainForm = new MainForm(configuration, cachedWebRetriever);
 
 				Application.Run(mainForm);
 			}
