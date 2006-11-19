@@ -6,13 +6,13 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
 	[ReflectorType("buildpublisher")]
 	public class BuildPublisher : ITask
 	{
-		[ReflectorProperty("publishDir")]
+		[ReflectorProperty("publishDir", Required=false)]
 		public string PublishDir;
 
-		[ReflectorProperty("sourceDir")]
+		[ReflectorProperty("sourceDir", Required=false)]
 		public string SourceDir;
 
-		[ReflectorProperty("useLabelSubDirectory")]
+		[ReflectorProperty("useLabelSubDirectory", Required=false)]
 		public bool UseLabelSubDirectory = true;
 		
 		public void Run(IIntegrationResult result)

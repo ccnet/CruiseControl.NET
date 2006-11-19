@@ -108,6 +108,30 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Publishers
 			Assert.AreEqual(@"\\file\share\build", publisher.PublishDir);
 			Assert.AreEqual(false, publisher.UseLabelSubDirectory);
 		}
+
+		[Test]
+		public void LoadMinimalXml()
+		{
+			string xml = @"<buildpublisher />";
+
+			publisher = (BuildPublisher) NetReflector.Read(xml);
+			Assert.IsNull(publisher.SourceDir);
+			Assert.IsNull(publisher.PublishDir);
+			Assert.IsTrue(publisher.UseLabelSubDirectory);			
+		}
+		
+		[Test]
+		public void PublishWorksIfNoPropertiesAreSpecified()
+		{
+			srcRoot.CreateDirectory().CreateTextFile(fileName, fileContents);
+			result.WorkingDirectory = srcRoot.ToString();
+			result.ArtifactDirectory = pubRoot.ToString();
+			
+			publisher = new BuildPublisher();
+			publisher.Run(result);
+
+			Assert.IsTrue(labelPubDir.Combine(fileName).Exists(), "File not found in pubRoot directory");
+		}
 		
 		[TearDown]
 		public void TearDown()
