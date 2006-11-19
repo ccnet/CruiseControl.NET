@@ -1,8 +1,8 @@
+using System.IO;
 using NUnit.Framework;
 using ThoughtWorks.CruiseControl.Core;
 using ThoughtWorks.CruiseControl.Core.Publishers;
 using ThoughtWorks.CruiseControl.Core.Util;
-using ThoughtWorks.CruiseControl.Remote;
 
 namespace ThoughtWorks.CruiseControl.UnitTests.Core.Publishers
 {
@@ -11,8 +11,9 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Publishers
 	{
 		private SystemPath srcRoot;
 		private SystemPath pubRoot;
-		private SystemPath subRoot;
-		private SystemPath subSubRoot;
+		private BuildPublisher publisher;
+		private IntegrationResult result;
+		private SystemPath labelPubDir;
 		private const string fileName = "foo.txt";
 		private const string fileContents = "I'm the contents of foo.txt";
 
@@ -21,32 +22,65 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Publishers
 		{
 			srcRoot = SystemPath.UniqueTempPath();
 			pubRoot = SystemPath.UniqueTempPath();
-			subRoot = srcRoot.CreateSubDirectory("SubDir");
-			subSubRoot = subRoot.CreateSubDirectory("SubSubDir");
-			srcRoot.CreateTextFile(fileName, fileContents);
-			subRoot.CreateTextFile(fileName, fileContents);
-			subSubRoot.CreateTextFile(fileName, fileContents);
+
+			publisher = new BuildPublisher();
+			publisher.PublishDir = pubRoot.ToString();
+			publisher.SourceDir = srcRoot.ToString();
+			result = IntegrationResultMother.CreateSuccessful("99");
+			labelPubDir = pubRoot.Combine("99");
 		}
 
 		[Test]
-		public void TestCopyFiles()
+		public void CopyFiles()
 		{
-			BuildPublisher publisher = new BuildPublisher();
-			publisher.PublishDir = pubRoot.ToString();
-			publisher.SourceDir = srcRoot.ToString();
-			IntegrationResult result = new IntegrationResult();
-			result.Status = IntegrationStatus.Success;
-			result.Label = "99";
+			SystemPath subRoot = srcRoot.CreateSubDirectory("SubDir");
+			SystemPath subSubRoot = subRoot.CreateSubDirectory("SubSubDir");
+			srcRoot.CreateTextFile(fileName, fileContents);
+			subRoot.CreateTextFile(fileName, fileContents);
+			subSubRoot.CreateTextFile(fileName, fileContents);
 
 			publisher.Run(result);
 
-			SystemPath labelPubDir = pubRoot.Combine("99");
 			Assert.IsTrue(labelPubDir.Combine(fileName).Exists(), "File not found in build number directory");
 			SystemPath subPubDir = labelPubDir.Combine("SubDir");
 			Assert.IsTrue(subPubDir.Combine(fileName).Exists(), "File not found in sub directory");
 			Assert.IsTrue(subPubDir.Combine("SubSubDir").Combine(fileName).Exists(), "File not found in sub sub directory");
 		}
 
+		[Test]
+		public void SourceRootShouldBeRelativeToIntegrationWorkingDirectory()
+		{
+			srcRoot.CreateSubDirectory("foo").CreateTextFile(fileName, fileContents);
+
+			result.WorkingDirectory = srcRoot.ToString();
+
+			publisher.SourceDir = "foo";
+			publisher.Run(result);
+
+			Assert.IsTrue(labelPubDir.Combine(fileName).Exists(), "File not found in build number directory");
+		}
+
+		[Test]
+		public void DoNotUseLabelSubdirectoryAndCreatePublishDirIfItDoesntExist()
+		{
+			srcRoot.CreateDirectory().CreateTextFile(fileName, fileContents);
+			publisher.UseLabelSubDirectory = false;
+			publisher.Run(result);
+
+			Assert.IsTrue(pubRoot.Combine(fileName).Exists(), "File not found in pubRoot directory");
+		}
+
+		[Test]
+		public void OverwriteReadOnlyFileAtDestination()
+		{
+			srcRoot.CreateDirectory().CreateTextFile(fileName, fileContents);
+			pubRoot.CreateDirectory();
+			FileInfo readOnlyDestFile = new FileInfo(pubRoot.CreateEmptyFile(fileName).ToString());
+			readOnlyDestFile.Attributes = FileAttributes.ReadOnly;
+			publisher.UseLabelSubDirectory = false;
+			publisher.Run(result);			
+		}
+		
 		[TearDown]
 		public void TearDown()
 		{

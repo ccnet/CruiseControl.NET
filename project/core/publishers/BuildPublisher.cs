@@ -6,49 +6,45 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
 	[ReflectorType("buildpublisher")]
 	public class BuildPublisher : ITask
 	{
-		private string publishDir;
-		private string sourceDir;
-
 		[ReflectorProperty("publishDir")]
-		public string PublishDir
-		{
-			get { return publishDir; }
-			set { publishDir = value; }
-		}
+		public string PublishDir;
 
 		[ReflectorProperty("sourceDir")]
-		public string SourceDir
-		{
-			get { return sourceDir; }
-			set { sourceDir = value; }
-		}
+		public string SourceDir;
 
+		public bool UseLabelSubDirectory = true;
+		
 		public void Run(IIntegrationResult result)
 		{
-			if (result.Succeeded) 
+			if (result.Succeeded)
 			{
+				DirectoryInfo srcDir = new DirectoryInfo(result.BaseFromWorkingDirectory(SourceDir));
 				DirectoryInfo pubDir = new DirectoryInfo(PublishDir);
-				DirectoryInfo srcDir = new DirectoryInfo(SourceDir);
-				DirectoryInfo destination = pubDir.CreateSubdirectory(result.Label);
+				if (! pubDir.Exists) pubDir.Create();
+				
+				if (UseLabelSubDirectory)
+					pubDir = pubDir.CreateSubdirectory(result.Label);
 
-				recurseSubDirectories(srcDir, destination);
+				RecurseSubDirectories(srcDir, pubDir);
 			}
 		}
 
-		private void recurseSubDirectories(DirectoryInfo srcDir, DirectoryInfo destination) 
+		private void RecurseSubDirectories(DirectoryInfo srcDir, DirectoryInfo pubDir)
 		{
 			FileInfo[] files = srcDir.GetFiles();
-			foreach (FileInfo file in files) 
+			foreach (FileInfo file in files)
 			{
-				file.CopyTo(destination.FullName + @"\" + file.Name, true);
-
+				FileInfo destFile = new FileInfo(Path.Combine(pubDir.FullName, file.Name));
+				if (destFile.Exists) destFile.Attributes = FileAttributes.Normal;
+				
+				file.CopyTo(destFile.ToString(), true);
 			}
 			DirectoryInfo[] subDirectories = srcDir.GetDirectories();
-			foreach (DirectoryInfo subDir in subDirectories) 
+			foreach (DirectoryInfo subDir in subDirectories)
 			{
-				DirectoryInfo subDestination = destination.CreateSubdirectory(subDir.Name);
+				DirectoryInfo subDestination = pubDir.CreateSubdirectory(subDir.Name);
 
-				recurseSubDirectories(subDir, subDestination);
+				RecurseSubDirectories(subDir, subDestination);
 			}
 		}
 	}
