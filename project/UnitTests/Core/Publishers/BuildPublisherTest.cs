@@ -1,4 +1,5 @@
 using System.IO;
+using Exortech.NetReflector;
 using NUnit.Framework;
 using ThoughtWorks.CruiseControl.Core;
 using ThoughtWorks.CruiseControl.Core.Publishers;
@@ -61,6 +62,19 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Publishers
 		}
 
 		[Test]
+		public void PublishDirShouldBeRelativeToIntegrationArtifactDirectory()
+		{
+			srcRoot.CreateSubDirectory("foo").CreateTextFile(fileName, fileContents);
+			result.ArtifactDirectory = pubRoot.ToString();
+			
+			publisher.PublishDir = "bar";
+			publisher.Run(result);
+
+			labelPubDir = pubRoot.Combine("bar").Combine("99").Combine("foo");
+			Assert.IsTrue(labelPubDir.Combine(fileName).Exists(), "File not found in build number directory");
+		}
+
+		[Test]
 		public void DoNotUseLabelSubdirectoryAndCreatePublishDirIfItDoesntExist()
 		{
 			srcRoot.CreateDirectory().CreateTextFile(fileName, fileContents);
@@ -79,6 +93,20 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Publishers
 			readOnlyDestFile.Attributes = FileAttributes.ReadOnly;
 			publisher.UseLabelSubDirectory = false;
 			publisher.Run(result);			
+		}
+
+		[Test]
+		public void LoadFromXml()
+		{
+			string xml = @"<buildpublisher useLabelSubDirectory=""false"">
+	<sourceDir>c:\source</sourceDir>
+	<publishDir>\\file\share\build</publishDir>
+</buildpublisher>";
+
+			publisher = (BuildPublisher) NetReflector.Read(xml);
+			Assert.AreEqual(@"c:\source", publisher.SourceDir);
+			Assert.AreEqual(@"\\file\share\build", publisher.PublishDir);
+			Assert.AreEqual(false, publisher.UseLabelSubDirectory);
 		}
 		
 		[TearDown]

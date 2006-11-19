@@ -12,6 +12,7 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
 		[ReflectorProperty("sourceDir")]
 		public string SourceDir;
 
+		[ReflectorProperty("useLabelSubDirectory")]
 		public bool UseLabelSubDirectory = true;
 		
 		public void Run(IIntegrationResult result)
@@ -19,7 +20,7 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
 			if (result.Succeeded)
 			{
 				DirectoryInfo srcDir = new DirectoryInfo(result.BaseFromWorkingDirectory(SourceDir));
-				DirectoryInfo pubDir = new DirectoryInfo(PublishDir);
+				DirectoryInfo pubDir = new DirectoryInfo(result.BaseFromArtifactsDirectory(PublishDir));
 				if (! pubDir.Exists) pubDir.Create();
 				
 				if (UseLabelSubDirectory)
