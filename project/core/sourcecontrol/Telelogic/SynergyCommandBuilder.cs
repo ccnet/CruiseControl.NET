@@ -1,4 +1,5 @@
 using System;
+using System.Globalization;
 using System.Text;
 using ThoughtWorks.CruiseControl.Core.Util;
 
@@ -294,6 +295,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Telelogic
 		///         <para />
 		///         This query excludes tasks already in the baseline.  Assuming that all project purposes
 		///         employ similar baseline selection criteria, this should not be a problem.
+		///			NB. Dates must be formatted as 'yyyy/MM/dd HH:mm:ss': https://support.telelogic.com/en/synergy/docs/docs_63/help_w/wwhelp/wwhimpl/common/html/wwhelp.htm?context=cmsynergy&file=formats_at.html#wp901144
 		///     </note>
 		/// </remarks>
 		/// <param name="connection">CM Synergy connection parameters.</param>
@@ -305,8 +307,9 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Telelogic
 		/// <returns>A non-null initialized process structure.</returns>
 		public static ProcessInfo GetNewTasks(SynergyConnectionInfo connection, SynergyProjectInfo project, DateTime startDate)
 		{
-			const string template = @"query /type task /format " + @"""%displayname #### %task_number #### %completion_date #### %resolver #### %task_synopsis #### "" " + @"/nf /u /no_sort """ + /* ignore excluded and automatic tasks (which are used for project creation) */ @"status != 'task_automatic' and status != 'excluded' and " + /* include only tasks completed since the last integration run */ @"completion_date >= time('{2:yyyy/MM/dd HH:mm:ss}') and " + /* exclude any tasks that are already in the shared folder */ @"not ( is_task_in_folder_of(folder('{1}')) or " + /* exclude any tasks that are already in the baseline project */ @"is_task_in_folder_of(is_folder_in_rp_of(is_baseline_project_of('{0}'))) or " + /* exclude any tasks that are already in the baseline project */ @"is_task_in_rp_of(is_baseline_project_of('{0}')) ) and " + /* include all tasks in the reconfigure folders or directly in the reconfigure properties */ @"(is_task_in_folder_of(is_folder_in_rp_of('{0}')) or is_task_in_rp_of('{0}'))""";
-			string arguments = String.Format(template, project.ObjectName, project.TaskFolder, startDate);
+			string startDateString = startDate.ToString("yyyy/MM/dd HH:mm:ss", CultureInfo.InvariantCulture);
+			const string template = @"query /type task /format " + @"""%displayname #### %task_number #### %completion_date #### %resolver #### %task_synopsis #### "" " + @"/nf /u /no_sort """ + /* ignore excluded and automatic tasks (which are used for project creation) */ @"status != 'task_automatic' and status != 'excluded' and " + /* include only tasks completed since the last integration run */ @"completion_date >= time('{2}') and " + /* exclude any tasks that are already in the shared folder */ @"not ( is_task_in_folder_of(folder('{1}')) or " + /* exclude any tasks that are already in the baseline project */ @"is_task_in_folder_of(is_folder_in_rp_of(is_baseline_project_of('{0}'))) or " + /* exclude any tasks that are already in the baseline project */ @"is_task_in_rp_of(is_baseline_project_of('{0}')) ) and " + /* include all tasks in the reconfigure folders or directly in the reconfigure properties */ @"(is_task_in_folder_of(is_folder_in_rp_of('{0}')) or is_task_in_rp_of('{0}'))""";
+			string arguments = String.Format(template, project.ObjectName, project.TaskFolder, startDateString);
 			return CreateProcessInfo(connection, arguments);
 		}
 
