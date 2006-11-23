@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.Globalization;
 using System.IO;
 using System.Text.RegularExpressions;
 
@@ -9,10 +10,6 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 	{
 		private static Regex MODIFICATION_SEARCH_REGEX = new Regex(@"^(?<ModificationType>(Revision|Added|Deleted))\s(changed|member):\s+(?<Filename>.*?)(was|now).*\s(to|at)\s(?<NewRevision>\d+(\.\d+)*)(\r\n|$)", RegexOptions.Compiled | RegexOptions.IgnorePatternWhitespace | RegexOptions.ExplicitCapture | RegexOptions.IgnoreCase | RegexOptions.Multiline);
 		private static Regex MEMBER_INFO_REGEX = new Regex(@".*?\s+Created\sBy:\s(?<UserName>\w+)\son\s(?<ModifiedTime>.*?)\r\n(.|\r\n)*?\s+Revision\sDescription:\r\n(?<Comment>(.|\r\n)*?)\s+Labels:(.|\r\n|$)*?", RegexOptions.Compiled | RegexOptions.IgnorePatternWhitespace | RegexOptions.ExplicitCapture | RegexOptions.IgnoreCase);
-
-		public MksHistoryParser()
-		{
-		}
 
 		public virtual Modification[] Parse(TextReader history, DateTime from, DateTime to)
 		{
@@ -32,7 +29,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			foreach (Match match in memberInfoMatches)
 			{
 				modification.UserName = match.Groups["UserName"].Value.Trim();
-				modification.ModifiedTime = DateTime.Parse(match.Groups["ModifiedTime"].Value.Trim());
+				modification.ModifiedTime = DateTime.Parse(match.Groups["ModifiedTime"].Value.Trim(), CultureInfo.InvariantCulture);
 				modification.Comment = match.Groups["Comment"].Value.Trim();
 			}			
 		}
