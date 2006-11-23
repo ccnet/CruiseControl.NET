@@ -215,7 +215,8 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 		private void lbServer_SelectedIndexChanged(object sender, EventArgs e)
 		{
 			selectedServer = (BuildServer) lbServer.SelectedItem;
-			RetrieveListOfProjects(selectedServer);
+			if (selectedServer != null)
+				RetrieveListOfProjects(selectedServer);
 		}
 
 		private void RetrieveListOfProjects(BuildServer server)
