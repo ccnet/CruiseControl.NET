@@ -1,5 +1,7 @@
 using System;
+using System.Diagnostics;
 using System.IO;
+using System.Threading;
 using NUnit.Framework;
 using ThoughtWorks.CruiseControl.Core.Util;
 
@@ -67,8 +69,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Util
 		[Test]
 		public void ForceProcessTimeoutBecauseTargetIsNonTerminating()
 		{
-			ProcessInfo processInfo = new ProcessInfo("cmd.exe", "/C pause");
-			processInfo.TimeOut = 10;
+			ProcessInfo processInfo = new ProcessInfo("sleeper.exe");
+			processInfo.TimeOut = 1000;
 			ProcessResult result = executor.Execute(processInfo);
 
 			Assert.IsTrue(result.TimedOut);
@@ -79,14 +81,12 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Util
 		[Test, ExpectedException(typeof (IOException))]
 		public void SupplyInvalidFilenameAndVerifyException()
 		{
-			ProcessExecutor executor = new ProcessExecutor();
 			executor.Execute(new ProcessInfo("foodaddy.bat"));
 		}
 
 		[Test, ExpectedException(typeof(DirectoryNotFoundException))]
 		public void ShouldThrowMeaningfulExceptionIfWorkingDirectoryDoesNotExist()
 		{
-			ProcessExecutor executor = new ProcessExecutor();
 			executor.Execute(new ProcessInfo("myExecutable", "", @"c:\invalid_path\that_is_invalid"));
 		}
 
@@ -100,6 +100,48 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Util
 		{
 			Assert.AreEqual(expectedExitCode, result.ExitCode);
 			Assert.IsTrue(result.Failed, "process should return an error");
+		}
+	}
+	
+	[TestFixture]
+	public class ThreadedProcessExecutorTest
+	{
+		private ProcessExecutor executor;
+
+		[SetUp]
+		protected void CreateExecutor()
+		{
+			executor = new ProcessExecutor();
+		}
+
+		[Test]
+		public void StartNonTerminatingProcessAndAbortThreadShouldKillProcess()
+		{
+			Thread thread = new Thread(new ThreadStart(StartProcess));
+			thread.Start();
+			WaitForProcessToStart();
+			thread.Abort();
+			thread.Join();
+			try
+			{
+				Assert.AreEqual(0, Process.GetProcessesByName("sleeper").Length);
+			}
+			catch (Exception)
+			{
+				Process.GetProcessesByName("sleeper")[0].Kill();
+				Assert.Fail("Process was not killed.");
+			}
+		}
+
+		private void WaitForProcessToStart()
+		{
+			while (Process.GetProcessesByName("sleeper").Length == 0) { Thread.Sleep(50);}
+		}
+
+		private void StartProcess()
+		{
+			ProcessInfo processInfo = new ProcessInfo("sleeper.exe");
+			executor.Execute(processInfo);			
 		}
 	}
 }
