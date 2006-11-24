@@ -69,8 +69,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Util
 		[Test]
 		public void ForceProcessTimeoutBecauseTargetIsNonTerminating()
 		{
-			ProcessInfo processInfo = new ProcessInfo("cmd.exe", "/C pause");
-			processInfo.TimeOut = 100;
+			ProcessInfo processInfo = new ProcessInfo("sleeper.exe");
+			processInfo.TimeOut = 1000;
 			ProcessResult result = executor.Execute(processInfo);
 
 			Assert.IsTrue(result.TimedOut, "process did not time out, but it should have.");
@@ -90,31 +90,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Util
 			executor.Execute(new ProcessInfo("myExecutable", "", @"c:\invalid_path\that_is_invalid"));
 		}
 
-		private void AssertProcessExitsSuccessfully(ProcessResult result)
-		{
-			Assert.AreEqual(ProcessResult.SUCCESSFUL_EXIT_CODE, result.ExitCode);
-			AssertFalse("process should not return an error", result.Failed);
-		}
-
-		private void AssertProcessExitsWithFailure(ProcessResult result, int expectedExitCode)
-		{
-			Assert.AreEqual(expectedExitCode, result.ExitCode);
-			Assert.IsTrue(result.Failed, "process should return an error");
-		}
-	}
-	
-	[TestFixture]
-	public class ThreadedProcessExecutorTest
-	{
-		private ProcessExecutor executor;
-
-		[SetUp]
-		protected void CreateExecutor()
-		{
-			executor = new ProcessExecutor();
-		}
-
-		[Test, Explicit]	// temporary to resolve periodic test failures on build server
+		[Test]
 		public void StartNonTerminatingProcessAndAbortThreadShouldKillProcess()
 		{
 			Thread thread = new Thread(new ThreadStart(StartProcess));
@@ -131,6 +107,18 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Util
 				Process.GetProcessesByName("sleeper")[0].Kill();
 				Assert.Fail("Process was not killed.");
 			}
+		}
+
+		private void AssertProcessExitsSuccessfully(ProcessResult result)
+		{
+			Assert.AreEqual(ProcessResult.SUCCESSFUL_EXIT_CODE, result.ExitCode);
+			AssertFalse("process should not return an error", result.Failed);
+		}
+
+		private void AssertProcessExitsWithFailure(ProcessResult result, int expectedExitCode)
+		{
+			Assert.AreEqual(expectedExitCode, result.ExitCode);
+			Assert.IsTrue(result.Failed, "process should return an error");
 		}
 
 		private void WaitForProcessToStart()
