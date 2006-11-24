@@ -22,6 +22,7 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 			this.stream = stream;
 			output = new StringWriter();
 			thread = new Thread(new ThreadStart(ReadToEnd));
+			thread.Name = Thread.CurrentThread.Name;
 			thread.Priority = ThreadPriority.BelowNormal;
 			thread.Start();
 		}

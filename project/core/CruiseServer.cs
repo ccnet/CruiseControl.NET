@@ -32,6 +32,7 @@ namespace ThoughtWorks.CruiseControl.Core
 
 			// ToDo - get rid of manager, maybe
 			manager = new CruiseManager(this);
+			InitializeServerThread();
 
 			// By default, no integrators are running
 			CreateIntegrators();
@@ -393,6 +394,18 @@ namespace ThoughtWorks.CruiseControl.Core
 		public void Request(string project, IntegrationRequest request)
 		{
 			GetIntegrator(project).Request(request);
+		}
+
+		private static void InitializeServerThread()
+		{
+			try
+			{
+				Thread.CurrentThread.Name = "CCNet Server";
+			}
+			catch (InvalidOperationException)
+			{
+				// Thread name has already been set.  This only happens during unit tests.
+			}
 		}
 	}
 }

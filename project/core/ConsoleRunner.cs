@@ -8,14 +8,14 @@ namespace ThoughtWorks.CruiseControl.Core
 {
 	public class ConsoleRunner
 	{
-		private readonly ArgumentParser _parser;
-		private readonly ICruiseServerFactory _serverFactory;
+		private readonly ArgumentParser parser;
+		private readonly ICruiseServerFactory serverFactory;
 		private ICruiseServer server;
 
 		public ConsoleRunner(ArgumentParser parser, ICruiseServerFactory serverFactory)
 		{
-			_parser = parser;
-			_serverFactory = serverFactory;
+			this.parser = parser;
+			this.serverFactory = serverFactory;
 		}
 
 		public void Run()
@@ -26,7 +26,7 @@ namespace ThoughtWorks.CruiseControl.Core
 			Console.WriteLine("OS Version: {0}\tServer locale: {1}", Environment.OSVersion, CultureInfo.CurrentCulture);
 			Console.WriteLine();
 
-			if (_parser.ShowHelp)
+			if (parser.ShowHelp)
 			{
 				Log.Warning(ArgumentParser.Usage);
 				return;
@@ -40,17 +40,17 @@ namespace ThoughtWorks.CruiseControl.Core
 			{
 				handler.OnConsoleEvent += new EventHandler(HandleControlEvent);
 
-				using (server = _serverFactory.Create(_parser.UseRemoting, _parser.ConfigFile))
+				using (server = serverFactory.Create(parser.UseRemoting, parser.ConfigFile))
 				{
-					if (_parser.Project == null)
+					if (parser.Project == null)
 					{
 						server.Start();
 						server.WaitForExit();
 					}
 					else
 					{
-						server.ForceBuild(_parser.Project);
-						server.WaitForExit(_parser.Project);
+						server.ForceBuild(parser.Project);
+						server.WaitForExit(parser.Project);
 					}
 				}
 			}

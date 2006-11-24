@@ -135,7 +135,13 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Util
 
 		private void WaitForProcessToStart()
 		{
-			while (Process.GetProcessesByName("sleeper").Length == 0) { Thread.Sleep(50);}
+			int count = 0;
+			while (Process.GetProcessesByName("sleeper").Length == 0 && count < 1000)
+			{
+				Thread.Sleep(50);
+				count++;
+			}
+			if (count == 1000) Assert.Fail("sleeper process did not start.");
 		}
 
 		private void StartProcess()

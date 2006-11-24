@@ -64,7 +64,6 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 		{
 			NetReflector.Read(xml, cvs);
 			string y = NetReflector.Write(cvs);
-			Console.Out.WriteLine("y = {0}", y);
 			XmlUtil.VerifyXmlIsWellFormed(y);
 		}
 
