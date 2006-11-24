@@ -3,7 +3,7 @@ using System.Reflection;
 using NUnit.Framework;
 using ThoughtWorks.CruiseControl.Core.Logging;
 
-namespace ThoughtWorks.CruiseControl.UnitTests.Logging
+namespace ThoughtWorks.CruiseControl.UnitTests.Core.Logging
 {
 	[TestFixture()]
 	public class CircularArrayTest

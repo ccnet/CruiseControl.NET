@@ -4,7 +4,7 @@ using ThoughtWorks.CruiseControl.WebDashboard.IO;
 using ThoughtWorks.CruiseControl.WebDashboard.MVC;
 using ThoughtWorks.CruiseControl.WebDashboard.MVC.Cruise;
 
-namespace ThoughtWorks.CruiseControl.UnitTests.UnitTests.WebDashboard.MVC.Cruise
+namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.MVC.Cruise
 {
 	[TestFixture]
 	public class CachingActionProxyTest
