@@ -1,11 +1,13 @@
 using System;
 using System.Collections;
 using System.Web.Mail;
+using Exortech.NetReflector;
 using NMock;
 using NMock.Constraints;
 using NUnit.Framework;
 using ThoughtWorks.CruiseControl.Core;
 using ThoughtWorks.CruiseControl.Core.Publishers;
+using ThoughtWorks.CruiseControl.Core.Util;
 using ThoughtWorks.CruiseControl.Remote;
 
 namespace ThoughtWorks.CruiseControl.UnitTests.Core.Publishers
@@ -213,6 +215,14 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Publishers
 			EmailGroup buildmaster = new EmailGroup("buildmaster", EmailGroup.NotificationType.Always);
 			Assert.AreEqual(developers, publisher.EmailGroups["developers"]);
 			Assert.AreEqual(buildmaster, publisher.EmailGroups["buildmaster"]);
+		}
+
+		[Test]
+		public void SerializeToXml()
+		{
+			publisher = EmailPublisherMother.Create();
+			string xml = NetReflector.Write(publisher);
+			XmlUtil.VerifyXmlIsWellFormed(xml);
 		}
 
 		[Test]
