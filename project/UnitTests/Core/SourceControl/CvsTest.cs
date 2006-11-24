@@ -33,21 +33,22 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 		[TearDown]
 		protected void VerifyAll()
 		{
-			base.Verify();
+			Verify();
 			mockHistoryParser.Verify();
 			mockHistoryDirectoryParser.Verify();
 		}
 
-		[Test]
-		public void PopulateFromXml()
-		{
-			string xml = @"<sourceControl type=""cvs"" autoGetSource=""true"">
+		const string xml = @"<sourceControl type=""cvs"" autoGetSource=""true"">
       <executable>..\tools\cvs.exe</executable>
       <workingDirectory>..</workingDirectory>
 	  <useHistory>true</useHistory>
       <cvsroot>myCvsRoot</cvsroot>
 	  <branch>branch</branch>
     </sourceControl>";
+		
+		[Test]
+		public void PopulateFromXml()
+		{
 			NetReflector.Read(xml, cvs);
 			Assert.AreEqual(@"..\tools\cvs.exe", cvs.Executable);
 			Assert.AreEqual("..", cvs.WorkingDirectory);
@@ -56,6 +57,15 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 			Assert.AreEqual(true, cvs.AutoGetSource);
 			Assert.AreEqual(true, cvs.UseHistory);
 			Assert.AreEqual(true, cvs.CleanCopy);
+		}
+
+		[Test]
+		public void SerializeToXml()
+		{
+			NetReflector.Read(xml, cvs);
+			string y = NetReflector.Write(cvs);
+			Console.Out.WriteLine("y = {0}", y);
+			XmlUtil.VerifyXmlIsWellFormed(y);
 		}
 
 		[Test]
@@ -173,7 +183,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 		[Test]
 		public void ShouldRebaseWorkingDirectoryForGetSource()
 		{
-			base.DefaultWorkingDirectory = @"c:\devl\myproject";
+			DefaultWorkingDirectory = @"c:\devl\myproject";
 			ExpectToExecuteArguments(@"-q update -d -P -C");
 
 			cvs.AutoGetSource = true;

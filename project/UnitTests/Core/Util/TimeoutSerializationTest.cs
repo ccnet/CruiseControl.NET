@@ -19,6 +19,12 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Util
 		}
 
 		[Test]
+		public void HandleSerializingNull()
+		{
+			serializer.Write(new XmlTextWriter(new StringWriter()), null);	
+		}
+		
+		[Test]
 		public void MillisAreSerializedWithNoPeriodAttribute()
 		{
 			Timeout period = new Timeout(100);

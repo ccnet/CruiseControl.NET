@@ -12,6 +12,9 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 
 		public override void Write(XmlWriter writer, object target)
 		{
+			if (target == null) return;
+			if (! (target is Timeout)) target = ReflectorMember.GetValue(target);
+
 			Timeout to = target as Timeout;
 			to.Write(writer);
 		}
