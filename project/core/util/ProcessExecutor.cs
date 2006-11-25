@@ -103,7 +103,7 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 
 			private bool WaitForProcessToExit()
 			{
-				bool hasExited = latch.WaitOne(processInfo.TimeOut, false);
+				bool hasExited = latch.WaitOne(processInfo.TimeOut, true);
 				if (! hasExited)
 					Log.Warning(string.Format("Process timed out: {0} {1}.  Process id: {2}.  This process will now be killed.", processInfo.FileName, processInfo.Arguments, process.Id));
 				return hasExited;
