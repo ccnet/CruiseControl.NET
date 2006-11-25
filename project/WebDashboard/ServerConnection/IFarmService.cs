@@ -9,6 +9,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.ServerConnection
 		IBuildSpecifier[] GetBuildSpecifiers(IProjectSpecifier serverSpecifier);
 		void DeleteProject(IProjectSpecifier projectSpecifier, bool purgeWorkingDirectory, bool purgeArtifactDirectory, bool purgeSourceControlEnvironment);
 		string GetServerLog(IServerSpecifier serverSpecifier);
+		string GetServerLog(IProjectSpecifier specifier);
 		void Start(IProjectSpecifier projectSpecifier);
 		void Stop(IProjectSpecifier projectSpecifier);
 		void ForceBuild(IProjectSpecifier projectSpecifier);

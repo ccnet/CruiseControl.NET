@@ -35,9 +35,14 @@ namespace ThoughtWorks.CruiseControl.UnitTests.UnitTestUtils
 					message = "Expected to have key " + expectedKey.ToString();
 					return false;
 				}
-				if (! expected[expectedKey].Equals(other[expectedKey]))
+				object expectedValue = expected[expectedKey];
+				if (expectedValue is IConstraint)
 				{
-					message = string.Format("Expected {0} to be {1} but was {2}", expectedKey.ToString(), expected[expectedKey].ToString(), other[expectedKey].ToString());
+					return ((IConstraint)expectedValue).Eval(other[expectedKey]);
+				}
+				if (! expectedValue.Equals(other[expectedKey]))
+				{
+					message = string.Format("Expected {0} to be {1} but was {2}", expectedKey.ToString(), expectedValue.ToString(), other[expectedKey].ToString());
 					return false;
 				}
 			}

@@ -35,7 +35,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 		public HtmlFragmentResponse Execute()
 		{
 			Hashtable velocityContext = new Hashtable();
-			string velocityTemplateName = "";
+			string velocityTemplateName;
 
 			string serverName = request.ServerName;
 			if (serverName == "")
@@ -75,7 +75,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 				}
 			}
 
-			return velocityViewGenerator.GenerateView(velocityTemplateName, velocityContext) as HtmlFragmentResponse;
+			return velocityViewGenerator.GenerateView(velocityTemplateName, velocityContext);
 		}
 	}
 }

@@ -1,5 +1,7 @@
 using System.Collections;
 using Exortech.NetReflector;
+using ThoughtWorks.CruiseControl.Core.Reporting.Dashboard.Navigation;
+using ThoughtWorks.CruiseControl.Core.Util;
 using ThoughtWorks.CruiseControl.WebDashboard.Dashboard;
 using ThoughtWorks.CruiseControl.WebDashboard.IO;
 using ThoughtWorks.CruiseControl.WebDashboard.MVC;
@@ -12,19 +14,40 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.ServerReport
 	[ReflectorType("serverLogServerPlugin")]
 	public class ServerLogServerPlugin : ICruiseAction, IPlugin
 	{
+		private const string ActionName = "ViewServerLog";
 		private readonly IFarmService farmService;
 		private readonly IVelocityViewGenerator viewGenerator;
+		private readonly ICruiseUrlBuilder urlBuilder;
 
-		public ServerLogServerPlugin(IFarmService farmService, IVelocityViewGenerator viewGenerator)
+		public ServerLogServerPlugin(IFarmService farmService, IVelocityViewGenerator viewGenerator, ICruiseUrlBuilder urlBuilder)
 		{
 			this.farmService = farmService;
 			this.viewGenerator = viewGenerator;
+			this.urlBuilder = urlBuilder;
 		}
 
 		public IResponse Execute(ICruiseRequest request)
 		{
 			Hashtable velocityContext = new Hashtable();
-			velocityContext["log"] = farmService.GetServerLog(request.ServerSpecifier);
+			ArrayList links = new ArrayList();
+			links.Add(new ServerLink(urlBuilder, request.ServerSpecifier, "Server Log", ActionName));
+
+			ProjectStatusListAndExceptions projects = farmService.GetProjectStatusListAndCaptureExceptions(request.ServerSpecifier);
+			foreach (ProjectStatusOnServer projectStatusOnServer in projects.StatusAndServerList)
+			{
+				DefaultProjectSpecifier projectSpecifier = new DefaultProjectSpecifier(projectStatusOnServer.ServerSpecifier, projectStatusOnServer.ProjectStatus.Name);
+				links.Add(new ProjectLink(urlBuilder, projectSpecifier, projectSpecifier.ProjectName, ActionName));
+			}
+			velocityContext["projectLinks"] = links;
+			if (StringUtil.IsBlank(request.ProjectName))
+			{
+				velocityContext["log"] = farmService.GetServerLog(request.ServerSpecifier);
+			}
+			else
+			{
+				velocityContext["currentProject"] = request.ProjectSpecifier.ProjectName;
+				velocityContext["log"] = farmService.GetServerLog(request.ProjectSpecifier);
+			}
 
 			return viewGenerator.GenerateView(@"ServerLog.vm", velocityContext);
 		}
@@ -36,7 +59,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.ServerReport
 
 		public INamedAction[] NamedActions
 		{
-			get {  return new INamedAction[] { new ImmutableNamedAction("ViewServerLog", this) }; }
+			get {  return new INamedAction[] { new ImmutableNamedAction(ActionName, this) }; }
 		}
 	}
 }

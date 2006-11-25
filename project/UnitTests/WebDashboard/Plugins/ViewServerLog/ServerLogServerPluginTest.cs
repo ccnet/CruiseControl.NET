@@ -1,5 +1,6 @@
 using System.Collections;
 using NMock;
+using NMock.Constraints;
 using NUnit.Framework;
 using ThoughtWorks.CruiseControl.Core.Reporting.Dashboard.Navigation;
 using ThoughtWorks.CruiseControl.UnitTests.UnitTestUtils;
@@ -19,6 +20,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Plugins.ViewServerLo
 		private DynamicMock farmServiceMock;
 		private DynamicMock requestMock;
 		private DynamicMock viewGeneratorMock;
+		private DynamicMock cruiseUrlBuilderMock;
 
 		[SetUp]
 		public void Setup()
@@ -26,8 +28,10 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Plugins.ViewServerLo
 			requestMock = new DynamicMock(typeof(ICruiseRequest));
 			farmServiceMock = new DynamicMock(typeof(IFarmService));
 			viewGeneratorMock = new DynamicMock(typeof(IVelocityViewGenerator));
+			cruiseUrlBuilderMock = new DynamicMock(typeof(ICruiseUrlBuilder));
 
-			action = new ServerLogServerPlugin((IFarmService) farmServiceMock.MockInstance, (IVelocityViewGenerator) viewGeneratorMock.MockInstance);
+			action = new ServerLogServerPlugin((IFarmService) farmServiceMock.MockInstance, (IVelocityViewGenerator) viewGeneratorMock.MockInstance, 
+				(ICruiseUrlBuilder) cruiseUrlBuilderMock.MockInstance);
 		}
 
 		private void VerifyAll()
@@ -35,6 +39,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Plugins.ViewServerLo
 			farmServiceMock.Verify();
 			requestMock.Verify();
 			viewGeneratorMock.Verify();
+			cruiseUrlBuilderMock.Verify();
 		}
 
 		[Test]
@@ -45,11 +50,40 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Plugins.ViewServerLo
 			string serverLog = "server log";
 			Hashtable expectedHashtable = new Hashtable();
 			expectedHashtable["log"] = serverLog;
+			expectedHashtable["projectLinks"] = new IsAnything();
 
 			IResponse response = new HtmlFragmentResponse("foo");
 
-			requestMock.ExpectAndReturn("ServerSpecifier", serverSpecifier);
+			requestMock.SetupResult("ServerSpecifier", serverSpecifier);
 			farmServiceMock.ExpectAndReturn("GetServerLog", serverLog, serverSpecifier);
+			farmServiceMock.ExpectAndReturn("GetProjectStatusListAndCaptureExceptions", new ProjectStatusListAndExceptions(new ProjectStatusOnServer[0], null), serverSpecifier);
+			viewGeneratorMock.ExpectAndReturn("GenerateView", response, @"ServerLog.vm", new HashtableConstraint(expectedHashtable));
+
+			// Execute
+			Assert.AreEqual(response, action.Execute((ICruiseRequest) requestMock.MockInstance));
+
+			VerifyAll();
+		}
+
+		[Test]
+		public void ReturnsServerLogFromRequestedServerForSpecificProject()
+		{
+			// Setup
+			IServerSpecifier serverSpecifier = new DefaultServerSpecifier("foo");
+			IProjectSpecifier projectSpecifier = new DefaultProjectSpecifier(serverSpecifier, "foo-project");
+			string serverLog = "server log";
+			Hashtable expectedHashtable = new Hashtable();
+			expectedHashtable["log"] = serverLog;
+			expectedHashtable["projectLinks"] = new IsAnything();
+			expectedHashtable["currentProject"] = projectSpecifier.ProjectName;
+
+			IResponse response = new HtmlFragmentResponse("foo");
+
+			requestMock.SetupResult("ServerSpecifier", serverSpecifier);			
+			requestMock.SetupResult("ProjectName", projectSpecifier.ProjectName);
+			requestMock.SetupResult("ProjectSpecifier", projectSpecifier);
+			farmServiceMock.ExpectAndReturn("GetServerLog", serverLog, projectSpecifier);
+			farmServiceMock.ExpectAndReturn("GetProjectStatusListAndCaptureExceptions", new ProjectStatusListAndExceptions(new ProjectStatusOnServer[0], null), serverSpecifier);			
 			viewGeneratorMock.ExpectAndReturn("GenerateView", response, @"ServerLog.vm", new HashtableConstraint(expectedHashtable));
 
 			// Execute

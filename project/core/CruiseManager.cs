@@ -85,6 +85,11 @@ namespace ThoughtWorks.CruiseControl.Core
 			return cruiseServer.GetServerLog();
 		}
 
+		public string GetServerLog(string projectName)
+		{
+			return cruiseServer.GetServerLog(projectName);
+		}
+
 		public void AddProject(string serializedProject)
 		{
 			cruiseServer.AddProject(serializedProject);

@@ -263,6 +263,11 @@ namespace ThoughtWorks.CruiseControl.Core
 			return new ServerLogFileReader().Read();
 		}
 
+		public string GetServerLog(string projectName)
+		{
+			return new ServerLogFileReader().Read(projectName);
+		}
+
 		// ToDo - test
 		public void AddProject(string serializedProject)
 		{

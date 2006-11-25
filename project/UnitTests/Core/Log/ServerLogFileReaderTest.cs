@@ -10,26 +10,26 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Logging
 	[TestFixture]
 	public class ServerLogFileReaderTest
 	{
-		private const string TEMP_DIR = "ServerLogFileReaderTest";
+		private SystemPath tempDir;
 
 		[SetUp]
 		protected void CreateTempDir()
 		{
-			TempFileUtil.CreateTempDir(TEMP_DIR);
+			tempDir = SystemPath.Temp;
 		}
 
 		[TearDown]
 		protected void DeleteTempDir()
 		{
-			TempFileUtil.DeleteTempDir(TEMP_DIR);
+			if (tempDir.Exists()) tempDir.DeleteDirectory();
 		}
 
 		[Test]
 		public void ReadSingleLineFromLogFile()
 		{
 			string content = @"SampleLine";
-			string filename = TempFileUtil.CreateTempFile(TEMP_DIR, "ReadSingleLineFromLogFile.log", content);
-			ServerLogFileReader reader = new ServerLogFileReader(filename, 10);
+			SystemPath filename = tempDir.CreateTextFile("ReadSingleLineFromLogFile.log", content);
+			ServerLogFileReader reader = new ServerLogFileReader(filename.ToString(), 10);
 			Assert.AreEqual(content, reader.Read());
 		}
 
@@ -38,10 +38,10 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Logging
 		{
 			const int numFileLines = 15;
 			string[] contentLines = GenerateContentLines(numFileLines);
-			string filename = TempFileUtil.CreateTempFile(TEMP_DIR, "ReadLessThanInFile.log", LinesToString(contentLines));
+			SystemPath filename = tempDir.CreateTextFile("ReadLessThanInFile.log", LinesToString(contentLines));
 
 			const int numReadLines = 10;
-			ServerLogFileReader reader = new ServerLogFileReader(filename, numReadLines);
+			ServerLogFileReader reader = new ServerLogFileReader(filename.ToString(), numReadLines);
 			String[] readLines = StringToLines(reader.Read());
 
 			Assert.AreEqual(numReadLines, readLines.Length);
@@ -56,12 +56,12 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Logging
 		{
 			const int numFileLines = 5;
 			string[] contentLines = GenerateContentLines(numFileLines);
-			string filename = TempFileUtil.CreateTempFile(TEMP_DIR, "ReadMoreThanInFile.log", LinesToString(contentLines));
+			SystemPath filename = tempDir.CreateTextFile("ReadMoreThanInFile.log", LinesToString(contentLines));
 
 			const int numReadLines = 10;
-			ServerLogFileReader reader = new ServerLogFileReader(filename, numReadLines);
+			ServerLogFileReader reader = new ServerLogFileReader(filename.ToString(), numReadLines);
 			String[] readLines = StringToLines(reader.Read());
-			
+
 			// All of file should be read
 			Assert.AreEqual(numFileLines, readLines.Length);
 			for (int i = 0; i < readLines.Length; i++)
@@ -75,11 +75,11 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Logging
 		{
 			const int numLines = 10;
 			string[] contentLines = GenerateContentLines(numLines);
-			string filename = TempFileUtil.CreateTempFile(TEMP_DIR, "ReadExactInFile.log", LinesToString(contentLines));
+			SystemPath filename = tempDir.CreateTextFile("ReadExactInFile.log", LinesToString(contentLines));
 
-			ServerLogFileReader reader = new ServerLogFileReader(filename, numLines);
+			ServerLogFileReader reader = new ServerLogFileReader(filename.ToString(), numLines);
 			String[] readLines = StringToLines(reader.Read());
-			
+
 			// All of file should be read
 			Assert.AreEqual(numLines, readLines.Length);
 			for (int i = 0; i < readLines.Length; i++)
@@ -91,8 +91,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Logging
 		[Test]
 		public void ReadEmptyFile()
 		{
-			string filename = TempFileUtil.CreateTempFile(TEMP_DIR, "ReadEmptyFile.log");
-			ServerLogFileReader reader = new ServerLogFileReader(filename, 10);
+			SystemPath filename = tempDir.CreateEmptyFile("ReadEmptyFile.log");
+			ServerLogFileReader reader = new ServerLogFileReader(filename.ToString(), 10);
 			Assert.AreEqual("", reader.Read(), "Error reading empty log file");
 		}
 
@@ -106,14 +106,14 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Logging
 		[Test]
 		public void ReadTwice()
 		{
-			string filename = TempFileUtil.CreateTempFile(TEMP_DIR, "Twice.Log");
-			ServerLogFileReader reader = new ServerLogFileReader(filename, 10);
+			SystemPath filename = tempDir.CreateEmptyFile("Twice.Log");
+			ServerLogFileReader reader = new ServerLogFileReader(filename.ToString(), 10);
 			String first = reader.Read();
 			String second = reader.Read();
 			Assert.AreEqual(first, second, "Error reading file twice with same reader");
 		}
 
-		[Test, ExpectedException(typeof(FileNotFoundException))]
+		[Test, ExpectedException(typeof (FileNotFoundException))]
 		public void ReadUnknownFile()
 		{
 			ServerLogFileReader reader = new ServerLogFileReader("BogusFileName", 10);
@@ -123,18 +123,35 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Logging
 		[Test]
 		public void ReadFromLockedLogFile()
 		{
-			string tempFile = TempFileUtil.GetTempFilePath(TEMP_DIR, "LockedFilename.log");				
-			using (StreamWriter stream = File.CreateText(tempFile))
+			SystemPath tempFile = tempDir.CreateEmptyFile("LockedFilename.log");
+			using (StreamWriter stream = File.CreateText(tempFile.ToString()))
 			{
 				stream.Write("foo");
 				stream.Write("bar");
 				stream.Flush();
 
-				ServerLogFileReader reader = new ServerLogFileReader(tempFile, 10);
+				ServerLogFileReader reader = new ServerLogFileReader(tempFile.ToString(), 10);
 				Assert.AreEqual("foobar", reader.Read());
 			}
 		}
 
+		[Test]
+		public void ReadOutputFromSpecifiedProject()
+		{
+			string content = @"2006-11-24 20:09:52,000 [CCNet Server:INFO] Starting CruiseControl.NET Server
+2006-11-24 20:09:53,000 [foo:INFO] Starting integrator for project: foo
+2006-11-24 20:09:54,000 [bar:INFO] Starting integrator for project: bar
+2006-11-24 20:09:55,000 [foo:INFO] No modifications detected
+2006-11-24 20:09:56,000 [bar:INFO] No modifications detected.";
+			SystemPath tempFile = tempDir.CreateTextFile("MultiProject.log", content);
+			
+			ServerLogFileReader reader = new ServerLogFileReader(tempFile.ToString(), 10);
+			Assert.AreEqual(@"2006-11-24 20:09:53,000 [foo:INFO] Starting integrator for project: foo
+2006-11-24 20:09:55,000 [foo:INFO] No modifications detected", reader.Read("foo"));
+			Assert.AreEqual(@"2006-11-24 20:09:54,000 [bar:INFO] Starting integrator for project: bar
+2006-11-24 20:09:56,000 [bar:INFO] No modifications detected.", reader.Read("bar"));
+		}
+		
 		private string[] GenerateContentLines(int lines)
 		{
 			String[] contentLines = new String[lines];
@@ -145,7 +162,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Logging
 
 			return contentLines;
 		}
-		
+
 		private string LinesToString(string[] contentLines)
 		{
 			return string.Join(Environment.NewLine, contentLines);

@@ -126,6 +126,11 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.ServerConnection
 			return GetCruiseManager(serverSpecifier).GetServerLog();
 		}
 
+		public string GetServerLog(IProjectSpecifier projectSpecifier)
+		{
+			return GetCruiseManager(projectSpecifier.ServerSpecifier).GetServerLog(projectSpecifier.ProjectName);
+		}
+
 		public void Start(IProjectSpecifier projectSpecifier)
 		{
 			GetCruiseManager(projectSpecifier.ServerSpecifier).Start(projectSpecifier.ProjectName);
@@ -198,7 +203,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.ServerConnection
 
 		public IServerSpecifier GetServerConfiguration(string serverName)
 		{
-			foreach (ServerLocation serverLocation in this.ServerLocations)
+			foreach (ServerLocation serverLocation in ServerLocations)
 			{
 				if (serverLocation.ServerName == serverName)
 					return serverLocation;

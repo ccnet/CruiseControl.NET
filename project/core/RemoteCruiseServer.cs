@@ -1,8 +1,8 @@
 using System;
 using System.Runtime.Remoting;
 using System.Runtime.Remoting.Channels;
-using ThoughtWorks.CruiseControl.Remote;
 using ThoughtWorks.CruiseControl.Core.Util;
+using ThoughtWorks.CruiseControl.Remote;
 
 namespace ThoughtWorks.CruiseControl.Core
 {
@@ -11,146 +11,151 @@ namespace ThoughtWorks.CruiseControl.Core
 		public const string URI = "CruiseManager.rem";
 		public const string DefaultUri = "tcp://localhost:21234/" + URI;
 
-		private ICruiseServer _server;
+		private ICruiseServer server;
 		private bool _disposed;
 
 		public RemoteCruiseServer(ICruiseServer server, string remotingConfigurationFile)
 		{
-			_server = server;
+			this.server = server;
 			RemotingConfiguration.Configure(remotingConfigurationFile);
 			RegisterForRemoting();
 		}
 
 		public void Start()
 		{
-			_server.Start();
+			server.Start();
 		}
 
 		public void Stop()
 		{
-			_server.Stop();
+			server.Stop();
 		}
 
 		public void Abort()
 		{
-			_server.Abort();
+			server.Abort();
 		}
 
 		public void WaitForExit()
 		{
-			_server.WaitForExit();
+			server.WaitForExit();
 		}
 
 		public void Start(string project)
 		{
-			_server.Start(project);
+			server.Start(project);
 		}
 
 		public void Stop(string project)
 		{
-			_server.Stop(project);
+			server.Stop(project);
 		}
 
 		public ICruiseManager CruiseManager
 		{
-			get { return _server.CruiseManager; }
+			get { return server.CruiseManager; }
 		}
 
 		public ProjectStatus[] GetProjectStatus()
 		{
-			return _server.GetProjectStatus();
+			return server.GetProjectStatus();
 		}
 
 		public void ForceBuild(string projectName)
 		{
-			_server.ForceBuild(projectName);
+			server.ForceBuild(projectName);
 		}
 
 		public void Request(string projectName, IntegrationRequest request)
 		{
-			_server.Request(projectName, request);
+			server.Request(projectName, request);
 		}
 
 		public void WaitForExit(string projectName)
 		{
-			_server.WaitForExit(projectName);
+			server.WaitForExit(projectName);
 		}
 
 		public string GetLatestBuildName(string projectName)
 		{
-			return _server.GetLatestBuildName(projectName);
+			return server.GetLatestBuildName(projectName);
 		}
 
 		public string[] GetBuildNames(string projectName)
 		{
-			return _server.GetBuildNames(projectName);
+			return server.GetBuildNames(projectName);
 		}
 
 		public string GetVersion()
 		{
-			return _server.GetVersion();
+			return server.GetVersion();
 		}
 
 		public string[] GetMostRecentBuildNames(string projectName, int buildCount)
 		{
-			return _server.GetMostRecentBuildNames(projectName, buildCount);
+			return server.GetMostRecentBuildNames(projectName, buildCount);
 		}
 
 		public string GetLog(string projectName, string buildName)
 		{
-			return _server.GetLog(projectName, buildName);
+			return server.GetLog(projectName, buildName);
 		}
 
 		public string GetServerLog()
 		{
-			return _server.GetServerLog();
+			return server.GetServerLog();
+		}
+
+		public string GetServerLog(string projectName)
+		{
+			return server.GetServerLog(projectName);
 		}
 
 		public void AddProject(string serializedProject)
 		{
-			_server.AddProject(serializedProject);
+			server.AddProject(serializedProject);
 		}
 
 		public void DeleteProject(string projectName, bool purgeWorkingDirectory, bool purgeArtifactDirectory, bool purgeSourceControlEnvironment)
 		{
-			_server.DeleteProject(projectName, purgeWorkingDirectory, purgeArtifactDirectory, purgeSourceControlEnvironment);
+			server.DeleteProject(projectName, purgeWorkingDirectory, purgeArtifactDirectory, purgeSourceControlEnvironment);
 		}
 
 		public string GetProject(string name)
 		{
-			return _server.GetProject(name);
+			return server.GetProject(name);
 		}
 
 		public void UpdateProject(string projectName, string serializedProject)
 		{
-			_server.UpdateProject(projectName, serializedProject);
+			server.UpdateProject(projectName, serializedProject);
 		}
 
 		public ExternalLink[] GetExternalLinks(string projectName)
 		{
-			return _server.GetExternalLinks(projectName);
+			return server.GetExternalLinks(projectName);
 		}
 
 		public void SendMessage(string projectName, Message message)
 		{
-			_server.SendMessage(projectName, message);
+			server.SendMessage(projectName, message);
 		}
 
 		public string GetArtifactDirectory(string projectName)
 		{
-			return _server.GetArtifactDirectory(projectName);
+			return server.GetArtifactDirectory(projectName);
 		}
 
 		public string GetStatisticsDocument(string projectName)
 		{
-			return _server.GetStatisticsDocument(projectName);
+			return server.GetStatisticsDocument(projectName);
 		}
 
 		private void RegisterForRemoting()
 		{
-			MarshalByRefObject marshalByRef = (MarshalByRefObject)_server.CruiseManager;
+			MarshalByRefObject marshalByRef = (MarshalByRefObject) server.CruiseManager;
 			RemotingServices.Marshal(marshalByRef, URI);
- 
+
 			foreach (IChannel channel in ChannelServices.RegisteredChannels)
 			{
 				Log.Info("Registered channel: " + channel.ChannelName);
@@ -160,7 +165,7 @@ namespace ThoughtWorks.CruiseControl.Core
 				{
 					if (channel is IChannelReceiver)
 					{
-						foreach (string url in ((IChannelReceiver)channel).GetUrlsForUri(URI))
+						foreach (string url in ((IChannelReceiver) channel).GetUrlsForUri(URI))
 						{
 							Log.Info("CruiseManager: Listening on url: " + url);
 						}
@@ -173,17 +178,17 @@ namespace ThoughtWorks.CruiseControl.Core
 		{
 			lock (this)
 			{
-				if (_disposed) return;		
+				if (_disposed) return;
 				_disposed = true;
 			}
 			Log.Info("Disconnecting remote server: ");
-			RemotingServices.Disconnect((MarshalByRefObject)_server.CruiseManager);
+			RemotingServices.Disconnect((MarshalByRefObject) server.CruiseManager);
 			foreach (IChannel channel in ChannelServices.RegisteredChannels)
 			{
 				Log.Info("Unregistering channel: " + channel.ChannelName);
 				ChannelServices.UnregisterChannel(channel);
 			}
-			_server.Dispose();
+			server.Dispose();
 		}
 	}
 }

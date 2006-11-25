@@ -26,6 +26,16 @@ namespace ThoughtWorks.CruiseControl.Core.Logging
 
 		public string Read(EnumeratorDirection direction)
 		{
+			return Read(direction, null);
+		}
+
+		public string Read(string project)
+		{
+			return Read(EnumeratorDirection.Forward, '[' + project);
+		}
+
+		private string Read(EnumeratorDirection direction, string match)
+		{
 			CircularArray buffer = new CircularArray(maxLines);
 			using (Stream stream = OpenFile())
 			{
@@ -34,7 +44,8 @@ namespace ThoughtWorks.CruiseControl.Core.Logging
 					string line;
 					while ((line = reader.ReadLine()) != null)
 					{
-						buffer.Add(line);
+						if (match == null || line.IndexOf(match) >= 0)
+							buffer.Add(line);
 					}
 				}
 			}

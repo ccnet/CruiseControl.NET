@@ -86,7 +86,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.ServerConnection
 		public void ThrowsCorrectExceptionIfProjectNotRunningOnServer()
 		{
 			configurationMock.ExpectAndReturn("Servers", new ServerLocation[] {serverLocation});
-			cruiseManagerFactoryMock.ExpectAndReturn("GetCruiseManager", (ICruiseManager) cruiseManagerMock.MockInstance, "http://myurl");
+			cruiseManagerFactoryMock.ExpectAndReturn("GetCruiseManager", cruiseManagerMock.MockInstance, "http://myurl");
 			cruiseManagerMock.ExpectAndThrow("GetLatestBuildName", new NoSuchProjectException("myproject"), "myproject");
 
 			try
@@ -113,22 +113,22 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.ServerConnection
 			DefaultProjectSpecifier myOtherProjectMyOtherServer = new DefaultProjectSpecifier(new DefaultServerSpecifier("myotherserver"), "myotherproject");
 
 			configurationMock.ExpectAndReturn("Servers", servers);
-			cruiseManagerFactoryMock.ExpectAndReturn("GetCruiseManager", (ICruiseManager) cruiseManagerMock.MockInstance, "http://myurl");
+			cruiseManagerFactoryMock.ExpectAndReturn("GetCruiseManager", cruiseManagerMock.MockInstance, "http://myurl");
 			cruiseManagerMock.ExpectAndReturn("GetLatestBuildName", "mylogformyserverformyproject", "myproject");
 			Assert.AreEqual(new DefaultBuildSpecifier(myProjectMyServer, "mylogformyserverformyproject"), managerWrapper.GetLatestBuildSpecifier(myProjectMyServer));
 
 			configurationMock.ExpectAndReturn("Servers", servers);
-			cruiseManagerFactoryMock.ExpectAndReturn("GetCruiseManager", (ICruiseManager) cruiseManagerMock.MockInstance, "http://myurl");
+			cruiseManagerFactoryMock.ExpectAndReturn("GetCruiseManager", cruiseManagerMock.MockInstance, "http://myurl");
 			cruiseManagerMock.ExpectAndReturn("GetLatestBuildName", "mylogformyserverformyotherproject", "myotherproject");
 			Assert.AreEqual(new DefaultBuildSpecifier(myOtherProjectMyServer, "mylogformyserverformyotherproject"), managerWrapper.GetLatestBuildSpecifier(myOtherProjectMyServer));
 
 			configurationMock.ExpectAndReturn("Servers", servers);
-			cruiseManagerFactoryMock.ExpectAndReturn("GetCruiseManager", (ICruiseManager) cruiseManagerMock.MockInstance, "http://myotherurl");
+			cruiseManagerFactoryMock.ExpectAndReturn("GetCruiseManager", cruiseManagerMock.MockInstance, "http://myotherurl");
 			cruiseManagerMock.ExpectAndReturn("GetLatestBuildName", "mylogformyotherserverformyproject", "myproject");
 			Assert.AreEqual(new DefaultBuildSpecifier(myProjectMyOtherServer, "mylogformyotherserverformyproject"), managerWrapper.GetLatestBuildSpecifier(myProjectMyOtherServer));
 
 			configurationMock.ExpectAndReturn("Servers", servers);
-			cruiseManagerFactoryMock.ExpectAndReturn("GetCruiseManager", (ICruiseManager) cruiseManagerMock.MockInstance, "http://myotherurl");
+			cruiseManagerFactoryMock.ExpectAndReturn("GetCruiseManager", cruiseManagerMock.MockInstance, "http://myotherurl");
 			cruiseManagerMock.ExpectAndReturn("GetLatestBuildName", "mylogformyotherserverformyotherproject", "myotherproject");
 			Assert.AreEqual(new DefaultBuildSpecifier(myOtherProjectMyOtherServer, "mylogformyotherserverformyotherproject"), managerWrapper.GetLatestBuildSpecifier(myOtherProjectMyOtherServer));
 
@@ -141,7 +141,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.ServerConnection
 			ServerLocation[] servers = new ServerLocation[] {serverLocation, otherServerLocation};
 
 			configurationMock.ExpectAndReturn("Servers", servers);
-			cruiseManagerFactoryMock.ExpectAndReturn("GetCruiseManager", (ICruiseManager) cruiseManagerMock.MockInstance, "http://myurl");
+			cruiseManagerFactoryMock.ExpectAndReturn("GetCruiseManager", cruiseManagerMock.MockInstance, "http://myurl");
 			cruiseManagerMock.ExpectAndReturn("GetLog", "log\r\ncontents", "myproject", "mybuild");
 			Assert.AreEqual("log\r\ncontents", managerWrapper.GetLog(buildSpecifier));
 
@@ -154,7 +154,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.ServerConnection
 			ServerLocation[] servers = new ServerLocation[] {serverLocation, otherServerLocation};
 
 			configurationMock.ExpectAndReturn("Servers", servers);
-			cruiseManagerFactoryMock.ExpectAndReturn("GetCruiseManager", (ICruiseManager) cruiseManagerMock.MockInstance, "http://myurl");
+			cruiseManagerFactoryMock.ExpectAndReturn("GetCruiseManager", cruiseManagerMock.MockInstance, "http://myurl");
 			cruiseManagerMock.ExpectAndReturn("GetBuildNames", new string[] {"log1", "log2"}, "myproject");
 			Assert.AreEqual(new DefaultBuildSpecifier(projectSpecifier, "log1"), managerWrapper.GetBuildSpecifiers(projectSpecifier)[0]);
 
@@ -167,7 +167,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.ServerConnection
 			ServerLocation[] servers = new ServerLocation[] {serverLocation, otherServerLocation};
 
 			configurationMock.ExpectAndReturn("Servers", servers);
-			cruiseManagerFactoryMock.ExpectAndReturn("GetCruiseManager", (ICruiseManager) cruiseManagerMock.MockInstance, "http://myurl");
+			cruiseManagerFactoryMock.ExpectAndReturn("GetCruiseManager", cruiseManagerMock.MockInstance, "http://myurl");
 			cruiseManagerMock.ExpectAndReturn("GetArtifactDirectory", @"c:\ArtifactDirectory", "myproject");
 			Assert.AreEqual(@"c:\ArtifactDirectory", managerWrapper.GetArtifactDirectory(projectSpecifier));
 		}
@@ -179,7 +179,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.ServerConnection
 			ServerLocation[] servers = new ServerLocation[] {serverLocation, otherServerLocation};
 
 			configurationMock.ExpectAndReturn("Servers", servers);
-			cruiseManagerFactoryMock.ExpectAndReturn("GetCruiseManager", (ICruiseManager) cruiseManagerMock.MockInstance, "http://myurl");
+			cruiseManagerFactoryMock.ExpectAndReturn("GetCruiseManager", cruiseManagerMock.MockInstance, "http://myurl");
 			cruiseManagerMock.ExpectAndReturn("GetMostRecentBuildNames", new string[] {"log1", "log2"}, "myproject", 99);
 
 			// Execute
@@ -201,7 +201,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.ServerConnection
 			string serializedProject = "myproject---";
 
 			configurationMock.ExpectAndReturn("Servers", servers);
-			cruiseManagerFactoryMock.ExpectAndReturn("GetCruiseManager", (ICruiseManager) cruiseManagerMock.MockInstance, "http://myurl");
+			cruiseManagerFactoryMock.ExpectAndReturn("GetCruiseManager", cruiseManagerMock.MockInstance, "http://myurl");
 			cruiseManagerMock.Expect("AddProject", serializedProject);
 
 			/// Execute
@@ -218,7 +218,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.ServerConnection
 			ServerLocation[] servers = new ServerLocation[] {serverLocation, otherServerLocation};
 
 			configurationMock.ExpectAndReturn("Servers", servers);
-			cruiseManagerFactoryMock.ExpectAndReturn("GetCruiseManager", (ICruiseManager) cruiseManagerMock.MockInstance, "http://myurl");
+			cruiseManagerFactoryMock.ExpectAndReturn("GetCruiseManager", cruiseManagerMock.MockInstance, "http://myurl");
 			cruiseManagerMock.Expect("DeleteProject", "myproject", false, true, false);
 
 			// Execute
@@ -236,7 +236,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.ServerConnection
 			string serializedProject = "a serialized project";
 
 			configurationMock.ExpectAndReturn("Servers", servers);
-			cruiseManagerFactoryMock.ExpectAndReturn("GetCruiseManager", (ICruiseManager) cruiseManagerMock.MockInstance, "http://myurl");
+			cruiseManagerFactoryMock.ExpectAndReturn("GetCruiseManager", cruiseManagerMock.MockInstance, "http://myurl");
 			cruiseManagerMock.ExpectAndReturn("GetProject", serializedProject, "myproject");
 
 			// Execute
@@ -255,7 +255,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.ServerConnection
 			string serializedProject = "myproject---";
 
 			configurationMock.ExpectAndReturn("Servers", servers);
-			cruiseManagerFactoryMock.ExpectAndReturn("GetCruiseManager", (ICruiseManager) cruiseManagerMock.MockInstance, "http://myurl");
+			cruiseManagerFactoryMock.ExpectAndReturn("GetCruiseManager", cruiseManagerMock.MockInstance, "http://myurl");
 			cruiseManagerMock.Expect("UpdateProject", "myproject", serializedProject);
 
 			/// Execute
@@ -271,9 +271,22 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.ServerConnection
 			ServerLocation[] servers = new ServerLocation[] {serverLocation, otherServerLocation};
 
 			configurationMock.ExpectAndReturn("Servers", servers);
-			cruiseManagerFactoryMock.ExpectAndReturn("GetCruiseManager", (ICruiseManager) cruiseManagerMock.MockInstance, "http://myurl");
+			cruiseManagerFactoryMock.ExpectAndReturn("GetCruiseManager", cruiseManagerMock.MockInstance, "http://myurl");
 			cruiseManagerMock.ExpectAndReturn("GetServerLog", "a server log");
 			Assert.AreEqual("a server log", managerWrapper.GetServerLog(serverSpecifier));
+
+			VerifyAll();
+		}
+
+		[Test]
+		public void ReturnsServerLogFromCorrectServerForCorrectProject()
+		{
+			ServerLocation[] servers = new ServerLocation[] {serverLocation, otherServerLocation};
+
+			configurationMock.ExpectAndReturn("Servers", servers);
+			cruiseManagerFactoryMock.ExpectAndReturn("GetCruiseManager", cruiseManagerMock.MockInstance, "http://myurl");
+			cruiseManagerMock.ExpectAndReturn("GetServerLog", "a server log", "myproject");
+			Assert.AreEqual("a server log", managerWrapper.GetServerLog(projectSpecifier));
 
 			VerifyAll();
 		}
@@ -298,7 +311,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.ServerConnection
 			ServerLocation[] servers = new ServerLocation[] {serverLocation, otherServerLocation};
 
 			configurationMock.ExpectAndReturn("Servers", servers);
-			cruiseManagerFactoryMock.ExpectAndReturn("GetCruiseManager", (ICruiseManager) cruiseManagerMock.MockInstance, "http://myurl");
+			cruiseManagerFactoryMock.ExpectAndReturn("GetCruiseManager", cruiseManagerMock.MockInstance, "http://myurl");
 			cruiseManagerMock.Expect("ForceBuild", "myproject");
 
 			managerWrapper.ForceBuild(projectSpecifier);
@@ -310,7 +323,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.ServerConnection
 		public void ShouldMatchServersInCaseInsensitiveWay()
 		{
 			configurationMock.ExpectAndReturn("Servers", new ServerLocation[] {serverLocation, otherServerLocation});
-			cruiseManagerFactoryMock.ExpectAndReturn("GetCruiseManager", (ICruiseManager) cruiseManagerMock.MockInstance, "http://myurl");
+			cruiseManagerFactoryMock.ExpectAndReturn("GetCruiseManager", cruiseManagerMock.MockInstance, "http://myurl");
 			cruiseManagerMock.ExpectAndReturn("GetServerVersion", "1.1");
 
 			managerWrapper.GetServerVersion(new DefaultServerSpecifier(serverLocation.Name.ToUpper()));
@@ -324,7 +337,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.ServerConnection
 			ServerLocation[] servers = new ServerLocation[] {serverLocation, otherServerLocation};
 
 			configurationMock.ExpectAndReturn("Servers", servers);
-			cruiseManagerFactoryMock.ExpectAndReturn("GetCruiseManager", (ICruiseManager) cruiseManagerMock.MockInstance, "http://myurl");
+			cruiseManagerFactoryMock.ExpectAndReturn("GetCruiseManager", cruiseManagerMock.MockInstance, "http://myurl");
 			ExternalLink[] links = new ExternalLink[] {new ExternalLink("1", "2"), new ExternalLink("3", "4")};
 			cruiseManagerMock.ExpectAndReturn("GetExternalLinks", links, "myproject");
 
@@ -340,9 +353,9 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.ServerConnection
 
 			configurationMock.ExpectAndReturn("Servers", servers);
 
-			IServerSpecifier serverSpecifier = managerWrapper.GetServerConfiguration("myserver");
-			Assert.AreEqual(true, serverSpecifier.AllowForceBuild);
-			
+			IServerSpecifier specifier = managerWrapper.GetServerConfiguration("myserver");
+			Assert.AreEqual(true, specifier.AllowForceBuild);
+
 			VerifyAll();
 		}
 	}

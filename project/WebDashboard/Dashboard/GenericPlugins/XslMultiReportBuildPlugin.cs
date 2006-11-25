@@ -1,5 +1,4 @@
 using Exortech.NetReflector;
-using ThoughtWorks.CruiseControl.WebDashboard.Dashboard;
 using ThoughtWorks.CruiseControl.WebDashboard.Dashboard.Actions;
 
 namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard.GenericPlugins
@@ -8,7 +7,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard.GenericPlugins
 	/// A Generic XSL report template that can accept multiple transforms.
 	/// </summary>
 	[ReflectorType("xslMultiReportBuildPlugin")]
-	public class XslMultiReportBuildPlugin: ProjectConfigurableBuildPlugin
+	public class XslMultiReportBuildPlugin : ProjectConfigurableBuildPlugin
 	{
 		public XslMultiReportBuildPlugin(IActionInstantiator actionInstantiator)
 		{
@@ -24,36 +23,21 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard.GenericPlugins
 		[ReflectorProperty("description")]
 		public string ConfiguredLinkDescription
 		{
-			get
-			{
-				return description;
-			}
-			set
-			{
-				description = value;
-			}
+			get { return description; }
+			set { description = value; }
 		}
 
 		// See note on ConfiguredLinkDescription
 		public override string LinkDescription
 		{
-			get
-			{
-				return description;
-			}
+			get { return description; }
 		}
 
 		[ReflectorProperty("actionName")]
 		public string ActionName
 		{
-			get
-			{
-				return actionName;
-			}
-			set
-			{
-				actionName = value;
-			}
+			get { return actionName; }
+			set { actionName = value; }
 		}
 
 		[ReflectorArray("xslFileNames")]

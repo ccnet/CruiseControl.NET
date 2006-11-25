@@ -1,1 +1,9 @@
+<div id="serverLogProjects">
+	#foreach ($projectLink in $projectLinks)
+	<a href="$projectLink.Url" style="padding: 10px">$projectLink.Text</a>
+	#end
+</div>
+#if ($currentProject.Length > 0)
+<h2>Server Log for Project: $currentProject</h2>
+#end
 <pre class="log">$log</pre>
