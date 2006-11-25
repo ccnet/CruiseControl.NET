@@ -70,7 +70,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Util
 		public void ForceProcessTimeoutBecauseTargetIsNonTerminating()
 		{
 			ProcessInfo processInfo = new ProcessInfo("sleeper.exe");
-			processInfo.TimeOut = 1000;
+			processInfo.TimeOut = 100;
 			ProcessResult result = executor.Execute(processInfo);
 
 			Assert.IsTrue(result.TimedOut, "process did not time out, but it should have.");

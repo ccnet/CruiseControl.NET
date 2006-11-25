@@ -41,7 +41,7 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 			private const int WAIT_FOR_KILLED_PROCESS_TIMEOUT = 5000;
 			private readonly ProcessInfo processInfo;
 			private readonly Process process;
-			private readonly AutoResetEvent latch = new AutoResetEvent(false);
+			private readonly ManualResetEvent latch = new ManualResetEvent(false);
 
 			public RunnableProcess(ProcessInfo processInfo)
 			{
@@ -103,7 +103,7 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 
 			private bool WaitForProcessToExit()
 			{
-				bool hasExited = latch.WaitOne(processInfo.TimeOut, true);
+				bool hasExited = latch.WaitOne(processInfo.TimeOut, false);
 				if (! hasExited)
 					Log.Warning(string.Format("Process timed out: {0} {1}.  Process id: {2}.  This process will now be killed.", processInfo.FileName, processInfo.Arguments, process.Id));
 				return hasExited;
