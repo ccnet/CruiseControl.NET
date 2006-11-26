@@ -42,6 +42,7 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 			private readonly ProcessInfo processInfo;
 			private readonly Process process;
 			private readonly ManualResetEvent latch = new ManualResetEvent(false);
+			private bool hasTimedOut = false;
 
 			public RunnableProcess(ProcessInfo processInfo)
 			{
@@ -57,31 +58,23 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 				// Process must be started before StandardOutput and StandardError streams are accessible
 				using (ProcessReader standardOutput = new ProcessReader(process.StandardOutput), standardError = new ProcessReader(process.StandardError))
 				{
-					bool hasExited = false;
 					try
 					{
 						WriteToStandardInput();
-						hasExited = WaitForProcessToExit();
+						WaitForProcessToExit();
 					}
 					finally
 					{
 						// Guarantee that process will be killed if it has not exited cleanly
-						if (! hasExited)
+						if (! process.HasExited)
 						{
 							Kill();
 						}
 						// Read in the remainder of the redirected streams
 						standardOutput.WaitForExit();
 						standardError.WaitForExit();
-						
-						if (! hasExited)
-						{
-							// If process has terminated abnormally, write output to log in order to assist debugging.
-							Log.Debug(string.Format("Process stdout: {0}", standardOutput.Output));
-							Log.Debug(string.Format("Process stderr: {0}", standardError.Output));
-						}
 					}
-					return new ProcessResult(standardOutput.Output, standardError.Output, process.ExitCode, ! hasExited);
+					return new ProcessResult(standardOutput.Output, standardError.Output, process.ExitCode, hasTimedOut);
 				}
 			}
 
@@ -101,12 +94,11 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 				}
 			}
 
-			private bool WaitForProcessToExit()
+			private void WaitForProcessToExit()
 			{
-				bool hasExited = latch.WaitOne(processInfo.TimeOut, true);
-				if (! hasExited)
+				hasTimedOut = ! latch.WaitOne(processInfo.TimeOut, true);
+				if (hasTimedOut)
 					Log.Warning(string.Format("Process timed out: {0} {1}.  Process id: {2}.  This process will now be killed.", processInfo.FileName, processInfo.Arguments, process.Id));
-				return hasExited;
 			}
 
 			private void process_Exited(object sender, EventArgs e)
