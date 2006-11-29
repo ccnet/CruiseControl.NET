@@ -111,7 +111,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Util
 
 		private void AssertProcessExitsSuccessfully(ProcessResult result)
 		{
-			Assert.AreEqual(ProcessResult.SUCCESSFUL_EXIT_CODE, result.ExitCode);
+			Assert.AreEqual(ProcessResult.SUCCESSFUL_EXIT_CODE, result.ExitCode, "Process did not exit successfully");
 			AssertFalse("process should not return an error", result.Failed);
 		}
 
