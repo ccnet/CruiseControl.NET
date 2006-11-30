@@ -429,7 +429,6 @@ namespace ThoughtWorks.CruiseControl.Core
 	public class IntegrationState
 	{
 		private readonly IntegrationStatus status;
-		private readonly DateTime date = DateTime.Now;
 		private readonly string label;
 		private readonly string baseArtifactDirectory;
 
@@ -446,12 +445,12 @@ namespace ThoughtWorks.CruiseControl.Core
 			if (obj.GetType() != this.GetType()) return false;
 
 			IntegrationState other = (IntegrationState) obj;
-			return other.status.Equals(status) && other.date == this.date && other.label == this.label;
+			return other.status.Equals(status) && other.label == this.label;
 		}
 
 		public override int GetHashCode()
 		{
-			return date.GetHashCode();
+			return label.GetHashCode();
 		}
 
 		public string ArtifactDirectory
