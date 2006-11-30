@@ -1,6 +1,5 @@
 using System;
 using System.Collections;
-using System.Text;
 using NUnit.Framework;
 using ThoughtWorks.CruiseControl.Core;
 using ThoughtWorks.CruiseControl.Core.Util;
@@ -48,8 +47,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Util
 			Assert.IsTrue(output.IndexOf("myValue") > 0);
 		}
 
-		[ExpectedException(typeof(CruiseControlException))]
-		[Test]
+		[Test, ExpectedException(typeof (CruiseControlException))]
 		public void ShouldFailWhenInputInvalid()
 		{
 			string input = @"<This is some invalid xml";
@@ -58,31 +56,29 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Util
 			new XslTransformer().Transform(input, xslfile, null);
 		}
 
-		[ExpectedException(typeof(CruiseControlException))]
-		[Test]
+		[Test, ExpectedException(typeof (CruiseControlException))]
 		public void ShouldFailWhenXslFileMissing()
 		{
 			string logfile = TestData.LogFileContents;
 			string xslfile = "nosuchstylefile";
 
-			new XslTransformer().Transform(logfile, xslfile, null);			
+			new XslTransformer().Transform(logfile, xslfile, null);
 		}
 
-		[ExpectedException(typeof(CruiseControlException))]
-		[Test]
+		[Test, ExpectedException(typeof (CruiseControlException))]
 		public void ShouldFailWhenXslInvalid()
 		{
-			string logfile = TestData.LogFileContents;;
+			string logfile = TestData.LogFileContents;
 			string xslfile = XslFileBadFormat;
-			new XslTransformer().Transform(logfile, xslfile, null);			
-		}	
+			new XslTransformer().Transform(logfile, xslfile, null);
+		}
 
 		private string XslFileBadFormat
 		{
-			get 
+			get
 			{
-				return  TempFileUtil.CreateTempXmlFile(
-					TestFolder, "samplestylesheet.xsl", @"<xsl:this is some bad xsl"); 
+				return TempFileUtil.CreateTempXmlFile(
+					TestFolder, "samplestylesheet.xsl", @"<xsl:this is some bad xsl");
 			}
 		}
 	}

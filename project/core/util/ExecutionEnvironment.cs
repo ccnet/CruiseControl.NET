@@ -1,12 +1,13 @@
 using System;
+using System.IO;
 
 namespace ThoughtWorks.CruiseControl.Core.Util
 {
-	public sealed class ExecutionEnvironment
+	public sealed class ExecutionEnvironment : IExecutionEnvironment
 	{
-		private ExecutionEnvironment()
+		public char DirectorySeparator
 		{
-			// static members only
+			get { return Path.DirectorySeparatorChar; }
 		}
 
 		/// <summary>
@@ -15,7 +16,7 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 		/// <remarks>
 		/// If this method returns false, expect any DllImport not to work!
 		/// </remarks>
-		public static bool IsRunningOnWindows
+		public bool IsRunningOnWindows
 		{
 			get
 			{
@@ -25,6 +26,11 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 				return ((platform != 4) && (platform != 128));
 			}
 		}
+	}
 
+	public interface IExecutionEnvironment
+	{
+		char DirectorySeparator { get; }
+		bool IsRunningOnWindows { get; }
 	}
 }

@@ -40,8 +40,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Util
 			ProcessInfo processInfo = new ProcessInfo("cmd.exe", "/C @echo Hello World");
 			processInfo.TimeOut = ProcessInfo.InfiniteTimeout;
 			ProcessResult result = executor.Execute(processInfo);
-			Assert.AreEqual("Hello World", result.StandardOutput.Trim());
 			AssertProcessExitsSuccessfully(result);
+			Assert.AreEqual("Hello World", result.StandardOutput.Trim());			
 		}
 
 		[Test]
@@ -62,8 +62,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Util
 			processInfo.EnvironmentVariables["foo"] = "bar";
 			ProcessResult result = executor.Execute(processInfo);
 
-			Assert.AreEqual("foo=bar\r\n", result.StandardOutput);
 			AssertProcessExitsSuccessfully(result);
+			Assert.AreEqual("foo=bar\r\n", result.StandardOutput);
 		}
 
 		[Test]

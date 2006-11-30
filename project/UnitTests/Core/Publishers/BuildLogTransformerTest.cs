@@ -13,7 +13,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Publishers
 		{
 			BuildLogTransformer xformer = new BuildLogTransformer();
 			string result = xformer.TransformResults(null, new XPathDocument(new StringReader("<foo />")));
-			Assert.AreEqual("",result);
+			Assert.AreEqual("", result);
 		}
 	}
 }

@@ -1,5 +1,6 @@
 using System;
 using System.IO;
+using System.Text.RegularExpressions;
 
 namespace ThoughtWorks.CruiseControl.Core.Util
 {
@@ -9,10 +10,14 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 		
 		private readonly string path;
 
-		public SystemPath(string path)
+		public SystemPath(string path) : this(path, new ExecutionEnvironment())
 		{
+		}
+
+		public SystemPath(string path, IExecutionEnvironment environment)
+		{
+			this.path = Convert(path, environment);
 			if (PathIsInvalid(path)) throw new ArgumentException("Path contains invalid characters: " + path, "path");
-			this.path = path;
 		}
 
 		public SystemPath Combine(string subpath)
@@ -20,6 +25,11 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 			return new SystemPath(Path.Combine(path, subpath));
 		}
 
+		private string Convert(string newpath, IExecutionEnvironment environment)
+		{
+			return Regex.Replace(newpath, @"[/\\]", environment.DirectorySeparator.ToString());	
+		}
+		
 		public bool Exists()
 		{
 			return File.Exists(path);
@@ -76,12 +86,19 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 			}
 			return this;
 		}
+		
+		public string ReadTextFile()
+		{
+			using (StreamReader textReader = File.OpenText(path.ToString()))
+			{
+				return textReader.ReadToEnd();
+			}
+		}
 
 		public SystemPath CreateTextFile(string filename, string content)
 		{
 			return Combine(filename).CreateTextFile(content);
 		}
-
 	}
 	
 	public class TempDirectory : SystemPath, IDisposable

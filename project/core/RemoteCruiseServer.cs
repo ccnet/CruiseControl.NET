@@ -12,7 +12,8 @@ namespace ThoughtWorks.CruiseControl.Core
 		public const string DefaultUri = "tcp://localhost:21234/" + URI;
 
 		private ICruiseServer server;
-		private bool _disposed;
+		private bool disposed;
+		private IExecutionEnvironment environment = new ExecutionEnvironment();
 
 		public RemoteCruiseServer(ICruiseServer server, string remotingConfigurationFile)
 		{
@@ -161,7 +162,7 @@ namespace ThoughtWorks.CruiseControl.Core
 				Log.Info("Registered channel: " + channel.ChannelName);
 
 				// GetUrlsForUri is not support on cross-AppDomain channels on mono (as of 1.1.8.3)
-				if (ExecutionEnvironment.IsRunningOnWindows)
+				if (environment.IsRunningOnWindows)
 				{
 					if (channel is IChannelReceiver)
 					{
@@ -178,8 +179,8 @@ namespace ThoughtWorks.CruiseControl.Core
 		{
 			lock (this)
 			{
-				if (_disposed) return;
-				_disposed = true;
+				if (disposed) return;
+				disposed = true;
 			}
 			Log.Info("Disconnecting remote server: ");
 			RemotingServices.Disconnect((MarshalByRefObject) server.CruiseManager);

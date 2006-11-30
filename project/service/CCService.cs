@@ -95,7 +95,7 @@ namespace ThoughtWorks.CruiseControl.Service
 		private static void Main()
 		{
 			AllocateWin32Console();
-			ServiceBase.Run(new ServiceBase[] {new CCService()});
+			Run(new ServiceBase[] {new CCService()});
 		}
 
 		// Allocates a Win32 console if needed since Windows does not provide
@@ -104,7 +104,7 @@ namespace ThoughtWorks.CruiseControl.Service
 		// process supplies them with a console.
 		private static void AllocateWin32Console()
 		{
-			if (ExecutionEnvironment.IsRunningOnWindows)
+			if (new ExecutionEnvironment().IsRunningOnWindows)
 				AllocConsole();			
 		}
 

@@ -47,7 +47,7 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 		private XslTransform NewXslTransform(string transformerFileName)
 		{
 			XslTransform transform = new XslTransform();
-			LoadStylesheet(transform, transformerFileName);
+			LoadStylesheet(transform, new SystemPath(transformerFileName).ToString());
 			return transform;
 		}
 

@@ -3,6 +3,7 @@ using System.Xml;
 using System.Xml.XPath;
 using System.Xml.Xsl;
 using NUnit.Framework;
+using ThoughtWorks.CruiseControl.Core.Util;
 
 namespace ThoughtWorks.CruiseControl.UnitTests.Xsl
 {
@@ -31,7 +32,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Xsl
 		public void LoadStyleSheet()
 		{
 			transform = new XslTransform();
-			transform.Load(Stylesheet);
+			transform.Load(new SystemPath(Stylesheet).ToString());
 		}
 	}
 }

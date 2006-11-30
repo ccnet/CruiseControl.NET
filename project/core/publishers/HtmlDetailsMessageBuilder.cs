@@ -1,13 +1,14 @@
 using System.IO;
 using System.Text;
 using System.Xml.XPath;
+using ThoughtWorks.CruiseControl.Core.Util;
 
 namespace ThoughtWorks.CruiseControl.Core.Publishers
 {
 	public class HtmlDetailsMessageBuilder : IMessageBuilder
 	{
-		private const string HtmlCSSFile = @"xsl\cruisecontrol.css";
-		private string _htmlCss;
+		private static readonly SystemPath HtmlCSSFile = new SystemPath(@"xsl\cruisecontrol.css");
+		private string htmlCss;
 
 		public string BuildMessage(IIntegrationResult result)
 		{
@@ -60,14 +61,11 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
 		{
 			get
 			{
-				if (_htmlCss == null)
+				if (htmlCss == null)
 				{
-					using (StreamReader textReader = File.OpenText(HtmlCSSFile))
-					{
-						_htmlCss = textReader.ReadToEnd();
-					}
+					htmlCss = HtmlCSSFile.ReadTextFile();
 				}
-				return _htmlCss;
+				return htmlCss;
 			}
 		}
 	}
