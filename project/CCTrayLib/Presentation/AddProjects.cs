@@ -12,7 +12,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 		private Button btnOK;
 		private Button btnCancel;
 		private Label label4;
-		private ListBox lbProject;
+		public ListBox lbProject;
 		private Label label1;
 		public ListBox lbServer;
 		private GroupBox groupBox1;
@@ -26,11 +26,13 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 		/// </summary>
 		private Container components = null;
 
-		private ICruiseProjectManagerFactory cruiseProjectManagerFactory;
+		private readonly ICruiseProjectManagerFactory cruiseProjectManagerFactory;
+		private readonly Project[] currentProjectList;
 
 		public AddProjects(ICruiseProjectManagerFactory cruiseProjectManagerFactory, Project[] currentProjectList)
 		{
 			this.cruiseProjectManagerFactory = cruiseProjectManagerFactory;
+			this.currentProjectList = currentProjectList;
 
 			InitializeComponent();
 
@@ -176,7 +178,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 			this.groupBox2.Size = new System.Drawing.Size(280, 220);
 			this.groupBox2.TabIndex = 3;
 			this.groupBox2.TabStop = false;
-			this.groupBox2.Text = "Project";
+			this.groupBox2.Text = "Available Projects";
 			// 
 			// AddProjects
 			// 
@@ -230,7 +232,8 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 
 				foreach (Project project in projectList)
 				{
-					lbProject.Items.Add(project.ProjectName);
+					if (! IsProjectAlreadyAdded(project))
+						lbProject.Items.Add(project.ProjectName);
 				}
 			}
 			catch (Exception ex)
@@ -241,6 +244,16 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 			{
 				Cursor.Current = Cursors.Default;
 			}
+		}
+
+		private bool IsProjectAlreadyAdded(Project project)
+		{
+			foreach (Project currentProject in currentProjectList)
+			{
+				if (project.ServerUrl == currentProject.ServerUrl && project.ProjectName == currentProject.ProjectName)
+					return true;
+			}
+			return false;
 		}
 	}
 }
