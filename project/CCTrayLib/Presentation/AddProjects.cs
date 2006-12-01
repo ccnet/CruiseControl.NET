@@ -9,11 +9,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 {
 	public class AddProjects : Form
 	{
-		private Button btnOK;
-		private Button btnCancel;
-		private Label label4;
 		public ListBox lbProject;
-		private Label label1;
 		public ListBox lbServer;
 		private GroupBox groupBox1;
 		private Button btnAdd;
@@ -27,6 +23,10 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 		private Container components = null;
 
 		private readonly ICruiseProjectManagerFactory cruiseProjectManagerFactory;
+		private System.Windows.Forms.Button btnCancel;
+		private System.Windows.Forms.Button btnOK;
+		private System.Windows.Forms.Label label1;
+		private System.Windows.Forms.Label label4;
 		private readonly Project[] currentProjectList;
 
 		public AddProjects(ICruiseProjectManagerFactory cruiseProjectManagerFactory, Project[] currentProjectList)
@@ -81,48 +81,24 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 		private void InitializeComponent()
 		{
 			System.Resources.ResourceManager resources = new System.Resources.ResourceManager(typeof(AddProjects));
-			this.btnOK = new System.Windows.Forms.Button();
-			this.btnCancel = new System.Windows.Forms.Button();
-			this.label4 = new System.Windows.Forms.Label();
 			this.lbProject = new System.Windows.Forms.ListBox();
-			this.label1 = new System.Windows.Forms.Label();
 			this.lbServer = new System.Windows.Forms.ListBox();
 			this.groupBox1 = new System.Windows.Forms.GroupBox();
 			this.btnAdd = new System.Windows.Forms.Button();
 			this.groupBox2 = new System.Windows.Forms.GroupBox();
+			this.btnCancel = new System.Windows.Forms.Button();
+			this.btnOK = new System.Windows.Forms.Button();
+			this.label1 = new System.Windows.Forms.Label();
+			this.label4 = new System.Windows.Forms.Label();
 			this.groupBox1.SuspendLayout();
 			this.groupBox2.SuspendLayout();
 			this.SuspendLayout();
 			// 
-			// btnOK
-			// 
-			this.btnOK.DialogResult = System.Windows.Forms.DialogResult.OK;
-			this.btnOK.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.btnOK.Location = new System.Drawing.Point(215, 310);
-			this.btnOK.Name = "btnOK";
-			this.btnOK.TabIndex = 4;
-			this.btnOK.Text = "OK";
-			// 
-			// btnCancel
-			// 
-			this.btnCancel.CausesValidation = false;
-			this.btnCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-			this.btnCancel.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.btnCancel.Location = new System.Drawing.Point(300, 310);
-			this.btnCancel.Name = "btnCancel";
-			this.btnCancel.TabIndex = 5;
-			this.btnCancel.Text = "Cancel";
-			// 
-			// label4
-			// 
-			this.label4.Location = new System.Drawing.Point(10, 45);
-			this.label4.Name = "label4";
-			this.label4.Size = new System.Drawing.Size(570, 20);
-			this.label4.TabIndex = 1;
-			this.label4.Text = "If you want to add a new build server, click Add Server.";
-			// 
 			// lbProject
 			// 
+			this.lbProject.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+				| System.Windows.Forms.AnchorStyles.Left) 
+				| System.Windows.Forms.AnchorStyles.Right)));
 			this.lbProject.Location = new System.Drawing.Point(10, 25);
 			this.lbProject.Name = "lbProject";
 			this.lbProject.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended;
@@ -130,17 +106,10 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 			this.lbProject.Sorted = true;
 			this.lbProject.TabIndex = 0;
 			// 
-			// label1
-			// 
-			this.label1.Location = new System.Drawing.Point(10, 10);
-			this.label1.Name = "label1";
-			this.label1.Size = new System.Drawing.Size(570, 35);
-			this.label1.TabIndex = 0;
-			this.label1.Text = "The list on the left shows the build servers that CCTray currently knows about.  " +
-				"Select a build server, then select one or more projects to add.";
-			// 
 			// lbServer
 			// 
+			this.lbServer.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+				| System.Windows.Forms.AnchorStyles.Left)));
 			this.lbServer.Location = new System.Drawing.Point(10, 25);
 			this.lbServer.Name = "lbServer";
 			this.lbServer.Size = new System.Drawing.Size(255, 147);
@@ -150,6 +119,8 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 			// 
 			// groupBox1
 			// 
+			this.groupBox1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+				| System.Windows.Forms.AnchorStyles.Left)));
 			this.groupBox1.Controls.Add(this.btnAdd);
 			this.groupBox1.Controls.Add(this.lbServer);
 			this.groupBox1.FlatStyle = System.Windows.Forms.FlatStyle.System;
@@ -162,6 +133,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 			// 
 			// btnAdd
 			// 
+			this.btnAdd.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this.btnAdd.FlatStyle = System.Windows.Forms.FlatStyle.System;
 			this.btnAdd.Location = new System.Drawing.Point(100, 185);
 			this.btnAdd.Name = "btnAdd";
@@ -171,6 +143,9 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 			// 
 			// groupBox2
 			// 
+			this.groupBox2.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+				| System.Windows.Forms.AnchorStyles.Left) 
+				| System.Windows.Forms.AnchorStyles.Right)));
 			this.groupBox2.Controls.Add(this.lbProject);
 			this.groupBox2.FlatStyle = System.Windows.Forms.FlatStyle.System;
 			this.groupBox2.Location = new System.Drawing.Point(300, 80);
@@ -180,10 +155,47 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 			this.groupBox2.TabStop = false;
 			this.groupBox2.Text = "Available Projects";
 			// 
+			// btnCancel
+			// 
+			this.btnCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+			this.btnCancel.CausesValidation = false;
+			this.btnCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+			this.btnCancel.FlatStyle = System.Windows.Forms.FlatStyle.System;
+			this.btnCancel.Location = new System.Drawing.Point(300, 310);
+			this.btnCancel.Name = "btnCancel";
+			this.btnCancel.TabIndex = 5;
+			this.btnCancel.Text = "Cancel";
+			// 
+			// btnOK
+			// 
+			this.btnOK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+			this.btnOK.DialogResult = System.Windows.Forms.DialogResult.OK;
+			this.btnOK.FlatStyle = System.Windows.Forms.FlatStyle.System;
+			this.btnOK.Location = new System.Drawing.Point(215, 310);
+			this.btnOK.Name = "btnOK";
+			this.btnOK.TabIndex = 4;
+			this.btnOK.Text = "OK";
+			// 
+			// label1
+			// 
+			this.label1.Location = new System.Drawing.Point(10, 10);
+			this.label1.Name = "label1";
+			this.label1.Size = new System.Drawing.Size(570, 35);
+			this.label1.TabIndex = 0;
+			this.label1.Text = "The list on the left shows the build servers that CCTray currently knows about.  " +
+				"Select a build server, then select one or more projects to add.";
+			// 
+			// label4
+			// 
+			this.label4.Location = new System.Drawing.Point(10, 45);
+			this.label4.Name = "label4";
+			this.label4.Size = new System.Drawing.Size(570, 20);
+			this.label4.TabIndex = 1;
+			this.label4.Text = "If you want to add a new build server, click Add Server.";
+			// 
 			// AddProjects
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5, 13);
-			this.CancelButton = this.btnCancel;
 			this.ClientSize = new System.Drawing.Size(589, 346);
 			this.Controls.Add(this.groupBox2);
 			this.Controls.Add(this.groupBox1);
@@ -191,7 +203,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 			this.Controls.Add(this.label4);
 			this.Controls.Add(this.btnCancel);
 			this.Controls.Add(this.btnOK);
-			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
+			this.DockPadding.All = 4;
 			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
 			this.Name = "AddProjects";
 			this.Text = "Project";
