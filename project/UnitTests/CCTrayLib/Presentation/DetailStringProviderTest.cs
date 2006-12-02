@@ -9,12 +9,18 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Presentation
 	[TestFixture]
 	public class DetailStringProviderTest
 	{
+		private StubProjectMonitor monitor;
+		private DetailStringProvider provider;
+
+		[SetUp]
+		protected void SetUp()
+		{
+			monitor = new StubProjectMonitor("name");
+			provider = new DetailStringProvider();			
+		}
 		[Test]
 		public void WhenTheProjecStatusIndicatesAnExceptionItsMessageIsReportedInTheDetailString()
 		{
-			StubProjectMonitor monitor = new StubProjectMonitor("name");
-			DetailStringProvider provider = new DetailStringProvider();
-
 			Assert.AreEqual("Connecting...", provider.FormatDetailString(monitor.Detail));
 
 			monitor.SetUpAsIfExceptionOccurredOnConnect(new ApplicationException("message"));
@@ -25,40 +31,40 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Presentation
 		[Test]
 		public void WhenSleepingIndicatesTimeOfNextBuildCheck()
 		{
-			StubProjectMonitor monitor = new StubProjectMonitor("name");
-			DetailStringProvider provider = new DetailStringProvider();
 			DateTime nextBuildTime = new DateTime(2005, 7, 20, 15, 12, 30);
-
-			monitor.ProjectStatus = new ProjectStatus(
-				"NAME", "category",
-				ProjectActivity.Sleeping,
-				IntegrationStatus.Unknown,
-				ProjectIntegratorState.Running, "url", DateTime.MinValue, "lastLabel", null, nextBuildTime);
+			monitor.ProjectStatus = CreateNewProjectStatus(nextBuildTime);
 			monitor.ProjectState = ProjectState.Success;
 
-			Assert.AreEqual(
-				string.Format("Next build check: {0:T}", nextBuildTime)
-				, provider.FormatDetailString(monitor.Detail));
-
+			Assert.AreEqual(string.Format("Next build check: {0:T}", nextBuildTime), provider.FormatDetailString(monitor.Detail));
 		}
 
 		[Test]
 		public void WhenTheNextBuildTimeIsMaxValueIndicateThatNoBuildIsScheduled()
 		{
-			StubProjectMonitor monitor = new StubProjectMonitor("name");
-			DetailStringProvider provider = new DetailStringProvider();
 			DateTime nextBuildTime = DateTime.MaxValue;
+			monitor.ProjectStatus = CreateNewProjectStatus(nextBuildTime);
+			monitor.ProjectState = ProjectState.Success;
 
-			monitor.ProjectStatus = new ProjectStatus(
+			Assert.AreEqual("Project is not automatically triggered", provider.FormatDetailString(monitor.Detail));
+		}
+
+		[Test]
+		public void IncludeCurrentProjectMessage()
+		{
+			monitor.ProjectStatus = CreateNewProjectStatus(DateTime.MaxValue);
+			monitor.ProjectStatus.Messages = new Message[] { new Message("foo") };
+			monitor.ProjectState = ProjectState.Success;
+
+			Assert.AreEqual("Project is not automatically triggered - foo", provider.FormatDetailString(monitor.Detail));			
+		}
+
+		private static ProjectStatus CreateNewProjectStatus(DateTime nextBuildTime)
+		{
+			return new ProjectStatus(
 				"NAME", "category",
 				ProjectActivity.Sleeping,
 				IntegrationStatus.Unknown,
 				ProjectIntegratorState.Running, "url", DateTime.MinValue, "lastLabel", null, nextBuildTime);
-			monitor.ProjectState = ProjectState.Success;
-
-			Assert.AreEqual(
-				"Project is not automatically triggered", provider.FormatDetailString(monitor.Detail));
-
 		}
 	}
 }

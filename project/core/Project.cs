@@ -186,6 +186,7 @@ namespace ThoughtWorks.CruiseControl.Core
 					Log.Error("Publisher threw exception: " + e);
 				}
 			}
+			if (result.Succeeded) messages.Clear();
 		}
 
 		public void Initialize()

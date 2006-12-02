@@ -63,9 +63,9 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 			get { return status.Activity.ToString(); }
 		}
 
-		public Message[] Messages
+		public string CurrentMessage
 		{
-			get { return status.Messages; }	
+			get { return status.CurrentMessage; }
 		}
 
 		public string Url
@@ -85,21 +85,21 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 
 		public bool AllowForceBuild
 		{
-			get { return this.serverSpecifier.AllowForceBuild; }
+			get { return serverSpecifier.AllowForceBuild; }
 		}
 
 		public bool AllowStartStopBuild
 		{
-			get { return this.serverSpecifier.AllowStartStopBuild; }
+			get { return serverSpecifier.AllowStartStopBuild; }
 		}
 
-		private string CalculateHtmlColor(IntegrationStatus status)
+		private string CalculateHtmlColor(IntegrationStatus integrationStatus)
 		{
-			if (status == IntegrationStatus.Success)
+			if (integrationStatus == IntegrationStatus.Success)
 			{
 				return Color.Green.Name;
 			}
-			else if (status == IntegrationStatus.Unknown)
+			else if (integrationStatus == IntegrationStatus.Unknown)
 			{
 				return Color.Yellow.Name;
 			}
@@ -108,6 +108,5 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 				return Color.Red.Name;
 			}
 		}
-
 	}
 }

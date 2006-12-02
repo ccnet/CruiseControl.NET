@@ -526,6 +526,30 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 		}
 
 		[Test]
+		public void ShouldClearMessagesAfterSuccessfulBuild()
+		{
+			mockStateManager.ExpectAndReturn("HasPreviousState", false, ProjectName);
+			mockTrigger.ExpectAndReturn("NextBuild", DateTime.Now);
+
+			project.AddMessage(new Message("foo"));
+			project.PublishResults(IntegrationResultMother.CreateSuccessful());
+			ProjectStatus status = project.CreateProjectStatus(new ProjectIntegrator(project));			
+			Assert.AreEqual(0, status.Messages.Length);
+		}
+	
+		[Test]
+		public void DoNotClearMessagesAfterFailedBuild()
+		{
+			mockStateManager.ExpectAndReturn("HasPreviousState", false, ProjectName);
+			mockTrigger.ExpectAndReturn("NextBuild", DateTime.Now);
+
+			project.AddMessage(new Message("foo"));
+			project.PublishResults(IntegrationResultMother.CreateFailed());
+			ProjectStatus status = project.CreateProjectStatus(new ProjectIntegrator(project));			
+			Assert.AreEqual(1, status.Messages.Length);
+		}
+		
+		[Test]
 		public void PrebuildShouldIncrementLabelAndRunPrebuildTasks()
 		{
 			IntegrationResult result = IntegrationResult.CreateInitialIntegrationResult(ProjectName, "c:\\root");

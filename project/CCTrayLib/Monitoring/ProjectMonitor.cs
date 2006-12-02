@@ -52,6 +52,11 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
 			get { return lastProjectStatus.WebURL; }
 		}
 
+		public string CurrentMessage
+		{
+			get { return lastProjectStatus.CurrentMessage; }
+		}
+
 		public string ProjectName
 		{
 			get { return cruiseProjectManager.ProjectName; }
@@ -156,7 +161,6 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
 				buildDurationTracker.OnBuildStart();
 			}
 		}
-
 
 		public event MonitorBuildOccurredEventHandler BuildOccurred;
 		public event MonitorPolledEventHandler Polled;

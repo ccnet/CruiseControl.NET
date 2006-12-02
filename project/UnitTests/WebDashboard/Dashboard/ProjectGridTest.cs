@@ -297,7 +297,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 		}
 
 		[Test]
-		public void ShouldCopyProjectMessagesToProjectRow()
+		public void ShouldDisplayCurrentProjectMessagesInProjectGridRow()
 		{
 			// Setup
 			ProjectStatus projectStatus1 = new ProjectStatus(projectSpecifier.ProjectName, "category",
@@ -315,8 +315,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 			ProjectGridRow[] rows = projectGrid.GenerateProjectGridRows(statusses, "myAction", ProjectGridSortColumn.Name, true);
 
 			// Verify
-			Assert.IsNotNull(rows[0].Messages);
-			Assert.AreEqual("Test Message", rows[0].Messages[0].ToString());
+			Assert.IsNotNull(rows[0].CurrentMessage);
+			Assert.AreEqual("Test Message", rows[0].CurrentMessage);
 			VerifyAll();
 
 			// Setup
@@ -335,10 +335,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 			rows = projectGrid.GenerateProjectGridRows(statusses, "myAction", ProjectGridSortColumn.Name, true);
 
 			// Verify
-			Assert.IsNotNull(rows[0].Messages);
-			Assert.AreEqual(2, rows[0].Messages.Length);
-			Assert.AreEqual(string.Empty, rows[0].Messages[0].ToString());
-			Assert.AreEqual("Second Message", rows[0].Messages[1].ToString());
+			Assert.IsNotNull(rows[0].CurrentMessage);
+			Assert.AreEqual("Second Message", rows[0].CurrentMessage);
 			VerifyAll();
 		}
 

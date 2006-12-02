@@ -12,7 +12,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Presentation
 		private string projectName;
 		private Exception connectException;
 
-		public StubProjectMonitor( string projectName )
+		public StubProjectMonitor(string projectName)
 		{
 			this.projectName = projectName;
 		}
@@ -27,7 +27,6 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Presentation
 			get { return projectStatus; }
 			set { projectStatus = value; }
 		}
-
 
 		public ISingleProjectDetail Detail
 		{
@@ -76,21 +75,26 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Presentation
 			get { return ProjectStatus.WebURL; }
 		}
 
+		public string CurrentMessage
+		{
+			get { return ProjectStatus.CurrentMessage; }
+		}
+
 		public TimeSpan EstimatedTimeRemainingOnCurrentBuild
 		{
 			get { return TimeSpan.Zero; }
 		}
 
-		public void OnBuildOccurred( MonitorBuildOccurredEventArgs args )
+		public void OnBuildOccurred(MonitorBuildOccurredEventArgs args)
 		{
 			if (BuildOccurred != null)
-				BuildOccurred( this, args );
+				BuildOccurred(this, args);
 		}
 
-		public void OnPolled( MonitorPolledEventArgs args )
+		public void OnPolled(MonitorPolledEventArgs args)
 		{
 			if (Polled != null)
-				Polled( this, args );
+				Polled(this, args);
 		}
 
 		public event MonitorBuildOccurredEventHandler BuildOccurred;
@@ -112,7 +116,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Presentation
 			throw new NotImplementedException();
 		}
 
-		public void SetUpAsIfExceptionOccurredOnConnect( Exception exception )
+		public void SetUpAsIfExceptionOccurredOnConnect(Exception exception)
 		{
 			ProjectState = ProjectState.NotConnected;
 			ProjectStatus = null;
@@ -124,6 +128,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Presentation
 			get { return connectException; }
 			set { connectException = value; }
 		}
+
 		public string SummaryStatusString
 		{
 			get { throw new NotImplementedException(); }

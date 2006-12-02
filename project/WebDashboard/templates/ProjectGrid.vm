@@ -79,9 +79,7 @@
 		</td>
 		<td align="Center">
 			<font color="Black">
-				#foreach ($Message in $projectGridRow.BuildMessages)
-					$Message<br>
-				#end
+				$projectGridRow.CurrentMessage
 			</font>
 		</td>
 		<form method="post">

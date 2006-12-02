@@ -99,5 +99,15 @@ namespace ThoughtWorks.CruiseControl.Remote
 		}
 
 		public Message[] Messages = new Message[0];
+		
+		public string CurrentMessage
+		{
+			get
+			{
+				if (Messages.Length > 0)
+					return Messages[Messages.Length-1].ToString();
+				return string.Empty;
+			}
+		}
 	}
 }
