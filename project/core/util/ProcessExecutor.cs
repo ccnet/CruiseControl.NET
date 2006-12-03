@@ -28,13 +28,14 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 		/// a separate thread using the <see cref="ProcessReader"/> class, in order to prevent deadlock while 
 		/// waiting for the process to finish. RunnableProcess also subscribes to the <see cref="Process.Exited" /> event
 		/// to receive asynchronous notification that the process has terminated; the executing thread then blocks on an
-		/// AutoResetEvent latch until the event is raised.  Using the <see cref="Process.Exited" /> event is preferrable to
+		/// ManualResetEvent latch until the event is raised.  Using the <see cref="Process.Exited" /> event is preferrable to
 		/// using the synchronous <see cref="Process.WaitForExit()" /> method as <see cref="Process.WaitForExit()" /> does not respond
 		/// immediately if the executing thread is aborted. If the process does not complete executing within the specified timeout period, 
-		/// or if the waiting thread is aborted, the RunnableProcess will attempt to kill the process.
-		/// As process termination is asynchronous, the RunnableProcess will wait for the process to die.  Under certain circumstances, 
+		/// or if the waiting thread is aborted, the RunnableProcess will attempt to kill the process. Because the <see cref="Process.Exited" />
+		/// is fired asynchronously from a thread in the thread pool, it may fire after the RunnableProcess object has been disposed (but
+		/// before it has been garbage collected).  Therefore it is important to ensure that latch is not set if the object has already been disposed.
+		/// As process termination is asynchronous, the RunnableProcess will wait for the process to die using.  Under certain circumstances, 
 		/// the process does not terminate gracefully after being killed, causing the RunnableProcess to throw an exception.
-
 		/// </summary>
 		private class RunnableProcess : IDisposable
 		{
@@ -43,6 +44,7 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 			private readonly Process process;
 			private readonly ManualResetEvent latch = new ManualResetEvent(false);
 			private bool hasTimedOut = false;
+			private bool disposed = false;
 
 			public RunnableProcess(ProcessInfo processInfo)
 			{
@@ -84,7 +86,7 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 				try
 				{
 					bool isNewProcess = process.Start();
-					if (! isNewProcess) Log.Debug("Reusing existing process...");
+					if (! isNewProcess) Log.Warning("Reusing existing process...");
 				}
 				catch (Win32Exception e)
 				{
@@ -96,8 +98,11 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 
 			private void WaitForProcessToExit()
 			{
-				latch.WaitOne(processInfo.TimeOut, true);
+				bool released = latch.WaitOne(processInfo.TimeOut, false);
 				process.Refresh();
+				if (released && ! process.HasExited)
+					Log.Error("Latch released but process has not exited!  ** Process may have exited abnormally before timeout expired **");
+
 				hasTimedOut = ! process.HasExited;
 				if (hasTimedOut)
 					Log.Warning(string.Format("Process timed out: {0} {1}.  Process id: {2}.  This process will now be killed.", processInfo.FileName, processInfo.Arguments, process.Id));
@@ -105,7 +110,7 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 
 			private void process_Exited(object sender, EventArgs e)
 			{
-				latch.Set();
+				if (! disposed) latch.Set();
 			}
 
 			private void Kill()
@@ -137,7 +142,9 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 
 			void IDisposable.Dispose()
 			{
+				disposed = true;
 				process.Dispose();
+				latch.Close();
 			}
 		}
 	}
