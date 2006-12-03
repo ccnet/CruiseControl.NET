@@ -1,4 +1,5 @@
 using System;
+using System.Globalization;
 using System.IO;
 using Exortech.NetReflector;
 
@@ -216,6 +217,8 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Telelogic
 		[ReflectorProperty("timeout", Required=false)]
 		public int Timeout;
 
+		public IFormatProvider FormatProvider = CultureInfo.CurrentCulture;
+		
 		/// <summary>
 		///     Resets session variables back to default values.
 		///     Useful for when a connection is closed or reestablished.

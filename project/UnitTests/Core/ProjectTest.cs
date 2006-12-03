@@ -530,6 +530,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 		{
 			mockStateManager.ExpectAndReturn("HasPreviousState", false, ProjectName);
 			mockTrigger.ExpectAndReturn("NextBuild", DateTime.Now);
+			mockPublisher.Expect("Run", new AddTaskResultConstraint());
 
 			project.AddMessage(new Message("foo"));
 			project.PublishResults(IntegrationResultMother.CreateSuccessful());
@@ -542,6 +543,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 		{
 			mockStateManager.ExpectAndReturn("HasPreviousState", false, ProjectName);
 			mockTrigger.ExpectAndReturn("NextBuild", DateTime.Now);
+			mockPublisher.Expect("Run", new AddTaskResultConstraint());
 
 			project.AddMessage(new Message("foo"));
 			project.PublishResults(IntegrationResultMother.CreateFailed());

@@ -331,13 +331,13 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Telelogic
 		///     Thrown if the last reconfigure time cannot be read or parsed successfully.
 		/// </exception>
 		/// <returns></returns>
-		private DateTime GetReconfigureTime()
+		public DateTime GetReconfigureTime()
 		{
 			// setup the project to reconfigure using the default template
 			ProcessResult result = command.Execute(SynergyCommandBuilder.GetLastReconfigureTime(connection, project));
 			try
 			{
-				return DateTime.Parse(result.StandardOutput.Trim(), CultureInfo.InvariantCulture);
+				return DateTime.Parse(result.StandardOutput.Trim(), connection.FormatProvider);
 			}
 			catch (Exception inner)
 			{

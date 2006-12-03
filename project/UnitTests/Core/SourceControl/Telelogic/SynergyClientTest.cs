@@ -107,7 +107,6 @@ Sessions for user jdoe:
 Current project could not be identified.
 ";
 			AssertSession(status, "COMPUTERNAME:1234:127.0.0.1", @"\\myserver\share\mydatabase", false);
-
 		}
 
 		[Test]
@@ -198,8 +197,23 @@ Current project could not be identified.
 			IMock mockParser = new DynamicMock(typeof(SynergyParser));
 			mockParser.ExpectAndReturn("Parse", new Modification[0], new IsAnything(), new IsAnything(), new NotNull());
 
-			Synergy synergy = new Synergy(new SynergyConnectionInfo(), new SynergyProjectInfo(), (ISynergyCommand) mockCommand.MockInstance, (SynergyParser) mockParser.MockInstance);
+			SynergyConnectionInfo connectionInfo = new SynergyConnectionInfo();
+			connectionInfo.FormatProvider = CultureInfo.InvariantCulture;
+			Synergy synergy = new Synergy(connectionInfo, new SynergyProjectInfo(), (ISynergyCommand) mockCommand.MockInstance, (SynergyParser) mockParser.MockInstance);
 			synergy.LabelSourceControl(new IntegrationResult());
+			mockCommand.Verify();
+		}
+
+		[Test]
+		public void GetReconfigureTimeShouldHandleNonUSDates()
+		{
+			string dateString = "samedi 2 décembre 2006";
+			IMock mockCommand = new DynamicMock(typeof(ISynergyCommand));
+			mockCommand.ExpectAndReturn("Execute", ProcessResultFixture.CreateSuccessfulResult(dateString), new IsAnything());
+			SynergyConnectionInfo connectionInfo = new SynergyConnectionInfo();
+			connectionInfo.FormatProvider = new CultureInfo("FR-fr");
+			Synergy synergy = new Synergy(connectionInfo, new SynergyProjectInfo(), (ISynergyCommand) mockCommand.MockInstance, null);
+			DateTime time = synergy.GetReconfigureTime();
 			mockCommand.Verify();
 		}
 
