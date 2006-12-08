@@ -24,7 +24,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 		[ReflectorProperty("executable")]
 		public string Executable = DefaultExecutable;
 
-		[ReflectorProperty("user" , Required = false)]
+		[ReflectorProperty("user", Required = false)]
 		public string User;
 
 		[ReflectorProperty("password", Required = false)]
@@ -60,18 +60,19 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 		/* as the "mods" command gets modifications to a project between checkpoints on the working project,
 		 * if CheckpointOnSuccess is set to false the modifications are filtered according to the modified time of the files
 		 * */
+
 		private Modification[] ValidModifications(Modification[] modifications, DateTime from, DateTime to)
 		{
-			if(CheckpointOnSuccess) return modifications;
+			if (CheckpointOnSuccess) return modifications;
 			ArrayList validModifications = new ArrayList();
 			for (int i = 0; i < modifications.Length; i++)
 			{
-				if(from <= modifications[i].ModifiedTime && to >= modifications[i].ModifiedTime)
+				if (from <= modifications[i].ModifiedTime && to >= modifications[i].ModifiedTime)
 				{
 					validModifications.Add(modifications[i]);
 				}
 			}
-			return (Modification[]) validModifications.ToArray(typeof(Modification));
+			return (Modification[]) validModifications.ToArray(typeof (Modification));
 		}
 
 		public override void LabelSourceControl(IIntegrationResult result)
@@ -79,7 +80,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			if (CheckpointOnSuccess && result.Succeeded)
 			{
 				ProcessInfo checkpointProcess = NewProcessInfoWithArgs(BuildCheckpointCommand(result.Label));
-				ExecuteWithLogging(checkpointProcess, "Adding Checkpoint");				
+				ExecuteWithLogging(checkpointProcess, "Adding Checkpoint");
 			}
 		}
 
@@ -139,7 +140,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			AppendCommonArguments(buffer, true);
 			return buffer.ToString();
 		}
-		
+
 		//MODS_TEMPLATE = "mods -R -S {SandboxRoot\SandboxFile} --user={user} --password={password} --quiet"
 		private string BuildModsCommand()
 		{
@@ -155,7 +156,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			ProcessArgumentBuilder buffer = new ProcessArgumentBuilder();
 			buffer.AppendArgument("memberinfo");
 			AppendCommonArguments(buffer, false);
-			buffer.AppendArgument(SandboxRoot + "\\" + modification.FolderName + "\\" + modification.FileName);
+			buffer.AddArgument(Path.Combine(Path.Combine(SandboxRoot, modification.FolderName), modification.FileName));
 			return buffer.ToString();
 		}
 
@@ -165,7 +166,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			{
 				buffer.AppendArgument("-R");
 			}
-			buffer.AppendArgument("-S {0}", SandboxRoot + "\\" + SandboxFile);
+			buffer.AddArgument("-S", Path.Combine(SandboxRoot, SandboxFile));
 			buffer.AppendArgument("--user={0}", User);
 			buffer.AppendArgument("--password={0}", Password);
 			buffer.AppendArgument("--quiet");
@@ -173,8 +174,10 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 
 		private void RemoveReadOnlyAttribute()
 		{
-			ProcessInfo attribProcess = new ProcessInfo("attrib", string.Format(" -R /s {0}", SandboxRoot + "\\*"));
-			new ProcessExecutor().Execute(attribProcess);
+			ProcessArgumentBuilder buffer = new ProcessArgumentBuilder();
+			buffer.AddArgument("-R");
+			buffer.AddArgument("/s", SandboxRoot + "\\*");
+			Execute(new ProcessInfo("attrib", buffer.ToString()));
 		}
 
 		private ProcessInfo NewProcessInfoWithArgs(string args)

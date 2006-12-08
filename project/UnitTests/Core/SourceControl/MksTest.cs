@@ -101,9 +101,23 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 		[Test]
 		public void GetSource()
 		{
-			string expectedCommand = string.Format(@"resync --overwriteChanged --restoreTimestamp -R -S {0}\myproject.pj --user=CCNetUser --password=CCNetPassword --quiet", sandboxRoot);
-			ProcessInfo expectedProcessInfo = ExpectedProcessInfo(expectedCommand);
-			mockExecutorWrapper.ExpectAndReturn("Execute", new ProcessResult(null, null, 0, false), expectedProcessInfo);
+			string expectedResyncCommand = string.Format(@"resync --overwriteChanged --restoreTimestamp -R -S {0}\myproject.pj --user=CCNetUser --password=CCNetPassword --quiet", sandboxRoot);
+			mockExecutorWrapper.ExpectAndReturn("Execute", new ProcessResult(null, null, 0, false), ExpectedProcessInfo(expectedResyncCommand));
+			string expectedAttribCommand = string.Format(@"-R /s {0}\*", sandboxRoot);
+			mockExecutorWrapper.ExpectAndReturn("Execute", new ProcessResult(null, null, 0, false), ExpectedProcessInfo("attrib", expectedAttribCommand));
+
+			mks = CreateMks(CreateSourceControlXml(), mockHistoryParser, mockProcessExecutor);
+			mks.GetSource(null);
+		}
+
+		[Test]
+		public void GetSourceWithSpacesInSandbox()
+		{
+			sandboxRoot = TempFileUtil.GetTempPath("Mks Sand Box");
+			string expectedResyncCommand = string.Format(@"resync --overwriteChanged --restoreTimestamp -R -S ""{0}\myproject.pj"" --user=CCNetUser --password=CCNetPassword --quiet", sandboxRoot);
+			mockExecutorWrapper.ExpectAndReturn("Execute", new ProcessResult(null, null, 0, false), ExpectedProcessInfo(expectedResyncCommand));
+			string expectedAttribCommand = string.Format(@"-R /s ""{0}\*""", sandboxRoot);
+			mockExecutorWrapper.ExpectAndReturn("Execute", new ProcessResult(null, null, 0, false), ExpectedProcessInfo("attrib", expectedAttribCommand));
 
 			mks = CreateMks(CreateSourceControlXml(), mockHistoryParser, mockProcessExecutor);
 			mks.GetSource(null);
@@ -166,6 +180,41 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 		}
 
 		[Test]
+		public void HandleSpacesInGetModifications()
+		{
+			sandboxRoot = TempFileUtil.GetTempPath("MksSandBox With Spaces");
+			mksHistoryParserWrapper.ExpectAndReturn("Parse", new Modification[0], new IsTypeOf(typeof (TextReader)), FROM, TO);
+			mksHistoryParserWrapper.ExpectNoCall("ParseMemberInfoAndAddToModification", new Type[] {(typeof (Modification)), typeof (StringReader)});
+			ProcessInfo expectedProcessInfo = ExpectedProcessInfo(string.Format(@"mods -R -S ""{0}\myproject.pj"" --user=CCNetUser --password=CCNetPassword --quiet", sandboxRoot));
+			mockExecutorWrapper.ExpectAndReturn("Execute", new ProcessResult(null, null, 0, false), expectedProcessInfo);
+
+			mks = CreateMks(CreateSourceControlXml(), mksHistoryParser, mockProcessExecutor);
+			Modification[] modifications = mks.GetModifications(IntegrationResultMother.CreateSuccessful(FROM), IntegrationResultMother.CreateSuccessful(TO));
+			Assert.AreEqual(0, modifications.Length);
+		}
+
+		[Test]
+		public void HandleSpacesInParseMemberInfo()
+		{
+			sandboxRoot = TempFileUtil.GetTempPath("MksSandBox With Spaces");
+			
+			Modification addedModification = ModificationMother.CreateModification("myFile.file", "MyFolder");
+			addedModification.Type = "Added";
+
+			mksHistoryParserWrapper.ExpectAndReturn("Parse", new Modification[] {addedModification}, new IsTypeOf(typeof (TextReader)), FROM, TO);
+			mksHistoryParserWrapper.ExpectAndReturn("ParseMemberInfoAndAddToModification", new Modification[] {addedModification}, new IsTypeOf(typeof (Modification)), new IsTypeOf(typeof (StringReader)));
+			mockExecutorWrapper.ExpectAndReturn("Execute", new ProcessResult("", null, 0, false), new IsTypeOf(typeof (ProcessInfo)));
+
+			string expectedCommand = string.Format(@"memberinfo -S ""{0}\myproject.pj"" --user=CCNetUser --password=CCNetPassword --quiet ""{0}\MyFolder\myFile.file""", sandboxRoot);
+			ProcessInfo expectedProcessInfo = ExpectedProcessInfo(expectedCommand);
+			mockExecutorWrapper.ExpectAndReturn("Execute", new ProcessResult(null, null, 0, false), expectedProcessInfo);
+
+			mks = CreateMks(CreateSourceControlXml(), mksHistoryParser, mockProcessExecutor);
+			Modification[] modifications = mks.GetModifications(IntegrationResultMother.CreateSuccessful(FROM), IntegrationResultMother.CreateSuccessful(TO));
+			Assert.AreEqual(1, modifications.Length);
+		}
+
+		[Test]
 		public void GetModificationsCallsMemberInfoForNonDeletedModifications()
 		{
 			Modification addedModification = ModificationMother.CreateModification("myFile.file", "MyFolder");
@@ -207,16 +256,21 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 			Assert.AreEqual(1, modifications.Length);
 		}
 
-		private Mks CreateMks(string xml, IHistoryParser mockHistoryParser, ProcessExecutor mockExecutor)
+		private Mks CreateMks(string xml, IHistoryParser historyParser, ProcessExecutor executor)
 		{
-			Mks mks = new Mks(mockHistoryParser, mockExecutor);
-			NetReflector.Read(xml, mks);
-			return mks;
+			Mks newMks = new Mks(historyParser, executor);
+			NetReflector.Read(xml, newMks);
+			return newMks;
 		}
 
 		private ProcessInfo ExpectedProcessInfo(string arguments)
 		{
-			ProcessInfo expectedProcessInfo = new ProcessInfo(@"..\bin\si.exe", arguments);
+			return ExpectedProcessInfo(@"..\bin\si.exe", arguments);
+		}
+
+		private ProcessInfo ExpectedProcessInfo(string executable, string arguments)
+		{
+			ProcessInfo expectedProcessInfo = new ProcessInfo(executable, arguments);
 			expectedProcessInfo.TimeOut = Timeout.DefaultTimeout.Millis;
 			return expectedProcessInfo;
 		}
