@@ -106,6 +106,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			builder.AppendIf(CleanCopy, "-C");
 			builder.AppendIf(UseHistory && dir != null, "-l");
 			builder.AppendIf(UseHistory && dir != null, "\"{0}\"", dir);
+			builder.AddArgument("-r", Branch);
 
 			return NewProcessInfoWithArgs(result, builder.ToString());
 		}

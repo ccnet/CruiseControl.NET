@@ -161,6 +161,18 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 		}
 
 		[Test]
+		public void VerifyProcessInfoForGetSourceOnBranch()
+		{
+			ExpectToExecuteArguments(@"-q update -d -P -C -r branch");
+
+			cvs.AutoGetSource = true;
+			cvs.Branch = "branch";
+			cvs.CleanCopy = true; // set as default
+			cvs.WorkingDirectory = DefaultWorkingDirectory;
+			cvs.GetSource(IntegrationResult());
+		}
+
+		[Test]
 		public void ShouldUseCvsRootWithGetSource()
 		{
 			ExpectToExecuteArguments(@"-d myCvsRoot -q update -d -P -C");
