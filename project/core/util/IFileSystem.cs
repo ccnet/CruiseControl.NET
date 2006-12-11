@@ -8,5 +8,6 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 		void Save(string file, string content);
 		TextReader Load(string file);
 		bool FileExists(string file);
+		bool DirectoryExists(string folder);
 	}
 }

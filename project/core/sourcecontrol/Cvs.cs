@@ -4,6 +4,7 @@ using System.Globalization;
 using System.IO;
 using System.Text.RegularExpressions;
 using Exortech.NetReflector;
+using ThoughtWorks.CruiseControl.Core.Config;
 using ThoughtWorks.CruiseControl.Core.Util;
 
 namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
@@ -13,21 +14,28 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 	{
 		public const string DefaultCvsExecutable = "cvs.exe";
 		public const string COMMAND_DATE_FORMAT = "yyyy-MM-dd HH:mm:ss 'GMT'";
+		private readonly IFileSystem fileSystem;
 		private readonly CvsHistoryCommandParser historyCommandParser;
 
-		public Cvs() : this(new CvsHistoryParser(), new ProcessExecutor(), new CvsHistoryCommandParser())
-		{}
-
-		public Cvs(IHistoryParser parser, ProcessExecutor executor, CvsHistoryCommandParser historyCommandParser) : base(parser, executor)
+		public Cvs() : this(new CvsHistoryParser(), new ProcessExecutor(), new CvsHistoryCommandParser(), new SystemIoFileSystem())
 		{
+		}
+
+		public Cvs(IHistoryParser parser, ProcessExecutor executor, CvsHistoryCommandParser historyCommandParser, IFileSystem fileSystem)
+			: base(parser, executor)
+		{
+			this.fileSystem = fileSystem;
 			this.historyCommandParser = historyCommandParser;
 		}
 
 		[ReflectorProperty("executable")]
 		public string Executable = DefaultCvsExecutable;
 
-		[ReflectorProperty("cvsroot", Required=false)]
+		[ReflectorProperty("cvsroot")]
 		public string CvsRoot = string.Empty;
+
+		[ReflectorProperty("module")]
+		public string Module;
 
 		[ReflectorProperty("workingDirectory", Required=false)]
 		public string WorkingDirectory = string.Empty;
@@ -63,7 +71,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 
 		public override Modification[] GetModifications(IIntegrationResult from, IIntegrationResult to)
 		{
-			Modification[] modifications = null;
+			Modification[] modifications;
 			if (UseHistory)
 			{
 				modifications = GetModificationsUsingHistory(from, to);
@@ -73,6 +81,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 				modifications = GetModifications(WorkingDirectory, from, to);
 			}
 
+			StripRepositoryRootFromModificationFolderNames(modifications);
 			UrlBuilder.SetupModification(modifications);
 			return modifications;
 		}
@@ -89,8 +98,41 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 		{
 			if (AutoGetSource && !UseHistory)
 			{
-				UpdateSource(result, null);
+				if (DoesCvsDirectoryExist(result))
+				{
+					UpdateSource(result, null);
+				}
+				else
+				{
+					CheckoutSource(result);
+				}
 			}
+		}
+
+		private bool DoesCvsDirectoryExist(IIntegrationResult result)
+		{
+			string cvsDirectory = Path.Combine(result.BaseFromWorkingDirectory(WorkingDirectory), "CVS");
+			return fileSystem.DirectoryExists(cvsDirectory);
+		}
+
+		private void CheckoutSource(IIntegrationResult result)
+		{
+			if (StringUtil.IsBlank(CvsRoot))
+				throw new ConfigurationException("<cvsroot> configuration element must be specified in order to automatically checkout source from CVS.");
+			Execute(NewCheckoutProcessInfo(result));
+		}
+
+		private ProcessInfo NewCheckoutProcessInfo(IIntegrationResult result)
+		{
+			ProcessArgumentBuilder builder = new ProcessArgumentBuilder();
+			AppendCvsRoot(builder);
+			builder.AddArgument("checkout");
+			builder.AddArgument("-R");
+			builder.AddArgument("-P");
+			builder.AddArgument("-r", Branch);
+			builder.AddArgument("-d", result.BaseFromWorkingDirectory(WorkingDirectory));
+			builder.AddArgument(Module);
+			return NewProcessInfoWithArgs(result, builder.ToString());
 		}
 
 		private void UpdateSource(IIntegrationResult result, string file)
@@ -178,22 +220,26 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			return new ProcessInfo(Executable, args, result.BaseFromWorkingDirectory(WorkingDirectory));
 		}
 
-		// cvs [-d :ext:mycvsserver:/cvsroot/myrepo] -q log -N "-d>2004-12-24 12:00:00 'GMT'" -rmy_branch (with branch)
-		// cvs [-d :ext:mycvsserver:/cvsroot/myrepo] -q log -Nb "-d>2004-12-24 12:00:00 'GMT'" (without branch)
+		// cvs [-d :ext:mycvsserver:/cvsroot/myrepo] -q log -N "-d>2004-12-24 12:00:00 GMT" -rmy_branch (with branch)
+		// cvs [-d :ext:mycvsserver:/cvsroot/myrepo] -q log -Nb "-d>2004-12-24 12:00:00 GMT" (without branch)
 		//		public const string HISTORY_COMMAND_FORMAT = @"{0}-q log -N{3} ""-d>{1}""{2}";		// -N means 'do not show tags'
-
-		// in cvs, date 'to' is implicitly now
-		// todo: if cvs will accept a 'to' date, it would be nicer to 
-		// include that for some harmony with the vss version
 		private string BuildHistoryProcessInfoArgs(DateTime from, string dir)
 		{
 			ProcessArgumentBuilder buffer = new ProcessArgumentBuilder();
 			AppendCvsRoot(buffer);
-			buffer.AppendArgument("-q log -N");
+			buffer.AddArgument("-q"); // quiet
+			buffer.AddArgument("rlog");
+			buffer.AddArgument("-N"); // do not show tags
+			if (StringUtil.IsBlank(Branch))
+			{
+				buffer.AddArgument("-b"); // only list revisions on HEAD
+			}
+			else
+			{
+				buffer.AppendArgument("-r{0}", Branch); // list revisions on branch
+			}
 			buffer.AppendIf(UseHistory, "-l");
-			buffer.AppendIf(StringUtil.IsBlank(Branch), "-b");
 			buffer.AppendArgument(@"""-d>{0}""", FormatCommandDate(from));
-			buffer.AppendArgument("-r{0}", Branch);
 			if (! StringUtil.IsBlank(RestrictLogins))
 			{
 				foreach (string login in RestrictLogins.Split(','))
@@ -202,12 +248,48 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 				}
 			}
 			buffer.AppendIf(UseHistory && dir != null, @"""{0}""", dir);
+			buffer.AddArgument(Module);
 			return buffer.ToString();
 		}
 
 		private void AppendCvsRoot(ProcessArgumentBuilder buffer)
 		{
-			buffer.AppendArgument("-d {0}", CvsRoot);
+			buffer.AddArgument("-d", CvsRoot);
+		}
+
+		private void StripRepositoryRootFromModificationFolderNames(Modification[] modifications)
+		{
+			foreach (Modification modification in modifications)
+			{
+				modification.FolderName = StripRepositoryFolder(modification.FolderName);
+			}
+		}
+
+		private const string LocalCvsProtocolString = ":local:";
+
+		private string StripRepositoryFolder(string rcsFilePath)
+		{
+			string repositoryFolder = GetRepositoryFolder();
+			if (rcsFilePath.StartsWith(repositoryFolder))
+			{
+				return rcsFilePath.Remove(0, repositoryFolder.Length);
+			}
+			return rcsFilePath;
+		}
+
+		/// <summary>
+		/// Get the repository folder in order to strip it from the RCS file.
+		/// The repository folder is the last part of the CVSRoot path -- unless the local protocol is used on windows machines.
+		/// Examples: 
+		///		CvsRoot=":pserver:anonymous@cruisecontrol.cvs.sourceforge.net:/cvsroot/cruisecontrol", Module="cruisecontrol", RepositoryFolder="/cvsroot/cruisecontrol/cruisecontrol"
+		///		CvsRoot=":local:C:\dev\CVSRoot", Module="fitwebservice", RepositoryFolder="C:\dev\CVSRoot/fitwebservice"
+		/// </summary>
+		private string GetRepositoryFolder()
+		{
+			string modulePath = '/' + Module + '/';
+			if (CvsRoot.StartsWith(LocalCvsProtocolString))
+				return CvsRoot.Substring(LocalCvsProtocolString.Length) + modulePath;
+			return CvsRoot.Substring(CvsRoot.LastIndexOf(':') + 1) + modulePath;
 		}
 	}
 }

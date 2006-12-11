@@ -10,7 +10,6 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 		public static string CVS_LOGFILE_CONTENT
 		{
 			get { return @"RCS file: /cvsroot/cruisecontrol/cruisecontrol/main/README.txt,v
-Working file: main/README.txt
 head: 1.1
 branch:
 locks: strict
@@ -21,7 +20,6 @@ description:
 =============================================================================
 
 RCS file: /cvsroot/cruisecontrol/cruisecontrol/main/build.bat,v
-Working file: main/build.bat
 head: 1.6
 branch:
 locks: strict
@@ -32,7 +30,6 @@ description:
 =============================================================================
 
 RCS file: /cvsroot/cruisecontrol/cruisecontrol/main/build.sh,v
-Working file: main/build.sh
 head: 1.4
 branch:
 locks: strict
@@ -43,7 +40,6 @@ description:
 =============================================================================
 
 RCS file: /cvsroot/cruisecontrol/cruisecontrol/main/build.xml,v
-Working file: main/build.xml
 head: 1.42
 branch:
 locks: strict
@@ -62,7 +58,6 @@ Added target to clean up test results.
 =============================================================================
 
 RCS file: /cvsroot/cruisecontrol/cruisecontrol/main/cruise.jsp,v
-Working file: main/cruise.jsp
 head: 1.3
 branch:
 locks: strict
@@ -73,7 +68,6 @@ description:
 =============================================================================
 
 RCS file: /cvsroot/cruisecontrol/cruisecontrol/main/Attic/cruiseControl.bat,v
-Working file: main/cruiseControl.bat
 head: 1.6
 branch:
 locks: strict
@@ -84,7 +78,6 @@ description:
 =============================================================================
 
 RCS file: /cvsroot/cruisecontrol/cruisecontrol/main/Attic/cruiseControl.sh,v
-Working file: main/cruiseControl.sh
 head: 1.5
 branch:
 locks: strict
@@ -95,7 +88,6 @@ description:
 =============================================================================
 
 RCS file: /cvsroot/cruisecontrol/cruisecontrol/main/cruisecontrol.properties,v
-Working file: main/cruisecontrol.properties
 head: 1.5
 branch:
 locks: strict
@@ -106,7 +98,6 @@ description:
 =============================================================================
 
 RCS file: /cvsroot/cruisecontrol/cruisecontrol/main/cruisecontrol.xsl,v
-Working file: main/cruisecontrol.xsl
 head: 1.15
 branch:
 locks: strict
@@ -117,7 +108,6 @@ description:
 =============================================================================
 
 RCS file: /cvsroot/cruisecontrol/cruisecontrol/main/emailmap.properties,v
-Working file: main/emailmap.properties
 head: 1.1
 branch:
 locks: strict
@@ -128,7 +118,6 @@ description:
 =============================================================================
 
 RCS file: /cvsroot/cruisecontrol/cruisecontrol/main/license.txt,v
-Working file: main/license.txt
 head: 1.2
 branch:
 locks: strict
@@ -139,7 +128,6 @@ description:
 =============================================================================
 
 RCS file: /cvsroot/cruisecontrol/cruisecontrol/main/log4j.properties,v
-Working file: foobar/log4j.properties
 head: 1.2
 branch:
 locks: strict
@@ -154,7 +142,6 @@ Shortening ConversionPattern so we don't use up all of the available screen spac
 =============================================================================
 
 RCS file: /cvsroot/cruisecontrol/cruisecontrol/main/masterbuild.bat,v
-Working file: main/masterbuild.bat
 head: 1.3
 branch:
 locks: strict
@@ -165,7 +152,6 @@ description:
 =============================================================================
 
 RCS file: /cvsroot/cruisecontrol/cruisecontrol/main/Attic/kungfu.xml,v
-Working file: main/kungfu.xml
 head: 1.2
 branch:
 locks: strict
@@ -180,7 +166,6 @@ Hey, look, a deleted file.
 =============================================================================
 
 RCS file: /cvsroot/cruisecontrol/cruisecontrol/main/Attic/stuff.xml,v
-Working file: main/stuff.xml
 head: 1.4
 branch:
 locks: strict
@@ -194,8 +179,7 @@ date: 2002/03/13 19:38:42;  author: alden;  state: dead;  lines: +0 -0
 Hey, look, another deleted file.
 =============================================================================
 
-RCS file: /data/Project/File.cs,v
-Working file: Project/File.cs
+RCS file: /cvsroot/cruisecontrol/cruisecontrol/Project/File.cs,v
 head: 1.11
 branch:
 locks: strict
@@ -213,7 +197,6 @@ Fixed some bugs.
 		public static string Cvs112Examples()
 		{
 			return @"RCS file: /home/jerome/cvs-repository/CVSROOT/cvswrappers,v
-Working file: cvswrappers
 head: 1.1
 branch:
 locks: strict
@@ -229,7 +212,6 @@ initial checkin
 =============================================================================
 
 RCS file: /var/lib/cvs/test/file.txt,v
-Working file: test/file.txt
 head: 1.49
 branch:
 locks: strict
@@ -254,7 +236,6 @@ Test commit
 		public static string CvsNTExamples()
 		{
 			return @"RCS file: /var/lib/cvs/test/file.txt,v
-Working file: test/file.txt
 head: 1.49
 branch:
 locks: strict
@@ -275,7 +256,6 @@ Test commit
 =============================================================================
 
 RCS file: /var/lib/cvs/test/file.txt,v
-Working file: test/file.txt
 head: 1.49
 branch:
 locks: strict
@@ -299,7 +279,6 @@ Test commit
 		public static string ExampleOfFileAddedOnBranch()
 		{
 			return @"RCS file: /cvsroot/ccnet/ccnet/project/core/label/DateLabeller.cs,v
-Working file: project/core/label/DateLabeller.cs
 head: 1.2
 branch:
 locks: strict
@@ -337,7 +316,6 @@ file DateLabeller.cs was initially added on branch RB_1_0.
 		public static string CvsModifiedFileExample()
 		{
 			return @"RCS file: /var/lib/cvs/test/file.txt,v
-Working file: test/file.txt
 head: 1.49
 branch:
 locks: strict

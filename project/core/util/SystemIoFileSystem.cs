@@ -74,5 +74,10 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 		{
 			return File.Exists(file);
 		}
+
+		public bool DirectoryExists(string folder)
+		{
+			return Directory.Exists(folder);
+		}
 	}
 }

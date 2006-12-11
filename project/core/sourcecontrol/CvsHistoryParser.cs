@@ -27,11 +27,6 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 		private static readonly string CVS_RCSFILE_LINE = "RCS file: ";
 
 		/// <summary>
-		/// This is the keyword that precedes the name of the working filename in the CVS log information.
-		/// </summary>
-		private static readonly string CVS_WORKINGFILE_LINE = "Working file: ";
-
-		/// <summary>
 		/// This is the keyword that precedes the timestamp of a file revision in the CVS log information.
 		/// </summary>
 		private static readonly string CVS_REVISION_DATE = "date:";
@@ -44,7 +39,6 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 		private static readonly string CVS_REVISION_DEAD = "dead";
 
 		private string currentLine;
-		private string workingFileName;
 
 		public Modification[] Parse(TextReader cvsLog, DateTime from, DateTime to)
 		{
@@ -56,7 +50,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			while ((currentLine = ReadToNotPast(cvsLog, CVS_RCSFILE_LINE, null)) != null)
 			{
 				// Parse the single file entry, which may include several modifications.
-				IList entryList = ParseFileEntry(cvsLog);
+				IList entryList = ParseFileEntry(currentLine, cvsLog);
 
 				//Add all the modifications to the local list.
 				mods.AddRange(entryList);
@@ -64,31 +58,26 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			return (Modification[]) mods.ToArray(typeof (Modification));
 		}
 
-		private IList ParseFileEntry(TextReader cvsLog)
+		private IList ParseFileEntry(string rcsFileLine, TextReader cvsLog)
 		{
 			ArrayList mods = new ArrayList();
 
-			workingFileName = ParseFileNameAndPath(cvsLog);
+			string rcsFile = ParseFileNameAndPath(rcsFileLine);
+			string fileName = ParseFileName(rcsFile);
+			string folderName = ParseFolderName(rcsFile);
 
 			currentLine = ReadToNotPast(cvsLog, CvsModificationDelimiter, CVS_FILE_DELIM);
 			while (currentLine != null && !currentLine.StartsWith(CVS_FILE_DELIM))
 			{
-				mods.Add(ParseModification(cvsLog));
+				mods.Add(ParseModification(cvsLog, folderName, fileName));
 			}
 			return mods;
 		}
 
-		private string ParseFileNameAndPath(TextReader cvsLog)
+		private readonly Regex rcsfileRegex = new Regex(@"^RCS file:\s+(\S+),v\s*$");
+		private string ParseFileNameAndPath(string rcsFileLine)
 		{
-			// Read to the working file name line to get the filename. It is ASSUMED
-			// that a line will exist with the working file name on it.
-			currentLine = ReadToNotPast(cvsLog, CVS_WORKINGFILE_LINE, null);
-			string workingFileNameAndPath = null;
-			if (currentLine != null)
-			{
-				workingFileNameAndPath = currentLine.Substring(CVS_WORKINGFILE_LINE.Length);
-			}
-			return workingFileNameAndPath;
+			return rcsfileRegex.Match(rcsFileLine).Groups[1].Value;
 		}
 
 		private string ReadToNotPast(TextReader reader, string startsWith, string notPast)
@@ -105,7 +94,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			return currentLine;
 		}
 
-		private Modification ParseModification(TextReader reader)
+		private Modification ParseModification(TextReader reader, string folderName, string fileName)
 		{
 			currentLine = reader.ReadLine();
 			Modification modification = new Modification();
@@ -117,8 +106,8 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			if (currentLine.StartsWith(CVS_REVISION_DATE))
 			{
 				ParseDateLine(modification, currentLine);
-				modification.FileName = ParseFileName(workingFileName);
-				modification.FolderName = ParseFolderName(workingFileName);
+				modification.FileName = fileName;
+				modification.FolderName = folderName;
 
 				currentLine = reader.ReadLine();
 				modification.Comment = ParseComment(reader);
@@ -132,7 +121,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			// file delimiter constitutes the comment.
 			StringBuilder message = new StringBuilder();
 			while (currentLine != null && !currentLine.StartsWith(CVS_FILE_DELIM)
-				&& !currentLine.StartsWith(CvsHistoryParser.CvsModificationDelimiter))
+				&& !currentLine.StartsWith(CvsModificationDelimiter))
 			{
 				if (message.Length > 0)
 				{
@@ -146,24 +135,38 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			return message.ToString();
 		}
 
-		private string ParseFileName(string workingFileName)
+		private string ParseFileName(string rcsFilePath)
 		{
-			int lastSlashIndex = workingFileName.LastIndexOf("/");
-			return workingFileName.Substring(lastSlashIndex + 1);
+			int lastSlashIndex = rcsFilePath.LastIndexOf("/");
+			return rcsFilePath.Substring(lastSlashIndex + 1);
 		}
 
-		private string ParseFolderName(string workingFileName)
+		/// <summary>
+		/// Strip the filename, Attic folder (if the file has been deleted) and repository folder prefix to get folder name.
+		/// </summary>
+		private string ParseFolderName(string rcsFilePath)
 		{
-			int lastSlashIndex = workingFileName.LastIndexOf("/");
-			string folderName = string.Empty;
+			return StripAtticFolder(StripFilename(rcsFilePath));
+		}
+
+		private static string StripFilename(string rcsFilePath)
+		{
+			int lastSlashIndex = rcsFilePath.LastIndexOf("/");
 			if (lastSlashIndex != -1)
 			{
-				folderName = workingFileName.Substring(0, lastSlashIndex);
+				return rcsFilePath.Substring(0, lastSlashIndex);
 			}
-			return folderName;
+			return string.Empty;
 		}
 
-		private Regex dateLineRegex = new Regex(@"date:\s+(?<date>\S+)\s+(?<time>\S+)\s*(?<timezone>\S*);\s+author:\s+(?<author>.*);\s+state:\s+(?<state>\S*);(\s+lines:\s+\+(?<line1>\d+)\s+-(?<line2>\d+))?");
+		private static string StripAtticFolder(string rcsFilePath)
+		{
+			if (rcsFilePath.EndsWith("Attic"))
+				rcsFilePath = rcsFilePath.Substring(0, rcsFilePath.LastIndexOf("/"));
+			return rcsFilePath;
+		}
+
+		private readonly Regex dateLineRegex = new Regex(@"date:\s+(?<date>\S+)\s+(?<time>\S+)\s*(?<timezone>\S*);\s+author:\s+(?<author>.*);\s+state:\s+(?<state>\S*);(\s+lines:\s+\+(?<line1>\d+)\s+-(?<line2>\d+))?");
 
 		private void ParseDateLine(Modification modification, string dateLine)
 		{
