@@ -5,7 +5,7 @@ This file, default.aspx, should never be processed by 'normal' ASP.NET and is he
 <html>
 <head>
 <title>CruiseControl.NET</title>
-<link type="text/css" rel="stylesheet" href="cruisecontrol.css">
+<link type="text/css" rel="stylesheet" href="cruisecontrol.css" />
 </head>
 <body>
 <h1>
@@ -21,6 +21,9 @@ Hi. You're seeing this page because there is a configuration problem with your i
 </pre>
 
 Also make sure you have setup IIS to map .aspx files to aspnet_isapi.dll. This should be setup for you automatically when you install the .NET Framework and run the aspnet_regiis.exe program.
+If IIS was installed after the .NET framework, you will need to either run aspnet_regiis.exe or 
+open IIS manager, right-click the ccnet website, select properties and then the ASP.NET tab.
+Make sure the ASP.NET version has something displayed in the dropdown (eg. .NET 2.0, 2.0.50727) and click OK.
 </p>
 
 </body>
