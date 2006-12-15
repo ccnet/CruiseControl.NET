@@ -16,7 +16,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.IO
 
 		public InMemoryResponseCache(DashboardCacheDependency dashboardCacheDependency)
 		{
-			this.cacheDependency = dashboardCacheDependency;
+			cacheDependency = dashboardCacheDependency;
 		}
 
 		public IResponse Get(IRequest request)

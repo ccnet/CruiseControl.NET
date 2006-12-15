@@ -673,6 +673,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "MVC\Cruise\NoCacheabilityActionProxy.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "MVC\Cruise\ProjectCheckingProxyAction.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -849,6 +854,11 @@
                 />
                 <File
                     RelPath = "Plugins\ProjectReport\ProjectReportProjectPlugin.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Plugins\ProjectReport\ServerLogProjectPlugin.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

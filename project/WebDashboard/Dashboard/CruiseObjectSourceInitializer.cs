@@ -64,7 +64,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 				foreach (INamedAction action in plugin.NamedActions)
 				{
 					objectionManager.AddInstanceForName(action.ActionName, action.Action)
-						.Decorate(typeof(CruiseActionProxyAction)).Decorate(typeof(ExceptionCatchingActionProxy)).Decorate(typeof(SiteTemplateActionDecorator));
+						.Decorate(typeof(CruiseActionProxyAction)).Decorate(typeof(ExceptionCatchingActionProxy)).Decorate(typeof(SiteTemplateActionDecorator)).Decorate(typeof(NoCacheabilityActionProxy));
 				}
 			}
 
@@ -73,7 +73,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 				foreach (INamedAction action in plugin.NamedActions)
 				{
 					objectionManager.AddInstanceForName(action.ActionName, action.Action)
-						.Decorate(typeof(ServerCheckingProxyAction)).Decorate(typeof(CruiseActionProxyAction)).Decorate(typeof(ExceptionCatchingActionProxy)).Decorate(typeof(SiteTemplateActionDecorator));
+						.Decorate(typeof(ServerCheckingProxyAction)).Decorate(typeof(CruiseActionProxyAction)).Decorate(typeof(ExceptionCatchingActionProxy)).Decorate(typeof(SiteTemplateActionDecorator)).Decorate(typeof(NoCacheabilityActionProxy));
 				}
 			}
 

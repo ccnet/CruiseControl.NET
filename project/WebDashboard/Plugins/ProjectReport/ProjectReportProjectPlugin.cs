@@ -26,7 +26,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.ProjectReport
 		[ReflectorArray("reportPlugins", Required=false)]
 		public IBuildPlugin[] DashPlugins
 		{
-			get { return pluginNames;}
+			get { return pluginNames; }
 			set { pluginNames = value; }
 		}
 
@@ -51,11 +51,11 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.ProjectReport
 			velocityContext["projectName"] = projectSpecifier.ProjectName;
 			velocityContext["externalLinks"] = farmService.GetExternalLinks(projectSpecifier);
 			velocityContext["noLogsAvailable"] = (buildSpecifiers.Length == 0);
-			
+
 			string subReportData = GetPluginSubReport(cruiseRequest, projectSpecifier, buildSpecifiers);
 			if (subReportData != null && subReportData != String.Empty)
 				velocityContext["pluginInfo"] = subReportData;
-			
+
 			return viewGenerator.GenerateView(@"ProjectReport.vm", velocityContext);
 		}
 
@@ -66,30 +66,30 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.ProjectReport
 
 		public INamedAction[] NamedActions
 		{
-			get {  return new INamedAction[] { new ImmutableNamedAction(ACTION_NAME, this) }; }
+			get { return new INamedAction[] {new ImmutableNamedAction(ACTION_NAME, this)}; }
 		}
 
 		private string GetPluginSubReport(ICruiseRequest cruiseRequest,
-			IProjectSpecifier projectSpecifier, IBuildSpecifier[] buildSpecifiers)
+		                                  IProjectSpecifier projectSpecifier, IBuildSpecifier[] buildSpecifiers)
 		{
 			if (buildSpecifiers.Length > 0 && pluginNames != null)
 			{
 				string outputResponse = String.Empty;
 
 				ModifiedCruiseRequest req = new ModifiedCruiseRequest(cruiseRequest.Request);
-				req.ReplaceBuildSpecifier(buildSpecifiers[0]);	
+				req.ReplaceBuildSpecifier(buildSpecifiers[0]);
 
-				foreach(IBuildPlugin buildPlugIn in pluginNames)
+				foreach (IBuildPlugin buildPlugIn in pluginNames)
 				{
-					if (buildPlugIn != null && buildPlugIn.IsDisplayedForProject(projectSpecifier) && 
-						buildPlugIn.NamedActions != null)
+					if (buildPlugIn != null && buildPlugIn.IsDisplayedForProject(projectSpecifier) &&
+					    buildPlugIn.NamedActions != null)
 					{
 						foreach (INamedAction namedAction in buildPlugIn.NamedActions)
 						{
-							IResponse resp =  namedAction.Action.Execute(req);
-						
+							IResponse resp = namedAction.Action.Execute(req);
+
 							if (resp != null && resp is HtmlFragmentResponse)
-								outputResponse += ((HtmlFragmentResponse)resp).ResponseFragment;
+								outputResponse += ((HtmlFragmentResponse) resp).ResponseFragment;
 						}
 					}
 				}
@@ -98,91 +98,81 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.ProjectReport
 			return null;
 		}
 
-		private class ModifiedCruiseRequest:ICruiseRequest
+		private class ModifiedCruiseRequest : ICruiseRequest
 		{
 			private readonly IRequest request;
 
-				private IServerSpecifier serverSpecifier = null;
-				private IProjectSpecifier projectSpecifier = null;
-				private IBuildSpecifier buildSpecifier = null;
+			private IServerSpecifier serverSpecifier = null;
+			private IProjectSpecifier projectSpecifier = null;
+			private IBuildSpecifier buildSpecifier = null;
 
-				public ModifiedCruiseRequest(IRequest request)
+			public ModifiedCruiseRequest(IRequest request)
+			{
+				this.request = request;
+			}
+
+			public string ServerName
+			{
+				get { return (serverSpecifier != null) ? serverSpecifier.ServerName : FindRESTSpecifiedResource(DefaultCruiseUrlBuilder.ServerRESTSpecifier); }
+			}
+
+			public string ProjectName
+			{
+				get { return (projectSpecifier != null) ? projectSpecifier.ProjectName : FindRESTSpecifiedResource(DefaultCruiseUrlBuilder.ProjectRESTSpecifier); }
+			}
+
+			public string BuildName
+			{
+				get { return (buildSpecifier != null) ? buildSpecifier.BuildName : FindRESTSpecifiedResource(DefaultCruiseUrlBuilder.BuildRESTSpecifier); }
+			}
+
+			private string FindRESTSpecifiedResource(string specifier)
+			{
+				string[] subFolders = request.SubFolders;
+
+				for (int i = 0; i < subFolders.Length; i += 2)
 				{
-					this.request = request;
-				}
-
-				public string ServerName
-				{
-					get { return (serverSpecifier != null) ? serverSpecifier.ServerName : FindRESTSpecifiedResource(DefaultCruiseUrlBuilder.ServerRESTSpecifier); }
-				}
-
-				public string ProjectName
-				{
-					get { return (projectSpecifier != null) ? projectSpecifier.ProjectName : FindRESTSpecifiedResource(DefaultCruiseUrlBuilder.ProjectRESTSpecifier); }
-				}
-
-				public string BuildName
-				{
-					get { return (buildSpecifier != null) ? buildSpecifier.BuildName : FindRESTSpecifiedResource(DefaultCruiseUrlBuilder.BuildRESTSpecifier); }
-				}
-
-				private string FindRESTSpecifiedResource(string specifier)
-				{
-					string[] subFolders = request.SubFolders;
-
-					for (int i = 0; i < subFolders.Length; i += 2)
+					if (subFolders[i] == specifier)
 					{
-						if (subFolders[i] == specifier)
+						if (i < subFolders.Length)
 						{
-							if (i < subFolders.Length)
-							{
-								return HttpUtility.UrlDecode(subFolders[i + 1]);
-							}
-							else
-							{
-								throw new CruiseControlException(
-									string.Format("unexpected URL format - found {0} REST Specifier, but no following value", specifier));
-							}
+							return HttpUtility.UrlDecode(subFolders[i + 1]);
+						}
+						else
+						{
+							throw new CruiseControlException(
+								string.Format("unexpected URL format - found {0} REST Specifier, but no following value", specifier));
 						}
 					}
-
-					return "";
 				}
 
-				public IServerSpecifier ServerSpecifier
-				{
-					get { return (serverSpecifier != null) ? serverSpecifier : new DefaultServerSpecifier(ServerName); }
-				}
+				return "";
+			}
 
-				public IProjectSpecifier ProjectSpecifier
-				{
-					get { return (projectSpecifier != null) ? projectSpecifier : new DefaultProjectSpecifier(ServerSpecifier, ProjectName); }
-				}
+			public IServerSpecifier ServerSpecifier
+			{
+				get { return (serverSpecifier != null) ? serverSpecifier : new DefaultServerSpecifier(ServerName); }
+			}
 
-				public IBuildSpecifier BuildSpecifier
-				{
-					get { return (buildSpecifier != null) ? buildSpecifier : new DefaultBuildSpecifier(ProjectSpecifier, BuildName); }
-				}
+			public IProjectSpecifier ProjectSpecifier
+			{
+				get { return (projectSpecifier != null) ? projectSpecifier : new DefaultProjectSpecifier(ServerSpecifier, ProjectName); }
+			}
 
-				public IRequest Request
-				{
-					get { return request; }
-				}
+			public IBuildSpecifier BuildSpecifier
+			{
+				get { return (buildSpecifier != null) ? buildSpecifier : new DefaultBuildSpecifier(ProjectSpecifier, BuildName); }
+			}
 
-				public void ReplaceBuildSpecifier(IBuildSpecifier buildSpecifier)
-				{
-					this.buildSpecifier = buildSpecifier;
-				}
+			public IRequest Request
+			{
+				get { return request; }
+			}
 
-				public void ReplaceProjectSpecifier(IProjectSpecifier projectSpecifier)
-				{
-					this.projectSpecifier = projectSpecifier;
-				}
-
-				public void ReplaceServerSpecifier(IServerSpecifier serverSpecifier)
-				{
-					this.serverSpecifier = serverSpecifier;
-				}
+			public void ReplaceBuildSpecifier(IBuildSpecifier buildSpecifier)
+			{
+				this.buildSpecifier = buildSpecifier;
 			}
 		}
 	}
+}

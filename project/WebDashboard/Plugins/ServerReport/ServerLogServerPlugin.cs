@@ -7,6 +7,7 @@ using ThoughtWorks.CruiseControl.WebDashboard.IO;
 using ThoughtWorks.CruiseControl.WebDashboard.MVC;
 using ThoughtWorks.CruiseControl.WebDashboard.MVC.Cruise;
 using ThoughtWorks.CruiseControl.WebDashboard.MVC.View;
+using ThoughtWorks.CruiseControl.WebDashboard.Plugins.ProjectReport;
 using ThoughtWorks.CruiseControl.WebDashboard.ServerConnection;
 
 namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.ServerReport
@@ -36,7 +37,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.ServerReport
 			foreach (ProjectStatusOnServer projectStatusOnServer in projects.StatusAndServerList)
 			{
 				DefaultProjectSpecifier projectSpecifier = new DefaultProjectSpecifier(projectStatusOnServer.ServerSpecifier, projectStatusOnServer.ProjectStatus.Name);
-				links.Add(new ProjectLink(urlBuilder, projectSpecifier, projectSpecifier.ProjectName, ActionName));
+				links.Add(new ProjectLink(urlBuilder, projectSpecifier, projectSpecifier.ProjectName, ServerLogProjectPlugin.ActionName));
 			}
 			velocityContext["projectLinks"] = links;
 			if (StringUtil.IsBlank(request.ProjectName))
