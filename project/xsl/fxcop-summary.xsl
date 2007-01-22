@@ -201,16 +201,16 @@
 			<div class="section-data" style="margin-left:10px">
 				<img>
 					<xsl:if test="$level='CriticalError'">
-						<xsl:attribute name="src">{$applicationPath}/images/fxcop-critical-error.gif</xsl:attribute>
+						<xsl:attribute name="src"><xsl:value-of select="$applicationPath" />/images/fxcop-critical-error.gif</xsl:attribute>
 					</xsl:if>
 					<xsl:if test="$level='Error'">
-						<xsl:attribute name="src">{$applicationPath}/images/fxcop-error.gif</xsl:attribute>
+						<xsl:attribute name="src"><xsl:value-of select="$applicationPath" />/images/fxcop-error.gif</xsl:attribute>
 					</xsl:if>
 					<xsl:if test="$level='Warning'">
-						<xsl:attribute name="src">{$applicationPath}/images/fxcop-warning.gif</xsl:attribute>
+						<xsl:attribute name="src"><xsl:value-of select="$applicationPath" />/images/fxcop-warning.gif</xsl:attribute>
 					</xsl:if>
 					<xsl:if test="$level='CriticalWarning'">
-						<xsl:attribute name="src">{$applicationPath}/images/fxcop-critical-warning.gif</xsl:attribute>
+						<xsl:attribute name="src"><xsl:value-of select="$applicationPath" />/images/fxcop-critical-warning.gif</xsl:attribute>
 					</xsl:if>
 					<xsl:attribute name="alt"><xsl:value-of select="$level"/> (<xsl:value-of select="$certainty"/>% certainty)</xsl:attribute>
 				</img>
