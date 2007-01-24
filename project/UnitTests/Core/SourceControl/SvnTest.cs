@@ -1,8 +1,10 @@
 using System;
+using System.IO;
 using Exortech.NetReflector;
 using NMock;
 using NUnit.Framework;
 using ThoughtWorks.CruiseControl.Core;
+using ThoughtWorks.CruiseControl.Core.Config;
 using ThoughtWorks.CruiseControl.Core.Sourcecontrol;
 using ThoughtWorks.CruiseControl.Core.Util;
 
@@ -15,6 +17,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 		private IMock mockParser;
 		private DateTime from;
 		private DateTime to;
+		private DynamicMock mockFileSystem;
 
 		[SetUp]
 		protected void SetUp()
@@ -23,7 +26,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 			to = DateTime.Parse("2001-01-21  20:30:50 'GMT'");
 			CreateProcessExecutorMock(Svn.DefaultExecutable);
 			mockParser = new DynamicMock(typeof(IHistoryParser));
-			svn = new Svn((ProcessExecutor) mockProcessExecutor.MockInstance, (IHistoryParser) mockParser.MockInstance);
+			mockFileSystem = new DynamicMock(typeof (IFileSystem));
+			svn = new Svn((ProcessExecutor) mockProcessExecutor.MockInstance, (IHistoryParser) mockParser.MockInstance, (IFileSystem) mockFileSystem.MockInstance);
 			svn.TrunkUrl = "svn://myserver/mypath";
 			svn.TagBaseUrl = "svn://someserver/tags/foo";
 			svn.WorkingDirectory = DefaultWorkingDirectory;
@@ -183,6 +187,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 		[Test]
 		public void ShouldGetSourceWithAppropriateRevisionNumberIfTagOnSuccessTrueAndModificationsFound()
 		{
+			ExpectSvnDirectoryExists(true);
 			ExpectToExecuteArguments("update --revision 10 --non-interactive");
 
 			IIntegrationResult result = IntegrationResult();
@@ -198,6 +203,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 		[Test]
 		public void ShouldGetSourceWithoutRevisionNumberIfTagOnSuccessTrueAndModificationsNotFound()
 		{
+			ExpectSvnDirectoryExists(true);
 			ExpectToExecuteArguments("update --non-interactive");
 			svn.AutoGetSource = true;
 			svn.GetSource(IntegrationResult());
@@ -206,6 +212,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 		[Test]
 		public void ShouldGetSourceWithCredentialsIfSpecifiedIfAutoGetSourceTrue()
 		{
+			ExpectSvnDirectoryExists(true);
 			ExpectToExecuteArguments(@"update --username ""Buck Rogers"" --password ""My Password"" --non-interactive");
 			svn.Username = "Buck Rogers";
 			svn.Password = "My Password";
@@ -219,6 +226,33 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 			ExpectThatExecuteWillNotBeCalled();
 			svn.AutoGetSource = false;
 			svn.GetSource(IntegrationResult());
+		}
+		
+		[Test]
+		public void ShouldCheckoutInsteadOfUpdateIfSVNFoldersDoNotExist()
+		{
+			ExpectToExecuteArguments(@"checkout svn://myserver/mypath --non-interactive");
+			ExpectSvnDirectoryExists(false);
+
+			svn.AutoGetSource = true;
+			svn.WorkingDirectory = DefaultWorkingDirectory;
+			svn.GetSource(IntegrationResult());
+		}
+
+		[Test, ExpectedException(typeof(ConfigurationException))]
+		public void ShouldThrowExceptionIfTrunkUrlIsNotSpecifiedAndSVNFoldersDoNotExist()
+		{
+			ExpectSvnDirectoryExists(false);
+			
+			svn.TrunkUrl = string.Empty;
+			svn.AutoGetSource = true;
+			svn.WorkingDirectory = DefaultWorkingDirectory;
+			svn.GetSource(IntegrationResult());
+		}
+
+		private void ExpectSvnDirectoryExists(bool doesSvnDirectoryExist)
+		{
+			mockFileSystem.ExpectAndReturn("DirectoryExists", doesSvnDirectoryExist, Path.Combine(DefaultWorkingDirectory, ".svn"));
 		}
 	}
 }

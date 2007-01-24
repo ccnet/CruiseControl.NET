@@ -17,52 +17,43 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 		private readonly IFileSystem fileSystem;
 		private readonly CvsHistoryCommandParser historyCommandParser;
 
-		public Cvs() : this(new CvsHistoryParser(), new ProcessExecutor(), new CvsHistoryCommandParser(), new SystemIoFileSystem())
+		public Cvs()
+			: this(new CvsHistoryParser(), new ProcessExecutor(), new CvsHistoryCommandParser(), new SystemIoFileSystem())
 		{
 		}
 
-		public Cvs(IHistoryParser parser, ProcessExecutor executor, CvsHistoryCommandParser historyCommandParser, IFileSystem fileSystem)
+		public Cvs(IHistoryParser parser, ProcessExecutor executor, CvsHistoryCommandParser historyCommandParser,
+		           IFileSystem fileSystem)
 			: base(parser, executor)
 		{
 			this.fileSystem = fileSystem;
 			this.historyCommandParser = historyCommandParser;
 		}
 
-		[ReflectorProperty("executable")]
-		public string Executable = DefaultCvsExecutable;
+		[ReflectorProperty("executable")] public string Executable = DefaultCvsExecutable;
 
-		[ReflectorProperty("cvsroot")]
-		public string CvsRoot = string.Empty;
+		[ReflectorProperty("cvsroot")] public string CvsRoot = string.Empty;
 
-		[ReflectorProperty("module")]
-		public string Module;
+		[ReflectorProperty("module")] public string Module;
 
-		[ReflectorProperty("workingDirectory", Required=false)]
-		public string WorkingDirectory = string.Empty;
+		[ReflectorProperty("workingDirectory", Required=false)] public string WorkingDirectory = string.Empty;
 
-		[ReflectorProperty("labelOnSuccess", Required=false)]
-		public bool LabelOnSuccess = false;
+		[ReflectorProperty("labelOnSuccess", Required=false)] public bool LabelOnSuccess = false;
 
-		[ReflectorProperty("restrictLogins", Required=false)]
-		public string RestrictLogins = string.Empty;
+		[ReflectorProperty("restrictLogins", Required=false)] public string RestrictLogins = string.Empty;
 
-		[ReflectorProperty("webUrlBuilder", InstanceTypeKey="type", Required=false)]
-		public IModificationUrlBuilder UrlBuilder = new NullUrlBuilder();
+		[ReflectorProperty("webUrlBuilder", InstanceTypeKey="type", Required=false)] public IModificationUrlBuilder UrlBuilder
+			= new NullUrlBuilder();
 
-		[ReflectorProperty("autoGetSource", Required = false)]
-		public bool AutoGetSource = false;
+		[ReflectorProperty("autoGetSource", Required = false)] public bool AutoGetSource = false;
 
-		[ReflectorProperty("cleanCopy", Required = false)]
-		public bool CleanCopy = true;
+		[ReflectorProperty("cleanCopy", Required = false)] public bool CleanCopy = true;
 
-		[ReflectorProperty("useHistory", Required = false)]
-		public bool UseHistory = false;
+		[ReflectorProperty("useHistory", Required = false)] public bool UseHistory = false;
 
-		[ReflectorProperty("branch", Required=false)]
-		public string Branch = string.Empty;
+		[ReflectorProperty("branch", Required=false)] public string Branch = string.Empty;
 
-		[ReflectorProperty("tagPrefix", Required=false)]
-		public string TagPrefix = "ver-";
+		[ReflectorProperty("tagPrefix", Required=false)] public string TagPrefix = "ver-";
 
 		public string FormatCommandDate(DateTime date)
 		{
@@ -96,16 +87,14 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 
 		public override void GetSource(IIntegrationResult result)
 		{
-			if (AutoGetSource && !UseHistory)
+			if (!AutoGetSource || UseHistory) return;
+			if (DoesCvsDirectoryExist(result))
 			{
-				if (DoesCvsDirectoryExist(result))
-				{
-					UpdateSource(result, null);
-				}
-				else
-				{
-					CheckoutSource(result);
-				}
+				UpdateSource(result, null);
+			}
+			else
+			{
+				CheckoutSource(result);
 			}
 		}
 
@@ -118,7 +107,8 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 		private void CheckoutSource(IIntegrationResult result)
 		{
 			if (StringUtil.IsBlank(CvsRoot))
-				throw new ConfigurationException("<cvsroot> configuration element must be specified in order to automatically checkout source from CVS.");
+				throw new ConfigurationException(
+					"<cvsroot> configuration element must be specified in order to automatically checkout source from CVS.");
 			Execute(NewCheckoutProcessInfo(result));
 		}
 

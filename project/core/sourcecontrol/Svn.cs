@@ -2,6 +2,7 @@ using System;
 using System.Globalization;
 using System.IO;
 using Exortech.NetReflector;
+using ThoughtWorks.CruiseControl.Core.Config;
 using ThoughtWorks.CruiseControl.Core.Util;
 
 namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
@@ -12,8 +13,10 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 		public const string DefaultExecutable = "svn.exe";
 		internal static readonly string COMMAND_DATE_FORMAT = "yyyy-MM-ddTHH:mm:ssZ";
 
-		public Svn(ProcessExecutor executor, IHistoryParser parser) : base(parser, executor)
-		{}
+		public Svn(ProcessExecutor executor, IHistoryParser parser, IFileSystem fileSystem) : base(parser, executor)
+		{
+			this.fileSystem = fileSystem;
+		}
 
 		public Svn() : base(new SvnHistoryParser())
 		{}
@@ -45,6 +48,8 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 		[ReflectorProperty("autoGetSource", Required = false)]
 		public bool AutoGetSource = false;
 
+		private IFileSystem fileSystem;
+
 		public string FormatCommandDate(DateTime date)
 		{
 			return date.ToUniversalTime().ToString(COMMAND_DATE_FORMAT, CultureInfo.InvariantCulture);
@@ -71,12 +76,46 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 
 		public override void GetSource(IIntegrationResult result)
 		{
-			if (AutoGetSource)
+			if (! AutoGetSource) return;
+			
+			if (DoesSvnDirectoryExist(result))
 			{
-				Execute(NewGetSourceProcessInfo(result));
+				UpdateSource(result);
+			}
+			else
+			{
+				CheckoutSource(result);
 			}
 		}
 
+		private void CheckoutSource(IIntegrationResult result)
+		{
+			if (StringUtil.IsBlank(TrunkUrl))
+				throw new ConfigurationException(
+					"<trunkurl> configuration element must be specified in order to automatically checkout source from SVN.");
+			Execute(NewCheckoutProcessInfo(result));
+		}
+
+		private ProcessInfo NewCheckoutProcessInfo(IIntegrationResult result)
+		{
+			ProcessArgumentBuilder buffer = new ProcessArgumentBuilder();
+			buffer.AppendArgument("checkout");
+			buffer.AppendArgument(TrunkUrl);
+			AppendCommonSwitches(buffer);
+			return NewProcessInfo(buffer.ToString(), result);
+		}
+
+		private void UpdateSource(IIntegrationResult result)
+		{
+			Execute(NewGetSourceProcessInfo(result));
+		}
+
+		private bool DoesSvnDirectoryExist(IIntegrationResult result)
+		{
+			string cvsDirectory = Path.Combine(result.BaseFromWorkingDirectory(WorkingDirectory), ".svn");
+			return fileSystem.DirectoryExists(cvsDirectory);
+		}
+		
 		private ProcessInfo NewGetSourceProcessInfo(IIntegrationResult result)
 		{
 			ProcessArgumentBuilder buffer = new ProcessArgumentBuilder();
