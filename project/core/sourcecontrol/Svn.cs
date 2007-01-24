@@ -18,35 +18,28 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			this.fileSystem = fileSystem;
 		}
 
-		public Svn() : base(new SvnHistoryParser())
-		{}
+		public Svn() : this(new ProcessExecutor(), new SvnHistoryParser(), new SystemIoFileSystem())
+		{
+		}
 
-		[ReflectorProperty("webUrlBuilder", InstanceTypeKey="type", Required = false)]
-		public IModificationUrlBuilder UrlBuilder;
+		[ReflectorProperty("webUrlBuilder", InstanceTypeKey="type", Required = false)] public IModificationUrlBuilder
+			UrlBuilder;
 
-		[ReflectorProperty("executable", Required = false)]
-		public string Executable = DefaultExecutable;
+		[ReflectorProperty("executable", Required = false)] public string Executable = DefaultExecutable;
 
-		[ReflectorProperty("trunkUrl", Required = false)]
-		public string TrunkUrl;
+		[ReflectorProperty("trunkUrl", Required = false)] public string TrunkUrl;
 
-		[ReflectorProperty("workingDirectory", Required = false)]
-		public string WorkingDirectory;
+		[ReflectorProperty("workingDirectory", Required = false)] public string WorkingDirectory;
 
-		[ReflectorProperty("tagOnSuccess", Required = false)]
-		public bool TagOnSuccess = false;
+		[ReflectorProperty("tagOnSuccess", Required = false)] public bool TagOnSuccess = false;
 
-		[ReflectorProperty("tagBaseUrl", Required = false)]
-		public string TagBaseUrl;
+		[ReflectorProperty("tagBaseUrl", Required = false)] public string TagBaseUrl;
 
-		[ReflectorProperty("username", Required = false)]
-		public string Username;
+		[ReflectorProperty("username", Required = false)] public string Username;
 
-		[ReflectorProperty("password", Required = false)]
-		public string Password;
+		[ReflectorProperty("password", Required = false)] public string Password;
 
-		[ReflectorProperty("autoGetSource", Required = false)]
-		public bool AutoGetSource = false;
+		[ReflectorProperty("autoGetSource", Required = false)] public bool AutoGetSource = false;
 
 		private IFileSystem fileSystem;
 
@@ -77,7 +70,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 		public override void GetSource(IIntegrationResult result)
 		{
 			if (! AutoGetSource) return;
-			
+
 			if (DoesSvnDirectoryExist(result))
 			{
 				UpdateSource(result);
@@ -115,7 +108,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			string cvsDirectory = Path.Combine(result.BaseFromWorkingDirectory(WorkingDirectory), ".svn");
 			return fileSystem.DirectoryExists(cvsDirectory);
 		}
-		
+
 		private ProcessInfo NewGetSourceProcessInfo(IIntegrationResult result)
 		{
 			ProcessArgumentBuilder buffer = new ProcessArgumentBuilder();
@@ -144,7 +137,8 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			ProcessArgumentBuilder buffer = new ProcessArgumentBuilder();
 			buffer.AddArgument("log");
 			buffer.AddArgument(TrunkUrl);
-			buffer.AppendArgument(string.Format("-r \"{{{0}}}:{{{1}}}\"", FormatCommandDate(from.StartTime), FormatCommandDate(to.StartTime)));
+			buffer.AppendArgument(
+				string.Format("-r \"{{{0}}}:{{{1}}}\"", FormatCommandDate(from.StartTime), FormatCommandDate(to.StartTime)));
 			buffer.AppendArgument("--verbose --xml");
 			AppendCommonSwitches(buffer);
 			return NewProcessInfo(buffer.ToString(), to);
