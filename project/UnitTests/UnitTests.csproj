@@ -751,11 +751,6 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "Core\SourceControl\CvsHistoryCommandParserTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
                     RelPath = "Core\SourceControl\CvsHistoryParserTest.cs"
                     SubType = "Code"
                     BuildAction = "Compile"

@@ -863,6 +863,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Plugins\ProjectReport\ViewConfigurationProjectPlugin.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Plugins\ServerReport\ServerInformationServerPlugin.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
