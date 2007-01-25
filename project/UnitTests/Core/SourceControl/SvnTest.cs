@@ -79,14 +79,14 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 		[Test]
 		public void CreatingHistoryProcessIncludesCorrectlyFormattedArguments()
 		{
-			ExpectToExecuteArguments("log svn://myserver/mypath -r \"{2001-01-21T20:00:00Z}:{2001-01-21T20:30:50Z}\" --verbose --xml --non-interactive");
+			ExpectToExecuteArguments("log svn://myserver/mypath -r \"{2001-01-21T20:00:00Z}:{2001-01-21T20:30:50Z}\" --verbose --xml --non-interactive --no-auth-cache");
 			svn.GetModifications(IntegrationResult(from), IntegrationResult(to));
 		}
 
 		[Test]
 		public void CreatingHistoryProcessIncludesCorrectlyFormattedArgumentsForUsernameAndPassword()
 		{
-			string args = @"log svn://myserver/mypath -r ""{2001-01-21T20:00:00Z}:{2001-01-21T20:30:50Z}"" --verbose --xml --username user --password password --non-interactive";
+			string args = @"log svn://myserver/mypath -r ""{2001-01-21T20:00:00Z}:{2001-01-21T20:30:50Z}"" --verbose --xml --username user --password password --non-interactive --no-auth-cache";
 			ExpectToExecuteArguments(args);
 			svn.Username = "user";
 			svn.Password = "password";
@@ -96,7 +96,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 		[Test]
 		public void CreatingHistoryProcessShouldQuoteTrunkUrl()
 		{
-			ExpectToExecuteArguments("log \"svn://my server/mypath\" -r \"{2001-01-21T20:00:00Z}:{2001-01-21T20:30:50Z}\" --verbose --xml --non-interactive");
+			ExpectToExecuteArguments("log \"svn://my server/mypath\" -r \"{2001-01-21T20:00:00Z}:{2001-01-21T20:30:50Z}\" --verbose --xml --non-interactive --no-auth-cache");
 			svn.TrunkUrl = "svn://my server/mypath";
 			svn.GetModifications(IntegrationResult(from), IntegrationResult(to));
 		}
@@ -104,7 +104,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 		[Test]
 		public void CreatingHistoryProcessShouldHandleImplicitTrunkUrl()
 		{
-			ExpectToExecuteArguments("log -r \"{2001-01-21T20:00:00Z}:{2001-01-21T20:30:50Z}\" --verbose --xml --non-interactive");
+			ExpectToExecuteArguments("log -r \"{2001-01-21T20:00:00Z}:{2001-01-21T20:30:50Z}\" --verbose --xml --non-interactive --no-auth-cache");
 			svn.TrunkUrl = null;
 			svn.GetModifications(IntegrationResult(from), IntegrationResult(to));
 		}
@@ -112,7 +112,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 		[Test]
 		public void ShouldRebaseWorkingDirectoryForHistory()
 		{
-			ExpectToExecuteArguments("log svn://myserver/mypath -r \"{2001-01-21T20:00:00Z}:{2001-01-21T20:30:50Z}\" --verbose --xml --non-interactive");
+			ExpectToExecuteArguments("log svn://myserver/mypath -r \"{2001-01-21T20:00:00Z}:{2001-01-21T20:30:50Z}\" --verbose --xml --non-interactive --no-auth-cache");
 			svn.WorkingDirectory = @"source\";
 			IIntegrationResult result = IntegrationResult(to);
 			result.WorkingDirectory = @"c:\";
@@ -122,7 +122,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 		[Test]
 		public void ShouldApplyLabelIfTagOnSuccessTrue()
 		{
-			ExpectToExecuteArguments(@"copy -m ""CCNET build foo"" c:\source svn://someserver/tags/foo/foo --non-interactive");
+			ExpectToExecuteArguments(@"copy -m ""CCNET build foo"" c:\source svn://someserver/tags/foo/foo --non-interactive --no-auth-cache");
 			svn.TagOnSuccess = true;
 			svn.LabelSourceControl(IntegrationResultMother.CreateSuccessful("foo"));
 		}
@@ -130,7 +130,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 		[Test]
 		public void ShouldApplyLabelUsingRebasedWorkingDirectory()
 		{
-			ExpectToExecuteArguments(@"copy -m ""CCNET build foo"" c:\source svn://someserver/tags/foo/foo --non-interactive");
+			ExpectToExecuteArguments(@"copy -m ""CCNET build foo"" c:\source svn://someserver/tags/foo/foo --non-interactive --no-auth-cache");
 			svn.TagOnSuccess = true;
 			svn.WorkingDirectory = null;
 			IIntegrationResult result = IntegrationResult(from);
@@ -145,7 +145,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 			Modification mod = new Modification();
 			mod.ChangeNumber = 5;
 			result.Modifications = new Modification[] { mod };
-			ExpectToExecuteArguments(@"copy -m ""CCNET build foo"" svn://myserver/mypath svn://someserver/tags/foo --revision 5 --non-interactive");
+			ExpectToExecuteArguments(@"copy -m ""CCNET build foo"" svn://myserver/mypath svn://someserver/tags/foo --revision 5 --non-interactive --no-auth-cache");
 
 			svn.TagOnSuccess = true;
 			svn.TagBaseUrl = "svn://someserver/tags";
@@ -171,7 +171,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 		[Test]
 		public void CreatingLabelProcessIncludesCorrectlyFormattedArgumentsForUsernameAndPassword()
 		{
-			string args = @"copy -m ""CCNET build foo"" c:\source svn://someserver/tags/foo --username user --password password --non-interactive";
+			string args = @"copy -m ""CCNET build foo"" c:\source svn://someserver/tags/foo --username user --password password --non-interactive --no-auth-cache";
 			ExpectToExecuteArguments(args);
 
 			IIntegrationResult result = IntegrationResult();
@@ -188,7 +188,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 		public void ShouldGetSourceWithAppropriateRevisionNumberIfTagOnSuccessTrueAndModificationsFound()
 		{
 			ExpectSvnDirectoryExists(true);
-			ExpectToExecuteArguments("update --revision 10 --non-interactive");
+			ExpectToExecuteArguments("update --revision 10 --non-interactive --no-auth-cache");
 
 			IIntegrationResult result = IntegrationResult();
 			Modification mod = new Modification();
@@ -204,7 +204,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 		public void ShouldGetSourceWithoutRevisionNumberIfTagOnSuccessTrueAndModificationsNotFound()
 		{
 			ExpectSvnDirectoryExists(true);
-			ExpectToExecuteArguments("update --non-interactive");
+			ExpectToExecuteArguments("update --non-interactive --no-auth-cache");
 			svn.AutoGetSource = true;
 			svn.GetSource(IntegrationResult());
 		}
@@ -213,7 +213,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 		public void ShouldGetSourceWithCredentialsIfSpecifiedIfAutoGetSourceTrue()
 		{
 			ExpectSvnDirectoryExists(true);
-			ExpectToExecuteArguments(@"update --username ""Buck Rogers"" --password ""My Password"" --non-interactive");
+			ExpectToExecuteArguments(@"update --username ""Buck Rogers"" --password ""My Password"" --non-interactive --no-auth-cache");
 			svn.Username = "Buck Rogers";
 			svn.Password = "My Password";
 			svn.AutoGetSource = true;
@@ -231,7 +231,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 		[Test]
 		public void ShouldCheckoutInsteadOfUpdateIfSVNFoldersDoNotExist()
 		{
-			ExpectToExecuteArguments(@"checkout svn://myserver/mypath --non-interactive");
+			ExpectToExecuteArguments(@"checkout svn://myserver/mypath --non-interactive --no-auth-cache");
 			ExpectSvnDirectoryExists(false);
 
 			svn.AutoGetSource = true;
