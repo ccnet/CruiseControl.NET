@@ -56,7 +56,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 	<autoGetSource>true</autoGetSource>
 </svn>";
 
-			Svn svn = (Svn) NetReflector.Read(xml);
+			svn = (Svn) NetReflector.Read(xml);
 			Assert.AreEqual(@"c:\svn\svn.exe", svn.Executable);
 			Assert.AreEqual("svn://myserver/mypath", svn.TrunkUrl);
 			Assert.AreEqual(new Timeout(5), svn.Timeout);
@@ -72,7 +72,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 		public void SpecifyFromMinimallySpecifiedXml()
 		{
 			string xml = @"<svn/>";
-			Svn svn = (Svn) NetReflector.Read(xml);
+			svn = (Svn) NetReflector.Read(xml);
 			Assert.AreEqual("svn.exe", svn.Executable);			
 		}
 

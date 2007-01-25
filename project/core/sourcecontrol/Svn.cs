@@ -22,24 +22,32 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 		{
 		}
 
-		[ReflectorProperty("webUrlBuilder", InstanceTypeKey="type", Required = false)] public IModificationUrlBuilder
-			UrlBuilder;
+		[ReflectorProperty("webUrlBuilder", InstanceTypeKey="type", Required = false)]
+		public IModificationUrlBuilder UrlBuilder;
 
-		[ReflectorProperty("executable", Required = false)] public string Executable = DefaultExecutable;
+		[ReflectorProperty("executable", Required = false)]
+		public string Executable = DefaultExecutable;
 
-		[ReflectorProperty("trunkUrl", Required = false)] public string TrunkUrl;
+		[ReflectorProperty("trunkUrl", Required = false)]
+		public string TrunkUrl;
 
-		[ReflectorProperty("workingDirectory", Required = false)] public string WorkingDirectory;
+		[ReflectorProperty("workingDirectory", Required = false)]
+		public string WorkingDirectory;
 
-		[ReflectorProperty("tagOnSuccess", Required = false)] public bool TagOnSuccess = false;
+		[ReflectorProperty("tagOnSuccess", Required = false)]
+		public bool TagOnSuccess = false;
 
-		[ReflectorProperty("tagBaseUrl", Required = false)] public string TagBaseUrl;
+		[ReflectorProperty("tagBaseUrl", Required = false)]
+		public string TagBaseUrl;
 
-		[ReflectorProperty("username", Required = false)] public string Username;
+		[ReflectorProperty("username", Required = false)]
+		public string Username;
 
-		[ReflectorProperty("password", Required = false)] public string Password;
+		[ReflectorProperty("password", Required = false)]
+		public string Password;
 
-		[ReflectorProperty("autoGetSource", Required = false)] public bool AutoGetSource = false;
+		[ReflectorProperty("autoGetSource", Required = false)]
+		public bool AutoGetSource = false;
 
 		private IFileSystem fileSystem;
 
@@ -84,8 +92,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 		private void CheckoutSource(IIntegrationResult result)
 		{
 			if (StringUtil.IsBlank(TrunkUrl))
-				throw new ConfigurationException(
-					"<trunkurl> configuration element must be specified in order to automatically checkout source from SVN.");
+				throw new ConfigurationException("<trunkurl> configuration element must be specified in order to automatically checkout source from SVN.");
 			Execute(NewCheckoutProcessInfo(result));
 		}
 
@@ -137,8 +144,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			ProcessArgumentBuilder buffer = new ProcessArgumentBuilder();
 			buffer.AddArgument("log");
 			buffer.AddArgument(TrunkUrl);
-			buffer.AppendArgument(
-				string.Format("-r \"{{{0}}}:{{{1}}}\"", FormatCommandDate(from.StartTime), FormatCommandDate(to.StartTime)));
+			buffer.AppendArgument(string.Format("-r \"{{{0}}}:{{{1}}}\"", FormatCommandDate(from.StartTime), FormatCommandDate(to.StartTime)));
 			buffer.AppendArgument("--verbose --xml");
 			AppendCommonSwitches(buffer);
 			return NewProcessInfo(buffer.ToString(), to);

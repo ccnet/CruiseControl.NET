@@ -69,12 +69,15 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			currentLine = ReadToNotPast(cvsLog, CvsModificationDelimiter, CVS_FILE_DELIM);
 			while (currentLine != null && !currentLine.StartsWith(CVS_FILE_DELIM))
 			{
-				mods.Add(ParseModification(cvsLog, folderName, fileName));
+				Modification mod = ParseModification(cvsLog, folderName, fileName);
+				if (IsFileAddedOnBranch(mod)) continue;
+				mods.Add(mod);
 			}
 			return mods;
 		}
 
 		private readonly Regex rcsfileRegex = new Regex(@"^RCS file:\s+(\S+),v\s*$");
+
 		private string ParseFileNameAndPath(string rcsFileLine)
 		{
 			return rcsfileRegex.Match(rcsFileLine).Groups[1].Value;
@@ -203,6 +206,11 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			{
 				return "modified";
 			}
+		}
+
+		private static bool IsFileAddedOnBranch(Modification mod)
+		{
+			return mod.Type == "deleted" && mod.Version == "1.1";
 		}
 	}
 }

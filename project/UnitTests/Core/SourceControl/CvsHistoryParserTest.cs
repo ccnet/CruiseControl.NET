@@ -100,7 +100,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 			Assert.AreEqual(2, mods.Length);
 		}
 
-		[Test, Ignore("implement next")]
+		[Test]
 		public void ParseExampleOfFileAddedOnBranch()
 		{
 			TextReader input = new StringReader(CvsMother.ExampleOfFileAddedOnBranch());
