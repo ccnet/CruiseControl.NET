@@ -19,18 +19,15 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 		private IMock mockHistoryParser;
 		private DateTime from;
 		private DateTime to;
-		private IMock mockHistoryDirectoryParser;
 		private IMock mockFileSystem;
 
 		[SetUp]
 		protected void CreateCvs()
 		{
 			mockHistoryParser = new DynamicMock(typeof (IHistoryParser));
-			mockHistoryDirectoryParser = new DynamicMock(typeof (CvsHistoryCommandParser));
 			mockFileSystem = new DynamicMock(typeof (IFileSystem));
 			CreateProcessExecutorMock(Cvs.DefaultCvsExecutable);
-			cvs = new Cvs((IHistoryParser) mockHistoryParser.MockInstance, (ProcessExecutor) mockProcessExecutor.MockInstance, 
-			              (CvsHistoryCommandParser) mockHistoryDirectoryParser.MockInstance, (IFileSystem)mockFileSystem.MockInstance);
+			cvs = new Cvs((IHistoryParser) mockHistoryParser.MockInstance, (ProcessExecutor) mockProcessExecutor.MockInstance, (IFileSystem)mockFileSystem.MockInstance);
 			from = new DateTime(2001, 1, 21, 20, 0, 0);
 			to = from.AddDays(1);
 		}
@@ -40,17 +37,16 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 		{
 			Verify();
 			mockHistoryParser.Verify();
-			mockHistoryDirectoryParser.Verify();
 			mockFileSystem.Verify();
 		}
 
 		private const string xml = @"<sourceControl type=""cvs"" autoGetSource=""true"">
       <executable>..\tools\cvs.exe</executable>
       <workingDirectory>..</workingDirectory>
-	  <useHistory>true</useHistory>
       <cvsroot>myCvsRoot</cvsroot>
 	  <branch>branch</branch>
 	  <module>module</module>
+	  <suppressRevisionHeader>true</suppressRevisionHeader>
     </sourceControl>";
 
 		[Test]
@@ -62,9 +58,9 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 			Assert.AreEqual("myCvsRoot", cvs.CvsRoot);
 			Assert.AreEqual("branch", cvs.Branch);
 			Assert.AreEqual(true, cvs.AutoGetSource);
-			Assert.AreEqual(true, cvs.UseHistory);
 			Assert.AreEqual(true, cvs.CleanCopy);
 			Assert.AreEqual("module", cvs.Module);
+			Assert.AreEqual(true, cvs.SuppressRevisionHeader);
 		}
 
 		[Test]
@@ -75,6 +71,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 			Assert.AreEqual(@"c:\cvs\cvs.exe", cvs.Executable);
 			Assert.AreEqual(@":local:C:\dev\CVSRoot", cvs.CvsRoot);
 			Assert.AreEqual(@"ccnet", cvs.Module);
+			Assert.IsFalse(cvs.SuppressRevisionHeader);
 		}
 
 		[Test]
@@ -110,7 +107,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 		}
 
 		[Test]
-		public void ShouldBuildCorrectHistoryProcessIfRestrictedLogins()
+		public void ShouldBuildCorrectLogProcessIfRestrictedLogins()
 		{
 			ExpectToExecuteArguments(string.Format(@"-d myCvsRoot -q rlog -N -b ""-d>{0}"" -wexortech -wmonkey module", cvs.FormatCommandDate(from)));
 			ExpectToParseAndReturnNoModifications();
@@ -123,37 +120,15 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 		}
 
 		[Test]
-		public void VerifyLogCommandArgumentsUsingHistoryWithDirectory()
+		public void ShouldBuildCorrectLogProcessIfSuppressRevisionHeaderIsSelected()
 		{
-			ExpectToExecuteArguments(string.Format(@"history -x MAR -a -D ""{0}""", cvs.FormatCommandDate(from)));
-			ExpectToExecuteArguments(string.Format(@"-q rlog -N -b -l ""-d>{0}"" ""{1}""", cvs.FormatCommandDate(from), @"\temp"));
+			ExpectToExecuteArguments(string.Format(@"-d myCvsRoot -q rlog -N -S -b ""-d>{0}"" module", cvs.FormatCommandDate(from)));
 			ExpectToParseAndReturnNoModifications();
-			mockHistoryDirectoryParser.ExpectAndReturn("ParseOutputFrom", new string[] {@"\temp"}, ProcessResultOutput);
 
-			cvs.UseHistory = true;
-			cvs.WorkingDirectory = DefaultWorkingDirectory;
-			cvs.GetModifications(IntegrationResult(from), IntegrationResult(to));
-		}
-
-		[Test]
-		public void VerifyLogCommandArgumentsUsingHistoryWithNoDirectoryDoesNotExecuteLogCommand()
-		{
-			ExpectToExecuteArguments(string.Format(@"history -x MAR -a -D ""{0}""", cvs.FormatCommandDate(from)));
-			mockHistoryDirectoryParser.ExpectAndReturn("ParseOutputFrom", new string[0], ProcessResultOutput);
-
-			cvs.UseHistory = true;
-			cvs.WorkingDirectory = DefaultWorkingDirectory;
-			cvs.GetModifications(IntegrationResult(from), IntegrationResult(to));
-		}
-
-		[Test]
-		public void VerifyHistoryArgumentUsingCvsRoot()
-		{
-			ExpectToExecuteArguments(string.Format(@"-d myCvsRoot history -x MAR -a -D ""{0}""", cvs.FormatCommandDate(from)));
-			mockHistoryDirectoryParser.ExpectAndReturn("ParseOutputFrom", new string[0], ProcessResultOutput);
-
-			cvs.UseHistory = true;
 			cvs.CvsRoot = "myCvsRoot";
+			cvs.Module = "module";
+			cvs.SuppressRevisionHeader = true;
+			cvs.WorkingDirectory = DefaultWorkingDirectory;
 			cvs.GetModifications(IntegrationResult(from), IntegrationResult(to));
 		}
 
@@ -198,7 +173,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 		[Test]
 		public void ShouldCheckoutInsteadOfUpdateIfCVSFoldersDoNotExist()
 		{
-			ExpectToExecuteArguments(@"-d :pserver:anonymous@ccnet.cvs.sourceforge.net:/cvsroot/ccnet checkout -R -P -d c:\source\ ccnet");
+			ExpectToExecuteArguments(@"-d :pserver:anonymous@ccnet.cvs.sourceforge.net:/cvsroot/ccnet -q checkout -R -P -d c:\source\ ccnet");
 			ExpectCvsDirectoryExists(false);
 
 			cvs.CvsRoot = ":pserver:anonymous@ccnet.cvs.sourceforge.net:/cvsroot/ccnet";
@@ -211,7 +186,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 		[Test]
 		public void ShouldCheckoutFromBranchInsteadOfUpdateIfCVSFoldersDoNotExist()
 		{
-			ExpectToExecuteArguments(@"-d :pserver:anonymous@ccnet.cvs.sourceforge.net:/cvsroot/ccnet checkout -R -P -r branch -d c:\source\ ccnet");
+			ExpectToExecuteArguments(@"-d :pserver:anonymous@ccnet.cvs.sourceforge.net:/cvsroot/ccnet -q checkout -R -P -r branch -d c:\source\ ccnet");
 			ExpectCvsDirectoryExists(false);
 
 			cvs.CvsRoot = ":pserver:anonymous@ccnet.cvs.sourceforge.net:/cvsroot/ccnet";
