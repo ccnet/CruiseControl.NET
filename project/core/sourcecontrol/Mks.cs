@@ -11,7 +11,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 	{
 		public const string DefaultExecutable = "si.exe";
 		public const int DefaultPort = 8722;
-		public const bool DefaultAutoGetSource = false;
+		public const bool DefaultAutoGetSource = true;
 
 		public Mks() : this(new MksHistoryParser(), new ProcessExecutor())
 		{

@@ -196,6 +196,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 		public void OnlyGetSourceIfAutoGetSourceIsSpecified()
 		{
 			ExpectThatExecuteWillNotBeCalled();
+			vss.AutoGetSource = false;
 			vss.GetSource(IntegrationResultMother.CreateSuccessful(today));
 		}
 
@@ -306,6 +307,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 			result.StartTime = new DateTime(2005, 6, 10, 18, 24, 31);
 				
 			vss.ApplyLabel = true;
+			vss.AutoGetSource = false;
 			vss.GetSource(result);
 			vss.LabelSourceControl(result);
 		}

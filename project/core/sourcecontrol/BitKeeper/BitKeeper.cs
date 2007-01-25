@@ -37,7 +37,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.BitKeeper
 		/// Automatically pull latest source into permanent BK repository
 		/// </summary>
 		[ReflectorProperty("autoGetSource", Required = false)]
-		public bool AutoGetSource = false;
+		public bool AutoGetSource = true;
 
 		/// <summary>
 		/// Include history of each file, rather than just ChangeSets

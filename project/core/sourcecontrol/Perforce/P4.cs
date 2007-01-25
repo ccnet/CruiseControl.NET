@@ -59,7 +59,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Perforce
 		public bool ApplyLabel = false;
 
 		[ReflectorProperty("autoGetSource", Required = false)]
-		public bool AutoGetSource = false;
+		public bool AutoGetSource = true;
 
 		[ReflectorProperty("forceSync", Required = false)]
 		public bool ForceSync = false;

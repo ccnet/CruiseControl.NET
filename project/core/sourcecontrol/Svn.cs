@@ -47,7 +47,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 		public string Password;
 
 		[ReflectorProperty("autoGetSource", Required = false)]
-		public bool AutoGetSource = false;
+		public bool AutoGetSource = true;
 
 		private IFileSystem fileSystem;
 

@@ -46,7 +46,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 		public IModificationUrlBuilder UrlBuilder = new NullUrlBuilder();
 
 		[ReflectorProperty("autoGetSource", Required = false)]
-		public bool AutoGetSource = false;
+		public bool AutoGetSource = true;
 
 		[ReflectorProperty("cleanCopy", Required = false)]
 		public bool CleanCopy = true;

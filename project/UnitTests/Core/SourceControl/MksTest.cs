@@ -78,7 +78,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 			Mks defalutMks = new Mks();
 			Assert.AreEqual(@"si.exe", defalutMks.Executable);
 			Assert.AreEqual(8722, defalutMks.Port);
-			Assert.AreEqual(false, defalutMks.AutoGetSource);
+			Assert.AreEqual(true, defalutMks.AutoGetSource);
 			Assert.AreEqual(false, defalutMks.CheckpointOnSuccess);
 		}
 

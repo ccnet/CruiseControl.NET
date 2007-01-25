@@ -69,7 +69,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 		public bool ApplyLabel = false;
 
 		[ReflectorProperty("autoGetSource", Required = false)]
-		public bool AutoGetSource = false;
+		public bool AutoGetSource = true;
 
 		[ReflectorProperty("workingDirectory", Required = false)]
 		public string WorkingDirectory;

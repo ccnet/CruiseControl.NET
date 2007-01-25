@@ -23,7 +23,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 		private int    _port;
 		private string _project;
 		private string _path;
-		private bool _autoGetSource;
+		private bool _autoGetSource = true;
 		private string _pathOverrideViewWorkingDir;
 		private string _pathOverrideFolderWorkingDir;
 

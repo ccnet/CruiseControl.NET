@@ -130,7 +130,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 			Assert.AreEqual("repository", vault.Repository);
 			Assert.AreEqual("$", vault.Folder);
 			Assert.AreEqual(false, vault.Ssl);
-			Assert.AreEqual(false, vault.AutoGetSource);
+			Assert.AreEqual(true, vault.AutoGetSource);
 			Assert.AreEqual(false, vault.ApplyLabel);
 			Assert.AreEqual(true, vault.UseVaultWorkingDirectory);
 			Assert.AreEqual(VaultVersionChecker.DefaultHistoryArgs, vault.HistoryArgs);
@@ -639,6 +639,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 		{
 			ExpectToExecuteArguments(@"label $ foo" + SetAndGetCommonOptionalArguments());
 			vault.ApplyLabel = true;
+			vault.AutoGetSource = false;
 			vault.Folder = "$";
 			vault.LabelSourceControl(result);
 			VerifyAll();

@@ -202,7 +202,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 			Assert.AreEqual(PROJECT_PATH, alienbrain.Project);
 			Assert.AreEqual(string.Empty, alienbrain.WorkingDirectory);
 			Assert.AreEqual(string.Empty, alienbrain.Branch);
-			Assert.AreEqual(Convert.ToBoolean(false), alienbrain.AutoGetSource);
+			Assert.AreEqual(Convert.ToBoolean(true), alienbrain.AutoGetSource);
 			Assert.AreEqual(Convert.ToBoolean(false), alienbrain.LabelOnSuccess);
 		}
 

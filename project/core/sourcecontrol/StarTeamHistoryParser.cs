@@ -1,10 +1,8 @@
 using System;
-using System.IO;
 using System.Collections;
 using System.Globalization;
+using System.IO;
 using System.Text.RegularExpressions;
-using System.Text;
-using ThoughtWorks.CruiseControl.Core.Util;
 
 namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 {
@@ -15,8 +13,8 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 	public class StarTeamHistoryParser : IHistoryParser
 	{
 		private readonly IStarTeamRegExProvider starTeamRegExProvider;
-		internal readonly static string FolderInfoSeparator  = "Folder: ";
-		internal readonly static string FileHistorySeparator = "----------------------------";
+		internal static readonly string FolderInfoSeparator = "Folder: ";
+		internal static readonly string FileHistorySeparator = "----------------------------";
 
 //		DateTimeFormatInfo dfi;
 		public CultureInfo Culture = CultureInfo.CurrentCulture;
@@ -38,7 +36,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 		/// <returns></returns>
 		public Modification[] Parse(TextReader starTeamLog, DateTime from, DateTime to)
 		{
-			Regex folderRegex = new Regex(starTeamRegExProvider.FolderRegEx);        
+			Regex folderRegex = new Regex(starTeamRegExProvider.FolderRegEx);
 			Regex fileRegex = new Regex(starTeamRegExProvider.FileRegEx);
 			Regex historyRegex = new Regex(starTeamRegExProvider.FileHistoryRegEx);
 
@@ -48,16 +46,16 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			// Read conetent of the stream as a string
 			// ASSUMPTION: entire log fits into the available memory
 			String s = starTeamLog.ReadToEnd();
-			
+
 			// Append folder info separator at the end of the string so
 			// that the regular expression engine does not miss the last
 			// folder's information. This is required because of the way
 			// the expression FolderRegEx is constructed.
-			s += StarTeamHistoryParser.FolderInfoSeparator;
+			s += FolderInfoSeparator;
 
 			// Parse the whole content to separate the info about each
 			// folder and the files it has
-			for (Match mFolder = folderRegex.Match(s); mFolder.Success; mFolder = mFolder.NextMatch()) 
+			for (Match mFolder = folderRegex.Match(s); mFolder.Success; mFolder = mFolder.NextMatch())
 			{
 				// Working folder
 				String folder = mFolder.Result("${working_directory}");
@@ -72,14 +70,14 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 					mod.FolderName = folder;
 					mod.FileName = mFile.Result("${file_name}");
 					mod.Type = mFile.Result("${file_status}");
-					
+
 					// Substring that contains file history. Append a new line 
 					// followed by the FileHistorySeparator so that the parse
 					// engine can extract the comments for the last history
 					String fileHistory = mFile.Result("${file_history}") + "\n" +
-						                 StarTeamHistoryParser.FileHistorySeparator;
-					
-	    			// Only get the first match which describes the 
+					                     FileHistorySeparator;
+
+					// Only get the first match which describes the 
 					// most recent changes
 					Match mHistory = historyRegex.Match(fileHistory);
 					if (mHistory.Success)
@@ -94,9 +92,9 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 						mod.Comment = mHistory.Result("${change_comment}");
 					}
 					modList.Add(mod);
-				}	    
+				}
 			}
-			return (Modification[])modList.ToArray(typeof(Modification));
+			return (Modification[]) modList.ToArray(typeof (Modification));
 		}
 	}
 }

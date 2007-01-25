@@ -136,6 +136,44 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 			return mock;
 		}
 
+		
+		[Test]
+		public void IfRequireChangesFromAllTrueAndAllSourceControlHasModificationsThenReturnMods()
+		{
+			//// SETUP
+			IntegrationResult from = IntegrationResultMother.CreateSuccessful(DateTime.Now);
+			IntegrationResult to = IntegrationResultMother.CreateSuccessful(DateTime.Now.AddDays(10));
+
+			Modification mod1 = new Modification();
+			mod1.Comment = "Testing Multi";
+			Modification mod2 = new Modification();
+			mod2.Comment = "Testing Multi";
+
+			ArrayList mocks = new ArrayList();
+			mocks.Add(CreateModificationsSourceControlMock(new Modification[] {mod1}, from, to));
+			mocks.Add(CreateModificationsSourceControlMock(new Modification[] {mod2}, from, to));
+
+			ArrayList scList = new ArrayList();
+			foreach (DynamicMock mock in mocks)
+			{
+				scList.Add(mock.MockInstance);
+			}
+
+			MultiSourceControl multiSourceControl = new MultiSourceControl();
+			multiSourceControl.SourceControls = (ISourceControl[]) scList.ToArray(typeof (ISourceControl));
+			multiSourceControl.RequireChangesFromAll = true;
+
+			//// EXECUTE
+			ArrayList returnedMods = new ArrayList(multiSourceControl.GetModifications(from, to));
+			Assert.AreEqual(2, returnedMods.Count);
+
+			//// VERIFY
+			foreach (DynamicMock mock in mocks)
+			{
+				mock.Verify();
+			}
+		}
+		
 		[Test]
 		public void IfRequireChangesFromAllTrueAndSecondSourceControlHasEmptyChangesThenReturnEmpty()
 		{

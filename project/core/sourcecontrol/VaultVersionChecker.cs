@@ -50,7 +50,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol {
 		public bool Ssl = false;
 
 		[ReflectorProperty("autoGetSource", Required=false)]
-		public bool AutoGetSource = false;
+		public bool AutoGetSource = true;
 
 		[ReflectorProperty("applyLabel", Required=false)]
 		public bool ApplyLabel = false;
