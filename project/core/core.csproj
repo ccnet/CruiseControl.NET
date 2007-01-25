@@ -594,6 +594,11 @@
                     BuildAction = "Content"
                 />
                 <File
+                    RelPath = "publishers\xsl\MsTestSummary.xsl"
+                    Link = "..\xsl\MsTestSummary.xsl"
+                    BuildAction = "Content"
+                />
+                <File
                     RelPath = "publishers\xsl\unittests.xsl"
                     Link = "..\xsl\unittests.xsl"
                     BuildAction = "Content"

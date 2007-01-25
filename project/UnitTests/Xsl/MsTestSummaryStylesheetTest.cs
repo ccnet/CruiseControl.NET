@@ -1,8 +1,9 @@
+using System;
 using NUnit.Framework;
 
 namespace ThoughtWorks.CruiseControl.UnitTests.Xsl
 {
-	[TestFixture]
+	[TestFixture, Ignore("Ignore until example xml can be retrieved from new version of MSTest")]
 	public class MsTestSummaryStylesheetTest : StylesheetTestFixture
 	{
 		protected override string Stylesheet
@@ -28,6 +29,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Xsl
   <passedTestCount type=""System.Int32"">29</passedTestCount> 
 </result></TestRun>");
 			string actualXml = LoadStylesheetAndTransformInput(xml);
+			Console.Out.WriteLine("actualXml = {0}", actualXml);
 			CustomAssertion.AssertContains("Tests run: 29", actualXml);
 			CustomAssertion.AssertContains("Failures: 0", actualXml);
 			CustomAssertion.AssertContains("Not run: 0", actualXml);
