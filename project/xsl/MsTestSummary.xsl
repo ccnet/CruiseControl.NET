@@ -5,46 +5,60 @@
     <xsl:output method="html"/>
     
     <xsl:template match="/">
-		<xsl:variable name="mstest.resultnodes" select="//Tests/TestRun/result" />
-		
-		<xsl:if test="count($mstest.resultnodes)>0">
-			<xsl:variable name="mstest.testcount" select="sum($mstest.resultnodes/totalTestCount)" />		
-			<xsl:variable name="mstest.executedcount" select="sum($mstest.resultnodes/executedTestCount)" />		
-			<xsl:variable name="mstest.failurecount" select="$mstest.executedcount - sum($mstest.resultnodes/passedTestCount)" />		
-			<table class="section-table" cellpadding="2" cellspacing="0" border="0" width="98%">
-				<tr>
-					<td class="sectionheader" colspan="2">
-						Tests run: <xsl:value-of select="$mstest.executedcount"/>
-						Failures: <xsl:value-of select="$mstest.failurecount" />
-						Not run: <xsl:value-of select="$mstest.testcount - sum($mstest.resultnodes/executedTestCount)" />
-					</td>
-				</tr>
-				<xsl:choose>
-					<xsl:when test="$mstest.failurecount = 0">
-						<tr>
-							<td class="section-data" colspan="2">All tests passed.</td>
-						</tr>
-					</xsl:when>
-					<xsl:otherwise>
-						<xsl:apply-templates select="//Tests/UnitTestResult[outcome/value__ = 1]" />
-					</xsl:otherwise>
-				</xsl:choose>
-			</table>
-		</xsl:if>		
+			<xsl:variable name="pass_count" select="count(/cruisecontrol/build/Tests/UnitTestResult[outcome=10])"/>
+			<xsl:variable name="inconclusive_count" select="count(/cruisecontrol/build/Tests/UnitTestResult[outcome=4])"/>
+			<xsl:variable name="failed_count" select="count(/cruisecontrol/build/Tests/UnitTestResult[outcome=1])"/>
+			<xsl:variable name="total_count" select="$failed_count + $pass_count + $inconclusive_count"/>
+
+			<xsl:if test="$total_count != 0">
+				<table class="section-table" cellpadding="2" cellspacing="0" border="0" width="98%">
+					<tr>
+						<td class="sectionheader" colspan="3">
+							Tests run: <xsl:value-of select="$total_count"/>
+							Failures: <xsl:value-of select="$failed_count" />
+							Inconclusive: <xsl:value-of select="$inconclusive_count" />
+						</td>
+					</tr>
+					<xsl:choose>
+						<xsl:when test="$total_count = $pass_count">
+							<tr>
+								<td class="section-data" colspan="2">All tests passed.</td>
+							</tr>
+						</xsl:when>
+						<xsl:otherwise>
+							<xsl:apply-templates select="//Tests/UnitTestResult[outcome!=10]" />
+						</xsl:otherwise>
+					</xsl:choose>
+				</table>
+			</xsl:if>
     </xsl:template>
     
     <xsl:template match="UnitTestResult">
-		<tr>
-			<td class="section-data" valign="top">Test:</td>
-			<td class="section-data"><xsl:value-of select="testName" /></td>
-		</tr>
-		<tr>
-			<td class="section-data" valign="top">Message:</td>
-			<td class="section-data"><xsl:value-of select="errorInfo/message" /></td>
-		</tr>
-		<tr>
-			<td class="section-data" valign="top">Stacktrace:</td>
-			<td class="section-data"><pre><xsl:value-of select="errorInfo/stackTrace" /></pre></td>
-		</tr>
+			<xsl:variable name="testId" select="id/testId/id"/>
+			<xsl:variable name="testDetails" select="/cruisecontrol/build/Tests/TestRun/tests/value[id=$testId]"/>
+			<tr>
+				<xsl:choose>
+					<xsl:when test="outcome = 1">
+						<td bgcolor="FF0000" align="center"> F </td>
+					</xsl:when>
+					<xsl:when test="outcome = 4">
+						<td bgcolor="FFCC00" align="center"> I </td>
+					</xsl:when>
+					<xsl:otherwise>
+						<td bgcolor="3399FF" align="center"> ? </td>
+					</xsl:otherwise>
+				</xsl:choose>
+				<td>
+					<script type="text/javascript">
+						var str= &quot; <xsl:value-of select="$testDetails/testMethod/className"/> &quot;
+						var pos=str.indexOf(",");
+						if (pos>=0) { var cs = str.substring(0, pos); document.write(cs); }
+						else { document.write("&lt; class name not specified&gt;"); }
+					</script>.<xsl:value-of select="$testDetails/testMethod/name"/>
+				</td>
+				<td>
+					<xsl:value-of select="errorInfo/message"/>
+				</td>
+			</tr>
     </xsl:template>
 </xsl:stylesheet>
