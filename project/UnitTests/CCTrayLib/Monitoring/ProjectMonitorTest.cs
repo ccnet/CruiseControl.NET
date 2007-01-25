@@ -11,6 +11,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Monitoring
 	[TestFixture]
 	public class ProjectMonitorTest
 	{
+		private StubCurrentTimeProvider dateTimeProvider;
 		private DynamicMock mockProjectManager;
 		private ProjectMonitor monitor;
 		private int pollCount;
@@ -24,7 +25,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Monitoring
 			buildOccurredCount = pollCount = 0;
 			mockProjectManager = new DynamicMock(typeof (ICruiseProjectManager));
 			mockProjectManager.Strict = true;
-			monitor = new ProjectMonitor((ICruiseProjectManager) mockProjectManager.MockInstance);
+			dateTimeProvider = new StubCurrentTimeProvider();
+			monitor = new ProjectMonitor((ICruiseProjectManager) mockProjectManager.MockInstance, dateTimeProvider);
 			monitor.Polled += new MonitorPolledEventHandler(Monitor_Polled);
 			monitor.BuildOccurred += new MonitorBuildOccurredEventHandler(Monitor_BuildOccurred);
 		}
@@ -103,6 +105,30 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Monitoring
 			monitor.Poll();
 
 			Assert.AreEqual(2, buildOccurredCount);
+		}
+
+		[Test]
+		public void ShouldCorrectlyReportEstimatedTimeWhenANewBuildStartsDuringThePollInterval()
+		{
+			ProjectStatus firstBuildStatus = 
+				ProjectStatusFixture.New(IntegrationStatus.Success, ProjectActivity.Building, new DateTime(2007,1,1,0,0,0));
+			mockProjectManager.ExpectAndReturn("ProjectStatus", firstBuildStatus);
+			dateTimeProvider.SetNow(new DateTime(2007, 1, 1, 1, 0, 0));
+			monitor.Poll();
+			
+			ProjectStatus secondBuildStatus = 
+				ProjectStatusFixture.New(IntegrationStatus.Success, ProjectActivity.Building, new DateTime(2007,1,1,2,0,0));
+			mockProjectManager.ExpectAndReturn("ProjectStatus", secondBuildStatus);
+			dateTimeProvider.SetNow(new DateTime(2007, 1, 1, 3, 0, 0));
+			monitor.Poll();
+			
+			ProjectStatus thirdBuildStatus = 
+				ProjectStatusFixture.New(IntegrationStatus.Success, ProjectActivity.Building, new DateTime(2007,1,1,4,0,0));
+			mockProjectManager.ExpectAndReturn("ProjectStatus", thirdBuildStatus);
+			dateTimeProvider.SetNow(new DateTime(2007, 1, 1, 5, 0, 0));
+			monitor.Poll();
+			
+			Assert.AreEqual(new TimeSpan(2,0,0), monitor.EstimatedTimeRemainingOnCurrentBuild);
 		}
 
 		[Test]

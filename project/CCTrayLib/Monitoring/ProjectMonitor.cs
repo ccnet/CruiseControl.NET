@@ -9,11 +9,17 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
 		private ICruiseProjectManager cruiseProjectManager;
 		private ProjectStatus lastProjectStatus;
 		private Exception connectException;
-		private BuildDurationTracker buildDurationTracker = new BuildDurationTracker();
+		private BuildDurationTracker buildDurationTracker;
 
 		public ProjectMonitor(ICruiseProjectManager cruiseProjectManager)
+			: this(cruiseProjectManager, new DateTimeProvider())
 		{
-			this.cruiseProjectManager = cruiseProjectManager;
+		}
+		
+		public ProjectMonitor(ICruiseProjectManager cruiseProjectManager, DateTimeProvider dateTimeProvider)
+		{
+			buildDurationTracker = new BuildDurationTracker(dateTimeProvider);
+			this.cruiseProjectManager = cruiseProjectManager;			
 		}
 
 		// public for testing only
@@ -119,8 +125,6 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
 				ProjectStatus newProjectStatus = cruiseProjectManager.ProjectStatus;
 				if (lastProjectStatus != null && newProjectStatus != null)
 				{
-					CheckForBuildStart(lastProjectStatus, newProjectStatus);
-
 					if (lastProjectStatus.LastBuildDate != newProjectStatus.LastBuildDate)
 					{
 						BuildTransition transition = CalculateBuildTransition(lastProjectStatus, newProjectStatus);
@@ -128,6 +132,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
 						CheckForSuccessfulBuild(transition);
 						OnBuildOccurred(new MonitorBuildOccurredEventArgs(this, transition));
 					}
+					CheckForBuildStart(lastProjectStatus, newProjectStatus);
 
 					if (lastProjectStatus.Messages.Length < newProjectStatus.Messages.Length)
 					{
@@ -156,7 +161,10 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
 
 		private void CheckForBuildStart(ProjectStatus lastProjectStatus, ProjectStatus newProjectStatus)
 		{
-			if (! lastProjectStatus.Activity.IsBuilding() && newProjectStatus.Activity.IsBuilding())
+			bool isStartDetectedFromStatusChange = !lastProjectStatus.Activity.IsBuilding() && newProjectStatus.Activity.IsBuilding();
+			bool isStartDetectedFromDateChange = lastProjectStatus.Activity.IsBuilding() && newProjectStatus.Activity.IsBuilding()
+				&& (lastProjectStatus.LastBuildDate != newProjectStatus.LastBuildDate);
+			if (isStartDetectedFromStatusChange || isStartDetectedFromDateChange)
 			{
 				buildDurationTracker.OnBuildStart();
 			}

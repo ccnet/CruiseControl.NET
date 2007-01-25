@@ -24,6 +24,11 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 		{
 			return New(DefaultProject, activity, integrationStatus, DefaultIntegratorState, DefaultLabel, DefaultLastBuildDate);
 		}
+		
+		public static ProjectStatus New(IntegrationStatus integrationStatus, ProjectActivity activity, DateTime lastBuildDate)
+		{
+			return New(DefaultProject, activity, integrationStatus, DefaultIntegratorState, DefaultLabel, lastBuildDate);
+		}		
 
 		public static ProjectStatus New(string projectName)
 		{
@@ -40,9 +45,9 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 			return New(name, integrationStatus, DefaultLastBuildDate);
 		}
 
-		public static ProjectStatus New(string name, IntegrationStatus integrationStatus, DateTime dateTime)
+		public static ProjectStatus New(string name, IntegrationStatus integrationStatus, DateTime lastBuildDate)
 		{
-			return New(name, ProjectActivity.Building, integrationStatus, DefaultIntegratorState, DefaultLabel, dateTime);
+			return New(name, ProjectActivity.Building, integrationStatus, DefaultIntegratorState, DefaultLabel, lastBuildDate);
 		}
 
 		public static ProjectStatus New(ProjectActivity activity, string label)
