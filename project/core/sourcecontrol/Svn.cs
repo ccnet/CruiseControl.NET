@@ -11,7 +11,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 	public class Svn : ProcessSourceControl
 	{
 		public const string DefaultExecutable = "svn.exe";
-		internal static readonly string COMMAND_DATE_FORMAT = "yyyy-MM-ddTHH:mm:ssZ";
+		public static readonly string UtcXmlDateFormat = "yyyy-MM-ddTHH:mm:ssZ";
 
 		public Svn(ProcessExecutor executor, IHistoryParser parser, IFileSystem fileSystem) : base(parser, executor)
 		{
@@ -53,7 +53,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 
 		public string FormatCommandDate(DateTime date)
 		{
-			return date.ToUniversalTime().ToString(COMMAND_DATE_FORMAT, CultureInfo.InvariantCulture);
+			return date.ToUniversalTime().ToString(UtcXmlDateFormat, CultureInfo.InvariantCulture);
 		}
 
 		public override Modification[] GetModifications(IIntegrationResult from, IIntegrationResult to)

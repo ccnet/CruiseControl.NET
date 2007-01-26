@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.Globalization;
 using System.IO;
 using System.Xml;
 
@@ -114,28 +115,28 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			return int.Parse(revision);
 		}
 
-		internal string GetFolderFromPath(string fullFileName)
+		private string GetFolderFromPath(string fullFileName)
 		{
 			int lastSlashIdx = fullFileName.LastIndexOf("/");
 			return fullFileName.Substring(0, lastSlashIdx);
 		}
 
-		internal string GetFileFromPath(string fullFileName)
+		private string GetFileFromPath(string fullFileName)
 		{
 			int lastSlashIdx = fullFileName.LastIndexOf("/");
 			return fullFileName.Substring(lastSlashIdx + 1);
 		}
 
-		internal string GetAttributeFromNode(XmlNode node, string attributeName)
+		private string GetAttributeFromNode(XmlNode node, string attributeName)
 		{
 			XmlAttributeCollection attributes = node.Attributes;
 			XmlAttribute attribute = (XmlAttribute) attributes.GetNamedItem(attributeName);
 			return attribute.InnerText;
 		}
 
-		internal DateTime ParseDate(string date)
+		private DateTime ParseDate(string date)
 		{
-			return DateTime.Parse(date);
+			return DateTime.Parse(date, CultureInfo.InvariantCulture, DateTimeStyles.AdjustToUniversal).ToLocalTime();
 		}
 	}
 }
