@@ -1,0 +1,93 @@
+<html>
+    <head>
+        <title>CruiseControl.NET : Using CruiseControl.NET with NDepend</title>
+	    <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">	    
+    </head>
+
+    <body>
+	    <table class="pagecontent" border="0" cellpadding="0" cellspacing="0" width="100%" bgcolor="#ffffff">
+		    <tr>
+			    <td valign="top" class="pagebody">
+				    <div class="pageheader">
+					    <span class="pagetitle">
+                            CruiseControl.NET : Using CruiseControl.NET with NDepend
+                                                    </span>
+				    </div>
+				    <div class="pagesubheading">
+					    This page last changed on Dec 17, 2006 by <font color="#0050B2">dcameron</font>.
+				    </div>
+
+				    <h2><a name="UsingCruiseControl.NETwithNDepend-RunNDependaspartofyourintegration"></a>Run NDepend as part of your integration</h2>
+
+
+<h4><a name="UsingCruiseControl.NETwithNDepend-RunNDependaspartofyourNAntbuild"></a>Run NDepend as part of your NAnt build</h4>
+
+<p>In order to get the results of NDepend included in the CruiseControl.NET build results, you will need to setup a NDepend project file that includes information about which Assemblies to analyze and which types of analysis to do. NDepend comes with a NDepend.Project GUI application to create project files. For more information see the demos at the NDepend site, <a href="http://www.ndepend.com/NDependProject.aspx" title="Visit page outside Confluence">http://www.ndepend.com/NDependProject.aspx</a>.</p>
+
+<p>Once you have the project file, you need to include a call to NDepend.Console.exe in your NAnt build file and pass it the name of the NDepend project file. We recommend you use a target like this, with paths relative to the location where NAnt was run from:</p>
+<div class="code"><div class="codeContent">
+<pre class="code-xml"><span class="code-tag">&lt;target name=<span class="code-quote">"-run-ndepend"</span> &gt;</span>
+	<span class="code-tag">&lt;exec program=<span class="code-quote">"Tools\BuildMetrics\NDepend\NDepend.Console.exe"</span>&gt;</span>
+		<span class="code-tag">&lt;arg value=<span class="code-quote">"Tools\BuildMetrics\NDepend\MyProject.NDependProject.xml"</span> /&gt;</span>
+		<span class="code-tag">&lt;arg value=<span class="code-quote">"/Silent"</span> /&gt;</span>
+	<span class="code-tag">&lt;/exec&gt;</span>
+<span class="code-tag">&lt;/target&gt;</span></pre>
+</div></div>
+
+<h4><a name="UsingCruiseControl.NETwithNDepend-RunNDependasaCruiseControl.NETTask"></a>Run NDepend as a CruiseControl.NET Task</h4>
+
+<p>We don't currently support running NDepend directly from CruiseControl.NET.</p>
+
+<h2><a name="UsingCruiseControl.NETwithNDepend-MergeNDependresultsintoyourCruiseControl.NETresults"></a>Merge NDepend results into your CruiseControl.NET results</h2>
+
+<p>The next step is to merge the NDepend report files into the integration result using the <a href="File Merge Task.html" title="File Merge Task">File Merge Task</a>. Your <a href="CruiseControl.NET Server.html" title="CruiseControl.NET Server">CruiseControl.NET Server</a> config file will have something in it like :</p>
+<div class="code"><div class="codeContent">
+<pre class="code-xml"><span class="code-tag">&lt;tasks&gt;</span>
+    <span class="code-tag">&lt;merge&gt;</span>
+        <span class="code-tag">&lt;files&gt;</span>
+            <span class="code-tag">&lt;file&gt;</span>d:\sourceforge\ccnet\build\log\unit-test.xml<span class="code-tag">&lt;/file&gt;</span>
+            <span class="code-tag"><span class="code-comment">&lt;!-- Add your NDepend report files as follows --&gt;</span></span>
+            <span class="code-tag">&lt;file&gt;</span>d:\sourceforge\ccnet\build\log\NDependOut\ApplicationMetrics.xm3l<span class="code-tag">&lt;/file&gt;</span>
+            <span class="code-tag">&lt;file&gt;</span>d:\sourceforge\ccnet\build\log\NDependOut\AssembliesBuildOrder.xml<span class="code-tag">&lt;/file&gt;</span>
+            <span class="code-tag">&lt;file&gt;</span>d:\sourceforge\ccnet\build\log\NDependOut\AssembliesDependencies.xml<span class="code-tag">&lt;/file&gt;</span>
+            <span class="code-tag">&lt;file&gt;</span>d:\sourceforge\ccnet\build\log\NDependOut\AssembliesMetrics.xml<span class="code-tag">&lt;/file&gt;</span>
+            <span class="code-tag">&lt;file&gt;</span>d:\sourceforge\ccnet\build\log\NDependOut\CQLResult.xml<span class="code-tag">&lt;/file&gt;</span>
+            <span class="code-tag">&lt;file&gt;</span>d:\sourceforge\ccnet\build\log\NDependOut\InfoWarnings.xml<span class="code-tag">&lt;/file&gt;</span>
+            <span class="code-tag">&lt;file&gt;</span>d:\sourceforge\ccnet\build\log\NDependOut\NDependMain.xml<span class="code-tag">&lt;/file&gt;</span>
+            <span class="code-tag">&lt;file&gt;</span>d:\sourceforge\ccnet\build\log\NDependOut\TypesDependencies.xml<span class="code-tag">&lt;/file&gt;</span>
+            <span class="code-tag">&lt;file&gt;</span>d:\sourceforge\ccnet\build\log\NDependOut\TypesMetrics.xml<span class="code-tag">&lt;/file&gt;</span>
+        <span class="code-tag">&lt;/files&gt;</span>
+    <span class="code-tag">&lt;/merge&gt;</span>
+<span class="code-tag">&lt;/tasks&gt;</span></pre>
+</div></div>
+
+<h2><a name="UsingCruiseControl.NETwithNDepend-ConfiguringyourReportingApplicationtodisplayNDependresults"></a>Configuring your Reporting Application to display NDepend results</h2>
+
+<p>For displaying the results, the NDepend distribution includes a default stylesheet for use with CC.NET. It is in the NDepend distribution at <tt>&lt;ndepend distribution&gt;\CruiseControl.NET\ndependreport-ccnet.v2.xsl</tt></p>
+
+<p>If you are using the <a href="Web Dashboard.html" title="Web Dashboard">Web Dashboard</a>, the most straightforward way to include this report in the dashboard is to copy the xsl file to the same location as the default xsl files, which should be <tt>&lt;webdashboard folder&gt;\xsl</tt>. Then, edit your <tt>dashboard.config</tt> file and include the <tt>ndependreport-ccnet.v2.xsl</tt> file under the <tt>&lt;dashboard&gt;/&lt;plugins&gt;/&lt;buildPlugins&gt;/&lt;buildReportBuildPlugin&gt;/&lt;xslFileNames&gt;</tt> section like:</p>
+<div class="code"><div class="codeContent">
+<pre class="code-xml"><span class="code-tag">&lt;xslFile&gt;</span>xsl\ndependreport-ccnet.v2.xsl<span class="code-tag">&lt;/xslFile&gt;</span></pre>
+</div></div>
+<p>Also add the following to the <tt>&lt;dashboard&gt;/&lt;plugins&gt;/&lt;buildPlugins&gt;</tt> section as:</p>
+<div class="code"><div class="codeContent">
+<pre class="code-xml"><span class="code-tag">&lt;xslReportBuildPlugin description=<span class="code-quote">"NDepend Report"</span> actionName=<span class="code-quote">"NDependBuildReport"</span> xslFileName=<span class="code-quote">"xsl\ndependreport-ccnet.v2.xsl"</span> /&gt;</span></pre>
+</div></div>
+
+<p>Unfortunately, because of limitations in CruiseControl.NET, the images that NDepends generates will not be available from the dashboard. This is a limitation we hope to overcome in a future version. However, until that work has been done it is possible to work around the limitation. Robin Curry explains his approach at his blog, <a href="http://www.robincurry.org/blog/IntegratingImagesIntoCustomCruiseControlNETBuildReports.aspx" title="Visit page outside Confluence">http://www.robincurry.org/blog/IntegratingImagesIntoCustomCruiseControlNETBuildReports.aspx</a>. He also has another explanation of integrating NDepend in to a CruiseControl.NET build at <a href="http://www.robincurry.org/blog/IntegratingNDependCodeMetricsIntoAnNAntCruiseControlNETBuild.aspx" title="Visit page outside Confluence">http://www.robincurry.org/blog/IntegratingNDependCodeMetricsIntoAnNAntCruiseControlNETBuild.aspx</a>. This would also appear to require manual editing of the <tt>ndependreport-ccnet.v2.xsl</tt> file.</p>
+
+				    
+                    			    </td>
+		    </tr>
+	    </table>
+	    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+			<tr>
+				<td height="12" background="border/border_bottom.gif"><img src="border/spacer.gif" width="1" height="1" border="0"/></td>
+			</tr>
+		    <tr>
+			    <td align="center"><font color="grey">Document generated by Confluence on Jan 25, 2007 17:46</font></td>
+		    </tr>
+	    </table>
+    </body>
+</html>

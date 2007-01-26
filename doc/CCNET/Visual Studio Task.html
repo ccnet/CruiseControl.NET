@@ -15,24 +15,21 @@
                                                     </span>
 				    </div>
 				    <div class="pagesubheading">
-					    This page last changed on Mar 21, 2006 by <font color="#0050B2">gfeldman</font>.
+					    This page last changed on Jan 23, 2007 by <font color="#0050B2">gfeldman</font>.
 				    </div>
 
-				    <p>Most complex build processes use <a href="http://nant.sourceforge.net" title="Visit page outside Confluence">NAnt </a> or <a href="http://msdn.microsoft.com/longhorn/default.aspx?pull=/library/en-us/dnlong/html/msbuildpart1.asp" title="Visit page outside Confluence">MSBuild </a> to script out the build process.  However, for simple projects that just need to compile a Visual Studio.NET solution, the DevenvBuilder provides an easy way to compile your project using the <tt>&lt;devenv&gt;</tt> task.</p>
+				    <p>Most complex build processes use <a href="http://nant.sourceforge.net" title="Visit page outside Confluence">NAnt </a> or <a href="http://msdn2.microsoft.com/en-us/library/ms171452.aspx" title="Visit page outside Confluence">MSBuild </a> to script the build.  However, for simple projects that just need to build a Visual Studio.NET solution, the Visual Studio task <tt>&lt;devenv&gt;</tt> provides an easier method.</p>
 
 <h4><a name="VisualStudioTask-Examples"></a>Examples</h4>
 
 <p>Minimalist example:</p>
-
 <div class="code"><div class="codeContent">
 <pre class="code-xml"><span class="code-tag">&lt;devenv&gt;</span>
     <span class="code-tag">&lt;solutionfile&gt;</span>src\MyProject.sln<span class="code-tag">&lt;/solutionfile&gt;</span>
     <span class="code-tag">&lt;configuration&gt;</span>Debug<span class="code-tag">&lt;/configuration&gt;</span>
 <span class="code-tag">&lt;/devenv&gt;</span></pre>
 </div></div>
-
 <p>Full example:</p>
-
 <div class="code"><div class="codeContent">
 <pre class="code-xml"><span class="code-tag">&lt;devenv&gt;</span>
     <span class="code-tag">&lt;solutionfile&gt;</span>src\MyProject.sln<span class="code-tag">&lt;/solutionfile&gt;</span>
@@ -40,7 +37,7 @@
     <span class="code-tag">&lt;buildtype&gt;</span>Build<span class="code-tag">&lt;/buildtype&gt;</span>
     <span class="code-tag">&lt;project&gt;</span>MyProject<span class="code-tag">&lt;/project&gt;</span>
     <span class="code-tag">&lt;executable&gt;</span>c:\program files\Microsoft Visual Studio .NET\Common7\IDE\devenv.com<span class="code-tag">&lt;/executable&gt;</span>
-    <span class="code-tag">&lt;buildTimeoutSeconds&gt;</span>10<span class="code-tag">&lt;/buildTimeoutSeconds&gt;</span>
+    <span class="code-tag">&lt;buildTimeoutSeconds&gt;</span>600<span class="code-tag">&lt;/buildTimeoutSeconds&gt;</span>
 <span class="code-tag">&lt;/devenv&gt;</span></pre>
 </div></div>
 
@@ -56,38 +53,38 @@
 </tr>
 <tr>
 <td class='confluenceTd'> solutionfile </td>
-<td class='confluenceTd'> Path of the solution file to build. If relative, is relative to the <a href="Project Configuration Block.html#ProjectConfigurationBlock-workingDirectory" title="workingDirectory on Project Configuration Block">Project Working Directory</a> </td>
+<td class='confluenceTd'> The path of the solution file to build. If relative, it is relative to the <a href="Project Configuration Block.html#ProjectConfigurationBlock-workingDirectory" title="workingDirectory on Project Configuration Block">Project Working Directory</a>. </td>
 <td class='confluenceTd'> string </td>
 <td class='confluenceTd'> true </td>
 <td class='confluenceTd'> n/a </td>
 </tr>
 <tr>
 <td class='confluenceTd'> configuration </td>
-<td class='confluenceTd'> Solution configuration to use with the build (Not case sensitive) </td>
+<td class='confluenceTd'> The solution configuration to use (not case sensitive). </td>
 <td class='confluenceTd'> string </td>
 <td class='confluenceTd'> true </td>
 <td class='confluenceTd'> n/a </td>
 </tr>
 <tr>
-<td class='confluenceTd'>buildtype</td>
-<td class='confluenceTd'>The type of build you want to execute using the devenv executable.  Valid values are <b>Rebuild</b>, <b>Build</b> or <b>Clean</b> (Not case sensitive)</td>
-<td class='confluenceTd'>string</td>
-<td class='confluenceTd'>false</td>
-<td class='confluenceTd'>rebuild</td>
+<td class='confluenceTd'> buildtype </td>
+<td class='confluenceTd'> The type of build.  Valid values are <b>Rebuild</b>, <b>Build</b> or <b>Clean</b> (not case sensitive). </td>
+<td class='confluenceTd'> string </td>
+<td class='confluenceTd'> false </td>
+<td class='confluenceTd'> rebuild </td>
 </tr>
 <tr>
-<td class='confluenceTd'>project</td>
-<td class='confluenceTd'>A specific project name included in the solution that you want to compile (Not case sensitive)</td>
-<td class='confluenceTd'>string</td>
-<td class='confluenceTd'>false</td>
-<td class='confluenceTd'>Default is "".  Often programmers like to use a centralised project to build an entire software system.  They define specific dependencies and the build order on that specific project to reproduce the behaviours of a nmake build</td>
+<td class='confluenceTd'> project </td>
+<td class='confluenceTd'> A specific project in the solution, if you only want to build one project (not case sensitive). </td>
+<td class='confluenceTd'> string </td>
+<td class='confluenceTd'> false </td>
+<td class='confluenceTd'> The default is to build all projects selected by the configuration.   </td>
 </tr>
 <tr>
 <td class='confluenceTd'> executable </td>
-<td class='confluenceTd'> Path to "devenv.com" </td>
+<td class='confluenceTd'> The path to <tt>devenv.com</tt>. </td>
 <td class='confluenceTd'> string </td>
 <td class='confluenceTd'> false </td>
-<td class='confluenceTd'> CC.NET will try to load this path from the registry.  If both VS.NET 2003 and VS.NET 2002 are installed, CC.NET will try using VS.NET 2003.  In this case, if you need to use VS.NET 2002, you should specify this property to point to the location of "devenv.com" for VS.NET 2002. </td>
+<td class='confluenceTd'> CC.NET will try to find this path from the registry.  If both VS.NET 2003 and VS.NET 2002 are installed, CC.NET will use VS.NET 2003.  In this case, if you need to use VS.NET 2002, you should specify this property to point to the location of <tt>devenv.com</tt> for VS.NET 2002. </td>
 </tr>
 <tr>
 <td class='confluenceTd'> buildTimeoutSeconds </td>
@@ -97,8 +94,8 @@
 <td class='confluenceTd'> 600 (10 minutes) </td>
 </tr>
 </tbody></table>
-
-<p><img class="emoticon" src="./icons/emoticons/warning.gif" height="16" width="16" align="absmiddle" alt="" border="0"/> Note: this task does require you to have Visual Studio .NET installed on your integration server.</p>
+<p><img class="emoticon" src="./icons/emoticons/warning.gif" height="16" width="16" align="absmiddle" alt="" border="0"/> Note: this task requires you to have Visual Studio .NET installed on your integration server.</p>
+<table cellpadding='5' width='85%' cellspacing='8px' class='infoMacro' border="0" align='center'><colgroup><col width='24'><col></colgroup><tr><td valign='top'><img src="./icons/emoticons/information.gif" width="16" height="16" align="absmiddle" alt="" border="0"></td><td>Often programmers like to use a centralised project to build an entire software system.  They define specific dependencies and the build order on that specific project to reproduce the behaviours of an nmake build.</td></tr></table>
 
 				    
                     			    </td>
@@ -109,7 +106,7 @@
 				<td height="12" background="border/border_bottom.gif"><img src="border/spacer.gif" width="1" height="1" border="0"/></td>
 			</tr>
 		    <tr>
-			    <td align="center"><font color="grey">Document generated by Confluence on Oct 01, 2006 23:02</font></td>
+			    <td align="center"><font color="grey">Document generated by Confluence on Jan 25, 2007 17:46</font></td>
 		    </tr>
 	    </table>
     </body>

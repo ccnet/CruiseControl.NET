@@ -15,22 +15,30 @@
                                                     </span>
 				    </div>
 				    <div class="pagesubheading">
-					    This page last changed on May 19, 2005 by <font color="#0050B2">orogers</font>.
+					    This page last changed on Nov 19, 2006 by <font color="#0050B2">orogers</font>.
 				    </div>
 
-				    <p>The 'Build Publisher' lets you copy any arbitrary files on a successful build.</p>
+				    <p>The <b>Build Publisher</b> lets you copy any arbitrary files on a successful build.</p>
 
 <h4><a name="BuildPublisher-Example"></a>Example</h4>
 
 <div class="code"><div class="codeContent">
-<pre class="code-xml"><span class="code-tag">&lt;publishers&gt;</span>
-    <span class="code-tag">&lt;buildpublisher&gt;</span>
-        <span class="code-tag">&lt;sourceDir&gt;</span>C:\myprojects\project1<span class="code-tag">&lt;/sourceDir&gt;</span>
-        <span class="code-tag">&lt;publishDir&gt;</span>\\myfileserver\project1<span class="code-tag">&lt;/publishDir&gt;</span>
-    <span class="code-tag">&lt;/buildpublisher&gt;</span>
-<span class="code-tag">&lt;/publishers&gt;</span></pre>
+<pre class="code-xml"><span class="code-tag">&lt;buildpublisher&gt;</span>
+     <span class="code-tag">&lt;sourceDir&gt;</span>C:\myprojects\project1<span class="code-tag">&lt;/sourceDir&gt;</span>
+     <span class="code-tag">&lt;publishDir&gt;</span>\\myfileserver\project1<span class="code-tag">&lt;/publishDir&gt;</span>
+     <span class="code-tag">&lt;useLabelSubDirectory&gt;</span>false<span class="code-tag">&lt;/useLabelSubDirectory&gt;</span>
+<span class="code-tag">&lt;/buildpublisher&gt;</span></pre>
 </div></div>
 
+<p>This will copy the contents of <b>C:\myprojects\project1</b> to the network share <b>\\myfileserver\project1</b>.</p>
+
+<p><b>Minimal Configuration Example</b></p>
+
+<div class="code"><div class="codeContent">
+<pre class="code-xml"><span class="code-tag">&lt;buildpublisher /&gt;</span></pre>
+</div></div>
+
+<p>This will copy the contents of the project's working directory to a new label subdirectory under the project's artifact directory (ie &lt;artifact_dir&gt;\&lt;label_dir&gt;)</p>
 
 <h4><a name="BuildPublisher-ConfigurationElements%3A"></a>Configuration Elements:</h4>
 
@@ -44,23 +52,49 @@
 </tr>
 <tr>
 <td class='confluenceTd'> sourceDir </td>
-<td class='confluenceTd'> The source Directory to copy from </td>
+<td class='confluenceTd'> The source directory to copy files from.  This path can be absolute or can be relative to the project's working directory. If unspecified, the project's working directory will be used as the source directory. </td>
 <td class='confluenceTd'> string </td>
-<td class='confluenceTd'> true </td>
+<td class='confluenceTd'> false </td>
 <td class='confluenceTd'> n/a </td>
 </tr>
 <tr>
 <td class='confluenceTd'> publishDir </td>
-<td class='confluenceTd'> The directory to copy to. A subdirectory called the current build's label will be created, and the contents of sourceDir will be copied to it </td>
+<td class='confluenceTd'> The directory to copy the files to. This path can be absolute or can be relative to the project's artifact directory. If <b>useLabelSubDirectory</b> is true (default) a subdirectory with the current build's label will be created, and the contents of sourceDir will be copied to it. If unspecified, the project's artifact directory will be used as the publish directory. </td>
 <td class='confluenceTd'> string </td>
-<td class='confluenceTd'> true </td>
+<td class='confluenceTd'> false </td>
 <td class='confluenceTd'> n/a </td>
+</tr>
+<tr>
+<td class='confluenceTd'> useLabelSubDirectory </td>
+<td class='confluenceTd'> If set to true (the default value), files will be copied to subdirectory under the publishDir which will be named with the label for the current integration. </td>
+<td class='confluenceTd'> bool </td>
+<td class='confluenceTd'> false </td>
+<td class='confluenceTd'> true </td>
 </tr>
 </tbody></table>
 
-<p><img class="emoticon" src="./icons/emoticons/information.gif" height="16" width="16" align="absmiddle" alt="" border="0"/> This block used to support a 'additionalDir' attributed. This feature has been removed - just use multiple <tt>&lt;buildpublisher&gt;</tt> blocks to achieve the same job.</p>
+<p><img class="emoticon" src="./icons/emoticons/information.gif" height="16" width="16" align="absmiddle" alt="" border="0"/> This block used to support a 'additionalDir' attributed. This feature has been removed - just use multiple <tt>&lt;buildpublisher&gt;</tt> blocks to achieve the same job.<br/>
+<img class="emoticon" src="./icons/emoticons/information.gif" height="16" width="16" align="absmiddle" alt="" border="0"/> The <b>useLabelSubDirectory</b> property has been added in 1.2.</p>
 
 				    
+                                            <div class="tabletitle">
+                            <a name="comments">Comments:</a>
+                        </div>
+
+                        <table border="0" width="100%">
+                                                        <tr>
+                                <td >
+                                    <a name="comment-6480"></a>
+                                    <font class="smallfont"><p>Might be nice if a fileset could be included...</p>
+
+<p>&lt;source&gt;C:\myprojects\project1&#42;-results.xml&lt;/source&gt;</p></font>
+                                    <div align="left" class="smallfont" style="color: #666666; width: 98%; margin-bottom: 10px;">
+                                        <img src="icons/comment_16.gif" height="16" width="16" border="0" align="absmiddle"/>
+                                        Posted by dcameron at Jan 14, 2007 23:17
+                                    </div>
+                                </td>
+                            </tr>
+                                                    </table>
                     			    </td>
 		    </tr>
 	    </table>
@@ -69,7 +103,7 @@
 				<td height="12" background="border/border_bottom.gif"><img src="border/spacer.gif" width="1" height="1" border="0"/></td>
 			</tr>
 		    <tr>
-			    <td align="center"><font color="grey">Document generated by Confluence on Oct 01, 2006 23:02</font></td>
+			    <td align="center"><font color="grey">Document generated by Confluence on Jan 25, 2007 17:46</font></td>
 		    </tr>
 	    </table>
     </body>

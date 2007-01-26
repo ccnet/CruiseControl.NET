@@ -15,7 +15,7 @@
                                                     </span>
 				    </div>
 				    <div class="pagesubheading">
-					    This page last changed on Sep 13, 2006 by <font color="#0050B2">richardjfoster</font>.
+					    This page last changed on Dec 17, 2006 by <font color="#0050B2">gfeldman</font>.
 				    </div>
 
 				    <p>This is the CruiseControl.NET <em>Frequently Asked Questions</em> (FAQ)</p>
@@ -34,6 +34,27 @@
 
 <p>The 'nsScm.dll' is a library supplied by the <a href="http://nsis.sourceforge.net/Service_Control_Manager_plugin_(install_services_and_drivers_on_NT/2K/XP)" title="Visit page outside Confluence">NullSoft installer for installing services</a>.  There is no virus in this dll. The easiest way to proceed with the installation is to uncheck the "Install CCService" checkbox and install <a href="The Server Service Application.html" title="The Server Service Application">CCService manually</a> once the installer has completed.</p>
 
+<h2><a name="FAQ-Resultfiles"></a>Result files</h2>
+
+<h4><a name="FAQ-Whyaremytestresultsshowingupwhenthebuildsucceeds%2Cbutnotwhenthebuildfails%3F"></a><em>Why are my test results showing up when the build succeeds, but not when the build fails?</em></h4>
+
+<p>In the <b>ccnet.config</b> file, you need to move your <a href="File Merge Task.html" title="File Merge Task">Merge Task</a> section from the <a href="Task Blocks.html" title="Task Blocks">Tasks Block</a> to the Publishers Block.  The reason is that the first task to fail in the tasks section will prevent any further tasks from being run.  If this task is your <a href="File Merge Task.html" title="File Merge Task">Merge Task</a> then your test result files will not be included in the build.  All tasks in the publishers section will run regardless of whether previous tasks succeed or fail.</p>
+
+<h4><a name="FAQ-CCNetsometimesthrowsanexceptionduringatask%2Cbutthere%27snoinformationinthelogaboutwherethetasktriggeredtheexception%3F"></a><em>CCNet sometimes throws an exception during a task, but there's no information in the log about where the task triggered the exception?</em></h4>
+
+<p>This can happen, for example, if a task times out.  A good practice that helps in these situations is to specify an explicit task-level log file for each task, different for each task.  If CCNet fails to merge in that log file, then at least you can check the actual log file before it's been merged.  (Also, see the preceding FAQ about merging output from failed tasks.)</p>
+
+<p>For example, with a NAnt task you could use:</p>
+<div class="code"><div class="codeContent">
+<pre class="code-java">&lt;nant&gt;
+  &lt;buildFile&gt;ProjectA.build&lt;/buildFile&gt;
+  &lt;targetList&gt;TargetX&lt;/buildFile&gt;
+  &lt;buildargs&gt;-l:projecta.targetx.log.xml ...&lt;/buildargs&gt;
+  ...
+&lt;/nant&gt;</pre>
+</div></div>
+<p>Then if the task crashes and CCNet doesn't merge in the NAnt log file, you can go to <b>projecta.targetx.log.xml</b> in the working directory, to see the original output from NAnt.</p>
+
 <h2><a name="FAQ-Debuggingtheserver"></a>Debugging the server</h2>
 
 
@@ -41,7 +62,7 @@
 
 <p>CCNet integrates with external applications via the command-line, hence it is essential that the command executed by CCNet is correct for everything to work:</p>
 <ol>
-	<li>As a first step, verify that you <b>can</b> run your build script or connect to your sourcecontrol system from the command-line.</li>
+	<li>As a first step, verify that you <em>can</em> run your build script or connect to your sourcecontrol system from the command-line.</li>
 	<li>If this works or if you're not too sure what command to execute, you can get CCNet to tell you what command it is using.  To do this, go into your <b>ccnet.exe.config</b> file (or <b>ccservice.exe.config</b> file if you are running ccservice) and increase the trace level of the CruiseControlSwitch to the debug level of 4.  When you restart the CCNet server, it will write out the commands the it is using to the console window (and to the <b>ccnet.log</b> file).  Try copying and pasting this command into a new console window and running it directly.</li>
 	<li>If you are still unsure of what the problem is or if you think that the command that CCNet is creating is incorrect, please send an email to the CCNet user mailing list above including 1) a copy of the command you are executing, 2) the output it produces and 3) a copy of your ccnet.config file.</li>
 </ol>
@@ -136,13 +157,6 @@ Echo %ErrorLevel%</pre>
 
 <p>One of the principles of Continuous Integration is that build failures are reported as quickly as possible. This means that if any item in the <tt>&lt;tasks&gt;</tt> section of the <a href="Project Configuration Block.html" title="Project Configuration Block">Project Configuration Block</a> reports a failure CruiseControl.Net will skip the remaining tasks and continue to the entries in the <tt>&lt;publishers&gt;</tt> section. If you need to do something more complex, we recommend using a tool like NAnt or MSBuild to handle the build tasks. An example showing how to use NAnt and NUnit to execute multiple test fixtures can be found on the <a href="Using CruiseControl.NET with NUnit.html" title="Using CruiseControl.NET with NUnit">Using CruiseControl.NET with NUnit</a> page.</p>
 
-<h2><a name="FAQ-Mergingresults"></a>Merging results</h2>
-
-
-<h4><a name="FAQ-Whyaremytestresultsshowingupwhenthebuildsucceeds%2Cbutnotwhenthebuildfails%3F"></a><em>Why are my test results showing up when the build succeeds, but not when the build fails?</em></h4>
-
-<p>In the <b>ccnet.config</b> file, you need to move your <a href="File Merge Task.html" title="File Merge Task">Merge Task</a> section from the <a href="Task Blocks.html" title="Task Blocks">Tasks Block</a> to the Publishers Block.  The reason is that the first task to fail in the tasks section will prevent any further tasks from being run.  If this task is your <a href="File Merge Task.html" title="File Merge Task">Merge Task</a> then your test result files will not be included in the build.  All tasks in the publishers section will run regardless of whether previous tasks succeed or fail.</p>
-
 <h2><a name="FAQ-MultipleProjects"></a>Multiple Projects</h2>
 
 
@@ -198,7 +212,7 @@ Echo %ErrorLevel%</pre>
 				<td height="12" background="border/border_bottom.gif"><img src="border/spacer.gif" width="1" height="1" border="0"/></td>
 			</tr>
 		    <tr>
-			    <td align="center"><font color="grey">Document generated by Confluence on Oct 01, 2006 23:02</font></td>
+			    <td align="center"><font color="grey">Document generated by Confluence on Jan 25, 2007 17:46</font></td>
 		    </tr>
 	    </table>
     </body>

@@ -15,19 +15,16 @@
                                                     </span>
 				    </div>
 				    <div class="pagesubheading">
-					    This page last changed on Aug 15, 2006 by <font color="#0050B2">orogers</font>.
+					    This page last changed on Dec 20, 2006 by <font color="#0050B2">dcameron</font>.
 				    </div>
 
-				    <p>The email publisher can be used to send email to any number of users. It is common to include one user who gets an email for every build and then also send email to every developer who checked code in for this build. </p>
+				    <p>The email publisher can be used to send email to any number of users. It is common to include one user who gets an email for every build and then also send email to every developer who checked code in for this build.</p>
 
 <p><img class="emoticon" src="./icons/emoticons/information.gif" height="16" width="16" align="absmiddle" alt="" border="0"/> People tend to prefer to use <a href="CCTray.html" title="CCTray">CCTray</a> rather than email for instant notification these days.</p>
-
 <table cellpadding='5' width='85%' cellspacing='8px' class='noteMacro' border="0" align='center'><colgroup><col width='24'><col></colgroup><tr><td valign='top'><img src="./icons/emoticons/warning.gif" width="16" height="16" align="absmiddle" alt="" border="0"></td><td>Make sure that all of the Merge Publishers, along with the <a href="Xml Log Publisher.html" title="Xml Log Publisher">Xml Log Publisher</a> task are done before the <tt>&lt;email&gt;</tt> publisher, or else you won't be able to include output from the build in the email.</td></tr></table>
-
 <table cellpadding='5' width='85%' cellspacing='8px' class='noteMacro' border="0" align='center'><colgroup><col width='24'><col></colgroup><tr><td valign='top'><img src="./icons/emoticons/warning.gif" width="16" height="16" align="absmiddle" alt="" border="0"></td><td>A common mistake is to put the email task in the &lt;tasks&gt; section instead of the &lt;publishers&gt; section.  If an error occurs in the &lt;tasks&gt; section, the remaining tasks in that section are skipped, and CC.Net goes right to the &lt;publishers&gt; section.  So if you put the &lt;email&gt; tasks in the &lt;tasks&gt; section, you'll never get any failure messages.</td></tr></table>
-
 <div class="code"><div class="codeContent">
-<pre class="code-xml"><span class="code-tag">&lt;email from=<span class="code-quote">"buildmaster@mycompany.com"</span> mailhost=<span class="code-quote">"smtp.mycompany.com"</span> includeDetails=<span class="code-quote">"TRUE"</span>&gt;</span>
+<pre class="code-xml"><span class="code-tag">&lt;email from=<span class="code-quote">"buildmaster@mycompany.com"</span> mailhost=<span class="code-quote">"smtp.mycompany.com"</span> mailhostUsername=<span class="code-quote">"smtpuser"</span> mailhostPassword=<span class="code-quote">"smtppassword"</span> includeDetails=<span class="code-quote">"TRUE"</span>&gt;</span>
     <span class="code-tag">&lt;users&gt;</span>
         <span class="code-tag">&lt;user name=<span class="code-quote">"BuildGuru"</span> group=<span class="code-quote">"buildmaster"</span> address=<span class="code-quote">"buildguru@mycompany.com"</span>/&gt;</span>
         <span class="code-tag">&lt;user name=<span class="code-quote">"JoeDeveloper"</span> group=<span class="code-quote">"developers"</span> address=<span class="code-quote">"joedeveloper@thoughtworks.com"</span>/&gt;</span>
@@ -40,6 +37,8 @@
 </div></div>
 
 <h3><a name="EmailPublisher-ConfigurationElements%3A"></a>Configuration Elements:</h3>
+
+<table cellpadding='5' width='85%' cellspacing='8px' class='noteMacro' border="0" align='center'><colgroup><col width='24'><col></colgroup><tr><td valign='top'><img src="./icons/emoticons/warning.gif" width="16" height="16" align="absmiddle" alt="" border="0"></td><td>The authentication elements, mailhostUsername and mailhostPassword, are available starting with build 1.1.1.2534. This is an interim release, and the feature has not been included in an official release yet. If you would like to use this functionality, you can download a recent build from <a href="http://http://ccnetlive.thoughtworks.com/CCNet%2Dbuilds/" title="Visit page outside Confluence">http://http://ccnetlive.thoughtworks.com/CCNet%2Dbuilds/</a></td></tr></table>
 
 <table class='confluenceTable'><tbody>
 <tr>
@@ -55,6 +54,20 @@
 <td class='confluenceTd'> string </td>
 <td class='confluenceTd'> true </td>
 <td class='confluenceTd'> n/a </td>
+</tr>
+<tr>
+<td class='confluenceTd'> mailhostUsername </td>
+<td class='confluenceTd'> The user name to provide to the SMTP server. (available in 1.1.1.2534) </td>
+<td class='confluenceTd'> string </td>
+<td class='confluenceTd'> false </td>
+<td class='confluenceTd'> "" </td>
+</tr>
+<tr>
+<td class='confluenceTd'> mailhostPassword </td>
+<td class='confluenceTd'> The password to provide to the SMTP server. (available in 1.1.1.2534) </td>
+<td class='confluenceTd'> string </td>
+<td class='confluenceTd'> false </td>
+<td class='confluenceTd'> "" </td>
 </tr>
 <tr>
 <td class='confluenceTd'> from </td>
@@ -93,7 +106,7 @@
 <th class='confluenceTh'> Node </th>
 <th class='confluenceTh'> Description </th>
 <th class='confluenceTh'> Type </th>
-<th class='confluenceTh'> Required</th>
+<th class='confluenceTh'> Required </th>
 </tr>
 <tr>
 <td class='confluenceTd'> name </td>
@@ -114,9 +127,7 @@
 <td class='confluenceTd'> true </td>
 </tr>
 </tbody></table>
-
-<p>Users do not need to belong to a group.  If they are not in a group then they will only receive emails when they have committed changes that are part of the current build.  They will receive an email regardless of whether the build succeeds or fails.  </p>
-
+<p>Users do not need to belong to a group.  If they are not in a group then they will only receive emails when they have committed changes that are part of the current build.  They will receive an email regardless of whether the build succeeds or fails.</p>
 <table cellpadding='5' width='85%' cellspacing='8px' class='noteMacro' border="0" align='center'><colgroup><col width='24'><col></colgroup><tr><td valign='top'><img src="./icons/emoticons/warning.gif" width="16" height="16" align="absmiddle" alt="" border="0"></td><td> It is essential that the value of the name attribute matches the name for the user in the sourcecontrol system.  This is the only way that CCNet can reconcile the user that committed their changes with the address to send the email to.</td></tr></table>
 
 <h4><a name="EmailPublisher-GroupConfigurationElement%3A"></a>Group Configuration Element:</h4>
@@ -126,7 +137,7 @@
 <th class='confluenceTh'> Node </th>
 <th class='confluenceTh'> Description </th>
 <th class='confluenceTh'> Type </th>
-<th class='confluenceTh'> Required</th>
+<th class='confluenceTh'> Required </th>
 </tr>
 <tr>
 <td class='confluenceTd'> name </td>
@@ -136,7 +147,7 @@
 </tr>
 <tr>
 <td class='confluenceTd'> notification </td>
-<td class='confluenceTd'> Determines when to send email to this group.  There are three possible notification values: 
+<td class='confluenceTd'> Determines when to send email to this group.  There are three possible notification values:
 <ul>
 	<li>"always" - send email when any build occurs</li>
 	<li>"change" - send email when the status of the build changes (e.g. from 'passed' to 'failed').</li>
@@ -222,6 +233,29 @@
                                     </div>
                                 </td>
                             </tr>
+                                                        <tr>
+                                <td  style="border-top: 1px dashed #666666">
+                                    <a name="comment-6472"></a>
+                                    <font class="smallfont"><p>It would also be useful to add a default domain so that you don't have to add each and every user to the user's list - as long as the source control username matches the start of the user's email address (which is very likely).&nbsp; (perhaps also the ability to disable email sending for an individual source control account - e.g. of the cc.net labler)</p>
+
+
+<p>It would also be useful to only email users who checked in for the current build, i.e. build 'contributers'.&nbsp; That way you can limit emails to the users who caused the build to occur.&nbsp; (of course it should be configurable that emails sends on 'always', or 'failed')</p></font>
+                                    <div align="left" class="smallfont" style="color: #666666; width: 98%; margin-bottom: 10px;">
+                                        <img src="icons/comment_16.gif" height="16" width="16" border="0" align="absmiddle"/>
+                                        Posted by normanr at Jan 13, 2007 01:41
+                                    </div>
+                                </td>
+                            </tr>
+                                                        <tr>
+                                <td  style="border-top: 1px dashed #666666">
+                                    <a name="comment-6507"></a>
+                                    <font class="smallfont"><p>Any possibility of specifying the smtp server port?&nbsp; Our email provider forces us to use a port other than 25.</p></font>
+                                    <div align="left" class="smallfont" style="color: #666666; width: 98%; margin-bottom: 10px;">
+                                        <img src="icons/comment_16.gif" height="16" width="16" border="0" align="absmiddle"/>
+                                        Posted by matt@formulatrix.com at Jan 19, 2007 08:52
+                                    </div>
+                                </td>
+                            </tr>
                                                     </table>
                     			    </td>
 		    </tr>
@@ -231,7 +265,7 @@
 				<td height="12" background="border/border_bottom.gif"><img src="border/spacer.gif" width="1" height="1" border="0"/></td>
 			</tr>
 		    <tr>
-			    <td align="center"><font color="grey">Document generated by Confluence on Oct 01, 2006 23:02</font></td>
+			    <td align="center"><font color="grey">Document generated by Confluence on Jan 25, 2007 17:46</font></td>
 		    </tr>
 	    </table>
     </body>

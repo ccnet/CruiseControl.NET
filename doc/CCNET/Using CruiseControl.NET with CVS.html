@@ -15,35 +15,38 @@
                                                     </span>
 				    </div>
 				    <div class="pagesubheading">
-					    This page last changed on Jul 14, 2005 by <font color="#0050B2">mroberts</font>.
+					    This page last changed on Jan 25, 2007 by <font color="#0050B2">orogers</font>.
 				    </div>
 
 				    <p>CruiseControl.NET has the following integration with CVS:</p>
 
 <p><img class="emoticon" src="./icons/emoticons/check.gif" height="16" width="16" align="absmiddle" alt="" border="0"/> Modification Checking via polling<br/>
 <img class="emoticon" src="./icons/emoticons/check.gif" height="16" width="16" align="absmiddle" alt="" border="0"/> Automatic Source Updates<br/>
+<img class="emoticon" src="./icons/emoticons/check.gif" height="16" width="16" align="absmiddle" alt="" border="0"/> Automatic Source Checkout<br/>
 <img class="emoticon" src="./icons/emoticons/check.gif" height="16" width="16" align="absmiddle" alt="" border="0"/> Automatic labelling on success<br/>
 <img class="emoticon" src="./icons/emoticons/check.gif" height="16" width="16" align="absmiddle" alt="" border="0"/> Web Integration with ViewCVS</p>
 
 <h3><a name="UsingCruiseControl.NETwithCVS-SettingupaCVSprojectforusewithCruiseControl.NET"></a>Setting up a CVS project for use with CruiseControl.NET</h3>
 
-<p>CruiseControl.NET cannot (yet) automatically checkout a project from CVS - it can only perform updates. Before you start you must therefore checkout the project you want to integrate to a directory on your integration server. You can do this using your normal CVS client (command line, Tortoise etc.)</p>
-
 <p>Make a note of the full path of your working directory (the uppermost directory that got checked out) since you're going to need that data for configuring your CruiseControl.NET server.</p>
 
-<p>You'll also need a command line client installed on the integration server. We recommend using the latest stable Windows client from <a href="http://www.cvshome.org" title="Visit page outside Confluence">CVSHome</a>.</p>
+<p>You'll also need a command line client installed on the integration server. We recommend using the latest stable Windows client from <a href="http://ximbiot.com/cvs/cvshome/" title="Visit page outside Confluence">Ximbiot</a>.</p>
 
 <h3><a name="UsingCruiseControl.NETwithCVS-ConfiguringCruiseControl.NET"></a>Configuring CruiseControl.NET</h3>
 
-<p>You need to make sure you use the <tt>cvs</tt> Source Control block within your project. Read up on this configuration block here : <a href="CVS Source Control Block.html" title="CVS Source Control Block">CVS Source Control Block</a>.</p>
+<p>You need to make sure you use the <tt>cvs</tt> Source Control block within your project. Read up on this configuration block here : <a href="CVS Configuration Examples.html" title="CVS Configuration Examples">CVS Configuration Examples</a>.</p>
 
 <h3><a name="UsingCruiseControl.NETwithCVS-AutomaticSourceUpdates"></a>Automatic Source Updates</h3>
 
-<p>To have CCNet automatically retrieve the latest version of the source from CVS prior to running a build, you should set the <tt><a href="CVS Source Control Block.html#CVSSourceControlBlock-autoGetSource" title="autoGetSource on CVS Source Control Block">autoGetSource</a></tt> attribute to <b><tt>true</tt></b>.</p>
+<p>To have CCNet automatically retrieve the latest version of the source from CVS prior to running a build, you should set the <tt><a href="CVS Configuration Examples.html#CVSConfigurationExamples-autoGetSource" title="autoGetSource on CVS Configuration Examples">autoGetSource</a></tt> attribute to <b><tt>true</tt></b>.</p>
 
-<h3><a name="UsingCruiseControl.NETwithCVS-AutomaticLabelling%28Tagging%29"></a>Automatic Labelling (Tagging)</h3>
+<h3><a name="UsingCruiseControl.NETwithCVS-AutomaticSourceCheckout"></a>Automatic Source Checkout</h3>
 
-<p>To have CCNet automatically tag your source tree after a successful build, you should set the <tt><a href="CVS Source Control Block.html#CVSSourceControlBlock-labelOnSuccess" title="labelOnSuccess on CVS Source Control Block">labelOnSuccess</a></tt> attribute to <b><tt>true</tt></b>. By default, the name of the tag is <tt>ver-</tt><em><tt>buildLabel</tt></em>, but you can change the <tt>ver-</tt> prefix using the <tt><a href="CVS Source Control Block.html#CVSSourceControlBlock-tagPrefix" title="tagPrefix on CVS Source Control Block">tagPrefix</a></tt> property of the CVS provider.</p>
+<p>As of the CCNet 1.2 release, the CVS provider is able to automatically checkout source from a CVS repository.  Source will be checked out into the specified working directory.  If a branch is specified, CCNet will checkout source from the branch. CCNet will automatically try to checkout the source any time it finds that the working directory does not contain a CVS folder.  If a CVS folder is present then CCNet will do an update on the working directory instead of a check out.</p>
+
+<h3><a name="UsingCruiseControl.NETwithCVS-AutomaticLabeling%28Tagging%29"></a>Automatic Labeling (Tagging)</h3>
+
+<p>To have CCNet automatically tag your source tree after a successful build, you should set the <tt><a href="CVS Configuration Examples.html#CVSConfigurationExamples-labelOnSuccess" title="labelOnSuccess on CVS Configuration Examples">labelOnSuccess</a></tt> attribute to <b><tt>true</tt></b>. By default, the name of the tag is <tt>ver-</tt><em><tt>buildLabel</tt></em>, but you can change the <tt>ver-</tt> prefix using the <tt><a href="CVS Configuration Examples.html#CVSConfigurationExamples-tagPrefix" title="tagPrefix on CVS Configuration Examples">tagPrefix</a></tt> property of the CVS provider.</p>
 
 <p>The contents of the tag will be the currently checked-out files in the build server's local working copy. </p>
 
@@ -112,7 +115,7 @@ If you are using key-based authentication, set the CVS_RSH variable to be the fu
 				<td height="12" background="border/border_bottom.gif"><img src="border/spacer.gif" width="1" height="1" border="0"/></td>
 			</tr>
 		    <tr>
-			    <td align="center"><font color="grey">Document generated by Confluence on Oct 01, 2006 23:02</font></td>
+			    <td align="center"><font color="grey">Document generated by Confluence on Jan 25, 2007 17:46</font></td>
 		    </tr>
 	    </table>
     </body>
