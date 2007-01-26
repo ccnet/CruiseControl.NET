@@ -66,6 +66,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 	<workingDirectory>C:\temp</workingDirectory>
 	<culture>fr-FR</culture>
 	<cleanCopy>false</cleanCopy>
+	<alwaysGetLatest>true</alwaysGetLatest>
 </sourceControl>";	
 
 			NetReflector.Read(xml, vss);
@@ -80,6 +81,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 			Assert.AreEqual(@"C:\temp", vss.WorkingDirectory);
 			Assert.AreEqual("fr-FR", vss.Culture);
 			Assert.AreEqual(false, vss.CleanCopy);
+			Assert.AreEqual(true, vss.AlwaysGetLatest);
 		}
 
 		[Test]
@@ -189,6 +191,17 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 
 			vss.AutoGetSource = true;
 			vss.CleanCopy = false;
+			vss.GetSource(IntegrationResultMother.CreateSuccessful(today));
+		}
+
+		[Test]
+		public void DoNotGetFromDateIfAlwaysGetLatestIsTrue()
+		{
+			ExpectToExecuteArguments("get $/fooProject -R -YAdmin,admin -I-N -W -GF- -GTM");
+
+			vss.AutoGetSource = true;
+			vss.CleanCopy = false;
+			vss.AlwaysGetLatest = true;
 			vss.GetSource(IntegrationResultMother.CreateSuccessful(today));
 		}
 

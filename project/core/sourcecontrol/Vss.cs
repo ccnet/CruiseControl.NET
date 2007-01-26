@@ -71,6 +71,9 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 		[ReflectorProperty("autoGetSource", Required = false)]
 		public bool AutoGetSource = true;
 
+		[ReflectorProperty("alwaysGetLatest", Required = false)]
+		public bool AlwaysGetLatest = false;
+
 		[ReflectorProperty("workingDirectory", Required = false)]
 		public string WorkingDirectory;
 
@@ -112,14 +115,8 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			ProcessArgumentBuilder builder = new ProcessArgumentBuilder();
 			builder.AddArgument("get", Project);
 			builder.AddArgument(RecursiveCommandLineOption);
-			if (ApplyLabel)
-			{
-				builder.AddArgument("-VL" + tempLabel);
-			}
-			else
-			{
-				builder.AddArgument("-Vd" + locale.FormatCommandDate(result.StartTime));
-			}
+			builder.AppendIf(ApplyLabel, "-VL" + tempLabel);
+			builder.AppendIf(!AlwaysGetLatest, "-Vd" + locale.FormatCommandDate(result.StartTime));
 			AppendUsernameAndPassword(builder);
 			builder.AppendArgument("-I-N -W -GF- -GTM");
 			builder.AppendIf(CleanCopy, "-GWR");
