@@ -29,7 +29,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Perforce
 		public P4(ProcessExecutor processExecutor, IP4Initializer initializer, IP4Purger p4Purger, IP4ProcessInfoCreator processInfoCreator)
 		{
 			this.processExecutor = processExecutor;
-			this.p4Initializer = initializer;
+			p4Initializer = initializer;
 			this.processInfoCreator = processInfoCreator;
 			this.p4Purger = p4Purger;
 		}
@@ -70,7 +70,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Perforce
 		[ReflectorProperty("timeZoneOffset", Required=false)]
 		public double TimeZoneOffset = 0;
 
-		public string BuildModificationsCommandArguments(DateTime from, DateTime to)
+		private string BuildModificationsCommandArguments(DateTime from, DateTime to)
 		{
 			return string.Format("changes -s submitted {0}", GenerateRevisionsForView(from, to));
 		}
@@ -80,6 +80,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Perforce
 			StringBuilder args = new StringBuilder();
 			foreach (string viewline in View.Split(','))
 			{
+				if (args.Length > 0) args.Append(' ');
 				args.Append(viewline);
 				if (from == DateTime.MinValue)
 				{
@@ -87,7 +88,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Perforce
 				}
 				else
 				{
-					args.Append(string.Format("@{0},@{1} ", FormatDate(from), FormatDate(to)));
+					args.Append(string.Format("@{0},@{1}", FormatDate(from), FormatDate(to)));
 				}
 			}
 			return args.ToString();

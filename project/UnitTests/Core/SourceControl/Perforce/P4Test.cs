@@ -125,7 +125,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.SourceControl.Perforce
 
 			ProcessInfo process = p4.CreateChangeListProcess(from, to);
 
-			string expectedArgs = "-s changes -s submitted //depot/myproj/...@2002/10/20:02:00:00,@2002/10/31:05:05:00 ";
+			string expectedArgs = "-s changes -s submitted //depot/myproj/...@2002/10/20:02:00:00,@2002/10/31:05:05:00";
 
 			Assert.AreEqual("p4", process.FileName);
 			Assert.AreEqual(expectedArgs, process.Arguments);
@@ -142,7 +142,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.SourceControl.Perforce
 
 			ProcessInfo process = p4.CreateChangeListProcess(from, to);
 
-			string expectedArgs = "-s changes -s submitted //depot/myproj/...@2002/10/19:21:30:00,@2002/10/31:00:35:00 ";
+			string expectedArgs = "-s changes -s submitted //depot/myproj/...@2002/10/19:21:30:00,@2002/10/31:00:35:00";
 
 			Assert.AreEqual("p4", process.FileName);
 			Assert.AreEqual(expectedArgs, process.Arguments);
@@ -158,7 +158,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.SourceControl.Perforce
 
 			ProcessInfo process = p4.CreateChangeListProcess(from, to);
 
-			string expectedArgs = "-s changes -s submitted //depot/myproj/...@2002/10/20:02:00:00,@2002/10/31:05:05:00 //myotherdepot/proj/...@2002/10/20:02:00:00,@2002/10/31:05:05:00 ";
+			string expectedArgs = "-s changes -s submitted //depot/myproj/...@2002/10/20:02:00:00,@2002/10/31:05:05:00 //myotherdepot/proj/...@2002/10/20:02:00:00,@2002/10/31:05:05:00";
 
 			Assert.AreEqual("p4", process.FileName);
 			Assert.AreEqual(expectedArgs, process.Arguments);
@@ -182,7 +182,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.SourceControl.Perforce
 			DateTime to = new DateTime(2004, 10, 31, 5, 5, 1);
 
 			string expectedArgs = "-s -c myclient -p anotherserver:2666 -u me -P mypassword"
-				+ " changes -s submitted //depot/myproject/...@2003/11/20:02:10:32,@2004/10/31:05:05:01 ";
+				+ " changes -s submitted //depot/myproject/...@2003/11/20:02:10:32,@2004/10/31:05:05:01";
 
 			P4 p4 = CreateP4WithNoArgContructor(xml);
 			ProcessInfo process = p4.CreateChangeListProcess(from, to);

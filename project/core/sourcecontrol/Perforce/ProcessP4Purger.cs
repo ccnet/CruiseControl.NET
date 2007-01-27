@@ -1,4 +1,3 @@
-using System.IO;
 using ThoughtWorks.CruiseControl.Core.Util;
 
 namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Perforce
