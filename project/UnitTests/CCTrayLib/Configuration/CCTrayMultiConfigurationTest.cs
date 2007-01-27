@@ -87,7 +87,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Configuration
 </Configuration>";
 
 			CCTrayMultiConfiguration configuration = CreateTestConfiguration(SimpleConfig);
-			configuration.Projects = new Project[1] {new Project("url", "projName")};
+			configuration.Projects = new CCTrayProject[1] {new CCTrayProject("url", "projName")};
 
 			configuration.Persist();
 

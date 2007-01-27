@@ -7,7 +7,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Configuration
 		IProjectMonitor[] GetProjectStatusMonitors();
 		ICruiseProjectManagerFactory CruiseProjectManagerFactory { get; }
 
-		Project[] Projects { get; set; }
+		CCTrayProject[] Projects { get; set; }
 		bool ShouldShowBalloonOnBuildTransition { get; set; }
 		int PollPeriodSeconds { get; set; }
 		AudioFiles Audio { get; }

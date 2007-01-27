@@ -23,14 +23,14 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Configuration
 			IProjectMonitor[] retVal = new IProjectMonitor[Projects.Length];
 			for (int i = 0; i < Projects.Length; i++)
 			{
-				Project project = Projects[i];
+				CCTrayProject project = Projects[i];
 				ICruiseProjectManager projectManager = cruiseProjectManagerFactory.Create(project);
 				retVal[i] = new ProjectMonitor(projectManager);
 			}
 			return retVal;
 		}
 
-		public Project[] Projects
+		public CCTrayProject[] Projects
 		{
 			get { return persistentConfiguration.Projects; }
 			set { persistentConfiguration.Projects = value; }

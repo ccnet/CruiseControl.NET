@@ -15,7 +15,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
 			this.webRetriever = webRetriever;
 		}
 
-		public ICruiseProjectManager Create(Project project)
+		public ICruiseProjectManager Create(CCTrayProject project)
 		{		
 			BuildServer server = project.BuildServer;
 			if (server.Transport == BuildServerTransport.Remoting)
@@ -28,7 +28,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
 			}
 		}
 
-		public Project[] GetProjectList(BuildServer server)
+		public CCTrayProject[] GetProjectList(BuildServer server)
 		{
 			if (server.Transport == BuildServerTransport.Remoting)
 			{

@@ -235,6 +235,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Configuration\CCTrayProject.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Configuration\ICCTrayMultiConfiguration.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -246,11 +251,6 @@
                 />
                 <File
                     RelPath = "Configuration\PersistentConfiguration.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Configuration\Project.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -578,5 +578,4 @@
         </Files>
     </CSHARP>
 </VisualStudioProject>
-
 

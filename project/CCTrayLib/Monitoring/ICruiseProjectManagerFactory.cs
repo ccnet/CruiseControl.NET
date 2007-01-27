@@ -4,7 +4,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
 {
 	public interface ICruiseProjectManagerFactory
 	{
-		ICruiseProjectManager Create(Project project);
-		Project[] GetProjectList(BuildServer server);
+		ICruiseProjectManager Create(CCTrayProject project);
+		CCTrayProject[] GetProjectList(BuildServer server);
 	}
 }

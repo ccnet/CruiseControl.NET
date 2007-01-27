@@ -12,15 +12,15 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
 			this.manager = manager;
 		}
 
-		public Project[] GetProjectList(BuildServer server)
+		public CCTrayProject[] GetProjectList(BuildServer server)
 		{
 			ProjectStatus[] statuses = manager.GetCruiseManager(server.Url).GetProjectStatus();
-			Project[] projects = new Project[statuses.Length];
+			CCTrayProject[] projects = new CCTrayProject[statuses.Length];
 
 			for (int i = 0; i < statuses.Length; i++)
 			{
 				ProjectStatus status = statuses[i];
-				projects[i] = new Project(server, status.Name);
+				projects[i] = new CCTrayProject(server, status.Name);
 			}
 
 			return projects;

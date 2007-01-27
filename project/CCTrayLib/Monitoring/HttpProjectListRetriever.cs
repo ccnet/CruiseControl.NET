@@ -14,15 +14,15 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
 			this.dashboardXmlParser = dashboardXmlParser;
 		}
 
-		public Project[] GetProjectList(BuildServer server)
+		public CCTrayProject[] GetProjectList(BuildServer server)
 		{
 			string xml = webRetriver.Get(server.Uri);
 			string[] projectNames = dashboardXmlParser.ExtractProjectNames(xml);
 
-			Project[] projects = new Project[projectNames.Length];
+			CCTrayProject[] projects = new CCTrayProject[projectNames.Length];
 			for (int i = 0; i < projectNames.Length; i++)
 			{
-				projects[i] = new Project(server, projectNames[i]);
+				projects[i] = new CCTrayProject(server, projectNames[i]);
 			}
 			
 			return projects;

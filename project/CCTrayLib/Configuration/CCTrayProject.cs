@@ -2,23 +2,24 @@ using System.Xml.Serialization;
 
 namespace ThoughtWorks.CruiseControl.CCTrayLib.Configuration
 {
-	public class Project
+	[XmlType("Project")]
+	public class CCTrayProject
 	{
 		private BuildServer buildServer;
 		private string projectName;
 
-		public Project()
+		public CCTrayProject()
 		{
 			buildServer = new BuildServer();
 		}
 
-		public Project(string serverUrl, string projectName)
+		public CCTrayProject(string serverUrl, string projectName)
 		{
 			ServerUrl = serverUrl;
 			ProjectName = projectName;
 		}
 
-		public Project(BuildServer buildServer, string projectName)
+		public CCTrayProject(BuildServer buildServer, string projectName)
 		{
 			this.buildServer = buildServer;
 			this.projectName = projectName;

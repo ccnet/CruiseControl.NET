@@ -80,7 +80,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 		{
 			lvProjects.Items.Clear();
 
-			foreach (Project project in configuration.Projects)
+			foreach (CCTrayProject project in configuration.Projects)
 			{
 				lvProjects.Items.Add(new ProjectConfigurationListViewItemAdaptor(project).Item);
 			}
@@ -647,11 +647,11 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 		private void btnAdd_Click(object sender, EventArgs e)
 		{
 			AddProjects addProjectDialog = new AddProjects(configuration.CruiseProjectManagerFactory, BuildProjectListFromListView());
-			Project[] projects = addProjectDialog.GetListOfNewProjects(this);
+			CCTrayProject[] projects = addProjectDialog.GetListOfNewProjects(this);
 
 			if (projects != null)
 			{
-				foreach (Project newProject in projects)
+				foreach (CCTrayProject newProject in projects)
 				{
 					lvProjects.Items.Add(new ProjectConfigurationListViewItemAdaptor(newProject).Item);
 				}
@@ -660,7 +660,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 
 		private void btnOK_Click(object sender, EventArgs e)
 		{
-			Project[] newProjectList = BuildProjectListFromListView();
+			CCTrayProject[] newProjectList = BuildProjectListFromListView();
 
 			configuration.Projects = newProjectList;
 			configuration.ShouldShowBalloonOnBuildTransition = chkShowBalloons.Checked;
@@ -679,9 +679,9 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 			configuration.Persist();
 		}
 
-		private Project[] BuildProjectListFromListView()
+		private CCTrayProject[] BuildProjectListFromListView()
 		{
-			Project[] newProjectList = new Project[lvProjects.Items.Count];
+			CCTrayProject[] newProjectList = new CCTrayProject[lvProjects.Items.Count];
 
 			for (int i = 0; i < lvProjects.Items.Count; i++)
 			{

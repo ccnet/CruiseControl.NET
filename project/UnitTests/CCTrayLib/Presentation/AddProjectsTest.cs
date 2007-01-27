@@ -14,16 +14,16 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Presentation
 		[Test, Explicit]
 		public void ShowDialogForInteractiveTesting()
 		{
-			AddProjects addProjects = new AddProjects(null, new Project[0]);
+			AddProjects addProjects = new AddProjects(null, new CCTrayProject[0]);
 			addProjects.GetListOfNewProjects(null);
 		}
 
 		[Test]
 		public void TheServerListBoxIsPopulatedWithAListOfAllServersCurrentlyConfigured()
 		{
-			Project[] projects = {
-			                     	new Project("tcp://localhost:123/blah", "proj1"),
-			                     	new Project("tcp://otherserver:456/blah", "proj2"),
+			CCTrayProject[] projects = {
+			                     	new CCTrayProject("tcp://localhost:123/blah", "proj1"),
+			                     	new CCTrayProject("tcp://otherserver:456/blah", "proj2"),
 			                     };
 
 			AddProjects addProjects = new AddProjects(null, projects);
@@ -35,9 +35,9 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Presentation
 		[Test]
 		public void TheServerListBoxIsPopulatedInAlphabeticalOrder()
 		{
-			Project[] projects = {
-			                     	new Project("tcp://b:123/blah", "proj1"),
-			                     	new Project("tcp://a:123/blah", "proj2"),
+			CCTrayProject[] projects = {
+			                     	new CCTrayProject("tcp://b:123/blah", "proj1"),
+			                     	new CCTrayProject("tcp://a:123/blah", "proj2"),
 			                     };
 
 			AddProjects addProjects = new AddProjects(null, projects);
@@ -49,9 +49,9 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Presentation
 		[Test]
 		public void DuplicateServersAreIgnoredWhenAddingToTheServerList()
 		{
-			Project[] projects = {
-			                     	new Project("tcp://localhost:123/blah", "proj1"),
-			                     	new Project("tcp://localhost:123/blah", "proj2"),
+			CCTrayProject[] projects = {
+			                     	new CCTrayProject("tcp://localhost:123/blah", "proj1"),
+			                     	new CCTrayProject("tcp://localhost:123/blah", "proj2"),
 			                     };
 
 			AddProjects addProjects = new AddProjects(null, projects);
@@ -62,15 +62,15 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Presentation
 		[Test]
 		public void CurrentlyAddedProjectsAreIgnoredWhenServerIsSelected()
 		{
-			Project[] allProjects = {
-			                        	new Project("tcp://localhost:123/blah", "proj1"),
-			                        	new Project("tcp://localhost:123/blah", "proj2"),
-			                        	new Project("tcp://localhost:123/blah", "proj3"),
+			CCTrayProject[] allProjects = {
+			                        	new CCTrayProject("tcp://localhost:123/blah", "proj1"),
+			                        	new CCTrayProject("tcp://localhost:123/blah", "proj2"),
+			                        	new CCTrayProject("tcp://localhost:123/blah", "proj3"),
 			                        };
 
-			Project[] selectedProjects = {
-			                             	new Project("tcp://localhost:123/blah", "proj1"),
-			                             	new Project("tcp://localhost:123/blah", "proj2"),
+			CCTrayProject[] selectedProjects = {
+			                             	new CCTrayProject("tcp://localhost:123/blah", "proj1"),
+			                             	new CCTrayProject("tcp://localhost:123/blah", "proj2"),
 			                             };
 
 			DynamicMock mockCruiseManagerFactory = new DynamicMock(typeof (ICruiseProjectManagerFactory));

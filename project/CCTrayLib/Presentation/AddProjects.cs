@@ -27,32 +27,32 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 		private System.Windows.Forms.Button btnOK;
 		private System.Windows.Forms.Label label1;
 		private System.Windows.Forms.Label label4;
-		private readonly Project[] currentProjectList;
+		private readonly CCTrayProject[] currentProjectList;
 
-		public AddProjects(ICruiseProjectManagerFactory cruiseProjectManagerFactory, Project[] currentProjectList)
+		public AddProjects(ICruiseProjectManagerFactory cruiseProjectManagerFactory, CCTrayProject[] currentProjectList)
 		{
 			this.cruiseProjectManagerFactory = cruiseProjectManagerFactory;
 			this.currentProjectList = currentProjectList;
 
 			InitializeComponent();
 
-			foreach (Project project in currentProjectList)
+			foreach (CCTrayProject project in currentProjectList)
 			{
 				if (!lbServer.Items.Contains(project.BuildServer))
 					lbServer.Items.Add(project.BuildServer);
 			}
 		}
 
-		public Project[] GetListOfNewProjects(IWin32Window owner)
+		public CCTrayProject[] GetListOfNewProjects(IWin32Window owner)
 		{
 			if (ShowDialog(owner) == DialogResult.OK)
 			{
 				ArrayList newProjects = new ArrayList();
 				foreach (string projectName in lbProject.SelectedItems)
 				{
-					newProjects.Add(new Project(selectedServer, projectName));
+					newProjects.Add(new CCTrayProject(selectedServer, projectName));
 				}
-				return (Project[]) newProjects.ToArray(typeof (Project));
+				return (CCTrayProject[]) newProjects.ToArray(typeof (CCTrayProject));
 			}
 			return null;
 		}
@@ -240,9 +240,9 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 			{
 				lbProject.Items.Clear();
 
-				Project[] projectList = cruiseProjectManagerFactory.GetProjectList(server);
+				CCTrayProject[] projectList = cruiseProjectManagerFactory.GetProjectList(server);
 
-				foreach (Project project in projectList)
+				foreach (CCTrayProject project in projectList)
 				{
 					if (! IsProjectAlreadyAdded(project))
 						lbProject.Items.Add(project.ProjectName);
@@ -258,9 +258,9 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 			}
 		}
 
-		private bool IsProjectAlreadyAdded(Project project)
+		private bool IsProjectAlreadyAdded(CCTrayProject project)
 		{
-			foreach (Project currentProject in currentProjectList)
+			foreach (CCTrayProject currentProject in currentProjectList)
 			{
 				if (project.ServerUrl == currentProject.ServerUrl && project.ProjectName == currentProject.ProjectName)
 					return true;

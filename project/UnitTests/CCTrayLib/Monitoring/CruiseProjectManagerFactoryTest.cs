@@ -21,7 +21,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Monitoring
 			BuildServer server= new BuildServer("tcp://somethingOrOther");
 			mockCruiseManagerFactory.ExpectAndReturn("GetCruiseManager", null, server.Url);
 
-			ICruiseProjectManager manager = factory.Create(new Project(server, ProjectName));
+			ICruiseProjectManager manager = factory.Create(new CCTrayProject(server, ProjectName));
 			Assert.AreEqual(ProjectName, manager.ProjectName);
 
 			mockCruiseManagerFactory.Verify();
@@ -36,7 +36,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Monitoring
 
 			BuildServer server = new BuildServer("http://somethingOrOther");
 
-			ICruiseProjectManager manager = factory.Create(new Project(server, ProjectName));
+			ICruiseProjectManager manager = factory.Create(new CCTrayProject(server, ProjectName));
 			Assert.AreEqual(ProjectName, manager.ProjectName);
 			Assert.AreEqual(typeof (HttpCruiseProjectManager), manager.GetType());
 

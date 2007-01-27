@@ -7,9 +7,9 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 	public class ProjectConfigurationListViewItemAdaptor
 	{
 		private ListViewItem item;
-		private Project project;
+		private CCTrayProject project;
 
-		public ProjectConfigurationListViewItemAdaptor(Project project)
+		public ProjectConfigurationListViewItemAdaptor(CCTrayProject project)
 		{
 			this.project = project;
 			item = new ListViewItem(new string[] {project.BuildServer.DisplayName, project.BuildServer.Transport.ToString(), project.ProjectName});
@@ -21,7 +21,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 			get { return item; }
 		}
 
-		public Project Project
+		public CCTrayProject Project
 		{
 			get { return project; }
 		}
