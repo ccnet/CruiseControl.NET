@@ -40,17 +40,34 @@ namespace ThoughtWorks.CruiseControl.Core.State
 		
 		public IIntegrationResult LoadState(string project)
 		{
-			string stateFilePath = GetFilePath(project);
+			TextReader stateFileReader = GetStateFileReader(project);
+			return LoadState(stateFileReader);
+		}
 
+		public IIntegrationResult LoadState(TextReader stateFileReader)
+		{
 			XmlSerializer serializer = new XmlSerializer(typeof (IntegrationResult));
 			try
 			{
-				return (IntegrationResult) serializer.Deserialize(fileSystem.Load(stateFilePath));
+				return (IntegrationResult) serializer.Deserialize(stateFileReader);
 			}
 			catch (Exception e)
 			{
 				throw new CruiseControlException(
-					string.Format("Unable to read the specified state file: {0}.  The path may be invalid.", stateFilePath), e);
+					string.Format("Unable to read the specified saved state.  The configuration data may be invalid."), e);
+			}
+		}
+
+		private TextReader GetStateFileReader(string project)
+		{
+			string stateFilePath = GetFilePath(project);
+			try
+			{
+				return fileSystem.Load(stateFilePath);
+			}
+			catch (Exception e)
+			{
+				throw new CruiseControlException(string.Format("Unable to read the specified state file: {0}.  The path may be invalid.", stateFilePath), e);				
 			}
 		}
 

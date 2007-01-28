@@ -143,11 +143,6 @@ namespace ThoughtWorks.CruiseControl.Core
 			get { return integrationResultManager.LastIntegrationResult; }
 		}
 
-		public IntegrationStatus LatestBuildStatus
-		{
-			get { return LastIntegrationResult.Status; }
-		}
-
 		public IIntegrationResult Integrate(IntegrationRequest request)
 		{
 			return integratable.Integrate(request);
@@ -234,7 +229,7 @@ namespace ThoughtWorks.CruiseControl.Core
 		public ProjectStatus CreateProjectStatus(IProjectIntegrator integrator)
 		{
 			ProjectStatus status =
-				new ProjectStatus(Name, Category, CurrentActivity, LatestBuildStatus, integrator.State, WebURL,
+				new ProjectStatus(Name, Category, CurrentActivity, LastIntegrationResult.Status, integrator.State, WebURL,
 				                  LastIntegrationResult.StartTime, LastIntegrationResult.Label,
 				                  LastIntegrationResult.LastSuccessfulIntegrationLabel,
 				                  Triggers.NextBuild);
