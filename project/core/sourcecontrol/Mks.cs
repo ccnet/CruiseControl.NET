@@ -156,7 +156,8 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			ProcessArgumentBuilder buffer = new ProcessArgumentBuilder();
 			buffer.AppendArgument("memberinfo");
 			AppendCommonArguments(buffer, false);
-			buffer.AddArgument(Path.Combine(Path.Combine(SandboxRoot, modification.FolderName), modification.FileName));
+			string modificationPath = (modification.FolderName == null) ? SandboxRoot : Path.Combine(SandboxRoot, modification.FolderName);
+			buffer.AddArgument(Path.Combine(modificationPath, modification.FileName));
 			return buffer.ToString();
 		}
 

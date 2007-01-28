@@ -215,6 +215,27 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 		}
 
 		[Test]
+		public void GetModificationsForModificationInRootFolder()
+		{
+			sandboxRoot = TempFileUtil.GetTempPath("MksSandBox");
+			
+			Modification addedModification = ModificationMother.CreateModification("myFile.file", null);
+			addedModification.Type = "Added";
+
+			mksHistoryParserWrapper.ExpectAndReturn("Parse", new Modification[] {addedModification}, new IsTypeOf(typeof (TextReader)), FROM, TO);
+			mksHistoryParserWrapper.ExpectAndReturn("ParseMemberInfoAndAddToModification", new Modification[] {addedModification}, new IsTypeOf(typeof (Modification)), new IsTypeOf(typeof (StringReader)));
+			mockExecutorWrapper.ExpectAndReturn("Execute", new ProcessResult("", null, 0, false), new IsTypeOf(typeof (ProcessInfo)));
+
+			string expectedCommand = string.Format(@"memberinfo -S {0}\myproject.pj --user=CCNetUser --password=CCNetPassword --quiet {0}\myFile.file", sandboxRoot);
+			ProcessInfo expectedProcessInfo = ExpectedProcessInfo(expectedCommand);
+			mockExecutorWrapper.ExpectAndReturn("Execute", new ProcessResult(null, null, 0, false), expectedProcessInfo);
+
+			mks = CreateMks(CreateSourceControlXml(), mksHistoryParser, mockProcessExecutor);
+			Modification[] modifications = mks.GetModifications(IntegrationResultMother.CreateSuccessful(FROM), IntegrationResultMother.CreateSuccessful(TO));
+			Assert.AreEqual(1, modifications.Length);
+		}
+
+		[Test]
 		public void GetModificationsCallsMemberInfoForNonDeletedModifications()
 		{
 			Modification addedModification = ModificationMother.CreateModification("myFile.file", "MyFolder");
