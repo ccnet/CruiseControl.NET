@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Web;
 using Exortech.NetReflector;
 using ThoughtWorks.CruiseControl.Core.Reporting.Dashboard.Navigation;
 using ThoughtWorks.CruiseControl.Core.Util;
@@ -42,12 +43,12 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.ServerReport
 			velocityContext["projectLinks"] = links;
 			if (StringUtil.IsBlank(request.ProjectName))
 			{
-				velocityContext["log"] = farmService.GetServerLog(request.ServerSpecifier);
+				velocityContext["log"] = HttpUtility.HtmlEncode(farmService.GetServerLog(request.ServerSpecifier));
 			}
 			else
 			{
 				velocityContext["currentProject"] = request.ProjectSpecifier.ProjectName;
-				velocityContext["log"] = farmService.GetServerLog(request.ProjectSpecifier);
+				velocityContext["log"] = HttpUtility.HtmlEncode(farmService.GetServerLog(request.ProjectSpecifier));
 			}
 
 			return viewGenerator.GenerateView(@"ServerLog.vm", velocityContext);
