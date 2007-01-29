@@ -231,7 +231,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 		[Test]
 		public void ShouldCheckoutInsteadOfUpdateIfSVNFoldersDoNotExist()
 		{
-			ExpectToExecuteArguments(@"checkout svn://myserver/mypath --non-interactive --no-auth-cache");
+			ExpectToExecuteArguments(string.Format(@"checkout svn://myserver/mypath {0} --non-interactive --no-auth-cache", DefaultWorkingDirectory));
 			ExpectSvnDirectoryExists(false);
 
 			svn.AutoGetSource = true;

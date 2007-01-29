@@ -101,6 +101,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			ProcessArgumentBuilder buffer = new ProcessArgumentBuilder();
 			buffer.AppendArgument("checkout");
 			buffer.AppendArgument(TrunkUrl);
+			buffer.AppendArgument(result.BaseFromWorkingDirectory(WorkingDirectory));
 			AppendCommonSwitches(buffer);
 			return NewProcessInfo(buffer.ToString(), result);
 		}
