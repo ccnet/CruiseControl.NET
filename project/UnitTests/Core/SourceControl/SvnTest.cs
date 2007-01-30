@@ -233,6 +233,19 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 		{
 			ExpectToExecuteArguments(string.Format(@"checkout svn://myserver/mypath {0} --non-interactive --no-auth-cache", DefaultWorkingDirectory));
 			ExpectSvnDirectoryExists(false);
+			ExpectUnderscoreSvnDirectoryExists(false);
+
+			svn.AutoGetSource = true;
+			svn.WorkingDirectory = DefaultWorkingDirectory;
+			svn.GetSource(IntegrationResult());
+		}
+		
+		[Test]
+		public void ShouldNotCheckoutIfSVNFoldersWithAspNetHackExist()
+		{
+			ExpectSvnDirectoryExists(false);
+			ExpectUnderscoreSvnDirectoryExists(true);
+			ExpectToExecuteArguments(@"update --non-interactive --no-auth-cache");
 
 			svn.AutoGetSource = true;
 			svn.WorkingDirectory = DefaultWorkingDirectory;
@@ -243,6 +256,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 		public void ShouldThrowExceptionIfTrunkUrlIsNotSpecifiedAndSVNFoldersDoNotExist()
 		{
 			ExpectSvnDirectoryExists(false);
+			ExpectUnderscoreSvnDirectoryExists(false);
 			
 			svn.TrunkUrl = string.Empty;
 			svn.AutoGetSource = true;
@@ -253,6 +267,11 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 		private void ExpectSvnDirectoryExists(bool doesSvnDirectoryExist)
 		{
 			mockFileSystem.ExpectAndReturn("DirectoryExists", doesSvnDirectoryExist, Path.Combine(DefaultWorkingDirectory, ".svn"));
+		}
+
+		private void ExpectUnderscoreSvnDirectoryExists(bool doesSvnDirectoryExist)
+		{
+			mockFileSystem.ExpectAndReturn("DirectoryExists", doesSvnDirectoryExist, Path.Combine(DefaultWorkingDirectory, "_svn"));
 		}
 	}
 }

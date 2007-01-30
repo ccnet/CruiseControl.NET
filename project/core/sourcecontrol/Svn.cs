@@ -113,8 +113,9 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 
 		private bool DoesSvnDirectoryExist(IIntegrationResult result)
 		{
-			string cvsDirectory = Path.Combine(result.BaseFromWorkingDirectory(WorkingDirectory), ".svn");
-			return fileSystem.DirectoryExists(cvsDirectory);
+			string svnDirectory = Path.Combine(result.BaseFromWorkingDirectory(WorkingDirectory), ".svn");
+			string underscoreSvnDirectory = Path.Combine(result.BaseFromWorkingDirectory(WorkingDirectory), "_svn");
+			return fileSystem.DirectoryExists(svnDirectory) || fileSystem.DirectoryExists(underscoreSvnDirectory);
 		}
 
 		private ProcessInfo NewGetSourceProcessInfo(IIntegrationResult result)
