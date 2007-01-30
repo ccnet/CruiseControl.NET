@@ -25,7 +25,7 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers.Statistics
 
 			XmlDocument xmlDocument = UpdateXmlFile(stats, integrationResult);
 			ChartGenerator().Process(xmlDocument, integrationResult.ArtifactDirectory);
-			UpdateCsvFile(builder, integrationResult.Integration);
+			UpdateCsvFile(builder, integrationResult);
 		}
 
 		private StatisticsChartGenerator ChartGenerator()
@@ -47,17 +47,15 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers.Statistics
 			XmlDocument doc = new XmlDocument();
 	
 			string lastFile = XmlStatisticsFile(integrationResult);
-			XmlElement root = null;
 			if (File.Exists(lastFile))
 			{
 				doc.Load(lastFile);
-				root = (XmlElement) doc.FirstChild;
 			}
 			else
 			{
-				root = doc.CreateElement("statistics");
-				doc.AppendChild(root);
+				doc.AppendChild(doc.CreateElement("statistics"));
 			}
+			XmlElement root = doc.DocumentElement;
 
 			XmlElement xml = toXml(doc, stats);
 			xml.SetAttribute("build-label", integrationResult.Label);
@@ -94,15 +92,15 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers.Statistics
 			return Path.Combine(integrationResult.ArtifactDirectory, integrationResult.StatisticsFile);
 		}
 
-		private void UpdateCsvFile(StatisticsBuilder builder, IntegrationState previousState)
+		private void UpdateCsvFile(StatisticsBuilder builder, IIntegrationResult integrationResult)
 		{
-			string csvFile = CsvStatisticsFile(previousState);
+			string csvFile = CsvStatisticsFile(integrationResult);
 			builder.AppendCsv(csvFile);
 		}
 
-		private string CsvStatisticsFile(IntegrationState integrationState)
+		private string CsvStatisticsFile(IIntegrationResult integrationResult)
 		{
-			return Path.Combine(integrationState.ArtifactDirectory, csvFileName);
+			return Path.Combine(integrationResult.ArtifactDirectory, csvFileName);
 		}
 	}
 }

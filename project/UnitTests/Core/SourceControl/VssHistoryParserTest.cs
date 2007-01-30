@@ -378,6 +378,25 @@ and then added a new line", mod.Comment);
 			parser.ParseComment(mod);
 			Assert.AreEqual(null, mod.Comment);
 		}
+		
+		[Test, Ignore("later")]
+		public void ParseCheckedInFileAndFolderWithLineBreaks()
+		{
+			string entry = @"*****  happyTheFile.txt  *****
+Version 3
+User: Admin        Date:  9/16/02   Time:  5:01p
+Checked in $/you/want/" + '\n' + @"folders/i/got/em
+Comment: added fir to tree file, checked in recursively from project root";
+
+			string expectedFile = "happyTheFile.txt";
+			string expectedFolder = "$/you/want/folders/i/got/em";
+
+			Modification mod = ParseAndAssertFilenameAndFolder(entry, expectedFile, expectedFolder);
+			Assert.AreEqual("Admin", mod.UserName);
+			Assert.AreEqual(new DateTime(2002, 9, 16, 17, 01, 0), mod.ModifiedTime);
+			Assert.AreEqual("Checked in", mod.Type);
+			Assert.AreEqual("added fir to tree file, checked in recursively from project root",mod.Comment);
+		}
 
 		private string EntryWithSingleLineComment()
 		{

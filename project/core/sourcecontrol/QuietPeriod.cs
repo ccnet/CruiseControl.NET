@@ -66,8 +66,6 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			}
 		}
 
-
-
 		private Modification[] GetModificationsWithLogging(ISourceControl sc, IIntegrationResult from, IIntegrationResult to)
 		{
 			Modification[] modifications = sc.GetModifications(from, to);

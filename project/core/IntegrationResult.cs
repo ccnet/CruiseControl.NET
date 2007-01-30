@@ -388,13 +388,13 @@ namespace ThoughtWorks.CruiseControl.Core
 		[XmlIgnore]
 		public IntegrationState LastIntegration
 		{
-			get { return new IntegrationState(LastIntegrationStatus, PreviousLabel, ArtifactDirectory); }
+			get { return new IntegrationState(LastIntegrationStatus, PreviousLabel); }
 		}
 
 		[XmlIgnore]
-		public IntegrationState Integration
+		public IntegrationState CurrentState
 		{
-			get { return new IntegrationState(Status, Label, ArtifactDirectory); }
+			get { return new IntegrationState(Status, Label); }
 		}
 
 		[XmlIgnore]
@@ -430,32 +430,25 @@ namespace ThoughtWorks.CruiseControl.Core
 	{
 		private readonly IntegrationStatus status;
 		private readonly string label;
-		private readonly string baseArtifactDirectory;
 
-		public IntegrationState(IntegrationStatus status, string label, string baseArtifactDirectory)
+		public IntegrationState(IntegrationStatus status, string label)
 		{
 			this.status = status;
 			this.label = label;
-			this.baseArtifactDirectory = baseArtifactDirectory;
 		}
 
 		public override bool Equals(object obj)
 		{
 			if (obj == null) return false;
-			if (obj.GetType() != this.GetType()) return false;
+			if (obj.GetType() != GetType()) return false;
 
 			IntegrationState other = (IntegrationState) obj;
-			return other.status.Equals(status) && other.label == this.label;
+			return other.status.Equals(status) && other.label == label;
 		}
 
 		public override int GetHashCode()
 		{
 			return label.GetHashCode();
-		}
-
-		public string ArtifactDirectory
-		{
-			get { return baseArtifactDirectory; }
 		}
 
 		public string Label

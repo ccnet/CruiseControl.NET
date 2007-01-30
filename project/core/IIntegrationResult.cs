@@ -6,47 +6,50 @@ namespace ThoughtWorks.CruiseControl.Core
 {
 	public interface IIntegrationResult
 	{
+		// Project configuration properties
 		string ProjectName { get; }
 		string ProjectUrl { get; set;}
-
-		BuildCondition BuildCondition { get; }
 		string WorkingDirectory { get; set; }
+		string ArtifactDirectory { get; set;}
+		string StatisticsFile {get; set;}
+		string BaseFromArtifactsDirectory(string pathToBase);
+		string BaseFromWorkingDirectory(string pathToBase);
+
+		// Current integration state
+		BuildCondition BuildCondition { get; }
 		string Label { get; set; }
 		IntegrationStatus Status { get; set; }
 		DateTime StartTime { get; set; }
 		DateTime EndTime { get; }
 		TimeSpan TotalIntegrationTime { get; }
-		string ArtifactDirectory { get; set;}
-		string StatisticsFile {get; set;}
 		bool Failed { get; }
 		bool Fixed { get; }
 		bool Succeeded { get; }
 		void MarkStartTime();
 		void MarkEndTime();
-		
-		string LastSuccessfulIntegrationLabel { get; }
+		bool IsInitial();
+		IntegrationState CurrentState { get; }
+		IntegrationRequest IntegrationRequest { get; }
+
+		// Last integration state
 		IntegrationStatus LastIntegrationStatus { get; }
 		DateTime LastModificationDate { get; }
 		int LastChangeNumber { get; }
+		IntegrationState LastIntegration { get; }
 
+		// Last successful integration state
+		string LastSuccessfulIntegrationLabel { get; }
+
+		// Current integration artifacts
 		IList TaskResults { get; }
 		Modification[] Modifications { get; set; }
 		Exception ExceptionResult { get; set; }
 		string TaskOutput { get; }
-
 		void AddTaskResult(string result);
 		void AddTaskResult(ITaskResult result);
-		bool IsInitial();
 		bool HasModifications();
 		bool ShouldRunBuild();
-		string BaseFromArtifactsDirectory(string pathToBase);
-		string BaseFromWorkingDirectory(string pathToBase);
+
 		IDictionary IntegrationProperties { get; }
-
-		IntegrationState LastIntegration { get; }
-
-		IntegrationState Integration { get; }
-
-		IntegrationRequest IntegrationRequest { get; }
 	}
 }

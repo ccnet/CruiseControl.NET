@@ -234,14 +234,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 			result.LastIntegrationStatus = IntegrationStatus.Exception;
 			result.LastSuccessfulIntegrationLabel = "foo";
 			result.ArtifactDirectory = "dir";
-			Assert.AreEqual(new IntegrationState(IntegrationStatus.Exception, "foo", "dir"), result.LastIntegration);
-		}
-
-		[Test]
-		public void ArtifactDirectory()
-		{
-			IntegrationState state = new IntegrationState(IntegrationStatus.Exception, "foo", "dir");
-			Assert.AreEqual("dir", state.ArtifactDirectory);
+			Assert.AreEqual(new IntegrationState(IntegrationStatus.Exception, "foo"), result.LastIntegration);
 		}
 	}
 }

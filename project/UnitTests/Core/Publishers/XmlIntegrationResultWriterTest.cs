@@ -1,6 +1,5 @@
 using System;
 using System.IO;
-using System.Xml;
 using System.Xml.XPath;
 using NUnit.Framework;
 using ThoughtWorks.CruiseControl.Core;
@@ -29,7 +28,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Publishers
 		[Test]
 		public void WriteBuildEvent()
 		{
-			IntegrationResult result = CreateIntegrationResult(IntegrationStatus.Success, false);
+			result = CreateIntegrationResult(IntegrationStatus.Success, false);
 			writer.Write(result);
 			AssertContains(CreateExpectedBuildXml(result), buffer.ToString());
 		}
@@ -187,7 +186,7 @@ http://nant.sourceforge.net
 
 <buildresults project=""test"" />";
 
-			IntegrationResult result = CreateIntegrationResult(IntegrationStatus.Success, false);
+			result = CreateIntegrationResult(IntegrationStatus.Success, false);
 			result.AddTaskResult(nantOut);
 
 			Assert.AreEqual(CreateExpectedBuildXml(result, nantOut), GenerateBuildOutput(result));
@@ -240,17 +239,17 @@ e:\RW\WORKSPACES\WIN2000\MSVC60\8S\INCLUDE\iterator(563) : warning C4284: return
 
 		private Modification[] CreateModifications()
 		{
-			Modification result = new Modification();
-			result.Type = "added";
-			result.FileName = "ntserver_protocol.dll";
-			result.FolderName = "tools";
-			result.ModifiedTime = new DateTime(2002, 9, 5, 11, 38, 30);
-			result.UserName = "owen";
-			result.EmailAddress = "";
-			result.Comment = "ccnet self-admin config folder files";
+			Modification mod = new Modification();
+			mod.Type = "added";
+			mod.FileName = "ntserver_protocol.dll";
+			mod.FolderName = "tools";
+			mod.ModifiedTime = new DateTime(2002, 9, 5, 11, 38, 30);
+			mod.UserName = "owen";
+			mod.EmailAddress = "";
+			mod.Comment = "ccnet self-admin config folder files";
 
 			Modification[] mods = new Modification[1];
-			mods[0] = result;
+			mods[0] = mod;
 			return mods;
 		}
 	}
