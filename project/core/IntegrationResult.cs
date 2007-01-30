@@ -18,20 +18,17 @@ namespace ThoughtWorks.CruiseControl.Core
 	{
 		public const string InitialLabel = "UNKNOWN";
 		private string lastSuccessfulIntegrationLabel;
-		private DateTime startTime;
-		private DateTime endTime;
 		private Modification[] modifications = new Modification[0];
 		private Exception exception;
 		private ArrayList taskResults = new ArrayList();
 		private IDictionary properties = new SortedList();
 		private IntegrationRequest request;
+		private IntegrationState currentState = new IntegrationState(IntegrationStatus.Unknown, InitialLabel);
 
 		// Default constructor required for serialization
 		public IntegrationResult()
 		{
 			BuildCondition = BuildCondition.NoBuild;
-			Label = InitialLabel;
-			Status = IntegrationStatus.Unknown;
 			LastIntegrationStatus = IntegrationStatus.Unknown;
 		}
 
@@ -74,28 +71,8 @@ namespace ThoughtWorks.CruiseControl.Core
 
 		public string Label
 		{
-			get { return Convert(properties["CCNetLabel"]); }
-			set
-			{
-				properties["CCNetLabel"] = value;
-				properties["CCNetNumericLabel"] = "0";
-				// The regex conversion will fail for certain types of labels, so catch exceptions
-				// and set the numeric label to blank in these cases.
-				if (value != null)
-				{
-					try
-					{
-						// NOTE: An all-text label (e.g. "My Label") will be returned
-						// entirely from the regex below.  Thus, we have to check that the
-						// final result is an integer before setting the property.
-						string tempNumericLabel = Regex.Replace(value, @".*?(\d+$)", "$1");
-						properties["CCNetNumericLabel"] = int.Parse(tempNumericLabel);
-					}
-					catch
-					{
-					}
-				}
-			}
+			get { return CurrentState.Label; }
+			set { CurrentState.Label = value; }
 		}
 
 		//
@@ -107,18 +84,19 @@ namespace ThoughtWorks.CruiseControl.Core
 		// "1-0--1", which might cause all sorts of havoc for them.  Best to
 		// avoid the "-" character.
 		//
-		public int NumericLabel		
+		public int NumericLabel
 		{
-			get				
+			get
 			{
-				int retval = 0;
 				try
 				{
-					retval = int.Parse(Convert(properties["CCNetNumericLabel"]));
+					string tempNumericLabel = Regex.Replace(Label, @".*?(\d+$)", "$1");
+					return int.Parse(tempNumericLabel);
 				}
-				catch {}
-
-				return retval;
+				catch (FormatException)
+				{
+					return 0;
+				}
 			}
 		}
 
@@ -147,8 +125,8 @@ namespace ThoughtWorks.CruiseControl.Core
 
 		public IntegrationStatus Status
 		{
-			get { return (IntegrationStatus) properties["CCNetIntegrationStatus"]; }
-			set { properties["CCNetIntegrationStatus"] = value; }
+			get { return CurrentState.Status; }
+			set { CurrentState.Status = value; }
 		}
 
 		public IntegrationStatus LastIntegrationStatus
@@ -179,8 +157,8 @@ namespace ThoughtWorks.CruiseControl.Core
 		/// </summary>
 		public DateTime StartTime
 		{
-			get { return startTime; }
-			set { startTime = value; }
+			get { return CurrentState.StartTime; }
+			set { CurrentState.StartTime = value; }
 		}
 
 		/// <summary>
@@ -188,8 +166,8 @@ namespace ThoughtWorks.CruiseControl.Core
 		/// </summary>
 		public DateTime EndTime
 		{
-			get { return endTime; }
-			set { endTime = value; }
+			get { return CurrentState.EndTime; }
+			set { CurrentState.EndTime = value; }
 		}
 
 		[XmlIgnore]
@@ -325,10 +303,10 @@ namespace ThoughtWorks.CruiseControl.Core
 			{
 				return false;
 			}
-			return this.ProjectName == other.ProjectName &&
-				this.Status == other.Status &&
-				this.Label == other.Label &&
-				this.StartTime == other.StartTime;
+			return ProjectName == other.ProjectName &&
+			       Status == other.Status &&
+			       Label == other.Label &&
+			       StartTime == other.StartTime;
 		}
 
 		public override int GetHashCode()
@@ -341,7 +319,7 @@ namespace ThoughtWorks.CruiseControl.Core
 			IntegrationResult result = new IntegrationResult(project, workingDirectory);
 			result.StartTime = DateTime.Now.AddDays(-1);
 			result.EndTime = DateTime.Now;
-			result.BuildCondition = Remote.BuildCondition.ForceBuild;
+			result.BuildCondition = BuildCondition.ForceBuild;
 			return result;
 		}
 
@@ -394,7 +372,7 @@ namespace ThoughtWorks.CruiseControl.Core
 		[XmlIgnore]
 		public IntegrationState CurrentState
 		{
-			get { return new IntegrationState(Status, Label); }
+			get { return currentState; }
 		}
 
 		[XmlIgnore]
@@ -409,6 +387,9 @@ namespace ThoughtWorks.CruiseControl.Core
 			get
 			{
 				IDictionary fullProps = new Hashtable(properties);
+				fullProps["CCNetIntegrationStatus"] = Status.ToString();
+				fullProps["CCNetLabel"] = Label;
+				fullProps["CCNetNumericLabel"] = NumericLabel.ToString();
 				fullProps["CCNetBuildDate"] = StartTime.ToString("yyyy-MM-dd", null);
 				fullProps["CCNetBuildTime"] = StartTime.ToString("HH:mm:ss", null);
 				return fullProps;
@@ -428,8 +409,14 @@ namespace ThoughtWorks.CruiseControl.Core
 
 	public class IntegrationState
 	{
-		private readonly IntegrationStatus status;
-		private readonly string label;
+		private IntegrationStatus status;
+		private string label;
+		private DateTime startTime;
+		private DateTime endTime;
+
+		public IntegrationState()
+		{
+		}
 
 		public IntegrationState(IntegrationStatus status, string label)
 		{
@@ -454,6 +441,25 @@ namespace ThoughtWorks.CruiseControl.Core
 		public string Label
 		{
 			get { return label; }
+			set { label = value; }
+		}
+
+		public IntegrationStatus Status
+		{
+			get { return status; }
+			set { status = value; }
+		}
+
+		public DateTime StartTime
+		{
+			get { return startTime; }
+			set { startTime = value; }
+		}
+
+		public DateTime EndTime
+		{
+			get { return endTime; }
+			set { endTime = value; }
 		}
 	}
 }

@@ -162,7 +162,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 		[Test]
 		public void InitiallyLastSuccessfulIntegrationLabelShouldBeCurrentLabel()
 		{
-			IntegrationResult result = IntegrationResult.CreateInitialIntegrationResult("foo", @"c:\");
+			result = IntegrationResult.CreateInitialIntegrationResult("foo", @"c:\");
 			result.Label = "initial";
 			Assert.AreEqual("initial", result.LastSuccessfulIntegrationLabel);
 		}
@@ -170,13 +170,14 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 		[Test]
 		public void MapIntegrationProperties()
 		{
-			IntegrationResult result = new IntegrationResult("project", @"c:\workingdir\", new IntegrationRequest(BuildCondition.IfModificationExists, "myTrigger"));
-			result.Label = "label";
+			result = new IntegrationResult("project", @"c:\workingdir\", new IntegrationRequest(BuildCondition.IfModificationExists, "myTrigger"));
+			result.Label = "label23";
 			result.ArtifactDirectory = @"c:\artifactdir\";
 			result.StartTime = new DateTime(2005,06,06,08,45,00);
 
 			Assert.AreEqual(11, result.IntegrationProperties.Count);
-			Assert.AreEqual("label", result.IntegrationProperties["CCNetLabel"]);
+			Assert.AreEqual("label23", result.IntegrationProperties["CCNetLabel"]);
+			Assert.AreEqual("23", result.IntegrationProperties["CCNetNumericLabel"]);
 			Assert.AreEqual(@"c:\artifactdir\", result.IntegrationProperties["CCNetArtifactDirectory"]);
 			// We purposefully use culture-independent string formats
 			Assert.AreEqual("2005-06-06", result.IntegrationProperties["CCNetBuildDate"]);
@@ -188,7 +189,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 		[Test]
 		public void VerifyIntegrationArtifactDir()
 		{
-			IntegrationResult result = new IntegrationResult();
+			result = new IntegrationResult();
 			result.ArtifactDirectory = @"c:\artifacts";
 			result.Label = "1.2.3.4";
 			Assert.AreEqual(@"c:\artifacts\1.2.3.4", result.IntegrationArtifactDirectory);
@@ -197,7 +198,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 		[Test]
 		public void NumericLabel()	
 		{
-			IntegrationResult result = new IntegrationResult();
+			result = new IntegrationResult();
 			result.Label = "23";
 			Assert.AreEqual(23, result.NumericLabel);
 		}
@@ -205,7 +206,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 		[Test]
 		public void NumericLabelWithPrefix()
 		{
-			IntegrationResult result = new IntegrationResult();
+			result = new IntegrationResult();
 			result.Label = "Prefix23";
 			Assert.AreEqual(23, result.NumericLabel);
 		}
@@ -213,7 +214,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 		[Test]
 		public void NumericLabelWithNumericPrefix()
 		{
-			IntegrationResult result = new IntegrationResult();
+			result = new IntegrationResult();
 			result.Label = "R3SX23";
 			Assert.AreEqual(23, result.NumericLabel);
 		}
@@ -221,7 +222,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 		[Test]
 		public void NumericLabelTextOnly()
 		{
-			IntegrationResult result = new IntegrationResult();
+			result = new IntegrationResult();
 			result.Label = "foo";
 			// Make sure we don't throw an exception
 			Assert.AreEqual(0, result.NumericLabel);
@@ -230,7 +231,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 		[Test]
 		public void CanGetPreviousState()
 		{
-			IntegrationResult result = new IntegrationResult();
+			result = new IntegrationResult();
 			result.LastIntegrationStatus = IntegrationStatus.Exception;
 			result.LastSuccessfulIntegrationLabel = "foo";
 			result.ArtifactDirectory = "dir";
