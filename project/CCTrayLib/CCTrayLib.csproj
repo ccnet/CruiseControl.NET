@@ -1,7 +1,7 @@
 <VisualStudioProject>
     <CSHARP
         ProjectType = "Local"
-        ProductVersion = "7.10.3077"
+        ProductVersion = "7.10.6030"
         SchemaVersion = "2.0"
         ProjectGuid = "{C8043AD9-0F30-4366-A263-E2FC0D6A57A9}"
     >
@@ -356,6 +356,11 @@
                 />
                 <File
                     RelPath = "Monitoring\Poller.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Monitoring\PollIntervalReporter.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

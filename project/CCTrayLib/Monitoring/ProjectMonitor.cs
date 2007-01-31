@@ -125,19 +125,14 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
 				ProjectStatus newProjectStatus = cruiseProjectManager.ProjectStatus;
 				if (lastProjectStatus != null && newProjectStatus != null)
 				{
-					if (lastProjectStatus.LastBuildDate != newProjectStatus.LastBuildDate)
-					{
-						BuildTransition transition = CalculateBuildTransition(lastProjectStatus, newProjectStatus);
+					PollIntervalReporter duringInterval = new PollIntervalReporter(lastProjectStatus, newProjectStatus);
+					
+					if (duringInterval.IsAnotherBuildComplete && duringInterval.WasLatestBuildSuccessful) buildDurationTracker.OnSuccessfulBuild();
+					if (duringInterval.IsAnotherBuildComplete) OnBuildOccurred(new MonitorBuildOccurredEventArgs(this, duringInterval.BuildTransition));
 
-						CheckForSuccessfulBuild(transition);
-						OnBuildOccurred(new MonitorBuildOccurredEventArgs(this, transition));
-					}
-					CheckForBuildStart(lastProjectStatus, newProjectStatus);
+					if (duringInterval.HasNewBuildStarted) buildDurationTracker.OnBuildStart();
 
-					if (lastProjectStatus.Messages.Length < newProjectStatus.Messages.Length)
-					{
-						OnMessageReceived(newProjectStatus.Messages[newProjectStatus.Messages.Length - 1]);
-					}
+					if (duringInterval.WasNewStatusMessagesReceived) OnMessageReceived(duringInterval.LatestStatusMessage);
 				}
 				lastProjectStatus = newProjectStatus;
 			}
@@ -149,25 +144,6 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
 			}
 
 			OnPolled(new MonitorPolledEventArgs(this));
-		}
-
-		private void CheckForSuccessfulBuild(BuildTransition transition)
-		{
-			if (transition == BuildTransition.Fixed || transition == BuildTransition.StillSuccessful)
-			{
-				buildDurationTracker.OnSuccessfulBuild();
-			}
-		}
-
-		private void CheckForBuildStart(ProjectStatus lastProjectStatus, ProjectStatus newProjectStatus)
-		{
-			bool isStartDetectedFromStatusChange = !lastProjectStatus.Activity.IsBuilding() && newProjectStatus.Activity.IsBuilding();
-			bool isStartDetectedFromDateChange = lastProjectStatus.Activity.IsBuilding() && newProjectStatus.Activity.IsBuilding()
-				&& (lastProjectStatus.LastBuildDate != newProjectStatus.LastBuildDate);
-			if (isStartDetectedFromStatusChange || isStartDetectedFromDateChange)
-			{
-				buildDurationTracker.OnBuildStart();
-			}
 		}
 
 		public event MonitorBuildOccurredEventHandler BuildOccurred;
@@ -187,23 +163,6 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
 		private void OnMessageReceived(Message message)
 		{
 			if (MessageReceived != null) MessageReceived(message);
-		}
-
-		private BuildTransition CalculateBuildTransition(ProjectStatus oldStatus, ProjectStatus newStatus)
-		{
-			bool wasOk = oldStatus.BuildStatus == IntegrationStatus.Success;
-			bool isOk = newStatus.BuildStatus == IntegrationStatus.Success;
-
-			if (wasOk && isOk)
-				return BuildTransition.StillSuccessful;
-			else if (!wasOk && !isOk)
-				return BuildTransition.StillFailing;
-			else if (wasOk && !isOk)
-				return BuildTransition.Broken;
-			else if (!wasOk && isOk)
-				return BuildTransition.Fixed;
-
-			throw new Exception("The universe has gone crazy.");
 		}
 
 		public string SummaryStatusString
