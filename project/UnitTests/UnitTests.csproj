@@ -726,6 +726,21 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Core\SourceControl\AccuRevHistoryParserTest.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Core\SourceControl\AccuRevMother.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Core\SourceControl\AccuRevTest.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Core\SourceControl\ActionFilterTest.cs"
                     SubType = "Code"
                     BuildAction = "Compile"

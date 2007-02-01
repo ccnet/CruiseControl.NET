@@ -1,7 +1,7 @@
 <VisualStudioProject>
     <CSHARP
         ProjectType = "Local"
-        ProductVersion = "7.10.3077"
+        ProductVersion = "7.10.6030"
         SchemaVersion = "2.0"
         ProjectGuid = "{F8113DB9-6C47-4FD1-8A01-655FCF151747}"
     >
@@ -660,6 +660,16 @@
                 />
                 <File
                     RelPath = "Reporting\Dashboard\Navigation\IUrlBuilder.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "sourcecontrol\AccuRev.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "sourcecontrol\AccuRevHistoryParser.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
