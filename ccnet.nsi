@@ -104,11 +104,7 @@ Section "Web Dashboard" SEC02
 SectionEnd
 
 
-Section "Documentation" SEC04
-  SetOutPath "$INSTDIR\Doc"
-  SetOverwrite on
-  File /r "deployed\doc\*"
-
+Section "Examples" SEC04
   SetOutPath "$INSTDIR\Examples"
   SetOverwrite on
   File /r "deployed\examples\*.config"
@@ -123,7 +119,7 @@ Section -AdditionalIcons
   WriteIniStr "$INSTDIR\${PRODUCT_NAME}.url" "InternetShortcut" "URL" "${PRODUCT_WEB_SITE}"
   CreateShortCut "$SMPROGRAMS\$ICONS_GROUP\Website.lnk" "$INSTDIR\${PRODUCT_NAME}.url"
   CreateShortCut "$SMPROGRAMS\$ICONS_GROUP\Uninstall.lnk" "$INSTDIR\uninst.exe"
-  CreateShortCut "$SMPROGRAMS\$ICONS_GROUP\Documentation.lnk" "$INSTDIR\doc\index.html"
+  CreateShortCut "$SMPROGRAMS\$ICONS_GROUP\Documentation.lnk" "$INSTDIR\webdashboard\doc\index.html"
   !insertmacro MUI_STARTMENU_WRITE_END
 SectionEnd
 
@@ -290,6 +286,7 @@ Section Uninstall
   Delete "$SMPROGRAMS\$ICONS_GROUP\Website.lnk"
   Delete "$DESKTOP\CruiseControl.NET.lnk"
   Delete "$SMPROGRAMS\$ICONS_GROUP\CruiseControl.NET.lnk"
+  Delete "$SMPROGRAMS\$ICONS_GROUP\CruiseControl.NET Config.lnk"
 
   RMDir "$SMPROGRAMS\$ICONS_GROUP"
   RMDir /r "$INSTDIR"

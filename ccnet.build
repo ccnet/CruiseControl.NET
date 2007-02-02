@@ -171,7 +171,7 @@
 	<!-- CREATE DISTRIBUTABLES -->
 	<target name="dist" depends="deploy">	
 		<copy todir="deployed" file="license.txt" />
-		<copy todir="deployed\doc">
+		<copy todir="${webdashboard.dir}\doc">
 			<fileset basedir="doc">
 				<include name="**\*" />
 			</fileset>

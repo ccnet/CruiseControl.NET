@@ -6,7 +6,9 @@ body, table, form, input, td, th, p, textarea, select
 
 a:hover { color:#FC0; }
 
-.main-panel { color:#FC0; }
+.main-panel { color:#000; font-weight: bold; padding: 6px; }
+.main-panel a { color:#FC0; }
+.main-panel a:hover { color:#FFF; }
 
 .link { color:#00F;  }
 .buildresults-header { color: #000; font-weight: bold; }
@@ -32,7 +34,7 @@ a:hover { color:#FC0; }
 .RecentBuildsPanel {
 	border-style: solid;
 	border-width: 1px;
-        border-color: #333399;
+    border-color: #333399;
 	margin-bottom:5;
 }
 
@@ -47,40 +49,40 @@ a:hover { color:#FC0; }
 
 .RecentBuildsPanel td {
 	padding: 3;
-        background-color: white;
+    background-color: white;
 }
 
 .breadcrumbs
 {
-        color: darkgrey;
+    color: darkgrey;
 }
 .breadcrumbs a {
-        color: ivory;
-        text-decoration: none;
+    color: ivory;
+    text-decoration: none;
 }
 
 .breadcrumbs a:hover 
 { 
-        color:#FC0; 
+	color:#FC0; 
 }
 
 .ProjectGridHeader
 {
-        color: ivory;
+    color: ivory;
 }
 .ProjectGridHeader a {
-        color: ivory;
-        text-decoration: none;
+    color: ivory;
+    text-decoration: none;
 }
 .ProjectGridHeader a:hover 
 { 
-        color:#FC0; 
+    color:#FC0; 
 }
 
 .SideBar a
 {
-        text-decoration: none;
-        color: #333399;
+    text-decoration: none;
+    color: #333399;
 }
 
 .SideBar .build-passed-link { color:Green; text-decoration:none; }
@@ -96,11 +98,11 @@ a:hover { color:#FC0; }
 
 .wholepage
 {
-        background-color: #000066;
+	background-color: #000066;
 }
 
 .TopControls
 {
-        background-color: #333399;
-        color: ivory;
+	background-color: #333399;
+	color: ivory;
 }
