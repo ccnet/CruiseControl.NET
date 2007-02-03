@@ -1,7 +1,5 @@
 using System;
 using System.Threading;
-using System.Xml;
-using System.Xml.XPath;
 using NMock;
 using NUnit.Framework;
 using ThoughtWorks.CruiseControl.Core;
@@ -35,8 +33,6 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 		private ProjectIntegratorList integratorList;
 
 		private ManualResetEvent monitor;
-		private XmlDocument statistics;
-		private XmlDocument statisticsClone;
 
 		[SetUp]
 		protected void SetUp()
@@ -61,14 +57,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 			project2.Name = "Project 2";
 
 			mockProject = new DynamicMock(typeof(IProject));
-			statistics = new XmlDocument();
-			XmlElement root = statistics.CreateElement("statistics");
-			statistics.AppendChild(root);
-			statisticsClone = new XmlDocument();
-			statisticsClone.LoadXml(statistics.OuterXml);
-			mockProject.ExpectAndReturn("Name", "Project 3");
-			mockProject.ExpectAndReturn("Statistics", statistics);
 			mockProjectInstance = (IProject) mockProject.MockInstance;
+			mockProject.ExpectAndReturn("Name", "Project 3");
 			integratorMock3.ExpectAndReturn("Project", mockProjectInstance);
 
 			configuration.AddProject(project1);
@@ -316,35 +306,6 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 			server.Request("Project 2", request);
 			integratorMock1.Verify();
 			integratorMock2.Verify();
-		}
-
-		[Test]
-		public void GetStatisticsDocumentSetsCurrentDate()
-		{
-			mockProject.ExpectAndReturn("Name", "Project 3");
-			string statisticsDocument = server.GetStatisticsDocument(mockProjectInstance.Name);
-			XmlDocument fromServer = new XmlDocument();
-			fromServer.LoadXml(statisticsDocument);
-			Assert.AreEqual(statisticsClone.DocumentElement.ChildNodes.Count + 1, fromServer.DocumentElement.ChildNodes.Count);
-			XPathNavigator navigator = fromServer.CreateNavigator();
-			XPathNodeIterator nodeIterator = navigator.Select("//timestamp/@day");
-			if(nodeIterator.MoveNext())
-			{
-				int day = Convert.ToInt32(nodeIterator.Current.Value);
-				Assert.AreEqual(DateTime.Now.Day, day);
-			}
-			nodeIterator = navigator.Select("//timestamp/@month");
-			if(nodeIterator.MoveNext())
-			{
-				string month = nodeIterator.Current.Value;
-				Assert.AreEqual(DateTime.Now.ToString("MMM"), month);
-			}
-			nodeIterator = navigator.Select("//timestamp/@year");
-			if(nodeIterator.MoveNext())
-			{
-				int year = Convert.ToInt32(nodeIterator.Current.Value);
-				Assert.AreEqual(DateTime.Now.Year, year);
-			}
 		}
 	}
 }

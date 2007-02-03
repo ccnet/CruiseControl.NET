@@ -10,15 +10,18 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers.Statistics
 	[ReflectorType("statistics")]
 	public class StatisticsPublisher : ITask
 	{
-		private static string csvFileName = "statistics.csv";
-		private Statistic[] configuredStatistics = new Statistic[0];
+		public const string CsvFileName = "statistics.csv";
+		public const string XmlFileName = "report.xml";
+
+		[ReflectorArray("statisticList", Required=false)]
+		public Statistic[] ConfiguredStatistics = new Statistic[0];
 
 		public void Run(IIntegrationResult integrationResult)
 		{
 			StatisticsBuilder builder = new StatisticsBuilder();
-			for (int i = 0; i < configuredStatistics.Length; i++)
+			for (int i = 0; i < ConfiguredStatistics.Length; i++)
 			{
-				Statistic statistic = configuredStatistics[i];
+				Statistic statistic = ConfiguredStatistics[i];
 				builder.Add(statistic);				
 			}
 			IList stats = builder.ProcessBuildResults(integrationResult);
@@ -33,13 +36,6 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers.Statistics
 			StatisticsChartGenerator chartGenerator = new StatisticsChartGenerator();
 			chartGenerator.RelevantStats = new string[]{"TestCount", "Duration"};
 			return chartGenerator;
-		}
-
-		[ReflectorArray("statisticList", Required=false)]
-		public Statistic[] ConfiguredStatistics
-		{
-			get{ return configuredStatistics;}
-			set{configuredStatistics = value;}
 		}
 
 		private XmlDocument UpdateXmlFile(IList stats, IIntegrationResult integrationResult)
@@ -57,7 +53,7 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers.Statistics
 			}
 			XmlElement root = doc.DocumentElement;
 
-			XmlElement xml = toXml(doc, stats);
+			XmlElement xml = ToXml(doc, stats);
 			xml.SetAttribute("build-label", integrationResult.Label);
 			IntegrationStatus status = integrationResult.Status;
 			xml.SetAttribute("status", status.ToString());
@@ -73,7 +69,7 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers.Statistics
 			return doc;
 		}
 
-		private XmlElement toXml(XmlDocument doc, IList stats)
+		private XmlElement ToXml(XmlDocument doc, IList stats)
 		{
 			XmlElement el = doc.CreateElement("integration");
 			foreach (StatisticResult statisticResult in stats)
@@ -86,10 +82,9 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers.Statistics
 			return el;
 		}
 
-
 		private string XmlStatisticsFile(IIntegrationResult integrationResult)
 		{
-			return Path.Combine(integrationResult.ArtifactDirectory, integrationResult.StatisticsFile);
+			return Path.Combine(integrationResult.ArtifactDirectory, XmlFileName);
 		}
 
 		private void UpdateCsvFile(StatisticsBuilder builder, IIntegrationResult integrationResult)
@@ -100,7 +95,29 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers.Statistics
 
 		private string CsvStatisticsFile(IIntegrationResult integrationResult)
 		{
-			return Path.Combine(integrationResult.ArtifactDirectory, csvFileName);
+			return Path.Combine(integrationResult.ArtifactDirectory, CsvFileName);
+		}
+
+		public static XmlDocument LoadStatistics(string artifactDirectory)
+		{
+			XmlDocument xmlDocument = new XmlDocument();
+			string documentLocation = Path.Combine(artifactDirectory, XmlFileName);
+			if (File.Exists(documentLocation))
+			{
+				xmlDocument.Load(documentLocation);
+				AppendCurrentDateElement(xmlDocument);
+			}
+			return xmlDocument;
+		}
+
+		private static void AppendCurrentDateElement(XmlDocument xmlDocument)
+		{
+			XmlElement timeStamp = xmlDocument.CreateElement("timestamp");
+			DateTime now = DateTime.Now;
+			timeStamp.SetAttribute("day", now.Day.ToString());
+			timeStamp.SetAttribute("month", now.ToString("MMM"));
+			timeStamp.SetAttribute("year", now.Year.ToString());
+			xmlDocument.DocumentElement.AppendChild(timeStamp);
 		}
 	}
 }

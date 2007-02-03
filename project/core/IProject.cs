@@ -68,8 +68,6 @@ namespace ThoughtWorks.CruiseControl.Core
 
 		XmlDocument Statistics { get; }
 		
-		string StatisticsFile { get; set; }
-		
 		void Initialize();
 		
 		ProjectStatus CreateProjectStatus(IProjectIntegrator integrator);

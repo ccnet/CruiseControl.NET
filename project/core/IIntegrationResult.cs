@@ -11,7 +11,6 @@ namespace ThoughtWorks.CruiseControl.Core
 		string ProjectUrl { get; set;}
 		string WorkingDirectory { get; set; }
 		string ArtifactDirectory { get; set;}
-		string StatisticsFile {get; set;}
 		string BaseFromArtifactsDirectory(string pathToBase);
 		string BaseFromWorkingDirectory(string pathToBase);
 
@@ -28,14 +27,13 @@ namespace ThoughtWorks.CruiseControl.Core
 		void MarkStartTime();
 		void MarkEndTime();
 		bool IsInitial();
-		IntegrationState CurrentState { get; }
 		IntegrationRequest IntegrationRequest { get; }
 
 		// Last integration state
 		IntegrationStatus LastIntegrationStatus { get; }
 		DateTime LastModificationDate { get; }
 		int LastChangeNumber { get; }
-		IntegrationState LastIntegration { get; }
+		IntegrationSummary LastIntegration { get; }
 
 		// Last successful integration state
 		string LastSuccessfulIntegrationLabel { get; }

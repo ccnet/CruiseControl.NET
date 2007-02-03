@@ -6,6 +6,7 @@ using System.Xml;
 using Exortech.NetReflector;
 using ThoughtWorks.CruiseControl.Core.Label;
 using ThoughtWorks.CruiseControl.Core.Publishers;
+using ThoughtWorks.CruiseControl.Core.Publishers.Statistics;
 using ThoughtWorks.CruiseControl.Core.Sourcecontrol;
 using ThoughtWorks.CruiseControl.Core.State;
 using ThoughtWorks.CruiseControl.Core.Tasks;
@@ -35,7 +36,6 @@ namespace ThoughtWorks.CruiseControl.Core
 	public class Project : ProjectBase, IProject, IIntegrationRunnerTarget
 	{
 		private string webUrl = DefaultUrl();
-		private string statisticsFile = "report.xml";
 		private ISourceControl sourceControl = new NullSourceControl();
 		private ILabeller labeller = new DefaultLabeller();
 		private ITask[] tasks = new ITask[] {new NullTask()};
@@ -73,13 +73,6 @@ namespace ThoughtWorks.CruiseControl.Core
 		{
 			get { return webUrl; }
 			set { webUrl = value; }
-		}
-
-		[ReflectorProperty("statisticsFile", Required=false)]
-		public string StatisticsFile
-		{
-			get { return statisticsFile; }
-			set { statisticsFile = value; }
 		}
 
 		[ReflectorProperty("sourcecontrol", InstanceTypeKey="type", Required=false)]
@@ -209,16 +202,7 @@ namespace ThoughtWorks.CruiseControl.Core
 
 		public XmlDocument Statistics
 		{
-			get
-			{
-				XmlDocument xmlDocument = new XmlDocument();
-				string documentLocation = Path.Combine(ArtifactDirectory, statisticsFile);
-				if (File.Exists(documentLocation))
-				{
-					xmlDocument.Load(documentLocation);
-				}
-				return xmlDocument;
-			}
+			get { return StatisticsPublisher.LoadStatistics(ArtifactDirectory); }
 		}
 
 		public static string DefaultUrl()

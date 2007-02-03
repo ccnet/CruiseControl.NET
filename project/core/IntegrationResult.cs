@@ -23,7 +23,10 @@ namespace ThoughtWorks.CruiseControl.Core
 		private ArrayList taskResults = new ArrayList();
 		private IDictionary properties = new SortedList();
 		private IntegrationRequest request;
-		private IntegrationState currentState = new IntegrationState(IntegrationStatus.Unknown, InitialLabel);
+		private IntegrationStatus status = IntegrationStatus.Unknown;
+		private string label = InitialLabel;
+		private DateTime startTime;
+		private DateTime endTime;
 
 		// Default constructor required for serialization
 		public IntegrationResult()
@@ -43,11 +46,6 @@ namespace ThoughtWorks.CruiseControl.Core
 			this.request = request;
 			RequestSource = request.Source;
 			BuildCondition = request.BuildCondition;
-		}
-
-		public IntegrationResult(string projectName, string workingDirectory, string statisticsFile, IntegrationRequest request) : this(projectName, workingDirectory, request)
-		{
-			StatisticsFile = statisticsFile;
 		}
 
 		// remove setter
@@ -71,8 +69,8 @@ namespace ThoughtWorks.CruiseControl.Core
 
 		public string Label
 		{
-			get { return CurrentState.Label; }
-			set { CurrentState.Label = value; }
+			get { return label; }
+			set { label = value; }
 		}
 
 		//
@@ -112,12 +110,6 @@ namespace ThoughtWorks.CruiseControl.Core
 			set { properties["CCNetArtifactDirectory"] = value; }
 		}
 
-		public string StatisticsFile
-		{
-			get { return (string) properties["ProjectStatisticsFile"]; }
-			set { properties["ProjectStatisticsFile"] = value; }
-		}
-
 		public string IntegrationArtifactDirectory
 		{
 			get { return Path.Combine(ArtifactDirectory, Label); }
@@ -125,8 +117,8 @@ namespace ThoughtWorks.CruiseControl.Core
 
 		public IntegrationStatus Status
 		{
-			get { return CurrentState.Status; }
-			set { CurrentState.Status = value; }
+			get { return status; }
+			set { status = value; }
 		}
 
 		public IntegrationStatus LastIntegrationStatus
@@ -157,8 +149,8 @@ namespace ThoughtWorks.CruiseControl.Core
 		/// </summary>
 		public DateTime StartTime
 		{
-			get { return CurrentState.StartTime; }
-			set { CurrentState.StartTime = value; }
+			get { return startTime; }
+			set { startTime = value; }
 		}
 
 		/// <summary>
@@ -166,8 +158,8 @@ namespace ThoughtWorks.CruiseControl.Core
 		/// </summary>
 		public DateTime EndTime
 		{
-			get { return CurrentState.EndTime; }
-			set { CurrentState.EndTime = value; }
+			get { return endTime; }
+			set { endTime = value; }
 		}
 
 		[XmlIgnore]
@@ -364,15 +356,9 @@ namespace ThoughtWorks.CruiseControl.Core
 		}
 
 		[XmlIgnore]
-		public IntegrationState LastIntegration
+		public IntegrationSummary LastIntegration
 		{
-			get { return new IntegrationState(LastIntegrationStatus, PreviousLabel); }
-		}
-
-		[XmlIgnore]
-		public IntegrationState CurrentState
-		{
-			get { return currentState; }
+			get { return new IntegrationSummary(LastIntegrationStatus, PreviousLabel); }
 		}
 
 		[XmlIgnore]
@@ -407,18 +393,12 @@ namespace ThoughtWorks.CruiseControl.Core
 		}
 	}
 
-	public class IntegrationState
+	public class IntegrationSummary
 	{
 		private IntegrationStatus status;
 		private string label;
-		private DateTime startTime;
-		private DateTime endTime;
 
-		public IntegrationState()
-		{
-		}
-
-		public IntegrationState(IntegrationStatus status, string label)
+		public IntegrationSummary(IntegrationStatus status, string label)
 		{
 			this.status = status;
 			this.label = label;
@@ -429,7 +409,7 @@ namespace ThoughtWorks.CruiseControl.Core
 			if (obj == null) return false;
 			if (obj.GetType() != GetType()) return false;
 
-			IntegrationState other = (IntegrationState) obj;
+			IntegrationSummary other = (IntegrationSummary) obj;
 			return other.status.Equals(status) && other.label == label;
 		}
 
@@ -441,25 +421,11 @@ namespace ThoughtWorks.CruiseControl.Core
 		public string Label
 		{
 			get { return label; }
-			set { label = value; }
 		}
 
 		public IntegrationStatus Status
 		{
 			get { return status; }
-			set { status = value; }
-		}
-
-		public DateTime StartTime
-		{
-			get { return startTime; }
-			set { startTime = value; }
-		}
-
-		public DateTime EndTime
-		{
-			get { return endTime; }
-			set { endTime = value; }
 		}
 	}
 }
