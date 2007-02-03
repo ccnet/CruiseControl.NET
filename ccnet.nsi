@@ -177,13 +177,9 @@ Function BackupAndExtractConfigFiles
   extractCCServiceExeConfig:
     File "deployed\server\ccservice.exe.config"
 
-  IfFileExists $INSTDIR\server\ccnet.config 0 extractCCNetConfig
-    DetailPrint "Backing up ccnet.config to ccnet.config.old..."
-    Delete $INSTDIR\server\ccnet.config.old
-    Rename $INSTDIR\server\ccnet.config $INSTDIR\server\ccnet.config.old
-    StrCpy $ConfigBackedUp "yes"
-  extractCCNetConfig:
+  IfFileExists $INSTDIR\server\ccnet.config done 0
     File "deployed\server\ccnet.config"
+  done:
 
 FunctionEnd
 
@@ -261,7 +257,7 @@ FunctionEnd
 Var MessageDetail
 Function PrepareFinishPageMessage
   StrCmp $ConfigBackedUp "yes" 0 prepMessage
-    StrCpy $MessageDetail "Your existing configuration files have been backed up to ccnet.config.old, ccnet.exe.config.old, ccservice.exe.config.old.\r\n"
+    StrCpy $MessageDetail "Your existing configuration files have been backed up to ccnet.exe.config.old, ccservice.exe.config.old.\r\n"
 prepMessage:
   StrCpy $FinishMessage "$(^Name) has been installed on your computer.\r\n\r\n$MessageDetail\r\nClick Finish to close this wizard."
 FunctionEnd
