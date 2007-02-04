@@ -1,3 +1,4 @@
+using System.Collections;
 using System.IO;
 using Exortech.NetReflector;
 using ThoughtWorks.CruiseControl.Core.Util;
@@ -56,9 +57,10 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 		{
 			ProcessInfo info = new ProcessInfo(Executable, BuildArgs, BaseDirectory(result));
 			info.TimeOut = BuildTimeoutSeconds*1000;
-			foreach (string key in result.IntegrationProperties.Keys)
+			IDictionary properties = result.IntegrationProperties;
+			foreach (string key in properties.Keys)
 			{
-				info.EnvironmentVariables[key] = Convert(result.IntegrationProperties[key]);
+				info.EnvironmentVariables[key] = Convert(properties[key]);
 			}
 			return info;
 		}

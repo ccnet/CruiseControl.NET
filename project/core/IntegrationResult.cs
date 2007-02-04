@@ -17,16 +17,27 @@ namespace ThoughtWorks.CruiseControl.Core
 	public class IntegrationResult : IIntegrationResult
 	{
 		public const string InitialLabel = "UNKNOWN";
-		private string lastSuccessfulIntegrationLabel;
-		private Modification[] modifications = new Modification[0];
-		private Exception exception;
-		private ArrayList taskResults = new ArrayList();
-		private IDictionary properties = new SortedList();
+
+		// immutable properties
+		private string projectName;
+		private string projectUrl;
+		private string workingDirectory;
+		private string artifactDirectory;
 		private IntegrationRequest request;
+		private BuildCondition buildCondition;
+
+		// mutable properties
 		private IntegrationStatus status = IntegrationStatus.Unknown;
 		private string label = InitialLabel;
 		private DateTime startTime;
 		private DateTime endTime;
+		private Modification[] modifications = new Modification[0];
+		private Exception exception;
+		private ArrayList taskResults = new ArrayList();
+
+		// previous result properties
+		private IntegrationStatus lastIntegrationStatus;
+		private string lastSuccessfulIntegrationLabel;
 
 		// Default constructor required for serialization
 		public IntegrationResult()
@@ -44,27 +55,25 @@ namespace ThoughtWorks.CruiseControl.Core
 		public IntegrationResult(string projectName, string workingDirectory, IntegrationRequest request) : this(projectName, workingDirectory)
 		{
 			this.request = request;
-			RequestSource = request.Source;
 			BuildCondition = request.BuildCondition;
 		}
 
-		// remove setter
 		public string ProjectName
 		{
-			get { return Convert(properties["CCNetProject"]); }
-			set { properties["CCNetProject"] = value; }
+			get { return projectName; }
+			set { projectName = value; }
 		}
 
 		public string ProjectUrl
 		{
-			get { return Convert(properties["CCNetProjectUrl"]); }
-			set { properties["CCNetProjectUrl"] = value; }
+			get { return projectUrl; }
+			set { projectUrl = value; }
 		}
 
 		public BuildCondition BuildCondition
 		{
-			get { return (BuildCondition) properties["CCNetBuildCondition"]; }
-			set { properties["CCNetBuildCondition"] = value; }
+			get { return buildCondition; }
+			set { buildCondition = value; }
 		}
 
 		public string Label
@@ -100,14 +109,14 @@ namespace ThoughtWorks.CruiseControl.Core
 
 		public string WorkingDirectory
 		{
-			get { return Convert(properties["CCNetWorkingDirectory"]); }
-			set { properties["CCNetWorkingDirectory"] = value; }
+			get { return workingDirectory; }
+			set { workingDirectory = value; }
 		}
 
 		public string ArtifactDirectory
 		{
-			get { return Convert(properties["CCNetArtifactDirectory"]); }
-			set { properties["CCNetArtifactDirectory"] = value; }
+			get { return artifactDirectory; }
+			set { artifactDirectory = value; }
 		}
 
 		public string IntegrationArtifactDirectory
@@ -123,14 +132,8 @@ namespace ThoughtWorks.CruiseControl.Core
 
 		public IntegrationStatus LastIntegrationStatus
 		{
-			get { return (IntegrationStatus) properties["CCNetLastIntegrationStatus"]; }
-			set { properties["CCNetLastIntegrationStatus"] = value; }
-		}
-
-		private string RequestSource
-		{
-			get { return Convert(properties["CCNetRequestSource"]); }
-			set { properties["CCNetRequestSource"] = value; }
+			get { return lastIntegrationStatus; }
+			set { lastIntegrationStatus = value; }
 		}
 
 		public string LastSuccessfulIntegrationLabel
@@ -372,19 +375,21 @@ namespace ThoughtWorks.CruiseControl.Core
 		{
 			get
 			{
-				IDictionary fullProps = new Hashtable(properties);
-				fullProps["CCNetIntegrationStatus"] = Status.ToString();
+				IDictionary fullProps = new SortedList();
+				fullProps["CCNetProject"] = projectName;
+				if (projectUrl != null) fullProps["CCNetProjectUrl"] = projectUrl;
+				fullProps["CCNetWorkingDirectory"] = workingDirectory;
+				fullProps["CCNetArtifactDirectory"] = artifactDirectory;
+				fullProps["CCNetIntegrationStatus"] = Status;
 				fullProps["CCNetLabel"] = Label;
-				fullProps["CCNetNumericLabel"] = NumericLabel.ToString();
+				fullProps["CCNetBuildCondition"] = BuildCondition;
+				fullProps["CCNetNumericLabel"] = NumericLabel;
 				fullProps["CCNetBuildDate"] = StartTime.ToString("yyyy-MM-dd", null);
 				fullProps["CCNetBuildTime"] = StartTime.ToString("HH:mm:ss", null);
+				fullProps["CCNetLastIntegrationStatus"] = LastIntegrationStatus;
+				if (IntegrationRequest != null) fullProps["CCNetRequestSource"] = IntegrationRequest.Source;
 				return fullProps;
 			}
-		}
-
-		private string Convert(object obj)
-		{
-			return (obj == null) ? null : obj.ToString();
 		}
 
 		public override string ToString()

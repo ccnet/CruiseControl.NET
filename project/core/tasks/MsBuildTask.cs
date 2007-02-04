@@ -84,8 +84,8 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 			int count = 0;
 			// We have to sort this alphabetically, else the unit tests
 			// that expect args in a certain order are unpredictable
-			SortedList sortedList = new SortedList(result.IntegrationProperties);
-			foreach (string key in sortedList.Keys)
+			IDictionary properties = result.IntegrationProperties;
+			foreach (string key in properties.Keys)
 			{
 				if (count > 0) builder.Append(";");
 				builder.Append(string.Format("{0}={1}", key, result.IntegrationProperties[key]));

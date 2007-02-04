@@ -127,8 +127,8 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 		{
 			// We have to sort this alphabetically, else the unit tests
 			// that expect args in a certain order are unpredictable
-			SortedList sortedList = new SortedList(result.IntegrationProperties);
-			foreach (string key in sortedList.Keys)
+			IDictionary properties = result.IntegrationProperties;
+			foreach (string key in properties.Keys)
 			{
 				object value = result.IntegrationProperties[key];
 				if (value != null)

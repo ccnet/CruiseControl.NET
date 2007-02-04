@@ -174,15 +174,21 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 			result.Label = "label23";
 			result.ArtifactDirectory = @"c:\artifactdir\";
 			result.StartTime = new DateTime(2005,06,06,08,45,00);
+			result.ProjectUrl = "http://localhost/ccnet2";
 
-			Assert.AreEqual(11, result.IntegrationProperties.Count);
+			Assert.AreEqual(12, result.IntegrationProperties.Count);
+			Assert.AreEqual("project", result.IntegrationProperties["CCNetProject"]);
+			Assert.AreEqual("http://localhost/ccnet2", result.IntegrationProperties["CCNetProjectUrl"]);
 			Assert.AreEqual("label23", result.IntegrationProperties["CCNetLabel"]);
-			Assert.AreEqual("23", result.IntegrationProperties["CCNetNumericLabel"]);
+			Assert.AreEqual(23, result.IntegrationProperties["CCNetNumericLabel"]);
 			Assert.AreEqual(@"c:\artifactdir\", result.IntegrationProperties["CCNetArtifactDirectory"]);
+			Assert.AreEqual(@"c:\workingdir\", result.IntegrationProperties["CCNetWorkingDirectory"]);
 			// We purposefully use culture-independent string formats
 			Assert.AreEqual("2005-06-06", result.IntegrationProperties["CCNetBuildDate"]);
 			Assert.AreEqual("08:45:00", result.IntegrationProperties["CCNetBuildTime"]);
 			Assert.AreEqual(BuildCondition.IfModificationExists, result.IntegrationProperties["CCNetBuildCondition"]);
+			Assert.AreEqual(IntegrationStatus.Unknown, result.IntegrationProperties["CCNetIntegrationStatus"]);
+			Assert.AreEqual(IntegrationStatus.Unknown, result.IntegrationProperties["CCNetLastIntegrationStatus"]);
 			Assert.AreEqual("myTrigger", result.IntegrationProperties["CCNetRequestSource"]);
 		}
 
