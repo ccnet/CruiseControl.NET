@@ -11,7 +11,7 @@ using ThoughtWorks.CruiseControl.Remote;
 namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 {
 	[TestFixture]
-	public class DevenvTaskTest
+	public class DevenvTaskTest : IntegrationFixture
 	{
 		private const string DEVENV_PATH = @"C:\Program Files\Microsoft Visual Studio .NET 2003\Common7\IDE\devenv.com";
 		private const string SOLUTION_FILE = @"D:\dev\ccnet\ccnet\project\ccnet.sln";
@@ -151,7 +151,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 			task.SolutionFile = @"D:\dev\ccnet\ccnet\project\nosolution.sln";
 			task.Configuration = CONFIGURATION;
 
-			IntegrationResult result = new IntegrationResult("myProject", "myWorkingDirectory");
+			IntegrationResult result = new IntegrationResult("myProject", "myWorkingDirectory", ModificationExistRequest());
 			task.Run(result);
 
 			ProcessInfo info = (ProcessInfo) constraint.Parameter;

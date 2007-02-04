@@ -23,8 +23,7 @@ namespace ThoughtWorks.CruiseControl.Core
 		private string projectUrl;
 		private string workingDirectory;
 		private string artifactDirectory;
-		private IntegrationRequest request;
-		private BuildCondition buildCondition;
+		private IntegrationRequest request = IntegrationRequest.NullRequest;
 
 		// mutable properties
 		private IntegrationStatus status = IntegrationStatus.Unknown;
@@ -36,26 +35,19 @@ namespace ThoughtWorks.CruiseControl.Core
 		private ArrayList taskResults = new ArrayList();
 
 		// previous result properties
-		private IntegrationStatus lastIntegrationStatus;
+		private IntegrationStatus lastIntegrationStatus = IntegrationStatus.Unknown;
 		private string lastSuccessfulIntegrationLabel;
 
 		// Default constructor required for serialization
 		public IntegrationResult()
 		{
-			BuildCondition = BuildCondition.NoBuild;
-			LastIntegrationStatus = IntegrationStatus.Unknown;
 		}
 
-		public IntegrationResult(string projectName, string workingDirectory) : this()
+		public IntegrationResult(string projectName, string workingDirectory, IntegrationRequest request)
 		{
 			ProjectName = projectName;
 			WorkingDirectory = workingDirectory;
-		}
-
-		public IntegrationResult(string projectName, string workingDirectory, IntegrationRequest request) : this(projectName, workingDirectory)
-		{
 			this.request = request;
-			BuildCondition = request.BuildCondition;
 		}
 
 		public string ProjectName
@@ -72,8 +64,8 @@ namespace ThoughtWorks.CruiseControl.Core
 
 		public BuildCondition BuildCondition
 		{
-			get { return buildCondition; }
-			set { buildCondition = value; }
+			get { return request.BuildCondition; }
+			set { request = new IntegrationRequest(value, "reloaded from state file"); }
 		}
 
 		public string Label
@@ -291,30 +283,12 @@ namespace ThoughtWorks.CruiseControl.Core
 			return Modifications.Length > 0;
 		}
 
-		public override bool Equals(object obj)
-		{
-			IntegrationResult other = obj as IntegrationResult;
-			if (other == null)
-			{
-				return false;
-			}
-			return ProjectName == other.ProjectName &&
-			       Status == other.Status &&
-			       Label == other.Label &&
-			       StartTime == other.StartTime;
-		}
-
-		public override int GetHashCode()
-		{
-			return (ProjectName + Label + StartTime.Ticks).GetHashCode();
-		}
-
 		public static IntegrationResult CreateInitialIntegrationResult(string project, string workingDirectory)
 		{
-			IntegrationResult result = new IntegrationResult(project, workingDirectory);
+			IntegrationRequest initialRequest = new IntegrationRequest(BuildCondition.ForceBuild, "Initial Build");
+			IntegrationResult result = new IntegrationResult(project, workingDirectory, initialRequest);
 			result.StartTime = DateTime.Now.AddDays(-1);
 			result.EndTime = DateTime.Now;
-			result.BuildCondition = BuildCondition.ForceBuild;
 			return result;
 		}
 
@@ -392,45 +366,27 @@ namespace ThoughtWorks.CruiseControl.Core
 			}
 		}
 
-		public override string ToString()
-		{
-			return string.Format("Project: {0}, Status: {1}, Label: {2}, StartTime: {3}", ProjectName, Status, Label, StartTime);
-		}
-	}
-
-	public class IntegrationSummary
-	{
-		private IntegrationStatus status;
-		private string label;
-
-		public IntegrationSummary(IntegrationStatus status, string label)
-		{
-			this.status = status;
-			this.label = label;
-		}
-
 		public override bool Equals(object obj)
 		{
-			if (obj == null) return false;
-			if (obj.GetType() != GetType()) return false;
-
-			IntegrationSummary other = (IntegrationSummary) obj;
-			return other.status.Equals(status) && other.label == label;
+			IntegrationResult other = obj as IntegrationResult;
+			if (other == null)
+			{
+				return false;
+			}
+			return ProjectName == other.ProjectName &&
+			       Status == other.Status &&
+			       Label == other.Label &&
+			       StartTime == other.StartTime;
 		}
 
 		public override int GetHashCode()
 		{
-			return label.GetHashCode();
+			return (ProjectName + Label + StartTime.Ticks).GetHashCode();
 		}
 
-		public string Label
+		public override string ToString()
 		{
-			get { return label; }
-		}
-
-		public IntegrationStatus Status
-		{
-			get { return status; }
+			return string.Format("Project: {0}, Status: {1}, Label: {2}, StartTime: {3}", ProjectName, Status, Label, StartTime);
 		}
 	}
 }

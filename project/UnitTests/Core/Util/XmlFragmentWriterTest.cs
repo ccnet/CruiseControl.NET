@@ -124,6 +124,24 @@ type=""log4net.Config.Log4NetConfigurationSectionHandler,log4net"" />";
 			Assert.AreEqual("<![CDATA[a <> b \t\n\r]]>", baseWriter.ToString());
 		}
 
+		[Test, Ignore("come back to this.")]
+		public void ShouldIgnoreDTDEntities()
+		{
+			string xml = @"<?xml version=""1.0""?>
+<!DOCTYPE Report
+[
+<!ELEMENT Report (General ,(Doc|BPT)) >
+<!ATTLIST Report ver CDATA #REQUIRED tmZone CDATA #REQUIRED>
+
+<!ELEMENT General ( DocLocation ) >
+<!ATTLIST General productName CDATA #REQUIRED productVer CDATA #REQUIRED os CDATA #REQUIRED host CDATA #REQUIRED>
+]
+>
+<Report ver=""2.0"" tmZone=""Pacific Standard Time"" />";
+			writer.WriteNode(xml);
+			Assert.AreEqual(@"<Report ver=""2.0"" tmZone=""Pacific Standard Time"" />", baseWriter.ToString());
+		}
+		
 		private string IllegalCharacters()
 		{
 			StringBuilder builder = new StringBuilder();

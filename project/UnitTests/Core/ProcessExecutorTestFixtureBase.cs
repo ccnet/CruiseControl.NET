@@ -7,7 +7,7 @@ using ThoughtWorks.CruiseControl.Core.Util;
 
 namespace ThoughtWorks.CruiseControl.UnitTests.Core
 {
-	public class ProcessExecutorTestFixtureBase : CustomAssertion
+	public class ProcessExecutorTestFixtureBase : IntegrationFixture
 	{
 		protected const int SuccessfulExitCode = 0;
 		protected const int FailedExitCode = -1;
@@ -90,6 +90,11 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 			ProcessInfo info = new ProcessInfo(defaultExecutable, args, DefaultWorkingDirectory);
 			info.TimeOut = DefaultTimeout;
 			return info;
+		}
+
+		protected IntegrationResult IntegrationResultForWorkingDirectoryTest()
+		{
+			return new IntegrationResult("project", "projectWorkingDirectory", ModificationExistRequest());
 		}
 	}
 }

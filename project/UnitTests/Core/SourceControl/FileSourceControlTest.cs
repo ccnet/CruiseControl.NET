@@ -9,7 +9,7 @@ using ThoughtWorks.CruiseControl.Core.Util;
 namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 {
 	[TestFixture]
-	public class FileSourceControlTest : CustomAssertion
+	public class FileSourceControlTest : IntegrationFixture
 	{
 		private FileSourceControl sc;
 		private DynamicMock fileSystemMock;
@@ -109,7 +109,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 		[Test]
 		public void ShouldCopyRespositoryRootToWorkingDirectoryForGetSource()
 		{
-			IntegrationResult result = new IntegrationResult("foo", "myWorkingDirectory");
+			IntegrationResult result = new IntegrationResult("foo", "myWorkingDirectory", ModificationExistRequest());
 			sc.AutoGetSource = true;
 			fileSystemMock.Expect("Copy", tempRoot.ToString(), "myWorkingDirectory");
 
@@ -121,7 +121,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 		[Test]
 		public void ShouldNotCopySourceIfAutoGetSourceNotBeenSetToTrue()
 		{
-			IntegrationResult result = new IntegrationResult("foo", "myWorkingDirectory");
+			IntegrationResult result = new IntegrationResult("foo", "myWorkingDirectory", ModificationExistRequest());
 			fileSystemMock.ExpectNoCall("Copy", typeof (string), typeof (string));
 
 			sc.GetSource(result);

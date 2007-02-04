@@ -155,7 +155,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 			{
 				expectedBaseDirectory = Path.Combine(expectedBaseDirectory, relativeDirectory);
 			}
-			CheckBaseDirectory(new IntegrationResult("project", "projectWorkingDirectory"), expectedBaseDirectory);
+			CheckBaseDirectory(IntegrationResultForWorkingDirectoryTest(), expectedBaseDirectory);
 			Verify();
 		}
 
@@ -163,7 +163,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 		public void IfConfiguredBaseDirectoryIsAbsoluteUseItAtBaseDirectory()
 		{
 			task.ConfiguredBaseDirectory = @"c:\my\base\directory";
-			CheckBaseDirectory(new IntegrationResult("project", "projectWorkingDirectory"), @"c:\my\base\directory");
+			CheckBaseDirectory(IntegrationResultForWorkingDirectoryTest(), @"c:\my\base\directory");
 		}
 
 		private void CheckBaseDirectory(IntegrationResult result, string expectedBaseDirectory)

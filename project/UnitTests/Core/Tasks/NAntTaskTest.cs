@@ -193,14 +193,14 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 			{
 				expectedBaseDirectory = Path.Combine(expectedBaseDirectory, relativeDirectory);
 			}
-			CheckBaseDirectory(new IntegrationResult("project", "projectWorkingDirectory"), expectedBaseDirectory);
+			CheckBaseDirectory(IntegrationResultForWorkingDirectoryTest(), expectedBaseDirectory);
 		}
 
 		[Test]
 		public void IfConfiguredBaseDirectoryIsAbsoluteUseItAtBaseDirectory()
 		{
 			builder.ConfiguredBaseDirectory = @"c:\my\base\directory";
-			CheckBaseDirectory(new IntegrationResult("project", "projectWorkingDirectory"), @"c:\my\base\directory");
+			CheckBaseDirectory(IntegrationResultForWorkingDirectoryTest(), @"c:\my\base\directory");
 		}
 
 		private void CheckBaseDirectory(IntegrationResult result, string expectedBaseDirectory)
@@ -254,7 +254,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 			// NOTE: Property names are sorted alphabetically when passed as process arguments
 			// Tests that look for the correct arguments will fail if the following properties
 			// are not sorted alphabetically.
-			return string.Format(@"-D:CCNetArtifactDirectory={1} -D:CCNetBuildCondition=NoBuild -D:CCNetBuildDate={2} -D:CCNetBuildTime={3} -D:CCNetIntegrationStatus=Success -D:CCNetLabel=1.0 -D:CCNetLastIntegrationStatus=Unknown -D:CCNetNumericLabel=0 -D:CCNetProject=test -D:CCNetWorkingDirectory={0}", workingDirectory, artifactDirectory, testDateString, testTimeString);
+			return string.Format(@"-D:CCNetArtifactDirectory={1} -D:CCNetBuildCondition=IfModificationExists -D:CCNetBuildDate={2} -D:CCNetBuildTime={3} -D:CCNetIntegrationStatus=Success -D:CCNetLabel=1.0 -D:CCNetLastIntegrationStatus=Unknown -D:CCNetNumericLabel=0 -D:CCNetProject=test -D:CCNetRequestSource=foo -D:CCNetWorkingDirectory={0}", workingDirectory, artifactDirectory, testDateString, testTimeString);
 		}
 	}
 }

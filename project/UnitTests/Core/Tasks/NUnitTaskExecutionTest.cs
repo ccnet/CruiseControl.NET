@@ -9,7 +9,7 @@ using ThoughtWorks.CruiseControl.Core.Util;
 namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 {
 	[TestFixture]
-	public class NUnitTaskExecutionTest : CustomAssertion
+	public class NUnitTaskExecutionTest : IntegrationFixture
 	{
 		private const string NUnitConsolePath = @"D:\temp\nunit-console.exe";
 		private string[] TEST_ASSEMBLIES = new string[] {"foo.dll"};
@@ -28,7 +28,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 			task.Assemblies = TEST_ASSEMBLIES;
 			task.NUnitPath = NUnitConsolePath;
 			task.OutputFile = TempFileUtil.CreateTempFile("NUnitTask", "results.xml", "foo");
-			result = new IntegrationResult("testProject", WORKING_DIRECTORY);
+			result = new IntegrationResult("testProject", WORKING_DIRECTORY, ModificationExistRequest());
 			result.ArtifactDirectory = WORKING_DIRECTORY;
 		}
 

@@ -91,7 +91,14 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 			string xml = "<?xml version=\"1.0\" encoding=\"utf-8\"?><log><logentry revision=\"4\"><date>2003-12-12T16:48:51Z</date><paths><path action=\"R\">/foo/addedfile.txt</path></paths><msg>i added a file</msg></logentry></log>";
 			Modification[] mods = svn.Parse(new StringReader(xml), oldestEntry, newestEntry);
 			Assert.AreEqual("Replaced", mods[0].Type);
+		}
 
+		[Test]
+		public void ParseModificationWithLongDate()
+		{
+			string xml = "<?xml version=\"1.0\" encoding=\"utf-8\"?><log><logentry revision=\"4\"><date>2007-02-02T23:17:08.718100Z</date><paths><path action=\"R\">/foo/addedfile.txt</path></paths><msg>i added a file</msg></logentry></log>";
+			Modification[] mods = svn.Parse(new StringReader(xml), new DateTime(2007, 2, 1, 23, 17, 8), new DateTime(2007, 2, 3, 23, 17, 9));
+			Assert.AreEqual("Replaced", mods[0].Type);
 		}
 
 		private DateTime CreateDate(string dateString)

@@ -1,7 +1,7 @@
 <VisualStudioProject>
     <CSHARP
         ProjectType = "Local"
-        ProductVersion = "7.10.6030"
+        ProductVersion = "7.10.3077"
         SchemaVersion = "2.0"
         ProjectGuid = "{F8113DB9-6C47-4FD1-8A01-655FCF151747}"
     >
@@ -231,6 +231,11 @@
                 />
                 <File
                     RelPath = "IntegrationStatus.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "IntegrationSummary.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -1014,11 +1019,6 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "tasks\CoverageTask.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
                     RelPath = "tasks\DataTaskResult.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -1044,11 +1044,6 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "tasks\ICoverage.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
                     RelPath = "tasks\MergeFilesTask.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -1065,11 +1060,6 @@
                 />
                 <File
                     RelPath = "tasks\NAntTask.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "tasks\NCoverCoverage.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

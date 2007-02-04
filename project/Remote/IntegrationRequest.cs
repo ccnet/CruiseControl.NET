@@ -6,6 +6,7 @@ namespace ThoughtWorks.CruiseControl.Remote
 	[Serializable]
 	public class IntegrationRequest
 	{
+		public static readonly IntegrationRequest NullRequest = new IntegrationRequest(BuildCondition.NoBuild, "NullRequest");
 		private readonly BuildCondition buildCondition;
 		private readonly string source;
 

@@ -1,7 +1,7 @@
 <VisualStudioProject>
     <CSHARP
         ProjectType = "Local"
-        ProductVersion = "7.10.6030"
+        ProductVersion = "7.10.3077"
         SchemaVersion = "2.0"
         ProjectGuid = "{3F93AC24-DF56-469E-91C3-43A2A179C7E1}"
     >
@@ -413,11 +413,6 @@
                 />
                 <File
                     RelPath = "Core\IntegrationRequestQueueTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Core\IntegrationResultFixture.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -1016,11 +1011,6 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "Core\Tasks\CoverageTaskTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
                     RelPath = "Core\Tasks\DataTaskResultTest.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -1062,16 +1052,6 @@
                 />
                 <File
                     RelPath = "Core\Tasks\NAntTaskTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Core\Tasks\NCoverCoverageLoadTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Core\Tasks\NCoverCoverageTest.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

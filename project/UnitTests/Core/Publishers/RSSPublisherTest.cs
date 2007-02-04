@@ -6,7 +6,7 @@ using ThoughtWorks.CruiseControl.Remote;
 namespace ThoughtWorks.CruiseControl.UnitTests.Core.Publishers
 {
 	[TestFixture]
-	public class RSSPublisherTest
+	public class RSSPublisherTest : IntegrationFixture
 	{
 		IntegrationResult result;
 		RssPublisher publisher;
@@ -14,7 +14,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Publishers
 		[SetUp]
 		public void Setup()
 		{
-			result = new IntegrationResult("myProject", @"c:\temp");
+			result = new IntegrationResult("myProject", @"c:\temp", ModificationExistRequest());
 			result.ProjectUrl = "http://somewhere/someplace.html";
 			publisher = new RssPublisher();
 		}

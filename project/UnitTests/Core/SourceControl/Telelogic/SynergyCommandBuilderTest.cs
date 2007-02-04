@@ -8,7 +8,7 @@ using ThoughtWorks.CruiseControl.Core.Util;
 namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol.Telelogic
 {
 	[TestFixture]
-	public sealed class SynergyCommandBuilderTest
+	public sealed class SynergyCommandBuilderTest : IntegrationFixture
 	{
 		private SynergyConnectionInfo connection;
 		private SynergyProjectInfo project;
@@ -41,7 +41,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol.Telelogic
 		[SetUp]
 		public void SetUp()
 		{
-			result = new IntegrationResult("MyCCNETProject", String.Empty);
+			result = new IntegrationResult("MyCCNETProject", String.Empty, ModificationExistRequest());
 
 			result.Modifications = new Modification[]
 				{
