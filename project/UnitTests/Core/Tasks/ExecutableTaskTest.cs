@@ -166,7 +166,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 			CheckBaseDirectory(IntegrationResultForWorkingDirectoryTest(), @"c:\my\base\directory");
 		}
 
-		private void CheckBaseDirectory(IntegrationResult result, string expectedBaseDirectory)
+		private void CheckBaseDirectory(IIntegrationResult result, string expectedBaseDirectory)
 		{
 			CollectingConstraint constraint = new CollectingConstraint();
 			mockProcessExecutor.ExpectAndReturn("Execute", SuccessfulProcessResult(), constraint);

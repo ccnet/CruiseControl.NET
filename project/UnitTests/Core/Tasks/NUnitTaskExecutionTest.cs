@@ -17,7 +17,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 
 		private IMock executorMock;
 		private NUnitTask task;
-		private IntegrationResult result;
+		private IIntegrationResult result;
 
 		[SetUp]
 		protected void Init()
@@ -28,7 +28,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 			task.Assemblies = TEST_ASSEMBLIES;
 			task.NUnitPath = NUnitConsolePath;
 			task.OutputFile = TempFileUtil.CreateTempFile("NUnitTask", "results.xml", "foo");
-			result = new IntegrationResult("testProject", WORKING_DIRECTORY, ModificationExistRequest());
+			result = Integration("testProject", WORKING_DIRECTORY);
 			result.ArtifactDirectory = WORKING_DIRECTORY;
 		}
 

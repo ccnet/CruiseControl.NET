@@ -109,7 +109,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 		[Test]
 		public void ShouldCopyRespositoryRootToWorkingDirectoryForGetSource()
 		{
-			IntegrationResult result = new IntegrationResult("foo", "myWorkingDirectory", ModificationExistRequest());
+			IntegrationResult result = (IntegrationResult) Integration("foo", "myWorkingDirectory");
 			sc.AutoGetSource = true;
 			fileSystemMock.Expect("Copy", tempRoot.ToString(), "myWorkingDirectory");
 
@@ -121,7 +121,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 		[Test]
 		public void ShouldNotCopySourceIfAutoGetSourceNotBeenSetToTrue()
 		{
-			IntegrationResult result = new IntegrationResult("foo", "myWorkingDirectory", ModificationExistRequest());
+			IIntegrationResult result = Integration("foo", "myWorkingDirectory");
 			fileSystemMock.ExpectNoCall("Copy", typeof (string), typeof (string));
 
 			sc.GetSource(result);

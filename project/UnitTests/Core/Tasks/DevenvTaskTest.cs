@@ -151,7 +151,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 			task.SolutionFile = @"D:\dev\ccnet\ccnet\project\nosolution.sln";
 			task.Configuration = CONFIGURATION;
 
-			IntegrationResult result = new IntegrationResult("myProject", "myWorkingDirectory", ModificationExistRequest());
+			IIntegrationResult result = Integration("myProject", "myWorkingDirectory");
 			task.Run(result);
 
 			ProcessInfo info = (ProcessInfo) constraint.Parameter;

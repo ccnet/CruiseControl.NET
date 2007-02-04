@@ -203,13 +203,13 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 			CheckBaseDirectory(IntegrationResultForWorkingDirectoryTest(), @"c:\my\base\directory");
 		}
 
-		private void CheckBaseDirectory(IntegrationResult result, string expectedBaseDirectory)
+		private void CheckBaseDirectory(IIntegrationResult integration, string expectedBaseDirectory)
 		{
 			ProcessResult returnVal = SuccessfulProcessResult();
 			CollectingConstraint constraint = new CollectingConstraint();
 			mockProcessExecutor.ExpectAndReturn("Execute", returnVal, constraint);
 
-			builder.Run(result);
+			builder.Run(integration);
 
 			ProcessInfo info = (ProcessInfo) constraint.Parameter;
 			Assert.AreEqual(expectedBaseDirectory, info.WorkingDirectory);

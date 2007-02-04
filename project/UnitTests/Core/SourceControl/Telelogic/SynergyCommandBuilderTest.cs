@@ -41,7 +41,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol.Telelogic
 		[SetUp]
 		public void SetUp()
 		{
-			result = new IntegrationResult("MyCCNETProject", String.Empty, ModificationExistRequest());
+			result = Integration("MyCCNETProject", String.Empty);
 
 			result.Modifications = new Modification[]
 				{

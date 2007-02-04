@@ -92,9 +92,9 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 			return info;
 		}
 
-		protected IntegrationResult IntegrationResultForWorkingDirectoryTest()
+		protected IIntegrationResult IntegrationResultForWorkingDirectoryTest()
 		{
-			return new IntegrationResult("project", "projectWorkingDirectory", ModificationExistRequest());
+			return Integration("project", "projectWorkingDirectory");
 		}
 	}
 }

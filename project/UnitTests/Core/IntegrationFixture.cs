@@ -1,3 +1,4 @@
+using ThoughtWorks.CruiseControl.Core;
 using ThoughtWorks.CruiseControl.Remote;
 
 namespace ThoughtWorks.CruiseControl.UnitTests.Core
@@ -19,6 +20,11 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 		public IntegrationRequest ForceBuildRequest()
 		{
 			return Request(BuildCondition.ForceBuild);
+		}
+
+		public IIntegrationResult Integration(string project, string workingDirectory)
+		{
+			return new IntegrationResult(project, workingDirectory, ModificationExistRequest());
 		}
 	}
 }

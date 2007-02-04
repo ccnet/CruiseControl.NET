@@ -8,13 +8,13 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Publishers
 	[TestFixture]
 	public class RSSPublisherTest : IntegrationFixture
 	{
-		IntegrationResult result;
+		IIntegrationResult result;
 		RssPublisher publisher;
 
 		[SetUp]
 		public void Setup()
 		{
-			result = new IntegrationResult("myProject", @"c:\temp", ModificationExistRequest());
+			result = Integration("myProject", @"c:\temp");
 			result.ProjectUrl = "http://somewhere/someplace.html";
 			publisher = new RssPublisher();
 		}
