@@ -91,7 +91,6 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Publishers.Statistics
 			StatisticsPublisher publisher = new StatisticsPublisher();
 
 			IntegrationResult result = IntegrationResultMother.CreateSuccessful(buildLabel.ToString());
-			result.LastSuccessfulIntegrationLabel = (buildLabel - 1).ToString();
 			result.ArtifactDirectory = testDir.ToString();
 			
 			publisher.Run(result);

@@ -5,6 +5,7 @@ using NUnit.Framework;
 using ThoughtWorks.CruiseControl.Core;
 using ThoughtWorks.CruiseControl.Core.Label;
 using ThoughtWorks.CruiseControl.Core.Util;
+using ThoughtWorks.CruiseControl.Remote;
 
 namespace ThoughtWorks.CruiseControl.UnitTests.Core.Label
 {
@@ -27,7 +28,6 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Label
 		[Test]
 		public void PopulateFromConfiguration()
 		{
-			DateTime releaseStartDate = new DateTime(2005, 1, 1);
 			string xml = string.Format(@"<iterationlabeller incrementOnFailure=""true"" duration=""1"" releaseStartDate=""{0}"" prefix=""foo"" separator=""-"" />", releaseStartDate);
 			labeller = (IterationLabeller) NetReflector.Read(xml);
 			Assert.AreEqual(true, labeller.IncrementOnFailed);
@@ -40,66 +40,63 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Label
 		[Test]
 		public void GenerateIncrementedLabel()
 		{
-			Assert.AreEqual("14.36", labeller.Generate(IntegrationResultMother.CreateSuccessful("14.35")));
+			Assert.AreEqual("14.36", labeller.Generate(CreateSuccessful("14.35")));
 		}
 
 		[Test]
 		public void GenerateWithNullLabel()
 		{
-			IntegrationResult result = IntegrationResultMother.CreateSuccessful((string)null);
-			Assert.AreEqual("14.1", labeller.Generate(result));
+			Assert.AreEqual("14.1", labeller.Generate(CreateSuccessful(null)));
 		}
 
 		[Test]
 		public void GenerateAfterLastBuildFailed()
 		{
-			Assert.AreEqual("14.23", labeller.Generate(IntegrationResultMother.CreateFailed("14.23")));
+			Assert.AreEqual("14.23", labeller.Generate(CreateFailed("14.23")));
 		}
 
 		[Test]
 		public void GeneratePrefixedLabelWithNullResultLabel()
 		{
-			IntegrationResult result = IntegrationResultMother.CreateSuccessful();
-			result.Label = null;
 			labeller.LabelPrefix = "Sample";
-			Assert.AreEqual("Sample.14.1", labeller.Generate(result));
+			Assert.AreEqual("Sample.14.1", labeller.Generate(CreateSuccessful(null)));
 		}
 
 		[Test]
 		public void GeneratePrefixedLabelOnSuccessAndPreviousLabel()
 		{
 			labeller.LabelPrefix = "Sample";
-			Assert.AreEqual("Sample.14.24", labeller.Generate(IntegrationResultMother.CreateSuccessful("Sample.14.23")));
+			Assert.AreEqual("Sample.14.24", labeller.Generate(CreateSuccessful("Sample.14.23")));
 		}
 
 		[Test]
 		public void GeneratePrefixedLabelOnFailureAndPreviousLabel()
 		{
 			labeller.LabelPrefix = "Sample";
-			Assert.AreEqual("Sample.14.23", labeller.Generate(IntegrationResultMother.CreateFailed("Sample.14.23")));
+			Assert.AreEqual("Sample.14.23", labeller.Generate(CreateFailed("Sample.14.23")));
 		}
 
 		[Test]
 		public void GeneratePrefixedLabelOnSuccessAndPreviousLabelWithDifferentPrefix()
 		{
 			labeller.LabelPrefix = "Sample";
-			Assert.AreEqual("Sample.14.24", labeller.Generate(IntegrationResultMother.CreateSuccessful("SomethingElse.14.23")));
+			Assert.AreEqual("Sample.14.24", labeller.Generate(CreateSuccessful("SomethingElse.14.23")));
 		}
 
 		[Test]
 		public void IncrementPrefixedLabelWithNumericPrefix()
 		{
 			labeller.LabelPrefix = "R3SX";
-			Assert.AreEqual("R3SX.14.24", labeller.Generate(IntegrationResultMother.CreateSuccessful("R3SX.14.23")));
+			Assert.AreEqual("R3SX.14.24", labeller.Generate(CreateSuccessful("R3SX.14.23")));
 		}
 
 		[Test]
 		public void IncrementPrefixedLabelWithNumericSeperatorSeperatedPrefix()
 		{
 			labeller.LabelPrefix = "1.0";
-			Assert.AreEqual("1.0.14.24", labeller.Generate(IntegrationResultMother.CreateSuccessful("1.0.14.23")));
+			Assert.AreEqual("1.0.14.24", labeller.Generate(CreateSuccessful("1.0.14.23")));
 		}
-		
+
 		[Test]
 		public void WhenTheBuildIsPerformedDuringANewIterationTheIterationNumberIsUpdatedAndTheLabelReset()
 		{
@@ -110,7 +107,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Label
 			
 			// one week iterations
 			labeller.Duration = 1;
-			Assert.AreEqual("15.1", labeller.Generate(IntegrationResultMother.CreateSuccessful("14.35")));						
+			Assert.AreEqual("15.1", labeller.Generate(CreateSuccessful("14.35")));						
 		}
 
 		[Test]
@@ -125,7 +122,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Label
 			labeller.Duration = 1;
 
 			labeller.LabelPrefix = "R3SX";
-			Assert.AreEqual("R3SX.15.1", labeller.Generate(IntegrationResultMother.CreateSuccessful("R3SX.14.23")));
+			Assert.AreEqual("R3SX.15.1", labeller.Generate(CreateSuccessful("R3SX.14.23")));
 		}
 
 		[Test]
@@ -141,7 +138,17 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Label
 		public void GenerateIncrementedLabelOnFailureIfIncrementOnFailedIsTrue()
 		{
 			labeller.IncrementOnFailed = true;
-			Assert.AreEqual("14.36", labeller.Generate(IntegrationResultMother.CreateFailed("14.35")));
+			Assert.AreEqual("14.36", labeller.Generate(CreateFailed("14.35")));
+		}
+
+		private static IntegrationResult CreateSuccessful(string previousLabel)
+		{
+			return IntegrationResultMother.Create(new IntegrationSummary(IntegrationStatus.Success, previousLabel, previousLabel));
+		}
+
+		private static IntegrationResult CreateFailed(string previousLabel)
+		{
+			return IntegrationResultMother.Create(new IntegrationSummary(IntegrationStatus.Failure, previousLabel, previousLabel));
 		}
 	}
 }

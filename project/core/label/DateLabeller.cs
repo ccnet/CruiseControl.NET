@@ -18,11 +18,11 @@ namespace ThoughtWorks.CruiseControl.Core.Label
 			this.dateTimeProvider = dateTimeProvider;
 		}
 
-		public string Generate(IIntegrationResult resultFromLastBuild)
+		public string Generate(IIntegrationResult integrationResult)
 		{
 			DateTime now = dateTimeProvider.Now;
 
-			Version version = ParseVersion(now, resultFromLastBuild);
+			Version version = ParseVersion(now, integrationResult.LastIntegration);
 
 			int revision = version.Revision;
 			if (now.Year == version.Major && now.Month == version.Minor && now.Day == version.Build)
@@ -36,11 +36,11 @@ namespace ThoughtWorks.CruiseControl.Core.Label
 			return new Version(now.Year, now.Month, now.Day, revision).ToString();
 		}
 
-		private Version ParseVersion(DateTime date, IIntegrationResult resultFromLastBuild)
+		private Version ParseVersion(DateTime date, IntegrationSummary lastIntegrationSummary)
 		{
 			try
 			{
-				return new Version(resultFromLastBuild.LastSuccessfulIntegrationLabel);
+				return new Version(lastIntegrationSummary.LastSuccessfulIntegrationLabel);
 			}
 			catch (SystemException)
 			{

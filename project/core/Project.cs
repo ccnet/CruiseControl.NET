@@ -143,7 +143,7 @@ namespace ThoughtWorks.CruiseControl.Core
 
 		public void Prebuild(IIntegrationResult result)
 		{
-			result.Label = Labeller.Generate(LastIntegrationResult);
+			result.Label = Labeller.Generate(result);
 			RunTasks(result, PrebuildTasks);
 		}
 

@@ -15,23 +15,24 @@ namespace ThoughtWorks.CruiseControl.Core.Label
 		[ReflectorProperty("incrementOnFailure", Required=false)]
 		public bool IncrementOnFailed = false;
 
-		public virtual string Generate(IIntegrationResult previousResult)
+		public virtual string Generate(IIntegrationResult integrationResult)
 		{
-			if (previousResult == null || previousResult.IsInitial())
+			IntegrationSummary lastIntegration = integrationResult.LastIntegration;
+			if (integrationResult == null || lastIntegration.IsInitial())
 			{
 				return LabelPrefix + INITIAL_LABEL;
 			}
-			else if (ShouldIncrementLabel(previousResult))
+			else if (ShouldIncrementLabel(lastIntegration))
 			{
-				return LabelPrefix + IncrementLabel(previousResult.Label);
+				return LabelPrefix + IncrementLabel(lastIntegration.Label);
 			}
 			else
 			{
-				return previousResult.Label;
+				return integrationResult.LastIntegration.Label;
 			}
 		}
 
-		private bool ShouldIncrementLabel(IIntegrationResult previousResult)
+		private bool ShouldIncrementLabel(IntegrationSummary previousResult)
 		{
 			return previousResult.Status == IntegrationStatus.Success || IncrementOnFailed;
 		}

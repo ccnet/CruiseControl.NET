@@ -2,6 +2,7 @@ using Exortech.NetReflector;
 using NUnit.Framework;
 using ThoughtWorks.CruiseControl.Core;
 using ThoughtWorks.CruiseControl.Core.Label;
+using ThoughtWorks.CruiseControl.Remote;
 
 namespace ThoughtWorks.CruiseControl.UnitTests.Core.Label
 {
@@ -106,12 +107,12 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Label
 
 		private IntegrationResult IntegrationResultFromSuccessfulBuild(string label)
 		{
-			return IntegrationResultMother.CreateSuccessful(label);
+			return IntegrationResultMother.Create(new IntegrationSummary(IntegrationStatus.Success, label, label));
 		}
 
 		private static IntegrationResult IntegrationResultFromFailedBuild(string label)
 		{
-			return IntegrationResultMother.CreateFailed(label);
+			return IntegrationResultMother.Create(new IntegrationSummary(IntegrationStatus.Failure, label, label));
 		}
 	}
 }

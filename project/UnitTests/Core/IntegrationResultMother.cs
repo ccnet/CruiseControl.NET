@@ -26,13 +26,18 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 
 		public static IntegrationResult Create(IntegrationStatus status, IntegrationStatus lastIntegrationStatus, DateTime date)
 		{
-			IntegrationResult result = new IntegrationResult(DefaultProjectName, Path.GetTempPath(), ModificationExistRequest(), new IntegrationSummary(lastIntegrationStatus, null));
+			IntegrationResult result = Create(new IntegrationSummary(lastIntegrationStatus, null, null));
 			result.Status = status;
 			result.StartTime = date;
 			result.EndTime = date;
 			result.Label = "2.0";
 			result.ArtifactDirectory = Path.GetTempPath();
 			return result;
+		}
+
+		public static IntegrationResult Create(IntegrationSummary integrationSummary)
+		{
+			return new IntegrationResult(DefaultProjectName, Path.GetTempPath(), ModificationExistRequest(), integrationSummary);
 		}
 
 		public static IntegrationResult CreateSuccessful(DateTime startDate)

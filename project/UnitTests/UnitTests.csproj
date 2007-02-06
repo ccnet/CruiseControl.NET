@@ -227,11 +227,6 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "CCTrayLib\Configuration\ProjectTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
                     RelPath = "CCTrayLib\Monitoring\AggregatingProjectMonitorTest.cs"
                     SubType = "Code"
                     BuildAction = "Compile"

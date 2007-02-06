@@ -35,9 +35,6 @@ namespace ThoughtWorks.CruiseControl.Core
 		private Exception exception;
 		private ArrayList taskResults = new ArrayList();
 
-		// previous result properties
-		private string lastSuccessfulIntegrationLabel;
-
 		// Default constructor required for serialization
 		public IntegrationResult()
 		{
@@ -325,15 +322,21 @@ namespace ThoughtWorks.CruiseControl.Core
 		public IntegrationStatus LastIntegrationStatus
 		{
 			get { return lastIntegration.Status; }
-			set { lastIntegration = new IntegrationSummary(value, lastIntegration.Label);}		// used only for loading IntegrationResult from state file
+			set { lastIntegration = new IntegrationSummary(value, lastIntegration.Label, LastSuccessfulIntegrationLabel);}		// used only for loading IntegrationResult from state file - to be removed
 		}
 
 		public string LastSuccessfulIntegrationLabel
 		{
-			get { return (Succeeded || lastSuccessfulIntegrationLabel == null) ? Label : lastSuccessfulIntegrationLabel; }
-			set { lastSuccessfulIntegrationLabel = value; }
+			get { return lastIntegration.LastSuccessfulIntegrationLabel; }
+			set { lastIntegration = new IntegrationSummary(lastIntegration.Status, lastIntegration.Label, value);} // used only for loading IntegrationResult from state file - to be removed
 		}
 
+//		public string LastSuccessfulIntegrationLabel
+//		{
+//			get { return (Succeeded || lastSuccessfulIntegrationLabel == null) ? Label : lastSuccessfulIntegrationLabel; }
+//			set { lastSuccessfulIntegrationLabel = value; }
+//		}
+//
 		[XmlIgnore]
 		public IntegrationRequest IntegrationRequest
 		{

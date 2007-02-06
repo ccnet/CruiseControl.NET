@@ -4,14 +4,16 @@ namespace ThoughtWorks.CruiseControl.Core
 {
 	public class IntegrationSummary
 	{
-		public static readonly IntegrationSummary Initial = new IntegrationSummary(IntegrationStatus.Unknown, IntegrationResult.InitialLabel);
+		public static readonly IntegrationSummary Initial = new IntegrationSummary(IntegrationStatus.Unknown, IntegrationResult.InitialLabel, IntegrationResult.InitialLabel);
 		private IntegrationStatus status;
 		private string label;
+		private string lastSuccessfulIntegrationLabel;
 
-		public IntegrationSummary(IntegrationStatus status, string label)
+		public IntegrationSummary(IntegrationStatus status, string label, string lastSuccessfulIntegrationLabel)
 		{
 			this.status = status;
 			this.label = label;
+			this.lastSuccessfulIntegrationLabel = lastSuccessfulIntegrationLabel;
 		}
 
 		public override bool Equals(object obj)
@@ -42,6 +44,16 @@ namespace ThoughtWorks.CruiseControl.Core
 		public IntegrationStatus Status
 		{
 			get { return status; }
+		}
+
+		public string LastSuccessfulIntegrationLabel
+		{
+			get { return lastSuccessfulIntegrationLabel; }
+		}
+
+		public bool IsInitial()
+		{
+			return label == IntegrationResult.InitialLabel;
 		}
 	}
 }

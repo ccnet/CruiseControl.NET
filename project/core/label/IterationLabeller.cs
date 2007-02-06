@@ -39,19 +39,20 @@ namespace ThoughtWorks.CruiseControl.Core.Label
 		[ReflectorProperty("separator", Required=false)]
 		public string Separator = ".";
 
-		public override string Generate(IIntegrationResult previousResult)
+		public override string Generate(IIntegrationResult integrationResult)
 		{
-			if (previousResult == null || previousResult.Label == null || previousResult.IsInitial())
+			IntegrationSummary lastIntegration = integrationResult.LastIntegration;
+			if (lastIntegration.Label == null || lastIntegration.IsInitial())
 			{
 				return NewLabel(InitialLabel);
 			}
-			else if (previousResult.Status == IntegrationStatus.Success || IncrementOnFailed)
+			else if (lastIntegration.Status == IntegrationStatus.Success || IncrementOnFailed)
 			{
-				return NewLabel(IncrementLabel(previousResult.Label));
+				return NewLabel(IncrementLabel(lastIntegration.Label));
 			}
 			else
 			{
-				return previousResult.Label;
+				return lastIntegration.Label;
 			}
 		}
 
