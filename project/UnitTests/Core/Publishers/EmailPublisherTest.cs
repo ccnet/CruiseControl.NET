@@ -113,11 +113,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Publishers
 
 		private IntegrationResult CreateIntegrationResult(IntegrationStatus current, IntegrationStatus last)
 		{
-			IntegrationResult result = new IntegrationResult();
+			IntegrationResult result = IntegrationResultMother.Create(current, last, new DateTime(1980, 1, 1));
 			result.ProjectName = "Project#9";
-			result.Modifications = CreateModifications();
-			result.Status = current;
-			result.LastIntegrationStatus = last;
 			result.Label = "0";
 			return result;
 		}

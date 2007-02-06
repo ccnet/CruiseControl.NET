@@ -32,9 +32,9 @@ namespace ThoughtWorks.CruiseControl.Core
 
 		public IIntegrationResult StartNewIntegration(IntegrationRequest request)
 		{
-			currentResult = new IntegrationResult(project.Name, project.WorkingDirectory, request);
+			IntegrationSummary lastIntegration = new IntegrationSummary(LastIntegrationResult.Status, LastIntegrationResult.Label);
+			currentResult = new IntegrationResult(project.Name, project.WorkingDirectory, request, lastIntegration);
 
-			currentResult.LastIntegrationStatus = LastIntegrationResult.Status;
 			currentResult.LastSuccessfulIntegrationLabel = LastIntegrationResult.LastSuccessfulIntegrationLabel;
 
 			currentResult.BuildCondition = DetermineBuildCondition(request.BuildCondition);

@@ -7,7 +7,6 @@ using System.Xml.XPath;
 using NUnit.Framework;
 using ThoughtWorks.CruiseControl.Core;
 using ThoughtWorks.CruiseControl.Core.Publishers.Statistics;
-using ThoughtWorks.CruiseControl.Remote;
 
 namespace ThoughtWorks.CruiseControl.UnitTests.Core.Publishers.Statistics
 {
@@ -35,7 +34,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Publishers.Statistics
 		public void SetUp()
 		{
 			builder = new StatisticsBuilder();
-			result = IntegrationResultMother.Create(true);
+			result = IntegrationResultMother.CreateSuccessful();
 			Directory.CreateDirectory(outDir);
 		}
 

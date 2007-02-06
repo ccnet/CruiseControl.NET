@@ -9,50 +9,40 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 	{
 		public const string DefaultProjectName = "test";
 
-		public static IntegrationResult Create(bool succeeded)
-		{
-			return Create(succeeded, DateTime.Now);
-		}
-
 		public static IntegrationResult Create(IntegrationStatus status)
 		{
-			return Create(status, DateTime.Now);
-		}
-
-		public static IntegrationResult Create(bool succeeded, DateTime date)
-		{
-			IntegrationStatus status = (succeeded) ? IntegrationStatus.Success : IntegrationStatus.Failure;
-			return Create(status, date);
+			return Create(status, status);
 		}
 
 		public static IntegrationResult Create(IntegrationStatus status, DateTime date)
 		{
-			IntegrationResult result = new IntegrationResult(DefaultProjectName, Path.GetTempPath(), ModificationExistRequest());
+			return Create(status, status, date);
+		}
+
+		public static IntegrationResult Create(IntegrationStatus status, IntegrationStatus lastStatus)
+		{
+			return Create(status, lastStatus, DateTime.Now);
+		}
+
+		public static IntegrationResult Create(IntegrationStatus status, IntegrationStatus lastIntegrationStatus, DateTime date)
+		{
+			IntegrationResult result = new IntegrationResult(DefaultProjectName, Path.GetTempPath(), ModificationExistRequest(), new IntegrationSummary(lastIntegrationStatus, null));
 			result.Status = status;
 			result.StartTime = date;
 			result.EndTime = date;
 			result.Label = "2.0";
 			result.ArtifactDirectory = Path.GetTempPath();
-			return result;			
+			return result;
 		}
 
-		private static IntegrationRequest ModificationExistRequest()
+		public static IntegrationResult CreateSuccessful(DateTime startDate)
 		{
-			return new IntegrationFixture().ModificationExistRequest();
-		}
-
-		public static IntegrationResult CreateSuccessfulWithRequest()
-		{
-			IntegrationResult result = new IntegrationResult(DefaultProjectName, Path.GetTempPath(), ModificationExistRequest());
-			result.Status = IntegrationStatus.Success;
-			result.StartTime = DateTime.Now;
-			result.EndTime = DateTime.Now;
-			return result;			
+			return Create(IntegrationStatus.Success, startDate);
 		}
 
 		public static IntegrationResult CreateSuccessful()
 		{
-			return Create(true, DateTime.Now);
+			return CreateSuccessful(DateTime.Now);
 		}
 
 		public static IntegrationResult CreateSuccessful(string label)
@@ -60,6 +50,18 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 			IntegrationResult result = CreateSuccessful();
 			result.Label = label;
 			return result;
+		}
+
+		public static IntegrationResult CreateSuccessful(Modification[] modifications)
+		{
+			IntegrationResult result = CreateSuccessful();
+			result.Modifications = modifications;
+			return result;
+		}
+
+		public static IntegrationResult CreateStillSuccessful()
+		{
+			return Create(IntegrationStatus.Success);
 		}
 
 		public static IntegrationResult CreateUnknown()
@@ -74,33 +76,17 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 			return result;
 		}
 
-		public static IntegrationResult CreateSuccessful(DateTime startDate)
-		{
-			return Create(true, startDate);
-		}
-
-		public static IntegrationResult CreateSuccessful(Modification[] modifications)
-		{
-			IntegrationResult result = Create(true, DateTime.Now);
-			result.Modifications = modifications;
-			return result;
-		}
-
 		public static IntegrationResult CreateFailed()
 		{
-			return Create(false, DateTime.Now);
+			return Create(IntegrationStatus.Failure, IntegrationStatus.Success);
 		}
-
 
 		public static IntegrationResult CreateFailed(IntegrationStatus previousIntegrationStatus)
 		{
-			IntegrationResult result = CreateFailed();
-			result.LastIntegrationStatus = previousIntegrationStatus;
-
-			return result;
+			return Create(IntegrationStatus.Failure, previousIntegrationStatus, DateTime.Now);
 		}
 
-		
+
 		public static IntegrationResult CreateFailed(string label)
 		{
 			IntegrationResult result = CreateFailed();
@@ -108,10 +94,14 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 			return result;
 		}
 
+		public static IIntegrationResult CreateStillFailing()
+		{
+			return Create(IntegrationStatus.Failure);
+		}
+
 		public static IntegrationResult CreateFixed()
 		{
-			IntegrationResult result = CreateSuccessful();
-			result.LastIntegrationStatus = IntegrationStatus.Failure;
+			IntegrationResult result = Create(IntegrationStatus.Success, IntegrationStatus.Failure, DateTime.Now);
 			return result;
 		}
 
@@ -122,23 +112,14 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 			return result;
 		}
 
-		public static IntegrationResult CreateStillSuccessful()
-		{
-			IntegrationResult result = CreateSuccessful();
-			result.LastIntegrationStatus = IntegrationStatus.Success;
-			return result;
-		}
-
-		public static IIntegrationResult CreateStillFailing()
-		{
-			IntegrationResult result = CreateFailed();
-			result.LastIntegrationStatus = IntegrationStatus.Failure;
-			return result;
-		}
-
 		public static IntegrationResult CreateInitial()
 		{
 			return IntegrationResult.CreateInitialIntegrationResult(DefaultProjectName, "");
+		}
+
+		private static IntegrationRequest ModificationExistRequest()
+		{
+			return new IntegrationFixture().ModificationExistRequest();
 		}
 	}
 }

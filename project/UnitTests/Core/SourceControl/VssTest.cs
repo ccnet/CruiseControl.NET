@@ -8,7 +8,6 @@ using NUnit.Framework;
 using ThoughtWorks.CruiseControl.Core;
 using ThoughtWorks.CruiseControl.Core.Sourcecontrol;
 using ThoughtWorks.CruiseControl.Core.Util;
-using ThoughtWorks.CruiseControl.Remote;
 
 namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 {
@@ -224,7 +223,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 			ExpectToExecuteAndReturn(SuccessfulProcessResult());
 			vss.AutoGetSource = true;
 			vss.WorkingDirectory = workingDirectory;
-			vss.GetSource(IntegrationResultMother.Create(false));
+			vss.GetSource(IntegrationResultMother.CreateFailed());
 
 			Assert.IsTrue(Directory.Exists(workingDirectory));
 			TempFileUtil.DeleteTempDir(workingDirectory);

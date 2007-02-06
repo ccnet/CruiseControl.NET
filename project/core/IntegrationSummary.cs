@@ -4,6 +4,7 @@ namespace ThoughtWorks.CruiseControl.Core
 {
 	public class IntegrationSummary
 	{
+		public static readonly IntegrationSummary Initial = new IntegrationSummary(IntegrationStatus.Unknown, IntegrationResult.InitialLabel);
 		private IntegrationStatus status;
 		private string label;
 
@@ -25,6 +26,12 @@ namespace ThoughtWorks.CruiseControl.Core
 		public override int GetHashCode()
 		{
 			return label.GetHashCode();
+		}
+
+
+		public override string ToString()
+		{
+			return string.Format("Status: {0}, Label: {1}", status, label);
 		}
 
 		public string Label

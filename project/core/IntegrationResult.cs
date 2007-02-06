@@ -24,6 +24,7 @@ namespace ThoughtWorks.CruiseControl.Core
 		private string workingDirectory;
 		private string artifactDirectory;
 		private IntegrationRequest request = IntegrationRequest.NullRequest;
+		private IntegrationSummary lastIntegration = IntegrationSummary.Initial;
 
 		// mutable properties
 		private IntegrationStatus status = IntegrationStatus.Unknown;
@@ -35,7 +36,6 @@ namespace ThoughtWorks.CruiseControl.Core
 		private ArrayList taskResults = new ArrayList();
 
 		// previous result properties
-		private IntegrationStatus lastIntegrationStatus = IntegrationStatus.Unknown;
 		private string lastSuccessfulIntegrationLabel;
 
 		// Default constructor required for serialization
@@ -43,11 +43,12 @@ namespace ThoughtWorks.CruiseControl.Core
 		{
 		}
 
-		public IntegrationResult(string projectName, string workingDirectory, IntegrationRequest request)
+		public IntegrationResult(string projectName, string workingDirectory, IntegrationRequest request, IntegrationSummary lastIntegration)
 		{
 			ProjectName = projectName;
 			WorkingDirectory = workingDirectory;
 			this.request = request;
+			this.lastIntegration = lastIntegration;
 		}
 
 		public string ProjectName
@@ -120,23 +121,6 @@ namespace ThoughtWorks.CruiseControl.Core
 		{
 			get { return status; }
 			set { status = value; }
-		}
-
-		public IntegrationStatus LastIntegrationStatus
-		{
-			get { return lastIntegrationStatus; }
-			set { lastIntegrationStatus = value; }
-		}
-
-		public string LastSuccessfulIntegrationLabel
-		{
-			get { return (Succeeded || lastSuccessfulIntegrationLabel == null) ? Label : lastSuccessfulIntegrationLabel; }
-			set { lastSuccessfulIntegrationLabel = value; }
-		}
-
-		public string PreviousLabel
-		{
-			get { return lastSuccessfulIntegrationLabel; }
 		}
 
 		/// <summary>
@@ -286,7 +270,7 @@ namespace ThoughtWorks.CruiseControl.Core
 		public static IntegrationResult CreateInitialIntegrationResult(string project, string workingDirectory)
 		{
 			IntegrationRequest initialRequest = new IntegrationRequest(BuildCondition.ForceBuild, "Initial Build");
-			IntegrationResult result = new IntegrationResult(project, workingDirectory, initialRequest);
+			IntegrationResult result = new IntegrationResult(project, workingDirectory, initialRequest, IntegrationSummary.Initial);
 			result.StartTime = DateTime.Now.AddDays(-1);
 			result.EndTime = DateTime.Now;
 			return result;
@@ -335,7 +319,19 @@ namespace ThoughtWorks.CruiseControl.Core
 		[XmlIgnore]
 		public IntegrationSummary LastIntegration
 		{
-			get { return new IntegrationSummary(LastIntegrationStatus, PreviousLabel); }
+			get { return lastIntegration; }
+		}
+
+		public IntegrationStatus LastIntegrationStatus
+		{
+			get { return lastIntegration.Status; }
+			set { lastIntegration = new IntegrationSummary(value, lastIntegration.Label);}		// used only for loading IntegrationResult from state file
+		}
+
+		public string LastSuccessfulIntegrationLabel
+		{
+			get { return (Succeeded || lastSuccessfulIntegrationLabel == null) ? Label : lastSuccessfulIntegrationLabel; }
+			set { lastSuccessfulIntegrationLabel = value; }
 		}
 
 		[XmlIgnore]

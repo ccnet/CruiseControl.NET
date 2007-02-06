@@ -22,7 +22,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Publishers
 		{
 			buffer = new StringWriter();
 			writer = new XmlIntegrationResultWriter(buffer);
-			result = IntegrationResultMother.CreateSuccessfulWithRequest();
+			result = IntegrationResultMother.CreateSuccessful();
 		}
 
 		[Test]
