@@ -40,5 +40,19 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 			string className = new DefaultBuildNameFormatter().GetCssClassForBuildLink(CreateBuildSpecifier("log20020507042535.xml"));
 			Assert.AreEqual("build-failed-link", className);
 		}
+
+		[Test]
+		public void ShouldGetCorrectCssLinkForSelectedPassedBuild()
+		{
+			string className = new DefaultBuildNameFormatter().GetCssClassForSelectedBuildLink(CreateBuildSpecifier("log20020830164057Lbuild.6.xml"));
+			Assert.AreEqual("selected build-passed-link", className);
+		}
+
+		[Test]
+		public void ShouldGetCorrectCssLinkForSelectedFailedBuild()
+		{
+			string className = new DefaultBuildNameFormatter().GetCssClassForSelectedBuildLink(CreateBuildSpecifier("log20020507042535.xml"));
+			Assert.AreEqual("selected build-failed-link", className);
+		}
 	}
 }

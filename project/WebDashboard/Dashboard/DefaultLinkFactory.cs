@@ -56,5 +56,12 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 			link.LinkClass = buildNameFormatter.GetCssClassForBuildLink(specifier);
 			return link;
 		}
+
+		public IAbsoluteLink CreateStyledSelectedBuildLink(IBuildSpecifier specifier, string action)
+		{
+			IAbsoluteLink link = CreateBuildLink(specifier, buildNameFormatter.GetPrettyBuildName(specifier), action);
+			link.LinkClass = buildNameFormatter.GetCssClassForSelectedBuildLink(specifier);
+			return link;
+		}
 	}
 }

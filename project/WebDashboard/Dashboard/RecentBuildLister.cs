@@ -31,12 +31,23 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 		// ToDo - something better for errors
 		public string BuildRecentBuildsTable(IProjectSpecifier projectSpecifier)
 		{
+			return BuildRecentBuildsTable(projectSpecifier, null);
+		}
+
+		public string BuildRecentBuildsTable(IBuildSpecifier buildSpecifier)
+		{
+			return BuildRecentBuildsTable(buildSpecifier.ProjectSpecifier, buildSpecifier);
+		}
+
+		private string BuildRecentBuildsTable(IProjectSpecifier projectSpecifier, IBuildSpecifier buildSpecifier)
+		{
 			Hashtable primaryContext = new Hashtable();
 			Hashtable secondaryContext = new Hashtable();
 
 			try
 			{
-				secondaryContext["links"] = linkListFactory.CreateStyledBuildLinkList(farmService.GetMostRecentBuildSpecifiers(projectSpecifier, 10), BuildReportBuildPlugin.ACTION_NAME);
+				IBuildSpecifier[] mostRecentBuildSpecifiers = farmService.GetMostRecentBuildSpecifiers(projectSpecifier, 10);
+				secondaryContext["links"] = linkListFactory.CreateStyledBuildLinkList(mostRecentBuildSpecifiers, buildSpecifier, BuildReportBuildPlugin.ACTION_NAME);
 				primaryContext["buildRows"] = velocityTransformer.Transform(@"BuildRows.vm", secondaryContext);
 				primaryContext["allBuildsLink"] = linkFactory.CreateProjectLink(projectSpecifier, "", ViewAllBuildsProjectPlugin.ACTION_NAME);
 

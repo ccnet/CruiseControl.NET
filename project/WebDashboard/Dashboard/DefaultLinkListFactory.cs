@@ -14,14 +14,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 
 		public IAbsoluteLink[] CreateStyledBuildLinkList(IBuildSpecifier[] buildSpecifiers, string action)
 		{
-			ArrayList displayableBuildLinkList = new ArrayList();
-			
-			foreach (IBuildSpecifier buildSpecifier in buildSpecifiers)
-			{
-				displayableBuildLinkList.Add(linkFactory.CreateStyledBuildLink(buildSpecifier, action));
-			}
-
-			return (IAbsoluteLink[]) displayableBuildLinkList.ToArray(typeof (IAbsoluteLink));
+			return CreateStyledBuildLinkList(buildSpecifiers, null, action);
 		}
 
 		public IAbsoluteLink[] CreateServerLinkList(IServerSpecifier[] serverSpecifiers, string action)
@@ -33,6 +26,25 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 			}
 
 			return (IAbsoluteLink[])lstLinks.ToArray(typeof(IAbsoluteLink));
+		}
+
+		public IAbsoluteLink[] CreateStyledBuildLinkList(IBuildSpecifier[] buildSpecifiers, IBuildSpecifier selectedBuildSpecifier, string action)
+		{
+			ArrayList displayableBuildLinkList = new ArrayList();
+			
+			foreach (IBuildSpecifier buildSpecifier in buildSpecifiers)
+			{
+				if (buildSpecifier.Equals(selectedBuildSpecifier))
+				{
+					displayableBuildLinkList.Add(linkFactory.CreateStyledSelectedBuildLink(buildSpecifier, action));
+				}
+				else
+				{
+					displayableBuildLinkList.Add(linkFactory.CreateStyledBuildLink(buildSpecifier, action));
+				}
+			}
+
+			return (IAbsoluteLink[]) displayableBuildLinkList.ToArray(typeof (IAbsoluteLink));			
 		}
 	}
 }

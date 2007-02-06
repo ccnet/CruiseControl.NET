@@ -6,5 +6,6 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 	{
 		string GetPrettyBuildName(IBuildSpecifier buildSpecifier);
 		string GetCssClassForBuildLink(IBuildSpecifier buildSpecifier);
+		string GetCssClassForSelectedBuildLink(IBuildSpecifier buildSpecifier);
 	}
 }

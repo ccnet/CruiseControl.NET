@@ -90,6 +90,8 @@ a:hover { color:#FC0; }
 
 .build-passed-link { color:Green; text-decoration:none; }
 .build-failed-link { color:Red; text-decoration:none; }
+td>a.selected { background-color:#FFA; }
+td>a.selected:hover { color:#006; }
 
 .log
 {

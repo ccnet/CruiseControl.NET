@@ -45,6 +45,28 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 		}
 
 		[Test]
+		public void ShouldGenerateBuildLinksAndIdentifySelectedLink()
+		{
+			string action = "my action";
+			IBuildSpecifier buildSpecifier1 = (IBuildSpecifier) new DynamicMock(typeof(IBuildSpecifier)).MockInstance;
+			IBuildSpecifier buildSpecifier2 = (IBuildSpecifier) new DynamicMock(typeof(IBuildSpecifier)).MockInstance;
+			IBuildSpecifier selectedBuildSpecifier = buildSpecifier1;
+			IAbsoluteLink link1 = new GeneralAbsoluteLink("link 1");
+			IAbsoluteLink link2 = new GeneralAbsoluteLink("link 2");
+
+			linkFactoryMock.ExpectAndReturn("CreateStyledSelectedBuildLink", link1, buildSpecifier1, action);
+			linkFactoryMock.ExpectAndReturn("CreateStyledBuildLink", link2, buildSpecifier2, action);
+
+			IAbsoluteLink[] returnedLinks = linkListFactory.CreateStyledBuildLinkList(new IBuildSpecifier[] { buildSpecifier1, buildSpecifier2 }, selectedBuildSpecifier, action);
+
+			Assert.AreEqual(2, returnedLinks.Length);
+			Assert.AreEqual(link1, returnedLinks[0]);
+			Assert.AreEqual(link2, returnedLinks[1]);
+
+			VerifyAll();
+		}
+
+		[Test]
 		public void ShouldGenerateServerLinks()
 		{
 			string action = "ViewServerReport";

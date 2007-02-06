@@ -22,5 +22,10 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 		{
 			return new LogFile(buildSpecifier.BuildName).Succeeded ? "build-passed-link" : "build-failed-link";
 		}
+
+		public string GetCssClassForSelectedBuildLink(IBuildSpecifier buildSpecifier)
+		{
+			return new LogFile(buildSpecifier.BuildName).Succeeded ? "selected build-passed-link" : "selected build-failed-link";
+		}
 	}
 }

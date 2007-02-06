@@ -67,7 +67,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 			Hashtable context2 = new Hashtable();
 
 			farmServiceMock.ExpectAndReturn("GetMostRecentBuildSpecifiers", buildSpecifiers, projectSpecifier, 10);
-			linkListFactoryMock.ExpectAndReturn("CreateStyledBuildLinkList", buildLinks, buildSpecifiers, BuildReportBuildPlugin.ACTION_NAME);
+			linkListFactoryMock.ExpectAndReturn("CreateStyledBuildLinkList", buildLinks, buildSpecifiers, build1Specifier, BuildReportBuildPlugin.ACTION_NAME);
 			context1["links"] = buildLinks;
 			velocityTransformerMock.ExpectAndReturn("Transform", buildRows, @"BuildRows.vm", new HashtableConstraint(context1));
 
@@ -77,7 +77,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 			context2["allBuildsLink"] = allBuildsLink;
 			velocityTransformerMock.ExpectAndReturn("Transform", recentBuilds, @"RecentBuilds.vm", new HashtableConstraint(context2));
 
-			Assert.AreEqual(recentBuilds, lister.BuildRecentBuildsTable(projectSpecifier));
+			Assert.AreEqual(recentBuilds, lister.BuildRecentBuildsTable(build1Specifier));
 
 			VerifyAll();
 		}
