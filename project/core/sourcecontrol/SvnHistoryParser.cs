@@ -136,7 +136,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 
 		private DateTime ParseDate(string date)
 		{
-			return DateTime.Parse(date, CultureInfo.InvariantCulture, DateTimeStyles.AdjustToUniversal).ToLocalTime();
+			return DateTime.Parse(date, CultureInfo.InvariantCulture);
 		}
 	}
 }
