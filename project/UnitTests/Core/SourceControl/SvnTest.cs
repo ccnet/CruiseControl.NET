@@ -22,8 +22,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 		[SetUp]
 		protected void SetUp()
 		{
-			from = DateTime.Parse("2001-01-21  20:00:00 'GMT'");
-			to = DateTime.Parse("2001-01-21  20:30:50 'GMT'");
+			from = DateTime.Parse("2001-01-21 20:00:00Z");
+			to = DateTime.Parse("2001-01-21 20:30:50Z");
 			CreateProcessExecutorMock(Svn.DefaultExecutable);
 			mockParser = new DynamicMock(typeof(IHistoryParser));
 			mockFileSystem = new DynamicMock(typeof (IFileSystem));
