@@ -241,6 +241,19 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 		}
 		
 		[Test]
+		public void ShouldCheckoutWrappingTrunkUrlInDoubleQuotes()
+		{
+			ExpectToExecuteArguments(string.Format(@"checkout ""svn://myserver/my path"" {0} --non-interactive --no-auth-cache", DefaultWorkingDirectory));
+			ExpectSvnDirectoryExists(false);
+			ExpectUnderscoreSvnDirectoryExists(false);
+
+			svn.TrunkUrl = "svn://myserver/my path";
+			svn.AutoGetSource = true;
+			svn.WorkingDirectory = DefaultWorkingDirectory;
+			svn.GetSource(IntegrationResult());
+		}
+		
+		[Test]
 		public void ShouldNotCheckoutIfSVNFoldersWithAspNetHackExist()
 		{
 			ExpectSvnDirectoryExists(false);

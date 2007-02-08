@@ -99,9 +99,9 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 		private ProcessInfo NewCheckoutProcessInfo(IIntegrationResult result)
 		{
 			ProcessArgumentBuilder buffer = new ProcessArgumentBuilder();
-			buffer.AppendArgument("checkout");
-			buffer.AppendArgument(TrunkUrl);
-			buffer.AppendArgument(result.BaseFromWorkingDirectory(WorkingDirectory));
+			buffer.AddArgument("checkout");
+			buffer.AddArgument(TrunkUrl);
+			buffer.AddArgument(result.BaseFromWorkingDirectory(WorkingDirectory));
 			AppendCommonSwitches(buffer);
 			return NewProcessInfo(buffer.ToString(), result);
 		}
@@ -121,7 +121,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 		private ProcessInfo NewGetSourceProcessInfo(IIntegrationResult result)
 		{
 			ProcessArgumentBuilder buffer = new ProcessArgumentBuilder();
-			buffer.Append("update");
+			buffer.AddArgument("update");
 			AppendRevision(buffer, result.LastChangeNumber);
 			AppendCommonSwitches(buffer);
 			return NewProcessInfo(buffer.ToString(), result);
@@ -131,7 +131,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 		private ProcessInfo NewLabelProcessInfo(IIntegrationResult result)
 		{
 			ProcessArgumentBuilder buffer = new ProcessArgumentBuilder();
-			buffer.AppendArgument("copy");
+			buffer.AddArgument("copy");
 			buffer.AppendArgument(TagMessage(result.Label));
 			buffer.AddArgument(TagSource(result));
 			buffer.AddArgument(TagDestination(result.Label));
