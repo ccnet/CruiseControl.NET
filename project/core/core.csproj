@@ -1044,6 +1044,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "tasks\FinalBuilderTask.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "tasks\MergeFilesTask.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
