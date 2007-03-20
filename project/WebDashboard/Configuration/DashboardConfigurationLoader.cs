@@ -54,7 +54,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Configuration
 			XmlNode node = XmlUtil.SelectNode(dashboardConfig, xpath);
 
 			NetReflectorTypeTable typeTable = NetReflectorTypeTable.CreateDefault(instantiator);
-			typeTable.Add(Path.GetDirectoryName(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, AppDomain.CurrentDomain.RelativeSearchPath)), "ccnet.*.plugin.dll");
+			typeTable.Add(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, AppDomain.CurrentDomain.RelativeSearchPath), "ccnet.*.plugin.dll");
 			typeTable.Add(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "ccnet.*.plugin.dll");
 
 			return NetReflector.Read(node, typeTable);
