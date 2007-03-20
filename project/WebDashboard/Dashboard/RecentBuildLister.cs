@@ -69,7 +69,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 			primaryContext["buildRows"] = velocityTransformer.Transform(@"BuildRows.vm", secondaryContext);
 			primaryContext["allBuildsLink"] = linkFactory.CreateProjectLink(projectSpecifier, "", ViewAllBuildsProjectPlugin.ACTION_NAME);
 
-			return velocityViewGenerator.GenerateView(@"RecentBuilds.vm", primaryContext);
+			return velocityViewGenerator.GenerateView(@"AllBuilds.vm", primaryContext);
 		}
 	}
 }

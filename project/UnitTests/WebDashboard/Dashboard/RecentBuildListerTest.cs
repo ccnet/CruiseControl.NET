@@ -101,7 +101,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 			IAbsoluteLink allBuildsLink = new GeneralAbsoluteLink("foo");
 			linkFactoryMock.ExpectAndReturn("CreateProjectLink", allBuildsLink, projectSpecifier, "", ViewAllBuildsProjectPlugin.ACTION_NAME);
 			context2["allBuildsLink"] = allBuildsLink;
-			velocityViewGeneratorMock.ExpectAndReturn("GenerateView", allBuildsResponse, @"RecentBuilds.vm", new HashtableConstraint(context2));
+			velocityViewGeneratorMock.ExpectAndReturn("GenerateView", allBuildsResponse, @"AllBuilds.vm", new HashtableConstraint(context2));
 
 			Assert.AreEqual(allBuildsResponse, lister.GenerateAllBuildsView(projectSpecifier));
 
