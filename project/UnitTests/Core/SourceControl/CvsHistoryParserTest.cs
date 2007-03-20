@@ -145,8 +145,32 @@ foo
 			Assert.AreEqual("modified", mods[0].Type);
 			Assert.AreEqual(@"C:\dev\CVSRoot/fitwebservice/src/fitwebservice/src", mods[0].FolderName);
 		}
-		
 
+		[Test]
+		public void ParseRLogWithSpacesInFilename()
+		{
+			string output = @"RCS file: C:\dev\CVSRoot/fitwebservice/src/fit webservice/src/Run File.cs,v
+head: 1.5
+branch:
+locks: strict
+access list:
+keyword substitution: kv
+total revisions: 5;       selected revisions: 2
+description:
+----------------------------
+revision 1.5
+date: 2006/12/10 06:09:42;  author: owen;  state: Exp;  lines: +2 -0;  kopt: kv;  commitid: 1568457ba4a37557;  filename: Run.cs;
+asdf
+=============================================================================";
+			Modification[] mods = cvs.Parse(new StringReader(output), new DateTime(2006, 12, 10), new DateTime(2006, 12, 11));
+			Assert.AreEqual(1, mods.Length);
+			Assert.AreEqual("1.5", mods[0].Version);
+			Assert.AreEqual("owen", mods[0].UserName);
+			Assert.AreEqual("modified", mods[0].Type);
+			Assert.AreEqual(@"C:\dev\CVSRoot/fitwebservice/src/fit webservice/src", mods[0].FolderName);
+			Assert.AreEqual("Run File.cs", mods[0].FileName);
+		}
+		
 		private DateTime CreateDate(string dateString) 
 		{
 			DateTime date = DateTime.ParseExact(dateString,"yyyy/MM/dd HH:mm:ss z",DateTimeFormatInfo.GetInstance(CultureInfo.InvariantCulture));

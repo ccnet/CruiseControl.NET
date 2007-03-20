@@ -76,7 +76,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			return mods;
 		}
 
-		private readonly Regex rcsfileRegex = new Regex(@"^RCS file:\s+(\S+),v\s*$");
+		private readonly Regex rcsfileRegex = new Regex(@"^RCS file:\s+(.+),v\s*$");
 
 		private string ParseFileNameAndPath(string rcsFileLine)
 		{
