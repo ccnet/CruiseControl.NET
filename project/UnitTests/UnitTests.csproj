@@ -1236,6 +1236,31 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Remote\ProjectStatus.1.0.bin"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "Remote\ProjectStatus.1.1.1.bin"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "Remote\ProjectStatus.1.1.bin"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "Remote\ProjectStatus.1.2.1.bin"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "Remote\ProjectStatus.1.2.bin"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "Remote\ProjectStatusCompatibilityTest.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "resources\buildlog.xml"
                     BuildAction = "Content"
                 />
@@ -1267,6 +1292,11 @@
                 />
                 <File
                     RelPath = "UnitTestUtils\Mockery.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "UnitTestUtils\ResourceUtil.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

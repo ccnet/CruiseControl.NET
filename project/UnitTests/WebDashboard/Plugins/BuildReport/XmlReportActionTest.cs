@@ -1,11 +1,11 @@
 using System;
 using System.IO;
-using System.Reflection;
 using System.Xml;
 using System.Xml.Schema;
 using NMock;
 using NUnit.Framework;
 using ThoughtWorks.CruiseControl.Remote;
+using ThoughtWorks.CruiseControl.UnitTests.UnitTestUtils;
 using ThoughtWorks.CruiseControl.WebDashboard.MVC;
 using ThoughtWorks.CruiseControl.WebDashboard.Plugins.FarmReport;
 using ThoughtWorks.CruiseControl.WebDashboard.ServerConnection;
@@ -83,7 +83,6 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Plugins.BuildReport
 			AssertXPathMatches(doc, "/Projects/Project/@category", "category");
 
 			mockFarmService.Verify();
-
 		}
 
 		private void AssertXPathMatches(XmlDocument doc, string xpath, string expectedValue)
@@ -117,10 +116,10 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Plugins.BuildReport
 			XmlValidatingReader rdr = new XmlValidatingReader(xml, XmlNodeType.Document, null);
 			rdr.Schemas.Add(ReadSchemaFromResources("XmlReportActionSchema.xsd"));
 			while (rdr.Read())
-				;
+			{
+			}
 
 			mockFarmService.Verify();
-
 		}
 
 		private ProjectStatus CreateProjectStatus()
@@ -133,11 +132,10 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Plugins.BuildReport
 
 		private XmlSchema ReadSchemaFromResources(string filename)
 		{
-			using (Stream s = Assembly.GetExecutingAssembly().GetManifestResourceStream(GetType(), filename))
+			using (Stream s = ResourceUtil.LoadResource(GetType(), filename))
 			{
 				return XmlSchema.Read(s, null);
 			}
 		}
-
 	}
 }

@@ -5,6 +5,7 @@ using System.Xml;
 using Exortech.NetReflector;
 using NUnit.Framework;
 using ThoughtWorks.CruiseControl.Core.Config;
+using ThoughtWorks.CruiseControl.UnitTests.UnitTestUtils;
 
 namespace ThoughtWorks.CruiseControl.UnitTests.Config
 {
@@ -58,7 +59,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Config
 
 		private XmlDocument LoadConfigXml()
 		{
-			Stream stream = Assembly.GetExecutingAssembly().GetManifestResourceStream(GetType().Namespace + "." + filename);
+			Stream stream = ResourceUtil.LoadResource(GetType(), filename);
 			XmlDocument xml = new XmlDocument();
 			xml.Load(stream);
 			return xml;
