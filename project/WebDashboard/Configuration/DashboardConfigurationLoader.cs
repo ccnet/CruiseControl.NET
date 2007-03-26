@@ -17,15 +17,16 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Configuration
 		private readonly IPhysicalApplicationPathProvider physicalApplicationPathProvider;
 		private static readonly string DashboardConfigAppSettingKey = "DashboardConfigLocation";
 		private static readonly string DefaultDashboardConfigLocation = "dashboard.config";
-		
+		private IRemoteServicesConfiguration remoteServicesConfiguration;
+		private IPluginConfiguration pluginsConfiguration;
+		private NetReflectorTypeTable typeTable;
+
 		public DashboardConfigurationLoader(ObjectionNetReflectorInstantiator instantiator, IPhysicalApplicationPathProvider physicalApplicationPathProvider)
 		{
 			this.instantiator = instantiator;
 			this.physicalApplicationPathProvider = physicalApplicationPathProvider;
+			typeTable = GetTypeTable();
 		}
-
-		private IRemoteServicesConfiguration remoteServicesConfiguration;
-		private IPluginConfiguration pluginsConfiguration;
 
 		private void LoadRemoteServicesConfiguration()
 		{
@@ -52,12 +53,15 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Configuration
 			}
 
 			XmlNode node = XmlUtil.SelectNode(dashboardConfig, xpath);
+			return NetReflector.Read(node, typeTable);
+		}
 
+		private NetReflectorTypeTable GetTypeTable()
+		{
 			NetReflectorTypeTable typeTable = NetReflectorTypeTable.CreateDefault(instantiator);
 			typeTable.Add(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, AppDomain.CurrentDomain.RelativeSearchPath), "ccnet.*.plugin.dll");
 			typeTable.Add(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "ccnet.*.plugin.dll");
-
-			return NetReflector.Read(node, typeTable);
+			return typeTable;
 		}
 
 		private string CalculateDashboardConfigPath()
@@ -74,22 +78,22 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Configuration
 			return path;
 		}
 
-			public IRemoteServicesConfiguration RemoteServices
+		public IRemoteServicesConfiguration RemoteServices
+		{
+			get
 			{
-				get
-				{
-					LoadRemoteServicesConfiguration();
-					return remoteServicesConfiguration;
-				}
+				LoadRemoteServicesConfiguration();
+				return remoteServicesConfiguration;
 			}
+		}
 
 		public IPluginConfiguration PluginConfiguration
+		{
+			get
 			{
-				get
-				{
-					LoadPluginsConfiguration();
-					return pluginsConfiguration;
-				}
+				LoadPluginsConfiguration();
+				return pluginsConfiguration;
 			}
 		}
 	}
+}

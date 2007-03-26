@@ -26,37 +26,37 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 		public ObjectSource SetupObjectSourceForRequest(HttpContext context)
 		{
 			ObjectSource objectSource = (ObjectSource) objectionManager; // Yuch - put this in Object Wizard somewhere
-			objectionManager.AddInstanceForType(typeof(ObjectSource), objectionManager);
+			objectionManager.AddInstanceForType(typeof (ObjectSource), objectionManager);
 
-			objectionManager.AddInstanceForType(typeof(HttpContext), context);
+			objectionManager.AddInstanceForType(typeof (HttpContext), context);
 			HttpRequest request = context.Request;
-			objectionManager.AddInstanceForType(typeof(HttpRequest), request);
+			objectionManager.AddInstanceForType(typeof (HttpRequest), request);
 
-			objectionManager.AddInstanceForType(typeof(IRequest), 
-				new AggregatedRequest(
-					new NameValueCollectionRequest(request.Form, request.Path, request.RawUrl, request.ApplicationPath), 
-					new NameValueCollectionRequest(request.QueryString, request.Path, request.RawUrl, request.ApplicationPath)));
+			objectionManager.AddInstanceForType(typeof (IRequest),
+			                                    new AggregatedRequest(
+			                                    	new NameValueCollectionRequest(request.Form, request.Path, request.RawUrl, request.ApplicationPath),
+			                                    	new NameValueCollectionRequest(request.QueryString, request.Path, request.RawUrl, request.ApplicationPath)));
 
-			objectionManager.AddInstanceForType(typeof(IUrlBuilder),
-				new AbsolutePathUrlBuilderDecorator(
-					new DefaultUrlBuilder(),
-					request.ApplicationPath));
+			objectionManager.AddInstanceForType(typeof (IUrlBuilder),
+			                                    new AbsolutePathUrlBuilderDecorator(
+			                                    	new DefaultUrlBuilder(),
+			                                    	request.ApplicationPath));
 
-			objectionManager.SetImplementationType(typeof(ICruiseRequest), typeof(RequestWrappingCruiseRequest));
+			objectionManager.SetImplementationType(typeof (ICruiseRequest), typeof (RequestWrappingCruiseRequest));
 
-			objectionManager.SetImplementationType(typeof(IMultiTransformer), typeof(PathMappingMultiTransformer));
+			objectionManager.SetImplementationType(typeof (IMultiTransformer), typeof (PathMappingMultiTransformer));
 
-			objectionManager.SetDependencyImplementationForType(typeof(PathMappingMultiTransformer), typeof(IMultiTransformer), typeof (HtmlAwareMultiTransformer));
+			objectionManager.SetDependencyImplementationForType(typeof (PathMappingMultiTransformer), typeof (IMultiTransformer), typeof (HtmlAwareMultiTransformer));
 
-			IDashboardConfiguration config = (IDashboardConfiguration) objectSource.GetByType(typeof(IDashboardConfiguration));
-			objectionManager.AddInstanceForType(typeof(IDashboardConfiguration), config);
+			IDashboardConfiguration config = GetDashboardConfiguration(objectSource, context);
+			objectionManager.AddInstanceForType(typeof (IDashboardConfiguration), config);
 
 			IRemoteServicesConfiguration remoteServicesConfig = config.RemoteServices;
-			objectionManager.AddInstanceForType(typeof(IRemoteServicesConfiguration), remoteServicesConfig);
+			objectionManager.AddInstanceForType(typeof (IRemoteServicesConfiguration), remoteServicesConfig);
 
 			IPluginConfiguration pluginConfig = config.PluginConfiguration;
-			objectionManager.AddInstanceForType(typeof(IPluginConfiguration), pluginConfig);
-			
+			objectionManager.AddInstanceForType(typeof (IPluginConfiguration), pluginConfig);
+
 			// ToDo - Refactor these plugin sections
 
 			foreach (IPlugin plugin in pluginConfig.FarmPlugins)
@@ -64,7 +64,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 				foreach (INamedAction action in plugin.NamedActions)
 				{
 					objectionManager.AddInstanceForName(action.ActionName, action.Action)
-						.Decorate(typeof(CruiseActionProxyAction)).Decorate(typeof(ExceptionCatchingActionProxy)).Decorate(typeof(SiteTemplateActionDecorator)).Decorate(typeof(NoCacheabilityActionProxy));
+						.Decorate(typeof (CruiseActionProxyAction)).Decorate(typeof (ExceptionCatchingActionProxy)).Decorate(typeof (SiteTemplateActionDecorator)).Decorate(typeof (NoCacheabilityActionProxy));
 				}
 			}
 
@@ -73,7 +73,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 				foreach (INamedAction action in plugin.NamedActions)
 				{
 					objectionManager.AddInstanceForName(action.ActionName, action.Action)
-						.Decorate(typeof(ServerCheckingProxyAction)).Decorate(typeof(CruiseActionProxyAction)).Decorate(typeof(ExceptionCatchingActionProxy)).Decorate(typeof(SiteTemplateActionDecorator)).Decorate(typeof(NoCacheabilityActionProxy));
+						.Decorate(typeof (ServerCheckingProxyAction)).Decorate(typeof (CruiseActionProxyAction)).Decorate(typeof (ExceptionCatchingActionProxy)).Decorate(typeof (SiteTemplateActionDecorator)).Decorate(typeof (NoCacheabilityActionProxy));
 				}
 			}
 
@@ -82,7 +82,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 				foreach (INamedAction action in plugin.NamedActions)
 				{
 					objectionManager.AddInstanceForName(action.ActionName, action.Action)
-						.Decorate(typeof(ServerCheckingProxyAction)).Decorate(typeof(ProjectCheckingProxyAction)).Decorate(typeof(CruiseActionProxyAction)).Decorate(typeof(ExceptionCatchingActionProxy)).Decorate(typeof(SiteTemplateActionDecorator));
+						.Decorate(typeof (ServerCheckingProxyAction)).Decorate(typeof (ProjectCheckingProxyAction)).Decorate(typeof (CruiseActionProxyAction)).Decorate(typeof (ExceptionCatchingActionProxy)).Decorate(typeof (SiteTemplateActionDecorator));
 				}
 			}
 
@@ -95,31 +95,37 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 			{
 				IPlugin latestBuildPlugin = (IPlugin) objectSource.GetByType(typeof (LatestBuildReportProjectPlugin));
 				objectionManager.AddInstanceForName(latestBuildPlugin.NamedActions[0].ActionName, latestBuildPlugin.NamedActions[0].Action)
-					.Decorate(typeof(ServerCheckingProxyAction)).Decorate(typeof(ProjectCheckingProxyAction)).Decorate(typeof(CruiseActionProxyAction)).Decorate(typeof(ExceptionCatchingActionProxy)).Decorate(typeof(SiteTemplateActionDecorator));
+					.Decorate(typeof (ServerCheckingProxyAction)).Decorate(typeof (ProjectCheckingProxyAction)).Decorate(typeof (CruiseActionProxyAction)).Decorate(typeof (ExceptionCatchingActionProxy)).Decorate(typeof (SiteTemplateActionDecorator));
 			}
-			
+
 			foreach (IPlugin plugin in pluginConfig.BuildPlugins)
 			{
 				foreach (INamedAction action in plugin.NamedActions)
 				{
-					objectionManager.AddInstanceForName(action.ActionName,action.Action)
-						.Decorate(typeof(ServerCheckingProxyAction)).Decorate(typeof(BuildCheckingProxyAction)).Decorate(typeof(ProjectCheckingProxyAction)).Decorate(typeof(CruiseActionProxyAction))
-						.Decorate(typeof(CachingActionProxy)).Decorate(typeof(ExceptionCatchingActionProxy)).Decorate(typeof(SiteTemplateActionDecorator));
+					objectionManager.AddInstanceForName(action.ActionName, action.Action)
+						.Decorate(typeof (ServerCheckingProxyAction)).Decorate(typeof (BuildCheckingProxyAction)).Decorate(typeof (ProjectCheckingProxyAction)).Decorate(typeof (CruiseActionProxyAction))
+						.Decorate(typeof (CachingActionProxy)).Decorate(typeof (ExceptionCatchingActionProxy)).Decorate(typeof (SiteTemplateActionDecorator));
 				}
 			}
 
 			// ToDo - make this kind of thing specifiable by Plugins (note that this action is not wrapped with a SiteTemplateActionDecorator
 			// See BuildLogBuildPlugin for linked todo
-			objectionManager.AddTypeForName(XmlBuildLogAction.ACTION_NAME, typeof(XmlBuildLogAction))
-				.Decorate(typeof(ServerCheckingProxyAction)).Decorate(typeof(BuildCheckingProxyAction)).Decorate(typeof(ProjectCheckingProxyAction)).Decorate(typeof(CruiseActionProxyAction));
+			objectionManager.AddTypeForName(XmlBuildLogAction.ACTION_NAME, typeof (XmlBuildLogAction))
+				.Decorate(typeof (ServerCheckingProxyAction)).Decorate(typeof (BuildCheckingProxyAction)).Decorate(typeof (ProjectCheckingProxyAction)).Decorate(typeof (CruiseActionProxyAction));
 
 			// TODO - Xml Exceptions?
-			objectionManager.AddTypeForName(ForceBuildXmlAction.ACTION_NAME, typeof(ForceBuildXmlAction))
-				.Decorate(typeof(ServerCheckingProxyAction)).Decorate(typeof(ProjectCheckingProxyAction)).Decorate(typeof(CruiseActionProxyAction));
+			objectionManager.AddTypeForName(ForceBuildXmlAction.ACTION_NAME, typeof (ForceBuildXmlAction))
+				.Decorate(typeof (ServerCheckingProxyAction)).Decorate(typeof (ProjectCheckingProxyAction)).Decorate(typeof (CruiseActionProxyAction));
 
 			objectionManager.AddTypeForName(XmlReportAction.ACTION_NAME, typeof (XmlReportAction));
-			
+
 			return objectSource;
+		}
+
+		private static IDashboardConfiguration GetDashboardConfiguration(ObjectSource objectSource, HttpContext context)
+		{
+			return new CachingDashboardConfigurationLoader(objectSource, context);
+//			return (IDashboardConfiguration) objectSource.GetByType(typeof(IDashboardConfiguration));
 		}
 	}
 }
