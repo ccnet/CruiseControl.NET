@@ -170,14 +170,14 @@
                     HintPath = "..\..\..\..\WINDOWS\Microsoft.NET\Framework\v1.1.4322\System.Data.dll"
                 />
                 <Reference
-                    Name = "Objection"
-                    AssemblyName = "Objection"
-                    HintPath = "..\..\lib\Objection.dll"
-                />
-                <Reference
                     Name = "NPlot"
                     AssemblyName = "NPlot"
                     HintPath = "..\..\lib\NPlot.dll"
+                />
+                <Reference
+                    Name = "objection"
+                    Project = "{1C0B8046-FE79-4845-84B9-369A76F817A3}"
+                    Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
                 />
             </References>
         </Build>
@@ -1232,6 +1232,21 @@
                 />
                 <File
                     RelPath = "Core\Util\XslTransformerTest.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "objection\AcceptanceTests\TypicalUsageClasses.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "objection\AcceptanceTests\TypicalUsageTests.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "objection\NetReflectorPlugin\NetReflectorPluginTest.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
