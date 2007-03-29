@@ -7,27 +7,35 @@ namespace Objection
 	public class NMockAwareImplementationResolver : ImplementationResolver
 	{
 		private bool ignoreNMockImplementations = false;
+		private readonly ArrayList assemblyNames = new ArrayList();
+		private readonly ArrayList types = new ArrayList();
 
-		public Type ResolveImplementation(Type baseType)
+		public NMockAwareImplementationResolver()
 		{
-			ArrayList assemblyNames = new ArrayList();
-			Type candidateType = null;
 			foreach (Assembly assembly in AppDomain.CurrentDomain.GetAssemblies())
 			{
 				assemblyNames.Add(assembly.GetName().Name);
 				foreach (Type type in assembly.GetTypes())
 				{
-					if (baseType.IsAssignableFrom(type) && baseType != type)
+					types.Add(type);
+				}
+			}
+		}
+
+		public Type ResolveImplementation(Type baseType)
+		{
+			Type candidateType = null;
+			foreach (Type type in types)
+			{
+				if (baseType.IsAssignableFrom(type) && baseType != type)
+				{
+					if (! IgnoreType(type))
 					{
-						if (! IgnoreType(type))
+						if (candidateType != null)
 						{
-							if (candidateType != null)
-							{
-								throw new Exception(string.Format("Ambiguous type {0}, implemented by {1} and {2}", baseType.FullName, candidateType.FullName, type.FullName));	
-							}
-						
-							candidateType = type;
-						}
+							throw new Exception(string.Format("Ambiguous type {0}, implemented by {1} and {2}", baseType.FullName, candidateType.FullName, type.FullName));	
+						}						
+						candidateType = type;
 					}
 				}
 			}
@@ -66,7 +74,7 @@ namespace Objection
 
 			if (typeNameToCheck.StartsWith("Proxy"))
 			{
-				int indexOfLastUnderscoreInName = findLastUnderscore(typeNameToCheck);
+				int indexOfLastUnderscoreInName = FindLastUnderscore(typeNameToCheck);
 				if (indexOfLastUnderscoreInName > -1 && indexOfLastUnderscoreInName < (typeNameToCheck.Length - 1) )
 				{
 					try
@@ -84,17 +92,17 @@ namespace Objection
 			return false;
 		}
 
-		private int findLastUnderscore(string nameToCheck)
+		private int FindLastUnderscore(string nameToCheck)
 		{
-			return findLastUnderscore(nameToCheck, 0);
+			return FindLastUnderscore(nameToCheck, 0);
 		}
 
-		private int findLastUnderscore(string nameToCheck, int startPosition)
+		private int FindLastUnderscore(string nameToCheck, int startPosition)
 		{
 			int lastUnderscore = nameToCheck.IndexOf('_', startPosition);
 			if (lastUnderscore != -1)
 			{
-				int nextUnderscore = findLastUnderscore(nameToCheck, lastUnderscore + 1);
+				int nextUnderscore = FindLastUnderscore(nameToCheck, lastUnderscore + 1);
 				if (nextUnderscore > -1)
 				{
 					return nextUnderscore;
