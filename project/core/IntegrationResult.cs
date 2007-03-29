@@ -322,13 +322,13 @@ namespace ThoughtWorks.CruiseControl.Core
 		public IntegrationStatus LastIntegrationStatus
 		{
 			get { return lastIntegration.Status; }
-			set { lastIntegration = new IntegrationSummary(value, lastIntegration.Label, LastSuccessfulIntegrationLabel);}		// used only for loading IntegrationResult from state file - to be removed
+			set { lastIntegration = new IntegrationSummary(value, lastIntegration.Label, LastSuccessfulIntegrationLabel, lastIntegration.StartTime);}		// used only for loading IntegrationResult from state file - to be removed
 		}
 
 		public string LastSuccessfulIntegrationLabel
 		{
 			get { return lastIntegration.LastSuccessfulIntegrationLabel; }
-			set { lastIntegration = new IntegrationSummary(lastIntegration.Status, lastIntegration.Label, value);} // used only for loading IntegrationResult from state file - to be removed
+			set { lastIntegration = new IntegrationSummary(lastIntegration.Status, lastIntegration.Label, value, lastIntegration.StartTime);} // used only for loading IntegrationResult from state file - to be removed
 		}
 
 //		public string LastSuccessfulIntegrationLabel

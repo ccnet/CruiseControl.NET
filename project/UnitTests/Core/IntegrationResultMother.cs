@@ -26,7 +26,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 
 		public static IntegrationResult Create(IntegrationStatus status, IntegrationStatus lastIntegrationStatus, DateTime date)
 		{
-			IntegrationResult result = Create(new IntegrationSummary(lastIntegrationStatus, null, null));
+			IntegrationResult result = Create(new IntegrationSummary(lastIntegrationStatus, null, null, DateTime.MinValue));
 			result.Status = status;
 			result.StartTime = date;
 			result.EndTime = date;

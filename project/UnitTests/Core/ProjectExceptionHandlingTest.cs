@@ -26,8 +26,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 			catch (Exception) { }
 
 			project.Integrate(new IntegrationRequest(BuildCondition.ForceBuild, "test"));
-			Assert.AreEqual(IntegrationStatus.Success, project.LastIntegrationResult.Status);
-			Assert.AreEqual("1", project.LastIntegrationResult.Label);
+			Assert.AreEqual(IntegrationStatus.Success, project.CurrentResult.Status);
+			Assert.AreEqual("1", project.CurrentResult.Label);
 		}
 
 		[Test]
@@ -48,8 +48,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 			catch (Exception) { }
 
 			project.Integrate(new IntegrationRequest(BuildCondition.ForceBuild, "test"));
-			Assert.AreEqual(IntegrationStatus.Success, project.LastIntegrationResult.Status);
-			Assert.AreEqual("11", project.LastIntegrationResult.Label);			
+			Assert.AreEqual(IntegrationStatus.Success, project.CurrentResult.Status);
+			Assert.AreEqual("11", project.CurrentResult.Label);			
 		}
 	}
 

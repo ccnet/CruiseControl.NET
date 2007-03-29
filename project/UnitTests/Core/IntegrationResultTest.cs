@@ -162,7 +162,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 		[Test]
 		public void MapIntegrationProperties()
 		{
-			result = new IntegrationResult("project", @"c:\workingdir\", new IntegrationRequest(BuildCondition.IfModificationExists, "myTrigger"), new IntegrationSummary(IntegrationStatus.Unknown, "foo", "foo"));
+			result = new IntegrationResult("project", @"c:\workingdir\", new IntegrationRequest(BuildCondition.IfModificationExists, "myTrigger"), new IntegrationSummary(IntegrationStatus.Unknown, "foo", "foo", DateTime.MinValue));
 			result.Label = "label23";
 			result.ArtifactDirectory = @"c:\artifactdir\";
 			result.StartTime = new DateTime(2005,06,06,08,45,00);
@@ -229,9 +229,9 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 		[Test]
 		public void CanGetPreviousState()
 		{
-			IntegrationSummary expectedSummary = new IntegrationSummary(IntegrationStatus.Exception, "foo", "foo");
+			IntegrationSummary expectedSummary = new IntegrationSummary(IntegrationStatus.Exception, "foo", "foo", DateTime.MinValue);
 			result = new IntegrationResult("project", "c:\\workingDir", IntegrationRequest.NullRequest, expectedSummary);
-			Assert.AreEqual(new IntegrationSummary(IntegrationStatus.Exception, "foo", "foo"), result.LastIntegration);
+			Assert.AreEqual(new IntegrationSummary(IntegrationStatus.Exception, "foo", "foo", DateTime.MinValue), result.LastIntegration);
 		}
 	}
 }

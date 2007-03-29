@@ -5,12 +5,11 @@ using NUnit.Framework;
 using ThoughtWorks.CruiseControl.Core;
 using ThoughtWorks.CruiseControl.Core.Label;
 using ThoughtWorks.CruiseControl.Core.Util;
-using ThoughtWorks.CruiseControl.Remote;
 
 namespace ThoughtWorks.CruiseControl.UnitTests.Core.Label
 {
 	[TestFixture]
-	public class IterationLabellerTest : CustomAssertion
+	public class IterationLabellerTest : IntegrationFixture
 	{
 		private IterationLabeller labeller;
 		private DateTime releaseStartDate = new DateTime(2005, 01, 01, 00, 00, 00, 00);
@@ -19,7 +18,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Label
 		[SetUp]
 		public void SetUp()
 		{
-			dateTimeMock = new DynamicMock(typeof(DateTimeProvider));
+			dateTimeMock = new DynamicMock(typeof (DateTimeProvider));
 			dateTimeMock.SetupResult("Today", new DateTime(2005, 7, 20, 0, 0, 0, 0));
 			labeller = new IterationLabeller((DateTimeProvider) dateTimeMock.MockInstance);
 			labeller.ReleaseStartDate = releaseStartDate;
@@ -40,61 +39,61 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Label
 		[Test]
 		public void GenerateIncrementedLabel()
 		{
-			Assert.AreEqual("14.36", labeller.Generate(CreateSuccessful("14.35")));
+			Assert.AreEqual("14.36", labeller.Generate(SuccessfulResult("14.35")));
 		}
 
 		[Test]
 		public void GenerateWithNullLabel()
 		{
-			Assert.AreEqual("14.1", labeller.Generate(CreateSuccessful(null)));
+			Assert.AreEqual("14.1", labeller.Generate(SuccessfulResult(null)));
 		}
 
 		[Test]
 		public void GenerateAfterLastBuildFailed()
 		{
-			Assert.AreEqual("14.23", labeller.Generate(CreateFailed("14.23")));
+			Assert.AreEqual("14.23", labeller.Generate(FailedResult("14.23")));
 		}
 
 		[Test]
 		public void GeneratePrefixedLabelWithNullResultLabel()
 		{
 			labeller.LabelPrefix = "Sample";
-			Assert.AreEqual("Sample.14.1", labeller.Generate(CreateSuccessful(null)));
+			Assert.AreEqual("Sample.14.1", labeller.Generate(SuccessfulResult(null)));
 		}
 
 		[Test]
 		public void GeneratePrefixedLabelOnSuccessAndPreviousLabel()
 		{
 			labeller.LabelPrefix = "Sample";
-			Assert.AreEqual("Sample.14.24", labeller.Generate(CreateSuccessful("Sample.14.23")));
+			Assert.AreEqual("Sample.14.24", labeller.Generate(SuccessfulResult("Sample.14.23")));
 		}
 
 		[Test]
 		public void GeneratePrefixedLabelOnFailureAndPreviousLabel()
 		{
 			labeller.LabelPrefix = "Sample";
-			Assert.AreEqual("Sample.14.23", labeller.Generate(CreateFailed("Sample.14.23")));
+			Assert.AreEqual("Sample.14.23", labeller.Generate(FailedResult("Sample.14.23")));
 		}
 
 		[Test]
 		public void GeneratePrefixedLabelOnSuccessAndPreviousLabelWithDifferentPrefix()
 		{
 			labeller.LabelPrefix = "Sample";
-			Assert.AreEqual("Sample.14.24", labeller.Generate(CreateSuccessful("SomethingElse.14.23")));
+			Assert.AreEqual("Sample.14.24", labeller.Generate(SuccessfulResult("SomethingElse.14.23")));
 		}
 
 		[Test]
 		public void IncrementPrefixedLabelWithNumericPrefix()
 		{
 			labeller.LabelPrefix = "R3SX";
-			Assert.AreEqual("R3SX.14.24", labeller.Generate(CreateSuccessful("R3SX.14.23")));
+			Assert.AreEqual("R3SX.14.24", labeller.Generate(SuccessfulResult("R3SX.14.23")));
 		}
 
 		[Test]
 		public void IncrementPrefixedLabelWithNumericSeperatorSeperatedPrefix()
 		{
 			labeller.LabelPrefix = "1.0";
-			Assert.AreEqual("1.0.14.24", labeller.Generate(CreateSuccessful("1.0.14.23")));
+			Assert.AreEqual("1.0.14.24", labeller.Generate(SuccessfulResult("1.0.14.23")));
 		}
 
 		[Test]
@@ -103,11 +102,11 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Label
 			// Set the release start date needs to be 15 iterations ago
 			// from today.  So take today's date and remove 15 weeks and a couple more days.
 			dateTimeMock.SetupResult("Today", DateTime.Today);
-			labeller.ReleaseStartDate = DateTime.Today.AddDays(- (15 * 7 + 2) );
-			
+			labeller.ReleaseStartDate = DateTime.Today.AddDays(- (15*7 + 2));
+
 			// one week iterations
 			labeller.Duration = 1;
-			Assert.AreEqual("15.1", labeller.Generate(CreateSuccessful("14.35")));						
+			Assert.AreEqual("15.1", labeller.Generate(SuccessfulResult("14.35")));
 		}
 
 		[Test]
@@ -116,13 +115,13 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Label
 			// Set the release start date needs to be 15 iterations ago
 			// from today.  So take today's date and remove 15 weeks and a couple more days.
 			dateTimeMock.SetupResult("Today", DateTime.Today);
-			labeller.ReleaseStartDate = DateTime.Today.AddDays(- (15 * 7 + 2) );
-			
+			labeller.ReleaseStartDate = DateTime.Today.AddDays(- (15*7 + 2));
+
 			// one week iterations
 			labeller.Duration = 1;
 
 			labeller.LabelPrefix = "R3SX";
-			Assert.AreEqual("R3SX.15.1", labeller.Generate(CreateSuccessful("R3SX.14.23")));
+			Assert.AreEqual("R3SX.15.1", labeller.Generate(SuccessfulResult("R3SX.14.23")));
 		}
 
 		[Test]
@@ -138,17 +137,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Label
 		public void GenerateIncrementedLabelOnFailureIfIncrementOnFailedIsTrue()
 		{
 			labeller.IncrementOnFailed = true;
-			Assert.AreEqual("14.36", labeller.Generate(CreateFailed("14.35")));
-		}
-
-		private static IntegrationResult CreateSuccessful(string previousLabel)
-		{
-			return IntegrationResultMother.Create(new IntegrationSummary(IntegrationStatus.Success, previousLabel, previousLabel));
-		}
-
-		private static IntegrationResult CreateFailed(string previousLabel)
-		{
-			return IntegrationResultMother.Create(new IntegrationSummary(IntegrationStatus.Failure, previousLabel, previousLabel));
+			Assert.AreEqual("14.36", labeller.Generate(FailedResult("14.35")));
 		}
 	}
 }

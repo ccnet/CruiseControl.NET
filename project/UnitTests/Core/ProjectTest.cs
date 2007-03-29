@@ -177,7 +177,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 			mockStateManager.ExpectAndReturn("HasPreviousState", true, ProjectName);
 			mockStateManager.ExpectAndReturn("LoadState", expected, ProjectName);
 
-			Assert.AreEqual(expected, project.LastIntegrationResult);
+			Assert.AreEqual(expected, project.CurrentResult);
 			VerifyAll();
 		}
 
@@ -360,7 +360,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 			Assert.AreEqual(IntegrationStatus.Unknown, result.LastIntegrationStatus);
 			Assert.AreEqual(BuildCondition.ForceBuild, result.BuildCondition);
 			Assert.AreEqual(@"c:\temp", result.WorkingDirectory);
-			Assert.AreEqual(result, project.LastIntegrationResult);
+			Assert.AreEqual(result, project.CurrentResult);
 			Assert.AreEqual("label", result.Label);
 			AssertFalse("unexpected modifications were returned", result.HasModifications());
 			AssertEqualArrays(new Modification[0], result.Modifications);
@@ -382,7 +382,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 			Assert.AreEqual(null, result.ExceptionResult);
 			Assert.AreEqual(ProjectActivity.Sleeping, project.CurrentActivity);
 			Assert.AreEqual(IntegrationStatus.Unknown, result.Status);
-			Assert.IsNotNull(project.LastIntegrationResult);
+			Assert.IsNotNull(project.CurrentResult);
 			Assert.AreEqual(IntegrationResult.InitialLabel, result.Label);
 			AssertFalse("unexpected modifications were returned", result.HasModifications());
 			AssertEqualArrays(new Modification[0], result.Modifications);
@@ -443,7 +443,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 
 			IIntegrationResult results = project.Integrate(ModificationExistRequest());
 
-			Assert.AreEqual(results, project.LastIntegrationResult, "new integration result has not been set to the last integration result");
+			Assert.AreEqual(results, project.CurrentResult, "new integration result has not been set to the last integration result");
 			Assert.IsNotNull(results.EndTime);
 			VerifyAll();
 		}
@@ -492,7 +492,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 			IIntegrationResult results = project.Integrate(ModificationExistRequest());
 
 			// failure to save the integration result will register as a failed project
-			Assert.AreEqual(results, project.LastIntegrationResult, "new integration result has not been set to the last integration result");
+			Assert.AreEqual(results, project.CurrentResult, "new integration result has not been set to the last integration result");
 			Assert.IsNotNull(results.EndTime);
 			VerifyAll();
 		}

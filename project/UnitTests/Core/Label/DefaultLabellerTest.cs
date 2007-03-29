@@ -1,13 +1,11 @@
 using Exortech.NetReflector;
 using NUnit.Framework;
-using ThoughtWorks.CruiseControl.Core;
 using ThoughtWorks.CruiseControl.Core.Label;
-using ThoughtWorks.CruiseControl.Remote;
 
 namespace ThoughtWorks.CruiseControl.UnitTests.Core.Label
 {
 	[TestFixture]
-	public class DefaultLabellerTest : CustomAssertion
+	public class DefaultLabellerTest : IntegrationFixture
 	{
 		private DefaultLabeller labeller;
 
@@ -20,7 +18,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Label
 		[Test]
 		public void GenerateIncrementedLabel()
 		{
-			Assert.AreEqual("36", labeller.Generate(IntegrationResultFromSuccessfulBuild("35")));
+			Assert.AreEqual("36", labeller.Generate(SuccessfulResult("35")));
 		}
 
 		[Test]
@@ -32,7 +30,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Label
 		[Test]
 		public void GenerateLabelWhenLastBuildFailed()
 		{
-			Assert.AreEqual("23", labeller.Generate(IntegrationResultFromFailedBuild("23")));
+			Assert.AreEqual("23", labeller.Generate(FailedResult("23")));
 		}
 
 		[Test]
@@ -46,42 +44,42 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Label
 		public void GeneratePrefixedLabelWhenLastBuildSucceeded()
 		{
 			labeller.LabelPrefix = "Sample";
-			Assert.AreEqual("Sample36", labeller.Generate(IntegrationResultFromSuccessfulBuild("35")));
+			Assert.AreEqual("Sample36", labeller.Generate(SuccessfulResult("35")));
 		}
 
 		[Test]
 		public void GeneratePrefixedLabelWhenLastBuildFailed()
 		{
 			labeller.LabelPrefix = "Sample";
-			Assert.AreEqual("23", labeller.Generate(IntegrationResultFromFailedBuild("23")));
+			Assert.AreEqual("23", labeller.Generate(FailedResult("23")));
 		}
 
 		[Test]
 		public void GeneratePrefixedLabelWhenLastBuildSucceededAndHasLabelWithPrefix()
 		{
 			labeller.LabelPrefix = "Sample";
-			Assert.AreEqual("Sample24", labeller.Generate(IntegrationResultFromSuccessfulBuild("Sample23")));
+			Assert.AreEqual("Sample24", labeller.Generate(SuccessfulResult("Sample23")));
 		}
 
 		[Test]
 		public void GeneratePrefixedLabelWhenPrefixAndLastIntegrationLabelDontMatch()
 		{
 			labeller.LabelPrefix = "Sample";
-			Assert.AreEqual("Sample24", labeller.Generate(IntegrationResultFromSuccessfulBuild("SomethingElse23")));
+			Assert.AreEqual("Sample24", labeller.Generate(SuccessfulResult("SomethingElse23")));
 		}
 
 		[Test]
 		public void GeneratePrefixedLabelWhenPrefixIsNumeric()
 		{
 			labeller.LabelPrefix = "R3SX";
-			Assert.AreEqual("R3SX24", labeller.Generate(IntegrationResultFromSuccessfulBuild("R3SX23")));
+			Assert.AreEqual("R3SX24", labeller.Generate(SuccessfulResult("R3SX23")));
 		}
 
 		[Test]
 		public void IncrementLabelOnFailedBuildIfIncrementConditionIsAlways()
 		{
 			labeller.IncrementOnFailed = true;
-			Assert.AreEqual("24", labeller.Generate(IntegrationResultFromFailedBuild("23")));
+			Assert.AreEqual("24", labeller.Generate(FailedResult("23")));
 		}
 
 		[Test]
@@ -98,21 +96,6 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Label
 		{
 			Assert.AreEqual(string.Empty, labeller.LabelPrefix);
 			Assert.AreEqual(false, labeller.IncrementOnFailed);
-		}
-
-		private IntegrationResult InitialIntegrationResult()
-		{
-			return IntegrationResultMother.CreateInitial();
-		}
-
-		private IntegrationResult IntegrationResultFromSuccessfulBuild(string label)
-		{
-			return IntegrationResultMother.Create(new IntegrationSummary(IntegrationStatus.Success, label, label));
-		}
-
-		private static IntegrationResult IntegrationResultFromFailedBuild(string label)
-		{
-			return IntegrationResultMother.Create(new IntegrationSummary(IntegrationStatus.Failure, label, label));
 		}
 	}
 }

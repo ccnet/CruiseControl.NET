@@ -1,19 +1,22 @@
+using System;
 using ThoughtWorks.CruiseControl.Remote;
 
 namespace ThoughtWorks.CruiseControl.Core
 {
 	public class IntegrationSummary
 	{
-		public static readonly IntegrationSummary Initial = new IntegrationSummary(IntegrationStatus.Unknown, IntegrationResult.InitialLabel, IntegrationResult.InitialLabel);
+		public static readonly IntegrationSummary Initial = new IntegrationSummary(IntegrationStatus.Unknown, IntegrationResult.InitialLabel, IntegrationResult.InitialLabel, DateTime.MinValue);
 		private IntegrationStatus status;
 		private string label;
 		private string lastSuccessfulIntegrationLabel;
+		private DateTime startTime;
 
-		public IntegrationSummary(IntegrationStatus status, string label, string lastSuccessfulIntegrationLabel)
+		public IntegrationSummary(IntegrationStatus status, string label, string lastSuccessfulIntegrationLabel, DateTime startTime)
 		{
 			this.status = status;
 			this.label = label;
 			this.lastSuccessfulIntegrationLabel = lastSuccessfulIntegrationLabel;
+			this.startTime = startTime;
 		}
 
 		public override bool Equals(object obj)
@@ -49,6 +52,11 @@ namespace ThoughtWorks.CruiseControl.Core
 		public string LastSuccessfulIntegrationLabel
 		{
 			get { return lastSuccessfulIntegrationLabel; }
+		}
+
+		public DateTime StartTime
+		{
+			get { return startTime; }
 		}
 
 		public bool IsInitial()

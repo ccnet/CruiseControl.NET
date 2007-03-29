@@ -131,9 +131,9 @@ namespace ThoughtWorks.CruiseControl.Core
 			get { return currentActivity; }
 		}
 
-		public IIntegrationResult LastIntegrationResult
+		public IIntegrationResult CurrentResult
 		{
-			get { return integrationResultManager.LastIntegrationResult; }
+			get { return integrationResultManager.CurrentIntegration; }
 		}
 
 		public IIntegrationResult Integrate(IntegrationRequest request)
@@ -213,12 +213,17 @@ namespace ThoughtWorks.CruiseControl.Core
 		public ProjectStatus CreateProjectStatus(IProjectIntegrator integrator)
 		{
 			ProjectStatus status =
-				new ProjectStatus(Name, Category, CurrentActivity, LastIntegrationResult.Status, integrator.State, WebURL,
-				                  LastIntegrationResult.StartTime, LastIntegrationResult.Label,
-				                  LastIntegrationResult.LastSuccessfulIntegrationLabel,
+				new ProjectStatus(Name, Category, CurrentActivity, LastIntegration.Status, integrator.State, WebURL,
+				                  LastIntegration.StartTime, LastIntegration.Label,
+				                  LastIntegration.LastSuccessfulIntegrationLabel,
 				                  Triggers.NextBuild);
 			status.Messages = (Message[]) messages.ToArray(typeof (Message));
 			return status;
+		}
+
+		private IntegrationSummary LastIntegration
+		{
+			get { return integrationResultManager.LastIntegration; }
 		}
 
 		public void AddMessage(Message message)

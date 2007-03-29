@@ -1,3 +1,4 @@
+using System;
 using ThoughtWorks.CruiseControl.Core;
 using ThoughtWorks.CruiseControl.Remote;
 
@@ -25,6 +26,26 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 		public IIntegrationResult Integration(string project, string workingDirectory)
 		{
 			return new IntegrationResult(project, workingDirectory, ModificationExistRequest(), IntegrationSummary.Initial);
+		}
+
+		public IntegrationResult SuccessfulResult(string previousLabel)
+		{
+			return IntegrationResultMother.Create(new IntegrationSummary(IntegrationStatus.Success, previousLabel, previousLabel, DateTime.MinValue));
+		}
+
+		public IntegrationResult FailedResult(string previousLabel)
+		{
+			return FailedResult(previousLabel, previousLabel);
+		}
+
+		public IntegrationResult FailedResult(string previousLabel, string lastSuccessfulLabel)
+		{
+			return IntegrationResultMother.Create(new IntegrationSummary(IntegrationStatus.Failure, previousLabel, lastSuccessfulLabel, DateTime.MinValue));
+		}
+
+		public IntegrationResult InitialIntegrationResult()
+		{
+			return IntegrationResultMother.CreateInitial();
 		}
 	}
 }

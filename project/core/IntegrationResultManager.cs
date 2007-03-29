@@ -8,7 +8,8 @@ namespace ThoughtWorks.CruiseControl.Core
 	{
 		private readonly Project project;
 		private IIntegrationResult lastResult;
-		private IntegrationResult currentResult;
+		private IIntegrationResult currentIntegration;
+		private IntegrationSummary lastIntegration;
 
 		public IntegrationResultManager(Project project)
 		{
@@ -19,31 +20,54 @@ namespace ThoughtWorks.CruiseControl.Core
 		{
 			get
 			{
+				// lazy loads because StateManager needs to be populated from configuration
 				if (lastResult == null)
 				{
-					if (project.StateManager.HasPreviousState(project.Name))
-						lastResult = project.StateManager.LoadState(project.Name);
-					else
-						lastResult = IntegrationResult.CreateInitialIntegrationResult(project.Name, project.WorkingDirectory);
+					lastResult = CurrentIntegration;
 				}
 				return lastResult;
 			}
 		}
 
+		public IntegrationSummary LastIntegration
+		{
+			get
+			{
+				if (lastIntegration == null)
+				{
+					lastIntegration = ConvertResultIntoSummary(LastIntegrationResult);
+				}
+				return lastIntegration;
+			}
+		}
+
+		public IIntegrationResult CurrentIntegration
+		{
+			get
+			{
+				if (currentIntegration == null)
+				{
+					if (project.StateManager.HasPreviousState(project.Name))
+						currentIntegration = project.StateManager.LoadState(project.Name);
+					else
+						currentIntegration = IntegrationResult.CreateInitialIntegrationResult(project.Name, project.WorkingDirectory);
+				}
+				return currentIntegration;
+			}
+		}
+
 		public IIntegrationResult StartNewIntegration(IntegrationRequest request)
 		{
-			string lastSuccessfulIntegrationLabel = (LastIntegrationResult.Succeeded) ? LastIntegrationResult.Label : LastIntegrationResult.LastSuccessfulIntegrationLabel;
-			IntegrationSummary lastIntegration = new IntegrationSummary(LastIntegrationResult.Status, LastIntegrationResult.Label, lastSuccessfulIntegrationLabel);
-			currentResult = new IntegrationResult(project.Name, project.WorkingDirectory, request, lastIntegration);
-			currentResult.BuildCondition = DetermineBuildCondition(request.BuildCondition);
-			currentResult.ArtifactDirectory = project.ArtifactDirectory;
-			currentResult.ProjectUrl = project.WebURL;
-			return currentResult;
+			IntegrationResult newResult = new IntegrationResult(project.Name, project.WorkingDirectory, request, LastIntegration);
+			newResult.BuildCondition = DetermineBuildCondition(request.BuildCondition);
+			newResult.ArtifactDirectory = project.ArtifactDirectory;
+			newResult.ProjectUrl = project.WebURL;
+			return currentIntegration = newResult;
 		}
 
 		private BuildCondition DetermineBuildCondition(BuildCondition buildCondition)
 		{
-			if (LastIntegrationResult.IsInitial())
+			if (LastIntegration.IsInitial())
 			{
 				return BuildCondition.ForceBuild;
 			}
@@ -54,14 +78,21 @@ namespace ThoughtWorks.CruiseControl.Core
 		{
 			try
 			{
-				project.StateManager.SaveState(currentResult);
+				project.StateManager.SaveState(currentIntegration);
 			}
 			catch (Exception ex)
 			{
 				// swallow exception???
 				Log.Error("Unable to save integration result: " + ex.ToString());
 			}
-			lastResult = currentResult;
+			lastResult = currentIntegration;
+			lastIntegration = ConvertResultIntoSummary(currentIntegration);
+		}
+
+		private IntegrationSummary ConvertResultIntoSummary(IIntegrationResult integration)
+		{
+			string lastSuccessfulIntegrationLabel = (integration.Succeeded) ? integration.Label : integration.LastSuccessfulIntegrationLabel;
+			return new IntegrationSummary(integration.Status, integration.Label, lastSuccessfulIntegrationLabel, integration.StartTime);
 		}
 	}
 }

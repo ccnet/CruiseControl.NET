@@ -3,13 +3,11 @@ using NUnit.Framework;
 using ThoughtWorks.CruiseControl.Core;
 using ThoughtWorks.CruiseControl.Core.Label;
 using ThoughtWorks.CruiseControl.Core.State;
-using ThoughtWorks.CruiseControl.Remote;
-using ThoughtWorks.CruiseControl.UnitTests.Core;
 
 namespace ThoughtWorks.CruiseControl.UnitTests.Core.Label
 {
 	[TestFixture]
-	public class StateFileLabellerTest
+	public class StateFileLabellerTest : IntegrationFixture
 	{
 		private StateFileLabeller labeller;
 		private IMock mockStateManager;
@@ -24,7 +22,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Label
 		[Test]
 		public void ShouldLoadIntegrationResultFromStateManagerAndReturnLastSuccessfulBuildLabel()
 		{
-			mockStateManager.ExpectAndReturn("LoadState", IntegrationResultMother.Create(new IntegrationSummary(IntegrationStatus.Success, "s", "success")), "Project1");
+			mockStateManager.ExpectAndReturn("LoadState", SuccessfulResult("success"), "Project1");
 			labeller.Project = "Project1";
 
 			Assert.AreEqual("success", labeller.Generate(new IntegrationResult()));
