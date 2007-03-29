@@ -28,8 +28,8 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.MVC.ASPNET
 				}
 			}
 
-			ObjectSource objectSource =
-				new CruiseObjectSourceInitializer(new ObjectionStore()).SetupObjectSourceForRequest(context);
+			ObjectionStore objectionStore = new ObjectionStore(new CachingImplementationResolver(new NMockAwareImplementationResolver()), new MaxLengthConstructorSelectionStrategy());
+			ObjectSource objectSource = new CruiseObjectSourceInitializer(objectionStore).SetupObjectSourceForRequest(context);
 			IResponse response = ((RequestController) objectSource.GetByType(typeof (RequestController))).Do();
 
 			if (response is RedirectResponse)
