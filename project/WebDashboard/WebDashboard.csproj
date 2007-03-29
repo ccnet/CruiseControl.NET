@@ -145,14 +145,9 @@
                     HintPath = "..\..\lib\NetReflector.dll"
                 />
                 <Reference
-                    Name = "Objection"
-                    AssemblyName = "Objection"
-                    HintPath = "..\..\lib\Objection.dll"
-                />
-                <Reference
-                    Name = "ObjectionNetReflectorPlugin"
-                    AssemblyName = "ObjectionNetReflectorPlugin"
-                    HintPath = "..\..\lib\ObjectionNetReflectorPlugin.dll"
+                    Name = "objection"
+                    Project = "{1C0B8046-FE79-4845-84B9-369A76F817A3}"
+                    Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
                 />
             </References>
         </Build>
