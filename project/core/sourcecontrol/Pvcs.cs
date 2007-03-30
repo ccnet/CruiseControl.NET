@@ -163,7 +163,8 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			try
 			{
 				CreatePVCSInstructionFile(filename, content);
-				Execute(CreatePVCSProcessInfo("cmd.exe", "/c ", filename));
+				string arguments = string.Format(@"/c ""{0}""", filename);
+				Execute(CreatePVCSProcessInfo("cmd.exe", arguments));
 			}
 			finally
 			{
@@ -174,7 +175,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 
 		private void Execute(string pcliContent)
 		{
-			Execute(CreatePVCSProcessInfo(Executable, pcliContent, ""));
+			Execute(CreatePVCSProcessInfo(Executable, pcliContent));
 		}
 
 		private void CreatePVCSInstructionFile(string filename, string content)
@@ -185,9 +186,9 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			}
 		}
 
-		private ProcessInfo CreatePVCSProcessInfo(string executable, string arguments, string filename)
+		private ProcessInfo CreatePVCSProcessInfo(string executable, string arguments)
 		{
-			return new ProcessInfo(executable, arguments + filename);
+			return new ProcessInfo(executable, arguments);
 		}
 
 		public string CreatePcliContentsForGet()
