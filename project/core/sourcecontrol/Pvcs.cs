@@ -49,7 +49,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 		{}
 
 		[ReflectorProperty("executable")]
-		public string Executable = "pcli";
+		public string Executable = "pcli.exe";
 
 		[ReflectorProperty("project")]
 		public string Project;
@@ -318,7 +318,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			}
 		}
 
-		protected void ExecutePvcsGet(StringDictionary folders)
+		private void ExecutePvcsGet(StringDictionary folders)
 		{
 			StringBuilder content = new StringBuilder();
 			content.Append("@echo off \r\necho Create all necessary folders first\r\n");
@@ -329,11 +329,16 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 
 			content.Append("\r\necho Get all of the files by version number and archive location \r\n");
 			// Build the Get Command based on the revisions -- Executable.Substring(0,Executable.LastIndexOf("\\"))
-			string dir = Path.GetDirectoryName(Executable);
-			content.AppendFormat("\"{0}\\Get.exe\" -W -Y -xo\"{1}\" -xe\"{2}\" @\"{3}\"\r{4}", dir, LogFile, ErrorFile, TempFile, Environment.NewLine);
+			content.AppendFormat("\"{0}\" -W -Y -xo\"{1}\" -xe\"{2}\" @\"{3}\"\r{4}", GetExeFilename(), LogFile, ErrorFile, TempFile, Environment.NewLine);
 
 			// Allow us to use same logic for Executing files
 			ExecuteNonPvcsFunction(content.ToString());
+		}
+
+		public string GetExeFilename()
+		{
+			string dir = Path.GetDirectoryName(Executable);
+			return Path.Combine(dir, "Get.exe");
 		}
 
 		#endregion

@@ -160,6 +160,12 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 			Assert.AreEqual(" \"\"-id\"foo\":\"bar\"\"\" ", pvcs.GetLogin(true));
 		}
 
+		[Test]
+		public void GetExeFilenameShouldNotBeRootedIfPathIsNotSpecified()
+		{
+			Assert.AreEqual("Get.exe", pvcs.GetExeFilename());
+		}
+
 		private TimeZone CreateMockTimeZone(bool inDayLightSavings)
 		{
 			Mock mock = new DynamicMock(typeof (TimeZone));
