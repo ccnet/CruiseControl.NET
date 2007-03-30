@@ -166,7 +166,9 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol.Telelogic
 		public void GetNewTasks()
 		{
 			ProcessInfo actual = SynergyCommandBuilder.GetNewTasks(connection, project, DateTime.MinValue);
-			ValidateProcessInfo(actual, @"query /type task /format ""%displayname #### %task_number #### %completion_date #### %resolver #### %task_synopsis #### "" /nf /u /no_sort ""status != 'task_automatic' and status != 'excluded' and completion_date >= time('0001/01/01 00:00:00') and not ( is_task_in_folder_of(folder('1234')) or is_task_in_folder_of(is_folder_in_rp_of(is_baseline_project_of('MyProject-MyProject_Int:project:1'))) or is_task_in_rp_of(is_baseline_project_of('MyProject-MyProject_Int:project:1')) ) and (is_task_in_folder_of(is_folder_in_rp_of('MyProject-MyProject_Int:project:1')) or is_task_in_rp_of('MyProject-MyProject_Int:project:1'))""");
+			string expectedDateString = SynergyCommandBuilder.FormatCommandDate(DateTime.MinValue);
+			string expectedCommand = string.Format(@"query /type task /format ""%displayname #### %task_number #### %completion_date #### %resolver #### %task_synopsis #### "" /nf /u /no_sort ""status != 'task_automatic' and status != 'excluded' and completion_date >= time('{0}') and not ( is_task_in_folder_of(folder('1234')) or is_task_in_folder_of(is_folder_in_rp_of(is_baseline_project_of('MyProject-MyProject_Int:project:1'))) or is_task_in_rp_of(is_baseline_project_of('MyProject-MyProject_Int:project:1')) ) and (is_task_in_folder_of(is_folder_in_rp_of('MyProject-MyProject_Int:project:1')) or is_task_in_rp_of('MyProject-MyProject_Int:project:1'))""", expectedDateString);
+			ValidateProcessInfo(actual, expectedCommand);
 		}
 
 		[Test]

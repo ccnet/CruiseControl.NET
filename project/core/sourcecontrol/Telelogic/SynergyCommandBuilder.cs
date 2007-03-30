@@ -307,10 +307,14 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Telelogic
 		/// <returns>A non-null initialized process structure.</returns>
 		public static ProcessInfo GetNewTasks(SynergyConnectionInfo connection, SynergyProjectInfo project, DateTime startDate)
 		{
-			string startDateString = startDate.ToString("yyyy/MM/dd HH:mm:ss", CultureInfo.InvariantCulture);
 			const string template = @"query /type task /format " + @"""%displayname #### %task_number #### %completion_date #### %resolver #### %task_synopsis #### "" " + @"/nf /u /no_sort """ + /* ignore excluded and automatic tasks (which are used for project creation) */ @"status != 'task_automatic' and status != 'excluded' and " + /* include only tasks completed since the last integration run */ @"completion_date >= time('{2}') and " + /* exclude any tasks that are already in the shared folder */ @"not ( is_task_in_folder_of(folder('{1}')) or " + /* exclude any tasks that are already in the baseline project */ @"is_task_in_folder_of(is_folder_in_rp_of(is_baseline_project_of('{0}'))) or " + /* exclude any tasks that are already in the baseline project */ @"is_task_in_rp_of(is_baseline_project_of('{0}')) ) and " + /* include all tasks in the reconfigure folders or directly in the reconfigure properties */ @"(is_task_in_folder_of(is_folder_in_rp_of('{0}')) or is_task_in_rp_of('{0}'))""";
-			string arguments = String.Format(template, project.ObjectName, project.TaskFolder, startDateString);
+			string arguments = String.Format(template, project.ObjectName, project.TaskFolder, FormatCommandDate(startDate));
 			return CreateProcessInfo(connection, arguments);
+		}
+
+		public static string FormatCommandDate(DateTime startDate)
+		{
+			return startDate.ToString("yyyy/MM/dd HH:mm:ss", CultureInfo.InvariantCulture);
 		}
 
 		/// <summary>
