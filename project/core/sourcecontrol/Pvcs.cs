@@ -78,6 +78,9 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 		[ReflectorProperty("autoGetSource", Required=false)]
 		public bool AutoGetSource = true;
 
+		[ReflectorProperty("manuallyAdjustForDaylightSavings", Required=false)]
+		public bool ManuallyAdjustForDaylightSavings = false;
+
 		//TODO: Support Promotion Groups -- [ReflectorProperty("isPromotionGroup", Required=false)]
 		public bool IsPromotionGroup = false;
 
@@ -136,8 +139,11 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 		private TextReader ExecuteVLog(DateTime from, DateTime to)
 		{
 			// required due to DayLightSavings bug in PVCS 7.5.1
-			from = AdjustForDayLightSavingsBug(from);
-			to = AdjustForDayLightSavingsBug(to);
+			if (ManuallyAdjustForDaylightSavings)
+			{
+				from = AdjustForDayLightSavingsBug(from);
+				to = AdjustForDayLightSavingsBug(to);				
+			}
 			Execute(CreatePcliContentsForCreatingVLog(GetDateString(from), GetDateString(to)));
 			return GetTextReader(LogFile);
 		}
