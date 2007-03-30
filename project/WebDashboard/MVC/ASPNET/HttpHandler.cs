@@ -1,11 +1,136 @@
+using System;
 using System.Collections;
 using System.IO;
+using System.Reflection;
 using System.Web;
+using System.Web.Caching;
 using Objection;
+using ThoughtWorks.CruiseControl.Core.Util;
 using ThoughtWorks.CruiseControl.WebDashboard.Dashboard;
 
 namespace ThoughtWorks.CruiseControl.WebDashboard.MVC.ASPNET
 {
+	public class CacheAsDictionary : IDictionary
+	{
+		private readonly Cache cache;
+
+		public CacheAsDictionary(Cache cache)
+		{
+			this.cache = cache;
+		}
+		
+		public bool IsReadOnly
+		{
+			get
+			{
+				return false;
+			}
+		}
+
+		public IDictionaryEnumerator GetEnumerator()
+		{
+			return cache.GetEnumerator();
+		}
+
+		public object this[object key]
+		{
+			get
+			{
+				return cache[GetFullTypeName(key)];
+			}
+			set
+			{
+				cache[GetFullTypeName(key)] = value;
+			}
+		}
+
+		private static string GetFullTypeName(object key)
+		{
+			Type keyType = (Type) key;
+			return keyType.FullName;
+		}
+
+		public void Remove(object key)
+		{
+			cache.Remove(GetFullTypeName(key));
+		}
+
+		public bool Contains(object key)
+		{
+			throw new NotImplementedException("Contains not available on cache");
+		}
+
+		public void Clear()
+		{
+			throw new NotImplementedException("Clear not available on cache");			
+		}
+
+		public ICollection Values
+		{
+			get
+			{
+				throw new NotImplementedException("Values not available on cache");
+			}
+		}
+
+		public void Add(object key, object value)
+		{
+			cache.Insert(GetFullTypeName(key), value);
+		}
+
+		public ICollection Keys
+		{
+			get
+			{
+				throw new NotImplementedException("Keys not available on cache");
+			}
+		}
+
+		public bool IsFixedSize
+		{
+			get
+			{
+				return false;
+			}
+		}
+
+		public bool IsSynchronized
+		{
+			get
+			{
+				return true;
+			}
+		}
+
+		public int Count
+		{
+			get
+			{
+				return cache.Count;
+			}
+		}
+
+		public void CopyTo(Array array, int index)
+		{
+			throw new NotImplementedException("CopyTo not available on cache");
+		}
+
+		public object SyncRoot
+		{
+			get
+			{
+				throw new NotImplementedException("SyncRoot not available on cache");
+			}
+		}
+
+		IEnumerator System.Collections.IEnumerable.GetEnumerator()
+		{
+			return ((IEnumerable) cache).GetEnumerator();
+		}
+
+	}
+
+	
 	// No need for session state yet, but if we do later then we should also add IRequiresSessionState to list of interfaces
 	public class HttpHandler : IHttpHandler
 	{
@@ -28,7 +153,9 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.MVC.ASPNET
 				}
 			}
 
-			ObjectionStore objectionStore = new ObjectionStore(new CachingImplementationResolver(new NMockAwareImplementationResolver()), new MaxLengthConstructorSelectionStrategy());
+//			LogAssembliesInAppDomain();
+			ObjectionStore objectionStore = new ObjectionStore(
+				new CachingImplementationResolver(new NMockAwareImplementationResolver(), new CacheAsDictionary(context.Cache)), new MaxLengthConstructorSelectionStrategy());
 			ObjectSource objectSource = new CruiseObjectSourceInitializer(objectionStore).SetupObjectSourceForRequest(context);
 			IResponse response = ((RequestController) objectSource.GetByType(typeof (RequestController))).Do();
 
@@ -48,6 +175,14 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.MVC.ASPNET
 			context.Response.Flush();
 		}
 
+//		private void LogAssembliesInAppDomain()
+//		{
+//			foreach (Assembly assembly in AppDomain.CurrentDomain.GetAssemblies())
+//			{
+//				Log.Debug("Assembly in app domain: " + assembly.GetName());
+//			}			
+//		}
+//
 		public bool IsReusable
 		{
 			get { return true; }

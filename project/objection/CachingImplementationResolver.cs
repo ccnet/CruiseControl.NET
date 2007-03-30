@@ -6,11 +6,17 @@ namespace Objection
 	public class CachingImplementationResolver : ImplementationResolver
 	{
 		private readonly ImplementationResolver decoratoredResolver;
-		private readonly Hashtable cachedResolvedTypes = new Hashtable();
+		private readonly IDictionary cachedResolvedTypes;
 
-		public CachingImplementationResolver(ImplementationResolver decoratoredResolver)
+		public CachingImplementationResolver(ImplementationResolver decoratoredResolver) :
+			this(decoratoredResolver, new Hashtable())
+		{
+		}
+
+		public CachingImplementationResolver(ImplementationResolver decoratoredResolver, IDictionary cacheDictionary)
 		{
 			this.decoratoredResolver = decoratoredResolver;
+			this.cachedResolvedTypes = cacheDictionary;
 		}
 
 		public Type ResolveImplementation(Type baseType)

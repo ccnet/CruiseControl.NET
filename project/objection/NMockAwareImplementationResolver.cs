@@ -4,25 +4,84 @@ using System.Reflection;
 
 namespace Objection
 {
+	public class LoadedTypeList
+	{
+		private readonly ArrayList namesOfCachedAssemblies = new ArrayList();
+		private ArrayList types = null;
+
+		public ArrayList GetTypes()
+		{
+			if (types == null)
+			{
+				types = GetTypeListForNewLoadedAssemblies();
+			}
+			return types;
+		}
+		
+		public ArrayList GetNewTypes()
+		{
+			ArrayList newTypes = GetTypeListForNewLoadedAssemblies();
+			types.AddRange(newTypes);
+			return newTypes;
+		}
+		
+		public ArrayList CheckedAssemblies()
+		{
+			return namesOfCachedAssemblies;
+		}
+		
+		private ArrayList GetTypeListForNewLoadedAssemblies()
+		{
+			ArrayList newTypes = new ArrayList();
+			foreach (Assembly assembly in AppDomain.CurrentDomain.GetAssemblies())
+			{
+				string assemblyName = assembly.GetName().Name;				
+				if (!namesOfCachedAssemblies.Contains(assemblyName))
+				{
+					namesOfCachedAssemblies.Add(assemblyName);
+					foreach (Type type in assembly.GetTypes())
+					{
+						newTypes.Add(type);
+					}
+				}
+			}
+			return newTypes;
+		}		
+	}
+	
 	public class NMockAwareImplementationResolver : ImplementationResolver
 	{
 		private bool ignoreNMockImplementations = false;
-		private readonly ArrayList assemblyNames = new ArrayList();
-		private readonly ArrayList types = new ArrayList();
-
-		public NMockAwareImplementationResolver()
-		{
-			foreach (Assembly assembly in AppDomain.CurrentDomain.GetAssemblies())
-			{
-				assemblyNames.Add(assembly.GetName().Name);
-				foreach (Type type in assembly.GetTypes())
-				{
-					types.Add(type);
-				}
-			}
-		}
+		private readonly LoadedTypeList loadedTypesList = new LoadedTypeList();
 
 		public Type ResolveImplementation(Type baseType)
+		{
+			Type candidateType = FindTypeAssignableToBaseType(baseType, loadedTypesList.GetTypes());
+			
+			if (candidateType == null)
+			{
+				candidateType = FindTypeAssignableToBaseType(baseType, loadedTypesList.GetNewTypes());
+			}
+			
+			if (candidateType == null)
+			{
+				ThrowExceptionForUnfoundImplementation(baseType);
+			}
+			return candidateType;
+		}
+
+		private void ThrowExceptionForUnfoundImplementation(Type baseType)
+		{
+			string message = "Unable to find implementation for " + baseType.FullName + ". Looked in assemblies: ";
+			foreach (string assemblyName in loadedTypesList.CheckedAssemblies())
+			{
+				message += assemblyName;
+				message += " ";
+			}
+			throw new Exception(message);
+		}
+
+		private Type FindTypeAssignableToBaseType(Type baseType, ArrayList types)
 		{
 			Type candidateType = null;
 			foreach (Type type in types)
@@ -38,16 +97,6 @@ namespace Objection
 						candidateType = type;
 					}
 				}
-			}
-			if (candidateType == null)
-			{
-				string message = "Unable to find implementation for " + baseType.FullName + ". Looked in assemblies: ";
-				foreach (string assemblyName in assemblyNames)
-				{
-					message += assemblyName;
-					message += " ";
-				}
-				throw new Exception(message);
 			}
 			return candidateType;
 		}
@@ -94,21 +143,7 @@ namespace Objection
 
 		private int FindLastUnderscore(string nameToCheck)
 		{
-			return FindLastUnderscore(nameToCheck, 0);
-		}
-
-		private int FindLastUnderscore(string nameToCheck, int startPosition)
-		{
-			int lastUnderscore = nameToCheck.IndexOf('_', startPosition);
-			if (lastUnderscore != -1)
-			{
-				int nextUnderscore = FindLastUnderscore(nameToCheck, lastUnderscore + 1);
-				if (nextUnderscore > -1)
-				{
-					return nextUnderscore;
-				}
-			}
-			return lastUnderscore;
+			return nameToCheck.LastIndexOf('_');
 		}
 	}
 }
