@@ -1,11 +1,8 @@
 using System;
 using System.Collections;
-using System.IO;
-using System.Reflection;
 using System.Web;
 using System.Web.Caching;
 using Objection;
-using ThoughtWorks.CruiseControl.Core.Util;
 using ThoughtWorks.CruiseControl.WebDashboard.Dashboard;
 
 namespace ThoughtWorks.CruiseControl.WebDashboard.MVC.ASPNET
@@ -123,7 +120,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.MVC.ASPNET
 			}
 		}
 
-		IEnumerator System.Collections.IEnumerable.GetEnumerator()
+		IEnumerator IEnumerable.GetEnumerator()
 		{
 			return ((IEnumerable) cache).GetEnumerator();
 		}
@@ -136,8 +133,6 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.MVC.ASPNET
 	{
 		public void ProcessRequest(HttpContext context)
 		{
-			DoSecurityChecks(context);
-
 			// ToDo - more on MimeTypes?
 			if (context.Request.Path.EndsWith(".xml"))
 			{
@@ -186,16 +181,6 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.MVC.ASPNET
 		public bool IsReusable
 		{
 			get { return true; }
-		}
-
-		private void DoSecurityChecks(HttpContext context)
-		{
-			// Security Fix - see http://www.microsoft.com/security/incident/aspnet.mspx
-			if (context.Request.Path.IndexOf('\\') >= 0 ||
-				Path.GetFullPath(context.Request.PhysicalPath) != context.Request.PhysicalPath)
-			{
-				throw new HttpException(404, "not found");
-			}
 		}
 	}
 
