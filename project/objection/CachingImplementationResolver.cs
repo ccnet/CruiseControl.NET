@@ -1,31 +1,39 @@
 using System;
-using System.Collections;
 
 namespace Objection
 {
 	public class CachingImplementationResolver : ImplementationResolver
 	{
 		private readonly ImplementationResolver decoratoredResolver;
-		private readonly IDictionary cachedResolvedTypes;
+		private readonly TypeToTypeMap resolvedTypeCache;
 
-		public CachingImplementationResolver(ImplementationResolver decoratoredResolver) :
-			this(decoratoredResolver, new Hashtable())
-		{
-		}
-
-		public CachingImplementationResolver(ImplementationResolver decoratoredResolver, IDictionary cacheDictionary)
+		public CachingImplementationResolver(ImplementationResolver decoratoredResolver, TypeToTypeMap resolvedTypeCache)
 		{
 			this.decoratoredResolver = decoratoredResolver;
-			this.cachedResolvedTypes = cacheDictionary;
+			this.resolvedTypeCache = resolvedTypeCache;
 		}
 
 		public Type ResolveImplementation(Type baseType)
 		{
-			Type resolvedType = (Type) cachedResolvedTypes[baseType];
+			Type resolvedType = resolvedTypeCache[baseType];
 			if (resolvedType == null)
 			{
-				resolvedType = decoratoredResolver.ResolveImplementation(baseType);
-				cachedResolvedTypes.Add(baseType, resolvedType);
+				resolvedType = AllowOneThreadPerAppDomainToDoResolution(baseType);
+			}
+			return resolvedType;
+		}
+
+		private Type AllowOneThreadPerAppDomainToDoResolution(Type baseType)
+		{
+			Type resolvedType;
+			lock (baseType)
+			{
+				resolvedType = resolvedTypeCache[baseType];
+				if (resolvedType == null)
+				{
+					resolvedType = decoratoredResolver.ResolveImplementation(baseType);
+					resolvedTypeCache[baseType] = resolvedType;
+				}
 			}
 			return resolvedType;
 		}

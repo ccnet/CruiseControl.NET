@@ -1,7 +1,7 @@
 <VisualStudioProject>
     <CSHARP
         ProjectType = "Local"
-        ProductVersion = "7.10.3077"
+        ProductVersion = "7.10.6030"
         SchemaVersion = "2.0"
         ProjectGuid = "{482EF049-EC0C-4819-B568-75B5F74BDD5B}"
     >
@@ -624,6 +624,11 @@
                 />
                 <File
                     RelPath = "MVC\RequestController.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "MVC\ASPNET\CachedTypeMap.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
