@@ -230,5 +230,47 @@ namespace ThoughtWorks.CruiseControl.Core
 		{
 			messages.Add(message);
 		}
+
+		public string GetBuildLog(string buildName)
+		{
+			string logDirectory = GetLogDirectory();
+			if (StringUtil.IsBlank(logDirectory)) return "";
+			using (StreamReader sr = new StreamReader(Path.Combine(logDirectory, buildName)))
+			{
+				return sr.ReadToEnd();
+			}
+		}
+
+		public string[] GetBuildNames()
+		{
+			string logDirectory = GetLogDirectory();
+			if (StringUtil.IsBlank(logDirectory)) return new string[0];
+			string[] logFileNames = LogFileUtil.GetLogFileNames(logDirectory);
+			Array.Reverse(logFileNames);
+			return logFileNames;
+		}
+
+		private string GetLogDirectory()
+		{
+			XmlLogPublisher publisher = GetLogPublisher();
+			string logDirectory = publisher.LogDirectory(ArtifactDirectory);
+			if (! Directory.Exists(logDirectory))
+			{
+				Log.Warning("Log Directory [ " + logDirectory + " ] does not exist. Are you sure any builds have completed?");
+			}
+			return logDirectory;
+		}
+
+		private XmlLogPublisher GetLogPublisher()
+		{
+			foreach (ITask publisher in Publishers)
+			{
+				if (publisher is XmlLogPublisher)
+				{
+					return (XmlLogPublisher)publisher;
+				}
+			}
+			throw new CruiseControlException("Unable to find Log Publisher for project so can't find log file");
+		}
 	}
 }

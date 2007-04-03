@@ -1,11 +1,9 @@
 using System;
 using System.Collections;
-using System.IO;
 using System.Reflection;
 using System.Threading;
 using ThoughtWorks.CruiseControl.Core.Config;
 using ThoughtWorks.CruiseControl.Core.Logging;
-using ThoughtWorks.CruiseControl.Core.Publishers;
 using ThoughtWorks.CruiseControl.Core.Util;
 using ThoughtWorks.CruiseControl.Remote;
 
@@ -173,6 +171,7 @@ namespace ThoughtWorks.CruiseControl.Core
 			GetIntegrator(projectName).WaitForExit();
 		}
 
+		// TODO - move this out of CruiseServer
 		public string GetLatestBuildName(string projectName)
 		{
 			string[] buildNames = GetBuildNames(projectName);
@@ -186,9 +185,9 @@ namespace ThoughtWorks.CruiseControl.Core
 			}
 		}
 
+		// TODO - move this out of CruiseServer
 		public string[] GetMostRecentBuildNames(string projectName, int buildCount)
 		{
-			// TODO - this is a hack - I'll tidy it up later - promise! :) MR
 			string[] buildNames = GetBuildNames(projectName);
 			ArrayList buildNamesToReturn = new ArrayList();
 			for (int i = 0; i < ((buildCount < buildNames.Length) ? buildCount : buildNames.Length); i++)
@@ -200,46 +199,12 @@ namespace ThoughtWorks.CruiseControl.Core
 
 		public string[] GetBuildNames(string projectName)
 		{
-			IProjectIntegrator projectIntegrator = GetIntegrator(projectName);
-			string logDirectory = GetLogDirectory(projectIntegrator);
-			if (StringUtil.IsBlank(logDirectory)) return new string[0];
-			string[] logFileNames = LogFileUtil.GetLogFileNames(logDirectory);
-			Array.Reverse(logFileNames);
-			return logFileNames;
+			return GetIntegrator(projectName).Project.GetBuildNames();
 		}
 
 		public string GetLog(string projectName, string buildName)
 		{
-			IProjectIntegrator projectIntegrator = GetIntegrator(projectName);
-			string logDirectory = GetLogDirectory(projectIntegrator);
-			if (StringUtil.IsBlank(logDirectory)) return "";
-			using (StreamReader sr = new StreamReader(Path.Combine(logDirectory, buildName)))
-			{
-				return sr.ReadToEnd();
-			}
-		}
-
-		private string GetLogDirectory(IProjectIntegrator projectIntegrator)
-		{
-			XmlLogPublisher publisher = GetLogPublisher(projectIntegrator);
-			string logDirectory = publisher.LogDirectory(projectIntegrator.Project.ArtifactDirectory);
-			if (! Directory.Exists(logDirectory))
-			{
-				Log.Warning("Log Directory [ " + logDirectory + " ] does not exist. Are you sure any builds have completed?");
-			}
-			return logDirectory;
-		}
-
-		private XmlLogPublisher GetLogPublisher(IProjectIntegrator projectIntegrator)
-		{
-			foreach (ITask publisher in ((Project) projectIntegrator.Project).Publishers)
-			{
-				if (publisher is XmlLogPublisher)
-				{
-					return (XmlLogPublisher)publisher;
-				}
-			}
-			throw new CruiseControlException("Unable to find Log Publisher for project so can't find log file");
+			return GetIntegrator(projectName).Project.GetBuildLog(buildName);
 		}
 
 		public string GetServerLog()

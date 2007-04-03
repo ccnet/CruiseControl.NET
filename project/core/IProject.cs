@@ -73,5 +73,8 @@ namespace ThoughtWorks.CruiseControl.Core
 		ProjectStatus CreateProjectStatus(IProjectIntegrator integrator);
 		
 		void AddMessage(Message message);
+
+		string GetBuildLog(string buildName);
+		string[] GetBuildNames();
 	}
 }

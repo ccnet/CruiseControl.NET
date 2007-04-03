@@ -76,12 +76,6 @@ namespace ThoughtWorks.CruiseControl.Core
 			get { throw new NotImplementedException(); }
 		}
 
-		public string StatisticsFile
-		{
-			get { throw new NotImplementedException(); }
-			set { throw new NotImplementedException(); }
-		}
-
 		public void Initialize()
 		{
 			throw new NotImplementedException();
@@ -93,6 +87,16 @@ namespace ThoughtWorks.CruiseControl.Core
 		}
 
 		public void AddMessage(Message message)
+		{
+			throw new NotImplementedException();
+		}
+
+		public string GetBuildLog(string buildName)
+		{
+			throw new NotImplementedException();
+		}
+
+		public string[] GetBuildNames()
 		{
 			throw new NotImplementedException();
 		}
