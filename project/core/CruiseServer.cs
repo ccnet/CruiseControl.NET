@@ -186,35 +186,6 @@ namespace ThoughtWorks.CruiseControl.Core
 			}
 		}
 
-		public string[] GetBuildNames(string projectName)
-		{
-			// TODO - this is a hack - I'll tidy it up later - promise! :) MR
-			foreach (IProjectIntegrator projectIntegrator in projectIntegrators)
-			{
-				if (projectIntegrator.Name == projectName)
-				{
-					foreach (ITask publisher in ((Project) projectIntegrator.Project).Publishers)
-					{
-						if (publisher is XmlLogPublisher)
-						{
-							string logDirectory = ((XmlLogPublisher) publisher).LogDirectory(projectIntegrator.Project.ArtifactDirectory);
-							if (! Directory.Exists(logDirectory))
-							{
-								Log.Warning("Log Directory [ " + logDirectory + " ] does not exist. Are you sure any builds have completed?");
-								return new string[0];
-							}
-							string[] logFileNames = LogFileUtil.GetLogFileNames(logDirectory);
-							Array.Reverse(logFileNames);
-							return logFileNames;
-						}
-					}
-					throw new CruiseControlException("Unable to find Log Publisher for project so can't find log file");
-				}
-			}
-
-			throw new NoSuchProjectException(projectName);
-		}
-
 		public string[] GetMostRecentBuildNames(string projectName, int buildCount)
 		{
 			// TODO - this is a hack - I'll tidy it up later - promise! :) MR
@@ -227,34 +198,48 @@ namespace ThoughtWorks.CruiseControl.Core
 			return (string[]) buildNamesToReturn.ToArray(typeof (string));
 		}
 
+		public string[] GetBuildNames(string projectName)
+		{
+			IProjectIntegrator projectIntegrator = GetIntegrator(projectName);
+			string logDirectory = GetLogDirectory(projectIntegrator);
+			if (StringUtil.IsBlank(logDirectory)) return new string[0];
+			string[] logFileNames = LogFileUtil.GetLogFileNames(logDirectory);
+			Array.Reverse(logFileNames);
+			return logFileNames;
+		}
+
 		public string GetLog(string projectName, string buildName)
 		{
-			// TODO - this is a hack - I'll tidy it up later - promise! :) MR
-			foreach (IProjectIntegrator projectIntegrator in projectIntegrators)
+			IProjectIntegrator projectIntegrator = GetIntegrator(projectName);
+			string logDirectory = GetLogDirectory(projectIntegrator);
+			if (StringUtil.IsBlank(logDirectory)) return "";
+			using (StreamReader sr = new StreamReader(Path.Combine(logDirectory, buildName)))
 			{
-				if (projectIntegrator.Name == projectName)
+				return sr.ReadToEnd();
+			}
+		}
+
+		private string GetLogDirectory(IProjectIntegrator projectIntegrator)
+		{
+			XmlLogPublisher publisher = GetLogPublisher(projectIntegrator);
+			string logDirectory = publisher.LogDirectory(projectIntegrator.Project.ArtifactDirectory);
+			if (! Directory.Exists(logDirectory))
+			{
+				Log.Warning("Log Directory [ " + logDirectory + " ] does not exist. Are you sure any builds have completed?");
+			}
+			return logDirectory;
+		}
+
+		private XmlLogPublisher GetLogPublisher(IProjectIntegrator projectIntegrator)
+		{
+			foreach (ITask publisher in ((Project) projectIntegrator.Project).Publishers)
+			{
+				if (publisher is XmlLogPublisher)
 				{
-					foreach (ITask publisher in ((Project) projectIntegrator.Project).Publishers)
-					{
-						if (publisher is XmlLogPublisher)
-						{
-							string logDirectory = ((XmlLogPublisher) publisher).LogDirectory(projectIntegrator.Project.ArtifactDirectory);
-							if (! Directory.Exists(logDirectory))
-							{
-								Log.Warning("Log Directory [ " + logDirectory + " ] does not exist. Are you sure any builds have completed?");
-								return "";
-							}
-							using (StreamReader sr = new StreamReader(Path.Combine(logDirectory, buildName)))
-							{
-								return sr.ReadToEnd();
-							}
-						}
-					}
-					throw new CruiseControlException("Unable to find Log Publisher for project so can't find log file");
+					return (XmlLogPublisher)publisher;
 				}
 			}
-
-			throw new NoSuchProjectException(projectName);
+			throw new CruiseControlException("Unable to find Log Publisher for project so can't find log file");
 		}
 
 		public string GetServerLog()
