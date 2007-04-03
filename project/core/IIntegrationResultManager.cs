@@ -6,11 +6,7 @@ namespace ThoughtWorks.CruiseControl.Core
 	{
 		IIntegrationResult LastIntegrationResult { get; }
 		IIntegrationResult CurrentIntegration { get; }
-
-		IntegrationSummary LastIntegration
-		{
-			get;
-		}
+		IntegrationSummary LastIntegration { get; }
 
 		IIntegrationResult StartNewIntegration(IntegrationRequest buildCondition);
 		void FinishIntegration();

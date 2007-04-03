@@ -174,37 +174,22 @@ namespace ThoughtWorks.CruiseControl.Core
 		// TODO - move this out of CruiseServer
 		public string GetLatestBuildName(string projectName)
 		{
-			string[] buildNames = GetBuildNames(projectName);
-			if (buildNames.Length > 0)
-			{
-				return buildNames[0];
-			}
-			else
-			{
-				return string.Empty;
-			}
+			return GetIntegrator(projectName).IntegrationRepository.GetLatestBuildName();
 		}
 
-		// TODO - move this out of CruiseServer
 		public string[] GetMostRecentBuildNames(string projectName, int buildCount)
 		{
-			string[] buildNames = GetBuildNames(projectName);
-			ArrayList buildNamesToReturn = new ArrayList();
-			for (int i = 0; i < ((buildCount < buildNames.Length) ? buildCount : buildNames.Length); i++)
-			{
-				buildNamesToReturn.Add(buildNames[i]);
-			}
-			return (string[]) buildNamesToReturn.ToArray(typeof (string));
+			return GetIntegrator(projectName).IntegrationRepository.GetMostRecentBuildNames(buildCount);
 		}
 
 		public string[] GetBuildNames(string projectName)
 		{
-			return GetIntegrator(projectName).Project.GetBuildNames();
+			return GetIntegrator(projectName).IntegrationRepository.GetBuildNames();
 		}
 
 		public string GetLog(string projectName, string buildName)
 		{
-			return GetIntegrator(projectName).Project.GetBuildLog(buildName);
+			return GetIntegrator(projectName).IntegrationRepository.GetBuildLog(buildName);
 		}
 
 		public string GetServerLog()

@@ -44,6 +44,11 @@ namespace ThoughtWorks.CruiseControl.Core
 			get { return state; }
 		}
 
+		public IIntegrationRepository IntegrationRepository
+		{
+			get { return project.IntegrationRepository; }
+		}
+
 		// TODO: should not start if stopping (ie. not stopped)
 		public void Start()
 		{

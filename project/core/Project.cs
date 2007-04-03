@@ -33,7 +33,7 @@ namespace ThoughtWorks.CruiseControl.Core
 	/// </code>
 	/// </remarks>
 	[ReflectorType("project")]
-	public class Project : ProjectBase, IProject, IIntegrationRunnerTarget
+	public class Project : ProjectBase, IProject, IIntegrationRunnerTarget, IIntegrationRepository
 	{
 		private string webUrl = DefaultUrl();
 		private ISourceControl sourceControl = new NullSourceControl();
@@ -205,6 +205,11 @@ namespace ThoughtWorks.CruiseControl.Core
 			get { return StatisticsPublisher.LoadStatistics(ArtifactDirectory); }
 		}
 
+		public IIntegrationRepository IntegrationRepository
+		{
+			get { return this; }
+		}
+
 		public static string DefaultUrl()
 		{
 			return string.Format("http://{0}/ccnet", Environment.MachineName);
@@ -248,6 +253,30 @@ namespace ThoughtWorks.CruiseControl.Core
 			string[] logFileNames = LogFileUtil.GetLogFileNames(logDirectory);
 			Array.Reverse(logFileNames);
 			return logFileNames;
+		}
+
+		public string[] GetMostRecentBuildNames(int buildCount)
+		{
+			string[] buildNames = GetBuildNames();
+			ArrayList buildNamesToReturn = new ArrayList();
+			for (int i = 0; i < ((buildCount < buildNames.Length) ? buildCount : buildNames.Length); i++)
+			{
+				buildNamesToReturn.Add(buildNames[i]);
+			}
+			return (string[]) buildNamesToReturn.ToArray(typeof (string));
+		}
+
+		public string GetLatestBuildName()
+		{
+			string[] buildNames = GetBuildNames();
+			if (buildNames.Length > 0)
+			{
+				return buildNames[0];
+			}
+			else
+			{
+				return string.Empty;
+			}
 		}
 
 		private string GetLogDirectory()

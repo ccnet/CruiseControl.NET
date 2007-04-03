@@ -67,14 +67,13 @@ namespace ThoughtWorks.CruiseControl.Core
 		ExternalLink[] ExternalLinks { get; }
 
 		XmlDocument Statistics { get; }
-		
+
+		IIntegrationRepository IntegrationRepository { get; }
+
 		void Initialize();
 		
 		ProjectStatus CreateProjectStatus(IProjectIntegrator integrator);
 		
 		void AddMessage(Message message);
-
-		string GetBuildLog(string buildName);
-		string[] GetBuildNames();
 	}
 }

@@ -114,6 +114,11 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Config
 				get { throw new NotImplementedException(); }
 			}
 
+			public IIntegrationRepository IntegrationRepository
+			{
+				get { throw new NotImplementedException(); }
+			}
+
 			public void Initialize() {}
 
 			public ProjectStatus CreateProjectStatus(IProjectIntegrator integrator)
@@ -122,16 +127,6 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Config
 			}
 
 			public void AddMessage(Message message)
-			{
-				throw new NotImplementedException();
-			}
-
-			public string GetBuildLog(string buildName)
-			{
-				throw new NotImplementedException();
-			}
-
-			public string[] GetBuildNames()
 			{
 				throw new NotImplementedException();
 			}
