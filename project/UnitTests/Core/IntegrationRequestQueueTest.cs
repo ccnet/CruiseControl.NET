@@ -74,6 +74,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 			Assert.IsFalse(queue.HasPendingRequests());
 		}
 
+		// TODO: This is causing ProjectIntegratorTest.Abort() to fail with a "LatchMock has not
+		// been signalled problem"
 		[Test]
 		public void WaitForRequestShouldBlockUntilNewBuildIsRequested()
 		{
@@ -81,7 +83,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 			int processedForcedBuildRequests = 0;
 			int processedModExistsRequests = 0;
 
-			new Thread(new ThreadStart(SpawnNewThreads)).Start();
+			Thread spawningThread = new Thread(new ThreadStart(SpawnNewThreads));
+			spawningThread.Start();
 
 			completedThreads = 0;
 			while (completedThreads < totalThreads)
@@ -92,9 +95,12 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 				else if (condition == BuildCondition.IfModificationExists) processedModExistsRequests++;
 				else Assert.Fail("Unexpected build request");
 			}
-//			Console.Out.WriteLine("processedRequests = {0}", processedRequests);
-//			Console.Out.WriteLine("force build requests = {0}", processedForcedBuildRequests);
-//			Console.Out.WriteLine("mod build requests = {0}", processedModExistsRequests);
+			
+			Assert.IsTrue(spawningThread.Join(30000), "Build request threads did not complete within 30 seconds.");
+			
+			Assert.AreEqual(totalThreads * 2, processedRequests, "Not all threads which started, completed.");
+			Assert.AreEqual(totalThreads, processedForcedBuildRequests, "Not all force build requests were received.");
+			Assert.AreEqual(totalThreads, processedModExistsRequests, "Not all modification exists requests were received.");
 		}
 
 		private int completedThreads = 0;
@@ -102,12 +108,18 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 
 		private void SpawnNewThreads()
 		{
+			Thread[] threads = new Thread[totalThreads];
 			for (int i = 0; i < totalThreads; i++)
 			{
 				Thread thread = new Thread(new ThreadStart(RequestNewBuild));
 				thread.Priority = ThreadPriority.BelowNormal;
-				thread.Start();				
-			}			
+				thread.Start();
+				threads[i] = thread;
+			}
+			foreach (Thread thread in threads)
+			{
+				thread.Join();
+			}
 		}
 
 		private void RequestNewBuild()
