@@ -11,6 +11,56 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Queues
 	[TestFixture]
 	public class IntegrationQueueSetTest
 	{
+		private IntegrationQueueSet set;
+
+		[SetUp]
+		protected void SetUp()
+		{
+			set = new IntegrationQueueSet();			
+		}
+
+		[Test]
+		public void AddQueueNameCreatesNewQueue()
+		{
+			set.Add("q1");
+			IIntegrationQueue q = set["q1"];
+			Assert.IsNotNull(q);
+		}	
+
+		[Test]
+		public void AddingSameQueueNameReturnsOriginalQueue()
+		{
+			set.Add("q1");
+			IIntegrationQueue q = set["q1"];
+			set.Add("q1");
+			Assert.AreSame(q, set["q1"]);
+		}
+
+		[Test]
+		public void RetrievingUnknownQueueNameReturnsNull()
+		{
+			Assert.IsNull(set["foo"]);
+		}
+
+		[Test]
+		public void GetQueueNamesForEmptySet()
+		{
+			Assert.AreEqual(0, set.GetQueueNames().Length);
+		}
+
+		[Test]
+		public void GetQueueNames()
+		{
+			set.Add("q1");
+			Assert.AreEqual("q1", set.GetQueueNames()[0]);
+			set.Add("q2");
+			Assert.AreEqual("q2", set.GetQueueNames()[1]);
+		}
+	}
+
+	[TestFixture]
+	public class IntegrationQueueSetIntegrationTest
+	{
 		private const string TestQueueName = "ProjectQueueOne";
 		private const string TestQueueName2 = "ProjectQueueTwo";
 
@@ -87,7 +137,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Queues
 			Thread.Sleep(20);
 
 			integrationQueueSnapshot = integrationQueues.GetIntegrationQueueSnapshot();
-			Assert.AreEqual((decimal)lastSnapshotTime.Ticks, (decimal)integrationQueueSnapshot.TimeStamp.Ticks);
+			Assert.AreEqual(lastSnapshotTime.Ticks, integrationQueueSnapshot.TimeStamp.Ticks);
 
 			Thread.Sleep(20);
 
@@ -99,7 +149,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Queues
 
 			lastSnapshotTime = integrationQueueSnapshot.TimeStamp;
 			integrationQueueSnapshot = integrationQueues.GetIntegrationQueueSnapshot();
-			Assert.AreNotEqual((decimal)lastSnapshotTime.Ticks, (decimal)integrationQueueSnapshot.TimeStamp.Ticks);
+			Assert.AreNotEqual(lastSnapshotTime.Ticks, (decimal)integrationQueueSnapshot.TimeStamp.Ticks);
 			Assert.IsTrue(lastSnapshotTime != integrationQueueSnapshot.TimeStamp);
 		}
 

@@ -10,11 +10,11 @@ namespace ThoughtWorks.CruiseControl.Core.Queues
 	/// </summary>
 	public class IntegrationQueue : ArrayList, IIntegrationQueue
 	{
-		private IntegrationQueueSet parent;
+		private IntegrationQueueSet queueSet;
 
-		public IntegrationQueue(IntegrationQueueSet parent)
+		public IntegrationQueue(IntegrationQueueSet queueSet)
 		{
-			this.parent = parent;
+			this.queueSet = queueSet;
 		}
 
 		/// <summary>
@@ -26,9 +26,8 @@ namespace ThoughtWorks.CruiseControl.Core.Queues
 		/// <param name="integrationQueueItem">The integration queue item.</param>
 		public void Enqueue(IIntegrationQueueItem integrationQueueItem)
 		{
-			lock (parent.SyncRoot)
+			lock (queueSet.SyncRoot)
 			{				
-				string queueName = integrationQueueItem.Project.QueueName;
 				if (this.Count == 0)
 				{
 					// We can start integration straight away as first in first served
@@ -43,6 +42,7 @@ namespace ThoughtWorks.CruiseControl.Core.Queues
 					bool isAlreadyQueued = false;
 					for (int index = 1; index < this.Count; index++)
 					{
+						string queueName = integrationQueueItem.Project.QueueName;
 						IIntegrationQueueItem queuedIntegrationQueueItem = this[index] as IIntegrationQueueItem;
 						if (queuedIntegrationQueueItem.Project == integrationQueueItem.Project)
 						{
@@ -64,7 +64,7 @@ namespace ThoughtWorks.CruiseControl.Core.Queues
 		/// </summary>
 		public void Dequeue()
 		{
-			lock (parent.SyncRoot)
+			lock (queueSet.SyncRoot)
 			{
 				if (this.Count > 0)
 				{
@@ -72,7 +72,7 @@ namespace ThoughtWorks.CruiseControl.Core.Queues
 					IIntegrationQueueItem integrationQueueItem = (IIntegrationQueueItem)this[0];
 					integrationQueueItem.IntegrationQueueNotifier.NotifyExitingIntegrationQueue(false);
 					this.RemoveAt(0);
-					parent.IsQueueContentChanged = true;
+					queueSet.IsQueueContentChanged = true;
 
 					StartFirstIntegrationOnQueue();
 				}
@@ -86,7 +86,7 @@ namespace ThoughtWorks.CruiseControl.Core.Queues
 		/// <param name="project">The project to have pending items removed from the queue.</param>
 		public void RemovePendingRequest(IProject project)
 		{
-			lock (parent.SyncRoot)
+			lock (queueSet.SyncRoot)
 			{
 				bool considerFirstQueueItem = false;
 				RemoveProjectItems(project, considerFirstQueueItem);
@@ -100,7 +100,7 @@ namespace ThoughtWorks.CruiseControl.Core.Queues
 		/// <param name="project">The project to be removed.</param>
 		public void RemoveProject(IProject project)
 		{
-			lock (parent.SyncRoot)
+			lock (queueSet.SyncRoot)
 			{
 				bool considerFirstQueueItem = true;
 				RemoveProjectItems(project, considerFirstQueueItem);
@@ -126,7 +126,7 @@ namespace ThoughtWorks.CruiseControl.Core.Queues
 			integrationQueueItem.IntegrationQueueNotifier.NotifyEnteringIntegrationQueue();
 			this.Insert(queuePosition, integrationQueueItem);
 	
-			parent.IsQueueContentChanged = true;
+			queueSet.IsQueueContentChanged = true;
 		}
 
 		private int GetPrioritisedQueuePosition(int insertingItemPriority)
@@ -167,8 +167,6 @@ namespace ThoughtWorks.CruiseControl.Core.Queues
 
 		private void RemoveProjectItems(IProject project, bool considerFirstQueueItem)
 		{
-			string queueName = project.QueueName;
-
 			bool isNewItemAtStartOfQueue = false;
 			// Note we are also potentially removing the item at index[0] as this method should
 			// only be called when the thread performing the build has been stopped.
@@ -178,11 +176,12 @@ namespace ThoughtWorks.CruiseControl.Core.Queues
 				IIntegrationQueueItem integrationQueueItem = (IIntegrationQueueItem)this[index];
 				if (integrationQueueItem.Project.Equals(project))
 				{
+					string queueName = project.QueueName;
 					Log.Info("Project: " + integrationQueueItem.Project.Name + " removed from queue: " + queueName);
 					bool isPendingItemCancelled = index > 0;
 					integrationQueueItem.IntegrationQueueNotifier.NotifyExitingIntegrationQueue(isPendingItemCancelled);
 					this.RemoveAt(index);
-					parent.IsQueueContentChanged = true;
+					queueSet.IsQueueContentChanged = true;
 					if (index == 0)
 					{
 						isNewItemAtStartOfQueue = true;

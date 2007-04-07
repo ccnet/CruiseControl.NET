@@ -10,7 +10,7 @@ namespace ThoughtWorks.CruiseControl.Core.Queues
 	/// </summary>
 	public class IntegrationQueueSet
 	{
-		private Hashtable content = new Hashtable();
+		private Hashtable queueSet = new Hashtable();
 		private bool isQueueContentChanged = true;
 		private string[] cachedQueueNames;
 		private IntegrationQueueSnapshot cachedIntegrationQueueSnapshot;
@@ -19,37 +19,35 @@ namespace ThoughtWorks.CruiseControl.Core.Queues
 		{
 			get
 			{
-				if (content.ContainsKey(queueName))
+				lock (SyncRoot)
 				{
-					return (IIntegrationQueue) content[queueName];
-				}
-				else
-				{
-					return null;
+					return (IIntegrationQueue) queueSet[queueName];
 				}
 			}
 		}
 
 		public void Add(string queueName)
 		{
-			IIntegrationQueue queue;
-			if (!content.ContainsKey(queueName))
+			lock (SyncRoot)
 			{
-				queue = new IntegrationQueue(this);
-				content.Add(queueName, queue);
+				if (!queueSet.ContainsKey(queueName))
+				{
+					queueSet.Add(queueName, new IntegrationQueue(this));
+					cachedQueueNames = null;
+				}
 			}
 		}
 
 		public void Clear()
 		{
-			content.Clear();
+			queueSet.Clear();
 			cachedQueueNames = null;
 			isQueueContentChanged = true;
 		}
 
 		public object SyncRoot
 		{
-			get { return content.SyncRoot; }
+			get { return queueSet.SyncRoot; }
 		}
 
 		public bool IsQueueContentChanged
@@ -62,8 +60,8 @@ namespace ThoughtWorks.CruiseControl.Core.Queues
 		{
 			if (cachedQueueNames == null)
 			{
-				cachedQueueNames = new string[content.Keys.Count];
-				content.Keys.CopyTo(cachedQueueNames, 0);
+				cachedQueueNames = new string[queueSet.Keys.Count];
+				queueSet.Keys.CopyTo(cachedQueueNames, 0);
 				Array.Sort(cachedQueueNames);
 			}
 			return cachedQueueNames;
@@ -71,15 +69,15 @@ namespace ThoughtWorks.CruiseControl.Core.Queues
 
 		public IntegrationQueueSnapshot GetIntegrationQueueSnapshot()
 		{
-			if (isQueueContentChanged)
+			lock (SyncRoot)
 			{
-				lock (SyncRoot)
+				if (isQueueContentChanged)
 				{
 					cachedIntegrationQueueSnapshot = BuildQueueContentSnapshot();
 					isQueueContentChanged = false;
 				}
+				return cachedIntegrationQueueSnapshot;
 			}
-			return cachedIntegrationQueueSnapshot;
 		}
 
 		private IntegrationQueueSnapshot BuildQueueContentSnapshot()
@@ -104,11 +102,10 @@ namespace ThoughtWorks.CruiseControl.Core.Queues
 		private NamedQueueSnapshot GetNamedQueueSnapshot(IIntegrationQueue queue, string queueName)
 		{
 			NamedQueueSnapshot namedQueueSnapshot = new NamedQueueSnapshot(queueName);
-			QueuedItemSnapshot queuedItemSnapshot;
 
 			foreach (IIntegrationQueueItem integrationQueueItem in queue)
 			{
-				queuedItemSnapshot = new QueuedItemSnapshot(
+				QueuedItemSnapshot queuedItemSnapshot = new QueuedItemSnapshot(
 					queueName,
 					integrationQueueItem.Project.Name,
 					integrationQueueItem.Project.QueuePriority,

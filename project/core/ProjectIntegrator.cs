@@ -171,8 +171,7 @@ namespace ThoughtWorks.CruiseControl.Core
 
 		private void AddToQueue(IntegrationRequest request)
 		{
-			IIntegrationQueueItem integrationQueueItem = new IntegrationQueueItem(project, request, this);
-			integrationQueue.Enqueue(integrationQueueItem);
+			integrationQueue.Enqueue(new IntegrationQueueItem(project, request, this));
 		}
 
 		private void RemoveCompletedRequestFromQueue()
