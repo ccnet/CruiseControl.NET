@@ -232,6 +232,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "CCTrayLib\Monitoring\AggregatingServerMonitorTest.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "CCTrayLib\Monitoring\BuildDurationTrackerTest.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -242,12 +247,22 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "CCTrayLib\Monitoring\CruiseServerManagerFactoryTest.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "CCTrayLib\Monitoring\DashboardXmlParserTest.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
                     RelPath = "CCTrayLib\Monitoring\HttpCruiseProjectManagerTest.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "CCTrayLib\Monitoring\HttpCruiseServerManagerTest.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -273,6 +288,16 @@
                 />
                 <File
                     RelPath = "CCTrayLib\Monitoring\ProjectStatusMonitorTest.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "CCTrayLib\Monitoring\RemotingCruiseServerManagerTest.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "CCTrayLib\Monitoring\ServerMonitorTest.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -312,6 +337,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "CCTrayLib\Presentation\IntegrationQueueTreeNodeAdaptorTest.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "CCTrayLib\Presentation\MainFormControllerTest.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -327,6 +357,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "CCTrayLib\Presentation\ResourceIntegrationQueueIconProviderTest.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "CCTrayLib\Presentation\ResourceProjectStateIconProviderTest.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -337,7 +372,17 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "CCTrayLib\Presentation\StubServerMonitor.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "CCTrayLib\Presentation\SynchronizedProjectMonitorTest.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "CCTrayLib\Presentation\SynchronizedServerMonitorTest.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -403,6 +448,11 @@
                 />
                 <File
                     RelPath = "Core\IntegrationFixture.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Core\IntegrationQueueManagerTest.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -712,6 +762,21 @@
                 />
                 <File
                     RelPath = "Core\Publishers\Statistics\StatisticsPublisherTest.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Core\Queues\IntegrationQueueItemTest.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Core\Queues\IntegrationQueueSetTest.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Core\Queues\IntegrationQueueTest.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

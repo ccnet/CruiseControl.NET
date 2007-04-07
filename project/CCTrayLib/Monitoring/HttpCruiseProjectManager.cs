@@ -28,6 +28,11 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
 			throw new NotImplementedException("Fix build not currently supported on projects monitored via HTTP");
 		}
 
+		public void CancelPendingRequest()
+		{
+			throw new NotImplementedException("Cancel pending not currently supported on projects monitored via HTTP");
+		}
+
 		public ProjectStatus ProjectStatus
 		{
 			get

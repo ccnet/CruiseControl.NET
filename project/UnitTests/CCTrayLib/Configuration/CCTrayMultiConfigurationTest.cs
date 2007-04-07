@@ -22,6 +22,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Configuration
 </Configuration>";
 
 		private DynamicMock mockServerConfigFactory;
+		private DynamicMock mockProjectConfigFactory;
 
 		[Test]
 		public void CanLoadConfigurationFromFile()
@@ -56,10 +57,14 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Configuration
 			using (TextWriter configFile = File.CreateText(configFileName))
 				configFile.Write(configFileContents);
 
-			mockServerConfigFactory = new DynamicMock(typeof (ICruiseProjectManagerFactory));
+			mockServerConfigFactory = new DynamicMock(typeof (ICruiseServerManagerFactory));
 			mockServerConfigFactory.Strict = true;
+
+			mockProjectConfigFactory = new DynamicMock(typeof (ICruiseProjectManagerFactory));
+			mockProjectConfigFactory.Strict = true;
 			return new CCTrayMultiConfiguration(
-				(ICruiseProjectManagerFactory) mockServerConfigFactory.MockInstance,
+				(ICruiseServerManagerFactory) mockServerConfigFactory.MockInstance,
+				(ICruiseProjectManagerFactory) mockProjectConfigFactory.MockInstance,
 				configFileName);
 		}
 
@@ -69,13 +74,13 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Configuration
 		{
 			CCTrayMultiConfiguration provider = CreateTestConfiguration(ConfigXml);
 
-			mockServerConfigFactory.ExpectAndReturn("Create", null, provider.Projects[0]);
-			mockServerConfigFactory.ExpectAndReturn("Create", null, provider.Projects[1]);
+			mockProjectConfigFactory.ExpectAndReturn("Create", null, provider.Projects[0]);
+			mockProjectConfigFactory.ExpectAndReturn("Create", null, provider.Projects[1]);
 
 			IProjectMonitor[] monitorList = provider.GetProjectStatusMonitors();
 			Assert.AreEqual(2, monitorList.Length);
 
-			mockServerConfigFactory.Verify();
+			mockProjectConfigFactory.Verify();
 		}
 
 		[Test]
@@ -99,10 +104,11 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Configuration
 		[Test]
 		public void CreatesAnEmptySettingsFileIfTheConfigFileIsNotFound()
 		{
-			mockServerConfigFactory = new DynamicMock(typeof (ICruiseProjectManagerFactory));
-			mockServerConfigFactory.Strict = true;
+			mockProjectConfigFactory = new DynamicMock(typeof (ICruiseProjectManagerFactory));
+			mockProjectConfigFactory.Strict = true;
 			CCTrayMultiConfiguration configuration = new CCTrayMultiConfiguration(
-				(ICruiseProjectManagerFactory) mockServerConfigFactory.MockInstance,
+				(ICruiseServerManagerFactory) mockServerConfigFactory.MockInstance,
+				(ICruiseProjectManagerFactory) mockProjectConfigFactory.MockInstance,
 				"config_file_that_isnt_present.xml");
 
 			Assert.IsNotNull(configuration);
@@ -112,6 +118,48 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Configuration
 			Assert.IsNull(configuration.Audio.FixedBuildSound);
 			Assert.IsNull(configuration.Audio.StillFailingBuildSound);
 			Assert.IsNull(configuration.Audio.StillSuccessfulBuildSound);
+		}
+
+		[Test]
+		public void CanBuildUniqueServerListWithTwoUniqueServerProjects()
+		{
+			CCTrayMultiConfiguration configuration = CreateTestConfiguration(ConfigXml);
+
+			BuildServer[] buildServers = configuration.GetUniqueBuildServerList();
+			Assert.AreEqual(2, buildServers.Length);
+			Assert.AreEqual("tcp://blah1", buildServers[0].Url);
+			Assert.AreEqual("tcp://blah2", buildServers[1].Url);
+		}
+
+		[Test]
+		public void CanBuildUniqueServerListWithTwoSameServerProjects()
+		{
+			const string SameServerProjectConfigXml = @"
+<Configuration>
+	<Projects>
+		<Project serverUrl='tcp://blah1' projectName='ProjectOne' />
+		<Project serverUrl='tcp://blah1' projectName='ProjectTwo' />
+	</Projects>
+</Configuration>";
+			CCTrayMultiConfiguration configuration = CreateTestConfiguration(SameServerProjectConfigXml);
+
+			BuildServer[] buildServers = configuration.GetUniqueBuildServerList();
+			Assert.AreEqual(1, buildServers.Length);
+			Assert.AreEqual("tcp://blah1", buildServers[0].Url);
+		}
+
+		[Test]
+		public void CanProvideASetOfServerMonitors()
+		{
+			CCTrayMultiConfiguration configuration = CreateTestConfiguration(ConfigXml);
+
+			mockServerConfigFactory.ExpectAndReturn("Create", null, configuration.GetUniqueBuildServerList()[0]);
+			mockServerConfigFactory.ExpectAndReturn("Create", null, configuration.GetUniqueBuildServerList()[1]);
+
+			IServerMonitor[] monitorList = configuration.GetServerMonitors();
+			Assert.AreEqual(2, monitorList.Length);
+
+			mockServerConfigFactory.Verify();
 		}
 	}
 }

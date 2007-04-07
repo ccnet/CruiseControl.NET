@@ -12,31 +12,42 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 	{
 		private IProjectMonitor selectedProject;
 		private ICCTrayMultiConfiguration configuration;
-		private Poller poller;
-		private IProjectMonitor aggregatedMonitor;
-		private IProjectMonitor[] monitors;
+		private Poller serverPoller;
+		private Poller projectPoller;
+		private IServerMonitor aggregatedServerMonitor;
+		private IProjectMonitor aggregatedProjectMonitor;
+		private ISingleServerMonitor[] serverMonitors;
+		private IProjectMonitor[] projectMonitors;
 		private ProjectStateIconAdaptor projectStateIconAdaptor;
-		private IProjectStateIconProvider iconProvider;
+		private IProjectStateIconProvider projectStateIconProvider;
+		private IIntegrationQueueIconProvider integrationQueueIconProvider;
 
 		public MainFormController(ICCTrayMultiConfiguration configuration, ISynchronizeInvoke owner, ICache httpCache)
 		{
 			this.configuration = configuration;
-			monitors = configuration.GetProjectStatusMonitors();
 
-			for (int i = 0; i < monitors.Length; i++)
+			serverMonitors = configuration.GetServerMonitors();
+			for (int i = 0; i < serverMonitors.Length; i++)
 			{
-				monitors[i] = new SynchronizedProjectMonitor(monitors[i], owner);
+				serverMonitors[i] = new SynchronizedServerMonitor(serverMonitors[i], owner);
 			}
+			aggregatedServerMonitor = new AggregatingServerMonitor(serverMonitors);
+			integrationQueueIconProvider = new ResourceIntegrationQueueIconProvider();
 
-			aggregatedMonitor = new AggregatingProjectMonitor(httpCache, monitors);
-			iconProvider = new ConfigurableProjectStateIconProvider(configuration.Icons);
-			projectStateIconAdaptor = new ProjectStateIconAdaptor(aggregatedMonitor, iconProvider);
-			new BuildTransitionSoundPlayer(aggregatedMonitor, new AudioPlayer(), configuration.Audio);
+			projectMonitors = configuration.GetProjectStatusMonitors();
+			for (int i = 0; i < projectMonitors.Length; i++)
+			{
+				projectMonitors[i] = new SynchronizedProjectMonitor(projectMonitors[i], owner);
+			}			
+			aggregatedProjectMonitor = new AggregatingProjectMonitor(httpCache, projectMonitors);
+			projectStateIconProvider = new ConfigurableProjectStateIconProvider(configuration.Icons);
+			projectStateIconAdaptor = new ProjectStateIconAdaptor(aggregatedProjectMonitor, projectStateIconProvider);
+			new BuildTransitionSoundPlayer(aggregatedProjectMonitor, new AudioPlayer(), configuration.Audio);
 
 			if (configuration.X10 != null && configuration.X10.Enabled)
 			{
 				new X10Controller(
-					aggregatedMonitor,
+					aggregatedProjectMonitor,
 					new LampController(new X10LowLevelDriver(HouseCode.A, configuration.X10.ComPort)),
 					new DateTimeProvider(),
 					configuration.X10);
@@ -80,14 +91,13 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 		{
 			trayIcon.IconProvider = ProjectStateIconAdaptor;
 			trayIcon.BalloonMessageProvider = new ConfigurableBalloonMessageProvider(configuration.BalloonMessages);
-			trayIcon.BindToProjectMonitor(aggregatedMonitor, configuration.ShouldShowBalloonOnBuildTransition);
+			trayIcon.BindToProjectMonitor(aggregatedProjectMonitor, configuration.ShouldShowBalloonOnBuildTransition);
 		}
-
 
 		public void BindToListView(ListView listView)
 		{
 			IDetailStringProvider detailStringProvider = new DetailStringProvider();
-			foreach (IProjectMonitor monitor in monitors)
+			foreach (IProjectMonitor monitor in projectMonitors)
 			{
 				ListViewItem item = new ProjectStatusListViewItemAdaptor(detailStringProvider).Create(monitor);
 				item.Tag = monitor;
@@ -96,11 +106,70 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 			if (listView.Items.Count > 0) listView.Items[0].Selected = true;
 		}
 
-		public void StartMonitoring()
+		public void BindToQueueTreeView(TreeView treeView)
 		{
-			StopMonitoring();
-			poller = new Poller(configuration.PollPeriodSeconds, aggregatedMonitor);
-			poller.Start();
+			StartProjectMonitoring();
+			treeView.BeginUpdate();
+			treeView.Nodes.Clear();
+			foreach (ISingleServerMonitor monitor in serverMonitors)
+			{
+				IntegrationQueueTreeNodeAdaptor adaptor = new IntegrationQueueTreeNodeAdaptor(monitor);
+				TreeNode serverTreeNode = adaptor.Create();
+				treeView.Nodes.Add(serverTreeNode);
+			}
+			treeView.EndUpdate();
+			treeView.ExpandAll();
+			if (treeView.Nodes.Count > 0)
+			{
+				treeView.SelectedNode = treeView.Nodes[0];
+			}
+		}
+
+		public void UnbindToQueueTreeView(TreeView treeView)
+		{
+			treeView.BeginUpdate();
+			foreach (TreeNode node in treeView.Nodes)
+			{
+				IntegrationQueueTreeNodeAdaptor adaptor = node.Tag as IntegrationQueueTreeNodeAdaptor;
+				if (adaptor != null)
+				{
+					adaptor.Detach();
+				}
+			}
+			treeView.Nodes.Clear();
+			treeView.EndUpdate();
+		}
+
+		public void StartProjectMonitoring()
+		{
+			StopProjectMonitoring();
+			projectPoller = new Poller(configuration.PollPeriodSeconds, aggregatedProjectMonitor);
+			projectPoller.Start();
+		}
+
+		public void StopProjectMonitoring()
+		{
+			if (projectPoller != null)
+			{
+				projectPoller.Stop();
+				projectPoller = null;
+			}
+		}
+
+		public void StartServerMonitoring()
+		{
+			StopServerMonitoring();
+			serverPoller = new Poller(configuration.PollPeriodSeconds, aggregatedServerMonitor);
+			serverPoller.Start();
+		}
+
+		public void StopServerMonitoring()
+		{
+			if (serverPoller != null)
+			{
+				serverPoller.Stop();
+				serverPoller = null;
+			}
 		}
 
 		public ProjectStateIconAdaptor ProjectStateIconAdaptor
@@ -108,22 +177,13 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 			get { return projectStateIconAdaptor; }
 		}
 
-		public void StopMonitoring()
-		{
-			if (poller != null)
-			{
-				poller.Stop();
-				poller = null;
-			}
-		}
-
 		public bool OnDoubleClick()
 		{
 			if (configuration.TrayIconDoubleClickAction == TrayIconDoubleClickAction.NavigateToWebPageOfFirstProject)
 			{
-				if (monitors.Length != 0)
+				if (projectMonitors.Length != 0)
 				{
-					DisplayWebPageForProject(monitors[0].Detail);
+					DisplayWebPageForProject(projectMonitors[0].Detail);
 					return true;
 				}
 			}
@@ -143,11 +203,21 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 		public void PopulateImageList(ImageList imageList)
 		{
 			imageList.Images.Clear();
-			imageList.Images.Add(iconProvider.GetStatusIconForState(ProjectState.NotConnected).Icon);
-			imageList.Images.Add(iconProvider.GetStatusIconForState(ProjectState.Success).Icon);
-			imageList.Images.Add(iconProvider.GetStatusIconForState(ProjectState.Broken).Icon);
-			imageList.Images.Add(iconProvider.GetStatusIconForState(ProjectState.Building).Icon);
-			imageList.Images.Add(iconProvider.GetStatusIconForState(ProjectState.BrokenAndBuilding).Icon);
+			imageList.Images.Add(projectStateIconProvider.GetStatusIconForState(ProjectState.NotConnected).Icon);
+			imageList.Images.Add(projectStateIconProvider.GetStatusIconForState(ProjectState.Success).Icon);
+			imageList.Images.Add(projectStateIconProvider.GetStatusIconForState(ProjectState.Broken).Icon);
+			imageList.Images.Add(projectStateIconProvider.GetStatusIconForState(ProjectState.Building).Icon);
+			imageList.Images.Add(projectStateIconProvider.GetStatusIconForState(ProjectState.BrokenAndBuilding).Icon);
+		}
+
+		public void PopulateQueueImageList(ImageList imageList)
+		{
+			imageList.Images.Clear();
+			imageList.Images.Add(integrationQueueIconProvider.GetStatusIconForNodeType(IntegrationQueueNodeType.RemotingServer).Icon);
+			imageList.Images.Add(integrationQueueIconProvider.GetStatusIconForNodeType(IntegrationQueueNodeType.HttpServer).Icon);
+			imageList.Images.Add(integrationQueueIconProvider.GetStatusIconForNodeType(IntegrationQueueNodeType.Queue).Icon);
+			imageList.Images.Add(integrationQueueIconProvider.GetStatusIconForNodeType(IntegrationQueueNodeType.FirstInQueue).Icon);
+			imageList.Images.Add(integrationQueueIconProvider.GetStatusIconForNodeType(IntegrationQueueNodeType.PendingInQueue).Icon);
 		}
 
 		public bool CanFixBuild()
@@ -159,6 +229,29 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 		public void VolunteerToFixBuild()
 		{
 			if (IsProjectSelected) selectedProject.FixBuild();
+		}
+
+		public bool CanCancelPending()
+		{
+			return IsProjectSelected && selectedProject.IsPending;
+		}
+
+		public void CancelPending()
+		{
+			if (IsProjectSelected) selectedProject.CancelPending();
+		}
+
+		public void CancelPendingProjectByName(string projectName)
+		{
+			foreach (IProjectMonitor projectMonitor in projectMonitors)
+			{
+				if (projectMonitor.Detail.ProjectName == projectName)
+				{
+					SelectedProject = projectMonitor;
+					CancelPending();
+					break;
+				}
+			}
 		}
 	}
 }

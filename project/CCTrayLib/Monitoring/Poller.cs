@@ -4,7 +4,7 @@ using System.Timers;
 namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
 {
 	/// <summary>
-	///  Polls a an IPollable thing
+	///  Polls an IPollable thing
 	/// </summary>
 	public class Poller
 	{
@@ -36,7 +36,9 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
 		public void Start()
 		{
 			timer.Stop();
-			timer.Start();
+			itemToPoll.OnPollStarting();
+			// Fire the timer straight away rather than waiting for poll interval
+			Timer_Elapsed(null, null);
 		}
 
 		public void Stop()

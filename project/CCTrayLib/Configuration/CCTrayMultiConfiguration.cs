@@ -1,3 +1,4 @@
+using System.Collections;
 using System.IO;
 using System.Xml.Serialization;
 using ThoughtWorks.CruiseControl.CCTrayLib.Monitoring;
@@ -7,11 +8,14 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Configuration
 	public class CCTrayMultiConfiguration : ICCTrayMultiConfiguration
 	{
 		private PersistentConfiguration persistentConfiguration;
+		private ICruiseServerManagerFactory cruiseServerManagerFactory;
 		private ICruiseProjectManagerFactory cruiseProjectManagerFactory;
 		private readonly string configFileName;
 
-		public CCTrayMultiConfiguration(ICruiseProjectManagerFactory cruiseProjectManagerFactory, string configFileName)
+		public CCTrayMultiConfiguration(ICruiseServerManagerFactory cruiseServerManagerFactory, 
+			ICruiseProjectManagerFactory cruiseProjectManagerFactory, string configFileName)
 		{
+			this.cruiseServerManagerFactory = cruiseServerManagerFactory;
 			this.cruiseProjectManagerFactory = cruiseProjectManagerFactory;
 			this.configFileName = configFileName;
 
@@ -28,6 +32,37 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Configuration
 				retVal[i] = new ProjectMonitor(projectManager);
 			}
 			return retVal;
+		}
+
+		public ISingleServerMonitor[] GetServerMonitors()
+		{
+			BuildServer[] buildServers = GetUniqueBuildServerList();
+			ISingleServerMonitor[] serverMonitors = new ISingleServerMonitor[buildServers.Length];
+			for (int i = 0; i < buildServers.Length; i++)
+			{
+				BuildServer buildServer = buildServers[i];
+				ICruiseServerManager serverManager = cruiseServerManagerFactory.Create(buildServer);
+				serverMonitors[i] = new ServerMonitor(serverManager);
+			}
+			return serverMonitors;
+		}
+
+		/// <summary>
+		/// Construct a unique list of the build servers based on the projects configured in CCTray.
+		/// </summary>
+		/// <returns></returns>
+		public BuildServer[] GetUniqueBuildServerList()
+		{
+			ArrayList buildServerList = new ArrayList();
+			for (int i = 0; i < Projects.Length; i++)
+			{
+				BuildServer buildServer = Projects[i].BuildServer;
+				if (!buildServerList.Contains(buildServer))
+				{
+					buildServerList.Add(buildServer);
+				}
+			}
+			return (BuildServer[])buildServerList.ToArray(typeof(BuildServer));
 		}
 
 		public CCTrayProject[] Projects
@@ -82,7 +117,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Configuration
 
 		public ICCTrayMultiConfiguration Clone()
 		{
-			return new CCTrayMultiConfiguration(cruiseProjectManagerFactory, configFileName);
+			return new CCTrayMultiConfiguration(cruiseServerManagerFactory, cruiseProjectManagerFactory, configFileName);
 		}
 
 		public AudioFiles Audio
@@ -109,6 +144,11 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Configuration
 		public X10Configuration X10
 		{
 			get { return persistentConfiguration.X10; }
+		}
+
+		public ICruiseServerManagerFactory CruiseServerManagerFactory
+		{
+			get { return cruiseServerManagerFactory; }
 		}
 
 		public ICruiseProjectManagerFactory CruiseProjectManagerFactory

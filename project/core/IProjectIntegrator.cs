@@ -42,7 +42,21 @@ namespace ThoughtWorks.CruiseControl.Core
 
 		IIntegrationRepository IntegrationRepository { get; }
 
+		/// <summary>
+		/// For invocation by a force build publisher or having the exe config running a project
+		/// when CC.Net first starts.
+		/// </summary>
 		void ForceBuild();
+
+		/// <summary>
+		/// For "Force" requests such as by CCTray or the Web GUI.
+		/// </summary>
+		/// <param name="request">Request contains the source such as the user id.</param>
 		void Request(IntegrationRequest request);
+
+		/// <summary>
+		/// Cancel a pending project integration request from the integration queue.
+		/// </summary>
+		void CancelPendingRequest();
 	}
 }

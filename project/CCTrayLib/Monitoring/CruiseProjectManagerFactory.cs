@@ -1,4 +1,3 @@
-using System;
 using ThoughtWorks.CruiseControl.CCTrayLib.Configuration;
 using ThoughtWorks.CruiseControl.Remote;
 
@@ -16,7 +15,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
 		}
 
 		public ICruiseProjectManager Create(CCTrayProject project)
-		{		
+		{
 			BuildServer server = project.BuildServer;
 			if (server.Transport == BuildServerTransport.Remoting)
 			{

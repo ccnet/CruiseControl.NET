@@ -52,6 +52,16 @@ namespace ThoughtWorks.CruiseControl.Core
 			cruiseServer.WaitForExit(project);
 		}
 
+		public void CancelPendingRequest(string projectName)
+		{
+			cruiseServer.CancelPendingRequest(projectName);
+		}
+		
+		public IntegrationQueueSnapshot GetIntegrationQueueSnapshot()
+		{
+			return cruiseServer.GetIntegrationQueueSnapshot();
+		}
+
 		public string GetLatestBuildName(string projectName)
 		{
 			return cruiseServer.GetLatestBuildName(projectName);

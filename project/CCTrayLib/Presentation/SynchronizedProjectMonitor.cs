@@ -51,9 +51,19 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 			projectMonitor.FixBuild();
 		}
 
+		public void CancelPending()
+		{
+			projectMonitor.CancelPending();
+		}
+
 		public void Poll()
 		{
 			projectMonitor.Poll();
+		}
+
+		public void OnPollStarting()
+		{
+			projectMonitor.OnPollStarting();
 		}
 
 		public event MonitorBuildOccurredEventHandler BuildOccurred;
@@ -78,6 +88,11 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 		public IntegrationStatus IntegrationStatus
 		{
 			get { return projectMonitor.IntegrationStatus; }
+		}
+
+		public bool IsPending
+		{
+			get { return projectMonitor.IsPending; }
 		}
 	}
 }

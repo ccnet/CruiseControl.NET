@@ -27,6 +27,11 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
 			manager.SendMessage(ProjectName, new Message(string.Format("{0} is fixing the build.", Environment.UserName)));
 		}
 
+		public void CancelPendingRequest()
+		{
+			manager.CancelPendingRequest(ProjectName);
+		}
+
 		public ProjectStatus ProjectStatus
 		{
 			get

@@ -28,6 +28,16 @@ namespace ThoughtWorks.CruiseControl.Remote
 		void Stop(string project);
 
 		/// <summary>
+		/// Cancel a pending project integration request from the integration queue.
+		/// </summary>
+		void CancelPendingRequest(string projectName);
+		
+		/// <summary>
+		/// Returns a snapshot of the integration queue status.
+		/// </summary>
+		IntegrationQueueSnapshot GetIntegrationQueueSnapshot();
+
+		/// <summary>
 		/// Retrieve CruiseManager interface for the server
 		/// </summary>
 		ICruiseManager CruiseManager { get; }

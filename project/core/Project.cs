@@ -36,6 +36,8 @@ namespace ThoughtWorks.CruiseControl.Core
 	public class Project : ProjectBase, IProject, IIntegrationRunnerTarget, IIntegrationRepository
 	{
 		private string webUrl = DefaultUrl();
+		private string queueName = string.Empty;
+		private int queuePriority = 0;
 		private ISourceControl sourceControl = new NullSourceControl();
 		private ILabeller labeller = new DefaultLabeller();
 		private ITask[] tasks = new ITask[] {new NullTask()};
@@ -73,6 +75,27 @@ namespace ThoughtWorks.CruiseControl.Core
 		{
 			get { return webUrl; }
 			set { webUrl = value; }
+		}
+
+		[ReflectorProperty("queue", Required=false)]
+		public string QueueName
+		{
+			get 
+			{
+				if (queueName == null | queueName.Length == 0)
+				{
+					return Name;
+				}
+				return queueName; 
+			}
+			set { queueName = value; }
+		}
+
+		[ReflectorProperty("queuePriority", Required=false)]
+		public int QueuePriority
+		{
+			get {return queuePriority; }
+			set { queuePriority = value; }
 		}
 
 		[ReflectorProperty("sourcecontrol", InstanceTypeKey="type", Required=false)]
@@ -139,6 +162,16 @@ namespace ThoughtWorks.CruiseControl.Core
 		public IIntegrationResult Integrate(IntegrationRequest request)
 		{
 			return integratable.Integrate(request);
+		}
+
+		public void NotifyPendingState()
+		{
+			integratable.NotifyPendingState();
+		}
+
+		public void NotifySleepingState()
+		{
+			integratable.NotifySleepingState();
 		}
 
 		public void Prebuild(IIntegrationResult result)

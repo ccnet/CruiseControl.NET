@@ -32,8 +32,9 @@ namespace ThoughtWorks.CruiseControl.CCTray
 			{
 				ICachingWebRetriever cachedWebRetriever = new CachingWebRetriever(new WebRetriever());
 				ICruiseManagerFactory remoteCruiseManagerFactory = new RemoteCruiseManagerFactory();
+				ICruiseServerManagerFactory cruiseServerManagerFactory = new CruiseServerManagerFactory(remoteCruiseManagerFactory);
 				ICruiseProjectManagerFactory cruiseProjectManagerFactory = new CruiseProjectManagerFactory(remoteCruiseManagerFactory, cachedWebRetriever);
-				CCTrayMultiConfiguration configuration = new CCTrayMultiConfiguration(cruiseProjectManagerFactory, GetSettingsFilename(args));
+				CCTrayMultiConfiguration configuration = new CCTrayMultiConfiguration(cruiseServerManagerFactory, cruiseProjectManagerFactory, GetSettingsFilename(args));
 
 				MainForm mainForm = new MainForm(configuration, cachedWebRetriever);
 
@@ -58,7 +59,7 @@ namespace ThoughtWorks.CruiseControl.CCTray
 
 		private static string GetSettingsFilename(string[] args)
 		{
-			if (args.Length == 1) return args[0];		// use settings file specified on command line
+			if (args.Length == 1) return args[0]; // use settings file specified on command line
 
 			string oldFashionedSettingsFilename = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "settings.xml");
 			string newSettingsFilename = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "cctray-settings.xml");
@@ -68,6 +69,5 @@ namespace ThoughtWorks.CruiseControl.CCTray
 
 			return newSettingsFilename;
 		}
-
 	}
 }

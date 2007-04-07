@@ -107,6 +107,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Config
 		class CustomTestProject : ProjectBase, IProject
 		{
 			public IIntegrationResult Integrate(IntegrationRequest request) { return null; }
+			public void NotifyPendingState() {}
+			public void NotifySleepingState() {}
 			public void Purge(bool purgeWorkingDirectory, bool purgeArtifactDirectory, bool purgeSourceControlEnvironment) { }
 
 			public XmlDocument Statistics
@@ -117,6 +119,18 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Config
 			public IIntegrationRepository IntegrationRepository
 			{
 				get { throw new NotImplementedException(); }
+			}
+
+			public string QueueName
+			{
+				get { throw new NotImplementedException(); }
+				set { throw new NotImplementedException(); }
+			}
+
+			public int QueuePriority
+			{
+				get { throw new NotImplementedException(); }
+				set { throw new NotImplementedException(); }
 			}
 
 			public void Initialize() {}

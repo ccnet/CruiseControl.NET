@@ -14,7 +14,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Presentation
 			Icons icons = new Icons();
 			icons.BrokenIcon = string.Empty;
 			icons.BuildingIcon = null;
-			
+
 			ConfigurableProjectStateIconProvider stateIconProvider = new ConfigurableProjectStateIconProvider(icons);
 			Assert.AreSame(ResourceProjectStateIconProvider.RED, stateIconProvider.GetStatusIconForState(ProjectState.Broken));
 			Assert.AreSame(ResourceProjectStateIconProvider.YELLOW, stateIconProvider.GetStatusIconForState(ProjectState.Building));

@@ -27,6 +27,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Presentation
 			mockConfiguration = new DynamicMock(typeof (ICCTrayMultiConfiguration));
 			configuration = (ICCTrayMultiConfiguration) mockConfiguration.MockInstance;
 
+			mockConfiguration.SetupResult("GetServerMonitors", new ISingleServerMonitor[0]);
 			mockConfiguration.SetupResult("GetProjectStatusMonitors", new IProjectMonitor[0]);
 			mockConfiguration.SetupResult("Icons", new Icons());
 
@@ -122,6 +123,49 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Presentation
 		{
 			Assert.IsNull(controller.SelectedProject);
 			controller.VolunteerToFixBuild();
+			mockProjectMonitor.Verify();
+		}
+		
+		[Test]
+		public void CanCancelPendingIfBuildIsPending()
+		{
+			mockProjectMonitor.ExpectAndReturn("IsPending", true);
+			controller.SelectedProject = projectMonitor;
+			Assert.IsTrue(controller.CanCancelPending());
+			mockProjectMonitor.Verify();
+		}
+
+		[Test]
+		public void CannotCancelPendingIfBuildIsNotPending()
+		{
+			mockProjectMonitor.ExpectAndReturn("IsPending", false);
+			controller.SelectedProject = projectMonitor;
+			Assert.IsFalse(controller.CanCancelPending());
+			mockProjectMonitor.Verify();
+		}
+
+		[Test]
+		public void CannotCancelPendingIfNoProjectIsSelected()
+		{
+			Assert.IsNull(controller.SelectedProject);
+			Assert.IsFalse(controller.CanCancelPending());
+			mockProjectMonitor.Verify();
+		}
+
+		[Test]
+		public void CancelPendingShouldInvokeServer()
+		{
+			controller.SelectedProject = projectMonitor;
+			mockProjectMonitor.Expect("CancelPending");
+			controller.CancelPending();
+			mockProjectMonitor.Verify();
+		}
+
+		[Test]
+		public void CancelPendingShouldDoNothingIfNoProjectIsSelected()
+		{
+			Assert.IsNull(controller.SelectedProject);
+			controller.CancelPending();
 			mockProjectMonitor.Verify();
 		}
 	}

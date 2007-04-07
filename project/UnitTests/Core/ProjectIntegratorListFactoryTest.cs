@@ -1,5 +1,6 @@
 using NUnit.Framework;
 using ThoughtWorks.CruiseControl.Core;
+using ThoughtWorks.CruiseControl.Core.Queues;
 
 namespace ThoughtWorks.CruiseControl.UnitTests.Core
 {
@@ -19,7 +20,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 			projectList.Add(project2);
 
 			// Execute
-			IProjectIntegratorList integrators = new ProjectIntegratorListFactory().CreateProjectIntegrators(projectList);
+			IntegrationQueueSet integrationQueues = new IntegrationQueueSet();
+			IProjectIntegratorList integrators = new ProjectIntegratorListFactory().CreateProjectIntegrators(projectList, integrationQueues);
 
 			// Verify
 			Assert.AreEqual(2, integrators.Count);

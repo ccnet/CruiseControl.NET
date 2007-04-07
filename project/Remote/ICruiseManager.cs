@@ -24,6 +24,16 @@ namespace ThoughtWorks.CruiseControl.Remote
 		void WaitForExit(string projectName);
 
 		/// <summary>
+		/// Cancel a pending project integration request from the integration queue.
+		/// </summary>
+		void CancelPendingRequest(string projectName);
+
+		/// <summary>
+		/// Returns a snapshot of the integration queue status.
+		/// </summary>
+		IntegrationQueueSnapshot GetIntegrationQueueSnapshot();
+
+		/// <summary>
 		/// Returns the name of the most recent build for the specified project
 		/// </summary>
 		string GetLatestBuildName(string projectName);

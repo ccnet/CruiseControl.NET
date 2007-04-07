@@ -32,6 +32,11 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
 			throw new NotImplementedException();
 		}
 
+		public void CancelPending()
+		{
+			throw new NotImplementedException();
+		}
+
 		public string SummaryStatusString
 		{
 			get
@@ -94,6 +99,11 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
 			}
 		}
 
+		public void OnPollStarting()
+		{
+			// No initialisation required.
+		}
+
 		public ProjectState ProjectState
 		{
 			get
@@ -123,6 +133,11 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
 
 				return worstStatus;
 			}
+		}
+
+		public bool IsPending
+		{
+			get { return false; }
 		}
 
 		private IntegrationStatus WorstStatusOf(IntegrationStatus status1, IntegrationStatus status2)

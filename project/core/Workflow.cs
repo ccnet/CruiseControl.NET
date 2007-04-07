@@ -56,6 +56,16 @@ namespace ThoughtWorks.CruiseControl.Core
 			return _currentIntegrationResult;
 		}
 
+		public void NotifyPendingState()
+		{
+			throw new NotImplementedException();
+		}
+
+		public void NotifySleepingState()
+		{
+			throw new NotImplementedException();
+		}
+
 		private void RunTask(ITask task)
 		{
 			task.Run(_currentIntegrationResult);
@@ -79,6 +89,18 @@ namespace ThoughtWorks.CruiseControl.Core
 		public IIntegrationRepository IntegrationRepository
 		{
 			get { throw new NotImplementedException(); }
+		}
+
+		public string QueueName
+		{
+			get { throw new NotImplementedException(); }
+			set { throw new NotImplementedException(); }
+		}
+
+		public int QueuePriority
+		{
+			get { throw new NotImplementedException(); }
+			set { throw new NotImplementedException(); }
 		}
 
 		public void Initialize()

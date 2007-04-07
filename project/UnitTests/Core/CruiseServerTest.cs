@@ -4,6 +4,7 @@ using NMock;
 using NUnit.Framework;
 using ThoughtWorks.CruiseControl.Core;
 using ThoughtWorks.CruiseControl.Core.Config;
+using ThoughtWorks.CruiseControl.Core.Queues;
 using ThoughtWorks.CruiseControl.Remote;
 
 namespace ThoughtWorks.CruiseControl.UnitTests.Core
@@ -27,6 +28,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 		private IMock mockProject;
 		private IProject mockProjectInstance;
 		
+		private IIntegrationQueue integrationQueue;
+
 		private IProjectIntegrator integrator1;
 		private IProjectIntegrator integrator2;
 		private IProjectIntegrator integrator3;
@@ -49,6 +52,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 			integratorMock2.SetupResult("Name", "Project 2");
 			integratorMock3.SetupResult("Name", "Project 3");
 
+			integrationQueue = null; // We have no way of injecting currently.
+
 			configuration = new Configuration();
 			project1 = new Project();
 			project1.Name = "Project 1";
@@ -57,6 +62,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 			project2.Name = "Project 2";
 
 			mockProject = new DynamicMock(typeof(IProject));
+			mockProject.ExpectAndReturn("Name", "Project 3");
+			mockProject.ExpectAndReturn("QueueName", "Project 3");
 			mockProjectInstance = (IProject) mockProject.MockInstance;
 			mockProject.ExpectAndReturn("Name", "Project 3");
 			integratorMock3.ExpectAndReturn("Project", mockProjectInstance);
@@ -74,7 +81,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 			configServiceMock.ExpectAndReturn("Load", configuration);
 
 			projectIntegratorListFactoryMock = new DynamicMock(typeof (IProjectIntegratorListFactory));
-			projectIntegratorListFactoryMock.ExpectAndReturn("CreateProjectIntegrators", integratorList, configuration.Projects);
+			projectIntegratorListFactoryMock.ExpectAndReturn("CreateProjectIntegrators", integratorList, configuration.Projects, integrationQueue);
 
 			server = new CruiseServer((IConfigurationService) configServiceMock.MockInstance,
 			                          (IProjectIntegratorListFactory) projectIntegratorListFactoryMock.MockInstance,
@@ -168,7 +175,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 			integratorList = new ProjectIntegratorList();
 			integratorList.Add(integrator1);
 			configServiceMock.ExpectAndReturn("Load", configuration);
-			projectIntegratorListFactoryMock.ExpectAndReturn("CreateProjectIntegrators", integratorList, configuration.Projects);
+			projectIntegratorListFactoryMock.ExpectAndReturn("CreateProjectIntegrators", integratorList, configuration.Projects, integrationQueue);
 
 			integratorMock1.Expect("Start");
 			integratorMock2.ExpectNoCall("Start");
@@ -306,6 +313,20 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 			server.Request("Project 2", request);
 			integratorMock1.Verify();
 			integratorMock2.Verify();
+		}
+
+		[Test]
+		public void GetIntegrationQueueSnapshot()
+		{
+			integratorMock1.Expect("Start");
+			integratorMock2.Expect("Start");
+
+			server.Start();
+
+			IntegrationQueueSnapshot snapshot = server.GetIntegrationQueueSnapshot();
+			Assert.IsNotNull(snapshot);
+
+			VerifyAll();
 		}
 	}
 }

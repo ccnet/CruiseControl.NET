@@ -221,7 +221,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Monitoring
 
 			mockProjectManager.ExpectAndReturn("ProjectStatus", CreateProjectStatus(IntegrationStatus.Success, ProjectActivity.Building));
 			monitor.Poll();
-			Assert.AreEqual(ProjectState.Building, monitor.ProjectState);			
+			Assert.AreEqual(ProjectState.Building, monitor.ProjectState);
 
 			mockProjectManager.ExpectAndReturn("ProjectStatus", CreateProjectStatus(IntegrationStatus.Success, ProjectActivity.Building));
 			monitor.Poll();
@@ -333,6 +333,14 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Monitoring
 			monitor.Poll();
 			monitor.Poll();
 			Assert.AreEqual(actualMessage, expectedMessage);
+		}
+
+		[Test]
+		public void InvokeServerWhenCancelPendingRequest()
+		{
+			mockProjectManager.Expect("CancelPendingRequest");
+			monitor.CancelPending();
+			mockProjectManager.Verify();
 		}
 
 		private void OnMessageReceived(Message message)

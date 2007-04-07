@@ -8,7 +8,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.UnitTestUtils
 	public class LatchMock : DynamicMock
 	{
 		private ManualResetEvent latch = new ManualResetEvent(false);
-		private ArrayList methods = new ArrayList();
+		private ArrayList signalMethods = new ArrayList();
 		private VerifyException ex;
 
 		public LatchMock(Type type) : base(type)
@@ -17,25 +17,25 @@ namespace ThoughtWorks.CruiseControl.UnitTests.UnitTestUtils
 		public void SetupResultAndSignal(string methodName, object returnVal, params Type[] argTypes)
 		{
 			base.SetupResult(methodName, returnVal, argTypes);
-			methods.Add(methodName);
+			signalMethods.Add(methodName);
 		}
 
 		public void ExpectAndSignal(string methodName, params object[] args)
 		{
 			base.Expect(methodName, args);
-			methods.Add(methodName);
+			signalMethods.Add(methodName);
 		}
 
 		public void ExpectAndReturnAndSignal(string methodName, object result, params object[] args)
 		{
 			base.ExpectAndReturn(methodName, result, args);
-			methods.Add(methodName);
+			signalMethods.Add(methodName);
 		}
 
 		public void ExpectAndThrowAndSignal(string methodName, Exception e, params object[] args)
 		{
 			base.ExpectAndThrow(methodName, e, args);
-			methods.Add(methodName);
+			signalMethods.Add(methodName);
 		}
 
 		public override object Invoke(string methodName, params object[] args)
@@ -51,7 +51,10 @@ namespace ThoughtWorks.CruiseControl.UnitTests.UnitTestUtils
 			}
 			finally
 			{
-				if (methods.Contains(methodName)) latch.Set();
+				if (signalMethods.Contains(methodName))
+				{
+					latch.Set();
+				}
 			}
 		}
 

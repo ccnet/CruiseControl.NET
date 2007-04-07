@@ -45,6 +45,11 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Presentation
 			set { integrationStatus = value; }
 		}
 
+		public bool IsPending
+		{
+			get { return ProjectStatus.Activity.IsPending(); }
+		}
+
 		public bool IsConnected
 		{
 			get { return ProjectStatus != null; }
@@ -97,6 +102,12 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Presentation
 				Polled(this, args);
 		}
 
+		public void OnMessageReceived( Message message )
+		{
+			if (MessageReceived != null)
+				MessageReceived( message );
+		}
+
 		public event MonitorBuildOccurredEventHandler BuildOccurred;
 		public event MonitorPolledEventHandler Polled;
 		public event MessageEventHandler MessageReceived;
@@ -106,12 +117,22 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Presentation
 			OnPolled(new MonitorPolledEventArgs(this));
 		}
 
+		public void OnPollStarting()
+		{
+			// No implementation.
+		}
+
 		public void ForceBuild()
 		{
 			throw new NotImplementedException();
 		}
 
 		public void FixBuild()
+		{
+			throw new NotImplementedException();
+		}
+
+		public void CancelPending()
 		{
 			throw new NotImplementedException();
 		}

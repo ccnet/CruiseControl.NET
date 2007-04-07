@@ -187,13 +187,29 @@
                     BuildAction = "EmbeddedResource"
                 />
                 <File
+                    RelPath = "Queue.ico"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
                     RelPath = "Red.ico"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "ServerHttp.ico"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "ServerRemoting.ico"
                     BuildAction = "EmbeddedResource"
                 />
                 <File
                     RelPath = "StatusIcon.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Stopwatch.ico"
+                    BuildAction = "EmbeddedResource"
                 />
                 <File
                     RelPath = "Yellow.ico"
@@ -270,6 +286,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Monitoring\AggregatingServerMonitor.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Monitoring\BuildDurationTracker.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -285,12 +306,22 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Monitoring\CruiseServerManagerFactory.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Monitoring\DashboardXmlParser.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
                     RelPath = "Monitoring\HttpCruiseProjectManager.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Monitoring\HttpCruiseServerManager.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -320,7 +351,22 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Monitoring\ICruiseServerManager.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Monitoring\ICruiseServerManagerFactory.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Monitoring\IDashboardXmlParser.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Monitoring\IntegrationQueueNodeType.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -335,7 +381,17 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Monitoring\IServerMonitor.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Monitoring\ISingleProjectDetail.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Monitoring\ISingleServerMonitor.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -351,6 +407,16 @@
                 />
                 <File
                     RelPath = "Monitoring\MonitorPolledEventArgs.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Monitoring\MonitorServerPolledEventArgs.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Monitoring\MonitorServerQueueChangedEventArgs.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -380,7 +446,17 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Monitoring\RemotingCruiseServerManager.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Monitoring\RemotingProjectListRetriever.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Monitoring\ServerMonitor.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -465,6 +541,21 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Presentation\IIntegrationQueueIconProvider.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Presentation\IntegrationQueueTreeNodeAdaptor.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Presentation\IntegrationQueueTreeNodeTag.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Presentation\IProjectStateIconProvider.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -525,6 +616,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Presentation\ResourceIntegrationQueueIconProvider.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Presentation\ResourceProjectStateIconProvider.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -536,6 +632,11 @@
                 />
                 <File
                     RelPath = "Presentation\SynchronizedProjectMonitor.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Presentation\SynchronizedServerMonitor.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

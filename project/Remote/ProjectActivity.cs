@@ -26,6 +26,11 @@ namespace ThoughtWorks.CruiseControl.Remote
 			return type == Sleeping.type;
 		}
 
+		public bool IsPending()
+		{
+			return type == Pending.type;
+		}
+
 		public override bool Equals(object obj)
 		{
 			ProjectActivity other = obj as ProjectActivity;
@@ -68,5 +73,10 @@ namespace ThoughtWorks.CruiseControl.Remote
 		/// for this project.
 		/// </summary>
 		public static ProjectActivity Sleeping = new ProjectActivity("Sleeping");
+
+		/// <summary>
+		/// CruiseControl.NET is queuing a pending build integration request for this project.
+		/// </summary>
+		public static ProjectActivity Pending = new ProjectActivity("Pending");
 	}
 }

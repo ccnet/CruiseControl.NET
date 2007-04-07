@@ -15,6 +15,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Presentation
 			Assert.AreEqual(ResourceProjectStateIconProvider.YELLOW, stateIconProvider.GetStatusIconForState(ProjectState.Building));
 			Assert.AreEqual(ResourceProjectStateIconProvider.GRAY, stateIconProvider.GetStatusIconForState(ProjectState.NotConnected));
 			Assert.AreEqual(ResourceProjectStateIconProvider.GREEN, stateIconProvider.GetStatusIconForState(ProjectState.Success));
+			Assert.AreEqual(ResourceProjectStateIconProvider.ORANGE, stateIconProvider.GetStatusIconForState(ProjectState.BrokenAndBuilding));
 		}
 	}
 

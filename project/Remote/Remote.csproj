@@ -1,7 +1,7 @@
 <VisualStudioProject>
     <CSHARP
         ProjectType = "Local"
-        ProductVersion = "7.10.3077"
+        ProductVersion = "7.10.6030"
         SchemaVersion = "2.0"
         ProjectGuid = "{E820CF3B-8C5A-4002-BC16-B7818D3D54A8}"
     >
@@ -155,6 +155,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "IntegrationQueueSnapshot.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "IntegrationRequest.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -176,6 +181,16 @@
                 />
                 <File
                     RelPath = "Message.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "NamedQueueSnapshot.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "NamedQueueSnapshotList.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -205,6 +220,16 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "QueuedItemSnapshot.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "QueuedItemSnapshotList.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "RemoteCruiseManagerFactory.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -223,4 +248,5 @@
         </Files>
     </CSHARP>
 </VisualStudioProject>
+
 

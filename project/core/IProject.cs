@@ -70,6 +70,19 @@ namespace ThoughtWorks.CruiseControl.Core
 
 		IIntegrationRepository IntegrationRepository { get; }
 
+		/// <summary>
+		/// Gets or sets the build queue this project will be added to when a start of the build is triggered.
+		/// If no queue name specified, uses the project name.
+		/// </summary>
+		string QueueName { get; set; }
+
+		/// <summary>
+		/// Gets or sets the optional queue priority for when multiple projects share a queue. 
+		/// A priority of zero (default) indicates a FIFO queue.
+		/// An item with priority 1 will be inserted before an item of priority 2.
+		/// </summary>
+		int QueuePriority { get; }
+		
 		void Initialize();
 		
 		ProjectStatus CreateProjectStatus(IProjectIntegrator integrator);

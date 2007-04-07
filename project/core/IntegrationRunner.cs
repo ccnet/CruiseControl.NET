@@ -39,6 +39,22 @@ namespace ThoughtWorks.CruiseControl.Core
 			return result;
 		}
 
+		/// <summary>
+		/// Notification that project should enter a pending state due to being queued.
+		/// </summary>
+		public void NotifyPendingState()
+		{
+			target.Activity = ProjectActivity.Pending;
+		}
+
+		/// <summary>
+		/// Notification of last project exiting the integration queue and hence can return to sleeping state.
+		/// </summary>
+		public void NotifySleepingState()
+		{
+			target.Activity = ProjectActivity.Sleeping;
+		}
+
 		private Modification[] GetModifications(IIntegrationResult from, IIntegrationResult to)
 		{
 			target.Activity = ProjectActivity.CheckingModifications;

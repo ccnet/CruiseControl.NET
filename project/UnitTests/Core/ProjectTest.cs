@@ -7,6 +7,7 @@ using NMock;
 using NMock.Constraints;
 using NUnit.Framework;
 using ThoughtWorks.CruiseControl.Core;
+using ThoughtWorks.CruiseControl.Core.Queues;
 using ThoughtWorks.CruiseControl.Core.Label;
 using ThoughtWorks.CruiseControl.Core.Publishers;
 using ThoughtWorks.CruiseControl.Core.Sourcecontrol;
@@ -33,6 +34,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 		private string artifactDirPath;
 		private const string ProjectName = "test";
 		private Mockery mockery;
+		private IntegrationQueue queue;
 
 		[SetUp]
 		public void SetUp()
@@ -41,7 +43,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 			artifactDirPath = TempFileUtil.CreateTempDir("artifactDir");
 			Assert.IsTrue(Directory.Exists(workingDirPath));
 			Assert.IsTrue(Directory.Exists(artifactDirPath));
-
+			queue = new IntegrationQueue(new IntegrationQueueSet());
 			mockery = new Mockery();
 			mockSourceControl = mockery.NewStrictMock(typeof (ISourceControl));
 			mockStateManager = mockery.NewStrictMock(typeof (IStateManager));
@@ -86,7 +88,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 		public void LoadFullySpecifiedProjectFromConfiguration()
 		{
 			string xml = @"
-<project name=""foo"" webURL=""http://localhost/ccnet"" modificationDelaySeconds=""60"" category=""category1"">
+<project name=""foo"" webURL=""http://localhost/ccnet"" modificationDelaySeconds=""60"" category=""category1"" queue=""queueName1"" queuePriority=""1"">
 	<workingDirectory>c:\my\working\directory</workingDirectory>
 	<sourcecontrol type=""filesystem"">
 		<repositoryRoot>C:\</repositoryRoot>
@@ -116,6 +118,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 			Assert.AreEqual("foo", project.Name);
 			Assert.AreEqual("http://localhost/ccnet", project.WebURL);
 			Assert.AreEqual("category1", project.Category);
+			Assert.AreEqual("queueName1", project.QueueName);
+			Assert.AreEqual(1, project.QueuePriority);
 			Assert.AreEqual(60, project.ModificationDelaySeconds);
 			Assert.IsTrue(project.SourceControl is FileSourceControl);
 			Assert.IsTrue(project.Labeller is DefaultLabeller);
@@ -387,7 +391,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 			AssertFalse("unexpected modifications were returned", result.HasModifications());
 			AssertEqualArrays(new Modification[0], result.Modifications);
 			Assert.AreEqual(string.Empty, result.TaskOutput, "no output is expected as builder is not called");
-//			Assert.IsTrue(result.EndTime >= result.StartTime);
+			//			Assert.IsTrue(result.EndTime >= result.StartTime);
 			VerifyAll();
 		}
 
@@ -521,7 +525,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 
 			Message message = new Message("foo");
 			project.AddMessage(message);
-			ProjectStatus status = project.CreateProjectStatus(new ProjectIntegrator(project));
+			ProjectStatus status = project.CreateProjectStatus(new ProjectIntegrator(project, queue));
 			Assert.AreEqual(message, status.Messages[0]);
 		}
 
@@ -534,7 +538,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 
 			project.AddMessage(new Message("foo"));
 			project.PublishResults(IntegrationResultMother.CreateSuccessful());
-			ProjectStatus status = project.CreateProjectStatus(new ProjectIntegrator(project));			
+			ProjectStatus status = project.CreateProjectStatus(new ProjectIntegrator(project, queue));			
 			Assert.AreEqual(0, status.Messages.Length);
 		}
 	
@@ -547,7 +551,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 
 			project.AddMessage(new Message("foo"));
 			project.PublishResults(IntegrationResultMother.CreateFailed());
-			ProjectStatus status = project.CreateProjectStatus(new ProjectIntegrator(project));			
+			ProjectStatus status = project.CreateProjectStatus(new ProjectIntegrator(project, queue));			
 			Assert.AreEqual(1, status.Messages.Length);
 		}
 		

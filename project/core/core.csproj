@@ -1,7 +1,7 @@
 <VisualStudioProject>
     <CSHARP
         ProjectType = "Local"
-        ProductVersion = "7.10.3077"
+        ProductVersion = "7.10.6030"
         SchemaVersion = "2.0"
         ProjectGuid = "{F8113DB9-6C47-4FD1-8A01-655FCF151747}"
     >
@@ -216,6 +216,11 @@
                 />
                 <File
                     RelPath = "IIntegrationRunnerTarget.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "IntegrationQueueManager.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -617,6 +622,36 @@
                     RelPath = "publishers\xsl\unittests.xsl"
                     Link = "..\xsl\unittests.xsl"
                     BuildAction = "Content"
+                />
+                <File
+                    RelPath = "Queues\IIntegrationQueue.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Queues\IIntegrationQueueItem.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Queues\IIntegrationQueueNotifier.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Queues\IntegrationQueue.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Queues\IntegrationQueueItem.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Queues\IntegrationQueueSet.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
                 />
                 <File
                     RelPath = "Reporting\Dashboard\Navigation\AbsolutePathUrlBuilderDecorator.cs"

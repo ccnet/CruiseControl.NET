@@ -1,9 +1,12 @@
 using System;
 using System.Collections;
 using System.ComponentModel;
+using System.Drawing;
 using System.Windows.Forms;
 using ThoughtWorks.CruiseControl.CCTrayLib.Configuration;
 using ThoughtWorks.CruiseControl.CCTrayLib.Monitoring;
+using ThoughtWorks.CruiseControl.Remote;
+using Message=System.Windows.Forms.Message;
 
 namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 {
@@ -25,7 +28,6 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 		private MenuItem mnuViewList;
 		private MenuItem mnuViewDetails;
 		private ImageList largeIconList;
-		private Panel panel1;
 		private Button btnForceBuild;
 		private ColumnHeader colLastBuildLabel;
 		private ColumnHeader colActivity;
@@ -44,6 +46,15 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 		private ColumnHeader colLastBuildTime;
 		private bool systemShutdownInProgress;
 		private MenuItem mnuFixBuild;
+		private System.Windows.Forms.MenuItem mnuCancelPending;
+		private System.Windows.Forms.Splitter splitterQueueView;
+		private System.Windows.Forms.Button btnToggleQueueView;
+		private System.Windows.Forms.Panel pnlButtons;
+		private System.Windows.Forms.Panel pnlViewQueues;
+		private System.Windows.Forms.TreeView queueTreeView;
+		private System.Windows.Forms.ContextMenu queueContextMenu;
+		private System.Windows.Forms.ImageList queueIconList;
+		private System.Windows.Forms.MenuItem mnuQueueCancelPending;
 		private PersistWindowState windowState;
 		private ICache httpCache;
 
@@ -54,9 +65,6 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 
 			InitializeComponent();
 			HookPersistentWindowState();
-			CreateController(httpCache);
-
-			controller.StartMonitoring();
 		}
 
 		private void HookPersistentWindowState()
@@ -77,6 +85,11 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 			colDetail.Width = (int) e.Key.GetValue("DetailColumnWidth", 250);
 			colLastBuildLabel.Width = (int) e.Key.GetValue("LastBuildLabelColumnWidth", 120);
 			colLastBuildTime.Width = (int) e.Key.GetValue("LastBuildTimeColumnWidth", 130);
+			bool isQueueViewPanelVisible = bool.Parse(e.Key.GetValue("QueueViewPanelVisible", bool.FalseString).ToString());
+			splitterQueueView.Visible = isQueueViewPanelVisible;
+			pnlViewQueues.Visible = isQueueViewPanelVisible;
+			UpdateViewQueuesButtonLabel();
+			splitterQueueView.SplitPosition = (int) e.Key.GetValue("QueueViewSplitterPosition", 80);
 		}
 
 		private void OnSaveState(object sender, WindowStateEventArgs e)
@@ -87,6 +100,8 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 			e.Key.SetValue("DetailColumnWidth", colDetail.Width);
 			e.Key.SetValue("LastBuildLabelColumnWidth", colLastBuildLabel.Width);
 			e.Key.SetValue("LastBuildTimeColumnWidth", colLastBuildTime.Width);
+			e.Key.SetValue("QueueViewPanelVisible", queueTreeView.Visible);
+			e.Key.SetValue("QueueViewSplitterPosition", splitterQueueView.SplitPosition);
 		}
 
 		private void CreateController(ICache httpCache)
@@ -99,9 +114,30 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 			controller.PopulateImageList(largeIconList);
 			controller.BindToTrayIcon(trayIcon);
 			controller.BindToListView(lvProjects);
+			controller.PopulateQueueImageList(queueIconList);
+			if (queueTreeView.Visible)
+			{
+				controller.BindToQueueTreeView(queueTreeView);
+			}
 
 			btnForceBuild.DataBindings.Add("Enabled", controller, "IsProjectSelected");
 		}
+
+		protected override void OnLoad(EventArgs e)
+		{
+			base.OnLoad (e);
+			if (!this.DesignMode)
+			{
+				// We can only populate the TreeView in the OnLoad event or else you get a horizontal scrollbar
+				// appearing - a known bug in .Net 1.1 TreeView (control must be visible when you populate it). 
+				// To keep related code together in CreateController() have moved here from constructor.
+				CreateController(httpCache);
+
+				controller.StartProjectMonitoring();
+				StartServerMonitoringIfQueuesDisplayed();
+			}
+		}
+
 
 		/// <summary>
 		/// Clean up any resources being used.
@@ -127,7 +163,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 		private void InitializeComponent()
 		{
 			this.components = new System.ComponentModel.Container();
-			System.Resources.ResourceManager resources = new System.Resources.ResourceManager(typeof (MainForm));
+			System.Resources.ResourceManager resources = new System.Resources.ResourceManager(typeof(MainForm));
 			this.lvProjects = new System.Windows.Forms.ListView();
 			this.colProject = new System.Windows.Forms.ColumnHeader();
 			this.colActivity = new System.Windows.Forms.ColumnHeader();
@@ -137,6 +173,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 			this.projectContextMenu = new System.Windows.Forms.ContextMenu();
 			this.mnuForce = new System.Windows.Forms.MenuItem();
 			this.mnuWebPage = new System.Windows.Forms.MenuItem();
+			this.mnuCancelPending = new System.Windows.Forms.MenuItem();
 			this.mnuFixBuild = new System.Windows.Forms.MenuItem();
 			this.largeIconList = new System.Windows.Forms.ImageList(this.components);
 			this.iconList = new System.Windows.Forms.ImageList(this.components);
@@ -155,30 +192,36 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 			this.mnuShow = new System.Windows.Forms.MenuItem();
 			this.menuItem5 = new System.Windows.Forms.MenuItem();
 			this.mnuTrayExit = new System.Windows.Forms.MenuItem();
-			this.panel1 = new System.Windows.Forms.Panel();
+			this.pnlButtons = new System.Windows.Forms.Panel();
+			this.btnToggleQueueView = new System.Windows.Forms.Button();
 			this.btnForceBuild = new System.Windows.Forms.Button();
-			this.panel1.SuspendLayout();
+			this.splitterQueueView = new System.Windows.Forms.Splitter();
+			this.pnlViewQueues = new System.Windows.Forms.Panel();
+			this.queueTreeView = new System.Windows.Forms.TreeView();
+			this.queueIconList = new System.Windows.Forms.ImageList(this.components);
+			this.queueContextMenu = new System.Windows.Forms.ContextMenu();
+			this.mnuQueueCancelPending = new System.Windows.Forms.MenuItem();
+			this.pnlButtons.SuspendLayout();
+			this.pnlViewQueues.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// lvProjects
 			// 
-			this.lvProjects.Columns.AddRange(new System.Windows.Forms.ColumnHeader[]
-			                                 	{
-			                                 		this.colProject,
-			                                 		this.colActivity,
-			                                 		this.colDetail,
-			                                 		this.colLastBuildLabel,
-			                                 		this.colLastBuildTime
-			                                 	});
+			this.lvProjects.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
+																						 this.colProject,
+																						 this.colActivity,
+																						 this.colDetail,
+																						 this.colLastBuildLabel,
+																						 this.colLastBuildTime});
 			this.lvProjects.ContextMenu = this.projectContextMenu;
 			this.lvProjects.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.lvProjects.FullRowSelect = true;
 			this.lvProjects.HideSelection = false;
 			this.lvProjects.LargeImageList = this.largeIconList;
-			this.lvProjects.Location = new System.Drawing.Point(0, 0);
+			this.lvProjects.Location = new System.Drawing.Point(203, 0);
 			this.lvProjects.MultiSelect = false;
 			this.lvProjects.Name = "lvProjects";
-			this.lvProjects.Size = new System.Drawing.Size(892, 260);
+			this.lvProjects.Size = new System.Drawing.Size(689, 260);
 			this.lvProjects.SmallImageList = this.iconList;
 			this.lvProjects.TabIndex = 0;
 			this.lvProjects.View = System.Windows.Forms.View.Details;
@@ -213,14 +256,12 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 			// 
 			// projectContextMenu
 			// 
-			this.projectContextMenu.MenuItems.AddRange(new System.Windows.Forms.MenuItem[]
-			                                           	{
-			                                           		this.mnuForce,
-			                                           		this.mnuWebPage,
-			                                           		this.mnuFixBuild
-			                                           	});
+			this.projectContextMenu.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
+																							   this.mnuForce,
+																							   this.mnuWebPage,
+																							   this.mnuCancelPending,
+																							   this.mnuFixBuild});
 			this.projectContextMenu.Popup += new System.EventHandler(this.projectContextMenu_Popup);
-			
 			// 
 			// mnuForce
 			// 
@@ -234,9 +275,15 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 			this.mnuWebPage.Text = "Display &Web Page";
 			this.mnuWebPage.Click += new System.EventHandler(this.mnuWebPage_Click);
 			// 
+			// mnuCancelPending
+			// 
+			this.mnuCancelPending.Index = 2;
+			this.mnuCancelPending.Text = "&Cancel Pending";
+			this.mnuCancelPending.Click += new System.EventHandler(this.mnuCancelPending_Click);
+			// 
 			// mnuFixBuild
 			// 
-			this.mnuFixBuild.Index = 2;
+			this.mnuFixBuild.Index = 3;
 			this.mnuFixBuild.Text = "&Volunteer to Fix Build";
 			this.mnuFixBuild.Click += new System.EventHandler(this.mnuFixBuild_Click);
 			// 
@@ -252,21 +299,17 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 			// 
 			// mainMenu
 			// 
-			this.mainMenu.MenuItems.AddRange(new System.Windows.Forms.MenuItem[]
-			                                 	{
-			                                 		this.menuFile,
-			                                 		this.mnuView
-			                                 	});
+			this.mainMenu.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
+																					 this.menuFile,
+																					 this.mnuView});
 			// 
 			// menuFile
 			// 
 			this.menuFile.Index = 0;
-			this.menuFile.MenuItems.AddRange(new System.Windows.Forms.MenuItem[]
-			                                 	{
-			                                 		this.mnuFilePreferences,
-			                                 		this.menuItem3,
-			                                 		this.menuFileExit
-			                                 	});
+			this.menuFile.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
+																					 this.mnuFilePreferences,
+																					 this.menuItem3,
+																					 this.menuFileExit});
 			this.menuFile.Text = "&File";
 			// 
 			// mnuFilePreferences
@@ -289,12 +332,10 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 			// mnuView
 			// 
 			this.mnuView.Index = 1;
-			this.mnuView.MenuItems.AddRange(new System.Windows.Forms.MenuItem[]
-			                                	{
-			                                		this.mnuViewIcons,
-			                                		this.mnuViewList,
-			                                		this.mnuViewDetails
-			                                	});
+			this.mnuView.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
+																					this.mnuViewIcons,
+																					this.mnuViewList,
+																					this.mnuViewDetails});
 			this.mnuView.Text = "&View";
 			this.mnuView.Popup += new System.EventHandler(this.mnuView_Popup);
 			// 
@@ -327,13 +368,11 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 			// 
 			// mnuTrayContextMenu
 			// 
-			this.mnuTrayContextMenu.MenuItems.AddRange(new System.Windows.Forms.MenuItem[]
-			                                           	{
-			                                           		this.mnuTraySettings,
-			                                           		this.mnuShow,
-			                                           		this.menuItem5,
-			                                           		this.mnuTrayExit
-			                                           	});
+			this.mnuTrayContextMenu.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
+																							   this.mnuTraySettings,
+																							   this.mnuShow,
+																							   this.menuItem5,
+																							   this.mnuTrayExit});
 			// 
 			// mnuTraySettings
 			// 
@@ -359,15 +398,26 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 			this.mnuTrayExit.Text = "&Exit";
 			this.mnuTrayExit.Click += new System.EventHandler(this.menuFileExit_Click);
 			// 
-			// panel1
+			// pnlButtons
 			// 
-			this.panel1.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-			this.panel1.Controls.Add(this.btnForceBuild);
-			this.panel1.Dock = System.Windows.Forms.DockStyle.Bottom;
-			this.panel1.Location = new System.Drawing.Point(0, 260);
-			this.panel1.Name = "panel1";
-			this.panel1.Size = new System.Drawing.Size(892, 45);
-			this.panel1.TabIndex = 1;
+			this.pnlButtons.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+			this.pnlButtons.Controls.Add(this.btnToggleQueueView);
+			this.pnlButtons.Controls.Add(this.btnForceBuild);
+			this.pnlButtons.Dock = System.Windows.Forms.DockStyle.Bottom;
+			this.pnlButtons.Location = new System.Drawing.Point(0, 260);
+			this.pnlButtons.Name = "pnlButtons";
+			this.pnlButtons.Size = new System.Drawing.Size(892, 45);
+			this.pnlButtons.TabIndex = 1;
+			// 
+			// btnToggleQueueView
+			// 
+			this.btnToggleQueueView.FlatStyle = System.Windows.Forms.FlatStyle.System;
+			this.btnToggleQueueView.Location = new System.Drawing.Point(105, 10);
+			this.btnToggleQueueView.Name = "btnToggleQueueView";
+			this.btnToggleQueueView.Size = new System.Drawing.Size(85, 23);
+			this.btnToggleQueueView.TabIndex = 1;
+			this.btnToggleQueueView.Text = "View &Queues";
+			this.btnToggleQueueView.Click += new System.EventHandler(this.btnToggleQueueView_Click);
 			// 
 			// btnForceBuild
 			// 
@@ -379,13 +429,61 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 			this.btnForceBuild.Text = "Force &Build";
 			this.btnForceBuild.Click += new System.EventHandler(this.btnForceBuild_Click);
 			// 
+			// splitterQueueView
+			// 
+			this.splitterQueueView.Location = new System.Drawing.Point(200, 0);
+			this.splitterQueueView.Name = "splitterQueueView";
+			this.splitterQueueView.Size = new System.Drawing.Size(3, 260);
+			this.splitterQueueView.TabIndex = 3;
+			this.splitterQueueView.TabStop = false;
+			this.splitterQueueView.Visible = false;
+			// 
+			// pnlViewQueues
+			// 
+			this.pnlViewQueues.Controls.Add(this.queueTreeView);
+			this.pnlViewQueues.Dock = System.Windows.Forms.DockStyle.Left;
+			this.pnlViewQueues.Location = new System.Drawing.Point(0, 0);
+			this.pnlViewQueues.Name = "pnlViewQueues";
+			this.pnlViewQueues.Size = new System.Drawing.Size(200, 260);
+			this.pnlViewQueues.TabIndex = 4;
+			this.pnlViewQueues.Visible = false;
+			// 
+			// queueTreeView
+			// 
+			this.queueTreeView.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.queueTreeView.ImageList = this.queueIconList;
+			this.queueTreeView.Location = new System.Drawing.Point(0, 0);
+			this.queueTreeView.Name = "queueTreeView";
+			this.queueTreeView.Size = new System.Drawing.Size(200, 260);
+			this.queueTreeView.TabIndex = 2;
+			this.queueTreeView.MouseUp += new System.Windows.Forms.MouseEventHandler(this.queueTreeView_MouseUp);
+			// 
+			// queueIconList
+			// 
+			this.queueIconList.ColorDepth = System.Windows.Forms.ColorDepth.Depth32Bit;
+			this.queueIconList.ImageSize = new System.Drawing.Size(16, 16);
+			this.queueIconList.TransparentColor = System.Drawing.Color.Transparent;
+			// 
+			// queueContextMenu
+			// 
+			this.queueContextMenu.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
+																							 this.mnuQueueCancelPending});
+			// 
+			// mnuQueueCancelPending
+			// 
+			this.mnuQueueCancelPending.Index = 0;
+			this.mnuQueueCancelPending.Text = "&Cancel Pending";
+			this.mnuQueueCancelPending.Click += new System.EventHandler(this.mnuQueueCancelPending_Click);
+			// 
 			// MainForm
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5, 13);
 			this.ClientSize = new System.Drawing.Size(892, 305);
 			this.Controls.Add(this.lvProjects);
-			this.Controls.Add(this.panel1);
-			this.Icon = ((System.Drawing.Icon) (resources.GetObject("$this.Icon")));
+			this.Controls.Add(this.splitterQueueView);
+			this.Controls.Add(this.pnlViewQueues);
+			this.Controls.Add(this.pnlButtons);
+			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
 			this.MaximizeBox = false;
 			this.Menu = this.mainMenu;
 			this.MinimizeBox = false;
@@ -394,11 +492,21 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 			this.StartPosition = System.Windows.Forms.FormStartPosition.Manual;
 			this.Text = "CCTray ";
 			this.Closing += new System.ComponentModel.CancelEventHandler(this.MainForm_Closing);
-			this.panel1.ResumeLayout(false);
+			this.pnlButtons.ResumeLayout(false);
+			this.pnlViewQueues.ResumeLayout(false);
 			this.ResumeLayout(false);
+
 		}
 
 		#endregion
+
+		private void StartServerMonitoringIfQueuesDisplayed()
+		{
+			if (queueTreeView.Visible)
+			{
+				controller.StartServerMonitoring();
+			}
+		}
 
 		private void menuFileExit_Click(object sender, EventArgs e)
 		{
@@ -423,6 +531,11 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 		private void mnuForce_Click(object sender, EventArgs e)
 		{
 			controller.ForceBuild();
+		}
+
+		private void mnuCancelPending_Click(object sender, EventArgs e)
+		{
+			controller.CancelPending();
 		}
 
 		private void btnForceBuild_Click(object sender, EventArgs e)
@@ -459,12 +572,14 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 		{
 			mnuForce.Enabled = controller.IsProjectSelected;
 			mnuWebPage.Enabled = controller.IsProjectSelected;
+			mnuCancelPending.Visible = controller.CanCancelPending();
 			mnuFixBuild.Visible = controller.CanFixBuild();
 		}
 		
 		private void mnuFilePreferences_Click(object sender, EventArgs e)
 		{
-			controller.StopMonitoring();
+			controller.StopProjectMonitoring();
+			controller.StopServerMonitoring();
 
 			try
 			{
@@ -474,12 +589,14 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 					lvProjects.Items.Clear();
 					DataBindings.Clear();
 					btnForceBuild.DataBindings.Clear();
+					controller.UnbindToQueueTreeView(queueTreeView);
 					CreateController(httpCache);
 				}
 			}
 			finally
 			{
-				controller.StartMonitoring();
+				controller.StartProjectMonitoring();
+				StartServerMonitoringIfQueuesDisplayed();
 			}
 		}
 
@@ -570,6 +687,58 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 		private void mnuFixBuild_Click(object sender, EventArgs e)
 		{
 			controller.VolunteerToFixBuild();
+		}
+
+		private void btnToggleQueueView_Click(object sender, System.EventArgs e)
+		{
+			bool isQueueViewVisible = !pnlViewQueues.Visible;
+			splitterQueueView.Visible = isQueueViewVisible;
+			pnlViewQueues.Visible = isQueueViewVisible;
+			UpdateViewQueuesButtonLabel();
+
+			if (isQueueViewVisible)
+			{
+				controller.BindToQueueTreeView(queueTreeView);
+				controller.StartServerMonitoring();
+			}
+			else
+			{
+				controller.UnbindToQueueTreeView(queueTreeView);
+				controller.StopServerMonitoring();
+			}
+		}
+
+		private void queueTreeView_MouseUp(object sender, System.Windows.Forms.MouseEventArgs e)
+		{
+			if (e.Button == System.Windows.Forms.MouseButtons.Right)
+			{
+				Point clickPoint = new Point( e.X,e.Y );
+				TreeNode clickNode = queueTreeView.GetNodeAt( clickPoint );
+				if (clickNode != null)
+				{
+					queueTreeView.SelectedNode = clickNode;
+
+					IntegrationQueueTreeNodeTag tag = clickNode.Tag as IntegrationQueueTreeNodeTag;
+					if (tag.IsQueuedItemNode)
+					{
+						mnuQueueCancelPending.Enabled = !tag.IsFirstItemOnQueue;
+						queueContextMenu.Show(queueTreeView, clickPoint);
+					}
+				}
+			}
+		}
+
+		private void mnuQueueCancelPending_Click(object sender, System.EventArgs e)
+		{
+			if (queueTreeView.SelectedNode == null) return;
+			IntegrationQueueTreeNodeTag tag = queueTreeView.SelectedNode.Tag as IntegrationQueueTreeNodeTag;
+			if (tag.QueuedItemSnapshot == null) return;
+			controller.CancelPendingProjectByName(tag.QueuedItemSnapshot.ProjectName);
+		}
+
+		private void UpdateViewQueuesButtonLabel()
+		{
+			btnToggleQueueView.Text = (pnlViewQueues.Visible) ? "&Hide Queues" : "&Show Queues" ;
 		}
 
 		// Implements the manual sorting of items by columns.

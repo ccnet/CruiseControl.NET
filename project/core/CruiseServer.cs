@@ -1,5 +1,4 @@
 using System;
-using System.Collections;
 using System.Reflection;
 using System.Threading;
 using ThoughtWorks.CruiseControl.Core.Config;
@@ -12,34 +11,34 @@ namespace ThoughtWorks.CruiseControl.Core
 	public class CruiseServer : ICruiseServer
 	{
 		private readonly IProjectSerializer projectSerializer;
-		private readonly IProjectIntegratorListFactory projectIntegratorListFactory;
 		private readonly IConfigurationService configurationService;
 		private readonly ICruiseManager manager;
 		private readonly ManualResetEvent monitor = new ManualResetEvent(true);
 
-		private IProjectIntegratorList projectIntegrators;
 		private bool disposed;
+		private IntegrationQueueManager integrationQueueManager;
 
-		public CruiseServer(IConfigurationService configurationService, IProjectIntegratorListFactory projectIntegratorListFactory, IProjectSerializer projectSerializer)
+		public CruiseServer(IConfigurationService configurationService,
+		                    IProjectIntegratorListFactory projectIntegratorListFactory, IProjectSerializer projectSerializer)
 		{
 			this.configurationService = configurationService;
 			this.configurationService.AddConfigurationUpdateHandler(new ConfigurationUpdateHandler(Restart));
-			this.projectIntegratorListFactory = projectIntegratorListFactory;
 			this.projectSerializer = projectSerializer;
 
 			// ToDo - get rid of manager, maybe
 			manager = new CruiseManager(this);
 			InitializeServerThread();
 
-			// By default, no integrators are running
-			CreateIntegrators();
+			IConfiguration configuration = configurationService.Load();
+			// TODO - does this need to go through a factory? GD
+			integrationQueueManager = new IntegrationQueueManager(projectIntegratorListFactory, configuration);
 		}
 
 		public void Start()
 		{
 			Log.Info("Starting CruiseControl.NET Server");
 			monitor.Reset();
-			StartIntegrators();
+			integrationQueueManager.StartAllProjects();
 		}
 
 		/// <summary>
@@ -47,8 +46,7 @@ namespace ThoughtWorks.CruiseControl.Core
 		/// </summary>
 		public void Start(string project)
 		{
-			IProjectIntegrator integrator = GetIntegrator(project);
-			integrator.Start();
+			integrationQueueManager.Start(project);
 		}
 
 		/// <summary>
@@ -57,7 +55,7 @@ namespace ThoughtWorks.CruiseControl.Core
 		public void Stop()
 		{
 			Log.Info("Stopping CruiseControl.NET Server");
-			StopIntegrators();
+			integrationQueueManager.StopAllProjects();
 			monitor.Set();
 		}
 
@@ -66,8 +64,7 @@ namespace ThoughtWorks.CruiseControl.Core
 		/// </summary>
 		public void Stop(string project)
 		{
-			IProjectIntegrator integrator = GetIntegrator(project);
-			integrator.Stop();
+			integrationQueueManager.Stop(project);
 		}
 
 		/// <summary>
@@ -76,7 +73,7 @@ namespace ThoughtWorks.CruiseControl.Core
 		public void Abort()
 		{
 			Log.Info("Aborting CruiseControl.NET Server");
-			AbortIntegrators();
+			integrationQueueManager.Abort();
 			monitor.Set();
 		}
 
@@ -87,9 +84,8 @@ namespace ThoughtWorks.CruiseControl.Core
 		{
 			Log.Info("Configuration changed: Restarting CruiseControl.NET Server ");
 
-			StopIntegrators();
-			CreateIntegrators();
-			StartIntegrators();
+			IConfiguration configuration = configurationService.Load();
+			integrationQueueManager.Restart(configuration);
 		}
 
 		/// <summary>
@@ -100,49 +96,20 @@ namespace ThoughtWorks.CruiseControl.Core
 			monitor.WaitOne();
 		}
 
-		private void StartIntegrators()
+		/// <summary>
+		/// Cancel a pending project integration request from the integration queue.
+		/// </summary>
+		public void CancelPendingRequest(string projectName)
 		{
-			foreach (IProjectIntegrator integrator in projectIntegrators)
-			{
-				integrator.Start();
-			}
+			integrationQueueManager.CancelPendingRequest(projectName);
 		}
 
-		private void CreateIntegrators()
+		/// <summary>
+		/// Returns a snapshot of the integration queue status.
+		/// </summary>
+		public IntegrationQueueSnapshot GetIntegrationQueueSnapshot()
 		{
-			IConfiguration configuration = configurationService.Load();
-			projectIntegrators = projectIntegratorListFactory.CreateProjectIntegrators(configuration.Projects);
-
-			if (projectIntegrators.Count == 0)
-			{
-				Log.Info("No projects found");
-			}
-		}
-
-		private void StopIntegrators()
-		{
-			foreach (IProjectIntegrator integrator in projectIntegrators)
-			{
-				integrator.Stop();
-			}
-			WaitForIntegratorsToExit();
-		}
-
-		private void AbortIntegrators()
-		{
-			foreach (IProjectIntegrator integrator in projectIntegrators)
-			{
-				integrator.Abort();
-			}
-			WaitForIntegratorsToExit();
-		}
-
-		private void WaitForIntegratorsToExit()
-		{
-			foreach (IProjectIntegrator integrator in projectIntegrators)
-			{
-				integrator.WaitForExit();
-			}
+			return integrationQueueManager.GetIntegrationQueueSnapshot();
 		}
 
 		public ICruiseManager CruiseManager
@@ -152,26 +119,24 @@ namespace ThoughtWorks.CruiseControl.Core
 
 		public ProjectStatus[] GetProjectStatus()
 		{
-			ArrayList projectStatusList = new ArrayList();
-			foreach (IProjectIntegrator integrator in projectIntegrators)
-			{
-				IProject project = integrator.Project;
-				projectStatusList.Add(project.CreateProjectStatus(integrator));
-			}
-			return (ProjectStatus[]) projectStatusList.ToArray(typeof (ProjectStatus));
+			return integrationQueueManager.GetProjectStatuses();
 		}
 
 		public void ForceBuild(string projectName)
 		{
-			GetIntegrator(projectName).ForceBuild();
+			integrationQueueManager.ForceBuild(projectName);
 		}
 
 		public void WaitForExit(string projectName)
 		{
-			GetIntegrator(projectName).WaitForExit();
+			integrationQueueManager.WaitForExit(projectName);
 		}
 
-		// TODO - move this out of CruiseServer
+		public void Request(string project, IntegrationRequest request)
+		{
+			integrationQueueManager.Request(project, request);
+		}
+
 		public string GetLatestBuildName(string projectName)
 		{
 			return GetIntegrator(projectName).IntegrationRepository.GetLatestBuildName();
@@ -203,6 +168,7 @@ namespace ThoughtWorks.CruiseControl.Core
 		}
 
 		// ToDo - test
+
 		public void AddProject(string serializedProject)
 		{
 			Log.Info("Adding project - " + serializedProject);
@@ -223,13 +189,16 @@ namespace ThoughtWorks.CruiseControl.Core
 
 		// ToDo - test
 		// ToDo - when we decide how to handle configuration changes, do more here (like stopping/waiting for project, returning asynchronously, etc.)
-		public void DeleteProject(string projectName, bool purgeWorkingDirectory, bool purgeArtifactDirectory, bool purgeSourceControlEnvironment)
+
+		public void DeleteProject(string projectName, bool purgeWorkingDirectory, bool purgeArtifactDirectory,
+		                          bool purgeSourceControlEnvironment)
 		{
 			Log.Info("Deleting project - " + projectName);
 			try
 			{
 				IConfiguration configuration = configurationService.Load();
-				configuration.Projects[projectName].Purge(purgeWorkingDirectory, purgeArtifactDirectory, purgeSourceControlEnvironment);
+				configuration.Projects[projectName].Purge(purgeWorkingDirectory, purgeArtifactDirectory,
+				                                          purgeSourceControlEnvironment);
 				configuration.DeleteProject(projectName);
 				configurationService.Save(configuration);
 			}
@@ -241,6 +210,7 @@ namespace ThoughtWorks.CruiseControl.Core
 		}
 
 		// ToDo - this done TDD
+
 		public string GetProject(string name)
 		{
 			Log.Info("Getting project - " + name);
@@ -263,6 +233,7 @@ namespace ThoughtWorks.CruiseControl.Core
 
 		// ToDo - this done TDD
 		// ToDo - really delete working dir? What if SCM hasn't changed?
+
 		public void UpdateProject(string projectName, string serializedProject)
 		{
 			Log.Info("Updating project - " + projectName);
@@ -285,18 +256,23 @@ namespace ThoughtWorks.CruiseControl.Core
 
 		public ExternalLink[] GetExternalLinks(string projectName)
 		{
-			return GetIntegrator(projectName).Project.ExternalLinks;
+			return LookupProject(projectName).ExternalLinks;
+		}
+
+		private IProject LookupProject(string projectName)
+		{
+			return GetIntegrator(projectName).Project;
 		}
 
 		public void SendMessage(string projectName, Message message)
 		{
 			Log.Info("New message received: " + message);
-			GetIntegrator(projectName).Project.AddMessage(message);
+			LookupProject(projectName).AddMessage(message);
 		}
 
 		public string GetArtifactDirectory(string projectName)
 		{
-			return GetIntegrator(projectName).Project.ArtifactDirectory;
+			return LookupProject(projectName).ArtifactDirectory;
 		}
 
 		public string GetStatisticsDocument(string projectName)
@@ -306,9 +282,7 @@ namespace ThoughtWorks.CruiseControl.Core
 
 		private IProjectIntegrator GetIntegrator(string projectName)
 		{
-			IProjectIntegrator integrator = projectIntegrators[projectName];
-			if (integrator == null) throw new NoSuchProjectException(projectName);
-			return integrator;
+			return integrationQueueManager.GetIntegrator(projectName);
 		}
 
 		void IDisposable.Dispose()
@@ -319,11 +293,6 @@ namespace ThoughtWorks.CruiseControl.Core
 				disposed = true;
 			}
 			Abort();
-		}
-
-		public void Request(string project, IntegrationRequest request)
-		{
-			GetIntegrator(project).Request(request);
 		}
 
 		private static void InitializeServerThread()

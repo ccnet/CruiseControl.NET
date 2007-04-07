@@ -14,6 +14,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
 		IntegrationStatus IntegrationStatus { get; }
 		ISingleProjectDetail Detail { get; }
 		string SummaryStatusString { get; }
+		bool IsPending { get; }
 
 		event MonitorBuildOccurredEventHandler BuildOccurred;
 		event MonitorPolledEventHandler Polled;
@@ -21,5 +22,6 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
 
 		void ForceBuild();
 		void FixBuild();
+		void CancelPending();
 	}
 }

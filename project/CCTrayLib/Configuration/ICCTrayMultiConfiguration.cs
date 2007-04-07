@@ -4,8 +4,11 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Configuration
 {
 	public interface ICCTrayMultiConfiguration
 	{
+		ISingleServerMonitor[] GetServerMonitors();
 		IProjectMonitor[] GetProjectStatusMonitors();
+		ICruiseServerManagerFactory CruiseServerManagerFactory { get; }
 		ICruiseProjectManagerFactory CruiseProjectManagerFactory { get; }
+		BuildServer[] GetUniqueBuildServerList();
 
 		CCTrayProject[] Projects { get; set; }
 		bool ShouldShowBalloonOnBuildTransition { get; set; }

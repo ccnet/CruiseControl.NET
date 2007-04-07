@@ -1,5 +1,6 @@
 using System;
 using System.Threading;
+using ThoughtWorks.CruiseControl.Core.Queues;
 using ThoughtWorks.CruiseControl.Core.Util;
 using ThoughtWorks.CruiseControl.Remote;
 
@@ -15,18 +16,22 @@ namespace ThoughtWorks.CruiseControl.Core
 	///		is called.</item>
 	/// </list>
 	/// </summary>
-	public class ProjectIntegrator : IProjectIntegrator, IDisposable
+	public class ProjectIntegrator : IProjectIntegrator, IDisposable, IIntegrationQueueNotifier
 	{
 		private readonly ITrigger trigger;
 		private readonly IProject project;
+		private readonly IIntegrationQueue integrationQueue;
 		private Thread thread;
 		private ProjectIntegratorState state = ProjectIntegratorState.Stopped;
-		public IntegrationRequest request;
+		private IntegrationRequest integrationRequest;
+		private int queuedProjectCount;
 
-		public ProjectIntegrator(IProject project)
+		public ProjectIntegrator(IProject project, IIntegrationQueue integrationQueue)
 		{
-			this.trigger = project.Triggers;
+			trigger = project.Triggers;
 			this.project = project;
+			this.integrationQueue = integrationQueue;
+			queuedProjectCount = 0;
 		}
 
 		public string Name
@@ -77,14 +82,19 @@ namespace ThoughtWorks.CruiseControl.Core
 		public void ForceBuild()
 		{
 			Log.Info("Force Build for project: " + project.Name);
-			this.request = new IntegrationRequest(BuildCondition.ForceBuild, "intervalTrigger");
+			AddToQueue(new IntegrationRequest(BuildCondition.ForceBuild, "intervalTrigger"));
 			Start();
 		}
 
 		public void Request(IntegrationRequest request)
 		{
-			this.request = request;
+			AddToQueue(request);
 			Start();
+		}
+
+		public void CancelPendingRequest()
+		{
+			integrationQueue.RemovePendingRequest(project);
 		}
 
 		/// <summary>
@@ -119,28 +129,57 @@ namespace ThoughtWorks.CruiseControl.Core
 		{
 			if (ShouldRunIntegration())
 			{
-				IntegrationRequest temp = request;
-				request = null;
 				try
 				{
-					project.Integrate(temp);
+					project.Integrate(integrationRequest);
 				}
 				catch (Exception ex)
 				{
 					Log.Error(ex);
 				}
 				trigger.IntegrationCompleted();
+
+				RemoveCompletedRequestFromQueue();
+			}
+			else
+			{
+				// If a build is queued for this project we need to hang around until either:
+				// - the build gets started by reaching it's turn on the queue
+				// - the build gets cancelled from the queue
+				// - the thread gets killed
+				while (IsRunning && queuedProjectCount > 0 && integrationRequest == null)
+				{
+					Thread.Sleep(200);
+				}
 			}
 		}
 
-		// TODO: threading issues here: request could get overridden by force at this point
 		private bool ShouldRunIntegration()
 		{
-			if (request == null)
+			if (integrationRequest == null)
 			{
-				request = trigger.Fire();
+				IntegrationRequest triggeredRequest = trigger.Fire();
+				if (triggeredRequest != null)
+				{
+					// Add to the queue - if it is able to build straight away
+					// then integrationRequest will get set immediately by the callback.
+					AddToQueue(triggeredRequest);
+				}
 			}
-			return request != null;
+			return integrationRequest != null;
+		}
+
+		private void AddToQueue(IntegrationRequest request)
+		{
+			IIntegrationQueueItem integrationQueueItem = new IntegrationQueueItem(project, request, this);
+			integrationQueue.Enqueue(integrationQueueItem);
+		}
+
+		private void RemoveCompletedRequestFromQueue()
+		{
+			// Free up the queue to kick off the next integration in it if any.
+			integrationRequest = null;
+			integrationQueue.Dequeue();
 		}
 
 		private void Stopped()
@@ -148,6 +187,9 @@ namespace ThoughtWorks.CruiseControl.Core
 			// the state was set to 'Stopping', so set it to 'Stopped'
 			state = ProjectIntegratorState.Stopped;
 			thread = null;
+			// Ensure that any queued integrations are cleared for this project.
+			integrationQueue.RemoveProject(project);
+			queuedProjectCount = 0;
 			Log.Info("Integrator for project: " + project.Name + " is now stopped.");
 		}
 
@@ -200,6 +242,56 @@ namespace ThoughtWorks.CruiseControl.Core
 		void IDisposable.Dispose()
 		{
 			Abort();
+		}
+
+		/// <summary>
+		/// Notification of entering the integration queue.
+		/// </summary>
+		public void NotifyEnteringIntegrationQueue()
+		{
+			// We only want to change the project status to "pending" if this is the only entry for this project.
+			// We should be thread-safe as within lock of the IntegrationQueue.
+			Interlocked.Increment(ref queuedProjectCount);
+			if (queuedProjectCount == 1)
+			{
+				// Life would be much simpler if we could change the status directly - instead we must go through
+				// an extra IIntegratable hop to the IntegrationRunner.
+				project.NotifyPendingState();
+			}
+		}
+
+		/// <summary>
+		/// This project integration request has reached the top of the queue and can be started.
+		/// </summary>
+		/// <param name="integrationQueueItem">The integration to be started.</param>
+		public void NotifyIntegrationToCommence(IIntegrationQueueItem integrationQueueItem)
+		{
+			integrationRequest = integrationQueueItem.IntegrationRequest;
+		}
+
+		/// <summary>
+		/// Notification of exiting the integration queue. This could be due to a single project completing,
+		/// a pending integration being cancelled or due to all projects being removed from the queue.
+		/// </summary>
+		public void NotifyExitingIntegrationQueue(bool isPendingItemCancelled)
+		{
+			// Change the project status back to "sleeping" if this is the only entry for this project.
+			// We should be thread-safe as within lock of the IntegrationQueue.
+			Interlocked.Decrement(ref queuedProjectCount);
+			if (queuedProjectCount == 0)
+			{
+				project.NotifySleepingState();
+			}
+			else if (isPendingItemCancelled)
+			{
+				// Must have been a queued force build for the same project while we are currently integrating 
+				// the first in the queue. Do not touch the state of the project in this scenario.
+			}
+			else
+			{
+				// State should go to pending as we still have an item on the queue
+				project.NotifyPendingState();
+			}
 		}
 	}
 }

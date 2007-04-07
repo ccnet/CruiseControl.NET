@@ -160,7 +160,6 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Monitoring
 			                CombinedState(ProjectState.Building, ProjectState.Success, ProjectState.NotConnected));
 			Assert.AreEqual(ProjectState.NotConnected,
 			                CombinedState(ProjectState.Success, ProjectState.Success, ProjectState.NotConnected));
-			Assert.AreEqual(ProjectState.Broken, CombinedState(ProjectState.Broken, ProjectState.Success, ProjectState.Success));
 			Assert.AreEqual(ProjectState.Broken,
 			                CombinedState(ProjectState.NotConnected, ProjectState.Success, ProjectState.Broken));
 			Assert.AreEqual(ProjectState.Broken, CombinedState(ProjectState.Broken, ProjectState.Building, ProjectState.Success));

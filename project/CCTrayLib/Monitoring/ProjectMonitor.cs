@@ -103,6 +103,11 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
 			}
 		}
 
+		public bool IsPending
+		{
+			get { return ProjectStatus.Activity.IsPending(); }
+		}
+
 		public ISingleProjectDetail Detail
 		{
 			get { return this; }
@@ -116,6 +121,16 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
 		public void FixBuild()
 		{
 			cruiseProjectManager.FixBuild();
+		}
+
+		public void CancelPending()
+		{
+			cruiseProjectManager.CancelPendingRequest();
+		}
+
+		public void OnPollStarting()
+		{
+			// No initialisation required.
 		}
 
 		public void Poll()
