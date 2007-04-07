@@ -63,7 +63,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.UnitTestUtils
 			bool signalled = latch.WaitOne(2000, false);
 			if (! signalled)
 			{
-				throw new Exception("Latch has not been signalled before the timeout expired!");
+				string msg = string.Format("Latch has not been signalled before the timeout expired! {0} never called.", signalMethods[0]);
+				throw new Exception(msg);
 			}
 			if (ex != null)
 			{

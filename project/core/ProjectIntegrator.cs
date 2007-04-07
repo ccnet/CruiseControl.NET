@@ -108,8 +108,14 @@ namespace ThoughtWorks.CruiseControl.Core
 				// loop, until the integrator is stopped
 				while (IsRunning)
 				{
-					Integrate();
-
+					try
+					{
+						Integrate();
+					}
+					catch (Exception ex)
+					{
+						Log.Error(ex);
+					}
 					// sleep for a short while, to avoid hammering CPU
 					Thread.Sleep(100);
 				}
@@ -127,22 +133,21 @@ namespace ThoughtWorks.CruiseControl.Core
 
 		private void Integrate()
 		{
-			if (ShouldRunIntegration())
+			if (integrationQueue.ShouldRunIntegration(project))
 			{
 				try
 				{
 					project.Integrate(integrationRequest);
 				}
-				catch (Exception ex)
+				finally
 				{
-					Log.Error(ex);
+					trigger.IntegrationCompleted();
+					RemoveCompletedRequestFromQueue();
 				}
-				trigger.IntegrationCompleted();
-
-				RemoveCompletedRequestFromQueue();
 			}
 			else
 			{
+				PollTriggers();
 				// If a build is queued for this project we need to hang around until either:
 				// - the build gets started by reaching it's turn on the queue
 				// - the build gets cancelled from the queue
@@ -154,19 +159,15 @@ namespace ThoughtWorks.CruiseControl.Core
 			}
 		}
 
-		private bool ShouldRunIntegration()
+		private void PollTriggers()
 		{
-			if (integrationRequest == null)
+			IntegrationRequest triggeredRequest = trigger.Fire();
+			if (triggeredRequest != null)
 			{
-				IntegrationRequest triggeredRequest = trigger.Fire();
-				if (triggeredRequest != null)
-				{
-					// Add to the queue - if it is able to build straight away
-					// then integrationRequest will get set immediately by the callback.
-					AddToQueue(triggeredRequest);
-				}
+				// Add to the queue - if it is able to build straight away
+				// then integrationRequest will get set immediately by the callback.
+				AddToQueue(triggeredRequest);
 			}
-			return integrationRequest != null;
 		}
 
 		private void AddToQueue(IntegrationRequest request)

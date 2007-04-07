@@ -1,4 +1,3 @@
-using System;
 using System.Collections;
 using ThoughtWorks.CruiseControl.Core.Util;
 using ThoughtWorks.CruiseControl.Remote;
@@ -10,8 +9,7 @@ namespace ThoughtWorks.CruiseControl.Core.Queues
 	/// </summary>
 	public class IntegrationQueueSet
 	{
-		private Hashtable queueSet = new Hashtable();
-		private string[] cachedQueueNames;
+		private SortedList queueSet = new SortedList();
 
 		public IIntegrationQueue this[string queueName]
 		{
@@ -30,29 +28,26 @@ namespace ThoughtWorks.CruiseControl.Core.Queues
 			{
 				if (!queueSet.ContainsKey(queueName))
 				{
-					queueSet.Add(queueName, new IntegrationQueue());
-					cachedQueueNames = null;
+					queueSet.Add(queueName, new IntegrationQueue(queueName));
 				}
 			}
 		}
 
 		public void Clear()
 		{
-			queueSet.Clear();
-			cachedQueueNames = null;
+			lock (this)
+			{
+				queueSet.Clear();
+			}
 		}
 
 		public string[] GetQueueNames()
 		{
 			lock (this)
 			{
-				if (cachedQueueNames == null)
-				{
-					cachedQueueNames = new string[queueSet.Keys.Count];
-					queueSet.Keys.CopyTo(cachedQueueNames, 0);
-					Array.Sort(cachedQueueNames);
-				}
-				return cachedQueueNames;
+				string[] queueNames = new string[queueSet.Keys.Count];
+				queueSet.Keys.CopyTo(queueNames, 0);
+				return queueNames;
 			}
 		}
 
@@ -67,30 +62,26 @@ namespace ThoughtWorks.CruiseControl.Core.Queues
 		private IntegrationQueueSnapshot BuildQueueContentSnapshot()
 		{
 			Log.Debug("Building integration queue snapshot cache");
-			IntegrationQueueSnapshot snapshot = new IntegrationQueueSnapshot();
-			string[] orderedQueueNames = GetQueueNames();
 
-			foreach (string queueName in orderedQueueNames)
+			IntegrationQueueSnapshot snapshot = new IntegrationQueueSnapshot();
+			foreach (IIntegrationQueue queue in queueSet.Values)
 			{
-				IIntegrationQueue queue = this[queueName];
 				if (queue != null && queue.Count > 0)
 				{
-					NamedQueueSnapshot namedQueueSnapshot = GetNamedQueueSnapshot(queue, queueName);
-					snapshot.Queues.Add(namedQueueSnapshot);
+					snapshot.Queues.Add(BuildQueueSnapshot(queue));
 				}
 			}
-
 			return snapshot;
 		}
 
-		private NamedQueueSnapshot GetNamedQueueSnapshot(IIntegrationQueue queue, string queueName)
+		private NamedQueueSnapshot BuildQueueSnapshot(IIntegrationQueue queue)
 		{
-			NamedQueueSnapshot namedQueueSnapshot = new NamedQueueSnapshot(queueName);
+			NamedQueueSnapshot namedQueueSnapshot = new NamedQueueSnapshot(queue.Name);
 
 			foreach (IIntegrationQueueItem integrationQueueItem in queue)
 			{
 				QueuedItemSnapshot queuedItemSnapshot = new QueuedItemSnapshot(
-					queueName,
+					queue.Name,
 					integrationQueueItem.Project.Name,
 					integrationQueueItem.Project.QueuePriority,
 					integrationQueueItem.IntegrationRequest.BuildCondition,

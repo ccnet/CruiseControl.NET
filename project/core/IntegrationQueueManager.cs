@@ -140,16 +140,5 @@ namespace ThoughtWorks.CruiseControl.Core
 		{
 			return integrationQueues.GetQueueNames();
 		}
-
-		/// <summary>
-		/// Returns an array of the current queued integrations on the named build queue.
-		/// </summary>
-		/// <param name="queueName">The queue name.</param>
-		/// <returns>Array of current queued integrations on the queue.</returns>
-		public IIntegrationQueueItem[] GetQueuedIntegrations(string queueName)
-		{
-			IIntegrationQueue queue = integrationQueues[queueName];
-			return queue.GetQueuedIntegrations();
-		}
 	}
 }

@@ -41,21 +41,6 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Queues
 		{
 			Assert.IsNull(set["foo"]);
 		}
-
-		[Test]
-		public void GetQueueNamesForEmptySet()
-		{
-			Assert.AreEqual(0, set.GetQueueNames().Length);
-		}
-
-		[Test]
-		public void GetQueueNames()
-		{
-			set.Add("q1");
-			Assert.AreEqual("q1", set.GetQueueNames()[0]);
-			set.Add("q2");
-			Assert.AreEqual("q2", set.GetQueueNames()[1]);
-		}
 	}
 
 	[TestFixture]

@@ -8,6 +8,8 @@ namespace ThoughtWorks.CruiseControl.Core.Queues
 	/// </summary>
 	public interface IIntegrationQueue : IList
 	{
+		string Name { get; }
+
 		/// <summary>
 		/// Add a project integration request be added to the integration queue.
 		/// If no requests are on that queue already the integration is just kicked off immediately.
@@ -41,5 +43,7 @@ namespace ThoughtWorks.CruiseControl.Core.Queues
 		/// </summary>
 		/// <returns>Array of current queued integrations on the queue.</returns>
 		IIntegrationQueueItem[] GetQueuedIntegrations();
+
+		bool ShouldRunIntegration(IProject project);
 	}
 }

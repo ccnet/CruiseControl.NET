@@ -1,8 +1,6 @@
-using System;
 using NUnit.Framework;
 using ThoughtWorks.CruiseControl.Core;
 using ThoughtWorks.CruiseControl.Core.Config;
-using ThoughtWorks.CruiseControl.Core.Queues;
 
 namespace ThoughtWorks.CruiseControl.UnitTests.Core
 {
@@ -25,7 +23,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 
 			configuration = new Configuration();
 			configuration.AddProject(project);
-			
+
 			queueManager = new IntegrationQueueManager(new ProjectIntegratorListFactory(), configuration);
 		}
 

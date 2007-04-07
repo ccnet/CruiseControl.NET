@@ -43,7 +43,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 			artifactDirPath = TempFileUtil.CreateTempDir("artifactDir");
 			Assert.IsTrue(Directory.Exists(workingDirPath));
 			Assert.IsTrue(Directory.Exists(artifactDirPath));
-			queue = new IntegrationQueue();
+			queue = new IntegrationQueue("foo");
 			mockery = new Mockery();
 			mockSourceControl = mockery.NewStrictMock(typeof (ISourceControl));
 			mockStateManager = mockery.NewStrictMock(typeof (IStateManager));

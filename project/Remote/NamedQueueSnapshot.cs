@@ -18,12 +18,12 @@ namespace ThoughtWorks.CruiseControl.Remote
 		}
 
 		public string QueueName
-		{ 
+		{
 			get { return queueName; }
 		}
 
 		public QueuedItemSnapshotList Items
-		{ 
+		{
 			get { return items; }
 		}
 	}

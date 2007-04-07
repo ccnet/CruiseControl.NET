@@ -16,7 +16,7 @@ namespace ThoughtWorks.CruiseControl.Remote
 		/// Initializes a new instance of the <see cref="IntegrationQueueSnapshot"/> class.
 		/// </summary>
 		public IntegrationQueueSnapshot()
-			: this (DateTime.Now)
+			: this(DateTime.Now)
 		{
 		}
 

@@ -1,5 +1,4 @@
 using System.Collections;
-
 using ThoughtWorks.CruiseControl.Core.Util;
 
 namespace ThoughtWorks.CruiseControl.Core.Queues
@@ -10,6 +9,18 @@ namespace ThoughtWorks.CruiseControl.Core.Queues
 	/// </summary>
 	public class IntegrationQueue : ArrayList, IIntegrationQueue
 	{
+		private readonly string name;
+
+		public IntegrationQueue(string name)
+		{
+			this.name = name;
+		}
+
+		public string Name
+		{
+			get { return name; }
+		}
+
 		/// <summary>
 		/// Add a project integration request be added to the integration queue.
 		/// If no requests are on that queue already the integration is just kicked off immediately.
@@ -20,7 +31,7 @@ namespace ThoughtWorks.CruiseControl.Core.Queues
 		public void Enqueue(IIntegrationQueueItem integrationQueueItem)
 		{
 			lock (this)
-			{				
+			{
 				if (Count == 0)
 				{
 					// We can start integration straight away as first in first served
@@ -36,7 +47,7 @@ namespace ThoughtWorks.CruiseControl.Core.Queues
 					for (int index = 1; index < Count; index++)
 					{
 						string queueName = integrationQueueItem.Project.QueueName;
-						IIntegrationQueueItem queuedIntegrationQueueItem = this[index] as IIntegrationQueueItem;
+						IIntegrationQueueItem queuedIntegrationQueueItem = GetIntegrationQueueItem(index);
 						if (queuedIntegrationQueueItem.Project == integrationQueueItem.Project)
 						{
 							Log.Info("Project: " + integrationQueueItem.Project.Name + " already on queue: " + queueName + " - cancelling new request");
@@ -52,6 +63,11 @@ namespace ThoughtWorks.CruiseControl.Core.Queues
 			}
 		}
 
+		private IIntegrationQueueItem GetIntegrationQueueItem(int index)
+		{
+			return this[index] as IIntegrationQueueItem;
+		}
+
 		/// <summary>
 		/// Releases the next integration request on the queue to start it's integration.
 		/// </summary>
@@ -62,7 +78,7 @@ namespace ThoughtWorks.CruiseControl.Core.Queues
 				if (Count > 0)
 				{
 					// The first item in the queue has now been integrated so discard it.
-					IIntegrationQueueItem integrationQueueItem = (IIntegrationQueueItem)this[0];
+					IIntegrationQueueItem integrationQueueItem = (IIntegrationQueueItem) this[0];
 					integrationQueueItem.IntegrationQueueNotifier.NotifyExitingIntegrationQueue(false);
 					RemoveAt(0);
 
@@ -105,16 +121,22 @@ namespace ThoughtWorks.CruiseControl.Core.Queues
 		/// <returns>Array of current queued integrations on the queue.</returns>
 		public IIntegrationQueueItem[] GetQueuedIntegrations()
 		{
-			return (IIntegrationQueueItem[])ToArray(typeof(IIntegrationQueueItem));
+			return (IIntegrationQueueItem[]) ToArray(typeof (IIntegrationQueueItem));
 		}
 
+		public bool ShouldRunIntegration(IProject project)
+		{
+			if (Count == 0) return false;
+			IIntegrationQueueItem item = GetIntegrationQueueItem(0);
+			return item != null && item.Project == project;
+		}
 
 		private void AddToQueue(IIntegrationQueueItem integrationQueueItem)
 		{
 			int queuePosition = GetPrioritisedQueuePosition(integrationQueueItem.Project.QueuePriority);
 
 			Log.Info(string.Format("Project: '{0}' is added to queue: '{1}' in position {2}.",
-				integrationQueueItem.Project.Name, integrationQueueItem.Project.QueueName, queuePosition));
+			                       integrationQueueItem.Project.Name, integrationQueueItem.Project.QueueName, queuePosition));
 			integrationQueueItem.IntegrationQueueNotifier.NotifyEnteringIntegrationQueue();
 			Insert(queuePosition, integrationQueueItem);
 		}
@@ -148,9 +170,9 @@ namespace ThoughtWorks.CruiseControl.Core.Queues
 		{
 			if (Count > 0)
 			{
-				IIntegrationQueueItem integrationQueueItem = (IIntegrationQueueItem)this[0];
+				IIntegrationQueueItem integrationQueueItem = (IIntegrationQueueItem) this[0];
 				Log.Info(string.Format("Project: '{0}' is first in queue: '{1}' and shall start integration.",
-					integrationQueueItem.Project.Name, integrationQueueItem.Project.QueueName));
+				                       integrationQueueItem.Project.Name, integrationQueueItem.Project.QueueName));
 				integrationQueueItem.IntegrationQueueNotifier.NotifyIntegrationToCommence(integrationQueueItem);
 			}
 		}
@@ -163,7 +185,7 @@ namespace ThoughtWorks.CruiseControl.Core.Queues
 			int startQueueIndex = considerFirstQueueItem ? 0 : 1;
 			for (int index = Count - 1; index >= startQueueIndex; index--)
 			{
-				IIntegrationQueueItem integrationQueueItem = (IIntegrationQueueItem)this[index];
+				IIntegrationQueueItem integrationQueueItem = (IIntegrationQueueItem) this[index];
 				if (integrationQueueItem.Project.Equals(project))
 				{
 					string queueName = project.QueueName;
