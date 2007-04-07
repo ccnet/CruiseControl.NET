@@ -11,15 +11,13 @@ namespace ThoughtWorks.CruiseControl.Core.Queues
 	public class IntegrationQueueSet
 	{
 		private Hashtable queueSet = new Hashtable();
-		private bool isQueueContentChanged = true;
 		private string[] cachedQueueNames;
-		private IntegrationQueueSnapshot cachedIntegrationQueueSnapshot;
 
 		public IIntegrationQueue this[string queueName]
 		{
 			get
 			{
-				lock (SyncRoot)
+				lock (this)
 				{
 					return (IIntegrationQueue) queueSet[queueName];
 				}
@@ -28,11 +26,11 @@ namespace ThoughtWorks.CruiseControl.Core.Queues
 
 		public void Add(string queueName)
 		{
-			lock (SyncRoot)
+			lock (this)
 			{
 				if (!queueSet.ContainsKey(queueName))
 				{
-					queueSet.Add(queueName, new IntegrationQueue(this));
+					queueSet.Add(queueName, new IntegrationQueue());
 					cachedQueueNames = null;
 				}
 			}
@@ -42,47 +40,33 @@ namespace ThoughtWorks.CruiseControl.Core.Queues
 		{
 			queueSet.Clear();
 			cachedQueueNames = null;
-			isQueueContentChanged = true;
-		}
-
-		public object SyncRoot
-		{
-			get { return queueSet.SyncRoot; }
-		}
-
-		public bool IsQueueContentChanged
-		{
-			get { return isQueueContentChanged; }
-			set { isQueueContentChanged = value; }
 		}
 
 		public string[] GetQueueNames()
 		{
-			if (cachedQueueNames == null)
+			lock (this)
 			{
-				cachedQueueNames = new string[queueSet.Keys.Count];
-				queueSet.Keys.CopyTo(cachedQueueNames, 0);
-				Array.Sort(cachedQueueNames);
+				if (cachedQueueNames == null)
+				{
+					cachedQueueNames = new string[queueSet.Keys.Count];
+					queueSet.Keys.CopyTo(cachedQueueNames, 0);
+					Array.Sort(cachedQueueNames);
+				}
+				return cachedQueueNames;
 			}
-			return cachedQueueNames;
 		}
 
 		public IntegrationQueueSnapshot GetIntegrationQueueSnapshot()
 		{
-			lock (SyncRoot)
+			lock (this)
 			{
-				if (isQueueContentChanged)
-				{
-					cachedIntegrationQueueSnapshot = BuildQueueContentSnapshot();
-					isQueueContentChanged = false;
-				}
-				return cachedIntegrationQueueSnapshot;
+				return BuildQueueContentSnapshot();
 			}
 		}
 
 		private IntegrationQueueSnapshot BuildQueueContentSnapshot()
 		{
-			Log.Debug("Rebuilding integration queue snapshot cache");
+			Log.Debug("Building integration queue snapshot cache");
 			IntegrationQueueSnapshot snapshot = new IntegrationQueueSnapshot();
 			string[] orderedQueueNames = GetQueueNames();
 

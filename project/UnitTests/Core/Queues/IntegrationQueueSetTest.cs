@@ -128,7 +128,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Queues
 			Assert.IsNull(integrationQueueSnapshot.Queues[TestQueueName]);
 		}
 
-		[Test]
+		[Test, Ignore("owen: removing caching for now - apr 7,2007")]
 		public void GetIntegrationQueueSnapshotIsCachedUntilChanges()
 		{
 			IntegrationQueueSnapshot integrationQueueSnapshot = integrationQueues.GetIntegrationQueueSnapshot();

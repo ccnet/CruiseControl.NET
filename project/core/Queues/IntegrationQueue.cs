@@ -10,13 +10,6 @@ namespace ThoughtWorks.CruiseControl.Core.Queues
 	/// </summary>
 	public class IntegrationQueue : ArrayList, IIntegrationQueue
 	{
-		private IntegrationQueueSet queueSet;
-
-		public IntegrationQueue(IntegrationQueueSet queueSet)
-		{
-			this.queueSet = queueSet;
-		}
-
 		/// <summary>
 		/// Add a project integration request be added to the integration queue.
 		/// If no requests are on that queue already the integration is just kicked off immediately.
@@ -26,9 +19,9 @@ namespace ThoughtWorks.CruiseControl.Core.Queues
 		/// <param name="integrationQueueItem">The integration queue item.</param>
 		public void Enqueue(IIntegrationQueueItem integrationQueueItem)
 		{
-			lock (queueSet.SyncRoot)
+			lock (this)
 			{				
-				if (this.Count == 0)
+				if (Count == 0)
 				{
 					// We can start integration straight away as first in first served
 					AddToQueue(integrationQueueItem);
@@ -40,7 +33,7 @@ namespace ThoughtWorks.CruiseControl.Core.Queues
 					// If so then we will ignore the latest request.
 					// Note we start at queue position 1 since position 0 is currently integrating.
 					bool isAlreadyQueued = false;
-					for (int index = 1; index < this.Count; index++)
+					for (int index = 1; index < Count; index++)
 					{
 						string queueName = integrationQueueItem.Project.QueueName;
 						IIntegrationQueueItem queuedIntegrationQueueItem = this[index] as IIntegrationQueueItem;
@@ -64,15 +57,14 @@ namespace ThoughtWorks.CruiseControl.Core.Queues
 		/// </summary>
 		public void Dequeue()
 		{
-			lock (queueSet.SyncRoot)
+			lock (this)
 			{
-				if (this.Count > 0)
+				if (Count > 0)
 				{
 					// The first item in the queue has now been integrated so discard it.
 					IIntegrationQueueItem integrationQueueItem = (IIntegrationQueueItem)this[0];
 					integrationQueueItem.IntegrationQueueNotifier.NotifyExitingIntegrationQueue(false);
-					this.RemoveAt(0);
-					queueSet.IsQueueContentChanged = true;
+					RemoveAt(0);
 
 					StartFirstIntegrationOnQueue();
 				}
@@ -86,7 +78,7 @@ namespace ThoughtWorks.CruiseControl.Core.Queues
 		/// <param name="project">The project to have pending items removed from the queue.</param>
 		public void RemovePendingRequest(IProject project)
 		{
-			lock (queueSet.SyncRoot)
+			lock (this)
 			{
 				bool considerFirstQueueItem = false;
 				RemoveProjectItems(project, considerFirstQueueItem);
@@ -100,7 +92,7 @@ namespace ThoughtWorks.CruiseControl.Core.Queues
 		/// <param name="project">The project to be removed.</param>
 		public void RemoveProject(IProject project)
 		{
-			lock (queueSet.SyncRoot)
+			lock (this)
 			{
 				bool considerFirstQueueItem = true;
 				RemoveProjectItems(project, considerFirstQueueItem);
@@ -113,7 +105,7 @@ namespace ThoughtWorks.CruiseControl.Core.Queues
 		/// <returns>Array of current queued integrations on the queue.</returns>
 		public IIntegrationQueueItem[] GetQueuedIntegrations()
 		{
-			return (IIntegrationQueueItem[])this.ToArray(typeof(IIntegrationQueueItem));
+			return (IIntegrationQueueItem[])ToArray(typeof(IIntegrationQueueItem));
 		}
 
 
@@ -124,22 +116,20 @@ namespace ThoughtWorks.CruiseControl.Core.Queues
 			Log.Info(string.Format("Project: '{0}' is added to queue: '{1}' in position {2}.",
 				integrationQueueItem.Project.Name, integrationQueueItem.Project.QueueName, queuePosition));
 			integrationQueueItem.IntegrationQueueNotifier.NotifyEnteringIntegrationQueue();
-			this.Insert(queuePosition, integrationQueueItem);
-	
-			queueSet.IsQueueContentChanged = true;
+			Insert(queuePosition, integrationQueueItem);
 		}
 
 		private int GetPrioritisedQueuePosition(int insertingItemPriority)
 		{
 			// Assume the back of the queue will be where we insert it.
-			int targetQueuePosition = this.Count;
+			int targetQueuePosition = Count;
 
 			// Items with priority zero always get added to the end of the queue, as will anything if the
 			// queue only has one item in it as we assume that item is integrating already and cannot be moved.
-			if (insertingItemPriority != 0 && this.Count > 1)
+			if (insertingItemPriority != 0 && Count > 1)
 			{
 				int compareQueuePosition;
-				for (int index = 1; index < this.Count; index++)
+				for (int index = 1; index < Count; index++)
 				{
 					IIntegrationQueueItem queuedIntegrationQueueItem = this[index] as IIntegrationQueueItem;
 					compareQueuePosition = queuedIntegrationQueueItem.Project.QueuePriority;
@@ -156,7 +146,7 @@ namespace ThoughtWorks.CruiseControl.Core.Queues
 
 		private void StartFirstIntegrationOnQueue()
 		{
-			if (this.Count > 0)
+			if (Count > 0)
 			{
 				IIntegrationQueueItem integrationQueueItem = (IIntegrationQueueItem)this[0];
 				Log.Info(string.Format("Project: '{0}' is first in queue: '{1}' and shall start integration.",
@@ -171,7 +161,7 @@ namespace ThoughtWorks.CruiseControl.Core.Queues
 			// Note we are also potentially removing the item at index[0] as this method should
 			// only be called when the thread performing the build has been stopped.
 			int startQueueIndex = considerFirstQueueItem ? 0 : 1;
-			for (int index = this.Count - 1; index >= startQueueIndex; index--)
+			for (int index = Count - 1; index >= startQueueIndex; index--)
 			{
 				IIntegrationQueueItem integrationQueueItem = (IIntegrationQueueItem)this[index];
 				if (integrationQueueItem.Project.Equals(project))
@@ -180,8 +170,7 @@ namespace ThoughtWorks.CruiseControl.Core.Queues
 					Log.Info("Project: " + integrationQueueItem.Project.Name + " removed from queue: " + queueName);
 					bool isPendingItemCancelled = index > 0;
 					integrationQueueItem.IntegrationQueueNotifier.NotifyExitingIntegrationQueue(isPendingItemCancelled);
-					this.RemoveAt(index);
-					queueSet.IsQueueContentChanged = true;
+					RemoveAt(index);
 					if (index == 0)
 					{
 						isNewItemAtStartOfQueue = true;
