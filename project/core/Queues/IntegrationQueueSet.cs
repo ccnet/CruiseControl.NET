@@ -1,5 +1,4 @@
 using System.Collections;
-using ThoughtWorks.CruiseControl.Core.Util;
 using ThoughtWorks.CruiseControl.Remote;
 
 namespace ThoughtWorks.CruiseControl.Core.Queues
@@ -61,8 +60,6 @@ namespace ThoughtWorks.CruiseControl.Core.Queues
 
 		private IntegrationQueueSnapshot BuildQueueContentSnapshot()
 		{
-			Log.Debug("Building integration queue snapshot cache");
-
 			IntegrationQueueSnapshot snapshot = new IntegrationQueueSnapshot();
 			foreach (IIntegrationQueue queue in queueSet.Values)
 			{
