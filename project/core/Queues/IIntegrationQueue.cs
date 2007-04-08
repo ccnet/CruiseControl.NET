@@ -1,4 +1,5 @@
 using System.Collections;
+using ThoughtWorks.CruiseControl.Remote;
 
 namespace ThoughtWorks.CruiseControl.Core.Queues
 {
@@ -44,6 +45,8 @@ namespace ThoughtWorks.CruiseControl.Core.Queues
 		/// <returns>Array of current queued integrations on the queue.</returns>
 		IIntegrationQueueItem[] GetQueuedIntegrations();
 
-		bool ShouldRunIntegration(IProject project);
+		IntegrationRequest GetNextRequest(IProject project);
+		
+		bool HasItemOnQueue(IProject project);
 	}
 }

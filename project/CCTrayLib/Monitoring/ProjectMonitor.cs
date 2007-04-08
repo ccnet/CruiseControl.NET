@@ -105,7 +105,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
 
 		public bool IsPending
 		{
-			get { return ProjectStatus.Activity.IsPending(); }
+			get { return ProjectStatus != null && ProjectStatus.Activity.IsPending(); }
 		}
 
 		public ISingleProjectDetail Detail

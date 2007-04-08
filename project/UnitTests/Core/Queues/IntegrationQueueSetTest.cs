@@ -1,5 +1,3 @@
-using System;
-using System.Threading;
 using NUnit.Framework;
 using ThoughtWorks.CruiseControl.Core;
 using ThoughtWorks.CruiseControl.Core.Queues;
@@ -16,7 +14,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Queues
 		[SetUp]
 		protected void SetUp()
 		{
-			set = new IntegrationQueueSet();			
+			set = new IntegrationQueueSet();
 		}
 
 		[Test]
@@ -25,7 +23,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Queues
 			set.Add("q1");
 			IIntegrationQueue q = set["q1"];
 			Assert.IsNotNull(q);
-		}	
+		}
 
 		[Test]
 		public void AddingSameQueueNameReturnsOriginalQueue()
@@ -70,30 +68,30 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Queues
 			integrationQueue2 = integrationQueues[TestQueueName2];
 
 			integrationRequest = new IntegrationRequest(BuildCondition.ForceBuild, "Test");
-			
+
 			project1Mock = new LatchMock(typeof (IProject));
 			project1Mock.Strict = true;
 			project1Mock.SetupResult("Name", "ProjectOne");
 			project1Mock.SetupResult("QueueName", TestQueueName);
 			project1Mock.SetupResult("QueuePriority", 0);
-			
+
 			project2Mock = new LatchMock(typeof (IProject));
 			project2Mock.Strict = true;
 			project2Mock.SetupResult("Name", "ProjectTwo");
 			project2Mock.SetupResult("QueueName", TestQueueName2);
 			project2Mock.SetupResult("QueuePriority", 0);
-			
-			queueNotifier1Mock = new LatchMock(typeof(IIntegrationQueueNotifier));
+
+			queueNotifier1Mock = new LatchMock(typeof (IIntegrationQueueNotifier));
 			queueNotifier1Mock.Strict = true;
 
-			queueNotifier2Mock = new LatchMock(typeof(IIntegrationQueueNotifier));
+			queueNotifier2Mock = new LatchMock(typeof (IIntegrationQueueNotifier));
 			queueNotifier2Mock.Strict = true;
 
-			integrationQueueItem1 = new IntegrationQueueItem((IProject)project1Mock.MockInstance, 
-				integrationRequest, (IIntegrationQueueNotifier)queueNotifier1Mock.MockInstance);
+			integrationQueueItem1 = new IntegrationQueueItem((IProject) project1Mock.MockInstance,
+			                                                 integrationRequest, (IIntegrationQueueNotifier) queueNotifier1Mock.MockInstance);
 
-			integrationQueueItem2 = new IntegrationQueueItem((IProject)project2Mock.MockInstance, 
-				integrationRequest, (IIntegrationQueueNotifier)queueNotifier2Mock.MockInstance);
+			integrationQueueItem2 = new IntegrationQueueItem((IProject) project2Mock.MockInstance,
+			                                                 integrationRequest, (IIntegrationQueueNotifier) queueNotifier2Mock.MockInstance);
 		}
 
 		private void VerifyAll()
@@ -113,31 +111,6 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Queues
 			Assert.IsNull(integrationQueueSnapshot.Queues[TestQueueName]);
 		}
 
-		[Test, Ignore("owen: removing caching for now - apr 7,2007")]
-		public void GetIntegrationQueueSnapshotIsCachedUntilChanges()
-		{
-			IntegrationQueueSnapshot integrationQueueSnapshot = integrationQueues.GetIntegrationQueueSnapshot();
-			DateTime lastSnapshotTime = integrationQueueSnapshot.TimeStamp;
-
-			Thread.Sleep(20);
-
-			integrationQueueSnapshot = integrationQueues.GetIntegrationQueueSnapshot();
-			Assert.AreEqual(lastSnapshotTime.Ticks, integrationQueueSnapshot.TimeStamp.Ticks);
-
-			Thread.Sleep(20);
-
-			// Change the queue contents by kicking off an integration.
-			queueNotifier1Mock.Expect("NotifyEnteringIntegrationQueue");
-			queueNotifier1Mock.Expect("NotifyIntegrationToCommence", integrationQueueItem1);
-			queueNotifier1Mock.ExpectNoCall("NotifyExitingIntegrationQueue", typeof(bool));
-			integrationQueue1.Enqueue(integrationQueueItem1);
-
-			lastSnapshotTime = integrationQueueSnapshot.TimeStamp;
-			integrationQueueSnapshot = integrationQueues.GetIntegrationQueueSnapshot();
-			Assert.AreNotEqual(lastSnapshotTime.Ticks, (decimal)integrationQueueSnapshot.TimeStamp.Ticks);
-			Assert.IsTrue(lastSnapshotTime != integrationQueueSnapshot.TimeStamp);
-		}
-
 		[Test]
 		public void GetIntegrationQueueSnapshotForNoProjectsStarted()
 		{
@@ -149,13 +122,9 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Queues
 		[Test]
 		public void GetIntegrationQueueSnapshotForProjectRegisteredButNotQueued()
 		{
-			project1Mock.ExpectAndReturn("Triggers", null);
-			IProjectIntegrator projectIntegrator = new ProjectIntegrator((IProject)project1Mock.MockInstance, this.integrationQueue1);
-
 			IntegrationQueueSnapshot integrationQueueSnapshot = integrationQueues.GetIntegrationQueueSnapshot();
 			Assert.IsNotNull(integrationQueueSnapshot);
 			Assert.AreEqual(0, integrationQueueSnapshot.Queues.Count);
-
 			VerifyAll();
 		}
 
@@ -163,20 +132,19 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Queues
 		public void GetIntegrationQueueSnapshotForSingleProjectOnSingleQueue()
 		{
 			queueNotifier1Mock.Expect("NotifyEnteringIntegrationQueue");
-			queueNotifier1Mock.Expect("NotifyIntegrationToCommence", integrationQueueItem1);
-			queueNotifier1Mock.ExpectNoCall("NotifyExitingIntegrationQueue", typeof(bool));
+			queueNotifier1Mock.ExpectNoCall("NotifyExitingIntegrationQueue", typeof (bool));
 			integrationQueue1.Enqueue(integrationQueueItem1);
 
 			IntegrationQueueSnapshot integrationQueueSnapshot = integrationQueues.GetIntegrationQueueSnapshot();
 			Assert.IsNotNull(integrationQueueSnapshot);
 			Assert.AreEqual(1, integrationQueueSnapshot.Queues.Count);
-			
+
 			NamedQueueSnapshot namedQueueSnapshot = integrationQueueSnapshot.Queues[0];
 			Assert.IsNotNull(namedQueueSnapshot);
 			Assert.AreEqual(TestQueueName, namedQueueSnapshot.QueueName);
 			Assert.AreEqual(1, namedQueueSnapshot.Items.Count);
 			Assert.AreEqual(namedQueueSnapshot, integrationQueueSnapshot.Queues[TestQueueName]);
-			
+
 			QueuedItemSnapshot queuedItemSnapshot = namedQueueSnapshot.Items[0];
 			Assert.AreEqual(TestQueueName, queuedItemSnapshot.QueueName);
 			Assert.AreEqual("ProjectOne", queuedItemSnapshot.ProjectName);
@@ -191,26 +159,24 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Queues
 		public void GetIntegrationQueueSnapshotForMultipleProjectsOnSingleQueue()
 		{
 			queueNotifier1Mock.Expect("NotifyEnteringIntegrationQueue");
-			queueNotifier1Mock.Expect("NotifyIntegrationToCommence", integrationQueueItem1);
-			queueNotifier1Mock.ExpectNoCall("NotifyExitingIntegrationQueue", typeof(bool));
+			queueNotifier1Mock.ExpectNoCall("NotifyExitingIntegrationQueue", typeof (bool));
 			integrationQueue1.Enqueue(integrationQueueItem1);
 
 			// Second item is different project but same queue
 			project2Mock.ExpectAndReturn("QueueName", TestQueueName);
 			queueNotifier2Mock.Expect("NotifyEnteringIntegrationQueue");
-			queueNotifier2Mock.ExpectNoCall("NotifyIntegrationToCommence", typeof(IntegrationQueueItem));
-			queueNotifier2Mock.ExpectNoCall("NotifyExitingIntegrationQueue", typeof(bool));
+			queueNotifier2Mock.ExpectNoCall("NotifyExitingIntegrationQueue", typeof (bool));
 			integrationQueue1.Enqueue(integrationQueueItem2);
 
 			IntegrationQueueSnapshot integrationQueueSnapshot = integrationQueues.GetIntegrationQueueSnapshot();
 			Assert.AreEqual(1, integrationQueueSnapshot.Queues.Count);
-			
+
 			NamedQueueSnapshot namedQueueSnapshot = integrationQueueSnapshot.Queues[0];
 			Assert.AreEqual(2, namedQueueSnapshot.Items.Count);
-			
+
 			QueuedItemSnapshot firstQueuedItemSnapshot = namedQueueSnapshot.Items[0];
 			Assert.AreEqual("ProjectOne", firstQueuedItemSnapshot.ProjectName);
-			
+
 			QueuedItemSnapshot secondQueuedItemSnapshot = namedQueueSnapshot.Items[1];
 			Assert.AreEqual("ProjectTwo", secondQueuedItemSnapshot.ProjectName);
 
@@ -226,19 +192,17 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Queues
 		public void GetIntegrationQueueSnapshotForMultipleQueues()
 		{
 			queueNotifier1Mock.Expect("NotifyEnteringIntegrationQueue");
-			queueNotifier1Mock.Expect("NotifyIntegrationToCommence", integrationQueueItem1);
-			queueNotifier1Mock.ExpectNoCall("NotifyExitingIntegrationQueue", typeof(bool));
+			queueNotifier1Mock.ExpectNoCall("NotifyExitingIntegrationQueue", typeof (bool));
 			integrationQueue1.Enqueue(integrationQueueItem1);
 
 			// Second item is different project and different queue
 			queueNotifier2Mock.Expect("NotifyEnteringIntegrationQueue");
-			queueNotifier2Mock.Expect("NotifyIntegrationToCommence", integrationQueueItem2);
-			queueNotifier2Mock.ExpectNoCall("NotifyExitingIntegrationQueue", typeof(bool));
+			queueNotifier2Mock.ExpectNoCall("NotifyExitingIntegrationQueue", typeof (bool));
 			integrationQueue2.Enqueue(integrationQueueItem2);
 
 			IntegrationQueueSnapshot integrationQueueSnapshot = integrationQueues.GetIntegrationQueueSnapshot();
 			Assert.AreEqual(2, integrationQueueSnapshot.Queues.Count);
-			
+
 			foreach (NamedQueueSnapshot namedQueueSnapshot in integrationQueueSnapshot.Queues)
 			{
 				Assert.AreEqual(1, namedQueueSnapshot.Items.Count);
@@ -248,12 +212,12 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Queues
 			Assert.AreEqual(1, firstNamedQueueSnapshot.Items.Count);
 			QueuedItemSnapshot firstQueuedItemSnapshot = firstNamedQueueSnapshot.Items[0];
 			Assert.AreEqual("ProjectOne", firstQueuedItemSnapshot.ProjectName);
-			
+
 			NamedQueueSnapshot secondNamedQueueSnapshot = integrationQueueSnapshot.Queues[1];
 			Assert.AreEqual(1, secondNamedQueueSnapshot.Items.Count);
 			QueuedItemSnapshot secondQueuedItemSnapshot = secondNamedQueueSnapshot.Items[0];
 			Assert.AreEqual("ProjectTwo", secondQueuedItemSnapshot.ProjectName);
-			
+
 			VerifyAll();
 		}
 	}

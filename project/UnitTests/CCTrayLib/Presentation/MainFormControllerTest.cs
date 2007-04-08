@@ -56,9 +56,22 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Presentation
 		[Test]
 		public void ForceBuildInvokesForceBuildOnTheSelectedProject()
 		{
+			mockProjectMonitor.ExpectAndReturn("ProjectState", ProjectState.Success);
 			controller.SelectedProject = projectMonitor;
 
 			mockProjectMonitor.Expect("ForceBuild");
+			controller.ForceBuild();
+
+			mockProjectMonitor.Verify();
+		}
+
+		[Test]
+		public void ForceBuildDoesNothingIfProjectIsNotConnected()
+		{
+			mockProjectMonitor.ExpectAndReturn("ProjectState", ProjectState.NotConnected);
+			controller.SelectedProject = projectMonitor;
+
+			mockProjectMonitor.ExpectNoCall("ForceBuild");
 			controller.ForceBuild();
 
 			mockProjectMonitor.Verify();

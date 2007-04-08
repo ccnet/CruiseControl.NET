@@ -28,7 +28,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 			projectMock.SetupResult("QueueName", TestQueueName);
 			projectMock.SetupResult("QueuePriority", 0);
 			projectMock.SetupResult("Triggers", integrationTriggerMock.MockInstance);
-			
+
 			integrationQueues = new IntegrationQueueSet();
 			integrationQueues.Add(TestQueueName);
 			integrationQueue = integrationQueues[TestQueueName];
@@ -267,18 +267,19 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 		[Test]
 		public void CancelPendingRequestRemovesPendingItems()
 		{
-			IProject project = (IProject)projectMock.MockInstance;
+			IProject project = (IProject) projectMock.MockInstance;
 
 			IntegrationRequest request1 = new IntegrationRequest(BuildCondition.IfModificationExists, "intervalTrigger");
 			projectMock.Expect("NotifyPendingState");
 			integrationQueue.Enqueue(new IntegrationQueueItem(project, request1, integrator));
 
 			IntegrationRequest request2 = new IntegrationRequest(BuildCondition.IfModificationExists, "intervalTrigger");
-			projectMock.ExpectNoCall("NotifyPendingState");
+			projectMock.Expect("NotifyPendingState");
 			integrationQueue.Enqueue(new IntegrationQueueItem(project, request2, integrator));
 
 			int queuedItemCount = integrationQueue.GetQueuedIntegrations().Length;
 			Assert.AreEqual(2, queuedItemCount);
+			integrationTriggerMock.Expect("IntegrationCompleted");
 
 			integrator.CancelPendingRequest();
 
@@ -287,7 +288,6 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 
 			VerifyAll();
 		}
-
 	}
 
 	public class HasForceBuildCondition : BaseConstraint

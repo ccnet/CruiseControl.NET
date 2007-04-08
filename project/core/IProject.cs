@@ -88,5 +88,16 @@ namespace ThoughtWorks.CruiseControl.Core
 		ProjectStatus CreateProjectStatus(IProjectIntegrator integrator);
 		
 		void AddMessage(Message message);
+
+		
+		/// <summary>
+		/// Notification that project should enter a pending state due to being queued.
+		/// </summary>
+		void NotifyPendingState();
+
+		/// <summary>
+		/// Notification of last project exiting the integration queue and hence can return to sleeping state.
+		/// </summary>
+		void NotifySleepingState();
 	}
 }

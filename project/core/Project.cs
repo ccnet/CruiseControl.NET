@@ -166,12 +166,12 @@ namespace ThoughtWorks.CruiseControl.Core
 
 		public void NotifyPendingState()
 		{
-			integratable.NotifyPendingState();
+			currentActivity = ProjectActivity.Pending;
 		}
 
 		public void NotifySleepingState()
 		{
-			integratable.NotifySleepingState();
+			currentActivity = ProjectActivity.Sleeping;
 		}
 
 		public void Prebuild(IIntegrationResult result)

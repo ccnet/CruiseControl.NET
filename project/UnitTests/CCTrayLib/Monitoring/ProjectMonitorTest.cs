@@ -110,25 +110,25 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Monitoring
 		[Test]
 		public void ShouldCorrectlyReportEstimatedTimeWhenANewBuildStartsDuringThePollInterval()
 		{
-			ProjectStatus firstBuildStatus = 
-				ProjectStatusFixture.New(IntegrationStatus.Success, ProjectActivity.Building, new DateTime(2007,1,1,0,0,0));
+			ProjectStatus firstBuildStatus =
+				ProjectStatusFixture.New(IntegrationStatus.Success, ProjectActivity.Building, new DateTime(2007, 1, 1, 0, 0, 0));
 			mockProjectManager.ExpectAndReturn("ProjectStatus", firstBuildStatus);
 			dateTimeProvider.SetNow(new DateTime(2007, 1, 1, 1, 0, 0));
 			monitor.Poll();
-			
-			ProjectStatus secondBuildStatus = 
-				ProjectStatusFixture.New(IntegrationStatus.Success, ProjectActivity.Building, new DateTime(2007,1,1,2,0,0));
+
+			ProjectStatus secondBuildStatus =
+				ProjectStatusFixture.New(IntegrationStatus.Success, ProjectActivity.Building, new DateTime(2007, 1, 1, 2, 0, 0));
 			mockProjectManager.ExpectAndReturn("ProjectStatus", secondBuildStatus);
 			dateTimeProvider.SetNow(new DateTime(2007, 1, 1, 3, 0, 0));
 			monitor.Poll();
-			
-			ProjectStatus thirdBuildStatus = 
-				ProjectStatusFixture.New(IntegrationStatus.Success, ProjectActivity.Building, new DateTime(2007,1,1,4,0,0));
+
+			ProjectStatus thirdBuildStatus =
+				ProjectStatusFixture.New(IntegrationStatus.Success, ProjectActivity.Building, new DateTime(2007, 1, 1, 4, 0, 0));
 			mockProjectManager.ExpectAndReturn("ProjectStatus", thirdBuildStatus);
 			dateTimeProvider.SetNow(new DateTime(2007, 1, 1, 5, 0, 0));
 			monitor.Poll();
-			
-			Assert.AreEqual(new TimeSpan(2,0,0), monitor.EstimatedTimeRemainingOnCurrentBuild);
+
+			Assert.AreEqual(new TimeSpan(2, 0, 0), monitor.EstimatedTimeRemainingOnCurrentBuild);
 		}
 
 		[Test]
@@ -174,7 +174,6 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Monitoring
 			Assert.AreEqual(expectedBuildTransition, lastBuildOccurredArgs.BuildTransition);
 
 			buildOccurredCount = 0;
-
 		}
 
 		private void Monitor_Polled(object sauce, MonitorPolledEventArgs args)
@@ -225,7 +224,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Monitoring
 
 			mockProjectManager.ExpectAndReturn("ProjectStatus", CreateProjectStatus(IntegrationStatus.Success, ProjectActivity.Building));
 			monitor.Poll();
-			Assert.AreEqual(ProjectState.Building, monitor.ProjectState);			
+			Assert.AreEqual(ProjectState.Building, monitor.ProjectState);
 
 			mockProjectManager.ExpectAndReturn("ProjectStatus", CreateProjectStatus(IntegrationStatus.Success, ProjectActivity.CheckingModifications));
 			monitor.Poll();
@@ -249,10 +248,10 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Monitoring
 		{
 			mockProjectManager.ExpectAndReturn("ProjectStatus", CreateProjectStatus(IntegrationStatus.Success, ProjectActivity.Building));
 			monitor.Poll();
-			Assert.AreEqual(ProjectState.Building, monitor.ProjectState);			
+			Assert.AreEqual(ProjectState.Building, monitor.ProjectState);
 			mockProjectManager.ExpectAndReturn("ProjectStatus", CreateProjectStatus(IntegrationStatus.Success, new ProjectActivity(ProjectActivity.Building.ToString())));
 			monitor.Poll();
-			Assert.AreEqual(ProjectState.Building, monitor.ProjectState);			
+			Assert.AreEqual(ProjectState.Building, monitor.ProjectState);
 		}
 
 		[Test]
@@ -284,7 +283,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Monitoring
 
 			Assert.AreEqual(string.Empty, monitor.SummaryStatusString);
 		}
-		
+
 		[Test]
 		public void ExposesTheIntegrationStatusOfTheContainedProject()
 		{
@@ -300,14 +299,14 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Monitoring
 			mockProjectManager.ExpectAndReturn("ProjectStatus", status);
 
 			monitor.Poll();
-			
+
 			Assert.AreEqual(integrationStatus, monitor.IntegrationStatus);
 		}
 
 		[Test]
 		public void WhenNoConnectionHasBeenMadeToTheBuildServerTheIntegrationStatusIsUnknown()
 		{
-			Assert.AreEqual(IntegrationStatus.Unknown, monitor.IntegrationStatus);			
+			Assert.AreEqual(IntegrationStatus.Unknown, monitor.IntegrationStatus);
 		}
 
 		[Test]
@@ -326,7 +325,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Monitoring
 
 			Message expectedMessage = new Message("foo");
 			ProjectStatus newStatus = ProjectStatusFixture.New(IntegrationStatus.Success, ProjectActivity.Sleeping);
-			newStatus.Messages = new Message[] { expectedMessage};
+			newStatus.Messages = new Message[] {expectedMessage};
 			mockProjectManager.ExpectAndReturn("ProjectStatus", newStatus);
 
 			monitor.MessageReceived += new MessageEventHandler(OnMessageReceived);
@@ -341,6 +340,12 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Monitoring
 			mockProjectManager.Expect("CancelPendingRequest");
 			monitor.CancelPending();
 			mockProjectManager.Verify();
+		}
+
+		[Test]
+		public void IsNotPendingIfThereIsNoProjectStatus()
+		{
+			Assert.IsFalse(monitor.IsPending);
 		}
 
 		private void OnMessageReceived(Message message)

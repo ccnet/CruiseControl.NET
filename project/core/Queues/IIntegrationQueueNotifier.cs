@@ -7,12 +7,6 @@ namespace ThoughtWorks.CruiseControl.Core.Queues
 	public interface IIntegrationQueueNotifier
 	{
 		/// <summary>
-		/// This project integration request has reached the top of the queue and can be started.
-		/// </summary>
-		/// <param name="integrationQueueItem">The integration to be started.</param>
-		void NotifyIntegrationToCommence(IIntegrationQueueItem integrationQueueItem);
-
-		/// <summary>
 		/// Notification of entering the integration queue.
 		/// </summary>
 		void NotifyEnteringIntegrationQueue();
