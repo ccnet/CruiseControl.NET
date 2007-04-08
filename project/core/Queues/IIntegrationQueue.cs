@@ -47,6 +47,6 @@ namespace ThoughtWorks.CruiseControl.Core.Queues
 
 		IntegrationRequest GetNextRequest(IProject project);
 		
-		bool HasItemOnQueue(IProject project);
+		bool HasItemPendingOnQueue(IProject project);
 	}
 }

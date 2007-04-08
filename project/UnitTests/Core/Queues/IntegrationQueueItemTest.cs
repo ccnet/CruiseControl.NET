@@ -25,11 +25,6 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Queues
 
 		private class TestIntegrationQueueCallback : IIntegrationQueueNotifier
 		{
-			public void NotifyIntegrationToCommence(IIntegrationQueueItem integrationQueueItem)
-			{
-				throw new NotImplementedException();
-			}
-
 			public void NotifyEnteringIntegrationQueue()
 			{
 				throw new NotImplementedException();

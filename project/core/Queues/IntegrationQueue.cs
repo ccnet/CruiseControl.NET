@@ -78,8 +78,8 @@ namespace ThoughtWorks.CruiseControl.Core.Queues
 				{
 					// The first item in the queue has now been integrated so discard it.
 					IIntegrationQueueItem integrationQueueItem = (IIntegrationQueueItem) this[0];
-					RemoveAt(0);
 					integrationQueueItem.IntegrationQueueNotifier.NotifyExitingIntegrationQueue(false);
+					RemoveAt(0);
 				}
 			}
 		}
@@ -130,15 +130,18 @@ namespace ThoughtWorks.CruiseControl.Core.Queues
 			return null;
 		}
 
-		public bool HasItemOnQueue(IProject project)
+		public bool HasItemPendingOnQueue(IProject project)
 		{
 			lock (this)
 			{
-				for	(int index = 0; index < Count; index++)
+				if (Count > 1)
 				{
-					IIntegrationQueueItem queuedIntegrationQueueItem = this[index] as IIntegrationQueueItem;
-					if (queuedIntegrationQueueItem.Project == project)
-						return true;
+					for	(int index = 1; index < Count; index++)
+					{
+						IIntegrationQueueItem queuedIntegrationQueueItem = this[index] as IIntegrationQueueItem;
+						if (queuedIntegrationQueueItem.Project == project)
+							return true;
+					}
 				}
 				return false;
 			}
@@ -191,8 +194,8 @@ namespace ThoughtWorks.CruiseControl.Core.Queues
 				{
 					Log.Info("Project: " + integrationQueueItem.Project.Name + " removed from queue: " + Name);
 					bool isPendingItemCancelled = index > 0;
-					RemoveAt(index);
 					integrationQueueItem.IntegrationQueueNotifier.NotifyExitingIntegrationQueue(isPendingItemCancelled);
+					RemoveAt(index);
 				}
 			}
 		}

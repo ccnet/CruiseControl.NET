@@ -335,5 +335,88 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Queues
 
 			VerifyAll();
 		}
+
+		[Test]
+		public void GetNextRequestIsNullWithNothingOnQueue()
+		{
+			IntegrationRequest ir = integrationQueue.GetNextRequest((IProject)project1Mock.MockInstance);
+			Assert.IsNull(ir);
+			VerifyAll();
+		}
+
+		[Test]
+		public void GetNextRequestIsNullWhenFirstQueueItemIsDifferentProject()
+		{
+			project1Mock.SetupResult("QueuePriority", 1);
+			queueNotifier1Mock.Expect("NotifyEnteringIntegrationQueue");
+			integrationQueue.Enqueue(integrationQueueItem1);
+
+			IntegrationRequest ir = integrationQueue.GetNextRequest((IProject)project2Mock.MockInstance);
+			Assert.IsNull(ir);
+			VerifyAll();
+		}
+
+		[Test]
+		public void GetNextRequestSucceedsWhenFirstQueueItemIsThisProject()
+		{
+			project1Mock.SetupResult("QueuePriority", 1);
+			queueNotifier1Mock.Expect("NotifyEnteringIntegrationQueue");
+			integrationQueue.Enqueue(integrationQueueItem1);
+
+			IntegrationRequest ir = integrationQueue.GetNextRequest((IProject)project1Mock.MockInstance);
+			Assert.AreSame(ir, integrationRequest);
+			VerifyAll();
+		}
+
+		[Test]
+		public void HasItemPendingOnQueueFalseWhenQueueIsEmpty()
+		{
+			bool hasItem = integrationQueue.HasItemPendingOnQueue((IProject) project1Mock.MockInstance);
+			Assert.IsFalse(hasItem);
+			VerifyAll();
+		}
+
+		[Test]
+		public void HasItemPendingOnQueueFalseWhenProjectNotOnQueue()
+		{
+			project1Mock.SetupResult("QueuePriority", 1);
+			queueNotifier1Mock.Expect("NotifyEnteringIntegrationQueue");
+			integrationQueue.Enqueue(integrationQueueItem1);
+
+			bool hasItem = integrationQueue.HasItemPendingOnQueue((IProject) project2Mock.MockInstance);
+			Assert.IsFalse(hasItem);
+			VerifyAll();
+		}
+
+		[Test]
+		public void HasItemPendingOnQueueFalseWhenProjectIsJustIntegrating()
+		{
+			project1Mock.SetupResult("QueuePriority", 1);
+			queueNotifier1Mock.Expect("NotifyEnteringIntegrationQueue");
+			integrationQueue.Enqueue(integrationQueueItem1);
+
+			bool hasItem = integrationQueue.HasItemPendingOnQueue((IProject) project1Mock.MockInstance);
+			Assert.IsFalse(hasItem);
+			VerifyAll();
+		}
+
+		[Test]
+		public void HasItemPendingOnQueueTrueWhenProjectIsQueued()
+		{
+			// Setup the first project request
+			project1Mock.SetupResult("QueuePriority", 1);
+			queueNotifier1Mock.Expect("NotifyEnteringIntegrationQueue");
+			integrationQueue.Enqueue(integrationQueueItem1);
+
+			// Add a second project request for different project with same queue name
+			project2Mock.SetupResult("QueueName", TestQueueName);
+			project2Mock.SetupResult("QueuePriority", 0);
+			queueNotifier2Mock.Expect("NotifyEnteringIntegrationQueue");
+			integrationQueue.Enqueue(integrationQueueItem2);
+
+			bool hasItem = integrationQueue.HasItemPendingOnQueue((IProject) project2Mock.MockInstance);
+			Assert.IsTrue(hasItem);
+			VerifyAll();
+		}
 	}
 }

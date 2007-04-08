@@ -151,7 +151,7 @@ namespace ThoughtWorks.CruiseControl.Core
 				// - the build gets started by reaching it's turn on the queue
 				// - the build gets cancelled from the queue
 				// - the thread gets killed
-				while (IsRunning && integrationQueue.HasItemOnQueue(project) && integrationQueue.GetNextRequest(project) == null)
+				while (IsRunning && integrationQueue.HasItemPendingOnQueue(project))
 				{
 					Thread.Sleep(200);
 				}
@@ -163,8 +163,6 @@ namespace ThoughtWorks.CruiseControl.Core
 			IntegrationRequest triggeredRequest = trigger.Fire();
 			if (triggeredRequest != null)
 			{
-				// Add to the queue - if it is able to build straight away
-				// then integrationRequest will get set immediately by the callback.
 				AddToQueue(triggeredRequest);
 			}
 		}
@@ -255,7 +253,7 @@ namespace ThoughtWorks.CruiseControl.Core
 		/// </summary>
 		public void NotifyExitingIntegrationQueue(bool isPendingItemCancelled)
 		{
-			if (!integrationQueue.HasItemOnQueue(project))
+			if (!integrationQueue.HasItemPendingOnQueue(project))
 			{
 				project.NotifySleepingState();
 			}
