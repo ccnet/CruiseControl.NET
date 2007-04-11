@@ -42,7 +42,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			DateTime changeTime = ParseDate(logEntry);
 			if (changeTime < from || to < changeTime)
 			{
-				// Work around issue 1642 in Subversion
+				// Work around issue 1642 in Subversion (http://subversion.tigris.org/issues/show_bug.cgi?id=1642).
 				return new ArrayList();
 			}
 
