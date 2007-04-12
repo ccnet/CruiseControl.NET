@@ -244,7 +244,11 @@ namespace ThoughtWorks.CruiseControl.Core
 		/// </summary>
 		public void NotifyEnteringIntegrationQueue()
 		{
-			project.NotifyPendingState();
+			if (!integrationQueue.HasItemOnQueue(project))
+			{
+				// We only set pending if first request on queue, as do not want to overwrite a Building state.
+				project.NotifyPendingState();
+			}
 		}
 
 		/// <summary>
@@ -253,19 +257,33 @@ namespace ThoughtWorks.CruiseControl.Core
 		/// </summary>
 		public void NotifyExitingIntegrationQueue(bool isPendingItemCancelled)
 		{
-			if (!integrationQueue.HasItemPendingOnQueue(project))
+			if (isPendingItemCancelled)
 			{
-				project.NotifySleepingState();
-			}
-			else if (isPendingItemCancelled)
-			{
-				// Must have been a queued force build for the same project while we are currently integrating 
-				// the first in the queue. Do not touch the state of the project in this scenario.
+				// User has cancelled a build request that has not yet started.
+				if (integrationQueue.GetNextRequest(project) == null)
+				{
+					// We cancelled the only request for this project in the queue
+					project.NotifySleepingState();
+				}
+				else
+				{
+					// We cancelled the pending request but there is one still building
+					// We do not touch the state as will leave project in "Building" state.
+				}
 			}
 			else
 			{
-				// State should go to pending as we still have an item on the queue
-				project.NotifyPendingState();
+				// The project at the front of the queue has completed.
+				if (!integrationQueue.HasItemPendingOnQueue(project))
+				{
+					// Nothing is pending on the queue for this project.
+					project.NotifySleepingState();
+				}
+				else
+				{
+					// State should go to pending as we still have an item on the queue
+					project.NotifyPendingState();
+				}
 			}
 			trigger.IntegrationCompleted();
 		}

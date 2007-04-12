@@ -418,5 +418,56 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Queues
 			Assert.IsTrue(hasItem);
 			VerifyAll();
 		}
+
+		[Test]
+		public void HasItemOnQueueFalseWhenQueueIsEmpty()
+		{
+			bool hasItem = integrationQueue.HasItemOnQueue((IProject) project1Mock.MockInstance);
+			Assert.IsFalse(hasItem);
+			VerifyAll();
+		}
+
+		[Test]
+		public void HasItemOnQueueFalseWhenProjectNotOnQueue()
+		{
+			project1Mock.SetupResult("QueuePriority", 1);
+			queueNotifier1Mock.Expect("NotifyEnteringIntegrationQueue");
+			integrationQueue.Enqueue(integrationQueueItem1);
+
+			bool hasItem = integrationQueue.HasItemOnQueue((IProject) project2Mock.MockInstance);
+			Assert.IsFalse(hasItem);
+			VerifyAll();
+		}
+
+		[Test]
+		public void HasItemOnQueueTrueWhenProjectIsJustIntegrating()
+		{
+			project1Mock.SetupResult("QueuePriority", 1);
+			queueNotifier1Mock.Expect("NotifyEnteringIntegrationQueue");
+			integrationQueue.Enqueue(integrationQueueItem1);
+
+			bool hasItem = integrationQueue.HasItemOnQueue((IProject) project1Mock.MockInstance);
+			Assert.IsTrue(hasItem);
+			VerifyAll();
+		}
+
+		[Test]
+		public void HasItemOnQueueTrueWhenProjectIsQueued()
+		{
+			// Setup the first project request
+			project1Mock.SetupResult("QueuePriority", 1);
+			queueNotifier1Mock.Expect("NotifyEnteringIntegrationQueue");
+			integrationQueue.Enqueue(integrationQueueItem1);
+
+			// Add a second project request for different project with same queue name
+			project2Mock.SetupResult("QueueName", TestQueueName);
+			project2Mock.SetupResult("QueuePriority", 0);
+			queueNotifier2Mock.Expect("NotifyEnteringIntegrationQueue");
+			integrationQueue.Enqueue(integrationQueueItem2);
+
+			bool hasItem = integrationQueue.HasItemOnQueue((IProject) project2Mock.MockInstance);
+			Assert.IsTrue(hasItem);
+			VerifyAll();
+		}
 	}
 }

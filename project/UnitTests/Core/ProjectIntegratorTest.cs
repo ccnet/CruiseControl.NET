@@ -274,7 +274,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 			integrationQueue.Enqueue(new IntegrationQueueItem(project, request1, integrator));
 
 			IntegrationRequest request2 = new IntegrationRequest(BuildCondition.IfModificationExists, "intervalTrigger");
-			projectMock.Expect("NotifyPendingState");
+			projectMock.ExpectNoCall("NotifyPendingState");
 			integrationQueue.Enqueue(new IntegrationQueueItem(project, request2, integrator));
 
 			int queuedItemCount = integrationQueue.GetQueuedIntegrations().Length;
@@ -286,6 +286,154 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 			queuedItemCount = integrationQueue.GetQueuedIntegrations().Length;
 			Assert.AreEqual(1, queuedItemCount);
 
+			VerifyAll();
+		}
+
+		[Test]
+		public void FirstBuildOfProjectShouldSetToPending()
+		{
+			IProject project = (IProject) projectMock.MockInstance;
+
+			IntegrationRequest request1 = new IntegrationRequest(BuildCondition.IfModificationExists, "intervalTrigger");
+			projectMock.Expect("NotifyPendingState");
+
+			integrationQueue.Enqueue(new IntegrationQueueItem(project, request1, integrator));
+			VerifyAll();
+		}
+
+		[Test]
+		public void SecondBuildOfProjectShouldNotSetToPendingWhenQueued()
+		{
+			IProject project = (IProject) projectMock.MockInstance;
+
+			IntegrationRequest request1 = new IntegrationRequest(BuildCondition.IfModificationExists, "intervalTrigger");
+			projectMock.Expect("NotifyPendingState");
+
+			IntegrationRequest request2 = new IntegrationRequest(BuildCondition.IfModificationExists, "intervalTrigger");
+			projectMock.ExpectNoCall("NotifyPendingState");
+
+			integrationQueue.Enqueue(new IntegrationQueueItem(project, request1, integrator));
+			integrationQueue.Enqueue(new IntegrationQueueItem(project, request2, integrator));
+			VerifyAll();
+		}
+
+		[Test]
+		public void CompletingOnlyQueueBuildGoesToSleepingState()
+		{
+			IProject project = (IProject) projectMock.MockInstance;
+
+			IntegrationRequest request1 = new IntegrationRequest(BuildCondition.IfModificationExists, "intervalTrigger");
+			projectMock.Expect("NotifyPendingState");
+			integrationTriggerMock.Expect("IntegrationCompleted");
+			projectMock.Expect("NotifySleepingState");
+
+			integrationQueue.Enqueue(new IntegrationQueueItem(project, request1, integrator));
+			// Simulate first build completed by dequeuing it to invoke notifcation.
+			integrationQueue.Dequeue();
+			VerifyAll();
+		}
+
+		[Test]
+		public void CompletingWithPendingQueueBuildGoesToPendingState()
+		{
+			IProject project = (IProject) projectMock.MockInstance;
+
+			IntegrationRequest request1 = new IntegrationRequest(BuildCondition.IfModificationExists, "intervalTrigger");
+			projectMock.Expect("NotifyPendingState");
+
+			IntegrationRequest request2 = new IntegrationRequest(BuildCondition.IfModificationExists, "intervalTrigger");
+
+			// As first build completes we go to pending as still another build on queue
+			integrationTriggerMock.Expect("IntegrationCompleted");
+			projectMock.Expect("NotifyPendingState");
+
+			integrationQueue.Enqueue(new IntegrationQueueItem(project, request1, integrator));
+			integrationQueue.Enqueue(new IntegrationQueueItem(project, request2, integrator));
+			// Simulate first build completed by dequeuing it to invoke notifcation.
+			integrationQueue.Dequeue();
+
+			VerifyAll();
+		}
+
+		[Test]
+		public void CompletingAllPendingQueueBuildsGoesToPendingState()
+		{
+			IProject project = (IProject) projectMock.MockInstance;
+
+			IntegrationRequest request1 = new IntegrationRequest(BuildCondition.IfModificationExists, "intervalTrigger");
+			projectMock.Expect("NotifyPendingState");
+
+			IntegrationRequest request2 = new IntegrationRequest(BuildCondition.IfModificationExists, "intervalTrigger");
+			// As first build completes we go to pending as still another build on queue
+			integrationTriggerMock.Expect("IntegrationCompleted");
+			projectMock.Expect("NotifyPendingState");
+			// As second build completes, we can go to sleeping state
+			integrationTriggerMock.Expect("IntegrationCompleted");
+			projectMock.Expect("NotifySleepingState");
+
+			integrationQueue.Enqueue(new IntegrationQueueItem(project, request1, integrator));
+			integrationQueue.Enqueue(new IntegrationQueueItem(project, request2, integrator));
+			// Simulate first build completed by dequeuing it to invoke notifcation.
+			integrationQueue.Dequeue();
+			// Simulate second build completed by dequeuing it to invoke notifcation.
+			integrationQueue.Dequeue();
+			
+			VerifyAll();
+		}
+
+		[Test]
+		public void CancellingAPendingRequestWhileBuildingIgnoresState()
+		{
+			IProject project = (IProject) projectMock.MockInstance;
+
+			IntegrationRequest request1 = new IntegrationRequest(BuildCondition.IfModificationExists, "intervalTrigger");
+			projectMock.Expect("NotifyPendingState");
+
+			IntegrationRequest request2 = new IntegrationRequest(BuildCondition.IfModificationExists, "intervalTrigger");
+			// As pending build is cancelled we should not alter state
+			projectMock.ExpectNoCall("NotifyPendingState");
+			projectMock.ExpectNoCall("NotifySleepingState");
+			integrationTriggerMock.Expect("IntegrationCompleted");
+
+			integrationQueue.Enqueue(new IntegrationQueueItem(project, request1, integrator));
+			integrationQueue.Enqueue(new IntegrationQueueItem(project, request2, integrator));
+			// Cancel second build project on queue
+			integrator.CancelPendingRequest();
+			
+			VerifyAll();
+		}
+
+		[Test]
+		public void CancellingAPendingRequestWhileNotBuildingGoesToSleeping()
+		{
+			LatchMock otherProjectMock = new LatchMock(typeof (IProject));
+			otherProjectMock.Strict = true;
+			otherProjectMock.SetupResult("Name", "otherProject");
+			otherProjectMock.SetupResult("QueueName", TestQueueName);
+			otherProjectMock.SetupResult("QueuePriority", 0);
+			otherProjectMock.SetupResult("Triggers", integrationTriggerMock.MockInstance);
+
+			IProject otherProject = (IProject) otherProjectMock.MockInstance;
+			IProject project = (IProject) projectMock.MockInstance;
+
+			ProjectIntegrator otherIntegrator = new ProjectIntegrator(otherProject, integrationQueue);
+			// Queue up the "otherProject" in the first queue position to build
+			IntegrationRequest otherProjectRequest = new IntegrationRequest(BuildCondition.IfModificationExists, "intervalTrigger");
+			otherProjectMock.Expect("NotifyPendingState");
+
+			// Queue up our test project on the same queue as so it goes to pending
+			IntegrationRequest request2 = new IntegrationRequest(BuildCondition.IfModificationExists, "intervalTrigger");
+			projectMock.Expect("NotifyPendingState");
+			// Cancelling the pending request should revert status to sleeping
+			projectMock.Expect("NotifySleepingState");
+			integrationTriggerMock.Expect("IntegrationCompleted");
+
+			integrationQueue.Enqueue(new IntegrationQueueItem(otherProject, otherProjectRequest, otherIntegrator));
+			integrationQueue.Enqueue(new IntegrationQueueItem(project, request2, integrator));
+			// Cancel second build project on queue
+			integrator.CancelPendingRequest();
+			
+			otherProjectMock.Verify();
 			VerifyAll();
 		}
 	}
