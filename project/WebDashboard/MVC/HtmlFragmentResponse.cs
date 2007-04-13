@@ -1,3 +1,5 @@
+using System.Web;
+
 namespace ThoughtWorks.CruiseControl.WebDashboard.MVC
 {
 	public class HtmlFragmentResponse : IResponse
@@ -12,6 +14,11 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.MVC
 		public string ResponseFragment
 		{
 			get { return htmlFragment; }
+		}
+
+		public void Process(HttpResponse response)
+		{
+			response.Write(htmlFragment);
 		}
 	}
 }

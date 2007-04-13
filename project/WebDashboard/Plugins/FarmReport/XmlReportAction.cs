@@ -32,7 +32,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.FarmReport
 
 			xmlWriter.WriteEndElement();
 
-			return new HtmlFragmentResponse(stringWriter.ToString());
+			return new XmlFragmentResponse(stringWriter.ToString());
 		}
 
 		private void WriteBuildStatus(XmlTextWriter xmlWriter, ProjectStatusOnServer projectStatusOnServer)

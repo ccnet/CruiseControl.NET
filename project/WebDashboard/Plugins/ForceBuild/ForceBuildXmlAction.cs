@@ -28,7 +28,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.FarmReport
 			xmlWriter.WriteString("Build Forced for " + request.ProjectName);
 			xmlWriter.WriteEndElement();
 
-			return new HtmlFragmentResponse(stringWriter.ToString());
+			return new XmlFragmentResponse(stringWriter.ToString());
 		}
 	}
 }

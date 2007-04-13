@@ -29,7 +29,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Plugins.BuildReport
 		}
 
 		[Test]
-		public void ReturnsAnHtmlResponse()
+		public void ReturnsAXmlResponse()
 		{
 			mockFarmService.ExpectAndReturn("GetProjectStatusListAndCaptureExceptions",
 			                                new ProjectStatusListAndExceptions(
@@ -37,7 +37,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Plugins.BuildReport
 
 			IResponse response = reportAction.Execute(null);
 			Assert.IsNotNull(response);
-			Assert.AreEqual(typeof (HtmlFragmentResponse), response.GetType());
+			Assert.AreEqual(typeof (XmlFragmentResponse), response.GetType());
 
 			mockFarmService.Verify();
 		}
@@ -48,7 +48,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Plugins.BuildReport
 			mockFarmService.ExpectAndReturn("GetProjectStatusListAndCaptureExceptions",
 			                                new ProjectStatusListAndExceptions(
 			                                	new ProjectStatusOnServer[0], new CruiseServerException[0]));
-			HtmlFragmentResponse response = (HtmlFragmentResponse) reportAction.Execute(null);
+			XmlFragmentResponse response = (XmlFragmentResponse) reportAction.Execute(null);
 			string xml = response.ResponseFragment;
 
 			Assert.AreEqual("<Projects />", xml);
@@ -66,7 +66,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Plugins.BuildReport
 			                                new ProjectStatusListAndExceptions(
 			                                	new ProjectStatusOnServer[] {projectStatusOnServer}, new CruiseServerException[0]));
 
-			HtmlFragmentResponse response = (HtmlFragmentResponse) reportAction.Execute(null);
+			XmlFragmentResponse response = (XmlFragmentResponse) reportAction.Execute(null);
 			string xml = response.ResponseFragment;
 
 			// cannot just compare the xml string, since we correctly expect the string to vary based on the
@@ -110,7 +110,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Plugins.BuildReport
 			                                new ProjectStatusListAndExceptions(
 			                                	new ProjectStatusOnServer[] {projectStatusOnServer}, new CruiseServerException[0]));
 
-			HtmlFragmentResponse response = (HtmlFragmentResponse) reportAction.Execute(null);
+			XmlFragmentResponse response = (XmlFragmentResponse) reportAction.Execute(null);
 			string xml = response.ResponseFragment;
 
 			XmlValidatingReader rdr = new XmlValidatingReader(xml, XmlNodeType.Document, null);

@@ -1,4 +1,3 @@
-using System;
 using NMock;
 using NUnit.Framework;
 using ThoughtWorks.CruiseControl.Core.Reporting.Dashboard.Navigation;
@@ -22,7 +21,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Plugins.ForceBuild
 		{
 			mockFarmService = new DynamicMock(typeof (IFarmService));
 			reportAction = new ForceBuildXmlAction((IFarmService) mockFarmService.MockInstance);
-			cruiseRequestMock = new DynamicMock(typeof(ICruiseRequest));
+			cruiseRequestMock = new DynamicMock(typeof (ICruiseRequest));
 			cruiseRequest = (ICruiseRequest) cruiseRequestMock.MockInstance;
 		}
 
@@ -43,9 +42,9 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Plugins.ForceBuild
 			mockFarmService.Expect("ForceBuild", projectSpecifier);
 
 			IResponse response = reportAction.Execute(cruiseRequest);
-			Assert.IsTrue(response is HtmlFragmentResponse);
-			Assert.AreEqual("<ForceBuildResult>Build Forced for myProject</ForceBuildResult>", 
-				((HtmlFragmentResponse) response).ResponseFragment);
+			Assert.IsTrue(response is XmlFragmentResponse);
+			Assert.AreEqual("<ForceBuildResult>Build Forced for myProject</ForceBuildResult>",
+			                ((XmlFragmentResponse) response).ResponseFragment);
 		}
 	}
 }

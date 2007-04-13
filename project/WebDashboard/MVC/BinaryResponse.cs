@@ -1,3 +1,5 @@
+using System.Web;
+
 namespace ThoughtWorks.CruiseControl.WebDashboard.MVC
 {
 	public class BinaryResponse : IResponse
@@ -9,9 +11,9 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.MVC
 			this.content = content;
 		}
 
-		public byte[] Content
+		public void Process(HttpResponse response)
 		{
-			get { return content; }
+			response.BinaryWrite(content);
 		}
 	}
 }
