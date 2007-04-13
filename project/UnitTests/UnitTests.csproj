@@ -1,1692 +1,1074 @@
-<VisualStudioProject>
-    <CSHARP
-        ProjectType = "Local"
-        ProductVersion = "7.10.6030"
-        SchemaVersion = "2.0"
-        ProjectGuid = "{3F93AC24-DF56-469E-91C3-43A2A179C7E1}"
-    >
-        <Build>
-            <Settings
-                ApplicationIcon = ""
-                AssemblyKeyContainerName = ""
-                AssemblyName = "ThoughtWorks.CruiseControl.UnitTests"
-                AssemblyOriginatorKeyFile = ""
-                DefaultClientScript = "JScript"
-                DefaultHTMLPageLayout = "Grid"
-                DefaultTargetSchema = "IE50"
-                DelaySign = "false"
-                OutputType = "Library"
-                PreBuildEvent = 'mkdir "$(TargetDir)xsl"&#xd;&#xa;copy "$(ProjectDir)test.config" "$(TargetPath).config"&#xd;&#xa;xcopy /y/q "$(SolutionDir)\xsl\*.*" "$(TargetDir)xsl"&#xd;&#xa;xcopy "$(ProjectDir)\resources\*.*" "$(TargetDir)" /S /Y /Q&#xd;&#xa;copy "$(ProjectDir)..\..\tools\sleeper.exe" "$(TargetDir)"'
-                PostBuildEvent = ""
-                RootNamespace = "ThoughtWorks.CruiseControl.UnitTests"
-                RunPostBuildEvent = "OnBuildSuccess"
-                StartupObject = ""
-            >
-                <Config
-                    Name = "Debug"
-                    AllowUnsafeBlocks = "false"
-                    BaseAddress = "285212672"
-                    CheckForOverflowUnderflow = "false"
-                    ConfigurationOverrideFile = ""
-                    DefineConstants = "DEBUG;TRACE"
-                    DocumentationFile = ""
-                    DebugSymbols = "true"
-                    FileAlignment = "4096"
-                    IncrementalBuild = "false"
-                    NoStdLib = "false"
-                    NoWarn = ""
-                    Optimize = "false"
-                    OutputPath = "bin\Debug\"
-                    RegisterForComInterop = "false"
-                    RemoveIntegerChecks = "false"
-                    TreatWarningsAsErrors = "false"
-                    WarningLevel = "4"
-                />
-                <Config
-                    Name = "Release"
-                    AllowUnsafeBlocks = "false"
-                    BaseAddress = "285212672"
-                    CheckForOverflowUnderflow = "false"
-                    ConfigurationOverrideFile = ""
-                    DefineConstants = "TRACE"
-                    DocumentationFile = ""
-                    DebugSymbols = "false"
-                    FileAlignment = "4096"
-                    IncrementalBuild = "false"
-                    NoStdLib = "false"
-                    NoWarn = ""
-                    Optimize = "true"
-                    OutputPath = "bin\Release\"
-                    RegisterForComInterop = "false"
-                    RemoveIntegerChecks = "false"
-                    TreatWarningsAsErrors = "false"
-                    WarningLevel = "4"
-                />
-                <Config
-                    Name = "Build"
-                    AllowUnsafeBlocks = "false"
-                    BaseAddress = "285212672"
-                    CheckForOverflowUnderflow = "false"
-                    ConfigurationOverrideFile = ""
-                    DefineConstants = "TRACE"
-                    DocumentationFile = ""
-                    DebugSymbols = "true"
-                    FileAlignment = "4096"
-                    IncrementalBuild = "false"
-                    NoStdLib = "false"
-                    NoWarn = ""
-                    Optimize = "true"
-                    OutputPath = "..\..\build\unittests\"
-                    RegisterForComInterop = "false"
-                    RemoveIntegerChecks = "false"
-                    TreatWarningsAsErrors = "false"
-                    WarningLevel = "4"
-                />
-            </Settings>
-            <References>
-                <Reference
-                    Name = "System"
-                    AssemblyName = "System"
-                    HintPath = "..\..\..\..\..\..\WINDOWS\Microsoft.NET\Framework\v1.1.4322\System.dll"
-                />
-                <Reference
-                    Name = "System.XML"
-                    AssemblyName = "System.Xml"
-                    HintPath = "..\..\..\..\..\..\WINDOWS\Microsoft.NET\Framework\v1.1.4322\System.XML.dll"
-                />
-                <Reference
-                    Name = "nmock"
-                    AssemblyName = "nmock"
-                    HintPath = "..\..\lib\nmock.dll"
-                />
-                <Reference
-                    Name = "core"
-                    Project = "{F8113DB9-6C47-4FD1-8A01-655FCF151747}"
-                    Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
-                />
-                <Reference
-                    Name = "WebDashboard"
-                    Project = "{482EF049-EC0C-4819-B568-75B5F74BDD5B}"
-                    Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
-                />
-                <Reference
-                    Name = "Remote"
-                    Project = "{E820CF3B-8C5A-4002-BC16-B7818D3D54A8}"
-                    Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
-                />
-                <Reference
-                    Name = "System.Web"
-                    AssemblyName = "System.Web"
-                    HintPath = "..\..\..\..\..\..\WINDOWS\Microsoft.NET\Framework\v1.1.4322\System.Web.dll"
-                />
-                <Reference
-                    Name = "NetReflector"
-                    AssemblyName = "NetReflector"
-                    HintPath = "..\..\lib\NetReflector.dll"
-                />
-                <Reference
-                    Name = "CCTrayLib"
-                    Project = "{C8043AD9-0F30-4366-A263-E2FC0D6A57A9}"
-                    Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
-                />
-                <Reference
-                    Name = "NVelocity"
-                    AssemblyName = "NVelocity"
-                    HintPath = "..\..\lib\NVelocity.dll"
-                />
-                <Reference
-                    Name = "Commons"
-                    AssemblyName = "Commons"
-                    HintPath = "..\..\lib\Commons.dll"
-                />
-                <Reference
-                    Name = "log4net"
-                    AssemblyName = "log4net"
-                    HintPath = "..\..\lib\log4net.dll"
-                />
-                <Reference
-                    Name = "System.Windows.Forms"
-                    AssemblyName = "System.Windows.Forms"
-                    HintPath = "..\..\..\..\WINDOWS\Microsoft.NET\Framework\v1.1.4322\System.Windows.Forms.dll"
-                />
-                <Reference
-                    Name = "System.Drawing"
-                    AssemblyName = "System.Drawing"
-                    HintPath = "..\..\..\..\..\WINDOWS\Microsoft.NET\Framework\v1.1.4322\System.Drawing.dll"
-                />
-                <Reference
-                    Name = "nunit.core"
-                    AssemblyName = "nunit.core"
-                    HintPath = "..\..\tools\nunit\nunit.core.dll"
-                />
-                <Reference
-                    Name = "nunit.framework"
-                    AssemblyName = "nunit.framework"
-                    HintPath = "..\..\tools\nunit\nunit.framework.dll"
-                />
-                <Reference
-                    Name = "System.Data"
-                    AssemblyName = "System.Data"
-                    HintPath = "..\..\..\..\WINDOWS\Microsoft.NET\Framework\v1.1.4322\System.Data.dll"
-                />
-                <Reference
-                    Name = "NPlot"
-                    AssemblyName = "NPlot"
-                    HintPath = "..\..\lib\NPlot.dll"
-                />
-                <Reference
-                    Name = "objection"
-                    Project = "{1C0B8046-FE79-4845-84B9-369A76F817A3}"
-                    Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
-                />
-            </References>
-        </Build>
-        <Files>
-            <Include>
-                <File
-                    RelPath = "AssemblyInfo.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "CustomAssertion.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "test.config"
-                    BuildAction = "None"
-                />
-                <File
-                    RelPath = "CCTrayLib\CCTimeFormatterTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "CCTrayLib\IconFileFixture.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "CCTrayLib\StatusIconTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "CCTrayLib\TestIcon.ico"
-                    BuildAction = "EmbeddedResource"
-                />
-                <File
-                    RelPath = "CCTrayLib\Configuration\BuildServerTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "CCTrayLib\Configuration\CCTrayMultiConfigurationTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "CCTrayLib\Monitoring\AggregatingProjectMonitorTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "CCTrayLib\Monitoring\AggregatingServerMonitorTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "CCTrayLib\Monitoring\BuildDurationTrackerTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "CCTrayLib\Monitoring\CruiseProjectManagerFactoryTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "CCTrayLib\Monitoring\CruiseServerManagerFactoryTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "CCTrayLib\Monitoring\DashboardXmlParserTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "CCTrayLib\Monitoring\HttpCruiseProjectManagerTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "CCTrayLib\Monitoring\HttpCruiseServerManagerTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "CCTrayLib\Monitoring\PollerTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "CCTrayLib\Monitoring\PollIntervalReporterTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "CCTrayLib\Monitoring\ProjectMonitorTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "CCTrayLib\Monitoring\ProjectStateTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "CCTrayLib\Monitoring\ProjectStatusMonitorTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "CCTrayLib\Monitoring\RemotingCruiseServerManagerTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "CCTrayLib\Monitoring\ServerMonitorTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "CCTrayLib\Monitoring\StubCurrentTimeProvider.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "CCTrayLib\Presentation\AddBuildServerTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "CCTrayLib\Presentation\AddProjectsTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "CCTrayLib\Presentation\BuildTransitionSoundPlayerTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "CCTrayLib\Presentation\ConfigurableBalloonMessageProviderTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "CCTrayLib\Presentation\ConfigurableProjectStateIconProviderTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "CCTrayLib\Presentation\DetailStringProviderTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "CCTrayLib\Presentation\IntegrationQueueTreeNodeAdaptorTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "CCTrayLib\Presentation\MainFormControllerTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "CCTrayLib\Presentation\ProjectStateIconAdaptorTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "CCTrayLib\Presentation\ProjectStatusListViewItemAdaptorTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "CCTrayLib\Presentation\ResourceIntegrationQueueIconProviderTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "CCTrayLib\Presentation\ResourceProjectStateIconProviderTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "CCTrayLib\Presentation\StubProjectMonitor.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "CCTrayLib\Presentation\StubServerMonitor.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "CCTrayLib\Presentation\SynchronizedProjectMonitorTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "CCTrayLib\Presentation\SynchronizedServerMonitorTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "CCTrayLib\Presentation\TrayIconTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "CCTrayLib\X10\LampControllerTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "CCTrayLib\X10\X10ControllerTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Config\ccnet.config"
-                    Link = "..\examples\ccnet.config"
-                    BuildAction = "EmbeddedResource"
-                />
-                <File
-                    RelPath = "Config\CCNetConfigFileValidationTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Config\CVSAndNAntAndEmailPublisherCCNet.config"
-                    Link = "..\examples\CVSAndNAntAndEmailPublisherCCNet.config"
-                    BuildAction = "EmbeddedResource"
-                />
-                <File
-                    RelPath = "Config\P4AndDevenv.config"
-                    Link = "..\examples\P4AndDevenv.config"
-                    BuildAction = "EmbeddedResource"
-                />
-                <File
-                    RelPath = "Config\VSSAndDevenvAndNUnitCCNet.config"
-                    Link = "..\examples\VSSAndDevenvAndNUnitCCNet.config"
-                    BuildAction = "EmbeddedResource"
-                />
-                <File
-                    RelPath = "Core\ArgumentParserTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Core\ConsoleRunnerTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Core\CruiseServerTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Core\FileMother.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Core\IntegrationFixture.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Core\IntegrationQueueManagerTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Core\IntegrationRequestQueueTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Core\IntegrationResultManagerTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Core\IntegrationResultMother.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Core\IntegrationResultTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Core\IntegrationRunnerTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Core\LogFileTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Core\MockBuilder.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Core\ProcessExecutorTestFixtureBase.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Core\ProcessResultFixture.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Core\ProjectBaseTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Core\ProjectExceptionHandlingTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Core\ProjectIntegratorListFactoryTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Core\ProjectIntegratorTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Core\ProjectStatusFixture.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Core\ProjectTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Core\RemoteCruiseServerTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Core\SimpleBuildFile.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Core\TestLogs.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Core\TraceListenerBackup.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Core\WorkflowResultTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Core\WorkflowTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Core\Config\CachingConfigurationServiceTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Core\Config\ConfigurationFileLoaderTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Core\Config\ConfigurationFileSaverTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Core\Config\ConfigurationFixture.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Core\Config\ConfigurationTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Core\Config\CruiseControlConfigSectionHandlerTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Core\Config\FileConfigurationServiceTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Core\Config\FileWatcherConfigurationServiceTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Core\Config\NetReflectorConfigurationReaderTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Core\Config\ValidatingLoaderTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Core\Config\XslFilesSectionHandlerTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Core\Label\DateLabellerTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Core\Label\DefaultLabellerTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Core\Label\IterationLabellerTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Core\Label\LastChangeLabellerTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Core\Label\RemoteProjectLabellerTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Core\Label\StateFileLabellerTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Core\Log\CircularArrayTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Core\Log\CircularArrayTestResources.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Core\Log\ServerLogFileReaderTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Core\Log\TestLog.txt"
-                    BuildAction = "EmbeddedResource"
-                />
-                <File
-                    RelPath = "Core\Publishers\BuildLogTransformerTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Core\Publishers\BuildPublisherTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Core\Publishers\EmailGatewayTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Core\Publishers\EmailGroupTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Core\Publishers\EmailMessageTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Core\Publishers\EmailPublisherMother.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Core\Publishers\EmailPublisherStub.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Core\Publishers\EmailPublisherTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Core\Publishers\ForceBuildPublisherTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Core\Publishers\HtmlDetailsMessageBuilderTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Core\Publishers\HtmlLinkMessageBuilderTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Core\Publishers\MockEmailGateway.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Core\Publishers\PublisherTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Core\Publishers\RSSPublisherTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Core\Publishers\XmlIntegrationResultWriterTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Core\Publishers\XmlLogFixture.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Core\Publishers\XmlLogPublisherTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Core\Publishers\Statistics\StatisticsBuilderTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Core\Publishers\Statistics\StatisticsChartGeneratorTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Core\Publishers\Statistics\StatisticsPublisherTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Core\Queues\IntegrationQueueItemTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Core\Queues\IntegrationQueueSetTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Core\Queues\IntegrationQueueTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Core\Reporting\Dashboard\Navigation\AbsolutePathUrlBuilderDecoratorTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Core\SourceControl\AccuRevHistoryParserTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Core\SourceControl\AccuRevMother.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Core\SourceControl\AccuRevTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Core\SourceControl\ActionFilterTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Core\SourceControl\AlienbrainHistoryParserTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Core\SourceControl\AlienbrainTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Core\SourceControl\ClearCaseHistoryParserTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Core\SourceControl\ClearCaseMother.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Core\SourceControl\ClearCaseTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Core\SourceControl\CvsHistoryParserTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Core\SourceControl\CvsMother.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Core\SourceControl\CvsTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Core\SourceControl\FileSourceControlTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Core\SourceControl\FilteredSourceControlTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Core\SourceControl\MksHistoryParserTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Core\SourceControl\MksTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Core\SourceControl\MockSourceControl.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Core\SourceControl\ModificationMother.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Core\SourceControl\ModificationTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Core\SourceControl\MultiSourceControlTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Core\SourceControl\NullSourceControlTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Core\SourceControl\PathFilterTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Core\SourceControl\ProcessSourceControlTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Core\SourceControl\PvcsHistoryParserTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Core\SourceControl\PvcsMother.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Core\SourceControl\PvcsTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Core\SourceControl\QuietPeriodTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Core\SourceControl\StarTeamHistoryParserTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Core\SourceControl\StarTeamTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Core\SourceControl\SurroundHistoryParserTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Core\SourceControl\SurroundTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Core\SourceControl\SvnHistoryParserTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Core\SourceControl\SvnTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Core\SourceControl\UserFilterTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Core\SourceControl\Vault317Test.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Core\SourceControl\Vault3Test.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Core\SourceControl\VaultHistoryParserTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Core\SourceControl\ViewCVSBuilderTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Core\SourceControl\VssApplyLabelTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Core\SourceControl\VssHistoryParserTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Core\SourceControl\VssMother.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Core\SourceControl\VssTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Core\SourceControl\WebSVNBuilderTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Core\SourceControl\BitKeeper\BitKeeperHistoryParserTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Core\SourceControl\BitKeeper\BitKeeperTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Core\SourceControl\Perforce\P4ConfigProcessInfoCreatorTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Core\SourceControl\Perforce\P4HistoryParserTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Core\SourceControl\Perforce\P4Mother.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Core\SourceControl\Perforce\P4Test.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Core\SourceControl\Perforce\ProcessP4InitializerTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Core\SourceControl\Perforce\ProessP4PurgerTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Core\SourceControl\Telelogic\ChangeSynergyUrlBuilderTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Core\SourceControl\Telelogic\SynergyClientTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Core\SourceControl\Telelogic\SynergyCommandBuilderTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Core\SourceControl\Telelogic\SynergyMother.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Core\SourceControl\Telelogic\SynergyParserTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Core\SourceControl\Vss\VssLocaleTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Core\State\FileStateManagerTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Core\Tasks\DataTaskResultTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Core\Tasks\DevenvTaskResultTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Core\Tasks\DevenvTaskTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Core\Tasks\ExecutableTaskTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Core\Tasks\FileTaskResultTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Core\Tasks\FinalBuilderTaskTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Core\Tasks\MergeFileTaskTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Core\Tasks\ModificationWriterTaskTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Core\Tasks\MsBuildTaskTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Core\Tasks\NAntTaskTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Core\Tasks\NullTaskTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Core\Tasks\NUnitArgumentTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Core\Tasks\NUnitTaskExecutionTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Core\Tasks\NunitTaskTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Core\Tasks\ProcessTaskResultTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Core\Triggers\FilterTriggerTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Core\Triggers\IntervalTriggerTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Core\Triggers\MultipleTriggerTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Core\Triggers\ProjectTriggerTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Core\Triggers\ScheduleTriggerTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Core\Triggers\UrlTriggerTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Core\Util\FileChangedWatcherTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Core\Util\HtmlAwareMultiTransformerTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Core\Util\HtmlExceptionFormatterTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Core\Util\HttpWrapperTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Core\Util\LogFileTraceListenerTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Core\Util\MockFileWatcher.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Core\Util\PathUtilTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Core\Util\ProcessExecutorTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Core\Util\ProcessInfoTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Core\Util\ProcessReaderTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Core\Util\ReflectionUtilTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Core\Util\RegistryTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Core\Util\StringUtilTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Core\Util\SystemIoFileSystemTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Core\Util\SystemPathTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Core\Util\TempFileUtilTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Core\Util\TestData.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Core\Util\TimeoutSerializationTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Core\Util\TimeoutTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Core\Util\WildCardPathTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Core\Util\XmlConstraints.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Core\Util\XmlFragmentWriterTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Core\Util\XmlUtilTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Core\Util\XslTransformerTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "objection\AcceptanceTests\CachingImplementationResolverTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "objection\AcceptanceTests\TypicalUsageClasses.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "objection\AcceptanceTests\TypicalUsageTests.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "objection\NetReflectorPlugin\NetReflectorPluginTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Remote\ProjectStatus.1.0.bin"
-                    BuildAction = "EmbeddedResource"
-                />
-                <File
-                    RelPath = "Remote\ProjectStatus.1.1.1.bin"
-                    BuildAction = "EmbeddedResource"
-                />
-                <File
-                    RelPath = "Remote\ProjectStatus.1.1.bin"
-                    BuildAction = "EmbeddedResource"
-                />
-                <File
-                    RelPath = "Remote\ProjectStatus.1.2.1.bin"
-                    BuildAction = "EmbeddedResource"
-                />
-                <File
-                    RelPath = "Remote\ProjectStatus.1.2.bin"
-                    BuildAction = "EmbeddedResource"
-                />
-                <File
-                    RelPath = "Remote\ProjectStatusCompatibilityTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "resources\buildlog.xml"
-                    BuildAction = "Content"
-                />
-                <File
-                    RelPath = "resources\failedbuildlog.xml"
-                    BuildAction = "Content"
-                />
-                <File
-                    RelPath = "resources\Statistics.csv"
-                    BuildAction = "None"
-                />
-                <File
-                    RelPath = "resources\statistics.xml"
-                    BuildAction = "Content"
-                />
-                <File
-                    RelPath = "resources\templates\TestTransform.vm"
-                    BuildAction = "None"
-                />
-                <File
-                    RelPath = "UnitTestUtils\HashtableConstraint.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "UnitTestUtils\LatchMock.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "UnitTestUtils\Mockery.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "UnitTestUtils\ResourceUtil.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <Folder RelPath = "WebDashboard\Cache\" />
-                <File
-                    RelPath = "WebDashboard\Dashboard\ActionInstantiatorWithObjectGiverTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "WebDashboard\Dashboard\BuildLinkTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "WebDashboard\Dashboard\BuildRequestTransformerTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "WebDashboard\Dashboard\BuildTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "WebDashboard\Dashboard\CruiseManagerBuildNameRetrieverTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "WebDashboard\Dashboard\CruiseObjectSourceInitializerTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "WebDashboard\Dashboard\DefaultBuildNameFormatterTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "WebDashboard\Dashboard\DefaultCruiseUrlBuilderTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "WebDashboard\Dashboard\DefaultLinkListFactoryTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "WebDashboard\Dashboard\DefaultPluginLinkCalculatorTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "WebDashboard\Dashboard\DefaultUrlBuilderTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "WebDashboard\Dashboard\PathMappingMultiTransformerTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "WebDashboard\Dashboard\ProjectGridTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "WebDashboard\Dashboard\ProjectLinkTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "WebDashboard\Dashboard\RecentBuildListerTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "WebDashboard\Dashboard\ServerLinkTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "WebDashboard\Dashboard\ServerQueryingBuildRetrieverTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "WebDashboard\Dashboard\SideBarViewBuilderTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "WebDashboard\Dashboard\TopControlsViewBuilderTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "WebDashboard\Dashboard\Actions\DefaultActionTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "WebDashboard\Dashboard\Actions\MultipleXslReportActionTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "WebDashboard\Dashboard\Actions\XslMultiGenericReportActionTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "WebDashboard\Dashboard\Actions\XslReportActionTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "WebDashboard\Dashboard\GenericPlugins\ConfigurablePluginTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "WebDashboard\Dashboard\GenericPlugins\ProjectConfigurableBuildPluginTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "WebDashboard\Dashboard\GenericPlugins\XslReportPluginTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "WebDashboard\IO\RequestWrappingCruiseRequestTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "WebDashboard\MVC\AggregatedRequestTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "WebDashboard\MVC\HtmlViewTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "WebDashboard\MVC\HttpControllerTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "WebDashboard\MVC\NameValueCollectionRequestTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "WebDashboard\MVC\Cruise\BuildCheckingProxyActionTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "WebDashboard\MVC\Cruise\CachingActionProxyTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "WebDashboard\MVC\Cruise\CruiseActionFactoryTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "WebDashboard\MVC\Cruise\CruiseActionProxyActionTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "WebDashboard\MVC\Cruise\ExceptionCatchingActionProxyTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "WebDashboard\MVC\Cruise\ProjectCheckingProxyActionTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "WebDashboard\MVC\Cruise\ServerCheckingProxyActionTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "WebDashboard\MVC\View\LazilyInitialisingVelocityTransformerTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "WebDashboard\MVC\View\VelocityViewGeneratorWithTransformerTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "WebDashboard\Plugins\BuildReport\HtmlBuildLogActionTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "WebDashboard\Plugins\BuildReport\LatestBuildReportProjectPluginTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "WebDashboard\Plugins\BuildReport\XmlReportActionSchema.xsd"
-                    BuildAction = "EmbeddedResource"
-                />
-                <File
-                    RelPath = "WebDashboard\Plugins\BuildReport\XmlReportActionSchema.xsx"
-                    DependentUpon = "XmlReportActionSchema.xsd"
-                    BuildAction = "None"
-                />
-                <File
-                    RelPath = "WebDashboard\Plugins\BuildReport\XmlReportActionTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "WebDashboard\Plugins\DeleteProject\DoDeleteProjectActionTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "WebDashboard\Plugins\DeleteProject\ShowDeleteProjectActionTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "WebDashboard\Plugins\ForceBuild\ForceBuildXmlActionTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "WebDashboard\Plugins\ProjectReport\ProjectReportProjectPluginTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "WebDashboard\Plugins\ViewServerLog\ServerLogServerPluginTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "WebDashboard\ServerConnection\ServerAggregatingCruiseManagerWrapperTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Xsl\AlternativeNUnitStylesheetTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Xsl\CompileStylesheetTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Xsl\HeaderStylesheetTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Xsl\ModificationStylesheetTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Xsl\MsBuildSummaryStylesheetTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Xsl\MsTestSummaryStylesheetTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Xsl\NUnitStylesheetTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Xsl\SimianSummaryStyleSheetTest.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Xsl\StylesheetTestFixture.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-            </Include>
-        </Files>
-    </CSHARP>
-</VisualStudioProject>
-
+﻿<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <ProjectType>Local</ProjectType>
+    <ProductVersion>8.0.50727</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{3F93AC24-DF56-469E-91C3-43A2A179C7E1}</ProjectGuid>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ApplicationIcon>
+    </ApplicationIcon>
+    <AssemblyKeyContainerName>
+    </AssemblyKeyContainerName>
+    <AssemblyName>ThoughtWorks.CruiseControl.UnitTests</AssemblyName>
+    <AssemblyOriginatorKeyFile>
+    </AssemblyOriginatorKeyFile>
+    <DefaultClientScript>JScript</DefaultClientScript>
+    <DefaultHTMLPageLayout>Grid</DefaultHTMLPageLayout>
+    <DefaultTargetSchema>IE50</DefaultTargetSchema>
+    <DelaySign>false</DelaySign>
+    <OutputType>Library</OutputType>
+    <RootNamespace>ThoughtWorks.CruiseControl.UnitTests</RootNamespace>
+    <RunPostBuildEvent>OnBuildSuccess</RunPostBuildEvent>
+    <StartupObject>
+    </StartupObject>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <UpgradeBackupLocation>
+    </UpgradeBackupLocation>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <OutputPath>bin\Debug\</OutputPath>
+    <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
+    <BaseAddress>285212672</BaseAddress>
+    <CheckForOverflowUnderflow>false</CheckForOverflowUnderflow>
+    <ConfigurationOverrideFile>
+    </ConfigurationOverrideFile>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DocumentationFile>
+    </DocumentationFile>
+    <DebugSymbols>true</DebugSymbols>
+    <FileAlignment>4096</FileAlignment>
+    <NoStdLib>false</NoStdLib>
+    <NoWarn>
+    </NoWarn>
+    <Optimize>false</Optimize>
+    <RegisterForComInterop>false</RegisterForComInterop>
+    <RemoveIntegerChecks>false</RemoveIntegerChecks>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+    <WarningLevel>4</WarningLevel>
+    <DebugType>full</DebugType>
+    <ErrorReport>prompt</ErrorReport>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <OutputPath>bin\Release\</OutputPath>
+    <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
+    <BaseAddress>285212672</BaseAddress>
+    <CheckForOverflowUnderflow>false</CheckForOverflowUnderflow>
+    <ConfigurationOverrideFile>
+    </ConfigurationOverrideFile>
+    <DefineConstants>TRACE</DefineConstants>
+    <DocumentationFile>
+    </DocumentationFile>
+    <DebugSymbols>false</DebugSymbols>
+    <FileAlignment>4096</FileAlignment>
+    <NoStdLib>false</NoStdLib>
+    <NoWarn>
+    </NoWarn>
+    <Optimize>true</Optimize>
+    <RegisterForComInterop>false</RegisterForComInterop>
+    <RemoveIntegerChecks>false</RemoveIntegerChecks>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+    <WarningLevel>4</WarningLevel>
+    <DebugType>none</DebugType>
+    <ErrorReport>prompt</ErrorReport>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Build|AnyCPU' ">
+    <OutputPath>..\..\build\unittests\</OutputPath>
+    <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
+    <BaseAddress>285212672</BaseAddress>
+    <CheckForOverflowUnderflow>false</CheckForOverflowUnderflow>
+    <ConfigurationOverrideFile>
+    </ConfigurationOverrideFile>
+    <DefineConstants>TRACE</DefineConstants>
+    <DocumentationFile>
+    </DocumentationFile>
+    <DebugSymbols>true</DebugSymbols>
+    <FileAlignment>4096</FileAlignment>
+    <NoStdLib>false</NoStdLib>
+    <NoWarn>
+    </NoWarn>
+    <Optimize>true</Optimize>
+    <RegisterForComInterop>false</RegisterForComInterop>
+    <RemoveIntegerChecks>false</RemoveIntegerChecks>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+    <WarningLevel>4</WarningLevel>
+    <DebugType>full</DebugType>
+    <ErrorReport>prompt</ErrorReport>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Commons">
+      <Name>Commons</Name>
+      <HintPath>..\..\lib\Commons.dll</HintPath>
+    </Reference>
+    <Reference Include="log4net">
+      <Name>log4net</Name>
+      <HintPath>..\..\lib\log4net.dll</HintPath>
+    </Reference>
+    <Reference Include="NetReflector">
+      <Name>NetReflector</Name>
+      <HintPath>..\..\lib\NetReflector.dll</HintPath>
+    </Reference>
+    <Reference Include="nmock">
+      <Name>nmock</Name>
+      <HintPath>..\..\lib\nmock.dll</HintPath>
+    </Reference>
+    <Reference Include="NPlot">
+      <Name>NPlot</Name>
+      <HintPath>..\..\lib\NPlot.dll</HintPath>
+    </Reference>
+    <Reference Include="nunit.core">
+      <Name>nunit.core</Name>
+      <HintPath>..\..\tools\nunit\nunit.core.dll</HintPath>
+    </Reference>
+    <Reference Include="nunit.framework">
+      <Name>nunit.framework</Name>
+      <HintPath>..\..\tools\nunit\nunit.framework.dll</HintPath>
+    </Reference>
+    <Reference Include="NVelocity">
+      <Name>NVelocity</Name>
+      <HintPath>..\..\lib\NVelocity.dll</HintPath>
+    </Reference>
+    <Reference Include="System">
+      <Name>System</Name>
+    </Reference>
+    <Reference Include="System.Data">
+      <Name>System.Data</Name>
+    </Reference>
+    <Reference Include="System.Drawing">
+      <Name>System.Drawing</Name>
+    </Reference>
+    <Reference Include="System.Web">
+      <Name>System.Web</Name>
+    </Reference>
+    <Reference Include="System.Windows.Forms">
+      <Name>System.Windows.Forms</Name>
+    </Reference>
+    <Reference Include="System.Xml">
+      <Name>System.XML</Name>
+    </Reference>
+    <ProjectReference Include="..\CCTrayLib\CCTrayLib.csproj">
+      <Name>CCTrayLib</Name>
+      <Project>{C8043AD9-0F30-4366-A263-E2FC0D6A57A9}</Project>
+      <Package>{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</Package>
+    </ProjectReference>
+    <ProjectReference Include="..\core\core.csproj">
+      <Name>core</Name>
+      <Project>{F8113DB9-6C47-4FD1-8A01-655FCF151747}</Project>
+      <Package>{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</Package>
+    </ProjectReference>
+    <ProjectReference Include="..\objection\objection.csproj">
+      <Name>objection</Name>
+      <Project>{1C0B8046-FE79-4845-84B9-369A76F817A3}</Project>
+      <Package>{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</Package>
+    </ProjectReference>
+    <ProjectReference Include="..\Remote\Remote.csproj">
+      <Name>Remote</Name>
+      <Project>{E820CF3B-8C5A-4002-BC16-B7818D3D54A8}</Project>
+      <Package>{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</Package>
+    </ProjectReference>
+    <ProjectReference Include="..\WebDashboard\WebDashboard.csproj">
+      <Name>WebDashboard</Name>
+      <Project>{482EF049-EC0C-4819-B568-75B5F74BDD5B}</Project>
+      <Package>{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</Package>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="AssemblyInfo.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="CCTrayLib\CCTimeFormatterTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="CCTrayLib\Configuration\BuildServerTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="CCTrayLib\Configuration\CCTrayMultiConfigurationTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="CCTrayLib\IconFileFixture.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="CCTrayLib\Monitoring\AggregatingProjectMonitorTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="CCTrayLib\Monitoring\AggregatingServerMonitorTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="CCTrayLib\Monitoring\BuildDurationTrackerTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="CCTrayLib\Monitoring\CruiseProjectManagerFactoryTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="CCTrayLib\Monitoring\CruiseServerManagerFactoryTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="CCTrayLib\Monitoring\DashboardXmlParserTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="CCTrayLib\Monitoring\HttpCruiseProjectManagerTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="CCTrayLib\Monitoring\HttpCruiseServerManagerTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="CCTrayLib\Monitoring\PollerTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="CCTrayLib\Monitoring\PollIntervalReporterTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="CCTrayLib\Monitoring\ProjectMonitorTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="CCTrayLib\Monitoring\ProjectStateTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="CCTrayLib\Monitoring\ProjectStatusMonitorTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="CCTrayLib\Monitoring\RemotingCruiseServerManagerTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="CCTrayLib\Monitoring\ServerMonitorTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="CCTrayLib\Monitoring\StubCurrentTimeProvider.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="CCTrayLib\Presentation\AddBuildServerTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="CCTrayLib\Presentation\AddProjectsTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="CCTrayLib\Presentation\BuildTransitionSoundPlayerTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="CCTrayLib\Presentation\ConfigurableBalloonMessageProviderTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="CCTrayLib\Presentation\ConfigurableProjectStateIconProviderTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="CCTrayLib\Presentation\DetailStringProviderTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="CCTrayLib\Presentation\IntegrationQueueTreeNodeAdaptorTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="CCTrayLib\Presentation\MainFormControllerTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="CCTrayLib\Presentation\ProjectStateIconAdaptorTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="CCTrayLib\Presentation\ProjectStatusListViewItemAdaptorTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="CCTrayLib\Presentation\ResourceIntegrationQueueIconProviderTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="CCTrayLib\Presentation\ResourceProjectStateIconProviderTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="CCTrayLib\Presentation\StubProjectMonitor.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="CCTrayLib\Presentation\StubServerMonitor.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="CCTrayLib\Presentation\SynchronizedProjectMonitorTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="CCTrayLib\Presentation\SynchronizedServerMonitorTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="CCTrayLib\Presentation\TrayIconTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="CCTrayLib\StatusIconTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="CCTrayLib\X10\LampControllerTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="CCTrayLib\X10\X10ControllerTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Config\CCNetConfigFileValidationTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Core\ArgumentParserTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Core\Config\CachingConfigurationServiceTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Core\Config\ConfigurationFileLoaderTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Core\Config\ConfigurationFileSaverTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Core\Config\ConfigurationFixture.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Core\Config\ConfigurationTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Core\Config\CruiseControlConfigSectionHandlerTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Core\Config\FileConfigurationServiceTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Core\Config\FileWatcherConfigurationServiceTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Core\Config\NetReflectorConfigurationReaderTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Core\Config\ValidatingLoaderTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Core\Config\XslFilesSectionHandlerTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Core\ConsoleRunnerTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Core\CruiseServerTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Core\FileMother.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Core\IntegrationFixture.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Core\IntegrationQueueManagerTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Core\IntegrationRequestQueueTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Core\IntegrationResultManagerTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Core\IntegrationResultMother.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Core\IntegrationResultTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Core\IntegrationRunnerTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Core\Label\DateLabellerTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Core\Label\DefaultLabellerTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Core\Label\IterationLabellerTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Core\Label\LastChangeLabellerTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Core\Label\RemoteProjectLabellerTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Core\Label\StateFileLabellerTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Core\LogFileTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Core\Log\CircularArrayTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Core\Log\CircularArrayTestResources.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Core\Log\ServerLogFileReaderTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Core\MockBuilder.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Core\ProcessExecutorTestFixtureBase.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Core\ProcessResultFixture.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Core\ProjectBaseTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Core\ProjectExceptionHandlingTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Core\ProjectIntegratorListFactoryTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Core\ProjectIntegratorTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Core\ProjectStatusFixture.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Core\ProjectTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Core\Publishers\BuildLogTransformerTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Core\Publishers\BuildPublisherTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Core\Publishers\EmailGatewayTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Core\Publishers\EmailGroupTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Core\Publishers\EmailMessageTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Core\Publishers\EmailPublisherMother.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Core\Publishers\EmailPublisherStub.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Core\Publishers\EmailPublisherTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Core\Publishers\ForceBuildPublisherTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Core\Publishers\HtmlDetailsMessageBuilderTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Core\Publishers\HtmlLinkMessageBuilderTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Core\Publishers\MockEmailGateway.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Core\Publishers\PublisherTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Core\Publishers\RSSPublisherTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Core\Publishers\Statistics\StatisticsBuilderTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Core\Publishers\Statistics\StatisticsChartGeneratorTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Core\Publishers\Statistics\StatisticsPublisherTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Core\Publishers\XmlIntegrationResultWriterTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Core\Publishers\XmlLogFixture.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Core\Publishers\XmlLogPublisherTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Core\Queues\IntegrationQueueItemTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Core\Queues\IntegrationQueueSetTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Core\Queues\IntegrationQueueTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Core\RemoteCruiseServerTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Core\Reporting\Dashboard\Navigation\AbsolutePathUrlBuilderDecoratorTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Core\SimpleBuildFile.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Core\SourceControl\AccuRevHistoryParserTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Core\SourceControl\AccuRevMother.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Core\SourceControl\AccuRevTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Core\SourceControl\ActionFilterTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Core\SourceControl\AlienbrainHistoryParserTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Core\SourceControl\AlienbrainTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Core\SourceControl\BitKeeper\BitKeeperHistoryParserTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Core\SourceControl\BitKeeper\BitKeeperTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Core\SourceControl\ClearCaseHistoryParserTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Core\SourceControl\ClearCaseMother.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Core\SourceControl\ClearCaseTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Core\SourceControl\CvsHistoryParserTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Core\SourceControl\CvsMother.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Core\SourceControl\CvsTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Core\SourceControl\FileSourceControlTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Core\SourceControl\FilteredSourceControlTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Core\SourceControl\MksHistoryParserTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Core\SourceControl\MksTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Core\SourceControl\MockSourceControl.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Core\SourceControl\ModificationMother.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Core\SourceControl\ModificationTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Core\SourceControl\MultiSourceControlTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Core\SourceControl\NullSourceControlTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Core\SourceControl\PathFilterTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Core\SourceControl\Perforce\P4ConfigProcessInfoCreatorTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Core\SourceControl\Perforce\P4HistoryParserTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Core\SourceControl\Perforce\P4Mother.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Core\SourceControl\Perforce\P4Test.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Core\SourceControl\Perforce\ProcessP4InitializerTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Core\SourceControl\Perforce\ProessP4PurgerTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Core\SourceControl\ProcessSourceControlTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Core\SourceControl\PvcsHistoryParserTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Core\SourceControl\PvcsMother.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Core\SourceControl\PvcsTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Core\SourceControl\QuietPeriodTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Core\SourceControl\StarTeamHistoryParserTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Core\SourceControl\StarTeamTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Core\SourceControl\SurroundHistoryParserTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Core\SourceControl\SurroundTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Core\SourceControl\SvnHistoryParserTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Core\SourceControl\SvnTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Core\SourceControl\Telelogic\ChangeSynergyUrlBuilderTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Core\SourceControl\Telelogic\SynergyClientTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Core\SourceControl\Telelogic\SynergyCommandBuilderTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Core\SourceControl\Telelogic\SynergyMother.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Core\SourceControl\Telelogic\SynergyParserTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Core\SourceControl\UserFilterTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Core\SourceControl\Vault317Test.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Core\SourceControl\Vault3Test.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Core\SourceControl\VaultHistoryParserTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Core\SourceControl\ViewCVSBuilderTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Core\SourceControl\VssApplyLabelTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Core\SourceControl\VssHistoryParserTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Core\SourceControl\VssMother.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Core\SourceControl\VssTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Core\SourceControl\Vss\VssLocaleTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Core\SourceControl\WebSVNBuilderTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Core\State\FileStateManagerTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Core\Tasks\DataTaskResultTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Core\Tasks\DevenvTaskResultTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Core\Tasks\DevenvTaskTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Core\Tasks\ExecutableTaskTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Core\Tasks\FileTaskResultTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Core\Tasks\FinalBuilderTaskTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Core\Tasks\MergeFileTaskTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Core\Tasks\ModificationWriterTaskTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Core\Tasks\MsBuildTaskTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Core\Tasks\NAntTaskTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Core\Tasks\NullTaskTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Core\Tasks\NUnitArgumentTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Core\Tasks\NUnitTaskExecutionTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Core\Tasks\NunitTaskTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Core\Tasks\ProcessTaskResultTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Core\TestLogs.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Core\TraceListenerBackup.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Core\Triggers\FilterTriggerTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Core\Triggers\IntervalTriggerTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Core\Triggers\MultipleTriggerTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Core\Triggers\ProjectTriggerTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Core\Triggers\ScheduleTriggerTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Core\Triggers\UrlTriggerTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Core\Util\FileChangedWatcherTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Core\Util\HtmlAwareMultiTransformerTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Core\Util\HtmlExceptionFormatterTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Core\Util\HttpWrapperTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Core\Util\LogFileTraceListenerTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Core\Util\MockFileWatcher.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Core\Util\PathUtilTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Core\Util\ProcessExecutorTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Core\Util\ProcessInfoTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Core\Util\ProcessReaderTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Core\Util\ReflectionUtilTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Core\Util\RegistryTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Core\Util\StringUtilTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Core\Util\SystemIoFileSystemTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Core\Util\SystemPathTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Core\Util\TempFileUtilTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Core\Util\TestData.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Core\Util\TimeoutSerializationTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Core\Util\TimeoutTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Core\Util\WildCardPathTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Core\Util\XmlConstraints.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Core\Util\XmlFragmentWriterTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Core\Util\XmlUtilTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Core\Util\XslTransformerTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Core\WorkflowResultTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Core\WorkflowTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="CustomAssertion.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="objection\AcceptanceTests\CachingImplementationResolverTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="objection\AcceptanceTests\TypicalUsageClasses.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="objection\AcceptanceTests\TypicalUsageTests.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="objection\NetReflectorPlugin\NetReflectorPluginTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Remote\ProjectStatusCompatibilityTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="UnitTestUtils\HashtableConstraint.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="UnitTestUtils\LatchMock.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="UnitTestUtils\Mockery.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="UnitTestUtils\ResourceUtil.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="WebDashboard\Dashboard\ActionInstantiatorWithObjectGiverTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="WebDashboard\Dashboard\Actions\DefaultActionTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="WebDashboard\Dashboard\Actions\MultipleXslReportActionTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="WebDashboard\Dashboard\Actions\XslMultiGenericReportActionTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="WebDashboard\Dashboard\Actions\XslReportActionTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="WebDashboard\Dashboard\BuildLinkTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="WebDashboard\Dashboard\BuildRequestTransformerTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="WebDashboard\Dashboard\BuildTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="WebDashboard\Dashboard\CruiseManagerBuildNameRetrieverTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="WebDashboard\Dashboard\CruiseObjectSourceInitializerTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="WebDashboard\Dashboard\DefaultBuildNameFormatterTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="WebDashboard\Dashboard\DefaultCruiseUrlBuilderTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="WebDashboard\Dashboard\DefaultLinkListFactoryTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="WebDashboard\Dashboard\DefaultPluginLinkCalculatorTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="WebDashboard\Dashboard\DefaultUrlBuilderTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="WebDashboard\Dashboard\GenericPlugins\ConfigurablePluginTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="WebDashboard\Dashboard\GenericPlugins\ProjectConfigurableBuildPluginTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="WebDashboard\Dashboard\GenericPlugins\XslReportPluginTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="WebDashboard\Dashboard\PathMappingMultiTransformerTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="WebDashboard\Dashboard\ProjectGridTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="WebDashboard\Dashboard\ProjectLinkTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="WebDashboard\Dashboard\RecentBuildListerTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="WebDashboard\Dashboard\ServerLinkTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="WebDashboard\Dashboard\ServerQueryingBuildRetrieverTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="WebDashboard\Dashboard\SideBarViewBuilderTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="WebDashboard\Dashboard\TopControlsViewBuilderTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="WebDashboard\IO\RequestWrappingCruiseRequestTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="WebDashboard\MVC\AggregatedRequestTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="WebDashboard\MVC\Cruise\BuildCheckingProxyActionTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="WebDashboard\MVC\Cruise\CachingActionProxyTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="WebDashboard\MVC\Cruise\CruiseActionFactoryTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="WebDashboard\MVC\Cruise\CruiseActionProxyActionTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="WebDashboard\MVC\Cruise\ExceptionCatchingActionProxyTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="WebDashboard\MVC\Cruise\ProjectCheckingProxyActionTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="WebDashboard\MVC\Cruise\ServerCheckingProxyActionTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="WebDashboard\MVC\HtmlViewTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="WebDashboard\MVC\HttpControllerTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="WebDashboard\MVC\NameValueCollectionRequestTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="WebDashboard\MVC\View\LazilyInitialisingVelocityTransformerTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="WebDashboard\MVC\View\VelocityViewGeneratorWithTransformerTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="WebDashboard\Plugins\BuildReport\HtmlBuildLogActionTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="WebDashboard\Plugins\BuildReport\LatestBuildReportProjectPluginTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="WebDashboard\Plugins\BuildReport\XmlReportActionTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="WebDashboard\Plugins\DeleteProject\DoDeleteProjectActionTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="WebDashboard\Plugins\DeleteProject\ShowDeleteProjectActionTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="WebDashboard\Plugins\ForceBuild\ForceBuildXmlActionTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="WebDashboard\Plugins\ProjectReport\ProjectReportProjectPluginTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="WebDashboard\Plugins\ViewServerLog\ServerLogServerPluginTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="WebDashboard\ServerConnection\ServerAggregatingCruiseManagerWrapperTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Xsl\AlternativeNUnitStylesheetTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Xsl\CompileStylesheetTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Xsl\HeaderStylesheetTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Xsl\ModificationStylesheetTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Xsl\MsBuildSummaryStylesheetTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Xsl\MsTestSummaryStylesheetTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Xsl\NUnitStylesheetTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Xsl\SimianSummaryStyleSheetTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Xsl\StylesheetTestFixture.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <None Include="resources\Statistics.csv" />
+    <None Include="resources\templates\TestTransform.vm" />
+    <None Include="test.config" />
+    <None Include="WebDashboard\Plugins\BuildReport\XmlReportActionSchema.xsx">
+      <DependentUpon>XmlReportActionSchema.xsd</DependentUpon>
+    </None>
+    <EmbeddedResource Include="..\examples\ccnet.config">
+      <Link>Config\ccnet.config</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\examples\CVSAndNAntAndEmailPublisherCCNet.config">
+      <Link>Config\CVSAndNAntAndEmailPublisherCCNet.config</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\examples\P4AndDevenv.config">
+      <Link>Config\P4AndDevenv.config</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\examples\VSSAndDevenvAndNUnitCCNet.config">
+      <Link>Config\VSSAndDevenvAndNUnitCCNet.config</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="CCTrayLib\TestIcon.ico" />
+    <EmbeddedResource Include="Core\Log\TestLog.txt" />
+    <EmbeddedResource Include="Remote\ProjectStatus.1.0.bin" />
+    <EmbeddedResource Include="Remote\ProjectStatus.1.1.1.bin" />
+    <EmbeddedResource Include="Remote\ProjectStatus.1.1.bin" />
+    <EmbeddedResource Include="Remote\ProjectStatus.1.2.1.bin" />
+    <EmbeddedResource Include="Remote\ProjectStatus.1.2.bin" />
+    <EmbeddedResource Include="WebDashboard\Plugins\BuildReport\XmlReportActionSchema.xsd">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <Content Include="resources\buildlog.xml" />
+    <Content Include="resources\failedbuildlog.xml" />
+    <Content Include="resources\statistics.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="WebDashboard\Cache\" />
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PreBuildEvent>mkdir "$(TargetDir)xsl"
+copy "$(ProjectDir)test.config" "$(TargetPath).config"
+xcopy /y/q "$(SolutionDir)\xsl\*.*" "$(TargetDir)xsl"
+xcopy "$(ProjectDir)\resources\*.*" "$(TargetDir)" /S /Y /Q
+copy "$(ProjectDir)..\..\tools\sleeper.exe" "$(TargetDir)"</PreBuildEvent>
+    <PostBuildEvent>
+    </PostBuildEvent>
+  </PropertyGroup>
+</Project>

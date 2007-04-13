@@ -159,7 +159,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 
 		private string DefaultLogger()
 		{
-			return string.Format(@" /l:{0};{1}", MsBuildTask.DefaultLogger, logfile);
+			return string.Format(@" ""/l:{0};{1}""", MsBuildTask.DefaultLogger, logfile);
 		}
 
 		private string IntegrationProperties()
@@ -167,7 +167,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 			// NOTE: Property names are sorted alphabetically when passed as process arguments
 			// Tests that look for the correct arguments will fail if the following properties
 			// are not sorted alphabetically.
-			return string.Format(@"/p:CCNetArtifactDirectory={3};CCNetBuildCondition=IfModificationExists;CCNetBuildDate={1};CCNetBuildTime={2};CCNetIntegrationStatus=Success;CCNetLabel=1.0;CCNetLastIntegrationStatus=Success;CCNetNumericLabel=0;CCNetProject=test;CCNetRequestSource=foo;CCNetWorkingDirectory={0}", DefaultWorkingDirectory, testDateString, testTimeString, result.ArtifactDirectory);
+			return string.Format(@"""/p:CCNetArtifactDirectory={3};CCNetBuildCondition=IfModificationExists;CCNetBuildDate={1};CCNetBuildTime={2};CCNetIntegrationStatus=Success;CCNetLabel=1.0;CCNetLastIntegrationStatus=Success;CCNetNumericLabel=0;CCNetProject=test;CCNetRequestSource=foo;CCNetWorkingDirectory={0}""", DefaultWorkingDirectory, testDateString, testTimeString, result.ArtifactDirectory);
 		}
 	}
 }

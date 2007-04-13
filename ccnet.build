@@ -1,4 +1,4 @@
-<?xml version="1.0"?>
+﻿<?xml version="1.0"?>
 
 <project name="ccnet" default="test">
 
@@ -21,6 +21,7 @@
     <property name="cctray.exe" value="cctray.exe"/>
     <property name="nunit-console.exe" value="tools\nunit\nunit-console.exe" />
     <property name="ncover-console.exe" value="tools\ncover\NCover.Console.exe" />
+    <property name="nantcontrib.assembly" value="tools\nant\contrib\NAnt.Contrib.Tasks.dll" />
     <property name="vil.executable" value="tools\vil\vil.exe" />
     <property name="vil.assemblies" value="comma,separated,list,of,assemblies,to,analyze (full path)" />    
     <property name="simian.executable" value="tools\simian\simian.exe" />
@@ -70,7 +71,12 @@
 
 	<!-- COMPILE -->
 	<target name="compile" depends="init" description="compiles everything to be released">
-		<solution configuration="build" solutionfile="project\ccnet.sln" />		
+		<loadtasks assembly="C:\dev\ccnet\trunk5\tools\nant\contrib\NAnt.Contrib.Tasks.dll" />
+		<msbuild project="project\ccnet.sln">
+			<property name="Configuration" value="Build" />
+		</msbuild>
+		
+	<!-- <solution configuration="build" solutionfile="project\ccnet.sln" /> -->
 		<copy file="${src.dir}\console\app.config" tofile="${build.dir}\server\${console.exe}.config" verbose="${verbosity}"/>
 		<copy file="${src.dir}\service\app.config" tofile="${build.dir}\service\${service.exe}.config" verbose="${verbosity}"/>		
 		<copy file="${src.dir}\service\ccnet.config" tofile="${build.dir}\service\ccnet.config" verbose="${verbosity}"/>
@@ -80,8 +86,8 @@
 	<target name="test" depends="compile, test.unit" />
 
 	<target name="test.unit" description="runs unit tests">
-		<exec program="regsvr32" workingdir="tools\ncover" commandline="/s CoverLib.dll" />
-		<exec program="${ncover-console.exe}" workingdir="${build.dir}\unittests" commandline="/w . /c &quot;..\..\${nunit-console.exe}&quot; &quot;${unittests.dll} /xml:../${unittests.dll}-results.xml /nologo&quot;"/>
+		<property name="unittests.fullpath" value="${path::get-full-path(build.dir)}\unittests" />
+		<exec program="${ncover-console.exe}" workingdir="${unittests.fullpath}" commandline="&quot;..\..\${nunit-console.exe}&quot; &quot;${unittests.fullpath}\${unittests.dll}&quot;  /xml:../${unittests.dll}-results.xml /nologo //w ${unittests.fullpath}"/>
 	</target>
 
 	<!-- DEPLOY -->

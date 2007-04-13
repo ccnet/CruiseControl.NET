@@ -27,10 +27,10 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 				}
 			}
 			// Ensure that duplicates were not pulled back in the Vlog (this can be caused by doing a get using Labels)
-			return PvcsHistoryParser.AnalyzeModifications(mods);
+			return AnalyzeModifications(mods);
 		}
 
-		private void ParseArchive(Match archive, IList modifications)
+		private static void ParseArchive(Match archive, IList modifications)
 		{
 			string archivePath = archive.Groups["ArchiveName"].Value.Trim();
 			DateTime createdDate = Pvcs.GetDate(archive.Groups["CreatedDate"].Value.Trim());
@@ -42,7 +42,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			}
 		}
 
-		private Modification ParseModification(Match revision, string path, DateTime createdDate)
+		private static Modification ParseModification(Match revision, string path, DateTime createdDate)
 		{
 			Modification mod = new Modification();
 			mod.Comment = revision.Groups["Comment"].Value.Trim();
@@ -64,7 +64,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 		public static Modification[] AnalyzeModifications(IList mods)
 		{
 			// Hashtables are used so we can compare on the keys in search of duplicates
-			Hashtable allFiles = new Hashtable();
+			SortedList allFiles = new SortedList();
 			foreach (Modification mod in mods)
 			{
 				string key = mod.FolderName + mod.FileName;
@@ -83,8 +83,8 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 					string[] currentVersion = mod.Version.Split(char.Parse("."));
 					int len1 = originalVersion.Length;
 					int len2 = currentVersion.Length;
-					int usingLen = -1;
-					int otherLen = -1;
+					int usingLen;
+					int otherLen;
 					if (len1 >= len2)
 					{
 						usingLen = len1;

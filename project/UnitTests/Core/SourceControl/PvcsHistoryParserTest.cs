@@ -4,162 +4,157 @@ using System.IO;
 using NUnit.Framework;
 using ThoughtWorks.CruiseControl.Core;
 using ThoughtWorks.CruiseControl.Core.Sourcecontrol;
-using ThoughtWorks.CruiseControl.UnitTests;
 
 namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 {
-	[TestFixture]
-	public class PvcsHistoryParserTest
-	{
-		public static DateTime OLDEST_ENTRY = DateTime.Parse("2000-Jan-01 13:34:52");		
-		public static DateTime NEWEST_ENTRY = DateTime.Parse("2005-Sep-13 13:34:52");
+    [TestFixture]
+    public class PvcsHistoryParserTest
+    {
+        public static DateTime OLDEST_ENTRY = DateTime.Parse("2000-Jan-01 13:34:52");
+        public static DateTime NEWEST_ENTRY = DateTime.Parse("2005-Sep-13 13:34:52");
 
-		PvcsHistoryParser _parser;
-		DateTimeFormatInfo _dfi;
+        private PvcsHistoryParser parser;
+        private DateTimeFormatInfo dfi;
 
-		[SetUp]
-		public void SetUp()
-		{
-			_parser = new PvcsHistoryParser();
-			_dfi = new DateTimeFormatInfo();
-			_dfi.AMDesignator = "AM";
-			_dfi.PMDesignator = "PM";
-			_dfi.MonthDayPattern = @"M/d/yy h:mm:ss tt";
-		}
+        [SetUp]
+        public void SetUp()
+        {
+            parser = new PvcsHistoryParser();
+            dfi = new DateTimeFormatInfo();
+            dfi.AMDesignator = "AM";
+            dfi.PMDesignator = "PM";
+            dfi.MonthDayPattern = @"M/d/yy h:mm:ss tt";
+        }
 
-		[Test]
-		public void ParseModifications()
-		{
-			Modification[] actual = _parser.Parse(PvcsHistoryParserTest.ContentReader, OLDEST_ENTRY, NEWEST_ENTRY);
-			Modification[] expected = GetExpectedModifications();
-			CustomAssertion.AssertEqualArrays(actual, expected);
-		}		
+        [Test]
+        public void ParseModifications()
+        {
+            Modification[] actual = parser.Parse(ContentReader, OLDEST_ENTRY, NEWEST_ENTRY);
+            Modification[] expected = GetExpectedModifications();
+            CustomAssertion.AssertEqualArrays(expected, actual);
+        }
 
-		[Test]
-		public void AnalyzeModifications()
-		{	
-			
-			Modification[] expected = new Modification[1];
-			expected[0] = new Modification();
-			expected[0].Comment = @"Added new labels.";
-			expected[0].EmailAddress = null;
-			expected[0].Version = "1.4";
-			expected[0].FileName = @"ChessViewer.java-arc";
-			expected[0].FolderName = @"D:\root\PVCS\vm\common\SampleDB\archives\chess\client";			
-			expected[0].ModifiedTime = DateTime.Parse("2/1/00 4:52:46 PM",	_dfi);
-			expected[0].Type = "Checked in";
-			expected[0].UserName = "kerstinb";
+        [Test]
+        public void AnalyzeModifications()
+        {
+            Modification[] expected = new Modification[1];
+            expected[0] = new Modification();
+            expected[0].Comment = @"Added new labels.";
+            expected[0].EmailAddress = null;
+            expected[0].Version = "1.4";
+            expected[0].FileName = @"ChessViewer.java-arc";
+            expected[0].FolderName = @"D:\root\PVCS\vm\common\SampleDB\archives\chess\client";
+            expected[0].ModifiedTime = DateTime.Parse("2/1/00 4:52:46 PM", dfi);
+            expected[0].Type = "Checked in";
+            expected[0].UserName = "kerstinb";
 
-			Modification[] actual =  PvcsHistoryParser.AnalyzeModifications(GetExpectedModificationsForAnalyze());
+            Modification[] actual = PvcsHistoryParser.AnalyzeModifications(GetExpectedModificationsForAnalyze());
 
-			CustomAssertion.AssertEqualArrays(actual, expected);
-		}
+            CustomAssertion.AssertEqualArrays(actual, expected);
+        }
 
-		#region Pvcs Version Information
+        #region Pvcs Version Information
 
-		private static TextReader ContentReader
-		{
-			get
-			{
-				return new StringReader(PVCS_VERSION_INFO);
-			}
-		}
+        private static TextReader ContentReader
+        {
+            get { return new StringReader(PVCS_VERSION_INFO); }
+        }
 
-		private Modification[] GetExpectedModificationsForAnalyze()
-		{
-			Modification[] mod = new Modification[4];
-			mod[0] = new Modification();
-			mod[0].Comment = @"Added new labels.";
-			mod[0].EmailAddress = null;
-			mod[0].Version = "1.2";
-			mod[0].FileName = @"ChessViewer.java-arc";
-			mod[0].FolderName = @"D:\root\PVCS\vm\common\SampleDB\archives\chess\client";			
-			mod[0].ModifiedTime = DateTime.Parse("2/1/00 4:52:46 PM",	_dfi);
-			mod[0].Type = "Checked in";
-			mod[0].UserName = "kerstinb";
+        private Modification[] GetExpectedModificationsForAnalyze()
+        {
+            Modification[] mod = new Modification[4];
+            mod[0] = new Modification();
+            mod[0].Comment = @"Added new labels.";
+            mod[0].EmailAddress = null;
+            mod[0].Version = "1.2";
+            mod[0].FileName = @"ChessViewer.java-arc";
+            mod[0].FolderName = @"D:\root\PVCS\vm\common\SampleDB\archives\chess\client";
+            mod[0].ModifiedTime = DateTime.Parse("2/1/00 4:52:46 PM", dfi);
+            mod[0].Type = "Checked in";
+            mod[0].UserName = "kerstinb";
 
-			mod[1] = new Modification();
-			mod[1].Comment = @"Added new labels.";
-			mod[1].EmailAddress = null;
-			mod[1].Version = "1.1";
-			mod[1].FileName = @"ChessViewer.java-arc";
-			mod[1].FolderName = @"D:\root\PVCS\vm\common\SampleDB\archives\chess\client";			
-			mod[1].ModifiedTime = DateTime.Parse("2/1/00 4:52:46 PM",	_dfi);
-			mod[1].Type = "Checked in";
-			mod[1].UserName = "kerstinb";
+            mod[1] = new Modification();
+            mod[1].Comment = @"Added new labels.";
+            mod[1].EmailAddress = null;
+            mod[1].Version = "1.1";
+            mod[1].FileName = @"ChessViewer.java-arc";
+            mod[1].FolderName = @"D:\root\PVCS\vm\common\SampleDB\archives\chess\client";
+            mod[1].ModifiedTime = DateTime.Parse("2/1/00 4:52:46 PM", dfi);
+            mod[1].Type = "Checked in";
+            mod[1].UserName = "kerstinb";
 
-			mod[2] = new Modification();
-			mod[2].Comment = @"Added new labels.";
-			mod[2].EmailAddress = null;
-			mod[2].Version = "1.4";
-			mod[2].FileName = @"ChessViewer.java-arc";
-			mod[2].FolderName = @"D:\root\PVCS\vm\common\SampleDB\archives\chess\client";			
-			mod[2].ModifiedTime = DateTime.Parse("2/1/00 4:52:46 PM",	_dfi);
-			mod[2].Type = "Checked in";
-			mod[2].UserName = "kerstinb";
+            mod[2] = new Modification();
+            mod[2].Comment = @"Added new labels.";
+            mod[2].EmailAddress = null;
+            mod[2].Version = "1.4";
+            mod[2].FileName = @"ChessViewer.java-arc";
+            mod[2].FolderName = @"D:\root\PVCS\vm\common\SampleDB\archives\chess\client";
+            mod[2].ModifiedTime = DateTime.Parse("2/1/00 4:52:46 PM", dfi);
+            mod[2].Type = "Checked in";
+            mod[2].UserName = "kerstinb";
 
-			mod[3] = new Modification();
-			mod[3].Comment = @"Added new labels.";
-			mod[3].EmailAddress = null;
-			mod[3].Version = "1.3";
-			mod[3].FileName = @"ChessViewer.java-arc";
-			mod[3].FolderName = @"D:\root\PVCS\vm\common\SampleDB\archives\chess\client";			
-			mod[3].ModifiedTime = DateTime.Parse("2/1/00 4:52:46 PM",	_dfi);
-			mod[3].Type = "Checked in";
-			mod[3].UserName = "kerstinb";
+            mod[3] = new Modification();
+            mod[3].Comment = @"Added new labels.";
+            mod[3].EmailAddress = null;
+            mod[3].Version = "1.3";
+            mod[3].FileName = @"ChessViewer.java-arc";
+            mod[3].FolderName = @"D:\root\PVCS\vm\common\SampleDB\archives\chess\client";
+            mod[3].ModifiedTime = DateTime.Parse("2/1/00 4:52:46 PM", dfi);
+            mod[3].Type = "Checked in";
+            mod[3].UserName = "kerstinb";
 
-			return mod;
-		}
+            return mod;
+        }
 
-		private Modification[] GetExpectedModifications()
-		{
-			Modification [] mod = new Modification[4];
+        private Modification[] GetExpectedModifications()
+        {
+            Modification[] mod = new Modification[4];
 
-			mod[0] = new Modification();
-			mod[0].Comment = @"Added new labels.";
-			mod[0].EmailAddress = null;
-			mod[0].Version = "1.2";
-			mod[0].FileName = @"ChessViewer.java-arc";
-			mod[0].FolderName = @"D:\root\PVCS\vm\common\SampleDB\archives\chess\client";			
-			mod[0].ModifiedTime = DateTime.Parse("2/1/00 4:52:46 PM",	_dfi);
-			mod[0].Type = "Checked in";
-			mod[0].UserName = "kerstinb";
+            mod[0] = new Modification();
+            mod[0].Comment = @"Added new msg string.";
+            mod[0].EmailAddress = null;
+            mod[0].Version = "1.3";
+            mod[0].FileName = @"BoardOptions.java-arc";
+            mod[0].FolderName = @"D:\root\PVCS\vm\common\SampleDB\archives\chess\client";
+            mod[0].ModifiedTime = DateTime.Parse("2/1/00 4:22:36 PM", dfi);
+            mod[0].Type = "Checked in";
+            mod[0].UserName = "kerstinb";
 
-			mod[1] = new Modification();
-			mod[1].Comment = @"Enabled system printouts.";
-			mod[1].EmailAddress = null;
-			mod[1].Version = "1.2";
-			mod[1].FileName = @"ChessRules.java-arc";
-			mod[1].FolderName = @"D:\root\PVCS\vm\common\SampleDB\archives\chess\client";			
-			mod[1].ModifiedTime = DateTime.Parse("2/1/00 4:26:14 PM",	_dfi);
-			mod[1].Type = "Checked in";
-			mod[1].UserName = "kerstinb";
+            mod[1] = new Modification();
+            mod[1].Comment = @"Enabled system printouts.";
+            mod[1].EmailAddress = null;
+            mod[1].Version = "1.2";
+            mod[1].FileName = @"ChessRules.java-arc";
+            mod[1].FolderName = @"D:\root\PVCS\vm\common\SampleDB\archives\chess\client";
+            mod[1].ModifiedTime = DateTime.Parse("2/1/00 4:26:14 PM", dfi);
+            mod[1].Type = "Checked in";
+            mod[1].UserName = "kerstinb";
 
-			mod[2] = new Modification();
-			mod[2].Comment = @"Added more explantions.";
-			mod[2].EmailAddress = null;
-			mod[2].Version = "1.1";
-			mod[2].FileName = @"chessviewer.html-arc";
-			mod[2].FolderName = @"D:\root\PVCS\vm\common\SampleDB\archives\chess\client";			
-			mod[2].ModifiedTime = DateTime.Parse("5/18/98 4:46:38 AM",	_dfi);
-			mod[2].Type = "Checked in";
-			mod[2].UserName = "kerstinb";
+            mod[2] = new Modification();
+            mod[2].Comment = @"Added more explantions.";
+            mod[2].EmailAddress = null;
+            mod[2].Version = "1.1";
+            mod[2].FileName = @"chessviewer.html-arc";
+            mod[2].FolderName = @"D:\root\PVCS\vm\common\SampleDB\archives\chess\client";
+            mod[2].ModifiedTime = DateTime.Parse("5/18/98 4:46:38 AM", dfi);
+            mod[2].Type = "Checked in";
+            mod[2].UserName = "kerstinb";
 
-			mod[3] = new Modification();
-			mod[3].Comment = @"Added new msg string.";
-			mod[3].EmailAddress = null;
-			mod[3].Version = "1.3";
-			mod[3].FileName = @"BoardOptions.java-arc";
-			mod[3].FolderName = @"D:\root\PVCS\vm\common\SampleDB\archives\chess\client";			
-			mod[3].ModifiedTime = DateTime.Parse("2/1/00 4:22:36 PM",	_dfi);
-			mod[3].Type = "Checked in";
-			mod[3].UserName = "kerstinb";
+            mod[3] = new Modification();
+            mod[3].Comment = @"Added new labels.";
+            mod[3].EmailAddress = null;
+            mod[3].Version = "1.2";
+            mod[3].FileName = @"ChessViewer.java-arc";
+            mod[3].FolderName = @"D:\root\PVCS\vm\common\SampleDB\archives\chess\client";
+            mod[3].ModifiedTime = DateTime.Parse("2/1/00 4:52:46 PM", dfi);
+            mod[3].Type = "Checked in";
+            mod[3].UserName = "kerstinb";
 
-			return mod;
-		}
+            return mod;
+        }
 
-		private static string PVCS_VERSION_INFO =
-@"
+        private static string PVCS_VERSION_INFO =
+            @"
 Change History  
 
 --------------------------------------------------------------------------------
@@ -353,6 +348,7 @@ Initial revision.
 ===================================
 --------------------------------------------------------------------------------
 				";
-		#endregion
-	}
+
+        #endregion
+    }
 }

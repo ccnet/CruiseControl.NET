@@ -101,9 +101,9 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 		[Test]
 		public void GetSource()
 		{
-			string expectedResyncCommand = string.Format(@"resync --overwriteChanged --restoreTimestamp -R -S {0}\myproject.pj --user=CCNetUser --password=CCNetPassword --quiet", sandboxRoot);
+			string expectedResyncCommand = string.Format(@"resync --overwriteChanged --restoreTimestamp -R -S ""{0}\myproject.pj"" --user=CCNetUser --password=CCNetPassword --quiet", sandboxRoot);
 			mockExecutorWrapper.ExpectAndReturn("Execute", new ProcessResult(null, null, 0, false), ExpectedProcessInfo(expectedResyncCommand));
-			string expectedAttribCommand = string.Format(@"-R /s {0}\*", sandboxRoot);
+			string expectedAttribCommand = string.Format(@"-R /s ""{0}\*""", sandboxRoot);
 			mockExecutorWrapper.ExpectAndReturn("Execute", new ProcessResult(null, null, 0, false), ExpectedProcessInfo("attrib", expectedAttribCommand));
 
 			mks = CreateMks(CreateSourceControlXml(), mockHistoryParser, mockProcessExecutor);
@@ -126,7 +126,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 		[Test]
 		public void CheckpointSourceOnSuccessfulBuild()
 		{
-			string expectedCommand = string.Format(@"checkpoint -d ""Cruise Control.Net Build - 20"" -L ""Build - 20"" -R -S {0}\myproject.pj --user=CCNetUser --password=CCNetPassword --quiet", sandboxRoot);
+			string expectedCommand = string.Format(@"checkpoint -d ""Cruise Control.Net Build - 20"" -L ""Build - 20"" -R -S ""{0}\myproject.pj"" --user=CCNetUser --password=CCNetPassword --quiet", sandboxRoot);
 			ProcessInfo expectedProcessInfo = ExpectedProcessInfo(expectedCommand);
 			mockExecutorWrapper.ExpectAndReturn("Execute", new ProcessResult(null, null, 0, false), expectedProcessInfo);
 			mockIntegrationResult.ExpectAndReturn("Succeeded", true);
@@ -152,7 +152,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 		{
 			mksHistoryParserWrapper.ExpectAndReturn("Parse", new Modification[0], new IsTypeOf(typeof (TextReader)), FROM, TO);
 			mksHistoryParserWrapper.ExpectNoCall("ParseMemberInfoAndAddToModification", new Type[] {(typeof (Modification)), typeof (StringReader)});
-			ProcessInfo expectedProcessInfo = ExpectedProcessInfo(string.Format(@"mods -R -S {0}\myproject.pj --user=CCNetUser --password=CCNetPassword --quiet", sandboxRoot));
+			ProcessInfo expectedProcessInfo = ExpectedProcessInfo(string.Format(@"mods -R -S ""{0}\myproject.pj"" --user=CCNetUser --password=CCNetPassword --quiet", sandboxRoot));
 			mockExecutorWrapper.ExpectAndReturn("Execute", new ProcessResult(null, null, 0, false), expectedProcessInfo);
 
 			mks = CreateMks(CreateSourceControlXml(), mksHistoryParser, mockProcessExecutor);
@@ -170,7 +170,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 			mksHistoryParserWrapper.ExpectAndReturn("ParseMemberInfoAndAddToModification", new Modification[] {addedModification}, new IsTypeOf(typeof (Modification)), new IsTypeOf(typeof (StringReader)));
 			mockExecutorWrapper.ExpectAndReturn("Execute", new ProcessResult("", null, 0, false), new IsTypeOf(typeof (ProcessInfo)));
 
-			string expectedCommand = string.Format(@"memberinfo -S {0}\myproject.pj --user=CCNetUser --password=CCNetPassword --quiet {0}\MyFolder\myFile.file", sandboxRoot);
+			string expectedCommand = string.Format(@"memberinfo -S ""{0}\myproject.pj"" --user=CCNetUser --password=CCNetPassword --quiet ""{0}\MyFolder\myFile.file""", sandboxRoot);
 			ProcessInfo expectedProcessInfo = ExpectedProcessInfo(expectedCommand);
 			mockExecutorWrapper.ExpectAndReturn("Execute", new ProcessResult(null, null, 0, false), expectedProcessInfo);
 
@@ -226,7 +226,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 			mksHistoryParserWrapper.ExpectAndReturn("ParseMemberInfoAndAddToModification", new Modification[] {addedModification}, new IsTypeOf(typeof (Modification)), new IsTypeOf(typeof (StringReader)));
 			mockExecutorWrapper.ExpectAndReturn("Execute", new ProcessResult("", null, 0, false), new IsTypeOf(typeof (ProcessInfo)));
 
-			string expectedCommand = string.Format(@"memberinfo -S {0}\myproject.pj --user=CCNetUser --password=CCNetPassword --quiet {0}\myFile.file", sandboxRoot);
+			string expectedCommand = string.Format(@"memberinfo -S ""{0}\myproject.pj"" --user=CCNetUser --password=CCNetPassword --quiet ""{0}\myFile.file""", sandboxRoot);
 			ProcessInfo expectedProcessInfo = ExpectedProcessInfo(expectedCommand);
 			mockExecutorWrapper.ExpectAndReturn("Execute", new ProcessResult(null, null, 0, false), expectedProcessInfo);
 
@@ -277,19 +277,19 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 			Assert.AreEqual(1, modifications.Length);
 		}
 
-		private Mks CreateMks(string xml, IHistoryParser historyParser, ProcessExecutor executor)
+		private static Mks CreateMks(string xml, IHistoryParser historyParser, ProcessExecutor executor)
 		{
 			Mks newMks = new Mks(historyParser, executor);
 			NetReflector.Read(xml, newMks);
 			return newMks;
 		}
 
-		private ProcessInfo ExpectedProcessInfo(string arguments)
+		private static ProcessInfo ExpectedProcessInfo(string arguments)
 		{
 			return ExpectedProcessInfo(@"..\bin\si.exe", arguments);
 		}
 
-		private ProcessInfo ExpectedProcessInfo(string executable, string arguments)
+		private static ProcessInfo ExpectedProcessInfo(string executable, string arguments)
 		{
 			ProcessInfo expectedProcessInfo = new ProcessInfo(executable, arguments);
 			expectedProcessInfo.TimeOut = Timeout.DefaultTimeout.Millis;

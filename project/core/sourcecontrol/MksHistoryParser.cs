@@ -29,12 +29,22 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			foreach (Match match in memberInfoMatches)
 			{
 				modification.UserName = match.Groups["UserName"].Value.Trim();
-				modification.ModifiedTime = DateTime.Parse(match.Groups["ModifiedTime"].Value.Trim(), CultureInfo.InvariantCulture);
+				modification.ModifiedTime = ParseDate(match.Groups["ModifiedTime"].Value.Trim());
 				modification.Comment = match.Groups["Comment"].Value.Trim();
 			}			
 		}
 
-		private Modification CreateModification(Match match)
+        // Dates returned from MKS seem to be in format Aug 26, 2005 - 5:32 AM but I haven't been able to verify this for all locales
+        // This format is not supported by DateTime.Parse under .NET 2.0. So we TryParseExact to see if just this format can be read.
+	    private static DateTime ParseDate(string dateString)
+	    {
+	        DateTime date;
+            if (DateTime.TryParseExact(dateString, "MMM d, yyyy - h:mm tt", CultureInfo.InvariantCulture, DateTimeStyles.AssumeLocal, out date))
+                return date;
+	        return Convert.ToDateTime(dateString);
+	    }
+
+	    private static Modification CreateModification(Match match)
 		{
 			Modification modification = new Modification();
 			ParseFileAndFolderName(match.Groups["Filename"].Value.Trim(), modification);
@@ -43,12 +53,12 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			return modification;
 		}
 
-		private string ParseModificationType(string modificationType)
+		private static string ParseModificationType(string modificationType)
 		{
 			return ("Revision" == modificationType) ? "Modified" : modificationType;
 		}
 
-		private void ParseFileAndFolderName(string file, Modification modification)
+		private static void ParseFileAndFolderName(string file, Modification modification)
 		{
 			int lastIndexOfFrontSlash = file.LastIndexOf("/");
 			modification.FileName = file.Substring(lastIndexOfFrontSlash + 1);

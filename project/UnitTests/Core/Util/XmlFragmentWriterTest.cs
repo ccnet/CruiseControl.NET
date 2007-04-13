@@ -101,20 +101,20 @@ type=""log4net.Config.Log4NetConfigurationSectionHandler,log4net"" />";
 		}
 
 		[Test]
-		public void UnclosedXmlFragmentEndingInCarriageReturnShouldCloseOpenElement()
+		public void UnclosedXmlFragmentEndingInCarriageReturnShouldEncloseInCDATATag()
 		{
 			string xml = @"<a>
 ";
 			writer.WriteNode(xml);
-			Assert.AreEqual(@"<a>
-</a>", baseWriter.ToString());
+			Assert.AreEqual(@"<![CDATA[<a>
+]]>", baseWriter.ToString());
 		}
 
 		[Test]
 		public void ShouldStripIllegalCharacters()
 		{
 			writer.WriteNode(string.Format("<foo>{0}</foo>", IllegalCharacters()));
-			Assert.AreEqual("<foo>\t\n\r</foo>", baseWriter.ToString());
+			Assert.AreEqual("<foo>\t\n\n</foo>", baseWriter.ToString());
 		}
 
 		[Test]

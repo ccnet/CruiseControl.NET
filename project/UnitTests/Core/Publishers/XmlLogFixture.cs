@@ -20,6 +20,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Publishers
 			}
 			else
 			{
+			    expectedBuildOutput = expectedBuildOutput.Replace("\r", string.Empty);
 				return string.Format(@"<build date=""{0}"" buildtime=""00:00:00""{1} buildcondition=""{3}"">{2}</build>", result.StartTime, error, expectedBuildOutput, result.BuildCondition);
 			}
 		}

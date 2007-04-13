@@ -109,19 +109,19 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Util
 			}
 		}
 
-		private void AssertProcessExitsSuccessfully(ProcessResult result)
+		private static void AssertProcessExitsSuccessfully(ProcessResult result)
 		{
 			Assert.AreEqual(ProcessResult.SUCCESSFUL_EXIT_CODE, result.ExitCode, "Process did not exit successfully");
 			AssertFalse("process should not return an error", result.Failed);
 		}
 
-		private void AssertProcessExitsWithFailure(ProcessResult result, int expectedExitCode)
+		private static void AssertProcessExitsWithFailure(ProcessResult result, int expectedExitCode)
 		{
 			Assert.AreEqual(expectedExitCode, result.ExitCode);
 			Assert.IsTrue(result.Failed, "process should return an error");
 		}
 
-		private void WaitForProcessToStart()
+		private static void WaitForProcessToStart()
 		{
 			int count = 0;
 			while (Process.GetProcessesByName("sleeper").Length == 0 && count < 1000)
@@ -129,6 +129,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Util
 				Thread.Sleep(50);
 				count++;
 			}
+            Thread.Sleep(2000);
 			if (count == 1000) Assert.Fail("sleeper process did not start.");
 		}
 

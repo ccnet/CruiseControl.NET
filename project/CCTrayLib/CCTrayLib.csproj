@@ -1,687 +1,453 @@
-<VisualStudioProject>
-    <CSHARP
-        ProjectType = "Local"
-        ProductVersion = "7.10.6030"
-        SchemaVersion = "2.0"
-        ProjectGuid = "{C8043AD9-0F30-4366-A263-E2FC0D6A57A9}"
-    >
-        <Build>
-            <Settings
-                ApplicationIcon = ""
-                AssemblyKeyContainerName = ""
-                AssemblyName = "ThoughtWorks.CruiseControl.CCTrayLib"
-                AssemblyOriginatorKeyFile = ""
-                DefaultClientScript = "JScript"
-                DefaultHTMLPageLayout = "Grid"
-                DefaultTargetSchema = "IE50"
-                DelaySign = "false"
-                OutputType = "Library"
-                PreBuildEvent = ""
-                PostBuildEvent = ""
-                RootNamespace = "ThoughtWorks.CruiseControl.CCTrayLib"
-                RunPostBuildEvent = "OnBuildSuccess"
-                StartupObject = ""
-            >
-                <Config
-                    Name = "Debug"
-                    AllowUnsafeBlocks = "false"
-                    BaseAddress = "285212672"
-                    CheckForOverflowUnderflow = "false"
-                    ConfigurationOverrideFile = ""
-                    DefineConstants = "DEBUG;TRACE"
-                    DocumentationFile = ""
-                    DebugSymbols = "true"
-                    FileAlignment = "4096"
-                    IncrementalBuild = "false"
-                    NoStdLib = "false"
-                    NoWarn = ""
-                    Optimize = "false"
-                    OutputPath = "bin\Debug\"
-                    RegisterForComInterop = "false"
-                    RemoveIntegerChecks = "false"
-                    TreatWarningsAsErrors = "false"
-                    WarningLevel = "4"
-                />
-                <Config
-                    Name = "Release"
-                    AllowUnsafeBlocks = "false"
-                    BaseAddress = "285212672"
-                    CheckForOverflowUnderflow = "false"
-                    ConfigurationOverrideFile = ""
-                    DefineConstants = "TRACE"
-                    DocumentationFile = ""
-                    DebugSymbols = "false"
-                    FileAlignment = "4096"
-                    IncrementalBuild = "false"
-                    NoStdLib = "false"
-                    NoWarn = ""
-                    Optimize = "true"
-                    OutputPath = "bin\Release\"
-                    RegisterForComInterop = "false"
-                    RemoveIntegerChecks = "false"
-                    TreatWarningsAsErrors = "false"
-                    WarningLevel = "4"
-                />
-                <Config
-                    Name = "Build"
-                    AllowUnsafeBlocks = "false"
-                    BaseAddress = "285212672"
-                    CheckForOverflowUnderflow = "false"
-                    ConfigurationOverrideFile = ""
-                    DefineConstants = ""
-                    DocumentationFile = ""
-                    DebugSymbols = "true"
-                    FileAlignment = "4096"
-                    IncrementalBuild = "false"
-                    NoStdLib = "false"
-                    NoWarn = ""
-                    Optimize = "true"
-                    OutputPath = "..\..\build\CCTrayLib\"
-                    RegisterForComInterop = "false"
-                    RemoveIntegerChecks = "false"
-                    TreatWarningsAsErrors = "false"
-                    WarningLevel = "4"
-                />
-            </Settings>
-            <References>
-                <Reference
-                    Name = "System"
-                    AssemblyName = "System"
-                    HintPath = "..\..\..\..\..\..\WINDOWS\Microsoft.NET\Framework\v1.1.4322\System.dll"
-                />
-                <Reference
-                    Name = "System.XML"
-                    AssemblyName = "System.Xml"
-                    HintPath = "..\..\..\..\..\..\WINDOWS\Microsoft.NET\Framework\v1.1.4322\System.XML.dll"
-                />
-                <Reference
-                    Name = "System.Windows.Forms"
-                    AssemblyName = "System.Windows.Forms"
-                    HintPath = "..\..\..\..\..\..\WINDOWS\Microsoft.NET\Framework\v1.1.4322\System.Windows.Forms.dll"
-                />
-                <Reference
-                    Name = "Remote"
-                    Project = "{E820CF3B-8C5A-4002-BC16-B7818D3D54A8}"
-                    Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
-                />
-                <Reference
-                    Name = "System.Drawing"
-                    AssemblyName = "System.Drawing"
-                    HintPath = "..\..\..\..\..\..\WINDOWS\Microsoft.NET\Framework\v1.1.4322\System.Drawing.dll"
-                />
-                <Reference
-                    Name = "System.Data"
-                    AssemblyName = "System.Data"
-                    HintPath = "..\..\..\..\WINDOWS\Microsoft.NET\Framework\v1.1.4322\System.Data.dll"
-                />
-                <Reference
-                    Name = "SerialPort"
-                    AssemblyName = "SerialPort"
-                    HintPath = "..\..\lib\SerialPort.dll"
-                />
-            </References>
-        </Build>
-        <Files>
-            <Include>
-                <File
-                    RelPath = "AssemblyInfo.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Audio.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "BuildOccurredEventArgs.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "BuildTransition.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "CCTimeFormatter.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "CommonAssemblyInfo.cs"
-                    Link = "..\CommonAssemblyInfo.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "DateTimeProvider.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "ErrorLevel.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Gray.ico"
-                    BuildAction = "EmbeddedResource"
-                />
-                <File
-                    RelPath = "Green.ico"
-                    BuildAction = "EmbeddedResource"
-                />
-                <File
-                    RelPath = "IconNotFoundException.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "NotifyInfoFlags.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Orange.ico"
-                    BuildAction = "EmbeddedResource"
-                />
-                <File
-                    RelPath = "Queue.ico"
-                    BuildAction = "EmbeddedResource"
-                />
-                <File
-                    RelPath = "Red.ico"
-                    BuildAction = "EmbeddedResource"
-                />
-                <File
-                    RelPath = "ServerHttp.ico"
-                    BuildAction = "EmbeddedResource"
-                />
-                <File
-                    RelPath = "ServerRemoting.ico"
-                    BuildAction = "EmbeddedResource"
-                />
-                <File
-                    RelPath = "StatusIcon.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Stopwatch.ico"
-                    BuildAction = "EmbeddedResource"
-                />
-                <File
-                    RelPath = "Yellow.ico"
-                    BuildAction = "EmbeddedResource"
-                />
-                <File
-                    RelPath = "Configuration\AudioFiles.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Configuration\BalloonMessages.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Configuration\BuildServer.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Configuration\BuildServerTransport.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Configuration\BuildTransitionNotification.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Configuration\CaptionAndMessage.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Configuration\CCTrayMultiConfiguration.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Configuration\CCTrayProject.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Configuration\ICCTrayMultiConfiguration.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Configuration\Icons.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Configuration\PersistentConfiguration.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Configuration\TrayIconDoubleClickAction.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Configuration\X10Configuration.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Monitoring\AggregatingProjectMonitor.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Monitoring\AggregatingServerMonitor.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Monitoring\BuildDurationTracker.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Monitoring\CachingWebRetriever.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Monitoring\CruiseProjectManagerFactory.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Monitoring\CruiseServerManagerFactory.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Monitoring\DashboardXmlParser.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Monitoring\HttpCruiseProjectManager.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Monitoring\HttpCruiseServerManager.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Monitoring\HttpProjectListRetriever.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Monitoring\ICache.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Monitoring\ICachingWebRetriever.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Monitoring\ICruiseProjectManager.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Monitoring\ICruiseProjectManagerFactory.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Monitoring\ICruiseServerManager.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Monitoring\ICruiseServerManagerFactory.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Monitoring\IDashboardXmlParser.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Monitoring\IntegrationQueueNodeType.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Monitoring\IPollable.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Monitoring\IProjectMonitor.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Monitoring\IServerMonitor.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Monitoring\ISingleProjectDetail.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Monitoring\ISingleServerMonitor.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Monitoring\IWebRetriever.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Monitoring\MonitorBuildOccurredEventArgs.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Monitoring\MonitorPolledEventArgs.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Monitoring\MonitorServerPolledEventArgs.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Monitoring\MonitorServerQueueChangedEventArgs.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Monitoring\Poller.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Monitoring\PollIntervalReporter.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Monitoring\ProjectMonitor.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Monitoring\ProjectState.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Monitoring\RemotingCruiseProjectManager.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Monitoring\RemotingCruiseServerManager.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Monitoring\RemotingProjectListRetriever.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Monitoring\ServerMonitor.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Monitoring\WebRetriever.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Presentation\AddBuildServer.cs"
-                    SubType = "Form"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Presentation\AddBuildServer.resx"
-                    DependentUpon = "AddBuildServer.cs"
-                    BuildAction = "EmbeddedResource"
-                />
-                <File
-                    RelPath = "Presentation\AddProjects.cs"
-                    SubType = "Form"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Presentation\AddProjects.resx"
-                    DependentUpon = "AddProjects.cs"
-                    BuildAction = "EmbeddedResource"
-                />
-                <File
-                    RelPath = "Presentation\AudioPlayer.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Presentation\BuildTransitionSoundPlayer.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Presentation\CCTrayMultiSettingsForm.cs"
-                    SubType = "Form"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Presentation\CCTrayMultiSettingsForm.resx"
-                    DependentUpon = "CCTrayMultiSettingsForm.cs"
-                    BuildAction = "EmbeddedResource"
-                />
-                <File
-                    RelPath = "Presentation\ConfigurableBalloonMessageProvider.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Presentation\ConfigurableProjectStateIconProvider.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Presentation\DetailStringProvider.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Presentation\IAudioPlayer.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Presentation\IBalloonMessageProvider.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Presentation\IDetailStringProvider.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Presentation\IIconProvider.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Presentation\IIntegrationQueueIconProvider.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Presentation\IntegrationQueueTreeNodeAdaptor.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Presentation\IntegrationQueueTreeNodeTag.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Presentation\IProjectStateIconProvider.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Presentation\MainForm.cs"
-                    SubType = "Form"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Presentation\MainForm.resx"
-                    DependentUpon = "MainForm.cs"
-                    BuildAction = "EmbeddedResource"
-                />
-                <File
-                    RelPath = "Presentation\MainFormController.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Presentation\NativeMethods.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Presentation\NotifyIconEx.cs"
-                    SubType = "Component"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Presentation\NotifyIconEx.resx"
-                    DependentUpon = "NotifyIconEx.cs"
-                    BuildAction = "EmbeddedResource"
-                />
-                <File
-                    RelPath = "Presentation\PersistWindowState.cs"
-                    SubType = "Component"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Presentation\PersistWindowState.resx"
-                    DependentUpon = "PersistWindowState.cs"
-                    BuildAction = "EmbeddedResource"
-                />
-                <File
-                    RelPath = "Presentation\ProjectConfigurationListViewItemAdaptor.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Presentation\ProjectStateIconAdaptor.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Presentation\ProjectStatusListViewItemAdaptor.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Presentation\ResourceIntegrationQueueIconProvider.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Presentation\ResourceProjectStateIconProvider.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Presentation\SelectAudioFileController.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Presentation\SynchronizedProjectMonitor.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Presentation\SynchronizedServerMonitor.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Presentation\TrayIcon.cs"
-                    SubType = "Component"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Presentation\TrayIcon.resx"
-                    DependentUpon = "TrayIcon.cs"
-                    BuildAction = "EmbeddedResource"
-                />
-                <File
-                    RelPath = "Presentation\WindowStateEventArgs.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "X10\ILampController.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "X10\IX10LowLevelDriver.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "X10\LampController.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "X10\X10Controller.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "X10\X10LowLevelDriver.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-            </Include>
-        </Files>
-    </CSHARP>
-</VisualStudioProject>
-
+﻿<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <ProjectType>Local</ProjectType>
+    <ProductVersion>8.0.50727</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{C8043AD9-0F30-4366-A263-E2FC0D6A57A9}</ProjectGuid>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ApplicationIcon>
+    </ApplicationIcon>
+    <AssemblyKeyContainerName>
+    </AssemblyKeyContainerName>
+    <AssemblyName>ThoughtWorks.CruiseControl.CCTrayLib</AssemblyName>
+    <AssemblyOriginatorKeyFile>
+    </AssemblyOriginatorKeyFile>
+    <DefaultClientScript>JScript</DefaultClientScript>
+    <DefaultHTMLPageLayout>Grid</DefaultHTMLPageLayout>
+    <DefaultTargetSchema>IE50</DefaultTargetSchema>
+    <DelaySign>false</DelaySign>
+    <OutputType>Library</OutputType>
+    <RootNamespace>ThoughtWorks.CruiseControl.CCTrayLib</RootNamespace>
+    <RunPostBuildEvent>OnBuildSuccess</RunPostBuildEvent>
+    <StartupObject>
+    </StartupObject>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <UpgradeBackupLocation>
+    </UpgradeBackupLocation>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <OutputPath>bin\Debug\</OutputPath>
+    <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
+    <BaseAddress>285212672</BaseAddress>
+    <CheckForOverflowUnderflow>false</CheckForOverflowUnderflow>
+    <ConfigurationOverrideFile>
+    </ConfigurationOverrideFile>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DocumentationFile>
+    </DocumentationFile>
+    <DebugSymbols>true</DebugSymbols>
+    <FileAlignment>4096</FileAlignment>
+    <NoStdLib>false</NoStdLib>
+    <NoWarn>
+    </NoWarn>
+    <Optimize>false</Optimize>
+    <RegisterForComInterop>false</RegisterForComInterop>
+    <RemoveIntegerChecks>false</RemoveIntegerChecks>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+    <WarningLevel>4</WarningLevel>
+    <DebugType>full</DebugType>
+    <ErrorReport>prompt</ErrorReport>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <OutputPath>bin\Release\</OutputPath>
+    <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
+    <BaseAddress>285212672</BaseAddress>
+    <CheckForOverflowUnderflow>false</CheckForOverflowUnderflow>
+    <ConfigurationOverrideFile>
+    </ConfigurationOverrideFile>
+    <DefineConstants>TRACE</DefineConstants>
+    <DocumentationFile>
+    </DocumentationFile>
+    <DebugSymbols>false</DebugSymbols>
+    <FileAlignment>4096</FileAlignment>
+    <NoStdLib>false</NoStdLib>
+    <NoWarn>
+    </NoWarn>
+    <Optimize>true</Optimize>
+    <RegisterForComInterop>false</RegisterForComInterop>
+    <RemoveIntegerChecks>false</RemoveIntegerChecks>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+    <WarningLevel>4</WarningLevel>
+    <DebugType>none</DebugType>
+    <ErrorReport>prompt</ErrorReport>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Build|AnyCPU' ">
+    <OutputPath>..\..\build\CCTrayLib\</OutputPath>
+    <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
+    <BaseAddress>285212672</BaseAddress>
+    <CheckForOverflowUnderflow>false</CheckForOverflowUnderflow>
+    <ConfigurationOverrideFile>
+    </ConfigurationOverrideFile>
+    <DefineConstants>
+    </DefineConstants>
+    <DocumentationFile>
+    </DocumentationFile>
+    <DebugSymbols>true</DebugSymbols>
+    <FileAlignment>4096</FileAlignment>
+    <NoStdLib>false</NoStdLib>
+    <NoWarn>
+    </NoWarn>
+    <Optimize>true</Optimize>
+    <RegisterForComInterop>false</RegisterForComInterop>
+    <RemoveIntegerChecks>false</RemoveIntegerChecks>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+    <WarningLevel>4</WarningLevel>
+    <DebugType>full</DebugType>
+    <ErrorReport>prompt</ErrorReport>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System">
+      <Name>System</Name>
+    </Reference>
+    <Reference Include="System.Data">
+      <Name>System.Data</Name>
+    </Reference>
+    <Reference Include="System.Drawing">
+      <Name>System.Drawing</Name>
+    </Reference>
+    <Reference Include="System.Windows.Forms">
+      <Name>System.Windows.Forms</Name>
+    </Reference>
+    <Reference Include="System.Xml">
+      <Name>System.XML</Name>
+    </Reference>
+    <ProjectReference Include="..\Remote\Remote.csproj">
+      <Name>Remote</Name>
+      <Project>{E820CF3B-8C5A-4002-BC16-B7818D3D54A8}</Project>
+      <Package>{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</Package>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="..\CommonAssemblyInfo.cs">
+      <Link>CommonAssemblyInfo.cs</Link>
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="AssemblyInfo.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Audio.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="BuildOccurredEventArgs.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="BuildTransition.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="CCTimeFormatter.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Configuration\AudioFiles.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Configuration\BalloonMessages.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Configuration\BuildServer.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Configuration\BuildServerTransport.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Configuration\BuildTransitionNotification.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Configuration\CaptionAndMessage.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Configuration\CCTrayMultiConfiguration.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Configuration\CCTrayProject.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Configuration\ICCTrayMultiConfiguration.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Configuration\Icons.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Configuration\PersistentConfiguration.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Configuration\TrayIconDoubleClickAction.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Configuration\X10Configuration.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="DateTimeProvider.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ErrorLevel.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="IconNotFoundException.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Monitoring\AggregatingProjectMonitor.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Monitoring\AggregatingServerMonitor.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Monitoring\BuildDurationTracker.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Monitoring\CachingWebRetriever.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Monitoring\CruiseProjectManagerFactory.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Monitoring\CruiseServerManagerFactory.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Monitoring\DashboardXmlParser.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Monitoring\HttpCruiseProjectManager.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Monitoring\HttpCruiseServerManager.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Monitoring\HttpProjectListRetriever.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Monitoring\ICache.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Monitoring\ICachingWebRetriever.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Monitoring\ICruiseProjectManager.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Monitoring\ICruiseProjectManagerFactory.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Monitoring\ICruiseServerManager.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Monitoring\ICruiseServerManagerFactory.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Monitoring\IDashboardXmlParser.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Monitoring\IntegrationQueueNodeType.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Monitoring\IPollable.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Monitoring\IProjectMonitor.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Monitoring\IServerMonitor.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Monitoring\ISingleProjectDetail.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Monitoring\ISingleServerMonitor.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Monitoring\IWebRetriever.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Monitoring\MonitorBuildOccurredEventArgs.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Monitoring\MonitorPolledEventArgs.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Monitoring\MonitorServerPolledEventArgs.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Monitoring\MonitorServerQueueChangedEventArgs.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Monitoring\Poller.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Monitoring\PollIntervalReporter.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Monitoring\ProjectMonitor.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Monitoring\ProjectState.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Monitoring\RemotingCruiseProjectManager.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Monitoring\RemotingCruiseServerManager.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Monitoring\RemotingProjectListRetriever.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Monitoring\ServerMonitor.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Monitoring\WebRetriever.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="NotifyInfoFlags.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Presentation\AddBuildServer.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Presentation\AddProjects.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Presentation\AudioPlayer.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Presentation\BuildTransitionSoundPlayer.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Presentation\CCTrayMultiSettingsForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Presentation\ConfigurableBalloonMessageProvider.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Presentation\ConfigurableProjectStateIconProvider.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Presentation\DetailStringProvider.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Presentation\IAudioPlayer.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Presentation\IBalloonMessageProvider.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Presentation\IDetailStringProvider.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Presentation\IIconProvider.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Presentation\IIntegrationQueueIconProvider.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Presentation\IntegrationQueueTreeNodeAdaptor.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Presentation\IntegrationQueueTreeNodeTag.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Presentation\IProjectStateIconProvider.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Presentation\MainForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Presentation\MainFormController.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Presentation\NativeMethods.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Presentation\NotifyIconEx.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Presentation\PersistWindowState.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Presentation\ProjectConfigurationListViewItemAdaptor.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Presentation\ProjectStateIconAdaptor.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Presentation\ProjectStatusListViewItemAdaptor.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Presentation\ResourceIntegrationQueueIconProvider.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Presentation\ResourceProjectStateIconProvider.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Presentation\SelectAudioFileController.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Presentation\SynchronizedProjectMonitor.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Presentation\SynchronizedServerMonitor.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Presentation\TrayIcon.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Presentation\WindowStateEventArgs.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="StatusIcon.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="X10\ILampController.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="X10\IX10LowLevelDriver.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="X10\LampController.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="X10\X10Controller.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="X10\X10LowLevelDriver.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <EmbeddedResource Include="Gray.ico" />
+    <EmbeddedResource Include="Green.ico" />
+    <EmbeddedResource Include="Orange.ico" />
+    <EmbeddedResource Include="Presentation\AddBuildServer.resx">
+      <DependentUpon>AddBuildServer.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Presentation\AddProjects.resx">
+      <DependentUpon>AddProjects.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Presentation\CCTrayMultiSettingsForm.resx">
+      <DependentUpon>CCTrayMultiSettingsForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Presentation\MainForm.resx">
+      <DependentUpon>MainForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Presentation\NotifyIconEx.resx">
+      <DependentUpon>NotifyIconEx.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Presentation\PersistWindowState.resx">
+      <DependentUpon>PersistWindowState.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Presentation\TrayIcon.resx">
+      <DependentUpon>TrayIcon.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Queue.ico" />
+    <EmbeddedResource Include="Red.ico" />
+    <EmbeddedResource Include="ServerHttp.ico" />
+    <EmbeddedResource Include="ServerRemoting.ico" />
+    <EmbeddedResource Include="Stopwatch.ico" />
+    <EmbeddedResource Include="Yellow.ico" />
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PreBuildEvent>
+    </PreBuildEvent>
+    <PostBuildEvent>
+    </PostBuildEvent>
+  </PropertyGroup>
+</Project>

@@ -146,7 +146,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Publishers
 			result.AddTaskResult(swWithNull.ToString());
 
 			string expectedResult = CreateExpectedBuildXml(result, swWithNull.ToString());
-			Assert.AreEqual(expectedResult.Replace("\0", string.Empty), GenerateBuildOutput(result));
+			Assert.AreEqual(expectedResult.Replace("\0", string.Empty).Replace("\r", string.Empty), GenerateBuildOutput(result));
 		}
 
 		[Test]

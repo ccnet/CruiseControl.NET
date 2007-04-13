@@ -1,1385 +1,890 @@
-<VisualStudioProject>
-    <CSHARP
-        ProjectType = "Local"
-        ProductVersion = "7.10.6030"
-        SchemaVersion = "2.0"
-        ProjectGuid = "{F8113DB9-6C47-4FD1-8A01-655FCF151747}"
-    >
-        <Build>
-            <Settings
-                ApplicationIcon = ""
-                AssemblyKeyContainerName = ""
-                AssemblyName = "ThoughtWorks.CruiseControl.Core"
-                AssemblyOriginatorKeyFile = ""
-                DefaultClientScript = "JScript"
-                DefaultHTMLPageLayout = "Grid"
-                DefaultTargetSchema = "IE50"
-                DelaySign = "false"
-                OutputType = "Library"
-                PreBuildEvent = ""
-                PostBuildEvent = 'mkdir "$(TargetDir)xsl"&#xd;&#xa;xcopy /q /y "$(SolutionDir)\xsl\*.*" "$(TargetDir)xsl"'
-                RootNamespace = "ThoughtWorks.CruiseControl.Core"
-                RunPostBuildEvent = "OnBuildSuccess"
-                StartupObject = ""
-            >
-                <Config
-                    Name = "Debug"
-                    AllowUnsafeBlocks = "false"
-                    BaseAddress = "285212672"
-                    CheckForOverflowUnderflow = "false"
-                    ConfigurationOverrideFile = ""
-                    DefineConstants = "DEBUG;TRACE"
-                    DocumentationFile = ""
-                    DebugSymbols = "true"
-                    FileAlignment = "4096"
-                    IncrementalBuild = "true"
-                    NoStdLib = "false"
-                    NoWarn = ""
-                    Optimize = "false"
-                    OutputPath = "bin\Debug\"
-                    RegisterForComInterop = "false"
-                    RemoveIntegerChecks = "false"
-                    TreatWarningsAsErrors = "false"
-                    WarningLevel = "4"
-                />
-                <Config
-                    Name = "Release"
-                    AllowUnsafeBlocks = "false"
-                    BaseAddress = "285212672"
-                    CheckForOverflowUnderflow = "false"
-                    ConfigurationOverrideFile = ""
-                    DefineConstants = "TRACE"
-                    DocumentationFile = ""
-                    DebugSymbols = "false"
-                    FileAlignment = "4096"
-                    IncrementalBuild = "false"
-                    NoStdLib = "false"
-                    NoWarn = ""
-                    Optimize = "true"
-                    OutputPath = "bin\Release\"
-                    RegisterForComInterop = "false"
-                    RemoveIntegerChecks = "false"
-                    TreatWarningsAsErrors = "false"
-                    WarningLevel = "4"
-                />
-                <Config
-                    Name = "Build"
-                    AllowUnsafeBlocks = "false"
-                    BaseAddress = "285212672"
-                    CheckForOverflowUnderflow = "false"
-                    ConfigurationOverrideFile = ""
-                    DefineConstants = "DEBUG;TRACE"
-                    DocumentationFile = ""
-                    DebugSymbols = "true"
-                    FileAlignment = "4096"
-                    IncrementalBuild = "false"
-                    NoStdLib = "false"
-                    NoWarn = ""
-                    Optimize = "true"
-                    OutputPath = "..\..\build\core\"
-                    RegisterForComInterop = "false"
-                    RemoveIntegerChecks = "false"
-                    TreatWarningsAsErrors = "false"
-                    WarningLevel = "4"
-                />
-            </Settings>
-            <References>
-                <Reference
-                    Name = "System.XML"
-                    AssemblyName = "System.Xml"
-                    HintPath = "C:\WINNT\Microsoft.NET\Framework\v1.1.4322\System.XML.dll"
-                />
-                <Reference
-                    Name = "System"
-                    AssemblyName = "System"
-                    HintPath = "C:\WINNT\Microsoft.NET\Framework\v1.1.4322\System.dll"
-                />
-                <Reference
-                    Name = "NetReflector"
-                    AssemblyName = "NetReflector"
-                    HintPath = "..\..\lib\NetReflector.dll"
-                />
-                <Reference
-                    Name = "Remote"
-                    Project = "{E820CF3B-8C5A-4002-BC16-B7818D3D54A8}"
-                    Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
-                />
-                <Reference
-                    Name = "System.Web"
-                    AssemblyName = "System.Web"
-                    HintPath = "C:\WINNT\Microsoft.NET\Framework\v1.1.4322\System.Web.dll"
-                />
-                <Reference
-                    Name = "System.Data"
-                    AssemblyName = "System.Data"
-                    HintPath = "..\..\..\..\..\..\WINDOWS\Microsoft.NET\Framework\v1.1.4322\System.Data.dll"
-                />
-                <Reference
-                    Name = "System.Runtime.Remoting"
-                    AssemblyName = "System.Runtime.Remoting"
-                    HintPath = "..\..\..\..\..\WINDOWS\Microsoft.NET\Framework\v1.1.4322\System.Runtime.Remoting.dll"
-                />
-                <Reference
-                    Name = "log4net"
-                    AssemblyName = "log4net"
-                    HintPath = "..\..\lib\log4net.dll"
-                />
-                <Reference
-                    Name = "NPlot"
-                    AssemblyName = "NPlot"
-                    HintPath = "..\..\lib\NPlot.dll"
-                />
-                <Reference
-                    Name = "System.Drawing"
-                    AssemblyName = "System.Drawing"
-                    HintPath = "..\..\..\..\WINDOWS\Microsoft.NET\Framework\v1.1.4322\System.Drawing.dll"
-                />
-            </References>
-        </Build>
-        <Files>
-            <Include>
-                <File
-                    RelPath = "ArgumentParser.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "AssemblyInfo.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "CommonAssemblyInfo.cs"
-                    Link = "..\CommonAssemblyInfo.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "ConsoleEventHandler.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "ConsoleRunner.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "CruiseControlRemotingException.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "CruiseManager.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "CruiseServer.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "CruiseServerFactory.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "IArgumentParser.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "ICruiseServerFactory.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "IIntegratable.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "IIntegrationRepository.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "IIntegrationResult.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "IIntegrationResultManager.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "IIntegrationRunnerTarget.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "IntegrationQueueManager.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "IntegrationResult.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "IntegrationResultManager.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "IntegrationRunner.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "IntegrationStatus.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "IntegrationSummary.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "IProject.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "IProjectIntegrator.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "IProjectIntegratorFactory.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "IProjectIntegratorList.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "IProjectList.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "IProjectSerializer.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "ITask.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "ITaskResult.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "LogFile.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "NetReflectorProjectSerializer.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Project.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "ProjectBase.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "ProjectIntegrator.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "ProjectIntegratorList.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "ProjectIntegratorListFactory.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "ProjectList.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "RemoteCruiseServer.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Workflow.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "WorkflowResult.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "configuration\CachingConfigurationService.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "configuration\ccnet.xsd"
-                    BuildAction = "EmbeddedResource"
-                />
-                <File
-                    RelPath = "configuration\ccnet.xsx"
-                    DependentUpon = "ccnet.xsd"
-                    BuildAction = "None"
-                />
-                <File
-                    RelPath = "configuration\Configuration.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "configuration\ConfigurationException.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "configuration\CruiseControlConfigSectionHandler.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "configuration\DefaultConfigurationFileLoader.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "configuration\DefaultConfigurationFileSaver.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "configuration\FileConfigurationService.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "configuration\FileWatcherConfigurationService.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "configuration\IConfiguration.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "configuration\IConfigurationFileLoader.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "configuration\IConfigurationFileSaver.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "configuration\IConfigurationService.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "configuration\NetReflectorConfigurationReader.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "configuration\XmlValidatingLoader.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "configuration\XslFilesSectionHandler.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "label\DateLabeller.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "label\DefaultLabeller.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "label\ILabeller.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "label\IterationLabeller.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "label\LastChangeLabeller.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "label\RemoteProjectLabeller.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "label\StateFileLabeller.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Log\CircularArray.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Log\EnumeratorDirection.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Log\ServerLogFileReader.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "publishers\BuildLogTransformer.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "publishers\BuildPublisher.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "publishers\EmailGateway.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "publishers\EmailGroup.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "publishers\EmailMessage.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "publishers\EmailPublisher.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "publishers\EmailUser.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "publishers\ForceBuildPublisher.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "publishers\HtmlDetailsMessageBuilder.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "publishers\HtmlLinkMessageBuilder.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "publishers\IMessageBuilder.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "publishers\RssPublisher.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "publishers\XmlIntegrationResultWriter.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "publishers\XmlLogPublisher.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "publishers\Statistics\FirstMatch.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "publishers\Statistics\IPlotter.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "publishers\Statistics\Plotter.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "publishers\Statistics\Statistic.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "publishers\Statistics\StatisticsBuilder.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "publishers\Statistics\StatisticsCalculator.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "publishers\Statistics\StatisticsChartGenerator.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "publishers\Statistics\StatisticsPublisher.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "publishers\Statistics\UnavailableStatisticsException.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "publishers\xsl\compile.xsl"
-                    Link = "..\xsl\compile.xsl"
-                    BuildAction = "Content"
-                />
-                <File
-                    RelPath = "publishers\xsl\cruisecontrol.css"
-                    Link = "..\xsl\cruisecontrol.css"
-                    BuildAction = "Content"
-                />
-                <File
-                    RelPath = "publishers\xsl\header.xsl"
-                    Link = "..\xsl\header.xsl"
-                    BuildAction = "Content"
-                />
-                <File
-                    RelPath = "publishers\xsl\modifications.xsl"
-                    Link = "..\xsl\modifications.xsl"
-                    BuildAction = "Content"
-                />
-                <File
-                    RelPath = "publishers\xsl\MsTestSummary.xsl"
-                    Link = "..\xsl\MsTestSummary.xsl"
-                    BuildAction = "Content"
-                />
-                <File
-                    RelPath = "publishers\xsl\unittests.xsl"
-                    Link = "..\xsl\unittests.xsl"
-                    BuildAction = "Content"
-                />
-                <File
-                    RelPath = "Queues\IIntegrationQueue.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Queues\IIntegrationQueueItem.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Queues\IIntegrationQueueNotifier.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Queues\IntegrationQueue.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Queues\IntegrationQueueItem.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Queues\IntegrationQueueSet.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Reporting\Dashboard\Navigation\AbsolutePathUrlBuilderDecorator.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Reporting\Dashboard\Navigation\DefaultBuildSpecifier.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Reporting\Dashboard\Navigation\DefaultCruiseUrlBuilder.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Reporting\Dashboard\Navigation\DefaultProjectSpecifier.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Reporting\Dashboard\Navigation\DefaultServerSpecifier.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Reporting\Dashboard\Navigation\DefaultUrlBuilder.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Reporting\Dashboard\Navigation\IBuildSpecifier.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Reporting\Dashboard\Navigation\ICruiseUrlBuilder.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Reporting\Dashboard\Navigation\IPhysicalApplicationPathProvider.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Reporting\Dashboard\Navigation\IProjectSpecifier.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Reporting\Dashboard\Navigation\IServerSpecifier.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Reporting\Dashboard\Navigation\IUrlBuilder.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "sourcecontrol\AccuRev.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "sourcecontrol\AccuRevHistoryParser.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "sourcecontrol\ActionFilter.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "sourcecontrol\Alienbrain.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "sourcecontrol\AlienbrainHistoryParser.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "sourcecontrol\ClearCase.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "sourcecontrol\ClearCaseHistoryParser.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "sourcecontrol\Cvs.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "sourcecontrol\CvsHistoryParser.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "sourcecontrol\FileSourceControl.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "sourcecontrol\FilteredSourceControl.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "sourcecontrol\IHistoryParser.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "sourcecontrol\IModificationFilter.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "sourcecontrol\IModificationUrlBuilder.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "sourcecontrol\ISourceControl.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "sourcecontrol\IStarTeamRegExProvider.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "sourcecontrol\IVssLocale.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "sourcecontrol\Mks.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "sourcecontrol\MksHistoryParser.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "sourcecontrol\Modification.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "sourcecontrol\MultiSourceControl.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "sourcecontrol\NullSourceControl.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "sourcecontrol\NullUrlBuilder.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "sourcecontrol\PathFilter.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "sourcecontrol\ProcessSourceControl.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "sourcecontrol\Pvcs.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "sourcecontrol\PvcsHistoryParser.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "sourcecontrol\QuietPeriod.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "sourcecontrol\StarTeam.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "sourcecontrol\StarTeamHistoryParser.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "sourcecontrol\Surround.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "sourcecontrol\SurroundHistoryParser.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "sourcecontrol\Svn.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "sourcecontrol\SvnHistoryParser.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "sourcecontrol\UserFilter.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "sourcecontrol\Vault3.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "sourcecontrol\Vault317.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "sourcecontrol\VaultHistoryParser.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "sourcecontrol\VaultVersionChecker.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "sourcecontrol\ViewCVSUrlBuilder.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "sourcecontrol\Vss.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "sourcecontrol\VssHistoryParser.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "sourcecontrol\VssLocale.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "sourcecontrol\VssLocale.de.resx"
-                    DependentUpon = "VssLocale.cs"
-                    BuildAction = "EmbeddedResource"
-                />
-                <File
-                    RelPath = "sourcecontrol\VssLocale.fr.resx"
-                    DependentUpon = "VssLocale.cs"
-                    BuildAction = "EmbeddedResource"
-                />
-                <File
-                    RelPath = "sourcecontrol\VssLocale.ja.resx"
-                    DependentUpon = "VssLocale.cs"
-                    BuildAction = "EmbeddedResource"
-                />
-                <File
-                    RelPath = "sourcecontrol\VssLocale.resx"
-                    DependentUpon = "VssLocale.cs"
-                    BuildAction = "EmbeddedResource"
-                />
-                <File
-                    RelPath = "sourcecontrol\WebSVNUrlBuilder.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "sourcecontrol\BitKeeper\BitKeeper.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "sourcecontrol\BitKeeper\BitKeeperHistoryParser.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "sourcecontrol\Perforce\IP4Initializer.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "sourcecontrol\Perforce\IP4ProcessInfoCreator.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "sourcecontrol\Perforce\IP4Purger.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "sourcecontrol\Perforce\P4.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "sourcecontrol\Perforce\P4ConfigProcessInfoCreator.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "sourcecontrol\Perforce\P4HistoryParser.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "sourcecontrol\Perforce\ProcessP4Initializer.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "sourcecontrol\Perforce\ProcessP4Purger.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "sourcecontrol\Telelogic\ChangeSynergyUrlBuilder.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "sourcecontrol\Telelogic\ISynergyCommand.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "sourcecontrol\Telelogic\Synergy.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "sourcecontrol\Telelogic\SynergyCommand.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "sourcecontrol\Telelogic\SynergyCommandBuilder.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "sourcecontrol\Telelogic\SynergyConnectionInfo.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "sourcecontrol\Telelogic\SynergyParser.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "sourcecontrol\Telelogic\SynergyProcessExecutor.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "sourcecontrol\Telelogic\SynergyProjectInfo.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "state\FileStateManager.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "state\IStateManager.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "tasks\BuilderException.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "tasks\DataTaskResult.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "tasks\DevenvTask.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "tasks\DevenvTaskResult.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "tasks\ExecutableTask.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "tasks\FileTaskResult.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "tasks\FinalBuilderTask.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "tasks\MergeFilesTask.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "tasks\ModificationWriterTask.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "tasks\MsBuildTask.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "tasks\NAntTask.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "tasks\NullTask.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "tasks\NUnitArgument.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "tasks\NUnitTask.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "tasks\ProcessTaskResult.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Triggers\FilterTrigger.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Triggers\IntervalTrigger.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Triggers\MultipleTrigger.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Triggers\ProjectTrigger.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Triggers\ScheduleTrigger.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Triggers\UrlTrigger.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "util\AccurateTimer.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "util\ConsoleTraceListener.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "util\DateTimeProvider.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "util\DateUtil.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "util\ExecutionEnvironment.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "util\FileChangedWatcher.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "util\HtmlAwareMultiTransformer.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "util\HtmlExceptionFormatter.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "util\HttpWrapper.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "util\IFileDirectoryDeleter.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "util\IFileSystem.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "util\IFileTransformer.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "util\IFileWatcher.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "util\IMultiTransformer.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "util\IoService.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "util\IRegistry.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "util\IStringFormatter.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "util\ITransformer.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "util\LogFileTraceListener.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "util\LogUtil.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "util\NotifierList.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "util\PathUtil.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "util\ProcessArgumentBuilder.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "util\ProcessExecutor.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "util\ProcessInfo.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "util\ProcessReader.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "util\ProcessResult.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "util\ReflectionUtil.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "util\Registry.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "util\StringUtil.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "util\SystemIoFileSystem.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "util\SystemPath.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "util\TempFileUtil.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "util\TestTraceListener.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "util\Timeout.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "util\TimeoutSerializer.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "util\TimeoutSerializerFactory.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "util\TimeUnits.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "util\Utf8StringWriter.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "util\WildCardPath.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "util\XmlFragmentWriter.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "util\XmlUtil.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "util\XslTransformer.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-            </Include>
-        </Files>
-    </CSHARP>
-</VisualStudioProject>
-
+﻿<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <ProjectType>Local</ProjectType>
+    <ProductVersion>8.0.50727</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{F8113DB9-6C47-4FD1-8A01-655FCF151747}</ProjectGuid>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ApplicationIcon>
+    </ApplicationIcon>
+    <AssemblyKeyContainerName>
+    </AssemblyKeyContainerName>
+    <AssemblyName>ThoughtWorks.CruiseControl.Core</AssemblyName>
+    <AssemblyOriginatorKeyFile>
+    </AssemblyOriginatorKeyFile>
+    <DefaultClientScript>JScript</DefaultClientScript>
+    <DefaultHTMLPageLayout>Grid</DefaultHTMLPageLayout>
+    <DefaultTargetSchema>IE50</DefaultTargetSchema>
+    <DelaySign>false</DelaySign>
+    <OutputType>Library</OutputType>
+    <RootNamespace>ThoughtWorks.CruiseControl.Core</RootNamespace>
+    <RunPostBuildEvent>OnBuildSuccess</RunPostBuildEvent>
+    <StartupObject>
+    </StartupObject>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <UpgradeBackupLocation>
+    </UpgradeBackupLocation>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <OutputPath>bin\Debug\</OutputPath>
+    <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
+    <BaseAddress>285212672</BaseAddress>
+    <CheckForOverflowUnderflow>false</CheckForOverflowUnderflow>
+    <ConfigurationOverrideFile>
+    </ConfigurationOverrideFile>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DocumentationFile>
+    </DocumentationFile>
+    <DebugSymbols>true</DebugSymbols>
+    <FileAlignment>4096</FileAlignment>
+    <NoStdLib>false</NoStdLib>
+    <NoWarn>
+    </NoWarn>
+    <Optimize>false</Optimize>
+    <RegisterForComInterop>false</RegisterForComInterop>
+    <RemoveIntegerChecks>false</RemoveIntegerChecks>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+    <WarningLevel>4</WarningLevel>
+    <DebugType>full</DebugType>
+    <ErrorReport>prompt</ErrorReport>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <OutputPath>bin\Release\</OutputPath>
+    <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
+    <BaseAddress>285212672</BaseAddress>
+    <CheckForOverflowUnderflow>false</CheckForOverflowUnderflow>
+    <ConfigurationOverrideFile>
+    </ConfigurationOverrideFile>
+    <DefineConstants>TRACE</DefineConstants>
+    <DocumentationFile>
+    </DocumentationFile>
+    <DebugSymbols>false</DebugSymbols>
+    <FileAlignment>4096</FileAlignment>
+    <NoStdLib>false</NoStdLib>
+    <NoWarn>
+    </NoWarn>
+    <Optimize>true</Optimize>
+    <RegisterForComInterop>false</RegisterForComInterop>
+    <RemoveIntegerChecks>false</RemoveIntegerChecks>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+    <WarningLevel>4</WarningLevel>
+    <DebugType>none</DebugType>
+    <ErrorReport>prompt</ErrorReport>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Build|AnyCPU' ">
+    <OutputPath>..\..\build\core\</OutputPath>
+    <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
+    <BaseAddress>285212672</BaseAddress>
+    <CheckForOverflowUnderflow>false</CheckForOverflowUnderflow>
+    <ConfigurationOverrideFile>
+    </ConfigurationOverrideFile>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DocumentationFile>
+    </DocumentationFile>
+    <DebugSymbols>true</DebugSymbols>
+    <FileAlignment>4096</FileAlignment>
+    <NoStdLib>false</NoStdLib>
+    <NoWarn>
+    </NoWarn>
+    <Optimize>true</Optimize>
+    <RegisterForComInterop>false</RegisterForComInterop>
+    <RemoveIntegerChecks>false</RemoveIntegerChecks>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+    <WarningLevel>4</WarningLevel>
+    <DebugType>full</DebugType>
+    <ErrorReport>prompt</ErrorReport>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="log4net">
+      <Name>log4net</Name>
+      <HintPath>..\..\lib\log4net.dll</HintPath>
+    </Reference>
+    <Reference Include="NetReflector">
+      <Name>NetReflector</Name>
+      <HintPath>..\..\lib\NetReflector.dll</HintPath>
+    </Reference>
+    <Reference Include="NPlot">
+      <Name>NPlot</Name>
+      <HintPath>..\..\lib\NPlot.dll</HintPath>
+    </Reference>
+    <Reference Include="System">
+      <Name>System</Name>
+    </Reference>
+    <Reference Include="System.Data">
+      <Name>System.Data</Name>
+    </Reference>
+    <Reference Include="System.Drawing">
+      <Name>System.Drawing</Name>
+    </Reference>
+    <Reference Include="System.Runtime.Remoting">
+      <Name>System.Runtime.Remoting</Name>
+    </Reference>
+    <Reference Include="System.Web">
+      <Name>System.Web</Name>
+    </Reference>
+    <Reference Include="System.Xml">
+      <Name>System.XML</Name>
+    </Reference>
+    <ProjectReference Include="..\Remote\Remote.csproj">
+      <Name>Remote</Name>
+      <Project>{E820CF3B-8C5A-4002-BC16-B7818D3D54A8}</Project>
+      <Package>{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</Package>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="..\CommonAssemblyInfo.cs">
+      <Link>CommonAssemblyInfo.cs</Link>
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ArgumentParser.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="AssemblyInfo.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="configuration\CachingConfigurationService.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="configuration\Configuration.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="configuration\ConfigurationException.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="configuration\CruiseControlConfigSectionHandler.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="configuration\DefaultConfigurationFileLoader.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="configuration\DefaultConfigurationFileSaver.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="configuration\FileConfigurationService.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="configuration\FileWatcherConfigurationService.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="configuration\IConfiguration.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="configuration\IConfigurationFileLoader.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="configuration\IConfigurationFileSaver.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="configuration\IConfigurationService.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="configuration\NetReflectorConfigurationReader.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="configuration\XmlValidatingLoader.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="configuration\XslFilesSectionHandler.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ConsoleEventHandler.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ConsoleRunner.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="CruiseControlRemotingException.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="CruiseManager.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="CruiseServer.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="CruiseServerFactory.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="IArgumentParser.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ICruiseServerFactory.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="IIntegratable.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="IIntegrationRepository.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="IIntegrationResult.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="IIntegrationResultManager.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="IIntegrationRunnerTarget.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="IntegrationQueueManager.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="IntegrationResult.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="IntegrationResultManager.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="IntegrationRunner.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="IntegrationStatus.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="IntegrationSummary.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="IProject.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="IProjectIntegrator.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="IProjectIntegratorFactory.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="IProjectIntegratorList.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="IProjectList.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="IProjectSerializer.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ITask.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ITaskResult.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="label\DateLabeller.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="label\DefaultLabeller.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="label\ILabeller.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="label\IterationLabeller.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="label\LastChangeLabeller.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="label\RemoteProjectLabeller.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="label\StateFileLabeller.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="LogFile.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Log\CircularArray.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Log\EnumeratorDirection.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Log\ServerLogFileReader.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="NetReflectorProjectSerializer.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Project.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ProjectBase.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ProjectIntegrator.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ProjectIntegratorList.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ProjectIntegratorListFactory.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ProjectList.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="publishers\BuildLogTransformer.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="publishers\BuildPublisher.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="publishers\EmailGateway.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="publishers\EmailGroup.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="publishers\EmailMessage.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="publishers\EmailPublisher.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="publishers\EmailUser.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="publishers\ForceBuildPublisher.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="publishers\HtmlDetailsMessageBuilder.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="publishers\HtmlLinkMessageBuilder.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="publishers\IMessageBuilder.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="publishers\RssPublisher.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="publishers\Statistics\FirstMatch.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="publishers\Statistics\IPlotter.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="publishers\Statistics\Plotter.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="publishers\Statistics\Statistic.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="publishers\Statistics\StatisticsBuilder.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="publishers\Statistics\StatisticsCalculator.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="publishers\Statistics\StatisticsChartGenerator.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="publishers\Statistics\StatisticsPublisher.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="publishers\Statistics\UnavailableStatisticsException.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="publishers\XmlIntegrationResultWriter.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="publishers\XmlLogPublisher.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Queues\IIntegrationQueue.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Queues\IIntegrationQueueItem.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Queues\IIntegrationQueueNotifier.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Queues\IntegrationQueue.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Queues\IntegrationQueueItem.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Queues\IntegrationQueueSet.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="RemoteCruiseServer.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Reporting\Dashboard\Navigation\AbsolutePathUrlBuilderDecorator.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Reporting\Dashboard\Navigation\DefaultBuildSpecifier.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Reporting\Dashboard\Navigation\DefaultCruiseUrlBuilder.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Reporting\Dashboard\Navigation\DefaultProjectSpecifier.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Reporting\Dashboard\Navigation\DefaultServerSpecifier.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Reporting\Dashboard\Navigation\DefaultUrlBuilder.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Reporting\Dashboard\Navigation\IBuildSpecifier.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Reporting\Dashboard\Navigation\ICruiseUrlBuilder.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Reporting\Dashboard\Navigation\IPhysicalApplicationPathProvider.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Reporting\Dashboard\Navigation\IProjectSpecifier.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Reporting\Dashboard\Navigation\IServerSpecifier.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Reporting\Dashboard\Navigation\IUrlBuilder.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="sourcecontrol\AccuRev.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="sourcecontrol\AccuRevHistoryParser.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="sourcecontrol\ActionFilter.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="sourcecontrol\Alienbrain.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="sourcecontrol\AlienbrainHistoryParser.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="sourcecontrol\BitKeeper\BitKeeper.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="sourcecontrol\BitKeeper\BitKeeperHistoryParser.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="sourcecontrol\ClearCase.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="sourcecontrol\ClearCaseHistoryParser.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="sourcecontrol\Cvs.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="sourcecontrol\CvsHistoryParser.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="sourcecontrol\FileSourceControl.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="sourcecontrol\FilteredSourceControl.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="sourcecontrol\IHistoryParser.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="sourcecontrol\IModificationFilter.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="sourcecontrol\IModificationUrlBuilder.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="sourcecontrol\ISourceControl.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="sourcecontrol\IStarTeamRegExProvider.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="sourcecontrol\IVssLocale.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="sourcecontrol\Mks.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="sourcecontrol\MksHistoryParser.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="sourcecontrol\Modification.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="sourcecontrol\MultiSourceControl.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="sourcecontrol\NullSourceControl.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="sourcecontrol\NullUrlBuilder.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="sourcecontrol\PathFilter.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="sourcecontrol\Perforce\IP4Initializer.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="sourcecontrol\Perforce\IP4ProcessInfoCreator.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="sourcecontrol\Perforce\IP4Purger.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="sourcecontrol\Perforce\P4.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="sourcecontrol\Perforce\P4ConfigProcessInfoCreator.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="sourcecontrol\Perforce\P4HistoryParser.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="sourcecontrol\Perforce\ProcessP4Initializer.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="sourcecontrol\Perforce\ProcessP4Purger.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="sourcecontrol\ProcessSourceControl.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="sourcecontrol\Pvcs.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="sourcecontrol\PvcsHistoryParser.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="sourcecontrol\QuietPeriod.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="sourcecontrol\StarTeam.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="sourcecontrol\StarTeamHistoryParser.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="sourcecontrol\Surround.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="sourcecontrol\SurroundHistoryParser.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="sourcecontrol\Svn.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="sourcecontrol\SvnHistoryParser.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="sourcecontrol\Telelogic\ChangeSynergyUrlBuilder.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="sourcecontrol\Telelogic\ISynergyCommand.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="sourcecontrol\Telelogic\Synergy.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="sourcecontrol\Telelogic\SynergyCommand.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="sourcecontrol\Telelogic\SynergyCommandBuilder.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="sourcecontrol\Telelogic\SynergyConnectionInfo.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="sourcecontrol\Telelogic\SynergyParser.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="sourcecontrol\Telelogic\SynergyProcessExecutor.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="sourcecontrol\Telelogic\SynergyProjectInfo.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="sourcecontrol\UserFilter.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="sourcecontrol\Vault3.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="sourcecontrol\Vault317.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="sourcecontrol\VaultHistoryParser.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="sourcecontrol\VaultVersionChecker.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="sourcecontrol\ViewCVSUrlBuilder.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="sourcecontrol\Vss.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="sourcecontrol\VssHistoryParser.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="sourcecontrol\VssLocale.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="sourcecontrol\WebSVNUrlBuilder.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="state\FileStateManager.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="state\IStateManager.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="tasks\BuilderException.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="tasks\DataTaskResult.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="tasks\DevenvTask.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="tasks\DevenvTaskResult.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="tasks\ExecutableTask.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="tasks\FileTaskResult.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="tasks\FinalBuilderTask.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="tasks\MergeFilesTask.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="tasks\ModificationWriterTask.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="tasks\MsBuildTask.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="tasks\NAntTask.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="tasks\NullTask.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="tasks\NUnitArgument.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="tasks\NUnitTask.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="tasks\ProcessTaskResult.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Triggers\FilterTrigger.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Triggers\IntervalTrigger.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Triggers\MultipleTrigger.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Triggers\ProjectTrigger.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Triggers\ScheduleTrigger.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Triggers\UrlTrigger.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="util\AccurateTimer.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="util\ConsoleTraceListener.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="util\DateTimeProvider.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="util\DateUtil.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="util\ExecutionEnvironment.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="util\FileChangedWatcher.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="util\HtmlAwareMultiTransformer.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="util\HtmlExceptionFormatter.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="util\HttpWrapper.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="util\IFileDirectoryDeleter.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="util\IFileSystem.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="util\IFileTransformer.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="util\IFileWatcher.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="util\IMultiTransformer.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="util\IoService.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="util\IRegistry.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="util\IStringFormatter.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="util\ITransformer.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="util\LogFileTraceListener.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="util\LogUtil.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="util\NotifierList.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="util\PathUtil.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="util\ProcessArgumentBuilder.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="util\ProcessExecutor.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="util\ProcessInfo.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="util\ProcessReader.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="util\ProcessResult.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="util\ReflectionUtil.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="util\Registry.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="util\StringUtil.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="util\SystemIoFileSystem.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="util\SystemPath.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="util\TempFileUtil.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="util\TestTraceListener.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="util\Timeout.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="util\TimeoutSerializer.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="util\TimeoutSerializerFactory.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="util\TimeUnits.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="util\Utf8StringWriter.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="util\WildCardPath.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="util\XmlFragmentWriter.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="util\XmlUtil.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="util\XslTransformer.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Workflow.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="WorkflowResult.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <EmbeddedResource Include="configuration\ccnet.xsd">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="sourcecontrol\VssLocale.de.resx">
+      <DependentUpon>VssLocale.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="sourcecontrol\VssLocale.fr.resx">
+      <DependentUpon>VssLocale.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="sourcecontrol\VssLocale.ja.resx">
+      <DependentUpon>VssLocale.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="sourcecontrol\VssLocale.resx">
+      <DependentUpon>VssLocale.cs</DependentUpon>
+    </EmbeddedResource>
+    <None Include="configuration\ccnet.xsx">
+      <DependentUpon>ccnet.xsd</DependentUpon>
+    </None>
+    <Content Include="..\xsl\compile.xsl">
+      <Link>publishers\xsl\compile.xsl</Link>
+    </Content>
+    <Content Include="..\xsl\cruisecontrol.css">
+      <Link>publishers\xsl\cruisecontrol.css</Link>
+    </Content>
+    <Content Include="..\xsl\header.xsl">
+      <Link>publishers\xsl\header.xsl</Link>
+    </Content>
+    <Content Include="..\xsl\modifications.xsl">
+      <Link>publishers\xsl\modifications.xsl</Link>
+    </Content>
+    <Content Include="..\xsl\MsTestSummary.xsl">
+      <Link>publishers\xsl\MsTestSummary.xsl</Link>
+    </Content>
+    <Content Include="..\xsl\unittests.xsl">
+      <Link>publishers\xsl\unittests.xsl</Link>
+    </Content>
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PreBuildEvent>
+    </PreBuildEvent>
+    <PostBuildEvent>mkdir "$(TargetDir)xsl"
+xcopy /q /y "$(SolutionDir)\xsl\*.*" "$(TargetDir)xsl"</PostBuildEvent>
+  </PropertyGroup>
+</Project>

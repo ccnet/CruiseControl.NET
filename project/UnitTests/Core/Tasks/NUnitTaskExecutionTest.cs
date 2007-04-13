@@ -18,16 +18,18 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 		private IMock executorMock;
 		private NUnitTask task;
 		private IIntegrationResult result;
+	    private SystemPath tempOutputFile;
 
-		[SetUp]
+	    [SetUp]
 		protected void Init()
 		{
-			executorMock = new DynamicMock(typeof (ProcessExecutor));
+		    tempOutputFile = new TempDirectory().CreateTextFile("results.xml", "foo");
+		    executorMock = new DynamicMock(typeof (ProcessExecutor));
 
 			task = new NUnitTask(executorMock.MockInstance as ProcessExecutor);
 			task.Assemblies = TEST_ASSEMBLIES;
 			task.NUnitPath = NUnitConsolePath;
-			task.OutputFile = TempFileUtil.CreateTempFile("NUnitTask", "results.xml", "foo");
+	        task.OutputFile = tempOutputFile.ToString();
 			result = Integration("testProject", WORKING_DIRECTORY);
 			result.ArtifactDirectory = WORKING_DIRECTORY;
 		}
@@ -35,13 +37,14 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 		[TearDown]
 		protected void DeleteTempFile()
 		{
-			TempFileUtil.DeleteTempFile(task.OutputFile);
+            tempOutputFile.DeleteDirectory();
 		}
 
 		[Test]
 		public void ExecuteNUnitConsoleAndRetrieveResultsFromFile()
 		{
-			ProcessInfo info = new ProcessInfo(NUnitConsolePath, @"/xml=" + task.OutputFile + " /nologo foo.dll", WORKING_DIRECTORY);
+		    string args = string.Format(@"/xml=""{0}"" /nologo foo.dll", task.OutputFile);
+		    ProcessInfo info = new ProcessInfo(NUnitConsolePath, args, WORKING_DIRECTORY);
 			info.TimeOut = NUnitTask.DefaultTimeout * 1000;
 			executorMock.ExpectAndReturn("Execute", new ProcessResult("", String.Empty, 0, false), info);
 

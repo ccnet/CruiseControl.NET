@@ -176,11 +176,10 @@ namespace ThoughtWorks.CruiseControl.Core.Queues
 			// queue only has one item in it as we assume that item is integrating already and cannot be moved.
 			if (insertingItemPriority != 0 && Count > 1)
 			{
-				int compareQueuePosition;
 				for (int index = 1; index < Count; index++)
 				{
 					IIntegrationQueueItem queuedIntegrationQueueItem = this[index] as IIntegrationQueueItem;
-					compareQueuePosition = queuedIntegrationQueueItem.Project.QueuePriority;
+					int compareQueuePosition = queuedIntegrationQueueItem.Project.QueuePriority;
 					// If two items have the same priority it will be FIFO order for that priority
 					if (compareQueuePosition == 0 || compareQueuePosition > insertingItemPriority)
 					{
