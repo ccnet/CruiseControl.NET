@@ -124,10 +124,10 @@
     </xs:element>
     <xs:element name="Message">
         <xs:complexType>
-            <xs:all>
+            <xs:sequence>
                 <xs:element ref="Issue" minOccurs="0" maxOccurs="unbounded" />
                 <xs:element name="Notes" type="NoteIdentifiers" minOccurs="0" maxOccurs="1" />
-            </xs:all>
+            </xs:sequence>
             <xs:attribute name="Status" type="MessageStatus" use="required" />
             <xs:attribute name="Created" type="xs:string" use="required" />
             <xs:attribute name="LastSeen" type="xs:string" use="optional" />

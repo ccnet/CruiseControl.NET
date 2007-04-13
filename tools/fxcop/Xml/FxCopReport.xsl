@@ -9,11 +9,11 @@
     <style>
         #Title {font-family: Verdana; font-size: 14pt; color: black; font-weight: bold}
         .ColumnHeader {font-family: Verdana; font-size: 8pt; background-color:white; color: black}
-        .CriticalError {font-family: Verdana; font-size: 8pt; color: darkred; font-weight: bold; text-align: center}
-        .Error {font-family: Verdana; font-size: 8pt; color: royalblue; font-weight: bold; text-align: center}
-        .CriticalWarning {font-family: Verdana; font-size: 8pt; color: green; font-weight: bold; text-align: center}
-        .Warning {font-family: Verdana; font-size: 8pt; color: darkgray; font-weight: bold; text-align: center}
-        .Information {font-family: Verdana; font-size: 8pt; color: black; font-weight: bold; text-align: center}
+        .CriticalError {font-family: Verdana; font-size: 8pt; color: darkred; font-weight: bold; vertical-align: middle; }
+        .Error {font-family: Verdana; font-size: 8pt; color: royalblue; font-weight: bold; vertical-align: middle; }
+        .CriticalWarning {font-family: Verdana; font-size: 8pt; color: darkorange; font-weight: bold; vertical-align: middle; }
+        .Warning {font-family: Verdana; font-size: 8pt; color: darkgray; font-weight: bold; vertical-align: middle; }
+        .Information {font-family: Verdana; font-size: 8pt; color: black; font-weight: bold; vertical-align: middle; }
 
         .PropertyName {font-family: Verdana; font-size: 8pt; color: black; font-weight: bold}
         .PropertyContent {font-family: Verdana; font-size: 8pt; color: black}
@@ -29,7 +29,10 @@
         .Note { font-family: Verdana; font-size: 9pt; color:black; background-color: #DDDDFF; }
         .NoteUser { font-family: Verdana; font-size: 9pt; font-weight: bold; }
         .NoteTime { font-family: Verdana; font-size: 8pt; font-style: italic; }
-        .Button { font-family: Verdana; font-size: 9pt; color: blue; background-color: #EEEEEE; }
+        .Button { font-family: Verdana; font-size: 9pt; color: blue; background-color: #EEEEEE; border-style: outset;}
+        a:link { color: blue; text-decoration: none; }
+        a:visited { color: blue; text-decoration: none; }
+        a:active { color: blue; text-decoration: none; }
     </style>
     <script>
         function ViewState(blockId) 
@@ -38,11 +41,21 @@
            if (block.style.display=='none')
            { 
               block.style.display='block'; 
+              if (block.className == 'MessageDiv')
+              {
+                var toggle = document.getElementById(blockId + "Toggle");                
+                toggle.innerHTML = "&#x0036;";
+              }              
            }
            else
            { 
               block.style.display='none'; 
-           } 
+              if (block.className=='MessageDiv')
+              {
+                var toggle = document.getElementById(blockId + "Toggle");                
+                toggle.innerHTML = "&#x0034;";
+              }            
+           }            
         } 
        
         function SwitchAll(how)
@@ -53,15 +66,24 @@
               var block = nodes[i]; 
               if (block != null)
               { 
-                 if (block.className == 'NodeDiv' 
-                     || block.className == 'MessageBlockDiv'
-                     || block.className == 'MessageDiv') 
+                 if (block.className == 'NodeDiv' || block.className == 'MessageBlockDiv' || IsMessageDivWithActionNone(block, how))
                  { 
                     block.style.display=how; 
                  }                
               } 
            } 
         } 
+        
+        function IsMessageDivWithActionNone(block, how)
+        {
+          if (block.className != 'MessageDiv') return false;
+          if (how != 'none') return false;
+          
+          //as we're collapsing the tree, set the correct toggle icon
+          var toggle = document.getElementById(block.id + "Toggle");                
+          toggle.innerHTML = "&#x0034;";         
+          return true;
+        }
 
         function ExpandAll()
         { 
@@ -71,6 +93,21 @@
         function CollapseAll() 
         { 
            SwitchAll('none'); 
+        } 
+        
+        function DoNothing() {}
+        
+        function ButtonState(blockId) 
+        { 
+           var block = document.getElementById(blockId); 
+           if (block.style.borderStyle=='inset')
+           { 
+              block.style.borderStyle='outset'; 
+           }
+           else
+           { 
+              block.style.borderStyle='inset'; 
+           } 
         } 
     </script>
     <body bgcolor="white" alink="Black" vlink="Black" link="Black">
@@ -82,11 +119,11 @@
     <br/>
     <table>
         <tr>
-            <td class="Button">
-                <a onClick="ExpandAll();">Expand All</a>
+            <td class="Button" Id="ExpandAllButton" OnMouseOver="ButtonState('ExpandAllButton');" OnMouseOut="ButtonState('ExpandAllButton');">
+                <a href="javascript:ExpandAll()">Expand All</a>
             </td>
-            <td class="Button">
-                <a onClick="CollapseAll();">Collapse All</a>
+            <td class="Button" Id="CollapseAllButton" OnMouseOver="ButtonState('CollapseAllButton');" OnMouseOut="ButtonState('CollapseAllButton');">
+                <a href="javascript:CollapseAll();">Collapse All</a>
             </td>
         </tr>
     </table>    
@@ -116,9 +153,10 @@
                     </xsl:attribute>
                     
                     <!-- Display Icon -->
+                    <a href="javascript:DoNothing()">
                     <xsl:choose>
                         <xsl:when test="name()='Member' and @Kind='Method'">
-                            <nobr class="NodeIcon">&#x0061;</nobr>    
+                            <nobr class="NodeIcon">&#x004C;</nobr>    
                         </xsl:when>
                         <xsl:when test="name()='Member' and @Kind='Constructor'">
                             <nobr class="NodeIcon">&#x003D;</nobr>    
@@ -166,7 +204,7 @@
                             [<xsl:value-of select="name()"/>]    
                         </xsl:otherwise>
                     </xsl:choose>
-                    
+                    </a>
                     <xsl:choose>
                         <xsl:when test="name()='Resources'">
                             <xsl:value-of select="name()"/>
@@ -203,7 +241,7 @@
         <xsl:attribute name="onClick">
             javascript:ViewState('<xsl:value-of select="$MessageBlockId"/>');
         </xsl:attribute>
-        <nobr class="MessagesIcon">&#x0040;</nobr>
+        <a href="javascript:DoNothing()"><nobr class="MessagesIcon">&#x005D;</nobr></a>
         <xsl:variable name="MessageCount" select="count(Message[@Status='Active'])"/>
         <xsl:value-of select="$MessageCount"/>
             Message<xsl:choose><xsl:when test="$MessageCount > 1">s</xsl:when></xsl:choose>
@@ -217,6 +255,7 @@
 
         <table width="100%">
             <tr>
+                <td class="ColumnHeader"> </td>
                 <td class="ColumnHeader">Message Level</td>
                 <td class="ColumnHeader">Certainty</td>
                 <td class="ColumnHeader" width="100%">Resolution</td>
@@ -232,13 +271,14 @@
     <!-- Message Row -->
 
     <xsl:variable name="messageId" select="generate-id()"/>
-    <xsl:variable name="rulename" select="TypeName"/>
+    <xsl:variable name="rulename" select="@TypeName"/>
 
         <xsl:apply-templates select="Issue" >
                 <xsl:with-param name="messageId"><xsl:value-of select="$messageId"/></xsl:with-param>
         </xsl:apply-templates>
 
     <tr>
+        <td></td>
         <td colspan="3">
             <div class="MessageDiv" style="display: none">
                 <xsl:attribute name="id">
@@ -248,7 +288,7 @@
                 <!--- Rule Details  -->
                 <table width="100%" class="RuleBlock">
                                         <xsl:apply-templates select="Notes" mode="notes"/>
-                    <xsl:apply-templates select="/FxCopReport/Rules/Rule[@TypeName=$rulename]" mode="ruledetails" />
+                    <xsl:apply-templates select="/FxCopReport/Rules/Rule[@TypeName=$rulename]" mode="ruledetails"/>
                 </table>
             </div>
         </td>        
@@ -270,10 +310,13 @@
         </xsl:attribute>
 
         <td valign="top">
+            <a href="javascript:DoNothing();"><nobr class="NodeIcon"><xsl:attribute name="id"><xsl:value-of select="$messageId"/>Toggle</xsl:attribute>&#x0034;</nobr></a>
+       </td>
+       <td>
             <xsl:attribute name="class"><xsl:value-of select="@Level" /></xsl:attribute>
             <xsl:value-of select="@Level" />
         </td>
-        <td valign="top">
+        <td valign="top" style=" text-align: center; ">
             <xsl:attribute name="class"><xsl:value-of select="@Level" /></xsl:attribute>
             <xsl:value-of select="@Certainty" />
         </td>
@@ -283,6 +326,7 @@
     </tr>
     <xsl:if test="@Path">
     <tr class="SourceCode">
+        <td></td>    
         <td class="PropertyName">Source:</td>
         <td class="PropertyContent" colspan="2">
             <a>
@@ -322,6 +366,7 @@
 
 
 <xsl:template match="Note" mode="notesPointer">
+        <td></td>
         <td colspan="2" class="Note">
         <nobr class="NoteTime">[<xsl:value-of select="@Modified"/>]</nobr>:
         <xsl:value-of select="."/>
@@ -333,18 +378,6 @@
         <td class="PropertyName">Rule Description:</td>
         <td class="PropertyContent"><xsl:value-of select="text()" /></td>
     </tr>    
-</xsl:template>
-
-<xsl:template match="LongDescription" mode="ruledetails">
-    <!-- Test, don't display line if no data present -->
-    <xsl:choose>
-        <xsl:when test="text()">
-            <tr>
-                <td class="PropertyName">Long Description:</td>
-                <td class="PropertyContent"><xsl:value-of select="text()" /></td>
-            </tr>    
-        </xsl:when>
-    </xsl:choose>
 </xsl:template>
 
 <xsl:template match="File" mode="ruledetails">
@@ -361,11 +394,11 @@
     </tr>    
     <tr>
         <td class="PropertyName">Category:</td>
-        <td class="PropertyContent"><xsl:value-of select="Category" /></td>
+        <td class="PropertyContent"><xsl:value-of select="@Category" /></td>
     </tr>    
     <tr>
         <td class="PropertyName">Check Id:</td>
-        <td class="PropertyContent"><xsl:value-of select="CheckId" /></td>
+        <td class="PropertyContent"><xsl:value-of select="@CheckId" /></td>
     </tr>    
     <xsl:apply-templates select="Description" mode="ruledetails" />
     <xsl:apply-templates select="File" mode="ruledetails" />

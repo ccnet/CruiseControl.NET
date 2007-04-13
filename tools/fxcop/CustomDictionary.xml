@@ -7,13 +7,20 @@
   <Recognized>
    <Word>contravariant</Word>
   </Recognized>
-  <Deprecated/>
+  <Deprecated>
+    <!-- Be sure to pascal-case deprecated terms and preferred alternates     -->
+    <!-- Note that terms consisting of one or two tokens only will be flagged -->    
+    <!-- eg, ComPlus can be checked for but NewComPlus will not be detected   -->    
+    <Term PreferredAlternate="EnterpriseServices">ComPlus</Term> 
+  </Deprecated>
   <Inappropriate/>
  </Words>
  <Acronyms>
   <CasingExceptions>
    <Acronym>CJK</Acronym>
    <Acronym>Pi</Acronym>
+   <Acronym>NESW</Acronym>
+   <Acronym>NWSE</Acronym>
   </CasingExceptions>
  </Acronyms>
 </Dictionary>
