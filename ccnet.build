@@ -24,7 +24,7 @@
     <property name="nantcontrib.assembly" value="tools\nant\contrib\NAnt.Contrib.Tasks.dll" />
     <property name="vil.executable" value="tools\vil\vil.exe" />
     <property name="vil.assemblies" value="comma,separated,list,of,assemblies,to,analyze (full path)" />    
-    <property name="simian.executable" value="tools\simian\simian.exe" />
+    <property name="simian.executable" value="tools\simian\simian-2.2.17.exe" />
     <property name="CCNetLabel" value="0" overwrite="false" />    
     <property name="CCNetArtifactDirectory" value="${build.dir}" overwrite="false" />
 
@@ -71,7 +71,7 @@
 
 	<!-- COMPILE -->
 	<target name="compile" depends="init" description="compiles everything to be released">
-		<loadtasks assembly="C:\dev\ccnet\trunk5\tools\nant\contrib\NAnt.Contrib.Tasks.dll" />
+		<loadtasks assembly="${nantcontrib.assembly}" />
 		<msbuild project="project\ccnet.sln">
 			<property name="Configuration" value="Build" />
 		</msbuild>
@@ -272,9 +272,10 @@
     	</target>
 
     <target name="simian" description="runs simian">    
-	<exec program="${simian.executable}" failonerror="false">
-		<arg value="-recurse=project\core\*.cs"/>
+	<exec program="${simian.executable}">
 		<arg value="-formatter=xml:${build.dir}\ccnet.simian-results.xml"/>
+		<arg value="-failOnDuplication-"/>
+		<arg value="project\core\**\*.cs"/>
 	</exec>
 	<tstamp/>
 	<echo message="Simian run complete"/>
