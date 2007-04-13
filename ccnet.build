@@ -1,4 +1,4 @@
-﻿<?xml version="1.0"?>
+<?xml version="1.0"?>
 
 <project name="ccnet" default="test">
 
@@ -87,7 +87,7 @@
 
 	<target name="test.unit" description="runs unit tests">
 		<property name="unittests.fullpath" value="${path::get-full-path(build.dir)}\unittests" />
-		<exec program="${ncover-console.exe}" workingdir="${unittests.fullpath}" commandline="&quot;..\..\${nunit-console.exe}&quot; &quot;${unittests.fullpath}\${unittests.dll}&quot;  /xml:../${unittests.dll}-results.xml /nologo //w ${unittests.fullpath}"/>
+		<exec program="${ncover-console.exe}" workingdir="${unittests.fullpath}" commandline="//reg &quot;..\..\${nunit-console.exe}&quot; &quot;${unittests.fullpath}\${unittests.dll}&quot;  /xml:../${unittests.dll}-results.xml /nologo //w ${unittests.fullpath}"/>
 	</target>
 
 	<!-- DEPLOY -->
