@@ -19,9 +19,14 @@ namespace ThoughtWorks.CruiseControl.Core
 			Initialize(configuration);
 		}
 
-		public IntegrationQueueSnapshot GetIntegrationQueueSnapshot()
+		/// <summary>
+		/// Gets the projects and integration queues snapshot from this server.
+		/// </summary>
+        public CruiseServerSnapshot GetCruiseServerSnapshot()
 		{
-			return integrationQueues.GetIntegrationQueueSnapshot();
+		    ProjectStatus[] projectStatuses = GetProjectStatuses();
+		    QueueSetSnapshot queueSetSnapshot = integrationQueues.GetIntegrationQueueSnapshot();
+            return new CruiseServerSnapshot(projectStatuses, queueSetSnapshot);
 		}
 
 		public void StartAllProjects()

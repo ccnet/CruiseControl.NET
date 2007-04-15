@@ -314,19 +314,5 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 			integratorMock1.Verify();
 			integratorMock2.Verify();
 		}
-
-		[Test]
-		public void GetIntegrationQueueSnapshot()
-		{
-			integratorMock1.Expect("Start");
-			integratorMock2.Expect("Start");
-
-			server.Start();
-
-			IntegrationQueueSnapshot snapshot = server.GetIntegrationQueueSnapshot();
-			Assert.IsNotNull(snapshot);
-
-			VerifyAll();
-		}
 	}
 }

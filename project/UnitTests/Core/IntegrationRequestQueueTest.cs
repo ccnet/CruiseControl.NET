@@ -77,6 +77,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 		// TODO: This is causing ProjectIntegratorTest.Abort() to fail with a "LatchMock has not
 		// been signalled problem"
 		[Test]
+        [Ignore("This entire class should be removed according to Owen")]
 		public void WaitForRequestShouldBlockUntilNewBuildIsRequested()
 		{
 			int processedRequests = 0;

@@ -41,9 +41,12 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
 			manager.CancelPendingRequest(projectName);
 		}
 
-		public IntegrationQueueSnapshot GetIntegrationQueueSnapshot()
+		/// <summary>
+		/// Gets the projects and integration queues snapshot from this server.
+		/// </summary>
+        public CruiseServerSnapshot GetCruiseServerSnapshot()
 		{
-			return manager.GetIntegrationQueueSnapshot();
+			return manager.GetCruiseServerSnapshot();
 		}
 	}
 }

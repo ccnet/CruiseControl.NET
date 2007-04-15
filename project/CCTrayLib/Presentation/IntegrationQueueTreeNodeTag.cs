@@ -9,8 +9,8 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 	public class IntegrationQueueTreeNodeTag
 	{
 		public readonly IntegrationQueueTreeNodeAdaptor Adaptor;
-		public readonly NamedQueueSnapshot NamedQueueSnapshot;
-		public readonly QueuedItemSnapshot QueuedItemSnapshot;
+		public readonly QueueSnapshot QueueSnapshot;
+		public readonly QueuedRequestSnapshot QueuedRequestSnapshot;
 		public readonly int QueueIndex;
 
 		public IntegrationQueueTreeNodeTag(IntegrationQueueTreeNodeAdaptor adaptor)
@@ -18,33 +18,33 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 		{
 		}
 
-		public IntegrationQueueTreeNodeTag(IntegrationQueueTreeNodeAdaptor adaptor, NamedQueueSnapshot namedQueueSnapshot)
-			: this(adaptor, namedQueueSnapshot, null, -1)
+		public IntegrationQueueTreeNodeTag(IntegrationQueueTreeNodeAdaptor adaptor, QueueSnapshot queueSnapshot)
+			: this(adaptor, queueSnapshot, null, -1)
 		{
 		}
 
-		public IntegrationQueueTreeNodeTag(IntegrationQueueTreeNodeAdaptor adaptor, NamedQueueSnapshot namedQueueSnapshot, 
-			QueuedItemSnapshot queuedItemSnapshot, int queueIndex)
+		public IntegrationQueueTreeNodeTag(IntegrationQueueTreeNodeAdaptor adaptor, QueueSnapshot queueSnapshot, 
+			QueuedRequestSnapshot queuedRequestSnapshot, int queueIndex)
 		{
 			this.Adaptor = adaptor;
-			this.NamedQueueSnapshot = namedQueueSnapshot;
-			this.QueuedItemSnapshot = queuedItemSnapshot;
+			this.QueueSnapshot = queueSnapshot;
+			this.QueuedRequestSnapshot = queuedRequestSnapshot;
 			this.QueueIndex = queueIndex;
 		}
 
 		public bool IsServerNode
 		{
-			get { return NamedQueueSnapshot == null; }
+			get { return QueueSnapshot == null; }
 		}
 
 		public bool IsNamedQueueNode
 		{
-			get { return NamedQueueSnapshot != null && QueuedItemSnapshot == null; }
+			get { return QueueSnapshot != null && QueuedRequestSnapshot == null; }
 		}
 
 		public bool IsQueuedItemNode
 		{
-			get { return QueuedItemSnapshot != null; }
+			get { return QueuedRequestSnapshot != null; }
 		}
 
 		public bool IsFirstItemOnQueue

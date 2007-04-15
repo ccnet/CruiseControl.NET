@@ -37,16 +37,16 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Monitoring
 			Assert.AreEqual(BuildServerTransport.HTTP, manager.Transport);
 		}
 
-		[Ignore("TODO when HttpCruiseServerManager.GetIntegrationQueueSnapshot() implemented")]
 		[Test]
+        [Ignore("Grant to get working when HTTP is working.")]
 		public void RetrieveSnapshotFromManager()
 		{
-			IntegrationQueueSnapshot snapshot = new IntegrationQueueSnapshot();
-			const string xmlContent = "<IntegrationQueue />";
+			CruiseServerSnapshot snapshot = new CruiseServerSnapshot();
+			const string xmlContent = "<CruiseControl />";
 
 			mockWebRetriever.ExpectAndReturn("Get", xmlContent, ServerUrl);
-			mockDashboardXmlParser.ExpectAndReturn("ExtractAsIntegrationQueueSnapshot", snapshot, xmlContent, ServerUrl );
-			IntegrationQueueSnapshot actual = manager.GetIntegrationQueueSnapshot();
+			mockDashboardXmlParser.ExpectAndReturn("ExtractAsCruiseServerSnapshot", snapshot, xmlContent, ServerUrl );
+			CruiseServerSnapshot actual = manager.GetCruiseServerSnapshot();
 			
 			Assert.AreSame(snapshot, actual);
 

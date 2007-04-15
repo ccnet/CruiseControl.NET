@@ -28,10 +28,10 @@ namespace ThoughtWorks.CruiseControl.Remote
 		/// </summary>
 		void CancelPendingRequest(string projectName);
 
-		/// <summary>
-		/// Returns a snapshot of the integration queue status.
-		/// </summary>
-		IntegrationQueueSnapshot GetIntegrationQueueSnapshot();
+        /// <summary>
+        /// Gets the projects and integration queues snapshot from this server.
+        /// </summary>
+        CruiseServerSnapshot GetCruiseServerSnapshot();
 
 		/// <summary>
 		/// Returns the name of the most recent build for the specified project

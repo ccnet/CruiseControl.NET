@@ -1,6 +1,7 @@
 using NUnit.Framework;
 using ThoughtWorks.CruiseControl.Core;
 using ThoughtWorks.CruiseControl.Core.Config;
+using ThoughtWorks.CruiseControl.Remote;
 
 namespace ThoughtWorks.CruiseControl.UnitTests.Core
 {
@@ -73,5 +74,37 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 			string[] queueNames = queueManager.GetQueueNames();
 			Assert.AreEqual(0, queueNames.Length);
 		}
-	}
+
+        [Test]
+        public void GetCruiseServerSnapshotWithNoProjects()
+        {
+            // Remove the project added in the test setup
+            configuration.DeleteProject(TestQueueName);
+
+            queueManager = new IntegrationQueueManager(new ProjectIntegratorListFactory(), configuration);
+            CruiseServerSnapshot cruiseServerSnapshot = queueManager.GetCruiseServerSnapshot();
+            Assert.IsNotNull(cruiseServerSnapshot);
+            Assert.AreEqual(0, cruiseServerSnapshot.ProjectStatuses.Length);
+            Assert.IsNotNull(cruiseServerSnapshot.QueueSetSnapshot);
+            Assert.AreEqual(0, cruiseServerSnapshot.QueueSetSnapshot.Queues.Count);
+        }
+
+        [Test]
+        public void GetCruiseServerSnapshotWithProjectsAdded()
+        {
+            Project project2 = new Project();
+            project2.Name = TestQueueName2;
+            Project project3 = new Project();
+            project3.Name = TestQueueName3;
+            configuration.AddProject(project2);
+            configuration.AddProject(project3);
+
+            queueManager = new IntegrationQueueManager(new ProjectIntegratorListFactory(), configuration);
+            CruiseServerSnapshot cruiseServerSnapshot = queueManager.GetCruiseServerSnapshot();
+            Assert.IsNotNull(cruiseServerSnapshot);
+            Assert.AreEqual(TestQueueName, cruiseServerSnapshot.ProjectStatuses[0].Name);
+            Assert.AreEqual(TestQueueName2, cruiseServerSnapshot.ProjectStatuses[1].Name);
+            Assert.AreEqual(TestQueueName3, cruiseServerSnapshot.ProjectStatuses[2].Name);
+        }
+    }
 }

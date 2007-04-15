@@ -128,6 +128,7 @@
     <Compile Include="CruiseControlStatus.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="CruiseServerSnapshot.cs" />
     <Compile Include="ExternalLink.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -138,9 +139,6 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="ICruiseServer.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="IntegrationQueueSnapshot.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="IntegrationRequest.cs">
@@ -158,12 +156,6 @@
     <Compile Include="Message.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="NamedQueueSnapshot.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="NamedQueueSnapshotList.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="NoSuchProjectException.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -179,12 +171,11 @@
     <Compile Include="ProjectStatus.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="QueuedItemSnapshot.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="QueuedItemSnapshotList.cs">
-      <SubType>Code</SubType>
-    </Compile>
+    <Compile Include="QueuedRequestSnapshot.cs" />
+    <Compile Include="QueuedRequestSnapshotList.cs" />
+    <Compile Include="QueueSetSnapshot.cs" />
+    <Compile Include="QueueSnapshot.cs" />
+    <Compile Include="QueueSnapshotList.cs" />
     <Compile Include="RemoteCruiseManagerFactory.cs">
       <SubType>Code</SubType>
     </Compile>

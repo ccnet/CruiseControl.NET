@@ -27,7 +27,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Presentation
 		public void CreateJustServerNodeWhenNoChildQueues()
 		{
 			StubServerMonitor serverMonitor = new StubServerMonitor(ServerUrl);
-			serverMonitor.IntegrationQueueSnapshot = CreateNoQueuesSnapshot();
+            serverMonitor.CruiseServerSnapshot = CreateNoQueuesSnapshot();
 
 			IntegrationQueueTreeNodeAdaptor adaptor = new IntegrationQueueTreeNodeAdaptor(serverMonitor);
 			TreeNode item = adaptor.Create();
@@ -39,7 +39,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Presentation
 		public void WhenTheStateOfTheQueueChangesTheChildNodesOfTheServerNodeAreUpdated()
 		{
 			StubServerMonitor serverMonitor = new StubServerMonitor(ServerUrl);
-			serverMonitor.IntegrationQueueSnapshot = CreateEmptyQueuesSnapshot();
+            serverMonitor.CruiseServerSnapshot = CreateEmptyQueuesSnapshot();
 
 			IntegrationQueueTreeNodeAdaptor adaptor = new IntegrationQueueTreeNodeAdaptor(serverMonitor);
 			TreeNode item = adaptor.Create();
@@ -56,7 +56,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Presentation
 			Assert.AreEqual(IntegrationQueueNodeType.Queue.ImageIndex, firstQueueNode.ImageIndex);
 
 			// Now lets add something to a queue.
-			serverMonitor.IntegrationQueueSnapshot = CreatePopulatedQueuesSnapshot();
+            serverMonitor.CruiseServerSnapshot = CreatePopulatedQueuesSnapshot();
 
 			serverMonitor.OnQueueChanged(new MonitorServerQueueChangedEventArgs(serverMonitor));
 
@@ -72,39 +72,38 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Presentation
 			Assert.AreEqual(IntegrationQueueNodeType.PendingInQueue.ImageIndex, secondQueuedItemNode.ImageIndex);
 		}
 
-		private IntegrationQueueSnapshot CreateNoQueuesSnapshot()
+        private CruiseServerSnapshot CreateNoQueuesSnapshot()
 		{
-			return new IntegrationQueueSnapshot();
+            return new CruiseServerSnapshot();
 		}
 
-		private IntegrationQueueSnapshot CreateEmptyQueuesSnapshot()
+        private CruiseServerSnapshot CreateEmptyQueuesSnapshot()
 		{
-			IntegrationQueueSnapshot snapshot = CreateNoQueuesSnapshot();
+            QueueSetSnapshot queueSetSnapshot = new QueueSetSnapshot();
 
-			NamedQueueSnapshot namedQueueSnapshot1 = new NamedQueueSnapshot("Queue1");
-			snapshot.Queues.Add(namedQueueSnapshot1);
+			QueueSnapshot queueSnapshot1 = new QueueSnapshot("Queue1");
+			queueSetSnapshot.Queues.Add(queueSnapshot1);
 
-			NamedQueueSnapshot namedQueueSnapshot2 = new NamedQueueSnapshot("Queue2");
-			snapshot.Queues.Add(namedQueueSnapshot2);
+			QueueSnapshot queueSnapshot2 = new QueueSnapshot("Queue2");
+			queueSetSnapshot.Queues.Add(queueSnapshot2);
 
-			return snapshot;
-		}
+            return new CruiseServerSnapshot(null, queueSetSnapshot);
+        }
 
-		private IntegrationQueueSnapshot CreatePopulatedQueuesSnapshot()
+        private CruiseServerSnapshot CreatePopulatedQueuesSnapshot()
 		{
-			IntegrationQueueSnapshot snapshot = CreateEmptyQueuesSnapshot();
+            CruiseServerSnapshot cruiseServerSnapshot = CreateEmptyQueuesSnapshot();
+            QueueSetSnapshot queueSetSnapshot = cruiseServerSnapshot.QueueSetSnapshot;
 
-			NamedQueueSnapshot namedQueueSnapshot1 = snapshot.Queues[0];
+			QueueSnapshot queueSnapshot1 = queueSetSnapshot.Queues[0];
 
-			QueuedItemSnapshot queuedItemSnapshot1 = new QueuedItemSnapshot(
-				namedQueueSnapshot1.QueueName, "Project1", 0, BuildCondition.ForceBuild, "Test");
-			namedQueueSnapshot1.Items.Add(queuedItemSnapshot1);
+			QueuedRequestSnapshot queuedRequestSnapshot1 = new QueuedRequestSnapshot("Project1");
+			queueSnapshot1.Requests.Add(queuedRequestSnapshot1);
 
-			QueuedItemSnapshot queuedItemSnapshot2 = new QueuedItemSnapshot(
-				namedQueueSnapshot1.QueueName, "Project2", 0, BuildCondition.ForceBuild, "Test");
-			namedQueueSnapshot1.Items.Add(queuedItemSnapshot2);
+			QueuedRequestSnapshot queuedRequestSnapshot2 = new QueuedRequestSnapshot("Project2");
+			queueSnapshot1.Requests.Add(queuedRequestSnapshot2);
 
-			return snapshot;
-		}
+            return cruiseServerSnapshot;
+        }
 	}
 }

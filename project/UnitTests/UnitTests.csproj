@@ -837,6 +837,7 @@
     <Compile Include="objection\NetReflectorPlugin\NetReflectorPluginTest.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Remote\CruiseServerSnapshotTest.cs" />
     <Compile Include="Remote\ProjectStatusCompatibilityTest.cs">
       <SubType>Code</SubType>
     </Compile>

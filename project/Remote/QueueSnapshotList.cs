@@ -7,14 +7,14 @@ namespace ThoughtWorks.CruiseControl.Remote
 	/// An enumerable list of named integration queues as stored in the snapshot.
 	/// </summary>
 	[Serializable]
-	public class NamedQueueSnapshotList : IEnumerable
+	public class QueueSnapshotList : IEnumerable
 	{
 		private ArrayList queueSnapshots;
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="NamedQueueSnapshotList"/> class.
+		/// Initializes a new instance of the <see cref="QueueSnapshotList"/> class.
 		/// </summary>
-		public NamedQueueSnapshotList()
+		public QueueSnapshotList()
 		{
 			queueSnapshots = new ArrayList();
 		}
@@ -24,21 +24,21 @@ namespace ThoughtWorks.CruiseControl.Remote
 			get { return queueSnapshots.Count; }
 		}
 
-		public void Add(NamedQueueSnapshot namedQueueSnapshot)
+		public void Add(QueueSnapshot queueSnapshot)
 		{ 
-			queueSnapshots.Add(namedQueueSnapshot);
+			queueSnapshots.Add(queueSnapshot);
 		}
 
-		public NamedQueueSnapshot this[int index]
+		public QueueSnapshot this[int index]
 		{ 
-			get { return queueSnapshots[index] as NamedQueueSnapshot; }
+			get { return queueSnapshots[index] as QueueSnapshot; }
 		}
 
-		public NamedQueueSnapshot this[string queueName]
+		public QueueSnapshot this[string queueName]
 		{ 
 			get 
 			{
-				foreach (NamedQueueSnapshot queueSnapshot in queueSnapshots)
+				foreach (QueueSnapshot queueSnapshot in queueSnapshots)
 				{
 					if (queueSnapshot.QueueName == queueName)
 					{

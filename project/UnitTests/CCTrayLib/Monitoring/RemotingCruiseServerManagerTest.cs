@@ -36,10 +36,10 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Monitoring
 		[Test]
 		public void RetrieveSnapshotFromManager()
 		{
-			IntegrationQueueSnapshot snapshot = new IntegrationQueueSnapshot();
-			cruiseManagerMock.ExpectAndReturn("GetIntegrationQueueSnapshot", snapshot);
+			CruiseServerSnapshot snapshot = new CruiseServerSnapshot();
+			cruiseManagerMock.ExpectAndReturn("GetCruiseServerSnapshot", snapshot);
 
-			IntegrationQueueSnapshot result = manager.GetIntegrationQueueSnapshot();
+            CruiseServerSnapshot result = manager.GetCruiseServerSnapshot();
 			Assert.AreEqual(snapshot, result);
 
 			cruiseManagerMock.Verify();

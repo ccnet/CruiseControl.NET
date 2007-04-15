@@ -55,21 +55,24 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 		{
 			serverTreeNode.Nodes.Clear();
 
-			IntegrationQueueSnapshot integrationQueueSnapshot = serverMonitor.IntegrationQueueSnapshot;
+		    CruiseServerSnapshot cruiseServerSnapshot = serverMonitor.CruiseServerSnapshot;
+            if (cruiseServerSnapshot == null)
+                return;
+            QueueSetSnapshot queueSetSnapshot = serverMonitor.CruiseServerSnapshot.QueueSetSnapshot;
 
-			if (integrationQueueSnapshot != null && integrationQueueSnapshot.Queues.Count > 0)
+            if (queueSetSnapshot != null && queueSetSnapshot.Queues.Count > 0)
 			{
-				foreach (NamedQueueSnapshot namedQueueSnapshot in integrationQueueSnapshot.Queues)
+				foreach (QueueSnapshot namedQueueSnapshot in queueSetSnapshot.Queues)
 				{
 					TreeNode queueNode = new TreeNode(namedQueueSnapshot.QueueName, IntegrationQueueNodeType.Queue.ImageIndex, IntegrationQueueNodeType.Queue.ImageIndex);
 					queueNode.Tag = new IntegrationQueueTreeNodeTag(this, namedQueueSnapshot);
 					serverTreeNode.Nodes.Add(queueNode);
 
-					for (int index = 0; index < namedQueueSnapshot.Items.Count; index++)
+					for (int index = 0; index < namedQueueSnapshot.Requests.Count; index++)
 					{
-						QueuedItemSnapshot queuedItemSnapshot = namedQueueSnapshot.Items[index];
-						TreeNode queuedItemNode = new TreeNode(queuedItemSnapshot.ProjectName);
-						queuedItemNode.Tag = new IntegrationQueueTreeNodeTag(this, namedQueueSnapshot, queuedItemSnapshot, index);
+						QueuedRequestSnapshot queuedRequestSnapshot = namedQueueSnapshot.Requests[index];
+						TreeNode queuedItemNode = new TreeNode(queuedRequestSnapshot.ProjectName);
+						queuedItemNode.Tag = new IntegrationQueueTreeNodeTag(this, namedQueueSnapshot, queuedRequestSnapshot, index);
 						if (index == 0)
 						{
 							queuedItemNode.ImageIndex = queuedItemNode.SelectedImageIndex = IntegrationQueueNodeType.FirstInQueue.ImageIndex;

@@ -43,13 +43,15 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
 			throw new NotImplementedException("Cancel pending not currently supported on servers monitored via HTTP");
 		}
 
-		public IntegrationQueueSnapshot GetIntegrationQueueSnapshot()
+		/// <summary>
+		/// Gets the projects and integration queues snapshot from this server.
+		/// </summary>
+        public CruiseServerSnapshot GetCruiseServerSnapshot()
 		{
 			throw new NotImplementedException("GD - Awaiting dashboard changes by Daniel Piessens");
-//			IntegrationQueueSnapshot snapshot;
+//			CruiseServerSnapshot snapshot;
 //			string content = webRetriever.Get(serverUri);
-//			snapshot = dashboardXmlParser.ExtractAsIntegrationQueueSnapshot(content, serverName);
-//			snapshot.ServerUrl = serverUrl;
+//			snapshot = dashboardXmlParser.ExtractAsCruiseServerSnapshot(content, serverName);
 //			return snapshot;
 		}
 

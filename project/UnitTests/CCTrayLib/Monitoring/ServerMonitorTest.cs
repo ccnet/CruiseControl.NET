@@ -33,16 +33,16 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Monitoring
 		}
 
 		[Test]
-		public void WhenPollIsCalledRetrivesANewCopyOfTheIntegrationQueueSnapshot()
+        public void WhenPollIsCalledRetrievesANewCopyOfTheCruiseServerSnapshot()
 		{
-			IntegrationQueueSnapshot snapshot = new IntegrationQueueSnapshot();
-			mockServerManager.ExpectAndReturn("GetIntegrationQueueSnapshot", snapshot);
+            CruiseServerSnapshot snapshot = new CruiseServerSnapshot();
+            mockServerManager.ExpectAndReturn("GetCruiseServerSnapshot", snapshot);
 
 			monitor.Poll();
 
 			// deliberately called twice: should not go back to server on 2nd call
-			Assert.AreSame(snapshot, monitor.IntegrationQueueSnapshot);
-			Assert.AreSame(snapshot, monitor.IntegrationQueueSnapshot);
+            Assert.AreSame(snapshot, monitor.CruiseServerSnapshot);
+            Assert.AreSame(snapshot, monitor.CruiseServerSnapshot);
 		}
 
 		[Test]
@@ -50,12 +50,12 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Monitoring
 		{
 			Assert.AreEqual(0, pollCount);
 
-			IntegrationQueueSnapshot snapshot = new IntegrationQueueSnapshot();
-			mockServerManager.ExpectAndReturn("GetIntegrationQueueSnapshot", snapshot);
+            CruiseServerSnapshot snapshot = new CruiseServerSnapshot();
+            mockServerManager.ExpectAndReturn("GetCruiseServerSnapshot", snapshot);
 			monitor.Poll();
 			Assert.AreEqual(1, pollCount);
 
-			mockServerManager.ExpectAndReturn("GetIntegrationQueueSnapshot", snapshot);
+            mockServerManager.ExpectAndReturn("GetCruiseServerSnapshot", snapshot);
 			monitor.Poll();
 			Assert.AreEqual(2, pollCount);
 		}
@@ -65,7 +65,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Monitoring
 		{
 			Assert.AreEqual(0, pollCount);
 			Exception ex = new Exception("should be caught");
-			mockServerManager.ExpectAndThrow("GetIntegrationQueueSnapshot", ex);
+            mockServerManager.ExpectAndThrow("GetCruiseServerSnapshot", ex);
 			monitor.Poll();
 			Assert.AreEqual(1, pollCount);
 			Assert.AreEqual(ex, monitor.ConnectException);
@@ -75,26 +75,26 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Monitoring
 		public void IfTheQueueTimeStampHasChangedAQueueChangedEventIsFired()
 		{
 			Assert.AreEqual(0, queueChangedCount);
-			IntegrationQueueSnapshot snapshot = CreateIntegrationQueueSnapshot(new DateTime(2004, 1, 1));
+            CruiseServerSnapshot snapshot = CreateCruiseServerSnapshot();
 
-			mockServerManager.ExpectAndReturn("GetIntegrationQueueSnapshot", snapshot);
+            mockServerManager.ExpectAndReturn("GetCruiseServerSnapshot", snapshot);
 			monitor.Poll();
 
 			Assert.AreEqual(1, queueChangedCount);
 
-			mockServerManager.ExpectAndReturn("GetIntegrationQueueSnapshot", snapshot);
+            mockServerManager.ExpectAndReturn("GetCruiseServerSnapshot", snapshot);
 			monitor.Poll();
 
 			Assert.AreEqual(1, queueChangedCount);
 
-			mockServerManager.ExpectAndReturn("GetIntegrationQueueSnapshot",
-			                                   CreateIntegrationQueueSnapshot(new DateTime(2004, 1, 2)));
+            mockServerManager.ExpectAndReturn("GetCruiseServerSnapshot",
+			                                   CreateCruiseServerSnapshot2());
 			monitor.Poll();
 
 			Assert.AreEqual(2, queueChangedCount);
 
-			mockServerManager.ExpectAndReturn("GetIntegrationQueueSnapshot",
-			                                   CreateIntegrationQueueSnapshot(new DateTime(2004, 1, 3)));
+			mockServerManager.ExpectAndReturn("GetCruiseServerSnapshot",
+			                                   CreateCruiseServerSnapshot());
 			monitor.Poll();
 
 			Assert.AreEqual(3, queueChangedCount);
@@ -104,14 +104,14 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Monitoring
 		public void IfThePollIsStoppedAndStartedQueueChangedIsFiredRegardless()
 		{
 			Assert.AreEqual(0, queueChangedCount);
-			IntegrationQueueSnapshot snapshot = CreateIntegrationQueueSnapshot(new DateTime(2004, 1, 1));
+            CruiseServerSnapshot snapshot = CreateCruiseServerSnapshot();
 
-			mockServerManager.ExpectAndReturn("GetIntegrationQueueSnapshot", snapshot);
+            mockServerManager.ExpectAndReturn("GetCruiseServerSnapshot", snapshot);
 			monitor.Poll();
 
 			Assert.AreEqual(1, queueChangedCount);
 
-			mockServerManager.ExpectAndReturn("GetIntegrationQueueSnapshot", snapshot);
+            mockServerManager.ExpectAndReturn("GetCruiseServerSnapshot", snapshot);
 			monitor.Poll();
 
 			Assert.AreEqual(1, queueChangedCount);
@@ -120,13 +120,13 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Monitoring
 			monitor.OnPollStarting();
 
 			// Now we expect the snapshot to be republished.
-			mockServerManager.ExpectAndReturn("GetIntegrationQueueSnapshot", snapshot);
+            mockServerManager.ExpectAndReturn("GetCruiseServerSnapshot", snapshot);
 			monitor.Poll();
 
 			Assert.AreEqual(2, queueChangedCount);
 
 			// But this should be a one-off thing - the next poll will revert to normal behaviour
-			mockServerManager.ExpectAndReturn("GetIntegrationQueueSnapshot", snapshot);
+            mockServerManager.ExpectAndReturn("GetCruiseServerSnapshot", snapshot);
 			monitor.Poll();
 
 			Assert.AreEqual(2, queueChangedCount);
@@ -142,26 +142,34 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Monitoring
 			queueChangedCount++;
 		}
 
-		private IntegrationQueueSnapshot CreateIntegrationQueueSnapshot(DateTime lastBuildDate)
+		private CruiseServerSnapshot CreateCruiseServerSnapshot()
 		{
-			return new IntegrationQueueSnapshot(lastBuildDate);
+            return new CruiseServerSnapshot();
 		}
-		
-		[Test]
-		public void ExposesTheIntegrationQueueSnapshotOfTheContainedServer()
+
+        private CruiseServerSnapshot CreateCruiseServerSnapshot2()
+        {
+            CruiseServerSnapshot snapshot = new CruiseServerSnapshot();
+            snapshot.QueueSetSnapshot.Queues.Add(new QueueSnapshot("Test"));
+            snapshot.QueueSetSnapshot.Queues[0].Requests.Add(new QueuedRequestSnapshot("Project"));
+            return snapshot;
+        }
+
+        [Test]
+        public void ExposesTheCruiseServerSnapshotOfTheContainedServer()
 		{
-			IntegrationQueueSnapshot snapshot = new IntegrationQueueSnapshot();
-			mockServerManager.ExpectAndReturn("GetIntegrationQueueSnapshot", snapshot);
+            CruiseServerSnapshot snapshot = new CruiseServerSnapshot();
+            mockServerManager.ExpectAndReturn("GetCruiseServerSnapshot", snapshot);
 
 			monitor.Poll();
-			
-			Assert.AreEqual(snapshot, monitor.IntegrationQueueSnapshot);
+
+            Assert.AreEqual(snapshot, monitor.CruiseServerSnapshot);
 		}
 
 		[Test]
-		public void WhenNoConnectionHasBeenMadeToTheBuildServerTheIntegrationQueueSnapshotIsNull()
+        public void WhenNoConnectionHasBeenMadeToTheBuildServerTheCruiseServerSnapshotIsNull()
 		{
-			Assert.AreEqual(null, monitor.IntegrationQueueSnapshot);			
+            Assert.AreEqual(null, monitor.CruiseServerSnapshot);			
 		}
 	}
 }

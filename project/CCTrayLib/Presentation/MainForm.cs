@@ -416,7 +416,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 			this.btnToggleQueueView.Name = "btnToggleQueueView";
 			this.btnToggleQueueView.Size = new System.Drawing.Size(85, 23);
 			this.btnToggleQueueView.TabIndex = 1;
-			this.btnToggleQueueView.Text = "View &Queues";
+            this.btnToggleQueueView.Text = "Activity &Queues";
 			this.btnToggleQueueView.Click += new System.EventHandler(this.btnToggleQueueView_Click);
 			// 
 			// btnForceBuild
@@ -732,13 +732,13 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 		{
 			if (queueTreeView.SelectedNode == null) return;
 			IntegrationQueueTreeNodeTag tag = queueTreeView.SelectedNode.Tag as IntegrationQueueTreeNodeTag;
-			if (tag.QueuedItemSnapshot == null) return;
-			controller.CancelPendingProjectByName(tag.QueuedItemSnapshot.ProjectName);
+			if (tag.QueuedRequestSnapshot == null) return;
+			controller.CancelPendingProjectByName(tag.QueuedRequestSnapshot.ProjectName);
 		}
 
 		private void UpdateViewQueuesButtonLabel()
 		{
-			btnToggleQueueView.Text = (pnlViewQueues.Visible) ? "&Hide Queues" : "&Show Queues" ;
+			btnToggleQueueView.Text = (pnlViewQueues.Visible) ? "&Hide Queues" : "Activity &Queues" ;
 		}
 
 		// Implements the manual sorting of items by columns.

@@ -57,9 +57,12 @@ namespace ThoughtWorks.CruiseControl.Core
 			cruiseServer.CancelPendingRequest(projectName);
 		}
 		
-		public IntegrationQueueSnapshot GetIntegrationQueueSnapshot()
+		/// <summary>
+		/// Gets the projects and integration queues snapshot from this server.
+		/// </summary>
+        public CruiseServerSnapshot GetCruiseServerSnapshot()
 		{
-			return cruiseServer.GetIntegrationQueueSnapshot();
+			return cruiseServer.GetCruiseServerSnapshot();
 		}
 
 		public string GetLatestBuildName(string projectName)

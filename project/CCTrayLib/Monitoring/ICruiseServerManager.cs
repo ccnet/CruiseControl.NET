@@ -18,9 +18,8 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
 		/// <param name="projectName">Name of the project to cancel.</param>
 		void CancelPendingRequest(string projectName);
 		/// <summary>
-		/// Gets the integration queue snapshot from this server.
+		/// Gets the projects and integration queues snapshot from this server.
 		/// </summary>
-		/// <value>The integration queue snapshot.</value>
-		IntegrationQueueSnapshot GetIntegrationQueueSnapshot();
+        CruiseServerSnapshot GetCruiseServerSnapshot();
 	}
 }

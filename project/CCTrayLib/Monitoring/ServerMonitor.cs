@@ -13,7 +13,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
 		public event MonitorServerPolledEventHandler Polled;
 		public event MonitorServerQueueChangedEventHandler QueueChanged;
 
-		private IntegrationQueueSnapshot lastIntegrationQueueSnapshot;
+        private CruiseServerSnapshot lastCruiseServerSnapshot;
 		private ICruiseServerManager cruiseServerManager;
 		private Exception connectException;
 
@@ -31,37 +31,33 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
 			this.cruiseServerManager.CancelPendingRequest(projectName);
 		}
 
-		/// <summary>
-		/// Gets the integration queue snapshot for this server.
-		/// </summary>
-		/// <value>The integration queue snapshot.</value>
-		public IntegrationQueueSnapshot IntegrationQueueSnapshot
+        /// <summary>
+        /// Gets the cruise server snapshot of project and queue status for the monitored server (single).
+        /// </summary>
+        public CruiseServerSnapshot CruiseServerSnapshot
 		{
-			get { return lastIntegrationQueueSnapshot; }
+            get { return lastCruiseServerSnapshot; }
 		}
 
 		/// <summary>
-		/// Polls this server for the latest integration queue snapshot.
+		/// Polls this server for the latest cruise control server project statuses and queues.
 		/// </summary>
 		public void Poll()
 		{
 			try
 			{
-				IntegrationQueueSnapshot newIntegrationQueueSnapshot = cruiseServerManager.GetIntegrationQueueSnapshot();
-				if (newIntegrationQueueSnapshot != null)
+			    CruiseServerSnapshot cruiseServerSnapshot = cruiseServerManager.GetCruiseServerSnapshot();
+                if ((lastCruiseServerSnapshot == null)
+                    || lastCruiseServerSnapshot.IsQueueSetSnapshotChanged(cruiseServerSnapshot.QueueSetSnapshot))
 				{
-					if ((lastIntegrationQueueSnapshot == null) 
-						|| (lastIntegrationQueueSnapshot.TimeStamp != newIntegrationQueueSnapshot.TimeStamp))
-					{
-						OnQueueChanged(new MonitorServerQueueChangedEventArgs(this));
-					}
+					OnQueueChanged(new MonitorServerQueueChangedEventArgs(this));
 				}
-				lastIntegrationQueueSnapshot = newIntegrationQueueSnapshot;
+                lastCruiseServerSnapshot = cruiseServerSnapshot;
 			}
 			catch (Exception ex)
 			{
-				Trace.WriteLine("ServerMonitorPoll Exception: " + ex.ToString());
-				lastIntegrationQueueSnapshot = null;
+				Trace.WriteLine("ServerMonitorPoll Exception: " + ex);
+                lastCruiseServerSnapshot = null;
 				connectException = ex;
 			}
 
@@ -70,7 +66,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
 
 		public void OnPollStarting()
 		{
-			lastIntegrationQueueSnapshot = null; // Force an OnQueueChanged event to fire when poll restarted
+            lastCruiseServerSnapshot = null; // Force an OnQueueChanged event to fire when poll restarted
 		}
 
 		public string ServerUrl
@@ -90,7 +86,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
 
 		public bool IsConnected
 		{
-			get { return lastIntegrationQueueSnapshot != null; }
+			get { return lastCruiseServerSnapshot != null; }
 		}
 
 		public Exception ConnectException

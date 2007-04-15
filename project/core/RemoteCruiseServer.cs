@@ -82,9 +82,9 @@ namespace ThoughtWorks.CruiseControl.Core
 			server.CancelPendingRequest(projectName);
 		}
 		
-		public IntegrationQueueSnapshot GetIntegrationQueueSnapshot()
+        public CruiseServerSnapshot GetCruiseServerSnapshot()
 		{
-			return server.GetIntegrationQueueSnapshot();
+			return server.GetCruiseServerSnapshot();
 		}
 
 		public string GetLatestBuildName(string projectName)

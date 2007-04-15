@@ -50,42 +50,38 @@ namespace ThoughtWorks.CruiseControl.Core.Queues
 			}
 		}
 
-		public IntegrationQueueSnapshot GetIntegrationQueueSnapshot()
+		public QueueSetSnapshot GetIntegrationQueueSnapshot()
 		{
 			lock (this)
 			{
-				return BuildQueueContentSnapshot();
+				return BuildQueueSetSnapshot();
 			}
 		}
 
-		private IntegrationQueueSnapshot BuildQueueContentSnapshot()
+		private QueueSetSnapshot BuildQueueSetSnapshot()
 		{
-			IntegrationQueueSnapshot snapshot = new IntegrationQueueSnapshot();
+			QueueSetSnapshot queueSetSnapshot = new QueueSetSnapshot();
 			foreach (IIntegrationQueue queue in queueSet.Values)
 			{
 				if (queue != null && queue.Count > 0)
 				{
-					snapshot.Queues.Add(BuildQueueSnapshot(queue));
+					queueSetSnapshot.Queues.Add(BuildQueueSnapshot(queue));
 				}
 			}
-			return snapshot;
+			return queueSetSnapshot;
 		}
 
-		private NamedQueueSnapshot BuildQueueSnapshot(IIntegrationQueue queue)
+		private QueueSnapshot BuildQueueSnapshot(IIntegrationQueue queue)
 		{
-			NamedQueueSnapshot namedQueueSnapshot = new NamedQueueSnapshot(queue.Name);
+			QueueSnapshot queueSnapshot = new QueueSnapshot(queue.Name);
 
 			foreach (IIntegrationQueueItem integrationQueueItem in queue)
 			{
-				QueuedItemSnapshot queuedItemSnapshot = new QueuedItemSnapshot(
-					queue.Name,
-					integrationQueueItem.Project.Name,
-					integrationQueueItem.Project.QueuePriority,
-					integrationQueueItem.IntegrationRequest.BuildCondition,
-					integrationQueueItem.IntegrationRequest.Source);
-				namedQueueSnapshot.Items.Add(queuedItemSnapshot);
+				QueuedRequestSnapshot queuedRequestSnapshot = new QueuedRequestSnapshot(
+					integrationQueueItem.Project.Name);
+				queueSnapshot.Requests.Add(queuedRequestSnapshot);
 			}
-			return namedQueueSnapshot;
+			return queueSnapshot;
 		}
 	}
 }

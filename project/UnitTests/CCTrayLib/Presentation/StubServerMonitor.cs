@@ -10,7 +10,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Presentation
 		public event MonitorServerQueueChangedEventHandler QueueChanged;
 		public event MonitorServerPolledEventHandler Polled;
 
-		private IntegrationQueueSnapshot lastIntegrationQueueSnapshot;
+        private CruiseServerSnapshot lastCruiseServerSnapshot;
 		private string serverUrl;
 		private string displayName;
 		private BuildServerTransport buildServerTransport;
@@ -39,11 +39,11 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Presentation
 			// No implementation
 		}
 
-		public IntegrationQueueSnapshot IntegrationQueueSnapshot
+        public CruiseServerSnapshot CruiseServerSnapshot
 		{
-			get { return lastIntegrationQueueSnapshot; }
+            get { return lastCruiseServerSnapshot; }
 			// Setter added for unit test purposes.
-			set { lastIntegrationQueueSnapshot = value; }
+            set { lastCruiseServerSnapshot = value; }
 		}
 
 		public BuildServerTransport Transport
@@ -53,7 +53,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Presentation
 
 		public bool IsConnected
 		{
-			get { return lastIntegrationQueueSnapshot != null; }
+            get { return lastCruiseServerSnapshot != null; }
 		}
 
 		public void OnQueueChanged( MonitorServerQueueChangedEventArgs args )
@@ -80,7 +80,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Presentation
 
 		public void SetUpAsIfExceptionOccurredOnConnect( Exception exception )
 		{
-			lastIntegrationQueueSnapshot = null;
+            lastCruiseServerSnapshot = null;
 			ConnectException = exception;
 		}
 

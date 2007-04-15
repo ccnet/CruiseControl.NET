@@ -105,11 +105,11 @@ namespace ThoughtWorks.CruiseControl.Core
 		}
 
 		/// <summary>
-		/// Returns a snapshot of the integration queue status.
+		/// Gets the projects and integration queues snapshot from this server.
 		/// </summary>
-		public IntegrationQueueSnapshot GetIntegrationQueueSnapshot()
+        public CruiseServerSnapshot GetCruiseServerSnapshot()
 		{
-			return integrationQueueManager.GetIntegrationQueueSnapshot();
+			return integrationQueueManager.GetCruiseServerSnapshot();
 		}
 
 		public ICruiseManager CruiseManager
