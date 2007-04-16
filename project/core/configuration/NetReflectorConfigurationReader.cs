@@ -46,7 +46,7 @@ namespace ThoughtWorks.CruiseControl.Core.Config
 			}
 		}
 
-		private void VerifyDocumentHasValidRootElement(XmlDocument configXml)
+		private static void VerifyDocumentHasValidRootElement(XmlDocument configXml)
 		{
 			if (configXml.DocumentElement == null || configXml.DocumentElement.Name != ROOT_ELEMENT)
 			{

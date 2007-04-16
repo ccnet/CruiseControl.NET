@@ -40,7 +40,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Config
 			XmlTextReader xr = new XmlTextReader(new StringReader(xml));
 			XmlValidatingLoader loader = new XmlValidatingLoader(xr);
 			XmlDocument doc = loader.Load();
-			Assert.IsNotNull(doc);
+			Assert.IsNotNull(doc, "Unable to load document because it is not valid according to reader");
 
 			IConfiguration config = new NetReflectorConfigurationReader().Read(doc);
 			Assert.IsNotNull(config.Projects["p1"]);
@@ -52,7 +52,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Config
 			if (tempfile != null) TempFileUtil.DeleteTempFile(tempfile);
 		}
 
-		private XmlValidatingLoader XmlValidatingLoader(string xml)
+		private static XmlValidatingLoader XmlValidatingLoader(string xml)
 		{
 			XmlTextReader xr = new XmlTextReader(new StringReader(xml));
 			XmlValidatingLoader loader = new XmlValidatingLoader(xr);
@@ -61,14 +61,14 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Config
 			return loader;
 		}
 
-		private XmlSchema LoadSchema() 
+		private static XmlSchema LoadSchema() 
 		{
 			Assembly ass = typeof(DefaultConfigurationFileLoader).Assembly;
 			Stream s = ass.GetManifestResourceStream(DefaultConfigurationFileLoader.XsdSchemaResourceName);
 			return XmlSchema.Read(s, new ValidationEventHandler(Handler));
 		}
 
-		private void Handler(object sender, ValidationEventArgs args) 
+		private static void Handler(object sender, ValidationEventArgs args) 
 		{
 //			throw args.Exception;
 		}

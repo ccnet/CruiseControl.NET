@@ -41,18 +41,13 @@ namespace ThoughtWorks.CruiseControl.Core.Config
 
 		private XmlDocument AttemptLoadConfiguration(FileInfo configFile)
 		{
-			XmlValidatingLoader loader = CreateXmlValidatingLoader(configFile);
 			try
 			{
-				return loader.Load();
+				return CreateXmlValidatingLoader(configFile).Load();
 			}
 			catch (XmlException ex)
 			{
 				throw new ConfigurationException("The configuration file contains invalid xml: " + configFile.FullName, ex);
-			}
-			finally
-			{
-				loader.Dispose();
 			}
 		}
 
@@ -63,7 +58,7 @@ namespace ThoughtWorks.CruiseControl.Core.Config
 			return loader;
 		}
 
-		private void VerifyConfigFileExists(FileInfo configFile)
+		private static void VerifyConfigFileExists(FileInfo configFile)
 		{
 			if (! configFile.Exists)
 			{
@@ -76,12 +71,12 @@ namespace ThoughtWorks.CruiseControl.Core.Config
 			return reader.Read(configXml);
 		}
 
-		private void HandleSchemaEvent(object sender, ValidationEventArgs args)
+		private static void HandleSchemaEvent(object sender, ValidationEventArgs args)
 		{
 			Log.Info("Loading config schema: " + args.Message);
 		}
 
-		private void WarnOnInvalidNode(InvalidNodeEventArgs args)
+		private static void WarnOnInvalidNode(InvalidNodeEventArgs args)
 		{
 			throw new ConfigurationException(args.Message);			// collate warnings into a single object
 //			Log.Warning(args.Message);		
