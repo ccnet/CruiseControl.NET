@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.IO;
 using System.Xml.Serialization;
@@ -22,19 +23,32 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Configuration
 			ReadConfigurationFile();
 		}
 
-		public IProjectMonitor[] GetProjectStatusMonitors()
+        public IProjectMonitor[] GetProjectStatusMonitors(ISingleServerMonitor[] serverMonitors)
 		{
 			IProjectMonitor[] retVal = new IProjectMonitor[Projects.Length];
 			for (int i = 0; i < Projects.Length; i++)
 			{
 				CCTrayProject project = Projects[i];
 				ICruiseProjectManager projectManager = cruiseProjectManagerFactory.Create(project);
-				retVal[i] = new ProjectMonitor(projectManager);
+			    IProjectStatusRetriever projectStatusRetriever = GetServerMonitorForProject(project, serverMonitors);
+				retVal[i] = new ProjectMonitor(projectManager, projectStatusRetriever);
 			}
 			return retVal;
 		}
 
-		public ISingleServerMonitor[] GetServerMonitors()
+        private IProjectStatusRetriever GetServerMonitorForProject(CCTrayProject project, ISingleServerMonitor[] serverMonitors)
+	    {
+            foreach (ISingleServerMonitor serverMonitor in serverMonitors)
+            {
+                if (serverMonitor.ServerUrl == project.ServerUrl)
+                {
+                    return serverMonitor;
+                }
+            }
+	        throw new ApplicationException("Server monitor not found for project: " + project.ProjectName);
+	    }
+
+	    public ISingleServerMonitor[] GetServerMonitors()
 		{
 			BuildServer[] buildServers = GetUniqueBuildServerList();
 			ISingleServerMonitor[] serverMonitors = new ISingleServerMonitor[buildServers.Length];

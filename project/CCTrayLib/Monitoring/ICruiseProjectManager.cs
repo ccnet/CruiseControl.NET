@@ -1,4 +1,3 @@
-using ThoughtWorks.CruiseControl.Remote;
 
 namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
 {
@@ -12,7 +11,6 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
 		void ForceBuild();
 		void FixBuild();
 		void CancelPendingRequest();
-		ProjectStatus ProjectStatus { get; }
 		string ProjectName { get; }
 	}
 }

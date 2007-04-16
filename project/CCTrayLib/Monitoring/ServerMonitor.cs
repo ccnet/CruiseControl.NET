@@ -8,7 +8,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
 	/// <summary>
 	/// Track the state of a single CruiseControl server.
 	/// </summary>
-	public class ServerMonitor : ISingleServerMonitor
+    public class ServerMonitor : ISingleServerMonitor
 	{
 		public event MonitorServerPolledEventHandler Polled;
 		public event MonitorServerQueueChangedEventHandler QueueChanged;
@@ -39,7 +39,24 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
             get { return lastCruiseServerSnapshot; }
 		}
 
-		/// <summary>
+        /// <summary>
+        /// Lookup the last project status retrieved for this project.
+        /// </summary>
+        public ProjectStatus GetProjectStatus(string projectName)
+        {
+            if (lastCruiseServerSnapshot == null || lastCruiseServerSnapshot.ProjectStatuses == null)
+            {
+                return null;
+            }
+            foreach (ProjectStatus status in lastCruiseServerSnapshot.ProjectStatuses)
+            {
+                if (status.Name == projectName)
+                    return status;
+            }
+            throw new ApplicationException("Project '" + projectName + "' not found on server");
+        }
+
+	    /// <summary>
 		/// Polls this server for the latest cruise control server project statuses and queues.
 		/// </summary>
 		public void Poll()
@@ -47,11 +64,12 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
 			try
 			{
 			    CruiseServerSnapshot cruiseServerSnapshot = cruiseServerManager.GetCruiseServerSnapshot();
-                if ((lastCruiseServerSnapshot == null)
+                if ((lastCruiseServerSnapshot == null) 
+                    || (cruiseServerSnapshot == null)
                     || lastCruiseServerSnapshot.IsQueueSetSnapshotChanged(cruiseServerSnapshot.QueueSetSnapshot))
-				{
-					OnQueueChanged(new MonitorServerQueueChangedEventArgs(this));
-				}
+                {
+                    OnQueueChanged(new MonitorServerQueueChangedEventArgs(this));
+                }
                 lastCruiseServerSnapshot = cruiseServerSnapshot;
 			}
 			catch (Exception ex)
@@ -59,7 +77,8 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
 				Trace.WriteLine("ServerMonitorPoll Exception: " + ex);
                 lastCruiseServerSnapshot = null;
 				connectException = ex;
-			}
+                OnQueueChanged(new MonitorServerQueueChangedEventArgs(this));
+            }
 
 			OnPolled(new MonitorServerPolledEventArgs(this));
 		}

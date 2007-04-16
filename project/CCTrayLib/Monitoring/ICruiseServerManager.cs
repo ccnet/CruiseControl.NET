@@ -21,5 +21,5 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
 		/// Gets the projects and integration queues snapshot from this server.
 		/// </summary>
         CruiseServerSnapshot GetCruiseServerSnapshot();
-	}
+     }
 }

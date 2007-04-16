@@ -1,5 +1,4 @@
 using System;
-using ThoughtWorks.CruiseControl.Remote;
 
 namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
 {
@@ -7,13 +6,14 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
 	{
 		private readonly string projectName;
 		private readonly Uri serverUri;
-		private readonly IWebRetriever webRetriver;
+		private readonly IWebRetriever webRetriever;
 		private readonly IDashboardXmlParser dashboardXmlParser;
 
-		public HttpCruiseProjectManager(IWebRetriever webRetriver, IDashboardXmlParser dashboardXmlParser, Uri serverUri, string projectName)
+		public HttpCruiseProjectManager(IWebRetriever webRetriever, IDashboardXmlParser dashboardXmlParser, 
+            Uri serverUri, string projectName)
 		{
 			this.projectName = projectName;
-			this.webRetriver = webRetriver;
+			this.webRetriever = webRetriever;
 			this.dashboardXmlParser = dashboardXmlParser;
 			this.serverUri = serverUri;
 		}
@@ -31,15 +31,6 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
 		public void CancelPendingRequest()
 		{
 			throw new NotImplementedException("Cancel pending not currently supported on projects monitored via HTTP");
-		}
-
-		public ProjectStatus ProjectStatus
-		{
-			get
-			{
-				string content = webRetriver.Get(serverUri);
-				return dashboardXmlParser.ExtractAsProjectStatus(content, projectName);
-			}
 		}
 
 		public string ProjectName

@@ -53,6 +53,11 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
             get { return serverMonitor.CruiseServerSnapshot; }
 		}
 
+        public ProjectStatus GetProjectStatus(string projectName)
+        {
+            return serverMonitor.GetProjectStatus(projectName);
+        }
+
 		public bool IsConnected
 		{
 			get { return serverMonitor.IsConnected; }

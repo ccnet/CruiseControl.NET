@@ -73,14 +73,25 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Configuration
 		public void CanProvideASetOfProjectStatusMonitors()
 		{
 			CCTrayMultiConfiguration provider = CreateTestConfiguration(ConfigXml);
+            DynamicMock mockCruiseServerManager = new DynamicMock(typeof(ICruiseServerManager));
+		    mockCruiseServerManager.Strict = true;
+            mockCruiseServerManager.ExpectAndReturn("ServerUrl", "tcp://blah1");
+            mockCruiseServerManager.ExpectAndReturn("ServerUrl", "tcp://blah2");
+		    ICruiseServerManager cruiseServerManagerInstance = (ICruiseServerManager) mockCruiseServerManager.MockInstance;
+
+            mockServerConfigFactory.ExpectAndReturn("Create", cruiseServerManagerInstance, provider.GetUniqueBuildServerList()[0]);
+            mockServerConfigFactory.ExpectAndReturn("Create", cruiseServerManagerInstance, provider.GetUniqueBuildServerList()[1]);
+            ISingleServerMonitor[] serverMonitorList = provider.GetServerMonitors();
 
 			mockProjectConfigFactory.ExpectAndReturn("Create", null, provider.Projects[0]);
 			mockProjectConfigFactory.ExpectAndReturn("Create", null, provider.Projects[1]);
 
-			IProjectMonitor[] monitorList = provider.GetProjectStatusMonitors();
+            IProjectMonitor[] monitorList = provider.GetProjectStatusMonitors(serverMonitorList);
 			Assert.AreEqual(2, monitorList.Length);
 
 			mockProjectConfigFactory.Verify();
+            mockServerConfigFactory.Verify();
+            mockCruiseServerManager.Verify();
 		}
 
 		[Test]

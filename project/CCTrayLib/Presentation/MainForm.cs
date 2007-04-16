@@ -133,8 +133,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 				// To keep related code together in CreateController() have moved here from constructor.
 				CreateController(httpCache);
 
-				controller.StartProjectMonitoring();
-				StartServerMonitoringIfQueuesDisplayed();
+				controller.StartServerMonitoring();
 			}
 		}
 
@@ -416,7 +415,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 			this.btnToggleQueueView.Name = "btnToggleQueueView";
 			this.btnToggleQueueView.Size = new System.Drawing.Size(85, 23);
 			this.btnToggleQueueView.TabIndex = 1;
-            this.btnToggleQueueView.Text = "Activity &Queues";
+            this.btnToggleQueueView.Text = "&Queue Activity";
 			this.btnToggleQueueView.Click += new System.EventHandler(this.btnToggleQueueView_Click);
 			// 
 			// btnForceBuild
@@ -500,14 +499,6 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 
 		#endregion
 
-		private void StartServerMonitoringIfQueuesDisplayed()
-		{
-			if (queueTreeView.Visible)
-			{
-				controller.StartServerMonitoring();
-			}
-		}
-
 		private void menuFileExit_Click(object sender, EventArgs e)
 		{
 			// If Application.Exit is called, OnClosing won't get raised, which PersistWindowState 
@@ -578,7 +569,6 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 		
 		private void mnuFilePreferences_Click(object sender, EventArgs e)
 		{
-			controller.StopProjectMonitoring();
 			controller.StopServerMonitoring();
 
 			try
@@ -595,8 +585,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 			}
 			finally
 			{
-				controller.StartProjectMonitoring();
-				StartServerMonitoringIfQueuesDisplayed();
+                controller.StartServerMonitoring();
 			}
 		}
 
@@ -699,12 +688,10 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 			if (isQueueViewVisible)
 			{
 				controller.BindToQueueTreeView(queueTreeView);
-				controller.StartServerMonitoring();
 			}
 			else
 			{
 				controller.UnbindToQueueTreeView(queueTreeView);
-				controller.StopServerMonitoring();
 			}
 		}
 
@@ -738,7 +725,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 
 		private void UpdateViewQueuesButtonLabel()
 		{
-			btnToggleQueueView.Text = (pnlViewQueues.Visible) ? "&Hide Queues" : "Activity &Queues" ;
+			btnToggleQueueView.Text = (pnlViewQueues.Visible) ? "Hide &Queues" : "&Queue Activity" ;
 		}
 
 		// Implements the manual sorting of items by columns.

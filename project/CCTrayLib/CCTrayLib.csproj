@@ -247,6 +247,7 @@
     <Compile Include="Monitoring\IProjectMonitor.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Monitoring\IProjectStatusRetriever.cs" />
     <Compile Include="Monitoring\IServerMonitor.cs">
       <SubType>Code</SubType>
     </Compile>

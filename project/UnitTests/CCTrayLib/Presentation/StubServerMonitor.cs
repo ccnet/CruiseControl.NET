@@ -46,6 +46,11 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Presentation
             set { lastCruiseServerSnapshot = value; }
 		}
 
+        public ProjectStatus GetProjectStatus(string projectName)
+        {
+            return null;
+        }
+
 		public BuildServerTransport Transport
 		{
 			get { return buildServerTransport; }

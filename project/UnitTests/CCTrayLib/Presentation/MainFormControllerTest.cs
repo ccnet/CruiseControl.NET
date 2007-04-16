@@ -27,8 +27,9 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Presentation
 			mockConfiguration = new DynamicMock(typeof (ICCTrayMultiConfiguration));
 			configuration = (ICCTrayMultiConfiguration) mockConfiguration.MockInstance;
 
-			mockConfiguration.SetupResult("GetServerMonitors", new ISingleServerMonitor[0]);
-			mockConfiguration.SetupResult("GetProjectStatusMonitors", new IProjectMonitor[0]);
+            ISingleServerMonitor[] serverMonitors = new ISingleServerMonitor[0];
+            mockConfiguration.SetupResult("GetServerMonitors", serverMonitors);
+            mockConfiguration.SetupResult("GetProjectStatusMonitors", new IProjectMonitor[0], typeof(ISingleServerMonitor[]));
 			mockConfiguration.SetupResult("Icons", new Icons());
 
 			eventCount = 0;

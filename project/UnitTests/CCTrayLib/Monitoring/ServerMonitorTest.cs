@@ -4,6 +4,7 @@ using NUnit.Framework;
 
 using ThoughtWorks.CruiseControl.CCTrayLib.Monitoring;
 using ThoughtWorks.CruiseControl.Remote;
+using ThoughtWorks.CruiseControl.UnitTests.Core;
 
 namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Monitoring
 {
@@ -14,6 +15,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Monitoring
 		private ServerMonitor monitor;
 		private int pollCount;
 		private int queueChangedCount;
+        const string PROJECT_NAME = "projectName";
 
 		[SetUp]
 		public void SetUp()
@@ -171,5 +173,55 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Monitoring
 		{
             Assert.AreEqual(null, monitor.CruiseServerSnapshot);			
 		}
-	}
+
+        [Test]
+        public void ProjectStatusNullIfServerNotYetPolled()
+        {
+            ProjectStatus projectStatus = monitor.GetProjectStatus(PROJECT_NAME);
+
+            Assert.IsNull(projectStatus);
+        }
+
+        [Test]
+        public void ProjectStatusReturnsTheStatusForTheNominatedProject()
+        {
+            ProjectStatus[] result = new ProjectStatus[]
+				{
+					CreateProjectStatus("a name"),
+					CreateProjectStatus(PROJECT_NAME),
+				};
+
+            CruiseServerSnapshot snapshot = new CruiseServerSnapshot(result, null);
+            mockServerManager.ExpectAndReturn("GetCruiseServerSnapshot", snapshot);
+
+            monitor.Poll(); // Force the snapshot to be loaded
+            ProjectStatus projectStatus = monitor.GetProjectStatus(PROJECT_NAME);
+
+            Assert.AreSame(result[1], projectStatus);
+        }
+
+        [Test]
+        [ExpectedException(typeof(ApplicationException), "Project 'projectName' not found on server")]
+        public void ProjectStatusThrowsIfProjectNotFound()
+        {
+            ProjectStatus[] result = new ProjectStatus[]
+				{
+					CreateProjectStatus("a name"),
+					CreateProjectStatus("another name"),
+			};
+
+            CruiseServerSnapshot snapshot = new CruiseServerSnapshot(result, null);
+            mockServerManager.ExpectAndReturn("GetCruiseServerSnapshot", snapshot);
+
+            monitor.Poll(); // Force the snapshot to be loaded
+            ProjectStatus projectStatus = monitor.GetProjectStatus(PROJECT_NAME);
+
+            Assert.AreSame(result[1], projectStatus);
+        }
+
+        private static ProjectStatus CreateProjectStatus(string projectName)
+        {
+            return ProjectStatusFixture.New(projectName);
+        }
+    }
 }

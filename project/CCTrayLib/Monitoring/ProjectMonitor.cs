@@ -10,17 +10,19 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
 		private ProjectStatus lastProjectStatus;
 		private Exception connectException;
 		private BuildDurationTracker buildDurationTracker;
+        private readonly IProjectStatusRetriever projectStatusRetriever;
 
-		public ProjectMonitor(ICruiseProjectManager cruiseProjectManager)
-			: this(cruiseProjectManager, new DateTimeProvider())
+        public ProjectMonitor(ICruiseProjectManager cruiseProjectManager, IProjectStatusRetriever projectStatusRetriever)
+			: this(cruiseProjectManager, projectStatusRetriever, new DateTimeProvider())
 		{
 		}
-		
-		public ProjectMonitor(ICruiseProjectManager cruiseProjectManager, DateTimeProvider dateTimeProvider)
+
+        public ProjectMonitor(ICruiseProjectManager cruiseProjectManager, IProjectStatusRetriever projectStatusRetriever, DateTimeProvider dateTimeProvider)
 		{
 			buildDurationTracker = new BuildDurationTracker(dateTimeProvider);
-			this.cruiseProjectManager = cruiseProjectManager;			
-		}
+			this.cruiseProjectManager = cruiseProjectManager;
+            this.projectStatusRetriever = projectStatusRetriever;
+        }
 
 		// public for testing only
 		public ProjectStatus ProjectStatus
@@ -137,7 +139,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
 		{
 			try
 			{
-				ProjectStatus newProjectStatus = cruiseProjectManager.ProjectStatus;
+				ProjectStatus newProjectStatus = projectStatusRetriever.GetProjectStatus(ProjectName);
 				if (lastProjectStatus != null && newProjectStatus != null)
 				{
 					PollIntervalReporter duringInterval = new PollIntervalReporter(lastProjectStatus, newProjectStatus);

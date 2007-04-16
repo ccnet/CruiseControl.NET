@@ -11,7 +11,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
 		private readonly ICruiseManager manager;
 		private readonly string projectName;
 
-		public RemotingCruiseProjectManager(ICruiseManager manager, string projectName)
+        public RemotingCruiseProjectManager(ICruiseManager manager, string projectName)
 		{
 			this.manager = manager;
 			this.projectName = projectName;
@@ -30,20 +30,6 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
 		public void CancelPendingRequest()
 		{
 			manager.CancelPendingRequest(ProjectName);
-		}
-
-		public ProjectStatus ProjectStatus
-		{
-			get
-			{
-				ProjectStatus[] statuses = manager.GetProjectStatus();
-				foreach (ProjectStatus status in statuses)
-				{
-					if (status.Name == ProjectName)
-						return status;
-				}
-				throw new ApplicationException("Project '" + projectName + "' not found on server");
-			}
 		}
 
 		public string ProjectName

@@ -12,21 +12,26 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Monitoring
 	public class ProjectMonitorTest
 	{
 		private StubCurrentTimeProvider dateTimeProvider;
-		private DynamicMock mockProjectManager;
+        private DynamicMock mockProjectStatusRetriever;
+        private DynamicMock mockProjectManager;
 		private ProjectMonitor monitor;
 		private int pollCount;
 		private int buildOccurredCount;
 		private MonitorBuildOccurredEventArgs lastBuildOccurredArgs;
 		private Message actualMessage;
 
+	    private const string PROJECT_NAME = "Project1";
+
 		[SetUp]
 		public void SetUp()
 		{
 			buildOccurredCount = pollCount = 0;
-			mockProjectManager = new DynamicMock(typeof (ICruiseProjectManager));
+            mockProjectStatusRetriever = new DynamicMock(typeof(IProjectStatusRetriever));
+            mockProjectStatusRetriever.Strict = true;
+            mockProjectManager = new DynamicMock(typeof(ICruiseProjectManager));
 			mockProjectManager.Strict = true;
 			dateTimeProvider = new StubCurrentTimeProvider();
-			monitor = new ProjectMonitor((ICruiseProjectManager) mockProjectManager.MockInstance, dateTimeProvider);
+            monitor = new ProjectMonitor((ICruiseProjectManager)mockProjectManager.MockInstance, (IProjectStatusRetriever)mockProjectStatusRetriever.MockInstance, dateTimeProvider);
 			monitor.Polled += new MonitorPolledEventHandler(Monitor_Polled);
 			monitor.BuildOccurred += new MonitorBuildOccurredEventHandler(Monitor_BuildOccurred);
 		}
@@ -39,10 +44,11 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Monitoring
 		}
 
 		[Test]
-		public void WhenPollIsCalledRetrivesANewCopyOfTheProjectStatus()
+		public void WhenPollIsCalledRetrievesANewCopyOfTheProjectStatus()
 		{
 			ProjectStatus status = new ProjectStatus();
-			mockProjectManager.ExpectAndReturn("ProjectStatus", status);
+            mockProjectManager.ExpectAndReturn("ProjectName", PROJECT_NAME);
+            mockProjectStatusRetriever.ExpectAndReturn("GetProjectStatus", status, PROJECT_NAME);
 
 			monitor.Poll();
 
@@ -58,12 +64,14 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Monitoring
 			Assert.AreEqual(0, pollCount);
 
 			ProjectStatus status = new ProjectStatus();
-			mockProjectManager.ExpectAndReturn("ProjectStatus", status);
-			monitor.Poll();
+            mockProjectManager.ExpectAndReturn("ProjectName", PROJECT_NAME);
+            mockProjectStatusRetriever.ExpectAndReturn("GetProjectStatus", status, PROJECT_NAME);
+            monitor.Poll();
 			Assert.AreEqual(1, pollCount);
 
-			mockProjectManager.ExpectAndReturn("ProjectStatus", status);
-			monitor.Poll();
+            mockProjectManager.ExpectAndReturn("ProjectName", PROJECT_NAME);
+            mockProjectStatusRetriever.ExpectAndReturn("GetProjectStatus", status, PROJECT_NAME);
+            monitor.Poll();
 			Assert.AreEqual(2, pollCount);
 		}
 
@@ -72,7 +80,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Monitoring
 		{
 			Assert.AreEqual(0, pollCount);
 
-			mockProjectManager.ExpectAndThrow("ProjectStatus", new Exception("should be caught"));
+            mockProjectManager.ExpectAndThrow("ProjectName", new Exception("should be caught"));
 			monitor.Poll();
 			Assert.AreEqual(1, pollCount);
 		}
@@ -82,27 +90,31 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Monitoring
 		{
 			Assert.AreEqual(0, buildOccurredCount);
 
-			mockProjectManager.ExpectAndReturn("ProjectStatus",
-			                                   CreateProjectStatus(IntegrationStatus.Success, new DateTime(2004, 1, 1)));
+		    ProjectStatus status = CreateProjectStatus(IntegrationStatus.Success, new DateTime(2004, 1, 1));
+            mockProjectManager.ExpectAndReturn("ProjectName", PROJECT_NAME);
+            mockProjectStatusRetriever.ExpectAndReturn("GetProjectStatus", status, PROJECT_NAME);
 			monitor.Poll();
 
 			Assert.AreEqual(0, buildOccurredCount);
 
-			mockProjectManager.ExpectAndReturn("ProjectStatus",
-			                                   CreateProjectStatus(IntegrationStatus.Success, new DateTime(2004, 1, 1)));
-			monitor.Poll();
+            status = CreateProjectStatus(IntegrationStatus.Success, new DateTime(2004, 1, 1));
+            mockProjectManager.ExpectAndReturn("ProjectName", PROJECT_NAME);
+            mockProjectStatusRetriever.ExpectAndReturn("GetProjectStatus", status, PROJECT_NAME);
+            monitor.Poll();
 
 			Assert.AreEqual(0, buildOccurredCount);
 
-			mockProjectManager.ExpectAndReturn("ProjectStatus",
-			                                   CreateProjectStatus(IntegrationStatus.Success, new DateTime(2004, 1, 2)));
-			monitor.Poll();
+            status = CreateProjectStatus(IntegrationStatus.Success, new DateTime(2004, 1, 2));
+            mockProjectManager.ExpectAndReturn("ProjectName", PROJECT_NAME);
+            mockProjectStatusRetriever.ExpectAndReturn("GetProjectStatus", status, PROJECT_NAME);
+            monitor.Poll();
 
 			Assert.AreEqual(1, buildOccurredCount);
 
-			mockProjectManager.ExpectAndReturn("ProjectStatus",
-			                                   CreateProjectStatus(IntegrationStatus.Success, new DateTime(2004, 1, 3)));
-			monitor.Poll();
+            status = CreateProjectStatus(IntegrationStatus.Success, new DateTime(2004, 1, 3));
+            mockProjectManager.ExpectAndReturn("ProjectName", PROJECT_NAME);
+            mockProjectStatusRetriever.ExpectAndReturn("GetProjectStatus", status, PROJECT_NAME);
+            monitor.Poll();
 
 			Assert.AreEqual(2, buildOccurredCount);
 		}
@@ -112,20 +124,23 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Monitoring
 		{
 			ProjectStatus firstBuildStatus =
 				ProjectStatusFixture.New(IntegrationStatus.Success, ProjectActivity.Building, new DateTime(2007, 1, 1, 0, 0, 0));
-			mockProjectManager.ExpectAndReturn("ProjectStatus", firstBuildStatus);
-			dateTimeProvider.SetNow(new DateTime(2007, 1, 1, 1, 0, 0));
+            mockProjectManager.ExpectAndReturn("ProjectName", PROJECT_NAME);
+            mockProjectStatusRetriever.ExpectAndReturn("GetProjectStatus", firstBuildStatus, PROJECT_NAME);
+            dateTimeProvider.SetNow(new DateTime(2007, 1, 1, 1, 0, 0));
 			monitor.Poll();
 
 			ProjectStatus secondBuildStatus =
 				ProjectStatusFixture.New(IntegrationStatus.Success, ProjectActivity.Building, new DateTime(2007, 1, 1, 2, 0, 0));
-			mockProjectManager.ExpectAndReturn("ProjectStatus", secondBuildStatus);
-			dateTimeProvider.SetNow(new DateTime(2007, 1, 1, 3, 0, 0));
+            mockProjectManager.ExpectAndReturn("ProjectName", PROJECT_NAME);
+            mockProjectStatusRetriever.ExpectAndReturn("GetProjectStatus", secondBuildStatus, PROJECT_NAME);
+            dateTimeProvider.SetNow(new DateTime(2007, 1, 1, 3, 0, 0));
 			monitor.Poll();
 
 			ProjectStatus thirdBuildStatus =
 				ProjectStatusFixture.New(IntegrationStatus.Success, ProjectActivity.Building, new DateTime(2007, 1, 1, 4, 0, 0));
-			mockProjectManager.ExpectAndReturn("ProjectStatus", thirdBuildStatus);
-			dateTimeProvider.SetNow(new DateTime(2007, 1, 1, 5, 0, 0));
+            mockProjectManager.ExpectAndReturn("ProjectName", PROJECT_NAME);
+            mockProjectStatusRetriever.ExpectAndReturn("GetProjectStatus", thirdBuildStatus, PROJECT_NAME);
+            dateTimeProvider.SetNow(new DateTime(2007, 1, 1, 5, 0, 0));
 			monitor.Poll();
 
 			Assert.AreEqual(new TimeSpan(2, 0, 0), monitor.EstimatedTimeRemainingOnCurrentBuild);
@@ -161,13 +176,15 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Monitoring
 			BuildTransition expectedBuildTransition)
 		{
 			// initial connection
-			mockProjectManager.ExpectAndReturn("ProjectStatus",
-			                                   CreateProjectStatus(initialIntegrationStatus, new DateTime(2004, 1, 1)));
+            ProjectStatus status = CreateProjectStatus(initialIntegrationStatus, new DateTime(2004, 1, 1));
+            mockProjectManager.ExpectAndReturn("ProjectName", PROJECT_NAME);
+            mockProjectStatusRetriever.ExpectAndReturn("GetProjectStatus", status, PROJECT_NAME);
 			monitor.Poll();
 
 			// then the build
-			mockProjectManager.ExpectAndReturn("ProjectStatus",
-			                                   CreateProjectStatus(nextBuildIntegrationStatus, new DateTime(2004, 1, 2)));
+            status = CreateProjectStatus(nextBuildIntegrationStatus, new DateTime(2004, 1, 2));
+            mockProjectManager.ExpectAndReturn("ProjectName", PROJECT_NAME);
+            mockProjectStatusRetriever.ExpectAndReturn("GetProjectStatus", status, PROJECT_NAME);
 			monitor.Poll();
 
 			Assert.AreEqual(1, buildOccurredCount);
@@ -202,43 +219,53 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Monitoring
 		{
 			Assert.AreEqual(ProjectState.NotConnected, monitor.ProjectState);
 
-			mockProjectManager.ExpectAndReturn("ProjectStatus", CreateProjectStatus(IntegrationStatus.Success, ProjectActivity.Sleeping));
+            mockProjectManager.ExpectAndReturn("ProjectName", PROJECT_NAME);
+            mockProjectStatusRetriever.ExpectAndReturn("GetProjectStatus", CreateProjectStatus(IntegrationStatus.Success, ProjectActivity.Sleeping), PROJECT_NAME);
 			monitor.Poll();
 			Assert.AreEqual(ProjectState.Success, monitor.ProjectState);
 
-			mockProjectManager.ExpectAndReturn("ProjectStatus", CreateProjectStatus(IntegrationStatus.Exception, ProjectActivity.Sleeping));
+            mockProjectManager.ExpectAndReturn("ProjectName", PROJECT_NAME);
+            mockProjectStatusRetriever.ExpectAndReturn("GetProjectStatus", CreateProjectStatus(IntegrationStatus.Exception, ProjectActivity.Sleeping), PROJECT_NAME);
 			monitor.Poll();
 			Assert.AreEqual(ProjectState.Broken, monitor.ProjectState);
 
-			mockProjectManager.ExpectAndReturn("ProjectStatus", CreateProjectStatus(IntegrationStatus.Failure, ProjectActivity.Sleeping));
+            mockProjectManager.ExpectAndReturn("ProjectName", PROJECT_NAME);
+            mockProjectStatusRetriever.ExpectAndReturn("GetProjectStatus", CreateProjectStatus(IntegrationStatus.Failure, ProjectActivity.Sleeping), PROJECT_NAME);
 			monitor.Poll();
 			Assert.AreEqual(ProjectState.Broken, monitor.ProjectState);
 
-			mockProjectManager.ExpectAndReturn("ProjectStatus", CreateProjectStatus(IntegrationStatus.Unknown, ProjectActivity.Sleeping));
+            mockProjectManager.ExpectAndReturn("ProjectName", PROJECT_NAME);
+            mockProjectStatusRetriever.ExpectAndReturn("GetProjectStatus", CreateProjectStatus(IntegrationStatus.Unknown, ProjectActivity.Sleeping), PROJECT_NAME);
 			monitor.Poll();
 			Assert.AreEqual(ProjectState.Broken, monitor.ProjectState);
 
-			mockProjectManager.ExpectAndReturn("ProjectStatus", CreateProjectStatus(IntegrationStatus.Success, ProjectActivity.Building));
+            mockProjectManager.ExpectAndReturn("ProjectName", PROJECT_NAME);
+            mockProjectStatusRetriever.ExpectAndReturn("GetProjectStatus", CreateProjectStatus(IntegrationStatus.Success, ProjectActivity.Building), PROJECT_NAME);
 			monitor.Poll();
 			Assert.AreEqual(ProjectState.Building, monitor.ProjectState);
 
-			mockProjectManager.ExpectAndReturn("ProjectStatus", CreateProjectStatus(IntegrationStatus.Success, ProjectActivity.Building));
+            mockProjectManager.ExpectAndReturn("ProjectName", PROJECT_NAME);
+            mockProjectStatusRetriever.ExpectAndReturn("GetProjectStatus", CreateProjectStatus(IntegrationStatus.Success, ProjectActivity.Building), PROJECT_NAME);
 			monitor.Poll();
 			Assert.AreEqual(ProjectState.Building, monitor.ProjectState);
 
-			mockProjectManager.ExpectAndReturn("ProjectStatus", CreateProjectStatus(IntegrationStatus.Success, ProjectActivity.CheckingModifications));
+            mockProjectManager.ExpectAndReturn("ProjectName", PROJECT_NAME);
+            mockProjectStatusRetriever.ExpectAndReturn("GetProjectStatus", CreateProjectStatus(IntegrationStatus.Success, ProjectActivity.CheckingModifications), PROJECT_NAME);
 			monitor.Poll();
 			Assert.AreEqual(ProjectState.Success, monitor.ProjectState);
 
-			mockProjectManager.ExpectAndReturn("ProjectStatus", null);
+            mockProjectManager.ExpectAndReturn("ProjectName", PROJECT_NAME);
+            mockProjectStatusRetriever.ExpectAndReturn("GetProjectStatus", null, PROJECT_NAME);
 			monitor.Poll();
 			Assert.AreEqual(ProjectState.NotConnected, monitor.ProjectState);
 
-			mockProjectManager.ExpectAndReturn("ProjectStatus", CreateProjectStatus(IntegrationStatus.Failure, ProjectActivity.Building));
+            mockProjectManager.ExpectAndReturn("ProjectName", PROJECT_NAME);
+            mockProjectStatusRetriever.ExpectAndReturn("GetProjectStatus", CreateProjectStatus(IntegrationStatus.Failure, ProjectActivity.Building), PROJECT_NAME);
 			monitor.Poll();
 			Assert.AreEqual(ProjectState.BrokenAndBuilding, monitor.ProjectState);
 
-			mockProjectManager.ExpectAndReturn("ProjectStatus", CreateProjectStatus(IntegrationStatus.Exception, ProjectActivity.Building));
+            mockProjectManager.ExpectAndReturn("ProjectName", PROJECT_NAME);
+            mockProjectStatusRetriever.ExpectAndReturn("GetProjectStatus", CreateProjectStatus(IntegrationStatus.Exception, ProjectActivity.Building), PROJECT_NAME);
 			monitor.Poll();
 			Assert.AreEqual(ProjectState.BrokenAndBuilding, monitor.ProjectState);
 		}
@@ -246,10 +273,12 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Monitoring
 		[Test]
 		public void DoNotTransitionProjectStateForNewInstanceOfSameProjectActivity()
 		{
-			mockProjectManager.ExpectAndReturn("ProjectStatus", CreateProjectStatus(IntegrationStatus.Success, ProjectActivity.Building));
+            mockProjectManager.ExpectAndReturn("ProjectName", PROJECT_NAME);
+            mockProjectStatusRetriever.ExpectAndReturn("GetProjectStatus", CreateProjectStatus(IntegrationStatus.Success, ProjectActivity.Building), PROJECT_NAME);
 			monitor.Poll();
 			Assert.AreEqual(ProjectState.Building, monitor.ProjectState);
-			mockProjectManager.ExpectAndReturn("ProjectStatus", CreateProjectStatus(IntegrationStatus.Success, new ProjectActivity(ProjectActivity.Building.ToString())));
+            mockProjectManager.ExpectAndReturn("ProjectName", PROJECT_NAME);
+            mockProjectStatusRetriever.ExpectAndReturn("GetProjectStatus", CreateProjectStatus(IntegrationStatus.Success, new ProjectActivity(ProjectActivity.Building.ToString())), PROJECT_NAME);
 			monitor.Poll();
 			Assert.AreEqual(ProjectState.Building, monitor.ProjectState);
 		}
@@ -265,19 +294,21 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Monitoring
 		public void SummaryStatusStringReturnsASummaryStatusStringWhenTheStateNotSuccess()
 		{
 			ProjectStatus status = ProjectStatusFixture.New(IntegrationStatus.Failure, ProjectActivity.Sleeping);
-			mockProjectManager.ExpectAndReturn("ProjectStatus", status);
-			mockProjectManager.ExpectAndReturn("ProjectName", "projName");
+            mockProjectManager.ExpectAndReturn("ProjectName", PROJECT_NAME);
+            mockProjectStatusRetriever.ExpectAndReturn("GetProjectStatus", status, PROJECT_NAME);
+            mockProjectManager.ExpectAndReturn("ProjectName", PROJECT_NAME);
 
 			monitor.Poll();
 
-			Assert.AreEqual("projName: Broken", monitor.SummaryStatusString);
+			Assert.AreEqual(PROJECT_NAME + ": Broken", monitor.SummaryStatusString);
 		}
 
 		[Test]
 		public void SummaryStatusStringReturnsEmptyStringWhenTheStateIsSuccess()
 		{
 			ProjectStatus status = ProjectStatusFixture.New(IntegrationStatus.Success, ProjectActivity.Sleeping);
-			mockProjectManager.ExpectAndReturn("ProjectStatus", status);
+            mockProjectManager.ExpectAndReturn("ProjectName", PROJECT_NAME);
+            mockProjectStatusRetriever.ExpectAndReturn("GetProjectStatus", status, PROJECT_NAME);
 
 			monitor.Poll();
 
@@ -296,7 +327,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Monitoring
 		private void AssertIntegrationStateReturned(IntegrationStatus integrationStatus)
 		{
 			ProjectStatus status = ProjectStatusFixture.New(integrationStatus, ProjectActivity.CheckingModifications);
-			mockProjectManager.ExpectAndReturn("ProjectStatus", status);
+            mockProjectManager.ExpectAndReturn("ProjectName", PROJECT_NAME);
+            mockProjectStatusRetriever.ExpectAndReturn("GetProjectStatus", status, PROJECT_NAME);
 
 			monitor.Poll();
 
@@ -321,12 +353,14 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Monitoring
 		public void DisplayBalloonMessageWhenNewMessageIsReceived()
 		{
 			ProjectStatus initial = ProjectStatusFixture.New(IntegrationStatus.Success, ProjectActivity.Sleeping);
-			mockProjectManager.ExpectAndReturn("ProjectStatus", initial);
+            mockProjectManager.ExpectAndReturn("ProjectName", PROJECT_NAME);
+            mockProjectStatusRetriever.ExpectAndReturn("GetProjectStatus", initial, PROJECT_NAME);
 
 			Message expectedMessage = new Message("foo");
 			ProjectStatus newStatus = ProjectStatusFixture.New(IntegrationStatus.Success, ProjectActivity.Sleeping);
 			newStatus.Messages = new Message[] {expectedMessage};
-			mockProjectManager.ExpectAndReturn("ProjectStatus", newStatus);
+            mockProjectManager.ExpectAndReturn("ProjectName", PROJECT_NAME);
+            mockProjectStatusRetriever.ExpectAndReturn("GetProjectStatus", newStatus, PROJECT_NAME);
 
 			monitor.MessageReceived += new MessageEventHandler(OnMessageReceived);
 			monitor.Poll();

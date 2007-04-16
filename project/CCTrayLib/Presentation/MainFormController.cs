@@ -34,7 +34,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 			aggregatedServerMonitor = new AggregatingServerMonitor(serverMonitors);
 			integrationQueueIconProvider = new ResourceIntegrationQueueIconProvider();
 
-			projectMonitors = configuration.GetProjectStatusMonitors();
+			projectMonitors = configuration.GetProjectStatusMonitors(serverMonitors);
 			for (int i = 0; i < projectMonitors.Length; i++)
 			{
 				projectMonitors[i] = new SynchronizedProjectMonitor(projectMonitors[i], owner);
@@ -140,37 +140,41 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 			treeView.EndUpdate();
 		}
 
-		public void StartProjectMonitoring()
-		{
-			StopProjectMonitoring();
-			projectPoller = new Poller(configuration.PollPeriodSeconds, aggregatedProjectMonitor);
-			projectPoller.Start();
-		}
-
-		public void StopProjectMonitoring()
-		{
-			if (projectPoller != null)
-			{
-				projectPoller.Stop();
-				projectPoller = null;
-			}
-		}
-
 		public void StartServerMonitoring()
 		{
 			StopServerMonitoring();
 			serverPoller = new Poller(configuration.PollPeriodSeconds, aggregatedServerMonitor);
 			serverPoller.Start();
+
+		    StartProjectMonitoring();
 		}
 
 		public void StopServerMonitoring()
 		{
+		    StopProjectMonitoring();
+
 			if (serverPoller != null)
 			{
 				serverPoller.Stop();
 				serverPoller = null;
 			}
 		}
+
+        private void StartProjectMonitoring()
+        {
+            StopProjectMonitoring();
+            projectPoller = new Poller(configuration.PollPeriodSeconds, aggregatedProjectMonitor);
+            projectPoller.Start();
+        }
+
+        private void StopProjectMonitoring()
+        {
+            if (projectPoller != null)
+            {
+                projectPoller.Stop();
+                projectPoller = null;
+            }
+        }
 
 		public ProjectStateIconAdaptor ProjectStateIconAdaptor
 		{

@@ -5,7 +5,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Configuration
 	public interface ICCTrayMultiConfiguration
 	{
 		ISingleServerMonitor[] GetServerMonitors();
-		IProjectMonitor[] GetProjectStatusMonitors();
+		IProjectMonitor[] GetProjectStatusMonitors(ISingleServerMonitor[] serverMonitors);
 		ICruiseServerManagerFactory CruiseServerManagerFactory { get; }
 		ICruiseProjectManagerFactory CruiseProjectManagerFactory { get; }
 		BuildServer[] GetUniqueBuildServerList();

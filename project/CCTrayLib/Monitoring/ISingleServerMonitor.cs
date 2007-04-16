@@ -4,7 +4,7 @@ using ThoughtWorks.CruiseControl.Remote;
 
 namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
 {
-	public interface ISingleServerMonitor : IServerMonitor
+    public interface ISingleServerMonitor : IServerMonitor, IProjectStatusRetriever
 	{
 		string ServerUrl { get; }
 		string DisplayName { get; }
@@ -15,6 +15,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
 		/// </summary>
 		/// <param name="projectName">Name of the project to cancel.</param>
 		void CancelPendingRequest(string projectName);
+
 		/// <summary>
 		/// Gets the cruise server snapshot of project and queue status for the monitored server (single).
 		/// </summary>

@@ -30,19 +30,5 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Monitoring
 		{
 			manager.ForceBuild();
 		}
-
-		[Test]
-		public void ProjectStatusRetrivesDocumentViaHttpAndParsesReturnedXml()
-		{
-			ProjectStatus expected = new ProjectStatus();
-			const string xmlContent = "<Projects />";
-			mockWebRetriever.ExpectAndReturn("Get", xmlContent, severUri);
-			mockDashboardXmlParser.ExpectAndReturn("ExtractAsProjectStatus", expected, xmlContent, "yyy" );
-			ProjectStatus actual = manager.ProjectStatus;
-			
-			Assert.AreSame(expected, actual);
-			mockWebRetriever.Verify();
-			mockDashboardXmlParser.Verify();
-		}
 	}
 }
