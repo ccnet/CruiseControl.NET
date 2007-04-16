@@ -73,7 +73,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Util
 			new XslTransformer().Transform(logfile, xslfile, null);
 		}
 
-		private string XslFileBadFormat
+		private static string XslFileBadFormat
 		{
 			get
 			{

@@ -10,7 +10,7 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 	{
 		public string Transform(string input, string xslFilename, Hashtable xsltArgs)
 		{
-			XslTransform transform = NewXslTransform(xslFilename);
+			XslCompiledTransform transform = NewXslTransform(xslFilename);
 
 			using (StringReader inputReader = new StringReader(input))
 			{
@@ -29,7 +29,7 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 
 		public string TransformToXml(string xslFilename, XPathDocument document)
 		{
-			XslTransform transform = NewXslTransform(xslFilename);
+            XslCompiledTransform transform = NewXslTransform(xslFilename);
 			try
 			{
 				StringWriter output = new StringWriter();
@@ -44,14 +44,14 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 			}
 		}
 
-		private XslTransform NewXslTransform(string transformerFileName)
+        private static XslCompiledTransform NewXslTransform(string transformerFileName)
 		{
-			XslTransform transform = new XslTransform();
+            XslCompiledTransform transform = new XslCompiledTransform();
 			LoadStylesheet(transform, new SystemPath(transformerFileName).ToString());
 			return transform;
 		}
 
-		private XsltArgumentList CreateXsltArgs(Hashtable xsltArgs)
+		private static XsltArgumentList CreateXsltArgs(Hashtable xsltArgs)
 		{
 			XsltArgumentList args = new XsltArgumentList();
 			if (xsltArgs != null)
@@ -64,7 +64,7 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 			return args;
 		}
 
-		private void LoadStylesheet(XslTransform transform, string xslFileName)
+        private static void LoadStylesheet(XslCompiledTransform transform, string xslFileName)
 		{
 			try
 			{
@@ -74,7 +74,7 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 			{
 				throw new CruiseControlException(string.Format("XSL stylesheet file not found: {0}", xslFileName));
 			}
-			catch (XmlException ex)
+            catch (XsltException ex)
 			{
 				throw new CruiseControlException("Unable to load transform: " + xslFileName, ex);
 			}
