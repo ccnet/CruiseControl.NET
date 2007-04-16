@@ -1,5 +1,4 @@
 using System;
-using System.Collections;
 using System.Text;
 using System.IO;
 using ThoughtWorks.CruiseControl.Core;
@@ -20,6 +19,7 @@ using Exortech.NetReflector;
  *		<FBVersion>3</FBVersion>											 <!-- Optional, used to find executable. Default uses extension from project file -->
  *		<FBCMDPath>C:\Program Files\MyFinalBuilderPath\FBCMD.EXE</FBCMDPath> <!-- Optional, overrides FBVersion to provide absolute path to FBCMD.EXE -->
  *		<DontWriteToLog>true</DontWriteToLog>                                <!-- Optional, default = false -->
+ *      <UseTemporaryLogFile>true</UseTemporaryLogFile>                      <!-- Optional, default = false, overrides DontWriteToLog -->
  *		<Timeout>100</Timeout>                                               <!-- Optional, in seconds, default = no timeout -->
  * </FinalBuilder>
  *		
@@ -36,7 +36,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 		private IRegistry _registry;	
 		private FinalBuilderVersion _fbversion;
 		private string _fbcmdpath;
-	
+                	
 		#endregion
 
 		#region Constructors
@@ -101,12 +101,15 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 		[ReflectorProperty("DontWriteToLog", Required = false)]
 		public bool DontWriteToLog = false;
 
-		[ReflectorProperty("Timeout", Required = false)]
+        [ReflectorProperty("UseTemporaryLogFile", Required = false)]
+        public bool UseTemporaryLogFile = false;
+
+        [ReflectorProperty("Timeout", Required = false)]
 		public int Timeout = 0;
 	
 		public void Run(IIntegrationResult result)
 		{
-			ProcessResult processResult = AttemptToExecute(NewProcessInfoFrom(result));
+            ProcessResult processResult = AttemptToExecute(NewProcessInfoFrom(result));
 			result.AddTaskResult(new ProcessTaskResult(processResult));
 
 			if (processResult.TimedOut)
@@ -160,10 +163,15 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 				args.Append("/B ");
 			}
 
-			if (DontWriteToLog)
+            if (UseTemporaryLogFile)
+            {
+                args.Append("/TL ");
+            }
+			else if (DontWriteToLog)
 			{
 				args.Append("/S ");
 			}
+
 			
 			if (FBVariables != null && FBVariables.Length > 0)
 			{

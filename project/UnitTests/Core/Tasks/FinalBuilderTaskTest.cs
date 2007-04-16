@@ -178,5 +178,42 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 			NetReflector.Read(@"<FinalBuilder />", _task);
 		}
 
+        [Test]
+        public void TemporaryLogFile()
+        {
+            string expectedArgs = @"/B /TL /PC:\Dummy\TestProject.fbz5";
+            ExpectToExecuteArguments(expectedArgs);
+
+            _mockRegistry.ExpectAndReturn("GetLocalMachineSubKeyValue", @"C:\Dummy\FinalBuilder5.exe", @"SOFTWARE\VSoft\FinalBuilder\5.0", "Location");
+
+            _task.ProjectFile = @"C:\Dummy\TestProject.fbz5";
+            _task.UseTemporaryLogFile = true;
+            _task.Timeout = 600;
+            _task.Run(_result);
+
+            Assert.AreEqual(1, _result.TaskResults.Count);
+            Assert.AreEqual(IntegrationStatus.Success, _result.Status);
+            Assert.AreEqual(ProcessResultOutput, _result.TaskOutput);
+        }
+
+        [Test]
+        public void TemporaryLogFileOverridesDontLogToOutput()
+        {
+            string expectedArgs = @"/B /TL /PC:\Dummy\TestProject.fbz5";
+            ExpectToExecuteArguments(expectedArgs);
+
+            _mockRegistry.ExpectAndReturn("GetLocalMachineSubKeyValue", @"C:\Dummy\FinalBuilder5.exe", @"SOFTWARE\VSoft\FinalBuilder\5.0", "Location");
+
+            _task.ProjectFile = @"C:\Dummy\TestProject.fbz5";
+            _task.UseTemporaryLogFile = true;
+            _task.DontWriteToLog = true;
+            _task.Timeout = 600;
+            _task.Run(_result);
+
+            Assert.AreEqual(1, _result.TaskResults.Count);
+            Assert.AreEqual(IntegrationStatus.Success, _result.Status);
+            Assert.AreEqual(ProcessResultOutput, _result.TaskOutput);
+        }
+
 	}
 }
