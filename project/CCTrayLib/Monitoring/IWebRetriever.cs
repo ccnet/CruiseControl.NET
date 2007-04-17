@@ -1,6 +1,4 @@
 using System;
-using System.IO;
-using System.Net;
 
 namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
 {
@@ -8,5 +6,4 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
 	{
 		string Get(Uri uri);
 	}
-
 }

@@ -5,7 +5,6 @@ using System.Drawing;
 using System.Windows.Forms;
 using ThoughtWorks.CruiseControl.CCTrayLib.Configuration;
 using ThoughtWorks.CruiseControl.CCTrayLib.Monitoring;
-using ThoughtWorks.CruiseControl.Remote;
 using Message=System.Windows.Forms.Message;
 
 namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
@@ -56,12 +55,10 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 		private System.Windows.Forms.ImageList queueIconList;
 		private System.Windows.Forms.MenuItem mnuQueueCancelPending;
 		private PersistWindowState windowState;
-		private ICache httpCache;
 
-		public MainForm(ICCTrayMultiConfiguration configuration, ICache httpCache)
+		public MainForm(ICCTrayMultiConfiguration configuration)
 		{
 			this.configuration = configuration;
-			this.httpCache = httpCache;
 
 			InitializeComponent();
 			HookPersistentWindowState();
@@ -104,9 +101,9 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 			e.Key.SetValue("QueueViewSplitterPosition", splitterQueueView.SplitPosition);
 		}
 
-		private void CreateController(ICache httpCache)
+		private void CreateController()
 		{
-			controller = new MainFormController(configuration, this, httpCache);
+			controller = new MainFormController(configuration, this);
 
 			DataBindings.Add("Icon", controller.ProjectStateIconAdaptor, "Icon");
 
@@ -131,7 +128,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 				// We can only populate the TreeView in the OnLoad event or else you get a horizontal scrollbar
 				// appearing - a known bug in .Net 1.1 TreeView (control must be visible when you populate it). 
 				// To keep related code together in CreateController() have moved here from constructor.
-				CreateController(httpCache);
+				CreateController();
 
 				controller.StartServerMonitoring();
 			}
@@ -580,7 +577,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 					DataBindings.Clear();
 					btnForceBuild.DataBindings.Clear();
 					controller.UnbindToQueueTreeView(queueTreeView);
-					CreateController(httpCache);
+					CreateController();
 				}
 			}
 			finally

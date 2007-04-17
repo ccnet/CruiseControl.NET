@@ -1,22 +1,21 @@
-using System;
 using ThoughtWorks.CruiseControl.CCTrayLib.Configuration;
 
 namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
 {
 	public class HttpProjectListRetriever
 	{
-		private readonly IWebRetriever webRetriver;
+		private readonly IWebRetriever webRetriever;
 		private readonly IDashboardXmlParser dashboardXmlParser;
 
-		public HttpProjectListRetriever(IWebRetriever webRetriver, IDashboardXmlParser dashboardXmlParser)
+		public HttpProjectListRetriever(IWebRetriever webRetriever, IDashboardXmlParser dashboardXmlParser)
 		{
-			this.webRetriver = webRetriver;
+			this.webRetriever = webRetriever;
 			this.dashboardXmlParser = dashboardXmlParser;
 		}
 
 		public CCTrayProject[] GetProjectList(BuildServer server)
 		{
-			string xml = webRetriver.Get(server.Uri);
+			string xml = webRetriever.Get(server.Uri);
 			string[] projectNames = dashboardXmlParser.ExtractProjectNames(xml);
 
 			CCTrayProject[] projects = new CCTrayProject[projectNames.Length];

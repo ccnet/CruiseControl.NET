@@ -22,7 +22,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 		private IProjectStateIconProvider projectStateIconProvider;
 		private IIntegrationQueueIconProvider integrationQueueIconProvider;
 
-		public MainFormController(ICCTrayMultiConfiguration configuration, ISynchronizeInvoke owner, ICache httpCache)
+		public MainFormController(ICCTrayMultiConfiguration configuration, ISynchronizeInvoke owner)
 		{
 			this.configuration = configuration;
 
@@ -39,7 +39,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 			{
 				projectMonitors[i] = new SynchronizedProjectMonitor(projectMonitors[i], owner);
 			}			
-			aggregatedProjectMonitor = new AggregatingProjectMonitor(httpCache, projectMonitors);
+			aggregatedProjectMonitor = new AggregatingProjectMonitor(projectMonitors);
 			projectStateIconProvider = new ConfigurableProjectStateIconProvider(configuration.Icons);
 			projectStateIconAdaptor = new ProjectStateIconAdaptor(aggregatedProjectMonitor, projectStateIconProvider);
 			new BuildTransitionSoundPlayer(aggregatedProjectMonitor, new AudioPlayer(), configuration.Audio);

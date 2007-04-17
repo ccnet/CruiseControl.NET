@@ -237,6 +237,7 @@
     <Compile Include="CCTrayLib\Monitoring\StubCurrentTimeProvider.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="CCTrayLib\Monitoring\WebDashboardUrlTest.cs" />
     <Compile Include="CCTrayLib\Presentation\AddBuildServerTest.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -988,6 +989,7 @@
     <Compile Include="WebDashboard\Plugins\DeleteProject\ShowDeleteProjectActionTest.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="WebDashboard\Plugins\FarmReport\XmlServerReportActionTest.cs" />
     <Compile Include="WebDashboard\Plugins\ForceBuild\ForceBuildXmlActionTest.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -1033,6 +1035,12 @@
     <None Include="WebDashboard\Plugins\BuildReport\XmlReportActionSchema.xsx">
       <DependentUpon>XmlReportActionSchema.xsd</DependentUpon>
     </None>
+    <None Include="WebDashboard\Plugins\FarmReport\XmlServerReportActionSchema.xsx">
+      <DependentUpon>XmlServerReportActionSchema.xsd</DependentUpon>
+    </None>
+    <EmbeddedResource Include="WebDashboard\Plugins\FarmReport\XmlServerReportActionSchema.xsd">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
     <EmbeddedResource Include="..\examples\ccnet.config">
       <Link>Config\ccnet.config</Link>
     </EmbeddedResource>

@@ -196,9 +196,6 @@
     <Compile Include="Monitoring\BuildDurationTracker.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Monitoring\CachingWebRetriever.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="Monitoring\CruiseProjectManagerFactory.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -215,12 +212,6 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Monitoring\HttpProjectListRetriever.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Monitoring\ICache.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Monitoring\ICachingWebRetriever.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Monitoring\ICruiseProjectManager.cs">
@@ -296,6 +287,7 @@
     <Compile Include="Monitoring\ServerMonitor.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Monitoring\WebDashboardUrl.cs" />
     <Compile Include="Monitoring\WebRetriever.cs">
       <SubType>Code</SubType>
     </Compile>

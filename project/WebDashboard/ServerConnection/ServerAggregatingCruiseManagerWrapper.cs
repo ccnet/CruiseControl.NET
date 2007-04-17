@@ -73,6 +73,11 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.ServerConnection
 			throw new UnknownServerException(serverSpecifier.ServerName);
 		}
 
+		public ExternalLink[] GetExternalLinks(IProjectSpecifier projectSpecifier)
+		{
+			return GetCruiseManager(projectSpecifier).GetExternalLinks(projectSpecifier.ProjectName);
+		}
+
 		public ProjectStatusListAndExceptions GetProjectStatusListAndCaptureExceptions()
 		{
 			return GetProjectStatusListAndCaptureExceptions(GetServerSpecifiers());
@@ -81,11 +86,6 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.ServerConnection
 		public ProjectStatusListAndExceptions GetProjectStatusListAndCaptureExceptions(IServerSpecifier serverSpecifier)
 		{
 			return GetProjectStatusListAndCaptureExceptions(new IServerSpecifier[] {serverSpecifier});
-		}
-
-		public ExternalLink[] GetExternalLinks(IProjectSpecifier projectSpecifier)
-		{
-			return GetCruiseManager(projectSpecifier).GetExternalLinks(projectSpecifier.ProjectName);
 		}
 
 		private ProjectStatusListAndExceptions GetProjectStatusListAndCaptureExceptions(IServerSpecifier[] serverSpecifiers)
@@ -210,5 +210,43 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.ServerConnection
 			}
 			return null;
 		}
-	}
+
+        public CruiseServerSnapshotListAndExceptions GetCruiseServerSnapshotListAndExceptions()
+        {
+            return GetCruiseServerSnapshotListAndExceptions(GetServerSpecifiers());
+        }
+
+        public CruiseServerSnapshotListAndExceptions GetCruiseServerSnapshotListAndExceptions(IServerSpecifier serverSpecifier)
+        {
+            return GetCruiseServerSnapshotListAndExceptions(new IServerSpecifier[] { serverSpecifier });
+        }
+
+        private CruiseServerSnapshotListAndExceptions GetCruiseServerSnapshotListAndExceptions(IServerSpecifier[] serverSpecifiers)
+        {
+            ArrayList cruiseServerSnapshotsOnServers = new ArrayList();
+            ArrayList exceptions = new ArrayList();
+
+            foreach (IServerSpecifier serverSpecifier in serverSpecifiers)
+            {
+                try
+                {
+                    CruiseServerSnapshot cruiseServerSnapshot =
+                        GetCruiseManager(serverSpecifier).GetCruiseServerSnapshot();
+                    cruiseServerSnapshotsOnServers.Add(new CruiseServerSnapshotOnServer(cruiseServerSnapshot, serverSpecifier));
+                }
+                catch (SocketException)
+                {
+                    AddException(exceptions, serverSpecifier, new CruiseControlException("Unable to connect to CruiseControl.NET server.  Please either start the server or check the url."));
+                }
+                catch (Exception e)
+                {
+                    AddException(exceptions, serverSpecifier, e);
+                }
+            }
+
+            return new CruiseServerSnapshotListAndExceptions(
+                (CruiseServerSnapshotOnServer[])cruiseServerSnapshotsOnServers.ToArray(typeof(CruiseServerSnapshotOnServer)),
+                (CruiseServerException[])exceptions.ToArray(typeof(CruiseServerException)));
+        }
+    }
 }

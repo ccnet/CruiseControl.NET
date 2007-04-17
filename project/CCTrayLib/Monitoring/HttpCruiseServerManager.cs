@@ -48,11 +48,9 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
 		/// </summary>
         public CruiseServerSnapshot GetCruiseServerSnapshot()
 		{
-			throw new NotImplementedException("GD - Awaiting dashboard changes by Daniel Piessens");
-//			CruiseServerSnapshot snapshot;
-//			string content = webRetriever.Get(serverUri);
-//			snapshot = dashboardXmlParser.ExtractAsCruiseServerSnapshot(content, serverName);
-//			return snapshot;
+            string content = webRetriever.Get(serverUri);
+            CruiseServerSnapshot snapshot = dashboardXmlParser.ExtractAsCruiseServerSnapshot(content);
+            return snapshot;
 		}
 
 		private string GetDisplayNameFromUri(Uri uri)

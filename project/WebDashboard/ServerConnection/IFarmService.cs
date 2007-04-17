@@ -21,5 +21,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.ServerConnection
 		string GetServerVersion(IServerSpecifier serverSpecifier);
 		string GetArtifactDirectory(IProjectSpecifier projectSpecifier);
 		string GetStatisticsDocument(IProjectSpecifier projectSpecifier);
+        CruiseServerSnapshotListAndExceptions GetCruiseServerSnapshotListAndExceptions();
+        CruiseServerSnapshotListAndExceptions GetCruiseServerSnapshotListAndExceptions(IServerSpecifier serverSpecifier);
 	}
 }

@@ -10,12 +10,12 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Monitoring
 	[TestFixture]
 	public class HttpCruiseServerManagerTest
 	{
-		private const string ServerUrl = @"http://localhost/ccnet/XmlStatusReport.aspx";
+		private const string SERVER_URL = @"http://localhost/ccnet/XmlServerReport.aspx";
 
 		private DynamicMock mockWebRetriever;
 		private DynamicMock mockDashboardXmlParser;
-		BuildServer buildServer;
-		HttpCruiseServerManager manager;
+        private BuildServer buildServer;
+        private HttpCruiseServerManager manager;
 
 		[SetUp]
 		public void SetUp()
@@ -25,27 +25,26 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Monitoring
 			mockDashboardXmlParser = new DynamicMock(typeof(IDashboardXmlParser));
 			IDashboardXmlParser dashboardXmlParser = (IDashboardXmlParser) mockDashboardXmlParser.MockInstance;
 
-			buildServer = new BuildServer(ServerUrl);
+			buildServer = new BuildServer(SERVER_URL);
 			manager = new HttpCruiseServerManager((IWebRetriever)mockWebRetriever.MockInstance, dashboardXmlParser, buildServer);
 		}
 
 		[Test]
 		public void InitialisingReturnsCorrectServerProperties()
 		{
-			Assert.AreEqual(ServerUrl, manager.ServerUrl);
+			Assert.AreEqual(SERVER_URL, manager.ServerUrl);
 			Assert.AreEqual(@"localhost", manager.DisplayName);
 			Assert.AreEqual(BuildServerTransport.HTTP, manager.Transport);
 		}
 
 		[Test]
-        [Ignore("Grant to get working when HTTP is working.")]
 		public void RetrieveSnapshotFromManager()
 		{
 			CruiseServerSnapshot snapshot = new CruiseServerSnapshot();
 			const string xmlContent = "<CruiseControl />";
 
-			mockWebRetriever.ExpectAndReturn("Get", xmlContent, ServerUrl);
-			mockDashboardXmlParser.ExpectAndReturn("ExtractAsCruiseServerSnapshot", snapshot, xmlContent, ServerUrl );
+			mockWebRetriever.ExpectAndReturn("Get", xmlContent, new Uri(SERVER_URL));
+			mockDashboardXmlParser.ExpectAndReturn("ExtractAsCruiseServerSnapshot", snapshot, xmlContent);
 			CruiseServerSnapshot actual = manager.GetCruiseServerSnapshot();
 			
 			Assert.AreSame(snapshot, actual);

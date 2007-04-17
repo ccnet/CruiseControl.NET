@@ -514,6 +514,7 @@
     <Compile Include="Plugins\EditProject\SaveEditProjectAction.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Plugins\FarmReport\XmlServerReportAction.cs" />
     <Compile Include="Plugins\FarmReport\FarmReportFarmPlugin.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -547,6 +548,8 @@
     <Compile Include="Plugins\ViewAllBuilds\ViewAllBuildsProjectPlugin.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="ServerConnection\CruiseServerSnapshotListAndExceptions.cs" />
+    <Compile Include="ServerConnection\CruiseServerSnapshotOnServer.cs" />
     <Compile Include="ServerConnection\CruiseServerException.cs">
       <SubType>Code</SubType>
     </Compile>

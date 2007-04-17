@@ -117,7 +117,12 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 			objectionManager.AddTypeForName(ForceBuildXmlAction.ACTION_NAME, typeof (ForceBuildXmlAction))
 				.Decorate(typeof (ServerCheckingProxyAction)).Decorate(typeof (ProjectCheckingProxyAction)).Decorate(typeof (CruiseActionProxyAction));
 
+            // Supporting xml project status queries from CCTray or clients earlier than version 1.3
+            // Also still used by the web dashboard for displaying farm/server reports
 			objectionManager.AddTypeForName(XmlReportAction.ACTION_NAME, typeof (XmlReportAction));
+            
+            // Supporting cruise server project and queue status queries from CCTray or clients 1.3 or later
+            objectionManager.AddTypeForName(XmlServerReportAction.ACTION_NAME, typeof(XmlServerReportAction));
 
 			return objectSource;
 		}

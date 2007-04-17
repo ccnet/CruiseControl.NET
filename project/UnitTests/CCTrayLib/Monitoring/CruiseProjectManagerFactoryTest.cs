@@ -16,7 +16,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Monitoring
 		{
 			DynamicMock mockCruiseManagerFactory = new DynamicMock(typeof (ICruiseManagerFactory));
 			mockCruiseManagerFactory.Strict = true;
-			CruiseProjectManagerFactory factory = new CruiseProjectManagerFactory((ICruiseManagerFactory) mockCruiseManagerFactory.MockInstance, new WebRetriever());
+			CruiseProjectManagerFactory factory = new CruiseProjectManagerFactory((ICruiseManagerFactory) mockCruiseManagerFactory.MockInstance);
 
 			BuildServer server= new BuildServer("tcp://somethingOrOther");
 			mockCruiseManagerFactory.ExpectAndReturn("GetCruiseManager", null, server.Url);
@@ -32,7 +32,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Monitoring
 		{
 			DynamicMock mockCruiseManagerFactory = new DynamicMock(typeof (ICruiseManagerFactory));
 			mockCruiseManagerFactory.Strict = true;
-			CruiseProjectManagerFactory factory = new CruiseProjectManagerFactory((ICruiseManagerFactory) mockCruiseManagerFactory.MockInstance, new WebRetriever());
+			CruiseProjectManagerFactory factory = new CruiseProjectManagerFactory((ICruiseManagerFactory) mockCruiseManagerFactory.MockInstance);
 
 			BuildServer server = new BuildServer("http://somethingOrOther");
 

@@ -7,12 +7,10 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
 	public class AggregatingProjectMonitor : IProjectMonitor
 	{
 		private readonly IProjectMonitor[] monitors;
-		private ICache httpCache;
 
-		public AggregatingProjectMonitor(ICache httpCache, params IProjectMonitor[] monitors)
+		public AggregatingProjectMonitor(params IProjectMonitor[] monitors)
 		{
 			this.monitors = monitors;
-			this.httpCache = httpCache;
 
 			foreach (IProjectMonitor monitor in this.monitors)
 			{
@@ -86,16 +84,9 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
 
 		public void Poll()
 		{
-			try
+			foreach (IProjectMonitor monitor in monitors)
 			{
-				foreach (IProjectMonitor monitor in monitors)
-				{
-					monitor.Poll();
-				}
-			}
-			finally
-			{
-				httpCache.Clear();
+				monitor.Poll();
 			}
 		}
 

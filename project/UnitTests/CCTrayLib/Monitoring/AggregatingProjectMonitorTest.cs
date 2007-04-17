@@ -14,7 +14,6 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Monitoring
 		private DynamicMock monitor1;
 		private DynamicMock monitor2;
 		private DynamicMock monitor3;
-		private DynamicMock cache;		
 		private IProjectMonitor[] monitors;
 		private AggregatingProjectMonitor aggregator;
 
@@ -31,10 +30,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Monitoring
 					(IProjectMonitor) monitor2.MockInstance,
 					(IProjectMonitor) monitor3.MockInstance,
 				};
-			
-			cache = new DynamicMock(typeof (ICache));
 
-			aggregator = new AggregatingProjectMonitor((ICache) cache.MockInstance, monitors);
+			aggregator = new AggregatingProjectMonitor(monitors);
 		}
 
 		[TearDown]
@@ -43,7 +40,6 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Monitoring
 			monitor1.Verify();
 			monitor2.Verify();
 			monitor3.Verify();
-			cache.Verify();
 		}
 
 		[Test]
@@ -52,13 +48,6 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Monitoring
 			monitor1.Expect("Poll");
 			monitor2.Expect("Poll");
 			monitor3.Expect("Poll");
-			aggregator.Poll();
-		}
-
-		[Test]
-		public void PollClearsCache()
-		{
-			cache.Expect("Clear");
 			aggregator.Poll();
 		}
 
@@ -83,7 +72,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Monitoring
 			StubProjectMonitor stubProjectMonitor1 = new StubProjectMonitor("project1");
 			StubProjectMonitor stubProjectMonitor2 = new StubProjectMonitor("project2");
 
-			aggregator = new AggregatingProjectMonitor(GetMockCache(), stubProjectMonitor1, stubProjectMonitor2);
+			aggregator = new AggregatingProjectMonitor(stubProjectMonitor1, stubProjectMonitor2);
 			aggregator.BuildOccurred += new MonitorBuildOccurredEventHandler(Aggregator_BuildOccurred);
 
 			Assert.AreEqual(0, buildOccurredCount);
@@ -112,7 +101,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Monitoring
 			StubProjectMonitor stubProjectMonitor1 = new StubProjectMonitor("project1");
 			StubProjectMonitor stubProjectMonitor2 = new StubProjectMonitor("project2");
 
-			aggregator = new AggregatingProjectMonitor(GetMockCache(), stubProjectMonitor1, stubProjectMonitor2);
+			aggregator = new AggregatingProjectMonitor(stubProjectMonitor1, stubProjectMonitor2);
 			aggregator.Polled += new MonitorPolledEventHandler(Aggregator_Polled);
 
 			Assert.AreEqual(0, pollCount);
@@ -134,7 +123,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Monitoring
 		{
 			StubProjectMonitor stubProjectMonitor1 = new StubProjectMonitor("project1");
 
-			aggregator = new AggregatingProjectMonitor(GetMockCache(), stubProjectMonitor1);
+			aggregator = new AggregatingProjectMonitor(stubProjectMonitor1);
 			aggregator.Polled += new MonitorPolledEventHandler(Aggregator_Polled);
 
 			stubProjectMonitor1.OnPolled(new MonitorPolledEventArgs(stubProjectMonitor1));
@@ -240,11 +229,5 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Monitoring
 
 			return aggregator.IntegrationStatus;
 		}
-
-		private ICache GetMockCache()
-		{
-			return (ICache) new DynamicMock(typeof (ICache)).MockInstance;
-		}
-		
 	}
 }

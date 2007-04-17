@@ -34,7 +34,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Presentation
 
 			eventCount = 0;
 
-			controller = new MainFormController(configuration, null, (ICache) new DynamicMock(typeof (ICache)).MockInstance );
+			controller = new MainFormController(configuration, null);
 		}
 
 		[Test]

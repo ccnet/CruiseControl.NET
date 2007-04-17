@@ -327,7 +327,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 
 			if (txtDashboard.Enabled)
 			{
-				return new BuildServer(txtDashboard.Text + "/XmlStatusReport.aspx");
+                return new BuildServer(new WebDashboardUrl(txtDashboard.Text).XmlServerReport);
 			}
 
 			return null;

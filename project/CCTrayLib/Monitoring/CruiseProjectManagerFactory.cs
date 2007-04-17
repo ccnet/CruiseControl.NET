@@ -6,12 +6,10 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
 	public class CruiseProjectManagerFactory : ICruiseProjectManagerFactory
 	{
 		private ICruiseManagerFactory cruiseManagerFactory;
-		private IWebRetriever webRetriever;
 
-		public CruiseProjectManagerFactory(ICruiseManagerFactory cruiseManagerFactory, IWebRetriever webRetriever)
+		public CruiseProjectManagerFactory(ICruiseManagerFactory cruiseManagerFactory)
 		{
 			this.cruiseManagerFactory = cruiseManagerFactory;
-			this.webRetriever = webRetriever;
 		}
 
 		public ICruiseProjectManager Create(CCTrayProject project)
@@ -23,7 +21,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
 			}
 			else
 			{
-				return new HttpCruiseProjectManager(webRetriever, new DashboardXmlParser(), server.Uri, project.ProjectName);
+                return new HttpCruiseProjectManager(new WebRetriever(), new DashboardXmlParser(), server.Uri, project.ProjectName);
 			}
 		}
 
@@ -35,7 +33,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
 			}
 			else
 			{
-				return new HttpProjectListRetriever(webRetriever, new DashboardXmlParser()).GetProjectList(server);
+                return new HttpProjectListRetriever(new WebRetriever(), new DashboardXmlParser()).GetProjectList(server);
 			}
 		}
 	}
