@@ -18,7 +18,7 @@ namespace ThoughtWorks.CruiseControl.Core
 		public RemoteCruiseServer(ICruiseServer server, string remotingConfigurationFile)
 		{
 			this.server = server;
-			RemotingConfiguration.Configure(remotingConfigurationFile);
+			RemotingConfiguration.Configure(remotingConfigurationFile, false);
 			RegisterForRemoting();
 		}
 

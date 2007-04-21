@@ -20,7 +20,7 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
 		/// <returns></returns>
 		public string TransformResultsWithAllStyleSheets(XPathDocument document)
 		{
-			IList list = (IList) ConfigurationSettings.GetConfig("xslFiles");
+			IList list = (IList) ConfigurationManager.GetSection("xslFiles");
 			return TransformResults(list, document);
 		}
 

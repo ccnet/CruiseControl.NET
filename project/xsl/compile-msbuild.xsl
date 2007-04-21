@@ -1,5 +1,4 @@
 <?xml version="1.0"?>
-<!DOCTYPE xsl:stylesheet [ <!ENTITY nbsp "&#160;"> ]>
 <xsl:stylesheet
     xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0">
     <xsl:output method="html"/>
@@ -41,18 +40,18 @@
 	<xsl:template match="error">
 		<div style="color:orangered">
 			<xsl:if test="@file != ''" >
-				<xsl:value-of select="@file"/>&nbsp;(<xsl:value-of select="@line"/>,<xsl:value-of select="@column"/>):&nbsp;
+				<xsl:value-of select="@file"/> (<xsl:value-of select="@line"/>,<xsl:value-of select="@column"/>):
 			</xsl:if>
-			error&nbsp;<xsl:value-of select="@code"/>:&nbsp;<xsl:value-of select="text()" />
+			error<xsl:value-of select="@code"/>: <xsl:value-of select="text()" />
 		</div>
 	</xsl:template>
 
 	<xsl:template match="warning">
 		<div style="color:gold">
 			<xsl:if test="@file != ''" >
-				<xsl:value-of select="@file"/>&nbsp;(<xsl:value-of select="@line"/>,<xsl:value-of select="@column"/>):&nbsp;
+				<xsl:value-of select="@file"/> (<xsl:value-of select="@line"/>,<xsl:value-of select="@column"/>): 
 			</xsl:if>
-			warning&nbsp;<xsl:value-of select="@code"/>:&nbsp;<xsl:value-of select="text()" />
+			warning <xsl:value-of select="@code"/>: <xsl:value-of select="text()" />
 		</div>
 	</xsl:template>
 </xsl:stylesheet>

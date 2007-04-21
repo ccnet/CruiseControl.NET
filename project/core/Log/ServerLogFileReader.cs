@@ -59,14 +59,14 @@ namespace ThoughtWorks.CruiseControl.Core.Logging
 
 		private static string ReadFilenameFromConfig()
 		{
-			string filename = ConfigurationSettings.AppSettings["ServerLogFilePath"];
+			string filename = ConfigurationManager.AppSettings["ServerLogFilePath"];
 			return StringUtil.IsBlank(filename) ? "ccnet.log" : filename;
 		}
 
 		private static int ReadMaxLinesFromConfig()
 		{
-			string linesToReadConfig = ConfigurationSettings.AppSettings["ServerLogFileLines"];
-			return (linesToReadConfig != null) ? int.Parse(ConfigurationSettings.AppSettings["ServerLogFileLines"]) : DefaultMaxLines;
+            string linesToReadConfig = ConfigurationManager.AppSettings["ServerLogFileLines"];
+            return (linesToReadConfig != null) ? int.Parse(ConfigurationManager.AppSettings["ServerLogFileLines"]) : DefaultMaxLines;
 		}
 	}
 }

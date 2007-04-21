@@ -26,14 +26,14 @@ namespace ThoughtWorks.CruiseControl.Service
 		{
 			get
 			{
-				string configFilename = ConfigurationSettings.AppSettings["ccnet.config"];
+				string configFilename = ConfigurationManager.AppSettings["ccnet.config"];
 				return StringUtil.IsBlank(configFilename) ? DefaultConfigFilePath() : configFilename;
 			}
 		}
 
-		private string Remoting
+		private static string Remoting
 		{
-			get { return ConfigurationSettings.AppSettings["remoting"]; }
+			get { return ConfigurationManager.AppSettings["remoting"]; }
 		}
 
 		protected override void OnStart(string[] args)
@@ -65,7 +65,7 @@ namespace ThoughtWorks.CruiseControl.Service
 			server.Start();
 		}
 
-		private bool UseRemoting()
+		private static bool UseRemoting()
 		{
 			return (Remoting != null && Remoting.Trim().ToLower() == "on");
 		}
@@ -86,9 +86,9 @@ namespace ThoughtWorks.CruiseControl.Service
 			server.Start();
 		}
 
-		private string LookupServiceName()
+		private static string LookupServiceName()
 		{
-			string serviceName = ConfigurationSettings.AppSettings["service.name"];
+			string serviceName = ConfigurationManager.AppSettings["service.name"];
 			return StringUtil.IsBlank(serviceName) ? DefaultServiceName : serviceName;
 		}
 

@@ -7,7 +7,7 @@
     <xsl:template match="/">
    		<xsl:variable name="messages" select="/cruisecontrol//buildresults//message" />
    		<xsl:if test="count($messages) > 0">   	
-			<xsl:variable name="error.messages" select="$messages[(contains(text(), 'error ')) or @level='Error'] | /cruisecontrol//builderror/message | /cruisecontrol//internalerror/message" />
+			    <xsl:variable name="error.messages" select="$messages[(contains(text(), 'error ')) or @level='Error'] | /cruisecontrol//builderror/message | /cruisecontrol//internalerror/message" />
 	        <xsl:variable name="error.messages.count" select="count($error.messages)" />
 	        <xsl:variable name="warning.messages" select="$messages[(contains(text(), 'warning ')) or @level='Warning']" />
 	        <xsl:variable name="warning.messages.count" select="count($warning.messages)" />
@@ -37,7 +37,7 @@
 	                <tr><td><xsl:apply-templates select="$warning.messages"/></td></tr>
 	            </table>
 	        </xsl:if>
-        </xsl:if>
+      </xsl:if>
     </xsl:template>
 
     <xsl:template match="message">

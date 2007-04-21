@@ -77,15 +77,15 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Plugins.BuildReport
 			AssertXPathMatches(doc, "/Projects/Project/@activity", "Sleeping");
 			AssertXPathMatches(doc, "/Projects/Project/@lastBuildStatus", "Success");
 			AssertXPathMatches(doc, "/Projects/Project/@lastBuildLabel", "build_7");
-			AssertXPathMatches(doc, "/Projects/Project/@lastBuildTime", XmlConvert.ToString(LastBuildTime));
-			AssertXPathMatches(doc, "/Projects/Project/@nextBuildTime", XmlConvert.ToString(NextBuildTime));
+			AssertXPathMatches(doc, "/Projects/Project/@lastBuildTime", XmlConvert.ToString(LastBuildTime, XmlDateTimeSerializationMode.Local));
+            AssertXPathMatches(doc, "/Projects/Project/@nextBuildTime", XmlConvert.ToString(NextBuildTime, XmlDateTimeSerializationMode.Local));
 			AssertXPathMatches(doc, "/Projects/Project/@webUrl", "http://blah");
 			AssertXPathMatches(doc, "/Projects/Project/@category", "category");
 
 			mockFarmService.Verify();
 		}
 
-		private void AssertXPathMatches(XmlDocument doc, string xpath, string expectedValue)
+		private static void AssertXPathMatches(XmlDocument doc, string xpath, string expectedValue)
 		{
 			XmlNode node = doc.SelectSingleNode(xpath);
 			Assert.IsNotNull(node, "Expected to find match for xpath " + xpath);
@@ -93,7 +93,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Plugins.BuildReport
 			Assert.AreEqual(node.InnerText, expectedValue, "Unexpected value for xpath " + xpath);
 		}
 
-		private XmlDocument LoadAsDocument(string xml)
+		private static XmlDocument LoadAsDocument(string xml)
 		{
 			XmlDocument doc = new XmlDocument();
 			doc.LoadXml(xml);
@@ -113,8 +113,9 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Plugins.BuildReport
 			XmlFragmentResponse response = (XmlFragmentResponse) reportAction.Execute(null);
 			string xml = response.ResponseFragment;
 
-			XmlValidatingReader rdr = new XmlValidatingReader(xml, XmlNodeType.Document, null);
-			rdr.Schemas.Add(ReadSchemaFromResources("XmlReportActionSchema.xsd"));
+		    XmlReaderSettings xmlReaderSettings = new XmlReaderSettings();
+		    xmlReaderSettings.Schemas.Add(ReadSchemaFromResources("XmlReportActionSchema.xsd"));
+		    XmlReader rdr = XmlReader.Create(new StringReader(xml), xmlReaderSettings);
 			while (rdr.Read())
 			{
 			}

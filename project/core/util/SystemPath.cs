@@ -60,7 +60,7 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 
 		public static bool PathIsInvalid(string path)
 		{
-			return (-1 != path.IndexOfAny(Path.InvalidPathChars));
+			return (-1 != path.IndexOfAny(Path.GetInvalidPathChars()));
 		}
 
 		public SystemPath CreateSubDirectory(string dir)

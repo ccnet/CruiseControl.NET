@@ -132,6 +132,7 @@
     <Reference Include="System">
       <Name>System</Name>
     </Reference>
+    <Reference Include="System.configuration" />
     <Reference Include="System.Data">
       <Name>System.Data</Name>
     </Reference>
@@ -430,9 +431,6 @@
     <Compile Include="Core\Publishers\BuildPublisherTest.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Core\Publishers\EmailGatewayTest.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="Core\Publishers\EmailGroupTest.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -455,9 +453,6 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Core\Publishers\HtmlLinkMessageBuilderTest.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Core\Publishers\MockEmailGateway.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Core\Publishers\PublisherTest.cs">

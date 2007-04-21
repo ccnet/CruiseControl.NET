@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.Net.Mail;
 using Exortech.NetReflector;
 using ThoughtWorks.CruiseControl.Core.Util;
 using ThoughtWorks.CruiseControl.Remote;
@@ -136,7 +137,7 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
             }
 	    }
 
-        private bool IsRecipientSpecified(string to)
+        private static bool IsRecipientSpecified(string to)
         {
             return to != null && to.Trim() != string.Empty;
         }
@@ -145,12 +146,24 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
         {
             try
             {
-            	emailGateway.Send(from, to, replyto, subject, message);
+            	emailGateway.Send(GetMailMessage(from, to, replyto, subject, message));
             }
             catch (Exception e)
             {
-                throw new CruiseControlException("EmailPublisher exception: " + e.ToString(), e);
+                throw new CruiseControlException("EmailPublisher exception: " + e, e);
             }
+        }
+
+        protected static MailMessage GetMailMessage(string from, string to, string replyto, string subject, string messageText)
+        {
+            MailMessage mailMessage = new MailMessage();
+            mailMessage.To.Add(to);
+            mailMessage.From = new MailAddress(from);
+            if (! String.IsNullOrEmpty(replyto)) mailMessage.ReplyTo = new MailAddress(replyto);
+            mailMessage.Subject = subject;
+            mailMessage.IsBodyHtml = true;
+            mailMessage.Body = messageText;
+            return mailMessage;
         }
 
         public string CreateMessage(IIntegrationResult result)

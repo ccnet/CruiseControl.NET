@@ -10,8 +10,6 @@
     encoding="ISO-8859-1"
     standalone="yes"
     version="1.0"
-    doctype-public="-//W3C//DTD HTML 4.01//EN"
-    doctype-system="http://www.w3.org/TR/html4/strict.dtd"
   	indent="yes"/>
 	<xsl:param name="applicationPath"/>
 

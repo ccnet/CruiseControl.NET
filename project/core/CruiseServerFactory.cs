@@ -14,12 +14,12 @@ namespace ThoughtWorks.CruiseControl.Core
 		{
 			get
 			{
-				string value = ConfigurationSettings.AppSettings["WatchConfigFile"];
+				string value = ConfigurationManager.AppSettings["WatchConfigFile"];
 				return value == null || StringUtil.EqualsIgnoreCase(value, Boolean.TrueString);
 			}
 		}
 
-		private ICruiseServer CreateLocal(string configFile)
+		private static ICruiseServer CreateLocal(string configFile)
 		{
 			return new CruiseServer(
 				NewConfigurationService(configFile),
@@ -27,7 +27,7 @@ namespace ThoughtWorks.CruiseControl.Core
 				new NetReflectorProjectSerializer());
 		}
 
-		private IConfigurationService NewConfigurationService(string configFile)
+		private static IConfigurationService NewConfigurationService(string configFile)
 		{
 			IConfigurationService service = new FileConfigurationService(
 				new DefaultConfigurationFileLoader(),
@@ -41,7 +41,7 @@ namespace ThoughtWorks.CruiseControl.Core
 			return new CachingConfigurationService(service);
 		}
 
-		private ICruiseServer CreateRemote(string configFile)
+		private static ICruiseServer CreateRemote(string configFile)
 		{
 			return new RemoteCruiseServer(CreateLocal(configFile), RemotingConfigurationFile);
 		}

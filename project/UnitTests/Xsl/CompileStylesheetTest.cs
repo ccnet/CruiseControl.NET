@@ -67,7 +67,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Xsl
 			CustomAssertion.AssertContains("Could not load file or assembly 'nunit.core", actualXml);			
 		}
 
-		private string CreateInfoMessage(string input)
+		private static string CreateInfoMessage(string input)
 		{
 			return string.Format(@"<cruisecontrol><buildresults>
 	<message level=""Info"">

@@ -35,7 +35,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.FarmReport
 			return new XmlFragmentResponse(stringWriter.ToString());
 		}
 
-		private void WriteBuildStatus(XmlTextWriter xmlWriter, ProjectStatusOnServer projectStatusOnServer)
+		private static void WriteBuildStatus(XmlTextWriter xmlWriter, ProjectStatusOnServer projectStatusOnServer)
 		{
 			ProjectStatus status = projectStatusOnServer.ProjectStatus;
 
@@ -45,8 +45,8 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.FarmReport
 			xmlWriter.WriteAttributeString("activity", status.Activity.ToString());
 			xmlWriter.WriteAttributeString("lastBuildStatus", status.BuildStatus.ToString());
 			xmlWriter.WriteAttributeString("lastBuildLabel", status.LastSuccessfulBuildLabel);
-			xmlWriter.WriteAttributeString("lastBuildTime", XmlConvert.ToString(status.LastBuildDate));
-			xmlWriter.WriteAttributeString("nextBuildTime", XmlConvert.ToString(status.NextBuildTime));
+			xmlWriter.WriteAttributeString("lastBuildTime", XmlConvert.ToString(status.LastBuildDate, XmlDateTimeSerializationMode.Local));
+            xmlWriter.WriteAttributeString("nextBuildTime", XmlConvert.ToString(status.NextBuildTime, XmlDateTimeSerializationMode.Local));
 			xmlWriter.WriteAttributeString("webUrl", status.WebURL);
 			xmlWriter.WriteEndElement();
 		}

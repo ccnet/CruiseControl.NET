@@ -152,7 +152,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Logging
 2006-11-24 20:09:56,000 [bar:INFO] No modifications detected.", reader.Read("bar"));
 		}
 		
-		private string[] GenerateContentLines(int lines)
+		private static string[] GenerateContentLines(int lines)
 		{
 			String[] contentLines = new String[lines];
 			for (int i = 0; i < lines; i++)
@@ -163,12 +163,12 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Logging
 			return contentLines;
 		}
 
-		private string LinesToString(string[] contentLines)
+		private static string LinesToString(string[] contentLines)
 		{
 			return string.Join(Environment.NewLine, contentLines);
 		}
 
-		private string[] StringToLines(string content)
+		private static string[] StringToLines(string content)
 		{
 			Regex regexLines = new Regex(@"\r\n");
 			return regexLines.Split(content);
