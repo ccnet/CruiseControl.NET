@@ -1,7 +1,9 @@
 using System;
 using System.IO;
+using System.Text;
 using Exortech.NetReflector;
 using NMock;
+using NMock.Constraints;
 using NUnit.Framework;
 using ThoughtWorks.CruiseControl.Core;
 using ThoughtWorks.CruiseControl.Core.Config;
@@ -277,6 +279,16 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 			svn.GetSource(IntegrationResult());
 		}
 
+	    [Test]
+	    public void SvnProcessInfoShouldSetEncodingToUTF8()
+	    {
+            ExpectSvnDirectoryExists(false);
+            ExpectUnderscoreSvnDirectoryExists(false);
+	        mockProcessExecutor.ExpectAndReturn("Execute", SuccessfulProcessResult(), new ProcessInfoEncodingValidator());
+
+            svn.GetSource(IntegrationResult());
+	    }
+
 		private void ExpectSvnDirectoryExists(bool doesSvnDirectoryExist)
 		{
 			mockFileSystem.ExpectAndReturn("DirectoryExists", doesSvnDirectoryExist, Path.Combine(DefaultWorkingDirectory, ".svn"));
@@ -287,4 +299,18 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 			mockFileSystem.ExpectAndReturn("DirectoryExists", doesSvnDirectoryExist, Path.Combine(DefaultWorkingDirectory, "_svn"));
 		}
 	}
+
+    internal class ProcessInfoEncodingValidator : BaseConstraint
+    {
+        public override bool Eval(object val)
+        {
+            ProcessInfo processInfo = (ProcessInfo) val;
+            return Encoding.UTF8 == processInfo.StreamEncoding;
+        }
+
+        public override string Message
+        {
+            get { return "Wrong encoding specified."; }
+        }
+    }
 }

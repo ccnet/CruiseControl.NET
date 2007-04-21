@@ -122,9 +122,7 @@
     <Reference Include="System.Runtime.Remoting">
       <Name>System.Runtime.Remoting</Name>
     </Reference>
-    <Reference Include="System.Web">
-      <Name>System.Web</Name>
-    </Reference>
+    <Reference Include="System.Web" />
     <Reference Include="System.Xml">
       <Name>System.XML</Name>
     </Reference>

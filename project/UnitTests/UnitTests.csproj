@@ -1024,6 +1024,7 @@
     <Compile Include="Xsl\StylesheetTestFixture.cs">
       <SubType>Code</SubType>
     </Compile>
+    <None Include="ClassDiagram1.cd" />
     <None Include="resources\Statistics.csv" />
     <None Include="resources\templates\TestTransform.vm" />
     <None Include="test.config" />

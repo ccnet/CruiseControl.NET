@@ -1,6 +1,7 @@
 using System;
 using System.Diagnostics;
 using System.IO;
+using System.Text;
 using System.Threading;
 using NUnit.Framework;
 using ThoughtWorks.CruiseControl.Core.Util;
@@ -109,7 +110,27 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Util
 			}
 		}
 
-		private static void AssertProcessExitsSuccessfully(ProcessResult result)
+        [Test]
+        public void ReadUnicodeFile()
+        {
+            SystemPath tempDirectory = SystemPath.UniqueTempPath().CreateDirectory();
+            try
+            {
+                string content = "yooo ез";
+                SystemPath tempFile = tempDirectory.CreateTextFile("test.txt", content);
+                ProcessInfo processInfo = new ProcessInfo("cmd.exe", "/C type \"" + tempFile + "\"");
+                processInfo.StreamEncoding = Encoding.UTF8;
+                ProcessResult result = executor.Execute(processInfo);
+                Assert.IsTrue(!result.Failed);
+                Assert.AreEqual(content + Environment.NewLine, result.StandardOutput);
+            }
+            finally
+            {
+                tempDirectory.DeleteDirectory();
+            }
+        }
+        
+        private static void AssertProcessExitsSuccessfully(ProcessResult result)
 		{
 			Assert.AreEqual(ProcessResult.SUCCESSFUL_EXIT_CODE, result.ExitCode, "Process did not exit successfully");
 			AssertFalse("process should not return an error", result.Failed);
@@ -133,10 +154,17 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Util
 			if (count == 1000) Assert.Fail("sleeper process did not start.");
 		}
 
-		private void StartProcess()
-		{
-			ProcessInfo processInfo = new ProcessInfo("sleeper.exe");
-			executor.Execute(processInfo);			
-		}
-	}
+        private void StartProcess()
+        {
+            try
+            {
+                ProcessInfo processInfo = new ProcessInfo("sleeper.exe");
+                executor.Execute(processInfo);
+            }
+            catch (ThreadAbortException)
+            {
+                Thread.ResetAbort();
+            }
+        }
+    }
 }

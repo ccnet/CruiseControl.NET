@@ -1,6 +1,7 @@
 using System;
 using System.Globalization;
 using System.IO;
+using System.Text;
 using Exortech.NetReflector;
 using ThoughtWorks.CruiseControl.Core.Config;
 using ThoughtWorks.CruiseControl.Core.Util;
@@ -152,7 +153,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			return NewProcessInfo(buffer.ToString(), to);
 		}
 
-		private string TagMessage(string label)
+		private static string TagMessage(string label)
 		{
 			return string.Format("-m \"CCNET build {0}\"", label);
 		}
@@ -179,14 +180,16 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			buffer.AddArgument("--no-auth-cache");
 		}
 
-		private void AppendRevision(ProcessArgumentBuilder buffer, int revision)
+		private static void AppendRevision(ProcessArgumentBuilder buffer, int revision)
 		{
 			buffer.AppendIf(revision > 0, "--revision {0}", revision.ToString());
 		}
 
 		private ProcessInfo NewProcessInfo(string args, IIntegrationResult result)
 		{
-			return new ProcessInfo(Executable, args, result.BaseFromWorkingDirectory(WorkingDirectory));
+		    ProcessInfo processInfo = new ProcessInfo(Executable, args, result.BaseFromWorkingDirectory(WorkingDirectory));
+		    processInfo.StreamEncoding = Encoding.UTF8;
+		    return processInfo;
 		}
 	}
 }
