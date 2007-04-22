@@ -77,17 +77,18 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Plugins.FarmReport
             AssertXPathMatches(doc, "/CruiseControl/Projects/Project/@activity", "Sleeping");
             AssertXPathMatches(doc, "/CruiseControl/Projects/Project/@lastBuildStatus", "Success");
             AssertXPathMatches(doc, "/CruiseControl/Projects/Project/@lastBuildLabel", "build_7");
-            AssertXPathMatches(doc, "/CruiseControl/Projects/Project/@lastBuildTime", XmlConvert.ToString(LastBuildTime));
-            AssertXPathMatches(doc, "/CruiseControl/Projects/Project/@nextBuildTime", XmlConvert.ToString(NextBuildTime));
+            AssertXPathMatches(doc, "/CruiseControl/Projects/Project/@lastBuildTime", XmlConvert.ToString(LastBuildTime, XmlDateTimeSerializationMode.Local));
+            AssertXPathMatches(doc, "/CruiseControl/Projects/Project/@nextBuildTime", XmlConvert.ToString(NextBuildTime, XmlDateTimeSerializationMode.Local));
             AssertXPathMatches(doc, "/CruiseControl/Projects/Project/@webUrl", "http://blah");
             AssertXPathMatches(doc, "/CruiseControl/Projects/Project/@category", "category");
 
             AssertXPathMatches(doc, "/CruiseControl/Queues/Queue/@name", "Queue1");
             AssertXPathMatches(doc, "/CruiseControl/Queues/Queue/Request/@projectName", "HelloWorld");
+            AssertXPathMatches(doc, "/CruiseControl/Queues/Queue/Request/@activity", "CheckingModifications");
 
 			mockFarmService.Verify();
 		}
-
+        
 		private void AssertXPathMatches(XmlDocument doc, string xpath, string expectedValue)
 		{
 			XmlNode node = doc.SelectSingleNode(xpath);
@@ -116,8 +117,9 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Plugins.FarmReport
 			XmlFragmentResponse response = (XmlFragmentResponse) reportAction.Execute(null);
 			string xml = response.ResponseFragment;
 
-			XmlValidatingReader rdr = new XmlValidatingReader(xml, XmlNodeType.Document, null);
-			rdr.Schemas.Add(ReadSchemaFromResources("XmlServerReportActionSchema.xsd"));
+            XmlReaderSettings xmlReaderSettings = new XmlReaderSettings();
+            xmlReaderSettings.Schemas.Add(ReadSchemaFromResources("XmlServerReportActionSchema.xsd"));
+            XmlReader rdr = XmlReader.Create(new StringReader(xml), xmlReaderSettings);
 			while (rdr.Read())
 			{
 			}
@@ -136,7 +138,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Plugins.FarmReport
 		        };
             QueueSetSnapshot snapshot = new QueueSetSnapshot();
             snapshot.Queues.Add(new QueueSnapshot("Queue1"));
-            snapshot.Queues[0].Requests.Add(new QueuedRequestSnapshot("HelloWorld"));
+            snapshot.Queues[0].Requests.Add(new QueuedRequestSnapshot("HelloWorld", ProjectActivity.CheckingModifications));
 
             return new CruiseServerSnapshot(projectStatuses, snapshot);
 		}

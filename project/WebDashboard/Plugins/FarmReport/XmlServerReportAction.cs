@@ -61,8 +61,8 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.FarmReport
             xmlWriter.WriteAttributeString("activity", projectStatus.Activity.ToString());
             xmlWriter.WriteAttributeString("lastBuildStatus", projectStatus.BuildStatus.ToString());
             xmlWriter.WriteAttributeString("lastBuildLabel", projectStatus.LastSuccessfulBuildLabel);
-            xmlWriter.WriteAttributeString("lastBuildTime", XmlConvert.ToString(projectStatus.LastBuildDate));
-            xmlWriter.WriteAttributeString("nextBuildTime", XmlConvert.ToString(projectStatus.NextBuildTime));
+            xmlWriter.WriteAttributeString("lastBuildTime", XmlConvert.ToString(projectStatus.LastBuildDate, XmlDateTimeSerializationMode.Local));
+            xmlWriter.WriteAttributeString("nextBuildTime", XmlConvert.ToString(projectStatus.NextBuildTime, XmlDateTimeSerializationMode.Local));
             xmlWriter.WriteAttributeString("webUrl", projectStatus.WebURL);
 			xmlWriter.WriteEndElement();
 		}
@@ -92,6 +92,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.FarmReport
         {
             xmlWriter.WriteStartElement("Request");
             xmlWriter.WriteAttributeString("projectName", queuedRequest.ProjectName);
+            xmlWriter.WriteAttributeString("activity", queuedRequest.Activity.ToString());
             xmlWriter.WriteEndElement();
         }
     }

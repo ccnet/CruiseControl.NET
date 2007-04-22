@@ -53,7 +53,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Presentation
 
 			Assert.AreEqual(0, firstQueueNode.Nodes.Count);
 			Assert.AreEqual(0, secondQueueNode.Nodes.Count);
-			Assert.AreEqual(IntegrationQueueNodeType.Queue.ImageIndex, firstQueueNode.ImageIndex);
+			Assert.AreEqual(IntegrationQueueNodeType.QueueEmpty.ImageIndex, firstQueueNode.ImageIndex);
 
 			// Now lets add something to a queue.
             serverMonitor.CruiseServerSnapshot = CreatePopulatedQueuesSnapshot();
@@ -68,8 +68,9 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Presentation
 			TreeNode firstQueuedItemNode = firstQueueNode.Nodes[0];
 			TreeNode secondQueuedItemNode = firstQueueNode.Nodes[1];
 
-			Assert.AreEqual(IntegrationQueueNodeType.FirstInQueue.ImageIndex, firstQueuedItemNode.ImageIndex);
-			Assert.AreEqual(IntegrationQueueNodeType.PendingInQueue.ImageIndex, secondQueuedItemNode.ImageIndex);
+            Assert.AreEqual(IntegrationQueueNodeType.QueuePopulated.ImageIndex, firstQueueNode.ImageIndex);
+			Assert.AreEqual(IntegrationQueueNodeType.CheckingModifications.ImageIndex, firstQueuedItemNode.ImageIndex);
+            Assert.AreEqual(IntegrationQueueNodeType.PendingInQueue.ImageIndex, secondQueuedItemNode.ImageIndex);
 		}
 
         private CruiseServerSnapshot CreateNoQueuesSnapshot()
@@ -97,10 +98,10 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Presentation
 
 			QueueSnapshot queueSnapshot1 = queueSetSnapshot.Queues[0];
 
-			QueuedRequestSnapshot queuedRequestSnapshot1 = new QueuedRequestSnapshot("Project1");
+            QueuedRequestSnapshot queuedRequestSnapshot1 = new QueuedRequestSnapshot("Project1", ProjectActivity.CheckingModifications);
 			queueSnapshot1.Requests.Add(queuedRequestSnapshot1);
 
-			QueuedRequestSnapshot queuedRequestSnapshot2 = new QueuedRequestSnapshot("Project2");
+            QueuedRequestSnapshot queuedRequestSnapshot2 = new QueuedRequestSnapshot("Project2", ProjectActivity.Pending);
 			queueSnapshot1.Requests.Add(queuedRequestSnapshot2);
 
             return cruiseServerSnapshot;

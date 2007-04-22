@@ -17,19 +17,29 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
 		public static readonly IntegrationQueueNodeType HttpServer = new IntegrationQueueNodeType("HttpServer", 1);
 
 		/// <summary>
-		/// This is a named queue
+		/// This is a queue with no requests on it
 		/// </summary>
-		public static readonly IntegrationQueueNodeType Queue = new IntegrationQueueNodeType("Queue", 2);
+		public static readonly IntegrationQueueNodeType QueueEmpty = new IntegrationQueueNodeType("QueueEmpty", 2);
+
+        /// <summary>
+        /// This is a queue with some requests on it
+        /// </summary>
+        public static readonly IntegrationQueueNodeType QueuePopulated = new IntegrationQueueNodeType("QueuePopulated", 3);
+
+        /// <summary>
+        /// This is first item in the queue but is just checking for modifications
+        /// </summary>
+        public static readonly IntegrationQueueNodeType CheckingModifications = new IntegrationQueueNodeType("CheckingModifications", 4);
 
 		/// <summary>
-		/// This is first item in the queue and likely currently integrating
+		/// This is first item in the queue and is currently building
 		/// </summary>
-		public static readonly IntegrationQueueNodeType FirstInQueue = new IntegrationQueueNodeType("FirstInQueue", 3);
+		public static readonly IntegrationQueueNodeType Building = new IntegrationQueueNodeType("Building", 5);
 
 		/// <summary>
 		/// This is pending integration
 		/// </summary>
-		public static readonly IntegrationQueueNodeType PendingInQueue = new IntegrationQueueNodeType("PendingInQueue", 4);
+		public static readonly IntegrationQueueNodeType PendingInQueue = new IntegrationQueueNodeType("PendingInQueue", 6);
 
 		public readonly string Name;
 		public readonly int ImageIndex;

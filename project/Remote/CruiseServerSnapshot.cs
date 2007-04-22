@@ -62,6 +62,8 @@ namespace ThoughtWorks.CruiseControl.Remote
                     QueuedRequestSnapshot requestToCompare = queueSnapshotToCompare.Requests[requestIndex];
                     if (requestToCompare.ProjectName != request.ProjectName)
                         return true;
+                    if (requestToCompare.Activity != request.Activity)
+                        return true;
                 }
             }
             return false;

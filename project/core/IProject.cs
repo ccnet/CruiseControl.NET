@@ -86,6 +86,7 @@ namespace ThoughtWorks.CruiseControl.Core
 		void Initialize();
 		
 		ProjectStatus CreateProjectStatus(IProjectIntegrator integrator);
+        ProjectActivity CurrentActivity { get; }
 		
 		void AddMessage(Message message);
 

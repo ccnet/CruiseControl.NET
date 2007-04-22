@@ -366,6 +366,9 @@
     <Compile Include="Presentation\ProjectStatusListViewItemAdaptor.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Presentation\QueueTreeView.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="Presentation\ResourceIntegrationQueueIconProvider.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -429,12 +432,19 @@
     <EmbeddedResource Include="Presentation\TrayIcon.resx">
       <DependentUpon>TrayIcon.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Queue.ico" />
     <EmbeddedResource Include="Red.ico" />
     <EmbeddedResource Include="ServerHttp.ico" />
     <EmbeddedResource Include="ServerRemoting.ico" />
     <EmbeddedResource Include="Stopwatch.ico" />
     <EmbeddedResource Include="Yellow.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="BuildPending.ico" />
+    <EmbeddedResource Include="QueueEmpty.ico" />
+    <EmbeddedResource Include="QueuePopulated.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="BuildCheckingModifications.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

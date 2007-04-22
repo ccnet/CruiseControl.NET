@@ -21,11 +21,11 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Monitoring
     </Projects>
     <Queues>
         <Queue name='Queue1'>
-            <Request projectName='projectName' />
-            <Request projectName='SVNTest' />
+            <Request projectName='projectName' activity='CheckingModifications' />
+            <Request projectName='SVNTest' activity='Pending' />
         </Queue>
         <Queue name='Queue2'>
-            <Request projectName='Missing' />
+            <Request projectName='Missing' activity='Building' />
         </Queue>
     </Queues>
 </CruiseControl>";
@@ -95,9 +95,15 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Monitoring
             Assert.AreEqual(2, snapshot.QueueSetSnapshot.Queues.Count);
             QueueSnapshot queueSnapshot1 = snapshot.QueueSetSnapshot.Queues[0];
             Assert.AreEqual("Queue1", queueSnapshot1.QueueName);
+            Assert.AreEqual("projectName", queueSnapshot1.Requests[0].ProjectName);
+            Assert.AreEqual(ProjectActivity.CheckingModifications, queueSnapshot1.Requests[0].Activity);
+            Assert.AreEqual("SVNTest", queueSnapshot1.Requests[1].ProjectName);
+            Assert.AreEqual(ProjectActivity.Pending, queueSnapshot1.Requests[1].Activity);
 
             QueueSnapshot queueSnapshot2 = snapshot.QueueSetSnapshot.Queues[1];
             Assert.AreEqual("Queue2", queueSnapshot2.QueueName);
+            Assert.AreEqual("Missing", queueSnapshot2.Requests[0].ProjectName);
+            Assert.AreEqual(ProjectActivity.Building, queueSnapshot2.Requests[0].Activity);
         }
     }
 }

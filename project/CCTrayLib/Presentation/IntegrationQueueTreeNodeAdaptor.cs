@@ -58,34 +58,45 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 		    CruiseServerSnapshot cruiseServerSnapshot = serverMonitor.CruiseServerSnapshot;
             if (cruiseServerSnapshot == null)
                 return;
-            QueueSetSnapshot queueSetSnapshot = serverMonitor.CruiseServerSnapshot.QueueSetSnapshot;
 
+            QueueSetSnapshot queueSetSnapshot = serverMonitor.CruiseServerSnapshot.QueueSetSnapshot;
             if (queueSetSnapshot != null && queueSetSnapshot.Queues.Count > 0)
 			{
-				foreach (QueueSnapshot namedQueueSnapshot in queueSetSnapshot.Queues)
+				foreach (QueueSnapshot queue in queueSetSnapshot.Queues)
 				{
-					TreeNode queueNode = new TreeNode(namedQueueSnapshot.QueueName, IntegrationQueueNodeType.Queue.ImageIndex, IntegrationQueueNodeType.Queue.ImageIndex);
-					queueNode.Tag = new IntegrationQueueTreeNodeTag(this, namedQueueSnapshot);
+				    string queueNodeTitle = queue.QueueName;
+                    int queueImageIndex = IntegrationQueueNodeType.QueueEmpty.ImageIndex;
+				    if (!queue.IsEmpty)
+				    {
+                        queueNodeTitle = string.Format("{0} ({1})", queue.QueueName, queue.Requests.Count);
+                        queueImageIndex = IntegrationQueueNodeType.QueuePopulated.ImageIndex;
+				    }
+                    TreeNode queueNode = new TreeNode(queueNodeTitle, queueImageIndex, queueImageIndex);
+					queueNode.Tag = new IntegrationQueueTreeNodeTag(this, queue);
 					serverTreeNode.Nodes.Add(queueNode);
 
-					for (int index = 0; index < namedQueueSnapshot.Requests.Count; index++)
+					for (int index = 0; index < queue.Requests.Count; index++)
 					{
-						QueuedRequestSnapshot queuedRequestSnapshot = namedQueueSnapshot.Requests[index];
-						TreeNode queuedItemNode = new TreeNode(queuedRequestSnapshot.ProjectName);
-						queuedItemNode.Tag = new IntegrationQueueTreeNodeTag(this, namedQueueSnapshot, queuedRequestSnapshot, index);
-						if (index == 0)
-						{
-							queuedItemNode.ImageIndex = queuedItemNode.SelectedImageIndex = IntegrationQueueNodeType.FirstInQueue.ImageIndex;
-						}
-						else
-						{
-							queuedItemNode.ImageIndex = queuedItemNode.SelectedImageIndex = IntegrationQueueNodeType.PendingInQueue.ImageIndex;
-						}
+						QueuedRequestSnapshot queuedRequest = queue.Requests[index];
+						TreeNode queuedItemNode = new TreeNode(queuedRequest.ProjectName);
+						queuedItemNode.Tag = new IntegrationQueueTreeNodeTag(this, queue, queuedRequest, index);
+
+                        int requestImageIndex = IntegrationQueueNodeType.PendingInQueue.ImageIndex;
+                        if (queuedRequest.Activity == ProjectActivity.CheckingModifications)
+                            requestImageIndex = IntegrationQueueNodeType.CheckingModifications.ImageIndex;
+                        else if (queuedRequest.Activity == ProjectActivity.Building)
+                            requestImageIndex = IntegrationQueueNodeType.Building.ImageIndex;
+
+                        queuedItemNode.ImageIndex = queuedItemNode.SelectedImageIndex = requestImageIndex;
 						queueNode.Nodes.Add(queuedItemNode);
 					}
 				}
 			}
-			serverTreeNode.ExpandAll();
+
+            serverTreeNode.Expand();
+		    QueueTreeView queueTreeView = serverTreeNode.TreeView as QueueTreeView;
+		    if (queueTreeView != null)
+                queueTreeView.RestoreExpandedNodes(serverTreeNode);
 		}
 	}
 }

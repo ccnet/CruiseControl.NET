@@ -63,7 +63,7 @@ namespace ThoughtWorks.CruiseControl.Core.Queues
 			QueueSetSnapshot queueSetSnapshot = new QueueSetSnapshot();
 			foreach (IIntegrationQueue queue in queueSet.Values)
 			{
-				if (queue != null && queue.Count > 0)
+				if (queue != null)
 				{
 					queueSetSnapshot.Queues.Add(BuildQueueSnapshot(queue));
 				}
@@ -75,10 +75,19 @@ namespace ThoughtWorks.CruiseControl.Core.Queues
 		{
 			QueueSnapshot queueSnapshot = new QueueSnapshot(queue.Name);
 
-			foreach (IIntegrationQueueItem integrationQueueItem in queue)
-			{
+            for (int index = 0; index < queue.Count; index++)
+            {
+                IIntegrationQueueItem integrationQueueItem = (IIntegrationQueueItem)queue[index];
+                // The first request in the queue shows it's real activity of CheckingModifications or Building
+                // Everything else is in a pending state.
+                ProjectActivity projectActivity = ProjectActivity.Pending;
+                if (index == 0)
+                {
+                    projectActivity = integrationQueueItem.Project.CurrentActivity;
+                }
 				QueuedRequestSnapshot queuedRequestSnapshot = new QueuedRequestSnapshot(
-					integrationQueueItem.Project.Name);
+					integrationQueueItem.Project.Name,
+                    projectActivity);
 				queueSnapshot.Requests.Add(queuedRequestSnapshot);
 			}
 			return queueSnapshot;

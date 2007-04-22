@@ -26,5 +26,10 @@ namespace ThoughtWorks.CruiseControl.Remote
 		{
 			get { return _requests; }
 		}
+
+        public bool IsEmpty
+        {
+            get { return _requests.Count == 0; }
+        }
 	}
 }

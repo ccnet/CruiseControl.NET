@@ -113,6 +113,11 @@ namespace ThoughtWorks.CruiseControl.Core
 			throw new NotImplementedException();
 		}
 
+        public ProjectActivity CurrentActivity
+        {
+            get { throw new NotImplementedException(); }
+        }
+
 		public void AddMessage(Message message)
 		{
 			throw new NotImplementedException();

@@ -14,8 +14,10 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Presentation
 
 			Assert.AreEqual(ResourceIntegrationQueueIconProvider.REMOTING_SERVER, iconProvider.GetStatusIconForNodeType(IntegrationQueueNodeType.RemotingServer));
 			Assert.AreEqual(ResourceIntegrationQueueIconProvider.HTTP_SERVER, iconProvider.GetStatusIconForNodeType(IntegrationQueueNodeType.HttpServer));
-			Assert.AreEqual(ResourceIntegrationQueueIconProvider.QUEUE, iconProvider.GetStatusIconForNodeType(IntegrationQueueNodeType.Queue));
-			Assert.AreEqual(ResourceIntegrationQueueIconProvider.FIRST_IN_QUEUE, iconProvider.GetStatusIconForNodeType(IntegrationQueueNodeType.FirstInQueue));
+            Assert.AreEqual(ResourceIntegrationQueueIconProvider.QUEUE_EMPTY, iconProvider.GetStatusIconForNodeType(IntegrationQueueNodeType.QueueEmpty));
+            Assert.AreEqual(ResourceIntegrationQueueIconProvider.QUEUE_POPULATED, iconProvider.GetStatusIconForNodeType(IntegrationQueueNodeType.QueuePopulated));
+            Assert.AreEqual(ResourceIntegrationQueueIconProvider.CHECKING_MODIFICATIONS, iconProvider.GetStatusIconForNodeType(IntegrationQueueNodeType.CheckingModifications));
+            Assert.AreEqual(ResourceIntegrationQueueIconProvider.BUILDING, iconProvider.GetStatusIconForNodeType(IntegrationQueueNodeType.Building));
 			Assert.AreEqual(ResourceIntegrationQueueIconProvider.PENDING, iconProvider.GetStatusIconForNodeType(IntegrationQueueNodeType.PendingInQueue));
 		}
 	}

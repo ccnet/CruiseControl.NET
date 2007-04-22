@@ -106,7 +106,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 			if (listView.Items.Count > 0) listView.Items[0].Selected = true;
 		}
 
-		public void BindToQueueTreeView(TreeView treeView)
+		public void BindToQueueTreeView(QueueTreeView treeView)
 		{
 			StartProjectMonitoring();
 			treeView.BeginUpdate();
@@ -118,14 +118,13 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 				treeView.Nodes.Add(serverTreeNode);
 			}
 			treeView.EndUpdate();
-			treeView.ExpandAll();
 			if (treeView.Nodes.Count > 0)
 			{
 				treeView.SelectedNode = treeView.Nodes[0];
 			}
 		}
 
-		public void UnbindToQueueTreeView(TreeView treeView)
+		public void UnbindToQueueTreeView(QueueTreeView treeView)
 		{
 			treeView.BeginUpdate();
 			foreach (TreeNode node in treeView.Nodes)
@@ -219,8 +218,10 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 			imageList.Images.Clear();
 			imageList.Images.Add(integrationQueueIconProvider.GetStatusIconForNodeType(IntegrationQueueNodeType.RemotingServer).Icon);
 			imageList.Images.Add(integrationQueueIconProvider.GetStatusIconForNodeType(IntegrationQueueNodeType.HttpServer).Icon);
-			imageList.Images.Add(integrationQueueIconProvider.GetStatusIconForNodeType(IntegrationQueueNodeType.Queue).Icon);
-			imageList.Images.Add(integrationQueueIconProvider.GetStatusIconForNodeType(IntegrationQueueNodeType.FirstInQueue).Icon);
+            imageList.Images.Add(integrationQueueIconProvider.GetStatusIconForNodeType(IntegrationQueueNodeType.QueueEmpty).Icon);
+            imageList.Images.Add(integrationQueueIconProvider.GetStatusIconForNodeType(IntegrationQueueNodeType.QueuePopulated).Icon);
+            imageList.Images.Add(integrationQueueIconProvider.GetStatusIconForNodeType(IntegrationQueueNodeType.CheckingModifications).Icon);
+            imageList.Images.Add(integrationQueueIconProvider.GetStatusIconForNodeType(IntegrationQueueNodeType.Building).Icon);
 			imageList.Images.Add(integrationQueueIconProvider.GetStatusIconForNodeType(IntegrationQueueNodeType.PendingInQueue).Icon);
 		}
 

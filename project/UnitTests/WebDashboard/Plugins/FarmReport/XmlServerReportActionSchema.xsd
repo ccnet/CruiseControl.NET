@@ -16,6 +16,7 @@
                         <xs:enumeration value="Sleeping"/>
                         <xs:enumeration value="Building"/>
                         <xs:enumeration value="CheckingModifications"/>
+                        <xs:enumeration value="Pending"/>
                       </xs:restriction>
                     </xs:simpleType>
                   </xs:attribute>
@@ -48,7 +49,16 @@
                     <xs:element name="Request" maxOccurs="unbounded">
                       <xs:complexType>
                         <xs:attribute name="projectName" type="xs:NMTOKEN" use="required"/>
-                      </xs:complexType>
+                        <xs:attribute name="activity" use="required">
+                          <xs:simpleType>
+                            <xs:restriction base="xs:NMTOKEN">
+                              <xs:enumeration value="Building"/>
+                              <xs:enumeration value="CheckingModifications"/>
+                              <xs:enumeration value="Pending"/>
+                            </xs:restriction>
+                          </xs:simpleType>
+                        </xs:attribute>
+                     </xs:complexType>
                     </xs:element>
                   </xs:sequence>
                   <xs:attribute name="name" type="xs:NMTOKEN" use="required"/>

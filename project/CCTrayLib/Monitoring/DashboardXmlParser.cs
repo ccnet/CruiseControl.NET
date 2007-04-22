@@ -64,6 +64,9 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
     {
         [XmlAttribute("projectName", DataType = "NMTOKEN")]
         public string ProjectName;
+
+        [XmlAttribute("activity", DataType = "NMTOKEN")]
+        public string Activity;
     }
 
 	public class DashboardXmlParser : IDashboardXmlParser
@@ -162,7 +165,8 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
                         foreach (DashboardQueuedRequest dashboardQueuedRequest in dashboardQueue.Requests)
                         {
                             QueuedRequestSnapshot queuedRequestSnapshot = new QueuedRequestSnapshot(
-                                dashboardQueuedRequest.ProjectName);
+                                dashboardQueuedRequest.ProjectName,
+                                new ProjectActivity(dashboardQueuedRequest.Activity));
                             queueSnapshot.Requests.Add(queuedRequestSnapshot);
                         }
                     }

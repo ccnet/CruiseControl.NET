@@ -37,7 +37,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 			get { return QueueSnapshot == null; }
 		}
 
-		public bool IsNamedQueueNode
+		public bool IsQueueNode
 		{
 			get { return QueueSnapshot != null && QueuedRequestSnapshot == null; }
 		}

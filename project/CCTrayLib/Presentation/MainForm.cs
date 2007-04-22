@@ -45,15 +45,15 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 		private ColumnHeader colLastBuildTime;
 		private bool systemShutdownInProgress;
 		private MenuItem mnuFixBuild;
-		private System.Windows.Forms.MenuItem mnuCancelPending;
-		private System.Windows.Forms.Splitter splitterQueueView;
-		private System.Windows.Forms.Button btnToggleQueueView;
-		private System.Windows.Forms.Panel pnlButtons;
-		private System.Windows.Forms.Panel pnlViewQueues;
-		private System.Windows.Forms.TreeView queueTreeView;
-		private System.Windows.Forms.ContextMenu queueContextMenu;
-		private System.Windows.Forms.ImageList queueIconList;
-		private System.Windows.Forms.MenuItem mnuQueueCancelPending;
+		private MenuItem mnuCancelPending;
+		private Splitter splitterQueueView;
+		private Button btnToggleQueueView;
+		private Panel pnlButtons;
+		private Panel pnlViewQueues;
+		private QueueTreeView queueTreeView;
+		private ContextMenu queueContextMenu;
+		private ImageList queueIconList;
+		private MenuItem mnuQueueCancelPending;
 		private PersistWindowState windowState;
 
 		public MainForm(ICCTrayMultiConfiguration configuration)
@@ -193,7 +193,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 			this.btnForceBuild = new System.Windows.Forms.Button();
 			this.splitterQueueView = new System.Windows.Forms.Splitter();
 			this.pnlViewQueues = new System.Windows.Forms.Panel();
-			this.queueTreeView = new System.Windows.Forms.TreeView();
+			this.queueTreeView = new QueueTreeView();
 			this.queueIconList = new System.Windows.Forms.ImageList(this.components);
 			this.queueContextMenu = new System.Windows.Forms.ContextMenu();
 			this.mnuQueueCancelPending = new System.Windows.Forms.MenuItem();
@@ -412,7 +412,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 			this.btnToggleQueueView.Name = "btnToggleQueueView";
 			this.btnToggleQueueView.Size = new System.Drawing.Size(85, 23);
 			this.btnToggleQueueView.TabIndex = 1;
-            this.btnToggleQueueView.Text = "&Queue Activity";
+            this.btnToggleQueueView.Text = "Show &Queues";
 			this.btnToggleQueueView.Click += new System.EventHandler(this.btnToggleQueueView_Click);
 			// 
 			// btnForceBuild
@@ -675,7 +675,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 			controller.VolunteerToFixBuild();
 		}
 
-		private void btnToggleQueueView_Click(object sender, System.EventArgs e)
+		private void btnToggleQueueView_Click(object sender, EventArgs e)
 		{
 			bool isQueueViewVisible = !pnlViewQueues.Visible;
 			splitterQueueView.Visible = isQueueViewVisible;
@@ -683,16 +683,12 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 			UpdateViewQueuesButtonLabel();
 
 			if (isQueueViewVisible)
-			{
 				controller.BindToQueueTreeView(queueTreeView);
-			}
 			else
-			{
 				controller.UnbindToQueueTreeView(queueTreeView);
-			}
 		}
 
-		private void queueTreeView_MouseUp(object sender, System.Windows.Forms.MouseEventArgs e)
+		private void queueTreeView_MouseUp(object sender, MouseEventArgs e)
 		{
 			if (e.Button == System.Windows.Forms.MouseButtons.Right)
 			{
@@ -703,7 +699,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 					queueTreeView.SelectedNode = clickNode;
 
 					IntegrationQueueTreeNodeTag tag = clickNode.Tag as IntegrationQueueTreeNodeTag;
-					if (tag.IsQueuedItemNode)
+                    if (tag != null && tag.IsQueuedItemNode)
 					{
 						mnuQueueCancelPending.Enabled = !tag.IsFirstItemOnQueue;
 						queueContextMenu.Show(queueTreeView, clickPoint);
@@ -712,17 +708,19 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 			}
 		}
 
-		private void mnuQueueCancelPending_Click(object sender, System.EventArgs e)
+		private void mnuQueueCancelPending_Click(object sender, EventArgs e)
 		{
-			if (queueTreeView.SelectedNode == null) return;
+			if (queueTreeView.SelectedNode == null) 
+                return;
 			IntegrationQueueTreeNodeTag tag = queueTreeView.SelectedNode.Tag as IntegrationQueueTreeNodeTag;
-			if (tag.QueuedRequestSnapshot == null) return;
+			if (tag == null || tag.QueuedRequestSnapshot == null) 
+                return;
 			controller.CancelPendingProjectByName(tag.QueuedRequestSnapshot.ProjectName);
 		}
 
 		private void UpdateViewQueuesButtonLabel()
 		{
-			btnToggleQueueView.Text = (pnlViewQueues.Visible) ? "Hide &Queues" : "&Queue Activity" ;
+			btnToggleQueueView.Text = (pnlViewQueues.Visible) ? "Hide &Queues" : "Show &Queues" ;
 		}
 
 		// Implements the manual sorting of items by columns.

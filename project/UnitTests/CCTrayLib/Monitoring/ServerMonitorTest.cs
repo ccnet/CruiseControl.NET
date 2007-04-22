@@ -153,7 +153,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Monitoring
         {
             CruiseServerSnapshot snapshot = new CruiseServerSnapshot();
             snapshot.QueueSetSnapshot.Queues.Add(new QueueSnapshot("Test"));
-            snapshot.QueueSetSnapshot.Queues[0].Requests.Add(new QueuedRequestSnapshot("Project"));
+            snapshot.QueueSetSnapshot.Queues[0].Requests.Add(new QueuedRequestSnapshot("Project", ProjectActivity.CheckingModifications));
             return snapshot;
         }
 

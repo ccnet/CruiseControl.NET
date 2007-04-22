@@ -9,15 +9,22 @@ namespace ThoughtWorks.CruiseControl.Remote
 	public class QueuedRequestSnapshot
 	{
 		private string projectName;
+	    private ProjectActivity activity;
 
-		public QueuedRequestSnapshot(string projectName)
+		public QueuedRequestSnapshot(string projectName, ProjectActivity activity)
 		{
 			this.projectName = projectName;
+            this.activity = activity;
 		}
 
 		public string ProjectName
 		{
 			get { return projectName; }
 		}
+
+	    public ProjectActivity Activity
+	    {
+	        get { return activity; }
+	    }
 	}
 }
