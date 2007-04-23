@@ -46,7 +46,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard.Actions
 			buildPlugin.ConfiguredLinkDescription = "My Plugin";
 			buildPlugin.XslFileNames = xslFiles;
 
-			MultipleXslReportBuildAction xslReportAction = new MultipleXslReportBuildAction(null);
+			MultipleXslReportBuildAction xslReportAction = new MultipleXslReportBuildAction(null, null);
 			actionInstantiatorMock.ExpectAndReturn("InstantiateAction", xslReportAction, typeof (MultipleXslReportBuildAction));
 
 			INamedAction[] namedActions = buildPlugin.NamedActions;

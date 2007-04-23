@@ -23,7 +23,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.IO
 
 		private void CreateCruiseRequest(string relativePath)
 		{
-			underlyingRequest = new NameValueCollectionRequest(queryString, applicationPath + relativePath, null, applicationPath);
+            underlyingRequest = new NameValueCollectionRequest(queryString, null, applicationPath + relativePath, null, applicationPath);
 			cruiseRequest = new RequestWrappingCruiseRequest(underlyingRequest);
 		}
 

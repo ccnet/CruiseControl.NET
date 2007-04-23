@@ -32,7 +32,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard.Actions
 			expectedXsltArgs["applicationPath"] = "myAppPath";
 			buildLogTransformerMock.ExpectAndReturn("Transform", "transformed", buildSpecifier, new string[] { @"xsl\myxsl.xsl" }, new HashtableConstraint(expectedXsltArgs));
 
-			XslReportBuildAction action = new XslReportBuildAction((IBuildLogTransformer) buildLogTransformerMock.MockInstance);
+			XslReportBuildAction action = new XslReportBuildAction((IBuildLogTransformer) buildLogTransformerMock.MockInstance, null);
 			action.XslFileName = @"xsl\myxsl.xsl";
 
 			Assert.AreEqual("transformed", ((HtmlFragmentResponse)action.Execute(cruiseRequest)).ResponseFragment);

@@ -927,6 +927,8 @@
     <Compile Include="WebDashboard\Dashboard\TopControlsViewBuilderTest.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="WebDashboard\IO\ConditionalGetFingerprintTest.cs" />
+    <Compile Include="WebDashboard\IO\FingerprintFactoryTest.cs" />
     <Compile Include="WebDashboard\IO\RequestWrappingCruiseRequestTest.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -1024,7 +1026,6 @@
     <Compile Include="Xsl\StylesheetTestFixture.cs">
       <SubType>Code</SubType>
     </Compile>
-    <None Include="ClassDiagram1.cd" />
     <None Include="resources\Statistics.csv" />
     <None Include="resources\templates\TestTransform.vm" />
     <None Include="test.config" />

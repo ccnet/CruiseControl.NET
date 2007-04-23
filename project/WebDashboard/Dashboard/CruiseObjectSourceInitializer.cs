@@ -34,8 +34,8 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 
 			objectionManager.AddInstanceForType(typeof (IRequest),
 			                                    new AggregatedRequest(
-			                                    	new NameValueCollectionRequest(request.Form, request.Path, request.RawUrl, request.ApplicationPath),
-			                                    	new NameValueCollectionRequest(request.QueryString, request.Path, request.RawUrl, request.ApplicationPath)));
+			                                    	new NameValueCollectionRequest(request.Form, request.Headers, request.Path, request.RawUrl, request.ApplicationPath),
+			                                    	new NameValueCollectionRequest(request.QueryString, request.Headers, request.Path, request.RawUrl, request.ApplicationPath)));
 
 			objectionManager.AddInstanceForType(typeof (IUrlBuilder),
 			                                    new AbsolutePathUrlBuilderDecorator(
@@ -102,6 +102,8 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 			{
 				foreach (INamedAction action in plugin.NamedActions)
 				{
+				    objectionManager.AddInstanceForName(action.ActionName + "_CONDITIONAL_GET_FINGERPRINT_CHAIN", action.Action)
+				        .Decorate(typeof (CruiseActionProxyAction)).Decorate(typeof (SiteTemplateActionDecorator));
 					objectionManager.AddInstanceForName(action.ActionName, action.Action)
 						.Decorate(typeof (ServerCheckingProxyAction)).Decorate(typeof (BuildCheckingProxyAction)).Decorate(typeof (ProjectCheckingProxyAction)).Decorate(typeof (CruiseActionProxyAction))
 						.Decorate(typeof (CachingActionProxy)).Decorate(typeof (ExceptionCatchingActionProxy)).Decorate(typeof (SiteTemplateActionDecorator));

@@ -40,7 +40,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 			velocityViewGeneratorMock = new DynamicMock(typeof(IVelocityViewGenerator));
 
 			viewBuilder = new TopControlsViewBuilder((ICruiseRequest) cruiseRequestMock.MockInstance, (ILinkFactory) linkFactoryMock.MockInstance,
-				(IVelocityViewGenerator) velocityViewGeneratorMock.MockInstance);
+				(IVelocityViewGenerator) velocityViewGeneratorMock.MockInstance, null);
 
 			serverSpecifier = new DefaultServerSpecifier("myServer");
 			projectSpecifier = new DefaultProjectSpecifier(serverSpecifier, "myProject");

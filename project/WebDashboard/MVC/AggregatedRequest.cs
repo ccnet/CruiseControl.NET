@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Specialized;
 
 namespace ThoughtWorks.CruiseControl.WebDashboard.MVC
@@ -89,5 +90,16 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.MVC
 		{
 			get { return request1.ApplicationPath; }
 		}
+
+
+	    public string IfModifiedSince
+	    {
+            get { return request1.IfModifiedSince; }
+	    }
+
+	    public string IfNoneMatch
+	    {
+            get { return request1.IfNoneMatch; }
+	    }
 	}
 }

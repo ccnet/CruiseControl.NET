@@ -8,17 +8,19 @@ using ThoughtWorks.CruiseControl.WebDashboard.MVC.Cruise;
 namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard.Actions
 {
 	[ReflectorType("xslReportBuildAction")]
-	public class XslReportBuildAction : ICruiseAction
+	public class XslReportBuildAction : ICruiseAction, IConditionalGetFingerprintProvider
 	{
 		private readonly IBuildLogTransformer buildLogTransformer;
-		private string xslFileName;
+	    private readonly IFingerprintFactory fingerprintFactory;
+	    private string xslFileName;
 
-		public XslReportBuildAction(IBuildLogTransformer buildLogTransformer)
-		{
-			this.buildLogTransformer = buildLogTransformer;
-		}
+        public XslReportBuildAction(IBuildLogTransformer buildLogTransformer, IFingerprintFactory fingerprintFactory)
+        {
+            this.buildLogTransformer = buildLogTransformer;
+            this.fingerprintFactory = fingerprintFactory;
+        }
 
-		public IResponse Execute(ICruiseRequest cruiseRequest)
+	    public IResponse Execute(ICruiseRequest cruiseRequest)
 		{
 			if (xslFileName == null)
 			{
@@ -41,5 +43,10 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard.Actions
 				xslFileName = value;
 			}
 		}
+
+	    public ConditionalGetFingerprint GetFingerprint(IRequest request)
+	    {
+            return fingerprintFactory.BuildFromFileNames(XslFileName);
+	    }
 	}
 }

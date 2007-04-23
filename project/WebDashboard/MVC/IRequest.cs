@@ -13,5 +13,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.MVC
 		string FileNameWithoutExtension { get; }
 		string[] SubFolders { get; }
 		string ApplicationPath { get; }
+	    string IfModifiedSince { get; }
+	    string IfNoneMatch { get; }
 	}
 }

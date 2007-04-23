@@ -7,14 +7,16 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.MVC
 	public class NameValueCollectionRequest : IRequest
 	{
 		private readonly NameValueCollection map;
-		private readonly string path;
+	    private readonly NameValueCollection headers;
+	    private readonly string path;
 		private readonly string rawUrl;
 		private readonly string applicationPath;
 
-		public NameValueCollectionRequest(NameValueCollection map, string path, string rawUrl, string applicationPath)
+		public NameValueCollectionRequest(NameValueCollection map, NameValueCollection headers, string path, string rawUrl, string applicationPath)
 		{
 			this.map = map;
-			this.path = path;
+		    this.headers = headers;
+		    this.path = path;
 			this.rawUrl = rawUrl;
 			this.applicationPath = applicationPath;
 		}
@@ -117,5 +119,16 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.MVC
 		{
 			get { return applicationPath; }
 		}
+
+
+	    public string IfModifiedSince
+	    {
+            get { return headers["If-Modified-Since"]; }
+	    }
+
+	    public string IfNoneMatch
+	    {
+            get { return headers["If-None-Match"]; }
+	    }
 	}
 }

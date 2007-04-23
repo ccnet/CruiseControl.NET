@@ -45,7 +45,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.MVC.Cruise
 
 		private IRequest CreateRequest()
 		{
-			return new NameValueCollectionRequest(null, null, null, null);
+            return new NameValueCollectionRequest(null, null, null, null, null);
 		}
 
 		[Test]

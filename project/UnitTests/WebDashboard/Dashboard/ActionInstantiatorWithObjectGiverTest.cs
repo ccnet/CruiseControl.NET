@@ -16,7 +16,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 		{
 			DynamicMock objectSourceMock = new DynamicMock(typeof(ObjectSource));
 			Type typeToInstantiate = typeof(XslReportBuildAction);
-			ICruiseAction instantiated = new XslReportBuildAction(null);
+			ICruiseAction instantiated = new XslReportBuildAction(null, null);
 			objectSourceMock.ExpectAndReturn("GetByType", instantiated, typeToInstantiate);
 
 			ActionInstantiatorWithObjectSource instantiator = new ActionInstantiatorWithObjectSource((ObjectSource) objectSourceMock.MockInstance);

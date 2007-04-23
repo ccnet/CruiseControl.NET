@@ -1,4 +1,7 @@
+using System;
 using System.Collections;
+using System.Web;
+using ThoughtWorks.CruiseControl.WebDashboard.Dashboard.ActionDecorators;
 using ThoughtWorks.CruiseControl.WebDashboard.IO;
 using ThoughtWorks.CruiseControl.WebDashboard.MVC;
 using ThoughtWorks.CruiseControl.WebDashboard.MVC.View;
@@ -9,17 +12,19 @@ using ThoughtWorks.CruiseControl.WebDashboard.Plugins.ServerReport;
 
 namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 {
-	public class TopControlsViewBuilder
+	public class TopControlsViewBuilder : IConditionalGetFingerprintProvider
 	{
 		private readonly ICruiseRequest request;
 		private readonly ILinkFactory linkFactory;
 		private readonly IVelocityViewGenerator velocityViewGenerator;
+	    private readonly IFingerprintFactory fingerprintFactory;
 
-		public TopControlsViewBuilder(ICruiseRequest request, ILinkFactory linkFactory, IVelocityViewGenerator velocityViewGenerator)
+	    public TopControlsViewBuilder(ICruiseRequest request, ILinkFactory linkFactory, IVelocityViewGenerator velocityViewGenerator, IFingerprintFactory fingerprintFactory)
 		{
 			this.request = request;
 			this.linkFactory = linkFactory;
 			this.velocityViewGenerator = velocityViewGenerator;
+		    this.fingerprintFactory = fingerprintFactory;
 		}
 
 		public HtmlFragmentResponse Execute()
@@ -53,5 +58,10 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 
 			return velocityViewGenerator.GenerateView("TopMenu.vm", velocityContext);
 		}
+
+	    public ConditionalGetFingerprint GetFingerprint(IRequest request)
+	    {
+	        return fingerprintFactory.BuildFromFileNames();
+	    }
 	}
 }

@@ -1,5 +1,3 @@
-using ThoughtWorks.CruiseControl.Core.Util;
-
 namespace ThoughtWorks.CruiseControl.Core.Reporting.Dashboard.Navigation
 {
 	public class DefaultServerSpecifier : IServerSpecifier
@@ -49,7 +47,6 @@ namespace ThoughtWorks.CruiseControl.Core.Reporting.Dashboard.Navigation
 			{
 				DefaultServerSpecifier other = obj as DefaultServerSpecifier;
 				return this.ServerName == other.ServerName;
-//				return (StringUtil.EqualsIngnoreCase(this.ServerName, other.ServerName));
 			}
 			return false;
 		}

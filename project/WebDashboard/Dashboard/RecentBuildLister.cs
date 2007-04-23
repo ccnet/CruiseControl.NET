@@ -1,6 +1,10 @@
 using System;
 using System.Collections;
+using System.Web;
+using ThoughtWorks.CruiseControl.Core;
 using ThoughtWorks.CruiseControl.Core.Reporting.Dashboard.Navigation;
+using ThoughtWorks.CruiseControl.WebDashboard.Dashboard.ActionDecorators;
+using ThoughtWorks.CruiseControl.WebDashboard.IO;
 using ThoughtWorks.CruiseControl.WebDashboard.MVC;
 using ThoughtWorks.CruiseControl.WebDashboard.MVC.View;
 using ThoughtWorks.CruiseControl.WebDashboard.Plugins.BuildReport;
@@ -9,22 +13,24 @@ using ThoughtWorks.CruiseControl.WebDashboard.ServerConnection;
 
 namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 {
-	public class RecentBuildLister : IRecentBuildsViewBuilder, IAllBuildsViewBuilder
+	public class RecentBuildLister : IRecentBuildsViewBuilder, IAllBuildsViewBuilder, IConditionalGetFingerprintProvider
 	{
 		private readonly IVelocityTransformer velocityTransformer;
 		private readonly IVelocityViewGenerator velocityViewGenerator;
 		private readonly ILinkFactory linkFactory;
 		private readonly ILinkListFactory linkListFactory;
-		private readonly IFarmService farmService;
+	    private readonly IFingerprintFactory fingerprintFactory;
+	    private readonly IFarmService farmService;
 
 		public RecentBuildLister(IFarmService farmService, IVelocityTransformer velocityTransformer, 
-			IVelocityViewGenerator viewGenerator, ILinkFactory linkFactory, ILinkListFactory linkListFactory)
+			IVelocityViewGenerator viewGenerator, ILinkFactory linkFactory, ILinkListFactory linkListFactory, IFingerprintFactory fingerprintFactory)
 		{
 			this.farmService = farmService;
 			this.velocityTransformer = velocityTransformer;
 			this.velocityViewGenerator = viewGenerator;
 			this.linkFactory = linkFactory;
 			this.linkListFactory = linkListFactory;
+		    this.fingerprintFactory = fingerprintFactory;
 		}
 
 		// ToDo - use concatenatable views here, not strings
@@ -71,5 +77,18 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 
 			return velocityViewGenerator.GenerateView(@"AllBuilds.vm", primaryContext);
 		}
+
+	    public ConditionalGetFingerprint GetFingerprint(IRequest request)
+	    {
+	        ICruiseRequest cruiseRequest = new NameValueCruiseRequestFactory().CreateCruiseRequest(request);
+	        IBuildSpecifier mostRecentBuildSpecifier =
+	            farmService.GetMostRecentBuildSpecifiers(cruiseRequest.ProjectSpecifier, 1)[0];
+	        DateTime mostRecentBuildDate = new LogFile(mostRecentBuildSpecifier.BuildName).Date;
+	        ConditionalGetFingerprint mostRecentBuildFingerprint =
+	            fingerprintFactory.BuildFromDate(mostRecentBuildDate);
+            ConditionalGetFingerprint mostRecentTemplateFingerprint = 
+                fingerprintFactory.BuildFromFileNames(@"BuildRows.vm", @"RecentBuilds.vm", @"AllBuilds.vm");
+	        return mostRecentBuildFingerprint.Combine(mostRecentTemplateFingerprint);
+	    }
 	}
 }

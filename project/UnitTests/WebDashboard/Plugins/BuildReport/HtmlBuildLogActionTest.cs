@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using NMock;
 using NUnit.Framework;
@@ -20,23 +21,26 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Plugins.BuildReport
 		private DynamicMock buildRetrieverMock;
 		private DynamicMock urlBuilderMock;
 		private DynamicMock velocityViewGeneratorMock;
+        private DynamicMock fingerprintFactoryMock;
 
 		private string buildLog;
 		private Build build;
 		private DefaultBuildSpecifier buildSpecifier;
 		private IResponse response;
 
-		[SetUp]
+	    [SetUp]
 		public void Setup()
 		{
 			buildRetrieverMock = new DynamicMock(typeof(IBuildRetriever));
 			velocityViewGeneratorMock = new DynamicMock(typeof(IVelocityViewGenerator));
 			urlBuilderMock = new DynamicMock(typeof(ICruiseUrlBuilder));
 			requestMock = new DynamicMock(typeof(ICruiseRequest));
+		    fingerprintFactoryMock = new DynamicMock(typeof (IFingerprintFactory));
 
 			buildLogAction = new HtmlBuildLogAction((IBuildRetriever) buildRetrieverMock.MockInstance, 
 				(IVelocityViewGenerator) velocityViewGeneratorMock.MockInstance,
-				(ICruiseUrlBuilder) urlBuilderMock.MockInstance);
+				(ICruiseUrlBuilder) urlBuilderMock.MockInstance, 
+                (IFingerprintFactory) fingerprintFactoryMock.MockInstance);
 
 			buildLog = "some stuff in a log with a < and >";
 			buildSpecifier = new DefaultBuildSpecifier(new DefaultProjectSpecifier(new DefaultServerSpecifier("myserver"), "myproject"), "mybuild");
@@ -74,5 +78,21 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Plugins.BuildReport
 
 			VerifyAll();
 		}
+
+	    [Test]
+        [Ignore("Difficult to mock because there is not a simple way to change a build name in to a build date.")]
+	    public void ShouldReturnFingerprintBasedOnLogFileDateAndTemplateDate()
+	    {
+	        const string TEST_TOKEN = "test token";
+            DateTime logFileDate = new DateTime(2006,12,2,1,4,5);
+            DateTime templateDate = new DateTime(2005,1,2);
+
+            DynamicMock requestMock = new DynamicMock(typeof(IRequest));
+            requestMock.SetupResult("SubFolders", new string[] { "server", "testServer", "project", "testProject", "build", "testBuild" });
+
+	        ConditionalGetFingerprint expectedFingerprint = new ConditionalGetFingerprint(logFileDate, TEST_TOKEN);
+
+            Assert.AreEqual(expectedFingerprint, buildLogAction.GetFingerprint((IRequest) requestMock.MockInstance));
+	    }
 	}
 }

@@ -17,7 +17,8 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.MVC.ASPNET
 		public void ProcessRequest(HttpContext context)
 		{
 			ObjectionStore objectionStore = new ObjectionStore(
-				new CachingImplementationResolver(new NMockAwareImplementationResolver(), new CachedTypeMap(context.Cache, RESOLVED_TYPE_MAP)), new MaxLengthConstructorSelectionStrategy());
+				new CachingImplementationResolver(new NMockAwareImplementationResolver(), new CachedTypeMap(context.Cache, RESOLVED_TYPE_MAP)), 
+                new MaxLengthConstructorSelectionStrategy());
 			ObjectSource objectSource = new CruiseObjectSourceInitializer(objectionStore).SetupObjectSourceForRequest(context);
 
 			IResponse response = ((RequestController) objectSource.GetByType(typeof (RequestController))).Do();

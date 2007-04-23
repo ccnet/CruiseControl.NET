@@ -120,6 +120,7 @@
     <Reference Include="System.Configuration.Install">
       <Name>System.Configuration.Install</Name>
     </Reference>
+    <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Web">
       <Name>System.Web</Name>
@@ -174,6 +175,9 @@
     <Compile Include="Configuration\ServerLocation.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="IO\IConditionalGetFingerprintProvider.cs" />
+    <Compile Include="IO\AssemblyVersionProvider.cs" />
+    <Compile Include="IO\ConditionalGetFingerprint.cs" />
     <Compile Include="Dashboard\ActionDecorators\SiteTemplateActionDecorator.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -342,9 +346,11 @@
     <Compile Include="IO\IResponseCache.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="IO\IVersionProvider.cs" />
     <Compile Include="IO\RequestWrappingCruiseRequest.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="IO\UncombinableFingerprintException.cs" />
     <Compile Include="MVC\AggregatedRequest.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -396,6 +402,7 @@
     <Compile Include="MVC\Cruise\UnknownActionAction.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="IO\FingerprintFactory.cs" />
     <Compile Include="MVC\HtmlFragmentResponse.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -405,6 +412,7 @@
     <Compile Include="MVC\IActionFactory.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="MVC\IFingerprintFactory.cs" />
     <Compile Include="MVC\IRequest.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -417,6 +425,7 @@
     <Compile Include="MVC\NameValueCollectionRequest.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="MVC\NotModifiedResponse.cs" />
     <Compile Include="MVC\RedirectResponse.cs">
       <SubType>Code</SubType>
     </Compile>

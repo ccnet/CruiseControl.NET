@@ -1,4 +1,5 @@
 using System.Web;
+using ThoughtWorks.CruiseControl.WebDashboard.IO;
 
 namespace ThoughtWorks.CruiseControl.WebDashboard.MVC
 {
@@ -20,5 +21,11 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.MVC
 		{
 			response.Redirect(redirectUrl);
 		}
+
+	    public ConditionalGetFingerprint ServerFingerprint
+	    {
+            get { return ConditionalGetFingerprint.NOT_AVAILABLE; }
+	        set { /* ignore attempts to fingerprint redirects */ }
+	    }
 	}
 }

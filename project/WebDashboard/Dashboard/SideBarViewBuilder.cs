@@ -1,5 +1,8 @@
+using System;
 using System.Collections;
+using System.Web;
 using ThoughtWorks.CruiseControl.Core.Reporting.Dashboard.Navigation;
+using ThoughtWorks.CruiseControl.WebDashboard.Dashboard.ActionDecorators;
 using ThoughtWorks.CruiseControl.WebDashboard.IO;
 using ThoughtWorks.CruiseControl.WebDashboard.MVC;
 using ThoughtWorks.CruiseControl.WebDashboard.MVC.View;
@@ -8,7 +11,7 @@ using ThoughtWorks.CruiseControl.WebDashboard.ServerConnection;
 
 namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 {
-	public class SideBarViewBuilder
+	public class SideBarViewBuilder : IConditionalGetFingerprintProvider
 	{
 		private readonly ICruiseRequest request;
 		private readonly IBuildNameRetriever buildNameRetriever;
@@ -18,9 +21,10 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 		private readonly ILinkListFactory linkListFactory;
 		private readonly ILinkFactory linkFactory;
 		private readonly IFarmService farmService;
-		
+	    private readonly IFingerprintFactory fingerprintFactory;
 
-		public SideBarViewBuilder(ICruiseRequest request, IBuildNameRetriever buildNameRetriever, IRecentBuildsViewBuilder recentBuildsViewBuilder, IPluginLinkCalculator pluginLinkCalculator, IVelocityViewGenerator velocityViewGenerator, ILinkFactory linkFactory, ILinkListFactory linkListFactory, IFarmService farmService)
+
+	    public SideBarViewBuilder(ICruiseRequest request, IBuildNameRetriever buildNameRetriever, IRecentBuildsViewBuilder recentBuildsViewBuilder, IPluginLinkCalculator pluginLinkCalculator, IVelocityViewGenerator velocityViewGenerator, ILinkFactory linkFactory, ILinkListFactory linkListFactory, IFarmService farmService, IFingerprintFactory fingerprintFactory)
 		{
 			this.request = request;
 			this.buildNameRetriever = buildNameRetriever;
@@ -30,6 +34,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 			this.linkListFactory = linkListFactory;
 			this.linkFactory = linkFactory;
 			this.farmService = farmService;
+            this.fingerprintFactory = fingerprintFactory;
 		}
 
 		public HtmlFragmentResponse Execute()
@@ -77,5 +82,13 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 
 			return velocityViewGenerator.GenerateView(velocityTemplateName, velocityContext);
 		}
+
+	    public ConditionalGetFingerprint GetFingerprint(IRequest request)
+	    {
+	        ConditionalGetFingerprint mostRecentTemplateFingerprint =
+                fingerprintFactory.BuildFromFileNames(@"FarmSideBar.vm", @"ServerSideBar.vm", @"ProjectSideBar.vm", @"BuildSideBar.vm");
+	        return ((IConditionalGetFingerprintProvider) recentBuildsViewBuilder).GetFingerprint(request).Combine(
+	            mostRecentTemplateFingerprint);
+	    }
 	}
 }

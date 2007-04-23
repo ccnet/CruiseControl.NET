@@ -1,9 +1,11 @@
+using System;
 using System.Collections;
 using NMock;
 using NUnit.Framework;
 using ThoughtWorks.CruiseControl.Core.Reporting.Dashboard.Navigation;
 using ThoughtWorks.CruiseControl.UnitTests.UnitTestUtils;
 using ThoughtWorks.CruiseControl.WebDashboard.Dashboard;
+using ThoughtWorks.CruiseControl.WebDashboard.IO;
 using ThoughtWorks.CruiseControl.WebDashboard.MVC;
 using ThoughtWorks.CruiseControl.WebDashboard.MVC.View;
 using ThoughtWorks.CruiseControl.WebDashboard.Plugins.BuildReport;
@@ -20,13 +22,14 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 		private DynamicMock velocityViewGeneratorMock;
 		private DynamicMock linkFactoryMock;
 		private DynamicMock linkListFactoryMock;
+        private DynamicMock fingerprintFactoryMock;
 
 		private RecentBuildLister lister;
 		private IProjectSpecifier projectSpecifier;
 		private DefaultBuildSpecifier build2Specifier;
 		private DefaultBuildSpecifier build1Specifier;
 
-		[SetUp]
+	    [SetUp]
 		public void Setup()
 		{
 			farmServiceMock = new DynamicMock(typeof(IFarmService));
@@ -34,16 +37,18 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 			velocityViewGeneratorMock = new DynamicMock(typeof(IVelocityViewGenerator));
 			linkFactoryMock = new DynamicMock(typeof(ILinkFactory));
 			linkListFactoryMock = new DynamicMock(typeof(ILinkListFactory));
+		    fingerprintFactoryMock = new DynamicMock(typeof (IFingerprintFactory));
 
 			lister = new RecentBuildLister(
 				(IFarmService) farmServiceMock.MockInstance,
 				(IVelocityTransformer) velocityTransformerMock.MockInstance,
 				(IVelocityViewGenerator) velocityViewGeneratorMock.MockInstance,
 				(ILinkFactory) linkFactoryMock.MockInstance,
-				(ILinkListFactory) linkListFactoryMock.MockInstance);
+				(ILinkListFactory) linkListFactoryMock.MockInstance,
+                (IFingerprintFactory) fingerprintFactoryMock.MockInstance);
 
 			projectSpecifier = new DefaultProjectSpecifier(new DefaultServerSpecifier("myServer"), "myProject");
-			build2Specifier = new DefaultBuildSpecifier(projectSpecifier, "build2");
+            build2Specifier = new DefaultBuildSpecifier(projectSpecifier, "log20070401013456.xml");
 			build1Specifier = new DefaultBuildSpecifier(projectSpecifier, "build1");
 		}
 
@@ -54,6 +59,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 			velocityViewGeneratorMock.Verify();
 			linkFactoryMock.Verify();
 			linkListFactoryMock.Verify();
+            fingerprintFactoryMock.Verify();
 		}
 
 		[Test]
@@ -107,5 +113,30 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 
 			VerifyAll();
 		}
+
+	    [Test]
+	    public void ShouldReturnFingerprintBasedOnLatestBuildDateAndVelocityTemplates()
+	    {
+            // TODO: Had to change content of build2specifier so that lister.GetFingerprint could new LogFile().Date
+            // Would be nice to have a cleaner way of getting the date. Possibly from the specifier directly?
+            const string testToken = "test token";
+
+            DynamicMock requestMock = new DynamicMock(typeof(IRequest));
+	        IRequest request = (IRequest) requestMock.MockInstance;
+
+            DateTime olderDate = new DateTime(2007,1,1,1,1,1);
+            DateTime mostRecentDate = new DateTime(2007, 4, 21, 1, 7, 8);
+
+	        fingerprintFactoryMock.SetupResult("BuildFromDate", new ConditionalGetFingerprint(olderDate, testToken), typeof(DateTime));
+            fingerprintFactoryMock.SetupResult("BuildFromFileNames", new ConditionalGetFingerprint(mostRecentDate, testToken), typeof(string[]));
+
+            requestMock.SetupResult("SubFolders", new string[] {"server", "testServer", "project", "testProject", "build", "testBuild"});
+
+            farmServiceMock.SetupResult("GetMostRecentBuildSpecifiers", new IBuildSpecifier[] { build2Specifier, build1Specifier }, typeof(IProjectSpecifier), typeof(int));
+
+	        ConditionalGetFingerprint expectedFingerprint = new ConditionalGetFingerprint(mostRecentDate, testToken);
+
+            Assert.AreEqual(expectedFingerprint, lister.GetFingerprint(request));
+	    }
 	}
 }
