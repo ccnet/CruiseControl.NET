@@ -6,9 +6,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.IO
     {
         public string GetVersion()
         {
-            Assembly assembly;
-
-            assembly = Assembly.GetExecutingAssembly();
+            Assembly assembly = Assembly.GetExecutingAssembly();
             return assembly.GetName().Version.ToString();
         }
     }

@@ -6,28 +6,27 @@ using ThoughtWorks.CruiseControl.WebDashboard.MVC.View;
 
 namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard.ActionDecorators
 {
-    // ToDo - test - I think doing so will change the design a bit - will probably get more in on the constructor - should do this after 1.0
+    // ToDo - test - I think doing so will change the design a bit - will probably get more in on
+    // the constructor - should do this after 1.0
     public class SiteTemplateActionDecorator : IAction, IConditionalGetFingerprintProvider
     {
+        private const string TEMPLATE_NAME = "SiteTemplate.vm";
         private readonly IAction decoratedAction;
         private readonly IVelocityViewGenerator velocityViewGenerator;
         private readonly ObjectSource objectSource;
-        private readonly IRequest request;
-        private readonly AssemblyVersionProvider assemblyVersionProvider;
+        private readonly IVersionProvider versionProvider;
         private readonly IFingerprintFactory fingerprintFactory;
         private TopControlsViewBuilder topControlsViewBuilder;
         private SideBarViewBuilder sideBarViewBuilder;
 
         public SiteTemplateActionDecorator(IAction decoratedAction, IVelocityViewGenerator velocityViewGenerator,
-                                           ObjectSource objectSource, IRequest request,
-                                           AssemblyVersionProvider assemblyVersionProvider,
+                                           ObjectSource objectSource, IVersionProvider versionProvider,
                                            IFingerprintFactory fingerprintFactory)
         {
             this.decoratedAction = decoratedAction;
             this.velocityViewGenerator = velocityViewGenerator;
             this.objectSource = objectSource;
-            this.request = request;
-            this.assemblyVersionProvider = assemblyVersionProvider;
+            this.versionProvider = versionProvider;
             this.fingerprintFactory = fingerprintFactory;
         }
 
@@ -57,22 +56,22 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard.ActionDecorators
             }
         }
 
-        public IResponse Execute(IRequest cruiseRequest)
+        public IResponse Execute(IRequest request)
         {
             Hashtable velocityContext = new Hashtable();
-            IResponse decoratedActionResponse = decoratedAction.Execute(cruiseRequest);
+            IResponse decoratedActionResponse = decoratedAction.Execute(request);
             if (decoratedActionResponse is HtmlFragmentResponse)
             {
                 velocityContext["breadcrumbs"] = (TopControlsViewBuilder.Execute()).ResponseFragment;
                 velocityContext["sidebar"] = (SideBarViewBuilder.Execute()).ResponseFragment;
                 velocityContext["mainContent"] = ((HtmlFragmentResponse) decoratedActionResponse).ResponseFragment;
-                velocityContext["dashboardversion"] = assemblyVersionProvider.GetVersion();
+                velocityContext["dashboardversion"] = versionProvider.GetVersion();
                 if (request.ApplicationPath == "/")
                     velocityContext["applicationPath"] = string.Empty;
                 else
                     velocityContext["applicationPath"] = request.ApplicationPath;
 
-                return velocityViewGenerator.GenerateView("SiteTemplate.vm", velocityContext);
+                return velocityViewGenerator.GenerateView(TEMPLATE_NAME, velocityContext);
             }
             else
             {
@@ -88,7 +87,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard.ActionDecorators
 
         private ConditionalGetFingerprint CalculateLocalFingerprint(IRequest request)
         {
-            return fingerprintFactory.BuildFromFileNames("SiteTemplate.vm")
+            return fingerprintFactory.BuildFromFileNames(TEMPLATE_NAME)
                 .Combine(TopControlsViewBuilder.GetFingerprint(request))
                 .Combine(SideBarViewBuilder.GetFingerprint(request));
         }
