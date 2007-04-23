@@ -959,12 +959,10 @@
     <Compile Include="WebDashboard\MVC\HtmlViewTest.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="WebDashboard\MVC\HttpControllerTest.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="WebDashboard\MVC\NameValueCollectionRequestTest.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="WebDashboard\MVC\RequestControllerTest.cs" />
     <Compile Include="WebDashboard\MVC\View\LazilyInitialisingVelocityTransformerTest.cs">
       <SubType>Code</SubType>
     </Compile>
