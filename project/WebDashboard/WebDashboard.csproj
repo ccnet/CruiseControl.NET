@@ -351,9 +351,6 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="IO\UncombinableFingerprintException.cs" />
-    <Compile Include="MVC\AggregatedRequest.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="MVC\ASPNET\CachedTypeMap.cs">
       <SubType>Code</SubType>
     </Compile>

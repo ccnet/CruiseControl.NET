@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Specialized;
 using System.Web;
 using Objection;
 using ThoughtWorks.CruiseControl.Core.Reporting.Dashboard.Navigation;
@@ -32,10 +33,12 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 			HttpRequest request = context.Request;
 			objectionManager.AddInstanceForType(typeof (HttpRequest), request);
 
-			objectionManager.AddInstanceForType(typeof (IRequest),
-			                                    new AggregatedRequest(
-			                                    	new NameValueCollectionRequest(request.Form, request.Headers, request.Path, request.RawUrl, request.ApplicationPath),
-			                                    	new NameValueCollectionRequest(request.QueryString, request.Headers, request.Path, request.RawUrl, request.ApplicationPath)));
+            NameValueCollection parametersCollection = new NameValueCollection();
+            parametersCollection.Add(request.QueryString);
+            parametersCollection.Add(request.Form);
+		    objectionManager.AddInstanceForType(typeof (IRequest),
+                                                new NameValueCollectionRequest(parametersCollection, request.Headers, request.Path,
+		                                                                       request.RawUrl, request.ApplicationPath));
 
 			objectionManager.AddInstanceForType(typeof (IUrlBuilder),
 			                                    new AbsolutePathUrlBuilderDecorator(

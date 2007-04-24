@@ -932,9 +932,6 @@
     <Compile Include="WebDashboard\IO\RequestWrappingCruiseRequestTest.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="WebDashboard\MVC\AggregatedRequestTest.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="WebDashboard\MVC\Cruise\BuildCheckingProxyActionTest.cs">
       <SubType>Code</SubType>
     </Compile>

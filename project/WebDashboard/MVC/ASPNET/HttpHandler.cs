@@ -1,11 +1,6 @@
-using System.Collections;
 using System.Web;
 using Objection;
 using ThoughtWorks.CruiseControl.WebDashboard.Dashboard;
-
-namespace ThoughtWorks.CruiseControl.WebDashboard.MVC
-{
-}
 
 namespace ThoughtWorks.CruiseControl.WebDashboard.MVC.ASPNET
 {

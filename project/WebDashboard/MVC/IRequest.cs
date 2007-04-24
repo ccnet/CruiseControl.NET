@@ -1,5 +1,3 @@
-using System.Collections.Specialized;
-
 namespace ThoughtWorks.CruiseControl.WebDashboard.MVC
 {
 	public interface IRequest
@@ -8,8 +6,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.MVC
 		string GetText(string id);
 		bool GetChecked(string id);
 		int GetInt(string id, int defaultValue);
-		NameValueCollection Params { get; }
-		string RawUrl { get; }
+	    string RawUrl { get; }
 		string FileNameWithoutExtension { get; }
 		string[] SubFolders { get; }
 		string ApplicationPath { get; }

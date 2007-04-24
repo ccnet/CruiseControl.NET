@@ -6,15 +6,15 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.MVC
 	// ToDo - test!!
 	public class NameValueCollectionRequest : IRequest
 	{
-		private readonly NameValueCollection map;
+		private readonly NameValueCollection parameters;
 	    private readonly NameValueCollection headers;
 	    private readonly string path;
 		private readonly string rawUrl;
 		private readonly string applicationPath;
 
-		public NameValueCollectionRequest(NameValueCollection map, NameValueCollection headers, string path, string rawUrl, string applicationPath)
+		public NameValueCollectionRequest(NameValueCollection parameters, NameValueCollection headers, string path, string rawUrl, string applicationPath)
 		{
-			this.map = map;
+			this.parameters = parameters;
 		    this.headers = headers;
 		    this.path = path;
 			this.rawUrl = rawUrl;
@@ -23,7 +23,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.MVC
 
 		public string FindParameterStartingWith(string prefix)
 		{
-			foreach (string key in map.Keys)
+			foreach (string key in parameters.Keys)
 			{
 				if (key.StartsWith(prefix))
 				{
@@ -35,7 +35,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.MVC
 
 		public string GetText(string id)
 		{
-			string text = map[id];
+			string text = parameters[id];
 			if (text == null || text == string.Empty)
 			{
 				return string.Empty;
@@ -74,12 +74,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.MVC
 			}
 		}
 
-		public NameValueCollection Params
-		{
-			get { return map; }
-		}
-
-		public string RawUrl
+	    public string RawUrl
 		{
 			get { return rawUrl; }
 		}
