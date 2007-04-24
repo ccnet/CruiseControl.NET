@@ -21,7 +21,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 			ArrayList mappedFiles = new ArrayList();
 			foreach (string transformerFileName in transformerFileNames)
 			{
-				mappedFiles.Add(Path.Combine(physicalApplicationPathProvider.PhysicalApplicationPath, transformerFileName));
+				mappedFiles.Add(physicalApplicationPathProvider.GetFullPathFor(transformerFileName));
 			}
 			return transformer.Transform(input, (string[]) mappedFiles.ToArray(typeof (string)), xsltArgs);
 		}

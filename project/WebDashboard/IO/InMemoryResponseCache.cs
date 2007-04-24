@@ -59,7 +59,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.IO
 				string[] xslFilenames = new string[plugin.XslFileNames.Length];
 				for (int i = 0; i < xslFilenames.Length; i++)
 				{
-					xslFilenames[i] = Path.Combine(physicalApplicationPathProvider.PhysicalApplicationPath, plugin.XslFileNames[i]);
+					xslFilenames[i] = physicalApplicationPathProvider.GetFullPathFor(plugin.XslFileNames[i]);
 				}
 				return xslFilenames;
 			}

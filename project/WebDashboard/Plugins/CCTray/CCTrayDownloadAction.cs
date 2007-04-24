@@ -18,7 +18,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.CCTray
 
 		public IResponse Execute(ICruiseRequest cruiseRequest)
 		{
-			DirectoryInfo cctrayPath = new DirectoryInfo(Path.Combine(physicalApplicationPathProvider.PhysicalApplicationPath, "CCTray"));
+			DirectoryInfo cctrayPath = new DirectoryInfo(physicalApplicationPathProvider.GetFullPathFor("CCTray"));
 			if (cctrayPath.Exists)
 			{
 				FileInfo[] files = cctrayPath.GetFiles("*CCTray*.*");

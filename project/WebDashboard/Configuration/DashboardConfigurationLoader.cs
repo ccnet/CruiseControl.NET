@@ -73,7 +73,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Configuration
 			}
 			if (! Path.IsPathRooted(path))
 			{
-				path = Path.Combine(physicalApplicationPathProvider.PhysicalApplicationPath, path);
+				path = physicalApplicationPathProvider.GetFullPathFor(path);
 			}
 			return path;
 		}

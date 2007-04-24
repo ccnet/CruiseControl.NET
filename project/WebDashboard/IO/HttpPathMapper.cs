@@ -1,3 +1,4 @@
+using System.IO;
 using System.Web;
 using ThoughtWorks.CruiseControl.Core.Reporting.Dashboard.Navigation;
 
@@ -15,14 +16,9 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.IO
 			this.context = context;
 		}
 
-		public string GetLocalPathFromURLPath(string originalPath)
-		{
-			return context.Server.MapPath(originalPath);
-		}
-
-		public string PhysicalApplicationPath
-		{
-			get { return context.Request.PhysicalApplicationPath; }
-		}
+	    public string GetFullPathFor(string appRelativePath)
+	    {
+	        return Path.Combine(context.Request.PhysicalApplicationPath, appRelativePath);
+	    }
 	}
 }

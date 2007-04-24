@@ -17,7 +17,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Dashboard
 
 			PathMappingMultiTransformer transformer = new PathMappingMultiTransformer((IPhysicalApplicationPathProvider) pathProviderStub.MockInstance, (IMultiTransformer) delegateMock.MockInstance);
 
-			pathProviderStub.SetupResult("PhysicalApplicationPath", @"c:\myAppPath");
+            pathProviderStub.ExpectAndReturn("GetFullPathFor", @"c:\myAppPath\xslFile1", "xslFile1");
+            pathProviderStub.ExpectAndReturn("GetFullPathFor", @"c:\myAppPath\xslFile2", "xslFile2");
 
 			delegateMock.ExpectAndReturn("Transform", "output", "myInput", new string[] { @"c:\myAppPath\xslFile1", @"c:\myAppPath\xslFile2" }, null);
 

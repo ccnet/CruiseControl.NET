@@ -21,7 +21,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.MVC
             DateTime newestFileDate = DateTime.MinValue;
             foreach (string filename in filenames)
             {
-                string fullFilePath = Path.Combine(pathProvider.PhysicalApplicationPath, filename);
+                string fullFilePath = pathProvider.GetFullPathFor(filename);
                 DateTime fileModifiedDate = File.GetLastWriteTimeUtc(fullFilePath);
                 if (newestFileDate < fileModifiedDate)
                 {

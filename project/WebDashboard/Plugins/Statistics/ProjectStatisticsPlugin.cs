@@ -55,7 +55,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.Statistics
 			Hashtable xsltArgs = new Hashtable();
 			xsltArgs["applicationPath"] = cruiseRequest.Request.ApplicationPath;
 
-			string xslFile = Path.Combine(pathProvider.PhysicalApplicationPath, XslFileName);
+			string xslFile = pathProvider.GetFullPathFor(XslFileName);
 			string statisticsDocument = farmService.GetStatisticsDocument(cruiseRequest.ProjectSpecifier);
 			return new HtmlFragmentResponse(transformer.Transform(statisticsDocument, xslFile, xsltArgs));
 		}
