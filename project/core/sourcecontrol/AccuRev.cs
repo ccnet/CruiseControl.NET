@@ -2,6 +2,7 @@ using System;
 using System.Collections.Specialized;
 using System.IO;
 using System.Globalization;
+using System.Text.RegularExpressions;
 using Exortech.NetReflector;
 using ThoughtWorks.CruiseControl.Core.Sourcecontrol;
 using ThoughtWorks.CruiseControl.Core.Util;
@@ -146,15 +147,18 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 		private string GetBasisStreamName(IIntegrationResult result)
 		{
 			string line;
+			Regex findBasisRegex = new Regex(@"^\s*Basis:\s+(.+)$");
 			PossiblyLogIn(result);
 			ProcessResult cmdResults = RunCommand("info", result);
 			StringReader infoStdOut = new StringReader(cmdResults.StandardOutput);
 			while ((line = infoStdOut.ReadLine()) != null)
 			{
-				if (line.StartsWith("Basis:"))
-					return line.Substring(6).Trim();	// Format is: "Basis:          __stream_name__"
+				Match parsed = findBasisRegex.Match(line);
+				if (parsed.Success)
+					return parsed.Groups[1].ToString().Trim();	
+				// Format is: "Basis:          __stream_name__"
 			}
-			Log.Error(string.Format("No \"Basis:\" line found in output from \"accurev info\": {0}", cmdResults.StandardOutput));
+			Log.Error(string.Format("No \"Basis:\" line found in output from AccuRev \"accurev info\": {0}", cmdResults.StandardOutput));
 			return "";
 		}
 

@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.IO;
+using System.Text.RegularExpressions;
 using ThoughtWorks.CruiseControl.Core.Util;
 
 namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
@@ -58,28 +59,10 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 		/// </summary>
 		private Modification modificationTemplate;
 
-		/// <summary>
-		/// The prefix AccuRev uses for an "absolute" (i.e., depot-relative) pathname. 
-		/// </summary>
-		/// <remarks>
-		/// Either "  \.\" (Windows) or "  /./" (Unix).  Our constructor sets this accordingly.
-		/// </remarks>		
-		private String absolutePathPrefix;
-		
-		/// <summary>
-		/// The character AccuRev uses for a pathname separator.
-		/// </summary>
-		/// <remarks>
-		/// Either "\" (Windows) or "/" (Unix).  Our constructor sets this accordingly.
-		/// </remarks>		
-		private char dirSeparator;
-		
 		public AccuRevHistoryParser()
 		{
-			/* Set the depot-relative path prefix according to what kind of system we're running on. */
-			dirSeparator = (new ExecutionEnvironment()).DirectorySeparator;
-			absolutePathPrefix = String.Format("  {0}.{0}", dirSeparator);
 		}
+
 		/// <summary>
 		/// Construct and return an array of Modifications describing the changes in
 		/// the AccuRev workspace, based on the output of the "accurev hist" command.
@@ -95,28 +78,44 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			toDateTime = to;
 			modificationList = new ArrayList();
 			modificationTemplate = null;
+			Regex firstTokenPattern = new Regex(@"^\s*(\S+)");
+            Regex absolutePathPrefixPattern = new Regex(@"(\\|/)\.(\\|/)");
+            Regex commentTextPattern = new Regex(@"^\s*# (.*)$");
 			
 			while ((line = history.ReadLine()) != null)
 			{
-				if (line.StartsWith("transaction "))
-					ParseTransaction(line);
-				else if (line.StartsWith("  #"))
-				{
-					// String together the lines of the comment, with a CRLF between adjacent lines.
-					if (modificationTemplate.Comment != null)
-						modificationTemplate.Comment += "\r\n ";
-					modificationTemplate.Comment += line.Substring(4);
-				}
-				else if (line.StartsWith(absolutePathPrefix))
-					ParseFileLine(line);
-				else if (line.StartsWith("  ancestor:") || line.StartsWith("  type:") || line.Trim().Equals(""))
-				{
-					// Ignore uninteresting lines.
-				}
-				else
-					Log.Error(string.Format("Unrecognized line in AccuRev \"accurev hist\" output: {0}", line));
-					
-			}
+				// Get the first non-whitespace token in the line and decide how to parse based on it:
+				Match parsed = firstTokenPattern.Match(line);
+				string firstToken = "";
+                if (parsed.Success)
+                    firstToken = parsed.Groups[1].ToString();
+                switch (firstToken)
+                {
+                    case "transaction":
+                        ParseTransaction(line);
+                        break;
+                    case "#":
+                        // String together the lines of the comment, with a newline sequence between 
+                        // adjacent lines.
+                        if (modificationTemplate.Comment != null)
+                            modificationTemplate.Comment += System.Environment.NewLine;
+                        Match commentText = commentTextPattern.Match(line);
+                        if (commentText.Groups.Count != 0)
+                            modificationTemplate.Comment += commentText.Groups[1].ToString();
+                        break;
+                    case "ancestor:":
+                    case "type:":
+                    case "":
+                        // Ignore uninteresting lines.
+                        break;
+                    default:
+                        if (absolutePathPrefixPattern.IsMatch(firstToken))
+                            ParseFileLine(line);
+                        else
+                            Log.Error(string.Format("Unrecognized line in AccuRev \"accurev hist\" output: {0}", line));
+                        break;
+                }
+            }
 			Log.Debug(string.Format("AccuRev reported {0} modifications", modificationList.Count));
 			return (Modification[]) modificationList.ToArray(typeof (Modification));
 		}
@@ -125,33 +124,37 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 		/// Parse a transaction header and set up a new template for modifications created by this transaction.
 		/// </summary>
 		/// <param name="line">the transaction header line to parse.</param>
+		/// <remarks>
+		/// Line format:
+		/// <br/>
+		/// transaction __transNum__; __operationType__; yyyy/mm/dd hh:mm:ss ; user: __userid__
+		/// </remarks>
 		private void ParseTransaction(string line)
 		{
-			// Line format:
-			// transaction __transNum__; __operationType__; yyyy/mm/dd hh:mm:ss ; user: __userid__
-			int tokenStart = 0, tokenEnd;
-			modificationTemplate = new Modification();				// Start with a clean slate
-		
-			// Parse "transaction __transNum__;"
-			tokenStart = line.IndexOf(' ', tokenStart) + 1;
-			tokenEnd = line.IndexOf(';', tokenStart);
-			modificationTemplate.ChangeNumber = int.Parse(line.Substring(tokenStart, tokenEnd - tokenStart));
-					
-			// Parse " __operationType__;"
-			tokenStart = tokenEnd + 1;
-			tokenEnd = line.IndexOf(';', tokenStart);
-			modificationTemplate.Type = line.Substring(tokenStart, tokenEnd - tokenStart).Trim();
-					
-			// Parse " yyyy/mm/dd hh:mm:ss ;" and convert to a timestamp
-			tokenStart = tokenEnd + 1;
-			tokenEnd = line.IndexOf(';', tokenStart);
-			modificationTemplate.ModifiedTime = DateTime.Parse(line.Substring(tokenStart,
-			                                                                  tokenEnd - tokenStart).Trim());
-					
-			// Parse " user: __userid__"
-			tokenStart = line.IndexOf(":", tokenEnd + 1);
-			tokenEnd = line.Length;
-			modificationTemplate.UserName = line.Substring(tokenStart + 1, tokenEnd - (tokenStart + 1)).Trim();
+			// This is a new transaction, so start with a new template for modifications:
+			modificationTemplate = new Modification();				
+			
+			// Parsing regular expression.  Groups used are:
+			//	1: transaction number (__transNum__)
+			//	2: operation type (__operationType__)
+			//	3: date and time (yyyy/mm/dd hh:mm:ss)
+			//	4: userid (__userid__)
+			Regex pattern = new Regex(@"^\s*transaction\s+(\d*)\s*;\s+(\S+)s*;\s+(\d{4}/\d{2}/\d{2} \d{2}:\d{2}:\d{2})\s*;\s+user:\s+(\S+)\s*$");
+
+			Match parsed = pattern.Match(line);
+			if (parsed.Success)
+			{
+				// Parsing worked, fill the transaction summary into the template modification:
+				GroupCollection tokens = parsed.Groups;
+				modificationTemplate.ChangeNumber = int.Parse(tokens[1].ToString());
+				modificationTemplate.Type = tokens[2].ToString();
+				modificationTemplate.ModifiedTime = DateTime.Parse(tokens[3].ToString());
+				modificationTemplate.UserName = tokens[4].ToString();
+            }
+			else
+			{
+                Log.Error(string.Format("Illegal transaction line in AccuRev \"accurev hist\" output: {0}", line));
+			}
 		}
 
 		/// <summary>
@@ -162,42 +165,51 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 		/// pathname, so it can contain any other legal Windows filename characters, including 
 		/// spaces.  Unfortunately it is not enquoted or escaped, so be careful when parsing 
 		/// the line.
+		/// <br/>
+		/// Line format is:
+		/// <br/>
+		///    |.|__dir1__|...|__dirn__|__filename__ __real_stream__/__real_revision__ (__virtual_stream__/__virtual_revision__[,__virtual_stream__/__virtual_revision__][,...])
+		/// <br/>
+		/// where any "|" delimiter can be either "/" or "\" and can vary in the same line.
 		/// </remarks>
 		/// <param name="line">the file detail line to parse.</param>
 		private void ParseFileLine(string line)
 		{
-			// Line format is:
-			//    \.\__dir1__\...\__dirn__\__filename__ __real_stream__/__real_revision__ (__virtual_stream__/__virtual_revision__[,__virtual_stream__/__virtual_revision__][,...])
-			// or:
-			//    /./__dir1__/.../__dirn__/__filename__ __real_stream__/__real_revision__ (__virtual_stream__/__virtual_revision__[,__virtual_stream__/__virtual_revision__][,...])
-			// i.e., in regex terms: "  " ("\\"|"/") "." ("\\"|"/") (DIRNAME ("\\"|"/"))* (FILENAME) " " (REALSTREAM) "/" (REALREVISION) (" (" (VIRTUALSTREAM "/" VIRTUALREVISION)+ ")" )?
-			int i;		
-			string tempLine;
-			
-			tempLine = line.Substring(absolutePathPrefix.Length).TrimStart();		// Drop "  \.\" or "  /./"
-			/* Remove any virtual version identifiers ("(nnn/nnn nnn/nnn ...)"). */
-			if (tempLine.EndsWith(")"))
-				tempLine = tempLine.Substring(0, tempLine.LastIndexOf('(') - 1).TrimEnd();
-			/* Extract the real version identifier ("nnn/nnn"). */
-			i = tempLine.LastIndexOf(' ');
-			modificationTemplate.Version = tempLine.Substring(i + 1);
-			tempLine = tempLine.Substring(0, i);
-			/* Extract the file name and folder (directory) name from the path. */
-			i = tempLine.LastIndexOf(dirSeparator);
-			if ( i > -1 )
+
+			// Pattern for line.  Groups used are:
+			//	3: dirname (__dir1__ ... __dirn__)
+			//	6: filename (__filename__)
+			//	7: real version id (__real_stream__/__real_revision__)
+			Regex pattern = new Regex(
+										@"^" +							// Start of line
+										@"\s+" +						// Leading spaces
+										@"(\\|/)\.(\\|/)" +				// Leading "\.\" or "/./"
+										@"(([^\\/]*(\\|/))*)?" +		// 3: Fully-qualified directory name, if any
+										@"(.*)" +						// 6: File name
+										@"\s+" +
+										@"(\S*/\S*)" +					// 7: Real version id
+										@"\s+" +
+										@"\(\S*/\S*(,\S*/\S*)*\)?\s*" +	// Virtual version id(s), if any
+										@"\s*" +
+										@"$"							// End of line
+									);
+			Match results = pattern.Match(line);
+			if (results.Success)
 			{
-				modificationTemplate.FolderName = tempLine.Substring(0, i);
-				modificationTemplate.FileName = tempLine.Substring(i + 1);
+				// Parsing worked, get the tokens we care about and update the template for our modifications
+				GroupCollection tokens = results.Groups;
+				modificationTemplate.Version = tokens[7].ToString();
+				modificationTemplate.FolderName = tokens[3].ToString();
+				modificationTemplate.FileName = tokens[6].ToString();
+				// Add this to the modification list if it's inside our time range.
+				if ((modificationTemplate.ModifiedTime >= fromDateTime) && 
+				    (modificationTemplate.ModifiedTime <= toDateTime))
+					AddModification(modificationTemplate);
 			}
 			else
 			{
-				modificationTemplate.FolderName = string.Empty;
-				modificationTemplate.FileName = tempLine;
+				Log.Error(String.Format("Illegal file detail line in AccuRev \"accurev hist\" output: {0}", line));
 			}
-			// We've got all the info, add it to the modification list if it's inside our time range.
-			if ((modificationTemplate.ModifiedTime >= fromDateTime) && 
-					(modificationTemplate.ModifiedTime <= toDateTime))
-				AddModification(modificationTemplate);		
 		}
 
 		/// <summary>
