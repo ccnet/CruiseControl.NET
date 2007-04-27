@@ -273,17 +273,9 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 		private void SetEnvironmentVariables(StringDictionary environmentVariables, IIntegrationResult result)
 		{
 			if (!StringUtil.IsBlank(AccuRevHomeDir))
-			{
-				if (environmentVariables.ContainsKey("ACCUREV_HOME"))
-					environmentVariables.Remove("ACCUREV_HOME");
-				environmentVariables.Add("ACCUREV_HOME", result.BaseFromArtifactsDirectory(AccuRevHomeDir));
-			}
+				environmentVariables["ACCUREV_HOME"] = result.BaseFromArtifactsDirectory(AccuRevHomeDir);
 			if (!StringUtil.IsBlank(AccuRevPrincipal))
-			{
-				if (environmentVariables.ContainsKey("ACCUREV_PRINCIPAL"))
-					environmentVariables.Remove("ACCUREV_PRINCIPAL");
-				environmentVariables.Add("ACCUREV_PRINCIPAL", AccuRevPrincipal);
-			}
+				environmentVariables["ACCUREV_PRINCIPAL"] = AccuRevPrincipal;
 		}
 	}
 }
