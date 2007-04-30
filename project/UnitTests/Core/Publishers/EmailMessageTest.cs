@@ -14,10 +14,12 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Publishers
 		private static readonly EmailGroup alwaysGroup = new EmailGroup("alwaysGroup", EmailGroup.NotificationType.Always);
 		private static readonly EmailGroup failedGroup = new EmailGroup("failedGroup", EmailGroup.NotificationType.Failed);
 		private static readonly EmailGroup changedGroup = new EmailGroup("changedGroup", EmailGroup.NotificationType.Change);
-		private static readonly EmailUser always = new EmailUser("always", alwaysGroup.Name, "always@thoughtworks.com");
+        private static readonly EmailGroup successGroup = new EmailGroup("successGroup", EmailGroup.NotificationType.Success);
+        private static readonly EmailUser always = new EmailUser("always", alwaysGroup.Name, "always@thoughtworks.com");
 		private static readonly EmailUser failed = new EmailUser("failed", failedGroup.Name, "failed@thoughtworks.com");
 		private static readonly EmailUser changed = new EmailUser("changed", changedGroup.Name, "changed@thoughtworks.com");
-		private static readonly EmailUser modifier = new EmailUser("modifier", changedGroup.Name, "modifier@thoughtworks.com");
+        private static readonly EmailUser success = new EmailUser("success", successGroup.Name, "success@thoughtworks.com");
+        private static readonly EmailUser modifier = new EmailUser("modifier", changedGroup.Name, "modifier@thoughtworks.com");
 
 		private EmailPublisher publisher;
 
@@ -28,31 +30,26 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Publishers
 			publisher.EmailGroups.Add(alwaysGroup.Name, alwaysGroup);
 			publisher.EmailGroups.Add(changedGroup.Name, changedGroup);
 			publisher.EmailGroups.Add(failedGroup.Name, failedGroup);
-			publisher.EmailUsers.Add(always.Name, always);
+            publisher.EmailGroups.Add(successGroup.Name, successGroup);
+            publisher.EmailUsers.Add(always.Name, always);
 			publisher.EmailUsers.Add(failed.Name, failed);
 			publisher.EmailUsers.Add(changed.Name, changed);
-			publisher.EmailUsers.Add(modifier.Name, modifier);
+            publisher.EmailUsers.Add(success.Name, success);
+            publisher.EmailUsers.Add(modifier.Name, modifier);
 		}
 
 		[Test]
 		public void VerifyRecipientListForFixedBuild()
 		{
 			IIntegrationResult result = AddModification(IntegrationResultMother.CreateFixed());
-			Assert.AreEqual(ExpectedRecipients(always, changed, modifier), new EmailMessage(result, publisher).Recipients);
-		}
-
-		[Test]
-		public void VerifyRecipientListForBuildStillSuccessful()
-		{
-			IIntegrationResult result = AddModification(IntegrationResultMother.CreateStillSuccessful());
-			Assert.AreEqual(ExpectedRecipients(always, modifier), new EmailMessage(result, publisher).Recipients);
+			Assert.AreEqual(ExpectedRecipients(always, changed, modifier, success), new EmailMessage(result, publisher).Recipients);
 		}
 
 		[Test]
 		public void VerifyRecipientListForFailedBuild()
 		{
 			IIntegrationResult result = AddModification(IntegrationResultMother.CreateFailed());
-			Assert.AreEqual(ExpectedRecipients(always, changed, failed, modifier), new EmailMessage(result, publisher).Recipients);
+            Assert.AreEqual(ExpectedRecipients(always, changed, failed, modifier), new EmailMessage(result, publisher).Recipients);
 		}
 
 		[Test]
@@ -62,7 +59,21 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Publishers
 			Assert.AreEqual(ExpectedRecipients(always, failed, modifier), new EmailMessage(result, publisher).Recipients);
 		}
 
-		[Test]
+        [Test]
+        public void VerifyRecipientListForSuccessfulBuild()
+        {
+            IIntegrationResult result = AddModification(IntegrationResultMother.CreateSuccessful());
+            Assert.AreEqual(ExpectedRecipients(always, modifier, success), new EmailMessage(result, publisher).Recipients);
+        }
+
+        [Test]
+        public void VerifyRecipientListForStillSuccessfulBuild()
+        {
+            IIntegrationResult result = AddModification(IntegrationResultMother.CreateStillSuccessful());
+            Assert.AreEqual(ExpectedRecipients(always, modifier, success), new EmailMessage(result, publisher).Recipients);
+        }
+
+        [Test]
 		public void CreateRecipientListWithNoRecipients()
 		{
 			EmailMessage emailMessage = new EmailMessage(IntegrationResultMother.CreateFixed(), new EmailPublisher());
@@ -74,7 +85,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Publishers
 		{
 			publisher.EmailUsers.Remove(modifier.Name);
 			IIntegrationResult result = AddModification(IntegrationResultMother.CreateStillSuccessful());
-			Assert.AreEqual(ExpectedRecipients(always), new EmailMessage(result, publisher).Recipients);
+			Assert.AreEqual(ExpectedRecipients(always, success), new EmailMessage(result, publisher).Recipients);
 		}
 
 		[Test]
@@ -82,7 +93,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Publishers
 		{
 			IIntegrationResult result = AddModification(IntegrationResultMother.CreateStillSuccessful());
 			result.Modifications[0].UserName = null;
-			Assert.AreEqual(ExpectedRecipients(always), new EmailMessage(result, publisher).Recipients);
+			Assert.AreEqual(ExpectedRecipients(always, success), new EmailMessage(result, publisher).Recipients);
 		}
 
 		[Test]
@@ -99,7 +110,14 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Publishers
 			Assert.AreEqual("Project#9 Build Failed", subject);
 		}
 
-		[Test]
+        [Test]
+        public void EmailSubjectForSuccessfulBuild()
+        {
+            string subject = GetEmailMessage(IntegrationResultMother.CreateSuccessful(), true).Subject;
+            Assert.AreEqual("Project#9 Build Successful: Build 0", subject);
+        }
+
+        [Test]
 		public void EmailSubjectForFixedBuild()
 		{
 			string subject = GetEmailMessage(IntegrationResultMother.CreateFixed(), true).Subject;

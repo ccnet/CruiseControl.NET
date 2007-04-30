@@ -19,10 +19,12 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Publishers
     		 	<user name=""manders"" group=""developers"" address=""mandersen@thoughtworks.com""/>
     		 	<user name=""dmercier"" group=""developers"" address=""dmercier@thoughtworks.com""/>
     		 	<user name=""rwan"" group=""developers"" address=""rwan@thoughtworks.com""/>
+                <user name=""owjones"" group=""successdudes"" address=""oliver.wendell.jones@example.com""/>
     		</users>
     		<groups>
     			<group name=""developers"" notification=""change""/>
-    			<group name=""buildmaster"" notification=""always""/>    			
+    			<group name=""buildmaster"" notification=""always""/>
+                <group name=""successdudes"" notification=""success""/>
     		</groups>
     	</email>");
 			}

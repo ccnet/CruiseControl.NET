@@ -113,7 +113,59 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Publishers
             mockGateway.Verify();
         }
 
-		private static IntegrationResult CreateIntegrationResult(IntegrationStatus current, IntegrationStatus last)
+        [Test]
+        public void ShouldSendMessageIfBuildSuccessful()
+        {
+            mockGateway.Expect("Send", new MailMessageRecipientValidator(1));
+
+            publisher = new EmailPublisher();
+            publisher.FromAddress = "from@foo.com";
+            publisher.EmailGateway = (EmailGateway)mockGateway.MockInstance;
+            publisher.EmailUsers.Add("bar", new EmailUser("bar", "foo", "bar@foo.com"));
+            publisher.EmailGroups.Add("foo", new EmailGroup("foo", EmailGroup.NotificationType.Success));
+            publisher.Run(IntegrationResultMother.CreateSuccessful());
+            mockGateway.Verify();
+        }
+
+        [Test]
+        public void ShouldSendMessageIfBuildSuccessfulAndPreviousFailed()
+        {
+            mockGateway.Expect("Send", new MailMessageRecipientValidator(2));
+
+            publisher = new EmailPublisher();
+            publisher.FromAddress = "from@foo.com";
+            publisher.EmailGateway = (EmailGateway)mockGateway.MockInstance;
+
+            publisher.EmailUsers.Add("dev", new EmailUser("dev", "changing", "dev@foo.com"));
+            publisher.EmailUsers.Add("admin", new EmailUser("admin", "succeeding", "bar@foo.com"));
+
+            publisher.EmailGroups.Add("changing", new EmailGroup("changing", EmailGroup.NotificationType.Change));
+            publisher.EmailGroups.Add("succeeding", new EmailGroup("succeeding", EmailGroup.NotificationType.Success));
+
+            publisher.Run(IntegrationResultMother.CreateSuccessful(IntegrationStatus.Failure));
+            mockGateway.Verify();
+        }
+
+        [Test]
+        public void ShouldSendMessageIfBuildSuccessfulAndPreviousSuccessful()
+        {
+            mockGateway.Expect("Send", new MailMessageRecipientValidator(1));
+
+            publisher = new EmailPublisher();
+            publisher.FromAddress = "from@foo.com";
+            publisher.EmailGateway = (EmailGateway)mockGateway.MockInstance;
+
+            publisher.EmailUsers.Add("dev", new EmailUser("dev", "changing", "dev@foo.com"));
+            publisher.EmailUsers.Add("admin", new EmailUser("admin", "succeeding", "bar@foo.com"));
+
+            publisher.EmailGroups.Add("changing", new EmailGroup("changing", EmailGroup.NotificationType.Change));
+            publisher.EmailGroups.Add("succeeding", new EmailGroup("succeeding", EmailGroup.NotificationType.Success));
+
+            publisher.Run(IntegrationResultMother.CreateSuccessful(IntegrationStatus.Success));
+            mockGateway.Verify();
+        }
+
+        private static IntegrationResult CreateIntegrationResult(IntegrationStatus current, IntegrationStatus last)
 		{
 			IntegrationResult result = IntegrationResultMother.Create(current, last, new DateTime(1980, 1, 1));
 			result.ProjectName = "Project#9";
@@ -182,23 +234,26 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Publishers
 			Assert.AreEqual("mailpassword", publisher.MailhostPassword);
 			Assert.AreEqual("ccnet@thoughtworks.com", publisher.FromAddress);
 
-			Assert.AreEqual(5, publisher.EmailUsers.Count);
+			Assert.AreEqual(6, publisher.EmailUsers.Count);
 			ArrayList expected = new ArrayList();
 			expected.Add(new EmailUser("buildmaster", "buildmaster", "servid@telus.net"));
 			expected.Add(new EmailUser("orogers", "developers", "orogers@thoughtworks.com"));
 			expected.Add(new EmailUser("manders", "developers", "mandersen@thoughtworks.com"));
 			expected.Add(new EmailUser("dmercier", "developers", "dmercier@thoughtworks.com"));
 			expected.Add(new EmailUser("rwan", "developers", "rwan@thoughtworks.com"));
+            expected.Add(new EmailUser("owjones", "successdudes", "oliver.wendell.jones@example.com"));
 			for (int i = 0; i < expected.Count; i++)
 			{
 				Assert.IsTrue(publisher.EmailUsers.ContainsValue(expected[i]));
 			}
 
-			Assert.AreEqual(2, publisher.EmailGroups.Count);
+			Assert.AreEqual(3, publisher.EmailGroups.Count);
 			EmailGroup developers = new EmailGroup("developers", EmailGroup.NotificationType.Change);
 			EmailGroup buildmaster = new EmailGroup("buildmaster", EmailGroup.NotificationType.Always);
+            EmailGroup successdudes = new EmailGroup("successdudes", EmailGroup.NotificationType.Success);
 			Assert.AreEqual(developers, publisher.EmailGroups["developers"]);
 			Assert.AreEqual(buildmaster, publisher.EmailGroups["buildmaster"]);
+            Assert.AreEqual(successdudes, publisher.EmailGroups["successdudes"]);
 		}
 
 		[Test]

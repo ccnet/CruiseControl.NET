@@ -34,5 +34,12 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Publishers
 			EmailGroup group = (EmailGroup) NetReflector.Read(@"<group name=""foo"" notification=""Failed"" />");
 			Assert.AreEqual(EmailGroup.NotificationType.Failed, group.Notification);
 		}
+
+        [Test]
+        public void ReadEmailGroupFromXmlUsingSuccessNotificationType()
+        {
+            EmailGroup group = (EmailGroup)NetReflector.Read(@"<group name=""foo"" notification=""Success"" />");
+            Assert.AreEqual(EmailGroup.NotificationType.Success, group.Notification);
+        }
 	}
 }

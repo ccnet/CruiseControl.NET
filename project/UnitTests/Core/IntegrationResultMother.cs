@@ -64,7 +64,12 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 			return result;
 		}
 
-		public static IntegrationResult CreateStillSuccessful()
+        public static IntegrationResult CreateSuccessful(IntegrationStatus previousIntegrationStatus)
+        {
+            return Create(IntegrationStatus.Success, previousIntegrationStatus, DateTime.Now);
+        }
+
+        public static IntegrationResult CreateStillSuccessful()
 		{
 			return Create(IntegrationStatus.Success);
 		}

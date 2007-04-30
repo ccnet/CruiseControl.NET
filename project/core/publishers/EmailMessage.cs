@@ -25,7 +25,7 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
 			{
 				IDictionary recipients = new SortedList();
 				AddRecipients(recipients, EmailGroup.NotificationType.Always);
-				AddModifiers(recipients);
+                AddModifiers(recipients);
 
 				if (BuildStateChanged())
 				{
@@ -34,7 +34,12 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
 
 				if (result.Status == IntegrationStatus.Failure)
 				{
-					AddRecipients(recipients, EmailGroup.NotificationType.Failed);
+                    AddRecipients(recipients, EmailGroup.NotificationType.Failed);
+				}
+				
+                if (result.Status == IntegrationStatus.Success)
+				{
+                    AddRecipients(recipients, EmailGroup.NotificationType.Success);
 				}
 
 				StringBuilder buffer = new StringBuilder();
@@ -66,7 +71,7 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
 				EmailGroup group = GetEmailGroup(user.Group);
 				if (group != null && group.Notification == notificationType)
 				{
-					recipients[user.Address] = user;
+                    recipients[user.Address] = user;
 				}
 			}
 		}
