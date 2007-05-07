@@ -19,7 +19,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 
 		private DevenvTask task;
 		private IMock mockRegistry;
-		private IMock mockProcessExecutor;
+        private IMock mockProcessExecutor;
 
 		[SetUp]
 		public void Setup()
@@ -32,8 +32,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 		[TearDown]
 		public void VerifyMocks()
 		{
-			mockRegistry.Verify();
-			mockProcessExecutor.Verify();
+            mockRegistry.Verify();
+            mockProcessExecutor.Verify();
 		}
 
 		[Test]
@@ -70,22 +70,47 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 			Assert.AreEqual(@"", task.Project);
 		}
 
-		[Test]
-		public void RetrieveExecutableLocationFromRegistryForVS2003()
+        [Test]
+        public void DefaultVisualStudioShouldBe2005IfInstalled()
+        {
+            IMock mockRegistry = new DynamicMock(typeof(IRegistry));
+            IMock mockProcessExecutor = new DynamicMock(typeof(ProcessExecutor));
+            DevenvTask task = new DevenvTask((IRegistry)mockRegistry.MockInstance, (ProcessExecutor)mockProcessExecutor.MockInstance);
+            mockRegistry.ExpectAndReturn("GetLocalMachineSubKeyValue", @"C:\Program Files\Microsoft Visual Studio 8\Common7\IDE\",
+                                         DevenvTask.VS2005_REGISTRY_PATH, DevenvTask.VS_REGISTRY_KEY);
+            Assert.AreEqual(@"C:\Program Files\Microsoft Visual Studio 8\Common7\IDE\devenv.com", task.Executable);
+            mockRegistry.Verify();
+            mockProcessExecutor.Verify();
+        }
+
+        [Test]
+        public void DefaultVisualStudioShouldBe2003IfNothingNewerInstalled()
 		{
-			mockRegistry.ExpectAndReturn("GetLocalMachineSubKeyValue", @"C:\Program Files\Microsoft Visual Studio .NET 2003\Common7\IDE\",
+            IMock mockRegistry = new DynamicMock(typeof(IRegistry));
+            IMock mockProcessExecutor = new DynamicMock(typeof(ProcessExecutor));
+            DevenvTask task = new DevenvTask((IRegistry)mockRegistry.MockInstance, (ProcessExecutor)mockProcessExecutor.MockInstance);
+            mockRegistry.ExpectAndReturn("GetLocalMachineSubKeyValue", null, DevenvTask.VS2005_REGISTRY_PATH, DevenvTask.VS_REGISTRY_KEY);
+            mockRegistry.ExpectAndReturn("GetLocalMachineSubKeyValue", @"C:\Program Files\Microsoft Visual Studio .NET 2003\Common7\IDE\",
 			                             DevenvTask.VS2003_REGISTRY_PATH, DevenvTask.VS_REGISTRY_KEY);
 			Assert.AreEqual(@"C:\Program Files\Microsoft Visual Studio .NET 2003\Common7\IDE\devenv.com", task.Executable);
-		}
+            mockRegistry.Verify();
+            mockProcessExecutor.Verify();
+        }
 
 		[Test]
-		public void RetrieveExecutableLocationFromRegistryForVS2002()
+        public void DefaultVisualStudioShouldBe2002IfNothingNewerInstalled()
 		{
-			mockRegistry.ExpectAndReturn("GetLocalMachineSubKeyValue", null, DevenvTask.VS2003_REGISTRY_PATH, DevenvTask.VS_REGISTRY_KEY);
+            IMock mockRegistry = new DynamicMock(typeof(IRegistry));
+            IMock mockProcessExecutor = new DynamicMock(typeof(ProcessExecutor));
+            DevenvTask task = new DevenvTask((IRegistry)mockRegistry.MockInstance, (ProcessExecutor)mockProcessExecutor.MockInstance);
+            mockRegistry.ExpectAndReturn("GetLocalMachineSubKeyValue", null, DevenvTask.VS2005_REGISTRY_PATH, DevenvTask.VS_REGISTRY_KEY);
+            mockRegistry.ExpectAndReturn("GetLocalMachineSubKeyValue", null, DevenvTask.VS2003_REGISTRY_PATH, DevenvTask.VS_REGISTRY_KEY);
 			mockRegistry.ExpectAndReturn("GetExpectedLocalMachineSubKeyValue", @"C:\Program Files\Microsoft Visual Studio .NET\Common7\IDE\",
 			                             DevenvTask.VS2002_REGISTRY_PATH, DevenvTask.VS_REGISTRY_KEY);
 			Assert.AreEqual(@"C:\Program Files\Microsoft Visual Studio .NET\Common7\IDE\devenv.com", task.Executable);
-		}
+            mockRegistry.Verify();
+            mockProcessExecutor.Verify();
+        }
 
 		[Test]
 		public void VerifyDevenvProcessInfo()

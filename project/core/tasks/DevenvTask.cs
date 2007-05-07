@@ -7,7 +7,8 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 	[ReflectorType("devenv")]
 	public class DevenvTask : ITask
 	{
-		public const string VS2003_REGISTRY_PATH = @"Software\Microsoft\VisualStudio\7.1";
+        public const string VS2005_REGISTRY_PATH = @"Software\Microsoft\VisualStudio\8.0";
+        public const string VS2003_REGISTRY_PATH = @"Software\Microsoft\VisualStudio\7.1";
 		public const string VS2002_REGISTRY_PATH = @"Software\Microsoft\VisualStudio\7.0";
 		public const string VS_REGISTRY_KEY = @"InstallDir";
 		public const string DEVENV_EXE = "devenv.com";
@@ -43,8 +44,13 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 
 		private string ReadDevenvExecutableFromRegistry()
 		{
-			string registryValue = registry.GetLocalMachineSubKeyValue(VS2003_REGISTRY_PATH, VS_REGISTRY_KEY);
-			if (registryValue == null)
+            string registryValue;
+            registryValue = registry.GetLocalMachineSubKeyValue(VS2005_REGISTRY_PATH, VS_REGISTRY_KEY);
+            if (registryValue == null)
+            {
+                registryValue = registry.GetLocalMachineSubKeyValue(VS2003_REGISTRY_PATH, VS_REGISTRY_KEY);
+            }
+            if (registryValue == null)
 			{
 				registryValue = registry.GetExpectedLocalMachineSubKeyValue(VS2002_REGISTRY_PATH, VS_REGISTRY_KEY);
 			}
