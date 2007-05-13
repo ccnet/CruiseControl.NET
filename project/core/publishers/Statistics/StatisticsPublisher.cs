@@ -27,14 +27,22 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers.Statistics
 			IList stats = builder.ProcessBuildResults(integrationResult);
 
 			XmlDocument xmlDocument = UpdateXmlFile(stats, integrationResult);
-			ChartGenerator().Process(xmlDocument, integrationResult.ArtifactDirectory);
+			ChartGenerator(builder.Statistics).Process(xmlDocument, integrationResult.ArtifactDirectory);
 			UpdateCsvFile(builder, integrationResult);
 		}
 
-		private static StatisticsChartGenerator ChartGenerator()
+		private static StatisticsChartGenerator ChartGenerator(IList statistics)
 		{
 			StatisticsChartGenerator chartGenerator = new StatisticsChartGenerator();
-			chartGenerator.RelevantStats = new string[]{"TestCount", "Duration"};
+            ArrayList list = new ArrayList();
+		    foreach (Statistic statistic in statistics)
+		    {
+                if(statistic.GenerateGraph)
+                {
+                    list.Add(statistic.Name);
+                }
+		    }
+		    chartGenerator.RelevantStats = (string[]) list.ToArray(typeof (string));
 			return chartGenerator;
 		}
 

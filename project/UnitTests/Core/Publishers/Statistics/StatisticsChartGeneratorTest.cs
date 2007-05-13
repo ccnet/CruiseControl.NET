@@ -1,6 +1,10 @@
+using System;
 using System.Collections;
+using System.Drawing.Imaging;
 using System.IO;
+using System.Text.RegularExpressions;
 using System.Xml;
+using System.Xml.XPath;
 using NMock;
 using NMock.Constraints;
 using NUnit.Framework;
@@ -15,7 +19,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Publishers.Statistics
 		private StatisticsChartGenerator chartGenerator;
 		private IMock mockPlotter;
 
-		#region XML
+		#region Report.xml
 
 		private string xml = 
 			"<statistics>" + 
@@ -187,7 +191,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Publishers.Statistics
 		[ExpectedException(typeof(UnavailableStatisticsException))]
 		public void ShouldThrowExceptionIfAskedToPlotUnavailableStatistics()
 		{
-			mockPlotter.ExpectNoCall("DrawGraph", typeof(IList), typeof(IList));
+			mockPlotter.ExpectNoCall("DrawGraph", typeof(IList), typeof(IList), typeof(string));
 			mockPlotter.ExpectNoCall("WriteToStream", typeof(IList), typeof(IList), typeof(Stream));
 			chartGenerator.RelevantStats = new string[]{"Unavailable"};
 			chartGenerator.Process(statistics, "dummy");
@@ -196,7 +200,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Publishers.Statistics
 		[Test]
 		public void ShouldPlotChartForAvailableStatistics()
 		{
-			mockPlotter.Expect("DrawGraph", new IsAnything(), new IsAnything());
+			mockPlotter.Expect("DrawGraph", new IsAnything(), new IsAnything(), new IsAnything());
 			mockPlotter.ExpectNoCall("WriteToStream", typeof(IList), typeof(IList), typeof(Stream));
 			chartGenerator.RelevantStats = new string[]{"TestCount"};
 			chartGenerator.Process(statistics, "dummy");
@@ -206,9 +210,35 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Publishers.Statistics
 		[Explicit]
 		public void ShouldGenerateChart()
 		{
-			StatisticsChartGenerator generator = new StatisticsChartGenerator(new Plotter("c:/", "temp.bmp"));
+			StatisticsChartGenerator generator = new StatisticsChartGenerator(new Plotter("c:/", "png", ImageFormat.Png));
 			generator.RelevantStats = new string[]{"TestCount"};
 			generator.Process(statistics, "dummy");
 		}
+
+	    [Test]
+        [Explicit]
+        public void ShouldSetBuildLabelInAbscissa()
+	    {
+            string xpath = "/statistics/integration";
+	        XPathNavigator navigator = statistics.CreateNavigator();
+            XPathNodeIterator dataList = navigator.Select(xpath);
+	        int count = dataList.Count;
+	        Console.Out.WriteLine("count = {0}", count);
+	        while(dataList.MoveNext())
+            {
+                XPathNavigator xPathNavigator = dataList.Current;
+                Console.Out.WriteLine("build-label = {0}", xPathNavigator.GetAttribute("build-label", ""));
+                XPathNavigator duration = xPathNavigator.SelectSingleNode(string.Format("statistic[@name='{0}']", "Duration"));
+                Console.Out.WriteLine("duration = {0}", duration);
+            }
+	    }
+
+	    [Test]
+        [Explicit]
+	    public void ShouldFormatStatisticAsSpecified()
+	    {
+	        string value = "03:00:02";
+	        Assert.IsTrue(Regex.IsMatch(value, "[0-9]+:[0-9]+:[0-9]+"));
+	    }
 	}
 }

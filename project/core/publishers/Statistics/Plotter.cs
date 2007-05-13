@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Drawing;
+using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
 using System.IO;
 using NPlot;
@@ -10,36 +11,38 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers.Statistics
 	public class Plotter : IPlotter
 	{
 		private string savePath;
-		private string fileName;
+	    private readonly string fileExtension;
+	    private ImageFormat imageFormat;
 
-		public Plotter(string savePath, string fileName)
+	    public Plotter(string savePath, string fileExtension, ImageFormat imageFormat)
 		{
 			this.savePath = savePath;
-			this.fileName = fileName;
+	        this.fileExtension = fileExtension;
+	        this.imageFormat = imageFormat;
 		}
 
-		public void DrawGraph(IList ordinateData, IList abscissaData)
+		public void DrawGraph(IList ordinateData, IList abscissaData, string statisticName)
 		{
 			Bitmap bitmap = Plot(ordinateData, abscissaData);
-			bitmap.Save(Path.Combine(savePath, fileName));
+			bitmap.Save(Path.Combine(savePath, string.Format("{0}.{1}", statisticName, fileExtension)));
 		}
 
 		public void WriteToStream(IList ordinateData, IList abscissaData, Stream stream)
 		{
 			Bitmap bitmap = Plot(ordinateData, abscissaData);
-			bitmap.Save(stream, ImageFormat.Png);
+			bitmap.Save(stream, imageFormat);
 		}
 
-		private Bitmap Plot(IList ordinateData, IList abscissaData)
+		private static Bitmap Plot(IList ordinateData, IList abscissaData)
 		{
 
 			PlotSurface2D plotSurface2D = new PlotSurface2D(200, 200);
+		    plotSurface2D.SmoothingMode = SmoothingMode.HighQuality;
 
-			BaseSequencePlot baseSequencePlot = new BaseSequencePlot();
-			LinePlot linePlot = new LinePlot(ordinateData, abscissaData);
+		    LinePlot linePlot = new LinePlot(ordinateData, abscissaData);
 			linePlot.ShadowColor = Color.Beige;
 			linePlot.Pen = new Pen(Color.Blue);
-			linePlot.Pen.Width = 2.0f;
+			linePlot.Pen.Width = 1.0f;
 			plotSurface2D.Add(linePlot);
 			plotSurface2D.Refresh();
 			return plotSurface2D.Bitmap;

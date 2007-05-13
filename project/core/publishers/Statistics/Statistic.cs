@@ -8,8 +8,9 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers.Statistics
 	{
 		protected string name;
 		protected string xpath;
+	    private bool generateGraph;
 
-		public Statistic()
+	    public Statistic()
 		{
 		}
 
@@ -32,6 +33,13 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers.Statistics
 			get { return name; }
 			set { name = value; }
 		}
+
+        [ReflectorProperty("generateGraph")]
+	    public bool GenerateGraph
+	    {
+            get { return generateGraph; }
+            set { generateGraph = value; }
+	    }
 
 		public StatisticResult Apply(XPathNavigator nav)
 		{
