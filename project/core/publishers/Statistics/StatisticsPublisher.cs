@@ -31,14 +31,14 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers.Statistics
 			UpdateCsvFile(builder, integrationResult);
 		}
 
-		private StatisticsChartGenerator ChartGenerator()
+		private static StatisticsChartGenerator ChartGenerator()
 		{
 			StatisticsChartGenerator chartGenerator = new StatisticsChartGenerator();
 			chartGenerator.RelevantStats = new string[]{"TestCount", "Duration"};
 			return chartGenerator;
 		}
 
-		private XmlDocument UpdateXmlFile(IList stats, IIntegrationResult integrationResult)
+		private static XmlDocument UpdateXmlFile(IList stats, IIntegrationResult integrationResult)
 		{
 			XmlDocument doc = new XmlDocument();
 	
@@ -69,7 +69,7 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers.Statistics
 			return doc;
 		}
 
-		private XmlElement ToXml(XmlDocument doc, IList stats)
+		private static XmlElement ToXml(XmlDocument doc, IList stats)
 		{
 			XmlElement el = doc.CreateElement("integration");
 			foreach (StatisticResult statisticResult in stats)
@@ -82,18 +82,18 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers.Statistics
 			return el;
 		}
 
-		private string XmlStatisticsFile(IIntegrationResult integrationResult)
+		private static string XmlStatisticsFile(IIntegrationResult integrationResult)
 		{
 			return Path.Combine(integrationResult.ArtifactDirectory, XmlFileName);
 		}
 
-		private void UpdateCsvFile(StatisticsBuilder builder, IIntegrationResult integrationResult)
+		private static void UpdateCsvFile(StatisticsBuilder builder, IIntegrationResult integrationResult)
 		{
 			string csvFile = CsvStatisticsFile(integrationResult);
 			builder.AppendCsv(csvFile);
 		}
 
-		private string CsvStatisticsFile(IIntegrationResult integrationResult)
+		private static string CsvStatisticsFile(IIntegrationResult integrationResult)
 		{
 			return Path.Combine(integrationResult.ArtifactDirectory, CsvFileName);
 		}

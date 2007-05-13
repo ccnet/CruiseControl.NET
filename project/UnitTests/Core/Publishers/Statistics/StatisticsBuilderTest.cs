@@ -149,7 +149,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Publishers.Statistics
 			AssertContains(result.ProjectName, buffer.ToString());
 		}
 
-		private void AssertXPath(string xml, string xpath, string expectedValue)
+		private static void AssertXPath(string xml, string xpath, string expectedValue)
 		{
 			XmlDocument doc = new XmlDocument();
 			doc.LoadXml(xml);

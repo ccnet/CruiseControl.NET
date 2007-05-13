@@ -35,7 +35,7 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers.Statistics
 			return ProcessBuildResults(ToXml(result));
 		}
 
-		private string ToXml(IIntegrationResult result)
+		private static string ToXml(IIntegrationResult result)
 		{
 			StringWriter xmlResultString = new StringWriter();
 			XmlIntegrationResultWriter writer = new XmlIntegrationResultWriter(xmlResultString);
@@ -72,6 +72,12 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers.Statistics
 			{
 				logStatistics.Add(stat);
 			}
+            else
+			{
+                int indexOf = logStatistics.IndexOf(stat);
+			    logStatistics.Remove(stat);
+                logStatistics.Insert(indexOf, stat);
+            }
 		}
 
 		private IList ProcessLog(XmlDocument doc)

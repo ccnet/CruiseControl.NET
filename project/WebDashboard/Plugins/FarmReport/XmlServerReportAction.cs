@@ -45,7 +45,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.FarmReport
             return new XmlFragmentResponse(stringWriter.ToString());
 		}
 
-	    private void WriteProjects(XmlTextWriter xmlWriter, ProjectStatus[] projectStatuses)
+	    private static void WriteProjects(XmlTextWriter xmlWriter, ProjectStatus[] projectStatuses)
 	    {
             foreach (ProjectStatus projectStatus in projectStatuses)
 	        {
@@ -53,7 +53,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.FarmReport
 	        }
 	    }
 
-        private void WriteProjectStatus(XmlTextWriter xmlWriter, ProjectStatus projectStatus)
+        private static void WriteProjectStatus(XmlTextWriter xmlWriter, ProjectStatus projectStatus)
 		{
 			xmlWriter.WriteStartElement("Project");
             xmlWriter.WriteAttributeString("name", projectStatus.Name);
@@ -67,7 +67,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.FarmReport
 			xmlWriter.WriteEndElement();
 		}
 
-        private void WriteQueueSetSnapshot(XmlTextWriter xmlWriter, QueueSetSnapshot queueSet)
+        private static void WriteQueueSetSnapshot(XmlTextWriter xmlWriter, QueueSetSnapshot queueSet)
         {
             foreach (QueueSnapshot queue in queueSet.Queues)
             {
@@ -75,7 +75,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.FarmReport
             }
        }
 
-        private void WriteQueueSnapshot(XmlTextWriter xmlWriter, QueueSnapshot queue)
+        private static void WriteQueueSnapshot(XmlTextWriter xmlWriter, QueueSnapshot queue)
         {
             xmlWriter.WriteStartElement("Queue");
             xmlWriter.WriteAttributeString("name", queue.QueueName);
@@ -88,7 +88,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.FarmReport
             xmlWriter.WriteEndElement();
         }
 
-        private void WriteQueuedRequestSnapshot(XmlTextWriter xmlWriter, QueuedRequestSnapshot queuedRequest)
+        private static void WriteQueuedRequestSnapshot(XmlTextWriter xmlWriter, QueuedRequestSnapshot queuedRequest)
         {
             xmlWriter.WriteStartElement("Request");
             xmlWriter.WriteAttributeString("projectName", queuedRequest.ProjectName);
