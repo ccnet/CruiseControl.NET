@@ -76,7 +76,10 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers.Statistics
 			{
                 int indexOf = logStatistics.IndexOf(stat);
 			    logStatistics.Remove(stat);
-                logStatistics.Insert(indexOf, stat);
+			    if (stat.Include)
+			    {
+			        logStatistics.Insert(indexOf, stat);
+			    }
             }
 		}
 
