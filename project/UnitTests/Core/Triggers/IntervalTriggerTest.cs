@@ -115,9 +115,10 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Triggers
 		}
 
 		[Test]
-		public void ShouldReturnCurrentTimeForNextBuildOnServerStart()
+        public void ShouldReturnIntervalTimeForNextBuildOnServerStart()
 		{
-			Assert.AreEqual(initialDateTimeNow, trigger.NextBuild);
+            trigger.IntervalSeconds = 10;
+            Assert.AreEqual(initialDateTimeNow.AddSeconds(10), trigger.NextBuild);
 			VerifyAll();
 		}
 

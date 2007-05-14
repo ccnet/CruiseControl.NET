@@ -59,26 +59,39 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Triggers
 		}
 
 		[Test]
-		public void ShouldBuildFirstTime()
+		public void ShouldNotBuildFirstTime()
 		{
-			mockHttpWrapper.ExpectAndReturn("GetLastModifiedTimeFor", initialDateTimeNow, new Uri(DefaultUrl), DateTime.MinValue);
-			Assert.AreEqual(ModificationExistRequest(), trigger.Fire());
+            Assert.IsNull(trigger.Fire());
 			VerifyAll();
 		}
 
-		[Test]
+
+        [Test]
+        public void ShouldBuildAfterFirstInterval()
+        {
+            mockDateTime.SetupResult("Now", initialDateTimeNow.AddSeconds(trigger.IntervalSeconds));
+            mockHttpWrapper.ExpectAndReturn("GetLastModifiedTimeFor", initialDateTimeNow, new Uri(DefaultUrl), DateTime.MinValue);
+            Assert.AreEqual(ModificationExistRequest(), trigger.Fire());
+            VerifyAll();
+        }
+
+        [Test]
 		public void ShouldNotBuildIfUrlHasNotChanged()
 		{
+            // Initial check, no build
 			mockHttpWrapper.ExpectAndReturn("GetLastModifiedTimeFor", initialDateTimeNow, new Uri(DefaultUrl), DateTime.MinValue);
-
-			Assert.AreEqual(ModificationExistRequest(), trigger.Fire());		// initial build
+            Assert.IsNull(trigger.Fire());
 			trigger.IntegrationCompleted();
-			Assert.IsNull(trigger.Fire());					// no build during interval delay
 
-			mockDateTime.SetupResult("Now", initialDateTimeNow.AddSeconds(trigger.IntervalSeconds));
+            // First interval passes, initial build because url date/time is unknown
+            mockDateTime.SetupResult("Now", initialDateTimeNow.AddSeconds(trigger.IntervalSeconds));
+            Assert.AreEqual(ModificationExistRequest(), trigger.Fire());
+
+            // Second interval passes, no build because url has not changed
+			mockDateTime.SetupResult("Now", initialDateTimeNow.AddSeconds(trigger.IntervalSeconds * 2));
 			mockHttpWrapper.ExpectAndReturn("GetLastModifiedTimeFor", initialDateTimeNow, new Uri(DefaultUrl), initialDateTimeNow);
-			Assert.IsNull(trigger.Fire());					// no build because url has not changed
-			Assert.AreEqual(initialDateTimeNow.AddSeconds(trigger.IntervalSeconds * 2), trigger.NextBuild);		// should not hammer web server
+			Assert.IsNull(trigger.Fire());
+			Assert.AreEqual(initialDateTimeNow.AddSeconds(trigger.IntervalSeconds * 3), trigger.NextBuild);		// Next build should be at third interval
 			VerifyAll();
 		}
 

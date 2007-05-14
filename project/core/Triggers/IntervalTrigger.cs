@@ -11,15 +11,16 @@ namespace ThoughtWorks.CruiseControl.Core.Triggers
 		public const double DefaultIntervalSeconds = 60;
 		private readonly DateTimeProvider dateTimeProvider;
 		private string name;
+        private double intervalSeconds = DefaultIntervalSeconds;
 
-		private DateTime nextBuildTime;
+        private DateTime nextBuildTime;
 
 		public IntervalTrigger() : this(new DateTimeProvider()) { }
 
 		public IntervalTrigger(DateTimeProvider dtProvider)
 		{
 			this.dateTimeProvider = dtProvider;
-			nextBuildTime = dtProvider.Now;
+            IncrementNextBuildTime();
 		}
 
 		[ReflectorProperty("name", Required=false)]
@@ -33,8 +34,16 @@ namespace ThoughtWorks.CruiseControl.Core.Triggers
 			set { name = value; }
 		}
 
-		[ReflectorProperty("seconds", Required=false)]
-		public double IntervalSeconds = DefaultIntervalSeconds;
+        [ReflectorProperty("seconds", Required=false)]
+        public double IntervalSeconds
+        {
+            get { return intervalSeconds; }
+            set
+            {
+                intervalSeconds = value;
+                IncrementNextBuildTime();
+            }
+        }                    
 
 		[ReflectorProperty("buildCondition", Required=false)]
 		public BuildCondition BuildCondition = BuildCondition.IfModificationExists;
@@ -46,7 +55,7 @@ namespace ThoughtWorks.CruiseControl.Core.Triggers
 
 		protected DateTime IncrementNextBuildTime()
 		{
-			return nextBuildTime = dateTimeProvider.Now.AddSeconds(IntervalSeconds);
+			return nextBuildTime = dateTimeProvider.Now.AddSeconds(intervalSeconds);
 		}
 
 		public DateTime NextBuild
