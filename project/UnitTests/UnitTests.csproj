@@ -374,6 +374,7 @@
     <Compile Include="Core\Label\DefaultLabellerTest.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Core\Label\FileLabellerTest.cs" />
     <Compile Include="Core\Label\IterationLabellerTest.cs">
       <SubType>Code</SubType>
     </Compile>

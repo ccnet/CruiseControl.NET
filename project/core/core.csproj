@@ -275,6 +275,7 @@
     <Compile Include="label\DefaultLabeller.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="label\FileLabeller.cs" />
     <Compile Include="label\ILabeller.cs">
       <SubType>Code</SubType>
     </Compile>
