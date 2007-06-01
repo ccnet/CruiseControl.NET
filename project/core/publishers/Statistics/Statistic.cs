@@ -42,7 +42,7 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers.Statistics
             set { generateGraph = value; }
 	    }
 
-        [ReflectorProperty("Include", Required = false)]
+        [ReflectorProperty("include", Required = false)]
         public bool Include
 	    {
 	        get { return include; }
