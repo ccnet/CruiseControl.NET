@@ -59,19 +59,9 @@ namespace ThoughtWorks.CruiseControl.Core
 		public IIntegrationResult StartNewIntegration(IntegrationRequest request)
 		{
 			IntegrationResult newResult = new IntegrationResult(project.Name, project.WorkingDirectory, request, LastIntegration);
-			newResult.BuildCondition = DetermineBuildCondition(request.BuildCondition);
 			newResult.ArtifactDirectory = project.ArtifactDirectory;
 			newResult.ProjectUrl = project.WebURL;
 			return currentIntegration = newResult;
-		}
-
-		private BuildCondition DetermineBuildCondition(BuildCondition buildCondition)
-		{
-			if (LastIntegration.IsInitial())
-			{
-				return BuildCondition.ForceBuild;
-			}
-			return buildCondition;
 		}
 
 		public void FinishIntegration()
@@ -83,13 +73,13 @@ namespace ThoughtWorks.CruiseControl.Core
 			catch (Exception ex)
 			{
 				// swallow exception???
-				Log.Error("Unable to save integration result: " + ex.ToString());
+				Log.Error("Unable to save integration result: " + ex);
 			}
 			lastResult = currentIntegration;
 			lastIntegration = ConvertResultIntoSummary(currentIntegration);
 		}
 
-		private IntegrationSummary ConvertResultIntoSummary(IIntegrationResult integration)
+		private static IntegrationSummary ConvertResultIntoSummary(IIntegrationResult integration)
 		{
 			string lastSuccessfulIntegrationLabel = (integration.Succeeded) ? integration.Label : integration.LastSuccessfulIntegrationLabel;
 			return new IntegrationSummary(integration.Status, integration.Label, lastSuccessfulIntegrationLabel, integration.StartTime);

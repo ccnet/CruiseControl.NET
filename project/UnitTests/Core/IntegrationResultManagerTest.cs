@@ -41,6 +41,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 			Assert.AreEqual(project.ArtifactDirectory, result.ArtifactDirectory);
 			Assert.AreEqual(project.WebURL, result.ProjectUrl);
 			Assert.AreEqual("success", result.LastSuccessfulIntegrationLabel);
+            Assert.AreEqual(Source, result.IntegrationRequest.Source);
 		}
 
 		[Test]
@@ -70,6 +71,15 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 			manager.FinishIntegration();
 			Assert.AreEqual(expected, manager.LastIntegrationResult);
 		}
+
+	    [Test]
+	    public void InitialBuildShouldBeForced()
+	    {
+            mockStateManager.ExpectAndReturn("HasPreviousState", false, "project");
+
+            IIntegrationResult expected = manager.StartNewIntegration(ModificationExistRequest());
+	        Assert.AreEqual(BuildCondition.ForceBuild, expected.BuildCondition);
+        }
 
 		private void ExpectToLoadState(IIntegrationResult result)
 		{

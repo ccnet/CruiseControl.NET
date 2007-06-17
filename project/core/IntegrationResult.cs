@@ -44,7 +44,7 @@ namespace ThoughtWorks.CruiseControl.Core
 		{
 			ProjectName = projectName;
 			WorkingDirectory = workingDirectory;
-			this.request = request;
+			this.request = (lastIntegration.IsInitial()) ? new IntegrationRequest(BuildCondition.ForceBuild, request.Source) : request;
 			this.lastIntegration = lastIntegration;
 		}
 
