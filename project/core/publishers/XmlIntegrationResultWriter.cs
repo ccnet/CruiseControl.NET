@@ -47,7 +47,7 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
 		public void WriteBuildElement(IIntegrationResult result)
 		{
 			writer.WriteStartElement(Elements.BUILD);
-			writer.WriteAttributeString("date", result.StartTime.ToString());
+			writer.WriteAttributeString("date", DateUtil.FormatDate(result.StartTime));
 
 			// hide the milliseconds
 			TimeSpan time = result.TotalIntegrationTime;

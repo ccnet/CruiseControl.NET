@@ -7,6 +7,7 @@ using System.Xml.XPath;
 using NUnit.Framework;
 using ThoughtWorks.CruiseControl.Core;
 using ThoughtWorks.CruiseControl.Core.Publishers.Statistics;
+using ThoughtWorks.CruiseControl.Core.Util;
 
 namespace ThoughtWorks.CruiseControl.UnitTests.Core.Publishers.Statistics
 {
@@ -106,7 +107,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Publishers.Statistics
 
 			builder.ProcessBuildResults(result);
 
-			AssertHasStatistic("StartTime", result.StartTime.ToString());
+			AssertHasStatistic("StartTime", DateUtil.FormatDate(result.StartTime));
 			AssertHasStatistic("Duration", new TimeSpan(0, 32, 0).ToString());
 			AssertHasStatistic("ProjectName", "Foo");
 		}
