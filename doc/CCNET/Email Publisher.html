@@ -15,7 +15,7 @@
                                                     </span>
 				    </div>
 				    <div class="pagesubheading">
-					    This page last changed on Dec 20, 2006 by <font color="#0050B2">dcameron</font>.
+					    This page last changed on May 01, 2007 by <font color="#0050B2">rosspatterson</font>.
 				    </div>
 
 				    <p>The email publisher can be used to send email to any number of users. It is common to include one user who gets an email for every build and then also send email to every developer who checked code in for this build.</p>
@@ -23,6 +23,7 @@
 <p><img class="emoticon" src="./icons/emoticons/information.gif" height="16" width="16" align="absmiddle" alt="" border="0"/> People tend to prefer to use <a href="CCTray.html" title="CCTray">CCTray</a> rather than email for instant notification these days.</p>
 <table cellpadding='5' width='85%' cellspacing='8px' class='noteMacro' border="0" align='center'><colgroup><col width='24'><col></colgroup><tr><td valign='top'><img src="./icons/emoticons/warning.gif" width="16" height="16" align="absmiddle" alt="" border="0"></td><td>Make sure that all of the Merge Publishers, along with the <a href="Xml Log Publisher.html" title="Xml Log Publisher">Xml Log Publisher</a> task are done before the <tt>&lt;email&gt;</tt> publisher, or else you won't be able to include output from the build in the email.</td></tr></table>
 <table cellpadding='5' width='85%' cellspacing='8px' class='noteMacro' border="0" align='center'><colgroup><col width='24'><col></colgroup><tr><td valign='top'><img src="./icons/emoticons/warning.gif" width="16" height="16" align="absmiddle" alt="" border="0"></td><td>A common mistake is to put the email task in the &lt;tasks&gt; section instead of the &lt;publishers&gt; section.  If an error occurs in the &lt;tasks&gt; section, the remaining tasks in that section are skipped, and CC.Net goes right to the &lt;publishers&gt; section.  So if you put the &lt;email&gt; tasks in the &lt;tasks&gt; section, you'll never get any failure messages.</td></tr></table>
+<table cellpadding='5' width='85%' cellspacing='8px' class='noteMacro' border="0" align='center'><colgroup><col width='24'><col></colgroup><tr><td valign='top'><img src="./icons/emoticons/warning.gif" width="16" height="16" align="absmiddle" alt="" border="0"></td><td>The ability to configure notifications for successful builds was added in build 1.3.0.2836. It is available in CCNet 1.3 and later.</td></tr></table>
 <div class="code"><div class="codeContent">
 <pre class="code-xml"><span class="code-tag">&lt;email from=<span class="code-quote">"buildmaster@mycompany.com"</span> mailhost=<span class="code-quote">"smtp.mycompany.com"</span> mailhostUsername=<span class="code-quote">"smtpuser"</span> mailhostPassword=<span class="code-quote">"smtppassword"</span> includeDetails=<span class="code-quote">"TRUE"</span>&gt;</span>
     <span class="code-tag">&lt;users&gt;</span>
@@ -38,7 +39,7 @@
 
 <h3><a name="EmailPublisher-ConfigurationElements%3A"></a>Configuration Elements:</h3>
 
-<table cellpadding='5' width='85%' cellspacing='8px' class='noteMacro' border="0" align='center'><colgroup><col width='24'><col></colgroup><tr><td valign='top'><img src="./icons/emoticons/warning.gif" width="16" height="16" align="absmiddle" alt="" border="0"></td><td>The authentication elements, mailhostUsername and mailhostPassword, are available starting with build 1.1.1.2534. This is an interim release, and the feature has not been included in an official release yet. If you would like to use this functionality, you can download a recent build from <a href="http://http://ccnetlive.thoughtworks.com/CCNet%2Dbuilds/" title="Visit page outside Confluence">http://http://ccnetlive.thoughtworks.com/CCNet%2Dbuilds/</a></td></tr></table>
+<table cellpadding='5' width='85%' cellspacing='8px' class='noteMacro' border="0" align='center'><colgroup><col width='24'><col></colgroup><tr><td valign='top'><img src="./icons/emoticons/warning.gif" width="16" height="16" align="absmiddle" alt="" border="0"></td><td>The authentication elements, mailhostUsername and mailhostPassword, are available starting with build 1.1.1.2534. This is an interim release, and the feature has not been included in an official release yet. If you would like to use this functionality, you can download a recent build from <a href="http://http://ccnetlive.thoughtworks.com/CCNet%2Dbuilds/">http://http://ccnetlive.thoughtworks.com/CCNet%2Dbuilds/</a></td></tr></table>
 
 <table class='confluenceTable'><tbody>
 <tr>
@@ -147,11 +148,12 @@
 </tr>
 <tr>
 <td class='confluenceTd'> notification </td>
-<td class='confluenceTd'> Determines when to send email to this group.  There are three possible notification values:
+<td class='confluenceTd'> Determines when to send email to this group.  There are four possible notification values:
 <ul>
 	<li>"always" - send email when any build occurs</li>
-	<li>"change" - send email when the status of the build changes (e.g. from 'passed' to 'failed').</li>
+	<li>"change" - send email when the status of the build changes (e.g. from 'success' to 'failed').</li>
 	<li>"failed" - send email when the build fails</li>
+	<li>"success" - send email when the build succeeds</li>
 </ul>
 </td>
 <td class='confluenceTd'> string </td>
@@ -169,94 +171,9 @@
 </div></div>
 <p>This is likely due to not having CDO properly installed on the build server.  To fix this, make sure that you have some sort of email client installed  (Outlook Express is probably there by default).  Outlook Express doesn't actually initialise CDO until you actually open it, so try and use the client to send an email just to verify that everything works.</p>
 
-<p>You can find further troubleshooting hints on the <a href="http://www.systemwebmail.com/faq/4.3.9.aspx" title="Visit page outside Confluence">System.Web.Mail faq site</a></p>
+<p>You can find further troubleshooting hints on the <a href="http://www.systemwebmail.com/faq/4.3.9.aspx">System.Web.Mail faq site</a></p>
 
 				    
-                                            <div class="tabletitle">
-                            <a name="comments">Comments:</a>
-                        </div>
-
-                        <table border="0" width="100%">
-                                                        <tr>
-                                <td >
-                                    <a name="comment-868"></a>
-                                    <font class="smallfont"><p>It would be nice if you added an attribute to set the Reply-To header. That way email could be marked as being "From" ccnet-builder@company.com without there actually being such an address. Replies would be sent to the project leader, for instance. It would be misleading to have the email actually come "From" his address; he is not sending these mails, he should just get any replies to them.</p>
-
-<p>This seems trivial to do with the .Net standard email classes.</p>
-
-<p>Makes sense?</p></font>
-                                    <div align="left" class="smallfont" style="color: #666666; width: 98%; margin-bottom: 10px;">
-                                        <img src="icons/comment_16.gif" height="16" width="16" border="0" align="absmiddle"/>
-                                        Posted by gthb at Jun 21, 2004 07:02
-                                    </div>
-                                </td>
-                            </tr>
-                                                        <tr>
-                                <td  style="border-top: 1px dashed #666666">
-                                    <a name="comment-876"></a>
-                                    <font class="smallfont"><p>In the example, the projectUrl is <a href="http://buildserver/myproject" title="Visit page outside Confluence">http://buildserver/myproject</a> which sounds like it points to the build deliverables, rather than the CC.Net webapp displaying information about the build.</p>
-
-<p>But clearly the CC.Net webapp is what was intended (since CC.Net tacks ?log=logXXX.xml onto the URL to select the build to display; this parameter has no meaning for the app I'm building).</p>
-
-<p>So shouldn't projectUrl rather be <a href="http://mybuildserver/ccnet" title="Visit page outside Confluence">http://mybuildserver/ccnet</a> in this example? That would be in sync with the webURL used in the ccnet.config page, <a href="http://mybuildserver/ccnet" title="Visit page outside Confluence">http://mybuildserver/ccnet</a></p>
-
-<p>Come to think of it, that begs the question: why is the URL to the CC.Net webapp being given again here? The same URL is already specified for each project, in the webUrl property, right?</p></font>
-                                    <div align="left" class="smallfont" style="color: #666666; width: 98%; margin-bottom: 10px;">
-                                        <img src="icons/comment_16.gif" height="16" width="16" border="0" align="absmiddle"/>
-                                        Posted by gthb at Jun 23, 2004 04:11
-                                    </div>
-                                </td>
-                            </tr>
-                                                        <tr>
-                                <td  style="border-top: 1px dashed #666666">
-                                    <a name="comment-1148"></a>
-                                    <font class="smallfont"><p>CruiseControl is running extremely well with the exception of the email publisher; it's not working.  Thought it could be a problem outside of cc, I am not seeing any output in the console saying that emails are being send when a build breaks.  I have one group for developers set to "always" receive email.   Please let me know if there are some small things I may be overlooking.  Thank you for your time in advance.</p></font>
-                                    <div align="left" class="smallfont" style="color: #666666; width: 98%; margin-bottom: 10px;">
-                                        <img src="icons/comment_16.gif" height="16" width="16" border="0" align="absmiddle"/>
-                                        Posted by bemizerany at Aug 12, 2004 12:25
-                                    </div>
-                                </td>
-                            </tr>
-                                                        <tr>
-                                <td  style="border-top: 1px dashed #666666">
-                                    <a name="comment-1575"></a>
-                                    <font class="smallfont"><p>Blake,</p>
-
-<p>I found an email from Matt Steele, he indicated a problem with the .config file.  The xsl links were in the wrong location for him.  This hit me like a brick on the head and I realized that my ccservice.exe.config is located on the C:\ drive and my CC.Net files run from the D:\ drive.  So I went in and added the fully qualified location of the XSL files and it worked like a dream.</p>
-
-<p>Good Luck.</p>
-
-<p>-Josh</p></font>
-                                    <div align="left" class="smallfont" style="color: #666666; width: 98%; margin-bottom: 10px;">
-                                        <img src="icons/comment_16.gif" height="16" width="16" border="0" align="absmiddle"/>
-                                        Posted by  at Sep 23, 2004 08:51
-                                    </div>
-                                </td>
-                            </tr>
-                                                        <tr>
-                                <td  style="border-top: 1px dashed #666666">
-                                    <a name="comment-6472"></a>
-                                    <font class="smallfont"><p>It would also be useful to add a default domain so that you don't have to add each and every user to the user's list - as long as the source control username matches the start of the user's email address (which is very likely).&nbsp; (perhaps also the ability to disable email sending for an individual source control account - e.g. of the cc.net labler)</p>
-
-
-<p>It would also be useful to only email users who checked in for the current build, i.e. build 'contributers'.&nbsp; That way you can limit emails to the users who caused the build to occur.&nbsp; (of course it should be configurable that emails sends on 'always', or 'failed')</p></font>
-                                    <div align="left" class="smallfont" style="color: #666666; width: 98%; margin-bottom: 10px;">
-                                        <img src="icons/comment_16.gif" height="16" width="16" border="0" align="absmiddle"/>
-                                        Posted by normanr at Jan 13, 2007 01:41
-                                    </div>
-                                </td>
-                            </tr>
-                                                        <tr>
-                                <td  style="border-top: 1px dashed #666666">
-                                    <a name="comment-6507"></a>
-                                    <font class="smallfont"><p>Any possibility of specifying the smtp server port?&nbsp; Our email provider forces us to use a port other than 25.</p></font>
-                                    <div align="left" class="smallfont" style="color: #666666; width: 98%; margin-bottom: 10px;">
-                                        <img src="icons/comment_16.gif" height="16" width="16" border="0" align="absmiddle"/>
-                                        Posted by matt@formulatrix.com at Jan 19, 2007 08:52
-                                    </div>
-                                </td>
-                            </tr>
-                                                    </table>
                     			    </td>
 		    </tr>
 	    </table>
@@ -265,7 +182,7 @@
 				<td height="12" background="border/border_bottom.gif"><img src="border/spacer.gif" width="1" height="1" border="0"/></td>
 			</tr>
 		    <tr>
-			    <td align="center"><font color="grey">Document generated by Confluence on Jan 25, 2007 17:46</font></td>
+			    <td align="center"><font color="grey">Document generated by Confluence on Jun 21, 2007 10:33</font></td>
 		    </tr>
 	    </table>
     </body>

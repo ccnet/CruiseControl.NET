@@ -67,7 +67,7 @@
 <td class='confluenceTd'> username</td>
 <td class='confluenceTd'> Vault user id that CCNet should use to authenticate </td>
 <td class='confluenceTd'> string </td>
-<td class='confluenceTd'> false<a href="#SourceGearVaultSourceControlBlock-optional" title="optional on SourceGear Vault Source Control Block">*</a> </td>
+<td class='confluenceTd'> false<a href="#SourceGearVaultSourceControlBlock-optional">*</a> </td>
 <td class='confluenceTd'> null </td>
 <td class='confluenceTd'>&nbsp;</td>
 <td class='confluenceTd'>&nbsp;</td>
@@ -76,7 +76,7 @@
 <td class='confluenceTd'> password </td>
 <td class='confluenceTd'> Password for the Vault user </td>
 <td class='confluenceTd'> string </td>
-<td class='confluenceTd'> false<a href="#SourceGearVaultSourceControlBlock-optional" title="optional on SourceGear Vault Source Control Block">*</a> </td>
+<td class='confluenceTd'> false<a href="#SourceGearVaultSourceControlBlock-optional">*</a> </td>
 <td class='confluenceTd'> null </td>
 <td class='confluenceTd'>&nbsp;</td>
 <td class='confluenceTd'>&nbsp;</td>
@@ -85,7 +85,7 @@
 <td class='confluenceTd'> host </td>
 <td class='confluenceTd'> The name of the Vault server </td>
 <td class='confluenceTd'> string </td>
-<td class='confluenceTd'> false<a href="#SourceGearVaultSourceControlBlock-optional" title="optional on SourceGear Vault Source Control Block">*</a> </td>
+<td class='confluenceTd'> false<a href="#SourceGearVaultSourceControlBlock-optional">*</a> </td>
 <td class='confluenceTd'> null </td>
 <td class='confluenceTd'>&nbsp;</td>
 <td class='confluenceTd'>&nbsp;</td>
@@ -94,7 +94,7 @@
 <td class='confluenceTd'> repository </td>
 <td class='confluenceTd'> The name of the Vault repository to monitor. </td>
 <td class='confluenceTd'> string </td>
-<td class='confluenceTd'> false<a href="#SourceGearVaultSourceControlBlock-optional" title="optional on SourceGear Vault Source Control Block">*</a> </td>
+<td class='confluenceTd'> false<a href="#SourceGearVaultSourceControlBlock-optional">*</a> </td>
 <td class='confluenceTd'> null </td>
 <td class='confluenceTd'>&nbsp;</td>
 <td class='confluenceTd'>&nbsp;</td>
@@ -140,7 +140,7 @@
 <td class='confluenceTd'> <b>CC.NET 1.0</b>: Determines the working directory into which Vault files will be retrieved. Supply true if you want CCNet to use the Vault folder working directory created for the build user using the Vault GUI (recommended). Supply false if CCNet should use the CCNet working directory.
 <br clear="all" />
 <br clear="all" />
-<b>CC.NET 1.1</b>: Determines if the source will be retrieved into a <a href="#SourceGearVaultSourceControlBlock-workingFolder" title="workingFolder on SourceGear Vault Source Control Block">Vault Working Folder</a>. </td>
+<b>CC.NET 1.1</b>: Determines if the source will be retrieved into a <a href="#SourceGearVaultSourceControlBlock-workingFolder">Vault Working Folder</a>. </td>
 <td class='confluenceTd'> bool </td>
 <td class='confluenceTd'> false </td>
 <td class='confluenceTd'> true </td>
@@ -170,7 +170,7 @@
 <td class='confluenceTd'> The root folder where the latest source will retrieved from Vault.  This path can either be absolute or it can be relative to the CCNet project working directory.
 <br clear="all" />
 <br clear="all" />
-<b>CC.NET 1.1</b>: If this element is missing or empty, Vault will attempt to use the directory set as the user's working folder.  Note that this is simply the destination path on disk.  Whether or not this location is a <a href="#SourceGearVaultSourceControlBlock-workingFolder" title="workingFolder on SourceGear Vault Source Control Block">Vault Working Folder</a> is determined by the useWorkingFolder element.  To use the same path as the project, it is necessary to use "." (without the quotes) rather than leaving this empty, as you could in CC.NET 1.0. </td>
+<b>CC.NET 1.1</b>: If this element is missing or empty, Vault will attempt to use the directory set as the user's working folder.  Note that this is simply the destination path on disk.  Whether or not this location is a <a href="#SourceGearVaultSourceControlBlock-workingFolder">Vault Working Folder</a> is determined by the useWorkingFolder element.  To use the same path as the project, it is necessary to use "." (without the quotes) rather than leaving this empty, as you could in CC.NET 1.0. </td>
 <td class='confluenceTd'> string </td>
 <td class='confluenceTd'> false </td>
 <td class='confluenceTd'> CCNet project working directory </td>
@@ -205,7 +205,7 @@
 <td class='confluenceTd'> proxyServer </td>
 <td class='confluenceTd'> The host name of the HTTP proxy Vault should use. </td>
 <td class='confluenceTd'> string </td>
-<td class='confluenceTd'> false<a href="#SourceGearVaultSourceControlBlock-optional" title="optional on SourceGear Vault Source Control Block">*</a> </td>
+<td class='confluenceTd'> false<a href="#SourceGearVaultSourceControlBlock-optional">*</a> </td>
 <td class='confluenceTd'>&nbsp;</td>
 <td class='confluenceTd'> 1.1.0.2172 </td>
 <td class='confluenceTd'> 3.0.6 </td>
@@ -214,7 +214,7 @@
 <td class='confluenceTd'> proxyPort </td>
 <td class='confluenceTd'> The port on the HTTP proxy Vault should use. </td>
 <td class='confluenceTd'> string </td>
-<td class='confluenceTd'> false<a href="#SourceGearVaultSourceControlBlock-optional" title="optional on SourceGear Vault Source Control Block">*</a> </td>
+<td class='confluenceTd'> false<a href="#SourceGearVaultSourceControlBlock-optional">*</a> </td>
 <td class='confluenceTd'>&nbsp;</td>
 <td class='confluenceTd'> 1.1.0.2172 </td>
 <td class='confluenceTd'> 3.0.6 </td>
@@ -223,7 +223,7 @@
 <td class='confluenceTd'> proxyUser </td>
 <td class='confluenceTd'> The user name for the HTTP proxy Vault should use. </td>
 <td class='confluenceTd'> string </td>
-<td class='confluenceTd'> false<a href="#SourceGearVaultSourceControlBlock-optional" title="optional on SourceGear Vault Source Control Block">*</a> </td>
+<td class='confluenceTd'> false<a href="#SourceGearVaultSourceControlBlock-optional">*</a> </td>
 <td class='confluenceTd'>&nbsp;</td>
 <td class='confluenceTd'> 1.1.0.2172 </td>
 <td class='confluenceTd'> 3.0.6 </td>
@@ -232,7 +232,7 @@
 <td class='confluenceTd'> proxyPassword </td>
 <td class='confluenceTd'> The password for the HTTP proxy Vault should use. </td>
 <td class='confluenceTd'> string </td>
-<td class='confluenceTd'> false<a href="#SourceGearVaultSourceControlBlock-optional" title="optional on SourceGear Vault Source Control Block">*</a> </td>
+<td class='confluenceTd'> false<a href="#SourceGearVaultSourceControlBlock-optional">*</a> </td>
 <td class='confluenceTd'>&nbsp;</td>
 <td class='confluenceTd'> 1.1.0.2172 </td>
 <td class='confluenceTd'> 3.0.6 </td>
@@ -241,7 +241,7 @@
 <td class='confluenceTd'> proxyDomain </td>
 <td class='confluenceTd'> The Windows domain of the HTTP proxy Vault should use. </td>
 <td class='confluenceTd'> string </td>
-<td class='confluenceTd'> false<a href="#SourceGearVaultSourceControlBlock-optional" title="optional on SourceGear Vault Source Control Block">*</a> </td>
+<td class='confluenceTd'> false<a href="#SourceGearVaultSourceControlBlock-optional">*</a> </td>
 <td class='confluenceTd'>&nbsp;</td>
 <td class='confluenceTd'> 1.1.0.2172 </td>
 <td class='confluenceTd'> 3.0.6 </td>
@@ -299,7 +299,7 @@
 
 <h3><a name="SourceGearVaultSourceControlBlock-NAntVaultTasks"></a>NAnt Vault Tasks</h3>
 
-<p>SourceGear has produced some NAnt tasks for Vault that can be downloaded from <a href="http://www.sourcegear.com/vault/downloads.html" title="Visit page outside Confluence">here</a>.</p>
+<p>SourceGear has produced some NAnt tasks for Vault that can be downloaded from <a href="http://www.sourcegear.com/vault/downloads.html">here</a>.</p>
 
 <h3><a name="SourceGearVaultSourceControlBlock-Turningoffthecreationofsgbakfolders"></a>Turning off the creation of _sgbak folders</h3>
 
@@ -320,7 +320,7 @@
 				<td height="12" background="border/border_bottom.gif"><img src="border/spacer.gif" width="1" height="1" border="0"/></td>
 			</tr>
 		    <tr>
-			    <td align="center"><font color="grey">Document generated by Confluence on Jan 25, 2007 17:46</font></td>
+			    <td align="center"><font color="grey">Document generated by Confluence on Jun 21, 2007 10:33</font></td>
 		    </tr>
 	    </table>
     </body>

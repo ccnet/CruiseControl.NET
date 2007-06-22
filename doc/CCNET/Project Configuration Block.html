@@ -15,7 +15,7 @@
                                                     </span>
 				    </div>
 				    <div class="pagesubheading">
-					    This page last changed on Oct 01, 2006 by <font color="#0050B2">orogers</font>.
+					    This page last changed on Apr 24, 2007 by <font color="#0050B2">rosspatterson</font>.
 				    </div>
 
 				    <p>A <tt>&lt;project&gt;</tt> block defines all the configuration for one project running in a CruiseControl.NET server</p>
@@ -28,11 +28,11 @@
 </div></div>
 <p>Full example:</p>
 <div class="code"><div class="codeContent">
-<pre class="code-xml"><span class="code-tag">&lt;project name=<span class="code-quote">"Project 1"</span>&gt;</span>
+<pre class="code-xml"><span class="code-tag">&lt;project name=<span class="code-quote">"Project 1"</span> queue=<span class="code-quote">"Q1"</span> queuePriority=<span class="code-quote">"1"</span>&gt;</span>
     <span class="code-tag">&lt;workingDirectory&gt;</span>yourWorkingDirectory<span class="code-tag">&lt;/workingDirectory&gt;</span>
     <span class="code-tag">&lt;artifactDirectory&gt;</span>yourArtifactDirectory<span class="code-tag">&lt;/artifactDirectory&gt;</span>
     <span class="code-tag">&lt;category&gt;</span>Category 1<span class="code-tag">&lt;/category&gt;</span>
-    <span class="code-tag">&lt;webURL&gt;</span>http://localhost/ccnet/Project1<span class="code-tag">&lt;/webURL&gt;</span>
+    <span class="code-tag">&lt;webURL&gt;</span>http://server1/ccnet/server/local/project/testProject/ViewLatestBuildReport.aspx<span class="code-tag">&lt;/webURL&gt;</span>
     <span class="code-tag">&lt;modificationDelaySeconds&gt;</span>2<span class="code-tag">&lt;/modificationDelaySeconds&gt;</span>
     <span class="code-tag">&lt;triggers&gt;</span>
         <span class="code-tag">&lt;yourFirstTriggerType ../&gt;</span>
@@ -78,6 +78,20 @@
 <td class='confluenceTd'> n/a </td>
 </tr>
 <tr>
+<td class='confluenceTd'> <a name="ProjectConfigurationBlock-name"></a> queue </td>
+<td class='confluenceTd'> The name of the <a href="Integration Queues.html" title="Integration Queues">integration queue</a> that this project will use. By default, each project runs in its own queue. (Added in CCNet 1.3) </td>
+<td class='confluenceTd'> string </td>
+<td class='confluenceTd'> no </td>
+<td class='confluenceTd'> the project name </td>
+</tr>
+<tr>
+<td class='confluenceTd'> <a name="ProjectConfigurationBlock-name"></a> queuePriority </td>
+<td class='confluenceTd'> The priority of this project within the integration queue. If multiple projects have pending requests in the specified queue then these requests will be executed according to their priority. Higher priority numbers indicate that integration requests for this project will execute before other projects in the same queue. </td>
+<td class='confluenceTd'> string </td>
+<td class='confluenceTd'> no </td>
+<td class='confluenceTd'> 0 </td>
+</tr>
+<tr>
 <td class='confluenceTd'> <a name="ProjectConfigurationBlock-workingDirectory"></a> workingDirectory </td>
 <td class='confluenceTd'> The Working Directory for the project (this is used by other blocks). <b>Relative paths</b> are relative to a directory called the project Name in the directory where the CruiseControl.NET server was launched from. The Working Directory is meant to contain the checked out version of the project under integration. </td>
 <td class='confluenceTd'> string </td>
@@ -93,10 +107,10 @@
 </tr>
 <tr>
 <td class='confluenceTd'> <a name="ProjectConfigurationBlock-webURL"></a> webURL </td>
-<td class='confluenceTd'> A reporting URL for this project. This is used by CCTray and the Email Publisher. Typically you should navigate to the Project Report on the Dashboard, and use its URL, but make sure to replace any ampersands with &amp; a m p ; (no spaces) </td>
+<td class='confluenceTd'> A reporting URL for this project. This is used by CCTray and the Email Publisher. Typically you should navigate to the Project Report on the Dashboard, and use its URL </td>
 <td class='confluenceTd'> string </td>
 <td class='confluenceTd'> no </td>
-<td class='confluenceTd'> <a href="http://localhost/ccnet" title="Visit page outside Confluence">http://localhost/ccnet</a> </td>
+<td class='confluenceTd'> <a href="http://localhost/ccnet">http://localhost/ccnet</a> </td>
 </tr>
 <tr>
 <td class='confluenceTd'> <a name="ProjectConfigurationBlock-category"></a> category </td>
@@ -144,7 +158,7 @@
 </tr>
 <tr>
 <td class='confluenceTd'> <a name="ProjectConfigurationBlock-tasks"></a> tasks </td>
-<td class='confluenceTd'> A set of <a href="Task Blocks.html" title="Task Blocks">Tasks</a> to run as part of the build. A failed task will fail the build and any subsequent tasks will not run. Tasks and any subsequent tasks will not run. Tasks are run sequentially, in the order they appear in the configuration. </td>
+<td class='confluenceTd'> A set of <a href="Task Blocks.html" title="Task Blocks">Tasks</a> to run as part of the build. A failed task will fail the build and any subsequent tasks will not run. Tasks are run sequentially, in the order they appear in the configuration. </td>
 <td class='confluenceTd'> List of <a href="Task Blocks.html" title="Task Blocks">Task Blocks</a> </td>
 <td class='confluenceTd'> no </td>
 <td class='confluenceTd'> empty list </td>
@@ -172,6 +186,20 @@
 </tr>
 </tbody></table>
 
+<h3><a name="ProjectConfigurationBlock-SettingtheWebURL"></a>Setting the WebURL</h3>
+
+<p>The current format of the url for a project, as specified in the &lt;webURL&gt; element is:</p>
+
+<div class="code"><div class="codeContent">
+<pre class="code-java">http:<span class="code-comment">//&lt;dashboardserver&gt;/&lt;vdir&gt;/server/&lt;ccnetserver&gt;/project/&lt;projectname&gt;/ViewLatestBuildReport.aspx</span></pre>
+</div></div>
+
+<p>For example, if the dashboard was deployed on the server <b>webserver</b> to virtual directory <b>ccnet</b>, and if the project to monitor is called <b>test</b> on server <b>cruise</b>, the URL would be:</p>
+
+<div class="code"><div class="codeContent">
+<pre class="code-java">http:<span class="code-comment">//webserver/ccnet/server/cruise/project/test/ViewLatestBuildReport.aspx</span></pre>
+</div></div>
+
 <h3><a name="ProjectConfigurationBlock-Subsectiontypes"></a>Sub-section types</h3>
 
 <ul><li><a href="ExternalLinks.html" title="ExternalLinks">ExternalLinks</a></li><li><a href="Labeller Blocks.html" title="Labeller Blocks">Labeller Blocks</a></li><li><a href="Source Control Blocks.html" title="Source Control Blocks">Source Control Blocks</a></li><li><a href="State Manager Blocks.html" title="State Manager Blocks">State Manager Blocks</a></li><li><a href="Task Blocks.html" title="Task Blocks">Task Blocks</a></li><li><a href="Timeout Configuration.html" title="Timeout Configuration">Timeout Configuration</a></li><li><a href="Trigger Blocks.html" title="Trigger Blocks">Trigger Blocks</a></li></ul>
@@ -185,7 +213,7 @@
 				<td height="12" background="border/border_bottom.gif"><img src="border/spacer.gif" width="1" height="1" border="0"/></td>
 			</tr>
 		    <tr>
-			    <td align="center"><font color="grey">Document generated by Confluence on Jan 25, 2007 17:46</font></td>
+			    <td align="center"><font color="grey">Document generated by Confluence on Jun 21, 2007 10:33</font></td>
 		    </tr>
 	    </table>
     </body>

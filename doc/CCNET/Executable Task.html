@@ -15,10 +15,10 @@
                                                     </span>
 				    </div>
 				    <div class="pagesubheading">
-					    This page last changed on Apr 14, 2006 by <font color="#0050B2">orogers</font>.
+					    This page last changed on May 02, 2007 by <font color="#0050B2">rosspatterson</font>.
 				    </div>
 
-				    <p>The Executable Task lets you invoke any command line executable. It doesn't offer as much specific integration as (for example) the <a href="NAnt Task.html" title="NAnt Task">NAnt Task</a>, but does allow you to hook almost anything up as a build process to CCNet.</p>
+				    <p>The Executable Task lets you invoke any command line executable. It doesn't offer as much specific integration as (for example) the <a href="NAnt Task.html" title="NAnt Task">NAnt Task</a>, but does allow you to hook almost anything up as a build process to CCNet.  CCNet will examine the exit code when the executable ends and act accordingly.</p>
 
 <h4><a name="ExecutableTask-Examples"></a>Examples</h4>
 
@@ -58,10 +58,10 @@
 </tr>
 <tr>
 <td class='confluenceTd'> baseDirectory </td>
-<td class='confluenceTd'> The directory to run the process in. If relative, is a subdirectory of the <a href="Project Configuration Block.html#ProjectConfigurationBlock-workingDirectory" title="workingDirectory on Project Configuration Block">Project Working Directory</a> </td>
+<td class='confluenceTd'> The directory to run the process in. If relative, is a subdirectory of the <a href="Project Configuration Block.html#ProjectConfigurationBlock-workingDirectory">Project Working Directory</a> </td>
 <td class='confluenceTd'> string </td>
 <td class='confluenceTd'> false </td>
-<td class='confluenceTd'> <a href="Project Configuration Block.html#ProjectConfigurationBlock-workingDirectory" title="workingDirectory on Project Configuration Block">Project Working Directory</a></td>
+<td class='confluenceTd'> <a href="Project Configuration Block.html#ProjectConfigurationBlock-workingDirectory">Project Working Directory</a></td>
 </tr>
 <tr>
 <td class='confluenceTd'> buildArgs </td>
@@ -126,12 +126,12 @@
 </tr>
 <tr>
 <td class='confluenceTd'> CCNetArtifactDirectory </td>
-<td class='confluenceTd'> The <a href="Project Configuration Block.html#ProjectConfigurationBlock-artifactDirectory" title="artifactDirectory on Project Configuration Block">project artifact directory</a> </td>
+<td class='confluenceTd'> The <a href="Project Configuration Block.html#ProjectConfigurationBlock-artifactDirectory">project artifact directory</a> </td>
 <td class='confluenceTd'> <tt>c:\program files\CruiseControl.NET\Server\MyProject\Artifacts</tt></td>
 </tr>
 <tr>
 <td class='confluenceTd'> CCNetWorkingDirectory </td>
-<td class='confluenceTd'> The <a href="Project Configuration Block.html#ProjectConfigurationBlock-workingDirectory" title="workingDirectory on Project Configuration Block">project working directory</a> </td>
+<td class='confluenceTd'> The <a href="Project Configuration Block.html#ProjectConfigurationBlock-workingDirectory">project working directory</a> </td>
 <td class='confluenceTd'> <tt>c:\program files\CruiseControl.NET\Server\MyProject\WorkingDirectory</tt></td>
 </tr>
 <tr>
@@ -141,9 +141,31 @@
 </tr>
 </tbody></table>
 
-<table cellpadding='5' width='85%' cellspacing='8px' class='noteMacro' border="0" align='center'><colgroup><col width='24'><col></colgroup><tr><td valign='top'><img src="./icons/emoticons/warning.gif" width="16" height="16" align="absmiddle" alt="" border="0"></td><td>
-<p>Windows seems to change the case of environment variables occasionally. If your task target doesn't find one of these properties, try using all upper case or all lower case versions of these properties.</p></td></tr></table>
+<table cellpadding='5' width='85%' cellspacing='8px' class='noteMacro' border="0" align='center'><colgroup><col width='24'><col></colgroup><tr><td valign='top'><img src="./icons/emoticons/warning.gif" width="16" height="16" align="absmiddle" alt="" border="0"></td><td>Windows seems to change the case of environment variables occasionally. If your task target doesn't find one of these properties, try using all upper case or all lower case versions of these properties.</td></tr></table>
 
+<h3><a name="ExecutableTask-Exitcodes"></a>Exit codes</h3>
+<table class='confluenceTable'><tbody>
+<tr>
+<th class='confluenceTh'> Code </th>
+<th class='confluenceTh'> Description </th>
+<th class='confluenceTh'> CCNet Behavior </th>
+</tr>
+<tr>
+<td class='confluenceTd'> 0 </td>
+<td class='confluenceTd'> Success </td>
+<td class='confluenceTd'> The build continues </td>
+</tr>
+<tr>
+<td class='confluenceTd'> -1 </td>
+<td class='confluenceTd'> Timed out </td>
+<td class='confluenceTd'> The operation timed out and the build fails </td>
+</tr>
+<tr>
+<td class='confluenceTd'> other </td>
+<td class='confluenceTd'> Failure </td>
+<td class='confluenceTd'> The build fails </td>
+</tr>
+</tbody></table>
 <h3><a name="ExecutableTask-FrequentlyAskedQuestions"></a>Frequently Asked Questions</h3>
 
 <p><b>Does the exec task pass the integration properties via the command line?</b></p>
@@ -159,7 +181,7 @@
 				<td height="12" background="border/border_bottom.gif"><img src="border/spacer.gif" width="1" height="1" border="0"/></td>
 			</tr>
 		    <tr>
-			    <td align="center"><font color="grey">Document generated by Confluence on Jan 25, 2007 17:46</font></td>
+			    <td align="center"><font color="grey">Document generated by Confluence on Jun 21, 2007 10:33</font></td>
 		    </tr>
 	    </table>
     </body>

@@ -15,7 +15,7 @@
                                                     </span>
 				    </div>
 				    <div class="pagesubheading">
-					    This page last changed on Jan 25, 2007 by <font color="#0050B2">orogers</font>.
+					    This page last changed on Mar 29, 2007 by <font color="#0050B2">orogers</font>.
 				    </div>
 
 				    <p>CruiseControl.NET has the following integration with CVS:</p>
@@ -30,15 +30,15 @@
 
 <p>Make a note of the full path of your working directory (the uppermost directory that got checked out) since you're going to need that data for configuring your CruiseControl.NET server.</p>
 
-<p>You'll also need a command line client installed on the integration server. We recommend using the latest stable Windows client from <a href="http://ximbiot.com/cvs/cvshome/" title="Visit page outside Confluence">Ximbiot</a>.</p>
+<p>You'll also need a command line client installed on the integration server. We recommend using the latest stable Windows client from <a href="http://ximbiot.com/cvs/cvshome/">Ximbiot</a>.</p>
 
 <h3><a name="UsingCruiseControl.NETwithCVS-ConfiguringCruiseControl.NET"></a>Configuring CruiseControl.NET</h3>
 
-<p>You need to make sure you use the <tt>cvs</tt> Source Control block within your project. Read up on this configuration block here : <a href="CVS Configuration Examples.html" title="CVS Configuration Examples">CVS Configuration Examples</a>.</p>
+<p>You need to make sure you use the <tt>cvs</tt> Source Control block within your project. Read up on this configuration block here : <a href="CVS Source Control Block.html" title="CVS Source Control Block">CVS Source Control Block</a>.</p>
 
 <h3><a name="UsingCruiseControl.NETwithCVS-AutomaticSourceUpdates"></a>Automatic Source Updates</h3>
 
-<p>To have CCNet automatically retrieve the latest version of the source from CVS prior to running a build, you should set the <tt><a href="CVS Configuration Examples.html#CVSConfigurationExamples-autoGetSource" title="autoGetSource on CVS Configuration Examples">autoGetSource</a></tt> attribute to <b><tt>true</tt></b>.</p>
+<p>To have CCNet automatically retrieve the latest version of the source from CVS prior to running a build, you should set the <tt><a href="CVS Source Control Block.html#CVSSourceControlBlock-autoGetSource">autoGetSource</a></tt> attribute to <b><tt>true</tt></b>.</p>
 
 <h3><a name="UsingCruiseControl.NETwithCVS-AutomaticSourceCheckout"></a>Automatic Source Checkout</h3>
 
@@ -46,7 +46,7 @@
 
 <h3><a name="UsingCruiseControl.NETwithCVS-AutomaticLabeling%28Tagging%29"></a>Automatic Labeling (Tagging)</h3>
 
-<p>To have CCNet automatically tag your source tree after a successful build, you should set the <tt><a href="CVS Configuration Examples.html#CVSConfigurationExamples-labelOnSuccess" title="labelOnSuccess on CVS Configuration Examples">labelOnSuccess</a></tt> attribute to <b><tt>true</tt></b>. By default, the name of the tag is <tt>ver-</tt><em><tt>buildLabel</tt></em>, but you can change the <tt>ver-</tt> prefix using the <tt><a href="CVS Configuration Examples.html#CVSConfigurationExamples-tagPrefix" title="tagPrefix on CVS Configuration Examples">tagPrefix</a></tt> property of the CVS provider.</p>
+<p>To have CCNet automatically tag your source tree after a successful build, you should set the <tt><a href="CVS Source Control Block.html#CVSSourceControlBlock-labelOnSuccess">labelOnSuccess</a></tt> attribute to <b><tt>true</tt></b>. By default, the name of the tag is <tt>ver-</tt><em><tt>buildLabel</tt></em>, but you can change the <tt>ver-</tt> prefix using the <tt><a href="CVS Source Control Block.html#CVSSourceControlBlock-tagPrefix">tagPrefix</a></tt> property of the CVS provider.</p>
 
 <p>The contents of the tag will be the currently checked-out files in the build server's local working copy. </p>
 
@@ -67,8 +67,8 @@
 <p>Very often when using CVS it is best to use SSH as the authentication/transport protocol. This occurs (for example) if you are using a 'SourceForge' or 'GForge' instance for your source control. If you are setting up such a scenario, you may want to follow the steps below to help get you going:</p>
 
 <ol>
-	<li>First you need to decide whether you are going to use password or key based authentication. Using keys is more secure, but using passwords is easier to setup initially. If you are going to use keys, you'll need to upload your public key to the server - we don't discuss that here but if you are using SourceForge, see <a href="http://sourceforge.net/docman/display_doc.php?docid=766&amp;group_id=1" title="Visit page outside Confluence">here </a> for some help.</li>
-	<li>We are going to use 'putty' and 'plink' as our SSH client - download them <a href="http://www.chiark.greenend.org.uk/%7Esgtatham/putty/download.html" title="Visit page outside Confluence">here </a>. In what follows, we're going to assume that putty and plink are both available in c:\putty.</li>
+	<li>First you need to decide whether you are going to use password or key based authentication. Using keys is more secure, but using passwords is easier to setup initially. If you are going to use keys, you'll need to upload your public key to the server - we don't discuss that here but if you are using SourceForge, see <a href="http://sourceforge.net/docman/display_doc.php?docid=766&amp;group_id=1">here </a> for some help.</li>
+	<li>We are going to use 'putty' and 'plink' as our SSH client - download them <a href="http://www.chiark.greenend.org.uk/%7Esgtatham/putty/download.html">here </a>. In what follows, we're going to assume that putty and plink are both available in c:\putty.</li>
 	<li>Start-up putty and create a session with the following details
 	<ul class="alternate" type="square">
 		<li>a name that we will use later (e.g. 'mysourcecontrol')</li>
@@ -115,7 +115,7 @@ If you are using key-based authentication, set the CVS_RSH variable to be the fu
 				<td height="12" background="border/border_bottom.gif"><img src="border/spacer.gif" width="1" height="1" border="0"/></td>
 			</tr>
 		    <tr>
-			    <td align="center"><font color="grey">Document generated by Confluence on Jan 25, 2007 17:46</font></td>
+			    <td align="center"><font color="grey">Document generated by Confluence on Jun 21, 2007 10:33</font></td>
 		    </tr>
 	    </table>
     </body>

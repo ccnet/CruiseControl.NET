@@ -1,0 +1,254 @@
+<html>
+    <head>
+        <title>CruiseControl.NET : Using CruiseControl.NET with CppUnit</title>
+	    <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">	    
+    </head>
+
+    <body>
+	    <table class="pagecontent" border="0" cellpadding="0" cellspacing="0" width="100%" bgcolor="#ffffff">
+		    <tr>
+			    <td valign="top" class="pagebody">
+				    <div class="pageheader">
+					    <span class="pagetitle">
+                            CruiseControl.NET : Using CruiseControl.NET with CppUnit
+                                                    </span>
+				    </div>
+				    <div class="pagesubheading">
+					    This page last changed on Feb 15, 2007 by <font color="#0050B2">makh_dv@qarea.com</font>.
+				    </div>
+
+				    <p>Maybe it is not "correct way". But for me it really works.<br/>
+I used CppUnit 1.12.0</p>
+
+<p>First Server...</p>
+<h1><a name="UsingCruiseControl.NETwithCppUnit-Server"></a>Server</h1>
+<h2><a name="UsingCruiseControl.NETwithCppUnit-Tasks"></a>Tasks</h2>
+<p>In &lt;exec&gt; and .bat file for launching tests.<br/>
+It is required that this but file first delete privious results.<br/>
+Than launch tests and using XmlOutputter, put results at "Results.xml"</p>
+<div class="code"><div class="codeContent">
+<pre class="code-xml"><span class="code-tag">&lt;exec&gt;</span>
+    	<span class="code-tag">&lt;executable&gt;</span>TestRunner.bat<span class="code-tag">&lt;/executable&gt;</span>
+    	<span class="code-tag">&lt;baseDirectory&gt;</span>***<span class="code-tag">&lt;/baseDirectory&gt;</span>
+    	<span class="code-tag">&lt;buildTimeoutSeconds&gt;</span>10<span class="code-tag">&lt;/buildTimeoutSeconds&gt;</span>
+<span class="code-tag">&lt;/exec&gt;</span></pre>
+</div></div>
+<h2><a name="UsingCruiseControl.NETwithCppUnit-Publisher"></a>Publisher</h2>
+<p>I like that build can be identified by NUnit, so I use the same method.<br/>
+And send to NUnit, exe file that return 1 or 0, depend on result.<br/>
+It has something</p>
+<div class="code"><div class="codeContent">
+<pre class="code-java"><span class="code-object">int</span> main(<span class="code-object">int</span> argc, <span class="code-object">char</span>* argv[])
+{
+...
+	<span class="code-comment">// Return error code 1 <span class="code-keyword">if</span> the one of test failed.
+</span>	<span class="code-keyword">return</span> wasSucessful ? 0 : 1;
+}</pre>
+</div></div>
+<p>It is a usual way for CppUnit. Who used cppUnit just once, should know these strings.</p>
+
+<p>Then I add to log recieved results.</p>
+<div class="code"><div class="codeContent">
+<pre class="code-xml"><span class="code-tag">&lt;nunit&gt;</span>
+    	<span class="code-tag">&lt;path&gt;</span>IsSucessful.exe<span class="code-tag">&lt;/path&gt;</span>
+    	<span class="code-tag">&lt;assemblies&gt;</span>
+		<span class="code-tag">&lt;assembly&gt;</span>*noassembly*<span class="code-tag">&lt;/assembly&gt;</span>
+	<span class="code-tag">&lt;/assemblies&gt;</span>
+	<span class="code-tag">&lt;outputfile&gt;</span>empty.xml<span class="code-tag">&lt;/outputfile&gt;</span>
+<span class="code-tag">&lt;/nunit&gt;</span>
+<span class="code-tag">&lt;merge&gt;</span>
+	<span class="code-tag">&lt;files&gt;</span>
+		<span class="code-tag">&lt;file&gt;</span>Results.xml<span class="code-tag">&lt;/file&gt;</span>
+	<span class="code-tag">&lt;/files&gt;</span>
+<span class="code-tag">&lt;/merge&gt;</span>
+<span class="code-tag">&lt;xmllogger /&gt;</span></pre>
+</div></div>
+
+<p>Now build failds if CppUnit tests failed.</p>
+
+<p>Lets update results at Dashboard...</p>
+
+<h1><a name="UsingCruiseControl.NETwithCppUnit-Dashboard"></a>Dashboard</h1>
+<p>I've updated <b>unittests.xsl</b> , to make tests in usual manner.<br/>
+Changed unittests.xsl is attached - <a href="../786491/unittests.xsl">unittests.xsl</a>.</p>
+
+<h2><a name="UsingCruiseControl.NETwithCppUnit-HowcppUnitxmllooks."></a>How cppUnit xml looks.</h2>
+<p>You can find standart example at cppunit-cvs-1.12.0\contrib\xml-xsl\tests.xml.<br/>
+In same folder xsl-transformation for cppUnit to JUnit, but I don't know how to use "double transformation" for CC.NET dashboard. <img class="emoticon" src="./icons/emoticons/sad.gif" height="20" width="20" align="absmiddle" alt="" border="0"/></p>
+
+<p>And here is my example</p>
+<div class="code"><div class="codeContent">
+<pre class="code-xml"><span class="code-tag">&lt;TestRun&gt;</span>
+  <span class="code-tag">&lt;FailedTests&gt;</span>
+    <span class="code-tag">&lt;FailedTest id=<span class="code-quote">"5"</span>&gt;</span>
+      <span class="code-tag">&lt;Name&gt;</span>MyMathOperationsTest::testAdd<span class="code-tag">&lt;/Name&gt;</span>
+      <span class="code-tag">&lt;FailureType&gt;</span>Assertion<span class="code-tag">&lt;/FailureType&gt;</span>
+      <span class="code-tag">&lt;Location&gt;</span>
+        <span class="code-tag">&lt;File&gt;</span>c:\test_cc\demon\cpp\src\tests4prj\mymathoperationstest.cpp<span class="code-tag">&lt;/File&gt;</span>
+        <span class="code-tag">&lt;Line&gt;</span>28<span class="code-tag">&lt;/Line&gt;</span>
+      <span class="code-tag">&lt;/Location&gt;</span>
+      <span class="code-tag">&lt;Message&gt;</span>equality assertion failed
+- Expected: 10
+- Actual  : 11
+<span class="code-tag">&lt;/Message&gt;</span>
+    <span class="code-tag">&lt;/FailedTest&gt;</span>
+    <span class="code-tag">&lt;FailedTest id=<span class="code-quote">"6"</span>&gt;</span>
+      <span class="code-tag">&lt;Name&gt;</span>MyMathOperationsTest::testDivideThrow<span class="code-tag">&lt;/Name&gt;</span>
+      <span class="code-tag">&lt;FailureType&gt;</span>Error<span class="code-tag">&lt;/FailureType&gt;</span>
+      <span class="code-tag">&lt;Message&gt;</span>uncaught exception of unknown type
+<span class="code-tag">&lt;/Message&gt;</span>
+    <span class="code-tag">&lt;/FailedTest&gt;</span>
+  <span class="code-tag">&lt;/FailedTests&gt;</span>
+  <span class="code-tag">&lt;SuccessfulTests&gt;</span>
+    <span class="code-tag">&lt;Test id=<span class="code-quote">"1"</span>&gt;</span>
+      <span class="code-tag">&lt;Name&gt;</span>MoneyTest::testConstructor<span class="code-tag">&lt;/Name&gt;</span>
+    <span class="code-tag">&lt;/Test&gt;</span>
+    <span class="code-tag">&lt;Test id=<span class="code-quote">"2"</span>&gt;</span>
+      <span class="code-tag">&lt;Name&gt;</span>MoneyTest::testEqual<span class="code-tag">&lt;/Name&gt;</span>
+    <span class="code-tag">&lt;/Test&gt;</span>
+    <span class="code-tag">&lt;Test id=<span class="code-quote">"3"</span>&gt;</span>
+      <span class="code-tag">&lt;Name&gt;</span>MoneyTest::testAdd<span class="code-tag">&lt;/Name&gt;</span>
+    <span class="code-tag">&lt;/Test&gt;</span>
+    <span class="code-tag">&lt;Test id=<span class="code-quote">"4"</span>&gt;</span>
+      <span class="code-tag">&lt;Name&gt;</span>MoneyTest::testAddThrow<span class="code-tag">&lt;/Name&gt;</span>
+    <span class="code-tag">&lt;/Test&gt;</span>
+  <span class="code-tag">&lt;/SuccessfulTests&gt;</span>
+  <span class="code-tag">&lt;Statistics&gt;</span>
+    <span class="code-tag">&lt;Tests&gt;</span>6<span class="code-tag">&lt;/Tests&gt;</span>
+    <span class="code-tag">&lt;FailuresTotal&gt;</span>2<span class="code-tag">&lt;/FailuresTotal&gt;</span>
+    <span class="code-tag">&lt;Errors&gt;</span>1<span class="code-tag">&lt;/Errors&gt;</span>
+    <span class="code-tag">&lt;Failures&gt;</span>1<span class="code-tag">&lt;/Failures&gt;</span>
+  <span class="code-tag">&lt;/Statistics&gt;</span>
+<span class="code-tag">&lt;/TestRun&gt;</span></pre>
+</div></div>
+
+<h2><a name="UsingCruiseControl.NETwithCppUnit-Variables"></a>Variables</h2>
+<div class="code"><div class="codeContent">
+<pre class="code-xml"><span class="code-tag"><span class="code-comment">&lt;!-- CppUnit Cases --&gt;</span></span>
+	<span class="code-tag">&lt;<span class="code-keyword">xsl:variable</span> name=<span class="code-quote">"cppunit.result.list"</span> select=<span class="code-quote">"/cruisecontrol/build/TestRun"</span>/&gt;</span>
+	<span class="code-tag">&lt;<span class="code-keyword">xsl:variable</span> name=<span class="code-quote">"cppunit.failed.list"</span> select=<span class="code-quote">"$cppunit.result.list/FailedTests/FailedTest"</span>/&gt;</span>
+	<span class="code-tag">&lt;<span class="code-keyword">xsl:variable</span> name=<span class="code-quote">"cppunit.failed.count"</span> select=<span class="code-quote">"count($cppunit.failed.list)"</span>/&gt;</span>
+	<span class="code-tag">&lt;<span class="code-keyword">xsl:variable</span> name=<span class="code-quote">"cppunit.passed.list"</span> select=<span class="code-quote">"$cppunit.result.list/SuccessfulTests/Test"</span>/&gt;</span>
+	<span class="code-tag">&lt;<span class="code-keyword">xsl:variable</span> name=<span class="code-quote">"cppunit.passed.count"</span> select=<span class="code-quote">"count($cppunit.passed.list)"</span>/&gt;</span>
+<span class="code-tag"><span class="code-comment">&lt;!-- CppUnit Statistics --&gt;</span></span>
+	<span class="code-tag">&lt;<span class="code-keyword">xsl:variable</span> name=<span class="code-quote">"cppunit.case.count"</span> select=<span class="code-quote">"$cppunit.result.list/Statistics/Tests"</span>/&gt;</span>
+	<span class="code-tag">&lt;<span class="code-keyword">xsl:variable</span> name=<span class="code-quote">"cppunit.failure.count"</span> select=<span class="code-quote">"$cppunit.result.list/Statistics/Failures"</span>/&gt;</span>
+	<span class="code-tag">&lt;<span class="code-keyword">xsl:variable</span> name=<span class="code-quote">"cppunit.error.count"</span> select=<span class="code-quote">"$cppunit.result.list/Statistics/Errors"</span>/&gt;</span></pre>
+</div></div>
+
+<h2><a name="UsingCruiseControl.NETwithCppUnit-UpdateTestStatistic"></a>Update Test Statistic</h2>
+<div class="code"><div class="codeContent">
+<pre class="code-xml">&lt;!-- <span class="code-quote">"Old"</span> 
+	<span class="code-tag">&lt;<span class="code-keyword">xsl:variable</span> name=<span class="code-quote">"total.time"</span> select=<span class="code-quote">"$nunit2.time + $junit.time"</span>/&gt;</span>
+	<span class="code-tag">&lt;<span class="code-keyword">xsl:variable</span> name=<span class="code-quote">"total.notrun.count"</span> select=<span class="code-quote">"$nunit2.notrun.count"</span>/&gt;</span>
+	<span class="code-tag">&lt;<span class="code-keyword">xsl:variable</span> name=<span class="code-quote">"total.run.count"</span> select=<span class="code-quote">"$nunit2.case.count + $junit.case.count - $total.notrun.count"</span>/&gt;</span>
+	<span class="code-tag">&lt;<span class="code-keyword">xsl:variable</span> name=<span class="code-quote">"total.failure.count"</span> select=<span class="code-quote">"$nunit2.failure.count + $junit.failure.count + $junit.error.count"</span>/&gt;</span> 
+--&gt;
+    
+<span class="code-tag"><span class="code-comment">&lt;!-- Added CppUnit--&gt;</span></span>
+	<span class="code-tag">&lt;<span class="code-keyword">xsl:variable</span> name=<span class="code-quote">"total.time"</span> select=<span class="code-quote">"$nunit2.time + $junit.time"</span>/&gt;</span>
+	<span class="code-tag">&lt;<span class="code-keyword">xsl:variable</span> name=<span class="code-quote">"total.notrun.count"</span> select=<span class="code-quote">"$nunit2.notrun.count"</span>/&gt;</span>
+	<span class="code-tag">&lt;<span class="code-keyword">xsl:variable</span> name=<span class="code-quote">"total.run.count"</span> select=<span class="code-quote">"$cppunit.case.count + $nunit2.case.count + $junit.case.count - $total.notrun.count"</span>/&gt;</span>
+	<span class="code-tag">&lt;<span class="code-keyword">xsl:variable</span> name=<span class="code-quote">"total.failure.count"</span> select=<span class="code-quote">"$cppunit.failed.count + $nunit2.failure.count + $junit.failure.count + $junit.error.count"</span>/&gt;</span></pre>
+</div></div>
+<p>For know it is absent testTime for cpp unit, but you can add "Chrono-plugin" if it is major for you.</p>
+
+<h2><a name="UsingCruiseControl.NETwithCppUnit-ShortDetails"></a>Short Details</h2>
+<p>First add "apply-templates"</p>
+<div class="code"><div class="codeContent">
+<pre class="code-xml"><span class="code-tag"><span class="code-comment">&lt;!-- Short Information *Next Line added* --&gt;</span></span>
+<span class="code-tag">&lt;<span class="code-keyword">xsl:apply-templates</span> select=<span class="code-quote">"$cppunit.failed.list"</span>/&gt;</span>
+<span class="code-tag"><span class="code-comment">&lt;!-- Next line helps you to identify the place --&gt;</span></span>		
+<span class="code-tag">&lt;<span class="code-keyword">xsl:apply-templates</span> select=<span class="code-quote">"$junit.error.list"</span>/&gt;</span>
+<span class="code-tag">&lt;<span class="code-keyword">xsl:apply-templates</span> select=<span class="code-quote">"$junit.failure.list | $nunit2.failure.list"</span>/&gt;</span>
+<span class="code-tag">&lt;<span class="code-keyword">xsl:apply-templates</span> select=<span class="code-quote">"$nunit2.notrun.list"</span>/&gt;</span></pre>
+</div></div>
+
+<p>Then add template before "&lt;!-- Unit Test Errors --&gt;"</p>
+<div class="code"><div class="codeContent">
+<pre class="code-xml"><span class="code-tag"><span class="code-comment">&lt;!-- CppUnit Failed Test --&gt;</span></span>
+	<span class="code-tag">&lt;<span class="code-keyword">xsl:template</span> match=<span class="code-quote">"FailedTest"</span>&gt;</span>
+        <span class="code-tag">&lt;tr&gt;</span>
+            <span class="code-tag">&lt;<span class="code-keyword">xsl:if</span> test=<span class="code-quote">"position() mod 2 = 0"</span>&gt;</span>
+                <span class="code-tag">&lt;<span class="code-keyword">xsl:attribute</span> name=<span class="code-quote">"class"</span>&gt;</span>section-oddrow<span class="code-tag">&lt;/<span class="code-keyword">xsl:attribute</span>&gt;</span>
+            <span class="code-tag">&lt;/<span class="code-keyword">xsl:if</span>&gt;</span>
+            <span class="code-tag">&lt;td class=<span class="code-quote">"section-data"</span>&gt;</span>CppUnit <span class="code-tag">&lt;<span class="code-keyword">xsl:value-of</span> select=<span class="code-quote">"FailureType"</span>/&gt;</span><span class="code-tag">&lt;/td&gt;</span>
+            <span class="code-tag">&lt;td class=<span class="code-quote">"section-data"</span>&gt;</span><span class="code-tag">&lt;<span class="code-keyword">xsl:value-of</span> select=<span class="code-quote">"Name"</span>/&gt;</span><span class="code-tag">&lt;/td&gt;</span>
+        <span class="code-tag">&lt;/tr&gt;</span>
+    <span class="code-tag">&lt;/<span class="code-keyword">xsl:template</span>&gt;</span></pre>
+</div></div>
+
+<h2><a name="UsingCruiseControl.NETwithCppUnit-DetailedInformaton"></a>Detailed Informaton</h2>
+<p>First add "call-template"</p>
+<div class="code"><div class="codeContent">
+<pre class="code-xml"><span class="code-tag"><span class="code-comment">&lt;!-- Detailed Information *Next Lines added* --&gt;</span></span>
+<span class="code-tag">&lt;<span class="code-keyword">xsl:call-template</span> name=<span class="code-quote">"cppunittestdetail"</span>&gt;</span>
+	<span class="code-tag">&lt;<span class="code-keyword">xsl:with-param</span> name=<span class="code-quote">"detailnodes"</span> select=<span class="code-quote">"$cppunit.failed.list"</span>/&gt;</span>
+<span class="code-tag">&lt;/<span class="code-keyword">xsl:call-template</span>&gt;</span>
+<span class="code-tag"><span class="code-comment">&lt;!-- Next line helps you to identify the place --&gt;</span></span>
+<span class="code-tag">&lt;<span class="code-keyword">xsl:call-template</span> name=<span class="code-quote">"junittestdetail"</span>&gt;</span>
+	<span class="code-tag">&lt;<span class="code-keyword">xsl:with-param</span> name=<span class="code-quote">"detailnodes"</span> select=<span class="code-quote">"//testsuite/testcase[.//error]"</span>/&gt;</span>
+<span class="code-tag">&lt;/<span class="code-keyword">xsl:call-template</span>&gt;</span></pre>
+</div></div>
+
+<p>Then add template before "&lt;!-- JUnit Test Errors And Failures Detail Template --&gt;"</p>
+<div class="code"><div class="codeContent">
+<pre class="code-xml"><span class="code-tag">&lt;<span class="code-keyword">xsl:template</span> name=<span class="code-quote">"cppunittestdetail"</span>&gt;</span>
+	<span class="code-tag">&lt;<span class="code-keyword">xsl:param</span> name=<span class="code-quote">"detailnodes"</span>/&gt;</span>
+
+	<span class="code-tag">&lt;<span class="code-keyword">xsl:for-each</span> select=<span class="code-quote">"$detailnodes"</span>&gt;</span>
+        
+		<span class="code-tag">&lt;tr&gt;</span><span class="code-tag">&lt;td class=<span class="code-quote">"section-data"</span>&gt;</span>CppTest:<span class="code-tag">&lt;/td&gt;</span><span class="code-tag">&lt;td class=<span class="code-quote">"section-data"</span>&gt;</span><span class="code-tag">&lt;<span class="code-keyword">xsl:value-of</span> select=<span class="code-quote">"Name"</span>/&gt;</span><span class="code-tag">&lt;/td&gt;</span><span class="code-tag">&lt;/tr&gt;</span>
+		<span class="code-tag">&lt;tr&gt;</span><span class="code-tag">&lt;td class=<span class="code-quote">"section-data"</span>&gt;</span>Type:<span class="code-tag">&lt;/td&gt;</span><span class="code-tag">&lt;td class=<span class="code-quote">"section-data"</span>&gt;</span><span class="code-tag">&lt;<span class="code-keyword">xsl:value-of</span> select=<span class="code-quote">"FailureType"</span>/&gt;</span><span class="code-tag">&lt;/td&gt;</span><span class="code-tag">&lt;/tr&gt;</span>
+		<span class="code-tag">&lt;tr&gt;</span><span class="code-tag">&lt;td class=<span class="code-quote">"section-data"</span>&gt;</span>Message:<span class="code-tag">&lt;/td&gt;</span><span class="code-tag">&lt;td class=<span class="code-quote">"section-data"</span>&gt;</span><span class="code-tag">&lt;pre style=<span class="code-quote">"font-size=120%"</span>&gt;</span><span class="code-tag">&lt;<span class="code-keyword">xsl:value-of</span> select=<span class="code-quote">"Message"</span>/&gt;</span><span class="code-tag">&lt;/pre&gt;</span><span class="code-tag">&lt;/td&gt;</span><span class="code-tag">&lt;/tr&gt;</span>
+            
+		<span class="code-tag">&lt;<span class="code-keyword">xsl:if</span> test=<span class="code-quote">"count(Location) &gt;</span> 0"</span>&gt;
+			<span class="code-tag">&lt;tr&gt;</span>
+				<span class="code-tag">&lt;td&gt;</span><span class="code-tag">&lt;/td&gt;</span>
+ 				<span class="code-tag">&lt;td class=<span class="code-quote">"section-error"</span>&gt;</span>
+					<span class="code-tag">&lt;pre&gt;</span><span class="code-tag">&lt;<span class="code-keyword">xsl:value-of</span> select=<span class="code-quote">"Location/File"</span>/&gt;</span>: Line <span class="code-tag">&lt;<span class="code-keyword">xsl:value-of</span> select=<span class="code-quote">"Location/Line"</span>/&gt;</span><span class="code-tag">&lt;/pre&gt;</span>
+				<span class="code-tag">&lt;/td&gt;</span>
+			<span class="code-tag">&lt;/tr&gt;</span>
+		<span class="code-tag">&lt;/<span class="code-keyword">xsl:if</span>&gt;</span>
+
+		<span class="code-tag">&lt;tr&gt;</span><span class="code-tag">&lt;td colspan=<span class="code-quote">"2"</span>&gt;</span><span class="code-tag">&lt;hr size=<span class="code-quote">"1"</span> width=<span class="code-quote">"100%"</span> color=<span class="code-quote">"#888888"</span>/&gt;</span><span class="code-tag">&lt;/td&gt;</span><span class="code-tag">&lt;/tr&gt;</span>
+
+        <span class="code-tag">&lt;/<span class="code-keyword">xsl:for-each</span>&gt;</span>
+<span class="code-tag">&lt;/<span class="code-keyword">xsl:template</span>&gt;</span></pre>
+</div></div>
+
+<p>If you done all rigth - Now it should all work.<br/>
+Modified file you can find in attaches - <a href="../786491/unittests.xsl">unittests.xsl</a>, all this inderts marked by (DEmon) <img class="emoticon" src="./icons/emoticons/smile.gif" height="20" width="20" align="absmiddle" alt="" border="0"/></p>
+
+<h1><a name="UsingCruiseControl.NETwithCppUnit-ToDo"></a>ToDo</h1>
+<ul class="alternate" type="square">
+	<li>Start using cppunit2junit.xsl transformation from CppUnit package at Dashboard. If someone could help... please do it. I'm not ASP.net developer.</li>
+	<li>Learn NUnit plugin and create "tidy" plugin for CppUnit.</li>
+</ul>
+
+
+				    					    <br/>
+                        <div class="tabletitle">
+                            <a name="attachments">Attachments:</a>
+                        </div>
+
+                        <div class="greybox" align="left">
+                                                            <img src="icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="../786491/unittests.xsl">unittests.xsl</a> (application/octet-stream)
+                                <br/>
+                                                    </div>
+				    
+                    			    </td>
+		    </tr>
+	    </table>
+	    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+			<tr>
+				<td height="12" background="border/border_bottom.gif"><img src="border/spacer.gif" width="1" height="1" border="0"/></td>
+			</tr>
+		    <tr>
+			    <td align="center"><font color="grey">Document generated by Confluence on Jun 21, 2007 10:33</font></td>
+		    </tr>
+	    </table>
+    </body>
+</html>

@@ -22,9 +22,9 @@
 
 <p>The FilteredSourceControl allows you to filter out modifications that are used to trigger a build.  If for example, you have certain files (such as web pages or document files) under source control that you don't want to have trigger the build, you can use this class to ensure that their changes will keep a new build from launching.</p>
 
-<p>The FilteredSourceControl works together with all of the source controls supported by CCNet (including the <a href="Multi Source Control Block.html" title="Multi Source Control Block">Multi Source Control Block</a>).  It can also be included under the <a href="Multi Source Control Block.html" title="Multi Source Control Block">Multi Source Control Block</a> provider so that you could have multiple FilterSourceControls each filtering a different set of modifications from different source control providers.  Essentially, it acts as a decorator (or an example of the <a href="http://www.eaipatterns.com/PipesAndFilters.html" title="Visit page outside Confluence">pipes and filters pattern </a>), wrapping around the specific SourceControl provider that you want to use.  </p>
+<p>The FilteredSourceControl works together with all of the source controls supported by CCNet (including the <a href="Multi Source Control Block.html" title="Multi Source Control Block">Multi Source Control Block</a>).  It can also be included under the <a href="Multi Source Control Block.html" title="Multi Source Control Block">Multi Source Control Block</a> provider so that you could have multiple FilterSourceControls each filtering a different set of modifications from different source control providers.  Essentially, it acts as a decorator (or an example of the <a href="http://www.eaipatterns.com/PipesAndFilters.html">pipes and filters pattern </a>), wrapping around the specific SourceControl provider that you want to use.  </p>
 
-<p>The FilteredSourceControl includes both <b>inclusion</b> and <b>exclusion</b> filters for specifying what modifications should be included/excluded.  Multiple inclusion and exclusion filters can be specified or, alternately, no inclusion or exclusion filter could be specified.  If a modification is matched by both the inclusion and exclusion filter, then the exclusion filter will take preference and the modification will not be included in the modification set.  At this point, CCNet only supports three types of filters: <a href="#FilteredSourceControlBlock-PathFilter" title="PathFilter on Filtered Source Control Block">PathFilters</a>, <a href="#FilteredSourceControlBlock-UserFilter" title="UserFilter on Filtered Source Control Block">UserFilters</a>, and <a href="#FilteredSourceControlBlock-ActionFilter" title="ActionFilter on Filtered Source Control Block">ActionFilters</a>.  It is relatively straightforward to build new filters, (such as one to filter modifications based on email address).</p>
+<p>The FilteredSourceControl includes both <b>inclusion</b> and <b>exclusion</b> filters for specifying what modifications should be included/excluded.  Multiple inclusion and exclusion filters can be specified or, alternately, no inclusion or exclusion filter could be specified.  If a modification is matched by both the inclusion and exclusion filter, then the exclusion filter will take preference and the modification will not be included in the modification set.  At this point, CCNet only supports three types of filters: <a href="#FilteredSourceControlBlock-PathFilter">PathFilters</a>, <a href="#FilteredSourceControlBlock-UserFilter">UserFilters</a>, and <a href="#FilteredSourceControlBlock-ActionFilter">ActionFilters</a>.  It is relatively straightforward to build new filters, (such as one to filter modifications based on email address).</p>
 
 <h3><a name="FilteredSourceControlBlock-ConfigurationExamples"></a>Configuration Examples</h3>
 
@@ -107,7 +107,7 @@
 </tr>
 <tr>
 <td class='confluenceTd'> pattern </td>
-<td class='confluenceTd'> This is the pattern used to compare the modification path against. The pattern should match the path of the files in the repository (not the path of the files in the working directory). See <a href="#FilteredSourceControlBlock-PathFilter" title="PathFilter on Filtered Source Control Block">below</a> for examples of the syntax for this element.  Each PathFilter contains a single pattern element. </td>
+<td class='confluenceTd'> This is the pattern used to compare the modification path against. The pattern should match the path of the files in the repository (not the path of the files in the working directory). See <a href="#FilteredSourceControlBlock-PathFilter">below</a> for examples of the syntax for this element.  Each PathFilter contains a single pattern element. </td>
 <td class='confluenceTd'> string </td>
 <td class='confluenceTd'> true </td>
 </tr>
@@ -203,7 +203,7 @@ UserFilter and ActionFilter by <b>Perry Ismangil</b>.</p>
 				<td height="12" background="border/border_bottom.gif"><img src="border/spacer.gif" width="1" height="1" border="0"/></td>
 			</tr>
 		    <tr>
-			    <td align="center"><font color="grey">Document generated by Confluence on Jan 25, 2007 17:46</font></td>
+			    <td align="center"><font color="grey">Document generated by Confluence on Jun 21, 2007 10:33</font></td>
 		    </tr>
 	    </table>
     </body>

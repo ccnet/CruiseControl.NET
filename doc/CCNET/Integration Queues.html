@@ -1,0 +1,150 @@
+<html>
+    <head>
+        <title>CruiseControl.NET : Integration Queues</title>
+	    <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">	    
+    </head>
+
+    <body>
+	    <table class="pagecontent" border="0" cellpadding="0" cellspacing="0" width="100%" bgcolor="#ffffff">
+		    <tr>
+			    <td valign="top" class="pagebody">
+				    <div class="pageheader">
+					    <span class="pagetitle">
+                            CruiseControl.NET : Integration Queues
+                                                    </span>
+				    </div>
+				    <div class="pagesubheading">
+					    This page last changed on Jun 16, 2007 by <font color="#0050B2">orogers</font>.
+				    </div>
+
+				    <h1><a name="IntegrationQueues-IntegrationQueues"></a>Integration Queues</h1>
+
+<h2><a name="IntegrationQueues-ConcurrentandSerialisedBuilds"></a>Concurrent and Serialised Builds</h2>
+
+<p>The default behaviour of CruiseControl.Net is that each project defined in the configuration is given its own integration thread, thereby allowing differently named projects to build concurrently.</p>
+
+<p>Note however that a single project can never be building more than once at the same time. If you force a build on Project X while it is already integrating, that force build request is effectively blocked until the previous integration completes. So you can also think of this as each project having its own dedicated integration queue, where only the item at the head of the queue can be currently building, with at most one request pending.</p>
+
+<p>There are scenarios however where you do not want different projects to integrate concurrently. Perhaps you have resources which are shared between the projects, like access to a file system, a database for running unit tests or a source control system. For instance one common scenario is if you have defined separate projects for continuous, daily and release builds. A developer checking in and triggering a continuous build while the daily build project is in progress could result in both projects failing. Another common problem scenario is where you have a common library project which another project references.</p>
+
+<p>Another way of describing this is to say we want to "serialise" the builds of this particular group of projects. We want to handle receiving multiple simultaneous requests to build these projects, but allow them to build one after another in the order of the received requests. In CruiseControl.Net as of version 1.3 or later we can do this by assigning each of the affected projects the same "queue" name attribute:</p>
+
+<div class="code"><div class="codeContent">
+<pre class="code-xml"><span class="code-tag">&lt;project name=<span class="code-quote">"ProjectA.Continuous"</span> queue=<span class="code-quote">"ProjectA"</span>&gt;</span> ...
+
+<span class="code-tag">&lt;project name=<span class="code-quote">"ProjectA.Daily"</span> queue=<span class="code-quote">"ProjectA"</span>&gt;</span> ...
+
+<span class="code-tag">&lt;project name=<span class="code-quote">"ProjectA.Release"</span> queue=<span class="code-quote">"ProjectA"</span>&gt;</span> ...</pre>
+</div></div>
+
+<p>Note that you can have as many different queues as you have projects - in fact if you do not specify a queue attribute then that project will be given a queue with the name of the project.</p>
+
+<h2><a name="IntegrationQueues-SettingProjectQueuePriority"></a>Setting Project Queue Priority</h2>
+
+<p>There may be situations where some of your projects should have a higher priority than others sharing the same queue. This can be important where the time to build can be long, or due to dependencies you want to ensure that one builds before the other. This will allow new pending requests to "jump the queue" rather than just being added to the end.</p>
+
+<p>We can do this using the <b>queuePriority</b> attribute on the <b>&lt;project&gt;</b> node. Requests with a greater priority number will be placed on the queue ahead of those with a smaller number. The default value if not specified is zero.</p>
+
+<p>In the example above, if we want to ensure that our continuous build projects take a higher priority than our daily builds as developers want feedback on their check-ins, then we change the definitions to:</p>
+
+<div class="code"><div class="codeContent">
+<pre class="code-xml"><span class="code-tag">&lt;project name=<span class="code-quote">"ProjectA.Continuous"</span> queue=<span class="code-quote">"ProjectA"</span> queuePriority=<span class="code-quote">"2"</span>&gt;</span> ...
+
+<span class="code-tag">&lt;project name=<span class="code-quote">"ProjectA.Daily"</span> queue=<span class="code-quote">"ProjectA"</span> queuePriority=<span class="code-quote">"1"</span>&gt;</span> ...</pre>
+</div></div>
+
+<p>Note that <b>queuePriority</b> has no effect on a project that has already started building - just on the pending requests.</p>
+
+
+<h2><a name="IntegrationQueues-ViewingIntegrationQueueActivity"></a>Viewing Integration Queue Activity</h2>
+
+
+<p>In CCTray you will now find a <b>Show Queues</b> button which toggles a tree displaying the list of all the known integration queues on the server and their contents. This list is updated with the same polling interval frequency specified in the CCTray options page.</p>
+
+<p>Next to each queue name in brackets is displayed the number of active project integration requests. Note that a continuous build trigger firing to check your source control system for changes counts as activity on the queue, but will not necessarily result in an actual build occurring. You can identify this by the icon as well as the project state.</p>
+
+<p>It is not currently possible to view integration queue activity via the web dashboard.</p>
+
+<h2><a name="IntegrationQueues-CancelingPendingIntegrations"></a>Canceling Pending Integrations</h2>
+
+<p>If a request is made to integrate a project, it will have a state of "Pending" until it reaches the front of the queue. You will see this state information in the web dashboard or CCTray.</p>
+
+<p>While in this Pending state, it is possible to cancel that integration. Perhaps a developer accidentally forced a build, or you want to ensure that one of the items queued is forced to be next. From CCTray it is possible to right-click on either the project in the list or on the item in the queue tree and select "Cancel Pending".</p>
+
+<p>It is not currently possible to cancel pending integrations via the web dashboard or when using the HTTP transport for CCTray.</p>
+
+<h2><a name="IntegrationQueues-PreventingDuplicateQueuedIntegrations"></a>Preventing Duplicate Queued Integrations</h2>
+
+<p>If a request to integrate a specific project is queued in a pending state, subsequent integration requests for that same project will be ignored. So a developer repeatedly clicking on the Force Build button will not add a stack of requests to the queue.</p>
+
+<p>However once that project reaches the front of the queue and hence changes state, then it is possible for a second request for that project to be added to the queue.</p>
+
+
+<h2><a name="IntegrationQueues-ManagingBuildDependencies"></a>Managing Build Dependencies</h2>
+
+<p>It is possible to use integration queues to manage multiple dependent projects. Let's say you have:</p>
+
+<div class="code"><div class="codeContent">
+<pre class="code-java">C -&gt; depends on -&gt; B -&gt; depends on -&gt; A</pre>
+</div></div>
+
+<p>The recommended approach for CruiseControl.Net is to specify a force build publisher setup, such that:</p>
+
+<div class="code"><div class="codeContent">
+<pre class="code-java">A -&gt; force builds -&gt; B -&gt; force builds -&gt; C</pre>
+</div></div>
+
+<p>Project A will have the CI trigger monitoring for changes and take responsibility for retrieving the source code. In its <b>&lt;publishers&gt;</b> section it will specify a force build of B which will occur if Project A succeeds. Project B will then start to build and if it succeeds do a force build of Project C.</p>
+
+<p>Where this can "go wrong" is if another check-in occurs on project A while project B or C are building. The potential problems are numerous - builds of C will now be against the wrong (later) source code version, the build output folder might be erased and so on.</p>
+
+<p>By forcing the three projects to share the same integration queue you now can prevent A from building while B and C are in progress. However there is still a potential pitfall - what if the CI trigger for A kicks off while B is still integrating? By default the queue will now look like this:</p>
+
+<div class="code"><div class="codeContent">
+<pre class="code-java">B (integrating)
+
+A (pending)</pre>
+</div></div>
+
+<p>The issue is that the force build publisher for project C will not have executed yet (remember B is still "building"). So project A will is next in line to build. When B then tries to force build C the queue will now look like this:</p>
+
+<div class="code"><div class="codeContent">
+<pre class="code-java">B (integrating)
+
+A (pending)
+
+C (pending)</pre>
+</div></div>
+
+<p>That is clearly not what we want as project C will fail!</p>
+
+
+<p>A solution is to use the queue priorities. If we set project C to have priority 1, B to have priority 2 and A to have priority 3 this now means that C or B will be inserted in front of a pending integration for A on the queue. So the queue will now look like this:</p>
+
+<div class="code"><div class="codeContent">
+<pre class="code-java">B (integrating)
+
+C (pending)
+
+A (pending)</pre>
+</div></div>
+
+<p>Only when project A reaches the head of the queue will it start integrating and create the forced queued build of project B to start the cycle anew.</p>
+
+<p>Note that this is not the perfect solution for everyone for managing build dependencies but at least it offers an option. For instance if B &amp; C only depend on A and then in theory they should be able to be built concurrently - however by placing all the projects on the same integration queue this is not possible. </p>
+
+				    
+                    			    </td>
+		    </tr>
+	    </table>
+	    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+			<tr>
+				<td height="12" background="border/border_bottom.gif"><img src="border/spacer.gif" width="1" height="1" border="0"/></td>
+			</tr>
+		    <tr>
+			    <td align="center"><font color="grey">Document generated by Confluence on Jun 21, 2007 10:33</font></td>
+		    </tr>
+	    </table>
+    </body>
+</html>

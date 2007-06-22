@@ -15,14 +15,14 @@
                                                     </span>
 				    </div>
 				    <div class="pagesubheading">
-					    This page last changed on Dec 17, 2006 by <font color="#0050B2">gfeldman</font>.
+					    This page last changed on May 07, 2007 by <font color="#0050B2">rosspatterson</font>.
 				    </div>
 
 				    <p>This is the CruiseControl.NET <em>Frequently Asked Questions</em> (FAQ)</p>
 
 <p>This FAQ is not meant to be a complete reference to CruiseControl.NET, but does provide some quick ideas about how to get various things done.</p>
 
-<p>If you want to add questions, answers, or both, please use the <a href="http://lists.sourceforge.net/lists/listinfo/ccnet-user" title="Visit page outside Confluence">CruiseControl.NET User's mailing list</a></p>
+<p>If you want to add questions, answers, or both, please use the <b>ccnet-user</b> <a href="Mailing Lists.html" title="Mailing Lists">mailing list </a></p>
 
 <h1><a name="FAQ-CruiseControl.NETServer"></a>CruiseControl.NET Server</h1>
 
@@ -32,7 +32,7 @@
 
 <h4><a name="FAQ-WhenIruntheinstallers%2CMcAfeeVirusScan8.0ispoppingupadialogreportingproblemswith%27nsScm.dll%27."></a><em>When I run the installers, McAfee VirusScan 8.0 is popping up a dialog reporting problems with 'nsScm.dll'.</em></h4>
 
-<p>The 'nsScm.dll' is a library supplied by the <a href="http://nsis.sourceforge.net/Service_Control_Manager_plugin_(install_services_and_drivers_on_NT/2K/XP)" title="Visit page outside Confluence">NullSoft installer for installing services</a>.  There is no virus in this dll. The easiest way to proceed with the installation is to uncheck the "Install CCService" checkbox and install <a href="The Server Service Application.html" title="The Server Service Application">CCService manually</a> once the installer has completed.</p>
+<p>The 'nsScm.dll' is a library supplied by the <a href="http://nsis.sourceforge.net/Service_Control_Manager_plugin_(install_services_and_drivers_on_NT/2K/XP)">NullSoft installer for installing services</a>.  There is no virus in this dll. The easiest way to proceed with the installation is to uncheck the "Install CCService" checkbox and install <a href="The Server Service Application.html" title="The Server Service Application">CCService manually</a> once the installer has completed.</p>
 
 <h2><a name="FAQ-Resultfiles"></a>Result files</h2>
 
@@ -70,11 +70,11 @@
 
 <h4><a name="FAQ-I%27mtryingtoaccesssomeinformationsuppliedbytheserver%2CbutIcan%27t.What%27sgoingwrong%3F"></a><em>I'm trying to access some information supplied by the server, but I can't. What's going wrong?</em></h4>
 
-<p>Many of the examples on the mailing list and user's blogs showing how to use information from the server (such as the build label) are based on the <a href="NAnt task.html" title="NAnt Task">NAnt task</a>, and date from before the first release candidate. Around that time, most of the property names changed, for example <tt>ccnet.label</tt> became <tt>CCNetLabel</tt>. Check the documentation page for the task you are using (ideally the one installed on your machine which should be accurate for the build of CruiseControl you installed) and make sure your build script is using the correct name for the property.</p>
+<p>Many of the examples on the mailing list and user's blogs showing how to use information from the server (such as the build label) are based on the <a href="NAnt Task.html" title="NAnt Task">NAnt task</a>, and date from before the first release candidate. Around that time, most of the property names changed, for example <tt>ccnet.label</tt> became <tt>CCNetLabel</tt>. Check the documentation page for the task you are using (ideally the one installed on your machine which should be accurate for the build of CruiseControl you installed) and make sure your build script is using the correct name for the property.</p>
 
 <h4><a name="FAQ-Accordingtothedocumentation%2CIneedfilexxxxxxxx.yyy.Thatfileisn%27tinthedistribution%2CwheredoIfindit%3F"></a><em>According to the documentation, I need file xxxxxxxx.yyy. That file isn't in the distribution, where do I find it?</em></h4>
 
-<p>It's likely that you have fallen into the classic mistake of overlooking that the documentation on the web site relates to the most recently <b>built</b> version, not the most recently <b>released</b> one. If the file in question is referenced in the <b>/doc</b> folder of your CCNet installation then ask on the CCNet user mailing list - you have probably found a documentation problem. If the file is not referenced in that folder, but is referenced in the online documentation you may want to try a more recent build from <a href="http://ccnetlive.thoughtworks.com/" title="Visit page outside Confluence">http://ccnetlive.thoughtworks.com/</a>. If you choose to do so, please be aware that builds from CCNetLive may contain more bugs than officially released versions of CCNet.</p>
+<p>It's likely that you have fallen into the classic mistake of overlooking that the documentation on the web site relates to the most recently <b>built</b> version, not the most recently <b>released</b> one. If the file in question is referenced in the <b>/doc</b> folder of your CCNet installation then ask on the CCNet user mailing list - you have probably found a documentation problem. If the file is not referenced in that folder, but is referenced in the online documentation you may want to try a more recent build from <a href="http://ccnetlive.thoughtworks.com/">http://ccnetlive.thoughtworks.com/</a>. If you choose to do so, please be aware that builds from CCNetLive may contain more bugs than officially released versions of CCNet.</p>
 
 <h4><a name="FAQ-CruiseControl.NETisreportingthatthebuildsucceededwhenitfailed.Why%3F"></a><em>CruiseControl.NET is reporting that the build succeeded when it failed. Why?</em></h4>
 
@@ -132,7 +132,7 @@ Echo %ErrorLevel%</pre>
 
 <h4><a name="FAQ-WhyisthevsssourcecontrolblockthrowingerrorswhenCCNetisrunningasaservicebutworkswhenrunningCCNetfromthecommandline%3F"></a><em>Why is the vss source control block throwing errors when CCNet is running as a service but works when running CCNet from the command line?</em></h4>
 
-<p>In order to access VSS, you must be able to access the shared folder on your VSS server from your CCNet server.  The CCNet service is set to use a local system user account by default which doesn't have access to other machines.  In order for CCNet to access VSS, you must change the log account for the service to a user that has network access to the VSS machine. More details can be found in the <a href="#FAQ-Service" title="Service on FAQ">Service</a> and <a href="Visual Source Safe Source Control Block.html" title="Visual Source Safe Source Control Block">Visual Source Safe Source Control Block</a> sections.</p>
+<p>In order to access VSS, you must be able to access the shared folder on your VSS server from your CCNet server.  The CCNet service is set to use a local system user account by default which doesn't have access to other machines.  In order for CCNet to access VSS, you must change the log account for the service to a user that has network access to the VSS machine. More details can be found in the <a href="#FAQ-Service">Service</a> and <a href="Visual Source Safe Source Control Block.html" title="Visual Source Safe Source Control Block">Visual Source Safe Source Control Block</a> sections.</p>
 
 <h3><a name="FAQ-AllSourceControlPackages"></a>All Source Control Packages</h3>
 
@@ -175,7 +175,7 @@ Echo %ErrorLevel%</pre>
 
 <h4><a name="FAQ-HowdoIusemyownXSLstylesheetsforreports%3F"></a><em>How do I use my own XSL stylesheets for reports?</em></h4>
 
-<p>Both the <a href="Build Report Build Plugin.html" title="Build Report Build Plugin">Build Report Build Plugin</a> and <a href="Xsl Report Build Plugin.html" title="XSL Report Build Plugin">Xsl Report Build Plugin</a> can be configured to use custom stylesheets. Change the configuration of the <a href="Build Report Build Plugin.html" title="Build Report Build Plugin">Build Report Build Plugin</a> if you want to add a stylesheet to the main Build Report, or add a new <a href="Xsl Report Build Plugin.html" title="XSL Report Build Plugin">Xsl Report Build Plugin</a> instance if you want a totally new page for the report.</p>
+<p>Both the <a href="Build Report Build Plugin.html" title="Build Report Build Plugin">Build Report Build Plugin</a> and <a href="XSL Report Build Plugin.html" title="XSL Report Build Plugin">Xsl Report Build Plugin</a> can be configured to use custom stylesheets. Change the configuration of the <a href="Build Report Build Plugin.html" title="Build Report Build Plugin">Build Report Build Plugin</a> if you want to add a stylesheet to the main Build Report, or add a new <a href="XSL Report Build Plugin.html" title="XSL Report Build Plugin">Xsl Report Build Plugin</a> instance if you want a totally new page for the report.</p>
 
 <h4><a name="FAQ-HowdoIpreventalltheseunwantedmessagesfromshowingupinthewarning%2FerrorsectionsoftheWebDashboard%3F"></a><em>How do I prevent all these unwanted messages from showing up in the warning/error sections of the WebDashboard?</em></h4>
 
@@ -212,7 +212,7 @@ Echo %ErrorLevel%</pre>
 				<td height="12" background="border/border_bottom.gif"><img src="border/spacer.gif" width="1" height="1" border="0"/></td>
 			</tr>
 		    <tr>
-			    <td align="center"><font color="grey">Document generated by Confluence on Jan 25, 2007 17:46</font></td>
+			    <td align="center"><font color="grey">Document generated by Confluence on Jun 21, 2007 10:33</font></td>
 		    </tr>
 	    </table>
     </body>

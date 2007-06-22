@@ -24,11 +24,11 @@
 
 <h2><a name="ProjectDetails-ProjectManagement"></a>Project Management</h2>
 
-<p>The CruiseControl.NET source trees and email lists are hosted on SourceForge under the <a href="http://www.sf.net/projects/ccnet" title="Visit page outside Confluence">ccnet</a> project.</p>
+<p>The CruiseControl.NET source trees and email lists are hosted on SourceForge under the <a href="http://www.sf.net/projects/ccnet">ccnet</a> project.</p>
 
 <p>We don't use Sourceforge for bug and feature tracking, instead look at our <a href="Issues.html" title="Issues">Issues</a> page.</p>
 
-<p>At ThoughtWorks we believe in lightweight methodologies. This fits in well with an open source project so project decisions tend to be made in an ad-hoc fashion, normally by some kind of consesus on the <em>CCNet-Devel</em> <a href="Mailing Lists.html" title="Mailing Lists">mailing list </a>.  You can search through the mailing list archives on <a href="Mailing Lists.html#MailingLists-GMane" title="GMane on Mailing Lists">GMane</a>.</p>
+<p>At ThoughtWorks we believe in lightweight methodologies. This fits in well with an open source project so project decisions tend to be made in an ad-hoc fashion, normally by some kind of consesus on the <em>CCNet-Devel</em> <a href="Mailing Lists.html" title="Mailing Lists">mailing list </a>.  You can search through the mailing list archives on <a href="Mailing Lists.html#MailingLists-GMane">GMane</a>.</p>
 
 <p>CruiseControl.NET is written by many volunteers - see the <a href="Project Team.html" title="Project Team">Project Team</a>.</p>
 
@@ -66,28 +66,28 @@
 
 <p>The format of your submission ideally should be a description of what you have done, along with an associated SVN patch (if you don't know how to create a SVN patch, you probably want to use TortoiseSVN client since it has a good GUI for creating them). If your patch includes files &gt; 40kb, please don't send it to the list. Instead, email the list with a description of your patch, and one of the admin team will reply off-list so that you can send the files just to one person.</p>
 
-<p>If you are really keen, please create <a href="http://jira.public.thoughtworks.org/browse/" title="Visit page outside Confluence">a new issue on jira</a> describing your patch and attach the patch file as an attachment.  This saves us the work of having to do it and generally means that your patch will be processed faster.</p>
+<p>If you are really keen, please create <a href="http://jira.public.thoughtworks.org/browse/">a new issue on jira</a> describing your patch and attach the patch file as an attachment.  This saves us the work of having to do it and generally means that your patch will be processed faster.</p>
 
 <p>If you do want to make a submission, please make sure you read up about our <a href="Contributor License Agreement.html" title="Contributor License Agreement">Contributor License Agreement</a>.</p>
 
 <h2><a name="ProjectDetails-ReleaseProcess"></a>Release Process</h2>
 
-<p>We use <a href="http://ccnetlive.thoughtworks.com/ccnet" title="Visit page outside Confluence">CCNetLive </a> to produce new distributions of CCNet every time a CCNet developer checks in new code.  You can download the source or binary packages from <a href="http://ccnetlive.thoughtworks.com/CCNet-builds/" title="Visit page outside Confluence">here </a>.</p>
+<p>We use <a href="http://ccnetlive.thoughtworks.com/ccnet">CCNetLive </a> to produce new distributions of CCNet every time a CCNet developer checks in new code.  You can download the source or binary packages from <a href="http://ccnetlive.thoughtworks.com/CCNet-builds/">here </a>.</p>
 
-<p>We also periodically produce stable releases that are posted on the <a href="http://sourceforge.net/project/showfiles.php?group_id=71179&amp;package_id=83198" title="Visit page outside Confluence">SourceForge download site </a>.  The process of producing new stable releases is as follows:</p>
+<p>We also periodically produce stable releases that are posted on the <a href="http://sourceforge.net/project/showfiles.php?group_id=71179&amp;package_id=83198">SourceForge download site </a>.  The process of producing new stable releases is as follows:</p>
 <ol>
 	<li>Rename the release in Jira to be a valid release name</li>
-	<li>Create new release notes using the <a href="http://jira.public.thoughtworks.org/ConfigureReleaseNote.jspa?projectId=10000" title="Visit page outside Confluence">CCNet Jira </a>.</li>
+	<li>Create new release notes using the <a href="http://jira.public.thoughtworks.org/ConfigureReleaseNote.jspa?projectId=10000">CCNet Jira </a>.</li>
 	<li>Add a new page to Confluence (child of <a href="Download.html" title="Download">Download</a>) to contain generated release notes.</li>
 	<li>Update version number in the ccnet.nsi and cctray.nsi installer files.</li>
 	<li>Update the CruiseControl.NET Live version number for CCNet by editting the ccnet.config file.</li>
-	<li><a href="http://confluence.public.thoughtworks.org/spaces/exportspace.action?key=CCNET" title="Visit page outside Confluence">Export </a> Confluence space as Html.   Extract the exported zip into your local ccnet\docs folder, and then check the modified Html files into SVN.  This way the next CCNetLive build will package the latest documentation from Confluence.&nbsp; Update CruiseControl.NET documentation version number in the confluence site template.</li>
-	<li>Tag all source to the url <a href="https://svn.sourceforge.net/svnroot/ccnet/branches" title="Visit page outside Confluence">https://svn.sourceforge.net/svnroot/ccnet/branches</a> with the new version number (e.g. ccnet_0_6_final)</li>
-	<li>Download the source and binary distributions from <a href="http://ccnetlive.thoughtworks.com/CCNet-builds/" title="Visit page outside Confluence">CCNetLive </a> that contain the newly packaged documentation</li>
-	<li>Upload the source and binary distributions to <a href="ftp://upload.sourceforge.net/incoming" title="Visit page outside Confluence">SourceForge </a> and go through the SourceForge release process.  Rename the distribution files to include the version number&#33;  (Distributions with the same filenames can cause problems for SourceForge mirrors).</li>
-	<li>Add news of the release on <a href="http://www.sourceforge.net/projects/ccnet" title="Visit page outside Confluence">SourceForge </a> and the <a href="News.html" title="News">Confluence news blog</a>.</li>
-	<li>Email the <a href="mailto:ccnet-user@googlegroups.com" title="Send mail to CCNet users list ">CCNet users list </a> to notify the users that the new release is ready.</li>
-	<li>Set the currently released version to <a href="http://jira.public.thoughtworks.org/secure/project/ViewProject.jspa?pid=10000" title="Visit page outside Confluence">"Released" </a> on the Jira.</li>
+	<li><a href="http://confluence.public.thoughtworks.org/spaces/exportspace.action?key=CCNET">Export </a> Confluence space as Html.   Extract the exported zip into your local ccnet\docs folder, and then check the modified Html files into SVN.  This way the next CCNetLive build will package the latest documentation from Confluence.&nbsp; Update CruiseControl.NET documentation version number in the confluence site template.</li>
+	<li>Tag all source to the url <a href="https://svn.sourceforge.net/svnroot/ccnet/branches">https://svn.sourceforge.net/svnroot/ccnet/branches</a> with the new version number (e.g. ccnet_0_6_final)</li>
+	<li>Download the source and binary distributions from <a href="http://ccnetlive.thoughtworks.com/CCNet-builds/">CCNetLive </a> that contain the newly packaged documentation</li>
+	<li>Upload the source and binary distributions to <a href="ftp://upload.sourceforge.net/incoming">SourceForge </a> and go through the SourceForge release process.  Rename the distribution files to include the version number&#33;  (Distributions with the same filenames can cause problems for SourceForge mirrors).</li>
+	<li>Add news of the release on <a href="http://www.sourceforge.net/projects/ccnet">SourceForge </a> and the <a href="News.html" title="News">Confluence news blog</a>.</li>
+	<li>Email the <a href="mailto:ccnet-user@googlegroups.com">CCNet users list </a> to notify the users that the new release is ready.</li>
+	<li>Set the currently released version to <a href="http://jira.public.thoughtworks.org/secure/project/ViewProject.jspa?pid=10000">"Released" </a> on the Jira.</li>
 	<li>Create a new 'Next' unreleased version in Jira and schedule it immediately before 'Soon'</li>
 </ol>
 
@@ -101,7 +101,7 @@
 				<td height="12" background="border/border_bottom.gif"><img src="border/spacer.gif" width="1" height="1" border="0"/></td>
 			</tr>
 		    <tr>
-			    <td align="center"><font color="grey">Document generated by Confluence on Jan 25, 2007 17:47</font></td>
+			    <td align="center"><font color="grey">Document generated by Confluence on Jun 21, 2007 10:33</font></td>
 		    </tr>
 	    </table>
     </body>

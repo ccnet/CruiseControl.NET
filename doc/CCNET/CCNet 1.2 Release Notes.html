@@ -15,7 +15,7 @@
                                                     </span>
 				    </div>
 				    <div class="pagesubheading">
-					    This page last changed on Jan 25, 2007 by <font color="#0050B2">orogers</font>.
+					    This page last changed on Apr 10, 2007 by <font color="#0050B2">dcameron</font>.
 				    </div>
 
 				    <h2><a name="CCNet1.2ReleaseNotes-HighlightsoftheCCNet1.2release"></a>Highlights of the CCNet 1.2 release</h2>
@@ -26,7 +26,7 @@
 	<li>CCNet server does a better job of killing child processes when it stops or shuts down.</li>
 	<li>Server log reporting in WebDashboard is improved.  Server logs can now be viewed per project.</li>
 	<li>Improved Mono support.</li>
-	<li>Can view project configuration through</li>
+	<li>Can view project configuration through the WebDashboard</li>
 </ul>
 
 
@@ -34,7 +34,7 @@
 
 <table cellpadding='5' width='85%' cellspacing='8px' class='warningMacro' border="0" align='center'><colgroup><col width='24'><col></colgroup><tr><td valign='top'><img src="./icons/emoticons/forbidden.gif" width="16" height="16" align="absmiddle" alt="" border="0"></td><td><b class="strong">Breaking Changes</b><br />
 <ul>
-	<li>The <tt>cvsroot</tt> and <tt>module</tt> elements are now required for the CVS provider.  This is to support automatic source checkout and to improve the performance of polling the repository for modifications.  See the <a href="CVS Configuration Examples.html" title="CVS Configuration Examples">Cvs source control block</a> for details.</li>
+	<li>The <tt>cvsroot</tt> and <tt>module</tt> elements are now required for the CVS provider.  This is to support automatic source checkout and to improve the performance of polling the repository for modifications.  See the <a href="CVS Source Control Block.html" title="CVS Source Control Block">Cvs source control block</a> for details.</li>
 </ul>
 </td></tr></table>
 <table cellpadding='5' width='85%' cellspacing='8px' class='noteMacro' border="0" align='center'><colgroup><col width='24'><col></colgroup><tr><td valign='top'><img src="./icons/emoticons/warning.gif" width="16" height="16" align="absmiddle" alt="" border="0"></td><td><b class="strong">Other Configuration Changes</b><br />
@@ -42,20 +42,28 @@
 	<li>The <tt>autoGetSource</tt> attribute is now true for all source control providers and need not be set explicitly in the <tt>ccnet.config</tt> file.</li>
 </ul>
 </td></tr></table>
+<table cellpadding='5' width='85%' cellspacing='8px' class='noteMacro' border="0" align='center'><colgroup><col width='24'><col></colgroup><tr><td valign='top'><img src="./icons/emoticons/warning.gif" width="16" height="16" align="absmiddle" alt="" border="0"></td><td><b class="strong">Upgrading from a version before 1.1?</b><br />
+<ul>
+	<li>You might be interested in the changes listed in <a href="http://confluence.public.thoughtworks.org/display/CCNET/CCNet+1.1+Final+Release+Notes">the 1.1 release notes</a>. CruiseControl.Net 1.1 broke compatibility with earlier versions of CCTray and the Web Dashboard.</li>
+</ul>
+</td></tr></table>
+
 
 <h2><a name="CCNet1.2ReleaseNotes-ReleaseNotesCruiseControl.NETVersion1.2"></a>Release Notes - CruiseControl .NET - Version 1.2</h2>
 
-<p>This is a list of <a href="http://jira.public.thoughtworks.org/secure/IssueNavigator.jspa?reset=true&amp;pid=10000&amp;fixfor=10220" title="Visit page outside Confluence">Jira Issues resolved by this release</a> :</p>
+<p>This is a list of <a href="http://jira.public.thoughtworks.org/secure/IssueNavigator.jspa?reset=true&amp;pid=10000&amp;fixfor=10220">Jira Issues resolved by this release</a> :</p>
 
 <h4><a name="CCNet1.2ReleaseNotes-Bugs"></a>Bugs</h4>
 
 <ul>
+	<li>CCNET-399 - Svn is not correctly converting dates to and from UTC</li>
 	<li>CCNET-576 - CVS: adds on a branch are treated as deletes on the trunk &#8211; this causes modifications to be detected when they really should be ignored</li>
 	<li>CCNET-621 - CCTray : On configuration screen, the server selection generate exception</li>
 	<li>CCNET-654 - Latest Builds of CCNET don't properly release child threads but older ones do</li>
 	<li>CCNET-658 - Cource control CVS, problem with Branch and CleanVersion</li>
 	<li>CCNET-723 - ThoughtWorks.CruiseControl.Core.Util.TimeoutSerializer.Write Causes Exception In Project Serialization</li>
 	<li>CCNET-767 - System.FormatException: String was not recognized as a valid DateTime</li>
+	<li>CCNET-768 - Two builds of the same project in a row cause Detail column to not be displayed in CCTray</li>
 	<li>CCNET-776 - CCTray's http transport consumes 100% of the server CPU for some users</li>
 	<li>CCNET-787 - Synergy - delimiter should be configurable</li>
 	<li>CCNET-788 - Synergy source control with Cruise Control .Net</li>
@@ -75,13 +83,13 @@
 <h4><a name="CCNet1.2ReleaseNotes-Improvements"></a>Improvements</h4>
 
 <ul>
-	<li>CCNET-418 - Add --no-auth-cache to Svn command line</li>
+	<li>CCNET-418 - Add &#45;-no-auth-cache to Svn command line</li>
 	<li>CCNET-583 - Support Mono</li>
 	<li>CCNET-731 - EmailPublisher should support authentication</li>
 	<li>CCNET-735 - Enhance the BuildPublisher to allow single-directory distribution as well as label based directories</li>
 	<li>CCNET-789 - Persist "Volunteer to fix the build" user on server, CCTray, webdashboard</li>
 	<li>CCNET-790 - Project names may be truncated in Add Project dialog</li>
-	<li>CCNET-822 - Cvs provider should support the -S option for suppressing headers with no revision history</li>
+	<li>CCNET-822 - Cvs provider should support the &#45;S option for suppressing headers with no revision history</li>
 	<li>CCNET-823 - Remove UseHistory option from Cvs provider</li>
 </ul>
 
@@ -115,7 +123,7 @@
 				<td height="12" background="border/border_bottom.gif"><img src="border/spacer.gif" width="1" height="1" border="0"/></td>
 			</tr>
 		    <tr>
-			    <td align="center"><font color="grey">Document generated by Confluence on Jan 25, 2007 17:47</font></td>
+			    <td align="center"><font color="grey">Document generated by Confluence on Jun 21, 2007 10:33</font></td>
 		    </tr>
 	    </table>
     </body>
