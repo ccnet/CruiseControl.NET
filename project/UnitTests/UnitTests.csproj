@@ -239,7 +239,6 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="CCTrayLib\Monitoring\WebDashboardUrlTest.cs" />
-    <Compile Include="CCTrayLib\Monitoring\WebRetrieverTest.cs" />
     <Compile Include="CCTrayLib\Presentation\AddBuildServerTest.cs">
       <SubType>Code</SubType>
     </Compile>
