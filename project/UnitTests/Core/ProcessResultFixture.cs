@@ -21,7 +21,17 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 
 		public static ProcessResult CreateNonZeroExitCodeResult()
 		{
-			return new ProcessResult("failed", "", -2, false);
+            return CreateNonZeroExitCodeResult("failed", "");
+		}
+
+        public static ProcessResult CreateNonZeroExitCodeResult(string stdOut)
+        {
+            return CreateNonZeroExitCodeResult(stdOut, "");
+        }
+
+		public static ProcessResult CreateNonZeroExitCodeResult(string stdOut, string stdErr)
+		{
+            return new ProcessResult(stdOut, stdErr, -2, false);		    
 		}
 	}
 }

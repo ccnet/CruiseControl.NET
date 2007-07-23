@@ -23,7 +23,7 @@ Build complete -- 1 errors, 0 warnings";
 "<message>Build complete -- 1 errors, 0 warnings</message>" +
 "</buildresults>";
 
-			DevenvTaskResult result = new DevenvTaskResult(ProcessResultFixture.CreateSuccessfulResult(output));
+            DevenvTaskResult result = new DevenvTaskResult(ProcessResultFixture.CreateNonZeroExitCodeResult(output));
 			Assert.AreEqual(expected, result.Data);
 		}
 
