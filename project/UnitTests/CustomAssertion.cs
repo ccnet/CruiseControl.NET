@@ -121,7 +121,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests
 			}
 			catch (Exception e)
 			{
-				throw new AssertionException(string.Format("Unable to parse xml <{0}> or xpath expression <{1}>\n\t{2}", xml, xpath, e.ToString()), e);
+				throw new AssertionException(string.Format("Unable to parse xml <{0}> or xpath expression <{1}>\n\t{2}", xml, xpath, e), e);
 			}
 		}
 	}

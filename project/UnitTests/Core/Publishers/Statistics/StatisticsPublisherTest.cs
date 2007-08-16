@@ -98,7 +98,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Publishers.Statistics
 			return result;
 		}
 
-		private void CountLines(string file, int expectedCount)
+		private static void CountLines(string file, int expectedCount)
 		{
 			StreamReader text = File.OpenText(file);
 			string s = text.ReadToEnd();

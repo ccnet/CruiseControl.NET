@@ -7,10 +7,10 @@ namespace ThoughtWorks.CruiseControl.Core.Label
     [ReflectorType("fileLabeller")]
     public class FileLabeller : ILabeller
     {
-        private string labelFilePath = string.Empty;
-        private FileReader fileReader;
-        private string prefix = string.Empty;
+        private readonly FileReader fileReader;
         private bool allowDuplicateSubsequentLabels = true;
+        private string labelFilePath = string.Empty;
+        private string prefix = string.Empty;
 
         public FileLabeller() : this(new FileReader())
         {
@@ -28,26 +28,35 @@ namespace ThoughtWorks.CruiseControl.Core.Label
             set { labelFilePath = value; }
         }
 
-        [ReflectorProperty("prefix", Required = true)]
+        [ReflectorProperty("prefix", Required = false)]
         public string Prefix
         {
             get { return prefix; }
             set { prefix = value; }
         }
 
-        [ReflectorProperty("allowDuplicateSubsequentLabels", Required = true)]
+        [ReflectorProperty("allowDuplicateSubsequentLabels", Required = false)]
         public bool AllowDuplicateSubsequentLabels
         {
             get { return allowDuplicateSubsequentLabels; }
             set { allowDuplicateSubsequentLabels = value; }
         }
 
+        #region ILabeller Members
+
         public string Generate(IIntegrationResult integrationResult)
         {
-            string label = fileReader.GetLabel(labelFilePath);
+            string label = fileReader.GetLabel(integrationResult.BaseFromWorkingDirectory(labelFilePath));
             string suffix = GetSuffixBasedOn(label, integrationResult.LastIntegration.Label);
             return string.Format("{0}{1}{2}", prefix, label, suffix);
         }
+
+        public void Run(IIntegrationResult result)
+        {
+            result.Label = Generate(result);
+        }
+
+        #endregion
 
         private string GetSuffixBasedOn(string currentLabel, string lastIntegrationLabel)
         {
@@ -65,10 +74,7 @@ namespace ThoughtWorks.CruiseControl.Core.Label
             return string.Empty;
         }
 
-        public void Run(IIntegrationResult result)
-        {
-            result.Label = Generate(result);
-        }
+        #region Nested type: FileReader
 
         public class FileReader
         {
@@ -80,5 +86,7 @@ namespace ThoughtWorks.CruiseControl.Core.Label
                 return ver;
             }
         }
+
+        #endregion
     }
 }

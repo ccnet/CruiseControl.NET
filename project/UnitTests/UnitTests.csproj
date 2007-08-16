@@ -471,6 +471,7 @@
     <Compile Include="Core\Publishers\Statistics\StatisticsPublisherTest.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Core\Publishers\Statistics\StatisticsResultsTest.cs" />
     <Compile Include="Core\Publishers\XmlIntegrationResultWriterTest.cs">
       <SubType>Code</SubType>
     </Compile>

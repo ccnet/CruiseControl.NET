@@ -1,7 +1,9 @@
 using NUnit.Framework;
+using ThoughtWorks.CruiseControl.Core;
+using ThoughtWorks.CruiseControl.Core.Label;
 using ThoughtWorks.CruiseControl.UnitTests.Core;
 
-namespace ThoughtWorks.CruiseControl.Core.Label
+namespace ThoughtWorks.CruiseControl.UnitTests.Core.Label
 {
     [TestFixture]
     public class FileLabellerTest : IntegrationFixture
@@ -49,7 +51,7 @@ namespace ThoughtWorks.CruiseControl.Core.Label
 
         private class TestFileReader : FileLabeller.FileReader
         {
-            private string label;
+            private readonly string label;
 
             public TestFileReader(string label)
             {

@@ -384,6 +384,7 @@
     <Compile Include="publishers\Statistics\StatisticsPublisher.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="publishers\Statistics\StatisticsResults.cs" />
     <Compile Include="publishers\Statistics\UnavailableStatisticsException.cs">
       <SubType>Code</SubType>
     </Compile>

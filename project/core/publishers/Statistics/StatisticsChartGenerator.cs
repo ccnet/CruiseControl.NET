@@ -4,6 +4,7 @@ using System.Drawing.Imaging;
 using System.Text.RegularExpressions;
 using System.Xml;
 using System.Xml.XPath;
+using ThoughtWorks.CruiseControl.Core.Util;
 
 namespace ThoughtWorks.CruiseControl.Core.Publishers.Statistics
 {
@@ -38,9 +39,8 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers.Statistics
 
         public void Process(XmlDocument xmlDocument, string savePath)
         {
-            for (int i = 0; i < relevantStats.Length; i++)
+            foreach (string relevantStat in relevantStats)
             {
-                string relevantStat = relevantStats[i];
                 if (!AvailableStatistics(xmlDocument).Contains(relevantStat))
                 {
                     throw new UnavailableStatisticsException(relevantStat);
@@ -60,12 +60,8 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers.Statistics
                         integration.SelectSingleNode(string.Format("statistic[@name='{0}']", relevantStat));
 
                     string value = statistic.Value;
-                    if(relevantStat == "Duration" && Regex.IsMatch(value, "[0-9]+:[0-9]+:[0-9]+"))
-                    {
-                        string[] parts = value.Split(':');
-                        value = Convert.ToInt32(parts[0]) * 3600 + Convert.ToInt32(parts[1]) * 60 + parts[2];
-                    }
-                    ordinateData.Add(value);
+                    Log.Debug(string.Format("Relevant Stat: {0}, Raw Value: {1}", relevantStat, value));
+                    ordinateData.Add(GetPlottableValue(relevantStat, value));
                     abscissaData.Add(integration.GetAttribute("build-label", ""));
                 }
 
@@ -78,6 +74,16 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers.Statistics
                     throw new Exception(string.Format("Cannot handle value for the statistic {0}", relevantStat));
                 }
             }
+        }
+
+        private static string GetPlottableValue(string relevantStat, string value)
+        {
+            if (relevantStat == "Duration" && Regex.IsMatch(value, "[0-9]+:[0-9]+:[0-9]+"))
+            {
+                string[] parts = value.Split(':');
+                value = Convert.ToInt32(parts[0]) * 3600 + Convert.ToInt32(parts[1]) * 60 + parts[2];
+            }
+            return value;
         }
 
         private static ArrayList AvailableStatistics(XmlDocument xmlDocument)
