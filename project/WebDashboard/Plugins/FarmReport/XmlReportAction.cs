@@ -27,28 +27,26 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.FarmReport
 
 			foreach (ProjectStatusOnServer projectStatusOnServer in allProjectStatus.StatusAndServerList)
 			{
-				WriteBuildStatus(xmlWriter, projectStatusOnServer);
-			}
+			    WriteProjectStatus(xmlWriter, projectStatusOnServer.ProjectStatus);
+            }
 
 			xmlWriter.WriteEndElement();
 
 			return new XmlFragmentResponse(stringWriter.ToString());
 		}
 
-		private static void WriteBuildStatus(XmlTextWriter xmlWriter, ProjectStatusOnServer projectStatusOnServer)
-		{
-			ProjectStatus status = projectStatusOnServer.ProjectStatus;
-
-			xmlWriter.WriteStartElement("Project");
-			xmlWriter.WriteAttributeString("name", status.Name);
-			xmlWriter.WriteAttributeString("category", status.Category);
-			xmlWriter.WriteAttributeString("activity", status.Activity.ToString());
-			xmlWriter.WriteAttributeString("lastBuildStatus", status.BuildStatus.ToString());
-			xmlWriter.WriteAttributeString("lastBuildLabel", status.LastSuccessfulBuildLabel);
-			xmlWriter.WriteAttributeString("lastBuildTime", XmlConvert.ToString(status.LastBuildDate, XmlDateTimeSerializationMode.Local));
-            xmlWriter.WriteAttributeString("nextBuildTime", XmlConvert.ToString(status.NextBuildTime, XmlDateTimeSerializationMode.Local));
-			xmlWriter.WriteAttributeString("webUrl", status.WebURL);
-			xmlWriter.WriteEndElement();
-		}
+	    private static void WriteProjectStatus(XmlWriter xmlWriter, ProjectStatus status)
+	    {
+	        xmlWriter.WriteStartElement("Project");
+	        xmlWriter.WriteAttributeString("name", status.Name);
+	        xmlWriter.WriteAttributeString("category", status.Category);
+	        xmlWriter.WriteAttributeString("activity", status.Activity.ToString());
+	        xmlWriter.WriteAttributeString("lastBuildStatus", status.BuildStatus.ToString());
+	        xmlWriter.WriteAttributeString("lastBuildLabel", status.LastSuccessfulBuildLabel);
+	        xmlWriter.WriteAttributeString("lastBuildTime", XmlConvert.ToString(status.LastBuildDate, XmlDateTimeSerializationMode.Local));
+	        xmlWriter.WriteAttributeString("nextBuildTime", XmlConvert.ToString(status.NextBuildTime, XmlDateTimeSerializationMode.Local));
+	        xmlWriter.WriteAttributeString("webUrl", status.WebURL);
+	        xmlWriter.WriteEndElement();
+	    }
 	}
 }

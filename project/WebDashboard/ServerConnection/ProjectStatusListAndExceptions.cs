@@ -1,3 +1,5 @@
+using ThoughtWorks.CruiseControl.Remote;
+
 namespace ThoughtWorks.CruiseControl.WebDashboard.ServerConnection
 {
     public class ProjectStatusListAndExceptions
@@ -13,12 +15,24 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.ServerConnection
 
         public ProjectStatusOnServer[] StatusAndServerList
         {
-            get { return this.statusAndServerList; }
+            get { return statusAndServerList; }
         }
 
         public CruiseServerException[] Exceptions
         {
-            get { return this.exceptions; }
+            get { return exceptions; }
+        }
+
+        public ProjectStatus GetStatusForProject(string projectName)
+        {
+            foreach (ProjectStatusOnServer projectStatusOnServer in statusAndServerList)
+            {
+                if (projectStatusOnServer.ProjectStatus.Name == projectName)
+                {
+                    return projectStatusOnServer.ProjectStatus;
+                }
+            }
+            throw new NoSuchProjectException(projectName);
         }
     }
 }

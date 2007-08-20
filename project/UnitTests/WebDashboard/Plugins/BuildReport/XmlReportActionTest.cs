@@ -69,35 +69,18 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Plugins.BuildReport
 			XmlFragmentResponse response = (XmlFragmentResponse) reportAction.Execute(null);
 			string xml = response.ResponseFragment;
 
-			// cannot just compare the xml string, since we correctly expect the string to vary based on the
-			// timezone in which this code is executing
-			XmlDocument doc = LoadAsDocument(xml);
+			XmlDocument doc = XPathAssert.LoadAsDocument(xml);
 
-			AssertXPathMatches(doc, "/Projects/Project/@name", "HelloWorld");
-			AssertXPathMatches(doc, "/Projects/Project/@activity", "Sleeping");
-			AssertXPathMatches(doc, "/Projects/Project/@lastBuildStatus", "Success");
-			AssertXPathMatches(doc, "/Projects/Project/@lastBuildLabel", "build_7");
-			AssertXPathMatches(doc, "/Projects/Project/@lastBuildTime", XmlConvert.ToString(LastBuildTime, XmlDateTimeSerializationMode.Local));
-            AssertXPathMatches(doc, "/Projects/Project/@nextBuildTime", XmlConvert.ToString(NextBuildTime, XmlDateTimeSerializationMode.Local));
-			AssertXPathMatches(doc, "/Projects/Project/@webUrl", "http://blah");
-			AssertXPathMatches(doc, "/Projects/Project/@category", "category");
+            XPathAssert.Matches(doc, "/Projects/Project/@name", "HelloWorld");
+            XPathAssert.Matches(doc, "/Projects/Project/@activity", "Sleeping");
+            XPathAssert.Matches(doc, "/Projects/Project/@lastBuildStatus", "Success");
+            XPathAssert.Matches(doc, "/Projects/Project/@lastBuildLabel", "build_7");
+            XPathAssert.Matches(doc, "/Projects/Project/@lastBuildTime", LastBuildTime);
+            XPathAssert.Matches(doc, "/Projects/Project/@nextBuildTime", NextBuildTime);
+            XPathAssert.Matches(doc, "/Projects/Project/@webUrl", "http://blah");
+            XPathAssert.Matches(doc, "/Projects/Project/@category", "category");
 
 			mockFarmService.Verify();
-		}
-
-		private static void AssertXPathMatches(XmlDocument doc, string xpath, string expectedValue)
-		{
-			XmlNode node = doc.SelectSingleNode(xpath);
-			Assert.IsNotNull(node, "Expected to find match for xpath " + xpath);
-
-			Assert.AreEqual(node.InnerText, expectedValue, "Unexpected value for xpath " + xpath);
-		}
-
-		private static XmlDocument LoadAsDocument(string xml)
-		{
-			XmlDocument doc = new XmlDocument();
-			doc.LoadXml(xml);
-			return doc;
 		}
 
 		[Test]

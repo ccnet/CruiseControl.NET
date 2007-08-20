@@ -11,12 +11,13 @@ using ThoughtWorks.CruiseControl.WebDashboard.MVC;
 using ThoughtWorks.CruiseControl.WebDashboard.MVC.Cruise;
 using ThoughtWorks.CruiseControl.WebDashboard.Plugins.BuildReport;
 using ThoughtWorks.CruiseControl.WebDashboard.Plugins.FarmReport;
+using ThoughtWorks.CruiseControl.WebDashboard.Plugins.ProjectReport;
 
 namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 {
 	public class CruiseObjectSourceInitializer
 	{
-		private ObjectionManager objectionManager;
+		private readonly ObjectionManager objectionManager;
 
 		public CruiseObjectSourceInitializer(ObjectionManager objectionManager)
 		{
@@ -60,8 +61,6 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 			IPluginConfiguration pluginConfig = config.PluginConfiguration;
 			objectionManager.AddInstanceForType(typeof (IPluginConfiguration), pluginConfig);
 
-			// ToDo - Refactor these plugin sections
-
 			foreach (IPlugin plugin in pluginConfig.FarmPlugins)
 			{
 				foreach (INamedAction action in plugin.NamedActions)
@@ -101,7 +100,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 					.Decorate(typeof (ServerCheckingProxyAction)).Decorate(typeof (ProjectCheckingProxyAction)).Decorate(typeof (CruiseActionProxyAction)).Decorate(typeof (ExceptionCatchingActionProxy)).Decorate(typeof (SiteTemplateActionDecorator));
 			}
 
-			foreach (IPlugin plugin in pluginConfig.BuildPlugins)
+			foreach (IBuildPlugin plugin in pluginConfig.BuildPlugins)
 			{
 				foreach (INamedAction action in plugin.NamedActions)
 				{
@@ -125,6 +124,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
             // Supporting xml project status queries from CCTray or clients earlier than version 1.3
             // Also still used by the web dashboard for displaying farm/server reports
 			objectionManager.AddTypeForName(XmlReportAction.ACTION_NAME, typeof (XmlReportAction));
+			objectionManager.AddTypeForName(ProjectXmlReport.ActionName, typeof (ProjectXmlReport)).Decorate(typeof(CruiseActionProxyAction));
             
             // Supporting cruise server project and queue status queries from CCTray or clients 1.3 or later
             objectionManager.AddTypeForName(XmlServerReportAction.ACTION_NAME, typeof(XmlServerReportAction));

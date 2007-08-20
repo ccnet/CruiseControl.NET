@@ -71,39 +71,23 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Plugins.FarmReport
 
 			// cannot just compare the xml string, since we correctly expect the string to vary based on the
 			// timezone in which this code is executing
-			XmlDocument doc = LoadAsDocument(xml);
+			XmlDocument doc = XPathAssert.LoadAsDocument(xml);
+            XPathAssert.Matches(doc, "/CruiseControl/Projects/Project/@name", "HelloWorld");
+            XPathAssert.Matches(doc, "/CruiseControl/Projects/Project/@activity", "Sleeping");
+            XPathAssert.Matches(doc, "/CruiseControl/Projects/Project/@lastBuildStatus", "Success");
+            XPathAssert.Matches(doc, "/CruiseControl/Projects/Project/@lastBuildLabel", "build_7");
+            XPathAssert.Matches(doc, "/CruiseControl/Projects/Project/@lastBuildTime", LastBuildTime);
+            XPathAssert.Matches(doc, "/CruiseControl/Projects/Project/@nextBuildTime", NextBuildTime);
+            XPathAssert.Matches(doc, "/CruiseControl/Projects/Project/@webUrl", "http://blah");
+            XPathAssert.Matches(doc, "/CruiseControl/Projects/Project/@category", "category");
 
-			AssertXPathMatches(doc, "/CruiseControl/Projects/Project/@name", "HelloWorld");
-            AssertXPathMatches(doc, "/CruiseControl/Projects/Project/@activity", "Sleeping");
-            AssertXPathMatches(doc, "/CruiseControl/Projects/Project/@lastBuildStatus", "Success");
-            AssertXPathMatches(doc, "/CruiseControl/Projects/Project/@lastBuildLabel", "build_7");
-            AssertXPathMatches(doc, "/CruiseControl/Projects/Project/@lastBuildTime", XmlConvert.ToString(LastBuildTime, XmlDateTimeSerializationMode.Local));
-            AssertXPathMatches(doc, "/CruiseControl/Projects/Project/@nextBuildTime", XmlConvert.ToString(NextBuildTime, XmlDateTimeSerializationMode.Local));
-            AssertXPathMatches(doc, "/CruiseControl/Projects/Project/@webUrl", "http://blah");
-            AssertXPathMatches(doc, "/CruiseControl/Projects/Project/@category", "category");
-
-            AssertXPathMatches(doc, "/CruiseControl/Queues/Queue/@name", "Queue1");
-            AssertXPathMatches(doc, "/CruiseControl/Queues/Queue/Request/@projectName", "HelloWorld");
-            AssertXPathMatches(doc, "/CruiseControl/Queues/Queue/Request/@activity", "CheckingModifications");
+            XPathAssert.Matches(doc, "/CruiseControl/Queues/Queue/@name", "Queue1");
+            XPathAssert.Matches(doc, "/CruiseControl/Queues/Queue/Request/@projectName", "HelloWorld");
+            XPathAssert.Matches(doc, "/CruiseControl/Queues/Queue/Request/@activity", "CheckingModifications");
 
 			mockFarmService.Verify();
 		}
         
-		private void AssertXPathMatches(XmlDocument doc, string xpath, string expectedValue)
-		{
-			XmlNode node = doc.SelectSingleNode(xpath);
-			Assert.IsNotNull(node, "Expected to find match for xpath " + xpath);
-
-			Assert.AreEqual(node.InnerText, expectedValue, "Unexpected value for xpath " + xpath);
-		}
-
-		private XmlDocument LoadAsDocument(string xml)
-		{
-			XmlDocument doc = new XmlDocument();
-			doc.LoadXml(xml);
-			return doc;
-		}
-
 		[Test]
 		public void ReturnedXmlValidatesAgainstSchema()
 		{

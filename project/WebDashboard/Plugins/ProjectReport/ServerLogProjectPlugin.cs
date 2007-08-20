@@ -14,7 +14,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.ProjectReport
 	public class ServerLogProjectPlugin : ICruiseAction, IPlugin
 	{
 		public const string ActionName = "ViewServerProjectLog";
-		private ServerLogServerPlugin plugin;
+		private readonly ServerLogServerPlugin plugin;
 
 		public ServerLogProjectPlugin(IFarmService farmService, IVelocityViewGenerator viewGenerator, ICruiseUrlBuilder urlBuilder)
 		{

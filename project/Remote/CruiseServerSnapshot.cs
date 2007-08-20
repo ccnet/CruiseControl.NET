@@ -8,8 +8,8 @@ namespace ThoughtWorks.CruiseControl.Remote
     [Serializable]
     public class CruiseServerSnapshot
     {
-        private ProjectStatus[] projectStatuses;
-        private QueueSetSnapshot queueSetSnapshot;
+        private readonly ProjectStatus[] projectStatuses;
+        private readonly QueueSetSnapshot queueSetSnapshot;
 
         public CruiseServerSnapshot()
         {

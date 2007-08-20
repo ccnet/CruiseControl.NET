@@ -535,6 +535,7 @@
     <Compile Include="Plugins\ProjectReport\ViewConfigurationProjectPlugin.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Plugins\ProjectReport\ProjectXmlReport.cs" />
     <Compile Include="Plugins\ServerReport\ServerInformationServerPlugin.cs">
       <SubType>Code</SubType>
     </Compile>

@@ -1,3 +1,4 @@
+using ThoughtWorks.CruiseControl.Remote;
 
 namespace ThoughtWorks.CruiseControl.WebDashboard.ServerConnection
 {
@@ -14,12 +15,25 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.ServerConnection
 
         public CruiseServerSnapshotOnServer[] SnapshotAndServerList
         {
-            get { return this.snapshotAndServerList; }
+            get { return snapshotAndServerList; }
         }
 
         public CruiseServerException[] Exceptions
         {
-            get { return this.exceptions; }
+            get { return exceptions; }
+        }
+
+        public CruiseServerSnapshot[] Snapshots
+        {
+            get
+            {
+                CruiseServerSnapshot[] snapshots = new CruiseServerSnapshot[snapshotAndServerList.Length];
+                for (int i = 0; i < snapshots.Length; i++)
+                {
+                    snapshots[i] = snapshotAndServerList[i].CruiseServerSnapshot;
+                }
+                return snapshots;
+            }
         }
     }
 }

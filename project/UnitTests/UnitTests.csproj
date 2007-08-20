@@ -344,6 +344,7 @@
     <Compile Include="Core\CruiseServerTest.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Core\CruiseXmlWriterTest.cs" />
     <Compile Include="Core\FileMother.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -851,6 +852,7 @@
     <Compile Include="UnitTestUtils\ResourceUtil.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="UnitTestUtils\XPathAssert.cs" />
     <Compile Include="WebDashboard\Dashboard\ActionInstantiatorWithObjectGiverTest.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -990,6 +992,7 @@
     <Compile Include="WebDashboard\Plugins\ProjectReport\ProjectReportProjectPluginTest.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="WebDashboard\Plugins\ProjectReport\ProjectXmlReportTest.cs" />
     <Compile Include="WebDashboard\Plugins\ViewServerLog\ServerLogServerPluginTest.cs">
       <SubType>Code</SubType>
     </Compile>

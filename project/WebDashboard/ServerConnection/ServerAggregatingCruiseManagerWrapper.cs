@@ -230,8 +230,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.ServerConnection
             {
                 try
                 {
-                    CruiseServerSnapshot cruiseServerSnapshot =
-                        GetCruiseManager(serverSpecifier).GetCruiseServerSnapshot();
+                    CruiseServerSnapshot cruiseServerSnapshot = GetCruiseManager(serverSpecifier).GetCruiseServerSnapshot();
                     cruiseServerSnapshotsOnServers.Add(new CruiseServerSnapshotOnServer(cruiseServerSnapshot, serverSpecifier));
                 }
                 catch (SocketException)
