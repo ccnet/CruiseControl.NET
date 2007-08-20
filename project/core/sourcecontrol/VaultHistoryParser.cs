@@ -72,6 +72,8 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			{
 				case 10: // add or delete, name attribute contains only the folder
 				case 80:
+                    // BUG?  This looks like it will incorrectly parse "Added filename containing blanks.txt"
+                    // as "blanks.txt" instead of "filename containing blanks.txt".
 					index = node.Attributes["actionString"].InnerText.LastIndexOf(' ');
 					nameBuilder.Append('/');
 					nameBuilder.Append(node.Attributes["actionString"].InnerText.Substring(index).Trim());
