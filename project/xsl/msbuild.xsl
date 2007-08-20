@@ -1,7 +1,4 @@
 <?xml version="1.0"?>
-<!DOCTYPE xsl:stylesheet [
-	<!ENTITY nbsp "&#160;">
-]>
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0">
 	<xsl:output method="html"/>
 
@@ -52,14 +49,12 @@
 					<xsl:if test="count($errors)+count($warnings) > 0">
 						<xsl:apply-templates select="$errors"/>
 						<xsl:apply-templates select="$warnings"/>
-						<br/>
 						<div style="color:orangered">
 							<xsl:value-of select="count($errors)"/> Error(s)
 						</div>
 						<div style="color:gold">
 							<xsl:value-of select="count($warnings)"/> Warning(s)
 						</div>
-						<br/>
 					</xsl:if>
 					Time elapsed <xsl:value-of select="@elapsedTime"/>
 				</td>
@@ -70,7 +65,6 @@
 	<xsl:template match="project">
 		<div style="color:dodgerblue;margin:4 0">
 			Project "<xsl:value-of select="@file"/>"
-			<xsl:choose></xsl:choose>
 			<xsl:choose>
 				<xsl:when test="@name">
 					(<xsl:value-of select="@name"/> target(s)):
@@ -163,18 +157,18 @@
 	<xsl:template match="error">
 		<div style="color:orangered">
 			<xsl:if test="@file != ''" >
-				<xsl:value-of select="@file"/>&nbsp;(<xsl:value-of select="@line"/>,<xsl:value-of select="@column"/>):&nbsp;
+				<xsl:value-of select="@file"/>&#160;(<xsl:value-of select="@line"/>,<xsl:value-of select="@column"/>):&#160;
 			</xsl:if>
-			error&nbsp;<xsl:value-of select="@code"/>:&nbsp;<xsl:value-of select="text()" />
+			error&#160;<xsl:value-of select="@code"/>:&#160;<xsl:value-of select="text()" />
 		</div>
 	</xsl:template>
 
 	<xsl:template match="warning">
 		<div style="color:gold">
 			<xsl:if test="@file != ''" >
-				<xsl:value-of select="@file"/>&nbsp;(<xsl:value-of select="@line"/>,<xsl:value-of select="@column"/>):&nbsp;
+				<xsl:value-of select="@file"/>&#160;(<xsl:value-of select="@line"/>,<xsl:value-of select="@column"/>):&#160;
 			</xsl:if>
-			warning&nbsp;<xsl:value-of select="@code"/>:&nbsp;<xsl:value-of select="text()" />
+			warning&#160;<xsl:value-of select="@code"/>:&#160;<xsl:value-of select="text()" />
 		</div>
 	</xsl:template>
 </xsl:stylesheet>

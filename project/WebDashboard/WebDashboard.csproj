@@ -598,6 +598,9 @@
     <Content Include="..\xsl\modifications.xsl">
       <Link>xsl\modifications.xsl</Link>
     </Content>
+    <Content Include="..\xsl\msbuild.xsl">
+      <Link>xsl\msbuild.xsl</Link>
+    </Content>
     <Content Include="..\xsl\NAntTiming.xsl">
       <Link>xsl\NAntTiming.xsl</Link>
     </Content>

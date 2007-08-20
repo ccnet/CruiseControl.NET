@@ -1011,6 +1011,7 @@
     <Compile Include="Xsl\ModificationStylesheetTest.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Xsl\MsBuildStylesheetTest.cs" />
     <Compile Include="Xsl\MsBuildSummaryStylesheetTest.cs">
       <SubType>Code</SubType>
     </Compile>
