@@ -108,6 +108,12 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 	        filter.Accept(modlist[0]);
         }
 
+        [Test]
+        public void TwicePartialPathAnyNameMatch()
+        {
+            TwicePartialPathAnyNameTestSet.RunTests();
+        }
+
 		private static Modification[] Modifications = 
 			{
 				ModificationMother.CreateModification("theName.dat", ""),
@@ -268,6 +274,19 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 			new bool[] {false, false, true, false, true,
 						   false, true, true, true, true,
 						   false, true, true, true});
+
+        public static string TwicePartialPathAnyNameFilterXml =
+    @"<pathFilter>
+        <pattern>**/theSubFolder/**/*.*</pattern>
+      </pathFilter>";
+
+        public static PathFilterTestHelper TwicePartialPathAnyNameTestSet =
+            new PathFilterTestHelper(
+              TwicePartialPathAnyNameFilterXml,
+              Modifications,
+              new bool[] {false, false, false, false, false,
+                            false, true , true , true , true ,
+                            false, true , true , false});
 	}
 
 	public class PathFilterTestHelper 
