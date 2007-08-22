@@ -12,7 +12,8 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
 			Always,
 			Change,
 			Failed,
-			Success
+			Success,
+            Fixed
 		}
 
 		public EmailGroup()

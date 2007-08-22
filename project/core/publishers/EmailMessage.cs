@@ -41,6 +41,11 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
 				{
                     AddRecipients(recipients, EmailGroup.NotificationType.Success);
 				}
+                
+                if (result.Fixed )
+                {
+                    AddRecipients(recipients, EmailGroup.NotificationType.Fixed);
+                }
 
 				StringBuilder buffer = new StringBuilder();
 				foreach (string key in recipients.Keys)

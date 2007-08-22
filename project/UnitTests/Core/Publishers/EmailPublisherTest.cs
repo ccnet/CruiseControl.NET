@@ -138,9 +138,11 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Publishers
 
             publisher.EmailUsers.Add("dev", new EmailUser("dev", "changing", "dev@foo.com"));
             publisher.EmailUsers.Add("admin", new EmailUser("admin", "succeeding", "bar@foo.com"));
+            publisher.EmailUsers.Add("fixer", new EmailUser("fixer", "fixing", "bar@foo.com"));
 
             publisher.EmailGroups.Add("changing", new EmailGroup("changing", EmailGroup.NotificationType.Change));
             publisher.EmailGroups.Add("succeeding", new EmailGroup("succeeding", EmailGroup.NotificationType.Success));
+            publisher.EmailGroups.Add("fixing", new EmailGroup("fixing", EmailGroup.NotificationType.Fixed));
 
             publisher.Run(IntegrationResultMother.CreateSuccessful(IntegrationStatus.Failure));
             mockGateway.Verify();
