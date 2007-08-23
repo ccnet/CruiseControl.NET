@@ -66,9 +66,11 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 
         private static void LoadStylesheet(XslCompiledTransform transform, string xslFileName)
 		{
-			try
+            XsltSettings settings = new XsltSettings(false, true);
+
+            try
 			{
-				transform.Load(xslFileName);
+				transform.Load(xslFileName,settings,new XmlUrlResolver());
 			}
 			catch (FileNotFoundException)
 			{
