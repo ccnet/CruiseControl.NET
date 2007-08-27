@@ -133,7 +133,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 		/// </summary>
 		/// <param name="date">the timestamp to format.</param>
 		/// <returns>the timestamp as a string in "yyyy/mm/dd hh:mm:ss" form in local time</returns>
-		private string FormatCommandDate(DateTime date)
+		private static string FormatCommandDate(DateTime date)
 		{
 			return date.ToString("yyyy\\/MM\\/dd HH\\:mm\\:ss", CultureInfo.InvariantCulture);
 		}
