@@ -116,6 +116,11 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Config
 				get { throw new NotImplementedException(); }
 			}
 
+            public string ModificationHistory
+            {
+                get { throw new NotImplementedException(); }
+            }
+
 			public IIntegrationRepository IntegrationRepository
 			{
 				get { throw new NotImplementedException(); }

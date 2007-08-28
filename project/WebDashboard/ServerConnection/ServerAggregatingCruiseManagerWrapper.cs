@@ -181,6 +181,12 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.ServerConnection
 			return GetCruiseManager(projectSpecifier).GetStatisticsDocument(projectSpecifier.ProjectName);
 		}
 
+        public string GetModificationHistoryDocument(IProjectSpecifier projectSpecifier)
+        {
+            return GetCruiseManager(projectSpecifier).GetModificationHistoryDocument(projectSpecifier.ProjectName);
+        }
+
+
 		private ICruiseManager GetCruiseManager(IBuildSpecifier buildSpecifier)
 		{
 			return GetCruiseManager(buildSpecifier.ProjectSpecifier);

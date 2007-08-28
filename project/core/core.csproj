@@ -358,6 +358,7 @@
     <Compile Include="publishers\IMessageBuilder.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="publishers\ModificationHistoryPublisher.cs" />
     <Compile Include="publishers\RssPublisher.cs">
       <SubType>Code</SubType>
     </Compile>

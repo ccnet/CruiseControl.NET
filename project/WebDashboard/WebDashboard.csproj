@@ -526,6 +526,7 @@
     <Compile Include="Plugins\ForceBuild\ForceBuildXmlAction.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Plugins\ProjectReport\ModificationHistoryProjectPlugin.cs" />
     <Compile Include="Plugins\ProjectReport\ProjectReportProjectPlugin.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -645,6 +646,7 @@
     <Content Include="images\fxcop-warning.gif" />
     <Content Include="images\shim.gif" />
     <Content Include="images\tw_dev_logo.gif" />
+    <Content Include="xsl\ModificationHistory.xsl" />
     <None Include="dashboard.config" />
     <None Include="templates\ActionException.vm" />
     <None Include="templates\AddProject.vm" />

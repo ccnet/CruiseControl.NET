@@ -118,5 +118,7 @@ namespace ThoughtWorks.CruiseControl.Remote
 		string GetArtifactDirectory(string projectName);
 
 		string GetStatisticsDocument(string projectName);
+
+        string GetModificationHistoryDocument(string projectName);
 	}
 }

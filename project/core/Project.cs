@@ -238,6 +238,11 @@ namespace ThoughtWorks.CruiseControl.Core
 			get { return StatisticsPublisher.LoadStatistics(ArtifactDirectory); }
 		}
 
+        public string ModificationHistory
+        {
+            get { return ModificationHistoryPublisher.LoadHistory(ArtifactDirectory); }
+        }
+
 		public IIntegrationRepository IntegrationRepository
 		{
 			get { return this; }

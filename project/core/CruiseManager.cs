@@ -138,6 +138,11 @@ namespace ThoughtWorks.CruiseControl.Core
 			return cruiseServer.GetStatisticsDocument(projectName);
 		}
 
+        public string GetModificationHistoryDocument(string projectName)
+        {
+            return cruiseServer.GetModificationHistoryDocument(projectName);
+        }
+
 		public override object InitializeLifetimeService()
 		{
 			return null;

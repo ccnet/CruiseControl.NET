@@ -457,6 +457,7 @@
     <Compile Include="Core\Publishers\HtmlLinkMessageBuilderTest.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Core\Publishers\ModificationHistoryPublisherTest.cs" />
     <Compile Include="Core\Publishers\PublisherTest.cs">
       <SubType>Code</SubType>
     </Compile>

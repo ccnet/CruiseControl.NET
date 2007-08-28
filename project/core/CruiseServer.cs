@@ -280,6 +280,12 @@ namespace ThoughtWorks.CruiseControl.Core
 			return GetIntegrator(projectName).Project.Statistics.OuterXml;
 		}
 
+
+        public string GetModificationHistoryDocument(string projectName)
+        {
+            return GetIntegrator(projectName).Project.ModificationHistory;
+        }
+
 		private IProjectIntegrator GetIntegrator(string projectName)
 		{
 			return integrationQueueManager.GetIntegrator(projectName);

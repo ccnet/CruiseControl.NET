@@ -159,8 +159,14 @@ namespace ThoughtWorks.CruiseControl.Core
 
 		public string GetStatisticsDocument(string projectName)
 		{
-			return server.GetStatisticsDocument(projectName);
+            return server.GetStatisticsDocument(projectName);
 		}
+
+        public string GetModificationHistoryDocument(string projectName)
+        {
+            return server.GetModificationHistoryDocument(projectName);
+        }
+
 
 		private void RegisterForRemoting()
 		{

@@ -23,5 +23,6 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.ServerConnection
 		string GetStatisticsDocument(IProjectSpecifier projectSpecifier);
         CruiseServerSnapshotListAndExceptions GetCruiseServerSnapshotListAndExceptions();
         CruiseServerSnapshotListAndExceptions GetCruiseServerSnapshotListAndExceptions(IServerSpecifier serverSpecifier);
+        string GetModificationHistoryDocument(IProjectSpecifier projectSpecifier);
 	}
 }

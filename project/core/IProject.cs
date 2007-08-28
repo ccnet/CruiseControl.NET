@@ -68,6 +68,8 @@ namespace ThoughtWorks.CruiseControl.Core
 
 		XmlDocument Statistics { get; }
 
+        string ModificationHistory { get; }
+
 		IIntegrationRepository IntegrationRepository { get; }
 
 		/// <summary>
