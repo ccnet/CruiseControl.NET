@@ -37,7 +37,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.ProjectReport
             string HistoryDocument = farmService.GetModificationHistoryDocument(cruiseRequest.ProjectSpecifier);
             if (HistoryDocument.Length == 0)
             {
-                return new HtmlFragmentResponse("No history Data found, use the historypublisher for this project" );
+                return new HtmlFragmentResponse("No history Data found, use the modificationHistory Publisher for this project");
             }
             else
             {
