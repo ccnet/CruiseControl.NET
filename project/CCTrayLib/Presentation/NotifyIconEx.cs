@@ -343,7 +343,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 		public void ShowBalloon (string title, string text, NotifyInfoFlags type, int timeoutInMilliSeconds)
 		{
 			if (timeoutInMilliSeconds < 0)
-				throw new ArgumentException ("The parameter must be positive", "timeoutInMilliseconds");
+				throw new ArgumentException ("The parameter must be positive", "timeoutInMilliSeconds");
 
 			NotifyIconData data = new NotifyIconData ();
 			data.cbSize = (uint) Marshal.SizeOf (data);
