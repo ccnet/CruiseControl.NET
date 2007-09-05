@@ -45,11 +45,11 @@ namespace ThoughtWorks.CruiseControl.Core.Triggers
 		{
 			Log.Debug("Retrieving ProjectStatus from server: " + ServerUri);
 			ProjectStatus[] currentStatuses = managerFactory.GetCruiseManager(ServerUri).GetProjectStatus();
-			foreach (ProjectStatus currentStatus in currentStatuses)
+			foreach (ProjectStatus projectStatus in currentStatuses)
 			{
-				if (currentStatus.Name == Project)
+				if (projectStatus.Name == Project)
 				{
-					return currentStatus;
+					return projectStatus;
 				}
 			}
 			throw new NoSuchProjectException(Project);
@@ -59,8 +59,7 @@ namespace ThoughtWorks.CruiseControl.Core.Triggers
 		{
 			get
 			{
-				if (lastStatus == null) return InnerTrigger.NextBuild;
-				return lastStatus.NextBuildTime;
+                return InnerTrigger.NextBuild;
 			}
 		}
 
