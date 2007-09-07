@@ -99,7 +99,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 			IDetailStringProvider detailStringProvider = new DetailStringProvider();
 			foreach (IProjectMonitor monitor in projectMonitors)
 			{
-				ListViewItem item = new ProjectStatusListViewItemAdaptor(detailStringProvider).Create(monitor);
+				ListViewItem item = new ProjectStatusListViewItemAdaptor(detailStringProvider, configuration).Create(monitor);
 				item.Tag = monitor;
 				listView.Items.Add(item);
 			}
