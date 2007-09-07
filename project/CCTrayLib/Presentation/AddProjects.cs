@@ -105,6 +105,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 			this.lbProject.Size = new System.Drawing.Size(255, 186);
 			this.lbProject.Sorted = true;
 			this.lbProject.TabIndex = 0;
+			this.lbProject.KeyDown += new KeyEventHandler(lbProject_KeyDown);
 			// 
 			// lbServer
 			// 
@@ -116,6 +117,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 			this.lbServer.Sorted = true;
 			this.lbServer.TabIndex = 0;
 			this.lbServer.SelectedIndexChanged += new System.EventHandler(this.lbServer_SelectedIndexChanged);
+			this.lbServer.KeyDown += new KeyEventHandler(lbServer_KeyDown);
 			// 
 			// groupBox1
 			// 
@@ -207,6 +209,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
 			this.Name = "AddProjects";
 			this.Text = "Project";
+			this.KeyDown += new KeyEventHandler(AddProjects_KeyDown);
 			this.groupBox1.ResumeLayout(false);
 			this.groupBox2.ResumeLayout(false);
 			this.ResumeLayout(false);
@@ -266,6 +269,44 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 					return true;
 			}
 			return false;
+		}
+		
+		private void KeyEventHelper(object sender, KeyEventArgs e)
+		{
+			if (e.KeyCode == Keys.Enter)
+			{
+				this.DialogResult = System.Windows.Forms.DialogResult.OK;
+				this.Close();
+			}
+			
+			if (e.KeyCode == Keys.Escape)
+			{
+				this.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+				this.Close();
+			}
+		}
+		
+		private void lbProject_KeyDown(object sender, KeyEventArgs e)
+		{
+			if ((e.Modifiers == Keys.Control) && (e.KeyCode == Keys.A))
+			{
+				for (int i = 0; i < lbProject.Items.Count; i++)
+				{
+					lbProject.SetSelected(i, true);
+				}
+			}
+			
+			KeyEventHelper(sender, e);
+		}
+		
+		private void lbServer_KeyDown(object sender, KeyEventArgs e)
+		{
+			KeyEventHelper(sender, e);
+		}
+		
+		private void AddProjects_KeyDown(object sender, KeyEventArgs e)
+		{
+			KeyEventHelper(sender, e);
 		}
 	}
 }

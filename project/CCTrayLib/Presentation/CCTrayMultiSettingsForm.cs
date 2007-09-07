@@ -252,6 +252,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 			this.lvProjects.View = System.Windows.Forms.View.Details;
 			this.lvProjects.ItemChecked += new System.Windows.Forms.ItemCheckedEventHandler(this.lvProjects_ItemChecked);
 			this.lvProjects.SelectedIndexChanged += new System.EventHandler(this.lvProjects_SelectedIndexChanged);
+            this.lvProjects.KeyDown += new KeyEventHandler(this.lvProjects_KeyDown);
 			// 
 			// columnHeader1
 			// 
@@ -738,5 +739,34 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 				}
 			}
 		}
+
+        private void lvProjects_KeyDown(object sender, KeyEventArgs e)
+        {          
+            if ((e.Modifiers == Keys.Control) && (e.KeyCode == Keys.A))
+            {
+                foreach (ListViewItem item in lvProjects.Items)
+                {
+                    item.Selected = true;
+                }
+            }
+
+            if (e.KeyCode == Keys.Delete)
+            {
+                lvProjects.BeginUpdate();
+                foreach (ListViewItem item in lvProjects.SelectedItems)
+                {
+                    lvProjects.Items.Remove(item);
+                }
+                lvProjects.EndUpdate();
+            }
+
+            if (e.KeyCode == Keys.Escape)
+            {
+                this.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+                this.Close();
+            }
+        }                                                                                
+
+
 	}
 }
