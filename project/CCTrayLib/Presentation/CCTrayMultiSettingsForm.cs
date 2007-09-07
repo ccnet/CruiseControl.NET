@@ -55,6 +55,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 		private ColumnHeader columnHeader1;
 		private ColumnHeader columnHeader2;
 		private ColumnHeader columnHeader3;
+		private CheckBox chkCheck;
 		private SelectAudioFileController successfulAudio;
 
 		public CCTrayMultiSettingsForm(ICCTrayMultiConfiguration configuration)
@@ -142,6 +143,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 			this.btnMoveDown = new System.Windows.Forms.Button();
 			this.btnMoveUp = new System.Windows.Forms.Button();
 			this.btnRemove = new System.Windows.Forms.Button();
+			this.chkCheck = new System.Windows.Forms.CheckBox();
 			this.tabGeneral = new System.Windows.Forms.TabPage();
 			this.rdoWebPage = new System.Windows.Forms.RadioButton();
 			this.rdoStatusWindow = new System.Windows.Forms.RadioButton();
@@ -217,6 +219,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 			// 
 			// tabBuildServers
 			// 
+			this.tabBuildServers.Controls.Add(this.chkCheck);
 			this.tabBuildServers.Controls.Add(this.lvProjects);
 			this.tabBuildServers.Controls.Add(this.label1);
 			this.tabBuildServers.Controls.Add(this.btnAdd);
@@ -235,6 +238,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 			this.lvProjects.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
 				| System.Windows.Forms.AnchorStyles.Left) 
 				| System.Windows.Forms.AnchorStyles.Right)));
+			this.lvProjects.CheckBoxes = true;
 			this.lvProjects.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
 																						 this.columnHeader1,
 																						 this.columnHeader3,
@@ -243,9 +247,10 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 			this.lvProjects.HideSelection = false;
 			this.lvProjects.Location = new System.Drawing.Point(8, 40);
 			this.lvProjects.Name = "lvProjects";
-			this.lvProjects.Size = new System.Drawing.Size(540, 240);
+			this.lvProjects.Size = new System.Drawing.Size(540, 220);
 			this.lvProjects.TabIndex = 8;
 			this.lvProjects.View = System.Windows.Forms.View.Details;
+			this.lvProjects.ItemChecked += new System.Windows.Forms.ItemCheckedEventHandler(this.lvProjects_ItemChecked);
 			this.lvProjects.SelectedIndexChanged += new System.EventHandler(this.lvProjects_SelectedIndexChanged);
 			// 
 			// columnHeader1
@@ -311,6 +316,20 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 			this.btnRemove.TabIndex = 10;
 			this.btnRemove.Text = "&Remove";
 			this.btnRemove.Click += new System.EventHandler(this.btnRemove_Click);
+			// 
+			// chkCheck
+			//
+			this.chkCheck.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+			this.chkCheck.AutoSize = true;
+			this.chkCheck.Checked = true;
+			this.chkCheck.CheckState = System.Windows.Forms.CheckState.Indeterminate;
+			this.chkCheck.Location = new System.Drawing.Point(16, 267);
+			this.chkCheck.Name = "chkCheck";
+			this.chkCheck.Size = new System.Drawing.Size(122, 17);
+			this.chkCheck.TabIndex = 15;
+			this.chkCheck.Text = "check / uncheck all";
+			this.chkCheck.UseVisualStyleBackColor = true;
+			this.chkCheck.CheckedChanged += new System.EventHandler(this.chkCheck_CheckedChanged);
 			// 
 			// tabGeneral
 			// 
@@ -689,6 +708,35 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 				newProjectList[i] = adaptor.Project;
 			}
 			return newProjectList;
+		}
+		
+		private void lvProjects_ItemChecked(object sender, ItemCheckedEventArgs e)
+		{
+			foreach(CCTrayProject project in configuration.Projects)
+			{
+				if(e.Item.SubItems[2].Text == project.ProjectName)
+				{
+					project.ShowProject = e.Item.Checked;
+				}
+			}
+		}
+		
+		private void chkCheck_CheckedChanged(object sender, EventArgs e)
+		{
+			if(chkCheck.Checked)
+			{
+				foreach (ListViewItem item in lvProjects.Items)
+				{
+					item.Checked = true;
+				}
+			}
+			else
+			{
+				foreach (ListViewItem item in lvProjects.Items)
+				{
+					item.Checked = false;
+				}
+			}
 		}
 	}
 }

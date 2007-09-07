@@ -7,22 +7,26 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Configuration
 	{
 		private BuildServer buildServer;
 		private string projectName;
+		private bool showProject;
 
 		public CCTrayProject()
 		{
 			buildServer = new BuildServer();
+			showProject = true;
 		}
 
 		public CCTrayProject(string serverUrl, string projectName)
 		{
 			ServerUrl = serverUrl;
 			ProjectName = projectName;
+			showProject = true;
 		}
 
 		public CCTrayProject(BuildServer buildServer, string projectName)
 		{
 			this.buildServer = buildServer;
 			this.projectName = projectName;
+			showProject = true;
 		}
 
 		[XmlAttribute(AttributeName="serverUrl")]
@@ -38,7 +42,14 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Configuration
 			get { return projectName; }
 			set { projectName = value; }
 		}
-
+		
+		[XmlAttribute(AttributeName = "showProject")]
+		public bool ShowProject
+		{
+			get { return showProject; }
+			set { showProject = value; }
+		}
+		
 		[XmlIgnore]
 		public BuildServer BuildServer
 		{

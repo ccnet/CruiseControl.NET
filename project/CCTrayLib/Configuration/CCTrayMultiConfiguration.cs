@@ -25,14 +25,26 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Configuration
 
         public IProjectMonitor[] GetProjectStatusMonitors(ISingleServerMonitor[] serverMonitors)
 		{
-			IProjectMonitor[] retVal = new IProjectMonitor[Projects.Length];
-			for (int i = 0; i < Projects.Length; i++)
+			int indexRetval = 0;
+			ArrayList indexList = new ArrayList();
+			
+			for(int i = 0; i < Projects.Length; i++)
 			{
-				CCTrayProject project = Projects[i];
-				ICruiseProjectManager projectManager = cruiseProjectManagerFactory.Create(project);
-			    IProjectStatusRetriever projectStatusRetriever = GetServerMonitorForProject(project, serverMonitors);
-				retVal[i] = new ProjectMonitor(projectManager, projectStatusRetriever);
+				if (Projects[i].ShowProject) indexList.Add(i);
 			}
+			
+			IProjectMonitor[] retVal = new IProjectMonitor[indexList.Count];
+			
+			foreach(int i in indexList)
+			{
+				if (Projects[i].ShowProject)
+				{
+					ICruiseProjectManager projectManager = cruiseProjectManagerFactory.Create(Projects[i]);
+					IProjectStatusRetriever projectStatusRetriever = GetServerMonitorForProject(Projects[i], serverMonitors);
+					retVal[indexRetval++] = new ProjectMonitor(projectManager, projectStatusRetriever);
+				}
+			}
+			
 			return retVal;
 		}
 

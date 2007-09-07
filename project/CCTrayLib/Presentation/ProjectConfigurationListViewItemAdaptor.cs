@@ -13,6 +13,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 		{
 			this.project = project;
 			item = new ListViewItem(new string[] {project.BuildServer.DisplayName, project.BuildServer.Transport.ToString(), project.ProjectName});
+			item.Checked = project.ShowProject;
 			item.Tag = this;
 		}
 
@@ -31,6 +32,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 			item.SubItems[0].Text = project.BuildServer.DisplayName;
 			item.SubItems[1].Text = project.BuildServer.Transport.ToString();
 			item.SubItems[2].Text = project.ProjectName;
+			item.Checked = project.ShowProject;
 		}
 	}
 }
