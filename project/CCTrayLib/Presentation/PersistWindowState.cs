@@ -64,8 +64,20 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 				int width = (int) key.GetValue("Width", parent.Width);
 				int height = (int) key.GetValue("Height", parent.Height);
 
-				parent.Location = new Point(left, top);
-				parent.Size = new Size(width, height);
+                Point requestedLocation = new Point(left, top);
+ 
+                foreach (Screen aScreen in Screen.AllScreens)
+                {                   
+                    // only change the default location if the saved location
+                    // maps to an existing screen
+                    if (aScreen.Bounds.Contains(requestedLocation) )
+                    {
+                        parent.Location = requestedLocation;
+                        break;
+                    }                    
+                }
+				
+                parent.Size = new Size(width, height);
 
 				visible = 1 == (int) key.GetValue("Visible", 1);
 				if (!visible)
