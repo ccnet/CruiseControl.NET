@@ -41,31 +41,17 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Label
             Assert.AreEqual(true, labeller.AllowDuplicateSubsequentLabels);
         }
 
-        [Test]
+        [Test, ExpectedException(
+                    typeof(NetReflectorException),
+                   "Missing Xml node (labelFilePath) for required member (ThoughtWorks.CruiseControl.Core.Label.FileLabeller.LabelFilePath)."
+                )
+        ]
         public void ShouldFailToPopulateFromConfigurationMissingRequiredFields()
         {
             FileLabeller labeller = new FileLabeller(new TestFileReader("001"));
             string xml = @"<fileLabeller prefix=""foo"" allowDuplicateSubsequentLabels=""false"" />";
-            string expectedExceptionText = "Missing Xml node (labelFilePath) for required member (ThoughtWorks.CruiseControl.Core.Label.FileLabeller.LabelFilePath).";
-            try
-            {
-                NetReflector.Read(xml, labeller);
-                Assert.Fail("Should have received a NetReflectorException with message: {0}", expectedExceptionText);
-            }
-            catch (AssertionException)
-            {
-                throw;
-            }
-            catch (NetReflectorException e)
-            {
-                Assert.AreEqual(expectedExceptionText, e.Message,
-                                "Received an unexpected NetReflector exception");
-            }
-            catch (Exception e)
-            {
-                Assert.IsInstanceOfType(typeof (NetReflectorException), e,
-                                        "Received an unexpected exception type");
-            }
+            NetReflector.Read(xml, labeller);
+            Assert.Fail("Should have received a NetReflectorException");
         }
 
         [Test]
@@ -109,6 +95,24 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Label
             Assert.AreEqual("001-2", thirdLabel);
         }
 
+        [Test]
+        public void ShouldIgnoreLeadingAndTrailingWhitespaceInFile()
+        {
+            FileLabeller labeller = new FileLabeller(new TestFileReader("\r\n\t 001 \t\r\n"));
+            string label = labeller.Generate(InitialIntegrationResult());
+            Assert.AreEqual("001", label);
+            
+        }
+        
+        [Test]
+        public void ShouldReplaceWhitespaceWithBlanks()
+        {
+            FileLabeller labeller = new FileLabeller(new TestFileReader("001 \r\n\t 002 \t\r\n 003"));
+            string label = labeller.Generate(InitialIntegrationResult());
+            Assert.AreEqual("001     002     003", label);
+
+        }
+
         private class TestFileReader : FileLabeller.FileReader
         {
             private readonly string label;
@@ -118,7 +122,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Label
                 this.label = label;
             }
 
-            public override string GetLabel(string labelFilePath)
+            public override string ReadLabel(string labelFilePath)
             {
                 return label;
             }

@@ -126,18 +126,55 @@ namespace ThoughtWorks.CruiseControl.Core.Label
         public class FileReader
         {
             /// <summary>
+            /// Read the label text.
+            /// </summary>
+            /// <param name="labelFilePath">the file pathname</param>
+            /// <returns>the label from the file</returns>
+            /// <remarks>
+            /// The label will have all leading and trailing whitespace removed.
+            /// </remarks>
+            public string GetLabel(string labelFilePath)
+            {
+                string label = ReadLabel(labelFilePath);
+                // Convert all whitespace to blanks
+                char[] nonBlankWhiteSpace = { '\r', '\n', '\v', '\f', '\t' };
+                for (int i = 0; i < nonBlankWhiteSpace.Length; i++)
+                {
+                    label = label.Replace(nonBlankWhiteSpace[i], ' ');
+                }
+                // Remove leading and trailing blanks
+                label = label.Trim();
+                if (label == "")
+                    throw new CruiseControlException("Label only contains whitespace.");
+                return label;
+            }
+
+            /// <summary>
             /// Read the label text from the specified file.
             /// </summary>
             /// <param name="labelFilePath">the file pathname</param>
             /// <returns>the label from the file</returns>
             /// <remarks>
-            /// The label consists of the first line of the file.
+            /// The label consists of the entire contents of the file.
             /// </remarks>
-            public virtual string GetLabel(string labelFilePath)
+            public virtual string ReadLabel(string labelFilePath)
             {
+                string ver;
+                try
+                {
                     TextReader tr = new StreamReader(labelFilePath);
-                string ver = tr.ReadLine();
+                    ver = tr.ReadToEnd();
                     tr.Close();
+                }
+                catch (Exception e)
+                {
+                    throw new CruiseControlException(
+                        String.Format("Error reading file {0}: {1}", labelFilePath, e.Message),
+                        e);
+                }
+                if (ver == "")
+                    throw new CruiseControlException(
+                        String.Format("File {0} only contains whitespace.", labelFilePath));
                 return ver;
             }
         }
