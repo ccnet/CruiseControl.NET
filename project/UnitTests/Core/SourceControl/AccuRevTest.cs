@@ -13,40 +13,44 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 	[TestFixture]
 	public class AccuRevTest
 	{
-		private const string EOL = "\r\n";
-		
 		[Test]
 		public void ShouldPopulateCorrectlyFromXml()
 		{
 			const string AccuRev_XML =
-				      "<sourceControl type=\"accuRev\">" +
-				EOL + "    <autoGetSource>false</autoGetSource>" +
-				EOL + "    <executable>accurev.exe</executable>" +
-				EOL + "    <labelOnSuccess>true</labelOnSuccess>" +
-				EOL + "    <workspace>C:\\DOES NOT\\EXIST</workspace>" +
-				EOL + "</sourceControl>";
+@"<sourceControl type=""accuRev"">
+    <autoGetSource>false</autoGetSource>
+    <executable>accurev.exe</executable>
+    <labelOnSuccess>true</labelOnSuccess>
+    <workspace>C:\DOES NOT\EXIST</workspace>
+</sourceControl>";
 			
 			AccuRev accurev = new AccuRev();
 			NetReflector.Read(AccuRev_XML, accurev);
 			Assert.AreEqual(false, accurev.AutoGetSource);
 			Assert.AreEqual("accurev.exe", accurev.Executable);
 			Assert.AreEqual(true, accurev.LabelOnSuccess);
-			Assert.AreEqual("C:\\DOES NOT\\EXIST", accurev.Workspace);
+			Assert.AreEqual(@"C:\DOES NOT\EXIST", accurev.Workspace);
 		}
 
-		[Test, ExpectedException(typeof (NetReflectorException))]
+		[Test, ExpectedException(typeof (NetReflectorException), @"Cannot convert from type System.String to System.Boolean for object with value: ""NOT_A_BOOLEAN""")]
 		public void CanCatchConfigInvalidAutoGetSource()
 		{
 			AccuRev accurev = new AccuRev();
-			const string invalidXml = "<sourcecontrol type=\"accurev\"><autoGetSource>NOT_A_BOOLEAN</autoGetSource></sourcecontrol>";
+			const string invalidXml = 
+@"<sourcecontrol type=""accurev"">
+    <autoGetSource>NOT_A_BOOLEAN</autoGetSource>
+</sourcecontrol>";
 			NetReflector.Read(invalidXml, accurev);
 		}
 
-		[Test, ExpectedException(typeof (NetReflectorException))]
+        [Test, ExpectedException(typeof(NetReflectorException), @"Cannot convert from type System.String to System.Boolean for object with value: ""NOT_A_BOOLEAN""")]
 		public void CanCatchConfigInvalidLabelOnSuccess()
 		{
 			AccuRev accurev = new AccuRev();
-			const string invalidXml = "<sourcecontrol type=\"accurev\"><labelOnSuccess>NOT_A_BOOLEAN</labelOnSuccess></sourcecontrol>";
+			const string invalidXml = 
+@"<sourcecontrol type=""accurev"">
+    <labelOnSuccess>NOT_A_BOOLEAN</labelOnSuccess>
+</sourcecontrol>";
 			NetReflector.Read(invalidXml, accurev);
 		}
 
