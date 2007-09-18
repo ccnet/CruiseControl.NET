@@ -73,19 +73,27 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Label
 			Assert.AreEqual("foo", labeller.LabelPrefix);
 		}
 
-		[Test]
-		public void DefaultValues()
+        [Test]
+        public void PopulateFromMinimalConfiguration()
+        {
+            string xml = "<LastChangeLabeller/>";
+            NetReflector.Read(xml, labeller);
+            Assert.AreEqual(string.Empty, labeller.LabelPrefix);
+        }
+
+        [Test]
+		public void VerifyDefaultValues()
 		{
 			Assert.AreEqual(string.Empty, labeller.LabelPrefix);
-		}
+        }
 
-		private IntegrationResult CreateIntegrationResult()
+		private static IntegrationResult CreateIntegrationResult()
 		{
 			IntegrationResult result = IntegrationResultMother.CreateSuccessful();
 			return result;
 		}
 		
-		private void AddModifications(IntegrationResult result) {
+		private static void AddModifications(IntegrationResult result) {
 			result.Modifications = new Modification[3];
 			result.Modifications[0] = ModificationMother.CreateModification("fileName", "folderName",
 																			new DateTime(), "userName",
