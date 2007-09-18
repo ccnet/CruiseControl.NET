@@ -1,5 +1,7 @@
 using System.Collections;
 using System.IO;
+using System.Text;
+using System.Text.RegularExpressions;
 using Exortech.NetReflector;
 using ThoughtWorks.CruiseControl.Core.Util;
 
@@ -8,7 +10,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 	/// <summary>
 	/// This is a builder that can run any command line process. We capture standard out and standard error
 	/// and include them in the Integration Result. We use the process exit code to set whether the build has failed.
-	/// TODO: Passing through build labe
+	/// TODO: Passing through build label
 	/// TODO: This is very similar to the NAntBuilder, so refactoring required (can we have subclasses with reflector properties?)
 	/// </summary>
 	[ReflectorType("exec")]
@@ -42,10 +44,26 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 		[ReflectorProperty("buildTimeoutSeconds", Required = false)]
 		public int BuildTimeoutSeconds = DEFAULT_BUILD_TIMEOUT;
 
+        /// <summary>
+        /// Run the specified executable and add its output to the build results.
+        /// </summary>
+        /// <param name="result">the IIntegrationResult object for the build</param>
 		public void Run(IIntegrationResult result)
 		{
 			ProcessResult processResult = AttemptToExecute(NewProcessInfoFrom(result));
-			result.AddTaskResult(new ProcessTaskResult(processResult));
+            if (!StringUtil.IsWhitespace(processResult.StandardOutput + processResult.StandardError))
+            {
+                // The executable produced some output.  We need to transform it into an XML build report 
+                // fragment so the rest of CC.Net can process it.
+                ProcessResult newResult = new ProcessResult(
+                    MakeBuildResult(processResult.StandardOutput, ""), 
+                    MakeBuildResult(processResult.StandardError, "Error"), 
+                    processResult.ExitCode, 
+                    processResult.TimedOut
+                    );
+                processResult = newResult;
+            }
+            result.AddTaskResult(new ProcessTaskResult(processResult));
 
 			if (processResult.TimedOut)
 			{
@@ -65,7 +83,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 			return info;
 		}
 
-		private string Convert(object obj)
+		private static string Convert(object obj)
 		{
 			return (obj == null) ? null : obj.ToString();
 		}
@@ -91,5 +109,52 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 		{
 			return string.Format(@" BaseDirectory: {0}, Executable: {1}", ConfiguredBaseDirectory, Executable);
 		}
+
+        /// <summary>
+        /// Convert a stream of text lines separated with newline sequences into an XML build result.
+        /// </summary>
+        /// <param name="input">the text stream</param>
+        /// <param name="msgLevel">the message level, if any.  Values are "Error" and "Warning".</param>
+        /// <returns>the build result string</returns>
+        /// <remarks>If there are any non-blank lines in the input, they are each wrapped in a
+        /// <code>&lt;message&gt</code> element and the entire set is wrapped in a
+        /// <code>&lt;buildresults&gt;</code> element and returned.  Each line of the input is encoded
+        /// as XML CDATA rules require.  If the input is empty or contains only whitspace, an 
+        /// empty string is returned.
+        /// Note: If we can't manage to understand the input, we just return it unchanged.
+        /// </remarks>
+        private static string MakeBuildResult(string input, string msgLevel)
+        {
+            StringBuilder output = new StringBuilder();
+
+            // Pattern for capturing a line of text, exclusive of the line-ending sequence.
+            // A "line" is an non-empty unbounded sequence of characters followed by some 
+            // kind of line-ending sequence (CR, LF, or any combination thereof) or 
+            // end-of-string.
+            Regex linePattern = new Regex(@"([^\r\n]+)");
+
+            MatchCollection lines = linePattern.Matches(input);
+            if (lines.Count > 0)
+            {
+                output.Append(System.Environment.NewLine);
+                output.Append("<buildresults>");
+                output.Append(System.Environment.NewLine);
+                foreach (Match line in lines)
+                {
+                    output.Append("  <message");
+                    if (msgLevel != "")
+                        output.AppendFormat(" level=\"{0}\"", msgLevel);
+                    output.Append(">");
+                    output.Append(XmlUtil.EncodePCDATA(line.ToString()));
+                    output.Append("</message>");
+                    output.Append(System.Environment.NewLine);
+                }
+                output.Append("</buildresults>");
+                output.Append(System.Environment.NewLine);
+            }
+            else
+                output.Append(input);       // All of that stuff failed, just return our input
+            return output.ToString();
+        }
 	}
 }

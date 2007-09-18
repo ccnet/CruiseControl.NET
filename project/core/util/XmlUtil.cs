@@ -116,6 +116,16 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 			return SelectRequiredValue(CreateDocument(xml), xpath);
 		}
 
+        /// <summary>
+        /// Encode a string so it is safe to use as XML "character data".
+        /// </summary>
+        /// <param name="text">the text to encode</param>
+        /// <returns>the encoded text</returns>
+        /// <remarks>
+        /// This method damages the resulting string, because the sequence "]]>" is forbidden inside
+        /// a CDATA section and cannot be escaped or encoded.  Since we can't protect it, we insert a
+        /// space between the brackets so it isn't recognized by an XML parser.  C'est la guerre.
+        /// </remarks>
 		public static string EncodeCDATA(string text)
 		{
 			Regex CDataCloseTag = new Regex(@"\]\]>");
@@ -170,5 +180,21 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 			XmlDocument document = new XmlDocument();
 			document.LoadXml(actual);
 		}
-	}
+
+        /// <summary>
+        /// Encode a string so it is safe to use as XML "parsed character data".
+        /// </summary>
+        /// <param name="input">the text to encode</param>
+        /// <returns>the encoded text</returns>
+        public static string EncodePCDATA(string input)
+        {
+            string result;
+            result = Regex.Replace(input, "&", "&amp;");    // Do this one first so "&"s in replacements pass through unchanged.
+            result = Regex.Replace(result, "<", "&lt;");
+            result = Regex.Replace(result, ">", "&gt;");
+            result = Regex.Replace(result, "-", "&#x2d;");   // Because XML comments are "--comment--".
+            return result;
+        }
+
+    }
 }

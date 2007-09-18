@@ -59,7 +59,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 			Assert.AreEqual("mybatchfile.bat", task.Executable);
 			Assert.AreEqual(600, task.BuildTimeoutSeconds);
 			Assert.AreEqual("", task.BuildArgs);
-			Verify();
+            Verify();
 		}
 
 		[Test]
@@ -72,8 +72,10 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 
 			Assert.IsTrue(result.Succeeded);
 			Assert.AreEqual(IntegrationStatus.Success, result.Status);
-			Assert.AreEqual(ProcessResultOutput, result.TaskOutput);
-			Verify();
+            Assert.AreEqual(System.Environment.NewLine + "<buildresults>" + System.Environment.NewLine + "  <message>" 
+                + ProcessResultOutput + "</message>" + System.Environment.NewLine + "</buildresults>" 
+                + System.Environment.NewLine, result.TaskOutput);
+            Verify();
 		}
 
 		[Test]
@@ -86,7 +88,10 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 
 			Assert.IsTrue(result.Failed);
 			Assert.AreEqual(IntegrationStatus.Failure, result.Status);
-			Assert.AreEqual(ProcessResultOutput, result.TaskOutput);
+            Assert.AreEqual(System.Environment.NewLine + "<buildresults>" + System.Environment.NewLine + "  <message>" 
+                + ProcessResultOutput + "</message>" + System.Environment.NewLine + "</buildresults>" 
+                + System.Environment.NewLine, result.TaskOutput);
+
 			Verify();
 		}
 
@@ -177,5 +182,28 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 			Assert.AreEqual(expectedBaseDirectory, info.WorkingDirectory);
 			Verify();
 		}
+
+        [Test]
+        public void ExecutableOutputShouldBeBuildResults()
+        {
+            ExecutableTask xmlTestTask = new ExecutableTask((ProcessExecutor)mockProcessExecutor.MockInstance);
+            xmlTestTask.Executable = DefaultExecutable;
+            xmlTestTask.BuildArgs = DefaultArgs;
+            ExpectToExecuteArguments(DefaultArgs);
+
+            IIntegrationResult result = IntegrationResult();
+            xmlTestTask.Run(result);
+
+            Assert.IsTrue(result.Succeeded);
+            Assert.AreEqual(IntegrationStatus.Success, result.Status);
+
+            // TODO: The following only works correctly when ProcessResultOutput is a single non-empty line.
+            // That is always the case, courtesy of our superclass' initialization.  If that should ever
+            // change, this test needs to be adjusted accordingly.
+            Assert.AreEqual(System.Environment.NewLine + "<buildresults>" + System.Environment.NewLine + "  <message>" 
+                + ProcessResultOutput + "</message>" + System.Environment.NewLine + "</buildresults>"
+                + System.Environment.NewLine, result.TaskOutput);
+            Verify();
+        }
 	}
 }

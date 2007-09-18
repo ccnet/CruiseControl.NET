@@ -98,5 +98,19 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Util
 			string test = "a b <f>]]></a>";
 			Assert.AreEqual("a b <f>] ]></a>", XmlUtil.EncodeCDATA(test));
 		}
-	}
+
+        [Test]
+        public void VerifyPCDATAEncodeEncodes()
+        {
+            string test = "a&b <c>-</d>";
+            Assert.AreEqual("a&amp;b &lt;c&gt;&#x2d;&lt;/d&gt;", XmlUtil.EncodePCDATA(test));
+        }
+
+        [Test]
+        public void VerifyPCDATAEncodeDoesNotEncodeOthers()
+        {
+            string test = @"abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890`~!@#$%^*()_+={[}]|\:;',.?/';" + '"';
+            Assert.AreEqual(test, XmlUtil.EncodePCDATA(test));
+        }
+    }
 }
