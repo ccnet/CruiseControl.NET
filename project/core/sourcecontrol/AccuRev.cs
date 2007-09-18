@@ -18,8 +18,10 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 	/// </remarks>
 	[ReflectorType("accurev")]
 	public class AccuRev : ProcessSourceControl
-	{
-		/// <summary>
+    {
+        #region Properties
+        
+        /// <summary>
 		/// Should we automatically obtain updated source from AccuRev or not? 
 		/// </summary>
 		/// <remarks>
@@ -50,7 +52,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 		public string AccuRevHomeDir = null;
 		
 		/// <summary>
-		/// If set, the source repository will be tagged with the build number upon successful builds.
+		/// If set, the source repository will be tagged with the build label upon successful builds.
 		/// </summary>
 		/// <remarks>
 		/// Optional, default is not to tag.
@@ -96,22 +98,25 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 		/// <remarks>
 		[ReflectorProperty("workspace", Required=false)]
 		public string Workspace = string.Empty;
+        
+        #endregion
 
-		/// <summary>
-		/// Create an instance of the source control integration.
+        /// <summary>
+		/// Create an instance of the source control integration with the default history parser and 
+		/// process executor.
 		/// </summary>
 		/// <remarks>
-		/// Uses AccuRev(IHistoryParser, ProcessExecutor) to do the heavy lifting.
+        /// Uses <see cref="AccuRev(IHistoryParser, ProcessExecutor)"/> to do the heavy lifting.
 		/// <remarks>
 		public AccuRev() : this(new AccuRevHistoryParser(), new ProcessExecutor())
 		{
 		}
 		
 		/// <summary>
-		/// Create an instance of the source control integration.
+        /// Create an instance of the source control integration with the default history parser.
 		/// </summary>
 		/// <remarks>
-		/// Uses AccuRev(IHistoryParser, ProcessExecutor) to do the heavy lifting.
+        /// Uses <see cref="AccuRev(IHistoryParser, ProcessExecutor)"/> to do the heavy lifting.
 		/// <remarks>
 		public AccuRev(ProcessExecutor executor) : this(new AccuRevHistoryParser(), executor)
 		{
@@ -165,8 +170,8 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 		/// <summary>
 		/// Obtain a list of modified files between the specified points on the revision history.
 		/// </summary>
-        /// <param name="from">the starting timestamp</param>
-		/// <param name="to">the ending timestamp</param>
+        /// <param name="from">the IntegrationResult containing the starting timestamp</param>
+        /// <param name="to">the IntegrationResult containing the ending timestamp</param>
         /// <remarks>
         /// This method creates an AccuRev command to list all the modifications in the specified 
         /// timespan, and defers the execution and parsing to AccuRevHistoryParser.Parse() (via 
@@ -192,11 +197,11 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 		/// <summary>
 		/// Obtain the specified level on the source code. 
 		/// </summary>
-		/// <remarks>
+        /// <param name="result">the IntegrationResult containing the timestamp to get; ignored for this implementation</param>
+        /// <remarks>
 		/// This implementation always gets the most current version of the source, because AccuRev
 		/// doesn't know how to get an earlier version.
 		/// </remarks>
-		/// <param name="result">the timestamp of the label; ignored for this implementation</param>
 		public override void GetSource(IIntegrationResult result)
 		{
 			if (AutoGetSource)
@@ -209,7 +214,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 		/// <summary>
 		/// Label the specified source level.  In AccuRev terms, create a snapshot based on that level.
 		/// </summary>
-		/// <param name="result">the timestamp of the label; ignored for this implementation</param>
+        /// <param name="result">the IntegrationResult containing the label</param>
 		public override void LabelSourceControl(IIntegrationResult result)
 		{
 			if (LabelOnSuccess && result.Succeeded && (result.Label != ""))
@@ -226,7 +231,8 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 		/// <summary>
 		/// Log in to AccuRev if we're supposed to do so.
 		/// </summary>
-		private void PossiblyLogIn(IIntegrationResult result)
+        /// <param name="result">IntegrationResult for which the command will be run</param>
+        private void PossiblyLogIn(IIntegrationResult result)
 		{
 			if (!LogIn)
 				return;		// Nothing to do.

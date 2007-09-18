@@ -69,7 +69,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 		/// </summary>
 		/// <param name="history">the stream of "accurev hist" command output</param>
 		/// <param name="from">the starting date and time for the range of modifications we want.</param>
-		/// <param name="to">the ending date and time for the range of modifications we want./param>
+		/// <param name="to">the ending date and time for the range of modifications we want.</param>
 		/// <returns>the changes in the specified time range.</returns>
 		public Modification[] Parse(TextReader history, DateTime from, DateTime to)
 		{
