@@ -186,7 +186,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 		{
 			PossiblyLogIn(from);
 			string args = string.Format("hist -a -s \"{0}\" -t \"{1}-{2}\"", 
-				GetBasisStreamName(from),
+				GetBasisStreamName(to),
 				FormatCommandDate(to.StartTime),
 				FormatCommandDate(from.StartTime));
 			ProcessInfo histCommand = PrepCommand(args, from);
