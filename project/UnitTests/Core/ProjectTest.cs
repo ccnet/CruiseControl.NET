@@ -558,7 +558,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 		[Test]
 		public void PrebuildShouldIncrementLabelAndRunPrebuildTasks()
 		{
-			IntegrationResult result = IntegrationResult.CreateInitialIntegrationResult(ProjectName, "c:\\root");
+			IntegrationResult result = IntegrationResult.CreateInitialIntegrationResult(ProjectName, "c:\\root\\workingdir", "c:\\root\\artifactdir");
 			mockStateManager.ExpectAndReturn("HasPreviousState", false, ProjectName);
 			mockLabeller.ExpectAndReturn("Generate", "1.0", new IsAnything());
 			IMock mockPrebuildTask = mockery.NewStrictMock(typeof(ITask));

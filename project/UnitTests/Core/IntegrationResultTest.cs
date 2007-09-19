@@ -42,7 +42,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 		[Test]
 		public void VerifyInitialIntegrationResult()
 		{
-			IntegrationResult initial = IntegrationResult.CreateInitialIntegrationResult("project", @"c:\temp");
+            IntegrationResult initial = IntegrationResult.CreateInitialIntegrationResult("project", @"c:\temp", @"c:\temp");
 
 			Assert.AreEqual("project", initial.ProjectName);
 			Assert.AreEqual(IntegrationStatus.Unknown, initial.LastIntegrationStatus, "last integration status is unknown because no previous integrations exist.");
@@ -162,7 +162,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 		[Test]
 		public void MapIntegrationProperties()
 		{
-			result = new IntegrationResult("project", @"c:\workingdir\", new IntegrationRequest(BuildCondition.IfModificationExists, "myTrigger"), new IntegrationSummary(IntegrationStatus.Unknown, "foo", "foo", DateTime.MinValue));
+            result = new IntegrationResult("project", @"c:\workingdir\", @"c:\artifactdir\", new IntegrationRequest(BuildCondition.IfModificationExists, "myTrigger"), new IntegrationSummary(IntegrationStatus.Unknown, "foo", "foo", DateTime.MinValue));
 			result.Label = "label23";
 			result.ArtifactDirectory = @"c:\artifactdir\";
 			result.StartTime = new DateTime(2005,06,06,08,45,00);
@@ -230,7 +230,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 		public void CanGetPreviousState()
 		{
 			IntegrationSummary expectedSummary = new IntegrationSummary(IntegrationStatus.Exception, "foo", "foo", DateTime.MinValue);
-			result = new IntegrationResult("project", "c:\\workingDir", IntegrationRequest.NullRequest, expectedSummary);
+            result = new IntegrationResult("project", "c:\\workingDir", @"c:\artifactdir\", IntegrationRequest.NullRequest, expectedSummary);
 			Assert.AreEqual(new IntegrationSummary(IntegrationStatus.Exception, "foo", "foo", DateTime.MinValue), result.LastIntegration);
 		}
 	}

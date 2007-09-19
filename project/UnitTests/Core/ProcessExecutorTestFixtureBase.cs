@@ -94,7 +94,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 
 		protected IIntegrationResult IntegrationResultForWorkingDirectoryTest()
 		{
-			return Integration("project", "projectWorkingDirectory");
+			return Integration("project", "projectWorkingDirectory", "projectArtifactDirectory");
 		}
 	}
 }

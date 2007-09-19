@@ -23,7 +23,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Label
 		[Test]
 		public void GenerateInitialLabel()
 		{
-			Assert.AreEqual("2005.1.1.1", labeller.Generate(IntegrationResult.CreateInitialIntegrationResult("foo", @"c:\")));
+			Assert.AreEqual("2005.1.1.1", labeller.Generate(IntegrationResult.CreateInitialIntegrationResult("foo", @"c:\", @"c:\")));
 		}
 
 		[Test]

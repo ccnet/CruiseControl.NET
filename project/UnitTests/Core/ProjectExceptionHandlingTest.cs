@@ -55,7 +55,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 
 	internal class StateManagerStub : IStateManager
 	{
-		private IIntegrationResult savedResult = IntegrationResult.CreateInitialIntegrationResult("test", @"c:\temp");
+        private IIntegrationResult savedResult = IntegrationResult.CreateInitialIntegrationResult("test", @"c:\temp", @"c:\temp");
 
 		public IIntegrationResult LoadState(string project)
 		{

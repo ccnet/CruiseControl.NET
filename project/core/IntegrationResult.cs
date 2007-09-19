@@ -40,10 +40,11 @@ namespace ThoughtWorks.CruiseControl.Core
 		{
 		}
 
-		public IntegrationResult(string projectName, string workingDirectory, IntegrationRequest request, IntegrationSummary lastIntegration)
+		public IntegrationResult(string projectName, string workingDirectory, string artifactDirectory, IntegrationRequest request, IntegrationSummary lastIntegration)
 		{
 			ProjectName = projectName;
 			WorkingDirectory = workingDirectory;
+		    ArtifactDirectory = artifactDirectory;
 			this.request = (lastIntegration.IsInitial()) ? new IntegrationRequest(BuildCondition.ForceBuild, request.Source) : request;
 			this.lastIntegration = lastIntegration;
 		}
@@ -264,10 +265,10 @@ namespace ThoughtWorks.CruiseControl.Core
 			return Modifications.Length > 0;
 		}
 
-		public static IntegrationResult CreateInitialIntegrationResult(string project, string workingDirectory)
+		public static IntegrationResult CreateInitialIntegrationResult(string project, string workingDirectory, string artifactDirectory)
 		{
 			IntegrationRequest initialRequest = new IntegrationRequest(BuildCondition.ForceBuild, "Initial Build");
-			IntegrationResult result = new IntegrationResult(project, workingDirectory, initialRequest, IntegrationSummary.Initial);
+			IntegrationResult result = new IntegrationResult(project, workingDirectory, artifactDirectory, initialRequest, IntegrationSummary.Initial);
 			result.StartTime = DateTime.Now.AddDays(-1);
 			result.EndTime = DateTime.Now;
 			return result;

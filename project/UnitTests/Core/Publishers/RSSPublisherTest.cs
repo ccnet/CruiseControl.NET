@@ -14,7 +14,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Publishers
 		[SetUp]
 		public void Setup()
 		{
-			result = Integration("myProject", @"c:\temp");
+            result = Integration("myProject", @"c:\temp", @"c:\temp");
 			result.ProjectUrl = "http://somewhere/someplace.html";
 			publisher = new RssPublisher();
 		}

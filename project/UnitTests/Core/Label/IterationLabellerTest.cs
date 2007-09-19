@@ -130,7 +130,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Label
 			labeller.ReleaseStartDate = new DateTime(2005, 6, 2);
 			labeller.LabelPrefix = "5.3.";
 			labeller.Duration = 1;
-			Assert.AreEqual("5.3.6.1", labeller.Generate(IntegrationResult.CreateInitialIntegrationResult("foo", "c:\\bar")));
+			Assert.AreEqual("5.3.6.1", labeller.Generate(IntegrationResult.CreateInitialIntegrationResult("foo", "c:\\bar", "c:\\baz")));
 		}
 
 		[Test]

@@ -37,7 +37,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 
 		public static IntegrationResult Create(IntegrationSummary integrationSummary)
 		{
-			return new IntegrationResult(DefaultProjectName, Path.GetTempPath(), ModificationExistRequest(), integrationSummary);
+            return new IntegrationResult(DefaultProjectName, Path.GetTempPath(), Path.GetTempPath(), ModificationExistRequest(), integrationSummary);
 		}
 
 		public static IntegrationResult CreateSuccessful(DateTime startDate)
@@ -124,7 +124,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 
 		public static IntegrationResult CreateInitial()
 		{
-			return IntegrationResult.CreateInitialIntegrationResult(DefaultProjectName, "");
+			return IntegrationResult.CreateInitialIntegrationResult(DefaultProjectName, "", "");
 		}
 
 		private static IntegrationRequest ModificationExistRequest()

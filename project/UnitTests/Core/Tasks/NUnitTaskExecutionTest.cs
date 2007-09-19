@@ -13,7 +13,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 	{
 		private const string NUnitConsolePath = @"D:\temp\nunit-console.exe";
 		private string[] TEST_ASSEMBLIES = new string[] {"foo.dll"};
-		const string WORKING_DIRECTORY = @"c:\temp";
+        const string WORKING_DIRECTORY = @"c:\temp";
+        const string ARTIFACT_DIRECTORY = @"c:\temp";
 
 		private IMock executorMock;
 		private NUnitTask task;
@@ -30,8 +31,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 			task.Assemblies = TEST_ASSEMBLIES;
 			task.NUnitPath = NUnitConsolePath;
 	        task.OutputFile = tempOutputFile.ToString();
-			result = Integration("testProject", WORKING_DIRECTORY);
-			result.ArtifactDirectory = WORKING_DIRECTORY;
+			result = Integration("testProject", WORKING_DIRECTORY, ARTIFACT_DIRECTORY);
 		}
 
 		[TearDown]

@@ -23,9 +23,9 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 			return Request(BuildCondition.ForceBuild);
 		}
 
-		public IIntegrationResult Integration(string project, string workingDirectory)
+		public IIntegrationResult Integration(string project, string workingDirectory, string artifactDirectory)
 		{
-			return new IntegrationResult(project, workingDirectory, ModificationExistRequest(), IntegrationSummary.Initial);
+			return new IntegrationResult(project, workingDirectory, artifactDirectory, ModificationExistRequest(), IntegrationSummary.Initial);
 		}
 
 		public IntegrationResult SuccessfulResult(string previousLabel)

@@ -50,7 +50,7 @@ namespace ThoughtWorks.CruiseControl.Core
 					if (project.StateManager.HasPreviousState(project.Name))
 						currentIntegration = project.StateManager.LoadState(project.Name);
 					else
-						currentIntegration = IntegrationResult.CreateInitialIntegrationResult(project.Name, project.WorkingDirectory);
+						currentIntegration = IntegrationResult.CreateInitialIntegrationResult(project.Name, project.WorkingDirectory, project.ArtifactDirectory);
 				}
 				return currentIntegration;
 			}
@@ -58,7 +58,7 @@ namespace ThoughtWorks.CruiseControl.Core
 
 		public IIntegrationResult StartNewIntegration(IntegrationRequest request)
 		{
-			IntegrationResult newResult = new IntegrationResult(project.Name, project.WorkingDirectory, request, LastIntegration);
+			IntegrationResult newResult = new IntegrationResult(project.Name, project.WorkingDirectory, project.ArtifactDirectory, request, LastIntegration);
 			newResult.ArtifactDirectory = project.ArtifactDirectory;
 			newResult.ProjectUrl = project.WebURL;
 			return currentIntegration = newResult;
