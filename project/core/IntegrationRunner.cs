@@ -51,9 +51,12 @@ namespace ThoughtWorks.CruiseControl.Core
             try
             {
                 target.Prebuild(result);
-                target.SourceControl.GetSource(result);
-                target.Run(result);
-                target.SourceControl.LabelSourceControl(result);
+                if (!result.Failed) 
+                {                                    
+                    target.SourceControl.GetSource(result);
+                    target.Run(result);
+                    target.SourceControl.LabelSourceControl(result);
+                }
             }
             catch (Exception ex)
             {

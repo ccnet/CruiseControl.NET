@@ -50,7 +50,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 			resultMock = mockery.NewStrictMock(typeof (IIntegrationResult));
 			resultMock.SetupResult("WorkingDirectory", TempFileUtil.GetTempPath("workingDir"));
 			resultMock.SetupResult("ArtifactDirectory", TempFileUtil.GetTempPath("artifactDir"));
-			result = (IIntegrationResult) resultMock.MockInstance;
+            result = (IIntegrationResult) resultMock.MockInstance;
 
 			lastResultMock = mockery.NewStrictMock(typeof (IIntegrationResult));
 			lastResult = (IIntegrationResult) lastResultMock.MockInstance;
@@ -132,7 +132,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 			targetMock.Expect("Activity", ProjectActivity.Building);
 			sourceControlMock.Expect("GetSource", result);
 			targetMock.Expect("Prebuild", result);
-			targetMock.Expect("Run", result);
+            resultMock.ExpectAndReturn("Failed", false);
+            targetMock.Expect("Run", result);
 			resultMock.Expect("MarkEndTime");
 			targetMock.Expect("Activity", ProjectActivity.Sleeping);
 			resultMock.ExpectAndReturn("EndTime", endTime);
