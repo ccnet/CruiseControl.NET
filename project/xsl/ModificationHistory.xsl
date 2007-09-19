@@ -53,19 +53,19 @@
 					</xsl:call-template>
 					
 					<!--  add a clickable section to expand or collapse the changes within this build -->
-					<span>
-					  <xsl:attribute name="onclick">
-							  <xsl:text>toggleTr('img-</xsl:text>
-							  <xsl:value-of select="$Build_Id" />
-							  <xsl:text>','</xsl:text>
-							  <xsl:value-of select="$Build_Id" />
-							  <xsl:text>')</xsl:text>
-						</xsl:attribute>
-						<xsl:attribute name="class">
-						    <xsl:text>clickable</xsl:text>
-						</xsl:attribute>
-									
+					<span>									
 						<th align="left">
+              <xsl:attribute name="onclick">
+                <xsl:text>toggleTr('img-</xsl:text>
+                <xsl:value-of select="$Build_Id" />
+                <xsl:text>','</xsl:text>
+                <xsl:value-of select="$Build_Id" />
+                <xsl:text>')</xsl:text>
+              </xsl:attribute>
+              <xsl:attribute name="class">
+                <xsl:text>clickable</xsl:text>
+              </xsl:attribute>
+
               <img src="{$applicationPath}/images/arrow_plus_small.gif" 
                    alt="Toggle display of the changes within this build">  
 						       <xsl:attribute name="id">
