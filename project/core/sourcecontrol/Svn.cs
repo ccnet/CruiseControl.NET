@@ -187,7 +187,10 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 
 		private ProcessInfo NewProcessInfo(string args, IIntegrationResult result)
 		{
-		    ProcessInfo processInfo = new ProcessInfo(Executable, args, result.BaseFromWorkingDirectory(WorkingDirectory));
+            string workingDirectory = result.BaseFromWorkingDirectory(WorkingDirectory);
+            if (!Directory.Exists(workingDirectory)) Directory.CreateDirectory(workingDirectory);
+
+            ProcessInfo processInfo = new ProcessInfo(Executable, args, workingDirectory);
 		    processInfo.StreamEncoding = Encoding.UTF8;
 		    return processInfo;
 		}
