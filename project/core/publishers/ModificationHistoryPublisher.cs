@@ -30,7 +30,7 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
 
             System.IO.StreamWriter sw = new System.IO.StreamWriter(fs);
             System.Xml.XmlTextWriter CurrentBuildInfoWriter = new System.Xml.XmlTextWriter(sw);
-            CurrentBuildInfoWriter.Formatting = System.Xml.Formatting.Indented; 
+            CurrentBuildInfoWriter.Formatting = System.Xml.Formatting.Indented;
 
             CurrentBuildInfoWriter.WriteStartElement("Build");
             WriteXMLAttributeAndValue(CurrentBuildInfoWriter, "BuildDate", Util.DateUtil.FormatDate(result.EndTime));

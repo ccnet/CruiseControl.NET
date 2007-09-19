@@ -58,7 +58,65 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Publishers
             Assert.AreEqual(ExpectedLoggedModifications, PublishedModifications, "Differences in log Detected");
         }
 
-  
+
+
+        [Test]
+        public void BuildWithModificationsShouldPublishModifications()
+        {
+            // Setup
+            IntegrationResult result = CreateIntegrationResult(IntegrationStatus.Success,true);
+            result.ArtifactDirectory = ARTIFACTS_DIR_PATH;
+            string PublishedModifications;
+            
+            System.Text.StringBuilder ExpectedLoggedModifications = new System.Text.StringBuilder();
+            ExpectedLoggedModifications.Append("<History>");
+            ExpectedLoggedModifications.Append( GetExpectedMods(result));
+            ExpectedLoggedModifications.AppendLine();
+            ExpectedLoggedModifications.Append("</History>");
+
+            // Execute
+            publisher.Run(result);
+
+            //Verify
+            PublishedModifications = ModificationHistoryPublisher.LoadHistory(ARTIFACTS_DIR_PATH);
+
+            Assert.AreEqual(ExpectedLoggedModifications.ToString(), PublishedModifications, "Differences in log Detected");
+        }
+
+        private string GetExpectedMods(IntegrationResult result)
+        {
+            System.IO.StringWriter sw = new System.IO.StringWriter();
+            System.Xml.XmlTextWriter cbiw = new System.Xml.XmlTextWriter(sw);
+            cbiw.Formatting = System.Xml.Formatting.Indented;
+
+            cbiw.WriteStartElement("Build");
+            cbiw.WriteStartAttribute("BuildDate");
+            cbiw.WriteValue(DateUtil.FormatDate(result.EndTime));
+
+            cbiw.WriteStartAttribute("Success");
+            cbiw.WriteValue(result.Succeeded.ToString());
+
+            cbiw.WriteStartAttribute("Label");
+            cbiw.WriteValue(result.Label);
+
+            if (result.Modifications.Length > 0)
+            {
+                cbiw.WriteStartElement("modifications");
+
+                for (int i = 0; i < result.Modifications.Length; i++)
+                {
+                    result.Modifications[i].ToXml(cbiw);
+                }
+
+                cbiw.WriteEndElement();
+            }
+
+            cbiw.WriteEndElement();
+
+            return sw.ToString();
+        }
+
+
         private IntegrationResult CreateIntegrationResult(IntegrationStatus status, bool addModifications)
         {
             IntegrationResult result = IntegrationResultMother.Create(status, new DateTime(1980, 1, 1));
@@ -71,6 +129,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Publishers
                 Modification[] modifications = new Modification[1];
                 modifications[0] = new Modification();
                 modifications[0].ModifiedTime = new DateTime(2002, 2, 3);
+                modifications[0].ChangeNumber = 2;
                 result.Modifications = modifications;
             }
             return result;
