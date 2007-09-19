@@ -1,3 +1,4 @@
+using System.Collections;
 using System.IO;
 using Exortech.NetReflector;
 using ThoughtWorks.CruiseControl.Core.Util;
@@ -74,7 +75,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 
 		public virtual void Run(IIntegrationResult result)
 		{
-			ProcessResult processResult = AttemptToExecute(result.WorkingDirectory);
+			ProcessResult processResult = AttemptToExecute(result);
 			result.AddTaskResult(new DevenvTaskResult(processResult));
 			Log.Info("Devenv build complete.  Status: " + result.Status);
 			
@@ -84,10 +85,20 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 			}
 		}
 
-		private ProcessResult AttemptToExecute(string workingDirectory)
+        private ProcessResult AttemptToExecute(IIntegrationResult result)
 		{
+            string workingDirectory = result.WorkingDirectory;
 			ProcessInfo processInfo = new ProcessInfo(Executable, Arguments, workingDirectory);
 			processInfo.TimeOut = BuildTimeoutSeconds * 1000;
+            IDictionary properties = result.IntegrationProperties;
+            // Pass the integration environment variables to devenv.
+            foreach (string key in properties.Keys)
+            {
+                if (properties[key] == null)
+                    processInfo.EnvironmentVariables[key] = null;
+                else
+                    processInfo.EnvironmentVariables[key] = properties[key].ToString();
+            }
 
 			Log.Info(string.Format("Starting build: {0} {1}", processInfo.FileName, processInfo.Arguments));
 			try
