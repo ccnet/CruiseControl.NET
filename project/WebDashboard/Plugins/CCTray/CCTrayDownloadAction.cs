@@ -1,4 +1,5 @@
 using System.IO;
+using System.Text;
 using ThoughtWorks.CruiseControl.Core.Reporting.Dashboard.Navigation;
 using ThoughtWorks.CruiseControl.WebDashboard.IO;
 using ThoughtWorks.CruiseControl.WebDashboard.MVC;
@@ -22,10 +23,30 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.CCTray
 			if (cctrayPath.Exists)
 			{
 				FileInfo[] files = cctrayPath.GetFiles("*CCTray*.*");
-				if (files.Length > 0)
+				if (files.Length == 0)
 				{
 					return new RedirectResponse("CCTray/" + files[0].Name);
 				}
+                else if (files.Length > 0)
+                {
+                    StringBuilder installerList = new StringBuilder();
+                    installerList.Append(@"<h3>Multiple CCTray installers available</h3>");
+                    installerList.Append(@"<p>Choose one of the following CCTray installers:");
+                    installerList.Append(@"<ul>");
+                    for (int i = 0; i < files.Length; i++)
+                    {
+                        installerList.Append(@"<li>");
+                        installerList.Append(@"<a href=""CCTray/");
+                        installerList.Append(files[i].Name);
+                        installerList.Append(@""">");
+                        installerList.Append(files[i].Name);
+                        installerList.Append(@"</a>");
+                        installerList.Append(@"</li>");
+                    }
+                    installerList.Append(@"</ul>");
+                    installerList.Append(@"</p>");
+                    return new HtmlFragmentResponse(installerList.ToString());
+                }
 			}
 			return new HtmlFragmentResponse("<h3>Unable to locate CCTray installer at path: " + cctrayPath + "</h3>");
 		}
