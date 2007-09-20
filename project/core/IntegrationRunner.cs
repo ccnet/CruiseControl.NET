@@ -65,11 +65,11 @@ namespace ThoughtWorks.CruiseControl.Core
             result.MarkEndTime();
         }
 
-        private void PostBuild(IIntegrationResult result)
-        {
-            target.PublishResults(result);
-            resultManager.FinishIntegration();
-        }
+		private void PostBuild(IIntegrationResult result)
+		{
+			resultManager.FinishIntegration();
+			target.PublishResults(result);
+		}
 
         private static void CreateDirectoryIfItDoesntExist(string directory)
         {
