@@ -115,12 +115,14 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 			controller.BindToTrayIcon(trayIcon);
 			controller.BindToListView(lvProjects);
 			controller.PopulateQueueImageList(queueIconList);
+            controller.SetFormTopMost(this);
+
 			if (queueTreeView.Visible)
 			{
 				controller.BindToQueueTreeView(queueTreeView);
 			}
 
-			btnForceBuild.DataBindings.Add("Enabled", controller, "IsProjectSelected");
+			btnForceBuild.DataBindings.Add("Enabled", controller, "IsProjectSelected");            
 		}
 
 		protected override void OnLoad(EventArgs e)

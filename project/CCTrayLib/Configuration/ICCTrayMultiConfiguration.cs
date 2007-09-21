@@ -19,6 +19,8 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Configuration
 		Icons Icons { get; }
 		X10Configuration X10 { get; }
 
+        bool AlwaysOnTop { get; set; }
+
 		void Reload();
 		void Persist();
 

@@ -103,6 +103,12 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Configuration
 			set { persistentConfiguration.BuildTransitionNotification.ShowBalloon = value; }
 		}
 
+        public bool AlwaysOnTop
+        { 
+            get { return persistentConfiguration.AlwaysOnTop; }
+            set { persistentConfiguration.AlwaysOnTop = value; }
+        }
+
 		public int PollPeriodSeconds
 		{
 			get { return persistentConfiguration.PollPeriodSeconds; }

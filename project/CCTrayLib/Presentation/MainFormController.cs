@@ -51,7 +51,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 					new LampController(new X10LowLevelDriver(HouseCode.A, configuration.X10.ComPort)),
 					new DateTimeProvider(),
 					configuration.X10);
-			}
+			}                        
 		}
 
 
@@ -65,6 +65,8 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 					IsProjectSelectedChanged(this, EventArgs.Empty);
 			}
 		}
+
+
 
 		public bool IsProjectSelected
 		{
@@ -85,7 +87,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 			{
 				DisplayWebPageForProject(SelectedProject.Detail);
 			}
-		}
+		}    
 
 		public void BindToTrayIcon(TrayIcon trayIcon)
 		{
@@ -224,6 +226,11 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
             imageList.Images.Add(integrationQueueIconProvider.GetStatusIconForNodeType(IntegrationQueueNodeType.Building).Icon);
 			imageList.Images.Add(integrationQueueIconProvider.GetStatusIconForNodeType(IntegrationQueueNodeType.PendingInQueue).Icon);
 		}
+
+        public void SetFormTopMost(Form form)
+        {
+            form.TopMost = configuration.AlwaysOnTop;
+        }
 
 		public bool CanFixBuild()
 		{
