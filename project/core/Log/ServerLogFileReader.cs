@@ -39,7 +39,7 @@ namespace ThoughtWorks.CruiseControl.Core.Logging
 			CircularArray buffer = new CircularArray(maxLines);
 			using (Stream stream = OpenFile())
 			{
-				using (StreamReader reader = new StreamReader(stream))
+				using (StreamReader reader = new StreamReader(stream,System.Text.Encoding.Default))
 				{
 					string line;
 					while ((line = reader.ReadLine()) != null)
