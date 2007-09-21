@@ -33,7 +33,8 @@ namespace ThoughtWorks.CruiseControl.Core.Label
 			{
 				revision = 1;
 			}
-			return new Version(now.Year, now.Month, now.Day, revision).ToString();
+            return string.Format("{0}.{1}.{2}.{3}",
+                   now.Year.ToString("0000"), now.Month.ToString("00"), now.Day.ToString("00"), revision.ToString("000"));
 		}
 
 		private Version ParseVersion(DateTime date, IntegrationSummary lastIntegrationSummary)
