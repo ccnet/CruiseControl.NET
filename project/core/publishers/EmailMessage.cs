@@ -25,26 +25,50 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
 			{
 				IDictionary recipients = new SortedList();
 				AddRecipients(recipients, EmailGroup.NotificationType.Always);
-                AddModifiers(recipients);
+
+                if (emailPublisher.ModifierNotificationType.ToLower() == EmailGroup.NotificationType.Always.ToString().ToLower() )
+                {
+                    AddModifiers(recipients);
+                }
+
 
 				if (BuildStateChanged())
 				{
 					AddRecipients(recipients, EmailGroup.NotificationType.Change);
+
+                    if (emailPublisher.ModifierNotificationType.ToLower() == EmailGroup.NotificationType.Change.ToString().ToLower() )
+                    {
+                        AddModifiers(recipients);
+                    }
 				}
 
 				if (result.Status == IntegrationStatus.Failure)
 				{
                     AddRecipients(recipients, EmailGroup.NotificationType.Failed);
-				}
+
+                    if (emailPublisher.ModifierNotificationType.ToLower() == EmailGroup.NotificationType.Failed.ToString().ToLower() )
+                    {
+                        AddModifiers(recipients);
+                    }
+                }
 				
                 if (result.Status == IntegrationStatus.Success)
 				{
                     AddRecipients(recipients, EmailGroup.NotificationType.Success);
-				}
+
+                    if (emailPublisher.ModifierNotificationType.ToLower() == EmailGroup.NotificationType.Success.ToString().ToLower() )
+                    {
+                        AddModifiers(recipients);
+                    }
+                }
                 
                 if (result.Fixed )
                 {
                     AddRecipients(recipients, EmailGroup.NotificationType.Fixed);
+                    if (emailPublisher.ModifierNotificationType.ToLower() == EmailGroup.NotificationType.Fixed.ToString().ToLower() )
+                    {
+                        AddModifiers(recipients);
+                    }
                 }
 
 				StringBuilder buffer = new StringBuilder();

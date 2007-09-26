@@ -21,6 +21,7 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
         private Hashtable users = new Hashtable();
         private Hashtable groups = new Hashtable();
         private IMessageBuilder messageBuilder;
+        private string modifierNotificationType = EmailGroup.NotificationType.Always.ToString();
 
     	public EmailPublisher() : this(new HtmlLinkMessageBuilder(false))
     	{}
@@ -107,6 +108,19 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
                 }
             }
         }
+
+        /// <summary>
+        /// Send an email to the modifiers of the build on this notification type
+        /// This allows for example to send a mail to the modifiers only when the build breaks
+        /// notification type = Failed
+        /// </summary>
+        [ReflectorProperty("modifierNotificationType", Required = false)] 
+        public string ModifierNotificationType
+        {
+            get { return modifierNotificationType; }
+            set { modifierNotificationType = value; }
+        }
+
 
         [ReflectorHash("users", "name")] 
 		public Hashtable EmailUsers
