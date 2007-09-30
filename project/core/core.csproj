@@ -331,6 +331,7 @@
     <Compile Include="publishers\BuildPublisher.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="publishers\EmailConverter.cs" />
     <Compile Include="publishers\EmailGateway.cs">
       <SubType>Code</SubType>
     </Compile>

@@ -130,7 +130,20 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
 		private EmailUser GetEmailUser(string username)
 		{
 			if (username == null) return null;
-			return (EmailUser) emailPublisher.EmailUsers[username];
+            EmailUser user = (EmailUser) emailPublisher.EmailUsers[username];
+
+            // if user is not specified in the project config, 
+            // use the converters to create the email address from the sourcecontrol ID           
+            if (user == null && emailPublisher.Converters.Length > 0)
+            {
+                string email = username;
+                foreach (EmailConverter converter in emailPublisher.Converters)
+                {
+                    email = converter.Convert(email);
+                }
+                user = new EmailUser(username, null, email);
+            }
+            return user;
 		}
 
 		private EmailGroup GetEmailGroup(string groupname)

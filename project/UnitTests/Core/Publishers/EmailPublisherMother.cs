@@ -26,6 +26,9 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Publishers
     			<group name=""buildmaster"" notification=""always""/>
                 <group name=""successdudes"" notification=""success""/>
     		</groups>
+			<converters>
+				<converter find=""$"" replace=""@TheCompany.com""/>
+			</converters>
     	</email>");
 			}
 		}
