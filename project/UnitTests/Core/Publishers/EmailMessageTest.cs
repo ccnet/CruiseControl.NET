@@ -165,7 +165,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Publishers
 			return result;
 		}
 
-		private IIntegrationResult AddModification(IIntegrationResult result)
+		private static IIntegrationResult AddModification(IIntegrationResult result)
 		{
 			Modification mod = new Modification();
 			mod.UserName = modifier.Name;
@@ -173,7 +173,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Publishers
 			return result;
 		}
 
-		private string ExpectedRecipients(params EmailUser[] users)
+		private static string ExpectedRecipients(params EmailUser[] users)
 		{
 			StringBuilder builder = new StringBuilder();
 			foreach (EmailUser user in users)
@@ -183,5 +183,27 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Publishers
 			}
 			return builder.ToString();
 		}
+
+        /// <summary>
+        /// Verify that EmailMessage runs the specified username-to-address converters.
+        /// </summary>
+        [Test]
+        public void ShouldConvertUsernamesToEmailAddresses()
+        {
+            EmailPublisher myPublisher = new EmailPublisher();
+
+            myPublisher.Converters = new EmailConverter[1];
+            myPublisher.Converters[0] = new EmailConverter("^([^@]*)$", @"$1@example.com");
+
+            IIntegrationResult result = IntegrationResultMother.CreateFailed();
+            Modification modification = new Modification();
+            modification.UserName = "username";
+            result.Modifications = new Modification[1] { modification };
+
+            EmailMessage message = new EmailMessage(result, myPublisher);
+            Assert.AreEqual("username@example.com", message.Recipients);
+
+        }
+
 	}
 }

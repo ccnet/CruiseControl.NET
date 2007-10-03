@@ -235,6 +235,11 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Publishers
 			Assert.AreEqual("mailuser", publisher.MailhostUsername);
 			Assert.AreEqual("mailpassword", publisher.MailhostPassword);
 			Assert.AreEqual("ccnet@thoughtworks.com", publisher.FromAddress);
+            Assert.AreEqual(EmailGroup.NotificationType.Failed, publisher.ModifierNotificationType);
+            
+            Assert.AreEqual(1, publisher.Converters.Length);
+            Assert.AreEqual("$", publisher.Converters[0].Find);
+            Assert.AreEqual("@TheCompany.com", publisher.Converters[0].Replace);
 
 			Assert.AreEqual(6, publisher.EmailUsers.Count);
 			ArrayList expected = new ArrayList();
@@ -258,7 +263,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Publishers
             Assert.AreEqual(successdudes, publisher.EmailGroups["successdudes"]);
 		}
 
-		[Test]
+        [Test]
 		public void SerializeToXml()
 		{
 			publisher = EmailPublisherMother.Create();
