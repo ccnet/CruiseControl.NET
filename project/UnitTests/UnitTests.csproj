@@ -449,6 +449,7 @@
     <Compile Include="Core\Publishers\EmailPublisherTest.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Core\Publishers\EmailUserTest.cs" />
     <Compile Include="Core\Publishers\ForceBuildPublisherTest.cs">
       <SubType>Code</SubType>
     </Compile>
