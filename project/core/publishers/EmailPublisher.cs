@@ -21,7 +21,7 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
         private Hashtable users = new Hashtable();
         private Hashtable groups = new Hashtable();
         private IMessageBuilder messageBuilder;
-        private string modifierNotificationType = EmailGroup.NotificationType.Always.ToString();
+        private EmailGroup.NotificationType modifierNotificationType = EmailGroup.NotificationType.Always;
         private EmailConverter[] converters = new EmailConverter[0];
 
 
@@ -117,7 +117,7 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
         /// notification type = Failed
         /// </summary>
         [ReflectorProperty("modifierNotificationType", Required = false)] 
-        public string ModifierNotificationType
+        public EmailGroup.NotificationType ModifierNotificationType
         {
             get { return modifierNotificationType; }
             set { modifierNotificationType = value; }
@@ -141,7 +141,7 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
 
         /// <summary>
         /// Allows regular expressions to be performed on the names of the modifiers for making an email adress
-        /// This way, it is not necessary to include all users on a project in the users tagof the emailpublisher
+        /// This way, it is not necessary to include all users on a project in the users tag of the emailpublisher
         /// </summary>
         [ReflectorArray("converters", Required = false)]
         public EmailConverter[] Converters

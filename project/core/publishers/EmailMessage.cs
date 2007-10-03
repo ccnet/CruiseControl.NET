@@ -26,7 +26,7 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
 				IDictionary recipients = new SortedList();
 				AddRecipients(recipients, EmailGroup.NotificationType.Always);
 
-                if (emailPublisher.ModifierNotificationType.ToLower() == EmailGroup.NotificationType.Always.ToString().ToLower() )
+                if (emailPublisher.ModifierNotificationType == EmailGroup.NotificationType.Always )
                 {
                     AddModifiers(recipients);
                 }
@@ -36,7 +36,7 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
 				{
 					AddRecipients(recipients, EmailGroup.NotificationType.Change);
 
-                    if (emailPublisher.ModifierNotificationType.ToLower() == EmailGroup.NotificationType.Change.ToString().ToLower() )
+                    if (emailPublisher.ModifierNotificationType == EmailGroup.NotificationType.Change )
                     {
                         AddModifiers(recipients);
                     }
@@ -46,7 +46,7 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
 				{
                     AddRecipients(recipients, EmailGroup.NotificationType.Failed);
 
-                    if (emailPublisher.ModifierNotificationType.ToLower() == EmailGroup.NotificationType.Failed.ToString().ToLower() )
+                    if (emailPublisher.ModifierNotificationType == EmailGroup.NotificationType.Failed )
                     {
                         AddModifiers(recipients);
                     }
@@ -56,7 +56,7 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
 				{
                     AddRecipients(recipients, EmailGroup.NotificationType.Success);
 
-                    if (emailPublisher.ModifierNotificationType.ToLower() == EmailGroup.NotificationType.Success.ToString().ToLower() )
+                    if (emailPublisher.ModifierNotificationType == EmailGroup.NotificationType.Success )
                     {
                         AddModifiers(recipients);
                     }
@@ -65,7 +65,7 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
                 if (result.Fixed )
                 {
                     AddRecipients(recipients, EmailGroup.NotificationType.Fixed);
-                    if (emailPublisher.ModifierNotificationType.ToLower() == EmailGroup.NotificationType.Fixed.ToString().ToLower() )
+                    if (emailPublisher.ModifierNotificationType == EmailGroup.NotificationType.Fixed )
                     {
                         AddModifiers(recipients);
                     }
