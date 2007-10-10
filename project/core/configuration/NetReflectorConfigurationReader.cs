@@ -25,14 +25,20 @@ namespace ThoughtWorks.CruiseControl.Core.Config
 
 		public IConfiguration Read(XmlDocument document)
 		{
+            string ConflictingXMLNode = string.Empty;
+
 			VerifyDocumentHasValidRootElement(document);
 			try
 			{
 				Configuration configuration = new Configuration();
 				foreach (XmlNode node in document.DocumentElement)
 				{
+                    ConflictingXMLNode = string.Empty;
+
 					if (!(node is XmlComment))
 					{
+                        ConflictingXMLNode = node.OuterXml;
+
 						IProject project = reader.Read(node) as IProject;	// could this be null?  should check
 						configuration.AddProject(project);
 					}
@@ -41,8 +47,10 @@ namespace ThoughtWorks.CruiseControl.Core.Config
 			}
 			catch (NetReflectorException ex)
 			{
-				throw new ConfigurationException("Unable to instantiate CruiseControl projects from configuration document. " +
-					"Configuration document is likely missing Xml nodes required for properly populating CruiseControl configuration." + ex.Message, ex);
+				throw new ConfigurationException("\nUnable to instantiate CruiseControl projects from configuration document." +
+                    "\nConfiguration document is likely missing Xml nodes required for properly populating CruiseControl configuration.\n" 
+                    + ex.Message + 
+                    "\n " + ConflictingXMLNode  , ex);
 			}
 		}
 
