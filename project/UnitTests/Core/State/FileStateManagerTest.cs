@@ -72,10 +72,16 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.State
 			Assert.AreEqual(result, actual);
 		}
 
-		[Test, ExpectedException(typeof (CruiseControlException))]
+		[Test]
 		public void SaveWithInvalidDirectory()
 		{
-			state.StateFileDirectory = @"c:\invalid\folder\";
+            string foldername  = @"c:\CCNet_remove_invalid";
+
+            if (Directory.Exists(foldername)) Directory.Delete(foldername);
+                
+            state.StateFileDirectory = foldername ;
+            Assert.IsTrue(Directory.Exists(foldername ));
+            
 		}
 
 		[Test]

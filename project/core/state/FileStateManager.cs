@@ -28,7 +28,7 @@ namespace ThoughtWorks.CruiseControl.Core.State
 			set
 			{
 				if (! Directory.Exists(value))
-					throw new CruiseControlException(string.Format("State file directory: {0} does not exist.", value));
+                    Directory.CreateDirectory(value);
 				directory = value;
 			}
 		}
