@@ -37,7 +37,7 @@ namespace ThoughtWorks.CruiseControl.Core.Config
 
 					if (!(node is XmlComment))
 					{
-                        ConflictingXMLNode = node.OuterXml;
+                        ConflictingXMLNode = "Conflicting project data : " + node.OuterXml;
 
 						IProject project = reader.Read(node) as IProject;	// could this be null?  should check
 						configuration.AddProject(project);
