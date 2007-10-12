@@ -75,12 +75,19 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.State
 		[Test]
 		public void SaveWithInvalidDirectory()
 		{
-            string foldername  = @"c:\CCNet_remove_invalid";
+            string foldername = @"c:\CCNet_remove_invalid";
 
-            if (Directory.Exists(foldername)) Directory.Delete(foldername);
-                
-            state.StateFileDirectory = foldername ;
-            Assert.IsTrue(Directory.Exists(foldername ));
+            try
+            {
+                if (Directory.Exists(foldername)) Directory.Delete(foldername);
+
+                state.StateFileDirectory = foldername;
+                Assert.IsTrue(Directory.Exists(foldername));
+            }
+            finally
+            {
+                if (Directory.Exists(foldername)) Directory.Delete(foldername);
+            }
             
 		}
 
