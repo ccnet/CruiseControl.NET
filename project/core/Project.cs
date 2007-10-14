@@ -259,10 +259,38 @@ namespace ThoughtWorks.CruiseControl.Core
 				new ProjectStatus(Name, Category, CurrentActivity, LastIntegration.Status, integrator.State, WebURL,
 				                  LastIntegration.StartTime, LastIntegration.Label,
 				                  LastIntegration.LastSuccessfulIntegrationLabel,
-				                  Triggers.NextBuild);
+                                  Triggers.NextBuild, CurrentBuildStage);
 			status.Messages = (Message[]) messages.ToArray(typeof (Message));
 			return status;
 		}
+
+        private string CurrentBuildStage
+        {
+            get
+            {
+                string BuildStageFile = integrationResultManager.CurrentIntegration.ListenerFile;
+                string data = "";
+
+                if (!File.Exists(BuildStageFile))
+                { return ""; }
+                else
+                {
+                    try
+                    {
+                        StreamReader FileReader = new StreamReader(BuildStageFile);
+                        if (FileReader.BaseStream.CanRead)
+                        {
+                            data = FileReader.ReadToEnd();
+                        }
+
+                        FileReader.Close();
+                        return data;
+                    }
+                    catch
+                    { return ""; }
+                }
+            }
+        }                                                                                                                                                                                                                                                                                                 
 
 		private IntegrationSummary LastIntegration
 		{

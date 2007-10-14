@@ -168,7 +168,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 			result.StartTime = new DateTime(2005,06,06,08,45,00);
 			result.ProjectUrl = "http://localhost/ccnet2";
 
-			Assert.AreEqual(12, result.IntegrationProperties.Count);
+			Assert.AreEqual(13, result.IntegrationProperties.Count);
 			Assert.AreEqual("project", result.IntegrationProperties["CCNetProject"]);
 			Assert.AreEqual("http://localhost/ccnet2", result.IntegrationProperties["CCNetProjectUrl"]);
 			Assert.AreEqual("label23", result.IntegrationProperties["CCNetLabel"]);
@@ -182,6 +182,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 			Assert.AreEqual(IntegrationStatus.Unknown, result.IntegrationProperties["CCNetIntegrationStatus"]);
 			Assert.AreEqual(IntegrationStatus.Unknown, result.IntegrationProperties["CCNetLastIntegrationStatus"]);
 			Assert.AreEqual("myTrigger", result.IntegrationProperties["CCNetRequestSource"]);
+            Assert.AreEqual(@"c:\artifactdir\ListenFile.xml", result.IntegrationProperties["CCNetListenerFile"]);
 		}
 
 		[Test]

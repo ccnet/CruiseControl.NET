@@ -98,7 +98,19 @@
 			</td>
 		</form>
 	</tr>
-	#end
+
+    #if ($projectGridRow.BuildStage.Length > 0)
+    <tr  bgcolor="lavender">
+      <td align="Left" COLSPAN="9">
+        <font color="Black">
+          $projectGridRow.BuildStage
+        </font>
+      </td>
+    </tr>
+    #end
+
+
+  #end
 </table>
 #end
 

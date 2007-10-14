@@ -108,5 +108,58 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 				return Color.Red.Name;
 			}
 		}
+
+        public string BuildStage
+        {
+            get
+            {
+                string CurrentBuildStage = status.BuildStage;
+
+                if (CurrentBuildStage.Length == 0)
+                { return ""; }
+                else
+                { return GetFormattedBuildStage(CurrentBuildStage); }
+            }
+        }
+
+        private string GetFormattedBuildStage(string buildStageData)
+        {
+            System.Xml.XmlDocument XDoc = new System.Xml.XmlDocument();
+            System.Xml.XmlTextReader XReader;
+            System.Text.StringBuilder Result = new System.Text.StringBuilder();
+
+            try
+            {
+
+                XDoc.LoadXml(buildStageData);
+                XReader = new System.Xml.XmlTextReader(XDoc.OuterXml, System.Xml.XmlNodeType.Document, null);
+                XReader.WhitespaceHandling = System.Xml.WhitespaceHandling.None;
+
+                Result.Append("<PRE>");
+
+                while (XReader.Read())
+                {
+                    XReader.MoveToContent();
+
+                    if (XReader.AttributeCount > 0)
+                    {
+                        Result.AppendFormat("{0} ", XReader.GetAttribute("Time"));
+                        Result.AppendFormat("{0}<BR>", XReader.GetAttribute("Data"));
+                    }
+                }
+                Result = Result.Remove(Result.Length - "<BR>".Length, "<BR>".Length);
+                Result.Append("</PRE>");
+
+                XReader.Close();
+            }
+            catch
+            {
+                Result = new System.Text.StringBuilder();
+            }
+            return Result.ToString();
+        }                                                                                                              
+                                                                                                                   
+
+
 	}
 }

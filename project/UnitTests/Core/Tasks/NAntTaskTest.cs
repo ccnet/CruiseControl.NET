@@ -156,8 +156,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 		[Test]
 		public void ShouldEncloseDirectoriesInQuotesIfTheyContainSpaces()
 		{
-			DefaultWorkingDirectory = @"c:\dir with spaces";
-			ExpectToExecuteArguments(@"-nologo -logger:NAnt.Core.XmlLogger " + IntegrationProperties(@"""c:\dir with spaces""", @"""c:\dir with spaces"""));
+			DefaultWorkingDirectory = @"c:\dir with spaces";			
+            ExpectToExecuteArguments(@"-nologo -logger:NAnt.Core.XmlLogger -D:CCNetArtifactDirectory=""c:\dir with spaces"" -D:CCNetBuildCondition=IfModificationExists -D:CCNetBuildDate=2005-06-06 -D:CCNetBuildTime=08:45:00 -D:CCNetIntegrationStatus=Success -D:CCNetLabel=1.0 -D:CCNetLastIntegrationStatus=Success -D:CCNetListenerFile=""c:\dir with spaces\ListenFile.xml"" -D:CCNetNumericLabel=0 -D:CCNetProject=test -D:CCNetRequestSource=foo -D:CCNetWorkingDirectory=""c:\dir with spaces""");
 
 			builder.ConfiguredBaseDirectory = DefaultWorkingDirectory;
 			result.ArtifactDirectory = DefaultWorkingDirectory;
@@ -254,7 +254,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 			// NOTE: Property names are sorted alphabetically when passed as process arguments
 			// Tests that look for the correct arguments will fail if the following properties
 			// are not sorted alphabetically.
-			return string.Format(@"-D:CCNetArtifactDirectory={1} -D:CCNetBuildCondition=IfModificationExists -D:CCNetBuildDate={2} -D:CCNetBuildTime={3} -D:CCNetIntegrationStatus=Success -D:CCNetLabel=1.0 -D:CCNetLastIntegrationStatus=Success -D:CCNetNumericLabel=0 -D:CCNetProject=test -D:CCNetRequestSource=foo -D:CCNetWorkingDirectory={0}", workingDirectory, artifactDirectory, testDateString, testTimeString);
-		}
+            return string.Format(@"-D:CCNetArtifactDirectory={1} -D:CCNetBuildCondition=IfModificationExists -D:CCNetBuildDate={2} -D:CCNetBuildTime={3} -D:CCNetIntegrationStatus=Success -D:CCNetLabel=1.0 -D:CCNetLastIntegrationStatus=Success -D:CCNetListenerFile={1}\ListenFile.xml -D:CCNetNumericLabel=0 -D:CCNetProject=test -D:CCNetRequestSource=foo -D:CCNetWorkingDirectory={0}", workingDirectory, artifactDirectory, testDateString, testTimeString);
+        }
 	}
 }

@@ -209,7 +209,6 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 			task.Run(new IntegrationResult());
 		}
 
-
 		[Test, ExpectedException(typeof (BuilderException))]
 		public void ShouldThrowBuilderExceptionIfProcessTimesOut()
 		{
@@ -222,7 +221,5 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 
 			task.Run(new IntegrationResult());
 		}
-
-
 	}
 }

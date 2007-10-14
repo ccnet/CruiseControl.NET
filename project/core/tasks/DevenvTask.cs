@@ -75,6 +75,9 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 
 		public virtual void Run(IIntegrationResult result)
 		{
+            Util.ListenerFile.WriteInfo(result.ListenerFile,
+                string.Format("Executing DevEnv :{0}", Arguments));          
+                                                                  
 			ProcessResult processResult = AttemptToExecute(result);
 			result.AddTaskResult(new DevenvTaskResult(processResult));
 			Log.Info("Devenv build complete.  Status: " + result.Status);
@@ -83,6 +86,8 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 			{
 				throw new BuilderException(this, string.Format("Devenv process timed out after {0} seconds.", BuildTimeoutSeconds));
 			}
+
+            Util.ListenerFile.RemoveListenerFile(result.ListenerFile);
 		}
 
         private ProcessResult AttemptToExecute(IIntegrationResult result)

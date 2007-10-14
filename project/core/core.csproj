@@ -766,6 +766,7 @@
     <Compile Include="util\ITransformer.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="util\ListenerFile.cs" />
     <Compile Include="util\LogFileTraceListener.cs">
       <SubType>Code</SubType>
     </Compile>

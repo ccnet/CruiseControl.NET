@@ -14,7 +14,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Remote
 		public void SaveAndLoadProjectStatus()
 		{
 			ProjectStatus projectStatus = new ProjectStatus("project", "category", ProjectActivity.Building, IntegrationStatus.Failure,
-			                                                ProjectIntegratorState.Running, "http://localhost/ccnet", DateTime.Now, "1.0", "1.0", DateTime.Now);
+			                                                ProjectIntegratorState.Running, "http://localhost/ccnet", DateTime.Now, "1.0", "1.0", DateTime.Now,"building");
 
 			BinaryFormatter binaryFormatter = new BinaryFormatter();
 			using (MemoryStream stream = new MemoryStream())

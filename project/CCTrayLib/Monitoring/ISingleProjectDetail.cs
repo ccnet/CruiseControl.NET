@@ -16,6 +16,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
 		DateTime NextBuildTime { get; }
 		string WebURL { get; }
 		string CurrentMessage { get; }
+        string CurrentBuildStage { get; }
 		
 		/// <summary>
 		/// Returns TimeSpan.MaxValue if unknown

@@ -28,6 +28,7 @@ namespace ThoughtWorks.CruiseControl.Core
 		void MarkEndTime();
 		bool IsInitial();
 		IntegrationRequest IntegrationRequest { get; }
+        string ListenerFile { get; }
 
 		// Last integration state
 		IntegrationStatus LastIntegrationStatus { get; }

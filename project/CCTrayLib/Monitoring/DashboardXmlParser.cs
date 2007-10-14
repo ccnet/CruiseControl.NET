@@ -37,6 +37,10 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
 
 		[XmlAttribute()]
 		public string category;
+
+        [XmlAttribute()]
+        public string buildStage;  
+
 	}
 
     [XmlRoot(Namespace = "", IsNullable = false, ElementName = "CruiseControl")]
@@ -146,7 +150,8 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
                         dashboardProject.lastBuildTime,
                         dashboardProject.lastBuildLabel,
                         dashboardProject.lastBuildLabel,
-                        dashboardProject.nextBuildTime);
+                        dashboardProject.nextBuildTime,
+                        dashboardProject.buildStage);
                 }
             }
             return projectStatuses;

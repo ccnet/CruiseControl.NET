@@ -60,6 +60,11 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
 			get { return lastProjectStatus.WebURL; }
 		}
 
+        public string CurrentBuildStage
+        {
+            get { return lastProjectStatus.BuildStage; }
+        }                                                                                                            
+
 		public string CurrentMessage
 		{
 			get { return lastProjectStatus.CurrentMessage; }

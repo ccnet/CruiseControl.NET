@@ -69,7 +69,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Plugins.FarmReport
 			XmlFragmentResponse response = (XmlFragmentResponse) reportAction.Execute(null);
 			string xml = response.ResponseFragment;
 
-			// cannot just compare the xml string, since we correctly expect the string to vary based on the
+            // cannot just compare the xml string, since we correctly expect the string to vary based on the
 			// timezone in which this code is executing
 			XmlDocument doc = XPathAssert.LoadAsDocument(xml);
             XPathAssert.Matches(doc, "/CruiseControl/Projects/Project/@name", "HelloWorld");
@@ -118,7 +118,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Plugins.FarmReport
 		            new ProjectStatus("HelloWorld", "category", ProjectActivity.Sleeping, IntegrationStatus.Success,
 		                              ProjectIntegratorState.Running,
 		                              "http://blah", LastBuildTime, "build_8", "build_7",
-		                              NextBuildTime)
+		                              NextBuildTime,"")
 		        };
             QueueSetSnapshot snapshot = new QueueSetSnapshot();
             snapshot.Queues.Add(new QueueSnapshot("Queue1"));

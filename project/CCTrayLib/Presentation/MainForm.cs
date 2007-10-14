@@ -57,6 +57,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 		private ImageList queueIconList;
 		private MenuItem mnuQueueCancelPending;
         private MenuItem mnuAbout;
+        private ToolTip tltBuildStage;
 		private PersistWindowState windowState;
 
 		public MainForm(ICCTrayMultiConfiguration configuration)
@@ -166,7 +167,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 		private void InitializeComponent()
 		{
             this.components = new System.ComponentModel.Container();
-			System.Resources.ResourceManager resources = new System.Resources.ResourceManager(typeof(MainForm));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             this.lvProjects = new System.Windows.Forms.ListView();
             this.colProject = new System.Windows.Forms.ColumnHeader();
             this.colServer = new System.Windows.Forms.ColumnHeader();
@@ -181,7 +182,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
             this.mnuFixBuild = new System.Windows.Forms.MenuItem();
             this.largeIconList = new System.Windows.Forms.ImageList(this.components);
             this.iconList = new System.Windows.Forms.ImageList(this.components);
-			this.mainMenu = new System.Windows.Forms.MainMenu();
+            this.mainMenu = new System.Windows.Forms.MainMenu(this.components);
             this.menuFile = new System.Windows.Forms.MenuItem();
             this.mnuFilePreferences = new System.Windows.Forms.MenuItem();
             this.menuItem3 = new System.Windows.Forms.MenuItem();
@@ -190,6 +191,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
             this.mnuViewIcons = new System.Windows.Forms.MenuItem();
             this.mnuViewList = new System.Windows.Forms.MenuItem();
             this.mnuViewDetails = new System.Windows.Forms.MenuItem();
+            this.mnuAbout = new System.Windows.Forms.MenuItem();
             this.trayIcon = new ThoughtWorks.CruiseControl.CCTrayLib.Presentation.TrayIcon();
             this.mnuTrayContextMenu = new System.Windows.Forms.ContextMenu();
             this.mnuTraySettings = new System.Windows.Forms.MenuItem();
@@ -201,11 +203,11 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
             this.btnForceBuild = new System.Windows.Forms.Button();
             this.splitterQueueView = new System.Windows.Forms.Splitter();
             this.pnlViewQueues = new System.Windows.Forms.Panel();
-			this.queueTreeView = new QueueTreeView();
+            this.queueTreeView = new ThoughtWorks.CruiseControl.CCTrayLib.Presentation.QueueTreeView();
             this.queueIconList = new System.Windows.Forms.ImageList(this.components);
             this.queueContextMenu = new System.Windows.Forms.ContextMenu();
             this.mnuQueueCancelPending = new System.Windows.Forms.MenuItem();
-            this.mnuAbout = new System.Windows.Forms.MenuItem();
+            this.tltBuildStage = new System.Windows.Forms.ToolTip(this.components);
             this.pnlButtons.SuspendLayout();
             this.pnlViewQueues.SuspendLayout();
             this.SuspendLayout();
@@ -230,10 +232,11 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
             this.lvProjects.Size = new System.Drawing.Size(689, 260);
             this.lvProjects.SmallImageList = this.iconList;
             this.lvProjects.TabIndex = 0;
+            this.lvProjects.UseCompatibleStateImageBehavior = false;
             this.lvProjects.View = System.Windows.Forms.View.Details;
             this.lvProjects.DoubleClick += new System.EventHandler(this.lvProjects_DoubleClick);
-			this.lvProjects.ColumnClick += new System.Windows.Forms.ColumnClickEventHandler(this.lvProjects_ColumnClick);
             this.lvProjects.SelectedIndexChanged += new System.EventHandler(this.lvProjects_SelectedIndexChanged);
+            this.lvProjects.ColumnClick += new System.Windows.Forms.ColumnClickEventHandler(this.lvProjects_ColumnClick);
             // 
             // colProject
             // 
@@ -300,11 +303,13 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
             // 
             // largeIconList
             // 
+            this.largeIconList.ColorDepth = System.Windows.Forms.ColorDepth.Depth8Bit;
             this.largeIconList.ImageSize = new System.Drawing.Size(32, 32);
             this.largeIconList.TransparentColor = System.Drawing.Color.Transparent;
             // 
             // iconList
             // 
+            this.iconList.ColorDepth = System.Windows.Forms.ColorDepth.Depth8Bit;
             this.iconList.ImageSize = new System.Drawing.Size(16, 16);
             this.iconList.TransparentColor = System.Drawing.Color.Transparent;
             // 
@@ -368,6 +373,12 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
             this.mnuViewDetails.Index = 2;
             this.mnuViewDetails.Text = "&Details";
             this.mnuViewDetails.Click += new System.EventHandler(this.mnuViewDetails_Click);
+            // 
+            // mnuAbout
+            // 
+            this.mnuAbout.Index = 2;
+            this.mnuAbout.Text = "&About";
+            this.mnuAbout.Click += new System.EventHandler(this.mnuAbout_Click);
             // 
             // trayIcon
             // 
@@ -463,9 +474,11 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
             // queueTreeView
             // 
             this.queueTreeView.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.queueTreeView.ImageIndex = 0;
             this.queueTreeView.ImageList = this.queueIconList;
             this.queueTreeView.Location = new System.Drawing.Point(0, 0);
             this.queueTreeView.Name = "queueTreeView";
+            this.queueTreeView.SelectedImageIndex = 0;
             this.queueTreeView.Size = new System.Drawing.Size(200, 260);
             this.queueTreeView.TabIndex = 2;
             this.queueTreeView.MouseUp += new System.Windows.Forms.MouseEventHandler(this.queueTreeView_MouseUp);
@@ -486,12 +499,6 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
             this.mnuQueueCancelPending.Index = 0;
             this.mnuQueueCancelPending.Text = "&Cancel Pending";
             this.mnuQueueCancelPending.Click += new System.EventHandler(this.mnuQueueCancelPending_Click);
-            // 
-            // mnuAbout
-            // 
-            this.mnuAbout.Index = 2;
-            this.mnuAbout.Text = "&About";
-            this.mnuAbout.Click += new System.EventHandler(this.mnuAbout_Click);
             // 
             // MainForm
             // 
@@ -532,11 +539,56 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 
 		private void lvProjects_SelectedIndexChanged(object sender, EventArgs e)
 		{
-			if (lvProjects.SelectedItems.Count == 0)
-				controller.SelectedProject = null;
-			else
-				controller.SelectedProject = (IProjectMonitor) lvProjects.SelectedItems[0].Tag;
+            if (lvProjects.SelectedItems.Count == 0)
+            {
+                controller.SelectedProject = null;
+                tltBuildStage.RemoveAll();
+            }
+            else
+            {
+                controller.SelectedProject = (IProjectMonitor)lvProjects.SelectedItems[0].Tag;
+                tltBuildStage.SetToolTip(this.lvProjects, GetBuildStage());
+            }
 		}
+
+        private string GetBuildStage()
+        {
+            if (!controller.SelectedProject.Detail.IsConnected)
+            { return ""; }
+
+            if (controller.SelectedProject.Detail.CurrentBuildStage.Length == 0)
+            { return ""; }
+
+            
+            System.Text.StringBuilder SB = new System.Text.StringBuilder();
+            System.IO.StringWriter BuildStage = new System.IO.StringWriter(SB);
+
+            try
+            {
+                System.Xml.XmlTextReader XReader;
+                System.Xml.XmlDocument XDoc = new System.Xml.XmlDocument();
+
+                XDoc.LoadXml(controller.SelectedProject.Detail.CurrentBuildStage);
+                XReader = new System.Xml.XmlTextReader(XDoc.OuterXml, System.Xml.XmlNodeType.Document, null);
+                XReader.WhitespaceHandling = System.Xml.WhitespaceHandling.None;
+
+                while (XReader.Read())
+                {
+                    XReader.MoveToContent();
+
+                    if (XReader.AttributeCount > 0)
+                    {
+                        BuildStage.WriteLine("{0}  {1}", XReader.GetAttribute("Time"), XReader.GetAttribute("Data"));
+                    }
+                }
+            }
+            catch
+            {
+                BuildStage = new System.IO.StringWriter();
+            }
+            return BuildStage.ToString();
+        }                                                                                                             
+                                                                                                               
 
 		private void mnuForce_Click(object sender, EventArgs e)
 		{

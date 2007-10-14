@@ -68,7 +68,6 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Plugins.BuildReport
 
 			XmlFragmentResponse response = (XmlFragmentResponse) reportAction.Execute(null);
 			string xml = response.ResponseFragment;
-
 			XmlDocument doc = XPathAssert.LoadAsDocument(xml);
 
             XPathAssert.Matches(doc, "/Projects/Project/@name", "HelloWorld");
@@ -111,7 +110,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Plugins.BuildReport
 			return
 				new ProjectStatus("HelloWorld", "category", ProjectActivity.Sleeping, IntegrationStatus.Success, ProjectIntegratorState.Running,
 				                  "http://blah", LastBuildTime, "build_8", "build_7",
-				                  NextBuildTime);
+				                  NextBuildTime,"");
 		}
 
 		private XmlSchema ReadSchemaFromResources(string filename)

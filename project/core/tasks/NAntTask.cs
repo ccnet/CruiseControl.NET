@@ -62,6 +62,9 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 		/// <param name="result">For storing build output.</param>
 		public void Run(IIntegrationResult result)
 		{
+            Util.ListenerFile.WriteInfo(result.ListenerFile,
+                string.Format("Executing Nant :BuildFile: {0} Targets: {1} ", BuildFile, string.Join(", ", Targets)));
+
 			ProcessResult processResult = AttemptExecute(CreateProcessInfo(result));
 			result.AddTaskResult(new ProcessTaskResult(processResult));
 
@@ -70,6 +73,8 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 			{
 				throw new BuilderException(this, "NAnt process timed out (after " + BuildTimeoutSeconds + " seconds)");
 			}
+
+            Util.ListenerFile.RemoveListenerFile(result.ListenerFile); Util.ListenerFile.RemoveListenerFile(result.ListenerFile);
 		}
 
 		private ProcessInfo CreateProcessInfo(IIntegrationResult result)

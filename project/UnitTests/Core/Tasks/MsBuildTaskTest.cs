@@ -72,8 +72,9 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 			// NOTE: Property names are sorted alphabetically when passed as process arguments
 			// Tests that look for the correct arguments will fail if the following properties
 			// are not sorted alphabetically.
-			string expectedProperties = string.Format(@"/p:CCNetArtifactDirectory={2};CCNetBuildCondition=IfModificationExists;CCNetBuildDate={0};CCNetBuildTime={1};CCNetIntegrationStatus=Success;CCNetLabel=My Label;CCNetLastIntegrationStatus=Success;CCNetNumericLabel=0;CCNetProject=test;CCNetRequestSource=foo;CCNetWorkingDirectory=c:\source\",testDateString, testTimeString, result.ArtifactDirectory);
-			ExpectToExecuteArguments(@"/nologo " + @"""" + expectedProperties + @"""" + DefaultLogger());
+			//string expectedProperties = string.Format(@"/p:CCNetArtifactDirectory={2};CCNetBuildCondition=IfModificationExists;CCNetBuildDate={0};CCNetBuildTime={1};CCNetIntegrationStatus=Success;CCNetLabel=My Label;CCNetLastIntegrationStatus=Success;CCNetNumericLabel=0;CCNetProject=test;CCNetRequestSource=foo;CCNetWorkingDirectory=c:\source\",testDateString, testTimeString, result.ArtifactDirectory);
+            string expectedProperties = string.Format(@"/p:CCNetArtifactDirectory={2};CCNetBuildCondition=IfModificationExists;CCNetBuildDate={0};CCNetBuildTime={1};CCNetIntegrationStatus=Success;CCNetLabel=My Label;CCNetLastIntegrationStatus=Success;CCNetListenerFile={2}ListenFile.xml;CCNetNumericLabel=0;CCNetProject=test;CCNetRequestSource=foo;CCNetWorkingDirectory=c:\source\", testDateString, testTimeString, result.ArtifactDirectory);
+            ExpectToExecuteArguments(@"/nologo " + @"""" + expectedProperties + @"""" + DefaultLogger());
 			result.Label = @"My Label";			
 			task.Run(result);
 		}
@@ -166,8 +167,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 		{
 			// NOTE: Property names are sorted alphabetically when passed as process arguments
 			// Tests that look for the correct arguments will fail if the following properties
-			// are not sorted alphabetically.
-			return string.Format(@"""/p:CCNetArtifactDirectory={3};CCNetBuildCondition=IfModificationExists;CCNetBuildDate={1};CCNetBuildTime={2};CCNetIntegrationStatus=Success;CCNetLabel=1.0;CCNetLastIntegrationStatus=Success;CCNetNumericLabel=0;CCNetProject=test;CCNetRequestSource=foo;CCNetWorkingDirectory={0}""", DefaultWorkingDirectory, testDateString, testTimeString, result.ArtifactDirectory);
+			// are not sorted alphabetically.			
+            return string.Format(@"""/p:CCNetArtifactDirectory={3};CCNetBuildCondition=IfModificationExists;CCNetBuildDate={1};CCNetBuildTime={2};CCNetIntegrationStatus=Success;CCNetLabel=1.0;CCNetLastIntegrationStatus=Success;CCNetListenerFile={3}ListenFile.xml;CCNetNumericLabel=0;CCNetProject=test;CCNetRequestSource=foo;CCNetWorkingDirectory={0}""", DefaultWorkingDirectory, testDateString, testTimeString, result.ArtifactDirectory);
 		}
 	}
 }

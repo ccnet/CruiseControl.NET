@@ -23,6 +23,7 @@ namespace ThoughtWorks.CruiseControl.Remote
 		private string lastBuildLabel;
 		private string lastSuccessfulBuildLabel;
 		private readonly SerializableDateTime nextBuildTime = SerializableDateTime.Default;
+        private string currentBuildStage;
 
 		public ProjectStatus()
 		{}
@@ -34,7 +35,7 @@ namespace ThoughtWorks.CruiseControl.Remote
 			this.lastBuildDate = new SerializableDateTime(lastBuildDate);
 		}
 
-		public ProjectStatus(string name, string category, ProjectActivity activity, IntegrationStatus buildStatus, ProjectIntegratorState status, string webURL, DateTime lastBuildDate, string lastBuildLabel, string lastSuccessfulBuildLabel, DateTime nextBuildTime)
+        public ProjectStatus(string name, string category, ProjectActivity activity, IntegrationStatus buildStatus, ProjectIntegratorState status, string webURL, DateTime lastBuildDate, string lastBuildLabel, string lastSuccessfulBuildLabel, DateTime nextBuildTime, string buildStage)
 		{
 			this.status = status;
 			this.buildStatus = buildStatus;
@@ -46,7 +47,16 @@ namespace ThoughtWorks.CruiseControl.Remote
 			this.lastBuildLabel = lastBuildLabel;
 			this.lastSuccessfulBuildLabel = lastSuccessfulBuildLabel;
 			this.nextBuildTime = new SerializableDateTime(nextBuildTime);
+            this.currentBuildStage = buildStage;
 		}
+
+        public string BuildStage
+        {
+            get { return currentBuildStage; }
+            set { currentBuildStage = value; }
+        }                                         
+                                             
+
 
 		public ProjectIntegratorState Status
 		{

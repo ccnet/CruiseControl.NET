@@ -75,6 +75,11 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Presentation
 			get { return ProjectStatus.NextBuildTime; }
 		}
 
+        public string CurrentBuildStage
+        {
+            get { return ProjectStatus.BuildStage; }
+        }                                                                                                         
+
 		public string WebURL
 		{
 			get { return ProjectStatus.WebURL; }

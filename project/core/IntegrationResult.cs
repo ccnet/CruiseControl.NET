@@ -22,7 +22,7 @@ namespace ThoughtWorks.CruiseControl.Core
 		private string projectName;
 		private string projectUrl;
 		private string workingDirectory;
-		private string artifactDirectory;
+		private string artifactDirectory="";
 		private IntegrationRequest request = IntegrationRequest.NullRequest;
 		private IntegrationSummary lastIntegration = IntegrationSummary.Initial;
 
@@ -115,6 +115,11 @@ namespace ThoughtWorks.CruiseControl.Core
 			get { return Path.Combine(ArtifactDirectory, Label); }
 		}
 
+        public string ListenerFile
+        {
+            get { return System.IO.Path.Combine(artifactDirectory, "ListenFile.xml"); }
+        }                                                                                
+                                                                              
 		public IntegrationStatus Status
 		{
 			get { return status; }
@@ -361,6 +366,7 @@ namespace ThoughtWorks.CruiseControl.Core
 				fullProps["CCNetBuildDate"] = StartTime.ToString("yyyy-MM-dd", null);
 				fullProps["CCNetBuildTime"] = StartTime.ToString("HH:mm:ss", null);
 				fullProps["CCNetLastIntegrationStatus"] = LastIntegrationStatus;
+                fullProps["CCNetListenerFile"] = ListenerFile;
 				if (IntegrationRequest != null) fullProps["CCNetRequestSource"] = IntegrationRequest.Source;
 				return fullProps;
 			}

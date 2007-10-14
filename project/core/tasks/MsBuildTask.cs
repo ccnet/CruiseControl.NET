@@ -45,14 +45,20 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 		public int Timeout = DefaultTimeout;
 
 		public void Run(IIntegrationResult result)
-		{
+		{                                   
+            Util.ListenerFile.WriteInfo(result.ListenerFile,
+                string.Format("Executing MSBuild :BuildFile: {0}", ProjectFile));    
+
 			ProcessResult processResult = executor.Execute(NewProcessInfo(result));
 			string buildOutputFile = MsBuildOutputFile(result);
 			if (File.Exists(buildOutputFile))
 			{
 				result.AddTaskResult(new FileTaskResult(buildOutputFile));
 			}
-			result.AddTaskResult(new ProcessTaskResult(processResult));				
+			result.AddTaskResult(new ProcessTaskResult(processResult));
+
+            Util.ListenerFile.RemoveListenerFile(result.ListenerFile);
+
 		}
 
 		private ProcessInfo NewProcessInfo(IIntegrationResult result)
