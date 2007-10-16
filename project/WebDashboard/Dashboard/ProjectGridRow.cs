@@ -135,7 +135,8 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
                 XReader = new System.Xml.XmlTextReader(XDoc.OuterXml, System.Xml.XmlNodeType.Document, null);
                 XReader.WhitespaceHandling = System.Xml.WhitespaceHandling.None;
 
-                Result.Append("<PRE>");
+                Result.Append("<table width=\"80%\">");
+                Result.AppendLine();
 
                 while (XReader.Read())
                 {
@@ -143,12 +144,13 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 
                     if (XReader.AttributeCount > 0)
                     {
-                        Result.AppendFormat("{0} ", XReader.GetAttribute("Time"));
-                        Result.AppendFormat("{0}<BR>", XReader.GetAttribute("Data"));
+                        Result.AppendFormat("<tr><td NOWRAP>{0}</td> ", XReader.GetAttribute("Time"));
+                        Result.AppendFormat("<td>{0}</td></tr>", XReader.GetAttribute("Data"));
+                        Result.AppendLine();
                     }
-                }
-                Result = Result.Remove(Result.Length - "<BR>".Length, "<BR>".Length);
-                Result.Append("</PRE>");
+                }                
+                
+                Result.Append("</table>");
 
                 XReader.Close();
             }
