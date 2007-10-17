@@ -20,6 +20,12 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
             set { smtpServer.Host = value; }
         }
 
+        public virtual int MailPort
+        {
+            get { return smtpServer.Port; }
+            set { smtpServer.Port = value; }
+        }
+
         public string MailHostUsername
         {
             get { return mailhostUsername; }

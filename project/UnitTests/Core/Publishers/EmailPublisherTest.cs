@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Net.Mail;
+using System.Xml;
 using Exortech.NetReflector;
 using NMock;
 using NMock.Constraints;
@@ -232,6 +233,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Publishers
 			publisher = EmailPublisherMother.Create();
 
 			Assert.AreEqual("smtp.telus.net", publisher.MailHost);
+            Assert.AreEqual(26, publisher.MailPort);
 			Assert.AreEqual("mailuser", publisher.MailhostUsername);
 			Assert.AreEqual("mailpassword", publisher.MailhostPassword);
 			Assert.AreEqual("ccnet@thoughtworks.com", publisher.FromAddress);
@@ -262,6 +264,26 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Publishers
 			Assert.AreEqual(buildmaster, publisher.EmailGroups["buildmaster"]);
             Assert.AreEqual(successdudes, publisher.EmailGroups["successdudes"]);
 		}
+
+        [Test]
+        public void ShouldPopulateFromMinimalConfiguration()
+        {
+            string configXml = @"<email from=""ccnet@example.com"" mailhost=""smtp.example.com""> <users/> <groups/> </email>";
+            XmlDocument configXmlDocument = XmlUtil.CreateDocument(configXml);
+            publisher = EmailPublisherMother.Create(configXmlDocument.DocumentElement);
+
+            Assert.AreEqual("smtp.example.com", publisher.MailHost);
+            Assert.AreEqual(25, publisher.MailPort);
+            Assert.AreEqual(null, publisher.MailhostUsername);
+            Assert.AreEqual(null, publisher.MailhostPassword);
+            Assert.AreEqual(null, publisher.ReplyToAddress);
+            Assert.AreEqual(false, publisher.IncludeDetails);
+            Assert.AreEqual("ccnet@example.com", publisher.FromAddress);
+            Assert.AreEqual(EmailGroup.NotificationType.Always, publisher.ModifierNotificationType);
+            Assert.AreEqual(0, publisher.Converters.Length);
+            Assert.AreEqual(0, publisher.EmailUsers.Count);
+            Assert.AreEqual(0, publisher.EmailGroups.Count);
+        }
 
         [Test]
 		public void SerializeToXml()

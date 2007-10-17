@@ -55,7 +55,20 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
             set { EmailGateway.MailHost = value; }
         }
 
-		[ReflectorProperty("mailhostUsername", Required = false)]
+        /// <summary>
+        /// The port number of the mail server.
+        /// </summary>
+        /// <remarks>
+        /// Optional, defaults to port 25 (via the default of System.Net.Mail.SmtpClient).
+        /// </remarks>
+        [ReflectorProperty("mailport", Required = false)]
+        public int MailPort
+        {
+            get { return EmailGateway.MailPort; }
+            set { EmailGateway.MailPort = value; }
+        }
+
+        [ReflectorProperty("mailhostUsername", Required = false)]
 		public string MailhostUsername
 		{
 			get { return EmailGateway.MailHostUsername; }

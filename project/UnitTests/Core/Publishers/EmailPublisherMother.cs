@@ -12,7 +12,9 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Publishers
 			get 
 			{
 				return XmlUtil.CreateDocument(
-@"    	<email from=""ccnet@thoughtworks.com"" mailhost=""smtp.telus.net"" mailhostUsername=""mailuser"" mailhostPassword=""mailpassword"" projectUrl=""http://localhost/ccnet"" includeDetails=""false"">
+@"    	<email from=""ccnet@thoughtworks.com"" mailhost=""smtp.telus.net"" mailport=""26""
+                mailhostUsername=""mailuser"" mailhostPassword=""mailpassword""
+                projectUrl=""http://localhost/ccnet"" includeDetails=""false"">
             <modifierNotificationType>failed</modifierNotificationType>
     		<users>
     		 	<user name=""buildmaster"" group=""buildmaster"" address=""servid@telus.net""/>
