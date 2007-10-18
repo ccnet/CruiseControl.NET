@@ -89,7 +89,24 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 
 		public override Modification[] GetModifications(IIntegrationResult from, IIntegrationResult to)
 		{
-			return GetModifications(CreateHistoryProcessInfo(from, to), from.StartTime, to.StartTime);
+            string tempOutputFileName = Path.GetTempFileName();
+            try
+            {
+                Execute(CreateHistoryProcessInfo(from, to, tempOutputFileName));
+                TextReader outputReader = new StreamReader(tempOutputFileName);
+                try
+                {
+                    return ParseModifications(outputReader, from.StartTime, to.StartTime);
+                }
+                finally
+                {
+                    outputReader.Close();
+                }
+            }
+            finally 
+            {
+                File.Delete(tempOutputFileName);
+            }
 		}
 
 		public override void LabelSourceControl(IIntegrationResult result)
@@ -123,12 +140,12 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			return builder.ToString();
 		}
 
-		private ProcessInfo CreateHistoryProcessInfo(IIntegrationResult from, IIntegrationResult to)
+		private ProcessInfo CreateHistoryProcessInfo(IIntegrationResult from, IIntegrationResult to, string tempOutputFileName)
 		{
-			return NewProcessInfoWith(HistoryProcessInfoArgs(from.StartTime, to.StartTime), to);
+			return NewProcessInfoWith(HistoryProcessInfoArgs(from.StartTime, to.StartTime, tempOutputFileName), to);
 		}
 
-		private string HistoryProcessInfoArgs(DateTime from, DateTime to)
+		private string HistoryProcessInfoArgs(DateTime from, DateTime to, string tempOutputFileName)
 		{
 			ProcessArgumentBuilder builder = new ProcessArgumentBuilder();
 			builder.AddArgument("history", Project);
@@ -136,7 +153,8 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			builder.AddArgument(string.Format("-Vd{0}~{1}", locale.FormatCommandDate(to), locale.FormatCommandDate(from)));
 			AppendUsernameAndPassword(builder);
 			builder.AddArgument("-I-Y");
-			return builder.ToString();
+            builder.AddArgument(string.Format("-O@{0}", tempOutputFileName));
+            return builder.ToString();
 		}
 
 		private void CreateTemporaryLabel(IIntegrationResult result)
