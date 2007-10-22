@@ -6,17 +6,34 @@ using ThoughtWorks.CruiseControl.Core;
 
 namespace ThoughtWorks.CruiseControl.Core.Publishers
 {
+    /// <summary>
+    /// This publisher logs all modifications detected by the integration to a separate file.
+    /// So retrieving the modifications across builds is very easy. (Timeline, ... )
+    /// </summary>
     [ReflectorType("modificationHistory")]
     public class ModificationHistoryPublisher : ITask
     {
-        // This publisher logs all modifications detected by the integration to a separate file.
-        // So retrieving the modifications across builds is very easy. (Timeline, ... )
-
         private const string DataHistoryFileName = "HistoryData.xml";
+        private bool onlyLogWhenChangesFound = false;
+
+
+        /// <summary>
+        /// When true, the history file will only be updated when the build contains modifications
+        /// This setting is mainly for keeping the file small when there are a lot builds without modifications
+        /// For example : like CCNet, there is a public website where everybody can force a build
+        /// </summary>
+        [ReflectorProperty("onlyLogWhenChangesFound", Required = false)]
+        public bool OnlyLogWhenChangesFound
+        {
+            get { return onlyLogWhenChangesFound; }
+            set { onlyLogWhenChangesFound = value; }
+        }
 
 
         public void Run(IIntegrationResult result)
         {
+            if ((OnlyLogWhenChangesFound) & (result.Modifications.Length == 0)) return;
+
             string DataHistoryFile = System.IO.Path.Combine(result.ArtifactDirectory, DataHistoryFileName);
 
             WriteModifications(DataHistoryFile, result);
@@ -66,6 +83,7 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
             xmlWriter.WriteValue(attributeValue);
         }
        
+
         public static string LoadHistory(string artifactDirectory)
         {
             string result = string.Empty;

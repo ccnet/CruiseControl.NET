@@ -16,9 +16,20 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.ProjectReport
         public const string ActionName = "ViewProjectModificationHistory";
         private const string XslFileName = "xsl\\ModificationHistory.xsl";
         private readonly IPhysicalApplicationPathProvider pathProvider;
+        private bool onlyShowBuildsWithModifications = false;
 
         private readonly IFarmService farmService;
         private ITransformer transformer;
+
+        /// <summary>
+        /// Filters out builds without modifications when set to true.
+        /// </summary>
+        [ReflectorProperty("onlyShowBuildsWithModifications", Required = false)]
+        public bool OnlyShowBuildsWithModifications
+        {
+            get { return onlyShowBuildsWithModifications; }
+            set { onlyShowBuildsWithModifications = value; }
+        }
 
         public ModificationHistoryProjectPlugin(IFarmService farmService, IPhysicalApplicationPathProvider pathProvider)
 		{
@@ -31,11 +42,12 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.ProjectReport
 		{			
             Hashtable xsltArgs = new Hashtable();
             xsltArgs["applicationPath"] = cruiseRequest.Request.ApplicationPath;
+            xsltArgs["onlyShowBuildsWithModifications"] = OnlyShowBuildsWithModifications;
 
             string HistoryDocument = farmService.GetModificationHistoryDocument(cruiseRequest.ProjectSpecifier);
             if (HistoryDocument.Length == 0)
             {
-                return new HtmlFragmentResponse("No history Data found, use the modificationHistory Publisher for this project");
+                return new HtmlFragmentResponse("No history Data found, make sure you use the modificationHistory Publisher for this project");
             }
             else
             {

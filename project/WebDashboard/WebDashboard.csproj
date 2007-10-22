@@ -596,6 +596,9 @@
     <Content Include="..\xsl\header.xsl">
       <Link>xsl\header.xsl</Link>
     </Content>
+    <Content Include="..\xsl\ModificationHistory.xsl">
+      <Link>xsl\ModificationHistory.xsl</Link>
+    </Content>
     <Content Include="..\xsl\modifications.xsl">
       <Link>xsl\modifications.xsl</Link>
     </Content>
@@ -646,7 +649,6 @@
     <Content Include="images\fxcop-warning.gif" />
     <Content Include="images\shim.gif" />
     <Content Include="images\tw_dev_logo.gif" />
-    <Content Include="xsl\ModificationHistory.xsl" />
     <None Include="dashboard.config" />
     <None Include="templates\ActionException.vm" />
     <None Include="templates\AddProject.vm" />

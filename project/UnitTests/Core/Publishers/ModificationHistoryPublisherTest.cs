@@ -58,7 +58,25 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Publishers
             Assert.AreEqual(ExpectedLoggedModifications, PublishedModifications, "Differences in log Detected");
         }
 
+        [Test]
+        public void BuildWithoutModificationsShouldNotLogWhenOnlyLogWhenChangesFound()
+        {
+            // Setup
+            publisher.OnlyLogWhenChangesFound = true;
 
+            IntegrationResult result = CreateIntegrationResult(IntegrationStatus.Success, false);
+            result.ArtifactDirectory = ARTIFACTS_DIR_PATH;
+            string PublishedModifications;
+            string ExpectedLoggedModifications = string.Empty;
+
+            // Execute
+            publisher.Run(result);
+
+            //Verify
+            PublishedModifications = ModificationHistoryPublisher.LoadHistory(ARTIFACTS_DIR_PATH);
+
+            Assert.AreEqual(ExpectedLoggedModifications, PublishedModifications, "Differences in log Detected");
+        }
 
         [Test]
         public void BuildWithModificationsShouldPublishModifications()
@@ -71,6 +89,31 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Publishers
             System.Text.StringBuilder ExpectedLoggedModifications = new System.Text.StringBuilder();
             ExpectedLoggedModifications.Append("<History>");
             ExpectedLoggedModifications.Append( GetExpectedMods(result));
+            ExpectedLoggedModifications.AppendLine();
+            ExpectedLoggedModifications.Append("</History>");
+
+            // Execute
+            publisher.Run(result);
+
+            //Verify
+            PublishedModifications = ModificationHistoryPublisher.LoadHistory(ARTIFACTS_DIR_PATH);
+
+            Assert.AreEqual(ExpectedLoggedModifications.ToString(), PublishedModifications, "Differences in log Detected");
+        }
+
+        [Test]
+        public void BuildWithModificationsShouldPublishModificationsWhenOnlyLogWhenChangesFound()
+        {
+            // Setup
+            publisher.OnlyLogWhenChangesFound = true;
+
+            IntegrationResult result = CreateIntegrationResult(IntegrationStatus.Success, true);
+            result.ArtifactDirectory = ARTIFACTS_DIR_PATH;
+            string PublishedModifications;
+
+            System.Text.StringBuilder ExpectedLoggedModifications = new System.Text.StringBuilder();
+            ExpectedLoggedModifications.Append("<History>");
+            ExpectedLoggedModifications.Append(GetExpectedMods(result));
             ExpectedLoggedModifications.AppendLine();
             ExpectedLoggedModifications.Append("</History>");
 
@@ -115,7 +158,6 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Publishers
 
             return sw.ToString();
         }
-
 
         private IntegrationResult CreateIntegrationResult(IntegrationStatus status, bool addModifications)
         {
