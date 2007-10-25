@@ -30,5 +30,22 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Monitoring
 		{
 			manager.ForceBuild();
 		}
+
+
+        [Test]
+        [ExpectedException(typeof(NotImplementedException), "Fix build not currently supported on projects monitored via HTTP")]
+        public void FixBuildThrowsAnNotImplementedException()
+        {
+            manager.FixBuild();
+        }
+
+
+        [Test]
+        [ExpectedException(typeof(NotImplementedException), "Cancel pending not currently supported on projects monitored via HTTP")]
+        public void CancelPendingRequestThrowsAnNotImplementedException()
+        {
+            manager.CancelPendingRequest();
+        }
+
 	}
 }

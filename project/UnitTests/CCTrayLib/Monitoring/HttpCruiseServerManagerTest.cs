@@ -52,5 +52,13 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Monitoring
 			mockWebRetriever.Verify();
 			mockDashboardXmlParser.Verify();
 		}
+
+        [Test]
+        [ExpectedException(typeof(NotImplementedException), "Cancel pending not currently supported on servers monitored via HTTP")]
+        public void CancelPendingRequestThrowsAnNotImplementedException()
+        {
+            manager.CancelPendingRequest("myproject");
+        }
+
 	}
 }
