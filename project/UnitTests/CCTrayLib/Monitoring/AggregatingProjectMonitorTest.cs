@@ -229,5 +229,28 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Monitoring
 
 			return aggregator.IntegrationStatus;
 		}
-	}
+
+        [Test]
+        [ExpectedException(typeof(NotImplementedException), "The method or operation is not implemented.")]
+        public void ForceBuildThrowsAnNotImplementedException()
+        {
+            aggregator.ForceBuild();
+        }
+
+        [Test]
+        [ExpectedException(typeof(NotImplementedException), "The method or operation is not implemented.")]
+        public void FixBuildThrowsAnNotImplementedException()
+        {
+            aggregator.FixBuild();
+        }
+
+        [Test]
+        [ExpectedException(typeof(NotImplementedException), "The method or operation is not implemented.")]
+        public void CancelPendingThrowsAnNotImplementedException()
+        {
+            aggregator.CancelPending();
+        }        
+
+
+    }
 }
