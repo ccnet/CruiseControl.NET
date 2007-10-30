@@ -3,7 +3,7 @@ using NUnit.Framework;
 using Objection;
 using Objection.NetReflectorPlugin;
 
-namespace objection.UnitTests.NetReflectorPlugin
+namespace Objection.UnitTests.NetReflectorPlugin
 {
 	[TestFixture]
 	public class NetReflectorPluginTest
