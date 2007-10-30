@@ -827,16 +827,16 @@
     <Compile Include="CustomAssertion.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="objection\AcceptanceTests\CachingImplementationResolverTest.cs">
+    <Compile Include="Objection\AcceptanceTests\CachingImplementationResolverTest.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="objection\AcceptanceTests\TypicalUsageClasses.cs">
+    <Compile Include="Objection\AcceptanceTests\TypicalUsageClasses.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="objection\AcceptanceTests\TypicalUsageTests.cs">
+    <Compile Include="Objection\AcceptanceTests\TypicalUsageTests.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="objection\NetReflectorPlugin\NetReflectorPluginTest.cs">
+    <Compile Include="Objection\NetReflectorPlugin\NetReflectorPluginTest.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Remote\CruiseServerSnapshotTest.cs" />
