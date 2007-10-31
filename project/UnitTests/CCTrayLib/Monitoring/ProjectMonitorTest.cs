@@ -344,8 +344,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Monitoring
 		[Test]
 		public void InvokeServerWhenVolunteeringToFixBuild()
 		{
-			mockProjectManager.Expect("FixBuild");
-			monitor.FixBuild();
+			mockProjectManager.Expect("FixBuild","John");
+			monitor.FixBuild("John");
 			mockProjectManager.Verify();
 		}
 

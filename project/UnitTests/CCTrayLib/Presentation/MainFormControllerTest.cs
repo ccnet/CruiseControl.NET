@@ -26,11 +26,12 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Presentation
 
 			mockConfiguration = new DynamicMock(typeof (ICCTrayMultiConfiguration));
 			configuration = (ICCTrayMultiConfiguration) mockConfiguration.MockInstance;
-
+            
             ISingleServerMonitor[] serverMonitors = new ISingleServerMonitor[0];
             mockConfiguration.SetupResult("GetServerMonitors", serverMonitors);
             mockConfiguration.SetupResult("GetProjectStatusMonitors", new IProjectMonitor[0], typeof(ISingleServerMonitor[]));
 			mockConfiguration.SetupResult("Icons", new Icons());
+            mockConfiguration.SetupResult("FixUserName", "John");
 
 			eventCount = 0;
 
@@ -126,8 +127,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Presentation
 		[Test]
 		public void VolunteeringToFixBuildShouldInvokeServer()
 		{
-			controller.SelectedProject = projectMonitor;
-			mockProjectMonitor.Expect("FixBuild");
+			controller.SelectedProject = projectMonitor;            
+			mockProjectMonitor.Expect("FixBuild","John");
 			controller.VolunteerToFixBuild();
 			mockProjectMonitor.Verify();
 		}

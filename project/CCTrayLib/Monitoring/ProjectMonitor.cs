@@ -125,9 +125,9 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
 			cruiseProjectManager.ForceBuild();
 		}
 
-		public void FixBuild()
+		public void FixBuild(string fixingUserName)
 		{
-			cruiseProjectManager.FixBuild();
+            cruiseProjectManager.FixBuild(fixingUserName);
 		}
 
 		public void CancelPending()

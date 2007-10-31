@@ -9,7 +9,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
 	public interface ICruiseProjectManager
 	{
 		void ForceBuild();
-		void FixBuild();
+		void FixBuild(string fixingUserName);
 		void CancelPendingRequest();
 		string ProjectName { get; }
 	}

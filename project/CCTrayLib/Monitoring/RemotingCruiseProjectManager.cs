@@ -22,9 +22,19 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
 			manager.Request(ProjectName, new IntegrationRequest(BuildCondition.ForceBuild, Environment.UserName));
 		}
 
-		public void FixBuild()
+		public void FixBuild(string fixingUserName)
 		{
-			manager.SendMessage(ProjectName, new Message(string.Format("{0} is fixing the build.", Environment.UserName)));
+            string Fixer;
+            if (fixingUserName.Trim().Length == 0)
+            {
+                Fixer = Environment.UserName;
+            }
+            else
+            {
+                Fixer = fixingUserName;
+            }
+
+            manager.SendMessage(ProjectName, new Message(string.Format("{0} is fixing the build.", Fixer)));
 		}
 
 		public void CancelPendingRequest()

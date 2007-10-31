@@ -21,7 +21,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
 		event MessageEventHandler MessageReceived;
 
 		void ForceBuild();
-		void FixBuild();
+		void FixBuild(string fixingUserName);
 		void CancelPending();
 	}
 }

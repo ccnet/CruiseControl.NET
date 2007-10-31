@@ -67,7 +67,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
 			}
 		}
 
-		public void FixBuild()
+		public void FixBuild(string fixingUserName)
 		{
 			throw new NotImplementedException("Fix build not currently supported on projects monitored via HTTP");
 		}

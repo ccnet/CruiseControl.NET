@@ -25,7 +25,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
 			throw new NotImplementedException();
 		}
 
-		public void FixBuild()
+		public void FixBuild(string fixingUserName)
 		{
 			throw new NotImplementedException();
 		}

@@ -57,6 +57,8 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 		private ColumnHeader columnHeader3;
 		private CheckBox chkCheck;
         private CheckBox chkAlwaysOnTop;
+        private Label lblFixUserName;
+        private TextBox txtFixUserName;
 		private SelectAudioFileController successfulAudio;
 
 		public CCTrayMultiSettingsForm(ICCTrayMultiConfiguration configuration)
@@ -67,6 +69,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 
 			chkShowBalloons.DataBindings.Add("Checked", configuration, "ShouldShowBalloonOnBuildTransition");
             chkAlwaysOnTop.DataBindings.Add("Checked", configuration, "AlwaysOnTop");
+            txtFixUserName.DataBindings.Add("Text", configuration, "FixUserName");
 
 			rdoStatusWindow.Checked = (configuration.TrayIconDoubleClickAction == TrayIconDoubleClickAction.ShowStatusWindow);
 			rdoWebPage.Checked =
@@ -147,6 +150,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
             this.btnMoveUp = new System.Windows.Forms.Button();
             this.btnRemove = new System.Windows.Forms.Button();
             this.tabGeneral = new System.Windows.Forms.TabPage();
+            this.chkAlwaysOnTop = new System.Windows.Forms.CheckBox();
             this.rdoWebPage = new System.Windows.Forms.RadioButton();
             this.rdoStatusWindow = new System.Windows.Forms.RadioButton();
             this.label4 = new System.Windows.Forms.Label();
@@ -171,7 +175,8 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
             this.txtAudioFileFixed = new System.Windows.Forms.TextBox();
             this.txtAudioFileBroken = new System.Windows.Forms.TextBox();
             this.txtAudioFileFailing = new System.Windows.Forms.TextBox();
-            this.chkAlwaysOnTop = new System.Windows.Forms.CheckBox();
+            this.lblFixUserName = new System.Windows.Forms.Label();
+            this.txtFixUserName = new System.Windows.Forms.TextBox();
             this.tabControl1.SuspendLayout();
             this.tabBuildServers.SuspendLayout();
             this.tabGeneral.SuspendLayout();
@@ -344,6 +349,8 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
             // 
             // tabGeneral
             // 
+            this.tabGeneral.Controls.Add(this.txtFixUserName);
+            this.tabGeneral.Controls.Add(this.lblFixUserName);
             this.tabGeneral.Controls.Add(this.chkAlwaysOnTop);
             this.tabGeneral.Controls.Add(this.rdoWebPage);
             this.tabGeneral.Controls.Add(this.rdoStatusWindow);
@@ -357,6 +364,16 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
             this.tabGeneral.Size = new System.Drawing.Size(667, 289);
             this.tabGeneral.TabIndex = 0;
             this.tabGeneral.Text = "General";
+            // 
+            // chkAlwaysOnTop
+            // 
+            this.chkAlwaysOnTop.AutoSize = true;
+            this.chkAlwaysOnTop.Location = new System.Drawing.Point(270, 8);
+            this.chkAlwaysOnTop.Name = "chkAlwaysOnTop";
+            this.chkAlwaysOnTop.Size = new System.Drawing.Size(98, 17);
+            this.chkAlwaysOnTop.TabIndex = 14;
+            this.chkAlwaysOnTop.Text = "Always On Top";
+            this.chkAlwaysOnTop.UseVisualStyleBackColor = true;
             // 
             // rdoWebPage
             // 
@@ -600,15 +617,21 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
             this.txtAudioFileFailing.Size = new System.Drawing.Size(353, 20);
             this.txtAudioFileFailing.TabIndex = 13;
             // 
-            // chkAlwaysOnTop
+            // lblFixUserName
             // 
-            this.chkAlwaysOnTop.AutoSize = true;
-            this.chkAlwaysOnTop.Location = new System.Drawing.Point(270, 8);
-            this.chkAlwaysOnTop.Name = "chkAlwaysOnTop";
-            this.chkAlwaysOnTop.Size = new System.Drawing.Size(98, 17);
-            this.chkAlwaysOnTop.TabIndex = 14;
-            this.chkAlwaysOnTop.Text = "Always On Top";
-            this.chkAlwaysOnTop.UseVisualStyleBackColor = true;
+            this.lblFixUserName.AutoSize = true;
+            this.lblFixUserName.Location = new System.Drawing.Point(14, 134);
+            this.lblFixUserName.Name = "lblFixUserName";
+            this.lblFixUserName.Size = new System.Drawing.Size(148, 13);
+            this.lblFixUserName.TabIndex = 15;
+            this.lblFixUserName.Text = "User Name for Fixing the build";
+            // 
+            // txtFixUserName
+            // 
+            this.txtFixUserName.Location = new System.Drawing.Point(171, 133);
+            this.txtFixUserName.Name = "txtFixUserName";
+            this.txtFixUserName.Size = new System.Drawing.Size(133, 20);
+            this.txtFixUserName.TabIndex = 16;
             // 
             // CCTrayMultiSettingsForm
             // 
@@ -717,6 +740,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 			configuration.Projects = newProjectList;
 			configuration.ShouldShowBalloonOnBuildTransition = chkShowBalloons.Checked;
             configuration.AlwaysOnTop = chkAlwaysOnTop.Checked;
+            configuration.FixUserName = txtFixUserName.Text;
             configuration.PollPeriodSeconds = (int) numPollPeriod.Value;
 
 			configuration.TrayIconDoubleClickAction =

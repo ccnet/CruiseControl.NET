@@ -51,7 +51,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Monitoring
         [ExpectedException(typeof(NotImplementedException), "Fix build not currently supported on projects monitored via HTTP")]
         public void FixBuildThrowsAnNotImplementedException()
         {
-            manager.FixBuild();
+            manager.FixBuild("John Do");
         }
 
 

@@ -46,9 +46,9 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 			projectMonitor.ForceBuild();
 		}
 
-		public void FixBuild()
+		public void FixBuild(string fixingUserName)
 		{
-			projectMonitor.FixBuild();
+			projectMonitor.FixBuild(fixingUserName);
 		}
 
 		public void CancelPending()

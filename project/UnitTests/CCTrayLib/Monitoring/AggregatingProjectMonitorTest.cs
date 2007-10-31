@@ -241,7 +241,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Monitoring
         [ExpectedException(typeof(NotImplementedException), "The method or operation is not implemented.")]
         public void FixBuildThrowsAnNotImplementedException()
         {
-            aggregator.FixBuild();
+            aggregator.FixBuild("JoeSmith");
         }
 
         [Test]

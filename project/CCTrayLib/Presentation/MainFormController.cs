@@ -240,7 +240,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 
 		public void VolunteerToFixBuild()
 		{
-			if (IsProjectSelected) selectedProject.FixBuild();
+			if (IsProjectSelected) selectedProject.FixBuild(configuration.FixUserName);
 		}
 
 		public bool CanCancelPending()

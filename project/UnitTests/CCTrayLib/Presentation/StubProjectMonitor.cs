@@ -132,7 +132,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Presentation
 			throw new NotImplementedException();
 		}
 
-		public void FixBuild()
+		public void FixBuild(string fixingUserName)
 		{
 			throw new NotImplementedException();
 		}

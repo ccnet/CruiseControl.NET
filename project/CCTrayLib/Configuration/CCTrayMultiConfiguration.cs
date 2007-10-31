@@ -109,6 +109,13 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Configuration
             set { persistentConfiguration.AlwaysOnTop = value; }
         }
 
+
+        public string FixUserName
+        {
+            get { return persistentConfiguration.FixUserName; }
+            set { persistentConfiguration.FixUserName = value; }
+        }
+
 		public int PollPeriodSeconds
 		{
 			get { return persistentConfiguration.PollPeriodSeconds; }
