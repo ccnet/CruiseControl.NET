@@ -117,8 +117,10 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 			{
 				try
 				{
-					process.Kill();
-					if (! process.WaitForExit(WAIT_FOR_KILLED_PROCESS_TIMEOUT))
+                   // TODO: Come back here some day when MS fixed the Process.Kill() bug (see CCNET-815)
+                   // process.Kill();
+                    KillUtil.KillPid(process.Id);
+                    if (!process.WaitForExit(WAIT_FOR_KILLED_PROCESS_TIMEOUT))
 						throw new CruiseControlException(string.Format(@"The killed process {0} did not terminate within the allotted timeout period {1}.  The process or one of its child processes may not have died.  This may create problems when trying to re-execute the process.  It may be necessary to reboot the server to recover.", process.Id, WAIT_FOR_KILLED_PROCESS_TIMEOUT));
 					Log.Warning(string.Format("The process has been killed: {0}", process.Id));
 				}

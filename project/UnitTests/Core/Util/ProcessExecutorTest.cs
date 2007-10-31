@@ -50,7 +50,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Util
 		{
 			ProcessResult result = executor.Execute(new ProcessInfo("cmd.exe", "/C @zerk.exe foo"));
 
-			AssertProcessExitsWithFailure(result, 1);
+            AssertProcessExitsWithFailure(result);
 			AssertContains("zerk.exe", result.StandardError);
 			Assert.AreEqual(string.Empty, result.StandardOutput);
 			Assert.IsTrue(! result.TimedOut);
@@ -76,7 +76,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Util
 
 			Assert.IsTrue(result.TimedOut, "process did not time out, but it should have.");
 			Assert.IsNotNull(result.StandardOutput, "some output should have been produced");
-			AssertProcessExitsWithFailure(result, ProcessResult.TIMED_OUT_EXIT_CODE);
+            AssertProcessExitsWithFailure(result);
 		}
 
 		[Test, ExpectedException(typeof (IOException))]
@@ -136,9 +136,9 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Util
 			AssertFalse("process should not return an error", result.Failed);
 		}
 
-		private static void AssertProcessExitsWithFailure(ProcessResult result, int expectedExitCode)
+        private static void AssertProcessExitsWithFailure(ProcessResult result)
 		{
-			Assert.AreEqual(expectedExitCode, result.ExitCode);
+            Assert.AreNotEqual(ProcessResult.SUCCESSFUL_EXIT_CODE, result.ExitCode);
 			Assert.IsTrue(result.Failed, "process should return an error");
 		}
 
