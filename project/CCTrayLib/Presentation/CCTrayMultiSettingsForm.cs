@@ -790,6 +790,12 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
                 {
                     lvProjects.Items.Remove(item);
                 }
+
+                if (lvProjects.Items.Count > 0)
+                {
+                    lvProjects.Items[0].Focused = true;
+                }
+                
                 lvProjects.EndUpdate();
             }
 
