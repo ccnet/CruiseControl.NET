@@ -91,6 +91,11 @@ namespace ThoughtWorks.CruiseControl.Core
             get { throw new NotImplementedException(); }
         }
 
+        public string RSSFeed
+        {
+            get { throw new NotImplementedException(); }
+        }
+
 
 		public IIntegrationRepository IntegrationRepository
 		{

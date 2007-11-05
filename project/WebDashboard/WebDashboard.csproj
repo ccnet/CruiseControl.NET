@@ -175,6 +175,7 @@
     <Compile Include="Configuration\ServerLocation.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Dashboard\RSSLinkBuilder.cs" />
     <Compile Include="IO\IConditionalGetFingerprintProvider.cs" />
     <Compile Include="IO\AssemblyVersionProvider.cs" />
     <Compile Include="IO\ConditionalGetFingerprint.cs" />
@@ -537,6 +538,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Plugins\ProjectReport\ProjectXmlReport.cs" />
+    <Compile Include="Plugins\RSS\RSSFeed.cs" />
     <Compile Include="Plugins\ServerReport\ServerInformationServerPlugin.cs">
       <SubType>Code</SubType>
     </Compile>

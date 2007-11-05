@@ -32,5 +32,21 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 			set { linkClass = value; }
 			get { return linkClass; }
 		}
+
+        public override bool Equals(object obj)
+        {
+            GeneralAbsoluteLink other = obj as GeneralAbsoluteLink;
+
+            if (other == null) return false;
+
+            return other.LinkClass == linkClass &&
+                   other.Text == Text &&
+                   other.Url == Url;            
+        }
+
+        public override int GetHashCode()
+        {
+            return (LinkClass + Text + Url).GetHashCode();
+        }
 	}
 }

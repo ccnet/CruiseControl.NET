@@ -35,11 +35,15 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Publishers
 		public void FirstItemContainsDetailsFromCurrentResult()
 		{
 			result.Status = IntegrationStatus.Success;
+            result.Label = "1.0";
+
 			/// Execute
 			Document document = publisher.GenerateDocument(result);
 
 			Item firstItem = (Item) document.Channel.Items[0];
-			Assert.AreEqual("Successful Build", firstItem.Title);
+            Assert.AreEqual("Build 1.0 : Success", firstItem.Title);
+            Assert.AreEqual("No Modifications found in Build", firstItem.Description);
+            
 		}
 	}
 }

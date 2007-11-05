@@ -12,18 +12,28 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
 	// ToDo - more on this, or delete it!
 	public class RssPublisher : ITask
 	{
-		private string filename;
+		private const string RSSFilename = "RSSData.xml";
 
-		[ReflectorProperty("filename", Required=true)]
-		public string Filename
-		{
-			get { return filename; }
-			set { filename = value;}
-		}
+        private static string RSSDataFileLocation(string artifactDirectory)
+        {
+            return System.IO.Path.Combine(artifactDirectory, RSSFilename);            
+        }
+
+        public static string LoadRSSDataDocument(string artifactDirectory)
+        {
+            string result = string.Empty;
+
+            if (File.Exists(RSSDataFileLocation(artifactDirectory)))
+            {
+                result = File.ReadAllText(RSSDataFileLocation(artifactDirectory));
+            }
+
+            return result;
+        }
 
 		public void Run(IIntegrationResult result)
 		{
-			using (StreamWriter stream = File.CreateText(Filename))
+            using (StreamWriter stream = File.CreateText(RSSDataFileLocation(result.ArtifactDirectory)))
 			{
 				stream.Write(GenerateDocument(result));
 			}
@@ -54,13 +64,42 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
 
 			Item item = new Item();
 			items.Add(item);
-			if (result.Succeeded)
-			{
-				item.Title = "Successful Build";
-			}
+
+            item.Title = string.Format("Build {0} : {1}", result.Label, result.Status.ToString());
+            item.Description = GetBuildModifications(result);
+
 
 			return items;
 		}
+
+        private string GetBuildModifications(IIntegrationResult result)
+        {
+            System.Text.StringBuilder mods = new System.Text.StringBuilder();
+
+            if (result.HasModifications())
+            {
+                mods.AppendLine("Modifications in Build :");
+
+                for (int i = 0; i < result.Modifications.Length; i++)
+                {
+                    ArrayList LoggedModifications  = new ArrayList();
+                    if (!LoggedModifications.Contains(result.Modifications[i].Comment ))
+                    {
+                        LoggedModifications.Add(result.Modifications[i].Comment);
+                        
+                        mods.AppendLine(string.Format("- {0} {1}", 
+                                        result.Modifications[i].UserName, 
+                                        result.Modifications[i].Comment));                        
+                    }
+                }
+            }
+            else
+            {
+                mods.Append("No Modifications found in Build");
+            }
+           
+            return mods.ToString();        
+        }
 	}
 
 	[XmlRoot(ElementName = "rss")]
@@ -91,6 +130,10 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
 
 		[XmlElement("language")]
 		public string Language = "en";
+
+        [XmlElement("ttl")]
+        public string TTL = "10";
+
 
 		[XmlElement(Type = typeof(Item), ElementName="item")]
 		public ArrayList Items = new ArrayList();

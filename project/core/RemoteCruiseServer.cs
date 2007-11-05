@@ -167,6 +167,10 @@ namespace ThoughtWorks.CruiseControl.Core
             return server.GetModificationHistoryDocument(projectName);
         }
 
+        public string GetRSSFeed(string projectName)
+        {
+            return server.GetRSSFeed(projectName);
+        }
 
 		private void RegisterForRemoting()
 		{

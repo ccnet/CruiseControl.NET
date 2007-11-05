@@ -36,7 +36,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Plugins.ProjectRepor
 				(ILinkFactory) linkFactoryMock.MockInstance);
 
 			cruiseRequestMock = new DynamicMock(typeof(ICruiseRequest));
-			cruiseRequest = (ICruiseRequest) cruiseRequestMock.MockInstance;
+			cruiseRequest = (ICruiseRequest ) cruiseRequestMock.MockInstance;
+
 		}
 
 		private void VerifyAll()
@@ -54,17 +55,37 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Plugins.ProjectRepor
 			IProjectSpecifier projectSpecifier = new DefaultProjectSpecifier(new DefaultServerSpecifier("myServer"), "myProject");
 			IBuildSpecifier buildSpecifier = new DefaultBuildSpecifier(projectSpecifier, "myBuild");
 			Hashtable expectedContext = new Hashtable();
+
+            DynamicMock requestStub = new DynamicMock(typeof(IRequest));
+            IRequest request = (IRequest)requestStub.MockInstance;
+
+            cruiseRequestMock.SetupResult("Request", request);
+            requestStub.SetupResult("ApplicationPath", "myAppPath");
+            
+            farmServiceMock.ExpectAndReturn("GetRSSFeed", "", projectSpecifier);
+            
 			expectedContext["projectName"] = "myProject";
 			expectedContext["externalLinks"] = links;
 			expectedContext["noLogsAvailable"] = false;
 			expectedContext["mostRecentBuildUrl"] = "buildUrl";
+
+            expectedContext["applicationPath"] = "myAppPath";
+            expectedContext["rssDataPresent"] = false;
+            expectedContext["rss"] = new GeneralAbsoluteLink("RSS", @"http://localhost/myServer");
+
+
 			IResponse response = new HtmlFragmentResponse("myView");
 
 			cruiseRequestMock.ExpectAndReturn("ProjectSpecifier", projectSpecifier);
 			farmServiceMock.ExpectAndReturn("GetMostRecentBuildSpecifiers", new IBuildSpecifier[] { buildSpecifier }, projectSpecifier, 1);
 			farmServiceMock.ExpectAndReturn("GetExternalLinks", links, projectSpecifier);
 			linkFactoryMock.ExpectAndReturn("CreateProjectLink", new GeneralAbsoluteLink("foo", "buildUrl"), projectSpecifier, LatestBuildReportProjectPlugin.ACTION_NAME);
+
+            linkFactoryMock.ExpectAndReturn("CreateProjectLink", new GeneralAbsoluteLink("RSS", @"myServer"), projectSpecifier, ThoughtWorks.CruiseControl.WebDashboard.Plugins.RSS.RSSFeed.ACTION_NAME);
+
+
 			viewGeneratorMock.ExpectAndReturn("GenerateView", response, @"ProjectReport.vm", new HashtableConstraint(expectedContext));
+
 
 			// Execute
 			plugin.DashPlugins = null;
@@ -81,18 +102,38 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Plugins.ProjectRepor
 			// Setup
 			ExternalLink[] links = new ExternalLink[] { new ExternalLink("foo", "bar") };
 			Hashtable expectedContext = new Hashtable();
-			expectedContext["projectName"] = "myProject";
+
+            DynamicMock requestStub = new DynamicMock(typeof(IRequest));
+            IRequest request = (IRequest)requestStub.MockInstance;
+            
+            expectedContext["projectName"] = "myProject";
 			expectedContext["externalLinks"] = links;
 			expectedContext["noLogsAvailable"] = true;
-			IResponse response = new HtmlFragmentResponse("myView");
 
-			IProjectSpecifier projectSpecifier = new DefaultProjectSpecifier(new DefaultServerSpecifier("myServer"), "myProject");
+            expectedContext["applicationPath"] = "myAppPath";
+            expectedContext["rssDataPresent"] = false;
+            expectedContext["rss"] = new GeneralAbsoluteLink("RSS", @"http://localhost/myServer");
+        
+            cruiseRequestMock.SetupResult("Request", request);
+            requestStub.SetupResult("ApplicationPath", "myAppPath");
+
+            IResponse response = new HtmlFragmentResponse("myView");
+
+
+            
+            IProjectSpecifier projectSpecifier = new DefaultProjectSpecifier(new DefaultServerSpecifier("myServer"), "myProject");
 			cruiseRequestMock.ExpectAndReturn("ProjectSpecifier", projectSpecifier);
 			farmServiceMock.ExpectAndReturn("GetMostRecentBuildSpecifiers", new IBuildSpecifier[0], projectSpecifier, 1);
 			farmServiceMock.ExpectAndReturn("GetExternalLinks", links, projectSpecifier);
-			viewGeneratorMock.ExpectAndReturn("GenerateView", response, @"ProjectReport.vm", new HashtableConstraint(expectedContext));
 
-			// Execute
+            farmServiceMock.ExpectAndReturn("GetRSSFeed", "", projectSpecifier);
+            linkFactoryMock.ExpectAndReturn("CreateProjectLink", new GeneralAbsoluteLink("RSS", @"myServer"), projectSpecifier, ThoughtWorks.CruiseControl.WebDashboard.Plugins.RSS.RSSFeed.ACTION_NAME);
+
+
+            viewGeneratorMock.ExpectAndReturn("GenerateView", response, @"ProjectReport.vm", new HashtableConstraint(expectedContext));
+
+            
+            // Execute
 			IResponse returnedResponse = plugin.Execute(cruiseRequest);
 
 			// Verify
@@ -109,20 +150,39 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.Plugins.ProjectRepor
 			IProjectSpecifier projectSpecifier = new DefaultProjectSpecifier(new DefaultServerSpecifier("myServer"), "myProject");
 			IBuildSpecifier buildSpecifier = new DefaultBuildSpecifier(projectSpecifier, "myBuild");
 			Hashtable expectedContext = new Hashtable();
+
+            DynamicMock requestStub = new DynamicMock(typeof(IRequest));
+            IRequest request = (IRequest)requestStub.MockInstance;
+
+
 			expectedContext["projectName"] = "myProject";
 			expectedContext["externalLinks"] = links;
 			expectedContext["noLogsAvailable"] = false;
 			expectedContext["mostRecentBuildUrl"] = "buildUrl";
 			expectedContext["pluginInfo"] = "test";
+
+            expectedContext["applicationPath"] = "myAppPath";
+            expectedContext["rssDataPresent"] = false;
+            expectedContext["rss"] = new GeneralAbsoluteLink("RSS", @"http://localhost/myServer");
+            cruiseRequestMock.SetupResult("Request", request);
+            requestStub.SetupResult("ApplicationPath", "myAppPath");
+
+
+
 			IResponse response = new HtmlFragmentResponse("myView");
 
 			cruiseRequestMock.ExpectAndReturn("ProjectSpecifier", projectSpecifier);
 			farmServiceMock.ExpectAndReturn("GetMostRecentBuildSpecifiers", new IBuildSpecifier[] { buildSpecifier }, projectSpecifier, 1);
 			farmServiceMock.ExpectAndReturn("GetExternalLinks", links, projectSpecifier);
 			linkFactoryMock.ExpectAndReturn("CreateProjectLink", new GeneralAbsoluteLink("foo", "buildUrl"), projectSpecifier, LatestBuildReportProjectPlugin.ACTION_NAME);
-			viewGeneratorMock.ExpectAndReturn("GenerateView", response, @"ProjectReport.vm", new HashtableConstraint(expectedContext));
 
-			// Execute
+            farmServiceMock.ExpectAndReturn("GetRSSFeed", "", projectSpecifier);
+            linkFactoryMock.ExpectAndReturn("CreateProjectLink", new GeneralAbsoluteLink("RSS", @"myServer"), projectSpecifier, ThoughtWorks.CruiseControl.WebDashboard.Plugins.RSS.RSSFeed.ACTION_NAME);
+            
+            viewGeneratorMock.ExpectAndReturn("GenerateView", response, @"ProjectReport.vm", new HashtableConstraint(expectedContext));
+                       
+            
+            // Execute
 			plugin.DashPlugins = new IBuildPlugin[1] {new TestPlugin()};
 			Assert.IsNotNull(plugin.DashPlugins, "DashPlugins are null");
 			Assert.IsInstanceOfType(typeof(IBuildPlugin[]), plugin.DashPlugins);

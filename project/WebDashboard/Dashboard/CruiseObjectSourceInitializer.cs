@@ -129,7 +129,11 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
             // Supporting cruise server project and queue status queries from CCTray or clients 1.3 or later
             objectionManager.AddTypeForName(XmlServerReportAction.ACTION_NAME, typeof(XmlServerReportAction));
 
-			return objectSource;
+
+            // RSS publisher
+            objectionManager.AddTypeForName(Plugins.RSS.RSSFeed.ACTION_NAME, typeof(Plugins.RSS.RSSFeed)).Decorate(typeof(CruiseActionProxyAction));
+
+            return objectSource;
 		}
 
 		private static IDashboardConfiguration GetDashboardConfiguration(ObjectSource objectSource, HttpContext context)

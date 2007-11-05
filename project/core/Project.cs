@@ -243,6 +243,13 @@ namespace ThoughtWorks.CruiseControl.Core
             get { return ModificationHistoryPublisher.LoadHistory(ArtifactDirectory); }
         }
 
+
+        public string RSSFeed
+        {
+            get { return RssPublisher.LoadRSSDataDocument(ArtifactDirectory); }
+        }
+
+
 		public IIntegrationRepository IntegrationRepository
 		{
 			get { return this; }

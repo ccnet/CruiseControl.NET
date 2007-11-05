@@ -70,6 +70,8 @@ namespace ThoughtWorks.CruiseControl.Core
 
         string ModificationHistory { get; }
 
+        string RSSFeed { get; }
+
 		IIntegrationRepository IntegrationRepository { get; }
 
 		/// <summary>

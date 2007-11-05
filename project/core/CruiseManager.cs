@@ -143,6 +143,12 @@ namespace ThoughtWorks.CruiseControl.Core
             return cruiseServer.GetModificationHistoryDocument(projectName);
         }
 
+        public string GetRSSFeed(string projectName)
+        {
+            return cruiseServer.GetRSSFeed(projectName);
+        }
+
+
 		public override object InitializeLifetimeService()
 		{
 			return null;

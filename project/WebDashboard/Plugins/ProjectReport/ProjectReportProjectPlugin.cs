@@ -52,6 +52,16 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.ProjectReport
 			velocityContext["externalLinks"] = farmService.GetExternalLinks(projectSpecifier);
 			velocityContext["noLogsAvailable"] = (buildSpecifiers.Length == 0);
 
+
+            velocityContext["applicationPath"] = cruiseRequest.Request.ApplicationPath;
+            velocityContext["rssDataPresent"] = farmService.GetRSSFeed(projectSpecifier).Length > 0;
+            
+            // I can not figure out why the lone below does not work :-(
+            // velocityContext["rss"] = linkFactory.CreateProjectLink(projectSpecifier, WebDashboard.Plugins.RSS.RSSFeed.ACTION_NAME).Url;
+            //
+            velocityContext["rss"] = RSSLinkBuilder.CreateRSSLink(linkFactory, projectSpecifier);
+            
+            
 			string subReportData = GetPluginSubReport(cruiseRequest, projectSpecifier, buildSpecifiers);
 			if (subReportData != null && subReportData != String.Empty)
 				velocityContext["pluginInfo"] = subReportData;

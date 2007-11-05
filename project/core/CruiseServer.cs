@@ -286,6 +286,13 @@ namespace ThoughtWorks.CruiseControl.Core
             return GetIntegrator(projectName).Project.ModificationHistory;
         }
 
+
+        public string GetRSSFeed(string projectName)
+        {
+            return GetIntegrator(projectName).Project.RSSFeed;
+        }
+
+
 		private IProjectIntegrator GetIntegrator(string projectName)
 		{
 			return integrationQueueManager.GetIntegrator(projectName);

@@ -120,5 +120,7 @@ namespace ThoughtWorks.CruiseControl.Remote
 		string GetStatisticsDocument(string projectName);
 
         string GetModificationHistoryDocument(string projectName);
+
+        string GetRSSFeed(string projectName);
 	}
 }
