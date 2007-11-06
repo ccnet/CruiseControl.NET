@@ -33,6 +33,7 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
 
 		public void Run(IIntegrationResult result)
         {
+         
             // only deal with known integration status
             if (result.Status == IntegrationStatus.Unknown)
                 return;
@@ -42,6 +43,9 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
 				integrationWriter.Formatting = Formatting.Indented;
 				integrationWriter.Write(result);
             }
+
+            result.BuildLogDirectory = LogDirectory(result.ArtifactDirectory);
+
         }
 
         private TextWriter CreateWriter(string dirname, string filename)

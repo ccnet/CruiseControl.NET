@@ -26,6 +26,10 @@ namespace ThoughtWorks.CruiseControl.Core
 		private IntegrationRequest request = IntegrationRequest.NullRequest;
 		private IntegrationSummary lastIntegration = IntegrationSummary.Initial;
 
+
+        private string buildLogDirectory;   //rw
+
+
 		// mutable properties
 		private IntegrationStatus status = IntegrationStatus.Unknown;
 		private string label = InitialLabel;
@@ -109,6 +113,14 @@ namespace ThoughtWorks.CruiseControl.Core
 			get { return artifactDirectory; }
 			set { artifactDirectory = value; }
 		}
+
+
+        public string BuildLogDirectory
+        {
+            get { return buildLogDirectory; }
+            set { buildLogDirectory = value; }
+        }
+
 
 		public string IntegrationArtifactDirectory
 		{

@@ -14,6 +14,9 @@ namespace ThoughtWorks.CruiseControl.Core
 		string BaseFromArtifactsDirectory(string pathToBase);
 		string BaseFromWorkingDirectory(string pathToBase);
 
+
+        string BuildLogDirectory { get; set;}   //rw
+
 		// Current integration state
 		BuildCondition BuildCondition { get; }
 		string Label { get; set; }
