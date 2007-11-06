@@ -114,27 +114,30 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 
 		// GetModifications tests
 
-		[Test]
+        [Test]
 		public void VerifyHistoryProcessInfoArguments()
 		{
-			ExpectToExecuteArguments(string.Format("history $/fooProject -R -Vd{0}~{1} -YAdmin,admin -I-Y", CommandDate(today), CommandDate(yesterday)));
-			vss.GetModifications(IntegrationResultMother.CreateSuccessful(yesterday), IntegrationResultMother.CreateSuccessful(today));
+            string tempOutputFileName = Path.GetTempFileName();
+            ExpectToExecuteArguments(string.Format("history $/fooProject -R -Vd{0}~{1} -YAdmin,admin -I-Y \"-O@{2}\"", CommandDate(today), CommandDate(yesterday), tempOutputFileName));
+            vss.GetModifications(IntegrationResultMother.CreateSuccessful(yesterday), IntegrationResultMother.CreateSuccessful(today), tempOutputFileName);
 		}
 
-		[Test]
-		public void VerifyHistoryProcessInfoArgumentsWithSpaceInProjectName()
+        [Test]
+        public void VerifyHistoryProcessInfoArgumentsWithSpaceInProjectName()
 		{
-			ExpectToExecuteArguments(string.Format("history \"$/My Project\" -R -Vd{0}~{1} -YAdmin,admin -I-Y", CommandDate(today), CommandDate(yesterday)));
+            string tempOutputFileName = Path.GetTempFileName();
+            ExpectToExecuteArguments(string.Format("history \"$/My Project\" -R -Vd{0}~{1} -YAdmin,admin -I-Y \"-O@{2}\"", CommandDate(today), CommandDate(yesterday), tempOutputFileName));
 			vss.Project = "$/My Project";
-			vss.GetModifications(IntegrationResultMother.CreateSuccessful(yesterday), IntegrationResultMother.CreateSuccessful(today));
+            vss.GetModifications(IntegrationResultMother.CreateSuccessful(yesterday), IntegrationResultMother.CreateSuccessful(today), tempOutputFileName);
 		}
 
-		[Test]
-		public void VerifyHistoryProcessInfoArgumentsWhenUsernameIsNotSpecified()
+        [Test]
+        public void VerifyHistoryProcessInfoArgumentsWhenUsernameIsNotSpecified()
 		{
-			ExpectToExecuteArguments(string.Format("history $/fooProject -R -Vd{0}~{1} -I-Y", CommandDate(today), CommandDate(yesterday)));
+            string tempOutputFileName = Path.GetTempFileName();
+            ExpectToExecuteArguments(string.Format("history $/fooProject -R -Vd{0}~{1} -I-Y \"-O@{2}\"", CommandDate(today), CommandDate(yesterday), tempOutputFileName));
 			vss.Username = null;
-			vss.GetModifications(IntegrationResultMother.CreateSuccessful(yesterday), IntegrationResultMother.CreateSuccessful(today));
+            vss.GetModifications(IntegrationResultMother.CreateSuccessful(yesterday), IntegrationResultMother.CreateSuccessful(today), tempOutputFileName);
 		}
 
 		[Test]

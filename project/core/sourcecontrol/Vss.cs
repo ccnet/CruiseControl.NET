@@ -87,9 +87,20 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 		[ReflectorProperty("cleanCopy", Required = false)]
 		public bool CleanCopy = true;
 
-		public override Modification[] GetModifications(IIntegrationResult from, IIntegrationResult to)
+            
+	    public override Modification[] GetModifications(IIntegrationResult from, IIntegrationResult to)
 		{
             string tempOutputFileName = Path.GetTempFileName();
+	        return GetModifications(from, to, tempOutputFileName);
+        }
+
+        /// <summary>
+        /// This method exists only to allow the VssTest unit tests to supply an expected output filename.
+        /// DO NOT use this method for normal processing, use <see cref="GetModifications(IIntegrationResult, IIntegrationResult)"/>
+        /// instead
+        /// </summary>
+        public Modification[] GetModifications(IIntegrationResult from, IIntegrationResult to, string tempOutputFileName)
+        {
             try
             {
                 Execute(CreateHistoryProcessInfo(from, to, tempOutputFileName));
