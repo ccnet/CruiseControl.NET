@@ -25,9 +25,7 @@ namespace ThoughtWorks.CruiseControl.Core
 		private string artifactDirectory="";
 		private IntegrationRequest request = IntegrationRequest.NullRequest;
 		private IntegrationSummary lastIntegration = IntegrationSummary.Initial;
-
-
-        private string buildLogDirectory;   //rw
+        private string buildLogDirectory;   
 
 
 		// mutable properties
