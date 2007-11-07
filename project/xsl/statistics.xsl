@@ -13,7 +13,7 @@
 			background-color: #ffffcc;
 		}
 	</style>
-		<p><pre><strong>Note: </strong>Only builds run with the statistics publisher enabled will appear on this page!</pre></p>
+		<p><pre><strong>Note: </strong>Only builds ran with the statistics publisher enabled will appear on this page!</pre></p>
 			<xsl:variable name="day" select="//timestamp/@day"/>
 			<xsl:variable name="month" select="//timestamp/@month"/>
 			<xsl:variable name="year" select="//timestamp/@year"/>
