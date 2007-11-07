@@ -34,7 +34,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Publishers.Statistics
             results.Save(writer);
             string xml = writer.ToString();
             Console.Out.WriteLine("xml = {0}", xml);
-            AssertXPathExists(xml, "//statistics/statistic[@name='ProjectName']");
+            AssertXPathExists(xml, "//statistics/statistic[@name='Duration']");
         }
 
         [Test]
@@ -51,7 +51,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Publishers.Statistics
             StringBuilder buffer = new StringBuilder();
             StatisticsResults results = builder.ProcessBuildResults(successful);
             results.WriteStats(new StringWriter(buffer));
-            AssertContains(successful.ProjectName, buffer.ToString());
+            AssertContains(ThoughtWorks.CruiseControl.Core.Util.DateUtil.FormatDate(successful.StartTime), buffer.ToString());                        
         }
     }
 }

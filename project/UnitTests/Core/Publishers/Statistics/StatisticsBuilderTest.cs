@@ -119,7 +119,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Publishers.Statistics
 
             AssertHasStatistic("StartTime", DateUtil.FormatDate(result.StartTime), results);
             AssertHasStatistic("Duration", new TimeSpan(0, 32, 0).ToString(), results);
-            AssertHasStatistic("ProjectName", "Foo", results);
+            //AssertHasStatistic("ProjectName", "Foo", results);
         }
     }
 }

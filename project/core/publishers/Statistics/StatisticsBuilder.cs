@@ -16,7 +16,7 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers.Statistics
 
             Add(new FirstMatch("StartTime", "/cruisecontrol/build/@date"));
             Add(new FirstMatch("Duration", "/cruisecontrol/build/@buildtime"));
-            Add(new FirstMatch("ProjectName", "/cruisecontrol/@project"));
+//            Add(new FirstMatch("ProjectName", "/cruisecontrol/@project"));
 
             Add(new Statistic("TestCount", "sum(//test-results/@total)"));
             Add(new Statistic("TestFailures", "sum(//test-results/@failures)"));
