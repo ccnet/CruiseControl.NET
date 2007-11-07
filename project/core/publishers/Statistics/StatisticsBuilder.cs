@@ -11,12 +11,8 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers.Statistics
 
         public StatisticsBuilder()
         {
-            Add(new FirstMatch("BuildErrorType", "//failure/builderror/type"));
-            Add(new FirstMatch("BuildErrorMessage", "//failure/builderror/message"));
-
             Add(new FirstMatch("StartTime", "/cruisecontrol/build/@date"));
             Add(new FirstMatch("Duration", "/cruisecontrol/build/@buildtime"));
-//            Add(new FirstMatch("ProjectName", "/cruisecontrol/@project"));
 
             Add(new Statistic("TestCount", "sum(//test-results/@total)"));
             Add(new Statistic("TestFailures", "sum(//test-results/@failures)"));
@@ -26,6 +22,10 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers.Statistics
                 new Statistic("FxCop Warnings",
                               "count(//FxCopReport/Namespaces/Namespace/Messages/Message/Issue[@Level='Warning'])"));
             Add(new Statistic("FxCop Errors", "count(//FxCopReport//Issue[@Level='Error'])"));
+
+            Add(new FirstMatch("BuildErrorType", "//failure/builderror/type"));
+            Add(new FirstMatch("BuildErrorMessage", "//failure/builderror/message"));
+
         }
 
         internal StatisticsResults ProcessBuildResults(IIntegrationResult result)

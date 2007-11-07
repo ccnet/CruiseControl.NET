@@ -42,7 +42,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Publishers.Statistics
         {
             StringBuilder buffer = new StringBuilder();
             StatisticsResults.WriteHeadings(new StringWriter(buffer), builder.Statistics);
-            AssertStartsWith("\"BuildErrorType\", \"BuildErrorMessage\"", buffer.ToString());
+            AssertStartsWith("\"StartTime\", \"Duration\"", buffer.ToString());
         }
 
         [Test]
