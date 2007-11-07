@@ -23,11 +23,11 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.CCTray
 			if (cctrayPath.Exists)
 			{
 				FileInfo[] files = cctrayPath.GetFiles("*CCTray*.*");
-				if (files.Length == 0)
+				if (files.Length == 1)
 				{
 					return new RedirectResponse("CCTray/" + files[0].Name);
 				}
-                else if (files.Length > 0)
+                else if (files.Length > 1)
                 {
                     StringBuilder installerList = new StringBuilder();
                     installerList.Append(@"<h3>Multiple CCTray installers available</h3>");
