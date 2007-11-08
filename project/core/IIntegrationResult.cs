@@ -33,6 +33,8 @@ namespace ThoughtWorks.CruiseControl.Core
 
 		// Last integration state
 		IntegrationStatus LastIntegrationStatus { get; }
+        // Users who contributed modifications to a series of failing builds:
+        ArrayList FailureUsers { get; }             // This should really be a Set but sets are not available in .NET 1.1
 		DateTime LastModificationDate { get; }
 		int LastChangeNumber { get; }
 		IntegrationSummary LastIntegration { get; }

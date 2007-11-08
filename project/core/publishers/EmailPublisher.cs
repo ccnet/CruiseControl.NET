@@ -175,6 +175,7 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
             string message = CreateMessage(result);
             if (IsRecipientSpecified(to))
             {
+                Log.Info(string.Format("Emailing \"{0}\" to {1}", subject, to));
                 SendMessage(fromAddress, to, replytoAddress, subject, message);
             }
 	    }

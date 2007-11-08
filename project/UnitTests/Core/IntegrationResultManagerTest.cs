@@ -81,6 +81,46 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 	        Assert.AreEqual(BuildCondition.ForceBuild, expected.BuildCondition);
         }
 
+        [Test]
+        public void FailedIntegrationShouldAddModificationUsersToFailedUsers()
+        {
+            IIntegrationResult lastResult = IntegrationResultMother.CreateFailed();
+            lastResult.FailureUsers.Add("user1");
+            ExpectToLoadState(lastResult);
+
+            IIntegrationResult newResult = manager.StartNewIntegration(ModificationExistRequest());
+            Assert.AreEqual(1, newResult.FailureUsers.Count, "Mismatched count of inherited FailureUsers");
+
+            Modification modification = new Modification();
+            modification.UserName = "user";
+            newResult.Modifications = new Modification[] { modification };
+            newResult.Status = IntegrationStatus.Failure;
+            mockStateManager.Expect("SaveState", newResult);
+            manager.FinishIntegration();
+
+            Assert.AreEqual(2, newResult.FailureUsers.Count, "Mismatched count of resulting FailureUsers");
+        }
+
+        [Test]
+        public void FixedIntegrationShouldClearFailedUsers()
+        {
+            IIntegrationResult lastResult = IntegrationResultMother.CreateFailed();
+            lastResult.FailureUsers.Add("user1");
+            ExpectToLoadState(lastResult);
+
+            IIntegrationResult newResult = manager.StartNewIntegration(ModificationExistRequest());
+            Assert.AreEqual(1, newResult.FailureUsers.Count);
+
+            Modification modification = new Modification();
+            modification.UserName = "user";
+            newResult.Modifications = new Modification[] { modification };
+            newResult.Status = IntegrationStatus.Success;
+            mockStateManager.Expect("SaveState", newResult);
+            manager.FinishIntegration();
+
+            Assert.AreEqual(0, newResult.FailureUsers.Count);
+        }
+
 		private void ExpectToLoadState(IIntegrationResult result)
 		{
 			mockStateManager.ExpectAndReturn("HasPreviousState", true, "project");

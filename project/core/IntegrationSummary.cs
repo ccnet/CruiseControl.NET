@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using ThoughtWorks.CruiseControl.Remote;
 
 namespace ThoughtWorks.CruiseControl.Core
@@ -10,6 +11,7 @@ namespace ThoughtWorks.CruiseControl.Core
 		private string label;
 		private string lastSuccessfulIntegrationLabel;
 		private DateTime startTime;
+        private ArrayList failureUsers = new ArrayList();
 
 		public IntegrationSummary(IntegrationStatus status, string label, string lastSuccessfulIntegrationLabel, DateTime startTime)
 		{
@@ -63,5 +65,11 @@ namespace ThoughtWorks.CruiseControl.Core
 		{
 			return label == IntegrationResult.InitialLabel;
 		}
+
+        public ArrayList FailureUsers
+        {
+            get { return failureUsers; }
+            set { failureUsers = value; }
+        }
 	}
 }

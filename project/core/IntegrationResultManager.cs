@@ -68,6 +68,22 @@ namespace ThoughtWorks.CruiseControl.Core
 		{
 			try
 			{
+                // Save users who may have broken integration so we can email them until it's fixed
+                if (currentIntegration.Status == IntegrationStatus.Failure)
+                {
+                    // Build is broken - add any users who contributed modifications to the existing list of users
+                    // who have contributed modifications to failing builds.
+                    foreach (Modification modification in currentIntegration.Modifications)
+                    {
+                        if (!currentIntegration.FailureUsers.Contains(modification.UserName))
+                            currentIntegration.FailureUsers.Add(modification.UserName);
+                    }
+                }
+                else if (currentIntegration.Status == IntegrationStatus.Success)
+                {
+                    // Build is fixed - remove all users who have contributed modifications to failing builds.
+                    currentIntegration.FailureUsers.Clear();
+                }
 				project.StateManager.SaveState(currentIntegration);
 			}
 			catch (Exception ex)
@@ -82,7 +98,9 @@ namespace ThoughtWorks.CruiseControl.Core
 		private static IntegrationSummary ConvertResultIntoSummary(IIntegrationResult integration)
 		{
 			string lastSuccessfulIntegrationLabel = (integration.Succeeded) ? integration.Label : integration.LastSuccessfulIntegrationLabel;
-			return new IntegrationSummary(integration.Status, integration.Label, lastSuccessfulIntegrationLabel, integration.StartTime);
+            IntegrationSummary newSummary = new IntegrationSummary(integration.Status, integration.Label, lastSuccessfulIntegrationLabel, integration.StartTime);
+		    newSummary.FailureUsers = integration.FailureUsers;
+		    return newSummary;
 		}
 	}
 }

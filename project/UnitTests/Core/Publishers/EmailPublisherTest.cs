@@ -168,6 +168,33 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Publishers
             mockGateway.Verify();
         }
 
+        [Test]
+        public void ShouldSendToModifiersAndFailureUsers()
+        {
+            mockGateway.Expect("Send", new MailMessageRecipientValidator(2));
+
+            publisher = new EmailPublisher();
+            publisher.FromAddress = "from@foo.com";
+            publisher.EmailGateway = (EmailGateway)mockGateway.MockInstance;
+
+            publisher.EmailUsers.Add("user1", new EmailUser("user1", null, "user1@foo.com"));
+            publisher.EmailUsers.Add("user2", new EmailUser("user2", null, "user2@foo.com"));
+
+            IntegrationResult result;
+            Modification modification;
+
+            result = IntegrationResultMother.CreateFailed();
+            result.FailureUsers.Add("user1");
+
+            modification = new Modification();
+            modification.UserName = "user2";
+            modification.ModifiedTime = new DateTime(1973, 12, 24, 2, 30, 00);
+            result.Modifications = new Modification[] { modification };
+
+            publisher.Run(result);
+            mockGateway.Verify();
+        }
+
         private static IntegrationResult CreateIntegrationResult(IntegrationStatus current, IntegrationStatus last)
 		{
 			IntegrationResult result = IntegrationResultMother.Create(current, last, new DateTime(1980, 1, 1));

@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using NUnit.Framework;
 using ThoughtWorks.CruiseControl.Core;
 using ThoughtWorks.CruiseControl.Core.Tasks;
@@ -167,8 +168,9 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 			result.ArtifactDirectory = @"c:\artifactdir\";
 			result.StartTime = new DateTime(2005,06,06,08,45,00);
 			result.ProjectUrl = "http://localhost/ccnet2";
+            result.FailureUsers.Add("user");
 
-			Assert.AreEqual(13, result.IntegrationProperties.Count);
+			Assert.AreEqual(14, result.IntegrationProperties.Count);
 			Assert.AreEqual("project", result.IntegrationProperties["CCNetProject"]);
 			Assert.AreEqual("http://localhost/ccnet2", result.IntegrationProperties["CCNetProjectUrl"]);
 			Assert.AreEqual("label23", result.IntegrationProperties["CCNetLabel"]);
@@ -183,6 +185,10 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 			Assert.AreEqual(IntegrationStatus.Unknown, result.IntegrationProperties["CCNetLastIntegrationStatus"]);
 			Assert.AreEqual("myTrigger", result.IntegrationProperties["CCNetRequestSource"]);
             Assert.AreEqual(@"c:\artifactdir\ListenFile.xml", result.IntegrationProperties["CCNetListenerFile"]);
+            ArrayList failureUsers = result.IntegrationProperties["CCNetFailureUsers"] as ArrayList;
+            Assert.IsNotNull(failureUsers);
+            Assert.AreEqual(1, failureUsers.Count);
+            Assert.AreEqual("user", failureUsers[0]);
 		}
 
 		[Test]

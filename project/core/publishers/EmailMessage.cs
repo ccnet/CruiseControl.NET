@@ -91,6 +91,14 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
 					recipients[user.Address] = user;
 				}
 			}
+            foreach (string username in result.FailureUsers) 
+            {
+                EmailUser user = GetEmailUser(username);
+                if (user != null)
+                {
+                    recipients[user.Address] = user;
+                }
+            }
 		}
 
 		private void AddRecipients(IDictionary recipients, EmailGroup.NotificationType notificationType)

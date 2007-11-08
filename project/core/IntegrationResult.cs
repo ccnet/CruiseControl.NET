@@ -30,6 +30,7 @@ namespace ThoughtWorks.CruiseControl.Core
 
 		// mutable properties
 		private IntegrationStatus status = IntegrationStatus.Unknown;
+        private ArrayList failureUsers = new ArrayList();
 		private string label = InitialLabel;
 		private DateTime startTime;
 		private DateTime endTime;
@@ -49,6 +50,7 @@ namespace ThoughtWorks.CruiseControl.Core
 		    ArtifactDirectory = artifactDirectory;
 			this.request = (lastIntegration.IsInitial()) ? new IntegrationRequest(BuildCondition.ForceBuild, request.Source) : request;
 			this.lastIntegration = lastIntegration;
+		    this.failureUsers = lastIntegration.FailureUsers;
 		}
 
 		public string ProjectName
@@ -353,6 +355,12 @@ namespace ThoughtWorks.CruiseControl.Core
 //			set { lastSuccessfulIntegrationLabel = value; }
 //		}
 //
+
+        public ArrayList FailureUsers {
+            get { return failureUsers; }
+            set { failureUsers = value; }
+        }
+
 		[XmlIgnore]
 		public IntegrationRequest IntegrationRequest
 		{
@@ -377,6 +385,7 @@ namespace ThoughtWorks.CruiseControl.Core
 				fullProps["CCNetBuildTime"] = StartTime.ToString("HH:mm:ss", null);
 				fullProps["CCNetLastIntegrationStatus"] = LastIntegrationStatus;
                 fullProps["CCNetListenerFile"] = ListenerFile;
+			    fullProps["CCNetFailureUsers"] = FailureUsers;
 				if (IntegrationRequest != null) fullProps["CCNetRequestSource"] = IntegrationRequest.Source;
 				return fullProps;
 			}
