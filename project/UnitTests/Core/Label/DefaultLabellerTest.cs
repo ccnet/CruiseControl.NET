@@ -24,7 +24,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Label
 		[Test]
 		public void GenerateInitialLabel()
 		{
-			Assert.AreEqual(DefaultLabeller.INITIAL_LABEL, labeller.Generate(InitialIntegrationResult()));
+			Assert.AreEqual(DefaultLabeller.INITIAL_LABEL.ToString(), labeller.Generate(InitialIntegrationResult()));
 		}
 
 		[Test]
@@ -37,7 +37,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Label
 		public void GenerateInitialPrefixedLabel()
 		{
 			labeller.LabelPrefix = "Sample";
-			Assert.AreEqual("Sample" + DefaultLabeller.INITIAL_LABEL, labeller.Generate(InitialIntegrationResult()));
+			Assert.AreEqual("Sample" + DefaultLabeller.INITIAL_LABEL.ToString(), labeller.Generate(InitialIntegrationResult()));
 		}
 
 		[Test]
@@ -74,6 +74,31 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Label
 			labeller.LabelPrefix = "R3SX";
 			Assert.AreEqual("R3SX24", labeller.Generate(SuccessfulResult("R3SX23")));
 		}
+
+        [Test]
+        public void GenerateInitialFormattedLabel()
+        {
+            labeller.LabelPrefix = "Sample";
+            labeller.LabelFormat = "000";
+            Assert.AreEqual("Sample" + DefaultLabeller.INITIAL_LABEL.ToString("000"), labeller.Generate(InitialIntegrationResult()));
+        }
+
+        [Test]
+        public void GenerateFormattedLabelWhenLastBuildSucceeded()
+        {
+            labeller.LabelPrefix = "Sample";
+            labeller.LabelFormat = "000";
+            Assert.AreEqual("Sample036", labeller.Generate(SuccessfulResult("35")));
+        }
+
+        [Test]
+        public void GenerateFormattedLabelWhenLastBuildFailed()
+        {
+            labeller.LabelPrefix = "Sample";
+            labeller.LabelFormat = "000";
+            Assert.AreEqual("23", labeller.Generate(FailedResult("23")));
+        }
+
 
 		[Test]
 		public void IncrementLabelOnFailedBuildIfIncrementConditionIsAlways()

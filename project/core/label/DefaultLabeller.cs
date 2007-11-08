@@ -7,20 +7,23 @@ namespace ThoughtWorks.CruiseControl.Core.Label
 	[ReflectorType("defaultlabeller")]
 	public class DefaultLabeller : ILabeller
 	{
-		public const string INITIAL_LABEL = "1";
-
-		[ReflectorProperty("prefix", Required=false)]
+		public const int INITIAL_LABEL = 1;
+        
+        [ReflectorProperty("prefix", Required=false)]
 		public string LabelPrefix = string.Empty;
 
 		[ReflectorProperty("incrementOnFailure", Required=false)]
 		public bool IncrementOnFailed = false;
+
+        [ReflectorProperty("labelFormat", Required = false)]
+        public string LabelFormat = "0";
 
 		public virtual string Generate(IIntegrationResult integrationResult)
 		{
 			IntegrationSummary lastIntegration = integrationResult.LastIntegration;
 			if (integrationResult == null || lastIntegration.IsInitial())
 			{
-				return LabelPrefix + INITIAL_LABEL;
+				return LabelPrefix + INITIAL_LABEL.ToString(LabelFormat);
 			}
 			else if (ShouldIncrementLabel(lastIntegration))
 			{
@@ -47,7 +50,7 @@ namespace ThoughtWorks.CruiseControl.Core.Label
 			string numericLabel = Regex.Replace(label, @".*?(\d+$)", "$1");
 			int newLabel = int.Parse(numericLabel);
 			newLabel++;
-			return newLabel.ToString();
+			return newLabel.ToString(LabelFormat);
 		}
 	}
 }
