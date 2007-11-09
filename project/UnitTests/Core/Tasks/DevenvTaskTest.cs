@@ -119,7 +119,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 			ProcessResult processResult = new ProcessResult("output", "error", 0, false);
 			mockProcessExecutor.ExpectAndReturn("Execute", processResult, constraint);
 			task.Executable = DEVENV_PATH;
-			task.SolutionFile = "mySolution.sln";
+			task.SolutionFile = "\"mySolution.sln\"";
 			task.Configuration = "Debug";
 
 			task.Run(new IntegrationResult());
@@ -127,7 +127,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 			ProcessInfo info = (ProcessInfo) constraint.Parameter;
 			Assert.AreEqual(DEVENV_PATH, info.FileName);
 			Assert.AreEqual(DevenvTask.DEFAULT_BUILD_TIMEOUT*1000, info.TimeOut);
-			CustomAssertion.AssertStartsWith("mySolution.sln /rebuild Debug", info.Arguments);
+            CustomAssertion.AssertStartsWith("\"mySolution.sln\" /rebuild \"Debug\"", info.Arguments);
 		}
 
 		[Test]
@@ -138,7 +138,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 			mockProcessExecutor.ExpectAndReturn("Execute", processResult, constraint);
 			task.Executable = DEVENV_PATH;
 			task.SolutionFile = "mySolution.sln";
-			task.Configuration = "Debug";
+			task.Configuration = "\"Debug\"";
 			task.Project = "myProject";
 
 			task.Run(new IntegrationResult());
@@ -146,7 +146,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 			ProcessInfo info = (ProcessInfo) constraint.Parameter;
 			Assert.AreEqual(DEVENV_PATH, info.FileName);
 			Assert.AreEqual(DevenvTask.DEFAULT_BUILD_TIMEOUT*1000, info.TimeOut);
-			CustomAssertion.AssertStartsWith("mySolution.sln /rebuild Debug /project myProject", info.Arguments);
+            CustomAssertion.AssertStartsWith("\"mySolution.sln\" /rebuild \"Debug\" /project \"myProject\"", info.Arguments);
 		}
 
 		[Test]

@@ -1,5 +1,6 @@
 using System.Collections;
 using System.IO;
+using System.Text;
 using Exortech.NetReflector;
 using ThoughtWorks.CruiseControl.Core.Util;
 
@@ -76,7 +77,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 		public virtual void Run(IIntegrationResult result)
 		{
             Util.ListenerFile.WriteInfo(result.ListenerFile,
-                string.Format("Executing DevEnv :{0}", Arguments));          
+                string.Format("Executing Devenv :{0}", Arguments));          
                                                                   
 			ProcessResult processResult = AttemptToExecute(result);
 			result.AddTaskResult(new DevenvTaskResult(processResult));
@@ -120,15 +121,30 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 		private string Arguments
 		{
 			get 
-			{ 
-				if (! StringUtil.IsBlank(Project))
-				{
-					return string.Format("{0} /{1} {2} /project {3}", SolutionFile, BuildType, Configuration, Project); 
-				}
-				else
-				{
-					return string.Format("{0} /{1} {2}", SolutionFile, BuildType, Configuration); 
-				}
+			{
+                StringBuilder text = new StringBuilder();
+
+                if (SolutionFile.StartsWith("\""))
+                    text.Append(SolutionFile);
+                else
+                    text.AppendFormat("\"{0}\"", SolutionFile);
+
+                text.AppendFormat(" /{0}", BuildType);
+
+                if (Configuration.StartsWith("\""))
+                    text.AppendFormat(" {0}", Configuration);
+                else
+                    text.AppendFormat(" \"{0}\"", Configuration);
+
+                if (!StringUtil.IsBlank(Project))
+                {
+                    if (Project.StartsWith("\""))
+                        text.AppendFormat(" /project {0}", Project);
+                    else
+                        text.AppendFormat(" /project \"{0}\"", Project);
+                }
+
+			    return text.ToString();
 			}
 		}
 	}
