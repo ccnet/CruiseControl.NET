@@ -31,6 +31,12 @@ namespace ThoughtWorks.CruiseControl.Core
 				Log.Warning(ArgumentParser.Usage);
 				return;
 			}
+
+            if (parser.ValidateConfigOnly)
+            {
+                serverFactory.Create(false, parser.ConfigFile);
+                return;
+            }
 			LaunchServer();
 		}
 

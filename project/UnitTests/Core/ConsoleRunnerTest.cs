@@ -69,6 +69,19 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 			new ConsoleRunner(parser, (ICruiseServerFactory)mockCruiseServerFactory.MockInstance).Run();
 
 			mockCruiseServer.Verify();
-		}	
-	}
+		}
+
+        [Test]
+        public void ValidateConfigFileShouldNotStartServer()
+        {
+            ArgumentParser parser = new ArgumentParser(new string[] { "-validate" });
+            Mock mockCruiseServer = new DynamicMock(typeof(ICruiseServer));
+            Mock mockCruiseServerFactory = new DynamicMock(typeof(ICruiseServerFactory));
+            mockCruiseServerFactory.ExpectAndReturn("Create", mockCruiseServer.MockInstance, false, parser.ConfigFile);
+
+            new ConsoleRunner(parser, (ICruiseServerFactory)mockCruiseServerFactory.MockInstance).Run();
+
+            mockCruiseServer.Verify();
+        }
+    }
 }

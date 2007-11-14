@@ -13,9 +13,10 @@ Options:
   -config:[ccnet.config]
   -remoting:[on/off] default:on
   -project:[projectName]
+  -validate
   -help";
 
-		private string[] validOptions = new string[] {"config", "remoting", "project", "help"};
+		private string[] validOptions = new string[] {"config", "remoting", "project", "validate", "help"};
 		private Hashtable options = new Hashtable();
 		private Regex regex = new Regex("-(?<option>[^:]*)(:(?<value>.*))?");
 
@@ -68,6 +69,11 @@ Options:
 				return (configFile == null) ? DEFAULT_CONFIG_PATH : configFile;
 			}
 		}
+
+	    public bool ValidateConfigOnly
+	    {
+            get { return GetOption("validate") != null; }
+	    }
 
 		public bool ShowHelp
 		{
