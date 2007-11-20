@@ -7,6 +7,7 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
 	public class ForceBuildPublisher : ITask
 	{
 		private readonly ICruiseManagerFactory factory;
+        private string BuildForcerName="BuildForcer";
 
 		public ForceBuildPublisher() : this(new RemoteCruiseManagerFactory())
 		{}
@@ -16,8 +17,16 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
 			this.factory = factory;
 		}
 
-		[ReflectorProperty("project")]
-		public string Project;
+        [ReflectorProperty("project")]
+        public string Project;
+
+
+        [ReflectorProperty("enforcerName", Required = false)]
+        public string EnforcerName
+        {
+            get { return BuildForcerName; }
+            set { BuildForcerName = value; }
+        }
 
 		[ReflectorProperty("serverUri", Required=false)]
 		public string ServerUri = string.Format("tcp://localhost:21234/{0}", RemoteCruiseServer.URI);
@@ -29,7 +38,7 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
 		{
 			if (IntegrationStatus != result.Status) return;
 
-			factory.GetCruiseManager(ServerUri).ForceBuild(Project);
+            factory.GetCruiseManager(ServerUri).ForceBuild(Project, BuildForcerName);
 		}
 	}
 }

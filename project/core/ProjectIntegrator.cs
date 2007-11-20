@@ -76,10 +76,10 @@ namespace ThoughtWorks.CruiseControl.Core
 			}
 		}
 
-		public void ForceBuild()
+		public void ForceBuild(string enforcerName)
 		{
-			Log.Info("Force Build for project: " + project.Name);
-			AddToQueue(new IntegrationRequest(BuildCondition.ForceBuild, "intervalTrigger"));
+			Log.Info(string.Format("{0} forced Build for project: {1}", enforcerName, project.Name));
+			AddToQueue(new IntegrationRequest(BuildCondition.ForceBuild, enforcerName));
 			Start();
 		}
 

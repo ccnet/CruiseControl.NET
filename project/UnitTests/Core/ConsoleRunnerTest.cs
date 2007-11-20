@@ -46,8 +46,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 		{
 			ArgumentParser parser = new ArgumentParser(new string[] { "-project:test" });
 			Mock mockCruiseServer = new DynamicMock(typeof(ICruiseServer));
-			mockCruiseServer.Expect("ForceBuild", "test");
-			mockCruiseServer.Expect("WaitForExit","test");
+            mockCruiseServer.Expect("ForceBuild", "test", "Forcing build on start");
+            mockCruiseServer.Expect("WaitForExit", "test");
 			Mock mockCruiseServerFactory = new DynamicMock(typeof(ICruiseServerFactory));
 			mockCruiseServerFactory.ExpectAndReturn("Create", mockCruiseServer.MockInstance, parser.UseRemoting, parser.ConfigFile);
 

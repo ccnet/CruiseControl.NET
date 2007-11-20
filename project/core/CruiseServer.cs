@@ -122,9 +122,9 @@ namespace ThoughtWorks.CruiseControl.Core
 			return integrationQueueManager.GetProjectStatuses();
 		}
 
-		public void ForceBuild(string projectName)
+		public void ForceBuild(string projectName, string enforcerName)
 		{
-			integrationQueueManager.ForceBuild(projectName);
+			integrationQueueManager.ForceBuild(projectName,enforcerName);
 		}
 
 		public void WaitForExit(string projectName)

@@ -77,9 +77,9 @@ namespace ThoughtWorks.CruiseControl.Core
 			return integrator;
 		}
 
-		public void ForceBuild(string projectName)
+		public void ForceBuild(string projectName, string enforcerName)
 		{
-			GetIntegrator(projectName).ForceBuild();
+            GetIntegrator(projectName).ForceBuild(enforcerName);
 		}
 
 		public void WaitForExit(string projectName)

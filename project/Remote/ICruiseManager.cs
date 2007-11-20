@@ -14,8 +14,9 @@ namespace ThoughtWorks.CruiseControl.Remote
 		/// <summary>
 		/// Forces a build for the named project.
 		/// </summary>
-		/// <param name="projectName"></param>
-		void ForceBuild(string projectName);
+		/// <param name="projectName">project to force</param>
+        /// <param name="enforcerName">ID of trigger/action forcing the build</param>
+		void ForceBuild(string projectName, string enforcerName );
 		void Request(string projectName, IntegrationRequest integrationRequest);
 		void Start(string project);
 		void Stop(string project);

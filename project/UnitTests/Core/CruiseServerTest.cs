@@ -233,9 +233,9 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 
 			server.Start();
 
-			integratorMock1.Expect("ForceBuild");
+            integratorMock1.Expect("ForceBuild", "BuildForcer");
 
-			server.ForceBuild("Project 1");
+			server.ForceBuild("Project 1","BuildForcer");
 
 			VerifyAll();
 		}
@@ -243,7 +243,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 		[Test, ExpectedException(typeof (NoSuchProjectException))]
 		public void AttemptToForceBuildOnProjectThatDoesNotExist()
 		{
-			server.ForceBuild("foo");
+            server.ForceBuild("foo", "BuildForcer");
 		}
 
 		[Test]

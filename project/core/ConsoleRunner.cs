@@ -62,7 +62,7 @@ namespace ThoughtWorks.CruiseControl.Core
 					}
 					else
 					{
-						server.ForceBuild(parser.Project);
+						server.ForceBuild(parser.Project,"Forcing build on start");
 						server.WaitForExit(parser.Project);
 					}
 				}

@@ -112,7 +112,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 			}
 			else if (request.FindParameterStartingWith("forcebuild") != string.Empty)
 			{
-				farmService.ForceBuild(ProjectSpecifier(request));
+				farmService.ForceBuild(ProjectSpecifier(request),"Dashboard");
 				return string.Format("Build successfully forced for {0}", SelectedProject(request));
 			}
 			else

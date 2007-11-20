@@ -312,9 +312,9 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.ServerConnection
 
 			configurationMock.ExpectAndReturn("Servers", servers);
 			cruiseManagerFactoryMock.ExpectAndReturn("GetCruiseManager", cruiseManagerMock.MockInstance, "http://myurl");
-			cruiseManagerMock.Expect("ForceBuild", "myproject");
+			cruiseManagerMock.Expect("ForceBuild", "myproject","BuildForcer");
 
-			managerWrapper.ForceBuild(projectSpecifier);
+            managerWrapper.ForceBuild(projectSpecifier, "BuildForcer");
 
 			VerifyAll();
 		}

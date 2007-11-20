@@ -20,7 +20,8 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Plugins.FarmReport
 
 		public IResponse Execute(ICruiseRequest request)
 		{
-			farmService.ForceBuild(request.ProjectSpecifier);
+            string EnforcerName = "BuildForcer";
+            farmService.ForceBuild(request.ProjectSpecifier, EnforcerName);
 
 			StringWriter stringWriter = new StringWriter();
 			XmlTextWriter xmlWriter = new XmlTextWriter(stringWriter);

@@ -34,7 +34,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Publishers
 		public void ShouldReqestForceBuildOnRemoteCruiseServer()
 		{
 			IMock mockCruiseManager = new RemotingMock(typeof (ICruiseManager));
-			mockCruiseManager.Expect("ForceBuild", "project");
+            mockCruiseManager.Expect("ForceBuild", "project", "BuildForcer");
 			IMock mockManagerFactory = new DynamicMock(typeof (ICruiseManagerFactory));
 			mockManagerFactory.ExpectAndReturn("GetCruiseManager", mockCruiseManager.MockInstance, "tcp://localhost:21234/CruiseManager.rem");
 

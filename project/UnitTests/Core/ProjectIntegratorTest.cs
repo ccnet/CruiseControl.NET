@@ -217,7 +217,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 			projectMock.ExpectAndSignal("NotifySleepingState");
 			projectMock.ExpectNoCall("Integrate", typeof (IntegrationRequest));
 			integrationTriggerMock.ExpectAndSignal("IntegrationCompleted");
-			integrator.ForceBuild();
+            integrator.ForceBuild("BuildForcer");
 			integrationTriggerMock.WaitForSignal();
 			projectMock.WaitForSignal();
 			VerifyAll();

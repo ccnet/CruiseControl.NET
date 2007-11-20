@@ -46,7 +46,8 @@ namespace ThoughtWorks.CruiseControl.Core
 		/// For invocation by a force build publisher or having the exe config running a project
 		/// when CC.Net first starts.
 		/// </summary>
-		void ForceBuild();
+        /// <param name="enforcerName">ID of program/person forcing the build</param>
+        void ForceBuild(string enforcerName);
 
 		/// <summary>
 		/// For "Force" requests such as by CCTray or the Web GUI.

@@ -55,9 +55,9 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.ServerConnection
 			GetCruiseManager(projectSpecifier).DeleteProject(projectSpecifier.ProjectName, purgeWorkingDirectory, purgeArtifactDirectory, purgeSourceControlEnvironment);
 		}
 
-		public void ForceBuild(IProjectSpecifier projectSpecifier)
+		public void ForceBuild(IProjectSpecifier projectSpecifier, string enforcerName)
 		{
-			GetCruiseManager(projectSpecifier.ServerSpecifier).ForceBuild(projectSpecifier.ProjectName);
+			GetCruiseManager(projectSpecifier.ServerSpecifier).ForceBuild(projectSpecifier.ProjectName,enforcerName);
 		}
 
 		private string GetServerUrl(IServerSpecifier serverSpecifier)

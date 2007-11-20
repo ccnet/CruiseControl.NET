@@ -22,9 +22,9 @@ namespace ThoughtWorks.CruiseControl.Core
 			return cruiseServer.GetProjectStatus();
 		}
 
-		public void ForceBuild(string project)
+		public void ForceBuild(string project, string enforcerName)
 		{
-			cruiseServer.ForceBuild(project);
+			cruiseServer.ForceBuild(project,enforcerName);
 		}
 
 		public void Request(string projectName, IntegrationRequest integrationRequest)
