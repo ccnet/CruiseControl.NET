@@ -12,7 +12,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			ArrayList mods = new ArrayList();
 			ArrayList filemods = new ArrayList();
 
-			string line = null;
+			string line;
 
 			while( (line = input.ReadLine()) != null )
 			{

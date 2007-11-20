@@ -1,11 +1,4 @@
-using System;
-using System.Collections;
-using System.Globalization;
-using System.IO;
-using System.Text;
-using System.Text.RegularExpressions;
 using Exortech.NetReflector;
-using ThoughtWorks.CruiseControl.Core.Config;
 using ThoughtWorks.CruiseControl.Core.Util;
 
 namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
@@ -20,16 +13,14 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 		public const string DATEFORMAT = "dd/MM/yyyy HH:mm:ss";
 		public static string FORMAT = DELIMITER + "{item}" + DELIMITER + "{owner}" + DELIMITER + "{date}" + DELIMITER + "{changeset}";
 
-		private readonly IFileSystem fileSystem;
 
-		public PlasticSCM() : this(new PlasticSCMHistoryParser(), new ProcessExecutor(), new SystemIoFileSystem())
+		public PlasticSCM() : this(new PlasticSCMHistoryParser(), new ProcessExecutor())
 		{
 		}
 
-		public PlasticSCM(IHistoryParser parser, ProcessExecutor executor, IFileSystem fileSystem)
+		public PlasticSCM(IHistoryParser parser, ProcessExecutor executor)
 			: base(parser, executor)
 		{
-			this.fileSystem = fileSystem;
 		}
 
 		[ReflectorProperty("executable", Required=false)]
@@ -67,15 +58,9 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 		{
 			if (LabelOnSuccess && result.Succeeded)
 			{
-				try
-				{
-					//The label could exist or the label process find private elements
-					Execute(CreateLabelProcessInfo(result));
-					Execute(LabelProcessInfo(result));
-				}
-				catch(Exception)
-				{
-				}
+                //The label could exist or the label process find private elements
+                Execute(CreateLabelProcessInfo(result));
+                Execute(LabelProcessInfo(result));
 			}
 		}
 

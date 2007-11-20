@@ -36,7 +36,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 			}
 		}
 
-		private Modification[] GetExpectedModifications ()
+		private static Modification[] GetExpectedModifications ()
 		{
 			Modification[] mod = new Modification[2];
 
