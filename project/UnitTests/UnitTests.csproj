@@ -593,6 +593,8 @@
     <Compile Include="Core\SourceControl\Perforce\ProessP4PurgerTest.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Core\SourceControl\PlasticSCMHistoryTest.cs" />
+    <Compile Include="Core\SourceControl\PlasticSCMTest.cs" />
     <Compile Include="Core\SourceControl\ProcessSourceControlTest.cs">
       <SubType>Code</SubType>
     </Compile>

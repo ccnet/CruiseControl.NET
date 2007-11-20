@@ -556,6 +556,8 @@
     <Compile Include="sourcecontrol\Perforce\ProcessP4Purger.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="sourcecontrol\PlasticSCM.cs" />
+    <Compile Include="sourcecontrol\PlasticSCMHistoryParser.cs" />
     <Compile Include="sourcecontrol\ProcessSourceControl.cs">
       <SubType>Code</SubType>
     </Compile>
