@@ -303,6 +303,18 @@
     <Compile Include="Presentation\AudioPlayer.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Presentation\AudioSettingsControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Presentation\AudioSettingsControl.Designer.cs">
+      <DependentUpon>AudioSettingsControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Presentation\BuildProjectsControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Presentation\BuildProjectsControl.Designer.cs">
+      <DependentUpon>BuildProjectsControl.cs</DependentUpon>
+    </Compile>
     <Compile Include="Presentation\BuildTransitionSoundPlayer.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -317,6 +329,12 @@
     </Compile>
     <Compile Include="Presentation\DetailStringProvider.cs">
       <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Presentation\GeneralSettingsControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Presentation\GeneralSettingsControl.Designer.cs">
+      <DependentUpon>GeneralSettingsControl.cs</DependentUpon>
     </Compile>
     <Compile Include="Presentation\IAudioPlayer.cs">
       <SubType>Code</SubType>
@@ -445,6 +463,18 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="BuildCheckingModifications.ico" />
+    <EmbeddedResource Include="Presentation\AudioSettingsControl.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>AudioSettingsControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Presentation\BuildProjectsControl.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>BuildProjectsControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Presentation\GeneralSettingsControl.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>GeneralSettingsControl.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
