@@ -23,7 +23,22 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 		{
 		}
 
-		[ReflectorProperty("executable", Required=false)]
+        /// <summary>
+        /// Should we automatically obtain updated source from PlasticSCM or not? 
+        /// </summary>
+        /// <remarks>
+        /// Optional, default is not to do so.
+        /// </remarks>
+        [ReflectorProperty("autoGetSource", Required = false)]
+        public bool AutoGetSource = true;
+        
+        /// <summary>
+        /// Name of the PlasticSCM executable.  
+        /// </summary>
+        /// <remarks>
+        /// Optional, defaults to "cm".
+        /// <remarks>
+        [ReflectorProperty("executable", Required=false)]
 		public string Executable = DefaultPlasticExecutable;
 
 		[ReflectorProperty("branch", Required=true)]
@@ -32,10 +47,23 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 		[ReflectorProperty("repository", Required=false)]
 		public string Repository = string.Empty;
 
-		[ReflectorProperty("workingDirectory", Required=true)]
+        /// <summary>
+        /// Pathname of the PlasticSCM working directory, either absolute or relative
+        /// to the project working directory.
+        /// </summary>
+        /// <remarks>
+        /// Optional, defaults to the project working directory.
+        /// <remarks>
+        [ReflectorProperty("workingDirectory", Required = false)]
 		public string WorkingDirectory = string.Empty;
 
-		[ReflectorProperty("labelOnSuccess", Required=false)]
+        /// <summary>
+        /// If set, the source repository will be tagged with the build label upon successful builds.
+        /// </summary>
+        /// <remarks>
+        /// Optional, default is not to tag.
+        /// <remarks>
+        [ReflectorProperty("labelOnSuccess", Required = false)]
 		public bool LabelOnSuccess = false;
 
 		[ReflectorProperty("labelPrefix", Required=false)]
@@ -66,14 +94,17 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 
 		public override void GetSource(IIntegrationResult result)
 		{
-			Execute(GoToBranchProcessInfo(result));
-			Execute(NewGetSourceProcessInfo(result));
+            if (AutoGetSource)
+            {
+                Execute(GoToBranchProcessInfo(result));
+                Execute(NewGetSourceProcessInfo(result));
+            }
 		}
 
 		public ProcessInfo NewGetSourceProcessInfo(IIntegrationResult result)
 		{
 			ProcessArgumentBuilder builder = new ProcessArgumentBuilder();
-			builder.AppendArgument(string.Format("update {0}", WorkingDirectory));
+            builder.AppendArgument(string.Format("update {0}", result.BaseFromWorkingDirectory(WorkingDirectory)));
 			if (Forced)
 			{
 				builder.AppendArgument("--forced");

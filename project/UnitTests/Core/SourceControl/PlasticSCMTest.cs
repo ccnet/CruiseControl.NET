@@ -27,24 +27,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
                 <workingDirectory>c:\workspace</workingDirectory>
 			</sourceControl>";
 
-        [Test]
-        [ExpectedException(typeof(NetReflectorException), @"Missing Xml node (workingDirectory) for required member (ThoughtWorks.CruiseControl.Core.Sourcecontrol.PlasticSCM.WorkingDirectory).")]
-        public void ShouldFailToConfigureWithoutRequiredAttributes1()
-        {
-            const string PLASTICSCM_ERR1_XML =
-                @"<sourceControl type=""plasticscm"" branch=""br:/main"">
-				<repository>mainrep</repository>
-                <forced>true</forced>
-			</sourceControl>";
-
-            PlasticSCM plasticscm = new PlasticSCM();
-            NetReflector.Read(PLASTICSCM_ERR1_XML, plasticscm);
-            Assert.Fail("without all required attributes should fail");
-        }
-
-	    [Test]
         [ExpectedException(typeof(NetReflectorException), @"Missing Xml node (branch) for required member (ThoughtWorks.CruiseControl.Core.Sourcecontrol.PlasticSCM.Branch).")]
-		public void ShouldFailToConfigureWithoutRequiredAttributes2()
+		public void ShouldFailToConfigureWithoutRequiredAttributes()
 		{
             const string PLASTICSCM_ERR2_XML =
                 @"<sourceControl type=""plasticscm"">
