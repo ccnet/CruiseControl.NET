@@ -195,6 +195,36 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Publishers
             mockGateway.Verify();
         }
 
+        [Test]
+        public void ShouldSendFixedMailToFailureUsersWithModificationNotificationSetToFailedAndFixed()
+        {
+            mockGateway.Expect("Send", new MailMessageRecipientValidator(2));
+
+            publisher = new EmailPublisher();
+            publisher.FromAddress = "from@foo.com";
+            publisher.EmailGateway = (EmailGateway)mockGateway.MockInstance;
+            publisher.ModifierNotificationTypes = new EmailGroup.NotificationType[2];
+            publisher.ModifierNotificationTypes[0] = EmailGroup.NotificationType.Failed;
+            publisher.ModifierNotificationTypes[1] = EmailGroup.NotificationType.Fixed;
+
+            publisher.EmailUsers.Add("user1", new EmailUser("user1", null, "user1@foo.com"));
+            publisher.EmailUsers.Add("user2", new EmailUser("user2", null, "user2@foo.com"));
+
+            IntegrationResult result;
+            Modification modification;
+
+            result = IntegrationResultMother.CreateFixed();
+            result.FailureUsers.Add("user1");
+
+            modification = new Modification();
+            modification.UserName = "user2";
+            modification.ModifiedTime = new DateTime(1973, 12, 24, 2, 30, 00);
+            result.Modifications = new Modification[] { modification };
+
+            publisher.Run(result);
+            mockGateway.Verify();
+        }
+
         private static IntegrationResult CreateIntegrationResult(IntegrationStatus current, IntegrationStatus last)
 		{
 			IntegrationResult result = IntegrationResultMother.Create(current, last, new DateTime(1980, 1, 1));
@@ -264,7 +294,9 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Publishers
 			Assert.AreEqual("mailuser", publisher.MailhostUsername);
 			Assert.AreEqual("mailpassword", publisher.MailhostPassword);
 			Assert.AreEqual("ccnet@thoughtworks.com", publisher.FromAddress);
-            Assert.AreEqual(EmailGroup.NotificationType.Failed, publisher.ModifierNotificationType);
+            Assert.AreEqual(2, publisher.ModifierNotificationTypes.Length);
+            Assert.AreEqual(EmailGroup.NotificationType.Failed, publisher.ModifierNotificationTypes[0]);
+            Assert.AreEqual(EmailGroup.NotificationType.Fixed, publisher.ModifierNotificationTypes[1]);
             
             Assert.AreEqual(1, publisher.Converters.Length);
             Assert.AreEqual("$", publisher.Converters[0].Find);
@@ -306,7 +338,9 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Publishers
             Assert.AreEqual(null, publisher.ReplyToAddress);
             Assert.AreEqual(false, publisher.IncludeDetails);
             Assert.AreEqual("ccnet@example.com", publisher.FromAddress);
-            Assert.AreEqual(EmailGroup.NotificationType.Always, publisher.ModifierNotificationType);
+            Assert.AreEqual(1, publisher.ModifierNotificationTypes.Length);
+            Assert.AreEqual(EmailGroup.NotificationType.Always, publisher.ModifierNotificationTypes[0]);
+
             Assert.AreEqual(0, publisher.Converters.Length);
             Assert.AreEqual(0, publisher.EmailUsers.Count);
             Assert.AreEqual(0, publisher.EmailGroups.Count);

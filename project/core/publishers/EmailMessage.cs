@@ -19,62 +19,74 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
 			this.emailPublisher = emailPublisher;
 		}
 
+	        /// <summary>
+        	/// Determine the recipients list for the email.
+        	/// </summary>
+        	/// <remarks>Note: This can be a mildly-heavyweight property to read.</remarks>
 		public string Recipients
 		{
 			get
 			{
 				IDictionary recipients = new SortedList();
+
+                // Add users who are explicity intended to get the message we're going to send.
 				AddRecipients(recipients, EmailGroup.NotificationType.Always);
-
-                if (emailPublisher.ModifierNotificationType == EmailGroup.NotificationType.Always )
-                {
-                    AddModifiers(recipients);
-                }
-
-
 				if (BuildStateChanged())
-				{
 					AddRecipients(recipients, EmailGroup.NotificationType.Change);
-
-                    if (emailPublisher.ModifierNotificationType == EmailGroup.NotificationType.Change )
-                    {
-                        AddModifiers(recipients);
-                    }
-				}
-
 				if (result.Status == IntegrationStatus.Failure)
-				{
                     AddRecipients(recipients, EmailGroup.NotificationType.Failed);
-
-                    if (emailPublisher.ModifierNotificationType == EmailGroup.NotificationType.Failed )
-                    {
-                        AddModifiers(recipients);
-                    }
-                }
-				
                 if (result.Status == IntegrationStatus.Success)
-				{
                     AddRecipients(recipients, EmailGroup.NotificationType.Success);
-
-                    if (emailPublisher.ModifierNotificationType == EmailGroup.NotificationType.Success )
-                    {
-                        AddModifiers(recipients);
-                    }
-                }
-                
-                if (result.Fixed )
-                {
+                if (result.Fixed)
                     AddRecipients(recipients, EmailGroup.NotificationType.Fixed);
-                    if (emailPublisher.ModifierNotificationType == EmailGroup.NotificationType.Fixed )
+
+                // Add users who contributed modifications to this or possibly previous builds.
+                foreach (EmailGroup.NotificationType notificationType in emailPublisher.ModifierNotificationTypes)
+                {
+                    switch (notificationType)
                     {
-                        AddModifiers(recipients);
+                        case EmailGroup.NotificationType.Always:
+                            AddModifiers(recipients);
+                            AddFailureUsers(recipients);
+                            break;
+                        case EmailGroup.NotificationType.Change:
+                            if (BuildStateChanged())
+                            {
+                                AddModifiers(recipients);
+                                AddFailureUsers(recipients);
+                            }
+                            break;
+                        case EmailGroup.NotificationType.Failed:
+                            if (result.Status == IntegrationStatus.Failure)
+                            {
+                                AddModifiers(recipients);
+                                AddFailureUsers(recipients);
+                            }
+                            break;
+                        case EmailGroup.NotificationType.Success:
+                            if (result.Status == IntegrationStatus.Success)
+                            {
+                                AddModifiers(recipients);
+                                AddFailureUsers(recipients);
+                            }
+                            break;
+                        case EmailGroup.NotificationType.Fixed:
+                            if (result.Fixed)
+                            {
+                                AddModifiers(recipients);
+                                AddFailureUsers(recipients);
+                            }
+                            break;
+                        default:
+                            throw new CruiseControlException("Unknown notification type" + notificationType);
                     }
                 }
 
 				StringBuilder buffer = new StringBuilder();
 				foreach (string key in recipients.Keys)
 				{
-					if (buffer.Length > 0) buffer.Append(", ");
+					if (buffer.Length > 0)
+                        buffer.Append(", ");
 					buffer.Append(key);
 				}
 				return buffer.ToString();
@@ -83,14 +95,18 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
 
 		private void AddModifiers(IDictionary recipients)
 		{
-			foreach (Modification modification in result.Modifications)
-			{
-				EmailUser user = GetEmailUser(modification.UserName);
-				if (user != null)
-				{
-					recipients[user.Address] = user;
-				}
-			}
+		    foreach (Modification modification in result.Modifications)
+		    {
+		        EmailUser user = GetEmailUser(modification.UserName);
+		        if (user != null)
+		        {
+		            recipients[user.Address] = user;
+		        }
+		    }
+		}
+
+        private void AddFailureUsers(IDictionary recipients)
+        {
             foreach (string username in result.FailureUsers) 
             {
                 EmailUser user = GetEmailUser(username);

@@ -15,7 +15,10 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Publishers
 @"    	<email from=""ccnet@thoughtworks.com"" mailhost=""smtp.telus.net"" mailport=""26""
                 mailhostUsername=""mailuser"" mailhostPassword=""mailpassword""
                 projectUrl=""http://localhost/ccnet"" includeDetails=""false"">
-            <modifierNotificationType>failed</modifierNotificationType>
+            <modifierNotificationTypes>
+                <NotificationType>failed</NotificationType>
+                <NotificationType>fixed</NotificationType>
+            </modifierNotificationTypes>
     		<users>
     		 	<user name=""buildmaster"" group=""buildmaster"" address=""servid@telus.net""/>
     		 	<user name=""orogers"" group=""developers"" address=""orogers@thoughtworks.com""/>
