@@ -240,5 +240,23 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
             result = new IntegrationResult("project", "c:\\workingDir", @"c:\artifactdir\", IntegrationRequest.NullRequest, expectedSummary);
 			Assert.AreEqual(new IntegrationSummary(IntegrationStatus.Exception, "foo", "foo", DateTime.MinValue), result.LastIntegration);
 		}
+
+        [Test]
+        public void ShouldReturnPreviousLabelAsLastSuccessfulIntegrationLabelIfFailed()
+        {
+            result.AddTaskResult(new ProcessTaskResult(ProcessResultFixture.CreateNonZeroExitCodeResult()));
+            result.LastSuccessfulIntegrationLabel = "1";
+            result.Label = "2";
+            Assert.AreEqual("1", result.LastSuccessfulIntegrationLabel);
+        }
+
+        [Test]
+        public void ShouldReturnCurrentLabelAsLastSuccessfulIntegrationLabelIfSuccessful()
+        {
+            result.AddTaskResult(new ProcessTaskResult(ProcessResultFixture.CreateSuccessfulResult()));
+            result.LastSuccessfulIntegrationLabel = "1";
+            result.Label = "2";
+            Assert.AreEqual("2", result.LastSuccessfulIntegrationLabel);
+        }
 	}
 }

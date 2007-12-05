@@ -345,7 +345,7 @@ namespace ThoughtWorks.CruiseControl.Core
 
 		public string LastSuccessfulIntegrationLabel
 		{
-			get { return lastIntegration.LastSuccessfulIntegrationLabel; }
+            get { return (Succeeded || lastIntegration.LastSuccessfulIntegrationLabel == null) ? Label : lastIntegration.LastSuccessfulIntegrationLabel; }
 			set { lastIntegration = new IntegrationSummary(lastIntegration.Status, lastIntegration.Label, value, lastIntegration.StartTime);} // used only for loading IntegrationResult from state file - to be removed
 		}
 
