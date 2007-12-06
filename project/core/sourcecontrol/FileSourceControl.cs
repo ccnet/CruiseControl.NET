@@ -30,7 +30,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 
 		public Modification[] GetModifications(IIntegrationResult from, IIntegrationResult to)
 		{
-			DirectoryInfo root = new DirectoryInfo(RepositoryRoot);
+			DirectoryInfo root = new DirectoryInfo(from.BaseFromWorkingDirectory(RepositoryRoot));
 			ArrayList modifications = GetMods(root, from.StartTime);
 			return (Modification[]) modifications.ToArray(typeof (Modification));
 		}
