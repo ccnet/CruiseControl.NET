@@ -536,6 +536,7 @@
     <Compile Include="Core\SourceControl\ClearCaseTest.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Core\SourceControl\CommentFilterTest.cs" />
     <Compile Include="Core\SourceControl\CvsHistoryParserTest.cs">
       <SubType>Code</SubType>
     </Compile>
