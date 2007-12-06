@@ -488,6 +488,12 @@
     <Compile Include="sourcecontrol\CvsHistoryParser.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="sourcecontrol\ExternalSourceControl.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="sourcecontrol\ExternalSourceControlHistoryParser.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="sourcecontrol\FileSourceControl.cs">
       <SubType>Code</SubType>
     </Compile>

@@ -546,6 +546,12 @@
     <Compile Include="Core\SourceControl\CvsTest.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Core\SourceControl\ExternalSourceControlHistoryParserTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Core\SourceControl\ExternalSourceControlTest.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Core\SourceControl\FileSourceControlTest.cs">
       <SubType>Code</SubType>
     </Compile>
