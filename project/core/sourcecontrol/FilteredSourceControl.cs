@@ -7,8 +7,8 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 	public class FilteredSourceControl : ISourceControl
 	{
 		private ISourceControl _realScProvider;
-		private IList _inclusionFilters;
-		private IList _exclusionFilters;
+        private IModificationFilter[] _inclusionFilters = new IModificationFilter[0];
+        private IModificationFilter[] _exclusionFilters = new IModificationFilter[0];
 
 		[ReflectorProperty("sourceControlProvider", Required=true, InstanceTypeKey="type")]
 		public ISourceControl SourceControlProvider
@@ -17,32 +17,34 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			set { _realScProvider = value; }
 		}
 
-		[ReflectorCollection("exclusionFilters", InstanceType=typeof (ArrayList), Required=false)]
-		public IList ExclusionFilters
-		{
-			get
-			{
-				if (_exclusionFilters == null)
-					_exclusionFilters = new ArrayList();
-
-				return _exclusionFilters;
-			}
+        /// <summary>
+        /// The list of filters that decide what modifications to exclude.
+        /// </summary>
+        [ReflectorProperty("exclusionFilters", Required = false)]
+        public IModificationFilter[] ExclusionFilters
+        {
+			get { return _exclusionFilters; }
 			set { _exclusionFilters = value; }
 		}
 
-		[ReflectorCollection("inclusionFilters", InstanceType=typeof (ArrayList), Required=false)]
-		public IList InclusionFilters
-		{
-			get
-			{
-				if (_inclusionFilters == null)
-					_inclusionFilters = new ArrayList();
+        /// <summary>
+        /// The list of filters that decide what modifications to include.
+        /// </summary>
+        [ReflectorProperty("inclusionFilters", Required = false)]
+        public IModificationFilter[] InclusionFilters
+        {
+            get { return _inclusionFilters; }
+            set { _inclusionFilters = value; }
+        }
 
-				return _inclusionFilters;
-			}
-			set { _inclusionFilters = value; }
-		}
-
+        /// <summary>
+        /// Get the list of modifications from the inner source control provider and filter it.
+        /// </summary>
+        /// <returns>The filtered modification list.</returns>
+        /// <remarks>
+        /// A modification survives filtering if it is accepted by the inclusion filters and not accepted
+        /// by the exclusion filters.
+        /// </remarks>
 		public Modification[] GetModifications(IIntegrationResult from, IIntegrationResult to)
 		{
 			Modification[] allModifications = _realScProvider.GetModifications(from, to);
@@ -70,12 +72,19 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 
 		public void Initialize(IProject project)
 		{
+            _realScProvider.Initialize(project);
 		}
 
 		public void Purge(IProject project)
 		{
+             _realScProvider.Purge(project);
 		}
 
+		/// <summary>
+		/// Determine if the specified modification should be included.
+		/// </summary>
+		/// <param name="m">The modification to check.</param>
+		/// <returns>True if the modification should be included, false otherwise.</returns>
 		/// <remarks>
 		/// Modification is accepted by default if there isn't any
 		/// inclusion filter or if the modification is accepted by
@@ -83,7 +92,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 		/// </remarks>
 		private bool IsAcceptedByInclusionFilters(Modification m)
 		{
-			if (_inclusionFilters == null || _inclusionFilters.Count == 0)
+			if (_inclusionFilters.Length == 0)
 				return true;
 
 			foreach (IModificationFilter mf in _inclusionFilters)
@@ -95,14 +104,19 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			return false;
 		}
 
-		/// <remarks>
+        /// <summary>
+        /// Determine if the specified modification should be excluded.
+        /// </summary>
+        /// <param name="m">The modification to check.</param>
+        /// <returns>True if the modification should be excluded, false otherwise.</returns>
+        /// <remarks>
 		/// Modification is not accepted if there isn't any exclusion
 		/// filter. Modification is accepted if it is accepted by at 
 		/// least one of the defined exclusion filters.
 		/// </remarks>
 		private bool IsAcceptedByExclusionFilters(Modification m)
 		{
-			if (_exclusionFilters == null || _exclusionFilters.Count == 0)
+            if (_exclusionFilters.Length == 0)
 				return false;
 
 			foreach (IModificationFilter mf in _exclusionFilters)
