@@ -55,6 +55,12 @@ namespace ThoughtWorks.CruiseControl.Remote
         /// <param name="enforcerName">name or id of the person, program that forces the build</param>
 		void ForceBuild(string projectName, string enforcerName);
 
+		
+		/// <summary>
+		/// Aborts the build of the selected project.
+		/// </summary>
+		string AbortBuild(string projectName, string enforcerName);
+		
 		void Request(string projectName, IntegrationRequest request);
 
 		void WaitForExit(string projectName);

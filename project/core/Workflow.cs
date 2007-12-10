@@ -75,7 +75,12 @@ namespace ThoughtWorks.CruiseControl.Core
 		{
 			get { return _currentIntegrationResult.Status; }
 		}
-
+		
+		public string AbortRunningBuild()
+		{
+			throw new NotImplementedException();
+		}
+		
 		public void Purge(bool purgeWorkingDirectory, bool purgeArtifactDirectory, bool purgeSourceControlEnvironment)
 		{
 			return;

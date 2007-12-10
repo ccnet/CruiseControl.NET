@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.IO;
 using System.Text;
@@ -79,7 +80,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
             Util.ListenerFile.WriteInfo(result.ListenerFile,
                 string.Format("Executing Devenv :{0}", Arguments));          
                                                                   
-			ProcessResult processResult = AttemptToExecute(result);
+			ProcessResult processResult = AttemptToExecute(result, ProcessMonitor.GetProcessMonitorByProject(result.ProjectName));
 			result.AddTaskResult(new DevenvTaskResult(processResult));
 			Log.Info("Devenv build complete.  Status: " + result.Status);
 			
@@ -91,7 +92,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
             Util.ListenerFile.RemoveListenerFile(result.ListenerFile);
 		}
 
-        private ProcessResult AttemptToExecute(IIntegrationResult result)
+        private ProcessResult AttemptToExecute(IIntegrationResult result, ProcessMonitor processMonitor)
 		{
             string workingDirectory = result.WorkingDirectory;
 			ProcessInfo processInfo = new ProcessInfo(Executable, Arguments, workingDirectory);
@@ -109,7 +110,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 			Log.Info(string.Format("Starting build: {0} {1}", processInfo.FileName, processInfo.Arguments));
 			try
 			{
-				return executor.Execute(processInfo);
+				return executor.Execute(processInfo, processMonitor);
 			}
 			catch (IOException ex)
 			{

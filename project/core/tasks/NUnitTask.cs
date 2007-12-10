@@ -1,3 +1,4 @@
+using System;
 using System.IO;
 using Exortech.NetReflector;
 using ThoughtWorks.CruiseControl.Core.Util;
@@ -38,7 +39,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 
 			string outputFile = result.BaseFromArtifactsDirectory(OutputFile);
 
-			ProcessResult nunitResult = processExecutor.Execute(NewProcessInfo(outputFile, result));
+			ProcessResult nunitResult = processExecutor.Execute(NewProcessInfo(outputFile, result), ProcessMonitor.GetProcessMonitorByProject(result.ProjectName));
 			result.AddTaskResult(new ProcessTaskResult(nunitResult));
 			if (File.Exists(outputFile))
 			{

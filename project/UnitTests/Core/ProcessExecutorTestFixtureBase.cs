@@ -58,6 +58,26 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 			mockProcessExecutor.ExpectAndThrow("Execute", new IOException(), new IsAnything());
 		}
 
+		protected void ExpectToExecuteWithMonitor(ProcessInfo processInfo, ProcessMonitor monitor)
+		{
+			mockProcessExecutor.ExpectAndReturn("Execute", SuccessfulProcessResult(), new object[2]);
+		}
+
+		protected void ExpectToExecuteAndThrowWithMonitor()
+		{
+			mockProcessExecutor.ExpectAndThrow("Execute", new IOException(), new object[2]);
+		}
+
+		protected void ExpectToExecuteAndReturnWithMonitor(ProcessResult result, ProcessMonitor monitor)
+		{
+			mockProcessExecutor.ExpectAndReturn("Execute", result, new object[2]);
+		}
+
+		protected void ExpectToExecuteArgumentsWithMonitor(string args)
+		{
+			ExpectToExecuteWithMonitor(NewProcessInfo(args), new ProcessMonitor());
+		}
+
 		protected virtual IIntegrationResult IntegrationResult()
 		{
 			return IntegrationResult(testDate);
@@ -92,9 +112,9 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 			return info;
 		}
 
-		protected IIntegrationResult IntegrationResultForWorkingDirectoryTest()
+		protected IntegrationResult IntegrationResultForWorkingDirectoryTest()
 		{
-			return Integration("project", "projectWorkingDirectory", "projectArtifactDirectory");
+			return (IntegrationResult) Integration("project", "projectWorkingDirectory", "projectArtifactDirectory");
 		}
 	}
 }

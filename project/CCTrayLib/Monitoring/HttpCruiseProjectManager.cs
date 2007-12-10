@@ -22,22 +22,47 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
 
 		public void ForceBuild()
 		{
+			PushDashboardButton("ForceBuild");
+		}
+		
+		public void AbortBuild()
+		{
+			PushDashboardButton("AbortBuild");			
+		}
+		
+		public void FixBuild(string fixingUserName)
+		{
+			throw new NotImplementedException("Fix build not currently supported on projects monitored via HTTP");
+		}
+		
+		public void CancelPendingRequest()
+		{
+			throw new NotImplementedException("Cancel pending not currently supported on projects monitored via HTTP");
+		}
+		
+		public string ProjectName
+		{
+			get { return projectName; }
+		}
+
+		public void PushDashboardButton(string buttonName)
+		{
 			Uri webUrl = null;
-			
+
 			// BUG: the projects name needs to be unique across the whole dashboard
 			foreach (ProjectStatus ps in
 				dashboardXmlParser.ExtractAsCruiseServerSnapshot(webRetriever.Get(serverUri)).ProjectStatuses)
 			{
 				if (ps.Name == projectName) webUrl = new Uri(ps.WebURL);
 			}
-			
+
 			string serverName = null;
 			string basePath = null;
 			string[] splitUrl = null;
-			
+
 			if (webUrl != null) splitUrl = webUrl.AbsolutePath.Split('/');
-			
-			if(splitUrl != null)
+
+			if (splitUrl != null)
 			{
 				for (int i = 0; i < splitUrl.Length; i++)
 				{
@@ -54,32 +79,17 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
 
 					Uri dashboardUri = new Uri("http://" + webUrl.Host + basePath + "/server/" + serverName + "/ViewFarmReport.aspx");
 					NameValueCollection input = new NameValueCollection();
-					
-					input.Add("forcebuild", "true");
-					input.Add("forceBuildProject", projectName);
-					input.Add("forceBuildServer", serverName);
-					
+
+					input.Add(buttonName, "true");
+					input.Add("projectName", projectName);
+					input.Add("serverName", serverName);
+
 					webRetriever.Post(dashboardUri, input);
 				}
 				else
 				{
 				}
 			}
-		}
-
-		public void FixBuild(string fixingUserName)
-		{
-			throw new NotImplementedException("Fix build not currently supported on projects monitored via HTTP");
-		}
-
-		public void CancelPendingRequest()
-		{
-			throw new NotImplementedException("Cancel pending not currently supported on projects monitored via HTTP");
-		}
-
-		public string ProjectName
-		{
-			get { return projectName; }
 		}
 	}
 }

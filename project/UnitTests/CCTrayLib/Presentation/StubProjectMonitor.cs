@@ -59,7 +59,12 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Presentation
 		{
 			get { return ProjectStatus.Activity; }
 		}
-
+		
+		public void AbortBuild()
+		{
+			throw new NotImplementedException();
+		}
+		
 		public string LastBuildLabel
 		{
 			get { return ProjectStatus.LastBuildLabel; }

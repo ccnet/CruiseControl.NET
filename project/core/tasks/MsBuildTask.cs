@@ -1,3 +1,4 @@
+using System;
 using System.IO;
 using System.Collections;
 using Exortech.NetReflector;
@@ -8,7 +9,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 	[ReflectorType("msbuild")]
 	public class MsBuildTask : ITask
 	{
-		public const string DefaultExecutable = @"C:\WINDOWS\Microsoft.NET\Framework\v2.0.50727\MSBuild.exe";
+		public const string defaultExecutable = @"C:\WINDOWS\Microsoft.NET\Framework\v2.0.50727\MSBuild.exe";
 		public const string DefaultLogger = "ThoughtWorks.CruiseControl.MsBuild.XmlLogger,ThoughtWorks.CruiseControl.MsBuild.dll";
 		public const string LogFilename = "msbuild-results.xml";
 		public const int DefaultTimeout = 600;
@@ -24,7 +25,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 		}
 
 		[ReflectorProperty("executable", Required=false)]
-		public string Executable = DefaultExecutable;
+		public string Executable = defaultExecutable;
 
 		[ReflectorProperty("workingDirectory", Required=false)]
 		public string WorkingDirectory;
@@ -49,7 +50,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
             Util.ListenerFile.WriteInfo(result.ListenerFile,
                 string.Format("Executing MSBuild :BuildFile: {0}", ProjectFile));    
 
-			ProcessResult processResult = executor.Execute(NewProcessInfo(result));
+			ProcessResult processResult = executor.Execute(NewProcessInfo(result), ProcessMonitor.GetProcessMonitorByProject(result.ProjectName));
 			string buildOutputFile = MsBuildOutputFile(result);
 			if (File.Exists(buildOutputFile))
 			{

@@ -110,10 +110,15 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 				farmService.Start(ProjectSpecifier(request));
 				return string.Format("Starting project {0}", SelectedProject(request));				
 			}
-			else if (request.FindParameterStartingWith("forcebuild") != string.Empty)
+			else if (request.FindParameterStartingWith("ForceBuild") != string.Empty)
 			{
 				farmService.ForceBuild(ProjectSpecifier(request),"Dashboard");
 				return string.Format("Build successfully forced for {0}", SelectedProject(request));
+			}
+			else if (request.FindParameterStartingWith("AbortBuild") != string.Empty)
+			{
+				farmService.AbortBuild(ProjectSpecifier(request), "Dashboard");
+				return string.Format("Abort successfully forced for {0}", SelectedProject(request));
 			}
 			else
 			{
@@ -124,12 +129,12 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 		private DefaultProjectSpecifier ProjectSpecifier(IRequest request)
 		{
 			return new DefaultProjectSpecifier(
-				farmService.GetServerConfiguration(request.GetText("forceBuildServer")), SelectedProject(request));
+				farmService.GetServerConfiguration(request.GetText("serverName")), SelectedProject(request));
 		}
 
 		private static string SelectedProject(IRequest request)
 		{
-			return request.GetText("forceBuildProject");
+			return request.GetText("projectName");
 		}
 	}
 }

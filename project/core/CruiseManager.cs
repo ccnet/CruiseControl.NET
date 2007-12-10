@@ -24,9 +24,14 @@ namespace ThoughtWorks.CruiseControl.Core
 
 		public void ForceBuild(string project, string enforcerName)
 		{
-			cruiseServer.ForceBuild(project,enforcerName);
+			cruiseServer.ForceBuild(project, enforcerName);
 		}
 
+		public string AbortBuild(string project, string enforcerName)
+		{
+			return cruiseServer.AbortBuild(project, enforcerName);
+		}
+		
 		public void Request(string projectName, IntegrationRequest integrationRequest)
 		{
 			cruiseServer.Request(projectName, integrationRequest);

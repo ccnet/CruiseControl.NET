@@ -83,6 +83,16 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard
 			get { return (status.Status == ProjectIntegratorState.Running) ? "Stop" : "Start"; }
 		}
 
+		public string ForceAbortBuildButtonName
+		{
+			get { return (status.Activity != ProjectActivity.Building) ? "ForceBuild" : "AbortBuild"; }
+		}
+
+		public string ForceAbortBuildButtonValue
+		{
+			get { return (status.Activity != ProjectActivity.Building) ? "Force" : "Abort"; }
+		}
+
 		public bool AllowForceBuild
 		{
 			get { return serverSpecifier.AllowForceBuild; }

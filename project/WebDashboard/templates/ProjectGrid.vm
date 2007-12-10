@@ -83,19 +83,18 @@
 			</font>
 		</td>
 		<form method="post">
-			<input type="hidden" name="forcebuild" value="true" />
-			<input type="hidden" name="forceBuildProject" value="$projectGridRow.Name" />
-			<input type="hidden" name="forceBuildServer" value="$projectGridRow.ServerName" />
+      <input type="hidden" name="projectName" value="$projectGridRow.Name" />
+			<input type="hidden" name="serverName" value="$projectGridRow.ServerName" />
 			<td align="Center">
 				<font color="Black">
 				#if ($projectGridRow.allowForceBuild)
-					<input type="submit" name="ForceBuild" value="Force"/>
+					<input type="submit" name="$projectGridRow.ForceAbortBuildButtonName" value="$projectGridRow.ForceAbortBuildButtonValue"/>
 				#end
 				#if ($projectGridRow.AllowStartStopBuild)				
 					<input type="submit" name="$projectGridRow.StartStopButtonName" value="$projectGridRow.StartStopButtonValue"/>
 				#end
 				</font>
-			</td>
+			</td>      
 		</form>
 	</tr>
 

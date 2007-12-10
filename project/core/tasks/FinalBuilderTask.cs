@@ -106,14 +106,14 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 
         [ReflectorProperty("Timeout", Required = false)]
 		public int Timeout = 0;
-	
+
 		public void Run(IIntegrationResult result)
 		{
             Util.ListenerFile.WriteInfo(result.ListenerFile,
                 string.Format("Executing FinalBuilder : BuildFile: {0} ", ProjectFile));
 
 
-            ProcessResult processResult = AttemptToExecute(NewProcessInfoFrom(result));
+            ProcessResult processResult = AttemptToExecute(NewProcessInfoFrom(result), ProcessMonitor.GetProcessMonitorByProject(result.ProjectName));
 			result.AddTaskResult(new ProcessTaskResult(processResult));
 
 			if (processResult.TimedOut)
@@ -128,11 +128,11 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 
 		#region Methods
 
-		protected ProcessResult AttemptToExecute(ProcessInfo info)
+		protected ProcessResult AttemptToExecute(ProcessInfo info, ProcessMonitor processMonitor)
 		{
 			try
 			{
-				return _executor.Execute(info);
+				return _executor.Execute(info, processMonitor);
 			}
 			catch (Exception e)
 			{

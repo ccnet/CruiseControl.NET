@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.IO;
 using System.Text;
@@ -54,7 +55,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
                     string.Format("Executing {0}", Executable));    
 
 
-			ProcessResult processResult = AttemptToExecute(NewProcessInfoFrom(result));
+			ProcessResult processResult = AttemptToExecute(NewProcessInfoFrom(result), ProcessMonitor.GetProcessMonitorByProject(result.ProjectName));
             if (!StringUtil.IsWhitespace(processResult.StandardOutput + processResult.StandardError))
             {
                 // The executable produced some output.  We need to transform it into an XML build report 
@@ -99,11 +100,11 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 			return result.BaseFromWorkingDirectory(ConfiguredBaseDirectory);
 		}
 
-		protected ProcessResult AttemptToExecute(ProcessInfo info)
+		protected ProcessResult AttemptToExecute(ProcessInfo info, ProcessMonitor processMonitor)
 		{
 			try
 			{
-				return executor.Execute(info);
+				return executor.Execute(info, processMonitor);
 			}
 			catch (IOException e)
 			{

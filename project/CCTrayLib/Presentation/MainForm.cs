@@ -24,6 +24,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 		private TrayIcon trayIcon;
 		private ContextMenu projectContextMenu;
 		private MenuItem mnuForce;
+		private MenuItem mnuAbort;
 		private MenuItem mnuWebPage;
 		private MenuItem mnuViewIcons;
 		private MenuItem mnuViewList;
@@ -124,10 +125,18 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 			{
 				controller.BindToQueueTreeView(queueTreeView);
 			}
-
-			btnForceBuild.DataBindings.Add("Enabled", controller, "IsProjectSelected");            
+			CreateDataBindings();
+			btnForceBuild.DataBindings.Add("Enabled", controller, "IsProjectSelected");
 		}
-
+		
+		private void CreateDataBindings()
+		{
+			foreach (IProjectMonitor mon in controller.Monitors)
+			{
+				mon.Polled += new MonitorPolledEventHandler(mon_Polled);
+			}
+		}
+		
 		protected override void OnLoad(EventArgs e)
 		{
 			base.OnLoad (e);
@@ -177,6 +186,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
             this.colLastBuildTime = new System.Windows.Forms.ColumnHeader();
             this.projectContextMenu = new System.Windows.Forms.ContextMenu();
             this.mnuForce = new System.Windows.Forms.MenuItem();
+			this.mnuAbort = new System.Windows.Forms.MenuItem();
             this.mnuWebPage = new System.Windows.Forms.MenuItem();
             this.mnuCancelPending = new System.Windows.Forms.MenuItem();
             this.mnuFixBuild = new System.Windows.Forms.MenuItem();
@@ -272,6 +282,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
             // 
             this.projectContextMenu.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
             this.mnuForce,
+			this.mnuAbort,
             this.mnuWebPage,
             this.mnuCancelPending,
             this.mnuFixBuild});
@@ -282,22 +293,28 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
             this.mnuForce.Index = 0;
             this.mnuForce.Text = "&Force Build";
             this.mnuForce.Click += new System.EventHandler(this.mnuForce_Click);
+			// 
+			// mnuAbort
+			// 
+			this.mnuAbort.Index = 1;
+			this.mnuAbort.Text = "&Abort Build";
+			this.mnuAbort.Click += new System.EventHandler(this.mnuAbort_Click);
             // 
             // mnuWebPage
             // 
-            this.mnuWebPage.Index = 1;
+            this.mnuWebPage.Index = 2;
             this.mnuWebPage.Text = "Display &Web Page";
             this.mnuWebPage.Click += new System.EventHandler(this.mnuWebPage_Click);
             // 
             // mnuCancelPending
             // 
-            this.mnuCancelPending.Index = 2;
+            this.mnuCancelPending.Index = 3;
             this.mnuCancelPending.Text = "&Cancel Pending";
             this.mnuCancelPending.Click += new System.EventHandler(this.mnuCancelPending_Click);
             // 
             // mnuFixBuild
             // 
-            this.mnuFixBuild.Index = 3;
+            this.mnuFixBuild.Index = 4;
             this.mnuFixBuild.Text = "&Volunteer to Fix Build";
             this.mnuFixBuild.Click += new System.EventHandler(this.mnuFixBuild_Click);
             // 
@@ -434,7 +451,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
             // 
             // btnToggleQueueView
             // 
-            this.btnToggleQueueView.FlatStyle = System.Windows.Forms.FlatStyle.System;
+            //this.btnToggleQueueView.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.btnToggleQueueView.Location = new System.Drawing.Point(105, 10);
             this.btnToggleQueueView.Name = "btnToggleQueueView";
             this.btnToggleQueueView.Size = new System.Drawing.Size(85, 23);
@@ -444,13 +461,16 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
             // 
             // btnForceBuild
             // 
-            this.btnForceBuild.FlatStyle = System.Windows.Forms.FlatStyle.System;
+            //this.btnForceBuild.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.btnForceBuild.Location = new System.Drawing.Point(10, 10);
             this.btnForceBuild.Name = "btnForceBuild";
             this.btnForceBuild.Size = new System.Drawing.Size(85, 23);
             this.btnForceBuild.TabIndex = 0;
+			this.btnForceBuild.TextAlign = ContentAlignment.MiddleRight;
+			this.btnForceBuild.ImageAlign = ContentAlignment.MiddleLeft;
             this.btnForceBuild.Text = "Force &Build";
-            this.btnForceBuild.Click += new System.EventHandler(this.btnForceBuild_Click);
+			this.btnForceBuild.Image = ResourceProjectStateIconProvider.GREEN.Icon.ToBitmap();
+			this.btnForceBuild.Click += new System.EventHandler(this.btnForceBuild_Click);
             // 
             // splitterQueueView
             // 
@@ -539,24 +559,33 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 
 		private void lvProjects_SelectedIndexChanged(object sender, EventArgs e)
 		{
-            if (lvProjects.SelectedItems.Count == 0)
-            {
-                controller.SelectedProject = null;
-                tltBuildStage.RemoveAll();
-            }
-            else
-            {
-                controller.SelectedProject = (IProjectMonitor)lvProjects.SelectedItems[0].Tag;
-                tltBuildStage.SetToolTip(this.lvProjects, GetBuildStage());
-            }
+			if (lvProjects.SelectedItems.Count == 0)
+			{
+				controller.SelectedProject = null;
+				tltBuildStage.RemoveAll();
+			}
+			else
+			{
+				controller.SelectedProject = (IProjectMonitor)lvProjects.SelectedItems[0].Tag;
+				tltBuildStage.SetToolTip(this.lvProjects, GetBuildStage());
+				System.Threading.Timer t =
+					new System.Threading.Timer(new System.Threading.TimerCallback(PollProject), controller.SelectedProject, 0,
+						System.Threading.Timeout.Infinite);
+			}
 		}
-
+		
+		private void PollProject(object obj)
+		{
+			IProjectMonitor projectMon = (IProjectMonitor)obj;
+			projectMon.Poll();
+		}
+		
         private string GetBuildStage()
         {
             if (!controller.SelectedProject.Detail.IsConnected)
             { return ""; }
 
-            if (controller.SelectedProject.Detail.CurrentBuildStage.Length == 0)
+			if (controller.SelectedProject.Detail.CurrentBuildStage.Length == 0)
             { return ""; }
 
             
@@ -595,6 +624,11 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 			controller.ForceBuild();
 		}
 
+		private void mnuAbort_Click(object sender, EventArgs e)
+		{
+			controller.AbortBuild();
+		}
+
 		private void mnuCancelPending_Click(object sender, EventArgs e)
 		{
 			controller.CancelPending();
@@ -602,9 +636,16 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 
 		private void btnForceBuild_Click(object sender, EventArgs e)
 		{
-			controller.ForceBuild();
+			if (!controller.IsProjectBuilding)
+			{
+				controller.ForceBuild();
+			}
+			else
+			{
+				controller.AbortBuild();
+			}
 		}
-
+		
 		private void mnuWebPage_Click(object sender, EventArgs e)
 		{
 			controller.DisplayWebPage();
@@ -641,7 +682,8 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 
 		private void projectContextMenu_Popup(object sender, EventArgs e)
 		{
-			mnuForce.Enabled = controller.IsProjectSelected;
+			mnuForce.Visible = controller.IsProjectSelected && !controller.IsProjectBuilding;
+			mnuAbort.Visible = controller.IsProjectSelected && controller.IsProjectBuilding;
 			mnuWebPage.Enabled = controller.IsProjectSelected;
 			mnuCancelPending.Visible = controller.CanCancelPending();
 			mnuFixBuild.Visible = controller.CanFixBuild();
@@ -805,7 +847,36 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 		{
 			btnToggleQueueView.Text = (pnlViewQueues.Visible) ? "Hide &Queues" : "Show &Queues" ;
 		}
-
+		
+		// Updates the buttons of CCTray, after each poll
+		private void mon_Polled(object sender, MonitorPolledEventArgs args)
+		{
+			//is a project selected and connected?
+			if (controller.SelectedProject == null || (controller.SelectedProject.ProjectState == ProjectState.NotConnected))
+			{
+				this.btnForceBuild.Enabled = false;
+			}
+			else
+			{
+				this.btnForceBuild.Enabled = true;
+				//is the polled project the selected one?
+				if (args.ProjectMonitor.Detail.ProjectName.Equals(this.controller.SelectedProject.Detail.ProjectName))
+				{
+					//set AbortBuild
+					if (controller.SelectedProject.Detail.Activity.Equals(Remote.ProjectActivity.Building))
+					{
+						this.btnForceBuild.Text = "&Abort Build";
+						this.btnForceBuild.Image = ResourceProjectStateIconProvider.RED.Icon.ToBitmap();
+					}
+					else
+					{
+						this.btnForceBuild.Text = "&Force Build";
+						this.btnForceBuild.Image = ResourceProjectStateIconProvider.GREEN.Icon.ToBitmap();
+					}
+				}
+			}
+		}
+		
 		// Implements the manual sorting of items by columns.
 		private class ListViewItemComparer : IComparer
 		{

@@ -9,7 +9,7 @@ using ThoughtWorks.CruiseControl.Core.Util;
 namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 {
 	[TestFixture]
-	public class NUnitTaskExecutionTest : IntegrationFixture
+	public class NUnitTaskExecutionTest : ProcessExecutorTestFixtureBase
 	{
 		private const string NUnitConsolePath = @"D:\temp\nunit-console.exe";
 		private string[] TEST_ASSEMBLIES = new string[] {"foo.dll"};
@@ -46,7 +46,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 		    string args = string.Format(@"/xml=""{0}"" /nologo foo.dll", task.OutputFile);
 		    ProcessInfo info = new ProcessInfo(NUnitConsolePath, args, WORKING_DIRECTORY);
 			info.TimeOut = NUnitTask.DefaultTimeout * 1000;
-			executorMock.ExpectAndReturn("Execute", new ProcessResult("", String.Empty, 0, false), info);
+			executorMock.ExpectAndReturn("Execute", new ProcessResult("", String.Empty, 0, false), new object[] { info, new IsAnything() });
 
 			task.Run(result);
 
@@ -57,7 +57,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 		[Test, ExpectedException(typeof(CruiseControlException))]
 		public void ShouldThrowExceptionIfTestsFailed()
 		{
-			executorMock.ExpectAndReturn("Execute", ProcessResultFixture.CreateNonZeroExitCodeResult(), new IsAnything());
+			executorMock.ExpectAndReturn("Execute", ProcessResultFixture.CreateNonZeroExitCodeResult(), new object[] { new IsAnything(), new IsAnything() });
 
 			task = new NUnitTask((ProcessExecutor) executorMock.MockInstance);
 			task.Run(result);

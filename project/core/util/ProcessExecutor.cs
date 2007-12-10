@@ -13,11 +13,39 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 	/// </summary>
 	public class ProcessExecutor
 	{
+		private RunnableProcess p;
+
 		public virtual ProcessResult Execute(ProcessInfo processInfo)
 		{
-			using (RunnableProcess p = new RunnableProcess(processInfo))
+			using (p = new RunnableProcess(processInfo))
 			{
 				return p.Run();
+			}
+		}
+		
+		// BuildTasks receive a ProcessMonitor to monitor their build process
+		public virtual ProcessResult Execute(ProcessInfo processInfo, ProcessMonitor processMonitor)
+		{
+			using(p = new RunnableProcess(processInfo))
+			{
+				processMonitor.MonitorNewProcess(p.process);
+				return p.Run();	
+			}
+		}
+		
+		public void Kill()
+		{
+			Log.Info(string.Format("The process will be killed: {0}", p));
+			try
+			{
+				using(p)
+				{
+					p.Kill();
+				}
+			}
+			catch(InvalidOperationException)
+			{
+				Log.Info(string.Format("The process can't be killed because it got disposed already: {0}", p));
 			}
 		}
 
@@ -41,7 +69,7 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 		{
 			private const int WAIT_FOR_KILLED_PROCESS_TIMEOUT = 5000;
 			private readonly ProcessInfo processInfo;
-			private readonly Process process;
+			public readonly Process process;
 			private readonly ManualResetEvent latch = new ManualResetEvent(false);
 			private bool hasTimedOut = false;
 			private bool disposed = false;
@@ -113,7 +141,7 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 				if (! disposed) latch.Set();
 			}
 
-			private void Kill()
+			public void Kill()
 			{
 				try
 				{

@@ -83,6 +83,12 @@ namespace ThoughtWorks.CruiseControl.Core
 			Start();
 		}
 
+		public string AbortBuild(string enforcerName)
+		{
+			Log.Info(string.Format("{0} aborted the running Build for project: {1}", enforcerName, project.Name));
+			return project.AbortRunningBuild();
+		}
+		
 		public void Request(IntegrationRequest request)
 		{
 			AddToQueue(request);

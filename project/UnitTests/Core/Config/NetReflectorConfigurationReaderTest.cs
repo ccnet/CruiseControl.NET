@@ -155,7 +155,12 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Config
             {
                 get { throw new NotImplementedException(); }
             }
-
+			
+			public string AbortRunningBuild()
+			{
+				throw new NotImplementedException();
+			}
+			
 			public void AddMessage(Message message)
 			{
 				throw new NotImplementedException();

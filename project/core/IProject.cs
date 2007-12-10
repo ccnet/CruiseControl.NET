@@ -91,6 +91,8 @@ namespace ThoughtWorks.CruiseControl.Core
 		
 		ProjectStatus CreateProjectStatus(IProjectIntegrator integrator);
         ProjectActivity CurrentActivity { get; }
+
+		string AbortRunningBuild();
 		
 		void AddMessage(Message message);
 

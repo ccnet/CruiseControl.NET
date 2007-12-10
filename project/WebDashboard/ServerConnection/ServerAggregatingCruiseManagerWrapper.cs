@@ -60,6 +60,11 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.ServerConnection
 			GetCruiseManager(projectSpecifier.ServerSpecifier).ForceBuild(projectSpecifier.ProjectName,enforcerName);
 		}
 
+		public void AbortBuild(IProjectSpecifier projectSpecifier, string enforcerName)
+		{
+			GetCruiseManager(projectSpecifier.ServerSpecifier).AbortBuild(projectSpecifier.ProjectName, enforcerName);
+		}
+
 		private string GetServerUrl(IServerSpecifier serverSpecifier)
 		{
 			foreach (ServerLocation serverLocation in ServerLocations)

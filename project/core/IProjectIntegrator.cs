@@ -48,6 +48,11 @@ namespace ThoughtWorks.CruiseControl.Core
 		/// </summary>
         /// <param name="enforcerName">ID of program/person forcing the build</param>
         void ForceBuild(string enforcerName);
+		
+		/// <summary>
+		/// Aborts the build of the selected project.
+		/// </summary>
+		string AbortBuild(string enforcerName);
 
 		/// <summary>
 		/// For "Force" requests such as by CCTray or the Web GUI.

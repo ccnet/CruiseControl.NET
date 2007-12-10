@@ -11,7 +11,7 @@ using ThoughtWorks.CruiseControl.Remote;
 namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 {
 	[TestFixture]
-	public class DevenvTaskTest : IntegrationFixture
+	public class DevenvTaskTest : ProcessExecutorTestFixtureBase
 	{
 		private const string DEVENV_PATH = @"C:\Program Files\Microsoft Visual Studio .NET 2003\Common7\IDE\devenv.com";
 		private const string SOLUTION_FILE = @"D:\dev\ccnet\ccnet\project\ccnet.sln";
@@ -19,13 +19,12 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 
 		private DevenvTask task;
 		private IMock mockRegistry;
-        private IMock mockProcessExecutor;
 
 		[SetUp]
 		public void Setup()
 		{
 			mockRegistry = new DynamicMock(typeof (IRegistry));
-			mockProcessExecutor = new DynamicMock(typeof (ProcessExecutor));
+			CreateProcessExecutorMock(DEVENV_PATH);
 			task = new DevenvTask((IRegistry) mockRegistry.MockInstance, (ProcessExecutor) mockProcessExecutor.MockInstance);
 		}
 
@@ -74,7 +73,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
         public void DefaultVisualStudioShouldBe2005IfInstalled()
         {
             IMock mockRegistry = new DynamicMock(typeof(IRegistry));
-            IMock mockProcessExecutor = new DynamicMock(typeof(ProcessExecutor));
+           
             DevenvTask task = new DevenvTask((IRegistry)mockRegistry.MockInstance, (ProcessExecutor)mockProcessExecutor.MockInstance);
             mockRegistry.ExpectAndReturn("GetLocalMachineSubKeyValue", @"C:\Program Files\Microsoft Visual Studio 8\Common7\IDE\",
                                          DevenvTask.VS2005_REGISTRY_PATH, DevenvTask.VS_REGISTRY_KEY);
@@ -87,7 +86,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
         public void DefaultVisualStudioShouldBe2003IfNothingNewerInstalled()
 		{
             IMock mockRegistry = new DynamicMock(typeof(IRegistry));
-            IMock mockProcessExecutor = new DynamicMock(typeof(ProcessExecutor));
+            
             DevenvTask task = new DevenvTask((IRegistry)mockRegistry.MockInstance, (ProcessExecutor)mockProcessExecutor.MockInstance);
             mockRegistry.ExpectAndReturn("GetLocalMachineSubKeyValue", null, DevenvTask.VS2005_REGISTRY_PATH, DevenvTask.VS_REGISTRY_KEY);
             mockRegistry.ExpectAndReturn("GetLocalMachineSubKeyValue", @"C:\Program Files\Microsoft Visual Studio .NET 2003\Common7\IDE\",
@@ -101,7 +100,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
         public void DefaultVisualStudioShouldBe2002IfNothingNewerInstalled()
 		{
             IMock mockRegistry = new DynamicMock(typeof(IRegistry));
-            IMock mockProcessExecutor = new DynamicMock(typeof(ProcessExecutor));
+           
             DevenvTask task = new DevenvTask((IRegistry)mockRegistry.MockInstance, (ProcessExecutor)mockProcessExecutor.MockInstance);
             mockRegistry.ExpectAndReturn("GetLocalMachineSubKeyValue", null, DevenvTask.VS2005_REGISTRY_PATH, DevenvTask.VS_REGISTRY_KEY);
             mockRegistry.ExpectAndReturn("GetLocalMachineSubKeyValue", null, DevenvTask.VS2003_REGISTRY_PATH, DevenvTask.VS_REGISTRY_KEY);
@@ -117,12 +116,12 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 		{
 			CollectingConstraint constraint = new CollectingConstraint();
 			ProcessResult processResult = new ProcessResult("output", "error", 0, false);
-			mockProcessExecutor.ExpectAndReturn("Execute", processResult, constraint);
+			mockProcessExecutor.ExpectAndReturn("Execute", processResult, new object[] { constraint, new IsAnything() });
 			task.Executable = DEVENV_PATH;
 			task.SolutionFile = "\"mySolution.sln\"";
 			task.Configuration = "Debug";
 
-			task.Run(new IntegrationResult());
+			task.Run(IntegrationResult());
 
 			ProcessInfo info = (ProcessInfo) constraint.Parameter;
 			Assert.AreEqual(DEVENV_PATH, info.FileName);
@@ -135,13 +134,13 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 		{
 			CollectingConstraint constraint = new CollectingConstraint();
 			ProcessResult processResult = new ProcessResult("output", "error", 0, false);
-			mockProcessExecutor.ExpectAndReturn("Execute", processResult, constraint);
+			mockProcessExecutor.ExpectAndReturn("Execute", processResult, new object[] {constraint, new IsAnything()});
 			task.Executable = DEVENV_PATH;
 			task.SolutionFile = "mySolution.sln";
 			task.Configuration = "\"Debug\"";
 			task.Project = "myProject";
 
-			task.Run(new IntegrationResult());
+			task.Run(IntegrationResult());
 
 			ProcessInfo info = (ProcessInfo) constraint.Parameter;
 			Assert.AreEqual(DEVENV_PATH, info.FileName);
@@ -153,12 +152,12 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 		public void ShouldSetOutputAndIntegrationStatusToSuccessOnSuccessfulBuild()
 		{
 			ProcessResult processResult = new ProcessResult(@"Rebuild All: 10 succeeded, 0 failed, 0 skipped", string.Empty, ProcessResult.SUCCESSFUL_EXIT_CODE, false);
-			mockProcessExecutor.ExpectAndReturn("Execute", processResult, new IsAnything());
+			mockProcessExecutor.ExpectAndReturn("Execute", processResult, new object[] { new IsAnything(), new IsAnything() });
 			task.Executable = DEVENV_PATH;
 			task.SolutionFile = SOLUTION_FILE;
 			task.Configuration = CONFIGURATION;
 
-			IntegrationResult result = new IntegrationResult();
+			IntegrationResult result = (IntegrationResult)IntegrationResult();
 			task.Run(result);
 
 			Assert.AreEqual(IntegrationStatus.Success, result.Status);
@@ -170,7 +169,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 		{
 			ProcessResult processResult = new ProcessResult(@"D:\dev\ccnet\ccnet\project\nosolution.sln could not be found and will not be loaded", string.Empty, 1, false);
 			CollectingConstraint constraint = new CollectingConstraint();
-			mockProcessExecutor.ExpectAndReturn("Execute", processResult, constraint);
+			mockProcessExecutor.ExpectAndReturn("Execute", processResult, new object[] {constraint, new IsAnything()});
 
 			task.Executable = DEVENV_PATH;
 			task.SolutionFile = @"D:\dev\ccnet\ccnet\project\nosolution.sln";
@@ -189,37 +188,37 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 		[Test, ExpectedException(typeof (BuilderException))]
 		public void ShouldThrowBuilderExceptionIfProcessExecutorThrowsAnException()
 		{
-			mockProcessExecutor.ExpectAndThrow("Execute", new IOException(), new IsAnything());
+			mockProcessExecutor.ExpectAndThrow("Execute", new IOException(), new object[] {new IsAnything(), new IsAnything()});
 			task.Executable = DEVENV_PATH + ".some.extra.ext.exe"; // file should not exist
 			task.SolutionFile = @"D:\dev\ccnet\ccnet\project\nosolution.sln";
 			task.Configuration = "Debug";
 
-			task.Run(new IntegrationResult());
+			task.Run(IntegrationResult());
 		}
 
 		[Test, ExpectedException(typeof (BuilderException))]
 		public void ShouldThrowBuilderExceptionIfProcessExecutorThrowsAnExceptionUsingUnkownProject()
 		{
-			mockProcessExecutor.ExpectAndThrow("Execute", new IOException(), new IsAnything());
+			mockProcessExecutor.ExpectAndThrow("Execute", new IOException(), new object[] {new IsAnything(), new IsAnything()});
 			task.Executable = DEVENV_PATH;
 			task.SolutionFile = SOLUTION_FILE;
 			task.Configuration = CONFIGURATION;
 			task.Project = "unknownproject";
 
-			task.Run(new IntegrationResult());
+			task.Run(IntegrationResult());
 		}
 
 		[Test, ExpectedException(typeof (BuilderException))]
 		public void ShouldThrowBuilderExceptionIfProcessTimesOut()
 		{
 			ProcessResult processResult = new ProcessResult(string.Empty, string.Empty, ProcessResult.TIMED_OUT_EXIT_CODE, true);
-			mockProcessExecutor.ExpectAndReturn("Execute", processResult, new IsAnything());
+			mockProcessExecutor.ExpectAndReturn("Execute", processResult, new object[] {new IsAnything(), new IsAnything()});
 			task.BuildTimeoutSeconds = 2;
 			task.Executable = DEVENV_PATH;
 			task.SolutionFile = SOLUTION_FILE;
 			task.Configuration = CONFIGURATION;
 
-			task.Run(new IntegrationResult());
+			task.Run(IntegrationResult());
 		}
 	}
 }

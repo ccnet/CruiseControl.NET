@@ -153,7 +153,12 @@ namespace ThoughtWorks.CruiseControl.Core
 		{
 			get { return currentActivity; }
 		}
-
+		
+		public ProcessMonitor ProcessMonitor
+		{
+			get { return ProcessMonitor.GetProcessMonitorByProject(this.Name); }
+		}
+		
 		public IIntegrationResult CurrentResult
 		{
 			get { return integrationResultManager.CurrentIntegration; }
@@ -184,7 +189,7 @@ namespace ThoughtWorks.CruiseControl.Core
 		{
 			RunTasks(result, tasks);
 		}
-
+		
 		private static void RunTasks(IIntegrationResult result, IList tasksToRun)
 		{
 			foreach (ITask task in tasksToRun)
@@ -193,7 +198,12 @@ namespace ThoughtWorks.CruiseControl.Core
 				if (result.Failed) break;
 			}
 		}
-
+		
+		public string AbortRunningBuild()
+		{
+			return this.ProcessMonitor.KillProcess();
+		}
+		
 		public void PublishResults(IIntegrationResult result)
 		{
 			foreach (ITask publisher in publishers)

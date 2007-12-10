@@ -55,12 +55,12 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 			string optionalProp = ((SourceControlMock)_filteredSourceControl.SourceControlProvider).AnOptionalProperty;
 			Assert.AreEqual(optionalProp, "foo", "Didn't find expected source control provider");
 
-			Assert.AreEqual(_filteredSourceControl.InclusionFilters.Count, 1);
+			Assert.AreEqual(_filteredSourceControl.InclusionFilters.Length, 1);
 
 			string inclusionPattern = ((PathFilter)_filteredSourceControl.InclusionFilters[0]).Pattern;
 			Assert.AreEqual(inclusionPattern, "/sources/**/*.*", "Didn't find expected inclusion path pattern");
 
-			Assert.AreEqual(_filteredSourceControl.ExclusionFilters.Count, 1);
+			Assert.AreEqual(_filteredSourceControl.ExclusionFilters.Length, 1);
 
 			string exclusionPattern = ((PathFilter)_filteredSourceControl.ExclusionFilters[0]).Pattern;
 			Assert.AreEqual(exclusionPattern, "/sources/info/version.cs", "Didn't find expected exclusion path pattern");

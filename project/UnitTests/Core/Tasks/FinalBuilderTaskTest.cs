@@ -17,7 +17,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 	{		
 		private IIntegrationResult _result;
 		private FinalBuilderTask _task;
-		private IMock _mockRegistry;		
+		private IMock _mockRegistry;
 
 		[SetUp]
 		protected void SetUp()
@@ -28,7 +28,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 			_result = IntegrationResult();
 			_result.Label = "1.0";
 			_result.ArtifactDirectory = Path.GetTempPath();
-			_task = new FinalBuilderTask((IRegistry) _mockRegistry.MockInstance, (ProcessExecutor) mockProcessExecutor.MockInstance);			
+			_task = new FinalBuilderTask((IRegistry) _mockRegistry.MockInstance, (ProcessExecutor) mockProcessExecutor.MockInstance);
 		}
 
 		[TearDown]
@@ -42,7 +42,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 		public void BuildCommandLine()
 		{
 			string expectedArgs = @"/B /S /Vvar1=value1;var2=""value 2"" /PC:\Dummy\TestProject.fbz5";
-			ExpectToExecuteArguments(expectedArgs);		
+			ExpectToExecuteArgumentsWithMonitor(expectedArgs);		
 
 			_mockRegistry.ExpectAndReturn("GetLocalMachineSubKeyValue", @"C:\Dummy\FinalBuilder5.exe", @"SOFTWARE\VSoft\FinalBuilder\5.0", "Location");
 
@@ -65,7 +65,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 		{
 			string expectedArgs = @"/P""C:\Dummy\Another Directory\TestProject.fbz5""";
 			DefaultWorkingDirectory = @"C:\Dummy\Another Directory";
-			ExpectToExecuteArguments(expectedArgs);		
+			ExpectToExecuteArgumentsWithMonitor(expectedArgs);		
 			
 			_mockRegistry.ExpectAndReturn("GetLocalMachineSubKeyValue", @"C:\Dummy\FinalBuilder5.exe", @"SOFTWARE\VSoft\FinalBuilder\5.0", "Location");
 							
@@ -182,7 +182,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
         public void TemporaryLogFile()
         {
             string expectedArgs = @"/B /TL /PC:\Dummy\TestProject.fbz5";
-            ExpectToExecuteArguments(expectedArgs);
+            ExpectToExecuteArgumentsWithMonitor(expectedArgs);
 
             _mockRegistry.ExpectAndReturn("GetLocalMachineSubKeyValue", @"C:\Dummy\FinalBuilder5.exe", @"SOFTWARE\VSoft\FinalBuilder\5.0", "Location");
 
@@ -200,7 +200,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
         public void TemporaryLogFileOverridesDontLogToOutput()
         {
             string expectedArgs = @"/B /TL /PC:\Dummy\TestProject.fbz5";
-            ExpectToExecuteArguments(expectedArgs);
+            ExpectToExecuteArgumentsWithMonitor(expectedArgs);
 
             _mockRegistry.ExpectAndReturn("GetLocalMachineSubKeyValue", @"C:\Dummy\FinalBuilder5.exe", @"SOFTWARE\VSoft\FinalBuilder\5.0", "Location");
 

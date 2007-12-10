@@ -11,13 +11,14 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 	public class NAntTask : ITask
 	{
 		public const int DefaultBuildTimeout = 600;
-		public const string DefaultExecutable = "nant.exe";
+		public const string defaultExecutable = "nant.exe";
 		public const string DefaultLogger = "NAnt.Core.XmlLogger";
 		public const bool DefaultNoLogo = true;
 
 		private ProcessExecutor executor;
 
-		public NAntTask() : this(new ProcessExecutor())
+		public NAntTask()
+			: this(new ProcessExecutor())
 		{
 		}
 
@@ -29,10 +30,10 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 		[ReflectorArray("targetList", Required = false)]
 		public string[] Targets = new string[0];
 
-		[ReflectorProperty("executable", Required = false)] 
-		public string Executable = DefaultExecutable;
+		[ReflectorProperty("executable", Required = false)]
+		public string Executable = defaultExecutable;
 
-		[ReflectorProperty("buildFile", Required = false)] 
+		[ReflectorProperty("buildFile", Required = false)]
 		public string BuildFile = string.Empty;
 
 		[ReflectorProperty("baseDirectory", Required = false)]
@@ -51,7 +52,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 		/// Gets and sets the maximum number of seconds that the build may take.  If the build process takes longer than
 		/// this period, it will be killed.  Specify this value as zero to disable process timeouts.
 		/// </summary>
-		[ReflectorProperty("buildTimeoutSeconds", Required = false)] 
+		[ReflectorProperty("buildTimeoutSeconds", Required = false)]
 		public int BuildTimeoutSeconds = DefaultBuildTimeout;
 
 		/// <summary>
@@ -62,12 +63,11 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 		/// <param name="result">For storing build output.</param>
 		public void Run(IIntegrationResult result)
 		{
+			ProcessResult processResult = AttemptExecute(CreateProcessInfo(result), ProcessMonitor.GetProcessMonitorByProject(result.ProjectName));
             Util.ListenerFile.WriteInfo(result.ListenerFile,
                 string.Format("Executing Nant :BuildFile: {0} Targets: {1} ", BuildFile, string.Join(", ", Targets)));
 
-			ProcessResult processResult = AttemptExecute(CreateProcessInfo(result));
 			result.AddTaskResult(new ProcessTaskResult(processResult));
-
 			// is this right?? or should this break the build
 			if (processResult.TimedOut)
 			{
@@ -80,7 +80,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 		private ProcessInfo CreateProcessInfo(IIntegrationResult result)
 		{
 			ProcessInfo info = new ProcessInfo(Executable, CreateArgs(result), BaseDirectory(result));
-			info.TimeOut = BuildTimeoutSeconds*1000;
+			info.TimeOut = BuildTimeoutSeconds * 1000;
 			return info;
 		}
 
@@ -89,11 +89,11 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 			return result.BaseFromWorkingDirectory(ConfiguredBaseDirectory);
 		}
 
-		protected ProcessResult AttemptExecute(ProcessInfo info)
+		protected ProcessResult AttemptExecute(ProcessInfo info, ProcessMonitor processMonitor)
 		{
 			try
 			{
-				return executor.Execute(info);
+				return executor.Execute(info, processMonitor);
 			}
 			catch (IOException e)
 			{
@@ -142,21 +142,21 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 		}
 
 		private string RemoveTrailingSlash(string directory)
-		{			
+		{
 			return StringUtil.IsBlank(directory) ? string.Empty : directory.TrimEnd(Path.DirectorySeparatorChar);
 		}
 
 		private void AppendTargets(ProcessArgumentBuilder buffer)
 		{
 			for (int i = 0; i < Targets.Length; i++)
- 			{
+			{
 				buffer.AppendArgument(Targets[i]);
- 			}
+			}
 		}
 
 		private string SurroundInQuotesIfContainsSpace(string value)
 		{
-			if (! StringUtil.IsBlank(value) && value.IndexOf(' ') >= 0)
+			if (!StringUtil.IsBlank(value) && value.IndexOf(' ') >= 0)
 				return string.Format(@"""{0}""", value);
 			return value;
 		}
@@ -194,7 +194,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 						targets.Add(reader.ReadLine());
 					}
 				}
-				Targets = (string[]) targets.ToArray(typeof (string));
+				Targets = (string[])targets.ToArray(typeof(string));
 			}
 		}
 	}

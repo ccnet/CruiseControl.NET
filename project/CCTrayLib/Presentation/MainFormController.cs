@@ -65,22 +65,63 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 					IsProjectSelectedChanged(this, EventArgs.Empty);
 			}
 		}
-
+		
+		public IProjectMonitor[] Monitors
+		{
+			get
+			{
+				return projectMonitors;
+			}
+		}
+		
 
 
 		public bool IsProjectSelected
 		{
 			get { return selectedProject != null; }
 		}
-
+		
+		public bool IsProjectBuilding
+		{
+			get
+			{
+				if (SelectedProject != null)
+				{
+					if ((SelectedProject.ProjectState == ProjectState.Building) ||
+						(SelectedProject.ProjectState == ProjectState.BrokenAndBuilding))
+					{
+						return true;
+					}
+					else
+					{
+						return false;
+					}
+				}
+				else
+				{
+					return false;
+				}
+			}
+		}
+		
 		public event EventHandler IsProjectSelectedChanged;
 
 		public void ForceBuild()
 		{
 			if (IsProjectSelected && SelectedProject.ProjectState != ProjectState.NotConnected)
+			{
 				SelectedProject.ForceBuild();
+			}
 		}
-
+		
+		public void AbortBuild()
+		{
+			if (IsProjectSelected && SelectedProject.ProjectState != ProjectState.NotConnected)
+			{
+				SelectedProject.AbortBuild();
+			}
+		}
+		
 		public void DisplayWebPage()
 		{
 			if (IsProjectSelected)

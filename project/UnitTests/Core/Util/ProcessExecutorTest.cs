@@ -4,6 +4,7 @@ using System.IO;
 using System.Text;
 using System.Threading;
 using NUnit.Framework;
+using ThoughtWorks.CruiseControl.Core;
 using ThoughtWorks.CruiseControl.Core.Util;
 
 namespace ThoughtWorks.CruiseControl.UnitTests.Core.Util
@@ -129,8 +130,15 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Util
                 tempDirectory.DeleteDirectory();
             }
         }
-        
-        private static void AssertProcessExitsSuccessfully(ProcessResult result)
+
+		[Test]
+		public void KillDisposedProcessShouldNotThrowException()
+		{
+			executor.Execute(new ProcessInfo("cmd.exe", "/C echo hello"), new ProcessMonitor());
+			executor.Kill();
+		}
+
+		private static void AssertProcessExitsSuccessfully(ProcessResult result)
 		{
 			Assert.AreEqual(ProcessResult.SUCCESSFUL_EXIT_CODE, result.ExitCode, "Process did not exit successfully");
 			AssertFalse("process should not return an error", result.Failed);

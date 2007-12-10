@@ -67,6 +67,11 @@ namespace ThoughtWorks.CruiseControl.Core
 			server.ForceBuild(projectName, enforcerName);
 		}
 
+		public string AbortBuild(string projectName, string enforcerName)
+		{
+			return server.AbortBuild(projectName, enforcerName);
+		}
+		
 		public void Request(string projectName, IntegrationRequest request)
 		{
 			server.Request(projectName, request);

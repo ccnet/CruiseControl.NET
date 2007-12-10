@@ -307,6 +307,7 @@
     <Compile Include="NetReflectorProjectSerializer.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="ProcessMonitor.cs" />
     <Compile Include="Project.cs">
       <SubType>Code</SubType>
     </Compile>
