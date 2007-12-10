@@ -161,7 +161,7 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
             if (user == null && emailPublisher.Converters.Length > 0)
             {
                 string email = username;
-                foreach (EmailConverter converter in emailPublisher.Converters)
+                foreach (IEmailConverter converter in emailPublisher.Converters)
                 {
                     email = converter.Convert(email);
                 }

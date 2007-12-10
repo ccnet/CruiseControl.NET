@@ -4,8 +4,8 @@ using Exortech.NetReflector;
 
 namespace ThoughtWorks.CruiseControl.Core.Publishers
 {
-	[ReflectorType("converter")]
-	public class EmailConverter
+    [ReflectorType("regexConverter")]
+	public class EmailRegexConverter : IEmailConverter
 	{
         private string find;
         private string replace;
@@ -31,12 +31,12 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
         }
 
 
-		public EmailConverter()
+		public EmailRegexConverter()
 		{
 		}
 
 
-		public EmailConverter(string find, string replace)
+		public EmailRegexConverter(string find, string replace)
 		{
 			this.find = find;
 			this.replace = replace;

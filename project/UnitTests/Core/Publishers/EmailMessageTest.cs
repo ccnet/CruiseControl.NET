@@ -192,8 +192,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Publishers
         {
             EmailPublisher myPublisher = new EmailPublisher();
 
-            myPublisher.Converters = new EmailConverter[1];
-            myPublisher.Converters[0] = new EmailConverter("^([^@]*)$", @"$1@example.com");
+            myPublisher.Converters = new IEmailConverter[1];
+            myPublisher.Converters[0] = new EmailRegexConverter("^([^@]*)$", @"$1@example.com");
 
             IIntegrationResult result = IntegrationResultMother.CreateFailed();
             Modification modification = new Modification();

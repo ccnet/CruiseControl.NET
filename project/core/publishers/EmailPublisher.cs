@@ -22,7 +22,7 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
         private Hashtable groups = new Hashtable();
         private IMessageBuilder messageBuilder;
         private EmailGroup.NotificationType[] modifierNotificationTypes = { EmailGroup.NotificationType.Always };
-        private EmailConverter[] converters = new EmailConverter[0];
+        private IEmailConverter[] converters = new IEmailConverter[0];
 
 
     	public EmailPublisher() : this(new HtmlLinkMessageBuilder(false))
@@ -157,7 +157,7 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
         /// This way, it is not necessary to include all users on a project in the users tag of the emailpublisher
         /// </summary>
         [ReflectorArray("converters", Required = false)]
-        public EmailConverter[] Converters
+        public IEmailConverter[] Converters
         {
             get { return converters; }
             set { converters = value; }

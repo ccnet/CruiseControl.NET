@@ -33,7 +33,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Publishers
                 <group name=""successdudes"" notification=""success""/>
     		</groups>
 			<converters>
-				<converter find=""$"" replace=""@TheCompany.com""/>
+				<regexConverter find=""$"" replace=""@TheCompany.com""/>
 			</converters>
     	</email>");
 			}

@@ -433,7 +433,7 @@
     <Compile Include="Core\Publishers\BuildPublisherTest.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Core\Publishers\EMailConverterTest.cs" />
+    <Compile Include="Core\Publishers\EMailRegexConverterTest.cs" />
     <Compile Include="Core\Publishers\EmailGroupTest.cs">
       <SubType>Code</SubType>
     </Compile>

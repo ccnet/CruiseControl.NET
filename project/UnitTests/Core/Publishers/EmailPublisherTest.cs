@@ -299,8 +299,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Publishers
             Assert.AreEqual(EmailGroup.NotificationType.Fixed, publisher.ModifierNotificationTypes[1]);
             
             Assert.AreEqual(1, publisher.Converters.Length);
-            Assert.AreEqual("$", publisher.Converters[0].Find);
-            Assert.AreEqual("@TheCompany.com", publisher.Converters[0].Replace);
+            Assert.AreEqual("$", ((EmailRegexConverter) publisher.Converters[0]).Find);
+            Assert.AreEqual("@TheCompany.com", ((EmailRegexConverter) publisher.Converters[0]).Replace);
 
 			Assert.AreEqual(6, publisher.EmailUsers.Count);
 			ArrayList expected = new ArrayList();

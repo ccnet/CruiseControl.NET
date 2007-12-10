@@ -332,7 +332,7 @@
     <Compile Include="publishers\BuildPublisher.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="publishers\EmailConverter.cs" />
+    <Compile Include="publishers\EmailRegexConverter.cs" />
     <Compile Include="publishers\EmailGateway.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -357,6 +357,7 @@
     <Compile Include="publishers\HtmlLinkMessageBuilder.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="publishers\IEmailConverter.cs" />
     <Compile Include="publishers\IMessageBuilder.cs">
       <SubType>Code</SubType>
     </Compile>
