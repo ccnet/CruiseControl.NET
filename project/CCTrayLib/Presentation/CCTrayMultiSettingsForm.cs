@@ -196,12 +196,12 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 		private void btnOK_Click(object sender, EventArgs e)
 		{
 			buildProjectsSettings.PersistProjectTabSettings();
-
+            configuration.Reload();
 			generalSettings.PersistGeneralTabSettings(configuration);
-
+            configuration.Reload();
 			audioSettings.PersistAudioTabSettings(configuration);
 
-			configuration.Persist();
+			configuration.Reload();
 		}
 	}
 }

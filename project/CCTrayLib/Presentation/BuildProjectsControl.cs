@@ -176,6 +176,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 		{
 			CCTrayProject[] newProjectList = BuildProjectListFromListView();
 			configuration.Projects = newProjectList;
+            configuration.Persist();
 		}
 
 	}

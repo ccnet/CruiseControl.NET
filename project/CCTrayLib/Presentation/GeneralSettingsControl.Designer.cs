@@ -156,16 +156,18 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 			this.Controls.Add(this.chkShowBalloons);
 			this.Controls.Add(this.lblFixUserName);
 			this.Controls.Add(this.txtFixUserName);
-			this.Name = "GeneralTab";
+			this.Name = "GeneralSettingsontrol";
 			this.Size = new System.Drawing.Size(667, 289);
+            ((System.ComponentModel.ISupportInitialize)(this.numPollPeriod)).EndInit();
 			this.ResumeLayout(false);
+            this.PerformLayout();
 		}
 
 		#endregion
 
 		private RadioButton rdoWebPage;
 		private RadioButton rdoStatusWindow;
-		private NumericUpDown numPollPeriod;
+		protected NumericUpDown numPollPeriod;
 		private Label lblDoubleClickAction;
 		private Label lblSeconds;
 		private Label lblPoll;
