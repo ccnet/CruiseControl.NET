@@ -12,6 +12,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Configuration
 		public Icons Icons = new Icons();
 		public X10Configuration X10 = new X10Configuration();
         public bool AlwaysOnTop = false;
+		public bool ShowInTaskbar = false;
         public string FixUserName = string.Empty;
 	}
 }

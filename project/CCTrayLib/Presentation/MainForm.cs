@@ -120,6 +120,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 			controller.BindToListView(lvProjects);
 			controller.PopulateQueueImageList(queueIconList);
             controller.SetFormTopMost(this);
+			controller.SetFormShowInTaskbar(this);
 
 			if (queueTreeView.Visible)
 			{
@@ -533,7 +534,6 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
             this.Menu = this.mainMenu;
             this.MinimizeBox = false;
             this.Name = "MainForm";
-            this.ShowInTaskbar = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.Manual;
             this.Text = "CCTray ";
             this.Closing += new System.ComponentModel.CancelEventHandler(this.MainForm_Closing);

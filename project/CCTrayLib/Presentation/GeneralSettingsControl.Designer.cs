@@ -38,6 +38,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 			this.lblPoll = new System.Windows.Forms.Label();
 			this.chkAlwaysOnTop = new System.Windows.Forms.CheckBox();
 			this.chkShowBalloons = new System.Windows.Forms.CheckBox();
+			this.chkShowInTaskbar = new System.Windows.Forms.CheckBox();
 			this.lblFixUserName = new System.Windows.Forms.Label();
 			this.txtFixUserName = new System.Windows.Forms.TextBox();
 			((System.ComponentModel.ISupportInitialize)(this.numPollPeriod)).BeginInit();
@@ -48,7 +49,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 			this.chkAlwaysOnTop.AutoSize = true;
 			this.chkAlwaysOnTop.Location = new System.Drawing.Point(270, 8);
 			this.chkAlwaysOnTop.Name = "chkAlwaysOnTop";
-			this.chkAlwaysOnTop.Size = new System.Drawing.Size(98, 17);
+			this.chkAlwaysOnTop.Size = new System.Drawing.Size(248, 24);
 			this.chkAlwaysOnTop.TabIndex = 14;
 			this.chkAlwaysOnTop.Text = "Always On Top";
 			this.chkAlwaysOnTop.UseVisualStyleBackColor = true;
@@ -110,6 +111,15 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 			this.chkShowBalloons.TabIndex = 7;
 			this.chkShowBalloons.Text = "Show balloon notifications";
 			// 
+			// chkShowInTaskbar
+			// 
+			this.chkShowInTaskbar.FlatStyle = System.Windows.Forms.FlatStyle.System;
+			this.chkShowInTaskbar.Location = new System.Drawing.Point(540, 8);
+			this.chkShowInTaskbar.Name = "chkShowInTaskbar";
+			this.chkShowInTaskbar.Size = new System.Drawing.Size(248, 24);
+			this.chkShowInTaskbar.TabIndex = 7;
+			this.chkShowInTaskbar.Text = "Show in Taskbar";
+			// 
 			// lblFixUserName
 			// 
 			this.lblFixUserName.AutoSize = true;
@@ -154,9 +164,10 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 			this.Controls.Add(this.lblPoll);
 			this.Controls.Add(this.chkAlwaysOnTop);
 			this.Controls.Add(this.chkShowBalloons);
+			this.Controls.Add(this.chkShowInTaskbar);
 			this.Controls.Add(this.lblFixUserName);
 			this.Controls.Add(this.txtFixUserName);
-			this.Name = "GeneralSettingsontrol";
+			this.Name = "GeneralSettingsControl";
 			this.Size = new System.Drawing.Size(667, 289);
             ((System.ComponentModel.ISupportInitialize)(this.numPollPeriod)).EndInit();
 			this.ResumeLayout(false);
@@ -173,6 +184,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 		private Label lblPoll;
 		private CheckBox chkAlwaysOnTop;
 		private CheckBox chkShowBalloons;
+		private CheckBox chkShowInTaskbar;
 		private Label lblFixUserName;
 		private TextBox txtFixUserName;
 	}

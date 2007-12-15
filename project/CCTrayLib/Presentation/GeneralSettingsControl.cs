@@ -20,6 +20,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 		{
 			chkShowBalloons.DataBindings.Add("Checked", configuration, "ShouldShowBalloonOnBuildTransition");
 			chkAlwaysOnTop.DataBindings.Add("Checked", configuration, "AlwaysOnTop");
+			chkShowInTaskbar.DataBindings.Add("Checked", configuration, "ShowInTaskbar");
 
 			rdoStatusWindow.Checked = (configuration.TrayIconDoubleClickAction == TrayIconDoubleClickAction.ShowStatusWindow);
 			rdoWebPage.Checked =

@@ -273,6 +273,11 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
             form.TopMost = configuration.AlwaysOnTop;
         }
 
+		public void SetFormShowInTaskbar(Form form)
+		{
+			form.ShowInTaskbar = configuration.ShowInTaskbar;
+		}
+
 		public bool CanFixBuild()
 		{
 			return IsProjectSelected && 

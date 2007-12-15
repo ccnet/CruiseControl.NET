@@ -20,6 +20,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Configuration
 		X10Configuration X10 { get; }
 
         bool AlwaysOnTop { get; set; }
+		bool ShowInTaskbar { get; set; }
         string FixUserName { get; set; }
 
 		void Reload();

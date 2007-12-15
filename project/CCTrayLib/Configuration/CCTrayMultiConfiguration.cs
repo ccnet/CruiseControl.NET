@@ -109,6 +109,11 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Configuration
             set { persistentConfiguration.AlwaysOnTop = value; }
         }
 
+		public bool ShowInTaskbar
+		{
+			get { return persistentConfiguration.ShowInTaskbar; }
+			set { persistentConfiguration.ShowInTaskbar = value; }
+		}
 
         public string FixUserName
         {
