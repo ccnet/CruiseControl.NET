@@ -28,11 +28,11 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 
 			InitializeComponent();
 
-			generalSettings.BindGeneralTabControls(configuration);
+			generalSettings.BindGeneralTabControls(this.configuration);
 
-			buildProjectsSettings.BindListView(configuration);
+			buildProjectsSettings.BindListView(this.configuration);
 
-			audioSettings.BindAudioControls(configuration);
+			audioSettings.BindAudioControls(this.configuration);
 		}
 
 		/// <summary>
@@ -196,12 +196,10 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 		private void btnOK_Click(object sender, EventArgs e)
 		{
 			buildProjectsSettings.PersistProjectTabSettings();
-            configuration.Reload();
 			generalSettings.PersistGeneralTabSettings(configuration);
-            configuration.Reload();
 			audioSettings.PersistAudioTabSettings(configuration);
 
-			configuration.Reload();
+			configuration.Persist();
 		}
 	}
 }

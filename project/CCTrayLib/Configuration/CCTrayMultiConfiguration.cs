@@ -9,8 +9,8 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Configuration
 	public class CCTrayMultiConfiguration : ICCTrayMultiConfiguration
 	{
 		private PersistentConfiguration persistentConfiguration;
-		private ICruiseServerManagerFactory cruiseServerManagerFactory;
-		private ICruiseProjectManagerFactory cruiseProjectManagerFactory;
+		private readonly ICruiseServerManagerFactory cruiseServerManagerFactory;
+		private readonly ICruiseProjectManagerFactory cruiseProjectManagerFactory;
 		private readonly string configFileName;
 
 		public CCTrayMultiConfiguration(ICruiseServerManagerFactory cruiseServerManagerFactory, 
