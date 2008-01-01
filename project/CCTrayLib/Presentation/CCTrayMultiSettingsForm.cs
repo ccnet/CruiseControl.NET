@@ -24,6 +24,8 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 
 		public CCTrayMultiSettingsForm(ICCTrayMultiConfiguration configuration)
 		{
+			// We will clone the existing configuration, so if the user cancels the dialog
+			// our in-memory configuration will still have the old values.
 			this.configuration = configuration.Clone();
 
 			InitializeComponent();
