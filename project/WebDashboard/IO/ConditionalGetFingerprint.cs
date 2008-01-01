@@ -1,4 +1,5 @@
 using System;
+using ThoughtWorks.CruiseControl.Core.Util;
 
 namespace ThoughtWorks.CruiseControl.WebDashboard.IO
 {
@@ -20,9 +21,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.IO
             if (this == NOT_AVAILABLE || other == NOT_AVAILABLE) return NOT_AVAILABLE;
             if (eTag != other.eTag) throw new UncombinableFingerprintException(eTag, other.eTag);
 
-            DateTime newerModificationTime = (lastModifiedTime > other.lastModifiedTime)
-                                                 ? lastModifiedTime
-                                                 : other.lastModifiedTime;
+            DateTime newerModificationTime = DateUtil.MaxDate(lastModifiedTime, other.lastModifiedTime);
             return new ConditionalGetFingerprint(newerModificationTime, eTag);
         }
 

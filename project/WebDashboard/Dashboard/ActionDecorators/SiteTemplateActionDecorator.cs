@@ -1,5 +1,7 @@
+using System;
 using System.Collections;
 using Objection;
+using ThoughtWorks.CruiseControl.Core.Util;
 using ThoughtWorks.CruiseControl.WebDashboard.IO;
 using ThoughtWorks.CruiseControl.WebDashboard.MVC;
 using ThoughtWorks.CruiseControl.WebDashboard.MVC.View;
@@ -70,6 +72,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Dashboard.ActionDecorators
                     velocityContext["applicationPath"] = string.Empty;
                 else
                     velocityContext["applicationPath"] = request.ApplicationPath;
+            	velocityContext["renderedAt"] = DateUtil.FormatDate(DateTime.Now);
 
                 return velocityViewGenerator.GenerateView(TEMPLATE_NAME, velocityContext);
             }

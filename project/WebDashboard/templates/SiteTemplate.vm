@@ -39,8 +39,11 @@
 				<td height="2" colspan="3"></td>
 			</tr>
 		</table>
-		<table width="100%">
+		<table class="Footer" width="100%">
 			<tr>
+				<td>
+					<p>This page rendered at: $renderedAt</p>
+				</td>
 				<td align="right">
 					<a href="http://www.thoughtworks.com/" border="0"><img src="$applicationPath/images/tw_dev_logo.gif" border="0"/><img src="$applicationPath/images/shim.gif" width="6" border="0" /></a>
 				</td>
