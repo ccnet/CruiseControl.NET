@@ -52,12 +52,26 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Publishers
             Assert.AreEqual(ExpectedRecipients(always, changed, failed, modifier), new EmailMessage(result, publisher).Recipients);
 		}
 
-		[Test]
+        [Test]
 		public void VerifyRecipientListForStillFailingBuild()
 		{
 			IIntegrationResult result = AddModification(IntegrationResultMother.CreateStillFailing());
 			Assert.AreEqual(ExpectedRecipients(always, failed, modifier), new EmailMessage(result, publisher).Recipients);
 		}
+
+        [Test]
+        public void VerifyRecipientListForExceptionBuild()
+        {
+            IIntegrationResult result = AddModification(IntegrationResultMother.CreateExceptioned());
+            Assert.AreEqual(ExpectedRecipients(always, changed, failed, modifier), new EmailMessage(result, publisher).Recipients);
+        }
+
+        [Test]
+        public void VerifyRecipientListForStillExceptionBuild()
+        {
+            IIntegrationResult result = AddModification(IntegrationResultMother.CreateStillFailing());
+            Assert.AreEqual(ExpectedRecipients(always, failed, modifier), new EmailMessage(result, publisher).Recipients);
+        }
 
         [Test]
         public void VerifyRecipientListForSuccessfulBuild()

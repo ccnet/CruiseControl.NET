@@ -33,7 +33,7 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
 				AddRecipients(recipients, EmailGroup.NotificationType.Always);
 				if (BuildStateChanged())
 					AddRecipients(recipients, EmailGroup.NotificationType.Change);
-				if (result.Status == IntegrationStatus.Failure)
+                if ((result.Status == IntegrationStatus.Failure) || (result.Status == IntegrationStatus.Exception))
                     AddRecipients(recipients, EmailGroup.NotificationType.Failed);
                 if (result.Status == IntegrationStatus.Success)
                     AddRecipients(recipients, EmailGroup.NotificationType.Success);
@@ -57,7 +57,7 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
                             }
                             break;
                         case EmailGroup.NotificationType.Failed:
-                            if (result.Status == IntegrationStatus.Failure)
+                            if ((result.Status == IntegrationStatus.Failure) || (result.Status == IntegrationStatus.Exception))
                             {
                                 AddModifiers(recipients);
                                 AddFailureUsers(recipients);

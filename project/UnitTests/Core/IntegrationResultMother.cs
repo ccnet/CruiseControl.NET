@@ -117,12 +117,15 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 
 		public static IntegrationResult CreateExceptioned()
 		{
-			IntegrationResult result = new IntegrationResult();
-			result.Status = IntegrationStatus.Exception;
-			return result;
+            return Create(IntegrationStatus.Exception, IntegrationStatus.Success);
 		}
 
-		public static IntegrationResult CreateInitial()
+        public static IntegrationResult CreateStillExceptioned()
+        {
+            return Create(IntegrationStatus.Exception);
+        }
+
+        public static IntegrationResult CreateInitial()
 		{
 			return IntegrationResult.CreateInitialIntegrationResult(DefaultProjectName, "", "");
 		}
