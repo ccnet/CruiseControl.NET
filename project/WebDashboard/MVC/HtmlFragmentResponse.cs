@@ -20,17 +20,26 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.MVC
 
 		public void Process(HttpResponse response)
 		{
-//            response.Cache.SetLastModified(serverFingerprint.LastModifiedTime);
-//            response.Cache.SetETag("\"" + serverFingerprint.ETag + "\"");
-//            response.Cache.SetMaxAge(TimeSpan.Zero);
-//            response.CacheControl = "private, max-age=0";
-            response.AppendHeader("Last-Modified", serverFingerprint.LastModifiedTime.ToString("r"));
-            response.AppendHeader("ETag", serverFingerprint.ETag);
-            response.AppendHeader("Cache-Control", "private, max-age=0");
-            response.Write(htmlFragment);
+			if (IsClientSideCacheable())
+			{
+				AddHeadersToEnable403Cacheing(response);
+			}
+			response.Write(htmlFragment);
 		}
 
-	    public ConditionalGetFingerprint ServerFingerprint
+		private void AddHeadersToEnable403Cacheing(HttpResponse response)
+		{
+			response.AppendHeader("Last-Modified", serverFingerprint.LastModifiedTime.ToString("r"));
+			response.AppendHeader("ETag", serverFingerprint.ETag);
+			response.AppendHeader("Cache-Control", "private, max-age=0");
+		}
+
+		private bool IsClientSideCacheable()
+		{
+			return !(ConditionalGetFingerprint.NOT_AVAILABLE.Equals(ServerFingerprint));
+		}
+
+		public ConditionalGetFingerprint ServerFingerprint
 	    {
             get { return serverFingerprint; }
 	        set { serverFingerprint = value; }

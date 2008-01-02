@@ -5,7 +5,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.IO
 {
     public class ConditionalGetFingerprint
     {
-        public static ConditionalGetFingerprint NOT_AVAILABLE = new ConditionalGetFingerprint(DateTime.MinValue, "NOT AVAILABLE");
+        public readonly static ConditionalGetFingerprint NOT_AVAILABLE = new ConditionalGetFingerprint(DateTime.MinValue, "\"NOT AVAILABLE\"");
 
         private readonly DateTime lastModifiedTime;
         private readonly string eTag;
