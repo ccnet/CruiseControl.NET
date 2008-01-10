@@ -1,4 +1,3 @@
-using System;
 using System.Collections;
 using System.IO;
 using System.Text;
@@ -10,6 +9,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 	[ReflectorType("devenv")]
 	public class DevenvTask : ITask
 	{
+        public const string VS2008_REGISTRY_PATH = @"Software\Microsoft\VisualStudio\9.0";
         public const string VS2005_REGISTRY_PATH = @"Software\Microsoft\VisualStudio\8.0";
         public const string VS2003_REGISTRY_PATH = @"Software\Microsoft\VisualStudio\7.1";
 		public const string VS2002_REGISTRY_PATH = @"Software\Microsoft\VisualStudio\7.0";
@@ -45,10 +45,18 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 			set { executable = value; }
 		}
 
+        /// <summary>
+        /// Get the name of the Visual Studio executable for the highest version installed on this machine.
+        /// </summary>
+        /// <returns>The fully-qualified pathname of the executable.</returns>
 		private string ReadDevenvExecutableFromRegistry()
 		{
             string registryValue;
-            registryValue = registry.GetLocalMachineSubKeyValue(VS2005_REGISTRY_PATH, VS_REGISTRY_KEY);
+            registryValue = registry.GetLocalMachineSubKeyValue(VS2008_REGISTRY_PATH, VS_REGISTRY_KEY);
+            if (registryValue == null)
+            {
+                registryValue = registry.GetLocalMachineSubKeyValue(VS2005_REGISTRY_PATH, VS_REGISTRY_KEY);
+            }
             if (registryValue == null)
             {
                 registryValue = registry.GetLocalMachineSubKeyValue(VS2003_REGISTRY_PATH, VS_REGISTRY_KEY);
