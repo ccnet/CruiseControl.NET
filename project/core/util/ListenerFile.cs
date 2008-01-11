@@ -13,7 +13,7 @@ namespace ThoughtWorks.CruiseControl.Core.Util
     /// of every task. (Nant, MSBuild, Nunit, DevEnv, ...)
     /// The visualiation stays the same.
     /// </summary>
-    class ListenerFile
+    public class ListenerFile
     {
         /// <summary>
         /// Writes the information to the listenerfile
