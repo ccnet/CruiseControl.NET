@@ -13,6 +13,8 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Configuration
 	// ToDo - testing
 	public class DashboardConfigurationLoader : IDashboardConfiguration
 	{
+        private const string CONFIG_ASSEMBLY_PATTERN = "ccnet.*.plugin.dll";
+
 		private readonly ObjectionNetReflectorInstantiator instantiator;
 		private readonly IPhysicalApplicationPathProvider physicalApplicationPathProvider;
 		private static readonly string DashboardConfigAppSettingKey = "DashboardConfigLocation";
@@ -46,7 +48,7 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Configuration
 
 		private object Load(string xpath)
 		{
-			string dashboardConfig = "";
+			string dashboardConfig;
 			using (StreamReader sr = new StreamReader(CalculateDashboardConfigPath()))
 			{
 				dashboardConfig = sr.ReadToEnd();
@@ -58,10 +60,13 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.Configuration
 
 		private NetReflectorTypeTable GetTypeTable()
 		{
-			NetReflectorTypeTable typeTable = NetReflectorTypeTable.CreateDefault(instantiator);
-			typeTable.Add(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, AppDomain.CurrentDomain.RelativeSearchPath), "ccnet.*.plugin.dll");
-			typeTable.Add(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "ccnet.*.plugin.dll");
-			return typeTable;
+			NetReflectorTypeTable newTypeTable = NetReflectorTypeTable.CreateDefault(instantiator);
+            foreach (string searchPathDir in AppDomain.CurrentDomain.RelativeSearchPath.Split(Path.PathSeparator))
+            {
+                newTypeTable.Add(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, searchPathDir), CONFIG_ASSEMBLY_PATTERN);
+            }
+		    newTypeTable.Add(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), CONFIG_ASSEMBLY_PATTERN);
+			return newTypeTable;
 		}
 
 		private string CalculateDashboardConfigPath()
