@@ -197,17 +197,20 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 		/// <summary>
 		/// Obtain the specified level on the source code. 
 		/// </summary>
-        /// <param name="result">the IntegrationResult containing the timestamp to get; ignored for this implementation</param>
+        /// <param name="result">the IntegrationResult indicating the source level to get</param>
         /// <remarks>
-		/// This implementation always gets the most current version of the source, because AccuRev
-		/// doesn't know how to get an earlier version.
-		/// </remarks>
+        /// If the integration result doesn't specify a last change number, we update to the most-current level,
+        /// because AccuRev doesn't have the ability to update to a specific timestamp, only to a specific transaction.
+        /// </remarks>
 		public override void GetSource(IIntegrationResult result)
 		{
 			if (AutoGetSource)
 			{
+			    string command = "update";
 				PossiblyLogIn(result);
-				RunCommand("update", result);
+                if (result.LastChangeNumber != 0)
+                    command = command + " -t " + result.LastChangeNumber;
+                RunCommand(command, result);
 			}
 		}
 		

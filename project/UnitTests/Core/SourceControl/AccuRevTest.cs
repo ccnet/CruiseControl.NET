@@ -80,5 +80,43 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 			accurev.GetSource(new IntegrationResult());
 			executor.Verify();
 		}
-	}
+
+        [Test]
+        public void ShouldUpdateSourceToHighestKnownModification()
+        {
+            DynamicMock executor = new DynamicMock(typeof(ProcessExecutor));
+            AccuRev accurev = new AccuRev((ProcessExecutor)executor.MockInstance);
+            accurev.AutoGetSource = true;
+
+            ProcessInfo expectedProcessRequest = new ProcessInfo("accurev.exe", "update -t 10");
+            expectedProcessRequest.TimeOut = Timeout.DefaultTimeout.Millis;
+
+            executor.ExpectAndReturn("Execute", new ProcessResult("foo", null, 0, false), expectedProcessRequest);
+            IntegrationResult result = new IntegrationResult();
+            result.Modifications = new Modification[2];
+            result.Modifications[0] = new Modification();
+            result.Modifications[0].ChangeNumber = 5;
+            result.Modifications[1] = new Modification();
+            result.Modifications[1].ChangeNumber = 10;
+
+            accurev.GetSource(result);
+            executor.Verify();
+        }
+
+        [Test]
+        public void ShouldUpdateSourceToCurrentIfNoModifications()
+        {
+            DynamicMock executor = new DynamicMock(typeof(ProcessExecutor));
+            AccuRev accurev = new AccuRev((ProcessExecutor)executor.MockInstance);
+            accurev.AutoGetSource = true;
+
+            ProcessInfo expectedProcessRequest = new ProcessInfo("accurev.exe", "update");  // Note: No "-t whatever"
+            expectedProcessRequest.TimeOut = Timeout.DefaultTimeout.Millis;
+
+            executor.ExpectAndReturn("Execute", new ProcessResult("foo", null, 0, false), expectedProcessRequest);
+            IntegrationResult result = new IntegrationResult();
+            accurev.GetSource(result);
+            executor.Verify();
+        }
+    }
 }
