@@ -153,8 +153,8 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
 
 
         /// <summary>
-        /// Allows regular expressions to be performed on the names of the modifiers for making an email adress
-        /// This way, it is not necessary to include all users on a project in the users tag of the emailpublisher
+        /// Allows transformations to be performed on the names of the modifiers for making an email address.
+        /// This way, it is not necessary to include all users on a project in the users tag of the emailpublisher.
         /// </summary>
         [ReflectorArray("converters", Required = false)]
         public IEmailConverter[] Converters
