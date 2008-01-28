@@ -9,8 +9,8 @@ namespace ThoughtWorks.CruiseControl.Core.Triggers
 	public class FilterTrigger : ITrigger
 	{
 		private readonly DateTimeProvider dtProvider;
-		private TimeSpan startTime;
-		private TimeSpan endTime;
+        private TimeSpan startTime = new TimeSpan(0, 0, 0);
+	    private TimeSpan endTime = new TimeSpan(23, 59, 59);
 		private DayOfWeek[] weekDays = (DayOfWeek[]) DayOfWeek.GetValues(typeof (DayOfWeek));
 
 		public FilterTrigger() : this(new DateTimeProvider())
@@ -25,14 +25,14 @@ namespace ThoughtWorks.CruiseControl.Core.Triggers
 		[ReflectorProperty("trigger", InstanceTypeKey="type")]
 		public ITrigger InnerTrigger;
 
-		[ReflectorProperty("startTime")]
+        [ReflectorProperty("startTime", Required = false)]
 		public string StartTime
 		{
 			get { return startTime.ToString(); }
 			set { startTime = ParseTime(value); }
 		}
 
-		[ReflectorProperty("endTime")]
+		[ReflectorProperty("endTime", Required = false)]
 		public string EndTime
 		{
 			get { return endTime.ToString(); }

@@ -42,7 +42,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Triggers
 			mockTrigger.ExpectNoCall("Fire");
 			mockDateTime.ExpectAndReturn("Now", new DateTime(2004, 12, 1, 10, 30, 0, 0));
 
-			Assert.IsNull(trigger.Fire());
+            Assert.IsNull(trigger.Fire(), "trigger.Fire()");
 		}
 
 		[Test]
@@ -52,7 +52,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Triggers
 			mockDateTime.ExpectAndReturn("Now", new DateTime(2004, 12, 1, 10, 30, 0, 0));
 			trigger.WeekDays = new DayOfWeek[] {};
 
-			Assert.IsNull(trigger.Fire());
+            Assert.IsNull(trigger.Fire(), "trigger.Fire()");
 		}
 
 		[Test]
@@ -61,7 +61,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Triggers
 			mockTrigger.ExpectAndReturn("Fire", ModificationExistRequest());
 			mockDateTime.ExpectAndReturn("Now", new DateTime(2004, 12, 1, 11, 30, 0, 0));
 
-			Assert.AreEqual(ModificationExistRequest(), trigger.Fire());
+            Assert.AreEqual(ModificationExistRequest(), trigger.Fire(), "trigger.Fire()");
 		}
 
 		[Test]
@@ -73,7 +73,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Triggers
 			mockTrigger.ExpectNoCall("Fire");
 			mockDateTime.ExpectAndReturn("Now", new DateTime(2004, 12, 1, 23, 30, 0, 0));
 
-			Assert.IsNull(trigger.Fire());
+            Assert.IsNull(trigger.Fire(), "trigger.Fire()");
 		}
 
 		[Test]
@@ -85,7 +85,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Triggers
 			mockTrigger.ExpectNoCall("Fire");
 			mockDateTime.ExpectAndReturn("Now", new DateTime(2004, 12, 1, 00, 30, 0, 0));
 
-			Assert.IsNull(trigger.Fire());
+            Assert.IsNull(trigger.Fire(), "trigger.Fire()");
 		}
 
 		[Test]
@@ -97,7 +97,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Triggers
 			mockTrigger.ExpectAndReturn("Fire", ModificationExistRequest());
 			mockDateTime.ExpectAndReturn("Now", new DateTime(2004, 12, 1, 11, 30, 0, 0));
 
-			Assert.AreEqual(ModificationExistRequest(), trigger.Fire());
+            Assert.AreEqual(ModificationExistRequest(), trigger.Fire(), "trigger.Fire()");
 		}
 
 		[Test]
@@ -107,8 +107,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Triggers
 			mockDateTime.ExpectAndReturn("Now", new DateTime(2004, 12, 1, 10, 00, 0, 0));
 			mockDateTime.ExpectAndReturn("Now", new DateTime(2004, 12, 1, 11, 00, 0, 0));
 
-			Assert.IsNull(trigger.Fire());
-			Assert.IsNull(trigger.Fire());
+            Assert.IsNull(trigger.Fire(), "trigger.Fire()");
+            Assert.IsNull(trigger.Fire(), "trigger.Fire()");
 		}
 
 		[Test]
@@ -117,7 +117,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Triggers
 			mockTrigger.ExpectAndReturn("Fire", ModificationExistRequest());
 			mockDateTime.ExpectAndReturn("Now", new DateTime(2004, 12, 2, 10, 30, 0, 0));
 
-			Assert.AreEqual(ModificationExistRequest(), trigger.Fire());
+            Assert.AreEqual(ModificationExistRequest(), trigger.Fire(), "trigger.Fire()");
 		}
 
 		[Test]
@@ -132,7 +132,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Triggers
 		{
 			DateTime triggerNextBuildTime = new DateTime(2004, 12, 1, 10, 30, 00);
 			mockTrigger.SetupResult("NextBuild", triggerNextBuildTime);
-			Assert.AreEqual(new DateTime(2004, 12, 1, 11, 00, 00), trigger.NextBuild);
+            Assert.AreEqual(new DateTime(2004, 12, 1, 11, 00, 00), trigger.NextBuild, "trigger.NextBuild");
 		}
 
 		[Test]
@@ -140,7 +140,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Triggers
 		{
 			DateTime triggerNextBuildTime = new DateTime(2004, 12, 4, 10, 00, 00);
 			mockTrigger.SetupResult("NextBuild", triggerNextBuildTime);
-			Assert.AreEqual(triggerNextBuildTime, trigger.NextBuild);
+            Assert.AreEqual(triggerNextBuildTime, trigger.NextBuild, "trigger.NextBuild");
 		}
 
 		[Test]
@@ -148,7 +148,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Triggers
 		{
 			DateTime nextBuildTime = new DateTime(2004, 12, 1, 13, 30, 00);
 			mockTrigger.ExpectAndReturn("NextBuild", nextBuildTime);
-			Assert.AreEqual(nextBuildTime, trigger.NextBuild);
+            Assert.AreEqual(nextBuildTime, trigger.NextBuild, "trigger.NextBuild");
 		}
 
 		[Test]
@@ -164,12 +164,12 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Triggers
 											</weekDays>
 										</filterTrigger>");
 			trigger = (FilterTrigger) NetReflector.Read(xml);
-			Assert.AreEqual("08:30:30", trigger.StartTime);
-			Assert.AreEqual("22:30:30", trigger.EndTime);
-			Assert.AreEqual(typeof (ScheduleTrigger), trigger.InnerTrigger.GetType());
-			Assert.AreEqual(DayOfWeek.Monday, trigger.WeekDays[0]);
-			Assert.AreEqual(DayOfWeek.Tuesday, trigger.WeekDays[1]);
-			Assert.AreEqual(BuildCondition.ForceBuild, trigger.BuildCondition);
+            Assert.AreEqual("08:30:30", trigger.StartTime, "trigger.StartTime");
+            Assert.AreEqual("22:30:30", trigger.EndTime, "trigger.EndTime");
+			Assert.AreEqual(typeof (ScheduleTrigger), trigger.InnerTrigger.GetType(), "trigger.InnerTrigger type");
+			Assert.AreEqual(DayOfWeek.Monday, trigger.WeekDays[0], "trigger.WeekDays[0]");
+			Assert.AreEqual(DayOfWeek.Tuesday, trigger.WeekDays[1], "trigger.WeekDays[1]");
+			Assert.AreEqual(BuildCondition.ForceBuild, trigger.BuildCondition, "trigger.BuildCondition");
 		}
 
 		[Test]
@@ -177,15 +177,15 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Triggers
 		{
 			string xml =
 				string.Format(
-					@"<filterTrigger startTime=""8:30:30"" endTime=""22:30:30"">
+					@"<filterTrigger>
 											<trigger type=""scheduleTrigger"" time=""12:00:00"" />
 										</filterTrigger>");
 			trigger = (FilterTrigger) NetReflector.Read(xml);
-			Assert.AreEqual("08:30:30", trigger.StartTime);
-			Assert.AreEqual("22:30:30", trigger.EndTime);
-			Assert.AreEqual(typeof (ScheduleTrigger), trigger.InnerTrigger.GetType());
-			Assert.AreEqual(7, trigger.WeekDays.Length);
-			Assert.AreEqual(BuildCondition.NoBuild, trigger.BuildCondition);
+            Assert.AreEqual("00:00:00", trigger.StartTime, "trigger.StartTime");
+            Assert.AreEqual("23:59:59", trigger.EndTime, "trigger.EndTime");
+            Assert.AreEqual(typeof(ScheduleTrigger), trigger.InnerTrigger.GetType(), "trigger.InnerTrigger type");
+            Assert.AreEqual(7, trigger.WeekDays.Length, "trigger.WeekDays.Length");
+            Assert.AreEqual(BuildCondition.NoBuild, trigger.BuildCondition, "trigger.BuildCondition");
 		}
 
 		[Test]
@@ -202,8 +202,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Triggers
                     </trigger>
 				  </filterTrigger>";
 			trigger = (FilterTrigger) NetReflector.Read(xml);
-			Assert.AreEqual(typeof (FilterTrigger), trigger.InnerTrigger.GetType());
-			Assert.AreEqual(typeof (IntervalTrigger), ((FilterTrigger) trigger.InnerTrigger).InnerTrigger.GetType());
+            Assert.AreEqual(typeof(FilterTrigger), trigger.InnerTrigger.GetType(), "trigger.InnerTrigger type");
+            Assert.AreEqual(typeof(IntervalTrigger), ((FilterTrigger)trigger.InnerTrigger).InnerTrigger.GetType(), "trigger.InnerTrigger.InnerTrigger type");
 		}
 
 		[Test]
@@ -221,16 +221,16 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Triggers
 			mockTrigger.SetupResult("Fire", request);
 			
 			mockDateTime.SetupResult("Now", new DateTime(2006, 8, 10, 11, 30, 0, 0)); // Thurs midday
-			Assert.AreEqual(request, outerTrigger.Fire());
+            Assert.AreEqual(request, outerTrigger.Fire(), "outerTrigger.Fire()");
 			
 			mockDateTime.SetupResult("Now", new DateTime(2006, 8, 10, 19, 30, 0, 0)); // Thurs evening
-			Assert.IsNull(outerTrigger.Fire());			
+            Assert.IsNull(outerTrigger.Fire(), "outerTrigger.Fire()");			
 
 			mockDateTime.SetupResult("Now", new DateTime(2006, 8, 12, 11, 30, 0, 0)); // Sat midday
-			Assert.IsNull(outerTrigger.Fire());			
+            Assert.IsNull(outerTrigger.Fire(), "outerTrigger.Fire()");			
 
 			mockDateTime.SetupResult("Now", new DateTime(2006, 8, 12, 19, 30, 0, 0)); // Sat evening
-			Assert.IsNull(outerTrigger.Fire());			
+            Assert.IsNull(outerTrigger.Fire(), "outerTrigger.Fire()");			
 		}
 	}
 }
