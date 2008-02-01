@@ -30,13 +30,13 @@
         <td colspan="2">
          <table width="100%">
            <tr>                <td><a href="#index-0-9">0-9</a> ... 0</td>
-                                                                      <td><a href="#index-A">A</a> ... 2</td>
+                                                                      <td><a href="#index-A">A</a> ... 3</td>
                                                                       <td><a href="#index-B">B</a> ... 5</td>
-                                                                      <td><a href="#index-C">C</a> ... 28</td>
+                                                                      <td><a href="#index-C">C</a> ... 31</td>
                                                                       <td><a href="#index-D">D</a> ... 9</td>
-                                                                      <td><a href="#index-E">E</a> ... 5</td>
+                                                                      <td><a href="#index-E">E</a> ... 6</td>
                                                               </tr><tr>
-                                                   <td><a href="#index-F">F</a> ... 9</td>
+                                                   <td><a href="#index-F">F</a> ... 10</td>
                                                                       <td><a href="#index-G">G</a> ... 0</td>
                                                                       <td><a href="#index-H">H</a> ... 1</td>
                                                                       <td><a href="#index-I">I</a> ... 7</td>
@@ -44,17 +44,17 @@
                                                                       <td><a href="#index-K">K</a> ... 0</td>
                                                               </tr><tr>
                                                    <td><a href="#index-L">L</a> ... 4</td>
-                                                                      <td><a href="#index-M">M</a> ... 8</td>
+                                                                      <td><a href="#index-M">M</a> ... 10</td>
                                                                       <td><a href="#index-N">N</a> ... 6</td>
                                                                       <td><a href="#index-O">O</a> ... 0</td>
-                                                                      <td><a href="#index-P">P</a> ... 10</td>
+                                                                      <td><a href="#index-P">P</a> ... 11</td>
                                                                       <td><a href="#index-Q">Q</a> ... 0</td>
                                                               </tr><tr>
                                                    <td><a href="#index-R">R</a> ... 4</td>
-                                                                      <td><a href="#index-S">S</a> ... 19</td>
+                                                                      <td><a href="#index-S">S</a> ... 21</td>
                                                                       <td><a href="#index-T">T</a> ... 8</td>
                                                                       <td><a href="#index-U">U</a> ... 34</td>
-                                                                      <td><a href="#index-V">V</a> ... 4</td>
+                                                                      <td><a href="#index-V">V</a> ... 5</td>
                                                                       <td><a href="#index-W">W</a> ... 5</td>
                                                               </tr><tr>
                                                    <td><a href="#index-X">X</a> ... 4</td>
@@ -73,11 +73,15 @@
                                      <img src="/images/icons/docs_16.gif" height="16" width="16" border="0" align="absmiddle" title="AccuRev Source Control Block"/>
                          <a href="/display/CCNET/AccuRev+Source+Control+Block">AccuRev Source Control Block</a>
         <br />
-             <div class="smalltext" style="margin: 0 0 0 36px">AccuRev Configuration   Note: The AccuRev source control block was added in build 1.3.0.2676. It is available in CCNet 1.3 and later.    Typical / Minimal Configuration  For most uses the following is all you'll need in your {{ccnet.config}}  Configuring the Server:    <sourcecontrol type="accurev ... </div>
+             <div class="smalltext" style="margin: 0 0 0 36px">AccuRev Configuration   Note: The AccuRev source control block is available in CCNet 1.3 and later.    Typical / Minimal Configuration  For most uses the following is all you'll need in your {{ccnet.config}}  Configuring the Server:    <sourcecontrol type="accurev">   <autoGetSource>true</autoGetSource ... </div>
                                      <img src="/images/icons/docs_16.gif" height="16" width="16" border="0" align="absmiddle" title="Alienbrain Source Control Block"/>
                          <a href="/display/CCNET/Alienbrain+Source+Control+Block">Alienbrain Source Control Block</a>
         <br />
              <div class="smalltext" style="margin: 0 0 0 36px">Alienbrain Configuration Examples  Example using defaults:    <sourcecontrol type="alienbrain">   <server>MyServer</server>   <database>MyDatabase</database>   <username>Username</username>   <password>Password</password>   <project>ab://myprojectpath</project> </sourcecontrol>    Full example:    <sourcecontrol type ... </div>
+                                     <img src="/images/icons/docs_16.gif" height="16" width="16" border="0" align="absmiddle" title="Artifact Cleanup"/>
+                         <a href="/display/CCNET/Artifact+Cleanup">Artifact Cleanup</a>
+        <br />
+             <div class="smalltext" style="margin: 0 0 0 36px">artifact CleanUp task allows for automatic removal of the buildlogs according to the choosen setting.   Example    <artifactcleanup  cleanUpMethod="KeepLastXBuilds"  cleanUpValue="50" />   &nbsp;This will keep the last 50 builds in the buildlog folder. \\   Node  Description  Type  Required  Default    cleanUpMethod  Defines ... </div>
         </td>
                                       </tr><tr valign="top">
                            <td><h4 style="margin-top: 0px"><a name="index-B"></a>B</h4>
@@ -96,7 +100,7 @@
                                      <img src="/images/icons/docs_16.gif" height="16" width="16" border="0" align="absmiddle" title="Build Publisher"/>
                          <a href="/display/CCNET/Build+Publisher">Build Publisher</a>
         <br />
-             <div class="smalltext" style="margin: 0 0 0 36px">Build Publisher lets you copy any arbitrary files on a successful build.   Example    <buildpublisher>    <sourceDir>C:\myprojects\project1</sourceDir>    <publishDir>\\myfileserver\project1</publishDir>    <useLabelSubDirectory>false</useLabelSubDirectory> </buildpublisher>    This will copy the contents of C:\myprojects\project1 ... </div>
+             <div class="smalltext" style="margin: 0 0 0 36px">Build Publisher lets you copy any arbitrary files on a successful build.  Example  <buildpublisher>   <sourceDir>C:\myprojects\project1</sourceDir>   <publishDir>\\myfileserver\project1</publishDir>   <useLabelSubDirectory>false</useLabelSubDirectory> </buildpublisher> \\ This will copy the contents of C:\myprojects\project1 ... </div>
                                      <img src="/images/icons/docs_16.gif" height="16" width="16" border="0" align="absmiddle" title="Build Report Build Plugin"/>
                          <a href="/display/CCNET/Build+Report+Build+Plugin">Build Report Build Plugin</a>
         <br />
@@ -174,11 +178,19 @@
                                      <img src="/images/icons/docs_16.gif" height="16" width="16" border="0" align="absmiddle" title="CCNet 1.3 Release Notes"/>
                          <a href="/display/CCNET/CCNet+1.3+Release+Notes">CCNet 1.3 Release Notes</a>
         <br />
-             <div class="smalltext" style="margin: 0 0 0 36px">Highlights of the CCNet 1.3 release   Integration Queues  The biggest feature change to CCNet 1.3 is the addition of Integration Queues to control and manage integration concurrency. Integration queues allow you to control which projects are permitted to build concurrently and to set their relative ... </div>
+             <div class="smalltext" style="margin: 0 0 0 36px">Highlights of the CCNet 1.3 release    Integration Queues  The biggest feature change to CCNet 1.3 is the addition of Integration Queues to control and manage integration concurrency. Integration queues allow you to control which projects are permitted to build concurrently and to set their relative ... </div>
+                                     <img src="/images/icons/docs_16.gif" height="16" width="16" border="0" align="absmiddle" title="CCNet 1.4 Release Notes"/>
+                         <a href="/display/CCNET/CCNet+1.4+Release+Notes">CCNet 1.4 Release Notes</a>
+        <br />
+             <div class="smalltext" style="margin: 0 0 0 36px">Release Notes CruiseControl .NET Version 1.4  This is a list of Jira Issues resolved by this release http://jira.public.thoughtworks.org/secure/ReleaseNote.jspa?projectId=10000&styleName=Html&version=10302 :   Bug  CCNET192 Modifications not detected by cvs provider  CCNET213 Changing non SCM ... </div>
                                      <img src="/images/icons/docs_16.gif" height="16" width="16" border="0" align="absmiddle" title="CCTray"/>
                          <a href="/display/CCNET/CCTray">CCTray</a>
         <br />
              <div class="smalltext" style="margin: 0 0 0 36px">Please note this documentation covers the new version of CCTray included in CruiseControl.NET version 1.0  CCTray is an optional utility for use with the CruiseControl.NET Continuous Integration server. It provides feedback upon build progress, and allows control over some of the server's ... </div>
+                                     <img src="/images/icons/docs_16.gif" height="16" width="16" border="0" align="absmiddle" title="CCTray Download Plugin"/>
+                         <a href="/display/CCNET/CCTray+Download+Plugin">CCTray Download Plugin</a>
+        <br />
+             <div class="smalltext" style="margin: 0 0 0 36px">CCTray Download Plugin adds a link to the dashboard to download the installer for CCTray.   Example    <cctrayDownloadPlugin />     Configuration Elements  There is no configuration for this plugin</div>
                                      <img src="/images/icons/docs_16.gif" height="16" width="16" border="0" align="absmiddle" title="cctray-settings.xml"/>
                          <a href="/display/CCNET/cctray-settings.xml">cctray-settings.xml</a>
         <br />
@@ -187,10 +199,14 @@
                          <a href="/display/CCNET/Commit+Process">Commit Process</a>
         <br />
              <div class="smalltext" style="margin: 0 0 0 36px">Please adhere to the following process when commiting changes to the repository:  # check to make sure that the build is currently passing on ccnetlive http://ccnetlive.thoughtworks.com/ccnet/. # validate that your changes work by running 'b.bat' in the root folder # check to see if a jira issue ... </div>
+                                     <img src="/images/icons/docs_16.gif" height="16" width="16" border="0" align="absmiddle" title="Configure CruiseControl.Net to Automatically Update its Config File"/>
+                         <a href="/display/CCNET/Configure+CruiseControl.Net+to+Automatically+Update+its+Config+File">Configure CruiseControl.Net to Automatically Update its Config File</a>
+        <br />
+             <div class="smalltext" style="margin: 0 0 0 36px">While using CC.Net the config file often has to be changed to add or remove projects or to add or remove reports. It can also be useful to keep the config file in a repository to track changes and to help get the server up and running again in case ... </div>
                                      <img src="/images/icons/docs_16.gif" height="16" width="16" border="0" align="absmiddle" title="Configuring the Server"/>
                          <a href="/display/CCNET/Configuring+the+Server">Configuring the Server</a>
         <br />
-             <div class="smalltext" style="margin: 0 0 0 36px">Outside of writing your build scripts to support Continuous Integration, your main configuration task in getting an instance of CruiseControl.NET running for your project is editting the Server's configuration file. This is defined in an XML file which by default is called ... </div>
+             <div class="smalltext" style="margin: 0 0 0 36px">Outside of writing your build scripts to support Continuous Integration, your main configuration task in getting an instance of CruiseControl.NET running for your project is editting the Server's configuration file.  This is defined in an XML file which by default is called ... </div>
                                      <img src="/images/icons/docs_16.gif" height="16" width="16" border="0" align="absmiddle" title="Configuring the Web Dashboard"/>
                          <a href="/display/CCNET/Configuring+the+Web+Dashboard">Configuring the Web Dashboard</a>
         <br />
@@ -245,7 +261,7 @@
                                      <img src="/images/icons/docs_16.gif" height="16" width="16" border="0" align="absmiddle" title="Documentation"/>
                          <a href="/display/CCNET/Documentation">Documentation</a>
         <br />
-             <div class="smalltext" style="margin: 0 0 0 36px">you are reading this documentation online it refers to the most recent development build, and not any specific release!   Introduction to Continuous Integration and CruiseControl.NET  What is Continuous Integration?  What is CruiseControl.NET?  Why CruiseControl.NET?  CruiseControl.NET Integration Process   For Users   Getting Started First ... </div>
+             <div class="smalltext" style="margin: 0 0 0 36px">you are reading this documentation online it refers to the most recent development build, and not any specific release\!  Introduction to Continuous Integration and CruiseControl.NET  What is Continuous Integration? What is CruiseControl.NET? Why CruiseControl.NET? CruiseControl.NET Integration Process  For Users   Getting Started First ... </div>
                                      <img src="/images/icons/docs_16.gif" height="16" width="16" border="0" align="absmiddle" title="Documentation Guidelines"/>
                          <a href="/display/CCNET/Documentation+Guidelines">Documentation Guidelines</a>
         <br />
@@ -272,6 +288,10 @@
                          <a href="/display/CCNET/Executable+Task">Executable Task</a>
         <br />
              <div class="smalltext" style="margin: 0 0 0 36px">Executable Task lets you invoke any command line executable. It doesn't offer as much specific integration as (for example) the NAnt Task, but does allow you to hook almost anything up as a build process to CCNet. CCNet will examine the exit ... </div>
+                                     <img src="/images/icons/docs_16.gif" height="16" width="16" border="0" align="absmiddle" title="External Source Control"/>
+                         <a href="/display/CCNET/External+Source+Control">External Source Control</a>
+        <br />
+             <div class="smalltext" style="margin: 0 0 0 36px">External Source Control Configuration   Note: The External source control block is available in CCNet build 1.3.0.3053 and later.    Typical / Minimal Configuration  For most uses the following is all you'll need in your {{ccnet.config}}  Configuring the Server:    <sourcecontrol type="external ... </div>
                                      <img src="/images/icons/docs_16.gif" height="16" width="16" border="0" align="absmiddle" title="ExternalLinks"/>
                          <a href="/display/CCNET/ExternalLinks">ExternalLinks</a>
         <br />
@@ -282,11 +302,15 @@
                                      <img src="/images/icons/docs_16.gif" height="16" width="16" border="0" align="absmiddle" title="FAQ"/>
                          <a href="/display/CCNET/FAQ">FAQ</a>
         <br />
-             <div class="smalltext" style="margin: 0 0 0 36px">CruiseControl.NET Frequently Asked Questions (FAQ)  This FAQ is not meant to be a complete reference to CruiseControl.NET, but does provide some quick ideas about how to get various things done.  If you want to add questions, answers, or both, please use the ccnetuser ... </div>
+             <div class="smalltext" style="margin: 0 0 0 36px">CruiseControl.NET Frequently Asked Questions (FAQ) This FAQ is not meant to be a complete reference to CruiseControl.NET, but does provide some quick ideas about how to get various things done. If you want to add questions, answers, or both, please use the ccnetuser ... </div>
                                      <img src="/images/icons/docs_16.gif" height="16" width="16" border="0" align="absmiddle" title="Farm Report Farm Plugin"/>
                          <a href="/display/CCNET/Farm+Report+Farm+Plugin">Farm Report Farm Plugin</a>
         <br />
              <div class="smalltext" style="margin: 0 0 0 36px">Farm Report Farm Plugin shows you status information for all projects on all servers. If the Dashboard cannot connect to any specific server then an errors table is shown detailing the problems.  Example  <farmReportFarmPlugin />   Configuration Elements There is no configuration for this plugin</div>
+                                     <img src="/images/icons/docs_16.gif" height="16" width="16" border="0" align="absmiddle" title="File Labeller"/>
+                         <a href="/display/CCNET/File+Labeller">File Labeller</a>
+        <br />
+             <div class="smalltext" style="margin: 0 0 0 36px">File Labeller The File Labeller is used to generate labels based on the content of a disk file. This file may be created by your build process, or by some outside mechanism. The labeller is configured with the location of the file, and it reads the file content to generate the label for CCNet ... </div>
                                      <img src="/images/icons/docs_16.gif" height="16" width="16" border="0" align="absmiddle" title="File Merge Task"/>
                          <a href="/display/CCNET/File+Merge+Task">File Merge Task</a>
         <br />
@@ -310,7 +334,7 @@
                                      <img src="/images/icons/docs_16.gif" height="16" width="16" border="0" align="absmiddle" title="FinalBuilder Task"/>
                          <a href="/display/CCNET/FinalBuilder+Task">FinalBuilder Task</a>
         <br />
-             <div class="smalltext" style="margin: 0 0 0 36px">FinalBuilder Task allows you to invoke FinalBuilder build projects as part of a CruiseControl.NET integration project.  FinalBuilder http://www.finalbuilder.com/finalbuilder.aspx is a commercial build and release management solution for Windows software developers and SCM professionals, developed and marketed by VSoft Technologies ... </div>
+             <div class="smalltext" style="margin: 0 0 0 36px">FinalBuilder Task allows you to invoke FinalBuilder build projects as part of a CruiseControl.NET integration project. FinalBuilder http://www.finalbuilder.com/finalbuilder.aspx is a commercial build and release management solution for Windows software developers and SCM professionals, developed and marketed by VSoft Technologies ... </div>
                                      <img src="/images/icons/docs_16.gif" height="16" width="16" border="0" align="absmiddle" title="ForceBuildPublisher"/>
                          <a href="/display/CCNET/ForceBuildPublisher">ForceBuildPublisher</a>
         <br />
@@ -337,7 +361,7 @@
                                      <img src="/images/icons/docs_16.gif" height="16" width="16" border="0" align="absmiddle" title="Integration Properties"/>
                          <a href="/display/CCNET/Integration+Properties">Integration Properties</a>
         <br />
-             <div class="smalltext" style="margin: 0 0 0 36px">Label  Description  Example   CCNetBuildCondition  The condition used to trigger the build, indicating if the build was triggered by new modifications or if it was forced. Legal values are: "IfModificationExists" or "ForceBuild"  ForceBuild   CCNetIntegrationStatus  The status of the current integration. Could be Success, Failure, Exception or Unknown  Success   CCNetLabel ... </div>
+             <div class="smalltext" style="margin: 0 0 0 36px">Label  Description  Example    CCNetBuildCondition  The condition used to trigger the build, indicating if the build was triggered by new modifications or if it was forced. Legal values are: "IfModificationExists" or "ForceBuild"  ForceBuild    CCNetIntegrationStatus  The status of the current integration. Could be Success, Failure, Exception or Unknown  Success   CCNetLabel ... </div>
                                      <img src="/images/icons/docs_16.gif" height="16" width="16" border="0" align="absmiddle" title="Integration Queues"/>
                          <a href="/display/CCNET/Integration+Queues">Integration Queues</a>
         <br />
@@ -391,7 +415,15 @@
                                      <img src="/images/icons/docs_16.gif" height="16" width="16" border="0" align="absmiddle" title="Modification Writer Task"/>
                          <a href="/display/CCNET/Modification+Writer+Task">Modification Writer Task</a>
         <br />
-             <div class="smalltext" style="margin: 0 0 0 36px">task writes the detected modifications for the current integration to a file as xml. This enables the modifications to be used by external programs, such as within a NAnt build script.  Minimal configuration example:  <modificationWriter />    Full configuration example:  <modificationWriter>   <filename>mods.xml</filename>   <path></path ... </div>
+             <div class="smalltext" style="margin: 0 0 0 36px">task writes the detected modifications for the current integration to a file as XML. This enables the modifications to be used by external programs, such as within a NAnt build script.   Minimal configuration example:   <modificationWriter />      Full configuration example:   <modificationWriter>    <filename>mods.xml</filename>    <path></path ... </div>
+                                     <img src="/images/icons/docs_16.gif" height="16" width="16" border="0" align="absmiddle" title="ModificationHistory Publisher"/>
+                         <a href="/display/CCNET/ModificationHistory+Publisher">ModificationHistory Publisher</a>
+        <br />
+             <div class="smalltext" style="margin: 0 0 0 36px">publisher logs all modifications for each build in a file. These modifications can be viewed in the Dashboard with the modificationHistoryProjectPlugin plugin enabled.  Minimal Configuration:&nbsp;  <publishers>  <modificationHistory /> </publishers>  This is available from build 1.3.0.2981 onwards  Full&nbsp; Configuration  <publishers>  <modificationHistory onlyLogWhenChangesFound ... </div>
+                                     <img src="/images/icons/docs_16.gif" height="16" width="16" border="0" align="absmiddle" title="modificationHistoryProjectPlugin"/>
+                         <a href="/display/CCNET/modificationHistoryProjectPlugin">modificationHistoryProjectPlugin</a>
+        <br />
+             <div class="smalltext" style="margin: 0 0 0 36px">plugin shows all the modifications of a project. The newest builds are shown first. The project must use the ModificationHistory Publisher to get results to show up.  Minimal Configuration&nbsp;  <projectPlugins>   < modificationHistoryProjectPlugin />  .... </projectPlugins>  This is available from build 1.3.0.2981 onwards  Full Configuration ... </div>
                                      <img src="/images/icons/docs_16.gif" height="16" width="16" border="0" align="absmiddle" title="MsBuild Task"/>
                          <a href="/display/CCNET/MsBuild+Task">MsBuild Task</a>
         <br />
@@ -448,6 +480,10 @@
                          <a href="/display/CCNET/Perforce+Source+Control+Block">Perforce Source Control Block</a>
         <br />
              <div class="smalltext" style="margin: 0 0 0 36px">Perforce Configuration Examples  Example using defaults:    <sourcecontrol type="p4">   <view>//projects/myproject/...</view> </sourcecontrol>	    Full example:    <sourcecontrol type="p4">   <view>//projects/ccnet/...,//tools/nant/...</view>   <executable>c:\perforce\p4.exe</executable ... </div>
+                                     <img src="/images/icons/docs_16.gif" height="16" width="16" border="0" align="absmiddle" title="PlasticSCM Source Control Block"/>
+                         <a href="/display/CCNET/PlasticSCM+Source+Control+Block">PlasticSCM Source Control Block</a>
+        <br />
+             <div class="smalltext" style="margin: 0 0 0 36px">PlasticSCM Configuration   Note: The PlasticSCM source control block is available in CCNet 1.3 and later.    Plastic SCM Configuration Example  For Plastic SCM you must specify the working directory, which must be a valid Plastic SCM workspace, and the branch. You ... </div>
                                      <img src="/images/icons/docs_16.gif" height="16" width="16" border="0" align="absmiddle" title="Plugins Configuration Block"/>
                          <a href="/display/CCNET/Plugins+Configuration+Block">Plugins Configuration Block</a>
         <br />
@@ -459,7 +495,7 @@
                                      <img src="/images/icons/docs_16.gif" height="16" width="16" border="0" align="absmiddle" title="Project Configuration Block"/>
                          <a href="/display/CCNET/Project+Configuration+Block">Project Configuration Block</a>
         <br />
-             <div class="smalltext" style="margin: 0 0 0 36px">project>}} block defines all the configuration for one project running in a CruiseControl.NET server   Examples  Minimalist example:   <project name="Project 1" />   Full example:   <project name="Project 1" queue="Q1" queuePriority="1">   <workingDirectory>yourWorkingDirectory</workingDirectory ... </div>
+             <div class="smalltext" style="margin: 0 0 0 36px">project>}} block defines all the configuration for one project running in a CruiseControl.NET server  Examples Minimalist example:  <project name="Project 1" /> \\ Full example:  <project name="Project 1" queue="Q1" queuePriority="1">   <workingDirectory>yourWorkingDirectory</workingDirectory ... </div>
                                      <img src="/images/icons/docs_16.gif" height="16" width="16" border="0" align="absmiddle" title="Project Details"/>
                          <a href="/display/CCNET/Project+Details">Project Details</a>
         <br />
@@ -475,7 +511,7 @@
                                      <img src="/images/icons/docs_16.gif" height="16" width="16" border="0" align="absmiddle" title="Project Team"/>
                          <a href="/display/CCNET/Project+Team">Project Team</a>
         <br />
-             <div class="smalltext" style="margin: 0 0 0 36px">people are committers to CruiseControl.NET: mroberts orogers Mike Two mgm Ajey Gore cbrown Jeremy StellSmith John Sullivan Mike Royle Ryan Moffat stham@thoughtworks.com svadagir@thoughtworks.com Bill Caputo Garrett Smith Christian Taubman Anand Vishwanath Manuel ... </div>
+             <div class="smalltext" style="margin: 0 0 0 36px">people are committers to CruiseControl.NET:  mroberts  orogers  Mike Two  mgm  Ajey Gore  cbrown  Jeremy StellSmith  John Sullivan  Mike Royle  Ryan Moffat  stham@thoughtworks.com  svadagir@thoughtworks.com  Bill Caputo  Garrett Smith  Christian Taubman  Anand Vishwanath  Manuel ... </div>
                                      <img src="/images/icons/docs_16.gif" height="16" width="16" border="0" align="absmiddle" title="Project Trigger"/>
                          <a href="/display/CCNET/Project+Trigger">Project Trigger</a>
         <br />
@@ -500,7 +536,7 @@
                                      <img src="/images/icons/docs_16.gif" height="16" width="16" border="0" align="absmiddle" title="Remote Services Configuration Block"/>
                          <a href="/display/CCNET/Remote+Services+Configuration+Block">Remote Services Configuration Block</a>
         <br />
-             <div class="smalltext" style="margin: 0 0 0 36px">time the {{<remoteServices>}} tag just contains a {{<servers>}} Servers Configuration Block section. Example:  <remoteServices>   <servers>   .   .   </servers> </remoteServices</div>
+             <div class="smalltext" style="margin: 0 0 0 36px">time the {{<remoteServices>}} tag just contains a {{<servers>}} Servers Configuration Block section. This section contains all the build servers that the Dashboard will visualize.  Example:  <remoteServices>   <servers>   .   .   </servers> </remoteServices</div>
                                      <img src="/images/icons/docs_16.gif" height="16" width="16" border="0" align="absmiddle" title="Resources"/>
                          <a href="/display/CCNET/Resources">Resources</a>
         <br />
@@ -514,7 +550,7 @@
                                      <img src="/images/icons/docs_16.gif" height="16" width="16" border="0" align="absmiddle" title="SCM Policy"/>
                          <a href="/display/CCNET/SCM+Policy">SCM Policy</a>
         <br />
-             <div class="smalltext" style="margin: 0 0 0 36px">page describes Source Control, Build Management and Issue Tracking policy for the CruiseControl.NET project. (!) This is how CruiseControl.NET manages itself as a project in development. If you are just using CruiseControl.NET you of course do not need to follow these same guidelines, but you might ... </div>
+             <div class="smalltext" style="margin: 0 0 0 36px">page describes Source Control, Build Management and Issue Tracking policy for the CruiseControl.NET project.  (!) This is how CruiseControl.NET manages itself as a project in development. If you are just using CruiseControl.NET you of course do not need to follow these same guidelines, but you might ... </div>
                                      <img src="/images/icons/docs_16.gif" height="16" width="16" border="0" align="absmiddle" title="Seapine Surround Source Control Block"/>
                          <a href="/display/CCNET/Seapine+Surround+Source+Control+Block">Seapine Surround Source Control Block</a>
         <br />
@@ -527,6 +563,10 @@
                          <a href="/display/CCNET/Server+Information+Server+Plugin">Server Information Server Plugin</a>
         <br />
              <div class="smalltext" style="margin: 0 0 0 36px">Server Information Server Plugin gives you information about a build server, for example the version of CruiseControl.NET the build server is running.   Example  <serverInformationServerPlugin />   Configuration Elements There is no configuration for this plugin</div>
+                                     <img src="/images/icons/docs_16.gif" height="16" width="16" border="0" align="absmiddle" title="Server Log Project Plugin"/>
+                         <a href="/display/CCNET/Server+Log+Project+Plugin">Server Log Project Plugin</a>
+        <br />
+             <div class="smalltext" style="margin: 0 0 0 36px">Server Log Project Plugin shows you recent activity that has been output to the server log for a specific project. Read the Server Application Config File page for more help on build server logging.   Example    <serverLogProjectPlugin />     Configuration Elements ... </div>
                                      <img src="/images/icons/docs_16.gif" height="16" width="16" border="0" align="absmiddle" title="Server Log Server Plugin"/>
                          <a href="/display/CCNET/Server+Log+Server+Plugin">Server Log Server Plugin</a>
         <br />
@@ -539,6 +579,10 @@
                          <a href="/display/CCNET/Servers+Configuration+Block">Servers Configuration Block</a>
         <br />
              <div class="smalltext" style="margin: 0 0 0 36px">Dashboard needs to connect over the network to each of Build Servers you want to report on. If you have changed any of the remoting configuration for your servers, you'll need those details now. (See Server Application Config File for more ... </div>
+                                     <img src="/images/icons/docs_16.gif" height="16" width="16" border="0" align="absmiddle" title="Setting up from scratch  Part 01"/>
+                         <a href="/display/CCNET/Setting+up+from+scratch++Part+01">Setting up from scratch  Part 01</a>
+        <br />
+             <div class="smalltext" style="margin: 0 0 0 36px">We'll be setting it up step by step, so this will be a real step by step approach. The reason is you can see what the benefits are of the setups used in this document. The first parts will seem overdone for users who used CCNet before, but it is intended for the real ... </div>
                                      <img src="/images/icons/docs_16.gif" height="16" width="16" border="0" align="absmiddle" title="Site Index"/>
                          <a href="/display/CCNET/Site+Index">Site Index</a>
         <br />
@@ -589,7 +633,7 @@
                                      <img src="/images/icons/docs_16.gif" height="16" width="16" border="0" align="absmiddle" title="Task Blocks"/>
                          <a href="/display/CCNET/Task+Blocks">Task Blocks</a>
         <br />
-             <div class="smalltext" style="margin: 0 0 0 36px">Task Blocks are the action elements of CruiseControl.Net. They're the elements that do things, like executing a program, running tests, or send email results.  Task blocks must appear in either the {{<tasks>}} section or the {{<publishers>}} section. The {{<tasks>}} section is always run ... </div>
+             <div class="smalltext" style="margin: 0 0 0 36px">Task Blocks are the action elements of CruiseControl.Net. They're the elements that do things, like executing a program, running tests, or send email results. Task blocks must appear in the {{<tasks>}} section, the {{<publishers>}} section or the <prebuild> section. The {{<tasks>}} section is always ... </div>
                                      <img src="/images/icons/docs_16.gif" height="16" width="16" border="0" align="absmiddle" title="Telelogic Synergy"/>
                          <a href="/display/CCNET/Telelogic+Synergy">Telelogic Synergy</a>
         <br />
@@ -601,7 +645,7 @@
                                      <img src="/images/icons/docs_16.gif" height="16" width="16" border="0" align="absmiddle" title="The Server Console Application"/>
                          <a href="/display/CCNET/The+Server+Console+Application">The Server Console Application</a>
         <br />
-             <div class="smalltext" style="margin: 0 0 0 36px">You can launch the CruiseControl.NET server by executing the {{ccnet.exe}} file, which is located in the {{server}} folder of the extracted distribution. Before doing this, make sure to setup the Server Application Config File. Executing the server using the {{help}} flag (eg. {{ccnet.exe ... </div>
+             <div class="smalltext" style="margin: 0 0 0 36px">You can launch the CruiseControl.NET server by executing the {{ccnet.exe}} file, which is located in the {{server}} folder of the extracted distribution.  Before doing this, make sure to setup the Server Application Config File.  Executing the server using the {{help}} flag (eg. {{ccnet.exe ... </div>
                                      <img src="/images/icons/docs_16.gif" height="16" width="16" border="0" align="absmiddle" title="The Server Service Application"/>
                          <a href="/display/CCNET/The+Server+Service+Application">The Server Service Application</a>
         <br />
@@ -623,7 +667,7 @@
                                      <img src="/images/icons/docs_16.gif" height="16" width="16" border="0" align="absmiddle" title="Upgrading CCNet"/>
                          <a href="/display/CCNET/Upgrading+CCNet">Upgrading CCNet</a>
         <br />
-             <div class="smalltext" style="margin: 0 0 0 36px">document describes two approaches to upgrading CCNet: a quick upgrade process (optimistic) and a slower, safer upgrade process that allows for quickly rolling back to the earlier install if required (pessimistic).   Optimistic Approach:  # Stop the CCNet server (either by closing the console ... </div>
+             <div class="smalltext" style="margin: 0 0 0 36px">document describes two approaches to upgrading CCNet: a quick upgrade process (optimistic) and a slower, safer upgrade process that allows for quickly rolling back to the earlier install if required (pessimistic).  Optimistic Approach: # Stop the CCNet server (either by closing the console ... </div>
                                      <img src="/images/icons/docs_16.gif" height="16" width="16" border="0" align="absmiddle" title="Url Trigger"/>
                          <a href="/display/CCNET/Url+Trigger">Url Trigger</a>
         <br />
@@ -763,6 +807,10 @@
                          <a href="/display/CCNET/View+All+Builds+Project+Plugin">View All Builds Project Plugin</a>
         <br />
              <div class="smalltext" style="margin: 0 0 0 36px">View All Builds Project Plugin lists all available builds for a project.  Example  <viewAllBuildsProjectPlugin />   Configuration Elements There is no configuration for this plugin</div>
+                                     <img src="/images/icons/docs_16.gif" height="16" width="16" border="0" align="absmiddle" title="View Configuration Project Plugin"/>
+                         <a href="/display/CCNET/View+Configuration+Project+Plugin">View Configuration Project Plugin</a>
+        <br />
+             <div class="smalltext" style="margin: 0 0 0 36px">View Configuration Project Plugin shows the configuration for a project.   This plugin shows the entire configuration. If your configuration contains confidential information (e.g., passwords in <sourcecontrol> sections), you may not want to use it.    Example    <viewConfigurationProjectPlugin />     Configuration Elements  There is no configuration for this plugin</div>
                                      <img src="/images/icons/docs_16.gif" height="16" width="16" border="0" align="absmiddle" title="Visual Source Safe Source Control Block"/>
                          <a href="/display/CCNET/Visual+Source+Safe+Source+Control+Block">Visual Source Safe Source Control Block</a>
         <br />
@@ -774,7 +822,7 @@
                                      <img src="/images/icons/docs_16.gif" height="16" width="16" border="0" align="absmiddle" title="Visual Studio Team Foundation Server Plugin"/>
                          <a href="/display/CCNET/Visual+Studio+Team+Foundation+Server+Plugin">Visual Studio Team Foundation Server Plugin</a>
         <br />
-             <div class="smalltext" style="margin: 0 0 0 36px">Because of dependencies on Team Foundation assemblies which cannot be shipped with the Cruise Control source, this plugin is available as a standalone plugin from the VSTSPlugins http://vstsplugins.sourceforge.net project on Sourceforge. The plugin has been recently updated to work with version 1.0 of the Team ... </div>
+             <div class="smalltext" style="margin: 0 0 0 36px">Because of dependencies on Team Foundation assemblies which cannot be shipped with the Cruise Control source, this plugin is available as a standalone plugin from the TFS CCNET Plugin http://www.codeplex.com/TFSCCNetPlugin/ project on CodePlex. The plugin works with Team Foundation Server 2005 ... </div>
         </td>
                                       <td><h4 style="margin-top: 0px"><a name="index-W"></a>W</h4>
                                      <img src="/images/icons/docs_16.gif" height="16" width="16" border="0" align="absmiddle" title="Web Dashboard"/>
@@ -784,7 +832,7 @@
                                      <img src="/images/icons/home_16.gif" height="16" width="16" border="0" align="absmiddle" title="Welcome to CruiseControl.NET (Space Home Page)"/>
                          <a href="/display/CCNET/Welcome+to+CruiseControl.NET">Welcome to CruiseControl.NET</a>
         <br />
-             <div class="smalltext" style="margin: 0 0 0 36px">Download  Documentation  FAQ  Examples  Support  Project Details  ThoughtWorks  Site Index  Issues http://jira.public.thoughtworks.org/browse/CCNET      CruiseControl.NET is an Automated Continuous Integration server, implemented using the Microsoft .NET Framework.\\  If you're new to CruiseControl.NET, you ... </div>
+             <div class="smalltext" style="margin: 0 0 0 36px">Download  Documentation  FAQ  Examples  Support  Project Details  ThoughtWorks  Site Index  Issues http://jira.public.thoughtworks.org/browse/CCNET      CruiseControl.NET is an Automated Continuous Integration server, implemented using the Microsoft .NET Framework. \\  If you're new to CruiseControl.NET, you ... </div>
                                      <img src="/images/icons/docs_16.gif" height="16" width="16" border="0" align="absmiddle" title="What is Continuous Integration"/>
                          <a href="/display/CCNET/What+is+Continuous+Integration">What is Continuous Integration</a>
         <br />
@@ -838,7 +886,7 @@
 				<td height="12" background="border/border_bottom.gif"><img src="border/spacer.gif" width="1" height="1" border="0"/></td>
 			</tr>
 		    <tr>
-			    <td align="center"><font color="grey">Document generated by Confluence on Jun 21, 2007 10:33</font></td>
+			    <td align="center"><font color="grey">Document generated by Confluence on Jan 31, 2008 19:33</font></td>
 		    </tr>
 	    </table>
     </body>

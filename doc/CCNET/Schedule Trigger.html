@@ -15,21 +15,22 @@
                                                     </span>
 				    </div>
 				    <div class="pagesubheading">
-					    This page last changed on Jan 02, 2007 by <font color="#0050B2">gfeldman</font>.
+					    This page last changed on Jun 29, 2007 by <font color="#0050B2">williams</font>.
 				    </div>
 
 				    <p>The Schedule Trigger is used to specify that an integration should be run at a certain time on certain days. By default, an integration will only be triggered if modifications have been detected since the last integration.  The trigger can be configured to force a build even if have occurred to source control.  The items to watch for modifications are specified with <a href="Source Control Blocks.html" title="Source Control Blocks">Source Control Blocks</a>.</p>
 
 <h4><a name="ScheduleTrigger-Example"></a>Example</h4>
-<table cellpadding='5' width='85%' cellspacing='8px' class='infoMacro' border="0" align='center'><colgroup><col width='24'><col></colgroup><tr><td valign='top'><img src="./icons/emoticons/information.gif" width="16" height="16" align="absmiddle" alt="" border="0"></td><td>NOTE: Like all triggers, the scheduleTrigger must be enclosed within a triggers element in the appropriate <a href="Project Configuration Block.html" title="Project Configuration Block">Project Configuration Block</a></td></tr></table>
 
+<table cellpadding='5' width='85%' cellspacing='8px' class='infoMacro' border="0" align='center'><colgroup><col width='24'><col></colgroup><tr><td valign='top'><img src="./icons/emoticons/information.gif" width="16" height="16" align="absmiddle" alt="" border="0"></td><td>NOTE: Like all triggers, the scheduleTrigger must be enclosed within a triggers element in the appropriate <a href="Project Configuration Block.html" title="Project Configuration Block">Project Configuration Block</a></td></tr></table>
+<p><br clear="all" />
 <div class="code"><div class="codeContent">
-<pre class="code-xml"><span class="code-tag">&lt;scheduleTrigger time=<span class="code-quote">"23:30"</span> buildCondition=<span class="code-quote">"ForceBuild"</span>&gt;</span>
+<pre class="code-xml"><span class="code-tag">&lt;scheduleTrigger time=<span class="code-quote">"23:30"</span> buildCondition=<span class="code-quote">"ForceBuild"</span> name=<span class="code-quote">"Scheduled"</span>&gt;</span>
     <span class="code-tag">&lt;weekDays&gt;</span>
         <span class="code-tag">&lt;weekDay&gt;</span>Monday<span class="code-tag">&lt;/weekDay&gt;</span>
     <span class="code-tag">&lt;/weekDays&gt;</span>
 <span class="code-tag">&lt;/scheduleTrigger&gt;</span></pre>
-</div></div>
+</div></div><br clear="all" /></p>
 
 <h4><a name="ScheduleTrigger-ConfigurationElements%3A"></a>Configuration Elements:</h4>
 
@@ -38,7 +39,7 @@
 <th class='confluenceTh'> Node </th>
 <th class='confluenceTh'> Description </th>
 <th class='confluenceTh'> Type </th>
-<th class='confluenceTh'> Required</th>
+<th class='confluenceTh'> Required </th>
 <th class='confluenceTh'> Default </th>
 </tr>
 <tr>
@@ -57,20 +58,19 @@
 </tr>
 <tr>
 <td class='confluenceTd'> buildCondition </td>
-<td class='confluenceTd'> The condition that should be used to launch the integration.  By default, this value is <b>IfModificationExists</b>, meaning that an integration will only be triggered if modifications have been detected. Set this attribute to <b>ForceBuild</b> in order to ensure that a build should be launched regardless of whether new modifications are detected. The items to watch for modifications are specified with <a href="Source Control Blocks.html" title="Source Control Blocks">Source Control Blocks</a>.</td>
+<td class='confluenceTd'> The condition that should be used to launch the integration.  By default, this value is <b>IfModificationExists</b>, meaning that an integration will only be triggered if modifications have been detected. Set this attribute to <b>ForceBuild</b> in order to ensure that a build should be launched regardless of whether new modifications are detected. The items to watch for modifications are specified with <a href="Source Control Blocks.html" title="Source Control Blocks">Source Control Blocks</a>. </td>
 <td class='confluenceTd'> string </td>
 <td class='confluenceTd'> false </td>
 <td class='confluenceTd'> IfModificationExists </td>
 </tr>
 <tr>
 <td class='confluenceTd'> name </td>
-<td class='confluenceTd'> The name of the trigger.  This name is passed to external tools as a means to identify the trigger that requested the build. (Added in CCNet 1.1)</td>
+<td class='confluenceTd'> The name of the trigger.  This name is passed to external tools as a means to identify the trigger that requested the build. (Added in CCNet 1.1) </td>
 <td class='confluenceTd'> string </td>
 <td class='confluenceTd'> false </td>
-<td class='confluenceTd'> ScheduleTrigger</td>
+<td class='confluenceTd'> ScheduleTrigger </td>
 </tr>
 </tbody></table>
-
 <p><img class="emoticon" src="./icons/emoticons/warning.gif" height="16" width="16" align="absmiddle" alt="" border="0"/> NOTE: this class replaces the <b>PollingScheduleTrigger</b> and the <b>ForceBuildScheduleTrigger</b>.  Use the <b>buildCondition</b> property if you want to run a scheduled forced build.</p>
 
 				    
@@ -82,7 +82,7 @@
 				<td height="12" background="border/border_bottom.gif"><img src="border/spacer.gif" width="1" height="1" border="0"/></td>
 			</tr>
 		    <tr>
-			    <td align="center"><font color="grey">Document generated by Confluence on Jun 21, 2007 10:33</font></td>
+			    <td align="center"><font color="grey">Document generated by Confluence on Jan 31, 2008 19:33</font></td>
 		    </tr>
 	    </table>
     </body>

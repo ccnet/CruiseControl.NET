@@ -1,0 +1,98 @@
+<html>
+    <head>
+        <title>CruiseControl.NET : Configure CruiseControl.Net to Automatically Update its Config File</title>
+	    <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">	    
+    </head>
+
+    <body>
+	    <table class="pagecontent" border="0" cellpadding="0" cellspacing="0" width="100%" bgcolor="#ffffff">
+		    <tr>
+			    <td valign="top" class="pagebody">
+				    <div class="pageheader">
+					    <span class="pagetitle">
+                            CruiseControl.NET : Configure CruiseControl.Net to Automatically Update its Config File
+                                                    </span>
+				    </div>
+				    <div class="pagesubheading">
+					    This page last changed on Sep 07, 2007 by <font color="#0050B2">dcameron</font>.
+				    </div>
+
+				    <p>While using CC.Net the config file often has to be changed to add or remove projects or to add or remove reports. It can also be useful to keep the config file in a repository to track changes and to help get the server up and running again in case of failure. (Just last month a cruise box on my project left the team with a loud bang and a smoky smell.)</p>
+
+<p>Because CruiseControl.Net can already:</p>
+<ul>
+	<li>monitor a source control repository for changes</li>
+	<li>update local files when there are changes in the repository</li>
+	<li>detect when its configuration file has changed on disc</li>
+</ul>
+
+
+<p>it's possible to configure CC.Net to automatically update its own configuration file whenever someone commits changes. Here's how:</p>
+
+<h3><a name="ConfigureCruiseControl.NettoAutomaticallyUpdateitsConfigFile-Step1%3AGetyourconfigurationfileundersourcecontrol"></a>Step 1: Get your configuration file under source control</h3>
+
+<p>At minimum this involves checking the file in. But there are cleaner and less clean ways to do this. Rather than checking the entire CruiseControl.Net folder in, I like to have a config folder underneath the main program folder that only has the config file in it.</p>
+
+<p> <img src="../3997877/CheckedInConfig.png" align="absmiddle" border="0" /><br/>
+This is not the default location for ccnet's config file, so it needs to be told to look in a different place as well. If you are using CC.Net as a service, then the "<tt>ccnet.config</tt>" key can be added to the &lt;appSettings&gt; section in ccservice.exe.config to point to the new configuration file, as shown in the next code block. If you are running CC.Net in a console, using ccnet.exe.config, then you can pass the new path as a command-line parameter in the form "-config:config\ccnet.config". The path can be relative to the exe or an absolute path. More information about moving the configuration file is available on the <a href="Server Application Config File.html" title="Server Application Config File">Server Application Config File</a> page.<br/>
+<div class="code"><div class="codeContent">
+<pre class="code-xml"><span class="code-tag">&lt;configuration&gt;</span>
+    ...
+    <span class="code-tag">&lt;appSettings&gt;</span>
+        <span class="code-tag"><span class="code-comment">&lt;!-- Without this appSetting ccservice will look for ccnet.config in its own directory. --&gt;</span></span>
+        <span class="code-tag">&lt;add key=<span class="code-quote">"ccnet.config"</span> value=<span class="code-quote">"config\ccnet.config"</span> /&gt;</span>
+        ...
+    <span class="code-tag">&lt;/appSettings&gt;</span>
+    ...
+<span class="code-tag">&lt;/configuration&gt;</span></pre>
+</div></div><br clear="all" />
+<br clear="all" />
+<br clear="all" /></p>
+<h3><a name="ConfigureCruiseControl.NettoAutomaticallyUpdateitsConfigFile-Step2%3AAddaCruiseControl.Netprojecttoupdatetheconfigfile"></a>Step 2: Add a CruiseControl.Net project to update the config file</h3>
+
+<p>At this point, someone could manually update the working copy on the cruise box when changes to the config are committed. But, we can have ccnet itself automatically perform this step by adding a project to ccnet. This project will check for changes to the configuration file in the source control repository and update it on disc. We only need a trigger block and a source control block. For the example worked above, this project would look like:</p>
+<div class="code"><div class="codeContent">
+<pre class="code-xml"><span class="code-tag">&lt;project name=<span class="code-quote">"cc-config"</span>&gt;</span>
+    <span class="code-tag">&lt;triggers&gt;</span>
+        <span class="code-tag">&lt;intervalTrigger seconds=<span class="code-quote">"30"</span> /&gt;</span>
+    <span class="code-tag">&lt;/triggers&gt;</span>
+    <span class="code-tag">&lt;sourcecontrol type=<span class="code-quote">"svn"</span>&gt;</span>
+        <span class="code-tag">&lt;trunkUrl&gt;</span>file:///c:/Repo/sandbox/config<span class="code-tag">&lt;/trunkUrl&gt;</span>
+        <span class="code-tag">&lt;workingDirectory&gt;</span>C:\Program Files\CruiseControl.NET\server\config<span class="code-tag">&lt;/workingDirectory&gt;</span>
+    <span class="code-tag">&lt;/sourcecontrol&gt;</span>
+<span class="code-tag">&lt;/project&gt;</span></pre>
+</div></div>
+<p>Now, when someone commits changes, the next time the cc-config project runs it will pull the changes on to the local disc. CruiseControl.Net will notice the changes and reload the configuration file. If you have the console visible you should see lines similar to the following:
+<br clear="all" />  <img src="../3997877/ReloadingConfigLogs.png" align="absmiddle" border="0" /><br/>
+&nbsp;<br/>
+&nbsp;<br/>
+If you can't see the console, perhaps because you are running CruiseControl.Net as a service, then the lines above should appear in your logs instead.</p>
+
+				    					    <br/>
+                        <div class="tabletitle">
+                            <a name="attachments">Attachments:</a>
+                        </div>
+
+                        <div class="greybox" align="left">
+                                                            <img src="icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="../3997877/CheckedInConfig.png">CheckedInConfig.png</a> (image/png)
+                                <br/>
+                                                            <img src="icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="../3997877/ReloadingConfigLogs.png">ReloadingConfigLogs.png</a> (image/png)
+                                <br/>
+                                                    </div>
+				    
+                    			    </td>
+		    </tr>
+	    </table>
+	    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+			<tr>
+				<td height="12" background="border/border_bottom.gif"><img src="border/spacer.gif" width="1" height="1" border="0"/></td>
+			</tr>
+		    <tr>
+			    <td align="center"><font color="grey">Document generated by Confluence on Jan 31, 2008 19:33</font></td>
+		    </tr>
+	    </table>
+    </body>
+</html>

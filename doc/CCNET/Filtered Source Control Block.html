@@ -15,7 +15,7 @@
                                                     </span>
 				    </div>
 				    <div class="pagesubheading">
-					    This page last changed on Jan 24, 2007 by <font color="#0050B2">gfeldman</font>.
+					    This page last changed on Dec 06, 2007 by <font color="#0050B2">rosspatterson</font>.
 				    </div>
 
 				    <h3><a name="FilteredSourceControlBlock-WhatisFilteredSourceControl%3F"></a>What is FilteredSourceControl?</h3>
@@ -55,11 +55,14 @@
 	<span class="code-tag">&lt;actionFilter&gt;</span>
 		<span class="code-tag">&lt;actions&gt;</span><span class="code-tag">&lt;action&gt;</span>deleted<span class="code-tag">&lt;/action&gt;</span><span class="code-tag">&lt;/actions&gt;</span>
 	<span class="code-tag">&lt;/actionFilter&gt;</span>
+        <span class="code-tag">&lt;commentFilter&gt;</span>
+                <span class="code-tag">&lt;pattern&gt;</span>Ignore: .*<span class="code-tag">&lt;/pattern&gt;</span>
+        <span class="code-tag">&lt;commentFilter&gt;</span>
     <span class="code-tag">&lt;/exclusionFilters&gt;</span>
 <span class="code-tag">&lt;/sourcecontrol&gt;</span></pre>
 </div></div>
 
-<p>This example filters out any modifications to the <b>AssemblyInfo.cs</b> file that have been checked in to <a href="Visual Source Safe Source Control Block.html" title="Visual Source Safe Source Control Block">Visual Source Safe Source Control Block</a>.  Although it shows the use of all three types of filter, you can choose to use only one or two types of filter as well.</p>
+<p>This example filters out any modifications to the <b>AssemblyInfo.cs</b> file that have been checked in to <a href="Visual Source Safe Source Control Block.html" title="Visual Source Safe Source Control Block">Visual Source Safe Source Control Block</a>.  Although it shows the use of all four types of filters, you can choose to use only fewer types of filter as well.</p>
 
 <h3><a name="FilteredSourceControlBlock-ConfigurationElements%3A"></a>Configuration Elements:</h3>
 
@@ -151,29 +154,94 @@
 </tr>
 </tbody></table>
 
+<p><a name="FilteredSourceControlBlock-CommentFilter"></a> <b>CommentFilter element</b></p>
+
+<p>The CommentFilter can be used to filter modifications on the basis of the comment that was supplied with the modification.</p>
+
+<table class='confluenceTable'><tbody>
+<tr>
+<th class='confluenceTh'> Node </th>
+<th class='confluenceTh'> Description </th>
+<th class='confluenceTh'> Type </th>
+<th class='confluenceTh'> Required</th>
+</tr>
+<tr>
+<td class='confluenceTd'> pattern </td>
+<td class='confluenceTd'> This is the pattern used to compare the modification comment against. The pattern is specified according to the rules of the .net <a href="http://msdn2.microsoft.com/en-us/library/system.text.regularexpressions.regex.aspx">System.Text.RegularExpressions.Regex</a> class.  Each CommentFilter contains a single pattern element. </td>
+<td class='confluenceTd'> string </td>
+<td class='confluenceTd'> true </td>
+</tr>
+</tbody></table>
+<table cellpadding='5' width='85%' cellspacing='8px' class='noteMacro' border="0" align='center'><colgroup><col width='24'><col></colgroup><tr><td valign='top'><img src="./icons/emoticons/warning.gif" width="16" height="16" align="absmiddle" alt="" border="0"></td><td>Comment filters are available starting with build #1.3.0.3052.</td></tr></table>
+
 <h3><a name="FilteredSourceControlBlock-UsingthePathFilter%3A"></a>Using the PathFilter:</h3>
 
 <p>PathFilter supports following wildcards:</p>
 
-<ol>
-	<li>"&#42;" used as part of the path will match none or exactly one subfolder. E.g. pattern "/Kunigunda/&#42;/Sources/&#42;.&#42;" will accept "/Kunigunda/Sources/&#42;.&#42;", "/Kunigunda/Service/Sources/&#42;.&#42;", "/Kunigunda/Web/Sources/&#42;.&#42;", etc.</li>
-	<li>"&#42;" used as part of the folder name will match zero or more characters that can appear in the folder name. E.g. pattern "/Kunigunda/Sources/Test&#42;/&#42;.&#42;" will accept "/Kunigunda/Sources/Test/&#42;.&#42;", "/Kunigunda/Sources/Tests/&#42;.&#42;", etc.</li>
-	<li>"&#42;" used as part of the filename will match zero or more characters that can appear in the file name. E.g. pattern<br/>
-"/Kunigunda/Sources/&#42;.cs" will accept all files in the "/Kunigunda/Sources" folder with the ".cs" extension. If the "&#42;" is prefixed, postfixed or wrapped with one or more characters, then these will be included in the pattern matching. E.g. pattern "/Kunigunda/Sources/&#42;Test.cs", will <br/>
-accept all files in the "/Kunigunda/Sources/" folder that have "Test" and the end of the name and the ".cs" extension.</li>
-	<li>"&#42;" used as part of the extension will match zero or more characters that can appear in the extension. E.g. pattern "/Kunigunda/Sources/Build.&#42;" will match all files in "/Kunigunda/Sources" folder named "Build" regardles of their extension. A "&#42;.&#42;" pattern will match any file name and<br/>
-extension. A "&#42;.cs&#42;" will match any file with extension that starts with "cs".</li>
-	<li>"&#42;&#42;" used as part of the path will match zero or more subfolders. E.g. pattern "/Kunigunda/Sources/&#42;&#42;/Test/&#42;.&#42;" will accept all files stored in "Test" subfolder anywhere bellow the "/Kunigunda/Sources" tree including "/Kunigunda/Sources/Test/&#42;.&#42;", "/Kunigunda/Sources/Core/Test/&#42;.&#42;".</li>
-</ol>
+<table class='confluenceTable'><tbody>
+<tr>
+<th class='confluenceTh'> Wildcard </th>
+<th class='confluenceTh'> Used as </th>
+<th class='confluenceTh'> Matches </th>
+<th class='confluenceTh'> Example </th>
+</tr>
+<tr>
+<td class='confluenceTd'> &#42;" </td>
+<td class='confluenceTd'> part of the path </td>
+<td class='confluenceTd'> none or exactly one subfolder </td>
+<td class='confluenceTd'> Pattern "/Kunigunda/&#42;/Sources/&#42;.&#42;" matches "/Kunigunda/Sources/&#42;.&#42;", "/Kunigunda/Service/Sources/&#42;.&#42;", and "/Kunigunda/Web/Sources/&#42;.&#42;" </td>
+</tr>
+<tr>
+<td class='confluenceTd'> "&#42;" </td>
+<td class='confluenceTd'> part of the folder name </td>
+<td class='confluenceTd'> zero or more characters that can appear in the folder name </td>
+<td class='confluenceTd'> Pattern "/Kunigunda/Sources/Test&#42;/&#42;.&#42;" matches "/Kunigunda/Sources/Test/&#42;.&#42;" and "/Kunigunda/Sources/Tests/&#42;.&#42;" </td>
+</tr>
+<tr>
+<td class='confluenceTd'> "&#42;" </td>
+<td class='confluenceTd'> part of the filename </td>
+<td class='confluenceTd'> zero or more characters that can appear in the file name </td>
+<td class='confluenceTd'> Pattern<br/>
+"/Kunigunda/Sources/&#42;.cs" matches all filenames in the "/Kunigunda/Sources" folder ending in ".cs". Pattern "/Kunigunda/Sources/&#42;Test.cs", matches all filenames in the "/Kunigunda/Sources/" folder that end with "Test.cs". </td>
+</tr>
+<tr>
+<td class='confluenceTd'> "&#42;" </td>
+<td class='confluenceTd'> part of the extension </td>
+<td class='confluenceTd'> zero or more characters that can appear in the extension. </td>
+<td class='confluenceTd'> Pattern "/Kunigunda/Sources/Build.&#42;" matches all files in "/Kunigunda/Sources" folder starting with "Build.". </td>
+</tr>
+<tr>
+<td class='confluenceTd'> "&#42;" </td>
+<td class='confluenceTd'> filename </td>
+<td class='confluenceTd'> any file name and extension </td>
+<td class='confluenceTd'> Pattern "/Kunigunda/Sources/&#42;" matches all files in "/Kunigunda/Sources" folder. </td>
+</tr>
+<tr>
+<td class='confluenceTd'> "&#42;.&#42;" </td>
+<td class='confluenceTd'> filename </td>
+<td class='confluenceTd'> any file name and extension </td>
+<td class='confluenceTd'> Pattern "/Kunigunda/Sources/&#42;.&#42;" matches all files in "/Kunigunda/Sources" folder. Note: "&#42;.&#42;" is exactly the same as "&#42;" as a filename. </td>
+</tr>
+<tr>
+<td class='confluenceTd'> "&#42;&#42;" </td>
+<td class='confluenceTd'> part of the path </td>
+<td class='confluenceTd'> zero or more subfolders. </td>
+<td class='confluenceTd'> Pattern "/Kunigunda/Sources/&#42;&#42;/Test/&#42;.&#42;" matches all files stored in any "Test" subfolder anywhere below the "/Kunigunda/Sources" tree (<em>e.g.</em>, "/Kunigunda/Sources/Test/&#42;.&#42;", "/Kunigunda/Sources/Core/Test/&#42;.&#42;"). </td>
+</tr>
+<tr>
+<td class='confluenceTd'> ? </td>
+<td class='confluenceTd'> anywhere </td>
+<td class='confluenceTd'> any single character </td>
+<td class='confluenceTd'> Pattern "/Kunigunda/Sources/Test?.cs" matches all files in "/Kunigunda/Sources" are named "Test" followed by one more character and that end in ".cs". </td>
+</tr>
+</tbody></table>
 
+<table cellpadding='5' width='85%' cellspacing='8px' class='noteMacro' border="0" align='center'><colgroup><col width='24'><col></colgroup><tr><td valign='top'><img src="./icons/emoticons/warning.gif" width="16" height="16" align="absmiddle" alt="" border="0"></td><td><b class="strong">Paths do not include the roots</b><br />Paths do not include the root server identifiers. For example, if you are using subversion source control on server "myserver" and trying to exclude path "svn://myserver/project1/excludedir/&#42;.&#42;" your node should be "/project1/excludedir/&#42;.&#42;".</td></tr></table>
+<table cellpadding='5' width='85%' cellspacing='8px' class='noteMacro' border="0" align='center'><colgroup><col width='24'><col></colgroup><tr><td valign='top'><img src="./icons/emoticons/warning.gif" width="16" height="16" align="absmiddle" alt="" border="0"></td><td><b class="strong">Path separators are not characters</b><br />Path separators are not compared as characters, but rather as separations between path elements.  The separators "\", "/" and the .Net System.IO.Path.DirectorySeparatorChar are all treated interchangably.  This means that the patterns "/Kunigunda/Sources/Test.cs" and "\Kunigunda\Sources\Test.cs" both match the file named "Test.cs" in the folder named "Sources" under the folder named "Kunigunda".</td></tr></table>
 
-<table cellpadding='5' width='85%' cellspacing='8px' class='noteMacro' border="0" align='center'><colgroup><col width='24'><col></colgroup><tr><td valign='top'><img src="./icons/emoticons/warning.gif" width="16" height="16" align="absmiddle" alt="" border="0"></td><td><b class="strong">A Note On Paths</b><br />
-<p>Paths do not include the root server identifiers. For example, if you are using subversion source control on server "myserver" and trying to exclude path svn://myserver/project1/excludedir/&#42;.&#42; your node should be /project1/excludedir/&#42;.&#42;</p></td></tr></table>
-
-<table cellpadding='5' width='85%' cellspacing='8px' class='noteMacro' border="0" align='center'><colgroup><col width='24'><col></colgroup><tr><td valign='top'><img src="./icons/emoticons/warning.gif" width="16" height="16" align="absmiddle" alt="" border="0"></td><td><b class="strong">StarTeam needs the full path</b><br />
-<p>With StarTeam, use the entire file path as recognized by StarTeam, such<br/>
+<table cellpadding='5' width='85%' cellspacing='8px' class='noteMacro' border="0" align='center'><colgroup><col width='24'><col></colgroup><tr><td valign='top'><img src="./icons/emoticons/warning.gif" width="16" height="16" align="absmiddle" alt="" border="0"></td><td><b class="strong">StarTeam needs the full path</b><br />With StarTeam, use the entire file path as recognized by StarTeam, such<br/>
 as what is displayed when clicking File/Properties/Working File within<br/>
-StarTeam.</p>
+StarTeam.
 
 <p>Examples:</p>
 <div class="code"><div class="codeContent">
@@ -186,8 +254,7 @@ c:\project\module2\**\filethatdoesntaffectbuild.txt</pre>
 
 <ol>
 	<li>Case insensitive pattern matching.</li>
-	<li>Support for "?" as a wildcard in patterns.</li>
-	<li>Current patterns are only an approximation of the pattersn used in NAnt filesets. Pattern translation and evaluation types in NAnt assembly are not public so it is not possible to use them directly but it would be a nice optimization.</li>
+	<li>Current patterns are only an approximation of the patterns used in NAnt filesets. Pattern translation and evaluation types in NAnt assembly are not public so it is not possible to use them directly but it would be a nice optimization.</li>
 </ol>
 
 
@@ -203,7 +270,7 @@ UserFilter and ActionFilter by <b>Perry Ismangil</b>.</p>
 				<td height="12" background="border/border_bottom.gif"><img src="border/spacer.gif" width="1" height="1" border="0"/></td>
 			</tr>
 		    <tr>
-			    <td align="center"><font color="grey">Document generated by Confluence on Jun 21, 2007 10:33</font></td>
+			    <td align="center"><font color="grey">Document generated by Confluence on Jan 31, 2008 19:33</font></td>
 		    </tr>
 	    </table>
     </body>

@@ -15,30 +15,29 @@
                                                     </span>
 				    </div>
 				    <div class="pagesubheading">
-					    This page last changed on Nov 19, 2006 by <font color="#0050B2">orogers</font>.
+					    This page last changed on Aug 23, 2007 by <font color="#0050B2">richardjfoster</font>.
 				    </div>
 
 				    <p>The <b>Build Publisher</b> lets you copy any arbitrary files on a successful build.</p>
 
 <h4><a name="BuildPublisher-Example"></a>Example</h4>
 
-<div class="code"><div class="codeContent">
+<p><div class="code"><div class="codeContent">
 <pre class="code-xml"><span class="code-tag">&lt;buildpublisher&gt;</span>
      <span class="code-tag">&lt;sourceDir&gt;</span>C:\myprojects\project1<span class="code-tag">&lt;/sourceDir&gt;</span>
      <span class="code-tag">&lt;publishDir&gt;</span>\\myfileserver\project1<span class="code-tag">&lt;/publishDir&gt;</span>
      <span class="code-tag">&lt;useLabelSubDirectory&gt;</span>false<span class="code-tag">&lt;/useLabelSubDirectory&gt;</span>
 <span class="code-tag">&lt;/buildpublisher&gt;</span></pre>
-</div></div>
+</div></div><br clear="all" /></p>
 
 <p>This will copy the contents of <b>C:\myprojects\project1</b> to the network share <b>\\myfileserver\project1</b>.</p>
 
-<p><b>Minimal Configuration Example</b></p>
-
+<p><b>Minimal Configuration Example</b><br/>
 <div class="code"><div class="codeContent">
 <pre class="code-xml"><span class="code-tag">&lt;buildpublisher /&gt;</span></pre>
-</div></div>
+</div></div><br clear="all" /></p>
 
-<p>This will copy the contents of the project's working directory to a new label subdirectory under the project's artifact directory (ie &lt;artifact_dir&gt;\&lt;label_dir&gt;)</p>
+<p>This will copy the contents of the project's working directory to a new label subdirectory under the project's artifact directory (i.e. &lt;artifact_dir&gt;\&lt;label_dir&gt;)</p>
 
 <h4><a name="BuildPublisher-ConfigurationElements%3A"></a>Configuration Elements:</h4>
 
@@ -72,8 +71,7 @@
 <td class='confluenceTd'> true </td>
 </tr>
 </tbody></table>
-
-<p><img class="emoticon" src="./icons/emoticons/information.gif" height="16" width="16" align="absmiddle" alt="" border="0"/> This block used to support a 'additionalDir' attributed. This feature has been removed - just use multiple <tt>&lt;buildpublisher&gt;</tt> blocks to achieve the same job.<br/>
+<p><img class="emoticon" src="./icons/emoticons/information.gif" height="16" width="16" align="absmiddle" alt="" border="0"/> This block used to support an 'additionalDir' attribute. This feature has been removed - just use multiple <tt>&lt;buildpublisher&gt;</tt> blocks to achieve the same job.<br/>
 <img class="emoticon" src="./icons/emoticons/information.gif" height="16" width="16" align="absmiddle" alt="" border="0"/> The <b>useLabelSubDirectory</b> property has been added in 1.2.</p>
 
 				    
@@ -90,7 +88,7 @@
 <p>&lt;source&gt;C:\myprojects\project1&#42;-results.xml&lt;/source&gt;</p></font>
                                     <div align="left" class="smallfont" style="color: #666666; width: 98%; margin-bottom: 10px;">
                                         <img src="icons/comment_16.gif" height="16" width="16" border="0" align="absmiddle"/>
-                                        Posted by dcameron at Jan 14, 2007 23:17
+                                        Posted by dcameron at Jan 15, 2007 00:17
                                     </div>
                                 </td>
                             </tr>
@@ -100,7 +98,17 @@
                                     <font class="smallfont"><p>As far as I can tell, it is ignoring the false value I inserted as a value for 'useLabelSubdirectory'. It keeps creating sub-folders in the target directory with the files, and placing the files therein. To avoid typographical errors, I cut-and-pasted the sample form above.</p></font>
                                     <div align="left" class="smallfont" style="color: #666666; width: 98%; margin-bottom: 10px;">
                                         <img src="icons/comment_16.gif" height="16" width="16" border="0" align="absmiddle"/>
-                                        Posted by actualrandy at Feb 28, 2007 11:12
+                                        Posted by actualrandy at Feb 28, 2007 12:12
+                                    </div>
+                                </td>
+                            </tr>
+                                                        <tr>
+                                <td  style="border-top: 1px dashed #666666">
+                                    <a name="comment-2981901"></a>
+                                    <font class="smallfont"><p>'useLabelSubdirectory' is meant for creating a directory under the target directory with the build label. It doesn't control whether any sub-folders are created in the target directory. That depends on whether your source directory has any sub-folders. It might be a good idea to be able to specify the number of sub-levels of the source directory it should copy.</p></font>
+                                    <div align="left" class="smallfont" style="color: #666666; width: 98%; margin-bottom: 10px;">
+                                        <img src="icons/comment_16.gif" height="16" width="16" border="0" align="absmiddle"/>
+                                        Posted by akumar at Jun 23, 2007 21:55
                                     </div>
                                 </td>
                             </tr>
@@ -113,7 +121,7 @@
 				<td height="12" background="border/border_bottom.gif"><img src="border/spacer.gif" width="1" height="1" border="0"/></td>
 			</tr>
 		    <tr>
-			    <td align="center"><font color="grey">Document generated by Confluence on Jun 21, 2007 10:33</font></td>
+			    <td align="center"><font color="grey">Document generated by Confluence on Jan 31, 2008 19:33</font></td>
 		    </tr>
 	    </table>
     </body>

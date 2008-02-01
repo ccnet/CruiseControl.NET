@@ -1,0 +1,150 @@
+<html>
+    <head>
+        <title>CruiseControl.NET : CCNet 1.4 Release Notes</title>
+	    <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">	    
+    </head>
+
+    <body>
+	    <table class="pagecontent" border="0" cellpadding="0" cellspacing="0" width="100%" bgcolor="#ffffff">
+		    <tr>
+			    <td valign="top" class="pagebody">
+				    <div class="pageheader">
+					    <span class="pagetitle">
+                            CruiseControl.NET : CCNet 1.4 Release Notes
+                                                    </span>
+				    </div>
+				    <div class="pagesubheading">
+					    This page last changed on Jan 31, 2008 by <font color="#0050B2">rosspatterson</font>.
+				    </div>
+
+				    <h2><a name="CCNet1.4ReleaseNotes-ReleaseNotesCruiseControl.NETVersion1.4"></a>Release Notes - CruiseControl .NET - Version 1.4</h2>
+
+<p>This is a list of <a href="http://jira.public.thoughtworks.org/secure/ReleaseNote.jspa?projectId=10000&amp;styleName=Html&amp;version=10302">Jira Issues resolved by this release</a> :</p>
+
+<h4><a name="CCNet1.4ReleaseNotes-Bug"></a>Bug</h4>
+<ul>
+	<li>CCNET-192 - Modifications not detected by cvs provider</li>
+	<li>CCNET-213 - Changing non SCM properties in dashboard causes a complete delete/re-create of the project</li>
+	<li>CCNET-383 - Schedule trigger is buggy?</li>
+	<li>CCNET-495 - RemoteProjectLabeller not always getting the latest label</li>
+	<li>CCNET-648 - Filtered Sourcecontrol gives a "Specified cast is not valid" error if filters contain invalid xml nodes</li>
+	<li>CCNET-815 - Task timeout does not stop the build</li>
+	<li>CCNET-881 - Using VSS and filter source control blocks together with long VSS path names can cause "illegal character" exceptions and prevent builds.</li>
+	<li>CCNET-899 - Bug in CC.NET dashboard last build label column</li>
+	<li>CCNET-903 - Problem with russian chars in ccnet.log (Solution)</li>
+	<li>CCNET-928 - LastSuccessfulIntegrationLabel lags behind by one build, so dependent projects using stateFileLabeller are building with the wrong label</li>
+	<li>CCNET-936 - XslTransformer requires XslSettings.EnableScript to allow various .xsl web reports</li>
+	<li>CCNET-948 - Build labels for CCTray are out of sync with those for the executables</li>
+	<li>CCNET-953 - MSBuild.xsl: DTD not allowed</li>
+	<li>CCNET-960 - SVN fails if local working copies are not present</li>
+	<li>CCNET-967 - SVN Block fails if checkout folders not present!</li>
+	<li>CCNET-969 - CCNETxxx environment variables are not set before calling DevEnv</li>
+	<li>CCNET-972 - CCTray reports weird next build check times</li>
+	<li>CCNET-976 - A failure in &lt;prebuild&gt; task fails should stop the build : no tasks executed from prebuild and tasks section</li>
+	<li>CCNET-981 - "System.ArgumentNullException: Value cannot be null." from  System.IO.Path.Combine()</li>
+	<li>CCNET-983 - ModificationHistory Report - Toggle not working in Firefox, Safari, etc.</li>
+	<li>CCNET-993 - specifying a not existing path in the state section results in a reflector error</li>
+	<li>CCNET-997 - MSBuild Integration Properties Quotation Issue</li>
+	<li>CCNET-1013 - No email sent to users contributing modifications when the build gets an exception</li>
+	<li>CCNET-1019 - DevEnv task misinterprets spaces in project path</li>
+	<li>CCNET-1034 - updown control in cctray not working + showing incorrect value</li>
+	<li>CCNET-1036 - System.ArgumentException: Invalid value '0' for parameter 'interval'.</li>
+	<li>CCNET-1057 - WebDashboard broken on Mono 1.2.6</li>
+	<li>CCNET-1058 - AccuRev source control GetSource() should update to exactly the revision detected by GetModifications(), if possible.</li>
+	<li>CCNET-1064 - CCTray download should only claim "multiple choices" when there <b>are</b> multiple choices.</li>
+	<li>CCNET-1066 -  AccuRev should get the basis stream name using the current IntegrationResult, not the previous.  The previous IntegrationResult does not have an artifactDirectory name if this is the first time the project has been built.</li>
+	<li>CCNET-1067 - Typo in parameter name</li>
+	<li>CCNET-1070 - User friendly message when someone tries to view statistics when it has not been collected yet, instead of showing a stacktrace</li>
+</ul>
+
+
+<h4><a name="CCNet1.4ReleaseNotes-Improvement"></a>Improvement</h4>
+<ul>
+	<li>CCNET-282 - Better CVS logging for failure</li>
+	<li>CCNET-442 - Break dependency of Dashboard on Publishers</li>
+	<li>CCNET-532 - Faster feedback on forced build</li>
+	<li>CCNET-571 - CCTray: adding invalid servers to the configuration screen</li>
+	<li>CCNET-640 - File Source Control directory should be relative to project working directory</li>
+	<li>CCNET-729 - Start and end time for FilterTrigger should be optional and default to min time and max time respectively</li>
+	<li>CCNET-730 - Add the machine name as a column in the CCTray UI</li>
+	<li>CCNET-887 - Client-side caching of the large build reports could greatly improve performance</li>
+	<li>CCNET-900 - Make CCtray multi-monitor friendly.</li>
+	<li>CCNET-902 - Date labeller format should pad with zeros.  Ex: 2007.04.05 not 2007.4.5</li>
+	<li>CCNET-949 - Document the FileLabeller</li>
+	<li>CCNET-950 - FileLabeller usage changes</li>
+	<li>CCNET-957 - Create a 'Fixed' notification type for the email publisher</li>
+	<li>CCNET-970 - Support for some standard keyboard shortcuts</li>
+	<li>CCNET-973 - Hide projects in CCTray without removing them from configuration</li>
+	<li>CCNET-977 - FileLabeller should be more forgiving about file contents</li>
+	<li>CCNET-978 - &lt;exec&gt; task should transform the process' output to valid XML for build log</li>
+	<li>CCNET-980 - New Subversion Project and New Working Directory</li>
+	<li>CCNET-982 - Dashboard "download CCTray" only expects one file.</li>
+	<li>CCNET-986 - Improve filter on dashboard so that warnings do not get shown as errors</li>
+	<li>CCNET-989 - email publisher should foresee a modificationtype for the comitters for a build</li>
+	<li>CCNET-990 - email publisher should foresee a mechanism for converting the modifying user name to an email adres</li>
+	<li>CCNET-991 - CCTray won't tell you what level it is</li>
+	<li>CCNET-995 - Provide more information when wrong settings are detected</li>
+	<li>CCNET-999 - Modification logger shoud provide some filtering</li>
+	<li>CCNET-1006 - After Pressing the delete button in the config screen of cctray, the focus should stay on the projects</li>
+	<li>CCNET-1008 - CCTray should have setting for specifying username fixing the build</li>
+	<li>CCNET-1010 - improve standard statistics report page</li>
+	<li>CCNET-1017 -  CCTray window should "Show in Taskbar"</li>
+	<li>CCNET-1021 - ForceBuildPublisher should allow you to enter a name like you can for triggers</li>
+	<li>CCNET-1045 - time rendered on dashboard pages to improve debuggine</li>
+	<li>CCNET-1046 - Email publisher ignores IntegrationStatus.Exception</li>
+	<li>CCNET-1059 - updated the errormessage for the ModificationHistoryProjectPlugin to the correct publisher name</li>
+	<li>CCNET-1060 - improved the errormessage when wrong settings are detected  (update of CCNET-995)</li>
+	<li>CCNET-1061 - clean up dummy test folder after test execcution</li>
+	<li>CCNET-1062 - fixed a typo in the statistics.xsl page</li>
+	<li>CCNET-1068 - The devenv task should include Visual Studio's standard error stream in the build results as "error" messages.</li>
+	<li>CCNET-1069 - Smash the mammoth, monolithic CCTrayMultiSettingsForm up in to smaller pieces.</li>
+	<li>CCNET-1071 - Moved Statistics Results handling to StatisticsResults.</li>
+</ul>
+
+
+<h4><a name="CCNet1.4ReleaseNotes-NewFeature"></a>New Feature</h4>
+<ul>
+	<li>CCNET-158 - Ability to tell where in the build process you are.</li>
+	<li>CCNET-179 - Support other source control providers via generic provider</li>
+	<li>CCNET-235 - Allow builds to be killed remotely</li>
+	<li>CCNET-318 - Automatically resolve email address from source control user name</li>
+	<li>CCNET-384 - Implement ChangeHistory plugin for CCDashboard</li>
+	<li>CCNET-412 - RSS Feed</li>
+	<li>CCNET-625 - Provide more detailed feedback from build during build process</li>
+	<li>CCNET-784 - Email Publisher Enhancements</li>
+	<li>CCNET-805 - Add a new FilteredSourceControl block for specific comments / labels</li>
+	<li>CCNET-890 - Email notification only on success</li>
+	<li>CCNET-901 - Abort running Build Processes</li>
+	<li>CCNET-906 - CCtray always ontop</li>
+	<li>CCNET-918 - Plastic SCM Integration</li>
+	<li>CCNET-963 - Dashboard should generate xml report for single project</li>
+	<li>CCNET-992 - CCNet should clean up the artifacts folder according to some settings</li>
+	<li>CCNET-1011 - Format number part in DefaultLabeller</li>
+	<li>CCNET-1022 - CCNet needs a tool to validate a ccnet.config file</li>
+	<li>CCNET-1039 - devenv task should support Visual Studio 2008</li>
+</ul>
+
+
+<h4><a name="CCNet1.4ReleaseNotes-Task"></a>Task</h4>
+<ul>
+	<li>CCNET-434 - Add installation documentation for CCTray</li>
+	<li>CCNET-759 - Add NUnit.Framework to the lib folder and reference it from there</li>
+	<li>CCNET-958 - Not able to build project from CCTray</li>
+</ul>
+
+
+				    
+                    			    </td>
+		    </tr>
+	    </table>
+	    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+			<tr>
+				<td height="12" background="border/border_bottom.gif"><img src="border/spacer.gif" width="1" height="1" border="0"/></td>
+			</tr>
+		    <tr>
+			    <td align="center"><font color="grey">Document generated by Confluence on Jan 31, 2008 19:33</font></td>
+		    </tr>
+	    </table>
+    </body>
+</html>

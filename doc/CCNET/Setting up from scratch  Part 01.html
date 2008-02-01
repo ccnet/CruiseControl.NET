@@ -1,0 +1,177 @@
+<html>
+    <head>
+        <title>CruiseControl.NET : Setting up from scratch  Part 01</title>
+	    <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">	    
+    </head>
+
+    <body>
+	    <table class="pagecontent" border="0" cellpadding="0" cellspacing="0" width="100%" bgcolor="#ffffff">
+		    <tr>
+			    <td valign="top" class="pagebody">
+				    <div class="pageheader">
+					    <span class="pagetitle">
+                            CruiseControl.NET : Setting up from scratch  Part 01
+                                                    </span>
+				    </div>
+				    <div class="pagesubheading">
+					    This page last changed on Sep 29, 2007 by <font color="#0050B2">williams</font>.
+				    </div>
+
+				    <p>We'll be setting it up step by step, so this will be a real step by step approach. The reason is you can see what the benefits are of the setups used in this document.<br/>
+The first parts will seem overdone for users who used CCNet before, but it is intended for the real starters. Later parts contain tips/situations for people with the basic knowledge.</p>
+
+<p>Typically a build system consists of 2 servers and X development machines, they can be on different physical machines, but they can also be hosted on 1 machine.<br/>
+Or 1 physical machine with virtual machines on it, everything is possible <img class="emoticon" src="./icons/emoticons/wink.gif" height="20" width="20" align="absmiddle" alt="" border="0"/></p>
+
+<p>These 2 servers are :&nbsp;&nbsp;&nbsp;<br/>
+° Build server&nbsp; : referenced as BuildServer<br/>
+° Source Control server : referenced as SourceControl</p>
+
+<p>For this example the setup will be on 1 machine, so everybody can follow this tutorial without having to maintain multiple PC's.</p>
+
+<p>The easiest way to set things up is to respect the following installation order :<br/>
+° windows<br/>
+° IIS<br/>
+° .Net framework<br/>
+° Visual Studio<br/>
+° extra tools (Nant, Testdriven.Net, NCover, ...)</p>
+
+<h3><a name="SettingupfromscratchPart01-Step1%3AInstallingCCNet"></a>Step 1 : Installing CCNet</h3>
+
+<p>Since it has an installer, it is in fact : setup, next, next, next, ...<br/>
+Once this is done, you will have :<br/>
+° a new folder in \Program Files : CruiseControl.Net<br/>
+° a shortcut on the desktop : CruiseControl.Net<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; This shortcut will start the build server.</p>
+
+<h3><a name="SettingupfromscratchPart01-Step2%3AFolderstructure"></a>Step 2 : Folder structure</h3>
+
+<p>Make the following folders</p>
+<table class='confluenceTable'><tbody>
+<tr>
+<th class='confluenceTh'> Folder Name </th>
+<th class='confluenceTh'> Purpose </th>
+</tr>
+<tr>
+<td class='confluenceTd'> c:\Integration </td>
+<td class='confluenceTd'> will contain the integration logs, artifacts, sources, ... </td>
+</tr>
+<tr>
+<td class='confluenceTd'> c:\Repository </td>
+<td class='confluenceTd'> will contain the repository of our source control </td>
+</tr>
+<tr>
+<td class='confluenceTd'> c:\Projects </td>
+<td class='confluenceTd'> will contain checked out sources to work with </td>
+</tr>
+</tbody></table>
+<p><br clear="all" />
+<div class="panel"><div class="panelContent">
+<p>note : this is not the best folder structure for sources, but for these example it will do fine.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; for setting up development trees, see Tree Surgeon (<a href="http://www.codeplex.com/treesurgeon">http://www.codeplex.com/treesurgeon</a>),&nbsp; CIFactory (<a href="http://www.cifactory.org/joomla">http://www.cifactory.org/joomla</a>), ...</p>
+</div></div><br clear="all" /> <br clear="all" />
+<br clear="all" /></p>
+
+<h3><a name="SettingupfromscratchPart01-Step3%3AFirstbasicCCNetproject"></a>Step 3 : First basic CCNet project</h3>
+
+<p>This project is just for playing around a bit with cruisecontrol, without having to do any real coding.<br/>
+We'll just use a batch file, and play a bit with that.<br/>
+Make a subfolder in c:\projects, named Example01<br/>
+Create a command script named 'test.cmd' with the following contents
+<br clear="all" />
+<div class="code"><div class="codeContent">
+<pre class="code-java">@echo off
+set</pre>
+</div></div><br clear="all" /></p>
+
+<p>If you run this script, you'll see all the environment variables of your machine.
+<br clear="all" /></p>
+
+<h3><a name="SettingupfromscratchPart01-Step4%3AConfiguringthebuildserver"></a>Step 4 : Configuring the build server</h3>
+
+<p>Start the build service, (there is a desktop icon) you will see a command window wit the following :
+<br clear="all" />
+<div class="panel"><div class="panelContent">
+<p>[CCNet Server:DEBUG] The trace level is currently set to debug.&nbsp; This will cause CCNet to log at the most verbose level,<br/>
+which is useful for setting up or debugging the server.&nbsp; Once your server is running smoothly, we recommend changing<br/>
+this setting in C:\Program Files\CruiseControl.NET\server\ccnet.exe.config to a lower level.<br/>
+[CCNet Server:INFO] Reading configuration file "C:\Program Files\CruiseControl.NET\server\ccnet.config"<br/>
+[CCNet Server:INFO] No projects found<br/>
+[CCNet Server:INFO] Registered channel: tcp<br/>
+[CCNet Server:INFO] CruiseManager: Listening on url: tcp://192.168.131.72:21234/CruiseManager.rem<br/>
+[CCNet Server:INFO] Starting CruiseControl.NET Server</p>
+</div></div><br clear="all" /> <br clear="all" />
+Since there are no projects, we'll add one for this simple script. Leave the CCNet server running, it will pick up the changes to the config file after every save.<br/>
+Modify CCNet.config, found in \program files\CruiseControl.Net\server<br/>
+Enter the following text :
+<br clear="all" />
+<div class="code"><div class="codeContent">
+<pre class="code-java">&lt;cruisecontrol&gt;
+    &lt;project&gt;
+        &lt;name&gt;SimpleExample&lt;/name&gt;
+
+	&lt;triggers /&gt;
+
+	&lt;tasks&gt;
+	    &lt;exec&gt;
+		&lt;executable&gt;c:\projects\test.cmd&lt;/executable&gt;
+	    &lt;/exec&gt;
+	&lt;/tasks&gt;
+    &lt;/project&gt;
+&lt;/cruisecontrol&gt;</pre>
+</div></div><br clear="all" /></p>
+
+<p>You'll see that the command window of the server added the following lines.<br/>
+<div class="panel"><div class="panelContent">
+<p>[680:INFO] Configuration changed: Restarting CruiseControl.NET Server<br/>
+[680:INFO] Reading configuration file "C:\Program Files\CruiseControl.NET\server\ccnet.config"<br/>
+[SimpleExample:INFO] Starting integrator for project: SimpleExample</p>
+</div></div><br clear="all" /></p>
+
+<p>Now you can also browse to the dashboard,</p>
+
+<p>open your browser and surf to <a href="http://localhost/ccnet">http://localhost/ccnet</a><br/>
+you will see the project : SimpleExample<br/>
+<img src="../4882433/Pic001.gif" align="absmiddle" border="0" /></p>
+
+<p>Press the 'Force' button to force the build. Next press 'Refresh Status' to view the result.
+<br clear="all" />  <img src="../4882433/Pic002.gif" align="absmiddle" border="0" /></p>
+
+<p>You see that the build was successfull <img class="emoticon" src="./icons/emoticons/biggrin.gif" height="20" width="20" align="absmiddle" alt="" border="0"/></p>
+
+<p>Clicking on the project name 'SimpleExample' will show a page with project related information. From there on you can go to individual builds.</p>
+
+<p>This shows how to set up a very basic project in CCNet, the next topic will cover :</p>
+
+<p>° improving the project setup<br/>
+° setting up source control monitoring<br/>
+° getting information about builds</p>
+
+				    					    <br/>
+                        <div class="tabletitle">
+                            <a name="attachments">Attachments:</a>
+                        </div>
+
+                        <div class="greybox" align="left">
+                                                            <img src="icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="../4882433/Pic001.gif">Pic001.gif</a> (image/gif)
+                                <br/>
+                                                            <img src="icons/bullet_blue.gif" height="8" width="8" alt=""/>
+                                <a href="../4882433/Pic002.gif">Pic002.gif</a> (image/gif)
+                                <br/>
+                                                    </div>
+				    
+                    			    </td>
+		    </tr>
+	    </table>
+	    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+			<tr>
+				<td height="12" background="border/border_bottom.gif"><img src="border/spacer.gif" width="1" height="1" border="0"/></td>
+			</tr>
+		    <tr>
+			    <td align="center"><font color="grey">Document generated by Confluence on Jan 31, 2008 19:33</font></td>
+		    </tr>
+	    </table>
+    </body>
+</html>

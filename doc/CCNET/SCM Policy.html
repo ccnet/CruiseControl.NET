@@ -15,7 +15,7 @@
                                                     </span>
 				    </div>
 				    <div class="pagesubheading">
-					    This page last changed on May 13, 2006 by <font color="#0050B2">gtackley@thoughtworks.com</font>.
+					    This page last changed on Jan 17, 2008 by <font color="#0050B2">rosspatterson</font>.
 				    </div>
 
 				    <p>This page describes Source Control, Build Management and Issue Tracking policy for the CruiseControl.NET project.</p>
@@ -26,15 +26,15 @@
 
 <p>CruiseControl.NET uses the Subversion Source Control server offered by SourceForge.net. Subversion access details for the project can be seen <a href="http://sourceforge.net/svn/?group_id=71179">here</a> .</p>
 
-<p>The main CruiseControl.NET project can be found at <a href="https://svn.sourceforge.net/svnroot/ccnet/trunk">https://svn.sourceforge.net/svnroot/ccnet/trunk</a>.</p>
+<p>The main CruiseControl.NET project can be found at <a href="https://ccnet.svn.sourceforge.net/svnroot/ccnet/trunk">https://ccnet.svn.sourceforge.net/svnroot/ccnet/trunk</a>.</p>
 
-<p>CruiseControl.NET is tagged on every successful build by its own Continuous Integration process. These tags have a name related to the build number so look like (for example) <a href="https://svn.sourceforge.net/svnroot/ccnet/tags/ver-1_0_0_1201">https://svn.sourceforge.net/svnroot/ccnet/tags/ver-1_0_0_1201</a>.</p>
+<p>CruiseControl.NET is tagged on every successful build by its own Continuous Integration process. These tags have a name related to the build number so look like (for example) <a href="https://ccnet.svn.sourceforge.net/svnroot/ccnet/tags/ver-1_0_0_1201">https://ccnet.svn.sourceforge.net/svnroot/ccnet/tags/ver-1_0_0_1201</a>.</p>
 
 <p>CruiseControl.NET uses branches only to allow stable releases to be maintained while at the same time offer mainline iterative development. We use the release branching method, as described very well by the book <em><a href="http://www.pragmaticprogrammer.com/titles/svn/index.html">Pragmatic Source Control Using Subversion</a></em> . This means that if we have a release branch active we may decide to fix bugs on that branch, and then merge changes to the trunk. Apart from in extreme circumstances (and occasionally at the start of a branch) we <b>never</b> merge from the trunk to the branch.</p>
 
 <h3><a name="SCMPolicy-WorkingontheTrunk"></a>Working on the Trunk</h3>
 
-<p>Most work should be performed on the trunk. For this scenario, just check out <a href="https://svn.sourceforge.net/svnroot/ccnet/trunk">https://svn.sourceforge.net/svnroot/ccnet/trunk</a>.</p>
+<p>Most work should be performed on the trunk. For this scenario, just check out <a href="https://ccnet.svn.sourceforge.net/svnroot/ccnet/trunk">https://ccnet.svn.sourceforge.net/svnroot/ccnet/trunk</a>.</p>
 
 <h3><a name="SCMPolicy-WorkingontheBranch"></a>Working on the Branch</h3>
 
@@ -47,7 +47,7 @@
 
 <p>Working on the release branch is slightly more complicated that working on the trunk. The following examples are using the cvs command line and the first CruiseControl.NET release branch called <b><tt>RB_1_0</tt></b> :</p>
 <ol>
-	<li>Check out the branch to a <b>separate</b> working directory : <a href="https://svn.sourceforge.net/svnroot/ccnet/branches/RB_1_0">https://svn.sourceforge.net/svnroot/ccnet/branches/RB_1_0</a></li>
+	<li>Check out the branch to a <b>separate</b> working directory : <a href="https://ccnet.svn.sourceforge.net/svnroot/ccnet/branches/RB_1_0">https://ccnet.svn.sourceforge.net/svnroot/ccnet/branches/RB_1_0</a></li>
 	<li><b>OR</b> if you have already checked out the branch, make sure it is <b>clean</b> and <b>up to date</b>. Please try <b>not</b> to checkin more than one <em>logical change</em> to the branch at once since it makes tracking merges back to the trunk a nightmare</li>
 	<li>Make your changes in this directory</li>
 	<li>Commit as normal</li>
@@ -60,7 +60,7 @@
 <ol>
 	<li>Make sure you have a <em>clean</em> working directory of the trunk which is up-to-date and as no pending changes (if necessary check out a new working directory somewhere else on your machine)</li>
 	<li>Perform a merge in the root of your CCNet Trunk working directory. Apply the changes from the repository revision number that relates to your checkin to the branch and the revision before.
-<table cellpadding='5' width='85%' cellspacing='8px' class='infoMacro' border="0" align='center'><colgroup><col width='24'><col></colgroup><tr><td valign='top'><img src="./icons/emoticons/information.gif" width="16" height="16" align="absmiddle" alt="" border="0"></td><td><b class="strong">Example</b><br />If your changes appeared in revision 2396, you would use the following merge recipe: <br clear="all" /> <tt>svn merge -r2395:2396 <a href="https://svn.sourceforge.net/svnroot/ccnet/branches/RB_1_0">https://svn.sourceforge.net/svnroot/ccnet/branches/RB_1_0</a></tt> </td></tr></table>
+<table cellpadding='5' width='85%' cellspacing='8px' class='infoMacro' border="0" align='center'><colgroup><col width='24'><col></colgroup><tr><td valign='top'><img src="./icons/emoticons/information.gif" width="16" height="16" align="absmiddle" alt="" border="0"></td><td><b class="strong">Example</b><br />If your changes appeared in revision 2396, you would use the following merge recipe: <br clear="all" /> <tt>svn merge -r2395:2396 <a href="https://ccnet.svn.sourceforge.net/svnroot/ccnet/branches/RB_1_0">https://ccnet.svn.sourceforge.net/svnroot/ccnet/branches/RB_1_0</a></tt> </td></tr></table>
 <table cellpadding='5' width='85%' cellspacing='8px' class='infoMacro' border="0" align='center'><colgroup><col width='24'><col></colgroup><tr><td valign='top'><img src="./icons/emoticons/information.gif" width="16" height="16" align="absmiddle" alt="" border="0"></td><td><b class="strong">Example</b><br />If you use TortoiseSVN, click merge on the top level directory of trunk. In the "From" box select the branch url, then click the topmost Show log button. Pick the revision number you want to merge in.  Tortoise automatically fills in the rest of the dialog - so then click OK.</td></tr></table></li>
 	<li><b>Run a local build!</b> You need to make sure that your merge has worked on the trunk so don't go blindly committing. <img class="emoticon" src="./icons/emoticons/smile.gif" height="20" width="20" align="absmiddle" alt="" border="0"/></li>
 	<li>Commit, mentioning in your commit message that you have done a merge, and what versions you merged
@@ -94,11 +94,12 @@
 
 <p>First make sure that the all changes to the trunk have built successfully. Then, using the svn command line, issue the following command in a trunk working directory:</p>
 <ul>
-	<li><tt>svn</tt> <tt>copy</tt> <a href="https://svn.sourceforge.net/svnroot/ccnet/trunk">https://svn.sourceforge.net/svnroot/ccnet/trunk</a> <a href="https://svn.sourceforge.net/svnroot/ccnet/branches/BranchName">https://svn.sourceforge.net/svnroot/ccnet/branches/BranchName</a></li>
+	<li><tt>svn</tt> <tt>copy</tt> <a href="https://ccnet.svn.sourceforge.net/svnroot/ccnet/trunk">https://ccnet.svn.sourceforge.net/svnroot/ccnet/trunk</a> <a href="https://ccnet.svn.sourceforge.net/svnroot/ccnet/branches/BranchName">https://ccnet.svn.sourceforge.net/svnroot/ccnet/branches/BranchName</a></li>
 </ul>
 
 
 <p>Finally, update the Branching History table above, making note of the label created by the last CCNetLive build.</p>
+
 
 				    
                     			    </td>
@@ -109,7 +110,7 @@
 				<td height="12" background="border/border_bottom.gif"><img src="border/spacer.gif" width="1" height="1" border="0"/></td>
 			</tr>
 		    <tr>
-			    <td align="center"><font color="grey">Document generated by Confluence on Jun 21, 2007 10:33</font></td>
+			    <td align="center"><font color="grey">Document generated by Confluence on Jan 31, 2008 19:33</font></td>
 		    </tr>
 	    </table>
     </body>

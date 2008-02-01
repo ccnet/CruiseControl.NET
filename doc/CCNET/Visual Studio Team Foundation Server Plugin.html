@@ -15,25 +15,24 @@
                                                     </span>
 				    </div>
 				    <div class="pagesubheading">
-					    This page last changed on Jun 06, 2006 by <font color="#0050B2">martinwoodward</font>.
+					    This page last changed on Nov 27, 2007 by <font color="#0050B2">martinwoodward</font>.
 				    </div>
 
-				    <p>Because of dependencies on Team Foundation assemblies which cannot be shipped with the Cruise Control source, this plugin is available as a standalone plugin from the <a href="http://vstsplugins.sourceforge.net">VSTSPlugins</a> project on Sourceforge.  The plugin has been recently updated to work with version 1.0 of the Team Foundation Server.</p>
+				    <p>Because of dependencies on Team Foundation assemblies which cannot be shipped with the Cruise Control source, this plugin is available as a standalone plugin from the <a href="http://www.codeplex.com/TFSCCNetPlugin/">TFS CCNET Plugin</a> project on CodePlex. The plug-in works with Team Foundation Server 2005 and against Team Foundation Server 2008 so long as the Team Explorer client assemblies are available.&nbsp; To download the latest version of the Microsoft Visual Studio Team Explorer client which will install the client assemblies on your machine then visit the <a href="http://www.microsoft.com/downloads/details.aspx?familyid=0ed12659-3d41-4420-bbb0-a46e51bfca86&amp;displaylang=en">Microsoft Download Site</a>.&nbsp; Note that the TFS2008 client assemblies work just fine against a TFS2005 server.</p>
 
-<h3><a name="VisualStudioTeamFoundationServerPlugin-VisualStudioTeamFoundationServer%28VSTS%29ConfigurationExamples"></a>Visual Studio Team Foundation Server (VSTS) Configuration Examples </h3>
 
-<p>Minimal example: </p>
+<h3><a name="VisualStudioTeamFoundationServerPlugin-VisualStudioTeamFoundationServer%28VSTS%29ConfigurationExamples"></a>Visual Studio Team Foundation Server (VSTS) Configuration Examples</h3>
 
-<div class="code"><div class="codeContent">
+<p>Minimal example:</p>
+
+<p><div class="code"><div class="codeContent">
 <pre class="code-xml"><span class="code-tag">&lt;sourcecontrol type=<span class="code-quote">"vsts"</span>&gt;</span>
   <span class="code-tag">&lt;server&gt;</span>my_team_foundation_server<span class="code-tag">&lt;/server&gt;</span>
   <span class="code-tag">&lt;project&gt;</span>$/Foobar<span class="code-tag">&lt;/project&gt;</span>
   <span class="code-tag">&lt;workingDirectory&gt;</span>c:\projects\Foobar<span class="code-tag">&lt;/workingDirectory&gt;</span>
 <span class="code-tag">&lt;/sourcecontrol&gt;</span></pre>
-</div></div> 
-
-<p>Full example: </p>
-
+</div></div><br clear="all" /> <br clear="all" />
+Full example:<br/>
 <div class="code"><div class="codeContent">
 <pre class="code-xml"><span class="code-tag">&lt;sourcecontrol type=<span class="code-quote">"vsts"</span> autoGetSource=<span class="code-quote">"true"</span> applyLabel=<span class="code-quote">"true"</span>&gt;</span>
   <span class="code-tag">&lt;server&gt;</span>http://my_team_foundation_server:8080<span class="code-tag">&lt;/server&gt;</span>
@@ -46,9 +45,10 @@
   <span class="code-tag">&lt;workspace&gt;</span>my_workspace_name<span class="code-tag">&lt;/workspace&gt;</span>
   <span class="code-tag">&lt;deleteWorkspace&gt;</span>false<span class="code-tag">&lt;/workspace&gt;</span>
 <span class="code-tag">&lt;/sourcecontrol&gt;</span></pre>
-</div></div> 
+</div></div><br clear="all" /> <br clear="all" />
+<br clear="all" /></p>
 
-<h3><a name="VisualStudioTeamFoundationServerPlugin-ConfigurationElements%3A"></a>Configuration Elements: </h3>
+<h3><a name="VisualStudioTeamFoundationServerPlugin-ConfigurationElements%3A"></a>Configuration Elements:</h3>
 
 <table class='confluenceTable'><tbody>
 <tr>
@@ -60,14 +60,17 @@
 </tr>
 <tr>
 <td class='confluenceTd'> server </td>
-<td class='confluenceTd'> The name or URL of the team foundation server.  For example <div class="preformatted"><div class="preformattedContent">
-<pre>http://vstsb3:8080</pre>
-</div></div><br/>
-or 
-<div class="preformatted"><div class="preformattedContent">
-<pre>vstsb3</pre>
-</div></div> 
-<p>if it has already been registered on the machine. </p></td>
+<td class='confluenceTd'> The name or URL of the team foundation server.  For example<br clear="all" />
+ <div class="preformatted"><div class="preformattedContent">
+<pre>http://tfsserver:8080
+</pre>
+</div></div><br clear="all" /> <br clear="all" />  <br clear="all" />
+or<br clear="all" />
+ <div class="preformatted"><div class="preformattedContent">
+<pre>tfsserver
+</pre>
+</div></div><br clear="all" /> <br clear="all" />
+if it has already been registered on the machine. </td>
 <td class='confluenceTd'> string </td>
 <td class='confluenceTd'> true </td>
 <td class='confluenceTd'> null </td>
@@ -76,21 +79,21 @@ or
 <td class='confluenceTd'> username </td>
 <td class='confluenceTd'> Username that CCNet should use to authenticate with Team Foundation Server </td>
 <td class='confluenceTd'> string </td>
-<td class='confluenceTd'> false <a href="#VisualStudioTeamFoundationServerPlugin-credential">*</a> </td>
+<td class='confluenceTd'> false <a href="#VisualStudioTeamFoundationServerPlugin-credential">&#42;</a> </td>
 <td class='confluenceTd'> <a href="#VisualStudioTeamFoundationServerPlugin-credential">See Below</a> </td>
 </tr>
 <tr>
 <td class='confluenceTd'> password </td>
 <td class='confluenceTd'> Password for the Team Foundation user </td>
 <td class='confluenceTd'> string </td>
-<td class='confluenceTd'> false <a href="#VisualStudioTeamFoundationServerPlugin-credential">*</a> </td>
+<td class='confluenceTd'> false <a href="#VisualStudioTeamFoundationServerPlugin-credential">&#42;</a> </td>
 <td class='confluenceTd'> <a href="#VisualStudioTeamFoundationServerPlugin-credential">See Below</a> </td>
 </tr>
 <tr>
 <td class='confluenceTd'> domain </td>
 <td class='confluenceTd'> Domain for the Team Foundation user </td>
 <td class='confluenceTd'> string </td>
-<td class='confluenceTd'> false <a href="#VisualStudioTeamFoundationServerPlugin-credential">*</a> </td>
+<td class='confluenceTd'> false <a href="#VisualStudioTeamFoundationServerPlugin-credential">&#42;</a> </td>
 <td class='confluenceTd'> <a href="#VisualStudioTeamFoundationServerPlugin-credential">See Below</a> </td>
 </tr>
 <tr>
@@ -136,29 +139,27 @@ or
 <td class='confluenceTd'> false </td>
 </tr>
 </tbody></table>
-
-<p><a name="VisualStudioTeamFoundationServerPlugin-credential"></a>*: If no credential is supplied in the config, then the credential of the user that the CruiseControl service runs as will be used automatically.  This user must have permission to read and label the Team Foundation Server Source Control repository. </p>
+<p><a name="VisualStudioTeamFoundationServerPlugin-credential"></a>&#42;: If no credential is supplied in the config, then the credential of the user that the CruiseControl service runs as will be used automatically.  This user must have permission to read and label the Team Foundation Server Source Control repository.</p>
 
 <h3><a name="VisualStudioTeamFoundationServerPlugin-InstallingthePlugin"></a>Installing the Plugin</h3>
-<p>For latest instructions see the <a href="http://vstsplugins.sourceforge.net/index.php/documentation">VSTSPlugins Documentation</a>.</p>
+
+<p>To install the plugin you will need a copy of the ccnet.vsts.plugin.dll assembly.&nbsp; The latest release can be downloaded from the <a href="http://www.codeplex.com/TFSCCNetPlugin/Release/ProjectReleases.aspx">TFS CCNET Plugin project</a>.&nbsp; The assembly should then be copied into the CruiseControl.NET server directory and the configuration file edited appropriately.</p>
 
 <h3><a name="VisualStudioTeamFoundationServerPlugin-TalkingtoCodePlex"></a>Talking to CodePlex</h3>
-<p>Microsoft have recently launched <a href="http://www.codeplex.com">CodePlex</a>, a developer community site that uses Team Foundation Server for version control and work item tracking.  The following example demonstrates how to configure the source control block to talk to CodePlex.  Please note that your username should be suffixed with "_cp".</p>
 
+<p>Microsoft have recently launched <a href="http://www.codeplex.com">CodePlex</a>, a developer community site that uses Team Foundation Server for version control and work item tracking.  The following example demonstrates how to configure the source control block to talk to CodePlex.  Please note that your username should be suffixed with "_cp".<br/>
 <div class="code"><div class="codeContent">
 <pre class="code-xml"><span class="code-tag">&lt;sourcecontrol type=<span class="code-quote">"vsts"</span> autoGetSource=<span class="code-quote">"true"</span> applyLabel=<span class="code-quote">"false"</span>&gt;</span>
-  <span class="code-tag">&lt;server&gt;</span>https://tfs01.codeplex.com<span class="code-tag">&lt;/server&gt;</span>
+  <span class="code-tag">&lt;server&gt;</span>https://tfs04.codeplex.com<span class="code-tag">&lt;/server&gt;</span>
   <span class="code-tag">&lt;username&gt;</span>USERNAME_cp<span class="code-tag">&lt;/username&gt;</span>
   <span class="code-tag">&lt;password&gt;</span>PASSWORD<span class="code-tag">&lt;/password&gt;</span>
   <span class="code-tag">&lt;domain&gt;</span>SND.RNO.GBL<span class="code-tag">&lt;/domain&gt;</span>
   <span class="code-tag">&lt;project&gt;</span>$/Foobar<span class="code-tag">&lt;/project&gt;</span>
   <span class="code-tag">&lt;workingDirectory&gt;</span>c:\source\Foobar<span class="code-tag">&lt;/workingDirectory&gt;</span>
 <span class="code-tag">&lt;/sourcecontrol&gt;</span></pre>
-</div></div> 
+</div></div><br clear="all" /></p>
 
-<h3><a name="VisualStudioTeamFoundationServerPlugin-NAntVSTSTasks"></a>NAnt VSTS Tasks </h3>
-
-<p>The VSTSPlugins project are working on some NANT tasks for VSTS that will be available at <a href="http://vstsplugins.sourceforge.net">VSTSPlugins</a>.</p>
+<h3><a name="VisualStudioTeamFoundationServerPlugin-"></a></h3>
 
 				    
                     			    </td>
@@ -169,7 +170,7 @@ or
 				<td height="12" background="border/border_bottom.gif"><img src="border/spacer.gif" width="1" height="1" border="0"/></td>
 			</tr>
 		    <tr>
-			    <td align="center"><font color="grey">Document generated by Confluence on Jun 21, 2007 10:33</font></td>
+			    <td align="center"><font color="grey">Document generated by Confluence on Jan 31, 2008 19:33</font></td>
 		    </tr>
 	    </table>
     </body>

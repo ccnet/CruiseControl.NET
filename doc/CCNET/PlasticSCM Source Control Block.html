@@ -1,0 +1,133 @@
+<html>
+    <head>
+        <title>CruiseControl.NET : PlasticSCM Source Control Block</title>
+	    <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">	    
+    </head>
+
+    <body>
+	    <table class="pagecontent" border="0" cellpadding="0" cellspacing="0" width="100%" bgcolor="#ffffff">
+		    <tr>
+			    <td valign="top" class="pagebody">
+				    <div class="pageheader">
+					    <span class="pagetitle">
+                            CruiseControl.NET : PlasticSCM Source Control Block
+                                                    </span>
+				    </div>
+				    <div class="pagesubheading">
+					    This page last changed on Nov 20, 2007 by <font color="#0050B2">rosspatterson</font>.
+				    </div>
+
+				    <h3><a name="PlasticSCMSourceControlBlock-PlasticSCMConfiguration"></a>PlasticSCM Configuration</h3>
+
+<table cellpadding='5' width='85%' cellspacing='8px' class='noteMacro' border="0" align='center'><colgroup><col width='24'><col></colgroup><tr><td valign='top'><img src="./icons/emoticons/warning.gif" width="16" height="16" align="absmiddle" alt="" border="0"></td><td>Note: The PlasticSCM source control block is available in CCNet 1.3 and later.</td></tr></table>
+
+<h3><a name="PlasticSCMSourceControlBlock-PlasticSCMConfigurationExample"></a>Plastic SCM Configuration Example</h3>
+
+<p>For Plastic SCM you must specify the working directory, which must be a valid Plastic SCM workspace, and the branch. You may also specify the Plastic SCM command-line client path, the repository and if the update must be forced.</p>
+
+<h4><a name="PlasticSCMSourceControlBlock-BasicConfiguration"></a>Basic Configuration</h4>
+
+<p>For most uses the following is all you'll need in your <a href="Configuring the Server.html" title="Configuring the Server"><tt>ccnet.config</tt> </a>:</p>
+
+<div class="code"><div class="codeContent">
+<pre class="code-xml"><span class="code-tag">&lt;sourcecontrol type=<span class="code-quote">"plasticscm"</span>&gt;</span>
+   <span class="code-tag">&lt;workingDirectory&gt;</span>c:\workspace<span class="code-tag">&lt;/workingDirectory&gt;</span>
+   <span class="code-tag">&lt;branch&gt;</span>br:/main<span class="code-tag">&lt;/branch&gt;</span>
+<span class="code-tag">&lt;/sourcecontrol&gt;</span></pre>
+</div></div>
+
+<h4><a name="PlasticSCMSourceControlBlock-FullConfiguration"></a>Full Configuration</h4>
+
+<div class="code"><div class="codeContent">
+<pre class="code-xml"><span class="code-tag">&lt;sourcecontrol type=<span class="code-quote">"plasticscm"</span>&gt;</span>
+   <span class="code-tag">&lt;executable&gt;</span>c:\Program Files\PlasticSCM\client\cm.exe<span class="code-tag">&lt;/executable&gt;</span>
+   <span class="code-tag">&lt;workingDirectory&gt;</span>c:\workspace<span class="code-tag">&lt;/workingDirectory&gt;</span>
+   <span class="code-tag">&lt;branch&gt;</span>br:/main<span class="code-tag">&lt;/branch&gt;</span>
+   <span class="code-tag">&lt;repository&gt;</span>mainrep<span class="code-tag">&lt;/repository&gt;</span>
+   <span class="code-tag">&lt;forced&gt;</span>true<span class="code-tag">&lt;/forced&gt;</span>
+   <span class="code-tag">&lt;labelOnSuccess&gt;</span>true<span class="code-tag">&lt;/labelOnSuccess&gt;</span>
+   <span class="code-tag">&lt;labelPrefix&gt;</span>BL<span class="code-tag">&lt;/labelPrefix&gt;</span>
+<span class="code-tag">&lt;/sourcecontrol&gt;</span></pre>
+</div></div>
+
+<table class='confluenceTable'><tbody>
+<tr>
+<th class='confluenceTh'> Element </th>
+<th class='confluenceTh'> Description </th>
+<th class='confluenceTh'> Type </th>
+<th class='confluenceTh'> Required </th>
+<th class='confluenceTh'> Default </th>
+</tr>
+<tr>
+<td class='confluenceTd'> branch </td>
+<td class='confluenceTd'> The Plastic SCM branch to monitor. </td>
+<td class='confluenceTd'> string </td>
+<td class='confluenceTd'> yes </td>
+<td class='confluenceTd'> n/a </td>
+</tr>
+<tr>
+<td class='confluenceTd'> executable </td>
+<td class='confluenceTd'> he local path for the Plastic SCM command-line client (eg. C:\Program Files\PlasticSCM\client\cc.exe) </td>
+<td class='confluenceTd'> string </td>
+<td class='confluenceTd'> no </td>
+<td class='confluenceTd'> cm </td>
+</tr>
+<tr>
+<td class='confluenceTd'> forced </td>
+<td class='confluenceTd'> Do the update with the "--forced" option </td>
+<td class='confluenceTd'> bool </td>
+<td class='confluenceTd'> no </td>
+<td class='confluenceTd'> false </td>
+</tr>
+<tr>
+<td class='confluenceTd'> labelPrefix </td>
+<td class='confluenceTd'> Specifies the prefix label name.  </td>
+<td class='confluenceTd'> string </td>
+<td class='confluenceTd'> no </td>
+<td class='confluenceTd'> ccver- </td>
+</tr>
+<tr>
+<td class='confluenceTd'> labelOnSuccess </td>
+<td class='confluenceTd'> Specifies whether or not CCNet should create an Plastic SCM baseline when the build is successful. </td>
+<td class='confluenceTd'> bool </td>
+<td class='confluenceTd'> no </td>
+<td class='confluenceTd'> false </td>
+</tr>
+<tr>
+<td class='confluenceTd'> repository </td>
+<td class='confluenceTd'> The Plastic SCM repository to monitor. </td>
+<td class='confluenceTd'> string </td>
+<td class='confluenceTd'> no </td>
+<td class='confluenceTd'> the current in the workspace </td>
+</tr>
+<tr>
+<td class='confluenceTd'> timeout </td>
+<td class='confluenceTd'> Sets the timeout period for the source control operation. See <a href="Timeout Configuration.html" title="Timeout Configuration">Timeout Configuration</a> for details. </td>
+<td class='confluenceTd'> Timeout </td>
+<td class='confluenceTd'> no </td>
+<td class='confluenceTd'> 10 minutes </td>
+</tr>
+<tr>
+<td class='confluenceTd'> workingDirectory </td>
+<td class='confluenceTd'> Valid Plastic SCM workspace path. </td>
+<td class='confluenceTd'> string </td>
+<td class='confluenceTd'> yes </td>
+<td class='confluenceTd'> n/a </td>
+</tr>
+</tbody></table>
+
+				    
+                    			    </td>
+		    </tr>
+	    </table>
+	    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+			<tr>
+				<td height="12" background="border/border_bottom.gif"><img src="border/spacer.gif" width="1" height="1" border="0"/></td>
+			</tr>
+		    <tr>
+			    <td align="center"><font color="grey">Document generated by Confluence on Jan 31, 2008 19:33</font></td>
+		    </tr>
+	    </table>
+    </body>
+</html>

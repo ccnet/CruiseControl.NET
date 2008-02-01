@@ -1,0 +1,192 @@
+<html>
+    <head>
+        <title>CruiseControl.NET : External Source Control</title>
+	    <link rel="stylesheet" href="styles/site.css" type="text/css" />
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">	    
+    </head>
+
+    <body>
+	    <table class="pagecontent" border="0" cellpadding="0" cellspacing="0" width="100%" bgcolor="#ffffff">
+		    <tr>
+			    <td valign="top" class="pagebody">
+				    <div class="pageheader">
+					    <span class="pagetitle">
+                            CruiseControl.NET : External Source Control
+                                                    </span>
+				    </div>
+				    <div class="pagesubheading">
+					    This page last changed on Dec 06, 2007 by <font color="#0050B2">rosspatterson</font>.
+				    </div>
+
+				    <h3><a name="ExternalSourceControl-ExternalSourceControlConfiguration"></a>External Source Control Configuration</h3>
+
+<table cellpadding='5' width='85%' cellspacing='8px' class='noteMacro' border="0" align='center'><colgroup><col width='24'><col></colgroup><tr><td valign='top'><img src="./icons/emoticons/warning.gif" width="16" height="16" align="absmiddle" alt="" border="0"></td><td>Note: The External source control block is available in CCNet build 1.3.0.3053 and later.</td></tr></table>
+
+<h4><a name="ExternalSourceControl-Typical%2FMinimalConfiguration"></a>Typical / Minimal Configuration</h4>
+
+<p>For most uses the following is all you'll need in your <a href="Configuring the Server.html" title="Configuring the Server"><tt>ccnet.config</tt> </a>:</p>
+
+<div class="code"><div class="codeContent">
+<pre class="code-xml"><span class="code-tag">&lt;sourcecontrol type=<span class="code-quote">"external"</span>&gt;</span> 
+    <span class="code-tag">&lt;executable&gt;</span>path to command-line application<span class="code-tag">&lt;/executable&gt;</span> 
+<span class="code-tag">&lt;/sourcecontrol&gt;</span></pre>
+</div></div>
+
+<p>This will:</p>
+<ul>
+	<li>monitor AccuRev for any changes in the workspace located at the project working directory</li>
+	<li>retrieve the lastest source from AccuRev when any changes are detected</li>
+	<li>apply a label to (<em>i.e.</em>, make a snapshot of) the built files at the end of each successful build</li>
+</ul>
+
+
+
+<h4><a name="ExternalSourceControl-FullConfiguration"></a>Full Configuration</h4>
+
+<div class="code"><div class="codeContent">
+<pre class="code-xml"><span class="code-tag">&lt;sourcecontrol type=<span class="code-quote">"external"</span>&gt;</span> 
+    <span class="code-tag">&lt;executable&gt;</span>path to command-line application<span class="code-tag">&lt;/executable&gt;</span> 
+    <span class="code-tag">&lt;args&gt;</span>arguments for the command-line application<span class="code-tag">&lt;/args&gt;</span> 
+    <span class="code-tag">&lt;autoGetSource&gt;</span>false<span class="code-tag">&lt;/autoGetSource&gt;</span> 
+    <span class="code-tag">&lt;labelOnSuccess&gt;</span>false<span class="code-tag">&lt;/labelOnSuccess&gt;</span> 
+    <span class="code-tag">&lt;environment&gt;</span> 
+        <span class="code-tag">&lt;var&gt;</span>name=value<span class="code-tag">&lt;/var&gt;</span>
+        <span class="code-tag">&lt;var&gt;</span>name=value<span class="code-tag">&lt;/var&gt;</span>
+        ...
+    <span class="code-tag">&lt;/environment&gt;</span> 
+<span class="code-tag">&lt;/sourcecontrol&gt;</span></pre>
+</div></div>
+
+<table class='confluenceTable'><tbody>
+<tr>
+<th class='confluenceTh'> Element </th>
+<th class='confluenceTh'> Description </th>
+<th class='confluenceTh'> Type </th>
+<th class='confluenceTh'> Required </th>
+<th class='confluenceTh'> Default </th>
+</tr>
+<tr>
+<td class='confluenceTd'> args </td>
+<td class='confluenceTd'> Specifies the command line arguments to be passed to the source control command. </td>
+<td class='confluenceTd'> string </td>
+<td class='confluenceTd'> no </td>
+<td class='confluenceTd'>&nbsp;</td>
+</tr>
+<tr>
+<td class='confluenceTd'> autoGetSource </td>
+<td class='confluenceTd'> Specifies whether the current version of the source should be retrieved from the source control system. </td>
+<td class='confluenceTd'> bool </td>
+<td class='confluenceTd'> no </td>
+<td class='confluenceTd'> false </td>
+</tr>
+<tr>
+<td class='confluenceTd'> environment </td>
+<td class='confluenceTd'> Specifies any environment variables to set for the source control command </td>
+<td class='confluenceTd'> complex </td>
+<td class='confluenceTd'> no </td>
+<td class='confluenceTd'>&nbsp;</td>
+</tr>
+<tr>
+<td class='confluenceTd'> executable </td>
+<td class='confluenceTd'> Specifies the path to the source control command. </td>
+<td class='confluenceTd'> string </td>
+<td class='confluenceTd'> yes </td>
+<td class='confluenceTd'>&nbsp;</td>
+</tr>
+<tr>
+<td class='confluenceTd'> labelOnSuccess </td>
+<td class='confluenceTd'> Specifies whether or not CruiseControl.Net should ask the source control system to label the source when the build is successful. </td>
+<td class='confluenceTd'> bool </td>
+<td class='confluenceTd'> no </td>
+<td class='confluenceTd'> false </td>
+</tr>
+<tr>
+<td class='confluenceTd'> timeout </td>
+<td class='confluenceTd'> Sets the timeout period for the source control operation. See <a href="Timeout Configuration.html" title="Timeout Configuration">Timeout Configuration</a> for details. </td>
+<td class='confluenceTd'> Timeout </td>
+<td class='confluenceTd'> no </td>
+<td class='confluenceTd'> 10 minutes </td>
+</tr>
+</tbody></table>
+
+<h4><a name="ExternalSourceControl-Operation"></a>Operation</h4>
+
+<p>Each of the three sourcecontrol operations (GetModifications(), GetSource(), and LabelSourceControl()) are passed to the source control command as a command line.</p>
+
+<h5><a name="ExternalSourceControl-GetModifications"></a>GetModifications</h5>
+
+<p>The GetModifications function is invoked as the <b>GETMODS</b> operation, and specifying a starting and ending timestamp:</p>
+
+<ul>
+	<li><em>executable</em> <b>GETMODS</b> "<em>fromtimestamp</em>" "<em>totimestamp</em>" <em>args</em></li>
+</ul>
+
+
+<p>The source control command should search for modifications between these two times inclusively, write their details to the standard output stream in the XML format used by the <a href="Modification Writer Task.html" title="Modification Writer Task">Modification Writer Task</a>, and exit with exit status 0 (any other status indicates an error and will fail the build).  For example, the following represents two modifications, numbered 12244 and 12245.</p>
+
+<div class="code"><div class="codeContent">
+<pre class="code-xml"><span class="code-tag">&lt;?xml version=<span class="code-quote">"1.0"</span> encoding=<span class="code-quote">"utf-8"</span>?&gt;</span>
+<span class="code-tag">&lt;ArrayOfModification&gt;</span>
+    <span class="code-tag">&lt;Modification&gt;</span>
+        <span class="code-tag">&lt;ChangeNumber&gt;</span>12245<span class="code-tag">&lt;/ChangeNumber&gt;</span>
+        <span class="code-tag">&lt;Comment&gt;</span>New Project for testing stuff<span class="code-tag">&lt;/Comment&gt;</span>
+        <span class="code-tag">&lt;EmailAddress&gt;</span>JUser@Example.Com<span class="code-tag">&lt;/EmailAddress&gt;</span>
+        <span class="code-tag">&lt;FileName&gt;</span>AssemblyInfo.cs<span class="code-tag">&lt;/FileName&gt;</span>
+        <span class="code-tag">&lt;FolderName&gt;</span>Dev\Server\Interface\Properties\<span class="code-tag">&lt;/FolderName&gt;</span>
+        <span class="code-tag">&lt;ModifiedTime&gt;</span>2006-11-22T11:11:00-0500<span class="code-tag">&lt;/ModifiedTime&gt;</span>
+        <span class="code-tag">&lt;Type&gt;</span>add<span class="code-tag">&lt;/Type&gt;</span>
+        <span class="code-tag">&lt;UserName&gt;</span>joe_user<span class="code-tag">&lt;/UserName&gt;</span>
+        <span class="code-tag">&lt;Url&gt;</span>http://www.example.com/index.html<span class="code-tag">&lt;/Url&gt;</span>
+        <span class="code-tag">&lt;Version&gt;</span>5<span class="code-tag">&lt;/Version&gt;</span>
+    <span class="code-tag">&lt;/Modification&gt;</span>
+    <span class="code-tag">&lt;Modification&gt;</span>
+        <span class="code-tag">&lt;ChangeNumber&gt;</span>12244<span class="code-tag">&lt;/ChangeNumber&gt;</span>
+        <span class="code-tag">&lt;Comment&gt;</span>New Project for accessing web services<span class="code-tag">&lt;/Comment&gt;</span>
+        <span class="code-tag">&lt;EmailAddress&gt;</span>SSpade@Example.Com<span class="code-tag">&lt;/EmailAddress&gt;</span>
+        <span class="code-tag">&lt;FileName&gt;</span>Interface<span class="code-tag">&lt;/FileName&gt;</span>
+        <span class="code-tag">&lt;FolderName&gt;</span>Dev\Server\<span class="code-tag">&lt;/FolderName&gt;</span>
+        <span class="code-tag">&lt;ModifiedTime&gt;</span>2006-11-22T11:10:44-0500<span class="code-tag">&lt;/ModifiedTime&gt;</span>
+        <span class="code-tag">&lt;Type&gt;</span>add<span class="code-tag">&lt;/Type&gt;</span>
+        <span class="code-tag">&lt;UserName&gt;</span>sam_spade<span class="code-tag">&lt;/UserName&gt;</span>
+        <span class="code-tag">&lt;Url&gt;</span>http://www.example.com/index.html<span class="code-tag">&lt;/Url&gt;</span>
+        <span class="code-tag">&lt;Version&gt;</span>4<span class="code-tag">&lt;/Version&gt;</span>
+    <span class="code-tag">&lt;/Modification&gt;</span>
+<span class="code-tag">&lt;/ArrayOfModification&gt;</span></pre>
+</div></div>
+
+<h5><a name="ExternalSourceControl-GetSource"></a>GetSource</h5>
+
+<p>The GetSource function is invoked as the <b>GETSOURCE</b> operation, and specifying a working directory path and the target timestamp:</p>
+
+<ul>
+	<li><em>executable</em> <b>GETSOURCE</b> "<em>workingdirectory</em>" "<em>timestamp</em>" <em>args</em></li>
+</ul>
+
+
+<p>The source control command should update the files in the specified working directory to the versions current as of the specified time stamp and exit with exit status 0 (any other status indicates an error and will fail the build).</p>
+
+<h5><a name="ExternalSourceControl-LabelSourceControl"></a>LabelSourceControl</h5>
+
+<p>The LabelSourceControl function is invoked as the <b>SETLABEL</b> operation, and specifying a label to be applied and the target timestamp:</p>
+
+<ul>
+	<li><em>executable</em> <b>SETLABEL</b> "<em>label</em>" "<em>sourcetimestamp</em>" <em>args</em></li>
+</ul>
+
+
+<p>The source control command should add the label to source repository and exit with exit status 0 (any other status indicates an error and will fail the build).</p>
+
+				    
+                    			    </td>
+		    </tr>
+	    </table>
+	    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+			<tr>
+				<td height="12" background="border/border_bottom.gif"><img src="border/spacer.gif" width="1" height="1" border="0"/></td>
+			</tr>
+		    <tr>
+			    <td align="center"><font color="grey">Document generated by Confluence on Jan 31, 2008 19:33</font></td>
+		    </tr>
+	    </table>
+    </body>
+</html>
