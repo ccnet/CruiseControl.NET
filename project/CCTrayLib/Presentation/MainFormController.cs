@@ -5,6 +5,7 @@ using System.Windows.Forms;
 using ThoughtWorks.CruiseControl.CCTrayLib.Configuration;
 using ThoughtWorks.CruiseControl.CCTrayLib.Monitoring;
 using ThoughtWorks.CruiseControl.CCTrayLib.X10;
+using ThoughtWorks.CruiseControl.CCTrayLib.Speech;
 
 namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 {
@@ -21,6 +22,9 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 		private ProjectStateIconAdaptor projectStateIconAdaptor;
 		private IProjectStateIconProvider projectStateIconProvider;
 		private IIntegrationQueueIconProvider integrationQueueIconProvider;
+		private BuildTransitionSoundPlayer soundPlayer;
+        private X10Controller x10Controller;
+        private SpeakingProjectMonitor speakerForTheDead;
 
 		public MainFormController(ICCTrayMultiConfiguration configuration, ISynchronizeInvoke owner)
 		{
@@ -42,16 +46,12 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 			aggregatedProjectMonitor = new AggregatingProjectMonitor(projectMonitors);
 			projectStateIconProvider = new ConfigurableProjectStateIconProvider(configuration.Icons);
 			projectStateIconAdaptor = new ProjectStateIconAdaptor(aggregatedProjectMonitor, projectStateIconProvider);
-			new BuildTransitionSoundPlayer(aggregatedProjectMonitor, new AudioPlayer(), configuration.Audio);
+			soundPlayer = new BuildTransitionSoundPlayer(aggregatedProjectMonitor, new AudioPlayer(), configuration.Audio);
+			LampController lampController = new LampController(configuration.X10,null);
+			x10Controller = new X10Controller(aggregatedProjectMonitor,new DateTimeProvider(),configuration.X10,lampController);
 
-			if (configuration.X10 != null && configuration.X10.Enabled)
-			{
-				new X10Controller(
-					aggregatedProjectMonitor,
-					new LampController(new X10LowLevelDriver(HouseCode.A, configuration.X10.ComPort)),
-					new DateTimeProvider(),
-					configuration.X10);
-			}                        
+			IBalloonMessageProvider balloonMessageProvider = new ConfigurableBalloonMessageProvider(configuration.BalloonMessages);
+			speakerForTheDead = new SpeakingProjectMonitor(aggregatedProjectMonitor, balloonMessageProvider, configuration.Speech);
 		}
 
 

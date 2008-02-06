@@ -199,5 +199,9 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Configuration
 		{
 			get { return cruiseProjectManagerFactory; }
 		}
+		public SpeechConfiguration Speech
+		{
+			get { return persistentConfiguration.Speech; }
+		}
 	}
 }

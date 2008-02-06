@@ -3,6 +3,7 @@ using System.Diagnostics;
 using ThoughtWorks.CruiseControl.CCTrayLib.Configuration;
 using ThoughtWorks.CruiseControl.CCTrayLib.Monitoring;
 using ThoughtWorks.CruiseControl.Remote;
+using System.Windows.Forms;
 
 namespace ThoughtWorks.CruiseControl.CCTrayLib.X10
 {
@@ -12,44 +13,56 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.X10
 		private readonly DateTimeProvider dateTimeProvider;
 		private readonly X10Configuration configuration;
 
-		public X10Controller(IProjectMonitor monitor, ILampController lampController, DateTimeProvider dateTimeProvider,
-		                     X10Configuration configuration)
+		public X10Controller(IProjectMonitor monitor, DateTimeProvider dateTimeProvider, X10Configuration configuration, ILampController lampController)
 		{
-			this.lampController = lampController;
-			this.dateTimeProvider = dateTimeProvider;
-			this.configuration = configuration;
-
-			monitor.Polled += new MonitorPolledEventHandler(Monitor_Polled);
+			if (configuration != null && configuration.Enabled)
+			{
+				Trace.WriteLine("New X10Controller created");
+                this.lampController = lampController;
+				this.dateTimeProvider = dateTimeProvider;
+				this.configuration = configuration;
+	
+				monitor.Polled += new MonitorPolledEventHandler(Monitor_Polled);
+			}
 		}
 
 		private void Monitor_Polled(object sender, MonitorPolledEventArgs args)
 		{
+			Debug.WriteLine("X10Controller.Monitor_Polled");
 			try
 			{
 				if (!IsInsideLampSwitchingHours)
 				{
+                    Cursor.Current = Cursors.WaitCursor;
 					lampController.GreenLightOn = false;
 					lampController.RedLightOn = false;
-					return;
+                    Cursor.Current = Cursors.Default;
+                    return;
 				}
 
 				switch (((IProjectMonitor)sender).IntegrationStatus)
 				{
 					case IntegrationStatus.Success:
-						lampController.GreenLightOn = true;
+                        Cursor.Current = Cursors.WaitCursor;
+                        lampController.GreenLightOn = true;
 						lampController.RedLightOn = false;
-						break;
+                        Cursor.Current = Cursors.Default;
+                        break;
 
 					case IntegrationStatus.Exception:
 					case IntegrationStatus.Failure:
-						lampController.GreenLightOn = false;
+                        Cursor.Current = Cursors.WaitCursor;
+                        lampController.GreenLightOn = false;
 						lampController.RedLightOn = true;
-						break;
+                        Cursor.Current = Cursors.Default;
+                        break;
 
 					default:
-						lampController.GreenLightOn = true;
+                        Cursor.Current = Cursors.WaitCursor;
+                        lampController.GreenLightOn = true;
 						lampController.RedLightOn = true;
-						break;
+                        Cursor.Current = Cursors.Default;
+                        break;
 				}
 			}
 			catch (ApplicationException ex)
@@ -63,9 +76,10 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.X10
 			get
 			{
 				DateTime now = dateTimeProvider.Now;
-				return ((now.DayOfWeek >= configuration.StartDay && now.DayOfWeek <= configuration.EndDay) &&
-				        (now.TimeOfDay >= configuration.StartTime.TimeOfDay && now.TimeOfDay < configuration.EndTime.TimeOfDay));
-
+                bool isTodayActive = configuration.ActiveDays[(int)now.DayOfWeek];
+                bool isInTimeRange = now.TimeOfDay >= configuration.StartTime.TimeOfDay && now.TimeOfDay < configuration.EndTime.TimeOfDay;
+                
+                return (isTodayActive && isInTimeRange);
 			}
 		}
 	}

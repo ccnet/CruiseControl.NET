@@ -1,8 +1,10 @@
+using System;
 using System.IO;
 using NMock;
 using NUnit.Framework;
 using ThoughtWorks.CruiseControl.CCTrayLib.Configuration;
 using ThoughtWorks.CruiseControl.CCTrayLib.Monitoring;
+using ThoughtWorks.CruiseControl.CCTrayLib.X10;
 
 namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Configuration
 {
@@ -129,6 +131,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Configuration
 			Assert.IsNull(configuration.Audio.FixedBuildSound);
 			Assert.IsNull(configuration.Audio.StillFailingBuildSound);
 			Assert.IsNull(configuration.Audio.StillSuccessfulBuildSound);
+			Assert.IsFalse(configuration.X10.Enabled);
 		}
 
 		[Test]
@@ -172,5 +175,16 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Configuration
 
 			mockServerConfigFactory.Verify();
 		}
+
+		[Test]
+		public void CanPersistAndReloadX10Configuration()
+		{
+			CCTrayMultiConfiguration configuration = CreateTestConfiguration(ConfigXml);
+
+			configuration.Persist();
+
+			configuration.Reload();
+		}
+
 	}
 }

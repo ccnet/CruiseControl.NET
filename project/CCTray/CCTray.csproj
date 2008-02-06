@@ -139,7 +139,6 @@
   <PropertyGroup>
     <PreBuildEvent>
     </PreBuildEvent>
-    <PostBuildEvent>
-    </PostBuildEvent>
+    <PostBuildEvent>copy "$(ProjectDir)..\..\tools\cm17a\cm17a.exe" "$(TargetDir)"</PostBuildEvent>
   </PropertyGroup>
 </Project>

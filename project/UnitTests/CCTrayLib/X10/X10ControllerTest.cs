@@ -1,6 +1,7 @@
 using System;
 using NMock;
 using NUnit.Framework;
+using ThoughtWorks.CruiseControl.CCTrayLib.Presentation;
 using ThoughtWorks.CruiseControl.CCTrayLib.Configuration;
 using ThoughtWorks.CruiseControl.CCTrayLib.Monitoring;
 using ThoughtWorks.CruiseControl.CCTrayLib.X10;
@@ -16,22 +17,28 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.X10
 		private StubProjectMonitor stubProjectMonitor;
 		private StubCurrentTimeProvider stubCurrentTimeProvider;
 		private X10Configuration configuration;
-		private DynamicMock mockX10Driver;
+		private DynamicMock mockLampController;
 
 		[SetUp]
 		public void SetUp()
 		{
 			stubProjectMonitor = new StubProjectMonitor("project");
 
-			mockX10Driver = new DynamicMock(typeof(ILampController));
-			mockX10Driver.Strict = true;
+			mockLampController = new DynamicMock(typeof(ILampController));
+			mockLampController.Strict = true;
+			ILampController lampController = mockLampController.MockInstance as ILampController;
 			
 			configuration = new X10Configuration();
 			configuration.Enabled = true;
 			configuration.StartTime = DateTime.Parse("08:00");
 			configuration.EndTime = DateTime.Parse("18:00");
-			configuration.StartDay = DayOfWeek.Monday;
-			configuration.EndDay = DayOfWeek.Friday;
+            configuration.ActiveDays[(int)DayOfWeek.Sunday] = false;
+            configuration.ActiveDays[(int)DayOfWeek.Monday] = true;
+            configuration.ActiveDays[(int)DayOfWeek.Tuesday] = true;
+            configuration.ActiveDays[(int)DayOfWeek.Wednesday] = true;
+            configuration.ActiveDays[(int)DayOfWeek.Thursday] = true;
+            configuration.ActiveDays[(int)DayOfWeek.Friday] = true;
+            configuration.ActiveDays[(int)DayOfWeek.Saturday] = false;
 			
 			stubCurrentTimeProvider = new StubCurrentTimeProvider();
 			stubCurrentTimeProvider.SetNow(new DateTime(2005, 11, 03, 12, 00, 00));
@@ -39,15 +46,15 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.X10
 
 			new X10Controller(
 				stubProjectMonitor, 
-				(ILampController) mockX10Driver.MockInstance,
 				stubCurrentTimeProvider, 
-				configuration);
+				configuration,
+				lampController);
 		}
 
 		[TearDown]
 		public void TearDown()
 		{
-			mockX10Driver.Verify();
+			mockLampController.Verify();
 		}
 		
 		[Test]
@@ -63,12 +70,12 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.X10
 		{
 			stubProjectMonitor.IntegrationStatus = status;
 			
-			mockX10Driver.Expect("RedLightOn", redLightOn);
-			mockX10Driver.Expect("GreenLightOn", greenLightOn);
+			mockLampController.Expect("RedLightOn", redLightOn);
+			mockLampController.Expect("GreenLightOn", greenLightOn);
 			
 			stubProjectMonitor.OnPolled(new MonitorPolledEventArgs(stubProjectMonitor));
 			
-			mockX10Driver.Verify();
+			mockLampController.Verify();
 		}
 		
 		[Test]

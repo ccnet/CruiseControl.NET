@@ -18,6 +18,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Configuration
 		BalloonMessages BalloonMessages { get; }
 		Icons Icons { get; }
 		X10Configuration X10 { get; }
+		SpeechConfiguration Speech { get; }
 
         bool AlwaysOnTop { get; set; }
 		bool ShowInTaskbar { get; set; }

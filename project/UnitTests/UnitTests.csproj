@@ -49,6 +49,7 @@
     <WarningLevel>4</WarningLevel>
     <DebugType>full</DebugType>
     <ErrorReport>prompt</ErrorReport>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <OutputPath>bin\Release\</OutputPath>
@@ -248,6 +249,7 @@
     <Compile Include="CCTrayLib\Presentation\BuildTransitionSoundPlayerTest.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="CCTrayLib\Presentation\SpeechSettingsControlTest.cs" />
     <Compile Include="CCTrayLib\Presentation\ConfigurableBalloonMessageProviderTest.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -275,9 +277,6 @@
     <Compile Include="CCTrayLib\Presentation\ResourceProjectStateIconProviderTest.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="CCTrayLib\Presentation\StubProjectMonitor.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="CCTrayLib\Presentation\StubServerMonitor.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -290,12 +289,14 @@
     <Compile Include="CCTrayLib\Presentation\TrayIconTest.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="CCTrayLib\Presentation\X10SettingsControlTest.cs" />
     <Compile Include="CCTrayLib\StatusIconTest.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="CCTrayLib\X10\LampControllerTest.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="CCTrayLib\X10\LowLevelDriverFactoryTest.cs" />
     <Compile Include="CCTrayLib\X10\X10ControllerTest.cs">
       <SubType>Code</SubType>
     </Compile>

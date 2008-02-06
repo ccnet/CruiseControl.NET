@@ -11,6 +11,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Configuration
 		public TrayIconDoubleClickAction TrayIconDoubleClickAction = TrayIconDoubleClickAction.ShowStatusWindow;
 		public Icons Icons = new Icons();
 		public X10Configuration X10 = new X10Configuration();
+		public SpeechConfiguration Speech = new SpeechConfiguration();
         public bool AlwaysOnTop = false;
 		public bool ShowInTaskbar = false;
         public string FixUserName = string.Empty;

@@ -10,10 +10,12 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 
 		public ConfigurableBalloonMessageProvider(BalloonMessages balloonMessages)
 		{
+			if (balloonMessages != null){
 			messages.Add(BuildTransition.Broken, balloonMessages.BrokenBuildMessage);
 			messages.Add(BuildTransition.Fixed, balloonMessages.FixedBuildMessage);
 			messages.Add(BuildTransition.StillFailing, balloonMessages.StillFailingBuildMessage);
 			messages.Add(BuildTransition.StillSuccessful, balloonMessages.StillSuccessfulBuildMessage);
+			}
 		}
 
 		public CaptionAndMessage GetCaptionAndMessageForBuildTransition(BuildTransition buildTransition)

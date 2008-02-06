@@ -1,6 +1,7 @@
 using System;
 using NMock;
 using NUnit.Framework;
+using ThoughtWorks.CruiseControl.CCTrayLib.Presentation;
 using ThoughtWorks.CruiseControl.CCTrayLib;
 using ThoughtWorks.CruiseControl.CCTrayLib.Monitoring;
 using ThoughtWorks.CruiseControl.Remote;

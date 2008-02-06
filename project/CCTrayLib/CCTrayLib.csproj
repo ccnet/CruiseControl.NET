@@ -172,6 +172,7 @@
     <Compile Include="Configuration\PersistentConfiguration.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Configuration\SpeechConfiguration.cs" />
     <Compile Include="Configuration\TrayIconDoubleClickAction.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -327,6 +328,19 @@
     <Compile Include="Presentation\ConfigurableProjectStateIconProvider.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Presentation\SpeechSettingsControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Presentation\SpeechSettingsControl.Designer.cs">
+      <DependentUpon>SpeechSettingsControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Presentation\StubProjectMonitor.cs" />
+    <Compile Include="Presentation\X10SettingsControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Presentation\X10SettingsControl.Designer.cs">
+      <DependentUpon>X10SettingsControl.cs</DependentUpon>
+    </Compile>
     <Compile Include="Presentation\DetailStringProvider.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -408,9 +422,12 @@
     <Compile Include="Presentation\WindowStateEventArgs.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Speech\SpeakingProjectMonitor.cs" />
     <Compile Include="StatusIcon.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="X10\Cm11LowLevelDriver.cs" />
+    <Compile Include="X10\Cm17LowLevelDriver.cs" />
     <Compile Include="X10\ILampController.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -420,12 +437,11 @@
     <Compile Include="X10\LampController.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="X10\LowLevelDriverFactory.cs" />
     <Compile Include="X10\X10Controller.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="X10\X10LowLevelDriver.cs">
-      <SubType>Code</SubType>
-    </Compile>
+    <Compile Include="X10\X10Definitions.cs" />
     <EmbeddedResource Include="Gray.ico" />
     <EmbeddedResource Include="Green.ico" />
     <EmbeddedResource Include="Orange.ico" />
@@ -446,6 +462,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Presentation\PersistWindowState.resx">
       <DependentUpon>PersistWindowState.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Presentation\SpeechSettingsControl.resx">
+      <DependentUpon>SpeechSettingsControl.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Presentation\TrayIcon.resx">
       <DependentUpon>TrayIcon.cs</DependentUpon>
@@ -471,10 +490,27 @@
       <SubType>Designer</SubType>
       <DependentUpon>BuildProjectsControl.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Presentation\X10SettingsControl.resx">
+      <DependentUpon>X10SettingsControl.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
     <EmbeddedResource Include="Presentation\GeneralSettingsControl.resx">
       <SubType>Designer</SubType>
       <DependentUpon>GeneralSettingsControl.cs</DependentUpon>
     </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <COMReference Include="SpeechLib">
+      <Guid>{C866CA3A-32F7-11D2-9602-00C04F8EE628}</Guid>
+      <VersionMajor>5</VersionMajor>
+      <VersionMinor>0</VersionMinor>
+      <Lcid>0</Lcid>
+      <WrapperTool>tlbimp</WrapperTool>
+      <Isolated>False</Isolated>
+    </COMReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Properties\" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

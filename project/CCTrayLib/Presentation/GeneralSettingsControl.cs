@@ -41,6 +41,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 					? TrayIconDoubleClickAction.ShowStatusWindow
 					: TrayIconDoubleClickAction.NavigateToWebPageOfFirstProject);
 			configuration.FixUserName = txtFixUserName.Text;
+            configuration.Persist();
 		}
 
 	}
