@@ -118,6 +118,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 		    IntegrationResult intResult = new IntegrationResult();
             intResult.StartTime = new DateTime(1959,9,11,7,53,0);
 		    intResult.WorkingDirectory = @"C:\SomeDir\Or\Other";
+            intResult.ProjectName = "MyProject";
 
 			ProcessInfo expectedProcessRequest = new ProcessInfo(
                 "banana.bat", 

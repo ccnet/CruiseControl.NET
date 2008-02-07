@@ -92,11 +92,11 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 			string revised = input;
 			foreach (string removal in removals)
 			{
-				int i = 0;
-				while ((i = revised.IndexOf(removal)) > -1)
-				{
-					revised = revised.Remove(i, removal.Length);
-				}
+                int i = 0;
+                while ((i = revised.IndexOf(removal)) > -1)
+                {
+                    revised = revised.Remove(i, removal.Length);
+                }
 			}
 			return revised;
 		}
@@ -129,5 +129,11 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 		{
 			return filename == null ? null : filename.Trim('"');
 		}
+
+        public static string RemoveInvalidCharactersFromFileName(string fileName)
+        {
+            return Strip(fileName,"\\", "/", ":", "*", "?", "\"", "<", ">", "|");
+
+        }
 	}
 }

@@ -74,5 +74,16 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Util
 			actual = StringUtil.Strip(input, "monkey ", "chinchilla ");
 			Assert.AreEqual("hey la banana", actual);
 		}
+
+        [Test]
+        public void TestRemoveInvalidCharactersFromFileName()
+        {
+            string BadFileName = "Go Stand ? in the <*/:*?> corner.txt";
+            string actual = StringUtil.RemoveInvalidCharactersFromFileName(BadFileName);
+
+            Assert.AreEqual("Go Stand  in the  corner.txt", actual);
+
+
+        }
 	}
 }

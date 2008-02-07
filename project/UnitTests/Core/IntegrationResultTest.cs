@@ -184,7 +184,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
 			Assert.AreEqual(IntegrationStatus.Unknown, result.IntegrationProperties["CCNetIntegrationStatus"]);
 			Assert.AreEqual(IntegrationStatus.Unknown, result.IntegrationProperties["CCNetLastIntegrationStatus"]);
 			Assert.AreEqual("myTrigger", result.IntegrationProperties["CCNetRequestSource"]);
-            Assert.AreEqual(@"c:\artifactdir\ListenFile.xml", result.IntegrationProperties["CCNetListenerFile"]);
+            Assert.AreEqual(@"c:\artifactdir\project_ListenFile.xml", result.IntegrationProperties["CCNetListenerFile"]);
             ArrayList failureUsers = result.IntegrationProperties["CCNetFailureUsers"] as ArrayList;
             Assert.IsNotNull(failureUsers);
             Assert.AreEqual(1, failureUsers.Count);

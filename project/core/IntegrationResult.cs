@@ -129,7 +129,7 @@ namespace ThoughtWorks.CruiseControl.Core
 
         public string ListenerFile
         {
-            get { return System.IO.Path.Combine(artifactDirectory, "ListenFile.xml"); }
+            get { return System.IO.Path.Combine(artifactDirectory, Util.StringUtil.RemoveInvalidCharactersFromFileName(ProjectName) + "_ListenFile.xml"); }
         }                                                                                
                                                                               
 		public IntegrationStatus Status
