@@ -11,7 +11,9 @@ namespace ThoughtWorks.CruiseControl.Core.Triggers
 		public const double DefaultIntervalSeconds = 60;
 		private readonly DateTimeProvider dateTimeProvider;
 		private string name;
-        private double intervalSeconds = DefaultIntervalSeconds;
+		private double intervalSeconds = DefaultIntervalSeconds;
+        private double initialIntervalSeconds = -1;         // -1 indicates unset
+	    private bool isInitialInterval = true;
 
         private DateTime nextBuildTime;
 
@@ -34,6 +36,10 @@ namespace ThoughtWorks.CruiseControl.Core.Triggers
 			set { name = value; }
 		}
 
+        /// <summary>
+        /// The delay from the end of one integration pass to the next check for modifications.
+        /// </summary>
+        /// <remarks>Defaults to 60 seconds.</remarks>
         [ReflectorProperty("seconds", Required=false)]
         public double IntervalSeconds
         {
@@ -43,19 +49,48 @@ namespace ThoughtWorks.CruiseControl.Core.Triggers
                 intervalSeconds = value;
                 IncrementNextBuildTime();
             }
-        }                    
+        }
 
+        /// <summary>
+        /// The delay from CCNet startup to the first check for modifications.
+        /// </summary>
+        /// <remarks>Defaults to the IntervalSettings value.</remarks>
+		[ReflectorProperty("initialSeconds", Required = false)]
+		public double InitialIntervalSeconds
+		{
+			get
+			{
+                if (initialIntervalSeconds == -1) 
+                    return IntervalSeconds;     // If no setting for this, use IntervalSeconds instead.
+                else
+                    return initialIntervalSeconds;
+			}
+			set
+			{
+				initialIntervalSeconds = value;
+				IncrementNextBuildTime();
+			}
+		}                    
+		
 		[ReflectorProperty("buildCondition", Required=false)]
 		public BuildCondition BuildCondition = BuildCondition.IfModificationExists;
 
 		public virtual void IntegrationCompleted()
 		{
+            isInitialInterval = false;
+
 			IncrementNextBuildTime();
 		}
 
 		protected DateTime IncrementNextBuildTime()
 		{
-			return nextBuildTime = dateTimeProvider.Now.AddSeconds(intervalSeconds);
+		    double delaySeconds;
+            if (isInitialInterval)
+				delaySeconds = InitialIntervalSeconds;
+            else
+                delaySeconds = IntervalSeconds;
+
+            return nextBuildTime = dateTimeProvider.Now.AddSeconds(delaySeconds);
 		}
 
 		public DateTime NextBuild
