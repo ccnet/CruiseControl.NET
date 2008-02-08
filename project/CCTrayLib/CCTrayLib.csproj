@@ -341,6 +341,7 @@
     <Compile Include="Presentation\X10SettingsControl.Designer.cs">
       <DependentUpon>X10SettingsControl.cs</DependentUpon>
     </Compile>
+    <Compile Include="Presentation\SelectIconController.cs" />
     <Compile Include="Presentation\DetailStringProvider.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -355,6 +356,12 @@
     </Compile>
     <Compile Include="Presentation\IBalloonMessageProvider.cs">
       <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Presentation\IconSettingsControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Presentation\IconSettingsControl.Designer.cs">
+      <DependentUpon>IconSettingsControl.cs</DependentUpon>
     </Compile>
     <Compile Include="Presentation\IDetailStringProvider.cs">
       <SubType>Code</SubType>
@@ -497,6 +504,10 @@
     <EmbeddedResource Include="Presentation\GeneralSettingsControl.resx">
       <SubType>Designer</SubType>
       <DependentUpon>GeneralSettingsControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Presentation\IconSettingsControl.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>IconSettingsControl.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

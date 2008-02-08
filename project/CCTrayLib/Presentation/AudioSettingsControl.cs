@@ -37,7 +37,6 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 			configuration.Audio.FixedBuildSound = fixedAudio.Value;
 			configuration.Audio.StillFailingBuildSound = stillFailingAudio.Value;
 			configuration.Audio.StillSuccessfulBuildSound = successfulAudio.Value;
-            configuration.Persist();
 		}
 	}
 }

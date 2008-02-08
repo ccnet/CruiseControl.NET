@@ -12,12 +12,14 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 		private Button btnCancel;
 
 		private AudioSettingsControl audioSettings;
+		private IconSettingsControl iconSettings;
 		private GeneralSettingsControl generalSettings;
 		private BuildProjectsControl buildProjectsSettings;
         private X10SettingsControl x10Settings;
         private SpeechSettingsControl speechSettings;
 
 		private TabPage tabAudio;
+		private TabPage tabIcons;
 		private TabPage tabGeneral;
 		private TabPage tabBuildProjects;
         private TabPage tabX10;
@@ -34,14 +36,13 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 
 			InitializeComponent();
 
+			// Always use this.configuration here!
 			generalSettings.BindGeneralTabControls(this.configuration);
-
 			buildProjectsSettings.BindListView(this.configuration);
-
 			audioSettings.BindAudioControls(this.configuration);
-
-            x10Settings.BindX10Controls(configuration.X10);
-            speechSettings.BindSpechControls(configuration.Speech);
+			iconSettings.BindIconControls(this.configuration);
+            x10Settings.BindX10Controls(this.configuration.X10);
+            speechSettings.BindSpeechControls(this.configuration.Speech);
 		}
 
 		/// <summary>
@@ -77,6 +78,8 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
             this.buildProjectsSettings = new ThoughtWorks.CruiseControl.CCTrayLib.Presentation.BuildProjectsControl();
             this.tabAudio = new System.Windows.Forms.TabPage();
             this.audioSettings = new ThoughtWorks.CruiseControl.CCTrayLib.Presentation.AudioSettingsControl();
+			this.tabIcons = new System.Windows.Forms.TabPage();
+			this.iconSettings = new ThoughtWorks.CruiseControl.CCTrayLib.Presentation.IconSettingsControl();
             this.tabX10 = new System.Windows.Forms.TabPage();
             this.x10Settings = new ThoughtWorks.CruiseControl.CCTrayLib.Presentation.X10SettingsControl();
             this.tabSpeech = new System.Windows.Forms.TabPage();
@@ -85,6 +88,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
             this.tabGeneral.SuspendLayout();
             this.tabBuildProjects.SuspendLayout();
             this.tabAudio.SuspendLayout();
+			this.tabIcons.SuspendLayout();
             this.tabX10.SuspendLayout();
             this.tabSpeech.SuspendLayout();
             this.SuspendLayout();
@@ -120,6 +124,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
             this.tabControl1.Controls.Add(this.tabGeneral);
             this.tabControl1.Controls.Add(this.tabBuildProjects);
             this.tabControl1.Controls.Add(this.tabAudio);
+			this.tabControl1.Controls.Add(this.tabIcons);
             this.tabControl1.Controls.Add(this.tabX10);
             this.tabControl1.Controls.Add(this.tabSpeech);
             this.tabControl1.Location = new System.Drawing.Point(1, 1);
@@ -189,6 +194,27 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
             this.audioSettings.Name = "audioSettings";
             this.audioSettings.Size = new System.Drawing.Size(192, 74);
             this.audioSettings.TabIndex = 2;
+			// 
+			// tabIcons
+			// 
+			this.tabIcons.Controls.Add(this.iconSettings);
+			this.tabIcons.Location = new System.Drawing.Point(4, 22);
+			this.tabIcons.Name = "tabIcons";
+			this.tabIcons.Size = new System.Drawing.Size(192, 74);
+			this.tabIcons.TabIndex = 2;
+			this.tabIcons.Text = "Icons";
+			this.tabIcons.UseVisualStyleBackColor = true;
+			this.tabIcons.Visible = false;
+			// 
+			// iconSettings
+			// 
+			this.iconSettings.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+						| System.Windows.Forms.AnchorStyles.Left)
+						| System.Windows.Forms.AnchorStyles.Right)));
+			this.iconSettings.Location = new System.Drawing.Point(0, 0);
+			this.iconSettings.Name = "iconSettings";
+			this.iconSettings.Size = new System.Drawing.Size(192, 74);
+			this.iconSettings.TabIndex = 2;
             // 
             // tabX10
             // 
@@ -248,6 +274,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
             this.tabGeneral.ResumeLayout(false);
             this.tabBuildProjects.ResumeLayout(false);
             this.tabAudio.ResumeLayout(false);
+			this.tabIcons.ResumeLayout(false);
             this.tabX10.ResumeLayout(false);
             this.tabSpeech.ResumeLayout(false);
             this.ResumeLayout(false);
@@ -259,16 +286,11 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 		private void btnOK_Click(object sender, EventArgs e)
 		{
 			buildProjectsSettings.PersistProjectTabSettings();
-            configuration.Reload();
-			generalSettings.PersistGeneralTabSettings(configuration);
-            configuration.Reload();
-			audioSettings.PersistAudioTabSettings(configuration);
-			configuration.Reload();
-            x10Settings.PersistX10TabSettings(configuration.X10);
-            configuration.Persist();
+            generalSettings.PersistGeneralTabSettings(configuration);
+            audioSettings.PersistAudioTabSettings(configuration);
+			iconSettings.PersistIconTabSettings(configuration);
+			x10Settings.PersistX10TabSettings(configuration.X10);
             speechSettings.PersistSpeechTabSettings(configuration.Speech);
-            configuration.Persist();
-            configuration.Reload();
 
 			configuration.Persist();
 		}

@@ -16,7 +16,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Presentation
         	SpeechSettingsControl control = new SpeechSettingsControl();
 
         	SpeechConfiguration configuration = new SpeechConfiguration();
-            control.BindSpechControls(configuration);
+            control.BindSpeechControls(configuration);
         }
 	}
 }

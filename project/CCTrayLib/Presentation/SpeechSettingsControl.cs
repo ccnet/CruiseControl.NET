@@ -16,7 +16,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
             UpdateEnabledState();
 		}
 		
-		public void BindSpechControls(SpeechConfiguration configuration)
+		public void BindSpeechControls(SpeechConfiguration configuration)
 		{
             this.currentConfiguration = configuration;
             this.checkBoxSpeechEnabled.Checked = configuration.Enabled;
