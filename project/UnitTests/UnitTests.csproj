@@ -249,6 +249,7 @@
     <Compile Include="CCTrayLib\Presentation\BuildTransitionSoundPlayerTest.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="CCTrayLib\Presentation\CCTrayMultiSettingsFormTest.cs" />
     <Compile Include="CCTrayLib\Presentation\SpeechSettingsControlTest.cs" />
     <Compile Include="CCTrayLib\Presentation\ConfigurableBalloonMessageProviderTest.cs">
       <SubType>Code</SubType>
