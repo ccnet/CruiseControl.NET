@@ -31,10 +31,10 @@ namespace ThoughtWorks.CruiseControl.WebDashboard.IO
             if (this == obj) return true;
             ConditionalGetFingerprint conditionalGetFingerprint = obj as ConditionalGetFingerprint;
             if (conditionalGetFingerprint == null) return false;
-            
-            return
-                Equals(lastModifiedTime, conditionalGetFingerprint.lastModifiedTime) &&
-                Equals(eTag, conditionalGetFingerprint.eTag);
+        	
+            return 
+                lastModifiedTime.Equals(conditionalGetFingerprint.lastModifiedTime) &&
+                eTag.Equals(conditionalGetFingerprint.eTag);
         }
 
         public override int GetHashCode()

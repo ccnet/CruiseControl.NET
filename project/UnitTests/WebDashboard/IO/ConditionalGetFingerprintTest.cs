@@ -7,8 +7,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.IO
     [TestFixture]
     public class ConditionalGetFingerprintTest
     {
-        private DateTime testDate = new DateTime(2007,4,22,22,50,29, DateTimeKind.Utc);
-        private string testETag = "test e tag";
+        private DateTime testDate;
+        private string testETag;
 
         [SetUp]
         public void SetUp()
@@ -25,6 +25,17 @@ namespace ThoughtWorks.CruiseControl.UnitTests.WebDashboard.IO
 
             Assert.AreEqual(firstFingerprint, secondFingerprint);
             Assert.AreNotSame(firstFingerprint, secondFingerprint);
+        }
+
+		[Test]
+        public void ShouldNotBeEqualIfDatesDiffer()
+        {
+            ConditionalGetFingerprint firstFingerprint = new ConditionalGetFingerprint(testDate, testETag);
+
+			DateTime differentDate = new DateTime(2007, 3, 22, 22, 50, 29, DateTimeKind.Utc);
+			ConditionalGetFingerprint secondFingerprint = new ConditionalGetFingerprint(differentDate, testETag);
+
+            Assert.AreNotEqual(firstFingerprint, secondFingerprint);
         }
 
         [Test]
