@@ -28,21 +28,20 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 
 		private Container components = null;
 
-		public CCTrayMultiSettingsForm(ICCTrayMultiConfiguration configuration)
+		public CCTrayMultiSettingsForm(ICCTrayMultiConfiguration existingConfiguration)
 		{
 			// We will clone the existing configuration, so if the user cancels the dialog
 			// our in-memory configuration will still have the old values.
-			this.configuration = configuration.Clone();
+			configuration = existingConfiguration.Clone();
 
 			InitializeComponent();
 
-			// Always use this.configuration here!
-			generalSettings.BindGeneralTabControls(this.configuration);
-			buildProjectsSettings.BindListView(this.configuration);
-			audioSettings.BindAudioControls(this.configuration);
-			iconSettings.BindIconControls(this.configuration);
-            x10Settings.BindX10Controls(this.configuration.X10);
-            speechSettings.BindSpeechControls(this.configuration.Speech);
+			generalSettings.BindGeneralTabControls(configuration);
+			buildProjectsSettings.BindListView(configuration);
+			audioSettings.BindAudioControls(configuration);
+			iconSettings.BindIconControls(configuration);
+			x10Settings.BindX10Controls(configuration.X10);
+			speechSettings.BindSpeechControls(configuration.Speech);
 		}
 
 		/// <summary>
