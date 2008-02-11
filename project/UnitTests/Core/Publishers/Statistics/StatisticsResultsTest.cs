@@ -33,7 +33,6 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Publishers.Statistics
 
             results.Save(writer);
             string xml = writer.ToString();
-            Console.Out.WriteLine("xml = {0}", xml);
             AssertXPathExists(xml, "//statistics/statistic[@name='Duration']");
         }
 
