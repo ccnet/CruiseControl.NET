@@ -22,6 +22,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 		private IRegistry registry;
 		private ProcessExecutor executor;
 		private string executable;
+		private string version;
 
 		public DevenvTask() : this(new Registry(), new ProcessExecutor()) { }
 
@@ -29,6 +30,29 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 		{
 			this.registry = registry;
 			this.executor = executor;
+		}
+
+		[ReflectorProperty("version", Required = false)]
+		public string Version
+		{
+			get { return version; }
+
+			set
+			{
+				if (value != "9.0" && 
+					value != "8.0" && 
+					value != "7.1" && 
+					value != "7.0" &&
+					value != "VS2008" &&
+					value != "VS2005" &&
+					value != "VS2003" &&
+					value != "VS2002")
+				{
+					throw new CruiseControlException("Invalid value for Version, expected one of 9.0, 8.0, 7.1, 7.0, VS2008, VS2005, VS2003 or VS2002");
+				}
+
+				version = value;
+			}
 		}
 
 		[ReflectorProperty("executable", Required=false)]
@@ -51,20 +75,50 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         /// <returns>The fully-qualified pathname of the executable.</returns>
 		private string ReadDevenvExecutableFromRegistry()
 		{
-            string registryValue;
-            registryValue = registry.GetLocalMachineSubKeyValue(VS2008_REGISTRY_PATH, VS_REGISTRY_KEY);
-            if (registryValue == null)
-            {
-                registryValue = registry.GetLocalMachineSubKeyValue(VS2005_REGISTRY_PATH, VS_REGISTRY_KEY);
-            }
-            if (registryValue == null)
-            {
-                registryValue = registry.GetLocalMachineSubKeyValue(VS2003_REGISTRY_PATH, VS_REGISTRY_KEY);
-            }
-            if (registryValue == null)
+			string registryValue = null;
+
+			if (Version == null)
 			{
-				registryValue = registry.GetExpectedLocalMachineSubKeyValue(VS2002_REGISTRY_PATH, VS_REGISTRY_KEY);
+				registryValue = registry.GetLocalMachineSubKeyValue(VS2008_REGISTRY_PATH, VS_REGISTRY_KEY);
+
+				if (registryValue == null)
+				{
+					registryValue = registry.GetLocalMachineSubKeyValue(VS2005_REGISTRY_PATH, VS_REGISTRY_KEY);
+				}
+
+				if (registryValue == null)
+				{
+					registryValue = registry.GetLocalMachineSubKeyValue(VS2003_REGISTRY_PATH, VS_REGISTRY_KEY);
+				}
+
+				if (registryValue == null)
+				{
+					registryValue = registry.GetExpectedLocalMachineSubKeyValue(VS2002_REGISTRY_PATH, VS_REGISTRY_KEY);
+				}
 			}
+			else
+			{
+				if (Version == "9.0" || Version == "VS2008")
+				{
+					registryValue = registry.GetExpectedLocalMachineSubKeyValue(VS2008_REGISTRY_PATH, VS_REGISTRY_KEY);
+				}
+
+				if (Version == "8.0" || Version == "VS2005")
+				{
+					registryValue = registry.GetExpectedLocalMachineSubKeyValue(VS2005_REGISTRY_PATH, VS_REGISTRY_KEY);
+				}
+
+				if (Version == "7.1" || Version == "VS2003")
+				{
+					registryValue = registry.GetExpectedLocalMachineSubKeyValue(VS2003_REGISTRY_PATH, VS_REGISTRY_KEY);
+				}
+
+				if (Version == "7.0" || Version == "VS2002")
+				{
+					registryValue = registry.GetExpectedLocalMachineSubKeyValue(VS2002_REGISTRY_PATH, VS_REGISTRY_KEY);
+				}
+			}
+
 			return Path.Combine(registryValue, DEVENV_EXE);
 		}
 

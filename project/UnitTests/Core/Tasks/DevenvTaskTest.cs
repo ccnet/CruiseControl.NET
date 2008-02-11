@@ -14,6 +14,12 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 	public class DevenvTaskTest : ProcessExecutorTestFixtureBase
 	{
 		private const string DEVENV_PATH = @"C:\Program Files\Microsoft Visual Studio .NET 2003\Common7\IDE\devenv.com";
+
+		private const string DEVENV_2008_PATH = @"C:\Program Files\Microsoft Visual Studio 9\Common7\IDE\";
+		private const string DEVENV_2005_PATH = @"C:\Program Files\Microsoft Visual Studio 8\Common7\IDE\";
+		private const string DEVENV_2003_PATH = @"C:\Program Files\Microsoft Visual Studio .NET 2003\Common7\IDE\";
+		private const string DEVENV_2002_PATH = @"C:\Program Files\Microsoft Visual Studio .NET\Common7\IDE\";
+
 		private const string SOLUTION_FILE = @"D:\dev\ccnet\ccnet\project\ccnet.sln";
 		private const string CONFIGURATION = "Debug";
 
@@ -41,6 +47,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 			string xml = @"
 <devenv>
 	<executable>c:\vs.net\devenv.com</executable>
+	<version>9.0</version>
 	<solutionfile>mySolution.sln</solutionfile>
 	<configuration>Debug</configuration>
 	<buildTimeoutSeconds>4</buildTimeoutSeconds>
@@ -69,18 +76,57 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 			Assert.AreEqual(@"", task2.Project);
 		}
 
+		[Test, ExpectedException(typeof (NetReflectorException))]
+		public void ShouldFailToLoadInvalidVersionFromConfiguration()
+		{
+			string xml = @"<devenv solutionfile=""mySolution.sln"" configuration=""Release"" version=""VSBAD""/>";
+			NetReflector.Read(xml);
+		}
+
         [Test]
         public void DefaultVisualStudioShouldBe2008IfInstalled()
         {
             IMock mockRegistry2 = new DynamicMock(typeof(IRegistry));
            
             DevenvTask task2 = new DevenvTask((IRegistry)mockRegistry2.MockInstance, (ProcessExecutor)mockProcessExecutor.MockInstance);
-            mockRegistry2.ExpectAndReturn("GetLocalMachineSubKeyValue", @"C:\Program Files\Microsoft Visual Studio 9\Common7\IDE\",
+            mockRegistry2.ExpectAndReturn("GetLocalMachineSubKeyValue", DEVENV_2008_PATH,
                                          DevenvTask.VS2008_REGISTRY_PATH, DevenvTask.VS_REGISTRY_KEY);
-            Assert.AreEqual(@"C:\Program Files\Microsoft Visual Studio 9\Common7\IDE\devenv.com", task2.Executable);
+            Assert.AreEqual(DEVENV_2008_PATH + "devenv.com", task2.Executable);
             mockRegistry2.Verify();
             mockProcessExecutor.Verify();
         }
+
+		[Test]
+		public void SelectVisualStudio2008ExplicitlyUsingVersionNumberWhenEverythingInstalled()
+		{
+			IMock mockRegistry2 = new DynamicMock(typeof(IRegistry));
+
+			DevenvTask task2 = new DevenvTask((IRegistry)mockRegistry2.MockInstance, (ProcessExecutor)mockProcessExecutor.MockInstance);
+			mockRegistry2.ExpectAndReturn("GetExpectedLocalMachineSubKeyValue", DEVENV_2008_PATH,
+										 DevenvTask.VS2008_REGISTRY_PATH, DevenvTask.VS_REGISTRY_KEY);
+
+			task2.Version = "9.0";
+
+			Assert.AreEqual(DEVENV_2008_PATH + "devenv.com", task2.Executable);
+			mockRegistry2.Verify();
+			mockProcessExecutor.Verify();
+		}
+
+		[Test]
+		public void SelectVisualStudio2008ExplicitlyUsingVersionNameWhenEverythingInstalled()
+		{
+			IMock mockRegistry2 = new DynamicMock(typeof(IRegistry));
+
+			DevenvTask task2 = new DevenvTask((IRegistry)mockRegistry2.MockInstance, (ProcessExecutor)mockProcessExecutor.MockInstance);
+			mockRegistry2.ExpectAndReturn("GetExpectedLocalMachineSubKeyValue", DEVENV_2008_PATH,
+										 DevenvTask.VS2008_REGISTRY_PATH, DevenvTask.VS_REGISTRY_KEY);
+
+			task2.Version = "VS2008";
+
+			Assert.AreEqual(DEVENV_2008_PATH + "devenv.com", task2.Executable);
+			mockRegistry2.Verify();
+			mockProcessExecutor.Verify();
+		}
 
         [Test]
         public void DefaultVisualStudioShouldBe2005IfNothingNewerInstalled()
@@ -89,12 +135,44 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 
             DevenvTask task2 = new DevenvTask((IRegistry)mockRegistry2.MockInstance, (ProcessExecutor)mockProcessExecutor.MockInstance);
             mockRegistry2.ExpectAndReturn("GetLocalMachineSubKeyValue", null, DevenvTask.VS2008_REGISTRY_PATH, DevenvTask.VS_REGISTRY_KEY);
-            mockRegistry2.ExpectAndReturn("GetLocalMachineSubKeyValue", @"C:\Program Files\Microsoft Visual Studio 8\Common7\IDE\",
+			mockRegistry2.ExpectAndReturn("GetLocalMachineSubKeyValue", DEVENV_2005_PATH,
                                          DevenvTask.VS2005_REGISTRY_PATH, DevenvTask.VS_REGISTRY_KEY);
-            Assert.AreEqual(@"C:\Program Files\Microsoft Visual Studio 8\Common7\IDE\devenv.com", task2.Executable);
-            mockRegistry2.Verify();
+			Assert.AreEqual(DEVENV_2005_PATH + "devenv.com", task2.Executable);
+			mockRegistry2.Verify();
             mockProcessExecutor.Verify();
         }
+
+		[Test]
+		public void SelectVisualStudio2005ExplicitlyUsingVersionNumberWhenEverythingInstalled()
+		{
+			IMock mockRegistry2 = new DynamicMock(typeof(IRegistry));
+
+			DevenvTask task2 = new DevenvTask((IRegistry)mockRegistry2.MockInstance, (ProcessExecutor)mockProcessExecutor.MockInstance);
+			mockRegistry2.ExpectAndReturn("GetExpectedLocalMachineSubKeyValue", DEVENV_2005_PATH,
+										 DevenvTask.VS2005_REGISTRY_PATH, DevenvTask.VS_REGISTRY_KEY);
+
+			task2.Version = "8.0";
+
+			Assert.AreEqual(DEVENV_2005_PATH + "devenv.com", task2.Executable);
+			mockRegistry2.Verify();
+			mockProcessExecutor.Verify();
+		}
+
+		[Test]
+		public void SelectVisualStudio2005ExplicitlyUsingVersionNameWhenEverythingInstalled()
+		{
+			IMock mockRegistry2 = new DynamicMock(typeof(IRegistry));
+
+			DevenvTask task2 = new DevenvTask((IRegistry)mockRegistry2.MockInstance, (ProcessExecutor)mockProcessExecutor.MockInstance);
+			mockRegistry2.ExpectAndReturn("GetExpectedLocalMachineSubKeyValue", DEVENV_2005_PATH,
+										 DevenvTask.VS2005_REGISTRY_PATH, DevenvTask.VS_REGISTRY_KEY);
+
+			task2.Version = "VS2005";
+
+			Assert.AreEqual(DEVENV_2005_PATH + "devenv.com", task2.Executable);
+			mockRegistry2.Verify();
+			mockProcessExecutor.Verify();
+		}
 
         [Test]
         public void DefaultVisualStudioShouldBe2003IfNothingNewerInstalled()
@@ -104,12 +182,44 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
             DevenvTask task2 = new DevenvTask((IRegistry)mockRegistry2.MockInstance, (ProcessExecutor)mockProcessExecutor.MockInstance);
             mockRegistry2.ExpectAndReturn("GetLocalMachineSubKeyValue", null, DevenvTask.VS2008_REGISTRY_PATH, DevenvTask.VS_REGISTRY_KEY);
             mockRegistry2.ExpectAndReturn("GetLocalMachineSubKeyValue", null, DevenvTask.VS2005_REGISTRY_PATH, DevenvTask.VS_REGISTRY_KEY);
-            mockRegistry2.ExpectAndReturn("GetLocalMachineSubKeyValue", @"C:\Program Files\Microsoft Visual Studio .NET 2003\Common7\IDE\",
-			                             DevenvTask.VS2003_REGISTRY_PATH, DevenvTask.VS_REGISTRY_KEY);
-			Assert.AreEqual(@"C:\Program Files\Microsoft Visual Studio .NET 2003\Common7\IDE\devenv.com", task2.Executable);
-            mockRegistry2.Verify();
+			mockRegistry2.ExpectAndReturn("GetLocalMachineSubKeyValue", DEVENV_2003_PATH,
+										 DevenvTask.VS2003_REGISTRY_PATH, DevenvTask.VS_REGISTRY_KEY);
+			Assert.AreEqual(DEVENV_2003_PATH + "devenv.com", task2.Executable);
+			mockRegistry2.Verify();
             mockProcessExecutor.Verify();
         }
+
+		[Test]
+		public void SelectVisualStudio2003ExplicitlyUsingVersionNumberWhenEverythingInstalled()
+		{
+			IMock mockRegistry2 = new DynamicMock(typeof(IRegistry));
+
+			DevenvTask task2 = new DevenvTask((IRegistry)mockRegistry2.MockInstance, (ProcessExecutor)mockProcessExecutor.MockInstance);
+			mockRegistry2.ExpectAndReturn("GetExpectedLocalMachineSubKeyValue", DEVENV_2003_PATH,
+										 DevenvTask.VS2003_REGISTRY_PATH, DevenvTask.VS_REGISTRY_KEY);
+
+			task2.Version = "7.1";
+
+			Assert.AreEqual(DEVENV_2003_PATH + "devenv.com", task2.Executable);
+			mockRegistry2.Verify();
+			mockProcessExecutor.Verify();
+		}
+
+		[Test]
+		public void SelectVisualStudio2003ExplicitlyUsingVersionNameWhenEverythingInstalled()
+		{
+			IMock mockRegistry2 = new DynamicMock(typeof(IRegistry));
+
+			DevenvTask task2 = new DevenvTask((IRegistry)mockRegistry2.MockInstance, (ProcessExecutor)mockProcessExecutor.MockInstance);
+			mockRegistry2.ExpectAndReturn("GetExpectedLocalMachineSubKeyValue", DEVENV_2003_PATH,
+										 DevenvTask.VS2003_REGISTRY_PATH, DevenvTask.VS_REGISTRY_KEY);
+
+			task2.Version = "VS2003";
+
+			Assert.AreEqual(DEVENV_2003_PATH + "devenv.com", task2.Executable);
+			mockRegistry2.Verify();
+			mockProcessExecutor.Verify();
+		}
 
 		[Test]
         public void DefaultVisualStudioShouldBe2002IfNothingNewerInstalled()
@@ -120,12 +230,45 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
             mockRegistry2.ExpectAndReturn("GetLocalMachineSubKeyValue", null, DevenvTask.VS2008_REGISTRY_PATH, DevenvTask.VS_REGISTRY_KEY);
             mockRegistry2.ExpectAndReturn("GetLocalMachineSubKeyValue", null, DevenvTask.VS2005_REGISTRY_PATH, DevenvTask.VS_REGISTRY_KEY);
             mockRegistry2.ExpectAndReturn("GetLocalMachineSubKeyValue", null, DevenvTask.VS2003_REGISTRY_PATH, DevenvTask.VS_REGISTRY_KEY);
-			mockRegistry2.ExpectAndReturn("GetExpectedLocalMachineSubKeyValue", @"C:\Program Files\Microsoft Visual Studio .NET\Common7\IDE\",
-			                             DevenvTask.VS2002_REGISTRY_PATH, DevenvTask.VS_REGISTRY_KEY);
-			Assert.AreEqual(@"C:\Program Files\Microsoft Visual Studio .NET\Common7\IDE\devenv.com", task2.Executable);
-            mockRegistry2.Verify();
+			mockRegistry2.ExpectAndReturn("GetExpectedLocalMachineSubKeyValue", DEVENV_2002_PATH,
+										 DevenvTask.VS2002_REGISTRY_PATH, DevenvTask.VS_REGISTRY_KEY);
+
+			Assert.AreEqual(DEVENV_2002_PATH + "devenv.com", task2.Executable);
+			mockRegistry2.Verify();
             mockProcessExecutor.Verify();
         }
+
+		[Test]
+		public void SelectVisualStudio2002ExplicitlyUsingVersionNumberWhenEverythingInstalled()
+		{
+			IMock mockRegistry2 = new DynamicMock(typeof(IRegistry));
+
+			DevenvTask task2 = new DevenvTask((IRegistry)mockRegistry2.MockInstance, (ProcessExecutor)mockProcessExecutor.MockInstance);
+			mockRegistry2.ExpectAndReturn("GetExpectedLocalMachineSubKeyValue", DEVENV_2002_PATH,
+										 DevenvTask.VS2002_REGISTRY_PATH, DevenvTask.VS_REGISTRY_KEY);
+
+			task2.Version = "7.0";
+
+			Assert.AreEqual(DEVENV_2002_PATH + "devenv.com", task2.Executable);
+			mockRegistry2.Verify();
+			mockProcessExecutor.Verify();
+		}
+
+		[Test]
+		public void SelectVisualStudio2002ExplicitlyUsingVersionNameWhenEverythingInstalled()
+		{
+			IMock mockRegistry2 = new DynamicMock(typeof(IRegistry));
+
+			DevenvTask task2 = new DevenvTask((IRegistry)mockRegistry2.MockInstance, (ProcessExecutor)mockProcessExecutor.MockInstance);
+			mockRegistry2.ExpectAndReturn("GetExpectedLocalMachineSubKeyValue", DEVENV_2002_PATH,
+										 DevenvTask.VS2002_REGISTRY_PATH, DevenvTask.VS_REGISTRY_KEY);
+
+			task2.Version = "VS2002";
+
+			Assert.AreEqual(DEVENV_2002_PATH + "devenv.com", task2.Executable);
+			mockRegistry2.Verify();
+			mockProcessExecutor.Verify();
+		}
 
 		[Test]
 		public void VerifyDevenvProcessInfo()
