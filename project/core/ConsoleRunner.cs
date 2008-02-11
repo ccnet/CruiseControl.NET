@@ -21,7 +21,12 @@ namespace ThoughtWorks.CruiseControl.Core
 		public void Run()
 		{
 			Console.WriteLine("CruiseControl.NET Server {0} -- .NET Continuous Integration Server", Assembly.GetExecutingAssembly().GetName().Version);
-			Console.WriteLine("Copyright (C) 2003-2006 ThoughtWorks Inc.  All Rights Reserved.");
+            // Find out our copyright claim, if any, and display it.
+		    AssemblyCopyrightAttribute[] copyrightAttributes = (AssemblyCopyrightAttribute[]) Assembly.GetExecutingAssembly().GetCustomAttributes(typeof (AssemblyCopyrightAttribute), false);
+            if (copyrightAttributes.Length > 0)
+            {
+                Console.WriteLine("{0}  All Rights Reserved.", copyrightAttributes[0].Copyright);
+            }
 			Console.WriteLine(".NET Runtime Version: {0}{2}\tImage Runtime Version: {1}", Environment.Version, Assembly.GetExecutingAssembly().ImageRuntimeVersion, GetRuntime());
 			Console.WriteLine("OS Version: {0}\tServer locale: {1}", Environment.OSVersion, CultureInfo.CurrentCulture);
 			Console.WriteLine();
