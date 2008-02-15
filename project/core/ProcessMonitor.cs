@@ -43,7 +43,7 @@ namespace ThoughtWorks.CruiseControl.Core
 		{
 			try
 			{
-				actProcess.Kill();
+				KillUtil.KillPid(actProcess.Id);
 				Log.Info("------------------------------------------------------------------");
 				Log.Info("---------The Build Process was successfully aborted---------------");
 				Log.Info("------------------------------------------------------------------");
