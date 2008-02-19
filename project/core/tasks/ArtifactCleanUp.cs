@@ -50,7 +50,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         public void Run(IIntegrationResult result)
         {
             string BuildLogFolder = result.BuildLogDirectory;
-            
+
             switch (cleanUpMethod)
             {
                 case CleanUpMethod.KeepLastXBuilds:

@@ -689,6 +689,7 @@
     <Compile Include="Core\State\FileStateManagerTest.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Core\Tasks\ArtifactCleanupTest.cs" />
     <Compile Include="Core\Tasks\DataTaskResultTest.cs">
       <SubType>Code</SubType>
     </Compile>
