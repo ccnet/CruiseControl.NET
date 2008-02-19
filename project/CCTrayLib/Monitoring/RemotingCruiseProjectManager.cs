@@ -42,6 +42,22 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
 			manager.AbortBuild(ProjectName, Environment.UserName);
 		}
 		
+		
+		public void StopProject()
+		{
+			manager.Stop(projectName);
+		}
+		
+		public void StartProject()
+		{
+			manager.Start(projectName);
+		}
+		
+		public string ProjectIntegratorState
+		{
+			get { return GetProjectIntegratorStateByProjectName(projectName); }
+		}
+		
 		public void CancelPendingRequest()
 		{
 			manager.CancelPendingRequest(ProjectName);
@@ -50,6 +66,20 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
 		public string ProjectName
 		{
 			get { return projectName; }
+		}
+		
+		private string GetProjectIntegratorStateByProjectName(string projectName)
+		{
+			string integratorState = string.Empty;
+			ProjectStatus[] statusList = manager.GetProjectStatus();
+			foreach( ProjectStatus projectStatus in statusList)
+			{
+				if (projectStatus.Name.Equals(projectName))
+				{
+					integratorState = projectStatus.Status.ToString();
+				}
+			}
+			return integratorState;
 		}
 	}
 }

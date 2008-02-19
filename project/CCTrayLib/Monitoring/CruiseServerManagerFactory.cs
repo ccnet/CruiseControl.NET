@@ -20,7 +20,9 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
 			}
 			else
 			{
-				return new HttpCruiseServerManager(new WebRetriever(), new DashboardXmlParser(), buildServer);
+
+				return new CachingCruiseServerManager(
+					new HttpCruiseServerManager(new WebRetriever(), new DashboardXmlParser(), buildServer));
 			}
 		}
 	}

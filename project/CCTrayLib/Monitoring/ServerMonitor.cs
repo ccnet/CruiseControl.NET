@@ -14,7 +14,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
 		public event MonitorServerQueueChangedEventHandler QueueChanged;
 
         private CruiseServerSnapshot lastCruiseServerSnapshot;
-		private ICruiseServerManager cruiseServerManager;
+		private readonly ICruiseServerManager cruiseServerManager;
 		private Exception connectException;
 
 		public ServerMonitor(ICruiseServerManager cruiseServerManager)
@@ -28,7 +28,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
 		/// <param name="projectName">Name of the project to cancel.</param>
 		public void CancelPendingRequest(string projectName)
 		{
-			this.cruiseServerManager.CancelPendingRequest(projectName);
+			cruiseServerManager.CancelPendingRequest(projectName);
 		}
 
         /// <summary>
@@ -85,7 +85,8 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
 
 		public void OnPollStarting()
 		{
-            lastCruiseServerSnapshot = null; // Force an OnQueueChanged event to fire when poll restarted
+			if (cruiseServerManager is ICache) 
+				((ICache)cruiseServerManager).InvalidateCache();
 		}
 
 		public string ServerUrl

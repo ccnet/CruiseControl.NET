@@ -35,6 +35,17 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
 			throw new NotImplementedException();
 		}
 
+		
+		public void StopProject()
+		{
+			throw new NotImplementedException();
+		}
+		
+		public void StartProject()
+		{
+			throw new NotImplementedException();
+		}
+		
 		public void CancelPending()
 		{
 			throw new NotImplementedException();
@@ -67,7 +78,12 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
 				return result.ToString();
 			}
 		}
-
+		
+		public string ProjectIntegratorState
+		{
+			get { throw new NotImplementedException(); }
+		}
+		
 		public event MonitorBuildOccurredEventHandler BuildOccurred;
 		public event MonitorPolledEventHandler Polled;
 		public event MessageEventHandler MessageReceived;
@@ -146,7 +162,12 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
 
 			return status2;
 		}
-
+		
+		public bool IsConnected
+		{
+			get { throw new NotImplementedException(); }
+		}
+		
 		private int GetIntegrationStatusImportance(IntegrationStatus status)
 		{
 			switch (status)

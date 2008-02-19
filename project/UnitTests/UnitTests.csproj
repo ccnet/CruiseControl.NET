@@ -200,6 +200,7 @@
     <Compile Include="CCTrayLib\Monitoring\BuildDurationTrackerTest.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="CCTrayLib\Monitoring\CachingCruiseServerManagerTest.cs" />
     <Compile Include="CCTrayLib\Monitoring\CruiseProjectManagerFactoryTest.cs">
       <SubType>Code</SubType>
     </Compile>

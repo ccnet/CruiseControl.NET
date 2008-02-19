@@ -32,7 +32,12 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Presentation
 		{
 			get { return this; }
 		}
-
+		
+		public string ProjectIntegratorState
+		{
+			get { return "Running"; }
+		}
+		
 		public ProjectState ProjectState
 		{
 			get { return projectState; }
@@ -141,7 +146,17 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Presentation
 		{
 			throw new NotImplementedException();
 		}
-
+		
+		public void StopProject()
+		{
+			throw new NotImplementedException();
+		}
+		
+		public void StartProject()
+		{
+			throw new NotImplementedException();
+		}
+		
 		public void CancelPending()
 		{
 			throw new NotImplementedException();

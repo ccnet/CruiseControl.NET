@@ -109,7 +109,12 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
 				return lastProjectStatus.BuildStatus;
 			}
 		}
-
+		
+		public string ProjectIntegratorState
+		{
+			get { return cruiseProjectManager.ProjectIntegratorState; }
+		}
+		
 		public bool IsPending
 		{
 			get { return ProjectStatus != null && ProjectStatus.Activity.IsPending(); }
@@ -135,6 +140,17 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
             cruiseProjectManager.FixBuild(fixingUserName);
 		}
 
+		
+		public void StopProject()
+		{
+			cruiseProjectManager.StopProject();
+		}
+		
+		public void StartProject()
+		{
+			cruiseProjectManager.StartProject();
+		}
+		
 		public void CancelPending()
 		{
 			cruiseProjectManager.CancelPendingRequest();

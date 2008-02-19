@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using ThoughtWorks.CruiseControl.CCTrayLib.Configuration;
 using ThoughtWorks.CruiseControl.Remote;
 
@@ -5,14 +6,14 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
 {
 	public class CruiseProjectManagerFactory : ICruiseProjectManagerFactory
 	{
-		private ICruiseManagerFactory cruiseManagerFactory;
+		private readonly ICruiseManagerFactory cruiseManagerFactory;
 
 		public CruiseProjectManagerFactory(ICruiseManagerFactory cruiseManagerFactory)
 		{
 			this.cruiseManagerFactory = cruiseManagerFactory;
 		}
 
-		public ICruiseProjectManager Create(CCTrayProject project)
+		public ICruiseProjectManager Create(CCTrayProject project, IDictionary<BuildServer, ICruiseServerManager> serverManagers)
 		{
 			BuildServer server = project.BuildServer;
 			if (server.Transport == BuildServerTransport.Remoting)
@@ -21,7 +22,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
 			}
 			else
 			{
-                return new HttpCruiseProjectManager(new WebRetriever(), new DashboardXmlParser(), server.Uri, project.ProjectName);
+                return new HttpCruiseProjectManager(new WebRetriever(), project.ProjectName, serverManagers[server]);
 			}
 		}
 

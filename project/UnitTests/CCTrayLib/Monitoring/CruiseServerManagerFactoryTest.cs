@@ -27,7 +27,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Monitoring
 		}
 
 		[Test]
-		public void WhenRequestingACruiseProjectManagerWithAnHttpUrlConstructsANewDashboardCruiseProjectManager()
+		public void WhenRequestingACruiseProjectManagerWithAnHttpUrlConstructsANewHttpServerManagerDecoratedWithACachingServerManager()
 		{
 			DynamicMock mockCruiseManagerFactory = new DynamicMock(typeof (ICruiseManagerFactory));
 			mockCruiseManagerFactory.Strict = true;
@@ -37,7 +37,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Monitoring
 
 			ICruiseServerManager manager = factory.Create(server);
 			Assert.AreEqual(server.Url, manager.ServerUrl);
-			Assert.AreEqual(typeof (HttpCruiseServerManager), manager.GetType());
+			Assert.AreEqual(typeof (CachingCruiseServerManager), manager.GetType());
 
 			mockCruiseManagerFactory.Verify();
 		}

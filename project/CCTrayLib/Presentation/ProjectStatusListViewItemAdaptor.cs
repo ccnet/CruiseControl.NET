@@ -13,6 +13,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 		private readonly ListViewItem.ListViewSubItem detail;
 		private readonly ListViewItem.ListViewSubItem lastBuildLabel;
 		private readonly ListViewItem.ListViewSubItem lastBuildTime;
+		private readonly ListViewItem.ListViewSubItem projectStatus;
 		private readonly ListViewItem.ListViewSubItem serverName;
 		private readonly ICCTrayMultiConfiguration config = null;
 		
@@ -34,6 +35,8 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 			item.SubItems.Add(lastBuildLabel);
 			lastBuildTime = new ListViewItem.ListViewSubItem(item, "");
 			item.SubItems.Add(lastBuildTime);
+			projectStatus = new ListViewItem.ListViewSubItem(item, "");
+			item.SubItems.Add(projectStatus);
 		}
 
 		public ListViewItem Create(IProjectMonitor projectMonitor)
@@ -74,6 +77,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 				}
 				lastBuildLabel.Text = monitor.Detail.LastBuildLabel;
 				lastBuildTime.Text = monitor.Detail.LastBuildTime.ToString();
+				projectStatus.Text = monitor.ProjectIntegratorState;
 				activity.Text = monitor.Detail.Activity.ToString();
 			}
 			else

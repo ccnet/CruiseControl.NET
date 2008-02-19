@@ -104,6 +104,20 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 			}
 		}
 		
+		
+		public bool IsProjectRunning
+		{
+			get {
+				if (!IsProjectSelected) return false;
+				if (!selectedProject.IsConnected) return false;
+				else
+				{
+					bool isProjectRunning = selectedProject.ProjectIntegratorState.Equals(Remote.ProjectIntegratorState.Running.ToString());
+					return isProjectRunning;
+				}
+			}
+		}
+		
 		public event EventHandler IsProjectSelectedChanged;
 
 		public void ForceBuild()
@@ -217,7 +231,17 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
                 projectPoller = null;
             }
         }
-
+		
+		public void StopProject()
+		{
+			selectedProject.StopProject();
+		}
+		
+		public void StartProject()
+		{
+			selectedProject.StartProject();
+		}
+		
 		public ProjectStateIconAdaptor ProjectStateIconAdaptor
 		{
 			get { return projectStateIconAdaptor; }

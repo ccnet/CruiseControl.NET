@@ -197,6 +197,7 @@
     <Compile Include="Monitoring\BuildDurationTracker.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Monitoring\CachingCruiseServerManager.cs" />
     <Compile Include="Monitoring\CruiseProjectManagerFactory.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -215,6 +216,7 @@
     <Compile Include="Monitoring\HttpProjectListRetriever.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Monitoring\ICache.cs" />
     <Compile Include="Monitoring\ICruiseProjectManager.cs">
       <SubType>Code</SubType>
     </Compile>

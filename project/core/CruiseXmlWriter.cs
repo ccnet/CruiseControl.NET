@@ -50,6 +50,7 @@ namespace ThoughtWorks.CruiseControl.Core
             xmlWriter.WriteAttributeString("name", projectStatus.Name);
             xmlWriter.WriteAttributeString("category", projectStatus.Category);
             xmlWriter.WriteAttributeString("activity", projectStatus.Activity.ToString());
+			xmlWriter.WriteAttributeString("status", projectStatus.Status.ToString());
             xmlWriter.WriteAttributeString("lastBuildStatus", projectStatus.BuildStatus.ToString());
             xmlWriter.WriteAttributeString("lastBuildLabel", projectStatus.LastSuccessfulBuildLabel);
             xmlWriter.WriteAttributeString("lastBuildTime", XmlConvert.ToString(projectStatus.LastBuildDate, XmlDateTimeSerializationMode.Local));

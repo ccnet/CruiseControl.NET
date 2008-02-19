@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.IO;
 using System.Xml.Serialization;
 using ThoughtWorks.CruiseControl.CCTrayLib.Monitoring;
@@ -12,6 +13,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Configuration
 		private readonly ICruiseServerManagerFactory cruiseServerManagerFactory;
 		private readonly ICruiseProjectManagerFactory cruiseProjectManagerFactory;
 		private readonly string configFileName;
+		private readonly IDictionary<BuildServer, ICruiseServerManager> serverManagersList;
 
 		public CCTrayMultiConfiguration(ICruiseServerManagerFactory cruiseServerManagerFactory, 
 			ICruiseProjectManagerFactory cruiseProjectManagerFactory, string configFileName)
@@ -19,6 +21,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Configuration
 			this.cruiseServerManagerFactory = cruiseServerManagerFactory;
 			this.cruiseProjectManagerFactory = cruiseProjectManagerFactory;
 			this.configFileName = configFileName;
+			serverManagersList = new Dictionary<BuildServer, ICruiseServerManager>();
 
 			ReadConfigurationFile();
 		}
@@ -39,7 +42,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Configuration
 			{
 				if (Projects[i].ShowProject)
 				{
-					ICruiseProjectManager projectManager = cruiseProjectManagerFactory.Create(Projects[i]);
+					ICruiseProjectManager projectManager = cruiseProjectManagerFactory.Create(Projects[i], serverManagersList);
 					IProjectStatusRetriever projectStatusRetriever = GetServerMonitorForProject(Projects[i], serverMonitors);
 					retVal[indexRetval++] = new ProjectMonitor(projectManager, projectStatusRetriever);
 				}
@@ -48,7 +51,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Configuration
 			return retVal;
 		}
 
-        private IProjectStatusRetriever GetServerMonitorForProject(CCTrayProject project, ISingleServerMonitor[] serverMonitors)
+        private IProjectStatusRetriever GetServerMonitorForProject(CCTrayProject project, IEnumerable<ISingleServerMonitor> serverMonitors)
 	    {
             foreach (ISingleServerMonitor serverMonitor in serverMonitors)
             {
@@ -68,6 +71,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Configuration
 			{
 				BuildServer buildServer = buildServers[i];
 				ICruiseServerManager serverManager = cruiseServerManagerFactory.Create(buildServer);
+				serverManagersList[buildServer] = serverManager;
 				serverMonitors[i] = new ServerMonitor(serverManager);
 			}
 			return serverMonitors;

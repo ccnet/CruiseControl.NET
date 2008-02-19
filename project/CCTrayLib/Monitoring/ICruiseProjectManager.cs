@@ -11,7 +11,10 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
 		void ForceBuild();
 		void FixBuild(string fixingUserName);
 		void AbortBuild();
+		void StopProject();
+		void StartProject();
 		void CancelPendingRequest();
 		string ProjectName { get; }
+		string ProjectIntegratorState {get; }
 	}
 }

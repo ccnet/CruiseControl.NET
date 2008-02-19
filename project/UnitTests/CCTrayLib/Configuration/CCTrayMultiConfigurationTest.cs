@@ -1,10 +1,8 @@
-using System;
 using System.IO;
 using NMock;
 using NUnit.Framework;
 using ThoughtWorks.CruiseControl.CCTrayLib.Configuration;
 using ThoughtWorks.CruiseControl.CCTrayLib.Monitoring;
-using ThoughtWorks.CruiseControl.CCTrayLib.X10;
 
 namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Configuration
 {
@@ -85,8 +83,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Configuration
             mockServerConfigFactory.ExpectAndReturn("Create", cruiseServerManagerInstance, provider.GetUniqueBuildServerList()[1]);
             ISingleServerMonitor[] serverMonitorList = provider.GetServerMonitors();
 
-			mockProjectConfigFactory.ExpectAndReturn("Create", null, provider.Projects[0]);
-			mockProjectConfigFactory.ExpectAndReturn("Create", null, provider.Projects[1]);
+			mockProjectConfigFactory.ExpectAndReturn("Create", null, provider.Projects[0], null);
+			mockProjectConfigFactory.ExpectAndReturn("Create", null, provider.Projects[1], null);
 
             IProjectMonitor[] monitorList = provider.GetProjectStatusMonitors(serverMonitorList);
 			Assert.AreEqual(2, monitorList.Length);

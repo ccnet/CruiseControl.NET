@@ -1,4 +1,7 @@
+using System;
+using NMock;
 using NUnit.Framework;
+using ThoughtWorks.CruiseControl.CCTrayLib.Monitoring;
 using ThoughtWorks.CruiseControl.Remote;
 
 namespace ThoughtWorks.CruiseControl.UnitTests.Remote
@@ -28,7 +31,31 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Remote
             Assert.AreSame(queueSetSnapshot, cruiseServerSnapshot.QueueSetSnapshot);
         }
 
-        [Test]
+		[Test]
+		public void ShouldFindProjectStatusBasedOnProjectName()
+		{
+			ProjectStatus[] projectStatuses = new ProjectStatus[2];
+			projectStatuses[0] = new ProjectStatus("test1", IntegrationStatus.Failure, DateTime.Now);
+			projectStatuses[1] = new ProjectStatus("test2", IntegrationStatus.Success, DateTime.Now);
+
+			CruiseServerSnapshot cruiseServerSnapshot = new CruiseServerSnapshot(projectStatuses, null);
+
+			Assert.AreSame(projectStatuses[0], cruiseServerSnapshot.GetProjectStatus("test1"));
+			Assert.AreSame(projectStatuses[1], cruiseServerSnapshot.GetProjectStatus("test2"));
+		}
+
+		[Test]
+		public void ShouldReturnNullIfNamedProjectNotFound()
+		{
+			ProjectStatus[] projectStatuses = new ProjectStatus[1];
+			projectStatuses[0] = new ProjectStatus("no names", IntegrationStatus.Failure, DateTime.Now);
+
+			CruiseServerSnapshot cruiseServerSnapshot = new CruiseServerSnapshot(projectStatuses, null);
+
+			Assert.IsNull(cruiseServerSnapshot.GetProjectStatus("this doesn't match"));
+		}
+
+		[Test]
         public void DetectQueueSetChangedWithNullArguments()
         {
             AssertQueueSetChanged(false, null, null);

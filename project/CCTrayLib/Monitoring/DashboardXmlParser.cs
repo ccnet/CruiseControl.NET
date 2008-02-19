@@ -20,6 +20,9 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
 		[XmlAttribute(DataType="NMTOKEN")]
 		public string activity;
 
+		[XmlAttribute(DataType = "NMTOKEN")]
+		public string status;
+
 		[XmlAttribute(DataType="NMTOKEN")]
 		public string lastBuildStatus;
 
@@ -139,13 +142,13 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
                 projectStatuses = new ProjectStatus[dashboardProjects.Length];
                 for (int index = 0; index < dashboardProjects.Length; index++)
                 {
-                    DashboardProject dashboardProject = dashboardProjects[index];
-                    projectStatuses[index] = new ProjectStatus(
+                	DashboardProject dashboardProject = dashboardProjects[index];
+					projectStatuses[index] = new ProjectStatus(
                         dashboardProject.name,
                         dashboardProject.category,
                         new ProjectActivity(dashboardProject.activity),
                         (IntegrationStatus)Enum.Parse(typeof(IntegrationStatus), dashboardProject.lastBuildStatus),
-                        ProjectIntegratorState.Running,
+                        GetIntegratorStateFromString(dashboardProject.status),
                         dashboardProject.webUrl,
                         dashboardProject.lastBuildTime,
                         dashboardProject.lastBuildLabel,
@@ -185,5 +188,20 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
         {
             return (DashboardCruiseServerSnapshot)cruiseServerSerializer.Deserialize(new StringReader(sourceXml));
         }
-    }
+
+		private ProjectIntegratorState GetIntegratorStateFromString(string projectStatus)
+		{
+			if (projectStatus == ProjectIntegratorState.Stopped.ToString())
+			{
+				return ProjectIntegratorState.Stopped;
+			}
+			
+			if (projectStatus == ProjectIntegratorState.Stopping.ToString())
+			{
+				return ProjectIntegratorState.Stopping;
+			}
+
+			return  ProjectIntegratorState.Running;
+		}
+	}
 }

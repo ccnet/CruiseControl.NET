@@ -7,17 +7,21 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
 	public class HttpCruiseProjectManager : ICruiseProjectManager
 	{
 		private readonly string projectName;
-		private readonly Uri serverUri;
 		private readonly IWebRetriever webRetriever;
-		private readonly IDashboardXmlParser dashboardXmlParser;
+		private readonly ICruiseServerManager serverManager;
+		private readonly Uri dashboardUri;
+		private Uri webUrl;
+		private string serverName;
+		private string basePath;
 
-		public HttpCruiseProjectManager(IWebRetriever webRetriever, IDashboardXmlParser dashboardXmlParser, 
-            Uri serverUri, string projectName)
+		public HttpCruiseProjectManager(IWebRetriever webRetriever, string projectName, ICruiseServerManager serverManager)
 		{
 			this.projectName = projectName;
 			this.webRetriever = webRetriever;
-			this.dashboardXmlParser = dashboardXmlParser;
-			this.serverUri = serverUri;
+			this.serverManager = serverManager;
+			GetWebUrl();
+			ExtractBasePathAndServerName();
+			dashboardUri = new Uri(string.Format("http://{0}/{1}/server/{2}/ViewFarmReport.aspx", webUrl.Host, basePath, serverName));
 		}
 
 		public void ForceBuild()
@@ -35,6 +39,16 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
 			throw new NotImplementedException("Fix build not currently supported on projects monitored via HTTP");
 		}
 		
+		public void StopProject()
+		{
+			PushDashboardButton("StopBuild");
+		}
+		
+		public void StartProject()
+		{
+			PushDashboardButton("StartBuild");
+		}
+		
 		public void CancelPendingRequest()
 		{
 			throw new NotImplementedException("Cancel pending not currently supported on projects monitored via HTTP");
@@ -44,52 +58,50 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
 		{
 			get { return projectName; }
 		}
+		
+		public string ProjectIntegratorState
+		{
+			get
+			{
+				return serverManager.GetCruiseServerSnapshot().GetProjectStatus(projectName).Status.ToString();
+			}
+		}
 
 		public void PushDashboardButton(string buttonName)
 		{
-			Uri webUrl = null;
+			NameValueCollection input = new NameValueCollection();
+			input.Add(buttonName, "true");
+			input.Add("projectName", projectName);
+			input.Add("serverName", serverName);
+			webRetriever.Post(dashboardUri, input);
+		}
 
+		private void GetWebUrl()
+		{
 			// BUG: the projects name needs to be unique across the whole dashboard
-			foreach (ProjectStatus ps in
-				dashboardXmlParser.ExtractAsCruiseServerSnapshot(webRetriever.Get(serverUri)).ProjectStatuses)
+			foreach (ProjectStatus ps in serverManager.GetCruiseServerSnapshot().ProjectStatuses)
 			{
-				if (ps.Name == projectName) webUrl = new Uri(ps.WebURL);
-			}
-
-			string serverName = null;
-			string basePath = null;
-			string[] splitUrl = null;
-
-			if (webUrl != null) splitUrl = webUrl.AbsolutePath.Split('/');
-
-			if (splitUrl != null)
-			{
-				for (int i = 0; i < splitUrl.Length; i++)
+				if (ps.Name == projectName)
 				{
-					if ((splitUrl[i] == "server") && (splitUrl[i + 1] != null))
-					{
-						serverName = splitUrl[i + 1];
-						break;
-					}
-					if (splitUrl[i] != "") basePath = basePath + "/" + splitUrl[i];
-				}
-
-				if (serverName != null)
-				{
-
-					Uri dashboardUri = new Uri("http://" + webUrl.Host + basePath + "/server/" + serverName + "/ViewFarmReport.aspx");
-					NameValueCollection input = new NameValueCollection();
-
-					input.Add(buttonName, "true");
-					input.Add("projectName", projectName);
-					input.Add("serverName", serverName);
-
-					webRetriever.Post(dashboardUri, input);
-				}
-				else
-				{
+					webUrl = new Uri(ps.WebURL);
+					break;
 				}
 			}
+		}
+
+		private void ExtractBasePathAndServerName()
+		{
+			string[] splitPath = webUrl.AbsolutePath.Trim('/').Split('/');
+			for (int i = 0; i < splitPath.Length; i++)
+			{
+				if ((splitPath[i] == "server") && (splitPath[i + 1] != null))
+				{
+					serverName = splitPath[i + 1];
+					break;
+				}
+				basePath = string.Format("{0}/{1}", basePath , splitPath[i]);
+			}
+			basePath = basePath.Trim('/');
 		}
 	}
 }

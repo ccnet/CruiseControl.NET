@@ -24,6 +24,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
 		{
 			try
 			{
+				itemToPoll.OnPollStarting();
 				Debug.WriteLine("Polling...");
 				itemToPoll.Poll();
 			}
@@ -36,7 +37,6 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
 		public void Start()
 		{
 			timer.Stop();
-			itemToPoll.OnPollStarting();
 			// Fire the timer straight away rather than waiting for poll interval
 			Timer_Elapsed(null, null);
 		}

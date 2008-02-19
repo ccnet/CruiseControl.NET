@@ -6,26 +6,23 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
 {
 	public class HttpCruiseServerManager : ICruiseServerManager
 	{
-		private readonly string serverUrl;
-		private readonly Uri serverUri;
-		private readonly string displayName;
-		private readonly BuildServerTransport transport;
 		private readonly IWebRetriever webRetriever;
 		private readonly IDashboardXmlParser dashboardXmlParser;
+		private readonly BuildServer buildServer;
+		private readonly string displayName;
 
-		public HttpCruiseServerManager(IWebRetriever webRetriever, IDashboardXmlParser dashboardXmlParser, BuildServer buildServer)
+		public HttpCruiseServerManager(IWebRetriever webRetriever, IDashboardXmlParser dashboardXmlParser, 
+			BuildServer buildServer)
 		{
 			this.webRetriever = webRetriever;
 			this.dashboardXmlParser = dashboardXmlParser;
-			this.serverUrl = buildServer.Url;
-			this.transport = buildServer.Transport;
-			this.serverUri = buildServer.Uri;
-			this.displayName = GetDisplayNameFromUri(serverUri);
+			this.buildServer = buildServer;
+			displayName = GetDisplayNameFromUri(buildServer.Uri);
 		}
 
 		public string ServerUrl
 		{
-			get { return serverUrl; }
+			get { return buildServer.Url; }
 		}
 
 		public string DisplayName
@@ -35,7 +32,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
 
 		public BuildServerTransport Transport
 		{
-			get { return transport; }
+			get { return buildServer.Transport; }
 		}
 
 		public void CancelPendingRequest(string projectName)
@@ -48,12 +45,11 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
 		/// </summary>
         public CruiseServerSnapshot GetCruiseServerSnapshot()
 		{
-            string content = webRetriever.Get(serverUri);
-            CruiseServerSnapshot snapshot = dashboardXmlParser.ExtractAsCruiseServerSnapshot(content);
-            return snapshot;
+			string xml = webRetriever.Get(buildServer.Uri);
+			return dashboardXmlParser.ExtractAsCruiseServerSnapshot(xml);
 		}
 
-		private string GetDisplayNameFromUri(Uri uri)
+		private static string GetDisplayNameFromUri(Uri uri)
 		{
 			const int DefaultHttpPort = 80;
 			// TODO: The BuildServer.DisplayName property is coded such that it only strips out the server

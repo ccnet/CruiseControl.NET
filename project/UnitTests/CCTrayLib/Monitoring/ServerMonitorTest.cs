@@ -102,38 +102,6 @@ namespace ThoughtWorks.CruiseControl.UnitTests.CCTrayLib.Monitoring
 			Assert.AreEqual(3, queueChangedCount);
 		}
 
-		[Test]
-		public void IfThePollIsStoppedAndStartedQueueChangedIsFiredRegardless()
-		{
-			Assert.AreEqual(0, queueChangedCount);
-            CruiseServerSnapshot snapshot = CreateCruiseServerSnapshot();
-
-            mockServerManager.ExpectAndReturn("GetCruiseServerSnapshot", snapshot);
-			monitor.Poll();
-
-			Assert.AreEqual(1, queueChangedCount);
-
-            mockServerManager.ExpectAndReturn("GetCruiseServerSnapshot", snapshot);
-			monitor.Poll();
-
-			Assert.AreEqual(1, queueChangedCount);
-
-			// Simulate the Poll being stopped and started which should call OnPollStarting.
-			monitor.OnPollStarting();
-
-			// Now we expect the snapshot to be republished.
-            mockServerManager.ExpectAndReturn("GetCruiseServerSnapshot", snapshot);
-			monitor.Poll();
-
-			Assert.AreEqual(2, queueChangedCount);
-
-			// But this should be a one-off thing - the next poll will revert to normal behaviour
-            mockServerManager.ExpectAndReturn("GetCruiseServerSnapshot", snapshot);
-			monitor.Poll();
-
-			Assert.AreEqual(2, queueChangedCount);
-		}
-
 		private void Monitor_Polled(object sauce, MonitorServerPolledEventArgs args)
 		{
 			pollCount++;

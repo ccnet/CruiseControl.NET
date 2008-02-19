@@ -34,9 +34,15 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
 			}
 		}
 
+		/// <summary>
+		/// Prepares all the server monitors for a poll.
+		/// </summary>
 		public void OnPollStarting()
 		{
-			// No initialisation required.
+			foreach (IServerMonitor monitor in monitors)
+			{
+				monitor.OnPollStarting();
+			}
 		}
 
 		private void Monitor_Polled(object sender, MonitorServerPolledEventArgs args)

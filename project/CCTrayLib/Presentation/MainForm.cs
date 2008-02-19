@@ -24,6 +24,8 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 		private TrayIcon trayIcon;
 		private ContextMenu projectContextMenu;
 		private MenuItem mnuForce;
+		private MenuItem mnuStart;
+		private MenuItem mnuStop;
 		private MenuItem mnuAbort;
 		private MenuItem mnuWebPage;
 		private MenuItem mnuViewIcons;
@@ -57,6 +59,8 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 		private ContextMenu queueContextMenu;
 		private ImageList queueIconList;
 		private MenuItem mnuQueueCancelPending;
+		private Button btnStartStopProject;
+		private ColumnHeader colProjectStatus;
         private MenuItem mnuAbout;
         private ToolTip tltBuildStage;
 		private PersistWindowState windowState;
@@ -128,6 +132,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 			}
 			CreateDataBindings();
 			btnForceBuild.DataBindings.Add("Enabled", controller, "IsProjectSelected");
+			btnStartStopProject.DataBindings.Add("Enabled", controller, "IsProjectSelected");
 		}
 		
 		private void CreateDataBindings()
@@ -151,7 +156,6 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 				controller.StartServerMonitoring();
 			}
 		}
-
 
 		/// <summary>
 		/// Clean up any resources being used.
@@ -185,9 +189,12 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
             this.colDetail = new System.Windows.Forms.ColumnHeader();
             this.colLastBuildLabel = new System.Windows.Forms.ColumnHeader();
             this.colLastBuildTime = new System.Windows.Forms.ColumnHeader();
+			this.colProjectStatus = new System.Windows.Forms.ColumnHeader();
             this.projectContextMenu = new System.Windows.Forms.ContextMenu();
             this.mnuForce = new System.Windows.Forms.MenuItem();
 			this.mnuAbort = new System.Windows.Forms.MenuItem();
+			this.mnuStart = new System.Windows.Forms.MenuItem();
+			this.mnuStop = new System.Windows.Forms.MenuItem();
             this.mnuWebPage = new System.Windows.Forms.MenuItem();
             this.mnuCancelPending = new System.Windows.Forms.MenuItem();
             this.mnuFixBuild = new System.Windows.Forms.MenuItem();
@@ -211,6 +218,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
             this.pnlButtons = new System.Windows.Forms.Panel();
             this.btnToggleQueueView = new System.Windows.Forms.Button();
             this.btnForceBuild = new System.Windows.Forms.Button();
+			this.btnStartStopProject = new System.Windows.Forms.Button();
             this.splitterQueueView = new System.Windows.Forms.Splitter();
             this.pnlViewQueues = new System.Windows.Forms.Panel();
             this.queueIconList = new System.Windows.Forms.ImageList(this.components);
@@ -231,7 +239,8 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
             this.colActivity,
             this.colDetail,
             this.colLastBuildLabel,
-            this.colLastBuildTime});
+            this.colLastBuildTime,
+			this.colProjectStatus});
             this.lvProjects.ContextMenu = this.projectContextMenu;
             this.lvProjects.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lvProjects.FullRowSelect = true;
@@ -278,12 +287,18 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
             // 
             this.colLastBuildTime.Text = "Last Build Time";
             this.colLastBuildTime.Width = 112;
+			// 
+			// colProjectStatus
+			// 
+			this.colProjectStatus.Text = "Project Status";
             // 
             // projectContextMenu
             // 
             this.projectContextMenu.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
             this.mnuForce,
 			this.mnuAbort,
+			this.mnuStart,
+			this.mnuStop,
             this.mnuWebPage,
             this.mnuCancelPending,
             this.mnuFixBuild});
@@ -300,22 +315,34 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 			this.mnuAbort.Index = 1;
 			this.mnuAbort.Text = "&Abort Build";
 			this.mnuAbort.Click += new System.EventHandler(this.mnuAbort_Click);
+			// 
+			// mnuStart
+			// 
+			this.mnuStart.Index = 2;
+			this.mnuStart.Text = "&Start Project";
+			this.mnuStart.Click += new System.EventHandler(this.mnuStart_Click);
+			// 
+			// mnuStop
+			// 
+			this.mnuStop.Index = 3;
+			this.mnuStop.Text = "&Stop Project";
+			this.mnuStop.Click += new System.EventHandler(this.mnuStop_Click);
             // 
             // mnuWebPage
             // 
-            this.mnuWebPage.Index = 2;
+            this.mnuWebPage.Index = 4;
             this.mnuWebPage.Text = "Display &Web Page";
             this.mnuWebPage.Click += new System.EventHandler(this.mnuWebPage_Click);
             // 
             // mnuCancelPending
             // 
-            this.mnuCancelPending.Index = 3;
+            this.mnuCancelPending.Index = 5;
             this.mnuCancelPending.Text = "&Cancel Pending";
             this.mnuCancelPending.Click += new System.EventHandler(this.mnuCancelPending_Click);
             // 
             // mnuFixBuild
             // 
-            this.mnuFixBuild.Index = 4;
+            this.mnuFixBuild.Index = 6;
             this.mnuFixBuild.Text = "&Volunteer to Fix Build";
             this.mnuFixBuild.Click += new System.EventHandler(this.mnuFixBuild_Click);
             // 
@@ -435,6 +462,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
             this.pnlButtons.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.pnlButtons.Controls.Add(this.btnToggleQueueView);
             this.pnlButtons.Controls.Add(this.btnForceBuild);
+			this.pnlButtons.Controls.Add(this.btnStartStopProject);
             this.pnlButtons.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.pnlButtons.Location = new System.Drawing.Point(0, 113);
             this.pnlButtons.Name = "pnlButtons";
@@ -448,9 +476,9 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
             this.btnToggleQueueView.Name = "btnToggleQueueView";
             this.btnToggleQueueView.Size = new System.Drawing.Size(85, 23);
             this.btnToggleQueueView.TabIndex = 1;
-            this.btnToggleQueueView.Text = "Show &Queues";
-            this.btnToggleQueueView.Click += new System.EventHandler(this.btnToggleQueueView_Click);
-            // 
+			this.btnToggleQueueView.Text = "Show &Queues";
+			this.btnToggleQueueView.Click += new System.EventHandler(this.btnToggleQueueView_Click);
+			// 
             // btnForceBuild
             // 
             //this.btnForceBuild.FlatStyle = System.Windows.Forms.FlatStyle.System;
@@ -463,7 +491,19 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
             this.btnForceBuild.Text = "Force &Build";
 			this.btnForceBuild.Image = ResourceProjectStateIconProvider.GREEN.Icon.ToBitmap();
 			this.btnForceBuild.Click += new System.EventHandler(this.btnForceBuild_Click);
-            // 
+			// 
+			// btnStartStopProject
+			// 
+			this.btnStartStopProject.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.btnStartStopProject.FlatStyle = System.Windows.Forms.FlatStyle.System;
+			this.btnStartStopProject.Location = new System.Drawing.Point(793, 10);
+			this.btnStartStopProject.Name = "btnStartStopProject";
+			this.btnStartStopProject.Size = new System.Drawing.Size(85, 23);
+			this.btnStartStopProject.TabIndex = 2;
+			this.btnStartStopProject.Text = "&Stop Project";
+			this.btnStartStopProject.UseVisualStyleBackColor = true;
+			this.btnStartStopProject.Click += new System.EventHandler(this.btnStartStopProject_Click);
+			// 
             // splitterQueueView
             // 
             this.splitterQueueView.Location = new System.Drawing.Point(200, 0);
@@ -540,7 +580,6 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
             this.pnlButtons.ResumeLayout(false);
             this.pnlViewQueues.ResumeLayout(false);
             this.ResumeLayout(false);
-
 		}
 
 		#endregion
@@ -646,6 +685,13 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 				controller.AbortBuild();
 			}
 		}
+
+		private void UpdateForceAbortBuildButtonLabel()
+		{
+			btnForceBuild.Text = controller.IsProjectBuilding ? "Abort &Build" : "Force &Build";
+			btnForceBuild.Image = controller.IsProjectBuilding ? new ConfigurableProjectStateIconProvider(configuration.Icons).GetStatusIconForState(ProjectState.Broken).Icon.ToBitmap() : new ConfigurableProjectStateIconProvider(configuration.Icons).GetStatusIconForState(ProjectState.Success).Icon.ToBitmap();
+			btnForceBuild.Enabled = ((controller.SelectedProject != null) && controller.SelectedProject.IsConnected);
+		}
 		
 		private void mnuWebPage_Click(object sender, EventArgs e)
 		{
@@ -685,6 +731,8 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 		{
 			mnuForce.Visible = controller.IsProjectSelected && !controller.IsProjectBuilding;
 			mnuAbort.Visible = controller.IsProjectSelected && controller.IsProjectBuilding;
+			mnuStart.Visible = controller.IsProjectSelected && !controller.IsProjectRunning;
+			mnuStop.Visible = controller.IsProjectSelected && controller.IsProjectRunning;
 			mnuWebPage.Enabled = controller.IsProjectSelected;
 			mnuCancelPending.Visible = controller.CanCancelPending();
 			mnuFixBuild.Visible = controller.CanFixBuild();
@@ -702,6 +750,7 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 					lvProjects.Items.Clear();
 					DataBindings.Clear();
 					btnForceBuild.DataBindings.Clear();
+					btnStartStopProject.DataBindings.Clear();
 					controller.UnbindToQueueTreeView(queueTreeView);
 					CreateController();
 				}
@@ -852,30 +901,37 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 		// Updates the buttons of CCTray, after each poll
 		private void mon_Polled(object sender, MonitorPolledEventArgs args)
 		{
-			//is a project selected and connected?
-			if (controller.SelectedProject == null || (controller.SelectedProject.ProjectState == ProjectState.NotConnected))
+			UpdateForceAbortBuildButtonLabel();
+			UpdateStartStopProjectButtonLabel();
+		}
+		
+		private void btnStartStopProject_Click(object sender, EventArgs e)
+		{
+			bool projectRunning = controller.IsProjectRunning;
+			if (projectRunning)
 			{
-				this.btnForceBuild.Enabled = false;
+				controller.StopProject();
 			}
 			else
 			{
-				this.btnForceBuild.Enabled = true;
-				//is the polled project the selected one?
-				if (args.ProjectMonitor.Detail.ProjectName.Equals(this.controller.SelectedProject.Detail.ProjectName))
-				{
-					//set AbortBuild
-					if (controller.SelectedProject.Detail.Activity.Equals(Remote.ProjectActivity.Building))
-					{
-						this.btnForceBuild.Text = "&Abort Build";
-						this.btnForceBuild.Image = ResourceProjectStateIconProvider.RED.Icon.ToBitmap();
-					}
-					else
-					{
-						this.btnForceBuild.Text = "Force &Build";
-						this.btnForceBuild.Image = ResourceProjectStateIconProvider.GREEN.Icon.ToBitmap();
-					}
-				}
+				controller.StartProject();
 			}
+		}
+
+		private void mnuStart_Click(object sender, EventArgs e)
+		{
+			controller.StartProject();
+		}
+
+		private void mnuStop_Click(object sender, EventArgs e)
+		{
+			controller.StopProject();
+		}
+		
+		private void UpdateStartStopProjectButtonLabel()
+		{
+			btnStartStopProject.Text = controller.IsProjectRunning ? "&Stop Project" : "&Start Project" ;
+			btnStartStopProject.Enabled = ((controller.SelectedProject != null) && controller.SelectedProject.IsConnected);
 		}
 		
 		// Implements the manual sorting of items by columns.

@@ -40,7 +40,12 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 		{
 			get { return projectMonitor.SummaryStatusString; }
 		}
-
+		
+		public string ProjectIntegratorState
+		{
+			get { return projectMonitor.ProjectIntegratorState; }
+		}
+		
 		public void ForceBuild()
 		{
 			projectMonitor.ForceBuild();
@@ -56,6 +61,17 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 			projectMonitor.FixBuild(fixingUserName);
 		}
 
+		
+		public void StopProject()
+		{
+			projectMonitor.StopProject();
+		}
+		
+		public void StartProject()
+		{
+			projectMonitor.StartProject();
+		}
+		
 		public void CancelPending()
 		{
 			projectMonitor.CancelPending();
@@ -98,6 +114,11 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
 		public bool IsPending
 		{
 			get { return projectMonitor.IsPending; }
+		}
+		
+		public bool IsConnected
+		{
+			get { return projectMonitor.IsConnected; }
 		}
 	}
 }

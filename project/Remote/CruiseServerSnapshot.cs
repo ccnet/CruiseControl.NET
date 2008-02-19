@@ -68,5 +68,17 @@ namespace ThoughtWorks.CruiseControl.Remote
             }
             return false;
         }
+
+		public ProjectStatus GetProjectStatus(string projectName)
+		{
+			foreach (ProjectStatus projectStatus in ProjectStatuses)
+			{
+				if (projectStatus.Name == projectName)
+				{
+					return projectStatus;
+				}
+			}
+			return null;
+		}
     }
 }
