@@ -18,7 +18,7 @@ namespace ThoughtWorks.CruiseControl.Core.Util
             switch (Environment.OSVersion.Platform)
             {
                 case PlatformID.Win32NT:
-                    if (Environment.OSVersion.Version.Minor == 0)
+                    if ((Environment.OSVersion.Version.Major == 5) && (Environment.OSVersion.Version.Minor == 0))
                     {
                         // Windows 2000 doesn't have taskkill.exe, so use kill.exe from the 
                         // "Windows 2000 Service Pack 4 Support Tools" package from Microsoft's download center
