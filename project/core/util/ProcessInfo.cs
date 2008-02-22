@@ -14,13 +14,18 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 		private string standardInputContent = null;
 		private int timeout = DefaultTimeout;
 
+        private int[] successExitCodes = new int[1] { 0 };
+
 	    public ProcessInfo(string filename) : this(filename, null)
 		{}
 
 		public ProcessInfo(string filename, string arguments) : this(filename, arguments, null)
 		{}
 
-		public ProcessInfo(string filename, string arguments, string workingDirectory)
+		public ProcessInfo(string filename, string arguments, string workingDirectory) : this(filename, arguments, workingDirectory, null)
+		{}
+
+		public ProcessInfo(string filename, string arguments, string workingDirectory, int[] successExitCodes)
 		{
 			startInfo.FileName = StringUtil.StripQuotes(filename);
 			startInfo.Arguments = arguments;
@@ -31,6 +36,10 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 			startInfo.RedirectStandardError = true;
 			startInfo.RedirectStandardInput = false;
 			RepathExecutableIfItIsInWorkingDirectory();
+            if (successExitCodes != null)
+                this.successExitCodes = successExitCodes;
+            else
+                this.successExitCodes = new int[1] { 0 };
 		}
 
 		private void RepathExecutableIfItIsInWorkingDirectory()
@@ -48,6 +57,18 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 		public StringDictionary EnvironmentVariables
 		{
 			get { return startInfo.EnvironmentVariables; }
+		}
+
+		public bool ProcessSuccessful(int exitCode)
+		{
+            foreach (int successCode in successExitCodes)
+            {
+                if (successCode == exitCode)
+                {
+                    return true;
+                }
+            }
+            return false;
 		}
 
 		public string FileName

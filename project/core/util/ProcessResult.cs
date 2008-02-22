@@ -15,13 +15,20 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 		private readonly string standardError;
 		private readonly int exitCode;
 		private readonly bool timedOut;
+		private readonly bool failed;
 
 		public ProcessResult(string standardOutput, string standardError, int errorCode, bool timedOut)
+			: this(standardOutput, standardError, errorCode, timedOut, errorCode != SUCCESSFUL_EXIT_CODE)
+		{
+		}
+
+		public ProcessResult(string standardOutput, string standardError, int errorCode, bool timedOut, bool failed)
 		{
 			this.standardOutput = (standardOutput == null ? "" : standardOutput);
 			this.standardError = (standardError == null ? "" : standardError);
 			this.exitCode = errorCode;
 			this.timedOut = timedOut;
+			this.failed = failed;
 		}
 
 		public string StandardOutput
@@ -44,13 +51,9 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 			get { return timedOut; }
 		}
 
-		/// <summary>
-		/// A non-zero exit code is the best indication of a process' success or failure.  Not all applications adhere to this, however.
-		/// Applications may write to stderr even if the process succeeds.
-		/// </summary>
 		public bool Failed
 		{
-			get { return exitCode != SUCCESSFUL_EXIT_CODE; }	
+			get { return failed; }	
 		}
 
 		public bool HasErrorOutput

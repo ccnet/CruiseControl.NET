@@ -38,6 +38,49 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 		[ReflectorProperty("buildArgs", Required = false)]
 		public string BuildArgs = string.Empty;
 
+		private int[] successExitCodes = null;
+
+        /// <summary>
+        /// The list of exit codes that indicate success, separated by commas.
+        /// </summary>
+		[ReflectorProperty("successExitCodes", Required = false)]
+		public string SuccessExitCodes
+		{
+			get 
+            {
+                string result = "";
+                if (successExitCodes != null)
+                {
+                    foreach (int code in successExitCodes)
+                    {
+                        if (result != "")
+                            result = result + ",";
+                        result = result + code;
+                    }
+                }
+                return result;
+            }
+
+			set 
+			{ 
+				string[] codes = value.Split(',');
+
+				if (codes.Length != 0)
+				{
+					successExitCodes = new int[codes.Length];
+
+					for (int i = 0; i < codes.Length; ++i)
+					{
+						successExitCodes[i] = Int32.Parse(codes[i]);
+					}
+				}
+				else
+				{
+					successExitCodes = null;
+				}
+			}
+		}
+		
 		/// <summary>
 		/// Gets and sets the maximum number of seconds that the build may take.  If the build process takes longer than
 		/// this period, it will be killed.  Specify this value as zero to disable process timeouts.
@@ -52,11 +95,13 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 		public void Run(IIntegrationResult result)
 		{
             Util.ListenerFile.WriteInfo(result.ListenerFile,
-                    string.Format("Executing {0}", Executable));    
+                    string.Format("Executing {0}", Executable));
 
+			ProcessInfo processInfo = NewProcessInfoFrom(result);
 
-			ProcessResult processResult = AttemptToExecute(NewProcessInfoFrom(result), ProcessMonitor.GetProcessMonitorByProject(result.ProjectName));
-            if (!StringUtil.IsWhitespace(processResult.StandardOutput + processResult.StandardError))
+			ProcessResult processResult = AttemptToExecute(processInfo, ProcessMonitor.GetProcessMonitorByProject(result.ProjectName));
+            
+			if (!StringUtil.IsWhitespace(processResult.StandardOutput + processResult.StandardError))
             {
                 // The executable produced some output.  We need to transform it into an XML build report 
                 // fragment so the rest of CC.Net can process it.
@@ -64,8 +109,9 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
                     MakeBuildResult(processResult.StandardOutput, ""), 
                     MakeBuildResult(processResult.StandardError, "Error"), 
                     processResult.ExitCode, 
-                    processResult.TimedOut
-                    );
+                    processResult.TimedOut,
+					processResult.Failed);
+
                 processResult = newResult;
             }
             result.AddTaskResult(new ProcessTaskResult(processResult));
@@ -80,13 +126,14 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 
 		private ProcessInfo NewProcessInfoFrom(IIntegrationResult result)
 		{
-			ProcessInfo info = new ProcessInfo(Executable, BuildArgs, BaseDirectory(result));
+			ProcessInfo info = new ProcessInfo(Executable, BuildArgs, BaseDirectory(result), successExitCodes);
 			info.TimeOut = BuildTimeoutSeconds*1000;
 			IDictionary properties = result.IntegrationProperties;
 			foreach (string key in properties.Keys)
 			{
 				info.EnvironmentVariables[key] = Convert(properties[key]);
 			}
+
 			return info;
 		}
 

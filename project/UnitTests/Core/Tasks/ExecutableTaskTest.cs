@@ -37,6 +37,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
     	<baseDirectory>C:\</baseDirectory>
 		<buildArgs>myarg1 myarg2</buildArgs>
 		<buildTimeoutSeconds>123</buildTimeoutSeconds>
+		<successExitCodes>0,1,3,5</successExitCodes>
     </exec>";
 
 			task = (ExecutableTask) NetReflector.Read(xml);
@@ -44,6 +45,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 			Assert.AreEqual("mybatchfile.bat", task.Executable);
 			Assert.AreEqual(123, task.BuildTimeoutSeconds);
 			Assert.AreEqual("myarg1 myarg2", task.BuildArgs);
+			Assert.AreEqual("0,1,3,5", task.SuccessExitCodes);
 			Verify();
 		}
 
@@ -59,7 +61,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 			Assert.AreEqual("mybatchfile.bat", task.Executable);
 			Assert.AreEqual(600, task.BuildTimeoutSeconds);
 			Assert.AreEqual("", task.BuildArgs);
-            Verify();
+			Assert.AreEqual("", task.SuccessExitCodes);
+			Verify();
 		}
 
 		[Test]
@@ -205,5 +208,48 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
                 + System.Environment.NewLine, result.TaskOutput);
             Verify();
         }
+
+		[Test]
+		public void ShouldParseValidSuccessExitCodes()
+		{
+			task.SuccessExitCodes = "0,1,3,5";
+
+			task.SuccessExitCodes = "300,500,-1";
+		}
+
+		[Test]
+		[ExpectedException(typeof(System.FormatException))]
+		public void ShouldThrowExceptionOnInvalidSuccessExitCodes()
+		{
+			task.SuccessExitCodes = "0, 1, GOOD";
+		}
+
+		[Test]
+		public void ShouldPassSuccessExitCodesToProcessExecutor()
+		{
+			CollectingConstraint constraint = new CollectingConstraint();
+			mockProcessExecutor.ExpectAndReturn("Execute", SuccessfulProcessResult(), new object[] { constraint, new IsAnything() });
+
+			IntegrationResult result = (IntegrationResult)IntegrationResult();
+			result.Label = "1.0";
+			result.BuildCondition = BuildCondition.ForceBuild;
+			result.WorkingDirectory = @"c:\workingdir\";
+			result.ArtifactDirectory = @"c:\artifactdir\";
+
+			task.SuccessExitCodes = "0,1,3,5";
+			task.Run(result);
+
+			ProcessInfo info = (ProcessInfo)constraint.Parameter;
+
+			Assert.IsTrue(info.ProcessSuccessful(0));
+			Assert.IsTrue(info.ProcessSuccessful(1));
+			Assert.IsFalse(info.ProcessSuccessful(2));
+			Assert.IsTrue(info.ProcessSuccessful(3));
+			Assert.IsFalse(info.ProcessSuccessful(4));
+			Assert.IsTrue(info.ProcessSuccessful(5));
+			Assert.IsFalse(info.ProcessSuccessful(6));
+
+			Verify();
+		}
 	}
 }

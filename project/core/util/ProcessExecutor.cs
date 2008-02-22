@@ -88,6 +88,8 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 				// Process must be started before StandardOutput and StandardError streams are accessible
 				using (ProcessReader standardOutput = new ProcessReader(process.StandardOutput), standardError = new ProcessReader(process.StandardError))
 				{
+					bool failed = true;         // Assume the worst
+
 					try
 					{
 						WriteToStandardInput();
@@ -98,13 +100,20 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 						// Guarantee that process will be killed if it has not exited cleanly
 						if (! process.HasExited)
 						{
+							failed = true;
 							Kill();
 						}
 						// Read in the remainder of the redirected streams
 						standardOutput.WaitForExit();
 						standardError.WaitForExit();
-					}
-					return new ProcessResult(standardOutput.Output, standardError.Output, process.ExitCode, hasTimedOut);
+                        if (processInfo.ProcessSuccessful(process.ExitCode))
+                        {
+                            failed = false;
+                        }
+                    }
+
+
+					return new ProcessResult(standardOutput.Output, standardError.Output, process.ExitCode, hasTimedOut, failed);
 				}
 			}
 
