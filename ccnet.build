@@ -106,6 +106,7 @@
 			<fileset basedir="${build.dir}\server">
 				<include name="**\*" />
 				<exclude name="**\*.pdb" />
+
 				<exclude name="**\*.incr" />
 				<exclude name="**\PostBuildEvent.bat" />
 			</fileset>
@@ -115,6 +116,7 @@
 		<copy todir="deployed\server" verbose="${verbosity}">
 			<fileset basedir="${build.dir}\service">
 				<include name="**\*" />
+
 				<exclude name="**\*.pdb" />
 				<exclude name="**\*.incr" />
 				<exclude name="**\PostBuildEvent.bat" />
@@ -135,6 +137,7 @@
 		<copy todir="deployed\cctray">
 			<fileset basedir="${build.dir}\cctray">
 				<include name="**\*" />
+
 				<exclude name="**\*.pdb" />
 				<exclude name="**\*.incr" />
 				<exclude name="**\PostBuildEvent.bat" />
@@ -153,6 +156,7 @@
 		<copy todir="${webdashboard.dir}\bin">
 			<fileset basedir="${build.dir}\webdashboard">
 				<include name="**\*" />
+
 				<exclude name="**\*.pdb" />
 				<exclude name="**\*.incr" />
 				<exclude name="**\PostBuildEvent.bat" />
@@ -163,15 +167,16 @@
 				<include name="**\*.aspx"/>
 				<include name="**\*.ascx"/>
 				<include name="**\*.asax"/>
-				<include name="**\*.html"/>
+				<include name="**\*.config"/>
+				<include name="**\*.css"/>
 				<include name="**\*.gif"/>
+				<include name="**\*.html"/>
 				<include name="**\*.jpg"/>
 				<include name="**\*.jpeg"/>
-				<include name="**\*.wav"/>
-				<include name="**\*.css"/>
-				<include name="**\*.xsl"/>
-				<include name="**\*.config"/>
+				<include name="**\*.js" />
 				<include name="**\*.vm" />
+				<include name="**\*.wav"/>
+				<include name="**\*.xsl"/>
 
 				<exclude name="bin\**\*" />
 				<exclude name="obj\**\*" />
