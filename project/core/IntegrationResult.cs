@@ -50,7 +50,9 @@ namespace ThoughtWorks.CruiseControl.Core
 		    ArtifactDirectory = artifactDirectory;
 			this.request = (lastIntegration.IsInitial()) ? new IntegrationRequest(BuildCondition.ForceBuild, request.Source) : request;
 			this.lastIntegration = lastIntegration;
-		    this.failureUsers = lastIntegration.FailureUsers;
+            if ((lastIntegration.Status == IntegrationStatus.Exception)
+                || (lastIntegration.Status == IntegrationStatus.Failure))
+                this.failureUsers = lastIntegration.FailureUsers;       // Inherit the previous build's failureUser list if it failed.
 		}
 
 		public string ProjectName

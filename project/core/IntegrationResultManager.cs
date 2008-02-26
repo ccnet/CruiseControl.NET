@@ -79,11 +79,6 @@ namespace ThoughtWorks.CruiseControl.Core
                             currentIntegration.FailureUsers.Add(modification.UserName);
                     }
                 }
-                else if (currentIntegration.Status == IntegrationStatus.Success)
-                {
-                    // Build is fixed - remove all users who have contributed modifications to failing builds.
-                    currentIntegration.FailureUsers.Clear();
-                }
 				project.StateManager.SaveState(currentIntegration);
 			}
 			catch (Exception ex)

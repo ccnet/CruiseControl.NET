@@ -102,23 +102,25 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
         }
 
         [Test]
-        public void FixedIntegrationShouldClearFailedUsers()
+        public void SuccessfulIntegrationShouldClearFailedUsersOnNextIntegration()
         {
-            IIntegrationResult lastResult = IntegrationResultMother.CreateFailed();
-            lastResult.FailureUsers.Add("user1");
-            ExpectToLoadState(lastResult);
+            IIntegrationResult result1 = IntegrationResultMother.CreateFailed();
+            result1.FailureUsers.Add("user1");
+            ExpectToLoadState(result1);
 
-            IIntegrationResult newResult = manager.StartNewIntegration(ModificationExistRequest());
-            Assert.AreEqual(1, newResult.FailureUsers.Count);
+            IIntegrationResult result2 = manager.StartNewIntegration(ModificationExistRequest());
+            Assert.AreEqual(1, result2.FailureUsers.Count);
 
             Modification modification = new Modification();
             modification.UserName = "user";
-            newResult.Modifications = new Modification[] { modification };
-            newResult.Status = IntegrationStatus.Success;
-            mockStateManager.Expect("SaveState", newResult);
+            result2.Modifications = new Modification[] { modification };
+            result2.Status = IntegrationStatus.Success;
+            mockStateManager.Expect("SaveState", result2);
             manager.FinishIntegration();
+            Assert.AreEqual(1, result2.FailureUsers.Count);
 
-            Assert.AreEqual(0, newResult.FailureUsers.Count);
+            IIntegrationResult result3 = manager.StartNewIntegration(ModificationExistRequest());
+            Assert.AreEqual(0, result3.FailureUsers.Count);
         }
 
 		private void ExpectToLoadState(IIntegrationResult result)
