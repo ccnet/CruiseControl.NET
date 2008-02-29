@@ -1,6 +1,8 @@
 using System;
 using System.Configuration;
+using System.Globalization;
 using System.IO;
+using System.Reflection;
 using System.Runtime.InteropServices;
 using System.ServiceProcess;
 using ThoughtWorks.CruiseControl.Core;
@@ -41,9 +43,20 @@ namespace ThoughtWorks.CruiseControl.Service
 			// Set working directory to service executable's home directory.
 			Directory.SetCurrentDirectory(DefaultDirectory);
 
-			VerifyConfigFileExists();
-			CreateAndStartCruiseServer();
-		}
+            // Announce our presence
+            Log.Info(string.Format("CruiseControl.NET Server {0} -- .NET Continuous Integration Server", Assembly.GetExecutingAssembly().GetName().Version));
+            // Find out our copyright claim, if any, and display it.
+            AssemblyCopyrightAttribute[] copyrightAttributes = (AssemblyCopyrightAttribute[])Assembly.GetExecutingAssembly().GetCustomAttributes(typeof(AssemblyCopyrightAttribute), false);
+            if (copyrightAttributes.Length > 0)
+            {
+                Log.Info(string.Format("{0}  All Rights Reserved.", copyrightAttributes[0].Copyright));
+            }
+            Log.Info(string.Format(".NET Runtime Version: {0}{2}\tImage Runtime Version: {1}", Environment.Version, Assembly.GetExecutingAssembly().ImageRuntimeVersion, GetRuntime()));
+            Log.Info(string.Format("OS Version: {0}\tServer locale: {1}", Environment.OSVersion, CultureInfo.CurrentCulture));
+
+            VerifyConfigFileExists();
+            CreateAndStartCruiseServer();
+        }
 
 		private string DefaultConfigFilePath()
 		{
@@ -110,5 +123,12 @@ namespace ThoughtWorks.CruiseControl.Service
 
 		[DllImport("kernel32.dll", SetLastError = true)]
 		private static extern bool AllocConsole();
+
+        private static string GetRuntime()
+        {
+            if (Type.GetType("Mono.Runtime") != null)
+                return " [Mono]";
+            return string.Empty;
+        }
 	}
 }
