@@ -223,7 +223,10 @@ namespace ThoughtWorks.CruiseControl.Core
 		public void Initialize()
 		{
 			Log.Info(string.Format("Initiatizing Project [{0}]", Name));
-			SourceControl.Initialize(this);
+            CreateDirectoryIfItDoesntExist(this.WorkingDirectory);
+            CreateDirectoryIfItDoesntExist(this.ArtifactDirectory);
+            SourceControl.Initialize(this);
+
 		}
 
 		public void Purge(bool purgeWorkingDirectory, bool purgeArtifactDirectory, bool purgeSourceControlEnvironment)
@@ -384,5 +387,11 @@ namespace ThoughtWorks.CruiseControl.Core
 			}
 			throw new CruiseControlException("Unable to find Log Publisher for project so can't find log file");
 		}
+
+        private static void CreateDirectoryIfItDoesntExist(string directory)
+        {
+            if (!Directory.Exists(directory))
+                Directory.CreateDirectory(directory);
+        }
 	}
 }
