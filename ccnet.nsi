@@ -203,7 +203,8 @@ Function InstallService
 FunctionEnd
 
 ; Messages for virtual directory creation error messages
-LangString ERROR_VDIR_CREATION_UNCONFIRMED ${LANG_ENGLISH} "The installer attempted to create the virtual directory for the CruiseControl.NET Web Dashboard but could not confirm its creation. Please check IIS after the installer has completed and manually create the virtual directory ."
+LangString ERROR_VDIR_CANNOT_SET_ASPNET_VERSION ${LANG_ENGLISH} "The installer attempted to set the ASP.NET version for the CruiseControl.NET Web Dashboard but was not successful. Please check IIS after the installer has completed and manually set the ASP.NET version."
+LangString ERROR_VDIR_CREATION_UNCONFIRMED ${LANG_ENGLISH} "The installer attempted to create the virtual directory for the CruiseControl.NET Web Dashboard but could not confirm its creation. Please check IIS after the installer has completed and manually create the virtual directory."
 LangString ERROR_VDIR_ALREADY_EXISTS ${LANG_ENGLISH} "A virtual directory called 'ccnet' already exists in the local IIS server's default web site. Please manually create a virtual directory for the CruiseControl.NET Web Dashboard after installation has completed."
 LangString ERROR_VDIR_PATH_UNDEFINED ${LANG_ENGLISH} "The installation directory for the CruiseControl.NET Web Dashboard was not specified. Please manually create a virtual directory after installation has completed."
 LangString ERROR_VDIR_TIMEOUT ${LANG_ENGLISH} "A timeout occurred during the creation of the virtual directory for the CruiseControl.NET Web Dashboard. Please manually create a virtual directory after installation has completed."
@@ -221,6 +222,7 @@ Function CreateVirtualDirectory
     DetailPrint "Creating IIS virtual directory..."
     nsExec::ExecToLog /TIMEOUT=60000 '"$SYSDIR\cscript.exe" "$TEMP\createCCNetVDir.vbs" "$INSTDIR\webdashboard"'
     Pop $0
+    StrCmp $0 "5" errorcode5
     StrCmp $0 "4" errorcode4
     StrCmp $0 "3" errorcode3
     StrCmp $0 "2" errorcode2
@@ -228,6 +230,9 @@ Function CreateVirtualDirectory
     StrCmp $0 "timeout" errorTimeout
     StrCmp $0 "error" errorExec
     Goto writeRegistryString
+    errorcode5:
+      StrCpy $ErrorMessage $(ERROR_VDIR_CANNOT_SET_ASPNET_VERSION)
+      Goto showError
     errorcode4:
       StrCpy $ErrorMessage $(ERROR_VDIR_CREATION_UNCONFIRMED)
       Goto showError

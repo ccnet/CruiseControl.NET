@@ -1,9 +1,13 @@
 Option Explicit
 
 ' Error codes:
-' 1: no installation directory provided
-' 2: ccnet virtual directory already exists
-' 3: created, but not confirmed
+' 2: no installation directory provided
+' 3: ccnet virtual directory already exists
+' 4: created, but not confirmed
+' 5: Unable to set ASP.NET version
+
+' Starting with CCNet 1.3, we are a .NET 2.0 application:
+Dim DotNetFrameworkLocation: DotNetFrameworkLocation = "C:\WINDOWS\Microsoft.NET\Framework\v2.0.50727\"
 
 createVDir()
 
@@ -25,6 +29,10 @@ Function CreateVDir()
 
 	Dim ccnetVDir: 	Set ccnetVDir = CreateCCNetVDir(webdashboardInstallDir)
 	UpdateCCNetVDirScriptMaps(ccnetVDir)
+
+	If SetASPNETVersion(vdirName) = False then
+		WScript.Quit 5
+	End if
 	
         ' Confirm the creation
         WScript.Echo "Confirming that the virtual directory " & vdirName & " was created..."
@@ -84,6 +92,7 @@ Function UpdateCCNetVDirScriptMaps(ccnetVDir)
 
 	For Each scriptMap In ccnetVDir.ScriptMaps
 		scriptMapCount = scriptMapCount + 1
+		' Create a ".xml" script map based on the ".aspx" map:
 		If InStr( scriptMap, ".aspx" ) Then
 			xmlScriptMap = Replace( scriptMap, ".aspx", ".xml" )
 		End If
@@ -98,3 +107,19 @@ Function UpdateCCNetVDirScriptMaps(ccnetVDir)
 	ccnetVDir.SetInfo
 
 End Function
+
+Function SetASPNETVersion(vdirName)
+
+	WScript.Echo "Setting .NET framework to " & DotNetFrameworkLocation
+	Dim cmd: cmd = """" & DotNetFrameworkLocation & "aspnet_regiis.exe"" -s ""W3SVC/1/ROOT/" & vdirName & """"
+	Dim wsh: Set wsh = WScript.CreateObject("WScript.Shell")
+	Dim response: response = wsh.Run(cmd , 1, true )
+	If ( response <> 0 ) Then
+		WScript.Echo cmd & " failed; rc=" & response
+		SetASPNETVersion = false
+		Exit function
+	End If
+	SetASPNETVersion = true
+
+End Function
+
