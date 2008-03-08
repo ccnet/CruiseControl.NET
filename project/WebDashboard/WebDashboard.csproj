@@ -619,6 +619,9 @@
     <Content Include="..\xsl\statistics.xsl">
       <Link>xsl\statistics.xsl</Link>
     </Content>
+    <Content Include="..\xsl\StatisticsGraphs.xsl">
+      <Link>xsl\StatisticsGraphs.xsl</Link>
+    </Content>
     <Content Include="..\xsl\tests.xsl">
       <Link>xsl\tests.xsl</Link>
     </Content>
