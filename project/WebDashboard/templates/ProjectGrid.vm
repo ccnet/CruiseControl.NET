@@ -72,7 +72,7 @@
 		</td>
 		<td align="Center">
 			#if ($projectGridRow.Activity == "Building")
-				<font color="Red">$projectGridRow.Activity</font>
+				<b><font color="Red">$projectGridRow.Activity</font></b>
 			#else
 				<font color="Black">$projectGridRow.Activity</font>
 			#end
