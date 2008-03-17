@@ -46,6 +46,8 @@ namespace ThoughtWorks.CruiseControl.Core.Logging
 					{
 						if (match == null || line.IndexOf(match) >= 0)
 							buffer.Add(line);
+                        // TODO: Messages can contain embedded newlines (e.g., exception reports).  
+                        // TODO: This code should be changed to capture those "follow on" lines as well.
 					}
 				}
 			}
