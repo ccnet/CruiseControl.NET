@@ -34,7 +34,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 			vss = new Vss(locale, historyParser, (ProcessExecutor) mockProcessExecutor.MockInstance, (IRegistry) mockRegistry.MockInstance);
 			vss.Project = "$/fooProject";
 			vss.Culture = string.Empty; // invariant culture
-			vss.Username = "Admin";
+			vss.Username = "Joe Admin";
 			vss.Password = "admin";
 			vss.WorkingDirectory = @"c:\source\";
 
@@ -59,7 +59,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
     <executable>..\tools\vss\ss.exe</executable>
     <ssdir>..\tools\vss</ssdir>
     <project>$/root</project>
-    <username>Admin</username>
+    <username>Joe Admin</username>
     <password>admin</password>
 	<applyLabel>true</applyLabel>
 	<timeout>5</timeout>
@@ -74,7 +74,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 			Assert.AreEqual(@"admin", vss.Password);
 			Assert.AreEqual(@"$/root", vss.Project);
 			Assert.AreEqual(@"..\tools\vss", vss.SsDir);
-			Assert.AreEqual(@"Admin", vss.Username);
+			Assert.AreEqual(@"Joe Admin", vss.Username);
 			Assert.AreEqual(true, vss.ApplyLabel);
 			Assert.AreEqual(new Timeout(5), vss.Timeout);
 			Assert.AreEqual(true, vss.AutoGetSource);
@@ -118,7 +118,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 		public void VerifyHistoryProcessInfoArguments()
 		{
             string tempOutputFileName = Path.GetTempFileName();
-            ExpectToExecuteArguments(string.Format("history $/fooProject -R -Vd{0}~{1} -YAdmin,admin -I-Y \"-O@{2}\"", CommandDate(today), CommandDate(yesterday), tempOutputFileName));
+            ExpectToExecuteArguments(string.Format("history $/fooProject -R -Vd{0}~{1} \"-YJoe Admin,admin\" -I-Y \"-O@{2}\"", CommandDate(today), CommandDate(yesterday), tempOutputFileName));
             vss.GetModifications(IntegrationResultMother.CreateSuccessful(yesterday), IntegrationResultMother.CreateSuccessful(today), tempOutputFileName);
 		}
 
@@ -126,7 +126,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
         public void VerifyHistoryProcessInfoArgumentsWithSpaceInProjectName()
 		{
             string tempOutputFileName = Path.GetTempFileName();
-            ExpectToExecuteArguments(string.Format("history \"$/My Project\" -R -Vd{0}~{1} -YAdmin,admin -I-Y \"-O@{2}\"", CommandDate(today), CommandDate(yesterday), tempOutputFileName));
+            ExpectToExecuteArguments(string.Format("history \"$/My Project\" -R -Vd{0}~{1} \"-YJoe Admin,admin\" -I-Y \"-O@{2}\"", CommandDate(today), CommandDate(yesterday), tempOutputFileName));
 			vss.Project = "$/My Project";
             vss.GetModifications(IntegrationResultMother.CreateSuccessful(yesterday), IntegrationResultMother.CreateSuccessful(today), tempOutputFileName);
 		}
@@ -182,15 +182,15 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 			vss.GetSource(IntegrationResultMother.CreateSuccessful(today));
 		}
 
-		private string RemoveUsername(string cmd)
+		private static string RemoveUsername(string cmd)
 		{
-			return cmd.Replace(" -YAdmin,admin", "");
+			return cmd.Replace(" \"-YJoe Admin,admin\"", "");
 		}
 
 		[Test]
 		public void GetSourceShouldNotGetCleanCopy()
 		{
-			ExpectToExecuteArguments(string.Format("get $/fooProject -R -Vd{0} -YAdmin,admin -I-N -W -GF- -GTM", CommandDate(today)));
+			ExpectToExecuteArguments(string.Format("get $/fooProject -R -Vd{0} \"-YJoe Admin,admin\" -I-N -W -GF- -GTM", CommandDate(today)));
 
 			vss.AutoGetSource = true;
 			vss.CleanCopy = false;
@@ -200,7 +200,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 		[Test]
 		public void DoNotGetFromDateIfAlwaysGetLatestIsTrue()
 		{
-			ExpectToExecuteArguments("get $/fooProject -R -YAdmin,admin -I-N -W -GF- -GTM");
+			ExpectToExecuteArguments("get $/fooProject -R \"-YJoe Admin,admin\" -I-N -W -GF- -GTM");
 
 			vss.AutoGetSource = true;
 			vss.CleanCopy = false;
@@ -253,7 +253,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 		[Test]
 		public void VerifyLabelProcessInfoArguments()
 		{
-			ExpectToExecuteArguments("label $/fooProject -LnewLabel -YAdmin,admin -I-Y");
+			ExpectToExecuteArguments("label $/fooProject -LnewLabel \"-YJoe Admin,admin\" -I-Y");
 
 			vss.ApplyLabel = true;
 			vss.LabelSourceControl(IntegrationResultMother.CreateSuccessful("newLabel"));
@@ -262,8 +262,8 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 		[Test]
 		public void VerifyLabelProcessInfoArgumentsWhenCreatingAndOverwritingTemporaryLabel()
 		{
-			ExpectToExecuteArguments("label $/fooProject -LCCNETUNVERIFIED06102005182431 -YAdmin,admin -I-Y");
-			ExpectToExecuteArguments("label $/fooProject -LnewLabel -VLCCNETUNVERIFIED06102005182431 -YAdmin,admin -I-Y");
+			ExpectToExecuteArguments("label $/fooProject -LCCNETUNVERIFIED06102005182431 \"-YJoe Admin,admin\" -I-Y");
+			ExpectToExecuteArguments("label $/fooProject -LnewLabel -VLCCNETUNVERIFIED06102005182431 \"-YJoe Admin,admin\" -I-Y");
 
 			IntegrationResult result = IntegrationResultMother.CreateSuccessful("newLabel");
 			result.StartTime = new DateTime(2005, 6, 10, 18, 24, 31);
@@ -302,7 +302,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 		[Test]
 		public void ShouldApplyTemporaryLabelBeforeGettingSource()
 		{
-			ExpectToExecuteArguments("label $/fooProject -LCCNETUNVERIFIED06102005182431 -YAdmin,admin -I-Y");
+			ExpectToExecuteArguments("label $/fooProject -LCCNETUNVERIFIED06102005182431 \"-YJoe Admin,admin\" -I-Y");
 
 			IntegrationResult result = IntegrationResultMother.CreateSuccessful("newLabel");
 			result.StartTime = new DateTime(2005, 6, 10, 18, 24, 31);
@@ -317,7 +317,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 		public void ShouldDeleteTemporaryLabelIfIntegrationFailed()
 		{
 			mockProcessExecutor.ExpectAndReturn("Execute", SuccessfulProcessResult(), new IsAnything());
-			ExpectToExecuteArguments("label $/fooProject -L -VLCCNETUNVERIFIED06102005182431 -YAdmin,admin -I-Y");
+			ExpectToExecuteArguments("label $/fooProject -L -VLCCNETUNVERIFIED06102005182431 \"-YJoe Admin,admin\" -I-Y");
 
 			IntegrationResult result = IntegrationResultMother.CreateFailed("foo");
 			result.StartTime = new DateTime(2005, 6, 10, 18, 24, 31);
@@ -328,14 +328,14 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 			vss.LabelSourceControl(result);
 		}
 
-		private string CommandDate(DateTime date)
+		private static string CommandDate(DateTime date)
 		{
 			return new VssLocale(CultureInfo.InvariantCulture).FormatCommandDate(date);
 		}
 
 		private string ForGetCommand()
 		{
-			return string.Format("get $/fooProject -R -Vd{0} -YAdmin,admin -I-N -W -GF- -GTM -GWR", CommandDate(today));
+			return string.Format("get $/fooProject -R -Vd{0} \"-YJoe Admin,admin\" -I-N -W -GF- -GTM -GWR", CommandDate(today));
 		}
 	}
 }
