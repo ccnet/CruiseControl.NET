@@ -45,16 +45,32 @@ namespace ThoughtWorks.CruiseControl.Core.Util
       /// <param name="listenerFileLocation">the listenerfile to delete (name and location)</param>                                                                                                                                                 
      public static void RemoveListenerFile(string listenerFileLocation)
      {
-         if (System.IO.File.Exists(listenerFileLocation))
+         const int MaxAmountOfRetries = 10;
+         int RetryCounter = 0;
+
+
+         while (System.IO.File.Exists(listenerFileLocation) && (RetryCounter <= MaxAmountOfRetries)  )
          {
-             System.IO.File.Delete(listenerFileLocation);        
+             try
+             {
+                 System.IO.File.Delete(listenerFileLocation);
+             }
+             catch (Exception e)
+             {
+                 RetryCounter += 1;
+                 System.Threading.Thread.Sleep(200);
+
+                 if (RetryCounter > MaxAmountOfRetries)
+                     throw new CruiseControlException(
+                         string.Format("Failed to delete {0} after {1} attempts", listenerFileLocation, RetryCounter), e );
+             }
          }
      }
                                                                                                                                                                                                                                                                                        
      private static string CleanUpMessageForXMLLogging(string msg)
      {
          return msg.Replace("\"",string.Empty);
-     }
+     }    
  }
                                                                                                                                             
 }

@@ -625,8 +625,11 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Presentation
             { return ""; }
 
             String currentBuildStage = controller.SelectedProject.Detail.CurrentBuildStage;
-			if (currentBuildStage == null || currentBuildStage.Length == 0)
-            { return ""; }
+            if (currentBuildStage == null || 
+                currentBuildStage.Length == 0 || 
+                controller.SelectedProject.ProjectState != ProjectState.Building || 
+                controller.SelectedProject.ProjectState != ProjectState.BrokenAndBuilding )
+                { return ""; }
 
             
             System.Text.StringBuilder SB = new System.Text.StringBuilder();
