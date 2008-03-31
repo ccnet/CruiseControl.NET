@@ -2,5 +2,5 @@
 	<tr><th>Recent Builds</th></tr>
 	$buildRows
 	<tr><td/></tr>
-	<tr><td><a href="$allBuildsLink.Url">Show All</a></a></td></tr>
+	<tr><td><a href="$allBuildsLink.Url">Show All</a></td></tr>
 </table>
