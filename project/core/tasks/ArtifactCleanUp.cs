@@ -51,6 +51,12 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         {
             string BuildLogFolder = result.BuildLogDirectory;
 
+            if (BuildLogFolder == null )
+                {
+                    Log.Debug("Cleaning up the artifact folder not possible because the buildlog folder is NULL. \n Check that the XML Log publisher is before the Artifacts Cleanup publisher in the config.") ;
+                    return;
+                }
+
             switch (cleanUpMethod)
             {
                 case CleanUpMethod.KeepLastXBuilds:

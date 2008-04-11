@@ -68,6 +68,35 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
         }
 
 
+
+        [Test]
+        public void NoErrorWhenBuildLogFolderIsUnknown()
+        {
+            IntegrationResult result = null;
+
+            // make a build
+            for (int i = 1; i < 10; i++)
+            {
+                // Setup
+                result = CreateIntegrationResult(IntegrationStatus.Success, i, ARTIFACTS_DIR_PATH);
+
+                // make a build
+                publisher.Run(result);
+
+            }
+
+            //clear the data of this build, so delete all build files
+            artifactCleaner.CleaningUpMethod = ArtifactCleanUpTask.CleanUpMethod.KeepLastXBuilds;
+            artifactCleaner.CleaningUpValue = 5;
+            
+            result.BuildLogDirectory = null;
+
+            // run the cleaning procedure
+            artifactCleaner.Run(result);
+            
+        }
+
+
         [Test]
         public void KeepLast5BuildLogs()
         {
