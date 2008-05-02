@@ -135,5 +135,21 @@ namespace ThoughtWorks.CruiseControl.Core.Util
             return Strip(fileName,"\\", "/", ":", "*", "?", "\"", "<", ">", "|");
 
         }
+
+		/// <summary>
+		/// Add a leading and trailing quote to the input value if it contains any spaces, and return the result.
+		/// </summary>
+		/// <param name="value">The value to enquote.</param>
+		/// <returns>The enquoted value.</returns>
+		/// <remarks>
+		/// Note: This method does not do anything special to quotes contained in the value (<i>i.e.</i>, <code>A"B</code> 
+		/// becomes <code>"A"B"</code>, not <code>"A""B"</code> or <code>"A\"B"</code>.
+		/// </remarks>
+		public static string SurroundInQuotesIfContainsSpace(string value)
+		{
+			if (!StringUtil.IsBlank(value) && value.IndexOf(' ') >= 0)
+				return string.Format(@"""{0}""", value);
+			return value;
+		}
 	}
 }

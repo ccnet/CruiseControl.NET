@@ -75,10 +75,10 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 
 			builder.AddArgument("/nologo");
 			if (! StringUtil.IsBlank(Targets)) builder.AddArgument("/t:" + Targets);
-			builder.AddArgument(GetPropertyArgs(result));
+			builder.AppendArgument(GetPropertyArgs(result));
 			builder.AppendArgument(BuildArgs);
 			builder.AddArgument(ProjectFile);
-			builder.AddArgument(GetLoggerArgs(result));
+			builder.AppendArgument(GetLoggerArgs(result));
 
 			return builder.ToString();
 		}
@@ -95,7 +95,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 			foreach (string key in properties.Keys)
 			{
 				if (count > 0) builder.Append(";");
-				builder.Append(string.Format("{0}={1}", key, result.IntegrationProperties[key]));
+				builder.Append(string.Format("{0}={1}", key, StringUtil.SurroundInQuotesIfContainsSpace(result.IntegrationProperties[key].ToString())));
 				count++;
 			}
 
@@ -106,9 +106,9 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 		{
 			ProcessArgumentBuilder builder = new ProcessArgumentBuilder();
 			builder.Append("/l:");
-			builder.Append(Logger);
+			builder.Append(StringUtil.SurroundInQuotesIfContainsSpace(Logger));
 			builder.Append(";");
-			builder.Append(MsBuildOutputFile(result));
+			builder.Append(StringUtil.SurroundInQuotesIfContainsSpace(MsBuildOutputFile(result)));
 			return builder.ToString();
 		}
 

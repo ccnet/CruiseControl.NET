@@ -100,7 +100,7 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 			if (StringUtil.IsBlank(value)) return;
 			AppendSpaceIfNotEmpty();
 
-			builder.Append(string.Format("{0}{1}{2}", arg, separator, SurroundInQuotesIfContainsSpace(value)));
+			builder.Append(string.Format("{0}{1}{2}", arg, separator, StringUtil.SurroundInQuotesIfContainsSpace(value)));
 		}
 
         /// <summary>
@@ -114,23 +114,7 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 			if (StringUtil.IsBlank(value)) return;
 			AppendSpaceIfNotEmpty();
 
-			builder.Append(SurroundInQuotesIfContainsSpace(value));			
-		}
-		
-        /// <summary>
-        /// Add a leading and trailing quote to the input value if it contains any spaces, and return the result.
-        /// </summary>
-        /// <param name="value">The value to enquote.</param>
-        /// <returns>The enquoted value.</returns>
-        /// <remarks>
-        /// Note: This method does not do anything special to quotes contained in the value (<i>i.e.</i>, <code>A"B</code> 
-        /// becomes <code>"A"B"</code>, not <code>"A""B"</code> or <code>"A\"B"</code>.
-        /// </remarks>
-		private string SurroundInQuotesIfContainsSpace(string value)
-		{
-			if (! StringUtil.IsBlank(value) && value.IndexOf(' ') >= 0)
-				return string.Format(@"""{0}""", value);
-			return value;
+			builder.Append(StringUtil.SurroundInQuotesIfContainsSpace(value));			
 		}
 
         /// <summary>
