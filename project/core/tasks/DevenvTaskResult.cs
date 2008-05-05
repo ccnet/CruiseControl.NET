@@ -27,8 +27,8 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 			StringWriter output = new StringWriter();
 			XmlWriter writer = new XmlTextWriter(output);
 			writer.WriteStartElement("buildresults");
-			WriteContent(writer, devenvOutput, "message");
-            WriteContent(writer, devenvError, "message level=\"error\"");
+			WriteContent(writer, devenvOutput, false);
+            WriteContent(writer, devenvError, true);
             writer.WriteEndElement();
 			return output.ToString();
 		}
@@ -39,8 +39,8 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         /// </summary>
         /// <param name="writer">an <c>XmlWriter</c> to receive the output</param>
         /// <param name="messages">the messages, with platform-specific newlines between them</param>
-        /// <param name="elementString">the XML element string for this type of output</param>
-		private static void WriteContent(XmlWriter writer, string messages, string elementString)
+		/// <param name="areErrors">True if the messages are errors, false otherwise.</param>
+		private static void WriteContent(XmlWriter writer, string messages, bool areErrors)
 		{
             StringReader reader = new StringReader(messages);
 			while (reader.Peek() >= 0)
@@ -48,7 +48,11 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 				string line = reader.ReadLine();
 				if (! StringUtil.IsBlank(line))
 				{
-                    writer.WriteElementString(elementString, StringUtil.RemoveNulls(line));
+                    writer.WriteStartElement("message");
+                    if (areErrors)
+                        writer.WriteAttributeString("level", "error");
+                    writer.WriteValue(StringUtil.RemoveNulls(line));
+                    writer.WriteEndElement();
 				}
 			}
 		}
