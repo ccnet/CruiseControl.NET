@@ -26,6 +26,12 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
             set { smtpServer.Port = value; }
         }
 
+        public bool UseSSL
+        {
+            get { return smtpServer.EnableSsl ; }
+            set { smtpServer.EnableSsl = value; }
+        }
+
         public string MailHostUsername
         {
             get { return mailhostUsername; }

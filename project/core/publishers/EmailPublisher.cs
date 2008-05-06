@@ -93,6 +93,16 @@ namespace ThoughtWorks.CruiseControl.Core.Publishers
             set { fromAddress = value; }
         }
 
+        /// <summary>
+        /// Use SSL or not, defaults to false
+        /// </summary>
+        [ReflectorProperty("useSSL", Required = false)]
+        public bool UseSSL
+        {
+            get { return EmailGateway.UseSSL; }
+            set { EmailGateway.UseSSL = value; }
+        }                                                                                        
+
 		[ReflectorProperty("replyto", Required = false)] 
 		public string ReplyToAddress
 		{
