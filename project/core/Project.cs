@@ -49,8 +49,8 @@ namespace ThoughtWorks.CruiseControl.Core
 		private QuietPeriod quietPeriod = new QuietPeriod(new DateTimeProvider());
 		private ArrayList messages = new ArrayList();
 
-        private static DateTime lastTimeBuildStageChecked ;
-        private const Int32 buildStageCheckPeriodInSeconds = 5;
+//        private static DateTime lastTimeBuildStageChecked ;
+        //private const Int32 buildStageCheckPeriodInSeconds = 5;
 
 
 		[ReflectorProperty("prebuild", Required=false)]
@@ -196,7 +196,7 @@ namespace ThoughtWorks.CruiseControl.Core
 		
 		private static void RunTasks(IIntegrationResult result, IList tasksToRun)
 		{
-            lastTimeBuildStageChecked = DateTime.Now.AddSeconds(-buildStageCheckPeriodInSeconds);
+            //lastTimeBuildStageChecked = DateTime.Now.AddSeconds(-buildStageCheckPeriodInSeconds);
 
 			foreach (ITask task in tasksToRun)
 			{
@@ -294,7 +294,7 @@ namespace ThoughtWorks.CruiseControl.Core
         {
             get
             {
-                if (DateTime.Now.AddSeconds(-buildStageCheckPeriodInSeconds) <= lastTimeBuildStageChecked) return "";
+                //if (DateTime.Now.AddSeconds(-buildStageCheckPeriodInSeconds) <= lastTimeBuildStageChecked) return "";
 
 
                 string BuildStageFile = integrationResultManager.CurrentIntegration.ListenerFile;
@@ -314,7 +314,7 @@ namespace ThoughtWorks.CruiseControl.Core
 
                         FileReader.Close();
 
-                        lastTimeBuildStageChecked = DateTime.Now;
+//                        lastTimeBuildStageChecked = DateTime.Now;
                         return data;
                     }
                     catch
