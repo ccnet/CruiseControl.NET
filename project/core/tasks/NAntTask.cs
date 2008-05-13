@@ -120,7 +120,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 
 		private void AppendBuildFileArg(ProcessArgumentBuilder buffer)
 		{
-			buffer.AppendArgument(@"-buildfile:{0}", SurroundInQuotesIfContainsSpace(BuildFile));
+			buffer.AppendArgument(@"-buildfile:{0}", StringUtil.AutoDoubleQuoteString(BuildFile));
 		}
 
 		private void AppendLoggerArg(ProcessArgumentBuilder buffer)
@@ -137,13 +137,8 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 			{
 				object value = result.IntegrationProperties[key];
 				if (value != null)
-					buffer.AppendArgument(string.Format("-D:{0}={1}", key, SurroundInQuotesIfContainsSpace(RemoveTrailingSlash(value.ToString()))));
+					buffer.AppendArgument(string.Format("-D:{0}={1}", key, StringUtil.AutoDoubleQuoteString(StringUtil.RemoveTrailingPathDelimeter(StringUtil.IntegrationPropertyToString(value)))));
 			}
-		}
-
-		private string RemoveTrailingSlash(string directory)
-		{
-			return StringUtil.IsBlank(directory) ? string.Empty : directory.TrimEnd(Path.DirectorySeparatorChar);
 		}
 
 		private void AppendTargets(ProcessArgumentBuilder buffer)
@@ -152,13 +147,6 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 			{
 				buffer.AppendArgument(Targets[i]);
 			}
-		}
-
-		private string SurroundInQuotesIfContainsSpace(string value)
-		{
-			if (!StringUtil.IsBlank(value) && value.IndexOf(' ') >= 0)
-				return string.Format(@"""{0}""", value);
-			return value;
 		}
 
 		public override string ToString()

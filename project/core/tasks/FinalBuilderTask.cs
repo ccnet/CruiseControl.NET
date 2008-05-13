@@ -153,7 +153,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 				object obj1 = result.IntegrationProperties[varName];
 				if (obj1 != null)
 				{
-				  info.EnvironmentVariables.Add(varName,AutoDoubleQuoteString(RemoveTrailingPathDelimeter(obj1.ToString())));
+				  info.EnvironmentVariables.Add(varName, StringUtil.AutoDoubleQuoteString(StringUtil.RemoveTrailingPathDelimeter(StringUtil.IntegrationPropertyToString(obj1))));
 				}
 			}           
 			return info;
@@ -186,7 +186,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 				{					
 					args.Append(FBVariables[j].Name);
 					args.Append("=");
-					args.Append(AutoDoubleQuoteString(FBVariables[j].Value));
+					args.Append(StringUtil.AutoDoubleQuoteString(FBVariables[j].Value));
 					if(j < FBVariables.Length - 1)
 					{
 						args.Append(";");
@@ -199,7 +199,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 			}
 			
 			args.Append("/P");
-			args.Append(AutoDoubleQuoteString(ProjectFile));		    
+			args.Append(StringUtil.AutoDoubleQuoteString(ProjectFile));		    
 			return args.ToString();
 		}	
 		
@@ -224,24 +224,6 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 			}
 		}
 	
-		#endregion
-
-		#region Utility Methods
-
-		private string AutoDoubleQuoteString(string value)
-		{
-			if (!StringUtil.IsBlank(value) && (value.IndexOf(' ') > -1) && (value.IndexOf("\"") == -1))
-			{
-				return String.Format("\"{0}\"", value);
-			}
-			return value;
-		}
-
-		private string RemoveTrailingPathDelimeter(string directory)
-		{
-			return directory.TrimEnd(new char[] { Path.DirectorySeparatorChar });			
-		}
-
 		#endregion
 
 		#region FBVariable nested class

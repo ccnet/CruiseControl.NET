@@ -1,13 +1,18 @@
 using System;
 using System.Collections;
+using System.IO;
 using System.Text;
 using System.Text.RegularExpressions;
+using ThoughtWorks.CruiseControl.Remote;
 
 namespace ThoughtWorks.CruiseControl.Core.Util
 {
 	public class StringUtil
 	{
 		private static Regex NullStringRegex = new Regex("\0");
+
+		// public for testing only
+		public const string DEFAULT_DELIMITER = " ";
 
 		public static bool Contains(string text, string fragment)
 		{
@@ -130,26 +135,46 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 			return filename == null ? null : filename.Trim('"');
 		}
 
-        public static string RemoveInvalidCharactersFromFileName(string fileName)
+		public static string RemoveInvalidCharactersFromFileName(string fileName)
         {
             return Strip(fileName,"\\", "/", ":", "*", "?", "\"", "<", ">", "|");
 
         }
 
-		/// <summary>
-		/// Add a leading and trailing quote to the input value if it contains any spaces, and return the result.
-		/// </summary>
-		/// <param name="value">The value to enquote.</param>
-		/// <returns>The enquoted value.</returns>
-		/// <remarks>
-		/// Note: This method does not do anything special to quotes contained in the value (<i>i.e.</i>, <code>A"B</code> 
-		/// becomes <code>"A"B"</code>, not <code>"A""B"</code> or <code>"A\"B"</code>.
-		/// </remarks>
-		public static string SurroundInQuotesIfContainsSpace(string value)
+		public static string AutoDoubleQuoteString(string value)
 		{
-			if (!StringUtil.IsBlank(value) && value.IndexOf(' ') >= 0)
-				return string.Format(@"""{0}""", value);
+			if (!StringUtil.IsBlank(value) && (value.IndexOf(' ') > -1) && (value.IndexOf("\"") == -1))
+			{
+				return string.Format("\"{0}\"", value);
+			}
 			return value;
 		}
+
+		public static string RemoveTrailingPathDelimeter(string directory)
+		{
+			return StringUtil.IsBlank(directory) ? string.Empty : directory.TrimEnd(new char[] { Path.DirectorySeparatorChar });
+		}
+
+		public static string IntegrationPropertyToString(object value)
+		{
+			return StringUtil.IntegrationPropertyToString(value, DEFAULT_DELIMITER);
+		}
+
+		public static string IntegrationPropertyToString(object value, string delimiter)
+		{
+			if ((value is string) || (value is int) || (value is Enum))
+			{
+				return value.ToString();
+			}
+			else if (value is ArrayList)
+			{
+				string[] tmp = (string[])((ArrayList)value).ToArray(typeof(string));
+				return string.Join(delimiter, tmp);
+			}
+			else
+			{
+				throw new ArgumentException(string.Format("The IntegrationProperty type {0} is not supported yet", value.GetType().ToString()));
+			}			
+		}		
 	}
 }

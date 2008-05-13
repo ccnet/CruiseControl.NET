@@ -131,15 +131,10 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 			IDictionary properties = result.IntegrationProperties;
 			foreach (string key in properties.Keys)
 			{
-				info.EnvironmentVariables[key] = Convert(properties[key]);
+				info.EnvironmentVariables[key] = StringUtil.IntegrationPropertyToString(properties[key]);
 			}
 
 			return info;
-		}
-
-		private static string Convert(object obj)
-		{
-			return (obj == null) ? null : obj.ToString();
 		}
 
 		private string BaseDirectory(IIntegrationResult result)

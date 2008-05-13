@@ -100,7 +100,7 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 			if (StringUtil.IsBlank(value)) return;
 			AppendSpaceIfNotEmpty();
 
-			builder.Append(string.Format("{0}{1}{2}", arg, separator, StringUtil.SurroundInQuotesIfContainsSpace(value)));
+			builder.Append(string.Format("{0}{1}{2}", arg, separator, StringUtil.AutoDoubleQuoteString(value)));
 		}
 
         /// <summary>
@@ -114,7 +114,7 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 			if (StringUtil.IsBlank(value)) return;
 			AppendSpaceIfNotEmpty();
 
-			builder.Append(StringUtil.SurroundInQuotesIfContainsSpace(value));			
+			builder.Append(StringUtil.AutoDoubleQuoteString(value));			
 		}
 
         /// <summary>

@@ -95,7 +95,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 			foreach (string key in properties.Keys)
 			{
 				if (count > 0) builder.Append(";");
-				builder.Append(string.Format("{0}={1}", key, StringUtil.SurroundInQuotesIfContainsSpace(result.IntegrationProperties[key].ToString())));
+				builder.Append(string.Format("{0}={1}", key, StringUtil.AutoDoubleQuoteString(StringUtil.IntegrationPropertyToString(result.IntegrationProperties[key]))));
 				count++;
 			}
 
@@ -106,9 +106,9 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 		{
 			ProcessArgumentBuilder builder = new ProcessArgumentBuilder();
 			builder.Append("/l:");
-			builder.Append(StringUtil.SurroundInQuotesIfContainsSpace(Logger));
+			builder.Append(StringUtil.AutoDoubleQuoteString(Logger));
 			builder.Append(";");
-			builder.Append(StringUtil.SurroundInQuotesIfContainsSpace(MsBuildOutputFile(result)));
+			builder.Append(StringUtil.AutoDoubleQuoteString(MsBuildOutputFile(result)));
 			return builder.ToString();
 		}
 

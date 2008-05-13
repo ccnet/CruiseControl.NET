@@ -166,7 +166,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
                 if (properties[key] == null)
                     processInfo.EnvironmentVariables[key] = null;
                 else
-                    processInfo.EnvironmentVariables[key] = properties[key].ToString();
+                    processInfo.EnvironmentVariables[key] = StringUtil.IntegrationPropertyToString(properties[key]);
             }
 
 			Log.Info(string.Format("Starting build: {0} {1}", processInfo.FileName, processInfo.Arguments));
