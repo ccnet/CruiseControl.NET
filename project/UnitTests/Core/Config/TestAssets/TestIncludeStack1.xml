@@ -1,0 +1,6 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+
+<TestIncludeStack1>
+  <cb:include href="Subfolder/TestIncludeStack2.xml" xmlns:cb="urn:ccnet.config.builder"/>
+  <cb:include href="TestIncludeStack4.xml" xmlns:cb="urn:ccnet.config.builder"/>
+</TestIncludeStack1>
