@@ -47,8 +47,8 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 
 		public void Run(IIntegrationResult result)
 		{                                   
-            Util.ListenerFile.WriteInfo(result.ListenerFile,
-                string.Format("Executing MSBuild :BuildFile: {0}", ProjectFile));    
+            result.BuildProgressInformation.SignalStartRunTask(            
+                    string.Format("Executing MSBuild :BuildFile: {0}", ProjectFile));    
 
 			ProcessResult processResult = executor.Execute(NewProcessInfo(result), ProcessMonitor.GetProcessMonitorByProject(result.ProjectName));
 			string buildOutputFile = MsBuildOutputFile(result);
@@ -56,10 +56,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 			{
 				result.AddTaskResult(new FileTaskResult(buildOutputFile));
 			}
-			result.AddTaskResult(new ProcessTaskResult(processResult));
-
-            Util.ListenerFile.RemoveListenerFile(result.ListenerFile);
-
+			result.AddTaskResult(new ProcessTaskResult(processResult));            
 		}
 
 		private ProcessInfo NewProcessInfo(IIntegrationResult result)

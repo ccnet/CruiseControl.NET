@@ -38,6 +38,19 @@ namespace ThoughtWorks.CruiseControl.Core
 		private Exception exception;
 		private ArrayList taskResults = new ArrayList();
 
+        private Util.BuildProgressInformation buildProgressInformation;
+
+
+        //todo this.buildProgressInformation = new Util.BuildProgressInformation(artifactDirectory, projectName);
+        // make delegate on after deserialisation  ??
+        [XmlIgnore]
+        public Util.BuildProgressInformation BuildProgressInformation
+        {
+            get { return buildProgressInformation; }
+        }
+        
+
+
 		// Default constructor required for serialization
 		public IntegrationResult()
 		{
@@ -53,8 +66,10 @@ namespace ThoughtWorks.CruiseControl.Core
             if ((lastIntegration.Status == IntegrationStatus.Exception)
                 || (lastIntegration.Status == IntegrationStatus.Failure))
                 this.failureUsers = lastIntegration.FailureUsers;       // Inherit the previous build's failureUser list if it failed.
+            
+            this.buildProgressInformation = new Util.BuildProgressInformation(artifactDirectory, projectName);
 		}
-
+ 
 		public string ProjectName
 		{
 			get { return projectName; }
@@ -131,9 +146,13 @@ namespace ThoughtWorks.CruiseControl.Core
 
         public string ListenerFile
         {
-            get { return System.IO.Path.Combine(artifactDirectory, Util.StringUtil.RemoveInvalidCharactersFromFileName(ProjectName) + "_ListenFile.xml"); }
-        }                                                                                
-                                                                              
+            get { return System.IO.Path.Combine(artifactDirectory, 
+                    StringUtil.RemoveInvalidCharactersFromFileName(projectName) + "_ListenFile.xml"); }
+        }
+
+   
+        
+                                                              
 		public IntegrationStatus Status
 		{
 			get { return status; }
@@ -386,7 +405,7 @@ namespace ThoughtWorks.CruiseControl.Core
 				fullProps["CCNetBuildDate"] = StartTime.ToString("yyyy-MM-dd", null);
 				fullProps["CCNetBuildTime"] = StartTime.ToString("HH:mm:ss", null);
 				fullProps["CCNetLastIntegrationStatus"] = LastIntegrationStatus;
-                fullProps["CCNetListenerFile"] = ListenerFile;
+                fullProps["CCNetListenerFile"] = BuildProgressInformation.ListenerFile;
 			    fullProps["CCNetFailureUsers"] = FailureUsers;
 				if (IntegrationRequest != null) fullProps["CCNetRequestSource"] = IntegrationRequest.Source;
 				return fullProps;

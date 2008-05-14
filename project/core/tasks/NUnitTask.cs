@@ -35,7 +35,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 
 		public virtual void Run(IIntegrationResult result)
 		{
-            Util.ListenerFile.WriteInfo(result.ListenerFile, "Executing NUnit"); 
+            result.BuildProgressInformation.SignalStartRunTask("Executing NUnit"); 
 
 			string outputFile = result.BaseFromArtifactsDirectory(OutputFile);
 
@@ -48,10 +48,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 			else
 			{
 				Log.Warning(string.Format("NUnit test output file {0} was not created", outputFile));
-			}
-
-            Util.ListenerFile.RemoveListenerFile(result.ListenerFile);
-
+			}           
 		}
 
 		private ProcessInfo NewProcessInfo(string outputFile, IIntegrationResult result)

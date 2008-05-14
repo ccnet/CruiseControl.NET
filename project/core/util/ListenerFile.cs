@@ -20,58 +20,64 @@ namespace ThoughtWorks.CruiseControl.Core.Util
         /// </summary>
         /// <param name="listenerFileLocation">name and location of the listener file</param>
         /// <param name="message">the information to log</param>
-        public static void WriteInfo(string listenerFileLocation,string message)                                                               
+        public static void WriteInfo(IIntegrationResult result, string message)
         {
-         System.IO.FileInfo ListenFile = new System.IO.FileInfo(listenerFileLocation) ;
-                                                       
-         if ( ListenFile.Directory.Exists != true) return;
+            //System.IO.FileInfo ListenFile = new System.IO.FileInfo(listenerFileLocation) ;
 
-         System.IO.StreamWriter ListenerFile;
-         ListenerFile = new System.IO.StreamWriter(listenerFileLocation, false);
-         ListenerFile.AutoFlush = true;
-                                                                                                       
-         ListenerFile.WriteLine("<data>");
-         ListenerFile.WriteLine("<Item Time=\"{0}\" Data=\"{1}\" />",
-                                 System.DateTime.Now.ToString("yyyy-MM-dd hh:mm:ss"),
-                                 CleanUpMessageForXMLLogging(message));
-         ListenerFile.WriteLine("</data>");
-                                                                                                                                               
-         ListenerFile.Close();
-     }
-                                                                                                                                        
-      /// <summary>
-      /// Deletes the listenerfile
-      /// </summary>
-      /// <param name="listenerFileLocation">the listenerfile to delete (name and location)</param>                                                                                                                                                 
-     public static void RemoveListenerFile(string listenerFileLocation)
-     {
-         const int MaxAmountOfRetries = 10;
-         int RetryCounter = 0;
+            //if ( ListenFile.Directory.Exists != true) return;
+
+            System.Text.StringBuilder ListenData = new StringBuilder();
+
+            ListenData.AppendLine("<data>");
+            ListenData.AppendLine(string.Format("<Item Time=\"{0}\" Data=\"{1}\" />",
+                                    System.DateTime.Now.ToString("yyyy-MM-dd hh:mm:ss"),
+                                    CleanUpMessageForXMLLogging(message)));
+            ListenData.AppendLine("</data>");
+
+            //result.BuildProgressInformation.BuildInformation = ListenData.ToString();
+
+            //System.IO.StreamWriter ListenerFile;
+            //ListenerFile = new System.IO.StreamWriter(listenerFileLocation, false);
+            //ListenerFile.AutoFlush = true;
 
 
-         while (System.IO.File.Exists(listenerFileLocation) && (RetryCounter <= MaxAmountOfRetries)  )
-         {
-             try
-             {
-                 System.IO.File.Delete(listenerFileLocation);
-             }
-             catch (Exception e)
-             {
-                 RetryCounter += 1;
-                 System.Threading.Thread.Sleep(200);
+            //ListenerFile.WriteLine(ListenData.ToString());                                                               
+            //ListenerFile.Close();
+        }
 
-                 if (RetryCounter > MaxAmountOfRetries)
-                     throw new CruiseControlException(
-                         string.Format("Failed to delete {0} after {1} attempts", listenerFileLocation, RetryCounter), e );
-             }
-         }
-     }
-                                                                                                                                                                                                                                                                                       
-     private static string CleanUpMessageForXMLLogging(string msg)
-     {
-         return msg.Replace("\"",string.Empty);
-     }    
- }
-                                                                                                                                            
+        /// <summary>
+        /// Deletes the listenerfile
+        /// </summary>
+        /// <param name="listenerFileLocation">the listenerfile to delete (name and location)</param>                                                                                                                                                 
+        public static void RemoveListenerFile(string listenerFileLocation)
+        {
+            const int MaxAmountOfRetries = 10;
+            int RetryCounter = 0;
+
+
+            while (System.IO.File.Exists(listenerFileLocation) && (RetryCounter <= MaxAmountOfRetries))
+            {
+                try
+                {
+                    System.IO.File.Delete(listenerFileLocation);
+                }
+                catch (Exception e)
+                {
+                    RetryCounter += 1;
+                    System.Threading.Thread.Sleep(200);
+
+                    if (RetryCounter > MaxAmountOfRetries)
+                        throw new CruiseControlException(
+                            string.Format("Failed to delete {0} after {1} attempts", listenerFileLocation, RetryCounter), e);
+                }
+            }
+        }
+
+        private static string CleanUpMessageForXMLLogging(string msg)
+        {
+            return msg.Replace("\"", string.Empty);
+        }
+    }
+
 }
 

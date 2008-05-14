@@ -185,7 +185,7 @@ namespace ThoughtWorks.CruiseControl.Core
 
 		public void Prebuild(IIntegrationResult result)
 		{
-			result.Label = Labeller.Generate(result);
+			result.Label = Labeller.Generate(result);            
 			RunTasks(result, PrebuildTasks);
 		}
 
@@ -285,43 +285,19 @@ namespace ThoughtWorks.CruiseControl.Core
 				new ProjectStatus(Name, Category, CurrentActivity, LastIntegration.Status, integrator.State, WebURL,
 				                  LastIntegration.StartTime, LastIntegration.Label,
 				                  LastIntegration.LastSuccessfulIntegrationLabel,
-                                  Triggers.NextBuild, CurrentBuildStage);
-			status.Messages = (Message[]) messages.ToArray(typeof (Message));
-			return status;
+                                  Triggers.NextBuild, CurrentBuildStage());
+			status.Messages = (Message[]) messages.ToArray(typeof (Message));			
+            return status;
 		}
 
-        private string CurrentBuildStage
+        private string CurrentBuildStage()
         {
-            get
-            {
-                //if (DateTime.Now.AddSeconds(-buildStageCheckPeriodInSeconds) <= lastTimeBuildStageChecked) return "";
 
-
-                string BuildStageFile = integrationResultManager.CurrentIntegration.ListenerFile;
-                string data = "";
-
-                if (!File.Exists(BuildStageFile))
-                { return ""; }
-                else
-                {
-                    try
-                    {
-                        StreamReader FileReader = new StreamReader(BuildStageFile);
-                        if (FileReader.BaseStream.CanRead)
-                        {
-                            data = FileReader.ReadToEnd();
-                        }
-
-                        FileReader.Close();
-
-//                        lastTimeBuildStageChecked = DateTime.Now;
-                        return data;
-                    }
-                    catch
-                    { return ""; }
-                }
-            }
-        }                                                                                                                                                                                                                                                                                                 
+            if (CurrentActivity != ProjectActivity.Building)
+                return "";
+            else
+                return integrationResultManager.CurrentIntegration.BuildProgressInformation.GetBuildProgressInformation();
+        }
 
 		private IntegrationSummary LastIntegration
 		{

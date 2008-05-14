@@ -62,10 +62,11 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 		/// </summary>
 		/// <param name="result">For storing build output.</param>
 		public void Run(IIntegrationResult result)
-		{
-			ProcessResult processResult = AttemptExecute(CreateProcessInfo(result), ProcessMonitor.GetProcessMonitorByProject(result.ProjectName));
-            Util.ListenerFile.WriteInfo(result.ListenerFile,
+		{            
+            result.BuildProgressInformation.SignalStartRunTask ( 
                 string.Format("Executing Nant :BuildFile: {0} Targets: {1} ", BuildFile, string.Join(", ", Targets)));
+
+            ProcessResult processResult = AttemptExecute(CreateProcessInfo(result), ProcessMonitor.GetProcessMonitorByProject(result.ProjectName));
 
 			result.AddTaskResult(new ProcessTaskResult(processResult));
 			// is this right?? or should this break the build
@@ -74,7 +75,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 				throw new BuilderException(this, "NAnt process timed out (after " + BuildTimeoutSeconds + " seconds)");
 			}
 
-            Util.ListenerFile.RemoveListenerFile(result.ListenerFile); Util.ListenerFile.RemoveListenerFile(result.ListenerFile);
+            
 		}
 
 		private ProcessInfo CreateProcessInfo(IIntegrationResult result)

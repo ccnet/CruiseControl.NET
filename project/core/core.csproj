@@ -727,6 +727,7 @@
     <Compile Include="util\AccurateTimer.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="util\BuildProgressInformation.cs" />
     <Compile Include="util\ConsoleTraceListener.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -779,7 +780,6 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="util\KillUtil.cs" />
-    <Compile Include="util\ListenerFile.cs" />
     <Compile Include="util\LogFileTraceListener.cs">
       <SubType>Code</SubType>
     </Compile>

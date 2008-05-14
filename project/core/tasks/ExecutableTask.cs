@@ -94,9 +94,8 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
         /// <param name="result">the IIntegrationResult object for the build</param>
 		public void Run(IIntegrationResult result)
 		{
-            Util.ListenerFile.WriteInfo(result.ListenerFile,
-                    string.Format("Executing {0}", Executable));
-
+            result.BuildProgressInformation.SignalStartRunTask(string.Format("Executing {0}", Executable));
+            
 			ProcessInfo processInfo = NewProcessInfoFrom(result);
 
 			ProcessResult processResult = AttemptToExecute(processInfo, ProcessMonitor.GetProcessMonitorByProject(result.ProjectName));
@@ -119,9 +118,7 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 			if (processResult.TimedOut)
 			{
 				throw new BuilderException(this, "Command Line Build timed out (after " + BuildTimeoutSeconds + " seconds)");
-			}
-
-            Util.ListenerFile.RemoveListenerFile(result.ListenerFile);
+			}            
 		}
 
 		private ProcessInfo NewProcessInfoFrom(IIntegrationResult result)
