@@ -6,6 +6,14 @@
     <buildArgs>$(build-args)</buildArgs>
   </cb:define>
 
+  <cb:define name="build-phoenix-task">
+    <!-- some task -->
+  </cb:define>
+
+  <cb:define name="build-phoenix-tools-task">
+    <!-- some task -->
+  </cb:define>
+
   <cb:define name="project">
     <cb:define
       project-workspace-dir="$(workspace-root)\$(workspace-name)\$(project-config)"
@@ -37,7 +45,7 @@
           <cb:build-phoenix-task/>
           <cb:build-phoenix-tools-task/>
           <cb:msbuild project-file="$(phoenix-dir)\zipbuilddir.msbuild"
-                      build-args="/noconsolelogger /p:output-path=$(project-zip)"/>1
+                      build-args="/noconsolelogger /p:output-path=$(project-zip)"/>
           <cb:msbuild project-file="$(phoenix-dir)\zipbuilddir.msbuild"
                       build-args="/noconsolelogger /t:MoveFiles /p:input-files=&quot;$(project-zip)&quot; /p:output-path=&quot;$(buildout)\setup\release&quot;"/>
         </tasks>
@@ -45,4 +53,6 @@
     </cb:project>
   </cb:define>
 
+  <cb:release-project queue="myqueue" project-name="myproject" localserver="localhost" workspace-root="C:\workspace"/>
+  
 </cb:config-template>

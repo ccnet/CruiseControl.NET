@@ -51,7 +51,10 @@ namespace CCNetConfigBuilder
         public void TestUseNestedConst2()
         {
             XmlDocument doc = _Preprocess( "TestUseNestedConst2.xml" );
-            AssertNodeValue(doc, "//hello/@attr1", "value1+value2");
+            AssertNodeValue(doc, "//project/@queue", "myqueue");
+            AssertNodeValue(doc, "//project/name", "myproject Release");
+            AssertNodeValue(doc, "//project/webURL", "localhost/?_action_ViewProjectReport=true&server=local&project=myproject%20Release");
+            AssertNodeValue(doc, "//project/tasks/buildArgs", "/noconsolelogger /p:output-path=C:\\workspace\\myproject\\myproject-release.zip");
         }
 
         [Test]
