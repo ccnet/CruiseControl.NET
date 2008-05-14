@@ -67,7 +67,9 @@ namespace ThoughtWorks.CruiseControl.Core.Config
             XmlDocument doc = new XmlDocument();
             
             // Run the config file through the preprocessor.
-            using (XmlReader reader = XmlReader.Create(configFile.FullName))
+            XmlReaderSettings settings2 = new XmlReaderSettings();
+            settings2.ProhibitDtd = false;
+            using (XmlReader reader = XmlReader.Create(configFile.FullName, settings2))
             {
                 using( XmlWriter writer = doc.CreateNavigator().AppendChild() )
                 {                                        
@@ -76,6 +78,7 @@ namespace ThoughtWorks.CruiseControl.Core.Config
             }
             XmlReaderSettings settings = new XmlReaderSettings();
 		    settings.ConformanceLevel = ConformanceLevel.Auto;
+		    settings.ProhibitDtd = false;
             // Wrap the preprocessed output with an XmlValidatingLoader
 		    XmlValidatingLoader loader =
 		        new XmlValidatingLoader( XmlReader.Create( doc.CreateNavigator().ReadSubtree(), settings ) );

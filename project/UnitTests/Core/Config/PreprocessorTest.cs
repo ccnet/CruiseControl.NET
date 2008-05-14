@@ -106,6 +106,31 @@ namespace CCNetConfigBuilder
         }
 
         [Test]
+        public void TestIncludeStack()
+        {
+            using (XmlReader input = GetInput("TestIncludeStack1.xml"))
+            {
+                ConfigPreprocessorEnvironment env;
+                using (XmlWriter output = GetOutput())
+                {
+                    ConfigPreprocessor preprocessor = new ConfigPreprocessor();
+                    env = preprocessor.PreProcess(input, output,
+                        new TestResolver(FAKE_ROOT + "TestIncludeStack1.xml"),
+                        new Uri(FAKE_ROOT + "TestIncludeStack1.xml"));
+                }
+                AssertNodeExists(ReadOutputDoc().CreateNavigator(), "/TestIncludeStack1/TestIncludeStack2/TestIncludeStack3");
+                AssertNodeExists(ReadOutputDoc().CreateNavigator(), "/TestIncludeStack1/TestIncludeStack4");
+
+                Assert.AreEqual(env.Fileset.Length, 4);
+
+                Assert.AreEqual(env.Fileset[0].ToLower(), GetTestPath("TestIncludeStack1.xml"));
+                Assert.AreEqual(env.Fileset[1].ToLower(), GetTestPath("subfolder/TestIncludeStack2.xml"));
+                Assert.AreEqual(env.Fileset[2].ToLower(), GetTestPath("TestIncludeStack3.xml"));
+                Assert.AreEqual(env.Fileset[3].ToLower(), GetTestPath("TestIncludeStack4.xml"));
+            }
+        }
+
+        [Test]
         public void TestScope()
         {            
             XmlDocument doc = _Preprocess( "TestScope.xml" );
