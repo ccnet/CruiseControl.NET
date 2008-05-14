@@ -116,9 +116,16 @@ namespace CCNetConfigBuilder
         }
 
         [Test,ExpectedException(typeof(EvaluationException))]
+        [Ignore("Ignoring this test because cycle checking is disabled until we can make it work correctly.")]
         public void TestCycle()
         {            
             _Preprocess( "TestCycle.xml" );            
+        }
+
+        [Test]
+        public void TestCycle2()
+        {
+            _Preprocess("TestCycle2.xml");
         }
 
         [Test]

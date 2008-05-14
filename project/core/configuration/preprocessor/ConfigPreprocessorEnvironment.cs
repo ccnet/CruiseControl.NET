@@ -208,6 +208,35 @@ namespace ThoughtWorks.CruiseControl.Core.Config.Preprocessor
 
         private void _CheckForCycle (string name)
         {
+            /*
+             * Cycle checking has been disabled because doesn't work right at this time.  Consider this:
+             * a = "$(b) $(c)"
+             * b = "$(c)"
+             * c = "d"
+             * 
+             * The stack ought to look like this over time:
+             * Time Result          Stack
+             * ---- ------          --------
+             * 1    "$(a)"          (empty)
+             * 2    "$(b) $(c)"     a
+             * 3    "$(c) $(c)"     a b
+             * 4    "d $(c)"        a b c
+             * 5    "d $(c)"        a b
+             * 6    "d $(c)"        a
+             * 7    "d d"           a c
+             * 8    "d d"           a
+             * 9    "d d"           (empty)
+             * 
+             * But in fact it looks like this:
+             * Time Result          Stack
+             * ---- ------          --------
+             * 1    "$(a)"          (empty)
+             * 2    "$(b) $(c)"     a
+             * 3    "$(c) $(c)"     a b
+             * 4    "$(c) d"        a b c
+             * 5    cycle detected expanding "$(c)"
+             */
+#if false
             StringBuilder sb = new StringBuilder();            
             // Check for cycles.
             if ( _eval_stack.Contains( name ) )
@@ -226,6 +255,7 @@ namespace ThoughtWorks.CruiseControl.Core.Config.Preprocessor
                     "Cycle detected while evaluating '{0}'.  Eval Stack: {1}",
                     name, sb );                
             }            
+#endif
         }
 
         /// <summary>
