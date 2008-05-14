@@ -1,0 +1,6 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+
+<cb:config-template xmlns:cb="urn:ccnet.config.builder">
+  <cb:define name="var1">value1</cb:define>
+  <hello attr1="$(var1)">$(var1);$(var1)</hello>  
+</cb:config-template>

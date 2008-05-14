@@ -1,0 +1,120 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!--#
+Missing from this example:
+
+	<cb:include href="uri_for_file_to_include/>
+-->
+<!--#
+The CCNET configuration preprocessor acts on the ccnet.config file.  
+Preprocessor directives are specified in the xml namespace "urn:ccnet.config.builder" to
+distinguish them from ordinary configuration markup.  Any markup not in the  
+preprocessor's namespace are passed through unchanged.
+-->
+<!--## Declare the cb (ConfigBuilder, aka preprocessor) 
+prefix on the root node-->
+<cruisecontrol xmlns:cb="urn:ccnet.config.builder">
+  
+  <!--# *** DEFINING PREPROCESSOR CONSTANTS *** -->
+  <!--# The cb:define element is used to define a preprocessor constant.  It
+       can be used in several ways:
+       
+       1. Text constants (values are strings): 
+  -->
+  <cb:define foo="bar"/><!--# Define a constant named "foo" with a value of "bar" -->
+  <!--# You can define more than one constant in the same define element: -->
+  <cb:define a="1" b="2" c="3"/>
+  
+  <!--# 2. Nodeset constants (values are xml fragments) 
+  -->    
+  <cb:define name="baz"> <!--# Define a constant named "baz" with a value of an xml fragment -->
+    <some_element>
+      <some_inner_element/>
+    </some_element>
+  </cb:define>
+  <!--# Any valid Xml inside the define element is considered to be the constant's
+         value.  This includes elements, attributes, text nodes, and comments.  -->
+  
+  <!--# *** EXPANDING PREPROCESSOR CONSTANT VALUES ***
+       Once defined, preprocessor constants can be expanded in two ways: 
+  
+      1. References of the form "$(const_name)" which are found in attribute values
+         or text nodes will be expanded such that the text value replaces the reference.  
+         If no constant exists with the given name and there exists a windows environment variable
+         with the same name, that environment variable's value will be used.
+   -->
+  <somexml attr1="$(foo)"/> <!--# expands to: <somexml attr1="bar"/> -->
+  <somexml>$(foo)</somexml> <!--# expands to: <somexml>bar</somexml> -->
+  <env dir="$(PATH)" />   <!--# expands to your PATH environment value -->
+  
+  <!--# 2. When the preprocessor encounters an element in the preprocessor namespace, 
+          and the element name is not one of the predefined keywords (define,scope,config-template, etc),
+          the element will be replaced by the constant value associated with the element name:          
+  -->
+  <sample>
+    <cb:foo/> <!--# expands to the text node "bar" -->
+    <cb:baz/> <!--# expands to: <somexml><some_element><some_inner_element/></some_element></somexml> -->
+  </sample>
+  
+  <!--# If a constant reference refers to a constant which has not been defined and which does not
+  exist as an OS environment variable, an error will occur.
+  -->
+
+  <!--# *** NESTED EXPANSIONS & PARAMETERS *** 
+           Constant references can be nested, i.e. the value of constant "zed" can contain a reference to
+           constant "alpha".
+  -->
+  <cb:define alpha="alphaval"/>
+  <cb:define zed="zedval/$(alpha)"/>
+
+  <z>$(zed)</z> <!--# Expands to "<z>zedval/alphaval</z> -->  
+  
+  <!--# In addition, using the cb:varname call syntax outlined above, constant values can be passed
+       as part of the call element.  Consider the following definition:
+  -->
+  <cb:define name="beta">
+    <hello>
+      <cb:gamma/>
+      <!--# gamma has not yet been defined-->
+      <hi attr1="$(delta)"/>
+      <!--# delta has not yet been defined-->
+    </hello>
+  </cb:define>
+  
+  <!--#  Since gamma and delta have not been defined, they must be passed in with the reference
+        to beta.  This is done as follows:
+  -->
+  <cb:beta delta="deltaval"> <!--# text value for delta -->
+    <cb:define name="gamma"> <!--# Xml fragment value for gamma-->
+      <gamma_element>hi</gamma_element>
+    </cb:define>
+  </cb:beta>
+  
+  <!--# This will expand to: 
+      <hello>
+        <gamma_element>hi</gamma_element>
+        <hi attr1="deltaval" />
+      </hello>
+  -->
+
+  <!--# *** SCOPES ***
+       The cb:scope element can be used to control the scope of a preprocessor definition.
+       You may not define the same constant twice within the same scope, however you may
+       introduce a nested scope which redefines a particular value in an outer scope. 
+       A scope is semantically equivalent to a stack frame in traditional programming terms.
+   -->
+  <cb:scope a="a_val" b="b_val">
+    <test attr="$(a)" attr2="$(b)"/>
+    <!--# outputs as <test attr="a_val" att2="b_val" -->
+    <cb:scope a="a_val_redefined">
+      <!--# outputs as <test attr="a_val_redefined" att2="b_val" -->
+      <test attr="$(a)" attr2="$(b)"/>
+    </cb:scope>
+  </cb:scope>
+  
+  <!--# *** COMMENTS ***
+       Xml Comments whose first character is '#' will not be copied to the output. 
+       All other comments will. -->
+  
+  <!-- This comment will appear in the output file-->
+
+</cruisecontrol>

@@ -26,7 +26,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Config
 		[Test]
 		public void LoadConfigurationFile()
 		{
-			string xml = "<cruisecontrol></cruisecontrol>";
+			string xml = "<cruisecontrol />";
 			FileInfo configFile = new FileInfo(TempFileUtil.CreateTempXmlFile(TempFileUtil.CreateTempDir(this), "loadernet.config", xml));
 			XmlDocument config = fileLoader.LoadConfiguration(configFile);
 			Assert.IsNotNull(config);

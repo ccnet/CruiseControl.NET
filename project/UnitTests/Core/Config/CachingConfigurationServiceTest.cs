@@ -125,6 +125,11 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Config
 			{
 				this.handler = handler;
 			}
+
+		    public void AddConfigurationSubfileLoadedHandler (
+		        ConfigurationSubfileLoadedHandler handler)
+		    {		        
+		    }
 		}
 	}
 }

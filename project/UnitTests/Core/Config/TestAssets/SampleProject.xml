@@ -1,0 +1,95 @@
+﻿<cruisecontrol xmlns:cb="urn:ccnet.config.builder">
+  <cb:define localserver="http://$(COMPUTERNAME)/ccnet"
+             program_files="ProgramFiles(x86)"
+             devenv8="$(program_files)\Microsoft Visual Studio 8\Common7\IDE\devenv.com"
+             devenv9="$(program_files)\Microsoft Visual Studio 9.0\Common7\IDE\devenv.com"
+             msbuild="C:\WINDOWS\Microsoft.NET\Framework\v2.0.50727\MSBuild.exe"
+             workspace_root="c:\build\workspaces"
+             ccnet_server_dir="c:\build\ccnet\server"
+             />
+  <a>$(localserver) $(localserver)</a>
+
+  <cb:define
+      project_workspace_dir="$(workspace_root)\$(project_name)\$(project_config)"
+      phoenix_dir="$(project_workspace_dir)\lqmi\ues\server\cs.net\phoenix"
+    />
+
+  <cb:define name="accurev">
+    <sourcecontrol type="lmaccurev">
+      <autoGetSource>true</autoGetSource>
+      <purgeModified>true</purgeModified>
+    </sourcecontrol>
+  </cb:define>
+
+  <cb:define name="project">
+  <project queue="FalconDevDebug">
+    <!--<name>Falcon Dev Debug</name>
+    <webURL>$(localserver)/?_action_ViewProjectReport=true&amp;server=local&amp;project=$(project_name)%20$(project_config)</webURL>
+    <triggers>
+      <intervalTrigger seconds="60"/>
+    </triggers>
+    <workingDirectory>$(project_workspace_dir)</workingDirectory>
+    <labeller type="dateLabeller" />
+    <modificationDelaySeconds>2</modificationDelaySeconds>
+    --><!-- !!!NOTE!!! lmaccurev is a Liquid-Machines-modified version of the accurev 
+          source control provider build into CCNET.  lmaccurev is implemented in the
+          ccnet.LMAccurev.plugin.dll assembly, which needs to be present in the 
+          CCNET server directory.  The source code for this plugin is 
+          in AccuRev at [depot]nightly_build:[stream]ccnet_build:\.\LMPlugins\LMAccuRev
+    --><!--
+    <cb:accurev/>-->
+    <tasks>
+      <!--<devenv>
+        <solutionfile>$(phoenix_dir)\phoenix.sln</solutionfile>
+        <configuration>Debug</configuration>
+        <executable>$(devenv8)</executable>
+      </devenv>
+      <devenv>
+        <solutionfile>lqmi\ues\server\cs.net\tools\tools.sln</solutionfile>
+        <configuration>Debug</configuration>
+        <executable>$(devenv8)</executable>
+      </devenv>-->
+      <msbuild>
+        <executable>$(msbuild)</executable>
+        <projectFile>$(phoenix_dir)\phoenix-utest.msbuild</projectFile>
+        <buildArgs>/noconsolelogger /t:RunUTests /p:lqmi-buildtools=$(project_workspace_dir)\3rdparty /p:configuration=debug /p:utest-db-connection-string="Data Source=qe-seattle;Initial Catalog=Falcon_CCNET_Utest;Integrated Security=True;Pooling=False" /p:phoenix-build-root=$(project_workspace_dir)\lqmi</buildArgs>
+        <timeout>600</timeout>
+        <logger>$(ccnet_server_dir)\ThoughtWorks.CruiseControl.MsBuild.dll</logger>
+      </msbuild>
+      <msbuild>
+        <executable>$(msbuild)</executable>
+        <projectFile>$(phoenix_dir)\phoenix-utest.msbuild</projectFile>
+        <buildArgs>/noconsolelogger /t:VerifyUTests /p:lqmi-buildtools=$(project_workspace_dir)\3rdparty /p:phoenix-build-root=$(project_workspace_dir)\lqmi</buildArgs>
+        <timeout>600</timeout>
+        <logger>$(ccnet_server_dir)\ThoughtWorks.CruiseControl.MsBuild.dll</logger>
+      </msbuild>
+    </tasks>
+    <!--publishers>
+      <merge>
+        <files>
+          <file>$(project_workspace_dir)\buildout2\nunit-results.xml</file>
+        </files>
+      </merge>
+      <xmllogger />
+      <statistics />
+      <email from="lmbuild@liquidmachines.com" mailhost="lqmmaexc.liquidmachines.com"  includeDetails="TRUE">
+        <users>
+          <user name="jlew" group="build-output" address="jlew@liquidmachines.com"/>
+          <user name="herickson" group="build-output" address="herickson@liquidmachines.com"/>
+        </users>
+        <groups>
+          <group name="build-output" notification="failed"/>
+        </groups>
+      </email>
+    </publishers>-->
+    <externalLinks>
+
+    </externalLinks>
+  </project>
+  </cb:define>
+
+  <cb:project project_name="Falcon" project_config="DevDebug"/>
+
+  
+
+</cruisecontrol>

@@ -8,7 +8,11 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Util
 	{
 		public event FileSystemEventHandler OnFileChanged;
 
-		public void RaiseEvent()
+	    public void AddWatcher (string filename)
+	    {	       
+	    }
+
+	    public void RaiseEvent()
 		{
 			OnFileChanged(null, null);
 		}

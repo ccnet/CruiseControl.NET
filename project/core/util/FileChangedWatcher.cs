@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Timers;
 
@@ -6,46 +7,65 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 {
 	public class FileChangedWatcher : IFileWatcher
 	{
-		private FileSystemWatcher watcher;
+		private List<FileSystemWatcher> watchers= new List< FileSystemWatcher >( );
 		private Timer timer;
+        /// <summary>
+        ///  Event args of first event to fire (filesystem watcher reports
+        /// multiple events on a single save)
+        /// </summary>
+	    private FileSystemEventArgs firstArgs = null;
 
-		public FileChangedWatcher(string filename)
+		public FileChangedWatcher(params string[] filenames)
 		{
-			watcher = new FileSystemWatcher();
-			watcher.Filter = Path.GetFileName(filename);
-			watcher.Path = new FileInfo(filename).DirectoryName;
-			watcher.Changed += new FileSystemEventHandler(HandleFileChanged);
-			watcher.Renamed += new RenamedEventHandler(HandleFileChanged);
-
-			timer = new Timer(500);
+            for( int idx = 0; idx < filenames.Length; ++idx )
+            {
+                AddWatcher( filenames[ idx ] );
+            }
+            timer = new Timer(500);
 			timer.AutoReset = false;
-			timer.Elapsed += new ElapsedEventHandler(HandleTimerElapsed);
-
-			watcher.EnableRaisingEvents = true;
+			timer.Elapsed += HandleTimerElapsed;
 		}
 
-		public event FileSystemEventHandler OnFileChanged;
+	    public event FileSystemEventHandler OnFileChanged;
 
-		private void HandleFileChanged(object sender, FileSystemEventArgs args)
+	    public void AddWatcher (string filename)
+	    {
+	        FileSystemWatcher watcher = new FileSystemWatcher();
+            watchers.Add( watcher );
+	        watcher.Filter = Path.GetFileName( filename );
+	        watcher.Path = new FileInfo(filename).DirectoryName;
+	        watcher.Changed += HandleFileChanged;
+	        watcher.Renamed += HandleFileChanged;
+	        watcher.EnableRaisingEvents = true;            
+	    }
+
+	    private void HandleFileChanged(object sender, FileSystemEventArgs args)
 		{
+	        firstArgs = firstArgs ?? args;            
 			timer.Start();
 		}
 
-		private void HandleFileChanged(object sender, RenamedEventArgs e)
+		private void HandleFileChanged(object sender, RenamedEventArgs args)
 		{
+            firstArgs = firstArgs ?? args;            
 			timer.Start();
 		}
 
 		private void HandleTimerElapsed(object sender, ElapsedEventArgs args)
 		{
 			timer.Stop();
-			OnFileChanged(sender, null);
+            Log.Info( "Config file modification detected for  " + firstArgs.FullPath );            
+			OnFileChanged(sender, firstArgs);
+		    firstArgs = null;
 		}
 
 		void IDisposable.Dispose()
 		{
-			watcher.EnableRaisingEvents = false;
-			watcher.Dispose();
+		    foreach ( FileSystemWatcher watcher in watchers )
+		    {
+                watcher.EnableRaisingEvents = false;
+			    watcher.Dispose();		        
+		    }			
 		}
 	}
 }

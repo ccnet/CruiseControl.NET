@@ -6,13 +6,13 @@ namespace ThoughtWorks.CruiseControl.Core.Config
 	{
 		private readonly FileInfo configFile;
 		private readonly IConfigurationFileSaver saver;
-		private readonly IConfigurationFileLoader loader;
+		private readonly IConfigurationFileLoader loader;	    
 
 		public FileConfigurationService(IConfigurationFileLoader loader, IConfigurationFileSaver saver, FileInfo configFile)
 		{
 			this.loader = loader;
 			this.saver = saver;
-			this.configFile = configFile;
+			this.configFile = configFile;            
 		}
 
 		public IConfiguration Load()
@@ -33,5 +33,11 @@ namespace ThoughtWorks.CruiseControl.Core.Config
 
 		public void AddConfigurationUpdateHandler(ConfigurationUpdateHandler handler)
 		{}
+
+	    public void AddConfigurationSubfileLoadedHandler (
+	        ConfigurationSubfileLoadedHandler handler)
+	    {
+	        loader.AddSubfileLoadedHandler( handler );
+	    }
 	}
 }

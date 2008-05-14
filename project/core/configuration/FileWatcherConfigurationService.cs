@@ -10,20 +10,27 @@ namespace ThoughtWorks.CruiseControl.Core.Config
 		private readonly IConfigurationService decoratedService;
 		private readonly IFileWatcher fileWatcher;
 		private ConfigurationUpdateHandler updateHandler;
+	    private ConfigurationSubfileLoadedHandler subfileHandler;
 
 		public FileWatcherConfigurationService(IConfigurationService decoratedService, IFileWatcher fileWatcher)
 		{
 			this.decoratedService = decoratedService;
 			this.fileWatcher = fileWatcher;
 			this.fileWatcher.OnFileChanged += new FileSystemEventHandler(HandleConfigurationFileChanged);
+		    decoratedService.AddConfigurationSubfileLoadedHandler( SubfileLoaded );
 		}
 
-		public IConfiguration Load()
+	    public IConfiguration Load()
 		{
 			return decoratedService.Load();
 		}
 
-		public void Save(IConfiguration configuration)
+	    private void SubfileLoaded (string path)
+	    {
+	        fileWatcher.AddWatcher( path );
+	    }
+
+	    public void Save(IConfiguration configuration)
 		{
 			decoratedService.Save(configuration);
 		}
@@ -33,7 +40,13 @@ namespace ThoughtWorks.CruiseControl.Core.Config
 			updateHandler += handler;
 		}
 
-		private void HandleConfigurationFileChanged(object source, FileSystemEventArgs args)
+	    public void AddConfigurationSubfileLoadedHandler (
+	        ConfigurationSubfileLoadedHandler handler)
+	    {
+	        subfileHandler += handler;	        
+	    }
+
+	    private void HandleConfigurationFileChanged(object source, FileSystemEventArgs args)
 		{
 			try
 			{

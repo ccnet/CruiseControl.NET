@@ -1,0 +1,15 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+
+<cb:config-template xmlns:cb="urn:ccnet.config.builder">
+
+  <cb:define name="macro1">
+    <a name="$(foo)">
+      <b name="$(bar)"/>
+    </a>
+  </cb:define>
+
+  <c>
+    <cb:macro1 foo="fooval" bar="barval"/>
+  </c>
+
+</cb:config-template>

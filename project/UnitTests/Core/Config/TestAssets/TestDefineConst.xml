@@ -1,0 +1,5 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+
+<cb:config-template xmlns:cb="urn:ccnet.config.builder">
+  <cb:define name="var1">value1</cb:define>
+</cb:config-template>

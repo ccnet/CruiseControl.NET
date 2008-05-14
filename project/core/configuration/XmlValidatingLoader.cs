@@ -5,18 +5,24 @@ namespace ThoughtWorks.CruiseControl.Core.Config
 {
     public class XmlValidatingLoader
     {
-        private readonly XmlTextReader innerReader;
+        private readonly XmlReader innerReader;
         private XmlReaderSettings xmlReaderSettings;
         private bool valid;
 
-        public XmlValidatingLoader(XmlTextReader innerReader)
+        public XmlValidatingLoader(XmlReader innerReader)
         {
             this.innerReader = innerReader;
-            innerReader.EntityHandling = EntityHandling.ExpandEntities;
+            // This is a bit of a hack - Turn on DTD entity resolution if it is not already on.
+            if ( innerReader is XmlTextReader )
+            {
+                ((XmlTextReader)(innerReader)).EntityHandling = EntityHandling.ExpandEntities;
+            }
             xmlReaderSettings = new XmlReaderSettings();
             xmlReaderSettings.ValidationType = ValidationType.None;
             xmlReaderSettings.ProhibitDtd = false;
-            xmlReaderSettings.ValidationEventHandler += new ValidationEventHandler(ValidationHandler);
+            xmlReaderSettings.XmlResolver = new XmlUrlResolver();
+            xmlReaderSettings.ConformanceLevel = ConformanceLevel.Auto;
+            xmlReaderSettings.ValidationEventHandler += ValidationHandler;
         }
 
         public event ValidationEventHandler ValidationEventHandler
@@ -37,13 +43,14 @@ namespace ThoughtWorks.CruiseControl.Core.Config
             lock (this)
             {
                 // set the flag true
-                valid = true;
+                valid = true;                
 
                 using (XmlReader reader = XmlReader.Create(innerReader, xmlReaderSettings))
                 {
                     try
                     {
                         XmlDocument doc = new XmlDocument();
+                        doc.XmlResolver = new XmlUrlResolver();
                         doc.Load(reader);
 
                         // if the load failed, our event handler will have set flag to false

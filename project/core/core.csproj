@@ -182,6 +182,11 @@
     <Compile Include="configuration\NetReflectorConfigurationReader.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="configuration\preprocessor\ConfigPreprocessor.cs" />
+    <Compile Include="configuration\preprocessor\ConfigPreprocessorEnvironment.cs" />
+    <Compile Include="configuration\preprocessor\Constant.cs" />
+    <Compile Include="configuration\preprocessor\PreprocessorUrlResolver.cs" />
+    <Compile Include="configuration\preprocessor\Utils.cs" />
     <Compile Include="configuration\XmlValidatingLoader.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -897,6 +902,7 @@
     <Content Include="..\xsl\unittests.xsl">
       <Link>publishers\xsl\unittests.xsl</Link>
     </Content>
+    <EmbeddedResource Include="configuration\preprocessor\ConfigPreprocessor.xslt" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

@@ -335,6 +335,7 @@
     <Compile Include="Core\Config\NetReflectorConfigurationReaderTest.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Core\Config\PreprocessorTest.cs" />
     <Compile Include="Core\Config\ValidatingLoaderTest.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -1077,6 +1078,36 @@
     <EmbeddedResource Include="WebDashboard\Plugins\BuildReport\XmlReportActionSchema.xsd">
       <SubType>Designer</SubType>
     </EmbeddedResource>
+    <EmbeddedResource Include="Core\Config\TestAssets\TestCycle.xml">
+    </EmbeddedResource>
+    <EmbeddedResource Include="Core\Config\TestAssets\TestDefineConst.xml">
+    </EmbeddedResource>
+    <EmbeddedResource Include="Core\Config\TestAssets\TestIncluded2.xml">
+    </EmbeddedResource>
+    <EmbeddedResource Include="Core\Config\TestAssets\TestIncluder.xml">
+    </EmbeddedResource>
+    <EmbeddedResource Include="Core\Config\TestAssets\TestParamRef.xml">
+    </EmbeddedResource>
+    <EmbeddedResource Include="Core\Config\TestAssets\TestScope.xml">
+    </EmbeddedResource>
+    <EmbeddedResource Include="Core\Config\TestAssets\TestUseConst.xml">
+    </EmbeddedResource>
+    <EmbeddedResource Include="Core\Config\TestAssets\TestExpandNodeset.xml">
+    </EmbeddedResource>
+    <EmbeddedResource Include="Core\Config\TestAssets\TestExpandNodesetWithParams.xml">
+    </EmbeddedResource>
+    <EmbeddedResource Include="Core\Config\TestAssets\TestUseNestedConst.xml">
+    </EmbeddedResource>
+    <EmbeddedResource Include="Core\Config\TestAssets\Sample.xml" />
+    <EmbeddedResource Include="Core\Config\TestAssets\Subfolder\TestIncluded.xml" />
+    <EmbeddedResource Include="Core\Config\TestAssets\Subfolder\TestExpandNodeset.xml" />
+    <EmbeddedResource Include="Core\Config\TestAssets\SampleProject.xml" />
+    <EmbeddedResource Include="Core\Config\TestAssets\TestUseNestedConst2.xml" />
+    <EmbeddedResource Include="Core\Config\TestAssets\Subfolder\TestIncludeStack2.xml" />
+    <EmbeddedResource Include="Core\Config\TestAssets\TestIncludeStack4.xml" />
+    <EmbeddedResource Include="Core\Config\TestAssets\TestIncludeStack1.xml" />
+    <EmbeddedResource Include="Core\Config\TestAssets\TestIncludeStack3.xml" />
+    <EmbeddedResource Include="Core\Config\TestAssets\TestCycle2.xml" />
     <Content Include="resources\buildlog.xml" />
     <Content Include="resources\failedbuildlog.xml" />
     <Content Include="resources\statistics.xml" />

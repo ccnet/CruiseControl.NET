@@ -30,7 +30,13 @@ namespace ThoughtWorks.CruiseControl.Core.Config
 			slaveService.AddConfigurationUpdateHandler(handler);
 		}
 
-		public void InvalidateCache()
+	    public void AddConfigurationSubfileLoadedHandler (
+	        ConfigurationSubfileLoadedHandler handler)
+	    {
+	        slaveService.AddConfigurationSubfileLoadedHandler( handler );
+	    }
+
+	    public void InvalidateCache()
 		{
 			cachedConfig = null;
 		}
