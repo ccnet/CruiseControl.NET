@@ -38,7 +38,7 @@ namespace ThoughtWorks.CruiseControl.Core
 		private Exception exception;
 		private ArrayList taskResults = new ArrayList();
 
-        private Util.BuildProgressInformation buildProgressInformation;
+        private Util.BuildProgressInformation buildProgressInformation = new BuildProgressInformation("", "");
 
 
         //todo this.buildProgressInformation = new Util.BuildProgressInformation(artifactDirectory, projectName);
