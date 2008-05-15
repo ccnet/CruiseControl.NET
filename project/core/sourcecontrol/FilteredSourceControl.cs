@@ -1,5 +1,7 @@
+using System;
 using System.Collections;
 using Exortech.NetReflector;
+using ThoughtWorks.CruiseControl.Core.Util;
 
 namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 {
@@ -52,10 +54,17 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 
 			foreach (Modification modification in allModifications)
 			{
-				if (IsAcceptedByInclusionFilters(modification) &&
-					(! IsAcceptedByExclusionFilters(modification)))
-					acceptedModifications.Add(modification);
-			}
+                if (IsAcceptedByInclusionFilters(modification) &&
+                    (!IsAcceptedByExclusionFilters(modification)))
+                {
+                    Log.Debug(String.Format("Modification {0} was accepted by the filter specification.",
+                        modification));
+                    acceptedModifications.Add(modification);
+                }
+                else
+                    Log.Debug(String.Format("Modification {0} was not accepted by the filter specification.",
+                        modification));
+            }
 
 			return (Modification[]) acceptedModifications.ToArray(typeof (Modification));
 		}
@@ -98,8 +107,11 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 			foreach (IModificationFilter mf in _inclusionFilters)
 			{
 				if (mf.Accept(m))
-					return true;
-			}
+                {
+                    Log.Debug(String.Format("Modification {0} was included by filter {1}.", m, mf));
+                    return true;
+                }
+            }
 
 			return false;
 		}
@@ -121,8 +133,11 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 
 			foreach (IModificationFilter mf in _exclusionFilters)
 			{
-				if (mf.Accept(m))
-					return true;
+                if (mf.Accept(m))
+                {
+                    Log.Debug(String.Format("Modification {0} was excluded by filter {1}.", m, mf));
+                    return true;
+                }
 			}
 
 			return false;

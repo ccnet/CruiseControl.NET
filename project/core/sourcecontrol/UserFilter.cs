@@ -13,5 +13,10 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 		{
 			return Array.IndexOf(UserNames, m.UserName) >= 0;
 		}
+
+        public override string ToString()
+        {
+            return "UserFilter";
+        }
 	}
 }

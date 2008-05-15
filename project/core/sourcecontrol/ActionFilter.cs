@@ -13,5 +13,10 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 		{
 			return Array.IndexOf(Actions, m.Type) >= 0;
 		}
+
+        public override string ToString()
+        {
+            return "ActionFilter";
+        }
 	}
 }
