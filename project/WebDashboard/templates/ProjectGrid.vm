@@ -82,10 +82,10 @@
 				$projectGridRow.CurrentMessage
 			</font>
 		</td>
-		<form method="post">
+    <td align="Center">
+      <form method="post">
       <input type="hidden" name="projectName" value="$projectGridRow.Name" />
 			<input type="hidden" name="serverName" value="$projectGridRow.ServerName" />
-			<td align="Center">
 				<font color="Black">
 				#if ($projectGridRow.allowForceBuild)
 					<input type="submit" name="$projectGridRow.ForceAbortBuildButtonName" value="$projectGridRow.ForceAbortBuildButtonValue"/>
@@ -94,9 +94,9 @@
 					<input type="submit" name="$projectGridRow.StartStopButtonName" value="$projectGridRow.StartStopButtonValue"/>
 				#end
 				</font>
-			</td>      
-		</form>
-	</tr>
+      </form>
+    </td>
+  </tr>
 
     #if ($projectGridRow.BuildStage.Length > 0)
     <tr  bgcolor="lavender">
