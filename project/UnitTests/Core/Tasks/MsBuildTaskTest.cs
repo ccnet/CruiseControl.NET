@@ -97,6 +97,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 		}
 
 		[Test]
+		[ExpectedException(typeof(BuilderException))]
 		public void TimedOutExecutionShouldFailBuild()
 		{
 			ExpectToExecuteAndReturnWithMonitor(TimedOutProcessResult(), new ProcessMonitor());

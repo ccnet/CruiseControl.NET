@@ -12,7 +12,7 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 		private static Regex NullStringRegex = new Regex("\0");
 
 		// public for testing only
-		public const string DEFAULT_DELIMITER = " ";
+		public const string DEFAULT_DELIMITER = ",";
 
 		public static bool Contains(string text, string fragment)
 		{

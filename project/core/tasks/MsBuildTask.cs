@@ -56,7 +56,11 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 			{
 				result.AddTaskResult(new FileTaskResult(buildOutputFile));
 			}
-			result.AddTaskResult(new ProcessTaskResult(processResult));            
+			result.AddTaskResult(new ProcessTaskResult(processResult));
+			if (processResult.TimedOut)
+			{
+				throw new BuilderException(this, "MSBuild process timed out (after " + Timeout + " seconds)");
+			}
 		}
 
 		private ProcessInfo NewProcessInfo(IIntegrationResult result)
