@@ -16,6 +16,7 @@
     <property name="core.dll" value="ThoughtWorks.CruiseControl.Core.dll"/>
     <property name="webdashboard.dll" value="ThoughtWorks.CruiseControl.WebDashboard.dll"/>
     <property name="unittests.dll" value="ThoughtWorks.CruiseControl.UnitTests.dll"/>
+    <property name="MSBuildLogger.dll" value="ThoughtWorks.CruiseControl.MSBuild.dll"/>
     <property name="console.exe" value="ccnet.exe"/>
     <property name="service.exe" value="ccservice.exe"/>
     <property name="cctray.exe" value="cctray.exe"/>
@@ -123,6 +124,9 @@
 			</fileset>
 		</copy>
 
+		<!-- deliberately copied into same folder as server -->
+		<copy file="${lib.dir}\${MSBuildLogger.dll}" todir="deployed\server" verbose="${verbosity}" />
+		
 		<copy todir="deployed\server\xsl" verbose="${verbosity}">
 			<fileset basedir="${src.dir}\xsl">
 				<include name="**\*.xsl"/>
