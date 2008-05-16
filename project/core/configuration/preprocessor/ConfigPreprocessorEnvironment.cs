@@ -49,7 +49,7 @@ namespace ThoughtWorks.CruiseControl.Core.Config.Preprocessor
             _env_stack.Push( new ConstantDict() );
             // Record the input file as the outer-most "include"
             _include_stack.Push( input_file_path );
-            _fileset[ input_file_path.PathAndQuery.ToLower() ] = true;
+            _fileset[ input_file_path.LocalPath.ToLower() ] = true;
             _resolver = resolver;
         }                        
        
@@ -60,7 +60,7 @@ namespace ThoughtWorks.CruiseControl.Core.Config.Preprocessor
         
         public void AddToFileset (Uri url)
         {
-            _fileset[ url.PathAndQuery.ToLower() ] = true;
+            _fileset[url.LocalPath.ToLower()] = true;
         }
 
         /// <summary>
@@ -304,7 +304,7 @@ namespace ThoughtWorks.CruiseControl.Core.Config.Preprocessor
             // resolve relative to it.
             _include_stack.Push( new_include );
             // Modify the resolver's base directory to reflect the (newly) current include.
-            _resolver.BaseDir = new_include.PathAndQuery;
+            _resolver.BaseDir = new_include.LocalPath;
 
             return doc.CreateNavigator();
         }
@@ -312,7 +312,7 @@ namespace ThoughtWorks.CruiseControl.Core.Config.Preprocessor
         public void pop_include()
         {
             _include_stack.Pop();
-            _resolver.BaseDir = _include_stack.Peek().PathAndQuery;
+            _resolver.BaseDir = _include_stack.Peek().AbsolutePath;
         }
 
         #endregion

@@ -1108,6 +1108,7 @@
     <EmbeddedResource Include="Core\Config\TestAssets\TestIncludeStack1.xml" />
     <EmbeddedResource Include="Core\Config\TestAssets\TestIncludeStack3.xml" />
     <EmbeddedResource Include="Core\Config\TestAssets\TestCycle2.xml" />
+    <EmbeddedResource Include="Core\Config\TestAssets\Test Include File With Spaces.xml" />
     <Content Include="resources\buildlog.xml" />
     <Content Include="resources\failedbuildlog.xml" />
     <Content Include="resources\statistics.xml" />

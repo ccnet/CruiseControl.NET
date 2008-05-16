@@ -7,7 +7,7 @@ using System.Xml.XPath;
 using NUnit.Framework;
 using ThoughtWorks.CruiseControl.Core.Config.Preprocessor;
 
-namespace CCNetConfigBuilder
+namespace ThoughtWorks.CruiseControl.UnitTests.Core.Config
 {
     [TestFixture]
     public class PreprocessorTest
@@ -164,6 +164,28 @@ namespace CCNetConfigBuilder
         {            
             _Preprocess( "SampleProject.xml" );
         }
+
+        [Test]
+        public void TestIncludeFileWithSpacesInName()
+        {
+            using (XmlReader input = GetInput("Test Include File With Spaces.xml"))
+            {
+                ConfigPreprocessorEnvironment env;
+                using (XmlWriter output = GetOutput())
+                {
+                    ConfigPreprocessor preprocessor = new ConfigPreprocessor();
+                    env = preprocessor.PreProcess(input, output,
+                        new TestResolver(FAKE_ROOT + "Test Include File With Spaces.xml"),
+                        new Uri(FAKE_ROOT + "Test Include File With Spaces.xml"));
+                }
+                XmlDocument doc = ReadOutputDoc();
+                AssertNodeValue(doc, "/element", "value");
+                Assert.AreEqual(env.Fileset.Length, 1);
+                Assert.AreEqual(Path.Combine(FAKE_ROOT, "Test Include File With Spaces.xml").ToLower(),
+                    env.Fileset[0]);
+            }
+        }
+
         private static XmlDocument _Preprocess( string filename )
         {
             using( XmlReader input = GetInput( filename ) )
