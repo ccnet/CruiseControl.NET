@@ -95,13 +95,9 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Config
                                   "/includer/included/included2" );
 
                 Assert.AreEqual( env.Fileset.Length, 3 );
-
-                Assert.AreEqual(
-                    env.Fileset[ 0 ].ToLower( ), GetTestPath( "testincluder.xml" ) );
-                Assert.AreEqual(
-                    env.Fileset[ 1 ].ToLower( ), GetTestPath( "subfolder/testincluded.xml" ) );
-                Assert.AreEqual(
-                    env.Fileset[ 2 ].ToLower( ), GetTestPath( "testincluded2.xml" ) );
+                Assert.AreEqual(GetTestPath("testincluder.xml"), env.Fileset[0]);
+                Assert.AreEqual(GetTestPath(@"subfolder\testincluded.xml"), env.Fileset[1]);
+                Assert.AreEqual(GetTestPath("testincluded2.xml"), env.Fileset[2]);
             }
         }
 
@@ -123,10 +119,10 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Config
 
                 Assert.AreEqual(env.Fileset.Length, 4);
 
-                Assert.AreEqual(env.Fileset[0].ToLower(), GetTestPath("TestIncludeStack1.xml"));
-                Assert.AreEqual(env.Fileset[1].ToLower(), GetTestPath("subfolder/TestIncludeStack2.xml"));
-                Assert.AreEqual(env.Fileset[2].ToLower(), GetTestPath("TestIncludeStack3.xml"));
-                Assert.AreEqual(env.Fileset[3].ToLower(), GetTestPath("TestIncludeStack4.xml"));
+                Assert.AreEqual(GetTestPath("TestIncludeStack1.xml"), env.Fileset[0]);
+                Assert.AreEqual(GetTestPath(@"subfolder\TestIncludeStack2.xml"), env.Fileset[1]);
+                Assert.AreEqual(GetTestPath("TestIncludeStack3.xml"), env.Fileset[2]);
+                Assert.AreEqual(GetTestPath("TestIncludeStack4.xml"), env.Fileset[3]);
             }
         }
 
@@ -181,8 +177,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Config
                 XmlDocument doc = ReadOutputDoc();
                 AssertNodeValue(doc, "/element", "value");
                 Assert.AreEqual(env.Fileset.Length, 1);
-                Assert.AreEqual(Path.Combine(FAKE_ROOT, "Test Include File With Spaces.xml").ToLower(),
-                    env.Fileset[0]);
+                Assert.AreEqual(GetTestPath("Test Include File With Spaces.xml"), env.Fileset[0]);
             }
         }
 
@@ -202,8 +197,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Config
 
         private static string GetTestPath( string relative_path )
         {
-            return
-                new Uri( Path.Combine(FAKE_ROOT, relative_path ) ).PathAndQuery.ToLower( );
+            return Path.Combine(FAKE_ROOT, relative_path).ToLower();
         }
 
         private static void AssertNodeValue(IXPathNavigable doc, string xpath, string expected_val)
