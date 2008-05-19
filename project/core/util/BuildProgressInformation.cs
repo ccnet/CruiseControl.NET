@@ -37,7 +37,7 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 
             ListenData.AppendLine("<data>");
             ListenData.AppendLine(string.Format("<Item Time=\"{0}\" Data=\"{1}\" />",
-                                    System.DateTime.Now.ToString("yyyy-MM-dd hh:mm:ss"),
+                                    System.DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"),
                                     CleanUpMessageForXMLLogging(information)));
             ListenData.AppendLine("</data>");
 
