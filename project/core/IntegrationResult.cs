@@ -41,16 +41,12 @@ namespace ThoughtWorks.CruiseControl.Core
         private Util.BuildProgressInformation buildProgressInformation = new BuildProgressInformation("", "");
 
 
-        //todo this.buildProgressInformation = new Util.BuildProgressInformation(artifactDirectory, projectName);
-        // make delegate on after deserialisation  ??
         [XmlIgnore]
         public Util.BuildProgressInformation BuildProgressInformation
         {
             get { return buildProgressInformation; }
         }
         
-
-
 		// Default constructor required for serialization
 		public IntegrationResult()
 		{
