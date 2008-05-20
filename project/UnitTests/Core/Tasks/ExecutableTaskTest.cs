@@ -35,16 +35,28 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
     <exec>
     	<executable>mybatchfile.bat</executable>
     	<baseDirectory>C:\</baseDirectory>
-		<buildArgs>myarg1 myarg2</buildArgs>
-		<buildTimeoutSeconds>123</buildTimeoutSeconds>
-		<successExitCodes>0,1,3,5</successExitCodes>
+	<buildArgs>myarg1 myarg2</buildArgs>
+	<buildTimeoutSeconds>123</buildTimeoutSeconds>
+        <environment>
+		<variable name=""name1"" value=""value1""/>
+		<variable><name>name2</name></variable>
+		<variable name=""name3""><value>value3</value></variable>
+	</environment>
+	<successExitCodes>0,1,3,5</successExitCodes>
     </exec>";
 
 			task = (ExecutableTask) NetReflector.Read(xml);
-			Assert.AreEqual(@"C:\", task.ConfiguredBaseDirectory);
-			Assert.AreEqual("mybatchfile.bat", task.Executable);
-			Assert.AreEqual(123, task.BuildTimeoutSeconds);
-			Assert.AreEqual("myarg1 myarg2", task.BuildArgs);
+			Assert.AreEqual(@"C:\", task.ConfiguredBaseDirectory, "Checking ConfiguredBaseDirectory property.");
+			Assert.AreEqual("mybatchfile.bat", task.Executable, "Checking property.");
+			Assert.AreEqual(123, task.BuildTimeoutSeconds, "Checking BuildTimeoutSeconds property.");
+			Assert.AreEqual("myarg1 myarg2", task.BuildArgs, "Checking BuildArgs property.");
+			Assert.AreEqual(3, task.EnvironmentVariables.Length, "Checking environment variable array size.");
+			Assert.AreEqual("name1", task.EnvironmentVariables[0].name, "Checking name1 environment variable.");
+			Assert.AreEqual("value1", task.EnvironmentVariables[0].value, "Checking name1 environment value.");
+			Assert.AreEqual("name2", task.EnvironmentVariables[1].name, "Checking name2 environment variable.");
+			Assert.AreEqual("", task.EnvironmentVariables[1].value, "Checking name2 environment value.");
+			Assert.AreEqual("name3", task.EnvironmentVariables[2].name, "Checking name3 environment variable.");
+			Assert.AreEqual("value3", task.EnvironmentVariables[2].value, "Checking name3 environment value.");
 			Assert.AreEqual("0,1,3,5", task.SuccessExitCodes);
 			Verify();
 		}
@@ -58,9 +70,10 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
     </exec>";
 
 			task = (ExecutableTask) NetReflector.Read(xml);
-			Assert.AreEqual("mybatchfile.bat", task.Executable);
-			Assert.AreEqual(600, task.BuildTimeoutSeconds);
-			Assert.AreEqual("", task.BuildArgs);
+            Assert.AreEqual("mybatchfile.bat", task.Executable, "Checking property.");
+            Assert.AreEqual(600, task.BuildTimeoutSeconds, "Checking BuildTimeoutSeconds property.");
+            Assert.AreEqual("", task.BuildArgs, "Checking BuildArgs property.");
+            Assert.AreEqual(0, task.EnvironmentVariables.Length, "Checking environment variable array size.");
 			Assert.AreEqual("", task.SuccessExitCodes);
 			Verify();
 		}

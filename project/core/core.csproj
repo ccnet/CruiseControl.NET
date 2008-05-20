@@ -742,6 +742,7 @@
     <Compile Include="util\DateUtil.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="util\EnvironmentVariable.cs" />
     <Compile Include="util\ExecutionEnvironment.cs">
       <SubType>Code</SubType>
     </Compile>

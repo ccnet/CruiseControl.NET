@@ -235,7 +235,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
         }
 
         /// <summary>
-        /// Make sure this process object has CCNet's environment variables set in it.
+        /// Pass CCNet's standard environment variables to the process.
         /// </summary>
         /// <param name="variablePool">The collection of environment variables to be updated.</param>
         /// <param name="varsToSet">The collection of variables to set.</param>
@@ -253,7 +253,7 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
         }
 
         /// <summary>
-        /// Make sure this process object has our environment variables set in it.
+        /// Pass the project's environment variables to the process.
         /// </summary>
         /// <param name="variablePool">The collection of environment variables to be updated.</param>
         /// <param name="varsToSet">An array of environment variables to set.</param>
@@ -266,36 +266,6 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
                 variablePool[item.name] = item.value;
         }
 
-        #endregion
-
-        #region Support classes
-
-        /// <summary>
-        /// A class to represent an environment variable.
-        /// </summary>
-        [ReflectorType("variable")]
-        public class EnvironmentVariable
-        {
-            /// <summary>
-            /// The name of the environment variable.
-            /// </summary>
-            [ReflectorProperty("name", Required=true)]
-            public string name;
-
-            /// <summary>
-            /// The value of the environment variable.
-            /// </summary>
-            /// <remarks>
-            /// If not set or if set to null, the value is "".
-            /// </remarks>
-            private string my_value = null;
-            [ReflectorProperty("value", Required = false)]
-            public string value
-            {
-                get { return (my_value == null) ? "" : my_value; }
-                set { my_value = value; }
-            }
-        }
         #endregion
     }
 }

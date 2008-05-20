@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.Collections.Specialized;
 using System.IO;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -37,6 +38,15 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 
 		[ReflectorProperty("buildArgs", Required = false)]
 		public string BuildArgs = string.Empty;
+
+		/// <summary>
+		/// A set of environment variables set for commands that are executed.
+		/// </summary>
+		/// <remarks>
+		/// Each variable should be specified as <code>&lt;variable name="name" value="value"/&gt;</code>.
+		/// </remarks>
+		[ReflectorArray("environment", Required = false)]
+		public EnvironmentVariable[] EnvironmentVariables = new EnvironmentVariable[0];
 
 		private int[] successExitCodes = null;
 
@@ -125,7 +135,8 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
 		{
 			ProcessInfo info = new ProcessInfo(Executable, BuildArgs, BaseDirectory(result), successExitCodes);
 			info.TimeOut = BuildTimeoutSeconds*1000;
-			IDictionary properties = result.IntegrationProperties;
+            SetConfiguredEnvironmentVariables(info.EnvironmentVariables, this.EnvironmentVariables);
+            IDictionary properties = result.IntegrationProperties;
 			foreach (string key in properties.Keys)
 			{
 				info.EnvironmentVariables[key] = StringUtil.IntegrationPropertyToString(properties[key]);
@@ -202,5 +213,20 @@ namespace ThoughtWorks.CruiseControl.Core.Tasks
                 output.Append(input);       // All of that stuff failed, just return our input
             return output.ToString();
         }
-	}
+
+        /// <summary>
+        /// Pass the project's environment variables to the process.
+        /// </summary>
+        /// <param name="variablePool">The collection of environment variables to be updated.</param>
+        /// <param name="varsToSet">An array of environment variables to set.</param>
+        /// <remarks>
+        /// Any variable without a value will be set to an empty string.
+        /// </remarks>
+        private static void SetConfiguredEnvironmentVariables(StringDictionary variablePool, EnvironmentVariable[] varsToSet)
+        {
+            foreach (EnvironmentVariable item in varsToSet)
+                variablePool[item.name] = item.value;
+        }
+
+    }
 }
