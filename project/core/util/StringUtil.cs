@@ -169,7 +169,14 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 			else if (value is ArrayList)
 			{
 				string[] tmp = (string[])((ArrayList)value).ToArray(typeof(string));
-				return string.Join(delimiter, tmp);
+				if (tmp.Length > 1)
+				{
+					return string.Format("\"{0}\"", string.Join(delimiter, tmp));
+				}
+				else
+				{
+					return string.Join(string.Empty, tmp);
+				}
 			}
 			else
 			{

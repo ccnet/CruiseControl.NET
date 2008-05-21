@@ -191,16 +191,17 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Util
 		{
 			int integer = 5;
 			string integerString = integer.ToString();			
-			BuildCondition buildCondition = BuildCondition.ForceBuild;
+			BuildCondition buildCondition = BuildCondition.ForceBuild;			
 			IntegrationStatus integrationStatus = IntegrationStatus.Success;			
+			
 			ArrayList arrayList = new ArrayList();
 			arrayList.Add("foo");
 			arrayList.Add("5");
-			arrayList.Add("bar");
+			arrayList.Add("bar");			
 			
 			string customDelimiter = "-";
-			string defaultConvertedArrayList = "foo" + StringUtil.DEFAULT_DELIMITER + "5" + StringUtil.DEFAULT_DELIMITER + "bar";
-			string customConvertedArrayList = "foo" + customDelimiter + "5" + customDelimiter + "bar";
+			string defaultConvertedArrayList = "\"foo" + StringUtil.DEFAULT_DELIMITER + "5" + StringUtil.DEFAULT_DELIMITER + "bar\"";
+			string customConvertedArrayList = "\"foo" + customDelimiter + "5" + customDelimiter + "bar\"";
 			
 			Assert.AreEqual(StringUtil.IntegrationPropertyToString(integer), integerString);
 			Assert.AreEqual(StringUtil.IntegrationPropertyToString(integerString), integerString);
@@ -213,6 +214,11 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Util
 			Assert.AreEqual(StringUtil.IntegrationPropertyToString(buildCondition, customDelimiter), buildCondition.ToString());
 			Assert.AreEqual(StringUtil.IntegrationPropertyToString(integrationStatus, customDelimiter), integrationStatus.ToString());
 			Assert.AreEqual(StringUtil.IntegrationPropertyToString(arrayList, customDelimiter), customConvertedArrayList);
+
+			arrayList = new ArrayList();
+			arrayList.Add("foo");			
+			Assert.AreEqual(StringUtil.IntegrationPropertyToString(arrayList), "foo");
+			Assert.AreEqual(StringUtil.IntegrationPropertyToString(arrayList, customDelimiter), "foo");
 		}
 
 		[Test]
