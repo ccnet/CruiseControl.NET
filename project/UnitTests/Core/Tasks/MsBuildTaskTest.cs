@@ -98,10 +98,23 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Tasks
 
 		[Test]
 		[ExpectedException(typeof(BuilderException))]
-		public void TimedOutExecutionShouldFailBuild()
+		public void TimedOutExecutionShouldCauseBuilderException()
 		{
 			ExpectToExecuteAndReturnWithMonitor(TimedOutProcessResult(), new ProcessMonitor());
 			task.Run(result);
+		}
+
+		[Test]
+		public void TimedOutExecutionShouldFailBuild()
+		{
+			try
+			{
+				ExpectToExecuteAndReturnWithMonitor(TimedOutProcessResult(), new ProcessMonitor());
+				task.Run(result);
+			}
+			catch (BuilderException)
+			{
+			}
 			Assert.AreEqual(IntegrationStatus.Failure, result.Status);
 		}
 
