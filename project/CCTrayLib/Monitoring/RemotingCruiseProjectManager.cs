@@ -19,38 +19,87 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
 
 		public void ForceBuild()
 		{
-			manager.Request(ProjectName, new IntegrationRequest(BuildCondition.ForceBuild, Environment.UserName));
+			try
+			{
+				manager.Request(ProjectName, new IntegrationRequest(BuildCondition.ForceBuild, Environment.UserName));
+			}
+			// Silently ignore exceptions that occur due to connection problems
+			catch (System.Net.Sockets.SocketException)
+			{
+			}
+			catch (System.Runtime.Remoting.RemotingException)
+			{
+			}
 		}
 
 		public void FixBuild(string fixingUserName)
 		{
-            string Fixer;
-            if (fixingUserName.Trim().Length == 0)
-            {
-                Fixer = Environment.UserName;
-            }
-            else
-            {
-                Fixer = fixingUserName;
-            }
+			string Fixer;
+			if (fixingUserName.Trim().Length == 0)
+			{
+				Fixer = Environment.UserName;
+			}
+			else
+			{
+				Fixer = fixingUserName;
+			}
 
-            manager.SendMessage(ProjectName, new Message(string.Format("{0} is fixing the build.", Fixer)));
+			try
+			{
+				manager.SendMessage(ProjectName, new Message(string.Format("{0} is fixing the build.", Fixer)));
+			}
+			// Silently ignore exceptions that occur due to connection problems
+			catch (System.Net.Sockets.SocketException)
+			{
+			}
+			catch (System.Runtime.Remoting.RemotingException)
+			{
+			}
 		}
 		
 		public void AbortBuild()
 		{
-			manager.AbortBuild(ProjectName, Environment.UserName);
+			try
+			{
+				manager.AbortBuild(ProjectName, Environment.UserName);
+			}
+			// Silently ignore exceptions that occur due to connection problems
+			catch (System.Net.Sockets.SocketException)
+			{
+			}
+			catch (System.Runtime.Remoting.RemotingException)
+			{
+			}
 		}
-		
 		
 		public void StopProject()
 		{
-			manager.Stop(projectName);
+			try
+			{
+				manager.Stop(projectName);
+			}
+			// Silently ignore exceptions that occur due to connection problems
+			catch (System.Net.Sockets.SocketException)
+			{
+			}
+			catch (System.Runtime.Remoting.RemotingException)
+			{
+			}
 		}
 		
 		public void StartProject()
 		{
-			manager.Start(projectName);
+			try
+			{
+				manager.Start(projectName);
+			}
+			// Silently ignore exceptions that occur due to connection problems
+			catch (System.Net.Sockets.SocketException)
+			{
+			}
+			catch (System.Runtime.Remoting.RemotingException)
+			{
+			}
 		}
 		
 		public string ProjectIntegratorState
@@ -60,7 +109,17 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
 		
 		public void CancelPendingRequest()
 		{
-			manager.CancelPendingRequest(ProjectName);
+			try
+			{
+				manager.CancelPendingRequest(ProjectName);
+			}
+			// Silently ignore exceptions that occur due to connection problems
+			catch (System.Net.Sockets.SocketException)
+			{
+			}
+			catch (System.Runtime.Remoting.RemotingException)
+			{
+			}
 		}
 
 		public string ProjectName
@@ -71,8 +130,23 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
 		private string GetProjectIntegratorStateByProjectName(string projectName)
 		{
 			string integratorState = string.Empty;
-			ProjectStatus[] statusList = manager.GetProjectStatus();
-			foreach( ProjectStatus projectStatus in statusList)
+			ProjectStatus[] statusList;
+			
+			try
+			{
+				statusList = manager.GetProjectStatus();
+			}
+			// Silently ignore exceptions that occur due to connection problems
+			catch(System.Net.Sockets.SocketException)
+			{
+				statusList = new ProjectStatus[0];
+			}
+			catch (System.Runtime.Remoting.RemotingException)
+			{
+				statusList = new ProjectStatus[0];
+			}
+			
+			foreach(ProjectStatus projectStatus in statusList)
 			{
 				if (projectStatus.Name.Equals(projectName))
 				{

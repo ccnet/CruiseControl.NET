@@ -37,37 +37,86 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
 
 		public ProjectActivity Activity
 		{
-			get { return lastProjectStatus.Activity; }
+			get
+			{
+				if (IsConnected)
+				{
+					return lastProjectStatus.Activity;
+				}
+				return new ProjectActivity("");
+			}
 		}
 
 		public string LastBuildLabel
 		{
-			get { return lastProjectStatus.LastBuildLabel; }
+			get
+			{
+				if (IsConnected)
+				{
+					return lastProjectStatus.LastBuildLabel;
+				}
+				return string.Empty;
+			}
 		}
 
 		public DateTime LastBuildTime
 		{
-			get { return lastProjectStatus.LastBuildDate; }
+			get
+			{
+				if (IsConnected)
+				{
+					return lastProjectStatus.LastBuildDate;
+				}
+				return new DateTime(1970, 1, 1);
+			}
 		}
 
 		public DateTime NextBuildTime
 		{
-			get { return lastProjectStatus.NextBuildTime; }
+			get
+			{
+				if (IsConnected)
+				{
+					return lastProjectStatus.NextBuildTime;
+				}
+				return new DateTime(1970, 1, 1);
+			}
 		}
 
 		public string WebURL
 		{
-			get { return lastProjectStatus.WebURL; }
+			get
+			{
+				if (IsConnected)
+				{
+					return lastProjectStatus.WebURL;
+				}
+				return string.Empty;
+			}
 		}
 
         public string CurrentBuildStage
         {
-            get { return lastProjectStatus.BuildStage; }
+            get
+			{
+				if (IsConnected)
+				{
+					return lastProjectStatus.BuildStage;
+				}
+				return string.Empty;
+			}
         }                                                                                                            
 
 		public string CurrentMessage
 		{
-			get { return lastProjectStatus.CurrentMessage; }
+			get
+			{
+				if (IsConnected)
+				{
+					return lastProjectStatus.CurrentMessage;
+				}
+				return string.Empty;
+			}
 		}
 
 		public string ProjectName

@@ -9,99 +9,116 @@ namespace ThoughtWorks.CruiseControl.CCTrayLib.Monitoring
 		private readonly string projectName;
 		private readonly IWebRetriever webRetriever;
 		private readonly ICruiseServerManager serverManager;
-		private readonly Uri dashboardUri;
+		private Uri dashboardUri;
 		private Uri webUrl;
-		private string serverName;
-		private string basePath;
+		private string serverAlias = "local";
 
 		public HttpCruiseProjectManager(IWebRetriever webRetriever, string projectName, ICruiseServerManager serverManager)
 		{
 			this.projectName = projectName;
 			this.webRetriever = webRetriever;
 			this.serverManager = serverManager;
-			GetWebUrl();
-			ExtractBasePathAndServerName();
-			dashboardUri = new Uri(string.Format("http://{0}/{1}/server/{2}/ViewFarmReport.aspx", webUrl.Host, basePath, serverName));
 		}
 
 		public void ForceBuild()
 		{
 			PushDashboardButton("ForceBuild");
 		}
-		
+
 		public void AbortBuild()
 		{
-			PushDashboardButton("AbortBuild");			
+			PushDashboardButton("AbortBuild");
 		}
-		
+
 		public void FixBuild(string fixingUserName)
 		{
 			throw new NotImplementedException("Fix build not currently supported on projects monitored via HTTP");
 		}
-		
+
 		public void StopProject()
 		{
 			PushDashboardButton("StopBuild");
 		}
-		
+
 		public void StartProject()
 		{
 			PushDashboardButton("StartBuild");
 		}
-		
+
 		public void CancelPendingRequest()
 		{
 			throw new NotImplementedException("Cancel pending not currently supported on projects monitored via HTTP");
 		}
-		
+
 		public string ProjectName
 		{
 			get { return projectName; }
 		}
-		
+
 		public string ProjectIntegratorState
 		{
 			get
 			{
-				return serverManager.GetCruiseServerSnapshot().GetProjectStatus(projectName).Status.ToString();
+				try
+				{
+					ProjectStatus ps = serverManager.GetCruiseServerSnapshot().GetProjectStatus(projectName);
+					if (ps != null)
+					{
+						return ps.Status.ToString();
+					}
+					return string.Empty;
+				}
+				// Silently ignore exceptions that occur due to connection problems
+				catch (System.Net.WebException)
+				{
+					return string.Empty;
+				}
 			}
 		}
 
 		public void PushDashboardButton(string buttonName)
 		{
-			NameValueCollection input = new NameValueCollection();
-			input.Add(buttonName, "true");
-			input.Add("projectName", projectName);
-			input.Add("serverName", serverName);
-			webRetriever.Post(dashboardUri, input);
-		}
-
-		private void GetWebUrl()
-		{
-			// BUG: the projects name needs to be unique across the whole dashboard
-			foreach (ProjectStatus ps in serverManager.GetCruiseServerSnapshot().ProjectStatuses)
+			try
 			{
-				if (ps.Name == projectName)
-				{
-					webUrl = new Uri(ps.WebURL);
-					break;
-				}
+				InitConnection();
+				NameValueCollection input = new NameValueCollection();
+				input.Add(buttonName, "true");
+				input.Add("projectName", projectName);
+				input.Add("serverName", serverAlias);
+				webRetriever.Post(dashboardUri, input);
+			}
+			// Silently ignore exceptions that occur due to connection problems
+			catch (System.Net.WebException)
+			{
 			}
 		}
 
-		private void ExtractBasePathAndServerName()
+		private void InitConnection()
 		{
-			string[] splitPath = webUrl.AbsolutePath.Trim('/').Split('/');
+			ProjectStatus ps = serverManager.GetCruiseServerSnapshot().GetProjectStatus(projectName);
+			if (ps != null)
+			{
+				webUrl = new Uri(ps.WebURL);
+				ExtractServerAlias();
+			}
+			dashboardUri = new Uri(new WebDashboardUrl(serverManager.ServerUrl, serverAlias).ViewFarmReport);
+		}
+
+		private void ExtractServerAlias()
+		{
+			string[] splitPath = new string[0];
+
+			if (webUrl != null)
+				splitPath = webUrl.AbsolutePath.Trim('/').Split('/');
+
 			for (int i = 0; i < splitPath.Length; i++)
 			{
-				if ((splitPath[i] == "server") && (splitPath[i + 1] != null))
+				if ((splitPath[i] == "server") && (splitPath[i + 1] != null) && (splitPath[i + 1] != string.Empty))
 				{
-					serverName = splitPath[i + 1];
+					serverAlias = splitPath[i + 1];
 					break;
 				}
-				basePath = string.Format("{0}/{1}", basePath , splitPath[i]);
 			}
-			basePath = basePath.Trim('/');
 		}
 	}
 }
