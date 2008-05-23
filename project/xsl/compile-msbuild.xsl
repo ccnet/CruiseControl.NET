@@ -5,7 +5,7 @@
     <xsl:template match="/">
 		<xsl:variable name="errors" select="/cruisecontrol//msbuild//error" />
 		<xsl:variable name="errors.count" select="count($errors)" />
-		<xsl:variable name="warnings" select="/cruisecontrol//msbuild/warning" />
+		<xsl:variable name="warnings" select="/cruisecontrol//msbuild//warning" />
 		<xsl:variable name="warnings.count" select="count($warnings)" />
         <xsl:if test="$errors.count > 0">
             <table class="section-table" cellpadding="2" cellspacing="0" border="0" width="98%">
@@ -47,7 +47,7 @@
 	</xsl:template>
 
 	<xsl:template match="warning">
-		<div style="color:gold">
+		<div style="color:blue">
 			<xsl:if test="@file != ''" >
 				<xsl:value-of select="@file"/> (<xsl:value-of select="@line"/>,<xsl:value-of select="@column"/>): 
 			</xsl:if>
