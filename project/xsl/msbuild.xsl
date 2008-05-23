@@ -52,7 +52,7 @@
 						<div style="color:orangered">
 							<xsl:value-of select="count($errors)"/> Error(s)
 						</div>
-						<div style="color:gold">
+						<div style="color:blue">
 							<xsl:value-of select="count($warnings)"/> Warning(s)
 						</div>
 					</xsl:if>
@@ -63,7 +63,7 @@
 	</xsl:template>
 
 	<xsl:template match="project">
-		<div style="color:dodgerblue;margin:4 0">
+		<div style="color:#339900;margin:4 0">
 			Project "<xsl:value-of select="@file"/>"
 			<xsl:choose>
 				<xsl:when test="@name">
@@ -164,7 +164,7 @@
 	</xsl:template>
 
 	<xsl:template match="warning">
-		<div style="color:gold">
+		<div style="color:blue">
 			<xsl:if test="@file != ''" >
 				<xsl:value-of select="@file"/>&#160;(<xsl:value-of select="@line"/>,<xsl:value-of select="@column"/>):&#160;
 			</xsl:if>
