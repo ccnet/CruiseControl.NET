@@ -100,7 +100,45 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Util
 			}
 		}
 
-		[Test]
+        [Test]
+        public void ShouldSaveToFileAtomically()
+        {
+            SystemPath tempFile = tempRoot.Combine("foo.txt");
+            Assert.IsFalse(tempFile.Exists());
+            new SystemIoFileSystem().AtomicSave(tempFile.ToString(), "bar");
+            Assert.IsTrue(tempFile.Exists());
+            using (StreamReader reader = File.OpenText(tempFile.ToString()))
+            {
+                Assert.AreEqual("bar", reader.ReadToEnd());
+            }
+            new SystemIoFileSystem().AtomicSave(tempFile.ToString(), "baz");
+            Assert.IsTrue(tempFile.Exists());
+            using (StreamReader reader = File.OpenText(tempFile.ToString()))
+            {
+                Assert.AreEqual("baz", reader.ReadToEnd());
+            }
+        }
+
+        [Test]
+        public void ShouldSaveUnicodeToFileAtomically()
+        {
+            SystemPath tempFile = tempRoot.Combine("foo.txt");
+            Assert.IsFalse(tempFile.Exists());
+            new SystemIoFileSystem().AtomicSave(tempFile.ToString(), "hi there? håkan! \u307b");
+            Assert.IsTrue(tempFile.Exists());
+            using (StreamReader reader = File.OpenText(tempFile.ToString()))
+            {
+                Assert.AreEqual("hi there? håkan! \u307b", reader.ReadToEnd());
+            }
+            new SystemIoFileSystem().AtomicSave(tempFile.ToString(), "hi there? håkan! \u307b sadfasdf");
+            Assert.IsTrue(tempFile.Exists());
+            using (StreamReader reader = File.OpenText(tempFile.ToString()))
+            {
+                Assert.AreEqual("hi there? håkan! \u307b sadfasdf", reader.ReadToEnd());
+            }
+        }
+
+        [Test]
 		public void LoadReadsFileContentCorrectly()
 		{
 			SystemPath tempFile = tempRoot.CreateTextFile("foo.txt", "bar");

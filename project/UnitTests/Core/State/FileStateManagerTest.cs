@@ -64,7 +64,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.State
 		public void SaveAndReload()
 		{
 			CollectingConstraint contents = new CollectingConstraint();
-			mockIO.Expect("Save", StateFilename(), contents);
+            mockIO.Expect("AtomicSave", StateFilename(), contents);
 			state.SaveState(result);
 
 			mockIO.ExpectAndReturn("Load", new StringReader(contents.Parameter.ToString()), StateFilename());
@@ -94,7 +94,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.State
 		[Test]
 		public void AttemptToSaveWithInvalidXml()
 		{
-			mockIO.Expect("Save", StateFilename(), new IsAnything());
+			mockIO.Expect("AtomicSave", StateFilename(), new IsAnything());
 
 			result.Label = "<&/<>";
 			result.AddTaskResult("<badxml>>");
@@ -104,7 +104,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.State
 		[Test]
 		public void SaveProjectWithSpacesInName()
 		{
-			mockIO.Expect("Save", Path.Combine(Path.GetTempPath(), "MyProject.state"), new IsAnything());
+            mockIO.Expect("AtomicSave", Path.Combine(Path.GetTempPath(), "MyProject.state"), new IsAnything());
 
 			result.ProjectName = "my project";
 			state.SaveState(result);
@@ -113,7 +113,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.State
 		[Test]
 		public void ShouldWriteXmlUsingUTF8Encoding()
 		{
-			mockIO.Expect("Save", StateFilename(), new StartsWith("<?xml version=\"1.0\" encoding=\"utf-8\"?>"));
+            mockIO.Expect("AtomicSave", StateFilename(), new StartsWith("<?xml version=\"1.0\" encoding=\"utf-8\"?>"));
 
 			result = IntegrationResultMother.CreateSuccessful();
 			result.ArtifactDirectory = "artifactDir";
@@ -123,7 +123,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.State
 		[Test, ExpectedException(typeof(CruiseControlException))]
 		public void HandleExceptionSavingStateFile()
 		{
-			mockIO.ExpectAndThrow("Save", new SystemException(), StateFilename(), new IsAnything());
+            mockIO.ExpectAndThrow("AtomicSave", new SystemException(), StateFilename(), new IsAnything());
 			state.SaveState(result);
 		}
 

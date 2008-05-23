@@ -71,6 +71,10 @@ namespace ThoughtWorks.CruiseControl.Core.State
 			}
 		}
 
+        /// <summary>
+        /// Write the state to disk, ensuring that it gets there in its entirety.
+        /// </summary>
+        /// <param name="result">The integration to save the state for.</param>
 		public void SaveState(IIntegrationResult result)
 		{
 			XmlSerializer serializer = new XmlSerializer(typeof (IntegrationResult));
@@ -80,12 +84,14 @@ namespace ThoughtWorks.CruiseControl.Core.State
 			string path = GetFilePath(result.ProjectName);
 			try
 			{
-				fileSystem.Save(path, buffer.ToString());
+				fileSystem.AtomicSave(path, buffer.ToString());
 			}
 			catch (SystemException e)
 			{
 				throw new CruiseControlException(
-					string.Format("Unable to save the IntegrationResult to the specified directory: {0}{1}{2}", path, Environment.NewLine, buffer.ToString()), e);
+					string.Format("Unable to save the IntegrationResult to the specified directory: {0}{1}{2}",
+                        path, Environment.NewLine, buffer),
+                    e);
 			}
 		}
 

@@ -1,4 +1,5 @@
 using System.IO;
+using System.Text;
 
 namespace ThoughtWorks.CruiseControl.Core.Util
 {
@@ -62,7 +63,81 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 			}
 		}
 
-		public TextReader Load(string file)
+        /// <summary>
+        /// Write the specified data in UTF8 encoding to the specified file in an atomic fashion, such
+        /// that the file is either completely replaced on disk or not altered at all.
+        /// </summary>
+        /// <param name="file">The pathname of the file to write to.</param>
+        /// <param name="content">The content to write to the file.</param>
+        public void AtomicSave(string file, string content)
+        {
+            AtomicSave(file, content, Encoding.UTF8);
+        }
+
+        /// <summary>
+        /// Write the specified data in the specified encoding to the specified file in an atomic fashion,
+        /// such that the file is either completely replaced on disk or not altered at all.
+        /// </summary>
+        /// <param name="file">The pathname of the file to write to.</param>
+        /// <param name="content">The content to write to the file.</param>
+        /// <param name="encoding">The encoding of the data.</param>
+        /// <remarks>
+        /// Not all file systems provide an atomic-file-replace operation, therefore we implement this 
+        /// ourselves.
+        /// <ol>
+        /// <li>Write to a new file on disk.
+        /// <li>Flush all the writes to disk.
+        /// <li>Rename the existing target file to the "old" file name.
+        /// <li>Rename the new file to the target file.
+        /// <li>Delete the old target file.
+        /// </remarks>
+        public void AtomicSave(string file, string content, Encoding encoding)
+        {
+            FileStream newFile = null;
+            string targetFilePath = file;
+            string newFilePath = targetFilePath + "-NEW";
+            string oldFilePath = targetFilePath + "-OLD";
+            try
+            {
+                // Clean up any old copies of our temporary files:
+                DeleteFile(newFilePath);
+                DeleteFile(oldFilePath);
+
+                // Step 1: Write to a new file on disk, forcing the writes out to disk.
+                newFile = new FileStream(newFilePath, FileMode.CreateNew, FileAccess.Write, FileShare.None,
+                    4096, FileOptions.WriteThrough | FileOptions.SequentialScan);
+                byte[] fileBytes = encoding.GetBytes(content);
+                newFile.Write(fileBytes, 0, fileBytes.Length);
+
+                // Step 2: Flush any remaining writes to disk.
+                newFile.Close();
+                newFile.Dispose();
+                newFile = null;
+
+                // Step 3: Rename the existing target file to the "old" file name, if it exists.
+                if (File.Exists(targetFilePath))
+                    File.Move(targetFilePath, oldFilePath);
+
+                // Step 4: Rename the new file to the target file.
+                File.Move(newFilePath, targetFilePath);
+
+                // Step 5: Delete the old target file if we renamed it in step 3.
+                if (File.Exists(oldFilePath))
+                    DeleteFile(oldFilePath);
+            }
+            catch
+            {
+                if (newFile != null)
+                {	
+                    // Don't leave open files laying around.
+                    newFile.Close();
+                    newFile.Dispose();
+                }
+                throw;
+            }
+        }
+
+        public TextReader Load(string file)
 		{
 			using (TextReader reader = new StreamReader(file))
 			{
@@ -79,5 +154,20 @@ namespace ThoughtWorks.CruiseControl.Core.Util
 		{
 			return Directory.Exists(folder);
 		}
-	}
+
+        /// <summary>
+        /// Delete a file if it exists.
+        /// </summary>
+        /// <param name="filePath">The filepath to delete.</param>
+        private static void DeleteFile(string filePath)
+        {
+            FileInfo fileInfo = new FileInfo(filePath);
+            if (fileInfo.Exists)
+            {
+                if ((fileInfo.Attributes & FileAttributes.ReadOnly) != 0)
+                    fileInfo.Attributes ^= FileAttributes.ReadOnly;
+                fileInfo.Delete();
+            }
+        }
+    }
 }
