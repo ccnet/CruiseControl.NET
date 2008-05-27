@@ -102,9 +102,21 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core
             queueManager = new IntegrationQueueManager(new ProjectIntegratorListFactory(), configuration);
             CruiseServerSnapshot cruiseServerSnapshot = queueManager.GetCruiseServerSnapshot();
             Assert.IsNotNull(cruiseServerSnapshot);
-            Assert.AreEqual(TestQueueName, cruiseServerSnapshot.ProjectStatuses[0].Name);
-            Assert.AreEqual(TestQueueName2, cruiseServerSnapshot.ProjectStatuses[1].Name);
-            Assert.AreEqual(TestQueueName3, cruiseServerSnapshot.ProjectStatuses[2].Name);
+            bool found1 = false;
+            bool found2 = false;
+            bool found3 = false;
+            foreach (ProjectStatus status in cruiseServerSnapshot.ProjectStatuses)
+            {
+                found1 |= (status.Name == TestQueueName);
+                found2 |= (status.Name == TestQueueName2);
+                found3 |= (status.Name == TestQueueName3);
+            }
+            if (!found1)
+                Assert.Fail("Could not find " + TestQueueName);
+            if (!found2)
+                Assert.Fail("Could not find " + TestQueueName2);
+            if (!found3)
+                Assert.Fail("Could not find " + TestQueueName3);
         }
     }
 }
