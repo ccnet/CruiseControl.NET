@@ -84,6 +84,8 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 
 		public override void GetSource(IIntegrationResult result)
 		{
+            result.BuildProgressInformation.SignalStartRunTask("Getting source from CVS");
+
 			if (!AutoGetSource) return;
 
 			if (DoesCvsDirectoryExist(result))

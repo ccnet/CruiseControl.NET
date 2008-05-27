@@ -75,6 +75,8 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 		public override void GetSource(IIntegrationResult result)
 		{
 			Log.Info("Getting source from Surround SCM");
+            result.BuildProgressInformation.SignalStartRunTask("Getting source from Surround SCM");
+
 			string command = String.Format("get * -q -tcheckin -wreplace {0} -d{1} -b{2} -p{3} -z{4} -y{5}",
 			                               (Recursive == 0) ? "" : "-r",
 			                               WorkingDirectory,

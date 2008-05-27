@@ -145,6 +145,8 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Telelogic
 		/// <url>element://model:project::CCNet.Synergy.Plugin/design:view:::ax60xur0dt7rg6h_v</url>
 		public void GetSource(IIntegrationResult integration)
 		{
+            integration.BuildProgressInformation.SignalStartRunTask("Getting source from Telelogic Synergy");
+
 			// reconcile any work area paths specificed by the config file
 			Reconcile();
 

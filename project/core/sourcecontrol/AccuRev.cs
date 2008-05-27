@@ -204,6 +204,8 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
         /// </remarks>
 		public override void GetSource(IIntegrationResult result)
 		{
+            result.BuildProgressInformation.SignalStartRunTask("Getting source from AccuRev");
+
 			if (AutoGetSource)
 			{
 			    string command = "update";

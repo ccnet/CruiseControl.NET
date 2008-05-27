@@ -79,6 +79,8 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 
 		public override void GetSource(IIntegrationResult result)
 		{
+            result.BuildProgressInformation.SignalStartRunTask("Getting source from Vault");
+
 			if (!_shim.AutoGetSource) return;
 			Debug.Assert(_folderVersion > 0, "_folderVersion <= 0 when attempting to get source.  This shouldn't happen.");
 

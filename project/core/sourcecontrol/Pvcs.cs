@@ -268,6 +268,8 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 
 		public override void GetSource(IIntegrationResult result)
 		{
+            result.BuildProgressInformation.SignalStartRunTask("Getting source from Pvcs");
+
 			// If no changes or no Auto Get Source, exit
 			if (result.Modifications.Length < 1 || !AutoGetSource)
 				return;

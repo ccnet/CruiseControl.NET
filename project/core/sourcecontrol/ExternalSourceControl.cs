@@ -152,6 +152,8 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
         /// </remarks>
         public override void GetSource(IIntegrationResult result)
         {
+            result.BuildProgressInformation.SignalStartRunTask("Getting source from External Source Control");
+
             if (AutoGetSource)
             {
                 string args = string.Format(@"GETSOURCE ""{0}"" ""{1}"" {2}",

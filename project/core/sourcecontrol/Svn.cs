@@ -78,6 +78,8 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 
 		public override void GetSource(IIntegrationResult result)
 		{
+            result.BuildProgressInformation.SignalStartRunTask("Getting source from SVN");
+
 			if (! AutoGetSource) return;
 
 			if (DoesSvnDirectoryExist(result))

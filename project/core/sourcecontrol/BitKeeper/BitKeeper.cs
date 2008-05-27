@@ -70,6 +70,8 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.BitKeeper
 
 		public override void GetSource(IIntegrationResult result)
 		{
+            result.BuildProgressInformation.SignalStartRunTask("Getting source from BitKeeper");
+
 			if (!AutoGetSource)
 				return;
 

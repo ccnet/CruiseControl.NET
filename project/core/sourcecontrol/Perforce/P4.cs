@@ -236,6 +236,8 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol.Perforce
 
 		public void GetSource(IIntegrationResult result)
 		{
+            result.BuildProgressInformation.SignalStartRunTask("Getting source from Perforce");
+
 			if (AutoGetSource)
 			{
 				ProcessInfo info = processInfoCreator.CreateProcessInfo(this, CreateSyncCommandLine());

@@ -107,7 +107,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 			mockExecutorWrapper.ExpectAndReturn("Execute", new ProcessResult(null, null, 0, false), ExpectedProcessInfo("attrib", expectedAttribCommand));
 
 			mks = CreateMks(CreateSourceControlXml(), mockHistoryParser, mockProcessExecutor);
-			mks.GetSource(null);
+            mks.GetSource(new IntegrationResult());
 		}
 
 		[Test]
@@ -120,7 +120,7 @@ namespace ThoughtWorks.CruiseControl.UnitTests.Core.Sourcecontrol
 			mockExecutorWrapper.ExpectAndReturn("Execute", new ProcessResult(null, null, 0, false), ExpectedProcessInfo("attrib", expectedAttribCommand));
 
 			mks = CreateMks(CreateSourceControlXml(), mockHistoryParser, mockProcessExecutor);
-			mks.GetSource(null);
+            mks.GetSource(new IntegrationResult());
 		}
 
 		[Test]

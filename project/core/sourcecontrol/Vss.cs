@@ -130,6 +130,8 @@ namespace ThoughtWorks.CruiseControl.Core.Sourcecontrol
 
 		public override void GetSource(IIntegrationResult result)
 		{
+            result.BuildProgressInformation.SignalStartRunTask("Getting source from VSS");
+
 			CreateTemporaryLabel(result);
 
 			if (! AutoGetSource) return;
